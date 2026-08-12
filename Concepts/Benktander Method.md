@@ -14,6 +14,8 @@
 - Benktander showed the GB estimator has lower mean squared error than either BF or chain ladder over a wide range of conditions, which is its theoretical claim to preference; it needs no data beyond what BF already requires.
 - The ordering is fixed by construction: whichever of $U_{\text{CL}}$ and $U_{\text{BF}}$ is larger, $U_{\text{GB}}$ lies between them.
 
+![[Media/Figures/Benktander_Method.svg|340]]
+
 > [!example]- Benktander Between BF and Chain Ladder {Example}
 > An accident year has reported losses $C = \$600$, a priori expected losses $U_0 = \$1{,}000$, and $\text{CDF} = 2.000$ (so $p = 50\%$).
 >

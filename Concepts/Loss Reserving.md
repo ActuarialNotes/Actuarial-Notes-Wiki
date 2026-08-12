@@ -22,6 +22,8 @@ Further points:
 - Under-reserving is a leading cause of **insolvency**: it overstates surplus, understates the loss ratio, and therefore feeds an inadequate rate indication back into pricing, which produces more under-reserved business. The feedback loop is the reason reserve monitoring is continuous rather than annual.
 - Professional requirements come from [[ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007)|ASOP 43]]: an actuarial central estimate, disclosure of methods and assumptions, and identification of any material change from the previous analysis.
 
+![[Media/Figures/Loss_Reserving.svg|340]]
+
 > [!example]- IBNR as the Plug {Example}
 > An insurer has $\$10{,}000{,}000$ of reported losses (paid plus case) for accident year $2025$. The development analysis indicates ultimate losses of $\$13{,}000{,}000$.
 >

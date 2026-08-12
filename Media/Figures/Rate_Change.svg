@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>The indicated change, the selected change, and the gap between them</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Indicated and selected are two different</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">numbers</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">Change = Indicated Rate / Current − 1</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">selected = indicated, adjusted and documented</text>
+  <line x1="93.2" y1="106" x2="93.2" y2="314" class="grid"/>
+  <line x1="143.6" y1="106" x2="143.6" y2="314" class="grid"/>
+  <line x1="194" y1="106" x2="194" y2="314" class="grid"/>
+  <line x1="244.4" y1="106" x2="244.4" y2="314" class="grid"/>
+  <line x1="294.8" y1="106" x2="294.8" y2="314" class="grid"/>
+  <line x1="68" y1="314" x2="320" y2="314" class="grid"/>
+  <line x1="68" y1="249" x2="320" y2="249" class="grid"/>
+  <line x1="68" y1="184" x2="320" y2="184" class="grid"/>
+  <line x1="68" y1="119" x2="320" y2="119" class="grid"/>
+  <line x1="68" y1="314" x2="330" y2="314" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="68" y1="314" x2="68" y2="96" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="93.2" y1="314" x2="93.2" y2="318" class="tick"/>
+  <text x="93.2" y="330" text-anchor="middle" class="sm dim">2021</text>
+  <line x1="143.6" y1="314" x2="143.6" y2="318" class="tick"/>
+  <text x="143.6" y="330" text-anchor="middle" class="sm dim">2022</text>
+  <line x1="194" y1="314" x2="194" y2="318" class="tick"/>
+  <text x="194" y="330" text-anchor="middle" class="sm dim">2023</text>
+  <line x1="244.4" y1="314" x2="244.4" y2="318" class="tick"/>
+  <text x="244.4" y="330" text-anchor="middle" class="sm dim">2024</text>
+  <line x1="294.8" y1="314" x2="294.8" y2="318" class="tick"/>
+  <text x="294.8" y="330" text-anchor="middle" class="sm dim">2025</text>
+  <line x1="64" y1="314" x2="68" y2="314" class="tick"/>
+  <text x="60" y="317.6" text-anchor="end" class="sm dim">0%</text>
+  <line x1="64" y1="249" x2="68" y2="249" class="tick"/>
+  <text x="60" y="252.6" text-anchor="end" class="sm dim">5%</text>
+  <line x1="64" y1="184" x2="68" y2="184" class="tick"/>
+  <text x="60" y="187.6" text-anchor="end" class="sm dim">10%</text>
+  <line x1="64" y1="119" x2="68" y2="119" class="tick"/>
+  <text x="60" y="122.6" text-anchor="end" class="sm dim">15%</text>
+  <rect x="75.06" y="165.8" width="17.14" height="148.2" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="94.2" y="223" width="17.14" height="91" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <rect x="125.46" y="186.6" width="17.14" height="127.4" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="144.6" y="223" width="17.14" height="91" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <rect x="175.86" y="142.4" width="17.14" height="171.6" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="195" y="197" width="17.14" height="117" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <rect x="226.26" y="202.2" width="17.14" height="111.8" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="245.4" y="223" width="17.14" height="91" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <rect x="276.66" y="219.1" width="17.14" height="94.9" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="295.8" y="249" width="17.14" height="65" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <line x1="96" y1="96" x2="109" y2="96" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="115" y="99.6" text-anchor="start" class="sm">indicated</text>
+  <line x1="200" y1="96" x2="213" y2="96" stroke="#d97706" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="219" y="99.6" text-anchor="start" class="sm">selected</text>
+  <text x="180" y="358" text-anchor="middle" class="sm dim">taking less than the indication is allowed;</text>
+  <text x="180" y="376" text-anchor="middle" class="sm dim">taking it every year without closing the gap</text>
+  <text x="180" y="394" text-anchor="middle" class="sm dim">is how a book becomes permanently inadequate</text>
+</svg>

@@ -10,6 +10,8 @@
 - The ratio is strongly a function of **distribution**. Direct writers run expense ratios in the low twenties or below; independent agency companies in the low thirties. That difference is a genuine cost advantage, not an efficiency measure.
 - In a **growing** book the written-premium denominator flatters the ratio, since this year's acquisition costs are spread over writings that will not be earned until next year. The distortion runs the other way in runoff.
 
+![[Media/Figures/Expense_Ratio.svg|340]]
+
 > [!example]- Underwriting, Operating and Combined Ratios {Example}
 > An insurer reports: written premium $\$46{,}000{,}000$; earned premium $\$40{,}000{,}000$; commissions $\$6{,}900{,}000$; premium taxes $\$1{,}150{,}000$; other acquisition $\$1{,}840{,}000$; general expenses $\$2{,}530{,}000$; ULAE $\$1{,}600{,}000$; losses and ALAE $\$27{,}600{,}000$.
 >

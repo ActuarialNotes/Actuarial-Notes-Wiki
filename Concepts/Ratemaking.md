@@ -19,6 +19,8 @@
 - The [[Principles of Ratemaking|four CAS principles]] frame the whole exercise: a rate estimates expected future costs, provides for all costs of the risk transfer, provides for the costs of an *individual* risk transfer, and is actuarially sound — and therefore not excessive, inadequate, or unfairly discriminatory — when it does all three.
 - The calculated indication is rarely the filed change: [[Ratemaking Constraints|regulatory, operational, and marketing constraints]] and [[Lifetime Value|customer lifetime value]] shape the selected [[Rate Change|rate change]].
 
+![[Media/Figures/Ratemaking.svg|340]]
+
 > [!example]- Calculating a Pure Premium {Example}
 > 
 > An actuary expects a fleet of 1,000 delivery vans to incur $250,000 in total losses over the next year. If the administrative expenses are estimated at $50$ per van, what is the **Pure Premium**?

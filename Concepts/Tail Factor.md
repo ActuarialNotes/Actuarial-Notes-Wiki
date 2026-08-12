@@ -13,6 +13,8 @@
 - A tail of exactly $1.000$ is itself an assumption — that development is complete — and it is the wrong one for any casualty line. Understating the tail is a classic source of reserve deficiency, especially with latent exposures (asbestos, environmental, abuse claims).
 - Because the tail multiplies the *oldest* accident years — the ones with the most dollars already reported — a small change in it moves a large reserve. Sensitivity testing the tail is not optional in a long-tail analysis.
 
+![[Media/Figures/Tail_Factor.svg|340]]
+
 > [!example]- Tail Selection Moves the Reserve {Example}
 > The last observable age is $120$ months, with $\$2{,}000{,}000$ reported. Two tail estimates are under consideration: $1.030$ and $1.050$.
 >

@@ -10,6 +10,8 @@
 - A run of adverse development in the same direction across several roll-forwards is systematic deficiency, not bad luck, and calls for the assumptions to be re-selected rather than for the current estimate to be topped up again.
 - Favourable development is not automatically good news: consistent redundancy overstates the current year's loss ratio, which feeds an over-stated rate indication into pricing, exactly as deficiency feeds an under-stated one.
 
+![[Media/Figures/Roll_Forward_Analysis.svg|340]]
+
 > [!example]- Rolling the Balance Forward {Example}
 > Reserves at $12/31/2023$ were $\$10{,}000{,}000$. During $2024$: losses incurred on the new accident year $\$2{,}500{,}000$; payments (all years) $\$3{,}200{,}000$; adverse development on prior accident years $\$400{,}000$.
 >

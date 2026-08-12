@@ -10,6 +10,8 @@
 
 The professional constraint: **the substance must not vary by audience.** Adapting depth, framing and emphasis is competent communication. Presenting a more favourable characterization to investors than to the regulator is not, and the disclosure requirements exist to make the difference visible.
 
+![[Media/Figures/Stakeholder_Reporting.svg|340]]
+
 > [!example]- One Result, Four Audiences {Example}
 > Year-end reserves were $\$50{,}000{,}000$. $\$5{,}000{,}000$ of adverse development has emerged on accident years $2021$–$2023$, driven by severity on litigated general liability claims.
 >

@@ -10,6 +10,8 @@
 - It produces a **change**, not a rate — so it cannot price a new programme, and it presumes the current rate structure is a sensible starting point.
 - The method is equivalent to the [[Pure Premium Method]] given consistent inputs, because a loss ratio is the pure premium divided by the average premium. Most filings use the loss ratio method for the overall indication and the pure premium method for [[Classification Ratemaking|class relativities]].
 
+![[Media/Figures/Loss_Ratio_Method.svg|340]]
+
 > [!example]- Straightforward Loss Ratio Indication {Example}
 > Projected ultimate trended losses and LAE are $\$720{,}000$; trended on-level earned premium is $\$1{,}000{,}000$. Variable expenses are $22\%$, fixed expenses $6\%$ of premium, target profit $5\%$.
 >

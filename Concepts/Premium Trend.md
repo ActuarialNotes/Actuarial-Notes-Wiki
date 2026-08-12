@@ -16,6 +16,8 @@
 - Premium trend matters most where the exposure base inflates ([[Exposure Trend]]) or where the book is drifting — rising homeowners amounts of insurance, higher liability limits, shifting deductible mix. Where the exposure base is a stable count and mix is stable, the trend is near zero and may be omitted.
 - Applying premium trend in a [[Pure Premium Method]] indication is a double count: that method never divides by premium, and the same phenomenon is captured there by exposure trend in the denominator.
 
+![[Media/Figures/Premium_Trend.svg|340]]
+
 > [!example]- One-Step Premium Trend {Example}
 > A homeowners book has on-level earned premium of $\$5{,}000{,}000$ for accident year $2024$. Average premium at current rate level has been rising $3.0\%$ a year with rising amounts of insurance. The trend period from the average written date of AY 2024 to the average written date of the forecast period is $2.0$ years.
 >

@@ -11,6 +11,8 @@
 - It is the natural companion to a **paid** projection rather than a substitute: paid data and case data are independent inputs, so agreement between the two is meaningful evidence.
 - Do **not** develop paid losses to ultimate and then add developed case outstanding — that double counts. Paid-to-date is taken at face value; only the case balance is developed.
 
+![[Media/Figures/Case_Outstanding_Development_Method.svg|340]]
+
 > [!example]- Projecting from Case Outstanding {Example}
 > AY 2023 at $24$ months: paid to date $\$800{,}000$, case outstanding $\$500{,}000$, so reported is $\$1{,}300{,}000$. From mature accident years, payments after $24$ months have averaged $2.00$ times the case outstanding at $24$ months.
 >

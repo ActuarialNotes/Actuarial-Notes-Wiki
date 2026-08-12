@@ -10,6 +10,8 @@
 - The full ratemaking chain on the loss side is: start with reported losses → **develop** to ultimate ([[Loss Development]]) → **trend** to the forecast period ([[Loss Trend]]) → adjust for [[Large Loss|large losses]] and [[Catastrophe Loss|catastrophes]] → adjust for benefit or coverage changes → add LAE.
 - The statutory Annual Statement calls ALAE **Defense and Cost Containment (DCC)** and ULAE **Adjusting and Other (A&O)**; the definitions do not match exactly, which matters when using industry data.
 
+![[Media/Figures/Loss_and_Loss_Adjustment_Expense.svg|340]]
+
 > [!example]- Building the Loss & LAE Ratio {Example}
 > Accident year $2023$: ultimate losses $\$650{,}000$, ultimate ALAE $\$78{,}000$, ULAE loaded at $4\%$ of loss and ALAE, earned premium $\$1{,}200{,}000$. The permissible loss ratio is $65\%$.
 >

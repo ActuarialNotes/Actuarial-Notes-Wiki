@@ -17,6 +17,8 @@ Further points:
 - The method needs **consistent count definitions** across the whole triangle, and it is sensitive to [[Large Loss|large losses]] in the severity series, so severities are usually capped and the excess layer added back separately.
 - A pitfall: average severity triangles mix two opposing forces — IBNER pushing severity up, late-reported small claims pulling it down. Report-year severities avoid the dilution; accident-year severities do not.
 
+![[Media/Figures/Frequency-Severity_Method.svg|340]]
+
 > [!example]- Straightforward Frequency-Severity Projection {Example}
 > An accident year has $10{,}000$ earned car-years. Projected ultimate frequency is $0.08$ claims per car-year and projected ultimate severity is $\$12{,}500$.
 >

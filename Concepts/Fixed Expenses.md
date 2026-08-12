@@ -10,6 +10,8 @@
 - Because $F$ is a dollar amount, it must be **trended** if fixed costs are inflating and the exposure count is not. Werner's simplification — assuming fixed expenses inflate at the same rate as premium — is only safe when the two genuinely move together.
 - The fixed provision is also where the [[Minimum Premium|minimum premium]] comes from: below some policy size, $F$ plus the pure premium exceeds what any percentage-based rate would produce, and the minimum premium is what makes small policies viable.
 
+![[Media/Figures/Fixed_Expenses.svg|340]]
+
 > [!example]- Fixed Expense Load in the Rate {Example}
 > An insurer has $\$500{,}000$ of fixed expenses and $10{,}000$ earned exposures. The projected pure premium is $\$200$, variable expenses are $20\%$ of premium, and the target underwriting profit provision is $5\%$.
 >

@@ -8,6 +8,8 @@
 - The obvious weakness is **consistency**. Two underwriters can see the same risk differently, and the discretion can become a competitive discount wearing an actuarial label. Regulators review aggregate schedule credits for exactly this reason: a book where nearly every risk receives the maximum credit is not being schedule-rated, it is being discounted.
 - Because credits are judgmental, they are also a source of **rate level leakage**: the filed manual rate can be adequate while the *achieved* rate is not. Monitoring the average schedule modification over time is part of measuring true rate change.
 
+![[Media/Figures/Schedule_Rating.svg|340]]
+
 > [!example]- Applying a Schedule Modification {Example}
 > A commercial general liability risk has a manual premium of $\$20{,}000$. The underwriter assigns a $-10\%$ credit for an excellent safety programme and a $+5\%$ debit for the age and condition of the building. The risk also carries an experience modification of $0.90$.
 >

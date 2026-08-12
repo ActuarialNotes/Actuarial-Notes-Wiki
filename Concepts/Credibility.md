@@ -24,6 +24,8 @@ Further points:
 - The choice of complement matters most exactly when $Z$ is low — which is when actuaries are most tempted to stop thinking about it.
 - In reserving, credibility appears explicitly in the [[Bornhuetter-Ferguson Method|BF method]], where $Z = 1/\text{CDF}$: the reported portion of an accident year is its own experience and the unreported portion is priced from the a priori.
 
+![[Media/Figures/Credibility.svg|340]]
+
 > [!example]- Partial Credibility on a Class Relativity {Example}
 > A workers compensation class has $75$ claims against a full-credibility standard of $1{,}082$. Its indicated relativity is $1.25$; the current (manual) relativity is $1.00$.
 >

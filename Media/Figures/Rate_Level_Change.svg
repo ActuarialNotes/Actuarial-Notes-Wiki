@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>The cumulative rate index that makes premium from different years comparable</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Premium from different years is not</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">comparable</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">OLF = current index / index in force</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">1.278 / 1.000 = 1.278 for 2020</text>
+  <line x1="88.82" y1="102" x2="88.82" y2="322" class="grid"/>
+  <line x1="138.2" y1="102" x2="138.2" y2="322" class="grid"/>
+  <line x1="187.59" y1="102" x2="187.59" y2="322" class="grid"/>
+  <line x1="236.98" y1="102" x2="236.98" y2="322" class="grid"/>
+  <line x1="286.37" y1="102" x2="286.37" y2="322" class="grid"/>
+  <line x1="74" y1="294.5" x2="316" y2="294.5" class="grid"/>
+  <line x1="74" y1="239.5" x2="316" y2="239.5" class="grid"/>
+  <line x1="74" y1="184.5" x2="316" y2="184.5" class="grid"/>
+  <line x1="74" y1="129.5" x2="316" y2="129.5" class="grid"/>
+  <line x1="74" y1="322" x2="326" y2="322" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="74" y1="322" x2="74" y2="92" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="88.82" y1="322" x2="88.82" y2="326" class="tick"/>
+  <text x="88.82" y="338" text-anchor="middle" class="sm dim">2020</text>
+  <line x1="138.2" y1="322" x2="138.2" y2="326" class="tick"/>
+  <text x="138.2" y="338" text-anchor="middle" class="sm dim">2021</text>
+  <line x1="187.59" y1="322" x2="187.59" y2="326" class="tick"/>
+  <text x="187.59" y="338" text-anchor="middle" class="sm dim">2022</text>
+  <line x1="236.98" y1="322" x2="236.98" y2="326" class="tick"/>
+  <text x="236.98" y="338" text-anchor="middle" class="sm dim">2023</text>
+  <line x1="286.37" y1="322" x2="286.37" y2="326" class="tick"/>
+  <text x="286.37" y="338" text-anchor="middle" class="sm dim">2024</text>
+  <line x1="70" y1="294.5" x2="74" y2="294.5" class="tick"/>
+  <text x="66" y="298.1" text-anchor="end" class="sm dim">1.00</text>
+  <line x1="70" y1="239.5" x2="74" y2="239.5" class="tick"/>
+  <text x="66" y="243.1" text-anchor="end" class="sm dim">1.10</text>
+  <line x1="70" y1="184.5" x2="74" y2="184.5" class="tick"/>
+  <text x="66" y="188.1" text-anchor="end" class="sm dim">1.20</text>
+  <line x1="70" y1="129.5" x2="74" y2="129.5" class="tick"/>
+  <text x="66" y="133.1" text-anchor="end" class="sm dim">1.30</text>
+  <polyline points="88.82,294.5 138.2,294.5 138.2,261.5 187.59,261.5 187.59,208.7 236.98,208.7 236.98,176.8 286.37,176.8 286.37,141.6 311.06,141.6" class="curve" stroke="#3b82f6" stroke-width="2.4"/>
+  <circle cx="138.2" cy="261.5" r="3.2" fill="#3b82f6"/>
+  <circle cx="187.59" cy="208.7" r="3.2" fill="#3b82f6"/>
+  <circle cx="236.98" cy="176.8" r="3.2" fill="#3b82f6"/>
+  <circle cx="286.37" cy="141.6" r="3.2" fill="#3b82f6"/>
+  <text x="306.12" y="133.6" text-anchor="end" class="sm bold" fill="#3b82f6">current</text>
+  <text x="180" y="352" text-anchor="middle" class="sm dim">cumulative rate level index</text>
+  <text x="180" y="376" text-anchor="middle" class="sm dim">a loss ratio on 2020 premium runs 28% high</text>
+  <text x="180" y="394" text-anchor="middle" class="sm dim">until it is on level — and so does any ELR from it</text>
+</svg>

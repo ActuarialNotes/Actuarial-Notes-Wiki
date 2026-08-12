@@ -8,6 +8,8 @@
 - Because factors interact, a change to any single relativity must be evaluated **through the whole algorithm** on the actual book — the realized effect differs from the factor change wherever the minimum premium binds, a cap applies, or the factor multiplies against a skewed distribution of other factors.
 - The algorithm is also the constraint on what the pricing analysis can deliver: a rating variable the policy administration system cannot capture, or an interaction the algorithm cannot express, is not usable however well it models.
 
+![[Media/Figures/Rating_Algorithm.svg|340]]
+
 > [!example]- Walking the Algorithm {Example}
 > Base rate $\$500$; territory relativity $1.20$; class relativity $0.90$; policy fee $\$25$ (additive); paid-in-full discount $10\%$; minimum premium $\$400$.
 >

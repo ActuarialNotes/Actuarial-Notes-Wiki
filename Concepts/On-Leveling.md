@@ -10,6 +10,8 @@
 - A special case: if the rate change applies to **in-force** policies rather than only new and renewal business, the parallelogram geometry no longer holds and the change is treated as effective immediately across the whole book.
 - On-levelling handles rate changes only; changes in the average risk being written are [[Premium Trend|premium trend]], and law amendments or benefit-level changes are handled by a separate law-level adjustment on the loss side.
 
+![[Media/Figures/On-Leveling.svg|340]]
+
 > [!example]- Parallelogram Factor for a Mid-Year Change {Example}
 > Rates increased $12\%$ effective $7/1/2023$ for policies written on or after that date. All policies are annual and premium is written uniformly. There have been no other changes.
 >

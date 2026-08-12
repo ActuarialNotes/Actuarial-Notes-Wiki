@@ -9,6 +9,8 @@
 - **Benefit-level changes** in statutory lines (workers compensation reform, auto no-fault changes) are the same problem at industry scale, and are handled by a law-level adjustment factor applied to historical losses before trend — deliberately kept separate from trend so the two are not confused.
 - On the pricing side the same restatement is required, or the indication prices coverage the insurer no longer sells.
 
+![[Media/Figures/Policy_Provision_Changes.svg|340]]
+
 > [!example]- Restating for a Deductible Increase {Example}
 > A commercial auto programme raises its per-occurrence deductible from $\$1{,}000$ to $\$5{,}000$ effective $1/1/2024$. A sample of $1{,}000$ historical claims:
 >

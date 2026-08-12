@@ -15,6 +15,8 @@
 - The clause applies only up to the policy limit, and full limits are still paid on total losses up to that limit.
 - The insurer's exposure to the clause is itself a rating consideration: books with poor insurance-to-value discipline show higher loss ratios per $\$1{,}000$ of stated value, which is [[Mix of Business|mix]], not cost.
 
+![[Media/Figures/Coinsurance_Rating.svg|340]]
+
 > [!example]- Pricing a Participation Plan {Example}
 > A full-coverage plan has a manual rate of $\$1{,}200$ a year, of which $\$780$ is loss cost, $\$120$ fixed expenses, with variable expenses of $20\%$ and profit $5\%$. The insurer offers an $80/20$ plan.
 >

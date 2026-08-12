@@ -10,6 +10,8 @@
 - Rate changes also shift the **mix**. A large increase drives away the risks with the most alternatives — typically the better ones — so the remaining book's experience deteriorates in a way no on-level factor corrects. See [[Mix of Business]].
 - Reconstructing rate level history is genuine work: changes may apply to new business only, to renewals at their anniversaries, or to policies in force; tier and underwriting-rule changes move effective price without appearing as a filed rate change at all.
 
+![[Media/Figures/Rate_Level_Change.svg|340]]
+
 > [!example]- Adjusting a Priori Loss Ratios for Rate Level {Example}
 > An actuary sets a BF expected loss ratio for accident year $2024$. The base year is AY $2021$, whose ultimate loss ratio was $68\%$ and is considered a fair a priori. Since then rates rose $+6\%$ ($1/1/2022$), $+10\%$ ($1/1/2023$) and $+4\%$ ($1/1/2024$); annual loss trend is $5\%$.
 >

@@ -16,6 +16,8 @@ Beyond the time basis, Friedland's segmentation requirements:
 - Handle recoveries consistently: decide whether [[Salvage and Subrogation|salvage and subrogation]] and [[Deductible Recovery|deductible recoveries]] are netted in the triangle or estimated separately, and apply the same treatment to every year.
 - Keep counts alongside dollars. Paid, reported, closed and open **claim counts** ([[Claim Count Triangle]]) are what make the dollar triangles diagnosable.
 
+![[Media/Figures/Reserving_Data_Organization.svg|340]]
+
 > [!example]- Segmenting a Book Before Building Triangles {Example}
 > A regional insurer writes personal auto: bodily injury liability, property damage liability, collision, and comprehensive. Total annual premium is $\$60{,}000{,}000$, split $35/15/35/15$. Physical damage claims close within months; BI claims run several years.
 >

@@ -10,6 +10,8 @@
 - Net loss ratios must be compared against **net** premium. Gross losses over net premium — or the reverse — misstates the ratio by the whole cost of the reinsurance programme.
 - Net figures depend on recoveries actually **arriving**. Reinsurer insolvency, coverage disputes, and an insolvent large-deductible insured all convert an assumed recovery into a retained loss, so a net estimate carries credit risk that a gross estimate does not.
 
+![[Media/Figures/Net_Losses.svg|340]]
+
 > [!example]- Building the Net Figure {Example}
 > Gross incurred losses $\$1{,}000{,}000$; excess-of-loss reinsurance recoverable $\$150{,}000$; salvage on total-loss vehicles $\$30{,}000$; subrogation from an at-fault third party $\$20{,}000$.
 >

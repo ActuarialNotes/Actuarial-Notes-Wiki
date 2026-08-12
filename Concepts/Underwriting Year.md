@@ -8,6 +8,8 @@
 - UY is standard at Lloyd's and in treaty reinsurance pricing, and it is the basis on which a reinsurer's [[Bornhuetter-Ferguson Method|BF]] and [[Expected Loss Method|expected loss]] reserving is usually performed, since chain ladder factors at early UY maturities are extremely leveraged.
 - Converting between bases loses information: a UY triangle cannot be re-cut into accident years without claim-level accident dates, which is one reason ceded data quality is a recurring problem in [[Reinsurance Recovery|reinsurance reserving]].
 
+![[Media/Figures/Underwriting_Year.svg|340]]
+
 > [!example]- How Long a $\;2024$ Treaty Stays Exposed {Example}
 > A quota share treaty incepting $1/1/2024$ covers all $12$-month policies written by the cedant during calendar $2024$. The line has an average reporting lag of nine months.
 >

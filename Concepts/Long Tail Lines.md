@@ -9,6 +9,8 @@
 - The long payout pattern means large held reserves, substantial investment income on them, and an [[Underwriting Profit|underwriting profit provision]] that may legitimately be lower than a short-tail line's — a fully developed answer to "why does workers compensation target a higher combined ratio".
 - No single method dominates. Practice is to run [[Chain Ladder Method|chain ladder]], [[Bornhuetter-Ferguson Method|BF]], [[Expected Loss Method|expected claims]] and [[Frequency-Severity Method|frequency-severity]] on both paid and reported data, and to weight toward the a priori methods at immature ages.
 
+![[Media/Figures/Long_Tail_Lines.svg|340]]
+
 > [!example]- Leverage in the Tail Factor {Example}
 > A medical malpractice accident year has $\$3{,}000{,}000$ reported at $36$ months. Two actuaries select tail factors of $3.50$ and $3.75$ against the same age-to-age factors.
 >

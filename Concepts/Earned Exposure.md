@@ -10,6 +10,8 @@
 - Exposures must be earned on a basis consistent with the premium: if premium is earned pro rata, so are exposures. Lines with strongly seasonal risk (crop, some property covers) may earn premium on a non-uniform schedule, and exposures follow the same schedule.
 - Earned exposures are also the weights in classification analysis and the denominator of [[Frequency|claim frequency]], so an error here propagates through the entire indication.
 
+![[Media/Figures/Earned_Exposure.svg|340]]
+
 > [!example]- Calendar Year Earned Car-Years {Example}
 > An insurer writes $1{,}200$ annual auto policies during $2024$ — $100$ on the first of each month — and wrote no business before $2024$.
 >

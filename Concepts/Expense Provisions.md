@@ -12,6 +12,8 @@
 - **Reinsurance costs** and the [[Catastrophe Loss|catastrophe]] provision sit alongside the expense provisions in the [[Overall Rate Level Indication]]; the net cost of reinsurance (ceded premium less expected ceded losses) is a real cost of writing the business even though it is not an internal expense.
 - Expense **trend** is often ignored on the assumption that fixed expenses inflate at roughly the same rate as premium, but where the two diverge materially the fixed provision should be trended independently (see [[Loss Trend]], [[Premium Trend]]).
 
+![[Media/Figures/Expense_Provisions.svg|340]]
+
 > [!example]- Splitting Fixed and Variable Expenses {Example}
 > An insurer's expense study shows commissions $15.0\%$ of written premium, premium taxes $2.5\%$ of written premium, general expenses $6.0\%$ of earned premium ($75\%$ fixed), and other acquisition $4.0\%$ of written premium ($50\%$ fixed). The target underwriting profit provision is $5.0\%$. Projected average premium is $\$800$.
 >

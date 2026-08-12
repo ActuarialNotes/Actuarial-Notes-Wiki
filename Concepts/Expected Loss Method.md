@@ -10,6 +10,8 @@
 - The **ELR** is the whole method, and it must be derived, not assumed: from the pricing indication for that year, from mature years' ultimate loss ratios adjusted for [[Rate Level Change|rate level]] and [[Loss Trend|trend]], or from [[External Information in Reserving|industry benchmarks]].
 - The estimate ignores emergence, so it can produce a **negative implied IBNR** if reported losses already exceed the a priori — an outcome that is a signal the ELR is wrong, not a reserve credit to be booked.
 
+![[Media/Figures/Expected_Loss_Method.svg|340]]
+
 > [!example]- Applying the Expected Loss Method {Example}
 > An accident year is three months old. Earned premium is $\$2{,}000{,}000$, the selected ELR is $65\%$, and reported losses are $\$50{,}000$.
 >

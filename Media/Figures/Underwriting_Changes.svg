@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>A shift in risk selection moving the aggregate loss ratio while no segment's own ratio moves</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">The same segments, a different book</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">Aggregate LR = Σ wᵢ × LRᵢ</text>
+  <text x="46" y="134" text-anchor="start" class="sm bold">2022</text>
+  <rect x="46" y="147" width="134" height="30" rx="4" fill="#059669" fill-opacity="0.30" stroke="#059669" stroke-width="1.2"/>
+  <text x="113" y="166" text-anchor="middle" class="sm">50%</text>
+  <rect x="180" y="147" width="93.8" height="30" rx="4" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="226.9" y="166" text-anchor="middle" class="sm">35%</text>
+  <rect x="273.8" y="147" width="40.2" height="30" rx="4" fill="#e11d48" fill-opacity="0.30" stroke="#e11d48" stroke-width="1.2"/>
+  <text x="293.9" y="166" text-anchor="middle" class="sm">15%</text>
+  <text x="180" y="200" text-anchor="middle" class="sm dim">aggregate loss ratio 65.2%</text>
+  <text x="46" y="230" text-anchor="start" class="sm bold">2024</text>
+  <rect x="46" y="243" width="67" height="30" rx="4" fill="#059669" fill-opacity="0.30" stroke="#059669" stroke-width="1.2"/>
+  <text x="79.5" y="262" text-anchor="middle" class="sm">25%</text>
+  <rect x="113" y="243" width="93.8" height="30" rx="4" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="159.9" y="262" text-anchor="middle" class="sm">35%</text>
+  <rect x="206.8" y="243" width="107.2" height="30" rx="4" fill="#e11d48" fill-opacity="0.30" stroke="#e11d48" stroke-width="1.2"/>
+  <text x="260.4" y="262" text-anchor="middle" class="sm">40%</text>
+  <text x="180" y="296" text-anchor="middle" class="sm bold">aggregate loss ratio 73.4%</text>
+  <line x1="46" y1="330" x2="59" y2="330" stroke="#059669" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="65" y="333.6" text-anchor="start" class="sm">pref 55%</text>
+  <line x1="158" y1="330" x2="171" y2="330" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="177" y="333.6" text-anchor="start" class="sm">std 70%</text>
+  <line x1="46" y1="350" x2="59" y2="350" stroke="#e11d48" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="65" y="353.6" text-anchor="start" class="sm">non-standard 88%</text>
+  <text x="180" y="380" text-anchor="middle" class="sm dim">no segment changed — only their weights did</text>
+</svg>

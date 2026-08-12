@@ -11,6 +11,8 @@
 - ILFs are **leveraged by inflation**. As losses grow, more of them pierce the basic limit and the excess layers grow faster than the ground-up trend — so ILF tables must be reviewed, not left in place, through inflationary periods.
 - The **assumptions** behind an ILF table matter: frequency is independent of severity, the severity distribution is the same at all limits, and there is no adverse selection by limit. All three fail somewhat in practice — insureds who buy $\$5$M limits are not a random sample.
 
+![[Media/Figures/Increased_Limits.svg|340]]
+
 > [!example]- Pricing a Higher Limit {Example}
 > The basic limit is $\$100{,}000$, with $\text{ILF}(100\text{K}) = 1.00$, $\text{ILF}(300\text{K}) = 1.25$, $\text{ILF}(500\text{K}) = 1.35$, $\text{ILF}(1\text{M}) = 1.45$. The basic-limits loss cost is $\$800$.
 >

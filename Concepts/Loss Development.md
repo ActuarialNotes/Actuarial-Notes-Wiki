@@ -11,6 +11,8 @@
 - The mechanics live in the [[Development Triangle]] → [[Age to Age Factor]] → [[Cumulative Development Factor]] chain; the [[Chain Ladder Method]] applies them directly, while the [[Bornhuetter-Ferguson Method]] uses the *complement* $(1 - 1/\text{CDF})$ to weight an a priori expectation.
 - In **ratemaking**, developing losses to ultimate is a distinct step from trending: development moves an immature year to its own ultimate value, while [[Loss Trend|trend]] moves that ultimate value forward to the future policy period. Applying one without the other under-states the indication; overlapping them double-counts.
 
+![[Media/Figures/Loss_Development.svg|340]]
+
 > [!example]- Developing an Immature Accident Year {Example}
 > Reported losses for AY 2024 at $12$ months are $\$4{,}200{,}000$. Selected age-to-age factors are $12\text{–}24: 1.650$, $24\text{–}36: 1.220$, $36\text{–}48: 1.080$, $48\text{–}60: 1.030$, with a tail factor of $1.015$ beyond $60$ months.
 >

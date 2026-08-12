@@ -14,6 +14,8 @@
 - In **reserving** the parallel treatment applies: pull large claims out of the triangle, develop the remainder with factors undistorted by shock losses, and reserve the large claims individually or with their own (much longer) pattern. Leaving a $\$2$M claim in an immature diagonal and multiplying it by a CDF of $4$ produces an $\$8$M estimate from one claim.
 - Distinguish a large loss from a [[Catastrophe Loss|catastrophe]]: a large loss is one claim of unusual size, a catastrophe is many claims from one event. Both are excluded from base experience, but the loads are built differently.
 
+![[Media/Figures/Large_Loss.svg|340]]
+
 > [!example]- Capping and Loading {Example}
 > A general liability class has a $\$500{,}000$ per-occurrence cap. Over five years the class produced $\$14{,}000{,}000$ of losses on $20{,}000$ exposures, including one claim that settled at $\$1{,}200{,}000$ and another at $\$800{,}000$. Ten years of wider data show that losses above $\$500{,}000$ have averaged $8\%$ of capped losses.
 >

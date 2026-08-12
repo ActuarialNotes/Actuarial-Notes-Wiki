@@ -10,6 +10,8 @@
 - Comparing successive in-force snapshots isolates growth from rate: the change in policy count is pure volume, and the change in average in-force premium is rate plus [[Mix of Business|mix]].
 - In-force counts also feed retention and renewal analysis (policies in force at renewal $\div$ policies eligible), which drives [[Lifetime Value|customer lifetime value]] work.
 
+![[Media/Figures/In-Force.svg|340]]
+
 > [!example]- Reading an In-Force Snapshot {Example}
 > At $6/30/2024$ an insurer's auto book contains:
 >

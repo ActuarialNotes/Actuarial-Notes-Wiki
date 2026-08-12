@@ -10,6 +10,8 @@
 - A **structural change** in distribution — moving business direct, renegotiating commission scales, adding a contingent commission — must be reflected prospectively rather than from historical ratios, since the ratemaking question is what the expenses *will* be.
 - Contingent or profit-sharing commissions complicate the split: they are a percentage of premium (variable) but conditional on loss experience, so they behave partly like a loss-sensitive cost and are sometimes provided for separately.
 
+![[Media/Figures/Variable_Expenses.svg|340]]
+
 > [!example]- Building the Variable Expense Ratio and the Rate {Example}
 > A personal auto insurer's expense study shows commissions $15\%$ of written premium, premium taxes $2\%$, other variable acquisition $3\%$. The projected pure premium is $\$300$, fixed expenses are $\$40$ per exposure, and the target underwriting profit provision is $5\%$.
 >

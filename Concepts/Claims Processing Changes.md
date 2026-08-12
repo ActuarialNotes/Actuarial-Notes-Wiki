@@ -10,6 +10,8 @@
 - Unlike [[Claims Coding Changes]], which move losses between categories, processing changes genuinely change the emergence curve — so post-change data is describing a different process, not a relabelled one.
 - Watch for **closed-without-payment** activity: a drive to clear old files can raise the closure rate without moving any money, which changes the disposal rate but not the paid pattern. Counting CWP separately reveals it.
 
+![[Media/Figures/Claims_Processing_Changes.svg|340]]
+
 > [!example]- A Fast-Track Settlement Programme {Example}
 > An insurer introduces fast-track settlement for auto bodily injury in $2022$, cutting average time-to-close from $18$ months to $9$. Historical $12$–$24$ paid factors for AY $2018$–$2021$ averaged $1.45$; AY $2022$–$2023$ are coming in near $1.20$.
 >

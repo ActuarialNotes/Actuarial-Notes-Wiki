@@ -9,6 +9,8 @@
 - [[Berquist-Sherman Method|Berquist-Sherman]] does not address this. It corrects for changes in *claims* practice, not in the composition of the exposure. The responses here are to weight recent years more heavily, to segment the data so the changing mix is visible, or to lean on a priori methods whose ELR can be set for the new book.
 - The pricing counterpart matters too: a book whose underwriting has tightened needs its historical loss experience adjusted before it is used in an indication, or the rate will be set for risks the insurer no longer writes.
 
+![[Media/Figures/Underwriting_Changes.svg|340]]
+
 > [!example]- Underwriting Tightening {Example}
 > An insurer stops writing contractors with more than three prior losses, effective $7/1/2022$. High-hazard contractors fall from $30\%$ of premium to $5\%$.
 >

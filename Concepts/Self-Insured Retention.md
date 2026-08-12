@@ -11,6 +11,8 @@
 - **Collateral and accounting.** Regulators and excess carriers usually require collateral (letters of credit, trusts) sized off the actuarial estimate of retained unpaid claims, so the estimate has direct cash consequences for the entity. Estimates are often required on both an undiscounted and a discounted basis.
 - **Large deductible programs** are the insurance-market analogue: a policy written with a deductible of $\$250{,}000$ or more, where the insurer fronts the claims and the insured reimburses. The insurer carries credit risk on the reimbursement and must reserve gross while tracking the [[Deductible Recovery|deductible recoveries]] as an offsetting asset.
 
+![[Media/Figures/Self-Insured_Retention.svg|340]]
+
 > [!example]- Retained vs. Excess Losses at an SIR {Example}
 > A self-insured municipality has a $\$500{,}000$ per-occurrence SIR with excess coverage above it. Accident year 2024 produced five claims, valued at ultimate: $\$120{,}000$, $\$380{,}000$, $\$650{,}000$, $\$1{,}400{,}000$, and $\$95{,}000$.
 >

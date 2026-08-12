@@ -10,6 +10,8 @@
 - **Collectability** must be assessed: disputes over coverage, commutations that settle the recoverable for a lump sum, and reinsurer insolvency all reduce what actually arrives. Statutory reporting requires provisions for uncollectible reinsurance, and the actuary should state whether the estimate is before or after such a provision.
 - Ceded recoveries also lag in **timing** even when uncontested — the cedant pays the claim first and bills afterwards — so the cash-flow profile of a net position differs from its accounting profile.
 
+![[Media/Figures/Reinsurance_Recovery.svg|340]]
+
 > [!example]- Gross, Ceded and Net Ultimates {Example}
 > AY 2023: gross reported losses $\$4{,}000{,}000$ with a gross CDF of $1.20$; ceded reported losses $\$900{,}000$ with a ceded CDF of $1.55$ under a per-occurrence excess treaty.
 >

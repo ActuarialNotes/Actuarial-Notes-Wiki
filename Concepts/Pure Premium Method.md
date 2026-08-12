@@ -10,6 +10,8 @@
 - Both methods are **algebraically equivalent** given consistent inputs, since $\text{Loss Ratio} = \text{Pure Premium} / \text{Average Premium}$. They differ in the data each demands: pure premium needs exposures, loss ratio needs premium on level.
 - Advisory organizations file **loss costs** — pure premiums — leaving each insurer to apply its own expense and profit provisions through a loss cost multiplier. That division of labour only works in the pure premium framework.
 
+![[Media/Figures/Pure_Premium_Method.svg|340]]
+
 > [!example]- Pure Premium Indication {Example}
 > Accident year $2023$: reported losses $\$1{,}200{,}000$ at $24$ months on $5{,}000$ earned exposures. The CDF to ultimate is $1.15$; loss trend is $4\%$ a year; exposure trend is $1\%$ a year; the trend period is $2.5$ years. Fixed expenses are $\$25$ per exposure, variable expenses $22\%$, target profit $5\%$. The current rate is $\$425$.
 >

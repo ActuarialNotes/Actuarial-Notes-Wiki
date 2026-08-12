@@ -12,6 +12,8 @@
 - Ceded history reflects the treaties **as they stood**. A change in attachment point, limit or structure breaks the series and makes prior ceded years non-comparable; the gross history is unaffected. See [[Gross Losses]].
 - Ceded amounts carry **credit risk** — dispute, commutation, insolvency — and a provision for uncollectible reinsurance may be required. The cedant remains liable to its policyholders regardless.
 
+![[Media/Figures/Ceded_Losses.svg|340]]
+
 > [!example]- Ceding Under Two Structures {Example}
 > Five claims: $\$2{,}600{,}000$, $\$900{,}000$, $\$800{,}000$, $\$500{,}000$, $\$200{,}000$ ($\$5{,}000{,}000$ gross).
 >

@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Commission and taxes rising in proportion to premium</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">A constant share of whatever the premium</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">is</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">V = Variable Expenses / Premium = 26%</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">Rate = (Pure Premium + F) / (1 − V − Q)</text>
+  <line x1="74" y1="100" x2="74" y2="328" class="grid"/>
+  <line x1="184.91" y1="100" x2="184.91" y2="328" class="grid"/>
+  <line x1="295.82" y1="100" x2="295.82" y2="328" class="grid"/>
+  <line x1="74" y1="328" x2="318" y2="328" class="grid"/>
+  <line x1="74" y1="217.68" x2="318" y2="217.68" class="grid"/>
+  <line x1="74" y1="107.35" x2="318" y2="107.35" class="grid"/>
+  <line x1="74" y1="328" x2="328" y2="328" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="74" y1="328" x2="74" y2="90" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="74" y1="328" x2="74" y2="332" class="tick"/>
+  <text x="74" y="344" text-anchor="middle" class="sm dim">0</text>
+  <line x1="184.91" y1="328" x2="184.91" y2="332" class="tick"/>
+  <text x="184.91" y="344" text-anchor="middle" class="sm dim">1,000</text>
+  <line x1="295.82" y1="328" x2="295.82" y2="332" class="tick"/>
+  <text x="295.82" y="344" text-anchor="middle" class="sm dim">2,000</text>
+  <line x1="70" y1="328" x2="74" y2="328" class="tick"/>
+  <text x="66" y="331.6" text-anchor="end" class="sm dim">0</text>
+  <line x1="70" y1="217.68" x2="74" y2="217.68" class="tick"/>
+  <text x="66" y="221.28" text-anchor="end" class="sm dim">300</text>
+  <line x1="70" y1="107.35" x2="74" y2="107.35" class="tick"/>
+  <text x="66" y="110.95" text-anchor="end" class="sm dim">600</text>
+  <polyline points="74,328 75.36,326.83 76.71,325.66 78.07,324.49 79.42,323.33 80.78,322.16 82.13,320.99 83.49,319.82 84.84,318.65 86.2,317.48 87.56,316.31 88.91,315.15 90.27,313.98 91.62,312.81 92.98,311.64 94.33,310.47 95.69,309.3 97.04,308.13 98.4,306.97 99.76,305.8 101.11,304.63 102.47,303.46 103.82,302.29 105.18,301.12 106.53,299.95 107.89,298.78 109.24,297.62 110.6,296.45 111.96,295.28 113.31,294.11 114.67,292.94 116.02,291.77 117.38,290.6 118.73,289.44 120.09,288.27 121.44,287.1 122.8,285.93 124.16,284.76 125.51,283.59 126.87,282.42 128.22,281.26 129.58,280.09 130.93,278.92 132.29,277.75 133.64,276.58 135,275.41 136.36,274.24 137.71,273.08 139.07,271.91 140.42,270.74 141.78,269.57 143.13,268.4 144.49,267.23 145.84,266.06 147.2,264.9 148.56,263.73 149.91,262.56 151.27,261.39 152.62,260.22 153.98,259.05 155.33,257.88 156.69,256.72 158.04,255.55 159.4,254.38 160.76,253.21 162.11,252.04 163.47,250.87 164.82,249.7 166.18,248.54 167.53,247.37 168.89,246.2 170.24,245.03 171.6,243.86 172.96,242.69 174.31,241.52 175.67,240.35 177.02,239.19 178.38,238.02 179.73,236.85 181.09,235.68 182.44,234.51 183.8,233.34 185.16,232.17 186.51,231.01 187.87,229.84 189.22,228.67 190.58,227.5 191.93,226.33 193.29,225.16 194.64,223.99 196,222.83 197.36,221.66 198.71,220.49 200.07,219.32 201.42,218.15 202.78,216.98 204.13,215.81 205.49,214.65 206.84,213.48 208.2,212.31 209.56,211.14 210.91,209.97 212.27,208.8 213.62,207.63 214.98,206.47 216.33,205.3 217.69,204.13 219.04,202.96 220.4,201.79 221.76,200.62 223.11,199.45 224.47,198.29 225.82,197.12 227.18,195.95 228.53,194.78 229.89,193.61 231.24,192.44 232.6,191.27 233.96,190.1 235.31,188.94 236.67,187.77 238.02,186.6 239.38,185.43 240.73,184.26 242.09,183.09 243.44,181.92 244.8,180.76 246.16,179.59 247.51,178.42 248.87,177.25 250.22,176.08 251.58,174.91 252.93,173.74 254.29,172.58 255.64,171.41 257,170.24 258.36,169.07 259.71,167.9 261.07,166.73 262.42,165.56 263.78,164.4 265.13,163.23 266.49,162.06 267.84,160.89 269.2,159.72 270.56,158.55 271.91,157.38 273.27,156.22 274.62,155.05 275.98,153.88 277.33,152.71 278.69,151.54 280.04,150.37 281.4,149.2 282.76,148.04 284.11,146.87 285.47,145.7 286.82,144.53 288.18,143.36 289.53,142.19 290.89,141.02 292.24,139.86 293.6,138.69 294.96,137.52 296.31,136.35 297.67,135.18 299.02,134.01 300.38,132.84 301.73,131.67 303.09,130.51 304.44,129.34 305.8,128.17 307.16,127 308.51,125.83 309.87,124.66 311.22,123.49 312.58,122.33 313.93,121.16 315.29,119.99 316.64,118.82 318,117.65" class="curve" stroke="#d97706" stroke-width="2.4"/>
+  <line x1="74" y1="318.81" x2="318" y2="318.81" class="thin" stroke="#3b82f6" stroke-width="1.3"/>
+  <text x="240.36" y="305.94" text-anchor="middle" class="sm bold" fill="#3b82f6">fixed F = 25</text>
+  <circle cx="295.82" cy="136.77" r="4" fill="#d97706"/>
+  <text x="287.82" y="138.77" text-anchor="end" class="sm bold" fill="#d97706">520</text>
+  <circle cx="96.18" cy="308.88" r="3.4" fill="#d97706"/>
+  <text x="180" y="360" text-anchor="middle" class="sm dim">policy premium</text>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">so it belongs in the denominator, not the numerator</text>
+</svg>

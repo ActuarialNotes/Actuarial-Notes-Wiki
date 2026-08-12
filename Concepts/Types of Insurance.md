@@ -17,6 +17,8 @@
 - [[Occurrence Coverage|Occurrence]] policies respond to losses *occurring* in the term, however late they are reported — so they generate pure IBNR and are organized on an [[Accident Year]] basis.
 - [[Claims Made Coverage|Claims-made]] policies respond to claims *reported* in the term, so pure IBNR is nil, development is faster and [[Report Year]] is the natural cohort.
 
+![[Media/Figures/Types_of_Insurance.svg|340]]
+
 > [!example]- Reserve Sensitivity by Tail Length {Example}
 > Two lines each show $\$1{,}000{,}000$ of reported losses at $24$ months. Auto physical damage is $95\%$ reported at that maturity; medical malpractice is $30\%$ reported.
 >

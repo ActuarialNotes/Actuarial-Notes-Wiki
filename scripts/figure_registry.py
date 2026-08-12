@@ -1,6 +1,6 @@
 """Registry that ties each concept page to the figure drawn for it.
 
-`figures_exam_p.py` and `figures_exam_fm.py` register builders with the
+The per-exam `figures_exam_*.py` modules register builders with the
 `@figure(...)` decorator; `generate_concept_figures.py` walks the registry,
 writes each SVG to `Media/Figures/`, and (with `--embed`) inserts the
 `![[Media/Figures/….svg|width]]` line into the matching `Concepts/*.md` page.

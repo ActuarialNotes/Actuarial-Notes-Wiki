@@ -10,6 +10,8 @@
 - The insurer reserves **gross** and carries the expected recoveries as an offsetting asset, discounted for expected uncollectibility. Reporting net without disclosing the gross figure hides the credit exposure.
 - Because the deductible erodes with [[Inflation|inflation]], the recoverable share of a growing loss falls over time — the same leverage that affects [[Deductible Rating|deductible pricing]], working here on the balance sheet.
 
+![[Media/Figures/Deductible_Recovery.svg|340]]
+
 > [!example]- Recovery on a Single Claim {Example}
 > A workers compensation policy carries a $\$250{,}000$ per-occurrence deductible. The insurer pays a $\$400{,}000$ claim in full and bills the insured.
 >

@@ -10,6 +10,8 @@
 - **One period's deviation is noise; a run of them is a signal.** Emergence is volatile, so a single A/E of $1.15$ means little. Four consecutive quarters above $1.0$, in the same direction, is evidence the assumptions are wrong.
 - A/E is the mechanism that would have caught the drifting ultimates on [[Ultimate Loss]] in year one instead of year four, and it feeds directly into whether factors, the tail or the a priori ELR need re-selection.
 
+![[Media/Figures/Actual_vs_Expected_Analysis.svg|340]]
+
 > [!example]- Scoring a Quarter's Emergence {Example}
 > At $12/31/2023$, AY 2022 was estimated at ultimate $\$10{,}000{,}000$ with $60\%$ reported at $24$ months and $75\%$ at $36$ months. Reported losses at $12/31/2023$ were $\$6{,}000{,}000$; at $12/31/2024$ they are $\$8{,}100{,}000$.
 >

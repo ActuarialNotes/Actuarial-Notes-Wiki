@@ -8,6 +8,8 @@
 - Premium and losses are only *approximately* matched. AY $n$ earned premium comes partly from policies written in year $n-1$, whose rates and terms differ — which is why the premium must still be brought to current level ([[On-Leveling]]).
 - The rows of a [[Development Triangle]] are usually accident years; diagonals are valuation dates. Accident *quarters* or *months* are used when volume permits and responsiveness matters.
 
+![[Media/Figures/Accident_Year.svg|340]]
+
 > [!example]- Assigning a Claim to an Accident Year {Example}
 > A $12$-month policy is effective $10/1/2023$. The insured has a loss on $11/15/2024$, which is reported $12/1/2024$, reserved at $\$40{,}000$, and paid $\$52{,}000$ on $3/1/2025$.
 >

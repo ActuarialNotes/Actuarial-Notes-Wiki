@@ -10,6 +10,8 @@
 - An **immature** accident-year loss ratio always understates the ultimate answer, and a **calendar-year** loss ratio contains prior-year reserve movements. Both are routinely quoted and both mislead if used for pricing.
 - As a reserving diagnostic, the loss ratio series across accident years at a fixed maturity should move smoothly. A break in the series is a signal — a rate change not accounted for, a [[Mix of Business|mix shift]], a change in [[Case Adequacy|case adequacy]] — and is the entry point to the analysis, not the conclusion.
 
+![[Media/Figures/Loss_Ratio.svg|340]]
+
 > [!example]- Rate Adequacy Against the Permissible Loss Ratio {Example}
 > An insurer projects ultimate losses and LAE of $\$715{,}000$ against trended on-level earned premium of $\$1{,}000{,}000$. Variable expenses are $25\%$ of premium and the target underwriting profit provision is $5\%$; there are no fixed expenses.
 >

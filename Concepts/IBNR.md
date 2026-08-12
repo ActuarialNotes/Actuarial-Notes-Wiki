@@ -11,6 +11,8 @@
 - Every reserving method is a way of estimating IBNR. The [[Chain Ladder Method|chain ladder]] gets it by scaling reported losses; the [[Bornhuetter-Ferguson Method|BF]] method by applying the unreported percentage to an a priori; the [[Expected Loss Method|expected claims]] technique by subtracting reported from an a priori ultimate.
 - **A claims-made book has no pure IBNR** by construction — every claim in a [[Report Year|report year]] is already reported — so its IBNR is entirely IBNER.
 
+![[Media/Figures/IBNR.svg|340]]
+
 > [!example]- Calculating IBNR {Example}
 > An accident year has estimated ultimate losses of $\$1{,}200{,}000$, paid losses of $\$500{,}000$ and case reserves of $\$300{,}000$.
 >

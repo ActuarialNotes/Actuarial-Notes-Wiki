@@ -10,6 +10,8 @@
 - A CDF is specific to the triangle it came from: paid CDFs differ from reported CDFs, count CDFs from dollar CDFs, and a CDF built on data capped at a retention differs from a gross one. Borrowing across bases is a common and consequential error.
 - Sensitivity to the tail rises sharply with the length of the tail: for a short-tail line the tail is a rounding difference, for a long-tail line it can be the largest single assumption in the analysis.
 
+![[Media/Figures/Cumulative_Development_Factor.svg|340]]
+
 > [!example]- Building CDFs and Reading the Emergence Pattern {Example}
 > Selected factors: $f_{12\text{–}24} = 1.500$, $f_{24\text{–}36} = 1.200$, $f_{36\text{–}48} = 1.050$, tail $= 1.020$.
 >

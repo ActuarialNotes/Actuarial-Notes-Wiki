@@ -11,6 +11,8 @@
 - Deductibles erode with [[Inflation|inflation]]: a fixed $d$ eliminates a falling share of a growing loss, so relativities must be refreshed or higher-deductible business becomes under-priced.
 - On the reserving side, the mirror concept is the [[Deductible Recovery|deductible recovery]] — amounts billed back to the insured on a large-deductible programme, which must be estimated and collected, and carry credit risk.
 
+![[Media/Figures/Deductible_Rating.svg|340]]
+
 > [!example]- Pricing a Deductible Option {Example}
 > A homeowners programme has a full-coverage loss cost of $\$620$ per house-year. LERs from the fitted severity distribution are:
 >

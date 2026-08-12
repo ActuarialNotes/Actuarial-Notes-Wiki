@@ -10,6 +10,8 @@
 - ALAE can be **countercyclical to indemnity**: money spent defending a claim vigorously may reduce the indemnity paid. A "defence and settle" strategy shift moves both components, in opposite directions, and shows up in the triangles as a change in the ALAE ratio.
 - Whether ALAE sits inside "losses" matters for the [[Reinsurance|reinsurance]] treaty too: treaties differ on whether ALAE is included within the limit, shared pro rata, or added on top — which changes both [[Ceded Losses|ceded]] and net figures.
 
+![[Media/Figures/Allocated_Loss_Adjustment_Expense.svg|340]]
+
 > [!example]- ALAE on a Litigated Claim {Example}
 > A general liability claim settles with an indemnity payment of $\$100{,}000$. Along the way the insurer paid defence counsel $\$25{,}000$, an expert witness $\$8{,}000$, and court costs $\$2{,}000$.
 >

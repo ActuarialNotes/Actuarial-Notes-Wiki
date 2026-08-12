@@ -8,6 +8,8 @@
 - The cost is that a report year is **not a homogeneous exposure period**. RY 2024 contains old accidents reported late alongside fresh ones; if the reporting pattern shifts, the mix of accident dates inside the cohort shifts with it, and trend measured on an RY basis is contaminated by the change.
 - For occurrence coverage, report year cannot be matched to earned premium at all — the premium was earned in the accident year, not the report year — so occurrence ratemaking uses accident year and reserves for the unreported claims.
 
+![[Media/Figures/Report_Year.svg|340]]
+
 > [!example]- Report Year vs. Accident Year Under Each Coverage Trigger {Example}
 > A general liability loss occurs $11/15/2023$ and is reported $2/3/2024$. The insured held an occurrence policy effective $6/1/2023$–$5/31/2024$ and, separately, a claims-made policy renewing each $1/1$.
 >

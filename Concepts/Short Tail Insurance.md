@@ -9,6 +9,8 @@
 - The dominant risk is **not** development but concentration: a single hail storm or hurricane can produce more loss in a day than a normal year, so [[Catastrophe Loss|catastrophe]] losses are excluded from the experience and loaded separately. A short-tail line can therefore have low reserve risk and very high underwriting risk at the same time.
 - Short-tail reserves are also sensitive to seasonality: the December diagonal of a property triangle behaves differently from the June one, which is why quarterly rather than annual cohorts are common.
 
+![[Media/Figures/Short_Tail_Insurance.svg|340]]
+
 > [!example]- Short-Tail vs. Long-Tail Development Side by Side {Example}
 > An auto comprehensive claim arises from hail damage on $3/5/2024$. A workers compensation occupational-disease claim also arises from $2024$ exposure.
 >

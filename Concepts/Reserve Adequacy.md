@@ -20,6 +20,8 @@ Further points:
 - Adequacy is tested **gross and net**, and by segment. A book can be adequate in aggregate while one line is severely deficient and another redundant.
 - [[ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007)|ASOP 43]] requires the actuary to consider whether the estimate is reasonable, to disclose significant assumptions, and to identify material changes from the prior analysis.
 
+![[Media/Figures/Reserve_Adequacy.svg|340]]
+
 > [!example]- Testing the Selection Against Implied Statistics {Example}
 > Selected ultimates and derived statistics for a book, on-level:
 >

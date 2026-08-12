@@ -1,6 +1,6 @@
 """A tiny dependency-free SVG toolkit for the concept-page figures.
 
-`generate_concept_figures.py` draws every Exam P / Exam FM illustration through
+`generate_concept_figures.py` draws every concept-page illustration through
 this module. It exists instead of matplotlib for three reasons:
 
 1. **Theme.** The quiz app defaults to a *dark* canvas, and the vault is also read

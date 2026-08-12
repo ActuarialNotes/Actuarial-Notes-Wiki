@@ -19,6 +19,8 @@
 
 Uncertainty must be communicated, not buried: a point estimate given without a sense of its range invites the reader to treat it as precise, and the reserve is the least precise number on the balance sheet.
 
+![[Media/Figures/Reserve_Communication.svg|340]]
+
 > [!example]- Explaining an $\$8$M Strengthening {Example}
 > General liability reserves rose from $\$42{,}000{,}000$ to $\$50{,}000{,}000$. The analysis shows: $\$5{,}200{,}000$ of adverse development on AY $2021$–$2023$ from higher severity on litigated claims; $\$1{,}900{,}000$ from a longer tail factor, changed after a benchmark study; and $\$900{,}000$ of ordinary growth on the new accident year net of payments.
 >

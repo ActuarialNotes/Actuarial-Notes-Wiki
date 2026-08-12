@@ -9,6 +9,8 @@
 - Salvage is material in auto physical damage and property; subrogation in auto liability, workers compensation (third-party actions) and products liability. Recovery rates vary enormously by line, so a benchmark ratio borrowed across lines is worthless.
 - Omitting S&S from the analysis overstates net reserves; assuming this year's recovery rate will persist without checking the subrogation department's staffing and practices is the mirror error.
 
+![[Media/Figures/Salvage_and_Subrogation.svg|340]]
+
 > [!example]- Developing Recoveries Separately {Example}
 > AY 2023: gross reported losses $\$1{,}000{,}000$ with a gross CDF of $1.200$; reported salvage $\$80{,}000$ and subrogation $\$40{,}000$, with an S&S CDF of $1.250$.
 >

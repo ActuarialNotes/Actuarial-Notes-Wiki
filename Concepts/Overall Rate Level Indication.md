@@ -20,6 +20,8 @@ Further points:
 - Weighting across years in the experience period is a judgment: equal weights, premium volume weights, or weights tilted to recency. More years buys [[Credibility|credibility]], fewer years buys responsiveness.
 - The indication is an **estimate with a distribution**, not a fact. A sensitivity test — how the answer moves under alternative trend, development and profit selections — belongs in the documentation and is what a reviewing regulator will ask for.
 
+![[Media/Figures/Overall_Rate_Level_Indication.svg|340]]
+
 > [!example]- Full Overall Indication {Example}
 > Two accident years, valued $12/31/2024$. Loss trend $6\%$; trend periods $3.0$ and $2.0$ years. LAE $10\%$ of loss. Variable expenses $23\%$, fixed expense ratio $6\%$, target profit $5\%$. Credibility $Z = 0.80$ against a complement of $+2.0\%$.
 >

@@ -8,6 +8,8 @@
 - Those same closed-claim counts drive the [[Berquist-Sherman Method|Berquist-Sherman]] paid adjustment and the disposal-rate variant of the [[Frequency-Severity Method]], where a triangle of *closed* counts is used to restate paid losses onto a common settlement pattern.
 - A shift in closing speed is one of the operational changes an actuary must probe (Friedland Ch. 4): faster closing inflates historical paid development factors, slower closing deflates them — see [[Claims Processing Changes]].
 
+![[Media/Figures/Close_Year.svg|340]]
+
 > [!example]- One Claim Under Four Aggregation Bases {Example}
 > An auto liability claim arises from an accident on $3/10/2022$ under a policy effective $9/1/2021$. It is reported $4/1/2022$, litigated, and settled $9/14/2024$.
 >

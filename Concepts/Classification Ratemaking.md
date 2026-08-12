@@ -21,6 +21,8 @@
 
 **Off-balance.** Relativity changes almost always change the average rate. The base rate must be adjusted so that the combined effect equals the intended [[Overall Rate Level Indication|overall indication]] — see [[Rate Change]].
 
+![[Media/Figures/Classification_Ratemaking.svg|340]]
+
 > [!example]- Class Relativity from Pure Premiums {Example}
 > Base class: $10{,}000$ exposures, $\$2{,}000{,}000$ losses. Class A: $5{,}000$ exposures, $\$1{,}500{,}000$ losses. The target loss ratio is $60\%$.
 >

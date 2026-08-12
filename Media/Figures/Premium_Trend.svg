@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Average premium at current rate level drifting upward between the experience and forecast periods</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Average premium drifts even at a fixed</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">rate level</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">Avg Premium at CRL = On-Level EP / Exp</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">Premium Trend Factor = (1 + t_P)ⁿ</text>
+  <line x1="74" y1="100" x2="74" y2="322" class="grid"/>
+  <line x1="135.5" y1="100" x2="135.5" y2="322" class="grid"/>
+  <line x1="197" y1="100" x2="197" y2="322" class="grid"/>
+  <line x1="258.5" y1="100" x2="258.5" y2="322" class="grid"/>
+  <line x1="320" y1="100" x2="320" y2="322" class="grid"/>
+  <line x1="74" y1="322" x2="320" y2="322" class="grid"/>
+  <line x1="74" y1="211" x2="320" y2="211" class="grid"/>
+  <line x1="74" y1="100" x2="320" y2="100" class="grid"/>
+  <line x1="74" y1="322" x2="330" y2="322" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="74" y1="322" x2="74" y2="90" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="74" y1="322" x2="74" y2="326" class="tick"/>
+  <line x1="135.5" y1="322" x2="135.5" y2="326" class="tick"/>
+  <line x1="197" y1="322" x2="197" y2="326" class="tick"/>
+  <line x1="258.5" y1="322" x2="258.5" y2="326" class="tick"/>
+  <line x1="320" y1="322" x2="320" y2="326" class="tick"/>
+  <line x1="70" y1="322" x2="74" y2="322" class="tick"/>
+  <text x="66" y="325.6" text-anchor="end" class="sm dim">480</text>
+  <line x1="70" y1="211" x2="74" y2="211" class="tick"/>
+  <text x="66" y="214.6" text-anchor="end" class="sm dim">530</text>
+  <line x1="70" y1="100" x2="74" y2="100" class="tick"/>
+  <text x="66" y="103.6" text-anchor="end" class="sm dim">580</text>
+  <polyline points="74,286.48 135.5,266.5 197,250.96 258.5,233.2" class="curve" stroke="#3b82f6" stroke-width="2.2"/>
+  <circle cx="74" cy="286.48" r="3.2" fill="#3b82f6"/>
+  <circle cx="135.5" cy="266.5" r="3.2" fill="#3b82f6"/>
+  <circle cx="197" cy="250.96" r="3.2" fill="#3b82f6"/>
+  <circle cx="258.5" cy="233.2" r="3.2" fill="#3b82f6"/>
+  <polyline points="258.5,233.2 320,213.22" class="curve dash" stroke="#059669" stroke-width="2.2"/>
+  <circle cx="320" cy="213.22" r="4.2" fill="#059669"/>
+  <text x="314" y="204.22" text-anchor="end" class="sm bold" fill="#059669">forecast</text>
+  <text x="180" y="352" text-anchor="middle" class="sm dim">average written premium at current rate level</text>
+  <text x="180" y="374" text-anchor="middle" class="sm dim">limits, deductibles and mix move it —</text>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">rate changes do not; on-levelling handles those</text>
+</svg>

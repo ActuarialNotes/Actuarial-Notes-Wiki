@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Generate (and embed) the Exam P / FM / MAS-I / MAS-II concept-page figures.
+"""Generate (and embed) the Exam P / FM / MAS-I / MAS-II / 5 concept-page figures.
 
 Every concept linked from `Exam P-1 (SOA).md`, `Exam FM-2 (SOA).md`,
-`Exam MAS-I (CAS).md` and `Exam MAS-II (CAS).md` should carry one figure that
-makes the idea visible — a Venn diagram, a payment timeline, an annotated
-density, a rejection region, a correlogram. This script draws them all into
+`Exam MAS-I (CAS).md`, `Exam MAS-II (CAS).md` and `Exam 5 (CAS).md` should carry
+one figure that makes the idea visible — a Venn diagram, a payment timeline, an
+annotated density, a rejection region, a loss triangle. This script draws them into
 `Media/Figures/` and can insert the Obsidian embed into the matching
 `Concepts/*.md` page.
 
@@ -41,6 +41,7 @@ import figures_exam_p  # noqa: F401,E402
 import figures_exam_fm  # noqa: F401,E402
 import figures_exam_mas_i  # noqa: F401,E402
 import figures_exam_mas_ii  # noqa: F401,E402
+import figures_exam_5  # noqa: F401,E402
 
 OUT_DIR = ROOT / "Media" / "Figures"
 CONCEPTS = ROOT / "Concepts"
@@ -49,6 +50,7 @@ EXAM_PAGES = [
     "Exam FM-2 (SOA).md",
     "Exam MAS-I (CAS).md",
     "Exam MAS-II (CAS).md",
+    "Exam 5 (CAS).md",
 ]
 
 EMBED_RE = re.compile(r"!\[\[")

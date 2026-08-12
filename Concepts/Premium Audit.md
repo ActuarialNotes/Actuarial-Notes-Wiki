@@ -10,6 +10,8 @@
 - Audits are the reason auditable lines carry [[Exposure Trend|exposure trend]]: a growing insured generates more payroll and pays more premium at the same rate, with no filing required. That automatic response is a feature, and it is why workers compensation rates respond to wage inflation without action.
 - Audit results are also a **data quality** control. Systematic under-reporting of payroll, misclassification into cheaper class codes, and unaudited policies all show up as premium that never arrives, and each distorts both the rate indication and the classification relativities built on the reported exposures.
 
+![[Media/Figures/Premium_Audit.svg|340]]
+
 > [!example]- Workers Compensation Audit Adjustment {Example}
 > A workers compensation policy is written with estimated payroll of $\$2{,}000{,}000$ at a rate of $\$3.50$ per $\$100$ of payroll. At audit, actual payroll for the term was $\$2{,}400{,}000$.
 >

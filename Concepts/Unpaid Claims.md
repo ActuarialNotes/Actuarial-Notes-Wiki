@@ -11,6 +11,8 @@
 - The estimate applies equally to **non-insurance entities that retain risk** — self-insureds, captives, public entities, pools — for their [[Self-Insured Retention|retained layer]], which is why the reserving syllabus covers them alongside insurers.
 - Accuracy matters beyond the balance sheet: unpaid claim estimates drive solvency assessment, [[Ratemaking|ratemaking]] (through ultimate loss ratios), reinsurance commutations, collateral requirements, and the price of the company itself in a transaction.
 
+![[Media/Figures/Unpaid_Claims.svg|340]]
+
 > [!example]- Splitting the Unpaid Estimate {Example}
 > For accident year $2024$ an actuary selects ultimate losses of $\$5{,}000{,}000$. Paid to date is $\$1{,}800{,}000$ and case reserves are $\$2{,}200{,}000$.
 >

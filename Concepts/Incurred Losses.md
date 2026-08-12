@@ -10,6 +10,8 @@
 - Reported losses can develop **downward**. Conservative initial reserving, [[Salvage and Subrogation|salvage and subrogation]] recoveries, and claims closing below their case reserve all produce age-to-age factors under $1.000$; capping factors at $1.000$ on principle is a standard error.
 - At ultimate, case reserves run off to zero and reported losses converge to paid. The gap between reported and ultimate at any maturity is IBNR.
 
+![[Media/Figures/Incurred_Losses.svg|340]]
+
 > [!example]- Reported Development and IBNR {Example}
 > Accident year $2022$ has reported losses of $\$800{,}000$ at $24$ months. The selected cumulative reported factor to ultimate is $1.35$.
 >

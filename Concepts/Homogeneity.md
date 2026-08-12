@@ -8,6 +8,8 @@
 - Werner's criteria for evaluating a rating variable are **actuarial** (statistically significant, accurate, homogeneous within class, credible), **operational** (objective, verifiable, cheap to administer), **social** (privacy, causality, affordability, controllability) and **legal** — homogeneity is one requirement inside the actuarial criterion, not the whole test.
 - Homogeneity is checked, not assumed: compare loss ratios, frequencies and severities across subgroups within a proposed class, and look for a consistent difference that persists across years.
 
+![[Media/Figures/Homogeneity.svg|340]]
+
 > [!example]- Testing a Class for Homogeneity {Example}
 > A commercial auto class "light trucks" is rated at a single rate. Splitting it by radius of operation gives:
 >

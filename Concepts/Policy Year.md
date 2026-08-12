@@ -8,6 +8,8 @@
 - PY is the natural basis where the policy *is* the unit being priced — [[Experience Rating|experience rating]], [[Retrospective Rating|retrospective rating]], large-deductible programs and most [[Reinsurance|reinsurance]] treaties — and it is the required basis where a policy's terms (limits, deductibles, rate level) matter more than the calendar.
 - In a triangle, PY rows develop more slowly than AY rows and the earliest maturities are thin, so [[Chain Ladder Method|chain ladder]] factors at $12$ months are highly leveraged.
 
+![[Media/Figures/Policy_Year.svg|340]]
+
 > [!example]- Splitting a Policy Year Across Accident Years {Example}
 > An insurer writes only $12$-month policies, uniformly through the year. It writes $\$6{,}000{,}000$ of premium in $2024$.
 >

@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>The carried reserve compared with the indicated estimate and the range around it</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">Is the carried number enough?</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">Redundancy = Carried − Indicated</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">2,180 − 2,250 = (70) deficient</text>
+  <rect x="98.8" y="156" width="161.2" height="48" rx="6" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="135.2" y="182" text-anchor="middle" class="sm" fill="#3b82f6">reasonable</text>
+  <text x="135.2" y="196" text-anchor="middle" class="sm" fill="#3b82f6">range</text>
+  <line x1="52" y1="226" x2="312" y2="226" class="axis"/>
+  <line x1="78" y1="222" x2="78" y2="230" class="tick"/>
+  <text x="78" y="244" text-anchor="middle" class="sm dim">2,000</text>
+  <line x1="182" y1="222" x2="182" y2="230" class="tick"/>
+  <text x="182" y="244" text-anchor="middle" class="sm dim">2,250</text>
+  <line x1="286" y1="222" x2="286" y2="230" class="tick"/>
+  <text x="286" y="244" text-anchor="middle" class="sm dim">2,500</text>
+  <line x1="182" y1="152" x2="182" y2="226" class="thin dash" stroke="#059669" stroke-width="1.6"/>
+  <text x="182" y="142" text-anchor="middle" class="sm bold" fill="#059669">indicated 2,250</text>
+  <line x1="153.4" y1="282" x2="153.4" y2="232" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
+  <text x="153.4" y="298" text-anchor="middle" class="sm bold" fill="#e11d48">carried 2,180</text>
+  <text x="180" y="322" text-anchor="middle" class="sm dim">inside the range, but below the point estimate</text>
+  <text x="180" y="340" text-anchor="middle" class="sm dim">— a deficiency to disclose, not necessarily</text>
+  <text x="180" y="358" text-anchor="middle" class="sm dim">an unreasonable one</text>
+</svg>

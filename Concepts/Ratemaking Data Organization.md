@@ -16,6 +16,8 @@ Two further choices cut across the time basis:
 
 Werner also distinguishes the **internal** sources (policy and claim databases, accounting records) from **external** ones — statistical plans, [[External Information in Reserving|industry aggregates]], competitor filings and third-party data — used where internal volume is thin.
 
+![[Media/Figures/Ratemaking_Data_Organization.svg|340]]
+
 > [!example]- One Transaction Set, Five Cohorts {Example}
 > A $12$-month policy is effective $7/1/2024$ for $\$1{,}200$. A loss occurs $11/15/2024$, is reported $12/20/2024$, is reserved at $\$8{,}000$, and closes $3/15/2025$ for a $\$9{,}500$ payment.
 >

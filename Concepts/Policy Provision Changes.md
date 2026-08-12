@@ -1,11 +1,49 @@
-**Policy Provision Changes** are modifications to policy terms — such as coverage limits, deductibles, exclusions, or sub-limits — that alter the expected cost of claims and make historical loss experience non-comparable to future exposure without adjustment.
+**Policy Provision Changes** are changes in the terms of the contract itself — deductibles, limits, sub-limits, exclusions, coverage triggers, benefit levels — that alter how loss is shared between insurer and insured for the *same* underlying risk.
 
-- When a provision change reduces or expands coverage (e.g., raising a per-occurrence deductible), historical losses must be restated on a **pro-forma basis** to reflect what those losses would have been under the new terms before development factors are applied
-- Provision changes affect not only the level of losses but also **development patterns**: a higher deductible, for example, eliminates or reduces small claims entirely, which can accelerate closure and compress the tail
-- Unlike [[Underwriting Changes]], which shift the mix of risks, policy provision changes alter the loss sharing between insurer and insured for the same risk
+> $$\text{Adjusted Loss} = \sum_i \left[\min(X_i, L_{\text{new}}) - \min(X_i, d_{\text{new}})\right]$$
 
-> [!example]- Deductible Change Adjustment {Example}
-> A commercial auto program raises its per-occurrence deductible from \$$1{,}000$ to \$$5{,}000$ effective $1/1/2024$. Historical accident years show average losses of \$$8{,}000$ per claim.
+- Unlike [[Underwriting Changes|underwriting changes]], which change *which risks* are written, provision changes change *what is covered* on the risks already there. That makes them far easier to quantify: the effective date is known, the terms are documented, and the historical claims can be re-valued under the new provisions.
+- The adjustment is a **pro-forma restatement**: take each historical claim and recompute what the insurer would have paid under the new terms, then develop the restated history. This is exactly the [[Loss Elimination Ratio|loss elimination ratio]] calculation applied retrospectively.
+- Provision changes affect the **development pattern**, not only the level. A higher deductible eliminates small, fast-closing claims, so the surviving claims are larger and slower — the restated triangle has a longer tail and a different shape, and simply scaling the old factors is wrong.
+- Changes attach to the **policy**, so they phase in over the policy term. On a [[Policy Year]] basis the change is clean; on an [[Accident Year]] basis it phases in over roughly two years, which is one of the few situations where policy year is the better reserving basis.
+- **Benefit-level changes** in statutory lines (workers compensation reform, auto no-fault changes) are the same problem at industry scale, and are handled by a law-level adjustment factor applied to historical losses before trend — deliberately kept separate from trend so the two are not confused.
+- On the pricing side the same restatement is required, or the indication prices coverage the insurer no longer sells.
+
+> [!example]- Restating for a Deductible Increase {Example}
+> A commercial auto programme raises its per-occurrence deductible from $\$1{,}000$ to $\$5{,}000$ effective $1/1/2024$. A sample of $1{,}000$ historical claims:
+>
+> | Claim size | Count | Total losses |
+> |---|---|---|
+> | $\$1{,}000$–$\$5{,}000$ | $600$ | $\$1{,}800{,}000$ |
+> | over $\$5{,}000$ | $400$ | $\$6{,}200{,}000$ |
+>
+> (All figures are already net of the old $\$1{,}000$ deductible.) Restate the historical losses to the new deductible.
 >
 > > [!answer]-
-> > Losses in prior accident years must be adjusted to remove the portion below \$$5{,}000$ that the insurer would no longer pay under the new provision. If the average loss below the old \$$1{,}000$ deductible averaged \$$600$ and the portion between \$$1{,}000$ and \$$5{,}000$ averages \$$1{,}200$, the historical per-claim cost must be reduced by approximately \$$1{,}200$ to make prior years comparable to the prospective period.
+> > Under the new $\$5{,}000$ deductible, the insurer pays nothing on the first group and $\$4{,}000$ less on each claim in the second:
+> >
+> > $$\begin{align*}
+> > \text{Eliminated (small claims)} &= \$1{,}800{,}000 \\
+> > \text{Eliminated (layer on large)} &= 400 \times \$4{,}000 = \$1{,}600{,}000 \\[4pt]
+> > \text{Total eliminated} &= \$3{,}400{,}000 \\[4pt]
+> > \text{Restated losses} &= \$8{,}000{,}000 - \$3{,}400{,}000 \\
+> > &= \$4{,}600{,}000
+> > \end{align*}$$
+> >
+> > The loss elimination ratio is $\$3{,}400{,}000/\$8{,}000{,}000 = 42.5\%$.
+> >
+> > But note what else changed: **claim counts fell from $1{,}000$ to $400$** — $60\%$ of claims disappear entirely. Average severity on the restated basis is $\$4{,}600{,}000/400 = \$11{,}500$ against $\$8{,}000$ before. The restated book has fewer, larger, slower claims, so its development pattern is longer-tailed. Applying the old factors to the restated triangle would understate ultimate.
+
+> [!example]- A Provision Change Across Accident and Policy Years {Example}
+> The same deductible change takes effect for policies written on or after $1/1/2024$. All policies are annual and written uniformly.
+>
+> How does the change appear on each aggregation basis?
+>
+> > [!answer]-
+> > **Policy year** — PY 2023 is entirely old-deductible business and PY 2024 entirely new. Clean, immediate, and fully comparable after restatement.
+> >
+> > **Accident year** — AY 2024 losses arise from both $2023$-written policies (old deductible, running off) and $2024$-written policies (new). With uniform writing, roughly half of AY 2024's exposure is on each basis, and AY 2025 is the first fully-new year.
+> >
+> > So on an accident year basis the change phases in over **two years**, at approximately $50\%$ and $100\%$. Restating AY 2024 requires applying the loss elimination ratio to only the affected half of the exposure — which requires knowing, claim by claim, which policy it arose under.
+> >
+> > This is one of the specific situations where [[Policy Year]] earns its longer development period: when the thing that changed attaches to the policy, only the policy-year cohort isolates it. The general rule from [[Ratemaking Data Organization]] applies — use the most responsive basis that can be *corrected* to current conditions, and here the correction on an accident year basis is materially harder.

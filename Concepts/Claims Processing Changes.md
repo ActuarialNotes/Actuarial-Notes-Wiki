@@ -1,11 +1,54 @@
-**Claims Processing Changes** are modifications to claims handling procedures — including staffing levels, settlement authority, use of defense counsel, closure rate targets, or outsourcing arrangements — that alter the **timing** of loss payments and case reserve changes, causing historical development patterns to no longer reliably predict future patterns.
+**Claims Processing Changes** are changes in how claims are handled — staffing and caseloads, settlement authority, use of defence counsel, closure targets, outsourcing, reserving philosophy — that alter the **timing** of payments and case reserve changes, and therefore the shape of the development pattern.
 
-- A shift toward faster settlement (e.g., a new "close early" initiative) accelerates paid loss emergence, making recent paid loss triangles develop faster than historical factors suggest; the inverse occurs when a carrier moves to more aggressive defense
-- Claims processing changes are a primary diagnostic focus of the **Berquist-Sherman method**: Berquist-Sherman tests for changes in settlement rates (paid-to-closed claim ratios) and adjusts historical paid triangles to reflect current settlement speed before selecting development factors
-- Unlike [[Claims Coding Changes]] (which affect classification without changing timing), processing changes genuinely alter the **shape** of the development curve and require the actuary to either restate historical data or select factors from the post-change period only
+> $$\text{Disposal Rate}_n = \frac{\text{Closed claims at age } n}{\text{Ultimate claim counts}}$$
 
-> [!example]- Settlement Rate Acceleration {Example}
-> An insurer implements a "fast-track" settlement program for auto bodily injury claims in $2022$, reducing average time-to-close from $18$ months to $9$ months. Historical paid loss age-to-age factors from $2018$–$2021$ average $1.45$ at $12$–$24$ months.
+> $$\text{Avg Case O/S} = \frac{\text{Case Reserves}}{\text{Open Claims}}$$
+
+- Processing changes hit the **diagonal**: they affect every open accident year in the calendar period when the change happens, which is what distinguishes them from a change in one cohort's experience.
+- The two diagnostics above separate the two kinds of change. A moving **disposal rate** is a [[Settlement Rate|settlement speed]] change and distorts **paid** development; a jump in **average case outstanding** is a [[Case Adequacy|case adequacy]] change and distorts **reported** development. Both call for the corresponding [[Berquist-Sherman Method|Berquist-Sherman]] adjustment.
+- Faster closing inflates the recent paid diagonal, so historical paid factors **over-develop** it. Slower closing does the reverse. The intuitive answer is usually the wrong sign, which is why the disposal-rate table is computed rather than reasoned about.
+- Unlike [[Claims Coding Changes]], which move losses between categories, processing changes genuinely change the emergence curve — so post-change data is describing a different process, not a relabelled one.
+- Watch for **closed-without-payment** activity: a drive to clear old files can raise the closure rate without moving any money, which changes the disposal rate but not the paid pattern. Counting CWP separately reveals it.
+
+> [!example]- A Fast-Track Settlement Programme {Example}
+> An insurer introduces fast-track settlement for auto bodily injury in $2022$, cutting average time-to-close from $18$ months to $9$. Historical $12$–$24$ paid factors for AY $2018$–$2021$ averaged $1.45$; AY $2022$–$2023$ are coming in near $1.20$.
+>
+> What happens if the historical factor is applied to the recent years?
 >
 > > [!answer]-
-> > The $12$–$24$ month factor for accident years $2022$–$2023$ drops to approximately $1.20$ because more claims are being paid in the first $12$ months. Applying the historical $1.45$ factor to post-change accident years will **overstate** ultimate losses. The Berquist-Sherman adjustment restates prior paid triangles to simulate the current faster settlement pace, producing lower factors consistent with the new process.
+> > More of each recent year's ultimate is already paid at $12$ months, so the $12$-month paid figure is high relative to its ultimate. Applying $1.45$ — a factor calibrated to a book that had paid much less by $12$ months — **overstates** ultimate losses for AY $2022$ onward.
+> >
+> > The observed $1.20$ is the correct factor for the new process, but two years of it is thin evidence and the change may still be bedding in.
+> >
+> > Options: restate the historical paid triangle to the current disposal pattern (Berquist-Sherman) so the full history is usable at the new pace; or lean on **reported** development, which is largely unaffected by closing speed, as the primary method while the paid series accumulates.
+
+> [!example]- Two Changes at Once {Example}
+> Diagnostics at $24$ months across four accident years:
+>
+> | AY | Disposal rate | Avg case O/S | Paid ÷ reported |
+> |---|---|---|---|
+> | $2021$ | $56\%$ | $\$11{,}000$ | $0.44$ |
+> | $2022$ | $57\%$ | $\$11{,}500$ | $0.45$ |
+> | $2023$ | $66\%$ | $\$14{,}900$ | $0.52$ |
+> | $2024$ | $71\%$ | $\$18{,}200$ | $0.56$ |
+>
+> What is happening, and what does it do to the methods?
+>
+> > [!answer]-
+> > **Both** things are happening at once, starting in $2023$:
+> >
+> > - Disposal rate up from $57\%$ to $71\%$ — claims closing faster.
+> > - Average case outstanding up from $\$11{,}500$ to $\$18{,}200$, far beyond any plausible severity trend — case reserves strengthened.
+> >
+> > That combination is common in practice (a new claims leader often does both) and it is the hardest case, because it distorts **both** triangles at once:
+> >
+> > - **Paid** development is overstated by the faster closing.
+> > - **Reported** development is overstated by the strengthening.
+> >
+> > Neither triangle can be used as the clean check on the other, which is the usual escape route. What remains:
+> >
+> > 1. Apply **both** Berquist-Sherman adjustments — restate the paid triangle to a common disposal rate and the reported triangle to current case adequacy — and compare the two restated results.
+> > 2. Lean on methods that do not depend on the triangle's recent diagonal at all: the [[Expected Loss Method|expected claims]] technique and [[Bornhuetter-Ferguson Method|BF]] with an externally derived ELR.
+> > 3. Use [[Frequency-Severity Method|frequency-severity]] on **closed** claims with a disposal-rate projection, which handles the settlement change explicitly.
+> >
+> > And document heavily: with both distortions active, the estimate rests far more on judgment than usual, and [[Reserve Communication|the report]] should say so.

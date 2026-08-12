@@ -28,6 +28,8 @@ import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/ca
 import { Button } from '@/components/ui/button'
 import { SegmentedControl, type SegmentedOption } from '@/components/ui/SegmentedControl'
 import { MasteryBadge } from '@/components/MasteryBadge'
+import { ExamWeightLabel } from '@/components/ExamWeightLabel'
+import { parseExamWeight } from '@/lib/examWeight'
 import { useActionBarHeight } from '@/hooks/useActionBarHeight'
 import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { cn } from '@/lib/utils'
@@ -80,15 +82,6 @@ type QuizSource = 'today' | 'custom' | 'mock-exam'
 
 // ─── Collapsible learning-objective group (mirrors example callout style) ─────
 
-function parseGroupWeight(weight?: string): number | null {
-  if (!weight) return null
-  const rangeMatch = weight.match(/(\d+(?:\.\d+)?)\s*[-–]\s*(\d+(?:\.\d+)?)\s*%/)
-  if (rangeMatch) return (parseFloat(rangeMatch[1]) + parseFloat(rangeMatch[2])) / 2
-  const singleMatch = weight.match(/(\d+(?:\.\d+)?)\s*%/)
-  if (singleMatch) return parseFloat(singleMatch[1])
-  return null
-}
-
 /** Marks a concept the day's study plan has scheduled. */
 function TodayChip({ className }: { className?: string }) {
   return (
@@ -127,7 +120,7 @@ function GroupSection({
   // A group that already holds restored selections opens itself, so returning to
   // the builder shows what's picked rather than a wall of collapsed rows.
   const [open, setOpen] = useState(someSelected)
-  const examPercentage = parseGroupWeight(group.weight)
+  const examPercentage = parseExamWeight(group.weight)
 
   const rowBg = allSelected
     ? 'bg-primary/10 group-hover:bg-primary/15'
@@ -137,79 +130,71 @@ function GroupSection({
 
   return (
     <div className="overflow-hidden rounded-lg bg-background">
-      <div className="flex items-stretch group">
-        {/* Select-all checkmark circle */}
-        <button
-          type="button"
-          role="checkbox"
-          aria-checked={allSelected ? true : someSelected ? 'mixed' : false}
-          data-sound="tick"
-          onClick={e => onSelectAll(group, e)}
-          className={cn(
-            'flex shrink-0 items-center justify-center px-3 transition-colors duration-150',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring',
-            rowBg,
-          )}
-          aria-label={allSelected ? `Deselect all ${group.name}` : `Select all ${group.name}`}
-        >
-          {allSelected ? (
-            <CheckCircle2 className="h-5 w-5 text-primary" />
-          ) : someSelected ? (
-            <CheckCircle2 className="h-5 w-5 text-primary/40" />
-          ) : (
-            <Circle className="h-5 w-5 text-muted-foreground/60" />
-          )}
-        </button>
+      <div className="relative">
+        {/* Share of the exam, drawn as the row itself: the fill reaches the
+            group's percentage while collapsed and runs the full width when
+            expanded — the same background the study guide's learning
+            objectives use. The selection tints below are translucent and sit
+            on top, so a picked group still shows its weight. */}
+        {examPercentage !== null && (
+          <div
+            aria-hidden
+            className="absolute inset-y-0 left-0 bg-card transition-all duration-300"
+            style={{ width: open ? '100%' : `${Math.min(100, examPercentage)}%` }}
+          />
+        )}
+        <div className="relative flex items-stretch group">
+          {/* Select-all checkmark circle */}
+          <button
+            type="button"
+            role="checkbox"
+            aria-checked={allSelected ? true : someSelected ? 'mixed' : false}
+            data-sound="tick"
+            onClick={e => onSelectAll(group, e)}
+            className={cn(
+              'flex shrink-0 items-center justify-center px-3 transition-colors duration-150',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring',
+              rowBg,
+            )}
+            aria-label={allSelected ? `Deselect all ${group.name}` : `Select all ${group.name}`}
+          >
+            {allSelected ? (
+              <CheckCircle2 className="h-5 w-5 text-primary" />
+            ) : someSelected ? (
+              <CheckCircle2 className="h-5 w-5 text-primary/40" />
+            ) : (
+              <Circle className="h-5 w-5 text-muted-foreground/60" />
+            )}
+          </button>
 
-        {/* Expand/collapse button */}
-        <button
-          type="button"
-          onClick={() => setOpen(v => !v)}
-          className={cn(
-            'flex-1 py-3 pr-3 text-left transition-colors duration-150',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring',
-            rowBg,
-          )}
-          aria-expanded={open}
-        >
-          <div className="flex w-full items-center gap-2">
-            <span className="min-w-0 flex-1 text-sm font-medium leading-snug text-foreground">
-              {group.name}
-            </span>
-            {/* Share of the exam. The number carries it; the bar underneath is
-                the same figure at a glance, on a muted track like every other
-                progress read in the app (style guide §7.5). It used to be a
-                full-height fill behind the row that vanished on selection and
-                grew to 100% on expand — three meanings, one shape. */}
-            {group.weight && (
-              <span className="flex shrink-0 flex-col items-end gap-1">
-                <span className="text-xs font-medium tabular-nums text-muted-foreground">
-                  {group.weight}
+          {/* Expand/collapse button */}
+          <button
+            type="button"
+            onClick={() => setOpen(v => !v)}
+            className={cn(
+              'flex-1 py-3 pr-3 text-left transition-colors duration-150',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring',
+              rowBg,
+            )}
+            aria-expanded={open}
+          >
+            <div className="flex w-full items-center gap-2">
+              <span className="min-w-0 flex-1 text-sm font-medium leading-snug text-foreground">
+                {group.name}
+              </span>
+              {/* The precise reading of what the fill behind the row shows. */}
+              {group.weight && <ExamWeightLabel weight={group.weight} />}
+              {selectedCount > 0 && (
+                <span className="shrink-0 text-xs tabular-nums text-muted-foreground">
+                  {selectedCount}/{group.subtopics.length}
                 </span>
-                {examPercentage !== null && (
-                  <span
-                    className="h-1 w-10 overflow-hidden rounded-full bg-muted"
-                    role="img"
-                    aria-label={`${group.weight} of the exam`}
-                  >
-                    <span
-                      className="block h-full rounded-full bg-muted-foreground/50"
-                      style={{ width: `${Math.min(100, examPercentage)}%` }}
-                    />
-                  </span>
-                )}
-              </span>
-            )}
-            {selectedCount > 0 && (
-              <span className="shrink-0 text-xs tabular-nums text-muted-foreground">
-                {selectedCount}/{group.subtopics.length}
-              </span>
-            )}
-            <ChevronDown
-              className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
-            />
-          </div>
-        </button>
+              )}
+              <ChevronDown
+                className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
+              />
+            </div>
+          </button>
+        </div>
       </div>
 
       <div hidden={!open} className="bg-card pb-1 pt-1">

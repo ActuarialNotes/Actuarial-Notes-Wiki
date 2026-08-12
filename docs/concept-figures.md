@@ -1,16 +1,18 @@
 # Concept Figures
 
 Every concept linked from `Exam P-1 (SOA).md`, `Exam FM-2 (SOA).md`,
-`Exam MAS-I (CAS).md` and `Exam MAS-II (CAS).md` carries one figure that makes the idea
-visible — a Venn diagram, a payment timeline, an annotated density, a rejection region,
-a correlogram. They live in `Media/Figures/*.svg` and are embedded near the top of each
-`Concepts/*.md` page, after the definition and formula block and before the first
-`> [!example]` callout.
+`Exam MAS-I (CAS).md`, `Exam MAS-II (CAS).md` and `Exam 5 (CAS).md` carries one figure
+that makes the idea visible — a Venn diagram, a payment timeline, an annotated density,
+a rejection region, a correlogram, a loss triangle. They live in `Media/Figures/*.svg`
+and are embedded near the top of each `Concepts/*.md` page, after the definition and
+formula block and before the first `> [!example]` callout.
 
 A concept on two syllabuses gets **one** builder, in the file for the exam that
 introduces it — MAS-I owns the thirteen it shares with MAS-II (`AIC`, `Cross-Validation`,
-`Linear Mixed Model`, …). Two builders for one concept would fight over the same slug,
-and `generate_concept_figures.py` prints a warning when it sees that.
+`Linear Mixed Model`, …) and the five it shares with Exam 5 (`Frequency`, `Severity`,
+`Complement of Credibility`, `Generalized Linear Model`, `Inflation`). Two builders for
+one concept would fight over the same slug, and `generate_concept_figures.py` prints a
+warning when it sees that.
 
 The figures are **generated, not hand-drawn**. Re-run the generator rather than editing
 an SVG by hand — a hand edit will be overwritten on the next run.
@@ -57,6 +59,7 @@ and it never disturbs the one remaining set of hand-authored embeds — the
 | `scripts/figures_exam_fm.py` | The 82 Exam FM builders, in syllabus order. |
 | `scripts/figures_exam_mas_i.py` | The 77 Exam MAS-I builders, in syllabus order. |
 | `scripts/figures_exam_mas_ii.py` | The 71 Exam MAS-II builders, in syllabus order (credibility, mixed models, statistical learning, time series). |
+| `scripts/figures_exam_5.py` | The 109 Exam 5 builders, in syllabus order (ratemaking, then estimating claim liabilities). |
 | `scripts/generate_concept_figures.py` | Walks the registry, writes the SVGs, optionally embeds them. |
 
 ## Why hand-written SVG and not matplotlib
@@ -82,7 +85,7 @@ surface and the dark one, so a blue curve is the same blue in either mode.
 ## Adding or changing a figure
 
 1. Write a builder in `figures_exam_p.py`, `figures_exam_fm.py`,
-   `figures_exam_mas_i.py` or `figures_exam_mas_ii.py` that opens with
+   `figures_exam_mas_i.py`, `figures_exam_mas_ii.py` or `figures_exam_5.py` that opens with
    `vcard(title, formula)` and draws into the box, and decorate it with
    `@figure("Concept Name", "alt text", width=WID)`. The concept name must match
    `Concepts/<name>.md` exactly; the slug is derived from it.
@@ -102,8 +105,14 @@ Conventions worth keeping:
   at 8% over 8 years; the bond pages the same 1,000 par bond; the discrete multivariate
   pages the same 3×3 joint PMF. On MAS-II the credibility pages all price the same
   300-claim class against a 1,082-claim standard, the mixed-model pages use the same five
-  territories, and the time-series pages draw the same quarterly loss index. A student
-  reading them in sequence sees one running example from several angles.
+  territories, and the time-series pages draw the same quarterly loss index. Exam 5 runs
+  on two: one personal-auto book (pure premium 360, fixed expense 25, V = 26%, Q = 5%, so
+  PLR = 0.69 and the indication is +7.3% on a 520 average rate) across every ratemaking
+  figure, and one 5×5 reported triangle (factors 1.500 / 1.160 / 1.060 / 1.020, tail
+  1.010, so CDF(12) = 1.900) across every reserving figure — the same AY 2024 turns up
+  as 2,600 under the expected loss method, 2,732 under BF, 2,794 under Benktander and
+  2,850 under the chain ladder. A student reading them in sequence sees one running
+  example from several angles.
 - **Label curves where they run**, rather than in a legend box, when there is room —
   a legend is a block of text competing with the picture. Where a legend is
   unavoidable, drop the y-axis name: the two collide in the box's top-left corner.
@@ -112,8 +121,11 @@ Conventions worth keeping:
   top of something surprisingly easily. Check, don't assume. Two recurring collisions:
   `Axes.frame(xlabel=…)` draws at `y1 + 32`, which is exactly where a first footer line
   wants to sit — pass the axis name as a footer line instead; and a footer formula over
-  ~45 characters is clipped by the card edge, so split it into the two-row form
-  `vcard(title, [row1, row2])`.
+  ~40 characters is clipped by the card edge, so shorten it or split it into the two-row
+  form `vcard(title, [row1, row2])`. Character counting only approximates this: the real
+  check is to measure the rendered `getBBox()` of every `<text>` in a headless browser
+  and flag any that escapes the 360 × 470 card or overlaps another — that catches both
+  the clipped footer and the label sitting on top of its neighbour.
 
 ## Interaction with the distribution simulators
 

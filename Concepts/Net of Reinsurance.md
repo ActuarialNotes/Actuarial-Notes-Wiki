@@ -10,6 +10,8 @@
 - Net experience is **less volatile** than gross — excess-of-loss reinsurance truncates exactly the [[Large Loss|large losses]] that drive volatility — which is why net data can look more credible than it is. The reinsurance is doing the smoothing, and the insurer is paying for it.
 - On the reserving side, the [[Reinsurance Recovery|ceded triangle]] develops differently from the gross one: cessions attach to the large, slow, litigated claims, so ceded patterns are longer-tailed and thinner. Friedland's guidance is to estimate gross and ceded separately and derive net as the difference, not to develop a net triangle whose mix shifts with each treaty change.
 
+![[Media/Figures/Net_of_Reinsurance.svg|340]]
+
 > [!example]- Gross, Ceded and Net Loss Ratios {Example}
 > An insurer writes $\$2{,}000{,}000$ of gross earned premium and cedes $10\%$ ($\$200{,}000$) under a $\$500{,}000$ excess of $\$250{,}000$ treaty. Gross incurred losses are $\$1{,}300{,}000$, of which $\$150{,}000$ is recovered from the reinsurer.
 >

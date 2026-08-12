@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>The four data aggregations placed on the accuracy-versus-availability trade-off</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Accuracy and availability pull against</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">each other</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">Experience Ratio = developed losses</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">÷ on-level premium</text>
+  <line x1="64" y1="338" x2="330" y2="338" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="64" y1="338" x2="64" y2="90" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <circle cx="284.16" cy="285.64" r="5" fill="#059669"/>
+  <text x="284.16" y="274.64" text-anchor="middle" class="sm bold" fill="#059669">Calendar</text>
+  <circle cx="202.24" cy="195.2" r="5" fill="#3b82f6"/>
+  <text x="202.24" y="184.2" text-anchor="middle" class="sm bold" fill="#3b82f6">Accident</text>
+  <circle cx="192" cy="238.04" r="5" fill="#0d9488"/>
+  <text x="192" y="227.04" text-anchor="middle" class="sm bold" fill="#0d9488">Report</text>
+  <circle cx="110.08" cy="128.56" r="5" fill="#d97706"/>
+  <text x="110.08" y="117.56" text-anchor="middle" class="sm bold" fill="#d97706">Policy</text>
+  <polyline points="79.36,104.05 80.61,105.15 81.86,106.26 83.11,107.36 84.37,108.47 85.62,109.57 86.87,110.68 88.12,111.78 89.37,112.89 90.62,113.99 91.88,115.1 93.13,116.21 94.38,117.31 95.63,118.42 96.88,119.52 98.13,120.63 99.38,121.73 100.64,122.84 101.89,123.94 103.14,125.05 104.39,126.15 105.64,127.26 106.89,128.36 108.15,129.47 109.4,130.58 110.65,131.68 111.9,132.79 113.15,133.89 114.4,135 115.66,136.1 116.91,137.21 118.16,138.31 119.41,139.42 120.66,140.52 121.91,141.63 123.16,142.73 124.42,143.84 125.67,144.94 126.92,146.05 128.17,147.16 129.42,148.26 130.67,149.37 131.93,150.47 133.18,151.58 134.43,152.68 135.68,153.79 136.93,154.89 138.18,156 139.43,157.1 140.69,158.21 141.94,159.31 143.19,160.42 144.44,161.53 145.69,162.63 146.94,163.74 148.2,164.84 149.45,165.95 150.7,167.05 151.95,168.16 153.2,169.26 154.45,170.37 155.7,171.47 156.96,172.58 158.21,173.68 159.46,174.79 160.71,175.9 161.96,177 163.21,178.11 164.47,179.21 165.72,180.32 166.97,181.42 168.22,182.53 169.47,183.63 170.72,184.74 171.98,185.84 173.23,186.95 174.48,188.05 175.73,189.16 176.98,190.27 178.23,191.37 179.48,192.48 180.74,193.58 181.99,194.69 183.24,195.79 184.49,196.9 185.74,198 186.99,199.11 188.25,200.21 189.5,201.32 190.75,202.42 192,203.53 193.25,204.64 194.5,205.74 195.75,206.85 197.01,207.95 198.26,209.06 199.51,210.16 200.76,211.27 202.01,212.37 203.26,213.48 204.52,214.58 205.77,215.69 207.02,216.79 208.27,217.9 209.52,219.01 210.77,220.11 212.02,221.22 213.28,222.32 214.53,223.43 215.78,224.53 217.03,225.64 218.28,226.74 219.53,227.85 220.79,228.95 222.04,230.06 223.29,231.16 224.54,232.27 225.79,233.38 227.04,234.48 228.3,235.59 229.55,236.69 230.8,237.8 232.05,238.9 233.3,240.01 234.55,241.11 235.8,242.22 237.06,243.32 238.31,244.43 239.56,245.53 240.81,246.64 242.06,247.75 243.31,248.85 244.57,249.96 245.82,251.06 247.07,252.17 248.32,253.27 249.57,254.38 250.82,255.48 252.07,256.59 253.33,257.69 254.58,258.8 255.83,259.9 257.08,261.01 258.33,262.12 259.58,263.22 260.84,264.33 262.09,265.43 263.34,266.54 264.59,267.64 265.84,268.75 267.09,269.85 268.34,270.96 269.6,272.06 270.85,273.17 272.1,274.27 273.35,275.38 274.6,276.48 275.85,277.59 277.11,278.7 278.36,279.8 279.61,280.91 280.86,282.01 282.11,283.12 283.36,284.22 284.62,285.33 285.87,286.43 287.12,287.54 288.37,288.64 289.62,289.75 290.87,290.85 292.12,291.96 293.38,293.07 294.63,294.17 295.88,295.28 297.13,296.38 298.38,297.49 299.63,298.59 300.89,299.7 302.14,300.8 303.39,301.91 304.64,303.01" class="curve dash" stroke="var(--dim)" stroke-width="1.3"/>
+  <text x="58" y="86" text-anchor="start" class="sm dim">accuracy</text>
+  <text x="320" y="358" text-anchor="end" class="sm dim">availability</text>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">policy year matches best and closes last</text>
+</svg>

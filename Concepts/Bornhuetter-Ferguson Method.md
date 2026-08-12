@@ -11,6 +11,8 @@
 - The a priori is the weak point. A stale ELR that ignores [[Rate Level Change|rate changes]] and [[Loss Trend|trend]] produces a systematically biased reserve — and the bias persists year after year without ever showing up as instability. Where no reliable external ELR exists, the [[Cape Cod Method|Cape Cod]] technique derives one from the data instead.
 - BF does not respond to bad news. If emergence runs far ahead of the a priori, BF holds most of its estimate anchored — which is exactly right when the emergence is noise and exactly wrong when it is signal. Comparing BF against chain ladder each year, and investigating the gap, is how that is managed.
 
+![[Media/Figures/Bornhuetter-Ferguson_Method.svg|340]]
+
 > [!example]- BF Against Chain Ladder {Example}
 > AY 2023: earned premium $\$2{,}000{,}000$, ELR $65\%$, reported losses $\$600{,}000$, $\text{CDF}_{12} = 1.896$.
 >

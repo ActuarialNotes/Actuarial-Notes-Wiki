@@ -10,6 +10,8 @@
 - In ratemaking, the **target** underwriting profit provision $Q_T$ is set so that underwriting plus investment income together deliver the required return on capital — see [[Profit and Contingency Provision]]. It is a derived quantity, not a management preference.
 - Underwriting profit is also the number most distorted by **reserve movements**: prior-year development runs through the current calendar year's incurred losses, so a calendar-year underwriting profit can be manufactured by weakening reserves. Accident-year results at successive maturities are what reveal the truth ([[Reserve Adequacy]]).
 
+![[Media/Figures/Underwriting_Profit.svg|340]]
+
 > [!example]- Underwriting Profit and Margin {Example}
 > An insurer reports earned premium $\$10{,}000{,}000$, incurred losses and LAE $\$6{,}800{,}000$, underwriting expenses $\$3{,}000{,}000$.
 >

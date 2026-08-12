@@ -98,10 +98,11 @@ before touching that area**:
   static `Media/*_pdf.svg` / `*_pmf.svg` embeds on the distribution concept pages: parameter
   sliders, live moments, PDF↔CDF, and a Monte-Carlo histogram. Read before touching
   `lib/distribution*.ts` or adding a distribution.
-- `docs/concept-figures.md` — the **generated concept figures**: one SVG per Exam P / Exam FM
-  concept in `Media/Figures/`, drawn by `scripts/generate_concept_figures.py` on top of the
-  dependency-free `scripts/figure_kit.py`. Read before editing a figure — they are generated,
-  so a hand edit to an SVG is lost on the next run.
+- `docs/concept-figures.md` — the **generated concept figures**: one SVG per Exam P / FM /
+  MAS-I / MAS-II / 5 concept in `Media/Figures/`, drawn by
+  `scripts/generate_concept_figures.py` on top of the dependency-free
+  `scripts/figure_kit.py`. Read before editing a figure — they are generated, so a hand
+  edit to an SVG is lost on the next run.
 - `docs/mock-exam-browser.md` — the **Mock Exam past-paper browser** on the quiz builder: the
   authored sitting catalogue (`data/pastExams.ts`), how `lib/pastExams.ts` merges it with the
   question bank so unimported papers still list (greyed out), and the **live pass-rate
@@ -310,9 +311,9 @@ compile — don't "clean up" the flagged code as dead.
   `tag_missing_concepts.py` backfills concept tags. Run these when doing bulk content
   cleanup, not for one-off edits.
 - `generate_concept_figures.py` (+ `figure_kit.py`, `figure_registry.py`,
-  `figures_exam_{p,fm}.py`) draws the per-concept SVGs in `Media/Figures/` and inserts their
-  embeds. The figures are **generated** — edit the builder, not the SVG. See
-  `docs/concept-figures.md`.
+  `figures_exam_{p,fm,mas_i,mas_ii,5}.py`) draws the per-concept SVGs in `Media/Figures/`
+  and inserts their embeds. The figures are **generated** — edit the builder, not the SVG.
+  See `docs/concept-figures.md`.
 
 ## Running things
 

@@ -8,6 +8,8 @@
 - Statutory reporting fixes the outer boundaries. Annual Statement Schedule P lines and NAIC line definitions determine how reserves are reported and how [[External Information in Reserving|industry benchmarks]] are published, so the actuary's internal segments must roll up to them.
 - Multi-line policies (commercial package, homeowners) are analyzed **by coverage**, not by policy, then recombined — a homeowners indication is built from separate property, liability and theft analyses.
 
+![[Media/Figures/Line_of_Business.svg|340]]
+
 > [!example]- Matching Exposure Base and Method to the Line {Example}
 > An actuary must set up analyses for personal auto physical damage, workers compensation, and commercial general liability.
 >

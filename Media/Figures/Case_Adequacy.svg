@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Average case outstanding strengthening along the calendar diagonal</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">A stronger case reserve looks like a</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">bigger loss</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">Avg Case O/S = case reserves / open claims</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">Adequacy = case reserve / eventual cost</text>
+  <line x1="96.17" y1="108" x2="96.17" y2="316" class="grid"/>
+  <line x1="146.58" y1="108" x2="146.58" y2="316" class="grid"/>
+  <line x1="197" y1="108" x2="197" y2="316" class="grid"/>
+  <line x1="247.42" y1="108" x2="247.42" y2="316" class="grid"/>
+  <line x1="297.83" y1="108" x2="297.83" y2="316" class="grid"/>
+  <line x1="76" y1="316" x2="318" y2="316" class="grid"/>
+  <line x1="76" y1="212" x2="318" y2="212" class="grid"/>
+  <line x1="76" y1="108" x2="318" y2="108" class="grid"/>
+  <line x1="76" y1="316" x2="328" y2="316" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="76" y1="316" x2="76" y2="98" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="96.17" y1="316" x2="96.17" y2="320" class="tick"/>
+  <text x="96.17" y="332" text-anchor="middle" class="sm dim">2020</text>
+  <line x1="146.58" y1="316" x2="146.58" y2="320" class="tick"/>
+  <text x="146.58" y="332" text-anchor="middle" class="sm dim">2021</text>
+  <line x1="197" y1="316" x2="197" y2="320" class="tick"/>
+  <text x="197" y="332" text-anchor="middle" class="sm dim">2022</text>
+  <line x1="247.42" y1="316" x2="247.42" y2="320" class="tick"/>
+  <text x="247.42" y="332" text-anchor="middle" class="sm dim">2023</text>
+  <line x1="297.83" y1="316" x2="297.83" y2="320" class="tick"/>
+  <text x="297.83" y="332" text-anchor="middle" class="sm dim">2024</text>
+  <line x1="72" y1="316" x2="76" y2="316" class="tick"/>
+  <text x="68" y="319.6" text-anchor="end" class="sm dim">0</text>
+  <line x1="72" y1="212" x2="76" y2="212" class="tick"/>
+  <text x="68" y="215.6" text-anchor="end" class="sm dim">700</text>
+  <line x1="72" y1="108" x2="76" y2="108" class="tick"/>
+  <text x="68" y="111.6" text-anchor="end" class="sm dim">1,400</text>
+  <polyline points="96.17,223.89 146.58,217.94 197,209.03 247.42,182.29 297.83,140.69" class="curve" stroke="#3b82f6" stroke-width="2.2"/>
+  <circle cx="96.17" cy="223.89" r="3.2" fill="#3b82f6"/>
+  <circle cx="146.58" cy="217.94" r="3.2" fill="#3b82f6"/>
+  <circle cx="197" cy="209.03" r="3.2" fill="#3b82f6"/>
+  <circle cx="247.42" cy="182.29" r="3.2" fill="#3b82f6"/>
+  <circle cx="297.83" cy="140.69" r="3.2" fill="#3b82f6"/>
+  <polyline points="96.17,185.26 146.58,176.34 197,165.94 247.42,131.77" class="curve" stroke="#d97706" stroke-width="2.2"/>
+  <circle cx="96.17" cy="185.26" r="3.2" fill="#d97706"/>
+  <circle cx="146.58" cy="176.34" r="3.2" fill="#d97706"/>
+  <circle cx="197" cy="165.94" r="3.2" fill="#d97706"/>
+  <circle cx="247.42" cy="131.77" r="3.2" fill="#d97706"/>
+  <line x1="120" y1="106" x2="133" y2="106" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="139" y="109.6" text-anchor="start" class="sm">at 12 months</text>
+  <line x1="224" y1="106" x2="237" y2="106" stroke="#d97706" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="243" y="109.6" text-anchor="start" class="sm">at 24 months</text>
+  <text x="180" y="346" text-anchor="middle" class="sm dim">average case outstanding by accident year</text>
+  <text x="180" y="376" text-anchor="middle" class="sm dim">both ages jump together in 2023 — a calendar</text>
+  <text x="180" y="394" text-anchor="middle" class="sm dim">effect, so reported factors must be restated</text>
+</svg>

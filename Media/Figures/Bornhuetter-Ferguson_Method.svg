@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Reported losses taken at face value with only the unreported portion estimated from the a priori</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Trust what emerged, estimate only what</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">has not</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">U = C + (1 − 1/CDF) × U₀</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">1,500 + 0.474 × 2,600 = 2,732</text>
+  <text x="180" y="116" text-anchor="middle" class="sm dim">AY 2024, CDF = 1.900 ⇒ 52.6% reported</text>
+  <rect x="46" y="142" width="147.14" height="36" rx="4" fill="#3b82f6" fill-opacity="0.42" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="119.57" y="165" text-anchor="middle" class="sm">reported 1,500</text>
+  <rect x="193.14" y="142" width="120.86" height="36" rx="4" fill="#7c3aed" fill-opacity="0.34" stroke="#7c3aed" stroke-width="1.2"/>
+  <text x="253.57" y="165" text-anchor="middle" class="sm">IBNR 1,232</text>
+  <text x="253.57" y="200" text-anchor="middle" class="sm dim">0.474 × 2,600</text>
+  <text x="180" y="246" text-anchor="middle" class="sm dim">it is a credibility blend in disguise</text>
+  <rect x="46" y="271" width="127.03" height="30" rx="4" fill="#7c3aed" fill-opacity="0.30" stroke="#7c3aed" stroke-width="1.2"/>
+  <text x="109.52" y="290" text-anchor="middle" class="sm">a priori 2,600</text>
+  <rect x="173.03" y="271" width="140.97" height="30" rx="4" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="243.52" y="290" text-anchor="middle" class="sm">chain ladder 2,850</text>
+  <text x="180" y="320" text-anchor="middle" class="sm dim">Z = 1 / CDF = 0.526</text>
+  <text x="180" y="358" text-anchor="middle" class="sm dim">a reporting anomaly moves BF dollar for dollar</text>
+  <text x="180" y="376" text-anchor="middle" class="sm dim">and the chain ladder by CDF times as much</text>
+</svg>

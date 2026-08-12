@@ -22,6 +22,8 @@ Further points:
 - In **ratemaking** the analysis is usually gross, with the **net cost of reinsurance** — ceded premium less expected ceded losses — loaded as an expense provision. See [[Net of Reinsurance]].
 - **Collectability** is a real exposure: reinsurance recoverables are an asset subject to dispute, commutation and reinsurer insolvency, and the cedant remains liable to its policyholders regardless.
 
+![[Media/Figures/Reinsurance.svg|340]]
+
 > [!example]- Net Losses Under Quota Share and Excess of Loss {Example}
 > A cedant has gross ultimate losses of $\$5{,}000{,}000$ across five claims: $\$2{,}600{,}000$, $\$900{,}000$, $\$800{,}000$, $\$500{,}000$ and $\$200{,}000$.
 >

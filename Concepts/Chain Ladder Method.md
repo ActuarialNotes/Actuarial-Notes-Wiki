@@ -18,6 +18,8 @@ Further points:
 - Run it on **paid and reported** data both. The two answers rest on the same claims, so their difference is a diagnostic about case adequacy and settlement rates, not a menu to average.
 - It is entirely **data-driven**: nothing external — premium, exposure, rate level or judgment about the year — enters the estimate. That independence is its strength as a check on other methods and its weakness as a standalone estimate.
 
+![[Media/Figures/Chain_Ladder_Method.svg|340]]
+
 > [!example]- Chain Ladder Projection Across Three Years {Example}
 > Cumulative reported losses ($000s):
 >

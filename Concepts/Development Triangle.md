@@ -11,6 +11,8 @@
 - Triangles may be annual, semi-annual or quarterly. Finer periods are more responsive and show seasonality; they also thin the data and multiply the factors to select.
 - Assumptions being made implicitly by using one at all: each cohort develops in a similar pattern, the pattern is stable over time, and the mix inside each cohort is comparable. Every reserving distortion on the syllabus is one of these three failing.
 
+![[Media/Figures/Development_Triangle.svg|340]]
+
 > [!example]- Reading a Triangle in Three Directions {Example}
 > Cumulative reported losses ($000s), valued $12/31/2024$:
 >

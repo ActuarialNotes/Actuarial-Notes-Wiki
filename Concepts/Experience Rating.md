@@ -11,6 +11,8 @@
 - It creates a real incentive for loss control, and an equally real incentive for **claim suppression** — paying small claims outside the policy to keep them out of the mod. Both are consequences of the same mechanism.
 - Order of application: schedule and experience modifications apply to the manual premium to give **standard premium**, which is then the base for a retro plan or a large-deductible programme.
 
+![[Media/Figures/Experience_Rating.svg|340]]
+
 > [!example]- Computing an Experience Modification {Example}
 > An insured has expected losses $E = \$200{,}000$, actual capped losses $A = \$280{,}000$, and credibility $Z = 0.60$. The manual premium is $\$100{,}000$.
 >

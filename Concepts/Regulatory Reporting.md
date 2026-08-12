@@ -8,6 +8,8 @@
 - The opinion also addresses **risk of material adverse deviation**: the actuary identifies whether such risk exists, the materiality standard used, and the major factors driving it.
 - Reserves are stated on a **statutory** basis, which is generally undiscounted except for defined categories (tabular workers compensation indemnity, and some long-term disability), and gross and net of reinsurance separately.
 
+![[Media/Figures/Regulatory_Reporting.svg|340]]
+
 > [!example]- Can the Actuary Sign a Clean Opinion? {Example}
 > An insurer's carried reserve is $\$36{,}000{,}000$. The actuary's central estimate is $\$41{,}000{,}000$ and the range of reasonable estimates is $\$38{,}000{,}000$ to $\$44{,}000{,}000$.
 >

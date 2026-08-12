@@ -10,6 +10,8 @@
 - Earning is pro rata *by default*, but the pattern must match the exposure. Warranty, crop and some construction covers earn on a non-uniform schedule because risk is not uniform over the term.
 - The premium the ratemaking analysis actually uses is earned premium **at current rate level, trended** — three successive adjustments, each addressing a different distortion: mix of rate levels, then the drift in average premium per exposure ([[Premium Trend]]).
 
+![[Media/Figures/Earned_Premium.svg|340]]
+
 > [!example]- Earning a Single Policy {Example}
 > A homeowners policy with an annual premium of $\$1{,}200$ is written effective $10/1/2024$.
 >

@@ -16,6 +16,8 @@ Further points:
 - The mechanisms **stack in a defined order**, and the [[Rating Algorithm|rating algorithm]] must specify it. Manual → schedule and experience mods → standard premium → premium discount (for size) → retro adjustment or deductible credit.
 - Each step transfers more risk back to the insured, and each therefore reduces the insurer's [[Profit and Contingency Provision|risk charge]] — but increases credit exposure, since the insured owes money after the loss.
 
+![[Media/Figures/Commercial_Lines_Rating.svg|340]]
+
 > [!example]- Building Standard Premium {Example}
 > A commercial auto risk has a manual premium of $\$50{,}000$, an experience modification of $1.15$, and schedule credits totalling $-5\%$.
 >

@@ -10,6 +10,8 @@
 - The **contingency** element is a provision for the difference between expected costs and the costs that actually materialize when a rate is set from a distribution with a long right tail. It is not a redundancy: if it is never realized as profit, the estimate of expected costs was too high, and the provision should be re-examined.
 - $Q_T$ is a **regulated** number. It is one of the most scrutinized components of a filing, and the actuary must be able to show how investment income and the cost of capital were reflected — which is why the derivation, not just the selection, belongs in the documentation.
 
+![[Media/Figures/Profit_and_Contingency_Provision.svg|340]]
+
 > [!example]- The Provision in the Rate {Example}
 > A line has a projected pure premium of $\$250$, fixed expenses of $\$0$, variable expenses of $30\%$ and a target underwriting profit provision of $5\%$.
 >

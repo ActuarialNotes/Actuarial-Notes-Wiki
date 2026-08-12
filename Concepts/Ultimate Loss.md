@@ -10,6 +10,8 @@
 - The ultimate loss ratio ($U / \text{EP}$) is the number that links reserving to pricing: it is the retrospective test of whether the year was priced adequately, and it is the input to the a priori for future years ([[Rate Level Change]]).
 - Ultimate must be stated on a defined basis — gross or [[Net of Reinsurance|net]], with or without [[Allocated Loss Adjustment Expense|ALAE]], before or after [[Salvage and Subrogation|salvage and subrogation]] — and the basis must be the same on both sides of every comparison.
 
+![[Media/Figures/Ultimate_Loss.svg|340]]
+
 > [!example]- Selecting an Ultimate from Several Methods {Example}
 > AY 2023 at $12$ months: paid $\$300{,}000$, case reserves $\$200{,}000$, reported $\$500{,}000$; earned premium $\$1{,}200{,}000$; a priori ELR $83.3\%$; reported $\text{CDF}_{12} = 2.400$; paid $\text{CDF}_{12} = 4.100$.
 >

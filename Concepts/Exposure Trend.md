@@ -11,6 +11,8 @@
 - Ignoring exposure trend on an inflating base understates the future denominator, overstates the projected pure premium, and produces an indicated increase the insurer does not need — because the same inflation that drives the losses is already raising the premium base automatically.
 - Under the [[Loss Ratio Method]] the effect enters through [[Premium Trend|premium trend]] instead: the premium at current rates grows with the exposure base even with no rate change, so the two methods handle the same phenomenon in different places and must not both be applied.
 
+![[Media/Figures/Exposure_Trend.svg|340]]
+
 > [!example]- Net Pure Premium Trend in Workers Compensation {Example}
 > A workers compensation book has accident-year-2023 payroll of $\$50{,}000{,}000$ and losses of $\$1{,}600{,}000$. Annual wage (exposure) trend is $3.0\%$, annual loss trend is $6.0\%$, and the trend period is $2.5$ years.
 >

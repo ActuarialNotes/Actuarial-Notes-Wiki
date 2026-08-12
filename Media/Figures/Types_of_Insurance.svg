@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Lines of insurance placed by claim frequency and claim severity</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Frequency, severity and how long the</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">tail runs</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">Pure Premium = Frequency × Severity</text>
+  <line x1="68" y1="322" x2="326" y2="322" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="68" y1="322" x2="68" y2="92" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <circle cx="276.32" cy="291.2" r="4.6" fill="#059669"/>
+  <text x="276.32" y="281.2" text-anchor="middle" class="sm bold" fill="#059669">Auto PD</text>
+  <circle cx="231.68" cy="251.6" r="4.6" fill="#059669"/>
+  <text x="231.68" y="241.6" text-anchor="middle" class="sm bold" fill="#059669">Homeowners</text>
+  <circle cx="177.12" cy="198.8" r="4.6" fill="#3b82f6"/>
+  <text x="177.12" y="188.8" text-anchor="middle" class="sm bold" fill="#3b82f6">CGL</text>
+  <circle cx="132.48" cy="172.4" r="4.6" fill="#3b82f6"/>
+  <text x="132.48" y="162.4" text-anchor="middle" class="sm bold" fill="#3b82f6">Auto BI</text>
+  <circle cx="147.36" cy="128.4" r="4.6" fill="#e11d48"/>
+  <text x="147.36" y="118.4" text-anchor="middle" class="sm bold" fill="#e11d48">Workers comp</text>
+  <circle cx="90.32" cy="115.2" r="4.6" fill="#e11d48"/>
+  <text x="90.32" y="105.2" text-anchor="middle" class="sm bold" fill="#e11d48">Med mal</text>
+  <text x="62" y="88" text-anchor="start" class="sm dim">severity</text>
+  <text x="316" y="342" text-anchor="end" class="sm dim">frequency</text>
+  <text x="180" y="376" text-anchor="middle" class="sm dim">low frequency and high severity means a long</text>
+  <text x="180" y="394" text-anchor="middle" class="sm dim">tail — and colour is the tail length here</text>
+</svg>

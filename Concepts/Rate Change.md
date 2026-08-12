@@ -10,6 +10,8 @@
 - Every rate change enters the rate level index used to compute [[On Level Premium|on-level premium]] in future analyses, so the history of changes (dates, magnitudes, and whether they applied to new business, renewals or in-force policies) is part of the ratemaking data.
 - A rate change also changes the **mix**: price-sensitive risks shop, so a large increase can worsen the remaining experience through adverse selection — an effect the indication itself does not capture.
 
+![[Media/Figures/Rate_Change.svg|340]]
+
 > [!example]- Indicated vs. Selected Change {Example}
 > A personal auto indication produces $+14.2\%$. The state's largest competitor filed $+4\%$ last quarter; the regulator has informally signalled that increases above $10\%$ will draw a hearing; the book's retention is $88\%$ and each point of rate historically costs $0.4$ points of retention.
 >

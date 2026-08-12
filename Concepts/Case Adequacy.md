@@ -11,6 +11,8 @@
 - The remedy is the [[Berquist-Sherman Method|Berquist-Sherman]] case adjustment: restate historical average case outstanding to the current adequacy level using a selected severity trend, rebuild the reported triangle, and select factors from the restated history.
 - Adequacy also affects the a priori methods indirectly: the [[Cape Cod Method|Cape Cod]] ELR is computed from reported losses, so a strengthening inflates it and the distortion enters twice.
 
+![[Media/Figures/Case_Adequacy.svg|340]]
+
 > [!example]- Detecting a Shift {Example}
 > Average case outstanding per open claim:
 >

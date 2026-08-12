@@ -10,6 +10,8 @@
 - Advisory organizations (ISO, NCCI) file **loss costs** — pure premiums — rather than rates, leaving each insurer to add its own expense and profit provisions through a loss cost multiplier.
 - The pure premium used in a rate is always **projected**: historical losses developed to ultimate, trended to the forecast period, adjusted for [[Large Loss|large losses]] and [[Catastrophe Loss|catastrophes]], and divided by exposures that are themselves trended if the base inflates ([[Exposure Trend]]).
 
+![[Media/Figures/Pure_Premium.svg|340]]
+
 > [!example]- Pure Premium from Frequency and Severity {Example}
 > A homeowners book has $12{,}000$ earned house-years, $960$ ultimate claims and $\$5{,}280{,}000$ of ultimate losses and LAE.
 >

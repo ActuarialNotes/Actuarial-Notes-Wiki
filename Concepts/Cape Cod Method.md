@@ -11,6 +11,8 @@
 - Cape Cod converges to the [[Chain Ladder Method|chain ladder]] as cohorts mature and to the [[Expected Loss Method|expected claims]] technique for very immature ones — the same limiting behaviour as BF.
 - A **decay-weighted** variant (generalized Cape Cod) weights recent years more heavily in the ELR estimate, recognizing that the loss ratio level genuinely drifts.
 
+![[Media/Figures/Cape_Cod_Method.svg|340]]
+
 > [!example]- Deriving the ELR and the Reserve {Example}
 > Three accident years, with on-level earned premium and reported losses ($000s):
 >

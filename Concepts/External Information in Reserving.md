@@ -7,6 +7,8 @@
 - **External information also flags problems.** A development pattern far outside the industry range, or a loss ratio that diverges persistently from peers writing the same business, is a signal to re-examine internal assumptions — a diagnostic use that does not require adopting the external numbers at all.
 - **Documentation matters.** ASOP 43 requires the actuary to disclose reliance on data supplied by others and the reasonableness review performed; a benchmark adopted without a stated rationale for its applicability is a documentation gap as much as a technical one (see [[Reserve Communication]]).
 
+![[Media/Figures/External_Information_in_Reserving.svg|340]]
+
 > [!example]- Benchmarking a Tail Factor {Example}
 > An insurer's commercial auto liability triangle runs only $60$ months. Internal $48\text{–}60$ age-to-age factors are $1.021$, $1.018$, and $1.024$. Industry patterns for commercial auto liability show a $60$-months-to-ultimate tail of $1.045$, but the industry data is written at a $\$1$M limit while the insurer writes at $\$500$K.
 >

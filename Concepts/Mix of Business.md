@@ -8,6 +8,8 @@
 - Mix shifts are frequently **endogenous to pricing**: a large [[Rate Change|rate increase]] drives away the risks with the most alternatives, which are usually the better ones. The indication that caused the shift does not anticipate it, so the following year's experience deteriorates for reasons the analysis attributed to the market.
 - Other common causes: a new distribution channel, entering or exiting a territory, a change in the [[Deductible Rating|deductible]] or limit profile, a growth push in one segment, and [[Underwriting Changes|underwriting]] tightening.
 
+![[Media/Figures/Mix_of_Business.svg|340]]
+
 > [!example]- A Mix Shift That Looks Like Rate Inadequacy {Example}
 > An insurer writes two territories, each with a stable loss ratio:
 >

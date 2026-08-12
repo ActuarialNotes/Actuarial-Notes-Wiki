@@ -8,6 +8,8 @@
 - A percentage rate change does **not** flow through evenly to policies sitting at the minimum: raising the base rate $8\%$ changes nothing for a risk already at the floor, so the achieved rate change on a book with many minimum-premium policies is less than the filed one.
 - Distinguish from the **minimum retrospective premium** (the floor in a [[Retrospective Rating|retro]] plan, which prices a risk-transfer band rather than expenses) and from a **deposit premium** (an advance against an auditable exposure — see [[Premium Audit]]).
 
+![[Media/Figures/Minimum_Premium.svg|340]]
+
 > [!example]- Applying the Minimum Premium {Example}
 > A liability rate is $\$4.00$ per $\$1{,}000$ of receipts, with a minimum premium of $\$750$. A small contractor has $\$150{,}000$ of receipts.
 >

@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>A recoding moving claim volume between segments without changing the total</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Volume moves between cells; nothing</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">costs more</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">Apparent = True + Reclassification</text>
+  <text x="46" y="134" text-anchor="start" class="sm bold">before</text>
+  <rect x="46" y="146" width="166.16" height="32" rx="4" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="129.08" y="166" text-anchor="middle" class="sm">coverage A</text>
+  <rect x="212.16" y="146" width="101.84" height="32" rx="4" fill="#d97706" fill-opacity="0.30" stroke="#d97706" stroke-width="1.2"/>
+  <text x="263.08" y="166" text-anchor="middle" class="sm">coverage B</text>
+  <text x="46" y="238" text-anchor="start" class="sm bold">after</text>
+  <rect x="46" y="250" width="117.92" height="32" rx="4" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="104.96" y="270" text-anchor="middle" class="sm">coverage A</text>
+  <rect x="163.92" y="250" width="150.08" height="32" rx="4" fill="#d97706" fill-opacity="0.30" stroke="#d97706" stroke-width="1.2"/>
+  <text x="238.96" y="270" text-anchor="middle" class="sm">coverage B</text>
+  <line x1="180" y1="198" x2="180" y2="232" class="thin" stroke="#e11d48" stroke-width="1.6" marker-end="url(#ahe11d48)"/>
+  <text x="188" y="220" text-anchor="start" class="sm bold" fill="#e11d48">recoded</text>
+  <text x="180" y="322" text-anchor="middle" class="sm dim">coverage B's triangle now shows a jump in</text>
+  <text x="180" y="340" text-anchor="middle" class="sm dim">counts that never happened — and A a drop</text>
+  <text x="180" y="372" text-anchor="middle" class="sm dim">the total is unchanged, so only the segments lie</text>
+</svg>

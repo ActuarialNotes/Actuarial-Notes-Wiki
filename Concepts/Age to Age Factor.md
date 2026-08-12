@@ -19,6 +19,8 @@ Further points:
 - A factor that moves along the **diagonal** rather than down the column is a calendar-year effect ([[Development Triangle]]) and should be addressed by restating the triangle, not by averaging it away.
 - The same selection process runs on paid, reported, count and ALAE triangles, and the selections should be mutually consistent — a paid factor implying faster emergence than the reported factor at the same age needs an explanation.
 
+![[Media/Figures/Age_to_Age_Factor.svg|340]]
+
 > [!example]- Selecting Factors from a Column {Example}
 > Cumulative reported losses ($000s):
 >

@@ -26,6 +26,8 @@ Further points:
 - The adjustments are **large and judgment-laden** — the severity trend and the target disposal pattern are both selections — so the restated result should be compared against methods that are insensitive to the distortion in question (paid methods for a case-adequacy change; reported methods for a settlement-rate change).
 - Berquist-Sherman does not fix the diagonal itself. Strengthened reserves are on the books and belong in the estimate; what the restatement fixes is the *factors*, which would otherwise develop the strengthening a second time.
 
+![[Media/Figures/Berquist-Sherman_Method.svg|340]]
+
 > [!example]- Case Adequacy Adjustment {Example}
 > Average case outstanding per open claim at $12$ months:
 >

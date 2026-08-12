@@ -17,6 +17,8 @@
 
 **Practical constraints.** Filing and approval timing, systems and IT release schedules, agent notification and training, and policyholder communication all determine when a change can actually take effect — often months after the analysis is finished, which is itself a reason the trend period reaches so far forward.
 
+![[Media/Figures/Considerations_for_Implementing_Rates.svg|340]]
+
 > [!example]- Phasing a Large Increase {Example}
 > The indication is $+20\%$. The insurer judges that a single $+20\%$ would trigger regulatory scrutiny and heavy non-renewal, and decides to phase it over two annual filings.
 >

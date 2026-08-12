@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Four lines of business with their exposure bases and indicated changes</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Each line is priced and reserved on its</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">own</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">Rate is set per line, per class, per territory</text>
+  <text x="34" y="122" text-anchor="start" class="sm bold">Personal auto</text>
+  <text x="34" y="138" text-anchor="start" class="sm dim">car-year</text>
+  <rect x="236" y="116" width="33.58" height="20" rx="3" fill="#3b82f6" fill-opacity="0.65"/>
+  <text x="277.58" y="131" text-anchor="start" class="sm">+7.3%</text>
+  <text x="34" y="174" text-anchor="start" class="sm bold">Homeowners</text>
+  <text x="34" y="190" text-anchor="start" class="sm dim">house-year</text>
+  <rect x="236" y="168" width="57.5" height="20" rx="3" fill="#d97706" fill-opacity="0.65"/>
+  <text x="301.5" y="183" text-anchor="start" class="sm">+12.5%</text>
+  <text x="34" y="226" text-anchor="start" class="sm bold">Workers comp</text>
+  <text x="34" y="242" text-anchor="start" class="sm dim">payroll/100</text>
+  <rect x="224.96" y="220" width="11.04" height="20" rx="3" fill="#059669" fill-opacity="0.65"/>
+  <text x="216.96" y="235" text-anchor="end" class="sm">-2.4%</text>
+  <text x="34" y="278" text-anchor="start" class="sm bold">General liability</text>
+  <text x="34" y="294" text-anchor="start" class="sm dim">sales/1,000</text>
+  <rect x="236" y="272" width="18.86" height="20" rx="3" fill="#7c3aed" fill-opacity="0.65"/>
+  <text x="262.86" y="287" text-anchor="start" class="sm">+4.1%</text>
+  <line x1="236" y1="106" x2="236" y2="340" class="rule"/>
+  <text x="180" y="366" text-anchor="middle" class="sm dim">one exposure base, one rating plan, one triangle</text>
+</svg>

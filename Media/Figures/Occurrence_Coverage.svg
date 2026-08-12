@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>The occurrence trigger drawn on the accident-date by report-date plane</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Covered by the policy in force when it</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">happened</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">Covered ⇔ effective ≤ accident ≤ expiry</text>
+  <rect x="92" y="126" width="176" height="176" rx="6" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
+  <polygon points="92,302 268,126 268,302" fill="var(--edge)" fill-opacity="0.5"/>
+  <line x1="92" y1="302" x2="268" y2="126" class="thin dash" stroke="var(--axis)" stroke-width="1.1"/>
+  <text x="222.24" y="280.88" text-anchor="middle" class="sm dim">impossible</text>
+  <text x="180" y="346" text-anchor="middle" class="sm dim">accident date →</text>
+  <text x="84" y="214" text-anchor="end" class="sm dim">report</text>
+  <text x="84" y="228" text-anchor="end" class="sm dim">date ↑</text>
+  <polygon points="151.84,242.16 208.16,185.84 208.16,126 151.84,126" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1.4"/>
+  <text x="180" y="150.64" text-anchor="middle" class="sm bold" fill="#3b82f6">covered</text>
+  <path d="M151.84,308 v4.2 H175 q5,0 5,3.85 q0,-3.85 5,-3.85 H208.16 v-4.2" class="thin" stroke="var(--dim)" stroke-width="1.2"/>
+  <text x="180" y="326" text-anchor="middle" class="sm dim">policy period</text>
+  <text x="180" y="374" text-anchor="middle" class="sm dim">any report date, however late —</text>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">so the insurer carries a long IBNR tail</text>
+</svg>

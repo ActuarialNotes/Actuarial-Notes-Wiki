@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>The coinsurance penalty applied when the insurance carried falls below the required percentage of value</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Under-insure and the clause pays only a</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">share</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">Share = min(Carried / (Coins% × Value), 1)</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">600k / (0.80 × 1,000k) = 0.75, then × Loss</text>
+  <line x1="112" y1="100" x2="112" y2="322" class="grid"/>
+  <line x1="152" y1="100" x2="152" y2="322" class="grid"/>
+  <line x1="192" y1="100" x2="192" y2="322" class="grid"/>
+  <line x1="232" y1="100" x2="232" y2="322" class="grid"/>
+  <line x1="272" y1="100" x2="272" y2="322" class="grid"/>
+  <line x1="312" y1="100" x2="312" y2="322" class="grid"/>
+  <line x1="72" y1="322" x2="320" y2="322" class="grid"/>
+  <line x1="72" y1="221.09" x2="320" y2="221.09" class="grid"/>
+  <line x1="72" y1="120.18" x2="320" y2="120.18" class="grid"/>
+  <line x1="72" y1="322" x2="330" y2="322" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="72" y1="322" x2="72" y2="90" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="112" y1="322" x2="112" y2="326" class="tick"/>
+  <line x1="152" y1="322" x2="152" y2="326" class="tick"/>
+  <text x="152" y="338" text-anchor="middle" class="sm dim">60%</text>
+  <line x1="192" y1="322" x2="192" y2="326" class="tick"/>
+  <line x1="232" y1="322" x2="232" y2="326" class="tick"/>
+  <text x="232" y="338" text-anchor="middle" class="sm dim">80%</text>
+  <line x1="272" y1="322" x2="272" y2="326" class="tick"/>
+  <line x1="312" y1="322" x2="312" y2="326" class="tick"/>
+  <text x="312" y="338" text-anchor="middle" class="sm dim">100%</text>
+  <line x1="68" y1="322" x2="72" y2="322" class="tick"/>
+  <text x="64" y="325.6" text-anchor="end" class="sm dim">0%</text>
+  <line x1="68" y1="221.09" x2="72" y2="221.09" class="tick"/>
+  <text x="64" y="224.69" text-anchor="end" class="sm dim">50%</text>
+  <line x1="68" y1="120.18" x2="72" y2="120.18" class="tick"/>
+  <text x="64" y="123.78" text-anchor="end" class="sm dim">100%</text>
+  <polyline points="72,221.09 73.38,220.22 74.76,219.35 76.13,218.48 77.51,217.62 78.89,216.75 80.27,215.88 81.64,215.01 83.02,214.14 84.4,213.27 85.78,212.4 87.16,211.53 88.53,210.66 89.91,209.79 91.29,208.93 92.67,208.06 94.04,207.19 95.42,206.32 96.8,205.45 98.18,204.58 99.56,203.71 100.93,202.84 102.31,201.97 103.69,201.11 105.07,200.24 106.44,199.37 107.82,198.5 109.2,197.63 110.58,196.76 111.96,195.89 113.33,195.02 114.71,194.15 116.09,193.28 117.47,192.42 118.84,191.55 120.22,190.68 121.6,189.81 122.98,188.94 124.36,188.07 125.73,187.2 127.11,186.33 128.49,185.46 129.87,184.6 131.24,183.73 132.62,182.86 134,181.99 135.38,181.12 136.76,180.25 138.13,179.38 139.51,178.51 140.89,177.64 142.27,176.78 143.64,175.91 145.02,175.04 146.4,174.17 147.78,173.3 149.16,172.43 150.53,171.56 151.91,170.69 153.29,169.82 154.67,168.95 156.04,168.09 157.42,167.22 158.8,166.35 160.18,165.48 161.56,164.61 162.93,163.74 164.31,162.87 165.69,162 167.07,161.13 168.44,160.27 169.82,159.4 171.2,158.53 172.58,157.66 173.96,156.79 175.33,155.92 176.71,155.05 178.09,154.18 179.47,153.31 180.84,152.44 182.22,151.58 183.6,150.71 184.98,149.84 186.36,148.97 187.73,148.1 189.11,147.23 190.49,146.36 191.87,145.49 193.24,144.62 194.62,143.76 196,142.89 197.38,142.02 198.76,141.15 200.13,140.28 201.51,139.41 202.89,138.54 204.27,137.67 205.64,136.8 207.02,135.93 208.4,135.07 209.78,134.2 211.16,133.33 212.53,132.46 213.91,131.59 215.29,130.72 216.67,129.85 218.04,128.98 219.42,128.11 220.8,127.25 222.18,126.38 223.56,125.51 224.93,124.64 226.31,123.77 227.69,122.9 229.07,122.03 230.44,121.16 231.82,120.29 233.2,120.18 234.58,120.18 235.96,120.18 237.33,120.18 238.71,120.18 240.09,120.18 241.47,120.18 242.84,120.18 244.22,120.18 245.6,120.18 246.98,120.18 248.36,120.18 249.73,120.18 251.11,120.18 252.49,120.18 253.87,120.18 255.24,120.18 256.62,120.18 258,120.18 259.38,120.18 260.76,120.18 262.13,120.18 263.51,120.18 264.89,120.18 266.27,120.18 267.64,120.18 269.02,120.18 270.4,120.18 271.78,120.18 273.16,120.18 274.53,120.18 275.91,120.18 277.29,120.18 278.67,120.18 280.04,120.18 281.42,120.18 282.8,120.18 284.18,120.18 285.56,120.18 286.93,120.18 288.31,120.18 289.69,120.18 291.07,120.18 292.44,120.18 293.82,120.18 295.2,120.18 296.58,120.18 297.96,120.18 299.33,120.18 300.71,120.18 302.09,120.18 303.47,120.18 304.84,120.18 306.22,120.18 307.6,120.18 308.98,120.18 310.36,120.18 311.73,120.18 313.11,120.18 314.49,120.18 315.87,120.18 317.24,120.18 318.62,120.18 320,120.18" class="curve" stroke="#3b82f6" stroke-width="2.6"/>
+  <line x1="232" y1="322" x2="232" y2="120.18" class="thin dash" stroke="#059669" stroke-width="1.3"/>
+  <text x="226" y="114.18" text-anchor="end" class="sm bold" fill="#059669">80% required</text>
+  <circle cx="152" cy="170.64" r="4.2" fill="#e11d48"/>
+  <text x="162" y="186.64" text-anchor="start" class="sm bold" fill="#e11d48">carried 60%</text>
+  <text x="162" y="201.64" text-anchor="start" class="sm" fill="#e11d48">⇒ 75% paid</text>
+  <text x="180" y="354" text-anchor="middle" class="sm dim">insurance carried, as a % of value</text>
+  <text x="180" y="374" text-anchor="middle" class="sm dim">the penalty applies to every loss, including</text>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">the partial ones the insured expected to collect</text>
+</svg>

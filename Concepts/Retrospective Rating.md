@@ -11,6 +11,8 @@
 - The **maximum** protects the insured against a bad year, the **minimum** protects the insurer against a good one. Together they define how much risk is actually transferred; a plan with a tight max/min band is close to guaranteed cost, a wide one close to self-insurance. The **net insurance charge** in the basic premium is the price of that band, and is derived from Table M (insurance charges by entry ratio and risk size).
 - Retro plans suit **large accounts** with credible volume, and they align incentives directly: every dollar of loss inside the band costs the insured $\text{LCF} \times \text{TM}$ dollars of premium. They also expose the insurer to credit risk, since additional premium is billed after the fact.
 
+![[Media/Figures/Retrospective_Rating.svg|340]]
+
 > [!example]- Computing a Retrospective Premium {Example}
 > A workers compensation policy has standard premium of $\$500{,}000$, basic premium $\$100{,}000$, loss conversion factor $1.10$, tax multiplier $1.03$, minimum retro premium $\$300{,}000$ and maximum $\$800{,}000$. Actual limited losses are $\$350{,}000$.
 >

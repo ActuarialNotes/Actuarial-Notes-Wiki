@@ -8,6 +8,8 @@
 - Pricing an occurrence policy requires projecting loss costs to the future *accident* period and then developing them to ultimate — two adjustments that compound the uncertainty relative to [[Claims Made Coverage|claims-made]], which is why occurrence rates for the same exposure are higher.
 - General liability, auto liability, workers compensation and most personal lines are written on an occurrence basis. Professional liability moved largely to claims-made precisely because occurrence-form IBNR proved unpriceable in the malpractice crises of the 1970s and 80s.
 
+![[Media/Figures/Occurrence_Coverage.svg|340]]
+
 > [!example]- Occurrence and Claims-Made on the Same Loss {Example}
 > A general liability policy runs $1/1/2024$–$12/31/2024$. A customer slips and falls on $8/10/2024$ but does not present a claim until $3/15/2026$.
 >

@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Historical losses trended from the experience period's midpoint to the future policy period's</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">Trend bridges two average accident dates</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">Trend Factor = (1 + t)ⁿ = 1.05^2.75 = 1.142</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">1 + t_PP = (1 + t_freq)(1 + t_sev)</text>
+  <line x1="72" y1="102" x2="72" y2="322" class="grid"/>
+  <line x1="134" y1="102" x2="134" y2="322" class="grid"/>
+  <line x1="196" y1="102" x2="196" y2="322" class="grid"/>
+  <line x1="258" y1="102" x2="258" y2="322" class="grid"/>
+  <line x1="320" y1="102" x2="320" y2="322" class="grid"/>
+  <line x1="72" y1="322" x2="320" y2="322" class="grid"/>
+  <line x1="72" y1="212" x2="320" y2="212" class="grid"/>
+  <line x1="72" y1="102" x2="320" y2="102" class="grid"/>
+  <line x1="72" y1="322" x2="330" y2="322" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="72" y1="322" x2="72" y2="92" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="72" y1="322" x2="72" y2="326" class="tick"/>
+  <line x1="134" y1="322" x2="134" y2="326" class="tick"/>
+  <line x1="196" y1="322" x2="196" y2="326" class="tick"/>
+  <line x1="258" y1="322" x2="258" y2="326" class="tick"/>
+  <line x1="320" y1="322" x2="320" y2="326" class="tick"/>
+  <line x1="68" y1="322" x2="72" y2="322" class="tick"/>
+  <text x="64" y="325.6" text-anchor="end" class="sm dim">300</text>
+  <line x1="68" y1="212" x2="72" y2="212" class="tick"/>
+  <text x="64" y="215.6" text-anchor="end" class="sm dim">380</text>
+  <line x1="68" y1="102" x2="72" y2="102" class="tick"/>
+  <text x="64" y="105.6" text-anchor="end" class="sm dim">460</text>
+  <polyline points="72,239.5 73.38,238.96 74.76,238.43 76.13,237.89 77.51,237.35 78.89,236.81 80.27,236.27 81.64,235.73 83.02,235.19 84.4,234.65 85.78,234.1 87.16,233.56 88.53,233.02 89.91,232.47 91.29,231.93 92.67,231.38 94.04,230.84 95.42,230.29 96.8,229.74 98.18,229.2 99.56,228.65 100.93,228.1 102.31,227.55 103.69,227 105.07,226.45 106.44,225.9 107.82,225.35 109.2,224.8 110.58,224.24 111.96,223.69 113.33,223.13 114.71,222.58 116.09,222.02 117.47,221.47 118.84,220.91 120.22,220.35 121.6,219.8 122.98,219.24 124.36,218.68 125.73,218.12 127.11,217.56 128.49,217 129.87,216.44 131.24,215.88 132.62,215.31 134,214.75 135.38,214.19 136.76,213.62 138.13,213.06 139.51,212.49 140.89,211.92 142.27,211.36 143.64,210.79 145.02,210.22 146.4,209.65 147.78,209.08 149.16,208.51 150.53,207.94 151.91,207.37 153.29,206.8 154.67,206.23 156.04,205.65 157.42,205.08 158.8,204.51 160.18,203.93 161.56,203.36 162.93,202.78 164.31,202.2 165.69,201.63 167.07,201.05 168.44,200.47 169.82,199.89 171.2,199.31 172.58,198.73 173.96,198.15 175.33,197.57 176.71,196.98 178.09,196.4 179.47,195.82 180.84,195.23 182.22,194.65 183.6,194.06 184.98,193.48 186.36,192.89 187.73,192.3 189.11,191.71 190.49,191.12 191.87,190.53 193.24,189.94 194.62,189.35 196,188.76 197.38,188.17 198.76,187.58 200.13,186.98 201.51,186.39 202.89,185.8 204.27,185.2 205.64,184.6 207.02,184.01 208.4,183.41 209.78,182.81 211.16,182.21 212.53,181.62 213.91,181.02 215.29,180.42 216.67,179.81 218.04,179.21 219.42,178.61 220.8,178.01 222.18,177.4 223.56,176.8 224.93,176.19 226.31,175.59 227.69,174.98 229.07,174.38 230.44,173.77 231.82,173.16 233.2,172.55 234.58,171.94 235.96,171.33 237.33,170.72 238.71,170.11 240.09,169.5 241.47,168.88 242.84,168.27 244.22,167.65 245.6,167.04 246.98,166.42 248.36,165.81 249.73,165.19 251.11,164.57 252.49,163.96 253.87,163.34 255.24,162.72 256.62,162.1 258,161.48 259.38,160.85 260.76,160.23 262.13,159.61 263.51,158.99 264.89,158.36 266.27,157.74 267.64,157.11 269.02,156.48 270.4,155.86 271.78,155.23 273.16,154.6 274.53,153.97 275.91,153.34 277.29,152.71 278.67,152.08 280.04,151.45 281.42,150.82 282.8,150.18 284.18,149.55 285.56,148.91 286.93,148.28 288.31,147.64 289.69,147.01 291.07,146.37 292.44,145.73 293.82,145.09 295.2,144.45 296.58,143.81 297.96,143.17 299.33,142.53 300.71,141.89 302.09,141.25 303.47,140.6 304.84,139.96 306.22,139.31 307.6,138.67 308.98,138.02 310.36,137.37 311.73,136.73 313.11,136.08 314.49,135.43 315.87,134.78 317.24,134.13 318.62,133.48 320,132.82" class="curve" stroke="#3b82f6" stroke-width="2.4"/>
+  <circle cx="72" cy="239.5" r="4.2" fill="#d97706"/>
+  <text x="78" y="255.5" text-anchor="start" class="sm bold" fill="#d97706">360</text>
+  <circle cx="242.5" cy="168.42" r="4.2" fill="#059669"/>
+  <text x="236.5" y="160.42" text-anchor="end" class="sm bold" fill="#059669">411</text>
+  <line x1="72" y1="322" x2="72" y2="239.5" class="thin dash" stroke="#d97706" stroke-width="1.3"/>
+  <line x1="242.5" y1="322" x2="242.5" y2="168.42" class="thin dash" stroke="#059669" stroke-width="1.3"/>
+  <path d="M72,340 v4.2 H152.25 q5,0 5,3.85 q0,-3.85 5,-3.85 H242.5 v-4.2" class="thin" stroke="var(--dim)" stroke-width="1.2"/>
+  <text x="157.25" y="358" text-anchor="middle" class="sm dim">2.75 years</text>
+  <text x="72" y="376" text-anchor="middle" class="sm dim">experience</text>
+  <text x="242.5" y="376" text-anchor="middle" class="sm dim">new rates</text>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">the length of the bridge is the calculation</text>
+</svg>

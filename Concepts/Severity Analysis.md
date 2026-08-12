@@ -13,6 +13,8 @@
 - As a **reserving diagnostic**, average case outstanding per open claim is the sharpest single indicator: a jump across all accident years in one calendar year is [[Case Adequacy|case strengthening]], while a rise concentrated in one accident year is a genuine change in that year's claims.
 - Severity analysis is what the [[Frequency-Severity Method]] rests on: project counts and severities separately, then multiply.
 
+![[Media/Figures/Severity_Analysis.svg|340]]
+
 > [!example]- Fitting a Severity Trend {Example}
 > Auto bodily injury ultimate figures: AY $2021$ — $\$5{,}000{,}000$ on $1{,}000$ claims; AY $2023$ — $\$6{,}600{,}000$ on $1{,}100$ claims.
 >

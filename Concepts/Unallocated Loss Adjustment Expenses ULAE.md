@@ -20,6 +20,8 @@ Further points:
 - The classical method's central weakness is **growth**: in a rapidly growing book, current paid ULAE supports a claim inventory much larger than current paid losses reflect, so the ratio overstates the true cost per dollar of loss; in a shrinking or runoff book, it understates it.
 - In **ratemaking**, ULAE may be handled as a load on losses or as a [[Fixed Expenses|fixed expense]] provision. Either is acceptable; doing both double-counts, and doing neither leaves a real cost unfunded.
 
+![[Media/Figures/Unallocated_Loss_Adjustment_Expenses_ULAE.svg|340]]
+
 > [!example]- Classical and Kittel Estimates Side by Side {Example}
 > Calendar year: paid ULAE $\$480{,}000$, paid loss $\$4{,}000{,}000$, incurred loss $\$8{,}000{,}000$. Unpaid claims are $\$6{,}000{,}000$ of case outstanding and $\$4{,}000{,}000$ of IBNR.
 >

@@ -10,6 +10,8 @@
 
 The professional position: [[Principles of Ratemaking|CAS Principle 4]] and the actuarial standards require the actuary to *estimate* the expected cost. If a constraint prevents charging it, the rate is inadequate and the actuary should say so — quantify the shortfall, state the assumptions, and record that the selection departs from the indication. Re-deriving the indication until it matches the desired filing is what the standards exist to prevent.
 
+![[Media/Figures/Ratemaking_Constraints.svg|340]]
+
 > [!example]- A Regulatory Cap {Example}
 > The indication is $+18\%$; the regulator caps a single filing at $+10\%$. The book earns $\$25{,}000{,}000$.
 >

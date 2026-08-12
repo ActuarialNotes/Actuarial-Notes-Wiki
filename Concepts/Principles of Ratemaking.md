@@ -19,6 +19,8 @@ Further points:
 - The Statement lists considerations the actuary must weigh — exposure, data organization, [[Loss Trend|trend]], [[Loss Development|development]], catastrophes, credibility, individual risk rating, [[Ratemaking Constraints|regulatory constraints]] — and is explicit that judgment is a necessary part of ratemaking.
 - The four principles underlie the whole syllabus: developing and trending is Principle 1, the expense and profit provisions are Principle 2, classification and individual risk rating are Principle 3, and the departure from an indication for competitive or regulatory reasons is precisely where Principle 4 gets tested.
 
+![[Media/Figures/Principles_of_Ratemaking.svg|340]]
+
 > [!example]- Applying the Principles to a Rate Build-Up {Example}
 > An actuary projects a pure premium of $\$250$, variable expenses of $20\%$, fixed expenses of $\$38$ per exposure, and a target underwriting profit provision of $5\%$.
 >

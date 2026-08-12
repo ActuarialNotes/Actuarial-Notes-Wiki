@@ -10,6 +10,8 @@
 - It is the *wrong* denominator for a [[Loss Ratio|loss ratio]]: losses in the period arise from coverage provided in the period, which is earned premium.
 - Written premium may still change after issuance — endorsements, cancellations and [[Premium Audit|audits]] all book additional or return premium into a later period, so "written premium" for a policy year keeps moving until the audits close.
 
+![[Media/Figures/Written_Premium.svg|340]]
+
 > [!example]- Written, Earned and Unearned from One Policy {Example}
 > A $12$-month homeowners policy is written $10/1/2024$ for $\$1{,}200$.
 >

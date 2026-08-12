@@ -9,6 +9,8 @@
 - The remedies, in order of preference: recode the history consistently, map the old and new schemes and restate, or (last resort) select factors from post-change diagonals only and accept the loss of history.
 - This is exactly what Friedland's Chapter 4 management interview is for. A coding change is invisible in the triangle until it has already distorted the factors, and it is trivially identifiable by asking.
 
+![[Media/Figures/Claims_Coding_Changes.svg|340]]
+
 > [!example]- A Coverage Reclassification {Example}
 > An insurer migrates claims systems on $1/1/2023$. Slip-and-fall claims at insured premises were coded "GL — premises" in the old system and "GL — operations" in the new one.
 >

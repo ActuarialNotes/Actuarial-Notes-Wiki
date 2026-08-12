@@ -11,6 +11,8 @@
 - **Catastrophe** exposure must be handled separately. Coastal territories' relativities computed on experience including hurricane losses swing on whether a storm happened to make landfall during the period; the modelled [[Catastrophe Loss|catastrophe load]] belongs in the territory rate as its own component.
 - Territorial rating attracts the most **social and regulatory** scrutiny of any variable, because geography correlates with income and demographics. Some jurisdictions restrict or prohibit territory in certain lines.
 
+![[Media/Figures/Territory_Ratemaking.svg|340]]
+
 > [!example]- Territory Relativities and Rates {Example}
 > Base territory: $10{,}000$ exposures, $\$2{,}000{,}000$ losses. Urban territory: $4{,}000$ exposures, $\$1{,}200{,}000$ losses. The base rate is $\$400$.
 >

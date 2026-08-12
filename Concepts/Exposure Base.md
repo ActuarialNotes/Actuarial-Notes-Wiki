@@ -17,6 +17,8 @@ Further properties:
 - Dollar-denominated bases inflate on their own, which is what [[Exposure Trend]] adjusts for; count-based bases (car-years) do not.
 - Where no single base is proportional to loss across the whole book, the shortfall is picked up by rating variables instead: this is the boundary between the exposure base and [[Classification Ratemaking|classification]].
 
+![[Media/Figures/Exposure_Base.svg|340]]
+
 > [!example]- Why Workers Compensation Rates on Payroll {Example}
 > Two employers in the same class code have identical operations. Employer A employs $10$ workers at $\$200{,}000$ each; Employer B employs $20$ workers at $\$50{,}000$ each.
 >

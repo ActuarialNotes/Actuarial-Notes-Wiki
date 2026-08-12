@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>The experience modification as a credibility blend between a risk's own loss ratio and the class average</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
+    <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">The risk's own past, weighted by</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">credibility</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">M = Z × (A / E) + (1 − Z)</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">0.40 × 0.70 + 0.60 = 0.88</text>
+  <text x="180" y="112" text-anchor="middle" class="sm dim">actual losses 70% of expected, Z = 0.40</text>
+  <line x1="52" y1="196" x2="312" y2="196" class="axis"/>
+  <line x1="52" y1="191" x2="52" y2="201" class="tick"/>
+  <text x="52" y="216" text-anchor="middle" class="sm dim">0.60</text>
+  <line x1="182" y1="191" x2="182" y2="201" class="tick"/>
+  <text x="182" y="216" text-anchor="middle" class="sm dim">1.00</text>
+  <line x1="312" y1="191" x2="312" y2="201" class="tick"/>
+  <text x="312" y="216" text-anchor="middle" class="sm dim">1.40</text>
+  <text x="180" y="238" text-anchor="middle" class="sm dim">experience modification</text>
+  <line x1="182" y1="130" x2="182" y2="188" class="thin" stroke="var(--dim)" stroke-width="1.7" marker-end="url(#ahvardim)"/>
+  <text x="182" y="122" text-anchor="middle" class="sm bold" fill="var(--dim)">no mod 1.00</text>
+  <line x1="143" y1="156" x2="143" y2="188" class="thin" stroke="#059669" stroke-width="1.7" marker-end="url(#ah059669)"/>
+  <text x="143" y="148" text-anchor="middle" class="sm bold" fill="#059669">M = 0.88</text>
+  <text x="180" y="284" text-anchor="middle" class="sm">a credit of 12% on the manual premium</text>
+  <text x="180" y="322" text-anchor="middle" class="sm dim">Z rises with the risk's own volume — a small</text>
+  <text x="180" y="340" text-anchor="middle" class="sm dim">insured's good year barely moves the mod,</text>
+  <text x="180" y="358" text-anchor="middle" class="sm dim">and its bad year barely hurts</text>
+</svg>

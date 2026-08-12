@@ -10,6 +10,8 @@
 - The remedy is the [[Berquist-Sherman Method|Berquist-Sherman]] paid adjustment: restate each historical year's paid losses to what they would have been at the *current* disposal pattern, by interpolating along each year's paid-versus-disposal-rate relationship, then select factors from the restated triangle.
 - Watch the mix of **closed with payment** versus **closed without**. A drive to close files can inflate the closure rate with zero-payment closures, moving the rate without moving any money — visible only if the two are counted separately.
 
+![[Media/Figures/Settlement_Rate.svg|340]]
+
 > [!example]- Diagnosing a Settlement Rate Shift {Example}
 > Disposal rates at $24$ months, against ultimate counts:
 >

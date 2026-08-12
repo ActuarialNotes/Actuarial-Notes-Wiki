@@ -11,6 +11,8 @@
 - A **two-step** trend is used when a level shift (a benefit change, a law amendment, a coverage change) breaks the series: the shift is handled by a separate law-level adjustment and only the residual trend is fitted.
 - Trend is applied to **capped** or **basic-limits** losses; excess layers trend faster (leveraged trend) and are handled through [[Increased Limits|ILFs]].
 
+![[Media/Figures/Loss_Trend.svg|340]]
+
 > [!example]- Getting the Trend Period Right {Example}
 > Rates will be in effect for annual policies written from $7/1/2025$ to $6/30/2026$. The experience period is accident year $2023$. Selected annual severity trend is $5\%$.
 >

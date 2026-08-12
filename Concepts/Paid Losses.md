@@ -10,6 +10,8 @@
 - Running paid and reported methods **side by side** is standard practice. Agreement is reassuring; divergence is a diagnostic. Paid ultimates above reported ultimates suggest case reserves are inadequate; the reverse suggests they are strengthening (or claims are closing slowly).
 - Paid losses are also what the **payment pattern** is built from, which drives discounting, cash-flow testing and the value of float in the [[Underwriting Profit|profit provision]].
 
+![[Media/Figures/Paid_Losses.svg|340]]
+
 > [!example]- Paid and Reported Chain Ladder on the Same Year {Example}
 > Accident year $2023$ at $24$ months: paid $\$2{,}400{,}000$, case reserves $\$1{,}900{,}000$. Selected cumulative factors to ultimate are $2.05$ on paid and $1.28$ on reported.
 >

@@ -10,6 +10,8 @@
 - Cancellation returns the unearned portion. **Pro rata** cancellation returns the full unearned premium; **short-rate** cancellation, used when the insured cancels, returns less than pro rata to recover acquisition costs that were incurred up front.
 - Because commissions and other acquisition costs are paid when the policy is *written* but the premium is earned over the term, rapid growth consumes surplus even on profitable business. This is the "growth penalty" of statutory accounting, and it is why a **premium deficiency reserve** must be established if the unearned premium is not expected to cover the future losses and expenses on that coverage.
 
+![[Media/Figures/Unearned_Premium.svg|340]]
+
 > [!example]- Unearned Premium Reserve for a Growing Book {Example}
 > An insurer writes only $12$-month policies, uniformly through the year:
 >

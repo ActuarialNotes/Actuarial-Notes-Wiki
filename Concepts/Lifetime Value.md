@@ -10,6 +10,8 @@
 - **Price elasticity and retention modelling** are what make LTV operational. Modelling renewal probability as a function of the rate change offered lets an insurer see the trade-off directly: a larger increase raises premium per policy and lowers the number of policies, and the optimum is rarely at either extreme.
 - The professional boundary matters: the **indication** is an actuarial estimate of expected cost; LTV is a **business decision layer** applied to it. Departing from the indication for retention reasons is legitimate and must be documented as a departure ([[Rate Change]], [[Ratemaking Constraints]]) — not folded back into the cost estimate.
 
+![[Media/Figures/Lifetime_Value.svg|340]]
+
 > [!example]- LTV Justifying a First-Year Loss {Example}
 > Acquiring a homeowners customer costs $\$200$. The first-year underwriting result is $-\$50$; expected renewal profit is $\$120$ a year for four further years, and the discount rate is $8\%$. Assume renewal is certain for those four years.
 >

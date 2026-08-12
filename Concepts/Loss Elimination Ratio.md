@@ -10,6 +10,8 @@
 - The LER **falls as losses inflate**, because a fixed deductible eliminates a shrinking fraction of a growing loss — the leveraged effect described under [[Inflation]]. Deductible relativities must therefore be reviewed as costs rise, or they silently become inadequate.
 - The insurer's cost is not reduced by the full LER in practice: it still investigates and adjusts claims below the deductible in many lines, and per-policy [[Fixed Expenses|fixed expenses]] do not shrink at all. A relativity of exactly $(1-\text{LER})$ applied to the whole rate over-credits the deductible.
 
+![[Media/Figures/Loss_Elimination_Ratio.svg|340]]
+
 > [!example]- LER from an Empirical Loss Distribution {Example}
 > A book of $1{,}000$ claims has this size-of-loss distribution:
 >

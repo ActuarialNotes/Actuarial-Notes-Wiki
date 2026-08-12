@@ -18,6 +18,8 @@ Further points:
 - Counts split broad IBNR into its two parts: **pure IBNR** (unreported claims, valued at an expected severity) and **IBNER** (development on known claims). Dollar triangles alone cannot separate them.
 - Counts are the input to the [[Frequency-Severity Method]] and the disposal-rate variant of [[Berquist-Sherman Method|Berquist-Sherman]].
 
+![[Media/Figures/Claim_Count_Triangle.svg|340]]
+
 > [!example]- Developing Counts and Deriving Severity {Example}
 > Cumulative reported claim counts:
 >

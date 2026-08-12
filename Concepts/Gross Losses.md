@@ -10,6 +10,8 @@
 - Gross data is also what survives a **change of programme**. When the treaty changes, the ceded and net histories break; the gross history does not, and it can be re-ceded under the new terms.
 - For ratemaking, whether to work gross or net depends on how the reinsurance cost is provided for — see [[Net of Reinsurance]].
 
+![[Media/Figures/Gross_Losses.svg|340]]
+
 > [!example]- Reconciling Gross, Ceded and Net {Example}
 > AY 2024: net retained losses $\$800{,}000$; excess-of-loss reinsurance recoverable $\$300{,}000$; salvage and subrogation recovered $\$50{,}000$.
 >

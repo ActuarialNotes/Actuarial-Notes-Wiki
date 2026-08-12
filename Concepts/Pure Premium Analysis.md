@@ -10,6 +10,8 @@
 - The frequency/severity split is what makes the analysis **actionable**: a frequency problem calls for underwriting, classification and risk-control responses; a severity problem calls for rate, limits, deductibles and claims handling.
 - In **reserving**, projected pure premium is a reasonableness test: multiply the reserving actuary's ultimate losses by nothing at all — just divide by exposures — and compare the resulting cost per exposure across accident years. A series that jumps in a way trend and rate changes cannot explain points at the estimate, not the world.
 
+![[Media/Figures/Pure_Premium_Analysis.svg|340]]
+
 > [!example]- Territory Relativities from Pure Premiums {Example}
 > Three territories:
 >

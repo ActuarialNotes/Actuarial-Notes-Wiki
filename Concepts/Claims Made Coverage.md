@@ -10,6 +10,8 @@
 - Werner's principles for claims-made pricing: a claims-made policy should always cost less than an occurrence policy for the same exposure; if the reporting pattern is stable, the claims-made rate is less sensitive to the reporting-pattern assumption; and claims-made policies incur no liability for [[IBNR]] beyond the reported claims, so the insurer's exposure to unexpected reporting-pattern shifts falls on the insured instead.
 - Standard in professional liability — medical malpractice, D&O, E&O, lawyers' and architects' liability — where occurrence-form IBNR proved unpriceable.
 
+![[Media/Figures/Claims_Made_Coverage.svg|340]]
+
 > [!example]- Applying Both Tests {Example}
 > A D&O policy runs $1/1/2024$–$12/31/2024$ with a retroactive date of $1/1/2020$.
 >

@@ -14,6 +14,8 @@
 - A higher variable expense ratio **lowers** the PLR, leaving less room for losses. Insurers with cheap distribution can run higher loss ratios profitably — which is why a loss ratio comparison across companies with different channels says little about relative pricing discipline.
 - The PLR should include a provision for the **net cost of [[Reinsurance|reinsurance]]** where the indication is built gross, and for any [[Catastrophe Loss|catastrophe]] load handled as a percentage rather than in the loss projection.
 
+![[Media/Figures/Permissible_Loss_Ratio.svg|340]]
+
 > [!example]- Computing the PLR and the Indication {Example}
 > An insurer's provisions: variable expenses $22\%$ of premium, fixed expenses $8\%$ of premium, target underwriting profit $5\%$. The projected loss and LAE ratio is $60\%$.
 >

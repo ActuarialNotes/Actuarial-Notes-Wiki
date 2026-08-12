@@ -11,6 +11,8 @@
 - Because of that mixing, a CY loss ratio is a **profitability** measure, not a pricing measure. Ratemaking uses [[Accident Year]] or [[Policy Year]] losses against on-level earned premium — see [[Ratemaking Data Organization]].
 - CY premium is unambiguous and is used everywhere: CY earned premium is the same number under CY, AY and (with more work) PY loss aggregation, so "calendar/accident year" data — CY premium against AY losses — is the standard ratemaking pairing.
 
+![[Media/Figures/Calendar_Year.svg|340]]
+
 > [!example]- Calendar Year Earned Premium from Written Premium {Example}
 > An insurer writes $\$5{,}000{,}000$ of $12$-month policies during calendar year $2024$. The unearned premium reserve was $\$1{,}800{,}000$ at $12/31/2023$ and $\$2{,}400{,}000$ at $12/31/2024$.
 >

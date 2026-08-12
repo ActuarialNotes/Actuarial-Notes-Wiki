@@ -10,6 +10,8 @@
 - Every year of the experience period gets its own on-level factor, and the factors decline as the years approach the present: the most recent year needs the least adjustment.
 - The [[Pure Premium Method]] needs no on-levelling at all, because it never divides by premium. That is its principal practical advantage where rate history is messy or the book has been re-tiered.
 
+![[Media/Figures/On_Level_Premium.svg|340]]
+
 > [!example]- Building a Rate Level Index {Example}
 > Rate changes: $+8\%$ effective $1/1/2022$, $+5\%$ effective $7/1/2023$, $-3\%$ effective $1/1/2025$. All changes are effective for policies *written* on or after those dates; the current date is $12/31/2025$.
 >

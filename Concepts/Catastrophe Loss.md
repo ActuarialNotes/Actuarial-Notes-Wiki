@@ -13,6 +13,8 @@
 - **Consistency of definition** across years is essential. If a $\$40$M hail event is treated as a catastrophe in one year and left in the base experience in another, both the non-catastrophe trend and the load are corrupted.
 - In **reserving**, catastrophe claims are triangulated separately: they report fast and settle in a distinctive pattern (rapid initial payment, then a long tail of disputed and litigated claims), quite unlike ordinary property claims.
 
+![[Media/Figures/Catastrophe_Loss.svg|340]]
+
 > [!example]- Building a Homeowners Catastrophe Load {Example}
 > Five years of experience: $\$50{,}000{,}000$ of losses on $10{,}000$ house-years a year, of which $\$8{,}000{,}000$ came from a single hurricane. The insurer's catastrophe model gives an average annual hurricane loss of $\$600{,}000$ for the current book.
 >

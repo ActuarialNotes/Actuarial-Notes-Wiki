@@ -53,18 +53,74 @@ with candidates who scored under half the pass mark removed, i.e. the pass rate 
 people who made a serious attempt — because that's the number a candidate is actually
 comparing themselves against. It falls back to the raw ratio when only that is known.
 
-**These are real-world figures, so they are only ever transcribed, never estimated.**
-Fill them from the CAS "Summary of Exam Statistics" or an aggregator such as
-[Actuarial Lookup](https://www.actuarial-lookup.com/exams/5):
+**These are real-world figures, so they are only ever transcribed, never estimated.** They
+arrive one of two ways — live from the publisher, or authored into the catalogue as a
+floor.
+
+Until a sitting has a figure from either source, the browser shows no statistics column at
+all (`hasPublishedStats`) — a shelf of em-dashes reads as a broken readout — and the header
+links out to the exam's lookup page (`PASS_RATE_LOOKUP`) instead. One figure lights the
+column for the whole shelf.
+
+### Live figures (`api/pass-rates.js`)
+
+The examining bodies serve no CORS headers, so the browser cannot fetch these tables
+itself — the request is blocked before it starts. The fetch therefore happens server-side:
+
+```
+PastExamBrowser ← Landing ← applyPassRates(rows, records)
+                              ↑
+              hooks/useExamPassRates → GET /api/pass-rates?exam=Exam%205
+                                              ↓  (Vercel function)
+                                        fetch(source) → extractPassRateRecords()
+```
+
+| Piece | Where |
+|---|---|
+| Fetch + cache headers + failure handling | `api/pass-rates.js` |
+| Table parsing (pure, no network) | `api/lib/passRates.js` |
+| Client cache, sanitising, overlay | `quiz/src/lib/passRates.ts` |
+| The hook the builder calls | `quiz/src/hooks/useExamPassRates.ts` |
+
+**Configuring a source.** Nothing is fetched until an operator sets `PASS_RATE_SOURCES` on
+the Vercel project — a JSON object of exam → source, so the endpoint can be re-aimed at a
+moved page without a redeploy:
+
+```json
+{ "Exam 5": { "url": "https://…/exam-statistics", "format": "html" } }
+```
+
+`format` is `html` (default), `csv`, `tsv` or `json`. Confirm the source permits automated
+fetching before pointing at it; the fetcher identifies itself honestly in its User-Agent
+and requests the page once per CDN cache window (six hours fresh, a week of
+stale-while-revalidate), not once per user.
+
+**Parsing is by column heading, not by selector.** `extractPassRateRecords` reads every
+table on the page, matches headings (`DATE`/`SITTING`, `EXAMS TAKEN`, `PASS RATIO`,
+`EFFECTIVE PASS RATIO`, …) and keeps the table that yields the most rows. Headings survive
+redesigns that CSS selectors don't, and — importantly — a layout it doesn't recognise
+returns **zero** records, so the app falls back rather than displaying garbage. Sitting
+labels are normalized from both the seasonal (`Spring 2019`) and monthly (`Mar-2026`)
+conventions; when a table gives counts but no percentage, the rate is derived from them.
+
+**Failure is quiet on the client, loud on the server.** A source that's down, unconfigured,
+or newly redesigned returns 502/empty from the endpoint; `useExamPassRates` swallows it and
+leaves the authored figures in place. Nothing in the UI reports a fetch error — the figures
+are a nicety beside the papers themselves. Responses (including "no source configured") are
+cached in `localStorage` for a week, since ratios are republished twice a year.
+
+**Authored figures** in `PAST_EXAM_SITTINGS` are the floor beneath all that — used when no
+live record matches, and per-field, so a live source that publishes only the effective
+ratio doesn't erase an authored raw one:
 
 ```ts
 { exam: 'Exam 5', year: 2019, session: 'Spring', candidates: 1234, passRate: 42.0, effectivePassRate: 46.2 },
 ```
 
-Until a sitting has a figure, the browser shows no statistics column at all
-(`hasPublishedStats`) — a shelf of em-dashes reads as a broken readout — and the header
-links out to the exam's lookup page (`PASS_RATE_LOOKUP`) instead. Add one figure and the
-column appears for the whole shelf.
+**The effective ratio is a CAS measure.** The SOA publishes a raw pass rate only, so
+`StatCell` labels each row by the figure it actually holds — an SOA row reads `PASS RATE`,
+never `EFF. PASS`. Monthly SOA records match no row on the shelf (a testing window isn't a
+paper anyone can sit) and `applyPassRates` drops them.
 
 ## What the selection drives
 

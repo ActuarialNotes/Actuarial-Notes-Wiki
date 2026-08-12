@@ -34,6 +34,8 @@ import { cn } from '@/lib/utils'
 import { getSittingPdfLink, getExamPdfLink } from '@/data/examPdfLinks'
 import { getPassRateLookup } from '@/data/pastExams'
 import { buildPastExamRows } from '@/lib/pastExams'
+import { applyPassRates } from '@/lib/passRates'
+import { useExamPassRates } from '@/hooks/useExamPassRates'
 import { PastExamBrowser } from '@/components/PastExamBrowser'
 
 type ExamOrg = 'SOA' | 'CAS'
@@ -923,10 +925,13 @@ export default function Landing() {
 
   // The exam's past sittings — the authored catalogue merged with whatever the
   // question bank holds, so papers that exist but haven't been imported still
-  // appear (greyed out) in the browser.
+  // appear (greyed out) in the browser. Published pass ratios, fetched live
+  // through `api/pass-rates.js`, are laid over the authored figures; when the
+  // source is unconfigured or unreachable the catalogue stands on its own.
+  const livePassRates = useExamPassRates(topic)
   const pastExamRows = useMemo(
-    () => (topic ? buildPastExamRows(allQuestions, topic) : []),
-    [allQuestions, topic],
+    () => (topic ? applyPassRates(buildPastExamRows(allQuestions, topic), livePassRates) : []),
+    [allQuestions, topic, livePassRates],
   )
 
   // Questions belonging to the selected sitting — shared by the launch params,

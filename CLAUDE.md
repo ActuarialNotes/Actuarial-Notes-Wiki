@@ -104,8 +104,11 @@ before touching that area**:
   so a hand edit to an SVG is lost on the next run.
 - `docs/mock-exam-browser.md` — the **Mock Exam past-paper browser** on the quiz builder: the
   authored sitting catalogue (`data/pastExams.ts`), how `lib/pastExams.ts` merges it with the
-  question bank so unimported papers still list (greyed out), and the rule that per-sitting
-  pass ratios are transcribed from published statistics, never estimated.
+  question bank so unimported papers still list (greyed out), and the **live pass-rate
+  pipeline** (`api/pass-rates.js` → `lib/passRates.ts` → `hooks/useExamPassRates`) that lays
+  published ratios over the authored ones. Read before touching any of it — in particular
+  the rule that a ratio is transcribed or fetched, never estimated, and that an unparseable
+  source must yield *no* figures rather than wrong ones.
 
 Other important `lib/` modules:
 - `parser.ts` — parses question markdown (frontmatter + body) into `Question` objects
@@ -127,6 +130,12 @@ Other important `lib/` modules:
   question bank actually holds, so a released paper that hasn't been imported still lists
   (greyed out, "Not added yet") and a freshly converted one appears without a catalogue edit.
   Rendered by `components/PastExamBrowser.tsx`. See `docs/mock-exam-browser.md`.
+- `passRates.ts` — the client half of the live pass-rate pipeline: sanitises what
+  `api/pass-rates.js` returns, caches it in localStorage for a week, and `applyPassRates`
+  lays the published ratios over the authored catalogue per field (live wins, authored is
+  the floor). The fetch is server-side because the examining bodies send no CORS headers;
+  the parsing lives in `api/lib/passRates.js` — one implementation, exercised from
+  `lib/passRateParser.test.ts` / `lib/passRateEndpoint.test.ts` rather than mirrored.
 - `resourceTimeline.ts` / `resourceTimelineFilters.ts` — build/filter the dated Resources timeline (heatmap)
 - `readiness.ts` — exam-readiness scoring. `computeExamReadiness` is **the** readiness score
   (syllabus coverage 60% + keystone concepts 40%, plus band, section breakdown and concept

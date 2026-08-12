@@ -12,6 +12,8 @@ import {
   Pencil,
 } from 'lucide-react'
 import type { Components } from 'react-markdown'
+import { ExamWeightLabel } from '@/components/ExamWeightLabel'
+import { parseExamWeight, splitWeightTag } from '@/lib/examWeight'
 
 // Matches an Obsidian callout header at the start of a blockquote paragraph:
 //   [!type]        non-foldable
@@ -163,18 +165,6 @@ function renderTitle(raw: string): ReactNode {
   )
 }
 
-// Extracts the average percentage from a title containing {5-15%} or {15%}.
-function parseExamPercentage(title: string): number | null {
-  const match = title.match(/\{([^}]+)\}/)
-  if (!match) return null
-  const content = match[1].trim()
-  const rangeMatch = content.match(/(\d+(?:\.\d+)?)\s*[-–]\s*(\d+(?:\.\d+)?)\s*%/)
-  if (rangeMatch) return (parseFloat(rangeMatch[1]) + parseFloat(rangeMatch[2])) / 2
-  const singleMatch = content.match(/(\d+(?:\.\d+)?)\s*%/)
-  if (singleMatch) return parseFloat(singleMatch[1])
-  return null
-}
-
 // Is this child the blockquote's first paragraph?
 //
 // react-markdown hands us the intrinsic `<p>` element normally, but when the
@@ -319,16 +309,24 @@ function Callout({ type, fold, title, children }: CalloutProps) {
   const [open, setOpen] = useState(fold !== '-')
   const style = getStyle(type)
   const Icon = style.icon
-  const displayTitle = title || titleCase(type)
   const hasBody = Children.count(children) > 0
 
-  const examPercentage = type === 'example' ? parseExamPercentage(title) : null
+  // A learning objective's `{23-30%}` share of the exam is lifted out of the
+  // title and rendered as its own right-aligned label, the same one the quiz
+  // builder uses (`ExamWeightLabel`) — so the figures line up in a column
+  // instead of trailing titles of ragged length. Any other `{…}` tag stays in
+  // the title and keeps the inline pill.
+  const { title: baseTitle, weight: examWeight } =
+    type === 'example' ? splitWeightTag(title) : { title, weight: null }
+  const displayTitle = baseTitle || titleCase(type)
+  const examPercentage = parseExamWeight(examWeight)
   const isBarGraph = examPercentage !== null
 
   const headerContent = (
     <div className="flex items-center gap-3 w-full">
       {Icon && <Icon className={`h-4 w-4 shrink-0 ${style.accentClass}`} />}
       <span className={`font-medium flex-1 text-left ${style.noBorder ? 'text-base' : 'text-sm'} ${Icon ? 'text-foreground' : style.accentClass}`}>{renderTitle(displayTitle)}</span>
+      {examWeight && <ExamWeightLabel weight={examWeight} />}
       {collapsible && hasBody && (
         <ChevronDown
           className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${open ? '' : '-rotate-90'}`}

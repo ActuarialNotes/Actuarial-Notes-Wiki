@@ -1,17 +1,57 @@
-**Exposure Trend** is the systematic annual change in the average value of the exposure base over time, relevant when the exposure base is denominated in dollars (e.g., payroll, sales receipts, insured property values) and is therefore subject to economic inflation; in the [[Pure Premium Method]], both losses and exposures must be trended.
+**Exposure Trend** is the systematic change over time in the average value of a dollar-denominated [[Exposure Base|exposure base]] — payroll, sales, amount of insurance — arising from inflation and drift in the book rather than from a change in the number of risks.
 
-> $$\text{Trended Exposure}$$
+> $$\text{Trended Exposure} = \text{Historical Exposure} \times (1 + t_E)^{n}$$
 
-> $$= \text{Historical Exposure} \times (1 + t_E)^{n}$$
+- $t_E$ is the annual exposure trend and $n$ the trend period in years, measured from the average date of the historical period to the average date of the forecast period — the same period used for [[Loss Trend|loss trend]].
+- Exposure trend applies **only** to inflation-sensitive bases. Car-years and house-years do not inflate; payroll, receipts and amount of insurance do.
+- In the [[Pure Premium Method]] the exposure trend sits in the denominator and therefore **offsets** loss trend. The quantity that matters is the *net* pure premium trend:
 
-- If exposures grow due to inflation but losses also grow due to the same inflation, the exposure trend partially offsets the [[Loss Trend]], reducing the net pure premium trend
-- Failure to trend dollar-denominated exposures causes the denominator to be understated in historical terms, overstating the historical pure premium and indicating an unnecessarily large rate increase
-- Exposure trend is not applicable when the exposure base is a physical count (car-years, house-years) that does not inflate; only dollar-based bases require this adjustment
-- The exposure trend period mirrors the loss trend period: from the midpoint of the historical period to the midpoint of the prospective rating period
+> $$1 + t_{\text{net}} = \frac{1 + t_L}{1 + t_E}$$
 
-> [!example]- Exposure Trend in Workers Compensation {Example}
-> A workers comp insurer uses payroll as the exposure base. Historical payroll for accident year 2023 is $50,000,000. Annual payroll growth (exposure trend) is 3%. The trend period is 2.5 years.
+- Ignoring exposure trend on an inflating base understates the future denominator, overstates the projected pure premium, and produces an indicated increase the insurer does not need — because the same inflation that drives the losses is already raising the premium base automatically.
+- Under the [[Loss Ratio Method]] the effect enters through [[Premium Trend|premium trend]] instead: the premium at current rates grows with the exposure base even with no rate change, so the two methods handle the same phenomenon in different places and must not both be applied.
+
+> [!example]- Net Pure Premium Trend in Workers Compensation {Example}
+> A workers compensation book has accident-year-2023 payroll of $\$50{,}000{,}000$ and losses of $\$1{,}600{,}000$. Annual wage (exposure) trend is $3.0\%$, annual loss trend is $6.0\%$, and the trend period is $2.5$ years.
+>
+> Project the pure premium per $\$100$ of payroll.
 >
 > > [!answer]-
-> > $$\text{Trended Exposure} = \$50{,}000{,}000 \times 1.03^{2.5} = \$50{,}000{,}000 \times 1.0764 = \$53{,}820{,}000$$
-> > If losses are trended at 6% and exposures at 3%, the net pure premium trend is approximately $1.06^{2.5}/1.03^{2.5} = 1.1593/1.0764 \approx 1.077$, or about 7.7% over the period.
+> > Trending each side separately:
+> >
+> > $$\begin{align*}
+> > \text{Trended payroll} &= \$50{,}000{,}000 \times 1.03^{2.5} \\
+> > &= \$50{,}000{,}000 \times 1.0764 \\
+> > &= \$53{,}820{,}000 \\[6pt]
+> > \text{Trended losses} &= \$1{,}600{,}000 \times 1.06^{2.5} \\
+> > &= \$1{,}600{,}000 \times 1.1593 \\
+> > &= \$1{,}854{,}880
+> > \end{align*}$$
+> >
+> > $$\begin{align*}
+> > \text{Projected PP per \$100} &= \frac{\$1{,}854{,}880}{\$53{,}820{,}000 / 100} \\
+> > &= \$3.446
+> > \end{align*}$$
+> >
+> > Against the historical pure premium of $\$1{,}600{,}000 / (\$50{,}000{,}000/100) = \$3.200$, the net increase is
+> >
+> > $$\frac{1.06^{2.5}}{1.03^{2.5}} = \frac{1.1593}{1.0764} = 1.0770$$
+> >
+> > i.e. $+7.7\%$ over $2.5$ years, or about $3.0\%$ a year — the $6\%$ loss trend net of the $3\%$ wage trend.
+
+> [!example]- The Cost of Forgetting Exposure Trend {Example}
+> Using the same book, an actuary trends losses at $6\%$ but leaves payroll at its historical level.
+>
+> What indication results, and what is the error?
+>
+> > [!answer]-
+> > $$\begin{align*}
+> > \text{Untrended-exposure PP} &= \frac{\$1{,}854{,}880}{\$50{,}000{,}000 / 100} \\
+> > &= \$3.710
+> > \end{align*}$$
+> >
+> > against the correct $\$3.446$:
+> >
+> > $$\frac{3.710}{3.446} - 1 = +7.7\%$$
+> >
+> > The actuary would indicate a rate $7.7\%$ higher than needed. The reason is that the rate is charged *per $\$100$ of payroll*: as wages inflate, premium rises automatically at the current rate level without any filing. Charging a higher rate on top of an already-inflating base double-counts wage inflation — the exposure-side twin of the classic "trend and develop the same growth twice" error described in [[Loss Development]].

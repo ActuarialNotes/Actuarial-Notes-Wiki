@@ -1,18 +1,62 @@
-**Large Losses** (also called shock losses) are individual claims that exceed a specified threshold and, if left uncapped, can distort average loss statistics and produce misleading ratemaking indications; they are treated separately to prevent a single catastrophic claim from causing an unjustified rate change.
+**Large Losses** (shock losses) are individual claims big enough that including them at face value would distort an experience analysis — a single claim moving a class's indicated rate by more than the underlying cost level justifies.
 
-> $$\text{Limited Average Severity}(M)$$
+> $$\text{Capped Loss} = \min(X, M)$$
 
-> $$= E[\min(X, M)]$$
+> $$\text{Excess Load} = \frac{\text{Expected losses above } M}{\text{Expected losses below } M}$$
 
-> $$= \int_0^{M} S(x)\,dx$$
+- The standard treatment has three steps: **cap** each claim at a threshold $M$ for the experience analysis, **compute** an excess load from a wider base (more years, more states, industry data), and **add it back**. The rate then covers the full expected cost without being hostage to whether a shock loss happened to occur in the experience period.
+- The threshold is a trade-off. A low cap removes too much real experience and makes the analysis depend heavily on the excess load; a high cap leaves the volatility in. Werner's guidance is to set $M$ where the credibility gained by capping outweighs the data lost.
+- The excess load must be computed over a **long** period — a decade or more — precisely because large losses are rare. Using the same five years for both the capped experience and the excess load defeats the purpose.
+- Where [[Increased Limits|ILFs]] exist, the load follows directly from them:
 
-- The standard treatment is to cap each individual loss at a large-loss limitation amount $M$ for the basic ratemaking analysis, then add a separate large-loss loading for the excess layer above $M$
-- The large-loss loading is typically derived from Increased Limits Factors (ILFs): $\text{Loading} = \text{Uncapped Pure Premium} \times (ILF(U) / ILF(M) - 1)$, where $U$ is the policy limit and $M$ is the cap
-- Alternatively, large losses may be excluded entirely and replaced with an expected loss load based on historical frequency of large losses and their average excess severity
-- The choice of threshold $M$ balances two concerns: too low a cap removes too much data from the base analysis, while too high a cap fails to protect against distortion
+> $$\text{Excess Load} = \frac{\text{ILF}(U)}{\text{ILF}(M)} - 1$$
 
-> [!example]- Capping a Large Loss {Example}
-> A general liability class has a $500K per-occurrence large-loss cap. In accident year 2023, one claim settled for $1,200,000. How is it treated in ratemaking?
+- In **reserving** the parallel treatment applies: pull large claims out of the triangle, develop the remainder with factors undistorted by shock losses, and reserve the large claims individually or with their own (much longer) pattern. Leaving a $\$2$M claim in an immature diagonal and multiplying it by a CDF of $4$ produces an $\$8$M estimate from one claim.
+- Distinguish a large loss from a [[Catastrophe Loss|catastrophe]]: a large loss is one claim of unusual size, a catastrophe is many claims from one event. Both are excluded from base experience, but the loads are built differently.
+
+> [!example]- Capping and Loading {Example}
+> A general liability class has a $\$500{,}000$ per-occurrence cap. Over five years the class produced $\$14{,}000{,}000$ of losses on $20{,}000$ exposures, including one claim that settled at $\$1{,}200{,}000$ and another at $\$800{,}000$. Ten years of wider data show that losses above $\$500{,}000$ have averaged $8\%$ of capped losses.
+>
+> Compute the pure premium.
 >
 > > [!answer]-
-> > The claim is capped at $500,000 in the basic loss analysis. The excess $700,000 is excluded from the per-occurrence data. A separate large-loss loading based on ILFs or historical excess experience is added back to ensure the rate covers expected costs above the $500K threshold. This prevents the single $1.2M claim from inflating the indicated pure premium for the entire class.
+> > Cap the two large claims, removing the excess:
+> >
+> > $$\begin{align*}
+> > \text{Excess removed} &= (\$1{,}200{,}000 - \$500{,}000) \\
+> > &\quad + (\$800{,}000 - \$500{,}000) \\
+> > &= \$1{,}000{,}000 \\[4pt]
+> > \text{Capped losses} &= \$14{,}000{,}000 - \$1{,}000{,}000 \\
+> > &= \$13{,}000{,}000
+> > \end{align*}$$
+> >
+> > $$\begin{align*}
+> > \text{Capped PP} &= \frac{\$13{,}000{,}000}{20{,}000} = \$650 \\[4pt]
+> > \text{Loaded PP} &= \$650 \times 1.08 = \$702
+> > \end{align*}$$
+> >
+> > The uncapped figure would have been $\$14{,}000{,}000/20{,}000 = \$700$ — close to the answer here, but only by coincidence. Had the five years contained *no* claim over $\$500{,}000$, the uncapped pure premium would have been $\$600$ and the class would have been under-priced by $17\%$; had it contained a $\$5$M claim, over-priced by a similar margin. Capping removes that dependence on luck.
+
+> [!example]- A Shock Loss in an Immature Triangle {Example}
+> Accident year $2024$ reported losses at $12$ months are $\$4{,}500{,}000$, including a single $\$1{,}500{,}000$ claim reserved at policy limits. The selected reported CDF at $12$ months is $3.20$. Historical non-large-loss experience suggests $\$3{,}000{,}000$ of ordinary losses develop to about $\$9{,}600{,}000$.
+>
+> Estimate ultimate losses correctly.
+>
+> > [!answer]-
+> > **Wrong:** develop everything.
+> >
+> > $$\$4{,}500{,}000 \times 3.20 = \$14{,}400{,}000$$
+> >
+> > This assumes the $\$1.5$M claim will grow to $\$4.8$M — impossible, since it is already at policy limits, and unjustified in any case because the CDF was built on ordinary claims.
+> >
+> > **Right:** separate the two.
+> >
+> > $$\begin{align*}
+> > \text{Ordinary} &= \$3{,}000{,}000 \times 3.20 = \$9{,}600{,}000 \\
+> > \text{Large claim} &= \$1{,}500{,}000 \text{ (at limits, no development)} \\[4pt]
+> > \text{Expected additional large losses} &\approx \$700{,}000 \\[4pt]
+> > \text{Ultimate} &= \$9{,}600{,}000 + \$1{,}500{,}000 + \$700{,}000 \\
+> > &= \$11{,}800{,}000
+> > \end{align*}$$
+> >
+> > The provision for *additional* large claims not yet reported is essential — removing the known shock loss without adding an expected-large-loss load leaves the estimate short. The two errors are opposite in sign, and doing neither adjustment is not a safe middle ground.

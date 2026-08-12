@@ -102,6 +102,10 @@ before touching that area**:
   concept in `Media/Figures/`, drawn by `scripts/generate_concept_figures.py` on top of the
   dependency-free `scripts/figure_kit.py`. Read before editing a figure — they are generated,
   so a hand edit to an SVG is lost on the next run.
+- `docs/mock-exam-browser.md` — the **Mock Exam past-paper browser** on the quiz builder: the
+  authored sitting catalogue (`data/pastExams.ts`), how `lib/pastExams.ts` merges it with the
+  question bank so unimported papers still list (greyed out), and the rule that per-sitting
+  pass ratios are transcribed from published statistics, never estimated.
 
 Other important `lib/` modules:
 - `parser.ts` — parses question markdown (frontmatter + body) into `Question` objects
@@ -118,6 +122,11 @@ Other important `lib/` modules:
   browser and the concept detail modal — add it to any new surface that lists questions rather than
   writing a new chip. Attempt history is server-side only, so signed-out viewers pass
   `showNew={false}` (via the hook's `tracked` flag) and see no chip instead of a false "Not attempted".
+- `pastExams.ts` — the past-sitting shelf behind the quiz builder's **Mock Exam** source:
+  `buildPastExamRows` unions the authored catalogue (`data/pastExams.ts`) with the sittings the
+  question bank actually holds, so a released paper that hasn't been imported still lists
+  (greyed out, "Not added yet") and a freshly converted one appears without a catalogue edit.
+  Rendered by `components/PastExamBrowser.tsx`. See `docs/mock-exam-browser.md`.
 - `resourceTimeline.ts` / `resourceTimelineFilters.ts` — build/filter the dated Resources timeline (heatmap)
 - `readiness.ts` — exam-readiness scoring. `computeExamReadiness` is **the** readiness score
   (syllabus coverage 60% + keystone concepts 40%, plus band, section breakdown and concept

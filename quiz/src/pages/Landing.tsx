@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
-import { CalendarCheck, Check, CheckCircle2, ChevronDown, ChevronLeft, Circle, FileDown, Loader2, Lock, Play, X } from 'lucide-react'
+import { CalendarCheck, Check, CheckCircle2, ChevronDown, ChevronLeft, Circle, Loader2, Lock, Play, X } from 'lucide-react'
 import { QuizFloatingSearch } from '@/components/QuizFloatingSearch'
 import { QuestionDeckCard } from '@/components/QuestionDeckCard'
 import { TodayQuizCornerBadge } from '@/components/TodayQuizBadge'
@@ -32,6 +32,9 @@ import { useActionBarHeight } from '@/hooks/useActionBarHeight'
 import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { cn } from '@/lib/utils'
 import { getSittingPdfLink, getExamPdfLink } from '@/data/examPdfLinks'
+import { getPassRateLookup } from '@/data/pastExams'
+import { buildPastExamRows } from '@/lib/pastExams'
+import { PastExamBrowser } from '@/components/PastExamBrowser'
 
 type ExamOrg = 'SOA' | 'CAS'
 
@@ -918,39 +921,16 @@ export default function Landing() {
     navigate(`/quiz?${params.toString()}`)
   }
 
-  // Available exam sittings (year + session) derived from the question bank.
-  // Uses a composite key so Spring and Fall of the same year appear as separate entries.
-  const availableSittings = useMemo(() => {
-    if (!topic) return []
-    const seen = new Set<string>()
-    const sittings: { year: number; session?: string }[] = []
-    for (const q of allQuestions) {
-      if (q.exam !== topic || !q.year) continue
-      const key = `${q.year}|${q.session ?? ''}`
-      if (!seen.has(key)) {
-        seen.add(key)
-        sittings.push({ year: q.year, session: q.session })
-      }
-    }
-    return sittings.sort((a, b) => {
-      if (b.year !== a.year) return b.year - a.year
-      const order = (s?: string) => {
-        const l = s?.toLowerCase()
-        return l === 'spring' || l === 'sp' ? 0 : l === 'fall' || l === 'fa' ? 1 : 2
-      }
-      return order(a.session) - order(b.session)
-    })
-  }, [allQuestions, topic])
-
-  function sittingLabel(year: number, session?: string): string {
-    const s = session?.toLowerCase()
-    if (s === 'spring' || s === 'sp') return `Spring ${year}`
-    if (s === 'fall' || s === 'fa') return `Fall ${year}`
-    return String(year)
-  }
+  // The exam's past sittings — the authored catalogue merged with whatever the
+  // question bank holds, so papers that exist but haven't been imported still
+  // appear (greyed out) in the browser.
+  const pastExamRows = useMemo(
+    () => (topic ? buildPastExamRows(allQuestions, topic) : []),
+    [allQuestions, topic],
+  )
 
   // Questions belonging to the selected sitting — shared by the launch params,
-  // the mock-exam blurb, and the availability count in the footer.
+  // the browser's footer line, and the availability count in the action bar.
   const sittingQuestionCount = useMemo(() => {
     if (!topic || !selectedSitting) return 0
     return allQuestions.filter(q =>
@@ -962,6 +942,23 @@ export default function Landing() {
 
   const mockExamCount = MOCK_EXAM_QUESTIONS[topic] ?? 30
   const examLabel = EXAMS.find(e => e.value === topic)?.label ?? topic
+
+  // What the "Mix" row draws: the exam-shaped question count, unless the bank
+  // holds fewer than that.
+  const examQuestionCount = useMemo(
+    () => (topic ? filterQuestions(allQuestions, { exam: topic }).length : 0),
+    [allQuestions, topic],
+  )
+  const mixQuestionCount = Math.min(mockExamCount, examQuestionCount || mockExamCount)
+
+  // The source paper behind the current selection: a sitting's examiner's
+  // report, or — for an exam with no dated papers at all (Exam P / FM draw on
+  // the SOA's rolling sample set) — the exam-level question PDF.
+  const mockReportLink = selectedSitting
+    ? getSittingPdfLink(topic, selectedSitting.year, selectedSitting.session)
+    : pastExamRows.length === 0
+    ? getExamPdfLink(topic)
+    : null
 
   // The questions the current configuration can draw from. Backs the deck
   // card's availability number and gives the shuffle something to draw from.
@@ -1344,42 +1341,17 @@ export default function Landing() {
                   </div>
                 )}
 
-                {/* Mock Exam content */}
+                {/* Mock Exam content — the past-paper shelf */}
                 {quizModeResolved && source === 'mock-exam' && (
-                  <div className="rounded-lg bg-muted/40 px-4 py-3 space-y-1">
-                    <p className="text-sm font-medium">
-                      {selectedSitting !== null
-                        ? `${sittingQuestionCount} questions`
-                        : `${mockExamCount} questions`
-                      }
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {selectedSitting !== null
-                        ? `All questions from the ${sittingLabel(selectedSitting.year, selectedSitting.session)} sitting.`
-                        : `Distributed across all ${examLabel} topics to mirror the real exam.`
-                      }
-                      {' '}Answers and explanations are revealed at the end.
-                    </p>
-                    {(() => {
-                      const sitting = selectedSitting
-                      const pdfLink = sitting
-                        ? getSittingPdfLink(topic, sitting.year, sitting.session)
-                        : availableSittings.length === 0
-                          ? getExamPdfLink(topic)
-                          : null
-                      return pdfLink ? (
-                        <a
-                          href={pdfLink.url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-1 text-xs text-primary hover:text-primary/80 hover:underline transition-colors pt-0.5"
-                        >
-                          <FileDown className="h-3 w-3" />
-                          {pdfLink.label}
-                        </a>
-                      ) : null
-                    })()}
-                  </div>
+                  <PastExamBrowser
+                    rows={pastExamRows}
+                    selected={selectedSitting}
+                    onSelect={setSelectedSitting}
+                    mixCount={mixQuestionCount}
+                    examLabel={examLabel}
+                    lookup={getPassRateLookup(topic)}
+                    reportLink={mockReportLink}
+                  />
                 )}
               </div>
 
@@ -1422,50 +1394,10 @@ export default function Landing() {
             />
           )}
 
-          {/* ── Sitting selector (real exam sittings) ─────────────────── */}
-          {mode === 'mock-exam' && availableSittings.length > 0 && (
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-muted-foreground shrink-0" id="sitting-label">Sitting:</span>
-              <div className="flex gap-1.5 flex-wrap" role="radiogroup" aria-labelledby="sitting-label">
-                <button
-                  type="button"
-                  role="radio"
-                  aria-checked={selectedSitting === null}
-                  onClick={() => setSelectedSitting(null)}
-                  className={cn(
-                    'rounded-md px-2.5 py-1 text-xs font-medium transition-colors',
-                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
-                    selectedSitting === null
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-muted text-muted-foreground hover:bg-accent hover:text-foreground',
-                  )}
-                >
-                  Mix
-                </button>
-                {availableSittings.map(sit => {
-                  const isActive = selectedSitting?.year === sit.year && selectedSitting?.session === sit.session
-                  return (
-                    <button
-                      key={`${sit.year}|${sit.session ?? ''}`}
-                      type="button"
-                      role="radio"
-                      aria-checked={isActive}
-                      onClick={() => setSelectedSitting({ year: sit.year, session: sit.session })}
-                      className={cn(
-                        'rounded-md px-2.5 py-1 text-xs font-medium transition-colors',
-                        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
-                        isActive
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-muted text-muted-foreground hover:bg-accent hover:text-foreground',
-                      )}
-                    >
-                      {sittingLabel(sit.year, sit.session)}
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-          )}
+          {/* The sitting picker used to live here as a row of pills. It's the
+              past-exam browser in the page body now — a pill row can't carry a
+              paper's size or its pass rate, and it had no room to list the
+              sittings that exist but aren't in the bank yet. */}
 
           <div className="relative">
             <Button

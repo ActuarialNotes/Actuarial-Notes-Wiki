@@ -1422,16 +1422,6 @@ function FlashcardControlsBar({
         </select>
       )}
 
-      {hasDeck && onManage && (
-        <button
-          type="button"
-          onClick={onManage}
-          title="Manage cards"
-          aria-label="Manage cards"
-          className="inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 shrink-0 rounded-md text-muted-foreground hover:text-destructive hover:bg-accent transition-colors"
-        ><Trash2 className="h-4 w-4 sm:h-5 sm:w-5" /></button>
-      )}
-
       <button
         type="button"
         onClick={onShortcutsHelp}
@@ -1441,6 +1431,16 @@ function FlashcardControlsBar({
       ><Keyboard className="h-4 w-4 sm:h-5 sm:w-5" /></button>
 
       <div className="flex-1 min-w-0" />
+
+      {hasDeck && onManage && (
+        <button
+          type="button"
+          onClick={onManage}
+          title="Manage cards"
+          aria-label="Manage cards"
+          className="inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 shrink-0 rounded-md text-muted-foreground hover:text-destructive hover:bg-accent transition-colors"
+        ><Trash2 className="h-4 w-4 sm:h-5 sm:w-5" /></button>
+      )}
 
       <AddFlashcardsButton onCardsAdded={onCardsAdded} />
     </div>

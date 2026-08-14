@@ -41,8 +41,16 @@ interface Props {
 }
 
 export function ConceptLevelUpCeremony({ transitions, gemsEarned, totalGems, onResolved }: Props) {
-  const { play } = useSoundEffects()
+  const { play, resetCombo } = useSoundEffects()
   const reduce = useMemo(prefersReducedMotion, [])
+  // A run of several concepts leveling up gets a rung-per-card climb instead
+  // of the full fanfare repeated (see `levelUpStep` in soundConfig.ts) — reset
+  // it once so a fresh ceremony always starts the climb at its root.
+  const multiple = transitions.length > 1
+  useEffect(() => {
+    if (multiple) resetCombo('levelUpStep')
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only for the ceremony this component was mounted for
+  }, [])
 
   const [index, setIndex] = useState(0)
   const [phase, setPhase] = useState<Phase>(reduce ? 'summary' : 'spin')
@@ -60,7 +68,7 @@ export function ConceptLevelUpCeremony({ transitions, gemsEarned, totalGems, onR
     if (reduce || phase === 'summary') return
     let id: number
     if (phase === 'spin') {
-      play('levelUp')
+      play(multiple ? 'levelUpStep' : 'levelUp')
       id = window.setTimeout(() => setPhase('flash'), 1100)
     } else {
       // flash → advance to the next card, or settle onto the summary
@@ -74,7 +82,7 @@ export function ConceptLevelUpCeremony({ transitions, gemsEarned, totalGems, onR
       }, 560)
     }
     return () => window.clearTimeout(id)
-  }, [phase, index, reduce, transitions.length, play])
+  }, [phase, index, reduce, transitions.length, multiple, play])
 
   // Count the gems up once we land on the summary.
   useEffect(() => {

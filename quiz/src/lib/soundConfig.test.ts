@@ -22,7 +22,7 @@ function climbing(): Array<[SoundEvent, SoundRecipe]> {
 }
 
 /** The cues that celebrate something, as opposed to acknowledging a press. */
-const REWARDS = ['correct', 'addToDeck', 'collect', 'levelUp', 'reward', 'streak', 'complete', 'begin'] as const
+const REWARDS = ['correct', 'addToDeck', 'collect', 'levelUp', 'levelUpStep', 'reward', 'streak', 'complete', 'begin'] as const
 
 /**
  * The two cues that open a session rather than close one: launching a quiz and
@@ -146,36 +146,35 @@ describe('sound catalogue', () => {
 
   describe('the correct-answer arpeggio', () => {
     const correct = SOUND_RECIPES.correct
-    // The three notes of the triad, ignoring the partials, the octave sparkle
+    // The two notes of the interval, ignoring the partials, the octave sparkle
     // and the bass root that sit underneath them.
-    const triad = principals(correct)
+    const pair = principals(correct)
 
-    it('is exactly three notes', () => {
-      expect(triad).toHaveLength(3)
+    it('is exactly two notes', () => {
+      expect(pair).toHaveLength(2)
     })
 
     it('ascends', () => {
-      const freqs = triad.map(t => t.freq)
+      const freqs = pair.map(t => t.freq)
       expect(freqs).toEqual([...freqs].sort((a, b) => a - b))
-      expect(new Set(freqs).size).toBe(3)
+      expect(new Set(freqs).size).toBe(2)
     })
 
-    it('is a major triad — 4 then 3 semitones', () => {
-      expect(semitones(triad[0].freq, triad[1].freq)).toBe(4)
-      expect(semitones(triad[1].freq, triad[2].freq)).toBe(3)
+    it('is a perfect fifth — 7 semitones', () => {
+      expect(semitones(pair[0].freq, pair[1].freq)).toBe(7)
     })
 
-    it('overlaps into a chord rather than three separate beeps', () => {
-      const step = triad[1].at - triad[0].at
+    it('overlaps into a chord rather than two separate beeps', () => {
+      const step = pair[1].at - pair[0].at
       expect(step).toBeGreaterThan(0)
-      for (const note of triad) expect(note.dur).toBeGreaterThan(step * 2)
+      for (const note of pair) expect(note.dur).toBeGreaterThan(step * 2)
     })
 
     it('is struck rather than faded in', () => {
       // A mallet attack: fast enough to read as an impact, slow enough not to
       // pop. Paired with a noise transient at the moment of the strike —
       // without it the notes bloom out of nowhere and lose their weight.
-      for (const note of triad) {
+      for (const note of pair) {
         expect(note.attack ?? 0.012).toBeLessThan(0.01)
         expect(note.attack ?? 0.012).toBeGreaterThanOrEqual(0.001)
       }
@@ -186,7 +185,7 @@ describe('sound catalogue', () => {
     it('gives every note an octave partial that dies before the note does', () => {
       // This is what makes a chime a chime rather than a beep: the spectrum
       // narrows as it rings, the way a struck metal bar's does.
-      for (const note of triad) {
+      for (const note of pair) {
         const octave = (correct.tones ?? []).find(t =>
           t.at === note.at && Math.abs(t.freq - note.freq * 2) < 0.01)
         expect(octave, `no octave partial over ${note.freq}`).toBeDefined()
@@ -195,10 +194,10 @@ describe('sound catalogue', () => {
       }
     })
 
-    it('carries a low root under the triad', () => {
-      const root = (correct.tones ?? []).filter(t => t.freq < triad[0].freq / 2)
-      expect(root.length, 'nothing underneath the triad').toBeGreaterThan(0)
-      // Quiet enough to be felt rather than heard as a fourth note.
+    it('carries a low root under the pair', () => {
+      const root = (correct.tones ?? []).filter(t => t.freq < pair[0].freq / 2)
+      expect(root.length, 'nothing underneath the pair').toBeGreaterThan(0)
+      // Quiet enough to be felt rather than heard as a third note.
       for (const note of root) expect(note.gain ?? 1).toBeLessThan(0.3)
     })
 
@@ -375,10 +374,11 @@ describe('sound catalogue', () => {
     })
 
     it('climbs only where there is a run to count', () => {
-      // Most cues mark a distinct event and have nothing to count. The two
-      // that climb both fire repeatedly on the same action: a run of right
-      // answers, and a deck of finished cards clearing one after another.
-      expect(climbing().map(([event]) => event).sort()).toEqual(['correct', 'fileAway'])
+      // Most cues mark a distinct event and have nothing to count. The ones
+      // that climb all fire repeatedly on the same action: a run of right
+      // answers, a deck of finished cards clearing one after another, and a
+      // run of concepts leveling up on the same completion ceremony.
+      expect(climbing().map(([event]) => event).sort()).toEqual(['correct', 'fileAway', 'levelUpStep'])
     })
   })
 

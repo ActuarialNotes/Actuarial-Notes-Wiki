@@ -46,6 +46,7 @@ const EXAMS = [
   { value: 'Probability', label: 'Exam P-1', tracks: ['ASA', 'ACAS'] as const, progressKey: 'P' },
   { value: 'Financial Mathematics', label: 'Exam FM-2', tracks: ['ASA', 'ACAS'] as const, progressKey: 'FM' },
   { value: 'Exam MAS-I', label: 'Exam MAS-I', tracks: ['ACAS'] as const, progressKey: 'MAS-I' },
+  { value: 'Exam MAS-II', label: 'Exam MAS-II', tracks: ['ACAS'] as const, progressKey: 'MAS-II' },
   { value: 'Exam 5', label: 'Exam 5', tracks: ['ACAS'] as const, progressKey: 'CAS-5' },
 ]
 
@@ -71,6 +72,7 @@ const MOCK_EXAM_QUESTIONS: Record<string, number> = {
   'Probability': 30,
   'Financial Mathematics': 35,
   'Exam MAS-I': 40,
+  'Exam MAS-II': 42,
   'Exam 5': 25,
 }
 

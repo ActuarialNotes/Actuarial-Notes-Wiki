@@ -1394,6 +1394,9 @@ export default function Landing() {
               type="button"
               size="lg"
               data-tour="start-quiz"
+              // The launch cue rather than the solid Button's `press`: this is
+              // the button the whole page exists for.
+              data-sound="begin"
               onClick={handleStart}
               disabled={quizQuestionCount === 0}
               className="h-14 w-full gap-3 rounded-xl text-base font-semibold"

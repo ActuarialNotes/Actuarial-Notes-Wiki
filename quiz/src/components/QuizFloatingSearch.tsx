@@ -363,6 +363,7 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
                 </button>
                 <button
                   type="button"
+                  data-sound="begin"
                   onClick={handleStartQuiz}
                   className="px-4 py-1.5 rounded-full bg-primary text-primary-foreground text-xs font-medium hover:bg-primary/90 transition-colors"
                 >
@@ -539,6 +540,7 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
                 <div className="flex-shrink-0 pt-2 pb-3">
                   <button
                     type="button"
+                    data-sound="begin"
                     onClick={handleStartQuiz}
                     className="w-full px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
                   >

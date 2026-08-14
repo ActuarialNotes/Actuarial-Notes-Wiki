@@ -1219,6 +1219,9 @@ function StudyGalleryToggle({
       onClick={onToggle}
       title={galleryOpen ? 'Back to study' : 'Open gallery'}
       aria-pressed={galleryOpen}
+      // Two different actions behind one button: going back to the cards is a
+      // study session opening (`study`), spreading them out is a panel (`open`).
+      data-sound={galleryOpen ? 'study' : 'open'}
       className={`inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-base sm:text-lg font-medium transition-colors ${
         galleryOpen
           ? 'bg-primary text-primary-foreground'
@@ -1665,6 +1668,7 @@ function SortableCard({
                   type="button"
                   onPointerDown={e => e.stopPropagation()}
                   onClick={e => { e.stopPropagation(); onSelect(); setShowPlayMenu(false) }}
+                  data-sound="study"
                   className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
                 >
                   <span className="inline-flex shrink-0 gap-0.5"><Eye className="h-3.5 w-3.5" /><Eye className="h-3.5 w-3.5" /></span>
@@ -1871,6 +1875,7 @@ function SortableCard({
                 type="button"
                 onPointerDown={e => e.stopPropagation()}
                 onClick={e => { e.stopPropagation(); onSelect(); setShowPlayMenu(false) }}
+                data-sound="study"
                 className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
               >
                 <span className="inline-flex shrink-0 gap-0.5"><Eye className="h-3.5 w-3.5" /><Eye className="h-3.5 w-3.5" /></span>
@@ -2196,6 +2201,7 @@ function StudySessionSummaryDialog({
           <button
             type="button"
             onClick={onStudyAgain}
+            data-sound="study"
             className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-muted text-foreground text-sm font-semibold hover:bg-accent active:scale-[0.98] transition-all"
           >
             <RotateCcw className="h-4 w-4" /> Study again

@@ -257,6 +257,18 @@ function scheduleNoise(audio: AudioContext, dest: AudioNode, spec: NoiseSpec, t0
 
 const lastPlayedAt = new Map<SoundEvent, number>()
 
+/**
+ * How long ago a cue last played, in ms — `Infinity` if it never has.
+ *
+ * For the cases where one cue should stand down because a bigger one is already
+ * sounding: pressing "Start Quiz" navigates, and the route-change whoosh landing
+ * inside `begin`'s run-up smears the count-in it's built around.
+ */
+export function msSinceSound(event: SoundEvent): number {
+  const last = lastPlayedAt.get(event)
+  return last === undefined ? Infinity : Date.now() - last
+}
+
 function throttled(event: SoundEvent, recipe: SoundRecipe): boolean {
   const gap = recipe.throttleMs ?? 60
   const now = Date.now()

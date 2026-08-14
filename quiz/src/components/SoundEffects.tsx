@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { playSound, unlockSound } from '@/lib/soundEngine'
+import { msSinceSound, playSound, unlockSound } from '@/lib/soundEngine'
 import { resolveInteractionSound, type InteractionTarget } from '@/lib/soundInteractions'
 
 /**
@@ -19,6 +19,13 @@ import { resolveInteractionSound, type InteractionTarget } from '@/lib/soundInte
 
 /** Elements that are interactive enough to deserve a cue. */
 const INTERACTIVE_SELECTOR = 'a, button, summary, input, textarea, select, [role], [data-sound]'
+
+/**
+ * How long a quiz launch keeps the route-change whoosh quiet. Long enough to
+ * cover `begin`'s run-up and arrival (~1.2s), short enough that a navigation a
+ * user makes *after* the quiz has opened still sounds.
+ */
+const LAUNCH_COVERS_NAVIGATION_MS = 1400
 
 // The last route we made a sound for. Module-level rather than a ref so
 // StrictMode's mount → unmount → remount doesn't read as a navigation and fire
@@ -84,12 +91,19 @@ export default function SoundEffects() {
   // it gets its own soft whoosh. The very first route is silent — nothing has
   // moved yet, and playing here would try to open an AudioContext before the
   // page has seen a gesture.
+  //
+  // Except behind a launch: pressing "Start Quiz" navigates, and `navigate` is
+  // itself a rising sweep, so it lands inside `begin`'s run-up and smears the
+  // count-in that cue is built around. When something bigger is already sounding
+  // the movement it caused doesn't need announcing too.
   const path = location.pathname
   useEffect(() => {
     if (lastSoundedPath === path) return
     const isFirstRoute = lastSoundedPath === null
     lastSoundedPath = path
-    if (!isFirstRoute) playSound('navigate')
+    if (isFirstRoute) return
+    if (msSinceSound('begin') < LAUNCH_COVERS_NAVIGATION_MS) return
+    playSound('navigate')
   }, [path])
 
   return null

@@ -30,7 +30,9 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > - [[Nonhomogeneous Poisson Process]] — a rate $\lambda(t)$ that changes over time
 > - [[Compound Poisson Process]] — a random number of claims of random size
 > - [[Mixed Poisson Process]] — a random rate across the portfolio
-> - Distributions that arise: [[Poisson Distribution]], [[Exponential Distribution]], [[Gamma]], [[Negative Binomial Distribution]]
+> - Distributions that arise: [[Poisson Distribution]], [[Exponential Distribution]], [[Gamma]], [[Negative Binomial Distribution]], [[Uniform Continuous Distribution]]
+> - [[Transformations of Random Variables]] — deriving the distribution of a function of a lifetime or claim size
+> - [[Combinatorics]] — counting the path and cut sets of a $k$-out-of-$n$ system
 > 
 > ### Markov Chains
 > - [[Markov Chain]] — the transition probability matrix, $n$-step transitions, and the stationary distribution
@@ -40,7 +42,7 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > - [[Survival Model]] and the [[Hazard Rate]] (force of mortality)
 > - [[Life Table]] — the tabular form of a survival model
 > - [[Joint Life]] statuses
-> - [[Whole Life Insurance]] and the [[Life Annuity]]
+> - [[Whole Life Insurance]] and the [[Life Annuity]] — valued as an actuarial [[Present Value]]
 > - [[Limited Expected Value]]
 > 
 > **Readings:** Daniel · Ross · Struppeck
@@ -60,14 +62,17 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > 9. Adjust calculations for the effect of missing data values, including [[Censoring]] and [[Truncation]]
 > 
 > ### Summarizing a Sample
-> - [[Sample Mean]] and [[Sample Variance]]
+> - [[Sample Mean]] and [[Sample Variance]], and the [[Standard Deviation]]
+> - [[Covariance]] between two variables
 > - [[Order Statistics]] and [[Percentile|percentiles]]
+> - [[Cumulative Distribution Function (CDF)]] — including its use to simulate a draw by inversion
 > - [[Sampling Distribution]] and the [[Central Limit Theorem]]
 > 
 > ### Estimation
 > - [[Maximum Likelihood Estimation]] and the [[Method of Moments]]
 > - [[Sufficient Statistic]] and [[Sufficiency]]
 > - [[Fisher Information]] and the Cramér–Rao lower bound
+> - Sampling models the estimators are built on, notably the [[Normal Distribution]]
 > - Criteria: [[Unbiasedness]], [[Bias]], [[Consistency]], [[Efficiency]], [[Minimum Variance]], [[Mean Square Error]]
 > - Incomplete data: [[Censoring]] and [[Truncation]]
 > 
@@ -79,6 +84,7 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > ### Loss Models
 > - [[Frequency]] and [[Severity]]
 > - [[Aggregate Loss Model]]s
+> - Coverage modifications, notably the [[Deductible]]
 > 
 > **Readings:** Hogg, McKean, and Craig · Tse
 
@@ -98,6 +104,7 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > 
 > ### Model Families
 > - [[Linear Regression]] — the ordinary least-squares starting point
+> - [[Linear Algebra]] — the design matrix, the hat matrix $H = X(X^TX)^{-1}X^T$, and fitted values
 > - [[Generalized Linear Model]] and the [[Exponential Family]]
 > - [[Logistic Regression]] for a binary response
 > - [[Poisson Regression]] for claim counts

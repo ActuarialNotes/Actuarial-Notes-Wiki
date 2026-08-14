@@ -68,8 +68,10 @@ export type SoundEvent =
   | 'streak'
   /** A quiz or study session is finished. */
   | 'complete'
-  /** Starting or resuming today's quiz from the Dashboard. */
+  /** Launching a quiz — every button in the app that starts one. */
   | 'begin'
+  /** Settling in to study: entering the flashcard study view. */
+  | 'study'
   /** The locked comprehension-check screen gating a flashcard's collection. */
   | 'unlock'
 
@@ -244,12 +246,14 @@ export function nextComboIndex(previous: number, elapsedMs: number, combo: Combo
 }
 
 // Equal-tempered reference pitches (Hz), so the recipes below read musically.
+const D2 = 73.42
 const E2 = 82.41
 const F2 = 87.31
+const A2 = 110.0
 const C3 = 130.81
+const D3 = 146.83
 const G3 = 196.0
 const A3 = 220
-const D4 = 293.66
 const E4 = 329.63
 const G4 = 392.0
 const A4 = 440.0
@@ -260,6 +264,7 @@ const G5 = 783.99
 const A5 = 880.0
 const B5 = 987.77
 const C6 = 1046.5
+const D6 = 1174.66
 const E6 = 1318.51
 const G6 = 1568.0
 
@@ -595,19 +600,81 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     ],
   },
   begin: {
-    // The dashboard's big call to action: a rising whoosh into two struck notes
-    // a fourth apart, the second held over a low root — "let's go", not a
-    // fanfare (that's `complete`). It opens rather than concludes, so it stops
-    // on the fifth instead of resolving home.
-    gain: 0.42,
-    throttleMs: 220,
-    lowpass: 5600,
-    space: 0.35,
-    noise: [{ at: 0, dur: 0.22, from: 700, to: 2600, type: 'bandpass', q: 0.65, gain: 0.4, swell: 0.35 }],
+    // Launching a quiz — the one cue in the app that *starts* something.
+    // Everything else marks a thing that just happened, so everything else can
+    // be a chime. This one has to make you want to go, which means it needs a
+    // run-up: nothing in a catalogue of 200 ms acknowledgements feels like
+    // momentum, because momentum is a thing you can only hear over time.
+    //
+    // So the first quarter-second is all anticipation and no melody. A sub
+    // spins up from D2 to D3 under a noise sweep opening from a rumble to a
+    // hiss, and over the top of it three ticks count in — spaced 90, 65 and
+    // 45 ms apart, closing up as they go. The acceleration is the trick: an
+    // even count-in tells you exactly when the launch lands, a tightening one
+    // arrives a beat before you expect it, and the surprise is what reads as
+    // being fired out of something.
+    //
+    // Then the bugle: up a fourth, up a whole tone, struck twice on the way
+    // and held on arrival. It stops on the *fifth*, not the octave — a quiz is
+    // being opened, not concluded. Resolving home is `complete`'s job, and the
+    // unresolved fifth is the whole reason this leans forward instead of
+    // sitting down.
+    gain: 0.52,
+    throttleMs: 260,
+    lowpass: 6200,
+    space: 0.38,
+    noise: [
+      // The runway: a slow swell from rumble to air, gone by the launch.
+      { at: 0, dur: 0.26, from: 420, to: 2600, type: 'bandpass', q: 0.6, gain: 0.32, swell: 0.75 },
+      // The count-in, accelerating into the strike.
+      { at: 0.02, dur: 0.016, from: 2400, to: 1700, type: 'bandpass', q: 1.6, gain: 0.2, swell: 0 },
+      { at: 0.11, dur: 0.016, from: 2800, to: 1900, type: 'bandpass', q: 1.6, gain: 0.26, swell: 0 },
+      { at: 0.175, dur: 0.016, from: 3200, to: 2100, type: 'bandpass', q: 1.6, gain: 0.32, swell: 0 },
+      mallet(0.22, 0.3),
+      mallet(0.4, 0.28),
+    ],
     tones: [
-      ...bell(D5, { at: 0.02, dur: 0.26, gain: 0.42 }),
-      ...bell(G5, { at: 0.11, dur: 0.55, gain: 0.55, hold: 0.08 }),
-      { at: 0.11, dur: 0.6, freq: D4, type: 'sine', gain: 0.18, attack: 0.03 },
+      // The spin-up: an octave of sub underneath the count-in. Felt, not heard.
+      { at: 0, dur: 0.3, freq: D2, glide: D3, type: 'sine', gain: 0.22, attack: 0.08 },
+      ...bell(D5, { at: 0.22, dur: 0.3, gain: 0.42 }),
+      ...bell(G5, { at: 0.31, dur: 0.34, gain: 0.5 }),
+      ...bell(A5, { at: 0.4, dur: 0.75, gain: 0.68, hold: 0.1 }),
+      // Octave over the landing — sparkle, not a fourth note.
+      { at: 0.4, dur: 0.8, freq: D6, type: 'sine', gain: 0.14, attack: 0.04 },
+      { at: 0.4, dur: 0.8, freq: D3, type: 'sine', gain: 0.22, attack: 0.04 },
+    ],
+  },
+  study: {
+    // Settling in to study — the flashcard deck coming up in front of you.
+    //
+    // The temptation is to reuse a reward cue here, and it's the wrong instinct:
+    // opening your deck is not an achievement, and congratulating someone for
+    // pressing Study is how a cue wears out. So this one deliberately has no
+    // triad and no third in it — just an open fifth, which is the interval with
+    // no mood attached. Warm rather than bright (the partials are pulled down
+    // with `sparkle` and the lowpass is the darkest in the catalogue outside
+    // `unlock`), and it *opens* instead of arriving: a slow A5 fades in over the
+    // held fifth across a fifth of a second, like a lamp coming up over a desk.
+    //
+    // It starts on paper, not on a note — the deck squared off on the desk, a
+    // short downward sweep with the mallet landing in it — so it stays in the
+    // same physical world as the rest of the flashcard family (`shuffle`,
+    // `fileAway`, `page`) rather than sounding like a prize.
+    gain: 0.44,
+    throttleMs: 220,
+    lowpass: 4200,
+    space: 0.24,
+    noise: [
+      { at: 0, dur: 0.11, from: 1200, to: 380, type: 'bandpass', q: 0.8, gain: 0.34, swell: 0.18 },
+      mallet(0.05, 0.18),
+    ],
+    tones: [
+      ...bell(A4, { at: 0.05, dur: 0.32, gain: 0.44, sparkle: 0.7 }),
+      ...bell(E5, { at: 0.16, dur: 0.7, gain: 0.56, hold: 0.07, sparkle: 0.7 }),
+      // The lamp: a slow swell over the fifth, the only voice here that isn't
+      // struck.
+      { at: 0.16, dur: 0.75, freq: A5, type: 'sine', gain: 0.12, attack: 0.22 },
+      { at: 0, dur: 0.9, freq: A2, type: 'sine', gain: 0.2, attack: 0.06 },
     ],
   },
   unlock: {

@@ -24,6 +24,13 @@ function climbing(): Array<[SoundEvent, SoundRecipe]> {
 /** The cues that celebrate something, as opposed to acknowledging a press. */
 const REWARDS = ['correct', 'addToDeck', 'collect', 'levelUp', 'reward', 'streak', 'complete', 'begin'] as const
 
+/**
+ * The two cues that open a session rather than close one: launching a quiz and
+ * settling in to study. They're built like reward cues (struck, in a room) but
+ * they mark a beginning, so they have their own rules — see "the launch cues".
+ */
+const LAUNCHES = ['begin', 'study'] as const
+
 /** Everything a user hears dozens of times an hour. */
 const INTERFACE = ['click', 'press', 'select', 'tick', 'toggleOn', 'toggleOff', 'navigate', 'actions',
   'open', 'close', 'page', 'shuffle', 'fileAway'] as const
@@ -263,6 +270,90 @@ describe('sound catalogue', () => {
             .toBeLessThan(tone.dur)
         }
       }
+    })
+  })
+
+  describe('the launch cues', () => {
+    it('rings in a room and lands on its loudest note', () => {
+      // Same construction as the reward family — struck notes, a landing, a
+      // tail — because a beginning is an event too.
+      for (const event of LAUNCHES) {
+        const recipe = SOUND_RECIPES[event]
+        expect(recipe.space, `${event} is bone dry`).toBeGreaterThan(0)
+        const notes = principals(recipe)
+        expect(notes.length, `${event} has no melody`).toBeGreaterThan(1)
+        const last = notes[notes.length - 1]
+        for (const note of notes.slice(0, -1)) {
+          expect(note.at, `${event} is out of order`).toBeLessThan(last.at)
+          expect(note.gain ?? 1, `${event} fades out instead of landing`)
+            .toBeLessThanOrEqual(last.gain ?? 1)
+        }
+        expect(last.hold ?? 0, `${event} does not hold its arrival`).toBeGreaterThan(0)
+      }
+    })
+
+    it('sits above the interface and no louder than the session fanfare', () => {
+      // A launch is a once-a-session moment, so it has to carry over the
+      // presses around it — but finishing is still the biggest thing the app
+      // ever says, and nothing is allowed to upstage it.
+      const complete = peakLevel(SOUND_RECIPES.complete)
+      for (const event of LAUNCHES) {
+        const level = peakLevel(SOUND_RECIPES[event])
+        expect(level, `${event} is louder than finishing a session`).toBeLessThanOrEqual(complete)
+        for (const quiet of INTERFACE) {
+          expect(level, `${event} is no bigger than a ${quiet}`)
+            .toBeGreaterThan(peakLevel(SOUND_RECIPES[quiet]))
+        }
+      }
+    })
+
+    it('gives the quiz launch a run-up before its first note', () => {
+      // The point of `begin`: momentum can only be heard over time, so the cue
+      // spends its first quarter-second on a swell and a count-in and doesn't
+      // play a note until the launch itself.
+      const begin = SOUND_RECIPES.begin
+      const firstNote = Math.min(...principals(begin).map(t => t.at))
+      expect(Math.min(...(begin.noise ?? []).map(n => n.at)), 'nothing leads in').toBe(0)
+      expect(firstNote, 'the melody starts too early to have a run-up').toBeGreaterThan(0.15)
+
+      // The count-in accelerates. An even one tells you exactly when the launch
+      // lands; a tightening one arrives before you expect it, which is the part
+      // that reads as being fired out of something.
+      const ticks = (begin.noise ?? [])
+        .filter(n => (n.swell ?? 0) === 0 && n.at < firstNote)
+        .map(n => n.at)
+        .sort((a, b) => a - b)
+      expect(ticks.length, 'no count-in').toBeGreaterThanOrEqual(3)
+      const gaps = ticks.slice(1).map((at, i) => at - ticks[i])
+      for (let i = 1; i < gaps.length; i++) {
+        expect(gaps[i], 'the count-in does not tighten').toBeLessThan(gaps[i - 1])
+      }
+    })
+
+    it('stops the quiz launch on the fifth rather than resolving home', () => {
+      // Opening, not concluding: an octave arrival is `complete`'s shape and
+      // would make starting a quiz sound like finishing one.
+      const notes = principals(SOUND_RECIPES.begin)
+      const span = semitones(notes[0].freq, notes[notes.length - 1].freq)
+      expect(span, 'the launch resolves instead of leaning forward').toBe(7)
+    })
+
+    it('keeps the study cue an open fifth — no third, so it congratulates nobody', () => {
+      // Opening your deck is not an achievement. A third would make this a
+      // reward cue, and a reward for pressing Study is how a cue wears out.
+      const notes = principals(SOUND_RECIPES.study)
+      expect(notes).toHaveLength(2)
+      expect(semitones(notes[0].freq, notes[1].freq)).toBe(7)
+      expect(SOUND_RECIPES.study.lowpass!, 'the study cue should be the warmer one')
+        .toBeLessThan(SOUND_RECIPES.correct.lowpass!)
+    })
+
+    it('starts the study cue on paper, like the rest of the flashcard family', () => {
+      // `shuffle`, `fileAway` and `page` are all paper; the cue that opens the
+      // deck has to live in the same physical world, not sound like a prize.
+      const first = (SOUND_RECIPES.study.noise ?? []).find(n => n.at === 0)
+      expect(first, 'the study cue has no paper under it').toBeDefined()
+      expect(first!.to!, 'the deck settles, so the sweep falls').toBeLessThan(first!.from)
     })
   })
 

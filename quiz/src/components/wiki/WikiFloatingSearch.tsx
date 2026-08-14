@@ -544,6 +544,7 @@ function ConceptActions({
       {questionCount !== 0 && (
         <button
           type="button"
+          data-sound="begin"
           onClick={e => {
             e.preventDefault()
             e.stopPropagation()

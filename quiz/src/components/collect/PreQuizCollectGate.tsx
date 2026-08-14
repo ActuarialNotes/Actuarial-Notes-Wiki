@@ -113,6 +113,7 @@ export function PreQuizCollectGate({ concepts, planConcepts, onStart, onQuit }: 
               onClick={onStart}
               size="lg"
               data-tour="gate-start-quiz"
+              data-sound="begin"
               className="w-full bg-foreground text-background hover:bg-foreground/90"
             >
               <Play className="h-4 w-4 mr-1.5" />

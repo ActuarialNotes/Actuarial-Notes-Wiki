@@ -189,11 +189,6 @@ function GroupSection({
               </span>
               {/* The precise reading of what the fill behind the row shows. */}
               {group.weight && <ExamWeightLabel weight={group.weight} />}
-              {selectedCount > 0 && (
-                <span className="shrink-0 text-xs tabular-nums text-muted-foreground">
-                  {selectedCount}/{group.subtopics.length}
-                </span>
-              )}
               <ChevronDown
                 className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
               />

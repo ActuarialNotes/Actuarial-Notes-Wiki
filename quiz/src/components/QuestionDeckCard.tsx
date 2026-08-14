@@ -48,7 +48,6 @@ export function QuestionDeckCard({
   }, [shuffleTick])
 
   const subline: string[] = []
-  if (selected > 0 && selected < available) subline.push(`drawing ${selected}`)
   if (attemptsTracked && newCount !== undefined) {
     subline.push(newCount === 0 ? 'all attempted before' : `${newCount} new to you`)
   }
@@ -84,10 +83,8 @@ export function QuestionDeckCard({
               question{available !== 1 ? 's' : ''}
             </span>
           </div>
-          {/* Two things the big number doesn't say: how many of the pool this
-              quiz actually pulls (a 35-question mock exam drawn from 349), and
-              how much of it is unseen — the number that decides whether the
-              draw is worth taking. */}
+          {/* What the big number doesn't say: how much of the pool is unseen —
+              the number that decides whether the draw is worth taking. */}
           {subline.length > 0 && (
             <span className="text-xs text-muted-foreground">{subline.join(' · ')}</span>
           )}

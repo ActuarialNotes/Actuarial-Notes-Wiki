@@ -1983,17 +1983,20 @@ function SortableCard({
         <LearningProgressModal conceptName={card.name} onClose={() => setShowLearningProgress(false)} />
       )}
 
-      {/* Name — click to flip. In focus mode the title is the only thing shown:
-          no lock icon, no mastery pill, no collect button. */}
-      <button
-        type="button"
-        onPointerDown={e => e.stopPropagation()}
-        onClick={e => { e.stopPropagation(); handleFlipOpen() }}
-        className={`flex-1 flex flex-col items-center justify-center px-3 py-2 text-center gap-1 transition-colors ${
-          isActive ? 'text-primary' : 'hover:text-primary'
-        }`}
-      >
-        <span className="flex items-center justify-center gap-1.5">
+      {/* Name — click to flip — with the collect gate sitting right beside it.
+          The padlock *is* the collect button (same as the concept popup's
+          header): a foil-ringed lock rather than a separate "Collect" pill
+          below, so the gate reads as one control attached to the name. In focus
+          mode the title is the only thing shown: no lock, no mastery pill. */}
+      <div className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 min-w-0">
+        <button
+          type="button"
+          onPointerDown={e => e.stopPropagation()}
+          onClick={e => { e.stopPropagation(); handleFlipOpen() }}
+          className={`min-w-0 text-center transition-colors ${
+            isActive ? 'text-primary' : 'hover:text-primary'
+          }`}
+        >
           {/* Keystone marker: the gold underline on the name, same as
               everywhere else. Never a ring — a collected card already wears the
               rainbow foil edge, and the two materials must not fight for the
@@ -2001,26 +2004,26 @@ function SortableCard({
           <span className={`font-semibold text-base leading-snug ${card.kind === 'concept' && isKeystone(card.name) ? 'keystone-underline' : ''}`}>
             {card.name}
           </span>
-          {!collected && !focusMode && <Lock className="h-4 w-4 shrink-0" />}
-        </span>
-      </button>
+        </button>
+        {!collected && !focusMode && (
+          <button
+            type="button"
+            onPointerDown={e => e.stopPropagation()}
+            onClick={e => { e.stopPropagation(); openCollect(card) }}
+            title="Locked — collect this flashcard"
+            aria-label={`Collect ${card.name}`}
+            className="lock-foil-ring inline-flex items-center justify-center h-8 w-8 rounded-lg shrink-0 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+          >
+            <Lock className="h-4 w-4" />
+          </button>
+        )}
+      </div>
 
-      {/* Mastery pill / collect button — hidden in focus mode */}
-      {!focusMode && (
+      {/* Mastery pill — hidden in focus mode, and absent while the card is
+          still behind the collect gate (the lock above says everything). */}
+      {!focusMode && collected && (
         <div className="flex justify-center pb-2.5">
-          {collected ? (
-            <MasteryPill state={masteryState} />
-          ) : (
-            <button
-              type="button"
-              onPointerDown={e => e.stopPropagation()}
-              onClick={e => { e.stopPropagation(); openCollect(card) }}
-              aria-label={`Collect ${card.name}`}
-              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-            >
-              <Lock className="h-3 w-3" /> Collect
-            </button>
-          )}
+          <MasteryPill state={masteryState} />
         </div>
       )}
     </div>

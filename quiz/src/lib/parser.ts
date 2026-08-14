@@ -38,6 +38,12 @@ export interface Question {
   author?: string
   year?: number
   session?: string  // e.g. "Spring" or "Fall" for CAS/SOA sittings
+  /**
+   * The exam this question was originally sat under, when the syllabus has
+   * since moved the material to the exam named in `exam`. Set on the 2018
+   * MAS-I sittings whose content CAS later moved to MAS-II.
+   */
+  originally_exam?: string
 }
 
 export interface QuestionFilter {
@@ -72,6 +78,7 @@ interface QuestionFrontmatter {
   author?: unknown
   year?: unknown
   session?: unknown
+  originally_exam?: unknown
 }
 
 const OPTION_REGEX = /^- ([A-E])\)\s+(.+)/
@@ -316,6 +323,7 @@ export function parseQuestion(raw: string): Question | null {
       author: data.author ? String(data.author) : undefined,
       year: data.year ? Number(data.year) : undefined,
       session: data.session ? String(data.session) : undefined,
+      originally_exam: data.originally_exam ? String(data.originally_exam) : undefined,
     }
 
     // ── multi-part ──────────────────────────────────────────────────────────

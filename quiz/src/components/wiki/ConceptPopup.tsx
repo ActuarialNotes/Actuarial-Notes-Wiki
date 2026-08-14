@@ -611,10 +611,17 @@ export function ConceptPopup() {
         )}
       </div>
 
-      {/* Footer nav */}
+      {/* Footer nav. The bar reads as progress through the syllabus, not as the
+          current position: following a wiki link (or paging back) to something
+          covered earlier holds the fill at the furthest concept reached instead
+          of collapsing it. The mark lives in the bar, which unmounts with the
+          popup, so each time it's opened the run starts fresh; swapping the
+          Viewing filter resets it too, via `sequenceKey`. */}
       <NavProgressBar
         current={index + 1}
         total={list.length}
+        holdFurthest
+        sequenceKey={currentFilter}
         label={`Concept ${index + 1} of ${list.length}`}
       />
       <div className="flex items-stretch h-16 shrink-0 bg-background/60">

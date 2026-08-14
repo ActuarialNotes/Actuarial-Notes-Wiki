@@ -65,6 +65,21 @@ describe('ConceptImageBanner', () => {
     expect(html).not.toContain('border-border')
   })
 
+  it('offers a collapse control on a picture', () => {
+    const html = render([img('Media/Figures/One.svg')])
+    expect(html).toContain('Hide figure')
+  })
+
+  it('names the whole set on the collapse control when there are several', () => {
+    const html = render([img('Media/Figures/One.svg'), img('Media/Figures/Two.svg')])
+    expect(html).toContain('Hide 2 figures')
+  })
+
+  it('leaves the simulator card uncollapsible', () => {
+    const html = render([img('Media/Normal_distribution_pdf.svg')])
+    expect(html).not.toContain('Hide figure')
+  })
+
   it('previews a discrete distribution as stems rather than a curve', () => {
     const html = render([img('Media/Binomial_distribution_pmf.svg')])
     expect(html).toContain('<line')

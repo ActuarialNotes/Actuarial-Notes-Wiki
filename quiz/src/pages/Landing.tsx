@@ -1298,13 +1298,9 @@ export default function Landing() {
                       <p className="text-xs text-muted-foreground px-1">Loading concepts…</p>
                     ) : (
                       <>
-                        {/* The default is "everything", and four empty circles
-                            with a live Start button didn't say so. */}
-                        <p className="px-1 text-xs text-muted-foreground">
-                          {selectedConcepts.length === 0
-                            ? 'All topics — pick some to narrow the draw.'
-                            : `${selectedConcepts.length} topic${selectedConcepts.length === 1 ? '' : 's'} selected.`}
-                          {selectedConcepts.length > 0 && (
+                        {selectedConcepts.length > 0 && (
+                          <p className="px-1 text-xs text-muted-foreground">
+                            {selectedConcepts.length} topic{selectedConcepts.length === 1 ? '' : 's'} selected.
                             <button
                               type="button"
                               onClick={() => setSelectedConcepts([])}
@@ -1312,8 +1308,8 @@ export default function Landing() {
                             >
                               Clear
                             </button>
-                          )}
-                        </p>
+                          </p>
+                        )}
                         {groupedConcepts.map(group => (
                           <GroupSection
                             key={group.name}

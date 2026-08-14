@@ -59,10 +59,6 @@ export function PastExamBrowser({
   lookup,
   reportLink,
 }: Props) {
-  const selectedRow = selected
-    ? rows.find(r => r.year === selected.year && (r.session ?? undefined) === (selected.session ?? undefined))
-    : undefined
-
   // The pass-ratio column only earns its width once the sitting catalogue
   // carries published figures — a column of em-dashes reads as a broken
   // readout, so until then the header's lookup link is the honest answer.
@@ -73,13 +69,8 @@ export function PastExamBrowser({
 
   return (
     <div className="space-y-2">
-      <div className="flex items-baseline justify-between gap-2 px-1">
-        <p className="text-xs text-muted-foreground">
-          {rows.length > 0
-            ? `Past ${examLabel} papers — pick one, or take a generated mix.`
-            : 'A generated exam, distributed across the syllabus.'}
-        </p>
-        {lookup && (
+      {lookup && (
+        <div className="flex justify-end px-1">
           <a
             href={lookup.url}
             target="_blank"
@@ -89,8 +80,8 @@ export function PastExamBrowser({
             Pass rates
             <ExternalLink className="h-3 w-3" aria-hidden />
           </a>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* A bounded scroller rather than a long page: the shelf is something you
           flick through, and the action bar below stays reachable. */}
@@ -161,15 +152,8 @@ export function PastExamBrowser({
         })}
       </div>
 
-      {/* What sitting this actually launches, plus the paper it came from. */}
-      <div className="space-y-1 px-1">
-        <p className="text-xs text-muted-foreground">
-          {selectedRow
-            ? `All ${selectedRow.bankCount} question${selectedRow.bankCount === 1 ? '' : 's'} from the ${selectedRow.label} sitting.`
-            : `Distributed across all ${examLabel} topics to mirror the real exam.`}
-          {' '}Answers and explanations are revealed at the end.
-        </p>
-        {reportLink && (
+      {reportLink && (
+        <div className="px-1">
           <a
             href={reportLink.url}
             target="_blank"
@@ -179,8 +163,8 @@ export function PastExamBrowser({
             <FileDown className="h-3 w-3" aria-hidden />
             {reportLink.label}
           </a>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ChevronLeft, ChevronRight, SlidersHorizontal } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ChevronsDownUp, ChevronsUpDown, ImageIcon, SlidersHorizontal } from 'lucide-react'
 import {
   defaultParams,
   distributionForImage,
   type DistributionSpec,
 } from '@/lib/distributions'
 import { buildContinuousCurve, buildMassPoints } from '@/lib/distributionPlot'
+import { useFiguresCollapsed } from '@/hooks/useFiguresCollapsed'
 
 /**
  * A concept's figure, shown at the top of the concept popup.
@@ -26,6 +27,14 @@ import { buildContinuousCurve, buildMassPoints } from '@/lib/distributionPlot'
  * the simulator in the same full-screen modal. That card wears the same
  * travelling rainbow foil edge as a collected flashcard (`.simulator-foil-ring`
  * in index.css): both mark a surface with something live behind it.
+ *
+ * A picture can be folded away with the control in its top-right corner,
+ * leaving a one-line "Show figure" strip in its place. That choice is global and
+ * persisted (`hooks/useFiguresCollapsed`), so it holds as the reader pages
+ * through concepts and only comes undone when they expand a figure again — the
+ * definition stays at the top of the popup until then. The simulator card is
+ * not collapsible: it is already a single row, and folding a live control away
+ * behind another control buys nothing.
  */
 
 export interface BannerImage {
@@ -115,6 +124,7 @@ function DistributionPreview({ spec }: { spec: DistributionSpec }) {
 
 export function ConceptImageBanner({ images, onOpen, className }: ConceptImageBannerProps) {
   const [index, setIndex] = useState(0)
+  const [collapsed, setCollapsed] = useFiguresCollapsed()
   // A figure whose file 404s is dropped rather than left as a broken frame the
   // Previous/Next counter still counts.
   const [failed, setFailed] = useState<ReadonlySet<string>>(() => new Set())
@@ -143,6 +153,28 @@ export function ConceptImageBanner({ images, onOpen, className }: ConceptImageBa
   const cardClass =
     'group block w-full rounded-lg text-left transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
 
+  // Only pictures fold away — the simulator card is a single row already.
+  const isCollapsed = collapsed && !distribution
+  const figureLabel = usable.length > 1 ? `${usable.length} figures` : 'figure'
+
+  if (isCollapsed) {
+    return (
+      <div className={`not-prose mb-4${className ? ` ${className}` : ''}`}>
+        <button
+          type="button"
+          data-sound="toggleOn"
+          onClick={() => setCollapsed(false)}
+          aria-expanded={false}
+          className={`${cardClass} flex items-center gap-2 border border-border px-3 py-2 text-sm text-muted-foreground hover:text-foreground`}
+        >
+          <ImageIcon className="h-4 w-4 shrink-0" aria-hidden />
+          <span className="flex-1 truncate">Show {figureLabel}</span>
+          <ChevronsUpDown className="h-4 w-4 shrink-0" aria-hidden />
+        </button>
+      </div>
+    )
+  }
+
   return (
     <div className={`not-prose mb-4${className ? ` ${className}` : ''}`}>
       {distribution ? (
@@ -167,23 +199,41 @@ export function ConceptImageBanner({ images, onOpen, className }: ConceptImageBa
           <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" aria-hidden />
         </button>
       ) : (
-        <button
-          type="button"
-          onClick={open}
-          data-sound="open"
-          className={`${cardClass} overflow-hidden border border-border p-2`}
-          aria-label={`View ${current.alt || 'figure'} full screen`}
-        >
-          <img
-            key={current.src}
-            src={current.src}
-            alt={current.alt}
-            // Concept figures are portrait (see docs/concept-figures.md), so a
-            // landscape-era height cap would shrink them to an unreadable column.
-            className="mx-auto max-h-80 w-full object-contain"
-            onError={() => setFailed(prev => new Set(prev).add(current.src))}
-          />
-        </button>
+        // The collapse control has to be a *sibling* of the card, not a child:
+        // the card is itself a button, and a button inside a button is invalid
+        // markup that swallows the inner click.
+        <div className="relative">
+          <button
+            type="button"
+            onClick={open}
+            data-sound="open"
+            className={`${cardClass} overflow-hidden border border-border p-2`}
+            aria-label={`View ${current.alt || 'figure'} full screen`}
+          >
+            <img
+              key={current.src}
+              src={current.src}
+              alt={current.alt}
+              // Concept figures are portrait (see docs/concept-figures.md), so a
+              // landscape-era height cap would shrink them to an unreadable column.
+              className="mx-auto max-h-80 w-full object-contain"
+              onError={() => setFailed(prev => new Set(prev).add(current.src))}
+            />
+          </button>
+          {/* Sits over the card's top-right corner. It carries the card's own
+              background so it stays legible over a light figure in dark mode. */}
+          <button
+            type="button"
+            data-sound="toggleOff"
+            onClick={() => setCollapsed(true)}
+            aria-expanded
+            title={`Hide ${figureLabel}`}
+            aria-label={`Hide ${figureLabel}`}
+            className="absolute right-1.5 top-1.5 inline-flex h-7 w-7 items-center justify-center rounded-md border border-border bg-card/90 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <ChevronsDownUp className="h-4 w-4" />
+          </button>
+        </div>
       )}
 
       {current.caption && (

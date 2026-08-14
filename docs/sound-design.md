@@ -30,7 +30,7 @@ costs zero bytes of assets and every cue is tunable from one table.
 6. **Loudness is the hierarchy.** `correct` fires forty times to `complete`'s
    one, so it sits below the ceremonies; the ceremonies sit below the
    session fanfare; the interface sits below all of it. Pinned by a test, along
-   with a headroom check — a four-note fanfare is nearly twenty oscillators in
+   with a headroom check — a three-note fanfare is a dozen-plus oscillators in
    one bus, and it still has to clear the ceiling at full volume.
 7. **Beginnings are shaped differently from endings.** `begin` and `study` are
    the only cues that open something instead of closing it, so neither resolves:
@@ -58,8 +58,9 @@ the reward family in `soundConfig.ts` is built from all five:
   oscillators — the fundamental, an octave, and a twelfth — where the partials
   are scaled to die in a fraction of the fundamental's time. The spectrum
   narrows as the note rings, which is what a real struck metal bar does and
-  what a lone sine can never do. Both partials are exact harmonics, so a triad
-  of them stays consonant instead of clanging like an actual (inharmonic) bell.
+  what a lone sine can never do. Both partials are exact harmonics, so
+  stacking several of these stays consonant instead of clanging like an actual
+  (inharmonic) bell.
 - **A mallet.** `mallet()` puts ~20 ms of bandpassed noise at the moment of the
   strike. You don't hear it as its own event; without it the notes bloom out of
   nowhere and the cue loses its impact.
@@ -68,7 +69,7 @@ the reward family in `soundConfig.ts` is built from all five:
   scale exercise; a run into a held arrival is an announcement. Two of them
   (`levelUp`, `complete`) go further and re-strike the landing note, so the cue
   is a fast pickup and then an arrival rather than one continuous climb.
-- **A low root.** A quiet sine an octave or two under the triad. Mostly felt
+- **A low root.** A quiet sine an octave or two under the chord. Mostly felt
   rather than heard, and inaudible on a laptop speaker, but it's the difference
   between weight and a beep on headphones.
 - **A room.** `space` sends the cue to a shared convolution reverb (a
@@ -136,6 +137,15 @@ Its run is a single sweep, so `handleClearCompleted` calls
 (deliberately generous) `resetMs` — the first card off a deck of two has to
 sound like the first card off a deck of twenty.
 
+`levelUpStep` climbs for the same reason, on the quiz-completion ceremony
+(`ConceptLevelUpCeremony`): when several concepts level up in one sitting,
+playing the full `levelUp` fanfare for every card stops sounding like several
+wins the moment it repeats. A lone level-up still gets the fanfare; a run of
+them gets one struck note per card instead, a rung higher each time — the
+climb itself is the ceremony. Same pentatonic rungs, same reason as
+`fileAway`, and the same `resetSoundCombo` call before the run starts so a
+two-concept ceremony and a ten-concept one both climb from the root.
+
 ## The catalogue
 
 | Cue | When |
@@ -154,7 +164,8 @@ sound like the first card off a deck of twenty.
 | `correct` | A right answer, anywhere: quiz, comprehension check, flashcard "Got it". Climbs endlessly across a run — see "The combo" |
 | `addToDeck` | A card filed into the study deck ("Add to Flashcards") |
 | `collect` | A flashcard landing in the deck via the collect ceremony |
-| `levelUp` | A concept climbing the mastery ladder |
+| `levelUp` | A concept climbing the mastery ladder — a lone one, on the quiz-completion ceremony |
+| `levelUpStep` | One card in a *run* of concepts leveling up on the same ceremony — a rung higher per card instead of repeating `levelUp`. Climbs — see "The combo" |
 | `reward` | Gems paid out — quest collect, study-plan bonus, a store purchase |
 | `streak` | The daily streak growing |
 | `complete` | A quiz or study session finishing |

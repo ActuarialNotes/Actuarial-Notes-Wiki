@@ -54,7 +54,7 @@ export type SoundEvent =
   /** A finished card sliding off the deck during "Clear Completed Flashcards". */
   | 'fileAway'
   // — reward —
-  /** The friendly three-note arpeggio: a right answer, anywhere. */
+  /** The friendly two-note arpeggio: a right answer, anywhere. */
   | 'correct'
   /** A card is filed into the study deck (no ceremony — that's `collect`). */
   | 'addToDeck'
@@ -62,6 +62,12 @@ export type SoundEvent =
   | 'collect'
   /** A concept climbs the mastery ladder. */
   | 'levelUp'
+  /**
+   * One card in a run of several concepts leveling up on the same
+   * quiz-completion ceremony. Climbs a rung per card instead of repeating the
+   * `levelUp` fanfare — see `combo`.
+   */
+  | 'levelUpStep'
   /** Gems / quest rewards paid out. */
   | 'reward'
   /** The daily streak grows. */
@@ -460,13 +466,14 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
 
   // ---- reward -------------------------------------------------------------
   correct: {
-    // The headline cue, and the one that fires most: an ascending C-major
-    // triad struck on tuned bars. Each note rings far longer than the 75 ms
-    // between them, so all three are sounding together at the end — a chord,
-    // not a countdown — and the run gets *louder* as it climbs, so it lands on
-    // the fifth instead of trailing off. A low C3 sits underneath for weight
-    // and the whole thing is sent to the reverb, which is most of the
-    // difference between "a reward" and "a notification".
+    // The headline cue, and the one that fires most: an ascending perfect
+    // fifth struck on tuned bars — root and fifth, no third, so a whole quiz's
+    // worth of these stays a chime rather than forty tiny fanfares. Each note
+    // rings far longer than the 90 ms between them, so both are sounding
+    // together at the end — a chord, not a call-and-response — and the second
+    // note is louder, so it lands instead of trailing off. A low C3 sits
+    // underneath for weight and the whole thing is sent to the reverb, which is
+    // most of the difference between "a reward" and "a notification".
     //
     // The combo is the other half: a right answer after a right answer comes
     // back higher, and it never stops doing that. The rungs are the major
@@ -488,10 +495,9 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     noise: [mallet()],
     tones: [
       ...bell(C5, { at: 0, dur: 0.5, gain: 0.6 }),
-      ...bell(E5, { at: 0.075, dur: 0.5, gain: 0.66 }),
-      ...bell(G5, { at: 0.15, dur: 0.66, gain: 0.78, hold: 0.05 }),
-      // Octave over the landing note — sparkle, not a fourth note.
-      { at: 0.15, dur: 0.5, freq: C6, type: 'sine', gain: 0.18, attack: 0.02 },
+      ...bell(G5, { at: 0.09, dur: 0.66, gain: 0.78, hold: 0.05 }),
+      // Octave over the root — sparkle, not a third note.
+      { at: 0.09, dur: 0.5, freq: C6, type: 'sine', gain: 0.18, attack: 0.02 },
       { at: 0, dur: 0.7, freq: C3, type: 'sine', gain: 0.2, attack: 0.02 },
     ],
   },
@@ -507,9 +513,9 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     tones: [...bell(D5, { at: 0.01, dur: 0.2, gain: 0.44 })],
   },
   collect: {
-    // The card landing in the deck: paper first, then the triad a fifth higher,
-    // struck, with a shimmer over the landing and a long tail. The ceremony
-    // earns more room than anything else at this size.
+    // The card landing in the deck: paper first, then a fifth higher, struck,
+    // with a shimmer over the landing and a long tail. The ceremony earns more
+    // room than anything else at this size.
     gain: 0.5,
     throttleMs: 150,
     lowpass: 7500,
@@ -520,17 +526,16 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     ],
     tones: [
       ...bell(G5, { at: 0.05, dur: 0.44, gain: 0.55 }),
-      ...bell(B5, { at: 0.12, dur: 0.44, gain: 0.6 }),
-      ...bell(E6, { at: 0.19, dur: 0.7, gain: 0.68, hold: 0.06 }),
-      { at: 0.19, dur: 0.75, freq: G6, type: 'sine', gain: 0.14, attack: 0.04 },
+      ...bell(E6, { at: 0.14, dur: 0.7, gain: 0.68, hold: 0.06 }),
+      { at: 0.14, dur: 0.75, freq: G6, type: 'sine', gain: 0.14, attack: 0.04 },
       { at: 0.02, dur: 0.85, freq: G3, type: 'sine', gain: 0.18, attack: 0.04 },
     ],
   },
   levelUp: {
-    // A proper fanfare, in two halves: three quick notes as a pickup, then a
+    // A proper fanfare, in two halves: two quick notes as a pickup, then a
     // second strike on the octave that holds. The rhythm is the point — an
-    // even four-note run is a scale exercise, a fast run into a held arrival
-    // is an announcement. Root underneath, fifth entering with the landing.
+    // even run is a scale exercise, a fast run into a held arrival is an
+    // announcement. Root underneath, fifth entering with the landing.
     gain: 0.54,
     throttleMs: 200,
     lowpass: 6500,
@@ -538,12 +543,30 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     noise: [mallet(), mallet(0.3, 0.26)],
     tones: [
       ...bell(C5, { at: 0, dur: 0.34, gain: 0.5 }),
-      ...bell(E5, { at: 0.085, dur: 0.34, gain: 0.55 }),
-      ...bell(G5, { at: 0.17, dur: 0.4, gain: 0.6 }),
+      ...bell(G5, { at: 0.15, dur: 0.4, gain: 0.6 }),
       ...bell(C6, { at: 0.3, dur: 0.95, gain: 0.72, hold: 0.14 }),
       { at: 0.3, dur: 1.0, freq: G6, type: 'sine', gain: 0.12, attack: 0.05 },
       { at: 0, dur: 1.15, freq: C3, type: 'sine', gain: 0.24, attack: 0.05 },
       { at: 0.3, dur: 0.9, freq: G4, type: 'sine', gain: 0.14, attack: 0.08 },
+    ],
+  },
+  levelUpStep: {
+    // Several concepts leveling up in one sitting, on the quiz-completion
+    // ceremony: playing the full `levelUp` fanfare for every card in a row
+    // stops sounding like several separate wins the moment it repeats, so only
+    // a lone level-up gets the fanfare. A run of them gets this instead — one
+    // struck note per card, a rung higher each time, the same climbing sweep
+    // `fileAway` uses for a deck of cards clearing. No pickup, no re-struck
+    // landing: the climb itself is the ceremony.
+    gain: 0.46,
+    throttleMs: 150,
+    lowpass: 7200,
+    space: 0.4,
+    combo: { steps: [0, 2, 4, 7, 9], resetMs: 2500 },
+    noise: [mallet(0, 0.28)],
+    tones: [
+      ...bell(D5, { at: 0, dur: 0.55, gain: 0.62, hold: 0.05 }),
+      { at: 0, dur: 0.6, freq: D3, type: 'sine', gain: 0.2, attack: 0.02 },
     ],
   },
   reward: {
@@ -590,8 +613,7 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     noise: [mallet(), mallet(0.36, 0.24)],
     tones: [
       ...bell(C5, { at: 0, dur: 0.5, gain: 0.5 }),
-      ...bell(E5, { at: 0.1, dur: 0.5, gain: 0.54 }),
-      ...bell(G5, { at: 0.2, dur: 0.55, gain: 0.58 }),
+      ...bell(G5, { at: 0.18, dur: 0.55, gain: 0.58 }),
       ...bell(C6, { at: 0.36, dur: 1.15, gain: 0.7, hold: 0.2 }),
       { at: 0.36, dur: 1.2, freq: E6, type: 'sine', gain: 0.13, attack: 0.06 },
       { at: 0, dur: 1.5, freq: C3, type: 'sine', gain: 0.24, attack: 0.08 },

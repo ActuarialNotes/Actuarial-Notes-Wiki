@@ -32,6 +32,10 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > - [[Mixed Poisson Process]] — a random rate across the portfolio
 > - Distributions that arise: [[Poisson Distribution]], [[Exponential Distribution]], [[Gamma]], [[Negative Binomial Distribution]]
 > 
+> ### Markov Chains
+> - [[Markov Chain]] — the transition probability matrix, $n$-step transitions, and the stationary distribution
+> - Actuarial uses: bonus-malus systems, multi-state disability/mortality models, credit-rating migration
+> 
 > ### Survival Models and Life Contingencies
 > - [[Survival Model]] and the [[Hazard Rate]] (force of mortality)
 > - [[Life Table]] — the tabular form of a survival model

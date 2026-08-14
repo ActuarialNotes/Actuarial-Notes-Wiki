@@ -11,7 +11,7 @@
 // Scope: the sittings whose papers the examining body released publicly. CAS
 // stopped publishing full past papers once the upper-level exams moved to
 // computer-based testing, so the shelf ends at Spring 2019 for Exam 5 and
-// Fall 2019 for MAS-I. Exam P and Exam FM aren't listed at all — the SOA
+// Fall 2019 for MAS-I and MAS-II. Exam P and Exam FM aren't listed at all — the SOA
 // publishes a rolling sample-question set rather than dated papers, so those
 // exams have no sittings to browse (the browser falls back to the generated
 // mock alone).
@@ -81,6 +81,12 @@ export const PAST_EXAM_SITTINGS: PastExamSitting[] = [
   { exam: 'Exam MAS-I', year: 2019, session: 'Spring' },
   { exam: 'Exam MAS-I', year: 2018, session: 'Fall' },
   { exam: 'Exam MAS-I', year: 2018, session: 'Spring' },
+
+  // ── CAS Exam MAS-II ─── first sat Spring 2018 ─────────────────────────────
+  { exam: 'Exam MAS-II', year: 2019, session: 'Fall', officialQuestionCount: 42 },
+  { exam: 'Exam MAS-II', year: 2019, session: 'Spring', officialQuestionCount: 42 },
+  { exam: 'Exam MAS-II', year: 2018, session: 'Fall' },
+  { exam: 'Exam MAS-II', year: 2018, session: 'Spring' },
 ]
 
 /**
@@ -91,6 +97,7 @@ export const PAST_EXAM_SITTINGS: PastExamSitting[] = [
 export const PASS_RATE_LOOKUP: Record<string, { url: string; label: string }> = {
   'Exam 5': { url: 'https://www.actuarial-lookup.com/exams/5', label: 'Actuarial Lookup' },
   'Exam MAS-I': { url: 'https://www.actuarial-lookup.com/exams/mas-i', label: 'Actuarial Lookup' },
+  'Exam MAS-II': { url: 'https://www.actuarial-lookup.com/exams/mas-ii', label: 'Actuarial Lookup' },
 }
 
 /** The catalogue's sittings for one exam. */

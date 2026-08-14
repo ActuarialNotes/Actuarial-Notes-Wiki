@@ -7,6 +7,7 @@ export const EXAM_ID_TO_TOPIC: Record<string, string> = {
   P: 'Probability',
   FM: 'Financial Mathematics',
   'MAS-I': 'Exam MAS-I',
+  'MAS-II': 'Exam MAS-II',
   'CAS-5': 'Exam 5',
 }
 

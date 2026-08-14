@@ -77,8 +77,10 @@ The **Modern Actuarial Statistics II** exam is a 4-hour computer-based exam cove
 > 15. Compare models via predictive performance measures (e.g., [[Double Lift Chart|double lift chart]], [[Quantile Plot|quantile plot]])
 > 
 > ### Learning framework
+> - [[Statistical Learning]] — the overall framework these methods sit in
 > - [[Supervised Learning]] · [[Unsupervised Learning]]
 > - [[Bias-Variance Tradeoff]] · [[Cross-Validation]] · [[Bootstrap]] · [[Regularization]]
+> - Test error measured by the [[Mean Square Error]]; [[Bootstrap|bootstrap]] variability by the [[Standard Deviation]] of the resampled estimates
 > 
 > ### Supervised methods
 > - [[K-Nearest Neighbors]]

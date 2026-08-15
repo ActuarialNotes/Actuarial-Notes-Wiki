@@ -302,6 +302,40 @@ async function collectComprehensionChecks(): Promise<string[]> {
   return rawFiles
 }
 
+// Case studies: the supplemental booklet handed out with a sitting, one
+// markdown file per study under case-studies/<exam-id>/<id>.md, parsed at
+// runtime by lib/caseStudies.ts. Questions join to one by id via their
+// `case_study` frontmatter.
+async function collectCaseStudies(): Promise<string[]> {
+  const rawFiles: string[] = []
+  const root = path.join(REPO_ROOT, 'case-studies')
+  const examDirs = await readdir(root).catch(() => [] as string[])
+  for (const examDir of examDirs) {
+    const examPath = path.join(root, examDir)
+    const files = await readdir(examPath).catch(() => [] as string[])
+    for (const name of files) {
+      if (!name.endsWith('.md')) continue
+      const text = await readFile(path.join(examPath, name), 'utf-8').catch(() => null)
+      if (text != null) rawFiles.push(text)
+    }
+  }
+  return rawFiles
+}
+
+function caseStudiesPlugin(): Plugin {
+  const VIRTUAL_ID = 'virtual:case-studies'
+  const RESOLVED_ID = '\0' + VIRTUAL_ID
+  return {
+    name: 'case-studies',
+    resolveId: (id) => id === VIRTUAL_ID ? RESOLVED_ID : undefined,
+    load: async (id) => {
+      if (id !== RESOLVED_ID) return
+      const studies = await collectCaseStudies()
+      return `export default ${JSON.stringify(studies)}`
+    },
+  }
+}
+
 function comprehensionChecksPlugin(): Plugin {
   const VIRTUAL_ID = 'virtual:comprehension-checks'
   const RESOLVED_ID = '\0' + VIRTUAL_ID
@@ -317,7 +351,7 @@ function comprehensionChecksPlugin(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), wikiContentPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin()],
+  plugins: [react(), wikiContentPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), caseStudiesPlugin()],
   resolve: {
     alias: { '@': path.resolve(__dirname, 'src') },
   },

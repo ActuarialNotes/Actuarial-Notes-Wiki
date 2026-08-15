@@ -31,6 +31,11 @@ declare module 'virtual:comprehension-checks' {
   export default checks
 }
 
+declare module 'virtual:case-studies' {
+  const studies: string[]
+  export default studies
+}
+
 declare module 'virtual:resource-timeline' {
   import type { TimelineRawEntry } from '@/lib/resourceTimeline'
   const timeline: TimelineRawEntry[]

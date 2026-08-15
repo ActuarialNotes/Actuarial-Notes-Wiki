@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { AnswerOption } from '@/components/AnswerOption'
 import { ExplanationPanel } from '@/components/ExplanationPanel'
 import { TopicBadge } from '@/components/TopicBadge'
+import { CaseStudyLink } from '@/components/CaseStudyLink'
 import { MarkdownText } from '@/components/MarkdownText'
 import { Button } from '@/components/ui/button'
 import { isAnswerCorrect, normalizeAnswerText, estimateEssayScore } from '@/lib/parser'
@@ -399,6 +400,7 @@ export function QuestionCard({
               <TopicBadge label={question.difficulty} variant="difficulty" />
             </div>
           )}
+          <CaseStudyLink question={question} />
           <MarkdownText className="text-base leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0">
             {question.stem}
           </MarkdownText>
@@ -455,6 +457,7 @@ export function QuestionCard({
               <TopicBadge label={question.difficulty} variant="difficulty" />
             </div>
           )}
+          <CaseStudyLink question={question} />
           <MarkdownText className="text-base leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 [&_table]:text-sm [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_th]:border [&_th]:border-border [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1">
             {question.stem}
           </MarkdownText>
@@ -497,6 +500,7 @@ export function QuestionCard({
             <TopicBadge label={question.difficulty} variant="difficulty" />
           </div>
         )}
+        <CaseStudyLink question={question} />
         {question.stem && (
           <MarkdownText className="text-base leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 [&_table]:text-sm [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_th]:border [&_th]:border-border [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1">
             {question.stem}

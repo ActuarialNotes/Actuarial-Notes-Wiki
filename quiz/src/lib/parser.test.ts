@@ -386,3 +386,40 @@ describe('parseQuestion — single-part essay (no "## Part", no "### Answer")', 
   it('isAnswerCorrect treats the all-essay question as correct', () =>
     expect(isAnswerCorrect(q, JSON.stringify({ a: 'anything' }))).toBe(true))
 })
+
+// ── case_study frontmatter ────────────────────────────────────────────────────
+// Questions read against a supplemental booklet carry its id, which the viewer
+// joins on (see lib/caseStudies.ts). It is optional and rare, so the important
+// case is that ordinary questions come back undefined rather than empty-string.
+
+const CASE_STUDY_RAW = `---
+id: "test-case-study"
+exam: "Exam MAS-II"
+topic: "Linear Mixed Model"
+learning_objective: "Linear Mixed Models"
+difficulty: hard
+type: multiple-choice
+case_study: "masii-2019s-systolic"
+answer: "B"
+points: 2
+---
+
+Evaluate the three statements against the case study.
+
+- A) I only
+- B) II only
+- C) III only
+- D) I, II and III
+- E) None
+`
+
+describe('parseQuestion — case_study', () => {
+  it('carries the case-study id through', () => {
+    expect(parseQuestion(CASE_STUDY_RAW)!.case_study).toBe('masii-2019s-systolic')
+  })
+
+  it('is undefined when the frontmatter omits it', () => {
+    expect(parseQuestion(CASE_STUDY_RAW.replace('case_study: "masii-2019s-systolic"\n', ''))!.case_study)
+      .toBeUndefined()
+  })
+})

@@ -38,6 +38,11 @@ export interface Question {
   author?: string
   year?: number
   session?: string  // e.g. "Spring" or "Fall" for CAS/SOA sittings
+  // Id of a case study in `case-studies/` this question is read against — the
+  // supplemental booklet handed out with the paper. Set only on the handful of
+  // questions that are unanswerable without it; the UI shows a button that
+  // opens the study alongside the question. See lib/caseStudies.ts.
+  case_study?: string
 }
 
 export interface QuestionFilter {
@@ -72,6 +77,7 @@ interface QuestionFrontmatter {
   author?: unknown
   year?: unknown
   session?: unknown
+  case_study?: unknown
 }
 
 const OPTION_REGEX = /^- ([A-E])\)\s+(.+)/
@@ -316,6 +322,7 @@ export function parseQuestion(raw: string): Question | null {
       author: data.author ? String(data.author) : undefined,
       year: data.year ? Number(data.year) : undefined,
       session: data.session ? String(data.session) : undefined,
+      case_study: data.case_study ? String(data.case_study) : undefined,
     }
 
     // ── multi-part ──────────────────────────────────────────────────────────

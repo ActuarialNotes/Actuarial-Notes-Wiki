@@ -30,6 +30,8 @@ Resources/{Books,Regulation,Events,Benchmarks,Data}/*.md
 questions/<exam-id>/*.md                          — question bank (YAML frontmatter + markdown)
 comprehension-checks/<exam-id>/*.md               — flashcard-collect gate questions (one .md per concept,
                                                     parsed by lib/comprehensionCheckParser.ts)
+case-studies/<exam-id>/*.md                       — supplemental booklets a question is read against
+                                                    (MAS-II); opened from the question card — see docs/case-studies.md
 Media/Attachments/                                — images referenced via ![[...]]
 scripts/                                          — Python content-maintenance scripts (one-off/batch)
 docs/                                             — design docs for app algorithms (read these!)
@@ -67,6 +69,11 @@ before touching that area**:
 - `docs/flashcard-collection.md` — the "collect this card" gate: a concept must be collected
   (pass a comprehension check) before its mastery can advance past **New**. `applyAnswer`
   in `mastery.ts` takes a `collected` flag; the gate UI lives in `components/collect/`.
+- `docs/case-studies.md` — the **case-study reader**: the supplemental booklet CAS ships with
+  some MAS-II sittings, authored in `case-studies/<exam-id>/*.md`, joined to a question by its
+  `case_study` frontmatter and opened from the question card into a non-modal panel. Read
+  before adding a study or changing how one is surfaced — in particular the rules that R
+  output is transcribed verbatim and the question stem is never padded with excerpts.
 - `docs/research-ai-disabled.md` — what the two Research feature flags hide and the exact
   re-enable checklist (read before touching anything under `Research`/`research`).
 - `docs/research-corpus-plan.md` — the plan for the Canadian P&C `Resources/` markdown corpus.
@@ -113,6 +120,11 @@ before touching that area**:
 
 Other important `lib/` modules:
 - `parser.ts` — parses question markdown (frontmatter + body) into `Question` objects
+- `caseStudies.ts` — parses `case-studies/` markdown into the id-keyed lookup a question's
+  `case_study` frontmatter joins on. Rendered by `components/CaseStudyLink.tsx` (the button,
+  which renders nothing when a question declares no study, so it sits unconditionally in every
+  `QuestionCard` branch) and `components/CaseStudyPanel.tsx` (the non-modal reader, sharing the
+  concept popup's `.concept-popup-aside` surface). See `docs/case-studies.md`.
 - `wikiParser.ts` / `wikiIndex.ts` / `wikiExtract.ts` — parse wiki pages, build search index, extract syllabus structure
 - `conceptMatch.ts` — resolves concept name variants/aliases to a canonical slug (`slugForLink`)
 - `keystone.ts` — the keystone-concept read side: `findKeystone` / `isKeystone` (strict name
@@ -295,6 +307,10 @@ compile — don't "clean up" the flagged code as dead.
   of concept paths), `answer`, `points` — followed by the question body, options, and an
   `## Explanation` section (LaTeX via `$$...$$`). Current banks: `exam-p`, `exam-fm`,
   `exam-mas-i`, `exam-5` (hundreds of questions each).
+- Case-study files (`case-studies/<exam-id>/<id>.md`) hold a sitting's supplemental booklet:
+  YAML frontmatter (`id`, `exam`, `title`, optional `year`/`session`/`source`) + a markdown body
+  of prose, verbatim fenced R output and cropped plot embeds. A question opts in with
+  `case_study: "<id>"` and its stem stays as authored. See `docs/case-studies.md`.
 - Comprehension-check files (`comprehension-checks/<exam-id>/<Concept Name>.md`) gate flashcard
   collection: YAML frontmatter (`concept`, `exam`, `topic`, `correct` letter) + a `- A) …` option
   list, then an authoring-only `<!-- rationale -->` comment. One file per concept; the filename is
@@ -326,12 +342,14 @@ npm run lint       # eslint src --ext ts,tsx
 npm test           # vitest run
 ```
 
-Vite plugins (`vite.config.ts`) bundle the markdown content at build time via three virtual
+Vite plugins (`vite.config.ts`) bundle the markdown content at build time via five virtual
 modules that read directly from the repo root:
 - `virtual:wiki-content` — `Exam*.md`, `Concepts/`, `Resources/Books/`
 - `virtual:questions-content` — `questions/`
 - `virtual:resource-timeline` — the dated `Resources/{Books,Events,Regulation,Benchmarks}/`
   pages that power the Resources timeline/heatmap
+- `virtual:comprehension-checks` — `comprehension-checks/`
+- `virtual:case-studies` — `case-studies/`
 
 If you add new top-level exam files or content directories, make sure the relevant collector
 picks them up.

@@ -305,13 +305,26 @@ describe('generateStudyPlan — new concept pipeline', () => {
       config,
       examDate: addDays(todayISO(), 40),
     })
-    const couponAssignments = plan.assignments.filter(a => a.conceptName === 'Coupon Rate')
-    const introDate = couponAssignments.find(a => a.initialState === 'new')?.scheduledDate
-    const l1Date = couponAssignments.find(a => a.initialState === 'level1')?.scheduledDate
-    const l2Date = couponAssignments.find(a => a.initialState === 'level2')?.scheduledDate
+    // The first concept introduced gets the textbook staging; a later one can
+    // have a stage pushed back a day by the daily-load cap, so assert the exact
+    // gaps on the first and the minimum gaps on every concept.
+    const first = plan.assignments
+      .filter(a => a.initialState === 'new')
+      .sort((a, b) => a.scheduledDate.localeCompare(b.scheduledDate))[0]
+    const firstStages = plan.assignments.filter(a => a.conceptName === first.conceptName)
+    const introDate = firstStages.find(a => a.initialState === 'new')?.scheduledDate
     expect(introDate).toBeDefined()
-    expect(l1Date).toBe(addDays(introDate!, 1))
-    expect(l2Date).toBe(addDays(introDate!, 3))
+    expect(firstStages.find(a => a.initialState === 'level1')?.scheduledDate).toBe(addDays(introDate!, 1))
+    expect(firstStages.find(a => a.initialState === 'level2')?.scheduledDate).toBe(addDays(introDate!, 3))
+
+    for (const name of ['Price', 'Coupon Rate']) {
+      const stages = plan.assignments.filter(a => a.conceptName === name)
+      const intro = stages.find(a => a.initialState === 'new')!.scheduledDate
+      const l2 = stages.find(a => a.initialState === 'level1')!.scheduledDate
+      const l3 = stages.find(a => a.initialState === 'level2')!.scheduledDate
+      expect(daysBetween(intro, l2)).toBeGreaterThanOrEqual(1)
+      expect(daysBetween(l2, l3)).toBeGreaterThanOrEqual(2)
+    }
   })
 
   it('does not schedule the same concept more than once per day in todaysConcepts', () => {
@@ -474,6 +487,100 @@ describe('generateStudyPlan — strong_key strategy', () => {
       // At minimum, high-weight concept must be scheduled
       expect(todayAssignments).toContain('High Concept')
     }
+  })
+
+  it('introduces a keystone before the rest of its topic, then what its page links to', () => {
+    // 'Bond Price' is an Exam FM keystone; the syllabus lists it last.
+    const keystoneSyllabus = {
+      examId: 'FM-2',
+      examLabel: 'Exam FM',
+      examTopic: 'Financial Mathematics',
+      resources: [],
+      topics: [
+        {
+          name: 'Bonds',
+          weight: '20-30%',
+          concepts: [
+            { name: 'Zeta Concept', target: 'Zeta Concept' },
+            { name: 'Callable Bond', target: 'Callable Bond' },
+            { name: 'Bond Price', target: 'Bond Price' },
+          ],
+        },
+      ],
+    } as unknown as WikiExamSyllabus
+
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus: keystoneSyllabus,
+      masteryRecords: [],
+      config: { ...config, targetReadyDate: addDays(todayISO(), 60), targetStrengthLevel: 'strong_key' },
+      examDate: addDays(todayISO(), 90),
+      keystoneLinks: { 'Bond Price': ['Callable Bond'] },
+    })
+
+    const introOrder = plan.assignments
+      .filter(a => a.initialState === 'new')
+      .sort((a, b) => a.scheduledDate.localeCompare(b.scheduledDate))
+      .map(a => a.conceptName)
+    expect(introOrder).toEqual(['Bond Price', 'Callable Bond', 'Zeta Concept'])
+  })
+})
+
+// ── Introduction order ────────────────────────────────────────────────────────
+
+describe('generateStudyPlan — introduction order', () => {
+  // Syllabus order is the teaching order; alphabetical order is not. Names are
+  // chosen so the two disagree completely.
+  const orderedSyllabus = {
+    examId: 'FM-2',
+    examLabel: 'Exam FM',
+    examTopic: 'Financial Mathematics',
+    resources: [],
+    topics: [
+      {
+        name: 'Interest',
+        weight: '20-30%',
+        concepts: [
+          { name: 'Zeta Concept', target: 'Zeta Concept' },
+          { name: 'Mu Concept', target: 'Mu Concept' },
+          { name: 'Alpha Concept', target: 'Alpha Concept' },
+        ],
+      },
+    ],
+  } as unknown as WikiExamSyllabus
+
+  const orderedConfig = {
+    targetReadyDate: addDays(todayISO(), 60),
+    targetStrengthLevel: 'strong_all' as const,
+    planStartDate: todayISO(),
+  }
+
+  it('introduces new concepts in syllabus order, not alphabetically', () => {
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus: orderedSyllabus,
+      masteryRecords: [],
+      config: orderedConfig,
+      examDate: addDays(todayISO(), 90),
+    })
+    const introOrder = plan.assignments
+      .filter(a => a.initialState === 'new')
+      .sort((a, b) => a.scheduledDate.localeCompare(b.scheduledDate))
+      .map(a => a.conceptName)
+    expect(introOrder).toEqual(['Zeta Concept', 'Mu Concept', 'Alpha Concept'])
+  })
+
+  it('still puts at-risk concepts ahead of the syllabus order', () => {
+    // The last concept on the syllabus has decayed — it is rescued before
+    // anything new is introduced.
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus: orderedSyllabus,
+      masteryRecords: [rec('Alpha Concept', { state: 'forgotten', correct_count: 2 })],
+      config: orderedConfig,
+      examDate: addDays(todayISO(), 90),
+    })
+    expect(plan.todaysConcepts[0]).toBe('Alpha Concept')
   })
 })
 

@@ -22,8 +22,8 @@ const INTERACTIVE_SELECTOR = 'a, button, summary, input, textarea, select, [role
 
 /**
  * How long a quiz launch keeps the route-change whoosh quiet. Long enough to
- * cover `begin`'s run-up and arrival (~1.2s), short enough that a navigation a
- * user makes *after* the quiz has opened still sounds.
+ * cover `begin`'s run-up and the note it lands on (~1s), short enough that a
+ * navigation a user makes *after* the quiz has opened still sounds.
  */
 const LAUNCH_COVERS_NAVIGATION_MS = 1400
 

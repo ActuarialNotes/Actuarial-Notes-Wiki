@@ -32,9 +32,9 @@ costs zero bytes of assets and every cue is tunable from one table.
    session fanfare; the interface sits below all of it. Pinned by a test, along
    with a headroom check — a three-note fanfare is a dozen-plus oscillators in
    one bus, and it still has to clear the ceiling at full volume.
-7. **Beginnings are shaped differently from endings.** `begin` and `study` are
-   the only cues that open something instead of closing it, so neither resolves:
-   see "The two cues that start something" below.
+7. **Beginnings are shaped differently from endings.** `begin`, `launch` and
+   `study` are the only cues that open something instead of closing it, so none
+   of them resolves: see "The cues that start something" below.
 
 ## The pieces
 
@@ -169,15 +169,16 @@ two-concept ceremony and a ten-concept one both climb from the root.
 | `reward` | Gems paid out — quest collect, study-plan bonus, a store purchase |
 | `streak` | The daily streak growing |
 | `complete` | A quiz or study session finishing |
-| `begin` | Launching a quiz — every button in the app that starts one |
+| `begin` | Pressing Start Quiz — every button in the app that opens one. The count-in and one struck note |
+| `launch` | The *second* Start Quiz, on the pre-quiz collect gate: the press that puts a question on screen. Finishes `begin`'s phrase |
 | `study` | Opening the flashcard study view: the Study toggle, a card's "Study" action, "Study again" |
 | `unlock` | The locked comprehension-check screen gating a flashcard's collection |
 
-## The two cues that start something
+## The cues that start something
 
 Everything else in the catalogue marks a thing that already happened, which is
-why everything else can be a chime. `begin` and `study` mark a thing about to
-happen, and that needs a different shape.
+why everything else can be a chime. `begin`, `launch` and `study` mark a thing
+about to happen, and that needs a different shape.
 
 **`begin` needs a run-up.** Momentum can only be heard over time, so nothing
 built like a 200 ms acknowledgement will ever feel like a launch. The cue spends
@@ -186,10 +187,30 @@ an octave from D2 to D3 under a noise sweep opening from rumble to air, with
 three ticks counting in over the top — 90 ms apart, then 65, then 45. The
 tightening is the trick. An even count-in tells you exactly when the launch will
 land; an accelerating one arrives a beat before you expect it, and that surprise
-is what reads as being fired out of something. Then the bugle: up a fourth, up a
-whole tone, struck on the way and held on arrival. It stops on the **fifth**, not
-the octave — a quiz is being opened, not concluded, and resolving home is
-`complete`'s shape. The unresolved fifth is the entire reason it leans forward.
+is what reads as being fired out of something. Then one struck D, held — and it
+stops there.
+
+**`launch` is the other half of it.** Starting a quiz is two presses, not one:
+Start Quiz opens the quiz, and when it covers concepts that are still New the
+collect gate's own Start Quiz is what actually puts a question on screen. Two
+presses a minute apart played the same fanfare twice, which made the first one
+sound like it hadn't worked. So the bugle is split across them. `begin` counts in
+and lands on D; `launch` picks the phrase up a fourth higher and finishes it —
+G, then A, struck and held. Measured across both halves the launch still stops on
+the **fifth**, not the octave: a quiz is being opened, not concluded, and
+resolving home is `complete`'s shape. The unresolved fifth is the entire reason
+it leans forward.
+
+What `launch` deliberately doesn't have is a second run-up. You were counted in
+once already; counting in again would make the gate read as a second beginning
+rather than the end of the first, so there's no count-in and no spin-up — one
+short sweep under an immediate strike. It carries the same low D and the same
+octave sparkle as `begin`'s landing, so the two halves sound like one instrument
+picked back up rather than two cues.
+
+A quiz without the gate is one press, and hears only the first half: a count-in
+into a single note that doesn't resolve — which is the right shape for a cue
+whose answer is the quiz itself.
 
 **`study` needs to not be a reward.** The tempting move is to reuse a
 celebration cue for the Study button, and it's wrong twice over: opening your own
@@ -201,9 +222,10 @@ in the catalogue outside `unlock`). It begins on paper, like the rest of the
 flashcard family, and it *opens* rather than arriving: a slow A5 fades in over
 the held fifth across a fifth of a second, a lamp coming up over a desk.
 
-Both are pinned by tests — the run-up and its accelerating count-in, the
-unresolved fifth, the missing third, and the loudness window that keeps them
-above the interface and under `complete`.
+All three are pinned by tests — the run-up and its accelerating count-in, the
+split phrase and the fourth that resumes it, the unresolved fifth across both
+halves, the missing third, and the loudness window that keeps them above the
+interface and under `complete`.
 
 ## Wiring a new interaction
 

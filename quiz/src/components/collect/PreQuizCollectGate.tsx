@@ -113,7 +113,10 @@ export function PreQuizCollectGate({ concepts, planConcepts, onStart, onQuit }: 
               onClick={onStart}
               size="lg"
               data-tour="gate-start-quiz"
-              data-sound="begin"
+              // The *second* Start Quiz, so the second half of the launch cue:
+              // `begin` counted in and stopped on one note when the quiz was
+              // opened, and this is the press that finishes the phrase.
+              data-sound="launch"
               className="w-full bg-foreground text-background hover:bg-foreground/90"
             >
               <Play className="h-4 w-4 mr-1.5" />

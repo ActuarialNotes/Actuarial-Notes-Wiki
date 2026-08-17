@@ -74,8 +74,17 @@ export type SoundEvent =
   | 'streak'
   /** A quiz or study session is finished. */
   | 'complete'
-  /** Launching a quiz — every button in the app that starts one. */
+  /**
+   * Pressing Start Quiz — every button in the app that opens one. The count-in
+   * and the single note it strikes; the phrase is finished by `launch`.
+   */
   | 'begin'
+  /**
+   * The *second* Start Quiz: the one on the pre-quiz collect gate, which is
+   * what actually drops you into the questions. Picks the phrase `begin` left
+   * hanging up a fourth and lands it.
+   */
+  | 'launch'
   /** Settling in to study: entering the flashcard study view. */
   | 'study'
   /** The locked comprehension-check screen gating a flashcard's collection. */
@@ -622,7 +631,7 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     ],
   },
   begin: {
-    // Launching a quiz — the one cue in the app that *starts* something.
+    // Pressing Start Quiz — the one cue in the app that *starts* something.
     // Everything else marks a thing that just happened, so everything else can
     // be a chime. This one has to make you want to go, which means it needs a
     // run-up: nothing in a catalogue of 200 ms acknowledgements feels like
@@ -636,11 +645,11 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     // arrives a beat before you expect it, and the surprise is what reads as
     // being fired out of something.
     //
-    // Then the bugle: up a fourth, up a whole tone, struck twice on the way
-    // and held on arrival. It stops on the *fifth*, not the octave — a quiz is
-    // being opened, not concluded. Resolving home is `complete`'s job, and the
-    // unresolved fifth is the whole reason this leans forward instead of
-    // sitting down.
+    // Then a single struck note, and it stops there. Opening a quiz is *two*
+    // presses — this one, then the collect gate's Start Quiz — so the bugle is
+    // split across them: this half is the count-in and the D it lands on,
+    // `launch` is the rest of the phrase. Ending on one note is what leaves it
+    // hanging, and a cue that hangs is a cue you want to answer.
     gain: 0.52,
     throttleMs: 260,
     lowpass: 6200,
@@ -652,18 +661,54 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
       { at: 0.02, dur: 0.016, from: 2400, to: 1700, type: 'bandpass', q: 1.6, gain: 0.2, swell: 0 },
       { at: 0.11, dur: 0.016, from: 2800, to: 1900, type: 'bandpass', q: 1.6, gain: 0.26, swell: 0 },
       { at: 0.175, dur: 0.016, from: 3200, to: 2100, type: 'bandpass', q: 1.6, gain: 0.32, swell: 0 },
-      mallet(0.22, 0.3),
-      mallet(0.4, 0.28),
+      mallet(0.22, 0.32),
     ],
     tones: [
       // The spin-up: an octave of sub underneath the count-in. Felt, not heard.
       { at: 0, dur: 0.3, freq: D2, glide: D3, type: 'sine', gain: 0.22, attack: 0.08 },
-      ...bell(D5, { at: 0.22, dur: 0.3, gain: 0.42 }),
-      ...bell(G5, { at: 0.31, dur: 0.34, gain: 0.5 }),
-      ...bell(A5, { at: 0.4, dur: 0.75, gain: 0.68, hold: 0.1 }),
-      // Octave over the landing — sparkle, not a fourth note.
-      { at: 0.4, dur: 0.8, freq: D6, type: 'sine', gain: 0.14, attack: 0.04 },
-      { at: 0.4, dur: 0.8, freq: D3, type: 'sine', gain: 0.22, attack: 0.04 },
+      // The note the count-in was counting into. It rings longer and holds
+      // than it did as the first of three, because now it's the whole melody.
+      ...bell(D5, { at: 0.22, dur: 0.72, gain: 0.66, hold: 0.08 }),
+      // Octave over the landing — sparkle, not a second note.
+      { at: 0.22, dur: 0.78, freq: D6, type: 'sine', gain: 0.14, attack: 0.04 },
+      { at: 0.22, dur: 0.8, freq: D3, type: 'sine', gain: 0.22, attack: 0.04 },
+    ],
+  },
+  launch: {
+    // The second Start Quiz — the one on the pre-quiz collect gate, the press
+    // that actually puts a question on screen.
+    //
+    // It is the back half of `begin`'s bugle: up a fourth to G, up a whole tone
+    // to A, struck on the way and held on arrival. Two presses, one phrase —
+    // whatever happened in between (collecting three cards, reading a
+    // definition), the launch picks up exactly where it stopped.
+    //
+    // What it deliberately does *not* have is a second run-up. You were counted
+    // in once already; doing it again would make the gate feel like a second
+    // beginning rather than the end of the first. So there's no count-in and no
+    // spin-up — one short sweep under an immediate strike, and it's away.
+    //
+    // It still stops on the *fifth* above where `begin` started, not the
+    // octave. A quiz is being opened, not concluded: resolving home is
+    // `complete`'s job, and the unresolved fifth is the whole reason this leans
+    // forward instead of sitting down.
+    gain: 0.52,
+    throttleMs: 260,
+    lowpass: 6200,
+    space: 0.42,
+    noise: [
+      // The door, not a runway: a short sweep that's gone by the arrival.
+      { at: 0, dur: 0.12, from: 900, to: 3000, type: 'bandpass', q: 0.7, gain: 0.28, swell: 0.5 },
+      mallet(0, 0.32),
+      mallet(0.1, 0.3),
+    ],
+    tones: [
+      ...bell(G5, { at: 0, dur: 0.34, gain: 0.5 }),
+      ...bell(A5, { at: 0.1, dur: 0.78, gain: 0.68, hold: 0.1 }),
+      // The same sparkle and the same low D as `begin`'s landing, so the two
+      // halves sound like one instrument picked back up.
+      { at: 0.1, dur: 0.82, freq: D6, type: 'sine', gain: 0.14, attack: 0.04 },
+      { at: 0.1, dur: 0.9, freq: D3, type: 'sine', gain: 0.22, attack: 0.04 },
     ],
   },
   study: {

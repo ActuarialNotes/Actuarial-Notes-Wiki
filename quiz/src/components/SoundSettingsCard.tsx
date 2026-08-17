@@ -92,7 +92,8 @@ export function SoundSettingsCard() {
               ['Collect', 'collect'],
               ['Level up', 'levelUp'],
               ['Session complete', 'complete'],
-              ['Begin quiz', 'begin'],
+              ['Start quiz', 'begin'],
+              ['Launch quiz', 'launch'],
               ['Study', 'study'],
               ['Unlock check', 'unlock'],
             ] as const).map(([label, event]) => (

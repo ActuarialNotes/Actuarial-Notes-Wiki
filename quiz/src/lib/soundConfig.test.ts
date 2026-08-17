@@ -22,14 +22,16 @@ function climbing(): Array<[SoundEvent, SoundRecipe]> {
 }
 
 /** The cues that celebrate something, as opposed to acknowledging a press. */
-const REWARDS = ['correct', 'addToDeck', 'collect', 'levelUp', 'levelUpStep', 'reward', 'streak', 'complete', 'begin'] as const
+const REWARDS = ['correct', 'addToDeck', 'collect', 'levelUp', 'levelUpStep', 'reward', 'streak',
+  'complete', 'begin', 'launch'] as const
 
 /**
- * The two cues that open a session rather than close one: launching a quiz and
- * settling in to study. They're built like reward cues (struck, in a room) but
- * they mark a beginning, so they have their own rules — see "the launch cues".
+ * The cues that open a session rather than close one: the two halves of a quiz
+ * launch (pressing Start Quiz, then the collect gate's Start Quiz) and settling
+ * in to study. They're built like reward cues (struck, in a room) but they mark
+ * a beginning, so they have their own rules — see "the launch cues".
  */
-const LAUNCHES = ['begin', 'study'] as const
+const LAUNCHES = ['begin', 'launch', 'study'] as const
 
 /** Everything a user hears dozens of times an hour. */
 const INTERFACE = ['click', 'press', 'select', 'tick', 'toggleOn', 'toggleOff', 'navigate', 'actions',
@@ -280,7 +282,9 @@ describe('sound catalogue', () => {
         const recipe = SOUND_RECIPES[event]
         expect(recipe.space, `${event} is bone dry`).toBeGreaterThan(0)
         const notes = principals(recipe)
-        expect(notes.length, `${event} has no melody`).toBeGreaterThan(1)
+        // `begin` is deliberately a single note — it's half a phrase, and the
+        // half it isn't playing is `launch`. Everything else here is a melody.
+        expect(notes.length, `${event} has nothing to play`).toBeGreaterThan(0)
         const last = notes[notes.length - 1]
         for (const note of notes.slice(0, -1)) {
           expect(note.at, `${event} is out of order`).toBeLessThan(last.at)
@@ -329,12 +333,38 @@ describe('sound catalogue', () => {
       }
     })
 
+    it('splits the launch across the two Start Quiz presses', () => {
+      // Opening a quiz is two presses — Start Quiz, then the collect gate's
+      // Start Quiz — so the bugle is split between them: the first strikes one
+      // note and leaves it hanging, the second picks it up a fourth higher.
+      // Whatever happened in between, the phrase resumes rather than restarts.
+      const first = principals(SOUND_RECIPES.begin)
+      const second = principals(SOUND_RECIPES.launch)
+      expect(first, 'the first press should strike one note and stop').toHaveLength(1)
+      expect(second.length, 'the second press has no phrase to finish').toBeGreaterThan(1)
+      expect(semitones(first[0].freq, second[0].freq), 'the second press restarts instead of resuming')
+        .toBe(5)
+    })
+
     it('stops the quiz launch on the fifth rather than resolving home', () => {
       // Opening, not concluding: an octave arrival is `complete`'s shape and
-      // would make starting a quiz sound like finishing one.
-      const notes = principals(SOUND_RECIPES.begin)
-      const span = semitones(notes[0].freq, notes[notes.length - 1].freq)
-      expect(span, 'the launch resolves instead of leaning forward').toBe(7)
+      // would make starting a quiz sound like finishing one. Measured across
+      // both halves, since that's the phrase a user actually hears.
+      const opening = principals(SOUND_RECIPES.begin)[0]
+      const arrival = principals(SOUND_RECIPES.launch).slice(-1)[0]
+      expect(semitones(opening.freq, arrival.freq), 'the launch resolves instead of leaning forward')
+        .toBe(7)
+    })
+
+    it('spends the run-up on the first press and none of it on the second', () => {
+      // You were counted in when the quiz opened. Counting in again at the gate
+      // would make that press sound like a second beginning instead of the end
+      // of the first, so the second half strikes immediately.
+      const launch = SOUND_RECIPES.launch
+      expect(Math.min(...principals(launch).map(t => t.at)), 'the second press counts in again')
+        .toBeLessThan(0.05)
+      const ticks = (launch.noise ?? []).filter(n => (n.swell ?? 0) === 0)
+      expect(ticks.length, 'the second press has a count-in of its own').toBeLessThan(3)
     })
 
     it('keeps the study cue an open fifth — no third, so it congratulates nobody', () => {

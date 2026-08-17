@@ -6,6 +6,7 @@ import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import type { Components } from 'react-markdown'
 import { calloutComponents } from '@/components/MarkdownCallout'
+import { codeComponents } from '@/components/CodeBlock'
 import { DistributionSimulator } from '@/components/wiki/DistributionSimulator'
 import { ExamGuideCards } from '@/components/wiki/ExamGuideCards'
 import { examIdFromFile, hrefToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
@@ -243,6 +244,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
 
   const components = useMemo<Components>(() => ({
     ...calloutComponents,
+    ...codeComponents,
     h1({ children, ...rest }) {
       if (!titleBadge) return <h1 {...rest}>{children}</h1>
       return (

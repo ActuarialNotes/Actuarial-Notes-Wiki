@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
+import { codeComponents, inlineCodeComponents } from '@/components/CodeBlock'
 
 interface Props {
   children: string
@@ -19,11 +20,13 @@ const scrollableTable: Components['table'] = ({ children, ...props }) => (
 )
 
 const inlineComponents: Components = {
+  ...inlineCodeComponents,
   p: ({ children }) => <span>{children}</span>,
   br: () => <span> </span>,
 }
 
 const blockComponents: Components = {
+  ...codeComponents,
   table: scrollableTable,
 }
 

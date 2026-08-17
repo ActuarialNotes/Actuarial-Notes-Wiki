@@ -9,7 +9,7 @@ Open the study plan configuration panel and set two things:
 | Setting | What it does |
 |---|---|
 | **Target ready date** | The date by which you want to have mastered all concepts. The plan uses this as its deadline. If the date passes, the plan falls back to your exam date; if that has also passed, it uses 30 days from today. |
-| **Study strategy** | **All concepts equally** treats every concept the same. **Key concepts first** front-loads topics that carry more weight in the exam syllabus, so you build strength where the marks are. |
+| **Study strategy** | **All concepts equally** works through the syllabus in the order it teaches it. **Key concepts first** front-loads the exam's [keystone concepts](keystone-concepts.md) — each one followed by the concepts its own page leans on — so you build the load-bearing ideas first. |
 
 Quick-set presets (1 day, 1 week, 1 month, … 8 months before the exam) let you pick a target relative to the exam date without calculating it yourself.
 
@@ -38,7 +38,45 @@ Unmastered concepts are sorted so the most at-risk ones come first:
 Forgotten → Level 1 → Level 2 → New
 ```
 
-Within each state, if you have chosen *Key concepts first*, concepts from high-weight syllabus topics are sorted before lower-weight ones. Otherwise, concepts within the same state are sorted alphabetically.
+Within a state, concepts are ordered by the **study strategy** — never alphabetically. That
+tiebreak matters more than it sounds: on a fresh account every concept is New, so *every*
+comparison lands on it, and the plan's first weeks are whatever the tiebreak says they are.
+
+`lib/studyPlanOrder.ts` owns that ordering and nothing else:
+
+**All concepts equally → syllabus order.** The exam page lists its concepts in the order the
+syllabus teaches them ("Ratemaking, Exposure Base, Line of Business, …"), so walking it top to
+bottom means never meeting a concept before the one it is defined in terms of. This is the
+identity ordering — the plan's concept list is already built by walking the syllabus.
+
+**Key concepts first → keystones, each trailed by what its page links to.** A
+[keystone](keystone-concepts.md) is one of the ~10–15 concepts per exam the rest of the
+syllabus is built on, and the concepts a keystone's own page links to are the ones needed to
+make sense of it — so the pair is a coherent day's work:
+
+```
+Ratemaking → Permissible Loss Ratio, On-Leveling, Ratemaking Data Organization
+Exposure Base → Premium Audit, Earned Exposure, In-Force
+On Level Premium → …
+```
+
+Those groups are **interleaved rather than laid end to end**: each round gives a keystone at
+most `SUPPORTERS_PER_ROUND` (3) supporting concepts before the next keystone's turn, and any
+overflow waits for the following round. At the maximum introduction rate of 5 new concepts a
+day, that keeps at least one keystone in every day's introductions instead of the fifteenth
+keystone waiting for the first fourteen groups to finish.
+
+Two rules keep the groups honest: a concept linked from two keystones is introduced once, by
+the first keystone that needs it, and a keystone linked from another keystone's page still
+leads its own group rather than trailing someone else's.
+
+Whatever no keystone reaches — most of the syllabus, on any exam — follows the groups ordered
+by **topic weight**, heaviest first, which is what *Key concepts first* meant before keystones
+existed and is still all it can mean for an exam with no keystone catalogue.
+
+The keystone → linked-concepts map is derived at build time by vite from `Concepts/*.md`
+(`data/keystoneLinks.ts`), so editing a concept page changes the plan's order on the next
+build with nothing to keep in sync by hand.
 
 ### Step 3 — Schedule each concept
 

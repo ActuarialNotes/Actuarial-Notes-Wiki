@@ -70,9 +70,21 @@ export function isKeystone(concept: string | ConceptIdentity | null | undefined)
   return findKeystone(concept) !== null
 }
 
+/**
+ * Normalise an exam key to the form the catalogue is authored in. A CAS exam's
+ * exam-progress key carries a `CAS-` prefix (`wikiExamIdToProgressKey('5')` →
+ * `'CAS-5'`) that `KEYSTONE_EXAMS` does not, so callers holding either shape —
+ * the readiness score and the study plan hold the progress key, `findKeystone`
+ * returns the catalogue id — resolve to the same exam.
+ */
+export function keystoneExamKey(examId: string): string {
+  return examId.replace(/^CAS-/, '')
+}
+
 /** The keystones of one exam, in authored (teaching) order. */
 export function keystonesForExam(examId: string): KeystoneConcept[] {
-  return KEYSTONE_EXAMS.find(e => e.id === examId)?.concepts ?? []
+  const key = keystoneExamKey(examId)
+  return KEYSTONE_EXAMS.find(e => keystoneExamKey(e.id) === key)?.concepts ?? []
 }
 
 /** Every keystone across every exam — used by the vault-integrity test. */

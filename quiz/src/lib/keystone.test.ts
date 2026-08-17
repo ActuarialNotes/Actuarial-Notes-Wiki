@@ -128,6 +128,14 @@ describe('keystonesForExam', () => {
     expect(keystonesForExam('P')[0]!.name).toBe('Axioms of Probability')
     expect(keystonesForExam('nope')).toEqual([])
   })
+
+  it('accepts a CAS exam under either key — the catalogue id or the progress key', () => {
+    // `wikiExamIdToProgressKey('5')` is 'CAS-5'; the catalogue authors it as '5'.
+    // The readiness score and the study plan hold the progress key.
+    expect(keystonesForExam('CAS-5')).toEqual(keystonesForExam('5'))
+    expect(keystonesForExam('CAS-5').length).toBeGreaterThan(0)
+    expect(keystonesForExam('CAS-9')).toEqual([])
+  })
 })
 
 describe('keystoneProgress', () => {

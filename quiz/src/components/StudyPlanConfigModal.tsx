@@ -374,13 +374,13 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                   {
                     value: 'strong_all' as TargetStrengthLevel,
                     label: 'Master everything',
-                    desc: 'Fully master every concept, one at a time.',
+                    desc: 'Work through the syllabus in the order it teaches it.',
                     icon: BookOpen,
                   },
                   {
                     value: 'strong_key' as TargetStrengthLevel,
-                    label: 'Focus on key topics',
-                    desc: 'Prioritize key topics, then fill in the rest.',
+                    label: 'Focus on key concepts',
+                    desc: 'Start with the concepts the rest of the exam builds on.',
                     icon: Sparkles,
                   },
                 ] as const).map(opt => {

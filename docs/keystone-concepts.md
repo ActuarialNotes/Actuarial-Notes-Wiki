@@ -30,7 +30,10 @@ export const KEYSTONE_EXAMS: KeystoneExam[] = [
 ```
 
 `id` is the exam-progress key (`P`, `FM`, `MAS-I`, `5`) — the same key `concept_mastery`,
-`daily_completions` and `exam_progress` rows use, so progress roll-ups need no translation.
+`daily_completions` and `exam_progress` rows use, so progress roll-ups need no translation. A
+CAS exam is the one exception: its progress key carries a `CAS-` prefix the catalogue does not
+(`CAS-5` vs `5`), so every lookup runs the key through `keystoneExamKey`, which strips it. Pass
+either shape.
 
 **Editing rules** (each is pinned by `quiz/src/lib/keystone.test.ts`):
 
@@ -63,7 +66,8 @@ export const KEYSTONE_EXAMS: KeystoneExam[] = [
 |---|---|
 | `findKeystone(name \| ConceptIdentity)` | The entry + which exam it anchors, or `null` |
 | `isKeystone(…)` | Yes/no, for surfaces that only decorate |
-| `keystonesForExam(examId)` | The exam's list, in authored (teaching) order |
+| `keystonesForExam(examId)` | The exam's list, in authored (teaching) order — takes `5` or `CAS-5` |
+| `keystoneExamKey(examId)` | Exam-progress key → catalogue id (strips a `CAS-` prefix) |
 | `keystoneProgress(examId, lookup, now)` | Mastery roll-up: total / mastered / started / forgotten |
 | `keystoneKey(raw)` | The normalisation everything above shares |
 
@@ -154,10 +158,25 @@ centre readout. Pinned by `lib/masteryFill.test.ts`.
    exam's keystones become a readiness criterion on its study guide automatically. An exam
    with no block scores on the other two criteria (see `lib/readiness.ts`).
 
+## Keystones and the study plan
+
+Keystones order one half of the study plan. Under the **Key concepts first** strategy the plan
+introduces each keystone in authored order, trailed by the concepts its own page links to, and
+interleaves those groups so every keystone lands early — see *Step 2* of
+`docs/study-plan-generation.md`, implemented in `lib/studyPlanOrder.ts`. The map of what each
+keystone page links to is derived from `Concepts/*.md` at build time (`data/keystoneLinks.ts`),
+so a keystone earns its supporting concepts by what it actually links to, not by a second
+authored list.
+
+Two things keystones still do *not* do:
+
+- **Under the other strategy they change nothing.** *All concepts equally* follows syllabus
+  order and never consults the catalogue. Keystones front-load the plan only when the student
+  has asked for that.
+- **They do not change pacing.** Spacing gaps, the daily load and the mastery ladder are
+  untouched: a keystone is introduced earlier, not more often or to a higher level.
+
 ## Deliberately not done
 
-- **Keystones do not change scheduling.** The study plan (`docs/study-plan-generation.md`)
-  still paces by mastery and syllabus weight; keystones are a *signal to the student*, not a
-  hidden reordering. If that changes, it belongs in `studyPlan.ts` with its own doc section.
 - **No per-user keystone lists.** The catalogue is authored and shared; personal "important to
   me" marking would be a different feature (and a different colour).

@@ -63,7 +63,11 @@ before touching that area**:
 - `docs/concept-learning-progression.md` — the 5-state mastery ladder (New → L1 → L2 → L3,
   with Forgotten/decay), implemented in `quiz/src/lib/mastery.ts`
 - `docs/study-plan-generation.md` — how daily study plans are scheduled/paced/cached,
-  implemented in `quiz/src/lib/studyPlan.ts`
+  implemented in `quiz/src/lib/studyPlan.ts`. The *order* concepts are introduced in lives
+  next door in `lib/studyPlanOrder.ts` — syllabus order, or keystone-first (each keystone
+  trailed by what its page links to, from the build-time `data/keystoneLinks.ts` map) when the
+  strategy is *Key concepts first*. Never alphabetical: on a fresh account every concept is
+  New, so that tiebreak *is* the plan.
 - `docs/flashcard-collection.md` — the "collect this card" gate: a concept must be collected
   (pass a comprehension check) before its mastery can advance past **New**. `applyAnswer`
   in `mastery.ts` takes a `collected` flag; the gate UI lives in `components/collect/`.
@@ -326,12 +330,15 @@ npm run lint       # eslint src --ext ts,tsx
 npm test           # vitest run
 ```
 
-Vite plugins (`vite.config.ts`) bundle the markdown content at build time via three virtual
+Vite plugins (`vite.config.ts`) bundle the markdown content at build time via virtual
 modules that read directly from the repo root:
 - `virtual:wiki-content` — `Exam*.md`, `Concepts/`, `Resources/Books/`
 - `virtual:questions-content` — `questions/`
+- `virtual:comprehension-checks` — `comprehension-checks/<exam-id>/`
 - `virtual:resource-timeline` — the dated `Resources/{Books,Events,Regulation,Benchmarks}/`
   pages that power the Resources timeline/heatmap
+- `virtual:keystone-links` — for each keystone concept page, the concept pages it links to
+  (the study plan's *Key concepts first* order)
 
 If you add new top-level exam files or content directories, make sure the relevant collector
 picks them up.

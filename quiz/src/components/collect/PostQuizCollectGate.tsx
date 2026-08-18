@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Check, Loader2, Lock, Sparkles } from 'lucide-react'
 import { useCollect } from '@/hooks/useCollect'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
+import { CollectGateButton } from '@/components/collect/CollectGateButton'
 import { promoteMissedLevelUp } from '@/stores/quizStore'
 import type { MasteryTransition } from '@/stores/quizStore'
 import { LevelPill } from '@/components/wiki/LearningProgressModal'
@@ -104,14 +105,10 @@ export function PostQuizCollectGate({ examId, userId, concepts, onPromoted, onDo
                   {isPromoted ? (
                     <LevelPill level="level1" size="sm" />
                   ) : !isPending ? (
-                    <button
-                      type="button"
+                    <CollectGateButton
+                      name={name}
                       onClick={() => openCollect({ kind: 'concept', name })}
-                      className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-                    >
-                      <Lock className="h-3.5 w-3.5" />
-                      Collect
-                    </button>
+                    />
                   ) : null}
                 </div>
               </li>

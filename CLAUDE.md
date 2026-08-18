@@ -245,6 +245,13 @@ Other important `lib/` modules:
   it, mounted at the app root as `components/FlashcardSync.tsx`. The rule to keep in mind:
   local state is unioned into the server **once per device per user** (so guest work
   survives sign-in), and after that the server wins — see `docs/flashcard-collection.md`.
+- `collectLockout.ts` — the collect-check **lockout**: a wrong answer on a flashcard's
+  comprehension check shuts it for 30 minutes, then a day, per concept (misses never
+  decay; passing clears the record). Pure core here, persisted by
+  `hooks/useCollectLockouts.ts` (localStorage only — see the doc for why), rendered by
+  `CollectConceptModal`'s locked panel and `components/collect/CollectGateButton.tsx`.
+  The wait is announced before it's applied and always points at the concept page.
+  See `docs/flashcard-collection.md`.
 - `localMasteryStore.ts` / `dailyProgressStore.ts` — localStorage-backed offline fallbacks that sync with Supabase
 - `github.ts` — fetches wiki content from GitHub raw URLs at runtime (for the live site, vs. the build-time bundle)
 - `supabase.ts` — Supabase client + shared row types

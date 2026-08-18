@@ -76,3 +76,54 @@ describe('useConceptPopup occurrence navigation', () => {
     expect(useConceptPopup.getState().index).toBe(1)
   })
 })
+
+describe('useConceptPopup jumpTo', () => {
+  beforeEach(() => useConceptPopup.getState().close())
+
+  const openAtFirst = () =>
+    useConceptPopup.getState().openAt(list, 0, 'Exam FM-2 (SOA).md', null, null, {
+      occurrences,
+      occurrenceIndex: 0,
+    })
+
+  it('follows a link to a concept the page mentions, landing on its first mention', () => {
+    openAtFirst()
+    useConceptPopup.getState().jumpTo(concept('Simple Interest'))
+    const s = useConceptPopup.getState()
+    expect(s.index).toBe(1)
+    expect(s.occurrenceIndex).toBe(1)
+    expect(s.list).toHaveLength(2)
+  })
+
+  it('appends a concept the page never mentions to the mention list too', () => {
+    openAtFirst()
+    useConceptPopup.getState().navigate(1) // walk forward first
+    useConceptPopup.getState().jumpTo(concept('Compound Interest'))
+    const s = useConceptPopup.getState()
+    // Both lists grow together, so the walk sits on the concept just opened…
+    expect(s.list.map(r => r.name)).toEqual(['Interest Rate', 'Simple Interest', 'Compound Interest'])
+    expect(s.index).toBe(2)
+    expect(s.occurrences).toHaveLength(5)
+    expect(s.occurrenceIndex).toBe(4)
+    // …and Previous still works, stepping back onto the page's last mention
+    // instead of being dead because the walk had snapped to occurrence 0.
+    useConceptPopup.getState().navigate(-1)
+    expect(useConceptPopup.getState().occurrenceIndex).toBe(3)
+    expect(useConceptPopup.getState().list[useConceptPopup.getState().index].name).toBe('Simple Interest')
+  })
+
+  it('leaves the walk alone when the jumped-to concept has no mention on the page', () => {
+    openAtFirst()
+    useConceptPopup.getState().navigate(2) // occurrence 2
+    // Appended once…
+    useConceptPopup.getState().jumpTo(concept('Compound Interest'))
+    // …then jumped to again from elsewhere: it is in `list` now, so the walk
+    // follows its appended mention rather than resetting to the top.
+    useConceptPopup.getState().navigate(-4)
+    useConceptPopup.getState().jumpTo(concept('Compound Interest'))
+    const s = useConceptPopup.getState()
+    expect(s.list).toHaveLength(3)
+    expect(s.index).toBe(2)
+    expect(s.occurrenceIndex).toBe(4)
+  })
+})

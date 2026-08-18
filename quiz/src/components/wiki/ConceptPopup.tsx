@@ -762,7 +762,7 @@ export function ConceptPopup() {
       <ImageGalleryModal
         images={images}
         initialIndex={galleryIndex}
-        hostFocusMode={focusMode}
+        placement={focusMode ? 'popup-focus' : 'popup'}
         onClose={() => setShowGallery(false)}
       />
     )}

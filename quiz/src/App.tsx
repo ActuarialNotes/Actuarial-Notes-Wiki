@@ -19,6 +19,7 @@ import BottomNav from '@/components/BottomNav'
 import OnboardingTour from '@/components/OnboardingTour'
 import SoundEffects from '@/components/SoundEffects'
 import MathFocus from '@/components/MathFocus'
+import ImageFocus from '@/components/ImageFocus'
 import FlashcardSync from '@/components/FlashcardSync'
 import Toast from '@/components/Toast'
 import { CollectConceptModal } from '@/components/collect/CollectConceptModal'
@@ -218,6 +219,7 @@ export default function App({ initialSession }: { initialSession: Session | null
             <OnboardingTour />
             <CollectModalBoundary />
             <MathFocus />
+            <ImageFocus />
             <Toast />
           </div>
         </ExamProgressProvider>

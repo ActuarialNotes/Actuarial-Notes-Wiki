@@ -143,22 +143,30 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
     set({ index: next })
   },
   jumpTo: ref => {
-    const { list, occurrences } = get()
+    const { list, occurrences, occurrenceIndex } = get()
+    const name = ref.name.toLowerCase()
     // Keep occurrence highlighting in sync: jump to the concept's first mention.
-    const syncOcc = occurrences
-      ? Math.max(0, occurrences.findIndex(o => o.name.toLowerCase() === ref.name.toLowerCase()))
-      : 0
-    const existingIdx = list.findIndex(
-      r => r.kind === ref.kind && r.name.toLowerCase() === ref.name.toLowerCase(),
-    )
+    const syncOcc = occurrences ? occurrences.findIndex(o => o.name.toLowerCase() === name) : -1
+    const existingIdx = list.findIndex(r => r.kind === ref.kind && r.name.toLowerCase() === name)
     if (existingIdx >= 0) {
-      set({ index: existingIdx, occurrenceIndex: syncOcc })
-    } else {
-      // Append & jump — mirrors publish.js behaviour when following a link
-      // from inside a concept.
-      const next = [...list, ref]
-      set({ list: next, index: next.length - 1, occurrenceIndex: syncOcc })
+      // A concept with no mention on the source page keeps the walk where it
+      // is rather than snapping it back to the first one.
+      set({ index: existingIdx, occurrenceIndex: syncOcc >= 0 ? syncOcc : occurrenceIndex })
+      return
     }
+    // Append & jump — mirrors publish.js behaviour when following a link from
+    // inside a concept. The mention list grows with it, because prev/next walk
+    // occurrences: leaving the jumped-to concept out of them stranded the walk
+    // at the top of the page (Previous dead, Next landing on the page's second
+    // concept) and left the footer progress bar reading the wrong position.
+    const next = [...list, ref]
+    const nextOccurrences = occurrences ? [...occurrences, { name: ref.name, occurrence: 0 }] : null
+    set({
+      list: next,
+      index: next.length - 1,
+      occurrences: nextOccurrences,
+      occurrenceIndex: nextOccurrences ? nextOccurrences.length - 1 : 0,
+    })
   },
   close: () => set({ open: false, list: [], index: 0, occurrences: null, occurrenceIndex: 0, sourcePath: null, dashboardContext: null }),
   closeOnNavigation: pathname => {

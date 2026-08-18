@@ -275,6 +275,13 @@ export function ConceptPopup() {
   const canPrev = isCircular || (occMode ? occurrenceIndex > 0 : index > 0)
   const canNext = isCircular || (occMode ? occurrenceIndex < occurrences!.length - 1 : index < list.length - 1)
   const position = `${index + 1} of ${list.length}`
+  // The footer bar measures the sequence prev/next actually walks, which in
+  // occurrence mode is the mention list rather than the deduped concepts: every
+  // press moves the fill by exactly one step, and the last stop reads full. The
+  // count beside it stays in concepts, so the two differ slightly on a page that
+  // links the same concept twice — the bar carries no number, the text does.
+  const navTotal = occMode ? occurrences!.length : list.length
+  const navCurrent = occMode ? occurrenceIndex + 1 : index + 1
   const sourcePath = current ? entryRefToRepoPath(current) : undefined
   const hasStudyPlan = !!(dashboardContext?.studyPlanList?.length)
   const hasSourceMaterial = !!(dashboardContext?.resourceList?.length)
@@ -611,17 +618,12 @@ export function ConceptPopup() {
         )}
       </div>
 
-      {/* Footer nav. The bar reads as progress through the syllabus, not as the
-          current position: following a wiki link (or paging back) to something
-          covered earlier holds the fill at the furthest concept reached instead
-          of collapsing it. The mark lives in the bar, which unmounts with the
-          popup, so each time it's opened the run starts fresh; swapping the
-          Viewing filter resets it too, via `sequenceKey`. */}
+      {/* Footer nav. In focus mode the bar is the only position readout — the
+          "N of M" text below is hidden — so it has to answer "where am I" on
+          every press, including Previous and a wiki-link jump backwards. */}
       <NavProgressBar
-        current={index + 1}
-        total={list.length}
-        holdFurthest
-        sequenceKey={currentFilter}
+        current={navCurrent}
+        total={navTotal}
         label={`Concept ${index + 1} of ${list.length}`}
       />
       <div className="flex items-stretch h-16 shrink-0 bg-background/60">

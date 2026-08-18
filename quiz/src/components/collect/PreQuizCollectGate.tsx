@@ -9,6 +9,7 @@ import { useMemo } from 'react'
 import { Check, Lock, Play, X } from 'lucide-react'
 import { useCollect } from '@/hooks/useCollect'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
+import { CollectGateButton } from '@/components/collect/CollectGateButton'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 
@@ -93,14 +94,10 @@ export function PreQuizCollectGate({ concepts, planConcepts, onStart, onQuit }: 
                         Collected
                       </span>
                     ) : (
-                      <button
-                        type="button"
+                      <CollectGateButton
+                        name={name}
                         onClick={() => openCollect({ kind: 'concept', name })}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-primary text-primary-foreground text-xs font-medium hover:bg-primary/90 transition-colors shrink-0"
-                      >
-                        <Lock className="h-3.5 w-3.5" />
-                        Collect
-                      </button>
+                      />
                     )}
                   </div>
                 </li>

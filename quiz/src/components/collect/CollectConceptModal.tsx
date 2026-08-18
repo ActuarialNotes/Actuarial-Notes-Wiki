@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
-import { Check, Loader2, Lock, Play, Sparkles, X } from 'lucide-react'
+import { BookOpen, Check, Loader2, Lock, Play, SkipForward, Sparkles, TimerReset, X } from 'lucide-react'
 import { useCollect } from '@/hooks/useCollect'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
+import { useCollectLockout, useCollectLockouts } from '@/hooks/useCollectLockouts'
 import { useFlashcards } from '@/hooks/useFlashcards'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useSoundEffects, useSoundOnToggle } from '@/hooks/useSoundEffects'
@@ -17,7 +18,13 @@ import { MarkdownText } from '@/components/MarkdownText'
 import { CollectCard3D } from '@/components/collect/CollectCard3D'
 import { LearningProgressPanelView, LevelPill } from '@/components/wiki/LearningProgressModal'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
+import { ConceptReadModal } from '@/components/ConceptReadModal'
 import { COMPREHENSION_CHECKS, type ComprehensionCheck } from '@/data/comprehensionChecks'
+import {
+  formatLockoutRemaining,
+  lockoutDurationMs,
+  nextLockoutDurationMs,
+} from '@/lib/collectLockout'
 import type { MasteryState } from '@/lib/mastery'
 import { trackConceptCollected } from '@/lib/analytics'
 
@@ -94,8 +101,10 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 export function CollectConceptModal() {
-  const { ref, knownCollected, knownMastery, close } = useCollect()
+  const { ref, knownCollected, knownMastery, onSkip, close, skip } = useCollect()
   const { collect, isCollected } = useCollectedCards()
+  const recordMiss = useCollectLockouts(s => s.recordMiss)
+  const clearLockout = useCollectLockouts(s => s.clear)
   const { addCard } = useFlashcards()
   const { syllabi } = useWikiSyllabus()
   const { play } = useSoundEffects()
@@ -150,10 +159,19 @@ export function CollectConceptModal() {
   const [selected, setSelected] = useState<string | null>(null)
   const [wrong, setWrong] = useState<string | null>(null)
   const [showQuestions, setShowQuestions] = useState(false)
+  // The concept page, read *over* the locked check — the wait's whole point is
+  // to send the reader to the material. Not a navigation (that would abandon a
+  // quiz or a study session) and not the concept popup (not mounted on every
+  // route the collect modal opens from — the Quiz page's pre-quiz gate, for one).
+  const [showRead, setShowRead] = useState(false)
   const [questionCount, setQuestionCount] = useState<number | null>(null)
   // Level shown beside the modal title. Bubbled up by the progress panel (which
   // no longer draws its own "Current level" row) so it tracks the graph hover too.
   const [headerLevel, setHeaderLevel] = useState<MasteryState | null>(null)
+  // A lock the reader just earned waits for the wrong option's shake to finish
+  // before the locked panel takes over — the miss itself is recorded straight
+  // away, so closing the modal mid-shake doesn't dodge it.
+  const [shakeHold, setShakeHold] = useState(false)
   const timers = useRef<number[]>([])
 
   const after = useCallback((ms: number, fn: () => void) => {
@@ -171,7 +189,9 @@ export function CollectConceptModal() {
     setDef(null)
     setDefError(false)
     setShowQuestions(false)
+    setShowRead(false)
     setHeaderLevel(null)
+    setShakeHold(false)
     if (!ref) return
     // The locked comprehension check gets its own low drone under the paper
     // slide `open` already plays — a card that's already been collected has
@@ -213,6 +233,12 @@ export function CollectConceptModal() {
       .catch(() => {})
     return () => { cancelled = true }
   }, [ref, name, alreadyCollected])
+
+  // This concept's missed-check record, countdown included. A wrong answer shuts
+  // the check for 30 minutes, then a day (lib/collectLockout.ts) — reason enough
+  // to read the concept instead of working through the four options.
+  const { lockout, remainingMs: lockedMs } = useCollectLockout(ref ? name : null)
+  const nextLockLabel = formatLockoutRemaining(nextLockoutDurationMs(lockout))
 
   // Pool of all other concept names for plausible distractors.
   const allConceptNames = useMemo(() => {
@@ -277,6 +303,8 @@ export function CollectConceptModal() {
   const runCollectAnimation = useCallback(() => {
     play('correct')
     trackConceptCollected({ concept: name })
+    // Passed — there is nothing left to lock, so the miss history goes with it.
+    clearLockout(name)
     if (prefersReducedMotion()) {
       collect(name)
       addCard({ kind: 'concept', name })
@@ -300,17 +328,22 @@ export function CollectConceptModal() {
         setPhase('done')
       })
     })
-  }, [name, collect, addCard, play, after])
+  }, [name, collect, addCard, play, after, clearLockout])
 
   function handleAnswer(opt: string) {
-    if (phase !== 'question' || selected) return
+    if (phase !== 'question' || selected || lockedMs > 0) return
     if (opt.toLowerCase() === correctAnswer.toLowerCase()) {
       setSelected(opt)
       runCollectAnimation()
     } else {
       // Deliberately silent — the option shakes red, which is feedback enough.
+      // The miss is banked now (not after the shake) so it can't be escaped by
+      // closing the modal quickly; the panel explaining the wait replaces the
+      // options once the shake has played out.
       setWrong(opt)
-      after(600, () => setWrong(null))
+      setShakeHold(true)
+      recordMiss(name)
+      after(650, () => { setWrong(null); setShakeHold(false) })
     }
   }
 
@@ -318,6 +351,18 @@ export function CollectConceptModal() {
 
   const inBloom = phase === 'flash'
   const showCard = phase === 'question' || phase === 'spinning' || phase === 'flash'
+  // The skip affordance belongs to the unanswered check alone: once the card is
+  // collected — or the collect ceremony has started — there is nothing to skip.
+  const canSkip = !!onSkip && !alreadyCollected && phase === 'question'
+  // Show the wait instead of the options — but let a just-earned lock finish
+  // its shake first, so the wrong answer reads as a wrong answer.
+  const showLocked = !alreadyCollected && phase === 'question' && lockedMs > 0 && !shakeHold
+  // The wait a miss costs — shown against a live check (or, mid-shake, the one
+  // just missed), and not for the single-option "tap to confirm" fallback, which
+  // can't be answered wrongly.
+  const showLockNote =
+    !alreadyCollected && phase === 'question' && hasRealQuestion &&
+    loadState !== 'loading' && !selected && (!!wrong || !showLocked)
   // Drop the modal chrome (border/background/header) once the ceremony starts so
   // only the card + light remain on screen.
   const showChrome = phase === 'question'
@@ -422,7 +467,33 @@ export function CollectConceptModal() {
               </div>
             ) : phase === 'spinning' ? (
               <p className="text-sm font-medium text-muted-foreground animate-pulse">Collecting…</p>
-            ) : phase === 'flash' ? null : loadState === 'loading' ? (
+            ) : phase === 'flash' ? null : showLocked ? (
+              /* Missed the check — the options are off the table until the wait
+                 is up, which is the whole mechanism: four options are guessable,
+                 so the way through is the concept page, not another tap. */
+              <div className="w-full flex flex-col items-center gap-3 text-center">
+                <span className="inline-flex items-center gap-2 text-sm font-semibold text-foreground">
+                  <TimerReset className="h-4 w-4 text-destructive" />
+                  Check locked for {formatLockoutRemaining(lockedMs)}
+                </span>
+                <p className="max-w-xs text-sm text-muted-foreground">
+                  {(lockout?.misses ?? 0) > 1
+                    ? 'Missed again — give the concept a proper read, then come back and collect the card.'
+                    : 'Read the concept, then come back and collect the card.'}
+                </p>
+                {ref.kind === 'concept' && (
+                  <button
+                    type="button"
+                    onClick={() => setShowRead(true)}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
+                  >
+                    <BookOpen className="h-4 w-4" />
+                    Read the concept
+                  </button>
+                )}
+                <p className="text-xs text-muted-foreground">Or flip the card for its definition.</p>
+              </div>
+            ) : loadState === 'loading' ? (
               <div className="flex items-center gap-2 text-sm text-muted-foreground py-4">
                 <Loader2 className="h-4 w-4 animate-spin" /> Preparing your check…
               </div>
@@ -478,12 +549,50 @@ export function CollectConceptModal() {
                   })}
                 </div>
 
-                {wrong && (
-                  <p className="text-xs text-center text-destructive">Not quite — give it another look and try again.</p>
-                )}
               </div>
             )}
+
           </div>
+
+          {/* Pinned footer: what a wrong answer costs, and the way out.
+              Both sit outside the scrolling body on purpose — a four-option
+              check fills a phone screen, and neither a warning nor an exit does
+              its job from under the fold.
+
+              Skip is drawn only for openers that gave us somewhere to go next
+              (the flashcard study loop; see CollectOpenOptions.onSkip): a check
+              the reader can't answer yet shouldn't be a dead end in the middle
+              of a session, and an exit that isn't guessing keeps the answers
+              honest. The card stays uncollected and in rotation. It's offered
+              while the check is still loading too — that's exactly when you
+              might want out. */}
+          {(showLockNote || canSkip) && (
+            <div className="shrink-0 flex flex-col items-center gap-1 px-5 pb-4">
+              {showLockNote && (wrong ? (
+                <p className="text-xs text-center text-destructive">
+                  Not quite — this check is locked for{' '}
+                  {formatLockoutRemaining(lockoutDurationMs(lockout?.misses ?? 1))}.
+                </p>
+              ) : (
+                // Said up front, because a penalty nobody was told about is just
+                // a trap: the reader should know what a guess costs before they
+                // commit to one.
+                <p className="text-[11px] leading-snug text-center text-muted-foreground">
+                  A wrong answer locks this check for {nextLockLabel}.
+                </p>
+              ))}
+              {canSkip && (
+                <button
+                  type="button"
+                  onClick={skip}
+                  className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <SkipForward className="h-3.5 w-3.5" />
+                  Skip for now
+                </button>
+              )}
+            </div>
+          )}
         </div>
       )}
 
@@ -553,6 +662,13 @@ export function CollectConceptModal() {
           onClose={() => setShowQuestions(false)}
           onQuizStart={close}
         />
+      </div>
+    )}
+    {/* The concept page over the locked check. The collect modal stays open
+        underneath, so closing the reader lands back on the card. */}
+    {showRead && (
+      <div className="relative z-[130]">
+        <ConceptReadModal conceptName={name} onClose={() => setShowRead(false)} />
       </div>
     )}
     </>,

@@ -65,6 +65,76 @@ upsert + optimistic simulation, and `Quiz.tsx`'s level-up preview).
 Users can still add packs to the gallery and quiz uncollected concepts — they
 just won't reach Level 1 until they collect.
 
+## Missing a check (lockouts)
+
+A check has four options, so a reader who doesn't know the answer can tap until
+one sticks and the gate certifies nothing. A wrong answer therefore takes the
+check off the table for a while:
+
+| Miss | The check reopens in |
+| --- | --- |
+| 1st | 30 minutes |
+| 2nd | 1 day |
+| 3rd and after | 1 day |
+
+The escalation is **per concept** and the miss count **never decays**, so the
+second miss costs a day even though the first wait lifted long ago. Passing the
+check clears the record — a collected card has nothing left to lock. `misses`
+only stops growing because the last step repeats: a wait that kept doubling
+would abandon the concept rather than teach it.
+
+`lib/collectLockout.ts` is the pure core (the steps, the escalation, the
+`formatLockoutRemaining` / `formatLockoutShort` readouts);
+`hooks/useCollectLockouts.ts` persists it and exposes `useCollectLockout(name)`,
+which re-renders once a second while a wait runs and stops the moment it lifts,
+so a check reopens under the reader without a reload.
+
+Two rules the UI keeps to:
+
+- **The penalty is announced before it is applied.** The question phase carries a
+  line naming what the *next* miss costs (`nextLockoutDurationMs`), because a
+  cost nobody was told about is a trap rather than an incentive. That line and the
+  **Skip** button live in a footer *outside* the modal's scrolling body: a
+  four-option check fills a phone screen, and neither a warning nor an exit does
+  its job from under the fold.
+- **The wait always points at the material.** The locked panel replaces the
+  options with the countdown and a **Read the concept** button, which opens
+  `components/ConceptReadModal` *over* the collect modal — not the concept popup
+  (not mounted on every route the modal opens from, e.g. the Quiz page's
+  pre-quiz gate) and not a navigation, which would abandon a quiz or a study
+  session. The card behind it stays flippable, so its definition is one tap away.
+  Being sent to read the concept is the point of the wait, not a consolation.
+
+Storage is **localStorage only** (`actuarial_collect_lockouts`), unlike the
+collected set, which syncs. That's deliberate: the wait exists to send a guessing
+reader back to the concept page, not to police them, so it costs little that
+clearing site data or switching devices resets it — while a server read on every
+render of a lock icon would cost plenty. If it ever needs to follow the learner,
+it belongs in the flashcard sync tables beside the collected set.
+
+The pre- and post-quiz gates share `components/collect/CollectGateButton.tsx`,
+which counts the wait down in place of its "Collect" label. It stays clickable
+while locked: the modal is where the wait is explained and where the link to the
+concept lives, which is exactly where a reader who just missed should land.
+
+## Skipping a check (flashcard study)
+
+In the Flashcards study loop, rating an uncollected card **Got it** opens its
+comprehension check instead of completing the card (Introduce → Flashcard →
+Collect → Quiz). That puts a gate in the middle of a session, so the check
+reached this way carries a **Skip for now** button: the card is left exactly as
+it was — uncollected, unrated, still in rotation — and the deck advances to the
+next unfinished card. The point is to give a reader who doesn't know the answer
+yet an exit that isn't guessing at four options.
+
+The button is opener-driven, not a property of the modal: `open()` takes an
+`onSkip` callback (`hooks/useCollect.ts`) and the modal only draws **Skip** when
+one was supplied. `useCollect.skip()` closes the modal *before* running the
+handler, so the opener is moving a deck the check is no longer sitting on. Every
+other opener — the concept popup's lock icon, the Flashcards pack shop, the
+pre-quiz gate — has nowhere to send the reader next and so passes nothing,
+keeping the plain close button it always had.
+
 ## Collect-then-quiz flow (daily quiz)
 
 Because a **New** concept only advances to Level 1 once collected, the quiz

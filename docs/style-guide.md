@@ -118,6 +118,26 @@ big type is rare and reserved for hero numbers and empty-state headings.
 - Long-form wiki/markdown content renders through `@tailwindcss/typography` (`prose`);
   don't restyle prose internals ad hoc.
 
+### 3.1 Code & console output
+
+The vault's fenced blocks are **console output** — an R model summary, a `summary()` table —
+and they only read while their columns stay aligned. `components/CodeBlock.tsx` is the single
+renderer every markdown surface uses (`MarkdownText`, `WikiArticle`, `ExamGuideCards` all
+spread its `codeComponents`); don't restyle a `<pre>` in a component.
+
+| Element | Treatment |
+|---|---|
+| Fenced block | Inset panel: `rounded-lg border border-border bg-muted`, `font-mono text-xs` (`sm:text-[0.8125rem]`) |
+| Inline code | Chip: `rounded border border-border bg-muted px-1 py-0.5 font-mono text-[0.9em]` |
+
+- **It scrolls, it never wraps.** The panel is an `overflow-x-auto` scroller, focusable
+  (`tabIndex={0}`) because a scroll region has to be reachable without a mouse. Its trailing
+  edge takes `.code-block--fade` while columns remain to the right — the same "scroll for
+  more" hint as the Dashboard tab strip.
+- **`not-prose` always.** It keeps the panel identical on the wiki (where typography would
+  otherwise paint its own zinc box and hang backtick quotes off inline code) and inside a
+  question card.
+
 ---
 
 ## 4. Semantic State Colours

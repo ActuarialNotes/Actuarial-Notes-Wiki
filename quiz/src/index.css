@@ -886,6 +886,17 @@
   -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 1.25rem), transparent);
 }
 
+/* Fenced code / console output (components/CodeBlock.tsx): the block scrolls
+   sideways rather than wrapping, so its trailing edge fades while columns
+   remain off to the right — the same "scroll for more" hint the tab strip uses.
+   The mask sits on the scroller, not the panel, so the panel's border and fill
+   stay crisp; the class is only present while there is more to reach, so the
+   last column is never dimmed once the block is scrolled to its end. */
+.code-block--fade {
+  mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
+}
+
 /* The compact "Read" / "Study" buttons slide in from the right as the full-size
    pair scrolls up behind the pinned header. */
 @keyframes dashboard-pinned-actions-in {

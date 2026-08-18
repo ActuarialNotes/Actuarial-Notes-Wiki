@@ -8,6 +8,7 @@ and the god-component refactors (P3.1) can't silently break them.
 | `home.spec.ts`   | App boots, sidebar nav renders, no error boundary |
 | `wiki.spec.ts`   | Wiki index loads from bundled content; open an exam page |
 | `quiz.spec.ts`   | Run a quiz, answer a question, reach the results screen |
+| `code-block.spec.ts` | Console output in a question stem scrolls inside its panel on a phone |
 | `collect.spec.ts`| Collect a flashcard by passing its comprehension check |
 | `tour.spec.ts`   | Onboarding tour: corner launcher, guided steps, minimize/resume, dismiss |
 | `store.spec.ts`  | Cosmetics catalog renders and tabs switch |

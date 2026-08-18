@@ -6,6 +6,7 @@ import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
+import { codeComponents } from '@/components/CodeBlock'
 import { guidesForExam, type ExamGuide } from '@/data/examGuides'
 import { hrefToEntryRef, wikiRoute } from '@/lib/wikiRoutes'
 import { playSound } from '@/lib/soundEngine'
@@ -161,6 +162,7 @@ function ExamGuideModal({ guide, onClose }: ModalProps) {
               remarkPlugins={[remarkGfm, remarkMath]}
               rehypePlugins={[rehypeKatex]}
               components={{
+                ...codeComponents,
                 a({ href, children, ...rest }) {
                   if (!href) return <a {...rest}>{children}</a>
                   return (

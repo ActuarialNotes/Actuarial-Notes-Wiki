@@ -28,6 +28,13 @@ import { useFiguresCollapsed } from '@/hooks/useFiguresCollapsed'
  * travelling rainbow foil edge as a collected flashcard (`.simulator-foil-ring`
  * in index.css): both mark a surface with something live behind it.
  *
+ * The card leads the banner but does not replace the concept's figure: the
+ * distribution pages carry a generated figure of their own (Media/Figures, see
+ * `docs/concept-figures.md`) and it renders as a picture beneath the card, so a
+ * distribution concept reads like every other one — a card to play with, and a
+ * picture to look at. The two are counted separately: the Previous/Next pager
+ * and the collapse control belong to the pictures alone.
+ *
  * A picture can be folded away with the control in its top-right corner,
  * leaving a one-line "Show figure" strip in its place. That choice is global and
  * persisted (`hooks/useFiguresCollapsed`), so it holds as the reader pages
@@ -140,10 +147,18 @@ export function ConceptImageBanner({ images, onOpen, className }: ConceptImageBa
   const usable = images.filter(img => !failed.has(img.src))
   if (usable.length === 0) return null
 
-  const safe = Math.min(index, usable.length - 1)
-  const current = usable[safe]
-  const distribution = distributionForImage(current.src)
-  const open = () => onOpen(images.indexOf(current))
+  // A distribution illustration is never drawn as a picture — it becomes the
+  // card that opens the simulator — but it does not *stand in* for the
+  // concept's figure either: the card leads, and the page's own figure renders
+  // underneath it, as on every other concept.
+  const entries = usable.map(img => ({ img, spec: distributionForImage(img.src) }))
+  const simulators = entries.filter(
+    (entry): entry is { img: BannerImage; spec: DistributionSpec } => entry.spec !== null,
+  )
+  const pictures = entries.filter(entry => entry.spec === null).map(entry => entry.img)
+
+  const safe = Math.min(index, Math.max(pictures.length - 1, 0))
+  const current: BannerImage | undefined = pictures[safe]
 
   // The popup this sits in is itself `bg-card`, so the card *shadow* has
   // nothing to lift off — an inset region on a card takes the hairline instead
@@ -154,12 +169,37 @@ export function ConceptImageBanner({ images, onOpen, className }: ConceptImageBa
     'group block w-full rounded-lg text-left transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
 
   // Only pictures fold away — the simulator card is a single row already.
-  const isCollapsed = collapsed && !distribution
-  const figureLabel = usable.length > 1 ? `${usable.length} figures` : 'figure'
+  const figureLabel = pictures.length > 1 ? `${pictures.length} figures` : 'figure'
 
-  if (isCollapsed) {
-    return (
-      <div className={`not-prose mb-4${className ? ` ${className}` : ''}`}>
+  return (
+    <div className={`not-prose mb-4${className ? ` ${className}` : ''}`}>
+      {simulators.map(({ img, spec }) => (
+        <button
+          key={img.src}
+          type="button"
+          onClick={() => onOpen(images.indexOf(img))}
+          data-sound="open"
+          // No `border` here: `.simulator-foil-ring` paints the travelling
+          // rainbow edge the collected flashcards use, and a hairline underneath
+          // it would read as a second, static border (see index.css).
+          className={`${cardClass} simulator-foil-ring flex items-center gap-3 p-3${
+            pictures.length > 0 ? ' mb-3' : ''
+          }`}
+          aria-label={`Open the ${spec.title} simulator`}
+        >
+          <DistributionPreview spec={spec} />
+          {/* The distribution's name is the whole label — the preview shape and
+              the sliders icon already say "live simulator", so naming the knobs
+              in a sub-line only crowded the card. */}
+          <span className="flex min-w-0 flex-1 items-center gap-1.5 text-sm font-semibold leading-snug tracking-tight">
+            <SlidersHorizontal className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+            <span className="min-w-0 truncate">{spec.title}</span>
+          </span>
+          <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" aria-hidden />
+        </button>
+      ))}
+
+      {current && (collapsed ? (
         <button
           type="button"
           data-sound="toggleOn"
@@ -171,33 +211,6 @@ export function ConceptImageBanner({ images, onOpen, className }: ConceptImageBa
           <span className="flex-1 truncate">Show {figureLabel}</span>
           <ChevronsUpDown className="h-4 w-4 shrink-0" aria-hidden />
         </button>
-      </div>
-    )
-  }
-
-  return (
-    <div className={`not-prose mb-4${className ? ` ${className}` : ''}`}>
-      {distribution ? (
-        <button
-          type="button"
-          onClick={open}
-          data-sound="open"
-          // No `border` here: `.simulator-foil-ring` paints the travelling
-          // rainbow edge the collected flashcards use, and a hairline underneath
-          // it would read as a second, static border (see index.css).
-          className={`${cardClass} simulator-foil-ring flex items-center gap-3 p-3`}
-          aria-label={`Open the ${distribution.title} simulator`}
-        >
-          <DistributionPreview spec={distribution} />
-          {/* The distribution's name is the whole label — the preview shape and
-              the sliders icon already say "live simulator", so naming the knobs
-              in a sub-line only crowded the card. */}
-          <span className="flex min-w-0 flex-1 items-center gap-1.5 text-sm font-semibold leading-snug tracking-tight">
-            <SlidersHorizontal className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-            <span className="min-w-0 truncate">{distribution.title}</span>
-          </span>
-          <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" aria-hidden />
-        </button>
       ) : (
         // The collapse control has to be a *sibling* of the card, not a child:
         // the card is itself a button, and a button inside a button is invalid
@@ -205,7 +218,7 @@ export function ConceptImageBanner({ images, onOpen, className }: ConceptImageBa
         <div className="relative">
           <button
             type="button"
-            onClick={open}
+            onClick={() => onOpen(images.indexOf(current))}
             data-sound="open"
             className={`${cardClass} overflow-hidden border border-border p-2`}
             aria-label={`View ${current.alt || 'figure'} full screen`}
@@ -234,13 +247,13 @@ export function ConceptImageBanner({ images, onOpen, className }: ConceptImageBa
             <ChevronsDownUp className="h-4 w-4" />
           </button>
         </div>
-      )}
+      ))}
 
-      {current.caption && (
+      {current && !collapsed && current.caption && (
         <p className="mt-1.5 text-center text-xs italic text-muted-foreground">{current.caption}</p>
       )}
 
-      {usable.length > 1 && (
+      {!collapsed && pictures.length > 1 && (
         <div className="mt-2 flex items-center justify-center gap-3">
           <button
             type="button"
@@ -253,13 +266,13 @@ export function ConceptImageBanner({ images, onOpen, className }: ConceptImageBa
             <ChevronLeft className="h-4 w-4" />
           </button>
           <span className="text-xs tabular-nums text-muted-foreground">
-            {safe + 1} / {usable.length}
+            {safe + 1} / {pictures.length}
           </span>
           <button
             type="button"
             data-sound="page"
             onClick={() => setIndex(safe + 1)}
-            disabled={safe === usable.length - 1}
+            disabled={safe === pictures.length - 1}
             className="rounded-full bg-muted/40 p-1.5 text-foreground transition-colors hover:bg-muted disabled:opacity-30 disabled:hover:bg-muted/40"
             aria-label="Next figure"
           >

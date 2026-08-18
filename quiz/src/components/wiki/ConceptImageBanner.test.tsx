@@ -75,6 +75,28 @@ describe('ConceptImageBanner', () => {
     expect(html).toContain('Hide 2 figures')
   })
 
+  it('shows the concept figure beneath the simulator card', () => {
+    const html = render([
+      img('Media/Poisson_pmf.svg'),
+      img('Media/Figures/Poisson_Distribution.svg'),
+    ])
+    // The card leads, but it no longer stands in for the concept's figure —
+    // the generated picture renders under it, as on every other concept.
+    expect(html).toContain('Open the Poisson Distribution simulator')
+    expect(html).toContain(`${RAW}/Media/Figures/Poisson_Distribution.svg`)
+    // The illustration itself is still never drawn: it is the simulator.
+    expect(html).not.toContain(`${RAW}/Media/Poisson_pmf.svg`)
+  })
+
+  it('counts only the pictures, not the simulator card, as figures', () => {
+    const html = render([
+      img('Media/Poisson_pmf.svg'),
+      img('Media/Figures/Poisson_Distribution.svg'),
+    ])
+    expect(html).not.toContain('Next figure')
+    expect(html).toContain('Hide figure')
+  })
+
   it('leaves the simulator card uncollapsible', () => {
     const html = render([img('Media/Normal_distribution_pdf.svg')])
     expect(html).not.toContain('Hide figure')

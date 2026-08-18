@@ -11,6 +11,8 @@ The **Geometric Distribution** $X \sim \text{Geom}(p)$ counts the number of inde
 
 ![[Media/Geometric_pmf.svg|500]]
 
+![[Media/Figures/Geometric_Distribution.svg|340]]
+
 > [!example]- Number of Policies Until First Claim {Example}
 > Each policy independently has a 20% chance of generating a claim. Let $X$ = the number of policies reviewed until the first claim.
 >

@@ -223,6 +223,16 @@ Other important `lib/` modules:
   opts a subtree out. Note the vault writes formulas as `> $$…$$` on one line, which
   remark parses as *inline* math — so equations are matched on `.katex`, not
   `.katex-display`.
+- `imageFocus.ts` — image focus: tapping a figure opens it in the full-screen
+  `ImageGalleryModal` (pan/zoom, Previous/Next), so the diagrams the exam banks ship
+  with are readable on a phone. Same shape as math focus — this module is the decision
+  layer, `components/ImageFocus.tsx` is the single delegated click listener mounted in
+  `App` — but the *opposite* default: an avatar, a cosmetic and an exam diagram are all
+  `<img>`, so nothing is clickable until a surface opts in by marking its images
+  `data-zoomable`. `MarkdownText` does that for every rendered markdown image, which is
+  what makes a quiz stem, a part and an explanation tappable; `data-image-scope` groups
+  the images that step together, and `data-image-zoom="none"` opts a subtree out. An
+  image inside a control (an answer option) is that control's label and never opens.
 - `soundConfig.ts` / `soundEngine.ts` / `soundInteractions.ts` — the sound system.
   `soundConfig.ts` is the cue catalogue as plain data (tones, noise sweeps,
   envelopes) — edit sounds there; `soundEngine.ts` holds the single AudioContext,

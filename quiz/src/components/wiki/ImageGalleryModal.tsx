@@ -10,24 +10,42 @@ interface GalleryImage {
   caption: string
 }
 
+/**
+ * Where the modal sits.
+ *
+ * `popup` — hosted by the concept popup, whose Previous/Next footer (and the
+ * mobile bottom nav under it) stays live below the modal and seeks to the next
+ * concept that has a figure.
+ *
+ * `popup-focus` — the same host in focus mode, which moves the popup to the top
+ * of the viewport *and* up the z stack (z-index 56, see
+ * `.concept-popup-aside[data-focus="true"]` in index.css) and drops the mobile
+ * bottom nav; the modal has to clear both to be visible at all, and its bottom
+ * inset shrinks to the popup's own footer.
+ *
+ * `fullscreen` — the standalone viewer opened by tapping a content image
+ * anywhere in the app (`components/ImageFocus.tsx`). There is no host chrome to
+ * stay clear of, so it takes the whole viewport.
+ */
+export type GalleryPlacement = 'popup' | 'popup-focus' | 'fullscreen'
+
+const PLACEMENT_INSET: Record<GalleryPlacement, string> = {
+  popup: 'bottom-[7.5rem] md:bottom-16',
+  'popup-focus': 'bottom-16',
+  fullscreen: 'bottom-0',
+}
+
 interface ImageGalleryModalProps {
   images: GalleryImage[]
   initialIndex: number
-  /**
-   * True when the concept popup hosting this modal is in focus mode. Focus mode
-   * moves the popup to the top of the viewport *and* up the z stack (z-index 56,
-   * see `.concept-popup-aside[data-focus="true"]` in index.css), and it drops the
-   * mobile bottom nav — so the modal has to clear both to be visible at all, and
-   * its bottom inset has to shrink to the popup's own footer.
-   */
-  hostFocusMode?: boolean
+  placement?: GalleryPlacement
   onClose: () => void
 }
 
 const MIN_ZOOM = 1
 const MAX_ZOOM = 4
 
-export function ImageGalleryModal({ images, initialIndex, hostFocusMode = false, onClose }: ImageGalleryModalProps) {
+export function ImageGalleryModal({ images, initialIndex, placement = 'fullscreen', onClose }: ImageGalleryModalProps) {
   // Paper: the panel sliding in.
   useSoundOnMount('open')
   const [index, setIndex] = useState(initialIndex)
@@ -171,12 +189,9 @@ export function ImageGalleryModal({ images, initialIndex, hostFocusMode = false,
     <div
       // z-[57] clears the focus-mode concept popup (z-index 56) — at the old
       // z-50 the modal opened *behind* it, which read as the card simply not
-      // responding to a tap. The bottom inset deliberately stops short of the
-      // popup's Previous/Next footer, which stays live underneath and seeks to
-      // the next concept that has a figure.
-      className={`fixed inset-x-0 top-0 z-[57] flex flex-col bg-black/95 ${
-        hostFocusMode ? 'bottom-16' : 'bottom-[7.5rem] md:bottom-16'
-      }`}
+      // responding to a tap. How far up from the bottom it stops is the host's
+      // call; see GalleryPlacement.
+      className={`fixed inset-x-0 top-0 z-[57] flex flex-col bg-black/95 ${PLACEMENT_INSET[placement]}`}
       onWheel={e => e.stopPropagation()}
     >
       {/* Top bar — dimmed chrome */}

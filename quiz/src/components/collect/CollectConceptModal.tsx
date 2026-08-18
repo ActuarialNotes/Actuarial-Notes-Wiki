@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
-import { Check, Loader2, Lock, Play, Sparkles, X } from 'lucide-react'
+import { Check, Loader2, Lock, Play, SkipForward, Sparkles, X } from 'lucide-react'
 import { useCollect } from '@/hooks/useCollect'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { useFlashcards } from '@/hooks/useFlashcards'
@@ -94,7 +94,7 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 export function CollectConceptModal() {
-  const { ref, knownCollected, knownMastery, close } = useCollect()
+  const { ref, knownCollected, knownMastery, onSkip, close, skip } = useCollect()
   const { collect, isCollected } = useCollectedCards()
   const { addCard } = useFlashcards()
   const { syllabi } = useWikiSyllabus()
@@ -318,6 +318,9 @@ export function CollectConceptModal() {
 
   const inBloom = phase === 'flash'
   const showCard = phase === 'question' || phase === 'spinning' || phase === 'flash'
+  // The skip affordance belongs to the unanswered check alone: once the card is
+  // collected — or the collect ceremony has started — there is nothing to skip.
+  const canSkip = !!onSkip && !alreadyCollected && phase === 'question'
   // Drop the modal chrome (border/background/header) once the ceremony starts so
   // only the card + light remain on screen.
   const showChrome = phase === 'question'
@@ -482,6 +485,24 @@ export function CollectConceptModal() {
                   <p className="text-xs text-center text-destructive">Not quite — give it another look and try again.</p>
                 )}
               </div>
+            )}
+
+            {/* Skip — drawn only for openers that gave us somewhere to go next
+                (the flashcard study loop; see CollectOpenOptions.onSkip). A
+                check the reader can't answer yet shouldn't be a dead end in the
+                middle of a session, and an exit that isn't guessing keeps the
+                answers honest. The card stays uncollected and in rotation.
+                Offered while the check is still loading too — that's exactly
+                when you might want out. */}
+            {canSkip && (
+              <button
+                type="button"
+                onClick={skip}
+                className="inline-flex items-center gap-1.5 px-3 py-2 -mb-1 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <SkipForward className="h-3.5 w-3.5" />
+                Skip for now
+              </button>
             )}
           </div>
         </div>

@@ -3272,10 +3272,27 @@ export default function Flashcards() {
     if (!card) return
     if (rating === 'got' && !collectedSet.has(card.name.toLowerCase())) {
       pendingGotNameRef.current = card.name
-      openCollect({ kind: 'concept', name: card.name })
+      openCollect({ kind: 'concept', name: card.name }, { onSkip: () => skipCollectCheck(card.name) })
       return
     }
     applyRating(rating, card, activeIndex)
+  }
+
+  // "Skip for now" in the collect check: the reader can't answer it yet, so the
+  // card is left exactly as it was — uncollected, unrated, still in rotation —
+  // and the session moves on to the next unfinished card rather than stalling
+  // on a gate. The card is found by name because the deck's order can be
+  // rebuilt while the modal is open (see resolveActiveIndex).
+  function skipCollectCheck(name: string) {
+    pendingGotNameRef.current = null
+    const list = orderedCardsRef.current
+    const index = list.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
+    if (index === -1) return
+    const next = nextIncompleteIndex(list.map(c => !!c.completedAt), index)
+    // -1: nothing left unfinished. next === index: this is the only card still
+    // going, so there is nowhere to move — leave it on screen.
+    if (next === -1 || next === index) return
+    setActiveIndex(next)
   }
 
   // Fires once the collect modal closes. If the card that triggered it is now

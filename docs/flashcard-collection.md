@@ -65,6 +65,24 @@ upsert + optimistic simulation, and `Quiz.tsx`'s level-up preview).
 Users can still add packs to the gallery and quiz uncollected concepts — they
 just won't reach Level 1 until they collect.
 
+## Skipping a check (flashcard study)
+
+In the Flashcards study loop, rating an uncollected card **Got it** opens its
+comprehension check instead of completing the card (Introduce → Flashcard →
+Collect → Quiz). That puts a gate in the middle of a session, so the check
+reached this way carries a **Skip for now** button: the card is left exactly as
+it was — uncollected, unrated, still in rotation — and the deck advances to the
+next unfinished card. The point is to give a reader who doesn't know the answer
+yet an exit that isn't guessing at four options.
+
+The button is opener-driven, not a property of the modal: `open()` takes an
+`onSkip` callback (`hooks/useCollect.ts`) and the modal only draws **Skip** when
+one was supplied. `useCollect.skip()` closes the modal *before* running the
+handler, so the opener is moving a deck the check is no longer sitting on. Every
+other opener — the concept popup's lock icon, the Flashcards pack shop, the
+pre-quiz gate — has nowhere to send the reader next and so passes nothing,
+keeping the plain close button it always had.
+
 ## Collect-then-quiz flow (daily quiz)
 
 Because a **New** concept only advances to Level 1 once collected, the quiz

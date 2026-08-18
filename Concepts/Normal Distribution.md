@@ -15,6 +15,8 @@ The **Normal Distribution** $X \sim N(\mu, \sigma^2)$ is a symmetric, bell-shape
 
 ![[Media/Normal_distribution_pdf.svg|500]]
 
+![[Media/Figures/Normal_Distribution.svg|340]]
+
 > [!example]- Probability that Aggregate Losses Exceed a Threshold {Example}
 > Annual aggregate losses $S \sim N(\mu = 50{,}000,\, \sigma^2 = 40{,}000{,}000)$. Find $P(S > 55{,}000)$.
 >

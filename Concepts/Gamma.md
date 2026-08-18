@@ -18,6 +18,8 @@ The **Gamma Distribution** $X \sim \text{Gamma}(\alpha, \theta)$ is a flexible c
 
 ![[Media/Gamma_distribution_pdf.svg|500]]
 
+![[Media/Figures/Gamma.svg|340]]
+
 > [!example]- Mean and Variance of Aggregate Claim Severity {Example}
 > Individual losses follow $\text{Gamma}(\alpha = 4, \theta = 250)$. Find $E[X]$, $\text{Var}(X)$, and the coefficient of variation.
 >

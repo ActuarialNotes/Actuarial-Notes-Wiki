@@ -13,6 +13,8 @@ The **Negative Binomial Distribution** $X \sim \text{NegBin}(r, p)$ counts the n
 
 ![[Media/Negative_binomial_pmf.svg|500]]
 
+![[Media/Figures/Negative_Binomial_Distribution.svg|340]]
+
 > [!example]- Claims Until Third Large Loss {Example}
 > Each claim has a 25% probability of being a large loss. Find the probability the 3rd large loss occurs on the 7th claim.
 >

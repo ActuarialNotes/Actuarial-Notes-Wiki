@@ -13,6 +13,8 @@ The **Exponential Distribution** $X \sim \text{Exp}(\theta)$ is a continuous dis
 
 ![[Media/Exponential_pdf.svg|500]]
 
+![[Media/Figures/Exponential_Distribution.svg|340]]
+
 > [!example]- Probability a Loss Exceeds the Deductible {Example}
 > Ground-up losses follow $X \sim \text{Exp}(\theta = 500)$. A deductible of $d = 300$ applies. What proportion of losses result in a claim payment?
 >

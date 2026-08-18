@@ -14,6 +14,8 @@ The **Lognormal Distribution** $X \sim \text{Lognormal}(\mu, \sigma^2)$ applies 
 
 ![[Media/Lognormal_distribution_pdf.svg|500]]
 
+![[Media/Figures/Lognormal_Distribution.svg|340]]
+
 > [!example]- Probability a Loss Exceeds a Threshold {Example}
 > Losses follow $X \sim \text{Lognormal}(\mu = 6,\, \sigma = 1.5)$. Find $P(X > 1000)$.
 >

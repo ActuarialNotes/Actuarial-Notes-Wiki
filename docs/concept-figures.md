@@ -47,7 +47,10 @@ python3 scripts/generate_concept_figures.py --only "Covariance"   # just one
 
 `--embed` skips any page that already contains an `![[...]]`, so it is safe to re-run
 and it never disturbs the one remaining set of hand-authored embeds — the
-`Media/*_pdf.svg` / `*_pmf.svg` distribution plots that the simulator replaces.
+`Media/*_pdf.svg` / `*_pmf.svg` distribution plots that the simulator replaces. Those
+plots are the one exception to the skip: a page whose *only* embed is a simulator plot
+still gets its figure, inserted below the plot (`SIMULATOR_EMBEDS` /
+`has_figure_embed()` in the generator).
 
 ## Modules
 
@@ -55,7 +58,7 @@ and it never disturbs the one remaining set of hand-authored embeds — the
 |---|---|
 | `scripts/figure_kit.py` | The SVG toolkit: the `vcard()` portrait card, cartesian `Axes` (`vaxes()` insets one into the card's box), timelines, cash-flow arrows, Venn helpers, palette and stylesheet. No dependencies — pure Python. |
 | `scripts/figure_registry.py` | The `@figure(concept, alt, width)` decorator and the registry it fills. |
-| `scripts/figures_exam_p.py` | The 56 Exam P builders, in syllabus order. |
+| `scripts/figures_exam_p.py` | The 66 Exam P builders, in syllabus order. |
 | `scripts/figures_exam_fm.py` | The 82 Exam FM builders, in syllabus order. |
 | `scripts/figures_exam_mas_i.py` | The 77 Exam MAS-I builders, in syllabus order. |
 | `scripts/figures_exam_mas_ii.py` | The 71 Exam MAS-II builders, in syllabus order (credibility, mixed models, statistical learning, time series). |
@@ -129,8 +132,22 @@ Conventions worth keeping:
 
 ## Interaction with the distribution simulators
 
-The named distribution pages (normal, Poisson, gamma, …) already embed
+The ten named distribution pages (normal, Poisson, gamma, …) also embed
 `Media/*_pdf.svg` / `*_pmf.svg`, which `components/wiki/WikiArticle.tsx` swaps for a live
-`DistributionSimulator` — see `docs/distribution-simulators.md`. Those pages are
-untouched here: they already had an embed, so `--embed` skips them, and no generated
-slug collides with a filename in `DISTRIBUTION_IMAGES`.
+`DistributionSimulator` — see `docs/distribution-simulators.md`. They carry **both**: the
+simulator embed first, then the generated figure directly under it. The simulator is a
+control to play with, the figure is a picture to read, and a distribution concept should
+not be the one concept in the vault with no picture.
+
+That means the two must stay out of each other's way:
+
+- The generator's skip rule ignores a simulator plot (`SIMULATOR_EMBEDS` above), so
+  `--embed` inserts the figure below it instead of treating the page as done.
+- No generated slug may collide with a filename in `DISTRIBUTION_IMAGES` — a collision
+  would turn the *figure* into a second simulator. The capitalised concept slugs
+  (`Poisson_Distribution.svg`) and the lower-case plot names (`Poisson_pmf.svg`) keep
+  clear of each other.
+- The figure must not simply redraw what the simulator already draws live. Each of these
+  ten shows the *mechanism* instead — the trials behind a binomial count, the exponential
+  waits that add to a gamma, the z ruler under a normal — so the pair says something the
+  simulator alone cannot.

@@ -17,7 +17,7 @@ import math
 from fractions import Fraction
 
 from figure_kit import (
-    AMBER, BLUE, GREEN, ROSE, TEAL, VIOLET,
+    AMBER, BLUE, GREEN, ROSE, SERIES, TEAL, VIOLET,
     Axes, Fig, brace, universe, venn2, vaxes, vcard,
     BX0, BY0, BX1, BY1, BCX,
 )
@@ -70,6 +70,47 @@ def _panel(f: Fig, px, py, pw, ph, name, colour):
     f.text(px + pw / 2, py - 6, name, cls="sm bold", fill=colour)
     f.line(px, py + ph, px + pw, py + ph, cls="axis")
     return Axes(f, px, py, px + pw, py + ph, 0, 1, 0, 1)
+
+
+def _binom_pmf(n, p, k):
+    return math.comb(n, k) * p ** k * (1 - p) ** (n - k)
+
+
+def _gamma_pdf(x, alpha, theta):
+    if x <= 0:
+        return 0.0
+    return math.exp((alpha - 1) * math.log(x) - x / theta
+                    - math.lgamma(alpha) - alpha * math.log(theta))
+
+
+def _beta_pdf(x, a, b):
+    if not 0 < x < 1:
+        return 0.0
+    log_beta = math.lgamma(a) + math.lgamma(b) - math.lgamma(a + b)
+    return math.exp((a - 1) * math.log(x) + (b - 1) * math.log(1 - x) - log_beta)
+
+
+def _trial_strip(f: Fig, y, wins, size=26, gap=5, colour=BLUE, ring=()):
+    """A row of Bernoulli trial boxes, filled where the trial succeeded.
+
+    The five named discrete distributions share this strip: each of those
+    figures is the mechanism (which trials happened) above the mass function it
+    produces, so a reader flipping between them meets the same two-part story
+    every time. `ring` outlines the trials that were drawn or that ended the
+    count. Returns the box centres.
+    """
+    x = BCX - (len(wins) * size + (len(wins) - 1) * gap) / 2
+    centres = []
+    for i, win in enumerate(wins):
+        f.rect(x, y, size, size, rx=5, fill=colour if win else "var(--soft)",
+               fill_opacity="0.7" if win else "1",
+               stroke=colour if win else "var(--edge)", stroke_width="1.2")
+        if i in ring:
+            f.rect(x - 4, y - 4, size + 8, size + 8, rx=8, fill="none",
+                   stroke="var(--dim)", stroke_width="1.2", stroke_dasharray="3 2.5")
+        centres.append(x + size / 2)
+        x += size + gap
+    return centres
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -816,6 +857,125 @@ def coefficient_of_variation() -> Fig:
     return f
 
 
+@figure("Binomial Distribution", "Ten policies with four of them claiming, above the "
+        "binomial mass function of the claim count", width=WID)
+def binomial_distribution() -> Fig:
+    f = vcard("Successes in a fixed number of trials",
+              ["P(X = k) = C(n, k) pᵏ (1 − p)ⁿ⁻ᵏ",
+               "E[X] = np,   Var(X) = np(1 − p)"])
+
+    n, p = 10, 0.3
+    f.text(BCX, 92, "10 policies, each claiming with probability 0.3", cls="sm dim")
+    _trial_strip(f, 102, (False, True, False, False, True, True, False, False, False, True))
+    f.text(BCX, 152, "4 of the 10 claimed → k = 4", cls="sm bold", fill=BLUE)
+
+    masses = [_binom_pmf(n, p, k) for k in range(n + 1)]
+    a = Axes(f, 60, 190, 326, 330, -0.7, 10.7, 0, max(masses) * 1.35)
+    a.stems([(k, m) for k, m in enumerate(masses) if k != 4], colour=BLUE)
+    a.stems([(4, masses[4])], colour=AMBER, width=2.8, dot=3.8)
+    a.frame(xlabel="k", ylabel="P(X = k)", xticks=list(range(n + 1)))
+    a.label(4, masses[4], "0.200", cls="sm bold", dy=-11, fill=AMBER)
+    return f
+
+
+@figure("Geometric Distribution", "Two policies without a claim then one with, above the "
+        "geometric mass function of the trial the first claim lands on", width=WID)
+def geometric_distribution() -> Fig:
+    f = vcard("Trials until the first success",
+              ["P(X = k) = (1 − p)ᵏ⁻¹ p,  k ≥ 1",
+               "E[X] = 1/p,   P(X > n) = (1 − p)ⁿ"])
+
+    p = 0.2
+    f.text(BCX, 92, "each policy claims with probability 0.2", cls="sm dim")
+    _trial_strip(f, 102, (False, False, True), ring=(2,))
+    f.text(BCX, 154, "the first claim is the 3rd policy → k = 3", cls="sm bold", fill=BLUE)
+
+    ks = list(range(1, 11))
+    masses = [(1 - p) ** (k - 1) * p for k in ks]
+    a = Axes(f, 60, 192, 326, 330, 0.3, 10.7, 0, max(masses) * 1.35)
+    a.stems([(k, m) for k, m in zip(ks, masses) if k != 3], colour=BLUE)
+    a.stems([(3, masses[2])], colour=AMBER, width=2.8, dot=3.8)
+    a.frame(xlabel="k", ylabel="P(X = k)", xticks=ks)
+    a.label(3, masses[2], "0.128", cls="sm bold", dy=-11, fill=AMBER)
+    return f
+
+
+@figure("Hypergeometric Distribution", "Three of ten policies drawn without replacement, "
+        "above the hypergeometric mass function of the number drawn with errors",
+        width=WID)
+def hypergeometric_distribution() -> Fig:
+    f = vcard("Drawing without replacement from a finite pool",
+              ["P(X = k) = C(K,k) C(N−K, n−k) / C(N,n)",
+               "E[X] = nK/N"])
+
+    N, K, n = 10, 4, 3
+    f.text(BCX, 92, "10 policies, 4 with errors — 3 drawn (dashed)", cls="sm dim")
+    _trial_strip(f, 102, (True, True, False, False, True, False, True, False, False, False),
+                 colour=ROSE, ring=(1, 4, 7))
+    f.text(BCX, 154, "2 of the 3 drawn have errors → k = 2", cls="sm bold", fill=ROSE)
+
+    ks = list(range(n + 1))
+    masses = [math.comb(K, k) * math.comb(N - K, n - k) / math.comb(N, n) for k in ks]
+    a = Axes(f, 60, 192, 326, 330, -0.45, 3.45, 0, max(masses) * 1.35)
+    a.stems([(k, m) for k, m in zip(ks, masses) if k != 2], colour=BLUE)
+    a.stems([(2, masses[2])], colour=AMBER, width=2.8, dot=3.8)
+    a.frame(xlabel="k", ylabel="P(X = k)", xticks=ks)
+    a.label(2, masses[2], "0.300", cls="sm bold", dy=-11, fill=AMBER)
+    return f
+
+
+@figure("Negative Binomial Distribution", "Seven claims with the third large loss on the "
+        "seventh, above the negative binomial mass function of the trial count", width=WID)
+def negative_binomial_distribution() -> Fig:
+    f = vcard("Trials until the r-th success",
+              ["P(X = k) = C(k−1, r−1) pʳ (1 − p)ᵏ⁻ʳ",
+               "E[X] = r/p,   Var(X) = r(1 − p)/p²"])
+
+    r, p = 3, 0.25
+    f.text(BCX, 92, "each claim is a large loss with probability 0.25", cls="sm dim")
+    _trial_strip(f, 102, (False, True, False, False, True, False, True), ring=(6,))
+    f.text(BCX, 154, "the 3rd large loss is the 7th claim → k = 7", cls="sm bold", fill=BLUE)
+
+    ks = list(range(r, 17))
+    masses = [math.comb(k - 1, r - 1) * p ** r * (1 - p) ** (k - r) for k in ks]
+    a = Axes(f, 60, 192, 326, 330, 2.4, 16.6, 0, max(masses) * 1.4)
+    a.stems([(k, m) for k, m in zip(ks, masses) if k != 7], colour=BLUE, dot=2.8)
+    a.stems([(7, masses[ks.index(7)])], colour=AMBER, width=2.8, dot=3.8)
+    a.frame(xlabel="k", ylabel="P(X = k)", xticks=list(range(3, 17, 2)))
+    a.label(7, masses[ks.index(7)], "0.074", cls="sm bold", dy=-11, fill=AMBER)
+    return f
+
+
+@figure("Poisson Distribution", "Three claims falling in one month, above the Poisson "
+        "mass function of the monthly claim count", width=WID)
+def poisson_distribution() -> Fig:
+    f = vcard("Counting events in a fixed interval",
+              ["P(X = k) = e^(−λ) λᵏ / k!",
+               "E[X] = Var(X) = λ"])
+
+    lam = 3.0
+    f.text(BCX, 92, "claims arrive at a rate of λ = 3 per month", cls="sm dim")
+    tx0, tx1, ty = 46, 306, 126
+    f.arrow(tx0 - 8, ty, tx1 + 14, ty, colour="var(--axis)", width=1.2)
+    for t in (0.16, 0.43, 0.81):
+        ex = tx0 + t * (tx1 - tx0)
+        f.line(ex, ty, ex, ty - 15, cls="", stroke=BLUE, stroke_width="2.2",
+               stroke_linecap="round")
+        f.circle(ex, ty - 18, 3.4, fill=BLUE)
+    f.text(tx0, ty + 16, "0", cls="sm dim")
+    f.text(tx1 + 20, ty + 16, "1 month", cls="sm dim", anchor="end")
+    f.text(BCX, 158, "3 claims in the month → k = 3", cls="sm bold", fill=BLUE)
+
+    ks = list(range(11))
+    masses = [math.exp(-lam) * lam ** k / math.factorial(k) for k in ks]
+    a = Axes(f, 60, 196, 326, 330, -0.7, 10.7, 0, max(masses) * 1.35)
+    a.stems([(k, m) for k, m in zip(ks, masses) if k != 3], colour=BLUE)
+    a.stems([(3, masses[3])], colour=AMBER, width=2.8, dot=3.8)
+    a.frame(xlabel="k", ylabel="P(X = k)", xticks=ks)
+    a.label(3, masses[3], "0.224", cls="sm bold", dy=-11, fill=AMBER)
+    return f
+
+
 @figure("Uniform Discrete", "The discrete uniform PMF and CDF for a fair die", width=WID)
 def uniform_discrete() -> Fig:
     f = vcard("Discrete uniform: n equally likely values",
@@ -839,6 +999,139 @@ def uniform_discrete() -> Fig:
                stroke_width="1.2")
         f.circle(x1, a2.py(v), 3, fill=VIOLET)
         prev = v
+    return f
+
+
+@figure("Beta", "Four beta densities on the unit interval — flat, right-skewed, "
+        "left-skewed and in between", width=WID)
+def beta_distribution() -> Fig:
+    f = vcard("Any shape a proportion can take",
+              ["f(x) ∝ x^(α−1) (1 − x)^(β−1)",
+               "E[X] = α/(α + β);  α = β = 1 is uniform"])
+
+    f.text(BCX, 90, "each curve is labelled (α, β)", cls="sm dim")
+    a = vaxes(f, 0, 1, 0, 2.95, left=40, right=16, top=52, bottom=46)
+    for aa, bb, colour in ((1, 1, BLUE), (2, 5, AMBER), (5, 2, GREEN), (3, 2, VIOLET)):
+        a.curve(lambda t, aa=aa, bb=bb: _beta_pdf(t, aa, bb), colour=colour, n=170,
+                xa=0.003, xb=0.997)
+    a.frame(xlabel="x", ylabel="f(x)", xticks=[0, 0.25, 0.5, 0.75, 1],
+            xfmt=lambda t: f"{t:g}", yticks=[1, 2], yfmt=lambda t: f"{t:g}")
+    a.label(0.15, 1, "(1, 1)", cls="sm bold", dy=-9, fill=BLUE)
+    a.label(0.2, _beta_pdf(0.2, 2, 5), "(2, 5)", cls="sm bold", dy=-10, fill=AMBER)
+    a.label(0.8, _beta_pdf(0.8, 5, 2), "(5, 2)", cls="sm bold", dy=-10, fill=GREEN)
+    a.label(0.47, _beta_pdf(0.47, 3, 2), "(3, 2)", cls="sm bold", dy=-10, fill=VIOLET)
+    return f
+
+
+@figure("Exponential Distribution", "An exponential density and, past a deductible, the "
+        "same curve starting over", width=WID)
+def exponential_distribution() -> Fig:
+    f = vcard("Memoryless: the curve starts over at d",
+              ["S(x) = e^(−x/θ),   E[X] = θ",
+               "E[X − d | X > d] = θ"])
+
+    theta, d = 500.0, 300.0
+    dens = lambda t: math.exp(-t / theta) / theta
+    a = Axes(f, 58, 122, 326, 322, 0, 2500, 0, 0.0024)
+    a.curve(dens, colour=BLUE, n=180)
+    a.curve(lambda t: dens(t - d), colour=AMBER, n=180, xa=d, dash=True)
+    a.frame(xlabel="x", ylabel="f(x)", xticks=[0, 500, 1000, 1500, 2000, 2500])
+    a.vline(d, colour="var(--dim)", y_top=1 / theta)
+    a.label(d, 1 / theta, "d = 300", cls="sm bold", dy=-9)
+    f.legend(180, 148, [(BLUE, "X ~ Exp(500)"), (AMBER, "X given X > 300")])
+    return f
+
+
+@figure("Gamma", "Four exponential waiting times laid end to end, and the gamma density "
+        "of their total", width=WID)
+def gamma_distribution() -> Fig:
+    f = vcard("α exponential waits add up to a gamma",
+              ["f(x) = x^(α−1) e^(−x/θ) / [Γ(α) θ^α]",
+               "E[X] = αθ,   Var(X) = αθ²"])
+
+    alpha, theta = 4, 250.0
+    f.text(BCX, 92, "4 waits, each Exp(θ = 250)", cls="sm dim")
+    bx0, bw, by = 34, 292, 106
+    x = bx0
+    for i, wait in enumerate((210, 430, 150, 320)):
+        seg = bw * wait / 1110
+        f.rect(x, by, seg - 3, 17, rx=3, fill=SERIES[i], fill_opacity="0.65")
+        x += seg
+    brace(f, bx0, bx0 + bw, by + 26, label="one Gamma(4, 250) draw")
+
+    dens = lambda t: _gamma_pdf(t, alpha, theta)
+    a = Axes(f, 58, 198, 326, 330, 0, 2500, 0, 0.0011)
+    a.area(dens, 0, 2500, colour=BLUE, opacity="0.14")
+    a.curve(dens, colour=BLUE, n=200)
+    a.frame(xlabel="x", ylabel="f(x)", xticks=[0, 500, 1000, 1500, 2000, 2500])
+    a.vline(1000, colour=AMBER, y_top=dens(1000))
+    a.label(1000, dens(1000), "mean 1,000", cls="sm bold", dx=6, dy=-10, fill=AMBER,
+            anchor="start")
+    return f
+
+
+@figure("Lognormal Distribution", "A normal density in log dollars above the right-skewed "
+        "lognormal it exponentiates to, with the same tail shaded on both", width=WID)
+def lognormal_distribution() -> Fig:
+    f = vcard("A lognormal is a normal in logs",
+              ["F(x) = Φ((ln x − μ)/σ)",
+               "E[X] = e^(μ + σ²/2)"])
+
+    mu, sd = 6.0, 0.8
+    cut = math.log(1000)
+
+    a1 = Axes(f, 66, 100, 326, 196, mu - 3.2 * sd, mu + 3.2 * sd, 0, 0.56)
+    a1.area(lambda t: _npdf(t, mu, sd), cut, mu + 3.2 * sd, colour=AMBER, opacity="0.32")
+    a1.curve(lambda t: _npdf(t, mu, sd), colour=BLUE, n=170)
+    a1.frame(ylabel="ln X ~ N(6, 0.8²)", xticks=[mu, cut],
+             xfmt=lambda t: "μ" if t == mu else "ln 1000")
+    a1.label(7.72, 0.115, "0.128", cls="sm bold", fill=AMBER)
+
+    f.arrow(BCX, 222, BCX, 244, colour="var(--dim)", width=1.3)
+    f.text(BCX + 10, 240, "x = e^t", cls="sm dim", anchor="start")
+
+    dens = lambda t: _lognorm(t, mu, sd)
+    a2 = Axes(f, 66, 256, 326, 348, 0, 2000, 0, 0.0019)
+    a2.area(dens, 1000, 2000, colour=AMBER, opacity="0.32")
+    a2.curve(dens, colour=BLUE, n=200, xa=1)
+    a2.frame(ylabel="X ~ Lognormal", xticks=[0, 1000, 2000],
+             xfmt=lambda t: f"{t:,.0f}")
+    a2.label(1360, 0.00028, "0.128", cls="sm bold", fill=AMBER)
+    return f
+
+
+@figure("Normal Distribution", "A normal density with its right tail shaded, over a "
+        "second ruler carrying the standardized z scale", width=WID)
+def normal_distribution() -> Fig:
+    f = vcard("Any normal standardizes to the z scale",
+              ["Z = (X − μ)/σ ~ N(0, 1)",
+               "P(S > 55) = 1 − Φ(0.79) = 0.215"])
+
+    mu, sd = 50.0, 6.3246
+    dens = lambda t: _npdf(t, mu, sd)
+    f.text(BCX, 100, "aggregate loss S ~ N(50, 6.32²), in thousands", cls="sm dim")
+
+    a = Axes(f, 54, 116, 326, 286, mu - 3.4 * sd, mu + 3.4 * sd, 0, 0.072)
+    a.area(dens, 55, mu + 3.4 * sd, colour=AMBER, opacity="0.3")
+    a.curve(dens, colour=BLUE, n=200)
+    a.frame(xticks=[30, 40, 50, 60, 70], xfmt=lambda t: f"{t:g}")
+    a.vline(55, colour=AMBER, y_top=dens(55))
+    a.label(55, dens(55), "55", cls="sm bold", dy=-8, fill=AMBER)
+    a.label(60.5, 0.0075, "0.215", cls="sm bold", fill=AMBER)
+
+    # The same axis, read again in standard deviations: the z ruler is what a
+    # Φ table is indexed by, so the figure shows both scales at once.
+    zy = 330
+    f.arrow(a.x0 - 8, zy, a.x1 + 12, zy, colour="var(--axis)", width=1.1)
+    for z in (-3, -2, -1, 0, 1, 2, 3):
+        zx = a.px(mu + z * sd)
+        f.line(zx, zy, zx, zy + 4, cls="tick")
+        f.text(zx, zy + 16, f"{z:g}".replace("-", "−"), cls="sm dim")
+    f.text(a.x0 - 14, zy + 4, "z", cls="sm dim", anchor="end")
+    zx = a.px(55)
+    f.line(zx, a.y1, zx, zy, cls="thin dash", stroke=AMBER, stroke_width="1.2")
+    f.line(zx, zy - 5, zx, zy + 5, cls="", stroke=AMBER, stroke_width="1.8")
+    f.text(zx, zy - 11, "0.79", cls="sm bold", fill=AMBER)
     return f
 
 

@@ -12,6 +12,8 @@ The **Poisson Distribution** $X \sim \text{Poi}(\lambda)$ models the number of e
 
 ![[Media/Poisson_pmf.svg|500]]
 
+![[Media/Figures/Poisson_Distribution.svg|340]]
+
 > [!example]- Probability of Zero Claims in a Month {Example}
 > Claims arrive at an average rate of $\lambda = 3$ per month. What is the probability of receiving no claims in a given month?
 >

@@ -35,7 +35,11 @@ Wired in at two places:
 - `components/wiki/ConceptImageBanner.tsx` — the figure at the top of the concept popup. A
   distribution illustration is never drawn there as a picture: the banner shows a **card**
   (a sparkline of the default-parameter shape, plus the distribution's name) that opens the
-  gallery, i.e. the full-screen simulator. The name is the card's whole label — the sparkline
+  gallery, i.e. the full-screen simulator. The card *leads* the banner but no longer stands
+  in for the concept's figure — every distribution page now also carries a generated figure
+  (`Media/Figures/`, see `docs/concept-figures.md`), and that renders as a picture beneath
+  the card, so these concepts read like all the others. The two are counted separately:
+  Previous/Next and the collapse control belong to the pictures, never to the card. The name is the card's whole label — the sparkline
   and the sliders icon already say "live simulator". The card wears `.simulator-foil-ring`
   (`quiz/src/index.css`), the same travelling rainbow foil edge as a collected L3 flashcard, so
   it must carry no `border` of its own — the ring *is* the edge, and a hairline under it reads
@@ -43,8 +47,9 @@ Wired in at two places:
   `buildMassPoints` rather than `DistributionPlot` — it is a hint at the shape inside a button,
   so it carries no axes and no pointer handling.
 
-Flashcard card faces still show the static image: those cards are drag-and-flip surfaces, and
-sliders inside them would fight dnd-kit for the pointer.
+Flashcard card faces still show the page's images as plain pictures — the plot and the
+figure both: those cards are drag-and-flip surfaces, and sliders inside them would fight
+dnd-kit for the pointer.
 
 ## Parameterizations
 

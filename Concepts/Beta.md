@@ -14,6 +14,8 @@ The **Beta Distribution** $X \sim \text{Beta}(\alpha, \beta)$ is a continuous di
 
 ![[Media/Beta_distribution_pdf.svg|500]]
 
+![[Media/Figures/Beta.svg|340]]
+
 > [!example]- Expected Loss Ratio from a Beta Model {Example}
 > An insurer models its loss ratio $X \sim \text{Beta}(3, 2)$. Find the mean and variance of $X$.
 >

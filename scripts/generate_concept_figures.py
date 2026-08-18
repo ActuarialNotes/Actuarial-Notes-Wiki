@@ -19,7 +19,8 @@ the same slug. `main()` warns when that happens.
 The embed is placed after the definition/formula block and before the first
 `> [!example]` callout, matching the hand-authored pages (e.g. Bayes Theorem).
 Pages that already contain an `![[...]]` embed are left alone, so re-running is
-safe.
+safe — except for the distribution plots the simulator replaces, which the
+figure is deliberately inserted *below*.
 
 The figures are theme-aware: each SVG carries its own light palette plus a
 `@media (prefers-color-scheme: dark)` override, because an `<img>`-embedded SVG
@@ -53,8 +54,38 @@ EXAM_PAGES = [
     "Exam 5 (CAS).md",
 ]
 
-EMBED_RE = re.compile(r"!\[\[")
+EMBED_TARGET_RE = re.compile(r"!\[\[([^\]|]+)")
 EXAMPLE_RE = re.compile(r"^> \[!(example|answer|quote|info|tip|warning)\]", re.M)
+
+# The hand-authored distribution plots the app renders as a live simulator
+# (`DISTRIBUTION_IMAGES` in quiz/src/lib/distributions.ts — kept in step by
+# hand, as Python cannot import the TypeScript map). A page that embeds one is
+# *not* treated as already illustrated: the simulator is a control, the figure
+# is the picture, and the concept popup shows the figure under the card. So the
+# generated embed is inserted below the plot rather than skipped.
+SIMULATOR_EMBEDS = {
+    "Normal_distribution_pdf.svg",
+    "Lognormal_distribution_pdf.svg",
+    "Exponential_pdf.svg",
+    "Gamma_distribution_pdf.svg",
+    "Beta_distribution_pdf.svg",
+    "Binomial_distribution_pmf.svg",
+    "Binomial_distribution_cdf.svg",
+    "Poisson_pmf.svg",
+    "Geometric_pmf.svg",
+    "Negative_binomial_pmf.svg",
+    "Hypergeometric_pmf.svg",
+}
+
+
+def has_figure_embed(text: str) -> bool:
+    """Does the page already carry an embed that counts as its figure?
+
+    A distribution plot does not: it is the simulator's fallback image, not the
+    concept's figure.
+    """
+    return any(target.split("/")[-1].strip() not in SIMULATOR_EMBEDS
+               for target in EMBED_TARGET_RE.findall(text))
 
 
 def exam_concepts() -> list[str]:
@@ -81,14 +112,15 @@ def insert_embed(text: str, line: str, slug: str) -> str | None:
     """Insert `line` before the first example callout, else at the end.
 
     A page that already embeds *this* figure has its embed rewritten, so a
-    change of canvas size lands on the page too. Any other embed is left alone
-    and the page is skipped (returns None).
+    change of canvas size lands on the page too. Any other embed — bar a
+    distribution plot, which the figure joins rather than replaces — is left
+    alone and the page is skipped (returns None).
     """
     own = re.compile(rf"!\[\[Media/Figures/{re.escape(slug)}\.svg(?:\|[^\]]*)?\]\]")
     if own.search(text):
         updated = own.sub(line.replace("\\", "\\\\"), text)
         return updated if updated != text else None
-    if EMBED_RE.search(text):
+    if has_figure_embed(text):
         return None
     match = EXAMPLE_RE.search(text)
     if match:
@@ -116,7 +148,7 @@ def main() -> int:
         missing = []
         for name in exam_concepts():
             page = (CONCEPTS / f"{name}.md").read_text(encoding="utf-8")
-            if EMBED_RE.search(page) or name in by_concept:
+            if has_figure_embed(page) or name in by_concept:
                 continue
             missing.append(name)
         print(f"{len(exam_concepts())} exam concepts, {len(missing)} without a figure")

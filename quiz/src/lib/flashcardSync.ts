@@ -1,8 +1,8 @@
 // Cross-device persistence for the flashcard state: the collected-card set
-// (hooks/useCollectedCards), the study deck + its custom order and the saved
-// packs (hooks/useFlashcards). All three were localStorage-only, so a learner
-// signing in on a second device saw a different set of collected cards and an
-// empty deck — everything else (mastery, XP, streaks, quests) already synced.
+// (hooks/useCollectedCards) and the study deck + its custom order
+// (hooks/useFlashcards). Both were localStorage-only, so a learner signing in
+// on a second device saw a different set of collected cards and an empty deck —
+// everything else (mastery, XP, streaks, quests) already synced.
 //
 // This module is the store-agnostic half: pure merge functions plus the
 // Supabase reads/writes. hooks/useFlashcardSync.ts is the orchestrator that
@@ -23,7 +23,7 @@
 import { supabase } from '@/lib/supabase'
 import type { WikiEntryKind } from '@/lib/wikiRoutes'
 import type { CollectedCard } from '@/hooks/useCollectedCards'
-import type { FlashCard, SavedFlashcardPack } from '@/hooks/useFlashcards'
+import type { FlashCard } from '@/hooks/useFlashcards'
 
 /** Identity used for a card everywhere in the app: the name, lowercased. */
 export function cardKey(name: string): string {
@@ -35,7 +35,6 @@ export interface FlashcardSnapshot {
   collected: CollectedCard[]
   cards: FlashCard[]
   order: string[]
-  packs: SavedFlashcardPack[]
 }
 
 // ── Pure merges ───────────────────────────────────────────────────────────────
@@ -109,42 +108,6 @@ function latest(a: number | undefined, b: number | undefined): number | undefine
   return Math.max(a, b)
 }
 
-/**
- * Union of two saved-pack lists. Packs are merged **by label**, not by id: the
- * auto-generated "Completed <date>" packs mint an id from Date.now(), so the
- * same day's pack has a different id on each device. clearCompleted already
- * merges same-label packs within a device, and this keeps that promise across
- * devices instead of showing two identically-named packs. The earliest pack
- * keeps its id, concepts are unioned (first appearance order), savedAt is the
- * most recent save.
- */
-export function mergePacks(
-  local: readonly SavedFlashcardPack[],
-  remote: readonly SavedFlashcardPack[],
-): SavedFlashcardPack[] {
-  const byLabel = new Map<string, SavedFlashcardPack>()
-  for (const pack of [...remote, ...local]) {
-    if (!pack || typeof pack.label !== 'string') continue
-    const seen = byLabel.get(pack.label)
-    if (!seen) { byLabel.set(pack.label, { ...pack, concepts: [...pack.concepts] }); continue }
-    const base = seen.savedAt <= pack.savedAt ? seen : pack
-    const concepts = [...seen.concepts]
-    const known = new Set(concepts.map(cardKey))
-    for (const name of pack.concepts) {
-      if (known.has(cardKey(name))) continue
-      known.add(cardKey(name))
-      concepts.push(name)
-    }
-    byLabel.set(pack.label, {
-      id: base.id,
-      label: pack.label,
-      concepts,
-      savedAt: Math.max(seen.savedAt, pack.savedAt),
-    })
-  }
-  return [...byLabel.values()].sort((a, b) => a.savedAt - b.savedAt)
-}
-
 /** True when the two snapshots would produce identical server rows. */
 export function snapshotsEqual(a: FlashcardSnapshot, b: FlashcardSnapshot): boolean {
   return JSON.stringify(normalize(a)) === JSON.stringify(normalize(b))
@@ -159,9 +122,6 @@ function normalize(s: FlashcardSnapshot) {
       .map(c => [cardKey(c.name), c.addedAt, c.completedAt ?? null] as const)
       .sort((x, y) => x[0].localeCompare(y[0])),
     order: s.order.map(cardKey),
-    packs: [...s.packs]
-      .map(p => [p.id, p.label, p.concepts.map(cardKey), p.savedAt] as const)
-      .sort((x, y) => x[0].localeCompare(y[0])),
   }
 }
 
@@ -215,13 +175,6 @@ interface DeckRow {
   sort_order: number | null
 }
 
-interface PackRow {
-  pack_id: string
-  label: string
-  concepts: string[]
-  saved_at: string
-}
-
 function toMillis(iso: string | null): number {
   if (!iso) return 0
   const ms = Date.parse(iso)
@@ -235,12 +188,11 @@ function toMillis(iso: string | null): number {
  */
 export async function fetchRemoteFlashcards(userId: string): Promise<FlashcardSnapshot | null> {
   try {
-    const [collectedRes, deckRes, packRes] = await Promise.all([
+    const [collectedRes, deckRes] = await Promise.all([
       supabase.from('user_collected_cards').select('*').eq('user_id', userId),
       supabase.from('user_flashcards').select('*').eq('user_id', userId),
-      supabase.from('user_flashcard_packs').select('*').eq('user_id', userId),
     ])
-    const error = collectedRes.error ?? deckRes.error ?? packRes.error
+    const error = collectedRes.error ?? deckRes.error
     if (error) throw new Error(error.message)
 
     const collected = ((collectedRes.data ?? []) as CollectedRow[]).map(r => ({
@@ -268,14 +220,7 @@ export async function fetchRemoteFlashcards(userId: string): Promise<FlashcardSn
         .sort((a, b) => toMillis(a.added_at) - toMillis(b.added_at)),
     ].map(r => r.concept_name)
 
-    const packs = ((packRes.data ?? []) as PackRow[]).map(r => ({
-      id: r.pack_id,
-      label: r.label,
-      concepts: r.concepts ?? [],
-      savedAt: toMillis(r.saved_at),
-    }))
-
-    return { collected, cards, order, packs }
+    return { collected, cards, order }
   } catch (err) {
     console.warn('fetchRemoteFlashcards failed; keeping local flashcards:', err)
     return null
@@ -351,19 +296,9 @@ async function pushDeck(
   })))
 }
 
-async function pushPacks(userId: string, packs: readonly SavedFlashcardPack[]): Promise<void> {
-  await replaceRows('user_flashcard_packs', 'pack_id', userId, packs.map(p => ({
-    user_id: userId,
-    pack_id: p.id,
-    label: p.label,
-    concepts: p.concepts,
-    saved_at: new Date(p.savedAt).toISOString(),
-  })))
-}
-
 // ── Write queue ───────────────────────────────────────────────────────────────
 // Stores call the queue* helpers on every mutation. Writes are debounced so a
-// drag-reorder or a burst of "add pack" clicks collapses into one round trip,
+// drag-reorder or a burst of "add to deck" clicks collapses into one round trip,
 // and coalesced per kind (the queued snapshot is always the latest state, so a
 // dropped intermediate write loses nothing).
 
@@ -386,7 +321,7 @@ export function getSyncUser(): string | null {
   return syncUserId
 }
 
-type WriteKind = 'collected' | 'deck' | 'packs'
+type WriteKind = 'collected' | 'deck'
 
 const pending = new Map<WriteKind, () => Promise<void>>()
 const timers = new Map<WriteKind, ReturnType<typeof setTimeout>>()
@@ -455,14 +390,8 @@ export function queueDeckSync(cards: readonly FlashCard[], order: readonly strin
   queue('deck', userId => pushDeck(userId, cardsSnapshot, orderSnapshot))
 }
 
-export function queuePacksSync(packs: readonly SavedFlashcardPack[]): void {
-  const snapshot = [...packs]
-  queue('packs', userId => pushPacks(userId, snapshot))
-}
-
 /** Push a whole snapshot at once — used by the first-sign-in union. */
 export function queueSnapshotSync(snapshot: FlashcardSnapshot): void {
   queueCollectedSync(snapshot.collected)
   queueDeckSync(snapshot.cards, snapshot.order)
-  queuePacksSync(snapshot.packs)
 }

@@ -1,31 +1,27 @@
 import { create } from 'zustand'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
-import { queueDeckSync, queuePacksSync } from '@/lib/flashcardSync'
+import { queueDeckSync } from '@/lib/flashcardSync'
 
-// The study deck, its custom order and the saved packs. Persisted to
-// localStorage (the immediate source of truth, which keeps this store's API
-// synchronous) and — for signed-in users — mirrored to user_flashcards /
-// user_flashcard_packs so the deck follows the learner across devices. The
-// server writes are fire-and-forget and debounced; see lib/flashcardSync.ts.
+// The study deck and its custom order. Persisted to localStorage (the immediate
+// source of truth, which keeps this store's API synchronous) and — for
+// signed-in users — mirrored to user_flashcards so the deck follows the learner
+// across devices. The server writes are fire-and-forget and debounced; see
+// lib/flashcardSync.ts.
 
 export interface FlashCard extends WikiEntryRef {
   addedAt: number
   // Timestamp the card was marked "completed" in the deck, or undefined if not.
   // Completed cards stay in the deck (with a checkmark) until "Clear Completed"
-  // sweeps them into a date-stamped saved pack.
+  // sweeps them out of it.
   completedAt?: number
-}
-
-export interface SavedFlashcardPack {
-  id: string
-  label: string
-  concepts: string[]
-  savedAt: number
 }
 
 const STORAGE_KEY = 'actuarial_flashcards'
 const ORDER_KEY = 'actuarial_flashcards_order'
-const SAVED_PACKS_KEY = 'actuarial_saved_flashcard_packs'
+
+// Saved packs are gone — sweep the key older builds left behind rather than
+// leaving a dead list sitting in every returning learner's storage.
+try { localStorage.removeItem('actuarial_saved_flashcard_packs') } catch { /* ignore */ }
 
 function load(): FlashCard[] {
   try {
@@ -62,25 +58,9 @@ function saveOrder(order: string[]) {
   } catch { /* ignore */ }
 }
 
-function loadSavedPacks(): SavedFlashcardPack[] {
-  try {
-    const raw = localStorage.getItem(SAVED_PACKS_KEY)
-    return raw ? (JSON.parse(raw) as SavedFlashcardPack[]) : []
-  } catch {
-    return []
-  }
-}
-
-function persistSavedPacks(packs: SavedFlashcardPack[]) {
-  try {
-    localStorage.setItem(SAVED_PACKS_KEY, JSON.stringify(packs))
-  } catch { /* ignore */ }
-}
-
 interface FlashcardsState {
   cards: FlashCard[]
   customOrder: string[]
-  savedPacks: SavedFlashcardPack[]
   addCard: (ref: WikiEntryRef) => void
   removeCard: (name: string) => void
   clearCards: () => void
@@ -89,20 +69,17 @@ interface FlashcardsState {
   resetCompleted: () => void
   hasCard: (name: string) => boolean
   setCustomOrder: (names: string[]) => void
-  addSavedPack: (label: string, concepts: string[]) => void
-  deleteSavedPack: (id: string) => void
   /**
-   * Replace deck, order and packs from the server (see hooks/useFlashcardSync).
+   * Replace deck and order from the server (see hooks/useFlashcardSync).
    * Writes through to localStorage but does *not* queue a server push — the
    * caller decides whether the merged state needs pushing back.
    */
-  hydrate: (state: { cards: FlashCard[]; customOrder: string[]; savedPacks: SavedFlashcardPack[] }) => void
+  hydrate: (state: { cards: FlashCard[]; customOrder: string[] }) => void
 }
 
 export const useFlashcards = create<FlashcardsState>((set, get) => ({
   cards: load(),
   customOrder: loadOrder(),
-  savedPacks: loadSavedPacks(),
   addCard: (ref) => {
     const { cards, customOrder } = get()
     if (cards.some(c => c.name.toLowerCase() === ref.name.toLowerCase())) return
@@ -150,50 +127,20 @@ export const useFlashcards = create<FlashcardsState>((set, get) => ({
     queueDeckSync(nextCards, customOrder)
     set({ cards: nextCards })
   },
+  // Drop every completed card out of the deck. The cards themselves are not
+  // lost: they stay collected, so the Collected view can put any of them back.
   clearCompleted: () => {
-    const { cards, customOrder, savedPacks } = get()
+    const { cards, customOrder } = get()
     const completed = cards.filter(c => c.completedAt)
     if (completed.length === 0) return
-    const completedNames = completed.map(c => c.name)
-    const completedLower = new Set(completedNames.map(n => n.toLowerCase()))
-
-    // Move the cleared cards into a date-stamped "Completed <date>" pack so they
-    // can be re-added from the add-flashcards sheet. Merge into today's pack when clearing
-    // more than once in a day rather than spawning duplicate packs.
-    const label = `Completed ${new Date().toLocaleDateString(undefined, {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    })}`
-    const existing = savedPacks.find(p => p.label === label)
-    let nextPacks: SavedFlashcardPack[]
-    if (existing) {
-      const merged = [...existing.concepts]
-      const seen = new Set(merged.map(n => n.toLowerCase()))
-      for (const name of completedNames) {
-        if (!seen.has(name.toLowerCase())) { merged.push(name); seen.add(name.toLowerCase()) }
-      }
-      nextPacks = savedPacks.map(p =>
-        p.id === existing.id ? { ...p, concepts: merged, savedAt: Date.now() } : p,
-      )
-    } else {
-      const newPack: SavedFlashcardPack = {
-        id: `completed_${Date.now()}`,
-        label,
-        concepts: completedNames,
-        savedAt: Date.now(),
-      }
-      nextPacks = [...savedPacks, newPack]
-    }
+    const completedLower = new Set(completed.map(c => c.name.toLowerCase()))
 
     const nextCards = cards.filter(c => !c.completedAt)
     const nextOrder = customOrder.filter(n => !completedLower.has(n.toLowerCase()))
     save(nextCards)
     saveOrder(nextOrder)
-    persistSavedPacks(nextPacks)
     queueDeckSync(nextCards, nextOrder)
-    queuePacksSync(nextPacks)
-    set({ cards: nextCards, customOrder: nextOrder, savedPacks: nextPacks })
+    set({ cards: nextCards, customOrder: nextOrder })
   },
   hasCard: (name) =>
     get().cards.some(c => c.name.toLowerCase() === name.toLowerCase()),
@@ -202,28 +149,9 @@ export const useFlashcards = create<FlashcardsState>((set, get) => ({
     queueDeckSync(get().cards, names)
     set({ customOrder: names })
   },
-  addSavedPack: (label, concepts) => {
-    const newPack: SavedFlashcardPack = {
-      id: `saved_${Date.now()}`,
-      label,
-      concepts,
-      savedAt: Date.now(),
-    }
-    const next = [...get().savedPacks, newPack]
-    persistSavedPacks(next)
-    queuePacksSync(next)
-    set({ savedPacks: next })
-  },
-  deleteSavedPack: (id) => {
-    const next = get().savedPacks.filter(p => p.id !== id)
-    persistSavedPacks(next)
-    queuePacksSync(next)
-    set({ savedPacks: next })
-  },
-  hydrate: ({ cards, customOrder, savedPacks }) => {
+  hydrate: ({ cards, customOrder }) => {
     save(cards)
     saveOrder(customOrder)
-    persistSavedPacks(savedPacks)
-    set({ cards, customOrder, savedPacks })
+    set({ cards, customOrder })
   },
 }))

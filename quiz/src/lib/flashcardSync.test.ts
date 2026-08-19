@@ -8,11 +8,10 @@ import {
   cardKey,
   mergeCollected,
   mergeDeck,
-  mergePacks,
   snapshotsEqual,
   type FlashcardSnapshot,
 } from './flashcardSync'
-import type { FlashCard, SavedFlashcardPack } from '@/hooks/useFlashcards'
+import type { FlashCard } from '@/hooks/useFlashcards'
 
 const card = (name: string, addedAt: number, completedAt?: number): FlashCard => ({
   kind: 'concept',
@@ -20,9 +19,6 @@ const card = (name: string, addedAt: number, completedAt?: number): FlashCard =>
   addedAt,
   ...(completedAt ? { completedAt } : {}),
 })
-
-const pack = (id: string, label: string, concepts: string[], savedAt: number): SavedFlashcardPack =>
-  ({ id, label, concepts, savedAt })
 
 describe('mergeCollected', () => {
   it('unions both sides', () => {
@@ -115,41 +111,11 @@ describe('mergeDeck', () => {
   })
 })
 
-describe('mergePacks', () => {
-  it('merges same-day "Completed" packs by label despite different ids', () => {
-    const merged = mergePacks(
-      [pack('completed_2', 'Completed Aug 8, 2026', ['Variance'], 200)],
-      [pack('completed_1', 'Completed Aug 8, 2026', ['Poisson'], 100)],
-    )
-    expect(merged).toHaveLength(1)
-    expect(merged[0].id).toBe('completed_1')
-    expect(merged[0].concepts).toEqual(['Poisson', 'Variance'])
-    expect(merged[0].savedAt).toBe(200)
-  })
-
-  it('keeps distinct labels apart', () => {
-    const merged = mergePacks(
-      [pack('a', 'Mine', ['X'], 1)],
-      [pack('b', 'Theirs', ['Y'], 2)],
-    )
-    expect(merged.map(p => p.label)).toEqual(['Mine', 'Theirs'])
-  })
-
-  it('does not duplicate a concept both packs list', () => {
-    const merged = mergePacks(
-      [pack('a', 'Same', ['variance'], 2)],
-      [pack('b', 'Same', ['Variance'], 1)],
-    )
-    expect(merged[0].concepts).toEqual(['Variance'])
-  })
-})
-
 describe('snapshotsEqual', () => {
   const base: FlashcardSnapshot = {
     collected: [{ name: 'Variance', collectedAt: 1 }],
     cards: [card('Variance', 1)],
     order: ['Variance'],
-    packs: [pack('a', 'Mine', ['X'], 1)],
   }
 
   it('ignores ordering and name casing', () => {

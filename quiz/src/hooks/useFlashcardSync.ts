@@ -10,7 +10,6 @@ import {
   hydrateMode,
   mergeCollected,
   mergeDeck,
-  mergePacks,
   queueSnapshotSync,
   setSyncUser,
   snapshotsEqual,
@@ -19,7 +18,7 @@ import {
   type FlashcardSnapshot,
 } from '@/lib/flashcardSync'
 
-// Keeps the two flashcard stores (collected cards + deck/packs) in step with
+// Keeps the two flashcard stores (collected cards + the deck) in step with
 // the server for signed-in users. Mounted once at the app root; renders nothing.
 //
 // The stores stay synchronous and localStorage-backed — this hook only tells the
@@ -29,12 +28,11 @@ import {
 
 /** Read the current client state out of both stores as one snapshot. */
 function localSnapshot(): FlashcardSnapshot {
-  const { cards, customOrder, savedPacks } = useFlashcards.getState()
+  const { cards, customOrder } = useFlashcards.getState()
   return {
     collected: useCollectedCards.getState().cards,
     cards,
     order: customOrder,
-    packs: savedPacks,
   }
 }
 
@@ -44,7 +42,6 @@ function applySnapshot(snapshot: FlashcardSnapshot): void {
   useFlashcards.getState().hydrate({
     cards: snapshot.cards,
     customOrder: snapshot.order,
-    savedPacks: snapshot.packs,
   })
 }
 
@@ -83,7 +80,6 @@ export function useFlashcardSync(): void {
       collected: mergeCollected(local.collected, remote.collected),
       cards: deck.cards,
       order: deck.order,
-      packs: mergePacks(local.packs, remote.packs),
     }
     applySnapshot(merged)
     if (!snapshotsEqual(merged, remote)) queueSnapshotSync(merged)
@@ -114,9 +110,6 @@ export function useFlashcardSync(): void {
         refresh)
       .on('postgres_changes',
         { event: '*', schema: 'public', table: 'user_flashcards', filter: `user_id=eq.${userId}` },
-        refresh)
-      .on('postgres_changes',
-        { event: '*', schema: 'public', table: 'user_flashcard_packs', filter: `user_id=eq.${userId}` },
         refresh)
       .subscribe()
     return () => { supabase.removeChannel(channel) }

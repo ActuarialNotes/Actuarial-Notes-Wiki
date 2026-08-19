@@ -133,26 +133,31 @@ const PART_MD_CLASS = 'text-sm leading-relaxed [&_p]:my-1.5 [&_p:first-child]:mt
 
 function SelfGradeButtons({ value, onChange }: { value: SelfGrade | null; onChange: (g: SelfGrade) => void }) {
   return (
-    <div className="space-y-1.5">
-      <p className="text-xs text-muted-foreground">How did you do on this part?</p>
-      <div className="flex flex-wrap gap-2">
+    <div className="space-y-2">
+      <p className="text-sm font-medium text-muted-foreground">How did you do on this part?</p>
+      <div className="grid grid-cols-3 gap-2">
         {(['correct', 'partial', 'incorrect'] as const).map(grade => {
           const active = value === grade
           const cfg = {
-            correct: { label: '✓ Full credit', active: 'bg-green-600 hover:bg-green-700 text-white', inactive: 'bg-green-600/10 text-green-700 hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-950' },
-            partial:  { label: '~ Partial',     active: 'bg-yellow-500 hover:bg-yellow-600 text-white', inactive: 'bg-yellow-500/10 text-yellow-700 hover:bg-yellow-50 dark:text-yellow-400 dark:hover:bg-yellow-950' },
-            incorrect:{ label: '✗ No credit',   active: 'bg-red-600 hover:bg-red-700 text-white',         inactive: 'bg-red-600/10 text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950' },
+            correct: { mark: '✓', label: 'Full credit', active: 'bg-green-600 hover:bg-green-700 text-white', inactive: 'bg-green-600/10 text-green-700 hover:bg-green-600/20 dark:text-green-400 dark:hover:bg-green-950' },
+            partial:  { mark: '~', label: 'Partial',     active: 'bg-yellow-500 hover:bg-yellow-600 text-white', inactive: 'bg-yellow-500/10 text-yellow-700 hover:bg-yellow-500/20 dark:text-yellow-400 dark:hover:bg-yellow-950' },
+            incorrect:{ mark: '✗', label: 'No credit',   active: 'bg-red-600 hover:bg-red-700 text-white',         inactive: 'bg-red-600/10 text-red-700 hover:bg-red-600/20 dark:text-red-400 dark:hover:bg-red-950' },
           }[grade]
           return (
             <button
               key={grade}
               onClick={() => onChange(grade)}
+              aria-pressed={active}
               className={[
-                'inline-flex items-center rounded-md px-3 py-1.5 text-xs font-medium transition-colors',
-                active ? cfg.active : cfg.inactive,
+                'flex min-h-[52px] flex-col items-center justify-center gap-0.5 rounded-lg px-1.5 py-2.5',
+                'sm:flex-row sm:gap-1.5 sm:px-3',
+                'text-[13px] sm:text-sm font-semibold leading-tight text-center transition-colors',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                active ? `${cfg.active} shadow-sm` : cfg.inactive,
               ].join(' ')}
             >
-              {cfg.label}
+              <span aria-hidden="true" className="text-base leading-none">{cfg.mark}</span>
+              <span>{cfg.label}</span>
             </button>
           )
         })}
@@ -238,6 +243,10 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
               </div>
             )}
 
+            {showExplanation && (
+              <SelfGradeButtons value={effectiveSelfGrade} onChange={handleSelfGradeClick} />
+            )}
+
             {showExplanation && (part.explanation || part.examiner_report) && (
               <div className="rounded-md bg-muted/40 p-3 space-y-2 text-sm">
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Sample Answer</p>
@@ -255,10 +264,6 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
                   </div>
                 )}
               </div>
-            )}
-
-            {showExplanation && (
-              <SelfGradeButtons value={effectiveSelfGrade} onChange={handleSelfGradeClick} />
             )}
           </div>
         )}

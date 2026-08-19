@@ -630,6 +630,23 @@
   .flashcard-collected.flashcard-sheen-l3::before { animation: none; }
 }
 
+/* The same foil, worn by the small picker tiles in the add-flashcards sheet
+   (ConceptCardGrid) so a collected card looks like the same card there as it
+   does in the deck. Two adjustments for the smaller surface: a lighter edge, so
+   a grid of tiles reads as cards rather than as a page of borders, and a ring
+   lifted above the tile's own content — the mastery stripe runs the full width
+   of the card foot and, being a real child, would otherwise paint over the
+   bottom of the ring and break the border. */
+.flashcard-collected.flashcard-tile::before {
+  z-index: 1;
+}
+.flashcard-collected.flashcard-tile.flashcard-sheen-l2 {
+  --foil-border-width: 1px;
+}
+.flashcard-collected.flashcard-tile.flashcard-sheen-l3 {
+  --foil-border-width: 1.5px;
+}
+
 /* Travelling rainbow foil border, borrowed from the L3 flashcard and applied to
    the two surfaces in the concept popup that are "a live thing, not a picture":
    the collect (lock) icon in the header, and the distribution-simulator card

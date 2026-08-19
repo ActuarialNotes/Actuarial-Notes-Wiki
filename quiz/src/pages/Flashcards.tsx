@@ -855,6 +855,20 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
 
 // ─── Card shelves ────────────────────────────────────────────────────────────
 
+// The foil material a collected tile wears, keyed to its mastery — the same
+// ladder the deck gallery's cards use (`SortableCard`): a barely-there glint at
+// New/Level 1/Forgotten, a static holographic edge at Level 2, and the
+// travelling rainbow border at Level 3. An uncollected card is still behind the
+// gate and has earned no material at all. `.flashcard-tile` in index.css tunes
+// the ring for the smaller surface and lifts it over the mastery stripe.
+function tileFoilClass(collected: boolean, state: MasteryState): string {
+  if (!collected) return ''
+  const base = 'flashcard-collected flashcard-tile'
+  if (state === 'level3') return `${base} flashcard-sheen-l3`
+  if (state === 'level2') return `${base} flashcard-sheen-l2`
+  return base
+}
+
 // The unit both shelves below are built from: one concept as a small static
 // tile. Four across on the narrowest phone, so a screenful is ~20 cards and a
 // whole learning objective can be taken in at a glance — and deliberately
@@ -864,6 +878,10 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
 // Colour is state only: the stripe along the foot is the card's mastery (or the
 // faintest fill while it is still behind the collect gate), the green wash and
 // tick are "already in your deck", and the padlock is "not collected yet".
+//
+// A collected tile also wears the same rainbow **foil** edge as its counterpart
+// in the deck gallery, scaled by mastery (see `tileFoilClass` above), so one
+// card looks like the same card wherever it is shown.
 function ConceptCardGrid({
   concepts,
   masteryOf,
@@ -890,6 +908,12 @@ function ConceptCardGrid({
       {concepts.map(name => {
         const added = hasCard(name)
         const collected = isCollected(name)
+        // "In deck" is the green wash and the tick; the green ring only appears
+        // on a card wearing no foil, since one border carries one material
+        // (docs/style-guide.md §4.3 — the edge belongs to foil).
+        const deckClass = added
+          ? `bg-green-500/15${collected ? '' : ' ring-1 ring-inset ring-green-600/50 dark:ring-green-500/50'}`
+          : 'bg-card hover:bg-accent'
         return (
           <button
             key={name}
@@ -899,11 +923,7 @@ function ConceptCardGrid({
             aria-pressed={added}
             title={`${name}${collected ? '' : ' — not collected yet'} — ${added ? 'in your deck (tap to remove)' : 'tap to add to your deck'}`}
             aria-label={added ? `Remove ${name} from your deck` : `Add ${name} to your deck`}
-            className={`relative flex aspect-[4/5] items-center justify-center overflow-hidden rounded-md px-1.5 pb-1.5 text-center transition-colors ${
-              added
-                ? 'bg-green-500/15 ring-1 ring-inset ring-green-600/50 dark:ring-green-500/50'
-                : 'bg-card hover:bg-accent'
-            }`}
+            className={`relative flex aspect-[4/5] items-center justify-center overflow-hidden rounded-md px-1.5 pb-1.5 text-center transition-colors ${tileFoilClass(collected, masteryOf(name))} ${deckClass}`}
           >
             <span
               className={`text-[10px] font-medium leading-[1.2] break-words line-clamp-5 ${

@@ -64,6 +64,28 @@ upsert + optimistic simulation, and `Quiz.tsx`'s level-up preview).
 Users can still add packs to the gallery and quiz uncollected concepts — they
 just won't reach Level 1 until they collect.
 
+## What a collected card looks like
+
+Collecting is the card's first *material*: a collected card wears the rainbow
+**foil** edge (`.flashcard-collected` in `index.css`), and its intensity is the
+mastery ladder — a barely-there glint at New/Level 1/Forgotten, a static
+holographic border at Level 2 (`.flashcard-sheen-l2`), the travelling rainbow
+border at Level 3 (`.flashcard-sheen-l3`). Uncollected cards wear no material at
+all; they are still behind the gate.
+
+Both surfaces that draw a card use that same ladder, so one concept looks like
+the same card wherever it appears:
+
+| Surface | Where |
+| --- | --- |
+| Deck / gallery card | `SortableCard` in `pages/Flashcards.tsx` (the deck passes `animateCollected={false}` so the Level 3 border doesn't travel while you read) |
+| Picker tile in the add-flashcards sheet | `ConceptCardGrid` → `tileFoilClass`, plus `.flashcard-tile` for the smaller surface: a lighter edge, and the ring lifted over the mastery stripe that runs along the card's foot |
+
+The edge belongs to foil, so nothing else may claim it: a keystone concept moves
+its gold inside as an underline on the name, and a tile already in the deck
+shows that as its green wash and tick rather than a second ring (see
+`docs/style-guide.md` §4.3–4.4).
+
 ## Missing a check (lockouts)
 
 A check has four options, so a reader who doesn't know the answer can tap until

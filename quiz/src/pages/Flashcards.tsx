@@ -1360,9 +1360,10 @@ function ViewModeDropdown({
 }
 
 // The controls footer. Besides the card-display controls (Flip / Back content)
-// it carries what used to sit in the gallery's header row — the sort dropdown
-// and the manage-deck bin — plus the round + that opens the add-flashcards
-// sheet, pinned to the right-hand end.
+// it carries the manage-deck bin and the round + that opens the add-flashcards
+// sheet, pinned to the right-hand end. The sort dropdown rides here only in the
+// study view — with the gallery open it lives, labelled, at the top of the
+// gallery header instead, so it isn't shown twice.
 function FlashcardControlsBar({
   reverseCardModes,
   onToggleMode,
@@ -1410,8 +1411,9 @@ function FlashcardControlsBar({
 
       <ViewModeDropdown reverseCardModes={reverseCardModes} onToggleMode={onToggleMode} />
 
-      {/* Sort order — "Shuffle" lives in here, which is why the bar no longer
-          carries a separate shuffle button (the S shortcut still works). */}
+      {/* Sort order (study view only — see above). "Shuffle" lives in here,
+          which is why the bar carries no separate shuffle button (the S
+          shortcut still works). */}
       {hasDeck && groupBy && onGroupByChange && (
         <select
           value={groupBy}
@@ -2242,6 +2244,7 @@ function GalleryPanel({
   inline = false,
   tab,
   onTabChange,
+  onGroupByChange,
   onCardsAdded,
   focusMode = false,
   clearingNames,
@@ -2264,6 +2267,9 @@ function GalleryPanel({
   inline?: boolean
   tab: GalleryTab
   onTabChange: (tab: GalleryTab) => void
+  // Changes the deck's sort order from the header's Sort control. Omitted where
+  // there's nothing to sort.
+  onGroupByChange?: (g: GroupBy) => void
   onCardsAdded?: () => void
   focusMode?: boolean
   // Lowercased names of completed cards currently animating out (during a
@@ -2361,9 +2367,9 @@ function GalleryPanel({
 
   return (
     <div className={containerClass}>
-      {/* Header — tab switcher (hidden in focus mode) */}
+      {/* Header — tab switcher + deck sort (hidden in focus mode) */}
       {!focusMode && (
-        <div className={inline ? 'pb-3' : 'sticky top-0 z-10 bg-background px-4 py-3'}>
+        <div className={inline ? 'pb-3 space-y-2' : 'sticky top-0 z-10 bg-background px-4 py-3 space-y-2'}>
           <div className="flex items-center gap-3">
             <div className="flex-1 min-w-0">
               <GalleryTabBar
@@ -2374,6 +2380,31 @@ function GalleryPanel({
               />
             </div>
           </div>
+
+          {/* Sort — pinned at the top of the deck, above the cards it reorders.
+              It used to sit unlabelled in the footer controls bar, where the
+              dropdown read as a stray "Exam"; here it keeps its "Sort" label in
+              view. My Deck only — the Collected tab has its own order. */}
+          {tab === 'deck' && cards.length > 0 && onGroupByChange && (
+            <div className="flex items-center justify-end gap-2">
+              <label
+                htmlFor="flashcard-sort"
+                className="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+              >
+                Sort
+              </label>
+              <select
+                id="flashcard-sort"
+                value={groupBy}
+                onChange={e => onGroupByChange(e.target.value as GroupBy)}
+                className="h-9 min-w-[7rem] rounded-md border bg-muted/60 px-2 text-sm font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+              >
+                {GROUP_LABELS.map(({ key, label }) => (
+                  <option key={key} value={key}>{label}</option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
       )}
 
@@ -3539,6 +3570,7 @@ export default function Flashcards() {
           focusMode={focusMode}
           tab={galleryTab}
           onTabChange={setGalleryTab}
+          onGroupByChange={handleGroupByChange}
           clearingNames={clearingNames}
           onClearCompleted={handleClearCompleted}
         />
@@ -3677,8 +3709,8 @@ export default function Flashcards() {
             onFlipToggle={() => setGlobalFlip(v => !v)}
             onShortcutsHelp={() => setShowShortcutsHelp(true)}
             cardCount={cards.length}
-            groupBy={groupBy}
-            onGroupByChange={handleGroupByChange}
+            groupBy={galleryExpanded ? undefined : groupBy}
+            onGroupByChange={galleryExpanded ? undefined : handleGroupByChange}
             onManage={() => setShowManageDialog(true)}
           />
         )}

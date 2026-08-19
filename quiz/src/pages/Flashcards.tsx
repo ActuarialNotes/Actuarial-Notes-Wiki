@@ -49,7 +49,6 @@ import { useFlashcards, type FlashCard } from '@/hooks/useFlashcards'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { useCollect } from '@/hooks/useCollect'
 import { showAddedToDeck } from '@/hooks/useToast'
-import { useAuth } from '@/hooks/useAuth'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
@@ -69,7 +68,7 @@ import {
   summarizeSession,
   type StudyRating,
 } from '@/lib/flashcardStudy'
-import { buildCollectedPacks } from '@/lib/collectedPacks'
+import { buildCollectedList } from '@/lib/collectedList'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { matchesSelectedVariant } from '@/data/examSittings'
 import { Button } from '@/components/ui/button'
@@ -357,7 +356,9 @@ function PackConceptsModal({
 // pack actions (add everything to the deck, collect the next uncollected card,
 // browse the concept list). Expansion is controlled by the parent so only one
 // pack is open at a time. The only colour on the card is state: the mastery
-// segments and, for a fully-collected pack, the gold "complete" sheen.
+// segments and, once every concept in the pack is collected, the whole card
+// filling solid green. Its action panel keeps the neutral card surface, so the
+// mastery legend and buttons stay legible against it.
 // Learning-objective packs render in the `isSub` (smaller) variant.
 function PackCard({
   label,
@@ -370,7 +371,6 @@ function PackCard({
   onToggleExpand,
   masteryOf,
   className = '',
-  onDelete,
   onCardsAdded,
 }: {
   label: string
@@ -383,7 +383,6 @@ function PackCard({
   onToggleExpand: () => void
   masteryOf?: (name: string) => MasteryState
   className?: string
-  onDelete?: () => void
   onCardsAdded?: () => void
 }) {
   const { addCard, hasCard } = useFlashcards()
@@ -446,10 +445,16 @@ function PackCard({
     if (uncollectedNotAdded.length > 0) { playSound('addToDeck'); showAddedToDeck(uncollectedNotAdded.length); onCardsAdded?.() }
   }
 
+  // A finished pack turns the whole card green rather than wearing a green
+  // edge, so a screenful of packs reads at a glance. Everything inside it that
+  // normally leans on the muted/foreground tokens has to switch with it.
+  const mutedClass = fullyCollected ? 'text-white/75' : 'text-muted-foreground'
+  const strongClass = fullyCollected ? 'text-white' : 'text-foreground'
+
   return (
     <div
-      className={`relative overflow-hidden rounded-lg text-card-foreground shadow-[var(--shadow-card)] ${
-        fullyCollected ? 'collect-pack-complete' : 'bg-card'
+      className={`relative overflow-hidden rounded-lg shadow-[var(--shadow-card)] ${
+        fullyCollected ? 'collect-pack-complete' : 'bg-card text-card-foreground'
       } ${className}`}
     >
       {/* Header — click to reveal actions */}
@@ -464,43 +469,37 @@ function PackCard({
         <div className="flex items-start gap-2">
           <div className="flex-1 min-w-0">
             <span className={`block font-semibold leading-tight tracking-tight ${isSub ? 'text-sm' : 'text-base'}`}>{label}</span>
-            {sublabel && <span className="block text-xs text-muted-foreground truncate">{sublabel}</span>}
+            {sublabel && <span className={`block text-xs truncate ${mutedClass}`}>{sublabel}</span>}
           </div>
-          {onDelete && (
-            <button
-              type="button"
-              onClick={e => { e.stopPropagation(); onDelete() }}
-              aria-label={`Delete ${label} pack`}
-              className="shrink-0 h-7 w-7 rounded-md flex items-center justify-center text-muted-foreground hover:text-destructive transition-colors"
-            >
-              <Trash2 className="h-4 w-4" />
-            </button>
-          )}
         </div>
 
         {/* Collection progress — one thick bar: light green for cards added to
             the deck, solid green for the ones already collected. */}
         <div className="mt-2 flex items-center justify-between gap-2">
-          <span className="text-xs text-muted-foreground tabular-nums whitespace-nowrap">
-            <span className="font-medium text-foreground">{loading ? '…' : collected}</span> / {total} collected
+          <span className={`text-xs tabular-nums whitespace-nowrap ${mutedClass}`}>
+            <span className={`font-medium ${strongClass}`}>{loading ? '…' : collected}</span> / {total} collected
           </span>
-          <ChevronDown className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform ${expanded ? 'rotate-180' : ''}`} />
+          <ChevronDown className={`h-4 w-4 shrink-0 transition-transform ${mutedClass} ${expanded ? 'rotate-180' : ''}`} />
         </div>
         <div
-          className="relative mt-2 h-3 rounded-full overflow-hidden bg-muted"
+          className={`relative mt-2 h-3 rounded-full overflow-hidden ${fullyCollected ? 'bg-white/25' : 'bg-muted'}`}
           role="img"
           aria-label={loading || total === 0 ? undefined : collectedSummary}
           title={loading || total === 0 ? undefined : collectedSummary}
         >
           {!loading && total > 0 && started > 0 && (
             <div
-              className={`absolute inset-y-0 left-0 rounded-full transition-[width] duration-300 ${IN_DECK_FILL_CLASS}`}
+              className={`absolute inset-y-0 left-0 rounded-full transition-[width] duration-300 ${
+                fullyCollected ? 'bg-white/40' : IN_DECK_FILL_CLASS
+              }`}
               style={{ width: pct(started) }}
             />
           )}
           {!loading && total > 0 && collected > 0 && (
             <div
-              className="absolute inset-y-0 left-0 rounded-full bg-green-600 dark:bg-green-500 transition-[width] duration-300"
+              className={`absolute inset-y-0 left-0 rounded-full transition-[width] duration-300 ${
+                fullyCollected ? 'bg-white' : 'bg-green-600 dark:bg-green-500'
+              }`}
               style={{ width: pct(collected) }}
             />
           )}
@@ -509,7 +508,13 @@ function PackCard({
 
       {/* Actions */}
       {expanded && (
-        <div className={`pack-expand-in space-y-3 ${isSub ? 'px-3 pb-3' : 'px-4 pb-4'}`}>
+        <div
+          className={`pack-expand-in space-y-3 ${
+            fullyCollected
+              ? `rounded-md bg-card text-card-foreground ${isSub ? 'mx-3 mb-3 p-3' : 'mx-4 mb-4 p-4'}`
+              : (isSub ? 'px-3 pb-3' : 'px-4 pb-4')
+          }`}
+        >
           {emptyHint}
           {loading && (
             <div className="flex items-center gap-2 text-xs text-muted-foreground py-1">
@@ -670,18 +675,16 @@ const COLLECTED_FILTER_ID = '__collected__'
 // sheet (it used to be its own gallery tab). The exams are pill filters at the
 // top (same strip as the Dashboard's exam header) rather than stacked headings:
 // picking one shows its full-width "all concepts" pack followed by a two-column
-// grid of its learning-objective packs. A trailing "Collected" pill filters the
-// same shelf down to the cards the learner has already unlocked, grouped the
-// same way (see lib/collectedPacks.ts) — the fastest route from "I've collected
-// these" to "put them in my deck". Any user-saved packs sit below the selected
-// section. Only one pack's action panel is open at a time (accordion). Today's
-// study plan no longer lives here — it's pinned at the top of My Deck instead
-// (see TodayStudyPlanPack).
+// grid of its learning-objective packs. A trailing "Collected" pill swaps the
+// packs for the individual cards the learner has already unlocked (see
+// CollectedCardsGrid) — the fastest route from "I've collected these" to "put
+// them in my deck". Only one pack's action panel is open at a time (accordion).
+// Today's study plan no longer lives here — it's pinned at the top of My Deck
+// instead (see TodayStudyPlanPack).
 function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
   const { syllabi, loading: syllabiLoading } = useWikiSyllabus()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
   const { progress: examProgress, examVariants } = useExamProgress()
-  const { savedPacks, deleteSavedPack } = useFlashcards()
   const collectedCards = useCollectedCards(s => s.cards)
 
   const [expandedKey, setExpandedKey] = useState<string | null>(null)
@@ -737,13 +740,13 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
     }))
   }, [inProgressSyllabi, syllabi, examProgress])
 
-  // The "Collected" filter's shelf: only what the learner has unlocked, grouped
-  // into learning objectives the same way an exam is.
-  const collectedPacks = useMemo(
-    () => buildCollectedPacks(syllabi, collectedCards),
+  // The "Collected" filter's shelf: only what the learner has unlocked, newest
+  // first, as individual cards rather than packs.
+  const collectedConcepts = useMemo(
+    () => buildCollectedList(syllabi, collectedCards),
     [syllabi, collectedCards],
   )
-  const hasCollected = collectedPacks.allConcepts.length > 0
+  const hasCollected = collectedConcepts.length > 0
 
   // Which filter's packs are on screen. Kept as an id (not an index) so it
   // survives the groups being rebuilt, and clamped back to the first group
@@ -759,7 +762,7 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
   const activeGroup = showCollected ? null : examGroups.find(g => g.examId === activeId) ?? null
 
   const isLoading = masteryLoading || syllabiLoading
-  const hasContent = examGroups.length > 0 || savedPacks.length > 0 || hasCollected
+  const hasContent = examGroups.length > 0 || hasCollected
 
   return (
     <div className="space-y-4">
@@ -797,7 +800,7 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
               >
                 Collected
                 <span className={`text-xs tabular-nums ${showCollected ? 'opacity-80' : 'opacity-70'}`}>
-                  {collectedPacks.allConcepts.length}
+                  {collectedConcepts.length}
                 </span>
               </button>
             )}
@@ -833,57 +836,14 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
         </div>
       )}
 
-      {/* The Collected filter — every unlocked card, then the learning
-          objectives they came from. Every pack here is fully collected, so the
-          cards read as complete and their action is "add these to my deck". */}
+      {/* The Collected filter — the cards themselves, small enough to take in
+          a whole collection at once. */}
       {showCollected && (
-        <div className="grid grid-cols-2 gap-3">
-          <PackCard
-            label="All collected"
-            concepts={collectedPacks.allConcepts}
-            className="col-span-2"
-            expanded={expandedKey === 'collected-all'}
-            onToggleExpand={() => toggleExpanded('collected-all')}
-            masteryOf={masteryOf}
-            onCardsAdded={onCardsAdded}
-          />
-          {collectedPacks.packs.map(pack => (
-            <PackCard
-              key={pack.key}
-              label={pack.label}
-              sublabel={pack.sublabel}
-              concepts={pack.concepts}
-              isSub
-              expanded={expandedKey === `collected-${pack.key}`}
-              onToggleExpand={() => toggleExpanded(`collected-${pack.key}`)}
-              masteryOf={masteryOf}
-              onCardsAdded={onCardsAdded}
-            />
-          ))}
-        </div>
-      )}
-
-      {/* Saved packs */}
-      {savedPacks.length > 0 && (
-        <div className="space-y-2">
-          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1">
-            Saved Packs
-          </h3>
-          <div className="grid grid-cols-2 gap-3">
-            {savedPacks.map(sp => (
-              <PackCard
-                key={sp.id}
-                label={sp.label}
-                concepts={sp.concepts}
-                expanded={expandedKey === `saved-${sp.id}`}
-                onToggleExpand={() => toggleExpanded(`saved-${sp.id}`)}
-                masteryOf={masteryOf}
-                onDelete={() => deleteSavedPack(sp.id)}
-                onCardsAdded={onCardsAdded}
-              />
-            ))}
-          </div>
-        </div>
+        <CollectedCardsGrid
+          concepts={collectedConcepts}
+          masteryOf={masteryOf}
+          onCardsAdded={onCardsAdded}
+        />
       )}
 
       {isLoading && !hasContent && (
@@ -897,6 +857,95 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
           <Link to="/dashboard" className="text-primary hover:underline">Dashboard</Link>.
         </p>
       )}
+    </div>
+  )
+}
+
+// The "Collected" pill's shelf: every card the learner has unlocked, as
+// individual tiles instead of packs. Deliberately tiny — five columns on the
+// narrowest phone, so a screenful is ~30 cards and a whole collection can be
+// taken in at a glance — and deliberately static: this is a picker, not a study
+// surface, so a tile never flips. Tapping one puts it in the deck, tapping it
+// again takes it back out. Colour is state only: the bar along the bottom is
+// the card's mastery, the green wash and tick are "already in your deck".
+function CollectedCardsGrid({
+  concepts,
+  masteryOf,
+  onCardsAdded,
+}: {
+  concepts: string[]
+  masteryOf: (name: string) => MasteryState
+  onCardsAdded?: () => void
+}) {
+  const { addCard, removeCard, hasCard } = useFlashcards()
+
+  const notAdded = concepts.filter(n => !hasCard(n))
+  const inDeck = concepts.length - notAdded.length
+
+  function addAll() {
+    for (const name of notAdded) addCard({ kind: 'concept', name })
+    if (notAdded.length > 0) { playSound('addToDeck'); showAddedToDeck(notAdded.length); onCardsAdded?.() }
+  }
+
+  function toggle(name: string) {
+    if (hasCard(name)) { removeCard(name); return }
+    playSound('addToDeck')
+    addCard({ kind: 'concept', name })
+    showAddedToDeck(1)
+    onCardsAdded?.()
+  }
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-xs text-muted-foreground tabular-nums">
+          <span className="font-medium text-foreground">{concepts.length}</span> collected
+          {inDeck > 0 && <> · <span className="font-medium text-foreground">{inDeck}</span> in deck</>}
+        </span>
+        {notAdded.length > 0 && (
+          <Button size="sm" data-sound="none" onClick={addAll}>
+            Add all {notAdded.length} to deck
+          </Button>
+        )}
+      </div>
+
+      <div className="grid grid-cols-5 sm:grid-cols-7 lg:grid-cols-9 gap-1.5">
+        {concepts.map(name => {
+          const added = hasCard(name)
+          return (
+            <button
+              key={name}
+              type="button"
+              data-sound="none"
+              onClick={() => toggle(name)}
+              aria-pressed={added}
+              title={added ? `${name} — in your deck (tap to remove)` : `${name} — tap to add to your deck`}
+              aria-label={added ? `Remove ${name} from your deck` : `Add ${name} to your deck`}
+              className={`relative flex aspect-[4/5] items-center justify-center overflow-hidden rounded-md px-1 pb-1.5 text-center transition-colors ${
+                added
+                  ? 'bg-green-500/15 ring-1 ring-inset ring-green-600/50 dark:ring-green-500/50'
+                  : 'bg-card hover:bg-accent'
+              }`}
+            >
+              <span
+                className={`text-[9px] font-medium leading-[1.15] break-words line-clamp-4 ${
+                  isKeystone(name) ? 'keystone-underline' : ''
+                }`}
+              >
+                {name}
+              </span>
+              {added && (
+                <Check className="absolute top-0.5 right-0.5 h-2.5 w-2.5 text-green-600 dark:text-green-400" aria-hidden="true" />
+              )}
+              {/* Mastery, as the one stripe along the foot of the card. */}
+              <span
+                className={`absolute inset-x-0 bottom-0 h-1 ${MASTERY_FILL[masteryOf(name)]}`}
+                aria-hidden="true"
+              />
+            </button>
+          )
+        })}
+      </div>
     </div>
   )
 }
@@ -2030,36 +2079,22 @@ function SortableCard({
   )
 }
 
-// ─── Remove All / Save Pack Dialog ───────────────────────────────────────────
+// ─── Remove All Dialog ───────────────────────────────────────────────────────
 
 function FlashcardsManageDialog({
   cardCount,
-  cardNames,
-  canSave,
   onCancel,
   onRemoveAll,
 }: {
   cardCount: number
-  cardNames: string[]
-  canSave: boolean
   onCancel: () => void
   onRemoveAll: () => void
 }) {
-  const { addSavedPack } = useFlashcards()
-  const [packName, setPackName] = useState('')
-  const [saved, setSaved] = useState(false)
-
   useEffect(() => {
     function onKey(e: KeyboardEvent) { if (e.key === 'Escape') onCancel() }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [onCancel])
-
-  function handleSave() {
-    const name = packName.trim() || `My Pack`
-    addSavedPack(name, cardNames)
-    setSaved(true)
-  }
 
   return (
     <div
@@ -2078,29 +2113,6 @@ function FlashcardsManageDialog({
             {cardCount === 0 ? 'Your flashcard deck is empty.' : 'Manage your current flashcard deck.'}
           </p>
         </div>
-
-        {canSave && cardCount > 0 && (
-          <div className="rounded-md bg-muted/40 p-3 space-y-2">
-            <p className="text-sm font-medium">Save as pack</p>
-            {saved ? (
-              <p className="text-sm text-green-600 dark:text-green-400 flex items-center gap-1.5">
-                <Check className="h-4 w-4" /> Saved to your packs
-              </p>
-            ) : (
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={packName}
-                  onChange={e => setPackName(e.target.value)}
-                  onKeyDown={e => { if (e.key === 'Enter') handleSave() }}
-                  placeholder="Pack name…"
-                  className="flex-1 h-8 rounded-md border bg-background px-2.5 text-[16px] sm:text-sm focus:outline-none focus:ring-1 focus:ring-ring"
-                />
-                <Button size="sm" onClick={handleSave}>Save</Button>
-              </div>
-            )}
-          </div>
-        )}
 
         <div className="flex justify-end gap-2">
           <Button variant="outline" size="sm" onClick={onCancel}>
@@ -2405,7 +2417,7 @@ function GalleryPanel({
               <button
                 type="button"
                 onClick={onClearCompleted ?? clearCompleted}
-                title="Move completed cards into a dated pack and clear them from your deck"
+                title="Clear the completed cards out of your deck"
                 className="inline-flex items-center gap-1.5 px-3 h-9 rounded-md bg-green-600 text-white text-xs sm:text-sm font-semibold shadow-sm hover:bg-green-700 active:scale-[0.98] transition-all shrink-0"
               >
                 <CheckCircle2 className="h-4 w-4 shrink-0" />
@@ -2930,7 +2942,6 @@ export default function Flashcards() {
   } = useFlashcards()
   const { syllabi } = useWikiSyllabus()
   const { records: masteryRecords } = useConceptMastery()
-  const { user } = useAuth()
   const popupOpen = useConceptPopup(s => s.open)
   // "Got it" gates on collection (see docs/flashcard-collection.md): rating an
   // uncollected card "Got it" opens the collect comprehension check instead of
@@ -2954,7 +2965,7 @@ export default function Flashcards() {
   const [flashingCard, setFlashingCard] = useState<string | null>(null)
   const flashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   // Names (lowercased) of completed cards currently animating out of the deck
-  // before "Clear Completed Flashcards" sweeps them into a dated pack.
+  // before "Clear Completed Flashcards" sweeps them out of the deck.
   const [clearingNames, setClearingNames] = useState<Set<string>>(() => new Set())
   const clearTimersRef = useRef<ReturnType<typeof setTimeout>[]>([])
   const orderedCardsRef = useRef<FlashCard[]>([])
@@ -3687,8 +3698,6 @@ export default function Flashcards() {
       {showManageDialog && (
         <FlashcardsManageDialog
           cardCount={cards.length}
-          cardNames={cards.map(c => c.name)}
-          canSave={!!user}
           onCancel={() => setShowManageDialog(false)}
           onRemoveAll={() => { clearCards(); setGalleryExpanded(false); setShowManageDialog(false) }}
         />

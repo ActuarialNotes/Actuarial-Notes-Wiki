@@ -247,10 +247,10 @@ Other important `lib/` modules:
   `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`)
 - `research*.ts` (researchOntology / researchMetrics / researchPeriods / researchProjectMeta) — Research-tab logic (flag-gated)
 - `flashcardSync.ts` — cross-device persistence for the flashcard state: the collected
-  set (`hooks/useCollectedCards`) and the deck / custom order / saved packs
+  set (`hooks/useCollectedCards`) and the deck / custom order
   (`hooks/useFlashcards`). Both stores stay synchronous and localStorage-first; this
   module holds the pure merge functions and the Supabase reads/writes against
-  `user_collected_cards` / `user_flashcards` / `user_flashcard_packs` (row per card, so
+  `user_collected_cards` / `user_flashcards` (row per card, so
   two devices converge instead of clobbering). `hooks/useFlashcardSync.ts` orchestrates
   it, mounted at the app root as `components/FlashcardSync.tsx`. The rule to keep in mind:
   local state is unioned into the server **once per device per user** (so guest work
@@ -370,7 +370,7 @@ via `supabase secrets set`, never as `VITE_*`.
 - `supabase/migrations/` — SQL migrations, dated filenames (`YYYYMMDD_description.sql`).
   They cover: concept mastery, quiz sessions, exam progress, study plan config/cache,
   user subscriptions/gems/cosmetics, beta codes, daily completions, store expansion,
-  flashcard sync (collected cards + deck + saved packs), and
+  flashcard sync (collected cards + deck), and
   (most of the recent additions) the flag-gated **research** feature — `research_documents`,
   full-text search, ontology, projects, project questions/sections, cron.
 - `supabase/functions/` — Deno edge functions: Stripe checkout/portal/webhook/sync,

@@ -17,13 +17,12 @@ Level 1 (see [Concept Learning Progression](concept-learning-progression.md)).
 
 ## Where collected cards are stored
 
-`useCollectedCards` (the collected set) and `useFlashcards` (the deck, its
-custom order and the saved packs) write to **localStorage first** — that's what
-keeps their API synchronous, since `isCollected` / `hasCard` are called during
-render all over the app. For a **signed-in** user those writes are also mirrored
-to Supabase (`user_collected_cards`, `user_flashcards`, `user_flashcard_packs`)
-so the deck follows the learner across devices; guests are localStorage-only,
-exactly as before.
+`useCollectedCards` (the collected set) and `useFlashcards` (the deck and its
+custom order) write to **localStorage first** — that's what keeps their API
+synchronous, since `isCollected` / `hasCard` are called during render all over
+the app. For a **signed-in** user those writes are also mirrored to Supabase
+(`user_collected_cards`, `user_flashcards`) so the deck follows the learner
+across devices; guests are localStorage-only, exactly as before.
 
 `lib/flashcardSync.ts` is the store-agnostic half (pure merges + the Supabase
 reads/writes) and `hooks/useFlashcardSync.ts` the orchestrator, mounted once at

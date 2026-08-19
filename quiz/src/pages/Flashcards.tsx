@@ -8,7 +8,6 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronUp,
-  Circle,
   Eye,
   Headphones,
   Images,
@@ -1523,7 +1522,7 @@ function SortableCard({
   onCardsAdded,
   focusMode = false,
   isCompleted = false,
-  onToggleComplete,
+  showDeckToggle = true,
   isClearing = false,
 }: {
   card: FlashCard
@@ -1542,11 +1541,15 @@ function SortableCard({
   disableSort?: boolean
   onCardsAdded?: () => void
   focusMode?: boolean
-  // Deck-context completion tracking. When `onToggleComplete` is provided (the
-  // deck gallery) the top-left control becomes a "mark complete" circle instead
-  // of the add/remove-from-deck toggle used elsewhere (e.g. the + sheet).
+  // Completed cards keep their green edge in the gallery, but completion is
+  // only ever *toggled* from the study view — a gallery tile has no control
+  // for it, so a stray tap can't silently finish a card.
   isCompleted?: boolean
-  onToggleComplete?: (name: string) => void
+  // Whether the quiet add/remove-from-deck control shows in the corner. The
+  // deck gallery hides it — every tile there is already in the deck, and the
+  // actions menu takes one out — so it's left for any other surface that
+  // reuses this tile to pull a card in.
+  showDeckToggle?: boolean
   // True while the card is animating out during a "Clear Completed Flashcards"
   // sweep — shrinks and fades the card away just before it leaves the deck.
   isClearing?: boolean
@@ -1593,31 +1596,6 @@ function SortableCard({
       className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-transparent text-muted-foreground hover:text-foreground transition-colors"
     >
       {inDeck ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
-    </button>
-  )
-
-  // Deck-context "mark complete" control: an empty circle that fills with a
-  // satisfying checkmark when tapped. Replaces the deck toggle in the gallery.
-  const completeToggleButton = (
-    <button
-      type="button"
-      onPointerDown={e => e.stopPropagation()}
-      onClick={e => { e.stopPropagation(); onToggleComplete?.(card.name) }}
-      aria-label={isCompleted ? `Mark ${card.name} not complete` : `Mark ${card.name} complete`}
-      aria-pressed={isCompleted}
-      title={isCompleted ? 'Completed — tap to undo' : 'Mark complete'}
-      className={`inline-flex items-center justify-center h-7 w-7 rounded-full transition-colors ${
-        isCompleted ? 'text-green-500' : 'text-muted-foreground/50 hover:text-green-500'
-      }`}
-    >
-      {isCompleted
-        ? (
-          <span key="done" className="relative inline-flex items-center justify-center">
-            <span className="flashcard-complete-ripple" aria-hidden="true" />
-            <CheckCircle2 className="h-5 w-5 flashcard-complete-pop" />
-          </span>
-        )
-        : <Circle className="h-5 w-5" />}
     </button>
   )
 
@@ -1670,6 +1648,9 @@ function SortableCard({
   // the standard shine, L3 gets the dramatic pulsing treatment.
   const sheenLevelClass = masteryState === 'level3' ? ' flashcard-sheen-l3' : masteryState === 'level2' ? ' flashcard-sheen-l2' : ''
   const showSheen = (animateCollected ?? collected) && collected
+  // The collect gate's padlock, shown beside the name until the card has been
+  // collected. Focus mode shows the title and nothing else.
+  const showLock = !collected && !focusMode
   const baseClass = `group relative rounded-xl flex flex-col transition-shadow min-h-[150px]${showSheen && !focusMode ? ` flashcard-collected${sheenLevelClass}` : ''}${isFlashing ? ' flashcard-highlight' : ''}${isCompleted ? ' ring-1 ring-green-500/50' : ''}${isClearing ? ' flashcard-clearing' : ''}`
   const colorClass = isActive
     ? 'bg-primary/10 shadow-sm'
@@ -1902,10 +1883,12 @@ function SortableCard({
       className={`${baseClass} ${colorClass} cursor-pointer active:cursor-grabbing hover:shadow-md select-none`}
     >
       {isClearing && CLEAR_OVERLAY}
-      {/* Top bar: deck toggle + actions menu — hidden in focus mode */}
+      {/* Corner controls: deck toggle + actions menu — hidden in focus mode.
+          They float over the tile rather than sitting in a row above it, so
+          the name below reads dead-centre in the card. */}
       {!focusMode && (
-      <div className="flex items-center justify-between gap-1.5 px-2 pt-2">
-        {onToggleComplete ? completeToggleButton : deckToggleButton}
+      <div className="absolute top-2 right-2 z-20 flex items-center gap-1.5">
+        {showDeckToggle && deckToggleButton}
         <div className="relative" ref={playMenuRef}>
           <button
             ref={playBtnRef}
@@ -2044,7 +2027,10 @@ function SortableCard({
           header): a foil-ringed lock rather than a separate "Collect" pill
           below, so the gate reads as one control attached to the name. In focus
           mode the title is the only thing shown: no lock, no mastery pill. */}
-      <div className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 min-w-0">
+      <div className={`flex-1 flex items-center justify-center gap-1.5 px-3 min-w-0 ${focusMode ? 'py-4' : 'py-9'}`}>
+        {/* Spacer mirroring the lock, so what's centred is the name itself
+            rather than the name+lock pair. */}
+        {showLock && <span className="h-8 w-8 shrink-0" aria-hidden="true" />}
         <button
           type="button"
           onPointerDown={e => e.stopPropagation()}
@@ -2061,7 +2047,7 @@ function SortableCard({
             {card.name}
           </span>
         </button>
-        {!collected && !focusMode && (
+        {showLock && (
           <button
             type="button"
             onPointerDown={e => e.stopPropagation()}
@@ -2075,10 +2061,12 @@ function SortableCard({
         )}
       </div>
 
-      {/* Mastery pill — hidden in focus mode, and absent while the card is
-          still behind the collect gate (the lock above says everything). */}
+      {/* Mastery pill — pinned to the bottom edge (not in flow) so it doesn't
+          push the name off the card's centre. Hidden in focus mode, and absent
+          while the card is still behind the collect gate (the lock says
+          everything). */}
       {!focusMode && collected && (
-        <div className="flex justify-center pb-2.5">
+        <div className="absolute inset-x-0 bottom-2.5 flex justify-center">
           <MasteryPill state={masteryState} />
         </div>
       )}
@@ -2289,7 +2277,7 @@ function GalleryPanel({
   // store's plain clearCompleted when not provided (e.g. inline empty deck).
   onClearCompleted?: () => void
 }) {
-  const { toggleCompleted, clearCompleted } = useFlashcards()
+  const { clearCompleted } = useFlashcards()
   const collectedCards = useCollectedCards(s => s.cards)
   const completedCount = useMemo(() => cards.filter(c => c.completedAt).length, [cards])
   const collectedSet = useMemo(
@@ -2358,7 +2346,7 @@ function GalleryPanel({
         onCardsAdded={onCardsAdded}
         focusMode={focusMode}
         isCompleted={!!card.completedAt}
-        onToggleComplete={toggleCompleted}
+        showDeckToggle={false}
         isClearing={clearingNames?.has(card.name.toLowerCase()) ?? false}
       />
     )

@@ -280,11 +280,11 @@ The study plan reads mastery state but does not write it. Mastery advances only 
 
 Saving the study-plan configuration ("Lock in plan" in `StudyPlanConfigModal`) doesn't just
 close the modal — the Dashboard's **Study Schedule card** then rewinds through the new
-schedule. The day strip sweeps from exam day back to today while the day panel underneath
-shows each day it passes and the concepts that day's plan schedules, landing on today with a
-line reporting what was built ("Schedule locked in — *N* concepts across *M* study days").
-The animation is the real card doing real work: the same strip, the same day panel, the same
-"Planned for this day" list a user gets by tapping a future day.
+schedule. A highlight sweeps across the timeline from exam day back to today while the day
+panel underneath shows each day it passes and the concepts that day's plan schedules, landing
+on today with a line reporting what was built ("Schedule locked in — *N* concepts across *M*
+study days"). The animation is the real card doing real work: the same timeline, the same day
+panel, the same "Planned for this day" list a user gets by tapping a future day.
 
 **How the pieces fit**
 
@@ -293,29 +293,31 @@ The animation is the real card doing real work: the same strip, the same day pan
   two are joined by an event rather than by threading a callback through every caller.
 - `ReadinessCard` (which owns the card) listens for it, scrolls the card into view, waits a
   beat for the plan to regenerate, and starts the sweep. It renders the day the sweep is on
-  rather than mirroring it into `selectedDay`, so the strip and the panel can never disagree
-  by a frame and the sweep doesn't fire a level-up query for every day it passes.
+  rather than mirroring it into `selectedDay`, so the timeline and the panel can never
+  disagree by a frame and the sweep doesn't fire a level-up query for every day it passes.
 - `hooks/useSchedulePlayback.ts` owns only the day cursor: which day the card is showing,
   whether the sweep has landed, and the summary to report. Under `prefers-reduced-motion` it
   skips the rewind and lands on today immediately.
-- `ExamHeatmap` takes `playbackDay` and glides its strip to each new day (linear, finishing
-  inside the beat so a day comes to rest before the next arrives). It collapses the expanded
-  timeline for the duration without disturbing the user's stored preference, and the mark on
-  the day the sweep just left fades out quickly behind it.
+- `ExamHeatmap` takes `playbackDay` and lights that day's cell in place. Every day between
+  today and the exam is already on screen — the timeline is the card's only view — so nothing
+  has to scroll for the sweep to be visible: the lit cell is ringed, glowing and slightly
+  enlarged, and the day the sweep just left fades out behind it, which is what makes the
+  highlight read as moving along the schedule. `playbackStepMs` is published to the cells as
+  the `--playback-step` CSS variable so the flare finishes inside the day it belongs to.
 
 **The view-model** is `lib/planForming.ts` (pure, tested):
 
 - `buildPlanFormingDays` inverts `plan.assignments` into one entry per calendar day — including
   the empty days and the tail of buffer days between the ready date and exam day, because the
   gaps are part of what the schedule looks like. Today's row comes from `plan.todaysConcepts`
-  rather than the raw assignments, so it matches what the Dashboard shows. The strip is capped
+  rather than the raw assignments, so it matches what the Dashboard shows. The sweep is capped
   at `MAX_FORMING_DAYS` so an exam years out can't sweep forever.
 - `buildFormingTimeline` decides when the sweep reaches each day. The whole rewind is held
   inside a fixed budget (`TOTAL_REVEAL_MS`) so a 3-week plan and a 6-month plan finish in
   roughly the same time, and days with nothing scheduled get a slightly shorter beat — plans
   usually *end* in a run of empty buffer days, which is where the sweep starts. The
-  discount is deliberately mild: the strip has to travel to each new day, so a sharp speed-up
-  over the buffer turns that travel into a jump.
+  discount is deliberately mild: each day still has to register as its own beat, so a sharp
+  speed-up over the buffer turns the run into a flicker.
 - `formingIndexAt` maps elapsed time back to a day index, which is what the hook samples on
   each frame (throttled to `PLAYBACK_HOLD_MS`, so the days stay readable however fast the
   cursor is moving underneath).

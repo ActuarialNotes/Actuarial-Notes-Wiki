@@ -1,4 +1,4 @@
-import { Check, ExternalLink, FileDown, Shuffle } from 'lucide-react'
+import { Check, Download, ExternalLink, Shuffle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { formatPassRate, hasPublishedStats, type PastExamRow } from '@/lib/pastExams'
 
@@ -25,7 +25,10 @@ interface Props {
   examLabel: string
   /** Where to look the exam's published pass ratios up, when there is somewhere. */
   lookup?: { url: string; label: string } | null
-  /** Examiner's report (or equivalent) for the current selection. */
+  /**
+   * Examiner's report (or equivalent) for the current selection — offered as a
+   * PDF download beside the pass-rate lookup.
+   */
   reportLink?: { url: string; label: string } | null
 }
 
@@ -69,17 +72,38 @@ export function PastExamBrowser({
 
   return (
     <div className="space-y-2">
-      {lookup && (
-        <div className="flex justify-end px-1">
-          <a
-            href={lookup.url}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex shrink-0 items-center gap-1 rounded text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            Pass rates
-            <ExternalLink className="h-3 w-3" aria-hidden />
-          </a>
+      {/* Where to read *about* the papers, above the shelf you pick one from:
+          the selected sitting's report to download, and the exam's pass-rate
+          table to look up. Both are thumb-sized rather than fine print — they
+          sit between two much larger targets on a phone. */}
+      {(reportLink || lookup) && (
+        <div className="flex flex-wrap items-center justify-end gap-2 px-1">
+          {reportLink && (
+            <a
+              href={reportLink.url}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`Download ${reportLink.label} (PDF)`}
+              className="inline-flex min-h-[36px] items-center gap-2 rounded-md border border-border bg-card px-3 py-1.5 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <Download className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+              {reportLink.label}
+              <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                PDF
+              </span>
+            </a>
+          )}
+          {lookup && (
+            <a
+              href={lookup.url}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-[36px] shrink-0 items-center gap-1.5 rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent/40 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              Pass rates
+              <ExternalLink className="h-4 w-4 shrink-0" aria-hidden />
+            </a>
+          )}
         </div>
       )}
 
@@ -151,20 +175,6 @@ export function PastExamBrowser({
           )
         })}
       </div>
-
-      {reportLink && (
-        <div className="px-1">
-          <a
-            href={reportLink.url}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-1 rounded text-xs text-primary transition-colors hover:text-primary/80 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <FileDown className="h-3 w-3" aria-hidden />
-            {reportLink.label}
-          </a>
-        </div>
-      )}
     </div>
   )
 }

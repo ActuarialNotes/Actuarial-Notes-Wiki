@@ -131,5 +131,20 @@ downstream and still does:
   draw from that paper only;
 - `handleStart` passes `year` / `session` to `/quiz`, and the sitting's full question count
   as `count` (a past paper is sat whole, not sampled);
-- the footer line under the shelf names the sitting and links its examiner's report
-  (`data/examPdfLinks.ts`).
+- the header row above the shelf offers that sitting's examiner's report as a PDF download
+  (`data/examPdfLinks.ts`), beside the pass-rate lookup link.
+
+### The header row
+
+Two out-links sit above the shelf, both sized as real controls rather than fine print —
+on a phone they are sandwiched between the tab strip and the sitting rows, so a `text-xs`
+link is a miss waiting to happen:
+
+| Link | What it is | Shown when |
+|---|---|---|
+| Examiner's report | The selected sitting's report PDF, styled as a download button (icon + `PDF` tag) | `getSittingPdfLink` has that sitting — or, for an exam with no dated papers at all, `getExamPdfLink` has the exam-level sample-question PDF |
+| Pass rates | The exam's lookup page (`PASS_RATE_LOOKUP`) | The exam has a lookup entry |
+
+Either can be absent; the row itself disappears only when both are. The report link tracks
+the *selection*, so it appears, changes and vanishes as you move down the shelf — a sitting
+whose report isn't in `SITTING_PDF_LINKS` shows no button rather than a dead one.

@@ -129,3 +129,17 @@ export function examIdFromFile(name: string): string {
   const withDash = cleaned.includes('-') ? cleaned : `${cleaned}-1`
   return withDash.toLowerCase()
 }
+
+// Display name for an exam page: the file name without its `.md` extension and
+// without the examining-body suffix the vault files carry.
+//   "Exam P-1 (SOA).md"  → "Exam P-1"
+//   "Exam MAS-I (CAS)"   → "Exam MAS-I"
+// The quiz builder already labels exams this way (`Exam P-1`, `Exam 5`), so the
+// study-guide cards use this to match.
+export function examDisplayName(name: string): string {
+  const cleaned = name
+    .replace(/\.md$/i, '')
+    .replace(/\s*\((?:SOA|CAS)\)\s*$/i, '')
+    .trim()
+  return cleaned || name
+}

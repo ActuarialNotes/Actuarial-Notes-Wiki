@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigationType } from 'react-router-dom'
 import { BookMarked, CheckCircle2, GraduationCap } from 'lucide-react'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
-import { wikiRoute } from '@/lib/wikiRoutes'
+import { examDisplayName, wikiRoute } from '@/lib/wikiRoutes'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { TRACKS, type Track } from '@/data/tracks'
 import { matchesSelectedVariant } from '@/data/examSittings'
@@ -292,7 +292,7 @@ export default function WikiHome() {
                         >
                           <CardHeader className={hasProgressBar ? 'pb-3' : undefined}>
                             <div className="flex items-center justify-between gap-2">
-                              <CardTitle className="text-base leading-snug">{exam.name}</CardTitle>
+                              <CardTitle className="text-base leading-snug">{examDisplayName(exam.name)}</CardTitle>
                               {isCompleted && (
                                 <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
                               )}

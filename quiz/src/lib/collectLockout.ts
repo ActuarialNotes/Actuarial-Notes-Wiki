@@ -3,12 +3,14 @@
 // A flashcard's comprehension check has four options, so a reader who doesn't
 // know the answer can simply keep tapping until one sticks; the gate then
 // certifies nothing. Missing the check therefore takes it off the table for a
-// while: **30 minutes** after the first wrong answer, **a day** after the next
+// while: **1 minute** after the first wrong answer, **5 minutes** after the next
 // one. The wait is the nudge — the concept page is right there behind the card,
-// and the check is worth passing rather than guessing.
+// and the check is worth passing rather than guessing; long enough to read it,
+// short enough that a session isn't over.
 //
 // The escalation is per concept and remembers misses across the wait, so the
-// second miss costs a day even though the first lock has long since lifted.
+// second miss costs five minutes even though the first lock has long since
+// lifted.
 // Passing the check clears the record (see hooks/useCollectLockouts): a
 // collected card has nothing left to lock.
 //
@@ -32,10 +34,13 @@ const DAY = 24 * HOUR
 
 /**
  * How long the check stays shut after each miss, first to last. The final step
- * repeats for every further miss — a day is already long enough to have made
- * the point, and an ever-growing wall would just abandon the concept.
+ * repeats for every further miss — five minutes is already long enough to have
+ * made the point, and an ever-growing wall would just abandon the concept.
  */
-export const COLLECT_LOCKOUT_STEPS_MS: readonly number[] = [30 * MINUTE, DAY]
+export const COLLECT_LOCKOUT_STEPS_MS: readonly number[] = [MINUTE, 5 * MINUTE]
+
+/** The longest wait any miss can earn — the last step. */
+const MAX_LOCKOUT_MS = COLLECT_LOCKOUT_STEPS_MS[COLLECT_LOCKOUT_STEPS_MS.length - 1]!
 
 /** Concepts are matched case-insensitively, like the collected-cards store. */
 export function lockoutKey(name: string): string {
@@ -109,8 +114,12 @@ export function clearLockout(lockouts: CollectLockouts, name: string): CollectLo
 /**
  * Coerce whatever localStorage handed back into a usable map, dropping entries
  * that aren't shaped like a lockout (a hand-edited or half-written record).
+ *
+ * A stored wait is also capped at the longest step. Records outlive changes to
+ * the steps, so a reader who missed under a longer scheme would otherwise stay
+ * shut out well past anything a miss can cost today.
  */
-export function sanitizeLockouts(raw: unknown): CollectLockouts {
+export function sanitizeLockouts(raw: unknown, now: number = Date.now()): CollectLockouts {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return {}
   const out: CollectLockouts = {}
   for (const [key, value] of Object.entries(raw as Record<string, unknown>)) {
@@ -118,14 +127,20 @@ export function sanitizeLockouts(raw: unknown): CollectLockouts {
     const { misses, lockedUntil } = value as Partial<CollectLockout>
     if (typeof misses !== 'number' || typeof lockedUntil !== 'number') continue
     if (!Number.isFinite(misses) || !Number.isFinite(lockedUntil) || misses < 1) continue
-    out[lockoutKey(key)] = { misses: Math.floor(misses), lockedUntil }
+    out[lockoutKey(key)] = {
+      misses: Math.floor(misses),
+      lockedUntil: Math.min(lockedUntil, now + MAX_LOCKOUT_MS),
+    }
   }
   return out
 }
 
 /**
- * "30 minutes", "23 hours", "1 day" — the wait, rounded *up* so a countdown
- * never reads "0 minutes" while the check is still shut.
+ * "5 minutes", "23 hours", "1 day" — the wait, rounded *up* so a countdown
+ * never reads "0 minutes" while the check is still shut. The hour and day
+ * readings are past anything the steps hand out today; they stay because the
+ * formatter is given a wait rather than a step, and a stored one can be older
+ * than the current steps.
  */
 export function formatLockoutRemaining(ms: number): string {
   if (ms <= 0) return 'now'
@@ -139,13 +154,13 @@ export function formatLockoutRemaining(ms: number): string {
   }
   const hours = Math.ceil(ms / HOUR)
   if (hours < 24) return `${hours} hour${hours === 1 ? '' : 's'}`
-  // Rounding up crossed the day line: a lock set a moment ago is a day long, and
-  // "24 hours" is a stranger way to say so than "1 day".
+  // Rounding up crossed the day line, and "24 hours" is a stranger way to say
+  // "1 day".
   const days = Math.ceil(ms / DAY)
   return `${days} day${days === 1 ? '' : 's'}`
 }
 
-/** "29m", "23h", "1d" — the same wait where only a chip's width is going. */
+/** "4m", "23h", "1d" — the same wait where only a chip's width is going. */
 export function formatLockoutShort(ms: number): string {
   if (ms <= 0) return '0m'
   if (ms < HOUR) return `${Math.ceil(ms / MINUTE)}m`

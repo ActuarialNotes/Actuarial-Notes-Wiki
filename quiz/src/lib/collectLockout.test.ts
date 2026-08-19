@@ -20,22 +20,25 @@ const DAY = 24 * HOUR
 const T0 = Date.UTC(2026, 7, 18, 10, 39)
 
 describe('collect lockout escalation', () => {
-  it('locks for 30 minutes on the first miss', () => {
+  it('locks for a minute on the first miss', () => {
     const after = registerMiss({}, 'Report Year', T0)
-    expect(lockoutFor(after, 'Report Year')).toEqual({ misses: 1, lockedUntil: T0 + 30 * MINUTE })
-    expect(isLockedOut(lockoutFor(after, 'Report Year'), T0 + 29 * MINUTE)).toBe(true)
-    expect(isLockedOut(lockoutFor(after, 'Report Year'), T0 + 30 * MINUTE)).toBe(false)
+    expect(lockoutFor(after, 'Report Year')).toEqual({ misses: 1, lockedUntil: T0 + MINUTE })
+    expect(isLockedOut(lockoutFor(after, 'Report Year'), T0 + 59_000)).toBe(true)
+    expect(isLockedOut(lockoutFor(after, 'Report Year'), T0 + MINUTE)).toBe(false)
   })
 
-  it('locks for a day on the second miss, a wait after the first lifted', () => {
+  it('locks for five minutes on the second miss, a wait after the first lifted', () => {
     const first = registerMiss({}, 'Report Year', T0)
     // The reader waited it out, came back, and missed again.
-    const retryAt = T0 + 45 * MINUTE
+    const retryAt = T0 + 3 * MINUTE
     const second = registerMiss(first, 'Report Year', retryAt)
-    expect(lockoutFor(second, 'Report Year')).toEqual({ misses: 2, lockedUntil: retryAt + DAY })
+    expect(lockoutFor(second, 'Report Year')).toEqual({
+      misses: 2,
+      lockedUntil: retryAt + 5 * MINUTE,
+    })
   })
 
-  it('keeps the day-long wait for every further miss', () => {
+  it('keeps the five-minute wait for every further miss', () => {
     let state: CollectLockouts = {}
     let now = T0
     for (let i = 0; i < 5; i++) {
@@ -43,16 +46,19 @@ describe('collect lockout escalation', () => {
       now += remainingLockoutMs(lockoutFor(state, 'Report Year'), now) + MINUTE
     }
     expect(lockoutFor(state, 'Report Year')!.misses).toBe(5)
-    expect(lockoutDurationMs(5)).toBe(DAY)
-    expect(COLLECT_LOCKOUT_STEPS_MS).toEqual([30 * MINUTE, DAY])
+    expect(lockoutDurationMs(5)).toBe(5 * MINUTE)
+    expect(COLLECT_LOCKOUT_STEPS_MS).toEqual([MINUTE, 5 * MINUTE])
   })
 
   it('never shortens a lock that is still running', () => {
-    const first = registerMiss({}, 'Report Year', T0)
-    // A second miss one minute in (a stale tab, say) must not trade the
-    // remaining 29 minutes for a shorter wait — and here it earns a day.
-    const second = registerMiss(first, 'Report Year', T0 + MINUTE)
-    expect(remainingLockoutMs(lockoutFor(second, 'Report Year'), T0 + MINUTE)).toBe(DAY)
+    let state = registerMiss({}, 'Report Year', T0)
+    state = registerMiss(state, 'Report Year', T0 + 30_000)
+    const endsAt = lockoutFor(state, 'Report Year')!.lockedUntil
+    // A third miss ten seconds into that wait (a stale tab, say) may only push
+    // the reopening later, never nearer.
+    const third = registerMiss(state, 'Report Year', T0 + 40_000)
+    expect(lockoutFor(third, 'Report Year')!.lockedUntil).toBeGreaterThanOrEqual(endsAt)
+    expect(remainingLockoutMs(lockoutFor(third, 'Report Year'), T0 + 40_000)).toBe(5 * MINUTE)
   })
 
   it('matches concepts case- and space-insensitively', () => {
@@ -61,9 +67,9 @@ describe('collect lockout escalation', () => {
   })
 
   it('warns with the wait the next miss would cost', () => {
-    expect(nextLockoutDurationMs(undefined)).toBe(30 * MINUTE)
+    expect(nextLockoutDurationMs(undefined)).toBe(MINUTE)
     const first = registerMiss({}, 'Report Year', T0)
-    expect(nextLockoutDurationMs(lockoutFor(first, 'Report Year'))).toBe(DAY)
+    expect(nextLockoutDurationMs(lockoutFor(first, 'Report Year'))).toBe(5 * MINUTE)
   })
 
   it('forgets a concept once it is collected', () => {
@@ -81,18 +87,29 @@ describe('collect lockout escalation', () => {
 
 describe('sanitizeLockouts', () => {
   it('keeps well-formed records and drops the rest', () => {
-    const parsed = sanitizeLockouts({
-      'report year': { misses: 2, lockedUntil: T0 + DAY },
-      'Accident Year': { misses: 1.7, lockedUntil: T0 },
-      'no misses': { misses: 0, lockedUntil: T0 },
-      'bad shape': { lockedUntil: T0 },
-      'not an object': 3,
-      '': { misses: 1, lockedUntil: T0 },
-    })
+    const parsed = sanitizeLockouts(
+      {
+        'report year': { misses: 2, lockedUntil: T0 + 4 * MINUTE },
+        'Accident Year': { misses: 1.7, lockedUntil: T0 },
+        'no misses': { misses: 0, lockedUntil: T0 },
+        'bad shape': { lockedUntil: T0 },
+        'not an object': 3,
+        '': { misses: 1, lockedUntil: T0 },
+      },
+      T0,
+    )
     expect(parsed).toEqual({
-      'report year': { misses: 2, lockedUntil: T0 + DAY },
+      'report year': { misses: 2, lockedUntil: T0 + 4 * MINUTE },
       'accident year': { misses: 1, lockedUntil: T0 },
     })
+  })
+
+  it('caps a wait stored under a longer set of steps', () => {
+    // A reader who missed twice under the old 30-minute/1-day steps must not
+    // stay shut out for a day now that the longest a miss can cost is five
+    // minutes.
+    const parsed = sanitizeLockouts({ 'report year': { misses: 2, lockedUntil: T0 + DAY } }, T0)
+    expect(parsed['report year']).toEqual({ misses: 2, lockedUntil: T0 + 5 * MINUTE })
   })
 
   it('shrugs off junk', () => {
@@ -104,8 +121,8 @@ describe('sanitizeLockouts', () => {
 
 describe('formatting the wait', () => {
   it('rounds up so a live countdown never reads zero', () => {
-    expect(formatLockoutRemaining(30 * MINUTE)).toBe('30 minutes')
-    expect(formatLockoutRemaining(29 * MINUTE + 30_000)).toBe('30 minutes')
+    expect(formatLockoutRemaining(5 * MINUTE)).toBe('5 minutes')
+    expect(formatLockoutRemaining(4 * MINUTE + 30_000)).toBe('5 minutes')
     expect(formatLockoutRemaining(MINUTE)).toBe('1 minute')
     expect(formatLockoutRemaining(59_500)).toBe('60 seconds')
     expect(formatLockoutRemaining(1)).toBe('1 second')
@@ -121,6 +138,7 @@ describe('formatting the wait', () => {
   })
 
   it('abbreviates for chips', () => {
+    expect(formatLockoutShort(4 * MINUTE + 30_000)).toBe('5m')
     expect(formatLockoutShort(29 * MINUTE)).toBe('29m')
     expect(formatLockoutShort(90 * MINUTE)).toBe('2h')
     expect(formatLockoutShort(DAY)).toBe('1d')

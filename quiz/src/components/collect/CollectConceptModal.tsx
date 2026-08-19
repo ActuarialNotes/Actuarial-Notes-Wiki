@@ -235,8 +235,8 @@ export function CollectConceptModal() {
   }, [ref, name, alreadyCollected])
 
   // This concept's missed-check record, countdown included. A wrong answer shuts
-  // the check for 30 minutes, then a day (lib/collectLockout.ts) — reason enough
-  // to read the concept instead of working through the four options.
+  // the check for a minute, then five (lib/collectLockout.ts) — reason enough to
+  // read the concept instead of working through the four options.
   const { lockout, remainingMs: lockedMs } = useCollectLockout(ref ? name : null)
   const nextLockLabel = formatLockoutRemaining(nextLockoutDurationMs(lockout))
 

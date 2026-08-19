@@ -1052,7 +1052,6 @@ export function ReadinessCard({
             onOpenStudyPlan={(step) => { setConfigInitialStep(step ?? 1); setShowConfig(true) }}
             onDayClick={date => { playback.stop(); setSelectedDay(date) }}
             dayPlanPct={dayPlanPct}
-            mobileMonthOnly
             highlightedDay={displayDay}
             playbackDay={playback.day}
             playbackStepMs={PLAYBACK_HOLD_MS}

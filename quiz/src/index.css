@@ -1165,32 +1165,6 @@ summary .katex-display,
   40%, 80% { transform: translateX(5px); }
 }
 
-/* Fully-collected pack — the whole card fills with the app's mastery green
-   instead of wearing a green edge, so a finished pack is unmistakable in a
-   shelf of unfinished ones. The card's own text switches to white with it (see
-   PackCard); its action panel drops back to the neutral card surface, where the
-   mastery legend and buttons need their usual colours. */
-.collect-pack-complete {
-  position: relative;
-  background-color: rgb(22 163 74); /* green-600 */
-  color: #fff;
-}
-.dark .collect-pack-complete {
-  background-color: rgb(21 128 61); /* green-700 — calmer against the dark page */
-}
-
-/* Pack card action panel sliding open */
-.pack-expand-in {
-  animation: pack-expand-in 0.18s ease-out;
-}
-@keyframes pack-expand-in {
-  from { opacity: 0; transform: translateY(-4px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .pack-expand-in { animation: none; }
-}
-
 /* The add-flashcards sheet slides up from the bottom instead of appearing
    instantly, so it reads as a sheet rising out of the footer "+" that opened
    it — and slides back down on close rather than blinking away. */

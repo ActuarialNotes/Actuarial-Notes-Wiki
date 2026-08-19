@@ -25,7 +25,6 @@ import {
   Sigma,
   Trash2,
   TrendingUp,
-  Unlock,
   X,
 } from 'lucide-react'
 import {
@@ -56,7 +55,7 @@ import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath, wikiRoute } from '@/lib/wikiRoutes'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
-import { decayIfStale, type MasteryState } from '@/lib/mastery'
+import { decayIfStale, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
 import { isKeystone } from '@/lib/keystone'
 import {
   needsReviewOrder,
@@ -68,7 +67,7 @@ import {
   type StudyRating,
 } from '@/lib/flashcardStudy'
 import { buildCollectedList } from '@/lib/collectedList'
-import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { wikiExamIdToProgressKey, type WikiExamSyllabus } from '@/lib/wikiParser'
 import { matchesSelectedVariant } from '@/data/examSittings'
 import { Button } from '@/components/ui/button'
 import { WikiArticle, stripFrontmatter, extractMathBlockquotes, extractImages } from '@/components/wiki/WikiArticle'
@@ -81,7 +80,7 @@ import { usePageKeyboard } from '@/hooks/useKeyboard'
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
 import { NavProgressBar } from '@/components/NavProgressBar'
 import { MasteryBadge } from '@/components/MasteryBadge'
-import { MASTERY_FILL, MASTERY_TEXT } from '@/lib/masteryBadge'
+import { MASTERY_FILL } from '@/lib/masteryBadge'
 
 type GroupBy = 'exam' | 'date' | 'alpha' | 'custom' | 'mastery' | 'shuffle'
 type ReverseCardSection = 'definition' | 'math' | 'images'
@@ -161,10 +160,6 @@ const CLEAR_OVERLAY = (
 // the collect gate, so they get the faintest fill of all.
 const LOCKED_FILL_CLASS = 'bg-muted-foreground/15'
 
-// Cards sitting in the deck but not collected yet: a light green that reads as
-// "on its way" under the solid green collected fill.
-const IN_DECK_FILL_CLASS = 'bg-green-500/25'
-
 function MasteryPill({ state }: { state: MasteryState }) {
   return <MasteryBadge state={state} size="sm" compact />
 }
@@ -207,461 +202,7 @@ function withoutFirstParagraph(markdown: string): string {
   return splitFirstParagraph(markdown).rest
 }
 
-// ─── Flashcard Packs & Gallery Tabs ───────────────────────────────────────────
-
-// Popup listing every concept in a pack. Opened from "Browse concepts" on a
-// pack card; lets you select individual concepts, add them to the deck, or
-// collect them one at a time — without cluttering the card itself.
-function PackConceptsModal({
-  label,
-  concepts,
-  onClose,
-  onCardsAdded,
-}: {
-  label: string
-  concepts: string[]
-  onClose: () => void
-  onCardsAdded?: () => void
-}) {
-  const { addCard, hasCard } = useFlashcards()
-  const collectedCards = useCollectedCards(s => s.cards)
-  const openCollect = useCollect(s => s.open)
-  const collectedSet = useMemo(
-    () => new Set(collectedCards.map(c => c.name.toLowerCase())),
-    [collectedCards],
-  )
-  const isCollected = (name: string) => collectedSet.has(name.toLowerCase())
-
-  const [selected, setSelected] = useState<Set<string>>(new Set())
-
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) { if (e.key === 'Escape') onClose() }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [onClose])
-
-  const notAdded = concepts.filter(n => !hasCard(n))
-  const allAdded = concepts.length > 0 && notAdded.length === 0
-
-  function toggleSelect(name: string) {
-    setSelected(prev => {
-      const next = new Set(prev)
-      if (next.has(name)) next.delete(name); else next.add(name)
-      return next
-    })
-  }
-
-  function handleAdd() {
-    const toAdd = selected.size > 0
-      ? concepts.filter(n => selected.has(n) && !hasCard(n))
-      : notAdded
-    for (const name of toAdd) addCard({ kind: 'concept', name })
-    setSelected(new Set())
-    if (toAdd.length > 0) { playSound('addToDeck'); showAddedToDeck(toAdd.length); onCardsAdded?.() }
-  }
-
-  return (
-    <div
-      className="fixed inset-0 z-50 flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto"
-      role="dialog"
-      aria-modal="true"
-      aria-label={`${label} concepts`}
-      onClick={e => { if (e.target === e.currentTarget) onClose() }}
-    >
-      <div className="w-full max-w-lg bg-card rounded-xl shadow-2xl flex flex-col my-8 max-h-[85vh]">
-        <div className="flex items-center gap-3 px-4 h-12 shrink-0 border-b">
-          <span className="flex-1 truncate font-semibold text-sm">{label}</span>
-          <span className="text-xs text-muted-foreground shrink-0">{concepts.length} concepts</span>
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-muted-foreground hover:text-foreground p-1 transition-colors"
-            title="Close"
-            aria-label="Close"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        </div>
-
-        {concepts.length > 0 && (
-          <div className="px-4 pt-3 shrink-0">
-            {allAdded ? (
-              <p className="text-center text-xs text-muted-foreground py-2">All in deck</p>
-            ) : (
-              <Button size="sm" className="w-full" data-sound="none" onClick={handleAdd}>
-                {selected.size > 0 ? `Add ${selected.size} to deck` : `Add all ${notAdded.length} to deck`}
-              </Button>
-            )}
-          </div>
-        )}
-
-        <ul className="overflow-y-auto flex-1 px-4 py-3 space-y-0.5">
-          {concepts.map(name => {
-            const added = hasCard(name)
-            const checked = selected.has(name)
-            return (
-              <li key={name} className="flex items-center gap-2.5 py-1.5">
-                <button
-                  type="button"
-                  onClick={() => !added && toggleSelect(name)}
-                  disabled={added}
-                  aria-label={added ? `${name} already in deck` : checked ? `Deselect ${name}` : `Select ${name}`}
-                  className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 transition-colors ${
-                    added
-                      ? 'bg-green-500/20 border-green-500 cursor-default'
-                      : checked
-                        ? 'bg-primary border-primary'
-                        : 'border-muted-foreground/40 hover:border-muted-foreground/70'
-                  }`}
-                >
-                  {(added || checked) && (
-                    <svg className={`w-3 h-3 ${added ? 'text-green-600 dark:text-green-400' : 'text-primary-foreground'}`} viewBox="0 0 10 10" fill="none">
-                      <path d="M1.5 5L4 7.5L8.5 2.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  )}
-                </button>
-                <span className={`text-sm flex-1 min-w-0 truncate text-foreground ${added ? 'opacity-60' : ''}`}>{name}</span>
-                {added && (
-                  <span className="text-xs text-muted-foreground shrink-0">In deck</span>
-                )}
-                <button
-                  type="button"
-                  onClick={() => openCollect({ kind: 'concept', name }, { collected: isCollected(name) })}
-                  title={isCollected(name) ? 'Collected' : 'Collect this flashcard'}
-                  aria-label={isCollected(name) ? `${name} collected` : `Collect ${name}`}
-                  className={`shrink-0 h-7 w-7 rounded-md flex items-center justify-center transition-colors ${
-                    isCollected(name)
-                      ? 'text-emerald-600 dark:text-emerald-400'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-                  }`}
-                >
-                  {isCollected(name) ? <Unlock className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
-                </button>
-              </li>
-            )
-          })}
-        </ul>
-      </div>
-    </div>
-  )
-}
-
-// A single pack card. A neutral card surface (per the style guide: colour is a
-// signal, not decoration) — the header shows collection progress plus a
-// segmented mastery bar, and tapping it reveals the mastery breakdown and the
-// pack actions (add everything to the deck, collect the next uncollected card,
-// browse the concept list). Expansion is controlled by the parent so only one
-// pack is open at a time. The only colour on the card is state: the mastery
-// segments and, once every concept in the pack is collected, the whole card
-// filling solid green. Its action panel keeps the neutral card surface, so the
-// mastery legend and buttons stay legible against it.
-// Learning-objective packs render in the `isSub` (smaller) variant.
-function PackCard({
-  label,
-  sublabel,
-  concepts,
-  isSub = false,
-  loading = false,
-  emptyHint,
-  expanded,
-  onToggleExpand,
-  masteryOf,
-  className = '',
-  onCardsAdded,
-}: {
-  label: string
-  sublabel?: string
-  concepts: string[]
-  isSub?: boolean
-  loading?: boolean
-  emptyHint?: ReactNode
-  expanded: boolean
-  onToggleExpand: () => void
-  masteryOf?: (name: string) => MasteryState
-  className?: string
-  onCardsAdded?: () => void
-}) {
-  const { addCard, hasCard } = useFlashcards()
-  const collectedCards = useCollectedCards(s => s.cards)
-  const collectedSet = useMemo(
-    () => new Set(collectedCards.map(c => c.name.toLowerCase())),
-    [collectedCards],
-  )
-  const isCollected = (name: string) => collectedSet.has(name.toLowerCase())
-
-  const [showConcepts, setShowConcepts] = useState(false)
-
-  const total = concepts.length
-  const inDeck = concepts.filter(n => hasCard(n)).length
-  const collected = concepts.filter(n => isCollected(n)).length
-  // Light-green portion of the progress bar: everything the player has claimed
-  // so far, whether it's still waiting in the deck or already collected.
-  const started = concepts.filter(n => hasCard(n) || isCollected(n)).length
-  const notAdded = concepts.filter(n => !hasCard(n))
-  const uncollectedNotAdded = concepts.filter(n => !isCollected(n) && !hasCard(n))
-  const allAdded = total > 0 && notAdded.length === 0
-  const fullyCollected = total > 0 && collected === total
-
-  // Level breakdown — powers the segmented progress bar and the expanded
-  // legend. Every concept lands in exactly one bucket of the ladder: still
-  // behind the collect gate (locked), collected but not yet answered (new), or
-  // one of the mastery levels.
-  const levels = useMemo(() => {
-    const counts = { locked: 0, new: 0, level1: 0, level2: 0, level3: 0, forgotten: 0 }
-    for (const n of concepts) {
-      const s = masteryOf ? masteryOf(n) : 'new'
-      if (s !== 'new') counts[s]++
-      else if (collectedSet.has(n.toLowerCase())) counts.new++
-      else counts.locked++
-    }
-    return counts
-  }, [concepts, masteryOf, collectedSet])
-
-  const pct = (n: number) => `${(n / Math.max(total, 1)) * 100}%`
-
-  // Ordered most- to least-advanced, so the bar reads as a ramp from deep green
-  // down to the empty (locked) tail.
-  const legend: { key: string; label: string; count: number; fillClass: string; textClass?: string }[] = [
-    { key: 'level3',    label: 'Level 3',   count: levels.level3,    fillClass: MASTERY_FILL.level3 },
-    { key: 'level2',    label: 'Level 2',   count: levels.level2,    fillClass: MASTERY_FILL.level2 },
-    { key: 'level1',    label: 'Level 1',   count: levels.level1,    fillClass: MASTERY_FILL.level1 },
-    { key: 'forgotten', label: 'Forgotten', count: levels.forgotten, fillClass: MASTERY_FILL.forgotten, textClass: MASTERY_TEXT.forgotten },
-    { key: 'new',       label: 'New',       count: levels.new,       fillClass: MASTERY_FILL.new },
-    { key: 'locked',    label: 'Locked',    count: levels.locked,    fillClass: LOCKED_FILL_CLASS },
-  ]
-  const collectedSummary = `${collected} of ${total} collected, ${inDeck} in deck`
-
-  function handleAdd() {
-    for (const name of notAdded) addCard({ kind: 'concept', name })
-    if (notAdded.length > 0) { playSound('addToDeck'); showAddedToDeck(notAdded.length); onCardsAdded?.() }
-  }
-
-  function addUncollected() {
-    for (const name of uncollectedNotAdded) addCard({ kind: 'concept', name })
-    if (uncollectedNotAdded.length > 0) { playSound('addToDeck'); showAddedToDeck(uncollectedNotAdded.length); onCardsAdded?.() }
-  }
-
-  // A finished pack turns the whole card green rather than wearing a green
-  // edge, so a screenful of packs reads at a glance. Everything inside it that
-  // normally leans on the muted/foreground tokens has to switch with it.
-  const mutedClass = fullyCollected ? 'text-white/75' : 'text-muted-foreground'
-  const strongClass = fullyCollected ? 'text-white' : 'text-foreground'
-
-  return (
-    <div
-      className={`relative overflow-hidden rounded-lg shadow-[var(--shadow-card)] ${
-        fullyCollected ? 'collect-pack-complete' : 'bg-card text-card-foreground'
-      } ${className}`}
-    >
-      {/* Header — click to reveal actions */}
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={onToggleExpand}
-        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggleExpand() } }}
-        className={`cursor-pointer ${isSub ? 'p-3' : 'p-4'}`}
-        aria-expanded={expanded}
-      >
-        <div className="flex items-start gap-2">
-          <div className="flex-1 min-w-0">
-            <span className={`block font-semibold leading-tight tracking-tight ${isSub ? 'text-sm' : 'text-base'}`}>{label}</span>
-            {sublabel && <span className={`block text-xs truncate ${mutedClass}`}>{sublabel}</span>}
-          </div>
-        </div>
-
-        {/* Collection progress — one thick bar: light green for cards added to
-            the deck, solid green for the ones already collected. */}
-        <div className="mt-2 flex items-center justify-between gap-2">
-          <span className={`text-xs tabular-nums whitespace-nowrap ${mutedClass}`}>
-            <span className={`font-medium ${strongClass}`}>{loading ? '…' : collected}</span> / {total} collected
-          </span>
-          <ChevronDown className={`h-4 w-4 shrink-0 transition-transform ${mutedClass} ${expanded ? 'rotate-180' : ''}`} />
-        </div>
-        <div
-          className={`relative mt-2 h-3 rounded-full overflow-hidden ${fullyCollected ? 'bg-white/25' : 'bg-muted'}`}
-          role="img"
-          aria-label={loading || total === 0 ? undefined : collectedSummary}
-          title={loading || total === 0 ? undefined : collectedSummary}
-        >
-          {!loading && total > 0 && started > 0 && (
-            <div
-              className={`absolute inset-y-0 left-0 rounded-full transition-[width] duration-300 ${
-                fullyCollected ? 'bg-white/40' : IN_DECK_FILL_CLASS
-              }`}
-              style={{ width: pct(started) }}
-            />
-          )}
-          {!loading && total > 0 && collected > 0 && (
-            <div
-              className={`absolute inset-y-0 left-0 rounded-full transition-[width] duration-300 ${
-                fullyCollected ? 'bg-white' : 'bg-green-600 dark:bg-green-500'
-              }`}
-              style={{ width: pct(collected) }}
-            />
-          )}
-        </div>
-      </div>
-
-      {/* Actions */}
-      {expanded && (
-        <div
-          className={`pack-expand-in space-y-3 ${
-            fullyCollected
-              ? `rounded-md bg-card text-card-foreground ${isSub ? 'mx-3 mb-3 p-3' : 'mx-4 mb-4 p-4'}`
-              : (isSub ? 'px-3 pb-3' : 'px-4 pb-4')
-          }`}
-        >
-          {emptyHint}
-          {loading && (
-            <div className="flex items-center gap-2 text-xs text-muted-foreground py-1">
-              <Loader2 className="h-4 w-4 animate-spin" /> Loading…
-            </div>
-          )}
-          {!loading && total > 0 && (
-            <>
-              {/* Level breakdown — detail lives here, off the collapsed card */}
-              <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
-                {legend.map(seg => seg.count > 0 && (
-                  <span key={seg.key} className={`inline-flex items-center gap-1.5 ${seg.textClass ?? ''}`}>
-                    <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${seg.fillClass}`} />
-                    {seg.label}: <span className="tabular-nums">{seg.count}</span>
-                  </span>
-                ))}
-                <span className="inline-flex items-center gap-1.5">
-                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${IN_DECK_FILL_CLASS}`} />
-                  In deck: <span className="tabular-nums">{inDeck}</span>
-                </span>
-              </div>
-              <div className="flex flex-col gap-2">
-                {allAdded ? (
-                  <p className="text-center text-xs text-muted-foreground py-2">All in deck</p>
-                ) : (
-                  <Button
-                    size="sm"
-                    className="w-full"
-                    data-sound="none"
-                    onClick={e => { e.stopPropagation(); handleAdd() }}
-                  >
-                    Add all {notAdded.length} to deck
-                  </Button>
-                )}
-                {uncollectedNotAdded.length > 0 && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full"
-                    data-sound="none"
-                    onClick={e => { e.stopPropagation(); addUncollected() }}
-                  >
-                    Add {uncollectedNotAdded.length} uncollected card{uncollectedNotAdded.length === 1 ? '' : 's'} to deck
-                  </Button>
-                )}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="w-full text-muted-foreground"
-                  onClick={e => { e.stopPropagation(); setShowConcepts(true) }}
-                >
-                  Browse concepts
-                </Button>
-              </div>
-            </>
-          )}
-        </div>
-      )}
-
-      {showConcepts && (
-        <PackConceptsModal
-          label={label}
-          concepts={concepts}
-          onClose={() => setShowConcepts(false)}
-          onCardsAdded={onCardsAdded}
-        />
-      )}
-    </div>
-  )
-}
-
-// Today's study plan pack — pinned at the top of the deck (always visible
-// there, not tucked inside Packs) plus wherever else it's rendered. Owns its
-// own expand state since it now lives outside the Packs accordion.
-function TodayStudyPlanPack({ onCardsAdded }: { onCardsAdded?: () => void }) {
-  const { syllabi } = useWikiSyllabus()
-  const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
-  const { progress: examProgress, targetDates, examVariants } = useExamProgress()
-  const [expanded, setExpanded] = useState(false)
-
-  const packMasteryMap = useMemo(() => {
-    const map = new Map<string, MasteryState>()
-    const now = new Date()
-    const best = new Map<string, typeof masteryRecords[number]>()
-    for (const r of masteryRecords) {
-      const slug = r.concept_slug.toLowerCase()
-      const existing = best.get(slug)
-      if (!existing || (r.last_attempted_at ?? '') > (existing.last_attempted_at ?? '')) {
-        best.set(slug, r)
-      }
-    }
-    for (const [slug, r] of best) {
-      map.set(slug, decayIfStale(r, now).state)
-    }
-    return map
-  }, [masteryRecords])
-  const masteryOf = useCallback(
-    (name: string) => packMasteryMap.get(name.toLowerCase()) ?? 'new',
-    [packMasteryMap],
-  )
-
-  const inProgressSyllabi = useMemo(
-    () => syllabi.filter(s => {
-      const key = wikiExamIdToProgressKey(s.examId)
-      return examProgress[key] === 'in_progress' && matchesSelectedVariant(key, s.examId, examVariants[key])
-    }),
-    [syllabi, examProgress, examVariants],
-  )
-
-  const primarySyllabus = inProgressSyllabi[0] ?? null
-  const primaryProgressKey = primarySyllabus ? wikiExamIdToProgressKey(primarySyllabus.examId) : null
-  const primaryTargetDate = primaryProgressKey ? (targetDates[primaryProgressKey] ?? null) : null
-
-  const { plan: studyPlan, loading: planLoading } = useStudyPlan(
-    primarySyllabus,
-    masteryRecords,
-    primaryTargetDate,
-    masteryLoading,
-  )
-
-  const studyPlanConcepts = useMemo(() => {
-    if (!studyPlan) return []
-    return studyPlan.status === 'review_mode' ? studyPlan.reviewConcepts : studyPlan.todaysConcepts
-  }, [studyPlan])
-
-  if (!primarySyllabus) return null
-
-  const isLoading = planLoading || masteryLoading
-
-  return (
-    <PackCard
-      label="Today's Study Plan"
-      sublabel={primarySyllabus.examLabel}
-      concepts={studyPlanConcepts}
-      loading={isLoading}
-      expanded={expanded}
-      onToggleExpand={() => setExpanded(v => !v)}
-      masteryOf={masteryOf}
-      onCardsAdded={onCardsAdded}
-      emptyHint={
-        !isLoading && !studyPlan?.config?.targetReadyDate ? (
-          <p className="text-xs text-muted-foreground py-1">
-            Set up your study plan on the{' '}
-            <Link to="/dashboard" className="text-primary hover:underline">Dashboard</Link>{' '}
-            to see today's concepts.
-          </p>
-        ) : undefined
-      }
-    />
-  )
-}
+// ─── The add-flashcards shelves ──────────────────────────────────────────────
 
 // The pack shelf's "Collected" pill, selected alongside the exam ids in the
 // same strip.
@@ -673,8 +214,8 @@ const COLLECTED_FILTER_ID = '__collected__'
 // exam's concepts out as individual tiles under their learning objectives (see
 // ExamCardShelf), and the trailing "Collected" pill swaps in the same tiles for
 // what the learner has already unlocked — the fastest route from "I've
-// collected these" to "put them in my deck". Today's study plan no longer lives
-// here — it's pinned at the top of the deck instead (see TodayStudyPlanPack).
+// collected these" to "put them in my deck". Today's study plan is the first
+// section of the selected exam's shelf (see TodayStudyPlanSection).
 function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
   const { syllabi, loading: syllabiLoading } = useWikiSyllabus()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
@@ -733,6 +274,7 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
     return source.map(syllabus => ({
       examId: syllabus.examId,
       examLabel: syllabus.examLabel,
+      syllabus,
       allConcepts: syllabus.topics.flatMap(t => t.concepts.map(c => c.name)),
       learningObjectives: syllabus.topics
         .filter(t => t.concepts.length > 0)
@@ -815,6 +357,8 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
           group={activeGroup}
           masteryOf={masteryOf}
           isCollected={isCollected}
+          masteryRecords={masteryRecords}
+          masteryLoading={masteryLoading}
           onCardsAdded={onCardsAdded}
         />
       )}
@@ -990,72 +534,189 @@ function ShelfSummary({
   )
 }
 
+// One labelled block of a shelf: the heading with its collected count, the "add
+// what's missing" action, and the grid of tiles under it. Both the syllabus'
+// learning objectives and today's study plan render through this, so the plan
+// reads as the exam's first section rather than a different kind of thing.
+function ShelfSection({
+  title,
+  concepts,
+  masteryOf,
+  isCollected,
+  onCardsAdded,
+  loading = false,
+  emptyHint,
+  className = '',
+}: {
+  title: string
+  concepts: string[]
+  masteryOf: (name: string) => MasteryState
+  isCollected: (name: string) => boolean
+  onCardsAdded?: () => void
+  /** Shows a spinner in place of the tiles (the study plan is still building). */
+  loading?: boolean
+  /** Stands in for the grid when the section has no concepts. */
+  emptyHint?: ReactNode
+  className?: string
+}) {
+  const { addCard, hasCard } = useFlashcards()
+
+  const missing = concepts.filter(n => !hasCard(n))
+  const collected = concepts.filter(n => isCollected(n)).length
+  const showCounts = !loading && concepts.length > 0
+
+  function addMissing() {
+    for (const name of missing) addCard({ kind: 'concept', name })
+    if (missing.length > 0) { playSound('addToDeck'); showAddedToDeck(missing.length); onCardsAdded?.() }
+  }
+
+  return (
+    <section className={`space-y-2 ${className}`}>
+      <div className="flex items-end justify-between gap-2">
+        <div className="min-w-0">
+          <h3 className="text-sm font-semibold leading-tight">{title}</h3>
+          {showCounts && (
+            <span className="text-xs text-muted-foreground tabular-nums">
+              {collected} / {concepts.length} collected
+            </span>
+          )}
+        </div>
+        {showCounts && (missing.length > 0 ? (
+          <button
+            type="button"
+            data-sound="none"
+            onClick={addMissing}
+            className="shrink-0 text-xs font-medium text-primary hover:underline"
+          >
+            Add {missing.length}
+          </button>
+        ) : (
+          <span className="shrink-0 text-xs text-muted-foreground">All in deck</span>
+        ))}
+      </div>
+      {loading ? (
+        <div className="flex items-center gap-2 text-xs text-muted-foreground py-1">
+          <Loader2 className="h-4 w-4 animate-spin" /> Loading…
+        </div>
+      ) : concepts.length === 0 ? (
+        emptyHint
+      ) : (
+        <ConceptCardGrid
+          concepts={concepts}
+          masteryOf={masteryOf}
+          isCollected={isCollected}
+          onCardsAdded={onCardsAdded}
+        />
+      )}
+    </section>
+  )
+}
+
+// Today's study plan, as the first section of the selected exam's shelf: the
+// concepts the plan schedules for today, sitting above the syllabus' own
+// objectives so the deck the plan is asking for is the one that's easiest to
+// build. It used to be a card pinned to the top of the deck; it belongs here,
+// where cards are added. Follows the exam pill rather than the primary exam, so
+// it always describes the shelf below it. A hairline separates it from the
+// syllabus proper.
+function TodayStudyPlanSection({
+  syllabus,
+  masteryRecords,
+  masteryLoading,
+  masteryOf,
+  isCollected,
+  onCardsAdded,
+}: {
+  syllabus: WikiExamSyllabus
+  masteryRecords: ConceptMasteryRecord[]
+  masteryLoading: boolean
+  masteryOf: (name: string) => MasteryState
+  isCollected: (name: string) => boolean
+  onCardsAdded?: () => void
+}) {
+  const { targetDates } = useExamProgress()
+  const targetDate = targetDates[wikiExamIdToProgressKey(syllabus.examId)] ?? null
+  const { plan, loading: planLoading } = useStudyPlan(syllabus, masteryRecords, targetDate, masteryLoading)
+
+  const concepts = useMemo(() => {
+    if (!plan) return []
+    return plan.status === 'review_mode' ? plan.reviewConcepts : plan.todaysConcepts
+  }, [plan])
+
+  return (
+    <ShelfSection
+      title="Today's Study Plan"
+      concepts={concepts}
+      loading={planLoading || masteryLoading}
+      masteryOf={masteryOf}
+      isCollected={isCollected}
+      onCardsAdded={onCardsAdded}
+      className="pb-5 border-b border-border"
+      emptyHint={
+        <p className="text-xs text-muted-foreground py-1">
+          {plan?.config?.targetReadyDate ? (
+            'Nothing scheduled for today.'
+          ) : (
+            <>
+              Set up your study plan on the{' '}
+              <Link to="/dashboard" className="text-primary hover:underline">Dashboard</Link>{' '}
+              to see today's concepts.
+            </>
+          )}
+        </p>
+      }
+    />
+  )
+}
+
 interface ExamShelfGroup {
   examId: string
   examLabel: string
+  syllabus: WikiExamSyllabus
   allConcepts: string[]
   learningObjectives: { name: string; concepts: string[] }[]
 }
 
-// An exam's shelf. The same tiles as the Collected shelf, grouped under their
-// learning objectives — the syllabus structure the pack cards carried survives
-// the switch from packs to cards, and each objective keeps its own "add what's
-// missing" action.
+// An exam's shelf. The same tiles as the Collected shelf, grouped under today's
+// study plan and then the exam's learning objectives — the syllabus structure
+// the pack cards carried survives the switch from packs to cards, and each
+// section keeps its own "add what's missing" action.
 function ExamCardShelf({
   group,
   masteryOf,
   isCollected,
+  masteryRecords,
+  masteryLoading,
   onCardsAdded,
 }: {
   group: ExamShelfGroup
   masteryOf: (name: string) => MasteryState
   isCollected: (name: string) => boolean
+  masteryRecords: ConceptMasteryRecord[]
+  masteryLoading: boolean
   onCardsAdded?: () => void
 }) {
-  const { addCard, hasCard } = useFlashcards()
-
-  function addMissing(names: string[]) {
-    for (const name of names) addCard({ kind: 'concept', name })
-    if (names.length > 0) { playSound('addToDeck'); showAddedToDeck(names.length); onCardsAdded?.() }
-  }
-
   return (
     <div className="space-y-5">
       <ShelfSummary concepts={group.allConcepts} isCollected={isCollected} onCardsAdded={onCardsAdded} />
-      {group.learningObjectives.map(lo => {
-        const missing = lo.concepts.filter(n => !hasCard(n))
-        const collected = lo.concepts.filter(n => isCollected(n)).length
-        return (
-          <section key={lo.name} className="space-y-2">
-            <div className="flex items-end justify-between gap-2">
-              <div className="min-w-0">
-                <h3 className="text-sm font-semibold leading-tight">{lo.name}</h3>
-                <span className="text-xs text-muted-foreground tabular-nums">
-                  {collected} / {lo.concepts.length} collected
-                </span>
-              </div>
-              {missing.length > 0 ? (
-                <button
-                  type="button"
-                  data-sound="none"
-                  onClick={() => addMissing(missing)}
-                  className="shrink-0 text-xs font-medium text-primary hover:underline"
-                >
-                  Add {missing.length}
-                </button>
-              ) : (
-                <span className="shrink-0 text-xs text-muted-foreground">All in deck</span>
-              )}
-            </div>
-            <ConceptCardGrid
-              concepts={lo.concepts}
-              masteryOf={masteryOf}
-              isCollected={isCollected}
-              onCardsAdded={onCardsAdded}
-            />
-          </section>
-        )
-      })}
+      <TodayStudyPlanSection
+        syllabus={group.syllabus}
+        masteryRecords={masteryRecords}
+        masteryLoading={masteryLoading}
+        masteryOf={masteryOf}
+        isCollected={isCollected}
+        onCardsAdded={onCardsAdded}
+      />
+      {group.learningObjectives.map(lo => (
+        <ShelfSection
+          key={lo.name}
+          title={lo.name}
+          concepts={lo.concepts}
+          masteryOf={masteryOf}
+          isCollected={isCollected}
+          onCardsAdded={onCardsAdded}
+        />
+      ))}
     </div>
   )
 }
@@ -2401,9 +2062,9 @@ function GalleryPanel({
           </div>
           )}
 
-          {/* Today's study plan — pinned at the top of the deck so it's
-              always visible. */}
-          {!focusMode && <TodayStudyPlanPack onCardsAdded={onCardsAdded} />}
+          {/* Today's study plan is no longer pinned here — it's the first
+              section of the exam's shelf in the add-flashcards sheet, where
+              cards are added (see TodayStudyPlanSection). */}
 
           {cards.length === 0 ? (
             <div className="rounded-xl bg-card text-card-foreground p-10 text-center space-y-2">

@@ -210,11 +210,11 @@ existing local cluster already does (e.g. gem economy). Don't mix them within on
 
 Rarity/reward gets a distinct **material**, not just a colour: a travelling rainbow gradient
 border (`sky → fuchsia → gold`) applied via the padding + `mask-composite: exclude` ring trick.
-Reuse the existing classes (`.flashcard-collected` + `.flashcard-sheen-l2/l3`, `.lock-foil-ring`,
-`.collect-pack-complete`) rather than re-authoring the gradient. Intensity must scale with value:
+Reuse the existing classes (`.flashcard-collected` + `.flashcard-sheen-l2/l3`, `.lock-foil-ring`)
+rather than re-authoring the gradient. Intensity must scale with value:
 subtle glint for common, static foil for L2, animated saturated foil for L3/hero only. The
-material is **earned**, never applied to a whole list — a flashcard pack only picks up the gold
-`.collect-pack-complete` sheen once every card in it is collected; unfinished packs stay neutral.
+material is **earned**, never applied to a whole list — a card only wears its foil once it has
+been collected, and the shelf tiles scale it by mastery (`tileFoilClass` in `pages/Flashcards.tsx`).
 
 ### 4.4 The "keystone" gold material
 

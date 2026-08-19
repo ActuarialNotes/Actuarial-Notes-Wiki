@@ -1,11 +1,20 @@
 // Canonical mapping between a Question's `exam` label (e.g. "Probability", as
 // stored on Question.exam and quiz_sessions.exam) and the short exam id used
 // to key concept_mastery, daily_completions and exam_progress rows (e.g. "P").
+//
+// This map has to cover **every** `exam:` label the question bank actually
+// uses. An unmapped label is silently dropped by the mastery write path
+// (`upsertMasteryFromResponses` / `computeMasteryTransitions` in quizStore skip
+// a question whose exam has no id), so a missing entry means correct answers on
+// that exam never level a concept up. `examIds.test.ts` reads the bank and
+// fails if a label is missing.
 
 export const EXAM_LABEL_TO_ID: Record<string, string> = {
   'Probability': 'P',
   'Financial Mathematics': 'FM',
   'Exam MAS-I': 'MAS-I',
+  'Exam MAS-II': 'MAS-II',
+  'Exam 5': 'CAS-5',
 }
 
 export const EXAM_ID_TO_LABEL: Record<string, string> = Object.fromEntries(

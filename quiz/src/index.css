@@ -1258,31 +1258,6 @@ summary .katex-display,
   100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-/* Satisfying pop for the flashcard "mark complete" checkmark as it fills in. */
-/* Ticking a card complete: the checkmark springs in past its size and settles,
-   with a green ring pushed out from under it. */
-.flashcard-complete-pop {
-  animation: flashcard-complete-pop 520ms cubic-bezier(0.34, 1.4, 0.64, 1) both;
-}
-@keyframes flashcard-complete-pop {
-  0%   { transform: scale(0.2) rotate(-30deg); opacity: 0; }
-  45%  { transform: scale(1.26) rotate(6deg);  opacity: 1; }
-  70%  { transform: scale(0.94) rotate(-2deg); }
-  100% { transform: scale(1) rotate(0deg);     opacity: 1; }
-}
-.flashcard-complete-ripple {
-  position: absolute;
-  inset: -3px;
-  border-radius: 9999px;
-  border: 2px solid rgb(34 197 94);
-  pointer-events: none;
-  animation: flashcard-complete-ripple 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-@keyframes flashcard-complete-ripple {
-  0%   { opacity: 0.85; transform: scale(0.5); }
-  100% { opacity: 0;    transform: scale(2.2); }
-}
-
 /* "Clear Completed Flashcards" sweep. Each card runs one 1050ms timeline
    (CLEAR_CARD_MS in Flashcards.tsx) in five beats, each one triggering the
    next: a green line races around the border and closes (0–40%), green floods
@@ -1500,8 +1475,8 @@ summary .katex-display,
 
 @media (prefers-reduced-motion: reduce) {
   .collect-card-snake-ring::before, .collect-card-absorb,
-  .collect-bloom, .collect-shake, .flashcard-complete-ripple,
-  .flashcard-nav-glow, .flashcard-nav-ring, .flashcard-badge-pop, .collect-done-pop, .flashcard-complete-pop { animation: none; }
+  .collect-bloom, .collect-shake,
+  .flashcard-nav-glow, .flashcard-nav-ring, .flashcard-badge-pop, .collect-done-pop { animation: none; }
   /* Keep a plain green-flash fade so cards still visibly leave, without motion.
      The card stays visible here (no visibility step) and simply fades, which
      takes the fill and the checkmark with it — so the implode and its puff of

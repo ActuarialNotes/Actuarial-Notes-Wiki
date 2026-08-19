@@ -29,6 +29,8 @@ const EXAM_LABELS: Record<string, string> = {
   'P': 'Exam P — Probability',
   'FM': 'Exam FM — Financial Mathematics',
   'MAS-I': 'Exam MAS-I',
+  'MAS-II': 'Exam MAS-II',
+  'CAS-5': 'Exam 5',
 }
 
 // ── Mirrored from quiz/src/lib/dailyEmail.ts (tested there) ──────────────────

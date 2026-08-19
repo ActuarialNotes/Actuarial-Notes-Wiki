@@ -58,3 +58,19 @@ Some concepts are displayed under a short name (e.g. "Price") but stored under t
 ## What "Mastered" Means for the Study Plan
 
 Only Level 3 concepts count as mastered for pacing purposes. Level 1 and Level 2 concepts are still in-progress and will appear in upcoming study plan sessions until they reach Level 3. See [Study Plan Generation](study-plan-generation.md) for how mastery state drives scheduling.
+
+## Which exams are tracked
+
+A mastery row is keyed by `(user, exam id, concept slug)`, and the exam id comes
+from the question's `exam:` label through `EXAM_LABEL_TO_ID`
+(`quiz/src/lib/examIds.ts` — `"Exam 5"` → `CAS-5`, `"Probability"` → `P`, and so
+on). Both mastery write paths in `quizStore` (`upsertMasteryFromResponses` for
+signed-in users, `computeMasteryTransitions` for the level-up preview and guests)
+**skip a question whose label has no id**, so an exam missing from that map
+records question attempts as usual while its concepts sit at New forever. Exam 5
+and MAS-II were in exactly that state until the map was completed.
+
+The map is therefore the one place a new exam gets switched on, and
+`examIds.test.ts` reads every `exam:` value in `questions/` and fails if one has
+no id. Note the id is the **exam-progress key** (`CAS-5`), not the wiki exam id
+(`5-1`) — `wikiExamIdToProgressKey` converts between them.

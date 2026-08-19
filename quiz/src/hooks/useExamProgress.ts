@@ -1,20 +1,17 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
+import { EXAM_ID_TO_LABEL, EXAM_LABEL_TO_ID } from '@/lib/examIds'
 
-// Maps exam progress keys to the exam label stored in question.exam
-export const EXAM_ID_TO_TOPIC: Record<string, string> = {
-  P: 'Probability',
-  FM: 'Financial Mathematics',
-  'MAS-I': 'Exam MAS-I',
-  'MAS-II': 'Exam MAS-II',
-  'CAS-5': 'Exam 5',
-}
+// Maps exam progress keys to the exam label stored in question.exam, and back.
+// Both are re-exports of the canonical maps in lib/examIds.ts: this file used
+// to carry its own copy, and the two drifted — the copy here listed Exam 5 and
+// MAS-II while examIds.ts did not, so quizzes on those exams wrote no mastery
+// at all. One table, two names.
+export const EXAM_ID_TO_TOPIC: Record<string, string> = EXAM_ID_TO_LABEL
 
-// Maps question.exam labels back to wiki exam IDs
-export const TOPIC_TO_EXAM_ID: Record<string, string> = Object.fromEntries(
-  Object.entries(EXAM_ID_TO_TOPIC).map(([id, label]) => [label, id])
-)
+// Maps question.exam labels back to exam progress keys
+export const TOPIC_TO_EXAM_ID: Record<string, string> = EXAM_LABEL_TO_ID
 
 export interface ExamProgressResult {
   /** Status per exam progress key, e.g. { FM: 'in_progress', P: 'not_started' } */

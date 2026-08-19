@@ -94,18 +94,25 @@ check off the table for a while:
 
 | Miss | The check reopens in |
 | --- | --- |
-| 1st | 30 minutes |
-| 2nd | 1 day |
-| 3rd and after | 1 day |
+| 1st | 1 minute |
+| 2nd | 5 minutes |
+| 3rd and after | 5 minutes |
+
+The waits are short on purpose: long enough to send the reader to the concept
+page and break the tap-until-it-sticks rhythm, short enough that a study session
+survives them.
 
 The escalation is **per concept** and the miss count **never decays**, so the
-second miss costs a day even though the first wait lifted long ago. Passing the
-check clears the record — a collected card has nothing left to lock. `misses`
-only stops growing because the last step repeats: a wait that kept doubling
-would abandon the concept rather than teach it.
+second miss costs five minutes even though the first wait lifted long ago.
+Passing the check clears the record — a collected card has nothing left to lock.
+`misses` only stops growing because the last step repeats: a wait that kept
+doubling would abandon the concept rather than teach it.
 
 `lib/collectLockout.ts` is the pure core (the steps, the escalation, the
-`formatLockoutRemaining` / `formatLockoutShort` readouts);
+`formatLockoutRemaining` / `formatLockoutShort` readouts — which still speak
+hours and days, because a wait read out of storage can predate a change to the
+steps; `sanitizeLockouts` caps such a wait at the longest current step, so
+shortening the steps releases anyone the old ones locked);
 `hooks/useCollectLockouts.ts` persists it and exposes `useCollectLockout(name)`,
 which re-renders once a second while a wait runs and stops the moment it lifts,
 so a check reopens under the reader without a reload.

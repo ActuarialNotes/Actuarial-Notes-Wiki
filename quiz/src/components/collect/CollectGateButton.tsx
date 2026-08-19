@@ -1,9 +1,9 @@
 // The "Collect" button the pre- and post-quiz gates put beside each uncollected
 // concept — and the one place outside the collect modal that has to admit a
 // check is shut. A concept whose comprehension check has been missed is locked
-// for a while (30 minutes, then a day — see lib/collectLockout.ts), so the
-// button counts that wait down rather than promising a collection the reader
-// can't make yet.
+// for a while (1 minute, then 5 — see lib/collectLockout.ts), so the button
+// counts that wait down rather than promising a collection the reader can't
+// make yet.
 //
 // It stays clickable while locked: the collect modal is where the wait is
 // explained and where the concept page is one tap away, which is exactly where a

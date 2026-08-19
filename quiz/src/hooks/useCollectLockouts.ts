@@ -12,7 +12,7 @@ import {
 } from '@/lib/collectLockout'
 
 // Missed collect checks, by concept. A wrong answer on a flashcard's
-// comprehension check shuts it for 30 minutes, and for a day the next time (see
+// comprehension check shuts it for a minute, and for five the next time (see
 // lib/collectLockout.ts for the escalation, docs/flashcard-collection.md for
 // why). This store is the persistence half: localStorage only, like the
 // collected-cards store's guest path, so `isLocked` can be read synchronously

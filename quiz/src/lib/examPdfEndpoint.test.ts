@@ -1,8 +1,8 @@
 import { describe, it, expect, afterEach, vi } from 'vitest'
-// Exercises the serverless handler itself (api/exam-pdf.js) with the network
+// Exercises the serverless handler itself (quiz/api/exam-pdf.js) with the network
 // stubbed. What matters here is the refusals: this endpoint takes a URL from
 // the client, so the allowlist is the only thing between it and an open proxy.
-import handler, { resolvePdfTarget } from '../../../api/exam-pdf.js'
+import handler, { resolvePdfTarget } from '../../api/exam-pdf.js'
 
 const REPORT = 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam5_sp19-5.pdf'
 

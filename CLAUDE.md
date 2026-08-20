@@ -112,7 +112,7 @@ before touching that area**:
   question bank so unimported papers still list (greyed out), the **live pass-rate
   pipeline** (`api/pass-rates.js` → `lib/passRates.ts` → `hooks/useExamPassRates`) that lays
   published ratios over the authored ones, and the **in-app PDF viewer** that reads a
-  sitting's examiner's report (`components/PdfViewerPanel.tsx` → `api/exam-pdf.js`). Read
+  sitting's examiner's report (`components/PdfViewerPanel.tsx` → `quiz/api/exam-pdf.js`). Read
   before touching any of it — in particular the rule that a ratio is transcribed or fetched,
   never estimated, that an unparseable source must yield *no* figures rather than wrong ones,
   and the same rule for the report links in `data/examPdfLinks.ts`: transcribed from the
@@ -140,7 +140,7 @@ Other important `lib/` modules:
   Rendered by `components/PastExamBrowser.tsx`. See `docs/mock-exam-browser.md`.
 - `examPdf.ts` / `pdfViewer.ts` / `pdfjsSetup.ts` — the exam-PDF reader behind the mock-exam
   shelf's **Examiner's Report** button. `examPdf.ts` decides which sources are viewable (the
-  same allowlist `api/exam-pdf.js` enforces) and builds the proxy/download URLs — the page
+  same allowlist `quiz/api/exam-pdf.js` enforces) and builds the proxy/download URLs — the page
   can't fetch a publisher's PDF itself, and can't save one cross-origin; `pdfViewer.ts` is
   the pure reading maths (fit-to-width, the canvas pixel budget, the zoom ladder);
   `pdfjsSetup.ts` is the dynamically-imported pdf.js instance (the **legacy** build, plus the

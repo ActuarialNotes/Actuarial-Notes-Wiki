@@ -80,7 +80,7 @@ interface Props {
  * concepts are there.
  *
  * The pages are drawn by pdf.js rather than handed to a browser's PDF plugin
- * (`lib/pdfjsSetup.ts` explains why), and the bytes come from `api/exam-pdf.js`
+ * (`lib/pdfjsSetup.ts` explains why), and the bytes come from `quiz/api/exam-pdf.js`
  * rather than the publisher (`lib/examPdf.ts` explains why). Everything assumes
  * that can still fail — a moved file, an endpoint that isn't deployed — so the
  * publisher's own copy is always one tap away.
@@ -322,7 +322,7 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
       >
         {status === 'error' ? (
           <ReadingFailure
-            message={`This document couldn't be loaded${error ? ` (${error})` : ''}.`}
+            message={error ? `This document couldn't be loaded — ${error}.` : "This document couldn't be loaded."}
             url={url}
             sourceHost={sourceHost}
           />

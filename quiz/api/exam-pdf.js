@@ -17,6 +17,12 @@
 // URL from the client, so without an allowlist it would be an open proxy.
 // Override the list with the EXAM_PDF_HOSTS environment variable (a
 // comma-separated host list) if a body moves its documents.
+//
+// It lives under `quiz/api/` rather than the repo-root `api/` because the quiz
+// app is its own Vercel project rooted at `quiz/`: a function in the root
+// project isn't on the app's origin, and `quiz/vercel.json`'s SPA rewrite would
+// answer `/api/exam-pdf` with `index.html` — which the viewer receives as a
+// document whose structure is invalid. Same origin, same project, no rewrite.
 
 const DEFAULT_HOSTS = ['casact.org', 'www.casact.org', 'soa.org', 'www.soa.org'];
 
@@ -71,6 +77,12 @@ export function pdfFileName(url) {
 }
 
 export default async function handler(req, res) {
+  // The root project's vercel.json adds CORS headers to its own /api/*; this
+  // one is in the quiz project, so it carries its own — a split deployment
+  // pointing VITE_EXAM_PDF_URL here needs them.
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
+
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'GET' && req.method !== 'HEAD') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -118,7 +130,6 @@ export default async function handler(req, res) {
     const fileName = pdfFileName(target.url);
     const disposition = req.query?.download === '1' ? 'attachment' : 'inline';
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Length', String(buffer.byteLength));
     res.setHeader('Content-Disposition', `${disposition}; filename="${fileName}"`);
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('Cache-Control', CACHE_CONTROL);

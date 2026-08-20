@@ -181,7 +181,7 @@ you were building.
 | `quiz/src/lib/pdfjsSetup.ts` | The pdf.js instance, its worker and the Standard 14 font URL — reached only through a dynamic import |
 | `quiz/src/lib/pdfViewer.ts` | Fit-to-width, the canvas pixel budget, the zoom ladder, page clamping (pure) |
 | `quiz/src/lib/examPdf.ts` | Which sources are viewable, and the endpoint URLs |
-| `api/exam-pdf.js` | Serves the publisher's PDF from our own origin |
+| `quiz/api/exam-pdf.js` | Serves the publisher's PDF from our own origin |
 
 **Why the app draws the pages itself.** The obvious implementation — `<iframe src={pdf}>` —
 depends on the browser having a PDF viewer, and Chrome on Android has none (nor do the
@@ -199,7 +199,17 @@ Two consequences worth remembering:
   renders blank text without them. `pdfStandardFontsPlugin` in `vite.config.ts` copies them
   out of `node_modules` to `/pdf-standard-fonts/`.
 
-**Why the bytes come through `api/exam-pdf.js`.** The publishers send no CORS headers, so the
+**Why the endpoint lives under `quiz/`.** The quiz app is its own Vercel project rooted at
+`quiz/`, so a function in the repo-root `api/` is *not* on the app's origin. Worse than
+missing: `quiz/vercel.json` rewrites unmatched paths to `index.html`, so `/api/exam-pdf`
+answered **200 with the app's own HTML**, and pdf.js reported that as "Invalid PDF
+structure" — a message that reads as a corrupt paper and sends you looking at the links.
+The function therefore sits in the quiz project, the SPA rewrite excludes `/api/`, and the
+client checks the response really is a PDF before parsing it, naming the deployment when it
+isn't (`describeNonPdfResponse`). If the app and the functions are ever split apart again,
+`VITE_EXAM_PDF_URL` points the viewer at whichever origin serves them.
+
+**Why the bytes come through `quiz/api/exam-pdf.js`.** The publishers send no CORS headers, so the
 page cannot read the file itself (the same reason `api/pass-rates.js` exists), and
 `<a download>` is ignored cross-origin, so "Download" would navigate away instead of saving.
 The endpoint re-serves the file from our origin with `Content-Disposition` chosen by the

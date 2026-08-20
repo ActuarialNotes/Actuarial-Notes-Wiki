@@ -119,3 +119,44 @@ test.describe("examiner's report viewer", () => {
     await expect(panel.getByRole('link', { name: /Open at casact\.org/ })).toBeVisible()
   })
 })
+
+// The same panel, reached from the other end of the app: a wiki resource page's
+// source document. A study note is read beside the concept that cites it for
+// the same reason a paper is read beside the builder — the way back matters.
+test.describe('resource source viewer', () => {
+  const RESOURCE =
+    '/wiki/resource/Statement+of+Principles+Regarding+Property+and+Casualty+Insurance+Ratemaking+(CAS+-+1988)'
+
+  test('reads the resource’s PDF in the panel', async ({ page }) => {
+    await page.route('**/api/exam-pdf**', route =>
+      route.fulfill({ status: 200, contentType: 'application/pdf', body: SAMPLE_PDF }),
+    )
+    await page.goto(RESOURCE)
+
+    const link = page.getByRole('link', { name: /^Read Statement of Principles/ })
+    await expect(link).toHaveAttribute('href', /casact\.org.*\.pdf$/)
+    await link.click()
+
+    const panel = page.getByRole('complementary', { name: /Statement of Principles/ })
+    await expect(panel).toBeVisible()
+    await expect(panel.getByText('Casualty Actuarial Society · 1988')).toBeVisible()
+    await expect(panel.getByText('1 of 2')).toBeVisible()
+    await expect.poll(() => canvasIsDrawn(page)).toBe(true)
+
+    // Closing leaves the page as it was, with the button ready to open again.
+    await page.keyboard.press('Escape')
+    await expect(panel).toHaveCount(0)
+    await expect(link).toBeVisible()
+  })
+
+  test('leaves a source the proxy won’t serve as a plain out-link', async ({ page }) => {
+    // ASOP 13's current text is only published as a page, not a file, so there
+    // is nothing for the viewer to draw — the card must not promise otherwise.
+    await page.goto(
+      '/wiki/resource/ASOP+13+-+Trending+Procedures+in+Property+Casualty+Insurance+(ASB+-+2009)',
+    )
+    const link = page.getByRole('link', { name: /^Get a copy of ASOP No\. 13/ })
+    await expect(link).toHaveAttribute('href', /^https:\/\/www\.actuarialstandardsboard\.org\//)
+    await expect(link).toHaveAttribute('target', '_blank')
+  })
+})

@@ -1,5 +1,8 @@
-// The client half of the exam-PDF viewer: where a source paper is read from,
-// and what it's called once saved.
+// The client half of the PDF viewer: where a source document is read from, and
+// what it's called once saved. Two surfaces share it — the mock-exam shelf's
+// examiner's reports and the wiki's resource pages (a study note, a monograph,
+// an ASOP) — so the allowlist below names every body we link documents from,
+// not only the examining ones.
 //
 // Nothing here fetches the publisher directly. `quiz/api/exam-pdf.js` re-serves the
 // file from our own origin, because the examining bodies send no CORS headers,
@@ -9,7 +12,15 @@
 // viewer is opened rather than after a request round-trips.
 
 /** Hosts whose PDFs the endpoint will serve. Mirrors `DEFAULT_HOSTS` in `quiz/api/exam-pdf.js`. */
-export const EXAM_PDF_HOSTS = ['casact.org', 'www.casact.org', 'soa.org', 'www.soa.org']
+export const EXAM_PDF_HOSTS = [
+  'casact.org',
+  'www.casact.org',
+  'soa.org',
+  'www.soa.org',
+  // The ASOPs the Exam 5 resource pages cover are published here.
+  'actuarialstandardsboard.org',
+  'www.actuarialstandardsboard.org',
+]
 
 /** Can this URL be shown in the viewer? https, a `.pdf`, on a publisher we proxy. */
 export function isSupportedPdfSource(url: string): boolean {

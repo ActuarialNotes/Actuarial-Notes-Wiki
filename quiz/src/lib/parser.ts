@@ -484,6 +484,23 @@ export function parseAllQuestions(rawFiles: string[]): Question[] {
   return result
 }
 
+/**
+ * True when `q` sits on `exam` only because the syllabus moved — it was written
+ * for, and sat on, the paper of a different exam (`originally_exam`).
+ *
+ * Such a question keeps the `year`/`session` of the paper it really came from,
+ * so those dates name a sitting of the *other* exam. Anything that reasons
+ * about "this exam's sitting" has to skip it, or the transplanted date invents
+ * a sitting that never happened — the CAS moved Time Series and Statistical
+ * Learning from MAS-I to MAS-II, and the re-tagged MAS-I Spring 2018 questions
+ * would otherwise conjure an "Exam MAS-II Spring 2018" paper, six months before
+ * MAS-II was first sat.
+ */
+export function isFromAnotherExamsPaper(q: Question, exam: string): boolean {
+  const from = q.originally_exam?.trim()
+  return !!from && from.toLowerCase() !== exam.trim().toLowerCase()
+}
+
 export function filterQuestions(questions: Question[], filters: QuestionFilter): Question[] {
   return questions.filter(q => {
     if (filters.ids?.length) return filters.ids.includes(q.id)
@@ -502,6 +519,9 @@ export function filterQuestions(questions: Question[], filters: QuestionFilter):
     }
     if (filters.year && q.year !== filters.year) return false
     if (filters.session && q.session?.toLowerCase() !== filters.session.toLowerCase()) return false
+    // Filtering to a sitting of a named exam: a question carried over from
+    // another exam's paper is not part of it, whatever date it still carries.
+    if ((filters.year || filters.session) && filters.exam && isFromAnotherExamsPaper(q, filters.exam)) return false
     if (filters.search) {
       const needle = filters.search.toLowerCase()
       if (!q.stem.toLowerCase().includes(needle) && !q.id.toLowerCase().includes(needle)) return false

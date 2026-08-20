@@ -1,4 +1,4 @@
-import type { Question } from './parser'
+import { isFromAnotherExamsPaper, type Question } from './parser'
 import { getPastExamSittings, type ExamSession, type PastExamSitting } from '@/data/pastExams'
 
 // The read side of the past-exam shelf: merges the authored sitting catalogue
@@ -59,6 +59,13 @@ function sessionRank(session?: ExamSession): number {
  * in `questions` — the catalogue contributes the papers that exist but haven't
  * been imported (rendered greyed out), the bank contributes anything imported
  * ahead of the catalogue.
+ *
+ * The bank half is deliberately not "every question tagged with a year": a
+ * question re-tagged onto this exam from another one carries the date of the
+ * paper it was actually sat on, so it names a sitting of that *other* exam
+ * (`isFromAnotherExamsPaper`). Letting one build a row invents a paper nobody
+ * ever sat; letting one join a real row pads that paper with questions it
+ * never held.
  */
 export function buildPastExamRows(questions: Question[], exam: string): PastExamRow[] {
   const rows = new Map<string, PastExamRow>()
@@ -96,6 +103,7 @@ export function buildPastExamRows(questions: Question[], exam: string): PastExam
 
   for (const q of questions) {
     if (q.exam !== exam || !q.year) continue
+    if (isFromAnotherExamsPaper(q, exam)) continue
     const session = normalizeSession(q.session)
     add(q.year, session)
     const row = rows.get(rowKey(q.year, session))!

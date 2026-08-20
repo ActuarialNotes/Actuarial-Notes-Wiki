@@ -9,12 +9,18 @@
 // importing a new paper never requires editing this file first.
 //
 // Scope: the sittings whose papers the examining body released publicly. CAS
-// stopped publishing full past papers once the upper-level exams moved to
-// computer-based testing, so the shelf ends at Spring 2019 for Exam 5 and
-// Fall 2019 for MAS-I and MAS-II. Exam P and Exam FM aren't listed at all — the SOA
-// publishes a rolling sample-question set rather than dated papers, so those
+// stopped publishing past papers, answer keys and examiners' reports when the
+// exams moved to computer-based testing, so the shelf ends at Fall 2019 for
+// Exam 5, MAS-I and MAS-II alike. Exam P and Exam FM aren't listed at all — the
+// SOA publishes a rolling sample-question set rather than dated papers, so those
 // exams have no sittings to browse (the browser falls back to the generated
 // mock alone).
+//
+// Every entry is a paper that was really sat and really released — a sitting is
+// transcribed from the examining body's own list, never inferred from what the
+// question bank happens to hold. Bank tags are not evidence a sitting existed:
+// a question moved onto an exam by a syllabus change keeps the date of the
+// paper it came from, which is why `lib/pastExams.ts` builds no row from one.
 
 export type ExamSession = 'Spring' | 'Fall'
 
@@ -57,7 +63,8 @@ export interface PastExamSitting extends PastExamStats {
 
 /** Every sitting the browser knows about, in no particular order. */
 export const PAST_EXAM_SITTINGS: PastExamSitting[] = [
-  // ── CAS Exam 5 ─── released papers run Spring/Fall through Spring 2019 ────
+  // ── CAS Exam 5 ─── released papers run Spring/Fall through Fall 2019 ──────
+  { exam: 'Exam 5', year: 2019, session: 'Fall' },
   { exam: 'Exam 5', year: 2019, session: 'Spring' },
   { exam: 'Exam 5', year: 2018, session: 'Fall' },
   { exam: 'Exam 5', year: 2018, session: 'Spring' },
@@ -82,11 +89,11 @@ export const PAST_EXAM_SITTINGS: PastExamSitting[] = [
   { exam: 'Exam MAS-I', year: 2018, session: 'Fall' },
   { exam: 'Exam MAS-I', year: 2018, session: 'Spring' },
 
-  // ── CAS Exam MAS-II ─── first sat Spring 2018 ─────────────────────────────
+  // ── CAS Exam MAS-II ─── first sat Fall 2018, half a year after MAS-I, so
+  //    there is no Spring 2018 paper: three released sittings in total ───────
   { exam: 'Exam MAS-II', year: 2019, session: 'Fall', officialQuestionCount: 42 },
   { exam: 'Exam MAS-II', year: 2019, session: 'Spring', officialQuestionCount: 42 },
   { exam: 'Exam MAS-II', year: 2018, session: 'Fall' },
-  { exam: 'Exam MAS-II', year: 2018, session: 'Spring' },
 ]
 
 /**

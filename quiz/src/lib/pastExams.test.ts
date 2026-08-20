@@ -19,6 +19,7 @@ function q(partial: Partial<Question>): Question {
     explanation: partial.explanation ?? '',
     year: partial.year,
     session: partial.session,
+    originally_exam: partial.originally_exam,
   } as Question
 }
 
@@ -96,13 +97,54 @@ describe('buildPastExamRows', () => {
   it('orders newest sitting first, with Fall ahead of Spring in the same year', () => {
     const rows = buildPastExamRows([], 'Exam 5')
     const keys = rows.map(r => r.key)
-    expect(keys[0]).toBe('2019|Spring')
+    expect(keys[0]).toBe('2019|Fall')
+    expect(keys.indexOf('2019|Fall')).toBeLessThan(keys.indexOf('2019|Spring'))
     expect(keys.indexOf('2018|Fall')).toBeLessThan(keys.indexOf('2018|Spring'))
     expect(keys.indexOf('2018|Spring')).toBeLessThan(keys.indexOf('2017|Fall'))
   })
 
   it('returns nothing for an exam with no dated papers', () => {
     expect(buildPastExamRows([q({ exam: 'Probability' })], 'Probability')).toEqual([])
+  })
+
+  it('builds no row from a question carried over from another exam’s paper', () => {
+    // The CAS moved Time Series to MAS-II, so the bank holds MAS-I Spring 2018
+    // questions tagged `Exam MAS-II`. MAS-II was first sat in Fall 2018 — a
+    // Spring 2018 row would be a paper that never existed.
+    const rows = buildPastExamRows(
+      [
+        q({ exam: 'Exam MAS-II', year: 2018, session: 'Spring', originally_exam: 'Exam MAS-I' }),
+        q({ exam: 'Exam MAS-II', year: 2019, session: 'Spring' }),
+      ],
+      'Exam MAS-II',
+    )
+    expect(rows.find(r => r.key === '2018|Spring')).toBeUndefined()
+    expect(rows.find(r => r.key === '2019|Spring')!.bankCount).toBe(1)
+  })
+
+  it('leaves a real sitting unavailable when only carried-over questions carry its date', () => {
+    // MAS-II Fall 2018 happened, so it stays on the shelf — but the questions
+    // tagged with it came off the MAS-I paper, so the sitting is still unimported.
+    const rows = buildPastExamRows(
+      [q({ exam: 'Exam MAS-II', year: 2018, session: 'Fall', originally_exam: 'Exam MAS-I' })],
+      'Exam MAS-II',
+    )
+    const fall2018 = rows.find(r => r.key === '2018|Fall')!
+    expect(fall2018.bankCount).toBe(0)
+    expect(fall2018.available).toBe(false)
+  })
+
+  it('still counts a question whose recorded origin is this same exam', () => {
+    const rows = buildPastExamRows(
+      [q({ exam: 'Exam 5', year: 2019, session: 'Fall', originally_exam: 'Exam 5' })],
+      'Exam 5',
+    )
+    expect(rows.find(r => r.key === '2019|Fall')!.bankCount).toBe(1)
+  })
+
+  it('catalogues no MAS-II paper before its first sitting in Fall 2018', () => {
+    const years = buildPastExamRows([], 'Exam MAS-II').map(r => r.key)
+    expect(years).toEqual(['2019|Fall', '2019|Spring', '2018|Fall'])
   })
 
   it('normalizes bank sessions so one sitting never splits into two rows', () => {

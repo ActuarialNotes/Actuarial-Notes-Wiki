@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { parseQuestion, isAnswerCorrect, normalizeAnswerText, questionCredit, questionOutcome } from './parser'
+import { parseQuestion, isAnswerCorrect, normalizeAnswerText, questionCredit, questionOutcome, filterQuestions } from './parser'
+import type { Question } from './parser'
 
 // ── normalizeAnswerText ───────────────────────────────────────────────────────
 
@@ -385,4 +386,32 @@ describe('parseQuestion — single-part essay (no "## Part", no "### Answer")', 
     expect(q.parts![0].explanation).toContain('non-recurring'))
   it('isAnswerCorrect treats the all-essay question as correct', () =>
     expect(isAnswerCorrect(q, JSON.stringify({ a: 'anything' }))).toBe(true))
+})
+
+describe('filterQuestions — sitting filters vs. questions moved between exams', () => {
+  const sat: Question = {
+    id: 'masii-2019f-001', exam: 'Exam MAS-II', year: 2019, session: 'Fall',
+  } as Question
+  const movedOver: Question = {
+    id: 'masi-2018s-q41', exam: 'Exam MAS-II', year: 2018, session: 'Spring',
+    originally_exam: 'Exam MAS-I',
+  } as Question
+
+  it('excludes a question that came off another exam’s paper', () => {
+    const got = filterQuestions([sat, movedOver], {
+      exam: 'Exam MAS-II', year: 2018, session: 'Spring',
+    })
+    expect(got).toEqual([])
+  })
+
+  it('still returns it when no sitting is being asked for', () => {
+    expect(filterQuestions([sat, movedOver], { exam: 'Exam MAS-II' })).toHaveLength(2)
+  })
+
+  it('leaves questions actually sat on the paper alone', () => {
+    const got = filterQuestions([sat, movedOver], {
+      exam: 'Exam MAS-II', year: 2019, session: 'Fall',
+    })
+    expect(got.map(q => q.id)).toEqual(['masii-2019f-001'])
+  })
 })

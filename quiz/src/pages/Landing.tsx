@@ -19,7 +19,7 @@ import { planDoneConceptSlugs } from '@/lib/planCompletion'
 import { useTodayCompletions } from '@/hooks/useTodayCompletions'
 import { useTodayAnsweredQuestions } from '@/hooks/useTodayAnsweredQuestions'
 import { useSubscription } from '@/hooks/useSubscription'
-import { filterQuestions } from '@/lib/parser'
+import { filterQuestions, isFromAnotherExamsPaper } from '@/lib/parser'
 import type { Question } from '@/lib/parser'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
@@ -922,6 +922,9 @@ export default function Landing() {
     if (!topic || !selectedSitting) return 0
     return allQuestions.filter(q =>
       q.exam === topic &&
+      // Same rule the shelf counts by: a question carried over from another
+      // exam's paper keeps that paper's date and isn't part of this sitting.
+      !isFromAnotherExamsPaper(q, topic) &&
       q.year === selectedSitting.year &&
       (!selectedSitting.session || q.session?.toLowerCase() === selectedSitting.session.toLowerCase())
     ).length

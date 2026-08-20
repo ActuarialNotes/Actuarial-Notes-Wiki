@@ -29,6 +29,17 @@ hard it turned out to be, or that a sitting exists but hasn't been imported yet.
   for the exam. A newly converted paper therefore appears in the browser the moment its
   questions land, whether or not anyone remembered to add it to the catalogue.
 
+**Except questions the syllabus moved.** A question re-tagged onto this exam from another
+one carries `originally_exam` in its frontmatter and keeps the `year`/`session` of the paper
+it was really sat on — so its date names a sitting of the *other* exam.
+`isFromAnotherExamsPaper` (in `lib/parser.ts`) skips those, in the row builder and in the
+`filterQuestions` sitting filter alike. Without it the bank half of the union invents papers:
+the CAS moved Time Series, Statistical Learning and PCA from MAS-I to MAS-II, and the 23
+re-tagged MAS-I 2018 questions would otherwise raise an **MAS-II Spring 2018** row — a
+sitting half a year before MAS-II first existed — and pad the real **MAS-II Fall 2018** paper
+with 11 questions nobody sat on it. The questions themselves are untouched and still reachable
+by topic; they simply never claim to be a paper.
+
 Rows sort **newest first**, with Fall ahead of Spring within a year. Session strings in
 frontmatter are inconsistent (`Spring`, `spring`, `Sp`), so `normalizeSession` folds them —
 without it one sitting splits into two rows.
@@ -39,11 +50,17 @@ was a browser. Selecting it is `selectedSitting === null`, exactly as before.
 
 ### Scope of the catalogue
 
-Only sittings whose papers the examining body released publicly. CAS stopped publishing
-full past papers when the upper-level exams moved to CBT, so the shelf ends at Spring 2019
-(Exam 5) and Fall 2019 (MAS-I). Exam P and Exam FM have **no** sittings — the SOA publishes
-a rolling sample-question set rather than dated papers — so their browser is the Mix row
-alone, with the sample-questions PDF linked underneath.
+Only sittings whose papers the examining body released publicly. CAS stopped publishing past
+papers, answer keys and examiners' reports when the exams moved to CBT, so the shelf ends at
+**Fall 2019** for Exam 5, MAS-I and MAS-II alike. It starts where each exam does: Exam 5 at
+Spring 2011, MAS-I at Spring 2018, and MAS-II at **Fall 2018** — MAS-II was introduced half a
+sitting behind MAS-I, so it has three released papers, not four. Exam P and Exam FM have
+**no** sittings — the SOA publishes a rolling sample-question set rather than dated papers —
+so their browser is the Mix row alone, with the sample-questions PDF linked underneath.
+
+A sitting is transcribed from the examining body's list, never inferred from what the bank
+happens to hold — the same rule the pass ratios below follow, and for the same reason: a row
+is a claim that a paper exists and can be sat.
 
 ## Pass-rate statistics
 

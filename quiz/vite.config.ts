@@ -372,8 +372,51 @@ function keystoneLinksPlugin(): Plugin {
   }
 }
 
+/**
+ * Serves pdf.js's Standard 14 font programs from `/pdf-standard-fonts/`.
+ *
+ * The exam-PDF viewer draws pages itself (see `lib/pdfjsSetup.ts`), and a PDF
+ * that names Helvetica/Times/Courier without embedding them — which is most of
+ * what the examining bodies publish — renders blank text unless pdf.js can
+ * fetch those font programs. They ship inside pdfjs-dist rather than in
+ * `public/`, so they're copied into the build here and read straight from
+ * node_modules in dev. Nothing is fetched until a document actually needs a
+ * face.
+ */
+function pdfStandardFontsPlugin(): Plugin {
+  const URL_PREFIX = '/pdf-standard-fonts/'
+  const FONT_DIR = path.resolve(__dirname, 'node_modules/pdfjs-dist/standard_fonts')
+  const safeName = (name: string) => /^[\w.-]+$/.test(name)
+
+  return {
+    name: 'pdf-standard-fonts',
+    configureServer(server) {
+      server.middlewares.use(URL_PREFIX, async (req, res, next) => {
+        const name = decodeURIComponent((req.url ?? '').replace(/^\/+/, '').split('?')[0])
+        if (!safeName(name)) return next()
+        try {
+          res.setHeader('Content-Type', 'font/otf')
+          res.end(await readFile(path.join(FONT_DIR, name)))
+        } catch {
+          next()
+        }
+      })
+    },
+    async generateBundle() {
+      for (const name of await readdir(FONT_DIR)) {
+        if (!safeName(name)) continue
+        this.emitFile({
+          type: 'asset',
+          fileName: `pdf-standard-fonts/${name}`,
+          source: await readFile(path.join(FONT_DIR, name)),
+        })
+      }
+    },
+  }
+}
+
 export default defineConfig({
-  plugins: [react(), wikiContentPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), keystoneLinksPlugin()],
+  plugins: [react(), wikiContentPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), keystoneLinksPlugin(), pdfStandardFontsPlugin()],
   resolve: {
     alias: { '@': path.resolve(__dirname, 'src') },
   },

@@ -561,14 +561,15 @@ function ShelfSection({
           )}
         </div>
         {showCounts && (missing.length > 0 ? (
-          <button
-            type="button"
+          <Button
+            variant="secondary"
+            size="sm"
             data-sound="none"
             onClick={addMissing}
-            className="shrink-0 text-xs font-medium text-primary hover:underline"
+            className="shrink-0"
           >
             Add {missing.length}
-          </button>
+          </Button>
         ) : (
           <span className="shrink-0 text-xs text-muted-foreground">All in deck</span>
         ))}

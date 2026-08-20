@@ -12,12 +12,16 @@ test.describe('console output in a question stem', () => {
   test('scrolls inside its own panel instead of overflowing the card', async ({ page }) => {
     await page.goto('/quiz?ids=masii-2019f-q14')
 
+    // The quiz page holds a spinner until mastery loads, so wait for whichever
+    // it settles on — the pre-quiz collect gate or the question itself — rather
+    // than probing the gate button before it can exist.
     const startQuiz = page.getByRole('button', { name: 'Start Quiz' })
-    if (await startQuiz.isVisible().catch(() => false)) {
+    const block = page.locator('pre').first()
+    await expect(startQuiz.or(block).first()).toBeVisible()
+    if (await startQuiz.isVisible()) {
       await startQuiz.click()
     }
 
-    const block = page.locator('pre').first()
     await expect(block).toBeVisible()
     await expect(block).toContainText('(Intercept)')
 

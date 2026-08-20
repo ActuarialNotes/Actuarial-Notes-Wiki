@@ -6,6 +6,8 @@ import { NavProgressBar } from '@/components/NavProgressBar'
 import { Button } from '@/components/ui/button'
 import { isAnswerCorrect, isMultiPartAnswerComplete } from '@/lib/parser'
 import type { Question, SelfGrade } from '@/lib/parser'
+import { pendingAnswerFor, tagPendingAnswer } from '@/lib/pendingAnswer'
+import type { PendingAnswer } from '@/lib/pendingAnswer'
 import type { RecentMistake } from '@/lib/recentMistakes'
 import type { ConceptMasteryRecord } from '@/lib/mastery'
 import { recordReviewAnswers, type QuizResponse } from '@/stores/quizStore'
@@ -92,10 +94,13 @@ export function MistakesReviewModal({ mistakes, masteryRecords, onFixedChange, o
   const [responses, setResponses] = useState<Record<string, QuizResponse>>({})
   const [manualGrades, setManualGrades] = useState<Record<string, SelfGrade>>({})
   // Multi-part answers accumulate per part, so they need an explicit commit.
-  const [pending, setPending] = useState<string | null>(null)
+  // Tagged with the question they were entered for so a half-typed answer is
+  // never read back on the next question (see lib/pendingAnswer.ts).
+  const [pending, setPending] = useState<PendingAnswer | null>(null)
 
   const current = items[index]
   const question = current?.question
+  const pendingAnswer = pendingAnswerFor(pending, question)
   const response = question ? responses[question.id] : undefined
   const locked = response !== undefined
   const shownAt = useRef(Date.now())
@@ -103,7 +108,6 @@ export function MistakesReviewModal({ mistakes, masteryRecords, onFixedChange, o
 
   useEffect(() => {
     shownAt.current = Date.now()
-    setPending(null)
     if (bodyRef.current) bodyRef.current.scrollTop = 0
   }, [index])
 
@@ -187,7 +191,7 @@ export function MistakesReviewModal({ mistakes, masteryRecords, onFixedChange, o
 
   function handleAnswer(answer: string) {
     // Multi-part fires on every part edit — hold it until "Check answers".
-    if (question?.type === 'multi-part') setPending(answer)
+    if (question?.type === 'multi-part') setPending(tagPendingAnswer(question, answer))
     else commit(answer)
   }
 
@@ -199,7 +203,7 @@ export function MistakesReviewModal({ mistakes, masteryRecords, onFixedChange, o
   const fixedCount = fixedIds.length
   const currentVerdict = verdictFor(question, responses, manualGrades)
   const isMultiPart = question.type === 'multi-part'
-  const canCheck = pending !== null && isMultiPartAnswerComplete(question, pending)
+  const canCheck = pendingAnswer !== null && isMultiPartAnswerComplete(question, pendingAnswer)
   const name = questionName(question)
   const position = `${index + 1} of ${items.length}`
 
@@ -297,7 +301,7 @@ export function MistakesReviewModal({ mistakes, masteryRecords, onFixedChange, o
           <QuestionCard
             key={question.id}
             question={question}
-            selectedAnswer={response?.chosen ?? pending}
+            selectedAnswer={response?.chosen ?? pendingAnswer}
             onAnswer={handleAnswer}
             showExplanation={locked}
             isLocked={locked}
@@ -314,7 +318,7 @@ export function MistakesReviewModal({ mistakes, masteryRecords, onFixedChange, o
               <Button
                 className="w-full"
                 disabled={!canCheck}
-                onClick={() => canCheck && commit(pending!)}
+                onClick={() => canCheck && commit(pendingAnswer!)}
               >
                 Check answers
               </Button>

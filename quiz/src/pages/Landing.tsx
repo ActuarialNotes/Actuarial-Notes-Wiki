@@ -1137,7 +1137,7 @@ export default function Landing() {
         fixed guess — the bar grows and shrinks with the deck card and the
         sitting selector, and the old `pb-72` both clipped and over-reserved. */}
     <div
-      className="container max-w-2xl mx-auto px-4 pt-0 space-y-6"
+      className="container max-w-4xl mx-auto px-4 sm:px-6 pt-0 space-y-6"
       style={{
         paddingBottom: hasSelection
           ? 'calc(var(--action-bar-height, 16rem) + 1.5rem)'
@@ -1150,7 +1150,7 @@ export default function Landing() {
       {/* Same treatment as the Dashboard's sticky header — a translucent blurred
           background rather than a rule, which would stop at this container's
           edge rather than spanning the viewport. */}
-      <div className="sticky top-14 md:top-28 lg:top-14 z-20 -mx-4 space-y-2 bg-background/95 px-4 py-2.5 backdrop-blur-sm">
+      <div className="sticky top-14 md:top-28 lg:top-14 z-20 -mx-4 sm:-mx-6 space-y-2 bg-background/95 px-4 sm:px-6 py-2.5 backdrop-blur-sm">
         <div className="flex items-center gap-2">
           {hasTopic && (
             <button
@@ -1352,7 +1352,7 @@ export default function Landing() {
         ref={actionBarRef}
         className="fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-20 border-t border-border bg-background/95 backdrop-blur-sm"
       >
-        <div className="container max-w-2xl mx-auto px-4 pt-3 pb-4 space-y-3">
+        <div className="container max-w-4xl mx-auto px-4 sm:px-6 pt-3 pb-4 space-y-3">
           {/* ── Question deck: availability + shuffle the draw ────────── */}
           {poolCount > 0 && (
             <QuestionDeckCard

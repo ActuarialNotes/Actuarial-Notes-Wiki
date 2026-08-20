@@ -33,7 +33,7 @@ import {
   isConceptDoneToday,
 } from '@/lib/planCompletion'
 import { PLAN_LOCKED_EVENT, type PlanLockedDetail } from '@/lib/planForming'
-import { useSchedulePlayback, PLAYBACK_HOLD_MS } from '@/hooks/useSchedulePlayback'
+import { useSchedulePlayback } from '@/hooks/useSchedulePlayback'
 import type { QuizSession } from '@/lib/supabase'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
@@ -1054,7 +1054,7 @@ export function ReadinessCard({
             dayPlanPct={dayPlanPct}
             highlightedDay={displayDay}
             playbackDay={playback.day}
-            playbackStepMs={PLAYBACK_HOLD_MS}
+            playbackStepMs={playback.stepMs}
           />
 
           {/* Day panel — shown when a heatmap day is clicked, and driven by the
@@ -1114,10 +1114,10 @@ export function ReadinessCard({
                   </div>
                 )}
 
-                {/* Session flashcard grid */}
-                {daySessions.length === 0 ? (
-                  <p className="text-xs text-muted-foreground">{isFutureDay ? 'No sessions yet. This day is in the future.' : 'No sessions on this date.'}</p>
-                ) : (
+                {/* Session flashcard grid — a day with no sessions simply shows
+                    none: the day's plan below is the useful half, and during the
+                    schedule sweep an empty-state line would flicker on every day. */}
+                {daySessions.length > 0 && (
                   <div className="grid grid-cols-2 gap-2">
                     {daySessions.map(session => (
                       <QuizSessionCard
@@ -1154,10 +1154,13 @@ export function ReadinessCard({
                           const cIdx = allConcepts.findIndex(c => c.name.toLowerCase() === a.conceptName.toLowerCase())
                           return (
                             <div
-                              // Re-keyed per day during the sweep so each day's concepts flash in.
-                              key={playback.active ? `${displayDay}-${a.conceptName}` : a.conceptName}
-                              style={playback.active ? { animationDelay: `${i * 40}ms` } : undefined}
-                              className={`flex items-center gap-2.5 px-2 py-1.5${playback.active ? ' schedule-playback-concept' : ''}`}
+                              key={a.conceptName}
+                              // The sweep passes a day in well under the time an
+                              // entry animation takes, so mid-sweep the rows just
+                              // swap — the list reads as scrubbing through the
+                              // schedule. Only the day it lands on flashes in.
+                              style={playback.landed ? { animationDelay: `${i * 40}ms` } : undefined}
+                              className={`flex items-center gap-2.5 px-2 py-1.5${playback.landed ? ' schedule-playback-concept' : ''}`}
                             >
                               <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
                               <button

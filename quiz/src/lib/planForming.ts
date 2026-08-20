@@ -48,7 +48,17 @@ export function emitPlanLocked(examId: string): void {
 export const MAX_FORMING_DAYS = 400
 
 /** Wall-clock budget for the whole sweep, before the settle beat. */
-export const TOTAL_REVEAL_MS = 4000
+export const TOTAL_REVEAL_MS = 4500
+
+/**
+ * Shortest beat a day may get. Every day in the plan is shown — the sweep never
+ * skips one — so the floor is what keeps "shown" from meaning a single frame on
+ * a long plan. Roughly two frames at 60Hz: brief, but its own moment.
+ */
+export const MIN_STEP_MS = 24
+
+/** Longest beat, so a two-week plan doesn't crawl. */
+export const MAX_STEP_MS = 90
 
 /**
  * How much of a beat a day with nothing scheduled gets. Plans usually end in a
@@ -64,6 +74,8 @@ export interface FormingTimeline {
   delays: number[]
   /** When the sweep arrives at today. */
   durationMs: number
+  /** The base beat a day with concepts holds — the cadence the card animates to. */
+  stepMs: number
 }
 
 /**
@@ -73,7 +85,7 @@ export interface FormingTimeline {
  */
 export function planFormingStepMs(totalWeight: number): number {
   if (totalWeight <= 0) return 0
-  return Math.min(90, Math.max(14, Math.round(TOTAL_REVEAL_MS / totalWeight)))
+  return Math.min(MAX_STEP_MS, Math.max(MIN_STEP_MS, Math.round(TOTAL_REVEAL_MS / totalWeight)))
 }
 
 /**
@@ -83,7 +95,7 @@ export function planFormingStepMs(totalWeight: number): number {
  */
 export function buildFormingTimeline(days: PlanFormingDay[]): FormingTimeline {
   const n = days.length
-  if (n === 0) return { delays: [], durationMs: 0 }
+  if (n === 0) return { delays: [], durationMs: 0, stepMs: 0 }
 
   const weight = (d: PlanFormingDay) => (d.concepts.length > 0 ? 1 : EMPTY_DAY_WEIGHT)
   let totalWeight = 0
@@ -95,7 +107,7 @@ export function buildFormingTimeline(days: PlanFormingDay[]): FormingTimeline {
   for (let i = n - 2; i >= 0; i--) {
     delays[i] = delays[i + 1] + step * weight(days[i])
   }
-  return { delays, durationMs: delays[0] }
+  return { delays, durationMs: delays[0], stepMs: step }
 }
 
 /**

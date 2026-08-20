@@ -91,6 +91,14 @@ interface Props {
 }
 
 /**
+ * Floor on the lit cell's flare, so a fast sweep reads as one travelling
+ * highlight rather than a strobe. A beat shorter than this releases the cell
+ * mid-flare, and the release transition carries it out — which is exactly the
+ * trail the sweep should leave behind it.
+ */
+const MIN_FLARE_MS = 150
+
+/**
  * The Study Schedule timeline: one square per day, weeks as columns, from a
  * fortnight before the first session to a fortnight past exam day. It is the
  * card's only view — every day between today and the exam is on screen at
@@ -108,7 +116,7 @@ export function ExamHeatmap({
   dayPlanPct,
   highlightedDay,
   playbackDay,
-  playbackStepMs = 190,
+  playbackStepMs = 60,
 }: Props) {
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState('')
@@ -378,7 +386,9 @@ export function ExamHeatmap({
           lit day's flare and the trailing fade stay in step with it. */}
       <div
         className="flex items-stretch gap-[2px]"
-        style={playbackDay ? ({ '--playback-step': `${playbackStepMs}ms` } as CSSProperties) : undefined}
+        style={playbackDay
+          ? ({ '--playback-step': `${Math.max(playbackStepMs, MIN_FLARE_MS)}ms` } as CSSProperties)
+          : undefined}
       >
         <div className="flex flex-col gap-[2px] shrink-0" style={{ width: 16 }}>
           {DAY_LABELS.map((label, i) => (

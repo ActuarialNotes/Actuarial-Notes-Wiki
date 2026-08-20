@@ -90,14 +90,32 @@ test.describe("examiner's report viewer", () => {
   })
 
   test('offers the publisher’s copy when the document can’t be loaded', async ({ page }) => {
-    await page.route('**/api/exam-pdf**', route => route.fulfill({ status: 502, body: 'no' }))
+    await page.route('**/api/exam-pdf**', route =>
+      route.fulfill({ status: 502, contentType: 'application/json', body: '{"error":"Source responded 404"}' }),
+    )
     await page.getByRole('link', { name: /Examiner's Report/ }).click()
 
     const panel = viewer(page)
-    await expect(panel.getByText(/couldn't be loaded/)).toBeVisible()
+    // The endpoint's own explanation, not a parser's guess about the bytes.
+    await expect(panel.getByText(/Source responded 404/)).toBeVisible()
     await expect(panel.getByRole('link', { name: /Open at casact\.org/ })).toHaveAttribute(
       'href',
       /^https:\/\/www\.casact\.org\//,
     )
+  })
+
+  test('says so when the endpoint is missing and the SPA answers instead', async ({ page }) => {
+    // Exactly what a deployment without the function does: the host rewrites
+    // the unknown path to index.html and answers 200 with the app's own page.
+    // Before this was handled the panel reported "Invalid PDF structure", which
+    // reads as a corrupt paper rather than a missing service.
+    await page.route('**/api/exam-pdf**', route =>
+      route.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><html><body>app</body></html>' }),
+    )
+    await page.getByRole('link', { name: /Examiner's Report/ }).click()
+
+    const panel = viewer(page)
+    await expect(panel.getByText(/PDF service isn't available on this deployment/)).toBeVisible()
+    await expect(panel.getByRole('link', { name: /Open at casact\.org/ })).toBeVisible()
   })
 })

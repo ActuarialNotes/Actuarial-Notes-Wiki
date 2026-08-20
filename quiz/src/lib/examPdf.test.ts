@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest'
 import {
   EXAM_PDF_HOSTS,
   isSupportedPdfSource,
+  describeNonPdfResponse,
+  looksLikePdf,
   pdfDownloadUrl,
   pdfFileName,
   pdfProxyUrl,
@@ -48,6 +50,37 @@ describe('viewer URLs', () => {
   it('names the publisher without the www', () => {
     expect(pdfSourceHost(REPORT)).toBe('casact.org')
     expect(pdfSourceHost('nonsense')).toBe('')
+  })
+})
+
+describe('reading a response that is not a PDF', () => {
+  const bytes = (text: string) => new TextEncoder().encode(text)
+
+  it('recognises PDF bytes by their header, not by what the response claims', () => {
+    expect(looksLikePdf(bytes('%PDF-1.4'))).toBe(true)
+    expect(looksLikePdf(bytes('<!doctype html>'))).toBe(false)
+    expect(looksLikePdf(bytes('%PD'))).toBe(false)
+  })
+
+  it('names the deployment when the SPA answers instead of the endpoint', () => {
+    // The failure this exists for: the app's host rewrites unknown paths to
+    // index.html, so a deployment without the function returns 200 + the app's
+    // own page. pdf.js calls that "Invalid PDF structure", which reads as a
+    // corrupt document and sends you looking in the wrong place entirely.
+    expect(describeNonPdfResponse(200, 'text/html; charset=utf-8', '<!doctype html><html>…'))
+      .toBe("the PDF service isn't available on this deployment")
+    expect(describeNonPdfResponse(200, '', '  <html>…')).toContain('deployment')
+  })
+
+  it('passes the endpoint’s own explanation through', () => {
+    expect(describeNonPdfResponse(502, 'application/json', '{"error":"Source responded 404"}'))
+      .toBe('Source responded 404')
+  })
+
+  it('falls back to the status, then to the plain fact', () => {
+    expect(describeNonPdfResponse(503, 'text/plain', 'nope')).toBe('the service responded 503')
+    expect(describeNonPdfResponse(200, 'application/json', 'not json at all')).toBe('the response was not a PDF')
+    expect(describeNonPdfResponse(200, 'application/octet-stream', 'PK\u0003\u0004')).toBe('the response was not a PDF')
   })
 })
 

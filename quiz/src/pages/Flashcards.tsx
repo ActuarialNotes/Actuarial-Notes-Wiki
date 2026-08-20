@@ -80,7 +80,6 @@ import { usePageKeyboard } from '@/hooks/useKeyboard'
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
 import { NavProgressBar } from '@/components/NavProgressBar'
 import { MasteryBadge } from '@/components/MasteryBadge'
-import { MASTERY_FILL } from '@/lib/masteryBadge'
 
 type GroupBy = 'exam' | 'date' | 'alpha' | 'custom' | 'mastery' | 'shuffle'
 type ReverseCardSection = 'definition' | 'math' | 'images'
@@ -155,10 +154,6 @@ const CLEAR_OVERLAY = (
   </>
 )
 
-
-// Concepts that haven't been collected yet sit below New — they're still behind
-// the collect gate, so they get the faintest fill of all.
-const LOCKED_FILL_CLASS = 'bg-muted-foreground/15'
 
 function MasteryPill({ state }: { state: MasteryState }) {
   return <MasteryBadge state={state} size="sm" compact />
@@ -418,13 +413,13 @@ function tileFoilClass(collected: boolean, state: MasteryState): string {
 // static: this is a picker, not a study surface, so a tile never flips. Tapping
 // one puts the card in the deck, tapping it again takes it back out.
 //
-// Colour is state only: the stripe along the foot is the card's mastery (or the
-// faintest fill while it is still behind the collect gate), the green wash and
-// tick are "already in your deck", and the padlock is "not collected yet".
+// Colour is state only: the green wash and tick are "already in your deck", and
+// the padlock is "not collected yet".
 //
-// A collected tile also wears the same rainbow **foil** edge as its counterpart
-// in the deck gallery, scaled by mastery (see `tileFoilClass` above), so one
-// card looks like the same card wherever it is shown.
+// Mastery is the **foil** edge alone — the same rainbow border the card wears in
+// the deck gallery, scaled by level (see `tileFoilClass` above) — so one card
+// looks like the same card wherever it is shown, and the level is read off one
+// material rather than off a second, competing colour.
 function ConceptCardGrid({
   concepts,
   masteryOf,
@@ -466,7 +461,7 @@ function ConceptCardGrid({
             aria-pressed={added}
             title={`${name}${collected ? '' : ' — not collected yet'} — ${added ? 'in your deck (tap to remove)' : 'tap to add to your deck'}`}
             aria-label={added ? `Remove ${name} from your deck` : `Add ${name} to your deck`}
-            className={`relative flex aspect-[4/5] items-center justify-center overflow-hidden rounded-md px-1.5 pb-1.5 text-center transition-colors ${tileFoilClass(collected, masteryOf(name))} ${deckClass}`}
+            className={`relative flex aspect-[4/5] items-center justify-center overflow-hidden rounded-md p-1.5 text-center transition-colors ${tileFoilClass(collected, masteryOf(name))} ${deckClass}`}
           >
             <span
               className={`text-[10px] font-medium leading-[1.2] break-words line-clamp-5 ${
@@ -481,13 +476,6 @@ function ConceptCardGrid({
             {!collected && (
               <Lock className="absolute top-1 left-1 h-2.5 w-2.5 text-muted-foreground/70" aria-hidden="true" />
             )}
-            {/* Mastery, as the one stripe along the foot of the card. */}
-            <span
-              className={`absolute inset-x-0 bottom-0 h-1 ${
-                collected ? MASTERY_FILL[masteryOf(name)] : LOCKED_FILL_CLASS
-              }`}
-              aria-hidden="true"
-            />
           </button>
         )
       })}

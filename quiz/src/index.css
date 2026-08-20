@@ -632,11 +632,11 @@
 
 /* The same foil, worn by the small picker tiles in the add-flashcards sheet
    (ConceptCardGrid) so a collected card looks like the same card there as it
-   does in the deck. Two adjustments for the smaller surface: a lighter edge, so
-   a grid of tiles reads as cards rather than as a page of borders, and a ring
-   lifted above the tile's own content — the mastery stripe runs the full width
-   of the card foot and, being a real child, would otherwise paint over the
-   bottom of the ring and break the border. */
+   does in the deck — and, since the tiles carry no mastery stripe, the foil is
+   the *only* thing showing a card's level there. Two adjustments for the
+   smaller surface: a lighter edge, so a grid of tiles reads as cards rather
+   than as a page of borders, and a ring lifted above the tile's own content, so
+   nothing a tile paints inside itself can break the border. */
 .flashcard-collected.flashcard-tile::before {
   z-index: 1;
 }

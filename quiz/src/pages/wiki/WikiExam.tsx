@@ -8,6 +8,7 @@ import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { ExamReadinessCard } from '@/components/wiki/ExamReadinessCard'
+import { ExamSyllabusButton } from '@/components/wiki/ExamSyllabusButton'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
 import { parseExamMetadata, parseExamSyllabus, wikiExamIdToProgressKey } from '@/lib/wikiParser'
@@ -127,11 +128,25 @@ export default function WikiExam() {
 
   const { examRows } = useExamProgress()
 
+  // The wiki exam id (`p-1`, `5-1`, `mas-i`) — how the guide cards and the
+  // syllabus link are keyed.
+  const wikiExamId = useMemo(() => examIdFromFile(examFileName), [examFileName])
+
+  const extractedTitle = useMemo(() => {
+    if (!content) return null
+    const withoutFm = content.replace(/^---\n[\s\S]*?\n---\n?/, '')
+    const match = withoutFm.match(/^#\s+(.+)$/m)
+    return match ? match[1].trim() : null
+  }, [content])
+
+  // Beside the exam's title: its status/date, then the examining body's own
+  // syllabus — the document this whole page is a reading of.
   const titleBadge = useMemo(() => (
     <span className="inline-flex items-center gap-2 not-prose">
       <ExamStatusBadge progressKey={progressKey} />
+      <ExamSyllabusButton examId={wikiExamId} examLabel={extractedTitle ?? examFileName} />
     </span>
-  ), [progressKey])
+  ), [progressKey, wikiExamId, extractedTitle, examFileName])
 
   const smallTitleBadge = useMemo(() => (
     <span className="inline-flex items-center gap-1.5 not-prose shrink-0">
@@ -150,13 +165,6 @@ export default function WikiExam() {
       <ChevronLeft className="h-5 w-5" />
     </Link>
   ), [])
-
-  const extractedTitle = useMemo(() => {
-    if (!content) return null
-    const withoutFm = content.replace(/^---\n[\s\S]*?\n---\n?/, '')
-    const match = withoutFm.match(/^#\s+(.+)$/m)
-    return match ? match[1].trim() : null
-  }, [content])
 
   // Parsed straight from the page's own markdown rather than through
   // `useWikiSyllabus` (which fetches every exam) — this page already holds the
@@ -250,9 +258,9 @@ export default function WikiExam() {
   }, [pageRefs])
 
   useEffect(() => {
-    setExamId(examIdFromFile(examFileName))
+    setExamId(wikiExamId)
     setPageRefs(pageRefs)
-  }, [pageRefs, examFileName, setExamId, setPageRefs])
+  }, [pageRefs, wikiExamId, setExamId, setPageRefs])
 
   useEffect(() => {
     setPageTitle(extractedTitle)

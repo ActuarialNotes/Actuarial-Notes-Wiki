@@ -85,15 +85,6 @@ import { MASTERY_FILL } from '@/lib/masteryBadge'
 type GroupBy = 'exam' | 'date' | 'alpha' | 'custom' | 'mastery' | 'shuffle'
 type ReverseCardSection = 'definition' | 'math' | 'images'
 
-const GROUP_LABELS: { key: GroupBy; label: string }[] = [
-  { key: 'exam',    label: 'Exam' },
-  { key: 'date',    label: 'Date' },
-  { key: 'alpha',   label: 'A–Z' },
-  { key: 'mastery', label: 'Needs review' },
-  { key: 'shuffle', label: 'Shuffle' },
-  { key: 'custom',  label: 'Custom' },
-]
-
 // How long one card's "clear" animation (border ring → green flood + checkmark
 // → the card collapsing into its own centre and puffing out a ring of little
 // lines; see .flashcard-clearing and friends in index.css) runs.
@@ -1008,7 +999,7 @@ function ViewModeDropdown({
         data-tour="card-content"
         onClick={() => setOpen(v => !v)}
         title="Back content"
-        className={`inline-flex items-center gap-1 px-2 h-9 sm:h-10 rounded-md transition-colors ${
+        className={`inline-flex items-center gap-1 px-3 h-11 rounded-md transition-colors ${
           hasActive
             ? 'bg-primary text-primary-foreground'
             : 'bg-muted text-muted-foreground hover:text-foreground hover:bg-accent'
@@ -1064,10 +1055,10 @@ function ViewModeDropdown({
 }
 
 // The controls footer. Besides the card-display controls (Flip / Back content)
-// it carries the deck's sort order, the manage-deck bin and the round + that
-// opens the add-flashcards sheet, pinned to the right-hand end. The sort
-// dropdown lives here in both views — study and gallery — so there's one place
-// to reach for it.
+// it carries the manage-deck bin and the round + that opens the add-flashcards
+// sheet, pinned to the right-hand end. Every control in the bar is one 44px
+// (h-11) tap target, so the row reads as a single row of equally weighted
+// controls rather than small ones orbiting the +.
 function FlashcardControlsBar({
   reverseCardModes,
   onToggleMode,
@@ -1075,8 +1066,6 @@ function FlashcardControlsBar({
   onFlipToggle,
   onShortcutsHelp,
   cardCount = 0,
-  groupBy,
-  onGroupByChange,
   onManage,
   onCardsAdded,
 }: {
@@ -1085,17 +1074,15 @@ function FlashcardControlsBar({
   flip: boolean
   onFlipToggle: () => void
   onShortcutsHelp: () => void
-  // Deck controls — only rendered once there's a deck to sort or manage.
+  // Deck controls — only rendered once there's a deck to manage.
   cardCount?: number
-  groupBy?: GroupBy
-  onGroupByChange?: (g: GroupBy) => void
   onManage?: () => void
   onCardsAdded?: () => void
 }) {
   const hasDeck = cardCount > 0
   return (
     <div className="flex items-center gap-2 sm:gap-4 px-3 sm:px-4 py-3 sm:py-4 bg-background shadow-[0_-1px_4px_rgba(0,0,0,0.06)]">
-      <div className="flex items-center gap-2 shrink-0">
+      <div className="flex h-11 items-center gap-2 shrink-0 rounded-md bg-muted px-2.5">
         <span className="text-xs sm:text-sm text-muted-foreground">Flip</span>
         <button
           type="button"
@@ -1115,39 +1102,13 @@ function FlashcardControlsBar({
 
       <ViewModeDropdown reverseCardModes={reverseCardModes} onToggleMode={onToggleMode} />
 
-      {/* Sort order. "Shuffle" lives in here, which is why the bar carries no
-          separate shuffle button (the S shortcut still works). The label is
-          hidden on the narrowest phones, where the bar has no room for it —
-          the select keeps its accessible name either way. */}
-      {hasDeck && groupBy && onGroupByChange && (
-        <div className="flex items-center gap-1.5 shrink-0">
-          <label
-            htmlFor="flashcard-sort"
-            className="hidden sm:inline text-xs sm:text-sm text-muted-foreground"
-          >
-            Sort
-          </label>
-          <select
-            id="flashcard-sort"
-            value={groupBy}
-            onChange={e => onGroupByChange(e.target.value as GroupBy)}
-            aria-label="Sort deck"
-            className="h-9 sm:h-10 min-w-[3.5rem] max-w-[7.5rem] rounded-md border bg-muted/60 px-2 text-sm font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-          >
-            {GROUP_LABELS.map(({ key, label }) => (
-              <option key={key} value={key}>{label}</option>
-            ))}
-          </select>
-        </div>
-      )}
-
       <button
         type="button"
         onClick={onShortcutsHelp}
         title="Keyboard shortcuts (?)"
         aria-label="Keyboard shortcuts"
-        className="hidden sm:inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-      ><Keyboard className="h-4 w-4 sm:h-5 sm:w-5" /></button>
+        className="hidden sm:inline-flex items-center justify-center h-11 w-11 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+      ><Keyboard className="h-5 w-5" /></button>
 
       <div className="flex-1 min-w-0" />
 
@@ -1157,8 +1118,8 @@ function FlashcardControlsBar({
           onClick={onManage}
           title="Manage cards"
           aria-label="Manage cards"
-          className="inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 shrink-0 rounded-md text-muted-foreground hover:text-destructive hover:bg-accent transition-colors"
-        ><Trash2 className="h-4 w-4 sm:h-5 sm:w-5" /></button>
+          className="inline-flex items-center justify-center h-11 w-11 shrink-0 rounded-md text-muted-foreground hover:text-destructive hover:bg-accent transition-colors"
+        ><Trash2 className="h-5 w-5" /></button>
       )}
 
       <AddFlashcardsButton onCardsAdded={onCardsAdded} />
@@ -2849,12 +2810,6 @@ export default function Flashcards() {
     resetActiveIndex()
   }
 
-  // Selecting "Shuffle" from the sort dropdown draws a fresh order each time.
-  function handleGroupByChange(g: GroupBy) {
-    if (g === 'shuffle') setShuffleOrder(shuffled(cards.map(c => c.name)))
-    setGroupBy(g)
-  }
-
   // Rate a card and advance to the next unfinished one, wrapping around the
   // deck. "Got it" marks it complete; "Again" tallies a lapse (and
   // un-completes a previously finished card that has slipped). Once nothing is
@@ -3298,8 +3253,6 @@ export default function Flashcards() {
             onFlipToggle={() => setGlobalFlip(v => !v)}
             onShortcutsHelp={() => setShowShortcutsHelp(true)}
             cardCount={cards.length}
-            groupBy={groupBy}
-            onGroupByChange={handleGroupByChange}
             onManage={() => setShowManageDialog(true)}
           />
         )}

@@ -130,23 +130,34 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
     setZoom(current => stepZoom(current, direction))
   }, [])
 
+  // The panel can open *over* another one that reads the same keys — a resource
+  // page's source document sits above the concept popup, which also closes on
+  // Esc and steps its own sequence on the arrows. The topmost layer owns those
+  // keys, so this listener runs in the capture phase and stops the ones it
+  // handles before the panel underneath sees them. Only those keys are stopped,
+  // and never from a text field: swallowing keydown wholesale here would reach
+  // React's root listener and break typing everywhere.
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
+      const el = e.target as HTMLElement | null
+      const editing = !!el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable)
       // Esc leaves focus mode first, then closes — same as the concept popup.
       if (e.key === 'Escape') {
+        e.stopPropagation()
         if (focusMode) setFocusMode(false)
         else close()
         return
       }
-      const el = e.target as HTMLElement | null
-      if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable)) return
+      if (editing) return
       if (e.key === 'ArrowLeft') turnPage(-1)
       else if (e.key === 'ArrowRight') turnPage(1)
       else if (e.key === '+' || e.key === '=') changeZoom(1)
       else if (e.key === '-') changeZoom(-1)
+      else return
+      e.stopPropagation()
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    window.addEventListener('keydown', onKey, true)
+    return () => window.removeEventListener('keydown', onKey, true)
   }, [close, focusMode, turnPage, changeZoom])
 
   // Focus mode covers the whole viewport, so lock the page behind it exactly as

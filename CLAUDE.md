@@ -138,14 +138,18 @@ Other important `lib/` modules:
   question bank actually holds, so a released paper that hasn't been imported still lists
   (greyed out, "Not added yet") and a freshly converted one appears without a catalogue edit.
   Rendered by `components/PastExamBrowser.tsx`. See `docs/mock-exam-browser.md`.
-- `examPdf.ts` / `pdfViewer.ts` / `pdfjsSetup.ts` — the exam-PDF reader behind the mock-exam
-  shelf's **Examiner's Report** button. `examPdf.ts` decides which sources are viewable (the
-  same allowlist `quiz/api/exam-pdf.js` enforces) and builds the proxy/download URLs — the page
+- `examPdf.ts` / `pdfViewer.ts` / `pdfjsSetup.ts` — the PDF reader behind the mock-exam
+  shelf's **Examiner's Report** button *and* a resource page's **Read PDF** button
+  (`components/wiki/ResourceMetaCard.tsx`) — a study note, a monograph, an ASOP.
+  `examPdf.ts` decides which sources are viewable (the
+  same allowlist `quiz/api/exam-pdf.js` enforces — every publisher we link documents from,
+  not only the examining bodies) and builds the proxy/download URLs — the page
   can't fetch a publisher's PDF itself, and can't save one cross-origin; `pdfViewer.ts` is
   the pure reading maths (fit-to-width, the canvas pixel budget, the zoom ladder);
   `pdfjsSetup.ts` is the dynamically-imported pdf.js instance (the **legacy** build, plus the
   Standard 14 fonts `vite.config.ts` copies out of node_modules). Rendered by
-  `components/PdfViewerPanel.tsx` in the concept popup's shell. See
+  `components/PdfViewerPanel.tsx` in the concept popup's shell — and, on a resource page,
+  *over* that popup, which is why its key handling is capture-phase. See
   `docs/mock-exam-browser.md`.
 - `passRates.ts` — the client half of the live pass-rate pipeline: sanitises what
   `api/pass-rates.js` returns, caches it in localStorage for a week, and `applyPassRates`

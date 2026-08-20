@@ -218,10 +218,34 @@ changes. Because it takes a URL from the client it is **allowlisted to the exami
 hosts** and to `.pdf` paths over https, re-checked after redirects, and it refuses a response
 that isn't really a PDF (publishers answer 200 with an HTML "not found" page often enough
 that this would otherwise render as an empty panel). Set `EXAM_PDF_HOSTS` to re-aim the
-allowlist without a redeploy.
+allowlist without a redeploy. The two lists — `EXAM_PDF_HOSTS` in `lib/examPdf.ts` and
+`DEFAULT_HOSTS` in the endpoint — are kept in step deliberately: the client refuses the same
+sources up front so a viewer never opens on a request the endpoint will reject.
 
 Every failure path ends in the same place: the panel says so in a sentence and offers the
 publisher's own copy, which is the only action any of them leaves.
+
+### The other reader: a resource page's source document
+
+The panel is not the mock-exam shelf's alone. A `Resources/Books/*.md` page whose frontmatter
+links a PDF — Werner & Modlin, the Friedland study note, an ASOP — opens it the same way, from
+the button on `components/wiki/ResourceMetaCard.tsx`. Same reason as the examiner's report:
+you are reading a concept, you want to check what the source actually says, and a new tab
+costs you your place. Because the resource pages cite standards as well as papers, the
+allowlist above covers `actuarialstandardsboard.org` too.
+
+Two rules that fall out of sharing the panel:
+
+- **A source the proxy won't serve stays an out-link.** `isSupportedPdfSource` decides, and
+  the button says what it does — *Read PDF* when it opens here, *Download PDF* / *Get a copy*
+  when it leaves. `lib/resourceMeta.test.ts` walks every book page and fails if one links a
+  PDF the viewer can't draw, so a new resource can't quietly land in the weaker path.
+- **The topmost panel owns the keyboard.** On a resource page inside the concept popup the
+  viewer sits *over* another panel that also closes on Esc and steps its own sequence on the
+  arrows (`z-50` over `z-40`). `PdfViewerPanel` listens in the **capture** phase and stops
+  only the keys it handles, so Esc closes the document and leaves the popup standing. It
+  stops nothing else: swallowing keydown wholesale at the window would reach React's root
+  listener and break typing across the app.
 
 ### The link table (`data/examPdfLinks.ts`)
 

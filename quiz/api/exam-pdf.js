@@ -1,6 +1,7 @@
-// Vercel serverless function — serves an examining body's PDF from our own
-// origin so the app can show it in a viewer instead of throwing the learner out
-// to a browser tab.
+// Vercel serverless function — serves a publisher's PDF from our own origin so
+// the app can show it in a viewer instead of throwing the learner out to a
+// browser tab. Two surfaces read through it: the mock-exam shelf's examiner's
+// reports, and the wiki's resource pages (a study note, a monograph, an ASOP).
 //
 // Three things make the direct URL unusable in-page:
 //   • the publishers send no `Access-Control-Allow-Origin`, so the browser can't
@@ -13,7 +14,7 @@
 // response be cached at the CDN edge — these papers are frozen documents, so
 // one origin fetch serves everybody.
 //
-// Only the examining bodies' own hosts are reachable through here: this takes a
+// Only the publishing bodies' own hosts are reachable through here: this takes a
 // URL from the client, so without an allowlist it would be an open proxy.
 // Override the list with the EXAM_PDF_HOSTS environment variable (a
 // comma-separated host list) if a body moves its documents.
@@ -24,7 +25,18 @@
 // answer `/api/exam-pdf` with `index.html` — which the viewer receives as a
 // document whose structure is invalid. Same origin, same project, no rewrite.
 
-const DEFAULT_HOSTS = ['casact.org', 'www.casact.org', 'soa.org', 'www.soa.org'];
+// Keep in step with EXAM_PDF_HOSTS in `quiz/src/lib/examPdf.ts` — the client
+// refuses the same sources up front so a viewer never opens on a request this
+// endpoint will reject.
+const DEFAULT_HOSTS = [
+  'casact.org',
+  'www.casact.org',
+  'soa.org',
+  'www.soa.org',
+  // The ASOPs the Exam 5 resource pages cover are published here.
+  'actuarialstandardsboard.org',
+  'www.actuarialstandardsboard.org',
+];
 
 const FETCH_TIMEOUT_MS = 20000;
 const MAX_BYTES = 40 * 1024 * 1024;

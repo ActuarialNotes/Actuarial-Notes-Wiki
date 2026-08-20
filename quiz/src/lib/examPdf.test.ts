@@ -17,6 +17,11 @@ describe('isSupportedPdfSource', () => {
   it('accepts a publisher PDF', () => {
     expect(isSupportedPdfSource(REPORT)).toBe(true)
     expect(isSupportedPdfSource('https://www.soa.org/globalassets/a/b.pdf')).toBe(true)
+    // The resource pages read standards as well as papers, so the standards
+    // board is a publisher here too.
+    expect(
+      isSupportedPdfSource('https://www.actuarialstandardsboard.org/wp-content/uploads/a/asop043_106.pdf'),
+    ).toBe(true)
   })
 
   it('refuses anything the proxy would refuse', () => {

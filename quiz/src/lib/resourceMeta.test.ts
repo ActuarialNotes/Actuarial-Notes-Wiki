@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest'
+import wikiBundle from 'virtual:wiki-content'
 import { isNumberedOutline, parseResourceMeta, preprocessResourceMarkdown } from './resourceMeta'
+import { isSupportedPdfSource } from './examPdf'
 
 const OUTLINE = `## 1 Interest Rate Measurement
 
@@ -76,5 +78,40 @@ Body`
     expect(meta.edition).toBe('8th')
     expect(meta.isbn).toBe('979-8-8901-6016-4')
     expect(meta.getCopyUrl).toBe('https://search.worldcat.org/title/x')
+  })
+})
+
+describe('the vault’s resource links', () => {
+  const bookPages = Object.entries(wikiBundle.files).filter(([path]) =>
+    path.startsWith('Resources/Books/'),
+  )
+
+  it('reads every PDF in the app rather than a browser tab', () => {
+    // Guard against the checks below passing because nothing was collected.
+    const pdfLinks = bookPages
+      .map(([, raw]) => parseResourceMeta(raw).getCopyUrl)
+      .filter(url => url && /\.pdf$/i.test(url))
+    expect(pdfLinks.length).toBeGreaterThan(0)
+
+    // A resource PDF opens in `PdfViewerPanel`, which needs the source to be
+    // https, a `.pdf`, and on a host `quiz/api/exam-pdf.js` will fetch. A page
+    // linking a PDF the proxy won't serve silently falls back to an out-link,
+    // so it fails here instead — either the host belongs on the allowlist or
+    // the link is wrong.
+    const unreadable = bookPages
+      .map(([path, raw]) => [path, parseResourceMeta(raw).getCopyUrl] as const)
+      .filter(([, url]) => url && /\.pdf$/i.test(url) && !isSupportedPdfSource(url))
+      .map(([path, url]) => `${path} → ${url}`)
+    expect(unreadable).toEqual([])
+  })
+
+  it('links http(s) sources only', () => {
+    // `extractUrl` takes whatever is inside the frontmatter's parentheses; a
+    // relative path or a stray note would sail through as a href.
+    const bad = bookPages
+      .map(([path, raw]) => [path, parseResourceMeta(raw).getCopyUrl] as const)
+      .filter(([, url]) => url && !/^https?:\/\//i.test(url))
+      .map(([path, url]) => `${path} → ${url}`)
+    expect(bad).toEqual([])
   })
 })

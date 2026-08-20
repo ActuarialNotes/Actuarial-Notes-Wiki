@@ -6,7 +6,7 @@ date: "2010"
 Edition: 3rd
 Publisher: Casualty Actuarial Society
 Type: Study Note
-Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-02/Estimating-Unpaid-Claims-Friedland.pdf)"
+Available from: "[casact.org](https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf)"
 ---
 The primary [[Loss Reserving|reserving]] text on the [[Exam 5 (CAS)|Exam 5]] syllabus, covering the estimation of [[Unpaid Claims|unpaid claims]] for both insurers and non-insurance entities that retain risk.
 

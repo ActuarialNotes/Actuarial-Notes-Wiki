@@ -6,7 +6,7 @@ date: "2016"
 Edition: 5th
 Publisher: Casualty Actuarial Society
 Type: Study Note
-Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf)"
+Available from: "[casact.org](https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf)"
 ---
 The primary [[Ratemaking]] text on the [[Exam 5 (CAS)|Exam 5]] syllabus. Chapters 1–15 and 17 are on the syllabus; Chapter 16 is excluded.
 

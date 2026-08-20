@@ -1,6 +1,9 @@
-import { Check, Download, ExternalLink, Shuffle } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Check, ExternalLink, FileText, Shuffle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { formatPassRate, hasPublishedStats, type PastExamRow } from '@/lib/pastExams'
+import { isSupportedPdfSource } from '@/lib/examPdf'
+import { PdfViewerPanel } from '@/components/PdfViewerPanel'
 
 // The mock-exam shelf: scroll through the exam's past sittings, see how big
 // each paper is and how many candidates actually passed it, and sit one.
@@ -26,8 +29,8 @@ interface Props {
   /** Where to look the exam's published pass ratios up, when there is somewhere. */
   lookup?: { url: string; label: string } | null
   /**
-   * Examiner's report (or equivalent) for the current selection — offered as a
-   * PDF download beside the pass-rate lookup.
+   * Examiner's report (or equivalent) for the current selection — opened in the
+   * in-app PDF viewer beside the pass-rate lookup.
    */
   reportLink?: { url: string; label: string } | null
 }
@@ -70,6 +73,23 @@ export function PastExamBrowser({
   // an unfilled row's dash is labelled.
   const effectiveColumn = rows.some(r => r.effectivePassRate !== undefined)
 
+  // The report is read in a panel over the builder rather than in a new tab, so
+  // a candidate can check what the examiners said about a question and still be
+  // one tap from starting the paper. Only a source the proxy will serve opens
+  // that way; anything else stays an ordinary out-link.
+  const [viewingReport, setViewingReport] = useState(false)
+  const canView = reportLink ? isSupportedPdfSource(reportLink.url) : false
+  const selectedRow = rows.find(
+    r => r.year === selected?.year && (r.session ?? undefined) === (selected?.session ?? undefined),
+  )
+  const reportSubtitle = selectedRow ? `${examLabel} · ${selectedRow.label}` : examLabel
+  // The panel shows *the current selection's* report, so it follows the shelf
+  // while it's open — and shuts rather than lingering on the last document when
+  // the new selection has none.
+  useEffect(() => {
+    if (!reportLink) setViewingReport(false)
+  }, [reportLink])
+
   return (
     <div className="space-y-2">
       {/* Where to read *about* the papers, above the shelf you pick one from:
@@ -79,14 +99,22 @@ export function PastExamBrowser({
       {(reportLink || lookup) && (
         <div className="flex flex-wrap items-center justify-end gap-2 px-1">
           {reportLink && (
+            // Still an anchor to the publisher underneath: a plain click reads
+            // it here, but ⌘/ctrl-click, middle-click and long-press keep
+            // working the way a link does, and the real URL stays visible.
             <a
               href={reportLink.url}
               target="_blank"
               rel="noreferrer"
-              aria-label={`Download ${reportLink.label} (PDF)`}
+              aria-label={canView ? `View ${reportLink.label} (PDF)` : `Open ${reportLink.label} (PDF)`}
+              onClick={e => {
+                if (!canView || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return
+                e.preventDefault()
+                setViewingReport(true)
+              }}
               className="inline-flex min-h-[36px] items-center gap-2 rounded-md border border-border bg-card px-3 py-1.5 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-              <Download className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+              <FileText className="h-4 w-4 shrink-0 text-primary" aria-hidden />
               {reportLink.label}
               <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
                 PDF
@@ -175,6 +203,15 @@ export function PastExamBrowser({
           )
         })}
       </div>
+
+      {viewingReport && reportLink && canView && (
+        <PdfViewerPanel
+          url={reportLink.url}
+          title={reportLink.label}
+          subtitle={reportSubtitle}
+          onClose={() => setViewingReport(false)}
+        />
+      )}
     </div>
   )
 }

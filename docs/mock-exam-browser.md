@@ -142,9 +142,72 @@ link is a miss waiting to happen:
 
 | Link | What it is | Shown when |
 |---|---|---|
-| Examiner's report | The selected sitting's report PDF, styled as a download button (icon + `PDF` tag) | `getSittingPdfLink` has that sitting — or, for an exam with no dated papers at all, `getExamPdfLink` has the exam-level sample-question PDF |
+| Examiner's report | The selected sitting's paper, opened in the in-app PDF viewer (icon + `PDF` tag) | `getSittingPdfLink` has that sitting — or, for an exam with no dated papers at all, `getExamPdfLink` has the exam-level sample-question PDF |
 | Pass rates | The exam's lookup page (`PASS_RATE_LOOKUP`) | The exam has a lookup entry |
 
 Either can be absent; the row itself disappears only when both are. The report link tracks
 the *selection*, so it appears, changes and vanishes as you move down the shelf — a sitting
 whose report isn't in `SITTING_PDF_LINKS` shows no button rather than a dead one.
+
+## Reading the paper (`PdfViewerPanel`)
+
+Tapping the report opens it **in the app**, in the concept popup's shell: the same slide-up
+bottom panel, the same drag handle and shared preferred height (`useSplitHeight`), the same
+focus-mode expand, the same Previous / position / Next footer — with pages where the popup
+has concepts. Reading what the examiners said about question 7 shouldn't cost you the quiz
+you were building.
+
+| Piece | Role |
+|---|---|
+| `quiz/src/components/PdfViewerPanel.tsx` | The panel: header (title, download, expand, close), canvas, paging + zoom footer |
+| `quiz/src/hooks/usePdfDocument.ts` | Loads one document; imports pdf.js on demand and destroys the loading task on close |
+| `quiz/src/lib/pdfjsSetup.ts` | The pdf.js instance, its worker and the Standard 14 font URL — reached only through a dynamic import |
+| `quiz/src/lib/pdfViewer.ts` | Fit-to-width, the canvas pixel budget, the zoom ladder, page clamping (pure) |
+| `quiz/src/lib/examPdf.ts` | Which sources are viewable, and the endpoint URLs |
+| `api/exam-pdf.js` | Serves the publisher's PDF from our own origin |
+
+**Why the app draws the pages itself.** The obvious implementation — `<iframe src={pdf}>` —
+depends on the browser having a PDF viewer, and Chrome on Android has none (nor do the
+headless browsers this repo's e2e suite runs: they report `navigator.pdfViewerEnabled ===
+false`). An embedded PDF is a blank rectangle there, and no event fires to say so. pdf.js
+renders identically everywhere, and makes the panel's controls ours rather than a plugin's.
+
+Two consequences worth remembering:
+
+- It is the **legacy** pdfjs-dist build. The modern one calls
+  `Map.prototype.getOrInsertComputed`, which only the newest browsers ship — everything else
+  throws on the first render.
+- The **Standard 14 fonts** ship with it. A PDF that names Helvetica/Times without embedding
+  it — routine for anything produced from Word, which is most of what CAS publishes —
+  renders blank text without them. `pdfStandardFontsPlugin` in `vite.config.ts` copies them
+  out of `node_modules` to `/pdf-standard-fonts/`.
+
+**Why the bytes come through `api/exam-pdf.js`.** The publishers send no CORS headers, so the
+page cannot read the file itself (the same reason `api/pass-rates.js` exists), and
+`<a download>` is ignored cross-origin, so "Download" would navigate away instead of saving.
+The endpoint re-serves the file from our origin with `Content-Disposition` chosen by the
+caller (`?download=1` for a save), and caches it hard at the edge — a past paper never
+changes. Because it takes a URL from the client it is **allowlisted to the examining bodies'
+hosts** and to `.pdf` paths over https, re-checked after redirects, and it refuses a response
+that isn't really a PDF (publishers answer 200 with an HTML "not found" page often enough
+that this would otherwise render as an empty panel). Set `EXAM_PDF_HOSTS` to re-aim the
+allowlist without a redeploy.
+
+Every failure path ends in the same place: the panel says so in a sentence and offers the
+publisher's own copy, which is the only action any of them leaves.
+
+### The link table (`data/examPdfLinks.ts`)
+
+A URL in that table is **transcribed from the publisher, never constructed**. The CAS
+filenames look regular and are not — Spring 2019 is `admissions_studytools_exam5_sp19-5.pdf`,
+Spring 2015 is `sp15-5_0.pdf`, Spring 2018 is `sp18-5_examiners_report.pdf`, and Spring 2012
+still sits under `/old/` — so extrapolating the pattern is precisely how the table filled up
+with 404s. A sitting whose PDF hasn't been located is **absent**, and the button simply
+doesn't render.
+
+The gaps are researched, not forgotten: CAS began publishing Examiner's Reports with the
+**May 2012** sitting (2011 has none), stopped when testing moved to CBT in **Fall 2020**, and
+MAS-II was first sat in **Fall 2018**. Fall 2012 Exam 5 has not been located. What's
+published also differs by exam — Exams 5–9 are written papers with an Examiner's Report,
+while the MAS exams are multiple choice and come with a final answer key — so the button's
+label follows the document (`Examiner's Report` vs `Exam & Answer Key`), not the button.

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Download, ExternalLink } from 'lucide-react'
+import { ExternalLink, FileText } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { ResourceMeta } from '@/lib/resourceMeta'
 
@@ -15,7 +15,7 @@ export function ResourceMetaCard({ meta, compact, showTitle = true }: ResourceMe
   // A cover that fails to load drops its column entirely — no empty gutter.
   const [coverFailed, setCoverFailed] = useState(false)
   const isPdf = meta.getCopyUrl ? /\.pdf$/i.test(meta.getCopyUrl) : false
-  const CopyIcon = isPdf ? Download : ExternalLink
+  const CopyIcon = isPdf ? FileText : ExternalLink
   // One size for every line of metadata; colour, not scale, sets the hierarchy.
   // Standards pages name the same body as both author and publisher — say it once.
   const publisher = meta.publisher === meta.author ? undefined : meta.publisher
@@ -46,14 +46,28 @@ export function ResourceMetaCard({ meta, compact, showTitle = true }: ResourceMe
           <p className="text-muted-foreground">{meta2.join(' · ')}</p>
         )}
         {meta.getCopyUrl && (
+          // A control, not fine print: getting hold of the source is the one
+          // action this card offers, so it takes the same shape as the mock-exam
+          // shelf's report button — a thumb-sized bordered target with the file
+          // type spelled out — rather than a text link the eye slides past.
           <a
             href={meta.getCopyUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-1.5 inline-flex items-center gap-1.5 self-start font-medium text-primary hover:underline"
+            aria-label={
+              isPdf
+                ? `Download ${meta.title ?? 'this resource'} (PDF)`
+                : `Get a copy of ${meta.title ?? 'this resource'}`
+            }
+            className="mt-2 inline-flex min-h-[36px] items-center gap-2 self-start rounded-md border border-border bg-muted px-3 py-1.5 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            <CopyIcon className="h-3.5 w-3.5 shrink-0" />
+            <CopyIcon className="h-4 w-4 shrink-0 text-primary" aria-hidden />
             {isPdf ? 'Download PDF' : 'Get a copy'}
+            {isPdf && (
+              <span className="rounded border border-border bg-background px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                PDF
+              </span>
+            )}
           </a>
         )}
       </div>

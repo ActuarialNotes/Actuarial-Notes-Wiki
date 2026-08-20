@@ -142,7 +142,9 @@ Other important `lib/` modules:
   shelf's **Examiner's Report** button. `examPdf.ts` decides which sources are viewable (the
   same allowlist `quiz/api/exam-pdf.js` enforces) and builds the proxy/download URLs — the page
   can't fetch a publisher's PDF itself, and can't save one cross-origin; `pdfViewer.ts` is
-  the pure reading maths (fit-to-width, the canvas pixel budget, the zoom ladder);
+  the pure reading maths (fit-to-width, the render resolution and pixel budget — a
+  page is drawn at ~216 dpi rather than the screen's ratio, or the examining bodies'
+  scanned pages alias into ghosts — and the zoom ladder);
   `pdfjsSetup.ts` is the dynamically-imported pdf.js instance (the **legacy** build, plus the
   Standard 14 fonts `vite.config.ts` copies out of node_modules). Rendered by
   `components/PdfViewerPanel.tsx` in the concept popup's shell. See

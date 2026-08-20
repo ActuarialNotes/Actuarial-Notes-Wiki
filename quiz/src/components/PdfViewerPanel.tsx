@@ -199,15 +199,23 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
           setRendering(false)
           return
         }
-        const viewport = pdfPage.getViewport({ scale: fit * zoom })
+        const scale = fit * zoom
+        const viewport = pdfPage.getViewport({ scale })
         // The canvas is a bitmap: it's sized in device pixels for sharpness and
-        // laid out in CSS pixels, with the ratio capped so a deep zoom on a
-        // retina screen can't ask for a canvas the browser refuses to allocate.
-        const ratio = canvasPixelRatio(viewport.width, viewport.height, window.devicePixelRatio)
+        // laid out in CSS pixels, with the ratio held above a real resolution
+        // (a fitted page is only ~125 dpi at the screen's own ratio, which
+        // scanned pages don't survive) and capped so a deep zoom on a retina
+        // screen can't ask for a canvas the browser refuses to allocate.
+        const ratio = canvasPixelRatio(viewport.width, viewport.height, window.devicePixelRatio, scale)
         canvas.width = Math.floor(viewport.width * ratio)
         canvas.height = Math.floor(viewport.height * ratio)
         canvas.style.width = `${Math.floor(viewport.width)}px`
         canvas.style.height = `${Math.floor(viewport.height)}px`
+        // Sizing a canvas resets its context, so the filtering hint has to be
+        // set after: whatever reduction is left when a 300 dpi scan meets this
+        // canvas should be averaged rather than point-sampled.
+        context.imageSmoothingEnabled = true
+        context.imageSmoothingQuality = 'high'
 
         const renderTask = pdfPage.render({
           canvasContext: context,

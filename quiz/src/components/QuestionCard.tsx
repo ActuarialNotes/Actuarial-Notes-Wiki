@@ -473,6 +473,10 @@ export function QuestionCard({
 
         <CardContent className="space-y-3">
           <FreeEntryInput
+            // A free-entry answer that was typed but never submitted lives only
+            // in the input's own state, where no prop change would clear it —
+            // so tie the input's identity to the question.
+            key={question.id}
             answer={selectedAnswer ?? ''}
             isLocked={isLocked}
             correctAnswer={question.answer}
@@ -521,7 +525,10 @@ export function QuestionCard({
       <CardContent className="space-y-4">
         {parts.map(part => (
           <PartCard
-            key={part.label}
+            // Part labels repeat across questions ("a", "b", …), so keying on
+            // the label alone would hand the next question's part A the
+            // previous one's self-grade and typed answer.
+            key={`${question.id}__${part.label}`}
             part={part}
             partAnswer={isLocked && selectedAnswer
               ? (() => { try { return (JSON.parse(selectedAnswer) as Record<string, string>)[part.label] ?? '' } catch { return '' } })()

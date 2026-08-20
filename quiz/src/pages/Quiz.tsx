@@ -15,6 +15,8 @@ import { PreQuizCollectGate } from '@/components/collect/PreQuizCollectGate'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { isAnswerCorrect, isMultiPartAnswerComplete } from '@/lib/parser'
+import { pendingAnswerFor, tagPendingAnswer } from '@/lib/pendingAnswer'
+import type { PendingAnswer } from '@/lib/pendingAnswer'
 import type { QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
 import { decayIfStale } from '@/lib/mastery'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
@@ -112,8 +114,10 @@ export default function Quiz() {
   const [showIncompletePartsDialog, setShowIncompletePartsDialog] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
-  // Local pre-confirmation selection — not committed to store until "Confirm Answer"
-  const [pendingAnswer, setPendingAnswer] = useState<string | null>(null)
+  // Local pre-confirmation selection — not committed to store until "Confirm
+  // Answer". Tagged with the question it was entered for so it is never read
+  // back on another one (see lib/pendingAnswer.ts).
+  const [pending, setPending] = useState<PendingAnswer | null>(null)
 
   // Self-grading screen for reveal='end' (mock exam) with written questions
   const [showSelfGradeScreen, setShowSelfGradeScreen] = useState(false)
@@ -199,14 +203,16 @@ export default function Quiz() {
     status === 'active' &&
     Object.keys(responses).length === 0
 
-  // Clear pending selection and scroll to top whenever the question changes
+  // Scroll to top whenever the question changes. The pending selection needs no
+  // clearing here — it is tagged with its question and read back through
+  // `pendingAnswer` below, so it simply stops applying.
   useEffect(() => {
-    setPendingAnswer(null)
     setIsChangingAnswer(false)
     window.scrollTo({ top: 0, behavior: 'instant' })
   }, [currentIndex])
 
   const currentQuestion = storeQuestions[currentIndex]
+  const pendingAnswer = pendingAnswerFor(pending, currentQuestion)
   const committedAnswer = currentQuestion ? (responses[currentQuestion.id]?.chosen ?? null) : null
   const isLocked = status === 'reviewing'
   // What to visually highlight: committed answer (locked) or pending selection
@@ -263,7 +269,7 @@ export default function Quiz() {
       // Second tap on already-selected answer confirms it
       handleConfirmAnswer()
     } else {
-      setPendingAnswer(key)
+      setPending(tagPendingAnswer(currentQuestion, key))
     }
   }
 
@@ -313,7 +319,7 @@ export default function Quiz() {
     if (!currentQuestion) return
     const previous = committedAnswer
     clearAnswer(currentQuestion.id)
-    setPendingAnswer(previous)
+    setPending(tagPendingAnswer(currentQuestion, previous))
     setIsChangingAnswer(true)
   }
 
@@ -592,6 +598,10 @@ export default function Quiz() {
 
       <div className="mt-4">
         <QuestionCard
+          // Keyed by question so nothing the card holds locally — a typed
+          // free-entry answer, a self-grade — can outlive the question it
+          // was entered for.
+          key={currentQuestion.id}
           question={currentQuestion}
           selectedAnswer={displayAnswer}
           onAnswer={handleSelectAnswer}

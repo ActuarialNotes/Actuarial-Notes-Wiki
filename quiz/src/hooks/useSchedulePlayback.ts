@@ -1,7 +1,7 @@
 // Drives the "schedule forming" playback on the Dashboard's Study Schedule
 // card: after a plan is locked in, the card rewinds through the schedule from
-// exam day back to today, holding on each day long enough to read the concepts
-// it schedules.
+// exam day back to today, stopping on every day along the way — briefly, but
+// none of them skipped.
 //
 // The hook owns only the *day cursor*. The card reacts to it — ExamHeatmap
 // glides its strip to the day, and the day panel below shows that day's plan —
@@ -17,13 +17,8 @@ import {
 } from '@/lib/planForming'
 import type { StudyPlan } from '@/lib/studyPlan'
 
-/**
- * How long one day stays highlighted before the sweep moves on. The underlying
- * cursor crosses a day every ~14ms on a long plan; this is what makes the
- * schedule readable rather than a blur, and it's also the window the strip has
- * to glide to each new day.
- */
-export const PLAYBACK_HOLD_MS = 190
+/** Beat assumed before a sweep has been timed — see `SchedulePlayback.stepMs`. */
+export const DEFAULT_STEP_MS = 60
 
 /** How long the card rests on today before handing back to normal use. */
 const SETTLE_MS = 1400
@@ -42,6 +37,8 @@ export interface SchedulePlayback {
   landed: boolean
   /** What the finished plan came to — shown in the card header on landing. */
   summary: PlanFormingSummary | null
+  /** The beat the current sweep moves on, so the card can animate in time with it. */
+  stepMs: number
   start: (plan: StudyPlan, examDate: string | null) => void
   stop: () => void
 }
@@ -51,6 +48,7 @@ export function useSchedulePlayback(): SchedulePlayback {
   const [active, setActive] = useState(false)
   const [landed, setLanded] = useState(false)
   const [summary, setSummary] = useState<PlanFormingSummary | null>(null)
+  const [stepMs, setStepMs] = useState(DEFAULT_STEP_MS)
 
   const rafRef = useRef(0)
   const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
@@ -78,6 +76,7 @@ export function useSchedulePlayback(): SchedulePlayback {
 
     const timeline = buildFormingTimeline(days)
     setSummary(summarizeFormingDays(days))
+    setStepMs(timeline.stepMs || DEFAULT_STEP_MS)
     setActive(true)
 
     const settle = () => {
@@ -99,29 +98,31 @@ export function useSchedulePlayback(): SchedulePlayback {
     setLanded(false)
     setDay(days[days.length - 1].date)
 
-    const start = performance.now()
+    const startedAt = performance.now()
     let shown = days.length - 1
-    let shownAt = start
 
     const tick = (now: number) => {
-      const elapsed = now - start
-      const cursor = formingIndexAt(timeline, elapsed)
-      if (cursor !== shown && now - shownAt >= PLAYBACK_HOLD_MS) {
-        shown = cursor
-        shownAt = now
-        setDay(days[cursor].date)
+      // The timeline says which day the sweep is *due* on; the cursor only ever
+      // steps one day toward it per frame. That's what makes the rewind show
+      // the whole schedule: on a long plan the beat is shorter than a frame, so
+      // jumping straight to the due day would skip most of the days it passed,
+      // whereas walking gives every single day at least one frame on screen —
+      // and a plan whose beats outrun the display simply plays at the display's
+      // pace instead of flickering past.
+      if (formingIndexAt(timeline, now - startedAt) < shown) {
+        shown--
+        setDay(days[shown].date)
       }
-      if (elapsed < timeline.durationMs) {
+      if (shown > 0) {
         rafRef.current = requestAnimationFrame(tick)
         return
       }
-      // Land on today and hold there before releasing the card.
-      setDay(days[0].date)
+      // Landed on today — hold there before releasing the card.
       setLanded(true)
       settle()
     }
     rafRef.current = requestAnimationFrame(tick)
   }, [])
 
-  return { active, day, landed, summary, start, stop }
+  return { active, day, landed, summary, stepMs, start, stop }
 }

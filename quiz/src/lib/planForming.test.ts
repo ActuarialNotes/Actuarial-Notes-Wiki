@@ -7,6 +7,8 @@ import {
   planFormingStepMs,
   summarizeFormingDays,
   MAX_FORMING_DAYS,
+  MAX_STEP_MS,
+  MIN_STEP_MS,
   TOTAL_REVEAL_MS,
 } from './planForming'
 import { addDays, type ConceptAssignment, type StudyPlan } from './studyPlan'
@@ -160,9 +162,15 @@ describe('planFormingStepMs', () => {
   })
 
   it('never flickers on a long plan or crawls on a short one', () => {
-    expect(planFormingStepMs(400)).toBe(14)
-    expect(planFormingStepMs(5)).toBe(90)
+    expect(planFormingStepMs(400)).toBe(MIN_STEP_MS)
+    expect(planFormingStepMs(5)).toBe(MAX_STEP_MS)
     expect(planFormingStepMs(0)).toBe(0)
+  })
+
+  // The sweep shows every day, so the floor is what keeps the shortest beat
+  // longer than a frame — a day should register, not flicker past.
+  it('holds every day for more than one frame', () => {
+    expect(MIN_STEP_MS).toBeGreaterThan(1000 / 60)
   })
 })
 
@@ -198,8 +206,18 @@ describe('buildFormingTimeline', () => {
     expect(gapForDay(2)).toBeLessThan(gapForDay(3))
   })
 
-  // The 14ms floor wins over the budget on a very long plan — a wave that fast
-  // is already at the edge of reading as motion rather than a flicker.
+  it('gives every day its own beat, never a zero-length one', () => {
+    const days = daysWithConceptsOn([1, 3], 6)
+    const { delays, stepMs } = buildFormingTimeline(days)
+
+    expect(stepMs).toBeGreaterThanOrEqual(MIN_STEP_MS)
+    for (let i = 0; i < delays.length - 1; i++) {
+      expect(delays[i] - delays[i + 1]).toBeGreaterThanOrEqual(MIN_STEP_MS / 2)
+    }
+  })
+
+  // The step floor wins over the budget on a very long plan: no day is skipped,
+  // so a 200-day plan simply takes a little longer than a 20-day one.
   it('stays close to the reveal budget even for a long plan', () => {
     const days = buildPlanFormingDays({
       plan: plan({
@@ -214,9 +232,9 @@ describe('buildFormingTimeline', () => {
   })
 
   it('handles a one-day and an empty strip', () => {
-    expect(buildFormingTimeline([])).toEqual({ delays: [], durationMs: 0 })
+    expect(buildFormingTimeline([])).toEqual({ delays: [], durationMs: 0, stepMs: 0 })
     const oneDay = buildFormingTimeline(daysWithConceptsOn([], 0))
-    expect(oneDay).toEqual({ delays: [0], durationMs: 0 })
+    expect(oneDay).toEqual({ delays: [0], durationMs: 0, stepMs: 0 })
   })
 
   describe('formingIndexAt', () => {

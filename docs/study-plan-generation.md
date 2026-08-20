@@ -317,7 +317,17 @@ panel, the same "Planned for this day" list a user gets by tapping a future day.
   roughly the same time, and days with nothing scheduled get a slightly shorter beat — plans
   usually *end* in a run of empty buffer days, which is where the sweep starts. The
   discount is deliberately mild: each day still has to register as its own beat, so a sharp
-  speed-up over the buffer turns the run into a flicker.
-- `formingIndexAt` maps elapsed time back to a day index, which is what the hook samples on
-  each frame (throttled to `PLAYBACK_HOLD_MS`, so the days stay readable however fast the
-  cursor is moving underneath).
+  speed-up over the buffer turns the run into a flicker. The beat is floored at
+  `MIN_STEP_MS` (~2 frames) and capped at `MAX_STEP_MS`; on a long plan the floor wins over
+  the budget, so a 200-day plan takes somewhat longer than the budget rather than blurring.
+- `formingIndexAt` maps elapsed time back to a day index — the day the sweep is *due* on.
+  **Every day in the strip is shown.** The hook samples the due day each frame but only ever
+  steps its cursor one day toward it, so no day is skipped even when the beat is shorter than
+  a frame; a plan whose beats outrun the display just plays at the display's pace. The beat
+  itself is published as `SchedulePlayback.stepMs` → `ExamHeatmap`'s `playbackStepMs` →
+  `--playback-step`, floored again there so the lit cell's swell can't strobe: at speed a cell
+  is released mid-swell and the release transition carries it out, which is the trail that ties
+  the days into one travelling highlight.
+- Because a day passes in well under the time an entry animation takes, the day panel's
+  concept rows just swap while the sweep runs (it reads as scrubbing through the schedule) and
+  only flash in on the day it lands on.

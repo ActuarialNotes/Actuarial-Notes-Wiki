@@ -6,6 +6,8 @@ date: "2015"
 Edition: "Study Note (Dec 2015, rev. Jun 2016)"
 Publisher: Casualty Actuarial Society
 ---
+![[Generalized Linear Models (Larsen - 2015) - Cover.svg]]
+
 A CAS study note covering MAS-I learning objectives C1–C9. It is the syllabus's applied, insurance-facing treatment of the [[Generalized Linear Model]] — the practitioner's counterpart to the theory in [[An Introduction to Generalized Linear Models (Dobson - 2018)]].
 
 **Available from:** the CAS study-note library.

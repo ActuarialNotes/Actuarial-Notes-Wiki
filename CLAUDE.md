@@ -108,6 +108,11 @@ before touching that area**:
   `scripts/generate_concept_figures.py` on top of the dependency-free
   `scripts/figure_kit.py`. Read before editing a figure — they are generated, so a hand
   edit to an SVG is lost on the next run.
+- `docs/resource-covers.md` — the **resource cover images**: where the metadata card gets
+  a source's cover (the page's first image embed), how `scripts/generate_resource_covers.py`
+  draws one from front matter for the pages with no real jacket, and the rule that a real
+  jacket always wins — drop it in under a name that isn't `… - Cover.svg` and the generator
+  leaves it alone forever.
 - `docs/mock-exam-browser.md` — the **Mock Exam past-paper browser** on the quiz builder: the
   authored sitting catalogue (`data/pastExams.ts`), how `lib/pastExams.ts` merges it with the
   question bank so unimported papers still list (greyed out), the **live pass-rate
@@ -355,6 +360,10 @@ compile — don't "clean up" the flagged code as dead.
   `figures_exam_{p,fm,mas_i,mas_ii,5}.py`) draws the per-concept SVGs in `Media/Figures/`
   and inserts their embeds. The figures are **generated** — edit the builder, not the SVG.
   See `docs/concept-figures.md`.
+- `generate_resource_covers.py` (+ `cover_kit.py`) draws the `Resources/Books/` cover
+  images in `Media/Attachments/… - Cover.svg` and inserts their embeds, skipping any page
+  that already has a real jacket. Also **generated** — edit the builder.
+  See `docs/resource-covers.md`.
 
 ## Running things
 

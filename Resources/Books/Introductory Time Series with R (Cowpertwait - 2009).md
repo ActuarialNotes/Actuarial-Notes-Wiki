@@ -7,6 +7,8 @@ Publisher: Springer (Use R! series)
 Type: Textbook
 Available from: "[link.springer.com](https://link.springer.com/book/10.1007/978-0-387-88698-5)"
 ---
+![[Introductory Time Series with R (Cowpertwait - 2009) - Cover.svg]]
+
 The [[Time Series]] text on the [[Exam MAS-II (CAS)|MAS-II]] syllabus, covering section D (objectives D1–D4). The book runs to 12 chapters, covering in order: time series data, correlation, forecasting strategies, basic stochastic models, regression, stationary models, non-stationary models, long-memory processes, spectral analysis, system identification, multivariate models, and state space models. **MAS-II is examined on the first seven** — the constant-variance material through non-stationary models — and does not reach spectral analysis or state space models.
 
 Every method is developed alongside R code on a real series; the data sets are on the authors' companion site.

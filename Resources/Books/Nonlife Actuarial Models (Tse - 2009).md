@@ -7,6 +7,8 @@ Edition: 1e
 Publisher: Cambridge University Press
 ISBN: 978-0521764650
 ---
+![[Nonlife Actuarial Models (Tse - 2009) - Cover.svg]]
+
 On two syllabuses. The loss-modelling reference for [[Exam MAS-I (CAS)|MAS-I]] objectives B1–B4 and B7–B9 — Parts I and IV carry that material: claim [[Frequency|frequency]] and [[Severity|severity]] distributions, [[Aggregate Loss Model|aggregate loss models]], and parametric estimation with [[Censoring|censored]] and [[Truncation|truncated]] data. **Part III is the whole of [[Exam MAS-II (CAS)|MAS-II]] section A** (objectives A1–A2), and is the only part of the book on that syllabus.
 
 ## Part I — Loss Models

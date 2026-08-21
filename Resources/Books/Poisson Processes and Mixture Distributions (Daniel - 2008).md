@@ -6,6 +6,8 @@ date: "2008"
 Edition: Study Note
 Publisher: Casualty Actuarial Society
 ---
+![[Poisson Processes and Mixture Distributions (Daniel - 2008) - Cover.svg]]
+
 A short CAS study note covering MAS-I learning objectives A1–A5 — the [[Poisson Process]] and the mixture ideas that go with it. It is the syllabus's primary treatment of the process variants an exam question is most likely to test.
 
 **Available from:** the CAS study-note library (`studynotes_poissonprocesses.pdf`), and as an SOA Exam MLC study note.

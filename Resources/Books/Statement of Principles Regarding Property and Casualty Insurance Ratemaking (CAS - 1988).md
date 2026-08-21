@@ -7,6 +7,8 @@ Publisher: Casualty Actuarial Society
 Type: Statement of Principles
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-05/Statement-Of-Principles-Ratemaking.pdf)"
 ---
+![[Statement of Principles Regarding Property and Casualty Insurance Ratemaking (CAS - 1988) - Cover.svg]]
+
 The CAS statement setting out the **four principles of ratemaking** and the considerations behind them. On the [[Exam 5 (CAS)|Exam 5]] syllabus for objectives A4 and A16. Short but heavily examined — candidates are expected to state the principles and apply them to a scenario. See [[Principles of Ratemaking]].
 
 ## Definitions

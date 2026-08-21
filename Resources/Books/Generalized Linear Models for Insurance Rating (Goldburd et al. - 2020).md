@@ -8,6 +8,8 @@ Publisher: Casualty Actuarial Society
 Type: Monograph
 Available from: "[casact.org](https://www.casact.org/monograph/cas-monograph-no-5)"
 ---
+![[Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020) - Cover.svg]]
+
 **CAS Monograph No. 5.** On the [[Exam MAS-II (CAS)|MAS-II]] syllabus for objectives C10–C11 — the model-evaluation half of section C — and the standard reference for how a [[Generalized Linear Model]] is actually built into a rating plan.
 
 Where [[An Introduction to Statistical Learning (James et al. - 2021)|James et al.]] supplies the algorithms, this monograph supplies the **insurance context**: what a model has to demonstrate before it can be filed, and the diagnostics an actuary is expected to produce for it.

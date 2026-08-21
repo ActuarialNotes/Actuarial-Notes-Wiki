@@ -8,6 +8,8 @@ Type: Actuarial Standard of Practice
 Code: ASOP No. 12
 Available from: "[actuarialstandardsboard.org](https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop012_132.pdf)"
 ---
+![[ASOP 12 - Risk Classification (ASB - 2005) - Cover.svg]]
+
 The standard governing how actuaries design, review, and change **risk classification systems**. On the [[Exam 5 (CAS)|Exam 5]] syllabus for objectives A4–A5 (evaluating ratemaking data and grouping it to balance [[Homogeneity]] and [[Credibility]]). Adopted December 2005; a revision was subsequently adopted with a December 2023 effective date.
 
 ## Section 1 — Purpose, Scope, and Effective Date

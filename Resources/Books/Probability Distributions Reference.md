@@ -3,6 +3,8 @@ Title: "Probability Distributions — Reference Sheet"
 Author: Actuarial Notes
 Type: Reference Sheet
 ---
+![[Probability Distributions Reference - Cover.svg]]
+
 Every named distribution on the [[Exam P-1 (SOA)|Exam P]] syllabus, one card each. Tap a card to open its live plot — drag the parameters, switch between PMF/PDF and CDF, and draw Monte-Carlo samples to watch the shape the formula produces. The density, moments, MGF and the notes that matter sit underneath the plot.
 
 ## Discrete

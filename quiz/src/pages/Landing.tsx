@@ -39,6 +39,7 @@ import { buildPastExamRows } from '@/lib/pastExams'
 import { applyPassRates } from '@/lib/passRates'
 import { useExamPassRates } from '@/hooks/useExamPassRates'
 import { PastExamBrowser } from '@/components/PastExamBrowser'
+import { examStatus } from '@/lib/examStatus'
 
 type ExamOrg = 'SOA' | 'CAS'
 
@@ -255,7 +256,7 @@ function ExamOptionCard({
   subtitle,
   todayQuizCount = 0,
 }: {
-  exam: { value: string; label: string }
+  exam: { value: string; label: string; progressKey: string }
   onClick: () => void
   questionCount: number
   colorIdx: number  // -1 means not active
@@ -265,8 +266,10 @@ function ExamOptionCard({
   todayQuizCount?: number
 }) {
   const isActive = colorIdx >= 0
-  // P and FM are the mature exams with a full question bank; others are in beta.
-  const isBeta = exam.value !== 'Probability' && exam.value !== 'Financial Mathematics'
+  // P and FM are the mature exams with a full question bank; the rest of what
+  // the builder offers is beta. `lib/examStatus.ts` is the one definition —
+  // it's also what greys out the exams that are still only a syllabus.
+  const isBeta = examStatus(exam.progressKey) === 'beta'
   const description = subtitle ?? null
 
   return (

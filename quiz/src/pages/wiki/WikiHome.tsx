@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigationType } from 'react-router-dom'
-import { BookMarked, CheckCircle2, GraduationCap } from 'lucide-react'
+import { BookMarked, CheckCircle2, GraduationCap, Hammer } from 'lucide-react'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { examDisplayName, wikiRoute } from '@/lib/wikiRoutes'
@@ -13,6 +13,7 @@ import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { computeExamReadiness } from '@/lib/readiness'
+import { examStatus } from '@/lib/examStatus'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { cn } from '@/lib/utils'
 
@@ -256,6 +257,11 @@ export default function WikiHome() {
                     const isInProgress = status === 'in_progress' && variantMatch
                     const isCompleted = status === 'completed' && variantMatch
                     const targetDate = targetDates[examId]
+                    // Exams 6–9 are still only a syllabus outline. They stay
+                    // listed (candidates should see what's coming) but greyed
+                    // out, so the card never reads as material to study from.
+                    const contentStatus = examStatus(examId)
+                    const inDevelopment = contentStatus === 'development'
 
                     const now = new Date()
                     const examRecords = match
@@ -275,7 +281,8 @@ export default function WikiHome() {
                     const level2Pct = total > 0 ? Math.round((level2Count / total) * 100) : 0
                     const level1Pct = total > 0 ? Math.round((level1Count / total) * 100) : 0
 
-                    const hasProgressBar = isInProgress && total > 0
+                    // No readiness readout on an exam with nothing to be ready for.
+                    const hasProgressBar = isInProgress && total > 0 && !inDevelopment
 
                     return (
                       <Link key={exam.path} to={wikiRoute({ kind: 'exam', name: exam.name })} data-tour={examId === 'P' ? 'exam-p' : undefined}>
@@ -286,13 +293,21 @@ export default function WikiHome() {
                             // (completed / beta cards) so it stays balanced if the card
                             // is stretched to match a taller sibling in the grid row.
                             !hasProgressBar && 'justify-center',
-                            !isInProgress && 'hover:bg-accent/30',
-                            isInProgress && 'bg-primary/10 hover:bg-primary/25',
+                            !isInProgress && !inDevelopment && 'hover:bg-accent/30',
+                            isInProgress && !inDevelopment && 'bg-primary/10 hover:bg-primary/25',
+                            // Unbuilt exam: no card surface, a dashed outline and
+                            // dimmed contents — the same "nothing here yet" material
+                            // the empty-state placeholders use. The page is still
+                            // reachable (it holds the published syllabus), it just
+                            // never looks like something to study from.
+                            inDevelopment && 'bg-muted/40 border border-dashed border-muted-foreground/30 shadow-none hover:bg-muted/60',
                           )}
                         >
                           <CardHeader className={hasProgressBar ? 'pb-3' : undefined}>
                             <div className="flex items-center justify-between gap-2">
-                              <CardTitle className="text-base leading-snug">{examDisplayName(exam.name)}</CardTitle>
+                              <CardTitle className={cn('text-base leading-snug', inDevelopment && 'text-muted-foreground')}>
+                                {examDisplayName(exam.name)}
+                              </CardTitle>
                               {isCompleted && (
                                 <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
                               )}
@@ -301,10 +316,18 @@ export default function WikiHome() {
                               <CardDescription className="mt-0.5">{match.examTopic}</CardDescription>
                             )}
 
-                            {/* Status pill — hidden for completed exams */}
-                            {!isCompleted && (isInProgress || (examId !== 'P' && examId !== 'FM')) && (
+                            {/* Status pill — hidden for completed exams. "In
+                                development" outranks everything: it says the
+                                material isn't there, which is true whatever the
+                                candidate has marked this exam as. */}
+                            {!isCompleted && (inDevelopment || isInProgress || contentStatus === 'beta') && (
                               <div className="mt-2">
-                                {isInProgress ? (
+                                {inDevelopment ? (
+                                  <span className="inline-flex items-center gap-1 rounded-full border border-dashed border-muted-foreground/40 px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                                    <Hammer className="h-3 w-3" aria-hidden="true" />
+                                    In development — not yet available
+                                  </span>
+                                ) : isInProgress ? (
                                   <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
                                     {targetDate ? `Exam: ${formatTargetDate(targetDate)}` : 'In Progress'}
                                   </span>

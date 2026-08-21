@@ -178,7 +178,8 @@ you were building.
 |---|---|
 | `quiz/src/components/PdfViewerPanel.tsx` | The panel: header (title, download, expand, close), canvas, zoom slider, page scrubber, paging footer |
 | `quiz/src/hooks/usePdfDocument.ts` | Loads one document; imports pdf.js on demand and destroys the loading task on close |
-| `quiz/src/lib/pdfjsSetup.ts` | The pdf.js instance, its worker and the Standard 14 font URL — reached only through a dynamic import |
+| `quiz/src/lib/pdfjsSetup.ts` | The pdf.js instance, its worker and the URLs of the assets it fetches at run time — reached only through a dynamic import |
+| `quiz/src/lib/pdfjsAssets.ts` | The one list of those asset directories, shared with `vite.config.ts` so the two halves can't drift |
 | `quiz/src/lib/pdfViewer.ts` | Fit-to-width, the render resolution and pixel budget, the zoom range, the pan/anchor maths, page clamping (pure) |
 | `quiz/src/lib/examPdf.ts` | Which sources are viewable, and the endpoint URLs |
 | `quiz/src/components/NavProgressBar.tsx` | The shared position bar, scrubbable here (`onScrub`) |
@@ -196,10 +197,40 @@ Two consequences worth remembering:
 - It is the **legacy** pdfjs-dist build. The modern one calls
   `Map.prototype.getOrInsertComputed`, which only the newest browsers ship — everything else
   throws on the first render.
-- The **Standard 14 fonts** ship with it. A PDF that names Helvetica/Times without embedding
-  it — routine for anything produced from Word, which is most of what CAS publishes —
-  renders blank text without them. `pdfStandardFontsPlugin` in `vite.config.ts` copies them
-  out of `node_modules` to `/pdf-standard-fonts/`.
+- **A good deal of pdf.js lives outside its bundle**, in directories it fetches from at run
+  time and expects the caller to point it at. `pdfjsAssetsPlugin` in `vite.config.ts` copies
+  them out of `node_modules`, `lib/pdfjsSetup.ts` turns them into URLs, and
+  `hooks/usePdfDocument.ts` hands those to `getDocument`. See below — getting this wrong is
+  the most consequential mistake available here.
+
+### The assets pdf.js fetches at run time
+
+| Directory | Served from | What is lost without it |
+|---|---|---|
+| `standard_fonts` | `/pdf-standard-fonts/` | Text in a PDF that names Helvetica/Times/Courier without embedding it — routine for anything produced from Word, so most of what CAS publishes |
+| `wasm` | `/pdf-wasm/` | **The image codecs: CCITT fax, JBIG2, JPEG 2000, colour management** |
+| `cmaps` | `/pdf-cmaps/` | Text in CID-keyed fonts that name a predefined encoding rather than embedding one |
+| `iccs` | `/pdf-iccs/` | The fallback ICC profile |
+
+`wasm` is the one that decides whether a **scanned** page has any ink on it. The older
+papers are photocopies: the page is one big bitonal image, CCITT- or JBIG2-compressed, and
+in pdf.js 6 both of those decode through `jbig2.wasm`. Without the URL,
+`JBig2CCITTFaxImage.decode` throws "JBig2 failed to initialize", the image object resolves
+to **null**, and the scan is never painted — while everything else on the page draws
+normally. The result is a page that looks haunted rather than broken: ghost text from a
+background layer, a few crisp fragments, thin air where the rest of the paper should be.
+It is easy to read as a resampling or font problem, and it is neither.
+
+**None of these failures are loud.** pdf.js warns to the console and carries on drawing the
+rest of the page, so a missing or mistyped URL surfaces as a document that renders *almost*
+right — which is much harder to place than one that doesn't render at all. That is why the
+directory list lives in `lib/pdfjsAssets.ts` and is imported by both halves, and why
+`lib/pdfjsAssets.test.ts` asserts pdfjs-dist still ships each directory: an upgrade that
+renames one would otherwise put the ghost pages back with nothing failing.
+
+The trailing slash on each URL is required — pdf.js throws `Invalid factory url` without
+one. Nothing is fetched until a document actually needs it, so a reader who never opens a
+paper pays for none of it.
 
 **How big a page is drawn.** A canvas is sized in device pixels and laid out in
 CSS pixels, and the obvious ratio between them — `devicePixelRatio` — is the wrong
@@ -208,12 +239,13 @@ even on a 3× screen: ~125 dpi. That is plenty for the pages that are *vector* t
 which pdf.js rasterises at whatever size it is asked for and which come out crisp at
 any resolution. It is not plenty for the pages that are **scans** — the examining
 bodies' older papers include photocopied instruction and question pages, 200–300 dpi
-bitmaps that then have to be squeezed ~2.5× to fit that canvas. At that reduction a
-scan's thin strokes are narrower than a canvas pixel and fall between samples, so the
-text fades in and out along a line — a phrase black, the rest of the sentence a ghost
-— while the underlines and bullets beneath it, thick enough to survive any sampling
-grid, stay solid. It reads as a rendering fault, and only on some pages, because only
-some pages are scans.
+bitmaps that then have to be squeezed ~2.5× to fit that canvas, which costs a scan
+more than it costs vector text: strokes near a pixel wide are what a photocopy is made
+of.
+
+(This resolution floor is *not* what fixed the ghost pages — that was `wasmUrl`, above.
+The two were diagnosed together and only one of them was the bug. Drawing a scan at a
+real resolution is worth doing on its own, but it is a quality choice, not a cure.)
 
 `canvasPixelRatio` therefore holds the ratio to whatever reaches
 `MIN_DEVICE_PIXELS_PER_POINT` (3 px/pt, ~216 dpi) rather than to the screen's, so a
@@ -246,13 +278,26 @@ Three things follow, and all three are load-bearing:
 - **A slider move does not redraw the page.** A drag across the range fires ~60 changes;
   each redraw would be cancelled by the next, so the reader would never see a sharp page.
   The panel keeps three zooms — what was asked for, what the renderer is working towards
-  (140ms behind), and what the canvas is sized for — and covers the gap by scaling the
-  existing bitmap with a CSS transform, which comes off in the same statement that resizes
-  the canvas (a frame later would paint the new page scaled up again).
-- **The scroll position is re-anchored across a redraw** (`anchoredScroll`), on the panel's
-  midpoint for the slider and on the fingers' midpoint for a pinch. Without it every zoom
-  re-anchors at the top-left corner and the paragraph you zoomed in to read has to be
-  hunted down again.
+  (140ms behind), and what the drawn bitmap is sized for — and covers the gap by scaling
+  that bitmap with a CSS transform, which comes off in the same statement that resizes the
+  canvas (a frame later would paint the new page scaled up again).
+- **The layout follows the zoom immediately, even though the bitmap doesn't.** The page
+  sits in a box (`pageBoxRef`) sized for the zoom that was *asked* for, and the stand-in
+  bitmap is scaled from its top-left corner to fill it. So the scrollable area grows
+  continuously under the gesture, every point of the page is already where the redraw will
+  put it, and the redraw changes sharpness and nothing else. Transforming the canvas alone
+  is what the first version did, and it is why zoom used to jump: a transform doesn't
+  resize anything, so the page ballooned about its own centre over a scroll area that
+  hadn't moved, and the redraw then snapped it all into place.
+- **The scroll position is re-anchored on every zoom change** (`anchoredScroll`), in a
+  layout effect so it lands in the same frame — on the panel's midpoint for the slider,
+  and on the fingers' midpoint for a pinch, which is why a pinch holds whatever is between
+  the fingers. The measurement it works from is taken in the event that asked for the
+  zoom, before the DOM has changed under it. Without any of this, zooming re-anchors at
+  the top-left corner and the paragraph you zoomed in to read has to be hunted down again:
+  measured on a 4× zoom while reading two-thirds down a page, the old panel drifted ~30%
+  of the page away from that point, in steps of up to 3% at a time; it now holds to
+  within 0.15%.
 
 **Moving through the document.** The footer's "1 of 423" says where you are and nothing
 about how far that is, and Previous / Next is 422 presses from one end of a Basic Ratemaking

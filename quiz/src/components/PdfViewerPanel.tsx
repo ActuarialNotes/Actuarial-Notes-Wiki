@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import {
   ChevronLeft,
@@ -10,21 +10,24 @@ import {
   Maximize2,
   Minimize2,
   X,
-  ZoomIn,
-  ZoomOut,
 } from 'lucide-react'
 import { useSplitHeight } from '@/hooks/useSplitHeight'
 import { useSoundEffects, useSoundOnMount } from '@/hooks/useSoundEffects'
 import { usePdfDocument } from '@/hooks/usePdfDocument'
 import { pdfDownloadUrl, pdfProxyUrl, pdfSourceHost } from '@/lib/examPdf'
 import {
+  anchoredScroll,
   canvasPixelRatio,
-  canZoom,
   clampPage,
+  clampZoom,
   DEFAULT_ZOOM,
   fitWidthScale,
   formatZoom,
-  stepZoom,
+  MAX_ZOOM,
+  MIN_ZOOM,
+  nudgeZoom,
+  pinchZoom,
+  ZOOM_SLIDER_STEP,
 } from '@/lib/pdfViewer'
 
 /**
@@ -96,14 +99,38 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
   const { doc, pageCount, status, error } = usePdfDocument(proxied)
 
   const [page, setPage] = useState(1)
+  // Three zooms, because a page is a bitmap that takes a moment to redraw and
+  // the slider moves continuously:
+  //   `zoom`       what the reader has asked for, live under their finger;
+  //   `renderZoom` what the drawing effect is working towards, which lags the
+  //                slider until it settles (redrawing on every 0.05 step would
+  //                queue dozens of cancelled renders);
+  //   `sizedZoom`  what the canvas on screen is actually sized for.
+  // The gap between the first and the last is covered by scaling the existing
+  // bitmap with a CSS transform, so the page grows under the finger and only
+  // goes crisp once the render lands.
   const [zoom, setZoom] = useState<number>(DEFAULT_ZOOM)
+  const [renderZoom, setRenderZoom] = useState<number>(DEFAULT_ZOOM)
+  const [sizedZoom, setSizedZoom] = useState<number>(DEFAULT_ZOOM)
   const [rendering, setRendering] = useState(false)
   const [pageError, setPageError] = useState<string | null>(null)
   const [containerWidth, setContainerWidth] = useState(0)
+  const [dragging, setDragging] = useState(false)
 
   const scrollRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  // The zoom the canvas is sized for, readable from inside the render effect
+  // without making it re-run; and the live zoom, readable from the gesture
+  // listeners, which are attached once and would otherwise close over a stale one.
+  const sizedZoomRef = useRef(DEFAULT_ZOOM)
+  const zoomRef = useRef(DEFAULT_ZOOM)
+  // Where in the panel the next resize should hold steady: the pinch's midpoint
+  // or the pointer under a trackpad zoom, else the middle of the panel.
+  const zoomFocusRef = useRef<{ x: number; y: number } | null>(null)
+  const dragRef = useRef<{ id: number; x: number; y: number; left: number; top: number } | null>(null)
   const sourceHost = pdfSourceHost(url)
+
+  useEffect(() => { zoomRef.current = zoom }, [zoom])
 
   const close = useCallback(() => {
     play('close')
@@ -114,7 +141,17 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
   useEffect(() => {
     setPage(1)
     setZoom(DEFAULT_ZOOM)
+    setRenderZoom(DEFAULT_ZOOM)
   }, [proxied])
+
+  // Follow the slider once it stops moving. A drag across the whole range fires
+  // ~60 changes; each one would start a page render only to have it cancelled
+  // by the next, so the reader would see the CSS preview and never a sharp page.
+  useEffect(() => {
+    if (zoom === renderZoom) return
+    const timer = window.setTimeout(() => setRenderZoom(zoom), 140)
+    return () => window.clearTimeout(timer)
+  }, [zoom, renderZoom])
 
   // Stepping pages is a page flick, not a press — the cue the concept popup's
   // Previous/Next makes.
@@ -127,7 +164,7 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
   }, [pageCount, play])
 
   const changeZoom = useCallback((direction: -1 | 1) => {
-    setZoom(current => stepZoom(current, direction))
+    setZoom(current => nudgeZoom(current, direction))
   }, [])
 
   useEffect(() => {
@@ -171,9 +208,9 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
     return () => observer.disconnect()
   }, [status])
 
-  // Draw the current page. Re-runs on page, zoom and width; the previous render
-  // is cancelled so a fast flick through pages can't paint an older page over a
-  // newer one.
+  // Draw the current page. Re-runs on page, settled zoom and width; the previous
+  // render is cancelled so a fast flick through pages can't paint an older page
+  // over a newer one.
   useEffect(() => {
     if (!doc || containerWidth <= 0) return
     let cancelled = false
@@ -199,7 +236,7 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
           setRendering(false)
           return
         }
-        const scale = fit * zoom
+        const scale = fit * renderZoom
         const viewport = pdfPage.getViewport({ scale })
         // The canvas is a bitmap: it's sized in device pixels for sharpness and
         // laid out in CSS pixels, with the ratio held above a real resolution
@@ -207,10 +244,52 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
         // scanned pages don't survive) and capped so a deep zoom on a retina
         // screen can't ask for a canvas the browser refuses to allocate.
         const ratio = canvasPixelRatio(viewport.width, viewport.height, window.devicePixelRatio, scale)
+        // A zoom moves the page under the reader, so where they were looking
+        // has to be put back afterwards. Measured before the canvas is resized;
+        // reading the new size below forces the layout, so both are real.
+        const zoomChanged = sizedZoomRef.current !== renderZoom
+        const holder = scrollRef.current
+        const before = zoomChanged && holder
+          ? {
+              left: holder.scrollLeft,
+              top: holder.scrollTop,
+              width: holder.scrollWidth,
+              height: holder.scrollHeight,
+              clientWidth: holder.clientWidth,
+              clientHeight: holder.clientHeight,
+            }
+          : null
+
         canvas.width = Math.floor(viewport.width * ratio)
         canvas.height = Math.floor(viewport.height * ratio)
         canvas.style.width = `${Math.floor(viewport.width)}px`
         canvas.style.height = `${Math.floor(viewport.height)}px`
+        // The bitmap is now the size the slider asked for, so the CSS preview
+        // stretching the old one has done its job and comes off — here rather
+        // than only in the re-render below, which lands a frame later and would
+        // leave one paint showing a 3×-wide page scaled 3× again.
+        canvas.style.transform = ''
+        sizedZoomRef.current = renderZoom
+        setSizedZoom(renderZoom)
+
+        if (before && holder) {
+          const focus = zoomFocusRef.current
+          holder.scrollLeft = anchoredScroll(
+            before.left,
+            focus?.x ?? before.clientWidth / 2,
+            before.width,
+            holder.scrollWidth,
+            before.clientWidth,
+          )
+          holder.scrollTop = anchoredScroll(
+            before.top,
+            focus?.y ?? before.clientHeight / 2,
+            before.height,
+            holder.scrollHeight,
+            before.clientHeight,
+          )
+        }
+        zoomFocusRef.current = null
         // Sizing a canvas resets its context, so the filtering hint has to be
         // set after: whatever reduction is left when a 300 dpi scan meets this
         // canvas should be averaged rather than point-sampled.
@@ -243,7 +322,7 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
       cancelled = true
       task?.cancel()
     }
-  }, [doc, page, zoom, containerWidth])
+  }, [doc, page, renderZoom, containerWidth])
 
   // Each page starts at its top — landing halfway down page 12 because page 11
   // was scrolled is disorienting.
@@ -251,7 +330,110 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
     if (scrollRef.current) scrollRef.current.scrollTop = 0
   }, [page])
 
+  /**
+   * Panning, on the three things this is read on.
+   *
+   * A zoomed page is bigger than the panel in both directions, and reaching the
+   * rest of it is the whole point of zooming. The page area is a scroll
+   * container, so a finger already pans it natively (with momentum, which no
+   * hand-rolled version matches) — `touch-action: pan-x pan-y` keeps that while
+   * taking pinch away from the browser, which would otherwise zoom the whole
+   * site rather than the document. That leaves the two the browser gives us
+   * nothing for: a mouse, which gets grab-and-drag over the page, and a
+   * trackpad's pinch, which arrives as ctrl+wheel.
+   */
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+
+    function distance(touches: TouchList) {
+      const [a, b] = [touches[0], touches[1]]
+      return Math.hypot(b.clientX - a.clientX, b.clientY - a.clientY)
+    }
+
+    function focusOf(touches: TouchList) {
+      const rect = el!.getBoundingClientRect()
+      return {
+        x: (touches[0].clientX + touches[1].clientX) / 2 - rect.left,
+        y: (touches[0].clientY + touches[1].clientY) / 2 - rect.top,
+      }
+    }
+
+    let pinch: { distance: number; zoom: number } | null = null
+
+    function onTouchStart(e: TouchEvent) {
+      pinch = e.touches.length === 2
+        ? { distance: distance(e.touches), zoom: zoomRef.current }
+        : null
+    }
+
+    function onTouchMove(e: TouchEvent) {
+      if (!pinch || e.touches.length !== 2) return
+      // Non-passive so this can be prevented: two fingers on a scroll container
+      // is a scroll gesture to the browser, and we want it to be a zoom.
+      e.preventDefault()
+      zoomFocusRef.current = focusOf(e.touches)
+      setZoom(pinchZoom(pinch.zoom, pinch.distance, distance(e.touches)))
+    }
+
+    function onTouchEnd(e: TouchEvent) {
+      if (e.touches.length < 2) pinch = null
+    }
+
+    function onWheel(e: WheelEvent) {
+      // ctrl+wheel is what a trackpad pinch and a browser zoom shortcut both
+      // send. Over the document it should zoom the document.
+      if (!e.ctrlKey) return
+      e.preventDefault()
+      const rect = el!.getBoundingClientRect()
+      zoomFocusRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top }
+      setZoom(clampZoom(zoomRef.current * Math.exp(-e.deltaY / 200)))
+    }
+
+    el.addEventListener('touchstart', onTouchStart, { passive: true })
+    el.addEventListener('touchmove', onTouchMove, { passive: false })
+    el.addEventListener('touchend', onTouchEnd, { passive: true })
+    el.addEventListener('touchcancel', onTouchEnd, { passive: true })
+    el.addEventListener('wheel', onWheel, { passive: false })
+    return () => {
+      el.removeEventListener('touchstart', onTouchStart)
+      el.removeEventListener('touchmove', onTouchMove)
+      el.removeEventListener('touchend', onTouchEnd)
+      el.removeEventListener('touchcancel', onTouchEnd)
+      el.removeEventListener('wheel', onWheel)
+    }
+  }, [])
+
+  // Grab-and-drag for a mouse. Only from the page itself: a drag started on the
+  // failure card would capture the pointer and swallow the click on its links.
+  function startPan(e: React.PointerEvent<HTMLDivElement>) {
+    const el = scrollRef.current
+    if (!el || e.pointerType === 'touch' || e.button !== 0) return
+    if ((e.target as HTMLElement).tagName !== 'CANVAS') return
+    e.currentTarget.setPointerCapture(e.pointerId)
+    dragRef.current = { id: e.pointerId, x: e.clientX, y: e.clientY, left: el.scrollLeft, top: el.scrollTop }
+    setDragging(true)
+  }
+
+  function pan(e: React.PointerEvent<HTMLDivElement>) {
+    const drag = dragRef.current
+    const el = scrollRef.current
+    if (!drag || !el || drag.id !== e.pointerId) return
+    el.scrollLeft = drag.left - (e.clientX - drag.x)
+    el.scrollTop = drag.top - (e.clientY - drag.y)
+  }
+
+  function endPan(e: React.PointerEvent<HTMLDivElement>) {
+    if (dragRef.current?.id !== e.pointerId) return
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId)
+    dragRef.current = null
+    setDragging(false)
+  }
+
   const position = pageCount > 0 ? `${clampPage(page, pageCount)} of ${pageCount}` : ''
+  // How far the drawn page has to be stretched to stand in for the zoom the
+  // reader has asked for. 1 whenever the two agree, which is most of the time.
+  const previewScale = sizedZoom > 0 ? zoom / sizedZoom : 1
 
   return createPortal(
     <aside
@@ -323,10 +505,17 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
       </div>
 
       {/* The page. Scrolls in both directions, because a zoomed-in page is
-          wider than the panel and panning it is the point of zooming. */}
+          wider than the panel and panning it is the point of zooming.
+          `pan-x pan-y` keeps a one-finger drag scrolling natively while
+          reserving pinch for the zoom handler above. */}
       <div
         ref={scrollRef}
         className="relative flex-1 min-h-0 overflow-auto overscroll-contain bg-muted/40 [&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
+        style={{ touchAction: 'pan-x pan-y' }}
+        onPointerDown={startPan}
+        onPointerMove={pan}
+        onPointerUp={endPan}
+        onPointerCancel={endPan}
       >
         {status === 'error' ? (
           <ReadingFailure
@@ -335,8 +524,24 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
             sourceHost={sourceHost}
           />
         ) : (
-          <div className="flex min-h-full w-full justify-center p-4">
-            <canvas ref={canvasRef} className="max-w-none shadow-sm" aria-label={`Page ${page}`} />
+          <div className="flex min-h-full w-full p-4">
+            {/* `m-auto` centres the page rather than `justify-center` on the
+                row: auto margins collapse to zero once the page outgrows the
+                panel, where `justify-center` would push half of it off the left
+                edge — into space a scroll container can't reach. That is the
+                half of a zoomed page that used to be unreachable. */}
+            <canvas
+              ref={canvasRef}
+              className="m-auto max-w-none shadow-sm"
+              style={{
+                // Between a slider move and the redraw that follows it, the
+                // page on screen is the old bitmap stretched to the new size.
+                transform: previewScale === 1 ? undefined : `scale(${previewScale})`,
+                transformOrigin: 'center center',
+                cursor: dragging ? 'grabbing' : 'grab',
+              }}
+              aria-label={`Page ${page}`}
+            />
           </div>
         )}
 
@@ -363,8 +568,52 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
         )}
       </div>
 
+      {/* Zoom — the same slider the image gallery and math focus mode use
+          (`.zoom-slider`), for the same reason: on a phone it is dragged with
+          the thumb already holding the device, which a pair of small +/- targets
+          in the footer never was. 1× is the fitted page and the scale goes up
+          from there; the two custom properties recolour the shared control for
+          the card this panel sits on rather than the gallery's black. */}
+      <div
+        className="flex items-center gap-3 sm:gap-4 shrink-0 border-t px-4 sm:px-6 py-1"
+        style={{
+          '--zoom-slider-track': 'hsl(var(--foreground) / 0.18)',
+          '--zoom-slider-thumb': 'hsl(var(--foreground))',
+        } as CSSProperties}
+      >
+        <span className="text-sm text-muted-foreground tabular-nums w-6 shrink-0">
+          {MIN_ZOOM}×
+        </span>
+        <input
+          type="range"
+          min={MIN_ZOOM}
+          max={MAX_ZOOM}
+          step={ZOOM_SLIDER_STEP}
+          value={zoom}
+          disabled={status !== 'ready'}
+          onChange={e => setZoom(clampZoom(parseFloat(e.target.value)))}
+          className="zoom-slider flex-1 disabled:opacity-40"
+          aria-label="Zoom"
+        />
+        <span className="text-sm text-muted-foreground tabular-nums w-6 shrink-0 text-right">
+          {MAX_ZOOM}×
+        </span>
+        <span className="text-sm text-foreground tabular-nums w-10 text-right shrink-0 font-semibold">
+          {formatZoom(zoom)}
+        </span>
+        {zoom > MIN_ZOOM && (
+          <button
+            type="button"
+            onClick={() => setZoom(DEFAULT_ZOOM)}
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors shrink-0"
+          >
+            reset
+          </button>
+        )}
+      </div>
+
       {/* Footer: Previous / where you are / Next, as in the concept popup, with
-          the zoom stop and the way back to the publisher's copy. */}
+          the way back to the publisher's copy. */}
       <div className="flex items-stretch h-16 shrink-0 border-t bg-background/60">
         <button
           type="button"
@@ -378,35 +627,10 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
           <span>Previous</span>
         </button>
 
-        <div className="self-center flex shrink-0 flex-col items-center gap-0.5 px-2">
+        <div className="self-center flex shrink-0 flex-col items-center px-2">
           <span className="text-sm sm:text-xs text-muted-foreground tabular-nums">
             {position || '—'}
           </span>
-          <div className="flex items-center gap-1">
-            <button
-              type="button"
-              disabled={status !== 'ready' || !canZoom(zoom, -1)}
-              onClick={() => changeZoom(-1)}
-              className="inline-flex h-7 w-7 items-center justify-center rounded text-muted-foreground hover:bg-accent hover:text-foreground disabled:opacity-40 transition-colors"
-              title="Zoom out"
-              aria-label="Zoom out"
-            >
-              <ZoomOut className="h-4 w-4" />
-            </button>
-            <span className="min-w-[2.5rem] text-center text-xs text-muted-foreground tabular-nums">
-              {formatZoom(zoom)}
-            </span>
-            <button
-              type="button"
-              disabled={status !== 'ready' || !canZoom(zoom, 1)}
-              onClick={() => changeZoom(1)}
-              className="inline-flex h-7 w-7 items-center justify-center rounded text-muted-foreground hover:bg-accent hover:text-foreground disabled:opacity-40 transition-colors"
-              title="Zoom in"
-              aria-label="Zoom in"
-            >
-              <ZoomIn className="h-4 w-4" />
-            </button>
-          </div>
         </div>
 
         <button

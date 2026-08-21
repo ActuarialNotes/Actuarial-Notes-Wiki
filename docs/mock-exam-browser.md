@@ -176,10 +176,10 @@ you were building.
 
 | Piece | Role |
 |---|---|
-| `quiz/src/components/PdfViewerPanel.tsx` | The panel: header (title, download, expand, close), canvas, paging + zoom footer |
+| `quiz/src/components/PdfViewerPanel.tsx` | The panel: header (title, download, expand, close), canvas, zoom slider, paging footer |
 | `quiz/src/hooks/usePdfDocument.ts` | Loads one document; imports pdf.js on demand and destroys the loading task on close |
 | `quiz/src/lib/pdfjsSetup.ts` | The pdf.js instance, its worker and the Standard 14 font URL — reached only through a dynamic import |
-| `quiz/src/lib/pdfViewer.ts` | Fit-to-width, the render resolution and pixel budget, the zoom ladder, page clamping (pure) |
+| `quiz/src/lib/pdfViewer.ts` | Fit-to-width, the render resolution and pixel budget, the zoom range, the pan/anchor maths, page clamping (pure) |
 | `quiz/src/lib/examPdf.ts` | Which sources are viewable, and the endpoint URLs |
 | `quiz/api/exam-pdf.js` | Serves the publisher's PDF from our own origin |
 
@@ -221,6 +221,36 @@ down to the screen's own pixels is left to the compositor. It takes the render s
 ratio is the screen's again. `MAX_CANVAS_PIXELS` still has the final say — a fitted
 letter page at that resolution is ~4.4 of the 8 megapixels allowed, and a deep zoom is
 capped by the budget exactly as before.
+
+**Zooming, and reaching the rest of the page.** Zoom is a multiple of fit-to-width, so
+1× ("Fit") is always the whole page across the panel and the range runs up to 4×. The
+control is the **same slider** the image gallery (`ImageGalleryModal`) and math focus mode
+use — `.zoom-slider`, with the two custom properties set for a themed background — because
+this is read one-handed on a phone, where a thumb on a 40px knob works and a pair of small
++/− targets in the footer did not. Pinch works too: the page area sets `touch-action:
+pan-x pan-y`, which keeps a one-finger drag scrolling natively (with the momentum no
+hand-rolled pan matches) while taking the pinch away from the browser, which would
+otherwise zoom the whole site. A mouse gets grab-and-drag over the page, a trackpad's
+pinch arrives as ctrl+wheel, and `+`/`−` still nudge by 0.25.
+
+Three things follow, and all three are load-bearing:
+
+- **The page is centred with `m-auto`, never `justify-content: center`.** Once the page is
+  wider than the panel, centring it in a flex row pushes half of it off the *left* edge,
+  into space a scroll container cannot reach — `scrollLeft` bottoms out at 0 with the
+  page's left margin already 150px past it. Auto margins collapse to zero instead when the
+  free space goes negative, so the whole page stays inside the scrollable area. This is
+  what made a zoomed page only half readable.
+- **A slider move does not redraw the page.** A drag across the range fires ~60 changes;
+  each redraw would be cancelled by the next, so the reader would never see a sharp page.
+  The panel keeps three zooms — what was asked for, what the renderer is working towards
+  (140ms behind), and what the canvas is sized for — and covers the gap by scaling the
+  existing bitmap with a CSS transform, which comes off in the same statement that resizes
+  the canvas (a frame later would paint the new page scaled up again).
+- **The scroll position is re-anchored across a redraw** (`anchoredScroll`), on the panel's
+  midpoint for the slider and on the fingers' midpoint for a pinch. Without it every zoom
+  re-anchors at the top-left corner and the paragraph you zoomed in to read has to be
+  hunted down again.
 
 **Why the endpoint lives under `quiz/`.** The quiz app is its own Vercel project rooted at
 `quiz/`, so a function in the repo-root `api/` is *not* on the app's origin. Worse than

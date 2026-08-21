@@ -149,7 +149,8 @@ Other important `lib/` modules:
   can't fetch a publisher's PDF itself, and can't save one cross-origin; `pdfViewer.ts` is
   the pure reading maths (fit-to-width, the render resolution and pixel budget — a
   page is drawn at ~216 dpi rather than the screen's ratio, or the examining bodies'
-  scanned pages alias into ghosts — and the zoom ladder);
+  scanned pages alias into ghosts — plus the 1×–4× zoom range and the pan/re-anchor
+  maths behind the panel's zoom slider);
   `pdfjsSetup.ts` is the dynamically-imported pdf.js instance (the **legacy** build, plus the
   Standard 14 fonts `vite.config.ts` copies out of node_modules). Rendered by
   `components/PdfViewerPanel.tsx` in the concept popup's shell. See

@@ -1,13 +1,17 @@
 import { describe, it, expect } from 'vitest'
 import {
+  anchoredScroll,
   canvasPixelRatio,
-  canZoom,
   clampPage,
+  clampScroll,
+  clampZoom,
   DEFAULT_ZOOM,
   fitWidthScale,
   formatZoom,
-  stepZoom,
-  ZOOM_STEPS,
+  MAX_ZOOM,
+  MIN_ZOOM,
+  nudgeZoom,
+  pinchZoom,
 } from './pdfViewer'
 
 // A4 in PDF points, which is what an exam paper is.
@@ -77,23 +81,64 @@ describe('canvasPixelRatio', () => {
 })
 
 describe('zoom', () => {
-  it('starts at fit-to-width, which reads as "Fit" rather than 100%', () => {
+  it('starts at fit-to-width, which reads as "Fit" rather than a number', () => {
     expect(DEFAULT_ZOOM).toBe(1)
     expect(formatZoom(DEFAULT_ZOOM)).toBe('Fit')
-    expect(formatZoom(1.5)).toBe('150%')
+    expect(formatZoom(1.5)).toBe('1.5×')
   })
 
-  it('steps through the ladder and stops at both ends', () => {
-    expect(stepZoom(1, 1)).toBe(1.5)
-    expect(stepZoom(1, -1)).toBe(0.75)
-    expect(stepZoom(ZOOM_STEPS[ZOOM_STEPS.length - 1], 1)).toBe(4)
-    expect(stepZoom(ZOOM_STEPS[0], -1)).toBe(0.5)
+  it('never goes below the fitted page — there is nothing to read out there', () => {
+    expect(clampZoom(0.25)).toBe(MIN_ZOOM)
+    expect(clampZoom(9)).toBe(MAX_ZOOM)
+    expect(clampZoom(2.4)).toBe(2.4)
+    expect(clampZoom(Number.NaN)).toBe(DEFAULT_ZOOM)
   })
 
-  it('knows when a control has nowhere left to go', () => {
-    expect(canZoom(1, 1)).toBe(true)
-    expect(canZoom(4, 1)).toBe(false)
-    expect(canZoom(0.5, -1)).toBe(false)
+  it('moves a visible amount per key press, and stops at both ends', () => {
+    expect(nudgeZoom(1, 1)).toBe(1.25)
+    expect(nudgeZoom(1, -1)).toBe(MIN_ZOOM)
+    expect(nudgeZoom(MAX_ZOOM, 1)).toBe(MAX_ZOOM)
+  })
+
+  it('scales a pinch from the size it started at', () => {
+    expect(pinchZoom(1, 100, 200)).toBe(2)
+    expect(pinchZoom(2, 200, 100)).toBe(1)
+    // Spreading the fingers past the top of the range still stops there.
+    expect(pinchZoom(2, 100, 400)).toBe(MAX_ZOOM)
+    // A gesture with nothing to measure leaves the zoom alone.
+    expect(pinchZoom(1.5, 0, 120)).toBe(1.5)
+  })
+})
+
+describe('panning a zoomed page', () => {
+  it('has nowhere to go while the page fits', () => {
+    expect(clampScroll(120, 400, 400)).toBe(0)
+    expect(clampScroll(-40, 900, 400)).toBe(0)
+  })
+
+  it('stops at the far edge rather than past it', () => {
+    expect(clampScroll(999, 900, 400)).toBe(500)
+    expect(clampScroll(200, 900, 400)).toBe(200)
+  })
+
+  it('holds the middle of the panel still across a zoom', () => {
+    // A 400px-wide panel showing a 400px page, zoomed to 2×: what was in the
+    // middle of the panel is still in the middle of the panel.
+    expect(anchoredScroll(0, 200, 400, 800, 400)).toBe(200)
+    // And back out again.
+    expect(anchoredScroll(200, 200, 800, 400, 400)).toBe(0)
+  })
+
+  it('holds the point a pinch was centred on, not the middle', () => {
+    // Pinching near the left edge of the panel keeps that column in place.
+    expect(anchoredScroll(0, 50, 400, 800, 400)).toBe(50)
+  })
+
+  it('never leaves the reader outside the page', () => {
+    // Zooming out at the bottom of a long page: the offset that would keep the
+    // anchor still is past the end, so it pins to the end.
+    expect(anchoredScroll(1600, 200, 2000, 500, 400)).toBe(100)
+    expect(anchoredScroll(120, 200, 0, 800, 400)).toBe(120)
   })
 })
 

@@ -1203,6 +1203,24 @@ function SortableCard({
     </button>
   )
 
+  // The collect gate's padlock. It takes the actions menu's corner slot until
+  // the card is collected — the two are never both there, so the corner reads
+  // as one control that unlocks. Plain, like every other corner button: the
+  // foil is the collected card's edge and must not also ring the lock.
+  const lockButton = (
+    <button
+      type="button"
+      data-sound="actions"
+      onPointerDown={e => e.stopPropagation()}
+      onClick={e => { e.stopPropagation(); openCollect(card) }}
+      title="Locked — collect this flashcard"
+      aria-label={`Collect ${card.name}`}
+      className="inline-flex items-center justify-center h-7 w-7 rounded-lg shrink-0 text-muted-foreground hover:text-foreground transition-colors"
+    >
+      <Lock className="h-4 w-4" />
+    </button>
+  )
+
   useEffect(() => {
     if (!showPlayMenu) return
     function handleClickOutside(e: MouseEvent) {
@@ -1254,8 +1272,9 @@ function SortableCard({
   // L3, and amber once a card has decayed (`lib/flashcardFoil.ts`).
   const sheenLevelClass = FOIL_LEVEL_CLASS[masteryState] ? ` ${FOIL_LEVEL_CLASS[masteryState]}` : ''
   const showSheen = (animateCollected ?? collected) && collected
-  // The collect gate's padlock, shown beside the name until the card has been
-  // collected. Focus mode shows the title and nothing else.
+  // The collect gate's padlock, which stands in for the actions menu in the
+  // card's corner until the card has been collected — a locked card has no
+  // actions to offer. Focus mode shows the title and nothing else.
   const showLock = !collected && !focusMode
   const baseClass = `group relative rounded-xl flex flex-col transition-shadow min-h-[150px]${showSheen && !focusMode ? ` flashcard-collected${sheenLevelClass}` : ''}${isFlashing ? ' flashcard-highlight' : ''}${isCompleted ? ' ring-1 ring-green-500/50' : ''}${isClearing ? ' flashcard-clearing' : ''}`
   const colorClass = isActive
@@ -1282,10 +1301,12 @@ function SortableCard({
         className={`${baseClass} ${colorClass} cursor-grab active:cursor-grabbing select-none`}
       >
         {isClearing && CLEAR_OVERLAY}
-        {/* Header: name + play button — hidden in focus mode */}
+        {/* Header: name + play button (the padlock until the card is
+            collected) — hidden in focus mode */}
         {!focusMode && (
         <div className="flex items-center justify-between gap-1 px-3 py-2">
           <span className="text-sm font-medium text-muted-foreground truncate min-w-0">{card.name}</span>
+          {showLock ? lockButton : (
           <div className="relative shrink-0" ref={playMenuRef}>
             <button
               ref={playBtnRef}
@@ -1410,6 +1431,7 @@ function SortableCard({
               </div>
             )}
           </div>
+          )}
         </div>
         )}
         {showQuestionsModal && (
@@ -1495,6 +1517,7 @@ function SortableCard({
       {!focusMode && (
       <div className="absolute top-2 right-2 z-20 flex items-center gap-1.5">
         {showDeckToggle && deckToggleButton}
+        {showLock ? lockButton : (
         <div className="relative" ref={playMenuRef}>
           <button
             ref={playBtnRef}
@@ -1619,6 +1642,7 @@ function SortableCard({
             </div>
           )}
         </div>
+        )}
       </div>
       )}
       {showQuestionsModal && (
@@ -1628,15 +1652,11 @@ function SortableCard({
         <LearningProgressModal conceptName={card.name} onClose={() => setShowLearningProgress(false)} />
       )}
 
-      {/* Name — click to flip — with the collect gate sitting right beside it.
-          The padlock *is* the collect button (same as the concept popup's
-          header): a foil-ringed lock rather than a separate "Collect" pill
-          below, so the gate reads as one control attached to the name. In focus
-          mode the title is the only thing shown: no lock, no mastery pill. */}
+      {/* Name — click to flip. The collect gate is the padlock in the top-right
+          corner, in the actions menu's slot: the card's one control is locked
+          until it's collected, then it becomes the actions menu. So the name
+          sits alone on the card's centre. */}
       <div className={`flex-1 flex items-center justify-center gap-1.5 px-3 min-w-0 ${focusMode ? 'py-4' : 'py-9'}`}>
-        {/* Spacer mirroring the lock, so what's centred is the name itself
-            rather than the name+lock pair. */}
-        {showLock && <span className="h-8 w-8 shrink-0" aria-hidden="true" />}
         <button
           type="button"
           onPointerDown={e => e.stopPropagation()}
@@ -1656,18 +1676,6 @@ function SortableCard({
             {card.name}
           </span>
         </button>
-        {showLock && (
-          <button
-            type="button"
-            onPointerDown={e => e.stopPropagation()}
-            onClick={e => { e.stopPropagation(); openCollect(card) }}
-            title="Locked — collect this flashcard"
-            aria-label={`Collect ${card.name}`}
-            className="lock-foil-ring inline-flex items-center justify-center h-8 w-8 rounded-lg shrink-0 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-          >
-            <Lock className="h-4 w-4" />
-          </button>
-        )}
       </div>
 
       {/* Mastery is the foil border and nothing else — no pill, so the name sits

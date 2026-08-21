@@ -7,7 +7,12 @@ Level 1 (see [Concept Learning Progression](concept-learning-progression.md)).
 ## How it works
 
 1. A **lock icon** sits beside the concept name (before the play/action button)
-   in the concept popup, and in the Flashcards pack shop.
+   in the concept popup, and in the Flashcards pack shop. On a **flashcard tile**
+   (`pages/Flashcards.tsx`) the lock instead takes the play/actions button's
+   corner slot: the two are never both shown, so an uncollected tile offers the
+   lock and nothing else, and collecting it turns that same corner into the
+   actions menu. The tile's lock is plain — no foil ring — because the foil
+   there is the collected card's own edge and the two materials must not fight.
 2. Clicking it opens the **collect modal**: a 3D flashcard render plus a quick
    **comprehension check**.
 3. Passing the check **collects** the concept — a card-spin → screen-bloom →

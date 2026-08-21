@@ -125,6 +125,15 @@ before touching that area**:
 
 Other important `lib/` modules:
 - `parser.ts` — parses question markdown (frontmatter + body) into `Question` objects
+- `vaultMath.ts` — normalises the vault's math delimiters into the shapes `remark-math`
+  can tokenise. The content is authored for Obsidian, whose math parser is looser: an
+  escaped dollar inside inline math (`$\$400$` — currency is everywhere in ratemaking
+  examples) closes the span early and swallows the rest of the sentence as italic "math",
+  and a multi-line `$$\begin{align*}` block whose fence is not alone on its line loses the
+  `\begin` as fence *meta* and runs to the end of the page. Both render as red KaTeX error
+  text. `normalizeVaultMath` is applied by `WikiArticle` and `MarkdownText` before parsing;
+  it only ever moves delimiters, never edits a LaTeX body, and is idempotent. Write the
+  vault the Obsidian way — this module is what makes that render.
 - `wikiParser.ts` / `wikiIndex.ts` / `wikiExtract.ts` — parse wiki pages, build search index, extract syllabus structure
 - `conceptMatch.ts` — resolves concept name variants/aliases to a canonical slug (`slugForLink`)
 - `keystone.ts` — the keystone-concept read side: `findKeystone` / `isKeystone` (strict name

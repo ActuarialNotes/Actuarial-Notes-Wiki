@@ -3,6 +3,7 @@ import { describe, it, expect, afterEach, vi } from 'vitest'
 // stubbed. What matters here is the refusals: this endpoint takes a URL from
 // the client, so the allowlist is the only thing between it and an open proxy.
 import handler, { resolvePdfTarget } from '../../api/exam-pdf.js'
+import { EXAM_PDF_HOSTS } from './examPdf'
 
 const REPORT = 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam5_sp19-5.pdf'
 
@@ -46,6 +47,15 @@ describe('resolvePdfTarget', () => {
     expect(resolvePdfTarget('https://www.casact.org/exams').error).toMatch(/not a PDF/)
     expect(resolvePdfTarget('file:///etc/passwd').error).toBeTruthy()
     expect(resolvePdfTarget('').error).toMatch(/Missing/)
+  })
+
+  it('serves every host the client is willing to open a viewer for', () => {
+    // The two lists are written out separately (a serverless function can't
+    // import from `src/`), so a host added to one and not the other is a viewer
+    // that opens on a request the endpoint then refuses.
+    for (const host of EXAM_PDF_HOSTS) {
+      expect(resolvePdfTarget(`https://${host}/a.pdf`).url).toBe(`https://${host}/a.pdf`)
+    }
   })
 
   it('takes its allowlist from the operator when one is configured', () => {

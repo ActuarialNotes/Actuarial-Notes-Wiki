@@ -119,7 +119,9 @@ before touching that area**:
   and the same rule for the report links in `data/examPdfLinks.ts`: transcribed from the
   publisher, never constructed from the filename pattern. That doc also covers the
   **syllabus button** on a study-guide page (`components/wiki/ExamSyllabusButton.tsx`),
-  which reads the same table and reuses the same viewer.
+  which reads the same table and reuses the same viewer, and the **Read PDF** button on a
+  resource page's metadata card (`components/wiki/ResourceMetaCard.tsx`), which opens an
+  `Available from:` PDF — an ASOP, a CAS study note — in that viewer instead of a browser tab.
 
 Other important `lib/` modules:
 - `parser.ts` — parses question markdown (frontmatter + body) into `Question` objects

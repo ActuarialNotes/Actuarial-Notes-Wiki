@@ -237,8 +237,9 @@ page cannot read the file itself (the same reason `api/pass-rates.js` exists), a
 `<a download>` is ignored cross-origin, so "Download" would navigate away instead of saving.
 The endpoint re-serves the file from our origin with `Content-Disposition` chosen by the
 caller (`?download=1` for a save), and caches it hard at the edge — a past paper never
-changes. Because it takes a URL from the client it is **allowlisted to the examining bodies'
-hosts** and to `.pdf` paths over https, re-checked after redirects, and it refuses a response
+changes. Because it takes a URL from the client it is **allowlisted to the publishers we
+link source PDFs from** (the two examining bodies and the Actuarial Standards Board) and to
+`.pdf` paths over https, re-checked after redirects, and it refuses a response
 that isn't really a PDF (publishers answer 200 with an HTML "not found" page often enough
 that this would otherwise render as an empty panel). Set `EXAM_PDF_HOSTS` to re-aim the
 allowlist without a redeploy.
@@ -273,6 +274,32 @@ Two things differ from the sittings above:
   beats guessed" rule applies: Exams 6U, 8 and 9 have no entry and therefore no button.
   CAS's own naming is the warning against extrapolating — the newer outlines are
   `Exam_6C_CO_2026_Fall.pdf` where the older ones are `Exam7_Content_Outline.pdf`.
+
+### Source documents on a resource page (`ResourceMetaCard`)
+
+The third caller of the viewer isn't an exam at all. A `Resources/Books/*.md` page whose
+frontmatter carries an `Available from:` link to a PDF — the ASOPs, the CAS study notes,
+the SOA's *Risk and Insurance* — shows a **Read PDF** button on its metadata card
+(`components/wiki/ResourceMetaCard.tsx`, rendered both on the resource page and inside the
+concept popup), and that opens the same `PdfViewerPanel`. The reasoning is the one the
+syllabus button uses: the page under it is *our* summary of the source, and checking one
+against the other shouldn't throw a candidate out to a browser tab they then have to find
+their way back from — least of all on a phone, where the tab that opens is a different app
+shell entirely.
+
+The button is a **plain anchor to the publisher underneath**, exactly as the syllabus button
+is: only an unmodified left click is intercepted, so ⌘/ctrl-click, middle-click and
+long-press still behave like a link and the real URL stays visible on hover.
+
+What decides between reading and out-linking is `isSupportedPdfSource` — the same predicate
+the exam shelf uses, so the viewer never opens on a request the endpoint would refuse. A
+resource whose link is a library catalogue (`worldcat.org`), a publisher's shop page, or an
+ASOP *landing* page rather than the document is not a PDF we can serve, and keeps the
+ordinary out-link it always had (`Get a copy`, or `Download PDF` for a PDF on a host outside
+the allowlist). Adding a publisher means adding the host in **both** lists —
+`EXAM_PDF_HOSTS` in `lib/examPdf.ts` and `DEFAULT_HOSTS` in `quiz/api/exam-pdf.js`, which
+can't import from `src/` — and a test in `examPdfEndpoint.test.ts` walks the client list
+through the endpoint's resolver so the two can't drift.
 
 The gaps are researched, not forgotten: CAS began publishing Examiner's Reports with the
 **May 2012** sitting (2011 has none), stopped when testing moved to CBT in **Fall 2020**, and

@@ -406,7 +406,7 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, backLi
         {/* Status banner — thin, full-width, hidden while search dropdown is open */}
         {pageTitle && isInDevelopment && !isExpanded && !planOpen && (
           <div className="bg-amber-500/10 py-1.5 text-center text-amber-600 dark:text-amber-400 text-[11px] font-medium tracking-wide">
-            In Development
+            In Development — syllabus outline only, not yet available to study
           </div>
         )}
         {pageTitle && isBeta && !isExpanded && !planOpen && (

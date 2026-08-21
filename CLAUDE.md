@@ -141,6 +141,13 @@ Other important `lib/` modules:
   vault the Obsidian way — this module is what makes that render.
 - `wikiParser.ts` / `wikiIndex.ts` / `wikiExtract.ts` — parse wiki pages, build search index, extract syllabus structure
 - `conceptMatch.ts` — resolves concept name variants/aliases to a canonical slug (`slugForLink`)
+- `examStatus.ts` — how far along each exam's material is, keyed by exam_progress key:
+  `ready` (P, FM), `beta` (MAS-I, MAS-II, Exam 5) or `development` (Exams 6–9 — a syllabus
+  outline with no question bank yet). The one definition; the study-guide exam grid greys
+  those cards out with an "In development — not yet available" pill instead of a Beta label,
+  the exam page shows the amber *In Development* banner (`WikiFloatingSearch`), and the quiz
+  builder's Beta pill reads the same helper. Move an exam out of development here, not in the
+  surfaces.
 - `keystone.ts` — the keystone-concept read side: `findKeystone` / `isKeystone` (strict name
   matching, no fuzzy hits) and `keystoneProgress` (decay-aware mastery roll-up per exam).
   Rendered by `components/KeystoneName.tsx`; the per-exam list lives in the readiness popup

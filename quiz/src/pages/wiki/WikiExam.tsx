@@ -13,6 +13,7 @@ import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
 import { parseExamMetadata, parseExamSyllabus, wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { todayISO } from '@/lib/studyPlan'
+import { examStatus } from '@/lib/examStatus'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import type { ItemStatus } from '@/data/tracks'
 
@@ -104,7 +105,7 @@ export default function WikiExam() {
   const [searchParams] = useSearchParams()
   const conceptParam = searchParams.get('concept')
   const examFileName = fromSlug(slug)
-  const { setPageRefs, setExamId, setPageTitle, setPageTitleBadge, setBackLink, setStudyPlan, setIsBeta } = useWikiPage()
+  const { setPageRefs, setExamId, setPageTitle, setPageTitleBadge, setBackLink, setStudyPlan, setIsInDevelopment, setIsBeta } = useWikiPage()
   const openAt = useConceptPopup(s => s.openAt)
   const [content, setContent] = useState<string | null>(null)
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
@@ -176,7 +177,10 @@ export default function WikiExam() {
     return parseExamSyllabus(content, meta.examId, meta.examLabel, meta.examTopic, examFileName)
   }, [content, examFileName])
 
-  const isExamBeta = progressKey !== 'P' && progressKey !== 'FM'
+  // How far along this exam's material is — 'ready' (P/FM), 'beta', or
+  // 'development' (Exams 6–9: syllabus outline only). Drives the status banner
+  // under the sticky header.
+  const contentStatus = examStatus(progressKey)
 
   useEffect(() => {
     let cancelled = false
@@ -264,8 +268,9 @@ export default function WikiExam() {
 
   useEffect(() => {
     setPageTitle(extractedTitle)
-    setIsBeta(isExamBeta)
-  }, [extractedTitle, isExamBeta, setPageTitle, setIsBeta])
+    setIsInDevelopment(contentStatus === 'development')
+    setIsBeta(contentStatus === 'beta')
+  }, [extractedTitle, contentStatus, setPageTitle, setIsInDevelopment, setIsBeta])
 
   useEffect(() => {
     setPageTitleBadge(smallTitleBadge)

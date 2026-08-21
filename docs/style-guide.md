@@ -404,9 +404,30 @@ the semantic colour for what's being measured (green for mastery/readiness).
 
 `NavProgressBar` is the `h-1` green bar that sits directly above **every** Previous / Next
 footer (concept popup, flashcard study view, concept detail modal, math-focus overlay,
-recent-mistakes modal), showing how far through the sequence the current item is. Any new
-surface with that footer shape gets it too — it's the position read that survives focus
-mode, where the "N of M" label is stripped.
+recent-mistakes modal, the exam-PDF reader), showing how far through the sequence the
+current item is. Any new surface with that footer shape gets it too — it's the position
+read that survives focus mode, where the "N of M" label is stripped.
+
+**Scrubbing.** Given an `onScrub` handler, that bar is also the *control* for its sequence:
+press anywhere to jump there, drag to run through, arrow / Page / Home / End from the
+keyboard — a video timeline, with the position maths in `lib/navScrub.ts`. The rules:
+
+- **Only bars whose fill is a position in a sequence get a handler.** A bar measuring
+  something the learner *earned* — mastery, XP, exam readiness, quest progress — stays a
+  readout, because there is nowhere to drag to. Without `onScrub` the component renders
+  exactly as before, `role="progressbar"`, untouched and unfocusable.
+- **The row is 24px even though the bar is 4px.** The visible hairline is not a target
+  anyone can hit with a thumb; the grabbable row around it is, and the bar grows to `h-1.5`
+  on hover and `h-2` under a drag so it's clear which one you have hold of.
+- **A bubble names the destination.** A fill alone can't answer "which page is this" on
+  anything long, so the drag (and, on a mouse, the hover) floats the position it would land
+  on, clamped inside both edges.
+- **Scrubbing is silent** — see `docs/sound-design.md`. The Previous / Next buttons make a
+  page flick; a drag past 200 of them would machine-gun it.
+- **`onScrub` fires live**, so the surface moves under the finger. A surface whose item is
+  expensive to show lags that work behind the position itself rather than making the bar
+  wait — `PdfViewerPanel` renders the page 60ms behind the one being scrubbed to, the same
+  shape as its zoom / renderZoom split.
 
 ### 7.6 Empty, loading & error states
 

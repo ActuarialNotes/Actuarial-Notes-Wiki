@@ -208,6 +208,8 @@ export function MathFocusOverlay({ equations, initialIndex, onClose }: Props) {
           total={count}
           className="border-t"
           label={`Equation ${index + 1} of ${count}`}
+          onScrub={next => setIndex(next - 1)}
+          formatValue={n => `Equation ${n} of ${count}`}
         />
         <div className="flex items-stretch h-16 shrink-0 bg-background/60">
           <button

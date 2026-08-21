@@ -176,11 +176,13 @@ you were building.
 
 | Piece | Role |
 |---|---|
-| `quiz/src/components/PdfViewerPanel.tsx` | The panel: header (title, download, expand, close), canvas, zoom slider, paging footer |
+| `quiz/src/components/PdfViewerPanel.tsx` | The panel: header (title, download, expand, close), canvas, zoom slider, page scrubber, paging footer |
 | `quiz/src/hooks/usePdfDocument.ts` | Loads one document; imports pdf.js on demand and destroys the loading task on close |
 | `quiz/src/lib/pdfjsSetup.ts` | The pdf.js instance, its worker and the Standard 14 font URL — reached only through a dynamic import |
 | `quiz/src/lib/pdfViewer.ts` | Fit-to-width, the render resolution and pixel budget, the zoom range, the pan/anchor maths, page clamping (pure) |
 | `quiz/src/lib/examPdf.ts` | Which sources are viewable, and the endpoint URLs |
+| `quiz/src/components/NavProgressBar.tsx` | The shared position bar, scrubbable here (`onScrub`) |
+| `quiz/src/lib/navScrub.ts` | Which page a point on the scrubber means, and what a key press moves to (pure) |
 | `quiz/api/exam-pdf.js` | Serves the publisher's PDF from our own origin |
 
 **Why the app draws the pages itself.** The obvious implementation — `<iframe src={pdf}>` —
@@ -251,6 +253,29 @@ Three things follow, and all three are load-bearing:
   midpoint for the slider and on the fingers' midpoint for a pinch. Without it every zoom
   re-anchors at the top-left corner and the paragraph you zoomed in to read has to be
   hunted down again.
+
+**Moving through the document.** The footer's "1 of 423" says where you are and nothing
+about how far that is, and Previous / Next is 422 presses from one end of a Basic Ratemaking
+to the other. So the panel carries the app's shared `NavProgressBar` between the zoom row
+and the footer — the same green bar every Previous / Next surface has — with the
+`onScrub` handler that makes it a control as well as a readout: press anywhere on it to go
+to that page, or drag along it, the gesture a video timeline uses. A bubble above the
+finger names the page it would land on, because 62% of a 423-page report is not a page
+number. Keyboard: arrows step a page, PageUp/PageDown a tenth of the document, Home/End the
+ends. The maths — which page a point on the track means, and where a key press goes — is
+`lib/navScrub.ts`, kept as the exact inverse of `navProgressPercent` so the page the drag
+lands on is always the one whose fill reaches the finger.
+
+The panel therefore keeps **two page numbers**, for the same reason it keeps three zooms:
+`page` is where the reader is, live under their finger, and `renderPage` is the one being
+drawn, 60ms behind. A drag crosses a page every few milliseconds; parsing each one only to
+cancel it on the next frame would leave the reader watching a spinner instead of the page
+they stopped on. The delay is short enough that a Previous / Next press still starts
+drawing immediately as far as anyone can tell, and the scroll-to-top and the canvas's
+`aria-label` follow `renderPage` so they happen once, with the page that arrives.
+
+Scrubbing is **silent**, unlike the Previous / Next buttons either side of it — a drag past
+200 pages would fire the page-flick cue 200 times. See `docs/sound-design.md`.
 
 **Why the endpoint lives under `quiz/`.** The quiz app is its own Vercel project rooted at
 `quiz/`, so a function in the repo-root `api/` is *not* on the app's origin. Worse than

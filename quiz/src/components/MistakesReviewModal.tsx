@@ -332,6 +332,10 @@ export function MistakesReviewModal({ mistakes, masteryRecords, onFixedChange, o
         current={index + 1}
         total={items.length}
         label={`Question ${index + 1} of ${items.length}`}
+        // Silent, unlike the Previous / Next buttons above: a drag would fire
+        // the page flick once per question it crossed.
+        onScrub={next => setIndex(next - 1)}
+        formatValue={n => `Question ${n} of ${items.length}`}
       />
       <div className="flex items-stretch h-16 shrink-0 bg-background/60">
         <button

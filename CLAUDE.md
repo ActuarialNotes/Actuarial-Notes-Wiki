@@ -172,6 +172,14 @@ Other important `lib/` modules:
   as a ghost, and pdf.js only warns. Rendered by
   `components/PdfViewerPanel.tsx` in the concept popup's shell. See
   `docs/mock-exam-browser.md`.
+- `navScrub.ts` — the maths behind a **scrubbable** progress bar: which item a point on the
+  track means (the exact inverse of `navProgressPercent`, so a drag can't land off by one),
+  and where a key press moves to. Read by `components/NavProgressBar.tsx`, which is the one
+  position bar above every Previous / Next footer and becomes a video-timeline-style control
+  wherever a surface passes `onScrub` — the exam-PDF reader, the quiz's question bar, the
+  concept popup, flashcard study, the concept detail and mistakes modals, math focus. Bars
+  that measure something *earned* (mastery, XP, readiness, quests) deliberately don't get a
+  handler: there is nowhere to drag to. See `docs/style-guide.md` §7.5.
 - `passRates.ts` — the client half of the live pass-rate pipeline: sanitises what
   `api/pass-rates.js` returns, caches it in localStorage for a week, and `applyPassRates`
   lays the published ratios over the authored catalogue per field (live wins, authored is
@@ -303,8 +311,8 @@ Other important `lib/` modules:
 - `github.ts` — fetches wiki content from GitHub raw URLs at runtime (for the live site, vs. the build-time bundle)
 - `supabase.ts` — Supabase client + shared row types
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **57 test files /
-~940 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **80 test files /
+~1200 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, and the research/resource-timeline
 modules).
 

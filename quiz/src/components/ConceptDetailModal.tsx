@@ -595,6 +595,8 @@ export function ConceptDetailModal({
             total={effectiveConcepts!.length}
             className="mt-auto"
             label={`Concept ${localIndex + 1} of ${effectiveConcepts!.length}`}
+            onScrub={next => setLocalIndex(next - 1)}
+            formatValue={n => effectiveConcepts![n - 1]?.name ?? `${n} of ${effectiveConcepts!.length}`}
           />
           <div className="flex items-stretch h-10 shrink-0 bg-muted/10">
             <button

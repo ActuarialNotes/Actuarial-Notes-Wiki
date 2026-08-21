@@ -625,6 +625,12 @@ export function ConceptPopup() {
         current={navCurrent}
         total={navTotal}
         label={`Concept ${index + 1} of ${list.length}`}
+        // Dragging is the same walk Previous / Next takes, just several stops at
+        // once, so it goes through `navigate` rather than setting the index
+        // itself — that's what keeps occurrence mode's concept/mention pairing
+        // (and the dashboard's circular list) working from the bar too.
+        onScrub={next => navigate(next - navCurrent)}
+        formatValue={n => (occMode ? occurrences![n - 1]?.name : list[n - 1]?.name) ?? `${n} of ${navTotal}`}
       />
       <div className="flex items-stretch h-16 shrink-0 bg-background/60">
         <button

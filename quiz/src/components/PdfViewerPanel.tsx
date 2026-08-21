@@ -14,6 +14,7 @@ import {
 import { useSplitHeight } from '@/hooks/useSplitHeight'
 import { useSoundEffects, useSoundOnMount } from '@/hooks/useSoundEffects'
 import { usePdfDocument } from '@/hooks/usePdfDocument'
+import { NavProgressBar } from '@/components/NavProgressBar'
 import { pdfDownloadUrl, pdfProxyUrl, pdfSourceHost } from '@/lib/examPdf'
 import {
   anchoredScroll,
@@ -98,7 +99,14 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
   const proxied = useMemo(() => pdfProxyUrl(url), [url])
   const { doc, pageCount, status, error } = usePdfDocument(proxied)
 
+  // Two page numbers, for the same reason there are three zooms below: `page`
+  // is where the reader is, live under their finger on the scrubber, and
+  // `renderPage` is the one being drawn, which lags it until the scrub settles.
+  // A drag across a 423-page report crosses a page every few milliseconds, and
+  // parsing each one only to cancel it would leave the reader watching a
+  // spinner instead of the page they stopped on.
   const [page, setPage] = useState(1)
+  const [renderPage, setRenderPage] = useState(1)
   // Three zooms, because a page is a bitmap that takes a moment to redraw and
   // the slider moves continuously:
   //   `zoom`       what the reader has asked for, live under their finger;
@@ -214,9 +222,20 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
   // A new document starts at its first page, at fit-width.
   useEffect(() => {
     setPage(1)
+    setRenderPage(1)
     setZoom(DEFAULT_ZOOM)
     setRenderZoom(DEFAULT_ZOOM)
   }, [proxied])
+
+  // Draw the page the reader has settled on. Short enough that a Previous /
+  // Next press still starts drawing immediately as far as anyone can tell, long
+  // enough that a scrub — which crosses pages faster than this the whole way —
+  // renders once, where the finger stops, rather than at every page it passed.
+  useEffect(() => {
+    if (page === renderPage) return
+    const timer = window.setTimeout(() => setRenderPage(page), 60)
+    return () => window.clearTimeout(timer)
+  }, [page, renderPage])
 
   // Follow the slider once it stops moving. A drag across the whole range fires
   // ~60 changes; each one would start a page render only to have it cancelled
@@ -282,7 +301,7 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
     return () => observer.disconnect()
   }, [status])
 
-  // Draw the current page. Re-runs on page, settled zoom and width; the previous
+  // Draw the settled page. Re-runs on page, settled zoom and width; the previous
   // render is cancelled so a fast flick through pages can't paint an older page
   // over a newer one.
   useEffect(() => {
@@ -294,7 +313,7 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
 
     void (async () => {
       try {
-        const pdfPage = await doc.getPage(clampPage(page, doc.numPages))
+        const pdfPage = await doc.getPage(clampPage(renderPage, doc.numPages))
         if (cancelled) return
         const canvas = canvasRef.current
         const context = canvas?.getContext('2d')
@@ -369,13 +388,14 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
       cancelled = true
       task?.cancel()
     }
-  }, [doc, page, renderZoom, containerWidth])
+  }, [doc, renderPage, renderZoom, containerWidth])
 
   // Each page starts at its top — landing halfway down page 12 because page 11
-  // was scrolled is disorienting.
+  // was scrolled is disorienting. Keyed on the drawn page, so a scrub resets the
+  // scroll once, with the page it lands on, rather than at every page it crosses.
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = 0
-  }, [page])
+  }, [renderPage])
 
   /**
    * Panning, on the three things this is read on.
@@ -602,7 +622,7 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
                   transform: previewScale === 1 ? undefined : `scale(${previewScale})`,
                   cursor: dragging ? 'grabbing' : 'grab',
                 }}
-                aria-label={`Page ${page}`}
+                aria-label={`Page ${renderPage}`}
               />
             </div>
           </div>
@@ -674,6 +694,23 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
           </button>
         )}
       </div>
+
+      {/* How far through the document you are — and the way to move through it.
+          "1 of 423" in the footer says where you are but gives no sense of how
+          much is left, and Previous / Next is 422 presses from one end to the
+          other. Drag the bar and the page follows, the same gesture as a video
+          timeline; the bubble names the page you'd land on, because a fraction
+          of a 423-page report isn't a page number. */}
+      {status === 'ready' && pageCount > 0 && (
+        <NavProgressBar
+          current={clampPage(page, pageCount)}
+          total={pageCount}
+          className="border-t"
+          label={`Page ${clampPage(page, pageCount)} of ${pageCount}`}
+          onScrub={next => setPage(clampPage(next, pageCount))}
+          formatValue={n => `Page ${n} of ${pageCount}`}
+        />
+      )}
 
       {/* Footer: Previous / where you are / Next, as in the concept popup, with
           the way back to the publisher's copy. */}

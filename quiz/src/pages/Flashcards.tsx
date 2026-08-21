@@ -3185,6 +3185,8 @@ export default function Flashcards() {
             current={activeIndex + 1}
             total={orderedCards.length}
             label={`Card ${activeIndex + 1} of ${orderedCards.length}`}
+            onScrub={next => setActiveIndex(next - 1)}
+            formatValue={n => orderedCards[n - 1]?.name ?? `${n} of ${orderedCards.length}`}
           />
           <div className="flex items-stretch h-16 shrink-0 bg-background">
             <button

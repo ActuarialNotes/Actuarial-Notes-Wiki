@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { ChevronDown, Bookmark, BookmarkCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { Progress } from '@/components/ui/progress'
+import { NavProgressBar } from '@/components/NavProgressBar'
 
 interface ProgressBarProps {
   current: number   // 1-indexed
@@ -155,7 +155,19 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
         </div>
         <span>{Math.round(percentage)}%</span>
       </div>
-      <Progress value={percentage} className="h-2 [&>div]:bg-foreground" />
+      {/* The bar is the second way to jump between questions, alongside the
+          dropdown above it: press or drag along it to go straight to a question,
+          which on a 60-question mock beats scrolling a 60-row list. Same control
+          as every other progress bar in the app, in the quiz's own colours. */}
+      <NavProgressBar
+        current={current}
+        total={total}
+        label={`Question ${current} of ${total}`}
+        trackClassName="h-2 rounded-full bg-secondary group-hover:h-2.5 group-focus-visible:h-2.5"
+        fillClassName="bg-foreground dark:bg-foreground"
+        onScrub={onNavigate ? position => onNavigate(position - 1) : undefined}
+        formatValue={position => `Question ${position} of ${total}`}
+      />
     </div>
   )
 }

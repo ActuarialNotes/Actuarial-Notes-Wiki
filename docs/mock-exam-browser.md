@@ -276,13 +276,26 @@ Three things follow, and all three are load-bearing:
 - **A slider move does not redraw the page.** A drag across the range fires ~60 changes;
   each redraw would be cancelled by the next, so the reader would never see a sharp page.
   The panel keeps three zooms — what was asked for, what the renderer is working towards
-  (140ms behind), and what the canvas is sized for — and covers the gap by scaling the
-  existing bitmap with a CSS transform, which comes off in the same statement that resizes
-  the canvas (a frame later would paint the new page scaled up again).
-- **The scroll position is re-anchored across a redraw** (`anchoredScroll`), on the panel's
-  midpoint for the slider and on the fingers' midpoint for a pinch. Without it every zoom
-  re-anchors at the top-left corner and the paragraph you zoomed in to read has to be
-  hunted down again.
+  (140ms behind), and what the drawn bitmap is sized for — and covers the gap by scaling
+  that bitmap with a CSS transform, which comes off in the same statement that resizes the
+  canvas (a frame later would paint the new page scaled up again).
+- **The layout follows the zoom immediately, even though the bitmap doesn't.** The page
+  sits in a box (`pageBoxRef`) sized for the zoom that was *asked* for, and the stand-in
+  bitmap is scaled from its top-left corner to fill it. So the scrollable area grows
+  continuously under the gesture, every point of the page is already where the redraw will
+  put it, and the redraw changes sharpness and nothing else. Transforming the canvas alone
+  is what the first version did, and it is why zoom used to jump: a transform doesn't
+  resize anything, so the page ballooned about its own centre over a scroll area that
+  hadn't moved, and the redraw then snapped it all into place.
+- **The scroll position is re-anchored on every zoom change** (`anchoredScroll`), in a
+  layout effect so it lands in the same frame — on the panel's midpoint for the slider,
+  and on the fingers' midpoint for a pinch, which is why a pinch holds whatever is between
+  the fingers. The measurement it works from is taken in the event that asked for the
+  zoom, before the DOM has changed under it. Without any of this, zooming re-anchors at
+  the top-left corner and the paragraph you zoomed in to read has to be hunted down again:
+  measured on a 4× zoom while reading two-thirds down a page, the old panel drifted ~30%
+  of the page away from that point, in steps of up to 3% at a time; it now holds to
+  within 0.15%.
 
 **Why the endpoint lives under `quiz/`.** The quiz app is its own Vercel project rooted at
 `quiz/`, so a function in the repo-root `api/` is *not* on the app's origin. Worse than

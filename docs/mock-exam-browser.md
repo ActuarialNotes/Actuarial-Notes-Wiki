@@ -179,7 +179,7 @@ you were building.
 | `quiz/src/components/PdfViewerPanel.tsx` | The panel: header (title, download, expand, close), canvas, paging + zoom footer |
 | `quiz/src/hooks/usePdfDocument.ts` | Loads one document; imports pdf.js on demand and destroys the loading task on close |
 | `quiz/src/lib/pdfjsSetup.ts` | The pdf.js instance, its worker and the Standard 14 font URL — reached only through a dynamic import |
-| `quiz/src/lib/pdfViewer.ts` | Fit-to-width, the canvas pixel budget, the zoom ladder, page clamping (pure) |
+| `quiz/src/lib/pdfViewer.ts` | Fit-to-width, the render resolution and pixel budget, the zoom ladder, page clamping (pure) |
 | `quiz/src/lib/examPdf.ts` | Which sources are viewable, and the endpoint URLs |
 | `quiz/api/exam-pdf.js` | Serves the publisher's PDF from our own origin |
 
@@ -198,6 +198,29 @@ Two consequences worth remembering:
   it — routine for anything produced from Word, which is most of what CAS publishes —
   renders blank text without them. `pdfStandardFontsPlugin` in `vite.config.ts` copies them
   out of `node_modules` to `/pdf-standard-fonts/`.
+
+**How big a page is drawn.** A canvas is sized in device pixels and laid out in
+CSS pixels, and the obvious ratio between them — `devicePixelRatio` — is the wrong
+one here. Fitted to a phone, a letter page is about 0.6 device pixels per PDF point
+even on a 3× screen: ~125 dpi. That is plenty for the pages that are *vector* text,
+which pdf.js rasterises at whatever size it is asked for and which come out crisp at
+any resolution. It is not plenty for the pages that are **scans** — the examining
+bodies' older papers include photocopied instruction and question pages, 200–300 dpi
+bitmaps that then have to be squeezed ~2.5× to fit that canvas. At that reduction a
+scan's thin strokes are narrower than a canvas pixel and fall between samples, so the
+text fades in and out along a line — a phrase black, the rest of the sentence a ghost
+— while the underlines and bullets beneath it, thick enough to survive any sampling
+grid, stay solid. It reads as a rendering fault, and only on some pages, because only
+some pages are scans.
+
+`canvasPixelRatio` therefore holds the ratio to whatever reaches
+`MIN_DEVICE_PIXELS_PER_POINT` (3 px/pt, ~216 dpi) rather than to the screen's, so a
+scan's strokes stay wider than a pixel however the panel is sized, and the last step
+down to the screen's own pixels is left to the compositor. It takes the render scale
+(`fit × zoom`) for this: zoomed in far enough the scale alone clears the floor and the
+ratio is the screen's again. `MAX_CANVAS_PIXELS` still has the final say — a fitted
+letter page at that resolution is ~4.4 of the 8 megapixels allowed, and a deep zoom is
+capped by the budget exactly as before.
 
 **Why the endpoint lives under `quiz/`.** The quiz app is its own Vercel project rooted at
 `quiz/`, so a function in the repo-root `api/` is *not* on the app's origin. Worse than

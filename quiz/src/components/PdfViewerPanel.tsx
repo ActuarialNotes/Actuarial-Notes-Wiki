@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import {
   ChevronLeft,
@@ -105,13 +105,16 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
   //   `renderZoom` what the drawing effect is working towards, which lags the
   //                slider until it settles (redrawing on every 0.05 step would
   //                queue dozens of cancelled renders);
-  //   `sizedZoom`  what the canvas on screen is actually sized for.
-  // The gap between the first and the last is covered by scaling the existing
-  // bitmap with a CSS transform, so the page grows under the finger and only
-  // goes crisp once the render lands.
+  //   `sizedZoom`  what the drawn bitmap is sized for.
+  // The gap between the first and the last is covered by scaling that bitmap
+  // with a CSS transform, so the page grows under the finger and only goes
+  // crisp once the render lands. The *layout* follows the zoom immediately
+  // either way — see `pageBoxRef` — so the redraw changes sharpness and
+  // nothing else.
   const [zoom, setZoom] = useState<number>(DEFAULT_ZOOM)
   const [renderZoom, setRenderZoom] = useState<number>(DEFAULT_ZOOM)
   const [sizedZoom, setSizedZoom] = useState<number>(DEFAULT_ZOOM)
+  const [pageSize, setPageSize] = useState<{ width: number; height: number } | null>(null)
   const [rendering, setRendering] = useState(false)
   const [pageError, setPageError] = useState<string | null>(null)
   const [containerWidth, setContainerWidth] = useState(0)
@@ -119,18 +122,89 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
 
   const scrollRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  // The zoom the canvas is sized for, readable from inside the render effect
-  // without making it re-run; and the live zoom, readable from the gesture
-  // listeners, which are attached once and would otherwise close over a stale one.
-  const sizedZoomRef = useRef(DEFAULT_ZOOM)
+  // The box the page occupies in the layout. It is sized for the zoom the
+  // reader has asked for, not for the bitmap inside it, which is what makes the
+  // scrollable area grow with the gesture instead of at the end of it.
+  const pageBoxRef = useRef<HTMLDivElement>(null)
+  // The live zoom, readable from the gesture listeners, which are attached once
+  // and would otherwise close over a stale one.
   const zoomRef = useRef(DEFAULT_ZOOM)
-  // Where in the panel the next resize should hold steady: the pinch's midpoint
-  // or the pointer under a trackpad zoom, else the middle of the panel.
-  const zoomFocusRef = useRef<{ x: number; y: number } | null>(null)
+  // Where the panel was looking when a zoom was asked for, so the same point
+  // can be put back once the page has grown. Held from the event that changed
+  // the zoom until the layout effect below consumes it.
+  const zoomAnchorRef = useRef<{
+    left: number
+    top: number
+    width: number
+    height: number
+    clientWidth: number
+    clientHeight: number
+    focus: { x: number; y: number } | null
+  } | null>(null)
   const dragRef = useRef<{ id: number; x: number; y: number; left: number; top: number } | null>(null)
   const sourceHost = pdfSourceHost(url)
 
   useEffect(() => { zoomRef.current = zoom }, [zoom])
+  const requestZoomRef = useRef<(next: number, focus?: { x: number; y: number } | null) => void>(() => {})
+
+  /**
+   * Every zoom goes through here: the slider, the pinch, ctrl+wheel, the keys.
+   *
+   * The panel is measured *before* the change, while the DOM still shows the
+   * old size, because that measurement is what the point being held still is
+   * expressed against. `focus` is where the reader is looking — the midpoint
+   * between their fingers in a pinch, the pointer under a trackpad zoom, and
+   * the middle of the panel for a slider that has no position of its own.
+   */
+  const requestZoom = useCallback((next: number, focus?: { x: number; y: number } | null) => {
+    const target = clampZoom(next)
+    if (target === zoomRef.current) return
+    const el = scrollRef.current
+    if (el) {
+      zoomAnchorRef.current = {
+        left: el.scrollLeft,
+        top: el.scrollTop,
+        width: el.scrollWidth,
+        height: el.scrollHeight,
+        clientWidth: el.clientWidth,
+        clientHeight: el.clientHeight,
+        focus: focus ?? null,
+      }
+    }
+    zoomRef.current = target
+    setZoom(target)
+  }, [])
+
+  useEffect(() => { requestZoomRef.current = requestZoom }, [requestZoom])
+
+  /**
+   * Hold that point still, in the same frame the page changed size.
+   *
+   * A layout effect, so the scroll offset is corrected after the box has been
+   * re-sized but before the browser paints: the page grows around what the
+   * reader is looking at rather than around the top-left corner and a scroll
+   * correction they can see happening.
+   */
+  useLayoutEffect(() => {
+    const el = scrollRef.current
+    const anchor = zoomAnchorRef.current
+    if (!el || !anchor) return
+    zoomAnchorRef.current = null
+    el.scrollLeft = anchoredScroll(
+      anchor.left,
+      anchor.focus?.x ?? anchor.clientWidth / 2,
+      anchor.width,
+      el.scrollWidth,
+      anchor.clientWidth,
+    )
+    el.scrollTop = anchoredScroll(
+      anchor.top,
+      anchor.focus?.y ?? anchor.clientHeight / 2,
+      anchor.height,
+      el.scrollHeight,
+      anchor.clientHeight,
+    )
+  }, [zoom])
 
   const close = useCallback(() => {
     play('close')
@@ -164,8 +238,8 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
   }, [pageCount, play])
 
   const changeZoom = useCallback((direction: -1 | 1) => {
-    setZoom(current => nudgeZoom(current, direction))
-  }, [])
+    requestZoom(nudgeZoom(zoomRef.current, direction))
+  }, [requestZoom])
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -244,52 +318,25 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
         // scanned pages don't survive) and capped so a deep zoom on a retina
         // screen can't ask for a canvas the browser refuses to allocate.
         const ratio = canvasPixelRatio(viewport.width, viewport.height, window.devicePixelRatio, scale)
-        // A zoom moves the page under the reader, so where they were looking
-        // has to be put back afterwards. Measured before the canvas is resized;
-        // reading the new size below forces the layout, so both are real.
-        const zoomChanged = sizedZoomRef.current !== renderZoom
-        const holder = scrollRef.current
-        const before = zoomChanged && holder
-          ? {
-              left: holder.scrollLeft,
-              top: holder.scrollTop,
-              width: holder.scrollWidth,
-              height: holder.scrollHeight,
-              clientWidth: holder.clientWidth,
-              clientHeight: holder.clientHeight,
-            }
-          : null
-
+        const width = Math.floor(viewport.width)
+        const height = Math.floor(viewport.height)
         canvas.width = Math.floor(viewport.width * ratio)
         canvas.height = Math.floor(viewport.height * ratio)
-        canvas.style.width = `${Math.floor(viewport.width)}px`
-        canvas.style.height = `${Math.floor(viewport.height)}px`
-        // The bitmap is now the size the slider asked for, so the CSS preview
-        // stretching the old one has done its job and comes off — here rather
-        // than only in the re-render below, which lands a frame later and would
-        // leave one paint showing a 3×-wide page scaled 3× again.
+        canvas.style.width = `${width}px`
+        canvas.style.height = `${height}px`
+        // The bitmap now *is* the size the box has been laid out at, so the
+        // transform that was standing in for it comes off, and the box is
+        // pinned to the same size it already had. Both are written here rather
+        // than left to the re-render below: that lands a frame later, and this
+        // frame would otherwise paint a full-size page scaled up again on top
+        // of a box that no longer matches it.
         canvas.style.transform = ''
-        sizedZoomRef.current = renderZoom
-        setSizedZoom(renderZoom)
-
-        if (before && holder) {
-          const focus = zoomFocusRef.current
-          holder.scrollLeft = anchoredScroll(
-            before.left,
-            focus?.x ?? before.clientWidth / 2,
-            before.width,
-            holder.scrollWidth,
-            before.clientWidth,
-          )
-          holder.scrollTop = anchoredScroll(
-            before.top,
-            focus?.y ?? before.clientHeight / 2,
-            before.height,
-            holder.scrollHeight,
-            before.clientHeight,
-          )
+        if (pageBoxRef.current) {
+          pageBoxRef.current.style.width = `${width}px`
+          pageBoxRef.current.style.height = `${height}px`
         }
-        zoomFocusRef.current = null
+        setSizedZoom(renderZoom)
+        setPageSize({ width, height })
         // Sizing a canvas resets its context, so the filtering hint has to be
         // set after: whatever reduction is left when a 300 dpi scan meets this
         // canvas should be averaged rather than point-sampled.
@@ -372,8 +419,7 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
       // Non-passive so this can be prevented: two fingers on a scroll container
       // is a scroll gesture to the browser, and we want it to be a zoom.
       e.preventDefault()
-      zoomFocusRef.current = focusOf(e.touches)
-      setZoom(pinchZoom(pinch.zoom, pinch.distance, distance(e.touches)))
+      requestZoomRef.current(pinchZoom(pinch.zoom, pinch.distance, distance(e.touches)), focusOf(e.touches))
     }
 
     function onTouchEnd(e: TouchEvent) {
@@ -386,8 +432,10 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
       if (!e.ctrlKey) return
       e.preventDefault()
       const rect = el!.getBoundingClientRect()
-      zoomFocusRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top }
-      setZoom(clampZoom(zoomRef.current * Math.exp(-e.deltaY / 200)))
+      requestZoomRef.current(
+        zoomRef.current * Math.exp(-e.deltaY / 200),
+        { x: e.clientX - rect.left, y: e.clientY - rect.top },
+      )
     }
 
     el.addEventListener('touchstart', onTouchStart, { passive: true })
@@ -525,23 +573,38 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
           />
         ) : (
           <div className="flex min-h-full w-full p-4">
-            {/* `m-auto` centres the page rather than `justify-center` on the
-                row: auto margins collapse to zero once the page outgrows the
-                panel, where `justify-center` would push half of it off the left
-                edge — into space a scroll container can't reach. That is the
-                half of a zoomed page that used to be unreachable. */}
-            <canvas
-              ref={canvasRef}
-              className="m-auto max-w-none shadow-sm"
-              style={{
-                // Between a slider move and the redraw that follows it, the
-                // page on screen is the old bitmap stretched to the new size.
-                transform: previewScale === 1 ? undefined : `scale(${previewScale})`,
-                transformOrigin: 'center center',
-                cursor: dragging ? 'grabbing' : 'grab',
-              }}
-              aria-label={`Page ${page}`}
-            />
+            {/* The page's box in the layout, sized for the zoom that has been
+                *asked* for — so the scrollable area grows with the gesture
+                rather than in a step when the redraw lands, and the redraw
+                itself changes nothing but sharpness.
+
+                `m-auto` centres it rather than `justify-center` on the row:
+                auto margins collapse to zero once the page outgrows the panel,
+                where `justify-center` would push half of it off the left edge —
+                into space a scroll container can't reach. */}
+            <div
+              ref={pageBoxRef}
+              className="m-auto shrink-0 shadow-sm"
+              style={pageSize ? {
+                width: Math.round(pageSize.width * previewScale),
+                height: Math.round(pageSize.height * previewScale),
+              } : undefined}
+            >
+              <canvas
+                ref={canvasRef}
+                className="block max-w-none origin-top-left"
+                style={{
+                  // Between a slider move and the redraw that follows it, the
+                  // page on screen is the last bitmap stretched to fill the box
+                  // above. Scaled from its top-left corner, which is where the
+                  // box's own corner is, so every point of the page lands
+                  // exactly where the redraw will put it.
+                  transform: previewScale === 1 ? undefined : `scale(${previewScale})`,
+                  cursor: dragging ? 'grabbing' : 'grab',
+                }}
+                aria-label={`Page ${page}`}
+              />
+            </div>
           </div>
         )}
 
@@ -591,7 +654,7 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
           step={ZOOM_SLIDER_STEP}
           value={zoom}
           disabled={status !== 'ready'}
-          onChange={e => setZoom(clampZoom(parseFloat(e.target.value)))}
+          onChange={e => requestZoom(parseFloat(e.target.value))}
           className="zoom-slider flex-1 disabled:opacity-40"
           aria-label="Zoom"
         />
@@ -604,7 +667,7 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
         {zoom > MIN_ZOOM && (
           <button
             type="button"
-            onClick={() => setZoom(DEFAULT_ZOOM)}
+            onClick={() => requestZoom(DEFAULT_ZOOM)}
             className="text-xs text-muted-foreground hover:text-foreground transition-colors shrink-0"
           >
             reset

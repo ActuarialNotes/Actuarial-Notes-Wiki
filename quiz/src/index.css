@@ -577,22 +577,33 @@
 }
 
 /* Collected flashcard — a "shiny", holographic look that marks a card as
-   collected without adding any badge. A rainbow foil border traces its edge;
-   intensity scales with mastery level via CSS custom properties: New/L1/
-   Forgotten get a barely-there inset ring, L2 is the original "shiny" look,
-   and L3 turns it up to a fully saturated, animated foil border. Level
-   modifier classes (below) override the variables; the bare class is the
-   subtle default. */
+   collected without adding any badge. A rainbow foil border traces its edge,
+   and that border *is* the mastery readout: the card carries no level label,
+   so the ladder needs one distinguishable step per state (see
+   `lib/flashcardFoil.ts`). Intensity climbs through CSS custom properties —
+   New is the bare inset glint, L1 a faint rainbow hairline, L2 a static
+   holographic edge, L3 a fully saturated travelling foil. Forgotten steps off
+   the rainbow into amber (style guide §4.1: at risk, not an error), so a
+   decayed card is never mistaken for an early one. Level modifier classes
+   (below) override the variables; the bare class is the New default. */
 .flashcard-collected {
   --sheen-inset: hsl(var(--primary) / 0.12);
   --foil-border: none;
   --foil-border-width: 0px;
   box-shadow: inset 0 0 0 1px var(--sheen-inset);
 }
+.flashcard-collected.flashcard-sheen-l1 {
+  --sheen-inset: hsl(var(--primary) / 0.18);
+  /* The ladder's first rung: the same sky→fuchsia→gold ramp as L2/L3 but held
+     back to a hairline, so "started" is visible next to a New card without
+     reading as the shiny material L2 earns. */
+  --foil-border: linear-gradient(115deg, rgb(56 189 248 / 0.35), rgb(232 121 249 / 0.35), rgb(250 204 21 / 0.35));
+  --foil-border-width: 1px;
+}
 .flashcard-collected.flashcard-sheen-l2 {
   --sheen-inset: hsl(var(--primary) / 0.25);
   /* Static foil border — a soft, non-animated holographic edge that marks
-     this card as a step up from the plain New/L1 border. */
+     this card as a step up from the L1 hairline. */
   --foil-border: linear-gradient(115deg, rgb(56 189 248 / 0.6), rgb(232 121 249 / 0.6), rgb(250 204 21 / 0.6));
   --foil-border-width: 1.5px;
 }
@@ -603,6 +614,14 @@
      rather than just a brighter glow. */
   --foil-border: linear-gradient(115deg, rgb(56 189 248), rgb(232 121 249), rgb(250 204 21), rgb(56 189 248));
   --foil-border-width: 2px;
+}
+.flashcard-collected.flashcard-sheen-forgotten {
+  --sheen-inset: hsl(38 92% 50% / 0.2);
+  /* Off the rainbow: a card whose mastery has decayed wears one amber edge, so
+     it can't be read as a rung of the foil ladder it fell out of. Weighted
+     like L2 — this is a card that got somewhere once, and needs revisiting. */
+  --foil-border: linear-gradient(115deg, rgb(245 158 11 / 0.75), rgb(217 119 6 / 0.55), rgb(245 158 11 / 0.75));
+  --foil-border-width: 1.5px;
 }
 /* Gradient "foil" border ring, painted via the padding+mask-exclude trick so
    it sits exactly on the card edge without affecting layout or covering the
@@ -632,15 +651,19 @@
 
 /* The same foil, worn by the small picker tiles in the add-flashcards sheet
    (ConceptCardGrid) so a collected card looks like the same card there as it
-   does in the deck — and, since the tiles carry no mastery stripe, the foil is
-   the *only* thing showing a card's level there. Two adjustments for the
-   smaller surface: a lighter edge, so a grid of tiles reads as cards rather
-   than as a page of borders, and a ring lifted above the tile's own content, so
-   nothing a tile paints inside itself can break the border. */
+   does in the deck — the foil is the only thing showing a card's level on
+   either surface. Two adjustments for the smaller surface: a lighter edge, so
+   a grid of tiles reads as cards rather than as a page of borders, and a ring
+   lifted above the tile's own content, so nothing a tile paints inside itself
+   can break the border. */
 .flashcard-collected.flashcard-tile::before {
   z-index: 1;
 }
-.flashcard-collected.flashcard-tile.flashcard-sheen-l2 {
+.flashcard-collected.flashcard-tile.flashcard-sheen-l1 {
+  --foil-border-width: 0.5px;
+}
+.flashcard-collected.flashcard-tile.flashcard-sheen-l2,
+.flashcard-collected.flashcard-tile.flashcard-sheen-forgotten {
   --foil-border-width: 1px;
 }
 .flashcard-collected.flashcard-tile.flashcard-sheen-l3 {

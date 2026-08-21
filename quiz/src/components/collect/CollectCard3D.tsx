@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import type { MasteryState } from '@/lib/mastery'
 import { isKeystone } from '@/lib/keystone'
+import { flashcardFoilClass } from '@/lib/flashcardFoil'
 import { KeystoneIcon } from '@/components/KeystoneName'
 
 // A flat flashcard showing a concept name, styled identically to a collected
-// tile in the Flashcards gallery (the same .flashcard-collected /
-// .flashcard-sheen-l2/l3 treatment) — no 3D perspective or tilt. A correct
+// tile in the Flashcards gallery (the same .flashcard-collected foil ladder,
+// via `lib/flashcardFoil.ts`) — no 3D perspective or tilt. A correct
 // answer triggers a rainbow "snake" that chases around the border, spinning
 // faster and faster, before the card dissolves into the collect flash.
 
@@ -31,7 +32,9 @@ interface CollectCard3DProps {
 }
 
 export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '', flippable = false, back, locked = false, mastery }: CollectCard3DProps) {
-  const foilLevel = locked ? 'l3' : mastery === 'level3' ? 'l3' : mastery === 'level2' ? 'l2' : null
+  // A locked card always shows the top of the ladder — the still-sealed pack
+  // should look like the prize. Otherwise it wears its concept's real level.
+  const foilState: MasteryState = locked ? 'level3' : mastery ?? 'new'
   const keystone = isKeystone(name)
   const [side, setSide] = useState<'front' | 'back'>('front')
 
@@ -50,7 +53,7 @@ export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '
   // While the collection celebration is running, the accelerating snake ring
   // below carries the "rainbow border" effect on its own — the resting foil
   // sheen is dropped so the two don't visually compete.
-  const sheenClass = phase === 'spin' ? '' : foilLevel === 'l3' ? 'flashcard-collected flashcard-sheen-l3' : foilLevel === 'l2' ? 'flashcard-collected flashcard-sheen-l2' : ''
+  const sheenClass = phase === 'spin' ? '' : flashcardFoilClass(true, foilState)
   const phaseClass = phase === 'won' ? 'collect-card-won' : ''
 
   function handleClick() {

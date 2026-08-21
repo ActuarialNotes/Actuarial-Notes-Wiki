@@ -8,6 +8,8 @@ Type: Actuarial Standard of Practice
 Code: ASOP No. 13
 Available from: "[actuarialstandardsboard.org](https://www.actuarialstandardsboard.org/asops/trending-procedures-propertycasualty-insurance/)"
 ---
+![[ASOP 13 - Trending Procedures in Property Casualty Insurance (ASB - 2009) - Cover.svg]]
+
 The standard governing the selection and use of **trending procedures** in property/casualty [[Ratemaking|ratemaking]]. On the [[Exam 5 (CAS)|Exam 5]] syllabus for objectives A4 and A8 (evaluating data, and calculating and applying [[Loss Trend|loss]], [[Premium Trend|premium]], and [[Exposure Trend|exposure]] trends). Revised September 2009.
 
 ## Section 1 — Purpose, Scope, and Effective Date

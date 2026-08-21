@@ -7,6 +7,8 @@ Edition: 2e
 Publisher: Springer
 ISBN: 978-1071614174
 ---
+![[An Introduction to Statistical Learning (James et al. - 2021) - Cover.svg]]
+
 On two syllabuses. For [[Exam MAS-I (CAS)|MAS-I]] objectives C1–C9 it is the applied model-building reference, and chapters 2–6 carry that material: the [[Bias-Variance Tradeoff]], [[Linear Regression]], classification, [[Cross-Validation]] and model selection. For [[Exam MAS-II (CAS)|MAS-II]] it supplies section C — the largest section on that exam — through chapters 2, 5, 6, 8, 10 and 12. The full text is available free from the authors at [statlearning.com](https://www.statlearning.com/).
 
 ## 1 Introduction

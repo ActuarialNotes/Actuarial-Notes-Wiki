@@ -7,6 +7,8 @@ Edition: 12e
 Publisher: Academic Press
 ISBN: 978-0128143469
 ---
+![[Introduction to Probability Models (Ross - 2019) - Cover.svg]]
+
 The [[Stochastic Processes|stochastic process]] reference on the MAS-I syllabus, covering learning objectives A1–A6. Chapter 5 is the heart of the MAS-I reading: the [[Exponential Distribution]], the [[Poisson Process]], and its nonhomogeneous, compound and mixed variants.
 
 ## 1 Introduction to Probability Theory

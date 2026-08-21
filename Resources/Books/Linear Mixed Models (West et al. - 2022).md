@@ -8,6 +8,8 @@ Publisher: Chapman & Hall/CRC
 Type: Textbook
 Available from: "[routledge.com](https://www.routledge.com/Linear-Mixed-Models-A-Practical-Guide-Using-Statistical-Software/West-Welch-Galecki/p/book/9781032019321)"
 ---
+![[Linear Mixed Models (West et al. - 2022) - Cover.svg]]
+
 The [[Linear Mixed Model]] text on the [[Exam MAS-II (CAS)|MAS-II]] syllabus, covering section B (objectives B1–B4). The book is organized as an introductory chapter on the general model followed by worked case studies in five statistical packages; the third edition adds a chapter on power analysis for mixed-effects models.
 
 Read for the **model, not the software**: the exam tests interpretation of output, so the case-study chapters matter for what the printouts mean rather than for the syntax that produced them.

@@ -8,6 +8,8 @@ Type: Actuarial Standard of Practice
 Code: ASOP No. 43
 Available from: "[actuarialstandardsboard.org](https://www.actuarialstandardsboard.org/wp-content/uploads/2014/07/asop043_106.pdf)"
 ---
+![[ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007) - Cover.svg]]
+
 The standard governing the estimation of **[[Unpaid Claims|unpaid claims]]** for property/casualty coverages. On the [[Exam 5 (CAS)|Exam 5]] syllabus for objectives A4 and B2, and the source of the vocabulary examiners expect when a question asks for an "actuarial central estimate." Adopted June 2007.
 
 ## Section 1 — Purpose, Scope, and Effective Date

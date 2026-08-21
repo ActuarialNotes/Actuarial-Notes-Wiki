@@ -77,4 +77,36 @@ Body`
     expect(meta.isbn).toBe('979-8-8901-6016-4')
     expect(meta.getCopyUrl).toBe('https://search.worldcat.org/title/x')
   })
+
+  // The generated covers (scripts/generate_resource_covers.py) are SVG, and a
+  // bare filename is resolved against Media/Attachments the way Obsidian does.
+  it('resolves a generated SVG cover embed to its attachment', () => {
+    const md = `---
+Title: Basic Ratemaking
+---
+![[Basic Ratemaking (Werner - 2016) - Cover.svg]]
+
+Body`
+    const meta = parseResourceMeta(md)
+    expect(meta.coverImageUrl).toContain(
+      'Media/Attachments/Basic%20Ratemaking%20(Werner%20-%202016)%20-%20Cover.svg',
+    )
+  })
+
+  // A page may open with its cover and still embed sized figures further down;
+  // only the cover is lifted out of the body.
+  it('takes the cover from the first unsized embed, not a sized figure', () => {
+    const md = `---
+Title: Probability Distributions
+---
+![[Probability Distributions Reference - Cover.svg]]
+
+![[Media/Binomial_distribution_pmf.svg|500]]`
+    expect(parseResourceMeta(md).coverImageUrl).toContain(
+      'Probability%20Distributions%20Reference%20-%20Cover.svg',
+    )
+    const body = preprocessResourceMarkdown(md)
+    expect(body).not.toContain('Reference - Cover.svg')
+    expect(body).toContain('![[Media/Binomial_distribution_pmf.svg|500]]')
+  })
 })

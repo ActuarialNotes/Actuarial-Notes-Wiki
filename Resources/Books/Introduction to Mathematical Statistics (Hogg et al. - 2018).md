@@ -7,6 +7,8 @@ Edition: 8e
 Publisher: Pearson
 ISBN: 978-0134686998
 ---
+![[Introduction to Mathematical Statistics (Hogg et al. - 2018) - Cover.svg]]
+
 The statistics reference on the MAS-I syllabus, covering learning objectives B1–B8 and parts of C1–C9. Chapters 4–9 carry the exam's estimation, testing and linear-model material.
 
 ## 1 Probability and Distributions

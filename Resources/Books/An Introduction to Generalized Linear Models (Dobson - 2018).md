@@ -7,6 +7,8 @@ Edition: 4e
 Publisher: Chapman & Hall/CRC
 ISBN: 978-1138741515
 ---
+![[An Introduction to Generalized Linear Models (Dobson - 2018) - Cover.svg]]
+
 The core [[Generalized Linear Model]] text on the MAS-I syllabus, covering learning objectives C1–C9. It develops the [[Exponential Family]], estimation and inference, and then works through the model families the exam asks about — Normal, binomial and Poisson.
 
 ## 1 Introduction

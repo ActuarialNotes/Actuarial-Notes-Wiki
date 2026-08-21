@@ -6,6 +6,8 @@ date: "2014"
 Edition: "Study Note (Oct 2014, rev. Sep 2015)"
 Publisher: Casualty Actuarial Society
 ---
+![[Life Contingencies (Struppeck - 2014) - Cover.svg]]
+
 A short CAS study note covering MAS-I learning objectives A5–A6. "Life contingencies" is its own definition of the subject: survival models for human lives, and the cash flows that start or stop contingent on survival. Written for a casualty audience, so it stops well short of a full life-contingencies text.
 
 **Available from:** the CAS study-note library (originally written for Exam S).

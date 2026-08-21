@@ -43,18 +43,20 @@ const MAX_CANVAS_PIXELS = 8_000_000
  * Screen resolution is the wrong target for these documents. A page fitted to
  * a phone is drawn at roughly 0.6 device pixels per point even on a 3× screen,
  * i.e. ~125 dpi — fine for vector text, which is rasterised at whatever size it
- * is asked for, and bad for the **scanned** pages the examining bodies publish,
- * which are 200–300 dpi bitmaps that then have to be squeezed down by ~2.5×
- * inside the canvas. A reduction that steep is more than `drawImage` filters
- * well: thin strokes land between samples and drop out, so scanned text fades
- * in and out along a line while the rules and bullets under it — thick enough
- * to survive any sampling grid — stay black.
+ * is asked for, and thin for the **scanned** pages the examining bodies publish,
+ * which are 200–300 dpi bitmaps then squeezed down by ~2.5× inside the canvas.
+ * A photocopy is made of strokes about a pixel wide, and that is the reduction
+ * they are least able to afford.
  *
- * Drawing at least ~216 dpi keeps a scan's strokes wider than a canvas pixel
- * however the panel is sized, so they come out grey instead of dropping out,
- * and leaves the last step down to the screen's own pixels to the compositor.
- * The pixel budget above still has the final say — at a deep zoom the page is
- * past this resolution anyway and nothing here applies.
+ * Drawing at least ~216 dpi keeps those strokes wider than a canvas pixel
+ * however the panel is sized, and leaves the last step down to the screen's own
+ * pixels to the compositor. The pixel budget above still has the final say — at
+ * a deep zoom the page is past this resolution anyway and nothing here applies.
+ *
+ * This is a quality choice and nothing more. It was written believing it would
+ * fix the pages that rendered as ghosts, and it did not: those were scans whose
+ * image never decoded at all, for want of `wasmUrl` (see `lib/pdfjsAssets.ts`).
+ * Worth keeping, worth not mistaking for a cure.
  */
 const MIN_DEVICE_PIXELS_PER_POINT = 3
 

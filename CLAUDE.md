@@ -153,11 +153,14 @@ Other important `lib/` modules:
   same allowlist `quiz/api/exam-pdf.js` enforces) and builds the proxy/download URLs — the page
   can't fetch a publisher's PDF itself, and can't save one cross-origin; `pdfViewer.ts` is
   the pure reading maths (fit-to-width, the render resolution and pixel budget — a
-  page is drawn at ~216 dpi rather than the screen's ratio, or the examining bodies'
-  scanned pages alias into ghosts — plus the 1×–4× zoom range and the pan/re-anchor
-  maths behind the panel's zoom slider);
-  `pdfjsSetup.ts` is the dynamically-imported pdf.js instance (the **legacy** build, plus the
-  Standard 14 fonts `vite.config.ts` copies out of node_modules). Rendered by
+  page is drawn at ~216 dpi rather than the screen's ratio, so a scan is squeezed
+  less far to fit — plus the 1×–4× zoom range and the pan/re-anchor maths behind the
+  panel's zoom slider);
+  `pdfjsSetup.ts` is the dynamically-imported pdf.js instance (the **legacy** build) and the
+  URLs of the four asset directories pdf.js fetches at run time — `pdfjsAssets.ts` is the
+  shared list, copied out of node_modules by `vite.config.ts`. `wasm` is the load-bearing
+  one: CCITT fax and JBIG2 decode through it, so without it every *scanned* page renders
+  as a ghost, and pdf.js only warns. Rendered by
   `components/PdfViewerPanel.tsx` in the concept popup's shell. See
   `docs/mock-exam-browser.md`.
 - `passRates.ts` — the client half of the live pass-rate pipeline: sanitises what

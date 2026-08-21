@@ -63,8 +63,20 @@ export function usePdfDocument(url: string | null): PdfDocumentState {
           throw new Error(reason)
         }
 
-        const { pdfjs, STANDARD_FONT_DATA_URL } = await import('@/lib/pdfjsSetup')
-        const loadingTask = pdfjs.getDocument({ data: buffer, standardFontDataUrl: STANDARD_FONT_DATA_URL })
+        const { pdfjs, STANDARD_FONT_DATA_URL, WASM_URL, CMAP_URL, ICC_URL } = await import('@/lib/pdfjsSetup')
+        // Every one of these is a place pdf.js goes looking at run time, and
+        // every one it isn't given is a part of the document it quietly
+        // declines to draw — `wasmUrl` above all, which is where the CCITT and
+        // JBIG2 decoders live and therefore whether a scanned page has any ink
+        // on it. See `lib/pdfjsSetup.ts`.
+        const loadingTask = pdfjs.getDocument({
+          data: buffer,
+          standardFontDataUrl: STANDARD_FONT_DATA_URL,
+          wasmUrl: WASM_URL,
+          cMapUrl: CMAP_URL,
+          cMapPacked: true,
+          iccUrl: ICC_URL,
+        })
         task = loadingTask
         const doc = await loadingTask.promise
         if (cancelled) return

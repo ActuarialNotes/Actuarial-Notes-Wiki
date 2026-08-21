@@ -210,11 +210,16 @@ existing local cluster already does (e.g. gem economy). Don't mix them within on
 
 Rarity/reward gets a distinct **material**, not just a colour: a travelling rainbow gradient
 border (`sky → fuchsia → gold`) applied via the padding + `mask-composite: exclude` ring trick.
-Reuse the existing classes (`.flashcard-collected` + `.flashcard-sheen-l2/l3`, `.lock-foil-ring`)
+Reuse the existing classes (`.flashcard-collected` + `.flashcard-sheen-*`, `.lock-foil-ring`)
 rather than re-authoring the gradient. Intensity must scale with value:
-subtle glint for common, static foil for L2, animated saturated foil for L3/hero only. The
-material is **earned**, never applied to a whole list — a card only wears its foil once it has
-been collected, and the shelf tiles scale it by mastery (`tileFoilClass` in `pages/Flashcards.tsx`).
+subtle glint for common, a hairline at L1, static foil for L2, animated saturated foil for
+L3/hero only. The material is **earned**, never applied to a whole list — a card only wears
+its foil once it has been collected.
+
+On a flashcard the foil edge is the *only* mastery readout — the card prints no level label —
+so the ladder needs one distinguishable step per state, and a decayed card steps off the
+rainbow into amber (§4.1). `lib/flashcardFoil.ts` is that mapping; every surface that draws a
+card calls it rather than re-deriving the classes.
 
 ### 4.4 The "keystone" gold material
 

@@ -79,7 +79,8 @@ import { playSound, resetSoundCombo } from '@/lib/soundEngine'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
 import { NavProgressBar } from '@/components/NavProgressBar'
-import { MasteryBadge } from '@/components/MasteryBadge'
+import { flashcardFoilClass, FOIL_LEVEL_CLASS } from '@/lib/flashcardFoil'
+import { MASTERY_LABEL } from '@/lib/masteryBadge'
 
 type GroupBy = 'exam' | 'date' | 'alpha' | 'custom' | 'mastery' | 'shuffle'
 type ReverseCardSection = 'definition' | 'math' | 'images'
@@ -145,10 +146,6 @@ const CLEAR_OVERLAY = (
   </>
 )
 
-
-function MasteryPill({ state }: { state: MasteryState }) {
-  return <MasteryBadge state={state} size="sm" compact />
-}
 
 const BREADCRUMB_RE = /^\[\[[^\]|]*(?:\|[^\]]+)?\]\][^\n]* \/ [^\n]*\n?/
 
@@ -385,17 +382,13 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
 // ─── Card shelves ────────────────────────────────────────────────────────────
 
 // The foil material a collected tile wears, keyed to its mastery — the same
-// ladder the deck gallery's cards use (`SortableCard`): a barely-there glint at
-// New/Level 1/Forgotten, a static holographic edge at Level 2, and the
-// travelling rainbow border at Level 3. An uncollected card is still behind the
-// gate and has earned no material at all. `.flashcard-tile` in index.css tunes
-// the ring for the smaller surface and lifts it over the mastery stripe.
+// ladder the deck gallery's cards use (`SortableCard`), one step per state, so
+// the border alone says what level a card is at (`lib/flashcardFoil.ts`). An
+// uncollected card is still behind the gate and has earned no material at all.
+// `.flashcard-tile` in index.css tunes the ring for the smaller surface and
+// lifts it over the tile's own content.
 function tileFoilClass(collected: boolean, state: MasteryState): string {
-  if (!collected) return ''
-  const base = 'flashcard-collected flashcard-tile'
-  if (state === 'level3') return `${base} flashcard-sheen-l3`
-  if (state === 'level2') return `${base} flashcard-sheen-l2`
-  return base
+  return flashcardFoilClass(collected, state, { tile: true })
 }
 
 // The unit both shelves below are built from: one concept as a small static
@@ -1255,9 +1248,11 @@ function SortableCard({
 
   // Focus mode drops the "shiny"/holographic treatment for collected cards so
   // every card reads the same and the title is the only thing that stands out.
-  // Sheen intensity scales with mastery: New/L1/Forgotten stay subtle, L2 is
-  // the standard shine, L3 gets the dramatic pulsing treatment.
-  const sheenLevelClass = masteryState === 'level3' ? ' flashcard-sheen-l3' : masteryState === 'level2' ? ' flashcard-sheen-l2' : ''
+  // Everywhere else the foil edge is the card's level readout — the card prints
+  // no mastery label — so it steps once per state: a bare glint at New, a faint
+  // hairline at L1, a static holographic edge at L2, the travelling border at
+  // L3, and amber once a card has decayed (`lib/flashcardFoil.ts`).
+  const sheenLevelClass = FOIL_LEVEL_CLASS[masteryState] ? ` ${FOIL_LEVEL_CLASS[masteryState]}` : ''
   const showSheen = (animateCollected ?? collected) && collected
   // The collect gate's padlock, shown beside the name until the card has been
   // collected. Focus mode shows the title and nothing else.
@@ -1646,6 +1641,9 @@ function SortableCard({
           type="button"
           onPointerDown={e => e.stopPropagation()}
           onClick={e => { e.stopPropagation(); handleFlipOpen() }}
+          // The level used to be printed under the name; now that the foil edge
+          // carries it, hovering the name is how you put a word to the border.
+          title={!focusMode && collected ? `${card.name} — ${MASTERY_LABEL[masteryState]}` : undefined}
           className={`min-w-0 text-center transition-colors ${
             isActive ? 'text-primary' : 'hover:text-primary'
           }`}
@@ -1672,14 +1670,13 @@ function SortableCard({
         )}
       </div>
 
-      {/* Mastery pill — pinned to the bottom edge (not in flow) so it doesn't
-          push the name off the card's centre. Hidden in focus mode, and absent
-          while the card is still behind the collect gate (the lock says
-          everything). */}
+      {/* Mastery is the foil border and nothing else — no pill, so the name sits
+          alone on the card's centre. The border can't be read out, so the level
+          is named here for screen readers (and as the card's tooltip above).
+          Absent while the card is still behind the collect gate: the lock says
+          everything, and there is no level yet to name. */}
       {!focusMode && collected && (
-        <div className="absolute inset-x-0 bottom-2.5 flex justify-center">
-          <MasteryPill state={masteryState} />
-        </div>
+        <span className="sr-only">{MASTERY_LABEL[masteryState]}</span>
       )}
     </div>
   )

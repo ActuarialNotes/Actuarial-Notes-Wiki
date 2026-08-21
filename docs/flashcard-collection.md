@@ -67,19 +67,37 @@ just won't reach Level 1 until they collect.
 ## What a collected card looks like
 
 Collecting is the card's first *material*: a collected card wears the rainbow
-**foil** edge (`.flashcard-collected` in `index.css`), and its intensity is the
-mastery ladder — a barely-there glint at New/Level 1/Forgotten, a static
-holographic border at Level 2 (`.flashcard-sheen-l2`), the travelling rainbow
-border at Level 3 (`.flashcard-sheen-l3`). Uncollected cards wear no material at
-all; they are still behind the gate.
+**foil** edge (`.flashcard-collected` in `index.css`). Uncollected cards wear no
+material at all; they are still behind the gate.
 
-Both surfaces that draw a card use that same ladder, so one concept looks like
-the same card wherever it appears:
+That edge is also the card's **mastery readout** — a collected card carries no
+level label, so the border steps once per state
+(`lib/flashcardFoil.ts` → `flashcardFoilClass`, the mapping every surface shares):
+
+| State | Edge |
+| --- | --- |
+| New | the bare collected glint, no colour — the ladder hasn't started |
+| Level 1 | a faint rainbow hairline (`.flashcard-sheen-l1`) |
+| Level 2 | a static holographic border (`.flashcard-sheen-l2`) |
+| Level 3 | a saturated, travelling foil border (`.flashcard-sheen-l3`) |
+| Forgotten | **amber**, off the rainbow (`.flashcard-sheen-forgotten`) |
+
+Forgotten leaves the ladder rather than sitting on a rung of it, for the same
+reason the mastery badge does (`docs/style-guide.md` §4.1 — a decayed concept is
+*at risk*, not an error, and must not read as an early card).
+
+The border can't be spoken, so the deck card names its level twice invisibly: as
+the flip button's `title` and as an `sr-only` span. Nothing is printed on the
+card itself.
+
+All three surfaces that draw a card use that same ladder, so one concept looks
+like the same card wherever it appears:
 
 | Surface | Where |
 | --- | --- |
 | Deck / gallery card | `SortableCard` in `pages/Flashcards.tsx` (the deck passes `animateCollected={false}` so the Level 3 border doesn't travel while you read) |
-| Picker tile in the add-flashcards sheet | `ConceptCardGrid` → `tileFoilClass`, plus `.flashcard-tile` for the smaller surface: a lighter edge, and the ring lifted over the mastery stripe that runs along the card's foot |
+| Picker tile in the add-flashcards sheet | `ConceptCardGrid` → `tileFoilClass`, plus `.flashcard-tile` for the smaller surface: a lighter edge, and the ring lifted over the tile's own content |
+| The card in the collect modal | `components/collect/CollectCard3D.tsx` — a still-locked card always shows the Level 3 edge, so the sealed pack looks like the prize |
 
 The edge belongs to foil, so nothing else may claim it: a keystone concept moves
 its gold inside as an underline on the name, and a tile already in the deck

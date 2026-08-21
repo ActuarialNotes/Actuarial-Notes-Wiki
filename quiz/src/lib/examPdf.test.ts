@@ -25,6 +25,17 @@ describe('isSupportedPdfSource', () => {
     expect(isSupportedPdfSource('https://www.soa.org/globalassets/a/b.pdf')).toBe(true)
   })
 
+  it('accepts a source document a resource page links to', () => {
+    // Resource pages carry the same kind of link as the exam shelf — an ASOP
+    // published as a PDF — and it is read in the same viewer, so the standards
+    // board is a publisher we proxy.
+    expect(
+      isSupportedPdfSource(
+        'https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop012_132.pdf',
+      ),
+    ).toBe(true)
+  })
+
   it('refuses anything the proxy would refuse', () => {
     // The endpoint enforces the same three rules; disagreeing would open a
     // viewer on a request that is then rejected.
@@ -32,6 +43,14 @@ describe('isSupportedPdfSource', () => {
     expect(isSupportedPdfSource('https://example.com/a.pdf')).toBe(false)
     expect(isSupportedPdfSource('https://www.casact.org/exams')).toBe(false)
     expect(isSupportedPdfSource('not a url')).toBe(false)
+    // A resource page's other links — a library catalogue, a publisher's shop
+    // page, an ASOP landing page — are out-links, not documents to read here.
+    expect(isSupportedPdfSource('https://search.worldcat.org/title/1023819820')).toBe(false)
+    expect(
+      isSupportedPdfSource(
+        'https://www.actuarialstandardsboard.org/asops/trending-procedures-propertycasualty-insurance/',
+      ),
+    ).toBe(false)
   })
 })
 

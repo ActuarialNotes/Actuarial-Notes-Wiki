@@ -24,7 +24,17 @@
 // answer `/api/exam-pdf` with `index.html` — which the viewer receives as a
 // document whose structure is invalid. Same origin, same project, no rewrite.
 
-const DEFAULT_HOSTS = ['casact.org', 'www.casact.org', 'soa.org', 'www.soa.org'];
+// The publishers whose PDFs the app links to and can therefore re-serve: the
+// two examining bodies, plus the Actuarial Standards Board, whose ASOPs are
+// source material on the Exam 5+ syllabi and are read the same way.
+const DEFAULT_HOSTS = [
+  'casact.org',
+  'www.casact.org',
+  'soa.org',
+  'www.soa.org',
+  'actuarialstandardsboard.org',
+  'www.actuarialstandardsboard.org',
+];
 
 const FETCH_TIMEOUT_MS = 20000;
 const MAX_BYTES = 40 * 1024 * 1024;

@@ -8,8 +8,23 @@
 // allowlist the endpoint enforces, so an unsupported source is refused before a
 // viewer is opened rather than after a request round-trips.
 
-/** Hosts whose PDFs the endpoint will serve. Mirrors `DEFAULT_HOSTS` in `quiz/api/exam-pdf.js`. */
-export const EXAM_PDF_HOSTS = ['casact.org', 'www.casact.org', 'soa.org', 'www.soa.org']
+/**
+ * Hosts whose PDFs the endpoint will serve. Mirrors `DEFAULT_HOSTS` in
+ * `quiz/api/exam-pdf.js`.
+ *
+ * Wider than the exams alone: a source document a resource page links to — an
+ * ASOP on the standards board's site — is read in the same viewer, so its
+ * publisher belongs here too. Adding a host here without adding it there opens
+ * a viewer the endpoint then refuses.
+ */
+export const EXAM_PDF_HOSTS = [
+  'casact.org',
+  'www.casact.org',
+  'soa.org',
+  'www.soa.org',
+  'actuarialstandardsboard.org',
+  'www.actuarialstandardsboard.org',
+]
 
 /** Can this URL be shown in the viewer? https, a `.pdf`, on a publisher we proxy. */
 export function isSupportedPdfSource(url: string): boolean {

@@ -23,16 +23,16 @@
 
 > [!example]- Calculating a Pure Premium {Example}
 > 
-> An actuary expects a fleet of 1,000 delivery vans to incur $250,000 in total losses over the next year. If the administrative expenses are estimated at $50$ per van, what is the **Pure Premium**?
+> An actuary expects a fleet of $1{,}000$ delivery vans to incur \$$250{,}000$ in total losses over the next year. If the administrative expenses are estimated at \$$50$ per van, what is the **Pure Premium**?
 > 
 > > [!answer]-
 > > 
-> > - **Projected Losses ($L$):** $250,000
-> > - **Exposure Units ($N$):** $1,000$ vans
+> > - **Projected Losses ($L$):** \$$250{,}000$
+> > - **Exposure Units ($N$):** $1{,}000$ vans
 > > 
 > > The **Pure Premium** ($PP$) represents the portion of the rate required to pay for losses and loss adjustment expenses:
 > > 
-> > $$PP = \frac{L}{N} = \frac{250,000}{1,000} = \$250$$
+> > $$PP = \frac{L}{N} = \frac{250{,}000}{1{,}000} = \$250$$
 > > 
 > > > [!tip] The "Gross" Difference
 > > > The Pure Premium is **not** the final price the customer pays. To get the **Gross Premium**, you must "load" the Pure Premium for taxes, commissions, and profit — see [[Expense Provisions]].

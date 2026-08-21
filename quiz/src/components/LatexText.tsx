@@ -7,9 +7,9 @@ interface Props {
 
 export function LatexText({ children, className }: Props) {
   // Split on $$...$$ (display math) and $...$ (inline math), keeping delimiters.
-  // Inline math must contain at least one letter or backslash so currency like
-  // "$5" or "$1,000" isn't accidentally treated as math.
-  const parts = children.split(/(\$\$[\s\S]*?\$\$|\$[^$\n]*[A-Za-z\\][^$\n]*\$)/g)
+  // `\$` is a dollar *sign*, not a delimiter — ratemaking stems are full of
+  // `$\$400$` — so a span runs past it rather than closing there.
+  const parts = children.split(/(\$\$[\s\S]*?\$\$|\$(?:\\\$|[^$\n])*?\$)/g)
 
   return (
     <span className={className}>
@@ -27,6 +27,9 @@ export function LatexText({ children, className }: Props) {
         }
         if (part.startsWith('$') && part.endsWith('$') && part.length > 2) {
           const math = part.slice(1, -1)
+          // Inline math must hold a letter or a backslash, so plain currency
+          // like "$5" or "$1,000" isn't typeset as an equation.
+          if (!/[A-Za-z\\]/.test(math)) return <span key={i}>{part}</span>
           return (
             <span
               key={i}

@@ -13,6 +13,7 @@ import { examIdFromFile, hrefToEntryRef, wikiRoute, type WikiEntryRef } from '@/
 import { isInWikiIndex } from '@/lib/wikiIndex'
 import { isKeystone } from '@/lib/keystone'
 import { distributionForImage } from '@/lib/distributions'
+import { normalizeVaultMath } from '@/lib/vaultMath'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 
 const GITHUB_REPO = import.meta.env.VITE_GITHUB_REPO as string
@@ -224,7 +225,9 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
   const articleRef = useRef<HTMLDivElement | null>(null)
   const hasReadiness = readiness != null
   const processed = useMemo(() => {
-    const stripped = stripFrontmatter(markdown).replace(BREADCRUMB_RE, '')
+    // Math delimiters first: the vault is written for Obsidian, whose parser is
+    // looser than remark-math's. See lib/vaultMath.ts.
+    const stripped = normalizeVaultMath(stripFrontmatter(markdown).replace(BREADCRUMB_RE, ''))
     const marked = markExamGuides(fixBlockquoteOrderedLists(rewriteWikilinks(stripped)))
     // With guide cards on the page the readiness card joins their row; without
     // them it needs a marker of its own.

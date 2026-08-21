@@ -4,6 +4,7 @@ import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import { codeComponents, inlineCodeComponents } from '@/components/CodeBlock'
+import { normalizeVaultMath } from '@/lib/vaultMath'
 
 interface Props {
   children: string
@@ -65,7 +66,7 @@ export function MarkdownText({ children, className, inline }: Props) {
         rehypePlugins={[rehypeKatex]}
         components={inline ? inlineComponents : blockComponents}
       >
-        {children}
+        {normalizeVaultMath(children)}
       </ReactMarkdown>
     </Wrapper>
   )

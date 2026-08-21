@@ -147,6 +147,72 @@ const EXAM_LEVEL_PDF_LINKS: Record<string, ExamPdfLink> = {
   },
 }
 
+// The exam's own **syllabus**: the examining body's statement of what the exam
+// covers. Opened from the study guide's title row, in the same in-app viewer
+// the papers above use — a candidate reading our page of the syllabus should be
+// able to check it against the publisher's without leaving for a browser tab.
+//
+// Keyed by the wiki exam id (`lib/wikiRoutes.examIdFromFile`, lower-cased), the
+// same key `data/examGuides.ts` is keyed by — so a dash-less exam carries the
+// `-1` suffix (Exam 5 is `5-1`).
+//
+// ── Rules for this file, again, and why they bite harder here ────────────────
+// A URL is transcribed from the publisher, never constructed. A syllabus is
+// also **reissued** where an examiner's report never is: the SOA publishes one
+// per sitting (`2026-07-p-syllabus.pdf`) and CAS one per administration, so
+// these entries rot into *superseded* rather than dead — a link that still opens
+// and is no longer what the candidate sits. Each entry therefore records which
+// edition it is, so staleness is visible in the diff rather than only in the
+// PDF's own first page. An exam whose current document hasn't been located is
+// **absent**, and its page shows no button.
+//
+// What's published differs by body, so the label follows the document:
+//   • SOA — a per-sitting *Syllabus* for each exam.
+//   • CAS — since the move to computer-based testing, the per-exam *Content
+//     Outline* is the document that defines what's examined; the old per-exam
+//     "Syllabus of Basic Education" extracts are no longer reissued.
+const SYLLABUS_PDF_LINKS: Record<string, ExamPdfLink> = {
+  // ── SOA ───────────────────────────────────────────────────────────────────
+  // July 2026 sitting.
+  'p-1': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/july/syllabi/2026-07-p-syllabus.pdf',
+    label: 'Syllabus',
+  },
+  // June 2026 sitting.
+  'fm-2': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/syllabi/2026-06-exam-fm-syllabus.pdf',
+    label: 'Syllabus',
+  },
+
+  // ── CAS ───────────────────────────────────────────────────────────────────
+  '5-1': {
+    url: 'https://www.casact.org/sites/default/files/2023-06/Exam_5_Content_Outline.pdf',
+    label: 'Content Outline',
+  },
+  // Fall 2026 administration — CAS names the newer outlines
+  // `Exam_<id>_CO_<year>_<season>.pdf` rather than the older
+  // `Exam<id>_Content_Outline.pdf`, which is exactly why neither name may be
+  // extrapolated to the exams below.
+  '6c-1': {
+    url: 'https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf',
+    label: 'Content Outline',
+  },
+  '7-1': {
+    url: 'https://www.casact.org/sites/default/files/2023-05/Exam7_Content_Outline.pdf',
+    label: 'Content Outline',
+  },
+  'mas-i': {
+    url: 'https://www.casact.org/sites/default/files/2023-06/MASI_Content_Outline.pdf',
+    label: 'Content Outline',
+  },
+  'mas-ii': {
+    url: 'https://www.casact.org/sites/default/files/2023-06/MASII_Content_Outline.pdf',
+    label: 'Content Outline',
+  },
+  // Exams 6U, 8 and 9 have no entry: their current document hasn't been
+  // located on casact.org. Adding a guess is the one thing this file forbids.
+}
+
 export function getSittingPdfLink(examTopic: string, year: number, session?: string): ExamPdfLink | null {
   const normalized = (session ?? '').toLowerCase()
   return SITTING_PDF_LINKS[`${examTopic}|${year}|${normalized}`] ?? null
@@ -156,7 +222,16 @@ export function getExamPdfLink(examTopic: string): ExamPdfLink | null {
   return EXAM_LEVEL_PDF_LINKS[examTopic] ?? null
 }
 
+/** The exam's published syllabus, by wiki exam id (`P-1`, `5-1`, `MAS-I`, …). */
+export function getSyllabusPdfLink(examId: string): ExamPdfLink | null {
+  return SYLLABUS_PDF_LINKS[examId.toLowerCase()] ?? null
+}
+
 /** Every link in the table — the shape a link check (or a test) walks. */
 export function allExamPdfLinks(): ExamPdfLink[] {
-  return [...Object.values(SITTING_PDF_LINKS), ...Object.values(EXAM_LEVEL_PDF_LINKS)]
+  return [
+    ...Object.values(SITTING_PDF_LINKS),
+    ...Object.values(EXAM_LEVEL_PDF_LINKS),
+    ...Object.values(SYLLABUS_PDF_LINKS),
+  ]
 }

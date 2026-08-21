@@ -27,6 +27,38 @@ async function canvasIsDrawn(page: Page): Promise<boolean> {
   })
 }
 
+test.describe('exam syllabus', () => {
+  test('opens the published syllabus from the study guide in the same viewer', async ({ page }) => {
+    await page.route('**/api/exam-pdf**', route =>
+      route.fulfill({ status: 200, contentType: 'application/pdf', body: SAMPLE_PDF }),
+    )
+    await page.goto('/wiki/exam/Exam+FM-2+(SOA)')
+
+    // Beside the exam's title, and an anchor to the publisher underneath.
+    const syllabusLink = page.getByRole('link', { name: /syllabus/i }).first()
+    await expect(syllabusLink).toBeVisible()
+    await expect(syllabusLink).toHaveAttribute('href', /soa\.org.*\.pdf$/)
+    await syllabusLink.click()
+
+    // Reads in the app rather than a browser tab — the page behind it is our
+    // reading of this very document.
+    const panel = page.getByRole('complementary', { name: /Syllabus/ })
+    await expect(panel).toBeVisible()
+    await expect(panel.getByText('Exam FM-2')).toBeVisible()
+    await expect(panel.getByText('1 of 2')).toBeVisible()
+    await expect.poll(() => canvasIsDrawn(page)).toBe(true)
+
+    // Saving goes through our endpoint: `<a download>` is ignored cross-origin.
+    await expect(panel.getByRole('link', { name: 'Download PDF' })).toHaveAttribute(
+      'href',
+      /\/api\/exam-pdf\?url=.*&download=1/,
+    )
+
+    await page.keyboard.press('Escape')
+    await expect(panel).toHaveCount(0)
+  })
+})
+
 test.describe("examiner's report viewer", () => {
   test.beforeEach(async ({ page }) => {
     await page.route('**/api/exam-pdf**', route =>

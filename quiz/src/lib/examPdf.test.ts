@@ -9,7 +9,13 @@ import {
   pdfProxyUrl,
   pdfSourceHost,
 } from './examPdf'
-import { allExamPdfLinks, getExamPdfLink, getSittingPdfLink } from '@/data/examPdfLinks'
+import {
+  allExamPdfLinks,
+  getExamPdfLink,
+  getSittingPdfLink,
+  getSyllabusPdfLink,
+} from '@/data/examPdfLinks'
+import { examIdFromFile } from '@/lib/wikiRoutes'
 
 const REPORT = 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam5_sp19-5.pdf'
 
@@ -120,5 +126,37 @@ describe('the examiner-report catalogue', () => {
     for (const link of allExamPdfLinks()) {
       expect(EXAM_PDF_HOSTS).toContain(new URL(link.url).hostname)
     }
+  })
+})
+
+describe('the syllabus catalogue', () => {
+  it('is keyed by the wiki exam id the study-guide page holds', () => {
+    // `WikiExam` looks the link up with `examIdFromFile`, which lower-cases and
+    // gives a dash-less exam a `-1` suffix. A key written any other way is a
+    // button that silently never appears.
+    expect(getSyllabusPdfLink(examIdFromFile('Exam P-1 (SOA).md'))?.label).toBe('Syllabus')
+    expect(getSyllabusPdfLink(examIdFromFile('Exam FM-2 (SOA).md'))?.label).toBe('Syllabus')
+    expect(getSyllabusPdfLink(examIdFromFile('Exam 5 (CAS).md'))?.label).toBe('Content Outline')
+    expect(getSyllabusPdfLink(examIdFromFile('Exam MAS-II (CAS).md'))?.label).toBe('Content Outline')
+  })
+
+  it('matches an exam id however it is cased', () => {
+    expect(getSyllabusPdfLink('MAS-I')?.url).toBe(getSyllabusPdfLink('mas-i')?.url)
+  })
+
+  it('has nothing for an exam whose syllabus hasn’t been located', () => {
+    // Absent beats guessed: the page then shows no button at all, where an
+    // extrapolated URL is a 404 the candidate finds for themselves.
+    expect(getSyllabusPdfLink('6u-1')).toBeNull()
+    expect(getSyllabusPdfLink('8-1')).toBeNull()
+    expect(getSyllabusPdfLink('not-an-exam')).toBeNull()
+  })
+
+  it('labels each document as what the body actually published', () => {
+    // The SOA publishes a per-sitting Syllabus; since CBT, CAS's per-exam
+    // Content Outline is the document that defines what's examined. Calling a
+    // content outline a syllabus promises the readings list it doesn't carry.
+    expect(getSyllabusPdfLink('p-1')?.url).toContain('soa.org')
+    expect(getSyllabusPdfLink('5-1')?.url).toContain('casact.org')
   })
 })

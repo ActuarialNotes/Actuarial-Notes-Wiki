@@ -47,7 +47,8 @@ quiz/                                             — the React app (this is whe
 - `data/` — authored static tables bundled into the app: `comprehensionChecks.ts` (parses the
   flashcard-collect gate questions from `comprehension-checks/<exam-id>/*.md` at build time via the
   `virtual:comprehension-checks` vite module — see `lib/comprehensionCheckParser.ts` +
-  `docs/flashcard-collection.md`), `examSittings.ts` / `examPdfLinks.ts` (sitting dates + examiner reports),
+  `docs/flashcard-collection.md`), `examSittings.ts` / `examPdfLinks.ts` (sitting dates, examiner reports, and each
+  exam's published syllabus — the PDF an exam page's title-row button opens),
   `mnemonics.ts` / `stories.ts` (per-concept, per-avatar content), `quests.ts` (daily-quest
   catalogue), `keystoneConcepts.ts` (the per-exam keystone catalogue — see
   `docs/keystone-concepts.md`), `examGuides.ts` (the exam-page orientation cards — see below),
@@ -116,7 +117,9 @@ before touching that area**:
   before touching any of it — in particular the rule that a ratio is transcribed or fetched,
   never estimated, that an unparseable source must yield *no* figures rather than wrong ones,
   and the same rule for the report links in `data/examPdfLinks.ts`: transcribed from the
-  publisher, never constructed from the filename pattern.
+  publisher, never constructed from the filename pattern. That doc also covers the
+  **syllabus button** on a study-guide page (`components/wiki/ExamSyllabusButton.tsx`),
+  which reads the same table and reuses the same viewer.
 
 Other important `lib/` modules:
 - `parser.ts` — parses question markdown (frontmatter + body) into `Question` objects

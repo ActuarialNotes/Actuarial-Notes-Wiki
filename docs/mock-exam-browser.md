@@ -232,6 +232,25 @@ still sits under `/old/` — so extrapolating the pattern is precisely how the t
 with 404s. A sitting whose PDF hasn't been located is **absent**, and the button simply
 doesn't render.
 
+The same table also holds each exam's **syllabus** (`SYLLABUS_PDF_LINKS`, keyed by the wiki
+exam id — so Exam 5 is `5-1`, as in `data/examGuides.ts`). That one is read by
+`components/wiki/ExamSyllabusButton.tsx`, which sits beside the title on a study-guide page
+(`pages/wiki/WikiExam.tsx` passes it in the `titleBadge` slot) and opens the publisher's
+document in the same `PdfViewerPanel`: the page under it is *our* reading of that syllabus,
+and checking one against the other shouldn't cost you the page you were on.
+
+Two things differ from the sittings above:
+
+- **The label follows the body.** The SOA publishes a per-sitting *Syllabus*; since the move
+  to CBT, CAS's per-exam *Content Outline* is the document that defines what's examined, so
+  that is what the button says on a CAS page.
+- **A syllabus is reissued, not just published once**, so these entries rot into *superseded*
+  rather than dead — a link that still opens and is no longer what the candidate sits. Each
+  entry records which edition it is, so staleness shows up in the diff. The same "absent
+  beats guessed" rule applies: Exams 6U, 8 and 9 have no entry and therefore no button.
+  CAS's own naming is the warning against extrapolating — the newer outlines are
+  `Exam_6C_CO_2026_Fall.pdf` where the older ones are `Exam7_Content_Outline.pdf`.
+
 The gaps are researched, not forgotten: CAS began publishing Examiner's Reports with the
 **May 2012** sitting (2011 has none), stopped when testing moved to CBT in **Fall 2020**, and
 MAS-II was first sat in **Fall 2018**. Fall 2012 Exam 5 has not been located. What's

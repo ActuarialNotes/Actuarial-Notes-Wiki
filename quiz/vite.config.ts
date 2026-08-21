@@ -1,6 +1,7 @@
 /// <reference types="vitest/config" />
 import { defineConfig, loadEnv, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
+import { PDFJS_ASSET_DIRS } from './src/lib/pdfjsAssets'
 import path from 'path'
 import { readdir, readFile } from 'fs/promises'
 import fm from 'front-matter'
@@ -373,50 +374,85 @@ function keystoneLinksPlugin(): Plugin {
 }
 
 /**
- * Serves pdf.js's Standard 14 font programs from `/pdf-standard-fonts/`.
+ * Serves the asset directories pdf.js loads at runtime, from `/pdf-<dir>/`.
  *
- * The exam-PDF viewer draws pages itself (see `lib/pdfjsSetup.ts`), and a PDF
- * that names Helvetica/Times/Courier without embedding them — which is most of
- * what the examining bodies publish — renders blank text unless pdf.js can
- * fetch those font programs. They ship inside pdfjs-dist rather than in
- * `public/`, so they're copied into the build here and read straight from
- * node_modules in dev. Nothing is fetched until a document actually needs a
- * face.
+ * The exam-PDF viewer draws pages itself (see `lib/pdfjsSetup.ts`), and pdf.js
+ * keeps a surprising amount of itself outside its bundle, fetched on demand
+ * from URLs the caller has to supply. Miss one and the failure is silent: the
+ * part of the page that needed it simply isn't drawn, with a `warn()` in the
+ * console and no error anywhere the reader can see.
+ *
+ *   standard_fonts  A PDF that names Helvetica/Times/Courier without embedding
+ *                   it — routine for anything produced from Word — renders
+ *                   blank text without these font programs.
+ *   wasm            The image codecs. **CCITT fax and JBIG2 live here**, which
+ *                   is to say every bitonal scan: the examining bodies' older
+ *                   papers are photocopies, and their ink is a CCITT image.
+ *                   JPEG 2000 (openjpeg) and colour management (qcms) too.
+ *                   Without it `JBig2CCITTFaxImage.decode` throws "failed to
+ *                   initialize", the image object resolves to null, and the
+ *                   scan is never painted — a ghost page carrying only
+ *                   whatever else the page happened to draw.
+ *   cmaps           Character maps for CID-keyed fonts that name a predefined
+ *                   encoding rather than embedding one.
+ *   iccs           The fallback ICC profile.
+ *
+ * They ship inside pdfjs-dist rather than in `public/`, so they're copied into
+ * the build here and read straight from node_modules in dev. Nothing is
+ * fetched until a document actually needs it, so none of this is weight on a
+ * reader who never opens a paper.
  */
-function pdfStandardFontsPlugin(): Plugin {
-  const URL_PREFIX = '/pdf-standard-fonts/'
-  const FONT_DIR = path.resolve(__dirname, 'node_modules/pdfjs-dist/standard_fonts')
-  const safeName = (name: string) => /^[\w.-]+$/.test(name)
+function pdfjsAssetsPlugin(): Plugin {
+  // Directory in pdfjs-dist → the path it is served from. `lib/pdfjsAssets.ts`
+  // is the shared list; `lib/pdfjsSetup.ts` builds the matching URLs from it.
+  const DIRS: Record<string, string> = PDFJS_ASSET_DIRS
+  const CONTENT_TYPES: Record<string, string> = {
+    '.wasm': 'application/wasm',
+    '.js': 'text/javascript',
+    '.mjs': 'text/javascript',
+    '.bcmap': 'application/octet-stream',
+    '.icc': 'application/vnd.iccprofile',
+    '.pfb': 'application/x-font-type1',
+    '.ttf': 'font/ttf',
+  }
+  const dirFor = (name: string) => path.resolve(__dirname, 'node_modules/pdfjs-dist', name)
+  // Flat directories of ordinary filenames — anything else isn't ours to serve.
+  const safeName = (name: string) => /^[\w.-]+$/.test(name) && name !== '..'
 
   return {
-    name: 'pdf-standard-fonts',
+    name: 'pdfjs-assets',
     configureServer(server) {
-      server.middlewares.use(URL_PREFIX, async (req, res, next) => {
-        const name = decodeURIComponent((req.url ?? '').replace(/^\/+/, '').split('?')[0])
-        if (!safeName(name)) return next()
-        try {
-          res.setHeader('Content-Type', 'font/otf')
-          res.end(await readFile(path.join(FONT_DIR, name)))
-        } catch {
-          next()
-        }
-      })
+      for (const [dir, prefix] of Object.entries(DIRS)) {
+        server.middlewares.use(`/${prefix}/`, async (req, res, next) => {
+          const name = decodeURIComponent((req.url ?? '').replace(/^\/+/, '').split('?')[0])
+          if (!safeName(name)) return next()
+          try {
+            const body = await readFile(path.join(dirFor(dir), name))
+            res.setHeader('Content-Type', CONTENT_TYPES[path.extname(name).toLowerCase()] ?? 'font/otf')
+            res.end(body)
+          } catch {
+            next()
+          }
+        })
+      }
     },
     async generateBundle() {
-      for (const name of await readdir(FONT_DIR)) {
-        if (!safeName(name)) continue
-        this.emitFile({
-          type: 'asset',
-          fileName: `pdf-standard-fonts/${name}`,
-          source: await readFile(path.join(FONT_DIR, name)),
-        })
+      for (const [dir, prefix] of Object.entries(DIRS)) {
+        for (const name of await readdir(dirFor(dir))) {
+          if (!safeName(name)) continue
+          this.emitFile({
+            type: 'asset',
+            fileName: `${prefix}/${name}`,
+            source: await readFile(path.join(dirFor(dir), name)),
+          })
+        }
       }
     },
   }
 }
 
 export default defineConfig({
-  plugins: [react(), wikiContentPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), keystoneLinksPlugin(), pdfStandardFontsPlugin()],
+  plugins: [react(), wikiContentPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), keystoneLinksPlugin(), pdfjsAssetsPlugin()],
   resolve: {
     alias: { '@': path.resolve(__dirname, 'src') },
   },

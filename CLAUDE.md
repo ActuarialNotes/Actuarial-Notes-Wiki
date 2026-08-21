@@ -90,6 +90,12 @@ before touching that area**:
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
   work stays consistent, minimalistic, and hierarchy-aware.
+- `docs/stacked-pages.md` — the concept popup's **page stack** (Obsidian's stacked pages):
+  a link followed inside the popup opens a new panel on top of the page being read, and the
+  pages behind collapse to spines. Covers the push/focus/close rules in `lib/pageStack.ts`,
+  how many panels a given width expands, and the one thing to keep straight — the *stack*
+  (pages on screen) and the *walk* (the Previous/Next footer) are different sequences, so
+  every move of the walk rebuilds the stack from the page it landed on.
 - `docs/keystone-concepts.md` — **keystone concepts**: the authored ~10–15 load-bearing
   concepts per exam (`data/keystoneConcepts.ts`), the `lib/keystone.ts` lookup every surface
   shares, and the **gold** material that marks them. Read before editing the catalogue or
@@ -172,6 +178,11 @@ Other important `lib/` modules:
   as a ghost, and pdf.js only warns. Rendered by
   `components/PdfViewerPanel.tsx` in the concept popup's shell. See
   `docs/mock-exam-browser.md`.
+- `pageStack.ts` — the concept popup's **page stack**: which pages a followed link leaves
+  open, which one is expanded, and how many panels fit beside it before the rest collapse to
+  spines. Pure and tested; the store half is `pages`/`pageIndex` in `hooks/useConceptPopup.ts`,
+  the rendering is `ConceptPopup` (shell + spines) over `ConceptPagePanel` (one page, mounted
+  per ref so each keeps its own scroll and view mode). See `docs/stacked-pages.md`.
 - `navScrub.ts` — the maths behind a **scrubbable** progress bar: which item a point on the
   track means (the exact inverse of `navProgressPercent`, so a drag can't land off by one),
   and where a key press moves to. Read by `components/NavProgressBar.tsx`, which is the one
@@ -311,8 +322,8 @@ Other important `lib/` modules:
 - `github.ts` — fetches wiki content from GitHub raw URLs at runtime (for the live site, vs. the build-time bundle)
 - `supabase.ts` — Supabase client + shared row types
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **80 test files /
-~1200 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **83 test files /
+~1250 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, and the research/resource-timeline
 modules).
 

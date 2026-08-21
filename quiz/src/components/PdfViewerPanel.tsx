@@ -745,26 +745,6 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
           <ChevronRight className="h-6 w-6 sm:h-5 sm:w-5" />
         </button>
       </div>
-
-      {/* Who published it, and the way out to their copy — the reader's check
-          that this is the real document, and their escape hatch if the panel
-          ever can't show it. */}
-      {!focusMode && (
-        <div className="flex items-center justify-between gap-2 h-10 shrink-0 border-t px-3 sm:px-4">
-          <span className="truncate text-xs text-muted-foreground">
-            {sourceHost ? `Published by ${sourceHost}` : 'Source document'}
-          </span>
-          <a
-            href={url}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex shrink-0 items-center gap-1.5 rounded px-1.5 py-1 text-xs text-muted-foreground hover:bg-accent/40 hover:text-foreground transition-colors"
-          >
-            Open in new tab
-            <ExternalLink className="h-3.5 w-3.5 shrink-0" aria-hidden />
-          </a>
-        </div>
-      )}
     </aside>,
     document.body,
   )

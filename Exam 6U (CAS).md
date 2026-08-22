@@ -60,6 +60,7 @@ The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour com
 >
 > **Readings:** AAA CECL · ASC 944-020-15 · Cedar & Thompson · Freihaut & Vendetti · Klann · NAIC SSAP 62R · NAIC SSAP 66
 
+## Source Material
 > [!answer]- Source Material {46 Readings}
 >
 > - [[Actuarial Standard of Practice No. 20 Discounting of Property Casualty Claim Estimates (ASB - 2023)]]

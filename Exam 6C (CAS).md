@@ -39,6 +39,7 @@ The **Canada Regulation and Financial Reporting (6C) Exam** is a 4 hour exam wit
 > **Readings:** CAS Financial Reporting · CCIR Instructions · CIA Appointed Actuary · CIA CSOP · CIA Discount Rates · CIA Duration · CIA FCT 1 · CIA FCT 2 · CIA IFRS 1 · CIA IFRS 17 - Comparison · CIA IFRS 17 - LRC · CIA IFRS 2 · CIA Materiality · CIA Models · CIA PAA · CIA Reinsurance Treatment · CIA Runoff · CIA Subsequent Events · CIA Valuation · Feldblum · Freihaut and Vendetti · IAA Climate · IFOA · KPMG PACICC · MSA Legend · OSFI AA · OSFI Annual Return · OSFI Climate · OSFI Concentration · OSFI Core Return · OSFI Corporate Governance · OSFI Earthquake · OSFI MCT · OSFI Memorandum · OSFI Minimum Capital · OSFI ORSA · OSFI Quarterly Return · OSFI Reinsurance · OSFI Stress Testing · OSFI Target Capital
 
 
+## Source Material
 >[!answer]- Source Material {37 Sources}
 >
 > - [[Alberta Auto Reform]]

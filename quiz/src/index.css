@@ -227,6 +227,16 @@
   color: hsl(0 0% 9%) !important;
 }
 
+/* A source-material card is a whole card, not a run of text: the active
+   marker becomes a ring around it rather than a filled chip. */
+.wiki-link--active.source-card,
+.dark .wiki-link--active.source-card {
+  background: transparent;
+  color: inherit !important;
+  box-shadow: 0 0 0 2px hsl(var(--primary));
+  border-radius: var(--radius);
+}
+
 /* Wiki: a repeated mention of a concept already linked earlier in the same
    learning objective. Kept clickable but rendered dimmer (lower opacity + a
    dotted underline) so the first/primary link is the one that stands out. */
@@ -991,6 +1001,13 @@
 .concept-focus-mode :is(li, p, h1, h2, h3, h4, h5, h6, blockquote, table):not(:has(.wiki-link--active)) {
   opacity: 0.22;
   filter: blur(1.4px);
+}
+/* The source-material cards sit out of it: a card is itself the link, so its
+   own title would blur along with the rest, and the ring around the active
+   card already says which source the popup is showing. */
+.concept-focus-mode .source-material-gallery :is(p, li) {
+  opacity: 1;
+  filter: none;
 }
 
 

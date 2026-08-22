@@ -135,7 +135,16 @@ export function ConceptPagePanel({
     fetchWikiFile(entryRefToRepoPath(entry))
       .then(raw => {
         if (cancelled) return
-        const imgs = extractImages(raw)
+        // A resource page's first embed is its cover, and the cover is already
+        // the jacket on the metadata card — it is not one of the page's
+        // figures. Reading the images off the same cover-stripped markdown the
+        // article renders keeps the banner, its pager and the gallery walk
+        // agreeing with what's actually on the page (a book with nothing but a
+        // jacket then has no figure banner at all, rather than a "Show figure"
+        // strip that reveals the cover a second time).
+        const imgs = extractImages(
+          entry.kind === 'resource' ? preprocessResourceMarkdown(raw) : raw,
+        )
         setContent(raw)
         setImages(imgs)
         setStatus('idle')
@@ -499,7 +508,7 @@ export function ConceptPagePanel({
                 images={images}
                 onOpen={i => { setGalleryIndex(i); setShowGallery(true) }}
               />
-              {resourceMeta && <ResourceMetaCard meta={resourceMeta} compact showTitle={false} />}
+              {resourceMeta && <ResourceMetaCard meta={resourceMeta} compact />}
               <WikiArticle
                 markdown={processedContent ?? content}
                 className={

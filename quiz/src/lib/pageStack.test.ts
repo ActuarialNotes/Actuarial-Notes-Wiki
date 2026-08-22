@@ -6,7 +6,6 @@ import {
   openStack,
   pushPage,
   samePage,
-  stackSlots,
 } from './pageStack'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 
@@ -38,7 +37,7 @@ describe('pushPage', () => {
     expect(stack.index).toBe(2)
   })
 
-  it('drops the pages opened from a spine before branching off it again', () => {
+  it('drops the pages opened from a folded page before branching off it again', () => {
     let stack = openStack(book('ISL'))
     stack = pushPage(stack, 0, concept('Bias-Variance Tradeoff'))
     stack = pushPage(stack, 1, concept('Cross-Validation'))
@@ -115,36 +114,5 @@ describe('closePage', () => {
   it('ignores an index that isn\'t in the stack', () => {
     const stack = openStack(concept('A'))
     expect(closePage(stack, 3)).toBe(stack)
-  })
-})
-
-describe('stackSlots', () => {
-  const opts = { width: 390, spineWidth: 36, minPanelWidth: 260 }
-
-  it('leaves a lone page expanded — the popup looks exactly as it did', () => {
-    expect(stackSlots(1, 0, opts)).toEqual(['panel'])
-  })
-
-  it('collapses the trail to spines on a phone-width panel', () => {
-    expect(stackSlots(3, 2, opts)).toEqual(['spine', 'spine', 'panel'])
-  })
-
-  it('expands a run ending at the focused page when there is room', () => {
-    // 1200px fits (1200 - 3·36) / (260 - 36) ≈ 4 panels, capped by the focus.
-    expect(stackSlots(3, 2, { ...opts, width: 1200 })).toEqual(['panel', 'panel', 'panel'])
-    expect(stackSlots(3, 1, { ...opts, width: 1200 })).toEqual(['panel', 'panel', 'spine'])
-  })
-
-  it('never expands past the focused page, so the newest page sits rightmost', () => {
-    expect(stackSlots(4, 0, { ...opts, width: 1200 })).toEqual(['panel', 'spine', 'spine', 'spine'])
-  })
-
-  it('falls back to a single panel before the width is measured', () => {
-    expect(stackSlots(3, 2, { width: 0 })).toEqual(['spine', 'spine', 'panel'])
-  })
-
-  it('always expands the focused page, however cramped', () => {
-    const slots = stackSlots(4, 3, { ...opts, width: 200 })
-    expect(slots).toEqual(['spine', 'spine', 'spine', 'panel'])
   })
 })

@@ -2,9 +2,10 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { useConceptPopup } from './useConceptPopup'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 
-// The page stack: a link followed inside the popup opens a new panel on top of
-// the page being read (Obsidian's stacked pages), and every move of the
-// Previous / Next walk starts a fresh trail from wherever it landed.
+// The page stack: a link followed inside the popup opens a new page on top of
+// the one being read (Obsidian's stacked pages, folded into title bars down the
+// pane), and every move of the Previous / Next walk starts a fresh trail from
+// wherever it landed.
 
 const concept = (name: string): WikiEntryRef => ({ kind: 'concept', name })
 const book = (name: string): WikiEntryRef => ({ kind: 'resource', name })
@@ -34,7 +35,7 @@ describe('useConceptPopup page stack', () => {
     expect(s.list).toHaveLength(1)
   })
 
-  it('a spine expands without disturbing the trail', () => {
+  it('a folded page reopens without disturbing the trail', () => {
     useConceptPopup.getState().openAt([book('ISL')], 0, '/wiki')
     useConceptPopup.getState().pushPage(0, concept('Cross-Validation'))
     useConceptPopup.getState().focusPage(0)

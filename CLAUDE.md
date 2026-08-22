@@ -91,11 +91,13 @@ before touching that area**:
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
   work stays consistent, minimalistic, and hierarchy-aware.
 - `docs/stacked-pages.md` — the concept popup's **page stack** (Obsidian's stacked pages):
-  a link followed inside the popup opens a new panel on top of the page being read, and the
-  pages behind collapse to spines. Covers the push/focus/close rules in `lib/pageStack.ts`,
-  how many panels a given width expands, and the one thing to keep straight — the *stack*
-  (pages on screen) and the *walk* (the Previous/Next footer) are different sequences, so
-  every move of the walk rebuilds the stack from the page it landed on.
+  a link followed inside the popup opens a new page on top of the one being read, and the
+  pages behind it fold up into title bars — vertically, along the pane's short axis, so a
+  folded page keeps a readable title. Covers the push/open/close rules in `lib/pageStack.ts`,
+  why exactly one page is open at a time, how a folded page keeps its scroll position, and
+  the one thing to keep straight — the *stack* (what's on screen) and the *walk* (the
+  Previous/Next footer) are different sequences, so every move of the walk rebuilds the
+  stack from the page it landed on.
 - `docs/keystone-concepts.md` — **keystone concepts**: the authored ~10–15 load-bearing
   concepts per exam (`data/keystoneConcepts.ts`), the `lib/keystone.ts` lookup every surface
   shares, and the **gold** material that marks them. Read before editing the catalogue or
@@ -186,10 +188,11 @@ Other important `lib/` modules:
   `components/PdfViewerPanel.tsx` in the concept popup's shell. See
   `docs/mock-exam-browser.md`.
 - `pageStack.ts` — the concept popup's **page stack**: which pages a followed link leaves
-  open, which one is expanded, and how many panels fit beside it before the rest collapse to
-  spines. Pure and tested; the store half is `pages`/`pageIndex` in `hooks/useConceptPopup.ts`,
-  the rendering is `ConceptPopup` (shell + spines) over `ConceptPagePanel` (one page, mounted
-  per ref so each keeps its own scroll and view mode). See `docs/stacked-pages.md`.
+  open and which one of them is open on screen (one at a time — the rest are folded into
+  title bars down the pane). Pure and tested; the store half is `pages`/`pageIndex` in
+  `hooks/useConceptPopup.ts`, the rendering is `ConceptPopup` (shell + bars) over
+  `ConceptPagePanel` (the open page, mounted per ref, with the scroll memory that lets a
+  folded page come back where it was left). See `docs/stacked-pages.md`.
 - `navScrub.ts` — the maths behind a **scrubbable** progress bar: which item a point on the
   track means (the exact inverse of `navProgressPercent`, so a drag can't land off by one),
   and where a key press moves to. Read by `components/NavProgressBar.tsx`, which is the one

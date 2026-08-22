@@ -12,11 +12,11 @@ import {
 // the popup's prev/next footer and keyboard arrows.
 //
 // Layered on top of that walk is the **page stack** (`lib/pageStack.ts`): a
-// link followed from inside the popup opens a new panel rather than replacing
-// the one being read, and the pages behind it collapse to spines. The stack is
-// a side-branch of wherever the walk currently stands, so every move of the
-// walk — prev/next, a filter change, a jump from another surface — rebuilds it
-// from the single page the walk landed on.
+// link followed from inside the popup opens a new page rather than replacing
+// the one being read, and the pages behind it fold up into title bars down the
+// pane. The stack is a side-branch of wherever the walk currently stands, so
+// every move of the walk — prev/next, a filter change, a jump from another
+// surface — rebuilds it from the single page the walk landed on.
 
 type DashboardFilter = 'study-plan' | 'entire-syllabus' | 'source-material'
 
@@ -47,10 +47,10 @@ interface ConceptPopupState {
   open: boolean
   list: WikiEntryRef[]
   index: number
-  // The stacked pages currently open, oldest first, and which one is expanded.
-  // `pages[0]` is the walk's own entry until the trail outgrows the stack and
-  // the oldest page drops off; everything after it was reached by following a
-  // link. Reset to one page by every move of the walk.
+  // The stacked pages, oldest first, and which one is open on screen (the rest
+  // are folded to title bars). `pages[0]` is the walk's own entry until the
+  // trail outgrows the stack and the oldest page drops off; everything after it
+  // was reached by following a link. Reset to one page by every move of the walk.
   pages: WikiEntryRef[]
   pageIndex: number
   // Document-ordered occurrences for the current (entire-syllabus) view, or
@@ -74,10 +74,10 @@ interface ConceptPopupState {
   setDashboardFilter: (filter: DashboardFilter) => void
   navigate: (delta: number) => void
   jumpTo: (ref: WikiEntryRef) => void
-  // Follow a link found on the stacked page at `from`, opening it as a new
-  // panel. Anything opened from that page is dropped first — see pushPage.
+  // Follow a link found on the stacked page at `from`, opening the target on
+  // top of it. Anything opened from that page is dropped first — see pushPage.
   pushPage: (from: number, ref: WikiEntryRef) => void
-  // Expand the stacked page at `i` (tapping its spine).
+  // Open the stacked page at `i` (tapping its bar).
   focusPage: (i: number) => void
   // Close one stacked page; closing the last one closes the popup.
   closePage: (i: number) => void

@@ -10,6 +10,7 @@ import { useCollect } from '@/hooks/useCollect'
 import { showAddedToDeck } from '@/hooks/useToast'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
+import { recallPageScroll, rememberPageScroll } from '@/lib/pageScrollMemory'
 import { WikiArticle, extractImages, extractMathBlockquotes } from '@/components/wiki/WikiArticle'
 import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
 import { isNumberedOutline, OUTLINE_ARTICLE_CLASS, parseResourceMeta, preprocessResourceMarkdown } from '@/lib/resourceMeta'
@@ -31,23 +32,22 @@ import { MasteryBadge } from '@/components/MasteryBadge'
 import { MASTERY_LABEL, MASTERY_SHORT_LABEL, MASTERY_TINT } from '@/lib/masteryBadge'
 
 /**
- * One page of the concept popup's stack: its header (title, mastery, the action
- * menu behind the collect gate, Listen) and its body (the article, Math View or
- * Listen view), with the gallery and modals it opens.
+ * The open page of the concept popup's stack: its header (title, mastery, the
+ * action menu behind the collect gate, Listen) and its body (the article, Math
+ * View or Listen view), with the gallery and modals it opens.
  *
- * Every page in the stack renders one of these, so each keeps its own scroll
- * position, its own view mode and its own gallery — going back to a spine
- * returns you to the page as you left it. The component is mounted per page
- * (keyed by the ref), so switching pages is a remount rather than a reset of a
- * dozen pieces of state.
+ * Mounted per page, keyed by the ref, so opening another page of the stack is a
+ * remount rather than a reset of a dozen pieces of state. What a reader would
+ * expect to survive that — how far down the page they had read — is kept in
+ * `lib/pageScrollMemory.ts` and restored when the page comes back, which is
+ * what makes a folded page's title bar a way *back* to it rather than a way to
+ * load it again.
  *
  * The chrome shared by the whole popup — the resize handle, the Previous/Next
  * footer, focus mode — stays in `ConceptPopup`.
  */
 export interface ConceptPagePanelProps {
   entry: WikiEntryRef
-  /** This panel is the focused one: it carries the popup-level controls. */
-  active: boolean
   /** True while the popup fills the viewport — drops the page's extra chrome. */
   focusMode: boolean
   /** Called when a link on this page is followed, to stack the target on top. */
@@ -69,7 +69,6 @@ export interface ConceptPagePanelProps {
 
 export function ConceptPagePanel({
   entry,
-  active,
   focusMode,
   onOpenLink,
   onClose,
@@ -179,14 +178,19 @@ export function ConceptPagePanel({
     return () => document.removeEventListener('pointerdown', onPointerDown)
   }, [showPlayMenu])
 
-  // A panel that loses the focus puts its menus and overlays away — the
-  // controls belong to whichever page is being read, and a full-screen gallery
-  // left over from another page would cover it.
+  // Put the reader back where they were when this page is opened again from its
+  // bar. The restore waits for the article to be laid out — before that the body
+  // has nothing to scroll through. See lib/pageScrollMemory.ts.
   useEffect(() => {
-    if (active) return
-    setShowPlayMenu(false)
-    setShowGallery(false)
-  }, [active])
+    if (content === null) return
+    const saved = recallPageScroll(entry)
+    if (saved <= 0) return
+    const frame = requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (bodyRef.current) bodyRef.current.scrollTop = saved
+    }))
+    return () => cancelAnimationFrame(frame)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [content === null])
 
   useEffect(() => {
     onGalleryOpenChange?.(showGallery)
@@ -455,6 +459,7 @@ export function ConceptPagePanel({
           behind never scrolls. Scrollbar is hidden via CSS. */}
       <div
         ref={bodyRef}
+        onScroll={e => rememberPageScroll(entry, e.currentTarget.scrollTop)}
         // The body, not each article inside it, is one math-focus scope — in
         // Math View every equation is its own WikiArticle, and Previous/Next
         // should still run through all of them. See lib/mathFocus.ts.

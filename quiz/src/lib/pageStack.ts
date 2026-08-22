@@ -7,13 +7,18 @@ import type { WikiEntryRef } from '@/lib/wikiRoutes'
  * lost the page you were reading: on a resource page like *An Introduction to
  * Statistical Learning*, tapping **Cross-Validation** replaced the book you
  * were half-way through. Instead a link now *pushes* a new page onto a stack.
- * Earlier pages collapse to a spine at the left edge and stay one tap away,
- * exactly as stacked tabs work in Obsidian.
+ * The pages behind it fold up into title bars above the one being read and stay
+ * one tap away, the way a stack of sheets shows its edges.
  *
- * This module is the decision layer — which pages the stack holds, which one
- * is expanded, and how many fit side by side at a given width. The rendering
- * lives in `components/wiki/ConceptPopup.tsx` (the shell + spines) and
- * `components/wiki/ConceptPagePanel.tsx` (one page).
+ * The stack is **vertical**: the popup is a pane the width of the phone and the
+ * pages fold along its short axis, so a collapsed page reads as a legible row
+ * ("Calculus") rather than a sideways strip of letters. Exactly one page is
+ * open at a time — height is the pane's scarce dimension, and two half-height
+ * pages would leave neither readable.
+ *
+ * This module is the decision layer: which pages the stack holds and which one
+ * is open. The rendering lives in `components/wiki/ConceptPopup.tsx` (the shell
+ * + bars) and `components/wiki/ConceptPagePanel.tsx` (one page).
  *
  * The stack is a *trail*, not a history: it only ever grows by following a
  * link, and the popup rebuilds it from a single page whenever the Previous /
@@ -22,21 +27,11 @@ import type { WikiEntryRef } from '@/lib/wikiRoutes'
 
 /**
  * How many pages one stack holds, base included. Past this the oldest page
- * drops off: a trail that long has stopped being a trail, and every spine
- * costs width the page being read needs. Deep enough that the usual
- * two-or-three-link detour never loses anything.
+ * drops off: a trail that long has stopped being a trail, and every collapsed
+ * bar costs a row of the height the page being read needs. Deep enough that the
+ * usual two-or-three-link detour never loses anything.
  */
-export const MAX_STACK_PAGES = 6
-
-/** Width of a collapsed page's spine, in px. Mirrors `.page-spine` in index.css. */
-export const SPINE_WIDTH = 36
-
-/**
- * Narrowest an expanded panel is allowed to get before the stack collapses
- * another page into a spine instead. Below roughly this, a prose column with
- * KaTeX in it stops being readable.
- */
-export const MIN_PANEL_WIDTH = 260
+export const MAX_STACK_PAGES = 5
 
 export interface PageStack {
   /** Oldest first; the last entry is the most recently opened page. */
@@ -80,7 +75,7 @@ export function pushPage(stack: PageStack, from: number, ref: WikiEntryRef): Pag
   return { pages: trimmed, index: trimmed.length - 1 }
 }
 
-/** Expand the page at `i` (tapping a spine). Out-of-range indices are clamped. */
+/** Open the page at `i` (tapping its bar). Out-of-range indices are clamped. */
 export function focusPage(stack: PageStack, i: number): PageStack {
   if (!stack.pages.length) return stack
   return { pages: stack.pages, index: clampIndex(stack.pages, i) }
@@ -97,36 +92,4 @@ export function closePage(stack: PageStack, i: number): PageStack {
   if (!pages.length) return { pages, index: 0 }
   const index = stack.index === i ? Math.max(0, i - 1) : stack.index > i ? stack.index - 1 : stack.index
   return { pages, index: clampIndex(pages, index) }
-}
-
-export type SlotMode = 'panel' | 'spine'
-
-export interface SlotOptions {
-  /** Width available to the whole stack, in px. 0 while unmeasured. */
-  width: number
-  spineWidth?: number
-  minPanelWidth?: number
-}
-
-/**
- * Which pages are expanded and which are spines at a given width.
- *
- * The expanded pages are a run *ending* at the focused one, so the page being
- * read sits at the right edge with its trail collapsed to its left — the
- * newest page is always the rightmost expanded one, and the pages you stepped
- * back past collapse to the right. A phone fits one; a wide window fits two or
- * three, which is the whole point of reading a concept beside its source.
- */
-export function stackSlots(count: number, index: number, opts: SlotOptions): SlotMode[] {
-  if (count <= 0) return []
-  const spine = opts.spineWidth ?? SPINE_WIDTH
-  const minPanel = opts.minPanelWidth ?? MIN_PANEL_WIDTH
-  const active = Math.max(0, Math.min(count - 1, index))
-
-  // k panels + (count - k) spines must fit: k·minPanel + (count - k)·spine ≤ width.
-  const room = opts.width > 0 ? Math.floor((opts.width - count * spine) / (minPanel - spine)) : 1
-  const expanded = Math.max(1, Math.min(active + 1, room))
-  const first = active - expanded + 1
-
-  return Array.from({ length: count }, (_, i) => (i >= first && i <= active ? 'panel' : 'spine'))
 }

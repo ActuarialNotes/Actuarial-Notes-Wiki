@@ -554,38 +554,33 @@
   }
 }
 
-/* Page stack: a page held open behind the one being read collapses to this
-   spine — the Obsidian stacked-tab strip. `writing-mode: vertical-rl` turns the
-   title on its side and, with `min-height: 0` from the flex column, lets it
-   ellipsis at the spine's foot rather than spilling past the panel. The width
-   is mirrored by SPINE_WIDTH in lib/pageStack.ts, which is what decides how
-   many pages can stay expanded — keep the two in step. */
-.page-spine {
-  width: 2.25rem; /* SPINE_WIDTH = 36px */
+/* Page stack: a page behind the one being read folds up into a title bar, and
+   the bars stack down the pane — the trail above the open page, anything
+   stepped back past below it. A new bar unrolls to its full row height rather
+   than shoving the page down in one frame. */
+.page-bar {
+  animation: page-bar-in 180ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.page-spine-title {
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+@keyframes page-bar-in {
+  from { height: 0; opacity: 0; }
+  to   { height: 2.5rem; opacity: 1; }
 }
 
-/* A page that has just been expanded slides in from the right rather than
-   appearing, so it reads as a sheet laid on top of the one it came from. The
-   animation belongs to the element, not to a state class, so it plays once
-   when the page opens and never replays as the focus moves along the stack. */
+/* A page that has just been opened rises from the bar it came from rather than
+   appearing. The animation belongs to the element, not to a state class, so it
+   plays once when the page opens and never replays underneath it. */
 .page-panel {
   animation: page-stack-in 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes page-stack-in {
-  from { opacity: 0; transform: translateX(1.5rem); }
-  to   { opacity: 1; transform: translateX(0); }
+  from { opacity: 0; transform: translateY(1.25rem); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .page-bar,
   .page-panel {
     animation: none;
   }

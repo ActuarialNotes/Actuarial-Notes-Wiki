@@ -8,15 +8,32 @@
 const PAGE_MARGIN_PX = 16
 
 /**
- * Zoom is a multiple of fit-to-width, so 1 always means "the page fits the
- * panel" and the range only ever goes up from there. It is continuous rather
+ * Zoom is a multiple of fit-to-width, so 1 always means "the page drawn across
+ * the panel" and the range runs up from there to 4×. It is continuous rather
  * than a ladder of stops because the control is the same slider the image
  * gallery and math focus mode use — the reader drags to the size the small
  * print on *this* scan needs, which is rarely one of seven preset stops.
  */
-export const MIN_ZOOM = 1
+export const WIDTH_ZOOM = 1
 export const MAX_ZOOM = 4
-export const DEFAULT_ZOOM = 1
+
+/**
+ * The bottom of the range is not fit-to-width but **fit-to-page**: the zoom at
+ * which the whole page is on screen, which is `pageFitZoom` below and is never
+ * more than 1.
+ *
+ * A page is taller than it is wide, so on a phone — where the panel is about
+ * the same shape — fitting the width fits the page and the two are the same
+ * number. On a desktop the panel is a wide, short strip: a page fitted to its
+ * width runs two or three panel-heights down, and the reader opens a document
+ * to the top third of page 1 with no way to see the rest of it at once. So the
+ * slider starts wherever the whole page fits and 1× — the width fit — sits a
+ * little way along it.
+ *
+ * `MIN_ZOOM` is the floor under that: a panel dragged down to a sliver would
+ * otherwise fit the page by shrinking it to nothing.
+ */
+export const MIN_ZOOM = 0.2
 
 /** The slider's granularity, matching the other two zoom sliders in the app. */
 export const ZOOM_SLIDER_STEP = 0.05
@@ -24,9 +41,17 @@ export const ZOOM_SLIDER_STEP = 0.05
 /** How far the +/- keys move, which wants to be a visible jump, not a nudge. */
 export const KEY_ZOOM_STEP = 0.25
 
-export function clampZoom(zoom: number): number {
-  if (!Number.isFinite(zoom)) return DEFAULT_ZOOM
-  return Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, zoom))
+/**
+ * A zoom inside the range this panel allows.
+ *
+ * `minZoom` is the whole-page fit, which depends on the panel's shape and so
+ * arrives from the component; it defaults to the width fit for the moment
+ * before the page has been measured, when there is no page fit to know.
+ */
+export function clampZoom(zoom: number, minZoom: number = WIDTH_ZOOM): number {
+  const floor = Math.max(MIN_ZOOM, Math.min(WIDTH_ZOOM, minZoom))
+  if (!Number.isFinite(zoom)) return floor
+  return Math.max(floor, Math.min(MAX_ZOOM, zoom))
 }
 
 /**
@@ -73,6 +98,39 @@ export function fitWidthScale(containerWidth: number, pageWidthAtScale1: number)
 }
 
 /**
+ * The pdf.js scale that fits a page's *height* to the panel — the same sum
+ * down the short axis, with the same margin, since the page sits in a box
+ * padded on all four sides.
+ */
+export function fitHeightScale(containerHeight: number, pageHeightAtScale1: number): number {
+  if (!(containerHeight > 0) || !(pageHeightAtScale1 > 0)) return 0
+  const usable = Math.max(containerHeight - PAGE_MARGIN_PX * 2, 120)
+  return usable / pageHeightAtScale1
+}
+
+/**
+ * The zoom at which the whole page is on screen: the width fit on a panel
+ * shaped like a page, less than that on a panel shorter than one.
+ *
+ * Expressed as a zoom rather than a scale because zoom is what the rest of the
+ * panel works in — this is the bottom of the slider's range, and the size a
+ * document opens at. It is left exact rather than snapped to the slider's 0.05
+ * grid: down here a whole step is a tenth of the zoom, and a page that doesn't
+ * quite fit is the one thing this number exists to prevent.
+ */
+export function pageFitZoom(
+  containerWidth: number,
+  containerHeight: number,
+  pageWidthAtScale1: number,
+  pageHeightAtScale1: number,
+): number {
+  const width = fitWidthScale(containerWidth, pageWidthAtScale1)
+  const height = fitHeightScale(containerHeight, pageHeightAtScale1)
+  if (!width || !height) return WIDTH_ZOOM
+  return Math.max(MIN_ZOOM, Math.min(WIDTH_ZOOM, height / width))
+}
+
+/**
  * How many device pixels to draw per CSS pixel: the larger of the screen's
  * ratio and whatever it takes to reach `MIN_DEVICE_PIXELS_PER_POINT`, reduced
  * when that would exceed the pixel budget for this page.
@@ -99,13 +157,18 @@ export function canvasPixelRatio(
 }
 
 /** One keyboard press of zoom, stopping at either end of the range. */
-export function nudgeZoom(current: number, direction: -1 | 1): number {
-  return clampZoom(clampZoom(current) + direction * KEY_ZOOM_STEP)
+export function nudgeZoom(current: number, direction: -1 | 1, minZoom: number = WIDTH_ZOOM): number {
+  return clampZoom(clampZoom(current, minZoom) + direction * KEY_ZOOM_STEP, minZoom)
 }
 
-/** "Fit" reads better than "1.0×" for the size where the page fits the panel. */
-export function formatZoom(zoom: number): string {
-  return Math.abs(zoom - 1) < 1e-6 ? 'Fit' : `${zoom.toFixed(1)}×`
+/**
+ * "Fit" reads better than a number for the bottom of the range, where the whole
+ * page is on screen. Everything above it is a multiple of the width fit, so on
+ * a desktop panel the reader passes "1.0×" — the page across the panel — on the
+ * way up, which is a size worth being able to aim for.
+ */
+export function formatZoom(zoom: number, minZoom: number = WIDTH_ZOOM): string {
+  return Math.abs(zoom - minZoom) < 1e-6 ? 'Fit' : `${zoom.toFixed(1)}×`
 }
 
 /**
@@ -142,9 +205,14 @@ export function anchoredScroll(
 }
 
 /** The zoom a pinch has reached: the gesture scales the size it started from. */
-export function pinchZoom(startZoom: number, startDistance: number, distance: number): number {
-  if (!(startDistance > 0) || !(distance > 0)) return clampZoom(startZoom)
-  return clampZoom(startZoom * (distance / startDistance))
+export function pinchZoom(
+  startZoom: number,
+  startDistance: number,
+  distance: number,
+  minZoom: number = WIDTH_ZOOM,
+): number {
+  if (!(startDistance > 0) || !(distance > 0)) return clampZoom(startZoom, minZoom)
+  return clampZoom(startZoom * (distance / startDistance), minZoom)
 }
 
 /** Keeps a page number inside a document that may have shrunk under it. */

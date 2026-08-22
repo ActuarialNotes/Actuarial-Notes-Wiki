@@ -5,17 +5,20 @@ import {
   clampPage,
   clampScroll,
   clampZoom,
-  DEFAULT_ZOOM,
+  fitHeightScale,
   fitWidthScale,
   formatZoom,
   MAX_ZOOM,
   MIN_ZOOM,
   nudgeZoom,
+  pageFitZoom,
   pinchZoom,
+  WIDTH_ZOOM,
 } from './pdfViewer'
 
 // A4 in PDF points, which is what an exam paper is.
 const A4_WIDTH = 595
+const A4_HEIGHT = 842
 
 describe('fitWidthScale', () => {
   it('fits the page across the panel, minus its margin', () => {
@@ -31,6 +34,38 @@ describe('fitWidthScale', () => {
 
   it('keeps a usable width in a panel dragged down to nothing', () => {
     expect(fitWidthScale(20, A4_WIDTH)).toBeGreaterThan(0)
+  })
+})
+
+describe('pageFitZoom', () => {
+  it('is the width fit on a phone, where the panel is shaped like a page', () => {
+    // 390×620 of page area: fitting the width very nearly fits the page, so the
+    // slider starts where it always did and nothing about the phone changes.
+    expect(pageFitZoom(390, 620, A4_WIDTH, A4_HEIGHT)).toBeCloseTo(1, 1)
+    // A panel taller than the page needs never zooms out past the width fit —
+    // there is nothing to gain from a page narrower than the panel.
+    expect(pageFitZoom(390, 1200, A4_WIDTH, A4_HEIGHT)).toBe(WIDTH_ZOOM)
+  })
+
+  it('drops below the width fit on a desktop panel, which is a wide strip', () => {
+    // 1200×500: a page fitted to that width is ~1650px tall, three panels deep.
+    const zoom = pageFitZoom(1200, 500, A4_WIDTH, A4_HEIGHT)
+    expect(zoom).toBeLessThan(1)
+    // And at that zoom the whole page is on screen: its drawn height is the
+    // panel's, less the margin it sits in.
+    const drawn = A4_HEIGHT * fitWidthScale(1200, A4_WIDTH) * zoom
+    expect(drawn).toBeCloseTo(500 - 32, 0)
+    expect(drawn).toBeCloseTo(A4_HEIGHT * fitHeightScale(500, A4_HEIGHT), 6)
+  })
+
+  it('stops shrinking the page in a panel dragged down to a sliver', () => {
+    expect(pageFitZoom(1200, 40, A4_WIDTH, A4_HEIGHT)).toBe(MIN_ZOOM)
+  })
+
+  it('waits for a measurement rather than fitting to a guess', () => {
+    expect(pageFitZoom(0, 500, A4_WIDTH, A4_HEIGHT)).toBe(WIDTH_ZOOM)
+    expect(pageFitZoom(1200, 0, A4_WIDTH, A4_HEIGHT)).toBe(WIDTH_ZOOM)
+    expect(pageFitZoom(1200, 500, 0, 0)).toBe(WIDTH_ZOOM)
   })
 })
 
@@ -81,22 +116,35 @@ describe('canvasPixelRatio', () => {
 })
 
 describe('zoom', () => {
-  it('starts at fit-to-width, which reads as "Fit" rather than a number', () => {
-    expect(DEFAULT_ZOOM).toBe(1)
-    expect(formatZoom(DEFAULT_ZOOM)).toBe('Fit')
+  it('reads the bottom of the range as "Fit", wherever the panel puts it', () => {
+    expect(formatZoom(WIDTH_ZOOM)).toBe('Fit')
     expect(formatZoom(1.5)).toBe('1.5×')
+    // On a desktop panel the whole-page fit is below 1×, so that is the size
+    // called "Fit" and the width fit reads as the number it is.
+    expect(formatZoom(0.4, 0.4)).toBe('Fit')
+    expect(formatZoom(1, 0.4)).toBe('1.0×')
   })
 
   it('never goes below the fitted page — there is nothing to read out there', () => {
-    expect(clampZoom(0.25)).toBe(MIN_ZOOM)
+    expect(clampZoom(0.25)).toBe(WIDTH_ZOOM)
     expect(clampZoom(9)).toBe(MAX_ZOOM)
     expect(clampZoom(2.4)).toBe(2.4)
-    expect(clampZoom(Number.NaN)).toBe(DEFAULT_ZOOM)
+    expect(clampZoom(Number.NaN)).toBe(WIDTH_ZOOM)
+  })
+
+  it('opens the range down to the whole-page fit the panel asks for', () => {
+    expect(clampZoom(0.25, 0.4)).toBe(0.4)
+    expect(clampZoom(0.6, 0.4)).toBe(0.6)
+    expect(clampZoom(Number.NaN, 0.4)).toBe(0.4)
+    // A minimum outside the range the panel allows can't widen it either way.
+    expect(clampZoom(0.05, 0.01)).toBe(MIN_ZOOM)
+    expect(clampZoom(1.4, 2)).toBe(1.4)
   })
 
   it('moves a visible amount per key press, and stops at both ends', () => {
     expect(nudgeZoom(1, 1)).toBe(1.25)
-    expect(nudgeZoom(1, -1)).toBe(MIN_ZOOM)
+    expect(nudgeZoom(1, -1)).toBe(WIDTH_ZOOM)
+    expect(nudgeZoom(0.5, -1, 0.4)).toBe(0.4)
     expect(nudgeZoom(MAX_ZOOM, 1)).toBe(MAX_ZOOM)
   })
 
@@ -107,6 +155,8 @@ describe('zoom', () => {
     expect(pinchZoom(2, 100, 400)).toBe(MAX_ZOOM)
     // A gesture with nothing to measure leaves the zoom alone.
     expect(pinchZoom(1.5, 0, 120)).toBe(1.5)
+    // Pinching in stops at the fitted page, wherever the panel puts it.
+    expect(pinchZoom(1, 200, 40, 0.4)).toBe(0.4)
   })
 })
 

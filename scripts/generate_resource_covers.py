@@ -4,15 +4,15 @@
 A resource page's metadata card (`quiz/src/components/wiki/ResourceMetaCard.tsx`)
 shows the first image embedded in the page body as the source's cover, and the
 card looks unfinished without one. Real jacket art is the better picture and is
-kept wherever it exists — this script never touches a page that already embeds
-an image, so dropping a scanned or publisher-supplied cover into
+kept wherever it exists — this script never touches a page whose first embed it
+does not own, so dropping a scanned or publisher-supplied cover into
 `Media/Attachments/` and embedding it takes precedence permanently.
 
-For everything else it draws a typographic cover from the page's own front
-matter: title, author, edition, year, and a jacket colour keyed off the
-publisher, so the CAS study notes look like a series and the ASOPs look like a
-different one. Output is SVG (a couple of KB, crisp at the 56–96 px the card
-renders it at, and served as `image/svg+xml` by raw.githubusercontent.com).
+For everything else it draws a jacket from the page's own front matter: a band
+of the publisher's colour holding a drawing of the subject, then paper below
+with the title set large in black. Output is SVG (a couple of KB, crisp at the
+64–112 px the card renders it at, and served as `image/svg+xml` by
+raw.githubusercontent.com).
 
     python3 scripts/generate_resource_covers.py            # fill in the gaps
     python3 scripts/generate_resource_covers.py --force    # redraw ours too
@@ -27,11 +27,14 @@ from __future__ import annotations
 import argparse
 import re
 import sys
+from dataclasses import dataclass
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from cover_kit import H, SANS, SERIF, W, Cover, Livery, balance, fit, text_width
+from cover_kit import (H, W, Cover, balance, darken, fit, jacket_for, mix,
+                       text_width)
+from cover_motifs import MOTIFS
 
 REPO = Path(__file__).resolve().parent.parent
 BOOKS = REPO / "Resources" / "Books"
@@ -43,31 +46,15 @@ OURS = " - Cover.svg"
 
 IMAGE_EMBED_RE = re.compile(r"!\[\[([^\]|]+\.(?:png|jpe?g|gif|svg|webp|avif))\]\]", re.I)
 
-# ── jackets ──────────────────────────────────────────────────────────────────
-# Matched against the publisher (first hit wins), so every source from one house
-# shares a jacket. Field colours are dark enough for white type to clear 4.5:1.
-JACKETS: list[tuple[str, Livery]] = [
-    ("casualty actuarial society", Livery("#123f63", "#08243b", "#e8b23a")),
-    ("actuarial standards board", Livery("#39414d", "#1d222a", "#c0503c")),
-    ("society of actuaries", Livery("#12356f", "#071b40", "#ffffff")),
-    ("american academy", Livery("#12356f", "#071b40", "#ffffff")),
-    ("springer", Livery("#15537f", "#0a2f4d", "#f2c14e")),
-    ("chapman", Livery("#4b1f4a", "#28102a", "#d98c2b")),
-    ("routledge", Livery("#4b1f4a", "#28102a", "#d98c2b")),
-    ("taylor", Livery("#4b1f4a", "#28102a", "#d98c2b")),
-    ("pearson", Livery("#9e1122", "#5f0a15", "#f2c14e")),
-    ("academic press", Livery("#123a5e", "#0a2540", "#e87722")),
-    ("elsevier", Livery("#123a5e", "#0a2540", "#e87722")),
-    ("cambridge", Livery("#14452f", "#0a2a1d", "#c9a227")),
-    ("oxford", Livery("#0f2f52", "#08203a", "#9fc3e8")),
-    ("wiley", Livery("#1d3f8f", "#0f2255", "#5fb0e5")),
-    ("actex", Livery("#7a1f2b", "#45101a", "#e2b04a")),
-    ("lightning source", Livery("#0a5a6b", "#053540", "#f4d35e")),
-    ("actuarial notes", Livery("#4c1d95", "#2a1063", "#2dd4bf")),
-]
-DEFAULT_JACKET = Livery("#243040", "#131a24", "#93a4bb")
-
 ORDINALS = {1: "st", 2: "nd", 3: "rd"}
+
+# ── layout ───────────────────────────────────────────────────────────────────
+PAD = 30                 # left and right margin for everything
+MEASURE = W - PAD * 2
+BAND = 236               # where the colour band ends and the paper starts
+FOOT_RULE = H - 58       # the hairline the citation sits under
+PAPER = "#f6f5f1"
+GRAPHITE = "#14161a"
 
 
 # ── front matter ─────────────────────────────────────────────────────────────
@@ -86,7 +73,7 @@ def parse_front_matter(raw: str) -> tuple[dict[str, str], str]:
         km = re.match(r"^([A-Za-z][A-Za-z0-9 _/-]*):\s*(.*)$", line)
         if not km:
             continue
-        value = km.group(2).strip()
+        value = km.group(2).strip().strip("\r")
         if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
             value = value[1:-1]
         attrs[km.group(1).strip()] = value.strip()
@@ -94,47 +81,112 @@ def parse_front_matter(raw: str) -> tuple[dict[str, str], str]:
 
 
 def ordinal_edition(edition: str) -> str | None:
-    """`4e`, `5th`, `12e` → `4th Edition`. Anything wordier is not an edition."""
+    """`4e`, `5th`, `12e` → `4th ed.`. Anything wordier is not an edition."""
     m = re.fullmatch(r"(\d+)\s*(?:e|st|nd|rd|th)?", edition.strip(), re.I)
     if not m:
         return None
     n = int(m.group(1))
     # 11th/12th/13th break the last-digit rule.
     suffix = "th" if n % 100 in (11, 12, 13) else ORDINALS.get(n % 10, "th")
-    return f"{n}{suffix} Edition"
+    return f"{n}{suffix} ed."
 
 
-def jacket_for(publisher: str, author: str) -> Livery:
-    hay = f"{publisher} {author}".lower()
-    for needle, livery in JACKETS:
-        if needle in hay:
-            return livery
-    return DEFAULT_JACKET
+# A body, not a person: these are never reduced to a surname, and never set as a
+# byline when the imprint line at the foot is going to name them anyway.
+ORG_WORDS = re.compile(
+    r"\b(society|board|academy|association|institute|committee|council|"
+    r"bureau|press|university|actuaries|actuarial notes|casualty actuarial)\b",
+    re.I)
+
+
+def short_authors(author: str) -> str:
+    """`Hogg, R.V., McKean, J.W., and Craig, A.T.` → `Hogg, McKean & Craig`.
+
+    A byline at cover size has room for surnames, not for a full citation —
+    which the page's own front matter still carries, and which the metadata
+    card beside the jacket prints in full.
+    """
+    a = author.strip()
+    if not a or ORG_WORDS.search(a):
+        return a
+    a = re.sub(r"\s+et\s+al\.?$", " et al.", a)
+    names: list[str] = []
+    for part in re.split(r",\s*(?![A-Z]\.)|\s+and\s+|\s*&\s*", a):
+        part = part.strip().rstrip(",")
+        if not part or re.fullmatch(r"(?:[A-Z]\.\s*)+[A-Z]?\.?", part):
+            continue  # a stray initials fragment from `Surname, R.V.`
+        part = re.sub(r"^(?:[A-Z]\.[- ]?)+\s*", "", part)       # leading initials
+        part = re.sub(r"\s*,?\s*(?:[A-Z]\.[- ]?)+$", "", part)  # trailing initials
+        words = part.split()
+        if len(words) > 1 and not part.endswith("et al."):
+            part = words[-1]
+        if part:
+            names.append(part)
+    if not names:
+        return a
+    if len(names) > 3:
+        return f"{names[0]} et al."
+    if len(names) == 1:
+        return names[0]
+    return ", ".join(names[:-1]) + " & " + names[-1]
+
+
+# Which drawing a source gets, matched against its title and kind. First hit
+# wins, so the more specific patterns come first: an unpaid-claims *standard* is
+# a triangle before it is a shield.
+SUBJECTS: list[tuple[str, str]] = [
+    ("triangle", r"unpaid claim|reserv|loss development|ratemaking|principles|nonlife"),
+    ("regression", r"generalized linear|linear model|regression|statistical learning|mixed model"),
+    ("wave", r"time series"),
+    ("survival", r"life conting|surviv|mortalit"),
+    ("arrivals", r"poisson|stochastic|process"),
+    ("compounding", r"interest|financial math|investment|credit|annuit"),
+    ("bell", r"probabilit|statistic|distribution|random"),
+    ("shield", r"asop|standard|risk classification|trending|insurance"),
+]
+
+
+def subject_for(title: str, kind: str) -> str:
+    hay = f"{title} {kind}".lower()
+    for name, pattern in SUBJECTS:
+        if re.search(pattern, hay):
+            return name
+    return "lattice"
 
 
 def split_title(title: str, code: str, type_: str) -> str:
-    """Drop from the title what the subtitle and badge already say."""
+    """Strip from the title everything the rest of the cover already says.
+
+    The code (`ASOP No. 12`) is set in the citation line and the type
+    (`Reference Sheet`) in the kicker, so neither is repeated. A trailing
+    parenthetical goes too: `Risk Classification (for All Practice Areas)` wraps
+    to four lines at cover size, and the qualifier is the half nobody scans a
+    shelf by.
+    """
     out = title.strip()
     if code:
         out = re.sub(rf"^{re.escape(code)}\s*[—–:-]\s*", "", out)
     if type_:
         out = re.sub(rf"\s*[—–]\s*{re.escape(type_)}$", "", out, flags=re.I)
+    trimmed = re.sub(r"\s*\([^()]*\)$", "", out).strip()
+    if trimmed and len(trimmed.split()) >= 2:
+        out = trimmed
     return out.strip()
 
 
-def badge_for(type_: str, edition: str) -> str:
-    """The line of small caps above the imprint: what kind of document this is."""
-    if type_:
-        return type_
-    # The CAS study notes carry their kind in the Edition field
-    # ("Study Note (Oct 2014, rev. Sep 2015)") because they have no other.
-    m = re.match(r"^(Study Note|Monograph|Syllabus Reading)\b", edition, re.I)
-    return m.group(1) if m else ""
+@dataclass(frozen=True)
+class Meta:
+    """Everything the drawing needs, lifted out of one page's front matter."""
+    title: str
+    subtitle: str
+    kind: str
+    byline: str
+    imprint: str
+    facts: str
+    subject: str
 
 
-# ── drawing ──────────────────────────────────────────────────────────────────
-def draw(attrs: dict[str, str]) -> str:
-    title_raw = attrs.get("Title", "")
+def read_meta(attrs: dict[str, str]) -> Meta:
     author = attrs.get("Authors") or attrs.get("Author") or ""
     publisher = attrs.get("Publisher", "")
     year = attrs.get("Year", "")
@@ -142,82 +194,109 @@ def draw(attrs: dict[str, str]) -> str:
     code = attrs.get("Code", "")
     type_ = attrs.get("Type", "")
 
-    title = split_title(title_raw, code, type_)
-    badge = badge_for(type_, edition)
-    subtitle = " · ".join(x for x in (code, ordinal_edition(edition), year) if x)
-    # The standards name the same body twice; the imprint at the foot says it.
-    byline = "" if author.strip().lower() == publisher.strip().lower() else author
-    imprint = publisher or author
-
-    lv = jacket_for(publisher, author)
-    alt = " — ".join(x for x in (title, byline or publisher, year) if x)
-    c = Cover(lv, f"Cover of {alt}" if alt else "Cover")
-
-    # Field, then the light that falls on the upper half of a jacket.
-    c.rect(0, 0, W, H, "url(#field)")
-    c.rect(0, 0, W, H, "url(#glow)")
-    # Spine: a strip of shadow down the binding edge, closed by an accent rule.
-    c.rect(0, 0, 17, H, "#000000", 0.20)
-    c.line(17.5, 0, 17.5, H, lv.accent, 1.5, 0.55)
-    # Head and tail bands.
-    c.rect(0, 0, W, 9, lv.accent)
-    c.rect(0, H - 9, W, 9, lv.accent)
-    # The hairline an academic jacket is usually ruled with.
-    c.frame(38, 30, W - 76, H - 88, lv.ink, 1, 0.22)
-
-    inner = W - 76 - 34  # frame width less its own padding
-    cx = 38 + (W - 76) / 2
-
-    # A two-part title is set the way a jacket sets it — the main title large,
-    # what follows the colon smaller underneath. Run on, "Nonlife Actuarial
-    # Models: Theory, Methods and Evaluation" is one undifferentiated block.
+    title = split_title(attrs.get("Title", ""), code, type_)
     main, _, sub = title.partition(": ")
-    size, rows = fit(main, [31, 28, 25, 22, 20, 18], inner, 5, bold=True)
-    leading = size * 1.2
-    sub_size = max(13.5, round(size * 0.58, 1))
-    sub_rows = balance(sub, sub_size, inner) if sub else []
-    sub_leading = sub_size * 1.28
+    if not sub:
+        main, _, sub = title.partition(" — ")
 
-    block = len(rows) * leading
+    kind = type_
+    if not kind:
+        # The CAS study notes carry their kind in the Edition field ("Study Note
+        # (Oct 2014, rev. Sep 2015)") because they have no other field for it.
+        m = re.match(r"^(Study Note|Monograph|Syllabus Reading)\b", edition, re.I)
+        kind = m.group(1) if m else "Textbook"
+
+    imprint = publisher or author
+    # The imprint at the foot already names the house; a byline repeating it
+    # (every ASOP, the CAS statement, the vault's own reference sheets) is noise
+    # — the same rule `ResourceMetaCard` applies to its publisher chip.
+    byline = ("" if author.strip().lower() == imprint.strip().lower()
+              else short_authors(author))
+
+    return Meta(
+        title=main.strip(),
+        subtitle=sub.strip(),
+        kind=kind,
+        byline=byline,
+        imprint=imprint,
+        facts=" · ".join(f for f in (code, ordinal_edition(edition), year) if f),
+        subject=subject_for(title, kind),
+    )
+
+
+# ── drawing ──────────────────────────────────────────────────────────────────
+def draw(attrs: dict[str, str]) -> str:
+    """One jacket: a band of house colour over paper.
+
+    The two-tone split is the point. The band carries the publisher's livery and
+    the subject drawing, so a shelf reads as a series and a single cover says
+    what the book is about before its title is legible; the paper carries the
+    title in black, which is the most readable thing the format allows at 88 px.
+    Together they make the jacket the brightest object on the Resources page
+    rather than another dark rectangle on a dark canvas.
+    """
+    m = read_meta(attrs)
+    lv = jacket_for(attrs.get("Publisher", ""), m.byline)
+    alt = " — ".join(x for x in (m.title, m.byline or m.imprint,
+                                 attrs.get("Year", "")) if x)
+    c = Cover(f"Cover of {alt}" if alt else "Cover")
+
+    c.define(f'<linearGradient id="{c.gid("band")}" x1="0" y1="0" x2="0.8" y2="1">'
+             f'<stop offset="0" stop-color="{mix(lv.base, "#ffffff", 0.14)}"/>'
+             f'<stop offset="1" stop-color="{darken(lv.base, 0.22)}"/>'
+             '</linearGradient>')
+    c.define(f'<linearGradient id="{c.gid("paper")}" x1="0" y1="0" x2="0" y2="1">'
+             '<stop offset="0" stop-color="#fbfaf7"/>'
+             f'<stop offset="1" stop-color="{PAPER}"/></linearGradient>')
+    c.define(f'<clipPath id="{c.gid("crop")}">'
+             f'<rect x="0" y="0" width="{W}" height="{BAND}"/></clipPath>')
+
+    c.rect(0, 0, W, H, c.url("paper"))
+    # The drawing is cropped by the band, not fitted inside it — a shape running
+    # off the edge is what stops the block reading as a pasted-in icon.
+    c.raw(f'<g clip-path="{c.url("crop")}">')
+    c.rect(0, 0, W, BAND, c.url("band"))
+    MOTIFS[m.subject](c, W, BAND, lv.accent)
+    c.raw("</g>")
+    c.rect(0, BAND - 6, W, 6, lv.accent)
+
+    c.text(PAD, 52, m.kind.upper(), 10.5, weight="700", tracking=1.9,
+           fill="#ffffff", opacity=0.92)
+
+    # The words are centred in the paper rather than hung from the band: a
+    # two-word title otherwise leaves 200 px of blank paper at the foot, which
+    # reads as a layout that ran out rather than as white space.
+    size, rows = fit(m.title, [40, 36, 32, 28, 25, 22, 20], MEASURE, 5, bold=True)
+    leading = size * 1.06
+    sub_size = max(14.0, round(size * 0.40, 1))
+    sub_rows = balance(m.subtitle, sub_size, MEASURE) if m.subtitle else []
+    by_size, by_rows = (fit(m.byline, [15, 14, 13], MEASURE, 2, bold=True)
+                        if m.byline else (0.0, []))
+
+    block = (len(rows) - 1) * leading + size
     if sub_rows:
-        block += 10 + len(sub_rows) * sub_leading
-    # The title block sits on the upper third, as the covers already in the
-    # vault do; it grows downward from there rather than off the head band.
-    y = max(74, 176 - block / 2)
-    y = c.lines(cx, y, rows, size, leading,
-                family=SERIF, weight="bold", fill=lv.ink)
+        block += sub_size + 12 + (len(sub_rows) - 1) * sub_size * 1.3
+    if by_rows:
+        block += 34 + (len(by_rows) - 1) * by_size * 1.3 + by_size
+    y = BAND + (FOOT_RULE - BAND - block) / 2 + size
+
+    y = c.lines(PAD, y, rows, size, leading, weight="700", fill=GRAPHITE)
     if sub_rows:
-        y = c.lines(cx, y + 10, sub_rows, sub_size, sub_leading,
-                    family=SERIF, fill=lv.ink, opacity=0.85)
+        y = c.lines(PAD, y + sub_size + 12, sub_rows, sub_size, sub_size * 1.3,
+                    fill=mix(GRAPHITE, PAPER, 0.42))
+    if by_rows:
+        c.lines(PAD, y + 34, by_rows, by_size, by_size * 1.3, weight="600",
+                fill=darken(lv.base, 0.10))
 
-    if subtitle:
-        y += 6
-        c.text(cx, y, subtitle, 13.5, fill=lv.dim, opacity=0.92)
-        y += 13.5
-
-    y += 30
-    c.line(cx - 130, y, cx + 130, y, lv.accent, 2, 0.9)
-
-    if byline:
-        y += 26
-        bsize, brows = fit(byline, [14, 13, 12], inner, 3, bold=True)
-        c.lines(cx, y, brows, bsize, bsize * 1.35, weight="bold", fill=lv.ink)
-        y += bsize * 1.35 * len(brows)
-
-    # A small ornament so the lower half is not a blank field — three rules
-    # stepping in, the way a title page is usually closed off.
-    oy = 430
-    if y < oy - 24:
-        for i, half in enumerate((44, 28, 14)):
-            c.line(cx - half, oy + i * 7, cx + half, oy + i * 7,
-                   lv.accent, 1.5, 0.75 - i * 0.2)
-
-    if badge:
-        c.text(cx, 505, badge.upper(), 9.5, fill=lv.accent,
-               weight="bold", spacing=1.6, opacity=0.95)
-    if imprint:
-        isize = 13 if text_width(imprint, 13) <= inner else 11
-        c.text(cx, 535, imprint, isize, fill=lv.dim, opacity=0.9)
+    c.line(PAD, FOOT_RULE, W - PAD, FOOT_RULE, GRAPHITE, 1, 0.14)
+    foot_ink = mix(GRAPHITE, PAPER, 0.45)
+    if m.imprint:
+        size_ = 9.5 if text_width(m.imprint.upper(), 9.5, True, 1.5) <= MEASURE * 0.6 else 8
+        c.text(PAD, H - 36, m.imprint.upper(), size_, weight="700", tracking=1.5,
+               fill=foot_ink)
+    if m.facts:
+        c.text(W - PAD, H - 36, m.facts, 9.5, weight="600", tracking=1.1,
+               fill=foot_ink, anchor="end")
 
     return c.render()
 

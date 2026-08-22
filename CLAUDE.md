@@ -176,10 +176,11 @@ Other important `lib/` modules:
   shelf's **Examiner's Report** button. `examPdf.ts` decides which sources are viewable (the
   same allowlist `quiz/api/exam-pdf.js` enforces) and builds the proxy/download URLs — the page
   can't fetch a publisher's PDF itself, and can't save one cross-origin; `pdfViewer.ts` is
-  the pure reading maths (fit-to-width, the render resolution and pixel budget — a
-  page is drawn at ~216 dpi rather than the screen's ratio, so a scan is squeezed
-  less far to fit — plus the 1×–4× zoom range and the pan/re-anchor maths behind the
-  panel's zoom slider);
+  the pure reading maths: the fits (a document opens with the *whole page* on screen —
+  `pageFitZoom`, which is fit-to-width on a phone and well below it on a wide desktop
+  panel), the render resolution and pixel budget (a page is drawn at ~216 dpi rather than
+  the screen's ratio, so a scan is squeezed less far to fit), and the zoom range —
+  whole-page fit up to 4× — with the pan/re-anchor maths behind the panel's zoom slider;
   `pdfjsSetup.ts` is the dynamically-imported pdf.js instance (the **legacy** build) and the
   URLs of the four asset directories pdf.js fetches at run time — `pdfjsAssets.ts` is the
   shared list, copied out of node_modules by `vite.config.ts`. `wasm` is the load-bearing

@@ -257,7 +257,25 @@ letter page at that resolution is ~4.4 of the 8 megapixels allowed, and a deep z
 capped by the budget exactly as before.
 
 **Zooming, and reaching the rest of the page.** Zoom is a multiple of fit-to-width, so
-1× ("Fit") is always the whole page across the panel and the range runs up to 4×. The
+1× is the page drawn across the panel, and the range runs up to 4×. The *bottom* of the
+range is not 1× but `pageFitZoom` — the zoom at which the whole page is on screen, which
+is what "Fit" means on the slider and the size a document opens at. On a phone the panel
+is about the shape of a page, so the two are the same number and the slider runs 1×–4× as
+it always did; on a desktop the panel is a wide, short strip, where a page fitted to its
+width runs two or three panel-heights down and the reader would open a document to the
+top third of page 1 with no way to see the rest at once. There the fit is well below 1×
+and the width fit sits a little way along the slider. `MIN_ZOOM` (0.2) is the floor under
+it, for a panel dragged down to a sliver. The fit is deliberately *not* snapped to the
+slider's 0.05 grid: down at 0.3 a whole step is a tenth of the zoom, and a page that
+doesn't quite fit is the one thing the number exists to prevent.
+
+Two things follow in the panel. The page is **measured before it is drawn** — a
+`getPage`/`getViewport({scale: 1})` pass of its own fills `pageBase`, and the render
+effect waits for it and for the zoom to have settled on the fit, because drawing first
+would show a fitted-width page for a moment and then shrink it. And the fit is only the
+*default*: `zoomed` records whether the reader has set the zoom themselves, so the page
+re-fits as the panel is resized until they touch the slider, and after that their zoom is
+kept (clamped back into range when a resize raises the floor). The
 control is the **same slider** the image gallery (`ImageGalleryModal`) and math focus mode
 use — `.zoom-slider`, with the two custom properties set for a themed background — because
 this is read one-handed on a phone, where a thumb on a 40px knob works and a pair of small

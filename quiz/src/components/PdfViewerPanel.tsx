@@ -21,13 +21,13 @@ import {
   canvasPixelRatio,
   clampPage,
   clampZoom,
-  DEFAULT_ZOOM,
   fitWidthScale,
   formatZoom,
   MAX_ZOOM,
-  MIN_ZOOM,
   nudgeZoom,
+  pageFitZoom,
   pinchZoom,
+  WIDTH_ZOOM,
   ZOOM_SLIDER_STEP,
 } from '@/lib/pdfViewer'
 
@@ -119,13 +119,20 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
   // crisp once the render lands. The *layout* follows the zoom immediately
   // either way — see `pageBoxRef` — so the redraw changes sharpness and
   // nothing else.
-  const [zoom, setZoom] = useState<number>(DEFAULT_ZOOM)
-  const [renderZoom, setRenderZoom] = useState<number>(DEFAULT_ZOOM)
-  const [sizedZoom, setSizedZoom] = useState<number>(DEFAULT_ZOOM)
+  const [zoom, setZoom] = useState<number>(WIDTH_ZOOM)
+  const [renderZoom, setRenderZoom] = useState<number>(WIDTH_ZOOM)
+  const [sizedZoom, setSizedZoom] = useState<number>(WIDTH_ZOOM)
   const [pageSize, setPageSize] = useState<{ width: number; height: number } | null>(null)
+  // The page's own size, in PDF points. Measured before anything is drawn,
+  // because it and the panel's shape are what the whole-page fit is made of.
+  const [pageBase, setPageBase] = useState<{ width: number; height: number } | null>(null)
   const [rendering, setRendering] = useState(false)
   const [pageError, setPageError] = useState<string | null>(null)
   const [containerWidth, setContainerWidth] = useState(0)
+  const [containerHeight, setContainerHeight] = useState(0)
+  // Whether the reader has set the zoom themselves. Until they have, the page
+  // stays fitted to the panel and re-fits as the panel is resized.
+  const [zoomed, setZoomed] = useState(false)
   const [dragging, setDragging] = useState(false)
 
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -136,7 +143,7 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
   const pageBoxRef = useRef<HTMLDivElement>(null)
   // The live zoom, readable from the gesture listeners, which are attached once
   // and would otherwise close over a stale one.
-  const zoomRef = useRef(DEFAULT_ZOOM)
+  const zoomRef = useRef(WIDTH_ZOOM)
   // Where the panel was looking when a zoom was asked for, so the same point
   // can be put back once the page has grown. Held from the event that changed
   // the zoom until the layout effect below consumes it.
@@ -156,6 +163,42 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
   const requestZoomRef = useRef<(next: number, focus?: { x: number; y: number } | null) => void>(() => {})
 
   /**
+   * The bottom of the zoom range: the size at which the whole page is on
+   * screen. On a phone the panel is about the shape of a page, so this is the
+   * width fit (1×) and the slider behaves as it always did; on a desktop panel,
+   * which is a wide strip, it is well below 1× — which is the point, since a
+   * page fitted to that width runs several panel-heights down.
+   */
+  const minZoom = useMemo(
+    () => (pageBase ? pageFitZoom(containerWidth, containerHeight, pageBase.width, pageBase.height) : WIDTH_ZOOM),
+    [containerWidth, containerHeight, pageBase],
+  )
+  const minZoomRef = useRef(WIDTH_ZOOM)
+  useEffect(() => { minZoomRef.current = minZoom }, [minZoom])
+
+  /**
+   * Sit at the fitted size until the reader says otherwise, and stay inside the
+   * range when the panel is resized under a zoom they did set.
+   *
+   * `renderZoom` is set alongside `zoom` in the fitted case rather than left to
+   * the settle timer below: this is the size the document opens at, so waiting
+   * out the slider's debounce would draw the page at the wrong size first.
+   */
+  useEffect(() => {
+    if (!zoomed) {
+      zoomRef.current = minZoom
+      setZoom(minZoom)
+      setRenderZoom(minZoom)
+      return
+    }
+    const clamped = clampZoom(zoomRef.current, minZoom)
+    if (clamped !== zoomRef.current) {
+      zoomRef.current = clamped
+      setZoom(clamped)
+    }
+  }, [minZoom, zoomed])
+
+  /**
    * Every zoom goes through here: the slider, the pinch, ctrl+wheel, the keys.
    *
    * The panel is measured *before* the change, while the DOM still shows the
@@ -165,8 +208,9 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
    * the middle of the panel for a slider that has no position of its own.
    */
   const requestZoom = useCallback((next: number, focus?: { x: number; y: number } | null) => {
-    const target = clampZoom(next)
+    const target = clampZoom(next, minZoomRef.current)
     if (target === zoomRef.current) return
+    setZoomed(true)
     const el = scrollRef.current
     if (el) {
       zoomAnchorRef.current = {
@@ -219,12 +263,16 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
     onClose()
   }, [play, onClose])
 
-  // A new document starts at its first page, at fit-width.
+  // A new document starts at its first page, fitted to the panel — the fit
+  // itself lands once the page has been measured, below.
   useEffect(() => {
     setPage(1)
     setRenderPage(1)
-    setZoom(DEFAULT_ZOOM)
-    setRenderZoom(DEFAULT_ZOOM)
+    setPageBase(null)
+    setZoomed(false)
+    zoomRef.current = WIDTH_ZOOM
+    setZoom(WIDTH_ZOOM)
+    setRenderZoom(WIDTH_ZOOM)
   }, [proxied])
 
   // Draw the page the reader has settled on. Short enough that a Previous /
@@ -257,7 +305,7 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
   }, [pageCount, play])
 
   const changeZoom = useCallback((direction: -1 | 1) => {
-    requestZoom(nudgeZoom(zoomRef.current, direction))
+    requestZoom(nudgeZoom(zoomRef.current, direction, minZoomRef.current))
   }, [requestZoom])
 
   useEffect(() => {
@@ -293,19 +341,48 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
     const el = scrollRef.current
     if (!el) return
     setContainerWidth(el.clientWidth)
+    setContainerHeight(el.clientHeight)
     const observer = new ResizeObserver(entries => {
-      const width = entries[0]?.contentRect.width ?? 0
-      if (width > 0) setContainerWidth(width)
+      const box = entries[0]?.contentRect
+      if (!box) return
+      if (box.width > 0) setContainerWidth(box.width)
+      if (box.height > 0) setContainerHeight(box.height)
     })
     observer.observe(el)
     return () => observer.disconnect()
   }, [status])
 
+  // Measure the page before drawing it. The fit — and so the zoom the document
+  // opens at — is made of the page's proportions and the panel's, and drawing
+  // first would show the page at the wrong size for a moment and then shrink
+  // it. Pages of one document are almost always the same size, so the setter
+  // keeps the old object when they are and nothing re-renders.
+  useEffect(() => {
+    if (!doc) return
+    let cancelled = false
+    void (async () => {
+      try {
+        const pdfPage = await doc.getPage(clampPage(renderPage, doc.numPages))
+        if (cancelled) return
+        const { width, height } = pdfPage.getViewport({ scale: 1 })
+        setPageBase(prev => (prev && prev.width === width && prev.height === height ? prev : { width, height }))
+      } catch {
+        // The render effect below opens the same page and reports the failure.
+      }
+    })()
+    return () => { cancelled = true }
+  }, [doc, renderPage])
+
   // Draw the settled page. Re-runs on page, settled zoom and width; the previous
   // render is cancelled so a fast flick through pages can't paint an older page
   // over a newer one.
   useEffect(() => {
-    if (!doc || containerWidth <= 0) return
+    // Nothing is drawn until the page is at the size it will open at: with the
+    // fit known and the zoom not yet the reader's, `renderZoom` is one state
+    // update behind the effect above, and drawing now would show a
+    // fitted-width page for a moment and then shrink it.
+    if (!doc || containerWidth <= 0 || !pageBase) return
+    if (!zoomed && renderZoom !== minZoom) return
     let cancelled = false
     let task: { cancel: () => void } | null = null
     setRendering(true)
@@ -388,7 +465,7 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
       cancelled = true
       task?.cancel()
     }
-  }, [doc, renderPage, renderZoom, containerWidth])
+  }, [doc, renderPage, renderZoom, containerWidth, pageBase, zoomed, minZoom])
 
   // Each page starts at its top — landing halfway down page 12 because page 11
   // was scrolled is disorienting. Keyed on the drawn page, so a scrub resets the
@@ -439,7 +516,10 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
       // Non-passive so this can be prevented: two fingers on a scroll container
       // is a scroll gesture to the browser, and we want it to be a zoom.
       e.preventDefault()
-      requestZoomRef.current(pinchZoom(pinch.zoom, pinch.distance, distance(e.touches)), focusOf(e.touches))
+      requestZoomRef.current(
+        pinchZoom(pinch.zoom, pinch.distance, distance(e.touches), minZoomRef.current),
+        focusOf(e.touches),
+      )
     }
 
     function onTouchEnd(e: TouchEvent) {
@@ -654,9 +734,12 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
       {/* Zoom — the same slider the image gallery and math focus mode use
           (`.zoom-slider`), for the same reason: on a phone it is dragged with
           the thumb already holding the device, which a pair of small +/- targets
-          in the footer never was. 1× is the fitted page and the scale goes up
-          from there; the two custom properties recolour the shared control for
-          the card this panel sits on rather than the gallery's black. */}
+          in the footer never was. The bottom of the range ("Fit") is the whole
+          page on screen and 1× is the page across the panel — the same size on a
+          phone, a long way apart on a desktop panel, where the page is much
+          taller than the panel it is read in. The two custom properties recolour
+          the shared control for the card this panel sits on rather than the
+          gallery's black. */}
       <div
         className="flex items-center gap-3 sm:gap-4 shrink-0 border-t px-4 sm:px-6 py-1"
         style={{
@@ -664,12 +747,12 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
           '--zoom-slider-thumb': 'hsl(var(--foreground))',
         } as CSSProperties}
       >
-        <span className="text-sm text-muted-foreground tabular-nums w-6 shrink-0">
-          {MIN_ZOOM}×
+        <span className="text-sm text-muted-foreground w-6 shrink-0">
+          Fit
         </span>
         <input
           type="range"
-          min={MIN_ZOOM}
+          min={minZoom}
           max={MAX_ZOOM}
           step={ZOOM_SLIDER_STEP}
           value={zoom}
@@ -682,12 +765,12 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
           {MAX_ZOOM}×
         </span>
         <span className="text-sm text-foreground tabular-nums w-10 text-right shrink-0 font-semibold">
-          {formatZoom(zoom)}
+          {formatZoom(zoom, minZoom)}
         </span>
-        {zoom > MIN_ZOOM && (
+        {zoom > minZoom && (
           <button
             type="button"
-            onClick={() => requestZoom(DEFAULT_ZOOM)}
+            onClick={() => requestZoom(minZoom)}
             className="text-xs text-muted-foreground hover:text-foreground transition-colors shrink-0"
           >
             reset

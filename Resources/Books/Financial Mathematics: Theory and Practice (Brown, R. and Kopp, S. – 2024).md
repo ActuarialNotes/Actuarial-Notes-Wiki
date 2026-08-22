@@ -8,7 +8,8 @@ Publisher: ACTEX Learning
 ISBN: 979-8-89016-187-1
 Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/financial-mathematics-theory-and-practice-brown-kopp)"
 ---
-![[Financial Mathematics Theory and Practice - Cover.png]]
+![[Financial Mathematics- Theory and Practice (Brown, R. and Kopp, S. – 2024) - Cover.svg]]
+
 ## 1 The Time Value of Money
 
 - 1.1 [[Accumulation Function]] and Amount Functions

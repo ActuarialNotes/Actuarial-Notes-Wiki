@@ -8,7 +8,8 @@ Publisher: ActuarialBrew
 ISBN: 978-0-9981604-4-3
 Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/interest-theory-francis-ruckman)"
 ---
-![[Interest Theory - Francis Ruckman - Cover.png]]
+![[Interest Theory – Financial Mathematics and Deterministic Valuation (Francis, J. and Ruckman, C. – 2022) - Cover.svg]]
+
 ## 1 Setting the Stage
 
 - 1.01 The BA II Plus Calculator

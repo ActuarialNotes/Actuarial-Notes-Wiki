@@ -6,7 +6,8 @@ Type: Study Note
 Code: P-21-05
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf)"
 ---
-![[Risk and Insurance - SOA - Cover.png]]
+![[Risk and Insurance (SOA) - Cover.svg]]
+
 ## I. Introduction
 
 - Economic [[Risk]] as the possibility of losing economic security

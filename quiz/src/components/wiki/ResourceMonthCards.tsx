@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { X } from 'lucide-react'
 import { KIND_LABEL, type TimelineEntry, type TimelineKind } from '@/lib/resourceTimeline'
+import { splitAuthors } from '@/lib/authorNames'
 import { Card } from '@/components/ui/card'
 
 const MONTH_LONG = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -75,7 +76,9 @@ export function EntryCard({
             <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">{entry.summary}</p>
           )}
           <div className="flex flex-wrap gap-1 mt-0.5">
-            {entry.author && <MetaPill>{entry.author}</MetaPill>}
+            {splitAuthors(entry.author).map((author, i) => (
+              <MetaPill key={`author-${i}`}>{author}</MetaPill>
+            ))}
             {entry.edition && <MetaPill>{entry.edition} ed.</MetaPill>}
             {entry.publisher && <MetaPill>{entry.publisher}</MetaPill>}
             {entry.jurisdiction && <MetaPill>{entry.jurisdiction}</MetaPill>}

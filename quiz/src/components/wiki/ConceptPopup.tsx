@@ -117,6 +117,11 @@ export function ConceptPopup() {
     function onKey(e: KeyboardEvent) {
       const target = e.target as HTMLElement | null
       if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return
+      // The gallery is the top layer while it is open and binds the same keys,
+      // so it owns them: otherwise Esc closed it *and* unwound a page, and an
+      // arrow stepped to the next figure *and* to the next concept at once.
+      // The footer's Previous / Next still walk concepts — see `turnPage`.
+      if (showGalleryInPanel) return
       // Esc unwinds one layer at a time: the page just opened, then focus mode,
       // then the popup — so a link followed by mistake costs one key, not the
       // whole reading position.
@@ -131,7 +136,7 @@ export function ConceptPopup() {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [open, close, turnPage, focusMode])
+  }, [open, close, turnPage, focusMode, showGalleryInPanel])
 
   // Close viewing dropdown / premium info when clicking outside.
   useEffect(() => {

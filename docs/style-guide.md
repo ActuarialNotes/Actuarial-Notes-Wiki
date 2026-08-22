@@ -458,7 +458,7 @@ focus on close.
 
 ### 8.2 The z-index layer map
 
-The codebase has accumulated many arbitrary `z-[NN]` values (44–122). To stop the sprawl, place
+The codebase has accumulated many arbitrary `z-[NN]` values (44–130). To stop the sprawl, place
 new overlays on this ladder and comment the intent rather than picking a free number:
 
 | Band | Range | Layer |
@@ -468,9 +468,58 @@ new overlays on this ladder and comment the intent rather than picking a free nu
 | Popup stack | `z-[55]`–`z-[70]` | Concept popup, its action menus, gallery panel |
 | Onboarding | `z-[72]` | Tour spotlight (must sit above the popup stack) |
 | Ceremony | `z-[120]`+ | Full-screen celebrations that must cover everything |
+| Over a ceremony | `z-[130]` | The concept modals a collect dialog can open over itself |
 
 Keep a portalled element and the thing it visually sits *above* only a few steps apart, and
 leave a comment (as the existing code does) explaining what a non-obvious value is clearing.
+
+### 8.3 A z-index is only worth what its stacking context allows
+
+⚠️ **Convention — portal every shared overlay.** A `z-index` orders an element against its
+*siblings* inside the nearest stacking context; it says nothing about where that context sits.
+An overlay rendered as a descendant of a positioned, z-indexed panel is therefore pinned to
+that panel's layer no matter how high its own number is. The hosts that do this:
+
+| Host | Layer |
+|---|---|
+| Concept popup (`.concept-popup-aside`) | `z-40`, `z-index: 56` in focus mode |
+| Add-flashcards sheet (`pages/Flashcards.tsx`) | `z-[64]` |
+| Collect dialog (`CollectConceptModal`) | `z-[120]` |
+| Exams popout, sidebar drawer, PDF viewer, mistakes review | `z-[50]`–`z-[60]` |
+
+A modal opened from one of those and left in place opens *behind* whatever paints above the
+host — the floating search bar (`z-50`), the bottom nav, a sibling panel — which reads as a
+half-drawn or clipped panel rather than as a layering bug. A **transformed** ancestor is worse:
+the flashcard's swipe/flip `transform` is never `none`, so it both creates a stacking context
+*and* makes `position: fixed` resolve against the card, and the overlay lands glued to it
+instead of covering the screen.
+
+The one fix for both is to render the overlay into the body:
+
+```tsx
+import { OverlayPortal } from '@/components/ui/OverlayPortal'
+
+return (
+  <OverlayPortal>
+    <div className="fixed inset-0 z-[70] …">…</div>
+  </OverlayPortal>
+)
+```
+
+React context and event bubbling follow the React tree, so nothing else about the host changes.
+Any overlay that can be opened from more than one surface goes through this — the list is
+pinned by `components/ui/OverlayPortal.test.ts`, which also checks each one still clears the
+hosts that open it. Add new shared overlays to that list.
+
+Two consequences worth remembering:
+
+- **Scrims must cover what they dim.** The floating-search backdrop sits at `z-[44]` rather
+  than `z-40` because at `z-40` it tied with the concept popup and left it bright under a
+  dropdown that overlapped it.
+- **One layer owns the keyboard.** `Esc` and the arrow keys are bound on `window` by several
+  overlays at once. The topmost one owns them: `ConceptPopup` returns early while its gallery
+  is open, so `Esc` closes the gallery only, and `←`/`→` step figures rather than stepping a
+  figure *and* a concept at the same time.
 
 ---
 
@@ -531,7 +580,8 @@ Before shipping a screen or component, confirm:
 - [ ] Colour appears only for real signals (§4) or the single primary action.
 - [ ] Radius matches the element's role (§6.1); elevation uses a standard level (§6.3).
 - [ ] Reuses a `components/ui` primitive / existing domain component before anything bespoke.
-- [ ] Overlays use the standard scrim and sit correctly on the z-index ladder (§8).
+- [ ] Overlays use the standard scrim and sit correctly on the z-index ladder (§8.2).
+- [ ] An overlay that more than one surface can open is wrapped in `OverlayPortal` (§8.3).
 - [ ] Any animation is purposeful and has a reduced-motion fallback.
 - [ ] Icons are lucide, sized 4/5, coloured via `currentColor`, labelled where interactive.
 - [ ] Works in light **and** dark, and doesn't break the colourful / high-contrast themes.

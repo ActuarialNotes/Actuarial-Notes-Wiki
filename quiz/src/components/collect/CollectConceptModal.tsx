@@ -653,23 +653,19 @@ export function CollectConceptModal() {
         </div>
       )}
     </div>
-    {/* Rendered in its own stacking context so it layers above the collect
-        dialog (z-[120]) instead of behind it. */}
+    {/* Both portal themselves to the body at z-[130], so they layer above the
+        collect dialog (z-[120]) rather than behind it. */}
     {showQuestions && (
-      <div className="relative z-[130]">
-        <ConceptQuestionsModal
-          conceptName={name}
-          onClose={() => setShowQuestions(false)}
-          onQuizStart={close}
-        />
-      </div>
+      <ConceptQuestionsModal
+        conceptName={name}
+        onClose={() => setShowQuestions(false)}
+        onQuizStart={close}
+      />
     )}
     {/* The concept page over the locked check. The collect modal stays open
         underneath, so closing the reader lands back on the card. */}
     {showRead && (
-      <div className="relative z-[130]">
-        <ConceptReadModal conceptName={name} onClose={() => setShowRead(false)} />
-      </div>
+      <ConceptReadModal conceptName={name} onClose={() => setShowRead(false)} />
     )}
     </>,
     document.body,

@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Keyboard, X } from 'lucide-react'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
+import { OverlayPortal } from '@/components/ui/OverlayPortal'
 
 interface ShortcutRow {
   keys: string[]
@@ -81,6 +82,7 @@ export function KeyboardShortcutsHelp({ context, onClose }: KeyboardShortcutsHel
   }, [onClose])
 
   return (
+    <OverlayPortal>
     <div
       className="fixed inset-0 z-[80] flex items-center justify-center p-4"
       role="dialog"
@@ -128,5 +130,6 @@ export function KeyboardShortcutsHelp({ context, onClose }: KeyboardShortcutsHel
         </section>
       </div>
     </div>
+    </OverlayPortal>
   )
 }

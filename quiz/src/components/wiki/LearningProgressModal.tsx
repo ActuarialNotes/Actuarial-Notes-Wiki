@@ -10,6 +10,7 @@ import { ProgressGraph } from '@/components/ui/LearningProgressGraph'
 import { AttemptedQuestionsList } from '@/components/wiki/AttemptedQuestionsList'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { MasteryBadge } from '@/components/MasteryBadge'
+import { OverlayPortal } from '@/components/ui/OverlayPortal'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -228,8 +229,10 @@ export function LearningProgressModal({ conceptName, onClose }: LearningProgress
   }, [onClose])
 
   return (
+    <OverlayPortal>
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto"
+      // z-[130] — same hosts as ConceptQuestionsModal; see the note there.
+      className="fixed inset-0 z-[130] flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto"
       role="dialog"
       aria-modal="true"
       aria-label={`Learning Progress: ${conceptName}`}
@@ -264,5 +267,6 @@ export function LearningProgressModal({ conceptName, onClose }: LearningProgress
         </div>
       </div>
     </div>
+    </OverlayPortal>
   )
 }

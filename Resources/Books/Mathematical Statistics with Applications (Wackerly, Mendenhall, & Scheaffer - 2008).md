@@ -7,9 +7,7 @@ Edition: 7e
 Publisher: Thomson Brooks/Cole
 ISBN: 978-0495110811
 ---
-
-
-![[(Cover) Mathematical Statistics with Applications.jpg]]
+![[Mathematical Statistics with Applications (Wackerly, Mendenhall, & Scheaffer - 2008) - Cover.svg]]
 
 ## 1 What Is Statistics
 

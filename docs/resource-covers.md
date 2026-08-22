@@ -38,11 +38,11 @@ citation block with a third of its width empty reads as a layout bug.
 
 ## Real jackets win, always
 
-A scanned or publisher-supplied jacket is the better picture. Eleven of the thirty
-pages have one — the ACTEX and ActuarialBrew financial-mathematics texts, Leemis,
-Vaaler, Broverman, Wackerly, Hogg's *Probability and Statistical Inference*,
-Asimow, Hassett, the SOA's *Risk and Insurance* — and they are left exactly as they
-are. The other nineteen get a drawn one.
+A scanned or publisher-supplied jacket is the better picture. Three of the thirty
+pages have one — Hogg's *Probability and Statistical Inference*, Asimow's
+*Probability and Statistics with Applications*, Hassett's *Probability for Risk
+Management* — and they are left exactly as they are. The other twenty-seven get a
+drawn one.
 
 To replace a generated cover with a real one:
 
@@ -54,11 +54,16 @@ To replace a generated cover with a real one:
 `generate_resource_covers.py` skips any page whose first embed it does not own, so the
 real cover survives every future run.
 
-**The rule cuts both ways, so don't export a generated cover.** *A First Course in
-Probability* showed a PNG that was a generated jacket rasterised under a name the
-generator does not own — which froze it out of every redraw, including
-the one that produced the design below. A generated cover stays the SVG the script
-writes; only a genuine jacket earns a name of its own.
+**The rule cuts both ways, so don't export a generated cover.** Nine pages once
+showed a PNG or JPG that was a generated jacket rasterised under a name the
+generator does not own — which froze each of them out of every redraw. A generated
+cover stays the SVG the script writes; only a genuine jacket earns a name of its
+own.
+
+They are easy to spot after the fact, and worth spotting before assuming a page has
+a real jacket: every one was exactly **400×580**, the generated cover's own viewBox.
+A publisher's scan is whatever size it was scanned at — 518×648, 386×500, 311×467 —
+and is never that number twice.
 
 ## The generated cover
 

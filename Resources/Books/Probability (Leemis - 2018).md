@@ -8,7 +8,8 @@ Publisher: Lightning Source
 ISBN: 978-0-9829174-7-3
 Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/1014735226)"
 ---
-![[Probability - Leemis - Cover.png]]
+![[Probability (Leemis - 2018) - Cover.svg]]
+
 ## 1 Introduction
 
 - 1.1 [[Axioms of Probability]]

@@ -10,7 +10,7 @@ Find at your local library at: "[worldcat.org](https://search.worldcat.org/title
 ---
 
 
-![[A First Course in Probability.png]]
+![[A First Course in Probability (Ross - 2019) - Cover.svg]]
 
 ## 1 Combinatorial Analysis
 - 1.1 Introduction

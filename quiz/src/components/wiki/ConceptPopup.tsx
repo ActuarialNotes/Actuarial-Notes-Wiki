@@ -1,12 +1,13 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Lock, Maximize2, Minimize2 } from 'lucide-react'
 import { type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useSplitHeight } from '@/hooks/useSplitHeight'
 import { ConceptPagePanel } from '@/components/wiki/ConceptPagePanel'
-import { PageStackSpine } from '@/components/wiki/PageStackSpine'
-import { samePage, stackSlots } from '@/lib/pageStack'
+import { PageStackBar } from '@/components/wiki/PageStackBar'
+import { samePage } from '@/lib/pageStack'
+import { clearPageScrollMemory } from '@/lib/pageScrollMemory'
 import { useAuth } from '@/hooks/useAuth'
 import { useSoundEffects, useSoundOnToggle } from '@/hooks/useSoundEffects'
 import { useSubscription } from '@/hooks/useSubscription'
@@ -20,11 +21,11 @@ function pageKey(ref: WikiEntryRef): string {
  * The split pane that reads a wiki page beside whatever surface opened it.
  *
  * This component owns the *shell*: the resize handle, the page stack, the
- * Previous / Next footer and focus mode. Each page inside the stack renders as
- * a `ConceptPagePanel` — following a link there stacks the target on top rather
- * than replacing what you were reading, and the pages behind it collapse to
- * spines (see `lib/pageStack.ts`). A wide window expands two or three of them
- * side by side; a phone shows one with its trail down the left edge.
+ * Previous / Next footer and focus mode. The open page renders as a
+ * `ConceptPagePanel` — following a link there stacks the target on top rather
+ * than replacing what you were reading, and the page behind it folds up into a
+ * title bar above it (see `lib/pageStack.ts`). The stack runs down the pane:
+ * the trail above the open page, anything stepped back past below it.
  *
  * The footer walks the *source page's* concepts, which is a different
  * sequence from the stack: stepping to another concept starts a new trail.
@@ -47,8 +48,6 @@ export function ConceptPopup() {
   const [gallerySeek, setGallerySeek] = useState<0 | 1 | -1>(0)
   const gallerySeekRef = useRef<0 | 1 | -1>(0)
   const viewingRef = useRef<HTMLDivElement>(null)
-  const stackRef = useRef<HTMLDivElement>(null)
-  const [stackWidth, setStackWidth] = useState(0)
   const { user } = useAuth()
   const { isPremium } = useSubscription()
 
@@ -58,25 +57,13 @@ export function ConceptPopup() {
   const { play } = useSoundEffects()
   useSoundOnToggle(open, 'open', 'close')
 
-  // How many pages fit side by side depends on the pane's own width, not the
-  // window's: the popup is inset by the sidebar on desktop.
-  useEffect(() => {
-    const el = stackRef.current
-    if (!el || typeof ResizeObserver === 'undefined') return
-    setStackWidth(el.getBoundingClientRect().width)
-    const observer = new ResizeObserver(entries => {
-      const rect = entries[0]?.contentRect
-      if (rect) setStackWidth(rect.width)
-    })
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [open])
-
-  const slots = useMemo(
-    () => stackSlots(pages.length, pageIndex, { width: stackWidth }),
-    [pages.length, pageIndex, stackWidth],
-  )
-  const firstPanel = slots.indexOf('panel')
+  // Closing a stacked page is a sheet sliding back in. The last page is left to
+  // `useSoundOnToggle` above, which sounds the whole popup closing — otherwise
+  // the two would fire together.
+  const closePageAt = useCallback((i: number) => {
+    if (useConceptPopup.getState().pages.length > 1) play('close')
+    closePage(i)
+  }, [play, closePage])
 
   // Stepping to the previous/next concept is a page flick, not a press. Shared
   // by the footer buttons and the ←/→ shortcuts so both sound the same. The
@@ -184,9 +171,13 @@ export function ConceptPopup() {
     return () => { document.body.style.overflow = '' }
   }, [focusMode])
 
-  // Reset focus view when popup closes.
+  // Reset focus view when popup closes, and forget where each page was read up
+  // to — the trail is gone with it, so those offsets belong to nothing.
   useEffect(() => {
-    if (!open) setFocusMode(false)
+    if (!open) {
+      setFocusMode(false)
+      clearPageScrollMemory()
+    }
   }, [open])
 
   if (!open || !current || !activePage) return null
@@ -255,48 +246,43 @@ export function ConceptPopup() {
         </div>
       )}
 
-      {/* The stack: spines for the pages held open behind, panels for the ones
-          on screen. Each panel is its own column, so its header scrolls with
-          nothing and its body scrolls alone. */}
-      <div ref={stackRef} className="flex flex-1 min-h-0 items-stretch">
+      {/* The stack, running down the pane: the trail folded into title bars
+          above the open page, anything stepped back past folded below it. Only
+          one page is open — height is what this pane has least of, and two
+          half-height pages would leave neither readable. */}
+      <div className="flex flex-1 min-h-0 flex-col">
         {pages.map((page, i) =>
-          slots[i] === 'spine' ? (
-            <PageStackSpine
-              key={pageKey(page)}
-              entry={page}
-              onFocus={() => focusPage(i)}
-            />
-          ) : (
+          i === pageIndex ? (
             <div
               key={pageKey(page)}
-              // A page you can see but aren't reading takes the focus from the
-              // first touch anywhere in it, so its controls are live on the
-              // second — the same as clicking into another pane.
-              onPointerDownCapture={() => { if (i !== pageIndex) focusPage(i) }}
               role="group"
               aria-label={page.name}
-              aria-current={i === pageIndex ? 'page' : undefined}
-              style={{ flexBasis: 0 }}
+              aria-current="page"
               // Only a stacked page animates in: the base page is there from
               // the moment the popup opens, and the aside's own slide-up is
-              // already that page arriving. A page held open beside the one
-              // being read is tinted back a step, so which panel the controls
-              // and the keyboard belong to is never in doubt.
-              className={`flex flex-1 flex-col min-w-0 min-h-0 ${i > 0 ? 'page-panel' : ''} ${i > firstPanel ? 'border-l' : ''} ${i === pageIndex ? '' : 'bg-background/60'}`}
-              data-page-active={i === pageIndex}
+              // already that page arriving.
+              className={`flex flex-1 flex-col min-h-0 ${i > 0 ? 'page-panel' : ''}`}
+              data-page-open="true"
             >
               <ConceptPagePanel
                 entry={page}
-                active={i === pageIndex}
                 focusMode={focusMode}
                 onOpenLink={openLinkFrom(i)}
-                onClose={() => closePage(i)}
-                trailing={i === pageIndex ? focusToggle : undefined}
-                gallerySeek={i === pageIndex ? gallerySeek : 0}
-                onGallerySeekResolved={i === pageIndex ? handleGallerySeek : undefined}
-                onGalleryOpenChange={i === pageIndex ? setShowGalleryInPanel : undefined}
+                onClose={() => closePageAt(i)}
+                trailing={focusToggle}
+                gallerySeek={gallerySeek}
+                onGallerySeekResolved={handleGallerySeek}
+                onGalleryOpenChange={setShowGalleryInPanel}
               />
             </div>
+          ) : (
+            <PageStackBar
+              key={pageKey(page)}
+              entry={page}
+              above={i < pageIndex}
+              onOpen={() => focusPage(i)}
+              onClose={() => closePageAt(i)}
+            />
           ),
         )}
       </div>

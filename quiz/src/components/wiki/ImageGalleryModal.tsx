@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { DistributionSimulator } from '@/components/wiki/DistributionSimulator'
 import { distributionForImage } from '@/lib/distributions'
+import { OverlayPortal } from '@/components/ui/OverlayPortal'
 
 interface GalleryImage {
   src: string
@@ -18,10 +19,9 @@ interface GalleryImage {
  * concept that has a figure.
  *
  * `popup-focus` — the same host in focus mode, which moves the popup to the top
- * of the viewport *and* up the z stack (z-index 56, see
- * `.concept-popup-aside[data-focus="true"]` in index.css) and drops the mobile
- * bottom nav; the modal has to clear both to be visible at all, and its bottom
- * inset shrinks to the popup's own footer.
+ * of the viewport (see `.concept-popup-aside[data-focus="true"]` in index.css)
+ * and drops the mobile bottom nav, so the modal's bottom inset shrinks to the
+ * popup's own footer.
  *
  * `fullscreen` — the standalone viewer opened by tapping a content image
  * anywhere in the app (`components/ImageFocus.tsx`). There is no host chrome to
@@ -186,11 +186,14 @@ export function ImageGalleryModal({ images, initialIndex, placement = 'fullscree
   const distribution = distributionForImage(current.src)
 
   return (
+    <OverlayPortal>
     <div
-      // z-[57] clears the focus-mode concept popup (z-index 56) — at the old
-      // z-50 the modal opened *behind* it, which read as the card simply not
-      // responding to a tap. How far up from the bottom it stops is the host's
-      // call; see GalleryPlacement.
+      // Portalled to the body (see OverlayPortal), which is what makes z-[57]
+      // the layer it actually takes: rendered inside the concept popup that
+      // opens it, this was capped at that host's own layer and opened *under*
+      // the floating search bar (z-50) — the top of the panel simply vanished.
+      // 57 clears the popup in focus mode (z-index 56) as well. How far up from
+      // the bottom it stops is the host's call; see GalleryPlacement.
       className={`fixed inset-x-0 top-0 z-[57] flex flex-col bg-black/95 ${PLACEMENT_INSET[placement]}`}
       onWheel={e => e.stopPropagation()}
     >
@@ -334,5 +337,6 @@ export function ImageGalleryModal({ images, initialIndex, placement = 'fullscree
         </div>
       )}
     </div>
+    </OverlayPortal>
   )
 }

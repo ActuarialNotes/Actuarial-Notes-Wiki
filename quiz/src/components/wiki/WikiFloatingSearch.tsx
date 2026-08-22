@@ -240,14 +240,18 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, backLi
     <>
       {isExpanded && (
         <div
-          className="fixed inset-0 z-40 bg-background/60 backdrop-blur-sm"
+          // z-[44] dims the concept popup (z-40) as well: at a tied z-40 the popup
+          // stayed bright under a dropdown that overlapped it. It stays under
+          // the bottom nav (z-[45]), which keeps working.
+          className="fixed inset-0 z-[44] bg-background/60 backdrop-blur-sm"
           onMouseDown={e => { e.preventDefault(); dismiss() }}
         />
       )}
 
       {planOpen && (
         <div
-          className="fixed inset-0 z-40 bg-background/60 backdrop-blur-sm"
+          // z-[44] — see the search backdrop above.
+          className="fixed inset-0 z-[44] bg-background/60 backdrop-blur-sm"
           onMouseDown={e => { e.preventDefault(); setShowPlan(false) }}
         />
       )}

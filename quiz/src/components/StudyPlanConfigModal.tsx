@@ -17,6 +17,7 @@ import {
 } from '@/lib/studyPlan'
 import { emitPlanLocked } from '@/lib/planForming'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
+import { OverlayPortal } from '@/components/ui/OverlayPortal'
 
 const HEADLINE_PRESETS: QuickSetPreset[] = ['1w', '2w', '1m']
 
@@ -146,8 +147,11 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
   }
 
   return (
+    <OverlayPortal>
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto"
+      // z-[70]: above the popup stack and the sidebar drawer, both of which
+      // can be open behind the surface that opens this.
+      className="fixed inset-0 z-[70] flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto"
       role="dialog"
       aria-modal="true"
       aria-label="Study plan configuration"
@@ -456,5 +460,6 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
         </div>
       </div>
     </div>
+    </OverlayPortal>
   )
 }

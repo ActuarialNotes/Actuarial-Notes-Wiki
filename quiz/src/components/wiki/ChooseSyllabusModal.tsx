@@ -1,6 +1,7 @@
 import { GraduationCap, X } from 'lucide-react'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
+import { OverlayPortal } from '@/components/ui/OverlayPortal'
 
 interface ChooseSyllabusModalProps {
   conceptName: string
@@ -16,6 +17,7 @@ export function ChooseSyllabusModal({ conceptName, syllabi, onChoose, onClose }:
   // Paper: the panel sliding in.
   useSoundOnMount('open')
   return (
+    <OverlayPortal>
     <div
       className="fixed inset-0 z-[70] flex items-center justify-center bg-background/80 backdrop-blur-sm p-4"
       role="dialog"
@@ -57,5 +59,6 @@ export function ChooseSyllabusModal({ conceptName, syllabi, onChoose, onClose }:
         </div>
       </div>
     </div>
+    </OverlayPortal>
   )
 }

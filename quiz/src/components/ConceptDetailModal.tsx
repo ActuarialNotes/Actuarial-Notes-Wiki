@@ -14,6 +14,7 @@ import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { NavProgressBar } from '@/components/NavProgressBar'
 import { QuestionAttemptBadge } from '@/components/QuestionAttemptBadge'
 import { MasteryBadge } from '@/components/MasteryBadge'
+import { OverlayPortal } from '@/components/ui/OverlayPortal'
 
 function linkMatchesConcept(link: string, conceptName: string): boolean {
   const lower = conceptName.toLowerCase()
@@ -325,8 +326,11 @@ export function ConceptDetailModal({
   }
 
   return (
+    <OverlayPortal>
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto"
+      // z-[70]: above the popup stack, so the concept popup a dashboard card
+      // may already have open never paints over it.
+      className="fixed inset-0 z-[70] flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto"
       role="dialog"
       aria-modal="true"
       aria-label={`Concept: ${currentConceptName}`}
@@ -627,5 +631,6 @@ export function ConceptDetailModal({
         </div>
       </div>
     </div>
+    </OverlayPortal>
   )
 }

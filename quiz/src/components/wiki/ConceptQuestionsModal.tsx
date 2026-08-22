@@ -12,6 +12,7 @@ import { useIsConceptUnlocked } from '@/hooks/useConceptUnlocked'
 import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { tallyAttempts } from '@/lib/questionAttempts'
+import { OverlayPortal } from '@/components/ui/OverlayPortal'
 
 // Matches a raw wiki_link value against a concept name. Handles two formats:
 //   "Concepts/Fund+Accumulation"  (hrefToEntryRef resolves the name directly)
@@ -228,8 +229,11 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
   }, [pendingStart, unlocked])
 
   return (
+    <OverlayPortal>
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center bg-background/80 backdrop-blur-sm overflow-y-auto"
+      // z-[130]: openable from the concept popup, a flashcard and the collect
+      // dialog (z-[120]) alike, so it sits above every host that can open it.
+      className="fixed inset-0 z-[130] flex items-start justify-center bg-background/80 backdrop-blur-sm overflow-y-auto"
       role="dialog"
       aria-modal="true"
       aria-label={`Questions for ${conceptName}`}
@@ -433,5 +437,6 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
         )}
       </div>
     </div>
+    </OverlayPortal>
   )
 }

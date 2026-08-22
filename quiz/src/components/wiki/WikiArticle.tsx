@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -9,6 +9,8 @@ import { calloutComponents } from '@/components/MarkdownCallout'
 import { codeComponents } from '@/components/CodeBlock'
 import { DistributionSimulator } from '@/components/wiki/DistributionSimulator'
 import { ExamGuideCards } from '@/components/wiki/ExamGuideCards'
+import { SourceMaterialGallery } from '@/components/wiki/SourceMaterialGallery'
+import { extractSourceMaterial, SOURCE_MATERIAL_MARKER } from '@/lib/sourceMaterial'
 import { examIdFromFile, hrefToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { isInWikiIndex } from '@/lib/wikiIndex'
 import { isKeystone } from '@/lib/keystone'
@@ -224,15 +226,21 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
   const navigate = useNavigate()
   const articleRef = useRef<HTMLDivElement | null>(null)
   const hasReadiness = readiness != null
-  const processed = useMemo(() => {
+  const { processed, sourceMaterial } = useMemo(() => {
     // Math delimiters first: the vault is written for Obsidian, whose parser is
     // looser than remark-math's. See lib/vaultMath.ts.
     const stripped = normalizeVaultMath(stripFrontmatter(markdown).replace(BREADCRUMB_RE, ''))
-    const marked = markExamGuides(fixBlockquoteOrderedLists(rewriteWikilinks(stripped)))
+    // An exam page's source-material callout becomes a gallery of resource
+    // cards; lift its entries out before the wikilinks are rewritten.
+    const { markdown: body, entries } = extractSourceMaterial(stripped)
+    const marked = markExamGuides(fixBlockquoteOrderedLists(rewriteWikilinks(body)))
     // With guide cards on the page the readiness card joins their row; without
     // them it needs a marker of its own.
     const needsMarker = hasReadiness && !hasExamGuidesMarker(stripped)
-    return stripHtmlBlocks(needsMarker ? markReadinessCard(marked) : marked)
+    return {
+      processed: stripHtmlBlocks(needsMarker ? markReadinessCard(marked) : marked),
+      sourceMaterial: entries,
+    }
   }, [markdown, hasReadiness])
 
   // Exam pages get the orientation cards; every other page ignores the marker.
@@ -244,6 +252,15 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
   const popupCurrent = useConceptPopup(s => s.list[s.index])
   const popupOccurrences = useConceptPopup(s => s.occurrences)
   const popupOccurrenceIndex = useConceptPopup(s => s.occurrenceIndex)
+
+  // One place decides what a wiki reference does when clicked: the article's own
+  // links and the source-material cards both go through it.
+  const openRef = useCallback((ref: WikiEntryRef, e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
+    const suppressed = onWikiLink?.(ref, e)
+    if (suppressed === true) return
+    navigate(wikiRoute(ref))
+  }, [navigate, onWikiLink])
 
   const components = useMemo<Components>(() => ({
     ...calloutComponents,
@@ -266,6 +283,9 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
       const only = kids.length === 1 ? kids[0] : null
       if (only && only.type === 'text' && only.value.trim() === EXAM_GUIDES_MARKER) {
         return guideExamId ? <ExamGuideCards examId={guideExamId} leadCard={readiness} /> : null
+      }
+      if (only && only.type === 'text' && only.value.trim() === SOURCE_MATERIAL_MARKER) {
+        return <SourceMaterialGallery entries={sourceMaterial} onOpen={openRef} />
       }
       if (only && only.type === 'text' && only.value.trim() === READINESS_MARKER) {
         // Same capped three-column grid the guide cards use, so an exam page
@@ -319,17 +339,14 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
           style={exists ? undefined : { textDecorationLine: 'none' }}
           onClick={e => {
             if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
-            e.preventDefault()
-            const suppressed = onWikiLink?.(ref, e)
-            if (suppressed === true) return
-            navigate(route)
+            openRef(ref, e)
           }}
         >
           {children}
         </a>
       )
     },
-  }), [navigate, onWikiLink, hideImages, titleBadge, guideExamId, readiness])
+  }), [openRef, hideImages, titleBadge, guideExamId, readiness, sourceMaterial])
 
   // Active-concept highlight: when the popup is open and its sourcePath
   // matches this article's sourcePath, find the matching wikilink in this

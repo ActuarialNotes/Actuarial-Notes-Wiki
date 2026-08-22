@@ -377,6 +377,17 @@ compile — don't "clean up" the flagged code as dead.
   **Exam Readiness Score** card rides in the same row as its first column (passed to
   `ExamGuideCards` as `leadCard` — three cards across); on an exam page with no `exam-guides`
   div it falls back to a slot inserted under the "Learning Objectives" heading.
+- Every exam page ends with a `## Source Material` heading over a
+  `> [!answer]- Source Material` callout: one top-level bullet per syllabus reading (a
+  `[[wiki link]]`, normally to a `Resources/Books/` page) with an indented bullet naming the
+  chapters or sections covered. The vault keeps the callout — it is what Obsidian renders,
+  and `parseExamSyllabus` reads its links — but the app doesn't: `lib/sourceMaterial.ts`
+  lifts the entries out and `WikiArticle` renders them as
+  `components/wiki/SourceMaterialGallery.tsx`, the same shelf of cover/title/metadata cards
+  the study-guide home page shows, with each card carrying its reading assignment. The
+  metadata comes from the resource page's front matter via the wiki index, so a source with
+  no `Resources/Books/` page still gets a card, just a bare one. Obsidian inline footnotes
+  (`^[…]`) in a reading line are flattened into parentheses.
 - Question files (`questions/<exam-id>/*.md`) have YAML frontmatter: `id`, `exam`, `topic`,
   `learning_objective`, `difficulty` (`easy`/`medium`/`hard`), `type`, `wiki_link` (array
   of concept paths), `answer`, `points` — followed by the question body, options, and an

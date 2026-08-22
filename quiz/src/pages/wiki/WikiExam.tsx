@@ -34,7 +34,10 @@ function formatExamDate(iso: string): string {
     : { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
-function ExamStatusIcon({ status, size = 'md' }: { status: ItemStatus; size?: 'sm' | 'md' }) {
+// Only the two statuses worth a mark of their own. A not-started exam shows
+// nothing beside its title — the dashed-plus icon it used to show read as an
+// "add" control rather than a status.
+function ExamStatusIcon({ status, size = 'md' }: { status: Exclude<ItemStatus, 'not_started'>; size?: 'sm' | 'md' }) {
   const cls = size === 'sm' ? 'h-5 w-5' : 'h-7 w-7'
   if (status === 'completed') {
     return (
@@ -45,19 +48,10 @@ function ExamStatusIcon({ status, size = 'md' }: { status: ItemStatus; size?: 's
       </svg>
     )
   }
-  if (status === 'in_progress') {
-    return (
-      <svg className={`${cls} text-amber-500`} viewBox="0 0 20 20" fill="none" aria-hidden="true">
-        <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.8" />
-        <path d="M10 2a8 8 0 0 1 0 16" fill="currentColor" opacity=".45" />
-      </svg>
-    )
-  }
   return (
-    <svg className={`${cls} text-muted-foreground/50`} viewBox="0 0 20 20" fill="none" aria-hidden="true">
-      <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.8" strokeDasharray="3 1.5" />
-      <line x1="10" y1="7" x2="10" y2="13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-      <line x1="7" y1="10" x2="13" y2="10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    <svg className={`${cls} text-amber-500`} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M10 2a8 8 0 0 1 0 16" fill="currentColor" opacity=".45" />
     </svg>
   )
 }
@@ -75,6 +69,10 @@ function ExamStatusBadge({ progressKey, size = 'md' }: { progressKey: string; si
   const title = user
     ? (examDateLabel ? `Exam ${examDateLabel} — click to update exam status` : STATUS_TITLE[currentStatus])
     : 'Sign in to track progress'
+
+  // Nothing beside the title until the exam is actually being tracked; the
+  // status itself is set from the exams popout (sidebar profile menu, Settings).
+  if (currentStatus === 'not_started') return null
 
   return (
     <button

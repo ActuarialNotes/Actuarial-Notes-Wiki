@@ -5,15 +5,29 @@ import { isSupportedPdfSource } from '@/lib/examPdf'
 import { PdfViewerPanel } from '@/components/PdfViewerPanel'
 import type { ResourceMeta } from '@/lib/resourceMeta'
 
+/**
+ * The metadata card at the top of a resource page — the jacket, who wrote it,
+ * and the one action the page offers (get hold of the source).
+ *
+ * It is the page's title block, so it carries the resource's *title* on both
+ * surfaces. The popup header above it shows the vault's filename
+ * ("Introduction to Mathematical Statistics (Hogg et al. - 2018)"); the card
+ * shows the clean authored title, and reads as the citation the page is built
+ * on rather than a repeat of the chrome.
+ *
+ * Hierarchy inside the card, top to bottom (docs/style-guide.md §3): a muted
+ * kicker for the *kind* of source, the title, the author, then the
+ * bibliographic facts as outline chips and the action as the one filled
+ * control. Chips are deliberately outlined and the button filled — the passive
+ * facts and the thing to press must not read as the same object.
+ */
+
 interface ResourceMetaCardProps {
   meta: ResourceMeta
   compact?: boolean
-  // The popup already shows the resource's name in its header, so the card
-  // there would just repeat it.
-  showTitle?: boolean
 }
 
-export function ResourceMetaCard({ meta, compact, showTitle = true }: ResourceMetaCardProps) {
+export function ResourceMetaCard({ meta, compact }: ResourceMetaCardProps) {
   // A cover that fails to load drops its column entirely — no empty gutter.
   const [coverFailed, setCoverFailed] = useState(false)
   const [viewing, setViewing] = useState(false)
@@ -25,40 +39,79 @@ export function ResourceMetaCard({ meta, compact, showTitle = true }: ResourceMe
   // stays an ordinary out-link.
   const canView = !!meta.getCopyUrl && isPdf && isSupportedPdfSource(meta.getCopyUrl)
   const CopyIcon = isPdf ? FileText : ExternalLink
-  // One size for every line of metadata; colour, not scale, sets the hierarchy.
   // Standards pages name the same body as both author and publisher — say it once.
   const publisher = meta.publisher === meta.author ? undefined : meta.publisher
-  const meta1 = [meta.year, meta.edition && `${meta.edition} ed.`, publisher].filter(Boolean)
-  const meta2 = [meta.isbn && `ISBN ${meta.isbn}`, meta.type, meta.code].filter(Boolean)
+  // Reads left to right like a citation, with the identifiers last.
+  const facts = [
+    meta.edition && `${meta.edition} ed.`,
+    meta.year,
+    publisher,
+    meta.code,
+    meta.isbn && `ISBN ${meta.isbn}`,
+  ].filter((f): f is string => Boolean(f))
   const copyLabel = canView ? 'Read PDF' : isPdf ? 'Download PDF' : 'Get a copy'
+  const heading = compact ? 'text-sm sm:text-base' : 'text-base sm:text-lg'
 
   return (
-    <div className={cn('flex gap-3 rounded-lg bg-card p-3 not-prose', compact ? 'mb-3' : 'mb-4')}>
+    <div
+      className={cn(
+        // Three shape decisions worth keeping:
+        //
+        // `border` — the popup this can sit in is itself `bg-card`, so the fill
+        // alone leaves no edge; the hairline is what makes it a card there
+        // (style-guide §6.2: an inset region takes the border, not a shadow).
+        // `w-fit` — sized to its content rather than stretched across the pane.
+        // A citation block with a third of its width empty reads as a bug.
+        // `items-center` — the jacket is usually the taller column, so anchoring
+        // the text to the top of it left the card bottom-heavy with dead space.
+        'not-prose flex w-fit max-w-full items-center gap-4 rounded-lg border border-border bg-card',
+        compact ? 'mb-3 p-3' : 'mb-4 p-4',
+      )}
+    >
       {meta.coverImageUrl && !coverFailed && (
-        <div className={cn('flex-shrink-0', compact ? 'w-14' : 'w-20 sm:w-24')}>
+        <div className={cn('shrink-0', compact ? 'w-20' : 'w-24 sm:w-28')}>
+          {/* Natural aspect, never cropped: the real jackets range from 2:3 to
+              4:5 and the generated covers are 400×580, so a fixed ratio would
+              slice the top off one of them. */}
           <img
             src={meta.coverImageUrl}
-            alt={meta.title ?? 'Cover'}
-            className="w-full rounded object-cover shadow-sm"
+            alt={meta.title ? `Cover of ${meta.title}` : 'Cover'}
+            className="w-full rounded-md border border-border shadow-sm"
             onError={() => setCoverFailed(true)}
           />
         </div>
       )}
-      <div className="flex flex-col gap-0.5 min-w-0 text-sm leading-snug">
-        {showTitle && meta.title && (
-          <p className="font-semibold text-base leading-snug">{meta.title}</p>
+
+      <div className="flex min-w-0 flex-1 flex-col">
+        {meta.type && (
+          <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+            {meta.type}
+          </p>
         )}
-        {meta.author && <p className="font-medium">{meta.author}</p>}
-        {meta1.length > 0 && (
-          <p className="text-muted-foreground">{meta1.join(' · ')}</p>
+        {meta.title && (
+          <h2 className={cn('font-semibold leading-snug tracking-tight', heading)}>{meta.title}</h2>
         )}
-        {meta2.length > 0 && (
-          <p className="text-muted-foreground">{meta2.join(' · ')}</p>
+        {meta.author && (
+          <p className="mt-0.5 text-sm leading-snug text-muted-foreground">{meta.author}</p>
         )}
+
+        {facts.length > 0 && (
+          <ul className="mt-2.5 flex flex-wrap gap-1.5">
+            {facts.map(fact => (
+              <li
+                key={fact}
+                className="rounded-md border border-border px-2 py-0.5 text-xs leading-5 text-muted-foreground"
+              >
+                {fact}
+              </li>
+            ))}
+          </ul>
+        )}
+
         {meta.getCopyUrl && (
           // A control, not fine print: getting hold of the source is the one
           // action this card offers, so it takes the same shape as the mock-exam
-          // shelf's report button — a thumb-sized bordered target with the file
+          // shelf's report button — a thumb-sized filled target with the file
           // type spelled out — rather than a text link the eye slides past.
           //
           // Still an anchor to the publisher underneath when it opens the
@@ -81,7 +134,7 @@ export function ResourceMetaCard({ meta, compact, showTitle = true }: ResourceMe
               e.preventDefault()
               setViewing(true)
             }}
-            className="mt-2 inline-flex min-h-[36px] items-center gap-2 self-start rounded-md border border-border bg-muted px-3 py-1.5 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="mt-3 inline-flex min-h-[36px] items-center gap-2 self-start rounded-md border border-border bg-muted px-3 py-1.5 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <CopyIcon className="h-4 w-4 shrink-0 text-primary" aria-hidden />
             {copyLabel}

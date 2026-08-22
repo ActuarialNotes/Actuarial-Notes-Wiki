@@ -11,6 +11,31 @@ The card is built to survive a missing cover — the column drops out and the
 metadata closes up — but a shelf of sources with no pictures is much harder to scan
 than one with them, so every page carries one.
 
+**A cover is not a figure.** Because the jacket is lifted out of the body and shown
+as the card's picture, it must not also be counted among the page's figures — a book
+whose only embed is its cover would otherwise open in the concept popup behind a
+"Show figure" strip that reveals the cover a second time. `ConceptPagePanel` reads a
+resource page's images off the same `preprocessResourceMarkdown` output the article
+renders, so the figure banner, its Previous/Next pager and the gallery walk all agree
+with what is actually on the page.
+
+## What the card shows
+
+The card is the resource page's title block, on the page and in the concept popup
+alike: the jacket, then a muted kicker naming the *kind* of source (`Type`), the
+authored `Title`, the byline, the bibliographic facts as outline chips
+(`Edition`, `Year`, `Publisher`, `Code`, `ISBN` — in that order, reading like a
+citation with the identifiers last), and the one action the page offers.
+
+It carries the title on both surfaces. The popup header above it shows the vault's
+*filename* — "Introduction to Mathematical Statistics (Hogg et al. - 2018)" — which
+is not the authored title, so the card is not repeating the chrome.
+
+Two things about the shape are deliberate: the chips are outlined and the action
+button filled, so the passive facts never read as things to press; and the card is
+sized to its content (`w-fit`) rather than stretched across the pane, because a
+citation block with a third of its width empty reads as a layout bug.
+
 ## Real jackets win, always
 
 A scanned or publisher-supplied jacket is the better picture. Three pages already

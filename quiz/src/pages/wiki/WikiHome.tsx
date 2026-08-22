@@ -14,6 +14,7 @@ import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { computeExamReadiness } from '@/lib/readiness'
 import { examStatus } from '@/lib/examStatus'
+import { splitAuthors } from '@/lib/authorNames'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { cn } from '@/lib/utils'
 
@@ -400,11 +401,14 @@ export default function WikiHome() {
                     <p className="text-sm font-semibold leading-snug">{book.title ?? book.name}</p>
                     {(book.author || book.year || book.edition || book.publisher) && (
                       <div className="flex flex-wrap gap-1">
-                        {book.author && (
-                          <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground">
-                            {book.author}
+                        {splitAuthors(book.author).map((author, i) => (
+                          <span
+                            key={`author-${i}`}
+                            className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground"
+                          >
+                            {author}
                           </span>
-                        )}
+                        ))}
                         {book.year && (
                           <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground">
                             {book.year}

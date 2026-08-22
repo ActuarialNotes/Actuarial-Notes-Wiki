@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { hrefToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
+import { splitAuthors } from '@/lib/authorNames'
 import type { SourceMaterialEntry } from '@/lib/sourceMaterial'
 
 // The exam study guides' source-material list, rendered as the same shelf of
@@ -83,7 +84,9 @@ export function SourceMaterialGallery({ entries, onOpen }: SourceMaterialGallery
                 <p className="text-sm font-semibold leading-snug">{title}</p>
                 {(meta?.author || meta?.year || meta?.edition || meta?.publisher) && (
                   <div className="flex flex-wrap gap-1">
-                    {meta.author && <MetaPill>{meta.author}</MetaPill>}
+                    {splitAuthors(meta?.author).map((author, i) => (
+                      <MetaPill key={`author-${i}`}>{author}</MetaPill>
+                    ))}
                     {meta.year && <MetaPill>{meta.year}</MetaPill>}
                     {meta.edition && <MetaPill>{meta.edition} ed.</MetaPill>}
                     {meta.publisher && <MetaPill>{meta.publisher}</MetaPill>}

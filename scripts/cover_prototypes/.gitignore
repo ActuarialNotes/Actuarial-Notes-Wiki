@@ -1,0 +1,3 @@
+# Build products of build.py / make_artifact.py — regenerate, don't commit.
+covers.json
+placeholder-jackets.html

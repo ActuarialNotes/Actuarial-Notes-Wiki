@@ -1,0 +1,32 @@
+<html><body><svg id="s" width="10" height="10"><text id="t"></text></svg>
+<pre id="out"></pre><script>
+const STACK = "'Helvetica Neue', Helvetica, Arial, sans-serif";
+const t = document.getElementById('t');
+t.setAttribute('font-family', STACK);
+t.setAttribute('font-size', '100');
+function w(str, weight){
+  t.setAttribute('font-weight', weight);
+  t.textContent = str;
+  return t.getComputedTextLength();
+}
+const chars = [];
+for (let i = 32; i < 127; i++) chars.push(String.fromCharCode(i));
+chars.push('—','–','·','’','“','”','é','ł','ż','Ł','Ż','ó','ń','ć','ś','ź','ą','ę','ū','á','í','ç','ö','ü','ä');
+const out = {};
+for (const weight of [400, 700]) {
+  const m = {};
+  const base = w('nn', weight) - w('n', weight); // guard against kerning drift
+  for (const ch of chars) {
+    // measure in a repeated context so side bearings average out
+    const a = w('n' + ch + 'n', weight);
+    const b = w('nn', weight);
+    m[ch] = +( (a - b) / 100 ).toFixed(4);
+  }
+  out[weight] = m;
+}
+// sanity: whole-string checks
+const probes = ['Property/Casualty','A First Course in Probability','Generalized Linear Models','Introduction to Mathematical Statistics','Nonlife Actuarial Models'];
+const checks = {};
+for (const p of probes) checks[p] = {400:+(w(p,400)/100).toFixed(4), 700:+(w(p,700)/100).toFixed(4)};
+document.getElementById('out').textContent = 'JSONSTART' + JSON.stringify({widths: out, checks}) + 'JSONEND';
+</script></body></html>

@@ -1,95 +1,56 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Headphones, Loader2, Lock, Maximize2, Minimize2, Play, Sigma, TrendingUp, X } from 'lucide-react'
-import { fetchWikiFile, fetchAllQuestions } from '@/lib/github'
-import { entryRefToRepoPath, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
-import { parseAllQuestions, filterQuestions } from '@/lib/parser'
+import { Link } from 'react-router-dom'
+import { ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Lock, Maximize2, Minimize2 } from 'lucide-react'
+import { type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
-import { useFlashcards } from '@/hooks/useFlashcards'
-import { useCollect } from '@/hooks/useCollect'
-import { showAddedToDeck } from '@/hooks/useToast'
-import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { useSplitHeight } from '@/hooks/useSplitHeight'
-import { WikiArticle, extractImages, extractMathBlockquotes } from '@/components/wiki/WikiArticle'
-import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
-import { isNumberedOutline, OUTLINE_ARTICLE_CLASS, parseResourceMeta, preprocessResourceMarkdown } from '@/lib/resourceMeta'
-import { ListenView } from '@/components/wiki/ListenView'
-import { ImageGalleryModal } from '@/components/wiki/ImageGalleryModal'
-import { ConceptImageBanner } from '@/components/wiki/ConceptImageBanner'
-import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
-import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
-import { AddToProjectMenuItem } from '@/components/wiki/AddToProjectMenuItem'
-import { RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
+import { ConceptPagePanel } from '@/components/wiki/ConceptPagePanel'
+import { PageStackSpine } from '@/components/wiki/PageStackSpine'
+import { samePage, stackSlots } from '@/lib/pageStack'
 import { useAuth } from '@/hooks/useAuth'
 import { useSoundEffects, useSoundOnToggle } from '@/hooks/useSoundEffects'
 import { useSubscription } from '@/hooks/useSubscription'
-import { useConceptMastery } from '@/hooks/useConceptMastery'
-import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import { NavProgressBar } from '@/components/NavProgressBar'
-import { KeystoneName } from '@/components/KeystoneName'
-import { buildMasteryLookup } from '@/lib/conceptMatch'
-import { findKeystone, keystoneProgress } from '@/lib/keystone'
-import { MasteryBadge } from '@/components/MasteryBadge'
-import { MASTERY_LABEL, MASTERY_SHORT_LABEL, MASTERY_TINT } from '@/lib/masteryBadge'
 
+function pageKey(ref: WikiEntryRef): string {
+  return `${ref.kind}:${ref.name.toLowerCase()}`
+}
+
+/**
+ * The split pane that reads a wiki page beside whatever surface opened it.
+ *
+ * This component owns the *shell*: the resize handle, the page stack, the
+ * Previous / Next footer and focus mode. Each page inside the stack renders as
+ * a `ConceptPagePanel` — following a link there stacks the target on top rather
+ * than replacing what you were reading, and the pages behind it collapse to
+ * spines (see `lib/pageStack.ts`). A wide window expands two or three of them
+ * side by side; a phone shows one with its trail down the left edge.
+ *
+ * The footer walks the *source page's* concepts, which is a different
+ * sequence from the stack: stepping to another concept starts a new trail.
+ */
 export function ConceptPopup() {
-  const { open, list, index, occurrences, occurrenceIndex, navigate, jumpTo, close, dashboardContext, setDashboardFilter } = useConceptPopup()
-  const { addCard, hasCard, cards } = useFlashcards()
-  const openCollect = useCollect(s => s.open)
-  const collectedCards = useCollectedCards(s => s.cards)
-  const [conceptQuestionCount, setConceptQuestionCount] = useState<number | null>(null)
-  const location = useLocation()
-  const routerNavigate = useNavigate()
-  const isOnWiki = location.pathname.startsWith('/wiki/')
+  const { open, list, index, pages, pageIndex, occurrences, occurrenceIndex, navigate, pushPage, focusPage, closePage, close, dashboardContext, setDashboardFilter } = useConceptPopup()
   const current: WikiEntryRef | undefined = list[index]
-  const [content, setContent] = useState<string | null>(null)
-  const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
+  const activePage: WikiEntryRef | undefined = pages[pageIndex]
   const { height, beginDrag } = useSplitHeight()
   // Focus mode — the popup's counterpart to the Flashcards page focus mode:
   // it fills the viewport (covering the sidebar, bottom nav and search bar) and
   // strips the chrome back to the concept title, its text, and Previous/Next.
   const [focusMode, setFocusMode] = useState(false)
-  const [showQuestionsModal, setShowQuestionsModal] = useState(false)
-  const [showLearningProgress, setShowLearningProgress] = useState(false)
-  const [showPlayMenu, setShowPlayMenu] = useState(false)
-  const [menuAlignRight, setMenuAlignRight] = useState(false)
-  // Viewport rect of the play button, captured when the menu opens. The menu is
-  // portaled to <body> (out of the fixed aside's stacking context) so it can
-  // layer above the onboarding-tour coach-mark; fixed positioning is anchored
-  // from this rect. The button sits in the aside's non-scrolling header, so the
-  // rect stays valid for the life of the menu.
-  const [menuRect, setMenuRect] = useState<DOMRect | null>(null)
-  const [images, setImages] = useState<Array<{ src: string; alt: string; caption: string }>>([])
-  const [showGallery, setShowGallery] = useState(false)
-  const [galleryIndex, setGalleryIndex] = useState(0)
-  const [mathView, setMathView] = useState(false)
-  const [listenView, setListenView] = useState(false)
-  const playMenuRef = useRef<HTMLDivElement>(null)
-  const playBtnRef = useRef<HTMLButtonElement>(null)
-  const bodyRef = useRef<HTMLDivElement>(null)
-  const viewingRef = useRef<HTMLDivElement>(null)
-  const gallerySeekDirection = useRef<0 | 1 | -1>(0)
-  const { user } = useAuth()
-  const { isPremium } = useSubscription()
-  const { records: masteryRecords } = useConceptMastery()
-  const masteryState = useMemo<MasteryState | null>(() => {
-    if (!current) return null
-    const lower = current.name.toLowerCase()
-    const record = masteryRecords.find(r => r.concept_slug.toLowerCase() === lower)
-    if (!record) return null
-    return decayIfStale(record, new Date()).state
-  }, [masteryRecords, current?.name])
-  // Keystone roll-up for the exam this concept anchors — the popup already has
-  // every mastery record loaded, so the badge's explainer can show real
-  // progress without a second query. Null for ordinary concepts.
-  const keystoneStats = useMemo(() => {
-    const match = findKeystone(current?.name)
-    if (!match) return undefined
-    return keystoneProgress(match.examId, buildMasteryLookup(masteryRecords), new Date())
-  }, [masteryRecords, current?.name])
   const [viewingDropdownOpen, setViewingDropdownOpen] = useState(false)
   const [showPremiumInfo, setShowPremiumInfo] = useState(false)
+  const [showGalleryInPanel, setShowGalleryInPanel] = useState(false)
+  // Set when Previous / Next is pressed with the gallery open, so the page
+  // stepped onto opens its own gallery. Mirrored in a ref because it is read
+  // back from a panel's load callback, not from a render.
+  const [gallerySeek, setGallerySeek] = useState<0 | 1 | -1>(0)
+  const gallerySeekRef = useRef<0 | 1 | -1>(0)
+  const viewingRef = useRef<HTMLDivElement>(null)
+  const stackRef = useRef<HTMLDivElement>(null)
+  const [stackWidth, setStackWidth] = useState(0)
+  const { user } = useAuth()
+  const { isPremium } = useSubscription()
 
   // The panel's own sound — a sheet of paper sliding out, and back in on close.
   // It lives here rather than on the buttons because the popup can be opened
@@ -97,96 +58,93 @@ export function ConceptPopup() {
   const { play } = useSoundEffects()
   useSoundOnToggle(open, 'open', 'close')
 
+  // How many pages fit side by side depends on the pane's own width, not the
+  // window's: the popup is inset by the sidebar on desktop.
+  useEffect(() => {
+    const el = stackRef.current
+    if (!el || typeof ResizeObserver === 'undefined') return
+    setStackWidth(el.getBoundingClientRect().width)
+    const observer = new ResizeObserver(entries => {
+      const rect = entries[0]?.contentRect
+      if (rect) setStackWidth(rect.width)
+    })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [open])
+
+  const slots = useMemo(
+    () => stackSlots(pages.length, pageIndex, { width: stackWidth }),
+    [pages.length, pageIndex, stackWidth],
+  )
+  const firstPanel = slots.indexOf('panel')
+
   // Stepping to the previous/next concept is a page flick, not a press. Shared
-  // by the footer buttons and the ←/→ shortcuts so both sound the same.
+  // by the footer buttons and the ←/→ shortcuts so both sound the same. The
+  // trail collapses back to one page: it hung off the concept being left.
   const turnPage = useCallback((direction: -1 | 1) => {
     play('page')
-    navigate(direction)
-  }, [play, navigate])
-
-  // Scroll the body back to top whenever the viewed concept changes. The action
-  // menu closes with it — the next concept may be uncollected, in which case its
-  // header button is a lock and the menu has nothing to hang off.
-  useEffect(() => {
-    if (bodyRef.current) bodyRef.current.scrollTop = 0
-    setShowPlayMenu(false)
-  }, [current?.name])
-
-  // Fetch markdown whenever the active ref changes.
-  useEffect(() => {
-    if (!open || !current) return
-    let cancelled = false
-    setStatus('loading')
-    setContent(null)
-    setImages([])
-    fetchWikiFile(entryRefToRepoPath(current))
-      .then(raw => {
-        if (cancelled) return
-        const imgs = extractImages(raw)
-        setContent(raw)
-        setImages(imgs)
-        setStatus('idle')
-        const seeking = gallerySeekDirection.current
-        if (seeking !== 0) {
-          if (imgs.length > 0) {
-            gallerySeekDirection.current = 0
-            setGalleryIndex(0)
-            setShowGallery(true)
-          } else {
-            const nextIdx = index + seeking
-            if (nextIdx >= 0 && nextIdx < list.length) {
-              navigate(seeking)
-            } else {
-              gallerySeekDirection.current = 0
-            }
-          }
-        } else {
-          setShowGallery(false)
-        }
-      })
-      .catch(() => {
-        if (cancelled) return
-        setStatus('error')
-      })
-    return () => {
-      cancelled = true
+    if (showGalleryInPanel) {
+      gallerySeekRef.current = direction
+      setGallerySeek(direction)
     }
-  }, [open, current?.kind, current?.name])
+    navigate(direction)
+  }, [play, navigate, showGalleryInPanel])
 
-  // Keyboard: Esc closes, arrows navigate. Scoped to the popup so typing in
-  // the sidebar search input still works.
+  // A page stepped onto during a gallery walk reports whether it had any images.
+  // One that had none is skipped over, so the walk keeps moving in the same
+  // direction rather than stalling on a page with nothing to show.
+  const handleGallerySeek = useCallback((hadImages: boolean) => {
+    const direction = gallerySeekRef.current
+    const stop = () => {
+      gallerySeekRef.current = 0
+      setGallerySeek(0)
+    }
+    if (hadImages || direction === 0) return stop()
+
+    const state = useConceptPopup.getState()
+    const occMode = !!(state.occurrences && state.occurrences.length)
+    const atEnd = direction > 0
+      ? occMode
+        ? state.occurrenceIndex >= state.occurrences!.length - 1
+        : state.index >= state.list.length - 1
+      : occMode
+        ? state.occurrenceIndex <= 0
+        : state.index <= 0
+    if (atEnd && !state.dashboardContext?.circular) return stop()
+    state.navigate(direction)
+  }, [])
+
+  // Following a link from a page stacks the target on top of it. A link back to
+  // a page already open just returns to it, so the two get different cues: a
+  // sheet sliding out, or a flick back through the ones already there.
+  const openLinkFrom = useCallback((from: number) => (ref: WikiEntryRef) => {
+    const reopened = useConceptPopup.getState().pages.slice(0, from + 1).some(p => samePage(p, ref))
+    play(reopened ? 'page' : 'open')
+    pushPage(from, ref)
+  }, [play, pushPage])
+
+  // Keyboard: Esc steps back out, arrows navigate. Scoped to the popup so
+  // typing in the sidebar search input still works.
   useEffect(() => {
     if (!open) return
     function onKey(e: KeyboardEvent) {
       const target = e.target as HTMLElement | null
       if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return
-      // Esc leaves focus mode first, then closes — same as the Flashcards page.
-      if (e.key === 'Escape') focusMode ? setFocusMode(false) : close()
+      // Esc unwinds one layer at a time: the page just opened, then focus mode,
+      // then the popup — so a link followed by mistake costs one key, not the
+      // whole reading position.
+      if (e.key === 'Escape') {
+        const { pages: stacked, pageIndex: at, closePage: closeOne } = useConceptPopup.getState()
+        if (stacked.length > 1) closeOne(at)
+        else if (focusMode) setFocusMode(false)
+        else close()
+      }
       else if (e.key === 'ArrowLeft') turnPage(-1)
       else if (e.key === 'ArrowRight') turnPage(1)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [open, close, turnPage, focusMode])
-
-  // Close play menu when clicking outside of it. The "Add to Project" submenu
-  // is rendered in its own portal (outside playMenuRef in the DOM), so it's
-  // excluded via the data-add-to-project-menu marker.
-  useEffect(() => {
-    if (!showPlayMenu) return
-    function onPointerDown(e: PointerEvent) {
-      const target = e.target as HTMLElement | null
-      if (target?.closest('[data-add-to-project-menu]')) return
-      // The menu itself is portaled to <body> (outside playMenuRef), so a click
-      // inside it wouldn't count as "inside" without this marker check.
-      if (target?.closest('[data-play-menu]')) return
-      if (playMenuRef.current && !playMenuRef.current.contains(target)) {
-        setShowPlayMenu(false)
-      }
-    }
-    document.addEventListener('pointerdown', onPointerDown)
-    return () => document.removeEventListener('pointerdown', onPointerDown)
-  }, [showPlayMenu])
 
   // Close viewing dropdown / premium info when clicking outside.
   useEffect(() => {
@@ -226,46 +184,12 @@ export function ConceptPopup() {
     return () => { document.body.style.overflow = '' }
   }, [focusMode])
 
-  // Reset math / listen / focus view when popup closes.
+  // Reset focus view when popup closes.
   useEffect(() => {
-    if (!open) { setMathView(false); setListenView(false); setFocusMode(false) }
+    if (!open) setFocusMode(false)
   }, [open])
 
-  // Fetch question count for the current concept (uses cached question list).
-  useEffect(() => {
-    if (!open || !current || current.kind !== 'concept') {
-      setConceptQuestionCount(null)
-      return
-    }
-    let cancelled = false
-    fetchAllQuestions()
-      .then(rawFiles => {
-        if (cancelled) return
-        const all = parseAllQuestions(rawFiles)
-        const filtered = filterQuestions(all, { concept: current.name })
-        setConceptQuestionCount(filtered.length)
-      })
-      .catch(() => {})
-    return () => { cancelled = true }
-  }, [open, current?.kind, current?.name])
-
-  const mathBlocks = useMemo(() => {
-    if (!content) return []
-    return extractMathBlockquotes(content)
-  }, [content])
-
-  const resourceMeta = useMemo(() => {
-    if (!content || current?.kind !== 'resource') return null
-    return parseResourceMeta(content)
-  }, [content, current?.kind])
-
-  const processedContent = useMemo(() => {
-    if (!content) return content
-    if (current?.kind !== 'resource') return content
-    return preprocessResourceMarkdown(content)
-  }, [content, current?.kind])
-
-  if (!open || !current) return null
+  if (!open || !current || !activePage) return null
 
   const isCircular = !!(dashboardContext?.circular)
   // In occurrence mode, prev/next step through every mention (repeats included),
@@ -282,7 +206,6 @@ export function ConceptPopup() {
   // links the same concept twice — the bar carries no number, the text does.
   const navTotal = occMode ? occurrences!.length : list.length
   const navCurrent = occMode ? occurrenceIndex + 1 : index + 1
-  const sourcePath = current ? entryRefToRepoPath(current) : undefined
   const hasStudyPlan = !!(dashboardContext?.studyPlanList?.length)
   const hasSourceMaterial = !!(dashboardContext?.resourceList?.length)
   const isLoggedInPremium = !!user && isPremium
@@ -290,27 +213,28 @@ export function ConceptPopup() {
 
   const todayLabel = `Study Plan — ${new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}`
 
-  // The collect gate and the action menu share one header button. While a
-  // concept is uncollected the button *is* the lock: it shows the foil-ringed
-  // padlock and opens the collect flow, so the actions behind it (Start Quiz,
-  // Add to Flashcards, Math View, Learning Progress) are unreachable
-  // until the card is earned. Once collected the same slot becomes the play
-  // button. Non-concept entries (resources, exam pages) have no gate at all.
-  // The Listen toggle sits in the right-hand control cluster instead, and is
-  // gated on the same flag so the lock still covers it.
-  const isCollected = collectedCards.some(c => c.name.toLowerCase() === current.name.toLowerCase())
-  // A concept past New has necessarily been collected already (grandfathered
-  // users included), so treat it as unlocked even if not in the collected store.
-  const actionLocked = current.kind === 'concept' && !isCollected && (masteryState === null || masteryState === 'new')
+  // Focus mode's toggle is the only control that survives it, so there's always
+  // a way back out (Esc also works). It rides in the active page's header.
+  const focusToggle = (
+    <button
+      type="button"
+      onClick={() => setFocusMode(v => !v)}
+      aria-pressed={focusMode}
+      className="inline-flex items-center justify-center h-10 w-10 rounded-lg shrink-0 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+      title={focusMode ? 'Exit focus mode (Esc)' : 'Focus mode'}
+      aria-label={focusMode ? 'Exit focus mode' : 'Focus mode'}
+    >
+      {focusMode ? <Minimize2 className="h-5 w-5" /> : <Maximize2 className="h-5 w-5" />}
+    </button>
+  )
 
   return (
-    <>
     <aside
       className="concept-popup-aside fixed left-0 right-0 bottom-14 md:bottom-0 z-40 border-t bg-card text-card-foreground shadow-2xl flex flex-col"
       data-focus={focusMode}
       style={{ height: focusMode ? undefined : `min(${height}px, 100vh)` }}
       role="complementary"
-      aria-label={`Concept: ${current.name}`}
+      aria-label={`Concept: ${activePage.name}`}
     >
       {/* Drag handle — hidden in focus mode, visible otherwise */}
       {!focusMode && (
@@ -331,290 +255,49 @@ export function ConceptPopup() {
         </div>
       )}
 
-      {/* Header. Focus mode spans the full viewport, so the header and the body
-          below share a max-width reading column to keep line lengths sane on
-          desktop and stay aligned with each other. */}
-      <div className={`flex items-center gap-2 h-16 shrink-0 ${focusMode ? 'w-full max-w-4xl mx-auto px-4 sm:px-6' : 'px-3'}`}>
-        <div className="flex items-center gap-2 flex-1 min-w-0">
-          {/* The title carries the keystone marker itself: a gold underline on
-              the name, tappable to confirm this concept is load-bearing. For an
-              ordinary concept `KeystoneName` renders plain text, so the header
-              looks exactly as it did before. */}
-          <KeystoneName
-            name={current.name}
-            progress={keystoneStats}
-            className="truncate font-semibold text-lg sm:text-xl min-w-0"
-          />
-          {/* Mastery status (New/1/2/3/F), sitting just right of the concept
-              name — only once the card is collected, since an uncollected
-              concept is pinned at New by the gate. Opens the combined card +
-              learning-progress modal, where it can level up. */}
-          {!focusMode && current.kind === 'concept' && !actionLocked && (() => {
-            const state = masteryState ?? 'new'
-            return (
-              <button
-                type="button"
-                data-tour="collect-card"
-                // Hand the modal the verdict this pill is already showing, so
-                // it opens straight onto the card + learning progress instead
-                // of flashing the collect check while it re-derives mastery.
-                onClick={() => openCollect(current, { collected: true, mastery: masteryState ?? undefined })}
-                title="View flashcard & learning progress"
-                aria-label={`${current.name} — ${MASTERY_LABEL[state]}. View flashcard and progress`}
-                className={`shrink-0 inline-flex items-center justify-center min-w-[1.875rem] h-7 px-2 rounded-full text-xs font-bold tabular-nums cursor-pointer hover:opacity-80 transition-opacity ${MASTERY_TINT[state]}`}
-              >
-                {MASTERY_SHORT_LABEL[state]}
-              </button>
-            )
-          })()}
-          {/* The action button — or, while the concept is uncollected, the lock
-              that stands in for it. Spacing is the row's `gap-2` and nothing
-              else: the locked state draws a visible foil ring at the button's
-              edge, so any negative margin here puts that ring straight onto the
-              last letter of the name. */}
-          {!focusMode && (
-          <div className="relative shrink-0" ref={playMenuRef}>
-          {actionLocked ? (
-            <button
-              type="button"
-              data-tour="collect-card"
-              onClick={() => openCollect(current)}
-              className="lock-foil-ring inline-flex items-center justify-center h-10 w-10 rounded-lg shrink-0 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-              title="Locked — collect this flashcard to unlock its actions"
-              aria-label={`Collect ${current.name} to unlock its actions`}
-            >
-              <Lock className="h-5 w-5" />
-            </button>
+      {/* The stack: spines for the pages held open behind, panels for the ones
+          on screen. Each panel is its own column, so its header scrolls with
+          nothing and its body scrolls alone. */}
+      <div ref={stackRef} className="flex flex-1 min-h-0 items-stretch">
+        {pages.map((page, i) =>
+          slots[i] === 'spine' ? (
+            <PageStackSpine
+              key={pageKey(page)}
+              entry={page}
+              onFocus={() => focusPage(i)}
+            />
           ) : (
-          <button
-            ref={playBtnRef}
-            type="button"
-            data-tour="concept-action"
-            onClick={() => {
-              if (!showPlayMenu && playBtnRef.current) {
-                const rect = playBtnRef.current.getBoundingClientRect()
-                setMenuAlignRight(window.innerWidth - rect.right < 200)
-                setMenuRect(rect)
-              }
-              setShowPlayMenu(v => !v)
-            }}
-            className="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-background hover:bg-accent text-foreground shrink-0"
-            title="Start Quiz or Add to Flashcards"
-            aria-label="Start Quiz or Add to Flashcards"
-          >
-            <Play className="h-5 w-5" />
-          </button>
-          )}
-          {showPlayMenu && menuRect && createPortal(
             <div
-              data-play-menu
-              className="fixed w-52 rounded-md bg-popover text-popover-foreground shadow-md z-[70] py-1 max-h-[min(18rem,80vh)] overflow-y-auto"
-              style={{
-                top: menuRect.bottom + 4,
-                ...(menuAlignRight
-                  ? { right: Math.max(8, window.innerWidth - menuRect.right) }
-                  : { left: menuRect.left }),
-              }}
+              key={pageKey(page)}
+              // A page you can see but aren't reading takes the focus from the
+              // first touch anywhere in it, so its controls are live on the
+              // second — the same as clicking into another pane.
+              onPointerDownCapture={() => { if (i !== pageIndex) focusPage(i) }}
+              role="group"
+              aria-label={page.name}
+              aria-current={i === pageIndex ? 'page' : undefined}
+              style={{ flexBasis: 0 }}
+              // Only a stacked page animates in: the base page is there from
+              // the moment the popup opens, and the aside's own slide-up is
+              // already that page arriving. A page held open beside the one
+              // being read is tinted back a step, so which panel the controls
+              // and the keyboard belong to is never in doubt.
+              className={`flex flex-1 flex-col min-w-0 min-h-0 ${i > 0 ? 'page-panel' : ''} ${i > firstPanel ? 'border-l' : ''} ${i === pageIndex ? '' : 'bg-background/60'}`}
+              data-page-active={i === pageIndex}
             >
-              <button
-                type="button"
-                onClick={() => { setShowQuestionsModal(true); setShowPlayMenu(false) }}
-                className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
-              >
-                <Play className="h-3.5 w-3.5 shrink-0" />
-                <span className="flex-1 text-left">Start Quiz</span>
-                {conceptQuestionCount !== null && conceptQuestionCount > 0 && (
-                  <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-primary/10 text-primary tabular-nums">
-                    {conceptQuestionCount}
-                  </span>
-                )}
-              </button>
-              {current.kind === 'concept' && (
-                <button
-                  type="button"
-                  disabled={isOnWiki}
-                  onClick={() => { routerNavigate(wikiRoute(current)); setShowPlayMenu(false) }}
-                  className={`w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors ${isOnWiki ? 'opacity-40 cursor-not-allowed' : 'hover:bg-accent'}`}
-                >
-                  <BookOpen className="h-3.5 w-3.5 shrink-0" />
-                  Open in Study Guide
-                </button>
-              )}
-              <div className="flex items-center hover:bg-accent transition-colors">
-                <button
-                  type="button"
-                  data-tour="add-flashcard"
-                  data-sound="none"
-                  onClick={() => {
-                    if (!hasCard(current.name)) { play('addToDeck'); showAddedToDeck(1) }
-                    addCard(current)
-                  }}
-                  className="flex-1 flex items-center gap-2 px-3 py-2 text-sm text-left"
-                >
-                  <span className="h-3.5 w-3.5 shrink-0 flex items-center justify-center text-xs">
-                    {hasCard(current.name) ? '✓' : '+'}
-                  </span>
-                  <span className="flex-1">{hasCard(current.name) ? 'Added to Flashcards' : 'Add to Flashcards'}</span>
-                  {hasCard(current.name) && cards.length > 0 && (
-                    <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground tabular-nums">
-                      {cards.length}
-                    </span>
-                  )}
-                </button>
-                {hasCard(current.name) && (
-                  <Link
-                    to={`/flashcards?highlight=${encodeURIComponent(current.name)}`}
-                    data-tour="view-flashcards"
-                    onClick={() => { setShowPlayMenu(false); close() }}
-                    className="text-xs text-primary hover:underline pr-3 shrink-0"
-                  >
-                    view
-                  </Link>
-                )}
-              </div>
-              {RESEARCH_TAB_ENABLED && user && <AddToProjectMenuItem item={current} onNavigate={() => setShowPlayMenu(false)} />}
-              <button
-                type="button"
-                onClick={() => { setMathView(true); setListenView(false); setShowPlayMenu(false) }}
-                className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
-              >
-                <Sigma className="h-3.5 w-3.5 shrink-0" />
-                Math View
-              </button>
-              <button
-                type="button"
-                onClick={() => { setShowLearningProgress(true); setShowPlayMenu(false) }}
-                className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
-              >
-                <TrendingUp className="h-3.5 w-3.5 shrink-0" />
-                <span className="flex-1 text-left">Learning Progress</span>
-                {masteryState && <MasteryBadge state={masteryState} compact />}
-              </button>
-            </div>,
-            document.body,
-          )}
-          </div>
-          )}
-          {/* Sigma icon — visible only while in Math View; clicking exits it */}
-          {!focusMode && mathView && (
-            <button
-              type="button"
-              onClick={() => setMathView(false)}
-              className="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 shrink-0"
-              title="Exit Math View"
-              aria-label="Exit Math View"
-            >
-              <Sigma className="h-5 w-5" />
-            </button>
-          )}
-        </div>
-        {/* Listen toggle — sits beside the focus toggle rather than inside the
-            action menu, since it's a view switch like focus mode, not an
-            action. Survives focus mode for the same reason that toggle does:
-            Listen is most useful with the page full-screen, so there has to be
-            a way in and out of it there. Gated by the collect lock like the
-            menu items are. */}
-        {!actionLocked && (
-          <button
-            type="button"
-            onClick={() => { setListenView(!listenView); if (!listenView) setMathView(false) }}
-            aria-pressed={listenView}
-            className={`inline-flex items-center justify-center h-10 w-10 rounded-lg shrink-0 transition-colors ${listenView ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'text-muted-foreground hover:text-foreground hover:bg-accent'}`}
-            title={listenView ? 'Exit Listen' : 'Listen'}
-            aria-label={listenView ? 'Exit Listen' : 'Listen'}
-          >
-            <Headphones className="h-5 w-5" />
-          </button>
-        )}
-        {/* Focus mode toggle — the only control that survives focus mode, so
-            there's always a way back out (Esc also works). */}
-        <button
-          type="button"
-          onClick={() => setFocusMode(v => !v)}
-          aria-pressed={focusMode}
-          className="inline-flex items-center justify-center h-10 w-10 rounded-lg shrink-0 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-          title={focusMode ? 'Exit focus mode (Esc)' : 'Focus mode'}
-          aria-label={focusMode ? 'Exit focus mode' : 'Focus mode'}
-        >
-          {focusMode ? <Minimize2 className="h-5 w-5" /> : <Maximize2 className="h-5 w-5" />}
-        </button>
-        {!focusMode && (
-          <button
-            type="button"
-            onClick={close}
-            data-sound="none"
-            className="inline-flex items-center justify-center h-10 w-10 rounded-lg shrink-0 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-            title="Close"
-            aria-label="Close"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        )}
-      </div>
-
-      {/* Body — overflow-y:scroll (not auto) keeps this a scroll container even when
-          content is short, so overscroll-contain traps wheel events and the dashboard
-          behind never scrolls. Scrollbar is hidden via CSS. */}
-      <div
-        ref={bodyRef}
-        // The body, not each article inside it, is one math-focus scope — in
-        // Math View every equation is its own WikiArticle, and Previous/Next
-        // should still run through all of them. See lib/mathFocus.ts.
-        data-math-scope=""
-        className={`flex-1 min-h-0 w-full overflow-y-scroll overscroll-contain px-4 sm:px-6 pb-4 [&::-webkit-scrollbar]:hidden [scrollbar-width:none] ${focusMode ? 'max-w-4xl mx-auto' : ''} ${listenView ? 'pt-0' : 'pt-4'}`}
-      >
-        {status === 'loading' && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin" /> Loading…
-          </div>
-        )}
-        {status === 'error' && (
-          <div className="text-sm text-muted-foreground">
-            Couldn't load <span className="font-medium">{current.name}</span>.
-          </div>
-        )}
-        {content !== null && (
-          listenView ? (
-            <ListenView markdown={content} />
-          ) : mathView ? (
-            mathBlocks.length > 0 ? (
-              <div className="space-y-4">
-                {mathBlocks.map((block, i) => (
-                  <WikiArticle key={i} markdown={block} sourcePath={sourcePath} hideImages />
-                ))}
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center py-12 gap-3 text-muted-foreground">
-                <Sigma className="h-8 w-8 opacity-30" />
-                <span className="text-sm">No equations in this concept.</span>
-              </div>
-            )
-          ) : (
-            <>
-              {/* The concept's figure leads the page — see ConceptImageBanner. */}
-              <ConceptImageBanner
-                images={images}
-                onOpen={i => { setGalleryIndex(i); setShowGallery(true) }}
+              <ConceptPagePanel
+                entry={page}
+                active={i === pageIndex}
+                focusMode={focusMode}
+                onOpenLink={openLinkFrom(i)}
+                onClose={() => closePage(i)}
+                trailing={i === pageIndex ? focusToggle : undefined}
+                gallerySeek={i === pageIndex ? gallerySeek : 0}
+                onGallerySeekResolved={i === pageIndex ? handleGallerySeek : undefined}
+                onGalleryOpenChange={i === pageIndex ? setShowGalleryInPanel : undefined}
               />
-              {resourceMeta && <ResourceMetaCard meta={resourceMeta} compact showTitle={false} />}
-              <WikiArticle
-                markdown={processedContent ?? content}
-                className={
-                  resourceMeta && isNumberedOutline(processedContent ?? content)
-                    ? OUTLINE_ARTICLE_CLASS
-                    : undefined
-                }
-                sourcePath={sourcePath}
-                hideImages
-                onWikiLink={ref => {
-                  // Stay inside the popup: swap the body instead of navigating.
-                  play('page')
-                  jumpTo(ref)
-                  return true
-                }}
-              />
-            </>
-          )
+            </div>
+          ),
         )}
       </div>
 
@@ -637,13 +320,7 @@ export function ConceptPopup() {
           type="button"
           disabled={!canPrev}
           data-sound="none"
-          onClick={() => {
-            if (showGallery) {
-              setShowGallery(false)
-              gallerySeekDirection.current = -1
-            }
-            turnPage(-1)
-          }}
+          onClick={() => turnPage(-1)}
           className="flex-1 flex items-center justify-center gap-2 px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           <ChevronLeft className="h-6 w-6 sm:h-5 sm:w-5" />
@@ -739,13 +416,7 @@ export function ConceptPopup() {
           type="button"
           disabled={!canNext}
           data-sound="none"
-          onClick={() => {
-            if (showGallery) {
-              setShowGallery(false)
-              gallerySeekDirection.current = 1
-            }
-            turnPage(1)
-          }}
+          onClick={() => turnPage(1)}
           className="flex-1 flex items-center justify-center gap-2 px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           <span>Next</span>
@@ -753,27 +424,5 @@ export function ConceptPopup() {
         </button>
       </div>
     </aside>
-
-    {showQuestionsModal && (
-      <ConceptQuestionsModal
-        conceptName={current.name}
-        onClose={() => setShowQuestionsModal(false)}
-      />
-    )}
-    {showLearningProgress && (
-      <LearningProgressModal
-        conceptName={current.name}
-        onClose={() => setShowLearningProgress(false)}
-      />
-    )}
-    {showGallery && (
-      <ImageGalleryModal
-        images={images}
-        initialIndex={galleryIndex}
-        placement={focusMode ? 'popup-focus' : 'popup'}
-        onClose={() => setShowGallery(false)}
-      />
-    )}
-    </>
   )
 }

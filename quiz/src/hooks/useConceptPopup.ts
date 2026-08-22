@@ -1,8 +1,22 @@
 import { create } from 'zustand'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
+import {
+  closePage as closeStackPage,
+  focusPage as focusStackPage,
+  openStack,
+  pushPage as pushStackPage,
+  type PageStack,
+} from '@/lib/pageStack'
 
 // An ordered list of concept/resource refs plus the current index — drives
 // the popup's prev/next footer and keyboard arrows.
+//
+// Layered on top of that walk is the **page stack** (`lib/pageStack.ts`): a
+// link followed from inside the popup opens a new panel rather than replacing
+// the one being read, and the pages behind it collapse to spines. The stack is
+// a side-branch of wherever the walk currently stands, so every move of the
+// walk — prev/next, a filter change, a jump from another surface — rebuilds it
+// from the single page the walk landed on.
 
 type DashboardFilter = 'study-plan' | 'entire-syllabus' | 'source-material'
 
@@ -33,6 +47,12 @@ interface ConceptPopupState {
   open: boolean
   list: WikiEntryRef[]
   index: number
+  // The stacked pages currently open, oldest first, and which one is expanded.
+  // `pages[0]` is the walk's own entry until the trail outgrows the stack and
+  // the oldest page drops off; everything after it was reached by following a
+  // link. Reset to one page by every move of the walk.
+  pages: WikiEntryRef[]
+  pageIndex: number
   // Document-ordered occurrences for the current (entire-syllabus) view, or
   // null when occurrence-aware navigation doesn't apply (dashboard, study-plan
   // / source-material filters). Drives which mention gets highlighted.
@@ -54,16 +74,33 @@ interface ConceptPopupState {
   setDashboardFilter: (filter: DashboardFilter) => void
   navigate: (delta: number) => void
   jumpTo: (ref: WikiEntryRef) => void
+  // Follow a link found on the stacked page at `from`, opening it as a new
+  // panel. Anything opened from that page is dropped first — see pushPage.
+  pushPage: (from: number, ref: WikiEntryRef) => void
+  // Expand the stacked page at `i` (tapping its spine).
+  focusPage: (i: number) => void
+  // Close one stacked page; closing the last one closes the popup.
+  closePage: (i: number) => void
   close: () => void
   // Closes the popup if the user navigated away from the page that opened it —
   // called by WikiLayout on every route change to keep the split pane in sync.
   closeOnNavigation: (pathname: string) => void
 }
 
+// The stack the walk resets to whenever it moves: just the entry it landed on.
+// An empty list (nothing to show) yields an empty stack rather than a hole.
+function stackState(list: WikiEntryRef[], index: number): { pages: WikiEntryRef[]; pageIndex: number } {
+  const ref = list[index]
+  const stack: PageStack = ref ? openStack(ref) : { pages: [], index: 0 }
+  return { pages: stack.pages, pageIndex: stack.index }
+}
+
 export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
   open: false,
   list: [],
   index: 0,
+  pages: [],
+  pageIndex: 0,
   occurrences: null,
   occurrenceIndex: 0,
   sourcePath: null,
@@ -71,10 +108,12 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
   openAt: (list, index, sourcePath = null, studyPlanList, resourceList, options) => {
     const filter = options?.initialFilter ?? 'entire-syllabus'
     const occurrences = options?.occurrences ?? null
+    const at = Math.max(0, Math.min(index, list.length - 1))
     set({
       open: true,
       list,
-      index: Math.max(0, Math.min(index, list.length - 1)),
+      index: at,
+      ...stackState(list, at),
       // Occurrence nav only applies to the entire-syllabus view.
       occurrences: filter === 'entire-syllabus' ? occurrences : null,
       occurrenceIndex: filter === 'entire-syllabus' ? Math.max(0, options?.occurrenceIndex ?? 0) : 0,
@@ -84,10 +123,12 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
   },
   openDashboard: (fullList, studyPlanList, filter, initialIndex, options = {}) => {
     const list = filter === 'study-plan' && studyPlanList ? studyPlanList : fullList
+    const at = Math.max(0, Math.min(initialIndex, list.length - 1))
     set({
       open: true,
       list,
-      index: Math.max(0, Math.min(initialIndex, list.length - 1)),
+      index: at,
+      ...stackState(list, at),
       occurrences: null,
       occurrenceIndex: 0,
       sourcePath: null,
@@ -121,7 +162,14 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
       occurrences && currentName
         ? Math.max(0, occurrences.findIndex(o => o.name.toLowerCase() === currentName))
         : 0
-    set({ list: newList, index: newIndex, occurrences, occurrenceIndex, dashboardContext: { ...dashboardContext, filter } })
+    set({
+      list: newList,
+      index: newIndex,
+      ...stackState(newList, newIndex),
+      occurrences,
+      occurrenceIndex,
+      dashboardContext: { ...dashboardContext, filter },
+    })
   },
   navigate: delta => {
     const { list, index, occurrences, occurrenceIndex } = get()
@@ -132,7 +180,8 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
       const nextOcc = Math.max(0, Math.min(occurrences.length - 1, occurrenceIndex + delta))
       const name = occurrences[nextOcc]?.name.toLowerCase()
       const nextIndex = name ? list.findIndex(r => r.name.toLowerCase() === name) : -1
-      set({ occurrenceIndex: nextOcc, index: nextIndex >= 0 ? nextIndex : index })
+      const at = nextIndex >= 0 ? nextIndex : index
+      set({ occurrenceIndex: nextOcc, index: at, ...stackState(list, at) })
       return
     }
     if (!list.length) return
@@ -140,7 +189,7 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
     const next = dashboardContext?.circular
       ? ((index + delta) % list.length + list.length) % list.length
       : Math.max(0, Math.min(list.length - 1, index + delta))
-    set({ index: next })
+    set({ index: next, ...stackState(list, next) })
   },
   jumpTo: ref => {
     const { list, occurrences, occurrenceIndex } = get()
@@ -151,7 +200,11 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
     if (existingIdx >= 0) {
       // A concept with no mention on the source page keeps the walk where it
       // is rather than snapping it back to the first one.
-      set({ index: existingIdx, occurrenceIndex: syncOcc >= 0 ? syncOcc : occurrenceIndex })
+      set({
+        index: existingIdx,
+        ...stackState(list, existingIdx),
+        occurrenceIndex: syncOcc >= 0 ? syncOcc : occurrenceIndex,
+      })
       return
     }
     // Append & jump — mirrors publish.js behaviour when following a link from
@@ -164,15 +217,37 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
     set({
       list: next,
       index: next.length - 1,
+      ...stackState(next, next.length - 1),
       occurrences: nextOccurrences,
       occurrenceIndex: nextOccurrences ? nextOccurrences.length - 1 : 0,
     })
   },
-  close: () => set({ open: false, list: [], index: 0, occurrences: null, occurrenceIndex: 0, sourcePath: null, dashboardContext: null }),
+  pushPage: (from, ref) => {
+    const { pages, pageIndex } = get()
+    if (!pages.length) return
+    const next = pushStackPage({ pages, index: pageIndex }, from, ref)
+    set({ pages: next.pages, pageIndex: next.index })
+  },
+  focusPage: i => {
+    const { pages, pageIndex } = get()
+    const next = focusStackPage({ pages, index: pageIndex }, i)
+    set({ pages: next.pages, pageIndex: next.index })
+  },
+  closePage: i => {
+    const { pages, pageIndex } = get()
+    const next = closeStackPage({ pages, index: pageIndex }, i)
+    // Closing the only page closes the popup — there is nothing left to read.
+    if (!next.pages.length) {
+      get().close()
+      return
+    }
+    set({ pages: next.pages, pageIndex: next.index })
+  },
+  close: () => set({ open: false, list: [], index: 0, pages: [], pageIndex: 0, occurrences: null, occurrenceIndex: 0, sourcePath: null, dashboardContext: null }),
   closeOnNavigation: pathname => {
     const { open, sourcePath } = get()
     if (open && sourcePath && sourcePath !== pathname) {
-      set({ open: false, list: [], index: 0, occurrences: null, occurrenceIndex: 0, sourcePath: null, dashboardContext: null })
+      set({ open: false, list: [], index: 0, pages: [], pageIndex: 0, occurrences: null, occurrenceIndex: 0, sourcePath: null, dashboardContext: null })
     }
   },
 }))

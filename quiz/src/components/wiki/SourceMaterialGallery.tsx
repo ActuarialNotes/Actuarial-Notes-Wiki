@@ -3,20 +3,13 @@ import { Card } from '@/components/ui/card'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { hrefToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { splitAuthors } from '@/lib/authorNames'
+import { MetaPill } from '@/components/wiki/ResourcePills'
 import type { SourceMaterialEntry } from '@/lib/sourceMaterial'
 
 // The exam study guides' source-material list, rendered as the same shelf of
 // resource cards the study-guide home page shows (cover, title, metadata pills)
 // rather than a collapsed callout of bare links. Each card carries the reading
 // assignment the syllabus gives for that source.
-
-function MetaPill({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground">
-      {children}
-    </span>
-  )
-}
 
 export interface SourceMaterialGalleryProps {
   entries: SourceMaterialEntry[]

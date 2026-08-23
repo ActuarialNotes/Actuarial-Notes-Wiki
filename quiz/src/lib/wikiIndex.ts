@@ -5,6 +5,7 @@
 
 import fm from 'front-matter'
 import { listRepoContents, fetchWikiFile, rawGithubUrl } from '@/lib/github'
+import { buildResourceExamMap, examsForResource } from '@/lib/resourceExams'
 
 export type WikiIndexCategory = 'exam' | 'concept' | 'document'
 
@@ -14,6 +15,9 @@ export interface WikiIndexItem {
   path: string          // repo path ("Concepts/Expected Value.md")
   // Optional metadata, pulled from YAML frontmatter on resource files.
   topic?: string        // exam id the item belongs to (for filtering)
+  // Exams this resource is a syllabus reading for ("Exam P-1"), derived from the
+  // exam pages' Source Material callouts — see lib/resourceExams.ts. Documents only.
+  exams?: string[]
   author?: string
   year?: number
   title?: string        // resource display title (overrides name)
@@ -23,7 +27,7 @@ export interface WikiIndexItem {
   publisher?: string
 }
 
-const CACHE_KEY = 'actuarial_wiki_index_v3'
+const CACHE_KEY = 'actuarial_wiki_index_v4'
 const CACHE_TTL_MS = 6 * 60 * 60 * 1000
 
 interface CacheEntry {
@@ -116,12 +120,24 @@ export async function buildWikiIndex(): Promise<WikiIndexItem[]> {
 
   // Repo root — grab exam files.
   const rootItems = await listRepoContents().catch(() => [])
+  const examItems: WikiIndexItem[] = []
   for (const it of rootItems) {
     if (it.type !== 'file' || !it.name.endsWith('.md')) continue
     if (!/^Exam\b/i.test(it.name)) continue
     const bare = stripExt(it.name)
-    items.push({ category: 'exam', name: bare, path: it.path })
+    const item: WikiIndexItem = { category: 'exam', name: bare, path: it.path }
+    items.push(item)
+    examItems.push(item)
   }
+
+  // Which exams each resource is a syllabus reading for. The exam pages are the
+  // only place that relationship is authored, so this path reads them too —
+  // a dozen files, fetched once per index build.
+  const examPages = await Promise.all(examItems.map(async it => ({
+    name: it.name,
+    markdown: await fetchWikiFile(it.path).catch(() => ''),
+  })))
+  const examMap = buildResourceExamMap(examPages)
 
   // Concepts directory.
   const conceptItems = await listRepoContents('Concepts').catch(() => [])
@@ -145,10 +161,13 @@ export async function buildWikiIndex(): Promise<WikiIndexItem[]> {
         /* ignore — keep item with filename-derived display */
       }
       const yearNum = fmData['Year'] ? parseInt(fmData['Year'], 10) : undefined
+      const bare = stripExt(it.name)
+      const exams = examsForResource(examMap, bare)
       const item: WikiIndexItem = {
         category: 'document',
-        name: stripExt(it.name),
+        name: bare,
         path: it.path,
+        exams: exams.length > 0 ? exams : undefined,
         author: fmData['Authors'] || fmData['Author'] || undefined,
         year: Number.isFinite(yearNum) ? yearNum : undefined,
         title: fmData['Title'] || undefined,
@@ -169,6 +188,7 @@ export async function buildWikiIndex(): Promise<WikiIndexItem[]> {
 
 export function clearWikiIndexCache(): void {
   localStorage.removeItem(CACHE_KEY)
+  localStorage.removeItem('actuarial_wiki_index_v3')
   localStorage.removeItem('actuarial_wiki_index_v2')
   localStorage.removeItem('actuarial_wiki_index_v1')
 }

@@ -134,8 +134,9 @@ const SITTING_PDF_LINKS: Record<string, ExamPdfLink> = {
 // Exam-level source PDFs, for exams with no dated papers to browse: the SOA
 // publishes one rolling sample set for P and FM rather than releasing sittings,
 // and that set is where this app's P and FM banks come from. Questions and
-// solutions are separate downloads; the questions paper is the one that answers
-// "where did these come from", so it's the one linked.
+// solutions are **separate downloads**, so each gets its own entry and its own
+// button — the questions paper answers "where did these come from", and the
+// solutions paper is what a candidate reaches for after sitting the mix.
 const EXAM_LEVEL_PDF_LINKS: Record<string, ExamPdfLink> = {
   Probability: {
     url: 'https://www.soa.org/globalassets/assets/files/edu/edu-exam-p-sample-quest.pdf',
@@ -144,6 +145,26 @@ const EXAM_LEVEL_PDF_LINKS: Record<string, ExamPdfLink> = {
   'Financial Mathematics': {
     url: 'https://www.soa.org/globalassets/assets/files/edu/2017/exam-fm-sample-questions.pdf',
     label: 'Sample Questions',
+  },
+}
+
+// The solutions half of the same sample sets. Transcribed like everything else
+// here, and this pair is a good illustration of why that rule holds: the two
+// SOA documents do *not* share a naming scheme. Exam P's solutions swap
+// `-quest` for `-sol` in the same directory, while Exam FM's swap the whole
+// word (`exam-fm-sample-questions` → `exam-fm-sample-solutions`) — and the SOA
+// also publishes per-sitting reissues of the FM set under a dated name
+// (`2018/2018-10-exam-fm-sample-solutions.pdf`), which is a different document
+// from the rolling set linked here. An exam whose solutions paper hasn't been
+// located is absent, and shows no second button.
+const EXAM_LEVEL_SOLUTION_LINKS: Record<string, ExamPdfLink> = {
+  Probability: {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/edu-exam-p-sample-sol.pdf',
+    label: 'Sample Solutions',
+  },
+  'Financial Mathematics': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2017/exam-fm-sample-solutions.pdf',
+    label: 'Sample Solutions',
   },
 }
 
@@ -222,6 +243,11 @@ export function getExamPdfLink(examTopic: string): ExamPdfLink | null {
   return EXAM_LEVEL_PDF_LINKS[examTopic] ?? null
 }
 
+/** The worked solutions to that same sample set, where the body publishes them. */
+export function getExamSolutionsPdfLink(examTopic: string): ExamPdfLink | null {
+  return EXAM_LEVEL_SOLUTION_LINKS[examTopic] ?? null
+}
+
 /** The exam's published syllabus, by wiki exam id (`P-1`, `5-1`, `MAS-I`, …). */
 export function getSyllabusPdfLink(examId: string): ExamPdfLink | null {
   return SYLLABUS_PDF_LINKS[examId.toLowerCase()] ?? null
@@ -232,6 +258,7 @@ export function allExamPdfLinks(): ExamPdfLink[] {
   return [
     ...Object.values(SITTING_PDF_LINKS),
     ...Object.values(EXAM_LEVEL_PDF_LINKS),
+    ...Object.values(EXAM_LEVEL_SOLUTION_LINKS),
     ...Object.values(SYLLABUS_PDF_LINKS),
   ]
 }

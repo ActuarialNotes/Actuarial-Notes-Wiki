@@ -12,6 +12,7 @@ import {
 import {
   allExamPdfLinks,
   getExamPdfLink,
+  getExamSolutionsPdfLink,
   getSittingPdfLink,
   getSyllabusPdfLink,
 } from '@/data/examPdfLinks'
@@ -125,6 +126,25 @@ describe('the examiner-report catalogue', () => {
     expect(getSittingPdfLink('Exam 5', 2019, 'Spring')?.label).toBe("Examiner's Report")
     expect(getSittingPdfLink('Exam MAS-I', 2019, 'Fall')?.label).toBe('Exam & Answer Key')
     expect(getExamPdfLink('Probability')?.label).toBe('Sample Questions')
+    // The SOA publishes P and FM's sample set as two files, so the solutions
+    // are their own document rather than a section of the questions paper.
+    expect(getExamSolutionsPdfLink('Probability')?.label).toBe('Sample Solutions')
+    expect(getExamSolutionsPdfLink('Financial Mathematics')?.label).toBe('Sample Solutions')
+  })
+
+  it('keeps an exam-level set\u2019s two halves apart', () => {
+    // Same trap the sitting table has: the two SOA documents don't share a
+    // naming scheme, so a solutions link that merely echoes the questions link
+    // is a sign one of them was constructed rather than transcribed.
+    for (const topic of ['Probability', 'Financial Mathematics']) {
+      const questions = getExamPdfLink(topic)
+      const solutions = getExamSolutionsPdfLink(topic)
+      expect(questions).not.toBeNull()
+      expect(solutions).not.toBeNull()
+      expect(solutions?.url).not.toBe(questions?.url)
+    }
+    // An exam whose solutions haven't been located shows no second button.
+    expect(getExamSolutionsPdfLink('Exam 5')).toBeNull()
   })
 
   it('matches a sitting however its session is cased', () => {

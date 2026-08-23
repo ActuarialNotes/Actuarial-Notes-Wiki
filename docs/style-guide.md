@@ -465,7 +465,7 @@ new overlays on this ladder and comment the intent rather than picking a free nu
 |---|---|---|
 | Base | `z-0`–`z-20` | In-flow raised bits (sticky headers, floating search, nav) |
 | Chrome | `z-40`–`z-50` | Sidebar, bottom-nav, standard modals/scrims |
-| Popup stack | `z-[55]`–`z-[70]` | Concept popup, its action menus, gallery panel |
+| Popup stack | `z-[55]`–`z-[70]` | Concept popup (56 in focus mode), image gallery (57), PDF reader (58), action menus |
 | Onboarding | `z-[72]` | Tour spotlight (must sit above the popup stack) |
 | Ceremony | `z-[120]`+ | Full-screen celebrations that must cover everything |
 | Over a ceremony | `z-[130]` | The concept modals a collect dialog can open over itself |

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ExternalLink, FileText } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { isSupportedPdfSource } from '@/lib/examPdf'
@@ -25,9 +25,22 @@ import type { ResourceMeta } from '@/lib/resourceMeta'
 interface ResourceMetaCardProps {
   meta: ResourceMeta
   compact?: boolean
+  /**
+   * Whether the surface this card is read on is full screen — the concept
+   * popup in focus mode. Passed to the reader so it covers that page instead
+   * of leaving the chrome-sized gaps the page has already filled.
+   */
+  hostFullScreen?: boolean
+  /**
+   * Reports the reader opening and closing. The popup this card can sit in
+   * binds Esc and the arrow keys too, so it has to hand them over while the
+   * reader is up — otherwise Esc closed the document *and* the page behind it,
+   * and an arrow turned a PDF page *and* stepped to the next concept.
+   */
+  onViewerOpenChange?: (open: boolean) => void
 }
 
-export function ResourceMetaCard({ meta, compact }: ResourceMetaCardProps) {
+export function ResourceMetaCard({ meta, compact, hostFullScreen, onViewerOpenChange }: ResourceMetaCardProps) {
   // A cover that fails to load drops its column entirely — no empty gutter.
   const [coverFailed, setCoverFailed] = useState(false)
   const [viewing, setViewing] = useState(false)
@@ -51,6 +64,15 @@ export function ResourceMetaCard({ meta, compact }: ResourceMetaCardProps) {
   ].filter((f): f is string => Boolean(f))
   const copyLabel = canView ? 'Read PDF' : isPdf ? 'Download PDF' : 'Get a copy'
   const heading = compact ? 'text-sm sm:text-base' : 'text-base sm:text-lg'
+
+  // Reported from an effect rather than the handlers so the card unmounting
+  // with the reader open (stepping to the next concept) still hands the keys
+  // back to the popup.
+  useEffect(() => {
+    onViewerOpenChange?.(viewing)
+    return () => { if (viewing) onViewerOpenChange?.(false) }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [viewing])
 
   return (
     <div
@@ -152,6 +174,7 @@ export function ResourceMetaCard({ meta, compact }: ResourceMetaCardProps) {
           url={meta.getCopyUrl}
           title={meta.title ?? 'Source document'}
           subtitle={[meta.author, meta.year].filter(Boolean).join(' · ') || undefined}
+          hostFullScreen={hostFullScreen}
           onClose={() => setViewing(false)}
         />
       )}

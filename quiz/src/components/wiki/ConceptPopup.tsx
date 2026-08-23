@@ -42,6 +42,10 @@ export function ConceptPopup() {
   const [viewingDropdownOpen, setViewingDropdownOpen] = useState(false)
   const [showPremiumInfo, setShowPremiumInfo] = useState(false)
   const [showGalleryInPanel, setShowGalleryInPanel] = useState(false)
+  // A source document being read on the open page (`PdfViewerPanel`, opened
+  // from a resource page's "Read PDF"). It lays over the popup and binds the
+  // same keys, so while it is up the popup keeps its hands off them.
+  const [readerInPanel, setReaderInPanel] = useState(false)
   // Set when Previous / Next is pressed with the gallery open, so the page
   // stepped onto opens its own gallery. Mirrored in a ref because it is read
   // back from a panel's load callback, not from a render.
@@ -122,6 +126,9 @@ export function ConceptPopup() {
       // arrow stepped to the next figure *and* to the next concept at once.
       // The footer's Previous / Next still walk concepts — see `turnPage`.
       if (showGalleryInPanel) return
+      // Same hand-over for a document opened on the page: Esc closes the
+      // reader, arrows turn its pages, and neither reaches the concept behind.
+      if (readerInPanel) return
       // Esc unwinds one layer at a time: the page just opened, then focus mode,
       // then the popup — so a link followed by mistake costs one key, not the
       // whole reading position.
@@ -136,7 +143,7 @@ export function ConceptPopup() {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [open, close, turnPage, focusMode, showGalleryInPanel])
+  }, [open, close, turnPage, focusMode, showGalleryInPanel, readerInPanel])
 
   // Close viewing dropdown / premium info when clicking outside.
   useEffect(() => {
@@ -278,6 +285,7 @@ export function ConceptPopup() {
                 gallerySeek={gallerySeek}
                 onGallerySeekResolved={handleGallerySeek}
                 onGalleryOpenChange={setShowGalleryInPanel}
+                onReaderOpenChange={setReaderInPanel}
               />
             </div>
           ) : (

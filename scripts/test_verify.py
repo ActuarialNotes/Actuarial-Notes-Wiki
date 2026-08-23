@@ -422,6 +422,166 @@ class AppendOnlyTests(TempVault):
         self.assertEqual(C.check_append_only("HEAD~1"), [])
 
 
+# ─── Recording a pass (P1 + idempotency) ──────────────────────────────────────
+
+class RecordTests(TempVault):
+    """`verify_record.py` is where the spec's two hardest rules are made
+    mechanical: nothing verifies on reasoning alone, and a repeated sweep
+    reaffirms rather than duplicates."""
+
+    def setUp(self) -> None:
+        super().setUp()
+        import verify_record
+
+        self.R = verify_record
+        self.rel = "questions/exam-5/q.md"
+        self.write(self.rel, V.upsert_verification(QUESTION, V.new_block(QUESTION, V.log_rel_for(self.rel))))
+
+    def record(self, command: str, *argv: str) -> int:
+        saved = sys.argv
+        sys.argv = ["verify_record.py", command, *argv]
+        try:
+            return self.R.main()
+        finally:
+            sys.argv = saved
+
+    def finding(self, claim: str = "Stem gives earned premium of 4,200,000.", **kw) -> int:
+        return self.record(
+            "finding", self.rel,
+            "--severity", kw.get("severity", "critical"),
+            "--title", kw.get("title", "Stem value contradicts official PDF"),
+            "--locus", kw.get("locus", "stem, line 12"),
+            "--claim", claim,
+            "--evidence", kw.get("evidence", "CAS Exam 5 Fall 2019 Q17 official PDF p.4 states 3,850,000."),
+            "--date", kw.get("date", "2026-08-19"),
+            *kw.get("extra", []),
+        )
+
+    def log(self) -> V.VerificationLog:
+        return V.read_log(self.rel)
+
+    def block(self) -> dict:
+        return V.parse_verification((self.root / self.rel).read_text(encoding="utf-8"))
+
+    # — idempotency —
+
+    def test_a_finding_is_recorded_once(self) -> None:
+        self.finding()
+        self.assertEqual([e.entry_id for e in self.log().findings()], ["F-001"])
+        self.assertEqual(self.block()["open_findings"], 1)
+
+    def test_the_same_sweep_run_twice_produces_no_duplicate_findings(self) -> None:
+        self.finding()
+        self.finding()
+        self.finding()
+        log = self.log()
+        self.assertEqual([e.entry_id for e in log.findings()], ["F-001"])
+        self.assertEqual(len(log.open_findings()), 1)
+        self.assertEqual(self.block()["open_findings"], 1)
+
+    def test_a_later_sweep_reaffirms_rather_than_duplicating(self) -> None:
+        self.finding(date="2026-08-19")
+        self.finding(date="2026-08-26")
+        log = self.log()
+        self.assertEqual([e.entry_id for e in log.findings()], ["F-001"])
+        reaffirm = [e for e in log.entries if e.fields.get("reaffirms") == "F-001"]
+        self.assertEqual(len(reaffirm), 1)
+        self.assertEqual(reaffirm[0].entry_date, "2026-08-26")
+        self.assertEqual(reaffirm[0].entry_type, "comment")
+
+    def test_rephrasing_the_same_finding_is_still_recognised(self) -> None:
+        """The fingerprint normalises case, whitespace and punctuation, so a
+        differently-worded re-detection of the same problem still matches."""
+        self.finding("Stem gives earned premium of 4,200,000.")
+        self.finding("stem gives earned premium of  4200000")
+        self.assertEqual([e.entry_id for e in self.log().findings()], ["F-001"])
+
+    def test_a_different_problem_gets_its_own_id(self) -> None:
+        self.finding()
+        self.finding("Option D duplicates option B.", locus="option D", severity="minor",
+                     title="Duplicate distractor")
+        self.assertEqual([e.entry_id for e in self.log().findings()], ["F-001", "F-002"])
+        self.assertEqual(self.block()["open_findings"], 2)
+
+    def test_a_regression_after_a_fix_gets_a_new_entry_naming_the_old_one(self) -> None:
+        self.finding()
+        self.record("resolution", self.rel, "--resolves", "F-001", "--author", "human:jordan",
+                    "--note", "Fixed in commit 8ac31f2.", "--date", "2026-08-20")
+        self.assertEqual(self.block()["open_findings"], 0)
+
+        self.finding(date="2026-09-01")
+        log = self.log()
+        self.assertEqual([e.entry_id for e in log.findings()], ["F-001", "F-002"])
+        self.assertEqual(log.entries[-1].fields["recurrence_of"], "F-001")
+        self.assertEqual(self.block()["open_findings"], 1)
+
+    # — P1 —
+
+    def test_verified_without_a_source_is_refused(self) -> None:
+        with self.assertRaises(SystemExit) as caught:
+            self.record("pass", self.rel, "--status", "verified", "--confidence", "high",
+                        "--date", "2026-08-19")
+        self.assertIn("requires at least one --source", str(caught.exception))
+        self.assertEqual(self.block()["status"], "unverified")
+
+    def test_verified_with_a_source_is_allowed_and_passes_ci(self) -> None:
+        self.record("pass", self.rel, "--status", "verified", "--confidence", "high",
+                    "--source", "CAS Exam 5 Fall 2019 Q17 — official solution PDF, p.4",
+                    "--date", "2026-08-19")
+        block = self.block()
+        self.assertEqual(block["status"], "verified")
+        self.assertEqual(block["confidence"], "high")
+        self.assertEqual(len(block["sources"]), 1)
+        self.assertEqual(self.errors(self.rel), [])
+
+    def test_verified_over_an_open_critical_finding_is_refused(self) -> None:
+        self.finding()
+        with self.assertRaises(SystemExit) as caught:
+            self.record("pass", self.rel, "--status", "verified", "--confidence", "high",
+                        "--source", "CAS official PDF p.4", "--date", "2026-08-19")
+        self.assertIn("open critical finding", str(caught.exception))
+        self.assertNotEqual(self.block()["status"], "verified")
+
+    def test_in_review_needs_no_source(self) -> None:
+        self.record("pass", self.rel, "--status", "in_review", "--date", "2026-08-19")
+        self.assertEqual(self.block()["status"], "in_review")
+        self.assertEqual(self.errors(self.rel), [])
+
+    def test_a_finding_can_set_the_page_to_disputed(self) -> None:
+        self.finding(extra=["--set-status", "disputed"])
+        block = self.block()
+        self.assertEqual(block["status"], "disputed")
+        self.assertIsNone(block["confidence"])
+        self.assertEqual(self.errors(self.rel), [])
+
+    def test_recording_a_pass_leaves_a_same_day_log_entry(self) -> None:
+        """CI requires one; the recorder must always produce it."""
+        self.record("pass", self.rel, "--status", "verified", "--confidence", "medium",
+                    "--source", "SOA sample solutions (2024), Q17", "--date", "2026-08-19")
+        dates = [e.entry_date for e in self.log().entries]
+        self.assertIn("2026-08-19", dates)
+
+    def test_every_write_is_an_append(self) -> None:
+        """P3 by construction: the log only ever grows."""
+        self.finding()
+        snapshots = [V.log_path_for(self.rel, self.root).read_text(encoding="utf-8")]
+        self.record("comment", self.rel, "--note", "Checked the sibling batch too.",
+                    "--date", "2026-08-19")
+        snapshots.append(V.log_path_for(self.rel, self.root).read_text(encoding="utf-8"))
+        self.record("resolution", self.rel, "--resolves", "F-001", "--author", "human:jordan",
+                    "--note", "Fixed.", "--date", "2026-08-20")
+        snapshots.append(V.log_path_for(self.rel, self.root).read_text(encoding="utf-8"))
+        for earlier, later in zip(snapshots, snapshots[1:]):
+            self.assertTrue(later.startswith(earlier.rstrip("\n")))
+
+    def test_the_recorded_log_passes_the_log_checks(self) -> None:
+        self.finding()
+        self.record("resolution", self.rel, "--resolves", "F-001", "--author", "human:jordan",
+                    "--note", "Fixed in commit 8ac31f2.", "--date", "2026-08-20")
+        problems = C.check_log_file(V.log_path_for(self.rel, self.root))
+        self.assertEqual([p.message for p in problems], [])
+
+
 # ─── Frontmatter handling ─────────────────────────────────────────────────────
 
 class FrontmatterTests(unittest.TestCase):

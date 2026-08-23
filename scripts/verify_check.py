@@ -166,10 +166,15 @@ def check_block(rel: str, text: str) -> list[Problem]:
 def iter_log_files() -> list[Path]:
     if not V.VERIFY_DIR.is_dir():
         return []
-    return sorted(
-        p for p in V.VERIFY_DIR.rglob("*.md")
-        if V.RUNS_DIRNAME not in p.relative_to(V.VERIFY_DIR).parts
-    )
+    logs: list[Path] = []
+    for path in sorted(V.VERIFY_DIR.rglob("*.md")):
+        parts = path.relative_to(V.VERIFY_DIR).parts
+        # `_runs/` holds batch summaries, not logs; a top-level README documents
+        # the directory itself. Neither mirrors a vault path.
+        if any(part.startswith("_") for part in parts) or parts == ("README.md",):
+            continue
+        logs.append(path)
+    return logs
 
 
 def check_log_file(path: Path) -> list[Problem]:

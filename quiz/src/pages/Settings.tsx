@@ -21,7 +21,7 @@ import { DailyGoalPicker } from '@/components/DailyGoalPicker'
 import { LeagueSettingsCard } from '@/components/LeagueSettingsCard'
 import { SoundSettingsCard } from '@/components/SoundSettingsCard'
 import { EmailSettingsCard } from '@/components/EmailSettingsCard'
-import { DAILY_PLAN_EMAIL_ENABLED, LEAGUES_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
+import { DAILY_PLAN_EMAIL_ENABLED, LEAGUES_ENABLED, TOUR_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { CharacterSkinSelector } from '@/components/MascotWidget'
 import { COLOR_THEMES } from '@/lib/colorThemes'
@@ -1043,24 +1043,26 @@ export default function Settings() {
                   <CardTitle>Support</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-medium">Take the tour</p>
-                      <p className="text-xs text-muted-foreground">
-                        Replay the guided walkthrough of Study Guides, concept popups, flashcards, quizzes
-                        and more. Minimize it any time — it parks as a button in the bottom-right corner
-                        and picks up where you left off.
-                      </p>
+                  {TOUR_ENABLED && (
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                      <div>
+                        <p className="text-sm font-medium">Take the tour</p>
+                        <p className="text-xs text-muted-foreground">
+                          Replay the guided walkthrough of Study Guides, concept popups, flashcards, quizzes
+                          and more. Minimize it any time — it parks as a button in the bottom-right corner
+                          and picks up where you left off.
+                        </p>
+                      </div>
+                      <Button
+                        variant="outline"
+                        onClick={() => restartTour()}
+                        className="shrink-0"
+                      >
+                        <GraduationCap className="h-4 w-4 mr-2" />
+                        Start tour
+                      </Button>
                     </div>
-                    <Button
-                      variant="outline"
-                      onClick={() => restartTour()}
-                      className="shrink-0"
-                    >
-                      <GraduationCap className="h-4 w-4 mr-2" />
-                      Start tour
-                    </Button>
-                  </div>
+                  )}
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div>
                       <p className="text-sm font-medium">Contact us</p>

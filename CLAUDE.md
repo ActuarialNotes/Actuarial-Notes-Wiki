@@ -311,7 +311,11 @@ Other important `lib/` modules:
   `docs/sound-design.md`.
 - `featureFlags.ts` — build-time feature flags (`RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
   `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`, `MASTERY_ANALYTICS_ENABLED`,
-  `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`)
+  `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `TOUR_ENABLED`). `TOUR_ENABLED` is
+  **off**: the guided onboarding tour (`components/OnboardingTour.tsx` +
+  `hooks/useOnboardingTour.ts`) is parked pending a simpler rebuild, so `App.tsx` doesn't
+  mount it and Settings → Support hides the "Take the tour" row. The component, store and
+  the `data-tour` markers across the app are left intact — re-enabling is a one-line change.
 - `research*.ts` (researchOntology / researchMetrics / researchPeriods / researchProjectMeta) — Research-tab logic (flag-gated)
 - `flashcardSync.ts` — cross-device persistence for the flashcard state: the collected
   set (`hooks/useCollectedCards`) and the deck / custom order

@@ -15,6 +15,7 @@ import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { computeExamReadiness } from '@/lib/readiness'
 import { examStatus } from '@/lib/examStatus'
 import { splitAuthors } from '@/lib/authorNames'
+import { ExamPill, MetaPill } from '@/components/wiki/ResourcePills'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { cn } from '@/lib/utils'
 
@@ -399,31 +400,20 @@ export default function WikiHome() {
                   )}
                   <div className="p-4 flex flex-col gap-2 flex-1">
                     <p className="text-sm font-semibold leading-snug">{book.title ?? book.name}</p>
-                    {(book.author || book.year || book.edition || book.publisher) && (
+                    {(book.exams?.length || book.author || book.year || book.edition || book.publisher) && (
                       <div className="flex flex-wrap gap-1">
-                        {splitAuthors(book.author).map((author, i) => (
-                          <span
-                            key={`author-${i}`}
-                            className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground"
-                          >
-                            {author}
-                          </span>
+                        {/* The exam(s) this source is a reading for lead the row:
+                            on a shelf that mixes every exam's syllabus, that is
+                            what the card is being scanned for. */}
+                        {book.exams?.map(exam => (
+                          <ExamPill key={`exam-${exam}`}>{exam}</ExamPill>
                         ))}
-                        {book.year && (
-                          <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground">
-                            {book.year}
-                          </span>
-                        )}
-                        {book.edition && (
-                          <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground">
-                            {book.edition} ed.
-                          </span>
-                        )}
-                        {book.publisher && (
-                          <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground">
-                            {book.publisher}
-                          </span>
-                        )}
+                        {splitAuthors(book.author).map((author, i) => (
+                          <MetaPill key={`author-${i}`}>{author}</MetaPill>
+                        ))}
+                        {book.year && <MetaPill>{book.year}</MetaPill>}
+                        {book.edition && <MetaPill>{book.edition} ed.</MetaPill>}
+                        {book.publisher && <MetaPill>{book.publisher}</MetaPill>}
                       </div>
                     )}
                   </div>

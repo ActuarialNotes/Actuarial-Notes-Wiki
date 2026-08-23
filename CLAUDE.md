@@ -167,6 +167,13 @@ Other important `lib/` modules:
   browser and the concept detail modal — add it to any new surface that lists questions rather than
   writing a new chip. Attempt history is server-side only, so signed-out viewers pass
   `showNew={false}` (via the hook's `tracked` flag) and see no chip instead of a false "Not attempted".
+- `resourceExams.ts` — which exam(s) a resource is a syllabus reading for. A
+  `Resources/Books` page names no exam; the relationship is authored the other way round, in
+  each exam page's `Source Material` callout, so this module inverts those callouts into a
+  resource-name → exam-labels map. It is built once at bundle time (`vite.config.ts`) and
+  hung on the wiki index's `document` items as `exams`, which is what lets a resource card
+  lead its pill row with **Exam P-1** / **Exam MAS-I** without re-reading every exam page.
+  Imports are relative, not `@/`-aliased — the vite config pulls it into its own Node graph.
 - `pastExams.ts` — the past-sitting shelf behind the quiz builder's **Mock Exam** source:
   `buildPastExamRows` unions the authored catalogue (`data/pastExams.ts`) with the sittings the
   question bank actually holds, so a released paper that hasn't been imported still lists

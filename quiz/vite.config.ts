@@ -6,6 +6,7 @@ import path from 'path'
 import { readdir, readFile } from 'fs/promises'
 import fm from 'front-matter'
 import { KEYSTONE_EXAMS } from './src/data/keystoneConcepts'
+import { buildResourceExamMap, examsForResource } from './src/lib/resourceExams'
 
 const REPO_ROOT = path.resolve(__dirname, '..')
 
@@ -30,6 +31,7 @@ interface WikiIndexItem {
   name: string
   path: string
   topic?: string
+  exams?: string[]
   author?: string
   year?: number
   title?: string
@@ -48,14 +50,22 @@ async function collectWikiContent(): Promise<WikiBundleData> {
   const index: WikiIndexItem[] = []
 
   // Exam files at repo root
+  const examPages: { name: string; markdown: string }[] = []
   const rootEntries = await readdir(REPO_ROOT).catch(() => [] as string[])
   for (const name of rootEntries) {
     if (!name.endsWith('.md') || !/^Exam\b/i.test(name)) continue
     const text = await readFile(path.join(REPO_ROOT, name), 'utf-8').catch(() => null)
     if (text == null) continue
     files[name] = text
-    index.push({ category: 'exam', name: name.replace(/\.md$/i, ''), path: name })
+    const bare = name.replace(/\.md$/i, '')
+    index.push({ category: 'exam', name: bare, path: name })
+    examPages.push({ name: bare, markdown: text })
   }
+
+  // Which exams each resource is a syllabus reading for — inverted from the
+  // exam pages' Source Material callouts, since the resource pages themselves
+  // don't name an exam.
+  const examMap = buildResourceExamMap(examPages)
 
   // Concepts/
   const conceptEntries = await readdir(path.join(REPO_ROOT, 'Concepts')).catch(() => [] as string[])
@@ -76,10 +86,13 @@ async function collectWikiContent(): Promise<WikiBundleData> {
     files[`Resources/Books/${name}`] = text
     const attrs = (fm<Record<string, unknown>>(text).attributes ?? {}) as Record<string, unknown>
     const yearNum = attrs['Year'] ? parseInt(String(attrs['Year']), 10) : undefined
+    const bare = name.replace(/\.md$/i, '')
+    const exams = examsForResource(examMap, bare)
     index.push({
       category: 'document',
-      name: name.replace(/\.md$/i, ''),
+      name: bare,
       path: `Resources/Books/${name}`,
+      exams: exams.length > 0 ? exams : undefined,
       author: (attrs['Authors'] || attrs['Author']) ? String(attrs['Authors'] || attrs['Author']) : undefined,
       year: Number.isFinite(yearNum) ? yearNum : undefined,
       title: attrs['Title'] ? String(attrs['Title']) : undefined,

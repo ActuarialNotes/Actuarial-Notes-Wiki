@@ -5,6 +5,15 @@ Year: "2014"
 date: "2014"
 Edition: "Study Note (Oct 2014, rev. Sep 2015)"
 Publisher: Casualty Actuarial Society
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:08c7030cb6298ae5783fdf9ea291fe9bb05b17711bde9d45619eeac12ed14640
+  sources: []
+  open_findings: 0
+  log: .verify/Resources/Books/Life Contingencies (Struppeck - 2014).md
 ---
 ![[Life Contingencies (Struppeck - 2014) - Cover.svg]]
 

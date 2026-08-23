@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d0d7fa3295a286e701e5dedb44f08318282f1eee18cf653230df7ef3e5bfcaed
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Policy Information.md
+---
+
 **Policy Information** (or provisions) refers to the contractual terms of an insurance policy that determine how much of a ground-up loss $X$ the insurer pays.
 - The main provisions are [[Deductible]] ($d$), [[Benefit Limit|benefit limit]] ($u$), and [[Coinsurance Percentage|coinsurance]] ($\alpha$)
 - These provisions transform the loss random variable $X$ into a [[Payment Random Variable]] $Y$

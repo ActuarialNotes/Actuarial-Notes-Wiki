@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3d37fe58c9a5bc2c3f2e68a222814d492ee41e2dd3105472c7fd8ff019f7793f
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Empirical Bayes Credibility.md
+---
+
 **Empirical Bayes credibility** estimates the structural parameters $\mu$, $v$ and $a$ of a [[Bühlmann Credibility]] or [[Bühlmann-Straub Credibility]] model *from the observed experience itself*, rather than assuming them known. It is how credibility is actually applied when no prior is given.
 
 > $$\hat{v} = \frac{1}{r(n-1)}\sum_{i=1}^{r}\sum_{j=1}^{n}\left(X_{ij} - \bar{X}_i\right)^{2}$$

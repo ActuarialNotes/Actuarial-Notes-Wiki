@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:132970b99797a2b768cf2fccff8e4a811035b7e924a705ee1eb79894538e72df
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Compound Interest.md
+---
+
 Under **compound interest**, interest earned in each period is added to the principal and itself earns interest in subsequent periods. An investment of $P$ at effective annual rate $i$ grows to:
 
 > $$A(t) = P(1+i)^t$$

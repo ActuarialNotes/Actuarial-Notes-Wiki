@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ae53c7b81c6c1afff9cb682b2910e22f949dfac8212fa2a20b173e58ddb821f0
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Entropy.md
+---
+
 **Entropy** (in the context of [[Statistical Learning]]) is a measure of **node impurity** in a classification [[Decision Tree]], derived from information theory. Like the [[Gini Index]], it equals zero for a pure node and is maximized when classes are equally represented.
 
 > $$D = -\sum_{k=1}^K \hat{p}_{mk} \log(\hat{p}_{mk})$$

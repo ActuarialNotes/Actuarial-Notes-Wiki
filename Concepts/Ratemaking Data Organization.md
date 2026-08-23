@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:131d22610f1a15ceedfc64c4bf1545cc749314f5c6b289ed4d6156795289a4d6
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Ratemaking Data Organization.md
+---
+
 **Ratemaking Data Organization** is the choice of how premium, loss and exposure transactions are grouped into cohorts for a rate analysis. Werner & Modlin frame the choice as a trade-off between two properties an actuary cannot have at once: **accuracy** — how cleanly losses are matched to the premium that funds them — and **availability**, how soon the cohort can be used.
 
 > $$\text{Experience Ratio} = \frac{\text{Losses of a cohort, developed and trended}}{\text{Premium of that cohort, on level}}$$

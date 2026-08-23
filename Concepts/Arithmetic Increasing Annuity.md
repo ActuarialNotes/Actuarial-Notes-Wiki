@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:43d6091e9ba51549d85b32b71a6a19a1eacbf612a83a0181bf66bf51f3d347e0
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Arithmetic Increasing Annuity.md
+---
+
 An **arithmetic increasing annuity** has payments $1, 2, 3, \ldots, n$ at the end of periods $1, 2, \ldots, n$. Its present value is denoted $(Ia)_{\overline{n}|}$:
 
 > $$(Ia)_{\overline{n}|} = \frac{\ddot{a}_{\overline{n}|} - nv^n}{i}$$

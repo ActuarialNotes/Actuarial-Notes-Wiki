@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f54bbcbabf6d75479097ee1d8830e1bf5546326ed9e509eec65658a01cae021a
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Stationarity.md
+---
+
 A [[Time Series]] is **(weakly) stationary** when its mean, variance and autocovariances do not depend on time — only on the lag. Stationarity is the assumption every [[ARIMA]] result rests on, because a model whose behaviour drifts cannot be estimated from one realization.
 
 > $$E[Y_t] = \mu \quad \text{for all } t$$

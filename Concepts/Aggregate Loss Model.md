@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:558fc89c22f6bc32dbe717817c040eed23aae8ea828165a8e865e2bc8fe9a8ec
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Aggregate Loss Model.md
+---
+
 An **Aggregate Loss Model** models the total (aggregate) losses $S$ from a portfolio as the sum of a **random number** of individual claim amounts:
 
 > $$S = X_1 + X_2 + \cdots + X_N$$

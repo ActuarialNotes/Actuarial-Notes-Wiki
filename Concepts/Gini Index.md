@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ffde178c889c57a39b567b9203ec84479c93994ba5a057629b773640d122b8a7
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Gini Index.md
+---
+
 The **Gini Index** has two distinct uses in actuarial statistics:
 
 **1. Decision tree node impurity** — measures the purity of a node in a classification [[Decision Tree]]. A pure node (all one class) has Gini = 0.

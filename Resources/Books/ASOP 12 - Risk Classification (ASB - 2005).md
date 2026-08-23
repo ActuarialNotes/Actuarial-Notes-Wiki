@@ -7,6 +7,15 @@ Publisher: Actuarial Standards Board
 Type: Actuarial Standard of Practice
 Code: ASOP No. 12
 Available from: "[actuarialstandardsboard.org](https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop012_132.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4ca9a5979a56e4d9a3aa869351aadca3a2a4c2a53123fe802c6ec93c85c90305
+  sources: []
+  open_findings: 0
+  log: .verify/Resources/Books/ASOP 12 - Risk Classification (ASB - 2005).md
 ---
 ![[ASOP 12 - Risk Classification (ASB - 2005) - Cover.svg]]
 

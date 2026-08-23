@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:84ccaf826a32add76d81f76e53f0d6aa8c3ca276034d02d2481a9278466e60e1
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/AIC.md
+---
+
 The **Akaike Information Criterion (AIC)** is a model selection measure that balances **goodness of fit** against **model complexity** by penalizing the log-likelihood for the number of parameters.
 
 > $$\text{AIC} = -2\ell(\hat{\boldsymbol{\beta}}) + 2p$$

@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bcbfa268ea6f1d1f5b77f104835b3295e8c2b21627a2c474daa28f643ef54b6a
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Regulatory Reporting.md
+---
+
 **Regulatory Reporting** is the prescribed communication of reserves and supporting actuarial work to insurance regulators. The three linked deliverables are the **Annual Statement** (Schedule P), the **Statement of Actuarial Opinion** (SAO), and the **Actuarial Report** that supports it.
 
 > $$\text{Opinion range: } \; \text{Low} \le \text{Carried Reserve} \le \text{High}$$

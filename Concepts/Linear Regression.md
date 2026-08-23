@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:86320f46b9c5701eeb04f05b43756b6ed5114d6f545e5c9c136407d056b79382
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Linear Regression.md
+---
+
 **Linear Regression** models a continuous response as a linear function of predictors plus Normal error, with coefficients chosen to minimize the [[Residual Sum of Squares]] (ordinary least squares, OLS). It is the base case of the [[Extended Linear Model]] family: a [[Generalized Linear Model]] with a Normal response and the identity [[Link Function]].
 
 > $$Y_i = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip} + \varepsilon_i, \qquad \varepsilon_i \stackrel{\text{iid}}{\sim} N(0, \sigma^2)$$

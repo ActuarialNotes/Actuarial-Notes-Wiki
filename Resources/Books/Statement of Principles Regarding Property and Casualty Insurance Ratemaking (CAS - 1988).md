@@ -6,6 +6,15 @@ date: "1988"
 Publisher: Casualty Actuarial Society
 Type: Statement of Principles
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-05/Statement-Of-Principles-Ratemaking.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:decf7af8b05fea9b013e78c297fd358bf2753a17bd45861e0522ba15c8a4aba6
+  sources: []
+  open_findings: 0
+  log: .verify/Resources/Books/Statement of Principles Regarding Property and Casualty Insurance Ratemaking (CAS - 1988).md
 ---
 ![[Statement of Principles Regarding Property and Casualty Insurance Ratemaking (CAS - 1988) - Cover.svg]]
 

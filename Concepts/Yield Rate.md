@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ac8135a55bf7c6ade9165707eb7ba28bacc888f4dfeb0e58c936b3c7f8c3d6bc
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Yield Rate.md
+---
+
 The **yield rate** $j$ (also called the yield to maturity) is the internal rate of return of a bond — the interest rate per period at which the present value of all future cash flows equals the current price $P$.
 
 > $$P = Fr \cdot a_{\overline{n}|j} + C \cdot v^n$$

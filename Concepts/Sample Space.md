@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a3fb736d5acccbec379a38a06772c978f75639a524be7d2b93aa90f0bc7fcc52
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Sample Space.md
+---
+
 A **Sample Space** $S$ (or $\Omega$) is the set of all possible outcomes of a random experiment.
 - Every conceivable result of the experiment appears as exactly one element of $S$
 - Outcomes in $S$ must be mutually exclusive (no two can occur simultaneously) and collectively exhaustive (together they cover every possibility)

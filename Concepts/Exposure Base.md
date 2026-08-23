@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c2605e5ee605609e584eee4e85ba4c875ac68fc44f823c9643c60af2719ef6c4
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Exposure Base.md
+---
+
 **Exposure Base** is the basic unit of risk that underlies the premium — the quantity the rate is charged *per*. It is the denominator of the pure premium and the measure by which one insured's amount of insurance is compared with another's.
 
 > $$\text{Pure Premium} = \frac{\text{Losses} + \text{LAE}}{\text{Earned Exposures}}$$

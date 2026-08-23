@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:02e84889f3bbff527b798217824dfbc56e1cac13621703c9396943229e1f7504
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Time Series.md
+---
+
 A **Time Series** is a sequence of observations $\{Y_t\}$ indexed by time $t = 1, 2, \ldots, T$. Time series analysis models temporal dependence to understand structure and make forecasts.
 
 **Key components of a time series:**

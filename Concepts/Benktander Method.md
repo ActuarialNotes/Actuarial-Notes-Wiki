@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f056190d9350f7bb4f214494c5f261e38b09e6ada29cacdcd8f5e2c0c1327a11
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Benktander Method.md
+---
+
 **Benktander Method** (Gunnar Benktander, also called the iterated BF or GB method) runs the [[Bornhuetter-Ferguson Method|Bornhuetter-Ferguson]] calculation a second time, using the **BF ultimate in place of the a priori** expectation. The result sits between BF and the [[Chain Ladder Method|chain ladder]].
 
 > $$U_{\text{GB}} = C + \left(1 - \tfrac{1}{\text{CDF}}\right) U_{\text{BF}}$$

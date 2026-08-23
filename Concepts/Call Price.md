@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:71350d2cb5117618c291b3750105fb0f2fc9176c6c19a76ad473c7c05a78a6a1
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Call Price.md
+---
+
 The **call price** is the price at which an issuer may redeem a [[Callable Bond]] before maturity on a specified call date. The call price is typically set at or above [[Face Value]] to compensate the bondholder for the loss of future coupon income.
 
 - The difference between the call price and the face value is the **[[Call Premium]]**:

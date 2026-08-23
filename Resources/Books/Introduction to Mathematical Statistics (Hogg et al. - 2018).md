@@ -6,6 +6,15 @@ date: "2018"
 Edition: 8e
 Publisher: Pearson
 ISBN: 978-0134686998
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:492a0c6e0320a7191791afefd6062510191b0a60cf5095152e73f3fb511952f4
+  sources: []
+  open_findings: 0
+  log: .verify/Resources/Books/Introduction to Mathematical Statistics (Hogg et al. - 2018).md
 ---
 ![[Introduction to Mathematical Statistics (Hogg et al. - 2018) - Cover.svg]]
 

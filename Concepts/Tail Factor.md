@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:01e2d0f8812767826482a4065c1827c52ee275fe9f9c2b97c640dc4e5bfa3a46
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Tail Factor.md
+---
+
 **Tail Factor** is the development factor applied beyond the last maturity observable in the triangle — the estimate of all emergence that will occur after the data runs out.
 
 > $$\text{CDF}_{\text{last age} \to \text{ult}} = f_{\text{last observed}} \times \text{Tail}$$

@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:81bafe3d54fc0c3cbe196363acac5d60a09db2af16cfcc9f88dececbd55cf20d
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Covariance Structure.md
+---
+
 The **covariance structure** of a [[Linear Mixed Model]] is the pattern imposed on $\mathrm{Var}(\mathbf{y}) = \mathbf{Z}\mathbf{D}\mathbf{Z}^\top + \mathbf{R}$. Choosing it is how the model says *which observations are correlated and how the correlation decays*.
 
 > $$\mathbf{V}_i = \mathbf{Z}_i\mathbf{D}\mathbf{Z}_i^{\top} + \mathbf{R}_i$$

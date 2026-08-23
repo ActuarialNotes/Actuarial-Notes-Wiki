@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:867dc04a457b03f71c0b6b60c61da67fd54227faf439673e3d653cb15fcd119e
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Call Premium.md
+---
+
 The **call premium** is the amount by which the [[Call Price]] of a [[Callable Bond]] exceeds its [[Face Value]]:
 
 > $$\text{Call Premium} = \text{Call Price} - \text{Face Value}$$

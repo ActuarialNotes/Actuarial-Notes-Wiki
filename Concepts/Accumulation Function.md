@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b8a649469441da0507a557729d1afa00a857dd94ccdc8a1b724ddd8dd0619a22
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Accumulation Function.md
+---
+
 The **accumulation function** $a(t)$ gives the accumulated value at time $t \geq 0$ of 1 unit invested at time 0. It must satisfy $a(0) = 1$ and be non-decreasing.
 
 > $$a(t) = \exp\!\left(\int_0^t \delta(s)\,ds\right)$$

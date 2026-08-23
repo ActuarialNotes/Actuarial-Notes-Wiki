@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8336c63888259d59b238c0df3d5c5ca0ce8599ae5cc26992c96967975eb20ca3
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Random Forest.md
+---
+
 A **random forest** is [[Bagging|bagged]] [[Decision Tree|trees]] with one extra step: at *each split*, only a random subset of $m$ predictors is eligible. That decorrelates the trees, so averaging removes more variance than bagging can.
 
 > $$m \approx \sqrt{p} \ \text{(classification)}, \qquad m \approx p/3 \ \text{(regression)}$$

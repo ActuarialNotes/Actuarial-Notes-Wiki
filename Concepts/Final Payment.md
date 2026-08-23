@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2f66fae43e24fe286c66a7be803a4135b0368b1c1cdc0c430ca232323e54ee2e
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Final Payment.md
+---
+
 The **final payment** on a loan is the last payment made to retire the outstanding balance, which may differ from the regular payment amount when the [[Term of Loan]] is not an integer number of periods.
 
 - There are two conventions:

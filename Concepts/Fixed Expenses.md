@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0da16c098c3fd44a40cf641651818759247d9998fd48b2e3c4e86799ee21f7a4
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Fixed Expenses.md
+---
+
 **Fixed Expenses** are underwriting expenses that do not vary with the size of the premium — policy issuance, most general expenses, inspections, filing fees, part of "other acquisition". They cost roughly the same on a $\$500$ policy as on a $\$5{,}000$ one, so they are recovered as a **dollar amount per exposure**, not as a percentage of premium.
 
 > $$F = \frac{\text{Total Fixed Expenses}}{\text{Earned Exposures}}$$

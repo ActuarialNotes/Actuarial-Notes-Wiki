@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fa51c33edc6645768c9e7357bd676fb6ce0a3d736d77bb67b543b35e4d7fe95a
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Principal Components Analysis.md
+---
+
 **Principal Components Analysis (PCA)** is an unsupervised [[Statistical Learning]] technique that finds a low-dimensional representation of a high-dimensional dataset by identifying the directions (**principal components**) of maximum variance.
 
 > **First principal component** — the direction $\mathbf{z}_1 = \mathbf{X}\boldsymbol{\phi}_1$ that maximizes $\text{Var}(\mathbf{z}_1)$:

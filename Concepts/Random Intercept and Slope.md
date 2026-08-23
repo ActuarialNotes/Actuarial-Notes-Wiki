@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cac8c90bb2ae452e27c3bf7613ca4e8e6383fe85eae21890635a335d0ab3266b
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Random Intercept and Slope.md
+---
+
 A **random intercept** lets each group have its own baseline; a **random slope** lets each group have its own response to a predictor. Together they are the two building blocks of a [[Linear Mixed Model]]'s [[Random Effects|random part]].
 
 > $$y_{ij} = (\beta_0 + b_{0i}) + (\beta_1 + b_{1i})x_{ij} + \varepsilon_{ij}$$

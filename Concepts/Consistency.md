@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0e5ac3dec2deb3342adcb186b309eaa66c01e41061bf21df3bdbc191328f4a1d
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Consistency.md
+---
+
 An estimator $\hat{\theta}_n$ is **consistent** for $\theta$ if it converges in probability to the true parameter value as the sample size grows without bound — larger samples make the estimator's error arbitrarily small with arbitrarily high probability.
 
 > $$\hat{\theta}_n \xrightarrow{p} \theta \quad \text{as } n \to \infty$$

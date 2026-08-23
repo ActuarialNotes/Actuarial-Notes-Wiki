@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:aeb510eb16e4753a73187ff5c5f5487fac5e3dbafee1d701f7e6c905d385f09b
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Callable Bond.md
+---
+
 A **callable bond** gives the **issuer** the right (but not the obligation) to redeem the bond before maturity at a specified [[Call Price]] on or after a specified call date. Issuers call bonds when interest rates fall, allowing them to refinance at a lower rate.
 
 - For a callable bond, the investor faces reinvestment risk: if called early, the investor must reinvest at lower prevailing rates. The price of a callable bond is set so the investor achieves at least a **minimum yield** across all possible call scenarios:

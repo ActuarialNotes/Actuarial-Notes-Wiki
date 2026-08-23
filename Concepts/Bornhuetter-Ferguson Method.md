@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7842fe1ff5e7cff656731227962a9d52144beee7bf4d81300f7b29f6102e1db5
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Bornhuetter-Ferguson Method.md
+---
+
 **Bornhuetter-Ferguson Method** (BF) estimates ultimate losses by adding to what has actually been reported an estimate of what has *not* — computed from an a priori expectation and the percentage still unreported.
 
 > $$U_{\text{BF}} = C + \left(1 - \tfrac{1}{\text{CDF}}\right) \times U_{0}$$

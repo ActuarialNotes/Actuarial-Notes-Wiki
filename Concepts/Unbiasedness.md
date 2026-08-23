@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7d25832bcd1ad1a8c20b3e6816d64cf44975928e75b958fd41622332c6e6d66a
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Unbiasedness.md
+---
+
 An estimator $\hat{\theta}$ of a parameter $\theta$ is **unbiased** if its expected value equals the true parameter value for all $\theta$. Unbiasedness means the estimator is correct **on average**.
 
 > $$E[\hat{\theta}] = \theta \quad \text{for all } \theta$$

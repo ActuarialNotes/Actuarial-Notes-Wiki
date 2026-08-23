@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2ad62dd31a9ba6370f1462ff523e563ef20631f594b177d87db34bcc57185365
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Yield Curve.md
+---
+
 The **yield curve** is a graph plotting the [[Spot Rate]] $s_t$ (or yield to maturity) against time to maturity $t$, summarizing the term structure of interest rates at a given point in time. Bonds are priced by discounting each cash flow at the spot rate for its maturity:
 
 > $$P = \sum_{t=1}^{n} \frac{C_t}{(1+s_t)^t}$$

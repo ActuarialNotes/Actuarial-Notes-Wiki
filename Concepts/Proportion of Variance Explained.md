@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5b445f73141540349bb54250ee26c640847d77ef36a43e0dd56b709bab6259f7
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Proportion of Variance Explained.md
+---
+
 The **proportion of variance explained (PVE)** is the share of the total variance in the data captured by a principal component. It is how [[Principal Components Analysis]] answers "how much did I lose by keeping only $M$ components?"
 
 > $$\mathrm{PVE}_m = \frac{\lambda_m}{\sum_{j=1}^{p}\lambda_j}$$

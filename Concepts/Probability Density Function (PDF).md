@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:026219c9c407ec4dd8a18e978ee2d0d0f84dff171af19521e3dfd3ba590c584e
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Probability Density Function (PDF).md
+---
+
 A **Probability Density Function (PDF)** describes the relative likelihood of a continuous random variable taking a particular value. The probability that $X$ falls in an interval $[a, b]$ is the area under $f$ over that interval.
 
 > $$P(a \leq X \leq b) = \int_a^b f(x)\, dx$$

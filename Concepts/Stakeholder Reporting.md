@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b56db88954a16735397896b62c7792ff472a6b6f6231f4c9cf1ba48ac1161310
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Stakeholder Reporting.md
+---
+
 **Stakeholder Reporting** is the communication of reserve and pricing results to the parties who act on them — management, the board, regulators, investors, rating agencies and auditors. Each needs the same substance at a different depth, and [[ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007)|ASOP 43]] fixes what must be disclosed regardless of audience.
 
 > $$\Delta\text{Reserve} = \text{New AY} - \text{Payments} \pm \text{Prior-year development}$$

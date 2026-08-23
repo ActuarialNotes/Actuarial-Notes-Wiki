@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d89773ae1a601380de79b7d4beb15b3567bd73c1a5718242c466975c30c4ffd2
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Deductible Recovery.md
+---
+
 **Deductible Recovery** is the amount an insurer bills back to a policyholder for claim payments it advanced within that policyholder's deductible. It arises in **large-deductible programmes**, where the insurer pays claims in full — for statutory, licensing and claims-control reasons — and then reimburses itself from the insured.
 
 > $$\text{Recovery} = \min\!\left(X,\; d\right) \text{ per occurrence}$$

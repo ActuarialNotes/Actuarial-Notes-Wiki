@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b424b0f31b62055311870584cb82806dfe4f6be6961f90bb66aab1ba4cb9c713
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Payment Random Variable.md
+---
+
 The **Payment Random Variable** ($Y$) is the amount the insurer actually pays on a claim, derived from the [[Loss Random Variable]] $X$ after applying all policy provisions — [[Deductible]], [[Coinsurance Percentage|coinsurance]], and [[Benefit Limit|benefit limit]].
 
 > $$Y = \alpha\,\min\!\bigl((X-d)_+,\; u\bigr)$$

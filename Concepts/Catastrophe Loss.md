@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:86074a36b3ffb7d86699da5a473a91f08bfcf436817db189b4f5cba9bafb3e06
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Catastrophe Loss.md
+---
+
 **Catastrophe Loss** is loss arising from a single event, or a series of related events, that produces many claims at once — hurricane, earthquake, wildfire, hail, winter storm, terrorism. The defining feature for ratemaking is not the size of any one claim but the **correlation** across the book: the independence assumption that makes ordinary experience credible fails completely.
 
 > $$\text{Total Pure Premium} = \text{Non-Cat PP} + \text{Cat Load}$$

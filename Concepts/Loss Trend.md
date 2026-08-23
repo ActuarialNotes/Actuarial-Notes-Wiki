@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a963eddcb1bcc9428616a298250884c7aea5d7e96d227bfaf44b99ed0ec120d5
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Loss Trend.md
+---
+
 **Loss Trend** is the annual rate of change in loss cost over time — driven by inflation, the legal environment, technology, safety and mix — applied to bring historical losses from the cost level of the experience period to the cost level of the **future policy period**.
 
 > $$\text{Trend Factor} = (1 + t)^{n}$$

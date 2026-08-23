@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:706cce7fbd7603a6e8a66e4eb79af9d3129356ab1ea9c3fbe8ecf508927444ad
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Link Function.md
+---
+
 A **Link Function** $g$ is a monotone, differentiable function in a [[Generalized Linear Model]] that connects the **expected value** of the response $\mu = E[Y]$ to the **linear predictor** $\eta = \mathbf{x}^\top\boldsymbol{\beta}$:
 
 > $$g(\mu) = \eta$$

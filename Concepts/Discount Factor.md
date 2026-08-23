@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:81976b166811f6c61d8a1dd9b09e5afc854c2d4a0f073ca4e139f6106de0137d
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Discount Factor.md
+---
+
 The **discount factor** $v$ is the [[Present Value]] of $1$ payable one period in the future:
 
 > $$v = \frac{1}{1+i}$$

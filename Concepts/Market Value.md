@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c4d09fa5a154af7c9a537e4d991229676442cbb4da557c707ce476e69c475b3e
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Market Value.md
+---
+
 The **market value** of a bond (or any financial asset) is its current price in the open market, determined by supply and demand. For bonds, market value equals the [[Present Value]] of all future cash flows discounted at the prevailing market [[Yield Rate]]:
 
 > $$\text{Market Value}$$

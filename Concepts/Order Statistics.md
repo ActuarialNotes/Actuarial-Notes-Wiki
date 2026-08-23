@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:dd7516c28ca3d5a6b54d9937405d7436d1a4006116fc49635fd60076ea7cd16e
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Order Statistics.md
+---
+
 **Order Statistics** are the values of a random sample arranged in non-decreasing order. Given a sample $X_1, X_2, \ldots, X_n$, the $k$-th order statistic $X_{(k)}$ is the $k$-th smallest value. The minimum is $X_{(1)}$ and the maximum is $X_{(n)}$.
 
 > $$F_{X_{(k)}}(x) = \sum_{j=k}^{n} \binom{n}{j} [F(x)]^j [1 - F(x)]^{n-j}$$

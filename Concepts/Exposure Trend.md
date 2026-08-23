@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2993798ec2e5588b93b4a6f89220028e170b1e19818132665555b3f110bf1d2b
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Exposure Trend.md
+---
+
 **Exposure Trend** is the systematic change over time in the average value of a dollar-denominated [[Exposure Base|exposure base]] — payroll, sales, amount of insurance — arising from inflation and drift in the book rather than from a change in the number of risks.
 
 > $$\text{Trended Exposure} = \text{Historical Exposure} \times (1 + t_E)^{n}$$

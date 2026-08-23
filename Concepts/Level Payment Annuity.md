@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cea940e68023e666362b835f685019a18a7c378666b5f6f86762bf908b655018
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Level Payment Annuity.md
+---
+
 A **level payment annuity** makes equal (level) payments at regular intervals for a fixed term. It is the most basic annuity structure, forming the basis for [[Annuity Immediate]], [[Annuity Due]], [[Perpetuity]], and loan amortization.
 
 - For a level payment $P$, $n$-period annuity-immediate at rate $i$:

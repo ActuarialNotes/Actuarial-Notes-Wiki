@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cb44352df8f797e3752c952bbd96b971eae75d236737a8e5a0be02d7cb92ed90
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Joint Cumulative Distribution Function.md
+---
+
 The **joint cumulative distribution function** (joint CDF) of random variables $X$ and $Y$ gives the probability that $X \leq x$ and $Y \leq y$ simultaneously.
 
 > $$F(x,y) = P(X \leq x,\; Y \leq y)$$

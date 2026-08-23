@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ff43135c38c55df3a81285bf92e3c87e722fb58ea791db6612a0d33fa1d80e6a
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Redemption Value.md
+---
+
 The **redemption value** $C$ is the amount paid to the bondholder at maturity (when the bond is "redeemed"). For most bonds, the redemption value equals the [[Face Value]] ($C = F$, called redemption **at par**). However, redemption can occur at a premium ($C > F$) or discount ($C < F$).
 
 - The basic bond price formula uses $C$ as the terminal payment:

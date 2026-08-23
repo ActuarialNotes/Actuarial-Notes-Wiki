@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bd76ec9127ddfa9d211af50845645158c7e206c1dbbf1356d200d4563c1d905a
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Sufficient Statistic.md
+---
+
 A **Sufficient Statistic** $T(X_1, \ldots, X_n)$ for a parameter $\theta$ is a statistic that captures all the information in the sample about $\theta$. Once $T$ is known, the conditional distribution of the sample given $T$ does not depend on $\theta$.
 
 > **Fisher–Neyman Factorization Theorem:** $T$ is sufficient for $\theta$ if and only if the joint density (or PMF) factors as:

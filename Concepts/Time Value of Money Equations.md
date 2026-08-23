@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a474a0cbdae9c34ab4b6b726c3646d172174706f9f4fb25ae1e4f9bfe74a3e28
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Time Value of Money Equations.md
+---
+
 **Time value of money equations** express the equivalence of cash flows at different points in time under a given [[Interest Rate]] or [[Accumulation Function]]. The core principle: a dollar today is worth more than a dollar in the future because it can be invested to earn interest.
 
 - Standard equation linking [[Present Value]], [[Future Value]], rate, and time:

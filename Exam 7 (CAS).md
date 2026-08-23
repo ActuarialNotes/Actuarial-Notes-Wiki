@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:30ab3b586024ccaccc33c8b874d965354b4c75ead4cd05d1bac8530e3327cbfe
+  sources: []
+  open_findings: 0
+  log: .verify/Exam 7 (CAS).md
+---
+
 <div class="exam-nav"
 	 data-color="#65a30d"
      data-current="7|Advanced Estimation of Claims Liabilities"

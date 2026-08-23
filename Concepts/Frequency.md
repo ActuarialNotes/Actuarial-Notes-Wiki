@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4277cc980e9520dedf0584062a7932d64714393c9d252db47f171146634af491
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Frequency.md
+---
+
 **Frequency** is the number of claims per unit of exposure — how often losses happen, as distinct from [[Severity|how much they cost]].
 
 > $$\text{Frequency} = \frac{\text{Number of Claims}}{\text{Earned Exposures}}$$

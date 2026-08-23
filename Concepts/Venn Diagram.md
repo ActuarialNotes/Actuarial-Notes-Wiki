@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:dc552c26baac984951d80c2918d273b7eea5f88011ce6f1063d79c7b9d28ca77
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Venn Diagram.md
+---
+
 A **Venn Diagram** is a visual tool used to represent the relationships between different sets, used for calculating the intersections and unions of multiple events. The most common calculation derived from a Venn Diagram is finding the probability of the union.
 
 > $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$

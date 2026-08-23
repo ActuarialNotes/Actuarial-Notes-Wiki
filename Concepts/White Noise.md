@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8b55b44f05596f84656b49c5f9b99db3f93b9a0bd399f3384fa0db0def1e35e9
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/White Noise.md
+---
+
 **White noise** is a [[Time Series]] of uncorrelated, mean-zero, constant-variance terms. It is the input every [[ARIMA]] model is built from, and the thing a fitted model's residuals must look like if the model has captured everything.
 
 > $$E[\varepsilon_t] = 0, \quad \mathrm{Var}(\varepsilon_t) = \sigma^{2}, \quad \mathrm{Cov}(\varepsilon_t, \varepsilon_s) = 0 \ (t \neq s)$$

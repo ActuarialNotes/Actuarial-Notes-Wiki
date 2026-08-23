@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f7083ecd7abf2ff3b95b0a7246c0f2f5eb613952d285c5da5411dc838c9fafed
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Outstanding Balance.md
+---
+
 **Outstanding balance** (or outstanding loan balance) is the amount still owed on a loan at a given time, calculated by either the prospective or retrospective method.
 
 - **Prospective method** (present value of future payments):

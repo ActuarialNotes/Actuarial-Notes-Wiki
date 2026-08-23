@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d62829837f50d5bb9c907a23c8705bb9e33c8a98fea6ca1ffe6301f017f8c97f
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Discount Rate.md
+---
+
 The **effective annual discount rate** $d$ is the interest paid at the **beginning** of a period on a loan of 1, rather than at the end. If you borrow 1 today and repay 1 at year-end, the interest charge of $d$ is deducted upfront so you receive only $1-d$ now.
 
 > $$d = \frac{i}{1+i}$$

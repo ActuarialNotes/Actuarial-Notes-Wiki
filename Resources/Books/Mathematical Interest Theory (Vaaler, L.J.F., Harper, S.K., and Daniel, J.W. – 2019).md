@@ -7,6 +7,15 @@ Edition: 3rd
 Publisher: American Mathematical Society
 ISBN: 978-1-4704-4393-1
 Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/mathematical-interest-theory-vaaler)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a47242d0f9c2840bf0460e8b20a298bead81e139122bb978285bcc1eea040f15
+  sources: []
+  open_findings: 0
+  log: ".verify/Resources/Books/Mathematical Interest Theory (Vaaler, L.J.F., Harper, S.K., and Daniel, J.W. – 2019).md"
 ---
 ![[Mathematical Interest Theory (Vaaler, L.J.F., Harper, S.K., and Daniel, J.W. – 2019) - Cover.svg]]
 

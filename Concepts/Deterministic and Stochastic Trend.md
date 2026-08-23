@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d31f6d62fc2b0c1bd31b48e572563f3fa3c8d37bcb5237a0615fd9db7c5ed9d2
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Deterministic and Stochastic Trend.md
+---
+
 A **deterministic trend** is a fixed function of time that the series returns to after a shock; a **stochastic trend** is a unit root, where each shock permanently moves the level. They look alike on a plot and demand opposite treatments — the distinction that objective D3 turns on.
 
 > $$\text{deterministic: } Y_t = \alpha + \beta t + z_t, \quad z_t \text{ stationary}$$

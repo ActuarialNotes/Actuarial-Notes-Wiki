@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:eee75ff40546ae124a4269af0d49859e029f2727e8e987e21758bf9b99b921dc
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Case Outstanding Development Method.md
+---
+
 **Case Outstanding Development Method** projects future payments from the **case outstanding** balance rather than from paid or reported losses — developing the reserve the claims department has already set, instead of the losses that have emerged.
 
 > $$U = \text{Paid to date} + \text{Case Outstanding} \times f_{\text{case}}$$

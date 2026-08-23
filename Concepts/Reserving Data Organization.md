@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:aa59f29c2e8b58778e84aa37503e7076d55f6dd0ed85757091d38c8282ebf73c
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Reserving Data Organization.md
+---
+
 **Reserving Data Organization** is the grouping of claim and exposure data into cohorts for estimating [[Unpaid Claims|unpaid claims]]. Friedland's framing differs from ratemaking's: the cohort must be a set of claims whose **emergence pattern** is stable enough to project forward, and it must be segmented so that each triangle is internally consistent.
 
 > $$\text{Unpaid} = \text{Ultimate} - \text{Paid to date}$$

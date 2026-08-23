@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e11f3868b4eac47b72d476f057e58c3aaf2e573856dc632754403d7b8e0899dd
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Probability.md
+---
+
 A **Probability** $P$ is a measure of how likely an event $E$ is to occur. It is a [[Set Function]] that maps events in a sample space to a real number between 0 and 1, and must satisfy the [[Axioms of Probability]].
 - If all outcomes in a finite sample space $S$ are equally likely, then $P$ can be calculated as:
 

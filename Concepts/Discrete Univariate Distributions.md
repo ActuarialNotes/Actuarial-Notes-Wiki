@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5e3a408457a3267a241d5e6afcad45760e6859e6b791a7aa258f0a5732895441
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Discrete Univariate Distributions.md
+---
+
 A **Discrete Univariate Distribution** describes the probability law of a single [[Random Variable]] $X$ that takes on a countable set of values.
 - The probability mass function (PMF) $f(k)$ specifies the probability that the variable takes a particular distinct value $k$
 - The PMF must satisfy $f(k) \geq 0$ for all $k$ and $\sum_{k} f(k) = 1$:

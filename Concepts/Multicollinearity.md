@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:efb658ae6128d76785825f30a09183cd73b1e8f1790fe4ac3180e7877992eff9
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Multicollinearity.md
+---
+
 **Multicollinearity** is strong linear association among the *predictors* of a regression. The fit as a whole stays fine, but individual coefficients become unstable: the data cannot say which of two nearly interchangeable variables is doing the work, so each coefficient gets a large standard error.
 
 > $$\text{VIF}_j = \frac{1}{1 - R_j^{2}}$$

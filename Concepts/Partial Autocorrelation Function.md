@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e63cf0c5c6d71198dc7458e8981e85abe125d211ec71b6cc27fad8bc5547f192
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Partial Autocorrelation Function.md
+---
+
 The **partial autocorrelation function (PACF)** gives the correlation between $Y_t$ and $Y_{t-k}$ **after removing the effect of the intervening lags** $Y_{t-1}, \dots, Y_{t-k+1}$. It is what separates a direct dependence at lag $k$ from one inherited through the lags in between.
 
 > $$\phi_{kk} = \mathrm{Corr}\!\left(Y_t, Y_{t-k} \mid Y_{t-1}, \dots, Y_{t-k+1}\right)$$

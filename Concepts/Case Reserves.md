@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1eb4ddb699f0dd8e9d305c4392a6fe6dba21850406525ceb46dda8b448e1a517
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Case Reserves.md
+---
+
 **Case reserves** (also called case outstanding) are claim-specific estimates of the expected future payments on individual reported claims, established by claims adjusters based on the known facts of each loss.
 
 > $$\text{Reported (Incurred) Losses}$$

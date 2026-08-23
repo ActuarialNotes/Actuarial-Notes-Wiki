@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cd7a3157950edf2a9436385d813c0294c1479e5fc6af8b2ba67a85903977caca
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/External Information in Reserving.md
+---
+
 **External Information in Reserving** is the use of data originating outside the entity being analyzed — industry development patterns, published loss trends, competitor filings, economic and legal indicators — to supplement or replace an insurer's own experience when that experience is thin, distorted, or newly written. It is the reserving counterpart of the [[Complement of Credibility|complement of credibility]] in ratemaking.
 
 - **When external data is needed:** a new line or new company with no history; a small or newly segmented book whose triangle is too volatile to be [[Credibility|credible]]; the immature end of a long-tail triangle where a [[Tail Factor]] must be chosen; and as an independent reasonableness check on a selection driven entirely by internal data.

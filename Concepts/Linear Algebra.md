@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:35d07cc955b1f1497328af33ec2f63d3268401b02aeb02a8f839a4e7a8b29c32
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Linear Algebra.md
+---
+
 **Linear Algebra** is the study of vectors, matrices, and linear transformations. It is the computational backbone of regression, the [[Generalized Linear Model]], and [[Principal Components Analysis]]: data is stored in a design matrix and model fitting reduces to matrix operations.
 
 > $$A\mathbf{x} = \mathbf{b}$$

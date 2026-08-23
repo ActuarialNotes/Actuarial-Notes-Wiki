@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7d167873ac069d73e9fe9a40e51eea0349cb93656dc5dcace5d23ab8cba0cebd
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Combined Ratio.md
+---
+
 **Combined Ratio** is the sum of the [[Loss Ratio|loss and LAE ratio]] and the underwriting expense ratio — the share of premium consumed by claims and the cost of doing business. A combined ratio below $100\%$ means the book is profitable **before** investment income; above $100\%$ means underwriting is losing money.
 
 > $$\text{Combined Ratio} = \frac{L + \text{LAE}}{\text{Earned Premium}} + \frac{\text{UW Expenses}}{\text{Written Premium}}$$

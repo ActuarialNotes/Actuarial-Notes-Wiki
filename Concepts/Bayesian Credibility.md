@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:73cc15c2954bc0210b1c4b9fd8938e4a8efac22fcffed073b9cb9e8ca00d9a85
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Bayesian Credibility.md
+---
+
 **Bayesian Credibility** applies [[Bayes Theorem|Bayesian inference]] to credibility: the prior distribution of the risk parameter $\theta$ is updated with observed data to produce a posterior distribution, and the credibility estimate is the **posterior mean** $E[\theta \mid \mathbf{X}]$.
 
 > $$\text{Credibility Estimate} = E[\theta \mid X_1, \ldots, X_n]$$

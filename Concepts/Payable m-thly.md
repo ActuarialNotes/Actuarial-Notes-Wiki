@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:63959e4f22f8dbcbb4d4e1ddf0b806bde7ee84886ec6f4d0ff40b58fc4d2027c
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Payable m-thly.md
+---
+
 An annuity **payable $m$-thly** makes $m$ payments per year of $1/m$ each, totaling $1$ per year. The present value of a whole-life or $n$-year [[Annuity Immediate]] payable $m$-thly uses the modified annuity symbol $a^{(m)}_{\overline{n}|}$:
 
 > $$a^{(m)}_{\overline{n}|} = \frac{1 - v^n}{i^{(m)}}$$

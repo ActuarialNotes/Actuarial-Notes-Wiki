@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f289f3af6e4b1d3c4ee5585bac779479cef8de9c2b320cace7e67b7a9dc9d53e
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Annuity Immediate.md
+---
+
 An **annuity-immediate** is a series of $n$ level payments of 1 made at the **end** of each period. The present value, valued one period before the first payment, is $a_{\overline{n}|}$, and the accumulated value at the time of the last payment is $s_{\overline{n}|}$.
 
 > $$a_{\overline{n}|} = \frac{1-v^n}{i}$$

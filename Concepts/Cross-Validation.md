@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e8d234bebf3f8bce481f86c82b0063b12040c23bd795f363f7e4ac49d76ef0fb
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Cross-Validation.md
+---
+
 **Cross-Validation** estimates how well a model predicts **new** data by repeatedly holding part of the sample out of the fit and scoring the model on it. It measures test error directly, rather than penalizing complexity indirectly as [[AIC]] and [[BIC]] do.
 
 > $$\text{CV}_{(k)} = \frac{1}{k}\sum_{j=1}^{k} \text{MSE}_j$$

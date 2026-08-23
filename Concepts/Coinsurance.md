@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:40df57022cbea98708e2d365d97b6ea2cccb6ecfd13561ef9976c33138ec02d5
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Coinsurance.md
+---
+
 **Coinsurance** is a policy provision under which the insurer pays a fixed percentage $c$ ($0 < c \leq 1$) of the covered loss, with the policyholder responsible for the remaining fraction $1 - c$. Applied after the deductible, the insurer's payment is:
 
 > $$\text{Payment} = c \cdot (X - d)^+$$

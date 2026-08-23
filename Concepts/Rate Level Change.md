@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d2d53b285d504f49f61ea834fa2f871b06d3701fc32bd097a9e98677aa819799
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Rate Level Change.md
+---
+
 **Rate Level Change** is the effect that past [[Rate Change|rate changes]] have on the comparability of data across years — the reason historical premium must be brought to a common level before any loss ratio, trend or a priori expectation built on it can be believed.
 
 > $$\text{On-Level Factor} = \frac{\text{Current cumulative index}}{\text{Index in force during the period}}$$

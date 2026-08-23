@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e0afa274fdc9bebcd54426e3679efae5b7419b4fd801129bc923a8d93403302c
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Coupon.md
+---
+
 A **coupon** is the periodic interest payment made by a bond issuer to the bondholder, equal to the face value $F$ multiplied by the coupon rate per period $r$.
 
 > $$\text{Coupon} = Fr$$

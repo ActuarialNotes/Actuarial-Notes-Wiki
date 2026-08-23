@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c1d31f962955442c2729d438a48dfeb3e3510a45428c16423687ee75f2d98121
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Age to Age Factor.md
+---
+
 **Age-to-Age Factor** (link ratio) is the ratio of a cohort's cumulative amount at one maturity to its amount at the previous maturity — the observed development between two ages.
 
 > $$f_{n \to n+1}^{\text{AY}} = \frac{C_{\text{AY},\,n+1}}{C_{\text{AY},\,n}}$$

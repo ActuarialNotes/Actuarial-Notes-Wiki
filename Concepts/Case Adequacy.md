@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5aac2144f7560593d115767547b4f36558f27b6ec55cd81813feb8003ab2f4e2
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Case Adequacy.md
+---
+
 **Case Adequacy** is how close case reserves sit to the eventual settlement cost of the claims they are set on. A *change* in adequacy over calendar time is one of the two distortions ([[Settlement Rate|settlement rate]] is the other) that make historical development factors misleading.
 
 > $$\text{Avg Case Outstanding} = \frac{\text{Case Reserves}}{\text{Open Claim Counts}}$$

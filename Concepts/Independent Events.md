@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:826f856aaddda74ea3ed1eb379e9f2ba25423137404f969699fa654e77cd8d94
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Independent Events.md
+---
+
 Two events $A$ and $B$ are **Independent** if knowing that one occurred provides no information about whether the other occurred.
 - $P(A \mid B) = P(A)$ and $P(B \mid A) = P(B)$
 - Independence is a symmetric relation and must be verified mathematically; it cannot be assumed from a diagram

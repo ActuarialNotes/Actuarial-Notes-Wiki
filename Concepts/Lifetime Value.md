@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:92a154318bdb3e37ef07b67275eb8ddc0460c957a1c0d721ee29d4f39591bddd
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Lifetime Value.md
+---
+
 **Lifetime Value** (LTV) is the present value of the expected profit from a customer relationship over its whole life, rather than over a single policy period. It is the framework Werner uses for the retention and acquisition questions that sit *on top of* the actuarial indication.
 
 > $$\text{LTV} = \sum_{t=1}^{T} \frac{\left(P_t - L_t - E_t\right) \times {}_{t}p}{(1 + r)^{t}}$$

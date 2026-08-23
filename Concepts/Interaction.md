@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:19f3e8ad53b25278479adf13c8a47c20aa2f23737a893df4adaa9f1c76b78568
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Interaction.md
+---
+
 An **Interaction** between two predictors in a [[Generalized Linear Model]] exists when the effect of one predictor on the response depends on the level or value of the other — the combined effect is not simply the sum of each predictor's separate (main) effect.
 
 > $$\eta = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 (x_1 \times x_2)$$

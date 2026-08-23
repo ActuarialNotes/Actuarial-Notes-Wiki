@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:225304d54527ffd30f4a512397d5d4e565c5ee8721322e393bfb0fe29f9d6565
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Loss Development.md
+---
+
 **Loss Development** is the change in the reported or paid value of a cohort of claims as it matures — the difference between losses valued at an early age and their eventual [[Ultimate Loss|ultimate]] settled value. Because a ratemaking or reserving analysis must compare cohorts at a common (ultimate) basis, immature [[Accident Year]]s must be developed before they can be used.
 
 > $$\text{Ultimate Losses} = \text{Losses at age } n \times \text{CDF}_{n \to \text{ult}}$$

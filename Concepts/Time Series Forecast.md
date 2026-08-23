@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:502c50d4e974fe8d64a40081289bdd36be09d43aba664a49daa5169f210e81ed
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Time Series Forecast.md
+---
+
 A **time series forecast** is the conditional expectation of a future value given the history, $\hat Y_{t+h} = E[Y_{t+h} \mid Y_t, Y_{t-1}, \dots]$, together with an interval expressing how uncertain it is. Producing and reading one is objective D4.
 
 > $$\hat{Y}_{t+h} = E\!\left[Y_{t+h} \mid \mathcal{F}_t\right]$$

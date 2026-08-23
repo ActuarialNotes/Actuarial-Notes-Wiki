@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fe3616eba22bed76dcbc540d8f3273abdcc548e405a9a381c84013d3b03fff96
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Variance for Conditional and Marginal Distributions.md
+---
+
 The **Variance for Conditional and Marginal Distributions** measures spread at two different levels: the marginal variance $\text{Var}(X)$ describes the spread of $X$ across the whole population, while the conditional variance $\text{Var}(X \mid Y=y)$ measures the spread of $X$ within the subpopulation where $Y=y$. The two are tied together by the **law of total variance**.
 
 > $$\text{Var}(X \mid Y=y) = E[X^2 \mid Y=y] - \bigl(E[X \mid Y=y]\bigr)^2$$

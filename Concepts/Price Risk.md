@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4f2373fd4f0eb52a1fedb9e0f884266615fdbb015639bca5c51065c450099c6f
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Price Risk.md
+---
+
 **Price risk** (also called **interest rate risk**) is the risk that the market value of a [[Bonds|bond]] or fixed-income portfolio falls due to a rise in interest rates. Its sensitivity to a yield change $\Delta j$ is quantified by [[Modified Duration]] $D_{Mod}$.
 
 > $$\frac{\Delta P}{P} \approx -D_{Mod} \cdot \Delta j$$

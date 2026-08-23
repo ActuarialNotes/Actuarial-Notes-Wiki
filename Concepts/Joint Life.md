@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a3adffc7e3c77240246781c4b2056fee6ef943ac0d48f99c059e85044afb37f2
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Joint Life.md
+---
+
 **Joint Life** models describe the survival of two (or more) lives simultaneously, focusing on the time until the **first** death. Given two independent lives aged $x$ and $y$ with future lifetimes $T_x$ and $T_y$, the joint-life future lifetime is $T_{xy} = \min(T_x, T_y)$.
 
 > $$_{t}p_{xy} = P(T_{xy} > t)$$

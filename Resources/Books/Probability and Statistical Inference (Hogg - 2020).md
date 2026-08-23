@@ -8,6 +8,15 @@ date: "2020"
 Edition: 10e
 Publisher: Prentice Hall
 ISBN: 978-0135189399
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1d6447dde61b308aa367946d28572175f3698e957204f61edf1b0ce33a9751c1
+  sources: []
+  open_findings: 0
+  log: .verify/Resources/Books/Probability and Statistical Inference (Hogg - 2020).md
 ---
 ![[Probability and Statistical Inference (Hogg - 2020) - Cover.png]]
 ## 1 Probability

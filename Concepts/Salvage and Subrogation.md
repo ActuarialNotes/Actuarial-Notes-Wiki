@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:38a9c006468869c4e76262c7fbe267f205344630cc43f0d142283d79802d8633
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Salvage and Subrogation.md
+---
+
 **Salvage and Subrogation** (S&S) are the two recoveries that reduce an insurer's net cost after it has paid a claim: **salvage** is the value realized from damaged property the insurer takes title to (a totalled vehicle); **subrogation** is recovery from a third party legally responsible for the loss.
 
 > $$\text{Net Ultimate} = \text{Gross Ultimate} - \text{S\&S Ultimate}$$

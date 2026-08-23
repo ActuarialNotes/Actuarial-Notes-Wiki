@@ -1,4 +1,5 @@
 import fm from 'front-matter'
+import { verificationFromAttributes, type Verification } from './verification'
 
 export type Difficulty = 'easy' | 'medium' | 'hard'
 export type QuestionType = 'multiple-choice' | 'free-entry' | 'multi-part'
@@ -44,6 +45,12 @@ export interface Question {
    * MAS-I sittings whose content CAS later moved to MAS-II.
    */
   originally_exam?: string
+  /**
+   * The question's VERIFY record — what has been checked about it, against what
+   * source, and when. Undefined only for a file with no `verification:` block,
+   * which CI does not allow into the bank.
+   */
+  verification?: Verification
 }
 
 export interface QuestionFilter {
@@ -79,6 +86,7 @@ interface QuestionFrontmatter {
   year?: unknown
   session?: unknown
   originally_exam?: unknown
+  verification?: unknown
 }
 
 const OPTION_REGEX = /^- ([A-E])\)\s+(.+)/
@@ -324,6 +332,7 @@ export function parseQuestion(raw: string): Question | null {
       year: data.year ? Number(data.year) : undefined,
       session: data.session ? String(data.session) : undefined,
       originally_exam: data.originally_exam ? String(data.originally_exam) : undefined,
+      verification: verificationFromAttributes(data) ?? undefined,
     }
 
     // ── multi-part ──────────────────────────────────────────────────────────

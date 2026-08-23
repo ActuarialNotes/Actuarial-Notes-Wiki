@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8c4a3bbe0f6a0cc3eee83c3b8b724ee4796e3c5f759e7a85cbf0e314ae2b82cc
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Rating Algorithm.md
+---
+
 **Rating Algorithm** is the ordered set of rules that turns a base rate and a risk's characteristics into a premium. It is where the actuary's rate level and classification work actually meets a quote, and it is filed as part of the rate manual.
 
 > $$\text{Premium} = \left[\text{Base Rate} \times \prod_i R_i + \sum_j A_j\right] \times (1 - D) + \text{Fees}$$

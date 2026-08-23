@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cbda2685b30ec19db51533bb17f7d258a0d2f11aee3660e7017887ce0ca37386
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Hierarchical Clustering.md
+---
+
 **Hierarchical clustering** builds a nested sequence of groupings without committing to a number of clusters up front. Agglomerative clustering starts with every observation in its own cluster and repeatedly fuses the two closest, recording the whole history as a [[Dendrogram]].
 
 > $$\text{repeat: fuse the pair minimizing } d(C_i, C_j) \text{ until one cluster remains}$$

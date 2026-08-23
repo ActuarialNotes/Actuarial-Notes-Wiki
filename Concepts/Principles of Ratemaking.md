@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bb74e0f0df351a391ab46fa2da907d732660e6c2d4909c796deb0f1e43446d5d
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Principles of Ratemaking.md
+---
+
 **Principles of Ratemaking** are the four statements in the CAS *[[Statement of Principles Regarding Property and Casualty Insurance Ratemaking (CAS - 1988)|Statement of Principles Regarding Property and Casualty Insurance Ratemaking]]* that define what makes a rate actuarially sound. The Statement first defines a **rate** as an estimate of the expected value of future costs, and distinguishes it from a *price*, which may also reflect marketing, competition and regulation.
 
 > $$\text{Rate} = E[\text{Losses} + \text{LAE} + \text{Expenses} + \text{Cost of Capital}]$$

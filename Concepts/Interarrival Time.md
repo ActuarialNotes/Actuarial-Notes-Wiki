@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:af4686069c666430011b4e9644fc46d7513a6cb2cd393f531439496dbfe98e20
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Interarrival Time.md
+---
+
 The **Interarrival Time** $T_n$ is the waiting time between the $(n-1)$-th and $n$-th event of a counting process. For a [[Poisson Process]] with rate $\lambda$, the interarrival times are independent and identically distributed [[Exponential Distribution|exponential]] variables with mean $1/\lambda$ — and that property is an equivalent *definition* of the Poisson process.
 
 > $$T_n \stackrel{\text{iid}}{\sim} \text{Exp}(\lambda), \qquad E[T_n] = \frac{1}{\lambda}$$

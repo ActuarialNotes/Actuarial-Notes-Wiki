@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0a3e2c8a1a22b0041661473e89df57b08fa28028b7852bc8464117688a941d1e
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Sufficiency.md
+---
+
 **Sufficiency** is the property that a statistic $T(X_1, \ldots, X_n)$ captures all of a sample's information about a parameter $\theta$: once the [[Sufficient Statistic]] $T$ is known, the conditional distribution of the data no longer depends on $\theta$. It is a key criterion when judging an estimator built from $T$.
 
 > $$f(x_1, \ldots, x_n \mid T = t,\, \theta) = f(x_1, \ldots, x_n \mid T = t)$$

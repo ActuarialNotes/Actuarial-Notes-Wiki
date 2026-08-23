@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:20574b51c4b3ba25f8b2601fa1e65b246bf0a27a62e79c5489f0d19fe2bedef8
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Probability Rules.md
+---
+
 **Probability Rules** are the small set of identities, derived from the [[Axioms of Probability]], used to combine and decompose event probabilities: the complement, addition, multiplication, and total-probability rules.
 
 > $$P(A^c) = 1 - P(A)$$

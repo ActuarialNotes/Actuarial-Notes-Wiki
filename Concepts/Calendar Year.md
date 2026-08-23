@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c303222308afa56dcdf04dd6f59fe5ee0bdc313829cd187881e1fc6187b21122
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Calendar Year.md
+---
+
 **Calendar Year** (CY) is a data aggregation method that groups every transaction by the calendar year in which it is *booked* — premium as it is earned, losses as they are paid or as case reserves change — without regard to the policy's effective date or the claim's accident date.
 
 > $$\text{CY Earned Premium} = \text{Written Premium} - \Delta\text{UEP}$$

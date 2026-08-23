@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:250153141849ceac313952b05ecf30edf51db502a17523f24214556007799b09
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Combination.md
+---
+
 A **Combination** $\binom{n}{k}$ ("$n$ choose $k$") counts the number of ways to select $k$ objects from $n$ distinct objects when order does not matter.
 - Combinations assume no replacement: you cannot select the same object twice:
 

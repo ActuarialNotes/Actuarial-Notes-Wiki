@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6f6b838118f885635ba3272e692de7b5abe2172d00d3c9dd555538bbd54662f4
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Roll Forward Analysis.md
+---
+
 **Roll Forward Analysis** reconciles the reserve balance from one valuation date to the next, decomposing the change into its components so that genuine re-estimation is separated from the ordinary mechanics of new claims and payments.
 
 > $$R_{\text{end}} = R_{\text{begin}} + \text{Incurred on new AY} - \text{Paid} \pm \text{Prior-year development}$$

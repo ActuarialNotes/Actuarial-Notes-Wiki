@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:092f645db7a84964f552bd3504a68e8a72216d40b1d5197c88f409f1bb9520eb
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Settlement Rate.md
+---
+
 **Settlement Rate** (disposal rate, closure rate) is the proportion of a cohort's claims closed by a given maturity. A change in it distorts **paid** development in the same way a change in [[Case Adequacy|case adequacy]] distorts reported development.
 
 > $$\text{Disposal Rate}_n = \frac{\text{Closed claims at age } n}{\text{Ultimate claim counts}}$$

@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1e9e1f19fc91a228ef1465048ec500874d17504827d073d9ca9d01501876b8f2
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Term of Loan.md
+---
+
 The **term of a loan** is the total number of payment periods until the loan is fully repaid.
 
 - Along with the [[Interest Rate]], [[Principal]], and payment amount, it is one of the four key variables in a loan calculation — given any three, the fourth can be solved.

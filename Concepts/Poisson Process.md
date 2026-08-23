@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:873219aa721bfc650f0f32c0a7adb64f32f83faa160d30ea9c739ec833e1dde2
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Poisson Process.md
+---
+
 A **Poisson Process** $\{N(t), t \geq 0\}$ is a counting process that models the number of events occurring in a time interval when events arrive independently at a constant average rate $\lambda > 0$.
 
 > $$P(N(t) = k) = \frac{e^{-\lambda t}(\lambda t)^k}{k!}$$

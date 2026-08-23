@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1062b4aa6d54e5008b17da3862e0000e33d85d095003302017a3f0bdec1d86ca
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Fund Accumulation.md
+---
+
 **Fund accumulation** is the growth of a fund's balance over time from an initial deposit and/or a stream of periodic deposits or withdrawals, each earning interest at the fund's rate. It generalizes the single-sum [[Accumulation Function]] to a fund that also receives ongoing cash flows.
 
 > $$AV_n = F_0(1+i)^n + \sum_t C_t(1+i)^{n-t}$$

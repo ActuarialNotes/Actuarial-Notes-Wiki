@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d1f62d6818bb0a400f358a69b6d0a5b92554590659d24f1c5154e128bb475d87
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Linear Combinations of Random Variables.md
+---
+
 **Linear Combinations of Random Variables** are expressions of the form $L = c_1 X_1 + c_2 X_2 + \cdots + c_n X_n$ for constants $c_i$, collapsing several random variables into a single quantity — an aggregate loss, a portfolio value, a sample mean.
 
 > $$E[L] = \sum_{i=1}^{n} c_i\,E[X_i]$$

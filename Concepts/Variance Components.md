@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:40203295c4e8fe988afba327fc849b4bd00ae5825238a11bd8898b927d224605
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Variance Components.md
+---
+
 **Variance components** are the parameters that split the total variance of a [[Linear Mixed Model]] into a piece for each source of randomness — one per [[Random Effects|random effect]] plus the residual.
 
 > $$\mathrm{Var}(\mathbf{y}) = \mathbf{V} = \mathbf{Z}\mathbf{D}\mathbf{Z}^{\top} + \mathbf{R}$$

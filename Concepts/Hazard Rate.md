@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a4dcc4534bf1f49f404b7a7cfb21dc379d27db7dc4848e9acafd6116e1e9ef15
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Hazard Rate.md
+---
+
 The **Hazard Rate** $\mu(t)$ (also called the **force of mortality** in life contingencies, or the **failure rate** in reliability) is the instantaneous rate of failure at time $t$ given survival to $t$.
 
 > $$\mu(t) = \frac{f(t)}{S(t)}$$

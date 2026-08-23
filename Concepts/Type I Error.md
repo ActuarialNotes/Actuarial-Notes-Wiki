@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:48a4fcdb1f09bea1bbad699358c9445e5c1f15b3dae875b01bb524fbec077a4d
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Type I Error.md
+---
+
 A **Type I Error** occurs when a [[Hypothesis Testing|hypothesis test]] incorrectly **rejects a true null hypothesis** $H_0$. It is also called a **false positive**.
 
 > $$\alpha = P(\text{Reject } H_0 \mid H_0 \text{ is true})$$

@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:98dd81f805e47993b4903b7dd34a366f71795a3c9f1fcd44388f37ee6b2843e4
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Dispersion Parameter.md
+---
+
 The **Dispersion Parameter** $\phi$ is the scale factor in an [[Exponential Family]] variance: $\text{Var}(Y) = \phi\,V(\mu)$. It separates *how the variance depends on the mean* (the variance function $V$, fixed by the chosen distribution) from *how large the variance is overall* (the scale, estimated from the data).
 
 > $$\text{Var}(Y_i) = \frac{\phi\,V(\mu_i)}{w_i}$$

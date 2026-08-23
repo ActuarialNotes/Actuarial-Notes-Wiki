@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9c09c57fd6d7250f4f84381ab8d309661ddfe40119015385084d5558eb9ebf7d
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Exponential Family.md
+---
+
 The **Exponential Family** is the class of distributions whose density can be written in a common exponential form. It is the set of response distributions a [[Generalized Linear Model]] can use: Normal, Poisson, binomial, [[Gamma]], inverse Gaussian, and the [[Tweedie Distribution]] all belong to it.
 
 > $$f(y \mid \theta, \phi) = \exp\!\left\{\frac{y\theta - b(\theta)}{a(\phi)} + c(y, \phi)\right\}$$

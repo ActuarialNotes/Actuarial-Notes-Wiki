@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1ffdb36d5968b307d807c9ebc867304f9fbf2213e78b358376a443ca0f5a444b
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Non-level Annuities.md
+---
+
 **Non-level annuities** have payments that vary over time. Key types covered on Exam FM:
 
 - **[[Arithmetic Increasing Annuity|Arithmetic progression]]**: payments increase (or decrease) by a constant amount each period — $(P), (P+Q), (P+2Q), \ldots$

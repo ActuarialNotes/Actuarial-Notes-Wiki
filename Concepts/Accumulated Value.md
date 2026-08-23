@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c22a12c1dbaba8dc55ce80d134dc17e9c1aab4dee39739ae2c1c1e93f97005d2
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Accumulated Value.md
+---
+
 The **accumulated value** (AV) is the value at a future time $t$ of a cash flow (or series of cash flows), grown forward using the [[Accumulation Function]] $a(t)$. It is the time-$t$ analogue of [[Present Value]]: where PV discounts back to time 0, AV accumulates forward to time $t$:
 
 > $$AV = PV \cdot a(t)$$

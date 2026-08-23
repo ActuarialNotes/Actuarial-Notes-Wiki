@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c63ccfd4b911968212129fd54469ecdea21c1546a0216776fe6a1ada004f7825
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Unpaid Claims.md
+---
+
 **Unpaid Claims** are the insurer's liability at a valuation date for claims that have occurred but are not yet fully paid. The **unpaid claim estimate** is the central output of a reserve analysis, and [[ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007)|ASOP 43]] defines it as the actuary's estimate of the obligation for future payment resulting from claims due to past events.
 
 > $$\text{Unpaid} = \text{Ultimate} - \text{Paid to date}$$

@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1d6c24acb58de83b4ab183c3b50d967fceb0d57d74011b9f9b2a27f5eb1f78fd
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Profit and Contingency Provision.md
+---
+
 **Profit and Contingency Provision** ($Q_T$) is the loading in the rate that pays for the cost of the capital supporting the business and provides a margin for the possibility that actual results fall short of expected — the "contingency" half recognizing that a rate built on expected values will, on average, be exceeded some of the time.
 
 > $$\text{Rate} = \frac{\text{Pure Premium} + F}{1 - V - Q_T}$$

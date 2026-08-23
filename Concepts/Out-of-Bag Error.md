@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ea9daa93cfebe9d46bdd569b950b0ab98dd8251f19bd0937c9c4ff548991c3d0
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Out-of-Bag Error.md
+---
+
 **Out-of-bag (OOB) error** is a free test-error estimate for [[Bagging|bagged]] models. Each [[Bootstrap|bootstrap]] resample leaves out about a third of the observations; each observation is predicted using only the trees that did not see it, and those predictions are scored.
 
 > $$P(\text{observation } i \notin \text{ resample } b) = \left(1 - \frac{1}{n}\right)^{n} \xrightarrow[n\to\infty]{} e^{-1} \approx 0.368$$

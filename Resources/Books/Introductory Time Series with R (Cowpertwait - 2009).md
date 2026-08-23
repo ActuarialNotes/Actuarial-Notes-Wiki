@@ -6,6 +6,15 @@ date: "2009"
 Publisher: Springer (Use R! series)
 Type: Textbook
 Available from: "[link.springer.com](https://link.springer.com/book/10.1007/978-0-387-88698-5)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:390632ddda18a94661c1f8a219040aff2def9cd015390d6b62ebf66604e00c31
+  sources: []
+  open_findings: 0
+  log: .verify/Resources/Books/Introductory Time Series with R (Cowpertwait - 2009).md
 ---
 ![[Introductory Time Series with R (Cowpertwait - 2009) - Cover.svg]]
 

@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6bd6056877a5086389952bcc70f322f63dd21fe946ffe9b54d4852957c334ebf
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Term of Annuity.md
+---
+
 The **term of annuity** is the duration over which an annuity makes payments — the number of periods from the first to the last payment. For a finite-term annuity, the term determines when payments start and stop.
 
 - In the standard annuity factor notation, $n$ in $a_{\overline{n}|i}$ is the term.

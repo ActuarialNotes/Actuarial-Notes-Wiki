@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:de329d07d643e8869f40bcfc174b4bee1797075305c14fa688010d0e11a3bef2
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Probability Addition Rule.md
+---
+
 The **Probability Addition Rule** gives the probability that at least one of two events $A$ or $B$ occurs, correcting for the double-counting of outcomes in their intersection.
 - Also known as the Inclusion-Exclusion Principle
 - When events are [[Mutually Exclusive Events|mutually exclusive]], $P(A \cap B) = 0$ and the rule reduces to simple addition

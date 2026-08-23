@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f24f0490da27cb0b0255e8bf4dee18a45fe3038d1743fb9c1b49fb272383ed51
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Full Credibility Standard.md
+---
+
 The **full credibility standard** is the volume of experience at which [[Limited Fluctuation Credibility|classical credibility]] assigns $Z = 1$. It is the smallest expected claim count $n_F$ for which the observed mean stays within $\pm k$ of the true mean with probability $p$.
 
 > $$n_F = \left(\frac{z_{(1+p)/2}}{k}\right)^{2}\left(\frac{\sigma_S^{2}}{\mu_S^{2}}\right)$$

@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:38caba1b53b83826e8d0676c88393f9dec22a73f57bd8f067c428515361938b9
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Boosting.md
+---
+
 **Boosting** grows trees *sequentially*, each one fitted to the residuals left by the trees before it, and adds a shrunken version of each to a slowly improving model. Where [[Bagging]] fits independent trees in parallel to cut variance, boosting attacks bias.
 
 > $$\hat{f}(x) \leftarrow \hat{f}(x) + \lambda \hat{f}^{b}(x), \qquad r_i \leftarrow r_i - \lambda \hat{f}^{b}(x_i)$$

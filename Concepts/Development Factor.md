@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:53fc7d4374b8085f3e62e8d4eff9a1eebd0d674b916641fc45b5dee71c20d126
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Development Factor.md
+---
+
 **Development Factor** (link ratio or age-to-age factor) is the ratio used to project cumulative losses from one maturity age to the next, forming the building blocks of the [[Chain Ladder Method]]; chaining them together produces the [[Cumulative Development Factor]] to ultimate.
 
 > $$f_{n \to n{+}1} = \frac{\text{Losses at age }n{+}1}{\text{Losses at age }n}$$

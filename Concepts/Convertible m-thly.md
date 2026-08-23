@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7c8976a24defd2db6ef00dea123fcf3bf8ce6dd77293e188c1c80bdcf2b158b0
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Convertible m-thly.md
+---
+
 A [[Nominal Interest Rate]] is **convertible $m$-thly** (or compounded $m$ times per year) when interest is credited $m$ times per year at the periodic rate $i^{(m)}/m$. The equivalent effective annual rate is:
 
 > $$1 + i = \left(1 + \frac{i^{(m)}}{m}\right)^m$$

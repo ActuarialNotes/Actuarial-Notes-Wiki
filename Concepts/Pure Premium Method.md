@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:83df27a4286bca79477dd81e7856d4bde9c557800c494d97707acf8ac297ed90
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Pure Premium Method.md
+---
+
 **Pure Premium Method** derives the indicated **rate** directly: project loss and LAE per exposure, add the fixed expense per exposure, and gross up for variable expenses and profit. It never divides by premium, so it requires no [[On-Leveling|on-levelling]].
 
 > $$\text{Indicated Rate} = \frac{\text{Pure Premium} + F}{1 - V - Q_T}$$

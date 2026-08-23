@@ -7,6 +7,15 @@ Edition: 8th
 Publisher: ACTEX Learning
 ISBN: 979-8-8901-6016-4
 Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/mathematics-of-investment-and-credit-broverman)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ef768d94f4664402dc803648fab029800ea23627b27a869cc000d5f8720f744a
+  sources: []
+  open_findings: 0
+  log: ".verify/Resources/Books/Mathematics of Investment and Credit (Broverman, S.A. – 2024).md"
 ---
 ![[Mathematics of Investment and Credit (Broverman, S.A. – 2024) - Cover.svg]]
 

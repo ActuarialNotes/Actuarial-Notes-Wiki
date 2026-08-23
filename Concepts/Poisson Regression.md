@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:eadc382a8c7d9e6af82a20819dac959b7fa6e8be197dfd1b7e5fee821e8ccfbe
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Poisson Regression.md
+---
+
 **Poisson Regression** is the [[Generalized Linear Model]] for count data: the response is Poisson and the log [[Link Function]] makes the predictors act multiplicatively on the expected count. With log exposure entered as an [[Offset Variable|offset]], it is the standard model for claim **[[Frequency]]**.
 
 > $$\ln \mu_i = \ln(e_i) + \beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip}$$

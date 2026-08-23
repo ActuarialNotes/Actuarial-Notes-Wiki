@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:33e026b5d2e007b3cdc7517bc9d2d6fc59c248247a5e20c0066cb5a68fa153b3
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Redington Immunization.md
+---
+
 **Redington immunization** is a strategy for protecting a portfolio's surplus $S = V_A - V_L$ against small parallel shifts in interest rates. It requires three conditions to be satisfied simultaneously at the current yield rate $j$:
 
 1. $PV(A) = PV(L)$ — asset and liability present values are equal (surplus $S = 0$)

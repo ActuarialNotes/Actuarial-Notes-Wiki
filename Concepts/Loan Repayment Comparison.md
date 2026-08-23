@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e72f438088762563eac1862c11420ea746531383dd4e9c50ee2ea3a4da53aeae
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Loan Repayment Comparison.md
+---
+
 **Loan repayment comparison** problems compare two different repayment structures for a loan of the same [[Principal]] $L$ over $n$ periods at rate $i$ — most commonly [[Level Annuity|level payments]] (standard [[Amortization]]) versus **constant-principal** payments (equal principal repaid each period, plus interest on the declining [[Outstanding Balance]]) — and equate or contrast the resulting payments or total interest.
 
 > $$P_{\text{level}} = \frac{L}{a_{\overline{n}|i}}$$

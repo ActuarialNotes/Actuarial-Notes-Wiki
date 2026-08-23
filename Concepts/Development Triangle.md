@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:68d09e094693b355ba71305ff790b4d9382f2e63735d15b588a48e0d2aa16268
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Development Triangle.md
+---
+
 **Development Triangle** is the fundamental data structure of reserving: cumulative amounts arranged with **cohorts as rows** (usually [[Accident Year|accident years]]), **maturities as columns** (age in months since the start of the cohort), and **valuation dates as diagonals**.
 
 > $$f_{k \to k+1} = \frac{\sum_{\text{AY}} C_{\text{AY},\,k+1}}{\sum_{\text{AY}} C_{\text{AY},\,k}}$$

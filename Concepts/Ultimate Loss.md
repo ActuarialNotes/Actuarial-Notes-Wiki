@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bd1e1505b06bb4d1a345ce30a161cf720bc3d498b76c1cd32d11faabdcc50971
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Ultimate Loss.md
+---
+
 **Ultimate Loss** is the total cost a cohort of claims will have when every one of them is settled and closed — the quantity every reserving method exists to estimate.
 
 > $$U = \text{Paid} + \text{Case Reserves} + \text{IBNR}$$

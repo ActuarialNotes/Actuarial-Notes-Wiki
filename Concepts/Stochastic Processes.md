@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ce02893c5fe29566442730cdcd33d476caa36863e1dbe108ffada9f063b0472c
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Stochastic Processes.md
+---
+
 A **Stochastic Process** $\{X(t) : t \in T\}$ is a collection of [[Random Variable]]s indexed by a parameter $t$ (usually time), describing how a random quantity — such as an insurer's cumulative claim count or surplus — evolves over an index set $T$.
 
 > $$\{X(t) : t \in T\}$$

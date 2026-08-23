@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:117af22a86fa204743029cad47d2445313cd8644e91dd0fea23ef2e4c46daa9e
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Scree Plot.md
+---
+
 A **scree plot** graphs the eigenvalues (or the [[Proportion of Variance Explained]]) of a [[Principal Components Analysis]] against the component number. The number of components worth keeping is read off the **elbow** — the point after which the curve flattens into scree.
 
 > $$\text{plot } \lambda_m \ \text{(or } \mathrm{PVE}_m) \ \text{against } m = 1, 2, \dots, p$$

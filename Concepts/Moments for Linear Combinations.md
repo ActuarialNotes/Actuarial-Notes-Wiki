@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:270bb0fdcd746905c4384fe04e8424bba7b9a358fd04484b694a7bd3fe41c9f1
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Moments for Linear Combinations.md
+---
+
 **Moments for Linear Combinations** give the expected value and variance of any weighted sum $W = a_1 X_1 + a_2 X_2 + \cdots + a_n X_n$ of random variables. These results underlie the [[Central Limit Theorem]] and are used to compute the [[Expected Value]] and [[Variance]] of aggregate loss models.
 
 > $$E[W] = a_1 E[X_1] + a_2 E[X_2] + \cdots + a_n E[X_n]$$

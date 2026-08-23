@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5c50386b1e5200ed2e6b95bd3a4a839074a3aeecc2082e1b4cc503980194a22a
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Partial Credibility.md
+---
+
 **Partial credibility** is the weight $Z < 1$ that [[Limited Fluctuation Credibility|classical credibility]] gives to experience that falls short of the [[Full Credibility Standard]]. The square-root rule sets $Z$ so that the *credibility-weighted* estimate has the same variance the full-credibility standard was chosen to deliver.
 
 > $$Z = \min\left(\sqrt{\frac{n}{n_F}},\; 1\right)$$

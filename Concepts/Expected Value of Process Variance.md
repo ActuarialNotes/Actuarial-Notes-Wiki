@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e2f39341cec296b4c0be73969f42284378abacb3c2f25182d8178b44c1b7e99c
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Expected Value of Process Variance.md
+---
+
 The **expected value of the process variance (EPV)**, written $v$, is the average within-risk variance in a [[Bühlmann Credibility]] model — how noisy a single risk's own experience is, averaged over the population of risks.
 
 > $$v = \mathrm{EPV} = E_\Theta\!\left[\mathrm{Var}(X \mid \Theta)\right]$$

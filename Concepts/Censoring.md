@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9437f24387e53f20a23a9b98458898342cc4a32d765b83b2e9ad56b8ac3101c4
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Censoring.md
+---
+
 **Censoring** occurs when the exact value of an observation is unknown, but it is known to exceed (or fall below) a threshold. In actuarial and survival analysis, **right-censoring** is most common: a claim or lifetime is observed only up to some censoring time $c$, after which observation ends.
 
 > **Right-censored likelihood contribution:**

@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ef17a0c755a3521e32371bcfd7c6afde31b0ec1445338af4516b686985b34b7a
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Classification Ratemaking.md
+---
+
 **Classification Ratemaking** is the segmentation of a book into rating classes and the derivation of **relativities** — the factors by which each class's rate differs from the base class — so that each risk pays according to its own expected cost.
 
 > $$\text{Relativity}_i = \frac{\text{Pure Premium}_i}{\text{Pure Premium}_{\text{base}}}$$

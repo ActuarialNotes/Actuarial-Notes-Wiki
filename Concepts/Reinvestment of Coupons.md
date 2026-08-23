@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9b757169edba357fcd04a901cc9ef7ba086490f8c7d2e2d9919e816726bd681b
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Reinvestment of Coupons.md
+---
+
 **Reinvestment of coupons** refers to the practice of investing each periodic coupon payment at a reinvestment rate $r_i$, which may differ from the original [[Yield Rate]] $j$.
 
 > $$AV = Fr \cdot s_{\overline{n}|r_i} + C$$

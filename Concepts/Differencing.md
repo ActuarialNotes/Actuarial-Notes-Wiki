@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b6c04fec0fa40853bfafa2b48cb79b2388d27c83093bb53394077ce016929507
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Differencing.md
+---
+
 **Differencing** replaces a [[Time Series]] by its period-to-period changes. It is the standard route from a non-stationary series to a [[Stationarity|stationary]] one, and the operation the "I" in [[ARIMA]] counts.
 
 > $$\nabla Y_t = Y_t - Y_{t-1} = (1 - B)Y_t$$

@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9a19169f07d2417c49dc1df0751017be49a6db48c4e43485d63de69f3bd58e2e
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Self-Insured Retention.md
+---
+
 **Self-Insured Retention (SIR)** is the layer of loss a risk-bearing entity retains on its own balance sheet before any insurance responds. Entities that retain risk this way — self-insured corporations, public entities, captives, and group self-insurance pools — still need [[Unpaid Claims|unpaid claim estimates]] for their retained layer, which is why the reserving syllabus covers non-insurance entities alongside insurers.
 
 > $$\text{Retained Loss} = \sum_i \min(X_i, R)$$

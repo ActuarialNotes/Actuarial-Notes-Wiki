@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f739359d8126dad58aadc1cbdcde970a60c7ce021d7b8ef8e2d3bd4f5114bad5
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Accident Year.md
+---
+
 **Accident Year** (AY) is a data aggregation method that groups losses by the calendar year in which the loss event *occurred*, and matches them against the [[Earned Premium|premium earned]] in that same year — regardless of when the policy was written, when the claim was reported, or when it was paid.
 
 > $$\text{AY } n \text{ Loss Ratio} = \frac{\text{Losses occurring in year } n}{\text{Premium earned in year } n}$$

@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7cad8539b97f85ddaebe4019df927fab268df4417653e4854fafd0592721f599
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Occurrence Coverage.md
+---
+
 **Occurrence Coverage** is a policy trigger under which the policy responds to losses that *occur* during the policy period, however long afterwards the claim is reported.
 
 > $$\text{Covered if } \; \text{effective date} \le \text{accident date} \le \text{expiration date}$$

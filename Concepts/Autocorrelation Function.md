@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9c6169a6422a289521588c74950b081c9132c39d8da13b5b2644d15327b0c1a7
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Autocorrelation Function.md
+---
+
 The **autocorrelation function (ACF)** gives the correlation between a [[Time Series]] and itself $k$ periods earlier. Plotted against $k$ — the **correlogram** — it is the primary tool for identifying the MA order of an [[ARIMA]] model and for checking residuals.
 
 > $$\rho_k = \frac{\gamma_k}{\gamma_0} = \frac{\mathrm{Cov}(Y_t, Y_{t+k})}{\mathrm{Var}(Y_t)}$$

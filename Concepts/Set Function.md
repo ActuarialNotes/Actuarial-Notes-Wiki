@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7a002e7d26e34eada0e9b147b681b7e315bc0bb3f33a253b8f0ddab2cb9f0df3
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Set Function.md
+---
+
 A **set function** $f$ is a function that maps a collection of subsets $\mathcal{F}$ of a set $\mathcal{S}$ to the real numbers $\mathbb{R}$.
 
 > $$f:\mathcal{F} \to \mathbb{R}$$

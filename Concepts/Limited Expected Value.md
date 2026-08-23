@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:125485b01971ca7647556495b3d0586f5721c7e578a20c3562fb4e1f84b0a6cf
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Limited Expected Value.md
+---
+
 The **Limited Expected Value** (LEV) of a random variable $X$ at limit $u$ is the expected value of the payment under a policy that pays $X$ up to a maximum of $u$. It equals the expected value of $\min(X, u)$.
 
 > $$E[X \wedge u] = \int_0^u [1 - F(x)]\,dx \quad \text{(for non-negative } X\text{)}$$

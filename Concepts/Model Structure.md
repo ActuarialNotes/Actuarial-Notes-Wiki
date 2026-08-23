@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1947b50f13ca1d5760f7266db7df6e0a0aaa0467c6b9812c6008a25223cfd701
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Model Structure.md
+---
+
 **Model Structure** is the specific set of terms included in an [[Extended Linear Model]]'s linear predictor — which predictors, transformations, and [[Interaction|interactions]] appear — as distinct from the choice of response distribution or [[Link Function]].
 
 > $$\eta = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 (x_1 \times x_2) + \beta_4 x_1^2 + \cdots$$

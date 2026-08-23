@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c56eb1b864b51f55b38003d87a22b83c62527de5f347117f48935cee28bbdeba
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Linkage.md
+---
+
 **Linkage** is the rule that turns a dissimilarity between *observations* into a dissimilarity between *clusters*, so that [[Hierarchical Clustering]] can decide which pair of clusters to fuse next.
 
 > $$\text{complete: } \max_{i \in A,\, j \in B} d_{ij} \qquad \text{single: } \min_{i \in A,\, j \in B} d_{ij}$$

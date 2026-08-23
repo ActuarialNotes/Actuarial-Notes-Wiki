@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0b7adf752119ec0d014c57ce6616afb4868a5211621f9e180198ae8852b79063
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Experience Rating.md
+---
+
 **Experience Rating** modifies an individual insured's manual premium prospectively, using its own past loss experience, weighted by [[Credibility|credibility]]. The output is an **experience modification factor** (mod): above $1.0$ for worse-than-expected experience, below for better.
 
 > $$M = Z \times \frac{A}{E} + (1 - Z)$$

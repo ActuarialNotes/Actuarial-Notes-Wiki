@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4b40076215f6c9dc2bb9d9e08fc1f61efaea64b9425740a172f962ab08e44838
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Fixed Effects.md
+---
+
 **Fixed effects** are the regression coefficients in a [[Linear Mixed Model]] that describe the *population-average* relationship between the predictors and the response. They are unknown constants to be estimated, not draws from a distribution.
 
 > $$\mathbf{y} = \underbrace{\mathbf{X}\boldsymbol{\beta}}_{\text{fixed}} + \underbrace{\mathbf{Z}\mathbf{b}}_{\text{random}} + \boldsymbol{\varepsilon}$$

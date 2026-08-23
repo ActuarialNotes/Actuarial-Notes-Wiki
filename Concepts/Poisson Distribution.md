@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3a8f998592204f6ca0ced3c1e738e2150e5bd4e07a1c2fa488dfdc29ddbe6c7d
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Poisson Distribution.md
+---
+
 The **Poisson Distribution** $X \sim \text{Poi}(\lambda)$ models the number of events occurring in a fixed interval of time or space when events happen independently at a constant average rate $\lambda$.
 
 > $$P(X = k) = \frac{e^{-\lambda}\lambda^k}{k!}$$

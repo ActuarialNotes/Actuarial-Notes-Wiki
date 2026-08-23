@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:149bcd4acc864692cda4cc699b9ec0b110771a39980c2514e4ddc3adfbe204d8
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Mean Square Error.md
+---
+
 The **Mean Square Error (MSE)** of an estimator $\hat{\theta}$ measures its **overall accuracy** by combining both variance (spread) and bias (systematic error):
 
 > $$\text{MSE}(\hat{\theta})$$

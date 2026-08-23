@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fc02eee856f4b5199cc28824912ba83d50001ad76caaaee159a717f6b02d8668
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Statistics.md
+---
+
 **Statistics** is the discipline of collecting, summarizing, and drawing inferences about a population from sample data. A **statistic** is any quantity computed from a sample; the most fundamental are the **sample mean** $\bar{X}$ and **sample variance** $S^2$, which estimate the population mean $\mu$ and variance $\sigma^2$.
 
 > $$\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$$

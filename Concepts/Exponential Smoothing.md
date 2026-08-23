@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8992e4cf94f299fad2bd69879eed1878ed2782fd0afc8363c66c34e7a1c55442
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Exponential Smoothing.md
+---
+
 **Exponential smoothing** forecasts a [[Time Series]] with a weighted average of its past values, the weights decaying geometrically into the past. Simple exponential smoothing has one parameter; Holt adds a trend and Holt-Winters adds [[Seasonality|seasonality]].
 
 > $$\hat{Y}_{t+1} = \alpha Y_t + (1-\alpha)\hat{Y}_t, \qquad 0 < \alpha < 1$$

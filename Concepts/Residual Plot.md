@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d4355f33351e2b3c95da4a0c3eb78c32c1076c0ebf2779000b21089ffc5d42f0
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Residual Plot.md
+---
+
 A **Residual Plot** is a diagnostic graph used to assess model fit by plotting **residuals** (observed minus fitted values) against fitted values, a predictor, or another variable. Patterns in residuals indicate model deficiencies.
 
 > $$e_i = y_i - \hat{y}_i \quad \text{(raw residual)}$$

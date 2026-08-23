@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cc1d5eb5ee27e5568b04a7ac54b6af4254bf9184ef9084603476b8cb1244b6b6
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Supervised Learning.md
+---
+
 **Supervised learning** fits a model to predict a labelled response $Y$ from predictors $X$. Every observation in the training data carries the answer, so the fit can be scored against it — the defining contrast with [[Unsupervised Learning]].
 
 > $$Y = f(X) + \varepsilon, \qquad \hat{f} = \arg\min_{f}\ \sum_{i=1}^{n} L\!\left(y_i, f(x_i)\right)$$

@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8b901f507be6e6a11af1e7bac19d40ece3db15d814a8e428550e21fec124f93f
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Negative Binomial Distribution.md
+---
+
 The **Negative Binomial Distribution** $X \sim \text{NegBin}(r, p)$ counts the number of independent Bernoulli trials needed to achieve exactly $r$ successes. When $r = 1$ it reduces to the [[Geometric Distribution|Geometric]] distribution.
 
 > $$P(X = k) = \binom{k-1}{r-1}p^r(1-p)^{k-r}$$

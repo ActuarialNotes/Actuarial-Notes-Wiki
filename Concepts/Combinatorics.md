@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:43997ee99a992611bab52dac4e7920c82aca9d866a959fea78cd6956020574c0
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Combinatorics.md
+---
+
 **Combinatorics** is a branch of [[Discrete Mathematics]] concerned with counting the number of ways to arrange, select, or partition objects.
 - It provides the tools needed to compute probabilities when outcomes are equally likely
 - The two fundamental problems are counting **ordered** arrangements ([[Permutation]]s) and **unordered** selections ([[Combination]]s)

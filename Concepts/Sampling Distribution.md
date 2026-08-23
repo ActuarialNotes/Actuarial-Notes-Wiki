@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3faeefc6b60e8aff03f4dae1b3416e77d92e2fcd2e08545b33b1ab024f20aeae
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Sampling Distribution.md
+---
+
 A **Sampling Distribution** is the probability distribution of a statistic (e.g., the sample mean $\bar{X}$ or sample variance $S^2$) computed from all possible random samples of size $n$ drawn from a population.
 
 > $$\bar{X} \sim N\!\left(\mu,\, \frac{\sigma^2}{n}\right) \quad \text{if } X_i \stackrel{\text{iid}}{\sim} N(\mu, \sigma^2)$$

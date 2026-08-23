@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cc832a642006cb825a96f06782fd33cdf7ca2469440e6996a74f9da9a03ccace
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Transformations of Random Variables.md
+---
+
 A **Transformation of a Random Variable** produces a new variable $Y = g(X)$ from an existing one. The reliable way to find its distribution is the **CDF method**: write $F_Y(y) = P(g(X) \leq y)$, rearrange the inequality into an event about $X$, evaluate with $F_X$, then differentiate to get the density.
 
 > $$F_Y(y) = P\bigl(g(X) \leq y\bigr)$$

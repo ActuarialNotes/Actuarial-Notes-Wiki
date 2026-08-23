@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cd107fbdcf7f56247bc539ea870d4ef234361e406a8ec789d7f4826a1c707845
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Reserve Adequacy.md
+---
+
 **Reserve Adequacy** is whether the carried [[Unpaid Claims|unpaid claim estimate]] is sufficient to pay the claims it covers. Testing it is a distinct step from computing the estimate: the methods produce numbers, and the adequacy review asks whether the resulting picture is coherent.
 
 > $$\text{Redundancy / (Deficiency)} = \text{Carried Reserve} - \text{Indicated Reserve}$$

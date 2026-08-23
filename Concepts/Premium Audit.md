@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e6edb2cc55c04e201765cd79d0d67fbf05ec63d70bee1e56d716cfc7166d9531
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Premium Audit.md
+---
+
 **Premium Audit** is the post-expiration verification of a policy's actual exposure, used on commercial lines whose [[Exposure Base|exposure base]] cannot be known in advance — workers compensation (payroll), general liability (sales or receipts), commercial auto (mileage or units).
 
 > $$\text{Audited Premium} = \text{Rate} \times \text{Actual Exposure}$$

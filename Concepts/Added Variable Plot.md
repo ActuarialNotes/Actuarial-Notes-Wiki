@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e5a06e5d0c3e6d6f847af0e3ab01a70e3ca74a471fc26c2e9a963c2edc13b9d0
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Added Variable Plot.md
+---
+
 An **Added Variable Plot** (partial regression plot) isolates the relationship between a single predictor $x_j$ and the response after removing (partialling out) the linear effects of all other predictors in the model — used to check whether $x_j$'s effect is correctly specified and to spot influential observations.
 
 > $$e_Y = Y - \hat{Y}^{(-j)}, \qquad e_{x_j} = x_j - \hat{x}_j^{(-j)}$$

@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e72ccaf46326bb8c82d4bb069f52a066a2d00189b090f5f50ea7c9275a29686a
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Set Operations.md
+---
+
 **Set Operations** are the fundamental ways of combining or modifying [[Set Theory|sets]] — union, intersection, complement, and difference — which translate directly into logical statements about [[Event|events]] in probability.
 
 > $$A \cup B = \{\, \omega : \omega \in A \text{ or } \omega \in B \,\}$$

@@ -11,6 +11,15 @@ impact_level: high
 impacted_agents: ["Legal & Compliance", "Underwriting", "Risk Management"]
 tags: ["Insurable-Interest", "Statute", "Underwriting-Guardrails"]
 aliases: ["The Gambling Act 1774", "Insurable Interest Act"]
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c1e42374f8fa9470352b24e931f18f20d8225da49862168cbe206168bda02308
+  sources: []
+  open_findings: 0
+  log: .verify/Resources/Regulation/The Life Assurance Act (1774).md
 ---
 
 # The Life Assurance Act 1774

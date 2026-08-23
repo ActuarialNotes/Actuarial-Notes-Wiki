@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6894d0bc4043f949ffae2b0b39707ff94ed71e16b5f371db835a987ff14f272b
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Binomial Distribution.md
+---
+
 The **Binomial Distribution** $X \sim \text{Bin}(n, p)$ models the number of successes in $n$ independent Bernoulli trials, each with probability of success $p$.
 - Requires trials to be independent, each trial to have exactly two outcomes, and $p$ to be constant across trials
 

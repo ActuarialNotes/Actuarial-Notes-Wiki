@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ef8adf816dce7ff122dcd1b160e6c3e4244bbb5d024a5419c60b9a28bd0fe2aa
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Conditional and Marginal Probability Functions.md
+---
+
 The **marginal** and **conditional probability functions** each describe a single component of a joint distribution: the marginal PMF $p_X(x)$ is the distribution of $X$ on its own, and the conditional PMF $p_{X \mid Y}(x \mid y)$ is the distribution of $X$ once $Y = y$ is known.
 
 > $$p_X(x) = \sum_y p_{X,Y}(x, y)$$

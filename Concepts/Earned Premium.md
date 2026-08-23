@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9ed14f2a703be881b67d455725cdd5c98964401545c7dc99c937cc988231f9cc
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Earned Premium.md
+---
+
 **Earned Premium** is the portion of premium corresponding to coverage the insurer has actually provided — the premium it has earned the right to keep, recognized pro rata as the policy term elapses.
 
 > $$\text{Earned Premium} = \text{Written Premium} - \Delta\text{UEP}$$

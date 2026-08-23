@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ce010eb51648cb4fce11313dd373d410d2bc9253730d97adff8ea4d54a57df36
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Long Tail Lines.md
+---
+
 **Long Tail Lines** are lines of insurance whose claims take many years to be reported, litigated and paid — so that at any valuation date most of the ultimate cost is still an estimate rather than a fact.
 
 > $$\text{Reported \%} = \frac{1}{\text{CDF}_{n \to \text{ult}}}$$

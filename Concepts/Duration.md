@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:90f01670c3efb689535dc7416ddcef2f50960414da22a06adfddfb667f5be1ea
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Duration.md
+---
+
 **Duration** measures the weighted-average time of a bond's (or portfolio's) cash flows, and quantifies its sensitivity to interest rate changes. Two main types:
 
 - **[[Macaulay Duration]]** $D_{Mac}$: weighted-average time of cash flows, weighted by present value

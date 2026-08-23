@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e94a0682ef7dd93a483eb8c8de84240614cb179a66f2dc5d4654444986b429b0
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Random Walk.md
+---
+
 A **random walk** is the non-stationary series whose change at each step is [[White Noise|white noise]]: $Y_t = Y_{t-1} + \varepsilon_t$. It is ARIMA$(0,1,0)$, the boundary case of an AR(1) at $\phi = 1$, and the null hypothesis a unit-root test is testing.
 
 > $$Y_t = Y_{t-1} + \varepsilon_t = Y_0 + \sum_{i=1}^{t}\varepsilon_i$$

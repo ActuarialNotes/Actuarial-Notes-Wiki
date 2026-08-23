@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8147a54189a6c49ba088a608e7fb2b9163f93cbd8c4836a08321b5305e0886f5
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Book Value.md
+---
+
 **Book value** of a bond is the value assigned to the bond on the issuer's or investor's books, typically equal to the present value of future cash flows at the original yield rate.
 
 **Prospective formula** (present value of remaining cash flows):

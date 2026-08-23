@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:66b7b62089d65ef5ff24176f95b40ee77ab93042a48e78648d8b2d9a4e807e38
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Set Theory.md
+---
+
 **Set Theory** is the branch of mathematics that studies collections of objects called **sets** and the relationships between them. It supplies the language of [[Probability]]: the [[Sample Space]] $S$ is the set of all outcomes, an [[Event]] is a subset of $S$, and [[Set Operations]] on events (union, intersection, complement) mirror the words "or", "and", and "not".
 
 > $$A \subseteq S \iff (\omega \in A \Rightarrow \omega \in S)$$

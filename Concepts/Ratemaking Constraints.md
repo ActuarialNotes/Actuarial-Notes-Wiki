@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ef03b0eee6c92f9cb4174227c46a0b7d01816a5f79bc9a50aeb2fab4f2d372f8
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Ratemaking Constraints.md
+---
+
 **Ratemaking Constraints** are the regulatory, competitive, operational and legal limits that cause the **filed** rate change to differ from the **indicated** one. The actuary's obligation is not that the two agree, but that the indication is computed properly and the departure is identified and documented.
 
 > $$\text{Selected Change} = f\!\left(\text{Indication},\; \text{Credibility},\; \text{Constraints}\right)$$

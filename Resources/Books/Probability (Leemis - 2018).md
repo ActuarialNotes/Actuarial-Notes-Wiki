@@ -7,6 +7,15 @@ Edition: 2nd
 Publisher: Lightning Source
 ISBN: 978-0-9829174-7-3
 Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/1014735226)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d981c1661269640c57b324610f4450d5910fd1308f37a25ac1d7400471e8a741
+  sources: []
+  open_findings: 0
+  log: .verify/Resources/Books/Probability (Leemis - 2018).md
 ---
 ![[Probability (Leemis - 2018) - Cover.svg]]
 

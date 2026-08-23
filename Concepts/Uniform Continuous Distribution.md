@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2d98b81ef9f2162200fa926a8514c20134277000acc157d5ef65efe1a35d17b3
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Uniform Continuous Distribution.md
+---
+
 The **Continuous Uniform Distribution** $X \sim \text{Unif}(a, b)$ assigns equal probability density to every point in the interval $(a, b)$, making it the continuous analogue of the discrete uniform. It is commonly used as a simple loss model when all outcomes in a range are equally plausible.
 
 > $$f(x) = \frac{1}{b - a}, \quad a < x < b$$

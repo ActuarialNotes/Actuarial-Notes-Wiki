@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1149921dc28ef4f1e253e168a3c91f54383c27618a1e4d4d908ac3aaa27409ec
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Covariance and Correlation Coefficient.md
+---
+
 The **covariance** $\text{Cov}(X, Y)$ measures the direction of the linear relationship between two [[Random Variable|random variables]] — positive if they tend to move together, negative if oppositely. The **correlation coefficient** $\rho_{X,Y}$ standardizes it into the range $[-1, 1]$.
 
 > $$\text{Cov}(X, Y) = E[XY] - E[X]\,E[Y]$$

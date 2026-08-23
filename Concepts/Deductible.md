@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cd74be3dd93052c420b80573bf128ecae4c9e7175ce3a6387de871e00bfbf3bb
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Deductible.md
+---
+
 A **Deductible** is the initial amount of a loss that the policyholder must pay before insurance coverage begins.
 - If the loss $X$ is less than or equal to the deductible $d$, the insurer pays nothing
 - There are two types of deductibles:

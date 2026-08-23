@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fd1dcca057c18ab01f00a97f307a9326403e8c9e7a7d82a6ba5eb2766bcb78d5
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Geometric Progression.md
+---
+
 In the context of annuities, a **geometric progression** refers to a sequence of payments where each payment is a constant multiple $(1+g)$ of the previous one. Starting from $1$, the payments are $1, (1+g), (1+g)^2, \ldots$
 
 - This is the basis of the [[Geometric Increasing Annuity]].

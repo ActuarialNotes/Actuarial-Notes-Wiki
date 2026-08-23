@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b4d1fcff6fce1bba85d73d85adb334fb29647545adc067e6f3e5ec222b27a905
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Catastrophe Modelling Framework.md
+---
+
 | Framework                                                                                                     | Description                                                                                                                              |
 | ------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | ↗[OASIS](https://oasislmf.org/) - Loss Modelling Framework                                                    | An open source catastrophe modelling platform. Generate ground-up losses (GUL), direct/insured losses (IL) and reinsurance losses (RIL). |

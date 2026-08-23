@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cc7f695492bb7df7c06402584424c68c25d1d8d31eb9c3f35eca595234df756c
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Categorical Predictor.md
+---
+
 A **Categorical Predictor** is an explanatory variable in a [[Generalized Linear Model]] whose values fall into a finite set of unordered groups (levels), such as territory or vehicle type — contrasted with an **ordinal predictor** (categories with a natural order, e.g., a credit tier) and a **continuous predictor** (a numeric variable, e.g., vehicle age).
 
 | Predictor type | Example | How it enters the model |

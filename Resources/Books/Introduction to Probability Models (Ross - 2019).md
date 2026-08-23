@@ -6,6 +6,15 @@ date: "2019"
 Edition: 12e
 Publisher: Academic Press
 ISBN: 978-0128143469
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:baba59821b128e9cf1bc73a9c218733a52199ae9d61e62839690b5585dc6fb9e
+  sources: []
+  open_findings: 0
+  log: .verify/Resources/Books/Introduction to Probability Models (Ross - 2019).md
 ---
 ![[Introduction to Probability Models (Ross - 2019) - Cover.svg]]
 

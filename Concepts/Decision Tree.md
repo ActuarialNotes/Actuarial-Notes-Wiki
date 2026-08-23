@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:49f22f07d46a57276e925bb5bf7e97cd6b1c92755fb9637731d4d87ce8dfd1f8
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Decision Tree.md
+---
+
 A **Decision Tree** is a [[Statistical Learning]] method that partitions the predictor space into rectangular regions by applying a sequence of binary splits, then predicts a constant value (regression) or class (classification) within each region.
 
 > **Regression tree prediction:** $\hat{y} = \frac{1}{|R_m|}\sum_{i \in R_m} y_i$ for region $R_m$

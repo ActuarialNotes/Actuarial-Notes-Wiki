@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:24d61c1a90b3995e31d3ba7ec064beebe4088ed05e968b32db5bb455e2112a23
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Intraclass Correlation.md
+---
+
 The **intraclass correlation (ICC)** is the share of total variance in a [[Linear Mixed Model]] that sits *between* groups — equivalently, the correlation between two observations drawn from the same group.
 
 > $$\mathrm{ICC} = \rho = \frac{\sigma_b^{2}}{\sigma_b^{2} + \sigma^{2}}$$

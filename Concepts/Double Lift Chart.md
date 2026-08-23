@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5fe34bc2e38764ebff0fc0c8493ec88b862dc4eaf4b611bd0a9572ac4f32469d
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Double Lift Chart.md
+---
+
 A **double lift chart** compares two candidate models directly by sorting the data on the *ratio* of their predictions and plotting each model's average prediction against the actual over that sort. Where a single [[Lift|lift chart]] asks "is this model any good?", a double lift chart asks "**which of these two is better, and where?**"
 
 > $$\text{sort by } r_i = \frac{\hat{y}_i^{\text{(model A)}}}{\hat{y}_i^{\text{(model B)}}}, \quad \text{bucket, then plot } \frac{\overline{\hat{y}}^{A}}{\bar{y}},\ \frac{\overline{\hat{y}}^{B}}{\bar{y}} \text{ per bucket}$$

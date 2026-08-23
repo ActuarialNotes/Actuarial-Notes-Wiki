@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:10d50b8ee90edb10d31114d274a24019d844f1e038689e27ad04b2bfbcd7b3c9
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Term of Bond.md
+---
+
 The **term of a bond** is the time from the bond's issue date (or purchase date) to its **maturity date**, at which the [[Redemption Value]] is paid. The term determines:
 - The number of [[Coupon]] payments: $n = \text{term} \times m$ where $m$ = payments per year
 - The time factor in the present value formula: $v^n = (1+j)^{-n}$

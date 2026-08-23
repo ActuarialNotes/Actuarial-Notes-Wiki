@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ac536d71474d903bd7accea032bc3a6f11b59e7ec68646ecba8c24a8b7c350d8
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Rate Change.md
+---
+
 **Rate Change** is the percentage by which rates are altered. Two numbers must be kept distinct: the **indicated** change that falls out of the ratemaking analysis, and the **selected** (implemented) change actually filed after judgment, competitive and regulatory considerations.
 
 > $$\text{Indicated Change} = \frac{\text{Indicated Rate}}{\text{Current Rate}} - 1$$

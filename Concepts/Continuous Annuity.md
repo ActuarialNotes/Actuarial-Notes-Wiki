@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a1b70a2287cab36bc7571e59023262474a3503dd38e560e06df2fd1601f7b00c
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Continuous Annuity.md
+---
+
 The **continuous annuity** $\bar{a}_{\overline{n}|}$ is the [[Present Value]] of a payment stream flowing continuously at a constant rate of 1 per unit time over $[0, n]$, discounted at a constant [[Force of Interest]] $\delta$.
 
 > $$\bar{a}_{\overline{n}|} = \int_0^n e^{-\delta t}\,dt$$

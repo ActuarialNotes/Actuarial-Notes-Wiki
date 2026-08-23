@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ef62aa865e714b3e93683537fde01f7d67ab75652381ffe25dfb354defbe785c
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Geometric Distribution.md
+---
+
 The **Geometric Distribution** $X \sim \text{Geom}(p)$ counts the number of independent Bernoulli trials until the first success. It is the discrete analogue of the [[Exponential Distribution|Exponential]] distribution and shares its **memoryless property**: $P(X > m+n \mid X > m) = P(X > n)$.
 
 > $$P(X = k) = (1-p)^{k-1}p, \quad k = 1, 2, 3, \ldots$$

@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9d23b8a717b906ea9c257c2c8b483317927f2a2bb21e1f49a78cda77938ee773
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Accumulation of Discount.md
+---
+
 **Accumulation of discount** refers to the gradual increase in [[Book Value]] of a discount bond toward its [[Face Value]] (or [[Redemption Value]]) over the bond's life. When a bond is purchased at a **discount** (price $P < C$), the discount is written up each period.
 
 - The discount accumulated in period $t$ equals the shortfall of the coupon below the yield earned:

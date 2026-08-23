@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:147200bd574032ba2e3aa11cf6e24c41bce43910d3e24b5e0f66fb590bb002e1
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Lognormal Distribution.md
+---
+
 The **Lognormal Distribution** $X \sim \text{Lognormal}(\mu, \sigma^2)$ applies when $\ln X \sim N(\mu, \sigma^2)$. It is widely used to model insurance losses, asset prices, and any quantity that must be positive and right-skewed.
 
 > $$f(x) = \frac{1}{x\sigma\sqrt{2\pi}}\exp\!\left(-\frac{(\ln x - \mu)^2}{2\sigma^2}\right)$$

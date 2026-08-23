@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6c41694c2bb1e22919d249bfc0cf301ef942fbbe95ef92d6a58624a743d65e44
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Claims Processing Changes.md
+---
+
 **Claims Processing Changes** are changes in how claims are handled — staffing and caseloads, settlement authority, use of defence counsel, closure targets, outsourcing, reserving philosophy — that alter the **timing** of payments and case reserve changes, and therefore the shape of the development pattern.
 
 > $$\text{Disposal Rate}_n = \frac{\text{Closed claims at age } n}{\text{Ultimate claim counts}}$$

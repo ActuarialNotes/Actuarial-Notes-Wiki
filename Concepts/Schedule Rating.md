@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:345522f0ad2d71acf42a4df5147c3a000f510351e3655eb4a24a94d65cca3c61
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Schedule Rating.md
+---
+
 **Schedule Rating** applies underwriter-assigned debits and credits to the manual premium for characteristics of the individual risk that the classification system does not capture — the physical condition of premises, management quality, safety programmes, employee selection and training, loss-control practices.
 
 > $$\text{Schedule-Rated Premium} = \text{Manual Premium} \times \left(1 + \sum_k s_k\right)$$

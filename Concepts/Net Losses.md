@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:732a75db70161e27a67d215d87d808e5b3d20dac148c54f46b7b1313aae5da82
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Net Losses.md
+---
+
 **Net Losses** are what the insurer ultimately bears: gross losses less every recovery — reinsurance cessions, [[Salvage and Subrogation|salvage and subrogation]], and [[Deductible Recovery|deductible recoveries]].
 
 > $$\text{Net} = \text{Gross} - \text{Ceded} - \text{S\&S} - \text{Deductible Recoveries}$$

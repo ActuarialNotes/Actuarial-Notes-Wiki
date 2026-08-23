@@ -6,6 +6,15 @@ date: "2015"
 Edition: 2nd
 Publisher: ACTEX
 ISBN: 978-1-62542-472-3
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f7ad79bcee51d20c085ecb0ee4ad97412c3bf50105775ff3475089a1ce28a42e
+  sources: []
+  open_findings: 0
+  log: .verify/Resources/Books/Probability and Statistics with Applications - A Problem Solving Text (Asimow - 2021).md
 ---
 ![[Probability and Statistics with Applications - A Problem-Solving Text - Cover.png]]
 ## 1 Combinatorial Probability

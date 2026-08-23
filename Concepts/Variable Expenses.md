@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c4167c1ac08335a6cc610c93d8daa3818e14e1bb7698825c192c42bac16a46cb
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Variable Expenses.md
+---
+
 **Variable Expenses** are underwriting expenses that move proportionally with premium — commissions, premium taxes, licences and fees — and are therefore expressed as a percentage $V$ of premium and carried in the **denominator** of the rate formula.
 
 > $$V = \frac{\text{Variable Expenses}}{\text{Premium}}$$

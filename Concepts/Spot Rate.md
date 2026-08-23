@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5bc5be6f5a454356cdbac6e74259054752be6567d8a06fb97c46cd3d599d58a9
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Spot Rate.md
+---
+
 The **$n$-year spot rate** $s_n$ is the yield to maturity on a zero-coupon bond that matures in exactly $n$ years, representing the market's required return for a single cash flow received at time $n$ with no intermediate payments. A coupon bond is priced by discounting each cash flow at the spot rate for that maturity:
 
 > $$P = \sum_{t=1}^{n} \frac{C_t}{(1+s_t)^t}$$

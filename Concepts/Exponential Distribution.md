@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d2bfc9ea20a54d5e1a284bbb7dbaf18b7659436b318b528a36915c724757f087
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Exponential Distribution.md
+---
+
 The **Exponential Distribution** $X \sim \text{Exp}(\theta)$ is a continuous distribution on $(0, \infty)$ commonly used to model the time between events or the size of insurance losses.
 
 > $$f(x) = \frac{1}{\theta}\,e^{-x/\theta}, \quad x > 0$$

@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2c99d13a92b520debe9f6fdfb5315a5c7f9b8a5a670e494edf1de30b70cecc11
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Probability Mass Function (PMF).md
+---
+
 A **Probability Mass Function (PMF)** gives the probability that a discrete [[Random Variable]] $X$ equals a specific value $x$.
 
 > $$p(x) = P(X = x)$$

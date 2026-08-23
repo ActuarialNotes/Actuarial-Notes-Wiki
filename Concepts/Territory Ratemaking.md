@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a8389346ca81a72dfcb584895d9c0fa2b87c60be06ad44f383117a910f76693e
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Territory Ratemaking.md
+---
+
 **Territory Ratemaking** is the derivation of geographic rate differentials. It is [[Classification Ratemaking|classification ratemaking]] with one distinctive property: geography is *spatially correlated*, so neighbouring territories inform one another and boundaries are themselves a decision.
 
 > $$\text{Territory Relativity}_i = \frac{\text{Pure Premium}_i}{\text{Pure Premium}_{\text{base}}}$$

@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:50f2de0f8505b889decaa9616c389d161b4d50b0cd95bd92a2f3013ffc45fa3c
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Predictive Distribution.md
+---
+
 The **predictive distribution** is the distribution of the *next* observation given the ones already seen, with the unknown risk parameter integrated out against its posterior. It is what a [[Bayesian Credibility]] forecast is really a mean of.
 
 > $$f(x_{n+1} \mid \mathbf{x}) = \int f(x_{n+1} \mid \theta)\, \pi(\theta \mid \mathbf{x})\, d\theta$$

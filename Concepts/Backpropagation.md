@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a9853223cf0ff4edd8f24770a23b1eb185324a758faee5da9c71f4e155562876
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Backpropagation.md
+---
+
 **Backpropagation** is the chain rule applied backwards through a [[Neural Network]] to get the gradient of the loss with respect to every weight in one sweep. It is what makes gradient descent on a network with thousands of weights feasible.
 
 > $$\frac{\partial L}{\partial w_{kj}} = \frac{\partial L}{\partial A_k}\cdot\frac{\partial A_k}{\partial z_k}\cdot\frac{\partial z_k}{\partial w_{kj}}$$

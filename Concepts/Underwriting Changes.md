@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e2a42edcccffbda241feeb322271e3c32fa766371db79f55671d1c9c92ebf45e
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Underwriting Changes.md
+---
+
 **Underwriting Changes** are shifts in risk selection — eligibility rules, hazard appetite, minimum premium thresholds, tier placement, agency appointments and terminations — that change the **mix and average quality** of the risks in the book, and so change both loss levels and development patterns.
 
 > $$\overline{\text{LR}} = \sum_i w_i \times \text{LR}_i$$

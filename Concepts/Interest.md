@@ -1,3 +1,15 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6ca66adf23d3490051afb3fdc8a708515e9049622a753e5f84abf08525278a54
+  sources: []
+  open_findings: 0
+  log: .verify/Concepts/Interest.md
+---
+
 **Interest** is the compensation paid by a borrower to a lender for the use of money over time. It is the fundamental mechanism of the time value of money.
 
 - The interest paid in period $t$ of a loan is:

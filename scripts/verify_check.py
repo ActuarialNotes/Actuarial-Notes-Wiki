@@ -284,17 +284,13 @@ def _is_append(old: str, new: str) -> bool:
     return new_n == old_n or new_n.startswith(old_n + "\n")
 
 
-def check_append_only(base: str) -> list[Problem]:
-    """Every `.verify/` file changed since `base` must be new or appended to."""
+def _diff_pair(old_rev: str, new_rev: str) -> list[Problem]:
+    """Append-only violations introduced between two commits."""
     problems: list[Problem] = []
     try:
-        merge_base = _git("merge-base", base, "HEAD").strip() or base
-    except subprocess.CalledProcessError:
-        merge_base = base
-    try:
-        raw = _git("diff", "--name-status", "-z", "--find-renames", merge_base, "--", ".verify")
+        raw = _git("diff", "--name-status", "-z", "--find-renames", old_rev, new_rev, "--", ".verify")
     except subprocess.CalledProcessError as exc:  # pragma: no cover - git-level failure
-        return [Problem("error", ".verify", f"could not diff against {base}: {exc}")]
+        return [Problem("error", ".verify", f"could not diff {old_rev}..{new_rev}: {exc}")]
 
     fields = [f for f in raw.split("\0") if f != ""]
     i = 0
@@ -316,11 +312,13 @@ def check_append_only(base: str) -> list[Problem]:
             continue
         if code.startswith("M") or code.startswith("T"):
             try:
-                old = _git("show", f"{merge_base}:{path}")
+                old = _git("show", f"{old_rev}:{path}")
             except subprocess.CalledProcessError:
                 continue
-            new_file = REPO_ROOT / path
-            new = new_file.read_text(encoding="utf-8") if new_file.is_file() else ""
+            try:
+                new = _git("show", f"{new_rev}:{path}")
+            except subprocess.CalledProcessError:
+                new = ""
             if not _is_append(old, new):
                 problems.append(
                     Problem(
@@ -331,6 +329,55 @@ def check_append_only(base: str) -> list[Problem]:
                     )
                 )
     return problems
+
+
+#: Beyond this many commits the per-commit walk stops being a PR check and starts
+#: being a history audit; fall back to the net diff alone.
+MAX_WALK_COMMITS = 300
+
+
+def check_append_only(base: str) -> list[Problem]:
+    """Every `.verify/` file changed since `base` must be new or appended to.
+
+    Two passes, because one is not enough:
+
+    * The **net diff** `merge_base..HEAD` catches the obvious case — an entry
+      that was already published being reworded, or a log deleted or renamed.
+    * A **per-commit walk** catches what the net diff structurally cannot: a log
+      created *and then* rewritten inside the same PR shows up as a plain "added"
+      file, and an edit that is reverted in a later commit shows up as nothing at
+      all. A sweep writes its own logs, so this is exactly the shape a sweep
+      could produce — an agent rewriting a finding it had just filed.
+
+    Findings are deduplicated, so a violation visible to both passes is reported
+    once.
+    """
+    try:
+        merge_base = _git("merge-base", base, "HEAD").strip() or base
+    except subprocess.CalledProcessError:
+        merge_base = base
+
+    problems = _diff_pair(merge_base, "HEAD")
+
+    try:
+        revs = _git("rev-list", "--reverse", f"{merge_base}..HEAD").split()
+    except subprocess.CalledProcessError:  # pragma: no cover - git-level failure
+        revs = []
+    if 0 < len(revs) <= MAX_WALK_COMMITS:
+        previous = merge_base
+        for rev in revs:
+            problems.extend(_diff_pair(previous, rev))
+            previous = rev
+
+    seen: set[tuple[str, str]] = set()
+    unique: list[Problem] = []
+    for problem in problems:
+        key = (problem.path, problem.message)
+        if key in seen:
+            continue
+        seen.add(key)
+        unique.append(problem)
+    return unique
 
 
 # ─── Sync (repair) ────────────────────────────────────────────────────────────

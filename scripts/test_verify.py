@@ -356,6 +356,14 @@ class LogTests(TempVault):
 
 # ─── Append-only enforcement (P3) ─────────────────────────────────────────────
 
+def _git_diff_is_empty(root: Path, a: str, b: str) -> bool:
+    out = subprocess.run(
+        ["git", "diff", "--name-only", a, b, "--", ".verify"],
+        cwd=root, capture_output=True, text=True, check=True,
+    ).stdout.strip()
+    return out == ""
+
+
 class AppendOnlyTests(TempVault):
     ENTRY = """## [F-001] Stem value contradicts official PDF
 - entry_type: finding
@@ -420,6 +428,50 @@ class AppendOnlyTests(TempVault):
         self.log_file.write_text(text.rstrip("\n"), encoding="utf-8")
         self.commit("strip the trailing newline")
         self.assertEqual(C.check_append_only("HEAD~1"), [])
+
+
+    def test_a_log_created_and_then_tampered_within_one_pr_fails(self) -> None:
+        """The net diff shows a log added in this PR as a plain "added" file, so
+        a rewrite of an entry the same PR just filed is invisible to it. A sweep
+        writes its own logs, so this is exactly the shape a sweep could produce."""
+        other = "questions/exam-5/q2.md"
+        self.write(other, QUESTION)
+        V.append_entry(other, self.ENTRY.strip(), self.root)
+        self.commit("sweep: file a critical finding")
+
+        log_file = V.log_path_for(other, self.root)
+        text = log_file.read_text(encoding="utf-8")
+        log_file.write_text(text.replace("severity: critical", "severity: nit"), encoding="utf-8")
+        self.commit("sweep: quietly downgrade it")
+
+        problems = C.check_append_only("HEAD~2")
+        self.assertTrue(problems, "a within-PR rewrite must still be caught")
+        self.assertTrue(any("append-only" in p.message for p in problems))
+
+    def test_an_edit_reverted_later_in_the_pr_still_fails(self) -> None:
+        """Net-zero across the PR, but the entry was rewritten in between."""
+        original = self.log_file.read_text(encoding="utf-8")
+        self.log_file.write_text(original.replace("severity: critical", "severity: nit"),
+                                 encoding="utf-8")
+        self.commit("downgrade")
+        self.log_file.write_text(original, encoding="utf-8")
+        self.commit("put it back")
+
+        self.assertEqual(_git_diff_is_empty(self.root, "HEAD~2", "HEAD"), True)
+        problems = C.check_append_only("HEAD~2")
+        self.assertTrue(any("append-only" in p.message for p in problems))
+
+    def test_appending_across_several_commits_passes(self) -> None:
+        V.append_entry(self.rel, V.render_entry("C-001", "Checked the sibling batch", [
+            ("entry_type", "comment"), ("author", "agent:validate-v1"), ("date", "2026-08-19"),
+        ]), self.root)
+        self.commit("append a comment")
+        V.append_entry(self.rel, V.render_entry("F-001/R", "Correction applied", [
+            ("entry_type", "resolution"), ("author", "human:jordan"), ("date", "2026-08-20"),
+            ("resolves", "F-001"), ("status", "resolved"),
+        ]), self.root)
+        self.commit("append a resolution")
+        self.assertEqual(C.check_append_only("HEAD~2"), [])
 
 
 # ─── Recording a pass (P1 + idempotency) ──────────────────────────────────────
@@ -601,6 +653,7 @@ class RecordTests(TempVault):
                     "--note", "Fixed in commit 8ac31f2.", "--date", "2026-08-20")
         problems = C.check_log_file(V.log_path_for(self.rel, self.root))
         self.assertEqual([p.message for p in problems], [])
+
 
 
 # ─── Reader reports (Phase 3) ─────────────────────────────────────────────────

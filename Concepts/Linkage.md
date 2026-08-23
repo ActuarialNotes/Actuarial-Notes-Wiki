@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:c56eb1b864b51f55b38003d87a22b83c62527de5f347117f48935cee28bbdeba
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Linkage.md
 ---
 

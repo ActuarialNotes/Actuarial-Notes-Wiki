@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:9c7a53e0ca91da902e9a3d23738d1239a3dafcc89c68e24a50e7d9ed8fd2921e
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/AUROC.md
 ---
 

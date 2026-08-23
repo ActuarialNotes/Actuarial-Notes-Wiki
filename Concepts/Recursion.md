@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:29807f709694a4a8760d372efb04143954f5699ac4667170a134c95f8d4fcd14
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Recursion.md
 ---
 

@@ -14,6 +14,7 @@ verification:
   content_hash: sha256:f7ad79bcee51d20c085ecb0ee4ad97412c3bf50105775ff3475089a1ce28a42e
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Resources/Books/Probability and Statistics with Applications - A Problem Solving Text (Asimow - 2021).md
 ---
 ![[Probability and Statistics with Applications - A Problem-Solving Text - Cover.png]]

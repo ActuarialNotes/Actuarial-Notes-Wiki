@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:f69c23a155233093be1eff4138f0135a1f47621cc45d2b5fcc3a76120ec243d4
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/K-Means Clustering.md
 ---
 

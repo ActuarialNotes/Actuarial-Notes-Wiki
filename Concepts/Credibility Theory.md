@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:17200fe82cdd7ca8361b090501fca78ee5bd8dbba0a04b6025fdb21233bea219
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Credibility Theory.md
 ---
 

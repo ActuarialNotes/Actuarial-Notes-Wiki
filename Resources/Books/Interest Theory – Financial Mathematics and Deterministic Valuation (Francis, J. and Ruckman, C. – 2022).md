@@ -15,6 +15,7 @@ verification:
   content_hash: sha256:1266487a1a7dcfbd6fe62250ceea27f19c2aab3fc94384c2ccebd62b596b3c81
   sources: []
   open_findings: 0
+  open_critical: 0
   log: ".verify/Resources/Books/Interest Theory – Financial Mathematics and Deterministic Valuation (Francis, J. and Ruckman, C. – 2022).md"
 ---
 ![[Interest Theory – Financial Mathematics and Deterministic Valuation (Francis, J. and Ruckman, C. – 2022) - Cover.svg]]

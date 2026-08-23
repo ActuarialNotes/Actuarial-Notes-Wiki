@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:39a622fe47353403923a683c2febf87543f39848b402dd962d0ee4f5090aedfa
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Dendrogram.md
 ---
 

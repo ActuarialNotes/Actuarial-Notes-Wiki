@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:ff43135c38c55df3a81285bf92e3c87e722fb58ea791db6612a0d33fa1d80e6a
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Redemption Value.md
 ---
 

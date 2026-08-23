@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:5aac2144f7560593d115767547b4f36558f27b6ec55cd81813feb8003ab2f4e2
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Case Adequacy.md
 ---
 

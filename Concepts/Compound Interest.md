@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:132970b99797a2b768cf2fccff8e4a811035b7e924a705ee1eb79894538e72df
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Compound Interest.md
 ---
 

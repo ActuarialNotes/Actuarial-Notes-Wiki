@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:9d23b8a717b906ea9c257c2c8b483317927f2a2bb21e1f49a78cda77938ee773
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Accumulation of Discount.md
 ---
 

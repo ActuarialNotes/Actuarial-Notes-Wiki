@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:f65c7d62a766a2730fb9b2a9ba5828879960b7a12ea01f477281465b3f97273c
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Nominal Discount Rate.md
 ---
 

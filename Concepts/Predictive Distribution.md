@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:50f2de0f8505b889decaa9616c389d161b4d50b0cd95bd92a2f3013ffc45fa3c
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Predictive Distribution.md
 ---
 

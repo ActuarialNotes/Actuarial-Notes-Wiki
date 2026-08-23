@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:cc1d5eb5ee27e5568b04a7ac54b6af4254bf9184ef9084603476b8cb1244b6b6
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Supervised Learning.md
 ---
 

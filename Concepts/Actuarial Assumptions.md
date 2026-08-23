@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:86ffdb183c4197786c7da0730357a6d59ad18efc93b0f4760a0be95c304b4f82
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Actuarial Assumptions.md
 ---
 

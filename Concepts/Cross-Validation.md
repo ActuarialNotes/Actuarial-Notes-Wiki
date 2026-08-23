@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:e8d234bebf3f8bce481f86c82b0063b12040c23bd795f363f7e4ac49d76ef0fb
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Cross-Validation.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:616fb7c42d77d95a7c960355ad713c94acd559823b9e9d949d7916e273ede80a
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Written Premium.md
 ---
 

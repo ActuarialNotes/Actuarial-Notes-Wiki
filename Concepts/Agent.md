@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:1afbaf94c205eaaf52343f7cce9e96458bd3a7d4701252a273206718cb7bb669
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Agent.md
 ---
 

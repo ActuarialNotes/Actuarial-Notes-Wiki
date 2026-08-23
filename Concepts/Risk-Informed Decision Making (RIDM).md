@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Risk-Informed Decision Making (RIDM).md
 ---
 

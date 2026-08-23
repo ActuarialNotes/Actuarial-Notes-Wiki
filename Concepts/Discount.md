@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:f2f080c225faaa2622e527ab4c8f99f7681be3686f4b35f7327d135833b2a23f
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Discount.md
 ---
 

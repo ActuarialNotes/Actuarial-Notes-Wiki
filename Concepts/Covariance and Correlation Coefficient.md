@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:1149921dc28ef4f1e253e168a3c91f54383c27618a1e4d4d908ac3aaa27409ec
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Covariance and Correlation Coefficient.md
 ---
 

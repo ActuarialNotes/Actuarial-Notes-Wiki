@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:892a03408bbd2e28263904259376db3faaba8d2ab64354a9d9080899f113b2c7
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Tweedie Distribution.md
 ---
 

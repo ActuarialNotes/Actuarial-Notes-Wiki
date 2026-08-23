@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:7842fe1ff5e7cff656731227962a9d52144beee7bf4d81300f7b29f6102e1db5
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Bornhuetter-Ferguson Method.md
 ---
 

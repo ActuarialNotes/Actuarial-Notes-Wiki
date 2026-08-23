@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:c22a12c1dbaba8dc55ce80d134dc17e9c1aab4dee39739ae2c1c1e93f97005d2
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Accumulated Value.md
 ---
 

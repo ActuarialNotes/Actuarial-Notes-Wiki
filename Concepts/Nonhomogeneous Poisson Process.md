@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:be42bb1af419b1a049d74f87a053a2d3291f311d153ec653c64b5defd803f9e8
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Nonhomogeneous Poisson Process.md
 ---
 

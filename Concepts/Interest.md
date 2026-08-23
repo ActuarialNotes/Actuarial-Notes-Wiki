@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:6ca66adf23d3490051afb3fdc8a708515e9049622a753e5f84abf08525278a54
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Interest.md
 ---
 

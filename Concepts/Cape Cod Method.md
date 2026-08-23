@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:71f69816e5310e9d8e56caf313430a142854feea580be907aae1f50aed3a1772
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Cape Cod Method.md
 ---
 

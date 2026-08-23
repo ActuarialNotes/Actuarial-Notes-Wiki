@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:149bcd4acc864692cda4cc699b9ec0b110771a39980c2514e4ddc3adfbe204d8
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Mean Square Error.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:0e5ac3dec2deb3342adcb186b309eaa66c01e41061bf21df3bdbc191328f4a1d
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Consistency.md
 ---
 

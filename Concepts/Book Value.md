@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:8147a54189a6c49ba088a608e7fb2b9163f93cbd8c4836a08321b5305e0886f5
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Book Value.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:a24ad843e2d6041d80ac7758776b43f05f3d4d14e307abc71ef7b61a4bc5340b
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Equation of Value.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:2993798ec2e5588b93b4a6f89220028e170b1e19818132665555b3f110bf1d2b
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Exposure Trend.md
 ---
 

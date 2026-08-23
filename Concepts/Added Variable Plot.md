@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:e5a06e5d0c3e6d6f847af0e3ab01a70e3ca74a471fc26c2e9a963c2edc13b9d0
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Added Variable Plot.md
 ---
 

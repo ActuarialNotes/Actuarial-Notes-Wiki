@@ -39,6 +39,12 @@ export interface Verification {
   contentHash: string
   sources: string[]
   openFindings: number
+  /**
+   * How many of those are `critical`. Carried in the block rather than derived
+   * from the log because sidecar logs are not bundled at build time, and the
+   * quiz needs severity to decide what to exclude from a session.
+   */
+  openCritical: number
   /** Repo-relative path of the sidecar log, e.g. `.verify/Concepts/Convexity.md`. */
   log: string
 }
@@ -57,6 +63,7 @@ export const UNVERIFIED: Verification = {
   contentHash: '',
   sources: [],
   openFindings: 0,
+  openCritical: 0,
   log: '',
 }
 
@@ -83,6 +90,7 @@ export function verificationFromAttributes(attrs: unknown): Verification | null 
   const status = asString(block.status)
   const confidence = asString(block.confidence)
   const openFindings = Number(block.open_findings)
+  const openCritical = Number(block.open_critical)
 
   return {
     status: STATUSES.includes(status as VerificationStatus)
@@ -98,6 +106,7 @@ export function verificationFromAttributes(attrs: unknown): Verification | null 
       ? block.sources.map((s) => String(s).trim()).filter(Boolean)
       : [],
     openFindings: Number.isFinite(openFindings) && openFindings > 0 ? Math.floor(openFindings) : 0,
+    openCritical: Number.isFinite(openCritical) && openCritical > 0 ? Math.floor(openCritical) : 0,
     log: asString(block.log) ?? '',
   }
 }
@@ -161,6 +170,15 @@ export function formatCheckedDate(iso: string | null): string | null {
  * finding is exactly the thing a reader needs to know about.
  */
 export function verificationBadge(v: Verification | null | undefined): VerificationBadge {
+  if (v && v.openCritical > 0 && v.status !== 'disputed') {
+    // A critical finding outranks every other state: it is the one thing a
+    // reader has to know before they trust the page.
+    return {
+      label: 'Known issue',
+      tone: 'red',
+      detail: `${v.openCritical} unresolved critical finding${v.openCritical === 1 ? '' : 's'} on this page.`,
+    }
+  }
   if (!v || v.status === 'unverified') {
     return {
       label: 'Unverified',
@@ -190,6 +208,13 @@ export function verificationBadge(v: Verification | null | undefined): Verificat
     }
   }
   const date = formatCheckedDate(v.lastChecked)
+  if (v.openCritical > 0) {
+    return {
+      label: 'Known issue',
+      tone: 'red',
+      detail: `${v.openCritical} unresolved critical finding${v.openCritical === 1 ? '' : 's'} on this page.`,
+    }
+  }
   if (v.openFindings > 0) {
     return {
       label: date ? `Verified · ${date}` : 'Verified',
@@ -326,4 +351,20 @@ export function openFindings(log: VerificationLog): LogEntry[] {
 
 export function openCriticalFindings(log: VerificationLog): LogEntry[] {
   return openFindings(log).filter((e) => e.severity === 'critical')
+}
+
+
+/**
+ * Should this page be kept out of a quiz session by default?
+ *
+ * True when something critical is on file about it: an unresolved critical
+ * finding, or a `disputed` status (which means either sources conflict or a
+ * critical finding is unresolved). Serving a student a question that the record
+ * says is wrong is the exact failure this whole layer exists to prevent — but it
+ * is a *default*, not a lock, because reviewing flagged questions is how they get
+ * fixed. `hooks/useShowFlaggedQuestions.ts` is the toggle.
+ */
+export function hasCriticalFinding(v: Verification | null | undefined): boolean {
+  if (!v) return false
+  return v.openCritical > 0 || v.status === 'disputed'
 }

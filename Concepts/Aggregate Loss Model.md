@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:558fc89c22f6bc32dbe717817c040eed23aae8ea828165a8e865e2bc8fe9a8ec
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Aggregate Loss Model.md
 ---
 

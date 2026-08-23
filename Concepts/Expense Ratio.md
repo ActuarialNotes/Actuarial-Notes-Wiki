@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:dfbb44910ab1ea500498aeb4bf6f745e30b1281a4dbce2358229fd199b57d61a
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Expense Ratio.md
 ---
 

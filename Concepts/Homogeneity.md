@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:1ba734e4f7519fdb2ed50937edc6a8ede954cb21adbf5c96e9e0ebc6ceacdab4
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Homogeneity.md
 ---
 

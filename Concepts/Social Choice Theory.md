@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:518f2ca5f9c600d71b3a9cc4e08162eaa88dd9575beb98654c6df32ce7b1e4d9
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Social Choice Theory.md
 ---
 

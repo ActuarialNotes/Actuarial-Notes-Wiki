@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:514613c2e190bf7ef75508fa52a9320d9db4f7e5003d33d36b0f076aee6ab975
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Interest Rate.md
 ---
 

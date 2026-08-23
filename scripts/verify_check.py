@@ -136,6 +136,13 @@ def check_block(rel: str, text: str) -> list[Problem]:
         err(f"open_findings {open_findings!r} must be a non-negative integer")
         open_findings = None
 
+    open_critical = block.get("open_critical")
+    if not isinstance(open_critical, int) or isinstance(open_critical, bool) or open_critical < 0:
+        err(f"open_critical {open_critical!r} must be a non-negative integer")
+        open_critical = None
+    elif open_findings is not None and open_critical > open_findings:
+        err(f"open_critical ({open_critical}) cannot exceed open_findings ({open_findings})")
+
     expected_log = V.log_rel_for(rel)
     if block.get("log") != expected_log:
         err(f"log must be {expected_log!r}, found {block.get('log')!r}")
@@ -150,6 +157,9 @@ def check_block(rel: str, text: str) -> list[Problem]:
         actual_open = len(log.open_findings())
         if open_findings is not None and open_findings != actual_open:
             warn(f"open_findings is {open_findings}, log holds {actual_open} (run --sync)")
+        actual_critical = len(log.open_critical())
+        if open_critical is not None and open_critical != actual_critical:
+            warn(f"open_critical is {open_critical}, log holds {actual_critical} (run --sync)")
         if status == "verified" and last_checked is not None:
             same_day = [e for e in log.entries if e.entry_date == str(last_checked)]
             if not same_day:
@@ -369,6 +379,10 @@ def sync_file(path: Path) -> str | None:
     if block.get("open_findings") != actual_open:
         block["open_findings"] = actual_open
         changes.append(f"open_findings → {actual_open}")
+    actual_critical = len(log.open_critical()) if log else 0
+    if block.get("open_critical") != actual_critical:
+        block["open_critical"] = actual_critical
+        changes.append(f"open_critical → {actual_critical}")
 
     if not changes:
         return None

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:660de00f2dd0cbdef95980b9625fd129823ffe1a7caea0a9a6d3f7636be7590b
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Present Value.md
 ---
 

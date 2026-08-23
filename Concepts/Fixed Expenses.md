@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:0da16c098c3fd44a40cf641651818759247d9998fd48b2e3c4e86799ee21f7a4
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Fixed Expenses.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:eadc382a8c7d9e6af82a20819dac959b7fa6e8be197dfd1b7e5fee821e8ccfbe
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Poisson Regression.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:873219aa721bfc650f0f32c0a7adb64f32f83faa160d30ea9c739ec833e1dde2
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Poisson Process.md
 ---
 

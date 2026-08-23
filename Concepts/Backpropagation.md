@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:a9853223cf0ff4edd8f24770a23b1eb185324a758faee5da9c71f4e155562876
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Backpropagation.md
 ---
 

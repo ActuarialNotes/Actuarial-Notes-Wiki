@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:de5421d182acad3156e476c0b27e9d36ea17b7b08a6d0ed3b02a05eee8269f08
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Chain Ladder Method.md
 ---
 

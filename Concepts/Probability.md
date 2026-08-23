@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:e11f3868b4eac47b72d476f057e58c3aaf2e573856dc632754403d7b8e0899dd
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Probability.md
 ---
 

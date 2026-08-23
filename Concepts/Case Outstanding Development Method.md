@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:eee75ff40546ae124a4269af0d49859e029f2727e8e987e21758bf9b99b921dc
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Case Outstanding Development Method.md
 ---
 

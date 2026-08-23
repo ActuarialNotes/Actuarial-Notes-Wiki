@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:3d37fe58c9a5bc2c3f2e68a222814d492ee41e2dd3105472c7fd8ff019f7793f
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Empirical Bayes Credibility.md
 ---
 

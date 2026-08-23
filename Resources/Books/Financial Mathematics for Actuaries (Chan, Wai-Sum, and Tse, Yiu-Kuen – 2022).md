@@ -15,6 +15,7 @@ verification:
   content_hash: sha256:d7a608a90be3566d29ea188a8904e77a603ba3da34bf3274272e25b7bfb9a60d
   sources: []
   open_findings: 0
+  open_critical: 0
   log: ".verify/Resources/Books/Financial Mathematics for Actuaries (Chan, Wai-Sum, and Tse, Yiu-Kuen – 2022).md"
 ---
 ![[Financial Mathematics for Actuaries (Chan, Wai-Sum, and Tse, Yiu-Kuen – 2022) - Cover.svg]]

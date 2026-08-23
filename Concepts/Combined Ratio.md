@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:7d167873ac069d73e9fe9a40e51eea0349cb93656dc5dcace5d23ab8cba0cebd
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Combined Ratio.md
 ---
 

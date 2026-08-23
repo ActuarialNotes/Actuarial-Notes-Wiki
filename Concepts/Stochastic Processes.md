@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:ce02893c5fe29566442730cdcd33d476caa36863e1dbe108ffada9f063b0472c
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Stochastic Processes.md
 ---
 

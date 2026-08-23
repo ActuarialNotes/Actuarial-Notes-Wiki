@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:edd6177e722aa444131a2d91997294392b3ff9f5ecdcbce0e2f6369458107ac9
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Life Annuity.md
 ---
 

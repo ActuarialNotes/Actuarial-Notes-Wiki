@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:02e84889f3bbff527b798217824dfbc56e1cac13621703c9396943229e1f7504
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Time Series.md
 ---
 

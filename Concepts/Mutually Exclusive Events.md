@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:6fe255a119296c29cb4534cd440ed2f64b046b7d2b648ac8ac5d154d4000a617
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Mutually Exclusive Events.md
 ---
 

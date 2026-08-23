@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:3a3e2bc91467adbec6735951d2428204c2366c09c0bb4cb39ce49b94a41e7795
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Non-Callable Bond.md
 ---
 

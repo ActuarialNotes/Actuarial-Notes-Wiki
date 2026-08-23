@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:c51f849ef154bdcdd326c2c76408fe153286c8fc714996368d2db02d502349ed
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Whole Life Insurance.md
 ---
 

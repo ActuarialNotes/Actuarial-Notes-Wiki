@@ -19,6 +19,7 @@ verification:
   content_hash: sha256:b1d3b8ddec35de0e270cb96714b08e7d029bfaba4b29eedd2ebdfa34dcdcd0e2
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Resources/Regulation/Historic Ontario Auto Reform - SABS Reduction (2010).md
 ---
 

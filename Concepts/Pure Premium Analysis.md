@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:55093b06158b10568b04d640fc21c2712e24576ddf804fa98c56aff12687d90e
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Pure Premium Analysis.md
 ---
 

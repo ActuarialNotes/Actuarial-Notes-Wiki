@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:5a5518a750b0e1399198a03bf19b30f3a526eb2c37a24efddd76fbac3cc8abd0
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Deviance.md
 ---
 

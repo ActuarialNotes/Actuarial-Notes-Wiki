@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:84ccaf826a32add76d81f76e53f0d6aa8c3ca276034d02d2481a9278466e60e1
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/AIC.md
 ---
 

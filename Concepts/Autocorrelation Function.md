@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:9c6169a6422a289521588c74950b081c9132c39d8da13b5b2644d15327b0c1a7
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Autocorrelation Function.md
 ---
 

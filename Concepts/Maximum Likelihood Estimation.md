@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:1cd6f43fe109fc7e78f309a1b5f36a07eea1b7ee3aee9da517bd0d3569142af4
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Maximum Likelihood Estimation.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:40df57022cbea98708e2d365d97b6ea2cccb6ecfd13561ef9976c33138ec02d5
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Coinsurance.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:5b445f73141540349bb54250ee26c640847d77ef36a43e0dd56b709bab6259f7
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Proportion of Variance Explained.md
 ---
 

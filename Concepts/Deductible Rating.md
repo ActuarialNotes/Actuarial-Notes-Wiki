@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:46d0e83c16b9c7c77e7533d7a7282a092f63db2a336437aa2a470ea0722386f4
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Deductible Rating.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:a8ddbd185af92a572011c752191ce646b3a9ecab882ecc4aa4ba9c0afb35eefc
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Incurred Losses.md
 ---
 

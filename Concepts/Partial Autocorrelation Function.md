@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:e63cf0c5c6d71198dc7458e8981e85abe125d211ec71b6cc27fad8bc5547f192
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Partial Autocorrelation Function.md
 ---
 

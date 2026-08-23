@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:0173c4a319cddf6f28e10d091479bbe9445ebff0a8e345454b764a113a3577e3
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Method of Moments.md
 ---
 

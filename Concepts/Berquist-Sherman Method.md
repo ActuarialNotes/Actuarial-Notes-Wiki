@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:7168cf447ac9195297dc252345a70a78cdd4297455846d4660d0fd61c1810ca8
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Berquist-Sherman Method.md
 ---
 

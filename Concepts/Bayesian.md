@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:0906de0814bea24b7fd7e9dcfd57c06c971ee06dba297dff3ee8b42a00050910
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Bayesian.md
 ---
 

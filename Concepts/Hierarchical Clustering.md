@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:cbda2685b30ec19db51533bb17f7d258a0d2f11aee3660e7017887ce0ca37386
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Hierarchical Clustering.md
 ---
 

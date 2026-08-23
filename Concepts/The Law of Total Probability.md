@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:42121c2ca3aeb90e970df3614cacd0851b4d840fdaba087ddde4ec3495d75854
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/The Law of Total Probability.md
 ---
 

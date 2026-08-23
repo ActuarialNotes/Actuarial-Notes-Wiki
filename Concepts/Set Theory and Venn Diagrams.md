@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:80d2c7c41d4d84e1ce08a5489affb992a63702e45adeaa1c1ec65bc90051b196
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Set Theory and Venn Diagrams.md
 ---
 

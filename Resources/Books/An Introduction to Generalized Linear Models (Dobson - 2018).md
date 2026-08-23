@@ -14,6 +14,7 @@ verification:
   content_hash: sha256:83fcb5a3c280e6e4d918b1d7414a174cc12ebd08cad63ecb75b3c0d9352a9174
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Resources/Books/An Introduction to Generalized Linear Models (Dobson - 2018).md
 ---
 ![[An Introduction to Generalized Linear Models (Dobson - 2018) - Cover.svg]]

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:de0a2d1581f40276fe5a90d896f2a38c4fb5b125e3415b17ff07d16131a68184
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Cash Flow Matching.md
 ---
 

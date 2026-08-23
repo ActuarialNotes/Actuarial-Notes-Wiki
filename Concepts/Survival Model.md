@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:b2fc5b6c9b42997ea95ee216af06848eb38ece0fbb72341419a0d23f6013cd5c
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Survival Model.md
 ---
 

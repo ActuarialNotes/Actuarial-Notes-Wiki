@@ -19,6 +19,7 @@ verification:
   content_hash: sha256:8abad991acfa67884c83ad295486fbaf536c7040c394103ee589ab215bb04196
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Resources/Regulation/IFRS 17 Global Accounting Implementation (2023).md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:cc832a642006cb825a96f06782fd33cdf7ca2469440e6996a74f9da9a03ccace
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Transformations of Random Variables.md
 ---
 

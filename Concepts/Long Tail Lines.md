@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:ce010eb51648cb4fce11313dd373d410d2bc9253730d97adff8ea4d54a57df36
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Long Tail Lines.md
 ---
 

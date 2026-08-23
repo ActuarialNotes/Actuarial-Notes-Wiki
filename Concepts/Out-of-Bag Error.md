@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:ea9daa93cfebe9d46bdd569b950b0ab98dd8251f19bd0937c9c4ff548991c3d0
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Out-of-Bag Error.md
 ---
 

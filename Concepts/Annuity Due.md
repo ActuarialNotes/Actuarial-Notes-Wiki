@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:ea3b3624006faf7c61c8aebaa5628363602f002eb51824273318e8cc6dfabcf5
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Annuity Due.md
 ---
 

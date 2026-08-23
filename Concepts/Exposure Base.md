@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:c2605e5ee605609e584eee4e85ba4c875ac68fc44f823c9643c60af2719ef6c4
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Exposure Base.md
 ---
 

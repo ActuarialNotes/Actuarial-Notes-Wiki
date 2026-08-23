@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:7d25832bcd1ad1a8c20b3e6816d64cf44975928e75b958fd41622332c6e6d66a
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Unbiasedness.md
 ---
 

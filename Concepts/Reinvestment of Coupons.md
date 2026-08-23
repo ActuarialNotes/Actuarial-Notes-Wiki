@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:9b757169edba357fcd04a901cc9ef7ba086490f8c7d2e2d9919e816726bd681b
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Reinvestment of Coupons.md
 ---
 

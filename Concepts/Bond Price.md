@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:3f88d1aaba07a85ee4490198a8d0bd345ad4b147dec75d7bc0aa35e496fcc85f
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Bond Price.md
 ---
 

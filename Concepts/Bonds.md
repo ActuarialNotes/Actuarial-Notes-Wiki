@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:5e7389a4f79332782a2c27ad352b21a3cb357809e8edc78ebad0468b61b32c9b
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Bonds.md
 ---
 

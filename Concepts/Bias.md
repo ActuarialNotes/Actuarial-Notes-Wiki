@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:82311b597a687e2053eeaade592b91887175018a56fa1c3576a709f65a9de68e
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Bias.md
 ---
 

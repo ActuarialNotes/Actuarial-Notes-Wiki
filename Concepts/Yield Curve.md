@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:2ad62dd31a9ba6370f1462ff523e563ef20631f594b177d87db34bcc57185365
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Yield Curve.md
 ---
 

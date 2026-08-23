@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:a963eddcb1bcc9428616a298250884c7aea5d7e96d227bfaf44b99ed0ec120d5
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Loss Trend.md
 ---
 

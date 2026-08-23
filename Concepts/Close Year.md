@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:043a3b4fa6921fcd1f68763f387954e6581182a139503d1c848da2674b94ea59
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Close Year.md
 ---
 

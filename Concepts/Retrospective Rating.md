@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:13ccbf458cd33c277ac3de3b5c7e03a53aa7b6fe60322329c09401480ead1122
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Retrospective Rating.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:5bc5be6f5a454356cdbac6e74259054752be6567d8a06fb97c46cd3d599d58a9
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Spot Rate.md
 ---
 

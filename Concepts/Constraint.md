@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:a8a7542f6c0de98e367518e5d1cfe4c04ad404f6aa11b12c4738831bc76699a0
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Constraint.md
 ---
 

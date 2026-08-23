@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:cea940e68023e666362b835f685019a18a7c378666b5f6f86762bf908b655018
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Level Payment Annuity.md
 ---
 

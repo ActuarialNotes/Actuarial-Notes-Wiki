@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:efb658ae6128d76785825f30a09183cd73b1e8f1790fe4ac3180e7877992eff9
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Multicollinearity.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:79bbc5614d514cd216dc47eee2f8c73516c381bd84eba60bca7a7b780ac0f4ea
   sources: []
   open_findings: 0
+  open_critical: 0
   log: ".verify/Concepts/Bloom's Taxonomy.md"
 ---
 

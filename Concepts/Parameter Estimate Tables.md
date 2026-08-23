@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:a0bf9bcaa91d646340ea3e1e3b42237b6df07ab4dda4dc009c3b8678c93cb4bc
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Parameter Estimate Tables.md
 ---
 

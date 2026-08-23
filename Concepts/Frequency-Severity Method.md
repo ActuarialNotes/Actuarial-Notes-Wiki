@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:38f2eab7bf5771be168a7168b642b2d2064d3a89d8493245c577300782f9b470
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Frequency-Severity Method.md
 ---
 

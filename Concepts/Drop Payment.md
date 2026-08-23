@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:955d717be5091e99130b737e8ffae3bcba305bfcafdec9c6a10c107f5bcf8e0b
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Drop Payment.md
 ---
 

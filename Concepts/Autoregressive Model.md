@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:510dcd274ffc36f1c322bd8c4937a9787b80776186974aecc94fe3a38d01fcf6
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Autoregressive Model.md
 ---
 

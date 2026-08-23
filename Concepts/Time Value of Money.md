@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:344dd35ab6e9801ec3a615fd6bcc8f363afbe427f04c2958575770132fe6f818
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Time Value of Money.md
 ---
 

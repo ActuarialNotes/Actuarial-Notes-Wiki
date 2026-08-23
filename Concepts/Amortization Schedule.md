@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:343c4800c1f6b987161687005985bc8f8a5ca157fc16be7bf5bae04bc9b65f07
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Amortization Schedule.md
 ---
 

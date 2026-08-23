@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:86320f46b9c5701eeb04f05b43756b6ed5114d6f545e5c9c136407d056b79382
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Linear Regression.md
 ---
 

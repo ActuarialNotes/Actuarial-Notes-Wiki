@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:48a4fcdb1f09bea1bbad699358c9445e5c1f15b3dae875b01bb524fbec077a4d
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Type I Error.md
 ---
 

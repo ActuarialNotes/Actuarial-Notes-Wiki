@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:8863e4f390deb35e31177f70282d612c1f58aba5afcea5d354090e1157db22be
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Probabilities for Linear Combinations.md
 ---
 

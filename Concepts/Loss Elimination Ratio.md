@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:49a99418bb00b22dfa4747138d2383072401627d9e5a18e874a36c2e646277e1
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Loss Elimination Ratio.md
 ---
 

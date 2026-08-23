@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:c4d09fa5a154af7c9a537e4d991229676442cbb4da557c707ce476e69c475b3e
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Market Value.md
 ---
 

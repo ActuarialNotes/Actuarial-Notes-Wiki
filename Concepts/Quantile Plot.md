@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:e8503c55b0b14aa945e2eab4421fa843258af4ba87801dbe8768c043b62bd102
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Quantile Plot.md
 ---
 

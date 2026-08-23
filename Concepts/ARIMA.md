@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:1de157e986f8fb3ff2c5c374b70201ea7cb80837ace1fdd26aa097ee31b14591
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/ARIMA.md
 ---
 

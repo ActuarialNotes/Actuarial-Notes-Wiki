@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:b58834ffced486bacda52a8e91117e86c734bddeb3b1e9be5483683440f72dae
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Short Tail Insurance.md
 ---
 

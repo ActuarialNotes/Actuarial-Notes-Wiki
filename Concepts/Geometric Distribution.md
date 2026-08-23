@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:ef62aa865e714b3e93683537fde01f7d67ab75652381ffe25dfb354defbe785c
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Geometric Distribution.md
 ---
 

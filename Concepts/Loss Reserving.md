@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:df6f5b032e1c1f4ce58886aadda07dbf9708e54279babea28810842a8d7a6e2d
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Loss Reserving.md
 ---
 

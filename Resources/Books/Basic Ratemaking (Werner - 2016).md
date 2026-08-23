@@ -15,6 +15,7 @@ verification:
   content_hash: sha256:ead27c96a0fb6c9047afc0851468ec4df5c221a48235972abf39e51111fcf299
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Resources/Books/Basic Ratemaking (Werner - 2016).md
 ---
 ![[Basic Ratemaking (Werner - 2016) - Cover.svg]]

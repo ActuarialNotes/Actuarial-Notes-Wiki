@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:732a75db70161e27a67d215d87d808e5b3d20dac148c54f46b7b1313aae5da82
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Net Losses.md
 ---
 

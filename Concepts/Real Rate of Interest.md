@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:2cebfba5eccfe3a58c050bc49e0b07998f6f94939b0d2a274d413a161991844b
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Real Rate of Interest.md
 ---
 

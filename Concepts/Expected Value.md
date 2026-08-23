@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:a4fb29161e38b48aab5a4a6f6d5c85137456a44759f27417ee43aadcb4d63286
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Expected Value.md
 ---
 

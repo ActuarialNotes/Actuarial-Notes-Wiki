@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:c3cb9510935391fc3c8f4fc5a1792beecd8f81dc807614404258fa51edff7def
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Claim Count Triangle.md
 ---
 

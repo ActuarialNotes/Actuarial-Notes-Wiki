@@ -15,6 +15,7 @@ verification:
   content_hash: sha256:ef768d94f4664402dc803648fab029800ea23627b27a869cc000d5f8720f744a
   sources: []
   open_findings: 0
+  open_critical: 0
   log: ".verify/Resources/Books/Mathematics of Investment and Credit (Broverman, S.A. – 2024).md"
 ---
 ![[Mathematics of Investment and Credit (Broverman, S.A. – 2024) - Cover.svg]]

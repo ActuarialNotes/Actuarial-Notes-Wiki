@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:5dcd046904901836a7ef5084e830d5f1cbe60eac62023afdc28eec31d4d73c6a
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Gross Losses.md
 ---
 

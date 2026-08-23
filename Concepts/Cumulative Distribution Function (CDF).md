@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:a49f98c160e4b3d364aa52c478265fd177191e2c21262d72c5645928d4dddea7
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Cumulative Distribution Function (CDF).md
 ---
 

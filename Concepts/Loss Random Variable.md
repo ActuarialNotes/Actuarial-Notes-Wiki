@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:8e177b2d453af52409cced27a6e0a6e0d6985979470dc3f72b68fd03be099461
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Loss Random Variable.md
 ---
 

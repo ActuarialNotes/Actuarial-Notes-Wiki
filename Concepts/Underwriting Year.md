@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:699f767949c48a3dcedf9e750142aa6ab7513945448ec2f1aa04012d47ba089d
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Underwriting Year.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:88a642bb8ed44162e154da255912ee9ed11bc85f9539a8b530c0f42ca87b3a2d
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Level Annuity.md
 ---
 

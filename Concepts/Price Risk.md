@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:4f2373fd4f0eb52a1fedb9e0f884266615fdbb015639bca5c51065c450099c6f
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Price Risk.md
 ---
 

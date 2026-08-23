@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:28f2c93de1e7f92db95c4076b0f5ea8df653f3be840f206e8d07a23df0d69434
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Logistic Regression.md
 ---
 

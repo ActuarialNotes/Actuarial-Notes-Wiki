@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:a28a88a7dd70d0413a9a8014d764f1b72e3ee03c9e5e7d9e53f8b1cdc34bf122
   sources: []
   open_findings: 0
+  open_critical: 0
   log: ".verify/Concepts/Bühlmann Credibility.md"
 ---
 

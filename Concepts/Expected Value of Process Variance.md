@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:e2f39341cec296b4c0be73969f42284378abacb3c2f25182d8178b44c1b7e99c
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Expected Value of Process Variance.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:2d98b81ef9f2162200fa926a8514c20134277000acc157d5ef65efe1a35d17b3
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Uniform Continuous Distribution.md
 ---
 

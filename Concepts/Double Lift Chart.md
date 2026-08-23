@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:5fe34bc2e38764ebff0fc0c8493ec88b862dc4eaf4b611bd0a9572ac4f32469d
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Double Lift Chart.md
 ---
 

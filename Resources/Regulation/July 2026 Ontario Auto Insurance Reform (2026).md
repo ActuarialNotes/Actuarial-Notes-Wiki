@@ -20,6 +20,7 @@ verification:
   content_hash: sha256:0d5132935885a45b98f9a5b3def87b69919d7bb247ae8c2bd8173b192b14bf38
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Resources/Regulation/July 2026 Ontario Auto Insurance Reform (2026).md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:2073824f16e34758e7e7596575414d665d1ea927ade76eed373ad7d171137d5f
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Nominal Interest Rate Convertible m-thly.md
 ---
 

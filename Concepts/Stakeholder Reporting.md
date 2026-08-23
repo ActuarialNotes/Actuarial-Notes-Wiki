@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:b56db88954a16735397896b62c7792ff472a6b6f6231f4c9cf1ba48ac1161310
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Stakeholder Reporting.md
 ---
 

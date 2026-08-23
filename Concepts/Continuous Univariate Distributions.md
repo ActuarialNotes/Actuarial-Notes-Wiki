@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:51b5ab8eec90381f5c223a377b8838f278a924d31f48f57256bf22fc4fe0bb55
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Continuous Univariate Distributions.md
 ---
 

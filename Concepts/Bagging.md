@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:54b6adcd88ffc5feaac39a8f9c18dd0d53fedf620be31e33255d13dedfb5e732
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Bagging.md
 ---
 

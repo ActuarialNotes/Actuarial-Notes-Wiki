@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:97587dad5b2dc1905c4e8144ca1b8b70c91421c4c0444ffc365d6e4357162523
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Correlation.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:b8a649469441da0507a557729d1afa00a857dd94ccdc8a1b724ddd8dd0619a22
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Accumulation Function.md
 ---
 

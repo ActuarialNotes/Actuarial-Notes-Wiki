@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:86074a36b3ffb7d86699da5a473a91f08bfcf436817db189b4f5cba9bafb3e06
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Catastrophe Loss.md
 ---
 

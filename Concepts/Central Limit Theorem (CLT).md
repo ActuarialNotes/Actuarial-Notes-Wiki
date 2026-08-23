@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:ec7b06ef46f2d3364ddfea2bc01d2247deda9df9931e8976b395c7d62dd8199c
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Central Limit Theorem (CLT).md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:83a7ca63f1ad01da417bc338b0c8db8f1fa89f0c8e07bf322f8409657583ccf9
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Mixed Poisson Process.md
 ---
 

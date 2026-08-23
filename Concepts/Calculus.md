@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:b83c943f0a44a3dd20d4793dea7f01d0b61705a88c5145e70e10229948cb3b5a
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Calculus.md
 ---
 

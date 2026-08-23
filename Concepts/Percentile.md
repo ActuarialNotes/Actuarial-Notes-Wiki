@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:f71ca2adc19495f158a8cd953a0368ebd4785109212b18a25360d8271e9755eb
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Percentile.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:53fc7d4374b8085f3e62e8d4eff9a1eebd0d674b916641fc45b5dee71c20d126
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Development Factor.md
 ---
 

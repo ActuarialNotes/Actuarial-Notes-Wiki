@@ -13,6 +13,7 @@ verification:
   content_hash: sha256:e81a9c523795f3f9e3b47aaba0ed22387dfe7fe68569104ba0e405357f6e28b0
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Resources/Books/Generalized Linear Models (Larsen - 2015).md
 ---
 ![[Generalized Linear Models (Larsen - 2015) - Cover.svg]]

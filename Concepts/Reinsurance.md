@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:77681bbb23e2636b466ff1039fb59cf2d49c757df49ed9f6c3b8246cf22a8b2e
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Reinsurance.md
 ---
 

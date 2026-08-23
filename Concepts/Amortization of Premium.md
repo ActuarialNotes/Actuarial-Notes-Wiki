@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:6a2a50d8d552fa7e55ee0023ad00d51917317077d2844f73093a2fe856be782e
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Amortization of Premium.md
 ---
 

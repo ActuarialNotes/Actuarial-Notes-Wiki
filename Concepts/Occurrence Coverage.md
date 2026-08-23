@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:7cad8539b97f85ddaebe4019df927fab268df4417653e4854fafd0592721f599
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Occurrence Coverage.md
 ---
 

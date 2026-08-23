@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:ad5d5c9a915986a0356d8dbe45252fc66138fe8436503093a4e55c4c7037a5cb
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Resources/Data/Historical OSFI Data.md
 ---
 

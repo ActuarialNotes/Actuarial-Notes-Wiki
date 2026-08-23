@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:86ebf7fefea80971eab7a2b30243293d60b278178346d0f41c19de7ea7d98c85
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Sample Mean.md
 ---
 

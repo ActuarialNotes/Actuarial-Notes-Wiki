@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:98dd81f805e47993b4903b7dd34a366f71795a3c9f1fcd44388f37ee6b2843e4
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Dispersion Parameter.md
 ---
 

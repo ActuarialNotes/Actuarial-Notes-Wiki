@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:9fd34b1feeccaac6072e55238d9bce721a5d33aff2c0dd9c5d8d10994be72757
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Ratemaking.md
 ---
 

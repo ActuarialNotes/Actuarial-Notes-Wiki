@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:43d6091e9ba51549d85b32b71a6a19a1eacbf612a83a0181bf66bf51f3d347e0
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Arithmetic Increasing Annuity.md
 ---
 

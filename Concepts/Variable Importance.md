@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:b02bf52e6dc27d2881900548068c0252ddf16519f7f0bc538ec9db0b26efd111
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Variable Importance.md
 ---
 

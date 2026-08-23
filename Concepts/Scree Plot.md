@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:117af22a86fa204743029cad47d2445313cd8644e91dd0fea23ef2e4c46daa9e
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Scree Plot.md
 ---
 

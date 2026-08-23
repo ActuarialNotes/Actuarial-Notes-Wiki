@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:43997ee99a992611bab52dac4e7920c82aca9d866a959fea78cd6956020574c0
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Combinatorics.md
 ---
 

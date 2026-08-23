@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:f056190d9350f7bb4f214494c5f261e38b09e6ada29cacdcd8f5e2c0c1327a11
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Benktander Method.md
 ---
 

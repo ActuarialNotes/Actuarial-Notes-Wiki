@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:81976b166811f6c61d8a1dd9b09e5afc854c2d4a0f073ca4e139f6106de0137d
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Discount Factor.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:2b27ecadaf7b4cb154cf3580b5460a8bf42336a00cc06755ca83c7ee4418d7a1
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Coinsurance Rating.md
 ---
 

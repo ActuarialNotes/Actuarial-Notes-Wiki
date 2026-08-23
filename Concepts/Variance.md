@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:4a4230d6fc5740c627613fbff505e8db52f3c92ba3103426c862548332783663
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Variance.md
 ---
 

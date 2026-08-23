@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:ecc4262f678e55ace7ed4604f596906f94065ebab9ead8ddaa1a798eecab72ea
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Reinvestment Risk.md
 ---
 

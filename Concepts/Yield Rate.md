@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:ac8135a55bf7c6ade9165707eb7ba28bacc888f4dfeb0e58c936b3c7f8c3d6bc
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Yield Rate.md
 ---
 

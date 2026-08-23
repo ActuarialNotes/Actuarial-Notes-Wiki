@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:706cce7fbd7603a6e8a66e4eb79af9d3129356ab1ea9c3fbe8ecf508927444ad
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Link Function.md
 ---
 

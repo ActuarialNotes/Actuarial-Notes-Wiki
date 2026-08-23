@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:8422ade2082f9dabd5f040b24a0e06d729754736a192f31a6d27d524d8307ac6
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/1st-Order Linear Approximation.md
 ---
 

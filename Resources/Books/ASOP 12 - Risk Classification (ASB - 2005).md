@@ -15,6 +15,7 @@ verification:
   content_hash: sha256:4ca9a5979a56e4d9a3aa869351aadca3a2a4c2a53123fe802c6ec93c85c90305
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Resources/Books/ASOP 12 - Risk Classification (ASB - 2005).md
 ---
 ![[ASOP 12 - Risk Classification (ASB - 2005) - Cover.svg]]

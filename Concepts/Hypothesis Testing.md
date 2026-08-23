@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:1aa3bebfa0e72e747fb7dc95a207b912cf65eb30828ba7dc00b4bc8471bbd41d
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Hypothesis Testing.md
 ---
 

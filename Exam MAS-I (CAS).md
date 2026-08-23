@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:575d7aeab1730a3e01130a6e550ea6f39802a9dd548773919dcfaecd76d492b8
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Exam MAS-I (CAS).md
 ---
 

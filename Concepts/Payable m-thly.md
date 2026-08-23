@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:63959e4f22f8dbcbb4d4e1ddf0b806bde7ee84886ec6f4d0ff40b58fc4d2027c
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Payable m-thly.md
 ---
 

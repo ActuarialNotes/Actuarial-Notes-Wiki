@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:2b9baa00485237c6c51cde9e154b4d5e5731355c90b58dca2fafaceb4aa2ddb1
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Balloon Payment.md
 ---
 

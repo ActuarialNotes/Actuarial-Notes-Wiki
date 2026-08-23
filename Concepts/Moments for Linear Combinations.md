@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:270bb0fdcd746905c4384fe04e8424bba7b9a358fd04484b694a7bd3fe41c9f1
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Moments for Linear Combinations.md
 ---
 

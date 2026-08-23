@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:7a002e7d26e34eada0e9b147b681b7e315bc0bb3f33a253b8f0ddab2cb9f0df3
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Set Function.md
 ---
 

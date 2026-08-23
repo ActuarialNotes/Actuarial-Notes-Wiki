@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:199f874b12302fc9e1c7ecd1c24161a6c17d7ad0c198efad3c1de9e86dc12357
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Generalized Linear Model.md
 ---
 

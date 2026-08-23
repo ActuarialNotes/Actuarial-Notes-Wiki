@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:625d94d5d84f2f4851c28726c43fe4f7e391e94426e753ccd06417553335d8dd
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Allocated Loss Adjustment Expense.md
 ---
 

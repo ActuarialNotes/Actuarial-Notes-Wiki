@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:6bd6056877a5086389952bcc70f322f63dd21fe946ffe9b54d4852957c334ebf
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Term of Annuity.md
 ---
 

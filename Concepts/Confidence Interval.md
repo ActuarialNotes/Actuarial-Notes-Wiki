@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:b501e9b33aa31c505ba272e85a1d8910d2947abdc9969711f32fa58235fe8527
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Confidence Interval.md
 ---
 

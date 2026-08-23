@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:68bcd1d00bd4ba0796f5bf66574bd0d6d3513ee0725e684377311fe57d8bf532
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Exploratory Data Analysis.md
 ---
 

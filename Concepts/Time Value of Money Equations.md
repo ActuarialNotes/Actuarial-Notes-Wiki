@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:a474a0cbdae9c34ab4b6b726c3646d172174706f9f4fb25ae1e4f9bfe74a3e28
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Time Value of Money Equations.md
 ---
 

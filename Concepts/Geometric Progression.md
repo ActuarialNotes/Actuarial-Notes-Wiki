@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:fd1dcca057c18ab01f00a97f307a9326403e8c9e7a7d82a6ba5eb2766bcb78d5
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Geometric Progression.md
 ---
 

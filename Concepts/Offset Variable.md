@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:46bd5f1deeaf069f72e98c2133e318b864dd0236ad125233b04d6f75551036c0
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Offset Variable.md
 ---
 

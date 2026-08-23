@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:f739359d8126dad58aadc1cbdcde970a60c7ce021d7b8ef8e2d3bd4f5114bad5
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Accident Year.md
 ---
 

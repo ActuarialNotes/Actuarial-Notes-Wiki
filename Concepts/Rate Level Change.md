@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:d2d53b285d504f49f61ea834fa2f871b06d3701fc32bd097a9e98677aa819799
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Rate Level Change.md
 ---
 

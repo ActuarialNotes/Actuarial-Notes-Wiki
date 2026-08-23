@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:ef8adf816dce7ff122dcd1b160e6c3e4244bbb5d024a5419c60b9a28bd0fe2aa
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Conditional and Marginal Probability Functions.md
 ---
 

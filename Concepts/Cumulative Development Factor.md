@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:86ae4e30ccefdc7b7bf936a90f8e4277f6918ec6f6e4b98ac9fdb4cbd22bb536
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Cumulative Development Factor.md
 ---
 

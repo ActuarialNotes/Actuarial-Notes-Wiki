@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:3f45950d4e7f9186b2f6f1cff1d7e3972eb10fd34710efb1ce732306f02d928f
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Activation Function.md
 ---
 

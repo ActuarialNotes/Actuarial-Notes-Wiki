@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:f54bbcbabf6d75479097ee1d8830e1bf5546326ed9e509eec65658a01cae021a
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Stationarity.md
 ---
 

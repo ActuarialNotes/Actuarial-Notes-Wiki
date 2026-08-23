@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:137cf4132438e4e036b0002c471d6c16c9302443e8fc4abe02d4f13d918855e6
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Geometric Increasing Annuity.md
 ---
 

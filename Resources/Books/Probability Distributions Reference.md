@@ -10,6 +10,7 @@ verification:
   content_hash: sha256:9a8e143187cdccc4723ca08460a70f4fa0587758b339b271785059755b88a877
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Resources/Books/Probability Distributions Reference.md
 ---
 ![[Probability Distributions Reference - Cover.svg]]

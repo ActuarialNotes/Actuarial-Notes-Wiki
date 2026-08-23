@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:5cad762520016b1ed86c908e0c6722fa155b9e99c2832b1ce2184fcb4cff8bd5
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Linear Mixed Model.md
 ---
 

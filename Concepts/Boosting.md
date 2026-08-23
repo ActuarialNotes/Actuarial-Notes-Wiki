@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:38caba1b53b83826e8d0676c88393f9dec22a73f57bd8f067c428515361938b9
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Boosting.md
 ---
 

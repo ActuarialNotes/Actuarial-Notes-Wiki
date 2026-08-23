@@ -14,6 +14,7 @@ verification:
   content_hash: sha256:d6f5123fc7c8254e93c087e0e6f5b6279cae785a26cf9258c0e313a8e20d4544
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Resources/Books/Probability for Risk Management (Hassett - 2021).md
 ---
 ![[Media/Attachments/Probability-for-Risk-Management-Hassett-2021-Cover.jpg]]

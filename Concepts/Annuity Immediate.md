@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:f289f3af6e4b1d3c4ee5585bac779479cef8de9c2b320cace7e67b7a9dc9d53e
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Annuity Immediate.md
 ---
 

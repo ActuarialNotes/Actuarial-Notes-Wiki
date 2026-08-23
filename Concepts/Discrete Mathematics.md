@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:8891cf2ff4ac92a0a60f9a86ed05e050908b49db046b2be58b3727575bdd36e1
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Discrete Mathematics.md
 ---
 

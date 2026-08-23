@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:032236477982957f7065cfe3dc3cacffaec0a1b807041962dddce14a6e8c2151
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Tree Pruning.md
 ---
 

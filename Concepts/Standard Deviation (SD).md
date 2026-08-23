@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:0eb7515838a8005010416feb25a6cc202adc36e9048ad8e046e56addac229776
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Standard Deviation (SD).md
 ---
 

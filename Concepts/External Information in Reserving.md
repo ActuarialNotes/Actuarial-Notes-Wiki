@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:cd7a3157950edf2a9436385d813c0294c1479e5fc6af8b2ba67a85903977caca
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/External Information in Reserving.md
 ---
 

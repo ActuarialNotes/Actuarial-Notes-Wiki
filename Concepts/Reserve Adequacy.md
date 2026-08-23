@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:cd107fbdcf7f56247bc539ea870d4ef234361e406a8ec789d7f4826a1c707845
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Reserve Adequacy.md
 ---
 

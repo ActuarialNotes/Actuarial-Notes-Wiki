@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:908bd0462b953784e76d23242ea06527f00091f36649a86e8836b2811319c47a
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/ANOVA.md
 ---
 

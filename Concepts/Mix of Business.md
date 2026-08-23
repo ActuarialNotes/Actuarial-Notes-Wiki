@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:4f98512c00c49c0c253c50b02c2a7d9cfabe3f9a5c41ccb71dbba6663432995e
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Mix of Business.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:af7eb987f3727c2e147415a0ec4423f65e75c85129a07ce4c535f32407840612
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Compound Poisson Process.md
 ---
 

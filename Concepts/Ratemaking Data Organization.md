@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:131d22610f1a15ceedfc64c4bf1545cc749314f5c6b289ed4d6156795289a4d6
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Ratemaking Data Organization.md
 ---
 

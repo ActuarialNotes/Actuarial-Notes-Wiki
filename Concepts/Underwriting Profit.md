@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:409884650d4959db9b3f95c2993190747b90387173a560f70bd233a41746c05c
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Underwriting Profit.md
 ---
 

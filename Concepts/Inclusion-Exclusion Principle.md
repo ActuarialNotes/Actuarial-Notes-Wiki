@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:2022035461f97d1a5a1097c99bb420f5c60bd545ab325d894be3ac57c36f65db
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Inclusion-Exclusion Principle.md
 ---
 

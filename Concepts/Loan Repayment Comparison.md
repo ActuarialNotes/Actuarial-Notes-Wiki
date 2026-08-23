@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:e72f438088762563eac1862c11420ea746531383dd4e9c50ee2ea3a4da53aeae
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Loan Repayment Comparison.md
 ---
 

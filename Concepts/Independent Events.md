@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:826f856aaddda74ea3ed1eb379e9f2ba25423137404f969699fa654e77cd8d94
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Independent Events.md
 ---
 

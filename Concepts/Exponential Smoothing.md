@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:8992e4cf94f299fad2bd69879eed1878ed2782fd0afc8363c66c34e7a1c55442
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Exponential Smoothing.md
 ---
 

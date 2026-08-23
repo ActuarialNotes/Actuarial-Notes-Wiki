@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:35873597ef5fd336c9d1cb403daa8fe17b0a50d2ace30a213b9f42cc97028619
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Clustering.md
 ---
 

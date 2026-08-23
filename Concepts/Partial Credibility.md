@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:5c50386b1e5200ed2e6b95bd3a4a839074a3aeecc2082e1b4cc503980194a22a
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Partial Credibility.md
 ---
 

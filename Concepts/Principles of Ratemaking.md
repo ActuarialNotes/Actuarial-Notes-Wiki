@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:bb74e0f0df351a391ab46fa2da907d732660e6c2d4909c796deb0f1e43446d5d
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Principles of Ratemaking.md
 ---
 

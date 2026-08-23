@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:250153141849ceac313952b05ecf30edf51db502a17523f24214556007799b09
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Combination.md
 ---
 

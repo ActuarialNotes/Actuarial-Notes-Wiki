@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:01fbf9d2198b0fc9e0e0a7c29b9c65f3ee370abca000a806708a12b2de61c47d
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Univariate Plot.md
 ---
 

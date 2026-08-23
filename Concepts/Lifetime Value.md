@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:92a154318bdb3e37ef07b67275eb8ddc0460c957a1c0d721ee29d4f39591bddd
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Lifetime Value.md
 ---
 

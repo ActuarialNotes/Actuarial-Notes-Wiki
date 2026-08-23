@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:f7083ecd7abf2ff3b95b0a7246c0f2f5eb613952d285c5da5411dc838c9fafed
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Outstanding Balance.md
 ---
 

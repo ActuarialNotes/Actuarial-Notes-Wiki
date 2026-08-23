@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:d1f62d6818bb0a400f358a69b6d0a5b92554590659d24f1c5154e128bb475d87
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Linear Combinations of Random Variables.md
 ---
 

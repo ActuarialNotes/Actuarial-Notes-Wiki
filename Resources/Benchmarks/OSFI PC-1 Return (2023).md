@@ -21,6 +21,7 @@ verification:
   content_hash: sha256:697f2dbebfd6de5a93c28faf95a853552e027a8a0776571c8b93c3cf8d6c4628
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Resources/Benchmarks/OSFI PC-1 Return (2023).md
 ---
 

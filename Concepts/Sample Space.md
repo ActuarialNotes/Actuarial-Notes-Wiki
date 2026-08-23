@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:a3fb736d5acccbec379a38a06772c978f75639a524be7d2b93aa90f0bc7fcc52
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Sample Space.md
 ---
 

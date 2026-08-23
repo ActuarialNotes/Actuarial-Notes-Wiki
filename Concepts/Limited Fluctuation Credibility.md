@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:07cf73484b9c7b7dac2beb0ecea871888819ac03f633eaeed5fa9b48e9bf446f
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Limited Fluctuation Credibility.md
 ---
 

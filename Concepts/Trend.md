@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:ded45e74ba328a190b13166dd44a53633ab20ea45f8dd2aba74835319b72d8a9
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Trend.md
 ---
 

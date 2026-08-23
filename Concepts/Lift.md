@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:bbf305ee356617838d818f0cf9c325b1ffaf21b540e7226d3adeaa44ddd336e7
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Lift.md
 ---
 

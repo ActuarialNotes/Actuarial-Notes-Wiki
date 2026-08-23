@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:7b6f486b649788246252b7abd989094693f9676a67d539609908741c07e0372f
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Discount Function.md
 ---
 

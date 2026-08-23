@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:1e9e1f19fc91a228ef1465048ec500874d17504827d073d9ca9d01501876b8f2
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Term of Loan.md
 ---
 

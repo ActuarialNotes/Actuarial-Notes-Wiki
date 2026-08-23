@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:652276e9976c6d97cba956a359e09ff1962deb0a1ab53fd6ccfb98863619f6e4
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Effective Rate.md
 ---
 

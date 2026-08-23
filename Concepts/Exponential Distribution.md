@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:d2bfc9ea20a54d5e1a284bbb7dbaf18b7659436b318b528a36915c724757f087
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Exponential Distribution.md
 ---
 

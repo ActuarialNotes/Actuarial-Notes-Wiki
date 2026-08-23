@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:cfec8914fc2570cccb67f737a7704f4386421a6c34a8aa2c80a2d737ca870608
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Coupon Rate.md
 ---
 

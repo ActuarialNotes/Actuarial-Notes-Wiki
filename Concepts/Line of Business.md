@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:f3e3888c646cc21abaeb24a3fc1bf7f313e0d6e38deddef97b486c49fa7ecdda
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Line of Business.md
 ---
 

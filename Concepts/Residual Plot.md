@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:d4355f33351e2b3c95da4a0c3eb78c32c1076c0ebf2779000b21089ffc5d42f0
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Residual Plot.md
 ---
 

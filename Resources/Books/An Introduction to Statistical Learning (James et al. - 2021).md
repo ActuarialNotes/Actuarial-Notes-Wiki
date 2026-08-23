@@ -14,6 +14,7 @@ verification:
   content_hash: sha256:0f4a1c6d5836285253afc6a9ef767d4a19003475548f2657ccf02a60c28d34f9
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Resources/Books/An Introduction to Statistical Learning (James et al. - 2021).md
 ---
 ![[An Introduction to Statistical Learning (James et al. - 2021) - Cover.svg]]

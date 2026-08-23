@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:4ddf30c01a714147bf43c8548f438dc2b9e0e32fc7406d5ec790770eb3492e84
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Exam FM-2 (SOA).md
 ---
 

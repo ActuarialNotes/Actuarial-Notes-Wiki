@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:6894d0bc4043f949ffae2b0b39707ff94ed71e16b5f371db835a987ff14f272b
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Binomial Distribution.md
 ---
 

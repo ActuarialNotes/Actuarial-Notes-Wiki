@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:9ac9358020f6e01e5eb392deeb8a59111d36a4e048abbe4346c3e51bf2c79283
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Unearned Premium.md
 ---
 

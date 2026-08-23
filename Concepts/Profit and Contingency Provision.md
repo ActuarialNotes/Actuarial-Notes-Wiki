@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:1d6c24acb58de83b4ab183c3b50d967fceb0d57d74011b9f9b2a27f5eb1f78fd
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Profit and Contingency Provision.md
 ---
 

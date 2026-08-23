@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:3a2dd61bcfc3e7be9cf1268d0a1ed9d40a31dd58c734821ecce46948775fd0ae
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Permutation.md
 ---
 

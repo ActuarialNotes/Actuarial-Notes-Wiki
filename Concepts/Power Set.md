@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:b2687966fb646b7a563522e4dc83190b86245196e00ac092bb9afe7e7309bde1
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Power Set.md
 ---
 

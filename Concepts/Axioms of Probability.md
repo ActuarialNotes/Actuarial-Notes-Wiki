@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:eb0c10f7695b9b94dda92b507f8ed6bb63b941ad30b19d17376491a2836d1b06
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Axioms of Probability.md
 ---
 

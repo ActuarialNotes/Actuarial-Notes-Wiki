@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:1947b50f13ca1d5760f7266db7df6e0a0aaa0467c6b9812c6008a25223cfd701
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Model Structure.md
 ---
 

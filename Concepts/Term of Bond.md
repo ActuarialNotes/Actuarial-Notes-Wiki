@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:10d50b8ee90edb10d31114d274a24019d844f1e038689e27ad04b2bfbcd7b3c9
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Term of Bond.md
 ---
 

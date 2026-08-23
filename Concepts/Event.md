@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:0e9ea51b72e37e206962f4f65f22e4f3b2c8728e72eefefd0809422b52b74d74
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Event.md
 ---
 

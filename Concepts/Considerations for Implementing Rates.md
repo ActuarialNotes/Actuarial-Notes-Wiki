@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:a8430e1534e21eb2a64814dfcbf2c5eac246ba8cb4ea1714a6b403dc94fb0288
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Considerations for Implementing Rates.md
 ---
 

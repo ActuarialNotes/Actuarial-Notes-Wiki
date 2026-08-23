@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:cac8c90bb2ae452e27c3bf7613ca4e8e6383fe85eae21890635a335d0ab3266b
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Random Intercept and Slope.md
 ---
 

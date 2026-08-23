@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:cbf034ffadcd2fc1ef4d7931b1643549ab680d55c7ab39140d00b4b0aecfd7c2
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Increased Limits.md
 ---
 

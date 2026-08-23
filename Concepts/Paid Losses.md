@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:2c011c99c2d204dfaac9b51cc4914fc96e45f06a463a4eed9febe315db0789a2
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Paid Losses.md
 ---
 

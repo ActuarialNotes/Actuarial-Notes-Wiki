@@ -15,6 +15,7 @@ verification:
   content_hash: sha256:f4f876fe36adb2993f669e0ce44b3fa057f6e5dab5f8dfbb2bfc61fb20406f03
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Resources/Books/Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010).md
 ---
 ![[Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010) - Cover.svg]]

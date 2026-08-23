@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:7cba2824a4621d6742f33002c2d281486a49627a145e075caf62b60c8469697f
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Exam 8 (CAS).md
 ---
 

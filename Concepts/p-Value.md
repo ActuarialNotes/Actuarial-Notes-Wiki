@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:65f61dd1189fa99d9f7361f15cf300991deaca9bcb0f94023a2787a164135f99
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/p-Value.md
 ---
 

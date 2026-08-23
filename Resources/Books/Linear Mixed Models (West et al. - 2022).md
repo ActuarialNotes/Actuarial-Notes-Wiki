@@ -15,6 +15,7 @@ verification:
   content_hash: sha256:521b73fa7e731ae89667fa49dc745e70152f280b60d22cd676c63be10b2f48f2
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Resources/Books/Linear Mixed Models (West et al. - 2022).md
 ---
 ![[Linear Mixed Models (West et al. - 2022) - Cover.svg]]

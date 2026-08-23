@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:021e00ff4c0536843552c24be2106a23ab40b4e124136e3046d6b7a03a272206
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Actuarial Math.md
 ---
 

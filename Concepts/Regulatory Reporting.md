@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:bcbfa268ea6f1d1f5b77f104835b3295e8c2b21627a2c474daa28f643ef54b6a
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Regulatory Reporting.md
 ---
 

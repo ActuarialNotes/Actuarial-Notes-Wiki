@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:bfb961eb5fbc3fcbdc78fa83674535dd62a1fff74210d4e4feaac1ea1ed8f20b
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Extended Linear Model.md
 ---
 

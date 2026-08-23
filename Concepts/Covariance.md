@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:18d27ecc53ea0d77df1bddca59c8ed04f11af35dee5b1a85c3fefd4d4782b2ad
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Covariance.md
 ---
 

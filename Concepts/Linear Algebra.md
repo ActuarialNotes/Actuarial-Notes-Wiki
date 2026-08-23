@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:35d07cc955b1f1497328af33ec2f63d3268401b02aeb02a8f839a4e7a8b29c32
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Linear Algebra.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:cc7f695492bb7df7c06402584424c68c25d1d8d31eb9c3f35eca595234df756c
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Categorical Predictor.md
 ---
 

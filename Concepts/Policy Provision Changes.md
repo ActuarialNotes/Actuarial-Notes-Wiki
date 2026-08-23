@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:ae069733cefe5d74f1991949d9deb7922dbb1e8d0a270cc0e8f1bd3e43fcf12d
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Policy Provision Changes.md
 ---
 

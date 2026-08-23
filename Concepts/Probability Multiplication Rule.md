@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:ec4b18153d934058b6c244b90ae23579f8a4191f7e1cebb528fae41deda6a62d
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Probability Multiplication Rule.md
 ---
 

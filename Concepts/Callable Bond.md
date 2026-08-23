@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:aeb510eb16e4753a73187ff5c5f5487fac5e3dbafee1d701f7e6c905d385f09b
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Callable Bond.md
 ---
 

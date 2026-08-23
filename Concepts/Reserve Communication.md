@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:b2ee76d6b4d7350128e1be67080512750fad742fae47c700c7451f5dbf85331a
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Reserve Communication.md
 ---
 

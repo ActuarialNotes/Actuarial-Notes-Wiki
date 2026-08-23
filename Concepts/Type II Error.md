@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:ec1636aaf1dc7deaa6f66de28ac45d43389613c471e6a33af481616f59c7d25a
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Type II Error.md
 ---
 

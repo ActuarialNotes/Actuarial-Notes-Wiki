@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:dc552c26baac984951d80c2918d273b7eea5f88011ce6f1063d79c7b9d28ca77
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Venn Diagram.md
 ---
 

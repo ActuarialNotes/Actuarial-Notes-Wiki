@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:1062b4aa6d54e5008b17da3862e0000e33d85d095003302017a3f0bdec1d86ca
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Fund Accumulation.md
 ---
 

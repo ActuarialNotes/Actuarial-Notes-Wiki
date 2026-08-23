@@ -13,6 +13,7 @@ verification:
   content_hash: sha256:d5e4636efa37496bd64ab18d3802827c39f466b51fcf361c5aeff77304076a3f
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Resources/Books/Poisson Processes and Mixture Distributions (Daniel - 2008).md
 ---
 ![[Poisson Processes and Mixture Distributions (Daniel - 2008) - Cover.svg]]

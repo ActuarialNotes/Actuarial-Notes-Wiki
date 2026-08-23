@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:ab97b7bfe2128499eba2022c5151e8eb5944f7a345d81c94c7f67b3b624db1b5
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Severity.md
 ---
 

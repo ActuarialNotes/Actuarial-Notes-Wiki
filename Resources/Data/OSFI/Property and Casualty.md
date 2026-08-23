@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:b859c6c3c304ba81185ba7a0d2b882db8779d8966b521bd1ccf2e5bbcfc64429
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Resources/Data/OSFI/Property and Casualty.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:2626c7c17d03b9e3a9afadda3c24556ddbf3070ffec3b622f59d2562c6b333bc
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Permissible Loss Ratio.md
 ---
 

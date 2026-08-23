@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:866d091d7543b661541188796d2094f3a531cc066f7a6b9bd3ea278f80d36a79
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Premium Trend.md
 ---
 

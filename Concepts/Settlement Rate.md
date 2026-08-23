@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:092f645db7a84964f552bd3504a68e8a72216d40b1d5197c88f409f1bb9520eb
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Settlement Rate.md
 ---
 

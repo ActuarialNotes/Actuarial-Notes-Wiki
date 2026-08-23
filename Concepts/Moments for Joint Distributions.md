@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:8357cdd72fbf31504c7e8457e1b6cbb7893f6f41e9e19ea5189cedf973bc9a9b
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Moments for Joint Distributions.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:19f3e8ad53b25278479adf13c8a47c20aa2f23737a893df4adaa9f1c76b78568
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Interaction.md
 ---
 

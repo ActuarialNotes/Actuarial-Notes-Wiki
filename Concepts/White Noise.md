@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:8b55b44f05596f84656b49c5f9b99db3f93b9a0bd399f3384fa0db0def1e35e9
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/White Noise.md
 ---
 

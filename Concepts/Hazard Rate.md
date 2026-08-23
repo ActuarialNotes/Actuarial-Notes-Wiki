@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:a4dcc4534bf1f49f404b7a7cfb21dc379d27db7dc4848e9acafd6116e1e9ef15
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Hazard Rate.md
 ---
 

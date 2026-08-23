@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:381e3b3834b40697eee9dbbea967958ecbe51222f827c9ea6039fe226a9d1711
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Convexity.md
 ---
 

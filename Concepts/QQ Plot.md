@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:e9b9a1cef8c2dfe5dd2cdd02a69e78320da8a7e7314e6334abbcac35596d751f
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/QQ Plot.md
 ---
 

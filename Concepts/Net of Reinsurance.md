@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:ee6a8bdd8d6550b16a621e4f3925c302baa53b996c69e0e25c7cb9395d7a6588
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Net of Reinsurance.md
 ---
 

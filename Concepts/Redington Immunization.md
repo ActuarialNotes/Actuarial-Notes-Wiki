@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:33e026b5d2e007b3cdc7517bc9d2d6fc59c248247a5e20c0066cb5a68fa153b3
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Redington Immunization.md
 ---
 

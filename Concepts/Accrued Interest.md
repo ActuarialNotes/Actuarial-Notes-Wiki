@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:a4ee53d6bb42b46d5c1d33a01dc19462b2b0309c97dbf6942cfa2c6a9c885569
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Accrued Interest.md
 ---
 

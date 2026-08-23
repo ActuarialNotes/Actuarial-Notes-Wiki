@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:7563e8dcf4144694e57f8e1c470811deb976ea1d1ba94e58e1e7bd5dbe89eade
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Unsupervised Learning.md
 ---
 

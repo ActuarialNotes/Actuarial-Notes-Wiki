@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:3115ab2bff735560967b4939623b943778114cc5a57584e48020fbcfade5d450
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/On Level Premium.md
 ---
 

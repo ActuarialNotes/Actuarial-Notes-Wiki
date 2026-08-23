@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:68d09e094693b355ba71305ff790b4d9382f2e63735d15b588a48e0d2aa16268
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Development Triangle.md
 ---
 

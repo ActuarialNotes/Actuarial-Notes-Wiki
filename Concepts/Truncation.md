@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:e53fbadd495533b2999b3146e526ca8bc2ff2818f7a1c53759fdf35e7810dc94
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Truncation.md
 ---
 

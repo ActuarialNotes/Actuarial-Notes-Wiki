@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:7c8976a24defd2db6ef00dea123fcf3bf8ce6dd77293e188c1c80bdcf2b158b0
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Convertible m-thly.md
 ---
 

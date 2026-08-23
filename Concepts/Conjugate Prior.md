@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:270d6551f81d965d7e87d356c8fa541d05e2e8fbab905a585a9dd4707e07e189
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Conjugate Prior.md
 ---
 

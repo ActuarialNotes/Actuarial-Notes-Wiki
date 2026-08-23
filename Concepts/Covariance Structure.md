@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:81bafe3d54fc0c3cbe196363acac5d60a09db2af16cfcc9f88dececbd55cf20d
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Covariance Structure.md
 ---
 

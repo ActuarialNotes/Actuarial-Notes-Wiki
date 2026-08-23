@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:c8c969f0c376aa54233b200e84858ed845ae67b74ceaa63393da2d4375dbd22c
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Random Effects.md
 ---
 

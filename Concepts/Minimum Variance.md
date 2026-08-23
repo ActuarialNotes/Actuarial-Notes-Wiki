@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:892bff4a91b7b8420ca4704e987bda8112867045226698acfef9d57d1ea8eda6
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Minimum Variance.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:823b159ad34e0ffe6bc52417b151eeceb3d5dcb0477a19539c9442ec3665bda1
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Earned Exposure.md
 ---
 

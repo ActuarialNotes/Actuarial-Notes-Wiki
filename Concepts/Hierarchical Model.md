@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:4fd31097780cf412b3fe1274a00946faf63c9eaa56becefdba52b92e9e0b97e1
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Hierarchical Model.md
 ---
 

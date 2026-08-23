@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:7823ffa9b9a694303ee4335ca062467267d1e57cac3bedd5da6510acdb876812
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Collaboration.md
 ---
 

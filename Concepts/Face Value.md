@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:883f040a7bf0b0a7ec49887dc0e3bbecfd9ba68f085dc3732fb48f8efee67547
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Face Value.md
 ---
 

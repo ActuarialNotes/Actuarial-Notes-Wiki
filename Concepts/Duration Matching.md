@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:f599778b843f730064ea026f56643c1e1234455796454a0f5722b8071429d0c9
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Duration Matching.md
 ---
 

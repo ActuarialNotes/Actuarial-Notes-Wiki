@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:71171f3b021f8860bcb4a1a2eec45ecff815b0e0bd84e314f79cad78b2e39f24
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Restricted Maximum Likelihood.md
 ---
 

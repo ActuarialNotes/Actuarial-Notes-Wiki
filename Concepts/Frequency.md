@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:4277cc980e9520dedf0584062a7932d64714393c9d252db47f171146634af491
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Frequency.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:68970d2337f16633ad4ae3ed9e3168d2d982faf404a4a8ec864e89e705e3097b
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Conditional Probability Function.md
 ---
 

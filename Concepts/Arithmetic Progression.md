@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:94689dfb8cae0f23c9b1ea6956c879198b6ec2ff4c6fa38d7b45308d3e7d0254
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Arithmetic Progression.md
 ---
 

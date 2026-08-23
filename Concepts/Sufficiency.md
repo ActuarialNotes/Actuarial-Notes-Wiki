@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:0a3e2c8a1a22b0041661473e89df57b08fa28028b7852bc8464117688a941d1e
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Sufficiency.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:8b901f507be6e6a11af1e7bac19d40ece3db15d814a8e428550e21fec124f93f
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Negative Binomial Distribution.md
 ---
 

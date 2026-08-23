@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:765accc14cf229f6cfaf9cde4fc1a6b9f548ce7825b52cb8be3204908cad4ac4
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Bond Amortization.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:dbbc8c9b29c21bd50a6941292e2b50d505432330b229b5bd96384f27af4e5aea
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Risk as a Commodity.md
 ---
 

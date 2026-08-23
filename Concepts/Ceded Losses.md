@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:d850e583d8aa1087e6e2f81f2b5b30676414fe2677e343da20a503beaf764645
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Ceded Losses.md
 ---
 

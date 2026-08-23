@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:5bdba8014c70d4126c942d8206702ebee41225507fd40142e1a8c208463cc8e7
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Scatter Plot.md
 ---
 

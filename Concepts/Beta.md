@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:55b84c5e948460833cd7df09efa0e8b0da1de5d77e5b75a9e24644a3280b0814
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Beta.md
 ---
 

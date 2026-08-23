@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:4903c8d87cfa06cad347c8a3e6b0e2d19a6ddd2b1dba505ae0958d7029af484d
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/K-Nearest Neighbors.md
 ---
 

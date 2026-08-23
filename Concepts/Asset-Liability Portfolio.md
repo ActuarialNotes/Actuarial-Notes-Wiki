@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:2733fb53e40bc92da7962e1becd1eb7f5bc6bc797482c873250293398a1688f5
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Asset-Liability Portfolio.md
 ---
 

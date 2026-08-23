@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:38582140836692e9a20c4ebd36def4223a3a88f727f69af94622c6d4217c42fb
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Variable Force of Interest.md
 ---
 

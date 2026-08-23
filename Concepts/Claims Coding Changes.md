@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:fabf60470a64ab53a1448ea7f2c5c42fff5551efab59fe97100c066b5e061e95
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Claims Coding Changes.md
 ---
 

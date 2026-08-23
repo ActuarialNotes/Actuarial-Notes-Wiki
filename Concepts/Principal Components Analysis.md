@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:fa51c33edc6645768c9e7357bd676fb6ce0a3d736d77bb67b543b35e4d7fe95a
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Principal Components Analysis.md
 ---
 

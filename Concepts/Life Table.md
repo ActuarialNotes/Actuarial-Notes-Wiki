@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:102117df3cdcd49bca010274fa8525798e56da43712c3d90c5994ea658109f24
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Life Table.md
 ---
 

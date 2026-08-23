@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:c303222308afa56dcdf04dd6f59fe5ee0bdc313829cd187881e1fc6187b21122
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Calendar Year.md
 ---
 

@@ -15,6 +15,7 @@ verification:
   content_hash: sha256:7673380f1f46a35510261fa8f0b7f61c718d20915768bf2d4ebeb243c04acf48
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Resources/Books/Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020).md
 ---
 ![[Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020) - Cover.svg]]

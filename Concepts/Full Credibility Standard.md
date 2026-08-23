@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:f24f0490da27cb0b0255e8bf4dee18a45fe3038d1743fb9c1b49fb272383ed51
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Full Credibility Standard.md
 ---
 

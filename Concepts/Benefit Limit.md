@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:5413cc077eb0e4e45103a72953e8b811e0a010153fd8133bab88c21f634ccfb5
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Benefit Limit.md
 ---
 

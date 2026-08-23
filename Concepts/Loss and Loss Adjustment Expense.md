@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:ac4e1a4116d1fe6947160a6217b41e1ddc47cadac0d23fa51ced3a8a988e08de
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Loss and Loss Adjustment Expense.md
 ---
 

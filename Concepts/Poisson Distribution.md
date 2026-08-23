@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:3a8f998592204f6ca0ced3c1e738e2150e5bd4e07a1c2fa488dfdc29ddbe6c7d
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Poisson Distribution.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:5784dee056f3d6b92e4f240d319971c7b182a08203a7b93cc973394ec0791c90
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Variable Selection.md
 ---
 

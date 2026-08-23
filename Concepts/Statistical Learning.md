@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:4a0453cfac5177679ebc4a9e047ee928d9c5964f12971adbe025b7e086c90219
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Statistical Learning.md
 ---
 

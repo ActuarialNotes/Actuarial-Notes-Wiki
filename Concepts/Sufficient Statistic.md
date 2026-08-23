@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:bd76ec9127ddfa9d211af50845645158c7e206c1dbbf1356d200d4563c1d905a
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Sufficient Statistic.md
 ---
 

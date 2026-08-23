@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:e0afa274fdc9bebcd54426e3679efae5b7419b4fd801129bc923a8d93403302c
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Coupon.md
 ---
 

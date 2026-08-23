@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:3671205d48cc0d95ed9eb83811a291052168fff92edeb3298b8fe0fba34c7b30
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Loss Ratio Method.md
 ---
 

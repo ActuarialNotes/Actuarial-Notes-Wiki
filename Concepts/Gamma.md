@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:67bdc7e2f3128c1f9967162cb7794e771f6b4b91018493e0a652ee9938bce46e
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Gamma.md
 ---
 

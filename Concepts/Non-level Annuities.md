@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:1ffdb36d5968b307d807c9ebc867304f9fbf2213e78b358376a443ca0f5a444b
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Non-level Annuities.md
 ---
 

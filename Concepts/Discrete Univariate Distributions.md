@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:5e3a408457a3267a241d5e6afcad45760e6859e6b791a7aa258f0a5732895441
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Discrete Univariate Distributions.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:1b4e0596038ae3fca628d9d61375e48de275f0e5e070b8ca57ce900fc7122d13
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Net Present Value.md
 ---
 

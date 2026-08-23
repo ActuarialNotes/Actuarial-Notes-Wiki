@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:e4d0913b5e29ae7d6dfd0097ce0b44c70d28efc374d579f520710167f6ec3a37
   sources: []
   open_findings: 0
+  open_critical: 0
   log: ".verify/Concepts/Bühlmann-Straub Credibility.md"
 ---
 

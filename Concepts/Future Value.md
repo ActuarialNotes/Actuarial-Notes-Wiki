@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:6a13083292af97238e3fad4dabd8276a5b177d7b115d876113f3220ffd460c6f
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Future Value.md
 ---
 

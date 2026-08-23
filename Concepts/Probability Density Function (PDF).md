@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:026219c9c407ec4dd8a18e978ee2d0d0f84dff171af19521e3dfd3ba590c584e
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Probability Density Function (PDF).md
 ---
 

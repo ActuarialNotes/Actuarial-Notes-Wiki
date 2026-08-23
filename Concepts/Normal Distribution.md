@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:97cbab822bcd960ad07cb3378b51bd81d77ef479370eacece2996abc44014005
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Normal Distribution.md
 ---
 

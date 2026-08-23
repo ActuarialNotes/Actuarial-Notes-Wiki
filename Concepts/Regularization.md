@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:0f2e088cd7606d39183a60f665492f47c11cda7311c2f10abcc9d3e79a7c1da6
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Regularization.md
 ---
 

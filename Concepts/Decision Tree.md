@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:49f22f07d46a57276e925bb5bf7e97cd6b1c92755fb9637731d4d87ce8dfd1f8
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Decision Tree.md
 ---
 

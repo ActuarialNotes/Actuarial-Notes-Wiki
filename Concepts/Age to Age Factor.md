@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:c1d31f962955442c2729d438a48dfeb3e3510a45428c16423687ee75f2d98121
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Age to Age Factor.md
 ---
 

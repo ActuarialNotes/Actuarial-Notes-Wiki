@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:933b27c812b02687a9a55abbad676d656c21788af4c8f37fc84559507de6a668
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Moving Average Model.md
 ---
 

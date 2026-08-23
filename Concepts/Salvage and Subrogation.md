@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:38a9c006468869c4e76262c7fbe267f205344630cc43f0d142283d79802d8633
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Salvage and Subrogation.md
 ---
 

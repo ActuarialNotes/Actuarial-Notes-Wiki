@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:0650e0a7a81f5adf724c09eb1682eff599c4fc63b969dfcb7f3aa971781effb0
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Minimum Premium.md
 ---
 

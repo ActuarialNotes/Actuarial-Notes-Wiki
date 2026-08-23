@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:0cc8b9655f8b750fe07503362b9bf220deae8aba4402dd8499326a973fc392f4
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Bootstrap.md
 ---
 

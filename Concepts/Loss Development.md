@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:225304d54527ffd30f4a512397d5d4e565c5ee8721322e393bfb0fe29f9d6565
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Loss Development.md
 ---
 

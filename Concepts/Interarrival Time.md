@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:af4686069c666430011b4e9644fc46d7513a6cb2cd393f531439496dbfe98e20
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Interarrival Time.md
 ---
 

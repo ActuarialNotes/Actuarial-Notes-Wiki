@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:6f6b838118f885635ba3272e692de7b5abe2172d00d3c9dd555538bbd54662f4
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Roll Forward Analysis.md
 ---
 

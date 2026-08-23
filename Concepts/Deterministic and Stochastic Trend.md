@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:d31f6d62fc2b0c1bd31b48e572563f3fa3c8d37bcb5237a0615fd9db7c5ed9d2
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Deterministic and Stochastic Trend.md
 ---
 

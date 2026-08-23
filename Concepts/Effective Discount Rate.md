@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:207795d8b43ea3bd4045c14f5b5b8406071c0c6629f532bdf8be31ef241bdf75
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Effective Discount Rate.md
 ---
 

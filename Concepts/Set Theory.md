@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:66b7b62089d65ef5ff24176f95b40ee77ab93042a48e78648d8b2d9a4e807e38
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Set Theory.md
 ---
 

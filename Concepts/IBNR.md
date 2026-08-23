@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:65122a094818ffa6352fe431085ef5b14d20e7d9f76b3bc315e5296607f35f84
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/IBNR.md
 ---
 

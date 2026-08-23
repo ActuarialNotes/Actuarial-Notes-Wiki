@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:db7caae77d5a70666153cc53cd2816eb56f1dfa1124d361ab9635e6bb17023e8
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Loading Vector.md
 ---
 

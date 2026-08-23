@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:ae53c7b81c6c1afff9cb682b2910e22f949dfac8212fa2a20b173e58ddb821f0
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Entropy.md
 ---
 

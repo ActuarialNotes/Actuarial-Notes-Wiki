@@ -1,5 +1,5 @@
 import fm from 'front-matter'
-import { verificationFromAttributes, type Verification } from './verification'
+import { verificationFromAttributes, hasCriticalFinding, type Verification } from './verification'
 
 export type Difficulty = 'easy' | 'medium' | 'hard'
 export type QuestionType = 'multiple-choice' | 'free-entry' | 'multi-part'
@@ -69,6 +69,12 @@ export interface QuestionFilter {
   ids?: string[]        // when set, only return questions whose id is in this list
   concept?: string      // filter by wiki_link concept name (single)
   concepts?: string[]   // filter by wiki_link concept names (multi-select)
+  /**
+   * Include questions the validation record flags as critically wrong. Off by
+   * default — see `hasCriticalFinding`. Review surfaces turn it on so the
+   * flagged questions can actually be fixed.
+   */
+  includeFlagged?: boolean
 }
 
 interface QuestionFrontmatter {
@@ -512,6 +518,11 @@ export function isFromAnotherExamsPaper(q: Question, exam: string): boolean {
 
 export function filterQuestions(questions: Question[], filters: QuestionFilter): Question[] {
   return questions.filter(q => {
+    // Before anything else, and ahead of the `ids` short-circuit: a question the
+    // record says is critically wrong should not reach a student by any route,
+    // including a direct id lookup, unless the caller has explicitly asked for
+    // flagged questions.
+    if (!filters.includeFlagged && hasCriticalFinding(q.verification)) return false
     if (filters.ids?.length) return filters.ids.includes(q.id)
     if (filters.exam && q.exam.toLowerCase() !== filters.exam.toLowerCase()) return false
     if (filters.topic && q.topic.toLowerCase() !== filters.topic.toLowerCase()) return false

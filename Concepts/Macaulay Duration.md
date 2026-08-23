@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:2fc372ca6471b6a02b16417f114f4c85ce50f267d2b329b58eb54f9ab9ad28b6
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Macaulay Duration.md
 ---
 

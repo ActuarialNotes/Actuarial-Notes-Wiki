@@ -64,6 +64,12 @@ VERIFICATION_KEYS = (
     "content_hash",
     "sources",
     "open_findings",
+    # Not in the original spec's block, and added for one concrete reason: the
+    # app excludes a question with an open *critical* finding from quiz
+    # sessions, and sidecar logs are deliberately not bundled at build time, so
+    # severity has to reach the client some other way. Derived from the log by
+    # `verify_check.py --sync`, exactly like `open_findings`.
+    "open_critical",
     "log",
 )
 
@@ -285,6 +291,7 @@ def new_block(content_text: str, log_rel: str) -> dict[str, Any]:
         "content_hash": content_hash(content_text),
         "sources": [],
         "open_findings": 0,
+        "open_critical": 0,
         "log": log_rel,
     }
 

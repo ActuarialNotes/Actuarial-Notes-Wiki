@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:155716b57322252bef118b54e79cee29a5d875d535988d820d554a2a8920cb3c
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Loan Amortization.md
 ---
 

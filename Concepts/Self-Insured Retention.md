@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:9a19169f07d2417c49dc1df0751017be49a6db48c4e43485d63de69f3bd58e2e
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Self-Insured Retention.md
 ---
 

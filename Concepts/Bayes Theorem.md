@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:a82aafac7059aebe55102b3e49aae164705099ff9561202e72e142a2206ac2ee
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Bayes Theorem.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:2eb20e255311c3bd78fad541ec34c4c7dfc670b9aa6678e5adb033763e50edc0
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Actual vs Expected Analysis.md
 ---
 

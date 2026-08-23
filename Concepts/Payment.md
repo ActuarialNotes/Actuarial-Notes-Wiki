@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:8a03f899df0dd94d8e1868c6c89f675209fdd389e6a10a58165030bee147bd28
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Payment.md
 ---
 

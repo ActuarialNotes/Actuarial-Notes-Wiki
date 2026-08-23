@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:92ddec233bef8fd7ede8858e5460c993ad62e22c88079e714c67280fe7c57419
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Inflation.md
 ---
 

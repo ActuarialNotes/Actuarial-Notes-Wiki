@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:44acc5a65c120c1c4876ac5c0dfd071210666dd1f1db71699812e0683b406c66
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Power of a Test.md
 ---
 

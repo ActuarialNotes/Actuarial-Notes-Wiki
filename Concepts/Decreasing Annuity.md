@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:3af57ed49174a1f11402c354cf54ce8d7ebd54dfc7ab10591d650a29c9dd6827
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Decreasing Annuity.md
 ---
 

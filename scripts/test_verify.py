@@ -515,6 +515,27 @@ class RecordTests(TempVault):
         self.assertEqual(log.entries[-1].fields["recurrence_of"], "F-001")
         self.assertEqual(self.block()["open_findings"], 1)
 
+    def test_open_critical_tracks_severity_not_just_count(self) -> None:
+        """The app excludes a question with an open *critical* finding from quiz
+        sessions, and logs are not bundled — so severity has to ride in the
+        block."""
+        self.finding(severity="minor", locus="option D", claim="Option D duplicates B.",
+                     title="Duplicate distractor")
+        block = self.block()
+        self.assertEqual(block["open_findings"], 1)
+        self.assertEqual(block["open_critical"], 0)
+
+        self.finding()  # the default fixture finding is critical
+        block = self.block()
+        self.assertEqual(block["open_findings"], 2)
+        self.assertEqual(block["open_critical"], 1)
+
+        self.record("resolution", self.rel, "--resolves", "F-002", "--author", "human:jordan",
+                    "--note", "Fixed.", "--date", "2026-08-20")
+        block = self.block()
+        self.assertEqual(block["open_findings"], 1)
+        self.assertEqual(block["open_critical"], 0)
+
     # — P1 —
 
     def test_verified_without_a_source_is_refused(self) -> None:

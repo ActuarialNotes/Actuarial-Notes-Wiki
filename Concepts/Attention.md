@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:66048bd67f5766783a74949790c0630c04b80173c176de37b5044127b574f0fe
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Attention.md
 ---
 

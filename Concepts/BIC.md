@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:01607c42e87e3c8901e6bf9d2c9ff86feaeb00726df7bed451446abc31984102
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/BIC.md
 ---
 

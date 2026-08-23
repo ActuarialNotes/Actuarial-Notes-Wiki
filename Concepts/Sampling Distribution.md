@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:3faeefc6b60e8aff03f4dae1b3416e77d92e2fcd2e08545b33b1ab024f20aeae
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Sampling Distribution.md
 ---
 

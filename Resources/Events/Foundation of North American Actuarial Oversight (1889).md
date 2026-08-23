@@ -18,6 +18,7 @@ verification:
   content_hash: sha256:cf94859bb50310e801835c17e0769103207728beab9ba38eb14355948f17e93d
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Resources/Events/Foundation of North American Actuarial Oversight (1889).md
 ---
 

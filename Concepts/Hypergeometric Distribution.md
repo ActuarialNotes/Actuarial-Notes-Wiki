@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:443b7b3712706f9080db1bdacc62f91591c91c6ced5995ec945560083a1f5be8
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Hypergeometric Distribution.md
 ---
 

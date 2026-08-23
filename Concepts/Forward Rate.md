@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:5f7b1f18f6ee8eeca58b9336c777bb4e27cb5ca35c8ea91fc32d547cb8e7df35
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Forward Rate.md
 ---
 

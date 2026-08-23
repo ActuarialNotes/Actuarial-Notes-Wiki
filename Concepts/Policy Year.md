@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:c2664c2e9315fee6d99eede39d16f00ae0bdd5dc8364633f03509360ef4f312d
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Policy Year.md
 ---
 

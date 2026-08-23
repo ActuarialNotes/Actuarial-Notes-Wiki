@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:33c6022cf5e08b72d2acc89c3144f6728175c5b8c30889e653a094388315dbb2
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Risk.md
 ---
 

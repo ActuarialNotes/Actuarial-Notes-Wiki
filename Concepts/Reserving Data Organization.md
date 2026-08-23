@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:aa59f29c2e8b58778e84aa37503e7076d55f6dd0ed85757091d38c8282ebf73c
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Reserving Data Organization.md
 ---
 

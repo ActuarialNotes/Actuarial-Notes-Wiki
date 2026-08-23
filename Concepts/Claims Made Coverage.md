@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:a9c1c3928d28e4dd6e2160a2897b2864e8dbf3515d5998c3b8b969854dc13cc3
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Claims Made Coverage.md
 ---
 

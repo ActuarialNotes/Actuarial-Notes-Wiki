@@ -14,6 +14,7 @@ verification:
   content_hash: sha256:4bfafa809d119f0c6fd0419adda00d2ddb73afb71ae9587988885d68a5d7bf0a
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Resources/Books/Nonlife Actuarial Models (Tse - 2009).md
 ---
 ![[Nonlife Actuarial Models (Tse - 2009) - Cover.svg]]

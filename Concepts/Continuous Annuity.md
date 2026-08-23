@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:a1b70a2287cab36bc7571e59023262474a3503dd38e560e06df2fd1601f7b00c
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Continuous Annuity.md
 ---
 

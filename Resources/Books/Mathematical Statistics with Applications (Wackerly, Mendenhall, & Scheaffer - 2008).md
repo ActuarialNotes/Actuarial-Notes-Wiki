@@ -14,6 +14,7 @@ verification:
   content_hash: sha256:04c54f1911a7091754dbf7a066618f19ff68ca928199498cba19399dfdd2edb6
   sources: []
   open_findings: 0
+  open_critical: 0
   log: ".verify/Resources/Books/Mathematical Statistics with Applications (Wackerly, Mendenhall, & Scheaffer - 2008).md"
 ---
 ![[Mathematical Statistics with Applications (Wackerly, Mendenhall, & Scheaffer - 2008) - Cover.svg]]

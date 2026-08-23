@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:a3adffc7e3c77240246781c4b2056fee6ef943ac0d48f99c059e85044afb37f2
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Joint Life.md
 ---
 

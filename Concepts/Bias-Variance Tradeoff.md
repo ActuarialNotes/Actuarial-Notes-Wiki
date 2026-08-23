@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:771db24925328aa13f5ec14b04420503dcbf31e1572a11f980813b9cb3a9f86f
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Bias-Variance Tradeoff.md
 ---
 

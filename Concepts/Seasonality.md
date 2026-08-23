@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:24180daac234d021bae500d1e5f7f2b2512bee2757296532f05c46f84264824a
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Seasonality.md
 ---
 

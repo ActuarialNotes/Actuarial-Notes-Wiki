@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:4c587a5c30db9c353673a48295a9fc733bcc1fce145ee8180cf6facaf3ff9024
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/In-Force.md
 ---
 

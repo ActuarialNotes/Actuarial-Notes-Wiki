@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:bb71d8f70f1ef156fc1548bc77b9cf7977088d8afee09e228572090d64afda4a
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Commercial Lines Rating.md
 ---
 

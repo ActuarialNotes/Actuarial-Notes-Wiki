@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:0fc31e198f2afa793625bf340e9f5deeba0eae7181bca75fa70073d68abf704b
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Expense Provisions.md
 ---
 

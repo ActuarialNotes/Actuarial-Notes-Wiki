@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:c4167c1ac08335a6cc610c93d8daa3818e14e1bb7698825c192c42bac16a46cb
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Variable Expenses.md
 ---
 

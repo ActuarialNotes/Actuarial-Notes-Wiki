@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:1eb4ddb699f0dd8e9d305c4392a6fe6dba21850406525ceb46dda8b448e1a517
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Case Reserves.md
 ---
 

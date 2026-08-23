@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:8f76ccb6b93c80acf9bfd5f3c123cec76887e63b2f71c9d9df60f4c7b228bb94
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Cash Flow.md
 ---
 

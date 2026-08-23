@@ -15,6 +15,7 @@ verification:
   content_hash: sha256:0b2c50070a49f5e0d57452df39ce67a69baa2ec138e533fb506802f614c72496
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Resources/Books/A First Course in Probability (Ross - 2019).md
 ---
 

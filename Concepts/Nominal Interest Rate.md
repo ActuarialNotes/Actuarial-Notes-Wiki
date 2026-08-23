@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:a3e8e2c1c259a1d2c9e3ee55bf40277683eefab0856cf1331e5267ef48aac375
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Nominal Interest Rate.md
 ---
 

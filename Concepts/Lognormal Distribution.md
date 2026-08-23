@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:147200bd574032ba2e3aa11cf6e24c41bce43910d3e24b5e0f66fb590bb002e1
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Lognormal Distribution.md
 ---
 

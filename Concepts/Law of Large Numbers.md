@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:3ed657fde85dc2d3daa01c6458e00702e55c774f0d4568bded276a9c4ebb481f
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Law of Large Numbers.md
 ---
 

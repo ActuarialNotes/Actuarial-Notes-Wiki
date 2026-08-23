@@ -15,6 +15,7 @@ verification:
   content_hash: sha256:a47242d0f9c2840bf0460e8b20a298bead81e139122bb978285bcc1eea040f15
   sources: []
   open_findings: 0
+  open_critical: 0
   log: ".verify/Resources/Books/Mathematical Interest Theory (Vaaler, L.J.F., Harper, S.K., and Daniel, J.W. – 2019).md"
 ---
 ![[Mathematical Interest Theory (Vaaler, L.J.F., Harper, S.K., and Daniel, J.W. – 2019) - Cover.svg]]

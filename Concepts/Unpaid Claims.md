@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:c63ccfd4b911968212129fd54469ecdea21c1546a0216776fe6a1ada004f7825
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Unpaid Claims.md
 ---
 

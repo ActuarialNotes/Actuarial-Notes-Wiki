@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:71350d2cb5117618c291b3750105fb0f2fc9176c6c19a76ad473c7c05a78a6a1
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Call Price.md
 ---
 

@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:5e93d31ffd1c77a428f1f9cbbaed1682d185323ed1823a9c4ad58e1d31f2bfe6
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Full Immunization.md
 ---
 

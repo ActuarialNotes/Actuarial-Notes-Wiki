@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:4b40076215f6c9dc2bb9d9e08fc1f61efaea64b9425740a172f962ab08e44838
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Fixed Effects.md
 ---
 

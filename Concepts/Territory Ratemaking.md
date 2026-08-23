@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:a8389346ca81a72dfcb584895d9c0fa2b87c60be06ad44f383117a910f76693e
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Territory Ratemaking.md
 ---
 

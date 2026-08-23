@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:74f3d62ac9d322ab8c4c1155803466561910700a51dc9db29e16f9ebe0fb7368
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Force of Interest.md
 ---
 

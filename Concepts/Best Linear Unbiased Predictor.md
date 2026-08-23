@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:c1d71276f55c0edfe379792fcc1ac318f512c57faeec5e4d0d82f60ff36ade30
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Best Linear Unbiased Predictor.md
 ---
 

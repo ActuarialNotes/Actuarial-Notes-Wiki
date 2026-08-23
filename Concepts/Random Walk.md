@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:e94a0682ef7dd93a483eb8c8de84240614cb179a66f2dc5d4654444986b429b0
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Random Walk.md
 ---
 

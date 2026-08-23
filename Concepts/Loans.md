@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:757f974dfe031b15768238b367812804072e48ad48ee519a55e039e42841b2d7
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Loans.md
 ---
 

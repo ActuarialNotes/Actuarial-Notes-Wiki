@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:fa4a33e090c57baec7fb08d3b8c1344734cc23c843119de579b13a99ab5f2d0b
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Multivariate Distribution.md
 ---
 

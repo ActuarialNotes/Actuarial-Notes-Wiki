@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:8336c63888259d59b238c0df3d5c5ca0ce8599ae5cc26992c96967975eb20ca3
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Random Forest.md
 ---
 

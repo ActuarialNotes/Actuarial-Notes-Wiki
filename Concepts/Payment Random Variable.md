@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:b424b0f31b62055311870584cb82806dfe4f6be6961f90bb66aab1ba4cb9c713
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Payment Random Variable.md
 ---
 

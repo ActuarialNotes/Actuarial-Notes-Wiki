@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:8cf030b13088e1ab45c6fa66c10d5b59584841ee8b23cc71de5e6b17b01ae5dd
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Expected Loss Method.md
 ---
 

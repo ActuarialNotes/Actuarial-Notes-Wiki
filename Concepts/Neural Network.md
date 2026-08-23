@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:423950d3ede8e0689c4240c4f6c65a5b4e030e2af47a5f5e351b8f03bd0c0710
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Neural Network.md
 ---
 

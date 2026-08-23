@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:dd7516c28ca3d5a6b54d9937405d7436d1a4006116fc49635fd60076ea7cd16e
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Order Statistics.md
 ---
 

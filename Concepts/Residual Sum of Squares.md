@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:6ca41c8928c94554e7d147e613340e640fe07455385180cafa1126157706d7f1
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Residual Sum of Squares.md
 ---
 

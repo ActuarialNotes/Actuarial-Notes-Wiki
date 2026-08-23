@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:ecda7e39688252ef2ccad2afffcacd9fa475f68b718f8a4a6b347777b6edb71e
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Coefficient of Variation.md
 ---
 

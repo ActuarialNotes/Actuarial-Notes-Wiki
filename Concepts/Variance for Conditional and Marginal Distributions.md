@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:fe3616eba22bed76dcbc540d8f3273abdcc548e405a9a381c84013d3b03fff96
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Variance for Conditional and Marginal Distributions.md
 ---
 

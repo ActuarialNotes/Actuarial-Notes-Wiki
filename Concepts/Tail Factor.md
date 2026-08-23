@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:01e2d0f8812767826482a4065c1827c52ee275fe9f9c2b97c640dc4e5bfa3a46
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Tail Factor.md
 ---
 

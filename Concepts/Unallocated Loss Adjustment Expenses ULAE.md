@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:98d41287ef669dd85fb3e1fc104f3284f5ef402c8ee1c8922d47499c8ed39f1e
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Unallocated Loss Adjustment Expenses ULAE.md
 ---
 

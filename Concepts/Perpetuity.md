@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:c3cdf9973608669f776361b1252b8950843a67bc0a64a4e8e6903b0dc6827b3c
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Perpetuity.md
 ---
 

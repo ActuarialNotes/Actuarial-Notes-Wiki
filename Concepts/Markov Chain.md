@@ -7,6 +7,7 @@ verification:
   content_hash: sha256:3054c73bb70358ed3d5b9dbdb6153d7a6233a06dbb18dd5c5ddf89bf85d3b52a
   sources: []
   open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Markov Chain.md
 ---
 

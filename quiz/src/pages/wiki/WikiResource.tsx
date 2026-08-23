@@ -7,6 +7,8 @@ import { extractWikiLinksFromText } from '@/lib/wikiExtract'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
+import { VerificationBadge } from '@/components/VerificationBadge'
+import { parseVerification } from '@/lib/verification'
 import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
 import { isNumberedOutline, OUTLINE_ARTICLE_CLASS, parseResourceMeta, preprocessResourceMarkdown } from '@/lib/resourceMeta'
 
@@ -76,6 +78,15 @@ export default function WikiResource() {
           markdown={processedContent}
           className={isNumberedOutline(processedContent) ? OUTLINE_ARTICLE_CLASS : undefined}
           sourcePath={`Resources/Books/${resourceName}.md`}
+          titleBadge={
+            content && (
+              <VerificationBadge
+                verification={parseVerification(content)}
+                contentPath={`Resources/Books/${resourceName}.md`}
+                contentName={resourceName}
+              />
+            )
+          }
           onWikiLink={(ref, e) => {
             if (ref.kind !== 'concept') return false
             e.preventDefault()

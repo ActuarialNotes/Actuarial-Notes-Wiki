@@ -7,6 +7,7 @@ import {
   verificationBadge,
   formatCheckedDate,
   verificationLogPath,
+  contentPathFromVerification,
 } from './verification'
 
 const VERIFIED = `---
@@ -213,6 +214,29 @@ describe('parseVerificationLog', () => {
     const log = parseVerificationLog('---\ntarget: Concepts/Convexity.md\ncreated: 2026-08-19\n---\n')
     expect(log.entries).toEqual([])
     expect(openFindings(log)).toEqual([])
+  })
+})
+
+describe('contentPathFromVerification', () => {
+  it('recovers the vault path a question was parsed from', () => {
+    // Questions reach the app as raw markdown with no filename attached, and
+    // `id` does not map to the filename — the block's `log:` is the only
+    // carrier of the path.
+    const v = parseVerification(VERIFIED)!
+    expect(contentPathFromVerification(v)).toBe('questions/exam-5/q-2019-fall-17.md')
+  })
+
+  it('round-trips with verificationLogPath', () => {
+    const path = 'Concepts/Loss Development Factor.md'
+    const v = { ...parseVerification(UNVERIFIED_PAGE)!, log: verificationLogPath(path) }
+    expect(contentPathFromVerification(v)).toBe(path)
+  })
+
+  it('returns null rather than a bogus path when there is no block', () => {
+    expect(contentPathFromVerification(null)).toBeNull()
+    expect(contentPathFromVerification({ ...parseVerification(VERIFIED)!, log: '' })).toBeNull()
+    expect(contentPathFromVerification({ ...parseVerification(VERIFIED)!, log: 'questions/x.md' }))
+      .toBeNull()
   })
 })
 

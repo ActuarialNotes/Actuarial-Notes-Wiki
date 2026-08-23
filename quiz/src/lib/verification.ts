@@ -116,6 +116,21 @@ export function verificationLogPath(contentPath: string): string {
   return `.verify/${contentPath.replace(/^\/+/, '')}`
 }
 
+/**
+ * Recover a page's own vault path from its block.
+ *
+ * Questions reach the app as raw markdown with no filename attached — the build
+ * collects file *contents*, and a question's `id` doesn't map to its filename
+ * (`cas5-2013f-q1` lives in `cas5-2013f-001.md`). But `log:` is that path with
+ * `.verify/` on the front, and CI enforces that it is correct, so the block
+ * carries the answer already.
+ */
+export function contentPathFromVerification(v: Verification | null | undefined): string | null {
+  if (!v?.log?.startsWith('.verify/')) return null
+  const path = v.log.slice('.verify/'.length)
+  return path || null
+}
+
 // ─── Badge presentation ──────────────────────────────────────────────────────
 
 export type VerificationTone = 'green' | 'amber' | 'grey' | 'red'

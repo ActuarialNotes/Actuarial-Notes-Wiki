@@ -582,6 +582,91 @@ class RecordTests(TempVault):
         self.assertEqual([p.message for p in problems], [])
 
 
+# ─── Reader reports (Phase 3) ─────────────────────────────────────────────────
+
+class ReaderReportTests(TempVault):
+    """`sync_reports.py` is the bridge from an in-app report to the log the next
+    sweep reads. The bridge is only worth anything if the reader's words arrive
+    intact."""
+
+    def setUp(self) -> None:
+        super().setUp()
+        import sync_reports
+
+        self.S = sync_reports
+        self.rel = "questions/exam-5/q.md"
+        self.write(self.rel, V.upsert_verification(QUESTION, V.new_block(QUESTION, V.log_rel_for(self.rel))))
+
+    def report(self, **kw) -> "object":
+        defaults = dict(
+            id="11111111-1111-1111-1111-111111111111",
+            content_path=self.rel,
+            reporter_name="Jordan T",
+            locus="option C",
+            body="The earned premium in the stem looks wrong.",
+            severity="wrong answer",
+            created_at="2026-08-22T10:00:00Z",
+        )
+        return self.S.Report(**(defaults | kw))
+
+    def test_a_report_becomes_a_comment_entry_the_sweep_reads(self) -> None:
+        self.S.append_report(self.report())
+        log = self.log_for(self.rel)
+        entry = log.entries[0]
+        self.assertEqual(entry.entry_type, "comment")
+        self.assertEqual(entry.author, "human:Jordan-T")
+        self.assertEqual(entry.entry_date, "2026-08-22")
+        self.assertIn("earned premium in the stem looks wrong", entry.fields["note"])
+        self.assertEqual(entry.fields["locus"], "option C")
+
+    def test_the_reporters_words_survive_verbatim(self) -> None:
+        """Acceptance: a human comment appears verbatim in the agent's context."""
+        words = "Q14 on the same paper reuses this exhibit — check both."
+        self.S.append_report(self.report(body=words))
+        raw = V.log_path_for(self.rel, self.root).read_text(encoding="utf-8")
+        self.assertIn(words, raw)
+
+    def test_a_multi_line_body_flattens_without_losing_anything(self) -> None:
+        body = "First line.\n\n- a bullet\n- another bullet\n\nLast line."
+        self.S.append_report(self.report(body=body))
+        note = self.log_for(self.rel).entries[0].fields["note"]
+        for fragment in ("First line.", "a bullet", "another bullet", "Last line."):
+            self.assertIn(fragment, note)
+
+    def test_an_anonymous_report_is_authored_anon(self) -> None:
+        self.S.append_report(self.report(reporter_name=None))
+        self.assertEqual(self.log_for(self.rel).entries[0].author, "human:anon")
+
+    def test_contact_details_are_stripped_on_the_way_into_a_public_repo(self) -> None:
+        self.S.append_report(self.report(body="Reach me at reader@example.com about this."))
+        note = self.log_for(self.rel).entries[0].fields["note"]
+        self.assertNotIn("reader@example.com", note)
+        self.assertIn("[email removed]", note)
+
+    def test_syncing_twice_does_not_double_file_a_report(self) -> None:
+        self.S.append_report(self.report())
+        self.S.append_report(self.report())
+        self.assertEqual(len(self.log_for(self.rel).entries), 1)
+
+    def test_a_report_bumps_the_pages_open_finding_count_by_nothing(self) -> None:
+        """A reader report is a comment, not a finding. The agent triages it."""
+        self.S.append_report(self.report())
+        block = V.parse_verification((self.root / self.rel).read_text(encoding="utf-8"))
+        self.assertEqual(block["open_findings"], 0)
+
+    def test_a_report_against_a_path_outside_the_vault_is_skipped(self) -> None:
+        self.assertIsNone(self.S.append_report(self.report(content_path="../../etc/passwd")))
+        self.assertIsNone(self.S.append_report(self.report(content_path="quiz/src/App.tsx")))
+
+    def test_the_resulting_log_passes_the_log_checks(self) -> None:
+        self.S.append_report(self.report())
+        problems = C.check_log_file(V.log_path_for(self.rel, self.root))
+        self.assertEqual([p.message for p in problems], [])
+
+    def log_for(self, rel: str) -> V.VerificationLog:
+        return V.parse_log(V.log_path_for(rel, self.root).read_text(encoding="utf-8"))
+
+
 # ─── Frontmatter handling ─────────────────────────────────────────────────────
 
 class FrontmatterTests(unittest.TestCase):

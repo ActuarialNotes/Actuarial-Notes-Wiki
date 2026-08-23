@@ -8,6 +8,8 @@ import { findSyllabiForConcept } from '@/lib/conceptMatch'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
+import { VerificationBadge } from '@/components/VerificationBadge'
+import { parseVerification } from '@/lib/verification'
 import { KeystoneName } from '@/components/KeystoneName'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 
@@ -148,7 +150,17 @@ export default function WikiConcept() {
       )}
 
       {content !== null && (
-        <WikiArticle markdown={content} sourcePath={`Concepts/${conceptName}.md`} />
+        <WikiArticle
+          markdown={content}
+          sourcePath={`Concepts/${conceptName}.md`}
+          titleBadge={
+            <VerificationBadge
+              verification={parseVerification(content)}
+              contentPath={`Concepts/${conceptName}.md`}
+              contentName={conceptName}
+            />
+          }
+        />
       )}
     </div>
   )

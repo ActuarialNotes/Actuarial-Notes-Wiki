@@ -180,3 +180,24 @@ export const MISTAKES_REVIEW_ENABLED: boolean = true
  * above).
  */
 export const TOUR_ENABLED: boolean = false
+
+/**
+ * VERIFY — the content validation layer's student-facing surfaces. ON.
+ *
+ * When ON, three things appear: the verification badge on questions and wiki
+ * pages (`components/VerificationBadge.tsx`), the "Report an issue" affordance
+ * that files into `content_reports`, and the read-only validation log panel.
+ *
+ * Note what the badge says on a freshly backfilled vault: **Unverified**, on
+ * almost every page. That is the honest state and the reason to ship it on —
+ * a trust signal that only ever appears once something is green is not a trust
+ * signal, it is marketing. Showing the work includes showing how much of it is
+ * still to do.
+ *
+ * The quiz-side exclusion of questions with an open critical finding is *not*
+ * behind this flag — it is a correctness guard, not a surface, and it stays on
+ * with its own Settings toggle (`hooks/useShowFlaggedQuestions.ts`).
+ *
+ * See docs/verification.md.
+ */
+export const VERIFICATION_UI_ENABLED: boolean = true

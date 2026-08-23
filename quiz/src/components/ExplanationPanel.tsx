@@ -1,15 +1,32 @@
 import { cn } from '@/lib/utils'
 import { MarkdownText } from '@/components/MarkdownText'
 import { WikiContent } from '@/components/WikiContent'
+import { VerificationBadge } from '@/components/VerificationBadge'
+import { contentPathFromVerification, type Verification } from '@/lib/verification'
 
 interface ExplanationPanelProps {
   explanation: string
   wikiLinks: string[]
   isCorrect: boolean
   examinerReport?: string
+  /** The question's VERIFY record, so the reader can see and challenge it. */
+  verification?: Verification
+  /** Display name for the log panel's header, e.g. the question id. */
+  questionId?: string
 }
 
-export function ExplanationPanel({ explanation, wikiLinks, isCorrect, examinerReport }: ExplanationPanelProps) {
+export function ExplanationPanel({
+  explanation,
+  wikiLinks,
+  isCorrect,
+  examinerReport,
+  verification,
+  questionId,
+}: ExplanationPanelProps) {
+  // A student who has just worked the question and disagreed with it is the
+  // best-placed error detector this project has, and this is the moment they
+  // are looking straight at the discrepancy. Put the affordance here.
+  const contentPath = contentPathFromVerification(verification)
   return (
     <div
       className={cn(
@@ -53,6 +70,16 @@ export function ExplanationPanel({ explanation, wikiLinks, isCorrect, examinerRe
           {wikiLinks.map(link => (
             <WikiContent key={link} link={link} />
           ))}
+        </div>
+      )}
+
+      {contentPath && (
+        <div className="flex items-center justify-end border-t border-current/10 pt-2">
+          <VerificationBadge
+            verification={verification}
+            contentPath={contentPath}
+            contentName={questionId ?? contentPath}
+          />
         </div>
       )}
     </div>

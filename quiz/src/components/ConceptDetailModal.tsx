@@ -143,6 +143,8 @@ function QuestionItem({
             <ExplanationPanel
               explanation={question.explanation}
               wikiLinks={question.wiki_link}
+              verification={question.verification}
+              questionId={question.id}
               isCorrect
             />
           )}

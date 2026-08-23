@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5f7b1f18f6ee8eeca58b9336c777bb4e27cb5ca35c8ea91fc32d547cb8e7df35
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Forward Rate.md
+---
+
 A **forward rate** $f_{t_1, t_2}$ is the interest rate agreed upon today for an investment (or loan) beginning at a future time $t_1$ and maturing at time $t_2$. Forward rates are implied by the [[Yield Curve]] via [[Spot Rate]]s:
 
 > $$(1+s_{t_2})^{t_2} = (1+s_{t_1})^{t_1} \cdot (1+f_{t_1, t_2})^{t_2-t_1}$$

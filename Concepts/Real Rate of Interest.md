@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2cebfba5eccfe3a58c050bc49e0b07998f6f94939b0d2a274d413a161991844b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Real Rate of Interest.md
+---
+
 The **real rate of interest** $i_r$ adjusts the nominal [[Interest Rate]] $i$ for the effect of [[Inflation]] $r$, representing the true growth in purchasing power:
 
 > $$1 + i_r = \frac{1+i}{1+r}$$

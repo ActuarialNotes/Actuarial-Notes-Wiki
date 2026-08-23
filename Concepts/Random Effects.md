@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c8c969f0c376aa54233b200e84858ed845ae67b74ceaa63393da2d4375dbd22c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Random Effects.md
+---
+
 **Random effects** are the group-level departures from the population-average fit in a [[Linear Mixed Model]]. Unlike [[Fixed Effects|fixed effects]] they are treated as *draws from a distribution*, so a group with thin data is pulled toward the overall mean rather than fitted on its own.
 
 > $$\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \mathbf{Z}\mathbf{b} + \boldsymbol{\varepsilon}$$

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a3e8e2c1c259a1d2c9e3ee55bf40277683eefab0856cf1331e5267ef48aac375
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Nominal Interest Rate.md
+---
+
 The **nominal interest rate** $i^{(m)}$ is a quoted annual rate convertible (compounded) $m$ times per year. Rather than crediting interest once at year-end, the year is divided into $m$ sub-periods each earning a periodic rate of $i^{(m)}/m$.
 
 > $$i^{(m)} = m\left[(1+i)^{1/m} - 1\right]$$

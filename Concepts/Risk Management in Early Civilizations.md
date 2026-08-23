@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:766127eb0813ecb5c96f1dca0493b0ba34e48c19e3f30c4dd18048abb855a368
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Risk Management in Early Civilizations.md
+---
+
 ### Risk Management in Early Civilizations
 
 #### Sumer (Mesopotamia)

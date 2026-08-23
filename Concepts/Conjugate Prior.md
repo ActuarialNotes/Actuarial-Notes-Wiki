@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:270d6551f81d965d7e87d356c8fa541d05e2e8fbab905a585a9dd4707e07e189
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Conjugate Prior.md
+---
+
 A **conjugate prior** is a prior distribution for a risk parameter that, combined with a given likelihood, produces a posterior in the *same* family. Updating then reduces to arithmetic on the parameters — the reason [[Bayesian Credibility]] is computable by hand on an exam.
 
 > $$\pi(\theta) \in \mathcal{F} \;\text{and}\; f(x \mid \theta) \;\Longrightarrow\; \pi(\theta \mid \mathbf{x}) \in \mathcal{F}$$

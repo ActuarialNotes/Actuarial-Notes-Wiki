@@ -109,6 +109,8 @@ export function QuestionAnswerReveal({ question }: { question: Question }) {
         <ExplanationPanel
           explanation={question.explanation}
           wikiLinks={question.wiki_link}
+          verification={question.verification}
+          questionId={question.id}
           isCorrect
           examinerReport={question.examiner_report}
         />
@@ -121,6 +123,8 @@ export function QuestionAnswerReveal({ question }: { question: Question }) {
     <ExplanationPanel
       explanation={question.explanation}
       wikiLinks={question.wiki_link}
+      verification={question.verification}
+      questionId={question.id}
       isCorrect
       examinerReport={question.examiner_report}
     />

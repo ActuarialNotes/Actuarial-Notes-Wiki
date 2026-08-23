@@ -7,6 +7,16 @@ Edition: 2nd
 Publisher: ACTEX Learning
 ISBN: 979-8-89016-187-1
 Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/financial-mathematics-theory-and-practice-brown-kopp)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:29640dcbdc2171d322a099beba6952b726f98962e9bf257cf41adc0d56daf193
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/Financial Mathematics: Theory and Practice (Brown, R. and Kopp, S. – 2024).md"
 ---
 ![[Financial Mathematics- Theory and Practice (Brown, R. and Kopp, S. – 2024) - Cover.svg]]
 

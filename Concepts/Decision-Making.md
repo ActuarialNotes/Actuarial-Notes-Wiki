@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2849a1231ae1f1bf7f614bbba3c41692a31ee26ba7d803049c852798b5ffae2a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Decision-Making.md
+---
+
 > "**Decision-making** is the act of choosing between two or more courses of action."
 > - [A Theoretical Approach to the Effective Decision-Making Process](https://www.scirp.org/journal/paperinformation?paperid=100896)(Andreis - 2019)
 

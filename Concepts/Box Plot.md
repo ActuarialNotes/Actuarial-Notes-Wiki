@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4fae40927a3fca2ef031c4fd19b56ecc0155db3d3fa6b44a0987de550b105d0f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Box Plot.md
+---
+
 A **Box Plot** (box-and-whisker plot) is an [[Exploratory Data Analysis]] display that summarizes a distribution with five numbers: the minimum, first quartile $Q_1$, median $Q_2$, third quartile $Q_3$, and maximum. The box spans the middle half of the data and the whiskers reach the most extreme observations that are not flagged as outliers.
 
 > $$\text{IQR} = Q_3 - Q_1$$

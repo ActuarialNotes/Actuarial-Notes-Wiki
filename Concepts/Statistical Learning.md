@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4a0453cfac5177679ebc4a9e047ee928d9c5964f12971adbe025b7e086c90219
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Statistical Learning.md
+---
+
 **Statistical Learning** is a framework of methods for modeling the relationship between inputs (predictors $\mathbf{X}$) and an output (response $Y$) from data, with the goal of **prediction** or **inference**.
 
 > $$Y = f(\mathbf{X}) + \varepsilon$$

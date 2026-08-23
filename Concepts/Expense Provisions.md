@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0fc31e198f2afa793625bf340e9f5deeba0eae7181bca75fa70073d68abf704b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Expense Provisions.md
+---
+
 **Expense Provisions** are the loadings built into a rate to cover the insurer's costs of doing business other than losses and loss adjustment expense — commissions, other acquisition costs, general expenses, and premium taxes/licences/fees — together with the [[Profit and Contingency Provision|underwriting profit provision]]. How each is treated depends on whether it varies with premium.
 
 > $$\text{Rate} = \frac{\text{Pure Premium} + \text{Fixed Expense per Exposure}}{1 - V - Q_T}$$

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:65fdb58b1843d65d638d92c6eb5a54e4418af94c957d965f20fe38da7ec2fad8
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Premium.md
+---
+
 A **premium** bond is a [[Bonds|bond]] whose price $P$ is above its [[Face Value|face value]] (redemption value) $F$.
 
 > $$P > F$$

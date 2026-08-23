@@ -7,6 +7,16 @@ Edition: 10th
 Publisher: Pearson
 ISBN: 978-0134753119
 Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/1023819820)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0b2c50070a49f5e0d57452df39ce67a69baa2ec138e533fb506802f614c72496
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/A First Course in Probability (Ross - 2019).md
 ---
 
 

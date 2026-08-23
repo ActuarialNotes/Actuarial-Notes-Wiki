@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a4ee53d6bb42b46d5c1d33a01dc19462b2b0309c97dbf6942cfa2c6a9c885569
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Accrued Interest.md
+---
+
 **Accrued interest** ($Fr \cdot t$) is the portion of the next coupon that has been earned by the seller of a [[Bonds|bond]] between the last coupon date and the settlement date, where $Fr$ is the coupon amount and $t$ is the fraction of the coupon period elapsed ($0 \le t < 1$).
 
 > $$AI = Fr \cdot t$$

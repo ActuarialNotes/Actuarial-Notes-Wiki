@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:614a1fd13a698153b6b2e4f05eca5976420647a649433fe7e942ed910d36eb2c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Report Year.md
+---
+
 **Report Year** (RY) is a data aggregation method that groups claims by the calendar year in which the claim was first *reported* to the insurer, regardless of when the loss occurred.
 
 > $$\text{Report lag} = \text{Report date} - \text{Accident date}$$

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a28a88a7dd70d0413a9a8014d764f1b72e3ee03c9e5e7d9e53f8b1cdc34bf122
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Concepts/Bühlmann Credibility.md"
+---
+
 **Bühlmann Credibility** (also called **Greatest Accuracy Credibility**) is a least-squares credibility framework that derives the credibility factor $Z$ by minimizing the expected squared error between the credibility estimate and the true (unknown) risk parameter $\theta$.
 
 > $$\text{Estimate} = Z \cdot \bar{X} + (1-Z) \cdot \mu$$

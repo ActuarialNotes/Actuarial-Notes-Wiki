@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fabf60470a64ab53a1448ea7f2c5c42fff5551efab59fe97100c066b5e061e95
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Claims Coding Changes.md
+---
+
 **Claims Coding Changes** are changes in how claims are categorized in the claims system — coverage codes, cause-of-loss codes, claim vs. claimant counting, the treatment of reopened claims, or the line to which a claim is assigned. They move data between cells without changing any underlying cost.
 
 > $$\text{Apparent change} = \text{True change} + \text{Reclassification effect}$$

@@ -10,6 +10,16 @@ impact_level: high
 impacted_agents: ["Actuarial", "Product", "Strategy & Planning"]
 tags: ["Historical-Milestone", "Life-Insurance", "Premium-Pricing", "Mortality-Tables"]
 aliases: ["Equitable Life Foundation", "Birth of Modern Actuarial Science"]
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9dbd7b74e445cf40eefa2b9aa08271805726ae4c94abb399c0f27cfda90c2e26
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Events/Foundation of Scientific Actuarial Pricing (1762).md
 ---
 
 # Establishment of Equitable Life (1762)

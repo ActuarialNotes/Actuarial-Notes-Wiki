@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2733fb53e40bc92da7962e1becd1eb7f5bc6bc797482c873250293398a1688f5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Asset-Liability Portfolio.md
+---
+
 An **asset-liability portfolio** (or matched portfolio) refers to a set of assets constructed to offset specific liabilities in terms of timing and value of cash flows. The goal is to manage **interest rate risk** — the risk that changes in rates affect assets and liabilities differently.
 
 - **[[Cash Flow Matching]]**: select assets so each asset cash flow exactly funds a liability cash flow on the same date (no reinvestment risk)

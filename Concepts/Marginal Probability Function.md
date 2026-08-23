@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4935507c2dc67707d5c1ac46d28fda5623a63f47ce0c230db7fdee27fc4ee63b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Marginal Probability Function.md
+---
+
 The **marginal probability function** of $X$ is obtained from the [[Joint Probability Function]] $p(x,y)$ by summing over all values of $Y$, describing the behavior of each variable in isolation.
 
 > $$p_X(x) = P(X = x)$$

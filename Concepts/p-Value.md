@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:65f61dd1189fa99d9f7361f15cf300991deaca9bcb0f94023a2787a164135f99
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/p-Value.md
+---
+
 A **p-Value** is the probability, computed assuming the null hypothesis is true, of observing a test statistic at least as extreme as the one obtained. It converts any test statistic onto a common $0$–$1$ scale: reject $H_0$ when the p-value falls below the significance level $\alpha$.
 
 > $$p = P(\text{test statistic at least as extreme as observed} \mid H_0)$$

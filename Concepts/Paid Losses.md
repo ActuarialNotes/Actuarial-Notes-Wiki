@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2c011c99c2d204dfaac9b51cc4914fc96e45f06a463a4eed9febe315db0789a2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Paid Losses.md
+---
+
 **Paid Losses** are the cumulative cash payments made on covered claims through a valuation date — the only loss figure that contains no estimate.
 
 > $$\text{Reported Losses} = \text{Paid Losses} + \text{Case Reserves}$$

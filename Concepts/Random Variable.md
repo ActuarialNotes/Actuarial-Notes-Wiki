@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:318e4dfa1228d6e3e1aeb961b5b30de60c8762092756435e7724838bbef38fc8
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Random Variable.md
+---
+
 A **Random Variable** $X$ is a function that assigns a real number to each outcome in a [[Sample Space]] $S$, enabling numerical analysis of random experiments.
 
 > $$X : S \to \mathbb{R}$$

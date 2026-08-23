@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ef294381eee2a7f233116f6808e04d2d785d6b4d62baf5809264de564acdf5f5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Time Series Decomposition.md
+---
+
 **Decomposition** splits a [[Time Series]] into a trend-cycle component, a seasonal component and an irregular remainder, so each can be inspected and modelled on its own.
 
 > $$\text{additive: } Y_t = m_t + s_t + z_t$$

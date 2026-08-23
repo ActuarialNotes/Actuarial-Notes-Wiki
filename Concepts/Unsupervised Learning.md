@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7563e8dcf4144694e57f8e1c470811deb976ea1d1ba94e58e1e7bd5dbe89eade
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Unsupervised Learning.md
+---
+
 **Unsupervised learning** looks for structure in predictors $X$ when there is no response $Y$ to predict. With no labels there is no test error to minimize, so results are judged by interpretability and stability rather than by accuracy — the defining contrast with [[Supervised Learning]].
 
 > $$\text{given } X_1, \dots, X_n \in \mathbb{R}^{p}, \text{ find structure — no } Y$$

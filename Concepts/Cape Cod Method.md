@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:71f69816e5310e9d8e56caf313430a142854feea580be907aae1f50aed3a1772
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Cape Cod Method.md
+---
+
 **Cape Cod Method** (Stanard-Bühlmann) is the [[Bornhuetter-Ferguson Method|Bornhuetter-Ferguson]] technique with the a priori loss ratio **derived from the data itself** rather than supplied externally. The ELR is estimated as total reported losses over total *used-up* (on-level, developed) premium across all years.
 
 > $$\text{ELR} = \frac{\sum_i C_i}{\sum_i \text{EP}_i \times \tfrac{1}{\text{CDF}_i}}$$

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:01fbf9d2198b0fc9e0e0a7c29b9c65f3ee370abca000a806708a12b2de61c47d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Univariate Plot.md
+---
+
 A **Univariate Plot** displays the distribution of **one** variable at a time — its centre, spread, shape, and outliers — without reference to any other variable. Univariate plots are the first step of [[Exploratory Data Analysis]]: they are what tells you which response distribution and which transformations a model can plausibly use.
 
 > $$\text{one variable} \ \longrightarrow \ \text{shape, centre, spread, outliers}$$

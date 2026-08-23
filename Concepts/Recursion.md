@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:29807f709694a4a8760d372efb04143954f5699ac4667170a134c95f8d4fcd14
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Recursion.md
+---
+
 **Recursion** expresses the value of a loan balance or annuity at one time step in terms of its value at the immediately preceding step. For a loan with outstanding balance $B_{k-1}$ at the start of period $k$, level payment $P$, and periodic effective rate $i$:
 
 > $$B_k = B_{k-1}(1+i) - P$$

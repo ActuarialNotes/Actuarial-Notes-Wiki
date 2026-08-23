@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1bd71e5d6c231a174f536e2348864d2e06e7377ca95fc82be12e5b3ee79e57eb
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Independent Random Variables.md
+---
+
 [[Random Variable]]s $X$ and $Y$ are **Independent** if knowledge of one provides no information about the other. Formally, for all values $x$ and $y$, the joint distribution factors into the product of the marginals.
 
 > $$F(x, y) = F_X(x) \cdot F_Y(y)$$

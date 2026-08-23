@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1b4e0596038ae3fca628d9d61375e48de275f0e5e070b8ca57ce900fc7122d13
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Net Present Value.md
+---
+
 The **net present value** (NPV) is the sum of the present values of all cash flows associated with a project or investment, with inflows treated as positive and outflows as negative. Discounting each cash flow $C_t$ at effective rate $i$ using $v = (1+i)^{-1}$:
 
 > $$NPV = \sum_t C_t\, v^t$$

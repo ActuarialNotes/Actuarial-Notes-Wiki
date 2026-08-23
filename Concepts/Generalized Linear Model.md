@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:199f874b12302fc9e1c7ecd1c24161a6c17d7ad0c198efad3c1de9e86dc12357
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Generalized Linear Model.md
+---
+
 A **Generalized Linear Model (GLM)** extends ordinary linear regression to allow the response variable $Y$ to follow any distribution in the **exponential family** and to be related to the predictors through a **[[Link Function]]** $g$.
 
 > $$g(\mu_i) = \eta_i$$

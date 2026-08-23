@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:54b6adcd88ffc5feaac39a8f9c18dd0d53fedf620be31e33255d13dedfb5e732
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Bagging.md
+---
+
 **Bagging** (bootstrap aggregating) fits the same model to many [[Bootstrap|bootstrap]] resamples of the training data and averages the predictions. It leaves bias essentially unchanged and cuts variance — the reason it rescues high-variance learners like deep [[Decision Tree]]s.
 
 > $$\hat{f}_{\text{bag}}(x) = \frac{1}{B}\sum_{b=1}^{B}\hat{f}^{*b}(x)$$

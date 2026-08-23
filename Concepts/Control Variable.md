@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:589495aeb9ffb5d560f1d1948fe85320b2aa007dfecc29ecf4d9fcb5728afa4a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Control Variable.md
+---
+
 A **Control Variable** is a predictor included in an insurance [[Generalized Linear Model]] to account for a real, known effect on the response — preventing that effect from being incorrectly absorbed into the coefficients of the rating variables — even though the control variable itself will not be used to set the final rate.
 
 > $$\hat{\beta}_{\text{rating}}\big|_{\text{control omitted}} \;\neq\; \hat{\beta}_{\text{rating}}\big|_{\text{control included}} \quad \text{if the rating and control variables are correlated}$$

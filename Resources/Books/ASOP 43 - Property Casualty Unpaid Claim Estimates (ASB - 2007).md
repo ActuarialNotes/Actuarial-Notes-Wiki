@@ -7,6 +7,16 @@ Publisher: Actuarial Standards Board
 Type: Actuarial Standard of Practice
 Code: ASOP No. 43
 Available from: "[actuarialstandardsboard.org](https://www.actuarialstandardsboard.org/wp-content/uploads/2014/07/asop043_106.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e43bb6cd0c3053847c49a82dcfb36210d5b866f03fdd7ae22769454e5b95d970
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007).md
 ---
 ![[ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007) - Cover.svg]]
 

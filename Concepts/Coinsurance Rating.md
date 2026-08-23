@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2b27ecadaf7b4cb154cf3580b5460a8bf42336a00cc06755ca83c7ee4418d7a1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Coinsurance Rating.md
+---
+
 **Coinsurance Rating** prices the two distinct provisions that go by the name *coinsurance*: the **percentage participation** under which the insured shares each covered loss, and the property **coinsurance clause**, which penalizes an insured who carries limits below a required percentage of value.
 
 > $$\text{Loss Cost}_{\text{participation}} = c \times \text{Full-Coverage Loss Cost}$$

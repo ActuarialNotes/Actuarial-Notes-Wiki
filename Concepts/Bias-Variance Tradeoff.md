@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:771db24925328aa13f5ec14b04420503dcbf31e1572a11f980813b9cb3a9f86f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Bias-Variance Tradeoff.md
+---
+
 The **Bias-Variance Tradeoff** is the decomposition of a model's expected prediction error into three pieces — squared [[Bias]], variance, and irreducible noise — and the fact that model complexity moves the first two in opposite directions. It is the reason the best-fitting model is almost never the best-predicting one.
 
 > $$E\!\left[(y_0 - \hat{f}(x_0))^{2}\right] = \left[\text{Bias}(\hat{f}(x_0))\right]^{2} + \text{Var}(\hat{f}(x_0)) + \sigma^{2}$$

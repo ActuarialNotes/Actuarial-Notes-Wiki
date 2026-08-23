@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:18d27ecc53ea0d77df1bddca59c8ed04f11af35dee5b1a85c3fefd4d4782b2ad
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Covariance.md
+---
+
 **Covariance** measures the linear association between two random variables $X$ and $Y$. Positive covariance indicates the variables tend to move together; negative covariance indicates they tend to move in opposite directions.
 
 > $$\text{Cov}(X, Y) = E[XY] - E[X] \cdot E[Y]$$

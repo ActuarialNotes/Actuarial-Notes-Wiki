@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8a03f899df0dd94d8e1868c6c89f675209fdd389e6a10a58165030bee147bd28
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Payment.md
+---
+
 The **payment** $Y$ (the insurer's payment) is the amount an insurer actually pays a policyholder after all policy adjustments — [[Deductible|deductible]], [[Coinsurance|coinsurance]], and [[Benefit Limit|benefit limit]] — are applied to the raw [[Loss Random Variable|loss]] $X$.
 
 > $$Y = \min\!\big(c\,(X - d)^+,\ u\big)$$

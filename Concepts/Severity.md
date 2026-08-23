@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ab97b7bfe2128499eba2022c5151e8eb5944f7a345d81c94c7f67b3b624db1b5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Severity.md
+---
+
 **Severity** is the average cost per claim — total losses divided by claim count — as distinct from [[Frequency|how often claims occur]].
 
 > $$\text{Severity} = \frac{\text{Total Losses}}{\text{Number of Claims}}$$

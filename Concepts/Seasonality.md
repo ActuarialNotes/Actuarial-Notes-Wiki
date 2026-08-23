@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:24180daac234d021bae500d1e5f7f2b2512bee2757296532f05c46f84264824a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Seasonality.md
+---
+
 **Seasonality** is a pattern in a [[Time Series]] that repeats at a fixed, known period $s$ — 4 for quarterly data, 12 for monthly, 7 for daily. It is distinct from a cycle, whose length is not fixed.
 
 > $$Y_t = m_t + s_t + z_t \quad \text{with } s_t = s_{t+s} \text{ and } \sum_{j=1}^{s}s_j = 0$$

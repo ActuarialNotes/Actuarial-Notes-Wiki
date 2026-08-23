@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ad5d5c9a915986a0356d8dbe45252fc66138fe8436503093a4e55c4c7037a5cb
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Data/Historical OSFI Data.md
+---
+
 # Historical OSFI Data
 
 On June 10, 2026, **OSFI** discontinued its **Beyond 20/20** web server, which hosted historical financial data for federally regulated **Life Insurance** and **Property and Casualty Insurance** companies, covering 2020Q1 through 2025Q3:

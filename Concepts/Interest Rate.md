@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:514613c2e190bf7ef75508fa52a9320d9db4f7e5003d33d36b0f076aee6ab975
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Interest Rate.md
+---
+
 The **interest rate** (or rate of interest) $i$ is the amount of interest earned per unit of principal per unit of time. Under [[Compound Interest]], $1$ invested grows to $(1+i)^n$ after $n$ periods.
 
 - The interest rate connects [[Present Value]] and [[Future Value]]:

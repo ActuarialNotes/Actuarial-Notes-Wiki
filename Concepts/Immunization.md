@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6c529e109f266b69bb9881a6c3a43e5fc9dd47229c5a3ec75b931ab6a8f8aca3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Immunization.md
+---
+
 **Immunization** is a [[Portfolio]] management strategy that protects the value of a surplus (assets minus liabilities) against adverse interest rate movements. The two main types are:
 
 - **[[Redington Immunization]]**: protects against small parallel yield shifts; requires three conditions

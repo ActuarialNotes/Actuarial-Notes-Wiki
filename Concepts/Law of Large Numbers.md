@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3ed657fde85dc2d3daa01c6458e00702e55c774f0d4568bded276a9c4ebb481f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Law of Large Numbers.md
+---
+
 The **Law of Large Numbers (LLN)** states that the sample mean $\bar{X}_n$ of $n$ independent and identically distributed [[Random Variable]]s with finite mean $\mu$ converges to $\mu$ as the sample size grows. It is the formal reason risk pooling works: the average loss per policy becomes predictable as an insurer writes more independent policies.
 
 > $$\bar{X}_n = \frac{1}{n}\sum_{i=1}^{n} X_i \;\xrightarrow[n\to\infty]{}\; \mu$$

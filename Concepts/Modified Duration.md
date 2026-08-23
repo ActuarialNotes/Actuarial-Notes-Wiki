@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2deb5ee1323d5731cb9c02bebd312bee9aec1f6c4f0f81df246c0775eadb6fef
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Modified Duration.md
+---
+
 **Modified duration** $D_{Mod}$ measures the percentage change in price per unit increase in the [[Yield Rate]] $j$:
 
 > $$D_{Mod} = -\frac{1}{P}\frac{dP}{dj}$$

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:28f2c93de1e7f92db95c4076b0f5ea8df653f3be840f206e8d07a23df0d69434
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Logistic Regression.md
+---
+
 **Logistic Regression** is the [[Generalized Linear Model]] for a binary response: the outcome is modelled as binomial and the **logit** [[Link Function]] maps the probability $\pi \in (0,1)$ onto the whole real line, so the linear predictor can take any value and the fitted probability always stays between $0$ and $1$.
 
 > $$\ln\!\left(\frac{\pi}{1-\pi}\right) = \beta_0 + \beta_1 x_1 + \cdots + \beta_p x_p$$

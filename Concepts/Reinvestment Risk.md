@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ecc4262f678e55ace7ed4604f596906f94065ebab9ead8ddaa1a798eecab72ea
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Reinvestment Risk.md
+---
+
 **Reinvestment risk** is the risk that the coupons (and other intermediate cash flows) from a [[Bonds|bond]] must be reinvested at a rate lower than originally anticipated, reducing the total accumulated return. A bond bought to yield $j$ realizes that yield only if every coupon can be reinvested at $j$.
 
 > $$\text{Accumulated value} = \text{coupons} \cdot s_{\overline{n}|j'} + \text{redemption}$$

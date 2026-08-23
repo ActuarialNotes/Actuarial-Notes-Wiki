@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ded45e74ba328a190b13166dd44a53633ab20ea45f8dd2aba74835319b72d8a9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Trend.md
+---
+
 **Trend** is the systematic change in loss costs or exposures over time, applied in ratemaking to project historical experience forward to the future rating period.
 
 > $$\text{Trend Factor} = (1 + r)^n$$

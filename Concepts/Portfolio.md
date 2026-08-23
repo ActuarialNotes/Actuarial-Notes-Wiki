@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b97aaf30679889df2fc61081c599feb669a74200ea39af368adbad5552adb901
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Portfolio.md
+---
+
 A **portfolio** is a collection of financial assets (bonds, stocks, cash flows) held together. In the context of Exam FM, portfolio analysis focuses on:
 
 - **[[Yield Rate]] of a portfolio**: the internal rate of return of the combined cash flows

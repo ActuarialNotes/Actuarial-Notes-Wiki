@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d58bedf5edca5f64afde57c97d2c1e4879490df76b34bbee236075c162195cb7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Overall Rate Level Indication.md
+---
+
 **Overall Rate Level Indication** is the answer to the ratemaking question: by what percentage must the rate level change so that expected premium covers expected losses, expenses and profit for the future policy period? It is the aggregate result, before any [[Classification Ratemaking|classification]] work distributes it.
 
 > $$\text{Indicated Change} = \frac{\text{Projected Loss \& LAE Ratio} + F\%}{1 - V - Q_T} - 1$$

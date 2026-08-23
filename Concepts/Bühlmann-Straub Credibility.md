@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e4d0913b5e29ae7d6dfd0097ce0b44c70d28efc374d579f520710167f6ec3a37
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Concepts/Bühlmann-Straub Credibility.md"
+---
+
 **Bühlmann-Straub Credibility** extends [[Bühlmann Credibility]] to handle observations with **unequal exposures** (or weights) $m_i$. Each period $i$ contributes a loss rate $X_i = S_i / m_i$ with weight $m_i$, so periods with more exposure get more weight.
 
 > $$\text{Estimate} = Z \cdot \bar{X}_w + (1-Z) \cdot \mu$$

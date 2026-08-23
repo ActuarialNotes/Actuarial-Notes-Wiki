@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a9c1c3928d28e4dd6e2160a2897b2864e8dbf3515d5998c3b8b969854dc13cc3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Claims Made Coverage.md
+---
+
 **Claims-Made Coverage** is a policy trigger under which the policy responds to claims *reported* during the policy period, provided the underlying loss occurred on or after the policy's **retroactive date**.
 
 > $$\text{Covered if } \; \text{accident date} \ge \text{retro date} \; \text{ and } \; \text{report date} \in \text{policy period}$$

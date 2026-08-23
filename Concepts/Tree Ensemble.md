@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:83c80909001bf0c431ed4227b8f4edfec3c567e017465feecbaf6871ba46f6b3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Tree Ensemble.md
+---
+
 A **Tree Ensemble** combines many [[Decision Tree]]s to produce a single, more accurate and stable prediction. Ensembles reduce the high variance of individual trees while preserving their ability to capture complex, non-linear patterns.
 
 **Major ensemble methods:**

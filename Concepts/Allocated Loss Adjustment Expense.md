@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:625d94d5d84f2f4851c28726c43fe4f7e391e94426e753ccd06417553335d8dd
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Allocated Loss Adjustment Expense.md
+---
+
 **Allocated Loss Adjustment Expense** (ALAE) is claim adjustment cost that can be attributed to a specific claim — defence counsel fees, expert witnesses, independent adjusters, court costs — as opposed to [[Unallocated Loss Adjustment Expenses ULAE|ULAE]], the claims-department overhead that cannot.
 
 > $$\text{Loss \& ALAE} = \text{Indemnity} + \text{ALAE}$$

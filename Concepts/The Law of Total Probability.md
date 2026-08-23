@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:42121c2ca3aeb90e970df3614cacd0851b4d840fdaba087ddde4ec3495d75854
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/The Law of Total Probability.md
+---
+
 **The Law of Total Probability** states that if $\{A_1, \ldots, A_n\}$ is a partition of the sample space $S$, then the probability of any event $B$ can be expressed as a weighted average of its conditional probabilities given each $A_i$.
 - $\{A_1, A_2, \ldots, A_n\}$ must be mutually exclusive and exhaustive events to partition $S$
 - Used for computing the denominator $P(E)$ in [[Bayes Theorem]] and finding marginal probabilities when a problem is structured by distinct scenarios or risk classes

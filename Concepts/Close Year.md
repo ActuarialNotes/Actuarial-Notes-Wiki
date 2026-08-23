@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:043a3b4fa6921fcd1f68763f387954e6581182a139503d1c848da2674b94ea59
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Close Year.md
+---
+
 **Close Year** is a data aggregation method that groups claims by the calendar year in which they were finally *settled and closed*, regardless of when the loss occurred, when it was reported, or when partial payments were made.
 
 > $$\text{Settlement lag} = \text{Close date} - \text{Accident date}$$

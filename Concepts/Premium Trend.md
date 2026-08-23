@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:866d091d7543b661541188796d2094f3a531cc066f7a6b9bd3ea278f80d36a79
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Premium Trend.md
+---
+
 **Premium Trend** is the change over time in the average premium per exposure at a *constant rate level* — the drift caused by shifts in amounts of insurance, limits, deductibles, [[Mix of Business|mix of business]] and inflation-sensitive exposure bases, as distinct from deliberate [[Rate Change|rate changes]], which [[On-Leveling|on-levelling]] handles.
 
 > $$\text{Average Premium at Current Rate Level} = \frac{\text{On-Level Premium}}{\text{Earned Exposures}}$$

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1cd6f43fe109fc7e78f309a1b5f36a07eea1b7ee3aee9da517bd0d3569142af4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Maximum Likelihood Estimation.md
+---
+
 **Maximum Likelihood Estimation (MLE)** is a method of parameter estimation that chooses the parameter value $\hat{\theta}$ that **maximizes the likelihood function** — the probability of observing the given data as a function of the parameter.
 
 > $$L(\theta) = \prod_{i=1}^n f(x_i \mid \theta)$$

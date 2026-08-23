@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4c587a5c30db9c353673a48295a9fc733bcc1fce145ee8180cf6facaf3ff9024
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/In-Force.md
+---
+
 **In-Force** describes the policies, exposures or premium that are actively providing coverage at a single point in time — a *stock* measured at a date, as opposed to the *flows* of written and earned business measured over a period.
 
 > $$\text{In-force at date } t = \sum_{\text{policies}} \mathbf{1}\{\text{effective} \le t < \text{expiration}\}$$

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b501e9b33aa31c505ba272e85a1d8910d2947abdc9969711f32fa58235fe8527
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Confidence Interval.md
+---
+
 A **Confidence Interval** is a range computed from a sample that covers the unknown parameter with a stated long-run probability $1 - \alpha$. It reports the same information as a [[Hypothesis Testing|hypothesis test]] but on the parameter's own scale — the interval contains exactly those null values the test would not reject.
 
 > $$\bar{X} \pm z_{\alpha/2}\,\frac{\sigma}{\sqrt{n}} \qquad (\sigma \text{ known})$$

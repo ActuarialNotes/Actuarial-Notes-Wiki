@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5c9880160640fce2f5be6068310e6706026a5af30e3e434c8dd31765dabd2ee4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Joint Probability Function.md
+---
+
 The **joint probability function** (joint PMF) of discrete random variables $X$ and $Y$ fully characterizes the [[Multivariate Distribution]] of $(X, Y)$.
 
 > $$p(x,y) = P(X = x,\; Y = y)$$

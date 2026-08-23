@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:135dc9b6c6960374d483c63c64911851dcd326c9b007af184f06e1fb08285144
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Likelihood Ratio Test.md
+---
+
 A **Likelihood Ratio Test** (LRT) compares two nested models by how much better the larger one fits: it takes the ratio of maximized likelihoods and rejects the restricted model when the ratio is too small. It is the general-purpose test behind the analysis of [[Deviance]] used to compare [[Generalized Linear Model]]s.
 
 > $$\Lambda = \frac{\sup_{\theta \in \Theta_0} L(\theta)}{\sup_{\theta \in \Theta} L(\theta)}$$

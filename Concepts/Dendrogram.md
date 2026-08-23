@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:39a622fe47353403923a683c2febf87543f39848b402dd962d0ee4f5090aedfa
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Dendrogram.md
+---
+
 A **dendrogram** is the tree that records a [[Hierarchical Clustering|hierarchical clustering]]. Each fusion is drawn as a horizontal bar at the height of the dissimilarity at which it happened, so cutting the tree at a chosen height reads off a set of clusters.
 
 > $$\text{cut at height } h \;\Longrightarrow\; \text{the clusters joined below } h$$

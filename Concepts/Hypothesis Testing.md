@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1aa3bebfa0e72e747fb7dc95a207b912cf65eb30828ba7dc00b4bc8471bbd41d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Hypothesis Testing.md
+---
+
 **Hypothesis Testing** is a statistical procedure for deciding between two competing claims about a population parameter: the **null hypothesis** $H_0$ and the **alternative hypothesis** $H_1$ (or $H_a$).
 
 > **Decision Rule:** Reject $H_0$ if the test statistic falls in the **rejection region** (critical region); otherwise, fail to reject $H_0$.

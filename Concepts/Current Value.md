@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2360a38d9d06176baeb163598e9895dc56caf25502e91fe976aad3fd1104b41c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Current Value.md
+---
+
 The **current value** of a cash flow stream is its value at a specified reference point in time — not necessarily today (present) or at the end (future). It is computed by discounting future cash flows and accumulating past cash flows to the reference date using the applicable [[Interest Rate]] or [[Accumulation Function]].
 
 > $$\text{Current Value at time } t$$

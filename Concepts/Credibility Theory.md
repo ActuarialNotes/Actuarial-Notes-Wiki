@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:17200fe82cdd7ca8361b090501fca78ee5bd8dbba0a04b6025fdb21233bea219
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Credibility Theory.md
+---
+
 **Credibility Theory** provides the framework for weighting observed experience data against prior or external expectations, balancing the statistical reliability of an individual group's data with the stability of broader pooled data.
 
 > $$\text{Estimate} = Z \cdot \bar{X} + (1 - Z)\cdot \mu_0$$

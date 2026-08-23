@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:dec205a207136cf24e055cd21d9f83dd5f7b9cee4021c32aa57d188b46db4e28
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Large Loss.md
+---
+
 **Large Losses** (shock losses) are individual claims big enough that including them at face value would distort an experience analysis — a single claim moving a class's indicated rate by more than the underlying cost level justifies.
 
 > $$\text{Capped Loss} = \min(X, M)$$

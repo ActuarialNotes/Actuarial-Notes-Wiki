@@ -438,6 +438,8 @@ export function QuestionCard({
             <ExplanationPanel
               explanation={question.explanation}
               wikiLinks={question.wiki_link}
+              verification={question.verification}
+              questionId={question.id}
               isCorrect={selectedAnswer === question.answer}
               examinerReport={question.examiner_report}
             />
@@ -490,6 +492,8 @@ export function QuestionCard({
             <ExplanationPanel
               explanation={question.explanation}
               wikiLinks={question.wiki_link}
+              verification={question.verification}
+              questionId={question.id}
               isCorrect={correct}
               examinerReport={question.examiner_report}
             />

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0cc8b9655f8b750fe07503362b9bf220deae8aba4402dd8499326a973fc392f4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Bootstrap.md
+---
+
 The **bootstrap** estimates the sampling variability of a statistic by resampling the observed data *with replacement* $B$ times and looking at the spread of the statistic across the resamples. It needs no distributional assumption and no formula for the standard error.
 
 > $$\mathrm{SE}_B(\hat{\alpha}) = \sqrt{\frac{1}{B-1}\sum_{r=1}^{B}\left(\hat{\alpha}^{*r} - \bar{\hat{\alpha}}^{*}\right)^{2}}$$

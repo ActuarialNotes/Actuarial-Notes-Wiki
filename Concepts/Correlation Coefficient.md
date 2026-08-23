@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:80e66e52cd4277315cbfb149bb9df12d0729e555904822e5a9dcd2c66c3cf011
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Correlation Coefficient.md
+---
+
 The **Correlation Coefficient** (Pearson's $\rho$) is the standardized measure of linear association between two random variables, obtained by dividing the [[Covariance]] by the product of the standard deviations.
 
 > $$\rho(X, Y) = \frac{\text{Cov}(X, Y)}{\sigma_X \cdot \sigma_Y}$$

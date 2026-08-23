@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b2ee76d6b4d7350128e1be67080512750fad742fae47c700c7451f5dbf85331a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Reserve Communication.md
+---
+
 **Reserve Communication** is the actuary's obligation to explain an [[Unpaid Claims|unpaid claim estimate]] — what it is, how it was derived, how uncertain it is, and why it has changed — to audiences who will act on it. [[ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007)|ASOP 43]] governs what must be disclosed.
 
 > $$\Delta\text{Reserve} = \underbrace{\text{New AY}}_{\text{exposure}} - \underbrace{\text{Payments}}_{\text{run-off}} + \underbrace{\text{Prior-year development}}_{\text{change of view}}$$

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ac4e1a4116d1fe6947160a6217b41e1ddc47cadac0d23fa51ced3a8a988e08de
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Loss and Loss Adjustment Expense.md
+---
+
 **Loss and Loss Adjustment Expense** (loss & LAE) is the total cost of claims: the indemnity paid to claimants plus everything spent investigating, defending and settling those claims. It is the numerator of both the [[Pure Premium Method|pure premium]] and the [[Loss Ratio Method|loss ratio]] indication.
 
 > $$\text{Loss \& LAE} = \text{Loss} + \text{ALAE} + \text{ULAE}$$

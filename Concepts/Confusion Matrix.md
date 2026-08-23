@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3b599d247b6b6803721a50459cc852edad38f919f5be091fa7086b0924650a86
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Confusion Matrix.md
+---
+
 A **confusion matrix** cross-tabulates predicted class against actual class for a classifier, and is the table every classification metric is computed from.
 
 > $$\begin{array}{c|cc} & \text{Actual} + & \text{Actual} - \\ \hline \text{Pred} + & TP & FP \\ \text{Pred} - & FN & TN \end{array}$$

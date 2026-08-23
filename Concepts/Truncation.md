@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e53fbadd495533b2999b3146e526ca8bc2ff2818f7a1c53759fdf35e7810dc94
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Truncation.md
+---
+
 **Truncation** occurs when observations below (or above) a threshold are **not recorded at all** — unlike [[Censoring]], which records that an unobserved value exists. In insurance, **left-truncation** arises with deductibles: only losses exceeding the deductible $d$ are reported.
 
 > **Left-truncated likelihood contribution** (only losses $X > d$ are observed):

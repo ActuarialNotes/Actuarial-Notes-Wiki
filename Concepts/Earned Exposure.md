@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:823b159ad34e0ffe6bc52417b151eeceb3d5dcb0477a19539c9442ec3665bda1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Earned Exposure.md
+---
+
 **Earned Exposure** is the portion of written exposure for which coverage has actually been provided during the period — the exposure analogue of [[Earned Premium|earned premium]], and the correct denominator for a pure premium.
 
 > $$\text{Earned Exposure} = \text{Written Exposure} - \Delta\text{Unearned Exposure}$$

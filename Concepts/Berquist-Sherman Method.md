@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7168cf447ac9195297dc252345a70a78cdd4297455846d4660d0fd61c1810ca8
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Berquist-Sherman Method.md
+---
+
 **Berquist-Sherman Method** restates a historical [[Development Triangle|triangle]] so that every year reflects **current** claims practice, removing the distortion caused by a change in [[Case Adequacy|case reserve adequacy]] or in [[Settlement Rate|claim settlement rates]]. Development factors are then selected from the restated triangle.
 
 > $$\text{Adjusted Case}_{\text{AY},n} = \text{Case}_{\text{latest},n} \times \left(1 + t\right)^{-(\text{years before latest})}$$

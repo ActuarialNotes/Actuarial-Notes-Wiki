@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c57ae73adc34bb7f3140c71c5caa67f6236a844292225d4b49128814397fe8d2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Complement of Credibility.md
+---
+
 **Complement of Credibility** is the estimate that receives the weight $(1-Z)$ when observed experience receives [[Credibility|credibility]] $Z$. When $Z$ is low — a small class, a new territory, an excess layer — the complement, not the data, determines the answer.
 
 > $$\text{Estimate} = Z \times \text{Experience} + (1 - Z) \times \text{Complement}$$

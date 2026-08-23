@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:908bd0462b953784e76d23242ea06527f00091f36649a86e8836b2811319c47a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/ANOVA.md
+---
+
 **Analysis of Variance (ANOVA)** is a statistical method for testing whether the means of two or more groups differ by partitioning total variability in the response into explained and unexplained components.
 
 > **One-Way ANOVA F-Test:**

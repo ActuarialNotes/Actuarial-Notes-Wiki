@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f3e3888c646cc21abaeb24a3fc1bf7f313e0d6e38deddef97b486c49fa7ecdda
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Line of Business.md
+---
+
 **Line of Business** is a grouping of policies covering a similar kind of risk that share an [[Exposure Base|exposure base]], a rating structure, a development pattern and a regulatory classification — personal auto, homeowners, workers compensation, commercial general liability, and so on. The line is the outermost level at which rate indications and reserve analyses are organized.
 
 > $$\text{Rate}_{\text{line}} = \frac{\text{Losses} + \text{LAE} + \text{Fixed Expenses}}{\text{Exposures} \times (1 - V - Q)}$$

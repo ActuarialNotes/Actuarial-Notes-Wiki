@@ -1,6 +1,16 @@
 ---
 aliases:
   - AI Agents
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e71d67ca59f9d0c97f8097d0d97ffccaf7235420da86f66e2aecc1bb61d429a6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/AI Agent.md
 ---
 [[Actuarial Notes Wiki|Wiki]] / [[Actuarial Glossary]] / **AI Agent**
 ## What is an AI Agent?

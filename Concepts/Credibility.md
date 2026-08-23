@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:736efc01805bfc99d71272a9ec0191ca00dac0f02461152b3244e30a21dd76a3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Credibility.md
+---
+
 **Credibility** $Z$ is the weight given to a body of observed experience when it is blended with a broader estimate — the [[Complement of Credibility|complement]] — to produce an estimate more accurate than either alone.
 
 > $$\text{Estimate} = Z \times \text{Experience} + (1 - Z) \times \text{Complement}$$

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:883f040a7bf0b0a7ec49887dc0e3bbecfd9ba68f085dc3732fb48f8efee67547
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Face Value.md
+---
+
 The **face value** (also called **par value** or **nominal value**) $F$ of a bond is the principal amount stated on the bond certificate. It serves two purposes:
 - The [[Coupon]] payment each period equals $F \times r$ where $r$ is the [[Coupon Rate]] per period
 - When the bond is redeemed at par, the [[Redemption Value]] $C = F$

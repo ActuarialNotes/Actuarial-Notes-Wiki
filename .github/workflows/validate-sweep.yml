@@ -1,0 +1,112 @@
+name: Validate Sweep
+
+# The weekly VERIFY sweep (docs/validation-agent.md).
+#
+#   1. Pull reader reports out of `content_reports` and append them to the
+#      sidecar logs, so the agent reads this week's reports as context.
+#   2. Run the VALIDATE agent over the priority batch — open findings first,
+#      then stale, then never-checked ranked by syllabus weight and traffic.
+#   3. Open one PR for the batch.
+#
+# It never pushes to main. Every finding, fix and status change arrives as a pull
+# request a human merges — the agent proposes, a human decides (spec §6.4).
+on:
+  schedule:
+    # Mondays 06:00 UTC — a fresh batch waiting at the start of the week.
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Path or glob to validate (blank = the priority batch)'
+        required: false
+        default: ''
+      limit:
+        description: 'Batch size when no target is given'
+        required: false
+        default: '10'
+      depth:
+        description: 'quick | standard | deep'
+        required: false
+        default: 'standard'
+
+concurrency:
+  group: validate-sweep
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sweep:
+    name: validate a batch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Reader reports first, so a report filed on Tuesday is in the agent's
+      # context on Monday. Skipped without credentials rather than failing the
+      # run — the sweep is still worth doing with no new reports.
+      - name: Sync reader reports
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+            echo "::notice::Supabase credentials not set — skipping report sync."
+            exit 0
+          fi
+          python3 scripts/sync_reports.py --commit
+
+      # Inputs reach the shell as environment variables, never interpolated into
+      # the script text — a dispatch input is attacker-controlled in principle
+      # and `${{ }}` in a `run:` block is string substitution, not an argument.
+      - name: Show the priority batch
+        env:
+          TARGET: ${{ github.event.inputs.target }}
+          LIMIT: ${{ github.event.inputs.limit || '10' }}
+        run: |
+          python3 scripts/verify_targets.py --limit "$LIMIT" ${TARGET:+"$TARGET"}
+
+      # The `secrets` context is not reliably available to a step's own `if:`,
+      # so the availability check is its own step with an output.
+      - name: Check for agent credentials
+        id: agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -n "$ANTHROPIC_API_KEY" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::ANTHROPIC_API_KEY not set — skipping the agent step. \
+              The target list above still shows what a sweep would pick up."
+          fi
+
+      - name: Run the VALIDATE agent
+        if: steps.agent.outputs.available == 'true'
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: >-
+            /validate ${{ github.event.inputs.target }}
+            --depth ${{ github.event.inputs.depth || 'standard' }}
+            --limit ${{ github.event.inputs.limit || '10' }}
+          claude_args: '--allowed-tools Read,Write,Edit,Bash,Glob,Grep,WebFetch,WebSearch'
+
+      # Belt and braces: whatever the agent wrote is re-checked here, where it
+      # cannot reach. A sweep that produced a verification with no source fails
+      # the run rather than opening a PR.
+      - name: Check the record
+        run: |
+          python3 -m unittest discover -s scripts -p 'test_*.py'
+          python3 scripts/verify_check.py --base origin/main
+
+      - name: Refresh the dashboard
+        run: python3 scripts/generate_validation_status.py

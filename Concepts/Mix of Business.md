@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4f98512c00c49c0c253c50b02c2a7d9cfabe3f9a5c41ccb71dbba6663432995e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Mix of Business.md
+---
+
 **Mix of Business** is the distribution of a book across segments — territory, class, limit, deductible, coverage, distribution channel. A shift in the mix changes aggregate results even when nothing about any individual segment has changed, and it is one of the standard explanations an actuary must rule out before concluding that costs or adequacy have moved.
 
 > $$\overline{\text{LR}} = \sum_i w_i \times \text{LR}_i$$

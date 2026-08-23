@@ -12,6 +12,16 @@ impact_level: high
 impacted_agents: ["Legal & Compliance", "Actuarial", "Product", "Strategy & Planning"]
 tags: ["Filing-Requirements", "SABS", "Filing-Paths", "Benchmarks"]
 aliases: ["FSRA SABS Specifications 2025", "August 2025 Auto Insurance Filings"]
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7d419af08e2bb4eabb947740ccf7133085aeda0f523adb0ce48d064f0bd54473
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Regulation/FSRA Filing Specifications for SABS Optionality (2025).md
 ---
 
 # FSRA Filing Specifications for SABS Optionality (August 2025)

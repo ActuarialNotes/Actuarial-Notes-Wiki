@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4fd31097780cf412b3fe1274a00946faf63c9eaa56becefdba52b92e9e0b97e1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Hierarchical Model.md
+---
+
 A **Hierarchical Model** (also called a **multilevel model** or **nested model**) organizes data and parameters into levels, where units at a lower level are nested within units at a higher level. It is a special case of the [[Linear Mixed Model]] with nested random effects.
 
 > **Two-level hierarchical model:**

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c3cdf9973608669f776361b1252b8950843a67bc0a64a4e8e6903b0dc6827b3c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Perpetuity.md
+---
+
 A **perpetuity** is an annuity that pays 1 per period forever. For a **perpetuity-immediate** (payments at end of each period) the present value is obtained by letting $n \to \infty$ in $a_{\overline{n}|} = (1-v^n)/i$; since $v^n \to 0$:
 
 > $$a_{\overline{\infty}|} = \frac{1}{i}$$

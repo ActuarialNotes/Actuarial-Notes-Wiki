@@ -10,6 +10,16 @@ impact_level: high
 impacted_agents: ["Actuarial", "Legal & Compliance", "Risk Management"]
 tags: ["Canadian-Act", "Professional-Governance", "Appointed-Actuary"]
 aliases: ["CIA Incorporation 1965", "Canadian Institute of Actuaries"]
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:063cbd5cfb4352a3db7f0afcd6563c82f44d74c1d50db4a5e35f99e9ed08a3a2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Events/Establishment of the Canadian Institute of Actuaries (1965).md
 ---
 
 # Canadian Institute of Actuaries Established (1965)

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:876df01c1d8cd206583bf7bf11f14cd676b734c5789d432d28a67131459d3282
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/On-Leveling.md
+---
+
 **On-Leveling** is the procedure that restates historical earned premium to the current rate level, producing [[On Level Premium|on-level premium]]. Werner & Modlin give two methods: the **parallelogram method**, which works from aggregate premium and the dates of past [[Rate Change|rate changes]], and **extension of exposures**, which re-rates every historical policy under the current manual.
 
 > $$\text{On-Level Factor} = \frac{\text{Current cumulative index}}{\text{Average index for the year}}$$

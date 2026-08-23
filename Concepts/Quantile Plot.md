@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e8503c55b0b14aa945e2eab4421fa843258af4ba87801dbe8768c043b62bd102
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Quantile Plot.md
+---
+
 A **quantile plot** (or lift chart by predicted quantile) sorts a held-out dataset by predicted loss cost, splits it into equal-exposure buckets, and plots the actual against the predicted average in each. It is the standard first look at whether a rating model separates risk.
 
 > $$\text{sort by } \hat{y}_i,\ \text{split into } q \text{ equal-exposure buckets, plot } \bar{y}_b \text{ and } \overline{\hat{y}}_b$$

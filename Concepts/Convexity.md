@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:381e3b3834b40697eee9dbbea967958ecbe51222f827c9ea6039fe226a9d1711
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Convexity.md
+---
+
 **Convexity** measures the curvature of the price–yield relationship for a bond or portfolio. While [[Modified Duration]] gives the first-order approximation of price sensitivity to yield changes, convexity captures the second-order effect:
 
 > $$\text{Convexity}$$

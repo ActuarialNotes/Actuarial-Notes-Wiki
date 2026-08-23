@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:68970d2337f16633ad4ae3ed9e3168d2d982faf404a4a8ec864e89e705e3097b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Conditional Probability Function.md
+---
+
 A **Conditional Probability Function** gives the distribution of one random variable given a specific value of another. The conditional distribution integrates (or sums) to 1 over its support given the conditioning value.
 
 > $$f_{X|Y}(x \mid y) = \frac{f(x, y)}{f_Y(y)}, \quad f_Y(y) > 0$$

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b47d57e5a3bf828a53fae1af3f78bde60e99ae3b1e1a9fde5e984241738ca92a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Amortization.md
+---
+
 **Amortization** is the process of repaying a loan through a series of level periodic payments $P$, each covering the interest accrued on the [[Outstanding Balance]] plus a portion of principal. The payment $P$ is determined by:
 
 > $$P = \frac{L}{a_{\overline{n}|i}}$$

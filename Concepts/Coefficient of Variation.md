@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ecda7e39688252ef2ccad2afffcacd9fa475f68b718f8a4a6b347777b6edb71e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Coefficient of Variation.md
+---
+
 The **Coefficient of Variation** $CV$ is the ratio of the standard deviation to the mean, measuring dispersion as a proportion of the mean.
 
 > $$CV = \frac{\sigma}{\mu}$$

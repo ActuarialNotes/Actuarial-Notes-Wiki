@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ea142119a64bebb3f1b59d3fc9e7d718c0d60c47b4388250782e21ed89c5f713
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Marginal Model Plot.md
+---
+
 A **Marginal Model Plot** is a regression diagnostic that overlays a smooth curve fit directly to the raw data against the smooth curve implied by the fitted [[Generalized Linear Model]], both plotted against a predictor or the fitted values — large divergence between the two curves signals model misspecification.
 
 > $$\text{Marginal model plot: compare } \widehat{E}[Y \mid x] \text{ (data smooth) to } \hat{\mu}(x) \text{ (model smooth)}$$

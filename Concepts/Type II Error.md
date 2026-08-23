@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ec1636aaf1dc7deaa6f66de28ac45d43389613c471e6a33af481616f59c7d25a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Type II Error.md
+---
+
 A **Type II Error** occurs when a [[Hypothesis Testing|hypothesis test]] **fails to reject a false null hypothesis** $H_0$. It is also called a **false negative**.
 
 > $$\beta = P(\text{Fail to Reject } H_0 \mid H_0 \text{ is false})$$

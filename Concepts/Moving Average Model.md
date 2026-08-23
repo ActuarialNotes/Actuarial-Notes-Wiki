@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:933b27c812b02687a9a55abbad676d656c21788af4c8f37fc84559507de6a668
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Moving Average Model.md
+---
+
 A **moving average model of order $q$**, MA($q$), writes a [[Time Series]] as a weighted sum of the current and last $q$ [[White Noise|white-noise]] shocks. It is the "MA" in [[ARIMA]], and it models a series where a shock has a **finite** memory of exactly $q$ periods.
 
 > $$Y_t = \mu + \varepsilon_t + \theta_1\varepsilon_{t-1} + \cdots + \theta_q\varepsilon_{t-q}$$

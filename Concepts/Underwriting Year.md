@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:699f767949c48a3dcedf9e750142aa6ab7513945448ec2f1aa04012d47ba089d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Underwriting Year.md
+---
+
 **Underwriting Year** (UY), also called year of account or treaty year, groups all premium and losses by the year in which the *contract was bound*. It is the [[Policy Year]] concept carried into reinsurance, where the contract being tracked is a treaty rather than a single policy.
 
 > $$\text{UY } n \text{ Loss Ratio} = \frac{\text{Losses ceded under contracts bound in year } n}{\text{Premium on contracts bound in year } n}$$

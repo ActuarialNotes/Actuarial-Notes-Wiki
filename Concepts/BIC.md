@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:01607c42e87e3c8901e6bf9d2c9ff86feaeb00726df7bed451446abc31984102
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/BIC.md
+---
+
 The **Bayesian Information Criterion (BIC)** (also called the **Schwarz criterion**) is a model selection measure that penalizes model complexity more heavily than [[AIC]] by using $\ln(n)$ as the penalty per parameter.
 
 > $$\text{BIC} = -2\ell(\hat{\boldsymbol{\beta}}) + p\ln(n)$$

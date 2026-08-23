@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ab69d00eb37ce92e6621a6a2f20a40f9e8f156406271fb39d85164c3471ab372
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Payable Continuously.md
+---
+
 An annuity **payable continuously** pays at a constant rate of $1$ per year, with payments flowing continuously. The present value of a continuous $n$-year annuity is denoted $\bar{a}_{\overline{n}|}$:
 
 > $$\bar{a}_{\overline{n}|} = \int_0^n v^t\,dt$$

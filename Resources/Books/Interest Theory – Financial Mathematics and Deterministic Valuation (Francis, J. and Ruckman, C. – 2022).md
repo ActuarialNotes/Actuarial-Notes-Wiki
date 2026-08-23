@@ -7,6 +7,16 @@ Edition: 3rd
 Publisher: ActuarialBrew
 ISBN: 978-0-9981604-4-3
 Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/interest-theory-francis-ruckman)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1266487a1a7dcfbd6fe62250ceea27f19c2aab3fc94384c2ccebd62b596b3c81
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/Interest Theory – Financial Mathematics and Deterministic Valuation (Francis, J. and Ruckman, C. – 2022).md"
 ---
 ![[Interest Theory – Financial Mathematics and Deterministic Valuation (Francis, J. and Ruckman, C. – 2022) - Cover.svg]]
 

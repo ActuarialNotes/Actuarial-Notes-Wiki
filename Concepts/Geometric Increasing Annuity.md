@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:137cf4132438e4e036b0002c471d6c16c9302443e8fc4abe02d4f13d918855e6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Geometric Increasing Annuity.md
+---
+
 A **geometric increasing (or decreasing) annuity** has payments that grow (or shrink) at a constant geometric rate $g$ per period. For an $n$-payment annuity-immediate with first payment $1$ and growth rate $g$, payments are $1, (1+g), (1+g)^2, \ldots, (1+g)^{n-1}$.
 
 - The present value (at effective rate $i \neq g$) is:

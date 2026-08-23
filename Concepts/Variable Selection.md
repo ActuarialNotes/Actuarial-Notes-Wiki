@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5784dee056f3d6b92e4f240d319971c7b182a08203a7b93cc973394ec0791c90
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Variable Selection.md
+---
+
 **Variable Selection** is the process of choosing which predictors to include in a model's [[Model Structure]], balancing improved fit against the risk of overfitting and loss of interpretability.
 
 | Method | Description |

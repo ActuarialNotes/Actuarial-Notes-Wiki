@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3671205d48cc0d95ed9eb83811a291052168fff92edeb3298b8fe0fba34c7b30
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Loss Ratio Method.md
+---
+
 **Loss Ratio Method** derives an indicated rate **change** by comparing the projected loss and LAE ratio against the [[Permissible Loss Ratio|permissible loss ratio]]. It works entirely in ratios, so it needs premium on level rather than exposure counts.
 
 > $$\text{Indicated Change} = \frac{\text{Projected Loss \& LAE Ratio} + F\%}{1 - V - Q_T} - 1$$

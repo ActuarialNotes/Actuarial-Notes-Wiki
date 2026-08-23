@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:343c4800c1f6b987161687005985bc8f8a5ca157fc16be7bf5bae04bc9b65f07
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Amortization Schedule.md
+---
+
 An **amortization schedule** is a table that breaks every loan payment into its interest and principal components, and tracks the [[Outstanding Balance]] over the life of the loan. For a level-payment loan with payment $P$, interest rate $i$, and $n$ periods, each row contains:
 
 | Column | Formula |

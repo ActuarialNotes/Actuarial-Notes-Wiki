@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:162c8b153f3977a58326d83e438ea20a6c777fb71d3f2c9a75c42fbfef2cab8e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Variance of Hypothetical Means.md
+---
+
 The **variance of the hypothetical means (VHM)**, written $a$, is the between-risk variance in a [[Bühlmann Credibility]] model — how much the risks in the portfolio genuinely differ from one another once process noise is stripped out.
 
 > $$a = \mathrm{VHM} = \mathrm{Var}_\Theta\!\left(E[X \mid \Theta]\right)$$

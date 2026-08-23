@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:73591b7621a5f943f8a6c0966e96849a643bb771524e6255a27273ed039e275a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Reinsurance Recovery.md
+---
+
 **Reinsurance Recovery** is the amount an insurer expects to collect from its reinsurers on ceded losses and LAE. It is an **asset** — a receivable — not a reduction of the underlying liability, and the cedant remains liable to its policyholders whether or not the reinsurer pays.
 
 > $$\text{Net Unpaid} = \text{Gross Unpaid} - \text{Ceded Unpaid}$$

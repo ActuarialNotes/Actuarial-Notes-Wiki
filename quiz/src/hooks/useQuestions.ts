@@ -2,8 +2,13 @@ import { useEffect, useState } from 'react'
 import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions, filterQuestions } from '@/lib/parser'
 import type { Question, QuestionFilter } from '@/lib/parser'
+import { useShowFlaggedQuestions } from '@/hooks/useShowFlaggedQuestions'
 
 export function useQuestions(filters: QuestionFilter) {
+  // Questions carrying an unresolved critical finding are excluded from a
+  // session by default (filterQuestions does it); the Settings toggle is how a
+  // reviewer gets at them to fix them. See lib/verification.ts.
+  const [showFlagged] = useShowFlaggedQuestions()
   const [questions, setQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -23,7 +28,7 @@ export function useQuestions(filters: QuestionFilter) {
       .then(rawFiles => {
         if (cancelled) return
         const parsed = parseAllQuestions(rawFiles)
-        const filtered = filterQuestions(parsed, filters)
+        const filtered = filterQuestions(parsed, { ...filters, includeFlagged: showFlagged })
         // Fisher-Yates shuffle (uniform; sort+random is biased)
         for (let i = filtered.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1))
@@ -44,7 +49,7 @@ export function useQuestions(filters: QuestionFilter) {
 
     return () => { cancelled = true }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters.exam, filters.topic, filters.difficulty, filters.mode, filters.count, topicsKey, idsKey, filters.concept, conceptsKey, filters.year, filters.session])
+  }, [filters.exam, filters.topic, filters.difficulty, filters.mode, filters.count, topicsKey, idsKey, filters.concept, conceptsKey, filters.year, filters.session, showFlagged])
 
   return { questions, loading, error }
 }

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3a3e2bc91467adbec6735951d2428204c2366c09c0bb4cb39ce49b94a41e7795
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Non-Callable Bond.md
+---
+
 A **non-callable bond** (also called a **bullet bond**) cannot be redeemed by the issuer before its stated maturity date. The bondholder receives all scheduled [[Coupon]] payments and the [[Redemption Value]] at maturity with certainty, eliminating **call risk** and **reinvestment risk** from early redemption.
 
 - The price of a non-callable bond is straightforward:

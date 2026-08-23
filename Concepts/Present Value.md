@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:660de00f2dd0cbdef95980b9625fd129823ffe1a7caea0a9a6d3f7636be7590b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Present Value.md
+---
+
 The **present value** (PV) is the value today of a future payment, discounted at an interest rate. Because a dollar received in the future is worth less than a dollar today — it could have been invested to earn interest — future cash flows are multiplied by the discount factor $v = (1+i)^{-1}$ raised to the number of periods. A payment of $FV$ due in $n$ periods at effective rate $i$ has present value:
 
 > $$PV = FV \cdot (1+i)^{-n}$$

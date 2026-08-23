@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:510dcd274ffc36f1c322bd8c4937a9787b80776186974aecc94fe3a38d01fcf6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Autoregressive Model.md
+---
+
 An **autoregressive model of order $p$**, AR($p$), regresses a [[Time Series]] on its own past $p$ values. It is the "AR" in [[ARIMA]] and the natural model for a series that reverts to a mean at a rate set by $\phi$.
 
 > $$Y_t = c + \phi_1 Y_{t-1} + \cdots + \phi_p Y_{t-p} + \varepsilon_t$$

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:51b5ab8eec90381f5c223a377b8838f278a924d31f48f57256bf22fc4fe0bb55
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Continuous Univariate Distributions.md
+---
+
 A **Continuous Univariate Distribution** describes the probability law of a single random variable $X$ that can take any value in a continuous interval or union of continuous intervals.
 - The probability density function (PDF) $f(x)$ must satisfy $f(x) \geq 0$ and $\int_{-\infty}^{\infty} f(x)\,dx = 1$
 - Individual point probabilities are zero; all probabilities are computed as areas under $f$:

@@ -11,6 +11,16 @@ impact_level: high
 impacted_agents: ["Risk Management", "Finance", "Legal & Compliance", "Actuarial"]
 tags: ["Federal-Regulation", "Solvency", "MCT", "Capital-Adequacy"]
 aliases: ["OSFI Act 1987", "Office of the Superintendent of Financial Institutions"]
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c8c586b291c91022b2b4ebb3478625bee024842a5dbe6c388cf7d1e709d5288e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Regulation/Creation of OSFI (1987).md
 ---
 
 # Creation of OSFI (1987)

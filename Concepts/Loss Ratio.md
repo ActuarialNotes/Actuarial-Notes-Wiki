@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7fa3f3a836ced4c4a8dfd9861d7c99c486c90cdaa27aadeb8ab27fa69630313c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Loss Ratio.md
+---
+
 **Loss Ratio** is losses (usually with LAE) divided by earned premium — the share of premium consumed by claims, and the central measure of rate adequacy.
 
 > $$\text{Loss Ratio} = \frac{\text{Losses} + \text{LAE}}{\text{Earned Premium}}$$

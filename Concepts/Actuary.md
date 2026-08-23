@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6e3e16d946022a976a05c88df73b3fb037df3323906ad62eb5856680178f5415
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Actuary.md
+---
+
 [[Actuarial Notes Wiki|Wiki]] / [[Actuarial Glossary]] / **Actuary**
 
 ## Actuary

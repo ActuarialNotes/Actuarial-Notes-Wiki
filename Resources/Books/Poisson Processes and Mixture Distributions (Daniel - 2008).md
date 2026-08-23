@@ -5,6 +5,16 @@ Year: "2008"
 date: "2008"
 Edition: Study Note
 Publisher: Casualty Actuarial Society
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d5e4636efa37496bd64ab18d3802827c39f466b51fcf361c5aeff77304076a3f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Poisson Processes and Mixture Distributions (Daniel - 2008).md
 ---
 ![[Poisson Processes and Mixture Distributions (Daniel - 2008) - Cover.svg]]
 

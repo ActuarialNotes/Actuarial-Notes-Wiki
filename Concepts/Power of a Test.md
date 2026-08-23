@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:44acc5a65c120c1c4876ac5c0dfd071210666dd1f1db71699812e0683b406c66
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Power of a Test.md
+---
+
 The **Power of a Test** is the probability it rejects the null hypothesis when the null is false — the chance of detecting a real effect. Power is the complement of the [[Type II Error]] probability $\beta$, and it is a *function* of the true parameter value, not a single number.
 
 > $$\text{Power}(\theta) = P(\text{reject } H_0 \mid \theta) = 1 - \beta(\theta)$$

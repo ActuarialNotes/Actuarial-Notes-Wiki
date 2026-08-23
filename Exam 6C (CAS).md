@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1b9e0a7e0c317ba95d16a59831fd1c2e284bf39ca8bfbffd43e608f011a67d82
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Exam 6C (CAS).md
+---
+
 <div class="exam-nav"
 	 data-color="#ea580c"
      data-current="6C|Regulation and Financial Reporting (Canada)"

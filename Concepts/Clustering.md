@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:35873597ef5fd336c9d1cb403daa8fe17b0a50d2ace30a213b9f42cc97028619
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Clustering.md
+---
+
 **Clustering** is an unsupervised [[Statistical Learning]] technique that groups observations into clusters so that observations within a cluster are similar to each other and dissimilar from those in other clusters. There is no response variable $Y$ — the goal is to discover structure in $\mathbf{X}$.
 
 **Two main families:**

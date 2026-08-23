@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:be42bb1af419b1a049d74f87a053a2d3291f311d153ec653c64b5defd803f9e8
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Nonhomogeneous Poisson Process.md
+---
+
 A **Nonhomogeneous Poisson Process** (NHPP) is a [[Poisson Process]] whose rate changes with time: events arrive at intensity $\lambda(t)$ rather than at a constant $\lambda$. Counts over an interval are still Poisson, but the mean is the **integrated** rate over that interval.
 
 > $$m(t) = \int_0^{t} \lambda(u)\,du$$

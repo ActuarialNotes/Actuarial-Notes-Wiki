@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:102117df3cdcd49bca010274fa8525798e56da43712c3d90c5994ea658109f24
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Life Table.md
+---
+
 A **Life Table** is the tabular form of a [[Survival Model]]: starting from a radix $\ell_0$ of newborns, it records $\ell_x$, the expected number still alive at age $x$, and $d_x = \ell_x - \ell_{x+1}$, the number dying between ages $x$ and $x+1$. Every survival and mortality probability the exam asks for can be read off these two columns.
 
 > $$_{t}p_x = \frac{\ell_{x+t}}{\ell_x}, \qquad _{t}q_x = 1 - {}_{t}p_x = \frac{\ell_x - \ell_{x+t}}{\ell_x}$$

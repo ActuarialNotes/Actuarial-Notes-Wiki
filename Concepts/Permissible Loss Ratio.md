@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2626c7c17d03b9e3a9afadda3c24556ddbf3070ffec3b622f59d2562c6b333bc
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Permissible Loss Ratio.md
+---
+
 **Permissible Loss Ratio** (PLR, or target loss ratio) is the share of premium available to pay losses once every other cost has been provided for. It is the benchmark against which a projected loss ratio is judged in the [[Loss Ratio Method]].
 
 > $$\text{PLR} = 1 - V - Q_T$$

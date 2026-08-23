@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3115ab2bff735560967b4939623b943778114cc5a57584e48020fbcfade5d450
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/On Level Premium.md
+---
+
 **On-Level Premium** is historical earned premium restated as though every policy had been written at the rate level currently in effect. It is what makes loss ratios from different years comparable, and it is the denominator of the [[Loss Ratio Method]] indication.
 
 > $$\text{On-Level Factor} = \frac{\text{Current cumulative rate level index}}{\text{Average rate level index for the period}}$$

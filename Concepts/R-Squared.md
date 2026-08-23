@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d907b5c90039a83cefffb5cdb48b7f87e4bfb6b829afdba90637cfd1ed09ffd9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/R-Squared.md
+---
+
 **R-Squared** ($R^2$), also called the **coefficient of determination**, measures the proportion of total variance in the response variable $Y$ that is explained by the model.
 
 > $$R^2 = 1 - \frac{\text{SS}_\text{Res}}{\text{SS}_\text{Tot}}$$

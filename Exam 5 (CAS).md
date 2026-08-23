@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f82ba8d8138556b2f2f7a9d5f07cef94a7cdaddfa26273b6feedb60f56740a84
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Exam 5 (CAS).md
+---
+
 <div class="exam-nav"
      data-current="5|Basic Techniques for Ratemaking and Estimating Claim Liabilities"
 </div>

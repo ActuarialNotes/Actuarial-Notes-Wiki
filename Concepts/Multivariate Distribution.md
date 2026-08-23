@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fa4a33e090c57baec7fb08d3b8c1344734cc23c843119de579b13a99ab5f2d0b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Multivariate Distribution.md
+---
+
 A **multivariate distribution** describes the joint probabilistic behavior of two or more [[Random Variable]]s. For random variables $X_1, X_2, \ldots, X_n$, the joint distribution is characterized by the [[Joint Probability Function]] (discrete) or joint density function (continuous).
 - **[[Marginal Probability Function]]s**: distributions of individual variables after integrating/summing out the others
 - **[[Conditional Probability Function]]s**: distributions of one variable given fixed values of the others

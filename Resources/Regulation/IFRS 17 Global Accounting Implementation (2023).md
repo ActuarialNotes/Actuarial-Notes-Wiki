@@ -11,6 +11,16 @@ impact_level: high
 impacted_agents: ["Finance", "Actuarial", "IT", "Business Intelligence"]
 tags: ["Accounting-Standards", "Financial-Reporting", "Discount-Rates", "CSM"]
 aliases: ["IFRS 17 Effective Date", "Insurance Contracts Accounting"]
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8abad991acfa67884c83ad295486fbaf536c7040c394103ee589ab215bb04196
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Regulation/IFRS 17 Global Accounting Implementation (2023).md
 ---
 
 # IFRS 17 Implementation (January 1, 2023)

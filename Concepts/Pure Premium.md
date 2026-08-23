@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:15e629501a5e646135ad9a669940d589db23479e9db621cd15375c722f6ef7db
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Pure Premium.md
+---
+
 **Pure Premium** (also *loss cost* or *burning cost*) is expected loss and LAE per unit of exposure — the portion of the rate that pays claims, before any provision for expenses or profit.
 
 > $$\text{Pure Premium} = \frac{\text{Losses} + \text{LAE}}{\text{Earned Exposures}}$$

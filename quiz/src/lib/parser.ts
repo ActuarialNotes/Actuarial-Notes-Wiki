@@ -1,4 +1,5 @@
 import fm from 'front-matter'
+import { verificationFromAttributes, hasCriticalFinding, type Verification } from './verification'
 
 export type Difficulty = 'easy' | 'medium' | 'hard'
 export type QuestionType = 'multiple-choice' | 'free-entry' | 'multi-part'
@@ -44,6 +45,12 @@ export interface Question {
    * MAS-I sittings whose content CAS later moved to MAS-II.
    */
   originally_exam?: string
+  /**
+   * The question's VERIFY record — what has been checked about it, against what
+   * source, and when. Undefined only for a file with no `verification:` block,
+   * which CI does not allow into the bank.
+   */
+  verification?: Verification
 }
 
 export interface QuestionFilter {
@@ -62,6 +69,12 @@ export interface QuestionFilter {
   ids?: string[]        // when set, only return questions whose id is in this list
   concept?: string      // filter by wiki_link concept name (single)
   concepts?: string[]   // filter by wiki_link concept names (multi-select)
+  /**
+   * Include questions the validation record flags as critically wrong. Off by
+   * default — see `hasCriticalFinding`. Review surfaces turn it on so the
+   * flagged questions can actually be fixed.
+   */
+  includeFlagged?: boolean
 }
 
 interface QuestionFrontmatter {
@@ -79,6 +92,7 @@ interface QuestionFrontmatter {
   year?: unknown
   session?: unknown
   originally_exam?: unknown
+  verification?: unknown
 }
 
 const OPTION_REGEX = /^- ([A-E])\)\s+(.+)/
@@ -324,6 +338,7 @@ export function parseQuestion(raw: string): Question | null {
       year: data.year ? Number(data.year) : undefined,
       session: data.session ? String(data.session) : undefined,
       originally_exam: data.originally_exam ? String(data.originally_exam) : undefined,
+      verification: verificationFromAttributes(data) ?? undefined,
     }
 
     // ── multi-part ──────────────────────────────────────────────────────────
@@ -503,6 +518,11 @@ export function isFromAnotherExamsPaper(q: Question, exam: string): boolean {
 
 export function filterQuestions(questions: Question[], filters: QuestionFilter): Question[] {
   return questions.filter(q => {
+    // Before anything else, and ahead of the `ids` short-circuit: a question the
+    // record says is critically wrong should not reach a student by any route,
+    // including a direct id lookup, unless the caller has explicitly asked for
+    // flagged questions.
+    if (!filters.includeFlagged && hasCriticalFinding(q.verification)) return false
     if (filters.ids?.length) return filters.ids.includes(q.id)
     if (filters.exam && q.exam.toLowerCase() !== filters.exam.toLowerCase()) return false
     if (filters.topic && q.topic.toLowerCase() !== filters.topic.toLowerCase()) return false

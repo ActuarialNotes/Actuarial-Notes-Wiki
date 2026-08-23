@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8f76ccb6b93c80acf9bfd5f3c123cec76887e63b2f71c9d9df60f4c7b228bb94
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Cash Flow.md
+---
+
 A **cash flow** is a payment of money at a specific point in time, which can be positive (inflows/receipts) or negative (outflows/disbursements). A cash flow stream $\{(C_t, t)\}$ is valued by its present value at a given [[Interest Rate]]:
 
 > $$\text{PV} = \sum_t C_t \cdot v^t$$

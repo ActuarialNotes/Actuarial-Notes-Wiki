@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a8430e1534e21eb2a64814dfcbf2c5eac246ba8cb4ea1714a6b403dc94fb0288
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Considerations for Implementing Rates.md
+---
+
 **Considerations for Implementing Rates** are the decisions that turn an [[Overall Rate Level Indication|indication]] into rates in force — how much to file, how to distribute it, what mechanism to use, and what to do when the full indication cannot be taken.
 
 > $$\text{Base Rate}_{\text{new}} = \text{Base Rate}_{\text{current}} \times \frac{1 + \text{overall change}}{1 + \text{off-balance from relativity changes}}$$

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:207795d8b43ea3bd4045c14f5b5b8406071c0c6629f532bdf8be31ef241bdf75
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Effective Discount Rate.md
+---
+
 The **effective discount rate** $d$ is the interest paid at the **beginning** of the period rather than the end. On a $1$ investment for one period, $d$ is paid upfront and $1$ is returned at the end:
 
 > $$d = \frac{i}{1+i}$$

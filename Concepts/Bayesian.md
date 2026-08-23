@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0906de0814bea24b7fd7e9dcfd57c06c971ee06dba297dff3ee8b42a00050910
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Bayesian.md
+---
+
 **Bayesian** probability interprets probability as a degree of belief about uncertain propositions, updated as new evidence arrives. Starting from a prior $P(H)$ for a hypothesis $H$ and evidence $E$ with likelihood $P(E \mid H)$, [[Bayes Theorem]] yields the posterior $P(H \mid E)$.
 
 > $$P(H \mid E) = \frac{P(E \mid H)\, P(H)}{P(E)}$$

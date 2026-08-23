@@ -7,6 +7,16 @@ Publisher: Actuarial Standards Board
 Type: Actuarial Standard of Practice
 Code: ASOP No. 13
 Available from: "[actuarialstandardsboard.org](https://www.actuarialstandardsboard.org/asops/trending-procedures-propertycasualty-insurance/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:77002eccbc6b76e84b74ffb7535d60c0e6532739688d7d06f0fe15cd6131e9a9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ASOP 13 - Trending Procedures in Property Casualty Insurance (ASB - 2009).md
 ---
 ![[ASOP 13 - Trending Procedures in Property Casualty Insurance (ASB - 2009) - Cover.svg]]
 

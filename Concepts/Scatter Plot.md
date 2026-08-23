@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5bdba8014c70d4126c942d8206702ebee41225507fd40142e1a8c208463cc8e7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Scatter Plot.md
+---
+
 A **Scatter Plot** is an [[Exploratory Data Analysis]] display of two variables at once: each observation is one point at $(x_i, y_i)$. It is the standard first look at the relationship between a continuous predictor and the response, before any model is fitted.
 
 > $$\{(x_i, y_i)\}_{i=1}^n \quad \text{plotted in the plane}$$

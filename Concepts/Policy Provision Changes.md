@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ae069733cefe5d74f1991949d9deb7922dbb1e8d0a270cc0e8f1bd3e43fcf12d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Policy Provision Changes.md
+---
+
 **Policy Provision Changes** are changes in the terms of the contract itself — deductibles, limits, sub-limits, exclusions, coverage triggers, benefit levels — that alter how loss is shared between insurer and insured for the *same* underlying risk.
 
 > $$\text{Adjusted Loss} = \sum_i \left[\min(X_i, L_{\text{new}}) - \min(X_i, d_{\text{new}})\right]$$

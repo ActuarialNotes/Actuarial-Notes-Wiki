@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e04f4a3e27cbe9188fd70cb4b5c937b53e9fc9474a38e779d195e7fd27e50115
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Conditional Probability.md
+---
+
 **Conditional Probability** $P(A \mid B)$ is the probability that event $A$ occurs given that event $B$ is known to have occurred, restricting the sample space to $B$.
 
 > $$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:83a7ca63f1ad01da417bc338b0c8db8f1fa89f0c8e07bf322f8409657583ccf9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Mixed Poisson Process.md
+---
+
 A **Mixed Poisson Process** treats the arrival rate itself as random: each risk has its own rate $\Lambda$ drawn from a mixing distribution, and conditional on $\Lambda = \lambda$ the counts follow an ordinary [[Poisson Process]]. It is the standard way to model a **heterogeneous** portfolio in which some insureds are simply more claim-prone than others.
 
 > $$N(t) \mid \Lambda = \lambda \ \sim\ \text{Poi}(\lambda t)$$

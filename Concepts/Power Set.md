@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b2687966fb646b7a563522e4dc83190b86245196e00ac092bb9afe7e7309bde1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Power Set.md
+---
+
 The **Power Set** $\mathcal{P}(S)$ of a set $S$ is the set of all subsets of $S$, including the empty set $\varnothing$ and $S$ itself. It is the building block for defining the collection of [[Event]]s on a [[Sample Space]] in [[Set Theory]].
 
 > $$\mathcal{P}(S) = \{\, A : A \subseteq S \,\}$$

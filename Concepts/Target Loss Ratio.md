@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4a191eb42cc7488d7cece8aa46e59cfd3ed3c8f989b35e2f6b84b8c5e8f4db53
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Target Loss Ratio.md
+---
+
 **Target Loss Ratio** (also called the permissible loss ratio) is the loss ratio that, if exactly achieved, produces the desired combined ratio and profit margin; it serves as the benchmark in the [[Loss Ratio Method]] to determine whether rates are adequate.
 
 > $$\text{Target LR} = 1 - V - F - Q$$

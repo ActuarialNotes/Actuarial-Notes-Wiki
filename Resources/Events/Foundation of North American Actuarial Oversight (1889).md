@@ -10,6 +10,16 @@ impact_level: medium
 impacted_agents: ["Actuarial", "Business Intelligence"]
 tags: ["North-America", "Professional-Body", "Experience-Studies"]
 aliases: ["ASA Founding 1889", "Actuarial Society of America"]
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cf94859bb50310e801835c17e0769103207728beab9ba38eb14355948f17e93d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Events/Foundation of North American Actuarial Oversight (1889).md
 ---
 
 # Founding of the Actuarial Society of America (1889)

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:97587dad5b2dc1905c4e8144ca1b8b70c91421c4c0444ffc365d6e4357162523
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Correlation.md
+---
+
 **Correlation** $\rho(X, Y)$ measures the strength and direction of the linear relationship between two [[Random Variable|random variables]] $X$ and $Y$. The Pearson correlation coefficient standardizes the [[Covariance]] by the product of the standard deviations, forcing it into the range $[-1, 1]$.
 
 > $$\rho(X, Y) = \frac{\text{Cov}(X, Y)}{\sigma_X \, \sigma_Y}$$

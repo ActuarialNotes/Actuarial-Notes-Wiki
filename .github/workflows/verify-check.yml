@@ -1,0 +1,97 @@
+name: Verify Check
+
+# Gate every PR on the integrity of the validation record (VERIFY —
+# docs/verification.md). Cheap, dependency-free, and runs always: the record's
+# whole value is that a student can trust the badge on a page, and the two ways
+# to destroy that are a verification that cites no source and a log entry quietly
+# reworded after the fact. Both fail here.
+#
+# Note what this does NOT fail on: a content edit that outdates a hash. That is
+# repaired by --sync and committed back, so a content-only PR is never blocked by
+# the record — only a false claim is.
+on:
+  pull_request:
+    paths:
+      - 'questions/**'
+      - 'Concepts/**'
+      - 'Resources/**'
+      - 'Exam *.md'
+      - '.verify/**'
+      - 'scripts/verify_*.py'
+      - 'scripts/test_verify.py'
+      - '.github/workflows/verify-check.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'questions/**'
+      - 'Concepts/**'
+      - 'Resources/**'
+      - 'Exam *.md'
+      - '.verify/**'
+      - 'scripts/verify_*.py'
+      - '.github/workflows/verify-check.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: verify-check-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    name: validation record
+    runs-on: ubuntu-latest
+    steps:
+      # Full history: the append-only check diffs .verify/ against the merge base,
+      # which a shallow clone cannot reach.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Standard library only — verify_lib hand-parses the block rather than
+      # pulling in PyYAML, so there is nothing to install.
+      - name: Unit tests
+        run: python3 -m unittest discover -s scripts -p 'test_*.py'
+
+      # Repairs, never claims: refreshes content hashes, downgrades an edited
+      # verified page to stale, recomputes the finding counters. Nothing in here
+      # can raise a status.
+      - name: Sync the record
+        run: python3 scripts/verify_check.py --sync
+
+      - name: Refresh the dashboard
+        run: python3 scripts/generate_validation_status.py
+
+      # Only on a same-repo PR — a fork's branch is not ours to push to. On a
+      # fork the strict check below still runs; it just reports the drift as a
+      # warning instead of fixing it.
+      - name: Commit repairs
+        if: >-
+          github.event_name == 'pull_request' &&
+          github.event.pull_request.head.repo.full_name == github.repository
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name  "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "Sync validation record (hashes, stale downgrades, finding counts)"
+            git push origin HEAD:"${{ github.event.pull_request.head.ref }}"
+          else
+            echo "Record already in sync."
+          fi
+
+      # The part that fails the build: a verification with no source, a
+      # confidence on an unverified page, a log entry edited rather than
+      # appended, a log pointing at a file that does not exist.
+      - name: Check the record
+        run: |
+          python3 scripts/verify_check.py \
+            --base "origin/${{ github.event.pull_request.base.ref || 'main' }}"

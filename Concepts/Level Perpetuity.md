@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c6b01c6664aef8623f691057623b81da14502db20cea569fb975a07e6ec400b6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Level Perpetuity.md
+---
+
 A **level perpetuity** is a [[Perpetuity]] with equal payments at every period, continuing forever. The present value of a perpetuity-immediate (payments at end of period) paying $1$ per period at rate $i$:
 
 > $$a_{\overline{\infty}|} = \frac{1}{i}$$

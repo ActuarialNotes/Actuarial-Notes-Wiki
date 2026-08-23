@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0f2e088cd7606d39183a60f665492f47c11cda7311c2f10abcc9d3e79a7c1da6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Regularization.md
+---
+
 **Regularization** adds a penalty on coefficient size to the fitting criterion, shrinking estimates toward zero. It trades a little bias for a large reduction in variance — the [[Bias-Variance Tradeoff]] deliberately exploited.
 
 > $$\text{Ridge:}\quad \min_{\beta}\ \mathrm{RSS} + \lambda\sum_{j=1}^{p}\beta_j^{2}$$

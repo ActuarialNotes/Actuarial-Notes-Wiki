@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c09509fb975861c8e04ffe8462b4e1289b74f8134ef33d721ee08f7abb9d3b4b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Central Limit Theorem.md
+---
+
 The **Central Limit Theorem** (CLT) states that the standardized sum of independent and identically distributed random variables with mean $\mu$ and finite variance $\sigma^2$ converges in distribution to a standard normal as $n \to \infty$.
 
 > $$\frac{S_n - n\mu}{\sigma\sqrt{n}} \xrightarrow{d} N(0,1) \quad \text{as } n \to \infty$$

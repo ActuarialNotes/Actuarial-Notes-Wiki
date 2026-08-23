@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9ac9358020f6e01e5eb392deeb8a59111d36a4e048abbe4346c3e51bf2c79283
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Unearned Premium.md
+---
+
 **Unearned Premium** is the portion of written premium corresponding to coverage not yet provided — the insurer's obligation to either provide the remaining coverage or return the premium. The aggregate balance is the **unearned premium reserve** (UEP), a liability on the balance sheet.
 
 > $$\text{UEP for one policy} = \text{Full premium} \times \frac{\text{days remaining}}{\text{policy term}}$$

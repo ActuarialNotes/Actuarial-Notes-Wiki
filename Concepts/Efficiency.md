@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:222ad6d6cefb94c156811a027c28409d3e11b819fa37c6cd5118cc62d1825667
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Efficiency.md
+---
+
 **Efficiency** compares estimators by their variance relative to the smallest variance achievable: an [[Unbiasedness|unbiased]] estimator is **efficient** if it attains the Cramér–Rao lower bound, and one estimator is **relatively more efficient** than another if it has smaller variance (equivalently, smaller [[Mean Square Error]]) for the same parameter.
 
 > $$\text{Relative Efficiency}(\hat{\theta}_1, \hat{\theta}_2) = \frac{\text{Var}(\hat{\theta}_2)}{\text{Var}(\hat{\theta}_1)}$$

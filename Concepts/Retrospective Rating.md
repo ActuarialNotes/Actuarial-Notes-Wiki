@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:13ccbf458cd33c277ac3de3b5c7e03a53aa7b6fe60322329c09401480ead1122
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Retrospective Rating.md
+---
+
 **Retrospective Rating** adjusts a policy's premium *after* the period, based on the insured's own losses during that period, within a guaranteed minimum and maximum. Unlike [[Experience Rating|experience rating]], which uses past years to price the coming one, a retro plan charges the insured for its own current-year experience.
 
 > $$R = \left(\text{BP} + \text{CL} \times \text{LCF}\right) \times \text{TM}$$

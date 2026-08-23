@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ec7b06ef46f2d3364ddfea2bc01d2247deda9df9931e8976b395c7d62dd8199c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Central Limit Theorem (CLT).md
+---
+
 The **Central Limit Theorem (CLT)** states that the sum or average of a large number of independent, identically distributed [[Random Variable|random variables]] with finite mean $\mu$ and variance $\sigma^2$ is approximately [[Normal Distribution|normal]], regardless of the original distribution.
 
 > $$\frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \xrightarrow{d} N(0, 1)$$

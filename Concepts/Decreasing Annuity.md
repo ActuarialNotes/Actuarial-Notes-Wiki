@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3af57ed49174a1f11402c354cf54ce8d7ebd54dfc7ab10591d650a29c9dd6827
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Decreasing Annuity.md
+---
+
 An **arithmetic decreasing annuity** has payments $n, n-1, n-2, \ldots, 1$ at the end of periods $1, 2, \ldots, n$. Its present value is denoted $(Da)_{\overline{n}|}$:
 
 > $$(Da)_{\overline{n}|} = \frac{n - a_{\overline{n}|}}{i}$$

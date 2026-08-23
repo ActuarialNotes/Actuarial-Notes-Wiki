@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:652276e9976c6d97cba956a359e09ff1962deb0a1ab53fd6ccfb98863619f6e4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Effective Rate.md
+---
+
 The **effective interest rate** $i$ is the actual rate of interest earned (or paid) per period, accounting for compounding within the period. It is the rate that, applied once per period, produces the same result as any equivalent [[Nominal Interest Rate]] compounded more frequently.
 
 - For a nominal rate $i^{(m)}$ [[Convertible m-thly]]:

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:79bbc5614d514cd216dc47eee2f8c73516c381bd84eba60bca7a7b780ac0f4ea
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Concepts/Bloom's Taxonomy.md"
+---
+
 Knowledge—Exhibit memory of previously learned materials by recalling facts, terms, basic concepts, and answers.
 
 Comprehension—Demonstrative understanding of facts and ideas by organizing, comparing, translating, interpreting, giving descriptions, and stating main ideas.

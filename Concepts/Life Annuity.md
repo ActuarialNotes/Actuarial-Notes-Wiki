@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:edd6177e722aa444131a2d91997294392b3ff9f5ecdcbce0e2f6369458107ac9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Life Annuity.md
+---
+
 A **Life Annuity** pays periodic benefits contingent on the survival of one or more lives. The **whole life annuity** pays 1 continuously per unit time for as long as the insured lives. Its expected present value (EPV) for a life aged $x$ is $\bar{a}_x$.
 
 > $$\bar{a}_x = E\!\left[\bar{a}_{\overline{T_x}|}\right]$$

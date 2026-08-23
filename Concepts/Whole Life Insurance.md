@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c51f849ef154bdcdd326c2c76408fe153286c8fc714996368d2db02d502349ed
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Whole Life Insurance.md
+---
+
 **Whole Life Insurance** is a life insurance policy that pays a benefit of 1 (one unit) at the moment of the insured's death, regardless of when death occurs. The **net single premium** (expected present value of the benefit) is denoted $\bar{A}_x$ for a life aged $x$.
 
 > $$\bar{A}_x = E\!\left[e^{-\delta T_x}\right]$$

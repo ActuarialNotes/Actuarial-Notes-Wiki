@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3f45950d4e7f9186b2f6f1cff1d7e3972eb10fd34710efb1ce732306f02d928f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Activation Function.md
+---
+
 An **activation function** is the non-linear transform applied at each hidden unit of a [[Neural Network]]. Without it the whole network collapses to a single linear map, however many layers it has — the non-linearity is the entire source of a network's flexibility.
 
 > $$A_k = g\!\left(w_{k0} + \sum_{j=1}^{p} w_{kj}X_j\right)$$

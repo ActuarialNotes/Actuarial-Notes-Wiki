@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6fe255a119296c29cb4534cd440ed2f64b046b7d2b648ac8ac5d154d4000a617
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Mutually Exclusive Events.md
+---
+
 Two events $A$ and $B$ are **Mutually Exclusive** (disjoint) if they cannot both occur simultaneously.
 - For mutually exclusive events, the [[Probability Addition Rule]] simplifies to $P(A \cup B) = P(A) + P(B)$
 - The addition rule simplification extends to any finite collection: if $A_1, A_2, \ldots, A_n$ are pairwise mutually exclusive, then $P\!\left(\bigcup_{i=1}^n A_i\right) = \sum_{i=1}^n P(A_i)$

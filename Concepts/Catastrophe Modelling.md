@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:13bf47a23ab6cab67ab522f37ec3f52d7cbf5704f1e1a35915a12b89a86c07a3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Catastrophe Modelling.md
+---
+
 [[Actuarial Notes Wiki|Wiki]] / [[Actuarial Methods]] / **==Catastrophe Modelling==**
 
 > "==Catastrophes== are infrequent events that cause severe loss, injury or property damage to a large population of exposures. "

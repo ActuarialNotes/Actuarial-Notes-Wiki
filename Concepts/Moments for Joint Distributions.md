@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8357cdd72fbf31504c7e8457e1b6cbb7893f6f41e9e19ea5189cedf973bc9a9b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Moments for Joint Distributions.md
+---
+
 **Moments for joint distributions** generalize [[Expected Value]] to functions of multiple random variables. [[Covariance]] is computed from these moments as $\text{Cov}(X,Y) = E[XY] - E[X]E[Y]$.
 
 > $$E[X] = \sum_x \sum_y x\,p(x,y)$$

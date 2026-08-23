@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9fd34b1feeccaac6072e55238d9bce721a5d33aff2c0dd9c5d8d10994be72757
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Ratemaking.md
+---
+
 **Ratemaking** is the process of determining the appropriate price (the **rate**) to charge for insurance coverage. It is a **prospective** process that uses historical data and actuarial projections to ensure the premium collected is sufficient to cover future losses, expenses, and a margin for profit, while remaining competitive and regulatory-compliant. Contrast with [[Loss Reserving|loss reserving]], which is retrospective.
 
 - The **fundamental insurance equation** states that, over the future policy period:

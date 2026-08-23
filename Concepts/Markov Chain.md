@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3054c73bb70358ed3d5b9dbdb6153d7a6233a06dbb18dd5c5ddf89bf85d3b52a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Markov Chain.md
+---
+
 A **Markov Chain** is a [[Stochastic Processes|stochastic process]] $\{X_n\}$ on a discrete state space that has the **Markov property**: the next state depends on the past only through the current state. It is governed by a one-step **transition probability matrix** $P$.
 
 > $$P\big(X_{n+1} = j \mid X_n = i, \ldots, X_0\big) = P\big(X_{n+1} = j \mid X_n = i\big)$$

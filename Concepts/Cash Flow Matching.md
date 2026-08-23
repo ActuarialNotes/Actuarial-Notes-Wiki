@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:de0a2d1581f40276fe5a90d896f2a38c4fb5b125e3415b17ff07d16131a68184
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Cash Flow Matching.md
+---
+
 **Cash flow matching** (also called **dedication**) is a portfolio strategy in which asset cash flows are structured to exactly equal liability cash flows at every future date, eliminating both [[Price Risk]] and [[Reinvestment Risk]] entirely.
 
 - Unlike [[Redington Immunization]], which only protects against small parallel rate shifts and needs periodic rebalancing, a matched portfolio requires **no rebalancing** once constructed — each liability is funded directly by a matching asset cash flow.

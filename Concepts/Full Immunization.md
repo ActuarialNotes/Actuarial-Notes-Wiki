@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5e93d31ffd1c77a428f1f9cbbaed1682d185323ed1823a9c4ad58e1d31f2bfe6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Full Immunization.md
+---
+
 **Full immunization** provides protection against **any** single interest rate shift (both small and large, up or down), in contrast to [[Redington Immunization]] which only covers small parallel shifts. Full immunization is achieved when:
 
 1. $PV(assets) = PV(liabilities)$ at the current yield

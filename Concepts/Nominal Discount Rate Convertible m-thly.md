@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:98beb7b5ccaf054948469de5a30d0c3ab08b9f6a0834c52ddece6bdf60f07c52
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Nominal Discount Rate Convertible m-thly.md
+---
+
 The **nominal discount rate convertible $m$-thly**, denoted $d^{(m)}$, is an annual discount rate under which interest is paid at the **beginning** of each of $m$ sub-periods per year at rate $d^{(m)}/m$.
 
 - The relationship to the effective annual rate $i$ (and effective discount rate $d$) is:

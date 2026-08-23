@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:13c1ab63857d8f706a498252c3c99143ceb5568d37dc6f04d6c391a10645d970
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Probability Theory.md
+---
+
 **Probability Theory** is the mathematical framework for quantifying uncertainty. A probability measure $P$ assigns to each [[Event]] in a [[Sample Space]] $S$ a number in $[0, 1]$ satisfying Kolmogorov's three axioms: non-negativity, normalization, and countable additivity.
 
 > $$P(E) \ge 0$$

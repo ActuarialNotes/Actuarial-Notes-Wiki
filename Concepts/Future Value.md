@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6a13083292af97238e3fad4dabd8276a5b177d7b115d876113f3220ffd460c6f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Future Value.md
+---
+
 The **future value** (FV) of a cash flow is its [[Accumulated Value]] at a specified future date, accounting for the time value of money. Under [[Compound Interest]] at effective annual rate $i$:
 
 > $$\text{FV} = \text{PV} \cdot (1+i)^n$$

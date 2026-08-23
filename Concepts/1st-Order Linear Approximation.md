@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8422ade2082f9dabd5f040b24a0e06d729754736a192f31a6d27d524d8307ac6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/1st-Order Linear Approximation.md
+---
+
 The **1st-order linear approximation** (or first-order Taylor approximation) estimates the change in bond price for a small change in [[Yield Rate]] $\Delta j$, using [[Modified Duration]]:
 
 > $$\Delta P \approx -D_{Mod} \cdot P \cdot \Delta j$$

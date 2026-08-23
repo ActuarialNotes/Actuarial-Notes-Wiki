@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a2fdf2f19964347fddee7c39a4f8b2a7e2ad43754fcf317764bc3d72d10107e6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Exam P-1 (SOA).md
+---
+
 <div class="exam-nav"
      data-current="P-1|Probability"
 </div>

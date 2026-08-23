@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ace292c5c3e399ec4300d1de56db44ff862b0b9ae213a5a1ec669e9835ee46cd
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Deferred Annuity.md
+---
+
 A **deferred annuity** ${}_{k|}a_{\overline{n}|}$ is an [[Annuity Immediate|annuity-immediate]] (or [[Annuity Due|annuity-due]]) whose first payment is delayed by a **deferral period** of $k$ periods.
 
 > $${}_{k|}a_{\overline{n}|} = v^k \cdot a_{\overline{n}|}$$

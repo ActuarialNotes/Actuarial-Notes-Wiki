@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:82311b597a687e2053eeaade592b91887175018a56fa1c3576a709f65a9de68e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Bias.md
+---
+
 **Bias** is the systematic error of an estimator: the difference between its expected value and the parameter it estimates. An estimator with zero bias is [[Unbiasedness|unbiased]]; bias is one of the two components of [[Mean Square Error]], the other being variance.
 
 > $$\text{Bias}(\hat\theta) = E[\hat\theta] - \theta$$

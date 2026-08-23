@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:af7eb987f3727c2e147415a0ec4423f65e75c85129a07ce4c535f32407840612
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Compound Poisson Process.md
+---
+
 A **Compound Poisson Process** adds a random amount to each event of a [[Poisson Process]]: if claims arrive at rate $\lambda$ and the $i$-th claim costs $X_i$, the aggregate loss by time $t$ is the random sum $S(t) = \sum_{i=1}^{N(t)} X_i$. It is the standard model for total claims on a portfolio and the process form of the [[Aggregate Loss Model]].
 
 > $$S(t) = \sum_{i=1}^{N(t)} X_i, \qquad N(t) \sim \text{Poi}(\lambda t)$$

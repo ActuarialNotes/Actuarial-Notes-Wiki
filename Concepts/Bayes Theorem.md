@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a82aafac7059aebe55102b3e49aae164705099ff9561202e72e142a2206ac2ee
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Bayes Theorem.md
+---
+
 **Bayes' Theorem** is a formula for reversing conditional probabilities, updating the prior probability $P(H)$ of a hypothesis to the posterior probability $P(H \mid E)$ after observing evidence $E$.
 - The denominator $P(E)$ is computed via the [[The Law of Total Probability]] across a partition $\{H_i\}$ of the sample space:
 

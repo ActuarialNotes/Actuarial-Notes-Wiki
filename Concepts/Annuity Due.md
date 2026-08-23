@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ea3b3624006faf7c61c8aebaa5628363602f002eb51824273318e8cc6dfabcf5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Annuity Due.md
+---
+
 An **annuity-due** is a series of $n$ level payments of 1 made at the **beginning** of each period. Because each payment is received one period earlier than in an [[Annuity Immediate|annuity-immediate]], the annuity-due is worth exactly $(1+i)$ times as much.
 
 > $$\ddot{a}_{\overline{n}|} = (1+i)\,a_{\overline{n}|}$$

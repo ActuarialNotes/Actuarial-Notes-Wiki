@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:955d717be5091e99130b737e8ffae3bcba305bfcafdec9c6a10c107f5bcf8e0b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Drop Payment.md
+---
+
 A **drop payment** is a final loan payment that is **smaller** than the regular scheduled payment, occurring at the same date as a regular payment would occur. It arises when the [[Term of Loan]] is not a whole number of periods — the drop payment retires the remaining [[Outstanding Balance]].
 
 - If regular payments are $P$ and the outstanding balance after $n$ full payments is $B_n > 0$ (with $B_n < P$), then the drop payment is:

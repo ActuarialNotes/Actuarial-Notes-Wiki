@@ -5,6 +5,16 @@ Publisher: Society of Actuaries
 Type: Study Note
 Code: P-21-05
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:99f6f6bce2a05a70d2df7d92eb3d15671d3965e7a93214aa7c80baa16bb7f5ca
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Risk and Insurance (SOA).md
 ---
 ![[Risk and Insurance (SOA) - Cover.svg]]
 

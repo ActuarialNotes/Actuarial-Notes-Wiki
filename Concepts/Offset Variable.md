@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:46bd5f1deeaf069f72e98c2133e318b864dd0236ad125233b04d6f75551036c0
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Offset Variable.md
+---
+
 An **Offset Variable** is a predictor in a [[Generalized Linear Model]] whose coefficient is fixed at exactly $1$ rather than estimated from the data — used to force a known, exact relationship (most commonly exposure) into the linear predictor.
 
 > $$g(\mu_i) = \ln(\text{Exposure}_i) + \beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip}$$

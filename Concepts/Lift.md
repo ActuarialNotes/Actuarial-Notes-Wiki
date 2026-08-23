@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bbf305ee356617838d818f0cf9c325b1ffaf21b540e7226d3adeaa44ddd336e7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Lift.md
+---
+
 **Lift** is a model performance metric used to evaluate how much better a predictive model performs relative to a random baseline when targeting a fraction of the population. It is commonly used in insurance for fraud detection, marketing, and pricing model validation.
 
 > $$\text{Lift at decile } d$$

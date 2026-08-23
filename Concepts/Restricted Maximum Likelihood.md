@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:71171f3b021f8860bcb4a1a2eec45ecff815b0e0bd84e314f79cad78b2e39f24
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Restricted Maximum Likelihood.md
+---
+
 **Restricted (or residual) maximum likelihood — REML —** estimates the [[Variance Components|variance components]] of a [[Linear Mixed Model]] from the part of the likelihood that does not depend on the [[Fixed Effects|fixed effects]], removing the downward bias ordinary maximum likelihood carries.
 
 > $$\ell_R(\boldsymbol{\theta}) = -\tfrac{1}{2}\left[\log|\mathbf{V}| + \log|\mathbf{X}^{\top}\mathbf{V}^{-1}\mathbf{X}| + \mathbf{r}^{\top}\mathbf{V}^{-1}\mathbf{r}\right]$$

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6a2a50d8d552fa7e55ee0023ad00d51917317077d2844f73093a2fe856be782e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Amortization of Premium.md
+---
+
 **Amortization of premium** refers to the gradual reduction of a bond premium (excess of price over [[Face Value]]) over the bond's life. When a bond is purchased at a **premium** (price $P > C$, the [[Face Value]]/redemption value), the premium is written down each period.
 
 - The premium amortized in period $t$ equals the excess coupon over the yield earned:

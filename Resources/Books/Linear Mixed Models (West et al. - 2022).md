@@ -7,6 +7,16 @@ Edition: 3rd
 Publisher: Chapman & Hall/CRC
 Type: Textbook
 Available from: "[routledge.com](https://www.routledge.com/Linear-Mixed-Models-A-Practical-Guide-Using-Statistical-Software/West-Welch-Galecki/p/book/9781032019321)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:521b73fa7e731ae89667fa49dc745e70152f280b60d22cd676c63be10b2f48f2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Linear Mixed Models (West et al. - 2022).md
 ---
 ![[Linear Mixed Models (West et al. - 2022) - Cover.svg]]
 

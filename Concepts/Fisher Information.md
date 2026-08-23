@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e48e71b40322f731cdb220fb81e36ad35f3c2d8711554fe6b1498e7d8ac239cf
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Fisher Information.md
+---
+
 **Fisher Information** $I(\theta)$ measures how sharply the likelihood identifies a parameter — the expected curvature of the log-likelihood at $\theta$. It sets the **Cramér–Rao lower bound**, the smallest variance any [[Unbiasedness|unbiased]] estimator can achieve, and so defines what [[Efficiency|efficient]] means.
 
 > $$I(\theta) = E\!\left[\left(\frac{\partial}{\partial\theta}\ln f(X\mid\theta)\right)^{2}\right] = -E\!\left[\frac{\partial^{2}}{\partial\theta^{2}}\ln f(X\mid\theta)\right]$$

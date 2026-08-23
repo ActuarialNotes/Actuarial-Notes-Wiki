@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:892a03408bbd2e28263904259376db3faaba8d2ab64354a9d9080899f113b2c7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Tweedie Distribution.md
+---
+
 The **Tweedie Distribution** is the [[Exponential Family]] member whose variance is a power of the mean, $V(\mu) = \mu^{p}$. For $1 < p < 2$ it is a compound Poisson–Gamma distribution: a Poisson number of Gamma-sized claims. That gives it a point mass at zero plus a right-skewed continuous part — exactly the shape of **pure premium** data, where most policies have no claim at all.
 
 > $$\text{Var}(Y) = \phi\,\mu^{p}, \qquad 1 < p < 2$$

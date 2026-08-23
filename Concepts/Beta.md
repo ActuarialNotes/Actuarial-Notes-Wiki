@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:55b84c5e948460833cd7df09efa0e8b0da1de5d77e5b75a9e24644a3280b0814
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Beta.md
+---
+
 The **Beta Distribution** $X \sim \text{Beta}(\alpha, \beta)$ is a continuous distribution on $(0, 1)$ parameterized by shape parameters $\alpha > 0$ and $\beta > 0$. It is commonly used to model rates, proportions, and probabilities.
 
 > $$f(x) = \frac{x^{\alpha - 1}(1-x)^{\beta - 1}}{B(\alpha,\, \beta)}$$

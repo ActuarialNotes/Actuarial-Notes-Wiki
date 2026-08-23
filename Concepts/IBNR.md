@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:65122a094818ffa6352fe431085ef5b14d20e7d9f76b3bc315e5296607f35f84
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/IBNR.md
+---
+
 **IBNR** is the provision for claim cost that has been incurred but is not yet in the reported figures. In its **broad** sense — the one used in a reserve analysis — it is the gap between ultimate losses and reported losses, and it has two distinct components.
 
 > $$\text{IBNR} = \text{Ultimate} - \text{Reported}$$

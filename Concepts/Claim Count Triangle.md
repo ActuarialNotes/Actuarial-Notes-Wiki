@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c3cb9510935391fc3c8f4fc5a1792beecd8f81dc807614404258fa51edff7def
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Claim Count Triangle.md
+---
+
 **Claim Count Triangle** is a [[Development Triangle|development triangle]] of claim *counts* rather than dollars. Counts are what make the dollar triangles interpretable: they separate "more claims" from "costlier claims", and they are the denominator of every severity diagnostic.
 
 > $$\text{Ultimate Counts} = N_n \times \text{CDF}^{\text{count}}_{n \to \text{ult}}$$

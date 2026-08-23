@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7b6f486b649788246252b7abd989094693f9676a67d539609908741c07e0372f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Discount Function.md
+---
+
 The **discount function** $v(t)$ is the [[Present Value]] at time 0 of 1 unit due at time $t$. It is the reciprocal of the [[Accumulation Function]] $a(t)$.
 
 > $$v(t) = \frac{1}{a(t)}$$

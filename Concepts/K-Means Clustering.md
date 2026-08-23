@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f69c23a155233093be1eff4138f0135a1f47621cc45d2b5fcc3a76120ec243d4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/K-Means Clustering.md
+---
+
 **K-Means Clustering** is a partition-based [[Clustering]] algorithm that partitions $n$ observations into $K$ non-overlapping clusters by minimizing **total within-cluster variance** (the within-cluster sum of squares, WCSS).
 
 > $$\text{WCSS} = \sum_{k=1}^K \sum_{i \in C_k} \sum_{j=1}^p (x_{ij} - \bar{x}_{kj})^2$$

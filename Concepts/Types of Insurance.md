@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:12b92816ce1472a6d8e42da1826c64970f1ef96c356703b1c0e986074bf552e5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Types of Insurance.md
+---
+
 **Types of Insurance**, for ratemaking and reserving purposes, are distinguished less by what they cover than by three behavioural properties: **how long claims take to report and settle**, **how frequent and how severe** they are, and **what triggers coverage**. These three properties determine the data, the methods and the uncertainty of any analysis of the line.
 
 > $$\text{Pure Premium} = \text{Frequency} \times \text{Severity}$$

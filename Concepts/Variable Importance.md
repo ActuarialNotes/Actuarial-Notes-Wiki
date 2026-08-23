@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b02bf52e6dc27d2881900548068c0252ddf16519f7f0bc538ec9db0b26efd111
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Variable Importance.md
+---
+
 **Variable importance** ranks predictors in a [[Tree Ensemble]] by how much they contribute across all the trees, restoring some of the interpretability a single [[Decision Tree]] has and an ensemble of hundreds does not.
 
 > $$\mathrm{Imp}(X_j) = \frac{1}{B}\sum_{b=1}^{B}\ \sum_{\text{splits on } X_j \text{ in tree } b} \Delta\,\text{impurity}$$

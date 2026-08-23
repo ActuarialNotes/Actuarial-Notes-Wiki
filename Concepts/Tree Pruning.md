@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:032236477982957f7065cfe3dc3cacffaec0a1b807041962dddce14a6e8c2151
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Tree Pruning.md
+---
+
 **Tree pruning** grows a [[Decision Tree]] deliberately too large, then cuts it back to the subtree that minimizes a penalized error. Cost-complexity pruning indexes the candidate subtrees by a single parameter $\alpha$, turning "which of the many subtrees?" into a one-dimensional tuning problem.
 
 > $$\sum_{m=1}^{\lvert T\rvert} \sum_{x_i \in R_m}\left(y_i - \hat{y}_{R_m}\right)^{2} + \alpha\,\lvert T \rvert$$

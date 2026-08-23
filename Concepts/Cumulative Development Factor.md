@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:86ae4e30ccefdc7b7bf936a90f8e4277f6918ec6f6e4b98ac9fdb4cbd22bb536
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Cumulative Development Factor.md
+---
+
 **Cumulative Development Factor** (CDF, or age-to-ultimate factor) is the product of all selected [[Age to Age Factor|age-to-age factors]] from a given maturity through to ultimate, including the [[Tail Factor|tail]].
 
 > $$\text{CDF}_{n \to \text{ult}} = \left(\prod_{k \ge n} f_{k \to k+1}\right) \times \text{Tail}$$

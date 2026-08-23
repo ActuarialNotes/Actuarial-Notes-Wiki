@@ -7,6 +7,16 @@ Edition: 3rd
 Publisher: World Scientific
 ISBN: 978-981-124-327-1
 Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/financial-mathematics-for-actuaries-chan-tse)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d7a608a90be3566d29ea188a8904e77a603ba3da34bf3274272e25b7bfb9a60d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/Financial Mathematics for Actuaries (Chan, Wai-Sum, and Tse, Yiu-Kuen – 2022).md"
 ---
 ![[Financial Mathematics for Actuaries (Chan, Wai-Sum, and Tse, Yiu-Kuen – 2022) - Cover.svg]]
 

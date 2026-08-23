@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ec4b18153d934058b6c244b90ae23579f8a4191f7e1cebb528fae41deda6a62d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Probability Multiplication Rule.md
+---
+
 The **Probability Multiplication Rule** gives the joint probability of two events $A$ and $B$ occurring together.
 - When $A$ and $B$ are [[Independent Events|independent]], the rule simplifies to $P(A \cap B) = P(A) \cdot P(B)$ since $P(B \mid A) = P(B)$
 - For a chain of events, the rule extends to $P(A_1 \cap A_2 \cap \cdots \cap A_n) = P(A_1)\,P(A_2 \mid A_1)\,P(A_3 \mid A_1 \cap A_2) \cdots$

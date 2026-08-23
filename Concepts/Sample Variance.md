@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:657450d3fd8b09ea831e20f02d9937e2e52b5605938aea9d468d3d062eb6f31d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Sample Variance.md
+---
+
 The **Sample Variance** $S^2$ measures the spread of a random sample around its [[Sample Mean]]. Dividing the sum of squared deviations by $n - 1$ rather than $n$ makes it an [[Unbiasedness|unbiased]] estimator of the population variance $\sigma^2$.
 
 > $$S^2 = \frac{1}{n-1}\sum_{i=1}^{n}(X_i - \bar{X})^2$$

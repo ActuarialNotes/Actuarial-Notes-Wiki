@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4a4230d6fc5740c627613fbff505e8db52f3c92ba3103426c862548332783663
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Variance.md
+---
+
 **Variance** $\sigma^2$ measures the spread or dispersion of a [[Random Variable]]'s distribution as the expected squared deviation from the mean.
 - Efficient computation formula: $\text{Var}(X) = E[X^2] - \mu^2$ where $\mu = E[X]$
 - $\text{Var}(aX + b) = a^2 \text{Var}(X)$ — scaling changes variance, shifts do not

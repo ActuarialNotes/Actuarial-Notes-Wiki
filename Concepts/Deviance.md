@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5a5518a750b0e1399198a03bf19b30f3a526eb2c37a24efddd76fbac3cc8abd0
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Deviance.md
+---
+
 **Deviance** is a goodness-of-fit measure for [[Generalized Linear Model]]s based on the log-likelihood. It compares the fitted model to the **saturated model** (a model with one parameter per observation, achieving perfect fit).
 
 > $$D = -2\left[\ell(\hat{\boldsymbol{\beta}}) - \ell_{\text{sat}}\right]$$

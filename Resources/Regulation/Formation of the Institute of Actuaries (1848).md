@@ -10,6 +10,16 @@ impact_level: medium
 impacted_agents: ["Actuarial", "Strategy & Planning"]
 tags: ["Professional-Body", "Credentialing", "Actuarial-Standards"]
 aliases: ["Institute of Actuaries 1848", "IoA Founding"]
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e83da68a01898946adac066aef91c2c4ef3a7bf6df2ecbf1bf05e23158b9058e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Regulation/Formation of the Institute of Actuaries (1848).md
 ---
 
 # Founding of the Institute of Actuaries (1848)

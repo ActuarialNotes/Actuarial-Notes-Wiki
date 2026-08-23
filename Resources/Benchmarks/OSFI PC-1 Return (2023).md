@@ -13,6 +13,16 @@ tags: ["Federal-Regulation", "Financial-Reporting", "IFRS-17", "Annual-Return"]
 aliases: ["PC-1", "P&C Core Financial Statement Return", "PC1 Return"]
 source_url: "https://www.osfi-bsif.gc.ca/en/data-forms/reporting-returns/filing-financial-returns/financial-reporting-instructions/property-casualty-pc-insurance-return"
 source_type: webpage
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:697f2dbebfd6de5a93c28faf95a853552e027a8a0776571c8b93c3cf8d6c4628
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Benchmarks/OSFI PC-1 Return (2023).md
 ---
 
 # OSFI PC-1 Return (2023)

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2fc372ca6471b6a02b16417f114f4c85ce50f267d2b329b58eb54f9ab9ad28b6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Macaulay Duration.md
+---
+
 **Macaulay duration** $D_{Mac}$ is the weighted-average time to receipt of a bond's cash flows, where each cash flow is weighted by its [[Present Value]] as a fraction of total price:
 
 > $$D_{Mac} = \frac{\displaystyle\sum_{t=1}^{n} t \cdot C_t \cdot v^t}{\displaystyle\sum_{t=1}^{n} C_t \cdot v^t}$$

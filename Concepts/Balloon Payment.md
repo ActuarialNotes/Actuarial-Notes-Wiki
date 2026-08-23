@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2b9baa00485237c6c51cde9e154b4d5e5731355c90b58dca2fafaceb4aa2ddb1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Balloon Payment.md
+---
+
 A **balloon payment** is a final loan payment that is larger than the regular periodic payments.
 
 - It arises when the regular payment amount is set below the level needed to fully amortize the loan in $n$ periods — that is, when the regular payments do not reduce the [[Outstanding Balance]] to zero by the last scheduled date.

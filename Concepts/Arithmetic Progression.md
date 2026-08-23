@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:94689dfb8cae0f23c9b1ea6956c879198b6ec2ff4c6fa38d7b45308d3e7d0254
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Arithmetic Progression.md
+---
+
 In the context of annuities, an **arithmetic progression** refers to a sequence of payments where each payment increases (or decreases) by a fixed amount $Q$ per period. Starting from an initial payment $P$, the payments are $P, P+Q, P+2Q, \ldots$
 
 - The present value of the increasing portion uses the increasing annuity symbol $(I\ddot{a})_{\overline{n}|}$ or $(Ia)_{\overline{n}|}$:

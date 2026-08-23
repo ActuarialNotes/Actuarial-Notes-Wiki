@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2cacb8460e1b0420d52618d1d7aeaff369c7f66e729fe97d569f072685674701
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Joint Probability Density Function.md
+---
+
 A **Joint Probability Density Function** $f(x,y)$ describes the [[Multivariate Distribution]] of two continuous random variables. Probability is *volume* under the surface $f$: to find $P((X,Y) \in A)$, integrate $f$ over the region $A$.
 
 > $$P\bigl((X,Y) \in A\bigr) = \iint_A f(x,y)\,dA$$

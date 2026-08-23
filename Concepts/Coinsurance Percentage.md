@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ce7560e5653f455fb256d594bbeecaf91b65d6aca78370921ec74cb1c1dee82a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Coinsurance Percentage.md
+---
+
 A **Coinsurance Percentage** ($\alpha$) is the fraction of the covered loss (after any deductible) that the insurer agrees to pay, with the insured retaining the remaining fraction $1 - \alpha$.
 
 > $$Y = \alpha \cdot (X - d)_+$$

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:49a99418bb00b22dfa4747138d2383072401627d9e5a18e874a36c2e646277e1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Loss Elimination Ratio.md
+---
+
 **Loss Elimination Ratio** (LER) is the proportion of ground-up losses removed by a deductible — the share of expected loss that the insured retains rather than transfers.
 
 > $$\text{LER}(d) = \frac{E[X \wedge d]}{E[X]}$$

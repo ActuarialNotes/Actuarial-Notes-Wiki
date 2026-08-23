@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a8ddbd185af92a572011c752191ce646b3a9ecab882ecc4aa4ba9c0afb35eefc
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Incurred Losses.md
+---
+
 **Incurred Losses** — more precisely **reported losses** — are cumulative [[Paid Losses|payments]] plus [[Case Reserves|case outstanding]] on known claims at a valuation date. They are the insurer's current estimate of what the reported claims will ultimately cost, and they exclude [[IBNR]].
 
 > $$\text{Reported (Incurred)} = \text{Paid} + \text{Case Reserves}$$

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b58834ffced486bacda52a8e91117e86c734bddeb3b1e9be5483683440f72dae
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Short Tail Insurance.md
+---
+
 **Short Tail Insurance** covers lines whose claims are reported and settled quickly — typically within a year — so that reported losses are close to ultimate almost immediately and [[IBNR]] is small relative to case reserves.
 
 > $$\text{CDF}_{12 \to \text{ult}} \approx 1.0 \text{ for short-tail lines}$$

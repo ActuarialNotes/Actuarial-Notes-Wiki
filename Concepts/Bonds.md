@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5e7389a4f79332782a2c27ad352b21a3cb357809e8edc78ebad0468b61b32c9b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Bonds.md
+---
+
 A **bond** is a fixed-income debt instrument in which an issuer (borrower) promises to pay the bondholder (lender) periodic [[Coupon]] payments and to return the [[Face Value]] (par value) at maturity. Key bond terms:
 
 | Term | Definition |

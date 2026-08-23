@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0173c4a319cddf6f28e10d091479bbe9445ebff0a8e345454b764a113a3577e3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Method of Moments.md
+---
+
 The **Method of Moments** (MoM) estimates parameters by setting the sample moments equal to the theoretical moments and solving. With $k$ unknown parameters, the first $k$ moment equations are used. It is the simplest estimation method and often supplies the starting values for [[Maximum Likelihood Estimation]].
 
 > $$\frac{1}{n}\sum_{i=1}^{n} X_i^{\,r} = E[X^{\,r}], \qquad r = 1, 2, \ldots, k$$

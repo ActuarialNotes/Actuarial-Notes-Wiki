@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:45b3fcb366f0c453ed455c9caaa5be4f678a966774aa7ab9f03363d4bfe61c0d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Uniform Discrete.md
+---
+
 The **Discrete Uniform Distribution** $X \sim \text{Unif}\{1, \ldots, n\}$ assigns equal probability to each of $n$ possible integer values. It is the natural model for any experiment where all outcomes are equally likely, such as rolling a fair die.
 
 > $$P(X = k) = \frac{1}{n}, \quad k = 1, 2, \ldots, n$$

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:892bff4a91b7b8420ca4704e987bda8112867045226698acfef9d57d1ea8eda6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Minimum Variance.md
+---
+
 **Minimum Variance** is a criterion for comparing estimators: among all estimators in a given class (typically unbiased), the one with the **smallest variance** is preferred, as it produces estimates closest to the true parameter on average.
 
 > **Cramér–Rao Lower Bound (CRLB):** For any unbiased estimator $\hat{\theta}$,

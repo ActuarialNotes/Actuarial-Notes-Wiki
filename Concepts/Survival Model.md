@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b2fc5b6c9b42997ea95ee216af06848eb38ece0fbb72341419a0d23f6013cd5c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Survival Model.md
+---
+
 A **Survival Model** describes the distribution of a lifetime random variable $T \geq 0$, representing the time until death or failure. The model is characterized by the **survival function** $S(t)$, which gives the probability of surviving beyond time $t$.
 
 > $$S(t) = P(T > t)$$

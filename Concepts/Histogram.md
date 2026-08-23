@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4f644d7247bb036b1c71ce3770c8fe02f446cf374d5d3ebddfaaf2758abea829
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Histogram.md
+---
+
 A **Histogram** is an [[Exploratory Data Analysis]] display of a single continuous variable: the range is cut into bins of equal width and a bar is drawn over each bin whose area is proportional to the number of observations falling in it. It is the sample's picture of the underlying [[Probability Density Function (PDF)|density]].
 
 > $$\text{bar height} = \frac{n_j}{n \cdot w} \quad \text{(density scale)}$$

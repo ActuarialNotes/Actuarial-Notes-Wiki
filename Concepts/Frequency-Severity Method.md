@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:38f2eab7bf5771be168a7168b642b2d2064d3a89d8493245c577300782f9b470
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Frequency-Severity Method.md
+---
+
 **Frequency-Severity Method** projects [[Claim Count Triangle|claim counts]] and average [[Severity|severity]] separately and multiplies them, instead of developing loss dollars directly.
 
 > $$U = N_{\text{ult}} \times S_{\text{ult}}$$

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:df6f5b032e1c1f4ce58886aadda07dbf9708e54279babea28810842a8d7a6e2d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Loss Reserving.md
+---
+
 **Loss Reserving** is the estimation of an insurer's liability for claims that have already occurred — the **retrospective** counterpart to [[Ratemaking|ratemaking]]. Where ratemaking asks what future losses will cost, reserving asks what past losses will finally cost. The liability being estimated is [[Unpaid Claims|unpaid claims]].
 
 > $$\text{Total Reserve} = \text{Case Reserves} + \text{IBNR}$$

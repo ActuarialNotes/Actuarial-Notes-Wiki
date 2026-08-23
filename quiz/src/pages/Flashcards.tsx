@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState, type ReactNode } from 'react'
+import { createContext, forwardRef, useCallback, useContext, useEffect, useImperativeHandle, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import {
   BookOpen,
@@ -699,6 +699,16 @@ function ExamCardShelf({
 // index.css.
 const SHEET_EXIT_MS = 200
 
+// How the "+" reaches the sheet. The sheet is owned by the page
+// (`AddFlashcardsSheetHost`, mounted by `Flashcards` at the bottom of this
+// file), not by the button that opens it: the button lives in the controls
+// footer, and that footer is torn down and rebuilt the moment the deck stops
+// being empty. Holding the open state down there meant adding your *first*
+// card slammed the sheet shut mid-browse; hoisting it above that switch keeps
+// the sheet — and its search text, exam pill and scroll position — exactly
+// where it was.
+const AddFlashcardsSheetContext = createContext<{ openSheet: () => void }>({ openSheet: () => {} })
+
 // The "add flashcards" sheet — one full-screen view that covers both ways into
 // the deck: a free-form concept search pinned to the top, and, whenever the
 // search box is empty, every available pack below it (Packs used to be its own
@@ -824,44 +834,68 @@ function AddFlashcardsSheet({
 }
 
 // The round primary "+" that opens the add-flashcards sheet. Lives at the
-// right-hand end of the controls footer, in every flashcards view.
-function AddFlashcardsButton({ onCardsAdded }: { onCardsAdded?: () => void }) {
+// right-hand end of the controls footer, in every flashcards view. Only the
+// button is here — the sheet itself is mounted by the page, above the
+// empty-deck/deck switch this footer sits below.
+function AddFlashcardsButton() {
+  const { openSheet } = useContext(AddFlashcardsSheetContext)
+  return (
+    <button
+      type="button"
+      data-tour="add-flashcards-btn"
+      onClick={openSheet}
+      title="Add flashcards"
+      aria-label="Add flashcards"
+      className="inline-flex items-center justify-center h-11 w-11 shrink-0 rounded-full bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 active:scale-95 transition-all"
+    >
+      <Plus className="h-5 w-5" />
+    </button>
+  )
+}
+
+// Holds the add-flashcards sheet for the whole page: the "+" opens it through
+// the context, and it stays mounted — with its search, exam pill and scroll
+// intact — until it is closed, however the deck below it changes shape.
+function AddFlashcardsSheetHost({
+  onCardsAdded,
+  children,
+}: {
+  onCardsAdded?: () => void
+  children: ReactNode
+}) {
   const [open, setOpen] = useState(false)
   // The sheet stays mounted for the length of its slide-out so closing it
   // animates too; SHEET_EXIT_MS matches the `.add-flashcards-sheet` exit
   // animation in index.css.
   const [closing, setClosing] = useState(false)
   const closeTimer = useRef<ReturnType<typeof setTimeout>>()
+  const closingRef = useRef(false)
 
   useEffect(() => () => clearTimeout(closeTimer.current), [])
 
-  function requestClose() {
-    if (closing) return
+  const requestClose = useCallback(() => {
+    if (closingRef.current) return
+    closingRef.current = true
     setClosing(true)
     closeTimer.current = setTimeout(() => {
+      closingRef.current = false
       setOpen(false)
       setClosing(false)
     }, SHEET_EXIT_MS)
-  }
+  }, [])
 
-  function openSheet() {
+  const openSheet = useCallback(() => {
     clearTimeout(closeTimer.current)
+    closingRef.current = false
     setClosing(false)
     setOpen(true)
-  }
+  }, [])
+
+  const ctx = useMemo(() => ({ openSheet }), [openSheet])
 
   return (
-    <>
-      <button
-        type="button"
-        data-tour="add-flashcards-btn"
-        onClick={openSheet}
-        title="Add flashcards"
-        aria-label="Add flashcards"
-        className="inline-flex items-center justify-center h-11 w-11 shrink-0 rounded-full bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 active:scale-95 transition-all"
-      >
-        <Plus className="h-5 w-5" />
-      </button>
+    <AddFlashcardsSheetContext.Provider value={ctx}>
+      {children}
       {open && (
         <AddFlashcardsSheet
           onClose={requestClose}
@@ -869,7 +903,7 @@ function AddFlashcardsButton({ onCardsAdded }: { onCardsAdded?: () => void }) {
           closing={closing}
         />
       )}
-    </>
+    </AddFlashcardsSheetContext.Provider>
   )
 }
 
@@ -1049,7 +1083,6 @@ function FlashcardControlsBar({
   onShortcutsHelp,
   cardCount = 0,
   onManage,
-  onCardsAdded,
 }: {
   reverseCardModes: Set<ReverseCardSection>
   onToggleMode: (mode: ReverseCardSection) => void
@@ -1059,7 +1092,6 @@ function FlashcardControlsBar({
   // Deck controls — only rendered once there's a deck to manage.
   cardCount?: number
   onManage?: () => void
-  onCardsAdded?: () => void
 }) {
   const hasDeck = cardCount > 0
   return (
@@ -1104,7 +1136,7 @@ function FlashcardControlsBar({
         ><Trash2 className="h-5 w-5" /></button>
       )}
 
-      <AddFlashcardsButton onCardsAdded={onCardsAdded} />
+      <AddFlashcardsButton />
     </div>
   )
 }
@@ -2512,7 +2544,33 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
+// The page proper is `FlashcardsDeck` below; this shell exists only so the
+// add-flashcards sheet outlives it. `FlashcardsDeck` returns two completely
+// different trees either side of "is the deck empty?", so everything it renders
+// — the controls footer, the "+", and until now the sheet hanging off it — is
+// torn down the instant the first card lands. Owning the sheet (and the
+// gallery-expanded flag it flips) up here keeps it open across that switch, so
+// adding your first card leaves you where you were, free to add a second.
 export default function Flashcards() {
+  const [galleryExpanded, setGalleryExpanded] = useState(false)
+
+  return (
+    <AddFlashcardsSheetHost onCardsAdded={() => setGalleryExpanded(true)}>
+      <FlashcardsDeck
+        galleryExpanded={galleryExpanded}
+        setGalleryExpanded={setGalleryExpanded}
+      />
+    </AddFlashcardsSheetHost>
+  )
+}
+
+function FlashcardsDeck({
+  galleryExpanded,
+  setGalleryExpanded,
+}: {
+  galleryExpanded: boolean
+  setGalleryExpanded: (open: boolean) => void
+}) {
   const {
     cards, removeCard, clearCards, customOrder, setCustomOrder,
     toggleCompleted, clearCompleted, resetCompleted,
@@ -2580,7 +2638,9 @@ export default function Flashcards() {
     setActiveName(null)
   }, [])
 
-  const [galleryExpanded, setGalleryExpanded] = useState(false)
+  // `galleryExpanded` is owned by the page shell above, so the add-flashcards
+  // sheet can expand the gallery behind itself without this component holding
+  // the flag it would drop on the empty-deck switch.
   // Manage-deck dialog (rename/save/clear) — opened from the bin in the
   // controls footer, which is where the gallery's old header row moved to.
   const [showManageDialog, setShowManageDialog] = useState(false)
@@ -2626,7 +2686,7 @@ export default function Flashcards() {
       setGalleryExpanded(false)
       setFocusMode(false)
     }
-  }, [cards.length])
+  }, [cards.length, setGalleryExpanded])
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -2923,7 +2983,7 @@ export default function Flashcards() {
       next.delete('view')
       return next
     }, { replace: true })
-  }, [viewParam, cards.length, setSearchParams])
+  }, [viewParam, cards.length, setSearchParams, setGalleryExpanded])
 
   // Exam groups derived from orderedCards
   const examGroups = useMemo(() => {
@@ -2998,7 +3058,6 @@ export default function Flashcards() {
             onFlipToggle={() => setGlobalFlip(v => !v)}
             onShortcutsHelp={() => setShowShortcutsHelp(true)}
             cardCount={0}
-            onCardsAdded={() => setGalleryExpanded(true)}
           />
         </div>
       </>

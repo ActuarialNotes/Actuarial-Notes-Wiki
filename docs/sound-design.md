@@ -43,10 +43,39 @@ costs zero bytes of assets and every cue is tunable from one table.
 | `quiz/src/lib/soundConfig.ts` | The catalogue: every cue as plain data (tones, noise sweeps, envelopes, levels). Edit sounds here. |
 | `quiz/src/lib/soundEngine.ts` | One AudioContext for the app, the synth that renders a recipe, the shared reverb, the combo counters, and the enabled/volume store (localStorage-backed). |
 | `quiz/src/lib/soundInteractions.ts` | Pure decision table: given a description of the pressed element, which cue plays. |
-| `quiz/src/components/SoundEffects.tsx` | Mounted once in `App`. One delegated listener gives every control its press cue; also unlocks the AudioContext on the first gesture. |
+| `quiz/src/components/SoundEffects.tsx` | Mounted once in `App`. One delegated listener gives every control its press cue (see "When a press counts as a press"); also unlocks the AudioContext on the first gesture. |
 | `quiz/src/hooks/useSoundEffects.ts` | `useSoundEffects()` (settings + `play`), plus `useSoundOnMount` / `useSoundOnToggle` for surfaces whose sound belongs to the surface. |
 | `quiz/src/components/SoundSettingsCard.tsx` | Settings → Sound: on/off, volume, and previews. |
 | `quiz/src/components/SoundPopover.tsx` | The sidebar popout beside the theme picker: mute + volume, reachable from any page. |
+
+## When a press counts as a press
+
+A cue is feedback for something you did, so it may only sound once the press has
+actually *done* it. On a mouse that's the same moment: a button-down on a control
+has nothing else it can turn into, so the cue fires on `pointerdown` and lands
+with the click, which is what makes it feel like a physical button.
+
+A finger is not a mouse. The same touch-down is also how you scroll, drag and
+swipe, and on a phone almost every square inch of the app is a control — so
+flicking the page up from a syllabus row used to click at you for a row you
+never opened. There, the listener holds the cue and asks `pressActivates`
+(`lib/soundInteractions.ts`, pure and tested) at `pointerup`: a tap is a release
+that lands back on what it pressed, having moved less than the platform's touch
+slop (10px). Both halves are needed —
+
+- **moved far, still on target** is a scroll: the content travels *with* the
+  finger, so the row it started on is still underneath it at the end.
+- **stayed put, released elsewhere** means the element moved or was covered, and
+  the browser fires no click either.
+
+A `pointercancel` — the browser taking the gesture over for a scroll,
+pull-to-refresh or an edge swipe — drops the pending press outright.
+
+The cost is that a touch cue arrives on release rather than on contact, which is
+also where the tap's own effect arrives, so the two still coincide. The click
+that follows a sounded tap is swallowed (`CLICK_ECHO_MS`), because browsers
+disagree about the `detail` on a tap-synthesised click and that is the flag the
+keyboard path is recognised by.
 
 ## Anatomy of a reward cue
 
@@ -256,6 +285,9 @@ itself, so a button inside a `data-sound="none"` card still clicks.
 ## Notes
 
 - Disabled controls are always silent, whatever their `data-sound` says.
+- A press only sounds if it activates something — on touch that is decided at
+  release, so a scroll that begins on a button is silent. See "When a press
+  counts as a press".
 - Each cue has a `throttleMs` so rapid clicking can't machine-gun it.
 - A route change normally plays `navigate`, but not in the ~1.4 s after a
   `begin` — starting a quiz navigates, and a second rising sweep landing inside

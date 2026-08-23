@@ -156,3 +156,27 @@ export const DAILY_PLAN_EMAIL_ENABLED: boolean = true
  * roll back independently of the other surfaces.
  */
 export const MISTAKES_REVIEW_ENABLED: boolean = true
+
+/**
+ * Guided onboarding tour — currently OFF.
+ *
+ * The 17-step walkthrough (components/OnboardingTour.tsx, driven by the
+ * zustand store in hooks/useOnboardingTour.ts) spotlights controls across the
+ * study guide, concept popup, flashcards and quiz. Its cross-page step
+ * choreography is fragile enough to misfire — spotlighting the wrong element,
+ * or stranding a step whose target never appears — so the tour is gated off
+ * pending a simpler rebuild.
+ *
+ * When OFF, two things disappear: the `<OnboardingTour />` mount in App.tsx
+ * (so nothing auto-launches for a first-time visitor and the collapsed
+ * bottom-right launcher never appears) and the "Take the tour" replay row in
+ * the Settings → Support card.
+ *
+ * Everything behind the flag is intentionally left intact — the component, the
+ * store, its localStorage keys, and the `data-tour` target attributes sprinkled
+ * across the app (they're inert markers and cost nothing while the tour is
+ * off). Re-enabling is a one-line change: set this to `true`. The `: boolean`
+ * annotation keeps both branches of every gate type-checked (see the flags
+ * above).
+ */
+export const TOUR_ENABLED: boolean = false

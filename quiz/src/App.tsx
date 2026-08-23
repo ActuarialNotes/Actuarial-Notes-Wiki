@@ -27,7 +27,7 @@ import { useCollect } from '@/hooks/useCollect'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ExamProgressProvider } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
-import { RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
+import { RESEARCH_TAB_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
 import { captureError } from '@/lib/errorMonitoring'
 
 const Research    = lazy(() => import('@/pages/Research'))
@@ -216,7 +216,7 @@ export default function App({ initialSession }: { initialSession: Session | null
               </Routes>
             </main>
             <BottomNav />
-            <OnboardingTour />
+            {TOUR_ENABLED && <OnboardingTour />}
             <CollectModalBoundary />
             <MathFocus />
             <ImageFocus />

@@ -33,6 +33,12 @@ interface Props {
    * in-app PDF viewer beside the pass-rate lookup.
    */
   reportLink?: { url: string; label: string } | null
+  /**
+   * The worked solutions to that paper, where the body publishes them
+   * separately (the SOA splits its P and FM sample sets into a questions PDF
+   * and a solutions PDF). Sits beside the report as a second button.
+   */
+  solutionsLink?: { url: string; label: string } | null
 }
 
 /**
@@ -56,6 +62,45 @@ function StatCell({ row, effectiveColumn }: { row: PastExamRow; effectiveColumn:
   )
 }
 
+/**
+ * One published document — the paper, its examiner's report, its solutions —
+ * as a button that reads it in the in-app viewer.
+ *
+ * Still an anchor to the publisher underneath: a plain click reads it here, but
+ * ⌘/ctrl-click, middle-click and long-press keep working the way a link does,
+ * and the real URL stays visible. Only a source the proxy will serve opens in
+ * the panel; anything else stays an ordinary out-link.
+ */
+function PdfLinkButton({
+  link,
+  onView,
+}: {
+  link: { url: string; label: string }
+  onView: () => void
+}) {
+  const canView = isSupportedPdfSource(link.url)
+  return (
+    <a
+      href={link.url}
+      target="_blank"
+      rel="noreferrer"
+      aria-label={canView ? `View ${link.label} (PDF)` : `Open ${link.label} (PDF)`}
+      onClick={e => {
+        if (!canView || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return
+        e.preventDefault()
+        onView()
+      }}
+      className="inline-flex min-h-[36px] items-center gap-2 rounded-md border border-border bg-card px-3 py-1.5 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    >
+      <FileText className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+      {link.label}
+      <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+        PDF
+      </span>
+    </a>
+  )
+}
+
 export function PastExamBrowser({
   rows,
   selected,
@@ -64,6 +109,7 @@ export function PastExamBrowser({
   examLabel,
   lookup,
   reportLink,
+  solutionsLink,
 }: Props) {
   // The pass-ratio column only earns its width once the sitting catalogue
   // carries published figures — a column of em-dashes reads as a broken
@@ -73,22 +119,29 @@ export function PastExamBrowser({
   // an unfilled row's dash is labelled.
   const effectiveColumn = rows.some(r => r.effectivePassRate !== undefined)
 
-  // The report is read in a panel over the builder rather than in a new tab, so
+  // The papers behind the current selection, in reading order: the questions
+  // (or the report that carries them) first, its solutions second.
+  const documents = [reportLink, solutionsLink].filter(
+    (link): link is { url: string; label: string } => !!link,
+  )
+
+  // A document is read in a panel over the builder rather than in a new tab, so
   // a candidate can check what the examiners said about a question and still be
   // one tap from starting the paper. Only a source the proxy will serve opens
   // that way; anything else stays an ordinary out-link.
-  const [viewingReport, setViewingReport] = useState(false)
-  const canView = reportLink ? isSupportedPdfSource(reportLink.url) : false
+  const [viewingUrl, setViewingUrl] = useState<string | null>(null)
+  const viewing = documents.find(d => d.url === viewingUrl) ?? null
   const selectedRow = rows.find(
     r => r.year === selected?.year && (r.session ?? undefined) === (selected?.session ?? undefined),
   )
   const reportSubtitle = selectedRow ? `${examLabel} · ${selectedRow.label}` : examLabel
-  // The panel shows *the current selection's* report, so it follows the shelf
-  // while it's open — and shuts rather than lingering on the last document when
-  // the new selection has none.
+  // The panel shows *the current selection's* papers, so it follows the shelf
+  // while it's open — and forgets the document it was on when the new selection
+  // doesn't carry it, rather than springing back open on the way past.
+  const documentKey = documents.map(d => d.url).join(' ')
   useEffect(() => {
-    if (!reportLink) setViewingReport(false)
-  }, [reportLink])
+    setViewingUrl(url => (url && documentKey.includes(url) ? url : null))
+  }, [documentKey])
 
   return (
     <div className="space-y-2">
@@ -96,31 +149,11 @@ export function PastExamBrowser({
           the selected sitting's report to download, and the exam's pass-rate
           table to look up. Both are thumb-sized rather than fine print — they
           sit between two much larger targets on a phone. */}
-      {(reportLink || lookup) && (
+      {(documents.length > 0 || lookup) && (
         <div className="flex flex-wrap items-center justify-end gap-2 px-1">
-          {reportLink && (
-            // Still an anchor to the publisher underneath: a plain click reads
-            // it here, but ⌘/ctrl-click, middle-click and long-press keep
-            // working the way a link does, and the real URL stays visible.
-            <a
-              href={reportLink.url}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={canView ? `View ${reportLink.label} (PDF)` : `Open ${reportLink.label} (PDF)`}
-              onClick={e => {
-                if (!canView || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return
-                e.preventDefault()
-                setViewingReport(true)
-              }}
-              className="inline-flex min-h-[36px] items-center gap-2 rounded-md border border-border bg-card px-3 py-1.5 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <FileText className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-              {reportLink.label}
-              <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-                PDF
-              </span>
-            </a>
-          )}
+          {documents.map(doc => (
+            <PdfLinkButton key={doc.url} link={doc} onView={() => setViewingUrl(doc.url)} />
+          ))}
           {lookup && (
             <a
               href={lookup.url}
@@ -204,12 +237,12 @@ export function PastExamBrowser({
         })}
       </div>
 
-      {viewingReport && reportLink && canView && (
+      {viewing && (
         <PdfViewerPanel
-          url={reportLink.url}
-          title={reportLink.label}
+          url={viewing.url}
+          title={viewing.label}
           subtitle={reportSubtitle}
-          onClose={() => setViewingReport(false)}
+          onClose={() => setViewingUrl(null)}
         />
       )}
     </div>

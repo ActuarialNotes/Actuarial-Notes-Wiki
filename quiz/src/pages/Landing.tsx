@@ -33,7 +33,7 @@ import { parseExamWeight } from '@/lib/examWeight'
 import { useActionBarHeight } from '@/hooks/useActionBarHeight'
 import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { cn } from '@/lib/utils'
-import { getSittingPdfLink, getExamPdfLink } from '@/data/examPdfLinks'
+import { getSittingPdfLink, getExamPdfLink, getExamSolutionsPdfLink } from '@/data/examPdfLinks'
 import { getPassRateLookup } from '@/data/pastExams'
 import { buildPastExamRows } from '@/lib/pastExams'
 import { applyPassRates } from '@/lib/passRates'
@@ -953,6 +953,12 @@ export default function Landing() {
     ? getExamPdfLink(topic)
     : null
 
+  // Its worked solutions, where they're a separate download — the SOA splits P
+  // and FM's sample set in two, so the shelf shows both halves. A CAS sitting
+  // has none: its examiner's report already carries the sample answers.
+  const mockSolutionsLink =
+    !selectedSitting && pastExamRows.length === 0 ? getExamSolutionsPdfLink(topic) : null
+
   // The questions the current configuration can draw from. Backs the deck
   // card's availability number and gives the shuffle something to draw from.
   const currentPool = useMemo<Question[]>(() => {
@@ -1340,6 +1346,7 @@ export default function Landing() {
                     examLabel={examLabel}
                     lookup={getPassRateLookup(topic)}
                     reportLink={mockReportLink}
+                    solutionsLink={mockSolutionsLink}
                   />
                 )}
               </div>

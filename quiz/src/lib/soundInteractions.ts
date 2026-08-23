@@ -101,3 +101,37 @@ export function resolveInteractionSound(target: InteractionTarget | null): Sound
 
   return null
 }
+
+/**
+ * How far a finger may travel between press and release and still count as a
+ * tap rather than a drag. Roughly the touch slop the platforms themselves use
+ * (~8dp on Android); big enough that a still finger's jitter doesn't read as a
+ * drag, small enough that the first moments of a scroll do.
+ */
+export const PRESS_SLOP_PX = 10
+
+/** What became of a press, measured between `pointerdown` and `pointerup`. */
+export interface PressRelease {
+  /** Distance the pointer travelled between press and release, in CSS px. */
+  movedPx: number
+  /** Did the release land back on (or inside) the element that was pressed? */
+  onTarget: boolean
+}
+
+/**
+ * Did a press actually activate the thing under it?
+ *
+ * On a touch screen a `pointerdown` is not yet a press: the same finger starts
+ * a scroll, and the control it happened to land on is never activated. So the
+ * cue waits for the release and asks this — a tap is a release that lands back
+ * on what it pressed, having barely moved.
+ *
+ * Both halves matter. The release lands on target but the finger travelled:
+ * that's a scroll, where the content moves *with* the finger and leaves the
+ * same element underneath it. The finger stayed put but the release is
+ * elsewhere: the element moved or was covered, and the browser fires no click
+ * either.
+ */
+export function pressActivates({ movedPx, onTarget }: PressRelease): boolean {
+  return onTarget && movedPx <= PRESS_SLOP_PX
+}

@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest'
-import { isSoundEvent, resolveInteractionSound, type InteractionTarget } from './soundInteractions'
+import {
+  PRESS_SLOP_PX,
+  isSoundEvent,
+  pressActivates,
+  resolveInteractionSound,
+  type InteractionTarget,
+} from './soundInteractions'
 
 function target(partial: Partial<InteractionTarget> & { tag: string }): InteractionTarget {
   return partial
@@ -82,5 +88,28 @@ describe('isSoundEvent', () => {
     expect(isSoundEvent('wrong')).toBe(false)
     expect(isSoundEvent('none')).toBe(false)
     expect(isSoundEvent('')).toBe(false)
+  })
+})
+
+describe('pressActivates', () => {
+  it('sounds a tap: released on what it pressed, having barely moved', () => {
+    expect(pressActivates({ movedPx: 0, onTarget: true })).toBe(true)
+    expect(pressActivates({ movedPx: PRESS_SLOP_PX, onTarget: true })).toBe(true)
+  })
+
+  it('stays silent for a scroll that started on a control', () => {
+    // The whole point of the release check: a finger that lands on a link and
+    // drags the page is never activating the link, so it must not sound. The
+    // content scrolls *with* the finger, so the link is still underneath it —
+    // only the distance gives the gesture away.
+    expect(pressActivates({ movedPx: 40, onTarget: true })).toBe(false)
+    expect(pressActivates({ movedPx: PRESS_SLOP_PX + 1, onTarget: true })).toBe(false)
+  })
+
+  it('stays silent when the release lands somewhere else', () => {
+    // No click fires either — the finger slid off the control, or what was
+    // under it moved away.
+    expect(pressActivates({ movedPx: 0, onTarget: false })).toBe(false)
+    expect(pressActivates({ movedPx: 60, onTarget: false })).toBe(false)
   })
 })

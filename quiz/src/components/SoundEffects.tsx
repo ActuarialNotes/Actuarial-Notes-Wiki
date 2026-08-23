@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { msSinceSound, playSound, unlockSound } from '@/lib/soundEngine'
-import { resolveInteractionSound, type InteractionTarget } from '@/lib/soundInteractions'
+import { pressActivates, resolveInteractionSound, type InteractionTarget } from '@/lib/soundInteractions'
 
 /**
  * Mounted once at the app root. Gives *every* interaction a sound without
@@ -27,17 +27,29 @@ const INTERACTIVE_SELECTOR = 'a, button, summary, input, textarea, select, [role
  */
 const LAUNCH_COVERS_NAVIGATION_MS = 1400
 
+/**
+ * How long after a touch press the click it produces is ignored. The pointer
+ * pass already sounded that press; browsers disagree about the `detail` on a
+ * click synthesised from a tap, so the keyboard path is closed for a moment
+ * rather than trusted to tell them apart.
+ */
+const CLICK_ECHO_MS = 700
+
 // The last route we made a sound for. Module-level rather than a ref so
 // StrictMode's mount → unmount → remount doesn't read as a navigation and fire
 // a cue before the user has touched anything.
 let lastSoundedPath: string | null = null
 
-function describe(node: EventTarget | null): InteractionTarget | null {
+/** The nearest element around `node` that is worth a cue. */
+function findTarget(node: EventTarget | null): HTMLElement | null {
   if (!(node instanceof Element)) return null
   // Nearest wins: the selector matches both real controls and `data-sound`
   // wrappers, so a button inside a `data-sound="none"` card still clicks, while
   // a press on the card itself takes the card's cue.
-  const target = node.closest<HTMLElement>(INTERACTIVE_SELECTOR)
+  return node.closest<HTMLElement>(INTERACTIVE_SELECTOR)
+}
+
+function describe(target: HTMLElement | null): InteractionTarget | null {
   if (!target) return null
 
   const input = target instanceof HTMLInputElement ? target : null
@@ -57,31 +69,79 @@ export default function SoundEffects() {
   const location = useLocation()
 
   useEffect(() => {
-    // pointerdown, not click: the cue should land the instant the finger does,
-    // which is also what makes it feel like a physical button.
+    // A touch press in flight: where it started and what it landed on. Only one
+    // is tracked — a second finger during a press isn't a press of its own.
+    let pending: { id: number; x: number; y: number; target: HTMLElement } | null = null
+    let clickEchoUntil = 0
+
+    function sound(target: HTMLElement | null) {
+      const event = resolveInteractionSound(describe(target))
+      if (event) playSound(event)
+      return event !== null
+    }
+
     function onPointerDown(e: PointerEvent) {
       unlockSound()
       if (e.button !== 0 && e.pointerType === 'mouse') return
-      const event = resolveInteractionSound(describe(e.target))
-      if (event) playSound(event)
+      const target = findTarget(e.target)
+
+      // A mouse press is a press: there is nothing else a button-down on a
+      // control can turn into, so the cue lands the instant it happens, which
+      // is what makes it feel like a physical button.
+      if (e.pointerType === 'mouse') {
+        pending = null
+        sound(target)
+        return
+      }
+
+      // A finger is different. The same touch-down starts a scroll, and the
+      // control it happened to land on is never activated — so hold the cue
+      // until the release says the press was really a press.
+      pending = target ? { id: e.pointerId, x: e.clientX, y: e.clientY, target } : null
     }
+
+    function onPointerUp(e: PointerEvent) {
+      const press = pending
+      pending = null
+      if (!press || press.id !== e.pointerId) return
+
+      const released = document.elementFromPoint(e.clientX, e.clientY)
+      const activated = pressActivates({
+        movedPx: Math.hypot(e.clientX - press.x, e.clientY - press.y),
+        onTarget: released instanceof Node && press.target.contains(released),
+      })
+      if (!activated) return
+
+      // `checked` is still the pre-press state here — the browser applies the
+      // change on click, which comes after — so a switch's cue keeps describing
+      // the state being entered.
+      if (sound(press.target)) clickEchoUntil = performance.now() + CLICK_ECHO_MS
+    }
+
+    // The browser takes the gesture over — a scroll, a pull-to-refresh, a
+    // system edge swipe. Whatever it became, it wasn't a press.
+    function onPointerCancel() { pending = null }
 
     // Keyboard activation synthesises a click with `detail === 0`; pointer
     // clicks always report a positive detail, so this only fires for the cases
-    // pointerdown missed.
+    // the pointer pass missed.
     function onClick(e: MouseEvent) {
       if (e.detail !== 0) return
-      const event = resolveInteractionSound(describe(e.target))
-      if (event) playSound(event)
+      if (performance.now() < clickEchoUntil) return
+      sound(findTarget(e.target))
     }
 
     function onKeyDown() { unlockSound() }
 
     document.addEventListener('pointerdown', onPointerDown, true)
+    document.addEventListener('pointerup', onPointerUp, true)
+    document.addEventListener('pointercancel', onPointerCancel, true)
     document.addEventListener('click', onClick, true)
     document.addEventListener('keydown', onKeyDown, { capture: true, once: true })
     return () => {
       document.removeEventListener('pointerdown', onPointerDown, true)
+      document.removeEventListener('pointerup', onPointerUp, true)
+      document.removeEventListener('pointercancel', onPointerCancel, true)
       document.removeEventListener('click', onClick, true)
       document.removeEventListener('keydown', onKeyDown, true)
     }

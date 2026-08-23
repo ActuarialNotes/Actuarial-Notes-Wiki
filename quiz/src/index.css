@@ -564,6 +564,32 @@
   }
 }
 
+/* The PDF reader (`components/PdfViewerPanel.tsx`) wears the popup's shell but
+   is opened *from* a page — a resource page's "Read PDF" button, an exam page's
+   syllabus button — and that page is often the concept popup itself, which
+   paints at z-index 56 in focus mode. Sharing the popup's own layer meant the
+   reader opened behind the page that asked for it: on a full-screen resource
+   page, pressing Read PDF appeared to do nothing. It takes the step above the
+   popup (57 is the image gallery, §8.2 of docs/style-guide.md), in its own
+   focus mode too — hence the second selector, which outranks the rule above. */
+.concept-popup-aside.pdf-viewer-aside,
+.concept-popup-aside.pdf-viewer-aside[data-focus="true"] {
+  z-index: 58;
+}
+
+/* Opened from a page that is itself full screen: that page has already covered
+   the mobile bottom nav and the desktop sidebar, so the insets the reader
+   normally leaves for them would only show a strip of the page underneath. */
+.pdf-viewer-aside[data-host-focus="true"] {
+  bottom: 0;
+}
+
+@media (min-width: 1024px) {
+  .pdf-viewer-aside[data-host-focus="true"] {
+    left: 0 !important;
+  }
+}
+
 /* Page stack: a page behind the one being read folds up into a title bar, and
    the bars stack down the pane — the trail above the open page, anything
    stepped back past below it. A new bar unrolls to its full row height rather

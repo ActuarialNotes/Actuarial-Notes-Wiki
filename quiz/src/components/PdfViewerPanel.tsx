@@ -70,6 +70,15 @@ interface Props {
   title: string
   /** Which paper it belongs to, e.g. "Exam 5 · Spring 2019". */
   subtitle?: string
+  /**
+   * Whether the surface the reader was opened from is itself full screen — a
+   * concept popup in focus mode, which covers the sidebar and the mobile bottom
+   * nav (`.concept-popup-aside[data-focus="true"]` in index.css). The reader
+   * always paints above that page (see `.pdf-viewer-aside`); this is what stops
+   * it leaving a strip of it showing along the bottom and down the left, where
+   * the chrome it normally keeps clear of would be.
+   */
+  hostFullScreen?: boolean
   onClose: () => void
 }
 
@@ -89,7 +98,7 @@ interface Props {
  * that can still fail — a moved file, an endpoint that isn't deployed — so the
  * publisher's own copy is always one tap away.
  */
-export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
+export function PdfViewerPanel({ url, title, subtitle, hostFullScreen = false, onClose }: Props) {
   const { play } = useSoundEffects()
   // A sheet of paper sliding out, same as the concept popup opening.
   useSoundOnMount('open')
@@ -587,9 +596,13 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
     <aside
       // The concept popup's class carries the sidebar-width offset on desktop
       // and the whole focus-mode layer in index.css, so both panels sit and
-      // expand identically.
-      className="concept-popup-aside fixed left-0 right-0 bottom-14 md:bottom-0 z-50 border-t bg-card text-card-foreground shadow-2xl flex flex-col"
+      // expand identically. `pdf-viewer-aside` is the one difference: the
+      // reader is opened *from* a page — a resource page's Read PDF button, an
+      // exam page's syllabus button — so it has to layer above the popup that
+      // page may be read in, in focus mode included. See index.css.
+      className="concept-popup-aside pdf-viewer-aside fixed left-0 right-0 bottom-14 md:bottom-0 z-[58] border-t bg-card text-card-foreground shadow-2xl flex flex-col"
       data-focus={focusMode}
+      data-host-focus={hostFullScreen}
       style={{ height: focusMode ? undefined : `min(${height}px, 100vh)` }}
       // Non-modal, like the concept popup: the shelf behind stays live, so this
       // is a document you read beside the quiz rather than a dialog over it.

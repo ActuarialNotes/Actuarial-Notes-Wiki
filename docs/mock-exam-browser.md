@@ -409,6 +409,25 @@ The button is a **plain anchor to the publisher underneath**, exactly as the syl
 is: only an unmodified left click is intercepted, so ⌘/ctrl-click, middle-click and
 long-press still behave like a link and the real URL stays visible on hover.
 
+Because that card is read *inside* the concept popup as often as on the standalone page, the
+reader has to open **over** the page that asked for it, and the popup's own layer is what it
+would otherwise open behind: the popup paints at `z-index: 56` in focus mode, above the
+panel's `z-50`, so a Read PDF press on a full-screen resource page looked like it did
+nothing. Three things follow, and all of them live with the panel:
+
+- **Its own layer.** The panel carries `.pdf-viewer-aside` alongside the popup's class and
+  takes `z-index: 58` — a step above the popup and the image gallery (57) — in its own focus
+  mode too (`index.css`; the ladder is `docs/style-guide.md` §8.2).
+- **No chrome gaps over a full-screen host.** `hostFullScreen` (passed down as
+  `ConceptPagePanel`'s `focusMode`) drops the `bottom-14` the mobile bottom nav needs and the
+  desktop sidebar inset, because the page underneath has already covered both — leaving them
+  would show a strip of that page instead of the chrome they were reserved for.
+- **The keys.** The popup binds Esc and the arrows too, so `ResourceMetaCard` reports the
+  reader opening (`onViewerOpenChange` → `ConceptPagePanel`'s `onReaderOpenChange` →
+  `ConceptPopup`) and the popup hands them over while it is up — the same hand-over the image
+  gallery gets, but kept on its own flag: the gallery's also makes the footer's Previous /
+  Next carry the gallery to the next concept, which a document being read must not do.
+
 What decides between reading and out-linking is `isSupportedPdfSource` — the same predicate
 the exam shelf uses, so the viewer never opens on a request the endpoint would refuse. A
 resource whose link is a library catalogue (`worldcat.org`), a publisher's shop page, or an

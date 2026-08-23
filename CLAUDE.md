@@ -31,6 +31,8 @@ questions/<exam-id>/*.md                          — question bank (YAML frontm
 comprehension-checks/<exam-id>/*.md               — flashcard-collect gate questions (one .md per concept,
                                                     parsed by lib/comprehensionCheckParser.ts)
 Media/Attachments/                                — images referenced via ![[...]]
+.verify/<mirrors the vault path>.md               — VERIFY: one append-only validation log per
+                                                    content file (+ `_runs/` batch summaries)
 scripts/                                          — Python content-maintenance scripts (one-off/batch)
 docs/                                             — design docs for app algorithms (read these!)
 api/chat.js, api/research.js, api/research-ask.js — Vercel serverless fns, proxy to Anthropic API
@@ -72,6 +74,17 @@ before touching that area**:
 - `docs/flashcard-collection.md` — the "collect this card" gate: a concept must be collected
   (pass a comprehension check) before its mastery can advance past **New**. `applyAnswer`
   in `mastery.ts` takes a `collected` flag; the gate UI lives in `components/collect/`.
+- `docs/verification.md` — **VERIFY**, the content-validation layer: the `verification:`
+  frontmatter block every content file carries, the append-only `.verify/` sidecar logs, and
+  what `scripts/verify_check.py` fails a PR for. The five principles are the part to read —
+  in particular P1 (an AI cannot verify by reasoning alone; a page reaches `verified` only
+  against a *citable external source*, and `verify_record.py` refuses otherwise) and P4
+  (verification is bound to the file's bytes, so any edit downgrades it to `stale`). Read
+  before touching a `verification:` block, a log, or anything under `scripts/verify_*`.
+- `docs/validation-agent.md` — the VALIDATE agent (`.claude/agents/validate.md`, `/validate`):
+  how a sweep picks its batch, what context it loads (the *complete* prior log — that is the
+  compounding mechanism), and the line between what it may auto-fix and what it must only
+  open a finding about.
 - `docs/research-ai-disabled.md` — what the two Research feature flags hide and the exact
   re-enable checklist (read before touching anything under `Research`/`research`).
 - `docs/research-corpus-plan.md` — the plan for the Canadian P&C `Resources/` markdown corpus.
@@ -138,6 +151,15 @@ before touching that area**:
 
 Other important `lib/` modules:
 - `parser.ts` — parses question markdown (frontmatter + body) into `Question` objects
+- `verification.ts` — the app-side read half of **VERIFY** (`docs/verification.md`): parses the
+  `verification:` block off any content file (`parseVerification`, and `Question.verification`
+  via `parser.ts`), parses a sidecar log, and decides what the badge says
+  (`components/VerificationBadge.tsx` → `ValidationLogPanel`). Two rules live here rather than
+  in a surface: an open **critical** finding outranks every other badge state including
+  `verified`, and `hasCriticalFinding` is what makes `filterQuestions` keep such a question out
+  of quiz sessions — ahead of the `ids` short-circuit, so a saved mistake-review link can't
+  serve one either. Sidecar logs are deliberately *not* bundled; the panel fetches one on
+  demand through `github.ts`.
 - `vaultMath.ts` — normalises the vault's math delimiters into the shapes `remark-math`
   can tokenise. The content is authored for Obsidian, whose math parser is looser: an
   escaped dollar inside inline math (`$\$400$` — currency is everywhere in ratemaking
@@ -318,7 +340,7 @@ Other important `lib/` modules:
   `docs/sound-design.md`.
 - `featureFlags.ts` — build-time feature flags (`RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
   `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`, `MASTERY_ANALYTICS_ENABLED`,
-  `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `TOUR_ENABLED`). `TOUR_ENABLED` is
+  `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `VERIFICATION_UI_ENABLED`, `TOUR_ENABLED`). `TOUR_ENABLED` is
   **off**: the guided onboarding tour (`components/OnboardingTour.tsx` +
   `hooks/useOnboardingTour.ts`) is parked pending a simpler rebuild, so `App.tsx` doesn't
   mount it and Settings → Support hides the "Take the tour" row. The component, store and
@@ -400,6 +422,12 @@ compile — don't "clean up" the flagged code as dead.
   metadata comes from the resource page's front matter via the wiki index, so a source with
   no `Resources/Books/` page still gets a card, just a bare one. Obsidian inline footnotes
   (`^[…]`) in a reading line are flattened into parentheses.
+- **Every** content file (`questions/`, `Concepts/`, `Resources/`, root `Exam *.md`) carries a
+  `verification:` block as the last key of its YAML frontmatter — including concept and exam
+  pages, which is why they now have frontmatter at all (`WikiArticle` already stripped it).
+  Never hand-edit `content_hash`, `status`, `open_findings` or `open_critical`: they are
+  derived, and `python3 scripts/verify_check.py --sync` owns them. A new content file with no
+  block is backfilled by the same command. See `docs/verification.md`.
 - Question files (`questions/<exam-id>/*.md`) have YAML frontmatter: `id`, `exam`, `topic`,
   `learning_objective`, `difficulty` (`easy`/`medium`/`hard`), `type`, `wiki_link` (array
   of concept paths), `answer`, `points` — followed by the question body, options, and an
@@ -420,6 +448,12 @@ compile — don't "clean up" the flagged code as dead.
   `wiki_link` arrays and regenerates `Concepts Without Review Questions.md`,
   `tag_missing_concepts.py` backfills concept tags. Run these when doing bulk content
   cleanup, not for one-off edits.
+- `verify_lib.py` / `verify_check.py` / `verify_targets.py` / `verify_context.py` /
+  `verify_record.py` / `sync_reports.py` / `generate_validation_status.py` — the **VERIFY**
+  toolchain. `verify_check.py` is the CI gate (and `--sync` the repair pass);
+  `verify_record.py` is the only supported way to write a finding, resolution or status —
+  it dedupes findings by fingerprint and refuses to mark anything `verified` without a
+  cited source. Stdlib only, no PyYAML. Tests: `python3 -m unittest discover -s scripts`.
 - `generate_concept_figures.py` (+ `figure_kit.py`, `figure_registry.py`,
   `figures_exam_{p,fm,mas_i,mas_ii,5}.py`) draws the per-concept SVGs in `Media/Figures/`
   and inserts their embeds. The figures are **generated** — edit the builder, not the SVG.
@@ -469,8 +503,15 @@ via `supabase secrets set`, never as `VITE_*`.
 - `supabase/functions/` — Deno edge functions: Stripe checkout/portal/webhook/sync,
   account deletion, beta code redemption, Google Cloud TTS proxy, `research-ingest-url`,
   and `daily-plan-email` (the pg_cron-driven study-plan email sender).
+- `content_reports` (`20260823_content_reports.sql`) — the reader-report inbox behind VERIFY's
+  "Report an issue". Insert/select own rows only; **no** UPDATE or DELETE policy, so only the
+  service-role `scripts/sync_reports.py` can mark a report synced.
 - `.github/workflows/deploy-functions.yml` — auto-deploys edge functions to Supabase on
   push to `main` when `supabase/functions/**` changes.
+- `.github/workflows/verify-check.yml` — the VERIFY gate on every PR (fails on a false
+  verification claim or an edited log entry; repairs and commits back what is merely stale).
+- `.github/workflows/validate-sweep.yml` — the Monday VALIDATE sweep. Opens a PR, never
+  pushes to `main`.
 
 ## Deployment
 

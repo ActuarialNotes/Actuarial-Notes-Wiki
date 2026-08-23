@@ -56,8 +56,17 @@ verification:
   sources:
     - "CAS Exam 5 Fall 2019, Q17 — official solution PDF, p.4"
   open_findings: 1          # unresolved entries in the log
+  open_critical: 1          # how many of those are `critical`
   log: .verify/questions/exam-5/q-2019-fall-17.md
 ```
+
+`open_critical` is an addition to the original spec's block, for one concrete
+reason. The app keeps a question with an unresolved critical finding out of quiz
+sessions, and sidecar logs are deliberately **not** bundled at build time — so
+severity has to reach the client some other way, and one integer in the block is
+cheaper than a second bundled index. Like `open_findings`, it is *derived*:
+`verify_check.py --sync` recomputes it from the log, and CI warns when it drifts.
+Nothing hand-sets it.
 
 `quiz/src/lib/verification.ts` is the read side; `scripts/verify_lib.py` is the
 read/write side. Both hand-parse the block rather than handing it to a YAML
@@ -198,8 +207,48 @@ python3 scripts/verify_check.py --base origin/main  # + the append-only check
 python3 -m unittest discover -s scripts -p 'test_*.py'
 ```
 
+## What a reader sees
+
+`lib/verification.ts` is the read side; `components/VerificationBadge.tsx` is the
+one badge. Every concept, exam and resource page carries it in its title row, and
+a question carries it on its explanation panel — the moment a student who has
+just disagreed with a question is already looking at the discrepancy.
+
+Tapping any badge opens `ValidationLogPanel`: the block's own summary (status,
+date, the sources cited) with no fetch, then the page's full log, fetched on
+demand through `fetchWikiFile`. Showing the work is the point. A reader who can
+see that someone has already flagged the exact thing they were about to flag has
+a reason to trust the rest of the vault that no badge alone can give them.
+
+Two consequences of the record reach further than display:
+
+- **A critical finding outranks every other badge state**, `verified` included.
+  It is the one thing a reader has to know before trusting the page.
+- **A question with an unresolved critical finding is kept out of quiz sessions**
+  (`filterQuestions`, ahead of the `ids` short-circuit so a saved mistake-review
+  link cannot serve one either). Settings → Content validation turns them back
+  on, because a question nobody can see is a question nobody fixes.
+
+The surfaces are gated by `VERIFICATION_UI_ENABLED`, which is **on**. Note what
+the badge says on a freshly backfilled vault: *Unverified*, on almost every page.
+That is the honest state, and the reason to ship it on — a trust signal that only
+ever appears once something is green is not a trust signal.
+
+## The reader's write path
+
+`ReportIssueModal` → `content_reports` → `scripts/sync_reports.py` → the page's
+log, as a `comment` entry the next sweep reads in full. A student working a
+question line by line is the best-placed error detector this project has.
+
+The account identity never leaves the database: an entry is authored as
+`human:<the name they chose>` or `human:anon`, and the sync redacts emails and
+token-shaped strings on the way out. The modal says the report will be public
+*before* it is written, not after.
+
 ## Related
 
 - `.claude/agents/validate.md` — the VALIDATE agent that produces findings.
 - `docs/validation-agent.md` — how a sweep picks targets, loads context, and
   what it is and is not allowed to change.
+- `Validation Status.md` — the generated vault-level dashboard
+  (`scripts/generate_validation_status.py`).

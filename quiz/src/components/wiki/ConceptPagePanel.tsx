@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BookOpen, Headphones, Loader2, Lock, Play, Sigma, TrendingUp, X } from 'lucide-react'
+import { BookOpen, CheckCheck, Headphones, Loader2, Lock, Play, Sigma, TrendingUp, X } from 'lucide-react'
 import { fetchWikiFile, fetchAllQuestions } from '@/lib/github'
 import { entryRefToRepoPath, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { parseAllQuestions, filterQuestions } from '@/lib/parser'
@@ -20,7 +20,7 @@ import { ConceptImageBanner } from '@/components/wiki/ConceptImageBanner'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
 import { AddToProjectMenuItem } from '@/components/wiki/AddToProjectMenuItem'
-import { RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
+import { FACT_CHECK_UI_ENABLED, RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
 import { useAuth } from '@/hooks/useAuth'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
@@ -30,6 +30,8 @@ import { buildMasteryLookup } from '@/lib/conceptMatch'
 import { findKeystone, keystoneProgress } from '@/lib/keystone'
 import { MasteryBadge } from '@/components/MasteryBadge'
 import { MASTERY_LABEL, MASTERY_SHORT_LABEL, MASTERY_TINT } from '@/lib/masteryBadge'
+import { FactCheckDialog, FACT_CHECK_TONE_CLASSES } from '@/components/FactCheckBadge'
+import { factCheckBadge, parseVerification } from '@/lib/verification'
 
 /**
  * The open page of the concept popup's stack: its header (title, mastery, the
@@ -96,6 +98,7 @@ export function ConceptPagePanel({
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
   const [showQuestionsModal, setShowQuestionsModal] = useState(false)
   const [showLearningProgress, setShowLearningProgress] = useState(false)
+  const [showFactCheck, setShowFactCheck] = useState(false)
   const [showPlayMenu, setShowPlayMenu] = useState(false)
   const [menuAlignRight, setMenuAlignRight] = useState(false)
   // Viewport rect of the play button, captured when the menu opens. The menu is
@@ -232,6 +235,12 @@ export function ConceptPagePanel({
   }, [entry.kind, entry.name])
 
   const mathBlocks = useMemo(() => (content ? extractMathBlockquotes(content) : []), [content])
+
+  // What the page's own `verification:` block says has been checked about it —
+  // the Fact Check row of the action menu, and the record it opens. Parsed off
+  // the raw markdown the panel already fetched, so it costs no extra request.
+  const verification = useMemo(() => (content ? parseVerification(content) : null), [content])
+  const factCheck = useMemo(() => factCheckBadge(verification), [verification])
 
   const resourceMeta = useMemo(() => {
     if (!content || entry.kind !== 'resource') return null
@@ -420,6 +429,27 @@ export function ConceptPagePanel({
                 <span className="flex-1 text-left">Learning Progress</span>
                 {masteryState && <MasteryBadge state={masteryState} compact />}
               </button>
+              {/* Fact Check — what has been checked about this page, against
+                  which source, and everything anyone has since said about it.
+                  It lives in the menu rather than beside the title because a
+                  page's own claims are what a reader challenges, and this is
+                  the row that lets them. An exam page carries none of its own —
+                  it is a syllabus outline — so it has no Fact Check. */}
+              {FACT_CHECK_UI_ENABLED && content !== null && entry.kind !== 'exam' && (
+                <button
+                  type="button"
+                  onClick={() => { setShowFactCheck(true); setShowPlayMenu(false) }}
+                  className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
+                >
+                  <CheckCheck className="h-3.5 w-3.5 shrink-0" />
+                  <span className="flex-1 text-left whitespace-nowrap">Fact Check</span>
+                  <span
+                    className={`shrink-0 whitespace-nowrap text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${FACT_CHECK_TONE_CLASSES[factCheck.tone]}`}
+                  >
+                    {factCheck.short}
+                  </span>
+                </button>
+              )}
             </div>,
             document.body,
           )}
@@ -559,6 +589,13 @@ export function ConceptPagePanel({
           onClose={() => setShowLearningProgress(false)}
         />
       )}
+      <FactCheckDialog
+        open={showFactCheck}
+        onClose={() => setShowFactCheck(false)}
+        verification={verification}
+        contentPath={sourcePath}
+        contentName={entry.name}
+      />
       {showGallery && (
         <ImageGalleryModal
           images={images}

@@ -2,7 +2,7 @@
 //
 // Reports land in `content_reports` (supabase/migrations/20260823_content_reports.sql)
 // and `scripts/sync_reports.py` appends each one to the target page's
-// append-only sidecar log before the next validation sweep, where the agent
+// append-only sidecar log before the next fact-check sweep, where the agent
 // reads it in full. So this is not a support ticket that disappears into an
 // inbox — what a reader writes here becomes part of the page's permanent record.
 //

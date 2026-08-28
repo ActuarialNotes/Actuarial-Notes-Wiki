@@ -182,14 +182,16 @@ export const MISTAKES_REVIEW_ENABLED: boolean = true
 export const TOUR_ENABLED: boolean = false
 
 /**
- * VERIFY — the content validation layer's student-facing surfaces. ON.
+ * VERIFY — the fact-check layer's student-facing surfaces. ON.
  *
- * When ON, three things appear: the verification badge on questions and wiki
- * pages (`components/VerificationBadge.tsx`), the "Report an issue" affordance
- * that files into `content_reports`, and the read-only validation log panel.
+ * "Fact Check" is what this is called on screen; VERIFY is the vault-side
+ * toolchain that feeds it. When ON, three things appear: the fact-check badge
+ * on questions and wiki pages (`components/FactCheckBadge.tsx`), the "Fact
+ * Check" item in a concept or resource page's action menu, and the "Report an
+ * issue" affordance that files into `content_reports`.
  *
- * Note what the badge says on a freshly backfilled vault: **Unverified**, on
- * almost every page. That is the honest state and the reason to ship it on —
+ * Note what the badge says on a freshly backfilled vault: **Not fact checked**,
+ * on almost every page. That is the honest state and the reason to ship it on —
  * a trust signal that only ever appears once something is green is not a trust
  * signal, it is marketing. Showing the work includes showing how much of it is
  * still to do.
@@ -200,4 +202,4 @@ export const TOUR_ENABLED: boolean = false
  *
  * See docs/verification.md.
  */
-export const VERIFICATION_UI_ENABLED: boolean = true
+export const FACT_CHECK_UI_ENABLED: boolean = true

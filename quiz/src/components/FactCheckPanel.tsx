@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 import {
   parseVerificationLog,
   openFindings,
-  verificationBadge,
+  factCheckBadge,
   formatCheckedDate,
   verificationLogPath,
   type LogEntry,
@@ -16,7 +16,8 @@ import {
 } from '@/lib/verification'
 
 /**
- * The read-only validation log for one page.
+ * The read-only **Fact Check** record for one page: what has been checked about
+ * it, against which source, and everything anyone has since said about it.
  *
  * Sidecar logs are deliberately not bundled at build time — they grow without
  * bound and only matter when someone opens this panel — so the log is fetched
@@ -47,17 +48,17 @@ const SEVERITY_CLASSES: Record<string, string> = {
 /** Fields already shown in the entry header; not repeated in the body list. */
 const HEADER_FIELDS = new Set(['entry_type', 'author', 'date', 'severity', 'status'])
 
-interface ValidationLogPanelProps {
+interface FactCheckPanelProps {
   verification: Verification | null | undefined
   contentPath: string
   contentName?: string
 }
 
-export function ValidationLogPanel({
+export function FactCheckPanel({
   verification,
   contentPath,
   contentName,
-}: ValidationLogPanelProps) {
+}: FactCheckPanelProps) {
   const [log, setLog] = useState<VerificationLog | null>(null)
   const [loading, setLoading] = useState(true)
   const [missing, setMissing] = useState(false)
@@ -78,7 +79,7 @@ export function ValidationLogPanel({
     return () => { cancelled = true }
   }, [logPath])
 
-  const badge = verificationBadge(verification)
+  const badge = factCheckBadge(verification)
   const open = log ? openFindings(log) : []
 
   return (
@@ -120,7 +121,7 @@ export function ValidationLogPanel({
         {loading ? (
           <p className="flex items-center gap-2 py-4 text-xs text-muted-foreground">
             <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />
-            Loading the log…
+            Loading the record…
           </p>
         ) : missing || !log || log.entries.length === 0 ? (
           <p className="py-3 text-xs text-muted-foreground">

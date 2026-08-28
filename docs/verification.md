@@ -1,4 +1,10 @@
-# VERIFY — the content validation layer
+# VERIFY — the fact-check layer
+
+**Fact Check** is what this feature is called on screen; VERIFY is the vault-side
+toolchain behind it, and keeps its name (the `verification:` frontmatter key, the
+`.verify/` logs, `scripts/verify_*.py`, the CI gate) because the schema is bound
+to content hashes and to git history. When writing anything a student reads, call
+it a fact check.
 
 A wrong number in a stem is worse than a missing question. A student trusts it,
 learns it, and carries it into the exam. VERIFY exists so that "has this been
@@ -196,7 +202,7 @@ in check mode and a repair in sync mode. What is blocked is a false claim.
 
 Note the asymmetry, which is the point: **`--sync` can only ever lower a status,
 never raise one.** No code path anywhere in `scripts/` can move a page to
-`verified`. That takes a validation pass that cites a source, and CI checks the
+`verified`. That takes a fact-check pass that cites a source, and CI checks the
 citation is there.
 
 ```bash
@@ -209,14 +215,26 @@ python3 -m unittest discover -s scripts -p 'test_*.py'
 
 ## What a reader sees
 
-`lib/verification.ts` is the read side; `components/VerificationBadge.tsx` is the
-one badge. Every concept, exam and resource page carries it in its title row, and
-a question carries it on its explanation panel — the moment a student who has
-just disagreed with a question is already looking at the discrepancy.
+`lib/verification.ts` is the read side; `components/FactCheckBadge.tsx` is the one
+badge, and `factCheckBadge()` the one verdict it and every other surface reads
+out (*Fact checked · 12 Aug 2026*, *Not fact checked*, *Re-check needed*, *Under
+review*, *Disputed*, *Known issue* — plus a one-word `short` for a dense row).
 
-Tapping any badge opens `ValidationLogPanel`: the block's own summary (status,
-date, the sources cited) with no fetch, then the page's full log, fetched on
-demand through `fetchWikiFile`. Showing the work is the point. A reader who can
+Where the way in sits depends on the surface:
+
+- **Concept and resource pages** — the **Fact Check** item in the page's action
+  menu (`components/wiki/ConceptPagePanel.tsx`), a check mark with the current
+  verdict as a tinted pill beside it. The standalone `/wiki/concept/…` and
+  `/wiki/resource/…` pages, which have no action menu, keep the badge in the
+  title row.
+- **Questions** — the badge on the explanation panel, the moment a student who
+  has just disagreed with a question is already looking at the discrepancy.
+- **Exam pages** — nothing. An exam page is a syllabus outline; the claims worth
+  checking live on the concept and resource pages it links to.
+
+Either way opens `FactCheckDialog` over `FactCheckPanel`: the block's own summary
+(status, date, the sources cited) with no fetch, then the page's full log,
+fetched on demand through `fetchWikiFile`. Showing the work is the point. A reader who can
 see that someone has already flagged the exact thing they were about to flag has
 a reason to trust the rest of the vault that no badge alone can give them.
 
@@ -226,11 +244,12 @@ Two consequences of the record reach further than display:
   It is the one thing a reader has to know before trusting the page.
 - **A question with an unresolved critical finding is kept out of quiz sessions**
   (`filterQuestions`, ahead of the `ids` short-circuit so a saved mistake-review
-  link cannot serve one either). Settings → Content validation turns them back
+  link cannot serve one either). Settings → Fact check turns them back
   on, because a question nobody can see is a question nobody fixes.
 
-The surfaces are gated by `VERIFICATION_UI_ENABLED`, which is **on**. Note what
-the badge says on a freshly backfilled vault: *Unverified*, on almost every page.
+The surfaces are gated by `FACT_CHECK_UI_ENABLED`, which is **on**. Note what
+the badge says on a freshly backfilled vault: *Not fact checked*, on almost every
+page.
 That is the honest state, and the reason to ship it on — a trust signal that only
 ever appears once something is green is not a trust signal.
 

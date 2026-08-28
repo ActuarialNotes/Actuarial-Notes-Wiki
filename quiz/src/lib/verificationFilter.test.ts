@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest'
 import { filterQuestions, parseQuestion, type Question } from './parser'
-import { hasCriticalFinding, verificationBadge, parseVerification } from './verification'
+import { hasCriticalFinding, factCheckBadge, parseVerification } from './verification'
 
 /**
- * The quiz-side consequence of the validation record: a question the record says
+ * The quiz-side consequence of the fact-check record: a question the record says
  * is critically wrong must not reach a student by any route, unless a reviewer
  * has explicitly asked to see flagged questions.
  */
@@ -145,16 +145,16 @@ describe('filterQuestions and critical findings', () => {
   })
 })
 
-describe('verificationBadge with a critical finding', () => {
+describe('factCheckBadge with a critical finding', () => {
   it('says so in red, outranking every other state', () => {
-    const badge = verificationBadge(parseVerification(`---\n${FLAGGED}---\n`))
+    const badge = factCheckBadge(parseVerification(`---\n${FLAGGED}---\n`))
     expect(badge.tone).toBe('red')
     expect(badge.label).toBe('Known issue')
     expect(badge.detail).toContain('1 unresolved critical finding')
   })
 
   it('leaves a minor-findings page amber rather than red', () => {
-    const badge = verificationBadge(parseVerification(`---\n${NITS_ONLY}---\n`))
+    const badge = factCheckBadge(parseVerification(`---\n${NITS_ONLY}---\n`))
     expect(badge.tone).toBe('amber')
     expect(badge.detail).toContain('3 open findings')
   })

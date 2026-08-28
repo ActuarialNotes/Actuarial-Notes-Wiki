@@ -7,7 +7,7 @@ import { extractWikiLinksFromText } from '@/lib/wikiExtract'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
-import { VerificationBadge } from '@/components/VerificationBadge'
+import { FactCheckBadge } from '@/components/FactCheckBadge'
 import { parseVerification } from '@/lib/verification'
 import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
 import { isNumberedOutline, OUTLINE_ARTICLE_CLASS, parseResourceMeta, preprocessResourceMarkdown } from '@/lib/resourceMeta'
@@ -80,7 +80,7 @@ export default function WikiResource() {
           sourcePath={`Resources/Books/${resourceName}.md`}
           titleBadge={
             content && (
-              <VerificationBadge
+              <FactCheckBadge
                 verification={parseVerification(content)}
                 contentPath={`Resources/Books/${resourceName}.md`}
                 contentName={resourceName}

@@ -8,8 +8,6 @@ import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { ExamReadinessCard } from '@/components/wiki/ExamReadinessCard'
-import { VerificationBadge } from '@/components/VerificationBadge'
-import { parseVerification } from '@/lib/verification'
 import { ExamSyllabusButton } from '@/components/wiki/ExamSyllabusButton'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
@@ -141,20 +139,16 @@ export default function WikiExam() {
   }, [content])
 
   // Beside the exam's title: its status/date, then the examining body's own
-  // syllabus — the document this whole page is a reading of.
+  // syllabus — the document this whole page is a reading of. No fact-check
+  // badge here: an exam page is a syllabus outline, and the claims worth
+  // checking live on the concept and resource pages it links to, which is where
+  // the Fact Check action sits.
   const titleBadge = useMemo(() => (
     <span className="inline-flex items-center gap-2 not-prose">
       <ExamStatusBadge progressKey={progressKey} />
       <ExamSyllabusButton examId={wikiExamId} examLabel={extractedTitle ?? examFileName} />
-      {content && (
-        <VerificationBadge
-          verification={parseVerification(content)}
-          contentPath={`${examFileName}.md`}
-          contentName={extractedTitle ?? examFileName}
-        />
-      )}
     </span>
-  ), [progressKey, wikiExamId, extractedTitle, examFileName, content])
+  ), [progressKey, wikiExamId, extractedTitle, examFileName])
 
   const smallTitleBadge = useMemo(() => (
     <span className="inline-flex items-center gap-1.5 not-prose shrink-0">

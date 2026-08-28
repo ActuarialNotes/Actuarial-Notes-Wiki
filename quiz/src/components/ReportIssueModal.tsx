@@ -11,11 +11,11 @@ import {
 import { cn } from '@/lib/utils'
 
 /**
- * "Report an issue" — the reader's way into the validation record.
+ * "Report an issue" — the reader's way into the fact-check record.
  *
  * A student working a question line by line is the best-placed error detector
  * this project has. What they write here is appended verbatim to the page's
- * append-only log and read in full by the next validation sweep, so the modal
+ * append-only log and read in full by the next fact-check sweep, so the modal
  * says that plainly rather than implying a ticket queue. It also says the part
  * people would otherwise find out afterwards: the words become public.
  */
@@ -89,8 +89,8 @@ export function ReportIssueModal({
               <CheckCircle2 className="mx-auto h-8 w-8 text-green-600 dark:text-green-400" />
               <p className="text-sm font-medium">Thank you — that's on the record.</p>
               <p className="text-xs text-muted-foreground">
-                Your report is added to this page's validation log and read in full during the
-                next review pass.
+                Your report is added to this page's fact-check record and read in full during
+                the next review pass.
               </p>
               <Button onClick={onClose} className="mt-2" data-sound="tap">Close</Button>
             </div>
@@ -183,7 +183,7 @@ export function ReportIssueModal({
                 that while they are writing it.
               */}
               <p className="rounded-lg bg-muted px-3 py-2 text-[11px] leading-relaxed text-muted-foreground">
-                Your report is appended to this page's public validation log, credited to the
+                Your report is appended to this page's public fact-check log, credited to the
                 name above (or “anon”). Your account and email are never included. Please don't
                 include anything private.
               </p>

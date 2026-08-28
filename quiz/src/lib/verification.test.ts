@@ -4,7 +4,7 @@ import {
   parseVerificationLog,
   openFindings,
   openCriticalFindings,
-  verificationBadge,
+  factCheckBadge,
   formatCheckedDate,
   verificationLogPath,
   contentPathFromVerification,
@@ -115,41 +115,42 @@ describe('parseVerification', () => {
   })
 })
 
-describe('verificationBadge', () => {
+describe('factCheckBadge', () => {
   it('shows a green badge with the check date', () => {
-    const badge = verificationBadge(parseVerification(VERIFIED))
+    const badge = factCheckBadge(parseVerification(VERIFIED))
     expect(badge.tone).toBe('green')
-    expect(badge.label).toBe('Verified · 12 Aug 2026')
+    expect(badge.label).toBe('Fact checked · 12 Aug 2026')
     expect(badge.detail).toContain('2 sources')
   })
 
   it('is grey and non-committal for an unverified page', () => {
-    const badge = verificationBadge(parseVerification(UNVERIFIED_PAGE))
+    const badge = factCheckBadge(parseVerification(UNVERIFIED_PAGE))
     expect(badge.tone).toBe('grey')
-    expect(badge.label).toBe('Unverified')
+    expect(badge.label).toBe('Not fact checked')
+    expect(badge.short).toBe('Unchecked')
   })
 
   it('is grey rather than green when there is no block', () => {
-    expect(verificationBadge(null).tone).toBe('grey')
+    expect(factCheckBadge(null).tone).toBe('grey')
   })
 
   it('flags a verified page that still carries an open finding', () => {
     const v = parseVerification(VERIFIED)!
-    const badge = verificationBadge({ ...v, openFindings: 1 })
+    const badge = factCheckBadge({ ...v, openFindings: 1 })
     expect(badge.tone).toBe('amber')
     expect(badge.detail).toContain('1 open finding')
   })
 
   it('asks for a re-check once the page has changed underneath the pass', () => {
     const v = parseVerification(VERIFIED)!
-    const badge = verificationBadge({ ...v, status: 'stale', confidence: null })
+    const badge = factCheckBadge({ ...v, status: 'stale', confidence: null })
     expect(badge.tone).toBe('amber')
     expect(badge.label).toBe('Re-check needed')
   })
 
   it('is red and explicit when sources disagree', () => {
     const v = parseVerification(VERIFIED)!
-    const badge = verificationBadge({ ...v, status: 'disputed', confidence: null })
+    const badge = factCheckBadge({ ...v, status: 'disputed', confidence: null })
     expect(badge.tone).toBe('red')
     expect(badge.label).toBe('Disputed')
   })

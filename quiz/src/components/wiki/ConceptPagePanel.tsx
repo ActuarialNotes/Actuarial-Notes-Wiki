@@ -261,8 +261,10 @@ export function ConceptPagePanel({
   // Add to Flashcards, Math View, Learning Progress) are unreachable
   // until the card is earned. Once collected the same slot becomes the play
   // button. Non-concept entries (resources, exam pages) have no gate at all.
-  // The Listen toggle sits in the right-hand control cluster instead, and is
-  // gated on the same flag so the lock still covers it.
+  // The Listen toggle is deliberately outside the gate: it reads the page
+  // aloud, which is a way of *reading* the concept, not one of the actions the
+  // card unlocks — so it stays available in the right-hand control cluster
+  // even while the lock is up.
   const isCollected = collectedCards.some(c => c.name.toLowerCase() === entry.name.toLowerCase())
   // A concept past New has necessarily been collected already (grandfathered
   // users included), so treat it as unlocked even if not in the collected store.
@@ -412,6 +414,18 @@ export function ConceptPagePanel({
                 )}
               </div>
               {RESEARCH_TAB_ENABLED && user && <AddToProjectMenuItem item={entry} onNavigate={() => setShowPlayMenu(false)} />}
+              {/* Listen is both here and in the header cluster: the header
+                  button is the quick toggle (and the only way in and out of it
+                  in focus mode), this row is where someone browsing the menu
+                  discovers the mode exists. */}
+              <button
+                type="button"
+                onClick={() => { setListenView(!listenView); if (!listenView) setMathView(false); setShowPlayMenu(false) }}
+                className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
+              >
+                <Headphones className="h-3.5 w-3.5 shrink-0" />
+                {listenView ? 'Exit Listen' : 'Listen'}
+              </button>
               <button
                 type="button"
                 onClick={() => { setMathView(true); setListenView(false); setShowPlayMenu(false) }}
@@ -468,24 +482,24 @@ export function ConceptPagePanel({
             </button>
           )}
         </div>
-        {/* Listen toggle — sits beside the focus toggle rather than inside the
-            action menu, since it's a view switch like focus mode, not an
-            action. Survives focus mode for the same reason that toggle does:
-            Listen is most useful with the page full-screen, so there has to be
-            a way in and out of it there. Gated by the collect lock like the
-            menu items are. */}
-        {!actionLocked && (
-          <button
-            type="button"
-            onClick={() => { setListenView(!listenView); if (!listenView) setMathView(false) }}
-            aria-pressed={listenView}
-            className={`inline-flex items-center justify-center h-10 w-10 rounded-lg shrink-0 transition-colors ${listenView ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'text-muted-foreground hover:text-foreground hover:bg-accent'}`}
-            title={listenView ? 'Exit Listen' : 'Listen'}
-            aria-label={listenView ? 'Exit Listen' : 'Listen'}
-          >
-            <Headphones className="h-5 w-5" />
-          </button>
-        )}
+        {/* Listen toggle — a permanent control, sitting left of the expand
+            toggle rather than only inside the action menu, since it's a view
+            switch like focus mode, not an action. (It's mirrored in the menu
+            too, for discoverability.) Survives focus mode for the same reason
+            that toggle does: Listen is most useful with the page full-screen,
+            so there has to be a way in and out of it there. Deliberately *not*
+            behind the collect lock — hearing the page read is a way of reading
+            it, so it stays available on an uncollected concept. */}
+        <button
+          type="button"
+          onClick={() => { setListenView(!listenView); if (!listenView) setMathView(false) }}
+          aria-pressed={listenView}
+          className={`inline-flex items-center justify-center h-10 w-10 rounded-lg shrink-0 transition-colors ${listenView ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'text-muted-foreground hover:text-foreground hover:bg-accent'}`}
+          title={listenView ? 'Exit Listen' : 'Listen'}
+          aria-label={listenView ? 'Exit Listen' : 'Listen'}
+        >
+          <Headphones className="h-5 w-5" />
+        </button>
         {trailing}
         {!focusMode && (
           <button

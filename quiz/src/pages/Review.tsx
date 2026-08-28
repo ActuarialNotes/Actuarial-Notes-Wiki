@@ -20,6 +20,8 @@ import { StreakCompleteOverlay } from '@/components/StreakCompleteOverlay'
 import { StudyPlanCompleteOverlay } from '@/components/StudyPlanCompleteOverlay'
 import { ConceptLevelUpCeremony } from '@/components/ConceptLevelUpCeremony'
 import { PostQuizCollectGate } from '@/components/collect/PostQuizCollectGate'
+import { useMissedLevelUpPromotion } from '@/hooks/useMissedLevelUpPromotion'
+import { useCollect } from '@/hooks/useCollect'
 import { QUESTS_ENABLED, STREAK_ENABLED } from '@/lib/featureFlags'
 import { readJustCompletedQuests } from '@/lib/questStore'
 import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
@@ -200,6 +202,29 @@ export default function Review() {
 
   const [missedGateDone, setMissedGateDone] = useState(false)
 
+  // One promotion watcher for the whole screen: the gate modal and the collect
+  // cards behind it list the same concepts, and collecting one from either
+  // place has to bank exactly one level-up.
+  const { promoted: promotedConcepts, pending: pendingConcepts } = useMissedLevelUpPromotion({
+    examId: progressKey,
+    userId: user?.id ?? null,
+    concepts: missedLevelUpConcepts,
+    onPromoted: t => setGateTransitions(prev =>
+      prev.some(p => p.conceptSlug.toLowerCase() === t.conceptSlug.toLowerCase()) ? prev : [...prev, t]
+    ),
+  })
+
+  // What's still one comprehension check short of Level 1 — the cards the
+  // results screen keeps after the gate is dismissed. A concept drops out the
+  // moment its promotion lands (it reappears as a level-up card); one whose
+  // collection is still in flight stays, spinning.
+  const collectableConcepts = useMemo(
+    () => missedLevelUpConcepts.filter(name => !promotedConcepts.has(name.toLowerCase())),
+    [missedLevelUpConcepts, promotedConcepts],
+  )
+
+  const openCollect = useCollect(s => s.open)
+
   // Today's Study Plan completion — mirrors ReadinessCard's "all concepts on
   // target" check, but scoped to what's needed here so we can surface the 2×
   // bonus unlock right after the quiz that finished it, instead of waiting for
@@ -356,12 +381,9 @@ export default function Review() {
         collecting here still banks the level-up. */}
     {showMissedLevelUpGate && progressKey && (
       <PostQuizCollectGate
-        examId={progressKey}
-        userId={user?.id ?? null}
         concepts={missedLevelUpConcepts}
-        onPromoted={t => setGateTransitions(prev =>
-          prev.some(p => p.conceptSlug.toLowerCase() === t.conceptSlug.toLowerCase()) ? prev : [...prev, t]
-        )}
+        promoted={promotedConcepts}
+        pending={pendingConcepts}
         onDone={() => setMissedGateDone(true)}
       />
     )}
@@ -458,6 +480,9 @@ export default function Review() {
         manualGrades={session.manualGrades}
         onReviewIncorrect={handleReviewIncorrect}
         levelUpTransitions={upwardTransitions}
+        collectableConcepts={collectableConcepts}
+        pendingCollectConcepts={pendingConcepts}
+        onCollectConcept={name => openCollect({ kind: 'concept', name })}
         actionsRef={actionsRowRef}
       />
 

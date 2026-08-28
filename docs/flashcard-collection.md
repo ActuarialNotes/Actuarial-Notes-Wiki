@@ -226,6 +226,32 @@ plan schedules `[[Bond Price|Price]]` as "Price" while the gate holds the
 `slugForLink` slug "Bond Price". Exams with no configured plan simply get no
 highlight — the gate is unchanged.
 
+## Missed level-ups on the results screen
+
+The same New-and-uncollected concepts get a second, non-modal home on `/review`.
+`Review.tsx` derives them once (frozen after mastery loads — see the comment on
+`missedLevelUpConcepts`), shows the `PostQuizCollectGate` modal for them right
+after the level-up ceremony, and then keeps a **card per concept** in the results
+card's level-up grid for as long as they are still uncollected. Dismissing the
+gate no longer puts the level-up out of reach.
+
+`components/collect/CollectLevelUpCard.tsx` is that card. It deliberately wears
+the shape of the "levelled up" card beside it — the level-up really is one
+comprehension check away — but stays clearly unearned and clearly a control: a
+lock beside the name, a primary-coloured **Collect → Level 1** line instead of
+the earned card's emerald `New → Level 1`, and a primary ring. Like
+`CollectGateButton` it counts a lockout down in place of its label and stays
+clickable while shut, because the modal is where the wait is explained. Tapping
+it opens the shared `CollectConceptModal`; when the collection lands, the card
+is replaced in place by a real level-up card.
+
+The promotion itself belongs to neither surface. `hooks/useMissedLevelUpPromotion.ts`
+watches the collected set and calls `promoteMissedLevelUp` the instant a listed
+concept flips to collected, and **Review mounts it once for the whole screen**,
+passing `promoted` / `pending` down to both the gate and the cards. That is the
+rule to keep: the gate modal and the cards behind it list the same concepts, so
+two copies of the watcher would bank two level-ups for one collection.
+
 ## Where the comprehension checks live
 
 The authored checks are markdown, **one file per concept**, under

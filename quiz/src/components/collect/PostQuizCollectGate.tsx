@@ -1,68 +1,38 @@
 // Post-quiz collection gate. Shown right after the level-up ceremony (if any)
 // for concepts this quiz answered correctly but that stayed New because they
 // weren't collected yet (see docs/flashcard-collection.md — collection gates
-// New → Level 1). Collecting here banks that correct answer retroactively via
-// promoteMissedLevelUp; skipping leaves the concept New and the answer
-// uncredited, same as it would have been without this screen.
+// New → Level 1). Collecting here banks that correct answer retroactively;
+// dismissing the gate leaves the concept New — but no longer out of reach: the
+// results screen behind it keeps a "Collect → Level 1" card for each one
+// (components/collect/CollectLevelUpCard.tsx).
+//
+// The promotion itself is not run here. Review mounts
+// hooks/useMissedLevelUpPromotion once for the whole screen and passes the
+// result down, so this gate and the cards behind it can't both promote the same
+// collection.
 
-import { useEffect, useRef, useState } from 'react'
 import { Check, Loader2, Lock, Sparkles } from 'lucide-react'
 import { useCollect } from '@/hooks/useCollect'
-import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { CollectGateButton } from '@/components/collect/CollectGateButton'
-import { promoteMissedLevelUp } from '@/stores/quizStore'
-import type { MasteryTransition } from '@/stores/quizStore'
 import { LevelPill } from '@/components/wiki/LearningProgressModal'
 
 interface Props {
-  /** Exam id (progress key) the concepts belong to. */
-  examId: string
-  userId: string | null
   /** New-state concept names answered correctly this quiz but not collected. */
   concepts: string[]
-  /**
-   * Fired for each concept this gate actually promotes, so the results screen
-   * behind it can list the level-up it just banked. Not called when the concept
-   * had already advanced elsewhere (promoteMissedLevelUp returns null).
-   */
-  onPromoted?: (transition: MasteryTransition) => void
+  /** Lower-cased names whose level-up has been banked. */
+  promoted: Set<string>
+  /** Lower-cased names collected but whose promotion is still in flight. */
+  pending: Set<string>
   onDone: () => void
 }
 
-export function PostQuizCollectGate({ examId, userId, concepts, onPromoted, onDone }: Props) {
+export function PostQuizCollectGate({ concepts, promoted, pending, onDone }: Props) {
   const openCollect = useCollect(s => s.open)
-  const collectedCards = useCollectedCards(s => s.cards)
-  const [promoted, setPromoted] = useState<Set<string>>(new Set())
-  const promotingRef = useRef<Set<string>>(new Set())
 
-  const collectedSet = new Set(collectedCards.map(c => c.name.toLowerCase()))
-
-  // Kept in a ref so the promotion effect (which runs off collectedCards only)
-  // always calls the current callback without re-running on every render.
-  const onPromotedRef = useRef(onPromoted)
-  onPromotedRef.current = onPromoted
-
-  // The instant a listed concept flips to collected, bank the level-up it
-  // already earned this quiz — no need to wait for another correct answer.
-  useEffect(() => {
-    for (const name of concepts) {
-      const key = name.toLowerCase()
-      if (!collectedSet.has(key) || promoted.has(key) || promotingRef.current.has(key)) continue
-      promotingRef.current.add(key)
-      promoteMissedLevelUp(userId, examId, name)
-        .then(transition => {
-          if (transition) onPromotedRef.current?.(transition)
-        })
-        .catch(err => console.error('promoteMissedLevelUp failed:', err))
-        .finally(() => {
-          promotingRef.current.delete(key)
-          setPromoted(prev => new Set(prev).add(key))
-        })
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [collectedCards])
-
-  const doneCount = concepts.filter(name => collectedSet.has(name.toLowerCase())).length
+  const doneCount = concepts.filter(name => {
+    const key = name.toLowerCase()
+    return promoted.has(key) || pending.has(key)
+  }).length
 
   return (
     <div
@@ -88,7 +58,7 @@ export function PostQuizCollectGate({ examId, userId, concepts, onPromoted, onDo
           {concepts.map(name => {
             const key = name.toLowerCase()
             const isPromoted = promoted.has(key)
-            const isPending = collectedSet.has(key) && !isPromoted
+            const isPending = pending.has(key)
             return (
               <li key={name}>
                 <div className="flex items-center gap-2.5 rounded-lg bg-muted/30 px-3 py-2.5">

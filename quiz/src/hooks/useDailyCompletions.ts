@@ -3,6 +3,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 import { sanitizeMasteryState } from '@/lib/mastery'
 import type { DailyLevelUp } from '@/lib/dailyProgressStore'
+import { todayISO } from '@/lib/studyPlan'
 
 interface DailyCompletionRow {
   exam_id: string
@@ -34,7 +35,7 @@ export function useDailyCompletions(examId: string | null): DailyLevelUp[] {
   useEffect(() => {
     if (!userId) { setRows([]); return }
     let cancelled = false
-    const today = new Date().toISOString().slice(0, 10)
+    const today = todayISO()
     let query = supabase
       .from('daily_completions')
       .select('*')

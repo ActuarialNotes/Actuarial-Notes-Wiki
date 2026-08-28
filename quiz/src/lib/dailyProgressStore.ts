@@ -2,6 +2,19 @@
 // Written by quizStore on quiz completion; read by TodayCard for real-time display.
 
 import type { MasteryState } from '@/lib/mastery'
+import { localDayKey } from '@/lib/streak'
+
+/**
+ * The day every key in this module is bucketed by — the user's *local* calendar
+ * day, the same string `todayISO()` (lib/studyPlan) produces and the same one
+ * `daily_completions.day` is written with. Keying off UTC instead would roll
+ * today's bucket over in the early evening for anyone west of Greenwich, so the
+ * Today card would tick itself off with yesterday's work while the Study
+ * Schedule — which is drawn from local dates — showed nothing on today's square.
+ */
+function dayKey(): string {
+  return localDayKey(new Date())
+}
 
 export interface DailyLevelUp {
   conceptSlug: string
@@ -17,7 +30,7 @@ export interface DailyLevelUp {
 export const LEVELUP_EVENT = 'actuarial_levelup'
 
 function todayKey(): string {
-  return 'actuarial_daily_levelups_' + new Date().toISOString().slice(0, 10)
+  return 'actuarial_daily_levelups_' + dayKey()
 }
 
 export function readTodayLevelUps(): DailyLevelUp[] {
@@ -30,7 +43,7 @@ export function readTodayLevelUps(): DailyLevelUp[] {
 }
 
 function todayGemsKey(): string {
-  return 'actuarial_daily_gems_' + new Date().toISOString().slice(0, 10)
+  return 'actuarial_daily_gems_' + dayKey()
 }
 
 export function getDailyGems(): number {
@@ -55,7 +68,7 @@ interface DailyQuizStats {
 }
 
 function todayQuizStatsKey(): string {
-  return 'actuarial_daily_quiz_stats_' + new Date().toISOString().slice(0, 10)
+  return 'actuarial_daily_quiz_stats_' + dayKey()
 }
 
 export function getDailyQuizStats(): DailyQuizStats {
@@ -92,7 +105,7 @@ const ANSWERED_EVENT = 'actuarial_daily_answered'
 const ANSWERED_LIMIT = 1000
 
 function todayAnsweredKey(): string {
-  return 'actuarial_daily_answered_' + new Date().toISOString().slice(0, 10)
+  return 'actuarial_daily_answered_' + dayKey()
 }
 
 export function readTodayAnsweredIds(): string[] {

@@ -9,6 +9,7 @@ import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
 import { DECAY_DAYS_LEVEL3 } from '@/lib/mastery'
 import { buildMasteryLookup, lookupConceptRecord, resolveConceptState } from '@/lib/conceptMatch'
 import { orderConceptsForPlan } from '@/lib/studyPlanOrder'
+import { localDayKey } from '@/lib/streak'
 import type { ConceptLinkMap } from '@/data/keystoneLinks'
 
 // Bump when the generation logic changes in a way that should invalidate
@@ -79,15 +80,26 @@ export interface StudyPlan {
 }
 
 // ── Date helpers ──────────────────────────────────────────────────────────────
+//
+// Every day key in the app is the user's **local** calendar day. That matters
+// well beyond cosmetics: `daily_completions.day`, the device-local level-up keys
+// (lib/dailyProgressStore), an assignment's `scheduledDate` and the Study
+// Schedule heatmap's cells are all compared as strings, and the heatmap draws
+// its grid from local dates. Keying any of them off `toISOString()` — UTC — moves
+// the day boundary to 5–7pm for a North American user: the evening's work is
+// filed under tomorrow, the Today card rolls over early, and the heatmap can
+// never paint that work onto a cell (tomorrow is a *future* square). So format
+// through `localDayKey`, never `toISOString().slice(0, 10)`.
 
+/** Today as `YYYY-MM-DD` in the user's local timezone. */
 export function todayISO(): string {
-  return new Date().toISOString().slice(0, 10)
+  return localDayKey(new Date())
 }
 
 export function addDays(dateISO: string, days: number): string {
   const d = new Date(dateISO + 'T12:00:00')
   d.setDate(d.getDate() + days)
-  return d.toISOString().slice(0, 10)
+  return localDayKey(d)
 }
 
 export function daysBetween(from: string, to: string): number {
@@ -108,7 +120,7 @@ export function applyPreset(examDate: string, preset: QuickSetPreset): string {
     case '6m':  d.setMonth(d.getMonth() - 6);  break
     case '8m':  d.setMonth(d.getMonth() - 8);  break
   }
-  return d.toISOString().slice(0, 10)
+  return localDayKey(d)
 }
 
 export function formatReadableDate(iso: string): string {

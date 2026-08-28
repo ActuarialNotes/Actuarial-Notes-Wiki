@@ -252,6 +252,21 @@ If no concepts are close to decaying, the plan falls back to surfacing the 5 con
 
 When not in review mode, the plan also surfaces a short list of up to 3 mastered concepts that are getting stale, in case you want to review them proactively before they decay.
 
+## Which day is "today"
+
+Every day key in the app — `todayISO()`, an assignment's `scheduledDate`, the
+`daily_completions.day` column, the per-day localStorage buckets in
+`lib/dailyProgressStore.ts`, and the squares of the Study Schedule strip — is the
+user's **local** calendar day, formatted through `localDayKey` (`lib/streak.ts`).
+
+That is load-bearing rather than cosmetic. These keys are compared as strings, so
+mixing a UTC-derived key (`new Date().toISOString().slice(0, 10)`) into the set
+moves the app's day boundary to 5–7pm for a North American user: an evening's
+level-ups get filed under tomorrow, the Today card rolls over early, and the
+heatmap — which draws its grid from local dates — has nowhere to put the work,
+because tomorrow is a *future* square. Format day keys with `todayISO()` /
+`localDayKey`, never with `toISOString()`.
+
 ## Caching and Cross-Device Sync
 
 Once generated, the plan is frozen for the rest of the calendar day. This means your today's concepts list won't change mid-day just because you answer more questions — the plan stays stable so you know exactly what you're working toward.

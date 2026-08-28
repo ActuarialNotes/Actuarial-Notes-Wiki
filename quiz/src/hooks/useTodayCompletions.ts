@@ -10,6 +10,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useDailyCompletions } from '@/hooks/useDailyCompletions'
 import { readTodayLevelUps, LEVELUP_EVENT, type DailyLevelUp } from '@/lib/dailyProgressStore'
 import { mergeLevelUps } from '@/lib/planCompletion'
+import { todayISO } from '@/lib/studyPlan'
 
 export function useTodayCompletions(examProgressKey: string | null): DailyLevelUp[] {
   const [local, setLocal] = useState<DailyLevelUp[]>([])
@@ -19,7 +20,7 @@ export function useTodayCompletions(examProgressKey: string | null): DailyLevelU
     function handleLevelUp(e: Event) {
       setLocal((e as CustomEvent<DailyLevelUp[]>).detail)
     }
-    const levelUpKey = 'actuarial_daily_levelups_' + new Date().toISOString().slice(0, 10)
+    const levelUpKey = 'actuarial_daily_levelups_' + todayISO()
     function handleStorage(e: StorageEvent) {
       if (e.key === levelUpKey) setLocal(readTodayLevelUps())
     }

@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, afterEach, vi } from 'vitest'
 import { generateStudyPlan, todayISO, addDays, daysBetween, PLAN_CACHE_VERSION, selectQuestionsForCoverage, minQuestionsToCoverConcepts } from './studyPlan'
 import { emptyRecord, type ConceptMasteryRecord } from './mastery'
 import type { WikiExamSyllabus } from './wikiParser'
@@ -129,6 +129,43 @@ describe('generateStudyPlan — aliased concept mastery', () => {
       examDate: addDays(todayISO(), 40),
     })
     expect(plan.planVersion).toBe(PLAN_CACHE_VERSION)
+  })
+})
+
+// ── todayISO ──────────────────────────────────────────────────────────────────
+
+describe('todayISO', () => {
+  const realTz = process.env.TZ
+
+  afterEach(() => {
+    process.env.TZ = realTz
+    vi.useRealTimers()
+  })
+
+  it('is the local calendar day, not the UTC one', () => {
+    // 9:30pm in Chicago is already tomorrow in UTC. Keying the day off UTC moved
+    // the app's day boundary to the early evening: the evening's level-ups were
+    // filed under tomorrow, the Today card rolled over, and the Study Schedule —
+    // which draws its squares from local dates — had nowhere to put the work.
+    process.env.TZ = 'America/Chicago'
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-08-29T02:30:00Z'))
+    expect(todayISO()).toBe('2026-08-28')
+  })
+
+  it('is the local calendar day east of Greenwich too', () => {
+    // The mirror image: 9am in Auckland is still yesterday in UTC.
+    process.env.TZ = 'Pacific/Auckland'
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-08-28T21:00:00Z'))
+    expect(todayISO()).toBe('2026-08-29')
+  })
+
+  it('keeps addDays on local days across the same boundary', () => {
+    process.env.TZ = 'Pacific/Auckland'
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-08-28T21:00:00Z'))
+    expect(addDays(todayISO(), 1)).toBe('2026-08-30')
   })
 })
 

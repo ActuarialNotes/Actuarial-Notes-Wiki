@@ -225,9 +225,10 @@ export interface DayPlanPctInput {
  *
  * Today is scored against today's plan with the same rule the Today card's
  * checklist uses (`isConceptDoneToday`), so a day the user sees fully ticked off
- * is a fully bright cell. That has to be computed from the plan itself rather
- * than from `daily_completions` alone: a concept counts as done when it already
- * meets today's target, which writes no completion row, and a day whose plan is
+ * is a fully bright cell — whether or not the work that ticked it off happened
+ * today. That has to be computed from the plan itself rather than from
+ * `daily_completions` alone: a concept counts as done when it already meets
+ * today's target, which writes no completion row, and a day whose plan is
  * empty — everything the schedule asked for is already done — has no rows at all
  * yet is complete by definition.
  *
@@ -260,15 +261,22 @@ export function buildDayPlanPct({
   }
 
   const completedToday = completionsByDay.get(today) ?? new Set<string>()
-  if (studiedToday || completedToday.size > 0) {
+  if (todaysConcepts.length > 0) {
+    // Scored off the checklist itself, not off today's activity: a concept that
+    // already meets today's target reads as ticked on the Today card without
+    // writing a completion row, so gating this on "studied today" left a day the
+    // user sees finished as a blank square.
     const done = todaysConcepts.filter(name =>
       completedToday.has(name.toLowerCase()) ||
       isConceptDoneToday(name, targets, masteryStateByName, levelUps)
     ).length
-    const pct = todaysConcepts.length > 0
-      ? (done / todaysConcepts.length) * 100
-      : 100
+    const pct = (done / todaysConcepts.length) * 100
     if (pct > 0) result.set(today, pct)
+  } else if (studiedToday || completedToday.size > 0) {
+    // Nothing on the schedule for today. That's complete by definition, but only
+    // once the day has something to show for itself — an untouched rest day is
+    // left for the heatmap to shade as inactive.
+    result.set(today, 100)
   }
 
   return result

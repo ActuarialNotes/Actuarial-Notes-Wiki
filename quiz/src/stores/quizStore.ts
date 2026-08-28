@@ -7,6 +7,8 @@ import { mergeLocalMastery } from '@/lib/localMasteryStore'
 import { slugForLink } from '@/lib/conceptMatch'
 import { appendTodayLevelUps, addDailyGems, addDailyQuizStats, appendTodayAnsweredIds } from '@/lib/dailyProgressStore'
 import { recordStreakActivity } from '@/lib/streakStore'
+import { localDayKey } from '@/lib/streak'
+import { todayISO } from '@/lib/studyPlan'
 import { xpForAnswers } from '@/lib/xp'
 import { recordXp } from '@/lib/xpStore'
 import { recordQuestProgress } from '@/lib/questStore'
@@ -256,7 +258,7 @@ export async function promoteMissedLevelUp(
   if (upsertError) throw new Error(`concept_mastery upsert: ${upsertError.message}`)
 
   try {
-    const day = now.toISOString().slice(0, 10)
+    const day = localDayKey(now)
     const { error: completionError } = await supabase
       .from('daily_completions')
       .upsert([{
@@ -436,7 +438,7 @@ async function persistSessionToCloud(userId: string, params: PersistableSession)
   try {
     const completionExamId = EXAM_LABEL_TO_ID[questions[0]?.exam ?? '']
     if (completionExamId && upward.length > 0) {
-      const day = new Date().toISOString().slice(0, 10)
+      const day = todayISO()
       const nowIso = new Date().toISOString()
       const completionRows = upward.map(t => ({
         user_id: userId,

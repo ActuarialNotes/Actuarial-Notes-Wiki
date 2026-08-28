@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent } from 'react'
 import { Calendar, X } from 'lucide-react'
+import { dayCellAt } from '@/lib/heatmapGrid'
 import type { QuizSession } from '@/lib/supabase'
 import { ExamSittingsList } from '@/components/ExamSittingsList'
 import { LOCALIZED_EXAMS } from '@/data/examSittings'
@@ -98,6 +99,11 @@ interface Props {
  */
 const MIN_FLARE_MS = 150
 
+/** Cell gutter, in css px — must match the `gap-[2px]` on the grid below. */
+const CELL_GAP = 2
+/** Rows in a week column, Monday through Sunday. */
+const ROWS = 7
+
 /**
  * The Study Schedule timeline: one square per day, weeks as columns, from a
  * fortnight before the first session to a fortnight past exam day. It is the
@@ -125,6 +131,7 @@ export function ExamHeatmap({
 
   const inputRef = useRef<HTMLInputElement>(null)
   const inputReadyRef = useRef<HTMLInputElement>(null)
+  const gridRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (editing) inputRef.current?.focus()
@@ -273,6 +280,26 @@ export function ExamHeatmap({
     setEditingReady(true)
   }
 
+  // A day is ~18×14 css px on a phone, with 2px gutters — small enough that a
+  // finger regularly lands between two of them. A tap the cells themselves miss
+  // is resolved here against the grid's own geometry, so the gutters belong to
+  // their neighbours instead of swallowing the tap.
+  function handleGridClick(e: MouseEvent<HTMLDivElement>) {
+    if (!onDayClick || playbackDay) return
+    if ((e.target as HTMLElement).closest('[data-heatmap-cell]')) return
+    const grid = gridRef.current
+    if (!grid) return
+    const rect = grid.getBoundingClientRect()
+    const hit = dayCellAt(
+      { width: rect.width, height: rect.height, columns: totalWeeks, rows: ROWS, gap: CELL_GAP },
+      e.clientX - rect.left,
+      e.clientY - rect.top,
+    )
+    if (!hit) return
+    const day = columns[hit.col]?.days[hit.row]
+    if (day) onDayClick(day.key)
+  }
+
   const dateRows = (
     <div className="flex flex-col gap-1 pt-0.5">
       <div className="flex items-center gap-1.5">
@@ -397,7 +424,12 @@ export function ExamHeatmap({
             </div>
           ))}
         </div>
-        <div className="flex-1 flex gap-[2px]">
+        <div
+          ref={gridRef}
+          className="flex-1 flex gap-[2px]"
+          style={{ touchAction: 'manipulation' }}
+          onClick={handleGridClick}
+        >
           {columns.map(col => (
             <div
               key={col.key}
@@ -407,7 +439,11 @@ export function ExamHeatmap({
               }`}
             >
               {col.days.map(cell => {
-                const isClickable = onDayClick !== undefined && (!cell.isFuture ? cell.data !== null : true)
+                // Every day opens the panel below — a past day with no quiz on
+                // it still has its level-ups and its place in the schedule to
+                // show, and gating on `cell.data` made the strip feel dead on
+                // exactly the days a user taps to ask "what did I do here?".
+                const isClickable = onDayClick !== undefined
                 let cls = `w-full h-[14px] rounded-[2px] ${
                   cell.isFuture
                     ? cell.isExamDay ? 'bg-primary/30 ring-1 ring-inset ring-primary'
@@ -417,7 +453,7 @@ export function ExamHeatmap({
                       : 'bg-muted/20'
                     : cell.data === null ? 'bg-muted/30' : ''
                 }`
-                if (!cell.isFuture && isClickable && !playbackDay) cls += ' cursor-pointer hover:opacity-80'
+                if (isClickable && !playbackDay) cls += ' cursor-pointer hover:opacity-80'
                 // The trail: cells transition only while the sweep is running, so
                 // the mark on the day it just left fades out behind it instead of
                 // snapping off, and the whole run reads as one moving highlight.
@@ -428,9 +464,12 @@ export function ExamHeatmap({
                 return (
                   <div
                     key={cell.key}
+                    data-heatmap-cell
                     title={cell.title}
                     role={isClickable ? 'button' : undefined}
-                    aria-label={isClickable ? `View sessions for ${cell.key}` : undefined}
+                    aria-label={isClickable
+                      ? cell.isFuture ? `View what is planned for ${cell.key}` : `View sessions for ${cell.key}`
+                      : undefined}
                     onClick={isClickable ? () => onDayClick!(cell.key) : undefined}
                     style={!cell.isFuture ? cellStyle(resolvedPct(cell.key, cell.data, dayPlanPct)) : undefined}
                     className={cls}

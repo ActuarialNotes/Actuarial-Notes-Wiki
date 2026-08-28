@@ -210,6 +210,20 @@ describe('buildDayPlanPct', () => {
     expect(result.get(TODAY)).toBe(100)
   })
 
+  it('scores a finished plan even when nothing was studied today', () => {
+    // The Today card ticks a concept off when it already meets today's target,
+    // which needs no quiz and writes no completion row. Scoring today off
+    // "did you study today?" left the user looking at a finished checklist over
+    // a blank square on the same screen.
+    const result = pctFor({
+      todaysConcepts: ['Perpetuity', 'Annuities'],
+      targets: buildTodayTargets([assignment('Perpetuity', 'new')], mastery([]), TODAY),
+      masteryStateByName: mastery([['Perpetuity', 'level1'], ['Annuities', 'level2']]),
+      studiedToday: false,
+    })
+    expect(result.get(TODAY)).toBe(100)
+  })
+
   it('counts a day whose plan has nothing left on it as complete', () => {
     // Everything the schedule asked for is done, so `todaysConcepts` is empty —
     // there is nothing to fall short of.

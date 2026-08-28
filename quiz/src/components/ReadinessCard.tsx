@@ -671,11 +671,6 @@ export function ReadinessCard({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDay, user, progressKey])
 
-  // Keep the today panel in sync with live level-up events.
-  useEffect(() => {
-    if (selectedDay === todayISO()) setSelectedDayLevelUps(completedToday)
-  }, [selectedDay, completedToday])
-
   const examSessions = useMemo(
     () => sessions.filter(s => s.exam === syllabus.examTopic),
     [sessions, syllabus.examTopic],
@@ -717,6 +712,13 @@ export function ReadinessCard({
     completedToday.filter(lu => syllabusConceptNames.has(lu.conceptSlug.toLowerCase())),
     [completedToday, syllabusConceptNames]
   )
+
+  // Keep the today panel in sync with live level-up events. Scoped to this
+  // exam's concepts, like every other count in the panel — a level-up earned on
+  // another exam belongs on that exam's schedule, not this one's.
+  useEffect(() => {
+    if (selectedDay === todayISO()) setSelectedDayLevelUps(examCompletedToday)
+  }, [selectedDay, examCompletedToday])
 
   const displayConcepts = plan?.status === 'review_mode'
     ? (plan?.reviewConcepts ?? [])
@@ -1143,7 +1145,6 @@ export function ReadinessCard({
                     // Capped and height-reserved during the sweep so a busy day
                     // followed by a quiet one doesn't pump the whole dashboard.
                     const futureConcepts = playback.active ? dayConcepts.slice(0, 4) : dayConcepts
-                    if (futureConcepts.length === 0 && !playback.active) return null
                     return (
                       <div className={`border-t pt-3 space-y-1${playback.active ? ' min-h-[152px]' : ''}`}>
                         <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Planned for this day</p>
@@ -1207,6 +1208,23 @@ export function ReadinessCard({
                     )
                   }
                   return null
+                })()}
+
+                {/* Empty state — every square on the strip opens this panel, so a
+                    day with nothing on it has to say so rather than render an
+                    empty box. Suppressed during the sweep, which passes days too
+                    fast for a message to be read. */}
+                {!playback.active && daySessions.length === 0 && (() => {
+                  if (isFutureDay) {
+                    // A future day with a plan already shows "Planned for this day".
+                    if (isPremium && plan) return null
+                    return <p className="text-sm text-muted-foreground">This day is still ahead — nothing recorded yet.</p>
+                  }
+                  if (displayDay === todayStr) {
+                    return <p className="text-sm text-muted-foreground">No quizzes finished yet today.</p>
+                  }
+                  if (selectedDayLevelUps.length > 0) return null
+                  return <p className="text-sm text-muted-foreground">No study activity on this day.</p>
                 })()}
               </div>
             )

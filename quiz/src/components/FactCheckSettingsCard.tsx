@@ -1,31 +1,31 @@
-import { ShieldCheck, ShieldAlert } from 'lucide-react'
+import { CheckCheck, AlertTriangle } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useShowFlaggedQuestions } from '@/hooks/useShowFlaggedQuestions'
 import { cn } from '@/lib/utils'
 
 /**
- * Settings → Content validation.
+ * Settings → Fact check.
  *
  * One switch, and it is worth being explicit about which way round it is. Off —
  * the default — means a question with an unresolved critical finding never
  * reaches a quiz session: the record says it is wrong, so serving it would teach
- * the wrong thing, which is the failure the whole validation layer exists to
+ * the wrong thing, which is the failure the whole fact-check layer exists to
  * prevent. On means show them anyway, which is what someone reviewing the bank
  * needs, because a question nobody can see is a question nobody fixes.
  */
-export function ValidationSettingsCard() {
+export function FactCheckSettingsCard() {
   const [showFlagged, setShowFlagged] = useShowFlaggedQuestions()
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Content validation</CardTitle>
+        <CardTitle>Fact check</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         <div>
           <p className="text-sm font-medium mb-1">Questions with a known error</p>
           <p className="text-xs text-muted-foreground mb-3">
-            When a validation pass finds something critically wrong with a question, it is kept
+            When a fact check finds something critically wrong with a question, it is kept
             out of quiz sessions until the finding is resolved.
           </p>
           <div className="flex gap-2">
@@ -41,7 +41,7 @@ export function ValidationSettingsCard() {
                   : 'bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground',
               )}
             >
-              <ShieldCheck className="h-4 w-4" />
+              <CheckCheck className="h-4 w-4" />
               Hide them
             </button>
             <button
@@ -56,15 +56,16 @@ export function ValidationSettingsCard() {
                   : 'bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground',
               )}
             >
-              <ShieldAlert className="h-4 w-4" />
+              <AlertTriangle className="h-4 w-4" />
               Show them
             </button>
           </div>
         </div>
         <p className="text-xs text-muted-foreground">
-          Every page carries a badge showing what has been checked about it, and against which
-          source. Tap one to read the page's full validation log, or to report something that
-          looks wrong.
+          Every page keeps a fact-check record of what has been checked about it, and against
+          which source — on a concept or resource page it is the <strong>Fact Check</strong> item
+          of the action menu. Open one to read the page's full history, or to report something
+          that looks wrong.
         </p>
       </CardContent>
     </Card>

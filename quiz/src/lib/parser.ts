@@ -70,7 +70,7 @@ export interface QuestionFilter {
   concept?: string      // filter by wiki_link concept name (single)
   concepts?: string[]   // filter by wiki_link concept names (multi-select)
   /**
-   * Include questions the validation record flags as critically wrong. Off by
+   * Include questions the fact-check record flags as critically wrong. Off by
    * default — see `hasCriticalFinding`. Review surfaces turn it on so the
    * flagged questions can actually be fixed.
    */

@@ -2,12 +2,14 @@ import fm from 'front-matter'
 
 /**
  * The read side of VERIFY — the content-validation layer that records what has
- * been checked, against what source, by whom, and when.
+ * been checked, against what source, by whom, and when. **Fact Check** is what
+ * that layer is called on screen; the vault's own schema keeps the older
+ * `verification:` spelling, so this module reads one and speaks the other.
  *
  * The vault is the source of truth. Every content file carries a `verification:`
  * block in its frontmatter (written and policed by `scripts/verify_check.py`);
  * this module parses that block, and the append-only sidecar log that backs it,
- * for the surfaces that show a student what has been checked.
+ * for the Fact Check surfaces that show a student what has been checked.
  *
  * Two things worth keeping straight:
  *
@@ -142,11 +144,13 @@ export function contentPathFromVerification(v: Verification | null | undefined):
 
 // ─── Badge presentation ──────────────────────────────────────────────────────
 
-export type VerificationTone = 'green' | 'amber' | 'grey' | 'red'
+export type FactCheckTone = 'green' | 'amber' | 'grey' | 'red'
 
-export interface VerificationBadge {
+export interface FactCheckBadge {
   label: string
-  tone: VerificationTone
+  /** The same verdict in one or two words, for a dense row or a menu pill. */
+  short: string
+  tone: FactCheckTone
   /** One sentence explaining what the badge actually promises. */
   detail: string
 }
@@ -164,24 +168,27 @@ export function formatCheckedDate(iso: string | null): string | null {
 }
 
 /**
- * What to show a student. Deliberately conservative: only a page whose status is
- * `verified` *and* whose hash still matches gets the green badge, and a page
- * carrying an open finding says so even when it was verified, because an open
- * finding is exactly the thing a reader needs to know about.
+ * What to show a student — the verdict the **Fact Check** surfaces read out.
+ * Deliberately conservative: only a page whose status is `verified` *and* whose
+ * hash still matches gets the green badge, and a page carrying an open finding
+ * says so even when it was verified, because an open finding is exactly the
+ * thing a reader needs to know about.
  */
-export function verificationBadge(v: Verification | null | undefined): VerificationBadge {
+export function factCheckBadge(v: Verification | null | undefined): FactCheckBadge {
   if (v && v.openCritical > 0 && v.status !== 'disputed') {
     // A critical finding outranks every other state: it is the one thing a
     // reader has to know before they trust the page.
     return {
       label: 'Known issue',
+      short: 'Issue',
       tone: 'red',
       detail: `${v.openCritical} unresolved critical finding${v.openCritical === 1 ? '' : 's'} on this page.`,
     }
   }
   if (!v || v.status === 'unverified') {
     return {
-      label: 'Unverified',
+      label: 'Not fact checked',
+      short: 'Unchecked',
       tone: 'grey',
       detail: 'Not yet checked against a source.',
     }
@@ -189,6 +196,7 @@ export function verificationBadge(v: Verification | null | undefined): Verificat
   if (v.status === 'disputed') {
     return {
       label: 'Disputed',
+      short: 'Disputed',
       tone: 'red',
       detail: 'Sources disagree, or a critical finding is unresolved. Read with care.',
     }
@@ -196,34 +204,39 @@ export function verificationBadge(v: Verification | null | undefined): Verificat
   if (v.status === 'stale') {
     return {
       label: 'Re-check needed',
+      short: 'Re-check',
       tone: 'amber',
-      detail: 'This page changed after it was last verified, so the check no longer applies.',
+      detail: 'This page changed after it was last fact checked, so the check no longer applies.',
     }
   }
   if (v.status === 'in_review') {
     return {
       label: 'Under review',
+      short: 'Review',
       tone: 'amber',
-      detail: 'A validation pass is in progress.',
+      detail: 'A fact check is in progress.',
     }
   }
   const date = formatCheckedDate(v.lastChecked)
   if (v.openCritical > 0) {
     return {
       label: 'Known issue',
+      short: 'Issue',
       tone: 'red',
       detail: `${v.openCritical} unresolved critical finding${v.openCritical === 1 ? '' : 's'} on this page.`,
     }
   }
   if (v.openFindings > 0) {
     return {
-      label: date ? `Verified · ${date}` : 'Verified',
+      label: date ? `Fact checked · ${date}` : 'Fact checked',
+      short: 'Checked',
       tone: 'amber',
       detail: `Checked against ${v.sources.length} source${v.sources.length === 1 ? '' : 's'}, with ${v.openFindings} open finding${v.openFindings === 1 ? '' : 's'}.`,
     }
   }
   return {
-    label: date ? `Verified · ${date}` : 'Verified',
+    label: date ? `Fact checked · ${date}` : 'Fact checked',
+    short: 'Checked',
     tone: 'green',
     detail: `Checked against ${v.sources.length} source${v.sources.length === 1 ? '' : 's'}.`,
   }

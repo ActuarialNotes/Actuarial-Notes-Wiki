@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils'
 import { MarkdownText } from '@/components/MarkdownText'
 import { WikiContent } from '@/components/WikiContent'
-import { VerificationBadge } from '@/components/VerificationBadge'
+import { FactCheckBadge } from '@/components/FactCheckBadge'
 import { contentPathFromVerification, type Verification } from '@/lib/verification'
 
 interface ExplanationPanelProps {
@@ -75,7 +75,7 @@ export function ExplanationPanel({
 
       {contentPath && (
         <div className="flex items-center justify-end border-t border-current/10 pt-2">
-          <VerificationBadge
+          <FactCheckBadge
             verification={verification}
             contentPath={contentPath}
             contentName={questionId ?? contentPath}

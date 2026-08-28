@@ -31,7 +31,7 @@ questions/<exam-id>/*.md                          — question bank (YAML frontm
 comprehension-checks/<exam-id>/*.md               — flashcard-collect gate questions (one .md per concept,
                                                     parsed by lib/comprehensionCheckParser.ts)
 Media/Attachments/                                — images referenced via ![[...]]
-.verify/<mirrors the vault path>.md               — VERIFY: one append-only validation log per
+.verify/<mirrors the vault path>.md               — VERIFY: one append-only fact-check log per
                                                     content file (+ `_runs/` batch summaries)
 scripts/                                          — Python content-maintenance scripts (one-off/batch)
 docs/                                             — design docs for app algorithms (read these!)
@@ -74,7 +74,9 @@ before touching that area**:
 - `docs/flashcard-collection.md` — the "collect this card" gate: a concept must be collected
   (pass a comprehension check) before its mastery can advance past **New**. `applyAnswer`
   in `mastery.ts` takes a `collected` flag; the gate UI lives in `components/collect/`.
-- `docs/verification.md` — **VERIFY**, the content-validation layer: the `verification:`
+- `docs/verification.md` — **VERIFY**, the fact-check layer (**Fact Check** is what it is
+  called on screen; the vault-side schema and toolchain keep the `verify`/`verification`
+  spelling): the `verification:`
   frontmatter block every content file carries, the append-only `.verify/` sidecar logs, and
   what `scripts/verify_check.py` fails a PR for. The five principles are the part to read —
   in particular P1 (an AI cannot verify by reasoning alone; a page reaches `verified` only
@@ -153,8 +155,10 @@ Other important `lib/` modules:
 - `parser.ts` — parses question markdown (frontmatter + body) into `Question` objects
 - `verification.ts` — the app-side read half of **VERIFY** (`docs/verification.md`): parses the
   `verification:` block off any content file (`parseVerification`, and `Question.verification`
-  via `parser.ts`), parses a sidecar log, and decides what the badge says
-  (`components/VerificationBadge.tsx` → `ValidationLogPanel`). Two rules live here rather than
+  via `parser.ts`), parses a sidecar log, and decides what the **Fact Check** badge says
+  (`factCheckBadge` → `components/FactCheckBadge.tsx` → `FactCheckPanel`; on a concept or
+  resource page the way in is the *Fact Check* item of the action menu, and an exam page has
+  none). Two rules live here rather than
   in a surface: an open **critical** finding outranks every other badge state including
   `verified`, and `hasCriticalFinding` is what makes `filterQuestions` keep such a question out
   of quiz sessions — ahead of the `ids` short-circuit, so a saved mistake-review link can't
@@ -340,7 +344,7 @@ Other important `lib/` modules:
   `docs/sound-design.md`.
 - `featureFlags.ts` — build-time feature flags (`RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
   `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`, `MASTERY_ANALYTICS_ENABLED`,
-  `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `VERIFICATION_UI_ENABLED`, `TOUR_ENABLED`). `TOUR_ENABLED` is
+  `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `FACT_CHECK_UI_ENABLED`, `TOUR_ENABLED`). `TOUR_ENABLED` is
   **off**: the guided onboarding tour (`components/OnboardingTour.tsx` +
   `hooks/useOnboardingTour.ts`) is parked pending a simpler rebuild, so `App.tsx` doesn't
   mount it and Settings → Support hides the "Take the tour" row. The component, store and

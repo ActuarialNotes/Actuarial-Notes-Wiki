@@ -1,11 +1,11 @@
 import { useSyncExternalStore } from 'react'
 
 /**
- * Whether to include questions the validation record flags as critically wrong.
+ * Whether to include questions the fact-check record flags as critically wrong.
  *
  * Off by default: `filterQuestions` drops any question carrying an unresolved
  * critical finding, because serving a student a question the record says is
- * wrong is the exact failure the whole validation layer exists to prevent.
+ * wrong is the exact failure the whole fact-check layer exists to prevent.
  *
  * But it is a default, not a lock. Someone reviewing the bank needs to see the
  * flagged questions — that is how they get fixed — and a maintainer checking a

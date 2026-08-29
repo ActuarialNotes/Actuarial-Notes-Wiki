@@ -39,7 +39,8 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="40" text-anchor="middle" class="ttl">Inputs, hidden units, output — all wired</text>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Inputs feed hidden units, which feed the</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">output</text>
   <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
   <text x="180" y="438" text-anchor="middle" class="fml">f(x) = β₀ + Σ βₖ g(w_k0 + Σ w_kj xⱼ)</text>
   <text x="70" y="116" text-anchor="middle" class="sm dim">inputs Xⱼ</text>

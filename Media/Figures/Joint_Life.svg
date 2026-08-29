@@ -42,7 +42,8 @@ text {
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
   </defs>
   <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="40" text-anchor="middle" class="ttl">Two lives, two statuses</text>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Joint life fails at the first death,</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">last survivor at the last</text>
   <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
   <text x="180" y="430" text-anchor="middle" class="fml">ₜp_xy = ₜpₓ · ₜp_y   (joint life)</text>
   <text x="180" y="452" text-anchor="middle" class="fml2">ₜp_x̄y = ₜpₓ + ₜp_y − ₜpₓ·ₜp_y   (last survivor)</text>

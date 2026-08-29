@@ -39,7 +39,8 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="40" text-anchor="middle" class="ttl">Split the variation, then take a ratio</text>
+  <text x="180" y="31" text-anchor="middle" class="ttl">ANOVA splits the variation, then takes</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">an F ratio</text>
   <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
   <text x="180" y="430" text-anchor="middle" class="fml">F = (SS_Reg / p) / (RSS / (n − p − 1))</text>
   <text x="180" y="452" text-anchor="middle" class="fml2">MS = SS / df</text>

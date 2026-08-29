@@ -165,7 +165,7 @@ def full_credibility_standard() -> Fig:
 @figure("Partial Credibility", "The square-root rule compared with a "
         "proportional rule below the full-credibility standard", width=WID)
 def partial_credibility() -> Fig:
-    f = vcard("The square root, not the ratio", "Z = √(n / n_F)")
+    f = vcard("Below the standard, Z is the square root of n / n_F", "Z = √(n / n_F)")
 
     ax = vaxes(f, 0, 1, 0, 1.05, left=42, right=18, top=24, bottom=62)
     ax.frame(xticks=[0, 0.25, 0.5, 0.75, 1],
@@ -578,7 +578,7 @@ def intraclass_correlation() -> Fig:
 @figure("Restricted Maximum Likelihood", "REML correcting the downward bias in the "
         "maximum-likelihood variance estimate", width=WID)
 def reml() -> Fig:
-    f = vcard("REML pays for the fixed effects it estimated",
+    f = vcard("REML corrects the variance estimates for the fixed effects",
               "ℓ_R adds log|XᵀV⁻¹X| to the likelihood")
 
     ax = vaxes(f, 0, 1.9, 0, 2.6, left=40, right=16, top=32, bottom=78)
@@ -873,7 +873,7 @@ def decision_tree() -> Fig:
 @figure("Tree Pruning", "The cost-complexity score picking a subtree as alpha "
         "rises", width=WID)
 def tree_pruning() -> Fig:
-    f = vcard("Grow it too big, then cut back",
+    f = vcard("Grow a large tree, then prune on cost complexity",
               "RSS + α·|T|,  α chosen by CV")
 
     ax = vaxes(f, 0, 9, 230, 580, left=48, right=20, top=42, bottom=76)
@@ -1209,7 +1209,7 @@ def scree_plot() -> Fig:
 @figure("Clustering", "Points grouped into clusters that are tight inside and far "
         "apart", width=WID)
 def clustering() -> Fig:
-    f = vcard("Tight inside, far apart outside",
+    f = vcard("Clustering groups similar observations together",
               "minimize within-cluster variation")
 
     r = _Rand(53)
@@ -1346,7 +1346,7 @@ def dendrogram() -> Fig:
 @figure("Linkage", "Complete, single and average linkage measuring the distance "
         "between the same two clusters", width=WID)
 def linkage() -> Fig:
-    f = vcard("Three ways to measure cluster distance",
+    f = vcard("Linkage defines the distance between two clusters",
               ["complete = max · single = min", "average = mean"])
 
     left = [(1.6, 6.6), (2.3, 5.4), (1.3, 4.6)]
@@ -1380,7 +1380,7 @@ def linkage() -> Fig:
 @figure("Neural Network", "A two-layer network with its input, hidden and output "
         "units wired together", width=WID)
 def neural_network() -> Fig:
-    f = vcard("Inputs, hidden units, output — all wired",
+    f = vcard("Inputs feed hidden units, which feed the output",
               "f(x) = β₀ + Σ βₖ g(w_k0 + Σ w_kj xⱼ)")
 
     layers = [(70, 4, "inputs Xⱼ", BLUE), (180, 5, "hidden A_k", VIOLET),
@@ -1521,7 +1521,7 @@ def auroc() -> Fig:
 @figure("Lift", "A lift chart of actual against predicted loss cost across "
         "equal-exposure buckets", width=WID)
 def lift() -> Fig:
-    f = vcard("Does the model separate good risk from bad?",
+    f = vcard("Lift is how far the model separates best from worst",
               "lift = worst bucket ÷ best bucket")
 
     actual = [0.68, 0.84, 0.97, 1.11, 1.42]
@@ -1952,7 +1952,7 @@ def seasonality() -> Fig:
 @figure("Deterministic and Stochastic Trend", "A trend-stationary series returning "
         "to its line against a unit-root series that does not", width=WID)
 def det_stoch_trend() -> Fig:
-    f = vcard("Does a shock fade, or move the level for good?",
+    f = vcard("A deterministic trend absorbs shocks, a stochastic one keeps them",
               "α + βt + z_t   vs.   δ + Y_{t−1} + ε_t")
 
     r = _Rand(101)

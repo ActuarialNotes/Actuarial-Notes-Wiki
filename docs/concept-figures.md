@@ -27,6 +27,35 @@ and carries exactly three things:
 3. one **formula** in the footer, with an optional second line for an equivalent form
    (`Var(X) = E[(X − μ)²]` / `= E[X²] − μ²`).
 
+### What the title has to do
+
+The title is a **teaching line, not a caption**. It states the concept's defining claim in
+the vocabulary a candidate needs on exam day — so a reader who only ever sees the figure
+still comes away with the language.
+
+Judge a title by what it leaves the reader holding:
+
+- ✅ "Order statistics are the sorted sample" — names the term and says what it is.
+- ✅ "ρ measures the strength and direction of a linear relationship" — the actual
+  definition; the picture supplies the intuition and the footer the formula.
+- ❌ "ρ is how tightly the cloud hugs a line" — vivid, and describes the picture
+  accurately, but it teaches no vocabulary. A reader learns nothing about *linear*
+  association, direction, or the −1…1 scale.
+
+Three recurring ways a title fails, all of which read fine and still teach nothing:
+
+1. **Describing the picture** rather than the concept — "Covariance adds signed
+   rectangles", "Curvature is information", "A level annuity plus a staircase".
+2. **Counting instead of naming** — "Three views of one variable", "The two operations
+   Exam P leans on", "Kolmogorov's three axioms". Say *which* ones.
+3. **Colloquial paraphrase that dodges the term** — "Pick the parameter the data likes
+   best", "Right on average, sample after sample". Use "maximises the likelihood",
+   "unbiased".
+
+A metaphor is welcome once the vocabulary is already there, not instead of it. The title
+should also not simply restate the footer formula in words — the two lines are meant to
+carry different halves of the idea.
+
 Nothing else. The annotation columns, worked tallies and "worth remembering" asides
 that these figures used to carry belong on the concept page, not inside the image — a
 figure is read at a glance, and at phone size a paragraph inside it is unreadable

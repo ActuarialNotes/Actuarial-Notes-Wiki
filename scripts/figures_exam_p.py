@@ -120,7 +120,7 @@ def _trial_strip(f: Fig, y, wins, size=26, gap=5, colour=BLUE, ring=()):
 @figure("Probability", "Five of twelve equally likely outcomes shaded, and the "
         "resulting probability marked on a 0-to-1 scale", width=WID)
 def probability() -> Fig:
-    f = vcard("Probability counts the outcomes that work",
+    f = vcard("Probability is favourable outcomes over total, on a 0-to-1 scale",
               "P(E) = |E| / |S| = 5/12 ≈ 0.42")
 
     universe(f, 40, 82, 280, 168, "S")
@@ -214,7 +214,8 @@ def event() -> Fig:
 @figure("Axioms of Probability", "The three Kolmogorov axioms shown as diagrams",
         width=WID)
 def axioms_of_probability() -> Fig:
-    f = vcard("Kolmogorov's three axioms", "P(⋃ Eᵢ) = Σ P(Eᵢ)  for disjoint Eᵢ")
+    f = vcard("The axioms: P ≥ 0, P(S) = 1, disjoint events add",
+              "P(⋃ Eᵢ) = Σ P(Eᵢ)  for disjoint Eᵢ")
 
     for i, label in enumerate(("P(S) = 1", "P(E) ≥ 0", "P(E₁ ∪ E₂) = P(E₁) + P(E₂)")):
         y = 74 + i * 106
@@ -246,7 +247,7 @@ def axioms_of_probability() -> Fig:
 @figure("Set Theory", "Union, intersection, complement and difference on Venn diagrams",
         width=WID)
 def set_theory() -> Fig:
-    f = vcard("Set operations are the language of events", "P(Aᶜ) = 1 − P(A)")
+    f = vcard("Union, intersection, complement, difference", "P(Aᶜ) = 1 − P(A)")
 
     labels = ["A ∪ B", "A ∩ B", "Aᶜ", "A \\ B"]
     for i, lab in enumerate(labels):
@@ -290,7 +291,7 @@ def set_theory() -> Fig:
 @figure("Venn Diagram", "Two overlapping events with all four region probabilities "
         "filled in", width=WID)
 def venn_diagram() -> Fig:
-    f = vcard("Fill the overlap first, then work outwards",
+    f = vcard("A Venn diagram splits events into disjoint regions",
               ["P(A ∪ B) = P(A) + P(B) − P(A ∩ B)",
                "= 0.70 + 0.40 − 0.20 = 0.90"])
 
@@ -311,7 +312,7 @@ def venn_diagram() -> Fig:
 @figure("Combinatorics", "Counting ordered arrangements versus unordered selections",
         width=WID)
 def combinatorics() -> Fig:
-    f = vcard("Choosing k from n: the two questions",
+    f = vcard("Permutations count order; combinations ignore it",
               ["P(n, k) = n! / (n − k)!", "C(n, k) = P(n, k) / k!"])
 
     x0, cw, gap = 100, 118, 4
@@ -337,7 +338,8 @@ def combinatorics() -> Fig:
 
 @figure("Combination", "The six unordered pairs chosen from four objects", width=WID)
 def combination() -> Fig:
-    f = vcard("Order ignored: C(4, 2) = 6", "C(n, k) = n! / [k! (n − k)!]")
+    f = vcard("A combination is an unordered selection: C(4, 2) = 6",
+              "C(n, k) = n! / [k! (n − k)!]")
 
     for i, o in enumerate("ABCD"):
         cx = 78 + i * 68
@@ -359,7 +361,8 @@ def combination() -> Fig:
 
 @figure("Permutation", "The twelve ordered pairs drawn from four objects", width=WID)
 def permutation() -> Fig:
-    f = vcard("Order matters: P(4, 2) = 12", "P(n, k) = n! / (n − k)!")
+    f = vcard("A permutation is an ordered arrangement: P(4, 2) = 12",
+              "P(n, k) = n! / (n − k)!")
 
     ordered = [("A", "B"), ("B", "A"), ("A", "C"), ("C", "A"),
                ("A", "D"), ("D", "A"), ("B", "C"), ("C", "B"),
@@ -378,7 +381,7 @@ def permutation() -> Fig:
 @figure("Independent Events", "Independence as a product of areas on the unit square",
         width=WID)
 def independent_events() -> Fig:
-    f = vcard("Independence multiplies the areas",
+    f = vcard("Independent events: knowing A does not change P(B)",
               ["P(A ∩ B) = P(A) · P(B)", "0.6 × 0.5 = 0.30"])
 
     x0, y0, side = 92, 106, 200
@@ -427,7 +430,7 @@ def mutually_exclusive_events() -> Fig:
 @figure("Probability Addition Rule", "The addition rule correcting for a double-counted "
         "overlap", width=WID)
 def probability_addition_rule() -> Fig:
-    f = vcard("Subtract the double-counted overlap",
+    f = vcard("The addition rule subtracts the double-counted overlap",
               ["P(A ∪ B) = P(A) + P(B) − P(A ∩ B)", "0.45 + 0.40 − 0.15 = 0.70"])
 
     cx, cy, r, sep = 180, 200, 78, 78
@@ -453,7 +456,7 @@ def probability_addition_rule() -> Fig:
 @figure("Probability Multiplication Rule", "A two-stage probability tree whose branch "
         "probabilities multiply", width=WID)
 def probability_multiplication_rule() -> Fig:
-    f = vcard("Chain the stages: P(A), then P(B | A)",
+    f = vcard("The multiplication rule chains P(A) with P(B | A)",
               "P(A ∩ B) = P(A) · P(B | A) = 0.24")
 
     f.circle(180, 92, 6, fill="var(--dim)")
@@ -507,7 +510,7 @@ def inclusion_exclusion() -> Fig:
 @figure("Conditional Probability", "Conditioning on B rescales the sample space to B",
         width=WID)
 def conditional_probability() -> Fig:
-    f = vcard("Conditioning shrinks the space to B",
+    f = vcard("Conditioning makes B the new sample space",
               ["P(A | B) = P(A ∩ B) / P(B)", "= 0.12 / 0.40 = 0.30"])
 
     f.rect(30, 82, 300, 132, rx=8, fill="var(--soft)", stroke="var(--edge)",
@@ -546,7 +549,7 @@ def conditional_probability() -> Fig:
 @figure("Bayes Theorem", "The prior split into two columns whose shaded claim areas make "
         "up P(C), half of it high-risk", width=WID)
 def bayes_theorem() -> Fig:
-    f = vcard("The posterior is the claiming slice of the prior",
+    f = vcard("Bayes reverses the conditioning: prior → posterior",
               ["P(H | C) = P(C | H) P(H) / P(C)", "= 0.08 / 0.16 = 0.50"])
 
     p_h, p_c_h, p_c_l = 0.20, 0.40, 0.10
@@ -617,7 +620,7 @@ def law_of_total_probability() -> Fig:
 @figure("Discrete Univariate Distributions", "The six discrete families on the syllabus, "
         "each drawn as a probability mass function", width=WID)
 def discrete_univariate() -> Fig:
-    f = vcard("The discrete families on the syllabus",
+    f = vcard("Discrete distributions put mass on countable values",
               ["p(k) = P(X = k),   Σ p(k) = 1",
                "variance ÷ mean:  <1 binomial, =1 Poisson"])
 
@@ -650,7 +653,7 @@ def discrete_univariate() -> Fig:
 @figure("Continuous Univariate Distributions", "Shapes and supports of the six continuous "
         "families on the syllabus", width=WID)
 def continuous_univariate() -> Fig:
-    f = vcard("The continuous families on the syllabus",
+    f = vcard("Continuous distributions spread mass over intervals",
               "P(a ≤ X ≤ b) = ∫ₐᵇ f(x) dx")
 
     specs = [
@@ -776,7 +779,7 @@ def percentile() -> Fig:
 
 @figure("Expected Value", "The mean as the balance point of a distribution", width=WID)
 def expected_value() -> Fig:
-    f = vcard("The mean is the balance point",
+    f = vcard("E[X] is the probability-weighted average",
               ["E[X] = ∫ x f(x) dx", "= Σ k p(k)  when X is discrete"])
 
     a = vaxes(f, 0, 6.2, 0, 0.42, top=40, bottom=56)
@@ -840,7 +843,8 @@ def standard_deviation() -> Fig:
 @figure("Coefficient of Variation", "Equal standard deviations meaning very different "
         "relative risk", width=WID)
 def coefficient_of_variation() -> Fig:
-    f = vcard("Spread relative to the mean", "CV = σ / μ = √Var(X) / E[X]")
+    f = vcard("CV is standard deviation relative to the mean",
+              "CV = σ / μ = √Var(X) / E[X]")
 
     a = vaxes(f, 0, 12, 0, 0.50, top=40, bottom=52)
     a.curve(lambda t: _npdf(t, 2.2, 0.9), colour=ROSE)
@@ -1163,7 +1167,7 @@ def uniform_continuous() -> Fig:
 @figure("Transformations of Random Variables", "A monotone transformation carrying the "
         "density of X into the density of Y", width=WID)
 def transformations() -> Fig:
-    f = vcard("A transformation reshapes the density",
+    f = vcard("A transformation rescales the density by the Jacobian",
               ["f_Y(y) = f_X(g⁻¹(y)) · |d g⁻¹/dy|", "y = g(x) = x², x > 0"])
 
     gx0, gx1, gy0, gy1 = 128, 328, 96, 268
@@ -1201,7 +1205,7 @@ def transformations() -> Fig:
 @figure("Calculus", "The derivative as a tangent slope and the integral as an area",
         width=WID)
 def calculus() -> Fig:
-    f = vcard("The two operations Exam P leans on",
+    f = vcard("Differentiate to get f, integrate to get F",
               ["F′(x) = f(x)", "∫ₐᵇ f(x) dx = F(b) − F(a)"])
 
     fn = lambda t: 0.28 * t * t - 0.2 * t + 1.1
@@ -1227,7 +1231,8 @@ def calculus() -> Fig:
 
 @figure("Discrete Mathematics", "The power set of a three-element set", width=WID)
 def discrete_mathematics() -> Fig:
-    f = vcard("The power set of {a, b, c}", "|𝒫(S)| = 2ⁿ = 2³ = 8")
+    f = vcard("The power set collects every subset: 2ⁿ of them",
+              "|𝒫(S)| = 2ⁿ = 2³ = 8")
 
     levels = [["∅"], ["{a}", "{b}", "{c}"], ["{a,b}", "{a,c}", "{b,c}"], ["{a,b,c}"]]
     colours = ["var(--dim)", BLUE, VIOLET, GREEN]
@@ -1521,7 +1526,8 @@ def marginal_probability_function() -> Fig:
 @figure("Conditional Probability Function", "One row of a joint table renormalised into a "
         "conditional distribution", width=WID)
 def conditional_probability_function() -> Fig:
-    f = vcard("Fix a row, then renormalise it", "p(y | x) = p(x, y) / pₓ(x)")
+    f = vcard("A conditional PMF is one row divided by its total",
+              "p(y | x) = p(x, y) / pₓ(x)")
 
     x0, cell = 78, 68
     _joint_table(f, x0, 110, cell=cell, row_h=44, highlight=lambda i, j: i == 1,
@@ -1544,7 +1550,7 @@ def conditional_probability_function() -> Fig:
 @figure("Joint Cumulative Distribution Function", "The joint CDF as the probability mass "
         "in the lower-left quadrant", width=WID)
 def joint_cdf() -> Fig:
-    f = vcard("F(x, y) is a lower-left quadrant",
+    f = vcard("The joint CDF accumulates mass to the lower left",
               ["F(x, y) = P(X ≤ x, Y ≤ y)", "f(x, y) = ∂²F / ∂x ∂y"])
 
     px0, py0, side = 88, 106, 216
@@ -1567,7 +1573,7 @@ def joint_cdf() -> Fig:
 @figure("Joint Probability Density Function", "Setting up the limits of a double integral "
         "over a triangular support", width=WID)
 def joint_pdf() -> Fig:
-    f = vcard("Sketch the support, then set the limits",
+    f = vcard("A joint density integrates to 1 over its support",
               ["∫₀¹ ∫ₓ¹ f(x, y) dy dx", "support 0 < x < y < 1"])
 
     px0, py1, side = 92, 320, 200
@@ -1605,7 +1611,7 @@ def moments_for_joint() -> Fig:
 @figure("Covariance", "Covariance as the signed contribution of each quadrant around the "
         "means", width=WID)
 def covariance() -> Fig:
-    f = vcard("Covariance adds signed rectangles",
+    f = vcard("Covariance is the mean product of the deviations",
               ["Cov(X, Y) = E[(X − μₓ)(Y − μ_Y)]", "= E[XY] − E[X] E[Y]"])
 
     px0, py0, side = 84, 100, 220
@@ -1633,7 +1639,7 @@ def covariance() -> Fig:
 @figure("Correlation Coefficient", "The same scatter cloud at six correlations, from a "
         "falling line through a shapeless blob to a rising line", width=WID)
 def correlation_coefficient() -> Fig:
-    f = vcard("ρ is how tightly the cloud hugs a line",
+    f = vcard("ρ measures the strength and direction of a linear relationship",
               ["ρ(X, Y) = Cov(X, Y) / (σₓ σ_Y)", "−1 ≤ ρ ≤ 1, and ρ = ±1 is a line"])
 
     # One cloud, drawn six times: only ρ changes, so the panels read as the same
@@ -1717,7 +1723,7 @@ def order_statistics() -> Fig:
 @figure("Variance for Conditional and Marginal Distributions", "The law of total variance "
         "splitting spread into within-group and between-group parts", width=WID)
 def conditional_variance() -> Fig:
-    f = vcard("Total variance splits in two",
+    f = vcard("Total variance = mean of variances + variance of means",
               "Var(X) = E[Var(X | Y)] + Var(E[X | Y])")
 
     a = vaxes(f, 0, 10, 0, 0.62, top=44)
@@ -1747,7 +1753,7 @@ def conditional_variance() -> Fig:
 @figure("Linear Combinations of Random Variables", "Several variables collapsing into one "
         "weighted sum", width=WID)
 def linear_combinations() -> Fig:
-    f = vcard("Collapsing many variables into one",
+    f = vcard("A linear combination is a weighted sum Σ cᵢXᵢ",
               ["E[L] = Σ cᵢ E[Xᵢ]",
                "Var(L) = Σ cᵢ²Var(Xᵢ) + 2Σᵢ<ⱼ cᵢcⱼCov(Xᵢ, Xⱼ)"])
 
@@ -1823,7 +1829,7 @@ def probabilities_for_linear_combinations() -> Fig:
 @figure("Central Limit Theorem", "The density of the sample mean of n uniform draws, "
         "flat at n = 1 and normal by n = 30", width=WID)
 def central_limit_theorem() -> Fig:
-    f = vcard("Average enough draws and the shape turns normal",
+    f = vcard("The standardised sum tends to normal, whatever X is",
               ["(Sₙ − nμ) / (σ√n) → N(0, 1)", "so Sₙ ≈ N(nμ, nσ²) for large n"])
 
     bars, x0, x1, ph = 26, 84, 326, 54

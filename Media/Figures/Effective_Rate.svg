@@ -44,8 +44,8 @@ text {
     <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
   </defs>
   <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="31" text-anchor="middle" class="ttl">The effective rate is what actually</text>
-  <text x="180" y="50" text-anchor="middle" class="ttl">happened</text>
+  <text x="180" y="31" text-anchor="middle" class="ttl">The effective rate is the growth over</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">one full period</text>
   <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
   <text x="180" y="438" text-anchor="middle" class="fml">1 + i = A(1) / A(0),   here i = 8%</text>
   <line x1="88" y1="172" x2="286" y2="172" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>

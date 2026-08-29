@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { questionExamLabel } from '@/lib/examIds'
 import { decayIfStale } from '@/lib/mastery'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { supabase } from '@/lib/supabase'
@@ -55,10 +56,12 @@ export function ActiveExamCard({
       .filter(r => r.state === 'forgotten').length
   }, [records, progressKey])
 
-  // Sessions filtered to this exam's topic
+  // Sessions filtered to this exam. `quiz_sessions.exam` carries the question
+  // bank's label ("Exam 5"), not the syllabus subject line — see lib/examIds.
+  const examLabel = questionExamLabel(syllabus)
   const examSessions = useMemo(
-    () => sessions.filter(s => s.exam === syllabus.examTopic),
-    [sessions, syllabus.examTopic],
+    () => sessions.filter(s => s.exam === examLabel),
+    [sessions, examLabel],
   )
 
   const displayedSessions = historyFilter

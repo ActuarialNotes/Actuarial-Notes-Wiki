@@ -10,6 +10,7 @@ import {
 import { trackMasteryAnalyticsQuiz } from '@/lib/analytics'
 import type { ConceptMasteryRecord } from '@/lib/mastery'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
+import { questionExamLabel } from '@/lib/examIds'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { InsightCard, InsightBrowserModal } from '@/components/DashboardInsightCard'
 
@@ -61,9 +62,12 @@ export function MasteryAnalyticsCard({ syllabus, masteryRecords }: Props) {
   const { questions: allQuestions } = useAllQuestions()
   const [browserOpen, setBrowserOpen] = useState(false)
 
+  // `Question.exam` carries the bank's label ("Exam 5"), not the syllabus
+  // subject line — see lib/examIds.
+  const examLabel = questionExamLabel(syllabus)
   const examQuestions = useMemo(
-    () => allQuestions.filter(q => q.exam === syllabus.examTopic),
-    [allQuestions, syllabus.examTopic],
+    () => allQuestions.filter(q => q.exam === examLabel),
+    [allQuestions, examLabel],
   )
 
   const warnings = useMemo(
@@ -87,7 +91,7 @@ export function MasteryAnalyticsCard({ syllabus, masteryRecords }: Props) {
   // many other fading concepts as possible. Falls back to the concept quiz if no
   // tagged question is found (or questions haven't loaded yet).
   const launchConceptReview = (concept: string) => {
-    trackMasteryAnalyticsQuiz({ source: 'decay_warning', exam: syllabus.examTopic })
+    trackMasteryAnalyticsQuiz({ source: 'decay_warning', exam: examLabel })
     const chosen = pickReviewQuestionForConcept(examQuestions, decayConceptNames, concept)
     if (chosen) {
       launchStoredQuiz(navigate, [chosen.id])
@@ -100,7 +104,7 @@ export function MasteryAnalyticsCard({ syllabus, masteryRecords }: Props) {
   // Review every fading concept in the fewest questions (greedy set-cover).
   const launchReviewAll = () => {
     if (reviewAllQuestions.length === 0) return
-    trackMasteryAnalyticsQuiz({ source: 'decay_warning', exam: syllabus.examTopic })
+    trackMasteryAnalyticsQuiz({ source: 'decay_warning', exam: examLabel })
     launchStoredQuiz(navigate, reviewAllQuestions.map(q => q.id))
   }
 

@@ -1,12 +1,13 @@
 # Exam Readiness Score
 
-The card at the top of every exam study guide — a single green dial that opens an
-assessment popup. It answers one question: *how ready am I to sit this exam?*, and the popup
-then says why the number is what it is.
+The ring beside every exam study guide's title — the Dashboard's Study Guide radial shrunk
+to a badge, which opens an assessment popup. It answers one question: *how ready am I to sit
+this exam?*, and the popup then says why the number is what it is.
 
 - Scoring: `quiz/src/lib/readiness.ts` (`computeExamReadiness`), tested in `readiness.test.ts`
-- UI: `quiz/src/components/wiki/ExamReadinessCard.tsx`
-- Placement: `components/wiki/WikiArticle.tsx` + `ExamGuideCards.tsx`; wired in `pages/wiki/WikiExam.tsx`
+- Ring geometry: `quiz/src/lib/readinessRing.ts`, drawn by `components/ReadinessRing.tsx`
+- UI: `quiz/src/components/wiki/ExamReadinessRing.tsx`
+- Placement: the `titleAside` slot of `components/wiki/WikiArticle.tsx`; wired in `pages/wiki/WikiExam.tsx`
 
 ## One score, everywhere
 
@@ -15,7 +16,7 @@ a readiness percentage calls it, so they can never disagree:
 
 | Surface | Where |
 |---|---|
-| Exam Readiness Score card + popup | `components/wiki/ExamReadinessCard.tsx` |
+| Exam Readiness Score ring + popup | `components/wiki/ExamReadinessRing.tsx` |
 | Dashboard Study Guide radial (the `NN% readiness` in the ring) | `components/ReadinessCard.tsx` |
 | Exam grid cards ("Readiness NN%") | `pages/wiki/WikiHome.tsx` |
 | Readiness projection ("now → exam day") | `lib/masteryAnalytics.ts` → `components/HeatmapInfoPanel.tsx` |
@@ -92,20 +93,32 @@ criterion it scores rather than sitting in a section of its own:
 A criterion with nothing to expand (no sections parsed, or an exam with no keystone
 catalogue) renders without a chevron rather than opening onto an empty panel.
 
-Signed-out readers see the card at 0 and, in place of the criteria explanation, a **Sign in**
+Signed-out readers see the ring at 0 and, in place of the criteria explanation, a **Sign in**
 button (to `/auth`) under the dial with "Track learning progress" beneath it — mastery is a
 server-side record, so there is nothing to show until they do.
 
 ## Placement
 
-The card borrows the orientation cards' shell (`ExamGuideCards`) and is passed to them as
-`leadCard`, taking the first column of that (desktop-capped, `max-w-xl`) three-column row —
-readiness, then the two guides. At a third of a phone's width the cards drop their title icon
-and step the title down a size; the dial and the guide covers are drawn at the same size (88,
-scaling down with the card) so the row reads as three marks of equal weight. Exam pages that
-carry no `<div class="exam-guides"></div>` (everything but P, FM, MAS-I, MAS-II and Exam 5
-today) get the card from a marker `WikiArticle` inserts under the "Learning Objectives"
-heading instead, in the same capped three-column grid so it lands at the same width.
+The ring sits in the exam page's title row, pinned to its right edge — `WikiArticle`'s
+`titleAside` slot, which keeps its own column so a title that wraps to two lines doesn't drag
+it down the page. It gets there on *every* exam page, including the ones with no authored
+orientation guide, because it hangs off the title rather than off any content marker.
+
+It used to be a card in the orientation-card row, passed to `ExamGuideCards` as `leadCard`,
+with a marker-inserted fallback under "Learning Objectives" for exam pages carrying no
+`<div class="exam-guides"></div>`. Both are gone: the guides are one wide row now, and a
+score reads better beside the thing it scores than as one tile among three.
+
+## What the ring shows
+
+The ring is `components/ReadinessRing.tsx` at 64px: one arc per syllabus concept, each
+section sized by its exam weight, each arc filled by that concept's mastery state — green for
+an ordinary concept, gold for a keystone (`lib/masteryFill.ts`). It is the Dashboard's Study
+Guide radial with the legend, the section labels and the hover readout stripped off, and both
+draw their arcs from `lib/readinessRing.ts`, so the two can never disagree about the shape of
+a syllabus. At badge size the individual arcs are thinner than a hairline, which is the
+point: what survives the shrink is how much of the ring has colour in it, and where the gold
+is. The number in the middle is `overallPct` — the same one the popup opens with.
 
 ## Colour
 

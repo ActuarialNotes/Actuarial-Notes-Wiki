@@ -157,11 +157,11 @@ export interface WikiArticleProps {
   /** Optional node rendered inline after the H1 title (e.g. an exam status badge). */
   titleBadge?: React.ReactNode
   /**
-   * Optional node rendered with the exam's orientation cards (the readiness
-   * card). Falls back to a slot under the learning objectives on exam pages
-   * that carry no guide cards.
+   * Optional node pinned to the right of the H1 title row — the exam page's
+   * readiness ring. Unlike `titleBadge` it does not flow with the title text:
+   * it keeps its own column so a two-line title doesn't push it around.
    */
-  readiness?: React.ReactNode
+  titleAside?: React.ReactNode
 }
 
 function refKey(ref: WikiEntryRef): string {
@@ -194,23 +194,6 @@ export function markExamGuides(md: string): string {
   return md.replace(/^<div class="exam-guides"[^>]*>\s*<\/div> *$/gm, `\n${EXAM_GUIDES_MARKER}\n`)
 }
 
-// The readiness card rides along with the orientation cards, so on an exam page
-// that carries the `exam-guides` div it needs no marker of its own. Exams
-// without that div (the ones with no authored guides) get one inserted directly
-// under the "Learning Objectives" heading — or at the end of the page when an
-// exam has no such heading.
-export const READINESS_MARKER = '%%exam-readiness%%'
-
-export function hasExamGuidesMarker(md: string): boolean {
-  return /^<div class="exam-guides"[^>]*>\s*<\/div> *$/m.test(md)
-}
-
-export function markReadinessCard(md: string): string {
-  const heading = /^## +Learning Objectives.*$/im.exec(md)
-  const at = heading ? heading.index + heading[0].length : md.length
-  return `${md.slice(0, at)}\n\n${READINESS_MARKER}\n${md.slice(at)}`
-}
-
 // Strip block-level HTML divs that publish.js embeds for metadata / layout.
 // react-markdown renders them as literal text without rehype-raw, so they must
 // be removed before parsing.
@@ -222,10 +205,9 @@ function stripHtmlBlocks(md: string): string {
     .replace(/^> *<div\b.*?<\/div> *\n?/gm, '')
 }
 
-export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, className, titleBadge, readiness }: WikiArticleProps) {
+export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, className, titleBadge, titleAside }: WikiArticleProps) {
   const navigate = useNavigate()
   const articleRef = useRef<HTMLDivElement | null>(null)
-  const hasReadiness = readiness != null
   const { processed, sourceMaterial } = useMemo(() => {
     // Math delimiters first: the vault is written for Obsidian, whose parser is
     // looser than remark-math's. See lib/vaultMath.ts.
@@ -234,14 +216,11 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
     // cards; lift its entries out before the wikilinks are rewritten.
     const { markdown: body, entries } = extractSourceMaterial(stripped)
     const marked = markExamGuides(fixBlockquoteOrderedLists(rewriteWikilinks(body)))
-    // With guide cards on the page the readiness card joins their row; without
-    // them it needs a marker of its own.
-    const needsMarker = hasReadiness && !hasExamGuidesMarker(stripped)
     return {
-      processed: stripHtmlBlocks(needsMarker ? markReadinessCard(marked) : marked),
+      processed: stripHtmlBlocks(marked),
       sourceMaterial: entries,
     }
-  }, [markdown, hasReadiness])
+  }, [markdown])
 
   // Exam pages get the orientation cards; every other page ignores the marker.
   const guideExamId = sourcePath && /^Exam\b/i.test(sourcePath) ? examIdFromFile(sourcePath) : null
@@ -266,12 +245,21 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
     ...calloutComponents,
     ...codeComponents,
     h1({ children, ...rest }) {
-      if (!titleBadge) return <h1 {...rest}>{children}</h1>
-      return (
-        <h1 {...rest} className="flex items-center gap-2 flex-wrap">
+      if (!titleBadge && !titleAside) return <h1 {...rest}>{children}</h1>
+      const heading = (
+        <h1 {...rest} className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
           <span>{children}</span>
           {titleBadge}
         </h1>
+      )
+      if (!titleAside) return heading
+      // The aside keeps its own column and its own vertical centring, so a
+      // title that wraps to two lines doesn't drag it down the page.
+      return (
+        <div className="flex items-center gap-3">
+          {heading}
+          <div className="not-prose shrink-0">{titleAside}</div>
+        </div>
       )
     },
     // A paragraph whose only content is a marker or a distribution illustration
@@ -282,15 +270,10 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
       )
       const only = kids.length === 1 ? kids[0] : null
       if (only && only.type === 'text' && only.value.trim() === EXAM_GUIDES_MARKER) {
-        return guideExamId ? <ExamGuideCards examId={guideExamId} leadCard={readiness} /> : null
+        return guideExamId ? <ExamGuideCards examId={guideExamId} /> : null
       }
       if (only && only.type === 'text' && only.value.trim() === SOURCE_MATERIAL_MARKER) {
         return <SourceMaterialGallery entries={sourceMaterial} onOpen={openRef} />
-      }
-      if (only && only.type === 'text' && only.value.trim() === READINESS_MARKER) {
-        // Same capped three-column grid the guide cards use, so an exam page
-        // without them lands the card at the same width as one with them.
-        return <div className="not-prose my-5 grid max-w-xl grid-cols-3 gap-2 sm:gap-4">{readiness}</div>
       }
       if (
         !hideImages &&
@@ -346,7 +329,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
         </a>
       )
     },
-  }), [openRef, hideImages, titleBadge, guideExamId, readiness, sourceMaterial])
+  }), [openRef, hideImages, titleBadge, titleAside, guideExamId, sourceMaterial])
 
   // Active-concept highlight: when the popup is open and its sourcePath
   // matches this article's sourcePath, find the matching wikilink in this

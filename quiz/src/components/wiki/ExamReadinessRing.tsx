@@ -10,18 +10,23 @@ import {
   type ReadinessCriterion,
 } from '@/lib/readiness'
 import { LEVEL3_TEXT } from '@/lib/masteryFill'
+import { ReadinessRing } from '@/components/ReadinessRing'
+import { buildRingSegments } from '@/lib/readinessRing'
 import { playSound } from '@/lib/soundEngine'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import type { MasteryState } from '@/lib/mastery'
 
 /**
- * The exam page's readiness card, and the assessment popup it opens.
+ * The exam page's readiness ring, and the assessment popup it opens.
  *
- * It rides in the orientation-card row (`ExamGuideCards`) as one card among
- * three, borrowing their shell exactly — the same surface, the same
- * click-to-open-a-popup interaction, the dial standing in for a cover graphic.
+ * It sits beside the exam's title as a badge — the Dashboard's Study Guide
+ * radial at ~64px (`components/ReadinessRing.tsx`), drawn from the same
+ * `lib/readinessRing.ts` maths, so the syllabus a reader is looking at and the
+ * ring summarising it are the same object. It used to be a card in the
+ * orientation-card row; the row is one wide card now, and a score belongs with
+ * the thing it scores.
  *
- * The card is one number: the overall dial and the band it falls in. Every
+ * The ring is one number plus the shape of the syllabus behind it. Every
  * breakdown is a tap away, in the popup — which is two criterion bars, one per
  * scoring criterion, each expanding to the evidence behind its number:
  * syllabus coverage to the per-learning-objective bars, keystone concepts
@@ -301,7 +306,7 @@ function ExamReadinessModal({ assessment, examLabel, signedIn, onSelectConcept, 
   )
 }
 
-export interface ExamReadinessCardProps {
+export interface ExamReadinessRingProps {
   /** Exam progress key (`P`, `FM`, `MAS-I`, `5`) — the keystone catalogue key. */
   examId: string
   /** Exam display name, e.g. "Exam P-1 (SOA)". */
@@ -312,7 +317,7 @@ export interface ExamReadinessCardProps {
   onSelectConcept: (conceptName: string) => void
 }
 
-export function ExamReadinessCard({ examId, examLabel, syllabus, onSelectConcept }: ExamReadinessCardProps) {
+export function ExamReadinessRing({ examId, examLabel, syllabus, onSelectConcept }: ExamReadinessRingProps) {
   const { user } = useAuth()
   const { records } = useConceptMastery()
   const [open, setOpen] = useState(false)
@@ -323,6 +328,11 @@ export function ExamReadinessCard({ examId, examLabel, syllabus, onSelectConcept
     return computeExamReadiness(syllabus, examRecords, new Date(), examId)
   }, [syllabus, records, examId])
 
+  const segments = useMemo(
+    () => syllabus ? buildRingSegments(syllabus, records.filter(r => r.exam_id === examId), new Date()) : [],
+    [syllabus, records, examId],
+  )
+
   // Nothing to score: no syllabus concepts parsed *and* no keystones authored.
   if (!assessment || (assessment.counts.total === 0 && !assessment.keystone)) return null
 
@@ -332,22 +342,14 @@ export function ExamReadinessCard({ examId, examLabel, syllabus, onSelectConcept
         type="button"
         onClick={() => setOpen(true)}
         aria-haspopup="dialog"
-        className="group flex h-full flex-col rounded-lg bg-card p-3 text-left text-card-foreground shadow-[var(--shadow-card)] transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:p-4"
+        aria-label={`Exam readiness: ${Math.round(assessment.overallPct)}% — ${assessment.band.label}`}
+        title={`Exam readiness — ${assessment.band.label}`}
+        className="group inline-flex shrink-0 items-center rounded-full p-1 text-foreground transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
-        {/* One number. The dial stands where the guide cards put their cover
-            graphic — and, like the covers, it follows the card width (the
-            viewBox scales) so a third of a phone doesn't overflow it. The
-            breakdown waits in the popup. */}
-        <div className="mb-3 flex flex-1 items-center justify-center">
-          <ReadinessDial pct={assessment.overallPct} size={88} className="h-auto w-full max-w-[88px]" />
-        </div>
-        <div className="flex items-start gap-2">
-          <Gauge className="mt-0.5 hidden h-5 w-5 shrink-0 text-primary sm:block" />
-          <div className="min-w-0">
-            <h3 className="text-sm font-semibold leading-snug tracking-tight sm:text-base">Exam Readiness</h3>
-            <p className="text-xs text-muted-foreground">{assessment.band.label}</p>
-          </div>
-        </div>
+        {/* No label of its own: the ring is beside the exam's title, and the
+            title already says which exam is being scored. The band and the
+            breakdown are one tap away. */}
+        <ReadinessRing segments={segments} pct={assessment.overallPct} size={64} />
       </button>
 
       {open && (

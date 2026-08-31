@@ -18,11 +18,22 @@ import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
 import { aggregateForTopic, decayIfStale, sanitizeMasteryState } from '@/lib/mastery'
 import { normalizeMasteryToDisplayNames } from '@/lib/conceptMatch'
-import { isKeystone } from '@/lib/keystone'
 import { KEYSTONE_FILL, KEYSTONE_TEXT, LEVEL3_TEXT, LEVEL_FILL, masteryFill } from '@/lib/masteryFill'
 import { MasteryBadge } from '@/components/MasteryBadge'
 import { MASTERY_LABEL } from '@/lib/masteryBadge'
-import { computeExamReadiness, parseSectionWeight } from '@/lib/readiness'
+import { computeExamReadiness } from '@/lib/readiness'
+import {
+  RING_INNER_R,
+  RING_OUTER_R,
+  RING_VIEWBOX,
+  RING_CX,
+  RING_CY,
+  buildRingSegments,
+  ringArcPath,
+  ringPolar,
+  ringTopicGroups,
+  type RingSegment,
+} from '@/lib/readinessRing'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { todayISO, type StudyPlan, type StudyPlanConfig } from '@/lib/studyPlan'
 import { readTodayLevelUps, LEVELUP_EVENT, type DailyLevelUp } from '@/lib/dailyProgressStore'
@@ -41,37 +52,11 @@ import { questionExamLabel } from '@/lib/examIds'
 
 
 // ── Study Guide Radial ─────────────────────────────────────────────────────────
-
-const SG_VB = 280
-const SG_CX = SG_VB / 2
-const SG_CY = SG_VB / 2
-const SG_OUTER_R = 126
-const SG_INNER_R = 74
-const SG_CONCEPT_GAP = 1.5
-
-interface SGSegment {
-  startDeg: number
-  endDeg: number
-  conceptName: string
-  topicName: string
-  state: MasteryState
-  keystone: boolean
-}
-
-
-function sgPolar(angleDeg: number, r: number) {
-  const rad = ((angleDeg - 90) * Math.PI) / 180
-  return { x: SG_CX + r * Math.cos(rad), y: SG_CY + r * Math.sin(rad) }
-}
-
-function sgArc(startDeg: number, endDeg: number, ro: number, ri: number) {
-  const s1 = sgPolar(startDeg, ro)
-  const e1 = sgPolar(endDeg, ro)
-  const s2 = sgPolar(endDeg, ri)
-  const e2 = sgPolar(startDeg, ri)
-  const lg = endDeg - startDeg > 180 ? 1 : 0
-  return `M${s1.x} ${s1.y} A${ro} ${ro} 0 ${lg} 1 ${e1.x} ${e1.y} L${s2.x} ${s2.y} A${ri} ${ri} 0 ${lg} 0 ${e2.x} ${e2.y}Z`
-}
+//
+// The arcs, their angles and the section groups come from `lib/readinessRing.ts`
+// — the exam page's title-row ring draws the same shape from the same helpers.
+// What lives here is only this surface's chrome: the legend, the curved section
+// labels and the hover readout in the middle.
 
 function StudyGuideRadial({
   syllabus,
@@ -90,82 +75,19 @@ function StudyGuideRadial({
   selectedConcept?: string | null
   flashRadial?: boolean
 }) {
-  const [hovered, setHovered] = useState<SGSegment | null>(null)
+  const [hovered, setHovered] = useState<RingSegment | null>(null)
 
-  const segments = useMemo(() => {
-    const normalized = normalizeMasteryToDisplayNames(examRecords, syllabus)
-    const bySlug = new Map(normalized.map(r => [r.concept_slug.toLowerCase(), r]))
-    const totalWeight = syllabus.topics.reduce((s, t) => s + parseSectionWeight(t.weight), 0) || 1
-    const result: SGSegment[] = []
-    let cursor = 0
-
-    for (const topic of syllabus.topics) {
-      const topicWeight = parseSectionWeight(topic.weight)
-      const topicDeg = (topicWeight / totalWeight) * 360
-      const n = topic.concepts.length
-      if (n === 0) { cursor += topicDeg; continue }
-      const slotDeg = topicDeg / n
-      const gap = Math.min(SG_CONCEPT_GAP, slotDeg * 0.5)
-
-      for (const concept of topic.concepts) {
-        const rec = bySlug.get(concept.name.toLowerCase())
-        const state: MasteryState = rec ? decayIfStale(rec, now).state : 'new'
-        const startDeg = cursor + gap / 2
-        const endDeg = cursor + slotDeg - gap / 2
-        if (endDeg > startDeg + 0.5) {
-          result.push({
-            startDeg,
-            endDeg,
-            conceptName: concept.name,
-            topicName: topic.name,
-            state,
-            keystone: isKeystone(concept),
-          })
-        }
-        cursor += slotDeg
-      }
-    }
-    return result
-  }, [syllabus, examRecords, now])
+  const segments = useMemo(
+    () => buildRingSegments(syllabus, examRecords, now),
+    [syllabus, examRecords, now],
+  )
 
   const selected = useMemo(
     () => selectedConcept ? (segments.find(s => s.conceptName.toLowerCase() === selectedConcept.toLowerCase()) ?? null) : null,
     [segments, selectedConcept],
   )
 
-  const topicGroups = useMemo(() => {
-    if (segments.length === 0) return []
-    const groups: Array<{
-      topicName: string
-      startDeg: number
-      endDeg: number
-      midDeg: number
-      boundaryDeg: number
-    }> = []
-    let i = 0
-    while (i < segments.length) {
-      const name = segments[i].topicName
-      let j = i
-      while (j < segments.length && segments[j].topicName === name) j++
-      const startDeg = segments[i].startDeg
-      const endDeg = segments[j - 1].endDeg
-      const lastSegEnd = segments[segments.length - 1].endDeg
-      const prevEnd = i > 0 ? segments[i - 1].endDeg : lastSegEnd
-      // For i=0 wrap the boundary around 360°→0° (gives ~0° = 12 o'clock)
-      const boundaryDeg = i > 0
-        ? (prevEnd + startDeg) / 2
-        : ((lastSegEnd + startDeg + 360) / 2) % 360
-      groups.push({
-        topicName: name,
-        startDeg,
-        endDeg,
-        midDeg: (startDeg + endDeg) / 2,
-        boundaryDeg,
-      })
-      i = j
-    }
-    return groups
-  }, [segments])
+  const topicGroups = useMemo(() => ringTopicGroups(segments), [segments])
 
   // The one readiness score (lib/readiness.ts): syllabus coverage plus keystone
   // mastery. The exam page's Exam Readiness Score card and the exam grid print
@@ -197,12 +119,12 @@ function StudyGuideRadial({
           Keystone
         </span>
       </div>
-      <svg viewBox={`0 0 ${SG_VB} ${SG_VB}`} className="w-full max-w-[260px]" style={{ overflow: 'visible' }}>
+      <svg viewBox={`0 0 ${RING_VIEWBOX} ${RING_VIEWBOX}`} className="w-full max-w-[260px]" style={{ overflow: 'visible' }}>
         <circle
-          cx={SG_CX} cy={SG_CY}
-          r={(SG_OUTER_R + SG_INNER_R) / 2}
+          cx={RING_CX} cy={RING_CY}
+          r={(RING_OUTER_R + RING_INNER_R) / 2}
           fill="none"
-          strokeWidth={SG_OUTER_R - SG_INNER_R}
+          strokeWidth={RING_OUTER_R - RING_INNER_R}
           stroke="rgba(34,197,94,0.06)"
         />
         {segments.map((seg, i) => {
@@ -210,14 +132,14 @@ function StudyGuideRadial({
           return (
             <path
               key={i}
-              d={sgArc(seg.startDeg, seg.endDeg, SG_OUTER_R, SG_INNER_R)}
+              d={ringArcPath(seg.startDeg, seg.endDeg, RING_OUTER_R, RING_INNER_R)}
               fill={masteryFill(seg.state, seg.keystone)}
               opacity={(hovered || selected) && !isActive ? 0.35 : 1}
               stroke={selected === seg && hovered !== seg ? 'rgba(255,255,255,0.55)' : 'none'}
               strokeWidth={selected === seg && hovered !== seg ? 1 : 0}
               style={{
                 transition: 'opacity 100ms, transform 100ms',
-                transformOrigin: `${SG_CX}px ${SG_CY}px`,
+                transformOrigin: `${RING_CX}px ${RING_CY}px`,
                 transform: isActive ? 'scale(1.04)' : 'scale(1)',
               }}
               onMouseEnter={() => setHovered(seg)}
@@ -230,8 +152,8 @@ function StudyGuideRadial({
 
         {/* Topic boundary dividers — all boundaries including i=0 (12 o'clock) */}
         {topicGroups.map((g, i) => {
-          const p1 = sgPolar(g.boundaryDeg, SG_INNER_R - 4)
-          const p2 = sgPolar(g.boundaryDeg, SG_OUTER_R + 4)
+          const p1 = ringPolar(g.boundaryDeg, RING_INNER_R - 4)
+          const p2 = ringPolar(g.boundaryDeg, RING_OUTER_R + 4)
           return (
             <line
               key={`div-${i}`}
@@ -249,11 +171,11 @@ function StudyGuideRadial({
         {topicGroups.map((g, i) => {
           const arcSpan = g.endDeg - g.startDeg
           if (arcSpan < 16) return null
-          const LABEL_R = SG_OUTER_R + 9
+          const LABEL_R = RING_OUTER_R + 9
           // Bottom half (90°–270°): reverse arc direction so text reads L→R
           const isBottom = g.midDeg > 90 && g.midDeg < 270
-          const p1 = isBottom ? sgPolar(g.endDeg, LABEL_R) : sgPolar(g.startDeg, LABEL_R)
-          const p2 = isBottom ? sgPolar(g.startDeg, LABEL_R) : sgPolar(g.endDeg, LABEL_R)
+          const p1 = isBottom ? ringPolar(g.endDeg, LABEL_R) : ringPolar(g.startDeg, LABEL_R)
+          const p2 = isBottom ? ringPolar(g.startDeg, LABEL_R) : ringPolar(g.endDeg, LABEL_R)
           const sweepFlag = isBottom ? 0 : 1
           const largeArcFlag = arcSpan > 180 ? 1 : 0
           const arcLen = (arcSpan / 360) * 2 * Math.PI * LABEL_R
@@ -281,14 +203,14 @@ function StudyGuideRadial({
 
         {centerSeg ? (
           <>
-            <text x={SG_CX} y={SG_CY - 18} textAnchor="middle" fontSize={9} fill="currentColor" opacity={0.45} fontStyle="italic">
+            <text x={RING_CX} y={RING_CY - 18} textAnchor="middle" fontSize={9} fill="currentColor" opacity={0.45} fontStyle="italic">
               {centerSeg.topicName.length > 24 ? centerSeg.topicName.slice(0, 22) + '…' : centerSeg.topicName}
             </text>
-            <text x={SG_CX} y={SG_CY + 2} textAnchor="middle" fontSize={11} fill="currentColor" fontWeight="700">
+            <text x={RING_CX} y={RING_CY + 2} textAnchor="middle" fontSize={11} fill="currentColor" fontWeight="700">
               {centerSeg.conceptName.length > 20 ? centerSeg.conceptName.slice(0, 18) + '…' : centerSeg.conceptName}
             </text>
             <text
-              x={SG_CX} y={SG_CY + 18} textAnchor="middle" fontSize={10}
+              x={RING_CX} y={RING_CY + 18} textAnchor="middle" fontSize={10}
               fill={centerSeg.keystone ? KEYSTONE_TEXT : centerSeg.state === 'level3' ? LEVEL3_TEXT : 'currentColor'}
               opacity={centerSeg.keystone || centerSeg.state === 'level3' ? 1 : 0.65}
             >
@@ -298,13 +220,13 @@ function StudyGuideRadial({
           </>
         ) : (
           <>
-            <text x={SG_CX} y={SG_CY + 10} textAnchor="middle" fontSize={30} fontWeight="800"
+            <text x={RING_CX} y={RING_CY + 10} textAnchor="middle" fontSize={30} fontWeight="800"
               fill={flashRadial ? '#22c55e' : 'currentColor'}
               style={{ transition: 'fill 0.8s ease-out' }}
             >
               {pctText}
             </text>
-            <text x={SG_CX} y={SG_CY + 24} textAnchor="middle" fontSize={10} fill="currentColor"
+            <text x={RING_CX} y={RING_CY + 24} textAnchor="middle" fontSize={10} fill="currentColor"
               opacity={flashRadial ? 0.9 : 0.4}
               style={{ transition: 'opacity 0.8s ease-out' }}
             >

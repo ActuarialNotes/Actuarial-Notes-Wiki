@@ -1,5 +1,5 @@
 import type { ComponentType } from 'react'
-import { Info, Lightbulb } from 'lucide-react'
+import { Compass, Info, Lightbulb } from 'lucide-react'
 import {
   AccumulationGraphic,
   AmortizationGraphic,
@@ -39,7 +39,13 @@ import {
 
 /**
  * The orientation guides that sit above the learning objectives on an exam
- * page: two dashboard-style cards, each opening a paged popup.
+ * page. They are authored as two guides — how to study, and what exam day
+ * looks like — but the page shows a *single* wide card shaped like a learning
+ * objective, and its popup pages straight through both halves: a candidate
+ * reads them back to back anyway, and two square cards competing for the same
+ * row said less than one row that names both. `guideForExam` does the merge;
+ * the authored halves survive as `sections`, which is what the popup header
+ * shows so the reader knows which half they are in.
  *
  * This content used to be two collapsed `[!info]`/`[!tip]` callouts in the
  * vault markdown. It lives here instead because the presentation is now
@@ -55,6 +61,29 @@ export interface ExamGuidePage {
   title: string
   Graphic: ComponentType<{ className?: string }>
   body: string
+}
+
+/** One authored guide, as a half of the merged one. */
+export interface ExamGuideSection {
+  id: string
+  title: string
+  Icon: ComponentType<{ className?: string }>
+  Cover: ComponentType<{ className?: string }>
+  /** How many pages of the merged guide this half owns. */
+  pageCount: number
+}
+
+/** A page of the merged guide, tagged with the half it came from. */
+export interface CombinedGuidePage extends ExamGuidePage {
+  section: ExamGuideSection
+}
+
+/** The two authored guides for one exam, flattened into a single paged guide. */
+export interface CombinedExamGuide {
+  title: string
+  Icon: ComponentType<{ className?: string }>
+  sections: ExamGuideSection[]
+  pages: CombinedGuidePage[]
 }
 
 export interface ExamGuide {
@@ -656,4 +685,50 @@ export const EXAM_GUIDES: Record<string, ExamGuide[]> = {
 
 export function guidesForExam(examId: string): ExamGuide[] {
   return EXAM_GUIDES[examId.toLowerCase()] ?? []
+}
+
+/**
+ * Reading order for the merged guide: how to study comes before exam day. A
+ * candidate meets this page months before the sitting, and the authored order
+ * (exam day first) put the last thing they need at the front.
+ */
+const SECTION_ORDER = ['how-to-study', 'exam-day']
+
+function sectionRank(id: string): number {
+  const i = SECTION_ORDER.indexOf(id)
+  return i === -1 ? SECTION_ORDER.length : i
+}
+
+/**
+ * The single guide an exam page shows: both authored guides, one after the
+ * other, as one run of pages. Returns null for an exam with nothing authored.
+ */
+export function guideForExam(examId: string): CombinedExamGuide | null {
+  const guides = guidesForExam(examId)
+  if (guides.length === 0) return null
+  const ordered = [...guides].sort((a, b) => sectionRank(a.id) - sectionRank(b.id))
+
+  const pages: CombinedGuidePage[] = []
+  const sections: ExamGuideSection[] = []
+  for (const guide of ordered) {
+    const section: ExamGuideSection = {
+      id: guide.id,
+      title: guide.title,
+      Icon: guide.Icon,
+      Cover: guide.Cover,
+      pageCount: guide.pages.length,
+    }
+    sections.push(section)
+    for (const page of guide.pages) pages.push({ ...page, section })
+  }
+
+  return {
+    // Named for what it holds rather than after either half — the card is wide
+    // enough to say both, and a reader who wants only one of them can see from
+    // the title that it is in here.
+    title: 'How to Study & Exam Day Tips',
+    Icon: Compass,
+    sections,
+    pages,
+  }
 }

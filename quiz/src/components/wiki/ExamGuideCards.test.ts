@@ -1,12 +1,13 @@
 import { describe, it, expect } from 'vitest'
 import { rewriteGuideLinks } from '@/components/wiki/ExamGuideCards'
 import { markExamGuides, EXAM_GUIDES_MARKER } from '@/components/wiki/WikiArticle'
-import { EXAM_GUIDES, guidesForExam } from '@/data/examGuides'
+import { EXAM_GUIDES, guideForExam, guidesForExam } from '@/data/examGuides'
 import { examIdFromFile } from '@/lib/wikiRoutes'
 
-// The exam-page orientation cards. Two things are worth pinning: the marker
+// The exam-page orientation card. Three things are worth pinning: the marker
 // handshake between the vault markdown and the renderer (silently losing it
-// would just make the cards vanish), and that every authored page is complete.
+// would just make the card vanish), that every authored page is complete, and
+// that the merge into one paged guide keeps all of both halves.
 
 describe('markExamGuides', () => {
   it('replaces the marker div with the paragraph marker', () => {
@@ -84,5 +85,46 @@ describe('EXAM_GUIDES', () => {
         expect(rewriteGuideLinks(page.body)).not.toMatch(/\[\[/)
       }
     }
+  })
+})
+
+describe('guideForExam', () => {
+  it('merges both authored guides into one run of pages', () => {
+    const halves = guidesForExam('mas-ii')
+    const merged = guideForExam('mas-ii')!
+    expect(merged.pages).toHaveLength(halves.reduce((n, g) => n + g.pages.length, 0))
+    expect(merged.sections.map(s => s.id).sort()).toEqual(['exam-day', 'how-to-study'])
+  })
+
+  it('puts how-to-study before exam day', () => {
+    for (const examId of Object.keys(EXAM_GUIDES)) {
+      const merged = guideForExam(examId)!
+      expect(merged.sections[0].id).toBe('how-to-study')
+      expect(merged.pages[0].section.id).toBe('how-to-study')
+      expect(merged.pages[merged.pages.length - 1].section.id).toBe('exam-day')
+    }
+  })
+
+  it('tags every page with the half it came from, in contiguous runs', () => {
+    const merged = guideForExam('p-1')!
+    const runs = merged.pages.reduce<string[]>((acc, p) => (
+      acc[acc.length - 1] === p.section.id ? acc : [...acc, p.section.id]
+    ), [])
+    expect(runs).toEqual(['how-to-study', 'exam-day'])
+    // Each section's own count has to match what it contributed, or the
+    // grouped paging dots split in the wrong place.
+    for (const section of merged.sections) {
+      expect(merged.pages.filter(p => p.section.id === section.id)).toHaveLength(section.pageCount)
+    }
+  })
+
+  it('gives the merged guide a title that names both halves', () => {
+    const merged = guideForExam('fm-2')!
+    expect(merged.title).toMatch(/study/i)
+    expect(merged.title).toMatch(/exam day/i)
+  })
+
+  it('is null for an exam with nothing authored', () => {
+    expect(guideForExam('6u-1')).toBeNull()
   })
 })

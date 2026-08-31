@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
@@ -7,21 +7,25 @@ import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { codeComponents } from '@/components/CodeBlock'
-import { guidesForExam, type ExamGuide } from '@/data/examGuides'
+import { guideForExam, type CombinedExamGuide } from '@/data/examGuides'
 import { hrefToEntryRef, wikiRoute } from '@/lib/wikiRoutes'
 import { playSound } from '@/lib/soundEngine'
 
 /**
- * The two orientation cards above an exam page's learning objectives, and the
- * paged popup each one opens.
+ * The orientation card above an exam page's learning objectives, and the paged
+ * popup it opens.
  *
- * The cards borrow the Dashboard insight-card shell (`rounded-lg bg-card p-4
- * shadow-[var(--shadow-card)]`, two-up grid) and the popup borrows the
- * Dashboard help modal's paging chrome, so the whole thing reads as the same
- * component family. Type runs one step larger than those originals — this is
- * reading material, not a stat tile.
+ * One wide row, shaped like a learning objective (`MarkdownCallout`'s
+ * `rounded-lg bg-card` header at `px-4 py-3`) so it reads as the first item of
+ * the list it introduces rather than a banner over it. Its popup pages through
+ * both authored halves — how to study, then exam day — with the header naming
+ * the half in view; see `guideForExam` in `data/examGuides.ts` for why they are
+ * merged.
  *
- * Content lives in `data/examGuides.ts`; `WikiArticle` decides where the grid
+ * The popup borrows the Dashboard help modal's paging chrome. Type runs one
+ * step larger than that original — this is reading material, not a stat tile.
+ *
+ * Content lives in `data/examGuides.ts`; `WikiArticle` decides where the card
  * lands (the `<div class="exam-guides"></div>` marker in the exam markdown).
  */
 
@@ -43,39 +47,34 @@ export function rewriteGuideLinks(body: string): string {
 }
 
 interface CardProps {
-  guide: ExamGuide
+  guide: CombinedExamGuide
   onOpen: () => void
 }
 
 function ExamGuideCard({ guide, onOpen }: CardProps) {
-  const { Icon, title, Cover } = guide
+  const { Icon, title, pages } = guide
   return (
     <button
       type="button"
       onClick={onOpen}
-      className="group flex h-full flex-col rounded-lg bg-card p-3 text-left text-card-foreground shadow-[var(--shadow-card)] transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:p-4"
+      aria-haspopup="dialog"
+      className="not-prose my-4 w-full rounded-lg bg-card px-4 py-3 text-left text-card-foreground transition-colors duration-150 hover:bg-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
-      {/* The cover is a square mark drawn at the readiness dial's size, in the
-          same centred, flex-1 slot that card uses — the wide page graphics used
-          to stand here and, in a third-of-a-phone column, came out barely tall
-          enough to read. Page graphics stay wide; only the card face is square. */}
-      <div className="mb-3 flex flex-1 items-center justify-center">
-        <Cover />
-      </div>
-      {/* Title only: the cover carries the subject, so a blurb and a page
-          count just crowded a card that is three-up on a phone. The icon is
-          dropped at that width for the same reason — it costs a third of the
-          line and the cover already says which card this is. */}
-      <div className="flex items-start gap-2">
-        <Icon className="mt-0.5 hidden h-5 w-5 shrink-0 text-primary sm:block" />
-        <h3 className="min-w-0 text-sm font-semibold leading-snug tracking-tight sm:text-base">{title}</h3>
+      {/* The learning-objective header row, part for part: icon, title, a
+          right-aligned count where an objective puts its exam weight, and the
+          disclosure chevron. */}
+      <div className="flex w-full items-center gap-3">
+        <Icon className="h-4 w-4 shrink-0 text-primary" />
+        <span className="min-w-0 flex-1 text-sm font-medium text-foreground">{title}</span>
+        <span className="shrink-0 text-xs tabular-nums text-muted-foreground">{pages.length} pages</span>
+        <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
       </div>
     </button>
   )
 }
 
 interface ModalProps {
-  guide: ExamGuide
+  guide: CombinedExamGuide
   onClose: () => void
 }
 
@@ -94,7 +93,7 @@ function ExamGuideModal({ guide, onClose }: ModalProps) {
 
   const total = guide.pages.length
   const safe = Math.min(page, total - 1)
-  const { title, Graphic, body } = guide.pages[safe]
+  const { title, Graphic, body, section } = guide.pages[safe]
   // `step` is relative and `goTo` absolute; both clamp inside the updater so the
   // keyboard handler below can stay mounted once without going stale.
   const step = (delta: number) => setPage(p => {
@@ -129,10 +128,13 @@ function ExamGuideModal({ guide, onClose }: ModalProps) {
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
       <div className="my-12 flex w-full max-w-lg flex-col rounded-xl bg-card shadow-2xl">
-        {/* Header — the guide, then the page within it */}
+        {/* Header — which half of the guide is in view, not the merged title:
+            the reader needs to know whether they are being told how to study or
+            what exam day looks like, and the card they tapped already said the
+            popup holds both. */}
         <div className="flex h-12 shrink-0 items-center gap-2 px-4">
-          <guide.Icon className="h-4 w-4 shrink-0 text-primary" />
-          <span className="flex-1 truncate text-sm font-semibold">{guide.title}</span>
+          <section.Icon className="h-4 w-4 shrink-0 text-primary" />
+          <span className="flex-1 truncate text-sm font-semibold">{section.title}</span>
           <button
             type="button"
             onClick={onClose}
@@ -198,16 +200,23 @@ function ExamGuideModal({ guide, onClose }: ModalProps) {
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
-          <div className="flex items-center gap-1.5">
-            {guide.pages.map((p, i) => (
-              <button
-                key={p.title}
-                type="button"
-                onClick={() => goTo(i)}
-                aria-label={`Go to page ${i + 1}: ${p.title}`}
-                aria-current={i === safe}
-                className={`rounded-full transition-all duration-200 ${i === safe ? 'h-1.5 w-4 bg-primary' : 'h-1.5 w-1.5 bg-muted-foreground/30 hover:bg-muted-foreground/60'}`}
-              />
+          {/* Dots grouped by section, with a wider gap between the two runs:
+              the merged guide is long enough that an undifferentiated row of
+              dots hid where one half ends and the other begins. */}
+          <div className="flex items-center gap-3">
+            {guide.sections.map(sec => (
+              <div key={sec.id} className="flex items-center gap-1.5">
+                {guide.pages.map((p, i) => (p.section.id !== sec.id ? null : (
+                  <button
+                    key={p.title}
+                    type="button"
+                    onClick={() => goTo(i)}
+                    aria-label={`Go to page ${i + 1}: ${sec.title} — ${p.title}`}
+                    aria-current={i === safe}
+                    className={`rounded-full transition-all duration-200 ${i === safe ? 'h-1.5 w-4 bg-primary' : 'h-1.5 w-1.5 bg-muted-foreground/30 hover:bg-muted-foreground/60'}`}
+                  />
+                )))}
+              </div>
             ))}
           </div>
           {safe < total - 1 ? (
@@ -237,36 +246,17 @@ function ExamGuideModal({ guide, onClose }: ModalProps) {
 
 interface ExamGuideCardsProps {
   examId: string
-  /**
-   * A card rendered first in the grid, beside the guides — the readiness card
-   * (`ExamReadinessCard`), one column like they are. Passed in rather than
-   * imported because it needs the page's syllabus and concept-popup wiring,
-   * which live in `WikiExam`.
-   */
-  leadCard?: ReactNode
 }
 
-export function ExamGuideCards({ examId, leadCard }: ExamGuideCardsProps) {
-  const guides = guidesForExam(examId)
-  const [openId, setOpenId] = useState<string | null>(null)
-  if (guides.length === 0 && !leadCard) return null
-  const open = guides.find(g => g.id === openId) ?? null
+export function ExamGuideCards({ examId }: ExamGuideCardsProps) {
+  const guide = useMemo(() => guideForExam(examId), [examId])
+  const [open, setOpen] = useState(false)
+  if (!guide) return null
 
   return (
-    <div className="not-prose my-5">
-      {/* Three-up at every width — readiness, then the two guides — but capped
-          on desktop: left to fill the article column the cards grew to ~400px
-          each and read as a hero banner rather than the side notes they are.
-          Card height follows the width (the cover keeps its aspect ratio), so
-          the cap shrinks both dimensions; the cap is wider than the old two-up
-          one so a third column doesn't squeeze the covers. */}
-      <div className="grid max-w-xl grid-cols-3 gap-2 sm:gap-4">
-        {leadCard}
-        {guides.map(guide => (
-          <ExamGuideCard key={guide.id} guide={guide} onOpen={() => setOpenId(guide.id)} />
-        ))}
-      </div>
-      {open && <ExamGuideModal key={open.id} guide={open} onClose={() => setOpenId(null)} />}
-    </div>
+    <>
+      <ExamGuideCard guide={guide} onOpen={() => setOpen(true)} />
+      {open && <ExamGuideModal guide={guide} onClose={() => setOpen(false)} />}
+    </>
   )
 }

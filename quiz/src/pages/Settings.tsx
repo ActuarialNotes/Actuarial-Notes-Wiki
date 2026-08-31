@@ -20,7 +20,6 @@ import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { DailyGoalPicker } from '@/components/DailyGoalPicker'
 import { LeagueSettingsCard } from '@/components/LeagueSettingsCard'
 import { SoundSettingsCard } from '@/components/SoundSettingsCard'
-import { FactCheckSettingsCard } from '@/components/FactCheckSettingsCard'
 import { EmailSettingsCard } from '@/components/EmailSettingsCard'
 import { DAILY_PLAN_EMAIL_ENABLED, LEAGUES_ENABLED, TOUR_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
@@ -1035,8 +1034,6 @@ export default function Settings() {
             {/* ---- Sound ---- */}
             <section ref={el => { sectionRefs.current.sound = el }} id="sound">
               <SoundSettingsCard />
-
-              <FactCheckSettingsCard />
             </section>
 
             {/* ---- Support ---- */}

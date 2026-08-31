@@ -9,11 +9,12 @@ import { useSyncExternalStore } from 'react'
  *
  * But it is a default, not a lock. Someone reviewing the bank needs to see the
  * flagged questions — that is how they get fixed — and a maintainer checking a
- * reported error has to be able to reach the question that was reported. Hence
- * the toggle, in Settings, off unless asked for.
+ * reported error has to be able to reach the question that was reported. There
+ * is no longer a Settings control for it; the stored preference (and
+ * `setShowFlaggedQuestions`) is what a maintainer flips.
  *
- * A module-level store, like `useFiguresCollapsed`, so the quiz builder and
- * Settings agree without either owning the state.
+ * A module-level store, like `useFiguresCollapsed`, so every surface reading it
+ * agrees without any one of them owning the state.
  */
 const STORAGE_KEY = 'show-flagged-questions'
 

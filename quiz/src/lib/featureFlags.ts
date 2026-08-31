@@ -198,7 +198,7 @@ export const TOUR_ENABLED: boolean = false
  *
  * The quiz-side exclusion of questions with an open critical finding is *not*
  * behind this flag — it is a correctness guard, not a surface, and it stays on
- * with its own Settings toggle (`hooks/useShowFlaggedQuestions.ts`).
+ * (`hooks/useShowFlaggedQuestions.ts`, no longer surfaced in Settings).
  *
  * See docs/verification.md.
  */

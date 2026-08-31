@@ -244,8 +244,9 @@ Two consequences of the record reach further than display:
   It is the one thing a reader has to know before trusting the page.
 - **A question with an unresolved critical finding is kept out of quiz sessions**
   (`filterQuestions`, ahead of the `ids` short-circuit so a saved mistake-review
-  link cannot serve one either). Settings → Fact check turns them back
-  on, because a question nobody can see is a question nobody fixes.
+  link cannot serve one either). `hooks/useShowFlaggedQuestions.ts` is the
+  preference that turns them back on — a maintainer's switch, with no Settings
+  control, because a question nobody can see is a question nobody fixes.
 
 The surfaces are gated by `FACT_CHECK_UI_ENABLED`, which is **on**. Note what
 the badge says on a freshly backfilled vault: *Not fact checked*, on almost every

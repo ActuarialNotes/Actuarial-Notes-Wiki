@@ -17,16 +17,19 @@ import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import type { MasteryState } from '@/lib/mastery'
 
 /**
- * The exam page's readiness ring, and the assessment popup it opens.
+ * The exam page's readiness card, and the assessment popup it opens.
  *
- * It sits beside the exam's title as a badge — the Dashboard's Study Guide
- * radial at ~64px (`components/ReadinessRing.tsx`), drawn from the same
- * `lib/readinessRing.ts` maths, so the syllabus a reader is looking at and the
- * ring summarising it are the same object. It used to be a card in the
- * orientation-card row; the row is one wide card now, and a score belongs with
- * the thing it scores.
+ * It leads the orientation row (`ExamGuideCards`), beside the guide card and
+ * shaped like it — a horizontal `rounded-lg bg-card` row at the same padding,
+ * sized to its ring rather than sharing the width evenly, because the guide
+ * card carries a title and this one carries a number.
  *
- * The ring is one number plus the shape of the syllabus behind it. Every
+ * The mark is the Dashboard's Study Guide radial at 48px
+ * (`components/ReadinessRing.tsx`), drawn from the same `lib/readinessRing.ts`
+ * maths, so the syllabus a reader is looking at and the ring summarising it are
+ * the same object.
+ *
+ * The card is one number plus the shape of the syllabus behind it. Every
  * breakdown is a tap away, in the popup — which is two criterion bars, one per
  * scoring criterion, each expanding to the evidence behind its number:
  * syllabus coverage to the per-learning-objective bars, keystone concepts
@@ -306,7 +309,7 @@ function ExamReadinessModal({ assessment, examLabel, signedIn, onSelectConcept, 
   )
 }
 
-export interface ExamReadinessRingProps {
+export interface ExamReadinessCardProps {
   /** Exam progress key (`P`, `FM`, `MAS-I`, `5`) — the keystone catalogue key. */
   examId: string
   /** Exam display name, e.g. "Exam P-1 (SOA)". */
@@ -317,7 +320,7 @@ export interface ExamReadinessRingProps {
   onSelectConcept: (conceptName: string) => void
 }
 
-export function ExamReadinessRing({ examId, examLabel, syllabus, onSelectConcept }: ExamReadinessRingProps) {
+export function ExamReadinessCard({ examId, examLabel, syllabus, onSelectConcept }: ExamReadinessCardProps) {
   const { user } = useAuth()
   const { records } = useConceptMastery()
   const [open, setOpen] = useState(false)
@@ -342,14 +345,17 @@ export function ExamReadinessRing({ examId, examLabel, syllabus, onSelectConcept
         type="button"
         onClick={() => setOpen(true)}
         aria-haspopup="dialog"
-        aria-label={`Exam readiness: ${Math.round(assessment.overallPct)}% — ${assessment.band.label}`}
-        title={`Exam readiness — ${assessment.band.label}`}
-        className="group inline-flex shrink-0 items-center rounded-full p-1 text-foreground transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="flex shrink-0 items-center gap-3 rounded-lg bg-card px-4 py-3 text-left text-card-foreground transition-colors duration-150 hover:bg-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
-        {/* No label of its own: the ring is beside the exam's title, and the
-            title already says which exam is being scored. The band and the
-            breakdown are one tap away. */}
-        <ReadinessRing segments={segments} pct={assessment.overallPct} size={64} />
+        <ReadinessRing segments={segments} pct={assessment.overallPct} size={48} />
+        {/* The band, not a second copy of the number — the ring already says
+            what the score is, so the words say what it means. Below ~400px it
+            drops and the card is the ring alone: the guide card beside it has a
+            title to fit, and a ring with no words still reads as a score. */}
+        <span className="hidden min-w-0 min-[400px]:block">
+          <span className="block truncate text-sm font-medium text-foreground">Readiness</span>
+          <span className="block truncate text-xs text-muted-foreground">{assessment.band.label}</span>
+        </span>
       </button>
 
       {open && (

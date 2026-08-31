@@ -7,7 +7,7 @@ import { fromSlug, examIdFromFile, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
-import { ExamReadinessRing } from '@/components/wiki/ExamReadinessRing'
+import { ExamReadinessCard } from '@/components/wiki/ExamReadinessCard'
 import { ExamSyllabusButton } from '@/components/wiki/ExamSyllabusButton'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
@@ -397,8 +397,8 @@ export default function WikiExam() {
           sourcePath={`${examFileName}.md`}
           onWikiLink={onWikiLink}
           titleBadge={titleBadge}
-          titleAside={(
-            <ExamReadinessRing
+          readiness={(
+            <ExamReadinessCard
               examId={progressKey}
               examLabel={extractedTitle ?? examFileName}
               syllabus={syllabus}

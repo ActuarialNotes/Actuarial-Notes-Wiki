@@ -16,15 +16,16 @@ import {
  * readout, just the concept arcs and the score in the middle.
  *
  * It is the same shape from the same maths (`lib/readinessRing.ts`), so the
- * ring beside an exam's title and the one on the Dashboard read as one object
- * seen at two sizes. At ~64px the individual arcs are below the width of a
- * hairline, which is the point: what survives the shrink is the *proportion*
- * of the ring that has any colour in it, and the gold of the keystones.
+ * ring on an exam page's readiness card and the one on the Dashboard read as
+ * one object seen at two sizes. At ~48px the individual arcs are below the
+ * width of a hairline, which is the point: what survives the shrink is the
+ * *proportion* of the ring that has any colour in it, and the gold of the
+ * keystones.
  */
 export function ReadinessRing({
   segments,
   pct,
-  size = 64,
+  size = 48,
   className,
 }: {
   segments: RingSegment[]

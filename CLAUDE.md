@@ -198,6 +198,15 @@ Other important `lib/` modules:
   browser and the concept detail modal — add it to any new surface that lists questions rather than
   writing a new chip. Attempt history is server-side only, so signed-out viewers pass
   `showNew={false}` (via the hook's `tracked` flag) and see no chip instead of a false "Not attempted".
+- `questionSource.ts` — where a question came from, for the quiz's **Info** button
+  (`components/QuestionInfoButton.tsx`, in the question bar beside the flag): the sitting it
+  was sat on, the published paper behind it (`data/examPdfLinks.ts`), and its vault file —
+  recovered from the `verification:` block's `log:` path, since the build collects question
+  *contents* and an id doesn't map to a filename. Provenance is read off the frontmatter,
+  never inferred: an undated question says it names no sitting rather than being attributed
+  to a paper, and a question re-tagged onto another exam keeps its original exam's paper.
+  The panel hides topic / objective / difficulty until the answer is in, for the same reason
+  `QuestionCard` does (`showMeta`).
 - `resourceExams.ts` — which exam(s) a resource is a syllabus reading for. A
   `Resources/Books` page names no exam; the relationship is authored the other way round, in
   each exam page's `Source Material` callout, so this module inverts those callouts into a

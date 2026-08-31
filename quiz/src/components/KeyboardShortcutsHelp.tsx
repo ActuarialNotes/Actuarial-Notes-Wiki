@@ -14,6 +14,7 @@ const QUIZ_SHORTCUTS: ShortcutRow[] = [
   { keys: ['→'], description: 'Next question (after answering)' },
   { keys: ['←'], description: 'Previous question' },
   { keys: ['F'], description: 'Flag / unflag question' },
+  { keys: ['I'], description: 'Where this question came from' },
   { keys: ['M'], description: 'Mute / unmute sounds' },
   { keys: ['?'], description: 'Show this help' },
 ]

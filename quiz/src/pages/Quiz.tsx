@@ -11,6 +11,7 @@ import { ProgressBar } from '@/components/ProgressBar'
 import { QuitQuizDialog } from '@/components/QuitQuizDialog'
 import { IncompletePartsDialog } from '@/components/IncompletePartsDialog'
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
+import { QuestionInfoButton } from '@/components/QuestionInfoButton'
 import { PreQuizCollectGate } from '@/components/collect/PreQuizCollectGate'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -124,6 +125,8 @@ export default function Quiz() {
   // keyed by `${questionId}__${partLabel}`
   const [essaySelfGrades, setEssaySelfGrades] = useState<Record<string, SelfGrade>>({})
   const [showShortcutsHelp, setShowShortcutsHelp] = useState(false)
+  // Where the current question came from — its sitting and its vault file.
+  const [showQuestionInfo, setShowQuestionInfo] = useState(false)
 
   const essayQuestions = useMemo(
     () => storeQuestions.filter(q =>
@@ -222,7 +225,7 @@ export default function Quiz() {
   // for a pending selection) — incomplete submissions are caught with a confirm dialog
   const showConfirmButton = !isLocked && (pendingAnswer !== null || currentQuestion?.type === 'multi-part')
 
-  const anyDialogOpen = showQuitDialog || showIncompletePartsDialog || showSelfGradeScreen || showShortcutsHelp
+  const anyDialogOpen = showQuitDialog || showIncompletePartsDialog || showSelfGradeScreen || showShortcutsHelp || showQuestionInfo
 
   // Select an MC answer by its 0-based index in the options array
   function selectAnswerByIndex(i: number) {
@@ -253,6 +256,7 @@ export default function Quiz() {
     // which is exactly when the user needs to hear that it worked.
     'm': () => { toggleSound(); playSound('toggleOn') },
     '?': () => setShowShortcutsHelp(v => !v),
+    'i': () => { if (currentQuestion) setShowQuestionInfo(v => !v) },
   }, !anyDialogOpen && status !== 'idle' && status !== 'complete')
 
   function handleQuit() {
@@ -567,6 +571,16 @@ export default function Quiz() {
           questionIds={storeQuestions.map(q => q.id)}
           isFlagged={isFlagged}
           onFlag={() => toggleFlag(currentQuestion.id)}
+          info={
+            <QuestionInfoButton
+              question={currentQuestion}
+              open={showQuestionInfo}
+              onOpenChange={setShowQuestionInfo}
+              // Topic and difficulty are a hint while the question is live, so
+              // they only join the panel once the answer is committed.
+              showStudyMeta={isLocked}
+            />
+          }
         />
       </div>
 

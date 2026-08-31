@@ -78,6 +78,24 @@ interface GitTreeResponse {
   truncated: boolean
 }
 
+/**
+ * The vault's public repository — where a reader is sent to see the markdown
+ * behind a page, a question or a fact-check log.
+ *
+ * Hard-coded rather than built from `VITE_GITHUB_REPO`: that variable names the
+ * *content source* a deployment reads from (which may be a fork or a branch),
+ * while this is the project's home, and a deployment that leaves it unset would
+ * otherwise hand the reader a link to `undefined`.
+ */
+export const VAULT_REPO_URL = 'https://github.com/ActuarialNotes/Actuarial-Notes-Wiki'
+
+/** A repo-relative vault path as a link a reader can open. */
+export function githubBlobUrl(path: string): string {
+  const clean = path.replace(/^\/+/, '')
+  const encoded = clean.split('/').map(encodeURIComponent).join('/')
+  return `${VAULT_REPO_URL}/blob/main/${encoded}`
+}
+
 export function rawGithubUrl(path: string): string {
   const clean = path.replace(/^\/+/, '')
   const encoded = clean.split('/').map(encodeURIComponent).join('/')

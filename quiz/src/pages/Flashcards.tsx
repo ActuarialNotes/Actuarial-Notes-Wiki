@@ -3266,10 +3266,10 @@ function FlashcardsDeck({
               <ChevronLeft className="h-6 w-6 sm:h-5 sm:w-5" />
               <span>Previous</span>
             </button>
-            <div className="self-center px-4 shrink-0 flex flex-col items-center">
-              <span className="text-sm text-muted-foreground tabular-nums">
-                {activeIndex + 1} / {orderedCards.length}
-              </span>
+            {/* The position is already read off the bar above (and off the card
+                itself while scrubbing), so the middle column is the controls
+                handle — sized as the target it is, not as a footnote. */}
+            <div className="self-center px-2 shrink-0 flex flex-col items-center">
               {completedCount > 0 && (
                 <span className="flex items-center gap-0.5 text-[10px] font-semibold text-green-600 dark:text-green-400 tabular-nums">
                   <CheckCircle2 className="h-3 w-3" /> {completedCount} done
@@ -3282,9 +3282,9 @@ function FlashcardsDeck({
                 aria-expanded={controlsExpanded}
                 aria-label={controlsExpanded ? 'Hide controls' : 'Show controls'}
                 title={controlsExpanded ? 'Hide controls' : 'Show controls'}
-                className="mt-0.5 inline-flex items-center justify-center h-6 w-10 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+                className="inline-flex items-center justify-center h-12 w-16 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
               >
-                <ChevronUp className={`h-4 w-4 transition-transform ${controlsExpanded ? '' : 'rotate-180'}`} />
+                <ChevronUp className={`h-8 w-8 transition-transform ${controlsExpanded ? '' : 'rotate-180'}`} />
               </button>
             </div>
             <button

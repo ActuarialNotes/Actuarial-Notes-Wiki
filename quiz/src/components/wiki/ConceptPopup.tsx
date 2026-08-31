@@ -201,12 +201,9 @@ export function ConceptPopup() {
   const occMode = !!(occurrences && occurrences.length)
   const canPrev = isCircular || (occMode ? occurrenceIndex > 0 : index > 0)
   const canNext = isCircular || (occMode ? occurrenceIndex < occurrences!.length - 1 : index < list.length - 1)
-  const position = `${index + 1} of ${list.length}`
   // The footer bar measures the sequence prev/next actually walks, which in
   // occurrence mode is the mention list rather than the deduped concepts: every
-  // press moves the fill by exactly one step, and the last stop reads full. The
-  // count beside it stays in concepts, so the two differ slightly on a page that
-  // links the same concept twice — the bar carries no number, the text does.
+  // press moves the fill by exactly one step, and the last stop reads full.
   const navTotal = occMode ? occurrences!.length : list.length
   const navCurrent = occMode ? occurrenceIndex + 1 : index + 1
   const hasStudyPlan = !!(dashboardContext?.studyPlanList?.length)
@@ -300,9 +297,10 @@ export function ConceptPopup() {
         )}
       </div>
 
-      {/* Footer nav. In focus mode the bar is the only position readout — the
-          "N of M" text below is hidden — so it has to answer "where am I" on
-          every press, including Previous and a wiki-link jump backwards. */}
+      {/* Footer nav. The bar is the only position readout — there is no "N of
+          M" text under it — so it has to answer "where am I" on every press,
+          including Previous and a wiki-link jump backwards. Its drag bubble
+          names the concept, which is the more useful answer anyway. */}
       <NavProgressBar
         current={navCurrent}
         total={navTotal}
@@ -325,19 +323,20 @@ export function ConceptPopup() {
           <ChevronLeft className="h-6 w-6 sm:h-5 sm:w-5" />
           <span>Previous</span>
         </button>
-        {/* Position + syllabus-filter picker — extra information, so focus mode
-            drops it and leaves the footer as just Previous / Next. */}
+        {/* The syllabus-filter picker — extra information, so focus mode drops
+            it and leaves the footer as just Previous / Next. The position it
+            used to sit over is read off the bar above instead, which leaves the
+            picker as the one thing here and lets it be sized as a real target. */}
         {!focusMode && (
-        <div className="self-center flex flex-col items-center gap-0.5 px-2 shrink-0" ref={viewingRef}>
-          <span className="text-sm sm:text-xs text-muted-foreground tabular-nums">{position}</span>
+        <div className="self-center flex flex-col items-center px-2 shrink-0" ref={viewingRef}>
           <div className="relative">
             <button
               type="button"
               onClick={() => { setViewingDropdownOpen(v => !v); setShowPremiumInfo(false) }}
-              className="appearance-none text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer focus:outline-none inline-flex items-center gap-0.5"
+              className="appearance-none px-2 py-2 rounded-md text-xs text-muted-foreground hover:text-foreground hover:bg-accent transition-colors cursor-pointer focus:outline-none inline-flex items-center gap-1"
             >
               {currentFilter === 'study-plan' ? todayLabel : currentFilter === 'source-material' ? 'Source Material' : 'Entire Syllabus'}
-              <ChevronDown className="h-2.5 w-2.5 shrink-0" />
+              <ChevronDown className="h-6 w-6 shrink-0" />
             </button>
 
             {viewingDropdownOpen && (

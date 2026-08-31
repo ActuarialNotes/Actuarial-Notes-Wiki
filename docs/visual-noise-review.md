@@ -61,7 +61,7 @@ commit that introduced this note and will drift — grep the quoted string.
 
 ### 3.1 Exam Readiness popup — **done**
 
-`components/wiki/ExamReadinessRing.tsx`, `lib/readiness.ts`, `docs/exam-readiness.md`.
+`components/wiki/ExamReadinessCard.tsx`, `lib/readiness.ts`, `docs/exam-readiness.md`.
 
 The worked example. Four greys removed from one popup:
 
@@ -175,7 +175,7 @@ shipping on its own. For each:
 2. If a real fact was carried, encode it (thickness, fill, order, colour) or move it to
    `aria-label`.
 3. Update the surface's doc comment to say *why* the caption is absent, in the same voice as
-   `ExamReadinessRing.tsx`'s header now does — "Resist adding a grey caption back". A deletion
+   `ExamReadinessCard.tsx`'s header now does — "Resist adding a grey caption back". A deletion
    with no note is a deletion that gets undone.
 4. `npm run build && npm run lint && npm test`. Vitest covers the lib layer, so removing a
    rendered field (as `criterion.detail` was) will surface as a test edit, not a silent break.

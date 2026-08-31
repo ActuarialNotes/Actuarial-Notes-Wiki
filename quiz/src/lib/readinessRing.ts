@@ -5,9 +5,10 @@
  *
  * Two surfaces draw it: the Dashboard's Study Guide card (`StudyGuideRadial`
  * in `components/ReadinessCard.tsx`, with a legend, curved section labels and a
- * hover readout) and the exam page's title row (`ExamReadinessRing`, the same
- * ring shrunk to a badge). They differ only in chrome — the arcs come from
- * here, so the two can never disagree about what the ring is showing.
+ * hover readout) and the exam page's readiness card
+ * (`components/wiki/ExamReadinessCard.tsx`, the same ring shrunk to a mark).
+ * They differ only in chrome — the arcs come from here, so the two can never
+ * disagree about what the ring is showing.
  *
  * Geometry is expressed in a fixed 280-unit viewBox; a surface picks its
  * on-screen size by scaling the SVG, not by changing these numbers.

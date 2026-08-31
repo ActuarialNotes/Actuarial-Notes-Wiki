@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
@@ -12,20 +12,20 @@ import { hrefToEntryRef, wikiRoute } from '@/lib/wikiRoutes'
 import { playSound } from '@/lib/soundEngine'
 
 /**
- * The orientation card above an exam page's learning objectives, and the paged
- * popup it opens.
+ * The orientation row above an exam page's learning objectives: the readiness
+ * card, then the guide card, and the paged popup the guide opens.
  *
- * One wide row, shaped like a learning objective (`MarkdownCallout`'s
- * `rounded-lg bg-card` header at `px-4 py-3`) so it reads as the first item of
- * the list it introduces rather than a banner over it. Its popup pages through
- * both authored halves — how to study, then exam day — with the header naming
- * the half in view; see `guideForExam` in `data/examGuides.ts` for why they are
- * merged.
+ * Both are horizontal cards shaped like a learning objective (`MarkdownCallout`'s
+ * `rounded-lg bg-card` header at `px-4 py-3`), so the row reads as the head of
+ * the list it introduces rather than a banner over it. The readiness card sizes
+ * to its ring; the guide card takes the rest of the width.
  *
- * The popup borrows the Dashboard help modal's paging chrome. Type runs one
- * step larger than that original — this is reading material, not a stat tile.
+ * The guide's popup pages through both authored halves in one run — see
+ * `guideForExam` in `data/examGuides.ts` — and borrows the Dashboard help
+ * modal's paging chrome. Type runs one step larger than that original: this is
+ * reading material, not a stat tile.
  *
- * Content lives in `data/examGuides.ts`; `WikiArticle` decides where the card
+ * Content lives in `data/examGuides.ts`; `WikiArticle` decides where the row
  * lands (the `<div class="exam-guides"></div>` marker in the exam markdown).
  */
 
@@ -52,23 +52,20 @@ interface CardProps {
 }
 
 function ExamGuideCard({ guide, onOpen }: CardProps) {
-  const { Icon, title, pages } = guide
+  const { Icon, title } = guide
   return (
     <button
       type="button"
       onClick={onOpen}
       aria-haspopup="dialog"
-      className="not-prose my-4 w-full rounded-lg bg-card px-4 py-3 text-left text-card-foreground transition-colors duration-150 hover:bg-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className="flex min-w-0 flex-1 items-center gap-3 rounded-lg bg-card px-4 py-3 text-left text-card-foreground transition-colors duration-150 hover:bg-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
-      {/* The learning-objective header row, part for part: icon, title, a
-          right-aligned count where an objective puts its exam weight, and the
-          disclosure chevron. */}
-      <div className="flex w-full items-center gap-3">
-        <Icon className="h-4 w-4 shrink-0 text-primary" />
-        <span className="min-w-0 flex-1 text-sm font-medium text-foreground">{title}</span>
-        <span className="shrink-0 text-xs tabular-nums text-muted-foreground">{pages.length} pages</span>
-        <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-      </div>
+      {/* The learning-objective header row, part for part: icon, title, and the
+          disclosure chevron. No page count — it sat where an objective puts its
+          exam weight, which made it look like a figure worth reading. */}
+      <Icon className="h-4 w-4 shrink-0 text-primary" />
+      <span className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">{title}</span>
+      <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
     </button>
   )
 }
@@ -93,7 +90,7 @@ function ExamGuideModal({ guide, onClose }: ModalProps) {
 
   const total = guide.pages.length
   const safe = Math.min(page, total - 1)
-  const { title, Graphic, body, section } = guide.pages[safe]
+  const { title, Graphic, body } = guide.pages[safe]
   // `step` is relative and `goTo` absolute; both clamp inside the updater so the
   // keyboard handler below can stay mounted once without going stale.
   const step = (delta: number) => setPage(p => {
@@ -128,13 +125,10 @@ function ExamGuideModal({ guide, onClose }: ModalProps) {
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
       <div className="my-12 flex w-full max-w-lg flex-col rounded-xl bg-card shadow-2xl">
-        {/* Header — which half of the guide is in view, not the merged title:
-            the reader needs to know whether they are being told how to study or
-            what exam day looks like, and the card they tapped already said the
-            popup holds both. */}
+        {/* Header — the guide, then the page within it */}
         <div className="flex h-12 shrink-0 items-center gap-2 px-4">
-          <section.Icon className="h-4 w-4 shrink-0 text-primary" />
-          <span className="flex-1 truncate text-sm font-semibold">{section.title}</span>
+          <guide.Icon className="h-4 w-4 shrink-0 text-primary" />
+          <span className="flex-1 truncate text-sm font-semibold">{guide.title}</span>
           <button
             type="button"
             onClick={onClose}
@@ -200,23 +194,16 @@ function ExamGuideModal({ guide, onClose }: ModalProps) {
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
-          {/* Dots grouped by section, with a wider gap between the two runs:
-              the merged guide is long enough that an undifferentiated row of
-              dots hid where one half ends and the other begins. */}
-          <div className="flex items-center gap-3">
-            {guide.sections.map(sec => (
-              <div key={sec.id} className="flex items-center gap-1.5">
-                {guide.pages.map((p, i) => (p.section.id !== sec.id ? null : (
-                  <button
-                    key={p.title}
-                    type="button"
-                    onClick={() => goTo(i)}
-                    aria-label={`Go to page ${i + 1}: ${sec.title} — ${p.title}`}
-                    aria-current={i === safe}
-                    className={`rounded-full transition-all duration-200 ${i === safe ? 'h-1.5 w-4 bg-primary' : 'h-1.5 w-1.5 bg-muted-foreground/30 hover:bg-muted-foreground/60'}`}
-                  />
-                )))}
-              </div>
+          <div className="flex items-center gap-1.5">
+            {guide.pages.map((p, i) => (
+              <button
+                key={p.title}
+                type="button"
+                onClick={() => goTo(i)}
+                aria-label={`Go to page ${i + 1}: ${p.title}`}
+                aria-current={i === safe}
+                className={`rounded-full transition-all duration-200 ${i === safe ? 'h-1.5 w-4 bg-primary' : 'h-1.5 w-1.5 bg-muted-foreground/30 hover:bg-muted-foreground/60'}`}
+              />
             ))}
           </div>
           {safe < total - 1 ? (
@@ -246,17 +233,24 @@ function ExamGuideModal({ guide, onClose }: ModalProps) {
 
 interface ExamGuideCardsProps {
   examId: string
+  /**
+   * A card rendered first in the row, beside the guide — the readiness card
+   * (`ExamReadinessCard`). Passed in rather than imported because it needs the
+   * page's syllabus and concept-popup wiring, which live in `WikiExam`.
+   */
+  leadCard?: ReactNode
 }
 
-export function ExamGuideCards({ examId }: ExamGuideCardsProps) {
+export function ExamGuideCards({ examId, leadCard }: ExamGuideCardsProps) {
   const guide = useMemo(() => guideForExam(examId), [examId])
   const [open, setOpen] = useState(false)
-  if (!guide) return null
+  if (!guide && !leadCard) return null
 
   return (
-    <>
-      <ExamGuideCard guide={guide} onOpen={() => setOpen(true)} />
-      {open && <ExamGuideModal guide={guide} onClose={() => setOpen(false)} />}
-    </>
+    <div className="not-prose my-4 flex items-stretch gap-3">
+      {leadCard}
+      {guide && <ExamGuideCard guide={guide} onOpen={() => setOpen(true)} />}
+      {guide && open && <ExamGuideModal guide={guide} onClose={() => setOpen(false)} />}
+    </div>
   )
 }

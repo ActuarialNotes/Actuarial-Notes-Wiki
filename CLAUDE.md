@@ -190,7 +190,7 @@ Other important `lib/` modules:
 - `keystone.ts` — the keystone-concept read side: `findKeystone` / `isKeystone` (strict name
   matching, no fuzzy hits) and `keystoneProgress` (decay-aware mastery roll-up per exam).
   Rendered by `components/KeystoneName.tsx`; the per-exam list lives in the readiness popup
-  (`components/wiki/ExamReadinessRing.tsx`), where keystone mastery is a scoring criterion.
+  (`components/wiki/ExamReadinessCard.tsx`), where keystone mastery is a scoring criterion.
 - `questionAttempts.ts` — turns a learner's per-question response tally (`hooks/useQuestionAttempts`,
   backed by `question_responses`) into the display state every question list shows: attempted or not,
   and how many attempts were successful vs unsuccessful. Rendered by `components/QuestionAttemptBadge.tsx`,
@@ -250,10 +250,10 @@ Other important `lib/` modules:
 - `readiness.ts` — exam-readiness scoring. `computeExamReadiness` is **the** readiness score
   (syllabus coverage 60% + keystone concepts 40%, plus band, section breakdown and concept
   tally); every surface that prints a readiness % calls it — the exam page's **Exam Readiness
-  Score** ring (`components/wiki/ExamReadinessRing.tsx` — the Dashboard's Study Guide radial
-  at badge size, pinned beside the exam page's title through `WikiArticle`'s `titleAside`
-  slot; the ring shows only the score, its popup the breakdown and the exam's keystones), the
-  Dashboard's Study Guide radial, the exam grid and the readiness projection. `computeReadiness` is the
+  Score** card (`components/wiki/ExamReadinessCard.tsx` — the Dashboard's Study Guide radial
+  at 48px, leading the orientation row as `ExamGuideCards`'s `leadCard`; the card shows only
+  the score, its popup the breakdown and the exam's keystones), the Dashboard's Study Guide
+  radial, the exam grid and the readiness projection. `computeReadiness` is the
   weighted section score it is built from — an input, not a second number to display.
 - `readinessRing.ts` — the geometry behind the **readiness ring**: one arc per syllabus
   concept, each section sized by its exam weight, each arc filled by that concept's mastery
@@ -414,20 +414,22 @@ compile — don't "clean up" the flagged code as dead.
 - Exam pages use callout blocks (`> [!example]-`) listing learning objectives with weight
   percentages, e.g. `{23-30%}`.
 - An exam page may carry a bare `<div class="exam-guides"></div>` marking where the
-  **orientation card** goes (one wide row shaped exactly like a learning objective, normally
-  just below the exam's intro paragraph, opening a paged popup with a graphic per page).
-  The content is still authored as two guides — "How to Study for …" and "Exam Day Tips",
-  for Exam P, Exam FM, MAS-I, MAS-II and Exam 5 — but `guideForExam` merges them into one
-  run of pages (study first, then exam day); each page keeps its `section`, which is what
-  the popup header names and what splits the paging dots into two groups. Note the exam
+  **orientation row** goes (the readiness card beside the guide card, both shaped like a
+  learning objective, normally just below the exam's intro paragraph; the guide card opens a
+  paged popup with a graphic per page). The content is still authored as two guides —
+  "How to Study for …" and "Exam Day Tips", for Exam P, Exam FM, MAS-I, MAS-II and Exam 5 —
+  but `guideForExam` merges them into one run of pages titled **How to Study**: the page
+  marked `opensGuide` first (always the exam-day format page — how many questions, how long
+  each gets), then the focus-area advice, then the rest of the exam-day facts. Note the exam
   id for a dash-less exam picks up a `-1` suffix, so Exam 5's `EXAM_GUIDES` key is `5-1`.
   The div is only a position marker: the prose, the paging and the
   illustrations are authored app-side in `quiz/src/data/examGuides.ts` (keyed by the wiki
   exam id) + `components/wiki/ExamGuideGraphics.tsx`, and `WikiArticle` swaps the marker
   for `components/wiki/ExamGuideCards.tsx`. Page bodies are markdown and may use
   `[[Wiki Links]]`. An exam with no entry in `EXAM_GUIDES` renders no guide card. The
-  **Exam Readiness Score** is not in this row — it is the ring beside the exam's title
-  (`components/wiki/ExamReadinessRing.tsx`, via `WikiArticle`'s `titleAside`).
+  **Exam Readiness Score** card leads the same row (passed to `ExamGuideCards` as
+  `leadCard`); on an exam page with no `exam-guides` div it falls back to a slot inserted
+  under the "Learning Objectives" heading.
 - Every exam page ends with a `## Source Material` heading over a
   `> [!answer]- Source Material` callout: one top-level bullet per syllabus reading (a
   `[[wiki link]]`, normally to a `Resources/Books/` page) with an indented bullet naming the

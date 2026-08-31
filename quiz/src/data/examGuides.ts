@@ -40,12 +40,10 @@ import {
 /**
  * The orientation guides that sit above the learning objectives on an exam
  * page. They are authored as two guides — how to study, and what exam day
- * looks like — but the page shows a *single* wide card shaped like a learning
- * objective, and its popup pages straight through both halves: a candidate
- * reads them back to back anyway, and two square cards competing for the same
- * row said less than one row that names both. `guideForExam` does the merge;
- * the authored halves survive as `sections`, which is what the popup header
- * shows so the reader knows which half they are in.
+ * looks like — but the page shows a *single* card and its popup pages straight
+ * through both: a candidate reads them back to back anyway, and two cards
+ * competing for the same row said less than one that covers both.
+ * `guideForExam` does the merge.
  *
  * This content used to be two collapsed `[!info]`/`[!tip]` callouts in the
  * vault markdown. It lives here instead because the presentation is now
@@ -61,29 +59,21 @@ export interface ExamGuidePage {
   title: string
   Graphic: ComponentType<{ className?: string }>
   body: string
-}
-
-/** One authored guide, as a half of the merged one. */
-export interface ExamGuideSection {
-  id: string
-  title: string
-  Icon: ComponentType<{ className?: string }>
-  Cover: ComponentType<{ className?: string }>
-  /** How many pages of the merged guide this half owns. */
-  pageCount: number
-}
-
-/** A page of the merged guide, tagged with the half it came from. */
-export interface CombinedGuidePage extends ExamGuidePage {
-  section: ExamGuideSection
+  /**
+   * Marks the page the merged guide opens on, wherever it sits in its authored
+   * guide. Exactly one page per exam carries it, and it is always the exam-day
+   * format page: what the paper is — how many questions, how long you get for
+   * each — is the fact a candidate needs before any advice about what to study
+   * means anything. Everything else follows in authored order.
+   */
+  opensGuide?: boolean
 }
 
 /** The two authored guides for one exam, flattened into a single paged guide. */
 export interface CombinedExamGuide {
   title: string
   Icon: ComponentType<{ className?: string }>
-  sections: ExamGuideSection[]
-  pages: CombinedGuidePage[]
+  pages: ExamGuidePage[]
 }
 
 export interface ExamGuide {
@@ -113,6 +103,7 @@ const EXAM_P_GUIDES: ExamGuide[] = [
     pages: [
       {
         title: 'Format and pacing',
+        opensGuide: true,
         Graphic: FormatGraphic,
         body: [
           '**3 hours, 30 multiple-choice questions**, computer-based at a Prometric centre.',
@@ -224,6 +215,7 @@ const EXAM_FM_GUIDES: ExamGuide[] = [
     pages: [
       {
         title: 'Format and pacing',
+        opensGuide: true,
         Graphic: FormatFmGraphic,
         body: [
           '**2.5 hours, 35 multiple-choice questions**, computer-based at a Prometric centre.',
@@ -335,6 +327,7 @@ const EXAM_MAS_I_GUIDES: ExamGuide[] = [
     pages: [
       {
         title: 'Format and pacing',
+        opensGuide: true,
         Graphic: FormatMasGraphic,
         body: [
           '**4 hours, 45 multiple-choice questions**, computer-based.',
@@ -459,6 +452,7 @@ const EXAM_MAS_II_GUIDES: ExamGuide[] = [
     pages: [
       {
         title: 'Format and pacing',
+        opensGuide: true,
         // Same sitting as MAS-I: 4 hours, 45 questions.
         Graphic: FormatMasGraphic,
         body: [
@@ -571,6 +565,7 @@ const EXAM_5_GUIDES: ExamGuide[] = [
     pages: [
       {
         title: 'Format and pacing',
+        opensGuide: true,
         Graphic: FormatWrittenGraphic,
         body: [
           'A **4-hour written-answer exam** delivered by computer (a 4.5-hour Pearson VUE appointment), typically around **25 questions worth roughly 55 points** in total.',
@@ -688,9 +683,10 @@ export function guidesForExam(examId: string): ExamGuide[] {
 }
 
 /**
- * Reading order for the merged guide: how to study comes before exam day. A
- * candidate meets this page months before the sitting, and the authored order
- * (exam day first) put the last thing they need at the front.
+ * Reading order for the merged guide, after the `opensGuide` page is hoisted
+ * out: the focus-area advice, then the rest of the exam-day facts. A candidate
+ * meets this page months before the sitting, so what to study comes before
+ * which calculators are allowed.
  */
 const SECTION_ORDER = ['how-to-study', 'exam-day']
 
@@ -700,35 +696,26 @@ function sectionRank(id: string): number {
 }
 
 /**
- * The single guide an exam page shows: both authored guides, one after the
- * other, as one run of pages. Returns null for an exam with nothing authored.
+ * The single guide an exam page shows: both authored guides as one run of
+ * pages, opening on the page marked `opensGuide`. Returns null for an exam
+ * with nothing authored.
  */
 export function guideForExam(examId: string): CombinedExamGuide | null {
   const guides = guidesForExam(examId)
   if (guides.length === 0) return null
-  const ordered = [...guides].sort((a, b) => sectionRank(a.id) - sectionRank(b.id))
 
-  const pages: CombinedGuidePage[] = []
-  const sections: ExamGuideSection[] = []
-  for (const guide of ordered) {
-    const section: ExamGuideSection = {
-      id: guide.id,
-      title: guide.title,
-      Icon: guide.Icon,
-      Cover: guide.Cover,
-      pageCount: guide.pages.length,
-    }
-    sections.push(section)
-    for (const page of guide.pages) pages.push({ ...page, section })
-  }
+  const pages = [...guides]
+    .sort((a, b) => sectionRank(a.id) - sectionRank(b.id))
+    .flatMap(guide => guide.pages)
+  const leadAt = pages.findIndex(page => page.opensGuide)
+  if (leadAt > 0) pages.unshift(...pages.splice(leadAt, 1))
 
   return {
-    // Named for what it holds rather than after either half — the card is wide
-    // enough to say both, and a reader who wants only one of them can see from
-    // the title that it is in here.
-    title: 'How to Study & Exam Day Tips',
+    // The card says what the guide is for, not everything it contains: the
+    // exam-day pages are read as part of working out how to study, and a title
+    // listing both halves was longer without being clearer.
+    title: 'How to Study',
     Icon: Compass,
-    sections,
     pages,
   }
 }

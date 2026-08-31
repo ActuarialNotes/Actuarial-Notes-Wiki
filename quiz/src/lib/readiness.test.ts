@@ -144,8 +144,9 @@ describe('computeExamReadiness', () => {
     )
     expect(a.criteria.map(c => c.id)).toEqual(['syllabus', 'keystone'])
     expect(a.counts).toMatchObject({ studied: 2, forgotten: 1 })
-    // Forgotten earns no credit, so it drags the syllabus criterion down.
-    expect(a.criteria[0].detail).toContain('1 decayed')
+    // Forgotten earns no credit, so it scores exactly as if it were untouched.
+    const without = computeExamReadiness(syllabus(), [record('Bayes Theorem', 'level2')], NOW)
+    expect(a.criteria[0].pct).toBeCloseTo(without.criteria[0].pct)
   })
 
   it('applies decay before scoring, so a stale Level 3 no longer counts as mastered', () => {

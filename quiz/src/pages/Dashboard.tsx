@@ -22,6 +22,7 @@ import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { questionsNeededForPlan } from '@/lib/todayPlanCount'
 import { TodayQuizCornerBadge } from '@/components/TodayQuizBadge'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { questionExamLabel } from '@/lib/examIds'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import type { QuestContext } from '@/lib/quests'
 import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
@@ -347,7 +348,7 @@ export default function Dashboard() {
   const todayAnsweredIds = useTodayAnsweredQuestions()
   const todaysQuizBadgeCount = useMemo(() => {
     if (!activeSyllabus) return 0
-    return questionsNeededForPlan(studyPlan, activeSyllabus.examTopic, allQuestions, doneConceptSlugs, todayAnsweredIds)
+    return questionsNeededForPlan(studyPlan, questionExamLabel(activeSyllabus), allQuestions, doneConceptSlugs, todayAnsweredIds)
   }, [activeSyllabus, studyPlan, allQuestions, doneConceptSlugs, todayAnsweredIds])
 
   // Top-of-dashboard primary actions. "Read concepts" and the quiz launch reuse
@@ -769,7 +770,7 @@ export default function Dashboard() {
             {!isGuest && MISTAKES_REVIEW_ENABLED && (
               <FixMistakesButton
                 masteryRecords={activeExamRecords}
-                examTopic={activeSyllabus.examTopic}
+                examTopic={questionExamLabel(activeSyllabus)}
                 compactSlot={mistakesSlotEl}
               />
             )}

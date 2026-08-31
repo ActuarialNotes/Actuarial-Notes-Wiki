@@ -37,7 +37,7 @@ import { useSchedulePlayback } from '@/hooks/useSchedulePlayback'
 import type { QuizSession } from '@/lib/supabase'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
-import { EXAM_ID_TO_TOPIC } from '@/hooks/useExamProgress'
+import { questionExamLabel } from '@/lib/examIds'
 
 
 // ── Study Guide Radial ─────────────────────────────────────────────────────────
@@ -604,6 +604,7 @@ export function ReadinessCard({
 
   const now = useMemo(() => new Date(), [])
   const progressKey = wikiExamIdToProgressKey(syllabus.examId)
+  const examLabel = questionExamLabel(syllabus)
 
   // The day the strip highlights and the panel below describes: the sweep while
   // it's running, otherwise whatever day the user clicked. Deriving it (rather
@@ -671,9 +672,12 @@ export function ReadinessCard({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDay, user, progressKey])
 
+  // Sessions for this exam. `quiz_sessions.exam` carries the question bank's
+  // label ("Exam 5"), not the syllabus subject line, so the match goes through
+  // questionExamLabel — see lib/examIds.
   const examSessions = useMemo(
-    () => sessions.filter(s => s.exam === syllabus.examTopic),
-    [sessions, syllabus.examTopic],
+    () => sessions.filter(s => s.exam === examLabel),
+    [sessions, examLabel],
   )
 
   const examRecords = useMemo(
@@ -931,8 +935,7 @@ export function ReadinessCard({
       setQuizStartConcept(null)
       setTracePlanBorder(false)
       isLaunchingQuizRef.current = false
-      const progressKey = wikiExamIdToProgressKey(syllabus.examId)
-      const topicValue = EXAM_ID_TO_TOPIC[progressKey] ?? syllabus.examTopic
+      const topicValue = questionExamLabel(syllabus)
       // autostart=1 tells Landing to jump straight into a quiz sized to complete
       // today's plan (fewest questions covering every still-incomplete concept).
       navigate(`/?topic=${encodeURIComponent(topicValue)}&mode=quiz&autostart=1`)

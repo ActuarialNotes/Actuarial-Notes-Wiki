@@ -33,9 +33,12 @@ import type { MasteryState } from '@/lib/mastery'
  * (docs/keystone-concepts.md) to the concepts themselves. Both start collapsed,
  * so the popup opens as the dial plus two bars and goes no deeper until asked.
  *
- * It stays deliberately short of prose: the numbers, the bars and the keystone
- * chips are the content, and the explanation of *how* the score works lives in
- * docs/exam-readiness.md rather than under every bar.
+ * It carries no prose at all: the numbers, the bars and the keystone chips are
+ * the content. Nothing on screen says "60% of score" or restates the tally
+ * under a bar — a criterion's weight is drawn as the thickness of its bar, its
+ * evidence is the panel it opens onto, and the explanation of *how* the score
+ * works lives in docs/exam-readiness.md. Resist adding a grey caption back:
+ * each one reads as noise stacked under a number that already said it.
  *
  * Scoring lives in `lib/readiness.ts` — this file only draws it.
  */
@@ -95,10 +98,23 @@ function ReadinessDial({ pct, size, className }: { pct: number; size: number; cl
   )
 }
 
-/** A slim green criterion bar, matching the dials. */
-function CriterionBar({ pct }: { pct: number }) {
+/**
+ * A slim green criterion bar, matching the dials.
+ *
+ * `weight` (0–1, optional) thickens the bar in proportion to the share of the
+ * headline score the criterion carries: the heavier criterion is visibly the
+ * heavier line. That is the whole reason the rows no longer print "60% of
+ * score" — the weight is drawn, not narrated. Bars with no weight (the
+ * per-section breakdown) all take the base thickness.
+ */
+function CriterionBar({ pct, weight }: { pct: number; weight?: number }) {
+  const height = weight == null ? 6 : 4 + Math.max(0, Math.min(1, weight)) * 6
   return (
-    <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted" role="presentation">
+    <div
+      className="w-full overflow-hidden rounded-full bg-muted"
+      style={{ height }}
+      role="presentation"
+    >
       <div
         className="h-full rounded-full"
         style={{
@@ -123,11 +139,15 @@ function CriterionRow({ criterion, panel }: { criterion: ReadinessCriterion; pan
   const panelId = useId()
   const expandable = panel != null
 
+  // The weight and the tally behind the number are carried by the bar and by
+  // the panel the row opens onto, not by a grey line under it.
+  const label = `${criterion.label}: ${Math.round(criterion.pct)}%, `
+    + `${Math.round(criterion.weight * 100)}% of the readiness score`
+
   const head = (
     <>
       <div className="flex items-baseline gap-2">
         <span className="text-sm font-medium">{criterion.label}</span>
-        <span className="text-xs text-muted-foreground">{Math.round(criterion.weight * 100)}% of score</span>
         <span className="ml-auto text-sm font-semibold tabular-nums">{Math.round(criterion.pct)}%</span>
         {expandable && (
           <ChevronDown
@@ -136,8 +156,7 @@ function CriterionRow({ criterion, panel }: { criterion: ReadinessCriterion; pan
           />
         )}
       </div>
-      <CriterionBar pct={criterion.pct} />
-      <p className="text-xs text-muted-foreground">{criterion.detail}</p>
+      <CriterionBar pct={criterion.pct} weight={criterion.weight} />
     </>
   )
 
@@ -149,12 +168,13 @@ function CriterionRow({ criterion, panel }: { criterion: ReadinessCriterion; pan
           onClick={() => setOpen(o => !o)}
           aria-expanded={open}
           aria-controls={panelId}
-          className="-mx-1.5 w-full space-y-1.5 rounded-md px-1.5 py-1.5 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          aria-label={label}
+          className="-mx-1.5 w-full space-y-1.5 rounded-md px-1.5 py-2 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           {head}
         </button>
       ) : (
-        <div className="px-1.5 py-1.5 space-y-1.5">{head}</div>
+        <div role="group" aria-label={label} className="space-y-1.5 px-1.5 py-2">{head}</div>
       )}
       {expandable && open && (
         <div id={panelId} className="px-1.5 pb-1 pt-2">
@@ -222,9 +242,10 @@ function ExamReadinessModal({ assessment, examLabel, signedIn, onSelectConcept, 
           </div>
 
           {/* Signed out the score can only ever read zero, so the ask is the
-              control itself rather than a paragraph explaining it. */}
+              control itself — no caption under it explaining what signing in
+              is for. A dial reading zero next to a Sign in button says it. */}
           {!signedIn && (
-            <div className="flex flex-col items-center gap-1.5">
+            <div className="flex justify-center">
               <Link
                 to="/auth"
                 onClick={onClose}
@@ -232,7 +253,6 @@ function ExamReadinessModal({ assessment, examLabel, signedIn, onSelectConcept, 
               >
                 Sign in
               </Link>
-              <p className="text-xs text-muted-foreground">Track learning progress</p>
             </div>
           )}
 
@@ -257,7 +277,7 @@ function ExamReadinessModal({ assessment, examLabel, signedIn, onSelectConcept, 
                               <div className="flex items-baseline gap-2">
                                 <span className="min-w-0 truncate text-sm">{section.name}</span>
                                 <span className="ml-auto shrink-0 text-xs tabular-nums text-muted-foreground">
-                                  {section.level3Count}/{section.total} · {Math.round(section.readinessPct)}%
+                                  {Math.round(section.readinessPct)}%
                                 </span>
                               </div>
                               <CriterionBar pct={section.readinessPct} />

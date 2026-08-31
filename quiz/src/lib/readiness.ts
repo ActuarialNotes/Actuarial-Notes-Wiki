@@ -113,14 +113,12 @@ export interface ReadinessCriterion {
   label: string
   /** 0–100. */
   pct: number
-  /** Share of the headline score this criterion carries, 0–1 (renormalised). */
-  weight: number
   /**
-   * The tally behind the number, e.g. "12/74 at Level 3 · 49 new". Kept to a
-   * single short line — the popup shows it under the bar, and prose explaining
-   * the scoring belongs in docs/exam-readiness.md, not on screen.
+   * Share of the headline score this criterion carries, 0–1 (renormalised).
+   * The popup draws this rather than printing it — a heavier criterion gets a
+   * thicker bar — so nothing on screen has to say "60% of score".
    */
-  detail: string
+  weight: number
 }
 
 export interface ReadinessBand {
@@ -213,18 +211,12 @@ export function computeExamReadiness(
       label: 'Syllabus coverage',
       pct: syllabusPct,
       weight: CRITERION_WEIGHTS.syllabus,
-      detail: counts.total > 0
-        ? `${counts.level3}/${counts.total} at Level 3 · ${counts.new} new`
-          + (counts.forgotten > 0 ? ` · ${counts.forgotten} decayed` : '')
-        : 'No syllabus concepts parsed',
     },
     ...(hasKeystones ? [{
       id: 'keystone' as const,
       label: 'Keystone concepts',
       pct: keystonePct,
       weight: CRITERION_WEIGHTS.keystone,
-      detail: `${keystone.mastered}/${keystone.total} mastered`
-        + (keystone.forgotten > 0 ? ` · ${keystone.forgotten} decayed` : ''),
     }] : []),
   ]
 

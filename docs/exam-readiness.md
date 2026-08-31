@@ -74,17 +74,24 @@ are all one tap away, and a card that is a third of a phone wide has room for on
 
 1. The overall dial and the band.
 2. One expandable row per criterion — **Syllabus coverage** and **Keystone concepts** — and
-   nothing else. Each row is its percentage, its weight, a bar, and a one-line tally of what
-   the number counts (`detail`, e.g. `7/87 at Level 3 · 49 new`). No prose explaining the
-   scoring and no heading over the pair: the criterion names and the tally carry it, and this
+   nothing else. Each row is its name, its percentage and a bar. No prose explaining the
+   scoring, no heading over the pair, and **no grey caption under the bar**: a tally like
+   `7/87 at Level 3 · 49 new` restates a number the reader has already read, and this
    document is where the reasoning lives.
+
+   The criterion's **weight is drawn, not written**. Nothing says "60% of score"; instead the
+   bar's thickness scales with `criterion.weight` (4px + 6px × weight), so the heavier
+   criterion is visibly the heavier line. Weight and tally stay in the row's `aria-label`
+   and in the panel it opens onto — available, just not stacked on screen under a number
+   that already said it.
 
 Both rows start **collapsed** and expand (chevron on the right; the whole row is the tap
 target) onto the evidence behind their own number, so the breakdown is nested under the
 criterion it scores rather than sitting in a section of its own:
 
 - **Syllabus coverage** → the per-learning-objective bars, in syllabus order. The bars
-  themselves show which sections are behind, so no line names them.
+  themselves show which sections are behind, so no line names them, and each row carries its
+  percentage only — the `n/total` beside it was the same fact in a second notation.
 - **Keystone concepts** → the exam's keystone list as chips with mastery dots; tapping one
   opens that concept in the concept popup, on the exam's full concept list so Previous/Next
   still walks the whole syllabus. **This is the only surface that names all of an exam's
@@ -93,9 +100,10 @@ criterion it scores rather than sitting in a section of its own:
 A criterion with nothing to expand (no sections parsed, or an exam with no keystone
 catalogue) renders without a chevron rather than opening onto an empty panel.
 
-Signed-out readers see the ring at 0 and, in place of the criteria explanation, a **Sign in**
-button (to `/auth`) under the dial with "Track learning progress" beneath it — mastery is a
-server-side record, so there is nothing to show until they do.
+Signed-out readers see the ring at 0 and a bare **Sign in** button (to `/auth`) under the
+dial — mastery is a server-side record, so there is nothing to show until they do. The button
+carries no caption: a dial reading zero next to a Sign in button is the whole message, and
+"Track learning progress" underneath it was the reader's third reading of it.
 
 ## Placement
 

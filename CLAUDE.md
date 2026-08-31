@@ -101,6 +101,11 @@ before touching that area**:
   silent mistakes), the delegated `data-sound` listener that gives every control
   a press cue, and how to wire a new interaction. Read before adding or changing
   a sound.
+- `docs/visual-noise-review.md` — a **review backlog**: where the app explains itself in grey
+  text instead of designing the fact, the five tests for whether a muted caption has earned
+  its place, and the surface-by-surface list to work through. The Exam Readiness popup (§3.1)
+  is done and is the worked example; the rest is not. Read alongside the style guide before
+  adding a `text-xs text-muted-foreground` line under anything.
 - `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new

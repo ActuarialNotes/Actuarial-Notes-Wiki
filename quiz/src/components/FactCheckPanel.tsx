@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { AlertTriangle, Flag, Loader2, MessageSquare, CheckCircle2, ExternalLink } from 'lucide-react'
-import { fetchWikiFile } from '@/lib/github'
+import { fetchWikiFile, githubBlobUrl } from '@/lib/github'
 import { Button } from '@/components/ui/button'
 import { ReportIssueModal } from '@/components/ReportIssueModal'
 import { cn } from '@/lib/utils'
@@ -139,10 +139,7 @@ export function FactCheckPanel({
 
       <div className="flex flex-wrap items-center justify-between gap-2 border-t pt-3">
         <a
-          href={`https://github.com/ActuarialNotes/Actuarial-Notes-Wiki/blob/main/${logPath
-            .split('/')
-            .map(encodeURIComponent)
-            .join('/')}`}
+          href={githubBlobUrl(logPath)}
           target="_blank"
           rel="noreferrer"
           className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"

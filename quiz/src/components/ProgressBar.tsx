@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, type ReactNode } from 'react'
 import { ChevronDown, Bookmark, BookmarkCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { NavProgressBar } from '@/components/NavProgressBar'
@@ -11,9 +11,15 @@ interface ProgressBarProps {
   questionIds?: string[]
   isFlagged?: boolean
   onFlag?: () => void
+  /**
+   * A control that belongs to the question itself rather than to the run of
+   * them — the info button. Rendered after the flag, in the same row, so the
+   * bar stays the one place a question is identified.
+   */
+  info?: ReactNode
 }
 
-export function ProgressBar({ current, total, onNavigate, flaggedIds, questionIds, isFlagged, onFlag }: ProgressBarProps) {
+export function ProgressBar({ current, total, onNavigate, flaggedIds, questionIds, isFlagged, onFlag, info }: ProgressBarProps) {
   const percentage = total > 0 ? Math.min(100, (current / total) * 100) : 0
   const [open, setOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -152,6 +158,7 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
             {isFlagged ? 'Flagged' : 'Flag'}
           </button>
         )}
+        {info}
         </div>
         <span>{Math.round(percentage)}%</span>
       </div>

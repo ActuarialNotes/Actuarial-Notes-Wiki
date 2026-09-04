@@ -1,4 +1,4 @@
-import { BookOpen, FileText, GraduationCap, Landmark, X } from 'lucide-react'
+import { BookOpen, Compass, FileText, GraduationCap, Landmark, X } from 'lucide-react'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 
 const BAR_ICON = {
@@ -7,6 +7,7 @@ const BAR_ICON = {
   exam: GraduationCap,
   event: Landmark,
   regulation: Landmark,
+  guide: Compass,
 } as const
 
 /**

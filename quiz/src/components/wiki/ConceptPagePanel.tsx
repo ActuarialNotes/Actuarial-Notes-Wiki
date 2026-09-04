@@ -255,6 +255,12 @@ export function ConceptPagePanel({
 
   const sourcePath = entryRefToRepoPath(entry)
 
+  // A guide page (an exam's "How to Study" tip) has no action menu at all:
+  // Start Quiz, Add to Flashcards and Learning Progress are all about a concept
+  // being learned, and a tip is advice about the exam. Listen stays — it is a
+  // way of reading the page.
+  const hasActions = entry.kind !== 'guide'
+
   // The collect gate and the action menu share one header button. While a
   // concept is uncollected the button *is* the lock: it shows the foil-ringed
   // padlock and opens the collect flow, so the actions behind it (Start Quiz,
@@ -313,7 +319,7 @@ export function ConceptPagePanel({
               else: the locked state draws a visible foil ring at the button's
               edge, so any negative margin here puts that ring straight onto the
               last letter of the name. */}
-          {!focusMode && (
+          {!focusMode && hasActions && (
           <div className="relative shrink-0" ref={playMenuRef}>
           {actionLocked ? (
             <button

@@ -200,6 +200,10 @@ export function ConceptPopup() {
   // concept total so a repeat never changes "the number of concepts".
   const occMode = !!(occurrences && occurrences.length)
   const canPrev = isCircular || (occMode ? occurrenceIndex > 0 : index > 0)
+  // The tips behind an exam's "How to Study" card: a walk of its own, not a
+  // slice of the syllabus. See components/wiki/ExamGuideCards.tsx.
+  const isGuideWalk = current?.kind === 'guide'
+
   const canNext = isCircular || (occMode ? occurrenceIndex < occurrences!.length - 1 : index < list.length - 1)
   // The footer bar measures the sequence prev/next actually walks, which in
   // occurrence mode is the mention list rather than the deduped concepts: every
@@ -326,8 +330,11 @@ export function ConceptPopup() {
         {/* The syllabus-filter picker — extra information, so focus mode drops
             it and leaves the footer as just Previous / Next. The position it
             used to sit over is read off the bar above instead, which leaves the
-            picker as the one thing here and lets it be sized as a real target. */}
-        {!focusMode && (
+            picker as the one thing here and lets it be sized as a real target.
+            A guide walk (an exam's How to Study tips) drops it too: those pages
+            are not a view of the syllabus, so every filter it offers is either
+            a no-op or a lie about what is being read. */}
+        {!focusMode && !isGuideWalk && (
         <div className="self-center flex flex-col items-center px-2 shrink-0" ref={viewingRef}>
           <div className="relative">
             <button

@@ -107,12 +107,13 @@ carries no caption: a dial reading zero next to a Sign in button is the whole me
 
 ## Placement
 
-The card leads the orientation row (`ExamGuideCards`), beside the guide card and shaped like
-it: a horizontal `rounded-lg bg-card` row at `px-4 py-3`, the same shape a learning objective
-below it wears, so the row reads as the head of that list rather than a banner over it. The
-readiness card sizes to its content and the guide card takes the rest of the width — one
-carries a number, the other a title. Below ~400px the card drops its words and is the ring
-alone, so the guide card's title keeps its room.
+The card leads the orientation row (`ExamGuideCards`), beside the **How to Study** card and
+shaped like it: a horizontal `rounded-lg bg-card` row at `px-4 py-3` (`px-3` on a phone, where
+the row is two-up), the same shape a learning objective below it wears, so the row reads as
+the head of that list rather than a banner over it. The two cards share the row's width
+evenly and carry the same parts — a mark, then a two-line label: what it is over what it
+says (`Readiness` over the band; `How to Study` over the exam). Neither shrinks to its
+content, so the row stays symmetrical at every width.
 
 Exam pages that carry no `<div class="exam-guides"></div>` (everything but P, FM, MAS-I,
 MAS-II and Exam 5 today) get the card from a marker `WikiArticle` inserts under the "Learning

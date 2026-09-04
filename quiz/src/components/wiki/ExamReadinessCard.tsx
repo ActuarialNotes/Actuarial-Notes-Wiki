@@ -21,8 +21,8 @@ import type { MasteryState } from '@/lib/mastery'
  *
  * It leads the orientation row (`ExamGuideCards`), beside the guide card and
  * shaped like it — a horizontal `rounded-lg bg-card` row at the same padding,
- * sized to its ring rather than sharing the width evenly, because the guide
- * card carries a title and this one carries a number.
+ * sharing the row's width evenly with it: two cards of one row, each a mark, a
+ * two-line label and (on the guide) a chevron.
  *
  * The mark is the Dashboard's Study Guide radial at 48px
  * (`components/ReadinessRing.tsx`), drawn from the same `lib/readinessRing.ts`
@@ -369,14 +369,14 @@ export function ExamReadinessCard({ examId, examLabel, syllabus, onSelectConcept
         onClick={() => setOpen(true)}
         aria-haspopup="dialog"
         aria-label={`Exam readiness: ${Math.round(assessment.overallPct)}% — ${assessment.band.label}`}
-        className="flex shrink-0 items-center gap-3 rounded-lg bg-card px-4 py-3 text-left text-card-foreground transition-colors duration-150 hover:bg-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="flex min-w-0 flex-1 basis-0 items-center gap-2.5 rounded-lg bg-card px-3 py-3 text-left text-card-foreground sm:gap-3 sm:px-4 transition-colors duration-150 hover:bg-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <ReadinessRing segments={segments} pct={assessment.overallPct} size={48} />
         {/* The band, not a second copy of the number — the ring already says
-            what the score is, so the words say what it means. Below ~400px it
-            drops and the card is the ring alone: the guide card beside it has a
-            title to fit, and a ring with no words still reads as a score. */}
-        <span className="hidden min-w-0 min-[400px]:block">
+            what the score is, so the words say what it means. It stays on at
+            every width now that the card is half the row rather than sized to
+            its ring: a ring alone in half a row reads as a card still loading. */}
+        <span className="block min-w-0">
           <span className="block truncate text-sm font-medium text-foreground">Readiness</span>
           <span className="block truncate text-xs text-muted-foreground">{assessment.band.label}</span>
         </span>

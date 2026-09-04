@@ -2,7 +2,7 @@
 // Replaces the old external URL builder (wikiUrl.ts) that pointed at
 // wiki.actuarialnotes.com; everything now resolves to /wiki/... routes.
 
-export type WikiEntryKind = 'concept' | 'resource' | 'exam' | 'event' | 'regulation'
+export type WikiEntryKind = 'concept' | 'resource' | 'exam' | 'event' | 'regulation' | 'guide'
 
 export interface WikiEntryRef {
   kind: WikiEntryKind
@@ -50,6 +50,13 @@ export function pathToEntryRef(path: string): WikiEntryRef | null {
   if (p.toLowerCase().startsWith('resources/benchmarks/')) {
     return { kind: 'resource', name: p.slice('resources/benchmarks/'.length), path: `${p}.md` }
   }
+  // An exam-page orientation tip: Guides/<exam page>/<tip>.md. The name is the
+  // tip alone — the folder is what says which exam it belongs to — so the path
+  // has to travel with the ref ("Scoring" is a page under every exam).
+  if (p.toLowerCase().startsWith('guides/')) {
+    const title = p.split('/').pop() ?? p
+    return { kind: 'guide', name: title, path: `${p}.md` }
+  }
   if (/^Exam[ -]/i.test(p)) {
     return { kind: 'exam', name: p }
   }
@@ -69,6 +76,10 @@ export function entryRefToRepoPath(ref: WikiEntryRef): string {
       return `Resources/Events/${ref.name}.md`
     case 'regulation':
       return `Resources/Regulation/${ref.name}.md`
+    // Only reachable for a guide ref built without its path; a real one always
+    // carries the exam folder it lives in and returns above.
+    case 'guide':
+      return `Guides/${ref.name}.md`
   }
 }
 
@@ -99,7 +110,7 @@ export function hrefToEntryRef(href: string): WikiEntryRef | null {
   if (!clean) return null
 
   // Already slugged as concept/resource/exam internal route?
-  const internal = clean.match(/^wiki\/(concept|resource|exam|event|regulation)\/(.+)$/i)
+  const internal = clean.match(/^wiki\/(concept|resource|exam|event|regulation|guide)\/(.+)$/i)
   if (internal) {
     return { kind: internal[1].toLowerCase() as WikiEntryKind, name: fromSlug(internal[2]) }
   }

@@ -7,6 +7,7 @@ import { readdir, readFile } from 'fs/promises'
 import fm from 'front-matter'
 import { KEYSTONE_EXAMS } from './src/data/keystoneConcepts'
 import { buildResourceExamMap, examsForResource } from './src/lib/resourceExams'
+import { examDisplayName, examIdFromFile } from './src/lib/wikiRoutes'
 
 const REPO_ROOT = path.resolve(__dirname, '..')
 
@@ -100,6 +101,21 @@ async function collectWikiContent(): Promise<WikiBundleData> {
       publisher: attrs['Publisher'] ? String(attrs['Publisher']) : undefined,
       coverImage: extractCoverImageUrl(text),
     })
+  }
+
+  // Guides/<exam page>/<tip>.md — the exam-page orientation tips. Their
+  // markdown rides along in `files` so the concept viewer opens one without a
+  // network fetch, but they stay out of `index`: a tip is read from its exam's
+  // card, not found by searching the wiki for a concept. The list of them is
+  // its own module (`virtual:exam-guides`, below).
+  const guideExams = await readdir(path.join(REPO_ROOT, 'Guides')).catch(() => [] as string[])
+  for (const examDir of guideExams) {
+    const dir = path.join(REPO_ROOT, 'Guides', examDir)
+    for (const name of await readdir(dir).catch(() => [] as string[])) {
+      if (!name.endsWith('.md')) continue
+      const text = await readFile(path.join(dir, name), 'utf-8').catch(() => null)
+      if (text != null) files[`Guides/${examDir}/${name}`] = text
+    }
   }
 
   return { files, index }
@@ -331,6 +347,60 @@ function comprehensionChecksPlugin(): Plugin {
   }
 }
 
+// ── Exam guides ──────────────────────────────────────────────────────────────
+// The tip pages behind an exam page's "How to Study" card: one markdown file
+// per tip under Guides/<exam page>/<tip>.md, ordered by each page's `order:`
+// frontmatter. Only the list is collected here — the markdown itself is already
+// in the wiki bundle above, since the concept viewer reads a tip exactly like
+// any other wiki page. Mirrors `ExamGuideFile` in src/lib/examGuides.ts, which
+// can't be imported here (it resolves `@/…`, which tsconfig.node.json doesn't).
+interface ExamGuideFileEntry {
+  examId: string
+  examPage: string
+  examLabel: string
+  title: string
+  path: string
+  order: number | null
+}
+
+async function collectExamGuides(): Promise<ExamGuideFileEntry[]> {
+  const root = path.join(REPO_ROOT, 'Guides')
+  const entries: ExamGuideFileEntry[] = []
+  for (const examDir of await readdir(root).catch(() => [] as string[])) {
+    const dir = path.join(root, examDir)
+    for (const name of (await readdir(dir).catch(() => [] as string[])).sort()) {
+      if (!name.endsWith('.md')) continue
+      const text = await readFile(path.join(dir, name), 'utf-8').catch(() => null)
+      if (text == null) continue
+      const attrs = (fm<Record<string, unknown>>(text).attributes ?? {}) as Record<string, unknown>
+      const order = Number(attrs['order'])
+      entries.push({
+        examId: examIdFromFile(examDir),
+        examPage: `${examDir}.md`,
+        examLabel: examDisplayName(examDir),
+        title: name.replace(/\.md$/i, ''),
+        path: `Guides/${examDir}/${name}`,
+        order: Number.isFinite(order) ? order : null,
+      })
+    }
+  }
+  return entries
+}
+
+function examGuidesPlugin(): Plugin {
+  const VIRTUAL_ID = 'virtual:exam-guides'
+  const RESOLVED_ID = '\0' + VIRTUAL_ID
+  return {
+    name: 'exam-guides',
+    resolveId: (id) => id === VIRTUAL_ID ? RESOLVED_ID : undefined,
+    load: async (id) => {
+      if (id !== RESOLVED_ID) return
+      const guides = await collectExamGuides()
+      return `export default ${JSON.stringify(guides)}`
+    },
+  }
+}
+
 // Keystone link map: for every keystone concept page, the other concept pages it
 // links to directly. This is what the `strong_key` study plan orders by — a
 // keystone, then the concepts its own page leans on (see lib/studyPlanOrder.ts).
@@ -465,7 +535,7 @@ function pdfjsAssetsPlugin(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), wikiContentPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), keystoneLinksPlugin(), pdfjsAssetsPlugin()],
+  plugins: [react(), wikiContentPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), examGuidesPlugin(), keystoneLinksPlugin(), pdfjsAssetsPlugin()],
   resolve: {
     alias: { '@': path.resolve(__dirname, 'src') },
   },

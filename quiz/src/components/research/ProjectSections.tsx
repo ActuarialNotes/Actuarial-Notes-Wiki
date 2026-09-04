@@ -291,6 +291,7 @@ const KIND_BADGE: Record<WikiEntryKind, string> = {
   regulation: 'bg-blue-500/10 text-blue-700 dark:text-blue-300',
   event: 'bg-amber-500/10 text-amber-700 dark:text-amber-300',
   exam: 'bg-rose-500/10 text-rose-700 dark:text-rose-300',
+  guide: 'bg-sky-500/10 text-sky-700 dark:text-sky-300',
 }
 
 // A draggable resource card that opens the popup viewer on click, styled like

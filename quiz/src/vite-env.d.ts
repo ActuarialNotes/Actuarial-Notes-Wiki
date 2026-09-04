@@ -26,6 +26,13 @@ declare module 'virtual:questions-content' {
   export default questions
 }
 
+declare module 'virtual:exam-guides' {
+  import type { ExamGuideFile } from '@/lib/examGuides'
+  /** Every `Guides/<exam page>/<tip>.md`, one entry per tip page. */
+  const guides: ExamGuideFile[]
+  export default guides
+}
+
 declare module 'virtual:comprehension-checks' {
   const checks: string[]
   export default checks

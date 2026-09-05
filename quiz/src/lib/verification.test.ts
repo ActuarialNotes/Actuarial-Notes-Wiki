@@ -6,6 +6,8 @@ import {
   openCriticalFindings,
   factCheckBadge,
   formatCheckedDate,
+  summarizeLog,
+  summarizeSource,
   verificationLogPath,
   contentPathFromVerification,
 } from './verification'
@@ -247,5 +249,75 @@ describe('verificationLogPath', () => {
       .toBe('.verify/questions/exam-5/q-2019-fall-17.md')
     expect(verificationLogPath('Concepts/Loss Development Factor.md'))
       .toBe('.verify/Concepts/Loss Development Factor.md')
+  })
+})
+
+describe('summarizeSource', () => {
+  it('keeps the name and drops the hash, version and page locators', () => {
+    const raw =
+      'Werner, G. & Modlin, C., Basic Ratemaking, 5th ed., May 2016 (CAS) — ' +
+      'https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf ' +
+      `(sha256 ${'6'.repeat(64)}, 423 pp.): printed Table of Contents PDF pp.8-12`
+    expect(summarizeSource(raw)).toEqual({
+      label: 'Werner, G. & Modlin, C., Basic Ratemaking, 5th ed., May 2016 (CAS)',
+      url: 'https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf',
+    })
+  })
+
+  it('keeps a citation with no URL whole, minus the locator', () => {
+    expect(summarizeSource('CAS Exam 5 Fall 2019, Q17 — official solution PDF, p.4'))
+      .toEqual({ label: 'CAS Exam 5 Fall 2019, Q17', url: null })
+    expect(summarizeSource('Werner & Modlin, Basic Ratemaking 5th ed., ch. 8 p.142'))
+      .toEqual({ label: 'Werner & Modlin, Basic Ratemaking 5th ed., ch. 8 p.142', url: null })
+  })
+
+  it('cuts at the URL when the citation has no dash', () => {
+    expect(summarizeSource('ASOP No. 13, https://www.actuarialstandardsboard.org/asop13.pdf'))
+      .toEqual({ label: 'ASOP No. 13', url: 'https://www.actuarialstandardsboard.org/asop13.pdf' })
+  })
+
+  it('falls back to the URL rather than rendering an empty row', () => {
+    expect(summarizeSource('https://www.soa.org/p-sample.pdf'))
+      .toEqual({ label: 'https://www.soa.org/p-sample.pdf', url: 'https://www.soa.org/p-sample.pdf' })
+  })
+})
+
+describe('summarizeLog', () => {
+  it('splits the log into what is open, what was fixed, and what people said', () => {
+    const comment = `
+## [C-001] Reader report
+- entry_type: comment
+- author: human:anon
+- date: 2026-08-21
+- note: The exhibit looks off.
+`
+    const summary = summarizeLog(parseVerificationLog(LOG + RESOLUTION + comment))
+    expect(summary.open.map((g) => g.entry.id)).toEqual(['F-002'])
+    expect(summary.resolved.map((g) => g.entry.id)).toEqual(['F-001'])
+    expect(summary.notes.map((g) => g.entry.id)).toEqual(['C-001'])
+  })
+
+  it('folds a resolution into the finding it closes instead of listing it twice', () => {
+    const summary = summarizeLog(parseVerificationLog(LOG + RESOLUTION))
+    expect(summary.resolved).toHaveLength(1)
+    expect(summary.resolved[0].closedBy?.id).toBe('F-001/R')
+    expect(summary.resolved[0].closedBy?.fields.find((f) => f.key === 'note')?.value)
+      .toContain('commit 8ac31f2')
+  })
+
+  it('puts the worst open finding first', () => {
+    const summary = summarizeLog(parseVerificationLog(LOG))
+    // F-002 (minor) is appended after F-001 (critical) in the log; severity wins.
+    expect(summary.open.map((g) => g.entry.severity)).toEqual(['critical', 'minor'])
+  })
+
+  it('reads `applied`, which is independent of whether the finding is closed', () => {
+    const log = parseVerificationLog(LOG.replace('- applied: false', '- applied: true'))
+    const summary = summarizeLog(log)
+    // Still open — a correction landing does not sign the finding off — but the
+    // panel can now say the page in front of the reader has already been fixed.
+    expect(summary.open.map((g) => g.entry.id)).toContain('F-001')
+    expect(summary.open.find((g) => g.entry.id === 'F-001')!.entry.applied).toBe(true)
+    expect(summary.open.find((g) => g.entry.id === 'F-002')!.entry.applied).toBe(false)
   })
 })

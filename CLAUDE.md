@@ -165,7 +165,10 @@ Other important `lib/` modules:
   via `parser.ts`), parses a sidecar log, and decides what the **Fact Check** badge says
   (`factCheckBadge` → `components/FactCheckBadge.tsx` → `FactCheckPanel`; on a concept or
   resource page the way in is the *Fact Check* item of the action menu, and an exam page has
-  none). Two rules live here rather than
+  none). `summarizeSource` and `summarizeLog` are what keep that panel short — the first cuts
+  an auditor's citation down to the source's name and link, the second splits the log into
+  Open / Fixed / Notes and folds each resolution into the finding it closes. Two rules live
+  here rather than
   in a surface: an open **critical** finding outranks every other badge state including
   `verified`, and `hasCriticalFinding` is what makes `filterQuestions` keep such a question out
   of quiz sessions — ahead of the `ids` short-circuit, so a saved mistake-review link can't

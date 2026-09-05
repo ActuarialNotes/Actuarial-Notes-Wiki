@@ -1,52 +1,69 @@
 import { useEffect, useState } from 'react'
-import { AlertTriangle, Flag, Loader2, MessageSquare, CheckCircle2, ExternalLink } from 'lucide-react'
+import { Check, ChevronDown, ExternalLink, Flag, Loader2 } from 'lucide-react'
 import { fetchWikiFile, githubBlobUrl } from '@/lib/github'
 import { Button } from '@/components/ui/button'
 import { ReportIssueModal } from '@/components/ReportIssueModal'
 import { cn } from '@/lib/utils'
 import {
   parseVerificationLog,
-  openFindings,
   factCheckBadge,
   formatCheckedDate,
+  summarizeLog,
+  summarizeSource,
   verificationLogPath,
+  type FactCheckTone,
   type LogEntry,
+  type LogEntryGroup,
   type Verification,
   type VerificationLog,
 } from '@/lib/verification'
 
 /**
- * The read-only **Fact Check** record for one page: what has been checked about
- * it, against which source, and everything anyone has since said about it.
+ * The read-only **Fact Check** record for one page.
+ *
+ * A reader opens this with two questions, and the panel is laid out as their
+ * answers: *what was this checked against?* and *what has been changed since?*
+ * Everything else the record carries — content hashes, run ids, fingerprints,
+ * the page locator a finding was written against — is auditor's material. It
+ * stays in the vault, where `verify_check.py` can enforce it, and reaches the
+ * screen only through a link's accessible name. Showing the work is the point;
+ * showing the paperwork is not.
+ *
+ * A finding is one line until it is asked for. The evidence behind it runs to a
+ * paragraph of citations, which is exactly right in the log and unreadable as a
+ * wall — so a row expands.
  *
  * Sidecar logs are deliberately not bundled at build time — they grow without
- * bound and only matter when someone opens this panel — so the log is fetched
- * on demand. Everything above the fold (status, date, sources) comes from the
- * page's own `verification:` block and needs no fetch.
- *
- * Showing the work is the point. A reader who can see that a page was checked
- * against the official CAS PDF on a named date, or that someone has already
- * flagged the exact thing they were about to flag, has a reason to trust the
- * rest of the vault that no badge alone can give them.
+ * bound and only matter when someone opens this panel — so the log is fetched on
+ * demand. The verdict and the sources come from the page's own `verification:`
+ * block and need no fetch.
  */
 
-const ENTRY_ICONS: Record<string, typeof Flag> = {
-  finding: Flag,
-  resolution: CheckCircle2,
-  correction: CheckCircle2,
-  comment: MessageSquare,
-  question: MessageSquare,
+/**
+ * Statuses whose verdict doesn't say what to do about it. `unverified` is not
+ * one of them: "Not fact checked" is the whole story, and "Not yet checked
+ * against a source" underneath it is the same sentence twice.
+ */
+const NEEDS_DETAIL = new Set(['in_review', 'stale', 'disputed'])
+
+const TONE_TEXT: Record<FactCheckTone, string> = {
+  green: 'text-foreground',
+  amber: 'text-amber-700 dark:text-amber-300',
+  red: 'text-red-700 dark:text-red-300',
+  grey: 'text-muted-foreground',
 }
 
-const SEVERITY_CLASSES: Record<string, string> = {
-  critical: 'bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-100',
-  major: 'bg-amber-50 text-amber-900 dark:bg-amber-950 dark:text-amber-100',
-  minor: 'bg-muted text-muted-foreground',
-  nit: 'bg-muted text-muted-foreground',
+const SEVERITY_TONE: Record<string, FactCheckTone> = {
+  critical: 'red', major: 'amber', minor: 'grey', nit: 'grey',
 }
 
-/** Fields already shown in the entry header; not repeated in the body list. */
-const HEADER_FIELDS = new Set(['entry_type', 'author', 'date', 'severity', 'status'])
+/** The fields that carry the finding itself, in reading order. */
+const DETAIL_FIELDS: Array<[string, string]> = [
+  ['claim', 'Page said'],
+  ['evidence', 'Source says'],
+  ['proposed_action', 'Fix'],
+  ['note', 'Note'],
+]
 
 interface FactCheckPanelProps {
   verification: Verification | null | undefined
@@ -61,7 +78,6 @@ export function FactCheckPanel({
 }: FactCheckPanelProps) {
   const [log, setLog] = useState<VerificationLog | null>(null)
   const [loading, setLoading] = useState(true)
-  const [missing, setMissing] = useState(false)
   const [reporting, setReporting] = useState(false)
 
   const logPath = verification?.log || verificationLogPath(contentPath)
@@ -69,87 +85,90 @@ export function FactCheckPanel({
   useEffect(() => {
     let cancelled = false
     setLoading(true)
-    setMissing(false)
     fetchWikiFile(logPath)
       .then((raw) => { if (!cancelled) setLog(parseVerificationLog(raw)) })
       // A page with nothing recorded yet has no log file at all. That is the
       // normal state for most of the vault, not an error.
-      .catch(() => { if (!cancelled) setMissing(true) })
+      .catch(() => { if (!cancelled) setLog(null) })
       .finally(() => { if (!cancelled) setLoading(false) })
     return () => { cancelled = true }
   }, [logPath])
 
   const badge = factCheckBadge(verification)
-  const open = log ? openFindings(log) : []
+  const checked = formatCheckedDate(verification?.lastChecked ?? null)
+  const sources = (verification?.sources ?? []).map((raw) => ({ raw, ...summarizeSource(raw) }))
+  const groups = log ? summarizeLog(log) : null
 
   return (
-    <div className="space-y-4 text-sm">
-      <section className="rounded-xl bg-muted/50 p-3">
-        <p className="font-medium">{badge.label}</p>
-        <p className="mt-0.5 text-xs text-muted-foreground">{badge.detail}</p>
-
-        {verification?.lastChecked && (
-          <p className="mt-2 text-xs text-muted-foreground">
-            Last checked {formatCheckedDate(verification.lastChecked)}
-            {verification.lastCheckedBy && ` by ${verification.lastCheckedBy}`}
-          </p>
+    <div className="space-y-5 text-sm">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+        <span className={cn('font-semibold', TONE_TEXT[badge.tone])}>{badge.label}</span>
+        {/* The verified label already ends in the date; don't print it twice. */}
+        {checked && !badge.label.endsWith(checked) && (
+          <span className="text-xs text-muted-foreground">{checked}</span>
         )}
-
-        {verification && verification.sources.length > 0 && (
-          <div className="mt-3">
-            <p className="text-xs font-medium text-muted-foreground">Checked against</p>
-            <ul className="mt-1 space-y-1">
-              {verification.sources.map((source) => (
-                <li key={source} className="text-xs leading-relaxed">— {source}</li>
-              ))}
-            </ul>
-          </div>
+        {verification && NEEDS_DETAIL.has(verification.status) && (
+          <p className="w-full text-xs text-muted-foreground">{badge.detail}</p>
         )}
+      </div>
 
-        {open.length > 0 && (
-          <p className="mt-3 flex items-center gap-1.5 text-xs font-medium text-amber-700 dark:text-amber-300">
-            <AlertTriangle className="h-3.5 w-3.5" aria-hidden />
-            {open.length} open finding{open.length === 1 ? '' : 's'} on this page
-          </p>
-        )}
-      </section>
-
-      <section>
-        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          History
-        </h3>
-        {loading ? (
-          <p className="flex items-center gap-2 py-4 text-xs text-muted-foreground">
-            <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />
-            Loading the record…
-          </p>
-        ) : missing || !log || log.entries.length === 0 ? (
-          <p className="py-3 text-xs text-muted-foreground">
-            Nothing recorded about this page yet. If something here looks wrong, saying so is the
-            fastest way to get it checked.
-          </p>
-        ) : (
-          <ol className="space-y-3">
-            {log.entries.map((entry) => (
-              <LogEntryRow key={entry.id} entry={entry} open={open.some((f) => f.id === entry.id)} />
+      {sources.length > 0 && (
+        <Section title="Sources">
+          <ul className="space-y-1.5">
+            {sources.map((source) => (
+              <li key={source.raw}>
+                {source.url ? (
+                  <a
+                    href={source.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    title={source.raw}
+                    className="inline-flex items-start gap-1.5 break-words hover:underline"
+                  >
+                    <span>{source.label}</span>
+                    <ExternalLink className="mt-0.5 h-3 w-3 shrink-0 text-muted-foreground" aria-hidden />
+                  </a>
+                ) : (
+                  <span className="break-words" title={source.raw}>{source.label}</span>
+                )}
+              </li>
             ))}
-          </ol>
-        )}
-      </section>
+          </ul>
+        </Section>
+      )}
 
-      <div className="flex flex-wrap items-center justify-between gap-2 border-t pt-3">
-        <a
-          href={githubBlobUrl(logPath)}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
-        >
-          <ExternalLink className="h-3 w-3" aria-hidden />
-          View on GitHub
-        </a>
+      {loading ? (
+        <p className="flex items-center gap-2 text-xs text-muted-foreground">
+          <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />
+          Loading
+        </p>
+      ) : !log || !groups || log.entries.length === 0 ? (
+        verification && verification.status !== 'unverified' && (
+          <p className="text-xs text-muted-foreground">Nothing recorded yet.</p>
+        )
+      ) : (
+        <>
+          <EntrySection title="Open" groups={groups.open} defaultOpen />
+          <EntrySection title="Fixed" groups={groups.resolved} />
+          <EntrySection title="Notes" groups={groups.notes} />
+        </>
+      )}
+
+      <div className="flex items-center justify-between gap-2 border-t pt-4">
+        {log ? (
+          <a
+            href={githubBlobUrl(logPath)}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+          >
+            Full record
+            <ExternalLink className="h-3 w-3" aria-hidden />
+          </a>
+        ) : <span />}
         <Button size="sm" variant="outline" onClick={() => setReporting(true)} data-sound="tap">
           <Flag className="mr-1.5 h-3.5 w-3.5" />
-          Report an issue
+          Report
         </Button>
       </div>
 
@@ -163,43 +182,119 @@ export function FactCheckPanel({
   )
 }
 
-function LogEntryRow({ entry, open }: { entry: LogEntry; open: boolean }) {
-  const Icon = ENTRY_ICONS[entry.entryType] ?? MessageSquare
-  const isHuman = entry.author.startsWith('human:')
-  const body = entry.fields.filter((f) => !HEADER_FIELDS.has(f.key) && f.value)
+const HEADING = 'text-xs font-semibold uppercase tracking-wide text-muted-foreground'
+
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section>
+      <h3 className={cn('mb-2', HEADING)}>{title}</h3>
+      {children}
+    </section>
+  )
+}
+
+function EntrySection({
+  title,
+  groups,
+  defaultOpen = false,
+}: {
+  title: string
+  groups: LogEntryGroup[]
+  defaultOpen?: boolean
+}) {
+  const [open, setOpen] = useState(defaultOpen)
+  if (groups.length === 0) return null
 
   return (
-    <li className="rounded-xl border p-3">
-      <div className="flex flex-wrap items-center gap-2">
-        <Icon className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
-        <span className="text-xs font-semibold">{entry.title || entry.id}</span>
-        {entry.severity && (
-          <span className={cn('rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase',
-            SEVERITY_CLASSES[entry.severity] ?? SEVERITY_CLASSES.minor)}>
+    <section>
+      <h3>
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          data-sound="tap"
+          className={cn('mb-2 flex items-center gap-1.5 hover:text-foreground', HEADING)}
+        >
+          {title} · {groups.length}
+          <ChevronDown className={cn('h-3.5 w-3.5 transition-transform', open && 'rotate-180')} aria-hidden />
+        </button>
+      </h3>
+      {open && (
+        <ul className="divide-y rounded-xl border">
+          {groups.map((group) => (
+            <EntryRow key={group.entry.id} group={group} />
+          ))}
+        </ul>
+      )}
+    </section>
+  )
+}
+
+function EntryRow({ group }: { group: LogEntryGroup }) {
+  const [open, setOpen] = useState(false)
+  const { entry, closedBy } = group
+  // `applied` is independent of status: the page can be corrected before the
+  // finding is signed off, and that a reader is looking at already-corrected
+  // text is the single most useful thing this row can tell them. Under *Fixed*
+  // the same mark would only repeat the heading, so it is drawn here alone.
+  const isOpenFinding = entry.entryType === 'finding' && !closedBy
+  const applied = isOpenFinding && entry.applied
+
+  return (
+    <li>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        data-sound="tap"
+        className="flex w-full items-start gap-2 p-3 text-left hover:bg-muted/50"
+      >
+        {applied && <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />}
+        <span className="min-w-0 flex-1 break-words text-xs font-medium">
+          {entry.title || entry.id}
+          {applied && <span className="sr-only"> — already corrected on the page</span>}
+        </span>
+        {isOpenFinding && entry.severity && (
+          <span className={cn('shrink-0 text-[10px] font-semibold uppercase',
+            TONE_TEXT[SEVERITY_TONE[entry.severity] ?? 'grey'])}>
             {entry.severity}
           </span>
         )}
-        {open && (
-          <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-semibold uppercase text-amber-900 dark:bg-amber-950 dark:text-amber-100">
-            open
-          </span>
-        )}
-      </div>
-      <p className="mt-1 text-[11px] text-muted-foreground">
-        {entry.id} · {isHuman ? entry.author.replace('human:', '') : entry.author} · {entry.date}
-      </p>
-      {body.length > 0 && (
-        <dl className="mt-2 space-y-1">
-          {body.map((field) => (
-            <div key={field.key} className="text-xs leading-relaxed">
-              <dt className="inline font-medium capitalize text-muted-foreground">
-                {field.key.replace(/_/g, ' ')}:{' '}
-              </dt>
-              <dd className="inline">{field.value}</dd>
-            </div>
-          ))}
-        </dl>
+        <ChevronDown
+          className={cn('mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform',
+            open && 'rotate-180')}
+          aria-hidden
+        />
+      </button>
+
+      {open && (
+        <div className="space-y-2 px-3 pb-3">
+          <EntryDetail entry={entry} />
+          {closedBy && <EntryDetail entry={closedBy} />}
+        </div>
       )}
     </li>
+  )
+}
+
+function EntryDetail({ entry }: { entry: LogEntry }) {
+  const value = (key: string) => entry.fields.find((f) => f.key === key)?.value ?? ''
+  return (
+    <>
+      {DETAIL_FIELDS.map(([key, label]) => {
+        const text = value(key)
+        if (!text) return null
+        return (
+          <p key={key} className="break-words text-xs leading-relaxed">
+            <span className="font-medium text-muted-foreground">{label}. </span>
+            {text}
+          </p>
+        )
+      })}
+      <p className="text-[11px] text-muted-foreground">
+        {formatCheckedDate(entry.date) ?? entry.date}
+        {entry.author && ` · ${entry.author.replace(/^(agent|human):/, '')}`}
+      </p>
+    </>
   )
 }

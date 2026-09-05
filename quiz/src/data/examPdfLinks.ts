@@ -207,7 +207,7 @@ const SYLLABUS_PDF_LINKS: Record<string, ExamPdfLink> = {
 
   // ── CAS ───────────────────────────────────────────────────────────────────
   '5-1': {
-    url: 'https://www.casact.org/sites/default/files/2023-06/Exam_5_Content_Outline.pdf',
+    url: 'https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf',
     label: 'Content Outline',
   },
   // Fall 2026 administration — CAS names the newer outlines

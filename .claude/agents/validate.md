@@ -93,9 +93,21 @@ tempted to skip. The context bundle gives you the URL of each syllabus reading.
 Fetch it. For a past-paper question, find the official question booklet and
 examiner's report for that sitting.
 
+**Reading a PDF.** Use `pymupdf` (`pip install pymupdf` if it is missing):
+`pymupdf.open(path).get_toc()` for the bookmark outline, `page.get_text()` for a
+page. `pypdf` is present in some environments but its `cryptography` backend
+panics on import, and there is no `pdftotext` — do not reach for either. Fetch
+with `curl -o`, then hash the file and cite the hash: a source you can name by
+digest is one a reviewer can re-fetch and compare.
+
 If you genuinely cannot reach a source — paywalled, offline, not published —
 that page does not get verified. Record what you checked, set `in_review`, and
 say in the note which source you needed and could not get.
+
+Before you take that exit, spend one more call. A guessed URL that 404s is not a
+publisher without the document: go to the exam's or publisher's landing page and
+read the links off it. The escape hatch above is correct, and it is also one call
+away from laundering a give-up into a legitimate outcome.
 
 ### 4. Run the checks
 
@@ -105,7 +117,10 @@ say in the note which source you needed and could not get.
 - Malformed LaTeX: unbalanced `$$`, undefined macros. Note that the vault is
   authored for Obsidian — read `quiz/src/lib/vaultMath.ts` before calling a math
   delimiter broken, because several shapes that look wrong are deliberate.
-- Frontmatter schema validity (`scripts/validate_content.py` is the authority).
+- Frontmatter schema validity. `scripts/validate_content.py` is the authority for
+  **question** files only — it knows no other schema and will refuse a path
+  outside `questions/`. For `Concepts/`, `Resources/` and the root exam pages the
+  authority is `scripts/verify_check.py` (`--sync` to repair).
 - Terminology matches the canonical concept name
   (`quiz/src/lib/conceptMatch.ts`, `slugForLink`).
 
@@ -131,12 +146,42 @@ say in the note which source you needed and could not get.
   reconcile it.
 - A claim stated as fact that appears in no source → finding, severity `minor`.
 
-**Resources / Exam pages**
+**Exam pages** (root `Exam *.md`)
 
 - Syllabus weights, learning objectives and reading lists match the *current*
   published syllabus PDF.
 - Flag when the exam sitting has rolled over and the page still describes the old
   one.
+
+**Resources** (`Resources/**`) — a book, standard or study-note page
+
+A resource page is a *map of a document*, and its most consequential claim is
+which parts of that document are examinable. Get both sources: the document
+itself, and the exam's current content outline.
+
+- **Fetch the exam's published content outline and diff the chapter/section
+  range against what the page claims is on the syllabus.** The context bundle
+  lists the exam pages that cite this resource and the syllabus URL for each
+  (§6 of the bundle). The page's own reading of the syllabus is not evidence —
+  candidates skip chapters on the strength of that sentence.
+- **Build the outline from the source before re-reading the page's outline.**
+  This is the transfer of "recompute before you look at the answer": read the
+  document's table of contents first, then compare. Read them the other way
+  round and you will confirm what is there instead of noticing what is not.
+- Diff every heading against **both** the printed table of contents **and** the
+  PDF bookmark outline. When those two disagree, that is a conflict *inside the
+  source* — log it, and do not file it as a vault error.
+- **Full-text-search the source for every proper noun and named method the page
+  asserts.** A term that occurs zero times in the document is a finding, however
+  real the concept is elsewhere. This is the check that catches an outline
+  written from memory of the exam rather than from the text.
+- **Look for omissions, not just errors.** A missing chapter or a missing
+  appendix is more dangerous than a wrong bullet, and nothing on the page points
+  at it. Walk the source's structure and confirm the page covers all of it.
+- Check section→chapter **attribution**, not just existence: a topic filed under
+  the wrong chapter sends a candidate to the wrong place.
+- Verify every frontmatter field (title, authors, edition, year, publisher) against
+  the source's own title page, and fetch every `Available from:` URL.
 
 ### 5. Record what you found
 
@@ -189,16 +234,34 @@ goes through the PR, never straight to `main`:
 - Broken links, LaTeX syntax, frontmatter schema, obvious typos.
 - Missing verification blocks (`python3 scripts/verify_check.py --sync`).
 
-**You must not fix** — open a finding, `--set-status disputed`, and stop:
+**You must not fix** — open a finding with a `proposed_action` and move on:
 
 - Anything where sources conflict.
 - Anything where **the correct answer itself** is in question, as opposed to the
   transcription of it.
+- **Anything whose correction requires composing new prose** — a missing section,
+  a rewritten bullet, an added explanation — *even when the source is
+  unambiguous and you know exactly what it should say*. Fix only what can be
+  transcribed. Deleting a clause the source contradicts is transcription;
+  writing its replacement is authoring.
 - Rewriting an explanation for clarity or style.
 - Pedagogical judgement calls — difficulty ratings, what a topic should cover.
 
 The line to hold: you are allowed to make the vault say what the source says. You
 are not allowed to decide what is true.
+
+**The status is a separate decision from the stop.** Leaving a finding open does
+not by itself make a page `disputed`. Per `docs/verification.md`, `disputed` means
+one of exactly two things:
+
+- sources conflict with each other, or
+- a **critical** finding is open and unresolved.
+
+Anything else — a major or minor finding you could not fix, a page you checked but
+could not source — is recorded with the status it actually earned (`in_review`
+when you could not reach a source, otherwise the status the checks support) and
+the open findings speak for themselves. Do not reach for `disputed` merely because
+you stopped.
 
 ### 7. Close the run
 
@@ -212,7 +275,12 @@ The summary lists: files touched, findings by severity, sources consulted (with
 URLs), auto-fixes applied, files left `in_review` and why, and roughly what the
 run cost.
 
-Then:
+**Record-only mode.** If the caller says they are handling git — their own
+branch, their own PR, "leave it in the working tree" — stop here. Do not branch,
+commit or push. Running `python3 scripts/verify_check.py` to confirm your writes
+are consistent is still expected; everything below is not.
+
+Otherwise:
 
 ```bash
 python3 scripts/verify_check.py --base origin/main   # must pass before you push
@@ -232,7 +300,11 @@ reaffirming comment instead of a duplicate `F-` entry, or do nothing at all if i
 was already reaffirmed today. If a known finding is now fixed, append a
 `resolution`.
 
-Running the same sweep twice must leave the log the same length the second time.
+Running the same sweep twice must leave the log **byte-identical** the second
+time — including a repeat on the same day, where a finding you recorded an hour
+ago is its own reaffirmation and nothing is appended at all. This is enforced by
+`verify_record.py` and pinned by
+`test_the_same_sweep_run_twice_leaves_the_log_byte_identical`.
 
 ## What failure looks like
 

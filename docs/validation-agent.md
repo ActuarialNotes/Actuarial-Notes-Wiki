@@ -96,12 +96,26 @@ decide what is true.
 
 `docs/validation-agent-first-run.md` records the first real sweep
 (`Resources/Books/Basic Ratemaking (Werner - 2016).md`, against the CAS PDFs): what the
-agent caught, and the defects the run exposed in this design and in the tooling —
-a gap in §6's must-not-fix list, a `disputed` contradiction between the agent
-definition and `docs/verification.md`, no syllabus check for resource pages, a
-`validate_content.py` that applies the question schema to any path and exits 0 on
-failure, and same-day sweeps that are not idempotent until the third run. Read it
-before editing `.claude/agents/validate.md`.
+agent caught, and the defects the run exposed in this design and in the tooling.
+Read it before editing `.claude/agents/validate.md`.
+
+All of the defects it found have since been fixed, and the report is annotated with
+what changed:
+
+| Defect | Fix |
+|---|---|
+| §6's must-not-fix list had no category for "the source is unambiguous but the correction requires composing prose" | Added as its own bullet — transcribe, don't author |
+| §6 said `--set-status disputed` for *every* must-not-fix case, contradicting `docs/verification.md` | Status decoupled from the stop; `disputed` is a source conflict or an open critical, nothing else |
+| Nothing told a sweep to fetch the syllabus for a resource page — the largest gap | `Resources/**` now has its own §4 checklist, led by the content-outline diff |
+| No checklist for a book/outline page | Same checklist: TOC-vs-bookmark diff, build-before-compare, full-text term search, omission hunt, attribution, frontmatter-vs-title-page |
+| §7 unconditionally branched and opened a PR | Record-only mode documented |
+| Same-day sweeps appended a reaffirm comment on the second run | `verify_record.py`: a finding dated today is its own reaffirmation; pinned by a byte-identity test |
+| `validate_content.py` applied the question schema to any path | Dispatches on path; refuses non-`questions/` paths by name and points at `verify_check.py` |
+| `verify_context.py` gave a resource page no syllabus context | New §6 of the bundle: exam pages citing the resource, their published syllabus URL, and the page's own `Available from:` as a fetch target |
+
+One claim in the original report — that `validate_content.py` exits 0 on failure —
+was **wrong**, and is corrected in place there. It exits 1; the measurement had
+piped through `tail` and read the wrong process's status.
 
 ## Bootstrapping
 

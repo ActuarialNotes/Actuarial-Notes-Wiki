@@ -180,6 +180,54 @@ def source_material(exam_page: Path) -> list[tuple[str, str]]:
     return entries
 
 
+def exams_citing(resource_rel: str) -> list[tuple[Path, str]]:
+    """The inverse of `source_material`: which exam pages name this resource as a
+    syllabus reading, and with what assignment.
+
+    A `Resources/Books` page carries no `exam:` key — the relationship is authored
+    the other way round, in each exam page's Source Material callout (the same
+    inversion `quiz/src/lib/resourceExams.ts` does for the app). Without this a
+    resource page gets no syllabus context at all, which is exactly the context it
+    most needs: its most consequential claim is which of it is examinable.
+    """
+    name = Path(resource_rel).stem
+    hits: list[tuple[Path, str]] = []
+    for page in sorted(REPO_ROOT.glob("Exam *.md")):
+        for reading, assignment in source_material(page):
+            if reading.split("/")[-1].strip() == name:
+                hits.append((page, assignment))
+                break
+    return hits
+
+
+def syllabus_url_for(exam_page: Path) -> tuple[str, str]:
+    """`(url, label)` of the exam's published syllabus, read from the app's
+    transcribed table (`quiz/src/data/examPdfLinks.ts`)."""
+    table = REPO_ROOT / "quiz" / "src" / "data" / "examPdfLinks.ts"
+    if not table.is_file():
+        return "", ""
+    text = table.read_text(encoding="utf-8")
+    meta = re.search(r'data-current="([^|"]+)\|', exam_page.read_text(encoding="utf-8"))
+    exam_id = meta.group(1).strip().lower() if meta else ""
+    if not exam_id:
+        return "", ""
+    # Same key rule the app uses (`examIdFromFile`): a dash-less exam picks up a
+    # `-1` suffix, so Exam 5's key in the table is `5-1`, not `5`.
+    keys = [exam_id] if "-" in exam_id else [f"{exam_id}-1", exam_id]
+    for key in keys:
+        # Only the syllabus map pairs a url with a `label`; take the entry nearest
+        # the end of the file, which is that map.
+        hit = None
+        for m in re.finditer(
+            r"'" + re.escape(key) + r"':\s*\{\s*url:\s*'([^']+)',\s*label:\s*'([^']+)'",
+            text,
+        ):
+            hit = m
+        if hit:
+            return hit.group(1), hit.group(2)
+    return "", ""
+
+
 def resource_note(reading: str, assignment: str) -> tuple[str, str]:
     """The `Resources/Books` page for a reading, plus where to actually find it."""
     name = reading.split("/")[-1].strip()
@@ -236,6 +284,33 @@ def build(rel: str, max_concepts: int, max_siblings: int) -> Context:
         ))
 
     fm_text, _body = V.split_frontmatter(text)
+
+    # A resource page is reached from the exam side, not its own frontmatter.
+    if rel.startswith("Resources/"):
+        where = _fm_scalar(fm_text or "", "Available from") or \
+            _fm_scalar(fm_text or "", "Find at your local library at")
+        if where:
+            ctx.attachments.append(Attachment(
+                path=f"(fetch) {where}",
+                role="source",
+                note="the document this page describes — fetch it; the outline is "
+                     "checked against the real thing, not against the vault",
+                text="",
+            ))
+        for exam_page, assignment in exams_citing(rel):
+            detail = f"cites this resource ({assignment})" if assignment \
+                else "cites this resource"
+            url, label = syllabus_url_for(exam_page)
+            if url:
+                detail += f" · published syllabus ({label}): {url}"
+            ctx.attachments.append(Attachment(
+                path=V.rel_path(exam_page),
+                role="syllabus",
+                note=detail + " — the syllabus decides which parts of this "
+                              "resource are examinable",
+                text="",
+            ))
+
     exam_label = _fm_scalar(fm_text or "", "exam") if fm_text else None
     if exam_label is None and V.EXAM_PAGE_RE.match(path.name):
         exam_page: Path | None = path
@@ -288,6 +363,7 @@ def render(ctx: Context) -> str:
         ("3. Sibling files from the same import batch", "sibling"),
         ("4. Linked concept pages", "concept"),
         ("5. Source material named by the syllabus", "source"),
+        ("6. Exam pages citing this resource, and their published syllabus", "syllabus"),
     ]
     for heading, role in groups:
         items = [a for a in ctx.attachments if a.role == role]

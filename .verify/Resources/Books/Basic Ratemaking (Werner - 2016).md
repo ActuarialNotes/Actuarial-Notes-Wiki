@@ -187,3 +187,86 @@ created: 2026-09-05
 - checks_run: chapter-by-chapter heading diff against the printed TOC and the PDF bookmark outline; bullet-level claim checks against chapter bodies; full-text search for every named term the outline asserts (Lee diagram, consistency test, self-insured retention, personal auto example, permissible loss ratio, LCF/tax multiplier, lifetime value, spatial smoothing, limited fluctuation); syllabus scope resolved against the current CAS content outline; frontmatter fields against the PDF cover page; both Available-from URLs fetched (HTTP 200, identical content-length); 69 wiki-links and the cover embed resolved
 - sources_checked: CAS Exam 5 Content Outline, Fall 2026 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf (version Exam_5_CO_2026_F v01 2026_4_22.docx; sha256 a7ba895343f7d888bc2c2d5f3b10b2811c8911620c628ae4cebd3ae6393ff1ea), p.6 'Complete Text References for Exam 5'; Werner, G. & Modlin, C., Basic Ratemaking, 5th ed., May 2016 (CAS) — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf (sha256 6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c, 423 pp.): PDF bookmark outline, printed Table of Contents PDF pp.8-12, and chapter bodies as cited per finding
 - note: Left disputed rather than verified: F-002 is an unresolved critical finding (Chapter 16 is on the syllabus and the page has no section for it), and per docs/verification.md an unresolved critical finding is exactly what disputed means. The two mechanical, source-quotable errors (F-001 scope sentence, F-006 phantom chapter number) are fixed in this working tree. The remaining eight need authoring or a taxonomy decision, which section 6 of the agent definition reserves for a human. Both rank-1/rank-2 sources agreed with each other throughout - the only conflicts found were between the page and the sources.
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1-followup
+- run_id: 2026-09-05T17:10Z/fe28
+- date: 2026-09-05
+- resolves: F-002
+- status: resolved
+- note: Authored '## 16 Claims-Made Ratemaking' from Werner ch.16 (PDF pp.324-333, printed 312-321). Bullets transcribe the chapter's own scope list (PDF p.324): report-year/report-lag aggregation with the occurrence policy as a diagonal and the claims-made policy as a row of table 16.1; the report-date coverage trigger; the five Marker and Mohl (1980) principles verbatim in substance from PDF p.326; and the coordination mechanics from PDF pp.330-332 (retroactive date, first/second-year vs mature policies, step factors as a percentage of the mature rate per table 16.8, extended reporting endorsement / tail coverage for the switch back to occurrence and for retirement). Cross-checked against KEY CONCEPTS IN CHAPTER 16 (PDF p.333), which lists exactly these five items.
+
+## [F-003/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1-followup
+- run_id: 2026-09-05T17:10Z/fe28
+- date: 2026-09-05
+- resolves: F-003
+- status: resolved
+- note: Chapter 2 section kept, and marked with a collapsed '[!warning]- Not on the Exam 5 syllabus' callout naming the CAS content outline as the authority. Rationale: this page is the book's map, not only a syllabus map, and later chapters refer back to ch.2 - deleting the section would leave a numbering hole between 1 and 3. The exclusion is now stated where a candidate reads the chapter rather than only in the intro.
+
+## [F-004/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1-followup
+- run_id: 2026-09-05T17:10Z/fe28
+- date: 2026-09-05
+- resolves: F-004
+- status: resolved
+- note: 'consistency (Lee diagram) tests' removed. Replaced with what the INCREASED LIMITS RATEMAKING section actually contains, per its sub-headings across PDF pp.204-210: the Standard ILF Approach (built on limited average severity), Censored Losses, Other Considerations (trend's differential effect on higher layers), the ISO Mixed Exponential Methodology, and the Multivariate Approach. 'Lee diagram' still occurs zero times in the 423-page book.
+
+## [F-005/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1-followup
+- run_id: 2026-09-05T17:10Z/fe28
+- date: 2026-09-05
+- resolves: F-005
+- status: resolved
+- note: Corrected to the three worked examples the chapter actually contains, per the printed TOC (PDF p.8) and the body headings: HOMEOWNERS RATING MANUAL EXAMPLE (printed p.17), MEDICAL MALPRACTICE RATING MANUAL EXAMPLE (printed p.23), U.S. WORKERS COMPENSATION RATING MANUAL EXAMPLE (printed p.29). The non-existent personal auto example is gone. Bullet 1 also corrected from 'rate tables' to 'rate pages', the book's own section name.
+
+## [F-007/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1-followup
+- run_id: 2026-09-05T17:10Z/fe28
+- date: 2026-09-05
+- resolves: F-007
+- status: resolved
+- note: Appendices bullet expanded from four to all six, split A-D / E / F, with the CAS content outline's sentence that they are 'an integral part of the textbook and will be used for creating questions' quoted inline. E is the univariate classification example (pure premium and loss ratio approaches, PDF p.411); F is the multivariate example (GLM output for a predictive and an unpredictive variable, plus hold-out model validation, PDF p.415). Appendix A is labelled loss ratio and B pure premium, matching the printed TOC's 'LR (LOSS RATIO) INDICATION EXHIBIT' and 'PP (PURE PREMIUM) INDICATION EXHIBIT'.
+
+## [F-008/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1-followup
+- run_id: 2026-09-05T17:10Z/fe28
+- date: 2026-09-05
+- resolves: F-008
+- status: resolved
+- note: Self-insured-retention clause removed. Replaced with the section's own scope sentence, Werner PDF p.310 verbatim: 'These mechanisms include loss-rated composite risks, large deductible policies, and retrospective rating plans.' 'self-insured' still occurs zero times in the book.
+
+## [F-009/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1-followup
+- run_id: 2026-09-05T17:10Z/fe28
+- date: 2026-09-05
+- resolves: F-009
+- status: resolved
+- note: Permissible-loss-ratio bullet moved from ch.8 to ch.7, where the PERMISSIBLE LOSS RATIOS section heading sits (printed p.139 / PDF p.151; ch.8 opens at printed p.141 / PDF p.153). While editing ch.7, also added the exposure/policy-based projection method, which the chapter carries alongside the premium-based one (printed pp.130 and 133) and the page had omitted.
+
+## [F-010/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1-followup
+- run_id: 2026-09-05T17:10Z/fe28
+- date: 2026-09-05
+- resolves: F-010
+- status: resolved
+- note: Type changed from 'Study Note' to 'Textbook'. The CAS content outline (Fall 2026, p.6) calls it 'the textbook'; the book's own front matter (PDF p.2) calls it 'a single educational text'. 'Textbook' is an existing value in the vault's Resources/Books taxonomy (2 other pages use it), so this is a move within the taxonomy rather than a new value.
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1-followup
+- run_id: 2026-09-05T17:10Z/fe28
+- date: 2026-09-05
+- status_set: verified
+- confidence: high
+- checks_run: all eight findings from run 2026-09-05T16:45Z/fb4a resolved and re-checked against the source; chapter 16 section authored from ch.16 body and cross-checked against its KEY CONCEPTS list; heading sequence now 1-16 plus lettered Appendices, matching the printed TOC; 64 wiki-links and the cover embed re-resolved after editing
+- sources_checked: Werner, G. & Modlin, C., Basic Ratemaking, 5th ed., May 2016 (CAS) — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf (sha256 6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c, 423 pp.): printed Table of Contents PDF pp.8-12, PDF bookmark outline, and chapter bodies pp.204-210 (ILF), 310 (large commercial scope), 324-333 (ch.16), 411/415 (Appendices E/F); CAS Exam 5 Content Outline, Fall 2026 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf (version Exam_5_CO_2026_F v01 2026_4_22.docx; sha256 a7ba895343f7d888bc2c2d5f3b10b2811c8911620c628ae4cebd3ae6393ff1ea), p.6 'Complete Text References for Exam 5' and p.4 Domain A task list
+- note: Every heading and bullet on the page now traces to a cited page of the Werner PDF or to the CAS content outline. Chapter 2 is retained but marked off-syllabus rather than deleted (see F-003 resolution). Two terms the page previously asserted - 'Lee diagram' and 'self-insured' - occur zero times in the book and are gone.

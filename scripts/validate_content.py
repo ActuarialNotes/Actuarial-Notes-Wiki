@@ -127,6 +127,16 @@ def wiki_link_to_stem(link: str) -> str:
     return link.replace("Concepts/", "").replace(".md", "").replace("+", " ")
 
 
+def _is_question_path(path: Path) -> bool:
+    """True for a file under `questions/`, which is the only content this
+    validator has a schema for."""
+    try:
+        rel = path.resolve().relative_to(REPO_ROOT)
+    except ValueError:
+        return False
+    return rel.parts[:1] == ("questions",)
+
+
 def collect_built_questions(report: "Report") -> list[Path]:
     """Mirror the app's collector (`collectQuestions` in quiz/vite.config.ts).
 
@@ -260,6 +270,24 @@ def main() -> int:
                 targets.extend(sorted(pp.glob("*.md")))
             elif pp.is_file():
                 targets.append(pp)
+
+        # This validator only knows the *question* schema. Handed a concept,
+        # resource or exam page it used to demand `id`, `topic`, `points` and the
+        # rest of the question frontmatter, producing a wall of errors that say
+        # nothing about the file. Refuse those paths by name instead, and point
+        # at the tool that does own them.
+        misdirected = [t for t in targets if not _is_question_path(t)]
+        if misdirected:
+            print("This validator checks the question bank only.\n")
+            print(f"✗ {len(misdirected)} path(s) are not question-bank content:")
+            for t in misdirected:
+                print(f"  - {Report._rel(t)}")
+            print(
+                "\nQuestion files live under questions/<exam-id>/. For Concepts/,"
+                "\nResources/ and the root Exam pages, the frontmatter authority is"
+                "\n`python3 scripts/verify_check.py` (add --sync to repair)."
+            )
+            return 2
     else:
         targets = collect_built_questions(report)
 

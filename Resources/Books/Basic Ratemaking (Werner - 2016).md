@@ -5,19 +5,19 @@ Year: "2016"
 date: "2016"
 Edition: 5th
 Publisher: Casualty Actuarial Society
-Type: Study Note
+Type: Textbook
 Available from: "[casact.org](https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf)"
 verification:
-  status: disputed
-  confidence: null
+  status: verified
+  confidence: high
   last_checked: 2026-09-05
-  last_checked_by: agent:validate-v1
-  content_hash: sha256:98c6d7d73e73c020f467166fd01a37338b148c0f22a73951b368d97f7f67d585
+  last_checked_by: agent:validate-v1-followup
+  content_hash: sha256:5276f993b985228da93367fca70226e547fecbcee3fad21d3d1a1ba732ed06bc
   sources:
-    - "CAS Exam 5 Content Outline, Fall 2026 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf (version Exam_5_CO_2026_F v01 2026_4_22.docx; sha256 a7ba895343f7d888bc2c2d5f3b10b2811c8911620c628ae4cebd3ae6393ff1ea), p.6 'Complete Text References for Exam 5'"
-    - "Werner, G. & Modlin, C., Basic Ratemaking, 5th ed., May 2016 (CAS) — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf (sha256 6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c, 423 pp.): PDF bookmark outline, printed Table of Contents PDF pp.8-12, and chapter bodies as cited per finding"
-  open_findings: 8
-  open_critical: 1
+    - "Werner, G. & Modlin, C., Basic Ratemaking, 5th ed., May 2016 (CAS) — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf (sha256 6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c, 423 pp.): printed Table of Contents PDF pp.8-12, PDF bookmark outline, and chapter bodies pp.204-210 (ILF), 310 (large commercial scope), 324-333 (ch.16), 411/415 (Appendices E/F)"
+    - "CAS Exam 5 Content Outline, Fall 2026 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf (version Exam_5_CO_2026_F v01 2026_4_22.docx; sha256 a7ba895343f7d888bc2c2d5f3b10b2811c8911620c628ae4cebd3ae6393ff1ea), p.6 'Complete Text References for Exam 5' and p.4 Domain A task list"
+  open_findings: 0
+  open_critical: 0
   log: .verify/Resources/Books/Basic Ratemaking (Werner - 2016).md
 ---
 ![[Basic Ratemaking (Werner - 2016) - Cover.svg]]
@@ -33,9 +33,12 @@ The primary [[Ratemaking]] text on the [[Exam 5 (CAS)|Exam 5]] syllabus. The CAS
 
 ## 2 Rating Manuals
 
-- Structure of a rating manual: rules, rate tables, [[Rating Algorithm|rate pages and algorithms]], underwriting guidelines
+> [!warning]- Not on the Exam 5 syllabus
+> The CAS content outline excludes Chapter 2. It is kept here because it is part of the book's structure and the later chapters refer back to it — but nothing in it is examinable.
+
+- Structure of a rating manual: rules, rate pages, [[Rating Algorithm|rating algorithms]], underwriting guidelines
 - [[Classification Ratemaking|Rating characteristics]] and how they map to relativities
-- Worked personal auto and homeowners rating examples
+- Worked rating manual examples for homeowners, medical malpractice, and U.S. workers compensation
 
 ## 3 Ratemaking Data
 
@@ -69,13 +72,13 @@ The primary [[Ratemaking]] text on the [[Exam 5 (CAS)|Exam 5]] syllabus. The CAS
 
 - [[Expense Provisions|Expense provisions]]: [[Fixed Expenses|fixed]] vs. [[Variable Expenses|variable]] treatment
 - The all-variable expense method and the distortion it introduces across policy sizes
-- Premium-based expense ratios: written vs. earned denominators
+- Projecting expenses: the premium-based method and the exposure/policy-based method
 - [[Profit and Contingency Provision|Underwriting profit provision]] and the net cost of [[Reinsurance|reinsurance]]
+- Deriving the [[Permissible Loss Ratio]] from the expense and profit provisions
 
 ## 8 Overall Indication
 
 - The [[Pure Premium Method]] and the [[Loss Ratio Method]] — mathematical equivalence and when each is preferred
-- Calculating a [[Permissible Loss Ratio]]
 - Building the [[Overall Rate Level Indication]] from trended, developed, on-level components
 
 ## 9 Traditional Risk Classification
@@ -93,7 +96,7 @@ The primary [[Ratemaking]] text on the [[Exam 5 (CAS)|Exam 5]] syllabus. The CAS
 ## 11 Special Classification
 
 - [[Territory Ratemaking|Territorial ratemaking]] and spatial smoothing
-- [[Increased Limits|Increased limits factors]] and consistency (Lee diagram) tests
+- [[Increased Limits|Increased limits factors]]: the standard ILF approach built on limited average severity, censored losses, the effect of trend on higher layers, and the ISO mixed exponential and multivariate approaches
 - [[Deductible Rating|Deductible pricing]] and the loss elimination ratio
 - Size of risk, [[Coinsurance Rating|coinsurance]], and insurance-to-value
 
@@ -120,11 +123,23 @@ The primary [[Ratemaking]] text on the [[Exam 5 (CAS)|Exam 5]] syllabus. The CAS
 - Manual rating vs. loss-rated and composite-rated risks
 - [[Experience Rating|Experience rating]] and [[Schedule Rating|schedule rating]]
 - [[Retrospective Rating|Retrospective rating]]: basic premium, loss conversion factor, tax multiplier, minimum and maximum premium
-- Large deductible programs and [[Self-Insured Retention|self-insured retentions]]
+- Rating mechanisms for large commercial risks: loss-rated composite risks, large deductible policies, and [[Retrospective Rating|retrospective rating]] plans
+
+## 16 Claims-Made Ratemaking
+
+- Why claims-made coverage exists: unanticipated inflation and rising frequency in long-tailed professional liability during the 1960s–70s, and the pricing risk of a long reporting lag
+- Aggregating losses by **report year** and **report lag**: an occurrence policy is a diagonal of the report-year/lag table (one accident year), a [[Claims Made Coverage|claims-made]] policy is a row (one report year)
+- The [[Occurrence Coverage|coverage trigger]] is the **report date** rather than the accident date, so only claims reported in the next policy period must be projected
+- The five principles of claims-made policies (Marker and Mohl, 1980): cheaper than occurrence while claim costs rise; less exposed to a misestimated trend; a mature policy is barely affected by a shift in the reporting pattern; no pure [[IBNR]] liability, so less reserve-inadequacy risk; and substantially less investment income
+- Coordinating coverage: the **retroactive date**, first- and second-year vs. **mature** claims-made policies, **step factors** as a percentage of the mature rate, and the **extended reporting endorsement** (tail coverage) that closes the gap on switching back to occurrence or on retirement
 
 ## Appendices
 
-- Full ratemaking indication worked examples for personal auto, homeowners, workers compensation, and medical malpractice
+The Appendices are, per the CAS content outline, "an integral part of the textbook and will be used for creating questions."
+
+- **A–D** — full ratemaking indication worked examples: auto (loss ratio), homeowners (pure premium), medical malpractice, and workers compensation
+- **E** — univariate classification example: the pure premium and loss ratio approaches side by side
+- **F** — multivariate classification example: sample [[Generalized Linear Model|GLM]] output for a predictive and an unpredictive variable, plus overall model validation on a hold-out sample
 
 ## Links
 - [Basic Ratemaking, 5th Edition (CAS)](https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf)

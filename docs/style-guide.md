@@ -122,7 +122,7 @@ big type is rare and reserved for hero numbers and empty-state headings.
 
 The vault's fenced blocks are **console output** — an R model summary, a `summary()` table —
 and they only read while their columns stay aligned. `components/CodeBlock.tsx` is the single
-renderer every markdown surface uses (`MarkdownText`, `WikiArticle`, `ExamGuideCards` all
+renderer every markdown surface uses (`MarkdownText` and `WikiArticle` both
 spread its `codeComponents`); don't restyle a `<pre>` in a component.
 
 | Element | Treatment |

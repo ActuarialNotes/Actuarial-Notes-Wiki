@@ -28,8 +28,9 @@ Resources/{Books,Regulation,Events,Benchmarks,Data}/*.md
                                                   — resource pages; the dated ones feed the
                                                     Resources timeline/heatmap (frontmatter w/ source links)
 questions/<exam-id>/*.md                          — question bank (YAML frontmatter + markdown)
-Guides/<Exam page>/*.md                           — the exam-page "How to Study" tips, one page per tip
-                                                    (frontmatter: exam, section, order)
+Guides/<Exam page>/*.md                           — study tips, one page per tip (frontmatter: exam,
+                                                    section, order). Bundled but no longer rendered —
+                                                    the exam-page "How to Study" card was removed
 comprehension-checks/<exam-id>/*.md               — flashcard-collect gate questions (one .md per concept,
                                                     parsed by lib/comprehensionCheckParser.ts)
 Media/Attachments/                                — images referenced via ![[...]]
@@ -194,17 +195,18 @@ Other important `lib/` modules:
   the exam page shows the amber *In Development* banner (`WikiFloatingSearch`), and the quiz
   builder's Beta pill reads the same helper. Move an exam out of development here, not in the
   surfaces.
-- `examGuides.ts` — the exam page's **How to Study** guide: turns the tip pages the build
-  collects out of `Guides/<exam page>/` into one guide per exam, in the reading order their
-  `order:` frontmatter authors (a page with none sorts last rather than into the middle of
-  the run). Pure and tested; `data/examGuides.ts` applies it to `virtual:exam-guides`, and
-  `components/wiki/ExamGuideCards.tsx` draws the card, its list, and the concept-viewer walk
-  a tip opens into. Every tip ref carries an explicit `path` — "Scoring" is a page under
-  every exam, so only the folder says which one to fetch.
+- `examGuides.ts` — turns the tip pages the build collects out of `Guides/<exam page>/` into
+  one guide per exam, in the reading order their `order:` frontmatter authors (a page with
+  none sorts last rather than into the middle of the run). Pure and tested;
+  `data/examGuides.ts` applies it to `virtual:exam-guides`. **Nothing renders it today** —
+  the exam page's *How to Study* card was removed — but the content, the bundle and the
+  `kind: 'guide'` walk in the concept popup are all still here, so resurfacing it is a
+  matter of adding a surface. Every tip ref carries an explicit `path` — "Scoring" is a page
+  under every exam, so only the folder says which one to fetch.
 - `keystone.ts` — the keystone-concept read side: `findKeystone` / `isKeystone` (strict name
   matching, no fuzzy hits) and `keystoneProgress` (decay-aware mastery roll-up per exam).
-  Rendered by `components/KeystoneName.tsx`; the per-exam list lives in the readiness popup
-  (`components/wiki/ExamReadinessCard.tsx`), where keystone mastery is a scoring criterion.
+  Rendered by `components/KeystoneName.tsx`. No surface lists an exam's keystones since the
+  readiness card was removed; keystone mastery is still a criterion of the readiness score.
 - `questionAttempts.ts` — turns a learner's per-question response tally (`hooks/useQuestionAttempts`,
   backed by `question_responses`) into the display state every question list shows: attempted or not,
   and how many attempts were successful vs unsuccessful. Rendered by `components/QuestionAttemptBadge.tsx`,
@@ -272,11 +274,9 @@ Other important `lib/` modules:
 - `resourceTimeline.ts` / `resourceTimelineFilters.ts` — build/filter the dated Resources timeline (heatmap)
 - `readiness.ts` — exam-readiness scoring. `computeExamReadiness` is **the** readiness score
   (syllabus coverage 60% + keystone concepts 40%, plus band, section breakdown and concept
-  tally); every surface that prints a readiness % calls it — the exam page's **Exam Readiness
-  Score** card (`components/wiki/ExamReadinessCard.tsx` — the Dashboard's Study Guide radial
-  at 48px, leading the orientation row as `ExamGuideCards`'s `leadCard`; the card shows only
-  the score, its popup the breakdown and the exam's keystones), the Dashboard's Study Guide
-  radial, the exam grid and the readiness projection. `computeReadiness` is the
+  tally); every surface that prints a readiness % calls it — the Dashboard's Study Guide
+  radial, the exam grid and the readiness projection. The exam study guide shows no
+  readiness card (removed along with the orientation row). `computeReadiness` is the
   weighted section score it is built from — an input, not a second number to display.
 - `readinessRing.ts` — the geometry behind the **readiness ring**: one arc per syllabus
   concept, each section sized by its exam weight, each arc filled by that concept's mastery
@@ -436,27 +436,16 @@ compile — don't "clean up" the flagged code as dead.
 - Wiki links use Obsidian syntax: `[[Concept Name]]` or `[[Concept Name|Display Text]]`.
 - Exam pages use callout blocks (`> [!example]-`) listing learning objectives with weight
   percentages, e.g. `{23-30%}`.
-- An exam page may carry a bare `<div class="exam-guides"></div>` marking where the
-  **orientation row** goes (the readiness card beside the **How to Study** card, the same
-  size and shape as each other and as a learning objective, normally just below the exam's
-  intro paragraph). The div is only a position marker — `WikiArticle` swaps it for
-  `components/wiki/ExamGuideCards.tsx`.
-  The guide card is a disclosure, not a dialog: it expands in place to the list of its tips,
-  the way a learning objective expands, and a tip opens in the **concept viewer** (so the
-  popup's Previous / Next walks the guide and a `[[wikilink]]` inside a tip stacks the
-  concept on top of it). Each tip is a vault page — `Guides/<exam page>/<tip>.md`, e.g.
-  `Guides/Exam MAS-I (CAS)/Format and pacing.md` — with frontmatter `exam`, `section`
-  (`exam-day` / `how-to-study`, authoring context only) and `order`, which is the reading
-  order: the exam-day format page (how many questions, how long you get for each) first,
-  then the focus-area advice, then the rest of the exam-day facts. Write the body like a
-  concept page: no `# Title` (the file name is the title), markdown, `[[Wiki Links]]` and
-  LaTeX all fine. Vite bundles the folder at build time via `virtual:exam-guides`
-  (`quiz/src/lib/examGuides.ts` groups it, `data/examGuides.ts` applies it), and the folder
-  name is what ties a guide to its exam — `examIdFromFile`, so a dash-less exam picks up a
-  `-1` suffix and Exam 5's key is `5-1`. An exam with no `Guides/` folder renders no guide
-  card. The **Exam Readiness Score** card leads the same row (passed to `ExamGuideCards` as
-  `leadCard`); on an exam page with no `exam-guides` div it falls back to a slot inserted
-  under the "Learning Objectives" heading.
+- The study tips under `Guides/<exam page>/` are still bundled (`virtual:exam-guides`) but no
+  surface renders them: the exam page's orientation row — the **Exam Readiness Score** card
+  beside the **How to Study** card — was removed, along with the `<div class="exam-guides"></div>`
+  position marker the exam pages used to carry. Each tip is a vault page —
+  `Guides/<exam page>/<tip>.md`, e.g. `Guides/Exam MAS-I (CAS)/Format and pacing.md` — with
+  frontmatter `exam`, `section` (`exam-day` / `how-to-study`, authoring context only) and
+  `order`. Write the body like a concept page: no `# Title` (the file name is the title),
+  markdown, `[[Wiki Links]]` and LaTeX all fine. The folder name is what ties a guide to its
+  exam — `examIdFromFile`, so a dash-less exam picks up a `-1` suffix and Exam 5's key is
+  `5-1`.
 - Every exam page ends with a `## Source Material` heading over a
   `> [!answer]- Source Material` callout: one top-level bullet per syllabus reading (a
   `[[wiki link]]`, normally to a `Resources/Books/` page) with an indented bullet naming the
@@ -526,7 +515,7 @@ modules that read directly from the repo root:
 - `virtual:questions-content` — `questions/`
 - `virtual:comprehension-checks` — `comprehension-checks/<exam-id>/`
 - `virtual:exam-guides` — the tip pages under `Guides/<exam page>/` (their markdown rides
-  along in `virtual:wiki-content`, so the concept viewer opens one without a fetch)
+  along in `virtual:wiki-content`; bundled but unrendered — see `lib/examGuides.ts`)
 - `virtual:resource-timeline` — the dated `Resources/{Books,Events,Regulation,Benchmarks}/`
   pages that power the Resources timeline/heatmap
 - `virtual:keystone-links` — for each keystone concept page, the concept pages it links to

@@ -232,27 +232,37 @@ Where the way in sits depends on the surface:
 - **Exam pages** — nothing. An exam page is a syllabus outline; the claims worth
   checking live on the concept and resource pages it links to.
 
-Either way opens `FactCheckDialog` over `FactCheckPanel`, which is laid out as the
-answers to the two questions a reader arrives with — *what was this checked
-against?* and *what has changed since?*:
+Either way opens `FactCheckDialog` over `FactCheckPanel` — a bottom sheet on a
+phone, a centred `max-w-lg` card above `sm`, per `docs/style-guide.md` §8.1 — laid
+out as the answers to the two questions a reader arrives with: *what was this
+checked against?* and *what has changed since?*
 
-- **the verdict and its date**, from the block, with no fetch. The one-sentence
-  `detail` is printed only for the statuses whose two words don't say what to do
-  about it (`in_review`, `stale`, `disputed`).
-- **Sources** — each citation cut down by `summarizeSource` to the name a reader
-  recognises, linked to its URL. A citation is written for an auditor: it carries
-  the URL, a sha256 of the exact file that was read, a version string and the
-  pages the claim was checked on. All of that stays in the vault, where
-  `verify_check.py` can enforce it, and reaches the screen through the link's
-  `title` rather than as a wall of hashes.
+- **The verdict tile.** The tone's tinted mark beside the verdict, on the
+  `rounded-xl bg-muted/50` block the question-info sheet leads with. One
+  supporting line under it, never two: the one-sentence `detail` for the statuses
+  whose label doesn't say what to do about it (`in_review`, `stale`, `disputed`),
+  otherwise the check date when the label doesn't already carry it.
+- **Checked against** — each citation cut down by `summarizeSource` to the name a
+  reader recognises, drawn as the app's document row (bordered `bg-card`, a
+  `text-primary` file mark, an external-link glyph when there is a URL to open).
+  A citation is written for an auditor: it carries the URL, a sha256 of the exact
+  file that was read, a version string and the pages the claim was checked on.
+  All of that stays in the vault, where `verify_check.py` can enforce it, and
+  reaches the screen through the row's `title` rather than as a wall of hashes.
 - **Open / Fixed / Notes** — the log, fetched on demand through `fetchWikiFile`
   and split by `summarizeLog`. Open findings show first, worst severity first,
   and are the only section expanded by default; a resolution is folded into the
-  finding it closes rather than listed twice. A finding is one line until it is
-  tapped, and what it then shows is the substance — `claim`, `evidence`,
-  `proposed_action`, `note` — not the run id, locus or fingerprint beside them.
-  A `✓` marks an open finding whose `applied: true` says the page in front of the
-  reader has already been corrected.
+  finding it closes rather than listed twice. A finding is one row of a list card,
+  its severity a chip on the same four tones as the verdict, expanding in place to
+  the substance — `claim`, `evidence`, `proposed_action`, `note` — and not to the
+  run id, locus or fingerprint beside them. A `✓` marks an open finding whose
+  `applied: true` says the page in front of the reader has already been corrected.
+
+`lib/factCheckTone.ts` is the feature's one palette — the tinted surface per tone
+and the icon per tone, plus the severity → tone map — shared by the badge, the
+action-menu pill, the verdict tile and the severity chips. Same reason
+`lib/masteryBadge.ts` exists: a severity that is red in one place and amber in
+another is worse than no colour at all.
 
 Showing the work is the point; showing the paperwork is not. A reader who can see
 that someone has already flagged the exact thing they were about to flag has a

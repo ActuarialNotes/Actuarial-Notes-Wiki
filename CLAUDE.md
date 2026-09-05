@@ -167,7 +167,9 @@ Other important `lib/` modules:
   resource page the way in is the *Fact Check* item of the action menu, and an exam page has
   none). `summarizeSource` and `summarizeLog` are what keep that panel short — the first cuts
   an auditor's citation down to the source's name and link, the second splits the log into
-  Open / Fixed / Notes and folds each resolution into the finding it closes. Two rules live
+  Open / Fixed / Notes and folds each resolution into the finding it closes;
+  `lib/factCheckTone.ts` is the feature's one palette (tinted surface + icon per tone, and the
+  severity → tone map), shared by the badge, the action-menu pill and the panel. Two rules live
   here rather than
   in a surface: an open **critical** finding outranks every other badge state including
   `verified`, and `hasCriticalFinding` is what makes `filterQuestions` keep such a question out

@@ -1,8 +1,10 @@
-import { useState } from 'react'
-import { AlertTriangle, Check, CheckCheck, RefreshCw, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { ShieldCheck, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { FACT_CHECK_UI_ENABLED } from '@/lib/featureFlags'
-import { factCheckBadge, type Verification, type FactCheckTone } from '@/lib/verification'
+import { factCheckBadge, type Verification } from '@/lib/verification'
+import { FACT_CHECK_TONE_CLASSES, FACT_CHECK_TONE_ICONS } from '@/lib/factCheckTone'
+import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import { FactCheckPanel } from '@/components/FactCheckPanel'
 
@@ -18,29 +20,6 @@ import { FactCheckPanel } from '@/components/FactCheckPanel'
  * concept or resource page the way in is the **Fact Check** row of the action
  * menu rather than a badge in the title row.
  */
-
-export const FACT_CHECK_TONE_CLASSES: Record<FactCheckTone, string> = {
-  // §4.2 of the style guide: light tinted background, dark tinted text, inverted
-  // in dark mode.
-  green: 'bg-green-50 text-green-900 dark:bg-green-950 dark:text-green-100',
-  amber: 'bg-amber-50 text-amber-900 dark:bg-amber-950 dark:text-amber-100',
-  red: 'bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-100',
-  grey: 'bg-muted text-muted-foreground',
-}
-
-/**
- * A check mark is the feature's mark, so every state that is *about* checking
- * wears one: the double check for a page checked against a source, the single
- * check for one nobody has got to yet. The two states that are not about
- * checking — a page that changed underneath its pass, and one with something
- * known wrong on it — say that instead.
- */
-export const FACT_CHECK_TONE_ICONS: Record<FactCheckTone, typeof Check> = {
-  green: CheckCheck,
-  amber: RefreshCw,
-  red: AlertTriangle,
-  grey: Check,
-}
 
 interface FactCheckBadgeProps {
   verification: Verification | null | undefined
@@ -105,51 +84,80 @@ interface FactCheckDialogProps {
 }
 
 /** The fact-check record for one page, in the sheet every surface opens it in. */
-export function FactCheckDialog({
-  open,
+export function FactCheckDialog(props: FactCheckDialogProps) {
+  if (!props.open || !FACT_CHECK_UI_ENABLED) return null
+  return <FactCheckSheet {...props} />
+}
+
+/**
+ * Mounted only while open, so the sound and the key handler belong to one
+ * viewing rather than to the surface that owns the button.
+ *
+ * A bottom sheet on a phone and a centred dialog above `sm` — the same shape
+ * the app's other record panels use (`docs/style-guide.md` §8.1), down to the
+ * blurred scrim.
+ */
+function FactCheckSheet({
   onClose,
   verification,
   contentPath,
   contentName,
 }: FactCheckDialogProps) {
-  if (!open || !FACT_CHECK_UI_ENABLED) return null
+  // Paper: the panel sliding in, the same cue as the question-info sheet.
+  useSoundOnMount('open')
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        onClose()
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onClose])
 
   return (
     <OverlayPortal>
       <div
-        className="fixed inset-0 z-[130] flex items-end justify-center bg-black/40 sm:items-center"
+        className="fixed inset-0 z-[130] flex items-end justify-center bg-black/50 backdrop-blur-sm sm:items-center sm:p-4"
         onClick={onClose}
         role="presentation"
       >
         <div
-          className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-t-2xl bg-background p-5 shadow-xl sm:rounded-2xl"
+          className="flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden rounded-t-2xl bg-card shadow-2xl sm:rounded-2xl"
           onClick={(e) => e.stopPropagation()}
           role="dialog"
           aria-modal="true"
           aria-label={`Fact check for ${contentName ?? contentPath}`}
         >
-          <div className="mb-4 flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <h2 className="text-base font-semibold">Fact check</h2>
-              <p className="truncate text-xs text-muted-foreground">
-                {contentName ?? contentPath}
-              </p>
+          <div className="flex items-start justify-between gap-3 border-b border-border px-5 py-4">
+            <div className="flex min-w-0 items-center gap-2">
+              <ShieldCheck className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
+              <div className="min-w-0">
+                <h2 className="text-sm font-semibold leading-tight">Fact check</h2>
+                <p className="truncate text-xs text-muted-foreground">
+                  {contentName ?? contentPath}
+                </p>
+              </div>
             </div>
             <button
               type="button"
               onClick={onClose}
               aria-label="Close"
               data-sound="tap"
-              className="rounded-full p-1 text-muted-foreground hover:bg-muted"
+              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <X className="h-4 w-4" />
             </button>
           </div>
-          <FactCheckPanel
-            verification={verification}
-            contentPath={contentPath}
-            contentName={contentName}
-          />
+
+          <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
+            <FactCheckPanel
+              verification={verification}
+              contentPath={contentPath}
+              contentName={contentName}
+            />
+          </div>
         </div>
       </div>
     </OverlayPortal>

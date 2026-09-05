@@ -1,9 +1,14 @@
 import { useEffect, useState } from 'react'
-import { Check, ChevronDown, ExternalLink, Flag, Loader2 } from 'lucide-react'
+import { Check, ChevronDown, ExternalLink, FileText, Flag, Loader2 } from 'lucide-react'
 import { fetchWikiFile, githubBlobUrl } from '@/lib/github'
 import { Button } from '@/components/ui/button'
 import { ReportIssueModal } from '@/components/ReportIssueModal'
 import { cn } from '@/lib/utils'
+import {
+  FACT_CHECK_TONE_CLASSES,
+  FACT_CHECK_TONE_ICONS,
+  SEVERITY_TONE,
+} from '@/lib/factCheckTone'
 import {
   parseVerificationLog,
   factCheckBadge,
@@ -11,7 +16,6 @@ import {
   summarizeLog,
   summarizeSource,
   verificationLogPath,
-  type FactCheckTone,
   type LogEntry,
   type LogEntryGroup,
   type Verification,
@@ -29,9 +33,16 @@ import {
  * screen only through a link's accessible name. Showing the work is the point;
  * showing the paperwork is not.
  *
- * A finding is one line until it is asked for. The evidence behind it runs to a
- * paragraph of citations, which is exactly right in the log and unreadable as a
- * wall — so a row expands.
+ * Three shapes carry it, each already established elsewhere in the app:
+ *
+ *  - the **verdict tile** — the tinted mark from `lib/factCheckTone.ts` on the
+ *    `rounded-xl bg-muted/50` block the question-info sheet leads with;
+ *  - a **source** as a document row, the same bordered `bg-card` affordance the
+ *    quiz and a resource page use for "open this paper";
+ *  - a **finding** as one row of a list card, with its severity as a chip on the
+ *    same four tones, expanding in place to the evidence behind it. The evidence
+ *    runs to a paragraph of citations, which is right in the log and unreadable
+ *    as a wall — so it stays folded until asked for.
  *
  * Sidecar logs are deliberately not bundled at build time — they grow without
  * bound and only matter when someone opens this panel — so the log is fetched on
@@ -46,17 +57,6 @@ import {
  */
 const NEEDS_DETAIL = new Set(['in_review', 'stale', 'disputed'])
 
-const TONE_TEXT: Record<FactCheckTone, string> = {
-  green: 'text-foreground',
-  amber: 'text-amber-700 dark:text-amber-300',
-  red: 'text-red-700 dark:text-red-300',
-  grey: 'text-muted-foreground',
-}
-
-const SEVERITY_TONE: Record<string, FactCheckTone> = {
-  critical: 'red', major: 'amber', minor: 'grey', nit: 'grey',
-}
-
 /** The fields that carry the finding itself, in reading order. */
 const DETAIL_FIELDS: Array<[string, string]> = [
   ['claim', 'Page said'],
@@ -64,6 +64,9 @@ const DETAIL_FIELDS: Array<[string, string]> = [
   ['proposed_action', 'Fix'],
   ['note', 'Note'],
 ]
+
+const HEADING = 'text-xs font-semibold uppercase tracking-wide text-muted-foreground'
+const ROW_FOCUS = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
 
 interface FactCheckPanelProps {
   verification: Verification | null | undefined
@@ -95,56 +98,52 @@ export function FactCheckPanel({
   }, [logPath])
 
   const badge = factCheckBadge(verification)
+  const ToneIcon = FACT_CHECK_TONE_ICONS[badge.tone]
   const checked = formatCheckedDate(verification?.lastChecked ?? null)
   const sources = (verification?.sources ?? []).map((raw) => ({ raw, ...summarizeSource(raw) }))
+  // One supporting line under the verdict, never two: what to do about the
+  // status where the label doesn't say, otherwise the date the label lacks.
+  const support = verification && NEEDS_DETAIL.has(verification.status)
+    ? badge.detail
+    : checked && !badge.label.endsWith(checked) ? checked : null
   const groups = log ? summarizeLog(log) : null
 
   return (
     <div className="space-y-5 text-sm">
-      <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-        <span className={cn('font-semibold', TONE_TEXT[badge.tone])}>{badge.label}</span>
-        {/* The verified label already ends in the date; don't print it twice. */}
-        {checked && !badge.label.endsWith(checked) && (
-          <span className="text-xs text-muted-foreground">{checked}</span>
-        )}
-        {verification && NEEDS_DETAIL.has(verification.status) && (
-          <p className="w-full text-xs text-muted-foreground">{badge.detail}</p>
-        )}
+      <div className="flex items-center gap-3 rounded-xl bg-muted/50 p-3">
+        <span
+          className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-lg',
+            FACT_CHECK_TONE_CLASSES[badge.tone])}
+        >
+          <ToneIcon className="h-4 w-4" aria-hidden />
+        </span>
+        <div className="min-w-0">
+          <p className="font-medium leading-tight">{badge.label}</p>
+          {support && <p className="mt-0.5 text-xs text-muted-foreground">{support}</p>}
+        </div>
       </div>
 
       {sources.length > 0 && (
-        <Section title="Sources">
-          <ul className="space-y-1.5">
+        <section>
+          <h3 className={cn('mb-2', HEADING)}>Checked against</h3>
+          <ul className="space-y-2">
             {sources.map((source) => (
               <li key={source.raw}>
-                {source.url ? (
-                  <a
-                    href={source.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    title={source.raw}
-                    className="inline-flex items-start gap-1.5 break-words hover:underline"
-                  >
-                    <span>{source.label}</span>
-                    <ExternalLink className="mt-0.5 h-3 w-3 shrink-0 text-muted-foreground" aria-hidden />
-                  </a>
-                ) : (
-                  <span className="break-words" title={source.raw}>{source.label}</span>
-                )}
+                <SourceRow source={source} />
               </li>
             ))}
           </ul>
-        </Section>
+        </section>
       )}
 
       {loading ? (
-        <p className="flex items-center gap-2 text-xs text-muted-foreground">
-          <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />
+        <p className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
           Loading
         </p>
       ) : !log || !groups || log.entries.length === 0 ? (
         verification && verification.status !== 'unverified' && (
-          <p className="text-xs text-muted-foreground">Nothing recorded yet.</p>
+          <p className="text-sm text-muted-foreground">Nothing recorded yet.</p>
         )
       ) : (
         <>
@@ -154,20 +153,20 @@ export function FactCheckPanel({
         </>
       )}
 
-      <div className="flex items-center justify-between gap-2 border-t pt-4">
+      <div className="flex items-center justify-between gap-2 border-t border-border pt-4">
         {log ? (
           <a
             href={githubBlobUrl(logPath)}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+            className={cn('inline-flex items-center gap-1.5 rounded-md px-1 py-0.5 text-xs text-muted-foreground transition-colors hover:text-foreground', ROW_FOCUS)}
           >
             Full record
             <ExternalLink className="h-3 w-3" aria-hidden />
           </a>
         ) : <span />}
         <Button size="sm" variant="outline" onClick={() => setReporting(true)} data-sound="tap">
-          <Flag className="mr-1.5 h-3.5 w-3.5" />
+          <Flag className="mr-2 h-4 w-4" />
           Report
         </Button>
       </div>
@@ -182,14 +181,38 @@ export function FactCheckPanel({
   )
 }
 
-const HEADING = 'text-xs font-semibold uppercase tracking-wide text-muted-foreground'
+/**
+ * One cited source. A citation with a URL is a document you can open, and gets
+ * the app's document affordance; one without is the same row, inert — the
+ * shelf stays one shape either way.
+ */
+function SourceRow({ source }: { source: { raw: string; label: string; url: string | null } }) {
+  const inner = (
+    <>
+      <FileText
+        className={cn('mt-0.5 h-4 w-4 shrink-0', source.url ? 'text-primary' : 'text-muted-foreground')}
+        aria-hidden
+      />
+      <span className="min-w-0 flex-1 break-words">{source.label}</span>
+      {source.url && (
+        <ExternalLink className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
+      )}
+    </>
+  )
+  const shape = 'flex items-start gap-2.5 rounded-lg border border-border bg-card px-3 py-2.5 text-sm'
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  if (!source.url) return <div className={shape} title={source.raw}>{inner}</div>
   return (
-    <section>
-      <h3 className={cn('mb-2', HEADING)}>{title}</h3>
-      {children}
-    </section>
+    <a
+      href={source.url}
+      target="_blank"
+      rel="noreferrer"
+      title={source.raw}
+      data-sound="tap"
+      className={cn(shape, 'transition-colors hover:bg-accent hover:text-accent-foreground', ROW_FOCUS)}
+    >
+      {inner}
+    </a>
   )
 }
 
@@ -213,14 +236,15 @@ function EntrySection({
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           data-sound="tap"
-          className={cn('mb-2 flex items-center gap-1.5 hover:text-foreground', HEADING)}
+          className={cn('-mx-1 mb-2 flex items-center gap-1.5 rounded-md px-1 py-0.5 transition-colors hover:text-foreground',
+            HEADING, ROW_FOCUS)}
         >
           {title} · {groups.length}
           <ChevronDown className={cn('h-3.5 w-3.5 transition-transform', open && 'rotate-180')} aria-hidden />
         </button>
       </h3>
       {open && (
-        <ul className="divide-y rounded-xl border">
+        <ul className="divide-y divide-border overflow-hidden rounded-lg border border-border bg-card">
           {groups.map((group) => (
             <EntryRow key={group.entry.id} group={group} />
           ))}
@@ -247,28 +271,30 @@ function EntryRow({ group }: { group: LogEntryGroup }) {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         data-sound="tap"
-        className="flex w-full items-start gap-2 p-3 text-left hover:bg-muted/50"
+        className={cn('flex w-full items-start gap-2.5 px-3 py-2.5 text-left transition-colors hover:bg-accent/50', ROW_FOCUS)}
       >
-        {applied && <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />}
-        <span className="min-w-0 flex-1 break-words text-xs font-medium">
+        {applied && (
+          <Check className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
+        )}
+        <span className="min-w-0 flex-1 break-words text-sm">
           {entry.title || entry.id}
           {applied && <span className="sr-only"> — already corrected on the page</span>}
         </span>
         {isOpenFinding && entry.severity && (
-          <span className={cn('shrink-0 text-[10px] font-semibold uppercase',
-            TONE_TEXT[SEVERITY_TONE[entry.severity] ?? 'grey'])}>
+          <span className={cn('shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide',
+            FACT_CHECK_TONE_CLASSES[SEVERITY_TONE[entry.severity] ?? 'grey'])}>
             {entry.severity}
           </span>
         )}
         <ChevronDown
-          className={cn('mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform',
+          className={cn('mt-0.5 h-4 w-4 shrink-0 text-muted-foreground transition-transform',
             open && 'rotate-180')}
           aria-hidden
         />
       </button>
 
       {open && (
-        <div className="space-y-2 px-3 pb-3">
+        <div className="space-y-3 px-3 pb-3">
           <EntryDetail entry={entry} />
           {closedBy && <EntryDetail entry={closedBy} />}
         </div>
@@ -280,21 +306,23 @@ function EntryRow({ group }: { group: LogEntryGroup }) {
 function EntryDetail({ entry }: { entry: LogEntry }) {
   const value = (key: string) => entry.fields.find((f) => f.key === key)?.value ?? ''
   return (
-    <>
-      {DETAIL_FIELDS.map(([key, label]) => {
-        const text = value(key)
-        if (!text) return null
-        return (
-          <p key={key} className="break-words text-xs leading-relaxed">
-            <span className="font-medium text-muted-foreground">{label}. </span>
-            {text}
-          </p>
-        )
-      })}
-      <p className="text-[11px] text-muted-foreground">
+    <div className="rounded-lg bg-muted/50 p-3">
+      <dl className="space-y-2">
+        {DETAIL_FIELDS.map(([key, label]) => {
+          const text = value(key)
+          if (!text) return null
+          return (
+            <div key={key}>
+              <dt className="text-xs text-muted-foreground">{label}</dt>
+              <dd className="mt-0.5 break-words text-sm leading-relaxed">{text}</dd>
+            </div>
+          )
+        })}
+      </dl>
+      <p className="mt-2 text-xs text-muted-foreground">
         {formatCheckedDate(entry.date) ?? entry.date}
         {entry.author && ` · ${entry.author.replace(/^(agent|human):/, '')}`}
       </p>
-    </>
+    </div>
   )
 }

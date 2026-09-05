@@ -30,7 +30,8 @@ import { buildMasteryLookup } from '@/lib/conceptMatch'
 import { findKeystone, keystoneProgress } from '@/lib/keystone'
 import { MasteryBadge } from '@/components/MasteryBadge'
 import { MASTERY_LABEL, MASTERY_SHORT_LABEL, MASTERY_TINT } from '@/lib/masteryBadge'
-import { FactCheckDialog, FACT_CHECK_TONE_CLASSES } from '@/components/FactCheckBadge'
+import { FactCheckDialog } from '@/components/FactCheckBadge'
+import { FACT_CHECK_TONE_CLASSES } from '@/lib/factCheckTone'
 import { factCheckBadge, parseVerification } from '@/lib/verification'
 
 /**

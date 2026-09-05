@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a2fdf2f19964347fddee7c39a4f8b2a7e2ad43754fcf317764bc3d72d10107e6
+  content_hash: sha256:1f1b37931b91d3ea1560aafb88bc0c48bb8f17c7fe4bc12516aa14135b7fcf49
   sources: []
   open_findings: 0
   open_critical: 0
@@ -17,8 +17,6 @@ verification:
 
 # Exam P-1
 The Probability (P-1) Exam is a 3 hour SOA exam with 30 multiple choice questions that cover probability concepts and applications to measuring risk.
-
-<div class="exam-guides"></div>
 
 ## Prerequisite knowledge
 - [[Calculus]], including series, differentiation, and integration.

@@ -7,11 +7,10 @@ import { fromSlug, examIdFromFile, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
-import { ExamReadinessCard } from '@/components/wiki/ExamReadinessCard'
 import { ExamSyllabusButton } from '@/components/wiki/ExamSyllabusButton'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
-import { parseExamMetadata, parseExamSyllabus, wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { todayISO } from '@/lib/studyPlan'
 import { examStatus } from '@/lib/examStatus'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
@@ -167,16 +166,6 @@ export default function WikiExam() {
       <ChevronLeft className="h-5 w-5" />
     </Link>
   ), [])
-
-  // Parsed straight from the page's own markdown rather than through
-  // `useWikiSyllabus` (which fetches every exam) — this page already holds the
-  // file the syllabus comes from. Feeds the readiness score.
-  const syllabus = useMemo(() => {
-    if (!content) return null
-    const meta = parseExamMetadata(content)
-    if (!meta) return null
-    return parseExamSyllabus(content, meta.examId, meta.examLabel, meta.examTopic, examFileName)
-  }, [content, examFileName])
 
   // How far along this exam's material is — 'ready' (P/FM), 'beta', or
   // 'development' (Exams 6–9: syllabus outline only). Drives the status banner
@@ -341,22 +330,6 @@ export default function WikiExam() {
     return true
   }, [conceptList, conceptOccurrences, resourceRefs, examFileName, openAt, studyPlanRefs])
 
-  // Open a concept from the readiness card (its keystone list). It behaves like
-  // clicking that concept in the syllabus text: the popup opens on the full
-  // concept list so Previous/Next still walks the whole exam.
-  const openReadinessConcept = useCallback((conceptName: string) => {
-    const idx = conceptList.findIndex(r => r.name.toLowerCase() === conceptName.toLowerCase())
-    const list = idx >= 0 ? conceptList : [{ kind: 'concept' as const, name: conceptName }]
-    const occurrenceIndex = Math.max(
-      0,
-      conceptOccurrences.findIndex(o => o.name.toLowerCase() === conceptName.toLowerCase()),
-    )
-    openAt(list, idx >= 0 ? idx : 0, `${examFileName}.md`, studyPlanRefs, resourceRefs, {
-      occurrences: conceptOccurrences,
-      occurrenceIndex,
-    })
-  }, [conceptList, conceptOccurrences, examFileName, openAt, studyPlanRefs, resourceRefs])
-
   // Reset the opened flag whenever the exam or the requested concept changes.
   useEffect(() => {
     popupOpenedRef.current = false
@@ -397,14 +370,6 @@ export default function WikiExam() {
           sourcePath={`${examFileName}.md`}
           onWikiLink={onWikiLink}
           titleBadge={titleBadge}
-          readiness={(
-            <ExamReadinessCard
-              examId={progressKey}
-              examLabel={extractedTitle ?? examFileName}
-              syllabus={syllabus}
-              onSelectConcept={openReadinessConcept}
-            />
-          )}
         />
       )}
     </div>

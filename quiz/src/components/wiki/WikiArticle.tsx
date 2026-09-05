@@ -8,10 +8,9 @@ import type { Components } from 'react-markdown'
 import { calloutComponents } from '@/components/MarkdownCallout'
 import { codeComponents } from '@/components/CodeBlock'
 import { DistributionSimulator } from '@/components/wiki/DistributionSimulator'
-import { ExamGuideCards } from '@/components/wiki/ExamGuideCards'
 import { SourceMaterialGallery } from '@/components/wiki/SourceMaterialGallery'
 import { extractSourceMaterial, SOURCE_MATERIAL_MARKER } from '@/lib/sourceMaterial'
-import { examIdFromFile, hrefToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
+import { hrefToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { isInWikiIndex } from '@/lib/wikiIndex'
 import { isKeystone } from '@/lib/keystone'
 import { distributionForImage } from '@/lib/distributions'
@@ -156,12 +155,6 @@ export interface WikiArticleProps {
   className?: string
   /** Optional node rendered inline after the H1 title (e.g. an exam status badge). */
   titleBadge?: React.ReactNode
-  /**
-   * Optional node rendered with the exam's orientation card (the readiness
-   * card). Falls back to a slot under the learning objectives on exam pages
-   * that carry no guide card.
-   */
-  readiness?: React.ReactNode
 }
 
 function refKey(ref: WikiEntryRef): string {
@@ -184,33 +177,6 @@ function fixBlockquoteOrderedLists(md: string): string {
   )
 }
 
-// The exam pages mark where the orientation cards go with a bare
-// `<div class="exam-guides"></div>`. Swap it for a text marker *before*
-// stripHtmlBlocks runs, since that would otherwise drop it with the rest of the
-// layout divs; the paragraph renderer below turns the marker into the cards.
-export const EXAM_GUIDES_MARKER = '%%exam-guides%%'
-
-export function markExamGuides(md: string): string {
-  return md.replace(/^<div class="exam-guides"[^>]*>\s*<\/div> *$/gm, `\n${EXAM_GUIDES_MARKER}\n`)
-}
-
-// The readiness card rides along with the orientation card, so on an exam page
-// that carries the `exam-guides` div it needs no marker of its own. Exams
-// without that div (the ones with no authored guide) get one inserted directly
-// under the "Learning Objectives" heading — or at the end of the page when an
-// exam has no such heading.
-export const READINESS_MARKER = '%%exam-readiness%%'
-
-export function hasExamGuidesMarker(md: string): boolean {
-  return /^<div class="exam-guides"[^>]*>\s*<\/div> *$/m.test(md)
-}
-
-export function markReadinessCard(md: string): string {
-  const heading = /^## +Learning Objectives.*$/im.exec(md)
-  const at = heading ? heading.index + heading[0].length : md.length
-  return `${md.slice(0, at)}\n\n${READINESS_MARKER}\n${md.slice(at)}`
-}
-
 // Strip block-level HTML divs that publish.js embeds for metadata / layout.
 // react-markdown renders them as literal text without rehype-raw, so they must
 // be removed before parsing.
@@ -222,10 +188,9 @@ function stripHtmlBlocks(md: string): string {
     .replace(/^> *<div\b.*?<\/div> *\n?/gm, '')
 }
 
-export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, className, titleBadge, readiness }: WikiArticleProps) {
+export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, className, titleBadge }: WikiArticleProps) {
   const navigate = useNavigate()
   const articleRef = useRef<HTMLDivElement | null>(null)
-  const hasReadiness = readiness != null
   const { processed, sourceMaterial } = useMemo(() => {
     // Math delimiters first: the vault is written for Obsidian, whose parser is
     // looser than remark-math's. See lib/vaultMath.ts.
@@ -233,18 +198,11 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
     // An exam page's source-material callout becomes a gallery of resource
     // cards; lift its entries out before the wikilinks are rewritten.
     const { markdown: body, entries } = extractSourceMaterial(stripped)
-    const marked = markExamGuides(fixBlockquoteOrderedLists(rewriteWikilinks(body)))
-    // With a guide card on the page the readiness card joins its row; without
-    // one it needs a marker of its own.
-    const needsMarker = hasReadiness && !hasExamGuidesMarker(stripped)
     return {
-      processed: stripHtmlBlocks(needsMarker ? markReadinessCard(marked) : marked),
+      processed: stripHtmlBlocks(fixBlockquoteOrderedLists(rewriteWikilinks(body))),
       sourceMaterial: entries,
     }
-  }, [markdown, hasReadiness])
-
-  // Exam pages get the orientation cards; every other page ignores the marker.
-  const guideExamId = sourcePath && /^Exam\b/i.test(sourcePath) ? examIdFromFile(sourcePath) : null
+  }, [markdown])
 
   const popupOpen = useConceptPopup(s => s.open)
   const popupIndex = useConceptPopup(s => s.index)
@@ -281,14 +239,6 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
         child => !(child.type === 'text' && child.value.trim() === ''),
       )
       const only = kids.length === 1 ? kids[0] : null
-      if (only && only.type === 'text' && only.value.trim() === EXAM_GUIDES_MARKER) {
-        return guideExamId ? <ExamGuideCards examId={guideExamId} leadCard={readiness} /> : null
-      }
-      if (only && only.type === 'text' && only.value.trim() === READINESS_MARKER) {
-        // The orientation row without a guide card beside it, so the card lands
-        // at the same size and margin as it does on an exam that has one.
-        return <div className="not-prose my-4 flex items-stretch gap-3">{readiness}</div>
-      }
       if (only && only.type === 'text' && only.value.trim() === SOURCE_MATERIAL_MARKER) {
         return <SourceMaterialGallery entries={sourceMaterial} onOpen={openRef} />
       }
@@ -346,7 +296,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
         </a>
       )
     },
-  }), [openRef, hideImages, titleBadge, guideExamId, readiness, sourceMaterial])
+  }), [openRef, hideImages, titleBadge, sourceMaterial])
 
   // Active-concept highlight: when the popup is open and its sourcePath
   // matches this article's sourcePath, find the matching wikilink in this

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:4ddf30c01a714147bf43c8548f438dc2b9e0e32fc7406d5ec790770eb3492e84
+  content_hash: sha256:9c15800ae1e9cdccad682b5d086e9b2ae85b3c863a3e524dc39798da22d85716
   sources: []
   open_findings: 0
   open_critical: 0
@@ -17,8 +17,6 @@ verification:
 
 # Exam FM-2
 The **Financial Mathematics (FM-2) Exam** is a 2.5 hour SOA exam with 35 multiple choice questions about financial mathematics concepts and how they are applied in calculating present and accumulated values for streams of cash flows.
-
-<div class="exam-guides"></div>
 
 ## Learning Objectives
 

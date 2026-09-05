@@ -531,6 +531,20 @@ class RecordTests(TempVault):
         self.assertEqual(len(log.open_findings()), 1)
         self.assertEqual(self.block()["open_findings"], 1)
 
+    def test_the_same_sweep_run_twice_leaves_the_log_byte_identical(self) -> None:
+        """The contract the agent definition states is about the *log*, not just
+        the finding ids: a finding recorded today is its own reaffirmation, so a
+        repeat sweep the same day must append nothing at all. Before this was
+        fixed the second run appended a reaffirming comment and only the third
+        was a no-op."""
+        self.finding()
+        after_first = (self.root / V.log_rel_for(self.rel)).read_text(encoding="utf-8")
+        self.finding()
+        self.finding()
+        after_third = (self.root / V.log_rel_for(self.rel)).read_text(encoding="utf-8")
+        self.assertEqual(after_first, after_third)
+        self.assertEqual([e.entry_id for e in self.log().entries], ["F-001"])
+
     def test_a_later_sweep_reaffirms_rather_than_duplicating(self) -> None:
         self.finding(date="2026-08-19")
         self.finding(date="2026-08-26")

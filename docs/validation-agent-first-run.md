@@ -9,7 +9,14 @@ This is a record of what the agent got right and what the *definition and toolin
 wrong, from the first time `.claude/agents/validate.md` was pointed at real content
 against a real PDF. Read it alongside `docs/validation-agent.md`, which is the design;
 this is the field report. Every tooling claim below was reproduced independently of the
-agent's own report.
+agent's own report — and one of them did not survive that reproduction, which is noted
+in place rather than quietly deleted.
+
+> **Status.** Every defect below has since been fixed, and the ten findings on the page
+> itself are all resolved (it now reads `verified`). Each section is annotated with what
+> changed; `docs/validation-agent.md` carries the summary table. The report is kept in
+> its original shape because the *reasoning* is the reusable part — the next content type
+> the agent meets will expose a similar set of gaps.
 
 ## Does PDF-from-the-web actually work?
 
@@ -142,8 +149,8 @@ handling git, stop after `verify_record.py run`; do not branch, commit or push.*
 
 ## Tooling defects
 
-**`scripts/validate_content.py` — misfires on non-question content, and lies to scripts.**
-§4 of the definition calls it "the authority" for frontmatter schema. Reproduced:
+**`scripts/validate_content.py` — misfires on non-question content.**
+§4 of the definition called it "the authority" for frontmatter schema. Reproduced:
 
 ```
 $ python3 scripts/validate_content.py "Resources/Books/Basic Ratemaking (Werner - 2016).md"
@@ -153,16 +160,25 @@ Validated 1 question file(s) across 611 concept pages.
   - …: missing required frontmatter key 'exam'      (…and topic, learning_objective,
                                                      difficulty, type, points, wiki_link)
 Content validation FAILED.
-$ echo $?
-0
 ```
 
-It applies the **question** schema to any explicitly-passed path, and it prints
-`FAILED` while **exiting 0** — so a wrapper script reads that run as success. A less
-careful agent files eight bogus `nit` findings against a book page, or "fixes" the
-frontmatter. Two fixes: dispatch on path (`questions/` vs `Concepts/` vs `Resources/`),
-and exit non-zero when it prints FAILED. Until then §4 should not call it the authority
-for non-question content.
+It applied the **question** schema to any explicitly-passed path — calling a book
+page "1 question file" and demanding `id`, `points` and the rest. A less careful
+agent files eight bogus `nit` findings against it, or "fixes" the frontmatter.
+
+> **Correction.** The first version of this report also claimed it "prints FAILED
+> while exiting 0, so a wrapper script reads that run as success." **That is
+> wrong.** `main()` returns 1 and `sys.exit(main())` propagates it; the real exit
+> code is 1. The claim came from measuring `$?` after piping the command through
+> `tail`, which reports `tail`'s status, not Python's — an error the agent made
+> and this session repeated instead of catching. Only the schema-dispatch half of
+> this finding was real. The lesson generalises: a shell check is evidence about
+> the shell as much as about the program, and `cmd | tail; echo $?` is not a test
+> of `cmd`.
+
+**Fixed** by dispatching on path: an explicit path outside `questions/` is now
+refused by name, with a message pointing at `verify_check.py`, and exits 2. The
+repo-wide invocation CI runs is unchanged.
 
 **Same-day sweeps are not idempotent.** The definition asserts "running the same sweep
 twice must leave the log the same length the second time." Demonstrated on a throwaway
@@ -174,12 +190,16 @@ probe file (created, recorded three times, deleted):
 | 2 | `reaffirmed F-001 (no duplicate finding created)` | **27** |
 | 3 | `F-001 already reaffirmed today — nothing appended` | 27 |
 
-The log stabilizes on the **third** run, not the second. The cause is in
-`verify_record.py`: the "already reaffirmed today" guard looks only for an existing
-*reaffirm comment* dated today, and never considers that the finding itself was created
-today. Either treat "created today" as "already reaffirmed today", or correct the claim in
-the definition. The duplicate-finding guard itself works correctly — no `F-002` was ever
-created.
+The log stabilized on the **third** run, not the second. The cause was in
+`verify_record.py`: the "already reaffirmed today" guard looked only for an existing
+*reaffirm comment* dated today, and never considered that the finding itself was created
+today. The duplicate-finding guard itself worked correctly — no `F-002` was ever created.
+
+**Fixed.** A finding whose own entry is dated today now counts as already reaffirmed, so
+the same sweep repeated the same day appends nothing (19 → 19 → 19). Reaffirmation across
+days is unchanged: a re-detection tomorrow still appends one comment. Pinned by
+`test_the_same_sweep_run_twice_leaves_the_log_byte_identical`, and the definition's claim
+is now stated as byte-identical rather than same-length.
 
 **`verify_context.py` — under-serves resource pages.** §2 of the definition promises "the
 source material the syllabus names for that exam, with the URL each is available from."
@@ -188,6 +208,15 @@ For a `Resources/` path it delivers none of that: no exam content-outline URL, n
 cites this resource *and* the one containing the `A1–A15, A17` string that decoded the
 whole error. The agent found it by grepping. It also dumped ~200 irrelevant lines of
 `Concepts/Ratemaking.md` into the bundle.
+
+**Fixed.** A `Resources/` path now gets a section 6, "Exam pages citing this resource, and
+their published syllabus": `exams_citing()` inverts the exam pages' Source Material
+callouts (the same inversion `quiz/src/lib/resourceExams.ts` does for the app), and
+`syllabus_url_for()` reads the exam's outline URL out of `quiz/src/data/examPdfLinks.ts` —
+applying the app's own key rule, where a dash-less exam id picks up a `-1` suffix, so
+Exam 5 resolves at `5-1`. The page's own `Available from:` URL is now surfaced as an
+explicit fetch target. The concept-dump cap (`--max-concepts`) already existed and is
+unchanged.
 
 > For a `Resources/` path, the bundle should invert `quiz/src/lib/resourceExams.ts` to
 > list the exam pages naming this resource, include that exam's syllabus URL from

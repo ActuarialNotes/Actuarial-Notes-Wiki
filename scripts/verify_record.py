@@ -134,10 +134,16 @@ def cmd_finding(args: argparse.Namespace) -> int:
     if prior is not None:
         still_open = any(f.entry_id == prior.entry_id for f in log.open_findings())
         if still_open:
-            already = [
-                e for e in log.entries
-                if e.fields.get("reaffirms") == prior.entry_id and e.entry_date == stamp
-            ]
+            # A finding recorded today is its own reaffirmation: re-detecting it
+            # on a second sweep the same day says nothing the entry above does not
+            # already say. Without this, the first repeat sweep of the day appends
+            # a reaffirming comment and only the *second* one is a no-op, which
+            # breaks the "running the same sweep twice leaves the log the same
+            # length" contract the agent definition states.
+            already = prior.entry_date == stamp or any(
+                e.fields.get("reaffirms") == prior.entry_id and e.entry_date == stamp
+                for e in log.entries
+            )
             if already:
                 print(f"{rel}: {prior.entry_id} already reaffirmed today — nothing appended")
                 return 0

@@ -232,11 +232,31 @@ Where the way in sits depends on the surface:
 - **Exam pages** — nothing. An exam page is a syllabus outline; the claims worth
   checking live on the concept and resource pages it links to.
 
-Either way opens `FactCheckDialog` over `FactCheckPanel`: the block's own summary
-(status, date, the sources cited) with no fetch, then the page's full log,
-fetched on demand through `fetchWikiFile`. Showing the work is the point. A reader who can
-see that someone has already flagged the exact thing they were about to flag has
-a reason to trust the rest of the vault that no badge alone can give them.
+Either way opens `FactCheckDialog` over `FactCheckPanel`, which is laid out as the
+answers to the two questions a reader arrives with — *what was this checked
+against?* and *what has changed since?*:
+
+- **the verdict and its date**, from the block, with no fetch. The one-sentence
+  `detail` is printed only for the statuses whose two words don't say what to do
+  about it (`in_review`, `stale`, `disputed`).
+- **Sources** — each citation cut down by `summarizeSource` to the name a reader
+  recognises, linked to its URL. A citation is written for an auditor: it carries
+  the URL, a sha256 of the exact file that was read, a version string and the
+  pages the claim was checked on. All of that stays in the vault, where
+  `verify_check.py` can enforce it, and reaches the screen through the link's
+  `title` rather than as a wall of hashes.
+- **Open / Fixed / Notes** — the log, fetched on demand through `fetchWikiFile`
+  and split by `summarizeLog`. Open findings show first, worst severity first,
+  and are the only section expanded by default; a resolution is folded into the
+  finding it closes rather than listed twice. A finding is one line until it is
+  tapped, and what it then shows is the substance — `claim`, `evidence`,
+  `proposed_action`, `note` — not the run id, locus or fingerprint beside them.
+  A `✓` marks an open finding whose `applied: true` says the page in front of the
+  reader has already been corrected.
+
+Showing the work is the point; showing the paperwork is not. A reader who can see
+that someone has already flagged the exact thing they were about to flag has a
+reason to trust the rest of the vault that no badge alone can give them.
 
 Two consequences of the record reach further than display:
 

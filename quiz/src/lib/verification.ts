@@ -198,7 +198,7 @@ export function factCheckBadge(v: Verification | null | undefined): FactCheckBad
       label: 'Disputed',
       short: 'Disputed',
       tone: 'red',
-      detail: 'Sources disagree, or a critical finding is unresolved. Read with care.',
+      detail: 'Sources disagree, or something critical is unresolved.',
     }
   }
   if (v.status === 'stale') {
@@ -206,7 +206,7 @@ export function factCheckBadge(v: Verification | null | undefined): FactCheckBad
       label: 'Re-check needed',
       short: 'Re-check',
       tone: 'amber',
-      detail: 'This page changed after it was last fact checked, so the check no longer applies.',
+      detail: 'Edited since it was last checked.',
     }
   }
   if (v.status === 'in_review') {
@@ -257,6 +257,13 @@ export interface LogEntry {
   severity: LogEntrySeverity | ''
   status: LogEntryStatus | ''
   resolves: string
+  /**
+   * Whether the correction this finding proposed has already been made to the
+   * page. Independent of `status`: a fix can land before a human signs the
+   * finding off, and the Fact Check panel marks such a row so a reader can see
+   * that the text in front of them has already been changed.
+   */
+  applied: boolean
   /** Every `- key: value` field, in source order, for display. */
   fields: Array<{ key: string; value: string }>
 }
@@ -307,6 +314,7 @@ export function parseVerificationLog(raw: string): VerificationLog {
         id: heading[1].trim(),
         title: heading[2].trim(),
         entryType: '', author: '', date: '', severity: '', status: '', resolves: '',
+        applied: false,
         fields: [],
       }
       entries.push(current)
@@ -337,6 +345,7 @@ export function parseVerificationLog(raw: string): VerificationLog {
     entry.severity = get('severity').toLowerCase() as LogEntrySeverity | ''
     entry.status = get('status').toLowerCase() as LogEntryStatus | ''
     entry.resolves = get('resolves')
+    entry.applied = get('applied').toLowerCase() === 'true'
   }
 
   return {
@@ -348,22 +357,117 @@ export function parseVerificationLog(raw: string): VerificationLog {
   }
 }
 
-/**
- * Findings still open, accounting for later resolutions. Nothing in a log is
- * ever edited, so "is it still open" is always a question about what came after.
- */
-export function openFindings(log: VerificationLog): LogEntry[] {
+/** Every entry id that something later in the log has closed. */
+function closedEntryIds(log: VerificationLog): Set<string> {
   const closed = new Set<string>()
   for (const entry of log.entries) {
     const closes = CLOSING.includes(entry.status as LogEntryStatus)
     if (entry.resolves && closes) closed.add(entry.resolves)
     if (closes) closed.add(entry.id)
   }
+  return closed
+}
+
+/**
+ * Findings still open, accounting for later resolutions. Nothing in a log is
+ * ever edited, so "is it still open" is always a question about what came after.
+ */
+export function openFindings(log: VerificationLog): LogEntry[] {
+  const closed = closedEntryIds(log)
   return log.entries.filter((e) => e.entryType === 'finding' && !closed.has(e.id))
 }
 
 export function openCriticalFindings(log: VerificationLog): LogEntry[] {
   return openFindings(log).filter((e) => e.severity === 'critical')
+}
+
+// ─── Panel presentation ──────────────────────────────────────────────────────
+
+export interface SourceSummary {
+  /** The source's name — what a reader recognises it by. */
+  label: string
+  /** Where it can be read, when the citation names a URL. */
+  url: string | null
+}
+
+const SOURCE_URL = /https?:\/\/[^\s)>\]]+/
+
+/**
+ * Cut a cited source down to the part worth printing.
+ *
+ * A citation is written for an auditor, not a reader: it carries the URL, a
+ * sha256 of the exact file that was read, a version string and the pages the
+ * claim was checked on. All of that has to stay in the vault — it is what makes
+ * the check reproducible — but on screen it buries the one thing a student
+ * wants, which is *which book*. So the name is what the panel shows, the URL
+ * becomes the link, and the provenance moves to the link's accessible name.
+ *
+ * The convention is `<name> — <where it was checked>`; with no dash, everything
+ * before the URL is the name.
+ */
+export function summarizeSource(raw: string): SourceSummary {
+  const text = (raw ?? '').trim()
+  const match = SOURCE_URL.exec(text)
+  const url = match ? match[0].replace(/[.,;:]+$/, '') : null
+
+  let label = text.split(/\s+[—–]\s+/)[0]
+  if (label === text && match) label = text.slice(0, match.index)
+  label = label.replace(/[\s—–,:;(-]+$/, '').trim()
+  if (!label) label = url ?? text
+  return { label, url }
+}
+
+export interface LogEntryGroup {
+  entry: LogEntry
+  /** The later entry that closed it, when one exists. */
+  closedBy: LogEntry | null
+}
+
+/**
+ * A page's log, split into the three things a reader is actually asking:
+ * what is still wrong, what has been put right, and what people have said.
+ */
+export interface LogSummary {
+  /** Open findings, worst first. */
+  open: LogEntryGroup[]
+  /** Findings something later closed, plus standalone corrections. */
+  resolved: LogEntryGroup[]
+  /** Comments and questions — reader reports, mostly. */
+  notes: LogEntryGroup[]
+}
+
+const SEVERITY_ORDER: Record<string, number> = {
+  critical: 0, major: 1, minor: 2, nit: 3,
+}
+
+export function summarizeLog(log: VerificationLog): LogSummary {
+  const closed = closedEntryIds(log)
+  const closers = new Map<string, LogEntry>()
+  for (const entry of log.entries) {
+    if (entry.resolves && CLOSING.includes(entry.status as LogEntryStatus)) {
+      closers.set(entry.resolves, entry)
+    }
+  }
+
+  const summary: LogSummary = { open: [], resolved: [], notes: [] }
+  for (const entry of log.entries) {
+    // A resolution belongs to the finding it closes; listing it separately would
+    // say the same thing twice, in two places, out of order.
+    if (entry.resolves && closers.get(entry.resolves) === entry) continue
+    const group: LogEntryGroup = { entry, closedBy: closers.get(entry.id) ?? null }
+    if (entry.entryType === 'finding') {
+      if (closed.has(entry.id)) summary.resolved.push(group)
+      else summary.open.push(group)
+    } else if (entry.entryType === 'correction' || entry.entryType === 'resolution') {
+      summary.resolved.push(group)
+    } else {
+      summary.notes.push(group)
+    }
+  }
+
+  summary.open.sort((a, b) =>
+    (SEVERITY_ORDER[a.entry.severity] ?? 9) - (SEVERITY_ORDER[b.entry.severity] ?? 9))
+  return summary
 }
 
 

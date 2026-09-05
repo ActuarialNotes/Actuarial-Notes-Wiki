@@ -92,6 +92,17 @@ decide what is true.
 - One PR per batch: `Validate: <exam/topic> (<n> files, <m> findings)`, body =
   the run summary with critical findings first. Never a push to `main`.
 
+## First run — field notes
+
+`docs/validation-agent-first-run.md` records the first real sweep
+(`Resources/Books/Basic Ratemaking (Werner - 2016).md`, against the CAS PDFs): what the
+agent caught, and the defects the run exposed in this design and in the tooling —
+a gap in §6's must-not-fix list, a `disputed` contradiction between the agent
+definition and `docs/verification.md`, no syllabus check for resource pages, a
+`validate_content.py` that applies the question schema to any path and exits 0 on
+failure, and same-day sweeps that are not idempotent until the third run. Read it
+before editing `.claude/agents/validate.md`.
+
 ## Bootstrapping
 
 The Exam 5 questions are the regression suite. The transcription errors found in

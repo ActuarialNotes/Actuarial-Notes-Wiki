@@ -8,19 +8,21 @@ Publisher: Casualty Actuarial Society
 Type: Study Note
 Available from: "[casact.org](https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf)"
 verification:
-  status: unverified
+  status: disputed
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:ead27c96a0fb6c9047afc0851468ec4df5c221a48235972abf39e51111fcf299
-  sources: []
-  open_findings: 0
-  open_critical: 0
+  last_checked: 2026-09-05
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:98c6d7d73e73c020f467166fd01a37338b148c0f22a73951b368d97f7f67d585
+  sources:
+    - "CAS Exam 5 Content Outline, Fall 2026 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf (version Exam_5_CO_2026_F v01 2026_4_22.docx; sha256 a7ba895343f7d888bc2c2d5f3b10b2811c8911620c628ae4cebd3ae6393ff1ea), p.6 'Complete Text References for Exam 5'"
+    - "Werner, G. & Modlin, C., Basic Ratemaking, 5th ed., May 2016 (CAS) — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf (sha256 6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c, 423 pp.): PDF bookmark outline, printed Table of Contents PDF pp.8-12, and chapter bodies as cited per finding"
+  open_findings: 8
+  open_critical: 1
   log: .verify/Resources/Books/Basic Ratemaking (Werner - 2016).md
 ---
 ![[Basic Ratemaking (Werner - 2016) - Cover.svg]]
 
-The primary [[Ratemaking]] text on the [[Exam 5 (CAS)|Exam 5]] syllabus. Chapters 1–15 and 17 are on the syllabus; Chapter 16 is excluded.
+The primary [[Ratemaking]] text on the [[Exam 5 (CAS)|Exam 5]] syllabus. The CAS Exam 5 content outline lists **Chapters 1 and 3–16**; **Chapter 2 is excluded**, and the Appendices "are an integral part of the textbook and will be used for creating questions." Errata are included in the reading.
 
 ## 1 Introduction
 
@@ -120,7 +122,7 @@ The primary [[Ratemaking]] text on the [[Exam 5 (CAS)|Exam 5]] syllabus. Chapter
 - [[Retrospective Rating|Retrospective rating]]: basic premium, loss conversion factor, tax multiplier, minimum and maximum premium
 - Large deductible programs and [[Self-Insured Retention|self-insured retentions]]
 
-## 17 Appendices
+## Appendices
 
 - Full ratemaking indication worked examples for personal auto, homeowners, workers compensation, and medical malpractice
 

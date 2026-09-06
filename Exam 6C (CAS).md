@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:d9e9a526590489ddefb74fdc9b6ef3de1bf3baa2bbfe08761047128099e2350b
+  content_hash: sha256:71b4d3f3608f14ee564d86389b5b9425f8a3be8538050ae8e4fda6371fb6a1d1
   sources: []
   open_findings: 0
   open_critical: 0
@@ -29,7 +29,7 @@ The **Canada Regulation and Financial Reporting (6C) Exam** is a 4 hour exam wit
 > 2. Discuss the issues, outcomes, rationale and implications of [[Court Case]] decisions for the insurance industry (e.g., the [[Duty of Good Faith]], [[Bad Faith Damages]], [[Punitive Damages]], the [[Duty to Defend]], [[Vicarious Liability]], [[Limitation Period|limitation periods]], [[Prejudgment Interest]], [[Collateral Benefits]]).
 > 3. Discuss trends in [[Tort Litigation]] (e.g., [[Tort Reform]], [[Class Action]] suits, [[Structured Settlement|structured settlements]]).
 >
-> **Readings:** Alberta Auto Reform · Baer and Rendall · CIA Bias · CIA CSOP · CIA Territories · Davidson · FSCO Coverages · FSCO Private Auto · FSCO Tech Notes · FSRA Risk Management · Harris · IBC Code of Conduct · KPMG PACICC · KPMG Regulatory Oversight · Landmark Legal · Marshall · McDonald · Ontario Reg. 664
+> **Readings:** Baer and Rendall · CFAI · CIA Bias · CIA CSOP · CIA Reliance · CIA Territories · Davidson · FSCO Coverages · FSCO Private Auto · FSCO Tech Notes · FSRA Risk Management · GAO · IBC Code of Conduct · KPMG PACICC · KPMG Regulatory Oversight · Landmark Legal · Marshall · McDonald · Ontario Reg. 664
 
 > [!example]- B. Canadian Government and Industry Insurance Programs {10-15%}
 > ### B. Canadian Government and Industry Insurance Programs
@@ -49,16 +49,18 @@ The **Canada Regulation and Financial Reporting (6C) Exam** is a 4 hour exam wit
 > 4. Evaluate the financial health of an insurance entity based on various [[Solvency]] frameworks (e.g., the [[MCT]] — [[Capital Available]], [[Capital Required]], the [[Base Solvency Buffer]], the [[Insurance Risk Margin|insurance]], [[Market Risk Margin|market]], [[Credit Risk Margin|credit]] and [[Operational Risk Margin|operational]] risk margins, the [[Diversification Credit]], the [[Earthquake Exposure Risk Margin]] and [[Probable Maximum Loss|PML]], and the [[Supervisory Target Capital Ratio|supervisory]] and [[Internal Target Capital Ratio|internal]] target ratios — [[Stress Testing]] and [[Reverse Stress Testing]], [[Ripple Effect|ripple effects]], [[Risk Appetite]], [[Concentration Risk]], [[Climate Risk]], key financial measures used by [[Rating Agency|rating agencies]], and rules-based versus [[Principles-Based Regulation|principles-based]] solvency regulation — [[ORSA]], [[FCT]], [[Solvency II]]).
 > 5. Evaluate the responsibilities of an actuary as defined by standards of practice, regulators, and insurance laws for financial reporting (e.g., the [[Statement of Actuarial Opinion]], contents of the [[Appointed Actuary's Report]], the [[Standards of Practice]], [[Accepted Actuarial Practice]], [[Materiality]], [[Subsequent Events]], [[Model Risk]], [[Runoff|run-off and wind-up]] valuations, [[Educational Note|Educational Notes]], the [[Insurance Companies Act]], the [[Duty to Report]], [[Peer Review]], the actuary and [[External Auditor|auditor]] relationship, [[Corporate Governance]], and regulatory requirements).
 >
-> **Readings:** CAS Financial Reporting · CCIR Instructions · CIA Appointed Actuary · CIA CSOP · CIA Discount Rates · CIA Duration · CIA FCT 1 · CIA FCT 2 · CIA IFRS 1 · CIA IFRS 17 - Comparison · CIA IFRS 17 - LRC · CIA IFRS 2 · CIA Materiality · CIA Models · CIA PAA · CIA Reinsurance Treatment · CIA Runoff · CIA Subsequent Events · CIA Valuation · Feldblum · Freihaut and Vendetti · IAA Climate · IFOA · KPMG PACICC · MSA Legend · OSFI AA · OSFI Annual Return · OSFI Climate · OSFI Concentration · OSFI Core Return · OSFI Corporate Governance · OSFI Earthquake · OSFI MCT · OSFI Memorandum · OSFI Minimum Capital · OSFI ORSA · OSFI Quarterly Return · OSFI Reinsurance · OSFI Stress Testing · OSFI Target Capital
+> **Readings:** CAS Financial Reporting · CCIR Instructions · CIA Appointed Actuary · CIA CSOP · CIA Discount Rates · CIA Duration · CIA FCT 1 · CIA FCT 2 · CIA IFRS 1 · CIA IFRS 17 - Comparison · CIA IFRS 17 - LRC · CIA IFRS 2 · CIA Materiality · CIA Models · CIA PAA · CIA Reinsurance Treatment · CIA Runoff · CIA Subsequent Events · CIA Valuation · Feldblum · Freihaut and Vendetti · IAA Climate · IBC IFRS 17 - Metrics Discussion · ICA · IFOA · KPMG PACICC · MSA Legend · OSFI AA · OSFI Annual Return · OSFI Climate · OSFI Concentration · OSFI Core Return · OSFI Corporate Governance · OSFI Earthquake · OSFI MCT · OSFI Memorandum · OSFI Minimum Capital · OSFI ORSA · OSFI Quarterly Return · OSFI Reinsurance · OSFI Stress Testing · OSFI Target Capital
 
 
 ## Source Material
->[!answer]- Source Material {37 Sources}
+>[!answer]- Source Material {67 Sources}
 >
 > - [[Alberta Auto Reform]]
->      - A1
+>      - A1 — replaced by [[CFAI]] for Fall 2026
 > - [[Baer and Rendall]]
 >      - A2
+> - [[CFAI]]
+>      - A1
 > - [[CCIR Instructions]]
 >      - C1
 > - [[CIA Appointed Actuary]]
@@ -85,12 +87,14 @@ The **Canada Regulation and Financial Reporting (6C) Exam** is a 4 hour exam wit
 >      - C1-C3
 > - [[CIA Materiality]]
 >      - C1, C5
+> - [[CIA Reliance]]
+>      - A1
 > - [[CIA Models]]
 >      - C5
 > - [[CIA PAA]]
 >      - C1, C2
 > - [[CIA Reinsurance Treatment]]
->      - C1, C3
+>      - C1, C3 — retired from the Fall 2026 syllabus
 > - [[CIA Runoff]]
 >      - C1, C5
 > - [[CIA Subsequent Events]]
@@ -111,16 +115,22 @@ The **Canada Regulation and Financial Reporting (6C) Exam** is a 4 hour exam wit
 >      - C2-C4
 > - [[Freihaut and Vendetti]]
 >      - C1, C3
+> - [[GAO]]
+>      - A3
 > - [[GOC Flood Risks]]
 >      - B1-B3
 > - [[Government Insurers Study Note]]
 >      - B1-B3
 > - [[Harris]]
->      - A2
+>      - A2 — retired from the Fall 2026 syllabus
 > - [[IAA Climate]]
 >      - C4
 > - [[IBC Code of Conduct]]
 >      - A1
+> - [[IBC IFRS 17 Metrics Discussion]]
+>      - C4
+> - [[ICA]]
+>      - C5
 > - [[IFOA]]
 >      - C4
 > - [[Landmark Legal]]

@@ -23,6 +23,7 @@ import {
   RotateCcw,
   Search,
   Sigma,
+  Sparkles,
   Trash2,
   TrendingUp,
   X,
@@ -1235,21 +1236,20 @@ function SortableCard({
     </button>
   )
 
-  // The collect gate's padlock. It takes the actions menu's corner slot until
-  // the card is collected — the two are never both there, so the corner reads
-  // as one control that unlocks. Plain, like every other corner button: the
-  // foil is the collected card's edge and must not also ring the lock.
-  const lockButton = (
+  // Collecting is no longer a gate on the card's actions — the corner menu is
+  // the same on every card — but it is still what lets the card level up past
+  // New, so an uncollected card carries the collect check as the last item of
+  // that menu instead of as a padlock standing in front of it.
+  const collectMenuItem = collected ? null : (
     <button
       type="button"
       data-sound="actions"
       onPointerDown={e => e.stopPropagation()}
-      onClick={e => { e.stopPropagation(); openCollect(card) }}
-      title="Locked — collect this flashcard"
-      aria-label={`Collect ${card.name}`}
-      className="inline-flex items-center justify-center h-7 w-7 rounded-lg shrink-0 text-muted-foreground hover:text-foreground transition-colors"
+      onClick={e => { e.stopPropagation(); openCollect(card); setShowPlayMenu(false) }}
+      className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
     >
-      <Lock className="h-4 w-4" />
+      <Sparkles className="h-3.5 w-3.5 shrink-0" />
+      Collect Card
     </button>
   )
 
@@ -1304,10 +1304,6 @@ function SortableCard({
   // L3, and amber once a card has decayed (`lib/flashcardFoil.ts`).
   const sheenLevelClass = FOIL_LEVEL_CLASS[masteryState] ? ` ${FOIL_LEVEL_CLASS[masteryState]}` : ''
   const showSheen = (animateCollected ?? collected) && collected
-  // The collect gate's padlock, which stands in for the actions menu in the
-  // card's corner until the card has been collected — a locked card has no
-  // actions to offer. Focus mode shows the title and nothing else.
-  const showLock = !collected && !focusMode
   const baseClass = `group relative rounded-xl flex flex-col transition-shadow min-h-[150px]${showSheen && !focusMode ? ` flashcard-collected${sheenLevelClass}` : ''}${isFlashing ? ' flashcard-highlight' : ''}${isCompleted ? ' ring-1 ring-green-500/50' : ''}${isClearing ? ' flashcard-clearing' : ''}`
   const colorClass = isActive
     ? 'bg-primary/10 shadow-sm'
@@ -1333,12 +1329,10 @@ function SortableCard({
         className={`${baseClass} ${colorClass} cursor-grab active:cursor-grabbing select-none`}
       >
         {isClearing && CLEAR_OVERLAY}
-        {/* Header: name + play button (the padlock until the card is
-            collected) — hidden in focus mode */}
+        {/* Header: name + actions menu — hidden in focus mode */}
         {!focusMode && (
         <div className="flex items-center justify-between gap-1 px-3 py-2">
           <span className="text-sm font-medium text-muted-foreground truncate min-w-0">{card.name}</span>
-          {showLock ? lockButton : (
           <div className="relative shrink-0" ref={playMenuRef}>
             <button
               ref={playBtnRef}
@@ -1450,6 +1444,7 @@ function SortableCard({
                   <TrendingUp className="h-3.5 w-3.5 shrink-0" />
                   Learning Progress
                 </button>
+                {collectMenuItem}
                 <div className="my-1" />
                 <button
                   type="button"
@@ -1463,7 +1458,6 @@ function SortableCard({
               </div>
             )}
           </div>
-          )}
         </div>
         )}
         {showQuestionsModal && (
@@ -1549,7 +1543,6 @@ function SortableCard({
       {!focusMode && (
       <div className="absolute top-2 right-2 z-20 flex items-center gap-1.5">
         {showDeckToggle && deckToggleButton}
-        {showLock ? lockButton : (
         <div className="relative" ref={playMenuRef}>
           <button
             ref={playBtnRef}
@@ -1661,6 +1654,7 @@ function SortableCard({
                 <TrendingUp className="h-3.5 w-3.5 shrink-0" />
                 Learning Progress
               </button>
+              {collectMenuItem}
               <div className="my-1" />
               <button
                 type="button"
@@ -1674,7 +1668,6 @@ function SortableCard({
             </div>
           )}
         </div>
-        )}
       </div>
       )}
       {showQuestionsModal && (
@@ -1684,10 +1677,8 @@ function SortableCard({
         <LearningProgressModal conceptName={card.name} onClose={() => setShowLearningProgress(false)} />
       )}
 
-      {/* Name — click to flip. The collect gate is the padlock in the top-right
-          corner, in the actions menu's slot: the card's one control is locked
-          until it's collected, then it becomes the actions menu. So the name
-          sits alone on the card's centre. */}
+      {/* Name — click to flip. The card's controls live in the top-right
+          corner, so the name sits alone on the card's centre. */}
       <div className={`flex-1 flex items-center justify-center gap-1.5 px-3 min-w-0 ${focusMode ? 'py-4' : 'py-9'}`}>
         <button
           type="button"
@@ -1713,8 +1704,7 @@ function SortableCard({
       {/* Mastery is the foil border and nothing else — no pill, so the name sits
           alone on the card's centre. The border can't be read out, so the level
           is named here for screen readers (and as the card's tooltip above).
-          Absent while the card is still behind the collect gate: the lock says
-          everything, and there is no level yet to name. */}
+          Absent on an uncollected card: there is no level yet to name. */}
       {!focusMode && collected && (
         <span className="sr-only">{MASTERY_LABEL[masteryState]}</span>
       )}

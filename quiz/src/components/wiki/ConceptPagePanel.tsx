@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BookOpen, CheckCheck, Headphones, Loader2, Lock, Play, Sigma, TrendingUp, X } from 'lucide-react'
+import { BookOpen, CheckCheck, Headphones, Loader2, Play, Sigma, TrendingUp, X } from 'lucide-react'
 import { fetchWikiFile, fetchAllQuestions } from '@/lib/github'
 import { entryRefToRepoPath, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { parseAllQuestions, filterQuestions } from '@/lib/parser'
@@ -36,8 +36,8 @@ import { factCheckBadge, parseVerification } from '@/lib/verification'
 
 /**
  * The open page of the concept popup's stack: its header (title, mastery, the
- * action menu behind the collect gate, Listen) and its body (the article, Math
- * View or Listen view), with the gallery and modals it opens.
+ * action menu, Listen) and its body (the article, Math View or Listen view),
+ * with the gallery and modals it opens.
  *
  * Mounted per page, keyed by the ref, so opening another page of the stack is a
  * remount rather than a reset of a dozen pieces of state. What a reader would
@@ -262,20 +262,16 @@ export function ConceptPagePanel({
   // way of reading the page.
   const hasActions = entry.kind !== 'guide'
 
-  // The collect gate and the action menu share one header button. While a
-  // concept is uncollected the button *is* the lock: it shows the foil-ringed
-  // padlock and opens the collect flow, so the actions behind it (Start Quiz,
-  // Add to Flashcards, Math View, Learning Progress) are unreachable
-  // until the card is earned. Once collected the same slot becomes the play
-  // button. Non-concept entries (resources, exam pages) have no gate at all.
-  // The Listen toggle is deliberately outside the gate: it reads the page
-  // aloud, which is a way of *reading* the concept, not one of the actions the
-  // card unlocks — so it stays available in the right-hand control cluster
-  // even while the lock is up.
+  // The action menu is never gated: Start Quiz, Add to Flashcards, Math View
+  // and Learning Progress are all ways of *reading* a concept, and holding them
+  // behind the collect check only hid the app from a reader who hadn't met the
+  // concept yet. Collecting still matters — it is what lets mastery move past
+  // New (`applyAnswer`'s `collected` flag) — so the mastery pill beside the
+  // name stays the way into the collect flow for an uncollected concept.
   const isCollected = collectedCards.some(c => c.name.toLowerCase() === entry.name.toLowerCase())
   // A concept past New has necessarily been collected already (grandfathered
-  // users included), so treat it as unlocked even if not in the collected store.
-  const actionLocked = entry.kind === 'concept' && !isCollected && (masteryState === null || masteryState === 'new')
+  // users included), so treat it as collected even if not in the collected store.
+  const conceptCollected = isCollected || !(masteryState === null || masteryState === 'new')
 
   return (
     <>
@@ -294,46 +290,34 @@ export function ConceptPagePanel({
             className="truncate font-semibold text-lg sm:text-xl min-w-0"
           />
           {/* Mastery status (New/1/2/3/F), sitting just right of the concept
-              name — only once the card is collected, since an uncollected
-              concept is pinned at New by the gate. Opens the combined card +
-              learning-progress modal, where it can level up. */}
-          {!focusMode && entry.kind === 'concept' && !actionLocked && (() => {
+              name. An uncollected concept shows New and the pill opens the
+              collect check — collecting is what lets it move off New — while a
+              collected one opens the combined card + learning-progress modal. */}
+          {!focusMode && entry.kind === 'concept' && (() => {
             const state = masteryState ?? 'new'
             return (
               <button
                 type="button"
                 data-tour="collect-card"
-                // Hand the modal the verdict this pill is already showing, so
-                // it opens straight onto the card + learning progress instead
-                // of flashing the collect check while it re-derives mastery.
-                onClick={() => openCollect(entry, { collected: true, mastery: masteryState ?? undefined })}
-                title="View flashcard & learning progress"
-                aria-label={`${entry.name} — ${MASTERY_LABEL[state]}. View flashcard and progress`}
+                // Hand the modal the verdict this pill is already showing, so a
+                // collected card opens straight onto the card + learning
+                // progress instead of flashing the collect check while it
+                // re-derives mastery.
+                onClick={() => openCollect(entry, conceptCollected ? { collected: true, mastery: masteryState ?? undefined } : undefined)}
+                title={conceptCollected ? 'View flashcard & learning progress' : 'Collect this flashcard to level it up'}
+                aria-label={conceptCollected
+                  ? `${entry.name} — ${MASTERY_LABEL[state]}. View flashcard and progress`
+                  : `Collect ${entry.name} to level it up`}
                 className={`shrink-0 inline-flex items-center justify-center min-w-[1.875rem] h-7 px-2 rounded-full text-xs font-bold tabular-nums cursor-pointer hover:opacity-80 transition-opacity ${MASTERY_TINT[state]}`}
               >
                 {MASTERY_SHORT_LABEL[state]}
               </button>
             )
           })()}
-          {/* The action button — or, while the concept is uncollected, the lock
-              that stands in for it. Spacing is the row's `gap-2` and nothing
-              else: the locked state draws a visible foil ring at the button's
-              edge, so any negative margin here puts that ring straight onto the
-              last letter of the name. */}
+          {/* The action button. Spacing is the row's `gap-2` and nothing
+              else. */}
           {!focusMode && hasActions && (
           <div className="relative shrink-0" ref={playMenuRef}>
-          {actionLocked ? (
-            <button
-              type="button"
-              data-tour="collect-card"
-              onClick={() => openCollect(entry)}
-              className="lock-foil-ring inline-flex items-center justify-center h-10 w-10 rounded-lg shrink-0 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-              title="Locked — collect this flashcard to unlock its actions"
-              aria-label={`Collect ${entry.name} to unlock its actions`}
-            >
-              <Lock className="h-5 w-5" />
-            </button>
-          ) : (
           <button
             ref={playBtnRef}
             type="button"
@@ -352,7 +336,6 @@ export function ConceptPagePanel({
           >
             <Play className="h-5 w-5" />
           </button>
-          )}
           {showPlayMenu && menuRect && createPortal(
             <div
               data-play-menu
@@ -494,9 +477,7 @@ export function ConceptPagePanel({
             switch like focus mode, not an action. (It's mirrored in the menu
             too, for discoverability.) Survives focus mode for the same reason
             that toggle does: Listen is most useful with the page full-screen,
-            so there has to be a way in and out of it there. Deliberately *not*
-            behind the collect lock — hearing the page read is a way of reading
-            it, so it stays available on an uncollected concept. */}
+            so there has to be a way in and out of it there. */}
         <button
           type="button"
           onClick={() => { setListenView(!listenView); if (!listenView) setMathView(false) }}

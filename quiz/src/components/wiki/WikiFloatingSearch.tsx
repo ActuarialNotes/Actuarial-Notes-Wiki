@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BookMarked, Check, FileText, GraduationCap, ListChecks, Lock, Play, Search, X } from 'lucide-react'
+import { BookMarked, Check, FileText, GraduationCap, ListChecks, Play, Search, Sparkles, X } from 'lucide-react'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { fromSlug, pathToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { findSyllabiForConcept } from '@/lib/conceptMatch'
@@ -119,9 +119,11 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, backLi
     inputRef.current?.blur()
   }
 
-  // A concept is unlocked once its flashcard is collected — or, for pre-collect
-  // users, once mastery moved past New. Mirrors useIsConceptUnlocked, but
-  // resolved from a single mastery/collected read shared across every row.
+  // A concept is collected once its flashcard has been earned — or, for
+  // pre-collect users, once mastery moved past New. Resolved from a single
+  // mastery/collected read shared across every row. Nothing is withheld from an
+  // uncollected concept; this only decides whether the row offers the collect
+  // shortcut, since collecting is what lets a concept level up past New.
   function isUnlocked(name: string): boolean {
     const lower = name.toLowerCase()
     if (collectedCards.some(c => c.name.toLowerCase() === lower)) return true
@@ -509,10 +511,12 @@ function ConceptResultRow({
   )
 }
 
-// Inline "Unlock" + "Start Quiz" actions shown beside a concept name in the
-// search results and Today's Study Plan lists. Unlock opens the flashcard
-// collect flow (hidden once the concept is already unlocked); Start Quiz opens
-// the per-concept question picker, labelled with how many questions exist.
+// Inline "Collect" + "Start Quiz" actions shown beside a concept name in the
+// search results and Today's Study Plan lists. Collect opens the flashcard
+// collect flow (hidden once the concept is already collected) — it withholds
+// nothing, it is the shortcut to the check that lets the concept level up past
+// New; Start Quiz opens the per-concept question picker, labelled with how many
+// questions exist.
 function ConceptActions({
   name,
   unlocked,
@@ -539,10 +543,10 @@ function ConceptActions({
             openCollect({ kind: 'concept', name })
           }}
           className="inline-flex items-center gap-1 rounded-full px-2 py-1 text-[11px] font-medium bg-accent text-muted-foreground hover:text-foreground hover:bg-accent/80 transition-colors"
-          title={`Unlock ${name}`}
-          aria-label={`Unlock ${name}`}
+          title={`Collect ${name}`}
+          aria-label={`Collect ${name}`}
         >
-          <Lock className="h-3 w-3 shrink-0" />
+          <Sparkles className="h-3 w-3 shrink-0" />
         </button>
       )}
       {questionCount !== 0 && (

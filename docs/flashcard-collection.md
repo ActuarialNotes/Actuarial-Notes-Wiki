@@ -6,14 +6,28 @@ Level 1 (see [Concept Learning Progression](concept-learning-progression.md)).
 
 ## How it works
 
-1. A **lock icon** sits beside the concept name (before the play/action button)
-   in the concept popup, and in the Flashcards pack shop. On a **flashcard tile**
-   (`pages/Flashcards.tsx`) the lock instead takes the play/actions button's
-   corner slot: the two are never both shown, so an uncollected tile offers the
-   lock and nothing else, and collecting it turns that same corner into the
-   actions menu. The tile's lock is plain — no foil ring — because the foil
-   there is the collected card's own edge and the two materials must not fight.
-2. Clicking it opens the **collect modal**: a 3D flashcard render plus a quick
+1. Collecting **withholds nothing**. Every surface offers its full set of
+   actions on an uncollected concept — the concept popup's action menu (Start
+   Quiz, Open in Study Guide, Add to Flashcards, Math View, Listen, Learning
+   Progress), the same menu in a flashcard's corner, and the per-concept
+   question browser's **Start Quiz**. What collecting buys is the *level-up*:
+   mastery cannot move off New until the card is collected (see
+   [Mastery gate](#mastery-gate) below). The lock icons that used to stand in
+   front of those controls are gone; a reader who has not met a concept yet is
+   the reader who most needs to read it.
+2. The way *in* to the check is therefore an offer, not a barrier:
+   - **Concept popup** — the mastery pill beside the name. An uncollected
+     concept shows **New** and the pill opens the collect check; a collected one
+     opens the card + learning progress.
+   - **Flashcard** (`pages/Flashcards.tsx`) — a **Collect Card** item at the
+     bottom of the corner actions menu, shown only while the card is
+     uncollected.
+   - **Search / today's plan rows** (`WikiFloatingSearch`) — a small **Collect**
+     pill beside the concept name, hidden once it is collected.
+   - The **pre-quiz gate**, the **post-quiz gate** and the flashcard study loop,
+     which are described further down.
+
+   Each of these opens the **collect modal**: a 3D flashcard render plus a quick
    **comprehension check**.
 3. Passing the check **collects** the concept — a card-spin → screen-bloom →
    distilled-drop animation flies into and lights up the Flashcards tab. The
@@ -66,14 +80,15 @@ they were already collected, so existing users are grandfathered in. The flag is
 read from the collected store in the three quiz write paths (`quizStore`
 upsert + optimistic simulation, and `Quiz.tsx`'s level-up preview).
 
-Users can still add packs to the gallery and quiz uncollected concepts — they
-just won't reach Level 1 until they collect.
+Users can browse, study, listen to and quiz uncollected concepts freely — they
+just won't reach Level 1 until they collect. The mastery gate in `applyAnswer`
+is the *only* thing collection gates; no UI withholds a feature.
 
 ## What a collected card looks like
 
 Collecting is the card's first *material*: a collected card wears the rainbow
 **foil** edge (`.flashcard-collected` in `index.css`). Uncollected cards wear no
-material at all; they are still behind the gate.
+material at all — the foil is what collecting earns.
 
 That edge is also the card's **mastery readout** — a collected card carries no
 level label, so the border steps once per state
@@ -102,7 +117,7 @@ like the same card wherever it appears:
 | --- | --- |
 | Deck / gallery card | `SortableCard` in `pages/Flashcards.tsx` (the deck passes `animateCollected={false}` so the Level 3 border doesn't travel while you read) |
 | Picker tile in the add-flashcards sheet | `ConceptCardGrid` → `tileFoilClass`, plus `.flashcard-tile` for the smaller surface: a lighter edge, and the ring lifted over the tile's own content |
-| The card in the collect modal | `components/collect/CollectCard3D.tsx` — a still-locked card always shows the Level 3 edge, so the sealed pack looks like the prize |
+| The card in the collect modal | `components/collect/CollectCard3D.tsx` — an uncollected card always shows the Level 3 edge, so the sealed pack looks like the prize |
 
 The edge belongs to foil, so nothing else may claim it: a keystone concept moves
 its gold inside as an underline on the name, and a tile already in the deck
@@ -182,7 +197,7 @@ The button is opener-driven, not a property of the modal: `open()` takes an
 `onSkip` callback (`hooks/useCollect.ts`) and the modal only draws **Skip** when
 one was supplied. `useCollect.skip()` closes the modal *before* running the
 handler, so the opener is moving a deck the check is no longer sitting on. Every
-other opener — the concept popup's lock icon, the Flashcards pack shop, the
+other opener — the concept popup's mastery pill, the Flashcards pack shop, the
 pre-quiz gate — has nowhere to send the reader next and so passes nothing,
 keeping the plain close button it always had.
 

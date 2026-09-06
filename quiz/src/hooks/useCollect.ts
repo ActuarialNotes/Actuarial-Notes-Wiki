@@ -3,7 +3,7 @@ import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import type { MasteryState } from '@/lib/mastery'
 
 // Controls the globally-mounted CollectConceptModal. Any concept-name surface
-// (e.g. the lock icon in ConceptPopup) opens the collect flow by calling
+// (e.g. the mastery pill in the concept popup) opens the collect flow by calling
 // `open(ref)`; the modal itself lives once at the app root.
 
 export interface CollectOpenOptions {

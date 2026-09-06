@@ -1,14 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Loader2, Lock, Play, X } from 'lucide-react'
+import { Loader2, Play, X } from 'lucide-react'
 import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
 import type { Question } from '@/lib/parser'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { QuestionSearchRow, DifficultyDots } from '@/components/QuestionSearchRow'
 import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
-import { useCollect } from '@/hooks/useCollect'
-import { useIsConceptUnlocked } from '@/hooks/useConceptUnlocked'
 import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { tallyAttempts } from '@/lib/questionAttempts'
@@ -49,11 +47,7 @@ const DIFFICULTY_OPTIONS = [
 export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: ConceptQuestionsModalProps) {
   // Paper: the panel sliding in.
   useSoundOnMount('open')
-  const unlocked = useIsConceptUnlocked(conceptName)
   const { byQuestionId: attemptsByQuestionId, tracked: attemptsTracked } = useQuestionAttempts()
-  const openCollect = useCollect(s => s.open)
-  const closeCollect = useCollect(s => s.close)
-  const [pendingStart, setPendingStart] = useState(false)
   const [questions, setQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -62,9 +56,6 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
   const [conceptFilters, setConceptFilters] = useState<Set<string>>(new Set())
 
   useEffect(() => {
-    // The question browser is always available so the user can preview and
-    // pick questions before collecting — starting the quiz is what's gated
-    // behind the collect prompt (see handleStartQuiz), not browsing.
     let cancelled = false
     setLoading(true)
     setError(null)
@@ -194,7 +185,12 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
     [questions, selectedIds],
   )
 
-  function beginQuiz() {
+  // Quizzing is not gated on collection. Collecting a card is what lets a
+  // concept's mastery move past New (`applyAnswer`'s `collected` flag), so an
+  // uncollected concept still gets prompted to collect inside the quiz itself
+  // (`PreQuizCollectGate`) — but nothing here withholds the questions.
+  function handleStartQuiz() {
+    if (selectedQuestions.length === 0) return
     try {
       sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(selectedQuestions.map(q => q.id)))
     } catch { /* ignore */ }
@@ -202,31 +198,6 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
     onClose()
     navigate('/quiz?selection=stored')
   }
-
-  function handleStartQuiz() {
-    if (selectedQuestions.length === 0) return
-    // Quizzing is gated on collection: if the concept isn't collected yet,
-    // surface the collect prompt first and remember that the user wanted to
-    // start — the effect below carries them into the quiz once it's collected.
-    if (!unlocked) {
-      setPendingStart(true)
-      openCollect({ kind: 'concept', name: conceptName })
-      return
-    }
-    beginQuiz()
-  }
-
-  // Once a pending collect completes (concept becomes unlocked), close the
-  // collect prompt and continue into the quiz the user asked to start.
-  useEffect(() => {
-    if (!pendingStart || !unlocked) return
-    setPendingStart(false)
-    closeCollect()
-    beginQuiz()
-    // beginQuiz is stable enough for this one-shot hand-off; deps kept minimal
-    // to avoid re-running as selection state changes underneath.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pendingStart, unlocked])
 
   return (
     <OverlayPortal>
@@ -408,31 +379,19 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
           )}
         </div>
 
-        {/* Floating Start Quiz button. When the concept isn't collected yet,
-            the browser stays fully usable but starting the quiz routes through
-            the collect prompt first (handleStartQuiz). */}
+        {/* Floating Start Quiz button. */}
         {!loading && questions.length > 0 && (
-          <div className="shrink-0 px-4 py-3 bg-card rounded-b-xl space-y-2">
+          <div className="shrink-0 px-4 py-3 bg-card rounded-b-xl">
             <button
               type="button"
-              // Only a launch when it launches — while the concept is still
-              // locked this press opens the collect prompt, which brings its
-              // own cue.
-              data-sound={unlocked ? 'begin' : undefined}
+              data-sound="begin"
               onClick={handleStartQuiz}
               disabled={selectedIds.size === 0}
               className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
-              {unlocked ? <Play className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
-              {unlocked
-                ? `Start Quiz (${selectedQuestions.length})`
-                : `Collect to Start Quiz (${selectedQuestions.length})`}
+              <Play className="h-4 w-4" />
+              Start Quiz ({selectedQuestions.length})
             </button>
-            {!unlocked && (
-              <p className="text-center text-xs text-muted-foreground">
-                Pass a quick comprehension check to collect {conceptName}, then your quiz starts automatically.
-              </p>
-            )}
           </div>
         )}
       </div>

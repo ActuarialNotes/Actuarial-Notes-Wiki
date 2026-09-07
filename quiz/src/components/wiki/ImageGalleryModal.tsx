@@ -55,6 +55,8 @@ export function ImageGalleryModal({ images, initialIndex, placement = 'fullscree
   const [isDragging, setIsDragging] = useState(false)
 
   const containerRef = useRef<HTMLDivElement>(null)
+  const zoomRef = useRef(1)
+  const applyZoomRef = useRef<(z: number) => void>(() => {})
   const dragState = useRef<{ sx: number; sy: number; px: number; py: number } | null>(null)
   const hasMoved = useRef(false)
   const activePointers = useRef<Map<number, { x: number; y: number }>>(new Map())
@@ -97,6 +99,9 @@ export function ImageGalleryModal({ images, initialIndex, placement = 'fullscree
       setCursor('grab')
     }
   }
+
+  useEffect(() => { zoomRef.current = zoom }, [zoom])
+  useEffect(() => { applyZoomRef.current = applyZoom })
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -184,6 +189,23 @@ export function ImageGalleryModal({ images, initialIndex, placement = 'fullscree
   // Distribution illustrations open as the live simulator instead of a picture:
   // there's nothing to zoom or pan, and its controls must not close the modal.
   const distribution = distributionForImage(current.src)
+
+  // Zoom with the wheel. There is no zoom control in the chrome — the gestures
+  // are the zoom — so this is what a mouse or trackpad zooms with: a trackpad
+  // pinch arrives as ctrl+wheel, and a plain wheel has nothing else to do in a
+  // viewer that doesn't scroll. Attached natively rather than as `onWheel`
+  // because React's wheel listener is passive, and preventDefault is what keeps
+  // ctrl+wheel from zooming the whole browser page instead of the picture.
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    function onWheel(e: WheelEvent) {
+      e.preventDefault()
+      applyZoomRef.current(zoomRef.current * Math.exp(-e.deltaY / 200))
+    }
+    el.addEventListener('wheel', onWheel, { passive: false })
+    return () => el.removeEventListener('wheel', onWheel)
+  }, [distribution])
 
   return (
     <OverlayPortal>
@@ -279,38 +301,10 @@ export function ImageGalleryModal({ images, initialIndex, placement = 'fullscree
 
       {/* Caption — dimmed. The simulator renders its own, so skip it there. */}
       {current.caption && !distribution && (
-        <div className="shrink-0 text-center px-8 pt-2 pb-0 opacity-40">
+        <div className="shrink-0 text-center px-8 pt-2 pb-4 opacity-40">
           <span className="text-sm text-white italic">{current.caption}</span>
         </div>
       )}
-
-      {/* Zoom slider — nothing to zoom when the simulator is showing */}
-      <div className={`shrink-0 items-center gap-4 px-6 py-4 ${distribution ? 'hidden' : 'flex'}`}>
-        <span className="text-base text-white/50 tabular-nums w-8 shrink-0">1×</span>
-        <input
-          type="range"
-          min={MIN_ZOOM}
-          max={MAX_ZOOM}
-          step={0.05}
-          value={zoom}
-          onChange={e => applyZoom(parseFloat(e.target.value))}
-          className="zoom-slider flex-1"
-          aria-label="Zoom"
-        />
-        <span className="text-base text-white/50 tabular-nums w-8 shrink-0 text-right">4×</span>
-        <span className="text-base text-white tabular-nums w-12 text-right shrink-0 font-semibold">
-          {zoom.toFixed(1)}×
-        </span>
-        {zoom > MIN_ZOOM && (
-          <button
-            type="button"
-            onClick={resetView}
-            className="text-xs text-white/50 hover:text-white transition-colors shrink-0"
-          >
-            reset
-          </button>
-        )}
-      </div>
 
       {/* Thumbnail strip */}
       {images.length > 1 && (

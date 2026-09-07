@@ -1754,14 +1754,15 @@ summary .katex-display,
   .sim-slider:active::-webkit-slider-thumb { transform: none; }
 }
 
-/* Zoom slider for the two full-screen viewers — the image gallery and math
-   focus mode. Both are read one-handed on a phone with the thumb resting at
-   the bottom of the screen, so the knob is deliberately huge and the track
-   spans the width. The two custom properties are the only difference between
-   the two hosts: the gallery always sits on black (the fallbacks below), math
-   focus on the themed background, which sets its own pair on the row. They're
-   read as `var(…, fallback)` rather than declared here, since a declaration on
-   the control itself would beat the value inherited from the row. */
+/* Zoom slider for math focus mode, which is read one-handed on a phone with the
+   thumb resting at the bottom of the screen, so the knob is deliberately huge
+   and the track spans the width. (The image gallery and the PDF panel used to
+   share it; both now zoom by gesture alone and carry no zoom control.) The two
+   custom properties recolour it for its host — the fallbacks below are the
+   black a full-screen viewer sits on, and math focus sets its own pair on the
+   row for the themed background. They're read as `var(…, fallback)` rather than
+   declared here, since a declaration on the control itself would beat the value
+   inherited from the row. */
 .zoom-slider {
   -webkit-appearance: none;
   appearance: none;

@@ -27,16 +27,13 @@ export const MAX_ZOOM = 4
  * number. On a desktop the panel is a wide, short strip: a page fitted to its
  * width runs two or three panel-heights down, and the reader opens a document
  * to the top third of page 1 with no way to see the rest of it at once. So the
- * slider starts wherever the whole page fits and 1× — the width fit — sits a
+ * zoom range starts wherever the whole page fits and 1× — the width fit — sits a
  * little way along it.
  *
  * `MIN_ZOOM` is the floor under that: a panel dragged down to a sliver would
  * otherwise fit the page by shrinking it to nothing.
  */
 export const MIN_ZOOM = 0.2
-
-/** The slider's granularity, matching the other two zoom sliders in the app. */
-export const ZOOM_SLIDER_STEP = 0.05
 
 /** How far the +/- keys move, which wants to be a visible jump, not a nudge. */
 export const KEY_ZOOM_STEP = 0.25
@@ -159,16 +156,6 @@ export function canvasPixelRatio(
 /** One keyboard press of zoom, stopping at either end of the range. */
 export function nudgeZoom(current: number, direction: -1 | 1, minZoom: number = WIDTH_ZOOM): number {
   return clampZoom(clampZoom(current, minZoom) + direction * KEY_ZOOM_STEP, minZoom)
-}
-
-/**
- * "Fit" reads better than a number for the bottom of the range, where the whole
- * page is on screen. Everything above it is a multiple of the width fit, so on
- * a desktop panel the reader passes "1.0×" — the page across the panel — on the
- * way up, which is a size worth being able to aim for.
- */
-export function formatZoom(zoom: number, minZoom: number = WIDTH_ZOOM): string {
-  return Math.abs(zoom - minZoom) < 1e-6 ? 'Fit' : `${zoom.toFixed(1)}×`
 }
 
 /**

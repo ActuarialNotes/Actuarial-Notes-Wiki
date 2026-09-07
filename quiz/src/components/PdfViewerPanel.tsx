@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import {
   ChevronLeft,
@@ -22,13 +22,10 @@ import {
   clampPage,
   clampZoom,
   fitWidthScale,
-  formatZoom,
-  MAX_ZOOM,
   nudgeZoom,
   pageFitZoom,
   pinchZoom,
   WIDTH_ZOOM,
-  ZOOM_SLIDER_STEP,
 } from '@/lib/pdfViewer'
 
 /**
@@ -117,11 +114,11 @@ export function PdfViewerPanel({ url, title, subtitle, hostFullScreen = false, o
   const [page, setPage] = useState(1)
   const [renderPage, setRenderPage] = useState(1)
   // Three zooms, because a page is a bitmap that takes a moment to redraw and
-  // the slider moves continuously:
+  // a pinch changes the zoom continuously:
   //   `zoom`       what the reader has asked for, live under their finger;
   //   `renderZoom` what the drawing effect is working towards, which lags the
-  //                slider until it settles (redrawing on every 0.05 step would
-  //                queue dozens of cancelled renders);
+  //                gesture until it settles (redrawing on every step of a pinch
+  //                would queue dozens of cancelled renders);
   //   `sizedZoom`  what the drawn bitmap is sized for.
   // The gap between the first and the last is covered by scaling that bitmap
   // with a CSS transform, so the page grows under the finger and only goes
@@ -174,9 +171,9 @@ export function PdfViewerPanel({ url, title, subtitle, hostFullScreen = false, o
   /**
    * The bottom of the zoom range: the size at which the whole page is on
    * screen. On a phone the panel is about the shape of a page, so this is the
-   * width fit (1×) and the slider behaves as it always did; on a desktop panel,
-   * which is a wide strip, it is well below 1× — which is the point, since a
-   * page fitted to that width runs several panel-heights down.
+   * width fit (1×); on a desktop panel, which is a wide strip, it is well below
+   * 1× — which is the point, since a page fitted to that width runs several
+   * panel-heights down.
    */
   const minZoom = useMemo(
     () => (pageBase ? pageFitZoom(containerWidth, containerHeight, pageBase.width, pageBase.height) : WIDTH_ZOOM),
@@ -191,7 +188,7 @@ export function PdfViewerPanel({ url, title, subtitle, hostFullScreen = false, o
    *
    * `renderZoom` is set alongside `zoom` in the fitted case rather than left to
    * the settle timer below: this is the size the document opens at, so waiting
-   * out the slider's debounce would draw the page at the wrong size first.
+   * out the zoom debounce would draw the page at the wrong size first.
    */
   useEffect(() => {
     if (!zoomed) {
@@ -208,13 +205,15 @@ export function PdfViewerPanel({ url, title, subtitle, hostFullScreen = false, o
   }, [minZoom, zoomed])
 
   /**
-   * Every zoom goes through here: the slider, the pinch, ctrl+wheel, the keys.
+   * Every zoom goes through here: the pinch, ctrl+wheel, the keys. There is no
+   * zoom control in the chrome — the gestures are the zoom.
    *
    * The panel is measured *before* the change, while the DOM still shows the
    * old size, because that measurement is what the point being held still is
    * expressed against. `focus` is where the reader is looking — the midpoint
    * between their fingers in a pinch, the pointer under a trackpad zoom, and
-   * the middle of the panel for a slider that has no position of its own.
+   * the middle of the panel for a zoom that names no position of its own (the
+   * +/- keys).
    */
   const requestZoom = useCallback((next: number, focus?: { x: number; y: number } | null) => {
     const target = clampZoom(next, minZoomRef.current)
@@ -294,9 +293,10 @@ export function PdfViewerPanel({ url, title, subtitle, hostFullScreen = false, o
     return () => window.clearTimeout(timer)
   }, [page, renderPage])
 
-  // Follow the slider once it stops moving. A drag across the whole range fires
-  // ~60 changes; each one would start a page render only to have it cancelled
-  // by the next, so the reader would see the CSS preview and never a sharp page.
+  // Follow the gesture once it stops moving. A pinch across the whole range
+  // fires ~60 changes; each one would start a page render only to have it
+  // cancelled by the next, so the reader would see the CSS preview and never a
+  // sharp page.
   useEffect(() => {
     if (zoom === renderZoom) return
     const timer = window.setTimeout(() => setRenderZoom(zoom), 140)
@@ -707,7 +707,7 @@ export function PdfViewerPanel({ url, title, subtitle, hostFullScreen = false, o
                 ref={canvasRef}
                 className="block max-w-none origin-top-left"
                 style={{
-                  // Between a slider move and the redraw that follows it, the
+                  // Between a zoom gesture and the redraw that follows it, the
                   // page on screen is the last bitmap stretched to fill the box
                   // above. Scaled from its top-left corner, which is where the
                   // box's own corner is, so every point of the page lands
@@ -741,53 +741,6 @@ export function PdfViewerPanel({ url, title, subtitle, hostFullScreen = false, o
               {status === 'loading' ? 'Loading document…' : 'Rendering page…'}
             </span>
           </div>
-        )}
-      </div>
-
-      {/* Zoom — the same slider the image gallery and math focus mode use
-          (`.zoom-slider`), for the same reason: on a phone it is dragged with
-          the thumb already holding the device, which a pair of small +/- targets
-          in the footer never was. The bottom of the range ("Fit") is the whole
-          page on screen and 1× is the page across the panel — the same size on a
-          phone, a long way apart on a desktop panel, where the page is much
-          taller than the panel it is read in. The two custom properties recolour
-          the shared control for the card this panel sits on rather than the
-          gallery's black. */}
-      <div
-        className="flex items-center gap-3 sm:gap-4 shrink-0 border-t px-4 sm:px-6 py-1"
-        style={{
-          '--zoom-slider-track': 'hsl(var(--foreground) / 0.18)',
-          '--zoom-slider-thumb': 'hsl(var(--foreground))',
-        } as CSSProperties}
-      >
-        <span className="text-sm text-muted-foreground w-6 shrink-0">
-          Fit
-        </span>
-        <input
-          type="range"
-          min={minZoom}
-          max={MAX_ZOOM}
-          step={ZOOM_SLIDER_STEP}
-          value={zoom}
-          disabled={status !== 'ready'}
-          onChange={e => requestZoom(parseFloat(e.target.value))}
-          className="zoom-slider flex-1 disabled:opacity-40"
-          aria-label="Zoom"
-        />
-        <span className="text-sm text-muted-foreground tabular-nums w-6 shrink-0 text-right">
-          {MAX_ZOOM}×
-        </span>
-        <span className="text-sm text-foreground tabular-nums w-10 text-right shrink-0 font-semibold">
-          {formatZoom(zoom, minZoom)}
-        </span>
-        {zoom > minZoom && (
-          <button
-            type="button"
-            onClick={() => requestZoom(minZoom)}
-            className="text-xs text-muted-foreground hover:text-foreground transition-colors shrink-0"
-          >
-            reset
-          </button>
         )}
       </div>
 

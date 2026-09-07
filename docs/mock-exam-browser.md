@@ -176,7 +176,7 @@ you were building.
 
 | Piece | Role |
 |---|---|
-| `quiz/src/components/PdfViewerPanel.tsx` | The panel: header (title, download, expand, close), canvas, zoom slider, page scrubber, paging footer |
+| `quiz/src/components/PdfViewerPanel.tsx` | The panel: header (title, download, expand, close), canvas, page scrubber, paging footer |
 | `quiz/src/hooks/usePdfDocument.ts` | Loads one document; imports pdf.js on demand and destroys the loading task on close |
 | `quiz/src/lib/pdfjsSetup.ts` | The pdf.js instance, its worker and the URLs of the assets it fetches at run time — reached only through a dynamic import |
 | `quiz/src/lib/pdfjsAssets.ts` | The one list of those asset directories, shared with `vite.config.ts` so the two halves can't drift |
@@ -259,31 +259,27 @@ capped by the budget exactly as before.
 **Zooming, and reaching the rest of the page.** Zoom is a multiple of fit-to-width, so
 1× is the page drawn across the panel, and the range runs up to 4×. The *bottom* of the
 range is not 1× but `pageFitZoom` — the zoom at which the whole page is on screen, which
-is what "Fit" means on the slider and the size a document opens at. On a phone the panel
-is about the shape of a page, so the two are the same number and the slider runs 1×–4× as
-it always did; on a desktop the panel is a wide, short strip, where a page fitted to its
-width runs two or three panel-heights down and the reader would open a document to the
-top third of page 1 with no way to see the rest at once. There the fit is well below 1×
-and the width fit sits a little way along the slider. `MIN_ZOOM` (0.2) is the floor under
-it, for a panel dragged down to a sliver. The fit is deliberately *not* snapped to the
-slider's 0.05 grid: down at 0.3 a whole step is a tenth of the zoom, and a page that
-doesn't quite fit is the one thing the number exists to prevent.
+is the size a document opens at. On a phone the panel is about the shape of a page, so
+the two are the same number and the range is 1×–4×; on a desktop the panel is a wide,
+short strip, where a page fitted to its width runs two or three panel-heights down and
+the reader would open a document to the top third of page 1 with no way to see the rest
+at once. There the fit is well below 1× and the width fit sits a little way up the range.
+`MIN_ZOOM` (0.2) is the floor under it, for a panel dragged down to a sliver.
 
 Two things follow in the panel. The page is **measured before it is drawn** — a
 `getPage`/`getViewport({scale: 1})` pass of its own fills `pageBase`, and the render
 effect waits for it and for the zoom to have settled on the fit, because drawing first
 would show a fitted-width page for a moment and then shrink it. And the fit is only the
 *default*: `zoomed` records whether the reader has set the zoom themselves, so the page
-re-fits as the panel is resized until they touch the slider, and after that their zoom is
-kept (clamped back into range when a resize raises the floor). The
-control is the **same slider** the image gallery (`ImageGalleryModal`) and math focus mode
-use — `.zoom-slider`, with the two custom properties set for a themed background — because
-this is read one-handed on a phone, where a thumb on a 40px knob works and a pair of small
-+/− targets in the footer did not. Pinch works too: the page area sets `touch-action:
-pan-x pan-y`, which keeps a one-finger drag scrolling natively (with the momentum no
-hand-rolled pan matches) while taking the pinch away from the browser, which would
-otherwise zoom the whole site. A mouse gets grab-and-drag over the page, a trackpad's
-pinch arrives as ctrl+wheel, and `+`/`−` still nudge by 0.25.
+re-fits as the panel is resized until they zoom it themselves, and after that their zoom
+is kept (clamped back into range when a resize raises the floor). There is **no zoom
+control in the chrome** — the gestures are the zoom, and the slider that used to sit above
+the paging footer (the same `.zoom-slider` the image gallery and math focus mode use) is
+gone, giving the page that strip of height back. Pinch is the phone gesture: the page area
+sets `touch-action: pan-x pan-y`, which keeps a one-finger drag scrolling natively (with
+the momentum no hand-rolled pan matches) while taking the pinch away from the browser,
+which would otherwise zoom the whole site. A mouse gets grab-and-drag over the page, a
+trackpad's pinch arrives as ctrl+wheel, and `+`/`−` nudge by 0.25.
 
 Three things follow, and all three are load-bearing:
 
@@ -293,7 +289,7 @@ Three things follow, and all three are load-bearing:
   page's left margin already 150px past it. Auto margins collapse to zero instead when the
   free space goes negative, so the whole page stays inside the scrollable area. This is
   what made a zoomed page only half readable.
-- **A slider move does not redraw the page.** A drag across the range fires ~60 changes;
+- **A zoom gesture does not redraw the page.** A pinch across the range fires ~60 changes;
   each redraw would be cancelled by the next, so the reader would never see a sharp page.
   The panel keeps three zooms — what was asked for, what the renderer is working towards
   (140ms behind), and what the drawn bitmap is sized for — and covers the gap by scaling
@@ -308,9 +304,10 @@ Three things follow, and all three are load-bearing:
   resize anything, so the page ballooned about its own centre over a scroll area that
   hadn't moved, and the redraw then snapped it all into place.
 - **The scroll position is re-anchored on every zoom change** (`anchoredScroll`), in a
-  layout effect so it lands in the same frame — on the panel's midpoint for the slider,
-  and on the fingers' midpoint for a pinch, which is why a pinch holds whatever is between
-  the fingers. The measurement it works from is taken in the event that asked for the
+  layout effect so it lands in the same frame — on the fingers' midpoint for a pinch,
+  which is why a pinch holds whatever is between the fingers, on the pointer for a
+  trackpad zoom, and on the panel's midpoint for the `+`/`−` keys, which name no point of
+  their own. The measurement it works from is taken in the event that asked for the
   zoom, before the DOM has changed under it. Without any of this, zooming re-anchors at
   the top-left corner and the paragraph you zoomed in to read has to be hunted down again:
   measured on a 4× zoom while reading two-thirds down a page, the old panel drifted ~30%

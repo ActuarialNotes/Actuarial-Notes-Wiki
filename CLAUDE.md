@@ -243,7 +243,8 @@ Other important `lib/` modules:
   `pageFitZoom`, which is fit-to-width on a phone and well below it on a wide desktop
   panel), the render resolution and pixel budget (a page is drawn at ~216 dpi rather than
   the screen's ratio, so a scan is squeezed less far to fit), and the zoom range —
-  whole-page fit up to 4× — with the pan/re-anchor maths behind the panel's zoom slider;
+  whole-page fit up to 4× — with the pan/re-anchor maths behind pinch, ctrl+wheel and the
+  `+`/`−` keys (the panel has no zoom control in its chrome);
   `pdfjsSetup.ts` is the dynamically-imported pdf.js instance (the **legacy** build) and the
   URLs of the four asset directories pdf.js fetches at run time — `pdfjsAssets.ts` is the
   shared list, copied out of node_modules by `vite.config.ts`. `wasm` is the load-bearing

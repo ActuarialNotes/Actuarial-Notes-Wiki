@@ -90,7 +90,9 @@ Defined in `quiz/src/index.css` under "Keystone concepts", and summarised in
 **The marker is a gold underline on the concept's own name — never an icon
 beside it.** A keystone therefore looks the same in a sentence on the syllabus
 page, as the popup title, as a flashcard title and in a search result, and the
-name itself is the tap target that confirms it is a keystone.
+name itself is the tap target that confirms it is a keystone — everywhere except
+the concept popup, whose title is the action menu's trigger and shows the same
+explainer as that menu's first block.
 
 | Class | What it does |
 |---|---|
@@ -121,13 +123,17 @@ name, or the gold chip on the collect card — so the two never fight for the sa
 | Surface | Treatment |
 |---|---|
 | Exam study guide (`pages/wiki/WikiExam.tsx`) | Gold underline on the keystone concept links in the syllabus prose, same as anywhere else in the wiki. The exam page used to name all of an exam's keystones inside the **Exam Readiness Score** popup; that card was removed, so no surface lists an exam's keystones today — the catalogue is `data/keystoneConcepts.ts`, and keystone mastery still weighs on the readiness score (`lib/readiness.ts`) |
-| Concept popup header (`components/wiki/ConceptPopup.tsx`) | The **title** is the marker: gold underline, and tapping the concept name opens the explainer — the "Keystone concept" heading, the exam badge, and the exam's mastered count. Nothing else: the explainer is read mid-study, over the concept it is marking, so it carries no prose at all |
+| Concept popup header (`components/wiki/ConceptPagePanel.tsx`) | The **title** is the marker: gold underline. Tapping the name here opens the page's **action menu** rather than the explainer — a name can only do one thing, and in the popup that thing is the menu — so the explainer is the menu's first block instead: the "Keystone concept" heading, the exam badge, and the exam's mastered count (`KeystoneSummary`). Nothing else: the explainer is read mid-study, over the concept it is marking, so it carries no prose at all |
 | Wiki prose (`components/wiki/WikiArticle.tsx`) | `.wiki-link--keystone` on concept links — dimmed repeat mentions stay dim, so one marker per idea |
 | Flashcard tiles (`pages/Flashcards.tsx`) | Gold underline on the card name — never a ring, since the tile edge belongs to the collected-foil material |
 | Wiki search results (`components/wiki/WikiSearchPanel.tsx`) | Gold underline on the result's name; the category icon is untouched |
 | Standalone concept page (`pages/wiki/WikiConcept.tsx`) | Gold underline on the `<h1>`, same tap-to-explain |
 | Collect modal (`components/collect/CollectCard3D.tsx`) | A gold `KEYSTONE` chip + wash on the card being collected — a moment, not a name, so the glyph is allowed here |
 | Dashboard Study Guide radial (`components/ReadinessCard.tsx`) | Keystone spokes use the gold mastery ladder instead of the green one (`lib/masteryFill.ts`) |
+
+`components/KeystoneName.tsx` also exports `KeystoneSummary`, the explainer's
+contents on their own (heading, exam badge, mastered count), so the popup's
+action menu shows exactly what the popover does.
 
 `components/KeystoneName.tsx` exports `KeystoneName` (the name + explainer popover — it
 resolves the concept itself and renders plain text for a non-keystone, so call sites use it

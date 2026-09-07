@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BookOpen, CheckCheck, Headphones, Loader2, Play, Sigma, TrendingUp, X } from 'lucide-react'
+import { BookOpen, CheckCheck, Headphones, Loader2, Lock, Play, Sigma, TrendingUp, X } from 'lucide-react'
 import { fetchWikiFile, fetchAllQuestions } from '@/lib/github'
 import { entryRefToRepoPath, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { parseAllQuestions, filterQuestions } from '@/lib/parser'
@@ -25,19 +25,19 @@ import { useAuth } from '@/hooks/useAuth'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
-import { KeystoneName } from '@/components/KeystoneName'
+import { KeystoneSummary } from '@/components/KeystoneName'
 import { buildMasteryLookup } from '@/lib/conceptMatch'
 import { findKeystone, keystoneProgress } from '@/lib/keystone'
 import { MasteryBadge } from '@/components/MasteryBadge'
-import { MASTERY_LABEL, MASTERY_SHORT_LABEL, MASTERY_TINT } from '@/lib/masteryBadge'
 import { FactCheckDialog } from '@/components/FactCheckBadge'
 import { FACT_CHECK_TONE_CLASSES } from '@/lib/factCheckTone'
 import { factCheckBadge, parseVerification } from '@/lib/verification'
 
 /**
- * The open page of the concept popup's stack: its header (title, mastery, the
- * action menu, Listen) and its body (the article, Math View or Listen view),
- * with the gallery and modals it opens.
+ * The open page of the concept popup's stack: its header (the title, which is
+ * itself the action menu's trigger, plus the ▶ button and Listen) and its body
+ * (the article, Math View or Listen view), with the gallery and modals it
+ * opens.
  *
  * Mounted per page, keyed by the ref, so opening another page of the stack is a
  * remount rather than a reset of a dozen pieces of state. What a reader would
@@ -115,6 +115,7 @@ export function ConceptPagePanel({
   const [listenView, setListenView] = useState(false)
   const playMenuRef = useRef<HTMLDivElement>(null)
   const playBtnRef = useRef<HTMLButtonElement>(null)
+  const titleBtnRef = useRef<HTMLButtonElement>(null)
   const bodyRef = useRef<HTMLDivElement>(null)
   const { user } = useAuth()
   const { records: masteryRecords } = useConceptMastery()
@@ -133,11 +134,11 @@ export function ConceptPagePanel({
   // Keystone roll-up for the exam this concept anchors — the popup already has
   // every mastery record loaded, so the badge's explainer can show real
   // progress without a second query. Null for ordinary concepts.
+  const keystoneMatch = useMemo(() => findKeystone(entry.name), [entry.name])
   const keystoneStats = useMemo(() => {
-    const match = findKeystone(entry.name)
-    if (!match) return undefined
-    return keystoneProgress(match.examId, buildMasteryLookup(masteryRecords), new Date())
-  }, [masteryRecords, entry.name])
+    if (!keystoneMatch) return undefined
+    return keystoneProgress(keystoneMatch.examId, buildMasteryLookup(masteryRecords), new Date())
+  }, [masteryRecords, keystoneMatch])
 
   // Fetch this page's markdown. The panel is keyed by its ref, so this runs
   // once per page rather than on every step of the walk.
@@ -191,6 +192,10 @@ export function ConceptPagePanel({
       // The menu itself is portaled to <body> (outside playMenuRef), so a click
       // inside it wouldn't count as "inside" without this marker check.
       if (target?.closest('[data-play-menu]')) return
+      // The title opens the same menu but sits outside playMenuRef, so without
+      // this its pointerdown would close the menu and its click reopen it —
+      // pressing the title twice would never shut it.
+      if (target?.closest('[data-play-menu-trigger]')) return
       if (playMenuRef.current && !playMenuRef.current.contains(target)) {
         setShowPlayMenu(false)
       }
@@ -273,6 +278,18 @@ export function ConceptPagePanel({
   // users included), so treat it as collected even if not in the collected store.
   const conceptCollected = isCollected || !(masteryState === null || masteryState === 'new')
 
+  // The one action menu, opened by either of its two triggers — the concept's
+  // name and the ▶ button — and anchored to whichever was pressed. The menu is
+  // portaled to <body>, so it is positioned from the trigger's viewport rect.
+  function toggleMenu(anchor: HTMLElement | null) {
+    if (!showPlayMenu && anchor) {
+      const rect = anchor.getBoundingClientRect()
+      setMenuAlignRight(window.innerWidth - rect.right < 200)
+      setMenuRect(rect)
+    }
+    setShowPlayMenu(v => !v)
+  }
+
   return (
     <>
       {/* Header. Focus mode spans the full viewport, so the header and the body
@@ -280,40 +297,34 @@ export function ConceptPagePanel({
           desktop and stay aligned with each other. */}
       <div className={`flex items-center gap-2 h-16 shrink-0 ${focusMode ? 'w-full max-w-4xl mx-auto px-4 sm:px-6' : 'px-3'}`}>
         <div className="flex items-center gap-2 flex-1 min-w-0">
-          {/* The title carries the keystone marker itself: a gold underline on
-              the name, tappable to confirm this concept is load-bearing. For an
-              ordinary concept `KeystoneName` renders plain text, so the header
-              looks exactly as it did before. */}
-          <KeystoneName
-            name={entry.name}
-            progress={keystoneStats}
-            className="truncate font-semibold text-lg sm:text-xl min-w-0"
-          />
-          {/* Mastery status (New/1/2/3/F), sitting just right of the concept
-              name. An uncollected concept shows New and the pill opens the
-              collect check — collecting is what lets it move off New — while a
-              collected one opens the combined card + learning-progress modal. */}
-          {!focusMode && entry.kind === 'concept' && (() => {
-            const state = masteryState ?? 'new'
-            return (
-              <button
-                type="button"
-                data-tour="collect-card"
-                // Hand the modal the verdict this pill is already showing, so a
-                // collected card opens straight onto the card + learning
-                // progress instead of flashing the collect check while it
-                // re-derives mastery.
-                onClick={() => openCollect(entry, conceptCollected ? { collected: true, mastery: masteryState ?? undefined } : undefined)}
-                title={conceptCollected ? 'View flashcard & learning progress' : 'Collect this flashcard to level it up'}
-                aria-label={conceptCollected
-                  ? `${entry.name} — ${MASTERY_LABEL[state]}. View flashcard and progress`
-                  : `Collect ${entry.name} to level it up`}
-                className={`shrink-0 inline-flex items-center justify-center min-w-[1.875rem] h-7 px-2 rounded-full text-xs font-bold tabular-nums cursor-pointer hover:opacity-80 transition-opacity ${MASTERY_TINT[state]}`}
-              >
-                {MASTERY_SHORT_LABEL[state]}
-              </button>
-            )
-          })()}
+          {/* The title is a control: pressing the concept's own name opens the
+              action menu, the same one the ▶ button opens, so the largest thing
+              in the header is the way into the page's actions rather than
+              decoration. It carries the keystone marker too — a gold underline
+              on the name — but the explainer that marker used to open on tap is
+              now the menu's first block, since a name can only do one thing.
+              Nothing sits between the name and the ▶ button: the concept's
+              level is on the menu's Learning Progress row, where the graph that
+              explains it lives. */}
+          {!focusMode && hasActions ? (
+            <button
+              ref={titleBtnRef}
+              type="button"
+              data-play-menu-trigger
+              onClick={() => toggleMenu(titleBtnRef.current)}
+              aria-haspopup="menu"
+              aria-expanded={showPlayMenu}
+              title={entry.name}
+              aria-label={`${entry.name} — page actions`}
+              className={`truncate text-left font-semibold text-lg sm:text-xl min-w-0 ${keystoneMatch ? 'keystone-underline' : ''}`}
+            >
+              {entry.name}
+            </button>
+          ) : (
+            <span className={`truncate font-semibold text-lg sm:text-xl min-w-0 ${keystoneMatch ? 'keystone-underline' : ''}`}>
+              {entry.name}
+            </span>
+          )}
           {/* The action button. Spacing is the row's `gap-2` and nothing
               else. */}
           {!focusMode && hasActions && (
@@ -322,14 +333,7 @@ export function ConceptPagePanel({
             ref={playBtnRef}
             type="button"
             data-tour="concept-action"
-            onClick={() => {
-              if (!showPlayMenu && playBtnRef.current) {
-                const rect = playBtnRef.current.getBoundingClientRect()
-                setMenuAlignRight(window.innerWidth - rect.right < 200)
-                setMenuRect(rect)
-              }
-              setShowPlayMenu(v => !v)
-            }}
+            onClick={() => toggleMenu(playBtnRef.current)}
             className="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-background hover:bg-accent text-foreground shrink-0"
             title="Start Quiz or Add to Flashcards"
             aria-label="Start Quiz or Add to Flashcards"
@@ -339,7 +343,7 @@ export function ConceptPagePanel({
           {showPlayMenu && menuRect && createPortal(
             <div
               data-play-menu
-              className="fixed w-52 rounded-md bg-popover text-popover-foreground shadow-md z-[70] py-1 max-h-[min(18rem,80vh)] overflow-y-auto"
+              className="fixed w-56 rounded-md bg-popover text-popover-foreground shadow-md z-[70] py-1 max-h-[min(18rem,80vh)] overflow-y-auto"
               style={{
                 top: menuRect.bottom + 4,
                 ...(menuAlignRight
@@ -347,6 +351,15 @@ export function ConceptPagePanel({
                   : { left: menuRect.left }),
               }}
             >
+              {/* The keystone explainer, which used to open by tapping the
+                  concept's name. The name opens this menu now, so the summary
+                  leads it: what this concept is, before what can be done with
+                  it. */}
+              {keystoneMatch && (
+                <div className="px-3 pt-1.5 pb-2.5 mb-1 border-b border-border">
+                  <KeystoneSummary examLabel={keystoneMatch.examLabel} progress={keystoneStats} compact />
+                </div>
+              )}
               <button
                 type="button"
                 onClick={() => { setShowQuestionsModal(true); setShowPlayMenu(false) }}
@@ -424,14 +437,34 @@ export function ConceptPagePanel({
                 <Sigma className="h-3.5 w-3.5 shrink-0" />
                 Math View
               </button>
+              {/* Collect. The mastery pill beside the title used to be the way
+                  into the check; the level now lives on the Learning Progress
+                  row below, so the check needs a row of its own — passing it is
+                  what lets a concept's mastery leave New, so it can't be left
+                  unreachable from the page it is about. */}
+              {entry.kind === 'concept' && !conceptCollected && (
+                <button
+                  type="button"
+                  data-tour="collect-card"
+                  onClick={() => { openCollect(entry); setShowPlayMenu(false) }}
+                  className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
+                >
+                  <Lock className="h-3.5 w-3.5 shrink-0" />
+                  <span className="flex-1 text-left">Collect Flashcard</span>
+                </button>
+              )}
               <button
                 type="button"
                 onClick={() => { setShowLearningProgress(true); setShowPlayMenu(false) }}
                 className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
               >
                 <TrendingUp className="h-3.5 w-3.5 shrink-0" />
-                <span className="flex-1 text-left">Learning Progress</span>
-                {masteryState && <MasteryBadge state={masteryState} compact />}
+                <span className="flex-1 text-left whitespace-nowrap">Learning Progress</span>
+                {/* The concept's level — New / 1 / 2 / 3 / F — reads here and
+                    nowhere else in the popup, on the row that opens the graph
+                    explaining how it got there. A concept with no record yet is
+                    New, the same verdict the old title pill showed. */}
+                {entry.kind === 'concept' && <MasteryBadge state={masteryState ?? 'new'} compact />}
               </button>
               {/* Fact Check — what has been checked about this page, against
                   which source, and everything anyone has since said about it.

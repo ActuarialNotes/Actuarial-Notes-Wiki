@@ -13,6 +13,11 @@ import { findKeystone, type KeystoneProgress } from '@/lib/keystone'
 // mastered count. No prose beneath it — it is read mid-study, over the concept
 // it is marking, so a paragraph there is just something in the way.
 //
+// The concept popup is the one place the name is already spoken for: its title
+// opens the page's action menu. There the underline is drawn on that trigger
+// and the explainer is the menu's first block — `KeystoneSummary` below, which
+// is the popover's contents without the popover.
+//
 // `KeystoneName` is inert for an ordinary concept: it renders the plain name
 // with no underline and no click target, so call sites can use it for every
 // concept title rather than branching.
@@ -46,6 +51,73 @@ export function KeystoneIcon({ className = 'h-4 w-4' }: { className?: string }) 
       <path d="M3.4 4.6h4.9l-2.4 14.8H6.8z" fill={`url(#${shine})`} />
       <path d="M3.4 4.6h17.2l-3.4 14.8H6.8z" fill="none" stroke="#78350f" strokeOpacity="0.55" strokeWidth="0.9" strokeLinejoin="round" />
     </svg>
+  )
+}
+
+/**
+ * The explainer's content: the "Keystone concept" heading, the exam it belongs
+ * to and that exam's mastered count. Split out of the popover below because the
+ * concept popup no longer has the name to tap — its title opens the action menu
+ * — so the same summary is shown as that menu's first block instead.
+ */
+export function KeystoneSummary({
+  examLabel,
+  progress,
+  compact = false,
+}: {
+  examLabel: string
+  progress?: KeystoneProgress
+  /** Narrow layout for the concept popup's action menu: the exam and the count
+   *  read as one muted line under the bar, since a 13rem-wide menu has nowhere
+   *  to put the badge the popover sets beside the heading. */
+  compact?: boolean
+}) {
+  const pct = progress && progress.total ? (progress.mastered / progress.total) * 100 : 0
+  if (compact) {
+    return (
+      <>
+        <div className="flex items-center gap-2">
+          <KeystoneIcon className="h-4 w-4 shrink-0" />
+          <span className="text-sm font-semibold">Keystone concept</span>
+        </div>
+        {progress && (
+          <div className="mt-2 h-1 rounded-full bg-muted overflow-hidden">
+            <div
+              className="h-full rounded-full"
+              style={{ width: `${pct}%`, backgroundImage: 'var(--keystone-gradient)' }}
+            />
+          </div>
+        )}
+        <div className="mt-1 text-[11px] text-muted-foreground">
+          {examLabel}
+          {progress && ` · ${progress.mastered}/${progress.total} mastered`}
+        </div>
+      </>
+    )
+  }
+  return (
+    <>
+      <div className="flex items-center gap-2">
+        <KeystoneIcon className="h-5 w-5 shrink-0" />
+        <span className="text-base font-semibold">Keystone concept</span>
+        <span className="ml-auto shrink-0 text-[11px] font-medium px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground">
+          {examLabel}
+        </span>
+      </div>
+      {progress && (
+        <div className="mt-3 flex items-center gap-2">
+          <div className="h-1.5 flex-1 rounded-full bg-muted overflow-hidden">
+            <div
+              className="h-full rounded-full"
+              style={{ width: `${pct}%`, backgroundImage: 'var(--keystone-gradient)' }}
+            />
+          </div>
+          <span className="text-xs tabular-nums text-muted-foreground shrink-0">
+            {progress.mastered}/{progress.total} mastered
+          </span>
+        </div>
+      )}
+    </>
   )
 }
 
@@ -118,29 +190,7 @@ export function KeystoneName({ name, className = '', progress }: KeystoneNamePro
             left: Math.max(8, Math.min(rect.left, window.innerWidth - 328)),
           }}
         >
-          <div className="flex items-center gap-2">
-            <KeystoneIcon className="h-5 w-5 shrink-0" />
-            <span className="text-base font-semibold">Keystone concept</span>
-            <span className="ml-auto shrink-0 text-[11px] font-medium px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground">
-              {examLabel}
-            </span>
-          </div>
-          {progress && (
-            <div className="mt-3 flex items-center gap-2">
-              <div className="h-1.5 flex-1 rounded-full bg-muted overflow-hidden">
-                <div
-                  className="h-full rounded-full"
-                  style={{
-                    width: `${progress.total ? (progress.mastered / progress.total) * 100 : 0}%`,
-                    backgroundImage: 'var(--keystone-gradient)',
-                  }}
-                />
-              </div>
-              <span className="text-xs tabular-nums text-muted-foreground shrink-0">
-                {progress.mastered}/{progress.total} mastered
-              </span>
-            </div>
-          )}
+          <KeystoneSummary examLabel={examLabel} progress={progress} />
         </div>,
         document.body,
       )}

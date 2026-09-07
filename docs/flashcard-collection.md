@@ -16,9 +16,10 @@ Level 1 (see [Concept Learning Progression](concept-learning-progression.md)).
    front of those controls are gone; a reader who has not met a concept yet is
    the reader who most needs to read it.
 2. The way *in* to the check is therefore an offer, not a barrier:
-   - **Concept popup** — the mastery pill beside the name. An uncollected
-     concept shows **New** and the pill opens the collect check; a collected one
-     opens the card + learning progress.
+   - **Concept popup** — a **Collect Flashcard** row in the action menu (the
+     menu the title opens), shown only while the concept is uncollected. It used
+     to be a mastery pill beside the name; the level now reads on that menu's
+     **Learning Progress** row instead, so the check needed a row of its own.
    - **Flashcard** (`pages/Flashcards.tsx`) — a **Collect Card** item at the
      bottom of the corner actions menu, shown only while the card is
      uncollected.
@@ -197,7 +198,7 @@ The button is opener-driven, not a property of the modal: `open()` takes an
 `onSkip` callback (`hooks/useCollect.ts`) and the modal only draws **Skip** when
 one was supplied. `useCollect.skip()` closes the modal *before* running the
 handler, so the opener is moving a deck the check is no longer sitting on. Every
-other opener — the concept popup's mastery pill, the Flashcards pack shop, the
+other opener — the concept popup's **Collect Flashcard** row, the Flashcards pack shop, the
 pre-quiz gate — has nowhere to send the reader next and so passes nothing,
 keeping the plain close button it always had.
 

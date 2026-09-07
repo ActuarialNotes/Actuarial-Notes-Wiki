@@ -26,8 +26,8 @@ Wired in at two places:
   simulator. The `p` renderer unwraps the paragraph around it first, because the simulator is a
   `<div>` and `<div>` inside `<p>` is invalid nesting.
 - `components/wiki/ImageGalleryModal.tsx` — the full-screen gallery (opened from the concept
-  popup) renders the simulator instead of the picture, and hides the zoom slider and the
-  tap-to-close pointer handlers so the controls stay usable. It layers at `z-[57]`, which is
+  popup) renders the simulator instead of the picture, and drops the zoom/pan gestures and
+  the tap-to-close pointer handlers so the controls stay usable. It layers at `z-[57]`, which is
   what puts it above a concept popup in **focus mode** (`z-index: 56`); at its old `z-50` the
   simulator opened *behind* the focus-mode popup and the card looked unresponsive. The
   `hostFocusMode` prop also shrinks the bottom inset to the popup's own footer, since focus

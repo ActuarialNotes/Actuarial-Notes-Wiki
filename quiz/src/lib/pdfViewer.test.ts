@@ -7,7 +7,6 @@ import {
   clampZoom,
   fitHeightScale,
   fitWidthScale,
-  formatZoom,
   MAX_ZOOM,
   MIN_ZOOM,
   nudgeZoom,
@@ -116,15 +115,6 @@ describe('canvasPixelRatio', () => {
 })
 
 describe('zoom', () => {
-  it('reads the bottom of the range as "Fit", wherever the panel puts it', () => {
-    expect(formatZoom(WIDTH_ZOOM)).toBe('Fit')
-    expect(formatZoom(1.5)).toBe('1.5×')
-    // On a desktop panel the whole-page fit is below 1×, so that is the size
-    // called "Fit" and the width fit reads as the number it is.
-    expect(formatZoom(0.4, 0.4)).toBe('Fit')
-    expect(formatZoom(1, 0.4)).toBe('1.0×')
-  })
-
   it('never goes below the fitted page — there is nothing to read out there', () => {
     expect(clampZoom(0.25)).toBe(WIDTH_ZOOM)
     expect(clampZoom(9)).toBe(MAX_ZOOM)

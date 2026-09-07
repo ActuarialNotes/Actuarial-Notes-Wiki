@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a64f451db06a050ed88fed02b2f9446e8e1645d6681dd51d6f0f43dd1c4b93e7
+  content_hash: sha256:0b6d060f765b90de67318c9ec63be83afb9e75b9d8d46d3fd8407714f7119707
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **Disadvantages:** less predictable, since firms cannot be certain what will satisfy the supervisor; more expensive, since each firm builds its own approach; harder to enforce, because a breach is a judgement rather than a fact; and it depends on supervisory capacity and consistency.
 - **It shifts work to the actuary.** Under a prescribed margin, the actuary applies it; under a principles-based standard the actuary must **select, justify and document** — which is why [[IFRS 17]]'s entity-specific [[Risk Adjustment for Non-Financial Risk|risk adjustment]] with a disclosed confidence level replaced prescribed [[Margin for Adverse Deviations|MfADs]].
 - **[[Solvency II]]** is the international expression of the same philosophy: three pillars of quantitative requirements, supervisory review and disclosure, with internal models permitted subject to approval.
+
+![[Media/Figures/Principles-Based_Regulation.svg|340]]
 
 > [!example]- Which Approach for Which Problem? {Example}
 > A regulator wants to address three concerns. For each, decide whether a rule or a principle is the better instrument.

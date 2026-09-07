@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:add1b8fe1f777e75f02cec3c6859c6347906e25438fbd9247dd3b1c0b38711a6
+  content_hash: sha256:62733324a0f6cd41792c655ee6dc58661c0b91cd319c4982138bc51b3df8cdf1
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,6 +18,8 @@ verification:
 - **They are effectively expected.** An actuary who ignores a directly applicable educational note without explanation will be challenged by the [[External Auditor]], by [[OSFI]], and in any [[Peer Review]]. "Non-binding" describes their legal status, not the practical expectation.
 - **They can conflict or lag.** Notes issued at different times may not be fully consistent, and one written before a standard changed may be superseded in part. The actuary must work out which guidance is current, and the standards prevail over any note.
 - **Draft notes** circulated for comment carry less weight than final ones, but in a genuinely new area — as during the [[Transition to IFRS 17]] — a draft note may be the best available statement of emerging practice, and using it with disclosure is defensible.
+
+![[Media/Figures/Educational_Note.svg|340]]
 
 > [!example]- Departing From an Educational Note {Example}
 > A CIA educational note on constructing the [[IFRS 17 Discount Rates|IFRS 17 discount curve]] describes a bottom-up approach with an illiquidity premium derived from a specified reference portfolio. An insurer's [[Appointed Actuary]] concludes that its liabilities are considerably less liquid than the reference portfolio assumes and uses a higher illiquidity premium, raising the discount rate by $30$ basis points and reducing the [[Liability for Incurred Claims|LIC]] by $\$14$ million.

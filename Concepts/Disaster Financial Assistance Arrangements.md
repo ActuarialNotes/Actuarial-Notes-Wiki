@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:399edb4b23fb007df59264bad8e00f38c54b949307699455bfad430667bbd408
+  content_hash: sha256:bf11c6d104a7dff5e860092fbf6d18d162bf197626abc85ad9d9d0305bd4cdfc
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,6 +20,8 @@ verification:
 - **The [[Moral Hazard]] criticism.** Reliable post-disaster assistance reduces the incentive to buy insurance, to mitigate, or to avoid building in hazardous locations — and because assistance is decided after the event, it cannot be conditioned on precautions taken before it. Repeated rebuilding of the same flood-prone properties is the standard illustration.
 - **Fiscal exposure.** DFAA payments have grown by an order of magnitude over recent decades, driven by [[Climate Risk|climate]]-related events and by exposure growth in hazardous areas. The federal liability is effectively an **uncapped, unfunded catastrophe exposure** — the actuarial characterisation candidates should be able to give.
 - **Reform direction:** tie assistance to mitigation and relocation, tighten the insurability test, and replace ad hoc payments with a structured [[Flood Insurance|flood insurance]] program in which the subsidy is explicit and priced.
+
+![[Media/Figures/Disaster_Financial_Assistance_Arrangements.svg|340]]
 
 > [!example]- Insurance or Assistance? {Example}
 > A province suffers a flood causing $\$1.2$ billion of damage: $\$400$ million to private homes in an area where overland flood coverage is available and affordable, $\$300$ million to homes in a high-risk zone where no insurer will write, $\$350$ million to public infrastructure, and $\$150$ million of emergency response cost.

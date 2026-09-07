@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:190020b87f725f4a579bf5d4ff81012ca456c58104c7c612b5e11a9d8f8b404b
+  content_hash: sha256:95f5216fb5e53796ed23ab369f2acc94d56902ab888ca4e8a9675a7f3ce514bc
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **Resignation is not a substitute.** Resigning without reporting leaves the matter undisclosed — the precise outcome the framework is designed to prevent. Both the company and the actuary must notify OSFI of a change in the appointment, and the actuary may state the reasons, which is what makes a dismissal over a valuation disagreement visible.
 - **The successor actuary is part of the design.** Under the [[Standards of Practice]] an actuary asked to accept an appointment must communicate with the predecessor before accepting, so an insurer cannot escape a finding by replacing the person who made it.
 - **Documentation is the actuary's protection.** Dates, what was reported, to whom, and what response was received. If the matter is later examined, the file is the record of whether the duty was discharged.
+
+![[Media/Figures/Duty_to_Report.svg|340]]
 
 > [!example]- Working the Escalation {Example}
 > In November the Appointed Actuary concludes that a reinsurance contract booked as reinsurance does not transfer significant [[Risk Transfer|insurance risk]] and must be accounted for as a deposit. Correcting it would reduce [[Capital Available]] by $\$45$ million and take the [[MCT]] ratio from $166\%$ to $141\%$ — below the $150\%$ supervisory target.

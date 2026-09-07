@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:f7abacbc7cc294e7b0f6febb45b23f5106f0d160dd188abce09d448dfcd9b9a0
+  content_hash: sha256:1c5b14590087ba0cbc03df7c9e713409a38c8283a1f5c0faf5b9170d122edf2e
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **It is not free of judgement.** The systematic amount left in profit is computed at the locked-in rate, which requires tracking that rate by group — the same operational burden as [[Contractual Service Margin|CSM]] accretion.
 - **Reinsurance held** may be treated the same way, and consistency between the gross and ceded presentation is important or the option reintroduces the mismatch it was meant to remove.
 - **The residual in OCI is informative.** Once assets and liabilities are both in OCI, what remains there is the effect of the **duration mismatch** — a direct read on how well the insurer has matched, which is exactly what [[Duration|duration]] analysis is meant to reveal.
+
+![[Media/Figures/Other_Comprehensive_Income_Option.svg|340]]
 
 > [!example]- Should This Insurer Elect the Option? {Example}
 > Consider two insurers.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:94c505f20780573d1b6444e8ac0c866e5ec87ccc2517ca9ca7b92c5a4e68d513
+  content_hash: sha256:b2369e5bb20b0e35552c889f6011f19b41dfb4621ddc24eec54b91e834d33017
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **Capacity is finite.** The fund can absorb the failure of small and medium insurers; the failure of a very large one, or several at once after a catastrophe, would exceed what the survivors can be assessed without threatening *their* solvency. This is why [[Solvency Regulation]] does the real work and the fund handles the residual.
 - **Interaction with the regulator.** [[OSFI]] and [[PACICC]] share information, and OSFI's early-intervention ladder exists partly to give the fund an orderly wind-up rather than a disorderly failure — an insurer resolved early costs the fund far less.
 - Life and health insurers have a separate fund (Assuris); the two are distinct in coverage, funding and limits.
+
+![[Media/Figures/Guaranty_Funds.svg|340]]
 
 > [!example]- Sizing an Assessment {Example}
 > An insurer with $\$180$ million of premium fails, leaving a shortfall of $\$95$ million after its assets are applied. Guaranty fund coverage limits reduce eligible claims to $\$78$ million. Industry premium in the affected jurisdiction is $\$14$ billion, and a surviving insurer writes $\$420$ million there.

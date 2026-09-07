@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:e08cbdfc4d0f050844c25d648facf7cc2f0e4d6a6224d453d18de9b4b69ecd85
+  content_hash: sha256:9cf1eaf11b91bc14c74f005f1c909268ae023c11776a3dd8ee0d9d7f4979f2f8
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,6 +18,8 @@ verification:
 - **It is the first tripwire.** Breaching the internal target should trigger management action — a capital plan, reduced distributions, moderated growth — while the insurer is still well above supervisory attention. An internal target that gives no early warning has failed its purpose.
 - **[[FCT]] tests it; [[ORSA]] sets it.** ORSA is the forward-looking process that determines *how much* capital the insurer needs; FCT is the scenario testing that checks whether the target holds up. The two are complementary and OSFI expects both.
 - **A target set too low is a governance finding.** OSFI reviews internal targets and challenges those that do not follow from the insurer's own scenarios — an insurer whose ORSA identifies a $\$50$ million catastrophe exposure and sets a target providing $\$20$ million of headroom has not done the work.
+
+![[Media/Figures/Internal_Target_Capital_Ratio.svg|340]]
 
 > [!example]- Deriving an Internal Target {Example}
 > An insurer's ORSA identifies three severe but plausible events, each assessed at roughly a $1$-in-$100$ annual likelihood, with after-tax effects on capital available of: catastrophe $\$52$ million; reserve strengthening $\$38$ million; equity market decline $\$24$ million. Its base solvency buffer is $\$190$ million.

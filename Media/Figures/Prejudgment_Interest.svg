@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Interest accruing on the heads of damage it applies to over five and a half years to settlement</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Years of delay are paid for at a</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">prescribed rate</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">Judgment = Damages × (1 + r t)</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">$250,000 × 5% × 5.5 = $68,750</text>
+  <text x="180" y="102" text-anchor="middle" class="sm dim">a $400,000 award settled 5.5 years on</text>
+  <rect x="44" y="130" width="165" height="26" rx="4" fill="#3b82f6" fill-opacity="0.45"/>
+  <text x="50" y="148" text-anchor="start" class="sm">$150,000</text>
+  <text x="224" y="148" text-anchor="start" class="sm" fill="#3b82f6">PJI</text>
+  <rect x="44" y="176" width="110" height="26" rx="4" fill="#0d9488" fill-opacity="0.45"/>
+  <text x="50" y="194" text-anchor="start" class="sm">$100,000</text>
+  <text x="224" y="194" text-anchor="start" class="sm" fill="#0d9488">PJI</text>
+  <rect x="44" y="222" width="165" height="26" rx="4" fill="#d97706" fill-opacity="0.45"/>
+  <text x="50" y="240" text-anchor="start" class="sm">$150,000</text>
+  <text x="224" y="240" text-anchor="start" class="sm" fill="var(--dim)">no PJI</text>
+  <line x1="30" y1="278" x2="330" y2="278" class="rule"/>
+  <text x="180" y="300" text-anchor="middle" class="sm dim">future losses are already valued as at judgment</text>
+  <text x="180" y="316" text-anchor="middle" class="sm dim">— interest runs only on what was already owed</text>
+  <text x="180" y="348" text-anchor="middle" class="sm dim">set below market and delay pays; set above it</text>
+  <text x="180" y="364" text-anchor="middle" class="sm dim">and the plaintiff has no reason to settle</text>
+  <text x="180" y="388" text-anchor="middle" class="sm dim">PJI is claim cost — it belongs in the reserve</text>
+</svg>

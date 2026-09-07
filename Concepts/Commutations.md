@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:30ff3641f37799bb3c9f1caad33bff578ed56449281ade1be89bdce75a58e191
+  content_hash: sha256:2dc91d1b3ca6950997fc41d12da86f79c0987cc2639266a4f760e030cc251a45
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **Accounting and capital effects are immediate.** The [[Reinsurance Contracts Held|reinsurance asset]] is derecognised, cash is received, and the difference goes through profit or loss. The gross liability is unchanged, so **[[Capital Required]] rises** — commutation reverses the capital credit the reinsurance was providing.
 - **The risk transferred back is real.** After commutation the cedant carries the full tail, including the possibility of adverse development it had previously ceded. A commutation that looks favourable on the expected value can be badly unfavourable in the tail.
 - **[[Risk Transfer]] considerations attach.** A commutation negotiated on terms that effectively unwind a contract retroactively, or one accompanied by a replacement arrangement that returns the risk, invites scrutiny about whether risk was ever genuinely transferred.
+
+![[Media/Figures/Commutations.svg|340]]
 
 > [!example]- Should the Cedant Commute? {Example}
 > A cedant holds a $\$60$ million recoverable from a reinsurer, expected to be paid over $12$ years. The cedant's discount rate is $4\%$, giving a present value of $\$41$ million. The reinsurer offers $\$36$ million in cash now. The reinsurer's financial strength rating has been downgraded twice in two years, and the cedant assesses a $15\%$ probability of the reinsurer failing before the recoveries are paid, with an expected recovery of $50\%$ in that event.

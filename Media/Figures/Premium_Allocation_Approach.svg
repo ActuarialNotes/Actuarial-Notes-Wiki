@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>The PAA eligibility test, and the half of the liability it does not simplify</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">Unearned premium, in IFRS 17 clothing</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">LRC = premium − acquisition</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">− revenue recognised</text>
+  <text x="180" y="102" text-anchor="middle" class="sm dim">eligible if either holds</text>
+  <rect x="36" y="118" width="130" height="64" rx="7" fill="#059669" fill-opacity="0.12" stroke="#059669" stroke-width="1.2"/>
+  <text x="101" y="144" text-anchor="middle" class="sm">coverage ≤</text>
+  <text x="101" y="162" text-anchor="middle" class="sm dim">one year</text>
+  <rect x="194" y="118" width="130" height="64" rx="7" fill="#0d9488" fill-opacity="0.12" stroke="#0d9488" stroke-width="1.2"/>
+  <text x="259" y="144" text-anchor="middle" class="sm">or it gives</text>
+  <text x="259" y="162" text-anchor="middle" class="sm dim">a similar answer</text>
+  <line x1="30" y1="198" x2="330" y2="198" class="rule"/>
+  <text x="180" y="220" text-anchor="middle" class="sm bold">but only the LRC is simplified</text>
+  <rect x="36" y="236" width="130" height="62" rx="7" fill="#059669" fill-opacity="0.12" stroke="#059669" stroke-width="1.2"/>
+  <text x="101" y="261" text-anchor="middle" class="sm">LRC</text>
+  <text x="101" y="279" text-anchor="middle" class="sm dim">simplified</text>
+  <rect x="194" y="236" width="130" height="62" rx="7" fill="#e11d48" fill-opacity="0.12" stroke="#e11d48" stroke-width="1.2"/>
+  <text x="259" y="261" text-anchor="middle" class="sm">LIC</text>
+  <text x="259" y="279" text-anchor="middle" class="sm dim">identical to GMM</text>
+  <text x="180" y="326" text-anchor="middle" class="sm dim">no CSM, so profit emerges as revenue exceeds</text>
+  <text x="180" y="342" text-anchor="middle" class="sm dim">claims — but the onerous test still bites</text>
+  <text x="180" y="368" text-anchor="middle" class="sm dim">not available for multi-year commercial contracts,</text>
+  <text x="180" y="384" text-anchor="middle" class="sm dim">extended warranty, surety or long-term liability</text>
+</svg>

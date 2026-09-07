@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:77a68f2ec0c5113e18d646ed6971c1582701e359e7ef85ecccb49618aff60b94
+  content_hash: sha256:aa6f5b2e5f01cdcb7ee900c53c849ac14261e4c2326955a1aa05d82d986585e6
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **Actuarial characteristics that make class actions hard to reserve:** aggregate exposure that does not develop like ordinary claims; a **binary** outcome around certification; a long delay before the size of the class is known; and correlation across the book, since every affected policy is exposed to the same decision at the same time — the antithesis of the independence that ordinary reserving assumes.
 - Canadian class actions are governed provincially, with Ontario, Quebec and British Columbia the principal venues, and Quebec's regime historically the most permissive on certification.
 - Contingency fees and cost rules make Canada's class-action environment materially less expansive than the American one, but the trend has been toward more filings, not fewer — one of the [[Tort Litigation]] trends the syllabus asks candidates to discuss.
+
+![[Media/Figures/Class_Action.svg|340]]
 
 > [!example]- Reserving a Certified Class Action {Example}
 > An insurer is a defendant in a certified class action alleging it improperly deducted depreciation on $60{,}000$ replacement-cost claims over six years. Average alleged underpayment is $\$1{,}400$. Counsel assesses a $35\%$ probability of liability being established, and estimates that if liability is found, $70\%$ of class members would ultimately be paid.

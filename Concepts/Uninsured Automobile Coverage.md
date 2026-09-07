@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:6d03f184fa100e0d927bdb19087d2f9d77cdbde843dee9a0014af81e939c9ff8
+  content_hash: sha256:32c81f7d68543a2733e41e7949e45abe0a07a4bde192d084f311201db0767783
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **Cost driver:** the uninsured rate in the province. Provinces with high uninsured driving see materially higher costs in this coverage, and enforcement (plate-based insurance verification, penalties) is a public policy lever that directly affects the premium.
 - Where an uninsured driver *is* identified, the insurer generally has **subrogation** rights against them personally; recovery rates are low, which is why the coverage is priced as though recovery were nil.
 - Some provinces supplement this with a **motor vehicle accident claims fund**, a government fund of last resort for victims with no available coverage at all — a public analogue to a [[Guaranty Funds|guaranty fund]].
+
+![[Media/Figures/Uninsured_Automobile_Coverage.svg|340]]
 
 > [!example]- Which Coverage Responds? {Example}
 > An insured with $\$1$ million third-party liability and an optional underinsured motorist endorsement of $\$1$ million suffers $\$700{,}000$ of damages. Determine the recovery in each case.

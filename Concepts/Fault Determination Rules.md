@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:743cecc632948dfb7519ccce0a903717a59926a9ff93e01893970883dff21714
+  content_hash: sha256:099cc1e94cbcb14d0ed046df739dc617648bec2253c8473644c2fac7648fc8bc
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - The rules govern **first-party recovery and rating**; they do not bind a court in a [[Tort Litigation|tort]] action for bodily injury, where common-law negligence and contributory negligence apply and can produce a different apportionment on the same facts.
 - **Rating consequence.** An at-fault determination under the rules typically triggers a surcharge and loss of claims-free discount, so the rules directly affect the driver's premium — which is why a determination that a driver considers unjust reaches the regulator as a complaint.
 - Fault is assigned in **increments** ($0$, $25$, $50$, $75$, $100$ per cent), and a driver assessed at $50\%$ or more is generally "at fault" for rating purposes even though only half the fault was assigned.
+
+![[Media/Figures/Fault_Determination_Rules.svg|340]]
 
 > [!example]- Applying the Rules Mechanically {Example}
 > Driver A stops at a red light. Driver B, following, strikes A from behind. B claims A stopped abruptly and unnecessarily. Under the Fault Determination Rules, how is fault apportioned, and what if the facts were investigated further?

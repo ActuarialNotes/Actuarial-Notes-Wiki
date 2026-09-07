@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:4dea68316cdd770bb7a76ead6d6cd473cf02c12ab3576060e0c990964c5b959d
+  content_hash: sha256:f6c272a378f205d6b79a7ce4bc9d2b5eb7859283f1c3f537fca39313f5655d1a
   sources: []
   open_findings: 0
   open_critical: 0
@@ -25,6 +25,8 @@ verification:
 - **Growth raises it.** Writing more business increases claim and premium liabilities and therefore the insurance risk margin, so an insurer growing fast needs capital simply to stand still — a mechanism that turns rapid growth into a capital problem before it turns into a loss problem.
 - **Reinsurance reduces it**, but only where the reinsurer is [[Registered Reinsurance|registered]] or the cession is collateralised, and buying reinsurance itself creates [[Credit Risk Margin|credit risk]] against the reinsurer. The net capital benefit is the reduction in insurance risk less the credit charge.
 - **The formula is standardised**, which makes insurers comparable but means it cannot capture every insurer's actual risk — which is exactly why [[ORSA]] requires the insurer to form its **own** view of required capital alongside it.
+
+![[Media/Figures/Capital_Required.svg|340]]
 
 > [!example]- The Capital Cost of Growth {Example}
 > An insurer's capital required is $\$140$ million, of which $\$88$ million is insurance risk. Capital available is $\$330$ million. It plans to grow premium $20\%$, which will raise the insurance risk margin proportionally, with other margins unchanged and the diversification credit of $\$18$ million rising to $\$21$ million.

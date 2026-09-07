@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:e15699aae734bd6de3f8c9f1b96764b613a14c956a911c0d53a3ae54527fd58c
+  content_hash: sha256:4935d730fc74a51ba24b5765e2a4e0fbde991c4bba4b60e6c3919dc815cdb523
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **The CSM can be a net cost.** Reinsurance is usually bought at a price above expected recoveries, so the "profit" on the contract is negative. IFRS 17 nonetheless defers it as a CSM (a net cost of purchasing reinsurance) rather than recognising it immediately — the **no day-one loss** treatment, the reverse of the onerous rule for contracts issued.
 - **The loss-recovery component.** Where reinsurance covers an [[Onerous Contract|onerous]] group, a loss-recovery component is recognised on the reinsurance asset **at the same time** as the loss on the underlying group, so the two are matched rather than the loss appearing first.
 - **[[Premium Allocation Approach|PAA]] eligibility is assessed separately** for reinsurance held, and a treaty covering multiple underwriting years or with a long coverage period may need the [[General Measurement Model|GMM]] even where the underlying business uses the PAA.
+
+![[Media/Figures/Reinsurance_Contracts_Held.svg|340]]
 
 > [!example]- Measuring the Reinsurance Asset {Example}
 > An insurer buys a quota share ceding $30\%$. Ceded premium is $\$60$ million, expected recoveries have a present value of $\$52$ million, the ceding commission is $\$14$ million, the risk adjustment on risk transferred is $\$3$ million, and the allowance for reinsurer non-performance is $\$1.2$ million.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ef8ef2ae2ea57fde5846934b5ab3107d84f570a9c0052453a24896011a063faa
+  content_hash: sha256:a6e4c733ed0b1942f948146eb7beb8c9b74f3034e207fda2912ea0180ee09471
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **Consistency matters.** Using a small threshold when it favours one conclusion and a large one when it favours another is not a materiality judgement; it is a result-driven one.
 - **Aggregation.** Individually immaterial items that are all one-directional can be material in total. A set of small conservative approximations, each below threshold, can add to a significant bias.
 - **The [[External Auditor]]'s materiality is set for the financial statements as a whole** and may differ from the actuary's. The two should be discussed rather than assumed to coincide, since a difference means one of them is testing something the other is not.
+
+![[Media/Figures/Materiality.svg|340]]
 
 > [!example]- Setting and Applying a Materiality Standard {Example}
 > An insurer has [[Insurance Contract Liabilities]] of $\$800$ million, [[Capital Available]] of $\$260$ million, a [[Base Solvency Buffer]] of $\$150$ million (so an [[MCT]] ratio of $173\%$), and pre-tax income of $\$35$ million. Its [[Internal Target Capital Ratio|internal target]] is $170\%$.

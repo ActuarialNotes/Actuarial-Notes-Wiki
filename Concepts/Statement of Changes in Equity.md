@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:5b3634cadba90931d7c00bce4016720a618a04d26f3352a6dfd73f97022a5b8a
+  content_hash: sha256:a86cd271464836d38a1362f76524996a2c22e3530ac5678ac677dd0a13dee81d
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,6 +20,8 @@ verification:
 - **Dividends are the item under supervisory scrutiny.** An insurer paying dividends while its capital ratio is falling is distributing capital it may need, and [[OSFI]] can and does restrict distributions as an early intervention measure. This statement is where that behaviour is visible.
 - **Accounting policy changes and transition** appear here as an adjustment to opening retained earnings — which is where the equity effect of [[Transition to IFRS 17]] was recorded.
 - **The relationship to comprehensive income** is direct: comprehensive income is the total change in equity from all non-owner sources, and this statement shows it split by component and reconciled to the balance sheet.
+
+![[Media/Figures/Statement_of_Changes_in_Equity.svg|340]]
 
 > [!example]- Where Did the Capital Go? {Example}
 > An insurer's equity fell from $\$310$ million to $\$268$ million. The statement of changes in equity shows: net income $\$46$ million; other comprehensive loss $\$28$ million; dividends paid $\$60$ million.

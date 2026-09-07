@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1013cfa8592d5c8b89097e6b2d9e5573a8c274d1c6e344fd50e9eac8a5083939
+  content_hash: sha256:dc80a650234c4fbcdbd4c5657854ca5aebcf625997a416eec611276d41c43893
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **Cash flows within the [[Contract Boundary]]** only, and only those **directly attributable** to fulfilling the contracts: claim payments, [[Allocated Loss Adjustment Expense|ALAE]], directly attributable claims-handling overhead (ULAE), and claim-related salvage and subrogation recoveries as negative cash flows.
 - **Changes in the LIC are split** on the income statement: changes from claim experience and assumption revisions go to [[Insurance Service Expenses]], while the unwinding of discount and the effect of changes in discount rates go to [[Insurance Finance Income or Expenses]]. Getting this split right is what makes the [[Insurance Service Result]] a clean measure of underwriting performance.
 - Reinsurance recoveries on incurred claims are **not** deducted here; they form part of the [[Reinsurance Contracts Held]] asset.
+
+![[Media/Figures/Liability_for_Incurred_Claims.svg|340]]
 
 > [!example]- From Undiscounted Reserves to the LIC {Example}
 > An actuary's undiscounted central estimate of unpaid claims and ALAE is $\$180$ million, expected to be paid over five years in the pattern $35\%$, $25\%$, $20\%$, $12\%$, $8\%$ (paid at mid-year). The current discount rate is $4\%$. The risk adjustment is set at $6\%$ of the discounted fulfilment cash flows.

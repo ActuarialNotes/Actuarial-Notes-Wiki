@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:323a40a42faad252263d38e701e746152242c416da39e1afbdbf6eb2c8daf455
+  content_hash: sha256:155f2d2972029202c78d0628c2ea0226abbdf7f4c60d0a6266649de06886c148
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - The rule is the reason the **[[Facility Association]]** is a residual mechanism of last resort rather than a dumping ground: risks reach it because no insurer's filed rules accept them, not because insurers chose not to write them.
 - Enforcement is a **[[Market Conduct Regulation|market conduct]]** matter — mystery shopping, complaint patterns and broker reports — and penalties reach licence conditions.
 - The actuarial consequence is that an insurer cannot rely on underwriting selection to fix an inadequate approved rate. If the rate is inadequate for a segment the filed rules accept, the insurer must write it at that rate; the only lawful responses are to change the filed rules or to change the filed rate.
+
+![[Media/Figures/Take-All-Comers_Rule.svg|340]]
 
 > [!example]- Compliant or Not? {Example}
 > Assess each practice by an insurer writing compulsory auto in a take-all-comers province.

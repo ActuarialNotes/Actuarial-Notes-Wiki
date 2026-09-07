@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9bae463cbf992f5e85578e90108a54e8b9a6733abc3ca5568e59391a14aad5ba
+  content_hash: sha256:ae3bfdfb759c5e16efcd3cb78c42b5551f7d88a3648462c0b82c5e9ac8ab0274
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,6 +23,8 @@ verification:
 - **It correlates with everything.** The reinsurer most likely to fail is the one exposed to the same catastrophe as its cedants; the province most likely to suppress rates is the one where costs are rising fastest. Concentration and correlation are the same problem seen from two directions.
 - **[[OSFI]] addresses it** through exposure limits in its guidance, the earthquake requirements, reinsurance concentration expectations, and supervisory challenge of an insurer's own limits — and it is exactly the exposure that [[Reverse Stress Testing]] is best at finding.
 - **The management tools:** exposure limits by zone, counterparty and line; reinsurance (which itself creates counterparty concentration); geographic diversification; and, where concentration is inherent to the business model, higher capital.
+
+![[Media/Figures/Concentration_Risk.svg|340]]
 
 > [!example]- Finding the Real Concentration {Example}
 > An insurer's board is reassured that no single policy exceeds $2\%$ of capital and no single investment exceeds $3\%$. The book comprises: $65\%$ personal auto in one province; $25\%$ commercial property, of which $40\%$ is in one metropolitan area; $10\%$ other. Catastrophe reinsurance is placed $70\%$ with one reinsurer.

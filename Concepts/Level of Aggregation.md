@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:58ac14da8ec4cb9004f7fc8e295af2635d8353530e804be621c3054420001e28
+  content_hash: sha256:4113eb8d377e7daf466327841874e7009f8ec05cd536a9d8be1c9390639eee0c
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **Practical effect for P&C insurers.** The number of groups multiplies quickly — line by province by cohort by profitability bucket — which drives system complexity, and it makes the choice of **portfolio** definition consequential: a broadly drawn portfolio permits more offsetting within groups, a narrowly drawn one surfaces more losses.
 - **The floor, not the ceiling.** IFRS 17 sets a *minimum* granularity; an insurer may disaggregate further, and some do for management reporting. It may **not** aggregate more coarsely.
 - Contracts within a group are measured together for the [[Contractual Service Margin|CSM]], the [[Loss Component]], and the onerous assessment — but the [[Liability for Incurred Claims|LIC]] can in practice be estimated at a coarser level and allocated, since claims already incurred carry no CSM.
+
+![[Media/Figures/Level_of_Aggregation.svg|340]]
 
 > [!example]- How Many Groups? {Example}
 > An insurer writes personal automobile in Ontario and Alberta, and commercial property in Ontario. Within personal auto Ontario, one subset of business written in the year is expected to be onerous. All contracts are annual and written throughout the year.

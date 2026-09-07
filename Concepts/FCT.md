@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:f196779fcf94d897a11f31919dfcdf27d4d15d387a399e09e09200144f4c4a69
+  content_hash: sha256:f1323067b22425ea0124b96f47b041c8e90cd002adc02d7250d2599d4a6a8a3e
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **[[Ripple Effect|Ripple effects]] must be modelled.** An adverse scenario does not stop at its first impact: a catastrophe triggers reinstatement premium, reinsurance market hardening, rating pressure and higher borrowing costs. Ignoring them understates the scenario.
 - **Management and corrective actions.** The report shows the effect before and after realistic management responses, and distinguishes routine management action from the corrective action that would be needed if the scenario materialised. Assuming heroic management action is the standard way to make an FCT report meaningless.
 - **The relationship to [[ORSA]]:** ORSA is management's process determining how much capital is needed; FCT is the actuary's testing of whether condition holds under adversity. Both go to the board; only FCT carries an actuarial opinion.
+
+![[Media/Figures/FCT.svg|340]]
 
 > [!example]- Is Financial Condition Satisfactory? {Example}
 > An insurer's forecast MCT ratios over the three-year forecast period:

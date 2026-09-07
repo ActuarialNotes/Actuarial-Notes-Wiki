@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:7f80eb7e6b0d4736420ff407390db5f4637b51010bc5a1651a758b40095f2459
+  content_hash: sha256:54ec29d591753bd6b5fcece40927d9f9b6c2eb750c4bba5386aacc93fa580060
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **Why it matters to the insurer.** In auto, the same insurer often pays both the accident benefits and (through the liability policy of the at-fault driver) part of the tort award. Coordination determines the net cost of the system rather than merely who writes the cheque.
 - **Actuarial consequence.** A change in the deductibility rules — or a benefit increase on the accident-benefit side — shifts cost between coverages without changing total system cost. A rate indication computed coverage by coverage will show a large movement in each, offsetting; treating either in isolation gets the answer wrong.
 - Benefits from a source the plaintiff **paid for privately**, such as a personally purchased disability policy, are more likely to escape deduction than benefits mandated by statute — the distinction Canadian courts draw between charitable or self-funded benefits and statutory schemes.
+
+![[Media/Figures/Collateral_Benefits.svg|340]]
 
 > [!example]- Coordinating Benefits and a Tort Award {Example}
 > A claimant's assessed damages are $\$500{,}000$: $\$220{,}000$ past and future income loss, $\$130{,}000$ future care, $\$150{,}000$ non-pecuniary. They have received $\$85{,}000$ of accident-benefit income replacement and $\$40{,}000$ of medical/rehabilitation benefits, both statutorily deductible. A $\$45{,}000$ tort deductible applies to the non-pecuniary award, and the claimant is $10\%$ contributorily negligent.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:fa18605849440ff94d60da0e8cbf035062ea974f7d6d2fc3128848bdbd3cb9a4
+  content_hash: sha256:5f0eb61b2388fbfd8e1203ff53a1334261e3cf08c839842efab91a0d4d01b433
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **Model uncertainty is large.** Different vendor models produce materially different PMLs for the same portfolio, and all are sensitive to exposure data quality. Using a single model's output as a precise figure is a [[Model Risk]] failure; the defensible practice is multiple models, sensitivity testing, and disclosure of the basis.
 - **Exposure data quality dominates.** A PML computed on unmapped or mis-coded locations is wrong regardless of the model's sophistication — one of the most common and least visible errors in catastrophe management.
 - **The PML feeds [[FCT]] and [[ORSA]]**: the catastrophe scenario in the financial condition testing report is usually built from it, and the [[Internal Target Capital Ratio|internal target]] should be set so the ratio survives the net figure.
+
+![[Media/Figures/Probable_Maximum_Loss.svg|340]]
 
 > [!example]- Sizing a Catastrophe Programme From the PML {Example}
 > An insurer's modelled earthquake PMLs are: $1$-in-$100$, $\$180$ million; $1$-in-$250$, $\$310$ million; $1$-in-$500$, $\$430$ million. Its reinsurance programme retains $\$40$ million and covers up to $\$350$ million. Capital available is $\$390$ million and the base solvency buffer is $\$230$ million.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:8ef845c1c635880688b53eb869d26d78a6b03128aca6535491b3d26669d87dda
+  content_hash: sha256:528320e822b430b4ce0bb4ab98182e10cd35204771a613f449e32ae832120060
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,6 +18,8 @@ verification:
 - The **Civil Code of Québec** governs the insurance contract, not a common-law *Insurance Act*. Quebec is a civil law jurisdiction, so precedent from a [[Court Case]] in another province is persuasive at best, and doctrines such as [[Duty of Good Faith|good faith]] arise from Code articles rather than from case law.
 - Quebec has its own **[[Guaranty Funds|guaranty fund]]** arrangements; [[PACICC]] covers members across Canada, and Quebec insurers participate.
 - The AMF issues its own **sound commercial practices** and governance guidelines, which parallel but do not simply copy OSFI's [[Corporate Governance]] and [[ORSA]] expectations.
+
+![[Media/Figures/Autorité_des_marchés_financiers.svg|340]]
 
 > [!example]- Why Quebec Auto Premiums Are Not Comparable {Example}
 > A commentator notes that average Quebec auto premiums are far below Ontario's and concludes that Quebec's private insurers are more efficient. Evaluate.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:131855a4aa735e23c8a993e07248bae5d2a5855e3c76ed0e1c985e437dfa294f
+  content_hash: sha256:e14e4720cf842d6acd005d431d429a2756cfa8906a63a7838c6c9cb2d41f3848
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,6 +20,8 @@ verification:
 - **5. An independent board.** The board is autonomous of government and of the parties, so that decisions are not politically driven.
 - **The bargain cuts both ways** and the exam expects both halves: workers lose the possibility of full tort damages, including pain and suffering, and lose access to the courts; employers lose the ability to defend on fault and pay for injuries they did not cause.
 - Modern strains on the principles: exclusive jurisdiction versus a right of appeal; [[Experience Rating|experience rating]] pulling against pure collective liability; and coverage gaps as work shifts to contractors and gig arrangements outside the definition of "worker."
+
+![[Media/Figures/Meredith_Principles.svg|340]]
 
 > [!example]- Which Principle Is Under Pressure? {Example}
 > Identify the Meredith principle each development strains.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:12a01fcc584e811e75627be65a5069804568bd5de31ac92dddaecbf248a443cd
+  content_hash: sha256:048f39a177c9dbaf6eeb2b45316526495368ebfed7dbf972173974c749bc3210
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **A current measurement.** Assumptions are re-estimated every reporting period at current market-consistent rates and current expectations, so the liability moves with conditions rather than being locked in at inception.
 - **The split between the discount effect and everything else** drives the income statement: changes in cash flow estimates hit [[Insurance Service Expenses]], while the effect of discount rate changes and the unwind hit [[Insurance Finance Income or Expenses]].
 - Fulfilment cash flows are the insurer's **own** view of fulfilment cost, not an exit price. IFRS 17 deliberately does not use a transfer or fair value notion for the ongoing measurement.
+
+![[Media/Figures/Fulfilment_Cash_Flows.svg|340]]
 
 > [!example]- What Belongs in Fulfilment Cash Flows? {Example}
 > Classify each item as inside or outside fulfilment cash flows for a group of P&C contracts.

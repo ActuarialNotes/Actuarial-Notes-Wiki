@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:d249693ce26b4fe3536b03e7818f1be3876005a42591e81728b2f0a01d739349
+  content_hash: sha256:dbe5323788f4f185247e07694dc1c3403c6c47616ff1f5b3666270e25fde29c8
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,6 +18,8 @@ verification:
 - **Bond credit risk** is factor-based by rating and term. Government of Canada bonds attract essentially nothing; corporate bonds attract more as ratings fall, which — combined with the [[Market Risk Margin|market risk margin]] — is why insurers' bond portfolios skew to high grade.
 - **Concentration matters beyond the formula.** The factors are applied exposure by exposure, so an insurer with $80\%$ of its recoverables from one reinsurer gets the same total charge as one with the exposure spread across eight. The formula does not see the concentration; [[ORSA]] and [[Concentration Risk]] management must.
 - **Under [[IFRS 17]], the accounting parallel is the non-performance risk** allowance on the [[Reinsurance Contracts Held|reinsurance asset]] — the same economic exposure, measured for a different purpose, and the two should be consistent in their view of counterparty quality.
+
+![[Media/Figures/Credit_Risk_Margin.svg|340]]
 
 > [!example]- Does the Reinsurance Actually Save Capital? {Example}
 > An insurer cedes $\$150$ million of claim liabilities under a quota share. This reduces the insurance risk margin by $\$27$ million. The reinsurer is registered and A-rated, attracting a credit factor of $3\%$ on the recoverable. Ceded premium is $\$42$ million against expected recoveries with a present value of $\$36$ million.

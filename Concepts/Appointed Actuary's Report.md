@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:390b17890f7d2a937ca4ff216bff20ff6773c393900eb010625f766e4dc86026
+  content_hash: sha256:9e495d1ac149b52ed9dc0d6aad83fa00e9619362d0d1e7351046934fd370f126
   sources: []
   open_findings: 0
   open_critical: 0
@@ -24,6 +24,8 @@ verification:
 - **Changes must be disclosed and quantified.** A change in method or assumption that moves the liability materially must be identified, with its effect separated from the effect of experience — otherwise a reader cannot tell whether the liability moved because the world changed or because the model did.
 - **It is a communication document, not a working paper dump.** The [[Standards of Practice]] require the report to be clear enough for its intended user, which includes the board and the regulator — neither of whom will reconstruct a spreadsheet.
 - **[[Peer Review]]**, where performed, is documented here, and OSFI expects to see how findings were addressed.
+
+![[Media/Figures/Appointed_Actuarys_Report.svg|340]]
 
 > [!example]- Explaining the Change {Example}
 > The [[Liability for Incurred Claims|LIC]] rose from $\$430$ million to $\$487$ million. The actuary must explain the $\$57$ million increase in the report.

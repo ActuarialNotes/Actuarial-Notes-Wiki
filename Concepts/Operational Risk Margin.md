@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:55d089ef8b383d9ad55f4f2a771dba69d8e68cb41ad1a8a82f8d21e410c67054
+  content_hash: sha256:cbbec0da887d019ba99d1f8d8be573234e37fccefb0969cbf4d1d3c67e5773aa
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **The formula cannot see quality.** Two insurers with identical premium and liabilities attract the same charge regardless of the strength of their controls. That gap is what [[ORSA]] and [[Corporate Governance]] expectations are there to fill: the insurer must form its own view of operational risk and reflect it in the [[Internal Target Capital Ratio|internal target]].
 - **[[Model Risk]] is an operational risk**, and OSFI's model risk expectations sit alongside the capital charge — a mis-specified pricing or reserving model is an operational failure with insurance-risk consequences.
 - **Cyber risk** has grown into the dominant operational exposure for most insurers, and it is the clearest example of a risk the volume-based formula does not measure.
+
+![[Media/Figures/Operational_Risk_Margin.svg|340]]
 
 > [!example]- The Growth Charge in Action {Example}
 > An insurer's operational risk margin is computed as $2.5\%$ of written premium plus $0.5\%$ of liabilities, plus an additional $2.5\%$ of the amount by which premium growth exceeds $20\%$. Written premium rises from $\$400$ million to $\$540$ million; liabilities are $\$700$ million.

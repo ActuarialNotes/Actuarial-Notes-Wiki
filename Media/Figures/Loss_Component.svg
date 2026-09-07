@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>The two parts of an onerous group's LRC, and why only one of them ever becomes revenue</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">The half of the LRC that never becomes</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">revenue</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">LRC = remaining coverage</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">+ loss component</text>
+  <rect x="40" y="110" width="233.74" height="36" rx="4" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="156.87" y="132" text-anchor="middle" class="sm">coverage 9.6</text>
+  <rect x="273.74" y="110" width="46.26" height="36" rx="4" fill="#e11d48" fill-opacity="0.30" stroke="#e11d48" stroke-width="1.2"/>
+  <text x="296.87" y="132" text-anchor="middle" class="sm">1.9</text>
+  <text x="320" y="164" text-anchor="end" class="sm" fill="#e11d48">the loss component</text>
+  <text x="180" y="196" text-anchor="middle" class="sm dim">the blue is released as revenue; the red is</text>
+  <text x="180" y="212" text-anchor="middle" class="sm dim">released against expenses and never becomes any</text>
+  <line x1="30" y1="232" x2="330" y2="232" class="rule"/>
+  <text x="38" y="254" text-anchor="start" class="sm" fill="#d97706">•</text>
+  <text x="54" y="254" text-anchor="start" class="sm">the loss is already in profit or loss, so the</text>
+  <text x="38" y="278" text-anchor="start" class="sm" fill="#d97706">•</text>
+  <text x="54" y="278" text-anchor="start" class="sm">claims it anticipated must not be charged twice</text>
+  <text x="38" y="302" text-anchor="start" class="sm" fill="#d97706">•</text>
+  <text x="54" y="302" text-anchor="start" class="sm">so reported revenue on an onerous group is</text>
+  <text x="38" y="326" text-anchor="start" class="sm" fill="#d97706">•</text>
+  <text x="54" y="326" text-anchor="start" class="sm">lower than the premium written for it</text>
+  <text x="180" y="366" text-anchor="middle" class="sm dim">improve the estimate and the loss component reverses</text>
+  <text x="180" y="382" text-anchor="middle" class="sm dim">first — before any CSM can be established</text>
+</svg>

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:f53436beafe01b44656de7a5ec959dd0eaa34066f85dadc8d49fa21e415bd273
+  content_hash: sha256:0f5d793c2a372e3ca6fe6af833dce15f5856bd21d2285375ecc4bfdeb03c28a7
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **Disadvantages:** the at-fault driver's insurer pays nothing for the damage it caused, so the **price signal is muted** at the individual insurer level (though not at the driver level, since fault still affects the driver's rating); and an insurer with a book of good drivers pays for damage caused by other insurers' bad drivers.
 - **Actuarial effect.** DCPD experience reflects the **cost of the insured's own vehicles**, not the vehicles its policyholders hit. So DCPD rating relativities depend on the insured's vehicle, and an insurer writing expensive vehicles has high DCPD cost regardless of how carefully its policyholders drive.
 - Some provinces permit a **DCPD deductible option**, and Alberta introduced DCPD in 2022 — the direction across Canada has been toward it.
+
+![[Media/Figures/Direct_Compensation_Property_Damage.svg|340]]
 
 > [!example]- Who Pays What {Example}
 > Driver X (insured by Insurer 1) and Driver Y (insured by Insurer 2) collide. Under the [[Fault Determination Rules]], X is $25\%$ at fault and Y is $75\%$ at fault. Damage to X's vehicle is $\$12{,}000$; damage to Y's vehicle is $\$8{,}000$. Both carry $\$500$ DCPD deductibles.

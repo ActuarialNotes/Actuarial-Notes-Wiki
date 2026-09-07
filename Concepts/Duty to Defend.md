@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:c73c72189470e6d74b0575d86b5afb5aaadba961dfa43c04bd6c5b54ef365e52
+  content_hash: sha256:cf45522b90ee6121f84c0f55deae185986140437f7a238f5690fbf286ef81c37
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **Defence costs and the limit.** Whether defence costs erode the limit ("wasting" or "defence within limits" policies, common in professional liability) or sit outside it changes the insurer's total exposure materially and must be reflected in reserving.
 - **Actuarial significance.** Defence cost is [[Allocated Loss Adjustment Expense|ALAE]] and, on liability lines with a broad duty to defend, can rival indemnity in size. Because it accrues steadily through litigation while indemnity lands at settlement, it develops on a **different pattern** — the reason a combined loss-and-ALAE triangle can mislead.
 - The duty ends when the limit is exhausted by payment, or when it becomes clear no covered allegation remains — but not merely because the insurer believes the claim is meritless.
+
+![[Media/Figures/Duty_to_Defend.svg|340]]
 
 > [!example]- Mixed Allegations {Example}
 > A contractor is sued for $\$2$ million. The claim alleges (a) negligent construction causing water damage, which the CGL policy covers, and (b) intentional misrepresentation in the contract, which the policy expressly excludes. The insurer's counsel believes allegation (a) is weak and (b) is the plaintiff's real case.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:905162b6f47f831eda333341c613611bbeac0982647942e1bfdb596e0415dc61
+  content_hash: sha256:064e61bfee59a9e3b827973883471e417121080b45e44a618ad9bb1c874fd371
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,6 +22,8 @@ verification:
 - **Complexity has a cost.** Machine learning models can outperform on accuracy while being harder to validate, harder to explain to a policyholder or a regulator, and harder to test for [[Bias in Actuarial Practice|bias]]. The trade-off between accuracy, explainability and fairness is a model risk decision, not only a technical one.
 - **The actuary's professional obligation.** Under the [[Standards of Practice]] the actuary is responsible for the appropriateness of the models used, for data quality, and for communicating limitations and uncertainty. "The model produced it" is not an answer, and the standards say so.
 - **Back-testing is the discipline that catches drift**: compare what the model predicted with what happened, by segment, every period. A model that was right when built and has not been checked since is an unmonitored exposure.
+
+![[Media/Figures/Model_Risk.svg|340]]
 
 > [!example]- Three Model Failures {Example}
 > Diagnose each, and say what control would have prevented it.

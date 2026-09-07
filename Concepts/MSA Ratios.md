@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:363fdb2b14e47bfac5162a602e92a6b522062a932836c96c7a9e0ee52ed50fda
+  content_hash: sha256:3f5141a74246675c9da289cb4db08e9b830e00d0b1a42fbd14f2670f08bef3b6
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **Capital and liquidity:** the [[MCT]] ratio and its trend, liquid assets to liabilities, and change in net written premium (rapid growth being a standard failure precursor — see [[PACICC]]).
 - **How to read them.** No single ratio diagnoses anything. The combination that signals distress is the one [[PACICC]]'s failure research identifies: **rapid premium growth, high premium-to-surplus leverage, adverse development, and a falling MCT ratio** appearing together.
 - **The IFRS 17 complication.** [[Insurance Revenue]] is not earned premium and [[Insurance Service Expenses]] exclude discount unwind, so ratios computed post-transition are not directly comparable with pre-transition history. Any multi-year ratio series spanning 2023 must be read with that break in mind.
+
+![[Media/Figures/MSA_Ratios.svg|340]]
 
 > [!example]- Diagnosing an Insurer From Its Ratios {Example}
 > | Ratio | Insurer | Industry |

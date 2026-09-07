@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:3c0d9895b0ee3cd94a44c1f86a1b67fd28c786b4898d0e21cfc92747a57d1db8
+  content_hash: sha256:6d4b49ce63b19e5d60b455f9c9877629836f3527da21ef11c6146325cbbd08eb
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **[[Moral Hazard]] at the land-use level** is the defining policy problem: government disaster assistance after every flood, and any subsidised premium, both reduce the incentive to avoid building in floodplains or to invest in mitigation. A well-designed program prices the risk and subsidises the *household*, not the *location*.
 - **Actuarial features:** loss distributions are extremely heavy-tailed and correlated, so pricing depends on catastrophe models rather than experience; the [[Probable Maximum Loss|PML]] drives reinsurance and capital, and [[OSFI]] treats flood accumulation as a [[Concentration Risk|concentration]] and [[Climate Risk|climate]] issue.
 - Climate change is shifting the hazard itself, so the historical record understates the future — a **non-stationarity** problem that makes conventional return-period language unreliable.
+
+![[Media/Figures/Flood_Insurance.svg|340]]
 
 > [!example]- Why Voluntary Flood Coverage Cannot Be Priced at an Average {Example}
 > A community of $10{,}000$ homes has three zones: $500$ homes with an annual flood probability of $10\%$ and average loss $\$80{,}000$; $1{,}500$ homes at $1\%$ and $\$60{,}000$; $8{,}000$ homes at $0.05\%$ and $\$40{,}000$.

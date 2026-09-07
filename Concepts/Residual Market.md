@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ff8e9909a386e2c27f689974f41dab8abc19c63213974640c581333e9f4bc033
+  content_hash: sha256:1e290f8503e4d44e95397676076c674cd4d093dbd46343fcc04e1ea97ff0bab4
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,6 +20,8 @@ verification:
 - **Every insurer participates** in the results whether or not it writes the business, in proportion to its voluntary market share. There is no opting out — which is what makes it a market-wide mechanism rather than a competitive product.
 - **Depopulation** is the desired direction: as insurers become able to price and write formerly residual risks, volume returns to the voluntary market. The tools are permitting adequate rates, allowing appropriate classification, and take-out programs.
 - **Actuarial issues:** residual market business is adversely selected by construction, so its loss ratios exceed the voluntary market's; the sharing formula determines each insurer's exposure to a business it did not underwrite; and the [[Take-All-Comers Rule]] governs which risks are legitimately there rather than being pushed there.
+
+![[Media/Figures/Residual_Market.svg|340]]
 
 > [!example]- Reading the Residual Market Share {Example}
 > A province's residual market share of private passenger auto exposures over five years: $1.2\%$, $1.5\%$, $2.4\%$, $4.1\%$, $6.8\%$. Approved rate increases over the same period averaged $2\%$ per year while industry loss costs rose $7\%$ per year.

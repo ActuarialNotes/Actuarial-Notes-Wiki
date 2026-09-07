@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1d9201a5110d3d47666ab1b83bda8d7e2315c771d0fe89662b93756e15d4f1ec
+  content_hash: sha256:f48e328236eb4258fe336bf11dd3f9bcdb7924c5a0273708f46dfeabfdfa852b
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **The imbalance of power is the point.** A claimant who has just suffered a loss usually needs money immediately and cannot fund years of litigation. Canadian courts have repeatedly said that this vulnerability is what makes the insurer's duty more than a contractual formality — the breach of which supports [[Bad Faith Damages]] and, in serious cases, [[Punitive Damages]].
 - The duty is **continuing**: it applies at application, through the policy term, and — most importantly — throughout claims handling and any litigation that follows.
 - In Quebec the same obligation arises from the *Civil Code of Québec*'s general duty of good faith rather than from common-law insurance cases, with substantially similar effect.
+
+![[Media/Figures/Duty_of_Good_Faith.svg|340]]
 
 > [!example]- Where the Line Falls {Example}
 > Classify each insurer action as legitimate claims handling or a breach of the duty of good faith.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:b90a928e25e95c72d9c1f91d596c2ec7fd6572efa6161ae1642fe1a6d3cd237a
+  content_hash: sha256:dbad4c5116a610d938bb67fcae4a01fa37bcab6709a4a01191bc2b789ae328bd
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,6 +18,8 @@ verification:
 - FSRA also administers the **[[Statutory Accident Benefits]]** framework in practice — the [[Minor Injury Guideline]], the professional services guideline, and the arbitration/dispute rules — and supervises the **[[Facility Association]]** and Ontario's [[Risk Sharing Pool|risk sharing pool]] arrangements.
 - It publishes **technical notes** and bulletins that tell filers what actuarial support FSRA expects: trend selections, [[Loss Development|development]], expense and profit provisions, and the treatment of reform savings.
 - FSRA does **not** regulate solvency of federally incorporated insurers — that remains [[OSFI]]'s. A national insurer therefore satisfies FSRA on price and conduct and OSFI on capital, simultaneously.
+
+![[Media/Figures/Financial_Services_Regulatory_Authority_of_Ontario.svg|340]]
 
 > [!example]- A Rate Filing That Will Not Be Approved {Example}
 > An insurer files for a $9.8\%$ Ontario private passenger auto rate increase. The indication is supported by a loss trend of $+8\%$ per year selected from four years of the insurer's own data, which comprises about $1{,}200$ claims per year. No adjustment is made for a recently enacted benefit reform that industry analysis suggests will reduce accident benefit costs by roughly $5\%$.

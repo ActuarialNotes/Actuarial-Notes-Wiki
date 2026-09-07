@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:d70da81579de0fb51f3233d02fbec6ae554a5b53de20aeecefde63f73996727d
+  content_hash: sha256:77b145e481e8019a6e504744910f2e2852dc8fe26a3d499aa1bdb0293bdc8946
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **The CSM cannot go negative.** If an unfavourable revision exceeds the remaining CSM, the CSM is reduced to zero and the excess is recognised as a loss, creating a [[Loss Component]].
 - **P&C insurers see relatively little of it.** Most Canadian P&C business is measured under the [[Premium Allocation Approach|PAA]], which has no CSM for the [[Liability for Remaining Coverage|LRC]], and the [[Liability for Incurred Claims|LIC]] never has one. The CSM matters for multi-year contracts, some commercial business, and — importantly — **[[Reinsurance Contracts Held|reinsurance held]]**, where the CSM can be an asset representing the net cost of reinsurance.
 - Interest accretes on the CSM at the **locked-in discount rate** at initial recognition, not at current rates — one of the few places IFRS 17 retains a historical rate.
+
+![[Media/Figures/Contractual_Service_Margin.svg|340]]
 
 > [!example]- Setting and Releasing the CSM {Example}
 > A three-year group of contracts is written for premium of $\$60$ million received at inception. The present value of expected claims and expenses is $\$44$ million and the risk adjustment is $\$5$ million. Coverage units are expected to be $40\%$, $35\%$ and $25\%$ across the three years. Ignore interest accretion.

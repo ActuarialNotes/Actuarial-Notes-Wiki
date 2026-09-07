@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:06197fc9642ea60fba747e2a93ebb37054d15be9576fa92f40c9fcd0541245f2
+  content_hash: sha256:9ba4630a693fdfd53123d372e7e5db93ee6870952b5c94fcc81c64f4e4d159e7
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **Capital and solvency.** A public insurer is not subject to [[OSFI]] and often not to the [[MCT]], so its capital adequacy is governed by a legislated rate stabilisation or capital target instead. Where governments have drawn surpluses into general revenue, the resulting capital deficiency has been a recurring controversy — ICBC's is the best-documented Canadian case.
 - **Comparisons are hard and often abused.** Cross-province premium comparisons are meaningless unless the **product** is held constant: benefit levels, access to [[Tort Litigation|tort]], accident benefit limits, whether bodily injury is even in the private premium, and vehicle and driving-density differences all vary. See [[Autorité des marchés financiers|the Quebec example]] for the clearest illustration.
 - **Evaluation** should follow the [[Social Insurance]] framework: objective, sustainability, efficiency, equity, and effect on the private market — including the fact that a basic-coverage monopoly still leaves a private market for optional and excess coverage in BC, Saskatchewan and Manitoba.
+
+![[Media/Figures/Public_Auto_Insurance.svg|340]]
 
 > [!example]- Is the Public Insurer Cheaper? {Example}
 > Province X (public monopoly) reports an average auto premium of $\$1{,}150$ and an expense ratio of $18\%$. Province Y (private, competitive) reports $\$1{,}680$ and an expense ratio of $28\%$. Both have similar populations and vehicle counts.

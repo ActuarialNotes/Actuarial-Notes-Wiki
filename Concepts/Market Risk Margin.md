@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:09c0216ffd898665fa82e1a845b9f0b82b55781e7785375683f70e1fd830e8dd
+  content_hash: sha256:e789851682186bee74b20be635688c9b88ac5f8a86e233bff7dd4a9693fa916d
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **The margin shapes portfolios.** An insurer choosing between a bond yielding $4\%$ and an equity expected to return $8\%$ must compare the extra return against the capital the equity consumes. On a risk-adjusted basis the bond often wins, which is why Canadian P&C asset allocations look conservative.
 - **It interacts with [[IFRS 17]] presentation.** Assets at FVOCI move through [[Comprehensive Income|OCI]] and hence through [[Capital Available]]; if the [[Other Comprehensive Income Option|OCI option]] on liabilities is elected, part of that movement is offset and the capital effect is limited to the duration mismatch.
 - **It is the counterparty to the [[Diversification Credit]]**, which recognises that market risk and [[Insurance Risk Margin|insurance risk]] do not crystallise together.
+
+![[Media/Figures/Market_Risk_Margin.svg|340]]
 
 > [!example]- The Capital Cost of an Equity Allocation {Example}
 > An insurer holds $\$600$ million of investments, currently all in bonds yielding $4.2\%$. It is considering moving $\$90$ million into equities with an expected return of $8.5\%$. The equity risk factor is $30\%$; the bonds attract an interest rate margin of $3\%$ on the mismatched portion, unchanged by the switch. Capital available is $\$310$ million and the base solvency buffer is $\$185$ million.

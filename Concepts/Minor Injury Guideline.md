@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:11d576ffb7dd4cc1590035275b2f3604b5f64426ca8e866f3f8d61339d91080b
+  content_hash: sha256:3ef3f7372a3068c894f9c776cc40a2ea868820e29640b6244034479686b81702
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,6 +18,8 @@ verification:
 - **The escape route is where the cost goes.** Since falling outside the MIG multiplies the available limit, claimants and providers have a strong incentive to establish that the injury is not minor — through a pre-existing condition, a chronic pain diagnosis, or a psychological component. The observed result across reforms is that the *proportion* of claims held within the MIG erodes over time.
 - **Actuarial consequence.** The MIG changes the claim severity distribution from continuous to nearly **bimodal**: a large mass at the cap and a separate, much heavier tail of claims that escaped it. Average severity is then a poor summary, and the reserving question becomes "what share escapes the cap, and is that share drifting?"
 - The MIG is a **guideline** issued under regulation, so it can be revised administratively. That flexibility cuts both ways: it can be tightened after cost creep, and it can be widened under political pressure.
+
+![[Media/Figures/Minor_Injury_Guideline.svg|340]]
 
 > [!example]- Cost Creep Out of the Cap {Example}
 > An insurer's accident benefit claims by tier, as a percentage of claim count:

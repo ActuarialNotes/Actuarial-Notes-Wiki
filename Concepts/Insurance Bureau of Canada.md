@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:b834b0d46eb750b6df42dbf3ef10188fa0b470fdad16f5f83f046dc9a9540af7
+  content_hash: sha256:a59b14f0cfcfe189f74aea2579a799e58ffb72803261469fbccbf05bf139d690
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,6 +18,8 @@ verification:
 - **Consumer-facing work:** the Consumer Information Centre, disaster response after major catastrophes, and anti-fraud programmes.
 - IBC coordinates industry positions on **residual market** mechanisms and works alongside the [[Facility Association]] and [[PACICC]], but each of those is a separate body with its own mandate.
 - The [[Code of Consumer Rights and Responsibilities]] is voluntary self-regulation. Its existence is often argued as a reason regulation can be lighter; the counter-argument, which candidates should be able to state, is that a voluntary code adopted by an industry association carries no enforcement and no remedy for the individual consumer.
+
+![[Media/Figures/Insurance_Bureau_of_Canada.svg|340]]
 
 > [!example]- Reading an Industry Position Critically {Example}
 > IBC publishes analysis arguing that a proposed reduction in auto benefits will lower premiums by $6\%$. A consumer group publishes analysis arguing the same reform will lower premiums by $1\%$ while cutting benefits substantially. Both cite real data.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:752beea4102888f94149dafa2fbf851db3a5a3c901844abad953e342b3b122fa
+  content_hash: sha256:de3f2a1db044faf5fb36848f263c70e8da60c92e40c451ca0693e0d45c38d80a
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **The [[Appointed Actuary]] is a governance construct.** The [[Insurance Companies Act]] gives the appointment to the **directors**, not management, and gives the actuary a reporting line to the board and ultimately to OSFI — see [[Duty to Report]]. That structure is meaningless unless the board actually engages with the reports.
 - **The failure mode is passivity.** A board that receives reports and does not challenge them satisfies the form and not the substance. Supervisors test governance by looking at minutes: were the actuary's findings discussed, was a dissent recorded, did a limit breach produce an action?
 - **Culture is supervised too.** OSFI examines whether risk-taking incentives, remuneration and tone from the top are consistent with the stated appetite — and a mismatch between what the framework says and what the incentives reward is one of the most reliable predictors of trouble.
+
+![[Media/Figures/Corporate_Governance.svg|340]]
 
 > [!example]- A Governance Failure in Slow Motion {Example}
 > An insurer's Appointed Actuary reports for three consecutive years that reserves are at the low end of the reasonable range and that the [[FCT]] adverse scenarios show the [[MCT]] ratio approaching the supervisory target. Each year the board receives the report and the audit committee notes it. No action is taken. In year four the insurer strengthens reserves by $\$70$ million and the ratio falls below $150\%$.

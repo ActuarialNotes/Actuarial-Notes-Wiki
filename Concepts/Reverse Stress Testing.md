@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:228623356f46e7c84efedf831c0377f5e169c2956105267343bd0a411b6ceb4f
+  content_hash: sha256:eb9bf64be370f9c3ba3a94536b6edebae901079f1535a82fcb1f02a19b26a487
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **Plausibility is assessed afterwards.** The exercise deliberately does not begin with a probability constraint; a scenario is first identified as a failure mode and then judged for how plausible it is. Filtering for plausibility first defeats the purpose.
 - **It feeds the [[Internal Target Capital Ratio|internal target]] and the recovery plan.** If the identified failure mode is credible, the insurer must either hold capital against it, reduce the exposure that creates it, or have a documented plan for responding to it.
 - The technique is used across financial regulation — banking supervisors and [[Solvency II]] both require it — and the Canadian application is through FCT's requirement that the actuary consider what would render the insurer non-viable.
+
+![[Media/Figures/Reverse_Stress_Testing.svg|340]]
 
 > [!example]- Working Backwards From Failure {Example}
 > An insurer with a $185\%$ MCT ratio, capital available of $\$370$ million and a base solvency buffer of $\$200$ million asks what would make it non-viable.

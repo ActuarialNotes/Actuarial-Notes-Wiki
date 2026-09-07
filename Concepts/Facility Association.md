@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9b59cfbb870c33aa2d3b7586ce3369ef61c9f6986454c50f0cdd8daab1eb5821
+  content_hash: sha256:9ff67cb89f93df59dac352cf57970745454a7cc5e9f46ff985a053fc9d89dc6b
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,6 +22,8 @@ verification:
   - *[[Risk Sharing Pool|RSP]]* — the policy is issued by an ordinary insurer at its ordinary rate; the insurer transfers the risk to the pool without the driver knowing.
 - **Who ends up in FARM:** drivers with serious conviction or claim records, unusual commercial vehicles, drivers with no insurance history who fail every filed underwriting rule, and — in provinces where rates are suppressed — ordinary risks that no longer fit anyone's rules.
 - **Interpreting FA volume.** Growth signals rate inadequacy or classification restriction, not a change in driver behaviour. FA publishes volume by province, which makes it a public indicator of each province's rate regime.
+
+![[Media/Figures/Facility_Association.svg|340]]
 
 > [!example]- FARM or the Risk Sharing Pool? {Example}
 > For each driver, say which residual mechanism is likely to apply and what the driver experiences.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:7c1ecc251757f2d463f6cfe6fc0bec4d64111f59ad6fa6cead243395ff632bdd
+  content_hash: sha256:78a472eee42542ee1e0db0fff667a8a412c6ad2e216be85cd867795610ef1428
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **The boundary determines the model too.** A one-year boundary makes a group [[Premium Allocation Approach|PAA]]-eligible automatically; an extended boundary can push a nominally annual product into the [[General Measurement Model|GMM]].
 - **[[Insurance Acquisition Cash Flows]] are the exception that proves the rule.** Costs of acquiring *expected renewals* are outside the boundary of the current contract, yet IFRS 17 permits allocating some acquisition cost to those anticipated renewals — which is why an acquisition cash flow asset can exist for contracts not yet written.
 - **Judgement, not arithmetic.** Whether the insurer can "fully reprice" is a legal and practical question — regulatory constraints on repricing ([[Rate Regulation]]) can restrict it, and a filed-rate regime that prevents individual repricing is an argument for a longer boundary.
+
+![[Media/Figures/Contract_Boundary.svg|340]]
 
 > [!example]- Where Does the Boundary Fall? {Example}
 > Determine the contract boundary in each case.

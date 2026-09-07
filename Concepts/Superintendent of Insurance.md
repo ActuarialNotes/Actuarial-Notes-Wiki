@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:0b7ef4247938ef7f109aa4018a10c735222c814d515bcfd70896bfc82651c3ba
+  content_hash: sha256:806fd0c5191b4f47f53cd4a207979f20b53bc32dc38d1d14b543c2c49fd44543
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,6 +18,8 @@ verification:
 - Provincially incorporated insurers are also **prudentially** supervised by their province, so in that case the Superintendent does the job OSFI does federally, usually applying the [[MCT]] guideline by adoption rather than writing a separate capital rule.
 - A licence to write in a province is required **per province**, so a national insurer holds a federal order to commence and carry on business plus a licence from every jurisdiction it operates in — the practical source of Canada's multi-jurisdiction compliance burden.
 - Superintendents coordinate through the **[[Canadian Council of Insurance Regulators]]**, which produces harmonised positions but has no power of its own; each Superintendent must adopt them separately.
+
+![[Media/Figures/Superintendent_of_Insurance.svg|340]]
 
 > [!example]- One Insurer, Many Regulators {Example}
 > A federally incorporated insurer wants to begin writing personal property insurance in three new provinces next year. What approvals does it need, and from whom?

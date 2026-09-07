@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a218dc481e190069fc09a9131beca78fc457a30c099bbca89d2550b15799a857
+  content_hash: sha256:1797fbdd6f2573b00f1752e80e71082f61f9832fbea0dafc6121be2ddd9247d4
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **Why it matters for P&C insurers less than for life insurers.** Most Canadian P&C business is short-duration and [[Premium Allocation Approach|PAA]]-measured, so there is little or no CSM to reconstruct and transition is comparatively simple. The complexity lands on long-duration contracts and on multi-year [[Reinsurance Contracts Held|reinsurance held]].
 - **The choice changes reported equity and future profit.** A higher CSM at transition means more profit deferred into future periods and lower opening equity; a lower CSM means the reverse. Because two insurers with identical books can choose differently, IFRS 17 requires **disclosure of the transition approach and a reconciliation** of the CSM by approach.
 - **The Canadian layer:** [[OSFI]] set transitional arrangements for the [[MCT]] so that the capital effect of transition was phased rather than landing in a single quarter.
+
+![[Media/Figures/Transition_to_IFRS_17.svg|340]]
 
 > [!example]- Which Transition Approach? {Example}
 > An insurer holds three books at transition.

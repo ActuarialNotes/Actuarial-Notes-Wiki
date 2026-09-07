@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:bfc2ade429394992f30b55e05408070f17a140d54a35fcd46c08eb545956ccc8
+  content_hash: sha256:24178d80eef86dcd0aad41dbea402ef97edc48c202d05aec856f334a5f92bbfc
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **Reinsurance credit depends on registration.** Ceded liabilities reduce the requirement only where the reinsurer is [[Registered Reinsurance|registered]] or the cession is collateralised; see [[Unregistered Reinsurance]].
 - **It is a point-in-time measure**, which is why it does not stand alone: [[FCT]] tests it under adverse scenarios and [[ORSA]] asks whether the insurer's own view of required capital exceeds the formula's.
 - Provincially regulated insurers are generally subject to the same test, adopted by their provincial regulator, so the MCT is effectively the national capital standard.
+
+![[Media/Figures/MCT.svg|340]]
 
 > [!example]- Computing the MCT Ratio {Example}
 > An insurer reports: capital available $\$248$ million; insurance risk margin $\$92$ million; market risk margin $\$54$ million; credit risk margin $\$21$ million; operational risk margin $\$17$ million; diversification credit $\$26$ million. Its internal target is $185\%$.

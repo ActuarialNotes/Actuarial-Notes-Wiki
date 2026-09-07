@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:6bf647678305afedf26f628410ad0de8bc833181d3fefd0e18d339f1a800f789
+  content_hash: sha256:3b1feced94930800e0201c39e163d194477ad74b6b3291e2108be39fedfe49cc
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,6 +20,8 @@ verification:
 - **Regulation can cause it.** Every classification restriction reintroduces adverse selection by forcing a single price across risks the insurer knows differ — the cost quantified in [[Risk Classification Restrictions]]. This is the standard argument against banning a predictive variable.
 - **Distinguish from [[Moral Hazard]].** Adverse selection is about *who buys* — a selection effect present before the contract. Moral hazard is about *how the insured behaves after* being insured. Confusing them is a common exam error.
 - Adverse selection is the principal justification for **compulsory** government programs: [[Employment Insurance]], [[Health Care Insurance]] and [[Workers Compensation Insurance]] are all universal precisely because a voluntary version would attract only the high risks. It also explains why [[Flood Insurance|flood]] has historically been unwritable — only those in the floodplain want it.
+
+![[Media/Figures/Adverse_Selection.svg|340]]
 
 > [!example]- Unravelling a Voluntary Pool {Example}
 > A population of $10{,}000$ has two equal groups: low risks with expected loss $\$200$ and high risks with expected loss $\$1{,}000$. The insurer cannot tell them apart and charges the average. Buyers purchase only if the premium is at most $1.3$ times their own expected loss.

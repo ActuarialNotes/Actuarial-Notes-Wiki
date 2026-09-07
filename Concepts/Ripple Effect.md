@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:f23f7f17b2d15e9fa3cdd3fa6fae4262f7ed88e8f05a147e65bb4c3b7e41b868
+  content_hash: sha256:44eb5f086bbff01fa2695e8991c05bc340627405bc601338e3bba1f9af1948c7
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **The compounding is the point.** A $\$50$ million catastrophe that triggers a downgrade, a $30\%$ reinsurance cost increase and a $10\%$ loss of business is not a $\$50$ million event. Modelling only the direct loss produces a scenario the insurer comfortably survives on paper and would not survive in fact.
 - **Management actions are the counterpart.** FCT requires both: the ripples that worsen the scenario, and the realistic responses that mitigate it. The discipline is to be equally honest about both — and to recognise that some actions available in normal conditions (raising capital, buying reinsurance) are unavailable in the scenario that created the need.
 - The most commonly omitted ripple is the **feedback into pricing**: the events that damage capital usually also mean the business currently being written is underpriced.
+
+![[Media/Figures/Ripple_Effect.svg|340]]
 
 > [!example]- A Catastrophe With and Without Ripples {Example}
 > An insurer suffers a $\$60$ million net catastrophe loss. Capital available before the event is $\$340$ million and the base solvency buffer is $\$200$ million.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:bb456999b9f0f472a861bf63b78885bd2a2659eced8c644f5342c71c13d1ed5f
+  content_hash: sha256:4c727d18bd17431965d7ac1b8e17bded78b60b1c23cd8f62af4012f4e631de8f
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,6 +18,8 @@ verification:
 - **Deviation is permitted with disclosure.** An actuary may depart from the standards where circumstances warrant, provided the departure and the reason are disclosed. What is not permitted is departing silently.
 - **It evolves.** Accepted practice in 2026 is not what it was in 2020: [[IFRS 17]] replaced [[Margin for Adverse Deviations|margins for adverse deviations]] with the [[Risk Adjustment for Non-Financial Risk|risk adjustment]], and [[FCT]] replaced DCAT. An actuary applying yesterday's practice today is not complying, and the continuing professional development requirement exists for this reason.
 - **The [[Appointed Actuary]] cannot delegate the judgement.** Relying on another actuary's work, or on management's view, is permitted with disclosure — but the opinion given is the Appointed Actuary's, and accepted actuarial practice governs it.
+
+![[Media/Figures/Accepted_Actuarial_Practice.svg|340]]
 
 > [!example]- Is This Accepted Actuarial Practice? {Example}
 > Assess each.

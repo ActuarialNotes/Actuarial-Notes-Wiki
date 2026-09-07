@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:0c5a252f1ae9930c0859f64cbdebe2c79f509a42a5580df074a5113ae20736aa
+  content_hash: sha256:ed3211cb2f2b7919ddc948bd363282bdea2f28188b053006ede44985fc69f922
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,6 +20,8 @@ verification:
 - **Reinsurance appears as a single net line** in the ISR, so a heavily reinsured insurer shows large gross revenue and expenses and a large negative reinsurance line, rather than netted figures.
 - **Relation to the combined ratio.** The ISR is close to an underwriting result, but the two are not identical: revenue excludes deposit components and loss-component amounts, expenses exclude discount unwind, and reinsurance is presented net. An insurer's disclosed combined ratio and its ISR should be reconcilable but will not match line for line.
 - **What can distort it:** a large [[Onerous Contract|onerous]] group charge lands entirely in one period; a change in the [[Coverage Units]] driver changes CSM release; and a [[Risk Adjustment for Non-Financial Risk|risk adjustment]] release pattern that differs from claim emergence shifts profit between periods.
+
+![[Media/Figures/Insurance_Service_Result.svg|340]]
 
 > [!example]- Building the Income Statement {Example}
 > For the year: insurance revenue $\$480$ million; claims and expenses incurred $\$390$ million; acquisition amortisation $\$62$ million; a loss on an onerous group $\$9$ million; ceded premium relating to coverage received $\$70$ million; amounts recoverable from reinsurers on incurred claims $\$48$ million; unwinding of discount on liabilities $\$16$ million; investment income $\$95$ million.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:fa29f81a346bd79fb88f77a7a5ef159d806eb022bbc67f6c0f8221902abb00fd
+  content_hash: sha256:ebac81fb8998943bf78bc0a5500987f658bfcb7a572f0e4b027ce8f7e0ad5c48
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **The downgrade spiral is a [[Ripple Effect|ripple effect]] to model explicitly.** A downgrade reduces business, raises reinsurance and funding costs, and weakens the metrics that produced the rating — which is why [[FCT]] scenarios should carry a downgrade as a consequence rather than treating the rating as fixed.
 - **Ratings as an early warning.** Agencies act on forward-looking information and often move before regulatory metrics deteriorate, so a negative outlook is a signal worth taking seriously. Against that, they are demonstrably imperfect — the financial crisis is the standard illustration — and they should not substitute for the insurer's own analysis.
 - **Ratings are voluntary.** An insurer can decline to be rated, and many Canadian personal-lines insurers with no commercial counterparty requirement do.
+
+![[Media/Figures/Rating_Agency.svg|340]]
 
 > [!example]- Regulator Satisfied, Agency Not {Example}
 > An insurer maintains an MCT ratio of $172\%$, comfortably above the $150\%$ supervisory target, and OSFI has raised no concerns. Its rating agency places it on negative outlook, citing reserve development and business concentration.

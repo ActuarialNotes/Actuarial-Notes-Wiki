@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:c0a875f966ae69e8b2275aa6f943da967220531f563404eb21e68bfe7e77fd31
+  content_hash: sha256:36ac86ee7a04d70c09b372923cf7dc54efd234ea54b271e8e70377f84efefa76
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,6 +20,8 @@ verification:
 - **Full remeasurement each period.** Cash flow estimates, discount rates and the risk adjustment are all updated to current values, with the changes routed according to whether they relate to future service (CSM), past service (profit or loss), or the time value of money ([[Insurance Finance Income or Expenses]]).
 - **The [[Liability for Incurred Claims|LIC]] is measured the same way under both models** — fulfilment cash flows plus risk adjustment, no CSM. The GMM/PAA choice affects only the LRC, which is a point candidates frequently get backwards.
 - **The GMM is more work.** It requires cash flow projection over the full contract term, a locked-in discount rate for CSM accretion alongside current rates for the liability, and coverage-unit tracking for CSM release — which is precisely why the PAA exists.
+
+![[Media/Figures/General_Measurement_Model.svg|340]]
 
 > [!example]- GMM Versus PAA on the Same Contract {Example}
 > A three-year commercial policy is written for a single premium of $\$9$ million. Expected claims are $\$2.2$ million in each year, the risk adjustment is $\$0.6$ million, and the discount rate is $3\%$. Acquisition costs are $\$0.9$ million.

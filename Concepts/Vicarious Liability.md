@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:cac85e45ac0a9e0a4a6a676e945f2692c17ad5ae97cf3398591e549cb1de79c7
+  content_hash: sha256:d7e4e8fe426c326af383bcbbcfe6374631c8ad3d249e128b2d9b6399a4396c42
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **Underwriting consequence:** the risk being insured is the *vehicle and everyone permitted to drive it*, not only the named insured. A household with an unlisted young driver is a real exposure whether or not that driver is rated, which is why misrepresentation about drivers is treated so seriously.
 - Some provinces **cap** an owner's vicarious liability for a permitted driver's negligence, so the driver's own policy responds above the cap — a coverage-layering detail that changes which insurer pays.
 - For commercial insureds, vicarious liability drives the exposure base: an employer's general liability exposure grows with payroll and headcount because each employee is a source of imputed liability.
+
+![[Media/Figures/Vicarious_Liability.svg|340]]
 
 > [!example]- Which Policy Responds? {Example}
 > A car owned by A is lent to B, who lends it to C without A's knowledge. C causes a collision injuring D, who suffers $\$800{,}000$ of damages. A carries $\$1$ million liability; C carries $\$500{,}000$ on their own vehicle.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:085ffad5fa3cdd9b4115b4da0ef9810731c86eb3fb933df8f99f842cc4e385b2
+  content_hash: sha256:9a8b5355781e46dddae54512cbd06bf23e74bb4c70da8b7aa7436b93a733b6f3
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **The earthquake exposure requirement is separate from the [[Insurance Risk Margin|ordinary insurance risk margin]]**, because ordinary factors applied to liabilities capture the expected cost of business as usual, not a tail event that has not occurred.
 - **Take-up is a policy problem beside the capital one.** Earthquake insurance penetration in high-hazard Canadian regions is low, so a major event would produce large uninsured losses and heavy pressure for [[Disaster Financial Assistance Arrangements|government assistance]] — the same coverage-gap structure as [[Flood Insurance]].
 - **Reinstatement and the second event.** A programme adequate for one event may be exhausted for the aftershock; OSFI expects insurers to consider it, and [[FCT]] scenarios frequently test a second event.
+
+![[Media/Figures/Earthquake_Exposure_Risk_Margin.svg|340]]
 
 > [!example]- Meeting the Requirement {Example}
 > An insurer's $1$-in-$500$ earthquake PML is $\$520$ million. Its reinsurance programme covers $\$40$ million to $\$420$ million with one reinstatement. It holds an earthquake reserve of $\$25$ million and capital available of $\$310$ million.

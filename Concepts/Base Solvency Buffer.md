@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:bb6d3e3ab03cfecbe20e97aa48ad88cd6a59f6419c1ce022cdf2e2a8f783ae7c
+  content_hash: sha256:48e961a275aac0c11d84472dc3dc4cf8a39f9467d03ace396e0e4f4bea8c6a8a
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,6 +20,8 @@ verification:
 - **Every change in the risk profile moves it.** Growth, a shift toward longer-tail lines, a riskier investment mix, or reduced reinsurance credit all raise capital required and therefore the buffer — and lower the ratio without any loss occurring.
 - **Reading a falling ratio requires decomposing it.** A ratio can fall because capital available fell (losses, dividends, market movements) or because the buffer rose (growth, risk mix, lost reinsurance credit). The remedies differ entirely, so the decomposition is the first analytical step.
 - The buffer is recomputed every quarter in the [[Quarterly Return]], which is what lets [[OSFI]] track the trend rather than a single annual snapshot.
+
+![[Media/Figures/Base_Solvency_Buffer.svg|340]]
 
 > [!example]- Decomposing a Ratio Decline {Example}
 > An insurer's MCT ratio fell from $188\%$ to $161\%$ over a year. Capital available went from $\$282$ million to $\$276$ million.

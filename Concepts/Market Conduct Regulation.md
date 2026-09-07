@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:2fe07be9999c3b4f24c3bdf7dc8c31003b3846498866e93d38490e7deed06fac
+  content_hash: sha256:9e241a918aa2c94237a716068e96e978d679a26498bb72ff591fb6d7ee74b439
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - Insurers file an annual **Market Conduct Annual Statement** with provincial regulators (a CCIR product, distinct from OSFI's prudential [[Canadian Annual Return]]) reporting complaint counts, claims-denial rates and distribution data, which regulators use to target examinations.
 - The industry's self-regulatory layer sits alongside: the [[Insurance Bureau of Canada]]'s [[Code of Consumer Rights and Responsibilities]] and the General Insurance OmbudService for complaint escalation.
 - Market conduct increasingly reaches **actuarial** work: whether a rating variable is fair ([[Unfair Discrimination]], [[Bias in Actuarial Practice]]) and whether an algorithm can be explained to the customer are now conduct questions, not just pricing questions.
+
+![[Media/Figures/Market_Conduct_Regulation.svg|340]]
 
 > [!example]- Is This a Conduct Problem or a Pricing Problem? {Example}
 > An insurer's model charges materially more to policyholders who shop around less, using a "price optimisation" factor built from renewal-response data rather than expected loss.

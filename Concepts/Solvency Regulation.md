@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:95a84f4f6a2614acf89ac159ca4f868d2ce0df93af22f4cfea702847df908684
+  content_hash: sha256:da65754176035dbaf64bbabccdb48135e3c7f3ddf4324ab4f6f1cb60cde83e09
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,6 +20,8 @@ verification:
 - It is deliberately **not zero-failure**. OSFI's mandate requires it to let insurers compete and take reasonable risks; the residual failures are handled by [[PACICC]]. A regime with no failures would have set capital requirements so high that insurance became unaffordable.
 - **Early intervention** is the design goal. The ladder of internal target, supervisory target and minimum capital ratio ([[Supervisory Target Capital Ratio]], [[Internal Target Capital Ratio]]) exists so that action begins while the insurer still has surplus to work with, not at the point of insolvency.
 - Solvency and rate regulation can **conflict**: a regulator suppressing rates for affordability weakens the insurers it also supervises for solvency. Canada's split — provinces price, [[OSFI]] capitalises — means neither body owns both sides of that trade-off.
+
+![[Media/Figures/Solvency_Regulation.svg|340]]
 
 > [!example]- Rate Suppression Meets Solvency Supervision {Example}
 > A province holds auto rate increases to $2\%$ for three years while claims costs rise $8\%$ per year. Trace the consequences through the solvency framework.

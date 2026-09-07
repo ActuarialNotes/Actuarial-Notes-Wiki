@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:95413e3ca9f106bf8398c52fc97bc984efe2acd84cd7f11a29a484cd7284e0bf
+  content_hash: sha256:76fee0b00e5337eb355f02aa2ad75d922de3a3c96476cab1f256342b9f960414
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **Valuation must be in accordance with [[Accepted Actuarial Practice]]** — the requirement in s. 365 of the [[Insurance Companies Act]] — which for a Canadian insurer means the [[Standards of Practice]] and the CIA's educational notes on IFRS 17 application.
 - **Reinsurance is not netted.** [[Reinsurance Contracts Held]] are a separate asset with their own measurement, so the balance sheet shows gross liabilities and a reinsurance asset rather than a net figure. This inflates both sides relative to the old presentation and is deliberate: it makes reinsurance counterparty exposure visible.
 - The [[Appointed Actuary]] opines on these liabilities in the [[Statement of Actuarial Opinion]], and they flow directly into [[Capital Available]] and hence the [[MCT]] ratio.
+
+![[Media/Figures/Insurance_Contract_Liabilities.svg|340]]
 
 > [!example]- Building the Liability {Example}
 > At December 31 a PAA insurer has: unearned premium $\$46$ million, unamortised acquisition cash flows $\$11$ million, undiscounted case reserves and IBNR of $\$208$ million, an effect of discounting of $-\$14$ million, a risk adjustment of $\$17$ million, and reinsurance recoverable on unpaid claims of $\$35$ million (risk adjustment on reinsurance held $\$3$ million).

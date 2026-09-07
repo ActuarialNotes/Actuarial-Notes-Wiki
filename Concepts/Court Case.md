@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:21e2bb437514163aeb270bfb38c30f1813a45d4cd936fb83a7866c30f59bff1f
+  content_hash: sha256:7ba247adc99930e7aa4190f18b9324c63cac02be826360aa4dc16be520ce0c83
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,6 +18,8 @@ verification:
 - **Recurring subject matter** in Canadian insurance litigation: interpretation of coverage wordings (with ambiguity construed *contra proferentem*, against the drafter), the [[Duty to Defend]], the scope of the [[Duty of Good Faith]] and availability of [[Bad Faith Damages]] and [[Punitive Damages]], the [[Minor Injury Guideline|minor injury]] and [[Catastrophic Impairment|catastrophic impairment]] definitions, and the deductibility of [[Collateral Benefits]].
 - **Reasonable expectations.** Where a wording is ambiguous, Canadian courts construe it to meet the reasonable expectations of the insured, which systematically resolves genuine ambiguity in the policyholder's favour and is why drafting matters so much.
 - The interaction with legislation runs both ways: a decision the legislature dislikes is answered with an amendment, and each [[Automobile Insurance Reform|reform]] is partly a response to accumulated judicial interpretation.
+
+![[Media/Figures/Court_Case.svg|340]]
 
 > [!example]- A Decision Lands Mid-Reserve-Cycle {Example}
 > In November, a provincial court of appeal holds that a category of chronic pain claims previously treated as minor injuries falls **outside** the [[Minor Injury Guideline|minor injury]] cap. The insurer has $4{,}200$ open accident benefit claims; the actuary estimates $18\%$ involve the affected category. Average incurred on a capped claim is $\$3{,}500$; on an uncapped non-catastrophic claim, $\$48{,}000$.

@@ -1,13 +1,15 @@
 # Exam Readiness Score
 
-The card at the top of every exam study guide — the Dashboard's Study Guide radial shrunk to
-a mark, which opens an assessment popup. It answers one question: *how ready am I to sit this
-exam?*, and the popup then says why the number is what it is.
+The one number that answers *how ready am I to sit this exam?* It is computed in one place
+and read by every surface that prints a readiness percentage.
 
 - Scoring: `quiz/src/lib/readiness.ts` (`computeExamReadiness`), tested in `readiness.test.ts`
-- Ring geometry: `quiz/src/lib/readinessRing.ts`, drawn by `components/ReadinessRing.tsx`
-- UI: `quiz/src/components/wiki/ExamReadinessCard.tsx`
-- Placement: `components/wiki/WikiArticle.tsx` + `ExamGuideCards.tsx`; wired in `pages/wiki/WikiExam.tsx`
+- Ring geometry: `quiz/src/lib/readinessRing.ts`, drawn by the Dashboard's Study Guide radial
+  (`components/ReadinessCard.tsx`)
+
+**The exam study guide no longer shows a readiness card.** The card, its assessment popup and
+the 48px `ReadinessRing` badge were removed along with the exam page's orientation row; the
+score itself and the surfaces below are unchanged.
 
 ## One score, everywhere
 
@@ -16,7 +18,6 @@ a readiness percentage calls it, so they can never disagree:
 
 | Surface | Where |
 |---|---|
-| Exam Readiness Score card + popup | `components/wiki/ExamReadinessCard.tsx` |
 | Dashboard Study Guide radial (the `NN% readiness` in the ring) | `components/ReadinessCard.tsx` |
 | Exam grid cards ("Readiness NN%") | `pages/wiki/WikiHome.tsx` |
 | Readiness projection ("now → exam day") | `lib/masteryAnalytics.ts` → `components/HeatmapInfoPanel.tsx` |
@@ -50,7 +51,7 @@ disagreement between this score and a plain concept count.
 unreviewed steps back down the ladder, so it stops paying into syllabus coverage and, if it
 is a keystone, into that criterion too. A separate retention dial measured over *studied*
 concepts only would double-count the same decay and read high for a learner three concepts
-in. The popup surfaces decay as a count ("… , 4 decayed") instead of a third number.
+in.
 
 **Exams with no keystone catalogue** drop that criterion, so their readiness is exactly
 syllabus coverage. Adding a `KEYSTONE_EXAMS` block for the exam makes it appear — nothing
@@ -58,77 +59,17 @@ else to wire.
 
 ## Bands
 
-`readinessBand(pct)` maps the score onto the verdict shown on the card and as the popup's
-heading: **Not started** (<15), **Building foundations** (<40), **Making progress** (<65),
+`readinessBand(pct)` maps the score onto a verdict: **Not started** (<15), **Building foundations** (<40), **Making progress** (<65),
 **Nearly exam ready** (<85), **Exam ready** (85+). Each also carries a one-sentence `blurb`
-saying what to do next; nothing renders it today — the band name says where the reader
-stands and the criterion rows say what is holding the number down, so the sentence was
-repeating both.
-
-## What the card shows
-
-The overall dial and the band label. Nothing else: the criteria, the tally and the sections
-are all one tap away, and a card that is a third of a phone wide has room for one number.
-
-## What the popup shows
-
-1. The overall dial and the band.
-2. One expandable row per criterion — **Syllabus coverage** and **Keystone concepts** — and
-   nothing else. Each row is its name, its percentage and a bar. No prose explaining the
-   scoring, no heading over the pair, and **no grey caption under the bar**: a tally like
-   `7/87 at Level 3 · 49 new` restates a number the reader has already read, and this
-   document is where the reasoning lives.
-
-   The criterion's **weight is drawn, not written**. Nothing says "60% of score"; instead the
-   bar's thickness scales with `criterion.weight` (4px + 6px × weight), so the heavier
-   criterion is visibly the heavier line. Weight and tally stay in the row's `aria-label`
-   and in the panel it opens onto — available, just not stacked on screen under a number
-   that already said it.
-
-Both rows start **collapsed** and expand (chevron on the right; the whole row is the tap
-target) onto the evidence behind their own number, so the breakdown is nested under the
-criterion it scores rather than sitting in a section of its own:
-
-- **Syllabus coverage** → the per-learning-objective bars, in syllabus order. The bars
-  themselves show which sections are behind, so no line names them, and each row carries its
-  percentage only — the `n/total` beside it was the same fact in a second notation.
-- **Keystone concepts** → the exam's keystone list as chips with mastery dots; tapping one
-  opens that concept in the concept popup, on the exam's full concept list so Previous/Next
-  still walks the whole syllabus. **This is the only surface that names all of an exam's
-  keystones.**
-
-A criterion with nothing to expand (no sections parsed, or an exam with no keystone
-catalogue) renders without a chevron rather than opening onto an empty panel.
-
-Signed-out readers see the card at 0 and a bare **Sign in** button (to `/auth`) under the
-dial — mastery is a server-side record, so there is nothing to show until they do. The button
-carries no caption: a dial reading zero next to a Sign in button is the whole message, and
-"Track learning progress" underneath it was the reader's third reading of it.
-
-## Placement
-
-The card leads the orientation row (`ExamGuideCards`), beside the **How to Study** card and
-shaped like it: a horizontal `rounded-lg bg-card` row at `px-4 py-3` (`px-3` on a phone, where
-the row is two-up), the same shape a learning objective below it wears, so the row reads as
-the head of that list rather than a banner over it. The two cards share the row's width
-evenly and carry the same parts — a mark, then a two-line label: what it is over what it
-says (`Readiness` over the band; `How to Study` over the exam). Neither shrinks to its
-content, so the row stays symmetrical at every width.
-
-Exam pages that carry no `<div class="exam-guides"></div>` (everything but P, FM, MAS-I,
-MAS-II and Exam 5 today) get the card from a marker `WikiArticle` inserts under the "Learning
-Objectives" heading instead, in the same row wrapper so it lands at the same size.
+saying what to do next; nothing renders it today.
 
 ## What the ring shows
 
-The mark is `components/ReadinessRing.tsx` at 48px: one arc per syllabus concept, each section
-sized by its exam weight, each arc filled by that concept's mastery state — green for an
-ordinary concept, gold for a keystone (`lib/masteryFill.ts`). It is the Dashboard's Study
-Guide radial with the legend, the section labels and the hover readout stripped off, and both
-draw their arcs from `lib/readinessRing.ts`, so the two can never disagree about the shape of
-a syllabus. At card size the individual arcs are thinner than a hairline, which is the point:
-what survives the shrink is how much of the ring has colour in it, and where the gold is. The
-number in the middle is `overallPct` — the same one the popup opens with.
+The ring is the Dashboard's Study Guide radial (`components/ReadinessCard.tsx`): one arc per
+syllabus concept, each section sized by its exam weight, each arc filled by that concept's
+mastery state — green for an ordinary concept, gold for a keystone (`lib/masteryFill.ts`).
+Its arcs come from `lib/readinessRing.ts`, so geometry lives in one place. The
+number in the middle is `overallPct`.
 
 ## Colour
 

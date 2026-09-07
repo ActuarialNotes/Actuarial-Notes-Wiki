@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:591560941ed4cb85943c8e33dfec375fe643d4b2af26e493612973ee2859cc6d
+  content_hash: sha256:f9445747f2e4f7ba2e929124fb1597caa2fa596ded71a95ee54ccfd957fda210
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,6 +18,8 @@ verification:
 - **Reserving.** A catastrophic claim is effectively a lifetime care annuity: attendant care, housing modification, case management, and equipment replacement over decades. Its value depends on the claimant's age and life expectancy, the care regime, care-cost inflation, and the [[IFRS 17 Discount Rates|discount rate]] — the same drivers as a structured settlement.
 - **Reporting lag.** Catastrophic designation often occurs years after the accident (the impairment must stabilise before it can be assessed), so an accident year's catastrophic count develops upward long after ordinary claims have closed. This is a principal driver of adverse development in accident benefits.
 - **Sensitivity.** Because the liability is a long annuity, a small change in the discount rate or in assumed care-cost inflation moves the reserve substantially — far more than an equivalent change would move a short-tailed line.
+
+![[Media/Figures/Catastrophic_Impairment.svg|340]]
 
 > [!example]- Discount Rate Sensitivity on a Catastrophic Claim {Example}
 > A catastrophically injured claimant, aged $30$, is assessed as requiring $\$120{,}000$ per year of attendant and medical care for an expected $45$ years. Care costs are assumed to inflate at $3\%$ per year.

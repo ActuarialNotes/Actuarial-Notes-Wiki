@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:fc87c7b59c0944f26496f4193c76a6c72275acc0e62a32f876d4008fe1218ef3
+  content_hash: sha256:6e748d09473e9458a75d8911468333418d64a9de17c318332a4e103042f6e667
   sources: []
   open_findings: 0
   open_critical: 0
@@ -24,6 +24,8 @@ verification:
 - **Why the notes are not optional reading.** The risk adjustment, discount rate and coverage-unit choices are all levers on reported profit and equity. Two insurers with identical portfolios can report materially different results, and **only the notes reveal which choices were made**.
 - **Materiality governs.** Disclosure is required where it is material to a user's understanding — see [[Materiality]]. An insurer cannot bury a significant judgement in boilerplate, and the [[External Auditor]] and the regulator both test this.
 - The [[Appointed Actuary]]'s work underlies several notes directly — the liability reconciliations, the risk adjustment confidence level, the development tables and the sensitivity analyses — so the actuary is responsible for far more of the notes than of the primary statements.
+
+![[Media/Figures/Notes_to_Financial_Statements.svg|340]]
 
 > [!example]- Comparing Two Insurers Through the Notes {Example}
 > Two P&C insurers report similar books and similar equity. Their notes disclose:

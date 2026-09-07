@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:cea9f711621c137afe3c6bd1ce284169c4e22e7acac0a8a334aa6c43f8f988ae
+  content_hash: sha256:ad2eb38965bfe05075c945e5d80e364916bb321353a05513906120cc70714e7d
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **The hierarchy of professional obligation:** the CIA's **Rules of Professional Conduct** (integrity, competence, disclosure of conflicts, cooperation with other actuaries) sit above the Standards of Practice; **[[Educational Note|educational notes]]** sit below them as non-binding guidance on how to comply.
 - **Deviation is permitted but must be disclosed.** An actuary may depart from the standards where circumstances justify it, provided the deviation and its reason are stated. Silent deviation is a discipline matter.
 - **Enforcement** runs through the CIA's discipline process, and — for an [[Appointed Actuary]] — through [[OSFI]], which can find the work inadequate and require it to be redone.
+
+![[Media/Figures/Standards_of_Practice.svg|340]]
 
 > [!example]- Which Standard Is Engaged? {Example}
 > Identify the standard at issue in each situation and what it requires.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:3026647de31e17d1416422a6702058b879fd2821378a20c3410be345be574fec
+  content_hash: sha256:c1417af94ec888f391e7eb8a8537901473d099dba9e28407812c87c5020aaabf
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **Controls:** [[Deductible|deductibles]] and coinsurance (the insured retains part of every loss), [[Experience Rating|experience rating]] and no-claims discounts (today's claim raises tomorrow's price), policy limits, exclusions, treatment protocols such as the [[Minor Injury Guideline]], and claims investigation.
 - **Distinguish from fraud.** Moral hazard is a rational response to incentives and is legal; fraud is misrepresentation and is not. Programs are evaluated on how well they manage the former, not on how much of the latter they catch.
 - Moral hazard is the standard **criticism of government programs** whose benefits are generous and whose funding is not experience-rated — the argument against [[Employment Insurance]] regional benefit variation and against uniform [[Workers Compensation Insurance]] assessment rates, and the reason [[Disaster Financial Assistance Arrangements|disaster assistance]] is said to discourage flood mitigation.
+
+![[Media/Figures/Moral_Hazard.svg|340]]
 
 > [!example]- Deductible as a Moral Hazard Control {Example}
 > An insurer observes that policyholders with a $\$500$ deductible have a claim frequency of $0.082$ and those with a $\$2{,}500$ deductible have $0.049$. Average claim severity (ground-up) is $\$4{,}200$ and $\$5{,}800$ respectively.

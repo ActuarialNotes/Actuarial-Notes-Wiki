@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:8d55bd2ffb89c90fda67f8055a402b9565b77a7cd7128da2043aeeefeaa3ab37
+  content_hash: sha256:d7ff4bab38a3d52b1de3fb599b12af139174f1aed761944e84de17d1e0dfbf67
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,6 +18,8 @@ verification:
 - **Not a substitute for counterparty analysis.** Registration means OSFI supervises the reinsurer; it does not mean the reinsurer is strong. The cedant remains liable to its policyholders regardless of the reinsurer's condition, so [[Rating Agency|rating]], concentration by reinsurer, and dispute history all still matter — and under [[IFRS 17]] the **non-performance risk** allowance on the [[Reinsurance Contracts Held|reinsurance asset]] must reflect them.
 - **OSFI's reinsurance guidance** (the B-3 sound reinsurance practices expectations) requires a documented reinsurance risk management policy, due diligence on counterparties, limits on concentration, and confirmation that ceded risks are within the insurer's stated risk appetite.
 - **The cedant is never released.** Reinsurance is a contract between insurer and reinsurer; the policyholder has no claim against the reinsurer. A reinsurer's insolvency converts a recoverable asset into a loss, which is why concentration limits exist.
+
+![[Media/Figures/Registered_Reinsurance.svg|340]]
 
 > [!example]- Capital Credit and the Registration Status {Example}
 > An insurer cedes $\$120$ million of claim liabilities: $\$80$ million to registered reinsurers, $\$25$ million to an unregistered reinsurer with $\$25$ million of acceptable collateral, and $\$15$ million to an unregistered reinsurer with no collateral. Its gross [[Base Solvency Buffer]] before reinsurance credit is $\$210$ million, and ceded liabilities reduce the buffer by $18\%$ of the amount credited.

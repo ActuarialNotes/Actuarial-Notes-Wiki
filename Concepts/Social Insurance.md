@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9531dfa6ccfa33a2e6830970a8b22248b7ef1aeb1bc4cd6cc424552d07b58ace
+  content_hash: sha256:e1741575af5f806a8ddd7c9f301c0a9a5ac724968cdcd2ee78d8bc452d57a722
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **Evaluation criteria** the syllabus asks candidates to apply to any government program: does it meet its stated objective; is it financially sustainable ([[Solvency|solvency]] and funding); is it efficient (administrative cost, incentive effects); is it equitable; and how does it interact with the private market — does it crowd it out, complement it, or leave a gap?
 - **Funding is the recurring weakness.** Pay-as-you-go financing works while demographics are favourable and fails when they are not, and benefits set politically tend to be increased in good times faster than contributions are.
 - The private market is not absent: it often provides the **top-up** layer above the social floor — supplementary health, disability and life coverage — so program design determines the size of the private market beside it.
+
+![[Media/Figures/Social_Insurance.svg|340]]
 
 > [!example]- Evaluating a Government Program {Example}
 > A province proposes a compulsory public earthquake insurance program funded by a flat levy on every property, replacing private earthquake coverage. Apply the standard evaluation framework.

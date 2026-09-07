@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:e9487eca79f6274c69e4a9f4da36d17ad1a366fa0d8af308b184544e7804e0a5
+  content_hash: sha256:7008a5d048fa500e5e4e6d5f8d3bdbaadbebcb7562f570319e001628ef4a23e8
   sources: []
   open_findings: 0
   open_critical: 0
@@ -24,6 +24,8 @@ verification:
 - **Estimating reform savings** is the actuary's hard problem, and the standard errors are: assuming full and immediate effect; ignoring **cost migration** to the benefit heads left uncapped; ignoring behavioural response by claimants, counsel and providers; and ignoring judicial reinterpretation that erodes a definition over time.
 - Savings emerge over the **payout tail**, so the first-year premium effect and the ultimate cost effect are different numbers. Filing one as the other is a classic error.
 - Ontario (repeatedly since 1990) and Alberta (the 2004 minor-injury cap and subsequent reviews) are the two reform histories the syllabus covers in detail; the pattern in each is the same.
+
+![[Media/Figures/Automobile_Insurance_Reform.svg|340]]
 
 > [!example]- Pricing an Enacted Reform {Example}
 > A province enacts a reform effective January 1 that caps minor-injury awards. An insurer's actuary must reflect it in a rate filing for policies written during the following twelve months. Bodily injury is $55\%$ of total loss cost, and industry analysis estimates the cap removes $20\%$ of BI cost.

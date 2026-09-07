@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:32765564916f6178aeebc0c54c3256954b69ed99e94da4165f789ccc52a8d374
+  content_hash: sha256:6daad862c10b13398eca950ec07ab3aa5a679c795031b812b0e7d4837bd678fe
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,6 +23,8 @@ verification:
 - **Why it matters for insurers specifically.** OCI is where **accounting mismatch** is managed. Bonds at FVOCI move with rates; if the matching liability movement is also in OCI, the two offset there and profit is left showing underwriting and the predictable unwind. If they are split across statements, reported profit swings for no economic reason.
 - **Accumulated OCI is part of equity**, and therefore part of [[Capital Available]] and the [[MCT]] ratio. A sharp rise in interest rates reduces the value of FVOCI bonds, reduces accumulated OCI, and reduces the capital ratio — even though the insurer intends to hold the bonds to maturity and will suffer no loss.
 - **Comprehensive income is the more complete measure** of the period's economics; net income is the more closely watched. An analyst should read both, and read the gap between them as a measure of how much of the period's change in position was routed around the income statement.
+
+![[Media/Figures/Comprehensive_Income.svg|340]]
 
 > [!example]- A Rate Rise Through the Statements {Example}
 > Interest rates rise $150$ basis points during the year. An insurer holds $\$900$ million of FVOCI bonds with duration $4$ years, and insurance liabilities of $\$780$ million with duration $3$ years, for which it has elected the OCI option. Net income before these effects is $\$50$ million.

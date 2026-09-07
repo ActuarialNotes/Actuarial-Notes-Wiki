@@ -1,30 +1,12 @@
 import { describe, it, expect } from 'vitest'
-import { markExamGuides, EXAM_GUIDES_MARKER } from '@/components/wiki/WikiArticle'
 import { buildExamGuides, guideLabel, type ExamGuideFile } from '@/lib/examGuides'
 import { EXAM_GUIDES, guideForExam } from '@/data/examGuides'
 import { entryRefToRepoPath, examIdFromFile, pathToEntryRef } from '@/lib/wikiRoutes'
 
-// The exam-page orientation card and the tip pages behind it. Worth pinning:
-// the marker handshake between the vault markdown and the renderer (silently
-// losing it would just make the card vanish), the reading order the guide is
-// authored in, and that every tip resolves to a page the viewer can fetch.
-
-describe('markExamGuides', () => {
-  it('replaces the marker div with the paragraph marker', () => {
-    const md = '## Prerequisite knowledge\n\n<div class="exam-guides"></div>\n\n## Learning Objectives'
-    const out = markExamGuides(md)
-    expect(out).not.toContain('<div class="exam-guides">')
-    expect(out).toContain(EXAM_GUIDES_MARKER)
-    // The marker has to end up on its own line, or remark folds it into a
-    // neighbouring paragraph and the renderer never sees a lone text node.
-    expect(out.split('\n')).toContain(EXAM_GUIDES_MARKER)
-  })
-
-  it('leaves other layout divs for stripHtmlBlocks to remove', () => {
-    const md = '<div class="exam-nav"\n     data-current="P-1|Probability"\n</div>\n\n# Exam P-1'
-    expect(markExamGuides(md)).toBe(md)
-  })
-})
+// The exam guides and the tip pages behind them. No surface renders them since
+// the exam-page orientation row was removed, but the bundle is still built:
+// worth pinning the reading order the guide is authored in, and that every tip
+// resolves to a page the viewer can fetch.
 
 function file(over: Partial<ExamGuideFile> & { title: string }): ExamGuideFile {
   return {

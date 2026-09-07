@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:baf0f9e218db9e8b3eddc8cd2f7258e35d1cf60fac8cd1877c1e03784b4d809b
+  content_hash: sha256:5166b7ec6b24238d9fcf51089649f3f63ecfdf1def823a74a2940e3f313204d7
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **Reporting lag is the assuming reinsurer's defining problem.** Cedant reports arrive quarterly or later, so at any valuation date a material part of the exposure is not yet reported by the cedant, let alone by the underlying claimant. Estimation is therefore heavily dependent on **exposure-based** methods and cedant-supplied data of variable quality.
 - **Data quality and its consequences.** Where cedant data are late, incomplete or inconsistent, the [[Standards of Practice]] require the actuary to say so and to consider whether the data are sufficient for the purpose — this is one of the clearest practical applications of the data-quality standard.
 - **Higher uncertainty means a higher [[Risk Adjustment for Non-Financial Risk|risk adjustment]]**, and a reinsurer's disclosed confidence level is typically above a primary insurer's for exactly this reason.
+
+![[Media/Figures/Reinsurance_Contract_Liabilities.svg|340]]
 
 > [!example]- Both Directions on One Balance Sheet {Example}
 > An insurer writes direct business, cedes $25\%$ of it under a quota share, and also assumes reinsurance from other insurers. At year end: gross direct LIC $\$300$ million; reinsurance recoverable on that LIC $\$75$ million; LIC on assumed business $\$110$ million.

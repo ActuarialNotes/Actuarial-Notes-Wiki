@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:8e159aa4693e5934589567b7c8c77fff253fe55925572654291fb17284c2450f
+  content_hash: sha256:6ace852ae4c2bd8c4a2fbf3a08bd0bf27adbb6830c551dd3de6f4178318b6a4e
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,6 +22,8 @@ verification:
 - **Proxy discrimination** is the live issue. A model that omits a prohibited variable can still reproduce its effect through correlated permitted variables, especially in high-dimensional models. Testing for it means measuring the model's output across the protected groups, not only checking that the variable is absent from the input — see [[Bias in Actuarial Practice]].
 - Under the [[Standards of Practice]] and the [[Market Conduct Regulation|fair treatment of customers]] framework, the actuary is expected to be able to **explain** a rate difference in cost terms. A relativity that cannot be explained is a conduct exposure whatever its lift.
 - Human rights legislation supplies the outer boundary; insurance statutes and rate filings supply the operational one, and the two are not the same list in every province.
+
+![[Media/Figures/Unfair_Discrimination.svg|340]]
 
 > [!example]- Three Rate Differences {Example}
 > Classify each as fair, unfairly discriminatory, or prohibited-though-cost-based.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:19eaa3aad19d96e0e8bfc6d3f6be38d9e42e77d93aa298d8a7c156273e84db6f
+  content_hash: sha256:313dbdf2796f004a3a8b4fc6fb1c6804e433c2baada747166e1da69cbbfa0b82
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,6 +20,8 @@ verification:
 - Coordination between the many provincial regulators runs through the **[[Canadian Council of Insurance Regulators]]**, and prudential coordination with OSFI through information-sharing agreements — but coordination is not consolidation, and multi-jurisdiction compliance cost is a standing industry complaint.
 - Regulation is increasingly **[[Principles-Based Regulation|principles-based]]**: OSFI sets outcomes ([[ORSA]], [[FCT]], [[Corporate Governance]] expectations) and holds the board and senior management responsible, rather than prescribing every calculation.
 - The [[Appointed Actuary]] is a *regulatory* creation: the [[Insurance Companies Act]] requires the appointment and gives the actuary duties owed to the company, but with reporting obligations the regulator relies on.
+
+![[Media/Figures/Insurance_Regulation.svg|340]]
 
 > [!example]- Who Regulates What {Example}
 > A federally incorporated insurer writes personal automobile insurance in Ontario and Alberta and commercial property across Canada. Identify which regulator addresses each of the following.

@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>The LIC as discounted fulfilment cash flows plus a risk adjustment, and no margin beyond</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">Reserving's new name, and its two pieces</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">LIC = PV(expected cash flows) + RA</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">$420M + $30M = $450M</text>
+  <rect x="61.97" y="118" width="38.57" height="118" rx="3" fill="var(--dim)" fill-opacity="0.72"/>
+  <text x="81.25" y="110" text-anchor="middle" class="sm">486</text>
+  <text x="81.25" y="251" text-anchor="middle" class="sm dim">undiscounted</text>
+  <rect x="128.47" y="118" width="38.57" height="16.02" rx="3" fill="#0d9488" fill-opacity="0.72"/>
+  <text x="147.75" y="110" text-anchor="middle" class="sm">66</text>
+  <text x="147.75" y="251" text-anchor="middle" class="sm dim">discount</text>
+  <rect x="194.97" y="126.74" width="38.57" height="7.28" rx="3" fill="#7c3aed" fill-opacity="0.72"/>
+  <text x="214.25" y="118.74" text-anchor="middle" class="sm">30</text>
+  <text x="214.25" y="251" text-anchor="middle" class="sm dim">RA</text>
+  <rect x="261.46" y="126.74" width="38.57" height="109.26" rx="3" fill="#3b82f6" fill-opacity="0.72"/>
+  <text x="280.75" y="118.74" text-anchor="middle" class="sm">450</text>
+  <text x="280.75" y="251" text-anchor="middle" class="sm dim">LIC</text>
+  <line x1="42" y1="236" x2="320" y2="236" class="axis"/>
+  <text x="180" y="274" text-anchor="middle" class="sm dim">$M — case, IBNR and ALAE, at current rates</text>
+  <line x1="30" y1="294" x2="330" y2="294" class="rule"/>
+  <text x="38" y="316" text-anchor="start" class="sm" fill="#d97706">•</text>
+  <text x="54" y="316" text-anchor="start" class="sm">no CSM — the service is already provided</text>
+  <text x="38" y="340" text-anchor="start" class="sm" fill="#d97706">•</text>
+  <text x="54" y="340" text-anchor="start" class="sm">the estimate is the mean, not a prudent figure</text>
+  <text x="38" y="364" text-anchor="start" class="sm" fill="#d97706">•</text>
+  <text x="54" y="364" text-anchor="start" class="sm">discounting is mandatory, with no PAA relief</text>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">reinsurance recoveries sit in the separate asset</text>
+</svg>

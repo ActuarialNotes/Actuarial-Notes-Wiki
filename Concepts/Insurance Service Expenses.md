@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:28a94940692802173e6489358e7a8a832baf7f9aafcdc23267e0851aa37c88a9
+  content_hash: sha256:2593d516d533627fc13a824a1f4ddd8a1521c373406c919ed327480469a03939
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **Past service versus future service** is the routing rule to memorise. A change in the estimate of claims **already incurred** goes here, in profit or loss now. A change in the estimate of claims **not yet incurred** adjusts the [[Contractual Service Margin|CSM]] under the GMM, or triggers an [[Onerous Contract|onerous]] assessment under the PAA.
 - **The [[Loss Component]] offsets.** For an onerous group, incurred claims are reduced by the loss component released, so the expense reported is less than the claims incurred — because the difference was charged at inception.
 - Reinsurance recoveries do **not** reduce insurance service expenses; they appear in the separate net expense from [[Reinsurance Contracts Held|reinsurance held]].
+
+![[Media/Figures/Insurance_Service_Expenses.svg|340]]
 
 > [!example]- Routing Each Change {Example}
 > For each item, state where it appears in the IFRS 17 income statement.

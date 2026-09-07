@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:4eb4c68b6b498ecb62f5478853c4cc6add7d9ad657aefefbc6da313a9d34eef2
+  content_hash: sha256:a931f8a8e997ddcc3e167f9fab9937b4bef6bec8632effd6e8b93c9be3e1a2bc
   sources: []
   open_findings: 0
   open_critical: 0
@@ -25,6 +25,8 @@ verification:
   - Solvency II permits internal models; the MCT does not.
   - Canada supervises through a federal-provincial split ([[Federal-Provincial Jurisdiction]]); the EU through national supervisors coordinated by EIOPA.
 - Both descend from the same international work — the IAIS Insurance Core Principles and the emerging global capital standard — so convergence rather than divergence is the direction.
+
+![[Media/Figures/Solvency_II.svg|340]]
 
 > [!example]- Comparing the Two Regimes {Example}
 > An insurer operating in both Canada and the EU reports an [[MCT]] ratio of $195\%$ and a Solvency II ratio of $148\%$. Management asks which regulator is being tougher.

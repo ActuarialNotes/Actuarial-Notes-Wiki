@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9114f84c5e145ac8f31512aefd9e779710756fe22fbc7cdc73a230c4a820ead9
+  content_hash: sha256:06561204ecf07b610b9ac496bcafc011d88e282e0daa0e0095b4acda3a3fed46
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,6 +18,8 @@ verification:
 - **Canadian awards are modest by American standards** and are subject to no fixed multiplier, but they are not trivial: the $\$1$ million in *Whiten* was on a claim of roughly $\$345{,}000$, and the Court expressly considered whether a lower award would simply be a cost of doing business.
 - **Not insurable, as a rule of policy** — an insurer generally cannot insure a policyholder against their *own* punitive damages, since doing so would defeat the deterrent. Whether that holds in a given province and wording is a live coverage question and matters for liability reserving.
 - For the insurer as **defendant**, punitive damages are the uncapped tail on [[Bad Faith Damages]] exposure. For the insurer as **liability carrier**, the question is whether the policy responds to punitive damages awarded against the insured at all, and treaties frequently address it separately.
+
+![[Media/Figures/Punitive_Damages.svg|340]]
 
 > [!example]- Would Punitive Damages Be Awarded? {Example}
 > Assess each scenario against the *Whiten* framework.

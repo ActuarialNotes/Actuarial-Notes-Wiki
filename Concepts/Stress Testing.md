@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:203f6e7a506f7265268c2aba7d1f8d5e6bdd9df3133f13d962a263f1248f1eb0
+  content_hash: sha256:cd0ffc5ab61eca3b478267bdc4e8555d374f1393614a2603403643a5f2e9bc3a
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **Severity calibration is the hard judgement.** A test too mild reveals nothing; one too extreme is dismissed as implausible and ignored. The standard is *severe but plausible*, and the calibration should be documented — usually by reference to historical events, industry experience, or a stated return period.
 - **[[Ripple Effect|Ripple effects]] and management actions** must both be modelled: the scenario's second-order consequences, and the realistic responses available. Assuming management can raise capital in the middle of the scenario that caused the problem is the classic way to make a stress test useless.
 - **The output must reach a decision.** A stress test that produces a report and no change to limits, reinsurance, capital targets or the business plan has not been used. OSFI's supervisory reviews look for the link between test results and action.
+
+![[Media/Figures/Stress_Testing.svg|340]]
 
 > [!example]- Sensitivity, Scenario and Reverse {Example}
 > An insurer wants to understand its exposure to an economic downturn. Design one test of each type and explain what each reveals.

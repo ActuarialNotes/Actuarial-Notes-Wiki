@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:00fd0180f44332dfdd3fb1c888c261867fd01155e958c5af189be8703a2f8432
+  content_hash: sha256:c30c73e79b9f37b130d8506fba5b8851828426c1a3bcedd7956290b81eb7d7b8
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,6 +18,8 @@ verification:
 - **Consequences of a restriction** are predictable and appear on every exam: the removed variable's signal migrates into correlated **proxy** variables; cross-subsidy flows from the previously low-rated group to the previously high-rated one; [[Adverse Selection|adverse selection]] increases as the accurately-priced group's better risks leave; and [[Residual Market|residual market]] volumes grow if the restriction makes some segments unwritable at approved rates.
 - **Proxy effects cut both ways.** Banning a variable does not remove its influence if a permitted variable stands in for it, which is why territory restrictions and postal-code debates recur — see [[Bias in Actuarial Practice]].
 - Restrictions differ by province, so a national insurer maintains different classification plans by jurisdiction and cannot simply port a model across the country.
+
+![[Media/Figures/Risk_Classification_Restrictions.svg|340]]
 
 > [!example]- What Happens When a Variable Is Banned {Example}
 > A province bans the use of **age** in private passenger auto rating, effective immediately, with no change to the overall rate level. Currently, drivers under $25$ have a pure premium of $\$1{,}200$ and drivers $25$ and over $\$600$; the under-$25$ group is $12\%$ of exposures.

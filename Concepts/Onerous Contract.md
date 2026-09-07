@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ceab6fc2b9e07abfac63c1ceeafa29004fe380c7d7dcf8118f6dcbf77391eddb
+  content_hash: sha256:9aefc681d058e2f026c7066970625e308a02c12e2ef1c1404aedfbea31d7eb36
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **No [[Contractual Service Margin|CSM]] on an onerous group.** There is no unearned profit to defer, so the entire loss hits profit immediately. Subsequent favourable changes first reverse the loss component; only once it is exhausted can a CSM be established.
 - **The asymmetry is deliberate:** losses are recognised at once, profits are deferred and released over coverage. It is the accounting expression of prudence, and it means an insurer writing at inadequate rates cannot postpone the consequence to the year the claims arrive.
 - **The [[Appointed Actuary]]'s role is central.** The onerous assessment is an actuarial judgement about future cost on business already written, which is exactly the analysis behind a rate indication — so an actuary who signs a rate indication showing inadequacy has, in effect, identified an onerous group.
+
+![[Media/Figures/Onerous_Contract.svg|340]]
 
 > [!example]- When Rate Suppression Meets IFRS 17 {Example}
 > An insurer's Ontario personal auto indication is $+12\%$; the regulator approves $+3\%$. The group written in the following twelve months is expected to earn premium of $\$140$ million, with expected claims and directly attributable expenses of $\$149$ million and a risk adjustment of $\$4$ million.

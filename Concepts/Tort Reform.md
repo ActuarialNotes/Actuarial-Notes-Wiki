@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9f7d58683519329815fce079d241ac433f321e37282e67cb424d1ea1d285a944
+  content_hash: sha256:b75c0e02322eafcb52d0455d8bab027c68567e1a28f58d1305c159824388095b
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,6 +22,8 @@ verification:
 - **The trade-off is explicit and should be stated as such.** Reform lowers premiums by lowering compensation. Whether that is desirable depends on whether one values affordability of a compulsory product above full restitution of the seriously injured — an allocation question, not a technical one.
 - **Distributional effect:** thresholds and deductibles bite hardest on the *moderately* injured, who lose all or most of their claim, while the catastrophically injured lose proportionally little. Reform is therefore regressive within the claimant population.
 - The reverse also happens: a reform can be **rolled back**, and courts can widen a definition. Both directions must be in the [[FCT]] scenario set for an insurer heavily exposed to a reformed line.
+
+![[Media/Figures/Tort_Reform.svg|340]]
 
 > [!example]- Estimating the Durable Saving {Example}
 > A reform introduces a $\$40{,}000$ deductible on non-pecuniary awards. In the year after enactment, the insurer's bodily injury loss cost falls $22\%$. Three years later it is only $9\%$ below the pre-reform trend line.

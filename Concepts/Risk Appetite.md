@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:b87b2aa28d9c04a7d5e69c4c77852ca138d3a4bcf490bb1afb255470888ebc61
+  content_hash: sha256:387ccb46ef09376f4f5d9c446ef80fb43705dd4142c7e96ee18314e8f0fbd21a
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,6 +22,8 @@ verification:
 - **It must bind decisions.** A framework that does not stop transactions is decorative. The test is whether a profitable opportunity outside appetite has ever been declined — if not, the limits are not limits.
 - **It connects to everything else on the syllabus.** [[ORSA]] translates appetite into an internal capital target; [[FCT]] tests whether the position holds under scenarios consistent with it; reinsurance buying implements the catastrophe limits; and the pricing function operates within the underwriting ones.
 - **Breaches are the informative events.** How an insurer responds to a limit breach — escalation, remediation, or quiet revision of the limit — tells a supervisor more about its risk culture than the framework document does.
+
+![[Media/Figures/Risk_Appetite.svg|340]]
 
 > [!example]- Is the Transaction Within Appetite? {Example}
 > An insurer's risk appetite framework states: net catastrophe PML at $1$-in-$250$ shall not exceed $20\%$ of capital available; no single reinsurer shall hold more than $25\%$ of ceded recoverables; and the MCT ratio shall not fall below the $185\%$ internal target under the business plan.

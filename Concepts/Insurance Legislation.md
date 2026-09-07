@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:4cf683b8e9faf773f726f3fa9549b0f3097a9f76a36e7d4e1a83a7a451161a36
+  content_hash: sha256:648f48091c91f49d0a73b5680878940339f89585d5b2fd16f85b23ba50e8c0c6
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,6 +20,8 @@ verification:
 - Provincial *Insurance Acts* contain **statutory conditions** deemed part of every policy of a given class. They cannot be contracted out of to the insured's detriment, which is why policy wordings across insurers look so alike.
 - Legislation interacts constantly with the courts: a [[Court Case]] interpreting a statutory condition effectively rewrites its meaning until the legislature responds, and much of what candidates study as "the law" is statute *as construed*.
 - The [[Canadian Institute of Actuaries (CIA)]]'s [[Standards of Practice]] are not legislation, but the [[Insurance Companies Act]] gives them force indirectly by requiring valuation "in accordance with [[Accepted Actuarial Practice|accepted actuarial practice]]."
+
+![[Media/Figures/Insurance_Legislation.svg|340]]
 
 > [!example]- Statute, Regulation or Guideline? {Example}
 > Classify each instrument and say how hard it is to change.

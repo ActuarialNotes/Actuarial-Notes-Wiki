@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:2201c538c869b0a0ecdb1b5c42ad3579438999f8a6f6bf6b6d5a6280c585ab8a
+  content_hash: sha256:a903070275ef3446d71c920aaf51e4febf05b152cfd3dd3bd9dba34f7fff51ea
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **The costs are real and often understated.** Collateral is expensive — letters of credit carry fees and consume the reinsurer's own credit lines, and funds withheld reduce the reinsurer's investable assets, which it prices into the treaty. An uncollateralised cession is cheaper in premium and worthless in capital.
 - **Collectability risk is higher**, and not only from insolvency: enforcement across jurisdictions is slow and expensive, and a dispute with a reinsurer outside Canada is harder to pursue. Under [[IFRS 17]] this must be reflected in the **non-performance risk** allowance on the [[Reinsurance Contracts Held|reinsurance asset]].
 - **OSFI's reinsurance expectations** require the insurer to be satisfied that ceded risk is genuinely transferred and recoverable, which for unregistered cessions means documented collateral arrangements and counterparty due diligence.
+
+![[Media/Figures/Unregistered_Reinsurance.svg|340]]
 
 > [!example]- Is the Collateral Worth Its Cost? {Example}
 > An insurer cedes $\$50$ million of liabilities to an unregistered reinsurer. The reinsurer offers two terms: a treaty at a premium of $\$18$ million with no collateral, or the same treaty at $\$19.1$ million with a letter of credit securing the full $\$50$ million. Ceded liabilities reduce the [[Base Solvency Buffer]] by $18\%$ of the amount credited, and the insurer's cost of capital is $10\%$.

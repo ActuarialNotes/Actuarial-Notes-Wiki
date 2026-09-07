@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:af979a281bff1cee03f4c7eee0b95e81938c55731412a873a9d4d506cd57da31
+  content_hash: sha256:0d05eb11c782c73a544193e5c92f9fcab204d2b996e647296165741b5c4e50df
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **Practical expedients** available under the PAA: acquisition cash flows may be **expensed as incurred** if the coverage period is a year or less; and the LRC need not be discounted if the coverage period is a year or less or there is no significant financing component. Both are policy choices to be applied consistently.
 - **Why it exists.** For a twelve-month policy, the GMM's full cash flow projection, CSM and coverage-unit tracking produce a number indistinguishable from unearned premium, at large cost. The PAA keeps the answer and drops the machinery.
 - **Where the PAA is *not* available**, and candidates should recognise the cases: multi-year commercial contracts, extended warranty and surety, some [[Reinsurance Contracts Held|reinsurance held]] arrangements covering multiple underwriting years, and any group where experience is expected to vary enough over a longer term that the models would diverge.
+
+![[Media/Figures/Premium_Allocation_Approach.svg|340]]
 
 > [!example]- Is This Group PAA-Eligible? {Example}
 > Assess eligibility for each group.

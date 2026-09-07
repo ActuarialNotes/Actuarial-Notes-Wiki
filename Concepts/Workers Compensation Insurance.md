@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:15bb97ea11cd121212d0948323320a10d736e0ed7f038107999fe8fb5ed9fe0c
+  content_hash: sha256:8dff9708fcfe40e107e7147e1a93d3d21a4acd593606f5da9f3e86dbe9a36192
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **Funding and rate setting.** Employers are assigned to rate groups by industry and pay an assessment per $\$100$ of insurable payroll, adjusted by [[Experience Rating|experience rating]] so that an employer's own claim record affects its rate. The boards target **full funding** of the liability for benefits already awarded — many spent decades recovering from unfunded positions, and funding ratios are a standing policy issue.
 - **Long-tail liabilities.** Permanent disability and survivor benefits are lifetime annuities, so a board's liability behaves like a pension plan's: sensitive to discount rate, mortality and indexation, and valued by actuaries on that basis rather than by triangle methods.
 - **Interaction with private insurance.** An employer's general liability policy does not cover employee injury (the board has exclusive jurisdiction), but the board's **subrogation** rights against negligent third parties bring it into ordinary liability claims, and an injured worker's tort claim against a third party is coordinated with board benefits as a [[Collateral Benefits|collateral benefit]].
+
+![[Media/Figures/Workers_Compensation_Insurance.svg|340]]
 
 > [!example]- The Historic Bargain, Priced {Example}
 > A worker suffers a permanent partial disability. Under the provincial board they receive lifetime wage-loss benefits with a present value of $\$310{,}000$, paid without proving fault, beginning within weeks. Had they been able to sue and prove employer negligence, a court would have assessed $\$540{,}000$. The worker's chance of proving negligence is assessed at $45\%$, and litigation would take four years.

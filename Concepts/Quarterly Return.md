@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:477059089edfef5b87ba6ba744b8ee5ac9939cafbee2f6f7b9d8767b961f65e9
+  content_hash: sha256:359b93cbbcda9b1ffa4fa1cc01466b3fd5f1651468b26546616111ba42fb3c5d
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,6 +18,8 @@ verification:
 - **The actuary's quarterly role** is lighter but real. [[Insurance Contract Liabilities]] must still be estimated for the interim statements, usually by rolling forward the last full valuation with actual-versus-expected analysis rather than by repeating it in full. The [[Standards of Practice]] apply to that work as to any other.
 - **What the roll-forward can miss.** A quarterly estimate that simply applies expected emergence will not detect a deterioration in the underlying pattern. Actual-versus-expected analysis by accident year is the control that catches it, and it is why a quarter's favourable or adverse "actual versus expected" is more informative than the reported result.
 - **Trend reading.** OSFI and analysts read the sequence of quarterly MCT ratios, not any one of them; direction matters more than level, which is the same principle that governs the annual return's development exhibit.
+
+![[Media/Figures/Quarterly_Return.svg|340]]
 
 > [!example]- What the Quarterly Sequence Shows {Example}
 > An insurer's [[MCT]] ratios by quarter over two years: $202\%$, $198\%$, $195\%$, $191\%$, $186\%$, $178\%$, $169\%$, $158\%$. The internal target is $180\%$ and the supervisory target is $150\%$.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:c151d24585a382999d3635730b8cb22d9f49598560e03b9c131820f960ca34e2
+  content_hash: sha256:d14a11c3ddf12d3cc3caa9ef905392ccfb325104ce904fbf00aa97db30561656
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **Reinsurance reduces it**, but only where the reinsurer is [[Registered Reinsurance|registered]] or the cession collateralised — and buying reinsurance substitutes a [[Credit Risk Margin|credit risk]] charge against the reinsurer for part of the insurance risk relieved.
 - **It is why growth costs capital.** More business means more claim and premium liabilities, so the margin rises with volume even when the business is written profitably. See [[Capital Required]].
 - **It is the target of the [[Diversification Credit]]**, which recognises that insurance risk and [[Market Risk Margin|market risk]] do not peak together and reduces the sum of the two.
+
+![[Media/Figures/Insurance_Risk_Margin.svg|340]]
 
 > [!example]- Where a Line Mix Shift Shows Up {Example}
 > An insurer with $\$500$ million of net claim liabilities is shifting from personal property (claim liability factor $15\%$) toward commercial liability (factor $25\%$). Currently the split is $70/30$; the plan moves it to $40/60$ over three years, with total liabilities unchanged.

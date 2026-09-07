@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1db1eaa7f084ae9da5a3e3ca27a76ac6554f1df948af0792162bada4a100de7a
+  content_hash: sha256:33b74818ec97553be421676b36823453879985ae3f313a3bda57a16473b662ec
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **Actuarial treatment.** PJI is part of the ultimate claim cost and must be included in reserves. Its effect is a function of **duration**, so it interacts directly with development patterns: a line whose claims take five years to settle carries far more PJI than one that settles in one.
 - Under **[[IFRS 17]]**, note the distinction: PJI increases the *nominal* cash flow the insurer will pay, whereas the [[IFRS 17 Discount Rates|discount rate]] reduces its present value. The two are separate adjustments moving in opposite directions and must not be netted informally.
 - Prejudgment interest generally does **not** run on future losses (which are already valued as at judgment), only on pre-judgment pecuniary loss and non-pecuniary damages — a distinction that materially reduces the amount on a large future-care award.
+
+![[Media/Figures/Prejudgment_Interest.svg|340]]
 
 > [!example]- Interest on a Delayed Settlement {Example}
 > A claim arising in March 2020 settles in September 2025 for $\$400{,}000$, of which $\$150{,}000$ is non-pecuniary, $\$100{,}000$ is pre-judgment income loss, and $\$150{,}000$ is future care. Prejudgment interest applies at $5\%$ simple to the non-pecuniary and pre-judgment pecuniary amounts only.

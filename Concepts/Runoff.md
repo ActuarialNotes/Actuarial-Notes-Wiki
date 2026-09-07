@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:f0ff130007765a0210ec3639fcd335a37b3e5ba4d561292ea293922868b6c62e
+  content_hash: sha256:3251861aa74742a5f52be3462cbe9e0b109a0b4d93102f97c6b23c55efdbebb6
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,6 +22,8 @@ verification:
 - **Voluntary run-off versus wind-up.** A solvent run-off is an orderly business decision; a **wind-up** follows insolvency, and there the valuation basis changes again — priority of claims, [[PACICC]]'s involvement, and the fact that assets may not cover liabilities.
 - **[[FCT]] solvency scenarios** ask, in effect, a run-off question: could the insurer meet its obligations if it stopped writing? That is why FCT's addition of solvency scenarios to the old DCAT framework matters.
 - **[[Subsequent Events]] interact**: an event that makes the insurer no longer a going concern changes the valuation basis entirely, not merely the amounts.
+
+![[Media/Figures/Runoff.svg|340]]
 
 > [!example]- Valuing a Block in Run-Off {Example}
 > An insurer places a $\$220$ million (discounted, going-concern basis) claim liability block into run-off. As a going concern, unallocated claims expense was assumed at $3\%$ of the liability. In run-off, the block will take eight years to extinguish, and the dedicated claims and administration team will cost $\$6$ million in year 1, declining $15\%$ per year.

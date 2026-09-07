@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:e9157c20b881f991bbda4fca7cc383581df2f1988e25a48a7c4ae01235f86d36
+  content_hash: sha256:f008800d1a2a2ce5ed0ef03fc07a978ad3528db7c93014a073e90eed5a809268
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,6 +18,8 @@ verification:
 - The Code's structure mirrors the insurance contract's own logic — the insurer's duty to act in good faith ([[Duty of Good Faith]]) and the insured's duty of full disclosure — but expresses it as service expectations rather than as conditions of coverage.
 - **Its limits are the exam point.** A voluntary code has no statutory remedy, applies only to members, is drafted by the industry it governs, and does not create a cause of action. Its defenders argue it raises the floor faster than legislation can; its critics argue it is unenforceable where it matters.
 - The Code sits inside the wider **fair treatment of customers** framework from [[Canadian Council of Insurance Regulators|CCIR]] and CISRO, which *is* backed by regulatory expectation — the direction of travel has been from voluntary code toward supervised outcome.
+
+![[Media/Figures/Code_of_Consumer_Rights_and_Responsibilities.svg|340]]
 
 > [!example]- Voluntary Code Versus Regulation {Example}
 > A policyholder's claim is denied without written reasons. Under the Code, they were entitled to reasons. What can they actually do?

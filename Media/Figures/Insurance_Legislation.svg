@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>The four layers of Canadian insurance rules, with the line between what is law and what is expectation</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Four layers, and only two of them are</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">law</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">Statute → Regulation → Guideline → Bulletin</text>
+  <rect x="34" y="92" width="292" height="44" rx="6" fill="#3b82f6" fill-opacity="0.16" stroke="#3b82f6" stroke-width="1.3"/>
+  <text x="180" y="111" text-anchor="middle" class="sm">Statute</text>
+  <text x="180" y="126" text-anchor="middle" class="sm dim">Insurance Companies Act, Insurance Acts</text>
+  <rect x="34" y="148" width="292" height="44" rx="6" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.3"/>
+  <text x="180" y="167" text-anchor="middle" class="sm">Regulation</text>
+  <text x="180" y="182" text-anchor="middle" class="sm dim">Ontario Reg. 664 — cabinet, not the House</text>
+  <line x1="180" y1="135" x2="180" y2="147" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
+  <line x1="30" y1="208" x2="330" y2="208" class="thin dash" stroke="#e11d48" stroke-width="1.4"/>
+  <text x="180" y="202" text-anchor="middle" class="sm" fill="#e11d48">binding law above</text>
+  <text x="180" y="224" text-anchor="middle" class="sm" fill="#e11d48">supervisory expectation below</text>
+  <rect x="34" y="238" width="292" height="44" rx="6" fill="#d97706" fill-opacity="0.16" stroke="#d97706" stroke-width="1.3"/>
+  <text x="180" y="257" text-anchor="middle" class="sm">Guideline</text>
+  <text x="180" y="272" text-anchor="middle" class="sm dim">OSFI B-series, MCT — what OSFI expects</text>
+  <rect x="34" y="294" width="292" height="44" rx="6" fill="#7c3aed" fill-opacity="0.16" stroke="#7c3aed" stroke-width="1.3"/>
+  <text x="180" y="313" text-anchor="middle" class="sm">Bulletin</text>
+  <text x="180" y="328" text-anchor="middle" class="sm dim">the regulator's reading of the day</text>
+  <line x1="180" y1="226" x2="180" y2="236" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
+  <text x="180" y="362" text-anchor="middle" class="sm dim">departing from a guideline is allowed —</text>
+  <text x="180" y="378" text-anchor="middle" class="sm dim">explaining it to OSFI is the price</text>
+</svg>

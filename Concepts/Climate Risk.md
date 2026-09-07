@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:0bb727c69a72752a48e2cccb45e7fa26883d75de90f5fbf5b7fc286e0314f9e2
+  content_hash: sha256:57580a589ab10c5cba34e339eeb72a9000ad7a846ca7437dc1c7c7e35db9cf9e
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **OSFI's expectations** (B-15): governance and accountability at board level; climate risk integrated into the risk management framework and [[ORSA]]; **scenario analysis** using specified transition and physical pathways; and **disclosure** aligned with international frameworks. OSFI has also run standardised climate scenario exercises across the industry.
 - **The insurability question.** Rising hazard can make coverage unaffordable or unwritable in the most exposed locations — the [[Flood Insurance]] problem generalised. The policy response is the same trilemma: risk-based pricing, explicit subsidy, or a coverage gap absorbed by [[Disaster Financial Assistance Arrangements|government assistance]].
 - **The IAA and CIA** have both published on the actuary's role: climate belongs in pricing, reserving, catastrophe modelling, capital, investment and disclosure, and it is within the [[Appointed Actuary]]'s remit rather than beside it.
+
+![[Media/Figures/Climate_Risk.svg|340]]
 
 > [!example]- Trending a Non-Stationary Hazard {Example}
 > An insurer's water damage and flood loss costs per exposure over ten years show an average annual increase of $9\%$. Three of those years contained a major flood event. The pricing actuary proposes projecting the $9\%$ forward for the next three years.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:fe3165b38ca6d38d41536bea00eb2385f77522c987757cce1e9ab5b9e55ddd54
+  content_hash: sha256:1df84a606b05e921fb049eda5992efe73755327bac4d121bfaef19d352b12713
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **Revised each period.** The pattern of expected future coverage units is updated, which changes the release rate prospectively. A group whose expected duration shortens releases CSM faster.
 - **Not applicable under the [[Premium Allocation Approach|PAA]]** for the [[Liability for Remaining Coverage|LRC]], since there is no CSM to release. Coverage units matter to a Canadian P&C insurer mainly on [[General Measurement Model|GMM]]-measured multi-year contracts and on some [[Reinsurance Contracts Held|reinsurance held]].
 - The choice can change reported profit substantially: a limit-weighted driver front-loads profit on a group with large early-expiring policies, while a contract-count driver spreads it evenly.
+
+![[Media/Figures/Coverage_Units.svg|340]]
 
 > [!example]- Choosing the Coverage Unit Driver {Example}
 > A three-year group contains two sub-blocks: $1{,}000$ contracts with a $\$1$ million limit each, all running the full three years; and $4{,}000$ contracts with a $\$100{,}000$ limit each, expected to lapse evenly so that only $50\%$ remain in year 2 and $25\%$ in year 3. The CSM at inception is $\$15$ million.

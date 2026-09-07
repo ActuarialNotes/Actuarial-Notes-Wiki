@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:5d69e249713208017b75961a751db7c74320470a516364758b7ce5c088b18f87
+  content_hash: sha256:9e591acce3a521caae024fd18575a24d4698b09d591167660fbe272be9116e70
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,6 +20,8 @@ verification:
 - **Onerous groups add a [[Loss Component]].** If expected fulfilment cash flows for remaining coverage exceed the LRC carried, the shortfall is recognised **immediately** as a loss and tracked as a separate component of the LRC. This is the IFRS 17 successor to the premium deficiency reserve, and unlike the old test it is applied at the **group** level rather than across the whole book, so profitable business cannot offset unprofitable business.
 - **Discounting the LRC is optional under the PAA** where the coverage period is one year or less, or where there is no significant financing component — which is why most Canadian personal lines LRCs are undiscounted.
 - **The LRC does not contain claims already incurred.** The moment a claim occurs, its cost moves to the [[Liability for Incurred Claims]]. This transfer is the engine of the income statement: revenue is released from the LRC and expense is recognised in the LIC.
+
+![[Media/Figures/Liability_for_Remaining_Coverage.svg|340]]
 
 > [!example]- Rolling Forward the LRC {Example}
 > A group of annual policies is written on July 1 with premiums of $\$24$ million and directly attributable acquisition cash flows of $\$4.8$ million. Revenue is recognised on a time basis. At December 31, expected fulfilment cash flows for the remaining six months of coverage are $\$11.5$ million including risk adjustment.

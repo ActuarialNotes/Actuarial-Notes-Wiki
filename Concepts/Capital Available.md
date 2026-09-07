@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a5e42557f9977dedd8a6697691c56b704fd0d69099c839b41e33ffa88681cdf4
+  content_hash: sha256:f63efda1f3c891b275df19adb2f7b90a8b16e3104bdfb6b1c957a35a702b194b
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,6 +20,8 @@ verification:
 - **Why equity and capital available differ.** The deductions can be large — an acquisitive insurer's goodwill consumes regulatory capital dollar for dollar while leaving accounting equity untouched. This is why a strong balance sheet can still produce a weak MCT ratio.
 - **It moves with the income statement and with markets.** Losses reduce it, dividends reduce it, and unrealised losses on FVOCI investments reduce it through OCI. Under [[IFRS 17]] an [[Onerous Contract|onerous group]] charge reduces it in the year the business is written.
 - **Loss absorbency is the organising test.** Every question about whether an item counts reduces to: *would this absorb a loss when the insurer is in trouble?* Goodwill would not; a deferred tax asset contingent on profits would not; common equity would.
+
+![[Media/Figures/Capital_Available.svg|340]]
 
 > [!example]- Building Capital Available {Example}
 > An insurer reports equity of $\$340$ million, comprising common shares $\$120$ million, retained earnings $\$185$ million and accumulated OCI $\$35$ million. It also has $\$50$ million of subordinated debt qualifying as Category B. Deductions: goodwill $\$45$ million, intangibles $\$22$ million, and deferred tax assets dependent on future profitability $\$16$ million.

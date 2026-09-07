@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:48e4c1b8b3b99af452d95ca3961686be7b2a72940d06685cf94b64399c81379f
+  content_hash: sha256:c257583a32ca865eb385b2c53692c2f0f2cae6da051a1ac5c87943943199ce29
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **Net income is not cash.** An insurer collects premium before paying claims, so cash flow can be strongly positive while income is negative (a growing, underpriced book) or negative while income is positive (a shrinking, profitable one). Both patterns matter for [[Solvency]].
 - **Net income feeds capital.** Retained earnings flow into equity and hence into [[Capital Available]], so a loss reduces the [[MCT]] ratio directly — which is why [[FCT]] adverse scenarios model earnings, not just balance sheets.
 - Regulators and rating agencies read **the composition** of net income more than its level: profit from underwriting is repeatable, profit from investment returns is not under the insurer's control, and profit from prior-year reserve releases is neither.
+
+![[Media/Figures/Net_Income.svg|340]]
 
 > [!example]- Same Net Income, Different Companies {Example}
 > Two insurers each report net income of $\$40$ million on $\$500$ million of insurance revenue.

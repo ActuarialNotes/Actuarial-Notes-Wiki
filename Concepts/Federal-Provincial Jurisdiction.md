@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:98c63245c5de27da55e67e6a647f5f6be47973c615fb8c3fdbd11cfb31d3904e
+  content_hash: sha256:85a38791e08d5fe0be6978bc994e5318b75869498eff3f7c0584d91463d7021f
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,6 +22,8 @@ verification:
 - Some lines are effectively federal by another route — marine insurance falls under federal navigation and shipping power, and federal works and undertakings bring their own wrinkles — but P&C insurance as studied on 6C follows the split above.
 - The **[[Canadian Council of Insurance Regulators]]** exists precisely because the division makes voluntary harmonisation the only available substitute for a single regulator.
 - Compare the United States, where insurance is regulated almost entirely at the **state** level under the McCarran-Ferguson Act with no federal solvency regulator at all — Canada's federal prudential layer via [[OSFI]] is the structural difference from the 6U syllabus.
+
+![[Media/Figures/Federal-Provincial_Jurisdiction.svg|340]]
 
 > [!example]- Which Level of Government Can Do This? {Example}
 > For each proposal, say whether the federal or provincial government has the authority.

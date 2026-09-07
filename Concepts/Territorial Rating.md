@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:8fbf3f450b32ef7cbac38f5037f9a1fcdcfa6c874dfa229e49b77b325ad4f42f
+  content_hash: sha256:37b76223f10c21c7012aee8813fdf882f9e5007198a59cccc1cef69ac86c7037
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,6 +20,8 @@ verification:
 - **Canadian restrictions** are real: Ontario limits how narrowly auto territories may be drawn and has repeatedly examined postal-code rating in the Greater Toronto Area; some provinces prohibit territory in auto rating altogether, and public auto insurers ([[Public Auto Insurance]]) generally use very coarse territories or none.
 - **Credibility and smoothing** matter more here than for most variables: small territories have volatile experience, so raw relativities are [[Credibility|credibility-weighted]] toward a larger region and spatially smoothed so that adjacent territories do not show implausible jumps.
 - Removing or flattening territory creates the standard cross-subsidy: low-cost rural and suburban policyholders subsidise high-cost urban ones, and — because urban policyholders are more numerous in most provinces — the aggregate transfer can be large.
+
+![[Media/Figures/Territorial_Rating.svg|340]]
 
 > [!example]- Should These Territories Be Merged? {Example}
 > Two adjacent urban territories show the following auto liability experience over five years.

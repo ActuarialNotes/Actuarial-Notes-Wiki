@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:76085cc292581e53e15b005a9f345e96e819f6a41c30ff72e40d25f0c59d6559
+  content_hash: sha256:71d5792e85f60cf231408f097e6b9fc071508d16e51aedfb9fcfca99b596606b
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **Actuarial consequences:** exposure that cannot be estimated from the policy limit; a **fat, unbounded tail** on claims that look ordinary by limit; correlation with the insurer's own claims practices, so a systemic handling problem produces correlated bad-faith exposure across the book — and can become a [[Class Action]].
 - **Reinsurance treatment matters.** Extra-contractual obligations and excess-of-policy-limits exposure are addressed explicitly in treaties, and are often excluded or sub-limited, so the net retained exposure can far exceed the gross-line expectation. This should be tested in the [[FCT]] scenarios.
 - The deterrent works only if the award exceeds the profit from the practice — the express reasoning in *Whiten*, and the reason quantum is set by reference to the insurer's conduct rather than the insured's loss.
+
+![[Media/Figures/Bad_Faith_Damages.svg|340]]
 
 > [!example]- Exposure Beyond the Limit {Example}
 > A homeowner's fire claim of $\$310{,}000$ is denied on an arson allegation the insurer never substantiated. After a four-year trial the court finds the loss covered, awards the policy benefit, $\$60{,}000$ in aggravated damages for mental distress, $\$700{,}000$ in punitive damages, and full costs of $\$240{,}000$. The policy limit is $\$400{,}000$.

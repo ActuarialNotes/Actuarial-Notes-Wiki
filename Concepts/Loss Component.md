@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:777c5d6167dd91c3dc7359fcf6294a0223e36319207cdb3d62a7a0d137dc1fdc
+  content_hash: sha256:82c051599c7cd9a0a590ccd58e9ab8585a2e8a922bb6a77d404908b25cf31af4
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,6 +20,8 @@ verification:
 - **Systematic allocation.** Each period the loss component is released on a systematic basis — typically in proportion to the claims and expenses expected to be incurred — and the corresponding portion of incurred claims is excluded from insurance service expenses.
 - **Reversal.** If subsequent estimates improve, the loss component is reduced (and a gain recognised) before any [[Contractual Service Margin|CSM]] can be established. Under the [[General Measurement Model|GMM]] a group whose loss component is fully reversed can then begin building a CSM again.
 - **Reinsurance held has a mirror.** Where reinsurance covers an onerous group, a **loss-recovery component** on the [[Reinsurance Contracts Held]] asset recognises the recovery at the same time as the loss — so the two are matched rather than the loss appearing a year before its recovery.
+
+![[Media/Figures/Loss_Component.svg|340]]
 
 > [!example]- Releasing the Loss Component {Example}
 > A group is recognised as onerous at inception with a loss of $\$12$ million, established as a loss component in the LRC. Total expected claims over the coverage period are $\$150$ million. In the first period, $\$60$ million of claims are incurred.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:2b963091e5e2c1f2697dd44377ef5ac82f04dbfaef437e796d0d2ee626e84b0c
+  content_hash: sha256:cd3c8d0cb03c0ca905142e4632d40b87fbc31964bfcbc47d4750c85862be4705
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,6 +23,8 @@ verification:
 - A filing is judged on **prospective cost**: historical experience developed to ultimate, trended forward to the average date of loss of the policy period, adjusted for enacted [[Automobile Insurance Reform|reforms]], plus expenses and a permitted profit provision.
 - Regulators also approve the **[[Risk Classification Restrictions|risk classification system]]**, not just the overall level. A filing can be approved on level and rejected on structure, and prohibited variables must be excluded regardless of predictive power.
 - Suppressed rates do not remove cost — they relocate it, into reduced availability, growth of the [[Residual Market|residual market]] and the [[Facility Association]], and ultimately into insurer withdrawal from the province.
+
+![[Media/Figures/Rate_Regulation.svg|340]]
 
 > [!example]- Indicated Versus Approved {Example}
 > An insurer's Ontario auto indication is $+11.4\%$. FSRA approves $+4.0\%$. The insurer writes $\$80$ million of Ontario auto premium at a $101\%$ combined ratio before the change.

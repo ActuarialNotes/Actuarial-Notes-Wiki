@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:8b1d81fa40b319fae12618c5be27f7a29f2db555638c6ba84fe339c5c2ab365b
+  content_hash: sha256:a2d0e21265d563b851d56e8ccb78b9bee88a7ef9f5d28244bd2d1894a21d2cf4
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **Why single-payer at all:** health care is the extreme [[Adverse Selection]] case — the sick would buy, the healthy would not — and administrative cost is far lower with one payer than with many. The counter-arguments are queues for elective procedures, absence of a price signal, and no consumer choice of insurer.
 - **Interaction with P&C insurance** is direct and examinable: provincial health insurers hold **statutory subrogation** rights to recover the cost of treating accident victims from at-fault parties, so auto and liability insurers pay health-system costs through subrogated claims. Auto [[Statutory Accident Benefits|accident benefits]] similarly pay for treatment the public system does not cover.
 - **Out-of-country travel insurance** exists precisely because portability covers only the provincial rate, which is a small fraction of a foreign hospital bill.
+
+![[Media/Figures/Health_Care_Insurance.svg|340]]
 
 > [!example]- Who Pays for the Accident Victim's Care {Example}
 > A person is seriously injured in an automobile collision caused by another driver. Their care includes: emergency and surgical treatment in hospital, six months of physiotherapy, prescription drugs at home, a modified vehicle, and lost income.

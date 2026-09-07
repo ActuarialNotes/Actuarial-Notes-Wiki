@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:2afd3c0de8e5605de7e8c6fa2ccb33e5daaf94a94cc93e6e11fb6af8904c6aed
+  content_hash: sha256:a12d535a08fc3152916b779508f9e5bb867d78b0eca2721e4c13c40163b884f9
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **The cession decision is an actuarial one.** The insurer cedes where its own estimate of expected loss exceeds the approved premium net of the pool's terms — so pool volume is a direct measurement of the gap between filed rates and expected costs.
 - **Criticism.** Cost is socialised without any price signal reaching the driver, so the risk is never priced to the person creating it; and the pool's existence relieves some of the pressure that would otherwise force rates to adequacy. Its defenders reply that in a compulsory, rate-regulated market the alternative is not accurate pricing but insurer withdrawal.
 - **Watch pool volume** the way one watches [[Residual Market]] share: growth means the approved rate structure is drifting away from cost.
+
+![[Media/Figures/Risk_Sharing_Pool.svg|340]]
 
 > [!example]- Should the Policy Be Ceded? {Example}
 > An insurer must write a driver at its approved rate of $\$1{,}450$. Its own model puts the expected loss and LAE at $\$1{,}680$, with fixed expenses of $\$180$ regardless of cession. Ceding transfers premium and losses to the pool, but the insurer retains a servicing allowance of $12\%$ of premium and its share of the pool result is $2.4\%$ of the industry total. The pool's overall expected loss ratio is $118\%$.

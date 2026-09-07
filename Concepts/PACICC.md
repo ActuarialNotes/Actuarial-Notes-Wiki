@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:2bded463f0eb58afeb2fc4110ecbd14d74292b1f8a365adb3bebd529cde84787
+  content_hash: sha256:6fb46b7eed1688e6e8b053ab7ab4f8aa8560ab696708ed087295e5306c141889
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **Why insurers fail**, from PACICC's own research: **inadequate pricing and deficient reserves** dominate, with rapid growth into unfamiliar lines, reinsurance failure, catastrophe exposure and fraud following. Notably, investment losses are a *less* common primary cause than candidates expect.
 - **PACICC's own solvency work** — capital adequacy research, the "cost of failure" analysis, and studies on the [[MCT]] framework — argues that early intervention by [[OSFI]] is far cheaper than resolution, because an insurer's asset value deteriorates fast once failure is public.
 - The recurring exam question is the **framework's limits**: post-assessment funding creates a pro-cyclical burden, market-share assessment creates [[Moral Hazard]], and capacity is insufficient for the failure of a very large member. PACICC is the last line of defence, not the primary one.
+
+![[Media/Figures/PACICC.svg|340]]
 
 > [!example]- Why Insurers Fail, and What It Implies {Example}
 > An insurer grows written premium $45\%$ in two years by entering commercial trucking, a line it has not written before, at rates $15\%$ below the market. Its reserves are set by applying its personal auto development factors. Two years later it reports a $\$60$ million reserve strengthening and its [[MCT]] ratio falls to $118\%$.

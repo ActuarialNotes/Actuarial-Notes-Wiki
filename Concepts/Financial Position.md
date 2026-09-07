@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9e7ffbddacae1d0293fa2292336515eb7db76dff0d8d9956bbadae2c872531a7
+  content_hash: sha256:43c23b4a3171865cf69d2ff388b5ef5b34bfcd7eb34e84d31e62f879529eba80
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **From balance sheet to capital.** [[Capital Available]] starts from equity and applies regulatory adjustments — deducting intangibles, goodwill and certain deferred tax assets, and adjusting for items OSFI does not accept as loss-absorbing. Equity and capital available are therefore related but not equal.
 - **The gross-up effect.** Because reinsurance is no longer netted, an insurer that cedes heavily reports a larger balance sheet on both sides than it did before IFRS 17, with no change in economics. Comparisons across the transition date must allow for it.
 - **Liquidity, not just solvency.** A balance sheet can show ample equity while the assets are illiquid relative to a catastrophe's payment pattern — which is why [[FCT]] tests cash flows and not only capital.
+
+![[Media/Figures/Financial_Position.svg|340]]
 
 > [!example]- Equity Versus Capital Available {Example}
 > An insurer reports: total assets $\$1{,}240$ million (including goodwill $\$40$ million and intangibles $\$18$ million); total liabilities $\$980$ million. Regulatory adjustments also require deduction of $\$12$ million of deferred tax assets that rely on future profitability.

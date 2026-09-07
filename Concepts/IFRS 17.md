@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:27ef3b558dd26031188bf41917aff635ca03e8e43328a6782631407b2366c55c
+  content_hash: sha256:12b989ae51a85ebebcefd79d11769a867d23fac8b89037487d5d99b2094d8904
   sources: []
   open_findings: 0
   open_critical: 0
@@ -25,6 +25,8 @@ verification:
   - **[[Insurance Revenue]] replaces written and earned premium** on the face of the income statement, and deposit components are excluded.
 - **Presentation changes too:** an [[Insurance Service Result]] separated from [[Insurance Finance Income or Expenses]], with an accounting policy choice to present some finance effects in [[Other Comprehensive Income Option|OCI]].
 - The Canadian layer sits on top: the [[Canadian Institute of Actuaries (CIA)]] issued the [[Standards of Practice]] and educational notes that determine how IFRS 17 is applied in practice here, and [[OSFI]] rebuilt the [[MCT]] and the [[Canadian Annual Return]] around it.
+
+![[Media/Figures/IFRS_17.svg|340]]
 
 > [!example]- Mapping the Old Balance Sheet to the New {Example}
 > A P&C insurer's pre-transition balance sheet showed: unearned premium $\$120$ million, deferred acquisition costs $\$28$ million, unpaid claims (discounted, including PfADs) $\$340$ million, and reinsurance recoverable $\$60$ million netted within unpaid claims.

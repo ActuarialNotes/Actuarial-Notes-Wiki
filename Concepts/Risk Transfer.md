@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:85134bef5fbba1e4809cf53371955d6be53265ed48c3ce9f6eee197a2848e88d
+  content_hash: sha256:dfd6cbef2803b23b22f33296848823fd623a8c9e0c2c7b5d5506340681ab2109
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **The consequence of failing the test is severe:** deposit accounting. No ceded premium, no ceded losses, no improvement in the loss ratio — instead a deposit asset accruing interest. An insurer that booked a failed contract as reinsurance has overstated capital and understated liabilities.
 - Risk transfer is assessed on the **contract as a whole**, including side letters and undocumented understandings — which is the point at which it becomes a governance and professionalism issue rather than a technical one.
 - Beyond reinsurance, risk is transferred through catastrophe bonds and insurance-linked securities, and **retained** through captives, self-insurance and [[Deductible|deductibles]] — the alternatives against which a transfer's cost is judged.
+
+![[Media/Figures/Risk_Transfer.svg|340]]
 
 > [!example]- Does This Contract Transfer Risk? {Example}
 > An insurer cedes $\$50$ million of premium under an aggregate stop-loss attaching at a $95\%$ loss ratio with a $105\%$ exit, so the reinsurer's maximum payment is $10\%$ of subject premium. The cedant's expected loss ratio is $78\%$ with a standard deviation of $6$ points. There is a profit commission returning $90\%$ of the reinsurer's margin to the cedant.

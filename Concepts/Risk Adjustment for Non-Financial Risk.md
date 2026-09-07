@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:2562e608f0f7c6d1b38041bf6ae5d22e2ea7beb7ecbcb38252093bf01bbed2dd
+  content_hash: sha256:6e3705fd9fd6685f3b370554ec0bd4525493c9c607ee27648d8af87350297b29
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **The five characteristics** IFRS 17 says a risk adjustment should exhibit: low-frequency/high-severity risks attract higher adjustments than high-frequency/low-severity ones; longer-duration contracts attract higher adjustments than shorter ones; wider probability distributions attract higher adjustments than narrower ones; the less that is known about the estimate and its trend, the higher the adjustment; and emerging experience that reduces uncertainty reduces the adjustment.
 - **Diversification.** The RA reflects diversification only to the extent the *entity* benefits from it, and the level at which diversification is recognised (entity or group) must be disclosed — a significant judgement, because entity-level diversification can substantially lower the number.
 - **Release pattern.** The RA is released to [[Insurance Service Expenses|profit]] as risk expires, so a long-tail line releases it slowly. Under the [[Reinsurance Contracts Held|reinsurance held]] measurement the sign flips: the RA on reinsurance held represents risk **transferred away**, and it increases the reinsurance asset.
+
+![[Media/Figures/Risk_Adjustment_for_Non-Financial_Risk.svg|340]]
 
 > [!example]- Setting the Risk Adjustment Two Ways {Example}
 > An insurer's discounted fulfilment cash flows for incurred claims are $\$250$ million. The liability distribution is approximately lognormal with a coefficient of variation of $12\%$. The insurer targets the $75\text{th}$ percentile.

@@ -135,7 +135,7 @@ before touching that area**:
   sliders, live moments, PDF↔CDF, and a Monte-Carlo histogram. Read before touching
   `lib/distribution*.ts` or adding a distribution.
 - `docs/concept-figures.md` — the **generated concept figures**: one SVG per Exam P / FM /
-  MAS-I / MAS-II / 5 concept in `Media/Figures/`, drawn by
+  MAS-I / MAS-II / 5 / 6C concept in `Media/Figures/`, drawn by
   `scripts/generate_concept_figures.py` on top of the dependency-free
   `scripts/figure_kit.py`. Read before editing a figure — they are generated, so a hand
   edit to an SVG is lost on the next run.
@@ -490,7 +490,7 @@ compile — don't "clean up" the flagged code as dead.
   it dedupes findings by fingerprint and refuses to mark anything `verified` without a
   cited source. Stdlib only, no PyYAML. Tests: `python3 -m unittest discover -s scripts`.
 - `generate_concept_figures.py` (+ `figure_kit.py`, `figure_registry.py`,
-  `figures_exam_{p,fm,mas_i,mas_ii,5}.py`) draws the per-concept SVGs in `Media/Figures/`
+  `figures_exam_{p,fm,mas_i,mas_ii,5,6c}.py`) draws the per-concept SVGs in `Media/Figures/`
   and inserts their embeds. The figures are **generated** — edit the builder, not the SVG.
   See `docs/concept-figures.md`.
 - `generate_resource_covers.py` (+ `cover_kit.py`) draws the `Resources/Books/` cover

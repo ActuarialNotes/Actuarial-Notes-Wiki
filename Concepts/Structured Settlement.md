@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:60bd089d23679731562938c1bd993ecbe132058fa4728d28cecbd7a3004cf11f
+  content_hash: sha256:0a2360be5aa5f91707092f4f16ad1e305ff4eb15907401c3effdc5bd7a9d4b08
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **The insurer's residual exposure.** Because the casualty insurer remains ultimately liable if the life insurer defaults, the claim does not fully leave the balance sheet unless a qualifying assignment transfers it. The credit exposure to the annuity provider is real and is a [[Credit Risk Margin|credit risk]] item.
 - **Actuarial valuation** is life-contingent: the cost depends on the claimant's age, impaired life expectancy, indexation of the payments, and the annuity rate available — the same drivers as pricing a life annuity, applied inside a P&C claim.
 - Structures are most common on **large, long-duration** claims: catastrophic auto injuries, medical malpractice, and serious workers' compensation cases.
+
+![[Media/Figures/Structured_Settlement.svg|340]]
 
 > [!example]- Lump Sum Versus Structure {Example}
 > A claimant is entitled to $\$1{,}000{,}000$ as a lump sum. Alternatively the insurer can purchase an annuity paying $\$52{,}000$ per year for the claimant's expected $30$ remaining years, at a cost of $\$900{,}000$. The claimant's marginal tax rate on investment income is $40\%$ and they could earn $5\%$ before tax on invested funds.

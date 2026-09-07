@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:170400b46d10043ec4ba8d9f4d39a6e4cde26b8cd40f062e931aa038a3683c81
+  content_hash: sha256:27ead56a60f8c7655067ee9b8a9866139feb0ff4117fb879d560988c7c83a975
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **It does not transfer responsibility.** The [[Statement of Actuarial Opinion]] remains the Appointed Actuary's. A reviewer's concurrence is not a defence for an opinion that turns out to be unsupportable, and the standards do not permit reliance on a reviewer in place of the actuary's own judgement.
 - **OSFI may require it** where it has concerns — after adverse development, on a complex or newly acquired book, or where the actuarial function's resources are in question. A required review is a supervisory signal in its own right.
 - **The findings must be actioned and documented.** The [[Appointed Actuary's Report]] should record what the review found and what was done about it; an unaddressed finding sitting in a file is worse than no review, because it evidences that the problem was known.
+
+![[Media/Figures/Peer_Review.svg|340]]
 
 > [!example]- Designing a Peer Review That Would Work {Example}
 > After three consecutive years of adverse development averaging $6\%$ of opening reserves, an insurer's board commissions a peer review of the Appointed Actuary's valuation.

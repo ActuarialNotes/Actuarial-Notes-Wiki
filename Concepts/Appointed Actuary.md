@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:4ea01a5b02fda75e4156963fe23151ecc2b58186983d12b6f16ba52ba2f268d5
+  content_hash: sha256:ef713730c830c16c1c6a52cc8c0d4293995c6c79554d7a9d190134479a39cc86
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,6 +23,8 @@ verification:
 - **The dual accountability** is the defining tension of the role. The AA is usually an employee, paid by the company, working alongside management — and is required to reach conclusions management may not want and to escalate over their heads if necessary. The [[Standards of Practice]] and the statute exist precisely to make that possible.
 - **The AA is not the auditor.** The [[External Auditor]] audits the financial statements and relies on the actuary's work for the liabilities; the actuary produces that work. Each has a professional duty to communicate with the other, and neither may substitute the other's judgement for their own.
 - **Qualification** requires Fellowship of the [[Canadian Institute of Actuaries (CIA)]] with relevant experience, and the actuary must comply with the CIA's Rules of Professional Conduct and continuing professional development requirements.
+
+![[Media/Figures/Appointed_Actuary.svg|340]]
 
 > [!example]- When the Actuary and Management Disagree {Example}
 > The Appointed Actuary's central estimate of the [[Liability for Incurred Claims|LIC]] is $\$318$ million, with a reasonable range of $\$298$ million to $\$342$ million. Management proposes to carry $\$285$ million, arguing that the actuary's assumptions are pessimistic and that a lower figure is "still an actuarial estimate." Surplus is $\$160$ million.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:c35f61fafc498e5afed0ad0514ff91996c4f05236024378530abf27c96a9ea1a
+  content_hash: sha256:1178ca13327db3ead5a730b213793eeac9ebb7d501be2e76a5ade8be247f95ea
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **Data bias upstream.** Historical claims data reflects historical decisions — where claims were investigated, which were denied, which neighbourhoods were policed or served — so a model trained on it can inherit patterns that are not cost-based. [[Loss Development]] and territory data are both exposed to this.
 - **Governance.** Bias testing belongs in the [[Model Risk]] framework: documented at build, tested before deployment, monitored after, and disclosed to the regulator on request. The [[Standards of Practice]]' requirement that work be reasonable and communicated clearly is the professional hook.
 - The three-way tension to be able to articulate: **accuracy** (the model predicts cost), **fairness** (the model does not disadvantage a protected group without cost justification), and **explainability** (the customer can be told why they pay what they pay). Complex models buy accuracy at the expense of the other two.
+
+![[Media/Figures/Bias_in_Actuarial_Practice.svg|340]]
 
 > [!example]- A Model With No Prohibited Variables {Example}
 > An insurer builds a GLM for auto rating. Sex, age, race and credit score are excluded. Post-implementation testing shows that policyholders in three postal-code clusters — which happen to be the province's most racially diverse — are charged relativities averaging $1.34$, while their observed loss ratio is in line with the rest of the book.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1d6cbb3571d605590b1402de3fa25cf16c6106d090d19f21d43f6209206a78e2
+  content_hash: sha256:eccc61737605f6b99afa8b1dab52b6603390f8013bcc888554c41685f98e43b1
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **Costs follow the event** in Canada: the losing party generally pays a portion of the winner's legal costs. This discourages weak claims and weak defences alike, and is another significant difference from the American rule.
 - **Actuarial consequences:** tort claims are **long-tailed** (years from accident to resolution), **severity-driven**, and sensitive to judicial trend, so they carry the largest reserve uncertainty in a P&C book. Development patterns depend on court backlogs, limitation periods and settlement practice as much as on injury severity.
 - Tort damages are reduced by [[Collateral Benefits]] already received, and future losses are converted to present value using court-prescribed or evidence-based discount rates.
+
+![[Media/Figures/Tort_Litigation.svg|340]]
 
 > [!example]- Building a Bodily Injury Award {Example}
 > A plaintiff aged $40$, earning $\$70{,}000$ per year, is permanently unable to work after a collision. The court assesses $25$ years of future income loss, $\$300{,}000$ of future care, and $\$180{,}000$ for pain and suffering. The plaintiff is found $20\%$ contributorily negligent. Accident benefits of $\$95{,}000$ have been paid for income replacement. Assume future losses are discounted at $2\%$ net of wage inflation.

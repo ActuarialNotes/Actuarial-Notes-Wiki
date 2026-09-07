@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:4471a73500163ec3f9a6b2b52452e2232edab1270f4ae74dd3539d32b8d879a2
+  content_hash: sha256:3b82b4bf29dbb2df8a76ce76d599347f7dfaec4a191539951849bc4fb416dc11
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,6 +23,8 @@ verification:
 - **Why the change was made.** Prescribed ranges made margins comparable but arbitrary, and mixing prudence into the discount rate confused financial and non-financial risk. Disclosing a confidence level makes an entity-specific margin comparable in a way a list of MfADs never was.
 - **What was lost:** the old ranges gave a floor. A risk adjustment is the insurer's own judgement, and while the confidence-level disclosure constrains it, a low disclosed confidence level is permitted so long as it is disclosed.
 - MfADs remain relevant on the exam as the **basis of comparison** — candidates are asked to explain what replaced them and why.
+
+![[Media/Figures/Margin_for_Adverse_Deviations.svg|340]]
 
 > [!example]- Old Margins Versus the New Risk Adjustment {Example}
 > An insurer's best estimate of unpaid claims is $\$400$ million undiscounted, discounting at $4\%$ reduces it to $\$370$ million, and reinsurance recoverable is $\$90$ million.

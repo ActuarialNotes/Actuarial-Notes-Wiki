@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:42dc2dcb2a5d05e1a003d8a4008a13a9896947ffeda9879362e053d1b16aa84d
+  content_hash: sha256:ebea15269e7ef1f9b61d6cf27cdba6d06d5d1575503c854bfa501d493ede665f
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **It is an opinion on the amount carried**, not on the actuary's own estimate. The question is whether the *reported* liability makes appropriate provision, which is why a carried figure below the range of reasonable estimates forces a qualification regardless of how the estimate was produced.
 - **[[Subsequent Events]] must be considered** up to the date the opinion is signed, and events providing evidence of conditions existing at the valuation date require the liability to be adjusted.
 - The opinion is supported by, and must be read with, the **[[Appointed Actuary's Report]]**, which documents the data, methods, assumptions and selections behind it.
+
+![[Media/Figures/Statement_of_Actuarial_Opinion.svg|340]]
 
 > [!example]- Which Opinion? {Example}
 > Determine the appropriate opinion in each case.

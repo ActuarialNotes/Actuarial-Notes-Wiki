@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:24efd199c81dc3d35a52445d3a116282aeac1c2cffb3caae7bc7afbc8be7d88d
+  content_hash: sha256:c6be55adce6c175b43f0447fd2084e847e1e92bd676bffbd72160bd6fa3527cc
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **Solvency is forward-looking.** A ratio measured at a point in time says little; the questions are whether it is rising or falling, what would happen under adverse scenarios, and whether the business plan consumes or generates capital. This is precisely why [[FCT]] and [[ORSA]] exist alongside the [[MCT]].
 - **The regulator does not promise zero failures.** [[OSFI]]'s mandate is explicitly to allow reasonable risk-taking; [[Guaranty Funds|guaranty funds]] handle the residual. A regime with no failures would be one in which capital requirements had made insurance unaffordable.
 - Solvency interacts with pricing: suppressed rates guarantee eventual insolvency pressure, and a solvency regulator that cannot set rates can only observe the consequence.
+
+![[Media/Figures/Solvency.svg|340]]
 
 > [!example]- Is This Insurer Solvent? {Example}
 > An insurer reports: assets $\$820$ million, liabilities $\$690$ million, [[Base Solvency Buffer]] $\$92$ million. Its supervisory target ratio is $150\%$ and its internal target is $175\%$. One year ago the ratio was $168\%$. Two years ago, $181\%$.

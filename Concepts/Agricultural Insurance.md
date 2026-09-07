@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a8964ce4d16ce7b79956670ad1b9a1f3d8068c31e5482d67e275d6a74fdecb69
+  content_hash: sha256:cd33b56c6f28b69e043e05fad886044eaf406f75d2aff71998f2387899a4c5a6
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **Why the private market does not serve this risk.** Crop losses are **highly correlated** across a region (one drought hits every farm at once), so the law of large numbers fails; [[Moral Hazard]] and [[Adverse Selection]] are severe because the producer controls inputs and knows their own land; and the data required for pricing is expensive relative to farm-level premiums. Private hail insurance exists — hail is localised and therefore diversifiable — which is the exception that proves the rule.
 - **Actuarial features:** yield distributions are skewed and spatially correlated; area-yield and weather-index designs reduce moral hazard at the cost of **basis risk** (the index moves but the individual farm does not); and the programs' liability is catastrophe-like, requiring reinsurance or government backstop rather than ordinary reserving.
 - **Evaluation.** The programs achieve broad participation and stabilise farm income, but subsidised premiums distort planting decisions toward risky crops and marginal land, and cost-sharing formulas are a standing federal-provincial dispute.
+
+![[Media/Figures/Agricultural_Insurance.svg|340]]
 
 > [!example]- Individual Yield Versus Area Yield {Example}
 > A producer's probable yield is $50$ bushels per acre and coverage is $80\%$. The area's probable yield is also $50$. In a drought year the producer harvests $30$ and the area averages $35$. Price is $\$8$ per bushel.

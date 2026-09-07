@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:200218090430d68d8c6c6d1b07c94f809da0650d49d1c1ef3251a240f8e53da4
+  content_hash: sha256:afd4a217635b79f678d8b6f9bf991e4d090bec4a144ab8e7ebd0c604fdd99a8c
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,6 +18,8 @@ verification:
 - **Tools.** Guidelines (the *A* capital, *B* prudential and *E* corporate-governance series), the [[Canadian Annual Return|Annual and Quarterly Returns]], on-site examinations, supervisory letters, capital add-ons and internal target increases, and the power to take control of an insurer.
 - **What OSFI does not do.** It does not approve premium rates, adjudicate consumer complaints, or licence agents — those are provincial. It shares information with provincial regulators through the [[Canadian Council of Insurance Regulators]] and with [[PACICC]], which handles the aftermath of a failure.
 - OSFI has extended prudential supervision into **[[Climate Risk|climate]]** (Guideline B-15, standardised climate scenario exercises), **[[Concentration Risk|concentration]]** and **[[Model Risk|model risk]]**, on the view that these are solvency issues rather than social policy.
+
+![[Media/Figures/OSFI.svg|340]]
 
 > [!example]- Would OSFI Intervene? {Example}
 > A federally regulated insurer reports an [[MCT]] ratio of $142\%$. Its supervisory target is $150\%$ and its internal target is $180\%$. Its capital plan projects $138\%$ at the next quarter.

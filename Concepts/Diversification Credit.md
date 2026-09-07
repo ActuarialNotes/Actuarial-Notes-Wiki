@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:b655ff581b508fc9d55ed0458aed2a869db2f3becd4347b2ed00373ca2bb346b
+  content_hash: sha256:e620b284203e8d4584c836969053b8c2e9ee24be767b510173dae64f108f66ab
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,6 +20,8 @@ verification:
 - **The credit is largest when the two risks are of similar size.** An insurer whose capital requirement is almost entirely insurance risk gets little benefit, because there is nothing to diversify against.
 - **Correlation is not constant, which is the standing criticism.** In a severe crisis, correlations rise toward one: a catastrophe triggers asset sales, a market collapse coincides with an economic downturn that raises claim frequency and fraud. A diversification credit calibrated to normal-time correlation overstates the benefit in exactly the scenario it matters.
 - **[[ORSA]] should test that.** An insurer relying on the credit should examine, in its own scenarios, what happens if the risks *do* coincide, and reflect the answer in the [[Internal Target Capital Ratio|internal target]].
+
+![[Media/Figures/Diversification_Credit.svg|340]]
 
 > [!example]- Sizing the Credit {Example}
 > An insurer has an insurance risk margin of $\$110$ million and a market risk margin of $\$65$ million, with credit risk $\$18$ million and operational risk $\$14$ million. The diversification credit is computed as

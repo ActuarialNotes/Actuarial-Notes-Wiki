@@ -1,16 +1,19 @@
 # Concept Figures
 
 Every concept linked from `Exam P-1 (SOA).md`, `Exam FM-2 (SOA).md`,
-`Exam MAS-I (CAS).md`, `Exam MAS-II (CAS).md` and `Exam 5 (CAS).md` carries one figure
+`Exam MAS-I (CAS).md`, `Exam MAS-II (CAS).md`, `Exam 5 (CAS).md` and `Exam 6C (CAS).md`
+carries one figure
 that makes the idea visible — a Venn diagram, a payment timeline, an annotated density,
-a rejection region, a correlogram, a loss triangle. They live in `Media/Figures/*.svg`
+a rejection region, a correlogram, a loss triangle, a jurisdictional split, a capital
+waterfall. They live in `Media/Figures/*.svg`
 and are embedded near the top of each `Concepts/*.md` page, after the definition and
 formula block and before the first `> [!example]` callout.
 
 A concept on two syllabuses gets **one** builder, in the file for the exam that
 introduces it — MAS-I owns the thirteen it shares with MAS-II (`AIC`, `Cross-Validation`,
 `Linear Mixed Model`, …) and the five it shares with Exam 5 (`Frequency`, `Severity`,
-`Complement of Credibility`, `Generalized Linear Model`, `Inflation`). Two builders for
+`Complement of Credibility`, `Generalized Linear Model`, `Inflation`); 6C's 135 concepts
+happen to overlap none of the earlier exams'. Two builders for
 one concept would fight over the same slug, and `generate_concept_figures.py` prints a
 warning when it sees that.
 
@@ -63,6 +66,7 @@ still gets its figure, inserted below the plot (`SIMULATOR_EMBEDS` /
 | `scripts/figures_exam_mas_i.py` | The 77 Exam MAS-I builders, in syllabus order. |
 | `scripts/figures_exam_mas_ii.py` | The 71 Exam MAS-II builders, in syllabus order (credibility, mixed models, statistical learning, time series). |
 | `scripts/figures_exam_5.py` | The 109 Exam 5 builders, in syllabus order (ratemaking, then estimating claim liabilities). |
+| `scripts/figures_exam_6c.py` | The 135 Exam 6C builders, in syllabus order (Canadian regulation and law, government and industry programs, financial reporting and solvency). |
 | `scripts/generate_concept_figures.py` | Walks the registry, writes the SVGs, optionally embeds them. |
 
 ## Why hand-written SVG and not matplotlib
@@ -88,7 +92,8 @@ surface and the dark one, so a blue curve is the same blue in either mode.
 ## Adding or changing a figure
 
 1. Write a builder in `figures_exam_p.py`, `figures_exam_fm.py`,
-   `figures_exam_mas_i.py`, `figures_exam_mas_ii.py` or `figures_exam_5.py` that opens with
+   `figures_exam_mas_i.py`, `figures_exam_mas_ii.py`, `figures_exam_5.py` or
+   `figures_exam_6c.py` that opens with
    `vcard(title, formula)` and draws into the box, and decorate it with
    `@figure("Concept Name", "alt text", width=WID)`. The concept name must match
    `Concepts/<name>.md` exactly; the slug is derived from it.
@@ -100,6 +105,10 @@ surface and the dark one, so a blue curve is the same blue in either mode.
 
 Conventions worth keeping:
 
+- **A structure is a picture too.** 6C is a qualitative exam, so most of its figures are
+  shapes rather than plots — a jurisdictional split, a hierarchy of layers, a ladder of
+  thresholds, a decision tree, a waterfall. The rule is unchanged: one idea, drawn, with
+  labels only where the picture needs them to be read.
 - **One idea per figure**, and one formula under it. If a second idea needs saying, it
   belongs in the page's prose.
 - **Real numbers.** Where a worked value fits (an annuity factor, a bond price, a
@@ -114,7 +123,17 @@ Conventions worth keeping:
   figure, and one 5×5 reported triangle (factors 1.500 / 1.160 / 1.060 / 1.020, tail
   1.010, so CDF(12) = 1.900) across every reserving figure — the same AY 2024 turns up
   as 2,600 under the expected loss method, 2,732 under BF, 2,794 under Benktander and
-  2,850 under the chain ladder. A student reading them in sequence sees one running
+  2,850 under the chain ladder. 6C runs on three: one insurer's solvency position
+  (capital available $248M against insurance, market, credit and operational margins of
+  $92M, $54M, $21M and $17M less a $26M diversification credit, so capital required is
+  $158M, the base solvency buffer $237M and the MCT ratio 104.6% — above the minimum and
+  far below the supervisory target), the same company's statements ($1,240M of assets,
+  $980M of liabilities, $260M of equity, a $38M insurance service result and $39M of net
+  income), and two IFRS 17 groups — a PAA book of annual policies written 1 July for $24M
+  with $4.8M of acquisition cash flows (LRC $9.6M at 31 December against $11.5M of
+  fulfilment cash flows, so a $1.9M loss component) and a GMM group whose $60M of premium
+  less $44M of outflows and a $5M risk adjustment opens a CSM of $11M released over
+  coverage units of 40% / 35% / 25%. A student reading them in sequence sees one running
   example from several angles.
 - **Label curves where they run**, rather than in a legend box, when there is room —
   a legend is a block of text competing with the picture. Where a legend is

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:cf459d4d7c061952b6b65c584b0336f376afbd6b9c85a193cea1b35354835044
+  content_hash: sha256:5bec73692c6103fcb0728bb5dcad170e2600aae9e7ac11e6445aef203ac4d226
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **Effect on the severity distribution:** the threshold **truncates** the small claims out of the tort layer, and the deductible **shifts** what remains downward. The observed average tort award therefore rises after a threshold is introduced, even though total cost falls — a statistic routinely misread as evidence that the reform failed.
 - **Erosion** is the standard pattern. A verbal threshold is defined by the courts over time, and each decision that admits a category of injury widens it; a fixed-dollar deductible loses bite to inflation unless indexed. Both are why savings estimated at enactment decline.
 - The deductible is typically **not disclosed to the jury** in Ontario, which produces the recurring problem of awards assessed just below the deductible and therefore paid at zero after years of litigation.
+
+![[Media/Figures/Tort_Threshold_and_Deductible.svg|340]]
 
 > [!example]- Threshold Plus Deductible {Example}
 > Four claimants sue for pain and suffering. The verbal threshold requires permanent serious impairment; the deductible is $\$45{,}000$.

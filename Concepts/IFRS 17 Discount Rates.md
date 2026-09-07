@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:e0a6f0b1f1c844f3e07f532b11426e6e3733470ee9968e5f44405dfc2eade41b
+  content_hash: sha256:dd32b7775abdd0a521a3b3e34e7adc76c4f92c85952a46c2d8484b344cd2f056
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,6 +23,8 @@ verification:
 - **Where the effects go.** The **unwind** of discount and the effect of **changes in discount rates** are [[Insurance Finance Income or Expenses]], not [[Insurance Service Expenses]]. This is what keeps the [[Insurance Service Result]] free of interest-rate noise, and it is the single most important presentation consequence of discounting.
 - **The [[Other Comprehensive Income Option|OCI option]]** lets an insurer put the effect of discount rate *changes* in OCI rather than profit or loss, with the locked-in-rate portion staying in profit. Combined with fair-value-through-OCI assets, this reduces accounting mismatch — but it is an irrevocable choice by portfolio.
 - **Canadian practice** is shaped by CIA guidance on constructing the curve and on the illiquidity premium, and by the fact that Canadian P&C liabilities are relatively short — so the discount effect is a few percent of the liability, against far more for a life insurer.
+
+![[Media/Figures/IFRS_17_Discount_Rates.svg|340]]
 
 > [!example]- Bottom-Up Versus Top-Down {Example}
 > The risk-free curve at the liability's duration yields $3.4\%$. The insurer's supporting bond portfolio yields $4.9\%$, comprising $0.35\%$ expected credit loss, $0.45\%$ unexpected credit risk premium, and the remainder liquidity and term. The insurer assesses the illiquidity premium appropriate to its claim liabilities at $0.5\%$.

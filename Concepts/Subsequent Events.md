@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:f16a57a69c53c13f2b40b1eb18190f72aa28b7cf748512be1478388a57b2e3ba
+  content_hash: sha256:7d447b767c328ae3c79a6779fc5799554ed1ab336ea5aed08a9dda724be32d97
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **The cut-off is the report date, not the valuation date.** The actuary's obligation to consider events continues until the report is completed, which is why the opinion carries both dates.
 - **Judgement is required at the boundary**, and it is often contested. A settlement three weeks after year end usually reflects conditions existing at year end; a settlement driven entirely by a January change in the law does not.
 - **The consequences are real:** an adjusting event of any size moves the [[Statement of Actuarial Opinion]] and the [[MCT]] ratio, and failing to reflect one is a valuation error rather than a disclosure omission.
+
+![[Media/Figures/Subsequent_Events.svg|340]]
 
 > [!example]- Adjust, Disclose, or Neither? {Example}
 > An insurer's valuation date is December 31; the report is signed on March 15. Classify each event.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ace32827e5c00ccff9f36efadce92a58f9fe9755188441cc520a2c5e6572a4b6
+  content_hash: sha256:fb603349b4b02914a11ee64538c2d53a546db10fb8db166dbe31a2509b0bc048
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **The distinction from [[FCT]]** is worth stating precisely: **ORSA determines how much capital is needed** and sets the internal target; **FCT tests whether the insurer's condition holds up** under specified adverse scenarios. ORSA is management's process; FCT is the [[Appointed Actuary]]'s report. They overlap in content and differ in ownership.
 - **It is the clearest expression of [[Principles-Based Regulation]].** OSFI does not prescribe the risks, the methods or the target — it prescribes that the insurer must do the work, defend it, and act on it.
 - **The output is used.** An ORSA whose internal target is not reflected in capital management, pricing, reinsurance buying and the dividend policy has failed, and OSFI's reviews focus as much on use as on content.
+
+![[Media/Figures/ORSA.svg|340]]
 
 > [!example]- What Belongs in an ORSA That the MCT Misses {Example}
 > An insurer writes $\$600$ million of premium: $70\%$ personal auto in one province, $30\%$ commercial property. It buys $80\%$ of its catastrophe reinsurance from a single reinsurer. It plans to enter cyber liability next year. Its MCT ratio is $172\%$ against a $150\%$ supervisory target.

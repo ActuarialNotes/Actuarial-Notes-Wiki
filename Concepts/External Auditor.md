@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:6bedebcd3cbad43ff43a7e4e94a93c3f24ffaa3298f2b88d8524a18e2a7bde35
+  content_hash: sha256:d40f875967bd5ed12144af28920ef3a278e7bde6ca7b1288dc4a6fa43b13297e
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **Where they can genuinely disagree:** the [[Risk Adjustment for Non-Financial Risk|risk adjustment]]'s confidence level, the [[IFRS 17 Discount Rates|discount rate]] and illiquidity premium, [[Onerous Contract|onerous group]] identification, and [[Risk Transfer]] on a reinsurance contract. These are the judgemental areas [[IFRS 17]] created, and disagreement in them is a matter for the audit committee, not for private resolution.
 - **The audit committee is where the two meet.** Both the actuary and the auditor report to it, and a board that hears them separately and never together loses the most useful signal available — whether they agree.
 - **The auditor's opinion is on the statements as a whole**; the actuary's is on the liabilities specifically. A clean audit opinion does not imply an unqualified actuarial opinion, or the reverse.
+
+![[Media/Figures/External_Auditor.svg|340]]
 
 > [!example]- When the Auditor and the Actuary Disagree {Example}
 > The Appointed Actuary has set the [[Risk Adjustment for Non-Financial Risk|risk adjustment]] at the $75\text{th}$ percentile, giving $\$32$ million. The auditor's actuarial specialists consider the $75\text{th}$ percentile reasonable but calculate the corresponding amount as $\$41$ million, arguing the actuary's liability distribution understates tail variability on a long-tail liability book.

@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>DCPD paying the insured's own vehicle damage in proportion to the other driver's fault</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
+    <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Your own insurer pays for the other</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">driver's fault</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">Recovery = Damage × (1 − fault share)</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">first-party, but fault still decides how much</text>
+  <text x="180" y="100" text-anchor="middle" class="sm bold" fill="#e11d48">tort</text>
+  <rect x="38" y="116" width="100" height="24" rx="12.0" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="88" y="132" text-anchor="middle" class="sm">insured</text>
+  <rect x="213" y="116" width="118" height="24" rx="12.0" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2"/>
+  <text x="272" y="132" text-anchor="middle" class="sm">other insurer</text>
+  <line x1="140" y1="128" x2="212" y2="128" class="thin" stroke="#e11d48" stroke-width="1.5" marker-end="url(#ahe11d48)"/>
+  <text x="180" y="152" text-anchor="middle" class="sm dim">a claim against a stranger — slow, expensive</text>
+  <line x1="30" y1="172" x2="330" y2="172" class="rule"/>
+  <text x="180" y="194" text-anchor="middle" class="sm bold" fill="#059669">DCPD</text>
+  <rect x="38" y="210" width="100" height="24" rx="12.0" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="88" y="226" text-anchor="middle" class="sm">insured</text>
+  <rect x="213" y="210" width="118" height="24" rx="12.0" fill="#059669" fill-opacity="0.14" stroke="#059669" stroke-width="1.2"/>
+  <text x="272" y="226" text-anchor="middle" class="sm">own insurer</text>
+  <line x1="140" y1="222" x2="212" y2="222" class="thin" stroke="#059669" stroke-width="1.5" marker-end="url(#ah059669)"/>
+  <text x="180" y="246" text-anchor="middle" class="sm dim">a first-party claim — fast, cheap</text>
+  <text x="180" y="280" text-anchor="middle" class="sm bold">fault still decides how much</text>
+  <rect x="46" y="294" width="201" height="28" rx="4" fill="#059669" fill-opacity="0.30" stroke="#059669" stroke-width="1.2"/>
+  <text x="146.5" y="312" text-anchor="middle" class="sm">75% paid</text>
+  <rect x="247" y="294" width="67" height="28" rx="4" fill="var(--dim)" fill-opacity="0.30" stroke="var(--dim)" stroke-width="1.2"/>
+  <text x="280.5" y="312" text-anchor="middle" class="sm">25% not</text>
+  <text x="180" y="342" text-anchor="middle" class="sm dim">the insured was 25% at fault</text>
+  <text x="180" y="368" text-anchor="middle" class="sm dim">DCPD experience tracks the cars you insure —</text>
+  <text x="180" y="384" text-anchor="middle" class="sm dim">not the cars your policyholders hit</text>
+</svg>

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9faf69c8f460dc6b355ab0478d293383973a74f72d7b56c256814c55070049c2
+  content_hash: sha256:2fa2e8afc6c33afaf22091e15c3c915573d9f960eb8169c5b6ca2460f53d0cb7
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **Accounting mismatch is the reason the option exists.** If assets are held at fair value through OCI while liability rate effects go through profit or loss, a parallel movement in rates produces offsetting effects in *different* statements — reported profit swings for no economic reason. Electing OCI for the liabilities aligns them.
 - **Where reinsurance sits:** the corresponding finance effects on [[Reinsurance Contracts Held]] are presented in IFIE too, so a matched reinsurance programme partially offsets the gross movement.
 - IFIE is one half of the **net financial result**, the other being investment income on the assets backing the liabilities — and reading the two together is how one judges whether an insurer's asset-liability position is well matched.
+
+![[Media/Figures/Insurance_Finance_Income_or_Expenses.svg|340]]
 
 > [!example]- A Rate Fall Through Two Presentations {Example}
 > An insurer's LIC is $\$600$ million with a duration of $4$ years. During the year, discount rates fall $80$ basis points. The unwind of discount at the opening rate is $\$21$ million. Assets backing the liabilities are $\$650$ million of bonds with a duration of $3.5$ years, held at fair value through OCI.

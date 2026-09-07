@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:53707dcf75aa22a4244eaceca268c9338cabdc494facfa1a2ef050a9ccddb999
+  content_hash: sha256:27c469c1c187190abeebc3c790b74d6a9e1c56cd014c1d200cd609a56817a62b
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,6 +22,8 @@ verification:
 - **What a breach brings:** a required capital restoration plan with dates, restrictions on dividends and other capital distributions, increased reporting frequency, likely limits on growth (since growth raises the [[Base Solvency Buffer]]), and escalation through OSFI's intervention stages.
 - **Trend beats level.** A ratio of $160\%$ falling $20$ points a year is a more urgent problem than a stable $145\%$ — the first will breach the minimum within three years, the second will not. Supervisory attention follows direction.
 - **The target is uniform; the internal target is not.** OSFI applies $150\%$ to all, and expects each insurer's own target to reflect *its* risks — catastrophe exposure, business concentration, reserve uncertainty, growth plans — through [[ORSA]] and tested in [[FCT]].
+
+![[Media/Figures/Supervisory_Target_Capital_Ratio.svg|340]]
 
 > [!example]- How Much Room Is There? {Example}
 > An insurer holds a $158\%$ MCT ratio with capital available of $\$237$ million and a base solvency buffer of $\$150$ million. Its [[FCT]] report models a $1$-in-$100$ earthquake costing $\$46$ million net of reinsurance, after tax.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:c2887389f4558640d222a797632f2076f42e6c6dcdbcbd5248b7d877d6b885ed
+  content_hash: sha256:8bb8c052c9071ce2123fc250d9a37aca8cf8d8ecb26daa4d4e899b1173749eed
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,6 +18,8 @@ verification:
 - **The arguments against:** the negligent driver bears no financial consequence, weakening deterrence ([[Moral Hazard]]); benefit schedules under-compensate the seriously injured relative to full tort damages; the right to sue is a legal right being removed; and disputes migrate from liability to **entitlement** — whether an injury meets a definition — so litigation is reduced rather than eliminated.
 - **First-party structure changes the incentives on the insurer too.** Under tort, the insurer defends against a stranger's claim; under no-fault it adjudicates its own policyholder's claim, which is a [[Duty of Good Faith|good faith]] and [[Market Conduct Regulation|conduct]] relationship rather than an adversarial one.
 - Actuarially, no-fault shifts cost from **severity-driven and volatile** (jury awards, tail development) to **frequency-driven and schedule-bounded**, which shortens the tail and improves reserve predictability — the reason no-fault provinces have less reserve development risk in auto.
+
+![[Media/Figures/No-Fault_Insurance.svg|340]]
 
 > [!example]- Same Accident, Three Systems {Example}
 > A driver is injured by another driver's negligence: $\$18{,}000$ of medical and rehabilitation cost, $\$25{,}000$ of lost income, and pain and suffering a court would value at $\$45{,}000$. Describe the recovery under (a) pure tort, (b) pure no-fault with a benefit schedule paying medical costs in full and $80\%$ of income loss, and (c) threshold no-fault where the injury does not meet the threshold.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ff3ea9e96c972e34ae680b43ea824f85d5e8b720cb290bf31d5add2aa58f6ebc
+  content_hash: sha256:80b971f52711526acabda0284bfbc491344e4ffb23cf8cb7b41fad9ee18ae6fe
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,6 +23,8 @@ verification:
 - **Optional increased limits** are available in most provinces; take-up is low, which is itself a consumer-information issue regulators track.
 - SABs interact with [[Tort Litigation|tort]]: benefits received are generally deducted from a tort award for the same head of damage ([[Collateral Benefits]]), so the two systems are coordinated rather than cumulative.
 - Disputes are resolved through a **provincially prescribed process** — in Ontario, the Licence Appeal Tribunal rather than the courts — and the cost and speed of that process is itself a reform target.
+
+![[Media/Figures/Statutory_Accident_Benefits.svg|340]]
 
 > [!example]- Reserving a Tiered Accident Benefit Claim {Example}
 > A claimant has been designated non-catastrophic, with a medical/rehabilitation limit of $\$65{,}000$ and an attendant care limit of $\$36{,}000$. Paid to date: $\$41{,}000$ medical, $\$22{,}000$ attendant care. Counsel has applied for a [[Catastrophic Impairment|catastrophic]] designation, which would raise the combined limit to $\$1{,}000{,}000$. The actuary assesses a $30\%$ probability the application succeeds.

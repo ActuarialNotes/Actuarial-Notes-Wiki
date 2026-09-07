@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:4743f13ada3518fb0ae7b97c899c52aa1ea2f753cf45d7e8b23d4708081790fd
+  content_hash: sha256:b85b2b7915d7637adb64232919f14f732757668f2e56ca1fa78becf118bfbec7
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **Actuarial consequences:** the limitation period defines the **IBNR reporting tail**. Shortening it truncates late reporting and releases reserve; lengthening it, or a decision expanding discoverability, extends the tail on **claims already incurred**. Sexual abuse claims, where several provinces removed the limitation period entirely, are the largest Canadian example — a legislative change that created liability on policies written decades earlier.
 - Policy conditions impose their own, shorter, **notice** requirements, but statutory limitation periods generally override contractual attempts to shorten them below the statutory floor.
 - Quebec's *prescription* periods under the *Civil Code of Québec* serve the same function with different rules — three years for personal injury, running from manifestation of the injury.
+
+![[Media/Figures/Limitation_Period.svg|340]]
 
 > [!example]- A Limitation Period Is Removed {Example}
 > A province abolishes the limitation period for claims arising from sexual abuse, with retroactive effect. An insurer wrote general liability for institutional clients from 1970 to 2000, with policies typically carrying $\$1$ million occurrence limits.

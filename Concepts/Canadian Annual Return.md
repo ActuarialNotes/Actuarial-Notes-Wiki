@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:2b58f8d62e5c74d87da317c6e415faf94e4dfbe6376f12d60ad2c4524929d9ac
+  content_hash: sha256:cfe837cfc053f848a983cf3cb951648c156e8d0c642fbc659b4b803d1f219543
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,6 +23,8 @@ verification:
 - **The claims development exhibit** is the most heavily used by analysts: it shows how each accident year's estimate has moved over successive valuations, so persistent adverse or favourable development becomes visible and cannot be concealed by a single year's release.
 - **Public availability** and the derived ratio sets — the [[MSA Ratios]] published by MSA Research from return data — are what make Canadian P&C financial analysis possible from outside a company.
 - The return was substantially rebuilt for [[IFRS 17]]: line items now follow [[Insurance Revenue]], [[Insurance Service Expenses]] and [[Insurance Finance Income or Expenses]] rather than written and earned premium and incurred losses.
+
+![[Media/Figures/Canadian_Annual_Return.svg|340]]
 
 > [!example]- Reading the Development Exhibit {Example}
 > An insurer's annual return shows, for accident year 2021, the estimated ultimate claims as reported at successive year ends:

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>A formula on volume and growth, blind to how well the insurer is actually run</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">A charge on volume — and on growth</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">Operational ≈ f(premiums,</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">liabilities, growth)</text>
+  <line x1="68" y1="232" x2="332" y2="232" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="68" y1="232" x2="68" y2="84" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="68" y1="232" x2="68" y2="236" class="tick"/>
+  <text x="68" y="248" text-anchor="middle" class="sm dim">0%</text>
+  <line x1="195" y1="232" x2="195" y2="236" class="tick"/>
+  <text x="195" y="248" text-anchor="middle" class="sm dim">20%</text>
+  <line x1="322" y1="232" x2="322" y2="236" class="tick"/>
+  <text x="322" y="248" text-anchor="middle" class="sm dim">40%</text>
+  <polyline points="68,190.6 195,190.6 322,190.6" class="curve dash" stroke="#3b82f6" stroke-width="2.2"/>
+  <polyline points="68,190.6 195,190.6 245.8,158.4 322,107.8" class="curve" stroke="#e11d48" stroke-width="2.4"/>
+  <text x="125.15" y="176.8" text-anchor="middle" class="sm dim">base charge</text>
+  <text x="277.55" y="130.8" text-anchor="end" class="sm bold" fill="#e11d48">growth</text>
+  <text x="180" y="266" text-anchor="middle" class="sm dim">premium growth in the year</text>
+  <line x1="30" y1="274" x2="330" y2="274" class="rule"/>
+  <text x="36" y="296" text-anchor="start" class="sm" fill="#d97706">•</text>
+  <text x="52" y="296" text-anchor="start" class="sm">not built from the insurer's own loss history —</text>
+  <text x="36" y="320" text-anchor="start" class="sm" fill="#d97706">•</text>
+  <text x="52" y="320" text-anchor="start" class="sm">operational losses are too rare to fit</text>
+  <text x="36" y="344" text-anchor="start" class="sm" fill="#d97706">•</text>
+  <text x="52" y="344" text-anchor="start" class="sm">added after the diversification credit, not into it</text>
+  <text x="36" y="368" text-anchor="start" class="sm" fill="#d97706">•</text>
+  <text x="52" y="368" text-anchor="start" class="sm">and it cannot see the quality of the controls</text>
+</svg>

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:74b9bf18a6029e04ce9dbae7bcdac7fe3cbf22906740a4235d408d57dd724882
+  content_hash: sha256:1aa6e57f169c49c81664bbead11c6e3a7c48704e7fdbe19d6b835aa196d65c1e
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,6 +18,8 @@ verification:
 - **What it is not.** Not a regulator, not a standard setter with legal force, and not a substitute for [[OSFI]] on solvency. A CCIR guidance document binds an insurer only once the relevant Superintendent adopts it.
 - **Related bodies:** **CISRO** (insurance intermediary regulators, agent and broker licensing), and internationally the **IAIS**, whose Insurance Core Principles Canada is assessed against.
 - The recurring exam theme is **cost of fragmentation versus benefit of local accountability**: harmonisation lowers compliance cost and improves comparability, but a province that adopts a CCIR position loses the ability to tailor it to a local problem such as an auto affordability crisis.
+
+![[Media/Figures/Canadian_Council_of_Insurance_Regulators.svg|340]]
 
 > [!example]- Harmonisation and Its Limits {Example}
 > CCIR issues joint guidance on the fair treatment of customers. An insurer's compliance officer asks whether the company is now legally bound by it.

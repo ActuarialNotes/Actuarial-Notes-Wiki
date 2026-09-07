@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:640c78a0be51750ed3b6b2dd9ca2385dd23b5283da3b7a6d2bcc5f828adb4fb4
+  content_hash: sha256:d99b278f216239e89b32fde8d39fcefacfcc02e0b3b8723d7555d7264b724e04
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,6 +20,8 @@ verification:
 - **Revenue is not premium.** The differences that most often surprise: deposit components are excluded, [[Reinsurance Contracts Held|ceded premium]] is **not** deducted from revenue (it appears separately), and a group with a [[Loss Component]] recognises revenue on only the non-onerous portion of the [[Liability for Remaining Coverage|LRC]].
 - **Reinsurance held is presented separately**, never netted. The income statement shows insurance revenue, insurance service expenses, and then the net expense (or income) from reinsurance contracts held as its own line.
 - **Comparability improved, at a cost.** Insurance revenue is intended to be comparable with revenue reported by non-insurance businesses — an explicit IASB objective — but it broke the continuity of decades of premium-based analysis, which is why insurers disclose written premium as a supplementary measure.
+
+![[Media/Figures/Insurance_Revenue.svg|340]]
 
 > [!example]- From Written Premium to Insurance Revenue {Example}
 > A PAA insurer writes $\$300$ million of premium in the year, of which $\$170$ million is earned. It cedes $\$55$ million of premium to reinsurers, $\$32$ million of which relates to coverage received in the year. One group is onerous, with a loss component releasing $\$6$ million against expected claims of $\$40$ million in the year.

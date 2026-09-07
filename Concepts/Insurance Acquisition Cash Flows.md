@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1176a33560e78f181c25f15fed09108db4030e42df0df6d6c85d121c8ef8e681
+  content_hash: sha256:f542be7689409e30ea91652ff8e34dba9b3104a8087f58acccef1a299bf05d7c
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **Allocation to expected renewals.** Acquisition cash flows attributable to *anticipated renewals* of contracts in a group are allocated to those future groups and held as an **asset** until the renewal is recognised — one of the few IFRS 17 assets relating to contracts not yet issued. That asset is tested for **recoverability** each period.
 - **They feed the [[Onerous Contract|onerous]] test.** Acquisition cash flows are part of the fulfilment cash flows for the group, so a group with high commission and a thin margin can be onerous at inception even where claims alone would not make it so.
 - The policy choice — defer or expense — is applied consistently by group and must be disclosed, and it materially affects the timing of reported profit in a **growing** book.
+
+![[Media/Figures/Insurance_Acquisition_Cash_Flows.svg|340]]
 
 > [!example]- Defer or Expense? {Example}
 > An insurer writes $\$100$ million of annual premium evenly through the year, with acquisition cash flows of $18\%$. Premium grows $25\%$ the following year. Compare reported results in year 1 under (a) deferral within the LRC and (b) the expense-as-incurred expedient.

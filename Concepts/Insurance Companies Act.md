@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:5cf649fdb63e6ee76cb0ed6caec4defdc12885482845c6af6934fb423b51f697
+  content_hash: sha256:c8c4b723ac697d0109bf616f390944a03dba9412215068cad56e7a19fe554950
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,8 @@ verification:
 - **Civil immunity (s. 361).** The actuary is protected from civil liability for statements made in good faith in carrying out these duties, which is what makes the whistle-blowing duty workable.
 - **Adequacy of assets (s. 515).** The company must maintain adequate capital and appropriate forms of liquidity, and OSFI may direct an increase; this is the statutory authority under which the [[MCT]] guideline operates.
 - Provincially incorporated insurers are governed by the corresponding **provincial Insurance Act**, which generally mirrors these provisions — the actuary's duties do not disappear because the charter is provincial.
+
+![[Media/Figures/Insurance_Companies_Act.svg|340]]
 
 > [!example]- The Actuary Discovers a Reserve Deficiency {Example}
 > During the year-end valuation, the Appointed Actuary of a federally regulated insurer concludes that a reserve strengthening of $\$40$ million is needed. The CFO instructs the actuary to book $\$15$ million now and "phase in the rest." Surplus is $\$120$ million.

@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Net income built from the insurance service result and the net financial result, separately</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">Underwriting and investment, kept apart</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">Net income = (ISR + financial + other)</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">× (1 − tax)</text>
+  <rect x="49.02" y="185.27" width="38.35" height="74.73" rx="3" fill="#3b82f6" fill-opacity="0.72"/>
+  <text x="68.2" y="177.27" text-anchor="middle" class="sm">38</text>
+  <text x="68.2" y="275" text-anchor="middle" class="sm dim">ISR</text>
+  <rect x="105.42" y="142" width="38.35" height="43.27" rx="3" fill="#0d9488" fill-opacity="0.72"/>
+  <text x="124.6" y="134" text-anchor="middle" class="sm">22</text>
+  <text x="124.6" y="275" text-anchor="middle" class="sm dim">financial</text>
+  <rect x="161.82" y="142" width="38.35" height="11.8" rx="3" fill="#d97706" fill-opacity="0.72"/>
+  <text x="181" y="134" text-anchor="middle" class="sm">6</text>
+  <text x="181" y="275" text-anchor="middle" class="sm dim">other</text>
+  <rect x="218.22" y="153.8" width="38.35" height="28.71" rx="3" fill="#e11d48" fill-opacity="0.72"/>
+  <text x="237.4" y="145.8" text-anchor="middle" class="sm">15</text>
+  <text x="237.4" y="275" text-anchor="middle" class="sm dim">tax</text>
+  <rect x="274.62" y="182.51" width="38.35" height="77.49" rx="3" fill="#059669" fill-opacity="0.72"/>
+  <text x="293.8" y="174.51" text-anchor="middle" class="sm">39</text>
+  <text x="293.8" y="275" text-anchor="middle" class="sm dim">net</text>
+  <line x1="34" y1="260" x2="328" y2="260" class="axis"/>
+  <text x="180" y="298" text-anchor="middle" class="sm dim">$M, the running insurer</text>
+  <line x1="30" y1="318" x2="330" y2="318" class="rule"/>
+  <text x="180" y="338" text-anchor="middle" class="sm dim">before IFRS 17 the two were mingled, so a rate</text>
+  <text x="180" y="354" text-anchor="middle" class="sm dim">move could flatter or spoil the underwriting result</text>
+  <text x="180" y="380" text-anchor="middle" class="sm dim">and net income is not cash — premium comes first</text>
+</svg>

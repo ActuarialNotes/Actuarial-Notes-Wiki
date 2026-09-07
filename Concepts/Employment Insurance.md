@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:c1783993faf5f023959da9d9d3be4f088d37c4e7ead5cabd86afd7e78eff774f
+  content_hash: sha256:315c1defa96fea9aeafa8ae3089ba07940a5e5d0b9452b1ca6c20751f9114ae6
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **[[Moral Hazard]] is the central design problem.** A benefit that replaces too much income for too long reduces the incentive to return to work; regional variation in entitlement is criticised for subsidising seasonal industries and discouraging mobility. Against that, the program's stabilising effect in a recession is its clearest benefit — payments rise automatically exactly when the economy needs demand.
 - **Experience rating is largely absent.** Unlike [[Workers Compensation Insurance]], employers pay a uniform multiple of the employee rate regardless of their layoff record, so an industry that lays off seasonally is subsidised by one that does not.
 - **Interaction with private insurance:** EI sickness benefits are short and capped, so group short-term and long-term disability coverage is built on top of them, and disability insurers integrate EI as a [[Collateral Benefits|collateral benefit]].
+
+![[Media/Figures/Employment_Insurance.svg|340]]
 
 > [!example]- Replacement Rate and the Ceiling {Example}
 > Three workers become unemployed, with average weekly insurable earnings of $\$700$, $\$1{,}200$ and $\$2{,}400$. Maximum insurable earnings correspond to $\$1{,}200$ per week.

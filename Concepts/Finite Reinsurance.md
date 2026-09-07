@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:39bab52f0f9091a9406dcfde3e3a981e5c5cf16e24c1b113b3cddd8f9030b47a
+  content_hash: sha256:24592d66cdeab25fa2867a10b7da097c510315080a5482a289ea2a52c2bcba49
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **Why it attracted scrutiny.** Finite arrangements were at the centre of major accounting scandals in the 2000s, in which contracts with no real risk transfer were booked as reinsurance to improve reported loss ratios and capital. The regulatory response — enhanced disclosure, attestation by senior officers that no undisclosed side agreements exist, and closer actuarial review — is now standard.
 - **Side letters are the classic vice.** An arrangement that appears to transfer risk on its face, with an undisclosed agreement limiting the reinsurer's exposure, is a misrepresentation of the financial statements. Assessment must consider **all** terms, disclosed or not.
 - **Legitimate uses exist** — smoothing results across a multi-year programme, financing a run-off, or funding a specific exposure — and finite reinsurance is not improper in itself. What is improper is accounting for it as risk transfer when it is not.
+
+![[Media/Figures/Finite_Reinsurance.svg|340]]
 
 > [!example]- What the Actuary Must Do {Example}
 > The CFO presents a three-year aggregate contract: annual premium $\$25$ million, aggregate limit $\$30$ million across three years, an experience account crediting premium plus $3\%$ interest less paid losses with $90\%$ of any balance returned at expiry, and a cancellation right for the reinsurer after year 2. Expected annual ceded losses are $\$8$ million with a standard deviation of $\$3$ million. The CFO wants it booked as reinsurance to improve the reported loss ratio.

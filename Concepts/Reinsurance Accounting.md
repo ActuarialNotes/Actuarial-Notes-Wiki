@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:dc6adf796eaf6364b84ae72b426bd3eb0ef3fa20afe2be221fcde9ed60b5c665
+  content_hash: sha256:0704ab8187a04148eb5c4653278121edf4b7bcf019601590c53bde1db5d1d78b
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,6 +21,8 @@ verification:
 - **Deposit accounting** applies where risk transfer fails: the ceded premium is recorded as a deposit asset accruing interest, with no ceded premium, no ceded losses and no improvement in the reported loss ratio. An insurer that has wrongly booked such a contract as reinsurance has overstated capital and understated liabilities.
 - **[[Commutations]]** terminate an existing reinsurance contract for a lump sum, extinguishing the asset and any residual recovery — an accounting event with immediate profit and capital consequences.
 - **The [[MCT]] interacts.** Capital credit for ceded liabilities depends on whether the reinsurer is [[Registered Reinsurance|registered]] or [[Unregistered Reinsurance|unregistered]], so the accounting treatment and the capital treatment are related but governed by different rules.
+
+![[Media/Figures/Reinsurance_Accounting.svg|340]]
 
 > [!example]- Reinsurance Versus Deposit on the Same Numbers {Example}
 > An insurer with $\$400$ million of gross earned premium and a $\$300$ million gross loss cedes $\$50$ million of premium and expects $\$38$ million of recoveries. Show the presentation if the contract transfers significant risk, and if it does not.

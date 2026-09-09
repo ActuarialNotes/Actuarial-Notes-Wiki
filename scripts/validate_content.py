@@ -23,9 +23,10 @@ What it enforces (ERRORS — non-zero exit):
   * orphan wiki_link (target Concepts/*.md page does not exist) — an error in the
     mature banks, a warning in banks still missing concept pages (see
     ORPHAN_WARN_ONLY).
+  * orphan topic (the `topic` names no Concepts/*.md page) — same warn/error split.
 
 What it flags (WARNINGS — printed, non-fatal unless --strict):
-  * orphan wiki_link in a warn-only bank.
+  * orphan wiki_link or orphan topic in a warn-only bank.
   * a `type` the app parser can't render (the question won't appear in-app).
 
 Usage:
@@ -246,6 +247,18 @@ def validate_question(path: Path, concepts: set[str], report: Report) -> str | N
                 report.warn(path, msg)
             else:
                 report.error(path, msg)
+
+    # orphan topic detection. `topic` names a concept page in space form, so it
+    # is checked against the same index — a topic that resolves to nothing is how
+    # near-duplicate labels ("Territorial Ratemaking" vs the real "Territory
+    # Ratemaking") drift into the bank unnoticed.
+    topic = data.get("topic")
+    if isinstance(topic, str) and topic and topic not in concepts:
+        msg = f"orphan topic '{topic}' (no matching Concepts/ page)"
+        if bank in ORPHAN_WARN_ONLY:
+            report.warn(path, msg)
+        else:
+            report.error(path, msg)
 
     raw_id = data.get("id")
     return str(raw_id) if raw_id else None

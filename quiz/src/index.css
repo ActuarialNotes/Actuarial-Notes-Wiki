@@ -5,158 +5,19 @@
 @tailwind utilities;
 
 @layer base {
+  /* The app has one colour scheme: high contrast. Text sits at full
+     black-on-white / white-on-black; everything structural is deliberately
+     quieter, so the contrast is spent on content rather than on chrome.
+
+     Two rules keep it from becoming a grid of bright rules:
+     - `--border` is a dim grey, not the foreground. Separation between
+       regions is carried by `--card` / `--muted` surfaces first, and by a
+       line only where a surface change can't do the job.
+     - `--card` is a step off `--background` rather than the same value, so a
+       card (a flashcard above all) reads as a raised surface with no outline. */
   :root {
-    --shadow-card: 0 1px 4px 0 rgba(0,0,0,0.08), 0 2px 12px 0 rgba(0,0,0,0.06);
-    --background: 220 15% 95%;
-    --foreground: 0 0% 7%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 7%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 7%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 10%;
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 40%;
-    --accent: 0 0% 94%;
-    --accent-foreground: 0 0% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 0 0% 9%;
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --shadow-card: 0 2px 8px 0 rgba(0,0,0,0.55), 0 1px 3px 0 rgba(0,0,0,0.35);
-    --background: 220 15% 6%;
-    --foreground: 0 0% 95%;
-    --card: 220 15% 12%;
-    --card-foreground: 0 0% 95%;
-    --popover: 220 15% 8%;
-    --popover-foreground: 0 0% 95%;
-    --primary: 0 0% 91%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14%;
-    --secondary-foreground: 0 0% 95%;
-    --muted: 0 0% 14%;
-    --muted-foreground: 0 0% 65%;
-    --accent: 0 0% 14%;
-    --accent-foreground: 0 0% 95%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 18%;
-    --input: 0 0% 18%;
-    --ring: 0 0% 91%;
-  }
-
-  /* Colourful theme: vibrant violet primary + teal accent */
-  [data-color-theme="colourful"] {
-    --background: 240 60% 98%;
-    --foreground: 240 10% 12%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 12%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 12%;
-    --primary: 262 83% 58%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 199 89% 92%;
-    --secondary-foreground: 240 10% 15%;
-    --muted: 240 20% 94%;
-    --muted-foreground: 240 10% 45%;
-    --accent: 162 73% 46%;
-    --accent-foreground: 0 0% 100%;
-    --border: 240 20% 88%;
-    --input: 240 20% 88%;
-    --ring: 262 83% 58%;
-  }
-
-  [data-color-theme="colourful"].dark {
-    --background: 250 35% 9%;
-    --foreground: 240 30% 96%;
-    --card: 250 30% 14%;
-    --card-foreground: 240 30% 96%;
-    --popover: 250 30% 12%;
-    --popover-foreground: 240 30% 96%;
-    --primary: 263 85% 66%;
-    --primary-foreground: 250 35% 9%;
-    --secondary: 250 25% 20%;
-    --secondary-foreground: 240 30% 96%;
-    --muted: 250 25% 18%;
-    --muted-foreground: 240 15% 65%;
-    --accent: 162 70% 50%;
-    --accent-foreground: 250 35% 9%;
-    --border: 250 25% 22%;
-    --input: 250 25% 22%;
-    --ring: 263 85% 66%;
-  }
-
-  /* Colourful variant overrides — only primary/accent/ring change; backgrounds inherit from base */
-  [data-color-theme="colourful"][data-colourful-variant="blue-orange"] {
-    --primary: 217 91% 60%;
-    --primary-foreground: 0 0% 100%;
-    --accent: 25 95% 53%;
-    --accent-foreground: 0 0% 100%;
-    --ring: 217 91% 60%;
-  }
-  [data-color-theme="colourful"][data-colourful-variant="blue-orange"].dark {
-    --primary: 213 94% 68%;
-    --primary-foreground: 215 35% 9%;
-    --accent: 25 95% 61%;
-    --accent-foreground: 215 35% 9%;
-    --ring: 213 94% 68%;
-  }
-
-  [data-color-theme="colourful"][data-colourful-variant="rose-amber"] {
-    --primary: 347 77% 50%;
-    --primary-foreground: 0 0% 100%;
-    --accent: 43 96% 51%;
-    --accent-foreground: 0 0% 10%;
-    --ring: 347 77% 50%;
-  }
-  [data-color-theme="colourful"][data-colourful-variant="rose-amber"].dark {
-    --primary: 350 96% 72%;
-    --primary-foreground: 350 30% 10%;
-    --accent: 43 96% 56%;
-    --accent-foreground: 43 30% 10%;
-    --ring: 350 96% 72%;
-  }
-
-  [data-color-theme="colourful"][data-colourful-variant="emerald-pink"] {
-    --primary: 160 84% 39%;
-    --primary-foreground: 0 0% 100%;
-    --accent: 330 82% 60%;
-    --accent-foreground: 0 0% 100%;
-    --ring: 160 84% 39%;
-  }
-  [data-color-theme="colourful"][data-colourful-variant="emerald-pink"].dark {
-    --primary: 158 64% 52%;
-    --primary-foreground: 160 35% 9%;
-    --accent: 330 86% 70%;
-    --accent-foreground: 330 35% 9%;
-    --ring: 158 64% 52%;
-  }
-
-  [data-color-theme="colourful"][data-colourful-variant="sky-indigo"] {
-    --primary: 199 89% 48%;
-    --primary-foreground: 0 0% 100%;
-    --accent: 239 84% 67%;
-    --accent-foreground: 0 0% 100%;
-    --ring: 199 89% 48%;
-  }
-  [data-color-theme="colourful"][data-colourful-variant="sky-indigo"].dark {
-    --primary: 199 92% 60%;
-    --primary-foreground: 200 35% 9%;
-    --accent: 239 90% 74%;
-    --accent-foreground: 239 35% 9%;
-    --ring: 199 92% 60%;
-  }
-
-  /* High Contrast theme: pure black/white for max readability */
-  [data-color-theme="high-contrast"] {
-    --background: 0 0% 100%;
+    --shadow-card: 0 1px 3px 0 rgba(0,0,0,0.10), 0 2px 10px 0 rgba(0,0,0,0.06);
+    --background: 0 0% 95%;
     --foreground: 0 0% 0%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 0%;
@@ -164,36 +25,40 @@
     --popover-foreground: 0 0% 0%;
     --primary: 0 0% 0%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 92%;
+    --secondary: 0 0% 91%;
     --secondary-foreground: 0 0% 0%;
-    --muted: 0 0% 92%;
-    --muted-foreground: 0 0% 20%;
-    --accent: 0 0% 85%;
+    --muted: 0 0% 91%;
+    --muted-foreground: 0 0% 26%;
+    --accent: 0 0% 87%;
     --accent-foreground: 0 0% 0%;
-    --destructive: 0 100% 40%;
-    --border: 0 0% 0%;
-    --input: 0 0% 0%;
+    --destructive: 0 100% 38%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 78%;
+    --input: 0 0% 55%;
     --ring: 0 0% 0%;
+    --radius: 0.5rem;
   }
 
-  [data-color-theme="high-contrast"].dark {
+  .dark {
+    --shadow-card: 0 2px 8px 0 rgba(0,0,0,0.6), 0 1px 3px 0 rgba(0,0,0,0.4);
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
-    --card: 0 0% 0%;
+    --card: 0 0% 9%;
     --card-foreground: 0 0% 100%;
-    --popover: 0 0% 0%;
+    --popover: 0 0% 7%;
     --popover-foreground: 0 0% 100%;
     --primary: 0 0% 100%;
     --primary-foreground: 0 0% 0%;
-    --secondary: 0 0% 12%;
+    --secondary: 0 0% 14%;
     --secondary-foreground: 0 0% 100%;
-    --muted: 0 0% 12%;
-    --muted-foreground: 0 0% 85%;
-    --accent: 0 0% 15%;
+    --muted: 0 0% 14%;
+    --muted-foreground: 0 0% 78%;
+    --accent: 0 0% 20%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 100% 65%;
-    --border: 0 0% 100%;
-    --input: 0 0% 100%;
+    --destructive: 0 100% 68%;
+    --destructive-foreground: 0 0% 0%;
+    --border: 0 0% 26%;
+    --input: 0 0% 42%;
     --ring: 0 0% 100%;
   }
 }

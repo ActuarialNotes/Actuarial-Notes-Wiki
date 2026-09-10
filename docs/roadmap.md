@@ -325,7 +325,7 @@ down alongside Phase 2, beginning with the file the next feature touches._
   overdue given how much recent work compounded there. The E2E collect/quiz specs are the
   regression net.
 - ⬜ **P3.2 — Design-system consolidation.** Codify `components/ui/` primitives and shared
-  tokens (colors already in `lib/colorThemes.ts` / `examColors.ts`); document a11y-checked
+  tokens (colours already in `index.css` / `examColors.ts`); document a11y-checked
   patterns so new gamification surfaces are consistent and accessible.
 - 🟡 **P3.3 — Performance budget.** Route-level lazy loading exists (6 lazy routes in
   `App.tsx`). **Remaining:** track bundle size in CI, extend lazy-loading to

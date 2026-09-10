@@ -63,23 +63,28 @@ text, or border colour** — use the token utilities.
 is the intended hierarchy: **foreground for the thing, muted-foreground for everything that
 supports it.** If new text isn't the primary content of its block, it's almost certainly muted.
 
-### 2.2 Themes
+### 2.2 The one colour scheme
 
-The app ships four colour themes × light/dark, all driven by swapping the same variables via
-`data-color-theme` / `.dark` on the root (managed by `useTheme`, catalogue in
-`lib/colorThemes.ts`):
+The app has **one** colour scheme — high contrast — in light and dark. There is no theme
+picker and no `data-color-theme` attribute: the tokens live on `:root` and `.dark` in
+`index.css`, and `useTheme` toggles nothing but that `.dark` class. (The old *Minimal* and
+*Colourful* themes, their five sub-variants and `lib/colorThemes.ts` are gone.)
 
-- **default** — grayscale; near-black primary in light, near-white in dark. The reference look.
-- **colourful** — violet primary + teal accent, with four sub-variants
-  (`blue-orange`, `rose-amber`, `emerald-pink`, `sky-indigo`) that override only
-  `--primary`/`--accent`/`--ring` and inherit the colourful backgrounds.
-- **high-contrast** — pure black/white with black/white borders for maximum legibility (a11y).
+Text runs at the extremes — pure black on near-white, pure white on pure black — but the
+chrome deliberately does **not**. Two rules keep the scheme from turning into a grid of
+bright rules, and new UI has to hold them:
 
-**Implication for new UI:** because `--primary` can be near-black, violet, blue, emerald, …,
-never assume primary is dark or that it contrasts with a specific background. Always pair
-`bg-primary` with `text-primary-foreground`, and don't put `text-primary` on a coloured fill.
-The background canvas is a *cool* gray (`220 15%`), not pure white — use `bg-background` /
-`bg-card`, never `bg-white`.
+- **`--border` is a dim grey, never the foreground** (26% in dark, 78% in light). Reach for a
+  line only when a surface change can't do the separating. A hairline is the fallback, not
+  the default.
+- **`--card` is a step off `--background`, not the same value** (9% on black; white on a 95%
+  ground). A card — a flashcard above all — reads as a raised surface on its own, so it
+  needs no outline. Don't add `border` to something that already has `bg-card`.
+
+**Implication for new UI:** `--primary` is the foreground colour, so `bg-primary` is a solid
+white (dark) or black (light) fill. Always pair it with `text-primary-foreground`, and never
+put `text-primary` on a primary fill. Use `bg-background` / `bg-card`, never `bg-white` or
+`bg-black` — the two swap with the mode.
 
 ### 2.3 Focus & selection
 
@@ -320,8 +325,7 @@ coherent.
 - One hairline token: `border` + `border-border`. Dividers use `<Separator />` or
   `border-t border-border`. Form fields use `border-input`.
 - Borders and shadows are alternatives, not partners — a card gets the card shadow; a flat
-  inset region gets a border. Avoid heavy `border-2` except the high-contrast theme and
-  focus/active rings.
+  inset region gets a border. Avoid heavy `border-2` except for focus/active rings.
 
 ### 6.3 Elevation (shadows)
 
@@ -557,7 +561,7 @@ Motion is defined as named keyframes in `index.css` and triggered by adding a cl
 ## 11. Accessibility Baseline
 
 - **Contrast:** the semantic shade pairings in §4.2 are chosen for contrast in both modes; the
-  high-contrast theme exists for users who need more — don't defeat it with hard-coded colours.
+  scheme is high-contrast by construction — don't defeat it with hard-coded colours.
 - **Focus:** keep the standard `focus-visible` ring on every interactive element.
 - **Keyboard:** all actions reachable and operable by keyboard; dialogs trap and restore focus;
   `Esc` closes overlays. There's a `KeyboardShortcutsHelp` surface — register new shortcuts
@@ -584,5 +588,6 @@ Before shipping a screen or component, confirm:
 - [ ] An overlay that more than one surface can open is wrapped in `OverlayPortal` (§8.3).
 - [ ] Any animation is purposeful and has a reduced-motion fallback.
 - [ ] Icons are lucide, sized 4/5, coloured via `currentColor`, labelled where interactive.
-- [ ] Works in light **and** dark, and doesn't break the colourful / high-contrast themes.
+- [ ] Works in light **and** dark, and separates by surface (`bg-card`/`bg-muted`) before
+      reaching for a `border`.
 - [ ] `npm run build` (strict TS) and `npm run lint` pass — no unused imports.

@@ -127,7 +127,9 @@ function formatDate(iso: string | null): string {
 // Rendering
 // ---------------------------------------------------------------------------
 
-// Brand palette (matches the app's "colourful" theme: violet primary + accents).
+// Print palette. Deliberately independent of the app's on-screen scheme: an
+// exported PDF is read on paper, where the app's black-on-black / white-on-white
+// high contrast has nothing to sit against.
 const VIOLET: [number, number, number] = [124, 58, 237]
 const VIOLET_SOFT: [number, number, number] = [237, 233, 254]
 const INK: [number, number, number] = [24, 24, 27]

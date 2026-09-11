@@ -24,7 +24,6 @@ import { EmailSettingsCard } from '@/components/EmailSettingsCard'
 import { DAILY_PLAN_EMAIL_ENABLED, LEAGUES_ENABLED, TOUR_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { CharacterSkinSelector } from '@/components/MascotWidget'
-import { COLOR_THEMES } from '@/lib/colorThemes'
 import { supabase } from '@/lib/supabase'
 import { useTheme } from '@/hooks/useTheme'
 import { RESETTABLE_EXAMS, EXAM_ID_TO_LABEL } from '@/lib/examIds'
@@ -269,7 +268,7 @@ const ACCOUNT_NAV_ITEMS = [
 export default function Settings() {
   const navigate = useNavigate()
   const { user, loading: authLoading } = useAuth()
-  const { theme, toggleTheme, colorTheme, setColorTheme, colourfulVariant, setColourfulVariant } = useTheme()
+  const { theme, toggleTheme } = useTheme()
   const { isPremium, isBetaTester, currentPeriodEnd, loading: subLoading } = useSubscription()
   const { sessions } = useProgress()
   const {
@@ -901,131 +900,34 @@ export default function Settings() {
                 <CardHeader>
                   <CardTitle>Appearance</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <p className="text-sm font-medium mb-2">Mode</p>
-                    <div className="flex gap-2">
-                      <button
-                        type="button"
-                        onClick={() => theme !== 'light' && toggleTheme()}
-                        className={cn(
-                          'flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors',
-                          theme === 'light'
-                            ? 'bg-primary text-primary-foreground'
-                            : 'bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                        )}
-                      >
-                        <Sun className="h-4 w-4" />
-                        Light
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => theme !== 'dark' && toggleTheme()}
-                        className={cn(
-                          'flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors',
-                          theme === 'dark'
-                            ? 'bg-primary text-primary-foreground'
-                            : 'bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                        )}
-                      >
-                        <Moon className="h-4 w-4" />
-                        Dark
-                      </button>
-                    </div>
-                  </div>
-
-                  <div>
-                    <p className="text-sm font-medium mb-2">Theme</p>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                      {COLOR_THEMES.map(option => {
-                        const swatch = theme === 'dark' ? option.preview.dark : option.preview.light
-                        const selected = colorTheme === option.id
-
-                        if (option.id === 'colourful') {
-                          return (
-                            <div
-                              key={option.id}
-                              role="button"
-                              tabIndex={0}
-                              onClick={() => setColorTheme(option.id)}
-                              onKeyDown={e => e.key === 'Enter' && setColorTheme(option.id)}
-                              className={cn(
-                                'flex flex-col gap-2 p-3 rounded-md text-left transition-colors cursor-pointer',
-                                selected
-                                  ? 'ring-2 ring-primary'
-                                  : 'bg-muted/40 hover:bg-accent hover:text-accent-foreground'
-                              )}
-                            >
-                              <p className="text-sm font-medium">{option.name}</p>
-                              <div className="flex gap-1.5 flex-wrap">
-                                {option.variants!.map(v => {
-                                  const vPrimary = theme === 'dark' ? v.dark.primary : v.light.primary
-                                  const vAccent = theme === 'dark' ? v.dark.accent : v.light.accent
-                                  const vSelected = selected && colourfulVariant === v.id
-                                  return (
-                                    <button
-                                      key={v.id}
-                                      type="button"
-                                      aria-label={v.id}
-                                      onClick={e => {
-                                        e.stopPropagation()
-                                        setColorTheme('colourful')
-                                        setColourfulVariant(v.id)
-                                      }}
-                                      className={cn(
-                                        'flex gap-1 p-0.5 rounded transition-colors',
-                                        vSelected
-                                          ? 'ring-1 ring-primary'
-                                          : 'hover:bg-accent'
-                                      )}
-                                    >
-                                      <span
-                                        className="h-4 w-4 rounded-full border border-border/50"
-                                        style={{ backgroundColor: vPrimary }}
-                                      />
-                                      <span
-                                        className="h-4 w-4 rounded-full border border-border/50"
-                                        style={{ backgroundColor: vAccent }}
-                                      />
-                                    </button>
-                                  )
-                                })}
-                              </div>
-                            </div>
-                          )
-                        }
-
-                        return (
-                          <button
-                            key={option.id}
-                            type="button"
-                            onClick={() => setColorTheme(option.id)}
-                            className={cn(
-                              'flex flex-col gap-2 p-3 rounded-md text-left transition-colors',
-                              selected
-                                ? 'ring-2 ring-primary'
-                                : 'bg-muted/40 hover:bg-accent hover:text-accent-foreground'
-                            )}
-                          >
-                            <div className="flex gap-1.5">
-                              <span
-                                className="h-5 w-5 rounded-full border border-border/50"
-                                style={{ backgroundColor: swatch.background }}
-                              />
-                              <span
-                                className="h-5 w-5 rounded-full border border-border/50"
-                                style={{ backgroundColor: swatch.primary }}
-                              />
-                              <span
-                                className="h-5 w-5 rounded-full border border-border/50"
-                                style={{ backgroundColor: swatch.accent }}
-                              />
-                            </div>
-                            <p className="text-sm font-medium">{option.name}</p>
-                          </button>
-                        )
-                      })}
-                    </div>
+                <CardContent>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => theme !== 'light' && toggleTheme()}
+                      className={cn(
+                        'flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors',
+                        theme === 'light'
+                          ? 'bg-primary text-primary-foreground'
+                          : 'bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                      )}
+                    >
+                      <Sun className="h-4 w-4" />
+                      Light
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => theme !== 'dark' && toggleTheme()}
+                      className={cn(
+                        'flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors',
+                        theme === 'dark'
+                          ? 'bg-primary text-primary-foreground'
+                          : 'bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                      )}
+                    >
+                      <Moon className="h-4 w-4" />
+                      Dark
+                    </button>
                   </div>
                 </CardContent>
               </Card>

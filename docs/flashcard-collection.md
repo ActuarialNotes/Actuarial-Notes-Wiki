@@ -8,9 +8,11 @@ Level 1 (see [Concept Learning Progression](concept-learning-progression.md)).
 
 1. Collecting **withholds nothing**. Every surface offers its full set of
    actions on an uncollected concept — the concept popup's action menu (Start
-   Quiz, Open in Study Guide, Add to Flashcards, Math View, Listen, Learning
-   Progress), the same menu in a flashcard's corner, and the per-concept
-   question browser's **Start Quiz**. What collecting buys is the *level-up*:
+   Quiz, Open in Study Guide, Add to Flashcards, Collect Flashcard, Learning
+   Progress, Fact Check), the same menu in a flashcard's corner, and the
+   per-concept question browser's **Start Quiz**. It is literally the same
+   menu: `components/ConceptActionMenu.tsx` is what both surfaces open, so a
+   row added on one appears on the other. What collecting buys is the *level-up*:
    mastery cannot move off New until the card is collected (see
    [Mastery gate](#mastery-gate) below). The lock icons that used to stand in
    front of those controls are gone; a reader who has not met a concept yet is
@@ -20,9 +22,10 @@ Level 1 (see [Concept Learning Progression](concept-learning-progression.md)).
      menu the title opens), shown only while the concept is uncollected. It used
      to be a mastery pill beside the name; the level now reads on that menu's
      **Learning Progress** row instead, so the check needed a row of its own.
-   - **Flashcard** (`pages/Flashcards.tsx`) — a **Collect Card** item at the
-     bottom of the corner actions menu, shown only while the card is
-     uncollected.
+   - **Flashcard** (`pages/Flashcards.tsx`) — the same **Collect Flashcard**
+     row, on the same menu, shown only while the card is uncollected. The two
+     rows a card adds for itself — **Study** at the top and **Remove** at the
+     bottom — are all that differ from the popup's menu.
    - **Search / today's plan rows** (`WikiFloatingSearch`) — a small **Collect**
      pill beside the concept name, hidden once it is collected.
    - The **pre-quiz gate**, the **post-quiz gate** and the flashcard study loop,

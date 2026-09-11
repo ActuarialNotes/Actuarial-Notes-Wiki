@@ -14,7 +14,9 @@ import {
 import { useSplitHeight } from '@/hooks/useSplitHeight'
 import { useSoundEffects, useSoundOnMount } from '@/hooks/useSoundEffects'
 import { usePdfDocument } from '@/hooks/usePdfDocument'
+import { usePdfChapters } from '@/hooks/usePdfChapters'
 import { NavProgressBar } from '@/components/NavProgressBar'
+import { chapterAt } from '@/lib/pdfChapters'
 import { pdfDownloadUrl, pdfProxyUrl, pdfSourceHost } from '@/lib/examPdf'
 import {
   anchoredScroll,
@@ -104,6 +106,14 @@ export function PdfViewerPanel({ url, title, subtitle, hostFullScreen = false, o
 
   const proxied = useMemo(() => pdfProxyUrl(url), [url])
   const { doc, pageCount, status, error } = usePdfDocument(proxied)
+  // The document's own bookmarks, which cut the page bar into chapters. Empty
+  // for anything that carries none — most of the scanned papers — and the bar
+  // is then the plain strip it has always been.
+  const chapters = usePdfChapters(doc)
+  const chapterMarks = useMemo(
+    () => chapters.map(chapter => ({ start: chapter.startPage, label: chapter.title })),
+    [chapters],
+  )
 
   // Two page numbers, for the same reason there are three zooms below: `page`
   // is where the reader is, live under their finger on the scrubber, and
@@ -588,6 +598,10 @@ export function PdfViewerPanel({ url, title, subtitle, hostFullScreen = false, o
   }
 
   const position = pageCount > 0 ? `${clampPage(page, pageCount)} of ${pageCount}` : ''
+  // Which chapter the page being read belongs to. The bar shows this under a
+  // finger; the footer shows it while you read, which is the half of "where am
+  // I" a page number can't answer.
+  const currentChapter = chapterAt(chapters, clampPage(page, pageCount))?.title ?? ''
   // How far the drawn page has to be stretched to stand in for the zoom the
   // reader has asked for. 1 whenever the two agree, which is most of the time.
   const previewScale = sizedZoom > 0 ? zoom / sizedZoom : 1
@@ -749,7 +763,13 @@ export function PdfViewerPanel({ url, title, subtitle, hostFullScreen = false, o
           much is left, and Previous / Next is 422 presses from one end to the
           other. Drag the bar and the page follows, the same gesture as a video
           timeline; the bubble names the page you'd land on, because a fraction
-          of a 423-page report isn't a page number. */}
+          of a 423-page report isn't a page number.
+
+          Where the document carries bookmarks, the bar is cut into them the way
+          a video's timeline is cut into chapters: the segments show how the
+          paper is laid out — that question 14 starts here and runs four pages —
+          and the bubble names the one you're aiming at, so finding a question
+          is a glance and a press rather than a hunt. */}
       {status === 'ready' && pageCount > 0 && (
         <NavProgressBar
           current={clampPage(page, pageCount)}
@@ -758,6 +778,7 @@ export function PdfViewerPanel({ url, title, subtitle, hostFullScreen = false, o
           label={`Page ${clampPage(page, pageCount)} of ${pageCount}`}
           onScrub={next => setPage(clampPage(next, pageCount))}
           formatValue={n => `Page ${n} of ${pageCount}`}
+          segments={chapterMarks}
         />
       )}
 
@@ -777,6 +798,14 @@ export function PdfViewerPanel({ url, title, subtitle, hostFullScreen = false, o
         </button>
 
         <div className="self-center flex shrink-0 flex-col items-center px-2">
+          {/* The section you're in, when the document says what its sections
+              are. A page number on its own is a coordinate; this is the part
+              that tells you whether you're where you meant to be. */}
+          {currentChapter && (
+            <span className="max-w-[7.5rem] sm:max-w-[14rem] truncate text-xs font-medium">
+              {currentChapter}
+            </span>
+          )}
           <span className="text-sm sm:text-xs text-muted-foreground tabular-nums">
             {position || '—'}
           </span>

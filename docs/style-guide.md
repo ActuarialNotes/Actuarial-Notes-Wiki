@@ -433,6 +433,25 @@ keyboard — a video timeline, with the position maths in `lib/navScrub.ts`. The
   wait — `PdfViewerPanel` renders the page 60ms behind the one being scrubbed to, the same
   shape as its zoom / renderZoom split.
 
+**Chapters.** Given `segments` — the positions where the sequence's named stretches begin —
+the bar is cut into them the way a video's timeline is: one piece of track per stretch, a
+2px gap between, and the stretch's name above the position in the bubble. The exam-PDF
+reader passes the document's own bookmarks (`lib/pdfChapters.ts`), which is what turns a
+72-page examiner's report into a visible list of its questions. The rules:
+
+- **Only a real structure gets segments.** The marks come from the source — a PDF's
+  outline, a paper's questions — never from cutting the sequence into even pieces to make
+  the bar look busy. A document with no bookmarks has no chapters and keeps the plain bar;
+  invented ones would read as the paper's real shape.
+- **The maths is `navSegments`** in `lib/navScrub.ts`: it sorts, clamps and de-duplicates
+  whatever the source gave, makes the run before the first mark an unnamed stretch of its
+  own, and returns `[]` — a plain bar — when the marks say nothing (one stretch covering
+  everything) or so many that the bar would be a hatched strip (`MAX_NAV_SEGMENTS`).
+- **The fill still reads straight across.** Each stretch fills by how far into it the
+  position is, which lands the fill's edge exactly where an unsegmented bar would put it.
+- **The chapter is part of the position**, so it goes in `aria-valuetext` too ("Page 212 of
+  423, Question 14") rather than being a purely visual cue.
+
 ### 7.6 Empty, loading & error states
 
 - **Loading:** `Loader2` spinner with `animate-spin`, `h-4 w-4`, beside muted text

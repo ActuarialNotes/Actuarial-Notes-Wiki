@@ -52,6 +52,44 @@ describe('NavProgressBar rendering', () => {
     expect(html).toContain('aria-valuenow="10"')
   })
 
+  it('cuts the track into the chapters it is given', () => {
+    const html = renderToStaticMarkup(
+      <NavProgressBar
+        current={4}
+        total={12}
+        onScrub={noop}
+        segments={[{ start: 1, label: 'Question 1' }, { start: 7, label: 'Question 2' }]}
+      />,
+    )
+    // Two pieces of track, sized by how many pages each chapter runs for.
+    expect(html).toContain('flex-grow:6')
+    // The chapter you're in reaches a screen reader with the page.
+    expect(html).toContain('aria-valuetext="4 of 12, Question 1"')
+  })
+
+  it('fills each chapter by how far into it the position is', () => {
+    const html = renderToStaticMarkup(
+      <NavProgressBar
+        current={9}
+        total={12}
+        onScrub={noop}
+        segments={[{ start: 1, label: 'Question 1' }, { start: 7, label: 'Question 2' }]}
+      />,
+    )
+    // Chapter 1 is behind you and full; chapter 2 is three pages into its six.
+    expect(html).toContain('width:100%')
+    expect(html).toContain('width:50%')
+  })
+
+  it('stays a plain bar when the chapters say nothing', () => {
+    // A document whose only bookmark is its first page has no structure to show.
+    const html = renderToStaticMarkup(
+      <NavProgressBar current={2} total={9} onScrub={noop} segments={[{ start: 1, label: 'All of it' }]} />,
+    )
+    expect(html).not.toContain('flex-grow')
+    expect(html).toContain('aria-valuetext="2 of 9"')
+  })
+
   it('stays silent under the delegated sound listener', () => {
     // Scrubbing is a drag, and a drag that made a cue per step would machine-gun.
     const html = renderToStaticMarkup(<NavProgressBar current={2} total={9} onScrub={noop} />)

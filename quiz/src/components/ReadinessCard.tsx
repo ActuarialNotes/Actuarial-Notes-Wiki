@@ -505,12 +505,16 @@ export function ReadinessCard({
   // The one readiness score (docs/exam-readiness.md): syllabus coverage plus
   // keystone mastery. Computed once here and read by both halves of the card
   // below — the ring draws `overallPct`, the rows beside it draw the criteria
-  // it is made of — so the two can never quote different numbers. Without a
-  // subscription there is no mastery to score, which is what the empty record
-  // list says.
+  // it is made of — so the two can never quote different numbers.
+  //
+  // Scored from real mastery on every tier. Mastery is recorded for every
+  // account — the daily study *plan* is what Premium buys, not the record of
+  // what has been learned — so scoring a free account against an empty record
+  // list reported 0% readiness to someone who had just levelled concepts up,
+  // which reads as a broken app rather than as a locked feature.
   const readiness = useMemo(
-    () => computeExamReadiness(syllabus, isPremium ? examRecords : [], now),
-    [syllabus, examRecords, now, isPremium],
+    () => computeExamReadiness(syllabus, examRecords, now),
+    [syllabus, examRecords, now],
   )
 
   const allConcepts = useMemo(
@@ -718,6 +722,19 @@ export function ReadinessCard({
     if (isLaunchingQuizRef.current) return
     isLaunchingQuizRef.current = true
 
+    const topicValue = questionExamLabel(syllabus)
+
+    // No daily plan to sweep through — a free account, or a premium one that
+    // hasn't set a target date. The cascade is an animation *of the plan*, and
+    // `autostart` needs one, so both would be a second of nothing before the
+    // quiz builder appeared anyway. Go straight there, with the exam already
+    // chosen.
+    if (cascadeSteps.length === 0) {
+      isLaunchingQuizRef.current = false
+      navigate(`/?topic=${encodeURIComponent(topicValue)}&mode=quiz`)
+      return
+    }
+
     // Scroll the study plan into view first, then sweep a highlight through each
     // concept individually while the card border is traced in the primary colour —
     // together they tell the user exactly what today's session is about to cover.
@@ -742,7 +759,6 @@ export function ReadinessCard({
       setQuizStartConcept(null)
       setTracePlanBorder(false)
       isLaunchingQuizRef.current = false
-      const topicValue = questionExamLabel(syllabus)
       // autostart=1 tells Landing to jump straight into a quiz sized to complete
       // today's plan (fewest questions covering every still-incomplete concept).
       navigate(`/?topic=${encodeURIComponent(topicValue)}&mode=quiz&autostart=1`)
@@ -822,11 +838,11 @@ export function ReadinessCard({
             <div className="w-full max-w-[280px] shrink-0 sm:w-[250px]">
               <StudyGuideRadial
                 syllabus={syllabus}
-                examRecords={isPremium ? examRecords : []}
+                examRecords={examRecords}
                 now={now}
                 overallPct={readiness.overallPct}
                 totalCount={readiness.counts.total}
-                selectedConcept={isPremium && popupFromRadial ? popupCurrentName : null}
+                selectedConcept={popupFromRadial ? popupCurrentName : null}
                 flashRadial={flashRadial}
                 onConceptClick={name => {
                   const idx = allConcepts.findIndex(c => c.name.toLowerCase() === name.toLowerCase())

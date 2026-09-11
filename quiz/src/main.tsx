@@ -18,7 +18,15 @@ initErrorMonitoring()
 
 async function bootstrap() {
   // Detect email confirmation before getSession() strips the hash.
-  if (window.location.hash.includes('type=signup')) {
+  //
+  // Both flows have to be checked. The implicit flow puts `type=signup` in the
+  // hash; the PKCE flow (what `Auth.tsx` asks for, via `emailRedirectTo`) sends
+  // the user to `/auth/callback?code=…&type=signup`, with nothing in the hash
+  // at all — so checking only the hash meant a confirmed-by-email signup, the
+  // normal path, never got the welcome modal.
+  const hash = window.location.hash
+  const query = new URLSearchParams(window.location.search)
+  if (hash.includes('type=signup') || query.get('type') === 'signup') {
     sessionStorage.setItem('show_welcome', '1')
   }
 

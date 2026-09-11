@@ -54,8 +54,14 @@ export interface Segment {
 
 export const TRACKS: Track[] = [
   {
+    // The track a new account starts on. It isn't a credential path — it's
+    // every exam this app has material for, so someone who hasn't decided
+    // between ASA and ACAS (or doesn't yet know which track their exam sits
+    // on) can still find the exam they're sitting. Keep it in step with the
+    // syllabus pages in the vault: an exam listed here with no `Exam *.md`
+    // page shows as "Not covered yet" in the exams panel.
     key: 'DEFAULT',
-    name: 'Choose a Track',
+    name: 'All exams we cover',
     label: 'Track',
     fullName: null,
     conceptPage: null,
@@ -66,6 +72,14 @@ export const TRACKS: Track[] = [
         items: [
           { id: 'P',  name: 'Exam P-1',  color: 'blue' },
           { id: 'FM', name: 'Exam FM-2', color: 'indigo' },
+        ],
+      },
+      {
+        label: 'CAS Upper-Level Exams',
+        items: [
+          { id: 'MAS-I',  name: 'Exam MAS-I',  color: 'violet' },
+          { id: 'MAS-II', name: 'Exam MAS-II', color: 'violet' },
+          { id: 'CAS-5',  name: 'Exam 5',      color: 'pink' },
         ],
       },
     ],
@@ -385,3 +399,22 @@ export function getTrackCounts(
     total: segments.length,
   }
 }
+
+/**
+ * Display name for an exam id, across every credential track.
+ *
+ * `EXAM_ID_TO_LABEL` in lib/examIds only covers the exams with a question bank
+ * (and names them by their *bank* label — "Probability", not "Exam P-1"), so
+ * anything that has to name an arbitrary tracked exam reads it from here.
+ */
+export const EXAM_ID_TO_TRACK_NAME: Record<string, string> = (() => {
+  const names: Record<string, string> = {}
+  for (const track of TRACKS) {
+    for (const section of track.sections) {
+      for (const item of section.items) {
+        if (!names[item.id]) names[item.id] = item.name
+      }
+    }
+  }
+  return names
+})()

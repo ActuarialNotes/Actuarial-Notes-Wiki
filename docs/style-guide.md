@@ -451,6 +451,25 @@ reader passes the document's own bookmarks (`lib/pdfChapters.ts`), which is what
   position is, which lands the fill's edge exactly where an unsegmented bar would put it.
 - **The chapter is part of the position**, so it goes in `aria-valuetext` too ("Page 212 of
   423, Question 14") rather than being a purely visual cue.
+- **`keyStep="segment"`** makes the keys move chapter to chapter instead of item to item,
+  for a bar whose single item is too fine to be worth reaching (the syllabus bar, where a
+  position is a thousandth of an exam). Back from inside a chapter goes to the top of *that*
+  chapter first, like a transport control, so a press can't skip what you were reading.
+- **A bar whose position has no reading of its own** returns `''` from `formatValue`; the
+  bubble then shows the chapter alone rather than a meaningless number.
+
+**The study guide's chapter bar** (`components/wiki/SyllabusChapterBar.tsx`,
+`lib/syllabusChapters.ts`) is the same bar along the bottom edge of the wiki's sticky
+header, with an exam page's **main learning objectives** as its chapters. Two things about
+it are deliberate:
+
+- **Segments are sized by exam weight, not by page extent.** The objective callouts collapse
+  to identical 48px strips, so how much page each takes up says nothing; its share of the
+  exam says what the syllabus is made of — and it is the idiom those callouts already use,
+  filling their own row to their weight. The weights are read off the page (`{23-30%}`) and
+  never invented: a syllabus with none gets even segments.
+- **Scroll maps into the current objective's span**, so the fill moves as you read rather
+  than jumping at each boundary, and a press or drag maps back out to a scroll offset.
 
 ### 7.6 Empty, loading & error states
 

@@ -1,43 +1,24 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BookOpen, CheckCheck, Headphones, Loader2, Lock, Play, Sigma, TrendingUp, X } from 'lucide-react'
-import { fetchWikiFile, fetchAllQuestions } from '@/lib/github'
-import { entryRefToRepoPath, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
-import { parseAllQuestions, filterQuestions } from '@/lib/parser'
-import { useFlashcards } from '@/hooks/useFlashcards'
-import { useCollect } from '@/hooks/useCollect'
-import { showAddedToDeck } from '@/hooks/useToast'
-import { useCollectedCards } from '@/hooks/useCollectedCards'
-import { useConceptPopup } from '@/hooks/useConceptPopup'
+import { Headphones, Loader2, X } from 'lucide-react'
+import { fetchWikiFile } from '@/lib/github'
+import { entryRefToRepoPath, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { recallPageScroll, rememberPageScroll } from '@/lib/pageScrollMemory'
-import { WikiArticle, extractImages, extractMathBlockquotes } from '@/components/wiki/WikiArticle'
+import { WikiArticle, extractImages } from '@/components/wiki/WikiArticle'
 import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
 import { isNumberedOutline, OUTLINE_ARTICLE_CLASS, parseResourceMeta, preprocessResourceMarkdown } from '@/lib/resourceMeta'
 import { ListenView } from '@/components/wiki/ListenView'
 import { ImageGalleryModal } from '@/components/wiki/ImageGalleryModal'
 import { ConceptImageBanner } from '@/components/wiki/ConceptImageBanner'
-import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
-import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
-import { AddToProjectMenuItem } from '@/components/wiki/AddToProjectMenuItem'
-import { FACT_CHECK_UI_ENABLED, RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
-import { useAuth } from '@/hooks/useAuth'
-import { useSoundEffects } from '@/hooks/useSoundEffects'
-import { useConceptMastery } from '@/hooks/useConceptMastery'
-import { decayIfStale, type MasteryState } from '@/lib/mastery'
-import { KeystoneSummary } from '@/components/KeystoneName'
-import { buildMasteryLookup } from '@/lib/conceptMatch'
-import { findKeystone, keystoneProgress } from '@/lib/keystone'
-import { MasteryBadge } from '@/components/MasteryBadge'
-import { FactCheckDialog } from '@/components/FactCheckBadge'
-import { FACT_CHECK_TONE_CLASSES } from '@/lib/factCheckTone'
-import { factCheckBadge, parseVerification } from '@/lib/verification'
+import { ConceptActionMenu } from '@/components/ConceptActionMenu'
+import { findKeystone } from '@/lib/keystone'
 
 /**
  * The open page of the concept popup's stack: its header (the title, which is
- * itself the action menu's trigger, plus the ▶ button and Listen) and its body
- * (the article, Math View or Listen view), with the gallery and modals it
- * opens.
+ * the action menu's one trigger, plus Listen) and its body (the article or the
+ * Listen view), with the gallery it opens.
+ *
+ * The actions themselves are `components/ConceptActionMenu.tsx` — the same menu
+ * every flashcard surface opens — so this file is only the page.
  *
  * Mounted per page, keyed by the ref, so opening another page of the stack is a
  * remount rather than a reset of a dozen pieces of state. What a reader would
@@ -88,57 +69,20 @@ export function ConceptPagePanel({
   onGalleryOpenChange,
   onReaderOpenChange,
 }: ConceptPagePanelProps) {
-  const { addCard, hasCard, cards } = useFlashcards()
-  const openCollect = useCollect(s => s.open)
-  const collectedCards = useCollectedCards(s => s.cards)
-  const [conceptQuestionCount, setConceptQuestionCount] = useState<number | null>(null)
-  const location = useLocation()
-  const routerNavigate = useNavigate()
-  const isOnWiki = location.pathname.startsWith('/wiki/')
   const [content, setContent] = useState<string | null>(null)
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
-  const [showQuestionsModal, setShowQuestionsModal] = useState(false)
-  const [showLearningProgress, setShowLearningProgress] = useState(false)
-  const [showFactCheck, setShowFactCheck] = useState(false)
+  // Whether the action menu — the whole of the page's actions, hung off the
+  // title — is open. Everything on it lives in ConceptActionMenu.
   const [showPlayMenu, setShowPlayMenu] = useState(false)
-  const [menuAlignRight, setMenuAlignRight] = useState(false)
-  // Viewport rect of the play button, captured when the menu opens. The menu is
-  // portaled to <body> (out of the fixed aside's stacking context) so it can
-  // layer above the onboarding-tour coach-mark; fixed positioning is anchored
-  // from this rect. The button sits in the panel's non-scrolling header, so the
-  // rect stays valid for the life of the menu.
-  const [menuRect, setMenuRect] = useState<DOMRect | null>(null)
   const [images, setImages] = useState<Array<{ src: string; alt: string; caption: string }>>([])
   const [showGallery, setShowGallery] = useState(false)
   const [galleryIndex, setGalleryIndex] = useState(0)
-  const [mathView, setMathView] = useState(false)
   const [listenView, setListenView] = useState(false)
-  const playMenuRef = useRef<HTMLDivElement>(null)
-  const playBtnRef = useRef<HTMLButtonElement>(null)
   const titleBtnRef = useRef<HTMLButtonElement>(null)
   const bodyRef = useRef<HTMLDivElement>(null)
-  const { user } = useAuth()
-  const { records: masteryRecords } = useConceptMastery()
-  const { play } = useSoundEffects()
-  // The whole popup goes away when this page's "view flashcards" link leaves
-  // the wiki behind — the stack has nothing to sit on there.
-  const closePopup = useConceptPopup(s => s.close)
-
-  const masteryState = useMemo<MasteryState | null>(() => {
-    const lower = entry.name.toLowerCase()
-    const record = masteryRecords.find(r => r.concept_slug.toLowerCase() === lower)
-    if (!record) return null
-    return decayIfStale(record, new Date()).state
-  }, [masteryRecords, entry.name])
-
-  // Keystone roll-up for the exam this concept anchors — the popup already has
-  // every mastery record loaded, so the badge's explainer can show real
-  // progress without a second query. Null for ordinary concepts.
+  // Whether this concept is a keystone — which underline the title wears. The
+  // roll-up it used to open is the action menu's own first block now.
   const keystoneMatch = useMemo(() => findKeystone(entry.name), [entry.name])
-  const keystoneStats = useMemo(() => {
-    if (!keystoneMatch) return undefined
-    return keystoneProgress(keystoneMatch.examId, buildMasteryLookup(masteryRecords), new Date())
-  }, [masteryRecords, keystoneMatch])
 
   // Fetch this page's markdown. The panel is keyed by its ref, so this runs
   // once per page rather than on every step of the walk.
@@ -181,29 +125,6 @@ export function ConceptPagePanel({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [entry.kind, entry.name])
 
-  // Close play menu when clicking outside of it. The "Add to Project" submenu
-  // is rendered in its own portal (outside playMenuRef in the DOM), so it's
-  // excluded via the data-add-to-project-menu marker.
-  useEffect(() => {
-    if (!showPlayMenu) return
-    function onPointerDown(e: PointerEvent) {
-      const target = e.target as HTMLElement | null
-      if (target?.closest('[data-add-to-project-menu]')) return
-      // The menu itself is portaled to <body> (outside playMenuRef), so a click
-      // inside it wouldn't count as "inside" without this marker check.
-      if (target?.closest('[data-play-menu]')) return
-      // The title opens the same menu but sits outside playMenuRef, so without
-      // this its pointerdown would close the menu and its click reopen it —
-      // pressing the title twice would never shut it.
-      if (target?.closest('[data-play-menu-trigger]')) return
-      if (playMenuRef.current && !playMenuRef.current.contains(target)) {
-        setShowPlayMenu(false)
-      }
-    }
-    document.addEventListener('pointerdown', onPointerDown)
-    return () => document.removeEventListener('pointerdown', onPointerDown)
-  }, [showPlayMenu])
-
   // Put the reader back where they were when this page is opened again from its
   // bar. The restore waits for the article to be laid out — before that the body
   // has nothing to scroll through. See lib/pageScrollMemory.ts.
@@ -223,31 +144,6 @@ export function ConceptPagePanel({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showGallery])
 
-  // Fetch question count for this concept (uses cached question list).
-  useEffect(() => {
-    if (entry.kind !== 'concept') {
-      setConceptQuestionCount(null)
-      return
-    }
-    let cancelled = false
-    fetchAllQuestions()
-      .then(rawFiles => {
-        if (cancelled) return
-        const all = parseAllQuestions(rawFiles)
-        setConceptQuestionCount(filterQuestions(all, { concept: entry.name }).length)
-      })
-      .catch(() => {})
-    return () => { cancelled = true }
-  }, [entry.kind, entry.name])
-
-  const mathBlocks = useMemo(() => (content ? extractMathBlockquotes(content) : []), [content])
-
-  // What the page's own `verification:` block says has been checked about it —
-  // the Fact Check row of the action menu, and the record it opens. Parsed off
-  // the raw markdown the panel already fetched, so it costs no extra request.
-  const verification = useMemo(() => (content ? parseVerification(content) : null), [content])
-  const factCheck = useMemo(() => factCheckBadge(verification), [verification])
-
   const resourceMeta = useMemo(() => {
     if (!content || entry.kind !== 'resource') return null
     return parseResourceMeta(content)
@@ -262,33 +158,10 @@ export function ConceptPagePanel({
   const sourcePath = entryRefToRepoPath(entry)
 
   // A guide page (an exam's "How to Study" tip) has no action menu at all:
-  // Start Quiz, Add to Flashcards and Learning Progress are all about a concept
-  // being learned, and a tip is advice about the exam. Listen stays — it is a
-  // way of reading the page.
+  // quizzing, keeping a card and tracking mastery are all about a concept being
+  // learned, and a tip is advice about the exam. Listen stays — it is a way of
+  // reading the page.
   const hasActions = entry.kind !== 'guide'
-
-  // The action menu is never gated: Start Quiz, Add to Flashcards, Math View
-  // and Learning Progress are all ways of *reading* a concept, and holding them
-  // behind the collect check only hid the app from a reader who hadn't met the
-  // concept yet. Collecting still matters — it is what lets mastery move past
-  // New (`applyAnswer`'s `collected` flag) — so the mastery pill beside the
-  // name stays the way into the collect flow for an uncollected concept.
-  const isCollected = collectedCards.some(c => c.name.toLowerCase() === entry.name.toLowerCase())
-  // A concept past New has necessarily been collected already (grandfathered
-  // users included), so treat it as collected even if not in the collected store.
-  const conceptCollected = isCollected || !(masteryState === null || masteryState === 'new')
-
-  // The one action menu, opened by either of its two triggers — the concept's
-  // name and the ▶ button — and anchored to whichever was pressed. The menu is
-  // portaled to <body>, so it is positioned from the trigger's viewport rect.
-  function toggleMenu(anchor: HTMLElement | null) {
-    if (!showPlayMenu && anchor) {
-      const rect = anchor.getBoundingClientRect()
-      setMenuAlignRight(window.innerWidth - rect.right < 200)
-      setMenuRect(rect)
-    }
-    setShowPlayMenu(v => !v)
-  }
 
   return (
     <>
@@ -297,26 +170,26 @@ export function ConceptPagePanel({
           desktop and stay aligned with each other. */}
       <div className={`flex items-center gap-2 h-16 shrink-0 ${focusMode ? 'w-full max-w-4xl mx-auto px-4 sm:px-6' : 'px-3'}`}>
         <div className="flex items-center gap-2 flex-1 min-w-0">
-          {/* The title is a control: pressing the concept's own name opens the
-              action menu, the same one the ▶ button opens, so the largest thing
-              in the header is the way into the page's actions rather than
-              decoration. It carries the keystone marker too — a gold underline
-              on the name — but the explainer that marker used to open on tap is
-              now the menu's first block, since a name can only do one thing.
-              Nothing sits between the name and the ▶ button: the concept's
-              level is on the menu's Learning Progress row, where the graph that
-              explains it lives. */}
-          {!focusMode && hasActions ? (
+          {/* The title is the page's one control: pressing the concept's own
+              name opens the action menu, so the largest thing in the header is
+              the way into the page's actions rather than decoration — there is
+              no ▶ button beside it. It is underlined to say so: white (the
+              text's own colour) for an ordinary concept, and the keystone
+              marker's gold where that means something, since a name can only
+              carry one underline. The menu survives focus mode — the page
+              filling the screen is when its actions are most wanted. */}
+          {hasActions ? (
             <button
               ref={titleBtnRef}
               type="button"
               data-play-menu-trigger
-              onClick={() => toggleMenu(titleBtnRef.current)}
+              data-tour="concept-action"
+              onClick={() => setShowPlayMenu(v => !v)}
               aria-haspopup="menu"
               aria-expanded={showPlayMenu}
               title={entry.name}
               aria-label={`${entry.name} — page actions`}
-              className={`truncate text-left font-semibold text-lg sm:text-xl min-w-0 ${keystoneMatch ? 'keystone-underline' : ''}`}
+              className={`truncate text-left font-semibold text-lg sm:text-xl min-w-0 ${keystoneMatch ? 'keystone-underline' : 'action-title-underline'}`}
             >
               {entry.name}
             </button>
@@ -325,195 +198,24 @@ export function ConceptPagePanel({
               {entry.name}
             </span>
           )}
-          {/* The action button. Spacing is the row's `gap-2` and nothing
-              else. */}
-          {!focusMode && hasActions && (
-          <div className="relative shrink-0" ref={playMenuRef}>
-          <button
-            ref={playBtnRef}
-            type="button"
-            data-tour="concept-action"
-            onClick={() => toggleMenu(playBtnRef.current)}
-            className="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-background hover:bg-accent text-foreground shrink-0"
-            title="Start Quiz or Add to Flashcards"
-            aria-label="Start Quiz or Add to Flashcards"
-          >
-            <Play className="h-5 w-5" />
-          </button>
-          {showPlayMenu && menuRect && createPortal(
-            <div
-              data-play-menu
-              className="fixed w-56 rounded-md bg-popover text-popover-foreground shadow-md z-[70] py-1 max-h-[min(18rem,80vh)] overflow-y-auto"
-              style={{
-                top: menuRect.bottom + 4,
-                ...(menuAlignRight
-                  ? { right: Math.max(8, window.innerWidth - menuRect.right) }
-                  : { left: menuRect.left }),
-              }}
-            >
-              {/* The keystone explainer, which used to open by tapping the
-                  concept's name. The name opens this menu now, so the summary
-                  leads it: what this concept is, before what can be done with
-                  it. */}
-              {keystoneMatch && (
-                <div className="px-3 pt-1.5 pb-2.5 mb-1 border-b border-border">
-                  <KeystoneSummary examLabel={keystoneMatch.examLabel} progress={keystoneStats} compact />
-                </div>
-              )}
-              <button
-                type="button"
-                onClick={() => { setShowQuestionsModal(true); setShowPlayMenu(false) }}
-                className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
-              >
-                <Play className="h-3.5 w-3.5 shrink-0" />
-                <span className="flex-1 text-left">Start Quiz</span>
-                {conceptQuestionCount !== null && conceptQuestionCount > 0 && (
-                  <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-primary/10 text-primary tabular-nums">
-                    {conceptQuestionCount}
-                  </span>
-                )}
-              </button>
-              {entry.kind === 'concept' && (
-                <button
-                  type="button"
-                  disabled={isOnWiki}
-                  onClick={() => { routerNavigate(wikiRoute(entry)); setShowPlayMenu(false) }}
-                  className={`w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors ${isOnWiki ? 'opacity-40 cursor-not-allowed' : 'hover:bg-accent'}`}
-                >
-                  <BookOpen className="h-3.5 w-3.5 shrink-0" />
-                  Open in Study Guide
-                </button>
-              )}
-              <div className="flex items-center hover:bg-accent transition-colors">
-                <button
-                  type="button"
-                  data-tour="add-flashcard"
-                  data-sound="none"
-                  onClick={() => {
-                    if (!hasCard(entry.name)) { play('addToDeck'); showAddedToDeck(1) }
-                    addCard(entry)
-                  }}
-                  className="flex-1 flex items-center gap-2 px-3 py-2 text-sm text-left"
-                >
-                  <span className="h-3.5 w-3.5 shrink-0 flex items-center justify-center text-xs">
-                    {hasCard(entry.name) ? '✓' : '+'}
-                  </span>
-                  <span className="flex-1">{hasCard(entry.name) ? 'Added to Flashcards' : 'Add to Flashcards'}</span>
-                  {hasCard(entry.name) && cards.length > 0 && (
-                    <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground tabular-nums">
-                      {cards.length}
-                    </span>
-                  )}
-                </button>
-                {hasCard(entry.name) && (
-                  <Link
-                    to={`/flashcards?highlight=${encodeURIComponent(entry.name)}`}
-                    data-tour="view-flashcards"
-                    onClick={() => { setShowPlayMenu(false); closePopup() }}
-                    className="text-xs text-primary hover:underline pr-3 shrink-0"
-                  >
-                    view
-                  </Link>
-                )}
-              </div>
-              {RESEARCH_TAB_ENABLED && user && <AddToProjectMenuItem item={entry} onNavigate={() => setShowPlayMenu(false)} />}
-              {/* Listen is both here and in the header cluster: the header
-                  button is the quick toggle (and the only way in and out of it
-                  in focus mode), this row is where someone browsing the menu
-                  discovers the mode exists. */}
-              <button
-                type="button"
-                onClick={() => { setListenView(!listenView); if (!listenView) setMathView(false); setShowPlayMenu(false) }}
-                className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
-              >
-                <Headphones className="h-3.5 w-3.5 shrink-0" />
-                {listenView ? 'Exit Listen' : 'Listen'}
-              </button>
-              <button
-                type="button"
-                onClick={() => { setMathView(true); setListenView(false); setShowPlayMenu(false) }}
-                className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
-              >
-                <Sigma className="h-3.5 w-3.5 shrink-0" />
-                Math View
-              </button>
-              {/* Collect. The mastery pill beside the title used to be the way
-                  into the check; the level now lives on the Learning Progress
-                  row below, so the check needs a row of its own — passing it is
-                  what lets a concept's mastery leave New, so it can't be left
-                  unreachable from the page it is about. */}
-              {entry.kind === 'concept' && !conceptCollected && (
-                <button
-                  type="button"
-                  data-tour="collect-card"
-                  onClick={() => { openCollect(entry); setShowPlayMenu(false) }}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
-                >
-                  <Lock className="h-3.5 w-3.5 shrink-0" />
-                  <span className="flex-1 text-left">Collect Flashcard</span>
-                </button>
-              )}
-              <button
-                type="button"
-                onClick={() => { setShowLearningProgress(true); setShowPlayMenu(false) }}
-                className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
-              >
-                <TrendingUp className="h-3.5 w-3.5 shrink-0" />
-                <span className="flex-1 text-left whitespace-nowrap">Learning Progress</span>
-                {/* The concept's level — New / 1 / 2 / 3 / F — reads here and
-                    nowhere else in the popup, on the row that opens the graph
-                    explaining how it got there. A concept with no record yet is
-                    New, the same verdict the old title pill showed. */}
-                {entry.kind === 'concept' && <MasteryBadge state={masteryState ?? 'new'} compact />}
-              </button>
-              {/* Fact Check — what has been checked about this page, against
-                  which source, and everything anyone has since said about it.
-                  It lives in the menu rather than beside the title because a
-                  page's own claims are what a reader challenges, and this is
-                  the row that lets them. An exam page carries none of its own —
-                  it is a syllabus outline — so it has no Fact Check. */}
-              {FACT_CHECK_UI_ENABLED && content !== null && entry.kind !== 'exam' && (
-                <button
-                  type="button"
-                  onClick={() => { setShowFactCheck(true); setShowPlayMenu(false) }}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
-                >
-                  <CheckCheck className="h-3.5 w-3.5 shrink-0" />
-                  <span className="flex-1 text-left whitespace-nowrap">Fact Check</span>
-                  <span
-                    className={`shrink-0 whitespace-nowrap text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${FACT_CHECK_TONE_CLASSES[factCheck.tone]}`}
-                  >
-                    {factCheck.short}
-                  </span>
-                </button>
-              )}
-            </div>,
-            document.body,
-          )}
-          </div>
-          )}
-          {/* Sigma icon — visible only while in Math View; clicking exits it */}
-          {!focusMode && mathView && (
-            <button
-              type="button"
-              onClick={() => setMathView(false)}
-              className="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 shrink-0"
-              title="Exit Math View"
-              aria-label="Exit Math View"
-            >
-              <Sigma className="h-5 w-5" />
-            </button>
+          {hasActions && (
+            <ConceptActionMenu
+              entry={entry}
+              open={showPlayMenu}
+              onClose={() => setShowPlayMenu(false)}
+              anchorRef={titleBtnRef}
+              content={content}
+            />
           )}
         </div>
         {/* Listen toggle — a permanent control, sitting left of the expand
-            toggle rather than only inside the action menu, since it's a view
-            switch like focus mode, not an action. (It's mirrored in the menu
-            too, for discoverability.) Survives focus mode for the same reason
+            toggle rather than on the action menu, since it's a view switch like
+            focus mode, not an action. Survives focus mode for the same reason
             that toggle does: Listen is most useful with the page full-screen,
             so there has to be a way in and out of it there. */}
         <button
           type="button"
-          onClick={() => { setListenView(!listenView); if (!listenView) setMathView(false) }}
+          onClick={() => setListenView(!listenView)}
           aria-pressed={listenView}
           className={`inline-flex items-center justify-center h-10 w-10 rounded-lg shrink-0 transition-colors ${listenView ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'text-muted-foreground hover:text-foreground hover:bg-accent'}`}
           title={listenView ? 'Exit Listen' : 'Listen'}
@@ -542,9 +244,8 @@ export function ConceptPagePanel({
       <div
         ref={bodyRef}
         onScroll={e => rememberPageScroll(entry, e.currentTarget.scrollTop)}
-        // The body, not each article inside it, is one math-focus scope — in
-        // Math View every equation is its own WikiArticle, and Previous/Next
-        // should still run through all of them. See lib/mathFocus.ts.
+        // The body is one math-focus scope: tapping any equation on the page
+        // steps through all of them. See lib/mathFocus.ts.
         data-math-scope=""
         className={`flex-1 min-h-0 w-full overflow-y-scroll overscroll-contain px-4 sm:px-6 pb-4 [&::-webkit-scrollbar]:hidden [scrollbar-width:none] ${focusMode ? 'max-w-4xl mx-auto' : ''} ${listenView ? 'pt-0' : 'pt-4'}`}
       >
@@ -561,19 +262,6 @@ export function ConceptPagePanel({
         {content !== null && (
           listenView ? (
             <ListenView markdown={content} />
-          ) : mathView ? (
-            mathBlocks.length > 0 ? (
-              <div className="space-y-4">
-                {mathBlocks.map((block, i) => (
-                  <WikiArticle key={i} markdown={block} sourcePath={sourcePath} hideImages />
-                ))}
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center py-12 gap-3 text-muted-foreground">
-                <Sigma className="h-8 w-8 opacity-30" />
-                <span className="text-sm">No equations in this concept.</span>
-              </div>
-            )
           ) : (
             <>
               {/* The concept's figure leads the page — see ConceptImageBanner. */}
@@ -612,25 +300,6 @@ export function ConceptPagePanel({
         )}
       </div>
 
-      {showQuestionsModal && (
-        <ConceptQuestionsModal
-          conceptName={entry.name}
-          onClose={() => setShowQuestionsModal(false)}
-        />
-      )}
-      {showLearningProgress && (
-        <LearningProgressModal
-          conceptName={entry.name}
-          onClose={() => setShowLearningProgress(false)}
-        />
-      )}
-      <FactCheckDialog
-        open={showFactCheck}
-        onClose={() => setShowFactCheck(false)}
-        verification={verification}
-        contentPath={sourcePath}
-        contentName={entry.name}
-      />
       {showGallery && (
         <ImageGalleryModal
           images={images}

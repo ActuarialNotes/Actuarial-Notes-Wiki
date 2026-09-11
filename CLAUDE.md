@@ -47,7 +47,13 @@ quiz/                                             — the React app (this is whe
 - `pages/` — route-level views (Quiz, Review, Dashboard, Flashcards, Search, Settings, Store,
   Upgrade, wiki/*, and `Research/` — the last is flag-gated)
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
-  `components/collect/` (flashcard-collection modal + 3D card), `components/research/` (flag-gated)
+  `components/collect/` (flashcard-collection modal + 3D card), `components/research/` (flag-gated).
+  `components/ConceptActionMenu.tsx` is **the** concept action menu — quiz, study guide, deck,
+  collect, learning progress, fact check — and the owner of the modals those rows open; the
+  concept popup (whose title is its only trigger) and every flashcard surface open that one
+  component, so the two can't drift apart. A surface adds only rows about *itself* (a card's
+  Study and Remove) through `leading` / `trailing`; view switches (Listen, the deck's view
+  modes) are each surface's own control, never menu rows.
 - `lib/` — core logic, mostly pure/testable modules (this is where the interesting algorithms live)
 - `data/` — authored static tables bundled into the app: `comprehensionChecks.ts` (parses the
   flashcard-collect gate questions from `comprehension-checks/<exam-id>/*.md` at build time via the

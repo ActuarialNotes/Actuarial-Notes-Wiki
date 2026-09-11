@@ -781,6 +781,18 @@
   .keystone-underline { animation: none !important; }
 }
 
+/* The concept popup's title is a control — it opens the page's action menu —
+   so it is drawn as a link: the same 2px underline the keystone marker uses,
+   in the text's own colour rather than gold. A keystone concept keeps the gold
+   marker instead; that underline means something this one doesn't. */
+.action-title-underline {
+  background-image: linear-gradient(hsl(var(--foreground)), hsl(var(--foreground)));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 2px;
+  padding-bottom: 2px;
+}
+
 /* Study-plan row highlight: rings a checklist row when the popup navigates to it. */
 @keyframes concept-row-highlight {
   0%, 15% {

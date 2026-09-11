@@ -152,8 +152,8 @@ export default function Dashboard() {
   const profileRef = useRef<HTMLDivElement>(null)
   // ReadinessCard portals two of its cards into these slots so they render at the
   // top of the page: the Exam readiness card first — it is the answer to the
-  // question the dashboard exists to answer — then the Study Schedule, both above
-  // the primary actions.
+  // question the dashboard exists to answer — then the primary actions that act on
+  // it, and the Study Schedule below them.
   const [readinessSlotEl, setReadinessSlotEl] = useState<HTMLDivElement | null>(null)
   const [studyScheduleSlotEl, setStudyScheduleSlotEl] = useState<HTMLDivElement | null>(null)
   // FixMistakesButton portals its compact copy into this slot in the pinned
@@ -743,17 +743,17 @@ export default function Dashboard() {
           </div>
         </div>
       )}
-      {/* Exam readiness + Study Schedule cards — portaled here by ReadinessCard
-          (below) so they sit at the very top of the dashboard, above the primary
-          actions, readiness first. */}
+      {/* Exam readiness card — portaled here by ReadinessCard (below) so it
+          leads the dashboard: it is the answer to the question the page exists
+          to answer. */}
       {activeSyllabus && <div ref={setReadinessSlotEl} />}
-      {activeSyllabus && <div ref={setStudyScheduleSlotEl} />}
 
       {/* Primary actions — Read concepts (left) + the narrow Fix Mistakes button
-          + Start Today's Quiz (right), one row directly below the study schedule
-          card. Fix Mistakes lives inside this block on purpose: the
-          pinned-header copies swap in once primaryActionsRef has scrolled past,
-          so all three have to scroll out together. */}
+          + Start Today's Quiz (right), one row directly below the readiness
+          card so the two ways to act on that score are the next thing read.
+          Fix Mistakes lives inside this block on purpose: the pinned-header
+          copies swap in once primaryActionsRef has scrolled past, so all three
+          have to scroll out together. */}
       {activeSyllabus && (
         <div ref={primaryActionsRef} className="flex flex-col gap-3">
           {/* Three across on a phone is tight, so the two wide actions drop to
@@ -798,6 +798,10 @@ export default function Dashboard() {
           </div>
         </div>
       )}
+
+      {/* Study Schedule card — also portaled here by ReadinessCard, below the
+          primary actions. */}
+      {activeSyllabus && <div ref={setStudyScheduleSlotEl} />}
 
       {/* Congratulations banner — shown after returning from Stripe checkout */}
       {showUpgradedBanner && (

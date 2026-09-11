@@ -6,13 +6,12 @@ date: "2019"
 Edition: 3rd
 Publisher: American Mathematical Society
 ISBN: 978-1-4704-4393-1
-Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/mathematical-interest-theory-vaaler)"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a47242d0f9c2840bf0460e8b20a298bead81e139122bb978285bcc1eea040f15
+  content_hash: sha256:9ae31d66d42c3349d32986a9c41439fa8719e32555ab4afe1feb91bfa9386ff7
   sources: []
   open_findings: 0
   open_critical: 0
@@ -106,4 +105,5 @@ verification:
 - 9.8 [[Redington Immunization|Immunization]]
 
 ## Links
-- [worldcat.org](https://search.worldcat.org/title/mathematical-interest-theory-vaaler)
+- [Mathematical Interest Theory, Third Edition (AMS/MAA Press)](https://bookstore.ams.org/text-57)
+- [Find in a library (WorldCat)](https://search.worldcat.org/search?q=bn%3A9781470443931)

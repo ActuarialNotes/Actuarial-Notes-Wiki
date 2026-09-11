@@ -1,12 +1,12 @@
 // Which square of the Study Schedule strip a tap landed on.
 //
 // The strip draws a whole exam season at once — a phone fits ~17 week columns
-// across, so a day is about 18×14 css px with 2px gutters between. That is well
-// under a comfortable touch target, and a tap that lands in a gutter hits the
-// container rather than a day, which is what made tapping days on the heatmap
-// feel unreliable. `dayCellAt` maps *any* point inside the grid to the day whose
-// column/row band contains it, so the gutters belong to their neighbours and
-// every pixel of the strip is a live target.
+// across, so a day is a square of about 18 css px with 3px gutters between.
+// That is still under a comfortable touch target, and a tap that lands in a
+// gutter hits the container rather than a day, which is what made tapping days
+// on the heatmap feel unreliable. `dayCellAt` maps *any* point inside the grid
+// to the day whose column/row band contains it, so the gutters belong to their
+// neighbours and every pixel of the strip is a live target.
 //
 // Pure maths, no DOM: `components/ExamHeatmap.tsx` passes the grid's measured
 // box and the pointer offset, and gets back grid coordinates.
@@ -20,7 +20,7 @@ export interface HeatmapGridBox {
   columns: number
   /** Rows per column — 7, Monday through Sunday. */
   rows: number
-  /** Gap between cells, in css px (the `gap-[2px]` of the flex layout). */
+  /** Gap between cells, in css px (the `gap-[3px]` of the flex layout). */
   gap: number
 }
 

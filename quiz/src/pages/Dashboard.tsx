@@ -32,6 +32,7 @@ import { todayISO } from '@/lib/studyPlan'
 import { useTodayCompletions } from '@/hooks/useTodayCompletions'
 import { useTodayAnsweredQuestions } from '@/hooks/useTodayAnsweredQuestions'
 import { matchesSelectedVariant } from '@/data/examSittings'
+import { EXAM_ID_TO_TRACK_NAME } from '@/data/tracks'
 import { useGems } from '@/hooks/useGems'
 import { LevelBadge } from '@/components/LevelBadge'
 import { MasteryAnalyticsCard } from '@/components/MasteryAnalyticsCard'
@@ -43,6 +44,7 @@ import { DashboardGuideModal } from '@/components/DashboardGuideModal'
 import { DAILY_PLAN_EMAIL_ENABLED, MASTERY_ANALYTICS_ENABLED, MISTAKES_REVIEW_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 
 const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
+const WELCOME_DISMISSED_KEY = 'quiz.dashboard.welcomeDismissed'
 
 // ── Welcome Modal ─────────────────────────────────────────────────────────────
 
@@ -65,8 +67,13 @@ function WelcomeModal({ onAddExam, onClose }: { onAddExam: () => void; onClose: 
 
         <div className="text-center space-y-1.5">
           <h2 className="text-xl font-bold tracking-tight">Welcome to Actuarial Notes!</h2>
+          {/* No promise of a study plan here — that's Premium, and a free
+              account seeing it promised and then locked is a worse first
+              minute than not hearing about it. Everything named below is
+              free. */}
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Your account is confirmed. Start by adding the exam you&apos;re studying for — we&apos;ll build a personalized study plan around it.
+            Start by adding the exam you&apos;re studying for. Your concepts, quizzes and progress
+            all follow from it.
           </p>
         </div>
 
@@ -120,7 +127,7 @@ export default function Dashboard() {
   const location = useLocation()
   const { user, loading: authLoading, signOut } = useAuth()
   const { sessions, loading: sessionsLoading } = useProgress()
-  const { syllabi, loading: syllabusLoading } = useWikiSyllabus()
+  const { syllabi, loading: syllabusLoading, error: syllabusError } = useWikiSyllabus()
   const { progress: examProgress, targetDates, examVariants, updateTargetDate, loadingExams } = useExamProgress()
   const { records: masteryRecords, loading: masteryLoading, refresh: refreshMastery } = useConceptMastery()
   const { isPremium, refresh: refreshSubscription } = useSubscription()
@@ -136,6 +143,11 @@ export default function Dashboard() {
   const [showWelcomeModal, setShowWelcomeModal] = useState(
     () => sessionStorage.getItem('show_welcome') === '1',
   )
+  // Dismissing the welcome modal is remembered, so the fallback below can offer
+  // it to anyone who still has nothing set up without ever nagging.
+  const [welcomeDismissed, setWelcomeDismissed] = useState(
+    () => { try { return localStorage.getItem(WELCOME_DISMISSED_KEY) === '1' } catch { return false } },
+  )
   const [onboardingStep, setOnboardingStep] = useState<1 | 2 | 3>(1)
   const [conceptsOpenCounter, setConceptsOpenCounter] = useState(0)
   const [startQuizCounter, setStartQuizCounter] = useState(0)
@@ -150,8 +162,11 @@ export default function Dashboard() {
   const [remindersOpen, setRemindersOpen] = useState(false)
   const [guideOpen, setGuideOpen] = useState(false)
   const profileRef = useRef<HTMLDivElement>(null)
-  // ReadinessCard portals its Study Schedule card into this slot so it renders
-  // at the top of the page, above the primary actions.
+  // ReadinessCard portals two of its cards into these slots so they render at the
+  // top of the page: the Exam readiness card first — it is the answer to the
+  // question the dashboard exists to answer — then the primary actions that act on
+  // it, and the Study Schedule below them.
+  const [readinessSlotEl, setReadinessSlotEl] = useState<HTMLDivElement | null>(null)
   const [studyScheduleSlotEl, setStudyScheduleSlotEl] = useState<HTMLDivElement | null>(null)
   // FixMistakesButton portals its compact copy into this slot in the pinned
   // header row (the slot only exists while the actions are pinned).
@@ -171,6 +186,12 @@ export default function Dashboard() {
     if (showWelcomeModal) sessionStorage.removeItem('show_welcome')
   // Only run once on mount.
   // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const dismissWelcome = useCallback(() => {
+    setShowWelcomeModal(false)
+    setWelcomeDismissed(true)
+    try { localStorage.setItem(WELCOME_DISMISSED_KEY, '1') } catch { /* ignore */ }
   }, [])
 
   useEffect(() => {
@@ -237,6 +258,18 @@ export default function Dashboard() {
     }),
     [syllabi, examProgress, examVariants],
   )
+
+  // Exams the learner has marked in progress that this app has no syllabus page
+  // for (the credential tracks list far more exams than the vault covers). They
+  // can never become a dashboard tab, so the empty state names them rather than
+  // leaving "I added an exam and nothing happened" unexplained.
+  const unsupportedActiveExams = useMemo(() => {
+    if (syllabi.length === 0) return []
+    const covered = new Set(syllabi.map(s => wikiExamIdToProgressKey(s.examId)))
+    return Object.entries(examProgress)
+      .filter(([key, status]) => status === 'in_progress' && !covered.has(key))
+      .map(([key]) => EXAM_ID_TO_TRACK_NAME[key] ?? key)
+  }, [syllabi, examProgress])
 
   // Restore active exam from localStorage once syllabi are loaded
   const restoredRef = useRef(false)
@@ -479,17 +512,32 @@ export default function Dashboard() {
   const hasActiveExams = inProgressSyllabi.length > 0
   const showLevelBadge = XP_ENABLED && !isGuest
 
+  // The welcome modal fires off the signup confirmation, but that signal
+  // depends on the auth flow the deployment happens to use. The condition that
+  // actually matters is "signed in with nothing to study", so an account that
+  // reaches the dashboard with no exam gets the same introduction either way —
+  // once, since dismissing it is remembered.
+  const showWelcome =
+    !welcomeDismissed &&
+    (showWelcomeModal || (!syllabusLoading && !loadingExams && !hasActiveExams))
+
   // Quiz-launch action, shared by the full-size actions row and its compact
   // copy in the pinned exam header (which only has room for a one-word label).
   // Once today's plan is finished the same launch keeps working, but it's no
   // longer the day's work — it reads as "Extra Credit".
-  const showQuizAction = isPremium && displayConcepts.length > 0
+  // A daily plan is the Premium feature — starting a quiz is not. With a plan,
+  // the button launches exactly today's plan; without one (free account, or a
+  // premium account that hasn't set a target date) it opens the quiz builder
+  // with this exam already chosen. Hiding it from free users left their
+  // dashboard with no way into a quiz at all.
+  const hasTodaysPlan = isPremium && displayConcepts.length > 0
+  const showQuizAction = hasTodaysPlan || !isPremium
   const quizActionLabel = isLaunchingQuiz
     ? 'Get ready…'
-    : (planComplete ? 'Extra Credit' : 'Start Quiz')
+    : (hasTodaysPlan && planComplete ? 'Extra Credit' : 'Start Quiz')
   const compactQuizLabel = isLaunchingQuiz
     ? 'Wait…'
-    : (planComplete ? 'Extra' : 'Quiz')
+    : (hasTodaysPlan && planComplete ? 'Extra' : 'Quiz')
 
   return (
     <>
@@ -740,15 +788,17 @@ export default function Dashboard() {
           </div>
         </div>
       )}
-      {/* Study Schedule card — portaled here by ReadinessCard (below) so it sits
-          at the very top of the dashboard, above the primary actions. */}
-      {activeSyllabus && <div ref={setStudyScheduleSlotEl} />}
+      {/* Exam readiness card — portaled here by ReadinessCard (below) so it
+          leads the dashboard: it is the answer to the question the page exists
+          to answer. */}
+      {activeSyllabus && <div ref={setReadinessSlotEl} />}
 
       {/* Primary actions — Read concepts (left) + the narrow Fix Mistakes button
-          + Start Today's Quiz (right), one row directly below the study schedule
-          card. Fix Mistakes lives inside this block on purpose: the
-          pinned-header copies swap in once primaryActionsRef has scrolled past,
-          so all three have to scroll out together. */}
+          + Start Today's Quiz (right), one row directly below the readiness
+          card so the two ways to act on that score are the next thing read.
+          Fix Mistakes lives inside this block on purpose: the pinned-header
+          copies swap in once primaryActionsRef has scrolled past, so all three
+          have to scroll out together. */}
       {activeSyllabus && (
         <div ref={primaryActionsRef} className="flex flex-col gap-3">
           {/* Three across on a phone is tight, so the two wide actions drop to
@@ -794,6 +844,10 @@ export default function Dashboard() {
         </div>
       )}
 
+      {/* Study Schedule card — also portaled here by ReadinessCard, below the
+          primary actions. */}
+      {activeSyllabus && <div ref={setStudyScheduleSlotEl} />}
+
       {/* Congratulations banner — shown after returning from Stripe checkout */}
       {showUpgradedBanner && (
         <div className="rounded-lg bg-green-500/10 px-4 py-3 flex items-start justify-between gap-3">
@@ -822,7 +876,11 @@ export default function Dashboard() {
         {syllabusLoading || sessionsLoading || masteryLoading || loadingExams ? (
           <ActiveExamCardLoading />
         ) : !activeSyllabus ? (
-          <ActiveExamCardEmpty onChooseExam={() => setExamsOpen(true)} />
+          <ActiveExamCardEmpty
+            onChooseExam={() => setExamsOpen(true)}
+            unsupportedExams={unsupportedActiveExams}
+            loadError={syllabi.length === 0 ? syllabusError : null}
+          />
         ) : (
           <ReadinessCard
             syllabus={activeSyllabus}
@@ -843,6 +901,7 @@ export default function Dashboard() {
             isPremium={isPremium}
             onPlanCompletionChange={setPlanComplete}
             studyScheduleSlot={studyScheduleSlotEl}
+            readinessSlot={readinessSlotEl}
           />
         )}
       </div>
@@ -896,10 +955,10 @@ export default function Dashboard() {
     </div>
     </div>
     <ConceptPopup />
-    {!isGuest && showWelcomeModal && (
+    {!isGuest && showWelcome && (
       <WelcomeModal
-        onAddExam={() => { setShowWelcomeModal(false); setExamsOpen(true) }}
-        onClose={() => setShowWelcomeModal(false)}
+        onAddExam={() => { dismissWelcome(); setExamsOpen(true) }}
+        onClose={dismissWelcome}
       />
     )}
     </>

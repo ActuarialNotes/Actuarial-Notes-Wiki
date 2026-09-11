@@ -94,7 +94,8 @@ concepts would make "2 of 45" a lie, and the bar is a position readout for the w
 | `lib/pageStack.ts` | the pure decision layer: push / open / close, and the depth cap |
 | `hooks/useConceptPopup.ts` | `pages` + `pageIndex` in the store, and the reset-on-walk rule |
 | `components/wiki/ConceptPopup.tsx` | the shell: resize handle, the stack column, the footer, focus mode |
-| `components/wiki/ConceptPagePanel.tsx` | **the open page** — its header (the title, which is itself the action menu's trigger, plus the ▶ button and Listen) and its body (article / Math View / Listen), plus the gallery, modals and scroll memory |
+| `components/wiki/ConceptPagePanel.tsx` | **the open page** — its header (the title, which is the action menu's one trigger, plus Listen) and its body (article / Listen view), plus the gallery and scroll memory |
+| `components/ConceptActionMenu.tsx` | **the action menu** the title opens — the same component every flashcard surface opens, and the owner of the modals it leads to |
 | `components/wiki/PageStackBar.tsx` | a folded page |
 | `index.css` (`.page-bar`, `.page-panel`) | the bar unrolling and the new page rising into place |
 

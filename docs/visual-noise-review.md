@@ -148,13 +148,29 @@ which name consequences and contents a button cannot. Two to cut:
 - ~L1053, the tour description (currently unreachable — `TOUR_ENABLED` is off). Handle it
   when the tour is rebuilt rather than now.
 
-### 3.9 The dead `blurb`
+### 3.9 The band `blurb`, and what replaced it — **done**
 
-`lib/readiness.ts` `ReadinessBand.blurb` carries a one-sentence "what to do next" for all five
-bands and **nothing renders it** — the doc already records that it was cut for repeating the
-band name. It is not visual noise, but it is a loaded gun: the next person to open the file
-sees a ready-made caption and a place to put it. Delete the field, or add a comment at the
-declaration saying it is deliberately unrendered.
+`lib/readiness.ts` `ReadinessBand.blurb` carried a one-sentence "what to do next" for all five
+bands. It was first trimmed to the action alone (the openers that restated the band — "Early
+days.", "A real base is in place." — sat directly under the band label and were the label said
+twice, test 1) and rendered on the Dashboard's Exam readiness card.
+
+That was not enough, and the field is now **deleted**. A sentence shared by every learner in a
+forty-point band passes test 1 only on a technicality: it isn't the label repeated, but it
+isn't about the reader either. The bottom band gave it away — *Not started* over *"Answer
+questions on this exam and the score fills in."* is the label paraphrased **and** an
+instruction for using the app, printed at the one moment there is genuinely nothing to report.
+
+The replacement is `readinessInsight` (`docs/exam-readiness.md`), a line derived from the
+learner's own records: which keystone decayed, how much of what they studied has slipped, the
+section with the most score left on the table. It names something the card does not already
+draw, and — the part worth copying — **it returns null freely**. Six ordered rules, and if none
+of them has anything, the paragraph is not rendered. No generic sentence stands in.
+
+**The generalisable move:** a caption slot does not have to be filled. Where a surface prints
+one line for a whole range of states, the honest options are to make the line specific to the
+state or to drop it — not to write something bland enough to be true of all of them. Prefer a
+nullable, derived line over a constant one, and let the empty case be empty.
 
 ## 4. What *not* to do in this sweep
 

@@ -6,13 +6,12 @@ date: "2019"
 Edition: 10th
 Publisher: Pearson
 ISBN: 978-0134753119
-Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/1023819820)"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:0b2c50070a49f5e0d57452df39ce67a69baa2ec138e533fb506802f614c72496
+  content_hash: sha256:2f8aaf2520dd3312c189118f0435bcd5b2d7d278cc221f6e387dd2504062a821
   sources: []
   open_findings: 0
   open_critical: 0
@@ -148,4 +147,5 @@ verification:
 
 
 ## Links
-- [worldcat.org](https://search.worldcat.org/title/1023819820)
+- [A First Course in Probability, 10th edition (Pearson)](https://www.pearson.com/en-us/subject-catalog/p/first-course-in-probability-a/P200000006334)
+- [Find in a library (WorldCat)](https://search.worldcat.org/search?q=bn%3A9780134753119)

@@ -6,13 +6,12 @@ date: "2022"
 Edition: 3rd
 Publisher: ActuarialBrew
 ISBN: 978-0-9981604-4-3
-Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/interest-theory-francis-ruckman)"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1266487a1a7dcfbd6fe62250ceea27f19c2aab3fc94384c2ccebd62b596b3c81
+  content_hash: sha256:d1b69d7e75013e7302c47d2e1a31980d9eff0d82892e29f6a371a253a414689d
   sources: []
   open_findings: 0
   open_critical: 0
@@ -120,4 +119,5 @@ verification:
 - 16.03 [[Forward Rate|Forward Rates]]
 
 ## Links
-- [worldcat.org](https://search.worldcat.org/title/interest-theory-francis-ruckman)
+- [ActuarialBrew (publisher)](https://www.actuarialbrew.com/)
+- [Find in a library (WorldCat)](https://search.worldcat.org/search?q=bn%3A9780998160443)

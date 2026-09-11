@@ -1,13 +1,12 @@
 import { useMemo, useState, useCallback, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
-import { AlertTriangle, ArrowUp, Check, CheckCircle2, ChevronDown, Circle, Gem, Lock, Settings2, X } from 'lucide-react'
+import { AlertTriangle, ArrowUp, Check, CheckCircle2, Circle, Gem, Lock, Settings2, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
-import { ConceptScheduleBadge } from '@/components/TopicProgressSection'
 import { ExamHeatmap } from '@/components/ExamHeatmap'
 import { QuizSessionCard } from '@/components/QuizSessionCard'
 import { SessionCompletionOverlay } from '@/components/SessionCompletionOverlay'
@@ -16,10 +15,8 @@ import { STREAK_ENABLED } from '@/lib/featureFlags'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
-import { aggregateForTopic, decayIfStale, sanitizeMasteryState } from '@/lib/mastery'
-import { normalizeMasteryToDisplayNames } from '@/lib/conceptMatch'
+import { sanitizeMasteryState } from '@/lib/mastery'
 import { KEYSTONE_FILL, KEYSTONE_TEXT, LEVEL3_TEXT, LEVEL_FILL, masteryFill } from '@/lib/masteryFill'
-import { MasteryBadge } from '@/components/MasteryBadge'
 import { MASTERY_LABEL } from '@/lib/masteryBadge'
 import { computeExamReadiness } from '@/lib/readiness'
 import {
@@ -53,6 +50,8 @@ import { questionExamLabel } from '@/lib/examIds'
 
 // ── Study Guide Radial ─────────────────────────────────────────────────────────
 //
+// The readiness ring, drawn inside the **Exam readiness** card below (the name
+// here is the one the docs use for the ring itself — docs/exam-readiness.md).
 // The arcs, their angles and the section groups come from `lib/readinessRing.ts`
 // — the exam page's title-row ring draws the same shape from the same helpers.
 // What lives here is only this surface's chrome: the legend, the curved section
@@ -63,6 +62,7 @@ function StudyGuideRadial({
   examRecords,
   now,
   onConceptClick,
+  overallPct,
   totalCount,
   selectedConcept,
   flashRadial,
@@ -71,6 +71,10 @@ function StudyGuideRadial({
   examRecords: ConceptMasteryRecord[]
   now: Date
   onConceptClick?: (name: string) => void
+  /** The readiness score, from `computeExamReadiness` — the card that owns the
+   *  ring computes it once and hands it down, so the ring and the criteria
+   *  beside it are the same call. */
+  overallPct: number
   totalCount: number
   selectedConcept?: string | null
   flashRadial?: boolean
@@ -89,36 +93,11 @@ function StudyGuideRadial({
 
   const topicGroups = useMemo(() => ringTopicGroups(segments), [segments])
 
-  // The one readiness score (lib/readiness.ts): syllabus coverage plus keystone
-  // mastery. The exam page's Exam Readiness Score card and the exam grid print
-  // the same call, so the numbers always agree — the gold spokes in this ring
-  // are the criterion the second half of it measures.
-  const overallPct = useMemo(
-    () => computeExamReadiness(syllabus, examRecords, now).overallPct,
-    [syllabus, examRecords, now],
-  )
   const pctText = totalCount > 0 ? `${Math.round(overallPct)}%` : '0%'
   const centerSeg = hovered ?? selected
 
   return (
     <div className="flex flex-col items-center gap-3">
-      <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[12px] text-muted-foreground">
-        {(['level3', 'level2', 'level1', 'new'] as MasteryState[]).map(s => (
-          <span key={s} className="flex items-center gap-1">
-            {/* Each level shows both palettes stacked in one dot: green half for
-                an ordinary concept, gold half for a keystone at the same level. */}
-            <span
-              className="inline-block h-2 w-2 rounded-full shrink-0"
-              style={{ background: `linear-gradient(90deg, ${LEVEL_FILL[s]} 50%, ${KEYSTONE_FILL[s]} 50%)` }}
-            />
-            {s === 'new' ? 'New' : s === 'level1' ? 'Level 1' : s === 'level2' ? 'Level 2' : 'Level 3'}
-          </span>
-        ))}
-        <span className="flex items-center gap-1">
-          <span className="inline-block h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: KEYSTONE_FILL.level3 }} />
-          Keystone
-        </span>
-      </div>
       <svg viewBox={`0 0 ${RING_VIEWBOX} ${RING_VIEWBOX}`} className="w-full max-w-[260px]" style={{ overflow: 'visible' }}>
         <circle
           cx={RING_CX} cy={RING_CY}
@@ -219,23 +198,36 @@ function StudyGuideRadial({
             </text>
           </>
         ) : (
-          <>
-            <text x={RING_CX} y={RING_CY + 10} textAnchor="middle" fontSize={30} fontWeight="800"
-              fill={flashRadial ? '#22c55e' : 'currentColor'}
-              style={{ transition: 'fill 0.8s ease-out' }}
-            >
-              {pctText}
-            </text>
-            <text x={RING_CX} y={RING_CY + 24} textAnchor="middle" fontSize={10} fill="currentColor"
-              opacity={flashRadial ? 0.9 : 0.4}
-              style={{ transition: 'opacity 0.8s ease-out' }}
-            >
-              readiness
-            </text>
-          </>
+          // No caption under the number: the card this ring sits in is titled
+          // "Exam readiness" a few pixels away, so the word was the title said
+          // twice (docs/visual-noise-review.md, test 1).
+          <text x={RING_CX} y={RING_CY + 14} textAnchor="middle" fontSize={40} fontWeight="800"
+            fill={flashRadial ? '#22c55e' : 'currentColor'}
+            style={{ transition: 'fill 0.8s ease-out' }}
+          >
+            {pctText}
+          </text>
         )}
       </svg>
 
+      {/* Legend — under the ring it reads, not above it. */}
+      <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[12px] text-muted-foreground">
+        {(['level3', 'level2', 'level1', 'new'] as MasteryState[]).map(s => (
+          <span key={s} className="flex items-center gap-1">
+            {/* Each level shows both palettes stacked in one dot: green half for
+                an ordinary concept, gold half for a keystone at the same level. */}
+            <span
+              className="inline-block h-2 w-2 rounded-full shrink-0"
+              style={{ background: `linear-gradient(90deg, ${LEVEL_FILL[s]} 50%, ${KEYSTONE_FILL[s]} 50%)` }}
+            />
+            {s === 'new' ? 'New' : s === 'level1' ? 'Level 1' : s === 'level2' ? 'Level 2' : 'Level 3'}
+          </span>
+        ))}
+        <span className="flex items-center gap-1">
+          <span className="inline-block h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: KEYSTONE_FILL.level3 }} />
+          Keystone
+        </span>
+      </div>
     </div>
   )
 }
@@ -273,98 +265,6 @@ function ReviewModeNote({ concepts }: { concepts: string[] }) {
   )
 }
 
-function StudyPlanTracker({
-  syllabus,
-  masteryRecords,
-  studyPlan,
-  allConceptsForNav,
-  onConceptSelect,
-  openTopics,
-  onToggle,
-  flashingConcept,
-  showMastery = true,
-}: {
-  syllabus: WikiExamSyllabus
-  masteryRecords: ConceptMasteryRecord[]
-  studyPlan?: StudyPlan | null
-  allConceptsForNav: { name: string; state: MasteryState }[]
-  onConceptSelect: (concept: { name: string; state: MasteryState; index: number }) => void
-  openTopics: Set<string>
-  onToggle: (name: string) => void
-  flashingConcept?: string | null
-  showMastery?: boolean
-}) {
-  const examKey = wikiExamIdToProgressKey(syllabus.examId)
-  const examMastery = masteryRecords.filter(r => r.exam_id === examKey)
-  const now = new Date()
-
-  const normalizedMastery = normalizeMasteryToDisplayNames(examMastery, syllabus)
-  const recordsBySlug = new Map(normalizedMastery.map(r => [r.concept_slug.toLowerCase(), r]))
-
-  return (
-    <div className="space-y-1">
-      {syllabus.topics.map(topic => {
-        const conceptSlugs = topic.concepts.map(c => c.name)
-        const agg = aggregateForTopic(normalizedMastery, conceptSlugs, now)
-        const isOpen = openTopics.has(topic.name)
-        return (
-          <div key={topic.name}>
-            <button
-              data-topic={topic.name}
-              // Sticks below the Dashboard's pinned exam header (52px: py-1.5 +
-              // h-10 controls), which stays put for the whole page — offsets
-              // mirror its own `top-0 md:top-14 lg:top-0`.
-              className="flex items-center gap-2 w-full py-2 text-left hover:bg-muted/40 rounded-md px-1 -mx-1 transition-colors sticky top-[52px] md:top-[108px] lg:top-[52px] z-10 bg-card/95 backdrop-blur-sm"
-              onClick={() => onToggle(topic.name)}
-              aria-expanded={isOpen}
-            >
-              <ChevronDown className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} />
-              <span className="text-sm font-semibold min-w-0 truncate">
-                {topic.name}
-                {topic.weight && <span className="ml-1.5 text-xs font-normal text-muted-foreground">{topic.weight}</span>}
-              </span>
-              {showMastery && (
-                <>
-                  <div className="flex-1 h-1.5 rounded-full bg-secondary overflow-hidden min-w-0" role="progressbar" aria-valuenow={agg.strongPct} aria-valuemin={0} aria-valuemax={100}>
-                    <div className="h-full rounded-full bg-green-500 transition-all" style={{ width: `${agg.strongPct}%` }} />
-                  </div>
-                  <span className="text-xs font-medium shrink-0 text-right w-12 tabular-nums text-muted-foreground">{agg.level3}/{agg.total}</span>
-                </>
-              )}
-            </button>
-            {isOpen && topic.concepts.length > 0 && (
-              <div className="space-y-1 pl-5 border-l-2 border-border ml-2 mb-2 mt-1">
-                {topic.concepts.map(c => {
-                  const rec = recordsBySlug.get(c.name.toLowerCase())
-                  const state: MasteryState = rec ? decayIfStale(rec, now).state : 'new'
-                  const idx = allConceptsForNav.findIndex(ac => ac.name.toLowerCase() === c.name.toLowerCase())
-                  return (
-                    <button
-                      key={c.name}
-                      type="button"
-                      data-study-concept={c.name.toLowerCase()}
-                      onClick={() => onConceptSelect({ name: c.name, state, index: idx === -1 ? 0 : idx })}
-                      className={`flex items-center gap-2 w-full py-1 px-1 -mx-1 rounded hover:bg-muted/40 transition-colors text-left${flashingConcept?.toLowerCase() === c.name.toLowerCase() ? ' concept-row-highlight' : ''}`}
-                    >
-                      <span className="text-xs text-foreground min-w-0 flex-1 truncate">{c.name}</span>
-                      {showMastery && studyPlan && state !== 'level3' && (
-                        <ConceptScheduleBadge conceptName={c.name} plan={studyPlan} />
-                      )}
-                      {showMastery && (
-                        <MasteryBadge state={state} />
-                      )}
-                    </button>
-                  )
-                })}
-              </div>
-            )}
-          </div>
-        )
-      })}
-    </div>
-  )
-}
-
 // ── ReadinessCard ──────────────────────────────────────────────────────────────
 
 interface Props {
@@ -391,10 +291,14 @@ interface Props {
   /** Bumped by the Dashboard (e.g. tapping the readiness-stat checkmark) to open the day-complete/bonus info panel. */
   openDayCompleteInfoTrigger?: number
   /** DOM node the Study Schedule (heatmap) card portals into (e.g. a slot the Dashboard
-   *  places above its primary actions), so the card can render at the top of the page
-   *  while its state/logic stays owned here. Renders inline in its default bento-grid
-   *  position when omitted. */
+   *  places below its primary actions), so the card can render near the top of the page
+   *  while its state/logic stays owned here. Renders inline, last in this card's own
+   *  stack, when omitted. */
   studyScheduleSlot?: HTMLElement | null
+  /** DOM node the Exam readiness card portals into — the Dashboard puts it directly
+   *  under the exam tabs so readiness is the first thing on the page. Renders inline
+   *  at the top of this card's own stack when omitted. */
+  readinessSlot?: HTMLElement | null
 }
 
 export function ReadinessCard({
@@ -402,6 +306,7 @@ export function ReadinessCard({
   config, loading, examDate, onConfigChange, onRegenerate, onReplaceConcepts, onExamDateChange,
   openConceptsTrigger, startQuizTrigger, scrollToRadialTrigger,
   isPremium = true, onPlanCompletionChange, openDayCompleteInfoTrigger, studyScheduleSlot,
+  readinessSlot,
 }: Props) {
   const navigate = useNavigate()
   const { user } = useAuth()
@@ -415,7 +320,6 @@ export function ReadinessCard({
   const prevPopupConceptRef = useRef<string | null>(null)
   const studyGuideCardRef = useRef<HTMLDivElement>(null)
   const studyPlanCardRef = useRef<HTMLDivElement>(null)
-  const topicsMasteredContainerRef = useRef<HTMLDivElement>(null)
   const [flashingConcept, setFlashingConcept] = useState<string | null>(null)
   const [flashRadial, setFlashRadial] = useState(false)
   const [quizStartConcept, setQuizStartConcept] = useState<string | null>(null)
@@ -423,7 +327,6 @@ export function ReadinessCard({
   const isLaunchingQuizRef = useRef(false)
   const [recentlyCompletedConcepts, setRecentlyCompletedConcepts] = useState<Set<string>>(new Set())
   const prevCompletedRef = useRef<Set<string>>(new Set())
-  const [topicsMasteredOpen, setTopicsMasteredOpen] = useState(false)
   const [completedToday, setCompletedToday] = useState<DailyLevelUp[]>([])
   const [showConfig, setShowConfig] = useState(false)
   const [configInitialStep, setConfigInitialStep] = useState<1 | 2 | 3>(1)
@@ -443,7 +346,6 @@ export function ReadinessCard({
       return raw ? ((JSON.parse(raw) as { amount?: number }).amount ?? 0) : 0
     } catch { return 0 }
   })
-  const [openTopics, setOpenTopics] = useState<Set<string>>(new Set())
   const [highlightedTopicIdx, setHighlightedTopicIdx] = useState<number | null>(null)
 
   // Quiz history state
@@ -461,13 +363,6 @@ export function ReadinessCard({
   const studyScheduleCardRef = useRef<HTMLDivElement>(null)
   const planRef = useRef(plan)
   useEffect(() => { planRef.current = plan }, [plan])
-
-  const toggleTopic = (name: string) =>
-    setOpenTopics(prev => {
-      const next = new Set(prev)
-      next.has(name) ? next.delete(name) : next.add(name)
-      return next
-    })
 
   useEffect(() => {
     if (openConceptsTrigger && allConcepts.length > 0) {
@@ -607,13 +502,20 @@ export function ReadinessCard({
     [masteryRecords, progressKey],
   )
 
-  const aggregate = useMemo(() => {
-    const allSlugs = syllabus.topics.flatMap(t => t.concepts.map(c => c.name))
-    return aggregateForTopic(examRecords, allSlugs, now)
-  }, [syllabus, examRecords, now])
-
-  const level2Pct = aggregate.total > 0 ? Math.round((aggregate.level2 / aggregate.total) * 100) : 0
-  const level1Pct = aggregate.total > 0 ? Math.round((aggregate.level1 / aggregate.total) * 100) : 0
+  // The one readiness score (docs/exam-readiness.md): syllabus coverage plus
+  // keystone mastery. Computed once here and read by both halves of the card
+  // below — the ring draws `overallPct`, the rows beside it draw the criteria
+  // it is made of — so the two can never quote different numbers.
+  //
+  // Scored from real mastery on every tier. Mastery is recorded for every
+  // account — the daily study *plan* is what Premium buys, not the record of
+  // what has been learned — so scoring a free account against an empty record
+  // list reported 0% readiness to someone who had just levelled concepts up,
+  // which reads as a broken app rather than as a locked feature.
+  const readiness = useMemo(
+    () => computeExamReadiness(syllabus, examRecords, now),
+    [syllabus, examRecords, now],
+  )
 
   const allConcepts = useMemo(
     () => syllabus.topics.flatMap(t => t.concepts.map(c => ({
@@ -686,19 +588,6 @@ export function ReadinessCard({
     }))),
     [groupedPlanConcepts, masteryStateByName]
   )
-
-  // Auto-expand relevant topics (but not the Topics Learned card itself) when study plan is active
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    if (displayConcepts.length === 0) return
-    const planTopicNames = new Set(groupedPlanConcepts.map(g => g.topicName))
-    setOpenTopics(prev => {
-      if (planTopicNames.size === 0) return prev
-      const next = new Set(prev)
-      planTopicNames.forEach(n => next.add(n))
-      return next
-    })
-  }, [displayConcepts.join('|')])
 
   const todayStr = todayISO()
 
@@ -833,6 +722,19 @@ export function ReadinessCard({
     if (isLaunchingQuizRef.current) return
     isLaunchingQuizRef.current = true
 
+    const topicValue = questionExamLabel(syllabus)
+
+    // No daily plan to sweep through — a free account, or a premium one that
+    // hasn't set a target date. The cascade is an animation *of the plan*, and
+    // `autostart` needs one, so both would be a second of nothing before the
+    // quiz builder appeared anyway. Go straight there, with the exam already
+    // chosen.
+    if (cascadeSteps.length === 0) {
+      isLaunchingQuizRef.current = false
+      navigate(`/?topic=${encodeURIComponent(topicValue)}&mode=quiz`)
+      return
+    }
+
     // Scroll the study plan into view first, then sweep a highlight through each
     // concept individually while the card border is traced in the primary colour —
     // together they tell the user exactly what today's session is about to cover.
@@ -857,7 +759,6 @@ export function ReadinessCard({
       setQuizStartConcept(null)
       setTracePlanBorder(false)
       isLaunchingQuizRef.current = false
-      const topicValue = questionExamLabel(syllabus)
       // autostart=1 tells Landing to jump straight into a quiz sized to complete
       // today's plan (fewest questions covering every still-incomplete concept).
       navigate(`/?topic=${encodeURIComponent(topicValue)}&mode=quiz&autostart=1`)
@@ -904,20 +805,10 @@ export function ReadinessCard({
       return () => clearTimeout(scrollId)
     }
 
-    // Non-radial: for entire-syllabus mode expand the owning topic in topics-mastered
-    // so the concept row becomes visible there. For study-plan mode the plan topics are
-    // already auto-expanded and we don't want to cause a layout shift below.
-    const ownerTopic = syllabus.topics.find(t =>
-      t.concepts.some(c => c.name.toLowerCase() === popupCurrentName.toLowerCase())
-    )
-    if (popupDashboardFilter === 'entire-syllabus' && ownerTopic) {
-      setOpenTopics(prev => prev.has(ownerTopic.name) ? prev : new Set([...prev, ownerTopic.name]))
-      setTopicsMasteredOpen(true)
-    }
-    // For study-plan mode scroll to the active concept row in the study plan card.
-    // The querySelector finds study-plan rows first (higher in the DOM), so the target
-    // is always the correct element. For entire-syllabus, scroll within the overflow
-    // container rather than the window to avoid jumping to the wrong section.
+    // Non-radial: scroll to the concept's row in the study plan card. Only the
+    // plan lists concept rows now — the Topics Learned list the entire-syllabus
+    // branch used to reveal is gone, and the ring above is what that mode is
+    // read against.
     let scrollId: ReturnType<typeof setTimeout> | undefined
     if (popupDashboardFilter === 'study-plan') {
       scrollId = setTimeout(() => {
@@ -928,23 +819,93 @@ export function ReadinessCard({
         const rect = el.getBoundingClientRect()
         window.scrollBy({ top: rect.top - visibleHeight / 2 + rect.height / 2, behavior: 'smooth' })
       }, 50)
-    } else if (popupDashboardFilter === 'entire-syllabus') {
-      scrollId = setTimeout(() => {
-        const container = topicsMasteredContainerRef.current
-        if (!container) return
-        const el = container.querySelector<HTMLElement>(`[data-study-concept="${CSS.escape(popupCurrentName.toLowerCase())}"]`)
-        if (!el) return
-        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-      }, 100)
     }
     setFlashingConcept(popupCurrentName)
     const clearId = setTimeout(() => setFlashingConcept(null), 1400)
     return () => { if (scrollId !== undefined) clearTimeout(scrollId); clearTimeout(clearId) }
   }, [popupCurrentName, popupFromRadial, popupDashboardFilter])
 
+  // Exam readiness card — the headline answer to "how ready am I?", and the
+  // first thing on the Dashboard. The ring carries the score itself (one arc
+  // per syllabus concept, gold for a keystone); beside it sit the band verdict
+  // and the two criteria the score is made of, so a number as low as 3% still
+  // says *which* half of readiness is missing. Portals into `readinessSlot`
+  // when the Dashboard supplies one.
+  const readinessCardContent = (
+      <Card ref={studyGuideCardRef} className="order-none border-0">
+        <CardContent className="p-6">
+          <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-center sm:gap-8">
+            <div className="w-full max-w-[280px] shrink-0 sm:w-[250px]">
+              <StudyGuideRadial
+                syllabus={syllabus}
+                examRecords={examRecords}
+                now={now}
+                overallPct={readiness.overallPct}
+                totalCount={readiness.counts.total}
+                selectedConcept={popupFromRadial ? popupCurrentName : null}
+                flashRadial={flashRadial}
+                onConceptClick={name => {
+                  const idx = allConcepts.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
+                  openDashboard(toRefs(allConcepts), null, 'entire-syllabus', idx === -1 ? 0 : idx, { circular: true, fromRadial: true })
+                }}
+              />
+            </div>
+
+            <div className="w-full min-w-0 flex-1 space-y-5">
+              <div className="space-y-1.5">
+                <h3 className="text-sm font-semibold">Exam readiness</h3>
+                <p className="text-xl font-semibold tracking-tight leading-tight">{readiness.band.label}</p>
+                {/* The insight line, when there is one. `readiness.insight` is
+                    null on an untouched exam and whenever no rule found
+                    anything worth a line, and the paragraph goes with it —
+                    nothing generic stands in (lib/readiness.ts). */}
+                {readiness.insight && (
+                  <p className="text-sm text-muted-foreground leading-snug">{readiness.insight.text}</p>
+                )}
+              </div>
+
+              {/* The criteria. Each bar's *thickness* is the weight it carries in
+                  the headline score, so the heavier one is visibly the heavier
+                  line and nothing has to print "60% of score"
+                  (docs/visual-noise-review.md §3.1). Keystone coverage is drawn
+                  in the same gold as its spokes in the ring. */}
+              <div className="space-y-3">
+                {readiness.criteria.map(criterion => {
+                  const pct = Math.round(criterion.pct)
+                  const fill = criterion.id === 'keystone' ? KEYSTONE_TEXT : LEVEL3_TEXT
+                  return (
+                    <div
+                      key={criterion.id}
+                      className="space-y-1.5"
+                      role="group"
+                      aria-label={`${criterion.label}: ${pct}%, ${Math.round(criterion.weight * 100)}% of the readiness score`}
+                    >
+                      <div className="flex items-baseline justify-between gap-2">
+                        <span className="text-xs font-medium">{criterion.label}</span>
+                        <span className="text-xs tabular-nums text-muted-foreground">{pct}%</span>
+                      </div>
+                      <div
+                        className="w-full rounded-full bg-secondary overflow-hidden"
+                        style={{ height: 4 + 6 * criterion.weight }}
+                      >
+                        <div
+                          className="h-full rounded-full transition-all"
+                          style={{ width: `${criterion.pct}%`, backgroundColor: fill }}
+                        />
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+  )
+
   // Study Schedule (heatmap) card. Portals into `studyScheduleSlot` when the
-  // Dashboard supplies one (a slot above its primary actions), so the card
-  // renders at the top of the page while its state/logic stays owned by this
+  // Dashboard supplies one (a slot below its primary actions), so the card
+  // renders near the top of the page while its state/logic stays owned by this
   // component; otherwise renders inline below in its default bento-grid position.
   const studyScheduleCardContent = (
       <Card className="order-4 border-0 shadow-none" ref={studyScheduleCardRef}>
@@ -1161,15 +1122,16 @@ export function ReadinessCard({
 
   return (
     <div className="space-y-4">
-      {/* Bento grid. Left column = Today's Study Plan + primary actions + warnings
-          + Study Schedule; right column = Study Guide + Topics Learned (md+). On
-          mobile everything collapses to a single column, and the left column's
-          children are laid out with `order-*` so Today's Study Plan sits on top,
-          the Read concepts / Start Quiz actions sit directly below it, then the
-          rest. */}
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-4 items-start">
-      {/* Left column */}
+      {/* One column. The two cards the Dashboard wants at the very top of the
+          page — Exam readiness, then Study Schedule — portal into the slots it
+          supplies; what's left here is Today's Study Plan and its warnings,
+          full width. The `order-*` classes keep the inline (no-slot) fallback
+          in the same reading order: readiness, study plan, warnings, schedule. */}
       <div className="flex flex-col gap-4">
+      {/* Exam readiness card — portals to `readinessSlot` when the Dashboard
+          supplies one, otherwise renders inline here (no `order`, so it stays first). */}
+      {readinessSlot ? createPortal(readinessCardContent, readinessSlot) : readinessCardContent}
+
       {/* Study Schedule (heatmap) card — portals to `studyScheduleSlot` when the Dashboard
           supplies one (see the `studyScheduleCardContent` definition above), otherwise
           renders inline here (`order-4`, below the study plan/actions/warnings). */}
@@ -1416,83 +1378,7 @@ export function ReadinessCard({
           <ReviewModeNote concepts={plan.reviewConcepts ?? []} />
         )}
       </div>
-      </div>{/* end left column */}
-
-      {/* RIGHT COLUMN: Study Guide */}
-      <div className="space-y-3">
-        <Card ref={studyGuideCardRef} className="bg-card border-0">
-          <CardContent className="p-5 space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold">Study Guide</h3>
-            </div>
-
-            <StudyGuideRadial
-              syllabus={syllabus}
-              examRecords={isPremium ? examRecords : []}
-              now={now}
-              totalCount={aggregate.total}
-              selectedConcept={isPremium && popupFromRadial ? popupCurrentName : null}
-              flashRadial={flashRadial}
-              onConceptClick={name => {
-                const idx = allConcepts.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
-                openDashboard(toRefs(allConcepts), null, 'entire-syllabus', idx === -1 ? 0 : idx, { circular: true, fromRadial: true })
-              }}
-            />
-          </CardContent>
-        </Card>
-
-        {/* Topics Learned card */}
-        <Card className="border-0">
-          <CardContent className="p-5 space-y-2">
-            <button
-              type="button"
-              onClick={() => setTopicsMasteredOpen(prev => !prev)}
-              className="w-full"
-              aria-expanded={topicsMasteredOpen}
-            >
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Topics Learned</span>
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold">
-                      {isPremium ? aggregate.level3 : 0}
-                      <span className="text-muted-foreground font-normal">/{aggregate.total}</span>
-                      <span className="text-muted-foreground font-normal ml-1.5">({isPremium ? aggregate.strongPct : 0}%)</span>
-                    </span>
-                    <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${topicsMasteredOpen ? '' : '-rotate-90'}`} />
-                  </div>
-                </div>
-                {isPremium ? (
-                  <div className="h-4 rounded-full bg-secondary overflow-hidden flex">
-                    <div className="h-full transition-all" style={{ width: `${aggregate.strongPct}%`, backgroundColor: 'rgba(34, 197, 94, 1)' }} />
-                    <div className="h-full transition-all" style={{ width: `${level2Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.55)' }} />
-                    <div className="h-full transition-all" style={{ width: `${level1Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.25)' }} />
-                  </div>
-                ) : (
-                  <div className="h-4 rounded-full bg-secondary overflow-hidden" />
-                )}
-              </div>
-            </button>
-
-            {topicsMasteredOpen && (
-              <div className="max-h-80 overflow-y-auto" ref={topicsMasteredContainerRef}>
-                <StudyPlanTracker
-                  syllabus={syllabus}
-                  masteryRecords={masteryRecords}
-                  studyPlan={isPremium ? plan : null}
-                  allConceptsForNav={allConcepts}
-                  onConceptSelect={concept => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', concept.index)}
-                  openTopics={openTopics}
-                  onToggle={toggleTopic}
-                  flashingConcept={isPremium ? flashingConcept : undefined}
-                  showMastery={isPremium ? undefined : false}
-                />
-              </div>
-            )}
-          </CardContent>
-        </Card>
       </div>
-      </div>{/* end bento grid */}
 
       {showConfig && (
         <StudyPlanConfigModal

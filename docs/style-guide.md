@@ -86,7 +86,39 @@ white (dark) or black (light) fill. Always pair it with `text-primary-foreground
 put `text-primary` on a primary fill. Use `bg-background` / `bg-card`, never `bg-white` or
 `bg-black` — the two swap with the mode.
 
-### 2.3 Focus & selection
+### 2.3 Exam accent colours
+
+One exception to "neutral by default": every exam has a **hue of its own**, and the ramp
+carries information. `lib/examColors.ts` steps chromatically around the wheel from **blue at
+Exam P** to **red at Exam 9** — two exams next to each other on the ladder are next to each
+other on the wheel, and how far round the wheel a surface is says how far along the course of
+study it is. Only exams get one: VEE credits, the DISC courses, PCPA and the professionalism
+courses are requirements rather than rungs, so they take the neutral treatment.
+
+Nothing in that module paints anything. `examAccentStyle(examKey)` returns three custom
+properties to spread onto whatever element scopes the exam, and everything inside it can then
+reference them:
+
+| Property | Use for |
+|---|---|
+| `--exam-accent` | The solid hue — text, an icon, a rule, a ring |
+| `--exam-accent-muted` | Between the two — a hairline or a resting border |
+| `--exam-accent-soft` | A translucent wash — a tinted surface |
+
+```tsx
+<Card style={examAccentStyle('CAS-5')}
+      className="ring-1 ring-transparent hover:ring-[var(--exam-accent-muted)]
+                 hover:bg-[var(--exam-accent-soft)]" />
+```
+
+All three are translucent or mid-lightness by design, so the accent lands on whatever surface
+is under it and works in both modes without a per-exam light and dark value. Today the only
+surface spending it is the Study Guides exam grid, on hover; add it wherever an exam needs a
+feature colour rather than deriving a second palette. **`examAccentStyle` returns `undefined`
+for a non-exam** — spread it unconditionally and branch on it, so a requirement with no rung
+keeps the neutral hover instead of inheriting the wrong colour from an ancestor.
+
+### 2.4 Focus & selection
 
 - Focus ring is standardized: `focus-visible:ring-2 focus-visible:ring-ring
   focus-visible:ring-offset-2`. Never remove focus outlines without an equivalent replacement.

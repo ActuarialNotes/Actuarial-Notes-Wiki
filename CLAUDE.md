@@ -31,6 +31,9 @@ questions/<exam-id>/*.md                          — question bank (YAML frontm
 Guides/<Exam page>/*.md                           — study tips, one page per tip (frontmatter: exam,
                                                     section, order). Bundled but no longer rendered —
                                                     the exam-page "How to Study" card was removed
+Guides/*.md                                       — general guides, belonging to no exam ("How to Study
+                                                    for Actuarial Exams"). Listed on the Study Guides
+                                                    home page — data/examGuides.ts, GENERAL_GUIDES
 comprehension-checks/<exam-id>/*.md               — flashcard-collect gate questions (one .md per concept,
                                                     parsed by lib/comprehensionCheckParser.ts)
 Media/Attachments/                                — images referenced via ![[...]]
@@ -203,6 +206,15 @@ Other important `lib/` modules:
   `kind: 'guide'` walk in the concept popup are all still here, so resurfacing it is a
   matter of adding a surface. Every tip ref carries an explicit `path` — "Scoring" is a page
   under every exam, so only the folder says which one to fetch.
+- `examColors.ts` — the **exam accent colour**: one hue per exam, stepping chromatically
+  around the wheel from blue at Exam P to red at Exam 9, so the colour says where on the
+  ladder an exam sits. Pure and tested, and it paints nothing itself —
+  `examAccentStyle(examKey)` hands back three CSS custom properties (`--exam-accent`,
+  `--exam-accent-muted`, `--exam-accent-soft`) to spread onto whatever element scopes the
+  exam. The Study Guides grid spends it on hover; anything else that needs an exam's feature
+  colour should read it from there rather than growing a second palette. Non-exam
+  requirements (VEE, the DISCs, PCPA, the professionalism courses) get `undefined`, not a
+  colour. See `docs/style-guide.md` §2.3.
 - `keystone.ts` — the keystone-concept read side: `findKeystone` / `isKeystone` (strict name
   matching, no fuzzy hits) and `keystoneProgress` (decay-aware mastery roll-up per exam).
   Rendered by `components/KeystoneName.tsx`. No surface lists an exam's keystones since the
@@ -447,6 +459,17 @@ compile — don't "clean up" the flagged code as dead.
   markdown, `[[Wiki Links]]` and LaTeX all fine. The folder name is what ties a guide to its
   exam — `examIdFromFile`, so a dash-less exam picks up a `-1` suffix and Exam 5's key is
   `5-1`.
+- A guide page at the **top level** of `Guides/`, beside those folders, belongs to no exam —
+  it is an orientation to the course of study itself (`Guides/How to Study for Actuarial
+  Exams.md`). It is authored the same way (no `# Title`, wiki-links and LaTeX fine, no
+  frontmatter needed), rides along in `virtual:wiki-content`, and is listed on the Study
+  Guides home page from `GENERAL_GUIDES` in `data/examGuides.ts` — which is where the card's
+  title, one-line description and vault path are authored. It stays out of
+  `virtual:exam-guides`, which only walks the exam folders.
+- The four credential pages — `Concepts/Associate of the Casualty Actuarial Society
+  (ACAS).md` and its ASA / FCAS / FSA siblings — are what the Study Guides page's track
+  headings open. `data/tracks.ts` names them (`Track.conceptPage`), so a renamed page is a
+  one-line change there.
 - Every exam page ends with a `## Source Material` heading over a
   `> [!answer]- Source Material` callout: one top-level bullet per syllabus reading (a
   `[[wiki link]]`, normally to a `Resources/Books/` page) with an indented bullet naming the
@@ -516,7 +539,9 @@ modules that read directly from the repo root:
 - `virtual:questions-content` — `questions/`
 - `virtual:comprehension-checks` — `comprehension-checks/<exam-id>/`
 - `virtual:exam-guides` — the tip pages under `Guides/<exam page>/` (their markdown rides
-  along in `virtual:wiki-content`; bundled but unrendered — see `lib/examGuides.ts`)
+  along in `virtual:wiki-content`; bundled but unrendered — see `lib/examGuides.ts`). A
+  general guide at the top level of `Guides/` rides along in `virtual:wiki-content` too, but
+  never in this module
 - `virtual:resource-timeline` — the dated `Resources/{Books,Events,Regulation,Benchmarks}/`
   pages that power the Resources timeline/heatmap
 - `virtual:keystone-links` — for each keystone concept page, the concept pages it links to

@@ -121,6 +121,43 @@ async function collectWikiContent(): Promise<WikiBundleData> {
   return { files, index }
 }
 
+// ── Exam pages ───────────────────────────────────────────────────────────────
+// Just the root `Exam *.md` syllabus pages, as their own tiny module.
+//
+// `virtual:wiki-content` already carries these, but it also carries every
+// concept and resource page — megabytes that only the wiki routes need, and
+// which is why that module is imported from `WikiLayout` (its own lazy chunk).
+// The syllabi, by contrast, are needed by the Dashboard, the Sidebar, the quiz
+// builder and Flashcards, none of which mount `WikiLayout`. Those surfaces used
+// to reach GitHub's Contents API at runtime for them, which meant an API
+// outage, an offline user or an unauthenticated rate-limit (60 requests/hour
+// per IP) left the app with *no* exams at all — a new account could add an exam
+// and never see it appear. Bundling the ~80 KB of markdown removes that
+// dependency entirely. See `useWikiSyllabus`.
+async function collectExamPages(): Promise<Record<string, string>> {
+  const files: Record<string, string> = {}
+  const rootEntries = await readdir(REPO_ROOT).catch(() => [] as string[])
+  for (const name of rootEntries) {
+    if (!name.endsWith('.md') || !/^Exam\b/i.test(name)) continue
+    const text = await readFile(path.join(REPO_ROOT, name), 'utf-8').catch(() => null)
+    if (text != null) files[name] = text
+  }
+  return files
+}
+
+function examPagesPlugin(): Plugin {
+  const VIRTUAL_ID = 'virtual:exam-pages'
+  const RESOLVED_ID = '\0' + VIRTUAL_ID
+  return {
+    name: 'exam-pages',
+    resolveId: (id) => id === VIRTUAL_ID ? RESOLVED_ID : undefined,
+    load: async (id) => {
+      if (id !== RESOLVED_ID) return
+      return `export default ${JSON.stringify(await collectExamPages())}`
+    },
+  }
+}
+
 function wikiContentPlugin(): Plugin {
   const VIRTUAL_ID = 'virtual:wiki-content'
   const RESOLVED_ID = '\0' + VIRTUAL_ID
@@ -535,7 +572,7 @@ function pdfjsAssetsPlugin(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), wikiContentPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), examGuidesPlugin(), keystoneLinksPlugin(), pdfjsAssetsPlugin()],
+  plugins: [react(), examPagesPlugin(), wikiContentPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), examGuidesPlugin(), keystoneLinksPlugin(), pdfjsAssetsPlugin()],
   resolve: {
     alias: { '@': path.resolve(__dirname, 'src') },
   },

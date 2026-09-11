@@ -192,9 +192,13 @@ Other important `lib/` modules:
   `ready` (P, FM), `beta` (MAS-I, MAS-II, Exam 5) or `development` (Exams 6–9 — a syllabus
   outline with no question bank yet). The one definition; the study-guide exam grid greys
   those cards out with an "In development — not yet available" pill instead of a Beta label,
-  the exam page shows the amber *In Development* banner (`WikiFloatingSearch`), and the quiz
-  builder's Beta pill reads the same helper. Move an exam out of development here, not in the
-  surfaces.
+  the exam page shows the amber *In Development* banner (`WikiFloatingSearch`), the quiz
+  builder's Beta pill reads the same helper, and `ExamsPopout` uses it (together with "does
+  the vault have an `Exam *.md` page at all?") to decide which exams get an **Add** button.
+  Move an exam out of development here, not in the surfaces. The credential tracks in
+  `data/tracks.ts` list ~50 exams and the vault covers ten of them, so an exam can be
+  tracked on a credential path without being studiable — `data/tracks.test.ts` pins the
+  DEFAULT track (what a new account lands on) to exams that *are*.
 - `examGuides.ts` — turns the tip pages the build collects out of `Guides/<exam page>/` into
   one guide per exam, in the reading order their `order:` frontmatter authors (a page with
   none sorts last rather than into the middle of the run). Pure and tested;
@@ -404,11 +408,13 @@ Other important `lib/` modules:
   The wait is announced before it's applied and always points at the concept page.
   See `docs/flashcard-collection.md`.
 - `localMasteryStore.ts` / `dailyProgressStore.ts` — localStorage-backed offline fallbacks that sync with Supabase
-- `github.ts` — fetches wiki content from GitHub raw URLs at runtime (for the live site, vs. the build-time bundle)
+- `github.ts` — fetches wiki content from GitHub raw URLs at runtime (for the live site, vs. the
+  build-time bundle). Note that `listRepoContents` hits the GitHub **API**, which is limited to
+  60 requests/hour per IP without `VITE_GITHUB_TOKEN` — don't put it on a path that has to work.
 - `supabase.ts` — Supabase client + shared row types
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **96 test files /
-~1390 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **97 test files /
+~1400 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, and the research/resource-timeline
 modules).
 
@@ -512,6 +518,14 @@ npm test           # vitest run
 
 Vite plugins (`vite.config.ts`) bundle the markdown content at build time via virtual
 modules that read directly from the repo root:
+- `virtual:exam-pages` — just the root `Exam*.md` syllabus pages (~80 KB), read by
+  `hooks/useWikiSyllabus.ts`. Separate from `virtual:wiki-content` on purpose: that
+  module is megabytes and is imported from `WikiLayout`'s lazy chunk, but the Dashboard,
+  Sidebar, quiz builder and Flashcards all need to know *which exams exist* and none of
+  them mount `WikiLayout`. They used to resolve that from GitHub's Contents API at
+  runtime, so a rate-limit or outage left the app with no exams at all — an account
+  could add one and never see it appear. **Which exams exist is a build-time fact; keep
+  it off the network.**
 - `virtual:wiki-content` — `Exam*.md`, `Concepts/`, `Resources/Books/`
 - `virtual:questions-content` — `questions/`
 - `virtual:comprehension-checks` — `comprehension-checks/<exam-id>/`

@@ -1,41 +1,51 @@
+// The exam syllabi, parsed from the `Exam *.md` pages.
+//
+// Read from the build-time bundle (`virtual:exam-pages`) rather than fetched.
+// These pages decide which exams exist — the Dashboard's exam tabs, the
+// Sidebar, the quiz builder's exam cards, Flashcards — and they used to come
+// from GitHub's Contents API at runtime. That made the whole app depend on a
+// third-party API being reachable *and* under its rate limit (60 requests/hour
+// per IP when no `VITE_GITHUB_TOKEN` is configured). When the call failed, the
+// list came back empty and stayed empty for the session: a new account could
+// add an exam, save it, and watch the dashboard keep saying it had none. The
+// markdown is ~80 KB, so bundling it removes the failure mode outright.
+//
+// The network path is kept only as a fallback for a build whose bundle came out
+// empty, and `error` is still reported so a caller can say so rather than
+// render a silent empty state.
+
 import { useState, useEffect } from 'react'
+import examPages from 'virtual:exam-pages'
 import { listRepoContents, fetchWikiFile } from '@/lib/github'
 import { parseExamMetadata, parseExamSyllabus, type WikiExamSyllabus } from '@/lib/wikiParser'
 
-const CACHE_KEY = 'actuarial_wiki_syllabus_v4'
-const CACHE_TTL_MS = 6 * 60 * 60 * 1000  // 6 hours
-
-interface CacheEntry {
-  data: WikiExamSyllabus[]
-  expiresAt: number
+function parseExamPage(fileName: string, content: string): WikiExamSyllabus | null {
+  const meta = parseExamMetadata(content)
+  if (!meta) return null
+  const bare = fileName.replace(/\.md$/i, '')
+  return parseExamSyllabus(content, meta.examId, meta.examLabel, meta.examTopic, bare)
 }
 
-function readCache(): WikiExamSyllabus[] | null {
-  try {
-    const raw = localStorage.getItem(CACHE_KEY)
-    if (!raw) return null
-    const entry: CacheEntry = JSON.parse(raw)
-    if (Date.now() > entry.expiresAt) {
-      localStorage.removeItem(CACHE_KEY)
-      return null
+// Parsed once per session — the bundle never changes while the app is running.
+let bundledSyllabi: WikiExamSyllabus[] | null = null
+
+function readBundledSyllabi(): WikiExamSyllabus[] {
+  if (bundledSyllabi) return bundledSyllabi
+  const out: WikiExamSyllabus[] = []
+  for (const [name, content] of Object.entries(examPages)) {
+    try {
+      const parsed = parseExamPage(name, content)
+      if (parsed) out.push(parsed)
+    } catch {
+      // A malformed page shouldn't take the other exams down with it.
     }
-    return entry.data
-  } catch {
-    return null
   }
+  bundledSyllabi = out
+  return out
 }
 
-function writeCache(data: WikiExamSyllabus[]): void {
-  const entry: CacheEntry = { data, expiresAt: Date.now() + CACHE_TTL_MS }
-  try {
-    localStorage.setItem(CACHE_KEY, JSON.stringify(entry))
-  } catch {
-    // ignore quota errors
-  }
-}
-
-// Scan the repo root for Exam*.md files, fetch and parse each one.
-// Files that can't be fetched or lack the expected metadata are silently skipped.
+// Fallback for a build that shipped no exam pages: scan the repo for them the
+// old way. Files that can't be fetched or lack the expected metadata are skipped.
 async function fetchAllExamSyllabi(): Promise<WikiExamSyllabus[]> {
   const rootItems = await listRepoContents()
   const examFiles = rootItems.filter(
@@ -44,11 +54,9 @@ async function fetchAllExamSyllabi(): Promise<WikiExamSyllabus[]> {
 
   const results = await Promise.allSettled(
     examFiles.map(async item => {
-      const content = await fetchWikiFile(item.name)
-      const meta = parseExamMetadata(content)
-      if (!meta) throw new Error(`No exam metadata in ${item.name}`)
-      const fileName = item.name.replace(/\.md$/i, '')
-      return parseExamSyllabus(content, meta.examId, meta.examLabel, meta.examTopic, fileName)
+      const parsed = parseExamPage(item.name, await fetchWikiFile(item.name))
+      if (!parsed) throw new Error(`No exam metadata in ${item.name}`)
+      return parsed
     }),
   )
 
@@ -58,30 +66,29 @@ async function fetchAllExamSyllabi(): Promise<WikiExamSyllabus[]> {
 }
 
 export function useWikiSyllabus() {
-  const [syllabi, setSyllabi] = useState<WikiExamSyllabus[]>([])
-  const [loading, setLoading] = useState(true)
+  const [syllabi, setSyllabi] = useState<WikiExamSyllabus[]>(readBundledSyllabi)
+  const [loading, setLoading] = useState(() => readBundledSyllabi().length === 0)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const cached = readCache()
-    if (cached) {
-      setSyllabi(cached)
-      setLoading(false)
-      return
-    }
+    if (syllabi.length > 0) return
 
+    let cancelled = false
     setLoading(true)
     setError(null)
 
     fetchAllExamSyllabi()
       .then(parsed => {
-        // Only cache when we got real results — caching [] would block
-        // retries for 6 hours since [] is truthy and returned immediately.
-        if (parsed.length > 0) writeCache(parsed)
+        if (cancelled) return
         setSyllabi(parsed)
+        if (parsed.length === 0) setError('No exam syllabus pages could be loaded.')
       })
-      .catch(err => setError((err as Error).message))
-      .finally(() => setLoading(false))
+      .catch(err => { if (!cancelled) setError((err as Error).message) })
+      .finally(() => { if (!cancelled) setLoading(false) })
+
+    return () => { cancelled = true }
+  // Runs once: the bundle is static, so `syllabi` only goes from empty to full.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return { syllabi, loading, error }

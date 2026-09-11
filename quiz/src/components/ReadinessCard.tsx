@@ -833,6 +833,19 @@ export function ReadinessCard({
     if (isLaunchingQuizRef.current) return
     isLaunchingQuizRef.current = true
 
+    const topicValue = questionExamLabel(syllabus)
+
+    // No daily plan to sweep through — a free account, or a premium one that
+    // hasn't set a target date. The cascade is an animation *of the plan*, and
+    // `autostart` needs one, so both would be a second of nothing before the
+    // quiz builder appeared anyway. Go straight there, with the exam already
+    // chosen.
+    if (cascadeSteps.length === 0) {
+      isLaunchingQuizRef.current = false
+      navigate(`/?topic=${encodeURIComponent(topicValue)}&mode=quiz`)
+      return
+    }
+
     // Scroll the study plan into view first, then sweep a highlight through each
     // concept individually while the card border is traced in the primary colour —
     // together they tell the user exactly what today's session is about to cover.
@@ -857,7 +870,6 @@ export function ReadinessCard({
       setQuizStartConcept(null)
       setTracePlanBorder(false)
       isLaunchingQuizRef.current = false
-      const topicValue = questionExamLabel(syllabus)
       // autostart=1 tells Landing to jump straight into a quiz sized to complete
       // today's plan (fewest questions covering every still-incomplete concept).
       navigate(`/?topic=${encodeURIComponent(topicValue)}&mode=quiz&autostart=1`)
@@ -1426,12 +1438,17 @@ export function ReadinessCard({
               <h3 className="text-sm font-semibold">Study Guide</h3>
             </div>
 
+            {/* The readiness ring reads mastery, which is recorded for every
+                account — the daily *plan* is what Premium buys, not the record
+                of what has been learned. Blanking the ring for free users hid
+                their own progress and made the dashboard look broken on the
+                first quiz they finished. */}
             <StudyGuideRadial
               syllabus={syllabus}
-              examRecords={isPremium ? examRecords : []}
+              examRecords={examRecords}
               now={now}
               totalCount={aggregate.total}
-              selectedConcept={isPremium && popupFromRadial ? popupCurrentName : null}
+              selectedConcept={popupFromRadial ? popupCurrentName : null}
               flashRadial={flashRadial}
               onConceptClick={name => {
                 const idx = allConcepts.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
@@ -1455,22 +1472,18 @@ export function ReadinessCard({
                   <span className="text-muted-foreground">Topics Learned</span>
                   <div className="flex items-center gap-2">
                     <span className="font-semibold">
-                      {isPremium ? aggregate.level3 : 0}
+                      {aggregate.level3}
                       <span className="text-muted-foreground font-normal">/{aggregate.total}</span>
-                      <span className="text-muted-foreground font-normal ml-1.5">({isPremium ? aggregate.strongPct : 0}%)</span>
+                      <span className="text-muted-foreground font-normal ml-1.5">({aggregate.strongPct}%)</span>
                     </span>
                     <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${topicsMasteredOpen ? '' : '-rotate-90'}`} />
                   </div>
                 </div>
-                {isPremium ? (
-                  <div className="h-4 rounded-full bg-secondary overflow-hidden flex">
-                    <div className="h-full transition-all" style={{ width: `${aggregate.strongPct}%`, backgroundColor: 'rgba(34, 197, 94, 1)' }} />
-                    <div className="h-full transition-all" style={{ width: `${level2Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.55)' }} />
-                    <div className="h-full transition-all" style={{ width: `${level1Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.25)' }} />
-                  </div>
-                ) : (
-                  <div className="h-4 rounded-full bg-secondary overflow-hidden" />
-                )}
+                <div className="h-4 rounded-full bg-secondary overflow-hidden flex">
+                  <div className="h-full transition-all" style={{ width: `${aggregate.strongPct}%`, backgroundColor: 'rgba(34, 197, 94, 1)' }} />
+                  <div className="h-full transition-all" style={{ width: `${level2Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.55)' }} />
+                  <div className="h-full transition-all" style={{ width: `${level1Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.25)' }} />
+                </div>
               </div>
             </button>
 
@@ -1484,8 +1497,7 @@ export function ReadinessCard({
                   onConceptSelect={concept => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', concept.index)}
                   openTopics={openTopics}
                   onToggle={toggleTopic}
-                  flashingConcept={isPremium ? flashingConcept : undefined}
-                  showMastery={isPremium ? undefined : false}
+                  flashingConcept={flashingConcept}
                 />
               </div>
             )}

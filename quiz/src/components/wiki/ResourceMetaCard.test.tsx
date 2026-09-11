@@ -17,6 +17,15 @@ ISBN: 978-0134686998
 The statistics reference on the MAS-I syllabus.
 `
 
+// A page with nothing to get hold of: no ISBN to search on and no source link.
+const LANDMARK = `---
+Title: Landmark Legal Decisions
+Author: Various
+Year: "2019"
+---
+Case law summarised for Exam 6C.
+`
+
 const ASOP = `---
 Title: "ASOP No. 43 — Property/Casualty Unpaid Claim Estimates"
 Author: Actuarial Standards Board
@@ -67,7 +76,16 @@ describe('ResourceMetaCard', () => {
   it('offers the source document as a control, not a bare link', () => {
     expect(render(ASOP)).toContain('Read PDF')
     // Nothing to get hold of → no action at all.
-    expect(render(HOGG)).not.toContain('Get a copy')
+    expect(render(LANDMARK)).not.toContain('Get a copy')
+  })
+
+  // A textbook names no place to fetch it from, so the card sends the reader to
+  // a library instead — searching on the ISBN printed beside it, which is the
+  // one identifier the page can be sure of.
+  it('sends a textbook to a library search on its own ISBN', () => {
+    const html = render(HOGG)
+    expect(html).toContain('Get a copy')
+    expect(html).toContain('https://search.worldcat.org/search?q=bn%3A9780134686998')
   })
 })
 

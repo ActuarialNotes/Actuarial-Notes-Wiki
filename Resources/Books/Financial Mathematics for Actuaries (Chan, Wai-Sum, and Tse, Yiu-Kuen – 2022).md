@@ -6,13 +6,12 @@ date: "2022"
 Edition: 3rd
 Publisher: World Scientific
 ISBN: 978-981-124-327-1
-Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/financial-mathematics-for-actuaries-chan-tse)"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:d7a608a90be3566d29ea188a8904e77a603ba3da34bf3274272e25b7bfb9a60d
+  content_hash: sha256:697896b1d6f37ea73518da289c2e2da76d7a188574433034296718c0582d5156
   sources: []
   open_findings: 0
   open_critical: 0
@@ -90,4 +89,5 @@ verification:
 - 9.3 Autoregressive and Dynamic Term-Structure Models
 
 ## Links
-- [worldcat.org](https://search.worldcat.org/title/financial-mathematics-for-actuaries-chan-tse)
+- [Financial Mathematics for Actuaries, 3rd edition (World Scientific)](https://www.worldscientific.com/worldscibooks/10.1142/12464)
+- [Find in a library (WorldCat)](https://search.worldcat.org/search?q=bn%3A9789811243271)

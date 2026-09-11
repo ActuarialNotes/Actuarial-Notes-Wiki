@@ -1,6 +1,14 @@
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
-import { scrubKeyTarget, scrubPositionAt } from '@/lib/navScrub'
+import {
+  navSegments,
+  scrubKeyTarget,
+  scrubPositionAt,
+  segmentAt,
+  segmentFillPercent,
+  type NavSegment,
+  type NavSegmentMark,
+} from '@/lib/navScrub'
 
 /**
  * The thin green bar that sits directly above a Previous / Next footer, showing
@@ -18,6 +26,13 @@ import { scrubKeyTarget, scrubPositionAt } from '@/lib/navScrub'
  * measure something a reader has *earned* — mastery, XP, exam readiness, quest
  * progress — and those must stay readouts: there is nowhere to drag to. Only a
  * bar whose fill is a *position in a sequence* gets a handler.
+ *
+ * Given `segments` it is cut into chapters, the way a video's timeline is: one
+ * piece of track per named stretch, a hairline gap between them, and the
+ * chapter's name above the position in the drag bubble. A bar that is one solid
+ * strip says how far through you are and nothing about what is around you; a
+ * segmented one shows the shape of the document — where each question of an
+ * examiner's report starts, how long it runs — before you have read any of it.
  */
 export interface NavProgressBarProps {
   /** 1-indexed position of the current item. */
@@ -57,6 +72,17 @@ export interface NavProgressBarProps {
    * bar, since "212" alone doesn't say how far in that is.
    */
   formatValue?: (position: number) => string
+  /**
+   * Where the sequence's named stretches begin — a PDF's bookmarks, a paper's
+   * questions. Only the starts are given: each runs to the item before the next
+   * one, and anything before the first is an unnamed stretch of its own.
+   *
+   * Pass what the source actually says, in any order; `navSegments` settles the
+   * rest and leaves the bar plain when the marks say nothing useful. Never
+   * invent a chapter list to fill the bar — a document with no outline has no
+   * chapters, and evenly spaced fictions would read as its real structure.
+   */
+  segments?: NavSegmentMark[]
 }
 
 /** Percentage filled for a 1-indexed position, clamped to 0–100. */
@@ -78,6 +104,58 @@ function Fill({ percentage, fillClassName }: { percentage: number; fillClassName
   )
 }
 
+/**
+ * The track: one strip, or one strip per chapter.
+ *
+ * The segmented pieces are laid out by `flex-grow` rather than by percentage
+ * widths, so the gaps between them are taken out of the chapters' own width
+ * instead of pushing the last one off the end of the bar — and a one-page
+ * chapter of a 400-page report still gets a sliver rather than nothing.
+ */
+function Track({
+  segments,
+  percentage,
+  current,
+  highlight,
+  trackClassName,
+  fillClassName,
+}: {
+  segments: NavSegment[]
+  percentage: number
+  current: number
+  /** The chapter under the pointer, which lifts out of the track while it's there. */
+  highlight?: NavSegment | null
+  trackClassName?: string
+  fillClassName?: string
+}) {
+  if (segments.length === 0) {
+    return (
+      <div className={cn('h-full w-full overflow-hidden bg-muted', trackClassName)}>
+        <Fill percentage={percentage} fillClassName={fillClassName} />
+      </div>
+    )
+  }
+
+  return (
+    // The row itself is transparent: whatever `bg-muted` a caller wanted belongs
+    // to the pieces, or it would paint the gaps back in.
+    <div className={cn('flex h-full w-full gap-[2px] bg-transparent', trackClassName)}>
+      {segments.map(segment => (
+        <div
+          key={segment.start}
+          style={{ flexGrow: segment.end - segment.start + 1, flexBasis: 0 }}
+          className={cn(
+            'h-full min-w-px overflow-hidden rounded-[1px] transition-colors duration-150',
+            highlight && highlight.start === segment.start ? 'bg-muted-foreground/30' : 'bg-muted',
+          )}
+        >
+          <Fill percentage={segmentFillPercent(segment, current)} fillClassName={fillClassName} />
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export function NavProgressBar({
   current,
   total,
@@ -87,6 +165,7 @@ export function NavProgressBar({
   fillClassName,
   onScrub,
   formatValue,
+  segments,
 }: NavProgressBarProps) {
   const percentage = navProgressPercent(current, total)
   const trackRef = useRef<HTMLDivElement>(null)
@@ -101,6 +180,8 @@ export function NavProgressBar({
   // anything is pressed. Null on touch, which has no hover to read.
   const [hover, setHover] = useState<number | null>(null)
 
+  const chapters = useMemo(() => (segments ? navSegments(segments, total) : []), [segments, total])
+
   // A one-item sequence has nowhere to drag to, so it stays a plain readout.
   const scrubbable = !!onScrub && total > 1
 
@@ -112,9 +193,15 @@ export function NavProgressBar({
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={Math.round(percentage)}
-        className={cn('h-1 w-full shrink-0 overflow-hidden bg-muted', trackClassName, className)}
+        className={cn('h-1 w-full shrink-0 overflow-hidden', chapters.length === 0 && 'bg-muted', className)}
       >
-        <Fill percentage={percentage} fillClassName={fillClassName} />
+        <Track
+          segments={chapters}
+          percentage={percentage}
+          current={current}
+          trackClassName={trackClassName}
+          fillClassName={fillClassName}
+        />
       </div>
     )
   }
@@ -173,7 +260,14 @@ export function NavProgressBar({
   // While dragging, the bubble follows the position itself so it can't drift
   // from the fill; before that it follows the mouse.
   const preview = scrubbing ? position : hover
-  const valueText = formatValue ? formatValue(position) : `${position} of ${total}`
+  const previewChapter = preview === null ? null : segmentAt(chapters, preview)
+  const currentChapter = segmentAt(chapters, position)
+  // A screen reader gets the chapter the same way the bubble shows it — "page
+  // 212 of 423, Question 14" — since that is what says where the drag has got to.
+  const valueText = [
+    formatValue ? formatValue(position) : `${position} of ${total}`,
+    currentChapter?.label,
+  ].filter(Boolean).join(', ')
 
   return (
     <div
@@ -206,8 +300,9 @@ export function NavProgressBar({
         className,
       )}
     >
-      {/* Which item the press would land on. On a long document the fill alone
-          doesn't answer that — 62% of 423 pages is not a page number. */}
+      {/* Which item the press would land on, and which chapter that is. On a
+          long document the fill alone doesn't answer either — 62% of 423 pages
+          is not a page number, and a page number is not a section. */}
       {preview !== null && (
         <span
           aria-hidden
@@ -216,19 +311,29 @@ export function NavProgressBar({
           // at either end of the drag.
           style={{ left: `clamp(2rem, ${navProgressPercent(preview, total)}%, calc(100% - 2rem))` }}
         >
-          {formatValue ? formatValue(preview) : `${preview} of ${total}`}
+          {previewChapter?.label && (
+            // The chapter leads, the page follows: on a segmented bar the name
+            // is what you are aiming at and the number is how to get back.
+            <span className="block max-w-[14rem] truncate text-center">{previewChapter.label}</span>
+          )}
+          <span className={cn('block text-center', previewChapter?.label && 'font-normal text-popover-foreground/70')}>
+            {formatValue ? formatValue(preview) : `${preview} of ${total}`}
+          </span>
         </span>
       )}
 
       <div
         className={cn(
-          'w-full overflow-hidden bg-muted transition-[height] duration-150 ease-out',
+          'w-full transition-[height] duration-150 ease-out',
           scrubbing ? 'h-2' : 'h-1 group-hover:h-1.5 group-focus-visible:h-1.5',
-          trackClassName,
         )}
       >
-        <Fill
+        <Track
+          segments={chapters}
           percentage={percentage}
+          current={position}
+          highlight={previewChapter}
+          trackClassName={trackClassName}
           fillClassName={cn(scrubbing && 'transition-none', fillClassName)}
         />
       </div>

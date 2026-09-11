@@ -1,11 +1,15 @@
 import { describe, it, expect } from 'vitest'
 import { navProgressPercent } from '@/components/NavProgressBar'
 import {
+  MAX_NAV_SEGMENTS,
+  navSegments,
   scrubKeyTarget,
   scrubPageStep,
   scrubPosition,
   scrubPositionAt,
   scrubRatio,
+  segmentAt,
+  segmentFillPercent,
 } from './navScrub'
 
 describe('scrubRatio', () => {
@@ -130,5 +134,101 @@ describe('scrubKeyTarget', () => {
   it('recovers from a position that has walked out of range', () => {
     expect(scrubKeyTarget('ArrowRight', 99, 10)).toBe(10)
     expect(scrubKeyTarget('ArrowLeft', -4, 10)).toBe(1)
+  })
+})
+
+describe('navSegments', () => {
+  it('runs each mark to the item before the next one', () => {
+    expect(navSegments([{ start: 1, label: 'Q1' }, { start: 5, label: 'Q2' }], 8)).toEqual([
+      { start: 1, end: 4, label: 'Q1' },
+      { start: 5, end: 8, label: 'Q2' },
+    ])
+  })
+
+  it('makes the run before the first mark an unnamed stretch of its own', () => {
+    // A cover page and a contents page are not part of question 1.
+    expect(navSegments([{ start: 3, label: 'Q1' }], 6)).toEqual([
+      { start: 1, end: 2, label: undefined },
+      { start: 3, end: 6, label: 'Q1' },
+    ])
+  })
+
+  it('sorts and clamps whatever order the source had', () => {
+    expect(navSegments([{ start: 9, label: 'C' }, { start: 1, label: 'A' }, { start: 4, label: 'B' }], 10))
+      .toEqual([
+        { start: 1, end: 3, label: 'A' },
+        { start: 4, end: 8, label: 'B' },
+        { start: 9, end: 10, label: 'C' },
+      ])
+    expect(navSegments([{ start: 1, label: 'A' }, { start: 99, label: 'B' }], 5)).toEqual([
+      { start: 1, end: 4, label: 'A' },
+      { start: 5, end: 5, label: 'B' },
+    ])
+  })
+
+  it('keeps the first of two marks on one item', () => {
+    expect(navSegments([{ start: 2, label: 'first' }, { start: 2, label: 'second' }], 4)).toEqual([
+      { start: 1, end: 1, label: undefined },
+      { start: 2, end: 4, label: 'first' },
+    ])
+  })
+
+  it('leaves the bar plain when the marks say nothing', () => {
+    // One stretch covering everything is a bar, not a chapter list.
+    expect(navSegments([], 10)).toEqual([])
+    expect(navSegments([{ start: 1, label: 'All of it' }], 10)).toEqual([])
+    expect(navSegments([{ start: 1 }], 0)).toEqual([])
+    expect(navSegments([{ start: NaN, label: 'nowhere' }], 10)).toEqual([])
+  })
+
+  it('leaves the bar plain rather than cutting it into hairlines', () => {
+    const marks = Array.from({ length: MAX_NAV_SEGMENTS + 5 }, (_, i) => ({ start: i + 1, label: `${i}` }))
+    expect(navSegments(marks, 400)).toEqual([])
+    // One fewer is still a bar worth segmenting.
+    expect(navSegments(marks.slice(0, MAX_NAV_SEGMENTS), 400)).toHaveLength(MAX_NAV_SEGMENTS)
+  })
+})
+
+describe('segmentAt', () => {
+  const segments = navSegments([{ start: 1, label: 'A' }, { start: 5, label: 'B' }], 9)
+
+  it('finds the stretch a position falls in', () => {
+    expect(segmentAt(segments, 1)?.label).toBe('A')
+    expect(segmentAt(segments, 4)?.label).toBe('A')
+    expect(segmentAt(segments, 5)?.label).toBe('B')
+    expect(segmentAt(segments, 9)?.label).toBe('B')
+  })
+
+  it('is null off the ends and with no segments at all', () => {
+    expect(segmentAt(segments, 0)).toBeNull()
+    expect(segmentAt(segments, 99)).toBeNull()
+    expect(segmentAt([], 3)).toBeNull()
+    expect(segmentAt(segments, NaN)).toBeNull()
+  })
+})
+
+describe('segmentFillPercent', () => {
+  const segment = { start: 5, end: 8, label: 'B' }
+
+  it('fills a stretch by how far into it the position is', () => {
+    expect(segmentFillPercent(segment, 5)).toBe(25)
+    expect(segmentFillPercent(segment, 6)).toBe(50)
+    expect(segmentFillPercent(segment, 8)).toBe(100)
+  })
+
+  it('is empty before the stretch and full after it', () => {
+    expect(segmentFillPercent(segment, 4)).toBe(0)
+    expect(segmentFillPercent(segment, 1)).toBe(0)
+    expect(segmentFillPercent(segment, 9)).toBe(100)
+  })
+
+  it('agrees with the plain bar about where an item leaves the fill', () => {
+    // The last item of a stretch fills it, exactly as it fills `i / total` of
+    // an unsegmented bar — the two readings can't disagree.
+    const total = 12
+    const segments = navSegments([{ start: 1, label: 'A' }, { start: 7, label: 'B' }], total)
+    expect(segmentFillPercent(segments[0], 6)).toBe(100)
+    expect(navProgressPercent(6, total)).toBe(50)
+    expect(segments[0].end / total).toBe(0.5)
   })
 })

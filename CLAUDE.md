@@ -235,6 +235,12 @@ Other important `lib/` modules:
   question bank actually holds, so a released paper that hasn't been imported still lists
   (greyed out, "Not added yet") and a freshly converted one appears without a catalogue edit.
   Rendered by `components/PastExamBrowser.tsx`. See `docs/mock-exam-browser.md`.
+- `pdfChapters.ts` — the exam-PDF reader's **chapters**: a document's own outline (the
+  bookmarks a viewer shows in a sidebar) turned into the marks that segment the page bar,
+  resolved against the document by `hooks/usePdfChapters.ts`. Pure and tested. Chapters are
+  *transcribed, never constructed* — the same rule as the pass-rate and examiner's-report
+  tables: a document with no outline keeps the plain bar rather than being cut into even
+  pieces. See `docs/mock-exam-browser.md`.
 - `examPdf.ts` / `pdfViewer.ts` / `pdfjsSetup.ts` — the exam-PDF reader behind the mock-exam
   shelf's **Examiner's Report** button. `examPdf.ts` decides which sources are viewable (the
   same allowlist `quiz/api/exam-pdf.js` enforces) and builds the proxy/download URLs — the page
@@ -260,7 +266,9 @@ Other important `lib/` modules:
   folded page come back where it was left). See `docs/stacked-pages.md`.
 - `navScrub.ts` — the maths behind a **scrubbable** progress bar: which item a point on the
   track means (the exact inverse of `navProgressPercent`, so a drag can't land off by one),
-  and where a key press moves to. Read by `components/NavProgressBar.tsx`, which is the one
+  where a key press moves to, and how a list of chapter marks becomes the **segments** the
+  bar is cut into (`navSegments`, YouTube-style: a piece of track per named stretch, the
+  run before the first mark unnamed, a plain bar when the marks say nothing). Read by `components/NavProgressBar.tsx`, which is the one
   position bar above every Previous / Next footer and becomes a video-timeline-style control
   wherever a surface passes `onScrub` — the exam-PDF reader, the quiz's question bar, the
   concept popup, flashcard study, the concept detail and mistakes modals, math focus. Bars
@@ -408,7 +416,7 @@ Other important `lib/` modules:
 - `supabase.ts` — Supabase client + shared row types
 
 `*.test.ts` files sit alongside the modules they test (vitest). There are **96 test files /
-~1390 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+~1420 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, and the research/resource-timeline
 modules).
 

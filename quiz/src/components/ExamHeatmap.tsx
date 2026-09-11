@@ -99,16 +99,29 @@ interface Props {
  */
 const MIN_FLARE_MS = 150
 
-/** Cell gutter, in css px — must match the `gap-[2px]` on the grid below. */
-const CELL_GAP = 2
+/** Cell gutter, in css px — must match the `gap-[3px]` on the grid below. */
+const CELL_GAP = 3
 /** Rows in a week column, Monday through Sunday. */
 const ROWS = 7
+/**
+ * Ceiling on one day's square, in css px. Days are drawn square — a week column
+ * is as wide as it is tall — by letting the columns share the card's width and
+ * giving each cell `aspect-square`. On a wide desktop card a short schedule
+ * would blow a day up to something the size of a button, so the grid stops
+ * growing here and leaves the slack to its right instead.
+ */
+const MAX_CELL_PX = 40
 
 /**
  * The Study Schedule timeline: one square per day, weeks as columns, from a
  * fortnight before the first session to a fortnight past exam day. It is the
  * card's only view — every day between today and the exam is on screen at
  * once, so the schedule-forming sweep plays out right here.
+ *
+ * A day really is a square: the columns split the available width and each cell
+ * takes its height from that width (`aspect-square`, capped by `MAX_CELL_PX`),
+ * so the strip reads as a calendar rather than a barcode, and every day is a
+ * target a thumb can hit.
  */
 export function ExamHeatmap({
   sessions,
@@ -390,16 +403,22 @@ export function ExamHeatmap({
     </div>
   )
 
+  // Squares, not stripes: the columns share the width, each cell takes its
+  // height from that width, and the whole grid stops widening once a day would
+  // be bigger than `MAX_CELL_PX`. The month row is capped to the same width so
+  // its labels stay over the weeks they name.
+  const gridMaxWidth = totalWeeks * (MAX_CELL_PX + CELL_GAP) - CELL_GAP
+
   return (
     <div className="space-y-3">
       {/* Month labels */}
-      <div className="flex items-end gap-[2px]">
-        <div className="shrink-0" style={{ width: 16 }} />
-        <div className="flex-1 flex gap-[2px]" style={{ height: 12 }}>
+      <div className="flex items-end gap-[3px]">
+        <div className="shrink-0" style={{ width: 20 }} />
+        <div className="flex-1 flex gap-[3px]" style={{ height: 12, maxWidth: gridMaxWidth }}>
           {columns.map(col => (
             <div key={col.key} className="flex-1 relative">
               {col.monthLabel && (
-                <span className="absolute left-0 bottom-0 text-[10px] text-muted-foreground leading-none whitespace-nowrap">
+                <span className="absolute left-0 bottom-0 text-[11px] text-muted-foreground leading-none whitespace-nowrap">
                   {col.monthLabel}
                 </span>
               )}
@@ -412,28 +431,31 @@ export function ExamHeatmap({
           beat it moves on is published to the cells as `--playback-step` so the
           lit day's flare and the trailing fade stay in step with it. */}
       <div
-        className="flex items-stretch gap-[2px]"
+        className="flex items-stretch gap-[3px]"
         style={playbackDay
           ? ({ '--playback-step': `${Math.max(playbackStepMs, MIN_FLARE_MS)}ms` } as CSSProperties)
           : undefined}
       >
-        <div className="flex flex-col gap-[2px] shrink-0" style={{ width: 16 }}>
+        {/* Weekday gutter. Each label is `flex-1` rather than a fixed height so
+            the column divides whatever height the squares come out at — the two
+            can't drift apart the way a hard-coded row height would. */}
+        <div className="flex flex-col gap-[3px] shrink-0" style={{ width: 20 }}>
           {DAY_LABELS.map((label, i) => (
-            <div key={i} className="h-[14px] flex items-center justify-end pr-0.5 text-[10px] text-muted-foreground leading-none select-none">
-              {i % 2 === 0 ? label : ''}
+            <div key={i} className="flex-1 flex items-center justify-end pr-1 text-[11px] text-muted-foreground leading-none select-none overflow-hidden">
+              {label}
             </div>
           ))}
         </div>
         <div
           ref={gridRef}
-          className="flex-1 flex gap-[2px]"
-          style={{ touchAction: 'manipulation' }}
+          className="flex-1 flex gap-[3px]"
+          style={{ touchAction: 'manipulation', maxWidth: gridMaxWidth }}
           onClick={handleGridClick}
         >
           {columns.map(col => (
             <div
               key={col.key}
-              className={`flex-1 flex flex-col gap-[2px] rounded-sm ${
+              className={`flex-1 flex flex-col gap-[3px] rounded-sm ${
                 col.isExamWeek ? 'ring-1 ring-inset ring-primary/50'
                   : col.isTargetReadyWeek ? 'ring-1 ring-inset ring-amber-400/60' : ''
               }`}
@@ -444,7 +466,7 @@ export function ExamHeatmap({
                 // show, and gating on `cell.data` made the strip feel dead on
                 // exactly the days a user taps to ask "what did I do here?".
                 const isClickable = onDayClick !== undefined
-                let cls = `w-full h-[14px] rounded-[2px] ${
+                let cls = `w-full aspect-square rounded-[3px] ${
                   cell.isFuture
                     ? cell.isExamDay ? 'bg-primary/30 ring-1 ring-inset ring-primary'
                       : cell.isReadyDay ? 'bg-amber-400/30 ring-1 ring-inset ring-amber-400'

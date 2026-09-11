@@ -86,7 +86,39 @@ white (dark) or black (light) fill. Always pair it with `text-primary-foreground
 put `text-primary` on a primary fill. Use `bg-background` / `bg-card`, never `bg-white` or
 `bg-black` — the two swap with the mode.
 
-### 2.3 Focus & selection
+### 2.3 Exam accent colours
+
+One exception to "neutral by default": every exam has a **hue of its own**, and the ramp
+carries information. `lib/examColors.ts` steps chromatically around the wheel from **blue at
+Exam P** to **red at Exam 9** — two exams next to each other on the ladder are next to each
+other on the wheel, and how far round the wheel a surface is says how far along the course of
+study it is. Only exams get one: VEE credits, the DISC courses, PCPA and the professionalism
+courses are requirements rather than rungs, so they take the neutral treatment.
+
+Nothing in that module paints anything. `examAccentStyle(examKey)` returns three custom
+properties to spread onto whatever element scopes the exam, and everything inside it can then
+reference them:
+
+| Property | Use for |
+|---|---|
+| `--exam-accent` | The solid hue — text, an icon, a rule, a ring |
+| `--exam-accent-muted` | Between the two — a hairline or a resting border |
+| `--exam-accent-soft` | A translucent wash — a tinted surface |
+
+```tsx
+<Card style={examAccentStyle('CAS-5')}
+      className="ring-1 ring-transparent hover:ring-[var(--exam-accent-muted)]
+                 hover:bg-[var(--exam-accent-soft)]" />
+```
+
+All three are translucent or mid-lightness by design, so the accent lands on whatever surface
+is under it and works in both modes without a per-exam light and dark value. Today the only
+surface spending it is the Study Guides exam grid, on hover; add it wherever an exam needs a
+feature colour rather than deriving a second palette. **`examAccentStyle` returns `undefined`
+for a non-exam** — spread it unconditionally and branch on it, so a requirement with no rung
+keeps the neutral hover instead of inheriting the wrong colour from an ancestor.
+
+### 2.4 Focus & selection
 
 - Focus ring is standardized: `focus-visible:ring-2 focus-visible:ring-ring
   focus-visible:ring-offset-2`. Never remove focus outlines without an equivalent replacement.
@@ -432,6 +464,25 @@ keyboard — a video timeline, with the position maths in `lib/navScrub.ts`. The
   expensive to show lags that work behind the position itself rather than making the bar
   wait — `PdfViewerPanel` renders the page 60ms behind the one being scrubbed to, the same
   shape as its zoom / renderZoom split.
+
+**Chapters.** Given `segments` — the positions where the sequence's named stretches begin —
+the bar is cut into them the way a video's timeline is: one piece of track per stretch, a
+2px gap between, and the stretch's name above the position in the bubble. The exam-PDF
+reader passes the document's own bookmarks (`lib/pdfChapters.ts`), which is what turns a
+72-page examiner's report into a visible list of its questions. The rules:
+
+- **Only a real structure gets segments.** The marks come from the source — a PDF's
+  outline, a paper's questions — never from cutting the sequence into even pieces to make
+  the bar look busy. A document with no bookmarks has no chapters and keeps the plain bar;
+  invented ones would read as the paper's real shape.
+- **The maths is `navSegments`** in `lib/navScrub.ts`: it sorts, clamps and de-duplicates
+  whatever the source gave, makes the run before the first mark an unnamed stretch of its
+  own, and returns `[]` — a plain bar — when the marks say nothing (one stretch covering
+  everything) or so many that the bar would be a hatched strip (`MAX_NAV_SEGMENTS`).
+- **The fill still reads straight across.** Each stretch fills by how far into it the
+  position is, which lands the fill's edge exactly where an unsegmented bar would put it.
+- **The chapter is part of the position**, so it goes in `aria-valuetext` too ("Page 212 of
+  423, Question 14") rather than being a purely visual cue.
 
 ### 7.6 Empty, loading & error states
 

@@ -108,14 +108,25 @@ async function collectWikiContent(): Promise<WikiBundleData> {
   // network fetch, but they stay out of `index`: a tip is read from its exam's
   // card, not found by searching the wiki for a concept. The list of them is
   // its own module (`virtual:exam-guides`, below).
-  const guideExams = await readdir(path.join(REPO_ROOT, 'Guides')).catch(() => [] as string[])
-  for (const examDir of guideExams) {
-    const dir = path.join(REPO_ROOT, 'Guides', examDir)
-    for (const name of await readdir(dir).catch(() => [] as string[])) {
-      if (!name.endsWith('.md')) continue
-      const text = await readFile(path.join(dir, name), 'utf-8').catch(() => null)
-      if (text != null) files[`Guides/${examDir}/${name}`] = text
+  // A guide page sitting at the top level of Guides/ belongs to no exam — it is
+  // an orientation to the course of study itself, listed on the Study Guides
+  // home page (`data/examGuides.ts`, GENERAL_GUIDES). It rides along in `files`
+  // for the same reason a tip does, and stays out of `index` and out of
+  // `virtual:exam-guides` (which only walks the exam folders).
+  const guideEntries = await readdir(path.join(REPO_ROOT, 'Guides'), { withFileTypes: true }).catch(() => [])
+  for (const entry of guideEntries) {
+    if (entry.isDirectory()) {
+      const dir = path.join(REPO_ROOT, 'Guides', entry.name)
+      for (const name of await readdir(dir).catch(() => [] as string[])) {
+        if (!name.endsWith('.md')) continue
+        const text = await readFile(path.join(dir, name), 'utf-8').catch(() => null)
+        if (text != null) files[`Guides/${entry.name}/${name}`] = text
+      }
+      continue
     }
+    if (!entry.name.endsWith('.md')) continue
+    const text = await readFile(path.join(REPO_ROOT, 'Guides', entry.name), 'utf-8').catch(() => null)
+    if (text != null) files[`Guides/${entry.name}`] = text
   }
 
   return { files, index }

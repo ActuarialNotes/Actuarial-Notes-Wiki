@@ -148,13 +148,15 @@ which name consequences and contents a button cannot. Two to cut:
 - ~L1053, the tour description (currently unreachable — `TOUR_ENABLED` is off). Handle it
   when the tour is rebuilt rather than now.
 
-### 3.9 The dead `blurb`
+### 3.9 The dead `blurb` — **done**
 
-`lib/readiness.ts` `ReadinessBand.blurb` carries a one-sentence "what to do next" for all five
-bands and **nothing renders it** — the doc already records that it was cut for repeating the
-band name. It is not visual noise, but it is a loaded gun: the next person to open the file
-sees a ready-made caption and a place to put it. Delete the field, or add a comment at the
-declaration saying it is deliberately unrendered.
+`lib/readiness.ts` `ReadinessBand.blurb` carried a one-sentence "what to do next" for all five
+bands that **nothing rendered** — a loaded gun: a ready-made caption looking for a place to
+go. It now has one, the Dashboard's Exam readiness card, on the terms this note sets: each
+blurb was rewritten down to the action alone, because the openers that restated the band
+("Early days.", "A real base is in place.") sat directly under the band label and were the
+label said twice (test 1). One muted line per block, and it carries a fact — what to do next
+— that neither the ring nor the label does (test 4).
 
 ## 4. What *not* to do in this sweep
 

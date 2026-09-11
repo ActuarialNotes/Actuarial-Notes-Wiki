@@ -31,6 +31,9 @@ questions/<exam-id>/*.md                          — question bank (YAML frontm
 Guides/<Exam page>/*.md                           — study tips, one page per tip (frontmatter: exam,
                                                     section, order). Bundled but no longer rendered —
                                                     the exam-page "How to Study" card was removed
+Guides/*.md                                       — general guides, belonging to no exam ("How to Study
+                                                    for Actuarial Exams"). Listed on the Study Guides
+                                                    home page — data/examGuides.ts, GENERAL_GUIDES
 comprehension-checks/<exam-id>/*.md               — flashcard-collect gate questions (one .md per concept,
                                                     parsed by lib/comprehensionCheckParser.ts)
 Media/Attachments/                                — images referenced via ![[...]]
@@ -207,6 +210,15 @@ Other important `lib/` modules:
   `kind: 'guide'` walk in the concept popup are all still here, so resurfacing it is a
   matter of adding a surface. Every tip ref carries an explicit `path` — "Scoring" is a page
   under every exam, so only the folder says which one to fetch.
+- `examColors.ts` — the **exam accent colour**: one hue per exam, stepping chromatically
+  around the wheel from blue at Exam P to red at Exam 9, so the colour says where on the
+  ladder an exam sits. Pure and tested, and it paints nothing itself —
+  `examAccentStyle(examKey)` hands back three CSS custom properties (`--exam-accent`,
+  `--exam-accent-muted`, `--exam-accent-soft`) to spread onto whatever element scopes the
+  exam. The Study Guides grid spends it on hover; anything else that needs an exam's feature
+  colour should read it from there rather than growing a second palette. Non-exam
+  requirements (VEE, the DISCs, PCPA, the professionalism courses) get `undefined`, not a
+  colour. See `docs/style-guide.md` §2.3.
 - `keystone.ts` — the keystone-concept read side: `findKeystone` / `isKeystone` (strict name
   matching, no fuzzy hits) and `keystoneProgress` (decay-aware mastery roll-up per exam).
   Rendered by `components/KeystoneName.tsx`. No surface lists an exam's keystones since the
@@ -239,6 +251,12 @@ Other important `lib/` modules:
   question bank actually holds, so a released paper that hasn't been imported still lists
   (greyed out, "Not added yet") and a freshly converted one appears without a catalogue edit.
   Rendered by `components/PastExamBrowser.tsx`. See `docs/mock-exam-browser.md`.
+- `pdfChapters.ts` — the exam-PDF reader's **chapters**: a document's own outline (the
+  bookmarks a viewer shows in a sidebar) turned into the marks that segment the page bar,
+  resolved against the document by `hooks/usePdfChapters.ts`. Pure and tested. Chapters are
+  *transcribed, never constructed* — the same rule as the pass-rate and examiner's-report
+  tables: a document with no outline keeps the plain bar rather than being cut into even
+  pieces. See `docs/mock-exam-browser.md`.
 - `examPdf.ts` / `pdfViewer.ts` / `pdfjsSetup.ts` — the exam-PDF reader behind the mock-exam
   shelf's **Examiner's Report** button. `examPdf.ts` decides which sources are viewable (the
   same allowlist `quiz/api/exam-pdf.js` enforces) and builds the proxy/download URLs — the page
@@ -264,7 +282,9 @@ Other important `lib/` modules:
   folded page come back where it was left). See `docs/stacked-pages.md`.
 - `navScrub.ts` — the maths behind a **scrubbable** progress bar: which item a point on the
   track means (the exact inverse of `navProgressPercent`, so a drag can't land off by one),
-  and where a key press moves to. Read by `components/NavProgressBar.tsx`, which is the one
+  where a key press moves to, and how a list of chapter marks becomes the **segments** the
+  bar is cut into (`navSegments`, YouTube-style: a piece of track per named stretch, the
+  run before the first mark unnamed, a plain bar when the marks say nothing). Read by `components/NavProgressBar.tsx`, which is the one
   position bar above every Previous / Next footer and becomes a video-timeline-style control
   wherever a surface passes `onScrub` — the exam-PDF reader, the quiz's question bar, the
   concept popup, flashcard study, the concept detail and mistakes modals, math focus. Bars
@@ -279,14 +299,15 @@ Other important `lib/` modules:
 - `resourceTimeline.ts` / `resourceTimelineFilters.ts` — build/filter the dated Resources timeline (heatmap)
 - `readiness.ts` — exam-readiness scoring. `computeExamReadiness` is **the** readiness score
   (syllabus coverage 60% + keystone concepts 40%, plus band, section breakdown and concept
-  tally); every surface that prints a readiness % calls it — the Dashboard's Study Guide
-  radial, the exam grid and the readiness projection. The exam study guide shows no
+  tally); every surface that prints a readiness % calls it — the Dashboard's **Exam
+  readiness** card (its first card: the ring, the band verdict and the criterion bars), the
+  exam grid and the readiness projection. The exam study guide shows no
   readiness card (removed along with the orientation row). `computeReadiness` is the
   weighted section score it is built from — an input, not a second number to display.
 - `readinessRing.ts` — the geometry behind the **readiness ring**: one arc per syllabus
   concept, each section sized by its exam weight, each arc filled by that concept's mastery
   state. Pure and tested. Two surfaces draw it and differ only in chrome — the Dashboard's
-  Study Guide card (`StudyGuideRadial` in `components/ReadinessCard.tsx`, with a legend,
+  Exam readiness card (`StudyGuideRadial` in `components/ReadinessCard.tsx`, with a legend,
   curved section labels and a hover readout) and the exam page's title-row badge
   (`components/ReadinessRing.tsx`, everything stripped off) — so the two can never disagree
   about the shape of a syllabus. Geometry is in a fixed 280-unit viewBox; pick a size by
@@ -413,8 +434,8 @@ Other important `lib/` modules:
   60 requests/hour per IP without `VITE_GITHUB_TOKEN` — don't put it on a path that has to work.
 - `supabase.ts` — Supabase client + shared row types
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **97 test files /
-~1400 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **99 test files /
+~1445 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, and the research/resource-timeline
 modules).
 
@@ -453,6 +474,17 @@ compile — don't "clean up" the flagged code as dead.
   markdown, `[[Wiki Links]]` and LaTeX all fine. The folder name is what ties a guide to its
   exam — `examIdFromFile`, so a dash-less exam picks up a `-1` suffix and Exam 5's key is
   `5-1`.
+- A guide page at the **top level** of `Guides/`, beside those folders, belongs to no exam —
+  it is an orientation to the course of study itself (`Guides/How to Study for Actuarial
+  Exams.md`). It is authored the same way (no `# Title`, wiki-links and LaTeX fine, no
+  frontmatter needed), rides along in `virtual:wiki-content`, and is listed on the Study
+  Guides home page from `GENERAL_GUIDES` in `data/examGuides.ts` — which is where the card's
+  title, one-line description and vault path are authored. It stays out of
+  `virtual:exam-guides`, which only walks the exam folders.
+- The four credential pages — `Concepts/Associate of the Casualty Actuarial Society
+  (ACAS).md` and its ASA / FCAS / FSA siblings — are what the Study Guides page's track
+  headings open. `data/tracks.ts` names them (`Track.conceptPage`), so a renamed page is a
+  one-line change there.
 - Every exam page ends with a `## Source Material` heading over a
   `> [!answer]- Source Material` callout: one top-level bullet per syllabus reading (a
   `[[wiki link]]`, normally to a `Resources/Books/` page) with an indented bullet naming the
@@ -530,7 +562,9 @@ modules that read directly from the repo root:
 - `virtual:questions-content` — `questions/`
 - `virtual:comprehension-checks` — `comprehension-checks/<exam-id>/`
 - `virtual:exam-guides` — the tip pages under `Guides/<exam page>/` (their markdown rides
-  along in `virtual:wiki-content`; bundled but unrendered — see `lib/examGuides.ts`)
+  along in `virtual:wiki-content`; bundled but unrendered — see `lib/examGuides.ts`). A
+  general guide at the top level of `Guides/` rides along in `virtual:wiki-content` too, but
+  never in this module
 - `virtual:resource-timeline` — the dated `Resources/{Books,Events,Regulation,Benchmarks}/`
   pages that power the Resources timeline/heatmap
 - `virtual:keystone-links` — for each keystone concept page, the concept pages it links to

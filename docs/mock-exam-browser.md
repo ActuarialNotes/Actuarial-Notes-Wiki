@@ -182,8 +182,10 @@ you were building.
 | `quiz/src/lib/pdfjsAssets.ts` | The one list of those asset directories, shared with `vite.config.ts` so the two halves can't drift |
 | `quiz/src/lib/pdfViewer.ts` | Fit-to-width, the render resolution and pixel budget, the zoom range, the pan/anchor maths, page clamping (pure) |
 | `quiz/src/lib/examPdf.ts` | Which sources are viewable, and the endpoint URLs |
-| `quiz/src/components/NavProgressBar.tsx` | The shared position bar, scrubbable here (`onScrub`) |
-| `quiz/src/lib/navScrub.ts` | Which page a point on the scrubber means, and what a key press moves to (pure) |
+| `quiz/src/components/NavProgressBar.tsx` | The shared position bar, scrubbable here (`onScrub`) and cut into chapters (`segments`) |
+| `quiz/src/lib/navScrub.ts` | Which page a point on the scrubber means, what a key press moves to, and how chapter marks become segments (pure) |
+| `quiz/src/lib/pdfChapters.ts` | The document's outline turned into chapters — which level of the tree, cleaning a bookmark's title, dropping what didn't resolve (pure) |
+| `quiz/src/hooks/usePdfChapters.ts` | Reads the outline off the open document and resolves each bookmark's destination to a page |
 | `quiz/api/exam-pdf.js` | Serves the publisher's PDF from our own origin |
 
 **Why the app draws the pages itself.** The obvious implementation — `<iframe src={pdf}>` —
@@ -325,6 +327,31 @@ number. Keyboard: arrows step a page, PageUp/PageDown a tenth of the document, H
 ends. The maths — which page a point on the track means, and where a key press goes — is
 `lib/navScrub.ts`, kept as the exact inverse of `navProgressPercent` so the page the drag
 lands on is always the one whose fill reaches the finger.
+
+**Chapters on the bar.** Where the document carries bookmarks — the tree a PDF viewer shows
+in its sidebar, which the examining bodies' reports carry a question at a time because they
+are produced from Word — the bar is cut into them the way a YouTube timeline is cut into
+chapters: one piece of track per section, a hairline gap at each boundary, the hovered one
+lifted out of the track, and the section's name above the page number in the bubble. The
+footer carries the same name under the page count, so it answers "where am I" while you are
+reading and not only while you are dragging. That turns a 72-page report from a strip you
+scrub through into a visible list of its questions: you can see that question 14 starts here
+and runs four pages before you have read any of it.
+
+`hooks/usePdfChapters.ts` reads the outline off the document and resolves each bookmark's
+destination to a page — a bookmark points at a page *object*, so only pdf.js can say which
+page that is — and `lib/pdfChapters.ts` does everything decidable without it: descending past
+a single root bookmark that wraps the whole paper (one chapter covering everything is no
+chapters at all), using only that one level (the bookmarks *under* a question are its parts,
+and a bar cut into parts is a hatched strip), flattening a title broken across two lines,
+dropping a bookmark that didn't resolve or has no title, and collapsing two bookmarks on one
+page to the first. `navSegments` then shapes them into the segments the bar draws, and
+returns none — a plain bar — when the marks say nothing.
+
+The rule here is the one the pass-rate table and `data/examPdfLinks.ts` follow: **chapters
+are transcribed, never constructed**. A document with no outline — a scanned photocopy,
+which is most of the older papers — gets the plain bar it has always had. Evenly spaced
+fictions would read as the paper's real structure and send a candidate to the wrong page.
 
 The panel therefore keeps **two page numbers**, for the same reason it keeps three zooms:
 `page` is where the reader is, live under their finger, and `renderPage` is the one being

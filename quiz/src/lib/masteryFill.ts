@@ -1,4 +1,5 @@
-// Fill colours for the Dashboard's Study Guide radial (components/ReadinessCard.tsx).
+// Fill colours for the readiness ring on the Dashboard's Exam readiness card
+// (StudyGuideRadial in components/ReadinessCard.tsx).
 //
 // Two ladders, same shape: ordinary concepts climb through green, keystone
 // concepts (docs/keystone-concepts.md) climb through the matching three shades

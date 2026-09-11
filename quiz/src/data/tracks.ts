@@ -29,7 +29,18 @@ export interface TrackSection {
 
 export interface Track {
   key: string
+  /** Full label for the track selectors: "ACAS | Associate of the …". */
   name: string
+  /** The designation on its own ("ACAS"), for surfaces that title a section with it. */
+  label: string
+  /** What the designation stands for ("Associate of the Casualty Actuarial Society"). */
+  fullName: string | null
+  /**
+   * The `Concepts/` page describing the designation — what it is, what it takes
+   * and what it lets an actuary sign. Null for the placeholder track. Named the
+   * way the page is filed, so it can be opened as `{ kind: 'concept', name }`.
+   */
+  conceptPage: string | null
   certPath: string | null
   sections: TrackSection[]
 }
@@ -51,6 +62,9 @@ export const TRACKS: Track[] = [
     // page shows as "Not covered yet" in the exams panel.
     key: 'DEFAULT',
     name: 'All exams we cover',
+    label: 'Track',
+    fullName: null,
+    conceptPage: null,
     certPath: null,
     sections: [
       {
@@ -73,6 +87,9 @@ export const TRACKS: Track[] = [
   {
     key: 'ASA',
     name: 'ASA | Associate of the Society of Actuaries',
+    label: 'ASA',
+    fullName: 'Associate of the Society of Actuaries',
+    conceptPage: 'Associate of the Society of Actuaries (ASA)',
     certPath: 'Exams/Certifications/Associate of the Society of Actuaries (ASA)',
     sections: [
       {
@@ -110,6 +127,9 @@ export const TRACKS: Track[] = [
   {
     key: 'ACAS',
     name: 'ACAS | Associate of the Casualty Actuarial Society',
+    label: 'ACAS',
+    fullName: 'Associate of the Casualty Actuarial Society',
+    conceptPage: 'Associate of the Casualty Actuarial Society (ACAS)',
     certPath: 'Exams/Certifications/Associate of the Casualty Actuarial Society (ACAS)',
     sections: [
       {
@@ -145,6 +165,9 @@ export const TRACKS: Track[] = [
   {
     key: 'FSA',
     name: 'FSA | Fellow of the Society of Actuaries',
+    label: 'FSA',
+    fullName: 'Fellow of the Society of Actuaries',
+    conceptPage: 'Fellow of the Society of Actuaries (FSA)',
     certPath: 'Exams/Certifications/Fellow of the Society of Actuaries (FSA)',
     sections: [
       {
@@ -243,6 +266,9 @@ export const TRACKS: Track[] = [
   {
     key: 'FCAS',
     name: 'FCAS | Fellow of the Casualty Actuarial Society',
+    label: 'FCAS',
+    fullName: 'Fellow of the Casualty Actuarial Society',
+    conceptPage: 'Fellow of the Casualty Actuarial Society (FCAS)',
     certPath: 'Exams/Certifications/Fellow of the Casualty Actuarial Society (FCAS)',
     sections: [
       {

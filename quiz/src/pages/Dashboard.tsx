@@ -162,8 +162,11 @@ export default function Dashboard() {
   const [remindersOpen, setRemindersOpen] = useState(false)
   const [guideOpen, setGuideOpen] = useState(false)
   const profileRef = useRef<HTMLDivElement>(null)
-  // ReadinessCard portals its Study Schedule card into this slot so it renders
-  // at the top of the page, above the primary actions.
+  // ReadinessCard portals two of its cards into these slots so they render at the
+  // top of the page: the Exam readiness card first — it is the answer to the
+  // question the dashboard exists to answer — then the Study Schedule, both above
+  // the primary actions.
+  const [readinessSlotEl, setReadinessSlotEl] = useState<HTMLDivElement | null>(null)
   const [studyScheduleSlotEl, setStudyScheduleSlotEl] = useState<HTMLDivElement | null>(null)
   // FixMistakesButton portals its compact copy into this slot in the pinned
   // header row (the slot only exists while the actions are pinned).
@@ -785,8 +788,10 @@ export default function Dashboard() {
           </div>
         </div>
       )}
-      {/* Study Schedule card — portaled here by ReadinessCard (below) so it sits
-          at the very top of the dashboard, above the primary actions. */}
+      {/* Exam readiness + Study Schedule cards — portaled here by ReadinessCard
+          (below) so they sit at the very top of the dashboard, above the primary
+          actions, readiness first. */}
+      {activeSyllabus && <div ref={setReadinessSlotEl} />}
       {activeSyllabus && <div ref={setStudyScheduleSlotEl} />}
 
       {/* Primary actions — Read concepts (left) + the narrow Fix Mistakes button
@@ -892,6 +897,7 @@ export default function Dashboard() {
             isPremium={isPremium}
             onPlanCompletionChange={setPlanComplete}
             studyScheduleSlot={studyScheduleSlotEl}
+            readinessSlot={readinessSlotEl}
           />
         )}
       </div>

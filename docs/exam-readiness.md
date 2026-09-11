@@ -4,8 +4,8 @@ The one number that answers *how ready am I to sit this exam?* It is computed in
 and read by every surface that prints a readiness percentage.
 
 - Scoring: `quiz/src/lib/readiness.ts` (`computeExamReadiness`), tested in `readiness.test.ts`
-- Ring geometry: `quiz/src/lib/readinessRing.ts`, drawn by the Dashboard's Study Guide radial
-  (`components/ReadinessCard.tsx`)
+- Ring geometry: `quiz/src/lib/readinessRing.ts`, drawn by the Dashboard's **Exam readiness**
+  card (`StudyGuideRadial` in `components/ReadinessCard.tsx`)
 
 **The exam study guide no longer shows a readiness card.** The card, its assessment popup and
 the 48px `ReadinessRing` badge were removed along with the exam page's orientation row; the
@@ -18,7 +18,7 @@ a readiness percentage calls it, so they can never disagree:
 
 | Surface | Where |
 |---|---|
-| Dashboard Study Guide radial (the `NN% readiness` in the ring) | `components/ReadinessCard.tsx` |
+| Dashboard **Exam readiness** card (the `NN%` in the ring, the band verdict and the criterion bars) | `components/ReadinessCard.tsx` |
 | Exam grid cards ("Readiness NN%") | `pages/wiki/WikiHome.tsx` |
 | Readiness projection ("now → exam day") | `lib/masteryAnalytics.ts` → `components/HeatmapInfoPanel.tsx` |
 
@@ -61,15 +61,34 @@ else to wire.
 
 `readinessBand(pct)` maps the score onto a verdict: **Not started** (<15), **Building foundations** (<40), **Making progress** (<65),
 **Nearly exam ready** (<85), **Exam ready** (85+). Each also carries a one-sentence `blurb`
-saying what to do next; nothing renders it today.
+saying what to do next. The Dashboard's Exam readiness card renders both — the label as its
+headline, the blurb as the one muted line under it — so a blurb has to read true anywhere in
+its band, not just at the bottom of it.
 
-## What the ring shows
+## The Dashboard card
 
-The ring is the Dashboard's Study Guide radial (`components/ReadinessCard.tsx`): one arc per
-syllabus concept, each section sized by its exam weight, each arc filled by that concept's
-mastery state — green for an ordinary concept, gold for a keystone (`lib/masteryFill.ts`).
-Its arcs come from `lib/readinessRing.ts`, so geometry lives in one place. The
-number in the middle is `overallPct`.
+**Exam readiness is the first card on the Dashboard** — above the Study Schedule and the
+primary actions. `ReadinessCard` portals it into the slot the Dashboard puts there
+(`readinessSlot`, the same mechanism as `studyScheduleSlot`), so the card's state and logic
+stay with the study plan while it renders at the top of the page.
+
+It is one call — `computeExamReadiness` — read three ways:
+
+- **The ring** (`StudyGuideRadial`, the surface the docs elsewhere call the Study Guide
+  radial): one arc per syllabus concept, each section sized by its exam weight, each arc
+  filled by that concept's mastery state — green for an ordinary concept, gold for a keystone
+  (`lib/masteryFill.ts`). Its arcs come from `lib/readinessRing.ts`, so geometry lives in one
+  place. The number in the middle is `overallPct`, and it carries no caption: the card is
+  titled *Exam readiness* a few pixels away (`docs/visual-noise-review.md`, test 1).
+- **The band**, as the headline verdict beside the ring, with its blurb under it.
+- **The criteria**, as one bar each. A bar's *thickness* is the weight that criterion carries
+  in the score (`4px + 6px × weight`), so the heavier one is visibly the heavier line and
+  nothing has to print "60% of score" — the worked example in
+  `docs/visual-noise-review.md` §3.1, reused here.
+
+There is no concept tally card beside it. A `Topics Learned` bar (`N/M at Level 3`) used to
+sit under the ring; it restated what the ring already draws, so it and the topic list it
+expanded onto were removed.
 
 ## Colour
 
@@ -77,3 +96,8 @@ The dials and bars are green at every value (`LEVEL3_TEXT` from `lib/masteryFill
 arc length carries the score, so the hue doesn't have to. A readiness dial that turned red at
 low scores would collide with the mastery ladder's use of red for decay, where red means
 *something you had has slipped*, not *you haven't started*.
+
+The one exception is the **keystone criterion's** bar, which is drawn in the keystone gold
+(`KEYSTONE_TEXT`) rather than green. That is not a value signal either: it is the same gold
+as the keystone spokes in the ring beside it, so the bar and the arcs it measures read as the
+same thing (`docs/keystone-concepts.md`).

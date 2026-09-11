@@ -6,7 +6,7 @@ import { ChevronRight, X } from 'lucide-react'
  * Shell for the compact dashboard "insight" card (Fading Concepts). A flat,
  * single-tap card sized to sit two-up in a grid:
  *
- *   • header  — icon + title + a count pill
+ *   • header  — title + a count pill
  *   • item    — the single top item; the whole row is the primary action
  *               (quizzes just that one item), with the verb shown as a trailing
  *               pill ("Try Again" / "Review")
@@ -19,7 +19,6 @@ import { ChevronRight, X } from 'lucide-react'
  * the two-up row stays aligned.
  */
 interface InsightCardProps {
-  icon: ReactNode
   title: string
   count: number
   /** Preview of the single top item. */
@@ -32,7 +31,6 @@ interface InsightCardProps {
 }
 
 export function InsightCard({
-  icon,
   title,
   count,
   front,
@@ -43,9 +41,10 @@ export function InsightCard({
 }: InsightCardProps) {
   return (
     <div className="flex h-full min-h-44 flex-col rounded-lg bg-card p-4 text-card-foreground shadow-[var(--shadow-card)]">
-      {/* Header — icon + title + count */}
+      {/* Header — title + count. No icon: the trend arrow beside "Fading
+          Concepts" drew the eye to a decoration rather than to the concept the
+          card is about, and the title already names the card. */}
       <div className="flex items-center gap-1.5">
-        {icon}
         <h2 className="truncate text-sm font-semibold tracking-tight">{title}</h2>
         {count > 0 && (
           <span className="ml-0.5 rounded-full bg-muted px-1.5 py-0.5 text-xs font-semibold tabular-nums text-muted-foreground">

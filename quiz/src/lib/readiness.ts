@@ -124,15 +124,21 @@ export interface ReadinessCriterion {
 export interface ReadinessBand {
   id: 'not-started' | 'building' | 'progressing' | 'nearly' | 'ready'
   label: string
+  /** What to do next at this score — see the note on `BANDS` below. */
   blurb: string
 }
 
+// The blurb is the band's *next action*, never a restatement of its label: the
+// Dashboard's Exam readiness card prints the two one under the other, so an
+// opener like "Early days." would be the label said twice
+// (docs/visual-noise-review.md, test 1). Each one also has to read true
+// anywhere in its band, not only at the bottom of it.
 const BANDS: Array<{ min: number } & ReadinessBand> = [
-  { min: 85, id: 'ready', label: 'Exam ready', blurb: 'The syllabus and its keystones are at Level 3 and still fresh. Keep reviewing so nothing decays before the sitting.' },
-  { min: 65, id: 'nearly', label: 'Nearly exam ready', blurb: 'Most of the syllabus is carried high. Close the weakest sections and lift any keystone that is short of Level 3.' },
-  { min: 40, id: 'progressing', label: 'Making progress', blurb: 'A real base is in place. Push the started concepts up the ladder rather than adding breadth.' },
-  { min: 15, id: 'building', label: 'Building foundations', blurb: 'Early days. Work through the keystone concepts first — the rest of the syllabus leans on them.' },
-  { min: 0, id: 'not-started', label: 'Not started', blurb: 'Nothing measured yet. Answer questions on this exam and the score fills in.' },
+  { min: 85, id: 'ready', label: 'Exam ready', blurb: 'Keep reviewing so nothing decays before the sitting.' },
+  { min: 65, id: 'nearly', label: 'Nearly exam ready', blurb: 'Close the weakest sections and lift any keystone short of Level 3.' },
+  { min: 40, id: 'progressing', label: 'Making progress', blurb: 'Push the concepts you have started up the ladder rather than adding breadth.' },
+  { min: 15, id: 'building', label: 'Building foundations', blurb: 'Work through the keystone concepts first — the rest of the syllabus leans on them.' },
+  { min: 0, id: 'not-started', label: 'Not started', blurb: 'Answer questions on this exam and the score fills in.' },
 ]
 
 export function readinessBand(pct: number): ReadinessBand {

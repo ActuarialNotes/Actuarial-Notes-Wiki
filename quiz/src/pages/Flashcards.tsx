@@ -2646,8 +2646,13 @@ function FlashcardsDeck({
   // Per-card "Again" tallies for the current study session (feeds the summary).
   const [againCounts, setAgainCounts] = useState<Record<string, number>>({})
   const [showSessionSummary, setShowSessionSummary] = useState(false)
+  // The back of a card shows the definition *and* its formulas out of the box —
+  // a concept's equations are half of what a card is for, and a learner who
+  // never opens this menu should still see them. Images stay opt-in: many
+  // concepts carry none, and a figure is the one section that can push the
+  // definition off a phone screen.
   const [reverseCardModes, setReverseCardModes] = useState<Set<ReverseCardSection>>(
-    new Set<ReverseCardSection>(['definition']),
+    new Set<ReverseCardSection>(['definition', 'math']),
   )
   const [globalFlip, setGlobalFlip] = useState(false)
 

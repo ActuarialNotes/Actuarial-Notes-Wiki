@@ -855,7 +855,13 @@ export function ReadinessCard({
               <div className="space-y-1.5">
                 <h3 className="text-sm font-semibold">Exam readiness</h3>
                 <p className="text-xl font-semibold tracking-tight leading-tight">{readiness.band.label}</p>
-                <p className="text-sm text-muted-foreground leading-snug">{readiness.band.blurb}</p>
+                {/* The insight line, when there is one. `readiness.insight` is
+                    null on an untouched exam and whenever no rule found
+                    anything worth a line, and the paragraph goes with it —
+                    nothing generic stands in (lib/readiness.ts). */}
+                {readiness.insight && (
+                  <p className="text-sm text-muted-foreground leading-snug">{readiness.insight.text}</p>
+                )}
               </div>
 
               {/* The criteria. Each bar's *thickness* is the weight it carries in

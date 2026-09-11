@@ -344,7 +344,16 @@ function Callout({ type, fold, title, children }: CalloutProps) {
 
   if (isBarGraph) {
     return (
-      <div className="not-prose my-4 rounded-lg overflow-hidden bg-background">
+      // A weighted `[!example]` callout is a syllabus **learning objective** —
+      // the only thing in the vault that carries a share of an exam. These two
+      // attributes are what the study guide's chapter bar finds them by
+      // (`components/wiki/SyllabusChapterBar.tsx`): the page's main sections,
+      // named and weighted, without re-parsing the markdown.
+      <div
+        data-objective={displayTitle}
+        data-objective-weight={examWeight ?? undefined}
+        className="not-prose my-4 rounded-lg overflow-hidden bg-background"
+      >
         <div className="relative">
           {/* Grey bar fills to exam coverage % when collapsed, full width when expanded */}
           <div

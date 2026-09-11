@@ -291,7 +291,7 @@ interface Props {
   /** Bumped by the Dashboard (e.g. tapping the readiness-stat checkmark) to open the day-complete/bonus info panel. */
   openDayCompleteInfoTrigger?: number
   /** DOM node the Study Schedule (heatmap) card portals into (e.g. a slot the Dashboard
-   *  places above its primary actions), so the card can render at the top of the page
+   *  places below its primary actions), so the card can render near the top of the page
    *  while its state/logic stays owned here. Renders inline, last in this card's own
    *  stack, when omitted. */
   studyScheduleSlot?: HTMLElement | null
@@ -882,8 +882,8 @@ export function ReadinessCard({
   )
 
   // Study Schedule (heatmap) card. Portals into `studyScheduleSlot` when the
-  // Dashboard supplies one (a slot above its primary actions), so the card
-  // renders at the top of the page while its state/logic stays owned by this
+  // Dashboard supplies one (a slot below its primary actions), so the card
+  // renders near the top of the page while its state/logic stays owned by this
   // component; otherwise renders inline below in its default bento-grid position.
   const studyScheduleCardContent = (
       <Card className="order-4 border-0 shadow-none" ref={studyScheduleCardRef}>

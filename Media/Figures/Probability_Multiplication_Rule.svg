@@ -1,15 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>A two-stage probability tree whose branch probabilities multiply</title>
   <style>:root {
-  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
-  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+  --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
-    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+    --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+    --grid: #333333; --soft: #242424; --axis: #6b6b6b;
   }
 }
+/* Named by the host in the embed URL (`…svg#dark`), and beats the media query
+   above because a value set here lands on the drawing rather than on the root
+   it inherits from. See the module docstring. */
+#light:target ~ * { --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c; }
+#dark:target ~ * { --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+  --grid: #333333; --soft: #242424; --axis: #6b6b6b; }
 text {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
                "Helvetica Neue", Arial, sans-serif;
@@ -38,42 +45,45 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <g id="light"/><g id="dark"/>
   <defs>
     <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
     <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
     <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
   </defs>
-  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="40" text-anchor="middle" class="ttl">Chain the stages: P(A), then P(B | A)</text>
-  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-  <text x="180" y="438" text-anchor="middle" class="fml">P(A ∩ B) = P(A) · P(B | A) = 0.24</text>
-  <circle cx="180" cy="92" r="6" fill="var(--dim)"/>
-  <line x1="180" y1="100" x2="96" y2="168" class="thin" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#ah3b82f6)"/>
-  <text x="124" y="132" text-anchor="middle" class="sm" fill="#3b82f6">0.30</text>
-  <circle cx="96" cy="184" r="17" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.4"/>
-  <text x="96" y="190" text-anchor="middle">A</text>
-  <line x1="180" y1="100" x2="264" y2="168" class="thin" stroke="var(--dim)" stroke-width="1.5" marker-end="url(#ahvardim)"/>
-  <text x="236" y="132" text-anchor="middle" class="sm" fill="var(--dim)">0.70</text>
-  <circle cx="264" cy="184" r="17" fill="var(--dim)" fill-opacity="0.14" stroke="var(--dim)" stroke-width="1.4"/>
-  <text x="264" y="190" text-anchor="middle">Aᶜ</text>
-  <line x1="96" y1="201" x2="56" y2="268" class="thin" stroke="#059669" stroke-width="1.4" marker-end="url(#ah059669)"/>
-  <text x="62" y="234" text-anchor="middle" class="sm" fill="#059669">0.80</text>
-  <circle cx="56" cy="284" r="17" fill="#059669" fill-opacity="0.14" stroke="#059669" stroke-width="1.4"/>
-  <text x="56" y="290" text-anchor="middle">B</text>
-  <text x="56" y="322" text-anchor="middle" class="bold" fill="#059669">0.24</text>
-  <line x1="96" y1="201" x2="148" y2="268" class="thin" stroke="var(--dim)" stroke-width="1.4" marker-end="url(#ahvardim)"/>
-  <text x="136" y="234" text-anchor="middle" class="sm" fill="var(--dim)">0.20</text>
-  <circle cx="148" cy="284" r="17" fill="var(--dim)" fill-opacity="0.14" stroke="var(--dim)" stroke-width="1.4"/>
-  <text x="148" y="290" text-anchor="middle">Bᶜ</text>
-  <text x="148" y="322" text-anchor="middle" class="sm dim">0.06</text>
-  <line x1="264" y1="201" x2="216" y2="268" class="thin" stroke="#059669" stroke-width="1.4" marker-end="url(#ah059669)"/>
-  <text x="226" y="234" text-anchor="middle" class="sm" fill="#059669">0.10</text>
-  <circle cx="216" cy="284" r="17" fill="#059669" fill-opacity="0.14" stroke="#059669" stroke-width="1.4"/>
-  <text x="216" y="290" text-anchor="middle">B</text>
-  <text x="216" y="322" text-anchor="middle" class="sm dim">0.07</text>
-  <line x1="264" y1="201" x2="308" y2="268" class="thin" stroke="var(--dim)" stroke-width="1.4" marker-end="url(#ahvardim)"/>
-  <text x="300" y="234" text-anchor="middle" class="sm" fill="var(--dim)">0.90</text>
-  <circle cx="308" cy="284" r="17" fill="var(--dim)" fill-opacity="0.14" stroke="var(--dim)" stroke-width="1.4"/>
-  <text x="308" y="290" text-anchor="middle">Bᶜ</text>
-  <text x="308" y="322" text-anchor="middle" class="sm dim">0.63</text>
+  <g class="art">
+    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+    <text x="180" y="40" text-anchor="middle" class="ttl">Chain the stages: P(A), then P(B | A)</text>
+    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+    <text x="180" y="438" text-anchor="middle" class="fml">P(A ∩ B) = P(A) · P(B | A) = 0.24</text>
+    <circle cx="180" cy="92" r="6" fill="var(--dim)"/>
+    <line x1="180" y1="100" x2="96" y2="168" class="thin" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#ah3b82f6)"/>
+    <text x="124" y="132" text-anchor="middle" class="sm" fill="#3b82f6">0.30</text>
+    <circle cx="96" cy="184" r="17" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.4"/>
+    <text x="96" y="190" text-anchor="middle">A</text>
+    <line x1="180" y1="100" x2="264" y2="168" class="thin" stroke="var(--dim)" stroke-width="1.5" marker-end="url(#ahvardim)"/>
+    <text x="236" y="132" text-anchor="middle" class="sm" fill="var(--dim)">0.70</text>
+    <circle cx="264" cy="184" r="17" fill="var(--dim)" fill-opacity="0.14" stroke="var(--dim)" stroke-width="1.4"/>
+    <text x="264" y="190" text-anchor="middle">Aᶜ</text>
+    <line x1="96" y1="201" x2="56" y2="268" class="thin" stroke="#059669" stroke-width="1.4" marker-end="url(#ah059669)"/>
+    <text x="62" y="234" text-anchor="middle" class="sm" fill="#059669">0.80</text>
+    <circle cx="56" cy="284" r="17" fill="#059669" fill-opacity="0.14" stroke="#059669" stroke-width="1.4"/>
+    <text x="56" y="290" text-anchor="middle">B</text>
+    <text x="56" y="322" text-anchor="middle" class="bold" fill="#059669">0.24</text>
+    <line x1="96" y1="201" x2="148" y2="268" class="thin" stroke="var(--dim)" stroke-width="1.4" marker-end="url(#ahvardim)"/>
+    <text x="136" y="234" text-anchor="middle" class="sm" fill="var(--dim)">0.20</text>
+    <circle cx="148" cy="284" r="17" fill="var(--dim)" fill-opacity="0.14" stroke="var(--dim)" stroke-width="1.4"/>
+    <text x="148" y="290" text-anchor="middle">Bᶜ</text>
+    <text x="148" y="322" text-anchor="middle" class="sm dim">0.06</text>
+    <line x1="264" y1="201" x2="216" y2="268" class="thin" stroke="#059669" stroke-width="1.4" marker-end="url(#ah059669)"/>
+    <text x="226" y="234" text-anchor="middle" class="sm" fill="#059669">0.10</text>
+    <circle cx="216" cy="284" r="17" fill="#059669" fill-opacity="0.14" stroke="#059669" stroke-width="1.4"/>
+    <text x="216" y="290" text-anchor="middle">B</text>
+    <text x="216" y="322" text-anchor="middle" class="sm dim">0.07</text>
+    <line x1="264" y1="201" x2="308" y2="268" class="thin" stroke="var(--dim)" stroke-width="1.4" marker-end="url(#ahvardim)"/>
+    <text x="300" y="234" text-anchor="middle" class="sm" fill="var(--dim)">0.90</text>
+    <circle cx="308" cy="284" r="17" fill="var(--dim)" fill-opacity="0.14" stroke="var(--dim)" stroke-width="1.4"/>
+    <text x="308" y="290" text-anchor="middle">Bᶜ</text>
+    <text x="308" y="322" text-anchor="middle" class="sm dim">0.63</text>
+  </g>
 </svg>

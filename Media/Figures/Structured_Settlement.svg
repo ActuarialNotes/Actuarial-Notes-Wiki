@@ -1,15 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>A lump sum against the annuity that replaces it, and why the tax exemption makes the annuity cheaper</title>
   <style>:root {
-  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
-  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+  --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
-    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+    --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+    --grid: #333333; --soft: #242424; --axis: #6b6b6b;
   }
 }
+/* Named by the host in the embed URL (`…svg#dark`), and beats the media query
+   above because a value set here lands on the drawing rather than on the root
+   it inherits from. See the module docstring. */
+#light:target ~ * { --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c; }
+#dark:target ~ * { --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+  --grid: #333333; --soft: #242424; --axis: #6b6b6b; }
 text {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
                "Helvetica Neue", Arial, sans-serif;
@@ -38,30 +45,33 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
-  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="40" text-anchor="middle" class="ttl">The tax exemption pays for the discount</text>
-  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-  <text x="180" y="430" text-anchor="middle" class="fml">Annuity cost &lt; equivalent lump sum</text>
-  <text x="180" y="452" text-anchor="middle" class="fml2">$900,000 buys $52,000 a year for 30</text>
-  <rect x="30" y="104" width="143" height="126" rx="7" fill="#d97706" fill-opacity="0.08" stroke="#d97706" stroke-width="1.2"/>
-  <rect x="30" y="104" width="143" height="28" rx="7" fill="#d97706" fill-opacity="0.22" stroke="none"/>
-  <text x="101.5" y="122" text-anchor="middle" class="sm bold" fill="#d97706">Lump sum</text>
-  <text x="101.5" y="152" text-anchor="middle" class="sm">costs $1,000,000</text>
-  <text x="101.5" y="174" text-anchor="middle" class="sm">invested at 5%,</text>
-  <text x="101.5" y="196" text-anchor="middle" class="sm">taxed at 40%</text>
-  <text x="101.5" y="218" text-anchor="middle" class="sm">spends $51k a year</text>
-  <rect x="187" y="104" width="143" height="126" rx="7" fill="#059669" fill-opacity="0.08" stroke="#059669" stroke-width="1.2"/>
-  <rect x="187" y="104" width="143" height="28" rx="7" fill="#059669" fill-opacity="0.22" stroke="none"/>
-  <text x="258.5" y="122" text-anchor="middle" class="sm bold" fill="#059669">Structure</text>
-  <text x="258.5" y="152" text-anchor="middle" class="sm">costs $900,000</text>
-  <text x="258.5" y="174" text-anchor="middle" class="sm">paid by annuity,</text>
-  <text x="258.5" y="196" text-anchor="middle" class="sm">tax-free</text>
-  <text x="258.5" y="218" text-anchor="middle" class="sm">spends $52k a year</text>
-  <text x="180" y="250" text-anchor="middle" class="sm dim">the claimant does better and the insurer</text>
-  <text x="180" y="266" text-anchor="middle" class="sm dim">pays $100,000 less for it</text>
-  <line x1="30" y1="292" x2="330" y2="292" class="rule"/>
-  <text x="180" y="314" text-anchor="middle" class="sm dim">the casualty insurer stays liable if the life</text>
-  <text x="180" y="330" text-anchor="middle" class="sm dim">insurer defaults, so the claim never fully closes</text>
-  <text x="180" y="356" text-anchor="middle" class="sm dim">CRA's conditions: the insurer owns the annuity,</text>
-  <text x="180" y="372" text-anchor="middle" class="sm dim">it is non-assignable, non-commutable and irrevocable</text>
+  <g id="light"/><g id="dark"/>
+  <g class="art">
+    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+    <text x="180" y="40" text-anchor="middle" class="ttl">The tax exemption pays for the discount</text>
+    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+    <text x="180" y="430" text-anchor="middle" class="fml">Annuity cost &lt; equivalent lump sum</text>
+    <text x="180" y="452" text-anchor="middle" class="fml2">$900,000 buys $52,000 a year for 30</text>
+    <rect x="30" y="104" width="143" height="126" rx="7" fill="#d97706" fill-opacity="0.08" stroke="#d97706" stroke-width="1.2"/>
+    <rect x="30" y="104" width="143" height="28" rx="7" fill="#d97706" fill-opacity="0.22" stroke="none"/>
+    <text x="101.5" y="122" text-anchor="middle" class="sm bold" fill="#d97706">Lump sum</text>
+    <text x="101.5" y="152" text-anchor="middle" class="sm">costs $1,000,000</text>
+    <text x="101.5" y="174" text-anchor="middle" class="sm">invested at 5%,</text>
+    <text x="101.5" y="196" text-anchor="middle" class="sm">taxed at 40%</text>
+    <text x="101.5" y="218" text-anchor="middle" class="sm">spends $51k a year</text>
+    <rect x="187" y="104" width="143" height="126" rx="7" fill="#059669" fill-opacity="0.08" stroke="#059669" stroke-width="1.2"/>
+    <rect x="187" y="104" width="143" height="28" rx="7" fill="#059669" fill-opacity="0.22" stroke="none"/>
+    <text x="258.5" y="122" text-anchor="middle" class="sm bold" fill="#059669">Structure</text>
+    <text x="258.5" y="152" text-anchor="middle" class="sm">costs $900,000</text>
+    <text x="258.5" y="174" text-anchor="middle" class="sm">paid by annuity,</text>
+    <text x="258.5" y="196" text-anchor="middle" class="sm">tax-free</text>
+    <text x="258.5" y="218" text-anchor="middle" class="sm">spends $52k a year</text>
+    <text x="180" y="250" text-anchor="middle" class="sm dim">the claimant does better and the insurer</text>
+    <text x="180" y="266" text-anchor="middle" class="sm dim">pays $100,000 less for it</text>
+    <line x1="30" y1="292" x2="330" y2="292" class="rule"/>
+    <text x="180" y="314" text-anchor="middle" class="sm dim">the casualty insurer stays liable if the life</text>
+    <text x="180" y="330" text-anchor="middle" class="sm dim">insurer defaults, so the claim never fully closes</text>
+    <text x="180" y="356" text-anchor="middle" class="sm dim">CRA's conditions: the insurer owns the annuity,</text>
+    <text x="180" y="372" text-anchor="middle" class="sm dim">it is non-assignable, non-commutable and irrevocable</text>
+  </g>
 </svg>

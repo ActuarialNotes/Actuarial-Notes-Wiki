@@ -1,15 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>Physical and transition risk reaching the insurer by different routes, and the non-stationarity behind both</title>
   <style>:root {
-  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
-  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+  --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
-    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+    --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+    --grid: #333333; --soft: #242424; --axis: #6b6b6b;
   }
 }
+/* Named by the host in the embed URL (`…svg#dark`), and beats the media query
+   above because a value set here lands on the drawing rather than on the root
+   it inherits from. See the module docstring. */
+#light:target ~ * { --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c; }
+#dark:target ~ * { --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+  --grid: #333333; --soft: #242424; --axis: #6b6b6b; }
 text {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
                "Helvetica Neue", Arial, sans-serif;
@@ -38,37 +45,40 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <g id="light"/><g id="dark"/>
   <defs>
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
   </defs>
-  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="31" text-anchor="middle" class="ttl">Two risks, and the past no longer</text>
-  <text x="180" y="50" text-anchor="middle" class="ttl">predicts either</text>
-  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-  <text x="180" y="430" text-anchor="middle" class="fml">Physical: acute and chronic</text>
-  <text x="180" y="452" text-anchor="middle" class="fml2">Transition: policy, technology, litigation</text>
-  <rect x="30" y="100" width="143" height="120" rx="7" fill="#e11d48" fill-opacity="0.08" stroke="#e11d48" stroke-width="1.2"/>
-  <rect x="30" y="100" width="143" height="26" rx="7" fill="#e11d48" fill-opacity="0.22" stroke="none"/>
-  <text x="101.5" y="117" text-anchor="middle" class="sm bold" fill="#e11d48">Physical</text>
-  <text x="101.5" y="146" text-anchor="middle" class="sm">acute — flood,</text>
-  <text x="101.5" y="167" text-anchor="middle" class="sm">wildfire, hail</text>
-  <text x="101.5" y="188" text-anchor="middle" class="sm">chronic — sea level,</text>
-  <text x="101.5" y="209" text-anchor="middle" class="sm">shifting hazard</text>
-  <rect x="187" y="100" width="143" height="141" rx="7" fill="#0d9488" fill-opacity="0.08" stroke="#0d9488" stroke-width="1.2"/>
-  <rect x="187" y="100" width="143" height="26" rx="7" fill="#0d9488" fill-opacity="0.22" stroke="none"/>
-  <text x="258.5" y="117" text-anchor="middle" class="sm bold" fill="#0d9488">Transition</text>
-  <text x="258.5" y="146" text-anchor="middle" class="sm">investments</text>
-  <text x="258.5" y="167" text-anchor="middle" class="sm">repricing</text>
-  <text x="258.5" y="188" text-anchor="middle" class="sm">liability</text>
-  <text x="258.5" y="209" text-anchor="middle" class="sm">underwriting</text>
-  <text x="258.5" y="230" text-anchor="middle" class="sm">reputation</text>
-  <line x1="30" y1="254" x2="330" y2="254" class="rule"/>
-  <line x1="68" y1="340" x2="332" y2="340" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-  <line x1="68" y1="340" x2="68" y2="266" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-  <polyline points="68,320.8 322,320.8" class="curve dash" stroke="var(--dim)" stroke-width="1.8"/>
-  <polyline points="68,323.36 169.6,316.96 245.8,305.44 322,286.24" class="curve" stroke="#e11d48" stroke-width="2.4"/>
-  <text x="123.88" y="331.04" text-anchor="middle" class="sm dim">assumed</text>
-  <text x="255.96" y="293.92" text-anchor="end" class="sm bold" fill="#e11d48">actual</text>
-  <text x="180" y="362" text-anchor="middle" class="sm dim">hazard, over time — the ratemaking problem</text>
-  <text x="180" y="386" text-anchor="middle" class="sm dim">OSFI B-15 makes it prudential, not reputational</text>
+  <g class="art">
+    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+    <text x="180" y="31" text-anchor="middle" class="ttl">Two risks, and the past no longer</text>
+    <text x="180" y="50" text-anchor="middle" class="ttl">predicts either</text>
+    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+    <text x="180" y="430" text-anchor="middle" class="fml">Physical: acute and chronic</text>
+    <text x="180" y="452" text-anchor="middle" class="fml2">Transition: policy, technology, litigation</text>
+    <rect x="30" y="100" width="143" height="120" rx="7" fill="#e11d48" fill-opacity="0.08" stroke="#e11d48" stroke-width="1.2"/>
+    <rect x="30" y="100" width="143" height="26" rx="7" fill="#e11d48" fill-opacity="0.22" stroke="none"/>
+    <text x="101.5" y="117" text-anchor="middle" class="sm bold" fill="#e11d48">Physical</text>
+    <text x="101.5" y="146" text-anchor="middle" class="sm">acute — flood,</text>
+    <text x="101.5" y="167" text-anchor="middle" class="sm">wildfire, hail</text>
+    <text x="101.5" y="188" text-anchor="middle" class="sm">chronic — sea level,</text>
+    <text x="101.5" y="209" text-anchor="middle" class="sm">shifting hazard</text>
+    <rect x="187" y="100" width="143" height="141" rx="7" fill="#0d9488" fill-opacity="0.08" stroke="#0d9488" stroke-width="1.2"/>
+    <rect x="187" y="100" width="143" height="26" rx="7" fill="#0d9488" fill-opacity="0.22" stroke="none"/>
+    <text x="258.5" y="117" text-anchor="middle" class="sm bold" fill="#0d9488">Transition</text>
+    <text x="258.5" y="146" text-anchor="middle" class="sm">investments</text>
+    <text x="258.5" y="167" text-anchor="middle" class="sm">repricing</text>
+    <text x="258.5" y="188" text-anchor="middle" class="sm">liability</text>
+    <text x="258.5" y="209" text-anchor="middle" class="sm">underwriting</text>
+    <text x="258.5" y="230" text-anchor="middle" class="sm">reputation</text>
+    <line x1="30" y1="254" x2="330" y2="254" class="rule"/>
+    <line x1="68" y1="340" x2="332" y2="340" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="68" y1="340" x2="68" y2="266" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <polyline points="68,320.8 322,320.8" class="curve dash" stroke="var(--dim)" stroke-width="1.8"/>
+    <polyline points="68,323.36 169.6,316.96 245.8,305.44 322,286.24" class="curve" stroke="#e11d48" stroke-width="2.4"/>
+    <text x="123.88" y="331.04" text-anchor="middle" class="sm dim">assumed</text>
+    <text x="255.96" y="293.92" text-anchor="end" class="sm bold" fill="#e11d48">actual</text>
+    <text x="180" y="362" text-anchor="middle" class="sm dim">hazard, over time — the ratemaking problem</text>
+    <text x="180" y="386" text-anchor="middle" class="sm dim">OSFI B-15 makes it prudential, not reputational</text>
+  </g>
 </svg>

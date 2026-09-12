@@ -15,6 +15,8 @@ import { isInWikiIndex } from '@/lib/wikiIndex'
 import { isKeystone } from '@/lib/keystone'
 import { distributionForImage } from '@/lib/distributions'
 import { normalizeVaultMath } from '@/lib/vaultMath'
+import { themedFigureSrc } from '@/lib/figureTheme'
+import { useTheme } from '@/hooks/useTheme'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 
 const GITHUB_REPO = import.meta.env.VITE_GITHUB_REPO as string
@@ -191,6 +193,7 @@ function stripHtmlBlocks(md: string): string {
 export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, className, titleBadge }: WikiArticleProps) {
   const navigate = useNavigate()
   const articleRef = useRef<HTMLDivElement | null>(null)
+  const { theme } = useTheme()
   const { processed, sourceMaterial } = useMemo(() => {
     // Math delimiters first: the vault is written for Obsidian, whose parser is
     // looser than remark-math's. See lib/vaultMath.ts.
@@ -259,7 +262,9 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
       // The vault's distribution plots are static snapshots of four parameter
       // choices; swap them for the live thing.
       if (distribution) return <DistributionSimulator spec={distribution} className="my-3" />
-      return <img src={src} alt={alt ?? ''} className="max-w-full" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
+      // A generated concept figure carries both palettes and is told which one
+      // applies through the URL — see `lib/figureTheme.ts`.
+      return <img src={themedFigureSrc(src, theme)} alt={alt ?? ''} className="max-w-full" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
     },
     a({ href, children, ...rest }) {
       if (!href) return <a {...rest}>{children}</a>
@@ -296,7 +301,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
         </a>
       )
     },
-  }), [openRef, hideImages, titleBadge, sourceMaterial])
+  }), [openRef, hideImages, titleBadge, sourceMaterial, theme])
 
   // Active-concept highlight: when the popup is open and its sourcePath
   // matches this article's sourcePath, find the matching wikilink in this

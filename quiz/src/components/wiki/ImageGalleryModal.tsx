@@ -4,6 +4,7 @@ import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { DistributionSimulator } from '@/components/wiki/DistributionSimulator'
 import { distributionForImage } from '@/lib/distributions'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
+import { themedFigureSrc } from '@/lib/figureTheme'
 
 interface GalleryImage {
   src: string
@@ -271,7 +272,12 @@ export function ImageGalleryModal({ images, initialIndex, placement = 'fullscree
           >
             <img
               key={current.src}
-              src={current.src}
+              // Always the dark palette, whatever the app's theme: this is a
+              // lightbox (`bg-black/95` with white chrome, in both modes), so
+              // the surface a figure sits on here is black, not `--card`. A
+              // figure follows the surface under it, not the theme — see
+              // `lib/figureTheme.ts`.
+              src={themedFigureSrc(current.src, 'dark')}
               alt={current.alt}
               className="max-h-full max-w-full object-contain"
               style={{
@@ -320,7 +326,7 @@ export function ImageGalleryModal({ images, initialIndex, placement = 'fullscree
               aria-label={`View image ${i + 1}`}
             >
               <img
-                src={img.src}
+                src={themedFigureSrc(img.src, 'dark')}
                 alt={img.alt}
                 className="h-full w-full object-cover"
                 draggable={false}

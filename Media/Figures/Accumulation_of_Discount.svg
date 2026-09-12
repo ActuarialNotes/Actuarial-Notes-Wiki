@@ -1,15 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>A discount bond's book value written up to the redemption value</title>
   <style>:root {
-  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
-  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+  --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
-    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+    --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+    --grid: #333333; --soft: #242424; --axis: #6b6b6b;
   }
 }
+/* Named by the host in the embed URL (`…svg#dark`), and beats the media query
+   above because a value set here lands on the drawing rather than on the root
+   it inherits from. See the module docstring. */
+#light:target ~ * { --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c; }
+#dark:target ~ * { --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+  --grid: #333333; --soft: #242424; --axis: #6b6b6b; }
 text {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
                "Helvetica Neue", Arial, sans-serif;
@@ -38,45 +45,48 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <g id="light"/><g id="dark"/>
   <defs>
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
   </defs>
-  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="31" text-anchor="middle" class="ttl">The discount is written up, coupon by</text>
-  <text x="180" y="50" text-anchor="middle" class="ttl">coupon</text>
-  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-  <text x="180" y="430" text-anchor="middle" class="fml">Fr &lt; Cj  →  the coupon underpays</text>
-  <text x="180" y="452" text-anchor="middle" class="fml2">written up in period t:  (Cj − Fr) v^(n−t+1)</text>
-  <polygon points="78,162.26 78,317.39 80.07,316.45 82.13,315.52 84.2,314.58 86.27,313.65 88.33,312.71 90.4,311.78 92.47,310.84 94.53,309.91 96.6,308.97 98.67,308.03 100.73,307.1 102.8,306.16 104.87,305.16 106.93,304.16 109,303.16 111.07,302.16 113.13,301.16 115.2,300.16 117.27,299.15 119.33,298.15 121.4,297.15 123.47,296.15 125.53,295.15 127.6,294.15 129.67,293.08 131.73,292.01 133.8,290.93 135.87,289.86 137.93,288.79 140,287.72 142.07,286.65 144.13,285.58 146.2,284.51 148.27,283.44 150.33,282.37 152.4,281.29 154.47,280.15 156.53,279 158.6,277.86 160.67,276.71 162.73,275.56 164.8,274.42 166.87,273.27 168.93,272.12 171,270.98 173.07,269.83 175.13,268.69 177.2,267.54 179.27,266.31 181.33,265.09 183.4,263.86 185.47,262.63 187.53,261.41 189.6,260.18 191.67,258.95 193.73,257.73 195.8,256.5 197.87,255.27 199.93,254.05 202,252.82 204.07,251.51 206.13,250.2 208.2,248.88 210.27,247.57 212.33,246.26 214.4,244.95 216.47,243.64 218.53,242.32 220.6,241.01 222.67,239.7 224.73,238.39 226.8,237.07 228.87,235.67 230.93,234.27 233,232.86 235.07,231.46 237.13,230.05 239.2,228.65 241.27,227.24 243.33,225.84 245.4,224.44 247.47,223.03 249.53,221.63 251.6,220.22 253.67,218.72 255.73,217.22 257.8,215.72 259.87,214.21 261.93,212.71 264,211.21 266.07,209.71 268.13,208.2 270.2,206.7 272.27,205.2 274.33,203.7 276.4,202.19 278.47,200.59 280.53,198.98 282.6,197.37 284.67,195.76 286.73,194.16 288.8,192.55 290.87,190.94 292.93,189.33 295,187.73 297.07,186.12 299.13,184.51 301.2,182.9 303.27,181.18 305.33,179.46 307.4,177.74 309.47,176.02 311.53,174.3 313.6,172.58 315.67,170.86 317.73,169.14 319.8,167.42 321.87,165.7 323.93,163.98 326,162.26 326,162.26" fill="#3b82f6" fill-opacity="0.18" stroke="none"/>
-  <polyline points="78,317.39 102.8,306.16 127.6,294.15 152.4,281.29 177.2,267.54 202,252.82 226.8,237.07 251.6,220.22 276.4,202.19 301.2,182.9 326,162.26" class="curve" stroke="#3b82f6" stroke-width="2"/>
-  <circle cx="78" cy="317.39" r="2.8" fill="#3b82f6"/>
-  <circle cx="102.8" cy="306.16" r="2.8" fill="#3b82f6"/>
-  <circle cx="127.6" cy="294.15" r="2.8" fill="#3b82f6"/>
-  <circle cx="152.4" cy="281.29" r="2.8" fill="#3b82f6"/>
-  <circle cx="177.2" cy="267.54" r="2.8" fill="#3b82f6"/>
-  <circle cx="202" cy="252.82" r="2.8" fill="#3b82f6"/>
-  <circle cx="226.8" cy="237.07" r="2.8" fill="#3b82f6"/>
-  <circle cx="251.6" cy="220.22" r="2.8" fill="#3b82f6"/>
-  <circle cx="276.4" cy="202.19" r="2.8" fill="#3b82f6"/>
-  <circle cx="301.2" cy="182.9" r="2.8" fill="#3b82f6"/>
-  <circle cx="326" cy="162.26" r="2.8" fill="#3b82f6"/>
-  <line x1="78" y1="162.26" x2="326" y2="162.26" class="thin dash" stroke="var(--dim)" stroke-width="1.3"/>
-  <text x="320" y="165.86" text-anchor="end" class="sm dim">C</text>
-  <text x="147.44" y="283.74" text-anchor="start" class="sm bold">discount C − P</text>
-  <line x1="78" y1="350" x2="336" y2="350" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-  <line x1="78" y1="350" x2="78" y2="86" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-  <line x1="78" y1="350" x2="78" y2="354" class="tick"/>
-  <text x="78" y="366" text-anchor="middle" class="sm dim">0</text>
-  <line x1="202" y1="350" x2="202" y2="354" class="tick"/>
-  <text x="202" y="366" text-anchor="middle" class="sm dim">5</text>
-  <line x1="326" y1="350" x2="326" y2="354" class="tick"/>
-  <text x="326" y="366" text-anchor="middle" class="sm dim">10</text>
-  <line x1="74" y1="327.91" x2="78" y2="327.91" class="tick"/>
-  <text x="70" y="331.51" text-anchor="end" class="sm dim">850</text>
-  <line x1="74" y1="217.48" x2="78" y2="217.48" class="tick"/>
-  <text x="70" y="221.08" text-anchor="end" class="sm dim">950</text>
-  <line x1="74" y1="107.04" x2="78" y2="107.04" class="tick"/>
-  <text x="70" y="110.64" text-anchor="end" class="sm dim">1,050</text>
-  <text x="326" y="382" text-anchor="end" class="sm dim">coupons paid</text>
-  <text x="74" y="82" text-anchor="start" class="sm dim">book value</text>
+  <g class="art">
+    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+    <text x="180" y="31" text-anchor="middle" class="ttl">The discount is written up, coupon by</text>
+    <text x="180" y="50" text-anchor="middle" class="ttl">coupon</text>
+    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+    <text x="180" y="430" text-anchor="middle" class="fml">Fr &lt; Cj  →  the coupon underpays</text>
+    <text x="180" y="452" text-anchor="middle" class="fml2">written up in period t:  (Cj − Fr) v^(n−t+1)</text>
+    <polygon points="78,162.26 78,317.39 80.07,316.45 82.13,315.52 84.2,314.58 86.27,313.65 88.33,312.71 90.4,311.78 92.47,310.84 94.53,309.91 96.6,308.97 98.67,308.03 100.73,307.1 102.8,306.16 104.87,305.16 106.93,304.16 109,303.16 111.07,302.16 113.13,301.16 115.2,300.16 117.27,299.15 119.33,298.15 121.4,297.15 123.47,296.15 125.53,295.15 127.6,294.15 129.67,293.08 131.73,292.01 133.8,290.93 135.87,289.86 137.93,288.79 140,287.72 142.07,286.65 144.13,285.58 146.2,284.51 148.27,283.44 150.33,282.37 152.4,281.29 154.47,280.15 156.53,279 158.6,277.86 160.67,276.71 162.73,275.56 164.8,274.42 166.87,273.27 168.93,272.12 171,270.98 173.07,269.83 175.13,268.69 177.2,267.54 179.27,266.31 181.33,265.09 183.4,263.86 185.47,262.63 187.53,261.41 189.6,260.18 191.67,258.95 193.73,257.73 195.8,256.5 197.87,255.27 199.93,254.05 202,252.82 204.07,251.51 206.13,250.2 208.2,248.88 210.27,247.57 212.33,246.26 214.4,244.95 216.47,243.64 218.53,242.32 220.6,241.01 222.67,239.7 224.73,238.39 226.8,237.07 228.87,235.67 230.93,234.27 233,232.86 235.07,231.46 237.13,230.05 239.2,228.65 241.27,227.24 243.33,225.84 245.4,224.44 247.47,223.03 249.53,221.63 251.6,220.22 253.67,218.72 255.73,217.22 257.8,215.72 259.87,214.21 261.93,212.71 264,211.21 266.07,209.71 268.13,208.2 270.2,206.7 272.27,205.2 274.33,203.7 276.4,202.19 278.47,200.59 280.53,198.98 282.6,197.37 284.67,195.76 286.73,194.16 288.8,192.55 290.87,190.94 292.93,189.33 295,187.73 297.07,186.12 299.13,184.51 301.2,182.9 303.27,181.18 305.33,179.46 307.4,177.74 309.47,176.02 311.53,174.3 313.6,172.58 315.67,170.86 317.73,169.14 319.8,167.42 321.87,165.7 323.93,163.98 326,162.26 326,162.26" fill="#3b82f6" fill-opacity="0.18" stroke="none"/>
+    <polyline points="78,317.39 102.8,306.16 127.6,294.15 152.4,281.29 177.2,267.54 202,252.82 226.8,237.07 251.6,220.22 276.4,202.19 301.2,182.9 326,162.26" class="curve" stroke="#3b82f6" stroke-width="2"/>
+    <circle cx="78" cy="317.39" r="2.8" fill="#3b82f6"/>
+    <circle cx="102.8" cy="306.16" r="2.8" fill="#3b82f6"/>
+    <circle cx="127.6" cy="294.15" r="2.8" fill="#3b82f6"/>
+    <circle cx="152.4" cy="281.29" r="2.8" fill="#3b82f6"/>
+    <circle cx="177.2" cy="267.54" r="2.8" fill="#3b82f6"/>
+    <circle cx="202" cy="252.82" r="2.8" fill="#3b82f6"/>
+    <circle cx="226.8" cy="237.07" r="2.8" fill="#3b82f6"/>
+    <circle cx="251.6" cy="220.22" r="2.8" fill="#3b82f6"/>
+    <circle cx="276.4" cy="202.19" r="2.8" fill="#3b82f6"/>
+    <circle cx="301.2" cy="182.9" r="2.8" fill="#3b82f6"/>
+    <circle cx="326" cy="162.26" r="2.8" fill="#3b82f6"/>
+    <line x1="78" y1="162.26" x2="326" y2="162.26" class="thin dash" stroke="var(--dim)" stroke-width="1.3"/>
+    <text x="320" y="165.86" text-anchor="end" class="sm dim">C</text>
+    <text x="147.44" y="283.74" text-anchor="start" class="sm bold">discount C − P</text>
+    <line x1="78" y1="350" x2="336" y2="350" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="78" y1="350" x2="78" y2="86" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="78" y1="350" x2="78" y2="354" class="tick"/>
+    <text x="78" y="366" text-anchor="middle" class="sm dim">0</text>
+    <line x1="202" y1="350" x2="202" y2="354" class="tick"/>
+    <text x="202" y="366" text-anchor="middle" class="sm dim">5</text>
+    <line x1="326" y1="350" x2="326" y2="354" class="tick"/>
+    <text x="326" y="366" text-anchor="middle" class="sm dim">10</text>
+    <line x1="74" y1="327.91" x2="78" y2="327.91" class="tick"/>
+    <text x="70" y="331.51" text-anchor="end" class="sm dim">850</text>
+    <line x1="74" y1="217.48" x2="78" y2="217.48" class="tick"/>
+    <text x="70" y="221.08" text-anchor="end" class="sm dim">950</text>
+    <line x1="74" y1="107.04" x2="78" y2="107.04" class="tick"/>
+    <text x="70" y="110.64" text-anchor="end" class="sm dim">1,050</text>
+    <text x="326" y="382" text-anchor="end" class="sm dim">coupons paid</text>
+    <text x="74" y="82" text-anchor="start" class="sm dim">book value</text>
+  </g>
 </svg>

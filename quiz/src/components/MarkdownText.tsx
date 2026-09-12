@@ -5,6 +5,8 @@ import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import { codeComponents, inlineCodeComponents } from '@/components/CodeBlock'
 import { normalizeVaultMath } from '@/lib/vaultMath'
+import { themedFigureSrc } from '@/lib/figureTheme'
+import { useTheme } from '@/hooks/useTheme'
 
 interface Props {
   children: string
@@ -25,28 +27,35 @@ const scrollableTable: Components['table'] = ({ children, ...props }) => (
 // diagrams the exam banks ship with are printed small enough that reading one on
 // a phone means opening it. A broken image hides itself rather than leaving a
 // torn-picture icon mid-sentence.
-const zoomableImage: Components['img'] = ({ src, alt, title }) => (
-  <img
-    src={src}
-    alt={alt ?? ''}
-    title={title}
-    data-zoomable=""
-    className="max-w-full cursor-zoom-in"
-    onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
-  />
-)
+//
+// A generated concept figure is told which theme it is being shown in
+// (`lib/figureTheme.ts`) — it cannot see the app's `.dark` class from inside an
+// `<img>`, so the theme rides along in the URL.
+const ZoomableImage: Components['img'] = ({ src, alt, title }) => {
+  const { theme } = useTheme()
+  return (
+    <img
+      src={themedFigureSrc(src, theme)}
+      alt={alt ?? ''}
+      title={title}
+      data-zoomable=""
+      className="max-w-full cursor-zoom-in"
+      onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+    />
+  )
+}
 
 const inlineComponents: Components = {
   ...inlineCodeComponents,
   p: ({ children }) => <span>{children}</span>,
   br: () => <span> </span>,
-  img: zoomableImage,
+  img: ZoomableImage,
 }
 
 const blockComponents: Components = {
   ...codeComponents,
   table: scrollableTable,
-  img: zoomableImage,
+  img: ZoomableImage,
 }
 
 export function MarkdownText({ children, className, inline }: Props) {

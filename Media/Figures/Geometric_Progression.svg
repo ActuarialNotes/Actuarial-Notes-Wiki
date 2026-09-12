@@ -1,15 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>A geometric payment stream and the shifted rate that values it</title>
   <style>:root {
-  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
-  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+  --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
-    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+    --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+    --grid: #333333; --soft: #242424; --axis: #6b6b6b;
   }
 }
+/* Named by the host in the embed URL (`…svg#dark`), and beats the media query
+   above because a value set here lands on the drawing rather than on the root
+   it inherits from. See the module docstring. */
+#light:target ~ * { --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c; }
+#dark:target ~ * { --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+  --grid: #333333; --soft: #242424; --axis: #6b6b6b; }
 text {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
                "Helvetica Neue", Arial, sans-serif;
@@ -38,52 +45,55 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <g id="light"/><g id="dark"/>
   <defs>
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
   </defs>
-  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="31" text-anchor="middle" class="ttl">A geometric stream is a level annuity at</text>
-  <text x="180" y="50" text-anchor="middle" class="ttl">a shifted rate</text>
-  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-  <text x="180" y="430" text-anchor="middle" class="fml">j = (1 + i)/(1 + g) − 1</text>
-  <text x="180" y="452" text-anchor="middle" class="fml2">then PV = a₍ₙ₎ⱼ / (1 + g)</text>
-  <rect x="85.59" y="200" width="15.36" height="150" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
-  <rect x="108.87" y="195.5" width="15.36" height="154.5" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
-  <rect x="132.14" y="190.87" width="15.36" height="159.13" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
-  <rect x="155.41" y="186.09" width="15.36" height="163.91" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
-  <rect x="178.68" y="181.17" width="15.36" height="168.83" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
-  <rect x="201.96" y="176.11" width="15.36" height="173.89" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
-  <rect x="225.23" y="170.89" width="15.36" height="179.11" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
-  <rect x="248.5" y="165.52" width="15.36" height="184.48" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
-  <rect x="271.77" y="159.98" width="15.36" height="190.02" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
-  <rect x="295.05" y="154.28" width="15.36" height="195.72" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
-  <rect x="85.59" y="211.11" width="15.36" height="138.89" rx="1.5" fill="#3b82f6" fill-opacity="0.85"/>
-  <rect x="108.87" y="217.54" width="15.36" height="132.46" rx="1.5" fill="#3b82f6" fill-opacity="0.85"/>
-  <rect x="132.14" y="223.67" width="15.36" height="126.33" rx="1.5" fill="#3b82f6" fill-opacity="0.85"/>
-  <rect x="155.41" y="229.52" width="15.36" height="120.48" rx="1.5" fill="#3b82f6" fill-opacity="0.85"/>
-  <rect x="178.68" y="235.1" width="15.36" height="114.9" rx="1.5" fill="#3b82f6" fill-opacity="0.85"/>
-  <rect x="201.96" y="240.42" width="15.36" height="109.58" rx="1.5" fill="#3b82f6" fill-opacity="0.85"/>
-  <rect x="225.23" y="245.49" width="15.36" height="104.51" rx="1.5" fill="#3b82f6" fill-opacity="0.85"/>
-  <rect x="248.5" y="250.33" width="15.36" height="99.67" rx="1.5" fill="#3b82f6" fill-opacity="0.85"/>
-  <rect x="271.77" y="254.94" width="15.36" height="95.06" rx="1.5" fill="#3b82f6" fill-opacity="0.85"/>
-  <rect x="295.05" y="259.35" width="15.36" height="90.65" rx="1.5" fill="#3b82f6" fill-opacity="0.85"/>
-  <line x1="70" y1="350" x2="336" y2="350" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-  <line x1="70" y1="350" x2="70" y2="100" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-  <line x1="93.27" y1="350" x2="93.27" y2="354" class="tick"/>
-  <text x="93.27" y="366" text-anchor="middle" class="sm dim">1</text>
-  <line x1="186.36" y1="350" x2="186.36" y2="354" class="tick"/>
-  <text x="186.36" y="366" text-anchor="middle" class="sm dim">5</text>
-  <line x1="302.73" y1="350" x2="302.73" y2="354" class="tick"/>
-  <text x="302.73" y="366" text-anchor="middle" class="sm dim">10</text>
-  <line x1="66" y1="275" x2="70" y2="275" class="tick"/>
-  <text x="62" y="278.6" text-anchor="end" class="sm dim">0.5</text>
-  <line x1="66" y1="200" x2="70" y2="200" class="tick"/>
-  <text x="62" y="203.6" text-anchor="end" class="sm dim">1</text>
-  <line x1="66" y1="125" x2="70" y2="125" class="tick"/>
-  <text x="62" y="128.6" text-anchor="end" class="sm dim">1.5</text>
-  <text x="326" y="382" text-anchor="end" class="sm dim">payment number</text>
-  <line x1="62" y1="92" x2="75" y2="92" stroke="#e11d48" stroke-width="2.4" stroke-linecap="round"/>
-  <text x="81" y="95.6" text-anchor="start" class="sm">payment (1+g)^(k−1)</text>
-  <line x1="62" y1="108" x2="75" y2="108" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round"/>
-  <text x="81" y="111.6" text-anchor="start" class="sm">its present value</text>
+  <g class="art">
+    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+    <text x="180" y="31" text-anchor="middle" class="ttl">A geometric stream is a level annuity at</text>
+    <text x="180" y="50" text-anchor="middle" class="ttl">a shifted rate</text>
+    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+    <text x="180" y="430" text-anchor="middle" class="fml">j = (1 + i)/(1 + g) − 1</text>
+    <text x="180" y="452" text-anchor="middle" class="fml2">then PV = a₍ₙ₎ⱼ / (1 + g)</text>
+    <rect x="85.59" y="200" width="15.36" height="150" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
+    <rect x="108.87" y="195.5" width="15.36" height="154.5" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
+    <rect x="132.14" y="190.87" width="15.36" height="159.13" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
+    <rect x="155.41" y="186.09" width="15.36" height="163.91" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
+    <rect x="178.68" y="181.17" width="15.36" height="168.83" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
+    <rect x="201.96" y="176.11" width="15.36" height="173.89" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
+    <rect x="225.23" y="170.89" width="15.36" height="179.11" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
+    <rect x="248.5" y="165.52" width="15.36" height="184.48" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
+    <rect x="271.77" y="159.98" width="15.36" height="190.02" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
+    <rect x="295.05" y="154.28" width="15.36" height="195.72" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
+    <rect x="85.59" y="211.11" width="15.36" height="138.89" rx="1.5" fill="#3b82f6" fill-opacity="0.85"/>
+    <rect x="108.87" y="217.54" width="15.36" height="132.46" rx="1.5" fill="#3b82f6" fill-opacity="0.85"/>
+    <rect x="132.14" y="223.67" width="15.36" height="126.33" rx="1.5" fill="#3b82f6" fill-opacity="0.85"/>
+    <rect x="155.41" y="229.52" width="15.36" height="120.48" rx="1.5" fill="#3b82f6" fill-opacity="0.85"/>
+    <rect x="178.68" y="235.1" width="15.36" height="114.9" rx="1.5" fill="#3b82f6" fill-opacity="0.85"/>
+    <rect x="201.96" y="240.42" width="15.36" height="109.58" rx="1.5" fill="#3b82f6" fill-opacity="0.85"/>
+    <rect x="225.23" y="245.49" width="15.36" height="104.51" rx="1.5" fill="#3b82f6" fill-opacity="0.85"/>
+    <rect x="248.5" y="250.33" width="15.36" height="99.67" rx="1.5" fill="#3b82f6" fill-opacity="0.85"/>
+    <rect x="271.77" y="254.94" width="15.36" height="95.06" rx="1.5" fill="#3b82f6" fill-opacity="0.85"/>
+    <rect x="295.05" y="259.35" width="15.36" height="90.65" rx="1.5" fill="#3b82f6" fill-opacity="0.85"/>
+    <line x1="70" y1="350" x2="336" y2="350" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="70" y1="350" x2="70" y2="100" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="93.27" y1="350" x2="93.27" y2="354" class="tick"/>
+    <text x="93.27" y="366" text-anchor="middle" class="sm dim">1</text>
+    <line x1="186.36" y1="350" x2="186.36" y2="354" class="tick"/>
+    <text x="186.36" y="366" text-anchor="middle" class="sm dim">5</text>
+    <line x1="302.73" y1="350" x2="302.73" y2="354" class="tick"/>
+    <text x="302.73" y="366" text-anchor="middle" class="sm dim">10</text>
+    <line x1="66" y1="275" x2="70" y2="275" class="tick"/>
+    <text x="62" y="278.6" text-anchor="end" class="sm dim">0.5</text>
+    <line x1="66" y1="200" x2="70" y2="200" class="tick"/>
+    <text x="62" y="203.6" text-anchor="end" class="sm dim">1</text>
+    <line x1="66" y1="125" x2="70" y2="125" class="tick"/>
+    <text x="62" y="128.6" text-anchor="end" class="sm dim">1.5</text>
+    <text x="326" y="382" text-anchor="end" class="sm dim">payment number</text>
+    <line x1="62" y1="92" x2="75" y2="92" stroke="#e11d48" stroke-width="2.4" stroke-linecap="round"/>
+    <text x="81" y="95.6" text-anchor="start" class="sm">payment (1+g)^(k−1)</text>
+    <line x1="62" y1="108" x2="75" y2="108" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round"/>
+    <text x="81" y="111.6" text-anchor="start" class="sm">its present value</text>
+  </g>
 </svg>

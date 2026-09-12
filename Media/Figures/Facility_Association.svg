@@ -1,15 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>How a driver reaches FARM, and the market-share formula that spreads its result across every auto insurer</title>
   <style>:root {
-  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
-  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+  --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
-    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+    --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+    --grid: #333333; --soft: #242424; --axis: #6b6b6b;
   }
 }
+/* Named by the host in the embed URL (`…svg#dark`), and beats the media query
+   above because a value set here lands on the drawing rather than on the root
+   it inherits from. See the module docstring. */
+#light:target ~ * { --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c; }
+#dark:target ~ * { --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+  --grid: #333333; --soft: #242424; --axis: #6b6b6b; }
 text {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
                "Helvetica Neue", Arial, sans-serif;
@@ -38,41 +45,44 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <g id="light"/><g id="dark"/>
   <defs>
     <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
   </defs>
-  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="31" text-anchor="middle" class="ttl">Written by the industry, serviced by one</text>
-  <text x="180" y="50" text-anchor="middle" class="ttl">carrier</text>
-  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-  <text x="180" y="430" text-anchor="middle" class="fml">Member share = voluntary premium</text>
-  <text x="180" y="452" text-anchor="middle" class="fml2">÷ total voluntary premium</text>
-  <rect x="36" y="97" width="63" height="26" rx="13.0" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
-  <text x="67.5" y="114" text-anchor="middle" class="sm">driver</text>
-  <rect x="111" y="97" width="63" height="26" rx="13.0" fill="#0d9488" fill-opacity="0.14" stroke="#0d9488" stroke-width="1.2"/>
-  <text x="142.5" y="114" text-anchor="middle" class="sm">broker</text>
-  <line x1="100" y1="110" x2="110" y2="110" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-  <rect x="186" y="97" width="63" height="26" rx="13.0" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2"/>
-  <text x="217.5" y="114" text-anchor="middle" class="sm">carrier</text>
-  <line x1="175" y1="110" x2="185" y2="110" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-  <rect x="261" y="97" width="63" height="26" rx="13.0" fill="#e11d48" fill-opacity="0.14" stroke="#e11d48" stroke-width="1.2"/>
-  <text x="292.5" y="114" text-anchor="middle" class="sm">FA</text>
-  <line x1="250" y1="110" x2="260" y2="110" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-  <text x="180" y="144" text-anchor="middle" class="sm dim">the servicing carrier issues and adjusts for</text>
-  <text x="180" y="160" text-anchor="middle" class="sm dim">a fee — it does not bear the risk</text>
-  <line x1="30" y1="182" x2="330" y2="182" class="rule"/>
-  <text x="180" y="204" text-anchor="middle" class="sm bold">and the result lands on everyone</text>
-  <rect x="40" y="225" width="95.2" height="30" rx="4" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.2"/>
-  <text x="87.6" y="244" text-anchor="middle" class="sm">A</text>
-  <rect x="135.2" y="225" width="75.6" height="30" rx="4" fill="#0d9488" fill-opacity="0.30" stroke="#0d9488" stroke-width="1.2"/>
-  <text x="173" y="244" text-anchor="middle" class="sm">B</text>
-  <rect x="210.8" y="225" width="61.6" height="30" rx="4" fill="#d97706" fill-opacity="0.30" stroke="#d97706" stroke-width="1.2"/>
-  <text x="241.6" y="244" text-anchor="middle" class="sm">C</text>
-  <rect x="272.4" y="225" width="47.6" height="30" rx="4" fill="#059669" fill-opacity="0.30" stroke="#059669" stroke-width="1.2"/>
-  <text x="296.2" y="244" text-anchor="middle" class="sm">D</text>
-  <text x="180" y="274" text-anchor="middle" class="sm dim">by voluntary market share, serviced or not</text>
-  <text x="180" y="306" text-anchor="middle" class="sm dim">who ends up in FARM: serious conviction records,</text>
-  <text x="180" y="322" text-anchor="middle" class="sm dim">specialty vehicles no rating plan contemplates,</text>
-  <text x="180" y="338" text-anchor="middle" class="sm dim">and — where rates are suppressed — ordinary risks</text>
-  <text x="180" y="366" text-anchor="middle" class="sm dim">so FA volume reads the province's rate regime</text>
+  <g class="art">
+    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+    <text x="180" y="31" text-anchor="middle" class="ttl">Written by the industry, serviced by one</text>
+    <text x="180" y="50" text-anchor="middle" class="ttl">carrier</text>
+    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+    <text x="180" y="430" text-anchor="middle" class="fml">Member share = voluntary premium</text>
+    <text x="180" y="452" text-anchor="middle" class="fml2">÷ total voluntary premium</text>
+    <rect x="36" y="97" width="63" height="26" rx="13.0" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="67.5" y="114" text-anchor="middle" class="sm">driver</text>
+    <rect x="111" y="97" width="63" height="26" rx="13.0" fill="#0d9488" fill-opacity="0.14" stroke="#0d9488" stroke-width="1.2"/>
+    <text x="142.5" y="114" text-anchor="middle" class="sm">broker</text>
+    <line x1="100" y1="110" x2="110" y2="110" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
+    <rect x="186" y="97" width="63" height="26" rx="13.0" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2"/>
+    <text x="217.5" y="114" text-anchor="middle" class="sm">carrier</text>
+    <line x1="175" y1="110" x2="185" y2="110" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
+    <rect x="261" y="97" width="63" height="26" rx="13.0" fill="#e11d48" fill-opacity="0.14" stroke="#e11d48" stroke-width="1.2"/>
+    <text x="292.5" y="114" text-anchor="middle" class="sm">FA</text>
+    <line x1="250" y1="110" x2="260" y2="110" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
+    <text x="180" y="144" text-anchor="middle" class="sm dim">the servicing carrier issues and adjusts for</text>
+    <text x="180" y="160" text-anchor="middle" class="sm dim">a fee — it does not bear the risk</text>
+    <line x1="30" y1="182" x2="330" y2="182" class="rule"/>
+    <text x="180" y="204" text-anchor="middle" class="sm bold">and the result lands on everyone</text>
+    <rect x="40" y="225" width="95.2" height="30" rx="4" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="87.6" y="244" text-anchor="middle" class="sm">A</text>
+    <rect x="135.2" y="225" width="75.6" height="30" rx="4" fill="#0d9488" fill-opacity="0.30" stroke="#0d9488" stroke-width="1.2"/>
+    <text x="173" y="244" text-anchor="middle" class="sm">B</text>
+    <rect x="210.8" y="225" width="61.6" height="30" rx="4" fill="#d97706" fill-opacity="0.30" stroke="#d97706" stroke-width="1.2"/>
+    <text x="241.6" y="244" text-anchor="middle" class="sm">C</text>
+    <rect x="272.4" y="225" width="47.6" height="30" rx="4" fill="#059669" fill-opacity="0.30" stroke="#059669" stroke-width="1.2"/>
+    <text x="296.2" y="244" text-anchor="middle" class="sm">D</text>
+    <text x="180" y="274" text-anchor="middle" class="sm dim">by voluntary market share, serviced or not</text>
+    <text x="180" y="306" text-anchor="middle" class="sm dim">who ends up in FARM: serious conviction records,</text>
+    <text x="180" y="322" text-anchor="middle" class="sm dim">specialty vehicles no rating plan contemplates,</text>
+    <text x="180" y="338" text-anchor="middle" class="sm dim">and — where rates are suppressed — ordinary risks</text>
+    <text x="180" y="366" text-anchor="middle" class="sm dim">so FA volume reads the province's rate regime</text>
+  </g>
 </svg>

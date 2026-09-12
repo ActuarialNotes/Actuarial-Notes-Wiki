@@ -1,15 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>B decomposed across a partition of the sample space</title>
   <style>:root {
-  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
-  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+  --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
-    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+    --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+    --grid: #333333; --soft: #242424; --axis: #6b6b6b;
   }
 }
+/* Named by the host in the embed URL (`…svg#dark`), and beats the media query
+   above because a value set here lands on the drawing rather than on the root
+   it inherits from. See the module docstring. */
+#light:target ~ * { --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c; }
+#dark:target ~ * { --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+  --grid: #333333; --soft: #242424; --axis: #6b6b6b; }
 text {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
                "Helvetica Neue", Arial, sans-serif;
@@ -38,33 +45,36 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
-  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="40" text-anchor="middle" class="ttl">Split B across a partition, then weight</text>
-  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-  <text x="180" y="438" text-anchor="middle" class="fml">P(B) = Σ P(B | Aᵢ) P(Aᵢ) = 0.19</text>
-  <rect x="30" y="88" width="300" height="152" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
-  <rect x="30" y="88" width="90" height="152" fill="#3b82f6" fill-opacity="0.12"/>
-  <line x1="30" y1="88" x2="30" y2="240" stroke="var(--edge)" stroke-width="1"/>
-  <text x="75" y="108" text-anchor="middle" class="bold" fill="#3b82f6">A₁</text>
-  <rect x="120" y="88" width="75" height="152" fill="#d97706" fill-opacity="0.12"/>
-  <line x1="120" y1="88" x2="120" y2="240" stroke="var(--edge)" stroke-width="1"/>
-  <text x="157.5" y="108" text-anchor="middle" class="bold" fill="#d97706">A₂</text>
-  <rect x="195" y="88" width="75" height="152" fill="#059669" fill-opacity="0.12"/>
-  <line x1="195" y1="88" x2="195" y2="240" stroke="var(--edge)" stroke-width="1"/>
-  <text x="232.5" y="108" text-anchor="middle" class="bold" fill="#059669">A₃</text>
-  <rect x="270" y="88" width="60" height="152" fill="#7c3aed" fill-opacity="0.12"/>
-  <line x1="270" y1="88" x2="270" y2="240" stroke="var(--edge)" stroke-width="1"/>
-  <text x="300" y="108" text-anchor="middle" class="bold" fill="#7c3aed">A₄</text>
-  <ellipse cx="168" cy="180" rx="104" ry="42" fill="#e11d48" fill-opacity="0.28" stroke="#e11d48" stroke-width="1.6"/>
-  <text x="168" y="185" text-anchor="middle" class="bold" fill="#e11d48">B</text>
-  <text x="180" y="284" text-anchor="middle" class="sm dim">P(B) split into P(B | Aᵢ) P(Aᵢ)</text>
-  <rect x="40" y="298" width="44.21" height="30" rx="3" fill="#3b82f6" fill-opacity="0.6"/>
-  <text x="62.11" y="318" text-anchor="middle" class="sm bold">0.03</text>
-  <rect x="84.21" y="298" width="147.37" height="30" rx="3" fill="#d97706" fill-opacity="0.6"/>
-  <text x="157.89" y="318" text-anchor="middle" class="sm bold">0.10</text>
-  <rect x="231.58" y="298" width="73.68" height="30" rx="3" fill="#059669" fill-opacity="0.6"/>
-  <text x="268.42" y="318" text-anchor="middle" class="sm bold">0.05</text>
-  <rect x="305.26" y="298" width="14.74" height="30" rx="3" fill="#7c3aed" fill-opacity="0.6"/>
-  <line x1="40" y1="336" x2="320" y2="336" stroke="#e11d48" stroke-width="1.6"/>
-  <text x="180" y="356" text-anchor="middle" class="bold" fill="#e11d48">P(B) = 0.19</text>
+  <g id="light"/><g id="dark"/>
+  <g class="art">
+    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+    <text x="180" y="40" text-anchor="middle" class="ttl">Split B across a partition, then weight</text>
+    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+    <text x="180" y="438" text-anchor="middle" class="fml">P(B) = Σ P(B | Aᵢ) P(Aᵢ) = 0.19</text>
+    <rect x="30" y="88" width="300" height="152" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="30" y="88" width="90" height="152" fill="#3b82f6" fill-opacity="0.12"/>
+    <line x1="30" y1="88" x2="30" y2="240" stroke="var(--edge)" stroke-width="1"/>
+    <text x="75" y="108" text-anchor="middle" class="bold" fill="#3b82f6">A₁</text>
+    <rect x="120" y="88" width="75" height="152" fill="#d97706" fill-opacity="0.12"/>
+    <line x1="120" y1="88" x2="120" y2="240" stroke="var(--edge)" stroke-width="1"/>
+    <text x="157.5" y="108" text-anchor="middle" class="bold" fill="#d97706">A₂</text>
+    <rect x="195" y="88" width="75" height="152" fill="#059669" fill-opacity="0.12"/>
+    <line x1="195" y1="88" x2="195" y2="240" stroke="var(--edge)" stroke-width="1"/>
+    <text x="232.5" y="108" text-anchor="middle" class="bold" fill="#059669">A₃</text>
+    <rect x="270" y="88" width="60" height="152" fill="#7c3aed" fill-opacity="0.12"/>
+    <line x1="270" y1="88" x2="270" y2="240" stroke="var(--edge)" stroke-width="1"/>
+    <text x="300" y="108" text-anchor="middle" class="bold" fill="#7c3aed">A₄</text>
+    <ellipse cx="168" cy="180" rx="104" ry="42" fill="#e11d48" fill-opacity="0.28" stroke="#e11d48" stroke-width="1.6"/>
+    <text x="168" y="185" text-anchor="middle" class="bold" fill="#e11d48">B</text>
+    <text x="180" y="284" text-anchor="middle" class="sm dim">P(B) split into P(B | Aᵢ) P(Aᵢ)</text>
+    <rect x="40" y="298" width="44.21" height="30" rx="3" fill="#3b82f6" fill-opacity="0.6"/>
+    <text x="62.11" y="318" text-anchor="middle" class="sm bold">0.03</text>
+    <rect x="84.21" y="298" width="147.37" height="30" rx="3" fill="#d97706" fill-opacity="0.6"/>
+    <text x="157.89" y="318" text-anchor="middle" class="sm bold">0.10</text>
+    <rect x="231.58" y="298" width="73.68" height="30" rx="3" fill="#059669" fill-opacity="0.6"/>
+    <text x="268.42" y="318" text-anchor="middle" class="sm bold">0.05</text>
+    <rect x="305.26" y="298" width="14.74" height="30" rx="3" fill="#7c3aed" fill-opacity="0.6"/>
+    <line x1="40" y1="336" x2="320" y2="336" stroke="#e11d48" stroke-width="1.6"/>
+    <text x="180" y="356" text-anchor="middle" class="bold" fill="#e11d48">P(B) = 0.19</text>
+  </g>
 </svg>

@@ -1,15 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>Discount deducted at the start of each of m sub-periods</title>
   <style>:root {
-  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
-  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+  --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
-    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+    --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+    --grid: #333333; --soft: #242424; --axis: #6b6b6b;
   }
 }
+/* Named by the host in the embed URL (`…svg#dark`), and beats the media query
+   above because a value set here lands on the drawing rather than on the root
+   it inherits from. See the module docstring. */
+#light:target ~ * { --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c; }
+#dark:target ~ * { --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+  --grid: #333333; --soft: #242424; --axis: #6b6b6b; }
 text {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
                "Helvetica Neue", Arial, sans-serif;
@@ -38,37 +45,40 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <g id="light"/><g id="dark"/>
   <defs>
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
     <marker id="ahd97706" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#d97706"/></marker>
   </defs>
-  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="31" text-anchor="middle" class="ttl">d⁽ᵐ⁾ deducts interest at each sub-period</text>
-  <text x="180" y="50" text-anchor="middle" class="ttl">start</text>
-  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-  <text x="180" y="430" text-anchor="middle" class="fml">(1 − d⁽ᵐ⁾/m)ᵐ = 1 − d = v</text>
-  <text x="180" y="452" text-anchor="middle" class="fml2">d &lt; d⁽ᵐ⁾ &lt; δ &lt; i⁽ᵐ⁾ &lt; i</text>
-  <line x1="52" y1="220" x2="318" y2="220" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-  <line x1="60" y1="216" x2="60" y2="224" class="tick"/>
-  <text x="60" y="237" text-anchor="middle" class="sm dim">0</text>
-  <line x1="120" y1="216" x2="120" y2="224" class="tick"/>
-  <text x="120" y="237" text-anchor="middle" class="sm dim">¼</text>
-  <line x1="180" y1="216" x2="180" y2="224" class="tick"/>
-  <text x="180" y="237" text-anchor="middle" class="sm dim">½</text>
-  <line x1="240" y1="216" x2="240" y2="224" class="tick"/>
-  <text x="240" y="237" text-anchor="middle" class="sm dim">¾</text>
-  <line x1="300" y1="216" x2="300" y2="224" class="tick"/>
-  <text x="300" y="237" text-anchor="middle" class="sm dim">1</text>
-  <line x1="66" y1="180" x2="114" y2="180" class="thin" stroke="#d97706" stroke-width="1.3" marker-end="url(#ahd97706)"/>
-  <circle cx="60" cy="180" r="3.6" fill="#d97706"/>
-  <line x1="126" y1="180" x2="174" y2="180" class="thin" stroke="#d97706" stroke-width="1.3" marker-end="url(#ahd97706)"/>
-  <circle cx="120" cy="180" r="3.6" fill="#d97706"/>
-  <line x1="186" y1="180" x2="234" y2="180" class="thin" stroke="#d97706" stroke-width="1.3" marker-end="url(#ahd97706)"/>
-  <circle cx="180" cy="180" r="3.6" fill="#d97706"/>
-  <line x1="246" y1="180" x2="294" y2="180" class="thin" stroke="#d97706" stroke-width="1.3" marker-end="url(#ahd97706)"/>
-  <circle cx="240" cy="180" r="3.6" fill="#d97706"/>
-  <text x="180" y="150" text-anchor="middle" class="bold" fill="#d97706">÷ (1 − d⁽⁴⁾/4)  each quarter</text>
-  <text x="60" y="260" text-anchor="start" class="sm dim">deducted up front</text>
-  <text x="300" y="260" text-anchor="middle" class="sm dim">1</text>
-  <text x="180" y="330" text-anchor="middle" class="sm dim">everything meets at δ as m → ∞</text>
+  <g class="art">
+    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+    <text x="180" y="31" text-anchor="middle" class="ttl">d⁽ᵐ⁾ deducts interest at each sub-period</text>
+    <text x="180" y="50" text-anchor="middle" class="ttl">start</text>
+    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+    <text x="180" y="430" text-anchor="middle" class="fml">(1 − d⁽ᵐ⁾/m)ᵐ = 1 − d = v</text>
+    <text x="180" y="452" text-anchor="middle" class="fml2">d &lt; d⁽ᵐ⁾ &lt; δ &lt; i⁽ᵐ⁾ &lt; i</text>
+    <line x1="52" y1="220" x2="318" y2="220" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <line x1="60" y1="216" x2="60" y2="224" class="tick"/>
+    <text x="60" y="237" text-anchor="middle" class="sm dim">0</text>
+    <line x1="120" y1="216" x2="120" y2="224" class="tick"/>
+    <text x="120" y="237" text-anchor="middle" class="sm dim">¼</text>
+    <line x1="180" y1="216" x2="180" y2="224" class="tick"/>
+    <text x="180" y="237" text-anchor="middle" class="sm dim">½</text>
+    <line x1="240" y1="216" x2="240" y2="224" class="tick"/>
+    <text x="240" y="237" text-anchor="middle" class="sm dim">¾</text>
+    <line x1="300" y1="216" x2="300" y2="224" class="tick"/>
+    <text x="300" y="237" text-anchor="middle" class="sm dim">1</text>
+    <line x1="66" y1="180" x2="114" y2="180" class="thin" stroke="#d97706" stroke-width="1.3" marker-end="url(#ahd97706)"/>
+    <circle cx="60" cy="180" r="3.6" fill="#d97706"/>
+    <line x1="126" y1="180" x2="174" y2="180" class="thin" stroke="#d97706" stroke-width="1.3" marker-end="url(#ahd97706)"/>
+    <circle cx="120" cy="180" r="3.6" fill="#d97706"/>
+    <line x1="186" y1="180" x2="234" y2="180" class="thin" stroke="#d97706" stroke-width="1.3" marker-end="url(#ahd97706)"/>
+    <circle cx="180" cy="180" r="3.6" fill="#d97706"/>
+    <line x1="246" y1="180" x2="294" y2="180" class="thin" stroke="#d97706" stroke-width="1.3" marker-end="url(#ahd97706)"/>
+    <circle cx="240" cy="180" r="3.6" fill="#d97706"/>
+    <text x="180" y="150" text-anchor="middle" class="bold" fill="#d97706">÷ (1 − d⁽⁴⁾/4)  each quarter</text>
+    <text x="60" y="260" text-anchor="start" class="sm dim">deducted up front</text>
+    <text x="300" y="260" text-anchor="middle" class="sm dim">1</text>
+    <text x="180" y="330" text-anchor="middle" class="sm dim">everything meets at δ as m → ∞</text>
+  </g>
 </svg>

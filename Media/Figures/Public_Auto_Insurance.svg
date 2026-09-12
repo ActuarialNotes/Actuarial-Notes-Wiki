@@ -1,15 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>The four Canadian public auto models and the trade each makes</title>
   <style>:root {
-  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
-  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+  --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
-    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+    --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+    --grid: #333333; --soft: #242424; --axis: #6b6b6b;
   }
 }
+/* Named by the host in the embed URL (`…svg#dark`), and beats the media query
+   above because a value set here lands on the drawing rather than on the root
+   it inherits from. See the module docstring. */
+#light:target ~ * { --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c; }
+#dark:target ~ * { --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+  --grid: #333333; --soft: #242424; --axis: #6b6b6b; }
 text {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
                "Helvetica Neue", Arial, sans-serif;
@@ -38,35 +45,38 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
-  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="31" text-anchor="middle" class="ttl">A monopoly buys expense, and sells</text>
-  <text x="180" y="50" text-anchor="middle" class="ttl">competition</text>
-  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-  <text x="180" y="430" text-anchor="middle" class="fml">BC · Saskatchewan · Manitoba — basic</text>
-  <text x="180" y="452" text-anchor="middle" class="fml2">Quebec — bodily injury only</text>
-  <rect x="40" y="100" width="280" height="32" rx="6" fill="#3b82f6" fill-opacity="0.16" stroke="#3b82f6" stroke-width="1.2"/>
-  <text x="52" y="121" text-anchor="start" class="sm bold">ICBC — BC</text>
-  <text x="308" y="121" text-anchor="end" class="sm dim">monopoly, basic</text>
-  <rect x="40" y="140" width="280" height="32" rx="6" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.2"/>
-  <text x="52" y="161" text-anchor="start" class="sm bold">SGI — Sask.</text>
-  <text x="308" y="161" text-anchor="end" class="sm dim">monopoly, basic</text>
-  <rect x="40" y="180" width="280" height="32" rx="6" fill="#059669" fill-opacity="0.16" stroke="#059669" stroke-width="1.2"/>
-  <text x="52" y="201" text-anchor="start" class="sm bold">MPI — Manitoba</text>
-  <text x="308" y="201" text-anchor="end" class="sm dim">monopoly, basic</text>
-  <rect x="40" y="220" width="280" height="32" rx="6" fill="#d97706" fill-opacity="0.16" stroke="#d97706" stroke-width="1.2"/>
-  <text x="52" y="241" text-anchor="start" class="sm bold">SAAQ — Quebec</text>
-  <text x="308" y="241" text-anchor="end" class="sm dim">bodily injury only</text>
-  <line x1="30" y1="274" x2="330" y2="274" class="rule"/>
-  <rect x="30" y="288" width="143" height="94" rx="7" fill="#059669" fill-opacity="0.08" stroke="#059669" stroke-width="1.2"/>
-  <rect x="30" y="288" width="143" height="24" rx="7" fill="#059669" fill-opacity="0.22" stroke="none"/>
-  <text x="101.5" y="304" text-anchor="middle" class="sm bold" fill="#059669">For</text>
-  <text x="101.5" y="332" text-anchor="middle" class="sm">no commission</text>
-  <text x="101.5" y="352" text-anchor="middle" class="sm">no profit load</text>
-  <text x="101.5" y="372" text-anchor="middle" class="sm">universal access</text>
-  <rect x="187" y="288" width="143" height="94" rx="7" fill="#e11d48" fill-opacity="0.08" stroke="#e11d48" stroke-width="1.2"/>
-  <rect x="187" y="288" width="143" height="24" rx="7" fill="#e11d48" fill-opacity="0.22" stroke="none"/>
-  <text x="258.5" y="304" text-anchor="middle" class="sm bold" fill="#e11d48">Against</text>
-  <text x="258.5" y="332" text-anchor="middle" class="sm">no competition</text>
-  <text x="258.5" y="352" text-anchor="middle" class="sm">political rates</text>
-  <text x="258.5" y="372" text-anchor="middle" class="sm">no MCT, no OSFI</text>
+  <g id="light"/><g id="dark"/>
+  <g class="art">
+    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+    <text x="180" y="31" text-anchor="middle" class="ttl">A monopoly buys expense, and sells</text>
+    <text x="180" y="50" text-anchor="middle" class="ttl">competition</text>
+    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+    <text x="180" y="430" text-anchor="middle" class="fml">BC · Saskatchewan · Manitoba — basic</text>
+    <text x="180" y="452" text-anchor="middle" class="fml2">Quebec — bodily injury only</text>
+    <rect x="40" y="100" width="280" height="32" rx="6" fill="#3b82f6" fill-opacity="0.16" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="52" y="121" text-anchor="start" class="sm bold">ICBC — BC</text>
+    <text x="308" y="121" text-anchor="end" class="sm dim">monopoly, basic</text>
+    <rect x="40" y="140" width="280" height="32" rx="6" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.2"/>
+    <text x="52" y="161" text-anchor="start" class="sm bold">SGI — Sask.</text>
+    <text x="308" y="161" text-anchor="end" class="sm dim">monopoly, basic</text>
+    <rect x="40" y="180" width="280" height="32" rx="6" fill="#059669" fill-opacity="0.16" stroke="#059669" stroke-width="1.2"/>
+    <text x="52" y="201" text-anchor="start" class="sm bold">MPI — Manitoba</text>
+    <text x="308" y="201" text-anchor="end" class="sm dim">monopoly, basic</text>
+    <rect x="40" y="220" width="280" height="32" rx="6" fill="#d97706" fill-opacity="0.16" stroke="#d97706" stroke-width="1.2"/>
+    <text x="52" y="241" text-anchor="start" class="sm bold">SAAQ — Quebec</text>
+    <text x="308" y="241" text-anchor="end" class="sm dim">bodily injury only</text>
+    <line x1="30" y1="274" x2="330" y2="274" class="rule"/>
+    <rect x="30" y="288" width="143" height="94" rx="7" fill="#059669" fill-opacity="0.08" stroke="#059669" stroke-width="1.2"/>
+    <rect x="30" y="288" width="143" height="24" rx="7" fill="#059669" fill-opacity="0.22" stroke="none"/>
+    <text x="101.5" y="304" text-anchor="middle" class="sm bold" fill="#059669">For</text>
+    <text x="101.5" y="332" text-anchor="middle" class="sm">no commission</text>
+    <text x="101.5" y="352" text-anchor="middle" class="sm">no profit load</text>
+    <text x="101.5" y="372" text-anchor="middle" class="sm">universal access</text>
+    <rect x="187" y="288" width="143" height="94" rx="7" fill="#e11d48" fill-opacity="0.08" stroke="#e11d48" stroke-width="1.2"/>
+    <rect x="187" y="288" width="143" height="24" rx="7" fill="#e11d48" fill-opacity="0.22" stroke="none"/>
+    <text x="258.5" y="304" text-anchor="middle" class="sm bold" fill="#e11d48">Against</text>
+    <text x="258.5" y="332" text-anchor="middle" class="sm">no competition</text>
+    <text x="258.5" y="352" text-anchor="middle" class="sm">political rates</text>
+    <text x="258.5" y="372" text-anchor="middle" class="sm">no MCT, no OSFI</text>
+  </g>
 </svg>

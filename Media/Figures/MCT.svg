@@ -1,15 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>The running insurer's MCT ratio against the minimum, supervisory and internal thresholds</title>
   <style>:root {
-  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
-  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+  --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
-    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+    --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+    --grid: #333333; --soft: #242424; --axis: #6b6b6b;
   }
 }
+/* Named by the host in the embed URL (`…svg#dark`), and beats the media query
+   above because a value set here lands on the drawing rather than on the root
+   it inherits from. See the module docstring. */
+#light:target ~ * { --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c; }
+#dark:target ~ * { --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+  --grid: #333333; --soft: #242424; --axis: #6b6b6b; }
 text {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
                "Helvetica Neue", Arial, sans-serif;
@@ -38,22 +45,25 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
-  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="31" text-anchor="middle" class="ttl">One ratio, and three lines it has to</text>
-  <text x="180" y="50" text-anchor="middle" class="ttl">clear</text>
-  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-  <text x="180" y="430" text-anchor="middle" class="fml">MCT = capital available</text>
-  <text x="180" y="452" text-anchor="middle" class="fml2">÷ base solvency buffer = 104.6%</text>
-  <rect x="74" y="122" width="44" height="218" rx="4" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.1"/>
-  <rect x="74" y="295.23" width="44" height="44.77" rx="4" fill="#3b82f6" fill-opacity="0.42"/>
-  <line x1="66" y1="303.67" x2="124" y2="303.67" class="thin dash" stroke="#e11d48" stroke-width="1.4"/>
-  <text x="136" y="307.67" text-anchor="start" class="sm" fill="#e11d48">100% minimum</text>
-  <line x1="66" y1="212.83" x2="124" y2="212.83" class="thin dash" stroke="#d97706" stroke-width="1.4"/>
-  <text x="136" y="216.83" text-anchor="start" class="sm" fill="#d97706">150% supervisory</text>
-  <line x1="66" y1="149.25" x2="124" y2="149.25" class="thin dash" stroke="#7c3aed" stroke-width="1.4"/>
-  <text x="136" y="153.25" text-anchor="start" class="sm" fill="#7c3aed">185% internal</text>
-  <text x="96" y="283.23" text-anchor="middle" class="sm bold" fill="#3b82f6">104.6%</text>
-  <line x1="30" y1="352" x2="330" y2="352" class="rule"/>
-  <text x="180" y="374" text-anchor="middle" class="sm dim">$248M ÷ (1.5 × $158M) — above the minimum,</text>
-  <text x="180" y="390" text-anchor="middle" class="sm dim">and in serious difficulty</text>
+  <g id="light"/><g id="dark"/>
+  <g class="art">
+    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+    <text x="180" y="31" text-anchor="middle" class="ttl">One ratio, and three lines it has to</text>
+    <text x="180" y="50" text-anchor="middle" class="ttl">clear</text>
+    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+    <text x="180" y="430" text-anchor="middle" class="fml">MCT = capital available</text>
+    <text x="180" y="452" text-anchor="middle" class="fml2">÷ base solvency buffer = 104.6%</text>
+    <rect x="74" y="122" width="44" height="218" rx="4" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.1"/>
+    <rect x="74" y="295.23" width="44" height="44.77" rx="4" fill="#3b82f6" fill-opacity="0.42"/>
+    <line x1="66" y1="303.67" x2="124" y2="303.67" class="thin dash" stroke="#e11d48" stroke-width="1.4"/>
+    <text x="136" y="307.67" text-anchor="start" class="sm" fill="#e11d48">100% minimum</text>
+    <line x1="66" y1="212.83" x2="124" y2="212.83" class="thin dash" stroke="#d97706" stroke-width="1.4"/>
+    <text x="136" y="216.83" text-anchor="start" class="sm" fill="#d97706">150% supervisory</text>
+    <line x1="66" y1="149.25" x2="124" y2="149.25" class="thin dash" stroke="#7c3aed" stroke-width="1.4"/>
+    <text x="136" y="153.25" text-anchor="start" class="sm" fill="#7c3aed">185% internal</text>
+    <text x="96" y="283.23" text-anchor="middle" class="sm bold" fill="#3b82f6">104.6%</text>
+    <line x1="30" y1="352" x2="330" y2="352" class="rule"/>
+    <text x="180" y="374" text-anchor="middle" class="sm dim">$248M ÷ (1.5 × $158M) — above the minimum,</text>
+    <text x="180" y="390" text-anchor="middle" class="sm dim">and in serious difficulty</text>
+  </g>
 </svg>

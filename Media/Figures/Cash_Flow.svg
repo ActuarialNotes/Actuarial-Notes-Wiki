@@ -1,15 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>A cash-flow stream with inflows above and outflows below the timeline</title>
   <style>:root {
-  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
-  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+  --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
-    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+    --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+    --grid: #333333; --soft: #242424; --axis: #6b6b6b;
   }
 }
+/* Named by the host in the embed URL (`…svg#dark`), and beats the media query
+   above because a value set here lands on the drawing rather than on the root
+   it inherits from. See the module docstring. */
+#light:target ~ * { --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c; }
+#dark:target ~ * { --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+  --grid: #333333; --soft: #242424; --axis: #6b6b6b; }
 text {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
                "Helvetica Neue", Arial, sans-serif;
@@ -38,44 +45,47 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <g id="light"/><g id="dark"/>
   <defs>
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
     <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
     <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
   </defs>
-  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="31" text-anchor="middle" class="ttl">A cash flow is an amount attached to a</text>
-  <text x="180" y="50" text-anchor="middle" class="ttl">date</text>
-  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-  <text x="180" y="438" text-anchor="middle" class="fml">PV = Σ C_t v^t</text>
-  <line x1="48" y1="236" x2="324" y2="236" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-  <line x1="56" y1="232" x2="56" y2="240" class="tick"/>
-  <text x="56" y="253" text-anchor="middle" class="sm dim">0</text>
-  <line x1="97.67" y1="232" x2="97.67" y2="240" class="tick"/>
-  <text x="97.67" y="253" text-anchor="middle" class="sm dim">1</text>
-  <line x1="139.33" y1="232" x2="139.33" y2="240" class="tick"/>
-  <text x="139.33" y="253" text-anchor="middle" class="sm dim">2</text>
-  <line x1="181" y1="232" x2="181" y2="240" class="tick"/>
-  <text x="181" y="253" text-anchor="middle" class="sm dim">3</text>
-  <line x1="222.67" y1="232" x2="222.67" y2="240" class="tick"/>
-  <text x="222.67" y="253" text-anchor="middle" class="sm dim">4</text>
-  <line x1="264.33" y1="232" x2="264.33" y2="240" class="tick"/>
-  <text x="264.33" y="253" text-anchor="middle" class="sm dim">5</text>
-  <line x1="306" y1="232" x2="306" y2="240" class="tick"/>
-  <text x="306" y="253" text-anchor="middle" class="sm dim">6</text>
-  <line x1="56" y1="236" x2="56" y2="306" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
-  <text x="56" y="322" text-anchor="middle" class="sm">-500</text>
-  <line x1="97.67" y1="236" x2="97.67" y2="205.2" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
-  <text x="97.67" y="199.2" text-anchor="middle" class="sm">+150</text>
-  <line x1="139.33" y1="236" x2="139.33" y2="205.2" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
-  <text x="139.33" y="199.2" text-anchor="middle" class="sm">+150</text>
-  <line x1="181" y1="236" x2="181" y2="199.6" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
-  <text x="181" y="193.6" text-anchor="middle" class="sm">+200</text>
-  <line x1="222.67" y1="236" x2="222.67" y2="258.96" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
-  <text x="222.67" y="274.96" text-anchor="middle" class="sm">-80</text>
-  <line x1="264.33" y1="236" x2="264.33" y2="199.6" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
-  <text x="264.33" y="193.6" text-anchor="middle" class="sm">+200</text>
-  <line x1="306" y1="236" x2="306" y2="192.88" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
-  <text x="306" y="186.88" text-anchor="middle" class="sm">+260</text>
-  <text x="180" y="372" text-anchor="middle" class="sm dim">inflows up, outflows down — signs carry direction</text>
+  <g class="art">
+    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+    <text x="180" y="31" text-anchor="middle" class="ttl">A cash flow is an amount attached to a</text>
+    <text x="180" y="50" text-anchor="middle" class="ttl">date</text>
+    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+    <text x="180" y="438" text-anchor="middle" class="fml">PV = Σ C_t v^t</text>
+    <line x1="48" y1="236" x2="324" y2="236" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <line x1="56" y1="232" x2="56" y2="240" class="tick"/>
+    <text x="56" y="253" text-anchor="middle" class="sm dim">0</text>
+    <line x1="97.67" y1="232" x2="97.67" y2="240" class="tick"/>
+    <text x="97.67" y="253" text-anchor="middle" class="sm dim">1</text>
+    <line x1="139.33" y1="232" x2="139.33" y2="240" class="tick"/>
+    <text x="139.33" y="253" text-anchor="middle" class="sm dim">2</text>
+    <line x1="181" y1="232" x2="181" y2="240" class="tick"/>
+    <text x="181" y="253" text-anchor="middle" class="sm dim">3</text>
+    <line x1="222.67" y1="232" x2="222.67" y2="240" class="tick"/>
+    <text x="222.67" y="253" text-anchor="middle" class="sm dim">4</text>
+    <line x1="264.33" y1="232" x2="264.33" y2="240" class="tick"/>
+    <text x="264.33" y="253" text-anchor="middle" class="sm dim">5</text>
+    <line x1="306" y1="232" x2="306" y2="240" class="tick"/>
+    <text x="306" y="253" text-anchor="middle" class="sm dim">6</text>
+    <line x1="56" y1="236" x2="56" y2="306" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
+    <text x="56" y="322" text-anchor="middle" class="sm">-500</text>
+    <line x1="97.67" y1="236" x2="97.67" y2="205.2" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
+    <text x="97.67" y="199.2" text-anchor="middle" class="sm">+150</text>
+    <line x1="139.33" y1="236" x2="139.33" y2="205.2" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
+    <text x="139.33" y="199.2" text-anchor="middle" class="sm">+150</text>
+    <line x1="181" y1="236" x2="181" y2="199.6" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
+    <text x="181" y="193.6" text-anchor="middle" class="sm">+200</text>
+    <line x1="222.67" y1="236" x2="222.67" y2="258.96" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
+    <text x="222.67" y="274.96" text-anchor="middle" class="sm">-80</text>
+    <line x1="264.33" y1="236" x2="264.33" y2="199.6" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
+    <text x="264.33" y="193.6" text-anchor="middle" class="sm">+200</text>
+    <line x1="306" y1="236" x2="306" y2="192.88" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
+    <text x="306" y="186.88" text-anchor="middle" class="sm">+260</text>
+    <text x="180" y="372" text-anchor="middle" class="sm dim">inflows up, outflows down — signs carry direction</text>
+  </g>
 </svg>

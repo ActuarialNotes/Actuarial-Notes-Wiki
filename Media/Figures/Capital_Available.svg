@@ -1,15 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>Accounting equity reduced to capital available by the deductions for things that would not absorb a loss</title>
   <style>:root {
-  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
-  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+  --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
-    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+    --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+    --grid: #333333; --soft: #242424; --axis: #6b6b6b;
   }
 }
+/* Named by the host in the embed URL (`…svg#dark`), and beats the media query
+   above because a value set here lands on the drawing rather than on the root
+   it inherits from. See the module docstring. */
+#light:target ~ * { --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c; }
+#dark:target ~ * { --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+  --grid: #333333; --soft: #242424; --axis: #6b6b6b; }
 text {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
                "Helvetica Neue", Arial, sans-serif;
@@ -38,28 +45,31 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
-  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="40" text-anchor="middle" class="ttl">Only what would actually absorb a loss</text>
-  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-  <text x="180" y="430" text-anchor="middle" class="fml">Available = category A + B − deductions</text>
-  <text x="180" y="452" text-anchor="middle" class="fml2">$260M equity − $12M = $248M</text>
-  <rect x="58.96" y="124" width="38.08" height="120" rx="3" fill="#059669" fill-opacity="0.72"/>
-  <text x="78" y="116" text-anchor="middle" class="sm">260</text>
-  <text x="78" y="259" text-anchor="middle" class="sm dim">equity</text>
-  <rect x="126.96" y="124" width="38.08" height="3.69" rx="3" fill="#e11d48" fill-opacity="0.72"/>
-  <text x="146" y="116" text-anchor="middle" class="sm">8</text>
-  <text x="146" y="259" text-anchor="middle" class="sm dim">goodwill</text>
-  <rect x="194.96" y="127.69" width="38.08" height="1.85" rx="3" fill="#e11d48" fill-opacity="0.72"/>
-  <text x="214" y="119.69" text-anchor="middle" class="sm">4</text>
-  <text x="214" y="259" text-anchor="middle" class="sm dim">intangibles</text>
-  <rect x="262.96" y="129.54" width="38.08" height="114.46" rx="3" fill="#3b82f6" fill-opacity="0.72"/>
-  <text x="282" y="121.54" text-anchor="middle" class="sm">248</text>
-  <text x="282" y="259" text-anchor="middle" class="sm dim">available</text>
-  <line x1="38" y1="244" x2="322" y2="244" class="axis"/>
-  <text x="180" y="282" text-anchor="middle" class="sm dim">$M, the running insurer</text>
-  <line x1="30" y1="300" x2="330" y2="300" class="rule"/>
-  <text x="180" y="322" text-anchor="middle" class="sm dim">category A is common shares, retained earnings</text>
-  <text x="180" y="338" text-anchor="middle" class="sm dim">and accumulated OCI; category B is lower quality</text>
-  <text x="180" y="364" text-anchor="middle" class="sm dim">the test behind every deduction is the same:</text>
-  <text x="180" y="380" text-anchor="middle" class="sm dim">would this absorb a loss when things go wrong?</text>
+  <g id="light"/><g id="dark"/>
+  <g class="art">
+    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+    <text x="180" y="40" text-anchor="middle" class="ttl">Only what would actually absorb a loss</text>
+    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+    <text x="180" y="430" text-anchor="middle" class="fml">Available = category A + B − deductions</text>
+    <text x="180" y="452" text-anchor="middle" class="fml2">$260M equity − $12M = $248M</text>
+    <rect x="58.96" y="124" width="38.08" height="120" rx="3" fill="#059669" fill-opacity="0.72"/>
+    <text x="78" y="116" text-anchor="middle" class="sm">260</text>
+    <text x="78" y="259" text-anchor="middle" class="sm dim">equity</text>
+    <rect x="126.96" y="124" width="38.08" height="3.69" rx="3" fill="#e11d48" fill-opacity="0.72"/>
+    <text x="146" y="116" text-anchor="middle" class="sm">8</text>
+    <text x="146" y="259" text-anchor="middle" class="sm dim">goodwill</text>
+    <rect x="194.96" y="127.69" width="38.08" height="1.85" rx="3" fill="#e11d48" fill-opacity="0.72"/>
+    <text x="214" y="119.69" text-anchor="middle" class="sm">4</text>
+    <text x="214" y="259" text-anchor="middle" class="sm dim">intangibles</text>
+    <rect x="262.96" y="129.54" width="38.08" height="114.46" rx="3" fill="#3b82f6" fill-opacity="0.72"/>
+    <text x="282" y="121.54" text-anchor="middle" class="sm">248</text>
+    <text x="282" y="259" text-anchor="middle" class="sm dim">available</text>
+    <line x1="38" y1="244" x2="322" y2="244" class="axis"/>
+    <text x="180" y="282" text-anchor="middle" class="sm dim">$M, the running insurer</text>
+    <line x1="30" y1="300" x2="330" y2="300" class="rule"/>
+    <text x="180" y="322" text-anchor="middle" class="sm dim">category A is common shares, retained earnings</text>
+    <text x="180" y="338" text-anchor="middle" class="sm dim">and accumulated OCI; category B is lower quality</text>
+    <text x="180" y="364" text-anchor="middle" class="sm dim">the test behind every deduction is the same:</text>
+    <text x="180" y="380" text-anchor="middle" class="sm dim">would this absorb a loss when things go wrong?</text>
+  </g>
 </svg>

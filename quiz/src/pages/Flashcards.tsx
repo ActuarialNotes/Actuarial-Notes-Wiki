@@ -77,6 +77,8 @@ import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
 import { NavProgressBar } from '@/components/NavProgressBar'
 import { flashcardFoilClass, FOIL_LEVEL_CLASS } from '@/lib/flashcardFoil'
 import { MASTERY_LABEL } from '@/lib/masteryBadge'
+import { useTheme } from '@/hooks/useTheme'
+import { themedFigureSrc } from '@/lib/figureTheme'
 
 type GroupBy = 'exam' | 'date' | 'alpha' | 'custom' | 'mastery' | 'shuffle'
 type ReverseCardSection = 'definition' | 'math' | 'images'
@@ -1187,6 +1189,7 @@ function SortableCard({
   isClearing?: boolean
 }) {
   const [flipped, setFlipped] = useState(globalFlip)
+  const { theme } = useTheme()
   const [markdown, setMarkdown] = useState<string | null>(null)
   const [loadStatus, setLoadStatus] = useState<'idle' | 'loading' | 'error'>('idle')
   const [showPlayMenu, setShowPlayMenu] = useState(false)
@@ -1390,7 +1393,7 @@ function SortableCard({
                 <figure key={i} className="flex flex-col items-center gap-1">
                   {/* Match the study card: fill the tile's width rather than
                       rendering at the SVG's (small) intrinsic size. */}
-                  <img src={img.src} alt={img.alt} className="w-full max-h-[50vh] object-contain rounded" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
+                  <img src={themedFigureSrc(img.src, theme)} alt={img.alt} className="w-full max-h-[50vh] object-contain rounded" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
                   {img.caption && (
                     <figcaption className="text-xs text-muted-foreground text-center">{img.caption}</figcaption>
                   )}
@@ -1906,6 +1909,7 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
   isCompleted,
 }, ref) {
   const [flipped, setFlipped] = useState(defaultFlipped)
+  const { theme } = useTheme()
   const [expanded, setExpanded] = useState(false)
   const [markdown, setMarkdown] = useState<string | null>(null)
   const [loadStatus, setLoadStatus] = useState<'idle' | 'loading' | 'error'>('idle')
@@ -2171,7 +2175,7 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
                     {/* Figures are the point of the card, not a thumbnail: fill the
                         card's width and only clamp on height so a tall one still fits
                         above the Again / Got it buttons. */}
-                    <img src={img.src} alt={img.alt} className="w-full max-h-[60vh] object-contain rounded" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
+                    <img src={themedFigureSrc(img.src, theme)} alt={img.alt} className="w-full max-h-[60vh] object-contain rounded" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
                     {img.caption && (
                       <figcaption className="text-xs text-muted-foreground text-center">{img.caption}</figcaption>
                     )}

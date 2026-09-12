@@ -1,15 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>A compelled policy ceded to the pool while the policyholder keeps the ordinary rate and never learns of it</title>
   <style>:root {
-  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
-  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+  --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
-    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+    --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+    --grid: #333333; --soft: #242424; --axis: #6b6b6b;
   }
 }
+/* Named by the host in the embed URL (`…svg#dark`), and beats the media query
+   above because a value set here lands on the drawing rather than on the root
+   it inherits from. See the module docstring. */
+#light:target ~ * { --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c; }
+#dark:target ~ * { --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+  --grid: #333333; --soft: #242424; --axis: #6b6b6b; }
 text {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
                "Helvetica Neue", Arial, sans-serif;
@@ -38,32 +45,35 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <g id="light"/><g id="dark"/>
   <defs>
     <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
     <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
   </defs>
-  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="40" text-anchor="middle" class="ttl">The risk is ceded; the customer is kept</text>
-  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-  <text x="180" y="430" text-anchor="middle" class="fml">Cede the premium and the losses,</text>
-  <text x="180" y="452" text-anchor="middle" class="fml2">keep the relationship and the servicing</text>
-  <rect x="55" y="90" width="250" height="28" rx="14.0" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
-  <text x="180" y="108" text-anchor="middle" class="sm">applicant meets the filed rules</text>
-  <line x1="180" y1="120" x2="180" y2="144" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-  <rect x="45" y="146" width="270" height="28" rx="14.0" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2"/>
-  <text x="180" y="164" text-anchor="middle" class="sm">insurer must write, at its filed rate</text>
-  <line x1="120" y1="176" x2="96" y2="208" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-  <line x1="240" y1="176" x2="264" y2="208" class="thin" stroke="#e11d48" stroke-width="1.3" marker-end="url(#ahe11d48)"/>
-  <rect x="36" y="220" width="130" height="66" rx="7" fill="#059669" fill-opacity="0.12" stroke="#059669" stroke-width="1.2"/>
-  <text x="101" y="247" text-anchor="middle" class="sm">policyholder</text>
-  <text x="101" y="265" text-anchor="middle" class="sm dim">normal rate, and</text>
-  <text x="101" y="274" text-anchor="middle" class="sm dim">never told</text>
-  <rect x="194" y="220" width="130" height="66" rx="7" fill="#e11d48" fill-opacity="0.12" stroke="#e11d48" stroke-width="1.2"/>
-  <text x="259" y="247" text-anchor="middle" class="sm">the pool</text>
-  <text x="259" y="265" text-anchor="middle" class="sm dim">premium and losses</text>
-  <text x="259" y="274" text-anchor="middle" class="sm dim">shared by share</text>
-  <text x="180" y="314" text-anchor="middle" class="sm dim">cede where your own expected loss exceeds the</text>
-  <text x="180" y="330" text-anchor="middle" class="sm dim">approved premium net of the pool's terms —</text>
-  <text x="180" y="346" text-anchor="middle" class="sm dim">inside a cession window and a cession limit</text>
-  <text x="180" y="374" text-anchor="middle" class="sm dim">no price signal ever reaches the driver</text>
+  <g class="art">
+    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+    <text x="180" y="40" text-anchor="middle" class="ttl">The risk is ceded; the customer is kept</text>
+    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+    <text x="180" y="430" text-anchor="middle" class="fml">Cede the premium and the losses,</text>
+    <text x="180" y="452" text-anchor="middle" class="fml2">keep the relationship and the servicing</text>
+    <rect x="55" y="90" width="250" height="28" rx="14.0" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="180" y="108" text-anchor="middle" class="sm">applicant meets the filed rules</text>
+    <line x1="180" y1="120" x2="180" y2="144" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
+    <rect x="45" y="146" width="270" height="28" rx="14.0" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2"/>
+    <text x="180" y="164" text-anchor="middle" class="sm">insurer must write, at its filed rate</text>
+    <line x1="120" y1="176" x2="96" y2="208" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
+    <line x1="240" y1="176" x2="264" y2="208" class="thin" stroke="#e11d48" stroke-width="1.3" marker-end="url(#ahe11d48)"/>
+    <rect x="36" y="220" width="130" height="66" rx="7" fill="#059669" fill-opacity="0.12" stroke="#059669" stroke-width="1.2"/>
+    <text x="101" y="247" text-anchor="middle" class="sm">policyholder</text>
+    <text x="101" y="265" text-anchor="middle" class="sm dim">normal rate, and</text>
+    <text x="101" y="274" text-anchor="middle" class="sm dim">never told</text>
+    <rect x="194" y="220" width="130" height="66" rx="7" fill="#e11d48" fill-opacity="0.12" stroke="#e11d48" stroke-width="1.2"/>
+    <text x="259" y="247" text-anchor="middle" class="sm">the pool</text>
+    <text x="259" y="265" text-anchor="middle" class="sm dim">premium and losses</text>
+    <text x="259" y="274" text-anchor="middle" class="sm dim">shared by share</text>
+    <text x="180" y="314" text-anchor="middle" class="sm dim">cede where your own expected loss exceeds the</text>
+    <text x="180" y="330" text-anchor="middle" class="sm dim">approved premium net of the pool's terms —</text>
+    <text x="180" y="346" text-anchor="middle" class="sm dim">inside a cession window and a cession limit</text>
+    <text x="180" y="374" text-anchor="middle" class="sm dim">no price signal ever reaches the driver</text>
+  </g>
 </svg>

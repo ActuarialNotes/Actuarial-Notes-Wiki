@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { examStatus, isExamBeta, isExamInDevelopment, EXAM_STATUS_LABEL } from './examStatus'
+import { examRowAction, examStatus, isExamBeta, isExamInDevelopment, EXAM_STATUS_LABEL } from './examStatus'
 import { wikiExamIdToProgressKey } from './wikiParser'
 
 describe('examStatus', () => {
@@ -41,5 +41,35 @@ describe('examStatus', () => {
     expect(examStatus(undefined)).toBe('beta')
     expect(examStatus(null)).toBe('beta')
     expect(examStatus('NOPE')).toBe('beta')
+  })
+})
+
+describe('examRowAction', () => {
+  it('offers Add only from Not Started', () => {
+    expect(examRowAction('not_started', true)).toBe('add')
+  })
+
+  it('never offers Add for a passed exam', () => {
+    // The row is struck through with a green tick: "Add" there read as an
+    // invitation to start studying for the exam just ticked off.
+    expect(examRowAction('completed', true)).toBe('none')
+  })
+
+  it('brings Add back when a passed exam is un-ticked', () => {
+    // What the status dot does to a passed exam (STATUS_CYCLE in ExamsPopout).
+    expect(examRowAction('completed', true)).toBe('none')
+    expect(examRowAction('not_started', true)).toBe('add')
+  })
+
+  it('offers the exam date while an exam is being studied', () => {
+    expect(examRowAction('in_progress', true)).toBe('plan')
+  })
+
+  it('offers nothing for an exam there is no material for', () => {
+    // In development or not covered yet: the row says so where the button
+    // would be, and a study plan over an empty question bank is not a plan.
+    for (const status of ['not_started', 'in_progress', 'completed'] as const) {
+      expect(examRowAction(status, false)).toBe('none')
+    }
   })
 })

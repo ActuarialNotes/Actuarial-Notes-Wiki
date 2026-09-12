@@ -6,7 +6,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { useSubscription } from '@/hooks/useSubscription'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
-import { isExamBeta, isExamInDevelopment } from '@/lib/examStatus'
+import { examRowAction, isExamBeta, isExamInDevelopment } from '@/lib/examStatus'
 import { TRACKS } from '@/data/tracks'
 import type { ItemStatus, TrackItem } from '@/data/tracks'
 import { cn } from '@/lib/utils'
@@ -162,34 +162,19 @@ export default function ExamsPopout({ open, onClose }: Props) {
   // Every status change writes straight through. The old panel collected edits
   // behind a "Save Exam Progress" button at the bottom of a scrolling list, so
   // the common outcome of "add my exam" was a change that was never saved.
-  const persist = useCallback(
-    (map: Record<string, { status: ItemStatus; targetDate: string }>) =>
-      saveExamRows(
-        Object.entries(map).map(([exam_id, v]) => ({
-          exam_id,
-          status: v.status,
-          target_date: v.targetDate || null,
-        })),
-      ),
-    [saveExamRows],
-  )
-
-  // The map is derived straight from `examRows` and this panel is its only
-  // writer, so the next map can be built from the rendered one — no updater
-  // callback, which would otherwise have to double as the place the write is
-  // fired from.
+  //
+  // Only the row that changed is written. Sending the whole track (~50 rows,
+  // nearly all of them an unchanged `not_started`) made one tap an upsert of
+  // every exam on screen, and handed the context a row set that knew nothing
+  // about the tracks it wasn't showing.
   const setExamStatus = useCallback((examId: string, status: ItemStatus) => {
-    const next = {
-      ...localExamMap,
-      [examId]: {
-        ...localExamMap[examId],
-        status,
-        targetDate: status !== 'in_progress' ? '' : localExamMap[examId]?.targetDate ?? '',
-      },
+    const row = {
+      status,
+      targetDate: status !== 'in_progress' ? '' : localExamMap[examId]?.targetDate ?? '',
     }
-    setLocalExamMap(next)
-    return persist(next)
-  }, [localExamMap, persist])
+    setLocalExamMap(prev => ({ ...prev, [examId]: row }))
+    return saveExamRows([{ exam_id: examId, status, target_date: row.targetDate || null }])
+  }, [localExamMap, saveExamRows])
 
   const openOnboardingFor = useCallback((item: TrackItem, targetDate: string | null) => {
     // Promote this exam to be the user's active dashboard exam.
@@ -327,6 +312,7 @@ export default function ExamsPopout({ open, onClose }: Props) {
                           const row = localExamMap[item.id] ?? { status: 'not_started' as ItemStatus, targetDate: '' }
                           const availability = availabilityOf(item.id)
                           const canStudy = availability === 'ready' || availability === 'beta'
+                          const action = examRowAction(row.status, canStudy)
                           const statusColor =
                             row.status === 'completed'
                               ? 'text-green-600 dark:text-green-500 opacity-100'
@@ -357,11 +343,14 @@ export default function ExamsPopout({ open, onClose }: Props) {
                                 {item.name}
                               </span>
 
-                              {/* Beta is worth saying next to the name; the two
-                                  unstudiable states say so where the Add button
-                                  would otherwise be, since that's the question
-                                  being answered. */}
-                              {canStudy && availability === 'beta' && row.status !== 'in_progress' && (
+                              {/* Everything in this slot qualifies the Add
+                                  button: Beta says what you'd be adding, and
+                                  the two unstudiable states say why there's
+                                  nothing to add. So none of it outlives Add —
+                                  an exam being studied or already passed ends
+                                  the row with its own control, or with
+                                  nothing. */}
+                              {availability === 'beta' && action === 'add' && (
                                 <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
                                   Beta
                                 </span>
@@ -386,7 +375,7 @@ export default function ExamsPopout({ open, onClose }: Props) {
                                 </span>
                               )}
 
-                              {canStudy && row.status !== 'in_progress' && (
+                              {action === 'add' && (
                                 <button
                                   type="button"
                                   onClick={() => handleAddExam(item)}
@@ -398,13 +387,13 @@ export default function ExamsPopout({ open, onClose }: Props) {
                                 </button>
                               )}
 
-                              {row.status === 'in_progress' && (() => {
+                              {action === 'plan' && (() => {
                                 const hasPlan = !!loadStudyPlanConfig(item.id).planStartDate
                                 return (
                                   <button
                                     type="button"
                                     onClick={() => openOnboardingFor(item, row.targetDate || null)}
-                                    className="shrink-0 inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+                                    className="shrink-0 inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
                                   >
                                     {hasPlan
                                       ? <CalendarDays className="h-4 w-4" />

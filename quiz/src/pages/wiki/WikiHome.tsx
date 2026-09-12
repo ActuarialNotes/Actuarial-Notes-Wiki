@@ -449,7 +449,7 @@ export default function WikiHome() {
               >
                 <Card className="h-full transition-all duration-150 hover:bg-accent/40 overflow-hidden flex flex-row items-stretch">
                   {book.coverImage && (
-                    <div className="flex-shrink-0 p-2 flex items-center">
+                    <div className="flex-shrink-0 p-2 pt-4 flex items-start">
                       <img
                         src={book.coverImage}
                         alt={book.title ?? book.name}

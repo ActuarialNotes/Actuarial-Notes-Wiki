@@ -63,8 +63,13 @@ export function SourceMaterialGallery({ entries, onOpen }: SourceMaterialGallery
             }}
           >
             <Card className="transition-all duration-150 hover:bg-accent/40 overflow-hidden flex flex-row items-stretch">
+              {/* The cover sits at the top of the card, not its middle: the
+                  title is what the card is scanned for, and a centred jacket
+                  drifts down the card as the pills wrap onto more rows. `pt-4`
+                  matches the text block's own top padding so the two start on
+                  the same line. */}
               {meta?.coverImage && (
-                <div className="flex-shrink-0 p-2 flex items-center">
+                <div className="flex-shrink-0 p-2 pt-4 flex items-start">
                   <img
                     src={meta.coverImage}
                     alt={title}

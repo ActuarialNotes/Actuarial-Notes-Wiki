@@ -162,10 +162,11 @@ export default function Dashboard() {
   const [remindersOpen, setRemindersOpen] = useState(false)
   const [guideOpen, setGuideOpen] = useState(false)
   const profileRef = useRef<HTMLDivElement>(null)
-  // ReadinessCard portals two of its cards into these slots so they render at the
-  // top of the page: the Exam readiness card first — it is the answer to the
-  // question the dashboard exists to answer, and it carries the primary actions
-  // that act on it — then the Study Schedule below it.
+  // ReadinessCard portals its cards into these slots so they render at the top
+  // of the page: the readiness group first — the Exam readiness card, which is
+  // the answer to the question the dashboard exists to answer and carries the
+  // primary actions that act on it, then Today's Study Plan and the Study Guide
+  // ring — and the Study Schedule below it.
   const [readinessSlotEl, setReadinessSlotEl] = useState<HTMLDivElement | null>(null)
   const [studyScheduleSlotEl, setStudyScheduleSlotEl] = useState<HTMLDivElement | null>(null)
   // FixMistakesButton portals its compact copy into this slot in the pinned
@@ -840,13 +841,15 @@ export default function Dashboard() {
           </div>
         </div>
       )}
-      {/* Exam readiness card — portaled here by ReadinessCard (below) so it
-          leads the dashboard: it is the answer to the question the page exists
-          to answer. The primary actions ride inside it (`primaryActions`). */}
+      {/* Exam readiness, Today's Study Plan and the Study Guide ring — portaled
+          here by ReadinessCard (below) so they lead the dashboard: the score is
+          the answer to the question the page exists to answer, and the plan
+          under it is what to do about that answer today. The primary actions
+          ride inside the readiness card (`primaryActions`). */}
       {activeSyllabus && <div ref={setReadinessSlotEl} />}
 
       {/* Study Schedule card — also portaled here by ReadinessCard, below the
-          readiness card. */}
+          readiness group. */}
       {activeSyllabus && <div ref={setStudyScheduleSlotEl} />}
 
       {/* Congratulations banner — shown after returning from Stripe checkout */}

@@ -246,6 +246,15 @@ Other important `lib/` modules:
   browser and the concept detail modal — add it to any new surface that lists questions rather than
   writing a new chip. Attempt history is server-side only, so signed-out viewers pass
   `showNew={false}` (via the hook's `tracked` flag) and see no chip instead of a false "Not attempted".
+- `questionPreview.ts` — the collapsed preview every question list shows: a few lines of the
+  question's *prose*, not six words of it. A stem is prose wrapped around data, so the
+  flattening drops the tables, images and fenced blocks (keeping their captions, which is
+  the part that says what the data is), turns list markers into bullets, strips emphasis so
+  a surface can cut the text at a search match and `<mark>` it, and marks anything dropped
+  or cut with an ellipsis. `stemSnippet` windows onto a match that falls past the preview;
+  `questionPreview` falls back to the first *part* of a multi-part question whose stem is an
+  empty preamble — those rows previewed nothing at all before. Read by
+  `components/QuestionSearchRow.tsx` (clamped to three lines) and the Search page.
 - `questionSource.ts` — where a question came from, for the quiz's **Info** button
   (`components/QuestionInfoButton.tsx`, in the question bar beside the flag): the sitting it
   was sat on, the published paper behind it (`data/examPdfLinks.ts`), and its vault file —

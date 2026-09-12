@@ -149,7 +149,20 @@ downstream and still does:
 - `handleStart` passes `year` / `session` to `/quiz`, and the sitting's full question count
   as `count` (a past paper is sat whole, not sampled);
 - the header row above the shelf offers that sitting's examiner's report as a PDF download
-  (`data/examPdfLinks.ts`), beside the pass-rate lookup link.
+  (`data/examPdfLinks.ts`), beside the pass-rate lookup link;
+- `searchFilter` carries the sitting's `year` / `session` into the floating search bar, so
+  opening the search while Spring 2019 is picked lists *that paper's* questions rather than
+  the whole exam's, with a removable `Exam 5 · Spring 2019` pill in the panel (clearing it
+  drops the shelf's selection too, so the panel and the page behind it can't disagree).
+
+A sitting can also be picked from inside the search panel itself: the **Sitting** filter
+(`sittingLabels` / `questionSittingLabel` in `lib/pastExams.ts`) lists the sittings the
+current pool actually holds, newest first, with a count each. It is keyed by display label
+— `"Spring 2019"` is how a candidate thinks of a paper — and read off each question's own
+frontmatter, so an undated question contributes no option and a question re-tagged onto
+another exam's syllabus still lists under the paper it was sat on. The filter hides itself
+when the pool is already one sitting (the mock-exam selection above has scoped it) or holds
+no dated questions at all.
 
 ### The header row
 

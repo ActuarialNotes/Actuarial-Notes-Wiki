@@ -53,6 +53,39 @@ function sessionRank(session?: ExamSession): number {
 }
 
 /**
+ * The sitting label a question belongs to, or null when its file names none.
+ *
+ * Read off the question's own frontmatter, never inferred — the same rule
+ * `lib/questionSource.ts` keeps. A question re-tagged onto another exam's
+ * syllabus keeps the date of the paper it was actually sat on.
+ */
+export function questionSittingLabel(q: Pick<Question, 'year' | 'session'>): string | null {
+  return q.year ? sittingLabel(q.year, q.session) : null
+}
+
+/**
+ * The sittings a set of questions actually came from, newest first — the
+ * options behind the question search's **Sitting** filter.
+ *
+ * Keyed by display label (`"Spring 2019"`), which is what a question is matched
+ * back against. Undated questions contribute no option rather than a
+ * catch-all: the filter offers the papers the pool holds, nothing more.
+ */
+export function sittingLabels(questions: Pick<Question, 'year' | 'session'>[]): string[] {
+  const seen = new Map<string, { year: number; session?: ExamSession }>()
+  for (const q of questions) {
+    const label = questionSittingLabel(q)
+    if (!label || !q.year) continue
+    seen.set(label, { year: q.year, session: normalizeSession(q.session) })
+  }
+  return [...seen.entries()]
+    .sort(([, a], [, b]) => (
+      b.year !== a.year ? b.year - a.year : sessionRank(a.session) - sessionRank(b.session)
+    ))
+    .map(([label]) => label)
+}
+
+/**
  * One row per past sitting of `exam`, newest first.
  *
  * Rows come from the union of the authored catalogue and the sittings present

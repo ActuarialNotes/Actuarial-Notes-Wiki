@@ -35,7 +35,7 @@ import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { cn } from '@/lib/utils'
 import { getSittingPdfLink, getExamPdfLink, getExamSolutionsPdfLink } from '@/data/examPdfLinks'
 import { getPassRateLookup } from '@/data/pastExams'
-import { buildPastExamRows } from '@/lib/pastExams'
+import { buildPastExamRows, sittingLabel } from '@/lib/pastExams'
 import { applyPassRates } from '@/lib/passRates'
 import { useExamPassRates } from '@/hooks/useExamPassRates'
 import { PastExamBrowser } from '@/components/PastExamBrowser'
@@ -1099,6 +1099,14 @@ export default function Landing() {
   const searchFilter = useMemo(() => {
     if (selectedConcept) return { concept: selectedConcept }
     if (!topic) return {}
+    // Mock exam: the shelf's selection is the pool. Opening the search while
+    // Spring 2019 is picked should show that paper, not the whole exam.
+    if (mode === 'mock-exam') {
+      return {
+        exam: topic,
+        ...(selectedSitting && { year: selectedSitting.year, session: selectedSitting.session }),
+      }
+    }
     if (useTodaysPlan && plan) {
       const displayConcepts = plan.status === 'review_mode'
         ? (plan.reviewConcepts ?? [])
@@ -1112,7 +1120,7 @@ export default function Landing() {
       exam: topic,
       ...(selectedConcepts.length > 0 && { concepts: selectedConcepts }),
     }
-  }, [topic, selectedConcept, selectedConcepts, useTodaysPlan, plan])
+  }, [topic, mode, selectedSitting, selectedConcept, selectedConcepts, useTodaysPlan, plan])
 
   // Active filter chips shown in the search dropdown so the user can see and
   // remove concept filters without leaving the search panel.
@@ -1121,12 +1129,21 @@ export default function Landing() {
     if (selectedConcept) {
       pills.push({ label: selectedConcept, onRemove: () => setSelectedConcept('') })
     }
+    // The picked paper, removable in place — clearing it widens the search back
+    // to the whole exam and drops the shelf's selection with it, so the panel
+    // and the page behind it can't disagree about what is selected.
+    if (mode === 'mock-exam' && selectedSitting) {
+      pills.push({
+        label: `${examLabel} · ${sittingLabel(selectedSitting.year, selectedSitting.session)}`,
+        onRemove: () => setSelectedSitting(null),
+      })
+    }
     selectedConcepts.forEach(c => {
       pills.push({ label: c, onRemove: () => toggleConcept(c) })
     })
     return pills
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedConcept, selectedConcepts])
+  }, [selectedConcept, selectedConcepts, mode, selectedSitting, examLabel])
 
   // Dashboard launch is still resolving — hold a quiet loading state rather than
   // flashing the quiz config screen on the way into the quiz.

@@ -174,8 +174,9 @@ Other important `lib/` modules:
   `verification:` block off any content file (`parseVerification`, and `Question.verification`
   via `parser.ts`), parses a sidecar log, and decides what the **Fact Check** badge says
   (`factCheckBadge` → `components/FactCheckBadge.tsx` → `FactCheckPanel`; on a concept or
-  resource page the way in is the *Fact Check* item of the action menu, and an exam page has
-  none). `summarizeSource` and `summarizeLog` are what keep that panel short — the first cuts
+  resource page the way in is the *Fact Check* item of the action menu, on a question it is
+  both the explanation panel's badge and the verdict row in the quiz's **Info** sheet, and an
+  exam page has none). `summarizeSource` and `summarizeLog` are what keep that panel short — the first cuts
   an auditor's citation down to the source's name and link, the second splits the log into
   Open / Fixed / Notes and folds each resolution into the finding it closes;
   `lib/factCheckTone.ts` is the feature's one palette (tinted surface + icon per tone, and the
@@ -244,7 +245,17 @@ Other important `lib/` modules:
   never inferred: an undated question says it names no sitting rather than being attributed
   to a paper, and a question re-tagged onto another exam keeps its original exam's paper.
   The panel hides topic / objective / difficulty until the answer is in, for the same reason
-  `QuestionCard` does (`showMeta`).
+  `QuestionCard` does (`showMeta`). It also carries the question's **Fact Check** row: the
+  same verdict, opening the same `FactCheckDialog`, because "where did this come from" and
+  "has anyone checked it" are one question asked twice — and unlike the explanation panel's
+  badge, this one is reachable while the question is still live.
+- `factCheckSources.ts` — the syllabus readings a *concept* is fact checked against, for the
+  Fact Check panel's bottom shelf (`components/FactCheckSources.tsx`): the exams that teach
+  the concept (`findSyllabiForConcept` over the bundled exam pages), then those exam pages'
+  `Source Material` readings, unioned and deduplicated, each carrying the exams that list it.
+  Rendered as the same `ResourceMetaCard` a resource page leads with, so an unchecked page —
+  which is nearly all of them — still says what checking it would mean. Nothing is inferred:
+  a concept no exam page teaches gets no shelf. See `docs/verification.md`.
 - `resourceExams.ts` — which exam(s) a resource is a syllabus reading for. A
   `Resources/Books` page names no exam; the relationship is authored the other way round, in
   each exam page's `Source Material` callout, so this module inverts those callouts into a

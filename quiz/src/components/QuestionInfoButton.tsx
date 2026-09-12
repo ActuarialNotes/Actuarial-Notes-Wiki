@@ -1,10 +1,14 @@
-import { useEffect } from 'react'
-import { ExternalLink, FileText, Info, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { ChevronRight, ExternalLink, FileText, Info, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { githubBlobUrl } from '@/lib/github'
 import { questionSource } from '@/lib/questionSource'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
+import { FACT_CHECK_UI_ENABLED } from '@/lib/featureFlags'
+import { FACT_CHECK_TONE_CLASSES, FACT_CHECK_TONE_ICONS } from '@/lib/factCheckTone'
+import { factCheckBadge } from '@/lib/verification'
+import { FactCheckDialog } from '@/components/FactCheckBadge'
 import type { Question } from '@/lib/parser'
 
 /**
@@ -14,6 +18,12 @@ import type { Question } from '@/lib/parser'
  * the question gets asked: a candidate who half-recognises a question wants to
  * know which paper it was sat on, and one who thinks the answer is wrong wants
  * the file to report or fix. Neither is on screen anywhere else mid-quiz.
+ *
+ * It is also where a question's **fact check** is read from. A concept page
+ * carries that on its action menu and a resource page on its own, but a
+ * question is only ever met inside a quiz — so the record of what has been
+ * checked about *this* question, and anything known to be wrong with it, hangs
+ * off the same button as the rest of its provenance.
  *
  * What it deliberately does *not* show while the question is unanswered is the
  * study metadata — topic, learning objective, difficulty. `QuestionCard` hides
@@ -83,9 +93,14 @@ export function QuestionInfoDialog({
   showStudyMeta = false,
   onClose,
 }: QuestionInfoDialogProps) {
+  const [showFactCheck, setShowFactCheck] = useState(false)
   // Paper: the panel sliding in, same as the shortcuts sheet next to it.
   useSoundOnMount('open')
   useEffect(() => {
+    // The fact-check sheet opens on top of this one and binds Esc itself, so
+    // this panel hands the keys over while it is up — otherwise one Esc closed
+    // the record *and* the panel it was opened from.
+    if (showFactCheck) return
     function onKey(e: KeyboardEvent) {
       if (e.key === 'Escape' || e.key === 'i') {
         e.preventDefault()
@@ -94,9 +109,15 @@ export function QuestionInfoDialog({
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [onClose])
+  }, [onClose, showFactCheck])
 
   const source = questionSource(question)
+  const factCheck = factCheckBadge(question.verification)
+  const FactCheckIcon = FACT_CHECK_TONE_ICONS[factCheck.tone]
+  // The record is addressed by the question's own vault path, which only the
+  // `verification:` block carries (`contentPathFromVerification`). With no
+  // block there is nothing to open and nothing to report against.
+  const factCheckPath = question.verification ? source.path : null
 
   return (
     <OverlayPortal>
@@ -145,6 +166,28 @@ export function QuestionInfoDialog({
             )}
           </section>
 
+          {/* The verdict, in the same tinted mark the badge and the panel use,
+              on the document row shape the source above it wears — a record to
+              open, not a status to read and move past. */}
+          {FACT_CHECK_UI_ENABLED && factCheckPath && (
+            <button
+              type="button"
+              onClick={() => setShowFactCheck(true)}
+              data-sound="tap"
+              aria-label={`Fact check: ${factCheck.label}. ${factCheck.detail}`}
+              className="flex w-full items-center gap-2.5 rounded-lg border border-border bg-card px-3 py-2.5 text-left transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <span
+                className={cn('flex h-7 w-7 shrink-0 items-center justify-center rounded-md',
+                  FACT_CHECK_TONE_CLASSES[factCheck.tone])}
+              >
+                <FactCheckIcon className="h-4 w-4" aria-hidden />
+              </span>
+              <span className="min-w-0 flex-1 text-sm font-medium">{factCheck.label}</span>
+              <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
+            </button>
+          )}
+
           <dl className="space-y-2 text-sm">
             <InfoRow label="Question ID" value={question.id} mono />
             <InfoRow
@@ -183,6 +226,16 @@ export function QuestionInfoDialog({
                 View on GitHub
               </a>
             </div>
+          )}
+
+          {factCheckPath && (
+            <FactCheckDialog
+              open={showFactCheck}
+              onClose={() => setShowFactCheck(false)}
+              verification={question.verification}
+              contentPath={factCheckPath}
+              contentName={source.sitting ? `${source.exam} · ${source.sitting}` : question.id}
+            />
           )}
         </div>
       </div>

@@ -95,6 +95,15 @@ before touching that area**:
   against a *citable external source*, and `verify_record.py` refuses otherwise) and P4
   (verification is bound to the file's bytes, so any edit downgrades it to `stale`). Read
   before touching a `verification:` block, a log, or anything under `scripts/verify_*`.
+- `docs/pdf-question-pipeline.md` — the **PDF → question bank** pipeline behind the
+  `soa-exam-converter` / `cas-exam-converter` skills: the four stages that turn an
+  examiner's report or a sample-question booklet into `questions/<bank>/*.md`, and which
+  of them cost model tokens (`pdf_extract.py` → `question_classify.py` →
+  `question_write.py` → `question_lint.py`, all of them free but the review residue).
+  The rule to keep: **nothing a PDF prints is ever retyped by a model** — prompts,
+  exhibits, options, answer keys, point values and publisher solutions are extracted
+  mechanically, and a model is asked only for what is genuinely a judgment. Read before
+  changing any of those scripts, the skills, or `scripts/mdmath.py`.
 - `docs/validation-agent.md` — the VALIDATE agent (`.claude/agents/validate.md`, `/validate`):
   how a sweep picks its batch, what context it loads (the *complete* prior log — that is the
   compounding mechanism), and the line between what it may auto-fix and what it must only
@@ -554,6 +563,14 @@ compile — don't "clean up" the flagged code as dead.
   `wiki_link` arrays and regenerates `Concepts Without Review Questions.md`,
   `tag_missing_concepts.py` backfills concept tags. Run these when doing bulk content
   cleanup, not for one-off edits.
+- `pdf_extract.py` / `question_classify.py` / `question_write.py` / `question_lint.py`
+  (+ `mdmath.py`) — the **PDF → question bank** pipeline; see
+  `docs/pdf-question-pipeline.md`. `pdf_extract.py` is the only script in the repo with a
+  non-stdlib dependency (PyMuPDF, imported lazily so the rest stays importable without
+  it). `mdmath.py` is the math-aware text normaliser the pipeline and the linter share —
+  it mirrors what `quiz/src/lib/vaultMath.ts` fixes at render time and covers what the
+  renderer cannot (a literal `\n` escape, an `align*` row packing formula and result,
+  OCR characters). Tests: `scripts/test_pdf_pipeline.py`.
 - `verify_lib.py` / `verify_check.py` / `verify_targets.py` / `verify_context.py` /
   `verify_record.py` / `sync_reports.py` / `generate_validation_status.py` — the **VERIFY**
   toolchain. `verify_check.py` is the CI gate (and `--sync` the repair pass);

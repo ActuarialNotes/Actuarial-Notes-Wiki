@@ -1,15 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>A final payment larger than the regular one, retiring the remaining balance</title>
   <style>:root {
-  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
-  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+  --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
-    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+    --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+    --grid: #333333; --soft: #242424; --axis: #6b6b6b;
   }
 }
+/* Named by the host in the embed URL (`…svg#dark`), and beats the media query
+   above because a value set here lands on the drawing rather than on the root
+   it inherits from. See the module docstring. */
+#light:target ~ * { --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c; }
+#dark:target ~ * { --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+  --grid: #333333; --soft: #242424; --axis: #6b6b6b; }
 text {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
                "Helvetica Neue", Arial, sans-serif;
@@ -38,43 +45,46 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <g id="light"/><g id="dark"/>
   <defs>
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
     <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
     <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
   </defs>
-  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="40" text-anchor="middle" class="ttl">A balloon retires the balance left over</text>
-  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-  <text x="180" y="430" text-anchor="middle" class="fml">B = OB₍ₙ₋₁₎ (1 + i)</text>
-  <text x="180" y="452" text-anchor="middle" class="fml2">K was set below the amortising payment</text>
-  <line x1="48" y1="268" x2="318" y2="268" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-  <line x1="56" y1="264" x2="56" y2="272" class="tick"/>
-  <text x="56" y="285" text-anchor="middle" class="sm dim">0</text>
-  <line x1="96.67" y1="264" x2="96.67" y2="272" class="tick"/>
-  <text x="96.67" y="285" text-anchor="middle" class="sm dim">1</text>
-  <line x1="137.33" y1="264" x2="137.33" y2="272" class="tick"/>
-  <text x="137.33" y="285" text-anchor="middle" class="sm dim">2</text>
-  <line x1="178" y1="264" x2="178" y2="272" class="tick"/>
-  <text x="178" y="285" text-anchor="middle" class="sm dim">3</text>
-  <line x1="218.67" y1="264" x2="218.67" y2="272" class="tick"/>
-  <text x="218.67" y="285" text-anchor="middle" class="sm dim">4</text>
-  <line x1="259.33" y1="264" x2="259.33" y2="272" class="tick"/>
-  <text x="259.33" y="285" text-anchor="middle" class="sm dim">5</text>
-  <line x1="300" y1="264" x2="300" y2="272" class="tick"/>
-  <text x="300" y="285" text-anchor="middle" class="sm dim">6</text>
-  <line x1="96.67" y1="268" x2="96.67" y2="234" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <text x="96.67" y="228" text-anchor="middle" class="sm">K</text>
-  <line x1="137.33" y1="268" x2="137.33" y2="234" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <text x="137.33" y="228" text-anchor="middle" class="sm">K</text>
-  <line x1="178" y1="268" x2="178" y2="234" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <text x="178" y="228" text-anchor="middle" class="sm">K</text>
-  <line x1="218.67" y1="268" x2="218.67" y2="234" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <text x="218.67" y="228" text-anchor="middle" class="sm">K</text>
-  <line x1="259.33" y1="268" x2="259.33" y2="234" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <text x="259.33" y="228" text-anchor="middle" class="sm">K</text>
-  <line x1="300" y1="268" x2="300" y2="168" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
-  <text x="300" y="162" text-anchor="middle" class="sm">B</text>
-  <line x1="84.67" y1="234" x2="271.33" y2="234" class="thin dash" stroke="var(--dim)" stroke-width="1.2"/>
-  <text x="180" y="118" text-anchor="middle" class="sm dim">principal is still outstanding at the end</text>
+  <g class="art">
+    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+    <text x="180" y="40" text-anchor="middle" class="ttl">A balloon retires the balance left over</text>
+    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+    <text x="180" y="430" text-anchor="middle" class="fml">B = OB₍ₙ₋₁₎ (1 + i)</text>
+    <text x="180" y="452" text-anchor="middle" class="fml2">K was set below the amortising payment</text>
+    <line x1="48" y1="268" x2="318" y2="268" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <line x1="56" y1="264" x2="56" y2="272" class="tick"/>
+    <text x="56" y="285" text-anchor="middle" class="sm dim">0</text>
+    <line x1="96.67" y1="264" x2="96.67" y2="272" class="tick"/>
+    <text x="96.67" y="285" text-anchor="middle" class="sm dim">1</text>
+    <line x1="137.33" y1="264" x2="137.33" y2="272" class="tick"/>
+    <text x="137.33" y="285" text-anchor="middle" class="sm dim">2</text>
+    <line x1="178" y1="264" x2="178" y2="272" class="tick"/>
+    <text x="178" y="285" text-anchor="middle" class="sm dim">3</text>
+    <line x1="218.67" y1="264" x2="218.67" y2="272" class="tick"/>
+    <text x="218.67" y="285" text-anchor="middle" class="sm dim">4</text>
+    <line x1="259.33" y1="264" x2="259.33" y2="272" class="tick"/>
+    <text x="259.33" y="285" text-anchor="middle" class="sm dim">5</text>
+    <line x1="300" y1="264" x2="300" y2="272" class="tick"/>
+    <text x="300" y="285" text-anchor="middle" class="sm dim">6</text>
+    <line x1="96.67" y1="268" x2="96.67" y2="234" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <text x="96.67" y="228" text-anchor="middle" class="sm">K</text>
+    <line x1="137.33" y1="268" x2="137.33" y2="234" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <text x="137.33" y="228" text-anchor="middle" class="sm">K</text>
+    <line x1="178" y1="268" x2="178" y2="234" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <text x="178" y="228" text-anchor="middle" class="sm">K</text>
+    <line x1="218.67" y1="268" x2="218.67" y2="234" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <text x="218.67" y="228" text-anchor="middle" class="sm">K</text>
+    <line x1="259.33" y1="268" x2="259.33" y2="234" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <text x="259.33" y="228" text-anchor="middle" class="sm">K</text>
+    <line x1="300" y1="268" x2="300" y2="168" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
+    <text x="300" y="162" text-anchor="middle" class="sm">B</text>
+    <line x1="84.67" y1="234" x2="271.33" y2="234" class="thin dash" stroke="var(--dim)" stroke-width="1.2"/>
+    <text x="180" y="118" text-anchor="middle" class="sm dim">principal is still outstanding at the end</text>
+  </g>
 </svg>

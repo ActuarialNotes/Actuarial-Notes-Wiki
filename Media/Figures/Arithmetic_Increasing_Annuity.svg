@@ -1,15 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>Payments rising by a constant amount, split into a level and an increasing piece</title>
   <style>:root {
-  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
-  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+  --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
-    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+    --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+    --grid: #333333; --soft: #242424; --axis: #6b6b6b;
   }
 }
+/* Named by the host in the embed URL (`…svg#dark`), and beats the media query
+   above because a value set here lands on the drawing rather than on the root
+   it inherits from. See the module docstring. */
+#light:target ~ * { --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c; }
+#dark:target ~ * { --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+  --grid: #333333; --soft: #242424; --axis: #6b6b6b; }
 text {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
                "Helvetica Neue", Arial, sans-serif;
@@ -38,48 +45,51 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <g id="light"/><g id="dark"/>
   <defs>
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
   </defs>
-  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="40" text-anchor="middle" class="ttl">A level annuity plus a staircase</text>
-  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-  <text x="180" y="430" text-anchor="middle" class="fml">(Ia)₍ₙ₎ = (ä₍ₙ₎ − n vⁿ) / i</text>
-  <text x="180" y="452" text-anchor="middle" class="fml2">(Ia)₍ₙ₎ + (Da)₍ₙ₎ = (n + 1) a₍ₙ₎</text>
-  <line x1="48" y1="344" x2="318" y2="344" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-  <line x1="56" y1="340" x2="56" y2="348" class="tick"/>
-  <text x="56" y="361" text-anchor="middle" class="sm dim">0</text>
-  <line x1="96.67" y1="340" x2="96.67" y2="348" class="tick"/>
-  <text x="96.67" y="361" text-anchor="middle" class="sm dim">1</text>
-  <line x1="137.33" y1="340" x2="137.33" y2="348" class="tick"/>
-  <text x="137.33" y="361" text-anchor="middle" class="sm dim">2</text>
-  <line x1="178" y1="340" x2="178" y2="348" class="tick"/>
-  <text x="178" y="361" text-anchor="middle" class="sm dim">3</text>
-  <line x1="218.67" y1="340" x2="218.67" y2="348" class="tick"/>
-  <text x="218.67" y="361" text-anchor="middle" class="sm dim">4</text>
-  <line x1="259.33" y1="340" x2="259.33" y2="348" class="tick"/>
-  <text x="259.33" y="361" text-anchor="middle" class="sm dim">5</text>
-  <line x1="300" y1="340" x2="300" y2="348" class="tick"/>
-  <text x="300" y="361" text-anchor="middle" class="sm dim">6</text>
-  <rect x="85.67" y="310" width="22" height="34" rx="2" fill="#3b82f6" fill-opacity="0.6"/>
-  <text x="96.67" y="302" text-anchor="middle" class="sm">1</text>
-  <rect x="126.33" y="310" width="22" height="34" rx="2" fill="#3b82f6" fill-opacity="0.6"/>
-  <rect x="126.33" y="292" width="22" height="18" rx="2" fill="#d97706" fill-opacity="0.6"/>
-  <text x="137.33" y="284" text-anchor="middle" class="sm">2</text>
-  <rect x="167" y="310" width="22" height="34" rx="2" fill="#3b82f6" fill-opacity="0.6"/>
-  <rect x="167" y="274" width="22" height="36" rx="2" fill="#d97706" fill-opacity="0.6"/>
-  <text x="178" y="266" text-anchor="middle" class="sm">3</text>
-  <rect x="207.67" y="310" width="22" height="34" rx="2" fill="#3b82f6" fill-opacity="0.6"/>
-  <rect x="207.67" y="256" width="22" height="54" rx="2" fill="#d97706" fill-opacity="0.6"/>
-  <text x="218.67" y="248" text-anchor="middle" class="sm">4</text>
-  <rect x="248.33" y="310" width="22" height="34" rx="2" fill="#3b82f6" fill-opacity="0.6"/>
-  <rect x="248.33" y="238" width="22" height="72" rx="2" fill="#d97706" fill-opacity="0.6"/>
-  <text x="259.33" y="230" text-anchor="middle" class="sm">5</text>
-  <rect x="289" y="310" width="22" height="34" rx="2" fill="#3b82f6" fill-opacity="0.6"/>
-  <rect x="289" y="220" width="22" height="90" rx="2" fill="#d97706" fill-opacity="0.6"/>
-  <text x="300" y="212" text-anchor="middle" class="sm">6</text>
-  <line x1="58" y1="94" x2="71" y2="94" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round"/>
-  <text x="77" y="97.6" text-anchor="start" class="sm">level P</text>
-  <line x1="58" y1="110" x2="71" y2="110" stroke="#d97706" stroke-width="2.4" stroke-linecap="round"/>
-  <text x="77" y="113.6" text-anchor="start" class="sm">increase Q</text>
+  <g class="art">
+    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+    <text x="180" y="40" text-anchor="middle" class="ttl">A level annuity plus a staircase</text>
+    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+    <text x="180" y="430" text-anchor="middle" class="fml">(Ia)₍ₙ₎ = (ä₍ₙ₎ − n vⁿ) / i</text>
+    <text x="180" y="452" text-anchor="middle" class="fml2">(Ia)₍ₙ₎ + (Da)₍ₙ₎ = (n + 1) a₍ₙ₎</text>
+    <line x1="48" y1="344" x2="318" y2="344" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <line x1="56" y1="340" x2="56" y2="348" class="tick"/>
+    <text x="56" y="361" text-anchor="middle" class="sm dim">0</text>
+    <line x1="96.67" y1="340" x2="96.67" y2="348" class="tick"/>
+    <text x="96.67" y="361" text-anchor="middle" class="sm dim">1</text>
+    <line x1="137.33" y1="340" x2="137.33" y2="348" class="tick"/>
+    <text x="137.33" y="361" text-anchor="middle" class="sm dim">2</text>
+    <line x1="178" y1="340" x2="178" y2="348" class="tick"/>
+    <text x="178" y="361" text-anchor="middle" class="sm dim">3</text>
+    <line x1="218.67" y1="340" x2="218.67" y2="348" class="tick"/>
+    <text x="218.67" y="361" text-anchor="middle" class="sm dim">4</text>
+    <line x1="259.33" y1="340" x2="259.33" y2="348" class="tick"/>
+    <text x="259.33" y="361" text-anchor="middle" class="sm dim">5</text>
+    <line x1="300" y1="340" x2="300" y2="348" class="tick"/>
+    <text x="300" y="361" text-anchor="middle" class="sm dim">6</text>
+    <rect x="85.67" y="310" width="22" height="34" rx="2" fill="#3b82f6" fill-opacity="0.6"/>
+    <text x="96.67" y="302" text-anchor="middle" class="sm">1</text>
+    <rect x="126.33" y="310" width="22" height="34" rx="2" fill="#3b82f6" fill-opacity="0.6"/>
+    <rect x="126.33" y="292" width="22" height="18" rx="2" fill="#d97706" fill-opacity="0.6"/>
+    <text x="137.33" y="284" text-anchor="middle" class="sm">2</text>
+    <rect x="167" y="310" width="22" height="34" rx="2" fill="#3b82f6" fill-opacity="0.6"/>
+    <rect x="167" y="274" width="22" height="36" rx="2" fill="#d97706" fill-opacity="0.6"/>
+    <text x="178" y="266" text-anchor="middle" class="sm">3</text>
+    <rect x="207.67" y="310" width="22" height="34" rx="2" fill="#3b82f6" fill-opacity="0.6"/>
+    <rect x="207.67" y="256" width="22" height="54" rx="2" fill="#d97706" fill-opacity="0.6"/>
+    <text x="218.67" y="248" text-anchor="middle" class="sm">4</text>
+    <rect x="248.33" y="310" width="22" height="34" rx="2" fill="#3b82f6" fill-opacity="0.6"/>
+    <rect x="248.33" y="238" width="22" height="72" rx="2" fill="#d97706" fill-opacity="0.6"/>
+    <text x="259.33" y="230" text-anchor="middle" class="sm">5</text>
+    <rect x="289" y="310" width="22" height="34" rx="2" fill="#3b82f6" fill-opacity="0.6"/>
+    <rect x="289" y="220" width="22" height="90" rx="2" fill="#d97706" fill-opacity="0.6"/>
+    <text x="300" y="212" text-anchor="middle" class="sm">6</text>
+    <line x1="58" y1="94" x2="71" y2="94" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round"/>
+    <text x="77" y="97.6" text-anchor="start" class="sm">level P</text>
+    <line x1="58" y1="110" x2="71" y2="110" stroke="#d97706" stroke-width="2.4" stroke-linecap="round"/>
+    <text x="77" y="113.6" text-anchor="start" class="sm">increase Q</text>
+  </g>
 </svg>

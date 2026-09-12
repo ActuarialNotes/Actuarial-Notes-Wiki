@@ -118,7 +118,26 @@ feature colour rather than deriving a second palette. **`examAccentStyle` return
 for a non-exam** — spread it unconditionally and branch on it, so a requirement with no rung
 keeps the neutral hover instead of inheriting the wrong colour from an ancestor.
 
-### 2.4 Focus & selection
+### 2.4 The one place hexes are allowed
+
+The generated concept figures (`Media/Figures/*.svg`, see `docs/concept-figures.md`) are the
+single exception to "never hard-code a hex". They are embedded as `<img>`, which renders the
+SVG as an isolated document: the `.dark` class and every token above are unreachable from
+inside it, so a figure has to carry its own copy of the palette.
+
+It is a copy, not a second palette. `scripts/figure_kit.py` transcribes the tokens — `--surf`
+is `--card`, `--edge` is `--border`, `--ink` is `--foreground`, `--dim` is
+`--muted-foreground` — and because the scheme is achromatic (`0 0% L%`) the transcription is
+exact. `scripts/test_figure_kit.py` asserts it, so a token moved here fails that test until
+`figure_kit.py` follows and the figures are regenerated. **Moving a neutral token in this
+file is therefore a two-part change.**
+
+Which of the two palettes a figure uses is named by the host in the embed URL
+(`…/Exposure_Base.svg#dark`, via `quiz/src/lib/figureTheme.ts`), because the app's theme is a
+toggle that never consults `prefers-color-scheme` — the figure's own media query is only the
+fallback for Obsidian and GitHub.
+
+### 2.5 Focus & selection
 
 - Focus ring is standardized: `focus-visible:ring-2 focus-visible:ring-ring
   focus-visible:ring-offset-2`. Never remove focus outlines without an equivalent replacement.

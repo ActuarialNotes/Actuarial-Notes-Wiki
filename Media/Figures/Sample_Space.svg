@@ -1,15 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>A sample space partitioned into its elementary outcomes</title>
   <style>:root {
-  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
-  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+  --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
-    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+    --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+    --grid: #333333; --soft: #242424; --axis: #6b6b6b;
   }
 }
+/* Named by the host in the embed URL (`…svg#dark`), and beats the media query
+   above because a value set here lands on the drawing rather than on the root
+   it inherits from. See the module docstring. */
+#light:target ~ * { --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c; }
+#dark:target ~ * { --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+  --grid: #333333; --soft: #242424; --axis: #6b6b6b; }
 text {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
                "Helvetica Neue", Arial, sans-serif;
@@ -38,24 +45,27 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
-  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="31" text-anchor="middle" class="ttl">The sample space lists every outcome</text>
-  <text x="180" y="50" text-anchor="middle" class="ttl">once</text>
-  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-  <text x="180" y="438" text-anchor="middle" class="fml">S = {ω₁, ω₂, …, ω₆}</text>
-  <rect x="36" y="86" width="288" height="234" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
-  <text x="49" y="102" text-anchor="middle" class="sm dim">S</text>
-  <circle cx="96" cy="152" r="36" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
-  <text x="96" y="158" text-anchor="middle">ω₁</text>
-  <circle cx="180" cy="152" r="36" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
-  <text x="180" y="158" text-anchor="middle">ω₂</text>
-  <circle cx="264" cy="152" r="36" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
-  <text x="264" y="158" text-anchor="middle">ω₃</text>
-  <circle cx="96" cy="252" r="36" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
-  <text x="96" y="258" text-anchor="middle">ω₄</text>
-  <circle cx="180" cy="252" r="36" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
-  <text x="180" y="258" text-anchor="middle">ω₅</text>
-  <circle cx="264" cy="252" r="36" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
-  <text x="264" y="258" text-anchor="middle">ω₆</text>
-  <text x="180" y="350" text-anchor="middle" class="sm dim">one roll of a die</text>
+  <g id="light"/><g id="dark"/>
+  <g class="art">
+    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+    <text x="180" y="31" text-anchor="middle" class="ttl">The sample space lists every outcome</text>
+    <text x="180" y="50" text-anchor="middle" class="ttl">once</text>
+    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+    <text x="180" y="438" text-anchor="middle" class="fml">S = {ω₁, ω₂, …, ω₆}</text>
+    <rect x="36" y="86" width="288" height="234" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
+    <text x="49" y="102" text-anchor="middle" class="sm dim">S</text>
+    <circle cx="96" cy="152" r="36" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
+    <text x="96" y="158" text-anchor="middle">ω₁</text>
+    <circle cx="180" cy="152" r="36" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
+    <text x="180" y="158" text-anchor="middle">ω₂</text>
+    <circle cx="264" cy="152" r="36" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
+    <text x="264" y="158" text-anchor="middle">ω₃</text>
+    <circle cx="96" cy="252" r="36" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
+    <text x="96" y="258" text-anchor="middle">ω₄</text>
+    <circle cx="180" cy="252" r="36" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
+    <text x="180" y="258" text-anchor="middle">ω₅</text>
+    <circle cx="264" cy="252" r="36" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
+    <text x="264" y="258" text-anchor="middle">ω₆</text>
+    <text x="180" y="350" text-anchor="middle" class="sm dim">one roll of a die</text>
+  </g>
 </svg>

@@ -1,15 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>Spot rates as the yield on each zero-coupon maturity</title>
   <style>:root {
-  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
-  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+  --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
-    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+    --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+    --grid: #333333; --soft: #242424; --axis: #6b6b6b;
   }
 }
+/* Named by the host in the embed URL (`…svg#dark`), and beats the media query
+   above because a value set here lands on the drawing rather than on the root
+   it inherits from. See the module docstring. */
+#light:target ~ * { --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c; }
+#dark:target ~ * { --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+  --grid: #333333; --soft: #242424; --axis: #6b6b6b; }
 text {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
                "Helvetica Neue", Arial, sans-serif;
@@ -38,48 +45,51 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <g id="light"/><g id="dark"/>
   <defs>
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
   </defs>
-  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="31" text-anchor="middle" class="ttl">A spot rate is the yield on one future</text>
-  <text x="180" y="50" text-anchor="middle" class="ttl">payment</text>
-  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-  <text x="180" y="430" text-anchor="middle" class="fml">P = Σ C_t / (1 + s_t)^t</text>
-  <text x="180" y="452" text-anchor="middle" class="fml2">discount each flow at its own rate</text>
-  <rect x="88.8" y="299.2" width="26.4" height="50.8" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
-  <rect x="128.8" y="248.4" width="26.4" height="101.6" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
-  <rect x="168.8" y="207.76" width="26.4" height="142.24" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
-  <rect x="208.8" y="177.28" width="26.4" height="172.72" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
-  <rect x="248.8" y="156.96" width="26.4" height="193.04" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
-  <rect x="288.8" y="146.8" width="26.4" height="203.2" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
-  <polyline points="102,299.2 142,248.4 182,207.76 222,177.28 262,156.96 302,146.8" class="curve" stroke="#7c3aed" stroke-width="2"/>
-  <circle cx="102" cy="299.2" r="3" fill="#7c3aed"/>
-  <circle cx="142" cy="248.4" r="3" fill="#7c3aed"/>
-  <circle cx="182" cy="207.76" r="3" fill="#7c3aed"/>
-  <circle cx="222" cy="177.28" r="3" fill="#7c3aed"/>
-  <circle cx="262" cy="156.96" r="3" fill="#7c3aed"/>
-  <circle cx="302" cy="146.8" r="3" fill="#7c3aed"/>
-  <line x1="78" y1="350" x2="336" y2="350" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-  <line x1="78" y1="350" x2="78" y2="86" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-  <line x1="102" y1="350" x2="102" y2="354" class="tick"/>
-  <text x="102" y="366" text-anchor="middle" class="sm dim">1</text>
-  <line x1="142" y1="350" x2="142" y2="354" class="tick"/>
-  <text x="142" y="366" text-anchor="middle" class="sm dim">2</text>
-  <line x1="182" y1="350" x2="182" y2="354" class="tick"/>
-  <text x="182" y="366" text-anchor="middle" class="sm dim">3</text>
-  <line x1="222" y1="350" x2="222" y2="354" class="tick"/>
-  <text x="222" y="366" text-anchor="middle" class="sm dim">4</text>
-  <line x1="262" y1="350" x2="262" y2="354" class="tick"/>
-  <text x="262" y="366" text-anchor="middle" class="sm dim">5</text>
-  <line x1="302" y1="350" x2="302" y2="354" class="tick"/>
-  <text x="302" y="366" text-anchor="middle" class="sm dim">6</text>
-  <line x1="74" y1="299.2" x2="78" y2="299.2" class="tick"/>
-  <text x="70" y="302.8" text-anchor="end" class="sm dim">3%</text>
-  <line x1="74" y1="197.6" x2="78" y2="197.6" class="tick"/>
-  <text x="70" y="201.2" text-anchor="end" class="sm dim">4%</text>
-  <line x1="74" y1="96" x2="78" y2="96" class="tick"/>
-  <text x="70" y="99.6" text-anchor="end" class="sm dim">5%</text>
-  <text x="326" y="382" text-anchor="end" class="sm dim">maturity n (years)</text>
-  <text x="74" y="82" text-anchor="start" class="sm dim">spot rate sₙ</text>
+  <g class="art">
+    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+    <text x="180" y="31" text-anchor="middle" class="ttl">A spot rate is the yield on one future</text>
+    <text x="180" y="50" text-anchor="middle" class="ttl">payment</text>
+    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+    <text x="180" y="430" text-anchor="middle" class="fml">P = Σ C_t / (1 + s_t)^t</text>
+    <text x="180" y="452" text-anchor="middle" class="fml2">discount each flow at its own rate</text>
+    <rect x="88.8" y="299.2" width="26.4" height="50.8" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="128.8" y="248.4" width="26.4" height="101.6" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="168.8" y="207.76" width="26.4" height="142.24" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="208.8" y="177.28" width="26.4" height="172.72" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="248.8" y="156.96" width="26.4" height="193.04" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="288.8" y="146.8" width="26.4" height="203.2" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+    <polyline points="102,299.2 142,248.4 182,207.76 222,177.28 262,156.96 302,146.8" class="curve" stroke="#7c3aed" stroke-width="2"/>
+    <circle cx="102" cy="299.2" r="3" fill="#7c3aed"/>
+    <circle cx="142" cy="248.4" r="3" fill="#7c3aed"/>
+    <circle cx="182" cy="207.76" r="3" fill="#7c3aed"/>
+    <circle cx="222" cy="177.28" r="3" fill="#7c3aed"/>
+    <circle cx="262" cy="156.96" r="3" fill="#7c3aed"/>
+    <circle cx="302" cy="146.8" r="3" fill="#7c3aed"/>
+    <line x1="78" y1="350" x2="336" y2="350" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="78" y1="350" x2="78" y2="86" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="102" y1="350" x2="102" y2="354" class="tick"/>
+    <text x="102" y="366" text-anchor="middle" class="sm dim">1</text>
+    <line x1="142" y1="350" x2="142" y2="354" class="tick"/>
+    <text x="142" y="366" text-anchor="middle" class="sm dim">2</text>
+    <line x1="182" y1="350" x2="182" y2="354" class="tick"/>
+    <text x="182" y="366" text-anchor="middle" class="sm dim">3</text>
+    <line x1="222" y1="350" x2="222" y2="354" class="tick"/>
+    <text x="222" y="366" text-anchor="middle" class="sm dim">4</text>
+    <line x1="262" y1="350" x2="262" y2="354" class="tick"/>
+    <text x="262" y="366" text-anchor="middle" class="sm dim">5</text>
+    <line x1="302" y1="350" x2="302" y2="354" class="tick"/>
+    <text x="302" y="366" text-anchor="middle" class="sm dim">6</text>
+    <line x1="74" y1="299.2" x2="78" y2="299.2" class="tick"/>
+    <text x="70" y="302.8" text-anchor="end" class="sm dim">3%</text>
+    <line x1="74" y1="197.6" x2="78" y2="197.6" class="tick"/>
+    <text x="70" y="201.2" text-anchor="end" class="sm dim">4%</text>
+    <line x1="74" y1="96" x2="78" y2="96" class="tick"/>
+    <text x="70" y="99.6" text-anchor="end" class="sm dim">5%</text>
+    <text x="326" y="382" text-anchor="end" class="sm dim">maturity n (years)</text>
+    <text x="74" y="82" text-anchor="start" class="sm dim">spot rate sₙ</text>
+  </g>
 </svg>

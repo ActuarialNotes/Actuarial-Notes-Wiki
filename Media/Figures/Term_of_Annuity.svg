@@ -1,15 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>The term as the count of payments, solved from the present value</title>
   <style>:root {
-  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
-  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+  --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
-    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+    --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+    --grid: #333333; --soft: #242424; --axis: #6b6b6b;
   }
 }
+/* Named by the host in the embed URL (`…svg#dark`), and beats the media query
+   above because a value set here lands on the drawing rather than on the root
+   it inherits from. See the module docstring. */
+#light:target ~ * { --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c; }
+#dark:target ~ * { --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+  --grid: #333333; --soft: #242424; --axis: #6b6b6b; }
 text {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
                "Helvetica Neue", Arial, sans-serif;
@@ -38,59 +45,62 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <g id="light"/><g id="dark"/>
   <defs>
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
     <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
   </defs>
-  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="31" text-anchor="middle" class="ttl">The term n is how many payments there</text>
-  <text x="180" y="50" text-anchor="middle" class="ttl">are</text>
-  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-  <text x="180" y="438" text-anchor="middle" class="fml">n = −ln(1 − i · PV/P) / ln(1 + i)</text>
-  <line x1="52" y1="130" x2="314" y2="130" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-  <line x1="60" y1="126" x2="60" y2="134" class="tick"/>
-  <text x="60" y="147" text-anchor="middle" class="sm dim">0</text>
-  <line x1="99.33" y1="126" x2="99.33" y2="134" class="tick"/>
-  <text x="99.33" y="147" text-anchor="middle" class="sm dim">1</text>
-  <line x1="138.67" y1="126" x2="138.67" y2="134" class="tick"/>
-  <text x="138.67" y="147" text-anchor="middle" class="sm dim">2</text>
-  <line x1="178" y1="126" x2="178" y2="134" class="tick"/>
-  <text x="178" y="147" text-anchor="middle" class="sm dim">…</text>
-  <line x1="217.33" y1="126" x2="217.33" y2="134" class="tick"/>
-  <text x="217.33" y="147" text-anchor="middle" class="sm dim">n−1</text>
-  <line x1="256.67" y1="126" x2="256.67" y2="134" class="tick"/>
-  <text x="256.67" y="147" text-anchor="middle" class="sm dim">n</text>
-  <line x1="296" y1="126" x2="296" y2="134" class="tick"/>
-  <line x1="99.33" y1="130" x2="99.33" y2="100" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <text x="99.33" y="94" text-anchor="middle" class="sm">P</text>
-  <line x1="138.67" y1="130" x2="138.67" y2="100" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <text x="138.67" y="94" text-anchor="middle" class="sm">P</text>
-  <line x1="178" y1="130" x2="178" y2="100" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <text x="178" y="94" text-anchor="middle" class="sm">P</text>
-  <line x1="217.33" y1="130" x2="217.33" y2="100" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <text x="217.33" y="94" text-anchor="middle" class="sm">P</text>
-  <line x1="256.67" y1="130" x2="256.67" y2="100" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <text x="256.67" y="94" text-anchor="middle" class="sm">P</text>
-  <path d="M99.33,164 v5.4 H173 q5,0 5,4.95 q0,-4.95 5,-4.95 H256.67 v-5.4" class="thin" stroke="#7c3aed" stroke-width="1.2"/>
-  <text x="178" y="184" text-anchor="middle" class="sm dim">n payments</text>
-  <polyline points="77.63,346.5 78.97,345.28 80.32,344.06 81.67,342.86 83.01,341.67 84.36,340.49 85.71,339.32 87.05,338.17 88.4,337.02 89.75,335.89 91.09,334.76 92.44,333.65 93.78,332.55 95.13,331.46 96.48,330.37 97.82,329.3 99.17,328.24 100.52,327.19 101.86,326.15 103.21,325.12 104.56,324.1 105.9,323.09 107.25,322.09 108.6,321.1 109.94,320.12 111.29,319.14 112.64,318.18 113.98,317.23 115.33,316.28 116.68,315.35 118.02,314.42 119.37,313.5 120.72,312.59 122.06,311.69 123.41,310.8 124.75,309.92 126.1,309.05 127.45,308.18 128.79,307.32 130.14,306.47 131.49,305.63 132.83,304.8 134.18,303.97 135.53,303.16 136.87,302.35 138.22,301.54 139.57,300.75 140.91,299.96 142.26,299.18 143.61,298.41 144.95,297.65 146.3,296.89 147.65,296.14 148.99,295.4 150.34,294.67 151.69,293.94 153.03,293.22 154.38,292.5 155.72,291.8 157.07,291.09 158.42,290.4 159.76,289.71 161.11,289.03 162.46,288.36 163.8,287.69 165.15,287.03 166.5,286.38 167.84,285.73 169.19,285.09 170.54,284.45 171.88,283.82 173.23,283.2 174.58,282.58 175.92,281.97 177.27,281.36 178.62,280.76 179.96,280.17 181.31,279.58 182.66,278.99 184,278.42 185.35,277.84 186.69,277.28 188.04,276.72 189.39,276.16 190.73,275.61 192.08,275.06 193.43,274.52 194.77,273.99 196.12,273.46 197.47,272.94 198.81,272.42 200.16,271.9 201.51,271.39 202.85,270.89 204.2,270.39 205.55,269.89 206.89,269.4 208.24,268.92 209.59,268.44 210.93,267.96 212.28,267.49 213.63,267.02 214.97,266.56 216.32,266.1 217.66,265.65 219.01,265.2 220.36,264.75 221.7,264.31 223.05,263.88 224.4,263.44 225.74,263.01 227.09,262.59 228.44,262.17 229.78,261.75 231.13,261.34 232.48,260.93 233.82,260.53 235.17,260.13 236.52,259.73 237.86,259.34 239.21,258.95 240.56,258.57 241.9,258.19 243.25,257.81 244.59,257.43 245.94,257.06 247.29,256.7 248.63,256.33 249.98,255.97 251.33,255.62 252.67,255.26 254.02,254.91 255.37,254.57 256.71,254.22 258.06,253.88 259.41,253.55 260.75,253.21 262.1,252.88 263.45,252.56 264.79,252.23 266.14,251.91 267.49,251.6 268.83,251.28 270.18,250.97 271.53,250.66 272.87,250.35 274.22,250.05 275.56,249.75 276.91,249.46 278.26,249.16 279.6,248.87 280.95,248.58 282.3,248.3 283.64,248.01 284.99,247.73 286.34,247.46 287.68,247.18 289.03,246.91 290.38,246.64 291.72,246.37 293.07,246.11 294.42,245.85 295.76,245.59 297.11,245.33 298.46,245.08 299.8,244.82 301.15,244.57 302.5,244.33 303.84,244.08 305.19,243.84 306.53,243.6 307.88,243.36 309.23,243.13 310.57,242.89 311.92,242.66 313.27,242.43 314.61,242.21 315.96,241.98 317.31,241.76 318.65,241.54 320,241.32" class="curve" stroke="#3b82f6" stroke-width="2"/>
-  <circle cx="173.6" cy="283.03" r="3.6" fill="#d97706"/>
-  <line x1="173.6" y1="348" x2="173.6" y2="283.03" class="thin dash" stroke="#d97706" stroke-width="1.3"/>
-  <line x1="76" y1="283.03" x2="173.6" y2="283.03" class="thin dash" stroke="#d97706" stroke-width="1.3"/>
-  <line x1="76" y1="348" x2="330" y2="348" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-  <line x1="76" y1="348" x2="76" y2="214" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-  <line x1="76" y1="348" x2="76" y2="352" class="tick"/>
-  <text x="76" y="364" text-anchor="middle" class="sm dim">0</text>
-  <line x1="173.6" y1="348" x2="173.6" y2="352" class="tick"/>
-  <text x="173.6" y="364" text-anchor="middle" class="sm dim">12</text>
-  <line x1="320" y1="348" x2="320" y2="352" class="tick"/>
-  <text x="320" y="364" text-anchor="middle" class="sm dim">30</text>
-  <line x1="72" y1="309.25" x2="76" y2="309.25" class="tick"/>
-  <text x="68" y="312.85" text-anchor="end" class="sm dim">5</text>
-  <line x1="72" y1="270.5" x2="76" y2="270.5" class="tick"/>
-  <text x="68" y="274.1" text-anchor="end" class="sm dim">10</text>
-  <line x1="72" y1="231.75" x2="76" y2="231.75" class="tick"/>
-  <text x="68" y="235.35" text-anchor="end" class="sm dim">15</text>
-  <text x="320" y="380" text-anchor="end" class="sm dim">term n</text>
-  <text x="72" y="210" text-anchor="start" class="sm dim">a₍ₙ₎</text>
+  <g class="art">
+    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+    <text x="180" y="31" text-anchor="middle" class="ttl">The term n is how many payments there</text>
+    <text x="180" y="50" text-anchor="middle" class="ttl">are</text>
+    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+    <text x="180" y="438" text-anchor="middle" class="fml">n = −ln(1 − i · PV/P) / ln(1 + i)</text>
+    <line x1="52" y1="130" x2="314" y2="130" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <line x1="60" y1="126" x2="60" y2="134" class="tick"/>
+    <text x="60" y="147" text-anchor="middle" class="sm dim">0</text>
+    <line x1="99.33" y1="126" x2="99.33" y2="134" class="tick"/>
+    <text x="99.33" y="147" text-anchor="middle" class="sm dim">1</text>
+    <line x1="138.67" y1="126" x2="138.67" y2="134" class="tick"/>
+    <text x="138.67" y="147" text-anchor="middle" class="sm dim">2</text>
+    <line x1="178" y1="126" x2="178" y2="134" class="tick"/>
+    <text x="178" y="147" text-anchor="middle" class="sm dim">…</text>
+    <line x1="217.33" y1="126" x2="217.33" y2="134" class="tick"/>
+    <text x="217.33" y="147" text-anchor="middle" class="sm dim">n−1</text>
+    <line x1="256.67" y1="126" x2="256.67" y2="134" class="tick"/>
+    <text x="256.67" y="147" text-anchor="middle" class="sm dim">n</text>
+    <line x1="296" y1="126" x2="296" y2="134" class="tick"/>
+    <line x1="99.33" y1="130" x2="99.33" y2="100" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <text x="99.33" y="94" text-anchor="middle" class="sm">P</text>
+    <line x1="138.67" y1="130" x2="138.67" y2="100" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <text x="138.67" y="94" text-anchor="middle" class="sm">P</text>
+    <line x1="178" y1="130" x2="178" y2="100" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <text x="178" y="94" text-anchor="middle" class="sm">P</text>
+    <line x1="217.33" y1="130" x2="217.33" y2="100" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <text x="217.33" y="94" text-anchor="middle" class="sm">P</text>
+    <line x1="256.67" y1="130" x2="256.67" y2="100" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <text x="256.67" y="94" text-anchor="middle" class="sm">P</text>
+    <path d="M99.33,164 v5.4 H173 q5,0 5,4.95 q0,-4.95 5,-4.95 H256.67 v-5.4" class="thin" stroke="#7c3aed" stroke-width="1.2"/>
+    <text x="178" y="184" text-anchor="middle" class="sm dim">n payments</text>
+    <polyline points="77.63,346.5 78.97,345.28 80.32,344.06 81.67,342.86 83.01,341.67 84.36,340.49 85.71,339.32 87.05,338.17 88.4,337.02 89.75,335.89 91.09,334.76 92.44,333.65 93.78,332.55 95.13,331.46 96.48,330.37 97.82,329.3 99.17,328.24 100.52,327.19 101.86,326.15 103.21,325.12 104.56,324.1 105.9,323.09 107.25,322.09 108.6,321.1 109.94,320.12 111.29,319.14 112.64,318.18 113.98,317.23 115.33,316.28 116.68,315.35 118.02,314.42 119.37,313.5 120.72,312.59 122.06,311.69 123.41,310.8 124.75,309.92 126.1,309.05 127.45,308.18 128.79,307.32 130.14,306.47 131.49,305.63 132.83,304.8 134.18,303.97 135.53,303.16 136.87,302.35 138.22,301.54 139.57,300.75 140.91,299.96 142.26,299.18 143.61,298.41 144.95,297.65 146.3,296.89 147.65,296.14 148.99,295.4 150.34,294.67 151.69,293.94 153.03,293.22 154.38,292.5 155.72,291.8 157.07,291.09 158.42,290.4 159.76,289.71 161.11,289.03 162.46,288.36 163.8,287.69 165.15,287.03 166.5,286.38 167.84,285.73 169.19,285.09 170.54,284.45 171.88,283.82 173.23,283.2 174.58,282.58 175.92,281.97 177.27,281.36 178.62,280.76 179.96,280.17 181.31,279.58 182.66,278.99 184,278.42 185.35,277.84 186.69,277.28 188.04,276.72 189.39,276.16 190.73,275.61 192.08,275.06 193.43,274.52 194.77,273.99 196.12,273.46 197.47,272.94 198.81,272.42 200.16,271.9 201.51,271.39 202.85,270.89 204.2,270.39 205.55,269.89 206.89,269.4 208.24,268.92 209.59,268.44 210.93,267.96 212.28,267.49 213.63,267.02 214.97,266.56 216.32,266.1 217.66,265.65 219.01,265.2 220.36,264.75 221.7,264.31 223.05,263.88 224.4,263.44 225.74,263.01 227.09,262.59 228.44,262.17 229.78,261.75 231.13,261.34 232.48,260.93 233.82,260.53 235.17,260.13 236.52,259.73 237.86,259.34 239.21,258.95 240.56,258.57 241.9,258.19 243.25,257.81 244.59,257.43 245.94,257.06 247.29,256.7 248.63,256.33 249.98,255.97 251.33,255.62 252.67,255.26 254.02,254.91 255.37,254.57 256.71,254.22 258.06,253.88 259.41,253.55 260.75,253.21 262.1,252.88 263.45,252.56 264.79,252.23 266.14,251.91 267.49,251.6 268.83,251.28 270.18,250.97 271.53,250.66 272.87,250.35 274.22,250.05 275.56,249.75 276.91,249.46 278.26,249.16 279.6,248.87 280.95,248.58 282.3,248.3 283.64,248.01 284.99,247.73 286.34,247.46 287.68,247.18 289.03,246.91 290.38,246.64 291.72,246.37 293.07,246.11 294.42,245.85 295.76,245.59 297.11,245.33 298.46,245.08 299.8,244.82 301.15,244.57 302.5,244.33 303.84,244.08 305.19,243.84 306.53,243.6 307.88,243.36 309.23,243.13 310.57,242.89 311.92,242.66 313.27,242.43 314.61,242.21 315.96,241.98 317.31,241.76 318.65,241.54 320,241.32" class="curve" stroke="#3b82f6" stroke-width="2"/>
+    <circle cx="173.6" cy="283.03" r="3.6" fill="#d97706"/>
+    <line x1="173.6" y1="348" x2="173.6" y2="283.03" class="thin dash" stroke="#d97706" stroke-width="1.3"/>
+    <line x1="76" y1="283.03" x2="173.6" y2="283.03" class="thin dash" stroke="#d97706" stroke-width="1.3"/>
+    <line x1="76" y1="348" x2="330" y2="348" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="76" y1="348" x2="76" y2="214" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="76" y1="348" x2="76" y2="352" class="tick"/>
+    <text x="76" y="364" text-anchor="middle" class="sm dim">0</text>
+    <line x1="173.6" y1="348" x2="173.6" y2="352" class="tick"/>
+    <text x="173.6" y="364" text-anchor="middle" class="sm dim">12</text>
+    <line x1="320" y1="348" x2="320" y2="352" class="tick"/>
+    <text x="320" y="364" text-anchor="middle" class="sm dim">30</text>
+    <line x1="72" y1="309.25" x2="76" y2="309.25" class="tick"/>
+    <text x="68" y="312.85" text-anchor="end" class="sm dim">5</text>
+    <line x1="72" y1="270.5" x2="76" y2="270.5" class="tick"/>
+    <text x="68" y="274.1" text-anchor="end" class="sm dim">10</text>
+    <line x1="72" y1="231.75" x2="76" y2="231.75" class="tick"/>
+    <text x="68" y="235.35" text-anchor="end" class="sm dim">15</text>
+    <text x="320" y="380" text-anchor="end" class="sm dim">term n</text>
+    <text x="72" y="210" text-anchor="start" class="sm dim">a₍ₙ₎</text>
+  </g>
 </svg>

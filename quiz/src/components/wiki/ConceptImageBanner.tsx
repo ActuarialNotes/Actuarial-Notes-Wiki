@@ -7,6 +7,8 @@ import {
 } from '@/lib/distributions'
 import { buildContinuousCurve, buildMassPoints } from '@/lib/distributionPlot'
 import { useFiguresCollapsed } from '@/hooks/useFiguresCollapsed'
+import { useTheme } from '@/hooks/useTheme'
+import { isThemedFigure, themedFigureSrc } from '@/lib/figureTheme'
 
 /**
  * A concept's figure, shown at the top of the concept popup.
@@ -134,6 +136,7 @@ function DistributionPreview({ spec }: { spec: DistributionSpec }) {
 export function ConceptImageBanner({ images, onOpen, className }: ConceptImageBannerProps) {
   const [index, setIndex] = useState(0)
   const [collapsed, setCollapsed] = useFiguresCollapsed()
+  const { theme } = useTheme()
   // A figure whose file 404s is dropped rather than left as a broken frame the
   // Previous/Next counter still counts.
   const [failed, setFailed] = useState<ReadonlySet<string>>(() => new Set())
@@ -165,8 +168,12 @@ export function ConceptImageBanner({ images, onOpen, className }: ConceptImageBa
   // The popup this sits in is itself `bg-card`, so the card *shadow* has
   // nothing to lift off — an inset region on a card takes the hairline instead
   // (docs/style-guide.md §6.2: borders and shadows are alternatives). The
-  // simulator card supplies its own edge (the foil ring), so the hairline is
-  // kept out of the shared base.
+  // hairline is kept out of the shared base because two of the three things
+  // that use it supply an edge of their own: the simulator card wears the foil
+  // ring, and a generated figure draws its own rounded card in `--edge` (which
+  // is `--border`, the same hairline). Adding one around those gave a box
+  // inside a box 8px apart. A photograph or a screenshot the vault embeds
+  // instead of a generated figure has no edge of its own and still takes one.
   const cardClass =
     'group block w-full rounded-lg text-left transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
 
@@ -228,12 +235,17 @@ export function ConceptImageBanner({ images, onOpen, className }: ConceptImageBa
             type="button"
             onClick={() => onOpen(images.indexOf(current))}
             data-sound="open"
-            className={`${cardClass} overflow-hidden border border-border p-2`}
+            className={`${cardClass} overflow-hidden p-2${
+              isThemedFigure(current.src) ? '' : ' border border-border'
+            }`}
             aria-label={`View ${current.alt || 'figure'} full screen`}
           >
             <img
               key={current.src}
-              src={current.src}
+              // The figure carries both palettes; the URL says which one this
+              // reader is in (`lib/figureTheme.ts`). Without it an OS-light
+              // reader on the default dark app got a white panel on a black card.
+              src={themedFigureSrc(current.src, theme)}
               alt={current.alt}
               // Concept figures are portrait (see docs/concept-figures.md), so a
               // landscape-era height cap would shrink them to an unreadable column.

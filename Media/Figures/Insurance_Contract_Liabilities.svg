@@ -1,15 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>The insurer's contract liability split into the two halves, measured on entirely different bases</title>
   <style>:root {
-  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
-  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+  --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
-    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+    --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+    --grid: #333333; --soft: #242424; --axis: #6b6b6b;
   }
 }
+/* Named by the host in the embed URL (`…svg#dark`), and beats the media query
+   above because a value set here lands on the drawing rather than on the root
+   it inherits from. See the module docstring. */
+#light:target ~ * { --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c; }
+#dark:target ~ * { --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+  --grid: #333333; --soft: #242424; --axis: #6b6b6b; }
 text {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
                "Helvetica Neue", Arial, sans-serif;
@@ -38,34 +45,37 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
-  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="31" text-anchor="middle" class="ttl">Two halves that share nothing but a</text>
-  <text x="180" y="50" text-anchor="middle" class="ttl">total</text>
-  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-  <text x="180" y="430" text-anchor="middle" class="fml">ICL = LRC + LIC</text>
-  <text x="180" y="452" text-anchor="middle" class="fml2">$190M + $450M = $640M</text>
-  <rect x="40" y="109" width="83.12" height="38" rx="4" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.2"/>
-  <text x="81.56" y="132" text-anchor="middle" class="sm">LRC 190</text>
-  <rect x="123.12" y="109" width="196.88" height="38" rx="4" fill="#d97706" fill-opacity="0.30" stroke="#d97706" stroke-width="1.2"/>
-  <text x="221.56" y="132" text-anchor="middle" class="sm">LIC 450</text>
-  <rect x="30" y="168" width="143" height="134" rx="7" fill="#3b82f6" fill-opacity="0.08" stroke="#3b82f6" stroke-width="1.2"/>
-  <rect x="30" y="168" width="143" height="24" rx="7" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
-  <text x="101.5" y="184" text-anchor="middle" class="sm bold" fill="#3b82f6">LRC</text>
-  <text x="101.5" y="212" text-anchor="middle" class="sm">premium-driven</text>
-  <text x="101.5" y="232" text-anchor="middle" class="sm">released as</text>
-  <text x="101.5" y="252" text-anchor="middle" class="sm">coverage is given</text>
-  <text x="101.5" y="272" text-anchor="middle" class="sm">unearned premium's</text>
-  <text x="101.5" y="292" text-anchor="middle" class="sm">successor</text>
-  <rect x="187" y="168" width="143" height="134" rx="7" fill="#d97706" fill-opacity="0.08" stroke="#d97706" stroke-width="1.2"/>
-  <rect x="187" y="168" width="143" height="24" rx="7" fill="#d97706" fill-opacity="0.22" stroke="none"/>
-  <text x="258.5" y="184" text-anchor="middle" class="sm bold" fill="#d97706">LIC</text>
-  <text x="258.5" y="212" text-anchor="middle" class="sm">claim-driven</text>
-  <text x="258.5" y="232" text-anchor="middle" class="sm">run off as</text>
-  <text x="258.5" y="252" text-anchor="middle" class="sm">claims are paid</text>
-  <text x="258.5" y="272" text-anchor="middle" class="sm">case, IBNR, ALAE</text>
-  <text x="258.5" y="292" text-anchor="middle" class="sm">— the actuary's half</text>
-  <text x="180" y="322" text-anchor="middle" class="sm dim">confusing the two is the commonest IFRS 17 error</text>
-  <text x="180" y="348" text-anchor="middle" class="sm dim">reinsurance held is a separate asset, so the</text>
-  <text x="180" y="364" text-anchor="middle" class="sm dim">balance sheet shows both liabilities gross</text>
-  <text x="180" y="388" text-anchor="middle" class="sm dim">and the Appointed Actuary opines on the total</text>
+  <g id="light"/><g id="dark"/>
+  <g class="art">
+    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+    <text x="180" y="31" text-anchor="middle" class="ttl">Two halves that share nothing but a</text>
+    <text x="180" y="50" text-anchor="middle" class="ttl">total</text>
+    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+    <text x="180" y="430" text-anchor="middle" class="fml">ICL = LRC + LIC</text>
+    <text x="180" y="452" text-anchor="middle" class="fml2">$190M + $450M = $640M</text>
+    <rect x="40" y="109" width="83.12" height="38" rx="4" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="81.56" y="132" text-anchor="middle" class="sm">LRC 190</text>
+    <rect x="123.12" y="109" width="196.88" height="38" rx="4" fill="#d97706" fill-opacity="0.30" stroke="#d97706" stroke-width="1.2"/>
+    <text x="221.56" y="132" text-anchor="middle" class="sm">LIC 450</text>
+    <rect x="30" y="168" width="143" height="134" rx="7" fill="#3b82f6" fill-opacity="0.08" stroke="#3b82f6" stroke-width="1.2"/>
+    <rect x="30" y="168" width="143" height="24" rx="7" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+    <text x="101.5" y="184" text-anchor="middle" class="sm bold" fill="#3b82f6">LRC</text>
+    <text x="101.5" y="212" text-anchor="middle" class="sm">premium-driven</text>
+    <text x="101.5" y="232" text-anchor="middle" class="sm">released as</text>
+    <text x="101.5" y="252" text-anchor="middle" class="sm">coverage is given</text>
+    <text x="101.5" y="272" text-anchor="middle" class="sm">unearned premium's</text>
+    <text x="101.5" y="292" text-anchor="middle" class="sm">successor</text>
+    <rect x="187" y="168" width="143" height="134" rx="7" fill="#d97706" fill-opacity="0.08" stroke="#d97706" stroke-width="1.2"/>
+    <rect x="187" y="168" width="143" height="24" rx="7" fill="#d97706" fill-opacity="0.22" stroke="none"/>
+    <text x="258.5" y="184" text-anchor="middle" class="sm bold" fill="#d97706">LIC</text>
+    <text x="258.5" y="212" text-anchor="middle" class="sm">claim-driven</text>
+    <text x="258.5" y="232" text-anchor="middle" class="sm">run off as</text>
+    <text x="258.5" y="252" text-anchor="middle" class="sm">claims are paid</text>
+    <text x="258.5" y="272" text-anchor="middle" class="sm">case, IBNR, ALAE</text>
+    <text x="258.5" y="292" text-anchor="middle" class="sm">— the actuary's half</text>
+    <text x="180" y="322" text-anchor="middle" class="sm dim">confusing the two is the commonest IFRS 17 error</text>
+    <text x="180" y="348" text-anchor="middle" class="sm dim">reinsurance held is a separate asset, so the</text>
+    <text x="180" y="364" text-anchor="middle" class="sm dim">balance sheet shows both liabilities gross</text>
+    <text x="180" y="388" text-anchor="middle" class="sm dim">and the Appointed Actuary opines on the total</text>
+  </g>
 </svg>

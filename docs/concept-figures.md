@@ -78,16 +78,71 @@ reasons:
 1. **Theme.** The quiz app defaults to a **dark** canvas, while the vault is also read in
    Obsidian, on GitHub, and on the published light site. An embed becomes
    `<img src="…svg">`, and an image cannot inherit the app's CSS variables — so each
-   figure carries its own palette: a light default plus a
-   `@media (prefers-color-scheme: dark)` override. The matplotlib SVGs, which are dark
+   figure carries both palettes and two ways to choose between them (see
+   *Which theme a figure picks* below). The matplotlib SVGs, which are dark
    ink on a transparent background, are close to invisible on the app's default theme.
 2. **Diagrams, not plots.** Most of this material is timelines, Venn diagrams, step
    functions and stacked bars, which matplotlib is a poor fit for.
 3. **Size.** A hand-written figure is ~6 KB; the equivalent matplotlib output is ~40 KB.
 
-Only the neutrals (`--surf`, `--ink`, `--dim`, `--edge`, `--soft`, `--axis`) swap by
-theme. The series colours are fixed hexes chosen to stay legible against both the light
-surface and the dark one, so a blue curve is the same blue in either mode.
+Only the neutrals (`--surf`, `--ink`, `--dim`, `--edge`, `--grid`, `--soft`, `--axis`)
+swap by theme. The series colours are fixed hexes and stay put, so a blue curve is the
+same blue in either mode; each clears 3:1 — the WCAG bar for a graphical object — against
+both surfaces.
+
+### The neutrals are the app's tokens
+
+They are not a palette of the figures' own: every one is a value from
+`quiz/src/index.css`, transcribed as hex. The app's scheme is achromatic
+(`0 0% L%` throughout), so the transcription is exact rather than a match by eye, and
+`scripts/test_figure_kit.py` asserts it — a token that moves in `index.css` fails that
+test until `figure_kit.py` moves with it and the figures are regenerated.
+
+| Figure variable | App token | |
+|---|---|---|
+| `--surf` | `--card` | the figure's own rounded card |
+| `--edge` | `--border` | its hairline |
+| `--ink` | `--foreground` | titles, labels, the formula |
+| `--dim` | `--muted-foreground` | captions and secondary labels |
+| `--grid` | `--accent` | plot gridlines |
+| `--soft` | `--muted` | shaded regions |
+| `--axis` | `--input` | axes, ticks, arrowheads |
+
+Because `--surf` *is* `--card`, a figure sits on a concept page as one surface with the
+card behind it, and its `--edge` is the same hairline the app draws elsewhere. That is
+why the concept popup's figure button adds no border of its own
+(`components/wiki/ConceptImageBanner.tsx`) — the figure already has one, and two of them
+8px apart read as a box inside a box. A photograph or screenshot the vault embeds
+instead has no edge of its own and still gets one.
+
+### Which theme a figure picks
+
+A figure holds both palettes and decides between them in one of two ways:
+
+- **On its own** — in Obsidian, on GitHub, opened as a file — from the reader's OS, via
+  `@media (prefers-color-scheme: dark)`.
+- **In the app**, from a `#dark` / `#light` fragment the host puts on the embed URL,
+  which overrides the media query through a `:target` rule.
+
+The second exists because the OS is the wrong signal inside the app. The theme there is
+a toggle that defaults to dark and never consults `prefers-color-scheme` (`useTheme`, a
+`.dark` class on `<html>`), so the common case — an OS-light reader on the default dark
+app — used to render a white figure on a black card. A fragment is the only channel
+available: an `<img>` renders its SVG as an isolated document with no script and no view
+of the host, so the `.dark` class and the app's custom properties are unreachable from
+inside it.
+
+`quiz/src/lib/figureTheme.ts` is the app half — it appends the fragment, and only to
+`Media/Figures/*.svg`, since nothing else carries a second palette. A host that passes
+no fragment falls back to the media query, so the figures stay self-contained
+everywhere else.
+
+Two structural rules in `figure_kit.py` make this work, and a `:target` figure breaks
+quietly without them: the two anchor `<g>` elements must come **before** both `<defs>`
+and the drawing (the rules reach forward with a sibling combinator), and `<defs>` must
+be among what they reach — a marker takes its custom properties from where it is
+defined, not from the element referencing it, so an arrowhead would otherwise keep the
+media query's colour while the rest of the figure switched.
 
 ## Adding or changing a figure
 
@@ -98,7 +153,9 @@ surface and the dark one, so a blue curve is the same blue in either mode.
    `@figure("Concept Name", "alt text", width=WID)`. The concept name must match
    `Concepts/<name>.md` exactly; the slug is derived from it.
 2. Run the generator and look at the result — the fastest check is to open the SVG
-   directly, in both light and dark, before committing.
+   directly, in both light and dark, before committing. Opening the file plain follows
+   your OS setting; append `#dark` or `#light` to the URL to see what the app will show.
+   `python3 -m unittest scripts.test_figure_kit` re-checks the palette and its contrast.
 3. `--check` exits non-zero while any exam concept still lacks a figure.
    `--embed` inserts a missing embed and rewrites the width of an existing one, so a
    change of canvas size reaches the pages too.

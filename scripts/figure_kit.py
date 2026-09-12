@@ -6,9 +6,23 @@ this module. It exists instead of matplotlib for three reasons:
 1. **Theme.** The quiz app defaults to a *dark* canvas, and the vault is also read
    in Obsidian, on GitHub, and on the published light site. A figure is embedded
    as `<img src="...svg">`, so it cannot inherit the app's CSS variables — it has
-   to carry its own palette. Every figure here ships a `<style>` block with a
-   light default and a `@media (prefers-color-scheme: dark)` override, so it is
-   legible on either background and never depends on the host page.
+   to carry its own palette. Every figure here ships a `<style>` block holding
+   *both* palettes and two ways to choose between them:
+
+   - **On its own** (Obsidian, GitHub, a direct file open) it follows the
+     reader's OS setting, via `@media (prefers-color-scheme: dark)`.
+   - **In the app** the OS setting is the wrong signal: the theme is a user
+     toggle that defaults to dark and never consults the OS (`useTheme`, a
+     `.dark` class on `<html>`), so an OS-light reader on the default dark app
+     got a white figure on a black card. The host therefore *names* the theme
+     in the embed URL — `…/Exposure_Base.svg#dark` — and the `:target` rules
+     below override the media query. A fragment is the only channel into an
+     `<img>`: the referenced document is isolated, so the host's class and
+     custom properties are invisible to it, and it runs no script.
+
+   A host that passes no fragment, or a renderer that ignores `:target`, falls
+   back to the media query — i.e. to exactly the old behaviour — so the figures
+   stay self-contained everywhere else.
 2. **Diagrams, not just plots.** Most of these figures are timelines, Venn
    diagrams, step functions and stacked bars rather than data plots.
 3. **Size.** Hand-written SVG is ~2 KB per figure; matplotlib's is ~40 KB.
@@ -29,8 +43,12 @@ from pathlib import Path
 from xml.sax.saxutils import escape
 
 # ── palette ──────────────────────────────────────────────────────────────────
-# Series colours are fixed hexes chosen to clear 4.5:1 against *both* the light
-# surface (#ffffff) and the dark one (#1a1d24); only the neutrals swap by theme.
+# Series colours are fixed hexes and do not swap by theme: they are the *data*
+# layer, and a curve that changed hue between modes would stop being the same
+# series. Each clears 3:1 — the WCAG bar for a graphical object — against both
+# surfaces (#ffffff and #171717). They are strokes, fills and chips, never body
+# text, so 3:1 rather than 4.5:1 is the bar that applies; run
+# `python3 -m unittest scripts.test_figure_kit` to re-check after an edit.
 BLUE = "#3b82f6"
 AMBER = "#d97706"
 GREEN = "#059669"
@@ -39,17 +57,55 @@ VIOLET = "#7c3aed"
 TEAL = "#0d9488"
 SERIES = [BLUE, AMBER, GREEN, VIOLET, ROSE, TEAL]
 
-STYLE = """
-:root {
-  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
-  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
-    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
-  }
-}
+# The neutrals are not a palette of this module's own: they are the quiz app's
+# tokens, read out of `quiz/src/index.css` as hex. Those tokens are achromatic
+# (`0 0% L%`), so this is an exact transcription rather than a match by eye —
+# which is the point. A figure drawn in zinc and slate sat on a concept page as
+# a faintly blue panel on a neutral ground; drawn in these, its surface *is* the
+# card behind it. Keep the two in step: move a token in index.css and you move
+# it here, then regenerate.
+#
+#     --surf  ← --card              --grid  ← --accent
+#     --edge  ← --border            --soft  ← --muted
+#     --ink   ← --foreground        --axis  ← --input
+#     --dim   ← --muted-foreground
+LIGHT = """--surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;"""
+
+DARK = """--surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+  --grid: #333333; --soft: #242424; --axis: #6b6b6b;"""
+
+def _indent(block: str) -> str:
+    """Re-indent a palette block's continuation lines by one more level."""
+    return block.replace("\n  ", "\n    ")
+
+
+# The two anchors the `:target` rules hang off. They are empty and paint
+# nothing; all they do is give the embed URL something to name. Emitted
+# *before* `<defs>` and the drawing so the sibling combinator reaches both —
+# a marker lives in `<defs>` and inherits from there, not from the element
+# that references it, so an arrowhead drawn in `var(--axis)` would otherwise
+# keep the media query's value while the rest of the figure switched.
+THEME_ANCHORS = '<g id="light"/><g id="dark"/>'
+
+# Which of the two palettes applies, and how the host names one. Kept apart
+# from the rules below so the rest of the sheet stays a plain string.
+_THEME_RULES = f"""
+:root {{
+  {LIGHT}
+}}
+@media (prefers-color-scheme: dark) {{
+  :root {{
+    {_indent(DARK)}
+  }}
+}}
+/* Named by the host in the embed URL (`…svg#dark`), and beats the media query
+   above because a value set here lands on the drawing rather than on the root
+   it inherits from. See the module docstring. */
+#light:target ~ * {{ {LIGHT} }}
+#dark:target ~ * {{ {DARK} }}"""
+
+_RULES = """
 text {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
                "Helvetica Neue", Arial, sans-serif;
@@ -78,7 +134,9 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }
-""".strip()
+"""
+
+STYLE = (_THEME_RULES + _RULES).strip()
 
 
 def _fmt(v: float) -> str:
@@ -219,16 +277,27 @@ class Fig:
 
     # -- output --------------------------------------------------------------
     def svg(self) -> str:
-        body = "\n  ".join(self.parts)
+        """Serialise the figure.
+
+        Document order matters and is not free to change: `<style>`, then the
+        two theme anchors, then `<defs>`, then the drawing. The `:target` rules
+        reach forward with a sibling combinator, so anything that needs to see
+        the chosen palette has to come *after* the anchors — `<defs>` included,
+        since a marker takes its custom properties from where it is defined
+        rather than from the element referencing it.
+        """
+        body = "\n    ".join(self.parts)
         defs = ("\n  <defs>\n    " + "\n    ".join(self.defs) + "\n  </defs>") if self.defs else ""
         title = f"\n  <title>{escape(self.alt)}</title>" if self.alt else ""
         return (
             f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {_fmt(self.w)} {_fmt(self.h)}" '
             f'width="{_fmt(self.w)}" height="{_fmt(self.h)}" role="img">{title}\n'
-            f"  <style>{STYLE}</style>{defs}\n"
-            f'  <rect class="card" x="0.6" y="0.6" width="{_fmt(self.w - 1.2)}" '
+            f"  <style>{STYLE}</style>\n"
+            f"  {THEME_ANCHORS}{defs}\n"
+            f'  <g class="art">\n'
+            f'    <rect class="card" x="0.6" y="0.6" width="{_fmt(self.w - 1.2)}" '
             f'height="{_fmt(self.h - 1.2)}" rx="10"/>\n'
-            f"  {body}\n</svg>\n"
+            f"    {body}\n  </g>\n</svg>\n"
         )
 
     def save(self, out_dir: Path, name: str) -> Path:

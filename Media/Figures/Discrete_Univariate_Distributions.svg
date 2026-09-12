@@ -1,15 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>The six discrete families on the syllabus, each drawn as a probability mass function</title>
   <style>:root {
-  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
-  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+  --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
-    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+    --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+    --grid: #333333; --soft: #242424; --axis: #6b6b6b;
   }
 }
+/* Named by the host in the embed URL (`…svg#dark`), and beats the media query
+   above because a value set here lands on the drawing rather than on the root
+   it inherits from. See the module docstring. */
+#light:target ~ * { --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c; }
+#dark:target ~ * { --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+  --grid: #333333; --soft: #242424; --axis: #6b6b6b; }
 text {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
                "Helvetica Neue", Arial, sans-serif;
@@ -38,123 +45,126 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
-  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="40" text-anchor="middle" class="ttl">The discrete families on the syllabus</text>
-  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-  <text x="180" y="430" text-anchor="middle" class="fml">p(k) = P(X = k),   Σ p(k) = 1</text>
-  <text x="180" y="452" text-anchor="middle" class="fml2">variance ÷ mean:  &lt;1 binomial, =1 Poisson</text>
-  <text x="99" y="90" text-anchor="middle" class="sm bold" fill="#3b82f6">Binomial</text>
-  <line x1="34" y1="154" x2="164" y2="154" class="axis"/>
-  <line x1="42.48" y1="154" x2="42.48" y2="151.09" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="42.48" cy="151.09" r="2.4" fill="#3b82f6"/>
-  <line x1="56.61" y1="154" x2="56.61" y2="138.46" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="56.61" cy="138.46" r="2.4" fill="#3b82f6"/>
-  <line x1="70.74" y1="154" x2="70.74" y2="117.75" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="70.74" cy="117.75" r="2.4" fill="#3b82f6"/>
-  <line x1="84.87" y1="154" x2="84.87" y2="105.67" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="84.87" cy="105.67" r="2.4" fill="#3b82f6"/>
-  <line x1="99" y1="154" x2="99" y2="113.72" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="99" cy="113.72" r="2.4" fill="#3b82f6"/>
-  <line x1="113.13" y1="154" x2="113.13" y2="132.52" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="113.13" cy="132.52" r="2.4" fill="#3b82f6"/>
-  <line x1="127.26" y1="154" x2="127.26" y2="146.84" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="127.26" cy="146.84" r="2.4" fill="#3b82f6"/>
-  <line x1="141.39" y1="154" x2="141.39" y2="152.64" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="141.39" cy="152.64" r="2.4" fill="#3b82f6"/>
-  <line x1="155.52" y1="154" x2="155.52" y2="153.89" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="155.52" cy="153.89" r="2.4" fill="#3b82f6"/>
-  <text x="255" y="90" text-anchor="middle" class="sm bold" fill="#d97706">Poisson</text>
-  <line x1="190" y1="154" x2="320" y2="154" class="axis"/>
-  <line x1="198.48" y1="154" x2="198.48" y2="138.53" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="198.48" cy="138.53" r="2.4" fill="#d97706"/>
-  <line x1="212.61" y1="154" x2="212.61" y2="115.33" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="212.61" cy="115.33" r="2.4" fill="#d97706"/>
-  <line x1="226.74" y1="154" x2="226.74" y2="105.67" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="226.74" cy="105.67" r="2.4" fill="#d97706"/>
-  <line x1="240.87" y1="154" x2="240.87" y2="113.72" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="240.87" cy="113.72" r="2.4" fill="#d97706"/>
-  <line x1="255" y1="154" x2="255" y2="128.83" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="255" cy="128.83" r="2.4" fill="#d97706"/>
-  <line x1="269.13" y1="154" x2="269.13" y2="141.41" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="269.13" cy="141.41" r="2.4" fill="#d97706"/>
-  <line x1="283.26" y1="154" x2="283.26" y2="148.76" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="283.26" cy="148.76" r="2.4" fill="#d97706"/>
-  <line x1="297.39" y1="154" x2="297.39" y2="152.13" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="297.39" cy="152.13" r="2.4" fill="#d97706"/>
-  <line x1="311.52" y1="154" x2="311.52" y2="153.41" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="311.52" cy="153.41" r="2.4" fill="#d97706"/>
-  <text x="99" y="190" text-anchor="middle" class="sm bold" fill="#059669">Geometric</text>
-  <line x1="34" y1="254" x2="164" y2="254" class="axis"/>
-  <line x1="42.48" y1="254" x2="42.48" y2="205.67" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="42.48" cy="205.67" r="2.4" fill="#059669"/>
-  <line x1="56.61" y1="254" x2="56.61" y2="227.42" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="56.61" cy="227.42" r="2.4" fill="#059669"/>
-  <line x1="70.74" y1="254" x2="70.74" y2="239.38" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="70.74" cy="239.38" r="2.4" fill="#059669"/>
-  <line x1="84.87" y1="254" x2="84.87" y2="245.96" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="84.87" cy="245.96" r="2.4" fill="#059669"/>
-  <line x1="99" y1="254" x2="99" y2="249.58" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="99" cy="249.58" r="2.4" fill="#059669"/>
-  <line x1="113.13" y1="254" x2="113.13" y2="251.57" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="113.13" cy="251.57" r="2.4" fill="#059669"/>
-  <line x1="127.26" y1="254" x2="127.26" y2="252.66" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="127.26" cy="252.66" r="2.4" fill="#059669"/>
-  <line x1="141.39" y1="254" x2="141.39" y2="253.26" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="141.39" cy="253.26" r="2.4" fill="#059669"/>
-  <line x1="155.52" y1="254" x2="155.52" y2="253.6" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="155.52" cy="253.6" r="2.4" fill="#059669"/>
-  <text x="255" y="190" text-anchor="middle" class="sm bold" fill="#0d9488">Negative binomial</text>
-  <line x1="190" y1="254" x2="320" y2="254" class="axis"/>
-  <line x1="198.48" y1="254" x2="198.48" y2="205.67" stroke="#0d9488" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="198.48" cy="205.67" r="2.4" fill="#0d9488"/>
-  <line x1="212.61" y1="254" x2="212.61" y2="217.75" stroke="#0d9488" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="212.61" cy="217.75" r="2.4" fill="#0d9488"/>
-  <line x1="226.74" y1="254" x2="226.74" y2="235.88" stroke="#0d9488" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="226.74" cy="235.88" r="2.4" fill="#0d9488"/>
-  <line x1="240.87" y1="254" x2="240.87" y2="246.45" stroke="#0d9488" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="240.87" cy="246.45" r="2.4" fill="#0d9488"/>
-  <line x1="255" y1="254" x2="255" y2="251.17" stroke="#0d9488" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="255" cy="251.17" r="2.4" fill="#0d9488"/>
-  <line x1="269.13" y1="254" x2="269.13" y2="253.01" stroke="#0d9488" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="269.13" cy="253.01" r="2.4" fill="#0d9488"/>
-  <line x1="283.26" y1="254" x2="283.26" y2="253.67" stroke="#0d9488" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="283.26" cy="253.67" r="2.4" fill="#0d9488"/>
-  <line x1="297.39" y1="254" x2="297.39" y2="253.89" stroke="#0d9488" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="297.39" cy="253.89" r="2.4" fill="#0d9488"/>
-  <line x1="311.52" y1="254" x2="311.52" y2="253.97" stroke="#0d9488" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="311.52" cy="253.97" r="2.4" fill="#0d9488"/>
-  <text x="99" y="290" text-anchor="middle" class="sm bold" fill="#7c3aed">Hypergeometric</text>
-  <line x1="34" y1="354" x2="164" y2="354" class="axis"/>
-  <line x1="42.48" y1="354" x2="42.48" y2="353.7" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="42.48" cy="353.7" r="2.4" fill="#7c3aed"/>
-  <line x1="56.61" y1="354" x2="56.61" y2="351.63" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="56.61" cy="351.63" r="2.4" fill="#7c3aed"/>
-  <line x1="70.74" y1="354" x2="70.74" y2="345.71" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="70.74" cy="345.71" r="2.4" fill="#7c3aed"/>
-  <line x1="84.87" y1="354" x2="84.87" y2="315.33" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="84.87" cy="315.33" r="2.4" fill="#7c3aed"/>
-  <line x1="99" y1="354" x2="99" y2="305.67" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="99" cy="305.67" r="2.4" fill="#7c3aed"/>
-  <line x1="113.13" y1="354" x2="113.13" y2="315.33" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="113.13" cy="315.33" r="2.4" fill="#7c3aed"/>
-  <line x1="127.26" y1="354" x2="127.26" y2="345.71" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="127.26" cy="345.71" r="2.4" fill="#7c3aed"/>
-  <line x1="141.39" y1="354" x2="141.39" y2="351.63" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="141.39" cy="351.63" r="2.4" fill="#7c3aed"/>
-  <line x1="155.52" y1="354" x2="155.52" y2="353.7" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="155.52" cy="353.7" r="2.4" fill="#7c3aed"/>
-  <text x="255" y="290" text-anchor="middle" class="sm bold" fill="#e11d48">Discrete uniform</text>
-  <line x1="190" y1="354" x2="320" y2="354" class="axis"/>
-  <line x1="198.48" y1="354" x2="198.48" y2="305.67" stroke="#e11d48" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="198.48" cy="305.67" r="2.4" fill="#e11d48"/>
-  <line x1="212.61" y1="354" x2="212.61" y2="305.67" stroke="#e11d48" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="212.61" cy="305.67" r="2.4" fill="#e11d48"/>
-  <line x1="226.74" y1="354" x2="226.74" y2="305.67" stroke="#e11d48" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="226.74" cy="305.67" r="2.4" fill="#e11d48"/>
-  <line x1="240.87" y1="354" x2="240.87" y2="305.67" stroke="#e11d48" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="240.87" cy="305.67" r="2.4" fill="#e11d48"/>
-  <line x1="255" y1="354" x2="255" y2="305.67" stroke="#e11d48" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="255" cy="305.67" r="2.4" fill="#e11d48"/>
-  <line x1="269.13" y1="354" x2="269.13" y2="305.67" stroke="#e11d48" stroke-width="2.6" stroke-linecap="round"/>
-  <circle cx="269.13" cy="305.67" r="2.4" fill="#e11d48"/>
+  <g id="light"/><g id="dark"/>
+  <g class="art">
+    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+    <text x="180" y="40" text-anchor="middle" class="ttl">The discrete families on the syllabus</text>
+    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+    <text x="180" y="430" text-anchor="middle" class="fml">p(k) = P(X = k),   Σ p(k) = 1</text>
+    <text x="180" y="452" text-anchor="middle" class="fml2">variance ÷ mean:  &lt;1 binomial, =1 Poisson</text>
+    <text x="99" y="90" text-anchor="middle" class="sm bold" fill="#3b82f6">Binomial</text>
+    <line x1="34" y1="154" x2="164" y2="154" class="axis"/>
+    <line x1="42.48" y1="154" x2="42.48" y2="151.09" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="42.48" cy="151.09" r="2.4" fill="#3b82f6"/>
+    <line x1="56.61" y1="154" x2="56.61" y2="138.46" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="56.61" cy="138.46" r="2.4" fill="#3b82f6"/>
+    <line x1="70.74" y1="154" x2="70.74" y2="117.75" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="70.74" cy="117.75" r="2.4" fill="#3b82f6"/>
+    <line x1="84.87" y1="154" x2="84.87" y2="105.67" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="84.87" cy="105.67" r="2.4" fill="#3b82f6"/>
+    <line x1="99" y1="154" x2="99" y2="113.72" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="99" cy="113.72" r="2.4" fill="#3b82f6"/>
+    <line x1="113.13" y1="154" x2="113.13" y2="132.52" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="113.13" cy="132.52" r="2.4" fill="#3b82f6"/>
+    <line x1="127.26" y1="154" x2="127.26" y2="146.84" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="127.26" cy="146.84" r="2.4" fill="#3b82f6"/>
+    <line x1="141.39" y1="154" x2="141.39" y2="152.64" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="141.39" cy="152.64" r="2.4" fill="#3b82f6"/>
+    <line x1="155.52" y1="154" x2="155.52" y2="153.89" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="155.52" cy="153.89" r="2.4" fill="#3b82f6"/>
+    <text x="255" y="90" text-anchor="middle" class="sm bold" fill="#d97706">Poisson</text>
+    <line x1="190" y1="154" x2="320" y2="154" class="axis"/>
+    <line x1="198.48" y1="154" x2="198.48" y2="138.53" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="198.48" cy="138.53" r="2.4" fill="#d97706"/>
+    <line x1="212.61" y1="154" x2="212.61" y2="115.33" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="212.61" cy="115.33" r="2.4" fill="#d97706"/>
+    <line x1="226.74" y1="154" x2="226.74" y2="105.67" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="226.74" cy="105.67" r="2.4" fill="#d97706"/>
+    <line x1="240.87" y1="154" x2="240.87" y2="113.72" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="240.87" cy="113.72" r="2.4" fill="#d97706"/>
+    <line x1="255" y1="154" x2="255" y2="128.83" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="255" cy="128.83" r="2.4" fill="#d97706"/>
+    <line x1="269.13" y1="154" x2="269.13" y2="141.41" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="269.13" cy="141.41" r="2.4" fill="#d97706"/>
+    <line x1="283.26" y1="154" x2="283.26" y2="148.76" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="283.26" cy="148.76" r="2.4" fill="#d97706"/>
+    <line x1="297.39" y1="154" x2="297.39" y2="152.13" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="297.39" cy="152.13" r="2.4" fill="#d97706"/>
+    <line x1="311.52" y1="154" x2="311.52" y2="153.41" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="311.52" cy="153.41" r="2.4" fill="#d97706"/>
+    <text x="99" y="190" text-anchor="middle" class="sm bold" fill="#059669">Geometric</text>
+    <line x1="34" y1="254" x2="164" y2="254" class="axis"/>
+    <line x1="42.48" y1="254" x2="42.48" y2="205.67" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="42.48" cy="205.67" r="2.4" fill="#059669"/>
+    <line x1="56.61" y1="254" x2="56.61" y2="227.42" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="56.61" cy="227.42" r="2.4" fill="#059669"/>
+    <line x1="70.74" y1="254" x2="70.74" y2="239.38" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="70.74" cy="239.38" r="2.4" fill="#059669"/>
+    <line x1="84.87" y1="254" x2="84.87" y2="245.96" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="84.87" cy="245.96" r="2.4" fill="#059669"/>
+    <line x1="99" y1="254" x2="99" y2="249.58" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="99" cy="249.58" r="2.4" fill="#059669"/>
+    <line x1="113.13" y1="254" x2="113.13" y2="251.57" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="113.13" cy="251.57" r="2.4" fill="#059669"/>
+    <line x1="127.26" y1="254" x2="127.26" y2="252.66" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="127.26" cy="252.66" r="2.4" fill="#059669"/>
+    <line x1="141.39" y1="254" x2="141.39" y2="253.26" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="141.39" cy="253.26" r="2.4" fill="#059669"/>
+    <line x1="155.52" y1="254" x2="155.52" y2="253.6" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="155.52" cy="253.6" r="2.4" fill="#059669"/>
+    <text x="255" y="190" text-anchor="middle" class="sm bold" fill="#0d9488">Negative binomial</text>
+    <line x1="190" y1="254" x2="320" y2="254" class="axis"/>
+    <line x1="198.48" y1="254" x2="198.48" y2="205.67" stroke="#0d9488" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="198.48" cy="205.67" r="2.4" fill="#0d9488"/>
+    <line x1="212.61" y1="254" x2="212.61" y2="217.75" stroke="#0d9488" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="212.61" cy="217.75" r="2.4" fill="#0d9488"/>
+    <line x1="226.74" y1="254" x2="226.74" y2="235.88" stroke="#0d9488" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="226.74" cy="235.88" r="2.4" fill="#0d9488"/>
+    <line x1="240.87" y1="254" x2="240.87" y2="246.45" stroke="#0d9488" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="240.87" cy="246.45" r="2.4" fill="#0d9488"/>
+    <line x1="255" y1="254" x2="255" y2="251.17" stroke="#0d9488" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="255" cy="251.17" r="2.4" fill="#0d9488"/>
+    <line x1="269.13" y1="254" x2="269.13" y2="253.01" stroke="#0d9488" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="269.13" cy="253.01" r="2.4" fill="#0d9488"/>
+    <line x1="283.26" y1="254" x2="283.26" y2="253.67" stroke="#0d9488" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="283.26" cy="253.67" r="2.4" fill="#0d9488"/>
+    <line x1="297.39" y1="254" x2="297.39" y2="253.89" stroke="#0d9488" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="297.39" cy="253.89" r="2.4" fill="#0d9488"/>
+    <line x1="311.52" y1="254" x2="311.52" y2="253.97" stroke="#0d9488" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="311.52" cy="253.97" r="2.4" fill="#0d9488"/>
+    <text x="99" y="290" text-anchor="middle" class="sm bold" fill="#7c3aed">Hypergeometric</text>
+    <line x1="34" y1="354" x2="164" y2="354" class="axis"/>
+    <line x1="42.48" y1="354" x2="42.48" y2="353.7" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="42.48" cy="353.7" r="2.4" fill="#7c3aed"/>
+    <line x1="56.61" y1="354" x2="56.61" y2="351.63" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="56.61" cy="351.63" r="2.4" fill="#7c3aed"/>
+    <line x1="70.74" y1="354" x2="70.74" y2="345.71" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="70.74" cy="345.71" r="2.4" fill="#7c3aed"/>
+    <line x1="84.87" y1="354" x2="84.87" y2="315.33" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="84.87" cy="315.33" r="2.4" fill="#7c3aed"/>
+    <line x1="99" y1="354" x2="99" y2="305.67" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="99" cy="305.67" r="2.4" fill="#7c3aed"/>
+    <line x1="113.13" y1="354" x2="113.13" y2="315.33" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="113.13" cy="315.33" r="2.4" fill="#7c3aed"/>
+    <line x1="127.26" y1="354" x2="127.26" y2="345.71" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="127.26" cy="345.71" r="2.4" fill="#7c3aed"/>
+    <line x1="141.39" y1="354" x2="141.39" y2="351.63" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="141.39" cy="351.63" r="2.4" fill="#7c3aed"/>
+    <line x1="155.52" y1="354" x2="155.52" y2="353.7" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="155.52" cy="353.7" r="2.4" fill="#7c3aed"/>
+    <text x="255" y="290" text-anchor="middle" class="sm bold" fill="#e11d48">Discrete uniform</text>
+    <line x1="190" y1="354" x2="320" y2="354" class="axis"/>
+    <line x1="198.48" y1="354" x2="198.48" y2="305.67" stroke="#e11d48" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="198.48" cy="305.67" r="2.4" fill="#e11d48"/>
+    <line x1="212.61" y1="354" x2="212.61" y2="305.67" stroke="#e11d48" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="212.61" cy="305.67" r="2.4" fill="#e11d48"/>
+    <line x1="226.74" y1="354" x2="226.74" y2="305.67" stroke="#e11d48" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="226.74" cy="305.67" r="2.4" fill="#e11d48"/>
+    <line x1="240.87" y1="354" x2="240.87" y2="305.67" stroke="#e11d48" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="240.87" cy="305.67" r="2.4" fill="#e11d48"/>
+    <line x1="255" y1="354" x2="255" y2="305.67" stroke="#e11d48" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="255" cy="305.67" r="2.4" fill="#e11d48"/>
+    <line x1="269.13" y1="354" x2="269.13" y2="305.67" stroke="#e11d48" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="269.13" cy="305.67" r="2.4" fill="#e11d48"/>
+  </g>
 </svg>

@@ -47,8 +47,14 @@ export type SoundEvent =
   | 'open'
   /** …and slides back out. */
   | 'close'
-  /** A flick between pages of the same surface (prev/next, card flip). */
+  /** A flick between pages of the same surface (a flashcard turning over). */
   | 'page'
+  /**
+   * Stepping through a sequence: a Previous / Next footer, or a drag along the
+   * position bar above it. The quietest cue in the catalogue — it fires on
+   * every stop a drag crosses.
+   */
+  | 'ruffle'
   /** Riffling the flashcard deck into a new order. */
   | 'shuffle'
   /** A finished card sliding off the deck during "Clear Completed Flashcards". */
@@ -294,16 +300,25 @@ const G6 = 1568.0
  * way a glockenspiel bar or a music box tine does. Both partials are exact
  * harmonics, so stacking three of these into a triad stays consonant instead of
  * clanging like a real (inharmonic) bell.
+ *
+ * The partials are deliberately restrained: they are the difference between a
+ * struck bar and a beep, but past a certain level they are also the whole
+ * reason a chime reads as *bright* rather than *warm*. Both sit lower and die
+ * sooner than the ear would need to hear them as separate notes, the twelfth
+ * is a sine rather than a triangle (a triangle at 3f puts energy back up at 9f
+ * and 15f, which is exactly the glare this family is trying not to have), and
+ * the onset is slow enough to be a mallet on wood rather than metal — while
+ * staying fast enough to read as an impact.
  */
 function bell(
   freq: number,
   opts: { at: number; dur: number; gain?: number; attack?: number; hold?: number; sparkle?: number },
 ): ToneSpec[] {
-  const { at, dur, gain = 0.6, attack = 0.004, hold, sparkle = 1 } = opts
+  const { at, dur, gain = 0.6, attack = 0.007, hold, sparkle = 1 } = opts
   return [
     { at, dur, freq, type: 'sine', gain, attack, hold },
-    { at, dur: dur * 0.42, freq: freq * 2, type: 'sine', gain: gain * 0.3 * sparkle, attack: attack * 0.6 },
-    { at, dur: dur * 0.2, freq: freq * 3, type: 'triangle', gain: gain * 0.1 * sparkle, attack: 0.001 },
+    { at, dur: dur * 0.34, freq: freq * 2, type: 'sine', gain: gain * 0.22 * sparkle, attack: attack * 0.6 },
+    { at, dur: dur * 0.14, freq: freq * 3, type: 'sine', gain: gain * 0.05 * sparkle, attack: 0.002 },
   ]
 }
 
@@ -311,9 +326,14 @@ function bell(
  * The mallet itself: a few milliseconds of bandpassed noise at the moment of
  * the strike. Inaudible as its own event, but without it the bells fade up out
  * of nowhere and the cue loses its sense of impact.
+ *
+ * Pitched low and wide on purpose. Up around 3 kHz with a tight Q the strike
+ * stops being felt and starts being *heard*, as a tick on the front of every
+ * chime; down here it does the same job for the note behind it without adding
+ * a second event of its own.
  */
-function mallet(at = 0, gain = 0.3): NoiseSpec {
-  return { at, dur: 0.02, from: 3200, to: 1800, type: 'bandpass', q: 1.4, gain, swell: 0 }
+function mallet(at = 0, gain = 0.22): NoiseSpec {
+  return { at, dur: 0.022, from: 2400, to: 1300, type: 'bandpass', q: 1.1, gain, swell: 0 }
 }
 
 /**
@@ -430,11 +450,41 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     lowpass: 6000,
   },
   page: {
-    // A quick flick past one sheet to the next.
+    // A quick flick past one sheet to the next — one card turning over, or a
+    // page already open being returned to. Stepping *through* a sequence is
+    // `ruffle`, which is the same gesture done small enough to repeat.
     gain: 0.28,
     throttleMs: 70,
     noise: [{ at: 0, dur: 0.13, from: 1100, to: 3200, type: 'bandpass', q: 0.9, gain: 0.55, swell: 0.35 }],
     lowpass: 7000,
+  },
+  ruffle: {
+    // Stepping through a sequence — the Previous / Next footers and the
+    // position bar above them, in the concept popup, the PDF reader, flashcard
+    // study, mistakes review and math focus.
+    //
+    // This is the most-repeated cue in the app after the press transient, and
+    // the only one that fires *while a finger is still moving*: a drag along
+    // the bar sounds it once per stop it crosses, a dozen-plus times a second
+    // until the throttle catches it. So it is written to survive repetition
+    // rather than to be noticed — the quietest thing in the catalogue, a
+    // half-octave darker than `page`, and over in 70 ms.
+    //
+    // Three short brushes rather than one sweep. A single burst repeated
+    // quickly reads as a stutter of the same sound; three of them fanning past
+    // under one small swell reads as sheets moving against each other, which
+    // is what makes a drag sound like thumbing a stack instead of like a
+    // machine gun. The brushes fall in pitch and fade as they go, so the cue
+    // settles rather than arriving — nothing here should feel like an event.
+    gain: 0.18,
+    throttleMs: 40,
+    lowpass: 4800,
+    noise: [
+      { at: 0,     dur: 0.07,  from: 1500, to: 700,  type: 'bandpass', q: 0.8, gain: 0.3,  swell: 0.3 },
+      { at: 0,     dur: 0.012, from: 2200, to: 1500, type: 'bandpass', q: 1.6, gain: 0.26, swell: 0 },
+      { at: 0.022, dur: 0.012, from: 2000, to: 1400, type: 'bandpass', q: 1.6, gain: 0.2,  swell: 0 },
+      { at: 0.042, dur: 0.011, from: 1800, to: 1300, type: 'bandpass', q: 1.6, gain: 0.14, swell: 0 },
+    ],
   },
   shuffle: {
     // A quick riffle: short noise ticks fanning past like a thumbed stack of
@@ -465,9 +515,9 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     // a nineteen-card sweep keeps rising the whole way down the deck. No
     // `bloom` — the cue is dry, and twenty reverb tails overlapping is not a
     // sweep, it's a wash.
-    gain: 0.26,
+    gain: 0.21,
     throttleMs: 55,
-    lowpass: 6000,
+    lowpass: 5400,
     combo: { steps: [0, 2, 4, 7, 9], resetMs: 1500 },
     noise: [{ at: 0, dur: 0.12, from: 2400, to: 700, type: 'bandpass', q: 0.8, gain: 0.34, swell: 0.25 }],
     tones: [...bell(A4, { at: 0.02, dur: 0.22, gain: 0.4 })],
@@ -496,9 +546,9 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     // closes with it.
     // Quietest of the celebration cues on purpose: it fires forty times to
     // `complete`'s one, and the hierarchy has to hold.
-    gain: 0.44,
+    gain: 0.37,
     throttleMs: 90,
-    lowpass: 7000,
+    lowpass: 6000,
     space: 0.28,
     combo: { steps: [0, 2, 4, 7, 9], resetMs: 90_000, bloom: 1.7 },
     noise: [mallet()],
@@ -514,9 +564,9 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     // A card filed into the study deck: a soft thud plus one struck note —
     // lighter than `collect`, since this is just adding a card to a list, not
     // unlocking one through the ceremony. Barely any room on it.
-    gain: 0.34,
+    gain: 0.31,
     throttleMs: 90,
-    lowpass: 6500,
+    lowpass: 5600,
     space: 0.18,
     noise: [{ at: 0, dur: 0.05, from: 900, to: 400, type: 'bandpass', q: 0.9, gain: 0.3, swell: 0.15 }],
     tones: [...bell(D5, { at: 0.01, dur: 0.2, gain: 0.44 })],
@@ -525,9 +575,9 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     // The card landing in the deck: paper first, then a fifth higher, struck,
     // with a shimmer over the landing and a long tail. The ceremony earns more
     // room than anything else at this size.
-    gain: 0.5,
+    gain: 0.45,
     throttleMs: 150,
-    lowpass: 7500,
+    lowpass: 6400,
     space: 0.42,
     noise: [
       { at: 0, dur: 0.2, from: 900, to: 2600, type: 'bandpass', q: 0.8, gain: 0.35, swell: 0.4 },
@@ -541,22 +591,27 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     ],
   },
   levelUp: {
-    // A proper fanfare, in two halves: two quick notes as a pickup, then a
-    // second strike on the octave that holds. The rhythm is the point — an
-    // even run is a scale exercise, a fast run into a held arrival is an
-    // announcement. Root underneath, fifth entering with the landing.
-    gain: 0.54,
+    // A proper fanfare, in two strokes: a struck pickup, then the octave above
+    // it, struck again and held. The rhythm is the point — an even run is a
+    // scale exercise, a pickup into a held arrival is an announcement.
+    //
+    // It used to walk up through the fifth in between, a three-note arpeggio.
+    // Two notes say the same thing with less to hear: the octave leap *is* the
+    // rung being climbed, and dropping the middle note keeps a cue that can
+    // fire several times a session from settling into a jingle. The fifth
+    // hasn't gone anywhere — it enters underneath with the landing, as
+    // harmony rather than as a third event.
+    gain: 0.5,
     throttleMs: 200,
-    lowpass: 6500,
+    lowpass: 5600,
     space: 0.5,
-    noise: [mallet(), mallet(0.3, 0.26)],
+    noise: [mallet(), mallet(0.18, 0.2)],
     tones: [
       ...bell(C5, { at: 0, dur: 0.34, gain: 0.5 }),
-      ...bell(G5, { at: 0.15, dur: 0.4, gain: 0.6 }),
-      ...bell(C6, { at: 0.3, dur: 0.95, gain: 0.72, hold: 0.14 }),
-      { at: 0.3, dur: 1.0, freq: G6, type: 'sine', gain: 0.12, attack: 0.05 },
-      { at: 0, dur: 1.15, freq: C3, type: 'sine', gain: 0.24, attack: 0.05 },
-      { at: 0.3, dur: 0.9, freq: G4, type: 'sine', gain: 0.14, attack: 0.08 },
+      ...bell(C6, { at: 0.18, dur: 0.95, gain: 0.68, hold: 0.14 }),
+      { at: 0.18, dur: 1.0, freq: G6, type: 'sine', gain: 0.09, attack: 0.06 },
+      { at: 0, dur: 1.15, freq: C3, type: 'sine', gain: 0.22, attack: 0.05 },
+      { at: 0.18, dur: 0.9, freq: G4, type: 'sine', gain: 0.13, attack: 0.09 },
     ],
   },
   levelUpStep: {
@@ -567,9 +622,9 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     // struck note per card, a rung higher each time, the same climbing sweep
     // `fileAway` uses for a deck of cards clearing. No pickup, no re-struck
     // landing: the climb itself is the ceremony.
-    gain: 0.46,
+    gain: 0.42,
     throttleMs: 150,
-    lowpass: 7200,
+    lowpass: 6200,
     space: 0.4,
     combo: { steps: [0, 2, 4, 7, 9], resetMs: 2500 },
     noise: [mallet(0, 0.28)],
@@ -582,9 +637,9 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     // Gems: a coin dropping into the purse. A tiny high clink, then two struck
     // notes a fourth apart — the platformer pickup interval — with the second
     // one held. Short and bright; it fires once per quest, several in a row.
-    gain: 0.38,
+    gain: 0.35,
     throttleMs: 60,
-    lowpass: 8000,
+    lowpass: 6800,
     space: 0.3,
     noise: [{ at: 0, dur: 0.014, from: 5200, to: 3400, type: 'bandpass', q: 2.4, gain: 0.28, swell: 0 }],
     tones: [
@@ -596,9 +651,9 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     // The flame catching: a warm swell that rises into two struck notes an
     // octave apart, the second held, with a fifth above it as the flare. The
     // glide underneath does the catching; the bells are the flame taking.
-    gain: 0.44,
+    gain: 0.4,
     throttleMs: 200,
-    lowpass: 5000,
+    lowpass: 4400,
     space: 0.45,
     noise: [{ at: 0, dur: 0.42, from: 300, to: 1600, type: 'bandpass', q: 0.6, gain: 0.3, swell: 0.6 }],
     tones: [
@@ -610,24 +665,26 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
   },
   complete: {
     // Session over — the biggest cue in the app, and the only one allowed to
-    // take a second and a half. Same two-half shape as `levelUp` but wider: the
-    // run is slower, the arrival is struck again and held twice as long, and a
-    // soft root-and-third pad swells in underneath so the whole thing settles
-    // onto a chord instead of stopping.
+    // take a second and a half. Same two-stroke shape as `levelUp` and, since
+    // they are deliberately the same phrase, the same two notes: pickup, then
+    // the octave struck again and held. Wider in every other dimension — the
+    // pickup is slower, the arrival holds twice as long, and a soft
+    // root-third-fifth pad swells in underneath so the whole thing settles onto
+    // a chord instead of stopping. Length and weight are what make this the
+    // finale; it doesn't need an extra note to outrank a level-up.
     // The loudest thing the app ever plays, and the only cue allowed to be.
-    gain: 0.56,
+    gain: 0.52,
     throttleMs: 250,
-    lowpass: 6000,
+    lowpass: 5200,
     space: 0.58,
-    noise: [mallet(), mallet(0.36, 0.24)],
+    noise: [mallet(), mallet(0.22, 0.2)],
     tones: [
       ...bell(C5, { at: 0, dur: 0.5, gain: 0.5 }),
-      ...bell(G5, { at: 0.18, dur: 0.55, gain: 0.58 }),
-      ...bell(C6, { at: 0.36, dur: 1.15, gain: 0.7, hold: 0.2 }),
-      { at: 0.36, dur: 1.2, freq: E6, type: 'sine', gain: 0.13, attack: 0.06 },
-      { at: 0, dur: 1.5, freq: C3, type: 'sine', gain: 0.24, attack: 0.08 },
-      { at: 0.36, dur: 1.2, freq: G4, type: 'sine', gain: 0.14, attack: 0.12 },
-      { at: 0.36, dur: 1.2, freq: E4, type: 'sine', gain: 0.1, attack: 0.14 },
+      ...bell(C6, { at: 0.22, dur: 1.15, gain: 0.68, hold: 0.2 }),
+      { at: 0.22, dur: 1.2, freq: E6, type: 'sine', gain: 0.1, attack: 0.07 },
+      { at: 0, dur: 1.5, freq: C3, type: 'sine', gain: 0.22, attack: 0.08 },
+      { at: 0.22, dur: 1.2, freq: G4, type: 'sine', gain: 0.13, attack: 0.13 },
+      { at: 0.22, dur: 1.2, freq: E4, type: 'sine', gain: 0.09, attack: 0.15 },
     ],
   },
   begin: {
@@ -650,9 +707,9 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     // split across them: this half is the count-in and the D it lands on,
     // `launch` is the rest of the phrase. Ending on one note is what leaves it
     // hanging, and a cue that hangs is a cue you want to answer.
-    gain: 0.52,
+    gain: 0.46,
     throttleMs: 260,
-    lowpass: 6200,
+    lowpass: 5400,
     space: 0.38,
     noise: [
       // The runway: a slow swell from rumble to air, gone by the launch.
@@ -692,9 +749,9 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     // octave. A quiz is being opened, not concluded: resolving home is
     // `complete`'s job, and the unresolved fifth is the whole reason this leans
     // forward instead of sitting down.
-    gain: 0.52,
+    gain: 0.46,
     throttleMs: 260,
-    lowpass: 6200,
+    lowpass: 5400,
     space: 0.42,
     noise: [
       // The door, not a runway: a short sweep that's gone by the arrival.
@@ -727,9 +784,9 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     // short downward sweep with the mallet landing in it — so it stays in the
     // same physical world as the rest of the flashcard family (`shuffle`,
     // `fileAway`, `page`) rather than sounding like a prize.
-    gain: 0.44,
+    gain: 0.41,
     throttleMs: 220,
-    lowpass: 4200,
+    lowpass: 3800,
     space: 0.24,
     noise: [
       { at: 0, dur: 0.11, from: 1200, to: 380, type: 'bandpass', q: 0.8, gain: 0.34, swell: 0.18 },

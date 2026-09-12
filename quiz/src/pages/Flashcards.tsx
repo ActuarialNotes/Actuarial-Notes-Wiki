@@ -2022,8 +2022,8 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
 
     const dx = dragXRef.current
     if ((dx <= -SWIPE_THRESHOLD && hasNext) || (dx >= SWIPE_THRESHOLD && hasPrev)) {
-      // The card flies off — same flick as the Prev/Next buttons.
-      playSound('page')
+      // The card flies off — same cue as the Prev/Next buttons.
+      playSound('ruffle')
     }
     if (dx <= -SWIPE_THRESHOLD && hasNext) {
       setSettling(true)
@@ -2955,7 +2955,7 @@ function FlashcardsDeck({
             <button
               type="button"
               disabled={activeIndex === 0}
-              data-sound="page"
+              data-sound="ruffle"
               onClick={() => setActiveIndex(activeIndex - 1)}
               className="flex-1 flex items-center justify-center gap-2 px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
@@ -2986,7 +2986,7 @@ function FlashcardsDeck({
             <button
               type="button"
               disabled={activeIndex === orderedCards.length - 1}
-              data-sound="page"
+              data-sound="ruffle"
               onClick={() => setActiveIndex(activeIndex + 1)}
               className="flex-1 flex items-center justify-center gap-2 px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >

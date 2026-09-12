@@ -111,12 +111,13 @@ export function MistakesReviewModal({ mistakes, masteryRecords, onFixedChange, o
     if (bodyRef.current) bodyRef.current.scrollTop = 0
   }, [index])
 
-  // Stepping between questions is a page flick, not a press — the same cue the
-  // concept popup's Previous/Next makes. Shared by the buttons and the ←/→ keys.
+  // Stepping between questions is paper moving, not a press — the same
+  // `ruffle` the concept popup's Previous/Next makes. Shared by the buttons and
+  // the ←/→ keys.
   const turnPage = useCallback((direction: -1 | 1) => {
     const next = index + direction
     if (next < 0 || next > items.length - 1) return
-    play('page')
+    play('ruffle')
     setIndex(next)
   }, [play, index, items.length])
 
@@ -332,8 +333,9 @@ export function MistakesReviewModal({ mistakes, masteryRecords, onFixedChange, o
         current={index + 1}
         total={items.length}
         label={`Question ${index + 1} of ${items.length}`}
-        // Silent, unlike the Previous / Next buttons above: a drag would fire
-        // the page flick once per question it crossed.
+        // The bar sounds its own `ruffle` per question crossed — the same cue
+        // the Previous / Next buttons make, which is what turns a long drag
+        // into the sound of thumbing a stack rather than one silent jump.
         onScrub={next => setIndex(next - 1)}
         formatValue={n => `Question ${n} of ${items.length}`}
       />

@@ -14,25 +14,43 @@ costs zero bytes of assets and every cue is tunable from one table.
    solid `Button` variants (the committing actions: start, finish, save,
    delete) opt into. Stacked under every control instead, an afternoon of
    studying sounds like knocking on a desk.
-3. **Panels and cards move on filtered noise, not tones.** The `open` / `close`
-   / `page` family is a bandpass sweep over white noise with a slow swell — it
-   reads as a sheet of paper sliding, not as a beep.
+3. **Panels and cards move on filtered noise, not tones.** The `open` /
+   `close` / `page` / `ruffle` / `shuffle` family is a bandpass sweep over
+   white noise with a slow swell — it reads as a sheet of paper sliding, not as
+   a beep. The louder a cue in this family is, the fewer times it fires: see
+   "Stepping through a sequence".
 4. **Success is struck, not beeped.** Every reward cue is a mallet hitting a
    tuned bar (see "Anatomy of a reward cue" below). It ascends, the notes ring
    far longer than the gap between them so they pile into a chord rather than a
    countdown, it *lands* on its loudest note, it has a low root under it for
    weight, and it rings in a room.
-5. **Mistakes are silent.** There is deliberately no `wrong` cue. A wrong
+5. **Two notes, not three.** Every chime in the catalogue is a pickup and an
+   arrival. Nothing here is a melody — a cue is heard a few hundred times a
+   week, and the third note is where one stops being a sound and starts being a
+   jingle you can hum, which is the point at which it wears out. `levelUp` and
+   `complete` used to walk up through the fifth (C–G–C); they now leap the
+   octave and let the fifth enter underneath the landing as harmony instead.
+   What separates a level-up from finishing a session is width and weight, not
+   note count.
+6. **Chimes are round.** The partials that make a struck bar a struck bar are
+   also what make it *bright*, so they are kept on a short leash: the octave
+   and the twelfth sit well down and die in a third of the fundamental's time,
+   the twelfth is a sine (a triangle at 3f puts energy back up at 9f and 15f,
+   which is the glare), the onset is a mallet on wood rather than on metal, and
+   every reward cue runs through a lowpass in the 4–7 kHz range. Warm and a
+   little subdued beats bright: bright is what a notification sounds like.
+7. **Mistakes are silent.** There is deliberately no `wrong` cue. A wrong
    answer is already obvious on screen, and buzzing at someone who is studying
    is punishment, not feedback. `soundConfig.test.ts` pins this so it can't
    drift back in by accident. What a miss does instead is end the `correct`
    combo — the next right answer comes back at the pitch the run started from.
-6. **Loudness is the hierarchy.** `correct` fires forty times to `complete`'s
+8. **Loudness is the hierarchy.** `correct` fires forty times to `complete`'s
    one, so it sits below the ceremonies; the ceremonies sit below the
-   session fanfare; the interface sits below all of it. Pinned by a test, along
-   with a headroom check — a three-note fanfare is a dozen-plus oscillators in
-   one bus, and it still has to clear the ceiling at full volume.
-7. **Beginnings are shaped differently from endings.** `begin`, `launch` and
+   session fanfare; the interface sits below all of it, and `ruffle` — the most
+   repeated cue of all — sits under the interface. Pinned by a test, along with
+   a headroom check: a fanfare is a dozen-plus oscillators in one bus, and it
+   still has to clear the ceiling at full volume.
+9. **Beginnings are shaped differently from endings.** `begin`, `launch` and
    `study` are the only cues that open something instead of closing it, so none
    of them resolves: see "The cues that start something" below.
 
@@ -95,9 +113,10 @@ the reward family in `soundConfig.ts` is built from all five:
   nowhere and the cue loses its impact.
 - **A landing.** Cues accent *toward* the last note and give it a `hold` — the
   arrival stays at full level before it decays. An even run at even volume is a
-  scale exercise; a run into a held arrival is an announcement. Two of them
-  (`levelUp`, `complete`) go further and re-strike the landing note, so the cue
-  is a fast pickup and then an arrival rather than one continuous climb.
+  scale exercise; a pickup into a held arrival is an announcement. `levelUp`
+  and `complete` are the clearest case: one struck pickup, then the octave
+  above it struck again and held, with the fifth entering underneath the
+  landing as harmony rather than as a third event.
 - **A low root.** A quiet sine an octave or two under the chord. Mostly felt
   rather than heard, and inaudible on a laptop speaker, but it's the difference
   between weight and a beep on headphones.
@@ -187,7 +206,8 @@ two-concept ceremony and a ten-concept one both climb from the root.
 | `navigate` | A route change |
 | `actions` | Opening a flashcard's own actions menu (the header Play button) |
 | `open` / `close` | A panel or modal sliding in or out |
-| `page` | A flick within one surface — popup prev/next, a flashcard turning over, a swipe |
+| `page` | A flick within one surface — a flashcard turning over, a page already open being returned to |
+| `ruffle` | Stepping through a sequence: a Previous / Next footer, or a drag along the position bar above it. The quietest cue in the app — see "Stepping through a sequence" |
 | `shuffle` | Riffling the flashcard deck into a new order |
 | `fileAway` | One finished card going green and collapsing into itself during "Clear Completed Flashcards". Climbs across the sweep — see "The combo" |
 | `correct` | A right answer, anywhere: quiz, comprehension check, flashcard "Got it". Climbs endlessly across a run — see "The combo" |
@@ -256,12 +276,48 @@ split phrase and the fourth that resumes it, the unresolved fifth across both
 halves, the missing third, and the loudness window that keeps them above the
 interface and under `complete`.
 
+## Stepping through a sequence
+
+Six surfaces share the same footer — a position bar over Previous / Next — and
+all six make the same sound when you move through them: the concept popup,
+the exam-PDF reader, flashcard study, the concept detail modal, mistakes
+review and math focus.
+
+That sound is `ruffle`, and it is written around one fact: the bar is
+*scrubbable*, so it fires **while a finger is still moving**. Dragging through a
+423-page examiner's report crosses a stop every few pixels, a dozen-plus times
+a second until the throttle catches it. Nothing else in the app is asked to
+repeat like that.
+
+So it is built to be survived rather than noticed:
+
+- **The quietest cue in the catalogue** — under the press transient it shares a
+  footer with, pinned by a test. If thumbing through a document is the loudest
+  thing on screen, the cue is wrong.
+- **Three short brushes, not one sweep.** A single burst repeated quickly reads
+  as a stutter of the same sound; three fanning past under one small swell read
+  as sheets moving against each other. That is the difference between a drag
+  sounding like thumbing a stack and sounding like a machine gun.
+- **Dark and over in 70 ms**, so consecutive stops overlap into a riffle rather
+  than queueing up as separate events.
+- **Falling, not arriving.** The brushes drop in pitch and fade as they go.
+  Nothing about moving one stop should feel like an event.
+
+The cue lives in `NavProgressBar` itself (`moveTo`), so every scrubbable bar
+gets it without opting in, and each footer's own Previous / Next plays the same
+cue — stepping one item and dragging past ten are then the same gesture at
+different speeds. The bar keeps `data-sound="none"` so the delegated listener
+can't stack a press cue on the first stop of a drag.
+
+`page` is what's left over for a single sheet actually turning: a flashcard
+flipping over, a stacked page being returned to, an image gallery stepping on.
+
 ## Wiring a new interaction
 
 Most of the time you don't: a `<button>` gets `click` for free from the
 delegated listener, and a `role="checkbox"` gets `tick`. Beyond that,
 
-- **A different cue for one control** — add `data-sound="page"` (any cue name).
+- **A different cue for one control** — add `data-sound="ruffle"` (any cue name).
 - **A row in a picker that isn't a checkbox** — the topic and concept lists are
   built from plain `<button>`s, so they carry `data-sound="tick"` to join the
   checkboxes. Do the same for any new list of choices.

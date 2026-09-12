@@ -70,11 +70,14 @@ export function ConceptPopup() {
     closePage(i)
   }, [play, closePage])
 
-  // Stepping to the previous/next concept is a page flick, not a press. Shared
-  // by the footer buttons and the ←/→ shortcuts so both sound the same. The
-  // trail collapses back to one page: it hung off the concept being left.
+  // Stepping to the previous/next concept is paper moving, not a press —
+  // the same `ruffle` the bar above the footer makes when it's dragged, so
+  // stepping one concept and dragging past ten are the same gesture at
+  // different speeds. Shared by the footer buttons and the ←/→ shortcuts so
+  // both sound the same. The trail collapses back to one page: it hung off the
+  // concept being left.
   const turnPage = useCallback((direction: -1 | 1) => {
-    play('page')
+    play('ruffle')
     if (showGalleryInPanel) {
       gallerySeekRef.current = direction
       setGallerySeek(direction)

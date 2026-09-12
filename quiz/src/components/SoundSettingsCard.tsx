@@ -86,6 +86,7 @@ export function SoundSettingsCard() {
               ['Tick', 'tick'],
               ['Panel', 'open'],
               ['Page turn', 'page'],
+              ['Next / previous', 'ruffle'],
               ['Shuffle', 'shuffle'],
               ['Correct', 'correct'],
               ['Add to deck', 'addToDeck'],

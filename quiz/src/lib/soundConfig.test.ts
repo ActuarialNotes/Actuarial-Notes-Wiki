@@ -35,7 +35,7 @@ const LAUNCHES = ['begin', 'launch', 'study'] as const
 
 /** Everything a user hears dozens of times an hour. */
 const INTERFACE = ['click', 'press', 'select', 'tick', 'toggleOn', 'toggleOff', 'navigate', 'actions',
-  'open', 'close', 'page', 'shuffle', 'fileAway'] as const
+  'open', 'close', 'page', 'ruffle', 'shuffle', 'fileAway'] as const
 
 /**
  * The notes of a cue's melody, as opposed to the struck partials, sparkle and
@@ -601,9 +601,31 @@ describe('sound catalogue', () => {
     })
 
     it('builds the paper cues out of noise, not tones', () => {
-      for (const event of ['open', 'close', 'page'] as const) {
+      for (const event of ['open', 'close', 'page', 'ruffle', 'shuffle'] as const) {
         expect(SOUND_RECIPES[event].noise?.length ?? 0, event).toBeGreaterThan(0)
       }
+      // The three that are *only* paper. `open` and `close` each keep one low
+      // tone underneath, so a panel reads as an object moving rather than a
+      // hiss; a sheet going past has no note in it at all.
+      for (const event of ['page', 'ruffle', 'shuffle'] as const) {
+        expect(SOUND_RECIPES[event].tones ?? [], `${event} has a note in it`).toHaveLength(0)
+      }
+    })
+
+    it('keeps the step cue under everything else it repeats against', () => {
+      // `ruffle` fires on every stop a drag along the position bar crosses —
+      // more often than any cue in the app bar the press transient, and while
+      // the finger is still moving. It has to sit under the press it shares a
+      // footer with, or thumbing through a document is the loudest thing on
+      // screen.
+      const ruffle = peakLevel(SOUND_RECIPES.ruffle)
+      for (const event of ['click', 'press', 'page', 'shuffle'] as const) {
+        expect(ruffle, `ruffle is as loud as a ${event}`)
+          .toBeLessThan(peakLevel(SOUND_RECIPES[event]))
+      }
+      // Short enough that consecutive stops overlap into a riffle rather than
+      // queueing up as separate events.
+      expect(recipeDuration(SOUND_RECIPES.ruffle)).toBeLessThan(0.1)
     })
 
     it('sweeps `open` upward and `close` back down', () => {

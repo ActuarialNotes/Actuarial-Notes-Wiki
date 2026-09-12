@@ -313,12 +313,13 @@ export function PdfViewerPanel({ url, title, subtitle, hostFullScreen = false, o
     return () => window.clearTimeout(timer)
   }, [zoom, renderZoom])
 
-  // Stepping pages is a page flick, not a press — the cue the concept popup's
-  // Previous/Next makes.
+  // Stepping pages is paper moving, not a press — the same `ruffle` the
+  // concept popup's Previous/Next makes, and the same one the bar above this
+  // footer makes when it's dragged.
   const turnPage = useCallback((direction: -1 | 1) => {
     setPage(current => {
       const next = clampPage(current + direction, pageCount)
-      if (next !== current) play('page')
+      if (next !== current) play('ruffle')
       return next
     })
   }, [pageCount, play])

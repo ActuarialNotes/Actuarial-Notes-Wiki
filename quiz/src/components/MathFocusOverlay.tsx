@@ -50,7 +50,7 @@ export function MathFocusOverlay({ equations, initialIndex, onClose }: Props) {
     setIndex(current => {
       const next = stepIndex(current, delta, count)
       if (next !== current) {
-        play('page')
+        play('ruffle')
         setZoom(1)
       }
       return next

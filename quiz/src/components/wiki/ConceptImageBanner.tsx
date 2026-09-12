@@ -36,7 +36,9 @@ import { useFiguresCollapsed } from '@/hooks/useFiguresCollapsed'
  * and the collapse control belong to the pictures alone.
  *
  * A picture can be folded away with the control in its top-right corner,
- * leaving a one-line "Show figure" strip in its place. That choice is global and
+ * leaving nothing behind but that same corner control (an image icon and an
+ * expand icon) to bring it back — not a full-width strip, which would read as
+ * content where there is none. That choice is global and
  * persisted (`hooks/useFiguresCollapsed`), so it holds as the reader pages
  * through concepts and only comes undone when they expand a figure again — the
  * definition stays at the top of the popup until then. The simulator card is
@@ -200,17 +202,23 @@ export function ConceptImageBanner({ images, onOpen, className }: ConceptImageBa
       ))}
 
       {current && (collapsed ? (
-        <button
-          type="button"
-          data-sound="toggleOn"
-          onClick={() => setCollapsed(false)}
-          aria-expanded={false}
-          className={`${cardClass} flex items-center gap-2 border border-border px-3 py-2 text-sm text-muted-foreground hover:text-foreground`}
-        >
-          <ImageIcon className="h-4 w-4 shrink-0" aria-hidden />
-          <span className="flex-1 truncate">Show {figureLabel}</span>
-          <ChevronsUpDown className="h-4 w-4 shrink-0" aria-hidden />
-        </button>
+        // Folded away, the figure leaves no strip across the page — only the
+        // control that brings it back, in the corner the collapse control sits
+        // in. A full-width bar reads as content; this reads as chrome.
+        <div className="flex justify-end">
+          <button
+            type="button"
+            data-sound="toggleOn"
+            onClick={() => setCollapsed(false)}
+            aria-expanded={false}
+            title={`Show ${figureLabel}`}
+            aria-label={`Show ${figureLabel}`}
+            className="inline-flex h-7 items-center gap-1 rounded-md border border-border bg-card/90 px-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <ImageIcon className="h-4 w-4 shrink-0" aria-hidden />
+            <ChevronsUpDown className="h-4 w-4 shrink-0" aria-hidden />
+          </button>
+        </div>
       ) : (
         // The collapse control has to be a *sibling* of the card, not a child:
         // the card is itself a button, and a button inside a button is invalid

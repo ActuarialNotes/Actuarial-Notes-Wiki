@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigationType } from 'react-router-dom'
-import { BookMarked, CheckCircle2, GraduationCap, Hammer } from 'lucide-react'
+import { BookMarked, CheckCircle2, Compass, GraduationCap, Hammer } from 'lucide-react'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { examDisplayName, wikiRoute } from '@/lib/wikiRoutes'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { TRACKS, type Track } from '@/data/tracks'
+import { GENERAL_GUIDES } from '@/data/examGuides'
+import { examAccentStyle } from '@/lib/examColors'
 import { matchesSelectedVariant } from '@/data/examSittings'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
@@ -188,6 +190,33 @@ export default function WikiHome() {
         <h1 className="text-2xl font-bold tracking-tight">Study Guides</h1>
       </header>
 
+      {/* The guides that belong to no single exam — read before there is an
+          exam to study for, so they sit above the ladder rather than in it. */}
+      {GENERAL_GUIDES.length > 0 && (
+        <section className="-mt-4">
+          <div className="grid grid-cols-1 gap-3">
+            {GENERAL_GUIDES.map(guide => (
+              <button
+                key={guide.ref.path ?? guide.title}
+                type="button"
+                onClick={() => openAt([guide.ref], 0, '/wiki')}
+                className="w-full text-left appearance-none bg-transparent p-0"
+              >
+                <Card className="h-full transition-all duration-150 hover:bg-accent/30">
+                  <CardHeader className="flex-row items-start gap-3 space-y-0">
+                    <Compass className="h-5 w-5 mt-0.5 shrink-0 text-teal-500" aria-hidden="true" />
+                    <div className="space-y-1">
+                      <CardTitle className="text-base leading-snug">{guide.title}</CardTitle>
+                      <CardDescription>{guide.description}</CardDescription>
+                    </div>
+                  </CardHeader>
+                </Card>
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
+
       <section>
         {/* ── Sticky block: Exams heading + filter + in-progress pills ── */}
         <div
@@ -243,9 +272,27 @@ export default function WikiHome() {
                   className="sticky z-10 -mx-4 px-4 py-1.5 mb-3 bg-background/95 backdrop-blur-sm"
                   style={{ top: `${SEARCH_BAR_H + headerHeight}px` }}
                 >
-                  <span className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-                    {track.name}
-                  </span>
+                  {track.conceptPage ? (
+                    // The designation is a page of its own — what it is, what
+                    // it takes, what it lets an actuary sign — so the heading
+                    // is the way into it rather than a label.
+                    <button
+                      type="button"
+                      onClick={() => openAt([{ kind: 'concept', name: track.conceptPage! }], 0, '/wiki')}
+                      className="group flex flex-wrap items-baseline gap-x-2 text-left appearance-none bg-transparent p-0"
+                    >
+                      <span className="text-sm font-semibold uppercase tracking-wider group-hover:underline underline-offset-4">
+                        {track.label}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {track.fullName}
+                      </span>
+                    </button>
+                  ) : (
+                    <span className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+                      {track.name}
+                    </span>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -286,23 +333,40 @@ export default function WikiHome() {
                     // No readiness readout on an exam with nothing to be ready for.
                     const hasProgressBar = isInProgress && total > 0 && !inDevelopment
 
+                    // The exam's place on the ladder, as a colour (blue at
+                    // Exam P through to red at Exam 9 — see lib/examColors.ts).
+                    // Scoped to the card as custom properties, so the highlight
+                    // below is one use of it rather than the only place the
+                    // colour exists.
+                    const accent = examAccentStyle(examId)
+
                     return (
                       <Link key={exam.path} to={wikiRoute({ kind: 'exam', name: exam.name })} data-tour={examId === 'P' ? 'exam-p' : undefined}>
                         <Card
+                          style={accent}
                           className={cn(
-                            'h-full flex flex-col transition-all duration-150 overflow-hidden',
+                            'h-full flex flex-col transition-all duration-150 overflow-hidden ring-1 ring-transparent',
                             // Center content vertically when the card is only a header
                             // (completed / beta cards) so it stays balanced if the card
                             // is stretched to match a taller sibling in the grid row.
                             !hasProgressBar && 'justify-center',
-                            !isInProgress && !inDevelopment && 'hover:bg-accent/30',
-                            isInProgress && !inDevelopment && 'bg-primary/10 hover:bg-primary/25',
+                            isInProgress && !inDevelopment && 'bg-primary/10',
                             // Unbuilt exam: no card surface, a dashed outline and
                             // dimmed contents — the same "nothing here yet" material
                             // the empty-state placeholders use. The page is still
                             // reachable (it holds the published syllabus), it just
                             // never looks like something to study from.
-                            inDevelopment && 'bg-muted/40 border border-dashed border-muted-foreground/30 shadow-none hover:bg-muted/60',
+                            inDevelopment && 'bg-muted/40 border border-dashed border-muted-foreground/30 shadow-none',
+                            // Hover picks the exam's own colour up off the card's
+                            // custom properties. Exams only: a requirement with no
+                            // rung on the ladder keeps the neutral hover.
+                            accent
+                              ? 'hover:bg-[var(--exam-accent-soft)] hover:ring-[var(--exam-accent-muted)]'
+                              : isInProgress && !inDevelopment
+                                ? 'hover:bg-primary/25'
+                                : inDevelopment
+                                  ? 'hover:bg-muted/60'
+                                  : 'hover:bg-accent/30',
                           )}
                         >
                           <CardHeader className={hasProgressBar ? 'pb-3' : undefined}>
@@ -385,7 +449,7 @@ export default function WikiHome() {
               >
                 <Card className="h-full transition-all duration-150 hover:bg-accent/40 overflow-hidden flex flex-row items-stretch">
                   {book.coverImage && (
-                    <div className="flex-shrink-0 p-2 flex items-center">
+                    <div className="flex-shrink-0 p-2 pt-4 flex items-start">
                       <img
                         src={book.coverImage}
                         alt={book.title ?? book.name}

@@ -113,7 +113,6 @@ export function MasteryAnalyticsCard({ syllabus, masteryRecords }: Props) {
   return (
     <>
       <InsightCard
-        icon={icon}
         title="Fading Concepts"
         count={warnings.length}
         front={

@@ -6,13 +6,12 @@ date: "2018"
 Edition: 2nd
 Publisher: Lightning Source
 ISBN: 978-0-9829174-7-3
-Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/1014735226)"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:d981c1661269640c57b324610f4450d5910fd1308f37a25ac1d7400471e8a741
+  content_hash: sha256:3ac0ae816f1f8017fd523a6fbc63c189996ec56d2ffb9e759364626f6f1a5a40
   sources: []
   open_findings: 0
   open_critical: 0
@@ -98,4 +97,4 @@ verification:
 - 8.7 Univariate Distribution Relationships
 
 ## Links
-- [worldcat.org](https://search.worldcat.org/title/1014735226)
+- [Find in a library (WorldCat)](https://search.worldcat.org/search?q=bn%3A9780982917473)

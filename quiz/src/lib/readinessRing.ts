@@ -3,7 +3,7 @@
  * dial that shows an exam's whole syllabus at once: one arc per concept, sized
  * by its section's exam weight, filled by that concept's mastery state.
  *
- * Two surfaces draw it: the Dashboard's Study Guide card (`StudyGuideRadial`
+ * Two surfaces draw it: the Dashboard's Exam readiness card (`StudyGuideRadial`
  * in `components/ReadinessCard.tsx`, with a legend, curved section labels and a
  * hover readout) and the exam page's readiness card
  * (`components/wiki/ExamReadinessCard.tsx`, the same ring shrunk to a mark).

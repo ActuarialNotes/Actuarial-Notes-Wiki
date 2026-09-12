@@ -51,7 +51,7 @@ export function EntryCard({
         aria-label={`Open ${entry.title}`}
       >
         {entry.coverImage && (
-          <div className="flex-shrink-0 p-2 flex items-center">
+          <div className="flex-shrink-0 p-2 pt-3 flex items-start">
             <img
               src={entry.coverImage}
               alt={entry.title}

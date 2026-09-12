@@ -29,7 +29,18 @@ export interface TrackSection {
 
 export interface Track {
   key: string
+  /** Full label for the track selectors: "ACAS | Associate of the …". */
   name: string
+  /** The designation on its own ("ACAS"), for surfaces that title a section with it. */
+  label: string
+  /** What the designation stands for ("Associate of the Casualty Actuarial Society"). */
+  fullName: string | null
+  /**
+   * The `Concepts/` page describing the designation — what it is, what it takes
+   * and what it lets an actuary sign. Null for the placeholder track. Named the
+   * way the page is filed, so it can be opened as `{ kind: 'concept', name }`.
+   */
+  conceptPage: string | null
   certPath: string | null
   sections: TrackSection[]
 }
@@ -43,8 +54,17 @@ export interface Segment {
 
 export const TRACKS: Track[] = [
   {
+    // The track a new account starts on. It isn't a credential path — it's
+    // every exam this app has material for, so someone who hasn't decided
+    // between ASA and ACAS (or doesn't yet know which track their exam sits
+    // on) can still find the exam they're sitting. Keep it in step with the
+    // syllabus pages in the vault: an exam listed here with no `Exam *.md`
+    // page shows as "Not covered yet" in the exams panel.
     key: 'DEFAULT',
-    name: 'Choose a Track',
+    name: 'All exams we cover',
+    label: 'Track',
+    fullName: null,
+    conceptPage: null,
     certPath: null,
     sections: [
       {
@@ -54,11 +74,22 @@ export const TRACKS: Track[] = [
           { id: 'FM', name: 'Exam FM-2', color: 'indigo' },
         ],
       },
+      {
+        label: 'CAS Upper-Level Exams',
+        items: [
+          { id: 'MAS-I',  name: 'Exam MAS-I',  color: 'violet' },
+          { id: 'MAS-II', name: 'Exam MAS-II', color: 'violet' },
+          { id: 'CAS-5',  name: 'Exam 5',      color: 'pink' },
+        ],
+      },
     ],
   },
   {
     key: 'ASA',
     name: 'ASA | Associate of the Society of Actuaries',
+    label: 'ASA',
+    fullName: 'Associate of the Society of Actuaries',
+    conceptPage: 'Associate of the Society of Actuaries (ASA)',
     certPath: 'Exams/Certifications/Associate of the Society of Actuaries (ASA)',
     sections: [
       {
@@ -96,6 +127,9 @@ export const TRACKS: Track[] = [
   {
     key: 'ACAS',
     name: 'ACAS | Associate of the Casualty Actuarial Society',
+    label: 'ACAS',
+    fullName: 'Associate of the Casualty Actuarial Society',
+    conceptPage: 'Associate of the Casualty Actuarial Society (ACAS)',
     certPath: 'Exams/Certifications/Associate of the Casualty Actuarial Society (ACAS)',
     sections: [
       {
@@ -131,6 +165,9 @@ export const TRACKS: Track[] = [
   {
     key: 'FSA',
     name: 'FSA | Fellow of the Society of Actuaries',
+    label: 'FSA',
+    fullName: 'Fellow of the Society of Actuaries',
+    conceptPage: 'Fellow of the Society of Actuaries (FSA)',
     certPath: 'Exams/Certifications/Fellow of the Society of Actuaries (FSA)',
     sections: [
       {
@@ -229,6 +266,9 @@ export const TRACKS: Track[] = [
   {
     key: 'FCAS',
     name: 'FCAS | Fellow of the Casualty Actuarial Society',
+    label: 'FCAS',
+    fullName: 'Fellow of the Casualty Actuarial Society',
+    conceptPage: 'Fellow of the Casualty Actuarial Society (FCAS)',
     certPath: 'Exams/Certifications/Fellow of the Casualty Actuarial Society (FCAS)',
     sections: [
       {
@@ -359,3 +399,22 @@ export function getTrackCounts(
     total: segments.length,
   }
 }
+
+/**
+ * Display name for an exam id, across every credential track.
+ *
+ * `EXAM_ID_TO_LABEL` in lib/examIds only covers the exams with a question bank
+ * (and names them by their *bank* label — "Probability", not "Exam P-1"), so
+ * anything that has to name an arbitrary tracked exam reads it from here.
+ */
+export const EXAM_ID_TO_TRACK_NAME: Record<string, string> = (() => {
+  const names: Record<string, string> = {}
+  for (const track of TRACKS) {
+    for (const section of track.sections) {
+      for (const item of section.items) {
+        if (!names[item.id]) names[item.id] = item.name
+      }
+    }
+  }
+  return names
+})()

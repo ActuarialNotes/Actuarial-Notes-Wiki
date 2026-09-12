@@ -15,6 +15,7 @@
 // `components/wiki/ExamGuideCards.tsx`.
 
 import rawGuideFiles from 'virtual:exam-guides'
+import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import {
   buildExamGuides,
   type ExamGuide,
@@ -31,3 +32,33 @@ export const EXAM_GUIDES: Record<string, ExamGuide> = buildExamGuides(rawGuideFi
 export function guideForExam(examId: string): ExamGuide | null {
   return EXAM_GUIDES[examId.toLowerCase()] ?? null
 }
+
+
+/**
+ * A guide that belongs to no single exam — an orientation to the course of
+ * study itself, read before there is an exam to study for.
+ *
+ * These live at the *top level* of `Guides/`, beside the per-exam folders, so
+ * the per-exam collector (which only walks the folders) never mistakes one for
+ * a tip. They are read in the same viewer as a tip page, so the ref carries its
+ * explicit path. The Study Guides home page (`pages/wiki/WikiHome.tsx`) is what
+ * lists them.
+ */
+export interface GeneralGuide {
+  title: string
+  /** One line under the title on the card — what the guide answers. */
+  description: string
+  ref: WikiEntryRef
+}
+
+export const GENERAL_GUIDES: GeneralGuide[] = [
+  {
+    title: 'How to Study for Actuarial Exams',
+    description: 'How the course of study works: the two societies, the ladder of exams, how candidates get hired partway through, and how to prepare for a sitting.',
+    ref: {
+      kind: 'guide',
+      name: 'How to Study for Actuarial Exams',
+      path: 'Guides/How to Study for Actuarial Exams.md',
+    },
+  },
+]

@@ -4,8 +4,8 @@ The one number that answers *how ready am I to sit this exam?* It is computed in
 and read by every surface that prints a readiness percentage.
 
 - Scoring: `quiz/src/lib/readiness.ts` (`computeExamReadiness`), tested in `readiness.test.ts`
-- Ring geometry: `quiz/src/lib/readinessRing.ts`, drawn by the Dashboard's Study Guide radial
-  (`components/ReadinessCard.tsx`)
+- Ring geometry: `quiz/src/lib/readinessRing.ts`, drawn by the Dashboard's **Exam readiness**
+  card (`StudyGuideRadial` in `components/ReadinessCard.tsx`)
 
 **The exam study guide no longer shows a readiness card.** The card, its assessment popup and
 the 48px `ReadinessRing` badge were removed along with the exam page's orientation row; the
@@ -18,7 +18,7 @@ a readiness percentage calls it, so they can never disagree:
 
 | Surface | Where |
 |---|---|
-| Dashboard Study Guide radial (the `NN% readiness` in the ring) | `components/ReadinessCard.tsx` |
+| Dashboard **Exam readiness** card (the `NN%` in the ring, the band verdict and the criterion bars) | `components/ReadinessCard.tsx` |
 | Exam grid cards ("Readiness NN%") | `pages/wiki/WikiHome.tsx` |
 | Readiness projection ("now → exam day") | `lib/masteryAnalytics.ts` → `components/HeatmapInfoPanel.tsx` |
 
@@ -60,16 +60,88 @@ else to wire.
 ## Bands
 
 `readinessBand(pct)` maps the score onto a verdict: **Not started** (<15), **Building foundations** (<40), **Making progress** (<65),
-**Nearly exam ready** (<85), **Exam ready** (85+). Each also carries a one-sentence `blurb`
-saying what to do next; nothing renders it today.
+**Nearly exam ready** (<85), **Exam ready** (85+). A band is a label and nothing else.
 
-## What the ring shows
+It used to carry a one-sentence `blurb` as well, printed under the label on the Dashboard
+card. That field is gone. One sentence shared by everyone inside a forty-point range cannot
+be an insight about any of them, and at the bottom band it was the label paraphrased —
+*Not started* over *"Answer questions on this exam and the score fills in."*
+(`docs/visual-noise-review.md`, test 1). The line under the label is now `insight`.
 
-The ring is the Dashboard's Study Guide radial (`components/ReadinessCard.tsx`): one arc per
-syllabus concept, each section sized by its exam weight, each arc filled by that concept's
-mastery state — green for an ordinary concept, gold for a keystone (`lib/masteryFill.ts`).
-Its arcs come from `lib/readinessRing.ts`, so geometry lives in one place. The
-number in the middle is `overallPct`.
+## The insight line
+
+`readinessInsight(assessment)` — already called for you, so read `assessment.insight` — is the
+one sentence under the band label, derived from **this** learner's records. It returns
+`ReadinessInsight | null`.
+
+**Null is a normal outcome, not a fallback.** There is no insight to be had from an empty
+record, so an exam nobody has started gets no line at all; the empty ring and the *Not
+started* label are the whole story. A record where no rule below finds anything gets no line
+either. The card renders the paragraph only when the insight is non-null — nothing generic
+stands in for it.
+
+Two rules govern what may be said:
+
+1. **It must name something the card does not already draw** — a concept, a section, a tally.
+   "Syllabus coverage is low" is the criterion bar said twice.
+2. **It must be true of this learner specifically.** Anything that would read identically for
+   every account in the band belongs in the band label, not here.
+
+The rules are ordered by what costs a candidate the most, and the first hit wins:
+
+| # | `id` | Fires when | Says |
+|---|---|---|---|
+| 1 | `keystone-decay` | any keystone has decayed to Forgotten | names it (or counts them and names one) — a concept already earned once, paying into both criteria |
+| 2 | `broad-decay` | ≥3 concepts Forgotten **and** ≥25% of everything studied | the tally, and that recovery outruns new material |
+| 3 | `keystones-untouched` | the keystone criterion trails coverage by ≥15 points, with keystones still New | how many are behind and one of their names |
+| 4 | `second-pass` | ≥5 concepts at Level 1 **and** ≥60% of everything studied | the record is wide and shallow; a second pass beats breadth |
+| 5 | `costliest-section` | some section is under 80% covered (and there is more than one section) | the section with the largest **weight × shortfall** — the points actually on the table — with its share of the exam and its coverage |
+| 6 | `hold-the-keystones` | every keystone is at Level 3 | that Level 3 lapses after `DECAY_DAYS_LEVEL3` days unreviewed |
+
+Rule 5 deliberately does **not** reuse `weakestSections`, which ranks by coverage alone: a
+40%-of-the-exam section half-done is leaving more score on the table than a 3% section
+untouched, and the line is about where the missing score is. It drops the "% of the exam"
+clause for a syllabus whose sections carry no weight tags, since every share would be the
+same number.
+
+Adding a rule means a new `id` on `ReadinessInsightId`, a block in `readinessInsight` at the
+position its urgency earns, and a pair of tests in `readiness.test.ts`: one that it fires with
+the right text, and one that it stays quiet when it should.
+
+## The Dashboard card
+
+**Exam readiness is the first card on the Dashboard** — above the Study Schedule.
+`ReadinessCard` portals it into the slot the Dashboard puts there (`readinessSlot`, the same
+mechanism as `studyScheduleSlot`), so the card's state and logic stay with the study plan
+while it renders at the top of the page.
+
+The card reads top to bottom: **title and band verdict**, then the **ring** beside the
+**criteria**, then the **primary actions**. The title leads rather than sitting beside the
+ring because the row stacks on a phone, which left the card's own name — and its verdict —
+below the ring, read after the thing they were meant to introduce. The actions (*Read
+concepts* / *Fix mistakes* / *Start Quiz*) are the Dashboard's: it owns their triggers and
+the pinned-header copies, and hands them to `ReadinessCard` as the `actions` prop, which
+renders them as the card's last row. The score and the two ways to move it are one surface,
+not a card with a detached button row under it.
+
+It is one call — `computeExamReadiness` — read three ways:
+
+- **The ring** (`StudyGuideRadial`, the surface the docs elsewhere call the Study Guide
+  radial): one arc per syllabus concept, each section sized by its exam weight, each arc
+  filled by that concept's mastery state — green for an ordinary concept, gold for a keystone
+  (`lib/masteryFill.ts`). Its arcs come from `lib/readinessRing.ts`, so geometry lives in one
+  place. The number in the middle is `overallPct`, and it carries no caption: the card is
+  titled *Exam readiness* a few pixels away (`docs/visual-noise-review.md`, test 1).
+- **The band**, as the headline verdict at the top of the card under its title, with the
+  insight line under it when there is one (see above) and nothing under it when there is not.
+- **The criteria**, as one bar each. A bar's *thickness* is the weight that criterion carries
+  in the score (`4px + 6px × weight`), so the heavier one is visibly the heavier line and
+  nothing has to print "60% of score" — the worked example in
+  `docs/visual-noise-review.md` §3.1, reused here.
+
+There is no concept tally card beside it. A `Topics Learned` bar (`N/M at Level 3`) used to
+sit under the ring; it restated what the ring already draws, so it and the topic list it
+expanded onto were removed.
 
 ## Colour
 
@@ -77,3 +149,8 @@ The dials and bars are green at every value (`LEVEL3_TEXT` from `lib/masteryFill
 arc length carries the score, so the hue doesn't have to. A readiness dial that turned red at
 low scores would collide with the mastery ladder's use of red for decay, where red means
 *something you had has slipped*, not *you haven't started*.
+
+The one exception is the **keystone criterion's** bar, which is drawn in the keystone gold
+(`KEYSTONE_TEXT`) rather than green. That is not a value signal either: it is the same gold
+as the keystone spokes in the ring beside it, so the bar and the arcs it measures read as the
+same thing (`docs/keystone-concepts.md`).

@@ -40,7 +40,11 @@ export function SourceMaterialGallery({ entries, onOpen }: SourceMaterialGallery
   if (entries.length === 0) return null
 
   return (
-    <div className="source-material-gallery not-prose my-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+    // `items-start` is what keeps a card its own size: a grid track otherwise
+    // stretches every card to the tallest one in its row, and a source with two
+    // pills and a one-line reading ends up as a tall box of empty space next to
+    // a source with five pills and three.
+    <div className="source-material-gallery not-prose my-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 items-start gap-3">
       {entries.map(entry => {
         const meta = documents.get(entry.name.toLowerCase())
         // Bare names resolve to kind 'concept', exactly as the same link does in
@@ -58,9 +62,14 @@ export function SourceMaterialGallery({ entries, onOpen }: SourceMaterialGallery
               onOpen(ref, e)
             }}
           >
-            <Card className="h-full transition-all duration-150 hover:bg-accent/40 overflow-hidden flex flex-row items-stretch">
+            <Card className="transition-all duration-150 hover:bg-accent/40 overflow-hidden flex flex-row items-stretch">
+              {/* The cover sits at the top of the card, not its middle: the
+                  title is what the card is scanned for, and a centred jacket
+                  drifts down the card as the pills wrap onto more rows. `pt-4`
+                  matches the text block's own top padding so the two start on
+                  the same line. */}
               {meta?.coverImage && (
-                <div className="flex-shrink-0 p-2 flex items-center">
+                <div className="flex-shrink-0 p-2 pt-4 flex items-start">
                   <img
                     src={meta.coverImage}
                     alt={title}
@@ -87,7 +96,7 @@ export function SourceMaterialGallery({ entries, onOpen }: SourceMaterialGallery
                 )}
                 {entry.detail && (
                   <p
-                    className="text-xs text-muted-foreground leading-relaxed line-clamp-3 mt-auto"
+                    className="text-xs text-muted-foreground leading-relaxed line-clamp-3"
                     title={entry.detail}
                   >
                     {entry.detail}

@@ -1,3 +1,5 @@
+import type { ItemStatus } from '@/data/tracks'
+
 // How far along an exam's material is — the one definition of "is this exam
 // ready to study from?", keyed by the exam_progress key used everywhere else
 // (`P`, `FM`, `MAS-I`, `CAS-5`, `CAS-7`, … — see `wikiExamIdToProgressKey`).
@@ -47,4 +49,26 @@ export const EXAM_STATUS_LABEL: Record<ExamStatus, string | null> = {
   ready: null,
   beta: 'Beta',
   development: 'In Development',
+}
+
+/**
+ * What the end of a credential-path row offers (`components/ExamsPopout.tsx`).
+ *
+ *   'add'  — nothing started and there is material to study: the Add button,
+ *            which marks the exam in progress and opens the study-plan wizard
+ *   'plan' — being studied: set or change the exam date
+ *   'none' — nothing to offer, for one of two reasons the row states itself.
+ *            Either the material isn't there ("In development" / "Not covered
+ *            yet"), or the exam is passed — and a passed exam is struck
+ *            through, so offering to add it read as "start studying the exam
+ *            you just ticked off". Un-tick the dot and 'add' comes back.
+ *
+ * `canStudy` is `examStatus` above reduced to a yes/no: 'ready' or 'beta'.
+ */
+export type ExamRowAction = 'add' | 'plan' | 'none'
+
+export function examRowAction(status: ItemStatus, canStudy: boolean): ExamRowAction {
+  if (!canStudy) return 'none'
+  if (status === 'in_progress') return 'plan'
+  return status === 'not_started' ? 'add' : 'none'
 }

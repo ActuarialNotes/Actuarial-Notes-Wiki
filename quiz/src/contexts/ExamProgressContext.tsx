@@ -193,7 +193,20 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
       localStorage.setItem('quiz-journey', JSON.stringify(journey))
     } catch { /* ignore */ }
 
-    setExamRows(rows)
+    // Merge, never replace. A caller saves the rows it is looking at — the
+    // exams popout sends one track's slice — and the upsert above touches only
+    // those, so replacing the state would drop every other track's exams and
+    // strip `study_plan_config` / `study_plan_cache` off the rows it kept
+    // (the popout's rows carry neither), blanking cached study plans until the
+    // next refetch.
+    setExamRows(prev => {
+      const merged = prev.map(p => {
+        const update = rows.find(r => r.exam_id === p.exam_id)
+        return update ? { ...p, ...update } : p
+      })
+      const added = rows.filter(r => !prev.some(p => p.exam_id === r.exam_id))
+      return [...merged, ...added]
+    })
     setExamsState({ saving: false, error: null, success: 'Exam progress saved.' })
     return true
   }, [user])
@@ -211,7 +224,9 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
       console.warn('updateTargetDate: failed:', error.message)
       return false
     }
-    setExamRows(prev => prev.map(r => r.exam_id === examId ? { ...r, target_date: date } : r))
+    setExamRows(prev => prev.some(r => r.exam_id === examId)
+      ? prev.map(r => r.exam_id === examId ? { ...r, target_date: date } : r)
+      : [...prev, { exam_id: examId, status: 'in_progress' as ItemStatus, target_date: date }])
     return true
   }, [userId])
 
@@ -225,7 +240,9 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
       console.warn('updateStudyPlanConfig: failed:', error.message)
       return false
     }
-    setExamRows(prev => prev.map(r => r.exam_id === examId ? { ...r, study_plan_config: config } : r))
+    setExamRows(prev => prev.some(r => r.exam_id === examId)
+      ? prev.map(r => r.exam_id === examId ? { ...r, study_plan_config: config } : r)
+      : [...prev, { exam_id: examId, status: 'in_progress' as ItemStatus, target_date: null, study_plan_config: config }])
     return true
   }, [userId])
 
@@ -239,7 +256,9 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
       console.warn('updateStudyPlanCache: failed:', error.message)
       return false
     }
-    setExamRows(prev => prev.map(r => r.exam_id === examId ? { ...r, study_plan_cache: plan } : r))
+    setExamRows(prev => prev.some(r => r.exam_id === examId)
+      ? prev.map(r => r.exam_id === examId ? { ...r, study_plan_cache: plan } : r)
+      : [...prev, { exam_id: examId, status: 'in_progress' as ItemStatus, target_date: null, study_plan_cache: plan }])
     return true
   }, [userId])
 

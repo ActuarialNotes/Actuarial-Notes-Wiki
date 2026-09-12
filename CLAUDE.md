@@ -31,6 +31,9 @@ questions/<exam-id>/*.md                          — question bank (YAML frontm
 Guides/<Exam page>/*.md                           — study tips, one page per tip (frontmatter: exam,
                                                     section, order). Bundled but no longer rendered —
                                                     the exam-page "How to Study" card was removed
+Guides/*.md                                       — general guides, belonging to no exam ("How to Study
+                                                    for Actuarial Exams"). Listed on the Study Guides
+                                                    home page — data/examGuides.ts, GENERAL_GUIDES
 comprehension-checks/<exam-id>/*.md               — flashcard-collect gate questions (one .md per concept,
                                                     parsed by lib/comprehensionCheckParser.ts)
 Media/Attachments/                                — images referenced via ![[...]]
@@ -47,7 +50,13 @@ quiz/                                             — the React app (this is whe
 - `pages/` — route-level views (Quiz, Review, Dashboard, Flashcards, Search, Settings, Store,
   Upgrade, wiki/*, and `Research/` — the last is flag-gated)
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
-  `components/collect/` (flashcard-collection modal + 3D card), `components/research/` (flag-gated)
+  `components/collect/` (flashcard-collection modal + 3D card), `components/research/` (flag-gated).
+  `components/ConceptActionMenu.tsx` is **the** concept action menu — quiz, study guide, deck,
+  collect, learning progress, fact check — and the owner of the modals those rows open; the
+  concept popup (whose title is its only trigger) and every flashcard surface open that one
+  component, so the two can't drift apart. A surface adds only rows about *itself* (a card's
+  Study and Remove) through `leading` / `trailing`; view switches (Listen, the deck's view
+  modes) are each surface's own control, never menu rows.
 - `lib/` — core logic, mostly pure/testable modules (this is where the interesting algorithms live)
 - `data/` — authored static tables bundled into the app: `comprehensionChecks.ts` (parses the
   flashcard-collect gate questions from `comprehension-checks/<exam-id>/*.md` at build time via the
@@ -192,9 +201,13 @@ Other important `lib/` modules:
   `ready` (P, FM), `beta` (MAS-I, MAS-II, Exam 5) or `development` (Exams 6–9 — a syllabus
   outline with no question bank yet). The one definition; the study-guide exam grid greys
   those cards out with an "In development — not yet available" pill instead of a Beta label,
-  the exam page shows the amber *In Development* banner (`WikiFloatingSearch`), and the quiz
-  builder's Beta pill reads the same helper. Move an exam out of development here, not in the
-  surfaces.
+  the exam page shows the amber *In Development* banner (`WikiFloatingSearch`), the quiz
+  builder's Beta pill reads the same helper, and `ExamsPopout` uses it (together with "does
+  the vault have an `Exam *.md` page at all?") to decide which exams get an **Add** button.
+  Move an exam out of development here, not in the surfaces. The credential tracks in
+  `data/tracks.ts` list ~50 exams and the vault covers ten of them, so an exam can be
+  tracked on a credential path without being studiable — `data/tracks.test.ts` pins the
+  DEFAULT track (what a new account lands on) to exams that *are*.
 - `examGuides.ts` — turns the tip pages the build collects out of `Guides/<exam page>/` into
   one guide per exam, in the reading order their `order:` frontmatter authors (a page with
   none sorts last rather than into the middle of the run). Pure and tested;
@@ -203,6 +216,15 @@ Other important `lib/` modules:
   `kind: 'guide'` walk in the concept popup are all still here, so resurfacing it is a
   matter of adding a surface. Every tip ref carries an explicit `path` — "Scoring" is a page
   under every exam, so only the folder says which one to fetch.
+- `examColors.ts` — the **exam accent colour**: one hue per exam, stepping chromatically
+  around the wheel from blue at Exam P to red at Exam 9, so the colour says where on the
+  ladder an exam sits. Pure and tested, and it paints nothing itself —
+  `examAccentStyle(examKey)` hands back three CSS custom properties (`--exam-accent`,
+  `--exam-accent-muted`, `--exam-accent-soft`) to spread onto whatever element scopes the
+  exam. The Study Guides grid spends it on hover; anything else that needs an exam's feature
+  colour should read it from there rather than growing a second palette. Non-exam
+  requirements (VEE, the DISCs, PCPA, the professionalism courses) get `undefined`, not a
+  colour. See `docs/style-guide.md` §2.3.
 - `keystone.ts` — the keystone-concept read side: `findKeystone` / `isKeystone` (strict name
   matching, no fuzzy hits) and `keystoneProgress` (decay-aware mastery roll-up per exam).
   Rendered by `components/KeystoneName.tsx`. No surface lists an exam's keystones since the
@@ -296,14 +318,15 @@ Other important `lib/` modules:
 - `resourceTimeline.ts` / `resourceTimelineFilters.ts` — build/filter the dated Resources timeline (heatmap)
 - `readiness.ts` — exam-readiness scoring. `computeExamReadiness` is **the** readiness score
   (syllabus coverage 60% + keystone concepts 40%, plus band, section breakdown and concept
-  tally); every surface that prints a readiness % calls it — the Dashboard's Study Guide
-  radial, the exam grid and the readiness projection. The exam study guide shows no
+  tally); every surface that prints a readiness % calls it — the Dashboard's **Exam
+  readiness** card (its first card: the ring, the band verdict and the criterion bars), the
+  exam grid and the readiness projection. The exam study guide shows no
   readiness card (removed along with the orientation row). `computeReadiness` is the
   weighted section score it is built from — an input, not a second number to display.
 - `readinessRing.ts` — the geometry behind the **readiness ring**: one arc per syllabus
   concept, each section sized by its exam weight, each arc filled by that concept's mastery
   state. Pure and tested. Two surfaces draw it and differ only in chrome — the Dashboard's
-  Study Guide card (`StudyGuideRadial` in `components/ReadinessCard.tsx`, with a legend,
+  Exam readiness card (`StudyGuideRadial` in `components/ReadinessCard.tsx`, with a legend,
   curved section labels and a hover readout) and the exam page's title-row badge
   (`components/ReadinessRing.tsx`, everything stripped off) — so the two can never disagree
   about the shape of a syllabus. Geometry is in a fixed 280-unit viewBox; pick a size by
@@ -425,11 +448,13 @@ Other important `lib/` modules:
   The wait is announced before it's applied and always points at the concept page.
   See `docs/flashcard-collection.md`.
 - `localMasteryStore.ts` / `dailyProgressStore.ts` — localStorage-backed offline fallbacks that sync with Supabase
-- `github.ts` — fetches wiki content from GitHub raw URLs at runtime (for the live site, vs. the build-time bundle)
+- `github.ts` — fetches wiki content from GitHub raw URLs at runtime (for the live site, vs. the
+  build-time bundle). Note that `listRepoContents` hits the GitHub **API**, which is limited to
+  60 requests/hour per IP without `VITE_GITHUB_TOKEN` — don't put it on a path that has to work.
 - `supabase.ts` — Supabase client + shared row types
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **97 test files /
-~1430 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **99 test files /
+~1445 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, and the research/resource-timeline
 modules).
 
@@ -468,6 +493,17 @@ compile — don't "clean up" the flagged code as dead.
   markdown, `[[Wiki Links]]` and LaTeX all fine. The folder name is what ties a guide to its
   exam — `examIdFromFile`, so a dash-less exam picks up a `-1` suffix and Exam 5's key is
   `5-1`.
+- A guide page at the **top level** of `Guides/`, beside those folders, belongs to no exam —
+  it is an orientation to the course of study itself (`Guides/How to Study for Actuarial
+  Exams.md`). It is authored the same way (no `# Title`, wiki-links and LaTeX fine, no
+  frontmatter needed), rides along in `virtual:wiki-content`, and is listed on the Study
+  Guides home page from `GENERAL_GUIDES` in `data/examGuides.ts` — which is where the card's
+  title, one-line description and vault path are authored. It stays out of
+  `virtual:exam-guides`, which only walks the exam folders.
+- The four credential pages — `Concepts/Associate of the Casualty Actuarial Society
+  (ACAS).md` and its ASA / FCAS / FSA siblings — are what the Study Guides page's track
+  headings open. `data/tracks.ts` names them (`Track.conceptPage`), so a renamed page is a
+  one-line change there.
 - Every exam page ends with a `## Source Material` heading over a
   `> [!answer]- Source Material` callout: one top-level bullet per syllabus reading (a
   `[[wiki link]]`, normally to a `Resources/Books/` page) with an indented bullet naming the
@@ -533,11 +569,21 @@ npm test           # vitest run
 
 Vite plugins (`vite.config.ts`) bundle the markdown content at build time via virtual
 modules that read directly from the repo root:
+- `virtual:exam-pages` — just the root `Exam*.md` syllabus pages (~80 KB), read by
+  `hooks/useWikiSyllabus.ts`. Separate from `virtual:wiki-content` on purpose: that
+  module is megabytes and is imported from `WikiLayout`'s lazy chunk, but the Dashboard,
+  Sidebar, quiz builder and Flashcards all need to know *which exams exist* and none of
+  them mount `WikiLayout`. They used to resolve that from GitHub's Contents API at
+  runtime, so a rate-limit or outage left the app with no exams at all — an account
+  could add one and never see it appear. **Which exams exist is a build-time fact; keep
+  it off the network.**
 - `virtual:wiki-content` — `Exam*.md`, `Concepts/`, `Resources/Books/`
 - `virtual:questions-content` — `questions/`
 - `virtual:comprehension-checks` — `comprehension-checks/<exam-id>/`
 - `virtual:exam-guides` — the tip pages under `Guides/<exam page>/` (their markdown rides
-  along in `virtual:wiki-content`; bundled but unrendered — see `lib/examGuides.ts`)
+  along in `virtual:wiki-content`; bundled but unrendered — see `lib/examGuides.ts`). A
+  general guide at the top level of `Guides/` rides along in `virtual:wiki-content` too, but
+  never in this module
 - `virtual:resource-timeline` — the dated `Resources/{Books,Events,Regulation,Benchmarks}/`
   pages that power the Resources timeline/heatmap
 - `virtual:keystone-links` — for each keystone concept page, the concept pages it links to

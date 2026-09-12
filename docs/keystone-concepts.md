@@ -129,7 +129,7 @@ name, or the gold chip on the collect card — so the two never fight for the sa
 | Wiki search results (`components/wiki/WikiSearchPanel.tsx`) | Gold underline on the result's name; the category icon is untouched |
 | Standalone concept page (`pages/wiki/WikiConcept.tsx`) | Gold underline on the `<h1>`, same tap-to-explain |
 | Collect modal (`components/collect/CollectCard3D.tsx`) | A gold `KEYSTONE` chip + wash on the card being collected — a moment, not a name, so the glyph is allowed here |
-| Dashboard Study Guide radial (`components/ReadinessCard.tsx`) | Keystone spokes use the gold mastery ladder instead of the green one (`lib/masteryFill.ts`) |
+| Dashboard **Exam readiness** card (`components/ReadinessCard.tsx`) | Keystone spokes in the ring use the gold mastery ladder instead of the green one (`lib/masteryFill.ts`), and the **Keystone concepts** criterion bar beside it is drawn in the same gold |
 
 `components/KeystoneName.tsx` also exports `KeystoneSummary`, the explainer's
 contents on their own (heading, exam badge, mastered count), so the popup's

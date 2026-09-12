@@ -6,13 +6,12 @@ date: "2024"
 Edition: 8th
 Publisher: ACTEX Learning
 ISBN: 979-8-8901-6016-4
-Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/mathematics-of-investment-and-credit-broverman)"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ef768d94f4664402dc803648fab029800ea23627b27a869cc000d5f8720f744a
+  content_hash: sha256:08fecfb4142d94d5ab24d1f4d87a95974486d356a40bccae0468a3af5ceaf88d
   sources: []
   open_findings: 0
   open_critical: 0
@@ -105,4 +104,5 @@ verification:
 - 9.3 Options and the Binomial Option Pricing Model
 
 ## Links
-- [worldcat.org](https://search.worldcat.org/title/mathematics-of-investment-and-credit-broverman)
+- [Mathematics of Investment and Credit, 8th edition (ACTEX Learning)](https://www.actexlearning.com/exams/fm/mathematics-of-investment-and-credit)
+- [Find in a library (WorldCat)](https://search.worldcat.org/search?q=bn%3A9798890160164)

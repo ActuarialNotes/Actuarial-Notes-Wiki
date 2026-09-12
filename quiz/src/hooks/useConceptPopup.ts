@@ -1,3 +1,4 @@
+import type { ObjectiveIndex } from '@/lib/syllabusChapters'
 import { create } from 'zustand'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import {
@@ -60,9 +61,15 @@ interface ConceptPopupState {
   occurrenceIndex: number
   // What triggered the popup — used by "This Page" search to compute scope.
   sourcePath: string | null
+  // Which learning objective each concept of the source page belongs to, keyed
+  // by lowercased name (`lib/syllabusChapters.ts`). Set when the popup is opened
+  // from an exam page, which is the only place a syllabus's objectives exist;
+  // it is what cuts the footer's progress bar into the syllabus's own sections.
+  // Null everywhere else, and the bar is then the plain strip it has always been.
+  objectives: ObjectiveIndex | null
   // Set when opened from the dashboard to support the Viewing filter bar.
   dashboardContext: DashboardContext | null
-  openAt: (list: WikiEntryRef[], index: number, sourcePath?: string | null, studyPlanList?: WikiEntryRef[] | null, resourceList?: WikiEntryRef[] | null, options?: { initialFilter?: DashboardFilter; fullList?: WikiEntryRef[]; occurrences?: OccurrenceRef[] | null; occurrenceIndex?: number }) => void
+  openAt: (list: WikiEntryRef[], index: number, sourcePath?: string | null, studyPlanList?: WikiEntryRef[] | null, resourceList?: WikiEntryRef[] | null, options?: { initialFilter?: DashboardFilter; fullList?: WikiEntryRef[]; occurrences?: OccurrenceRef[] | null; occurrenceIndex?: number; objectives?: ObjectiveIndex | null }) => void
   // Opens the popup from the dashboard with optional study-plan/entire-syllabus filter.
   openDashboard: (
     fullList: WikiEntryRef[],
@@ -104,6 +111,7 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
   occurrences: null,
   occurrenceIndex: 0,
   sourcePath: null,
+  objectives: null,
   dashboardContext: null,
   openAt: (list, index, sourcePath = null, studyPlanList, resourceList, options) => {
     const filter = options?.initialFilter ?? 'entire-syllabus'
@@ -118,6 +126,10 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
       occurrences: filter === 'entire-syllabus' ? occurrences : null,
       occurrenceIndex: filter === 'entire-syllabus' ? Math.max(0, options?.occurrenceIndex ?? 0) : 0,
       sourcePath,
+      // Kept whatever the filter is: a study-plan or source-material walk is
+      // still a walk through the same syllabus, so its concepts still belong to
+      // the objectives that introduce them.
+      objectives: options?.objectives ?? null,
       dashboardContext: { studyPlanList: studyPlanList ?? null, fullList: options?.fullList ?? list, resourceList: resourceList ?? null, filter, circular: false, fromRadial: false, occurrences },
     })
   },
@@ -132,6 +144,8 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
       occurrences: null,
       occurrenceIndex: 0,
       sourcePath: null,
+      // The dashboard's walk is cross-exam, so it has no one syllabus to cut by.
+      objectives: null,
       dashboardContext: {
         studyPlanList,
         fullList,
@@ -243,11 +257,11 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
     }
     set({ pages: next.pages, pageIndex: next.index })
   },
-  close: () => set({ open: false, list: [], index: 0, pages: [], pageIndex: 0, occurrences: null, occurrenceIndex: 0, sourcePath: null, dashboardContext: null }),
+  close: () => set({ open: false, list: [], index: 0, pages: [], pageIndex: 0, occurrences: null, occurrenceIndex: 0, sourcePath: null, objectives: null, dashboardContext: null }),
   closeOnNavigation: pathname => {
     const { open, sourcePath } = get()
     if (open && sourcePath && sourcePath !== pathname) {
-      set({ open: false, list: [], index: 0, pages: [], pageIndex: 0, occurrences: null, occurrenceIndex: 0, sourcePath: null, dashboardContext: null })
+      set({ open: false, list: [], index: 0, pages: [], pageIndex: 0, occurrences: null, occurrenceIndex: 0, sourcePath: null, objectives: null, dashboardContext: null })
     }
   },
 }))

@@ -11,6 +11,7 @@ it is not installed, so CI without the dependency still runs everything else.
 
 from __future__ import annotations
 
+import importlib.util
 import os
 import sys
 import tempfile
@@ -729,8 +730,11 @@ def _make_pdf(path: Path, pages: list[str]) -> None:
     doc.close()
 
 
+# `import importlib` alone does not bring in `importlib.util`, so the submodule
+# is imported explicitly above: without it this guard raises AttributeError on a
+# cold interpreter and takes the whole module down instead of skipping.
 @unittest.skipUnless(
-    __import__("importlib").util.find_spec("pymupdf"), "PyMuPDF not installed"
+    importlib.util.find_spec("pymupdf") is not None, "PyMuPDF not installed"
 )
 class TestEndToEnd(unittest.TestCase):
     def test_soa_booklets_become_records(self):

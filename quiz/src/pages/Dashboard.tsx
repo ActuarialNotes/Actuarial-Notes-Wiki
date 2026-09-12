@@ -164,8 +164,8 @@ export default function Dashboard() {
   const profileRef = useRef<HTMLDivElement>(null)
   // ReadinessCard portals two of its cards into these slots so they render at the
   // top of the page: the Exam readiness card first — it is the answer to the
-  // question the dashboard exists to answer — then the primary actions that act on
-  // it, and the Study Schedule below them.
+  // question the dashboard exists to answer, and it carries the primary actions
+  // that act on it — then the Study Schedule below it.
   const [readinessSlotEl, setReadinessSlotEl] = useState<HTMLDivElement | null>(null)
   const [studyScheduleSlotEl, setStudyScheduleSlotEl] = useState<HTMLDivElement | null>(null)
   // FixMistakesButton portals its compact copy into this slot in the pinned
@@ -539,6 +539,58 @@ export default function Dashboard() {
     ? 'Wait…'
     : (hasTodaysPlan && planComplete ? 'Extra' : 'Quiz')
 
+  // Primary actions — Read concepts (left) + the narrow Fix Mistakes button +
+  // Start Today's Quiz (right). Authored here because this page owns their
+  // triggers, but handed to ReadinessCard, which renders them as the last row
+  // *inside* the Exam readiness card: the score and the two ways to move it are
+  // one surface. Fix Mistakes lives inside this block on purpose — the
+  // pinned-header copies swap in once primaryActionsRef has scrolled past, so
+  // all three have to scroll out together.
+  const primaryActions = activeSyllabus ? (
+    <div ref={primaryActionsRef} className="flex flex-col gap-3">
+      {/* Three across on a phone is tight, so the two wide actions drop to
+          text-sm below sm and are allowed to wrap rather than overflow the
+          row (Button is whitespace-nowrap by default). */}
+      <div className="flex gap-2 sm:gap-3">
+        <Button
+          variant="secondary"
+          onClick={handleReadConcepts}
+          className="min-w-0 flex-1 gap-1.5 sm:gap-2.5 whitespace-normal leading-tight text-sm sm:text-base h-auto px-3 sm:px-4 py-4"
+        >
+          <BookOpen className="h-5 w-5 shrink-0" />
+          Read concepts
+        </Button>
+
+        {/* Fix mistakes — the concepts behind questions you've missed and
+            not yet re-answered correctly. Hides itself when there are
+            none, leaving the two full-width actions side by side. */}
+        {!isGuest && MISTAKES_REVIEW_ENABLED && (
+          <FixMistakesButton
+            masteryRecords={activeExamRecords}
+            examTopic={questionExamLabel(activeSyllabus)}
+            compactSlot={mistakesSlotEl}
+          />
+        )}
+
+        {showQuizAction && (
+          <div className="relative min-w-0 flex-1">
+            <button
+              type="button"
+              data-sound="begin"
+              onClick={handleStartTodaysQuiz}
+              disabled={isLaunchingQuiz}
+              className="w-full h-full flex items-center justify-center gap-1.5 sm:gap-2.5 px-3 sm:px-4 py-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-sm sm:text-base font-semibold leading-tight transition-all active:scale-[0.97] disabled:opacity-80 disabled:cursor-default"
+            >
+              <Play className={`h-5 w-5 shrink-0 ${isLaunchingQuiz ? 'animate-pulse' : ''}`} />
+              {quizActionLabel}
+            </button>
+            {!planComplete && <TodayQuizCornerBadge count={todaysQuizBadgeCount} size="lg" />}
+          </div>
+        )}
+      </div>
+    </div>
+  ) : null
+
   return (
     <>
     <div className="relative">
@@ -790,62 +842,11 @@ export default function Dashboard() {
       )}
       {/* Exam readiness card — portaled here by ReadinessCard (below) so it
           leads the dashboard: it is the answer to the question the page exists
-          to answer. */}
+          to answer. The primary actions ride inside it (`primaryActions`). */}
       {activeSyllabus && <div ref={setReadinessSlotEl} />}
 
-      {/* Primary actions — Read concepts (left) + the narrow Fix Mistakes button
-          + Start Today's Quiz (right), one row directly below the readiness
-          card so the two ways to act on that score are the next thing read.
-          Fix Mistakes lives inside this block on purpose: the pinned-header
-          copies swap in once primaryActionsRef has scrolled past, so all three
-          have to scroll out together. */}
-      {activeSyllabus && (
-        <div ref={primaryActionsRef} className="flex flex-col gap-3">
-          {/* Three across on a phone is tight, so the two wide actions drop to
-              text-sm below sm and are allowed to wrap rather than overflow the
-              row (Button is whitespace-nowrap by default). */}
-          <div className="flex gap-2 sm:gap-3">
-            <Button
-              variant="secondary"
-              onClick={handleReadConcepts}
-              className="min-w-0 flex-1 gap-1.5 sm:gap-2.5 whitespace-normal leading-tight text-sm sm:text-base h-auto px-3 sm:px-4 py-4"
-            >
-              <BookOpen className="h-5 w-5 shrink-0" />
-              Read concepts
-            </Button>
-
-            {/* Fix mistakes — the concepts behind questions you've missed and
-                not yet re-answered correctly. Hides itself when there are
-                none, leaving the two full-width actions side by side. */}
-            {!isGuest && MISTAKES_REVIEW_ENABLED && (
-              <FixMistakesButton
-                masteryRecords={activeExamRecords}
-                examTopic={questionExamLabel(activeSyllabus)}
-                compactSlot={mistakesSlotEl}
-              />
-            )}
-
-            {showQuizAction && (
-              <div className="relative min-w-0 flex-1">
-                <button
-                  type="button"
-                  data-sound="begin"
-                  onClick={handleStartTodaysQuiz}
-                  disabled={isLaunchingQuiz}
-                  className="w-full h-full flex items-center justify-center gap-1.5 sm:gap-2.5 px-3 sm:px-4 py-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-sm sm:text-base font-semibold leading-tight transition-all active:scale-[0.97] disabled:opacity-80 disabled:cursor-default"
-                >
-                  <Play className={`h-5 w-5 shrink-0 ${isLaunchingQuiz ? 'animate-pulse' : ''}`} />
-                  {quizActionLabel}
-                </button>
-                {!planComplete && <TodayQuizCornerBadge count={todaysQuizBadgeCount} size="lg" />}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
       {/* Study Schedule card — also portaled here by ReadinessCard, below the
-          primary actions. */}
+          readiness card. */}
       {activeSyllabus && <div ref={setStudyScheduleSlotEl} />}
 
       {/* Congratulations banner — shown after returning from Stripe checkout */}
@@ -902,6 +903,7 @@ export default function Dashboard() {
             onPlanCompletionChange={setPlanComplete}
             studyScheduleSlot={studyScheduleSlotEl}
             readinessSlot={readinessSlotEl}
+            actions={primaryActions}
           />
         )}
       </div>

@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback, useEffect, useRef } from 'react'
+import { useMemo, useState, useCallback, useEffect, useRef, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import { AlertTriangle, ArrowUp, Check, CheckCircle2, Circle, Gem, Lock, Settings2, X } from 'lucide-react'
@@ -299,6 +299,12 @@ interface Props {
    *  under the exam tabs so readiness is the first thing on the page. Renders inline
    *  at the top of this card's own stack when omitted. */
   readinessSlot?: HTMLElement | null
+  /** The primary actions that act on this score (Read concepts / Fix mistakes /
+   *  Start quiz). Rendered as the last block *inside* the Exam readiness card —
+   *  the score and the two ways to move it belong to one surface — but authored
+   *  by the Dashboard, which owns their triggers. Omitted, the card just ends
+   *  after its criteria. */
+  actions?: ReactNode
 }
 
 export function ReadinessCard({
@@ -306,7 +312,7 @@ export function ReadinessCard({
   config, loading, examDate, onConfigChange, onRegenerate, onReplaceConcepts, onExamDateChange,
   openConceptsTrigger, startQuizTrigger, scrollToRadialTrigger,
   isPremium = true, onPlanCompletionChange, openDayCompleteInfoTrigger, studyScheduleSlot,
-  readinessSlot,
+  readinessSlot, actions,
 }: Props) {
   const navigate = useNavigate()
   const { user } = useAuth()
@@ -826,14 +832,31 @@ export function ReadinessCard({
   }, [popupCurrentName, popupFromRadial, popupDashboardFilter])
 
   // Exam readiness card — the headline answer to "how ready am I?", and the
-  // first thing on the Dashboard. The ring carries the score itself (one arc
-  // per syllabus concept, gold for a keystone); beside it sit the band verdict
-  // and the two criteria the score is made of, so a number as low as 3% still
-  // says *which* half of readiness is missing. Portals into `readinessSlot`
-  // when the Dashboard supplies one.
+  // first thing on the Dashboard. It reads top to bottom: the title and the
+  // band verdict, then the ring carrying the score itself (one arc per syllabus
+  // concept, gold for a keystone) beside the two criteria the score is made of,
+  // so a number as low as 3% still says *which* half of readiness is missing,
+  // then the primary actions (`actions`) that move it. Portals into
+  // `readinessSlot` when the Dashboard supplies one.
   const readinessCardContent = (
       <Card ref={studyGuideCardRef} className="order-none border-0">
-        <CardContent className="p-6">
+        <CardContent className="p-6 space-y-6">
+          {/* The card names itself and gives its verdict first, at the top,
+              rather than beside the ring: on a phone the row stacks, so a
+              title parked to the ring's right ended up halfway down the card
+              with the reader already past it. */}
+          <div className="space-y-1.5">
+            <h3 className="text-sm font-semibold">Exam readiness</h3>
+            <p className="text-xl font-semibold tracking-tight leading-tight">{readiness.band.label}</p>
+            {/* The insight line, when there is one. `readiness.insight` is
+                null on an untouched exam and whenever no rule found anything
+                worth a line, and the paragraph goes with it — nothing generic
+                stands in (lib/readiness.ts). */}
+            {readiness.insight && (
+              <p className="text-sm text-muted-foreground leading-snug">{readiness.insight.text}</p>
+            )}
+          </div>
+
           <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-center sm:gap-8">
             <div className="w-full max-w-[280px] shrink-0 sm:w-[250px]">
               <StudyGuideRadial
@@ -851,19 +874,7 @@ export function ReadinessCard({
               />
             </div>
 
-            <div className="w-full min-w-0 flex-1 space-y-5">
-              <div className="space-y-1.5">
-                <h3 className="text-sm font-semibold">Exam readiness</h3>
-                <p className="text-xl font-semibold tracking-tight leading-tight">{readiness.band.label}</p>
-                {/* The insight line, when there is one. `readiness.insight` is
-                    null on an untouched exam and whenever no rule found
-                    anything worth a line, and the paragraph goes with it —
-                    nothing generic stands in (lib/readiness.ts). */}
-                {readiness.insight && (
-                  <p className="text-sm text-muted-foreground leading-snug">{readiness.insight.text}</p>
-                )}
-              </div>
-
+            <div className="w-full min-w-0 flex-1">
               {/* The criteria. Each bar's *thickness* is the weight it carries in
                   the headline score, so the heavier one is visibly the heavier
                   line and nothing has to print "60% of score"
@@ -899,12 +910,15 @@ export function ReadinessCard({
               </div>
             </div>
           </div>
+
+          {/* The two ways to act on this score, inside the card with it. */}
+          {actions}
         </CardContent>
       </Card>
   )
 
   // Study Schedule (heatmap) card. Portals into `studyScheduleSlot` when the
-  // Dashboard supplies one (a slot below its primary actions), so the card
+  // Dashboard supplies one (a slot below the readiness card), so the card
   // renders near the top of the page while its state/logic stays owned by this
   // component; otherwise renders inline below in its default bento-grid position.
   const studyScheduleCardContent = (

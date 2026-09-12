@@ -108,17 +108,65 @@ async function collectWikiContent(): Promise<WikiBundleData> {
   // network fetch, but they stay out of `index`: a tip is read from its exam's
   // card, not found by searching the wiki for a concept. The list of them is
   // its own module (`virtual:exam-guides`, below).
-  const guideExams = await readdir(path.join(REPO_ROOT, 'Guides')).catch(() => [] as string[])
-  for (const examDir of guideExams) {
-    const dir = path.join(REPO_ROOT, 'Guides', examDir)
-    for (const name of await readdir(dir).catch(() => [] as string[])) {
-      if (!name.endsWith('.md')) continue
-      const text = await readFile(path.join(dir, name), 'utf-8').catch(() => null)
-      if (text != null) files[`Guides/${examDir}/${name}`] = text
+  // A guide page sitting at the top level of Guides/ belongs to no exam — it is
+  // an orientation to the course of study itself, listed on the Study Guides
+  // home page (`data/examGuides.ts`, GENERAL_GUIDES). It rides along in `files`
+  // for the same reason a tip does, and stays out of `index` and out of
+  // `virtual:exam-guides` (which only walks the exam folders).
+  const guideEntries = await readdir(path.join(REPO_ROOT, 'Guides'), { withFileTypes: true }).catch(() => [])
+  for (const entry of guideEntries) {
+    if (entry.isDirectory()) {
+      const dir = path.join(REPO_ROOT, 'Guides', entry.name)
+      for (const name of await readdir(dir).catch(() => [] as string[])) {
+        if (!name.endsWith('.md')) continue
+        const text = await readFile(path.join(dir, name), 'utf-8').catch(() => null)
+        if (text != null) files[`Guides/${entry.name}/${name}`] = text
+      }
+      continue
     }
+    if (!entry.name.endsWith('.md')) continue
+    const text = await readFile(path.join(REPO_ROOT, 'Guides', entry.name), 'utf-8').catch(() => null)
+    if (text != null) files[`Guides/${entry.name}`] = text
   }
 
   return { files, index }
+}
+
+// ── Exam pages ───────────────────────────────────────────────────────────────
+// Just the root `Exam *.md` syllabus pages, as their own tiny module.
+//
+// `virtual:wiki-content` already carries these, but it also carries every
+// concept and resource page — megabytes that only the wiki routes need, and
+// which is why that module is imported from `WikiLayout` (its own lazy chunk).
+// The syllabi, by contrast, are needed by the Dashboard, the Sidebar, the quiz
+// builder and Flashcards, none of which mount `WikiLayout`. Those surfaces used
+// to reach GitHub's Contents API at runtime for them, which meant an API
+// outage, an offline user or an unauthenticated rate-limit (60 requests/hour
+// per IP) left the app with *no* exams at all — a new account could add an exam
+// and never see it appear. Bundling the ~80 KB of markdown removes that
+// dependency entirely. See `useWikiSyllabus`.
+async function collectExamPages(): Promise<Record<string, string>> {
+  const files: Record<string, string> = {}
+  const rootEntries = await readdir(REPO_ROOT).catch(() => [] as string[])
+  for (const name of rootEntries) {
+    if (!name.endsWith('.md') || !/^Exam\b/i.test(name)) continue
+    const text = await readFile(path.join(REPO_ROOT, name), 'utf-8').catch(() => null)
+    if (text != null) files[name] = text
+  }
+  return files
+}
+
+function examPagesPlugin(): Plugin {
+  const VIRTUAL_ID = 'virtual:exam-pages'
+  const RESOLVED_ID = '\0' + VIRTUAL_ID
+  return {
+    name: 'exam-pages',
+    resolveId: (id) => id === VIRTUAL_ID ? RESOLVED_ID : undefined,
+    load: async (id) => {
+      if (id !== RESOLVED_ID) return
+      return `export default ${JSON.stringify(await collectExamPages())}`
+    },
+  }
 }
 
 function wikiContentPlugin(): Plugin {
@@ -535,7 +583,7 @@ function pdfjsAssetsPlugin(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), wikiContentPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), examGuidesPlugin(), keystoneLinksPlugin(), pdfjsAssetsPlugin()],
+  plugins: [react(), examPagesPlugin(), wikiContentPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), examGuidesPlugin(), keystoneLinksPlugin(), pdfjsAssetsPlugin()],
   resolve: {
     alias: { '@': path.resolve(__dirname, 'src') },
   },

@@ -21,6 +21,32 @@ function extractUrl(value: string): string | undefined {
   return m ? m[1] : (value.startsWith('http') ? value : undefined)
 }
 
+/**
+ * A library-catalogue search for a book, built from the ISBN its page already
+ * transcribes.
+ *
+ * This exists because the alternative kept being wrong. WorldCat's
+ * `/title/<n>` paths take an OCLC control number, so a title-and-author slug
+ * written into that position ("…/title/mathematical-interest-theory-vaaler")
+ * is a guess, and every one of those guesses 404s. Even a real control number
+ * is a poor thing to author by hand: it pins one manifestation, so it can
+ * quietly point at a different edition than the page describes.
+ *
+ * An ISBN search cannot be wrong in either way — it is derived from a number
+ * taken off the book itself, and it names a search rather than claiming a
+ * record exists. The URL shape is the one OCLC documents for deep links
+ * (`worldcat.org/isbn/<isbn>`, which redirects here).
+ *
+ * Returns nothing unless the ISBN is a well-formed 10- or 13-character one:
+ * no button at all beats a button onto an empty result page.
+ */
+export function librarySearchUrl(isbn?: string): string | undefined {
+  if (!isbn) return undefined
+  const digits = isbn.replace(/[\s-]/g, '').toUpperCase()
+  if (!/^(?:\d{9}[\dX]|\d{13})$/.test(digits)) return undefined
+  return `https://search.worldcat.org/search?q=bn%3A${digits}`
+}
+
 export function parseResourceMeta(raw: string): ResourceMeta {
   let attrs: Record<string, unknown> = {}
   try {
@@ -30,8 +56,13 @@ export function parseResourceMeta(raw: string): ResourceMeta {
   }
   const str = (v: unknown) => (v != null ? String(v).trim() || undefined : undefined)
 
+  const isbn = str(attrs['ISBN'])
+  // An authored link is where the source actually *is* — a publisher's PDF, a
+  // standards body's page. Only when a page names no such place (a textbook
+  // that is simply for sale) does the card fall back to finding it in a
+  // library.
   const linkStr = str(attrs['Find at your local library at']) ?? str(attrs['Available from'])
-  const getCopyUrl = linkStr ? extractUrl(linkStr) : undefined
+  const getCopyUrl = (linkStr ? extractUrl(linkStr) : undefined) ?? librarySearchUrl(isbn)
 
   const body = raw.replace(/^---\n[\s\S]*?\n---\n?/, '')
   const imgMatch = /!\[\[([^\]|]+)\]\]/.exec(body)
@@ -50,7 +81,7 @@ export function parseResourceMeta(raw: string): ResourceMeta {
     year: str(attrs['Year']),
     edition: str(attrs['Edition']),
     publisher: str(attrs['Publisher']),
-    isbn: str(attrs['ISBN']),
+    isbn,
     type: str(attrs['Type']),
     code: str(attrs['Code']),
     coverImageUrl,

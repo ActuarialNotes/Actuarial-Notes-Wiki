@@ -5,6 +5,7 @@ import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { fromSlug, pathToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { findSyllabiForConcept } from '@/lib/conceptMatch'
 import { ChooseSyllabusModal } from '@/components/wiki/ChooseSyllabusModal'
+import { SyllabusChapterBar } from '@/components/wiki/SyllabusChapterBar'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
@@ -420,6 +421,13 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, backLi
             Beta
           </div>
         )}
+
+        {/* The syllabus's own chapters, along the header's bottom edge: one
+            segment per learning objective, sized by its share of the exam.
+            Renders nothing on a page that has none, which is every page but an
+            exam's. Hidden under the search dropdown, like the banners above —
+            it measures the page behind it, and that page is covered. */}
+        {!isExpanded && !planOpen && <SyllabusChapterBar />}
       </div>
 
       {chooser && (

@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest'
-import { isNumberedOutline, parseResourceMeta, preprocessResourceMarkdown } from './resourceMeta'
+import {
+  isNumberedOutline,
+  librarySearchUrl,
+  parseResourceMeta,
+  preprocessResourceMarkdown,
+} from './resourceMeta'
 
 const OUTLINE = `## 1 Interest Rate Measurement
 
@@ -61,21 +66,78 @@ ${OUTLINE}`
 describe('parseResourceMeta', () => {
   it('reads bibliographic fields and the get-a-copy link', () => {
     const md = `---
+Title: Basic Ratemaking
+Author: Geoff Werner
+Year: "2016"
+Edition: 5th
+Publisher: Casualty Actuarial Society
+Available from: "[casact.org](https://www.casact.org/ratemaking.pdf)"
+---
+Body`
+    const meta = parseResourceMeta(md)
+    expect(meta.title).toBe('Basic Ratemaking')
+    expect(meta.author).toBe('Geoff Werner')
+    expect(meta.edition).toBe('5th')
+    expect(meta.getCopyUrl).toBe('https://www.casact.org/ratemaking.pdf')
+  })
+
+  // A textbook that is simply for sale names no place to fetch it from, so the
+  // card's one action has to be built from the ISBN. Before this, those pages
+  // carried a hand-written WorldCat /title/<slug> link — a guess at a URL that
+  // only takes OCLC control numbers, so every one of them 404'd.
+  it('falls back to a library search built from the ISBN', () => {
+    const md = `---
 Title: Mathematics of Investment and Credit
 Author: Samuel A. Broverman
 Year: "2024"
 Edition: 8th
 Publisher: ACTEX Learning
 ISBN: 979-8-8901-6016-4
-Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/x)"
 ---
 Body`
     const meta = parseResourceMeta(md)
-    expect(meta.title).toBe('Mathematics of Investment and Credit')
-    expect(meta.author).toBe('Samuel A. Broverman')
-    expect(meta.edition).toBe('8th')
     expect(meta.isbn).toBe('979-8-8901-6016-4')
-    expect(meta.getCopyUrl).toBe('https://search.worldcat.org/title/x')
+    expect(meta.getCopyUrl).toBe('https://search.worldcat.org/search?q=bn%3A9798890160164')
+  })
+
+  // An authored link is the real location of the source; the ISBN search is
+  // only the fallback, so it must never displace one.
+  it('prefers an authored source link over the ISBN search', () => {
+    const md = `---
+Title: Basic Ratemaking
+ISBN: 978-0134753119
+Available from: "[casact.org](https://www.casact.org/ratemaking.pdf)"
+---
+Body`
+    expect(parseResourceMeta(md).getCopyUrl).toBe('https://www.casact.org/ratemaking.pdf')
+  })
+
+  it('offers no link for a page with neither a source nor an ISBN', () => {
+    expect(parseResourceMeta('---\nTitle: Landmark Legal\n---\nBody').getCopyUrl).toBeUndefined()
+  })
+})
+
+describe('librarySearchUrl', () => {
+  it('strips the hyphens an ISBN is printed with', () => {
+    expect(librarySearchUrl('978-0-9829174-7-3')).toBe(
+      'https://search.worldcat.org/search?q=bn%3A9780982917473',
+    )
+  })
+
+  it('accepts a 10-digit ISBN, check digit X included', () => {
+    expect(librarySearchUrl('0-387-31073-X')).toBe(
+      'https://search.worldcat.org/search?q=bn%3A038731073X',
+    )
+  })
+
+  // A button onto an empty result page is worse than no button: the card drops
+  // its one control rather than promise a copy it cannot lead to.
+  it('returns nothing for anything that is not a well-formed ISBN', () => {
+    expect(librarySearchUrl(undefined)).toBeUndefined()
+    expect(librarySearchUrl('')).toBeUndefined()
+    expect(librarySearchUrl('CAS Study Kit')).toBeUndefined()
+    expect(librarySearchUrl('978-01347531')).toBeUndefined()
+    expect(librarySearchUrl('97801347531199')).toBeUndefined()
   })
 
   // The generated covers (scripts/generate_resource_covers.py) are SVG, and a

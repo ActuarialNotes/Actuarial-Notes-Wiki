@@ -6,13 +6,12 @@ date: "2024"
 Edition: 2nd
 Publisher: ACTEX Learning
 ISBN: 979-8-89016-187-1
-Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/financial-mathematics-theory-and-practice-brown-kopp)"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:29640dcbdc2171d322a099beba6952b726f98962e9bf257cf41adc0d56daf193
+  content_hash: sha256:b717a7497d5a14a9f22937c07bf0a5af20bc59aab7f37a5a5d3a46c50cd8a6d2
   sources: []
   open_findings: 0
   open_critical: 0
@@ -92,4 +91,5 @@ verification:
 - 9.4 [[Immunization|Immunization Conditions]]
 
 ## Links
-- [worldcat.org](https://search.worldcat.org/title/financial-mathematics-theory-and-practice-brown-kopp)
+- [Financial Mathematics: Theory and Practice, 2nd edition (ACTEX Learning)](https://www.actexlearning.com/exams/fm/financial-mathematics-theory-and-practice-second-edition)
+- [Find in a library (WorldCat)](https://search.worldcat.org/search?q=bn%3A9798890161871)

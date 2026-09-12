@@ -195,15 +195,66 @@ export function ActiveExamCardLoading() {
   )
 }
 
-export function ActiveExamCardEmpty({ onChooseExam }: { onChooseExam?: () => void }) {
+/**
+ * The dashboard with nothing on it.
+ *
+ * Three different situations used to land here under one message ("No active
+ * exam yet"), which is why "I added an exam and nothing happened" was so hard
+ * to act on: the exam list failed to load, or the exams the learner *has*
+ * marked in progress have no material in the vault, or they genuinely haven't
+ * added one. Say which.
+ */
+export function ActiveExamCardEmpty({ onChooseExam, unsupportedExams = [], loadError }: {
+  onChooseExam?: () => void
+  /** Exams marked in progress that have no syllabus page, so can't be shown. */
+  unsupportedExams?: string[]
+  /** Set when the exam syllabi couldn't be loaded at all. */
+  loadError?: string | null
+}) {
   const navigate = useNavigate()
+  const choose = () => onChooseExam ? onChooseExam() : navigate('/settings#exams')
+
+  if (loadError) {
+    return (
+      <Card className="border-0">
+        <CardContent className="py-8 text-center space-y-3">
+          <p className="text-sm font-medium">Couldn&apos;t load the exam list.</p>
+          <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+            Your progress is safe — the syllabus pages just didn&apos;t come through. Reloading
+            usually fixes it.
+          </p>
+          <Button onClick={() => window.location.reload()}>Reload</Button>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  if (unsupportedExams.length > 0) {
+    return (
+      <Card className="border-0">
+        <CardContent className="py-8 text-center space-y-3">
+          <p className="text-sm font-medium">
+            No study material for {unsupportedExams.join(', ')} yet.
+          </p>
+          <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+            {unsupportedExams.length === 1 ? "It's" : "They're"} still tracked on your credential
+            path. Add an exam we cover — P, FM, MAS-I, MAS-II or Exam 5 — to start studying.
+          </p>
+          <Button onClick={choose}>Add an Exam</Button>
+        </CardContent>
+      </Card>
+    )
+  }
+
   return (
     <Card className="border-0">
       <CardContent className="py-8 text-center space-y-3">
-        <p className="text-sm text-muted-foreground">No active exam yet.</p>
-        <Button onClick={() => onChooseExam ? onChooseExam() : navigate('/settings#exams')}>
-          Choose an Exam
-        </Button>
+        <p className="text-sm font-medium">Add the exam you&apos;re studying for.</p>
+        <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+          Your concepts, quizzes and progress all hang off it — this dashboard stays empty until
+          there&apos;s one here.
+        </p>
+        <Button onClick={choose}>Add an Exam</Button>
       </CardContent>
     </Card>
   )

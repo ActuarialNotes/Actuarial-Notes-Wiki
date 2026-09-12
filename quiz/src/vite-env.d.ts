@@ -21,6 +21,12 @@ declare module 'virtual:wiki-content' {
   export default content
 }
 
+declare module 'virtual:exam-pages' {
+  /** Every root `Exam *.md` syllabus page, keyed by file name. */
+  const examPages: Record<string, string>
+  export default examPages
+}
+
 declare module 'virtual:questions-content' {
   const questions: string[]
   export default questions

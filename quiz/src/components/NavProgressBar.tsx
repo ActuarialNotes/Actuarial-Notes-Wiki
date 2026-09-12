@@ -6,6 +6,7 @@ import {
   scrubPositionAt,
   segmentAt,
   segmentFillPercent,
+  segmentKeyTarget,
   type NavSegment,
   type NavSegmentMark,
 } from '@/lib/navScrub'
@@ -83,6 +84,14 @@ export interface NavProgressBarProps {
    * chapters, and evenly spaced fictions would read as its real structure.
    */
   segments?: NavSegmentMark[]
+  /**
+   * What a key press moves by. `'item'` (the default) steps one item, which is
+   * what a bar of pages or cards wants. `'segment'` steps chapter to chapter,
+   * for a bar whose single item is too fine to be worth reaching on its own —
+   * the syllabus bar, where a position is a thousandth of an exam. Ignored
+   * without `segments`.
+   */
+  keyStep?: 'item' | 'segment'
 }
 
 /** Percentage filled for a 1-indexed position, clamped to 0–100. */
@@ -166,6 +175,7 @@ export function NavProgressBar({
   onScrub,
   formatValue,
   segments,
+  keyStep = 'item',
 }: NavProgressBarProps) {
   const percentage = navProgressPercent(current, total)
   const trackRef = useRef<HTMLDivElement>(null)
@@ -250,7 +260,9 @@ export function NavProgressBar({
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
-    const target = scrubKeyTarget(e.key, position, total)
+    const target = keyStep === 'segment' && chapters.length > 0
+      ? segmentKeyTarget(e.key, position, chapters, total)
+      : scrubKeyTarget(e.key, position, total)
     if (target === null) return
     // These keys scroll the surface behind the bar otherwise.
     e.preventDefault()
@@ -261,13 +273,18 @@ export function NavProgressBar({
   // from the fill; before that it follows the mouse.
   const preview = scrubbing ? position : hover
   const previewChapter = preview === null ? null : segmentAt(chapters, preview)
+  const previewText = preview === null
+    ? ''
+    : (formatValue ? formatValue(preview) : `${preview} of ${total}`)
   const currentChapter = segmentAt(chapters, position)
   // A screen reader gets the chapter the same way the bubble shows it — "page
   // 212 of 423, Question 14" — since that is what says where the drag has got to.
-  const valueText = [
-    formatValue ? formatValue(position) : `${position} of ${total}`,
-    currentChapter?.label,
-  ].filter(Boolean).join(', ')
+  // A surface whose position has no reading of its own — the syllabus bar, where
+  // the number is a share of an exam — returns an empty string from
+  // `formatValue`, and then the chapter is the whole readout.
+  const positionText = formatValue ? formatValue(position) : `${position} of ${total}`
+  const valueText = [positionText, currentChapter?.label].filter(Boolean).join(', ')
+    || `${position} of ${total}`
 
   return (
     <div
@@ -303,7 +320,7 @@ export function NavProgressBar({
       {/* Which item the press would land on, and which chapter that is. On a
           long document the fill alone doesn't answer either — 62% of 423 pages
           is not a page number, and a page number is not a section. */}
-      {preview !== null && (
+      {preview !== null && (previewText || previewChapter?.label) && (
         <span
           aria-hidden
           className="pointer-events-none absolute bottom-full z-10 mb-1 -translate-x-1/2 whitespace-nowrap rounded bg-popover px-1.5 py-0.5 text-[11px] font-medium tabular-nums text-popover-foreground shadow-md"
@@ -316,9 +333,11 @@ export function NavProgressBar({
             // is what you are aiming at and the number is how to get back.
             <span className="block max-w-[14rem] truncate text-center">{previewChapter.label}</span>
           )}
-          <span className={cn('block text-center', previewChapter?.label && 'font-normal text-popover-foreground/70')}>
-            {formatValue ? formatValue(preview) : `${preview} of ${total}`}
-          </span>
+          {previewText && (
+            <span className={cn('block text-center', previewChapter?.label && 'font-normal text-popover-foreground/70')}>
+              {previewText}
+            </span>
+          )}
         </span>
       )}
 

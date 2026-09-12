@@ -3,6 +3,7 @@ import { Check, ChevronDown, ExternalLink, FileText, Flag, Loader2 } from 'lucid
 import { fetchWikiFile, githubBlobUrl } from '@/lib/github'
 import { Button } from '@/components/ui/button'
 import { ReportIssueModal } from '@/components/ReportIssueModal'
+import { FactCheckSources } from '@/components/FactCheckSources'
 import { cn } from '@/lib/utils'
 import {
   FACT_CHECK_TONE_CLASSES,
@@ -42,7 +43,11 @@ import {
  *  - a **finding** as one row of a list card, with its severity as a chip on the
  *    same four tones, expanding in place to the evidence behind it. The evidence
  *    runs to a paragraph of citations, which is right in the log and unreadable
- *    as a wall — so it stays folded until asked for.
+ *    as a wall — so it stays folded until asked for;
+ *  - and, under all of it, the **syllabus sources** a check on a concept is run
+ *    against (`components/FactCheckSources.tsx`) — the same resource cards the
+ *    resource page leads with, so an unchecked page still says what checking it
+ *    would mean.
  *
  * Sidecar logs are deliberately not bundled at build time — they grow without
  * bound and only matter when someone opens this panel — so the log is fetched on
@@ -152,6 +157,14 @@ export function FactCheckPanel({
           <EntrySection title="Notes" groups={groups.notes} />
         </>
       )}
+
+      {/* What a check on this page is run against — its exam's syllabus
+          readings. Below the record, because what has been found on the page
+          outranks the material it would be checked against; on the unchecked
+          pages that are most of the vault there is no record above it, and this
+          is the whole answer. Concept pages only — every other page renders
+          nothing (see the component). */}
+      <FactCheckSources contentPath={contentPath} />
 
       <div className="flex items-center justify-between gap-2 border-t border-border pt-4">
         {log ? (

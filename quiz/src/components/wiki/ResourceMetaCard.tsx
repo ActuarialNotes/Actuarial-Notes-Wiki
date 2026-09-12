@@ -25,6 +25,17 @@ import type { ResourceMeta } from '@/lib/resourceMeta'
 interface ResourceMetaCardProps {
   meta: ResourceMeta
   compact?: boolean
+  /** Extra classes on the card itself — a host that wants it to fill a column. */
+  className?: string
+  /**
+   * Send a PDF source to a browser tab instead of the in-app reader.
+   *
+   * The reader is an aside pinned to the bottom of the viewport, under the
+   * app's overlay layer, so a card read *inside* a dialog (the Fact Check
+   * sheet) would open a document behind the thing that opened it. There the
+   * link is the honest affordance.
+   */
+  linkOnly?: boolean
   /**
    * Whether the surface this card is read on is full screen — the concept
    * popup in focus mode. Passed to the reader so it covers that page instead
@@ -40,7 +51,14 @@ interface ResourceMetaCardProps {
   onViewerOpenChange?: (open: boolean) => void
 }
 
-export function ResourceMetaCard({ meta, compact, hostFullScreen, onViewerOpenChange }: ResourceMetaCardProps) {
+export function ResourceMetaCard({
+  meta,
+  compact,
+  className,
+  linkOnly = false,
+  hostFullScreen,
+  onViewerOpenChange,
+}: ResourceMetaCardProps) {
   // A cover that fails to load drops its column entirely — no empty gutter.
   const [coverFailed, setCoverFailed] = useState(false)
   const [viewing, setViewing] = useState(false)
@@ -50,7 +68,7 @@ export function ResourceMetaCard({ meta, compact, hostFullScreen, onViewerOpenCh
   // has to find their way back from. A PDF on a publisher the proxy won't serve
   // (and every non-PDF link — a library catalogue, a publisher's shop page)
   // stays an ordinary out-link.
-  const canView = !!meta.getCopyUrl && isPdf && isSupportedPdfSource(meta.getCopyUrl)
+  const canView = !linkOnly && !!meta.getCopyUrl && isPdf && isSupportedPdfSource(meta.getCopyUrl)
   const CopyIcon = isPdf ? FileText : ExternalLink
   // Standards pages name the same body as both author and publisher — say it once.
   const publisher = meta.publisher === meta.author ? undefined : meta.publisher
@@ -88,6 +106,7 @@ export function ResourceMetaCard({ meta, compact, hostFullScreen, onViewerOpenCh
         // the text to the top of it left the card bottom-heavy with dead space.
         'not-prose flex w-fit max-w-full items-center gap-4 rounded-lg border border-border bg-card',
         compact ? 'mb-3 p-3' : 'mb-4 p-4',
+        className,
       )}
     >
       {meta.coverImageUrl && !coverFailed && (

@@ -227,8 +227,16 @@ Where the way in sits depends on the surface:
   verdict as a tinted pill beside it. The standalone `/wiki/concept/…` and
   `/wiki/resource/…` pages, which have no action menu, keep the badge in the
   title row.
-- **Questions** — the badge on the explanation panel, the moment a student who
-  has just disagreed with a question is already looking at the discrepancy.
+- **Questions** — two ways in, because a question is met at two moments. The
+  badge on the explanation panel catches the student who has just disagreed with
+  a question and is already looking at the discrepancy; the **question info**
+  sheet (`components/QuestionInfoButton.tsx`, the *Info* button in the quiz's
+  question bar) carries the same verdict as a row beside the paper the question
+  was sat on and the file it is authored in, and is reachable while the question
+  is still live. Provenance and "has anyone checked this?" are the same question
+  asked twice, so they answer in the same place. The row opens the same
+  `FactCheckDialog`, which binds Esc itself — the info sheet hands the key over
+  while the record is up, so one Esc closes one thing.
 - **Exam pages** — nothing. An exam page is a syllabus outline; the claims worth
   checking live on the concept and resource pages it links to.
 
@@ -257,6 +265,27 @@ checked against?* and *what has changed since?*
   the substance — `claim`, `evidence`, `proposed_action`, `note` — and not to the
   run id, locus or fingerprint beside them. A `✓` marks an open finding whose
   `applied: true` says the page in front of the reader has already been corrected.
+- **Syllabus sources** — on a *concept* page, under all of the above: the
+  readings the concept's exam is taught from, as the same
+  `components/wiki/ResourceMetaCard.tsx` the resource page leads with — cover,
+  title, author, the bibliographic chips and the link to go and get it.
+  `lib/factCheckSources.ts` derives them: the concept's exam pages
+  (`findSyllabiForConcept` over the bundled `virtual:exam-pages`), then those
+  pages' `## Source Material` readings, unioned and deduplicated, each card
+  carrying the exams that list it.
+
+  It exists because of what the vault mostly says. *Not fact checked* is the
+  honest state of almost every page, and on its own it tells a reader what has
+  not happened without telling them what would: these are the books the claim
+  would be checked against — rank 2 of the hierarchy above — named, with a way to
+  go and check it themselves. It sits below the record because what has been
+  *found* on a page outranks the material it would be checked against; on the
+  unchecked pages there is no record above it anyway. Nothing is inferred: a
+  concept no exam page teaches renders no shelf rather than a list of unrelated
+  books, and a resource page (which *is* a source) and a question (which cites
+  the paper it was sat on) get none. Inside the dialog the cards are `linkOnly`
+  — the in-app PDF reader is an aside below the overlay layer, so a document
+  opened from here would slide in behind the sheet that opened it.
 
 `lib/factCheckTone.ts` is the feature's one palette — the tinted surface per tone
 and the icon per tone, plus the severity → tone map — shared by the badge, the

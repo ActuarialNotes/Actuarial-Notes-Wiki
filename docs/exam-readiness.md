@@ -4,7 +4,7 @@ The one number that answers *how ready am I to sit this exam?* It is computed in
 and read by every surface that prints a readiness percentage.
 
 - Scoring: `quiz/src/lib/readiness.ts` (`computeExamReadiness`), tested in `readiness.test.ts`
-- Ring geometry: `quiz/src/lib/readinessRing.ts`, drawn by the Dashboard's **Exam readiness**
+- Ring geometry: `quiz/src/lib/readinessRing.ts`, drawn by the Dashboard's **Study Guide**
   card (`StudyGuideRadial` in `components/ReadinessCard.tsx`)
 
 **The exam study guide no longer shows a readiness card.** The card, its assessment popup and
@@ -18,7 +18,8 @@ a readiness percentage calls it, so they can never disagree:
 
 | Surface | Where |
 |---|---|
-| Dashboard **Exam readiness** card (the `NN%` in the ring, the band verdict and the criterion bars) | `components/ReadinessCard.tsx` |
+| Dashboard **Exam readiness** card (the `NN%` KPI beside the band verdict, over the primary actions) | `components/ReadinessCard.tsx` |
+| Dashboard **Study Guide** card (the ring and the criterion bars — the breakdown of that one score, which it no longer reprints) | `components/ReadinessCard.tsx` |
 | Exam grid cards ("Readiness NN%") | `pages/wiki/WikiHome.tsx` |
 | Readiness projection ("now → exam day") | `lib/masteryAnalytics.ts` → `components/HeatmapInfoPanel.tsx` |
 

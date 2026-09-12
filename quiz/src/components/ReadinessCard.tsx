@@ -50,7 +50,7 @@ import { questionExamLabel } from '@/lib/examIds'
 
 // ── Study Guide Radial ─────────────────────────────────────────────────────────
 //
-// The readiness ring, drawn inside the **Exam readiness** card below (the name
+// The readiness ring, drawn inside the **Study Guide** card below (the name
 // here is the one the docs use for the ring itself — docs/exam-readiness.md).
 // The arcs, their angles and the section groups come from `lib/readinessRing.ts`
 // — the exam page's title-row ring draws the same shape from the same helpers.
@@ -62,8 +62,6 @@ function StudyGuideRadial({
   examRecords,
   now,
   onConceptClick,
-  overallPct,
-  totalCount,
   selectedConcept,
   flashRadial,
 }: {
@@ -71,11 +69,6 @@ function StudyGuideRadial({
   examRecords: ConceptMasteryRecord[]
   now: Date
   onConceptClick?: (name: string) => void
-  /** The readiness score, from `computeExamReadiness` — the card that owns the
-   *  ring computes it once and hands it down, so the ring and the criteria
-   *  beside it are the same call. */
-  overallPct: number
-  totalCount: number
   selectedConcept?: string | null
   flashRadial?: boolean
 }) {
@@ -93,12 +86,22 @@ function StudyGuideRadial({
 
   const topicGroups = useMemo(() => ringTopicGroups(segments), [segments])
 
-  const pctText = totalCount > 0 ? `${Math.round(overallPct)}%` : '0%'
   const centerSeg = hovered ?? selected
 
   return (
     <div className="flex flex-col items-center gap-3">
-      <svg viewBox={`0 0 ${RING_VIEWBOX} ${RING_VIEWBOX}`} className="w-full max-w-[260px]" style={{ overflow: 'visible' }}>
+      <svg
+        viewBox={`0 0 ${RING_VIEWBOX} ${RING_VIEWBOX}`}
+        className="w-full max-w-[260px]"
+        style={{
+          overflow: 'visible',
+          // The flash `scrollToRadialTrigger` fires. It used to tint the score
+          // in the middle green; that number is now the KPI on the Exam
+          // readiness card above, so the ring glows instead.
+          filter: flashRadial ? 'drop-shadow(0 0 10px rgba(34,197,94,0.55))' : 'none',
+          transition: 'filter 0.5s ease-out',
+        }}
+      >
         <circle
           cx={RING_CX} cy={RING_CY}
           r={(RING_OUTER_R + RING_INNER_R) / 2}
@@ -197,17 +200,7 @@ function StudyGuideRadial({
               {centerSeg.keystone ? ' · Keystone' : ''}
             </text>
           </>
-        ) : (
-          // No caption under the number: the card this ring sits in is titled
-          // "Exam readiness" a few pixels away, so the word was the title said
-          // twice (docs/visual-noise-review.md, test 1).
-          <text x={RING_CX} y={RING_CY + 14} textAnchor="middle" fontSize={40} fontWeight="800"
-            fill={flashRadial ? '#22c55e' : 'currentColor'}
-            style={{ transition: 'fill 0.8s ease-out' }}
-          >
-            {pctText}
-          </text>
-        )}
+        ) : null}
       </svg>
 
       {/* Legend — under the ring it reads, not above it. */}
@@ -831,31 +824,58 @@ export function ReadinessCard({
     return () => { if (scrollId !== undefined) clearTimeout(scrollId); clearTimeout(clearId) }
   }, [popupCurrentName, popupFromRadial, popupDashboardFilter])
 
-  // Exam readiness card — the headline answer to "how ready am I?", and the
-  // first thing on the Dashboard. It reads top to bottom: the title and the
-  // band verdict, then the ring carrying the score itself (one arc per syllabus
-  // concept, gold for a keystone) beside the two criteria the score is made of,
-  // so a number as low as 3% still says *which* half of readiness is missing,
-  // then the primary actions (`actions`) that move it. Portals into
-  // `readinessSlot` when the Dashboard supplies one.
+  // The two cards the Dashboard leads with, in this order:
+  //
+  //   1. **Exam readiness** — the headline answer to "how ready am I?". The
+  //      score as a KPI beside the band verdict and its insight line, then the
+  //      primary actions (`actions`) that move it. Nothing between the number
+  //      and the two ways to change it.
+  //   2. **Study Guide** — the ring (one arc per syllabus concept, gold for a
+  //      keystone) beside the two criteria the score is made of, so a number as
+  //      low as 3% still says *which* half of readiness is missing. The ring no
+  //      longer prints the score in its middle: it is the KPI one card up, and
+  //      a number said twice is a number the reader has to reconcile.
+  //
+  // Both portal into `readinessSlot` when the Dashboard supplies one.
+  const readinessPct = readiness.counts.total > 0 ? Math.round(readiness.overallPct) : 0
   const readinessCardContent = (
-      <Card ref={studyGuideCardRef} className="order-none border-0">
+    <div className="order-none flex flex-col gap-4">
+      <Card className="border-0">
         <CardContent className="p-6 space-y-6">
-          {/* The card names itself and gives its verdict first, at the top,
-              rather than beside the ring: on a phone the row stacks, so a
-              title parked to the ring's right ended up halfway down the card
-              with the reader already past it. */}
-          <div className="space-y-1.5">
-            <h3 className="text-sm font-semibold">Exam readiness</h3>
-            <p className="text-xl font-semibold tracking-tight leading-tight">{readiness.band.label}</p>
-            {/* The insight line, when there is one. `readiness.insight` is
-                null on an untouched exam and whenever no rule found anything
-                worth a line, and the paragraph goes with it — nothing generic
-                stands in (lib/readiness.ts). */}
-            {readiness.insight && (
-              <p className="text-sm text-muted-foreground leading-snug">{readiness.insight.text}</p>
-            )}
+          {/* Title and verdict on the left, the score itself on the right —
+              the empty half of this row is what the KPI is for. It stacks
+              under the verdict on a narrow phone rather than squeezing it. */}
+          <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
+            <div className="min-w-0 flex-1 space-y-1.5">
+              <h3 className="text-sm font-semibold">Exam readiness</h3>
+              <p className="text-xl font-semibold tracking-tight leading-tight">{readiness.band.label}</p>
+              {/* The insight line, when there is one. `readiness.insight` is
+                  null on an untouched exam and whenever no rule found anything
+                  worth a line, and the paragraph goes with it — nothing generic
+                  stands in (lib/readiness.ts). */}
+              {readiness.insight && (
+                <p className="text-sm text-muted-foreground leading-snug">{readiness.insight.text}</p>
+              )}
+            </div>
+            <p
+              className="shrink-0 text-4xl font-bold tabular-nums leading-none tracking-tight"
+              style={{
+                color: flashRadial ? '#22c55e' : undefined,
+                transition: 'color 0.8s ease-out',
+              }}
+            >
+              {readinessPct}%
+            </p>
           </div>
+
+          {/* The two ways to act on this score, under it in the same card. */}
+          {actions}
+        </CardContent>
+      </Card>
+
+      <Card ref={studyGuideCardRef} className="border-0">
+        <CardContent className="p-6 space-y-6">
+          <h3 className="text-sm font-semibold">Study Guide</h3>
 
           <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-center sm:gap-8">
             <div className="w-full max-w-[280px] shrink-0 sm:w-[250px]">
@@ -863,8 +883,6 @@ export function ReadinessCard({
                 syllabus={syllabus}
                 examRecords={examRecords}
                 now={now}
-                overallPct={readiness.overallPct}
-                totalCount={readiness.counts.total}
                 selectedConcept={popupFromRadial ? popupCurrentName : null}
                 flashRadial={flashRadial}
                 onConceptClick={name => {
@@ -910,11 +928,9 @@ export function ReadinessCard({
               </div>
             </div>
           </div>
-
-          {/* The two ways to act on this score, inside the card with it. */}
-          {actions}
         </CardContent>
       </Card>
+    </div>
   )
 
   // Study Schedule (heatmap) card. Portals into `studyScheduleSlot` when the
@@ -1136,14 +1152,15 @@ export function ReadinessCard({
 
   return (
     <div className="space-y-4">
-      {/* One column. The two cards the Dashboard wants at the very top of the
-          page — Exam readiness, then Study Schedule — portal into the slots it
+      {/* One column. The cards the Dashboard wants at the very top of the
+          page — Exam readiness + Study Guide, then Study Schedule — portal into the slots it
           supplies; what's left here is Today's Study Plan and its warnings,
           full width. The `order-*` classes keep the inline (no-slot) fallback
           in the same reading order: readiness, study plan, warnings, schedule. */}
       <div className="flex flex-col gap-4">
-      {/* Exam readiness card — portals to `readinessSlot` when the Dashboard
-          supplies one, otherwise renders inline here (no `order`, so it stays first). */}
+      {/* Exam readiness + Study Guide cards — portal to `readinessSlot` when the
+          Dashboard supplies one, otherwise render inline here (`order-none`, so they
+          stay first). */}
       {readinessSlot ? createPortal(readinessCardContent, readinessSlot) : readinessCardContent}
 
       {/* Study Schedule (heatmap) card — portals to `studyScheduleSlot` when the Dashboard

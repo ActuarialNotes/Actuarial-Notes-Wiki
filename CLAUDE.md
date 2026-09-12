@@ -331,16 +331,16 @@ Other important `lib/` modules:
   (syllabus coverage 60% + keystone concepts 40%, plus band, section breakdown and concept
   tally); every surface that prints a readiness % calls it — the Dashboard's **Exam
   readiness** card (its first card: the `NN%` KPI, the band verdict and the primary actions,
-  with the ring and the criterion bars in the **Study Guide** card below it), the
-  exam grid and the readiness projection. The exam study guide shows no
+  with **Today's Study Plan** below it and then the ring and the criterion bars in the
+  **Study Guide** card), the exam grid and the readiness projection. The exam study guide shows no
   readiness card (removed along with the orientation row). `computeReadiness` is the
   weighted section score it is built from — an input, not a second number to display.
 - `readinessRing.ts` — the geometry behind the **readiness ring**: one arc per syllabus
   concept, each section sized by its exam weight, each arc filled by that concept's mastery
   state. Pure and tested. Two surfaces draw it and differ only in chrome — the Dashboard's
   Study Guide card (`StudyGuideRadial` in `components/ReadinessCard.tsx`, with a legend,
-  curved section labels and a hover readout in the middle — the score itself is the KPI on
-  the Exam readiness card above, never reprinted here) and the exam page's title-row badge
+  curved section labels and a middle that prints the score until a concept is hovered or
+  selected, then that concept's readout) and the exam page's title-row badge
   (`components/ReadinessRing.tsx`, everything stripped off) — so the two can never disagree
   about the shape of a syllabus. Geometry is in a fixed 280-unit viewBox; pick a size by
   scaling the SVG, not by editing the constants.

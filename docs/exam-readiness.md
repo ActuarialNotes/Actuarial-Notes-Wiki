@@ -109,21 +109,28 @@ Adding a rule means a new `id` on `ReadinessInsightId`, a block in `readinessIns
 position its urgency earns, and a pair of tests in `readiness.test.ts`: one that it fires with
 the right text, and one that it stays quiet when it should.
 
-## The Dashboard card
+## The Dashboard cards
 
-**Exam readiness is the first card on the Dashboard** — above the Study Schedule.
-`ReadinessCard` portals it into the slot the Dashboard puts there (`readinessSlot`, the same
-mechanism as `studyScheduleSlot`), so the card's state and logic stay with the study plan
-while it renders at the top of the page.
+**Exam readiness is the first card on the Dashboard**, and it leads a group of three that
+`ReadinessCard` portals into the slot the Dashboard puts there (`readinessSlot`, the same
+mechanism as `studyScheduleSlot`), so the cards' state and logic stay with the study plan
+while they render at the top of the page:
 
-The card reads top to bottom: **title and band verdict**, then the **ring** beside the
-**criteria**, then the **primary actions**. The title leads rather than sitting beside the
-ring because the row stacks on a phone, which left the card's own name — and its verdict —
-below the ring, read after the thing they were meant to introduce. The actions (*Read
-concepts* / *Fix mistakes* / *Start Quiz*) are the Dashboard's: it owns their triggers and
-the pinned-header copies, and hands them to `ReadinessCard` as the `actions` prop, which
-renders them as the card's last row. The score and the two ways to move it are one surface,
-not a card with a detached button row under it.
+1. **Exam readiness** — the **title and band verdict** with the insight line under it, the
+   score itself as a KPI to their right, then the **primary actions**. Nothing sits between
+   the number and the two ways to change it.
+2. **Today's Study Plan** — what to do about that score today. It follows the number rather
+   than the ring: a reader who has just read *Not started* is looking for the next step, not
+   for a breakdown of how the number was reached.
+3. **Study Guide** — the **ring** beside the **criteria**, the breakdown for the reader who
+   wants one.
+
+Then the **Study Schedule** heatmap, in its own slot below the group.
+
+The actions (*Read concepts* / *Fix mistakes* / *Start Quiz*) are the Dashboard's: it owns
+their triggers and the pinned-header copies, and hands them to `ReadinessCard` as the
+`actions` prop, which renders them as the readiness card's last row. The score and the two
+ways to move it are one surface, not a card with a detached button row under it.
 
 It is one call — `computeExamReadiness` — read three ways:
 
@@ -131,8 +138,12 @@ It is one call — `computeExamReadiness` — read three ways:
   radial): one arc per syllabus concept, each section sized by its exam weight, each arc
   filled by that concept's mastery state — green for an ordinary concept, gold for a keystone
   (`lib/masteryFill.ts`). Its arcs come from `lib/readinessRing.ts`, so geometry lives in one
-  place. The number in the middle is `overallPct`, and it carries no caption: the card is
-  titled *Exam readiness* a few pixels away (`docs/visual-noise-review.md`, test 1).
+  place. The number in the middle is `overallPct`, printed while nothing is hovered or
+  selected and replaced by the hovered concept's readout while one is. It carries no caption:
+  the two criteria beside it and the *Exam readiness* KPI two cards up already name what it
+  measures (`docs/visual-noise-review.md`, test 1). It is printed here as well as in the KPI
+  because by the time a reader has scrolled to the ring the KPI is off screen — a ring that
+  measures something unnamed is worse than the number said twice.
 - **The band**, as the headline verdict at the top of the card under its title, with the
   insight line under it when there is one (see above) and nothing under it when there is not.
 - **The criteria**, as one bar each. A bar's *thickness* is the weight that criterion carries

@@ -55,12 +55,14 @@ import { questionExamLabel } from '@/lib/examIds'
 // The arcs, their angles and the section groups come from `lib/readinessRing.ts`
 // — the exam page's title-row ring draws the same shape from the same helpers.
 // What lives here is only this surface's chrome: the legend, the curved section
-// labels and the hover readout in the middle.
+// labels, and the middle — which carries the readiness score until a concept is
+// hovered or selected, and that concept's readout while one is.
 
 function StudyGuideRadial({
   syllabus,
   examRecords,
   now,
+  pct,
   onConceptClick,
   selectedConcept,
   flashRadial,
@@ -68,6 +70,9 @@ function StudyGuideRadial({
   syllabus: WikiExamSyllabus
   examRecords: ConceptMasteryRecord[]
   now: Date
+  /** The readiness score, already rounded — the card that owns the ring computes
+   *  it once (`readinessPct`) so the KPI above and this number are one call. */
+  pct: number
   onConceptClick?: (name: string) => void
   selectedConcept?: string | null
   flashRadial?: boolean
@@ -95,9 +100,8 @@ function StudyGuideRadial({
         className="w-full max-w-[260px]"
         style={{
           overflow: 'visible',
-          // The flash `scrollToRadialTrigger` fires. It used to tint the score
-          // in the middle green; that number is now the KPI on the Exam
-          // readiness card above, so the ring glows instead.
+          // The flash `scrollToRadialTrigger` fires: the ring glows and the
+          // score in its middle tints green with it.
           filter: flashRadial ? 'drop-shadow(0 0 10px rgba(34,197,94,0.55))' : 'none',
           transition: 'filter 0.5s ease-out',
         }}
@@ -200,7 +204,19 @@ function StudyGuideRadial({
               {centerSeg.keystone ? ' · Keystone' : ''}
             </text>
           </>
-        ) : null}
+        ) : (
+          // The score itself, while nothing is hovered or selected. No caption
+          // under it: the two criteria beside the ring and the "Exam readiness"
+          // KPI above both name what it measures, so a word here would be the
+          // third time (docs/visual-noise-review.md, test 1).
+          <text
+            x={RING_CX} y={RING_CY + 14} textAnchor="middle" fontSize={40} fontWeight="800"
+            fill={flashRadial ? '#22c55e' : 'currentColor'}
+            style={{ transition: 'fill 0.8s ease-out' }}
+          >
+            {pct}%
+          </text>
+        )}
       </svg>
 
       {/* Legend — under the ring it reads, not above it. */}
@@ -824,19 +840,262 @@ export function ReadinessCard({
     return () => { if (scrollId !== undefined) clearTimeout(scrollId); clearTimeout(clearId) }
   }, [popupCurrentName, popupFromRadial, popupDashboardFilter])
 
-  // The two cards the Dashboard leads with, in this order:
+  // Today's Study Plan — the Dashboard's second card, directly under the
+  // readiness score: the number says how ready you are, this says what to do
+  // about it today. It rides inside `readinessCardContent` below, between the
+  // score and the ring, so it portals into the Dashboard's slot with them.
+  const studyPlanCardContent = (
+    <>
+      {/* Premium: today's concepts. Stays visible regardless of which day is
+          selected on the Study Schedule heatmap. */}
+      {isPremium && displayConcepts.length > 0 && (
+        <Card
+          ref={studyPlanCardRef}
+          className={`border-0 relative transition-colors ${allConceptsDone ? 'bg-green-500/10 dark:bg-green-500/15' : ''}`}
+        >
+          {allConceptsDone && (
+            <button
+              type="button"
+              onClick={() => setShowDayCompleteInfo(true)}
+              className="absolute -top-2 -right-2 flex h-7 w-7 items-center justify-center rounded-full bg-green-500 text-white shadow ring-2 ring-background hover:bg-green-600 transition-colors z-10"
+              aria-label="Today's study plan complete — view bonus details"
+              title="Today's study plan complete — tap for details"
+            >
+              <Check className="h-4 w-4" strokeWidth={3} />
+            </button>
+          )}
+          {tracePlanBorder && (
+            <svg className="absolute inset-0 h-full w-full overflow-visible" aria-hidden="true">
+              {/* Rainbow foil ramp — the same sky→fuchsia→gold the collected-card
+                  and lock borders wear, run diagonally across the card so the
+                  traced edge picks up all three. */}
+              <defs>
+                <linearGradient id="study-plan-trace-foil" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="rgb(56 189 248)" />
+                  <stop offset="35%" stopColor="rgb(232 121 249)" />
+                  <stop offset="70%" stopColor="rgb(250 204 21)" />
+                  <stop offset="100%" stopColor="rgb(56 189 248)" />
+                </linearGradient>
+              </defs>
+              <rect
+                x={0} y={0} width="100%" height="100%"
+                rx={8} ry={8}
+                fill="none"
+                stroke="url(#study-plan-trace-foil)"
+                strokeWidth={2}
+                pathLength={100}
+                className="study-plan-trace-path"
+              />
+            </svg>
+          )}
+          <CardContent className="p-6 space-y-4">
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <h3 className="text-sm font-semibold">Today's Study Plan</h3>
+                {/* Inline gems bonus pill */}
+                <button
+                  type="button"
+                  onClick={() => setShowBonusInfo(true)}
+                  title="Daily gems bonus info"
+                  className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-medium shrink-0 transition-colors ${
+                    allConceptsDone
+                      ? 'bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500/20'
+                      : 'text-muted-foreground hover:bg-muted/30'
+                  }`}
+                >
+                  {allConceptsDone
+                    ? <Gem className="h-2.5 w-2.5 shrink-0" />
+                    : <Lock className="h-2.5 w-2.5 shrink-0" />}
+                  <span>
+                    {allConceptsDone && bonusClaimed
+                      ? `+${claimedBonusAmount} earned`
+                      : '2× Bonus'}
+                  </span>
+                </button>
+              </div>
+
+              {/* Progress pills — shown when there's activity today */}
+              {todayQuestionsAnswered > 0 && !allConceptsDone && (
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
+                    <Check className="h-3 w-3 text-green-500" />
+                    {todayGemsEarned}/{todayQuestionsAnswered} correct
+                  </span>
+                  {todayGemsEarned > 0 && (
+                    <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
+                      <Gem className="h-3 w-3 text-cyan-400" />
+                      {todayGemsEarned} gems
+                    </span>
+                  )}
+                  {todayLevelUps > 0 && (
+                    <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
+                      <ArrowUp className="h-3 w-3 text-primary" />
+                      {todayLevelUps} levelled up
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {/* Grouped concept list — topic heading with its concepts listed directly below */}
+              <div className="space-y-3">
+                {groupedPlanConcepts.map((group, groupIdx) => {
+                  const isHighlighted = highlightedTopicIdx === groupIdx
+                  return (
+                    <div
+                      key={group.topicName}
+                      className={`space-y-0.5 rounded-lg px-2 py-1.5 -mx-2 transition-colors duration-200 ${isHighlighted ? 'plan-foil-ring bg-gradient-to-br from-sky-400/10 via-fuchsia-400/10 to-amber-300/10' : ''}`}
+                    >
+                      {/* Topic heading */}
+                      <p className="text-xs font-semibold text-muted-foreground truncate">
+                        {group.topicName}
+                      </p>
+                      {/* Concepts */}
+                      {group.concepts.map(name => {
+                        const target = targetByName.get(name.toLowerCase()) ?? 'level1'
+                        const isCompleted = isConceptDoneToday(name, targetByName, masteryStateByName, examCompletedToday)
+                        const planIdx = studyPlanConceptsForModal.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
+                        const isCascadeHighlighted = quizStartConcept === name.toLowerCase()
+                        return (
+                          <div key={name} className={`flex items-center gap-2 w-full${isCascadeHighlighted ? ' concept-row-foil' : (flashingConcept?.toLowerCase() === name.toLowerCase() ? ' concept-row-highlight' : '')}${recentlyCompletedConcepts.has(name.toLowerCase()) ? ' concept-success' : ''}`}>
+                            {isCompleted
+                              ? <Check className="h-4 w-4 text-green-500 shrink-0" />
+                              : <Circle className="h-4 w-4 text-muted-foreground shrink-0" />}
+                            {/* Concept name — opens popup */}
+                            <button
+                              type="button"
+                              data-study-concept={name.toLowerCase()}
+                              onClick={() => openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'study-plan', planIdx === -1 ? 0 : planIdx)}
+                              className={`flex-1 text-left text-sm py-1 truncate transition-colors hover:text-foreground/80 ${isCompleted ? 'text-muted-foreground line-through' : 'text-foreground'}`}
+                            >
+                              {name}
+                            </button>
+                            <span className={`text-xs shrink-0 ${isCompleted ? 'text-green-600 dark:text-green-400 font-medium' : 'text-muted-foreground'}`}>→ {MASTERY_LABEL[target]}</span>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )
+                })}
+
+                {/* Bonus concepts */}
+                {bonusConcepts.length > 0 && (
+                  <>
+                    <div className="flex items-center gap-2 pt-1">
+                      <div className="flex-1 border-t border-dashed border-muted-foreground/30" />
+                      <span className="text-xs text-muted-foreground shrink-0">Also completed today</span>
+                      <div className="flex-1 border-t border-dashed border-muted-foreground/30" />
+                    </div>
+                    {bonusConcepts.map(lu => {
+                      const globalIdx = allConcepts.findIndex(ac => ac.name.toLowerCase() === lu.conceptSlug.toLowerCase())
+                      return (
+                        <button
+                          key={lu.conceptSlug}
+                          type="button"
+                          data-study-concept={lu.conceptSlug.toLowerCase()}
+                          onClick={() => openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'entire-syllabus', globalIdx === -1 ? 0 : globalIdx)}
+                          className={`w-full flex items-center gap-2 text-left transition-colors${flashingConcept?.toLowerCase() === lu.conceptSlug.toLowerCase() ? ' concept-row-highlight' : ''}`}
+                        >
+                          <Check className="h-4 w-4 text-green-500 shrink-0" />
+                          <span className="text-xs py-1 flex-1 min-w-0 truncate text-muted-foreground line-through hover:text-foreground/80">
+                            {lu.conceptSlug}
+                          </span>
+                          <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">
+                            → {MASTERY_LABEL[lu.to]}
+                          </span>
+                        </button>
+                      )
+                    })}
+                  </>
+                )}
+              </div>
+
+              {/* Replace button */}
+              {showReplaceButton && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={handleReplace}
+                  className="w-full gap-1.5 text-xs h-8"
+                >
+                  Replace with today's completed concepts
+                </Button>
+              )}
+
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Locked study plan — non-premium only, standing in the same place as
+          the premium Today's Study Plan card. */}
+      {!isPremium && (
+        <div className="relative rounded-xl overflow-hidden">
+          {/* Blurred background: Custom Study Plan card */}
+          <div className="absolute inset-0 pointer-events-none select-none blur-sm opacity-50 rounded-xl" aria-hidden="true">
+            <div className="h-full bg-card rounded-xl p-5 space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-semibold">Today's Study Plan</h3>
+                <Settings2 className="h-4 w-4 text-muted-foreground" />
+              </div>
+              <div className="space-y-0.5">
+                {[
+                  ...(syllabus.topics[0]?.concepts ?? []).slice(0, 4),
+                  ...(syllabus.topics[1]?.concepts ?? []).slice(0, 3),
+                ].map((c, i) => (
+                  <div key={i} className="w-full flex items-center gap-2.5 px-2 py-1.5">
+                    <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
+                    <span className="text-sm flex-1 min-w-0 truncate">{c.name}</span>
+                    <span className="text-xs text-muted-foreground shrink-0">→ Level 1</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Lock overlay — in normal flow so parent sizes to content */}
+          <div className="relative z-10 backdrop-blur-md bg-background/75 flex flex-col items-center px-6 pt-6 pb-5 text-center rounded-xl">
+            {/* Lock icon + title */}
+            <div className="flex flex-col items-center gap-2">
+              <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 text-primary ring-1 ring-primary/20">
+                <Lock className="h-5 w-5" />
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center justify-center gap-1.5">
+                  <p className="text-base font-semibold">Custom Study Plan</p>
+                </div>
+                <p className="text-xs text-muted-foreground max-w-[220px]">
+                  A daily plan tailored to you
+                </p>
+              </div>
+            </div>
+
+            {/* Upgrade button */}
+            <Link to="/upgrade" className={buttonVariants({ size: 'sm' }) + ' gap-1.5 mt-6 w-full max-w-xs'}>
+              Upgrade
+            </Link>
+          </div>
+        </div>
+      )}
+    </>
+  )
+
+  // The three cards the Dashboard leads with, in this order:
   //
   //   1. **Exam readiness** — the headline answer to "how ready am I?". The
   //      score as a KPI beside the band verdict and its insight line, then the
   //      primary actions (`actions`) that move it. Nothing between the number
   //      and the two ways to change it.
-  //   2. **Study Guide** — the ring (one arc per syllabus concept, gold for a
+  //   2. **Today's Study Plan** (`studyPlanCardContent`) — what to do about that
+  //      score today. It follows the number rather than the ring: the reader who
+  //      has just read "Not started" is looking for the next step, not for a
+  //      breakdown.
+  //   3. **Study Guide** — the ring (one arc per syllabus concept, gold for a
   //      keystone) beside the two criteria the score is made of, so a number as
-  //      low as 3% still says *which* half of readiness is missing. The ring no
-  //      longer prints the score in its middle: it is the KPI one card up, and
-  //      a number said twice is a number the reader has to reconcile.
+  //      low as 3% still says *which* half of readiness is missing. The score is
+  //      printed in the ring's middle too — by the time the reader reaches it the
+  //      KPI two cards up has scrolled off, so the ring has to say what it measures.
   //
-  // Both portal into `readinessSlot` when the Dashboard supplies one.
+  // All three portal into `readinessSlot` when the Dashboard supplies one.
   const readinessPct = readiness.counts.total > 0 ? Math.round(readiness.overallPct) : 0
   const readinessCardContent = (
     <div className="order-none flex flex-col gap-4">
@@ -873,6 +1132,8 @@ export function ReadinessCard({
         </CardContent>
       </Card>
 
+      {studyPlanCardContent}
+
       <Card ref={studyGuideCardRef} className="border-0">
         <CardContent className="p-6 space-y-6">
           <h3 className="text-sm font-semibold">Study Guide</h3>
@@ -883,6 +1144,7 @@ export function ReadinessCard({
                 syllabus={syllabus}
                 examRecords={examRecords}
                 now={now}
+                pct={readinessPct}
                 selectedConcept={popupFromRadial ? popupCurrentName : null}
                 flashRadial={flashRadial}
                 onConceptClick={name => {
@@ -1153,251 +1415,21 @@ export function ReadinessCard({
   return (
     <div className="space-y-4">
       {/* One column. The cards the Dashboard wants at the very top of the
-          page — Exam readiness + Study Guide, then Study Schedule — portal into the slots it
-          supplies; what's left here is Today's Study Plan and its warnings,
-          full width. The `order-*` classes keep the inline (no-slot) fallback
-          in the same reading order: readiness, study plan, warnings, schedule. */}
+          page — Exam readiness, Today's Study Plan, Study Guide, then Study
+          Schedule — portal into the slots it supplies; what's left here is the
+          plan's warnings, full width. The `order-*` classes keep the inline
+          (no-slot) fallback in the same reading order: the readiness group,
+          warnings, schedule. */}
       <div className="flex flex-col gap-4">
-      {/* Exam readiness + Study Guide cards — portal to `readinessSlot` when the
-          Dashboard supplies one, otherwise render inline here (`order-none`, so they
-          stay first). */}
+      {/* Exam readiness + Today's Study Plan + Study Guide — portal to
+          `readinessSlot` when the Dashboard supplies one, otherwise render inline
+          here (`order-none`, so they stay first). */}
       {readinessSlot ? createPortal(readinessCardContent, readinessSlot) : readinessCardContent}
 
       {/* Study Schedule (heatmap) card — portals to `studyScheduleSlot` when the Dashboard
           supplies one (see the `studyScheduleCardContent` definition above), otherwise
-          renders inline here (`order-4`, below the study plan/actions/warnings). */}
+          renders inline here (`order-4`, below the readiness group and warnings). */}
       {studyScheduleSlot ? createPortal(studyScheduleCardContent, studyScheduleSlot) : studyScheduleCardContent}
-
-      {/* Today's Study Plan card — `order-1` floats it to the top of the left column.
-          Stays visible regardless of which day is selected on the Study Schedule heatmap. */}
-      {isPremium && displayConcepts.length > 0 && (
-        <Card
-          ref={studyPlanCardRef}
-          className={`order-1 border-0 relative transition-colors ${allConceptsDone ? 'bg-green-500/10 dark:bg-green-500/15' : ''}`}
-        >
-          {allConceptsDone && (
-            <button
-              type="button"
-              onClick={() => setShowDayCompleteInfo(true)}
-              className="absolute -top-2 -right-2 flex h-7 w-7 items-center justify-center rounded-full bg-green-500 text-white shadow ring-2 ring-background hover:bg-green-600 transition-colors z-10"
-              aria-label="Today's study plan complete — view bonus details"
-              title="Today's study plan complete — tap for details"
-            >
-              <Check className="h-4 w-4" strokeWidth={3} />
-            </button>
-          )}
-          {tracePlanBorder && (
-            <svg className="absolute inset-0 h-full w-full overflow-visible" aria-hidden="true">
-              {/* Rainbow foil ramp — the same sky→fuchsia→gold the collected-card
-                  and lock borders wear, run diagonally across the card so the
-                  traced edge picks up all three. */}
-              <defs>
-                <linearGradient id="study-plan-trace-foil" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="rgb(56 189 248)" />
-                  <stop offset="35%" stopColor="rgb(232 121 249)" />
-                  <stop offset="70%" stopColor="rgb(250 204 21)" />
-                  <stop offset="100%" stopColor="rgb(56 189 248)" />
-                </linearGradient>
-              </defs>
-              <rect
-                x={0} y={0} width="100%" height="100%"
-                rx={8} ry={8}
-                fill="none"
-                stroke="url(#study-plan-trace-foil)"
-                strokeWidth={2}
-                pathLength={100}
-                className="study-plan-trace-path"
-              />
-            </svg>
-          )}
-          <CardContent className="p-6 space-y-4">
-            <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <h3 className="text-sm font-semibold">Today's Study Plan</h3>
-                {/* Inline gems bonus pill */}
-                <button
-                  type="button"
-                  onClick={() => setShowBonusInfo(true)}
-                  title="Daily gems bonus info"
-                  className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-medium shrink-0 transition-colors ${
-                    allConceptsDone
-                      ? 'bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500/20'
-                      : 'text-muted-foreground hover:bg-muted/30'
-                  }`}
-                >
-                  {allConceptsDone
-                    ? <Gem className="h-2.5 w-2.5 shrink-0" />
-                    : <Lock className="h-2.5 w-2.5 shrink-0" />}
-                  <span>
-                    {allConceptsDone && bonusClaimed
-                      ? `+${claimedBonusAmount} earned`
-                      : '2× Bonus'}
-                  </span>
-                </button>
-              </div>
-
-              {/* Progress pills — shown when there's activity today */}
-              {todayQuestionsAnswered > 0 && !allConceptsDone && (
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
-                    <Check className="h-3 w-3 text-green-500" />
-                    {todayGemsEarned}/{todayQuestionsAnswered} correct
-                  </span>
-                  {todayGemsEarned > 0 && (
-                    <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
-                      <Gem className="h-3 w-3 text-cyan-400" />
-                      {todayGemsEarned} gems
-                    </span>
-                  )}
-                  {todayLevelUps > 0 && (
-                    <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
-                      <ArrowUp className="h-3 w-3 text-primary" />
-                      {todayLevelUps} levelled up
-                    </span>
-                  )}
-                </div>
-              )}
-
-              {/* Grouped concept list — topic heading with its concepts listed directly below */}
-              <div className="space-y-3">
-                {groupedPlanConcepts.map((group, groupIdx) => {
-                  const isHighlighted = highlightedTopicIdx === groupIdx
-                  return (
-                    <div
-                      key={group.topicName}
-                      className={`space-y-0.5 rounded-lg px-2 py-1.5 -mx-2 transition-colors duration-200 ${isHighlighted ? 'plan-foil-ring bg-gradient-to-br from-sky-400/10 via-fuchsia-400/10 to-amber-300/10' : ''}`}
-                    >
-                      {/* Topic heading */}
-                      <p className="text-xs font-semibold text-muted-foreground truncate">
-                        {group.topicName}
-                      </p>
-                      {/* Concepts */}
-                      {group.concepts.map(name => {
-                        const target = targetByName.get(name.toLowerCase()) ?? 'level1'
-                        const isCompleted = isConceptDoneToday(name, targetByName, masteryStateByName, examCompletedToday)
-                        const planIdx = studyPlanConceptsForModal.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
-                        const isCascadeHighlighted = quizStartConcept === name.toLowerCase()
-                        return (
-                          <div key={name} className={`flex items-center gap-2 w-full${isCascadeHighlighted ? ' concept-row-foil' : (flashingConcept?.toLowerCase() === name.toLowerCase() ? ' concept-row-highlight' : '')}${recentlyCompletedConcepts.has(name.toLowerCase()) ? ' concept-success' : ''}`}>
-                            {isCompleted
-                              ? <Check className="h-4 w-4 text-green-500 shrink-0" />
-                              : <Circle className="h-4 w-4 text-muted-foreground shrink-0" />}
-                            {/* Concept name — opens popup */}
-                            <button
-                              type="button"
-                              data-study-concept={name.toLowerCase()}
-                              onClick={() => openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'study-plan', planIdx === -1 ? 0 : planIdx)}
-                              className={`flex-1 text-left text-sm py-1 truncate transition-colors hover:text-foreground/80 ${isCompleted ? 'text-muted-foreground line-through' : 'text-foreground'}`}
-                            >
-                              {name}
-                            </button>
-                            <span className={`text-xs shrink-0 ${isCompleted ? 'text-green-600 dark:text-green-400 font-medium' : 'text-muted-foreground'}`}>→ {MASTERY_LABEL[target]}</span>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  )
-                })}
-
-                {/* Bonus concepts */}
-                {bonusConcepts.length > 0 && (
-                  <>
-                    <div className="flex items-center gap-2 pt-1">
-                      <div className="flex-1 border-t border-dashed border-muted-foreground/30" />
-                      <span className="text-xs text-muted-foreground shrink-0">Also completed today</span>
-                      <div className="flex-1 border-t border-dashed border-muted-foreground/30" />
-                    </div>
-                    {bonusConcepts.map(lu => {
-                      const globalIdx = allConcepts.findIndex(ac => ac.name.toLowerCase() === lu.conceptSlug.toLowerCase())
-                      return (
-                        <button
-                          key={lu.conceptSlug}
-                          type="button"
-                          data-study-concept={lu.conceptSlug.toLowerCase()}
-                          onClick={() => openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'entire-syllabus', globalIdx === -1 ? 0 : globalIdx)}
-                          className={`w-full flex items-center gap-2 text-left transition-colors${flashingConcept?.toLowerCase() === lu.conceptSlug.toLowerCase() ? ' concept-row-highlight' : ''}`}
-                        >
-                          <Check className="h-4 w-4 text-green-500 shrink-0" />
-                          <span className="text-xs py-1 flex-1 min-w-0 truncate text-muted-foreground line-through hover:text-foreground/80">
-                            {lu.conceptSlug}
-                          </span>
-                          <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">
-                            → {MASTERY_LABEL[lu.to]}
-                          </span>
-                        </button>
-                      )
-                    })}
-                  </>
-                )}
-              </div>
-
-              {/* Replace button */}
-              {showReplaceButton && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={handleReplace}
-                  className="w-full gap-1.5 text-xs h-8"
-                >
-                  Replace with today's completed concepts
-                </Button>
-              )}
-
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Locked study plan — non-premium only. `order-1` keeps it at the top of
-          the left column, mirroring the premium Today's Study Plan card. */}
-      {!isPremium && (
-        <div className="order-1 relative rounded-xl overflow-hidden">
-          {/* Blurred background: Custom Study Plan card */}
-          <div className="absolute inset-0 pointer-events-none select-none blur-sm opacity-50 rounded-xl" aria-hidden="true">
-            <div className="h-full bg-card rounded-xl p-5 space-y-3">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-semibold">Today's Study Plan</h3>
-                <Settings2 className="h-4 w-4 text-muted-foreground" />
-              </div>
-              <div className="space-y-0.5">
-                {[
-                  ...(syllabus.topics[0]?.concepts ?? []).slice(0, 4),
-                  ...(syllabus.topics[1]?.concepts ?? []).slice(0, 3),
-                ].map((c, i) => (
-                  <div key={i} className="w-full flex items-center gap-2.5 px-2 py-1.5">
-                    <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
-                    <span className="text-sm flex-1 min-w-0 truncate">{c.name}</span>
-                    <span className="text-xs text-muted-foreground shrink-0">→ Level 1</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Lock overlay — in normal flow so parent sizes to content */}
-          <div className="relative z-10 backdrop-blur-md bg-background/75 flex flex-col items-center px-6 pt-6 pb-5 text-center rounded-xl">
-            {/* Lock icon + title */}
-            <div className="flex flex-col items-center gap-2">
-              <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 text-primary ring-1 ring-primary/20">
-                <Lock className="h-5 w-5" />
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center justify-center gap-1.5">
-                  <p className="text-base font-semibold">Custom Study Plan</p>
-                </div>
-                <p className="text-xs text-muted-foreground max-w-[220px]">
-                  A daily plan tailored to you
-                </p>
-              </div>
-            </div>
-
-            {/* Upgrade button */}
-            <Link to="/upgrade" className={buttonVariants({ size: 'sm' }) + ' gap-1.5 mt-6 w-full max-w-xs'}>
-              Upgrade
-            </Link>
-          </div>
-        </div>
-      )}
 
       {/* Warnings — `order-3` sits them below the primary actions; `empty:hidden`
           drops the flex gap when neither warning is shown. */}

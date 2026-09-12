@@ -13,6 +13,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { todayISO } from '@/lib/studyPlan'
 import { examStatus } from '@/lib/examStatus'
+import { buildObjectiveIndex, isSyllabusConcept } from '@/lib/syllabusChapters'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import type { ItemStatus } from '@/data/tracks'
 
@@ -196,11 +197,8 @@ export default function WikiExam() {
     [content],
   )
 
-  const isConceptRef = (r: WikiEntryRef) =>
-    r.kind === 'concept' && !/ \([^)]*\d{4}\)$/.test(r.name)
-
   const conceptList = useMemo(
-    () => pageRefs.filter(isConceptRef),
+    () => pageRefs.filter(isSyllabusConcept),
     [pageRefs],
   )
 
@@ -213,7 +211,7 @@ export default function WikiExam() {
     const counts = new Map<string, number>()
     const out: { name: string; occurrence: number }[] = []
     for (const r of extractWikiLinkOccurrences(content)) {
-      if (!isConceptRef(r)) continue
+      if (!isSyllabusConcept(r)) continue
       const key = r.name.toLowerCase()
       const occ = counts.get(key) ?? 0
       counts.set(key, occ + 1)
@@ -221,6 +219,15 @@ export default function WikiExam() {
     }
     return out
   }, [content])
+
+  // Which learning objective each concept belongs to — the syllabus's own
+  // sections, read off the `[!example]` callouts. The popup uses it to cut its
+  // walk's progress bar into chapters, so stepping through forty concepts shows
+  // which part of the syllabus you are in.
+  const objectives = useMemo(
+    () => (content ? buildObjectiveIndex(content) : null),
+    [content],
+  )
 
   // Today's cached plan for this exam, or null when absent/stale.
   const todaysPlan = useMemo(() => {
@@ -285,9 +292,10 @@ export default function WikiExam() {
           initialFilter: 'study-plan',
           fullList: conceptList,
           occurrences: conceptOccurrences,
+          objectives,
         }),
     })
-  }, [studyPlanRefs, resourceRefs, conceptList, conceptOccurrences, examFileName, openAt, setStudyPlan, progressKey, todaysPlan])
+  }, [studyPlanRefs, resourceRefs, conceptList, conceptOccurrences, examFileName, openAt, setStudyPlan, progressKey, todaysPlan, objectives])
 
   const onWikiLink = useCallback((ref: WikiEntryRef, e: React.MouseEvent<HTMLAnchorElement>) => {
     if (ref.kind === 'exam') return false
@@ -295,7 +303,7 @@ export default function WikiExam() {
       e.preventDefault()
       const resList = resourceRefs ?? [{ kind: 'resource' as const, name: ref.name }]
       const resIdx = resList.findIndex(r => r.name.toLowerCase() === ref.name.toLowerCase())
-      openAt(resList, resIdx >= 0 ? resIdx : 0, `${examFileName}.md`, studyPlanRefs, resourceRefs, { initialFilter: 'source-material', fullList: conceptList, occurrences: conceptOccurrences })
+      openAt(resList, resIdx >= 0 ? resIdx : 0, `${examFileName}.md`, studyPlanRefs, resourceRefs, { initialFilter: 'source-material', fullList: conceptList, occurrences: conceptOccurrences, objectives })
       return true
     }
     if (ref.kind !== 'concept') return false
@@ -325,10 +333,10 @@ export default function WikiExam() {
       `${examFileName}.md`,
       studyPlanRefs,
       resourceRefs,
-      { occurrences: conceptOccurrences, occurrenceIndex },
+      { occurrences: conceptOccurrences, occurrenceIndex, objectives },
     )
     return true
-  }, [conceptList, conceptOccurrences, resourceRefs, examFileName, openAt, studyPlanRefs])
+  }, [conceptList, conceptOccurrences, resourceRefs, examFileName, openAt, studyPlanRefs, objectives])
 
   // Reset the opened flag whenever the exam or the requested concept changes.
   useEffect(() => {
@@ -350,8 +358,9 @@ export default function WikiExam() {
     openAt(openList, idx >= 0 ? idx : 0, `${examFileName}.md`, studyPlanRefs, resourceRefs, {
       occurrences: conceptOccurrences,
       occurrenceIndex,
+      objectives,
     })
-  }, [conceptParam, pageRefs, conceptList, conceptOccurrences, examFileName, openAt, studyPlanRefs, resourceRefs])
+  }, [conceptParam, pageRefs, conceptList, conceptOccurrences, examFileName, openAt, studyPlanRefs, resourceRefs, objectives])
 
   return (
     <div className="space-y-4">

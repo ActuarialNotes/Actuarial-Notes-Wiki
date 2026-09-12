@@ -451,25 +451,22 @@ reader passes the document's own bookmarks (`lib/pdfChapters.ts`), which is what
   position is, which lands the fill's edge exactly where an unsegmented bar would put it.
 - **The chapter is part of the position**, so it goes in `aria-valuetext` too ("Page 212 of
   423, Question 14") rather than being a purely visual cue.
-- **`keyStep="segment"`** makes the keys move chapter to chapter instead of item to item,
-  for a bar whose single item is too fine to be worth reaching (the syllabus bar, where a
-  position is a thousandth of an exam). Back from inside a chapter goes to the top of *that*
-  chapter first, like a transport control, so a press can't skip what you were reading.
-- **A bar whose position has no reading of its own** returns `''` from `formatValue`; the
-  bubble then shows the chapter alone rather than a meaningless number.
+**The syllabus's chapters.** The concept popup's bar — the one above its Previous / Next
+footer, which walks an exam page's concepts — is cut by **learning objective** when the walk
+came from an exam page (`lib/syllabusChapters.ts`, fed through `useConceptPopup`'s
+`objectives`). Reading a syllabus in the popup is forty-odd concepts of stepping, and the
+segments are what say *where*: these eight are General Probability, the next twenty are
+Univariate Random Variables. The bubble names the objective above the concept.
 
-**The study guide's chapter bar** (`components/wiki/SyllabusChapterBar.tsx`,
-`lib/syllabusChapters.ts`) is the same bar along the bottom edge of the wiki's sticky
-header, with an exam page's **main learning objectives** as its chapters. Two things about
-it are deliberate:
-
-- **Segments are sized by exam weight, not by page extent.** The objective callouts collapse
-  to identical 48px strips, so how much page each takes up says nothing; its share of the
-  exam says what the syllabus is made of — and it is the idiom those callouts already use,
-  filling their own row to their weight. The weights are read off the page (`{23-30%}`) and
-  never invented: a syllabus with none gets even segments.
-- **Scroll maps into the current objective's span**, so the fill moves as you read rather
-  than jumping at each boundary, and a press or drag maps back out to a scroll offset.
+A stop's objective is the `[!example]` callout it is written inside — nothing is inferred.
+The walk steps through *mentions* in document order, so the index is keyed that way too
+(`byOccurrence`): keying by where a concept is first introduced would flip the label back
+and forth every time a later objective re-used an earlier concept, cutting one chapter into
+five. A walk of concepts rather than mentions (the study-plan filter) falls back to the
+objective that introduces each one. Concepts the page mentions outside every callout (the
+prerequisite line, the reading list) belong to none, and their stretch stays unnamed rather
+than being folded into the objective above them. A walk with no syllabus behind it — the
+dashboard, a search result — gets the plain bar.
 
 ### 7.6 Empty, loading & error states
 

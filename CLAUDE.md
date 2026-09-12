@@ -235,15 +235,19 @@ Other important `lib/` modules:
   question bank actually holds, so a released paper that hasn't been imported still lists
   (greyed out, "Not added yet") and a freshly converted one appears without a catalogue edit.
   Rendered by `components/PastExamBrowser.tsx`. See `docs/mock-exam-browser.md`.
-- `syllabusChapters.ts` — the study guide's **chapters**: an exam page's main learning
-  objectives, laid along the bar under the wiki's sticky header
-  (`components/wiki/SyllabusChapterBar.tsx`, which measures them via the `data-objective`
-  attributes `MarkdownCallout` puts on every weighted `[!example]` callout). Segments are
-  sized by **exam weight** rather than page extent — the callouts collapse to identical
-  strips, so only the weight says what the syllabus is made of — and scrolling maps into
-  the current objective's span so the fill moves as you read. Pure and tested; weights come
-  from `lib/examWeight.ts` and are never invented (no weights → even segments). See
-  `docs/style-guide.md` §7.5.
+- `syllabusChapters.ts` — the syllabus's **chapters**: which learning objective each stop of
+  an exam page's walk belongs to, read off the page's `[!example]` callouts
+  (`buildObjectiveIndex`), and the marks that cut the **concept popup's** progress bar into
+  them (`objectiveMarks` → `NavProgressBar segments`). Plumbed as `objectives` through
+  `openAt` → `useConceptPopup` → `ConceptPopup`, so a walk down an exam's concepts shows
+  which part of the syllabus it is in; a walk with no syllabus behind it (the dashboard, a
+  search result) keeps the plain bar. The index has two halves and the popup's mode picks
+  one: `byOccurrence` for the document-ordered walk (a *mention* belongs to the callout it
+  sits in — keying by first introduction breaks a chapter apart wherever a later objective
+  re-uses a concept) and `byConcept` for a walk of concepts. Nothing is inferred — a concept
+  outside every callout belongs to no objective and its stretch stays unnamed. `isSyllabusConcept`
+  is the shared "this link is a concept, not a source" predicate the exam page walks too, so
+  both sides count the same mentions. Pure and tested. See `docs/style-guide.md` §7.5.
 - `pdfChapters.ts` — the exam-PDF reader's **chapters**: a document's own outline (the
   bookmarks a viewer shows in a sidebar) turned into the marks that segment the page bar,
   resolved against the document by `hooks/usePdfChapters.ts`. Pure and tested. Chapters are
@@ -425,7 +429,7 @@ Other important `lib/` modules:
 - `supabase.ts` — Supabase client + shared row types
 
 `*.test.ts` files sit alongside the modules they test (vitest). There are **97 test files /
-~1445 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+~1430 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, and the research/resource-timeline
 modules).
 

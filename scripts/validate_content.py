@@ -67,6 +67,7 @@ EXAM_LABEL_BY_DIR = {
     "exam-p": "Probability",
     "exam-fm": "Financial Mathematics",
     "exam-mas-i": "Exam MAS-I",
+    "exam-mas-ii": "Exam MAS-II",
     "exam-5": "Exam 5",
 }
 # Banks whose concept pages are not fully authored yet: an orphan wiki_link there

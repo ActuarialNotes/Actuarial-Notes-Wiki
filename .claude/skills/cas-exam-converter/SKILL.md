@@ -5,258 +5,142 @@ description: Convert a CAS "Sample Answers and Examiner's Report" PDF (Exam 5/6/
 
 # CAS Examiner's Report → Question Bank Converter
 
-Converts a CAS released exam (question booklet + "Sample Answers and Examiner's
-Report") into one markdown file per question under `questions/exam-<N>/`,
-matching the schema documented in `CLAUDE.md` and exemplified by
-`questions/exam-5/cas5-2018-001.md`.
+The conversion is a **scripted pipeline**, not a transcription job. Read
+`docs/pdf-question-pipeline.md` once for the design; this file is the operating
+procedure. `questions/exam-5/cas5-2018-001.md` is the format reference.
 
-## What you're given
+**Do not read the report and type out question files.** The examiner's report
+is structured text — `TOTAL POINT VALUE`, `Part a: 0.5 point`, `Sample 1`,
+`EXAMINER'S REPORT`, `Part a` — and `pdf_extract.py` parses all of it: point
+values, per-part sample answers, per-part commentary, and the booklet's
+lettered sub-prompts. Retyping it is the expensive mistake this pipeline exists
+to remove.
 
-Usually a single PDF combining two very different sections:
+## 0. Set up
 
-1. **Question booklet** (early pages, often the majority of the page count for
-   the cover/instructions but only ~1 page per question) — almost always
-   **scanned images**, not extractable text. `page.get_text()` returns `""`
-   for these pages even though `page.get_images()` is non-empty.
-2. **"EXAM <N> <SEASON> <YEAR> – SAMPLE ANSWERS AND EXAMINER'S REPORT"**
-   (later pages) — normal extractable text, structured per-question as:
-   ```
-   QUESTION <N>
-   TOTAL POINT VALUE: <points>
-   LEARNING OBJECTIVE(S): <codes, e.g. A3, B12>
-   SAMPLE ANSWERS
-   Part a: <points> point(s)
-   Sample 1
-   ...
-   Sample 2
-   ...
-   Part b: <points> point...
-   ...
-   EXAMINER'S REPORT
-   <overall commentary>
-   Part a
-   <per-part commentary on what was expected / common mistakes>
-   Part b
-   ...
-   ```
-
-Sometimes the question text and the examiner's report arrive as two separate
-PDFs — the workflow below still applies, just skip the "which pages are
-scanned" detection.
-
-## Step 0 — Set up PDF extraction
-
-The sandbox usually does **not** have `pdftoppm`/`poppler-utils`, so the
-`Read` tool's built-in PDF page rendering fails (`pdftoppm is not installed`).
-Use Python + PyMuPDF instead — `pip install pymupdf` if `import fitz` fails
-(`pypdf` tends to break on `_cffi_backend`/cryptography in this sandbox; avoid
-it).
-
-```python
-import fitz
-doc = fitz.open("/path/to/exam.pdf")
-
-# 1. Find which pages are scanned (question booklet) vs text (examiner's report)
-for i, page in enumerate(doc):
-    text = page.get_text()
-    print(i + 1, len(text), len(page.get_images()))
-
-# 2. Render scanned pages to PNG for vision transcription
-for i in range(START, END):  # 0-indexed scanned-page range
-    doc[i].get_pixmap(dpi=150).save(f"/tmp/exam_page_{i+1:02d}.png")
-
-# 3. Dump all examiner's-report text to one file for grep/reference
-with open("/tmp/examiner_report.txt", "w") as out:
-    for i in range(REPORT_START, len(doc)):
-        out.write(f"\n===== PDF PAGE {i+1} =====\n")
-        out.write(doc[i].get_text())
+```bash
+pip install pymupdf
+tesseract --version    # optional; if present, pass --ocr below
 ```
 
-Then `Read` the rendered PNGs (vision) for booklet pages, and `Read`/`Grep`
-the dumped text file for the examiner's report.
+## 1. Extract
 
-## Step 1 — Identify exam metadata
-
-From the examiner's report header (e.g. `EXAM 5 SPRING 2019 – SAMPLE ANSWERS
-AND EXAMINER'S REPORT`) and the booklet cover page, extract:
-
-- **Exam number** → determines `questions/exam-<N>/` and the `cas<N>-` id prefix.
-- **Sitting season + year** (e.g. Spring 2019) → use the **sitting year** for
-  the `year` frontmatter field and the id, *not* any calendar year that
-  happens to appear inside a question's data (e.g. a question can be "Spring
-  2019" but reference "CY 2018" data — use 2019).
-- **CAS exams are often given twice a year** (Spring/Fall). If the repo
-  already has files from the other sitting in the same year, disambiguate
-  ids/filenames with a season suffix (e.g. `cas5-2019s-q1` / `cas5-2019f-q1`)
-  to avoid collisions — check `questions/exam-<N>/` for existing files from
-  that year first and ask the user if it's ambiguous.
-
-## Step 2 — Map the document structure
-
-Build a small table (in your head or scratch notes) of, for each question N:
-
-- Total point value and per-part point breakdown (`Part a: X point(s)`, etc.)
-- `LEARNING OBJECTIVE(S)` code(s) (informational only — CAS LO numbering
-  shifts between syllabus years, don't rely on it for `learning_objective`;
-  see Step 5)
-- The PDF page range in the booklet containing the question's prompt/exhibits
-- The PDF page range in the examiner's report containing its sample answers
-  and examiner's report commentary
-
-`grep -n "^QUESTION" /tmp/examiner_report.txt` quickly gives the page
-boundaries for each question's report section.
-
-## Step 3 — Transcribe the question prompt (vision)
-
-`Read` the rendered PNG(s) for the question's booklet pages. Transcribe:
-
-- The exact prompt wording, all parts (a, b, c, ...) and their point values
-- Any tables/exhibits as GitHub-flavored markdown tables (preserve all rows/
-  columns exactly — these are usually the crux of the calculation)
-- Bullet-point assumptions ("All policies are semi-annual.", etc.) as a
-  markdown bullet list, placed before the lettered parts
-- Numbers, dates, and currency exactly as printed
-
-Don't transcribe page furniture ("CONTINUED ON NEXT PAGE", page numbers,
-"EXAM 5, SPRING 2019" headers).
-
-## Step 4 — Parse sample answers + examiner's report
-
-For each part:
-
-- **`### Answer`** — the final numeric/short result. Omit this section
-  entirely for open-ended/descriptive parts that don't have a single correct
-  numeric answer (e.g. "identify and evaluate..." — see Part e of
-  `cas5-2018-001.md`).
-- **`### Explanation`** — a clean walkthrough of the calculation, based on
-  the clearest "Sample N" answer (often Sample 1, or a tabular Sample if it's
-  more legible). Reformat into prose + `$$...$$` display math / `$...$`
-  inline math — don't just paste the raw OCR'd sample. If a second sample
-  shows a meaningfully different valid approach, add a short `Alternatively:`
-  paragraph with its formula (see Parts b/c of `cas5-2018-001.md`).
-  For descriptive parts, synthesize a model answer covering the
-  criteria/points the examiner's report says were expected.
-- **`### Examiner Report`** — 1-2 short paragraphs distilling "what
-  candidates were expected to do" and "common mistakes", from the
-  `EXAMINER'S REPORT` → `Part X` section. Don't copy verbatim; tighten into
-  the same style as the existing example (declarative, no "candidates
-  should/were expected to" repeated every sentence redundantly — but that
-  phrasing is fine, just keep it tight).
-
-## Step 5 — Determine frontmatter
-
-```yaml
----
-id: "cas<N>-<sitting-year>-q<Q>"          # e.g. "cas5-2019-q2"
-exam: "Exam <N>"                          # e.g. "Exam 5"
-topic: "<Most specific Concepts page>"    # e.g. "Exposure Base"
-learning_objective: "<Broader grouping>"  # e.g. "Ratemaking Data Organization"
-difficulty: easy|medium|hard
-type: multi-part                          # exam 5/6/7/8/9 essay/calc questions
-year: <sitting-year>                      # e.g. 2019 — NOT a data year inside the question
-wiki_link:
-  - Concepts/<Topic+With+Pluses>
-  - Concepts/<Other+Relevant+Concept>
-points: <total point value across all parts>
----
+```bash
+python3 scripts/pdf_extract.py --exam 5 --year 2019 --session Spring \
+    --pdf exam5-spring-2019.pdf --out /tmp/exam-5 --ocr
+cat /tmp/exam-5/report.md
 ```
 
-- **`topic`**: the single `Concepts/*.md` page that best matches the
-  question's core technique (e.g. "Exposure Base", "Bornhuetter-Ferguson
-  Method", "Trended On-Level Premium"). `ls Concepts/ | grep -i <keyword>`
-  first — reuse an existing page name verbatim. Only propose a new
-  `Concepts/*.md` page if nothing close exists, and keep new pages short
-  (intro paragraph + bullets + `> [!example]-` callout, matching the style of
-  `Concepts/Ratemaking Data Organization.md`); per `CLAUDE.md`, flag
-  newly-created concept content to the user for review rather than treating
-  it as final.
-- **`learning_objective`**: a *broader* grouping than `topic` — for Exam 5
-  this is often itself a `Concepts/*.md` page name covering a syllabus
-  sub-area (e.g. "Ratemaking Data Organization", "Reserving Data
-  Organization", "Trend Selection"). Don't try to map the raw `A1`/`B12`
-  codes from the PDF directly — they're syllabus-year-specific. Instead, pick
-  the label that best groups this question with others that will share the
-  same LO (consistency across questions on the same topic matters more than
-  matching the PDF's code).
-- **`wiki_link`**: 2-4 `Concepts/<Name>` entries (spaces → `+`), covering the
-  `topic` plus any other concepts the question meaningfully exercises (as in
-  the example: `Exposure Base`, `Earned Exposure`, `In-Force`).
-- **`difficulty`**: heuristic — `easy` for single-step recall/lookup parts
-  dominating the question, `medium` for standard multi-step calculations,
-  `hard` for questions requiring judgment across many interacting pieces or
-  unusually low pass rates on that question (check the examiner's report —
-  CAS sometimes notes a question was a major differentiator).
-- **`points`**: sum of all part point values (should equal `TOTAL POINT
-  VALUE` from the PDF).
+- `--pdf` for a combined booklet + report (the split is found by the
+  `SAMPLE ANSWERS AND EXAMINER'S REPORT` header); `--questions` / `--solutions`
+  when they arrive as two files.
+- `--year` is the **sitting year**, not a data year inside a question: a Spring
+  2019 paper about CY 2018 losses is `2019`.
+- `--session` disambiguates the two sittings a year, giving ids
+  `cas5-2019s-q1` / `cas5-2019f-q1`. Check `ls questions/exam-<N>/` for what
+  the same year already uses and match it; ask the user if it is ambiguous.
+- `--ocr` reads scanned booklet pages locally instead of leaving them for
+  vision — that is the difference between the booklet costing page images and
+  costing nothing. Questions read this way are listed in `report.md` for a
+  spot-check, because OCR is fallible in a way a text layer is not.
 
-## Step 6 — Write the file
+**Read `report.md`.** It gives the coverage, the questions needing vision, the
+OCR'd ones, and any question whose part points do not sum to its
+`TOTAL POINT VALUE` — which is the one arithmetic check worth doing by hand
+before anything else.
 
-Path: `questions/exam-<N>/cas<N>-<year>-<QQQ>.md` where `<QQQ>` is the
-question number zero-padded to 3 digits (matches the exam's question number,
-e.g. question 2 → `cas5-2019-002.md`, id `cas5-2019-q2`).
+## 2. Classify
 
-Body structure (see `questions/exam-5/cas5-2018-001.md` for a full worked
-example):
-
-```markdown
-<question prompt, assumptions, exhibits as markdown tables>
-
-## Part a (<points> points)
-
-<part a prompt text>
-
-### Answer
-<final answer>
-
-### Explanation
-<worked solution with $$...$$ / $...$ LaTeX>
-
-### Examiner Report
-<what was expected / common mistakes>
-
-## Part b (<points> points)
-...
+```bash
+python3 scripts/question_classify.py --records /tmp/exam-5/records.jsonl \
+    --out /tmp/exam-5/judgments.jsonl
 ```
 
-For a part with no clean numeric answer, omit `### Answer` and go straight
-from the prompt to `### Explanation`.
+`learning_objective`, `difficulty` and `wiki_link` come out settled — on Exam 5
+the objective vote measures 96% accurate, since the syllabus has only two. The
+**topic** is the real judgment, and it is asked in `review.md` beside the
+judgments file: one line per question with the id, its imperative clause, and
+five candidates.
 
-## Step 7 — Quality checklist (per file)
+**Read `review.md`, not the questions.** For each line set `topic` in
+`judgments.jsonl` to the most specific existing `Concepts/*.md` page for the
+question's core technique (`Exposure Base`, `Bornhuetter-Ferguson Method`,
+`Trended On-Level Premium`). Exact filename, no `.md`. Never invent one; raise
+it with the user instead (`CLAUDE.md`).
 
-- [ ] Frontmatter `points` total matches `TOTAL POINT VALUE` and each part's
-      points sum to it
-- [ ] `id` and filename use the **sitting year**, not an in-question data year
-- [ ] All tables/exhibits from the booklet are reproduced accurately
-- [ ] LaTeX renders correctly (`$$...$$` for display, `$...$` inline; no raw
-      OCR artifacts like stray `‐` hyphens, smart quotes, or `½` glyphs —
-      normalize to ASCII)
-- [ ] `wiki_link` entries point to concept pages that actually exist (or are
-      created as part of this change)
-- [ ] `### Examiner Report` reflects the actual per-part commentary, not a
-      generic restatement
+Two things to know:
 
-## Parallelizing large exams
+- **Ignore the `LEARNING OBJECTIVE(S): A3` codes** the report prints — CAS
+  renumbers them between syllabus years. They stay in the record for reference
+  and are never written to frontmatter.
+- `difficulty` comes from point value and part count; override it if the report
+  says the question was a major differentiator.
 
-A full CAS exam is typically 20-30 multi-part questions — converting all of
-them is a large job. For batches beyond a handful of questions, split the
-question range across parallel subagents (e.g. 4-6 questions per agent),
-giving each agent:
+## 3. Pilot, then write
 
-- The rendered booklet PNGs and examiner's-report text excerpt for its
-  question range
-- This SKILL.md
-- The frontmatter conventions above and a pointer to
-  `questions/exam-5/cas5-2018-001.md` as the formatting reference
-- The exam number/sitting year and file-naming scheme to use
+Two or three questions first, for the user to check — `topic` and
+`learning_objective` choices set precedent for the rest of the paper.
 
-Do a small batch (2-3 questions) first and have the user review before
-running the rest, since `topic`/`learning_objective` choices set precedent
-for the remaining questions in the same exam.
+```bash
+python3 scripts/question_write.py --records /tmp/exam-5/records.jsonl \
+    --judgments /tmp/exam-5/judgments.jsonl --only 1-3 --dry-run
+```
 
-## Known gaps / follow-ups
+Each part becomes `## Part a (0.5 points)` with the booklet's sub-prompt, an
+`### Explanation` from the clearest sample answer, and `### Examiner Report`
+from that part's commentary. Then drop `--dry-run`, and after the user's review
+drop `--only`. The writer refuses a question whose topic is still unreviewed —
+`--accept-unreviewed` is for a deliberate fast pass with a review to follow,
+not a way past a question you have not looked at.
 
-- `scripts/standardize_questions.py` and `scripts/update_wiki_links.py`
-  currently only cover `questions/exam-fm/` and `questions/exam-p/` (and have
-  no Exam 5+ entries in `ontology_map.py`). Don't run them on new exam-5+
-  files — they'll either no-op or fail on unmapped topics. If Exam 5+
-  ontology coverage is wanted later, that's a separate scripted migration.
+The report's *overall* commentary stays in `records.jsonl`: every
+`### Examiner Report` in the bank's format is per-part, and this pipeline does
+not invent a section the app does not render.
+
+## 4. Fill the gaps the scripts name
+
+- **`needs_vision`** — the booklet page is a scan and OCR was unavailable. Its
+  page is rendered to `/tmp/exam-5/pages/`. Read the image and write the prompt
+  markdown to `/tmp/exam-5/prompts/<id>.md`, then pass `--prompts`. Transcribe
+  exactly: wording, all parts and their point values, every exhibit row as a
+  markdown table, bullet assumptions before the lettered parts. Skip page
+  furniture.
+- **A sample answer that does not read as a walkthrough** — CAS samples are
+  candidate handwriting transcribed, so this is common. Rewrite into prose plus
+  `$$…$$` / `$…$` and save to `/tmp/exam-5/expl/<id>.md`, then pass
+  `--explanations`. If a second sample shows a genuinely different valid
+  approach, the writer already appends it as `Alternatively:`.
+- **A descriptive part with no numeric answer** — no `### Answer` section;
+  synthesise a model answer from what the commentary says was expected.
+- **An `### Answer` value** — add it to the part in `records.jsonl` if the
+  sample states a single final figure worth surfacing. Never compute one the
+  report does not give.
+
+## 5. Check
+
+```bash
+python3 scripts/question_lint.py questions/exam-5      # --fix for mechanical ones
+python3 scripts/validate_content.py
+python3 scripts/verify_check.py --sync
+```
+
+The linter covers the old per-file checklist: point sums, part sequence, LaTeX
+readability, OCR characters. `verification:` is never hand-written
+(`docs/verification.md`).
+
+## 6. Commit
+
+```
+Add CAS Exam 5 Spring 2019 questions 1-12
+```
+
+## Known gaps
+
+- `scripts/standardize_questions.py` and `scripts/update_wiki_links.py` have no
+  Exam 5+ entries in `ontology_map.py` — do not run them on these banks.
+- Exam 6/7/8/9 have no question bank yet and `examStatus.ts` lists them as *in
+  development*; converting a paper for them is fine, but the exam does not
+  become studiable until that status moves.
+- The classifier leans on `Concepts/` coverage, which is thinner for Exam 5+
+  than for P/FM, so expect a longer review list. Every concept page added
+  shrinks it for the next paper.

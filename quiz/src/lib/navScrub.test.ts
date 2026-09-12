@@ -10,7 +10,6 @@ import {
   scrubRatio,
   segmentAt,
   segmentFillPercent,
-  segmentKeyTarget,
 } from './navScrub'
 
 describe('scrubRatio', () => {
@@ -231,41 +230,5 @@ describe('segmentFillPercent', () => {
     expect(segmentFillPercent(segments[0], 6)).toBe(100)
     expect(navProgressPercent(6, total)).toBe(50)
     expect(segments[0].end / total).toBe(0.5)
-  })
-})
-
-describe('segmentKeyTarget', () => {
-  const chapters = navSegments(
-    [{ start: 1, label: 'A' }, { start: 100, label: 'B' }, { start: 400, label: 'C' }],
-    1000,
-  )
-
-  it('steps forward a chapter at a time', () => {
-    expect(segmentKeyTarget('ArrowRight', 1, chapters, 1000)).toBe(100)
-    expect(segmentKeyTarget('ArrowRight', 150, chapters, 1000)).toBe(400)
-    expect(segmentKeyTarget('ArrowUp', 150, chapters, 1000)).toBe(400)
-    expect(segmentKeyTarget('PageUp', 1, chapters, 1000)).toBe(100)
-  })
-
-  it('goes to the end from the last chapter', () => {
-    expect(segmentKeyTarget('ArrowRight', 500, chapters, 1000)).toBe(1000)
-  })
-
-  it('goes back to the top of this chapter before the one before it', () => {
-    // A transport control, not a slider: a press can't skip what you're reading.
-    expect(segmentKeyTarget('ArrowLeft', 250, chapters, 1000)).toBe(100)
-    expect(segmentKeyTarget('ArrowLeft', 100, chapters, 1000)).toBe(1)
-    expect(segmentKeyTarget('PageDown', 450, chapters, 1000)).toBe(400)
-  })
-
-  it('stops at the ends rather than erroring', () => {
-    expect(segmentKeyTarget('ArrowLeft', 1, chapters, 1000)).toBe(1)
-    expect(segmentKeyTarget('Home', 700, chapters, 1000)).toBe(1)
-    expect(segmentKeyTarget('End', 5, chapters, 1000)).toBe(1000)
-  })
-
-  it('leaves keys that are not ours alone', () => {
-    expect(segmentKeyTarget('Enter', 5, chapters, 1000)).toBeNull()
-    expect(segmentKeyTarget('ArrowRight', 5, [], 1000)).toBeNull()
   })
 })

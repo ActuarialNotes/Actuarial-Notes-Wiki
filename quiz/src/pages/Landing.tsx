@@ -40,6 +40,7 @@ import { applyPassRates } from '@/lib/passRates'
 import { useExamPassRates } from '@/hooks/useExamPassRates'
 import { PastExamBrowser } from '@/components/PastExamBrowser'
 import { examStatus } from '@/lib/examStatus'
+import { ExamLogo } from '@/components/ExamLogo'
 
 type ExamOrg = 'SOA' | 'CAS'
 
@@ -285,35 +286,42 @@ function ExamOptionCard({
           ? 'bg-primary/10 hover:bg-primary/25'
           : 'hover:bg-accent/30',
       )}>
-        <CardHeader className="p-4 pb-3">
-          <CardTitle className="text-base leading-snug">{exam.label}</CardTitle>
-          {description && (
-            <CardDescription className="mt-0.5">{description}</CardDescription>
-          )}
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
-              {questionCount} question{questionCount !== 1 ? 's' : ''}
-            </span>
-            {/* Style guide §4.1: blue is the info hue, amber means "caution".
-                A scheduled date is information; being part-way through an exam
-                is neither, so it stays neutral rather than borrowing the
-                warning colour. Beta *is* a caution, and takes the amber that
-                the mobile nav's Research chip already uses for the same word —
-                it used to be emerald here and amber there. */}
-            {isActive ? (
-              <span className={cn(
-                'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium',
-                targetDate
-                  ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
-                  : 'bg-muted text-muted-foreground',
-              )}>
-                {targetDate ? `Exam: ${formatTargetDate(targetDate)}` : 'In progress'}
+        <CardHeader className="flex-row items-start gap-3 space-y-0 p-4 pb-3">
+          {/* The exam's logo — the same monogram tile the Study Guides grid
+              leads its cards with, in the exam's own place on the colour ramp,
+              so an exam is recognisable across the two tabs. Decorative: the
+              title beside it names the exam. */}
+          <ExamLogo examKey={exam.progressKey} size="md" className="mt-0.5" />
+          <div className="min-w-0 flex-1">
+            <CardTitle className="text-base leading-snug">{exam.label}</CardTitle>
+            {description && (
+              <CardDescription className="mt-0.5">{description}</CardDescription>
+            )}
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                {questionCount} question{questionCount !== 1 ? 's' : ''}
               </span>
-            ) : isBeta ? (
-              <span className="inline-flex items-center rounded-full bg-amber-500/15 px-2 py-0.5 text-xs font-medium text-amber-600 dark:text-amber-400">
-                Beta
-              </span>
-            ) : null}
+              {/* Style guide §4.1: blue is the info hue, amber means "caution".
+                  A scheduled date is information; being part-way through an exam
+                  is neither, so it stays neutral rather than borrowing the
+                  warning colour. Beta *is* a caution, and takes the amber that
+                  the mobile nav's Research chip already uses for the same word —
+                  it used to be emerald here and amber there. */}
+              {isActive ? (
+                <span className={cn(
+                  'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium',
+                  targetDate
+                    ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
+                    : 'bg-muted text-muted-foreground',
+                )}>
+                  {targetDate ? `Exam: ${formatTargetDate(targetDate)}` : 'In progress'}
+                </span>
+              ) : isBeta ? (
+                <span className="inline-flex items-center rounded-full bg-amber-500/15 px-2 py-0.5 text-xs font-medium text-amber-600 dark:text-amber-400">
+                  Beta
+                </span>
+              ) : null}
+            </div>
           </div>
         </CardHeader>
       </Card>

@@ -8,6 +8,7 @@ import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { TRACKS, type Track } from '@/data/tracks'
 import { GENERAL_GUIDES } from '@/data/examGuides'
 import { examAccentStyle } from '@/lib/examColors'
+import { ExamLogo } from '@/components/ExamLogo'
 import { matchesSelectedVariant } from '@/data/examSittings'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
@@ -369,41 +370,49 @@ export default function WikiHome() {
                                   : 'hover:bg-accent/30',
                           )}
                         >
-                          <CardHeader className={hasProgressBar ? 'pb-3' : undefined}>
-                            <div className="flex items-center justify-between gap-2">
-                              <CardTitle className={cn('text-base leading-snug', inDevelopment && 'text-muted-foreground')}>
-                                {examDisplayName(exam.name)}
-                              </CardTitle>
-                              {isCompleted && (
-                                <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
-                              )}
-                            </div>
-                            {match && (
-                              <CardDescription className="mt-0.5">{match.examTopic}</CardDescription>
-                            )}
-
-                            {/* Status pill — hidden for completed exams. "In
-                                development" outranks everything: it says the
-                                material isn't there, which is true whatever the
-                                candidate has marked this exam as. */}
-                            {!isCompleted && (inDevelopment || isInProgress || contentStatus === 'beta') && (
-                              <div className="mt-2">
-                                {inDevelopment ? (
-                                  <span className="inline-flex items-center gap-1 rounded-full border border-dashed border-muted-foreground/40 px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
-                                    <Hammer className="h-3 w-3" aria-hidden="true" />
-                                    In development — not yet available
-                                  </span>
-                                ) : isInProgress ? (
-                                  <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
-                                    {targetDate ? `Exam: ${formatTargetDate(targetDate)}` : 'In Progress'}
-                                  </span>
-                                ) : (
-                                  <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-                                    Beta
-                                  </span>
+                          <CardHeader className={cn('flex-row items-start gap-3 space-y-0', hasProgressBar && 'pb-3')}>
+                            {/* The exam's logo — its monogram in its own place
+                                on the colour ramp. A visual anchor, so a card
+                                is recognisable before its title is read; the
+                                title beside it is what actually names the exam,
+                                which is why the tile is aria-hidden. */}
+                            <ExamLogo examKey={examId} size="lg" muted={inDevelopment} className="mt-0.5" />
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center justify-between gap-2">
+                                <CardTitle className={cn('text-base leading-snug', inDevelopment && 'text-muted-foreground')}>
+                                  {examDisplayName(exam.name)}
+                                </CardTitle>
+                                {isCompleted && (
+                                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
                                 )}
                               </div>
-                            )}
+                              {match && (
+                                <CardDescription className="mt-0.5">{match.examTopic}</CardDescription>
+                              )}
+
+                              {/* Status pill — hidden for completed exams. "In
+                                  development" outranks everything: it says the
+                                  material isn't there, which is true whatever the
+                                  candidate has marked this exam as. */}
+                              {!isCompleted && (inDevelopment || isInProgress || contentStatus === 'beta') && (
+                                <div className="mt-2">
+                                  {inDevelopment ? (
+                                    <span className="inline-flex items-center gap-1 rounded-full border border-dashed border-muted-foreground/40 px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                                      <Hammer className="h-3 w-3" aria-hidden="true" />
+                                      In development — not yet available
+                                    </span>
+                                  ) : isInProgress ? (
+                                    <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
+                                      {targetDate ? `Exam: ${formatTargetDate(targetDate)}` : 'In Progress'}
+                                    </span>
+                                  ) : (
+                                    <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                                      Beta
+                                    </span>
+                                  )}
+                                </div>
+                              )}
+                            </div>
                           </CardHeader>
 
                           {/* Progress bar — in-progress only, not for completed */}

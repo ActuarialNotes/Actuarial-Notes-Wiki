@@ -324,6 +324,125 @@ class TestCasPartPrompts(unittest.TestCase):
         self.assertEqual([p["label"] for p in parts], ["a", "b"])
 
 
+class TestStructureGuards(unittest.TestCase):
+    """A table candidate must never swallow the document's own headings."""
+
+    def test_report_page_read_as_a_table_is_rejected(self):
+        self.assertTrue(px.swallows_structure([
+            ["", "QUESTION 1", ""],
+            ["", "TOTAL POINT VALUE: 1.25", "LEARNING OBJECTIVE: A1"],
+            ["Part a: 0.5 point", "", ""],
+        ]))
+
+    def test_a_real_exhibit_is_not_rejected(self):
+        self.assertFalse(px.swallows_structure([
+            ["Policy", "Vehicles"], ["A", "2"], ["B", "3"],
+        ]))
+
+    def test_sample_answer_heading_counts_as_structure(self):
+        self.assertTrue(px.swallows_structure([["Sample Answer 1", "x"], ["a", "b"]]))
+
+    def test_block_outside_the_cells_is_kept(self):
+        table = "| AY | Loss |\n|---|---|\n| 2013 | 100 |"
+        self.assertFalse(px._inside_table("QUESTION 5", table))
+        self.assertTrue(px._inside_table("2013 100", table))
+
+    def test_exhibit_detection(self):
+        self.assertTrue(px._has_exhibit("| a | b |\n|---|---|\n| 1 | 2 |"))
+        self.assertTrue(px._has_exhibit("AY    Loss    Trend"))
+        self.assertFalse(px._has_exhibit("Calculate the written exposures."))
+
+
+class TestBookletAlignment(unittest.TestCase):
+    """Aligning a scanned booklet to the report on printed point values."""
+
+    BOOKLET = (
+        "(1.25 points)\nGiven the following policies:\n"
+        "a.\n(0.5 point)\nCalculate the written car-years.\n"
+        "b.\n(0.75 point)\nCalculate the earned car-years.\n"
+        "(2 points)\nGiven the following premium:\n"
+        "a.\n(1 point)\nCalculate the on-level factor.\n"
+        "b.\n(1 point)\nIdentify a weakness.\n"
+    )
+
+    def test_aligns_both_questions(self):
+        spans = px.align_booklet(self.BOOKLET, [(1, 1.25, [0.5, 0.75]), (2, 2.0, [1.0, 1.0])])
+        self.assertEqual(sorted(spans), [1, 2])
+        first = self.BOOKLET[spans[1][0] : spans[1][1]]
+        self.assertIn("written car-years", first)
+        self.assertNotIn("on-level factor", first)
+
+    def test_question_with_no_parts_takes_only_its_total(self):
+        booklet = "(2.25 points)\nDescribe the trend.\n(1 point)\nCalculate x.\n"
+        spans = px.align_booklet(booklet, [(5, 2.25, []), (6, 1.0, [])])
+        self.assertIn("Describe the trend", booklet[spans[5][0] : spans[5][1]])
+        self.assertNotIn("Calculate x", booklet[spans[5][0] : spans[5][1]])
+
+    def test_total_need_not_be_printed_when_parts_sum_to_it(self):
+        booklet = "a.\n(2.5 points)\nFirst.\nb.\n(0.5 point)\nSecond.\n"
+        spans = px.align_booklet(booklet, [(4, 3.0, [2.5, 0.5])])
+        self.assertIn("First.", booklet[spans[4][0] : spans[4][1]])
+
+    def test_a_question_the_report_skips_is_stepped_over(self):
+        # Fall 2016 has no QUESTION 8, but the booklet still prints its points.
+        booklet = "(1 point)\nSeven.\n(3.5 points)\nEight.\n(1 point)\nNine.\n"
+        spans = px.align_booklet(booklet, [(7, 1.0, []), (9, 1.0, [])])
+        self.assertEqual(sorted(spans), [7, 9])
+        self.assertIn("Nine.", booklet[spans[9][0] : spans[9][1]])
+        self.assertNotIn("Eight.", booklet[spans[9][0] : spans[9][1]])
+
+    def test_an_unmatchable_question_is_left_out_not_guessed(self):
+        booklet = "(1 point)\nOne.\n(0.75 point)\nTwo-ish.\n(1 point)\nThree.\n"
+        spans = px.align_booklet(booklet, [(1, 1.0, []), (2, 1.75, []), (3, 1.0, [])])
+        self.assertEqual(sorted(spans), [1, 3])
+
+    def test_a_span_never_absorbs_the_question_after_it(self):
+        booklet = "(1 point)\nOne.\n(0.75 point)\nUnmatched.\n(1 point)\nThree.\n"
+        spans = px.align_booklet(booklet, [(1, 1.0, []), (2, 1.75, []), (3, 1.0, [])])
+        self.assertNotIn("Unmatched", booklet[spans[1][0] : spans[1][1]])
+
+    def test_nothing_to_align_returns_none(self):
+        self.assertIsNone(px.align_booklet("no point values here", [(1, 1.0, [])]))
+        self.assertIsNone(px.align_booklet("(1 point)\nx", []))
+
+    def test_a_missing_total_is_not_aligned(self):
+        self.assertIsNone(px.align_booklet("(1 point)\nx\n", [(1, None, [])]))
+
+
+class TestPublisherTextDefects(unittest.TestCase):
+    """Shapes a real CAS report turned out to have."""
+
+    def test_dropped_leading_glyph_in_a_field_label(self):
+        # Fall 2016 extracts `OTAL POINT VALUE: 3.25` — the T is absent from
+        # the PDF's own text layer.
+        parsed = px.parse_cas_question(
+            "\nOTAL POINT VALUE: 3.25\nLEARNING OBJECTIVE: A8\n"
+            "SAMPLE ANSWERS\nPart a: 3.25 points\nSample Answer 1\nLAS = 1.591\n"
+        )
+        self.assertEqual(parsed["points"], 3.25)
+        self.assertEqual(parsed["parts"][0]["points"], 3.25)
+
+    def test_single_part_answer_is_kept_as_the_solution(self):
+        parsed = px.parse_cas_question(
+            "TOTAL POINT VALUE: 2.25\nSAMPLE ANSWER\n"
+            "Calculate the severity trend and select a rate.\n"
+            "EXAMINER'S REPORT\nWell answered.\n"
+        )
+        self.assertEqual(parsed["parts"], [])
+        self.assertIn("severity trend", parsed["solution"])
+
+    def test_curly_apostrophe_splits_the_report_off(self):
+        parsed = px.parse_cas_question(
+            "TOTAL POINT VALUE: 1\nSAMPLE ANSWERS\nPart a: 1 point\n"
+            "Sample Answer 1\nThe answer is 4.5\n"
+            "EXAMINER\u2019S REPORT\nPart a\nCandidates were expected to round.\n"
+        )
+        part = parsed["parts"][0]
+        self.assertIn("4.5", part["samples"][0])
+        self.assertNotIn("expected to round", part["samples"][0])
+        self.assertIn("expected to round", part["report"])
+
+
 # ─── Tables, furniture, reflow ────────────────────────────────────────────────
 
 

@@ -115,15 +115,38 @@ def _pymupdf():
     return pymupdf
 
 
+def tessdata_dir() -> str | None:
+    """Tesseract's language-data directory, or None if it cannot be found.
+
+    PyMuPDF otherwise requires `TESSDATA_PREFIX` in the environment and raises
+    without it, so the directory is located here and passed explicitly.
+    """
+    from glob import glob  # noqa: PLC0415
+
+    env = os.environ.get("TESSDATA_PREFIX")
+    if env and os.path.isdir(env):
+        return env
+    for pattern in (
+        "/usr/share/tesseract-ocr/*/tessdata",
+        "/usr/share/tessdata",
+        "/usr/local/share/tessdata",
+        "/opt/homebrew/share/tessdata",
+    ):
+        for found in sorted(glob(pattern), reverse=True):
+            if os.path.isdir(found):
+                return found
+    return None
+
+
 def ocr_available() -> bool:
-    """Whether a local Tesseract is on PATH for PyMuPDF to drive."""
-    return bool(shutil.which("tesseract"))
+    """Whether a local Tesseract is on PATH with language data to drive it."""
+    return bool(shutil.which("tesseract")) and bool(tessdata_dir())
 
 
 def _ocr_page(page, dpi: int):
     """A text page recovered by local OCR, or None if OCR is unavailable."""
     try:
-        return page.get_textpage_ocr(dpi=dpi, full=True)
+        return page.get_textpage_ocr(dpi=dpi, full=True, tessdata=tessdata_dir())
     except Exception:  # pragma: no cover - depends on the local tesseract
         return None
 
@@ -159,7 +182,6 @@ def read_pages(path: str, want_tables: bool = True, ocr: bool = False) -> list[P
         tables: list[tuple[float, float, float, float, str]] = []
         if want_tables and not ocred:
             tables = _find_tables(page)
-        table_boxes = [t[:4] for t in tables]
 
         blocks: list[tuple[float, float, str]] = []
         raw_blocks = (
@@ -170,7 +192,10 @@ def read_pages(path: str, want_tables: bool = True, ocr: bool = False) -> list[P
         for x0, y0, x1, y1, text, _no, kind in raw_blocks:
             if kind != 0 or not text.strip():
                 continue
-            if any(_overlaps((x0, y0, x1, y1), box) for box in table_boxes):
+            if any(
+                _overlaps((x0, y0, x1, y1), table[:4]) and _inside_table(text, table[4])
+                for table in tables
+            ):
                 continue
             blocks.append((y0, x0, text))
         for x0, y0, _x1, _y1, md in tables:
@@ -195,6 +220,28 @@ def _overlaps(a: tuple[float, ...], b: tuple[float, ...]) -> bool:
     return not (a[2] <= b[0] or a[0] >= b[2] or a[3] <= b[1] or a[1] >= b[3])
 
 
+# Share of a block's words that must appear in a table before the block counts
+# as part of it.
+INSIDE_TABLE_SHARE = 0.6
+
+
+def _inside_table(text: str, table_md: str) -> bool:
+    """Whether a block's text is really carried by the table it overlaps.
+
+    A detected table's bounding box is routinely larger than the cells it
+    extracted, so overlap alone is not enough: withholding on overlap silently
+    drops whatever the table did not capture. On a CAS report page that lost
+    the `QUESTION 5` heading, and with it the whole question. Compare the
+    words instead, and keep any block the table cannot account for.
+    """
+    words = [w for w in re.findall(r"\w+", text) if len(w) > 2]
+    if not words:
+        return True
+    haystack = table_md
+    hits = sum(1 for word in words if word in haystack)
+    return hits >= INSIDE_TABLE_SHARE * len(words)
+
+
 def _find_tables(page) -> list[tuple[float, float, float, float, str]]:
     """Exhibits on a page, as (bbox…, markdown).
 
@@ -214,6 +261,8 @@ def _find_tables(page) -> list[tuple[float, float, float, float, str]]:
                 rows = table.extract()
             except Exception:  # pragma: no cover
                 continue
+            if swallows_structure(rows):
+                continue
             if strategy == "text" and not plausible_table(rows):
                 continue
             md = rows_to_markdown(rows)
@@ -222,6 +271,26 @@ def _find_tables(page) -> list[tuple[float, float, float, float, str]]:
         if out:
             return out
     return []
+
+
+# The markers that carry a document's skeleton. A real CAS report page is full
+# of ruled boxes, and PyMuPDF will read the whole page — headings included — as
+# one table, which hides `QUESTION 1` inside a markdown cell where no segmenter
+# can see it. A candidate holding any of these is a page, not an exhibit.
+STRUCTURE_CELL_RE = re.compile(
+    r"(?i)(?:^QUESTION\s+\d{1,3}\b|TOTAL POINT VALUE|LEARNING OBJECTIVE"
+    r"|SAMPLE ANSWERS?\b|EXAMINER'?.?S REPORT"
+    r"|^Part\s+[a-h]\s*[:.]|^Sample(?:\s+Answer)?\s+\d+\b)"
+)
+
+
+def swallows_structure(rows: list[list[str | None]]) -> bool:
+    """Whether a table candidate has eaten the document's own headings."""
+    return any(
+        STRUCTURE_CELL_RE.search((cell or "").strip())
+        for row in rows
+        for cell in row
+    )
 
 
 NUMERIC_CELL_RE = re.compile(r"^[\s$(]*-?[\d,]+(?:\.\d+)?[)%\s]*$")
@@ -339,7 +408,7 @@ DEHYPHEN_RE = re.compile(r"([a-z])-\n([a-z])")
 # match any word at all.
 CAPS_HEADING_RE = re.compile(r"^\s*[A-Z][A-Z0-9 '(),./-]{4,}$")
 MARKER_RE = re.compile(
-    r"^\s*(?:Part\s+[a-h]\b|Sample\s+\d+\b|Solution\s*[:#]"
+    r"^\s*(?:Part\s+[a-h]\b|Sample(?:\s+Answer)?\s+\d+\b|Solution\s*[:#]"
     r"|Question\s*#?\s*\d+\b|Page\s+\d+\b)",
     re.IGNORECASE,
 )
@@ -589,17 +658,24 @@ def strip_solution_header(text: str) -> tuple[str, str | None]:
 # ─── CAS examiner's report ────────────────────────────────────────────────────
 
 CAS_QUESTION_RE = re.compile(r"(?m)^[ \t]*QUESTION[ \t]+(\d{1,3})\b")
-CAS_POINTS_RE = re.compile(r"(?i)TOTAL POINT VALUE[ \t]*[:=]?[ \t]*([\d.]+)")
-CAS_LO_RE = re.compile(r"(?i)LEARNING OBJECTIVE\(?S?\)?[ \t]*[:=]?[ \t]*(.+)")
+# The leading glyph of a field label is sometimes missing from a publisher
+# PDF's text layer — Fall 2016 page 45 extracts as `OTAL POINT VALUE: 3.25`,
+# the `T` simply absent. The label is being *recognised*, not transcribed, and
+# the value after it is intact, so the first letter is optional. Each phrase is
+# long enough that this cannot match anything else.
+CAS_POINTS_RE = re.compile(r"(?i)T?OTAL POINT VALUE[ \t]*[:=]?[ \t]*([\d.]+)")
+CAS_LO_RE = re.compile(r"(?i)L?EARNING OBJECTIVE\(?S?\)?[ \t]*[:=]?[ \t]*(.+)")
 CAS_PART_RE = re.compile(r"(?mi)^[ \t]*Part[ \t]+([a-h])[ \t]*[:.]?[ \t]*"
                          r"(?:([\d.]+)[ \t]*points?)?[ \t]*")
-CAS_SAMPLE_RE = re.compile(r"(?mi)^[ \t]*SAMPLE ANSWERS?\b")
-CAS_REPORT_RE = re.compile(r"(?mi)^[ \t]*EXAMINER'?S? REPORT\b")
+CAS_SAMPLE_RE = re.compile(r"(?mi)^[ \t]*S?AMPLE ANSWERS?\b")
+# `_joined` normalises the curly apostrophe away, but the parser is called
+# directly too, so it reads both spellings itself.
+CAS_REPORT_RE = re.compile("(?mi)^[ \t]*E?XAMINER['\u2019]?S? REPORT\\b")
 
 
 # `a. (0.25 points) Calculate …` — how the booklet introduces each sub-part.
 CAS_PROMPT_PART_RE = re.compile(
-    r"(?m)^[ \t]*([a-h])[.)][ \t]*\(([\d.]+)[ \t]*points?\)[ \t]*"
+    r"(?m)^[ \t]*([a-h])[.)][ \t]*\n?[ \t]*\(([\d.]+)[ \t]*points?\)[ \t]*"
 )
 
 
@@ -671,10 +747,18 @@ def parse_cas_question(text: str) -> dict:
     if first_part:
         overall = report_block[: first_part.start()]
 
+    # A question with no `Part a:` markers is single-part — Fall 2016 has six
+    # of them, headed `SAMPLE ANSWER` rather than `SAMPLE ANSWERS`. Its answer
+    # has to go somewhere or it is silently dropped, so it becomes the
+    # question's own solution.
+    samples = _split_samples(samples_block) if not parts else []
+
     return {
         "points": float(points.group(1)) if points else None,
         "learning_objective_codes": lo.group(1).strip() if lo else "",
         "examiner_report": overall.strip(),
+        "solution": samples[0] if samples else "",
+        "alternatives": samples[1:],
         "parts": [asdict(parts[k]) for k in sorted(parts)],
     }
 
@@ -689,7 +773,9 @@ def _split_parts(block: str) -> list[tuple[str, str | None, str]]:
 
 
 def _split_samples(chunk: str) -> list[str]:
-    pieces = re.split(r"(?mi)^[ \t]*Sample[ \t]+\d+[ \t]*:?[ \t]*$", chunk)
+    pieces = re.split(
+        r"(?mi)^[ \t]*Sample(?:[ \t]+Answer)?[ \t]+\d+[ \t]*:?[ \t]*$", chunk
+    )
     return [p.strip() for p in pieces if len(p.strip()) > 2]
 
 
@@ -816,31 +902,63 @@ def cas_records(
     b_text, b_index = _joined(booklet_pages, furniture)
     r_text, r_index = _joined(report_pages, furniture)
 
-    prompts = {b.num: b for b in segment(b_text)} if b_text.strip() else {}
+    numbered = {b.num: (b.start, b.end) for b in segment(b_text)} if b_text.strip() else {}
     suffix = ""
     if session:
         suffix = "s" if session.lower().startswith("sp") else "f"
 
+    bounds = list(segment(r_text, CAS_QUESTION_RE))
+    parsed_by_num = {
+        b.num: parse_cas_question(r_text[b.start : b.end]) for b in bounds
+    }
+
+    # A booklet whose numbering survived is read directly. One whose numbering
+    # did not — every scanned CAS booklet — is aligned on its point values
+    # against the report's, which is why the report is parsed first.
+    prompts = numbered
+    if b_text.strip() and len(numbered) < len(bounds) / 2:
+        aligned = align_booklet(
+            b_text,
+            [
+                (b.num, parsed_by_num[b.num]["points"],
+                 [p["points"] for p in parsed_by_num[b.num]["parts"]])
+                for b in bounds
+            ],
+        )
+        if aligned:
+            prompts = aligned
+
     records: list[dict] = []
-    for bound in segment(r_text, CAS_QUESTION_RE):
-        parsed = parse_cas_question(r_text[bound.start : bound.end])
+    for bound in bounds:
+        parsed = parsed_by_num[bound.num]
         body, pages, needs_vision = "", [], False
         if bound.num in prompts:
-            pb = prompts[bound.num]
-            body = mdmath.normalize_markdown(b_text[pb.start : pb.end]).strip()
-            pages = sorted({b_index[i] for i in range(pb.start, min(pb.end, len(b_index)))})
+            p_start, p_end = prompts[bound.num]
+            body = mdmath.normalize_markdown(b_text[p_start:p_end]).strip()
+            pages = sorted({b_index[i] for i in range(p_start, min(p_end, len(b_index)))})
             body = _attach_part_prompts(body, parsed["parts"])
             ocred = sorted({p for p in pages if booklet_pages[p - 1].ocred})
         else:
+            # No prompt text for this question. When the booklet has no text
+            # layer at all, which page holds which question is exactly what
+            # cannot be known — so the record claims no pages rather than all
+            # of them, and the rendered booklet is pointed at once in the
+            # report instead of being charged to every question.
             ocred = []
-            pages = [p.number for p in booklet_pages if p.scanned]
-            needs_vision = bool(pages)
+            pages = []
+            needs_vision = any(p.scanned for p in booklet_pages)
 
         warnings = []
         if not body and not needs_vision:
             warnings.append("no prompt text found in the booklet")
         if ocred:
-            warnings.append(f"prompt read by OCR (page {_ranges(ocred)}) — spot-check it")
+            note = f"prompt read by OCR (page {_ranges(ocred)}) — spot-check it"
+            if _has_exhibit(body):
+                note = (
+                    f"exhibit read by OCR (page {_ranges(ocred)}) — verify every "
+                    "figure against pages/, OCR drops and misreads table columns"
+                )
+            warnings.append(note)
         part_points = [p["points"] for p in parsed["parts"]]
         if parsed["points"] and all(pp is not None for pp in part_points) and part_points:
             if abs(sum(part_points) - parsed["points"]) > 0.01:
@@ -861,7 +979,7 @@ def cas_records(
                 "year": year,
                 "session": session,
                 "parts": parsed["parts"],
-                "solution": "",
+                "solution": parsed["solution"],
                 "examiner_report": parsed["examiner_report"],
                 "learning_objective_codes": parsed["learning_objective_codes"],
                 "pages": {
@@ -876,6 +994,108 @@ def cas_records(
             }
         )
     return records
+
+
+# A bare point-value line: `(1.25 points)` for a whole question, `(0.5 point)`
+# for a part. In a scanned booklet these survive OCR when the question numbers
+# do not — the numbers sit in a margin the OCR engine reorders.
+POINT_MARKER_RE = re.compile(r"(?mi)^[ \t]*\(\s*([\d.]+)\s*points?\s*\)")
+POINT_EPS = 0.01
+# Markers the alignment may step over to resync across a question the report
+# omits. Small on purpose: a long skip is a desync, not a gap.
+MAX_ALIGN_SKIP = 8
+
+
+def align_booklet(
+    booklet_text: str, questions: list[tuple[int, float | None, list[float | None]]]
+) -> dict[int, tuple[int, int]] | None:
+    """Map question number → span in a booklet whose numbering did not survive.
+
+    A scanned CAS booklet OCRs its prose well and loses the `1.` that starts
+    each question, so there is nothing for `segment` to key on. But it prints
+    each point value, and the examiner's report prints the same values as
+    `TOTAL POINT VALUE` and `Part a: 0.5 point` — so the two can be aligned on
+    published data rather than on a guess about page order.
+
+    A question matches only when its whole point signature — an optional
+    leading marker equal to its total, then exactly its parts' values in order,
+    summing to that total — appears in sequence. A question that does not match
+    is left out and the next one resumes the search from the same place, so one
+    unreadable question (a marker OCR missed, a part the report never labelled)
+    costs its own prompt and no other.
+
+    A matched span ends at its own last marker rather than at the next matched
+    question, so an unaligned question in between can never have its text
+    absorbed into a neighbour. That is the property that makes a partial
+    alignment safe: a prompt attached to the wrong question would be far worse
+    than no prompt at all.
+
+    Returns the spans it is sure of — empty if none — never a guess.
+    """
+    markers = [
+        (float(m.group(1)), m.start()) for m in POINT_MARKER_RE.finditer(booklet_text)
+    ]
+    if not markers or not questions:
+        return None
+
+    spans: dict[int, tuple[int, int]] = {}
+    pos = 0
+    for num, total, parts in questions:
+        if total is None:
+            continue
+        start = pos
+        match = _match_question(markers, start, total, parts)
+        if match is None:
+            # Step over markers belonging to a question this one is not: the
+            # report may skip a question the booklet prints (Fall 2016 has no
+            # QUESTION 8), or a marker may have been misread.
+            for skip in range(1, MAX_ALIGN_SKIP + 1):
+                match = _match_question(markers, start + skip, total, parts)
+                if match is not None:
+                    start += skip
+                    break
+        if match is None:
+            continue
+        end = markers[match][1] if match < len(markers) else len(booklet_text)
+        spans[num] = (markers[start][1], end)
+        pos = match
+    return spans or None
+
+
+def _match_question(
+    markers: list[tuple[float, int]],
+    pos: int,
+    total: float,
+    parts: list[float | None],
+) -> int | None:
+    """Consume one question's point markers from `pos`, or None if they differ.
+
+    A question takes an optional leading marker equal to its total (the booklet
+    prints it for some questions and not others), then exactly its parts'
+    values in order.
+    """
+    if pos >= len(markers):
+        return None
+    if abs(markers[pos][0] - total) < POINT_EPS:
+        pos += 1
+    elif not parts:
+        return None  # no parts to sum, and the total is not printed here
+
+    for value in parts:
+        if value is None or pos >= len(markers):
+            return None
+        if abs(markers[pos][0] - value) > POINT_EPS:
+            return None
+        pos += 1
+    if parts and abs(sum(v for v in parts if v is not None) - total) > POINT_EPS:
+        return None  # the report's own arithmetic does not close
+    return pos
+
+
+# A markdown table or a run of aligned columns in a prompt: the exhibit a
+# ratemaking question turns on, and the part of a scan OCR is worst at.
+def _has_exhibit(body: str) -> bool:
+    return "|---" in body or bool(COLUMN_GAP_RE.search(body))
 
 
 def _attach_part_prompts(body: str, parts: list[dict]) -> str:
@@ -912,7 +1132,10 @@ def _joined(pages: list[Page], furniture: set[str] | None = None) -> tuple[str, 
     chunks: list[str] = []
     index: list[int] = []
     for page in pages:
-        md = page_markdown(page, drop)
+        # Normalise here rather than per record: the publisher writes
+        # `EXAMINER’S REPORT` with a curly apostrophe, and every marker regex
+        # downstream is written with a straight one.
+        md = mdmath.normalize_chars(page_markdown(page, drop))
         piece = md + "\n\n"
         chunks.append(piece)
         index.extend([page.number] * len(piece))
@@ -922,7 +1145,9 @@ def _joined(pages: list[Page], furniture: set[str] | None = None) -> tuple[str, 
 # ─── Reporting ────────────────────────────────────────────────────────────────
 
 
-def token_estimate(records: list[dict], dpi: int = DEFAULT_DPI) -> dict[str, int]:
+def token_estimate(
+    records: list[dict], dpi: int = DEFAULT_DPI, rendered_pages: int = 0
+) -> dict[str, int]:
     """Model-token cost of this conversion, and of the workflow it replaces.
 
     Three rows, because they answer different questions:
@@ -934,7 +1159,9 @@ def token_estimate(records: list[dict], dpi: int = DEFAULT_DPI) -> dict[str, int
       was re-sent every turn.
     * `residual` — what stage 1 leaves: page images for prompts with no text
       layer, and nothing else, because the prompt, the options, the answer and
-      the solution are already in the record.
+      the solution are already in the record. `rendered_pages` covers a booklet
+      with no text layer anywhere, where no question can be tied to a page and
+      the whole booklet is read once rather than per question.
     * `review` — the topic decision stage 2 cannot make for you, at the
       measured cost of one `review.md` line per question. Counted for every
       question, since most of them need it.
@@ -953,6 +1180,9 @@ def token_estimate(records: list[dict], dpi: int = DEFAULT_DPI) -> dict[str, int
          "review_in", "review_out", "rewrite_in", "rewrite_out"),
         0,
     )
+
+    est["residual_in"] += rendered_pages * per_page
+    est["baseline_in"] += rendered_pages * 2805
 
     for rec in records:
         solution = chars(rec.get("solution")) + sum(
@@ -981,13 +1211,15 @@ def token_estimate(records: list[dict], dpi: int = DEFAULT_DPI) -> dict[str, int
     return est
 
 
-def write_report(path: Path, records: list[dict], dpi: int) -> str:
+def write_report(
+    path: Path, records: list[dict], dpi: int, rendered_pages: int = 0
+) -> str:
     have_answer = sum(1 for r in records if r.get("answer"))
     have_solution = sum(1 for r in records if r.get("solution") or r.get("parts"))
     vision = [r["num"] for r in records if r["needs_vision"]]
     ocred = [r["num"] for r in records if r.get("ocr")]
     flagged = [r for r in records if r["warnings"]]
-    est = token_estimate(records, dpi)
+    est = token_estimate(records, dpi, rendered_pages)
 
     lines = [
         "# Extraction report",
@@ -999,6 +1231,7 @@ def write_report(path: Path, records: list[dict], dpi: int) -> str:
         + (f" (questions {_ranges(vision)})" if vision else ""),
         f"- read by OCR (spot-check these): **{len(ocred)}**"
         + (f" (questions {_ranges(ocred)})" if ocred else ""),
+        f"- booklet pages rendered for transcription: **{rendered_pages}**",
         f"- flagged with warnings: **{len(flagged)}**",
         "",
         "## Token estimate",
@@ -1015,6 +1248,19 @@ def write_report(path: Path, records: list[dict], dpi: int) -> str:
         f"{est['residual_out'] + est['review_out'] + est['rewrite_out']:,} |",
         "",
     ]
+    unplaced = [r for r in records if r["needs_vision"] and not r["pages"]["question"]]
+    if unplaced:
+        lines += [
+            "## The booklet has no text layer",
+            "",
+            f"No page could be tied to a question, so all {rendered_pages} booklet "
+            "page(s) were rendered to `pages/`. Transcribe each prompt into "
+            "`prompts/<id>.md` and pass `--prompts` to `question_write.py`. "
+            "Where a page was read by OCR instead, check its exhibit tables "
+            "against the image — OCR drops columns.",
+            "",
+        ]
+
     if flagged:
         lines += ["## Warnings", ""]
         for rec in flagged:
@@ -1072,9 +1318,15 @@ def main(argv: list[str] | None = None) -> int:
         booklet, report = pages[:split], pages[split:]
         sources = {"question": args.pdf, "solution": args.pdf}
         offsets = {"question": 0, "solution": split}
-        # One document: its running headers repeat across both halves, so they
-        # are found over all the pages rather than within each half.
-        furniture = furniture_lines(pages)
+        # One document, two halves with different furniture: the report's
+        # header repeats across the whole file, while the booklet's
+        # "CONTINUED ON NEXT PAGE" only repeats across its own 31 pages and
+        # never reaches the share threshold measured over all 96.
+        furniture = (
+            furniture_lines(pages)
+            | furniture_lines(pages[:split])
+            | furniture_lines(pages[split:])
+        )
     else:
         booklet = read_pages(args.questions, want_tables, args.ocr) if args.questions else []
         report = read_pages(args.solutions, want_tables, args.ocr) if args.solutions else []
@@ -1093,14 +1345,17 @@ def main(argv: list[str] | None = None) -> int:
         print("no questions segmented — check the PDF layout", file=sys.stderr)
         return 1
 
+    rendered = 0
     if not args.no_render:
-        _render_needed(records, sources["question"], offsets["question"], out, args.dpi)
+        rendered = _render_needed(
+            records, sources["question"], offsets["question"], out, args.dpi, booklet
+        )
 
     with (out / "records.jsonl").open("w", encoding="utf-8") as fh:
         for rec in records:
             fh.write(json.dumps(rec, ensure_ascii=False) + "\n")
 
-    print(write_report(out / "report.md", records, args.dpi))
+    print(write_report(out / "report.md", records, args.dpi, rendered))
     print(f"wrote {out / 'records.jsonl'}")
     return 0
 
@@ -1116,10 +1371,25 @@ def _split_combined(pages: list[Page]) -> int:
     return 0
 
 
-def _render_needed(records, source, offset, out: Path, dpi: int) -> None:
-    wanted = sorted({p for r in records if r["needs_vision"] for p in r["pages"]["question"]})
+def _render_needed(records, source, offset, out: Path, dpi: int, booklet=()) -> int:
+    """Render the pages a prompt still has to be read off, and count them.
+
+    A question that names its pages gets just those. A booklet with no text
+    layer at all names none — nothing says which page holds which question —
+    so every scanned page is rendered once for the whole document.
+    """
+    wanted = sorted(
+        {
+            p
+            for r in records
+            if r["needs_vision"] or (r.get("ocr") and _has_exhibit(r.get("body") or ""))
+            for p in r["pages"]["question"]
+        }
+    )
+    if not wanted and any(r["needs_vision"] for r in records):
+        wanted = sorted(p.number for p in booklet if p.scanned)
     if not wanted or not source:
-        return
+        return 0
     pymupdf = _pymupdf()
     doc = pymupdf.open(source)
     for number in wanted:
@@ -1128,6 +1398,7 @@ def _render_needed(records, source, offset, out: Path, dpi: int) -> None:
             render_page(doc, index, out / "pages" / f"page-{number:03d}.png", dpi)
     doc.close()
     print(f"rendered {len(wanted)} page(s) to {out / 'pages'}")
+    return len(wanted)
 
 
 if __name__ == "__main__":

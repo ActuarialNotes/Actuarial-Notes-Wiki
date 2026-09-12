@@ -1,188 +1,209 @@
-// The study guide's chapters: an exam page's **main learning objectives**, laid
-// out along the bar that sits under the sticky header
-// (`components/wiki/SyllabusChapterBar.tsx`).
+// The syllabus's chapters: which **learning objective** each concept of an exam
+// page belongs to, so the concept viewer's walk can be cut into them the way the
+// exam-PDF reader's page bar is cut into a document's bookmarks
+// (`lib/pdfChapters.ts`).
 //
-// The same idea as the exam-PDF reader's chapters (`lib/pdfChapters.ts`), on the
-// other kind of long document this app asks people to read. A syllabus page is
-// three to six objectives and a bibliography; which one you are in, and how much
-// of the exam it is worth, is the thing you actually navigate by — "70% of the
-// way down the page" is not.
+// Reading an exam's material in the popup is a walk down a list — seventy-odd
+// stops, Previous to Next — and the bar above that footer says how far along you
+// are and nothing about *where*. But the syllabus does have sections: the
+// `> [!example]- General Probability {23-30%}` callouts an exam page is built
+// out of. Cutting the bar at each one turns the walk into the syllabus's own
+// structure: these twenty stops are General Probability, the next thirty are
+// Univariate Random Variables.
 //
-// Two things make this bar different from the PDF's, and both come from the
-// content:
+// A syllabus names the same concept under several objectives — conditional
+// probability is defined in the first and used in the second — so the index has
+// two halves, and which one answers depends on what the walk is stepping
+// through:
 //
-//  1. **The segments are sized by exam weight, not by how much page they take
-//     up.** An objective worth 44–50% of the exam is half the bar, even when its
-//     callout is collapsed to a 48px strip like every other one. That is the
-//     shape of the syllabus, which is what a candidate is orienting against; it
-//     is also the idiom the objective callouts themselves already use, filling
-//     their own row to their share of the exam.
-//  2. **The bar's units are those weights**, so its position is "how much of the
-//     exam's material is behind you". Scrolling maps into the current
-//     objective's span, so the fill still moves smoothly as you read, and a
-//     scrub maps back out to a scroll offset.
+//  - **By mention** (`byOccurrence`), for the document-ordered walk the popup
+//    takes through an exam page: a mention belongs to the callout it is written
+//    inside, which is the only reading that gives the bar unbroken chapters.
+//    Keying by first introduction instead would flip the label back and forth
+//    every time a later objective re-used an earlier concept.
+//  - **By concept** (`byConcept`), for a walk of concepts rather than mentions —
+//    the deduped list, a study-plan filter — where there is no one mention to
+//    ask about. There, a concept belongs to the objective that introduces it.
 //
-// Weights are read off the page (`{23-30%}`, parsed by `lib/examWeight.ts`) and
-// never invented: a page whose objectives carry no weights gets even segments,
-// which claims nothing.
+// Nothing is inferred. A concept written outside every callout — the
+// prerequisite line, the reading list — belongs to no objective, and its stretch
+// of the bar is left unnamed rather than folded into the objective above it.
 //
-// Pure. The measuring — where each objective's callout sits in the document —
-// is the component's half.
+// Pure. The markdown comes from the exam page, which already has it.
 
-import { parseExamWeight } from './examWeight'
+import { splitWeightTag } from './examWeight'
+import { extractWikiLinkOccurrences, stripWikiChrome } from './wikiExtract'
+import type { WikiEntryRef } from './wikiRoutes'
+import type { NavSegmentMark } from './navScrub'
+
+/** Matches the header line of a learning-objective callout. */
+const OBJECTIVE_HEADER_RE = /^>\s*\[!example\][-+]?\s*(.*)$/i
 
 /**
- * The bar's resolution. Positions are thousandths of the exam's material, which
- * is fine enough that a 2%-weighted objective still gets ~20 positions to scroll
- * through and coarse enough to stay well inside integer arithmetic.
+ * Which links count as the syllabus's concepts.
+ *
+ * A dated name — "A First Course in Probability (Ross - 2019)" — is a source in
+ * the reading list, not a concept, however it is linked. The exam page walks the
+ * same predicate, so the popup's list and this index count the same things and
+ * a mention's number means the same on both sides.
  */
-export const SYLLABUS_BAR_UNITS = 1000
+export function isSyllabusConcept(ref: WikiEntryRef): boolean {
+  return ref.kind === 'concept' && !/ \([^)]*\d{4}\)$/.test(ref.name)
+}
 
-/** One objective's callout, as the page renders it. */
-export interface MeasuredObjective {
-  /** The objective's name, from the callout title (weight tag already split off). */
+/** One learning objective, and the concepts written inside it. */
+export interface ObjectiveSection {
+  /** The callout's title with its weight tag split off — "General Probability". */
   title: string
-  /** The weight tag verbatim — "23-30%", "45–55%" — or '' when it carries none. */
+  /** The weight tag verbatim ("23-30%"), or '' when the callout carries none. */
   weight: string
-  /** Document y of the callout's first pixel. */
-  top: number
-  /** Document y just past its last. */
-  bottom: number
+  /** The concepts linked inside it, in the order the page writes them. */
+  concepts: string[]
 }
 
-/** An objective once it knows its stretch of the bar and of the page. */
-export interface SyllabusChapter extends MeasuredObjective {
-  /** 1-indexed first position of its stretch of the bar. */
-  start: number
-  /** 1-indexed last position, inclusive. */
-  end: number
+/** The two lookups, built together in one pass over the page. */
+export interface ObjectiveIndex {
+  /** Objective title by `name#n` — the page's nth mention of that concept. */
+  byOccurrence: Record<string, string>
+  /** Objective title by lowercased concept name — where it is introduced. */
+  byConcept: Record<string, string>
+}
+
+/** An item of a walk: a concept, and which mention of it this stop is. */
+export interface ObjectiveWalkItem {
+  name: string
+  /** 0-based index among the page's mentions of this concept, where known. */
+  occurrence?: number
+}
+
+/** The key `byOccurrence` is written under. */
+function occurrenceKey(name: string, occurrence: number): string {
+  return `${name.toLowerCase()}#${occurrence}`
 }
 
 /**
- * Each objective's share of the bar, summing to 1.
+ * Walk the page, handing every concept link the objective it is written inside.
  *
- * Proportional to the weights only when *every* objective has one: a page with
- * some weights missing can't be laid out by weight without inventing the rest,
- * so it falls back to even shares, which say nothing about the exam either way.
+ * A callout runs from its `[!example]` header to the first line that leaves the
+ * blockquote, which is how Obsidian reads it too — so a concept listed under
+ * "Discrete Univariate Distributions" *inside* the callout is still that
+ * objective's, while the `## Source Material` shelf below is outside them all.
  */
-export function objectiveShares(weights: (string | null | undefined)[]): number[] {
-  const count = weights.length
-  if (count === 0) return []
-  const parsed = weights.map(w => parseExamWeight(w))
-  const total = parsed.reduce<number>((sum, w) => sum + (w ?? 0), 0)
-  if (parsed.some(w => w === null || !(w > 0)) || !(total > 0)) {
-    return new Array<number>(count).fill(1 / count)
+function scanObjectiveLinks(markdown: string): { name: string; objective: string | null }[] {
+  const links: { name: string; objective: string | null }[] = []
+  let objective: string | null = null
+  let inCallout = false
+
+  // The same starting point the occurrence list counts from, so the two agree
+  // about which mention is the nth.
+  for (const line of stripWikiChrome(markdown).split('\n')) {
+    const header = OBJECTIVE_HEADER_RE.exec(line)
+    if (header) {
+      const { title, weight: _weight } = splitWeightTag(header[1].trim())
+      objective = title.trim() || null
+      inCallout = true
+    } else if (inCallout && !line.startsWith('>') && line.trim() !== '') {
+      // A blank line between two callouts doesn't end anything; a line of prose
+      // does. (Inside a callout a blank line is written as a bare ">".)
+      objective = null
+      inCallout = false
+    }
+
+    for (const ref of extractWikiLinkOccurrences(line)) {
+      if (!isSyllabusConcept(ref)) continue
+      links.push({ name: ref.name, objective })
+    }
   }
-  return parsed.map(w => (w as number) / total)
+  return links
 }
 
 /**
- * The chapters, from the objectives as measured on the page.
- *
- * Objectives are put in page order and given two spans: their stretch of the
- * bar (by weight) and their stretch of the page — which runs to wherever the
- * next objective starts, so the gap between two callouts belongs to the one
- * above it. The last objective keeps its own bottom edge, because what follows
- * it is the source-material shelf rather than more syllabus.
- *
- * Returns `[]` for fewer than two objectives: one chapter covering a page is
- * not a chapter list, and a page with no objectives at all is not a syllabus.
+ * The learning objectives of an exam page, in page order, with the concepts
+ * each one names.
  */
-export function buildSyllabusChapters(
-  objectives: MeasuredObjective[],
-  total: number = SYLLABUS_BAR_UNITS,
-): SyllabusChapter[] {
-  if (!Number.isFinite(total) || total < 2) return []
+export function parseObjectiveSections(markdown: string): ObjectiveSection[] {
+  if (!markdown) return []
+  const sections: ObjectiveSection[] = []
+  let current: ObjectiveSection | null = null
+  let inCallout = false
 
-  const usable = objectives
-    .filter(o =>
-      !!o &&
-      o.title.trim() !== '' &&
-      Number.isFinite(o.top) &&
-      Number.isFinite(o.bottom) &&
-      o.bottom > o.top)
-    .sort((a, b) => a.top - b.top)
-  if (usable.length < 2) return []
-  // More objectives than the bar has positions to give each one is not a case
-  // any syllabus reaches, but the arithmetic below would hand out zero-width
-  // stretches if it did.
-  if (usable.length > total) return []
-
-  const shares = objectiveShares(usable.map(o => o.weight))
-
-  const chapters: SyllabusChapter[] = []
-  let cumulative = 0
-  let start = 1
-  for (let i = 0; i < usable.length; i++) {
-    cumulative += shares[i]
-    // Each boundary is rounded off the *cumulative* share rather than by adding
-    // up rounded widths, so the rounding can't drift and the last stretch
-    // always ends exactly on `total`. Every stretch keeps at least one
-    // position, and enough room is left for the ones still to come.
-    const remaining = usable.length - 1 - i
-    const end = i === usable.length - 1
-      ? total
-      : Math.min(total - remaining, Math.max(start, Math.round(cumulative * total)))
-    const objective = usable[i]
-    const next = usable[i + 1]
-    chapters.push({
-      ...objective,
-      bottom: next ? Math.max(objective.bottom, next.top) : objective.bottom,
-      start,
-      end,
-    })
-    start = end + 1
+  for (const line of stripWikiChrome(markdown).split('\n')) {
+    const header = OBJECTIVE_HEADER_RE.exec(line)
+    if (header) {
+      const { title, weight } = splitWeightTag(header[1].trim())
+      current = { title: title.trim(), weight: weight ?? '', concepts: [] }
+      inCallout = true
+      if (current.title) sections.push(current)
+      continue
+    }
+    if (!inCallout) continue
+    if (!line.startsWith('>') && line.trim() !== '') {
+      current = null
+      inCallout = false
+      continue
+    }
+    for (const ref of extractWikiLinkOccurrences(line)) {
+      if (current && isSyllabusConcept(ref)) current.concepts.push(ref.name)
+    }
   }
-  return chapters
-}
-
-/** The chapter a bar position falls in, or null when it falls outside them all. */
-export function chapterAtPosition(chapters: SyllabusChapter[], position: number): SyllabusChapter | null {
-  if (!Number.isFinite(position)) return null
-  const at = Math.round(position)
-  return chapters.find(c => at >= c.start && at <= c.end) ?? null
+  return sections
 }
 
 /**
- * Where the bar sits for a given reading line — the document y just under the
- * sticky header, which is what the reader is actually looking at.
- *
- * Above the first objective the bar is at the start (a syllabus's lead-in is
- * before the material, not part of it); below the last it is full. Inside one,
- * it is proportionally along that objective's own stretch, so the fill keeps
- * moving as you read a long section instead of jumping between chapters.
+ * Both lookups for one exam page. `null` in, empty index out — a page with no
+ * objectives cuts no bar.
  */
-export function chapterPositionForScroll(chapters: SyllabusChapter[], viewTop: number): number {
-  if (chapters.length === 0 || !Number.isFinite(viewTop)) return 1
-  const first = chapters[0]
-  const last = chapters[chapters.length - 1]
-  if (viewTop <= first.top) return first.start
-  if (viewTop >= last.bottom) return last.end
+export function buildObjectiveIndex(markdown: string | null | undefined): ObjectiveIndex {
+  const index: ObjectiveIndex = { byOccurrence: {}, byConcept: {} }
+  if (!markdown) return index
 
-  for (const chapter of chapters) {
-    if (viewTop >= chapter.bottom) continue
-    const height = chapter.bottom - chapter.top
-    const fraction = height > 0 ? (viewTop - chapter.top) / height : 0
-    const span = chapter.end - chapter.start
-    return chapter.start + Math.round(Math.min(1, Math.max(0, fraction)) * span)
+  const counts = new Map<string, number>()
+  for (const link of scanObjectiveLinks(markdown)) {
+    const key = link.name.toLowerCase()
+    const occurrence = counts.get(key) ?? 0
+    counts.set(key, occurrence + 1)
+    if (!link.objective) continue
+    index.byOccurrence[occurrenceKey(link.name, occurrence)] = link.objective
+    // First one wins: the objective that introduces a concept is the one that
+    // owns it wherever the walk isn't stepping through mentions.
+    if (!(key in index.byConcept)) index.byConcept[key] = link.objective
   }
-  return last.end
+  return index
+}
+
+/** The objective one stop of a walk belongs to, or '' when it belongs to none. */
+export function objectiveFor(item: ObjectiveWalkItem, index: ObjectiveIndex | null | undefined): string {
+  if (!index || !item?.name) return ''
+  if (typeof item.occurrence === 'number') {
+    const byMention = index.byOccurrence[occurrenceKey(item.name, item.occurrence)]
+    if (byMention) return byMention
+    // A stop the page doesn't have a mention for — a concept the walk picked up
+    // by following a link — falls back to where the concept is introduced.
+  }
+  return index.byConcept[item.name.toLowerCase()] ?? ''
 }
 
 /**
- * The inverse: the document y a bar position means, for a press or a drag.
+ * Where the objectives begin along a walk — the marks `NavProgressBar` cuts its
+ * track at.
  *
- * The exact inverse of `chapterPositionForScroll`, so letting go of the bar
- * leaves it where the finger was rather than a nudge off it.
+ * A mark goes wherever the objective changes. A run of stops that belong to no
+ * objective gets an unnamed mark, so it reads as a gap in the syllabus rather
+ * than as part of whichever objective happens to precede it.
  */
-export function scrollForChapterPosition(chapters: SyllabusChapter[], position: number): number {
-  if (chapters.length === 0 || !Number.isFinite(position)) return 0
-  const chapter = chapterAtPosition(chapters, position) ?? (
-    position < chapters[0].start ? chapters[0] : chapters[chapters.length - 1]
-  )
-  const span = chapter.end - chapter.start
-  const fraction = span > 0
-    ? Math.min(1, Math.max(0, (Math.round(position) - chapter.start) / span))
-    : 0
-  return chapter.top + fraction * (chapter.bottom - chapter.top)
+export function objectiveMarks(
+  items: ObjectiveWalkItem[],
+  index: ObjectiveIndex | null | undefined,
+): NavSegmentMark[] {
+  if (!index || items.length === 0) return []
+  const marks: NavSegmentMark[] = []
+  let previous: string | undefined
+  items.forEach((item, i) => {
+    const label = objectiveFor(item, index) || undefined
+    if (i === 0 || label !== previous) marks.push({ start: i + 1, label })
+    previous = label
+  })
+  // One stretch covering the whole walk says nothing; `navSegments` would drop
+  // it anyway, and returning it makes an unnamed bar look deliberate.
+  return marks.length > 1 ? marks : []
 }

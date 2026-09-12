@@ -16,10 +16,21 @@ const BREADCRUMB_RE = /^\[\[[^\]|]*(?:\|[^\]]+)?\]\][^\n]* \/ [^\n]*\n?/
 // entries. Used to build the occurrence-aware navigation on exam pages (the
 // deduped list drives the concept count; this one drives which occurrence is
 // highlighted). Frontmatter and the breadcrumb nav line are stripped first.
-export function extractWikiLinkOccurrences(text: string): WikiEntryRef[] {
-  const cleaned = text
+/**
+ * Everything at the top of a file that is never content: the YAML frontmatter
+ * and the breadcrumb nav line. Exported because anything that walks a page's
+ * links *positionally* — `lib/syllabusChapters.ts`, pairing each mention with
+ * the syllabus section it sits in — has to start counting from the same place
+ * the occurrence list does, or the two drift apart by whatever the chrome held.
+ */
+export function stripWikiChrome(text: string): string {
+  return text
     .replace(/^---\n[\s\S]*?\n---\n?/, '')
     .replace(BREADCRUMB_RE, '')
+}
+
+export function extractWikiLinkOccurrences(text: string): WikiEntryRef[] {
+  const cleaned = stripWikiChrome(text)
 
   const regex = /\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g
   const refs: WikiEntryRef[] = []

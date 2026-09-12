@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Lock, Maximize2, Minimize2 } from 'lucide-react'
 import { type WikiEntryRef } from '@/lib/wikiRoutes'
@@ -12,6 +12,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { useSoundEffects, useSoundOnToggle } from '@/hooks/useSoundEffects'
 import { useSubscription } from '@/hooks/useSubscription'
 import { NavProgressBar } from '@/components/NavProgressBar'
+import { objectiveMarks } from '@/lib/syllabusChapters'
 
 function pageKey(ref: WikiEntryRef): string {
   return `${ref.kind}:${ref.name.toLowerCase()}`
@@ -31,7 +32,7 @@ function pageKey(ref: WikiEntryRef): string {
  * sequence from the stack: stepping to another concept starts a new trail.
  */
 export function ConceptPopup() {
-  const { open, list, index, pages, pageIndex, occurrences, occurrenceIndex, navigate, pushPage, focusPage, closePage, close, dashboardContext, setDashboardFilter } = useConceptPopup()
+  const { open, list, index, pages, pageIndex, occurrences, occurrenceIndex, objectives, navigate, pushPage, focusPage, closePage, close, dashboardContext, setDashboardFilter } = useConceptPopup()
   const current: WikiEntryRef | undefined = list[index]
   const activePage: WikiEntryRef | undefined = pages[pageIndex]
   const { height, beginDrag } = useSplitHeight()
@@ -192,6 +193,23 @@ export function ConceptPopup() {
     }
   }, [open])
 
+  // The syllabus's chapters for the footer's bar, built from whatever sequence
+  // it is walking — the deduped concept list, or the document-ordered mentions
+  // when the whole syllabus is being read — so the segments line up with the
+  // positions under them either way. Above the early return, like every hook.
+  const objectiveSegments = useMemo(
+    () => objectiveMarks(
+      // In occurrence mode each stop is a *mention*, and its objective is the
+      // callout that mention is written in — which is what keeps a concept
+      // re-used by a later objective from cutting the chapter in two.
+      occurrences && occurrences.length
+        ? occurrences.map(o => ({ name: o.name, occurrence: o.occurrence }))
+        : list.map(ref => ({ name: ref.name })),
+      objectives,
+    ),
+    [occurrences, list, objectives],
+  )
+
   if (!open || !current || !activePage) return null
 
   const isCircular = !!(dashboardContext?.circular)
@@ -315,6 +333,13 @@ export function ConceptPopup() {
         // (and the dashboard's circular list) working from the bar too.
         onScrub={next => navigate(next - navCurrent)}
         formatValue={n => (occMode ? occurrences![n - 1]?.name : list[n - 1]?.name) ?? `${n} of ${navTotal}`}
+        // …and cut into the syllabus's own sections when the walk is an exam's:
+        // a segment per learning objective, so the bar shows that these eight
+        // concepts are General Probability and the next twenty are Univariate
+        // Random Variables. The bubble then names the objective above the
+        // concept. Empty for a walk with no syllabus behind it (the dashboard,
+        // a search result), and the bar is the plain strip it always was.
+        segments={objectiveSegments}
       />
       <div className="flex items-stretch h-16 shrink-0 bg-background/60">
         <button

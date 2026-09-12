@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Check } from 'lucide-react'
 import type { Question } from '@/lib/parser'
 import type { AttemptCounts } from '@/lib/questionAttempts'
-import { LatexText } from '@/components/LatexText'
+import { questionPreview } from '@/lib/questionPreview'
 import { MarkdownText } from '@/components/MarkdownText'
 import { QuestionAnswerReveal } from '@/components/QuestionAnswerReveal'
 import { QuestionAttemptBadge } from '@/components/QuestionAttemptBadge'
@@ -26,18 +26,26 @@ interface QuestionSearchRowProps {
   attemptsTracked?: boolean
 }
 
-function highlightStem(text: string, query: string): React.ReactNode {
+/**
+ * The collapsed preview — a few lines of the question's prose (see
+ * `lib/questionPreview.ts`), with the search match highlighted.
+ *
+ * The preview is deliberately plain prose so it can be cut at the match, and
+ * each piece still goes through the markdown renderer: a ratemaking stem
+ * escapes its currency (`\$400`) and writes its variables as math (`$X$`).
+ */
+function StemPreview({ question, query }: { question: Question; query: string }) {
+  const text = questionPreview(question, query)
   const q = query.trim()
-  if (!q) return <LatexText>{text}</LatexText>
-  const idx = text.toLowerCase().indexOf(q.toLowerCase())
-  if (idx < 0) return <LatexText>{text}</LatexText>
+  const idx = q ? text.toLowerCase().indexOf(q.toLowerCase()) : -1
+  if (idx < 0) return <MarkdownText inline>{text}</MarkdownText>
   return (
     <>
-      <LatexText>{text.slice(0, idx)}</LatexText>
+      <MarkdownText inline>{text.slice(0, idx)}</MarkdownText>
       <mark className="bg-primary/20 text-foreground rounded px-0.5">
         {text.slice(idx, idx + q.length)}
       </mark>
-      <LatexText>{text.slice(idx + q.length)}</LatexText>
+      <MarkdownText inline>{text.slice(idx + q.length)}</MarkdownText>
     </>
   )
 }
@@ -70,9 +78,6 @@ export function QuestionSearchRow({ question, query, selected = false, onToggleS
   const [expanded, setExpanded] = useState(false)
   const [showAnswer, setShowAnswer] = useState(false)
   const selectable = !!onToggleSelect
-
-  const words = question.stem.trim().split(/\s+/)
-  const previewText = words.length <= 6 ? question.stem : words.slice(0, 6).join(' ') + '…'
 
   return (
     <div
@@ -126,11 +131,15 @@ export function QuestionSearchRow({ question, query, selected = false, onToggleS
         </button>
       </div>
 
+      {/* Collapsed: a few lines of the stem, clamped so a long one can't push
+          the next row off screen. Expanded: the whole thing. */}
       <div className="text-sm text-muted-foreground leading-relaxed">
         {expanded ? (
           <MarkdownText className={STEM_MD_CLASS}>{question.stem}</MarkdownText>
         ) : (
-          <span>{highlightStem(previewText, query)}</span>
+          <span className="line-clamp-3">
+            <StemPreview question={question} query={query} />
+          </span>
         )}
       </div>
 

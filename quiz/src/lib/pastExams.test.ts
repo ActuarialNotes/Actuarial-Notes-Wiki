@@ -4,7 +4,9 @@ import {
   formatPassRate,
   hasPublishedStats,
   normalizeSession,
+  questionSittingLabel,
   sittingLabel,
+  sittingLabels,
 } from './pastExams'
 import type { Question } from './parser'
 
@@ -181,5 +183,39 @@ describe('hasPublishedStats', () => {
 
   it('is true as soon as one sitting has a pass ratio', () => {
     expect(hasPublishedStats([base, { ...base, key: 'x', effectivePassRate: 46 }])).toBe(true)
+  })
+})
+
+describe('questionSittingLabel', () => {
+  it('names the sitting from the question\'s own frontmatter', () => {
+    expect(questionSittingLabel(q({ year: 2019, session: 'Sp' }))).toBe('Spring 2019')
+  })
+
+  it('is the bare year when the file tags no session', () => {
+    expect(questionSittingLabel(q({ year: 2019 }))).toBe('2019')
+  })
+
+  it('is null for an undated question rather than a guess', () => {
+    expect(questionSittingLabel(q({}))).toBeNull()
+  })
+})
+
+describe('sittingLabels', () => {
+  it('lists the sittings the pool holds, newest first', () => {
+    const labels = sittingLabels([
+      q({ year: 2018, session: 'Spring' }),
+      q({ year: 2019, session: 'Fall' }),
+      q({ year: 2019, session: 'Spring' }),
+      q({ year: 2019, session: 'Fall' }),
+    ])
+    expect(labels).toEqual(['Fall 2019', 'Spring 2019', 'Spring 2018'])
+  })
+
+  it('leaves undated questions out', () => {
+    expect(sittingLabels([q({}), q({ year: 2019, session: 'Fall' })])).toEqual(['Fall 2019'])
+  })
+
+  it('is empty for a pool with no dated questions', () => {
+    expect(sittingLabels([q({})])).toEqual([])
   })
 })

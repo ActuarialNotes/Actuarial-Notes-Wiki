@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { History, Layers, Search, Sparkles, X } from 'lucide-react'
 import { filterQuestions } from '@/lib/parser'
 import type { Question, QuestionFilter } from '@/lib/parser'
+import { questionSittingLabel, sittingLabels } from '@/lib/pastExams'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { QuestionSearchRow, DifficultyDots } from '@/components/QuestionSearchRow'
@@ -55,6 +56,14 @@ function conceptLabel(link: string): string {
   return segment.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
 }
 
+// Tallies a pool by the option(s) each question belongs to — a question sits
+// under one difficulty but under every concept it is tagged with.
+function tally(pool: Question[], keysOf: (q: Question) => string[]): Record<string, number> {
+  const counts: Record<string, number> = {}
+  pool.forEach(q => keysOf(q).forEach(key => { counts[key] = (counts[key] ?? 0) + 1 }))
+  return counts
+}
+
 interface QuizFloatingSearchProps {
   /** When provided, results are pre-filtered to this pool (e.g. current exam + concepts). */
   filter?: QuestionFilter
@@ -72,6 +81,7 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
   const [difficultyFilters, setDifficultyFilters] = useState<Set<string>>(new Set())
   const [conceptFilters, setConceptFilters] = useState<Set<string>>(new Set())
   const [examFilters, setExamFilters] = useState<Set<string>>(new Set())
+  const [sittingFilters, setSittingFilters] = useState<Set<string>>(new Set())
   const [attemptStatus, setAttemptStatus] = useState<AttemptStatus>('all')
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -84,6 +94,7 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
     setDifficultyFilters(new Set())
     setConceptFilters(new Set())
     setExamFilters(new Set())
+    setSittingFilters(new Set())
     setAttemptStatus('all')
   }, [filterKey])
 
@@ -151,6 +162,14 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
     return Array.from(seen).sort().map(name => ({ value: name, label: name }))
   }, [basePool])
 
+  // Past sittings the pool holds, newest first — "Spring 2019" is how a
+  // candidate thinks of a paper, so the filter is keyed by that label rather
+  // than by year and session separately. Undated questions contribute nothing.
+  const sittingOptions = useMemo(
+    () => sittingLabels(basePool).map(label => ({ value: label, label })),
+    [basePool],
+  )
+
   // A question counts as attempted once it has any recorded response — the same
   // signal QuestionSearchRow uses to show its "Attempted/Correct" chip.
   const isAttempted = useCallback(
@@ -158,96 +177,69 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
     [attemptsByQuestionId],
   )
 
-  const matchesAttemptStatus = useCallback(
-    (q: Question) =>
+  // One predicate per filter group. Each group is OR within itself (an empty
+  // group matches everything); the groups are AND'd together.
+  const predicates = useMemo(() => ({
+    difficulty: (q: Question) => difficultyFilters.size === 0 || difficultyFilters.has(q.difficulty),
+    concept: (q: Question) => conceptFilters.size === 0
+      || q.wiki_link.some(link => conceptFilters.has(conceptLabel(link))),
+    exam: (q: Question) => examFilters.size === 0 || examFilters.has(q.exam),
+    sitting: (q: Question) => {
+      if (sittingFilters.size === 0) return true
+      const label = questionSittingLabel(q)
+      return label !== null && sittingFilters.has(label)
+    },
+    attempt: (q: Question) =>
       attemptStatus === 'all' ? true
       : attemptStatus === 'attempted' ? isAttempted(q)
       : !isAttempted(q),
-    [attemptStatus, isAttempted],
+  }), [difficultyFilters, conceptFilters, examFilters, sittingFilters, attemptStatus, isAttempted])
+
+  type FilterGroup = keyof typeof predicates
+
+  const visiblePool = useMemo(
+    () => basePool.filter(q => Object.values(predicates).every(match => match(q))),
+    [basePool, predicates],
   )
 
-  // Apply the local refinements. Each group is OR within itself; the groups are
-  // AND'd together.
-  const visiblePool = useMemo(() => {
-    let filtered = basePool
-    if (difficultyFilters.size > 0) {
-      filtered = filtered.filter(q => difficultyFilters.has(q.difficulty))
-    }
-    if (conceptFilters.size > 0) {
-      filtered = filtered.filter(q => q.wiki_link.some(link => conceptFilters.has(conceptLabel(link))))
-    }
-    if (examFilters.size > 0) {
-      filtered = filtered.filter(q => examFilters.has(q.exam))
-    }
-    if (attemptStatus !== 'all') {
-      filtered = filtered.filter(matchesAttemptStatus)
-    }
-    return filtered
-  }, [basePool, difficultyFilters, conceptFilters, examFilters, attemptStatus, matchesAttemptStatus])
+  // Option counts reflect the pool with the *other* filter groups applied, so
+  // each count previews how many questions choosing it would leave.
+  const poolExcluding = useCallback(
+    (group: FilterGroup) => basePool.filter(q => (Object.keys(predicates) as FilterGroup[])
+      .every(g => g === group || predicates[g](q))),
+    [basePool, predicates],
+  )
 
-  // Option counts reflect the pool with the *other* filter groups applied, so each
-  // count previews how many questions choosing it would leave.
-  const difficultyOptionCounts = useMemo(() => {
-    let pool = basePool
-    if (conceptFilters.size > 0) {
-      pool = pool.filter(q => q.wiki_link.some(link => conceptFilters.has(conceptLabel(link))))
-    }
-    if (examFilters.size > 0) {
-      pool = pool.filter(q => examFilters.has(q.exam))
-    }
-    pool = pool.filter(matchesAttemptStatus)
-    const counts: Record<string, number> = {}
-    pool.forEach(q => { counts[q.difficulty] = (counts[q.difficulty] ?? 0) + 1 })
-    return counts
-  }, [basePool, conceptFilters, examFilters, matchesAttemptStatus])
+  const difficultyOptionCounts = useMemo(
+    () => tally(poolExcluding('difficulty'), q => [q.difficulty]),
+    [poolExcluding],
+  )
 
-  const conceptOptionCounts = useMemo(() => {
-    let pool = basePool
-    if (difficultyFilters.size > 0) {
-      pool = pool.filter(q => difficultyFilters.has(q.difficulty))
-    }
-    if (examFilters.size > 0) {
-      pool = pool.filter(q => examFilters.has(q.exam))
-    }
-    pool = pool.filter(matchesAttemptStatus)
-    const counts: Record<string, number> = {}
-    pool.forEach(q => q.wiki_link.forEach(link => {
-      const lbl = conceptLabel(link)
-      counts[lbl] = (counts[lbl] ?? 0) + 1
-    }))
-    return counts
-  }, [basePool, difficultyFilters, examFilters, matchesAttemptStatus])
+  const conceptOptionCounts = useMemo(
+    () => tally(poolExcluding('concept'), q => q.wiki_link.map(conceptLabel)),
+    [poolExcluding],
+  )
 
-  const examOptionCounts = useMemo(() => {
-    let pool = basePool
-    if (difficultyFilters.size > 0) {
-      pool = pool.filter(q => difficultyFilters.has(q.difficulty))
-    }
-    if (conceptFilters.size > 0) {
-      pool = pool.filter(q => q.wiki_link.some(link => conceptFilters.has(conceptLabel(link))))
-    }
-    pool = pool.filter(matchesAttemptStatus)
-    const counts: Record<string, number> = {}
-    pool.forEach(q => { counts[q.exam] = (counts[q.exam] ?? 0) + 1 })
-    return counts
-  }, [basePool, difficultyFilters, conceptFilters, matchesAttemptStatus])
+  const examOptionCounts = useMemo(
+    () => tally(poolExcluding('exam'), q => [q.exam]),
+    [poolExcluding],
+  )
+
+  const sittingOptionCounts = useMemo(
+    () => tally(poolExcluding('sitting'), q => {
+      const label = questionSittingLabel(q)
+      return label ? [label] : []
+    }),
+    [poolExcluding],
+  )
 
   // Counts for the attempt-status cycle, previewing what each state would leave
   // once the other filter groups are applied.
   const attemptStatusCounts = useMemo(() => {
-    let pool = basePool
-    if (difficultyFilters.size > 0) {
-      pool = pool.filter(q => difficultyFilters.has(q.difficulty))
-    }
-    if (conceptFilters.size > 0) {
-      pool = pool.filter(q => q.wiki_link.some(link => conceptFilters.has(conceptLabel(link))))
-    }
-    if (examFilters.size > 0) {
-      pool = pool.filter(q => examFilters.has(q.exam))
-    }
+    const pool = poolExcluding('attempt')
     const attempted = pool.reduce((n, q) => n + (isAttempted(q) ? 1 : 0), 0)
     return { all: pool.length, attempted, new: pool.length - attempted }
-  }, [basePool, difficultyFilters, conceptFilters, examFilters, isAttempted])
+  }, [poolExcluding, isAttempted])
 
   const questionResults = useMemo(() => visiblePool.slice(0, 100), [visiblePool])
   const totalCount = visiblePool.length
@@ -272,6 +264,15 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
 
   function toggleExamFilter(value: string) {
     setExamFilters(prev => {
+      const next = new Set(prev)
+      if (next.has(value)) next.delete(value)
+      else next.add(value)
+      return next
+    })
+  }
+
+  function toggleSittingFilter(value: string) {
+    setSittingFilters(prev => {
       const next = new Set(prev)
       if (next.has(value)) next.delete(value)
       else next.add(value)
@@ -427,6 +428,19 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
                         selected={examFilters}
                         onToggle={toggleExamFilter}
                         getCount={v => examOptionCounts[v] ?? 0}
+                      />
+                    )}
+                    {/* Past sittings — how a candidate narrows to one paper.
+                        Hidden for a pool that is already a single sitting (the
+                        mock-exam shelf's selection scopes the pool itself) or
+                        holds no dated questions at all. */}
+                    {sittingOptions.length > 1 && (
+                      <MultiSelectDropdown
+                        label="Sitting"
+                        options={sittingOptions}
+                        selected={sittingFilters}
+                        onToggle={toggleSittingFilter}
+                        getCount={v => sittingOptionCounts[v] ?? 0}
                       />
                     )}
                     {/* Attempt history — a single button cycling all → attempted → new.

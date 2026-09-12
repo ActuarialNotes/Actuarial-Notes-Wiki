@@ -4,6 +4,7 @@ import { X, Check, Search as SearchIcon, BookMarked, FileText, GraduationCap, Ch
 import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions, filterQuestions } from '@/lib/parser'
 import type { Question, Difficulty } from '@/lib/parser'
+import { questionPreview } from '@/lib/questionPreview'
 import { hrefToEntryRef, pathToEntryRef, wikiRoute } from '@/lib/wikiRoutes'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { findSyllabiForConcept } from '@/lib/conceptMatch'
@@ -17,6 +18,7 @@ import { useSubscription } from '@/hooks/useSubscription'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { LatexText } from '@/components/LatexText'
+import { MarkdownText } from '@/components/MarkdownText'
 import { QuestionAnswerReveal } from '@/components/QuestionAnswerReveal'
 import { QuestionAttemptBadge } from '@/components/QuestionAttemptBadge'
 import { useQuestionAttempts, type QuestionAttemptSummary } from '@/hooks/useQuestionAttempts'
@@ -131,9 +133,10 @@ function QuestionRow({ question, selected, onToggleSelect, activeDifficulty, act
         {expanded ? (
           <LatexText>{question.stem}</LatexText>
         ) : (
-          <LatexText>
-            {(() => { const w = question.stem.trim().split(/\s+/); return w.length <= 6 ? question.stem : w.slice(0, 6).join(' ') + '…' })()}
-          </LatexText>
+          // A few lines of the question's prose, clamped — see
+          // lib/questionPreview.ts. Rendered as markdown so a stem's escaped
+          // currency (`\$400`) reads as a dollar sign.
+          <MarkdownText inline className="line-clamp-3">{questionPreview(question)}</MarkdownText>
         )}
       </div>
 

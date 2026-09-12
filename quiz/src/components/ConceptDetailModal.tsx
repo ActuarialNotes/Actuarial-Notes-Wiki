@@ -608,6 +608,8 @@ export function ConceptDetailModal({
             <button
               type="button"
               disabled={!canPrev}
+              // Paper moving, not a press — the same cue the bar above makes.
+              data-sound="ruffle"
               onClick={() => setLocalIndex(i => i - 1)}
               className="flex items-center justify-center gap-1.5 px-4 text-xs font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
@@ -620,6 +622,7 @@ export function ConceptDetailModal({
             <button
               type="button"
               disabled={!canNext}
+              data-sound="ruffle"
               onClick={() => setLocalIndex(i => i + 1)}
               className="flex items-center justify-center gap-1.5 px-4 text-xs font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >

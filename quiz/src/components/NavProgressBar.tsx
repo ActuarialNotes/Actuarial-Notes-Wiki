@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
+import { playSound } from '@/lib/soundEngine'
 import {
   navSegments,
   scrubKeyTarget,
@@ -218,11 +219,26 @@ export function NavProgressBar({
 
   const position = Math.min(total, Math.max(1, Math.round(current) || 1))
 
+  /**
+   * Move to the position under the pointer, and ruffle if that moved us.
+   *
+   * The cue is deliberately on the *stop crossed*, not on the press or the
+   * release: a drag through forty pages should sound like forty pages going
+   * past, the way thumbing a stack does, rather than like one press at each
+   * end. `ruffle` is written for exactly this — the quietest cue in the
+   * catalogue, with a throttle that thins a fast drag down to a riffle instead
+   * of a burst per pointermove (see docs/sound-design.md).
+   */
+  function moveTo(next: number) {
+    if (next === position) return
+    playSound('ruffle')
+    onScrub!(next)
+  }
+
   function seek(clientX: number) {
     const rect = trackRef.current?.getBoundingClientRect()
     if (!rect) return
-    const next = scrubPositionAt(clientX, rect.left, rect.width, total)
-    if (next !== position) onScrub!(next)
+    moveTo(scrubPositionAt(clientX, rect.left, rect.width, total))
   }
 
   function previewAt(clientX: number) {
@@ -266,7 +282,7 @@ export function NavProgressBar({
     if (target === null) return
     // These keys scroll the surface behind the bar otherwise.
     e.preventDefault()
-    if (target !== position) onScrub!(target)
+    moveTo(target)
   }
 
   // While dragging, the bubble follows the position itself so it can't drift
@@ -297,9 +313,10 @@ export function NavProgressBar({
       aria-valuemax={total}
       aria-valuenow={position}
       aria-valuetext={valueText}
-      // The delegated sound listener stays out of this anyway (a div isn't a
-      // control it recognises), but scrubbing is explicitly a silent gesture —
-      // see docs/sound-design.md — and a drag would otherwise be a cue per step.
+      // The delegated listener stays out of this anyway (a div isn't a control
+      // it recognises), and it must: the bar sounds its own `ruffle` per stop
+      // crossed (see `moveTo`), and a press cue on top of it would double up on
+      // the first stop of every drag.
       data-sound="none"
       data-scrubbing={scrubbing || undefined}
       onPointerDown={handlePointerDown}

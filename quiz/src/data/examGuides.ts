@@ -54,7 +54,7 @@ export interface GeneralGuide {
 export const GENERAL_GUIDES: GeneralGuide[] = [
   {
     title: 'How to Study for Actuarial Exams',
-    description: 'How the course of study works: the two societies, the ladder of exams, and how to prepare for a sitting.',
+    description: 'How the course of study works: the two societies, the ladder of exams, how candidates get hired partway through, and how to prepare for a sitting.',
     ref: {
       kind: 'guide',
       name: 'How to Study for Actuarial Exams',

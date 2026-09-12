@@ -110,10 +110,19 @@ the right text, and one that it stays quiet when it should.
 
 ## The Dashboard card
 
-**Exam readiness is the first card on the Dashboard** — above the Study Schedule and the
-primary actions. `ReadinessCard` portals it into the slot the Dashboard puts there
-(`readinessSlot`, the same mechanism as `studyScheduleSlot`), so the card's state and logic
-stay with the study plan while it renders at the top of the page.
+**Exam readiness is the first card on the Dashboard** — above the Study Schedule.
+`ReadinessCard` portals it into the slot the Dashboard puts there (`readinessSlot`, the same
+mechanism as `studyScheduleSlot`), so the card's state and logic stay with the study plan
+while it renders at the top of the page.
+
+The card reads top to bottom: **title and band verdict**, then the **ring** beside the
+**criteria**, then the **primary actions**. The title leads rather than sitting beside the
+ring because the row stacks on a phone, which left the card's own name — and its verdict —
+below the ring, read after the thing they were meant to introduce. The actions (*Read
+concepts* / *Fix mistakes* / *Start Quiz*) are the Dashboard's: it owns their triggers and
+the pinned-header copies, and hands them to `ReadinessCard` as the `actions` prop, which
+renders them as the card's last row. The score and the two ways to move it are one surface,
+not a card with a detached button row under it.
 
 It is one call — `computeExamReadiness` — read three ways:
 
@@ -123,8 +132,8 @@ It is one call — `computeExamReadiness` — read three ways:
   (`lib/masteryFill.ts`). Its arcs come from `lib/readinessRing.ts`, so geometry lives in one
   place. The number in the middle is `overallPct`, and it carries no caption: the card is
   titled *Exam readiness* a few pixels away (`docs/visual-noise-review.md`, test 1).
-- **The band**, as the headline verdict beside the ring, with the insight line under it when
-  there is one (see above) and nothing under it when there is not.
+- **The band**, as the headline verdict at the top of the card under its title, with the
+  insight line under it when there is one (see above) and nothing under it when there is not.
 - **The criteria**, as one bar each. A bar's *thickness* is the weight that criterion carries
   in the score (`4px + 6px × weight`), so the heavier one is visibly the heavier line and
   nothing has to print "60% of score" — the worked example in

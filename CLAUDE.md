@@ -229,12 +229,20 @@ Other important `lib/` modules:
 - `examColors.ts` — the **exam accent colour**: one hue per exam, stepping chromatically
   around the wheel from blue at Exam P to red at Exam 9, so the colour says where on the
   ladder an exam sits. Pure and tested, and it paints nothing itself —
-  `examAccentStyle(examKey)` hands back three CSS custom properties (`--exam-accent`,
-  `--exam-accent-muted`, `--exam-accent-soft`) to spread onto whatever element scopes the
-  exam. The Study Guides grid spends it on hover; anything else that needs an exam's feature
-  colour should read it from there rather than growing a second palette. Non-exam
-  requirements (VEE, the DISCs, PCPA, the professionalism courses) get `undefined`, not a
-  colour. See `docs/style-guide.md` §2.3.
+  `examAccentStyle(examKey)` hands back four CSS custom properties (`--exam-accent`,
+  `--exam-accent-muted`, `--exam-accent-soft`, `--exam-accent-vivid`) to spread onto whatever
+  element scopes the exam. The first three are translucent or mid-lightness so they wash over
+  either theme; `--exam-accent-vivid` is the opaque fill for a shape carrying white text.
+  Anything that needs an exam's feature colour should read it from there rather than growing
+  a second palette. Non-exam requirements (VEE, the DISCs, PCPA, the professionalism courses)
+  get `undefined`, not a colour. See `docs/style-guide.md` §2.3.
+- `examLogo.ts` — the **exam logo**'s monogram: an exam key cut down to something that fits a
+  square (`MAS-I` → `MAS` over `I`, `CAS-5` → `5`) and the type scale that says how big it may
+  be drawn, as a fraction of the tile's edge. Pure and tested; the tile itself is
+  `components/ExamLogo.tsx`, filled with the exam's own `--exam-accent-vivid` so a row of
+  logos also reads as the ladder. It leads the cards on the Study Guides exam grid and the
+  quiz builder, and it is branding rather than information — the card's title names the exam,
+  so the tile is `aria-hidden`. See `docs/style-guide.md` §2.3.
 - `keystone.ts` — the keystone-concept read side: `findKeystone` / `isKeystone` (strict name
   matching, no fuzzy hits) and `keystoneProgress` (decay-aware mastery roll-up per exam).
   Rendered by `components/KeystoneName.tsx`. No surface lists an exam's keystones since the

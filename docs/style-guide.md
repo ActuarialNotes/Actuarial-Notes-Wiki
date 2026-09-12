@@ -104,6 +104,7 @@ reference them:
 | `--exam-accent` | The solid hue — text, an icon, a rule, a ring |
 | `--exam-accent-muted` | Between the two — a hairline or a resting border |
 | `--exam-accent-soft` | A translucent wash — a tinted surface |
+| `--exam-accent-vivid` | The hue turned up and darkened — an opaque fill carrying white text |
 
 ```tsx
 <Card style={examAccentStyle('CAS-5')}
@@ -111,12 +112,33 @@ reference them:
                  hover:bg-[var(--exam-accent-soft)]" />
 ```
 
-All three are translucent or mid-lightness by design, so the accent lands on whatever surface
-is under it and works in both modes without a per-exam light and dark value. Today the only
-surface spending it is the Study Guides exam grid, on hover; add it wherever an exam needs a
-feature colour rather than deriving a second palette. **`examAccentStyle` returns `undefined`
-for a non-exam** — spread it unconditionally and branch on it, so a requirement with no rung
-keeps the neutral hover instead of inheriting the wrong colour from an ancestor.
+The first three are translucent or mid-lightness by design, so the accent lands on whatever
+surface is under it and works in both modes without a per-exam light and dark value.
+`--exam-accent-vivid` is the exception and the one to reach for when the accent is the
+*subject* rather than a highlight: mid-lightness is too pale to fill a shape that has to carry
+white text, so the vivid variant turns the saturation up and the lightness down. Add any of
+them wherever an exam needs a feature colour rather than deriving a second palette.
+**`examAccentStyle` returns `undefined` for a non-exam** — spread it unconditionally and
+branch on it, so a requirement with no rung keeps the neutral treatment instead of inheriting
+the wrong colour from an ancestor.
+
+#### The exam logo
+
+`components/ExamLogo.tsx` is the accent's main spender: a square, rounded tile carrying the
+exam's monogram (`lib/examLogo.ts` — `P`, `FM`, `MAS` over `I`, `5`) on an `--exam-accent-vivid`
+fill. It leads the card on the Study Guides exam grid and the quiz builder's exam cards, and
+it is **branding, not information** — every surface that shows one also names the exam beside
+it, which is why the tile is `aria-hidden`. Use it wherever exams are listed, at one of its
+three sizes, rather than drawing a second badge:
+
+```tsx
+<ExamLogo examKey="MAS-I" size="lg" />              // a full-strength tile
+<ExamLogo examKey="CAS-6" size="lg" muted />        // material not built yet: a tint, not a fill
+```
+
+`muted` holds the colour back to `--exam-accent-soft` rather than draining it: an exam whose
+material is still in development keeps its place on the ladder, it just stops looking like
+something to study from. A non-exam key has no accent and falls back to a neutral tile.
 
 ### 2.4 The one place hexes are allowed
 

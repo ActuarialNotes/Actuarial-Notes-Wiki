@@ -9,6 +9,11 @@ name: Verify Check
 # Note what this does NOT fail on: a content edit that outdates a hash. That is
 # repaired by --sync and committed back, so a content-only PR is never blocked by
 # the record — only a false claim is.
+#
+# The trigger covers `scripts/**`, not just `scripts/verify_*.py`, because the
+# "Unit tests" step below runs the *whole* scripts suite — the VERIFY toolchain
+# and the PDF→question-bank pipeline alike. Narrower paths left those tests
+# unrun on exactly the PRs that change them.
 on:
   pull_request:
     paths:
@@ -17,8 +22,7 @@ on:
       - 'Resources/**'
       - 'Exam *.md'
       - '.verify/**'
-      - 'scripts/verify_*.py'
-      - 'scripts/test_verify.py'
+      - 'scripts/**'
       - '.github/workflows/verify-check.yml'
   push:
     branches: [main]
@@ -28,7 +32,7 @@ on:
       - 'Resources/**'
       - 'Exam *.md'
       - '.verify/**'
-      - 'scripts/verify_*.py'
+      - 'scripts/**'
       - '.github/workflows/verify-check.yml'
   workflow_dispatch:
 

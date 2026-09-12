@@ -136,7 +136,7 @@ def render(record: dict, judgment: dict, explanation: str | None = None) -> str:
     if body:
         chunks.append(body)
 
-    if record["type"] == "multi-part":
+    if record["type"] == "multi-part" and record.get("parts"):
         # The record also carries the report's *overall* commentary, which the
         # bank's format has no slot for — every `### Examiner Report` in a
         # question file is per-part. It stays in records.jsonl rather than
@@ -145,6 +145,8 @@ def render(record: dict, judgment: dict, explanation: str | None = None) -> str:
         if sections:
             chunks.append(sections)
     else:
+        # No lettered parts: a single-part question, whose answer sits under
+        # one `## Explanation` like a multiple-choice question's.
         if record.get("options"):
             chunks.append(options_block(record["options"]))
         text = (explanation if explanation is not None else record.get("solution") or "").strip()
@@ -157,8 +159,8 @@ def missing_explanation(record: dict, explanation: str | None) -> bool:
     """True when the file would land with nothing under its explanation heading."""
     if explanation and explanation.strip():
         return False
-    if record["type"] == "multi-part":
-        return not any(part.get("samples") for part in record.get("parts") or [])
+    if record.get("parts"):
+        return not any(part.get("samples") for part in record["parts"])
     return not (record.get("solution") or "").strip()
 
 

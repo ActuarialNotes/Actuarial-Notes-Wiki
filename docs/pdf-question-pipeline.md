@@ -59,6 +59,34 @@ PDF(s) ──▶│ page text · exhibits → GFM tables · options   │
           └───────────────────────────────────────────────┘
 ```
 
+### What a scanned booklet costs
+
+A CAS booklet is a scan with no text layer, so its prompts and exhibits cannot
+be read the way the report can. Three routes, in order of preference:
+
+1. **A text layer.** Nothing to do. Post-2020 papers increasingly have one.
+2. **Local OCR (`--ocr`, needs `tesseract` on PATH).** Free, and good at prose:
+   on Fall 2016 it recovered 22 of 26 prompts and every lettered sub-prompt.
+   It is *not* good at tables — it dropped a column of policy counts from
+   Q1's exhibit and misread "earned" as "eared" — so a record read this way is
+   marked `ocr`, and one whose prompt contains an exhibit has its pages
+   rendered anyway and says so in `report.md`. **Never ship an OCR'd exhibit
+   without checking every figure against the image.**
+3. **Vision on the rendered page.** The fallback, and the only route for a
+   question OCR could not place at all.
+
+Because a scanned booklet loses the `1.` that starts each question, there is
+nothing for `segment` to key on. `align_booklet` recovers the boundaries from
+the point values instead: the booklet prints `(1.25 points)` and `(0.5 point)`,
+the report prints the same numbers as `TOTAL POINT VALUE` and `Part a: 0.5
+point`, so the two sequences can be walked together. A question matches only
+when its whole signature appears in order and its parts sum to its total; one
+that does not is skipped and the next resumes from the same place. A matched
+span ends at its own last marker, so an unmatched question can never have its
+text absorbed into a neighbour — the property that makes a partial alignment
+safe. On Fall 2016 that placed 22 of 26 prompts, stepping over the markers of
+QUESTION 8, which the report omits entirely.
+
 ### Stage 1 — `pdf_extract.py`
 
 Reads the PDFs and writes `records.jsonl`, one JSON object per question (the
@@ -181,11 +209,19 @@ batch's whole context was re-sent on every turn. Counting the skill reload
 alone takes the comparison past 13×; counting the per-turn re-send takes it
 several times further.
 
-**25-question CAS paper with a scanned booklet:** about **2.6×**. The
-examiner's report parses for free, but the page images are irreducible —
-unless `tesseract` is on PATH, in which case `--ocr` reads them locally and the
-paper behaves like a text-layer one. Budget a few vision spot-checks of OCR'd
-prompts against that.
+**CAS Exam 5, Fall 2016** — measured on the real paper (96 pages: a 31-page
+scanned booklet, a 65-page text-layer report), which is what the CAS
+`admissions_studytools_exam5_*` PDFs look like generally:
+
+| | input | output |
+|---|---|---|
+| transcribe by hand (content floor) | 61,032 | 13,766 |
+| pipeline with `--ocr`, exhibit pages rendered for checking | 21,672 | 1,192 |
+
+About **3.3×**, and the shape of it matters more than the ratio. The report side
+is free and complete: 26 questions, every point value, every per-part sample
+answer and commentary. The booklet side is a scan, and that is where the
+remaining cost sits — see **What a scanned booklet costs** below.
 
 ### What the review is buying
 
@@ -267,6 +303,9 @@ PDF-reading cases when PyMuPDF is absent).
 | `no answer letter found` for many | the solutions booklet uses a key shape not in `ANSWER_PATTERNS` | add the pattern; do **not** infer an answer from the worked solution |
 | options are missing | the booklet sets them in a way `split_options` does not read | check whether they were eaten as furniture or as a table first |
 | a prompt looks subtly wrong and the record says `ocr` | OCR error | that is what the spot-check is for; fix in `--prompts` |
+| a question's numbers disagree with its exhibit, record says `ocr` | OCR dropped or misread a table column | re-transcribe that exhibit from `pages/` into `--prompts`; never publish the OCR'd figures |
+| the report skips a question number | the publisher omitted it (Fall 2016 has no QUESTION 8) | nothing to do — it is not in the paper's report |
+| a field parses as `OTAL POINT VALUE` | the PDF's text layer dropped a leading glyph | already handled: the field labels accept a missing first letter |
 
 ## The rules this pipeline does not bend
 

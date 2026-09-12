@@ -40,9 +40,16 @@ cat /tmp/exam-5/report.md
   `cas5-2019s-q1` / `cas5-2019f-q1`. Check `ls questions/exam-<N>/` for what
   the same year already uses and match it; ask the user if it is ambiguous.
 - `--ocr` reads scanned booklet pages locally instead of leaving them for
-  vision — that is the difference between the booklet costing page images and
-  costing nothing. Questions read this way are listed in `report.md` for a
-  spot-check, because OCR is fallible in a way a text layer is not.
+  vision. Always pass it when tesseract is there: on Fall 2016 it recovered 22
+  of 26 prompts for nothing. The booklet's question numbers do not survive a
+  scan, so the prompts are aligned to the report on their printed point values
+  (`align_booklet` — see the design doc); a question that cannot be placed is
+  left for vision rather than guessed at.
+- **An OCR'd exhibit is never publishable as-is.** OCR reads prose well and
+  tables badly — on Fall 2016 it dropped a column of policy counts and turned
+  "earned" into "eared". `report.md` names every question whose prompt carries
+  an exhibit and renders its pages; check every figure against the image and
+  re-transcribe the exhibit into `prompts/<id>.md`.
 
 **Read `report.md`.** It gives the coverage, the questions needing vision, the
 OCR'd ones, and any question whose part points do not sum to its

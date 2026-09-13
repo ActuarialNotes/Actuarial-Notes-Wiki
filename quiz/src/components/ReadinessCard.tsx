@@ -1,13 +1,14 @@
 import { useMemo, useState, useCallback, useEffect, useRef, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
-import { AlertTriangle, ArrowDown, ArrowUp, Check, CheckCircle2, Circle, Gem, Lock, Settings2, X } from 'lucide-react'
+import { AlertTriangle, ArrowDown, ArrowUp, CalendarDays, Check, CheckCircle2, Circle, Gem, Lock, Settings2, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
 import { ExamHeatmap } from '@/components/ExamHeatmap'
+import { ExamLogo } from '@/components/ExamLogo'
 import { QuizSessionCard } from '@/components/QuizSessionCard'
 import { SessionCompletionOverlay } from '@/components/SessionCompletionOverlay'
 import { StreakNavBadge } from '@/components/StreakBadge'
@@ -33,7 +34,13 @@ import {
   type RingSegment,
 } from '@/lib/readinessRing'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
-import { todayISO, type StudyPlan, type StudyPlanConfig } from '@/lib/studyPlan'
+import { daysBetween, formatReadableDate, todayISO, type StudyPlan, type StudyPlanConfig } from '@/lib/studyPlan'
+import {
+  LOCALIZED_EXAMS,
+  formatSittingDate,
+  getSittingsForExam,
+  isValidSittingDate,
+} from '@/data/examSittings'
 import { readTodayLevelUps, LEVELUP_EVENT, type DailyLevelUp } from '@/lib/dailyProgressStore'
 import {
   NEXT_STATE,
@@ -351,7 +358,6 @@ export function ReadinessCard({
   const [completedToday, setCompletedToday] = useState<DailyLevelUp[]>([])
   const [showConfig, setShowConfig] = useState(false)
   const [configInitialStep, setConfigInitialStep] = useState<1 | 2 | 3>(1)
-  const [showBonusInfo, setShowBonusInfo] = useState(false)
   const [showDayCompleteInfo, setShowDayCompleteInfo] = useState(false)
   const [bonusClaimed, setBonusClaimed] = useState<boolean>(() => {
     try {
@@ -904,29 +910,7 @@ export function ReadinessCard({
           )}
           <CardContent className="p-6 space-y-4">
             <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <h3 className="text-sm font-semibold">Today's Study Plan</h3>
-                {/* Inline gems bonus pill */}
-                <button
-                  type="button"
-                  onClick={() => setShowBonusInfo(true)}
-                  title="Daily gems bonus info"
-                  className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-medium shrink-0 transition-colors ${
-                    allConceptsDone
-                      ? 'bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500/20'
-                      : 'text-muted-foreground hover:bg-muted/30'
-                  }`}
-                >
-                  {allConceptsDone
-                    ? <Gem className="h-2.5 w-2.5 shrink-0" />
-                    : <Lock className="h-2.5 w-2.5 shrink-0" />}
-                  <span>
-                    {allConceptsDone && bonusClaimed
-                      ? `+${claimedBonusAmount} earned`
-                      : '2× Bonus'}
-                  </span>
-                </button>
-              </div>
+              <h3 className="text-sm font-semibold">Today's Study Plan</h3>
 
               {/* Progress pills — shown when there's activity today */}
               {todayQuestionsAnswered > 0 && !allConceptsDone && (
@@ -1097,8 +1081,10 @@ export function ReadinessCard({
   //
   //   1. **Exam readiness** — the headline answer to "how ready am I?". The
   //      score as a KPI beside the band verdict and its insight line, then the
-  //      primary actions (`actions`) that move it. Nothing between the number
-  //      and the two ways to change it.
+  //      date it is racing (`examDatesRow`) and the primary actions (`actions`)
+  //      that move it. The deadline earns its place between them: a percentage
+  //      says nothing on its own, and the two ways to change it are what a
+  //      reader who has just seen how little time is left reaches for.
   //   2. **Today's Study Plan** (`studyPlanCardContent`) — what to do about that
   //      score today. It follows the number rather than the ring: the reader who
   //      has just read "Not started" is looking for the next step, not for a
@@ -1111,6 +1097,57 @@ export function ReadinessCard({
   //
   // All three portal into `readinessSlot` when the Dashboard supplies one.
   const readinessPct = readiness.counts.total > 0 ? Math.round(readiness.overallPct) : 0
+
+  // The dates row inside that card. Two facts, in the order a candidate asks for
+  // them: the day they are sitting — with how many days that leaves — and then
+  // the next published sitting window, the second only when it says something
+  // the first doesn't (no date chosen yet, or a date that falls outside every
+  // known window for this exam). Nothing is inferred: the countdown is the
+  // chosen date and the window is transcribed from `data/examSittings.ts`, so an
+  // exam with no scheduled sitting simply offers the date picker.
+  const examDateStep: 1 | 2 = (LOCALIZED_EXAMS[progressKey]?.length ?? 0) > 0 ? 2 : 1
+  const nextSitting = useMemo(() => getSittingsForExam(progressKey)[0] ?? null, [progressKey])
+  const daysToExam = examDate ? daysBetween(todayISO(), examDate) : null
+  const showNextSitting = !!nextSitting && (!examDate || !isValidSittingDate(progressKey, examDate))
+  const countdownLabel =
+    daysToExam === null ? null
+      : daysToExam > 1 ? `${daysToExam} days left`
+      : daysToExam === 1 ? 'Tomorrow'
+      : daysToExam === 0 ? 'Today'
+      : 'Passed'
+  const examDatesRow = (
+    <button
+      type="button"
+      onClick={() => { setConfigInitialStep(examDateStep); setShowConfig(true) }}
+      className="flex w-full flex-col gap-1 rounded-lg border bg-muted/30 px-3 py-2.5 text-left transition-colors hover:bg-accent/60"
+      aria-label={examDate
+        ? `Exam date ${formatReadableDate(examDate)}${countdownLabel ? `, ${countdownLabel}` : ''} — change it`
+        : 'Set your exam date'}
+    >
+      <span className="flex w-full items-center gap-2">
+        <CalendarDays className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+        <span className="min-w-0 flex-1 truncate text-sm font-medium">
+          {examDate ? formatReadableDate(examDate) : 'Set your exam date'}
+        </span>
+        {countdownLabel && (
+          <span
+            className={
+              'shrink-0 text-sm font-semibold tabular-nums ' +
+              (daysToExam !== null && daysToExam < 0 ? 'text-muted-foreground' : '')
+            }
+          >
+            {countdownLabel}
+          </span>
+        )}
+      </span>
+      {showNextSitting && nextSitting && (
+        <span className="flex w-full items-center gap-2 pl-6 text-xs text-muted-foreground">
+          <span className="min-w-0 flex-1 truncate">Next sitting · {formatSittingDate(nextSitting)}</span>
+          <span className="shrink-0 font-medium">{nextSitting.format}</span>
+        </span>
+      )}
+    </button>
+  )
   const readinessCardContent = (
     <div className="order-none flex flex-col gap-4">
       <Card className="border-0">
@@ -1120,7 +1157,15 @@ export function ReadinessCard({
               under the verdict on a narrow phone rather than squeezing it. */}
           <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
             <div className="min-w-0 flex-1 space-y-1.5">
-              <h3 className="text-sm font-semibold">Exam readiness</h3>
+              {/* The exam's own logo leads the title. The card is scoped to one
+                  exam and the tabs above it switch which — the tile is what says
+                  *which* without re-printing the name, and its accent puts the
+                  exam on the ladder (lib/examColors.ts). Branding, so the tile
+                  itself is aria-hidden and the heading carries the meaning. */}
+              <div className="flex items-center gap-2">
+                <ExamLogo examKey={progressKey} size="sm" />
+                <h3 className="text-sm font-semibold">Exam readiness</h3>
+              </div>
               <p className="text-xl font-semibold tracking-tight leading-tight">{readiness.band.label}</p>
               {/* The insight line, when there is one. `readiness.insight` is
                   null on an untouched exam and whenever no rule found anything
@@ -1165,6 +1210,15 @@ export function ReadinessCard({
               </p>
             </div>
           </div>
+
+          {/* The date the score is racing. A readiness percentage only means
+              something against a deadline, so the card carries it rather than
+              leaving it to the Study Schedule further down the page: the day
+              itself, how far off it is, and — when no date is set, or the one
+              set isn't a real sitting — the next published sitting window for
+              this exam (data/examSittings.ts). Tapping it opens the same Study
+              Plan step the heatmap's date row does. */}
+          {examDatesRow}
 
           {/* The two ways to act on this score, under it in the same card. */}
           {actions}
@@ -1498,7 +1552,6 @@ export function ReadinessCard({
           onClose={() => setShowConfig(false)}
         />
       )}
-      <DailyBonusInfoPanel open={showBonusInfo} onClose={() => setShowBonusInfo(false)} />
       <DayCompleteInfoPanel
         open={showDayCompleteInfo}
         onClose={() => setShowDayCompleteInfo(false)}
@@ -1520,70 +1573,6 @@ export function ReadinessCard({
           }}
         />
       )}
-    </div>
-  )
-}
-
-// ── Daily Bonus Info Panel ────────────────────────────────────────────────────
-
-function DailyBonusInfoPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
-  if (!open) return null
-  return (
-    <div
-      className="fixed inset-0 z-[70] flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Daily study plan bonus"
-      onClick={e => { if (e.target === e.currentTarget) onClose() }}
-    >
-      <div className="w-full max-w-sm bg-card border rounded-xl shadow-2xl flex flex-col my-16">
-        <div className="flex items-center gap-2 px-4 h-12 border-b shrink-0">
-          <Gem className="h-4 w-4 text-cyan-400 shrink-0" />
-          <span className="flex-1 font-semibold text-sm">Daily Study Plan Bonus</span>
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-muted-foreground hover:text-foreground p-1 transition-colors"
-            aria-label="Close"
-          >
-            <span className="text-lg leading-none">×</span>
-          </button>
-        </div>
-        <div className="p-5 space-y-4 text-sm leading-relaxed">
-          <div className="flex items-center justify-center gap-3 py-2">
-            <div className="flex items-center justify-center h-14 w-14 rounded-full bg-muted/50 border">
-              <Lock className="h-6 w-6 text-muted-foreground" />
-            </div>
-            <span className="text-2xl text-muted-foreground">→</span>
-            <div className="flex items-center justify-center h-14 w-14 rounded-full bg-cyan-500/20 border border-cyan-500/30">
-              <Gem className="h-6 w-6 text-cyan-400" />
-            </div>
-          </div>
-          <p className="text-muted-foreground">
-            Complete every concept in today's study plan and we'll double the gems you earned today from quizzes.
-          </p>
-          <div className="rounded-lg border bg-muted/30 px-3 py-2.5 space-y-1">
-            <p className="text-xs font-semibold">How it works</p>
-            <ul className="text-xs text-muted-foreground space-y-1">
-              <li>· Earn gems by answering questions correctly (1 gem each)</li>
-              <li>· Finish all of today's planned concepts</li>
-              <li>· Receive a bonus equal to your gems earned today</li>
-            </ul>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            Tip: if today's plan doesn't reflect what you actually studied, use the <strong>Replace</strong> button to swap in the concepts you completed today.
-          </p>
-        </div>
-        <div className="px-5 pb-5 flex justify-end">
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-md px-3 py-1.5 text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-          >
-            Got it
-          </button>
-        </div>
-      </div>
     </div>
   )
 }

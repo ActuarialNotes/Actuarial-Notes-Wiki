@@ -128,9 +128,21 @@ the right text, and one that it stays quiet when it should.
 mechanism as `studyScheduleSlot`), so the cards' state and logic stay with the study plan
 while they render at the top of the page:
 
-1. **Exam readiness** — the **title and band verdict** with the insight line under it, the
-   score itself as a KPI to their right, then the **primary actions**. Nothing sits between
-   the number and the two ways to change it.
+1. **Exam readiness** — the exam's **logo** beside the **title**, the **band verdict** with
+   the insight line under it, the score itself as a KPI to their right, then the **exam
+   dates** row and the **primary actions**. The logo says which exam the card is scoped to
+   without re-printing its name, and carries that exam's accent (`lib/examColors.ts`) so the
+   card sits on the same ladder as every other surface that shows one.
+
+   The dates row is the deadline the score is racing — a readiness percentage means nothing
+   without one, so the card carries it rather than leaving it to the Study Schedule further
+   down the page. It prints the chosen exam date and how many days that leaves, and falls
+   back to *Set your exam date* when there is none; under either, the **next published
+   sitting window** for this exam (`data/examSittings.ts`) appears only when it adds
+   something — no date chosen yet, or a date that falls outside every known window. Nothing
+   there is inferred: the countdown is the chosen date and the window is transcribed from the
+   sittings table, so an exam with no scheduled sitting simply offers the picker. Tapping the
+   row opens the same Study Plan step the heatmap's date row does.
 2. **Today's Study Plan** — what to do about that score today. It follows the number rather
    than the ring: a reader who has just read *Not started* is looking for the next step, not
    for a breakdown of how the number was reached.

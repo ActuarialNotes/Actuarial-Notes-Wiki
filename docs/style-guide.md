@@ -142,6 +142,19 @@ it wherever exams are listed, at one of its three sizes, rather than drawing a s
 material is still in development keeps its place on the ladder, it just stops looking like
 something to study from. A non-exam key has no accent and falls back to a neutral tile.
 
+The tile's **shape** — the three edge lengths and the radius that tracks them — is
+`components/LogoTile.tsx`, one level down, because an exam is not the only thing that leads a
+card with one: the Study Guides page's general-guide card carries a lucide icon in the same
+`lg` tile (teal, since a guide has no place on the colour ramp). Anything else that needs to
+lead a card should take `LogoTile` rather than setting a loose `h-5 w-5` glyph beside a 48px
+tile — that mismatch is what the two grids used to disagree about.
+
+```tsx
+<LogoTile size="lg" className="bg-teal-500 text-white shadow-sm">
+  <Compass className="h-6 w-6" />
+</LogoTile>
+```
+
 ### 2.4 The one place hexes are allowed
 
 The generated concept figures (`Media/Figures/*.svg`, see `docs/concept-figures.md`) are the

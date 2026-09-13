@@ -7,9 +7,10 @@
 // (`lib/examColors.ts` — blue at Exam P through to red at Exam 9), a row of
 // logos also says where on the ladder each exam sits.
 //
-// The monogram and its type scale are `lib/examLogo.ts`; the size here is a
-// single edge length in pixels and everything inside scales off it, so the
-// same tile works at 26px in a list row and 48px on an exam card.
+// The monogram and its type scale are `lib/examLogo.ts`; the tile itself —
+// edge lengths and radius — is `components/LogoTile.tsx`, shared with the
+// guide cards on the Study Guides home page so a guide and an exam lead their
+// cards with the same shape.
 //
 // A requirement that is not an exam has no accent (VEE, the DISCs, PCPA, the
 // professionalism courses), so it gets a neutral tile rather than a borrowed
@@ -17,20 +18,8 @@
 
 import { examAccentStyle } from '@/lib/examColors'
 import { examMonogram } from '@/lib/examLogo'
+import { LogoTile, logoTileEdge, type LogoTileSize } from '@/components/LogoTile'
 import { cn } from '@/lib/utils'
-
-const SIZES = {
-  /** A list row or a pill. */
-  sm: 26,
-  /** The wiki header strip, where the tile stands in for the exam's title. */
-  md: 34,
-  /**
-   * An exam card. One size for both grids that show them — the Study Guides
-   * grid and the quiz builder — so the same exam is the same object on either
-   * tab rather than two tiles that nearly match.
-   */
-  lg: 48,
-} as const
 
 export function ExamLogo({
   examKey,
@@ -40,7 +29,7 @@ export function ExamLogo({
 }: {
   /** The `exam_progress` key: `P`, `FM`, `MAS-I`, `CAS-5`, … */
   examKey: string
-  size?: keyof typeof SIZES
+  size?: LogoTileSize
   /**
    * Hold the colour back — for an exam whose material isn't built yet, where a
    * full-strength logo would read as something to study from. The exam keeps
@@ -50,24 +39,17 @@ export function ExamLogo({
   muted?: boolean
   className?: string
 }) {
-  const edge = SIZES[size]
   const accent = examAccentStyle(examKey)
   const { lines, fontScale } = examMonogram(examKey)
 
   return (
-    <span
-      aria-hidden="true"
+    <LogoTile
+      size={size}
       style={{
         ...accent,
-        width: edge,
-        height: edge,
-        // The radius tracks the tile: a fixed `rounded-lg` reads as a very
-        // round tile at 26px and a barely-rounded one at 40px.
-        borderRadius: Math.round(edge * 0.28),
-        fontSize: `${(fontScale * edge).toFixed(1)}px`,
+        fontSize: `${(fontScale * logoTileEdge(size)).toFixed(1)}px`,
       }}
       className={cn(
-        'inline-flex shrink-0 select-none flex-col items-center justify-center',
         'font-bold uppercase leading-[1.02] tracking-tight',
         accent
           ? muted
@@ -80,6 +62,6 @@ export function ExamLogo({
       {lines.map((line, i) => (
         <span key={i}>{line}</span>
       ))}
-    </span>
+    </LogoTile>
   )
 }

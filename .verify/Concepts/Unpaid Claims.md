@@ -1,0 +1,14 @@
+---
+target: Concepts/Unpaid Claims.md
+created: 2026-09-13
+---
+
+## [C-001] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-13T04:49Z/f8d9
+- date: 2026-09-13
+- status_set: verified
+- confidence: high
+- checks_run: Both defined terms diffed word for word. ASOP 43 section 2.11: 'Unpaid Claim Estimate---The actuary's estimate of the obligation for future payment resulting from claims due to past events' -- the page's wording is exact. Section 2.1: 'Actuarial Central Estimate---An estimate that represents an expected value over the range of reasonably possible outcomes' -- the page quotes it exactly, and section 3.3(a)(1) backs the page's gloss that it is not a conservative figure and not necessarily a statistical percentile ('This description is intended to clarify the concept rather than assign a precise statistical measure, as commonly used actuarial methods typically do not result in a statistical mean'). The reserves-vs-unpaid-claims bullet is confirmed by Friedland printed p.13: 'ASOP 43 limits the term reserve to its strict definition as an amount booked in a financial statement. ASOP 43 defines the term unpaid claim estimate to be the actuary's estimate of the obligation for future payment resulting from claims due to past events... we predominantly use the terminology of ASOP 43.' Friedland p.13 also confirms the non-insurance-entity bullet ('insurer' = any risk bearer, including self-insurers, captives and pooling associations), and p.14 the case-outstanding-plus-broad-IBNR decomposition behind the page's two identities. Gross/net handling matches ASOP 43 3.6.5 (gross estimate, estimated recoverables, net estimate as three components) and 3.3(b)-(c) (scope must state gross or net and how collectibility risk is treated). Recomputed both examples independently: 5,000,000-1,800,000 = 3,200,000 unpaid; reported 4,000,000; IBNR 1,000,000; case+IBNR = 3,200,000 reconciles. Second: 68M-41M = 27M unpaid loss and ALAE; IBNR 27-19 = 8M; ULAE 0.04x27M = 1,080,000; gross unpaid 28,080,000; net 28,080,000-900,000-5,200,000 = 21,980,000 -- all correct. Note for a future pass, not filed as a finding: ASOP 43 3.3(d) makes the types of claim adjustment expense covered a scope item the actuary identifies, rather than automatically including ULAE as the page's second bullet implies.
+- sources_checked: ASOP No. 43, Property/Casualty Unpaid Claim Estimates (ASB, June 2007), sections 2.1, 2.11, 3.3, 3.6.4-3.6.5, standard pp.2-4 and 7, sha256:b921a3c59038fcb748214ed127e97dfe9df2111c97ac1223f8cf9952c16304e9; Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.1 'Key Terminology', printed pp.13-14 (PDF pp.19-20), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf

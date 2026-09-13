@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-13
+  last_checked_by: agent:validate-v1
   content_hash: sha256:12b92816ce1472a6d8e42da1826c64970f1ef96c356703b1c0e986074bf552e5
-  sources: []
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.3 printed pp.40-43 (PDF pp.46-49), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.6 printed p.99 (PDF p.111) and Ch.15 printed p.305 (PDF p.317), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Types of Insurance.md

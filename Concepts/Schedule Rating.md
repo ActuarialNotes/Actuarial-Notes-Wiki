@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:345522f0ad2d71acf42a4df5147c3a000f510351e3655eb4a24a94d65cca3c61
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Schedule Rating.md
 ---

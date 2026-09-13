@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-09-13
+  last_checked_by: agent:validate-v1
   content_hash: sha256:8c4a3bbe0f6a0cc3eee83c3b8b724ee4796e3c5f759e7a85cbf0e314ae2b82cc
-  sources: []
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.2 'Rating Manuals', printed pp.13, 16, 27-28 and 31-32 (PDF pp.25, 28, 39-40, 43-44), and Ch.10 printed p.176 (PDF p.188), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Rating Algorithm.md

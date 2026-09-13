@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:225304d54527ffd30f4a512397d5d4e565c5ee8721322e393bfb0fe29f9d6565
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: high
+  last_checked: 2026-09-13
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:ea030fb3f3071cdb88fa1f9eb8c84bef875de5763ddaf09e3f5b171895316f40
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch. 7 pp.85-90 (PDF pp.91-96), Ch. 6 p.68 (PDF p.74), Ch. 9 p.153 (PDF p.159), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 6 pp.93-95 (PDF pp.105-107), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Loss Development.md
 ---
@@ -36,15 +38,15 @@ verification:
 > >
 > > $$\text{CDF}_{12 \to \text{ult}} = 1.650 \times 1.220 \times 1.080 \times 1.030 \times 1.015$$
 > >
-> > $$= 2.2727$$
+> > $$= 2.2729$$
 > >
 > > Apply it to reported losses:
 > >
-> > $$\text{Ultimate} = \$4{,}200{,}000 \times 2.2727 = \$9{,}545{,}340$$
+> > $$\text{Ultimate} = \$4{,}200{,}000 \times 2.2729 = \$9{,}546{,}180$$
 > >
 > > IBNR is the portion of ultimate not yet reported:
 > >
-> > $$\text{IBNR} = \$9{,}545{,}340 - \$4{,}200{,}000 = \$5{,}345{,}340$$
+> > $$\text{IBNR} = \$9{,}546{,}180 - \$4{,}200{,}000 = \$5{,}346{,}180$$
 > >
 > > > [!tip] Leverage at early maturities
 > > > A CDF of $2.27$ means more than half the ultimate estimate is unreported. A $5\%$ error in the $12\text{–}24$ factor moves ultimate by roughly $\$450{,}000$ — which is why actuaries lean on the [[Bornhuetter-Ferguson Method]] or [[Expected Loss Method]] at the immature end of the triangle rather than on the [[Chain Ladder Method]] alone.

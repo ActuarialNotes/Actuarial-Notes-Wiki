@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:ac4e1a4116d1fe6947160a6217b41e1ddc47cadac0d23fa51ced3a8a988e08de
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: high
+  last_checked: 2026-09-13
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:eb62adbc7b5bfd6144a474e50e48fe7346bd7c8fd92e418c6e7d6d8b98f11748
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 p.4 (PDF p.16), Ch. 3 p.42 (PDF p.54), Ch. 6 pp.93-95 and p.122 (PDF pp.105-107, 134), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch. 1 p.9 (PDF p.15), Ch. 16 p.369 (PDF p.375), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf"
+  open_findings: 3
   open_critical: 0
   log: .verify/Concepts/Loss and Loss Adjustment Expense.md
 ---
@@ -60,11 +62,11 @@ verification:
 > >
 > > **3. Trend** to the future cost level:
 > >
-> > $$\$3{,}840{,}000 \times 1.05^{2.5} = \$3{,}840{,}000 \times 1.1294 = \$4{,}336{,}900$$
+> > $$\$3{,}840{,}000 \times 1.05^{2.5} = \$3{,}840{,}000 \times 1.1297 = \$4{,}338{,}000$$
 > >
 > > **4. Add back a large-loss provision** — not this year's actual shock loss, but the long-run expected excess load (say $6\%$ of the trended non-shock losses):
 > >
-> > $$\$4{,}336{,}900 \times 1.06 = \$4{,}597{,}100$$
+> > $$\$4{,}338{,}000 \times 1.06 = \$4{,}598{,}300$$
 > >
 > > **5. Load LAE**, and only then divide by exposures or premium.
 > >

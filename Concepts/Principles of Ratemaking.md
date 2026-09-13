@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-09-13
+  last_checked_by: agent:validate-v1
   content_hash: sha256:bb74e0f0df351a391ab46fa2da907d732660e6c2d4909c796deb0f1e43446d5d
-  sources: []
-  open_findings: 0
+  sources:
+    - "CAS Statement of Principles Regarding Property and Casualty Insurance Ratemaking (adopted May 1988; rescinded Dec 2020, reinstated May 2021 for reference for U.S.-regulated ratemaking), Sections I-IV, pp.1-5, sha256:f240ea62dd033aac827c2073e56c0a4061d5c84531e5cf6be02d333a8f9f2140"
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Principles of Ratemaking.md
 ---

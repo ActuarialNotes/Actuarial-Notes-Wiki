@@ -4,9 +4,9 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:49a99418bb00b22dfa4747138d2383072401627d9e5a18e874a36c2e646277e1
+  content_hash: sha256:7687362a9be1f0c23f5a412e192f1eec44ef868e1e1727ac5a4850a6f8f061a1
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Loss Elimination Ratio.md
 ---
@@ -71,6 +71,6 @@ verification:
 > >
 > > Two consequences follow. First, an insurer that leaves its deductible relativities untouched through an inflationary period systematically under-charges its higher-deductible policies. Second, the *ground-up* rate increase understates the increase needed on deductible business: at $20\%$ inflation, losses excess of the $\$500$ deductible grow by
 > >
-> > $$\frac{2{,}400 \times 0.812}{2{,}000 \times 0.779} - 1 = +25.0\%$$
+> > $$\frac{2{,}400 \times 0.812}{2{,}000 \times 0.779} - 1 = +25.1\%$$
 > >
 > > five points more than the ground-up trend.

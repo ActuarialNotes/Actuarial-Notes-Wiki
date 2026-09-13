@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-13
+  last_checked_by: agent:validate-v1
   content_hash: sha256:df6f5b032e1c1f4ce58886aadda07dbf9708e54279babea28810842a8d7a6e2d
-  sources: []
-  open_findings: 0
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.1 printed pp.13-14 (PDF pp.19-20) and Ch.3 printed pp.39-43 (PDF pp.45-49), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf"
+    - "ASOP No. 43, Property/Casualty Unpaid Claim Estimates (ASB, June 2007), sections 2.1, 3.3(a), 4.1 and 4.2(b), standard pp.2, 4, 9-10, sha256:b921a3c59038fcb748214ed127e97dfe9df2111c97ac1223f8cf9952c16304e9"
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Loss Reserving.md
 ---

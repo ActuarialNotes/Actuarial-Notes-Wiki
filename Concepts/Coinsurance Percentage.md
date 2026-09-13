@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:ce7560e5653f455fb256d594bbeecaf91b65d6aca78370921ec74cb1c1dee82a
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Coinsurance Percentage.md
 ---

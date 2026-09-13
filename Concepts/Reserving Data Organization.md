@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-09-13
+  last_checked_by: agent:validate-v1
   content_hash: sha256:aa59f29c2e8b58778e84aa37503e7076d55f6dd0ed85757091d38c8282ebf73c
-  sources: []
-  open_findings: 0
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.3 'Understanding the Types of Data Used in the Estimation of Unpaid Claims', printed pp.39-43 (PDF pp.45-49), and Ch.5 printed p.73 (PDF p.79), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Reserving Data Organization.md
 ---

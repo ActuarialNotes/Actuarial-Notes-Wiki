@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-13
+  last_checked_by: agent:validate-v1
   content_hash: sha256:199f874b12302fc9e1c7ecd1c24161a6c17d7ad0c198efad3c1de9e86dc12357
-  sources: []
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.10 'Multivariate Classification', printed pp.176-181 (PDF pp.188-193), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Generalized Linear Model.md

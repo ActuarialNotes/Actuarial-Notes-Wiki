@@ -1208,6 +1208,23 @@ export default function Landing() {
               <span className="hidden sm:inline"> to save progress</span>
             </Link>
           )}
+          {/* The body picker rides the title row, the shape the Study Guides
+              tab opens on — it governs the whole exam list below, so it sits
+              with the title rather than in a label row of its own. */}
+          {!hasTopic && (
+            <SegmentedControl
+              label="Examining body"
+              size="lg"
+              pill
+              value={activeFilter}
+              onChange={handleSetFilter}
+              options={[
+                { value: 'SOA', label: 'SOA' },
+                { value: 'CAS', label: 'CAS' },
+              ]}
+              className="shrink-0"
+            />
+          )}
         </div>
 
         {selectedConcept && (
@@ -1234,48 +1251,32 @@ export default function Landing() {
 
       <div className="space-y-6">
           {!hasTopic && (
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium">Exam</p>
-                <SegmentedControl
-                  label="Examining body"
-                  size="sm"
-                  value={activeFilter}
-                  onChange={handleSetFilter}
-                  options={[
-                    { value: 'SOA', label: 'SOA' },
-                    { value: 'CAS', label: 'CAS' },
-                  ]}
-                  className="shrink-0"
-                />
-              </div>
-              <div className="space-y-4">
-                {filteredTrackGroups.map(group => (
-                  <div key={group.key}>
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                      {group.name}
-                    </p>
-                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                      {group.exams.map(exam => {
-                        const colorIdx = activeExamValues.indexOf(exam.value)
-                        const isActive = colorIdx >= 0
-                        return (
-                          <ExamOptionCard
-                            key={exam.value}
-                            exam={exam}
-                            onClick={() => setTopic(exam.value)}
-                            questionCount={questionCounts[exam.value] ?? 0}
-                            colorIdx={colorIdx}
-                            targetDate={isActive ? (targetDates[exam.progressKey] ?? null) : null}
-                            subtitle={examTopicByProgressKey[exam.progressKey]}
-                            todayQuizCount={badgeCountFor(todayQuizByExam[exam.progressKey])}
-                          />
-                        )
-                      })}
-                    </div>
+            <div className="space-y-4">
+              {filteredTrackGroups.map(group => (
+                <div key={group.key}>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                    {group.name}
+                  </p>
+                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                    {group.exams.map(exam => {
+                      const colorIdx = activeExamValues.indexOf(exam.value)
+                      const isActive = colorIdx >= 0
+                      return (
+                        <ExamOptionCard
+                          key={exam.value}
+                          exam={exam}
+                          onClick={() => setTopic(exam.value)}
+                          questionCount={questionCounts[exam.value] ?? 0}
+                          colorIdx={colorIdx}
+                          targetDate={isActive ? (targetDates[exam.progressKey] ?? null) : null}
+                          subtitle={examTopicByProgressKey[exam.progressKey]}
+                          todayQuizCount={badgeCountFor(todayQuizByExam[exam.progressKey])}
+                        />
+                      )
+                    })}
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           )}
 

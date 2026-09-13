@@ -33,13 +33,20 @@ interface SegmentedControlProps<T extends string> {
   options: SegmentedOption<T>[]
   /** Accessible name for the group as a whole, e.g. "Question count". */
   label: string
-  size?: 'sm' | 'md'
+  size?: 'sm' | 'md' | 'lg'
+  /**
+   * Fully rounded ends, for a control that sits beside a page title rather than
+   * inside a form: at that size the default radius reads as a stray box, while
+   * a pill reads as one object you flip (style guide §4).
+   */
+  pill?: boolean
   className?: string
 }
 
 const SIZES = {
   sm: 'h-9',
   md: 'h-10',
+  lg: 'h-11',
 } as const
 
 export function SegmentedControl<T extends string>({
@@ -48,6 +55,7 @@ export function SegmentedControl<T extends string>({
   options,
   label,
   size = 'md',
+  pill = false,
   className,
 }: SegmentedControlProps<T>) {
   const groupRef = useRef<HTMLDivElement>(null)
@@ -78,7 +86,11 @@ export function SegmentedControl<T extends string>({
       role="radiogroup"
       aria-label={label}
       onKeyDown={handleKeyDown}
-      className={cn('flex items-center gap-0.5 rounded-lg border border-border bg-muted/50 p-0.5', className)}
+      className={cn(
+        'flex items-center gap-0.5 border border-border bg-muted/50 p-0.5',
+        pill ? 'rounded-full' : 'rounded-lg',
+        className,
+      )}
     >
       {options.map(option => {
         const isActive = option.value === value
@@ -97,7 +109,8 @@ export function SegmentedControl<T extends string>({
             onClick={() => onChange(option.value)}
             style={{ flex: option.flex ?? 1 }}
             className={cn(
-              'flex min-w-0 items-center justify-center gap-1.5 rounded-md px-2 text-sm font-medium transition-colors',
+              'flex min-w-0 items-center justify-center gap-1.5 text-sm font-medium transition-colors',
+              pill ? 'rounded-full px-4' : 'rounded-md px-2',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
               'disabled:pointer-events-none disabled:opacity-40',
               SIZES[size],

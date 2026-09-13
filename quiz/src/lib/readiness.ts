@@ -122,7 +122,7 @@ export interface ReadinessCriterion {
 }
 
 export interface ReadinessBand {
-  id: 'not-started' | 'building' | 'progressing' | 'nearly' | 'ready'
+  id: 'not-started' | 'started' | 'building' | 'progressing' | 'nearly' | 'ready'
   label: string
 }
 
@@ -133,16 +133,36 @@ export interface ReadinessBand {
 // score fills in") it was the label paraphrased (docs/visual-noise-review.md,
 // test 1). `readinessInsight` below replaces it with something derived from
 // this learner's own records, and says nothing when there is nothing to say.
+//
+// **`not-started` means zero, not "low".** It used to cover everything under 15,
+// so a card could read "Not started" beside a 5% score, contradicting work the
+// learner had just done. It is now reserved for a record with nothing in it, and
+// `started` below is the band between it and "Building foundations".
 const BANDS: Array<{ min: number } & ReadinessBand> = [
   { min: 85, id: 'ready', label: 'Exam ready' },
   { min: 65, id: 'nearly', label: 'Nearly exam ready' },
   { min: 40, id: 'progressing', label: 'Making progress' },
   { min: 15, id: 'building', label: 'Building foundations' },
+  { min: 1, id: 'started', label: 'Getting started' },
   { min: 0, id: 'not-started', label: 'Not started' },
 ]
 
-export function readinessBand(pct: number): ReadinessBand {
-  const band = BANDS.find(b => pct >= b.min) ?? BANDS[BANDS.length - 1]
+/**
+ * The verdict for a score. Banded on the **rounded** percentage, so the label
+ * always agrees with the number printed beside it (the same rule
+ * `readinessDelta` follows).
+ *
+ * `started` says whether this record has any progress in it at all; it defaults
+ * to "the score rounds above zero". Pass it when you know better — a single
+ * concept on a 300-concept syllabus rounds to 0%, and that record is still not
+ * one nobody has started.
+ */
+export function readinessBand(pct: number, started?: boolean): ReadinessBand {
+  const rounded = Math.round(pct)
+  // A started record never bands below `started`; an empty one bands on its
+  // score alone, which is 0 in every case that matters.
+  const effective = (started ?? rounded > 0) ? Math.max(rounded, 1) : rounded
+  const band = BANDS.find(b => effective >= b.min) ?? BANDS[BANDS.length - 1]
   return { id: band.id, label: band.label }
 }
 
@@ -244,7 +264,7 @@ export function computeExamReadiness(
 
   const assessment: Omit<ExamReadinessAssessment, 'insight'> = {
     overallPct,
-    band: readinessBand(overallPct),
+    band: readinessBand(overallPct, counts.studied > 0),
     criteria,
     sections,
     weakestSections,
@@ -273,6 +293,12 @@ export function computeExamReadiness(
 // The rules are ordered by what costs a candidate the most, and the first hit
 // wins: a decayed keystone outranks a thin section, which outranks the reminder
 // that Level 3 does not hold by itself.
+//
+// **Say it the way a tutor would.** Each line is at most two short sentences:
+// the fact, then what to do about it. No em-dash asides, no "moves the score
+// further than new material does" hedging, no sentence that has to be read
+// twice on a phone. The card is already dense; the line under the verdict is
+// the one place a plain voice costs nothing.
 
 export type ReadinessInsightId =
   | 'keystone-decay'
@@ -319,13 +345,13 @@ export function readinessInsight(
     if (decayed.length === 1) {
       return {
         id: 'keystone-decay',
-        text: `${decayed[0].concept.name} — a keystone — has decayed back to Forgotten; review it before adding anything new.`,
+        text: `You've forgotten ${decayed[0].concept.name}, a keystone concept. Review it before anything new.`,
       }
     }
     if (decayed.length > 1) {
       return {
         id: 'keystone-decay',
-        text: `${decayed.length} keystone concepts have decayed back to Forgotten, ${decayed[0].concept.name} among them — review those before adding anything new.`,
+        text: `${decayed.length} keystone concepts have slipped to Forgotten, including ${decayed[0].concept.name}. Review those first.`,
       }
     }
   }
@@ -335,8 +361,8 @@ export function readinessInsight(
     return {
       id: 'broad-decay',
       text: counts.forgotten === counts.studied
-        ? `All ${counts.forgotten} concepts you have started have decayed back to Forgotten — recovering those moves the score further than new material does.`
-        : `${counts.forgotten} of the ${counts.studied} concepts you have started have decayed back to Forgotten — recovering those moves the score further than new material does.`,
+        ? `All ${counts.forgotten} concepts you've started have slipped to Forgotten. Review those before you add new ones.`
+        : `${counts.forgotten} of the ${counts.studied} concepts you've started have slipped to Forgotten. Review those before you add new ones.`,
     }
   }
 
@@ -349,15 +375,15 @@ export function readinessInsight(
     if (untouched.length === 1) {
       return {
         id: 'keystones-untouched',
-        text: `${untouched[0].concept.name} is the one keystone concept you have not started — the rest of the syllabus leans on it.`,
+        text: `${untouched[0].concept.name} is the one keystone concept you haven't started. Much of the exam builds on it.`,
       }
     }
     if (untouched.length > 1) {
       return {
         id: 'keystones-untouched',
         text: untouched.length === keystone.total
-          ? `None of the ${keystone.total} keystone concepts are started yet, ${untouched[0].concept.name} included — the rest of the syllabus leans on them.`
-          : `${untouched.length} of the ${keystone.total} keystone concepts are still untouched, ${untouched[0].concept.name} among them — the rest of the syllabus leans on them.`,
+          ? `You haven't started any of the ${keystone.total} keystone concepts yet. Begin with ${untouched[0].concept.name}.`
+          : `${untouched.length} of the ${keystone.total} keystone concepts are still untouched. Begin with ${untouched[0].concept.name}.`,
       }
     }
   }
@@ -367,7 +393,7 @@ export function readinessInsight(
   if (counts.level1 >= SECOND_PASS_MIN && counts.level1 >= counts.studied * SECOND_PASS_SHARE) {
     return {
       id: 'second-pass',
-      text: `${counts.level1} concepts are sitting at Level 1 — a second pass on those lifts the score further than starting new ones.`,
+      text: `${counts.level1} concepts are still at Level 1. Another pass on those is worth more than starting new ones.`,
     }
   }
 
@@ -386,8 +412,8 @@ export function readinessInsight(
     return {
       id: 'costliest-section',
       text: weighted
-        ? `Most of the missing score is in ${costliest.name} — ${share}% of the exam, ${covered}% covered.`
-        : `Most of the missing score is in ${costliest.name}, at ${covered}% covered.`,
+        ? `Your biggest gap is ${costliest.name}: ${share}% of the exam, ${covered}% covered.`
+        : `Your biggest gap is ${costliest.name}, at ${covered}% covered.`,
     }
   }
 
@@ -396,7 +422,7 @@ export function readinessInsight(
   if (keystone && keystone.total > 0 && keystone.mastered === keystone.total) {
     return {
       id: 'hold-the-keystones',
-      text: `All ${keystone.total} keystone concepts are at Level 3 — that lapses after ${DECAY_DAYS_LEVEL3} days unreviewed, so keep them in rotation.`,
+      text: `All ${keystone.total} keystone concepts are at Level 3. Keep reviewing them or they lapse after ${DECAY_DAYS_LEVEL3} days.`,
     }
   }
 

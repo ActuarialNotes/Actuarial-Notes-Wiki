@@ -85,12 +85,29 @@ describe('computeReadiness', () => {
 })
 
 describe('readinessBand', () => {
-  it('maps the score onto the five bands', () => {
+  it('maps the score onto the bands', () => {
     expect(readinessBand(0).id).toBe('not-started')
+    expect(readinessBand(5).id).toBe('started')
     expect(readinessBand(20).id).toBe('building')
     expect(readinessBand(50).id).toBe('progressing')
     expect(readinessBand(70).id).toBe('nearly')
     expect(readinessBand(90).id).toBe('ready')
+  })
+
+  it('never calls a score above zero "Not started"', () => {
+    // The card prints the rounded score, so the verdict bands on it too.
+    expect(readinessBand(0.4).label).toBe('Not started')
+    expect(readinessBand(0.6).label).toBe('Getting started')
+    expect(readinessBand(5).label).toBe('Getting started')
+    expect(readinessBand(14.4).label).toBe('Getting started')
+    expect(readinessBand(14.6).label).toBe('Building foundations')
+  })
+
+  it('lifts a record with progress out of "Not started" even when it rounds to zero', () => {
+    expect(readinessBand(0.2).id).toBe('not-started')
+    expect(readinessBand(0.2, true).id).toBe('started')
+    // A real score still bands on itself, whatever the caller says.
+    expect(readinessBand(50, false).id).toBe('progressing')
   })
 })
 
@@ -102,6 +119,13 @@ describe('computeExamReadiness', () => {
     expect(a.criteria.map(c => c.id)).toEqual(['syllabus', 'keystone'])
     expect(a.criteria.every(c => c.pct === 0)).toBe(true)
     expect(a.counts).toMatchObject({ total: 4, new: 4, studied: 0 })
+  })
+
+  it('bands a barely-started exam as started, not as "Not started"', () => {
+    const a = computeExamReadiness(syllabus(), [record('Variance', 'level1')], NOW)
+    expect(a.overallPct).toBeGreaterThan(0)
+    expect(a.band.id).toBe('started')
+    expect(a.band.label).toBe('Getting started')
   })
 
   it('includes keystone mastery as its own criterion', () => {
@@ -342,7 +366,7 @@ describe('readinessInsight', () => {
       sections: [section('A', { readinessPct: 10 }), section('B', { readinessPct: 60 })],
     }))
     expect(insight?.id).toBe('costliest-section')
-    expect(insight?.text).toBe('Most of the missing score is in A, at 10% covered.')
+    expect(insight?.text).toBe('Your biggest gap is A, at 10% covered.')
   })
 
   it('reminds a finished candidate that Level 3 does not hold by itself', () => {

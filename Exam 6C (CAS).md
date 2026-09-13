@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:71b4d3f3608f14ee564d86389b5b9425f8a3be8538050ae8e4fda6371fb6a1d1
+  content_hash: sha256:5e29977812cc1cd6bfb5aed5c48186866051846c395ae73c00e1f05924c01b21
   sources: []
   open_findings: 0
   open_critical: 0
@@ -17,7 +17,7 @@ verification:
      data-tracks="ACAS|Associate of the Casualty Actuarial Society (ACAS).md"
 </div>
 
-# Exam 6C (CAS)
+# Exam 6C
 
 The **Canada Regulation and Financial Reporting (6C) Exam** is a 4 hour exam with mixed question types about Canadian insurance regulation, government insurance programs, financial reporting, and solvency.
 ### Learning Objectives

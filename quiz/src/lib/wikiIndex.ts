@@ -6,6 +6,7 @@
 import fm from 'front-matter'
 import { listRepoContents, fetchWikiFile, rawGithubUrl } from '@/lib/github'
 import { buildResourceExamMap, examsForResource } from '@/lib/resourceExams'
+import { examDisplayName } from '@/lib/wikiRoutes'
 
 export type WikiIndexCategory = 'exam' | 'concept' | 'document'
 
@@ -20,14 +21,15 @@ export interface WikiIndexItem {
   exams?: string[]
   author?: string
   year?: number
-  title?: string        // resource display title (overrides name)
+  title?: string        // display title (overrides name): a resource's own title, or
+                        // an exam without its examining-body suffix ("Exam MAS-I")
   questionCount?: number // number of questions whose wiki_link points here
   coverImage?: string   // full GitHub raw URL to cover image
   edition?: string
   publisher?: string
 }
 
-const CACHE_KEY = 'actuarial_wiki_index_v4'
+const CACHE_KEY = 'actuarial_wiki_index_v5'
 const CACHE_TTL_MS = 6 * 60 * 60 * 1000
 
 interface CacheEntry {
@@ -125,7 +127,9 @@ export async function buildWikiIndex(): Promise<WikiIndexItem[]> {
     if (it.type !== 'file' || !it.name.endsWith('.md')) continue
     if (!/^Exam\b/i.test(it.name)) continue
     const bare = stripExt(it.name)
-    const item: WikiIndexItem = { category: 'exam', name: bare, path: it.path }
+    // `name` stays the file name (it is the route key); `title` is what a
+    // surface shows, with the examining-body suffix stripped.
+    const item: WikiIndexItem = { category: 'exam', name: bare, path: it.path, title: examDisplayName(bare) }
     items.push(item)
     examItems.push(item)
   }

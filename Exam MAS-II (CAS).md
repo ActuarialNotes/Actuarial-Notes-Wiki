@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:6999cabdb222e2043df63ae2aee1244421d9cc96adb091c0633e600e9a411ee4
+  content_hash: sha256:b8fac1d6edc5397eb5ae5db37316e2db71380d34988095643a0853c4cf5377df
   sources: []
   open_findings: 0
   open_critical: 0
@@ -15,7 +15,7 @@ verification:
      data-current="MAS-II|Modern Actuarial Statistics II"
 </div>
 
-# MAS-II (CAS)
+# Exam MAS-II
 The **Modern Actuarial Statistics II** exam is a 4-hour computer-based exam covering [[Credibility Theory]], [[Linear Mixed Model|Linear Mixed Models]], [[Statistical Learning]], and [[Time Series]] as part of the ACAS credentialing pathway.
 
 ## Prerequisite knowledge

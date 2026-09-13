@@ -3,7 +3,7 @@ import { useParams, Link, useSearchParams, useNavigationType } from 'react-route
 import { ChevronLeft, Loader2, CalendarDays } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { extractWikiLinksFromText, extractWikiLinkOccurrences } from '@/lib/wikiExtract'
-import { fromSlug, examIdFromFile, type WikiEntryRef } from '@/lib/wikiRoutes'
+import { fromSlug, examIdFromFile, examDisplayName, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
@@ -131,11 +131,14 @@ export default function WikiExam() {
   // syllabus link are keyed.
   const wikiExamId = useMemo(() => examIdFromFile(examFileName), [examFileName])
 
+  // The page's own `# ` heading, with the examining-body suffix the vault
+  // filenames carry stripped off — "Exam MAS-I", never "Exam MAS-I (CAS)".
+  // Which body sets an exam is the syllabus's job to say, not the title's.
   const extractedTitle = useMemo(() => {
     if (!content) return null
     const withoutFm = content.replace(/^---\n[\s\S]*?\n---\n?/, '')
     const match = withoutFm.match(/^#\s+(.+)$/m)
-    return match ? match[1].trim() : null
+    return match ? examDisplayName(match[1].trim()) : null
   }, [content])
 
   // Beside the exam's title: its status/date, then the examining body's own
@@ -146,7 +149,7 @@ export default function WikiExam() {
   const titleBadge = useMemo(() => (
     <span className="inline-flex items-center gap-2 not-prose">
       <ExamStatusBadge progressKey={progressKey} />
-      <ExamSyllabusButton examId={wikiExamId} examLabel={extractedTitle ?? examFileName} />
+      <ExamSyllabusButton examId={wikiExamId} examLabel={extractedTitle ?? examDisplayName(examFileName)} />
     </span>
   ), [progressKey, wikiExamId, extractedTitle, examFileName])
 

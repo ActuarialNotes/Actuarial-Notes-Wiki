@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:7cba2824a4621d6742f33002c2d281486a49627a145e075caf62b60c8469697f
+  content_hash: sha256:736265f865849ca5593a63fa00e3fc085db345e088c4f1d2a6b445bb34319cdd
   sources: []
   open_findings: 0
   open_critical: 0
@@ -15,7 +15,7 @@ verification:
      data-current="8|Advanced Ratemaking"
 </div>
 
-# Exam 8 (CAS)
+# Exam 8
 The **Advanced Ratemaking (Exam 8)** is a 4 hour exam covering classification ratemaking models and excess, deductible, and individual risk rating systems.
 
 ## Learning Objectives

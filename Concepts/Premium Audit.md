@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-09-12
+  last_checked_by: agent:validate-v1
   content_hash: sha256:e6edb2cc55c04e201765cd79d0d67fbf05ec63d70bee1e56d716cfc7166d9531
-  sources: []
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 5 pp. 80-81 (PDF pp. 92-93), Premium Development — incl. the workers compensation policy-year audit example and the 24-36 month factor 6.48/6.24 = 1.0385, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 4 p. 52 fn. 9 (PDF p. 64) and Ch. 5 p. 65 fn. 11 (PDF p. 77), policies subject to audit as the exception to CY = AY equivalence, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Premium Audit.md

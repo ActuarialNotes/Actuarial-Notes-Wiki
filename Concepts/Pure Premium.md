@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:15e629501a5e646135ad9a669940d589db23479e9db621cd15375c722f6ef7db
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-09-12
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:1cb5405e3a8f04d3a909c2cd3a8995d2d0bdd212fc62bd521a2cc8bf8a473808
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 pp. 7-8 (PDF pp. 19-20), Pure Premium (or Loss Cost), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 6 p. 94 (PDF p. 106), frequency/severity/pure premium ratios, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 8 pp. 141-143 (PDF pp. 153-155), Pure Premium Method, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Pure Premium.md
@@ -55,14 +58,14 @@ verification:
 > >
 > > $$\begin{align*}
 > > \text{Frequency factor} &= 0.985^{2.5} = 0.9629 \\
-> > \text{Severity factor} &= 1.060^{2.5} = 1.1593 \\[4pt]
-> > \text{Combined} &= 0.9629 \times 1.1593 = 1.1162
+> > \text{Severity factor} &= 1.060^{2.5} = 1.1568 \\[4pt]
+> > \text{Combined} &= 0.9629 \times 1.1568 = 1.1139
 > > \end{align*}$$
 > >
-> > $$\text{Projected PP} = \$440 \times 1.1162 = \$491.13$$
+> > $$\text{Projected PP} = \$440 \times 1.1139 = \$490.12$$
 > >
 > > **Direct pure premium trending** at $4.4\%$:
 > >
-> > $$1.044^{2.5} = 1.1129 \Rightarrow \$440 \times 1.1129 = \$489.68$$
+> > $$1.044^{2.5} = 1.1137 \Rightarrow \$440 \times 1.1137 = \$490.03$$
 > >
-> > The two are within $0.3\%$, because $1.06 \times 0.985 = 1.0441$ — the implied pure premium trend. The component approach is preferred not because it gives a different answer but because it is **diagnosable**: an actuary can defend $-1.5\%$ frequency and $+6.0\%$ severity against external evidence (repair costs, safety technology, litigation rates) in a way that a single blended $4.4\%$ cannot be defended.
+> > The two are within $0.02\%$, because $1.06 \times 0.985 = 1.0441$ — the implied pure premium trend. The component approach is preferred not because it gives a different answer but because it is **diagnosable**: an actuary can defend $-1.5\%$ frequency and $+6.0\%$ severity against external evidence (repair costs, safety technology, litigation rates) in a way that a single blended $4.4\%$ cannot be defended.

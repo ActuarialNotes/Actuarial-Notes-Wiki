@@ -1,13 +1,14 @@
 ---
 verification:
-  status: unverified
+  status: disputed
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-09-12
+  last_checked_by: agent:validate-v1
   content_hash: sha256:4c587a5c30db9c353673a48295a9fc733bcc1fce145ee8180cf6facaf3ff9024
-  sources: []
-  open_findings: 0
-  open_critical: 0
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 p.2 (PDF p.14) and Ch. 5 pp.70-71 (PDF pp.82-83), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+  open_findings: 1
+  open_critical: 1
   log: .verify/Concepts/In-Force.md
 ---
 

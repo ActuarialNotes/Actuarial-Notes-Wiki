@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-09-12
+  last_checked_by: agent:validate-v1
   content_hash: sha256:d58bedf5edca5f64afde57c97d2c1e4879490df76b34bbee236075c162195cb7
-  sources: []
-  open_findings: 0
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 8 pp. 141-146 (PDF pp. 153-158), Overall Indication: Pure Premium Method, Loss Ratio Method, derivation of the indicated rate change formula, and Werner-s check (0.65 + 0.065)/(1.0 - 0.25 - 0.10) = 1.10, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Overall Rate Level Indication.md
 ---

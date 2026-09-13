@@ -240,7 +240,10 @@ Other important `lib/` modules:
   square (`MAS-I` → `MAS` over `I`, `CAS-5` → `5`) and the type scale that says how big it may
   be drawn, as a fraction of the tile's edge. Pure and tested; the tile itself is
   `components/ExamLogo.tsx`, filled with the exam's own `--exam-accent-vivid` so a row of
-  logos also reads as the ladder. It leads the cards on the Study Guides exam grid and the
+  logos also reads as the ladder. The tile's *shape* — the three edge lengths and the radius
+  that tracks them — is one level down in `components/LogoTile.tsx`, shared with the Study
+  Guides page's general-guide card, which carries an icon in the same `lg` tile so a guide
+  and an exam lead their cards with the same object. It leads the cards on the Study Guides exam grid and the
   quiz builder, and it is branding rather than information — the card's title names the exam,
   so the tile is `aria-hidden`. See `docs/style-guide.md` §2.3.
 - `keystone.ts` — the keystone-concept read side: `findKeystone` / `isKeystone` (strict name

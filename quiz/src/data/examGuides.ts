@@ -42,19 +42,17 @@ export function guideForExam(examId: string): ExamGuide | null {
  * the per-exam collector (which only walks the folders) never mistakes one for
  * a tip. They are read in the same viewer as a tip page, so the ref carries its
  * explicit path. The Study Guides home page (`pages/wiki/WikiHome.tsx`) is what
- * lists them.
+ * lists them — as a card of the same shape an exam gets, its title and nothing
+ * else, so the two read as one grid rather than a prose card above a ladder.
  */
 export interface GeneralGuide {
   title: string
-  /** One line under the title on the card — what the guide answers. */
-  description: string
   ref: WikiEntryRef
 }
 
 export const GENERAL_GUIDES: GeneralGuide[] = [
   {
     title: 'How to Study for Actuarial Exams',
-    description: 'Answers to the questions candidates ask: the two societies, the ladder of exams, how candidates get hired partway through, and how to prepare for a sitting.',
     ref: {
       kind: 'guide',
       name: 'How to Study for Actuarial Exams',

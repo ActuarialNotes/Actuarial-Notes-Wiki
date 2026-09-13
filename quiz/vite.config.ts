@@ -59,7 +59,9 @@ async function collectWikiContent(): Promise<WikiBundleData> {
     if (text == null) continue
     files[name] = text
     const bare = name.replace(/\.md$/i, '')
-    index.push({ category: 'exam', name: bare, path: name })
+    // `name` stays the file name (it is the route key); `title` is what a
+    // surface shows, with the examining-body suffix stripped.
+    index.push({ category: 'exam', name: bare, path: name, title: examDisplayName(bare) })
     examPages.push({ name: bare, markdown: text })
   }
 

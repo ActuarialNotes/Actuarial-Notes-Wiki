@@ -13,6 +13,13 @@ describe('examDisplayName', () => {
     expect(examDisplayName('Exam MAS-II (CAS).md')).toBe('Exam MAS-II')
   })
 
+  // The exam pages' own `# ` headings go through this too, and they aren't all
+  // spelled like the file name — "MAS-I (CAS)" carried no "Exam " prefix.
+  it('drops the suffix off a heading that omits the Exam prefix', () => {
+    expect(examDisplayName('MAS-I (CAS)')).toBe('MAS-I')
+    expect(examDisplayName('P-1 (SOA)')).toBe('P-1')
+  })
+
   it('leaves a name without the suffix alone', () => {
     expect(examDisplayName('Exam 5')).toBe('Exam 5')
     expect(examDisplayName('Exam GI 101')).toBe('Exam GI 101')

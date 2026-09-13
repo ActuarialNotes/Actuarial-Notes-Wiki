@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1da1c7e26907e605e30e8f0a1af94935f153445015f8ece4fa835a963de62829
+  content_hash: sha256:0a7033e53a6ee53abf364096505630b6ed993b7218dff02ae84454dc95868a71
   sources: []
   open_findings: 0
   open_critical: 0
@@ -15,7 +15,7 @@ verification:
      data-current="5|Basic Techniques for Ratemaking and Estimating Claim Liabilities"
 </div>
 
-# Exam 5 (CAS)
+# Exam 5
 The **Basic Techniques for Ratemaking and Estimating Claim Liabilities** is a 4-hour computer-based exam (4.5-hour Pearson VUE appointment) covering **Ratemaking** and **Loss Reserving** as part of the ACAS credentialing pathway.
 
 ## Learning Objectives

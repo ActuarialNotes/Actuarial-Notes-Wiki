@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:30ab3b586024ccaccc33c8b874d965354b4c75ead4cd05d1bac8530e3327cbfe
+  content_hash: sha256:8893482125bb248ab84aa21f4c2dff23b7cbd4c14ae609b29f2f67362d629195
   sources: []
   open_findings: 0
   open_critical: 0
@@ -17,7 +17,7 @@ verification:
      data-tracks="FCAS|Fellow of the Casualty Actuarial Society (FCAS).md"
 </div>
 
-# Exam 7 (CAS)
+# Exam 7
 
 The **Advanced Estimation of Claims Liabilities (Exam 7)** is a 4 hour exam covering unpaid claim estimation, stochastic reserving methods, and reinsurance reserving.
 

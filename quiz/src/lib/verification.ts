@@ -388,33 +388,96 @@ export interface SourceSummary {
   label: string
   /** Where it can be read, when the citation names a URL. */
   url: string | null
+  /** The chapters, sections and pages the claim was checked on. */
+  locator: string | null
 }
 
 const SOURCE_URL = /https?:\/\/[^\s)>\]]+/
+/** The auditor's fingerprint of the exact file that was read. */
+const SOURCE_HASH = /\bsha-?256[:\s]+[0-9a-f]{16,}\b/gi
+/** A parenthetical carrying that fingerprint, and nothing a reader wants. */
+const HASH_PAREN = /\s*\([^()]*sha-?256[^()]*\)/gi
 
 /**
- * Cut a cited source down to the part worth printing.
+ * Where in a citation the work stops being named and starts being located.
+ *
+ * A locator segment opens with a chapter, a section, a page or the word for one
+ * — optionally behind an "and" / "incl." that continues a previous locator. Two
+ * near misses are deliberately not here: `Q17` (a paper's question number reads
+ * as part of what the source *is* — "CAS Exam 5 Fall 2019, Q17") and a bare
+ * `PDF` (it opens plenty of titles), which arrives through `printed …` or
+ * `PDF pp.` instead.
+ */
+const LOCATOR_START =
+  /^(?:(?:and|incl\.?|including|plus|also|see|at)\s+)*(?:ch(?:apter)?s?\.?\s*\d|chapters?\b|§|sections?\b|pp?\.\s*[0-9A-Z]|pp?\s+\d|pages?\s+\d|printed\b|standard\s+pp?\b|appendi(?:x|ces)\b|principles?\b|tables?\s+\d|figs?\.|figures?\s+\d|exhibits?\b|footnotes?\b|fn\.|paras?\.|paragraphs?\b|arts?\.|articles?\s+\d|slides?\s+\d|PDF\s+pp?\.|domains?\s+[A-Z0-9]|parts?\s+[IVX0-9])/i
+
+/** Punctuation left stranded by cutting a citation in two. */
+function trimCitationEdges(text: string): string {
+  return text.replace(/^[\s,;:—–-]+/, '').replace(/[\s,;:—–(-]+$/, '').trim()
+}
+
+/**
+ * Where the locator begins, or -1 — the index of the separator to cut on.
+ *
+ * Two separators say it, and the earlier one wins. The convention is
+ * `<name> — <where it was checked>`, but plenty of citations run the locator on
+ * after a comma and only then reach a dash ("… (CAS, 5th ed. May 2016), Ch. 2
+ * p.29 — NCCI loss costs …"), where cutting at the dash would keep the chapter
+ * in the title. Commas and dashes inside brackets are part of whatever they sit
+ * in, so the scan only sees the top level.
+ */
+function locatorCut(text: string): number {
+  let depth = 0
+  let segmentStart = 0
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i]
+    if (c === '(' || c === '[') depth++
+    else if (c === ')' || c === ']') depth = Math.max(0, depth - 1)
+    else if (depth > 0) continue
+    else if (c === '—' || c === '–') return i
+    else if (c === ',') {
+      const segment = text.slice(segmentStart, i)
+      if (segmentStart > 0 && LOCATOR_START.test(trimCitationEdges(segment))) return segmentStart - 1
+      segmentStart = i + 1
+    }
+  }
+  const last = text.slice(segmentStart)
+  if (segmentStart > 0 && LOCATOR_START.test(trimCitationEdges(last))) return segmentStart - 1
+  return -1
+}
+
+/**
+ * Cut a cited source into the three parts worth printing.
  *
  * A citation is written for an auditor, not a reader: it carries the URL, a
  * sha256 of the exact file that was read, a version string and the pages the
- * claim was checked on. All of that has to stay in the vault — it is what makes
- * the check reproducible — but on screen it buries the one thing a student
- * wants, which is *which book*. So the name is what the panel shows, the URL
- * becomes the link, and the provenance moves to the link's accessible name.
- *
- * The convention is `<name> — <where it was checked>`; with no dash, everything
- * before the URL is the name.
+ * claim was checked on. The hash and the version have to stay in the vault — it
+ * is what makes the check reproducible — but on screen they bury the two things
+ * a student wants, which are *which book* and *which pages*. So the name
+ * becomes the card's title, the pages become the line under it, the URL becomes
+ * the way to go and read it, and the fingerprint doesn't reach the screen at
+ * all.
  */
 export function summarizeSource(raw: string): SourceSummary {
   const text = (raw ?? '').trim()
   const match = SOURCE_URL.exec(text)
   const url = match ? match[0].replace(/[.,;:]+$/, '') : null
 
-  let label = text.split(/\s+[—–]\s+/)[0]
-  if (label === text && match) label = text.slice(0, match.index)
-  label = label.replace(/[\s—–,:;(-]+$/, '').trim()
+  // Everything that isn't the citation's prose, removed before it is cut — the
+  // URL and the hash both sit *between* the name and the locator as often as
+  // they sit after them.
+  const prose = (match ? text.slice(0, match.index) + ' ' + text.slice(match.index + match[0].length) : text)
+    .replace(HASH_PAREN, ' ')
+    .replace(SOURCE_HASH, ' ')
+    .replace(/\(\s*\)/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+
+  const cut = locatorCut(prose)
+  let label = trimCitationEdges(cut < 0 ? prose : prose.slice(0, cut))
+  const locator = cut < 0 ? '' : trimCitationEdges(prose.slice(cut + 1))
   if (!label) label = url ?? text
-  return { label, url }
+  return { label, url, locator: locator || null }
 }
 
 export interface LogEntryGroup {

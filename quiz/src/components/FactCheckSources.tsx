@@ -2,92 +2,92 @@ import { useEffect, useMemo, useState } from 'react'
 import { fetchWikiFile } from '@/lib/github'
 import { parseResourceMeta, type ResourceMeta } from '@/lib/resourceMeta'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
-import {
-  conceptNameFromPath,
-  examsForSources,
-  factCheckSourcesForConcept,
-  type FactCheckSource,
-} from '@/lib/factCheckSources'
+import { citedSources, syllabusSourcePages, type CitedSource } from '@/lib/factCheckSources'
 import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
 
 /**
- * **What this concept is checked against** — the syllabus readings behind a
- * concept page, in the Fact Check panel.
+ * **Checked against** — the sources a fact check was actually run against, in
+ * the Fact Check panel.
  *
- * The panel's other source list is what a pass actually *cited*, and most of
- * the vault has never had one: a reader who opens the record on an unchecked
- * page sees "Not fact checked" and nothing else, which says what has not
- * happened without saying what would. This says it. A concept is taught by an
- * exam, that exam's study guide names the readings it is taught from, and those
- * are the books a check is run against (`docs/verification.md` P2, rank 2).
+ * A `verification:` block records each one as a line of citation prose written
+ * for an auditor, and this draws it as the *same card the resource page leads
+ * with* — cover, title, author, the bibliographic chips, and the link to go and
+ * read it — rather than a line of text, because the reader's next move is
+ * usually to open the book and check the claim for themselves. What that
+ * citation adds over the shelf's other cards is the part of the book that was
+ * read, so the chapters and pages ride along as the card's note.
  *
- * It shows them as the *same card the resource page leads with* — cover, title,
- * author, the bibliographic chips, and the link to go and read it — rather than
- * a list of titles, because the reader's next move is usually to open the book
- * and check the claim for themselves. Inside a dialog that means the link, not
- * the in-app reader: `linkOnly` (the reader is an aside below the overlay
- * layer, so a document opened from here would slide in behind this sheet).
+ * `lib/factCheckSources.ts` does the matching: a citation that names a syllabus
+ * reading is shown as that reading's page, and one that names anything else is
+ * built from the citation alone. The sha256 the citation carries never reaches
+ * the screen — it is what makes the check reproducible, not something a student
+ * can act on.
  *
- * Nothing is invented. A concept no exam page teaches has no syllabus sources,
- * and this renders nothing rather than a shelf of unrelated books.
+ * Inside a dialog the cards are `linkOnly`: the in-app PDF reader is an aside
+ * below the overlay layer, so a document opened from here would slide in behind
+ * the sheet that opened it.
  */
 
 interface FactCheckSourcesProps {
-  /** Repo-relative path of the page the panel is open on. */
-  contentPath: string
+  /** The citations from the page's `verification:` block, as authored. */
+  sources: string[]
 }
 
-export function FactCheckSources({ contentPath }: FactCheckSourcesProps) {
+export function FactCheckSources({ sources }: FactCheckSourcesProps) {
   const { syllabi } = useWikiSyllabus()
-  const concept = conceptNameFromPath(contentPath)
-
-  const sources = useMemo(
-    () => (concept ? factCheckSourcesForConcept(syllabi, concept) : []),
-    [syllabi, concept],
+  const cited = useMemo(
+    () => citedSources(sources, syllabusSourcePages(syllabi)),
+    [sources, syllabi],
   )
 
-  if (sources.length === 0) return null
-  return <SourceShelf sources={sources} />
+  if (cited.length === 0) return null
+  return <SourceShelf sources={cited} />
 }
 
 /**
  * Mounted only when there is something to show, so the metadata fetch belongs
  * to a shelf that will actually be drawn.
  */
-function SourceShelf({ sources }: { sources: FactCheckSource[] }) {
-  const [metas, setMetas] = useState<ResourceMeta[] | null>(null)
+function SourceShelf({ sources }: { sources: CitedSource[] }) {
+  const [metas, setMetas] = useState<Array<ResourceMeta | null> | null>(null)
 
   // A resource page's front matter is where the card's facts live. The pages
   // are bundled on the wiki routes and fetched elsewhere; either way a page
-  // that can't be read falls back to the name the syllabus links it by, so the
-  // source is still named rather than silently dropped.
+  // that can't be read falls back to the citation, so the source is still named
+  // rather than silently dropped.
   useEffect(() => {
     let cancelled = false
     Promise.all(
       sources.map(source =>
-        fetchWikiFile(source.path)
-          .then(parseResourceMeta)
-          .catch((): ResourceMeta => ({})),
+        source.page
+          ? fetchWikiFile(source.page.path).then(parseResourceMeta).catch(() => null)
+          : Promise.resolve(null),
       ),
     ).then(loaded => { if (!cancelled) setMetas(loaded) })
     return () => { cancelled = true }
   }, [sources])
 
-  const exams = examsForSources(sources)
-
   return (
     <section>
       {/* The same heading shape as the panel's other sections. */}
       <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-        Syllabus sources{exams.length > 0 && ` · ${exams.join(', ')}`}
+        Checked against
       </h3>
       <ul className="space-y-2">
         {sources.map((source, i) => {
           const meta = metas?.[i]
           return (
-            <li key={source.path}>
+            <li key={source.raw}>
               <ResourceMetaCard
-                meta={{ ...meta, title: meta?.title || source.name }}
+                meta={{
+                  ...meta,
+                  title: meta?.title || source.label,
+                  // The citation's own link is the fallback, never the
+                  // override: the resource page names where the source lives,
+                  // and a pass cites the copy it happened to read.
+                  getCopyUrl: meta?.getCopyUrl || source.url || undefined,
+                }}
+                note={source.locator ?? undefined}
                 compact
                 linkOnly
                 className="mb-0 w-full"

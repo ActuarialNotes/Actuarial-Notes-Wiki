@@ -185,9 +185,12 @@ Other important `lib/` modules:
   (`factCheckBadge` → `components/FactCheckBadge.tsx` → `FactCheckPanel`; on a concept or
   resource page the way in is the *Fact Check* item of the action menu, on a question it is
   both the explanation panel's badge and the verdict row in the quiz's **Info** sheet, and an
-  exam page has none). `summarizeSource` and `summarizeLog` are what keep that panel short — the first cuts
-  an auditor's citation down to the source's name and link, the second splits the log into
-  Open / Fixed / Notes and folds each resolution into the finding it closes;
+  exam page has none). The panel shows the verdict alone until the reader taps it, then
+  unfolds the record — findings first, then what it was **Checked against**.
+  `summarizeSource` and `summarizeLog` are what keep it short — the first cuts an auditor's
+  citation into the source's name, the chapters/pages checked and its link (the sha256 never
+  reaches the screen), the second splits the log into Open / Fixed / Notes and folds each
+  resolution into the finding it closes;
   `lib/factCheckTone.ts` is the feature's one palette (tinted surface + icon per tone, and the
   severity → tone map), shared by the badge, the action-menu pill and the panel. Two rules live
   here rather than
@@ -278,13 +281,18 @@ Other important `lib/` modules:
   same verdict, opening the same `FactCheckDialog`, because "where did this come from" and
   "has anyone checked it" are one question asked twice — and unlike the explanation panel's
   badge, this one is reachable while the question is still live.
-- `factCheckSources.ts` — the syllabus readings a *concept* is fact checked against, for the
-  Fact Check panel's bottom shelf (`components/FactCheckSources.tsx`): the exams that teach
-  the concept (`findSyllabiForConcept` over the bundled exam pages), then those exam pages'
-  `Source Material` readings, unioned and deduplicated, each carrying the exams that list it.
-  Rendered as the same `ResourceMetaCard` a resource page leads with, so an unchecked page —
-  which is nearly all of them — still says what checking it would mean. Nothing is inferred:
-  a concept no exam page teaches gets no shelf. See `docs/verification.md`.
+- `factCheckSources.ts` — the sources a page was fact checked *against*, for the Fact Check
+  panel's **Checked against** shelf (`components/FactCheckSources.tsx`). `summarizeSource`
+  (in `verification.ts`) cuts a citation into the work's name, the chapters/pages the claim
+  was checked on and its link, dropping the sha256; this module finds the vault's own page
+  for the work, matching against every reading of every exam page (`syllabusSourcePages`
+  over the bundled exam pages) on *words*, since the two are authored independently — the
+  vault files `Basic Ratemaking (Werner - 2016)`, an auditor writes "Werner & Modlin, Basic
+  Ratemaking (CAS, 5th ed. May 2016)". The match is one-directional and strict — every word
+  of the page's title must appear in the citation — so a citation that names something the
+  vault has no page for is drawn from the citation alone rather than matched to a book it
+  isn't. Rendered as the same `ResourceMetaCard` a resource page leads with, with the
+  locator as the card's `note`. See `docs/verification.md`.
 - `resourceExams.ts` — which exam(s) a resource is a syllabus reading for. A
   `Resources/Books` page names no exam; the relationship is authored the other way round, in
   each exam page's `Source Material` callout, so this module inverts those callouts into a

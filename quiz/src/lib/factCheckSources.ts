@@ -1,43 +1,46 @@
-// The sources a concept page is fact checked *against*.
+// The sources a page was fact checked *against*.
 //
-// A page's `verification:` block records what a pass actually cited, and the
-// Fact Check panel leads with those. But most of the vault has never been
-// checked, and "Not fact checked" on its own tells a reader nothing about what
-// checking would even mean here. What it would mean is concrete and already
-// authored: a concept is taught by an exam, and that exam's study guide names
-// the syllabus readings it is taught *from* (`## Source Material`). Those
-// readings are the material a fact check draws on — rank 2 of the
-// source-of-truth hierarchy in `docs/verification.md` — so the panel shows
-// them, as the same resource cards the shelf and the resource page show.
+// A `verification:` block records each source as one line of citation prose
+// written for an auditor: the work, the pages the claim was checked on, a
+// sha256 of the file that was read, and usually a URL. `summarizeSource`
+// (lib/verification.ts) cuts that line into its parts; this module does the
+// other half — finding the vault's own page for the work, so the panel can show
+// a cited source as the same resource card a resource page leads with (cover,
+// title, author, the bibliographic chips, a way to go and read it) instead of a
+// line of citation text.
 //
-// Pure and testable: the syllabi come from `hooks/useWikiSyllabus` (the
-// build-time `virtual:exam-pages` bundle), so nothing here fetches.
+// The candidate pages are the syllabus readings: every entry of every exam
+// page's `## Source Material` callout, from the build-time `virtual:exam-pages`
+// bundle via `hooks/useWikiSyllabus`. Those are the books a check is run
+// against in the first place (`docs/verification.md`, rank 2), so a citation
+// that names one finds its page, and one that names something else — a content
+// outline, a paper, a standard with no page in the vault — is drawn from the
+// citation alone rather than matched to a book it isn't.
+//
+// Pure and testable: nothing here fetches.
 
-import { findSyllabiForConcept } from '@/lib/conceptMatch'
-import { compareExamLabels } from '@/lib/resourceExams'
-import { examDisplayName, pathToEntryRef, entryRefToRepoPath } from '@/lib/wikiRoutes'
+import { summarizeSource } from '@/lib/verification'
+import { pathToEntryRef, entryRefToRepoPath } from '@/lib/wikiRoutes'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 
-export interface FactCheckSource {
-  /** Resource page name, as the syllabus links it. */
+export interface SourcePage {
+  /** The page's name, as a syllabus links it: `Basic Ratemaking (Werner - 2016)`. */
   name: string
-  /** The raw `[[target]]`, for the route the card links to. */
-  target: string
-  /** Repo-relative path of the resource page, e.g. `Resources/Books/…md`. */
+  /** Repo-relative path of the page, e.g. `Resources/Books/….md`. */
   path: string
-  /** Exam labels whose syllabus lists it ("Exam P-1"), in ladder order. */
-  exams: string[]
 }
 
-/**
- * The concept a content path names, or null for anything else. Only concept
- * pages have syllabus sources: a resource page *is* one, a question cites the
- * paper it was sat on, and an exam page is an outline with no claims of its own.
- */
-export function conceptNameFromPath(contentPath: string | null | undefined): string | null {
-  if (!contentPath) return null
-  const ref = pathToEntryRef(contentPath)
-  return ref?.kind === 'concept' && ref.name ? ref.name : null
+export interface CitedSource {
+  /** The citation exactly as authored — kept for the card's `title`. */
+  raw: string
+  /** The work's name, which is what the card is titled when nothing matches. */
+  label: string
+  /** The chapters, sections and pages the claim was checked on. */
+  locator: string | null
+  /** Where the citation says the source can be read. */
+  url: string | null
+  /** The vault's page for the work, when one matches. */
+  page: SourcePage | null
 }
 
 /**
@@ -53,57 +56,85 @@ export function resourcePagePath(target: string, name: string): string {
   return `Resources/Books/${name}.md`
 }
 
-/** The label an exam is known by elsewhere in the app ("Exam P-1", "Exam 5"). */
-function syllabusLabel(syllabus: WikiExamSyllabus): string {
-  return examDisplayName(syllabus.fileName ?? syllabus.examLabel)
-}
-
-/**
- * The syllabus readings behind a concept — the union of the source material of
- * every exam that teaches it, in syllabus order, deduplicated by page name. A
- * concept taught by two exams (Expected Value is on both P and MAS-I) keeps one
- * card per source, carrying both exam labels.
- *
- * A concept no exam page links to yields nothing rather than every book in the
- * vault: there is no honest answer, and a list of unrelated sources would read
- * as one.
- */
-export function factCheckSourcesForConcept(
-  syllabi: WikiExamSyllabus[],
-  conceptName: string,
-): FactCheckSource[] {
-  const sources: FactCheckSource[] = []
-  const byName = new Map<string, FactCheckSource>()
-
-  for (const syllabus of findSyllabiForConcept(syllabi, conceptName)) {
-    const label = syllabusLabel(syllabus)
+/** Every reading named by every exam page, once each, in syllabus order. */
+export function syllabusSourcePages(syllabi: WikiExamSyllabus[]): SourcePage[] {
+  const pages: SourcePage[] = []
+  const seen = new Set<string>()
+  for (const syllabus of syllabi) {
     for (const resource of syllabus.resources) {
       const name = resource.name.trim()
       if (!name) continue
       const key = name.toLowerCase()
-      const existing = byName.get(key)
-      if (existing) {
-        if (label && !existing.exams.includes(label)) existing.exams.push(label)
-        continue
-      }
-      const source: FactCheckSource = {
-        name,
-        target: resource.target || name,
-        path: resourcePagePath(resource.target || name, name),
-        exams: label ? [label] : [],
-      }
-      byName.set(key, source)
-      sources.push(source)
+      if (seen.has(key)) continue
+      seen.add(key)
+      pages.push({ name, path: resourcePagePath(resource.target || name, name) })
     }
   }
-
-  for (const source of sources) source.exams.sort(compareExamLabels)
-  return sources
+  return pages
 }
 
-/** Every exam represented in a source list, in ladder order — for the heading. */
-export function examsForSources(sources: FactCheckSource[]): string[] {
-  const labels = new Set<string>()
-  for (const source of sources) for (const exam of source.exams) labels.add(exam)
-  return [...labels].sort(compareExamLabels)
+/** Words that carry no identity, so requiring them would only cause misses. */
+const STOP_WORDS = new Set([
+  'a', 'an', 'and', 'the', 'of', 'for', 'in', 'on', 'to', 'with', 'using', 'its',
+  'et', 'al', 'ed', 'eds', 'vol', 'no',
+])
+
+function words(text: string): string[] {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().split(' ').filter(Boolean)
+}
+
+/** A page name minus its `(Author - Year)` tail — the work itself. */
+function workName(pageName: string): string {
+  return pageName.replace(/\s*\([^()]*\)\s*$/, '').trim() || pageName
+}
+
+/**
+ * The vault page a citation names, or null.
+ *
+ * Matched on words rather than on the string, because the two are authored
+ * independently and never agree character for character: the vault files
+ * *Basic Ratemaking (Werner - 2016)* and *ASOP 43 - Property Casualty Unpaid
+ * Claim Estimates (ASB - 2007)*, while an auditor writes "Werner & Modlin,
+ * Basic Ratemaking (CAS, 5th ed. May 2016)" and "ASOP No. 43,
+ * Property/Casualty Unpaid Claim Estimates (ASB, June 2007)".
+ *
+ * The test is one-directional and strict: *every* word of the page's title has
+ * to appear in the citation. A citation may say more than the title does (the
+ * authors, the edition, the pages) but it cannot say less, so a near-neighbour
+ * on the shelf can't answer for a book that was never cited. Where several
+ * pages qualify, the most specific title wins, and the author and year of the
+ * page name break the tie.
+ */
+export function matchSourcePage(pages: SourcePage[], label: string): SourcePage | null {
+  const cited = new Set(words(label))
+  let best: SourcePage | null = null
+  let bestScore = 0
+
+  for (const page of pages) {
+    const required = words(workName(page.name)).filter(w => !STOP_WORDS.has(w))
+    if (required.length === 0) continue
+    // A one-word title only identifies anything if the word is distinctive —
+    // "Dutil" or "Davidson", not an acronym that could be part of a sentence.
+    if (required.length === 1 && required[0].length < 5) continue
+    if (!required.every(w => cited.has(w))) continue
+
+    const corroborating = words(page.name).filter(w => !STOP_WORDS.has(w) && cited.has(w)).length
+    const score = required.length * 100 + corroborating
+    if (score > bestScore) {
+      bestScore = score
+      best = page
+    }
+  }
+  return best
+}
+
+/** Each cited source, cut into its parts and matched to its page. */
+export function citedSources(raws: string[], pages: SourcePage[]): CitedSource[] {
+  return raws
+    .map(raw => (raw ?? '').trim())
+    .filter(Boolean)
+    .map(raw => {
+      const { label, url, locator } = summarizeSource(raw)
+      return { raw, label, url, locator, page: matchSourcePage(pages, label) }
+    })
 }

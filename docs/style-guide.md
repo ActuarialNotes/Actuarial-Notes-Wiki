@@ -126,10 +126,12 @@ the wrong colour from an ancestor.
 
 `components/ExamLogo.tsx` is the accent's main spender: a square, rounded tile carrying the
 exam's monogram (`lib/examLogo.ts` — `P`, `FM`, `MAS` over `I`, `5`) on an `--exam-accent-vivid`
-fill. It leads the card on the Study Guides exam grid and the quiz builder's exam cards, and
-it is **branding, not information** — every surface that shows one also names the exam beside
-it, which is why the tile is `aria-hidden`. Use it wherever exams are listed, at one of its
-three sizes, rather than drawing a second badge:
+fill. It leads the card on the Study Guides exam grid and the quiz builder's exam cards — the
+same `lg` tile on both, deliberately, so an exam is the same object on either tab — and it
+stands in for the exam's name in the wiki header strip at `md`. It is **branding, not
+information**: every surface that shows one also names the exam beside it (the header strip
+carries the name as the tile's `sr-only` label), which is why the tile is `aria-hidden`. Use
+it wherever exams are listed, at one of its three sizes, rather than drawing a second badge:
 
 ```tsx
 <ExamLogo examKey="MAS-I" size="lg" />              // a full-strength tile

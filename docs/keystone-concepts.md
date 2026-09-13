@@ -100,7 +100,6 @@ explainer as that menu's first block.
 | `.keystone-underline` | The same marker for a name outside prose (popup title, page heading, card title): a gold gradient bar painted as a background, so it can catch the shine |
 | `.keystone-ring` | Gold gradient edge, via the same padding + `mask-composite: exclude` ring trick as the foil border. `--keystone-ring-width` tunes thickness. Used for *panels and chips* (the explainer popover, the collect card's chip), not names |
 | `.keystone-ring--hero` | Thicker edge + a permanently travelling shine, for a hero surface |
-| `.keystone-wash` | Warm gold wash behind a keystone surface. Small surfaces only — in practice just the collect card. Nothing full-width wears it, so a wide panel never tints the page |
 | `@keyframes keystone-shine` / `keystone-shine-underline` | The sweep animations, used on hover/focus only |
 
 **Gold is not foil, and the two must not be confused:**
@@ -114,7 +113,10 @@ Because gold is intrinsic, it never animates on its own: the shine sweeps on hov
 a deliberate hero surface, so a syllabus page carrying a dozen keystone links stays calm.
 Where a surface could wear both materials (a collected flashcard tile, the collect card), the
 **edge belongs to foil** and the keystone signal moves inside — the underline on the card's
-name, or the gold chip on the collect card — so the two never fight for the same border.
+name, or the gold chip on the collect card — so the two never fight for the same border. The
+signal stays a *mark on* the surface and never a wash *across* it: the collect card used to
+tint its whole face gold behind the chip, which recoloured the card itself and left the
+concept name reading as a label on brass rather than a card that happens to be keystone.
 
 `prefers-reduced-motion: reduce` disables every keystone animation.
 
@@ -128,7 +130,7 @@ name, or the gold chip on the collect card — so the two never fight for the sa
 | Flashcard tiles (`pages/Flashcards.tsx`) | Gold underline on the card name — never a ring, since the tile edge belongs to the collected-foil material |
 | Wiki search results (`components/wiki/WikiSearchPanel.tsx`) | Gold underline on the result's name; the category icon is untouched |
 | Standalone concept page (`pages/wiki/WikiConcept.tsx`) | Gold underline on the `<h1>`, same tap-to-explain |
-| Collect modal (`components/collect/CollectCard3D.tsx`) | A gold `KEYSTONE` chip + wash on the card being collected — a moment, not a name, so the glyph is allowed here |
+| Collect modal (`components/collect/CollectCard3D.tsx`) | A gold `KEYSTONE` chip on the card being collected — a moment, not a name, so the glyph is allowed here. The chip is all of it: the card's face keeps its own colour |
 | Dashboard **Exam readiness** card (`components/ReadinessCard.tsx`) | Keystone spokes in the ring use the gold mastery ladder instead of the green one (`lib/masteryFill.ts`), and the **Keystone concepts** criterion bar beside it is drawn in the same gold |
 
 `components/KeystoneName.tsx` also exports `KeystoneSummary`, the explainer's

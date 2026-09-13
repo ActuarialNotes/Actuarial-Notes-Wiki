@@ -736,17 +736,6 @@
   to { background-position: 300% 0; }
 }
 
-/* Warm wash behind a keystone surface (the collect card, the badge chip) —
-   just enough to read as gold-lit rather than plain. */
-.keystone-wash {
-  background-image: linear-gradient(115deg,
-    hsl(45 93% 47% / 0.10), hsl(38 92% 50% / 0.05), hsl(48 96% 60% / 0.12));
-}
-.dark .keystone-wash {
-  background-image: linear-gradient(115deg,
-    hsl(45 93% 47% / 0.14), hsl(38 92% 50% / 0.06), hsl(48 96% 60% / 0.16));
-}
-
 /* A keystone concept mentioned inside wiki prose. Static gold — a marker, not
    a light show — so a syllabus page with a dozen of them still reads as text. */
 .wiki-link--keystone {
@@ -1055,6 +1044,14 @@ summary .katex-display,
 /* Front/back panes cross-fade in place (tap to flip) instead of a 3D flip. */
 .collect-card-pane {
   transition: opacity 260ms ease;
+}
+/* The face that isn't showing is faded out but still fills the card, so its
+   contents — the back's "Read the concept" button — would stay tabbable behind
+   the face on show. Visibility flips only once the cross-fade has run, so the
+   fade itself is untouched. */
+.collect-card-pane--hidden {
+  visibility: hidden;
+  transition: opacity 260ms ease, visibility 0s linear 260ms;
 }
 
 /* The card grows and dissolves into the bloom of light once collection is

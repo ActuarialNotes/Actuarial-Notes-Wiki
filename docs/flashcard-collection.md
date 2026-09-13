@@ -166,7 +166,10 @@ Two rules the UI keeps to:
   cost nobody was told about is a trap rather than an incentive. That line and the
   **Skip** button live in a footer *outside* the modal's scrolling body: a
   four-option check fills a phone screen, and neither a warning nor an exit does
-  its job from under the fold.
+  its job from under the fold. **Skip** is drawn as a full-width secondary button
+  rather than a small grey link — it is one of the two ways out of this screen,
+  and a link tucked under the fine print read as a footnote on the warning above
+  it.
 - **The wait always points at the material.** The locked panel replaces the
   options with the countdown and a **Read the concept** button, which opens
   `components/ConceptReadModal` *over* the collect modal — not the concept popup
@@ -174,6 +177,14 @@ Two rules the UI keeps to:
   pre-quiz gate) and not a navigation, which would abandon a quiz or a study
   session. The card behind it stays flippable, so its definition is one tap away.
   Being sent to read the concept is the point of the wait, not a consolation.
+- **The back of the card is a way in, not a dead end.** The flipped card shows
+  only the page's opening paragraph, so it ends in a secondary **Read the
+  concept** button that opens the same `ConceptReadModal` over the collect modal
+  — available from the first frame of the check, not only after a miss, and on
+  the *Collected!* card too. `CollectCard3D` ignores a click or an Enter that
+  came from a control inside itself (`fromInnerControl`), so pressing that button
+  doesn't also flip the card out from under what it opened. Only a `concept` ref
+  draws it: the reader fetches `Concepts/<name>.md`.
 
 Storage is **localStorage only** (`actuarial_collect_lockouts`), unlike the
 collected set, which syncs. That's deliberate: the wait exists to send a guessing

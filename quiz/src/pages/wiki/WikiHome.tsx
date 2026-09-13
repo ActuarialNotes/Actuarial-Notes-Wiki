@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigationType } from 'react-router-dom'
-import { BookMarked, CheckCircle2, Compass, GraduationCap, Hammer } from 'lucide-react'
+import { CheckCircle2, Compass, Hammer } from 'lucide-react'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { examDisplayName, wikiRoute } from '@/lib/wikiRoutes'
@@ -8,8 +8,11 @@ import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { TRACKS, type Track } from '@/data/tracks'
 import { GENERAL_GUIDES } from '@/data/examGuides'
 import { examAccentStyle } from '@/lib/examColors'
+import { ExamLogo } from '@/components/ExamLogo'
+import { LogoTile } from '@/components/LogoTile'
 import { matchesSelectedVariant } from '@/data/examSittings'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
@@ -185,16 +188,24 @@ export default function WikiHome() {
   )
 
   return (
-    <div className="space-y-10">
-      <header>
+    <div className="space-y-6">
+      <header className="flex items-center gap-2">
+        <img
+          src="/favicon.png"
+          alt=""
+          aria-hidden="true"
+          className="h-6 w-6 shrink-0 brightness-0 dark:invert"
+        />
         <h1 className="text-2xl font-bold tracking-tight">Study Guides</h1>
       </header>
 
       {/* The guides that belong to no single exam — read before there is an
-          exam to study for, so they sit above the ladder rather than in it. */}
+          exam to study for, so they sit above the ladder rather than in it.
+          Same grid, same card, same tile as an exam below: a guide is one more
+          thing to open, not a prose block introducing the page. */}
       {GENERAL_GUIDES.length > 0 && (
-        <section className="-mt-4">
-          <div className="grid grid-cols-1 gap-3">
+        <section>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             {GENERAL_GUIDES.map(guide => (
               <button
                 key={guide.ref.path ?? guide.title}
@@ -203,11 +214,15 @@ export default function WikiHome() {
                 className="w-full text-left appearance-none bg-transparent p-0"
               >
                 <Card className="h-full transition-all duration-150 hover:bg-accent/30">
-                  <CardHeader className="flex-row items-start gap-3 space-y-0">
-                    <Compass className="h-5 w-5 mt-0.5 shrink-0 text-teal-500" aria-hidden="true" />
-                    <div className="space-y-1">
+                  <CardHeader className="flex-row items-start gap-3 space-y-0 p-4 pb-3">
+                    {/* The exam cards' tile, carrying an icon instead of a
+                        monogram — a guide has no place on the colour ramp, so
+                        it takes the wiki's teal rather than borrowing a hue. */}
+                    <LogoTile size="lg" className="mt-0.5 bg-teal-500 text-white shadow-sm">
+                      <Compass className="h-6 w-6" />
+                    </LogoTile>
+                    <div className="min-w-0 flex-1">
                       <CardTitle className="text-base leading-snug">{guide.title}</CardTitle>
-                      <CardDescription>{guide.description}</CardDescription>
                     </div>
                   </CardHeader>
                 </Card>
@@ -221,35 +236,29 @@ export default function WikiHome() {
         {/* ── Sticky block: Exams heading + filter + in-progress pills ── */}
         <div
           ref={examsHeaderRef}
-          className="sticky z-20 -mx-4 px-4 pt-3 pb-3 bg-background/95 backdrop-blur-sm mb-4"
+          className="sticky z-20 -mx-4 sm:-mx-6 px-4 sm:px-6 py-2.5 bg-background/95 backdrop-blur-sm mb-3"
           style={{ top: `${SEARCH_BAR_H}px` }}
         >
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-lg font-semibold flex items-center gap-2">
-              <GraduationCap className="h-5 w-5 text-teal-500" />
-              Exams
-            </h2>
-            <div className="flex items-center rounded-lg border bg-muted/50 p-0.5 gap-0.5">
-              {(['SOA', 'CAS'] as const).map(tab => (
-                <button
-                  key={tab}
-                  onClick={() => handleSetFilter(tab)}
-                  className={cn(
-                    'px-5 py-2 rounded-md text-sm font-medium transition-colors',
-                    filter === tab
-                      ? 'bg-background text-foreground shadow-sm'
-                      : 'text-muted-foreground hover:text-foreground',
-                  )}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
+          {/* Same row the quiz builder leads with — a field label and the
+              body picker — so the two tabs open on the same shape. */}
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-medium">Exams</p>
+            <SegmentedControl
+              label="Examining body"
+              size="sm"
+              value={filter}
+              onChange={handleSetFilter}
+              options={[
+                { value: 'SOA', label: 'SOA' },
+                { value: 'CAS', label: 'CAS' },
+              ]}
+              className="shrink-0"
+            />
           </div>
 
           {/* In-progress exam quick-links */}
           {inProgressPills.length > 0 && (
-            <div className="flex flex-wrap gap-1.5">
+            <div className="mt-2 flex flex-wrap gap-1.5">
               {inProgressPills.map(({ syllabus, item }) => (
                 <Link key={syllabus.examId} to={wikiRoute({ kind: 'exam', name: item.name })}>
                   <span className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary transition-opacity hover:opacity-80">
@@ -264,38 +273,37 @@ export default function WikiHome() {
         {loading && exams.length === 0 ? (
           <p className="text-sm text-muted-foreground">Loading exams…</p>
         ) : (
-          <div className="space-y-8">
+          <div className="space-y-4">
             {filteredTrackGroups.filter(g => g.exams.length > 0).map(({ track, exams: trackExams }) => (
               <div key={track.key}>
                 {/* Sticky track header — sits just below the sticky Exams block */}
                 <div
-                  className="sticky z-10 -mx-4 px-4 py-1.5 mb-3 bg-background/95 backdrop-blur-sm"
+                  className="sticky z-10 -mx-4 sm:-mx-6 px-4 sm:px-6 py-1.5 mb-2 bg-background/95 backdrop-blur-sm"
                   style={{ top: `${SEARCH_BAR_H + headerHeight}px` }}
                 >
+                  {/* The quiz builder's track heading, to the letter — one
+                      `LABEL | Full name` line at `text-xs` — except that here
+                      it is a button: the designation is a page of its own
+                      (what it is, what it takes, what it lets an actuary
+                      sign), so the heading is the way into it. */}
                   {track.conceptPage ? (
-                    // The designation is a page of its own — what it is, what
-                    // it takes, what it lets an actuary sign — so the heading
-                    // is the way into it rather than a label.
                     <button
                       type="button"
                       onClick={() => openAt([{ kind: 'concept', name: track.conceptPage! }], 0, '/wiki')}
-                      className="group flex flex-wrap items-baseline gap-x-2 text-left appearance-none bg-transparent p-0"
+                      className="group block text-left appearance-none bg-transparent p-0 text-xs font-semibold text-muted-foreground uppercase tracking-wider transition-colors hover:text-foreground"
                     >
-                      <span className="text-sm font-semibold uppercase tracking-wider group-hover:underline underline-offset-4">
-                        {track.label}
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        {track.fullName}
+                      <span className="group-hover:underline underline-offset-4">
+                        {track.label} | {track.fullName}
                       </span>
                     </button>
                   ) : (
-                    <span className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                       {track.name}
-                    </span>
+                    </p>
                   )}
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                   {trackExams.map(exam => {
                     const examId = examNameToTrackKey(exam.name)
                     const examIdCleaned = exam.name.replace(/^Exam\s+/i, '').replace(/\s*\([^)]*\)\s*$/, '').trim()
@@ -369,47 +377,66 @@ export default function WikiHome() {
                                   : 'hover:bg-accent/30',
                           )}
                         >
-                          <CardHeader className={hasProgressBar ? 'pb-3' : undefined}>
-                            <div className="flex items-center justify-between gap-2">
-                              <CardTitle className={cn('text-base leading-snug', inDevelopment && 'text-muted-foreground')}>
-                                {examDisplayName(exam.name)}
-                              </CardTitle>
-                              {isCompleted && (
-                                <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
-                              )}
-                            </div>
-                            {match && (
-                              <CardDescription className="mt-0.5">{match.examTopic}</CardDescription>
-                            )}
-
-                            {/* Status pill — hidden for completed exams. "In
-                                development" outranks everything: it says the
-                                material isn't there, which is true whatever the
-                                candidate has marked this exam as. */}
-                            {!isCompleted && (inDevelopment || isInProgress || contentStatus === 'beta') && (
-                              <div className="mt-2">
-                                {inDevelopment ? (
-                                  <span className="inline-flex items-center gap-1 rounded-full border border-dashed border-muted-foreground/40 px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
-                                    <Hammer className="h-3 w-3" aria-hidden="true" />
-                                    In development — not yet available
-                                  </span>
-                                ) : isInProgress ? (
-                                  <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
-                                    {targetDate ? `Exam: ${formatTargetDate(targetDate)}` : 'In Progress'}
-                                  </span>
-                                ) : (
-                                  <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-                                    Beta
-                                  </span>
+                          <CardHeader className="flex-row items-start gap-3 space-y-0 p-4 pb-3">
+                            {/* The exam's logo — its monogram in its own place
+                                on the colour ramp. A visual anchor, so a card
+                                is recognisable before its title is read; the
+                                title beside it is what actually names the exam,
+                                which is why the tile is aria-hidden. */}
+                            <ExamLogo examKey={examId} size="lg" muted={inDevelopment} className="mt-0.5" />
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center justify-between gap-2">
+                                <CardTitle className={cn('text-base leading-snug', inDevelopment && 'text-muted-foreground')}>
+                                  {examDisplayName(exam.name)}
+                                </CardTitle>
+                                {isCompleted && (
+                                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
                                 )}
                               </div>
-                            )}
+                              {match && (
+                                <CardDescription className="mt-0.5">{match.examTopic}</CardDescription>
+                              )}
+
+                              {/* Status pill — hidden for completed exams. "In
+                                  development" outranks everything: it says the
+                                  material isn't there, which is true whatever the
+                                  candidate has marked this exam as. */}
+                              {!isCompleted && (inDevelopment || isInProgress || contentStatus === 'beta') && (
+                                <div className="mt-2 flex flex-wrap gap-1.5">
+                                  {/* The quiz builder's pills, to the letter:
+                                      blue is the info hue a scheduled date
+                                      takes, being part-way through is neutral,
+                                      and Beta is the amber caution (style
+                                      guide §4.1). They used to be one size
+                                      smaller and a different colour here. */}
+                                  {inDevelopment ? (
+                                    <span className="inline-flex items-center gap-1 rounded-full border border-dashed border-muted-foreground/40 px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                                      <Hammer className="h-3 w-3" aria-hidden="true" />
+                                      In development — not yet available
+                                    </span>
+                                  ) : isInProgress ? (
+                                    <span className={cn(
+                                      'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium',
+                                      targetDate
+                                        ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
+                                        : 'bg-muted text-muted-foreground',
+                                    )}>
+                                      {targetDate ? `Exam: ${formatTargetDate(targetDate)}` : 'In progress'}
+                                    </span>
+                                  ) : (
+                                    <span className="inline-flex items-center rounded-full bg-amber-500/15 px-2 py-0.5 text-xs font-medium text-amber-600 dark:text-amber-400">
+                                      Beta
+                                    </span>
+                                  )}
+                                </div>
+                              )}
+                            </div>
                           </CardHeader>
 
                           {/* Progress bar — in-progress only, not for completed */}
                           {hasProgressBar && (
-                            <div className="px-6 pb-4 space-y-1">
-                              <div className="flex items-center justify-between text-[11px] text-muted-foreground">
+                            <div className="px-4 pb-4 space-y-1">
+                              <div className="flex items-center justify-between text-xs text-muted-foreground">
                                 <span>Readiness</span>
                                 <span className="font-medium tabular-nums">{readinessPct}%</span>
                               </div>
@@ -432,14 +459,13 @@ export default function WikiHome() {
       </section>
 
       <section>
-        <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
-          <BookMarked className="h-5 w-5 text-muted-foreground" />
-          Resources
-        </h2>
+        {/* Same field-label treatment the Exams block above uses, so the page
+            has one heading size rather than two. */}
+        <p className="text-sm font-medium mb-3">Resources</p>
         {books.length === 0 ? (
           <p className="text-sm text-muted-foreground">Loading resources…</p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {books.map((book, bookIdx) => (
               <button
                 key={book.path}

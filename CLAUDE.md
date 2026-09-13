@@ -229,12 +229,23 @@ Other important `lib/` modules:
 - `examColors.ts` — the **exam accent colour**: one hue per exam, stepping chromatically
   around the wheel from blue at Exam P to red at Exam 9, so the colour says where on the
   ladder an exam sits. Pure and tested, and it paints nothing itself —
-  `examAccentStyle(examKey)` hands back three CSS custom properties (`--exam-accent`,
-  `--exam-accent-muted`, `--exam-accent-soft`) to spread onto whatever element scopes the
-  exam. The Study Guides grid spends it on hover; anything else that needs an exam's feature
-  colour should read it from there rather than growing a second palette. Non-exam
-  requirements (VEE, the DISCs, PCPA, the professionalism courses) get `undefined`, not a
-  colour. See `docs/style-guide.md` §2.3.
+  `examAccentStyle(examKey)` hands back four CSS custom properties (`--exam-accent`,
+  `--exam-accent-muted`, `--exam-accent-soft`, `--exam-accent-vivid`) to spread onto whatever
+  element scopes the exam. The first three are translucent or mid-lightness so they wash over
+  either theme; `--exam-accent-vivid` is the opaque fill for a shape carrying white text.
+  Anything that needs an exam's feature colour should read it from there rather than growing
+  a second palette. Non-exam requirements (VEE, the DISCs, PCPA, the professionalism courses)
+  get `undefined`, not a colour. See `docs/style-guide.md` §2.3.
+- `examLogo.ts` — the **exam logo**'s monogram: an exam key cut down to something that fits a
+  square (`MAS-I` → `MAS` over `I`, `CAS-5` → `5`) and the type scale that says how big it may
+  be drawn, as a fraction of the tile's edge. Pure and tested; the tile itself is
+  `components/ExamLogo.tsx`, filled with the exam's own `--exam-accent-vivid` so a row of
+  logos also reads as the ladder. The tile's *shape* — the three edge lengths and the radius
+  that tracks them — is one level down in `components/LogoTile.tsx`, shared with the Study
+  Guides page's general-guide card, which carries an icon in the same `lg` tile so a guide
+  and an exam lead their cards with the same object. It leads the cards on the Study Guides exam grid and the
+  quiz builder, and it is branding rather than information — the card's title names the exam,
+  so the tile is `aria-hidden`. See `docs/style-guide.md` §2.3.
 - `keystone.ts` — the keystone-concept read side: `findKeystone` / `isKeystone` (strict name
   matching, no fuzzy hits) and `keystoneProgress` (decay-aware mastery roll-up per exam).
   Rendered by `components/KeystoneName.tsx`. No surface lists an exam's keystones since the
@@ -246,6 +257,15 @@ Other important `lib/` modules:
   browser and the concept detail modal — add it to any new surface that lists questions rather than
   writing a new chip. Attempt history is server-side only, so signed-out viewers pass
   `showNew={false}` (via the hook's `tracked` flag) and see no chip instead of a false "Not attempted".
+- `questionPreview.ts` — the collapsed preview every question list shows: a few lines of the
+  question's *prose*, not six words of it. A stem is prose wrapped around data, so the
+  flattening drops the tables, images and fenced blocks (keeping their captions, which is
+  the part that says what the data is), turns list markers into bullets, strips emphasis so
+  a surface can cut the text at a search match and `<mark>` it, and marks anything dropped
+  or cut with an ellipsis. `stemSnippet` windows onto a match that falls past the preview;
+  `questionPreview` falls back to the first *part* of a multi-part question whose stem is an
+  empty preamble — those rows previewed nothing at all before. Read by
+  `components/QuestionSearchRow.tsx` (clamped to three lines) and the Search page.
 - `questionSource.ts` — where a question came from, for the quiz's **Info** button
   (`components/QuestionInfoButton.tsx`, in the question bar beside the flag): the sitting it
   was sat on, the published paper behind it (`data/examPdfLinks.ts`), and its vault file —
@@ -344,6 +364,14 @@ Other important `lib/` modules:
   **Study Guide** card), the exam grid and the readiness projection. The exam study guide shows no
   readiness card (removed along with the orientation row). `computeReadiness` is the
   weighted section score it is built from — an input, not a second number to display.
+- `readinessDelta.ts` — the **movement arrow** beside that KPI: how far the score has moved
+  *today*, green up / red down, absent when it hasn't moved. A mastery record carries no
+  history, so yesterday's score can't be recomputed — this is the memory that makes the arrow
+  possible (pure core here, `hooks/useReadinessDelta.ts` persists it to localStorage). The rule
+  to keep: the day after a sighting baselines on **yesterday's last score**, so overnight decay
+  shows as a red arrow, while a gap longer than a day starts flat rather than blaming today for
+  a week of decay. The delta is measured between the *rounded* scores so it always agrees with
+  the number on screen. See `docs/exam-readiness.md`.
 - `readinessRing.ts` — the geometry behind the **readiness ring**: one arc per syllabus
   concept, each section sized by its exam weight, each arc filled by that concept's mastery
   state. Pure and tested. Two surfaces draw it and differ only in chrome — the Dashboard's
@@ -475,8 +503,8 @@ Other important `lib/` modules:
   60 requests/hour per IP without `VITE_GITHUB_TOKEN` — don't put it on a path that has to work.
 - `supabase.ts` — Supabase client + shared row types
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **100 test files /
-~1485 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **105 test files /
+~1550 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, and the research/resource-timeline
 modules).
 

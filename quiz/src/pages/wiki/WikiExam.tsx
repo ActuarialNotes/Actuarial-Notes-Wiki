@@ -3,11 +3,12 @@ import { useParams, Link, useSearchParams, useNavigationType } from 'react-route
 import { ChevronLeft, Loader2, CalendarDays } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { extractWikiLinksFromText, extractWikiLinkOccurrences } from '@/lib/wikiExtract'
-import { fromSlug, examIdFromFile, type WikiEntryRef } from '@/lib/wikiRoutes'
+import { fromSlug, examIdFromFile, examDisplayName, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { ExamSyllabusButton } from '@/components/wiki/ExamSyllabusButton'
+import { ExamLogo } from '@/components/ExamLogo'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
@@ -103,7 +104,7 @@ export default function WikiExam() {
   const [searchParams] = useSearchParams()
   const conceptParam = searchParams.get('concept')
   const examFileName = fromSlug(slug)
-  const { setPageRefs, setExamId, setPageTitle, setPageTitleBadge, setBackLink, setStudyPlan, setIsInDevelopment, setIsBeta } = useWikiPage()
+  const { setPageRefs, setExamId, setPageTitle, setPageIcon, setPageTitleBadge, setBackLink, setStudyPlan, setIsInDevelopment, setIsBeta } = useWikiPage()
   const openAt = useConceptPopup(s => s.openAt)
   const [content, setContent] = useState<string | null>(null)
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
@@ -131,11 +132,14 @@ export default function WikiExam() {
   // syllabus link are keyed.
   const wikiExamId = useMemo(() => examIdFromFile(examFileName), [examFileName])
 
+  // The page's own `# ` heading, with the examining-body suffix the vault
+  // filenames carry stripped off — "Exam MAS-I", never "Exam MAS-I (CAS)".
+  // Which body sets an exam is the syllabus's job to say, not the title's.
   const extractedTitle = useMemo(() => {
     if (!content) return null
     const withoutFm = content.replace(/^---\n[\s\S]*?\n---\n?/, '')
     const match = withoutFm.match(/^#\s+(.+)$/m)
-    return match ? match[1].trim() : null
+    return match ? examDisplayName(match[1].trim()) : null
   }, [content])
 
   // Beside the exam's title: its status/date, then the examining body's own
@@ -146,9 +150,17 @@ export default function WikiExam() {
   const titleBadge = useMemo(() => (
     <span className="inline-flex items-center gap-2 not-prose">
       <ExamStatusBadge progressKey={progressKey} />
-      <ExamSyllabusButton examId={wikiExamId} examLabel={extractedTitle ?? examFileName} />
+      <ExamSyllabusButton examId={wikiExamId} examLabel={extractedTitle ?? examDisplayName(examFileName)} />
     </span>
   ), [progressKey, wikiExamId, extractedTitle, examFileName])
+
+  // What the sticky header shows instead of the exam's name: the exam's own
+  // logo, the same tile its card carries on the Study Guides grid and the quiz
+  // builder — so the strip says which exam you are in with the object you
+  // picked it with, rather than restating the heading a few pixels below it.
+  const pageIcon = useMemo(() => (
+    <ExamLogo examKey={progressKey} size="md" />
+  ), [progressKey])
 
   const smallTitleBadge = useMemo(() => (
     <span className="inline-flex items-center gap-1.5 not-prose shrink-0">
@@ -268,6 +280,10 @@ export default function WikiExam() {
     setIsInDevelopment(contentStatus === 'development')
     setIsBeta(contentStatus === 'beta')
   }, [extractedTitle, contentStatus, setPageTitle, setIsInDevelopment, setIsBeta])
+
+  useEffect(() => {
+    setPageIcon(pageIcon)
+  }, [pageIcon, setPageIcon])
 
   useEffect(() => {
     setPageTitleBadge(smallTitleBadge)

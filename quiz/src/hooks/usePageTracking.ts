@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
+import { fromSlug, examDisplayName } from '@/lib/wikiRoutes'
 
 const STATIC_TITLES: Record<string, string> = {
   '/': 'Actuarial Notes',
@@ -16,18 +17,21 @@ const STATIC_TITLES: Record<string, string> = {
   '/wiki': 'Wiki | Actuarial Notes',
 }
 
+// Wiki route slugs are `toSlug` output (spaces as `+`, the rest
+// percent-encoded), so the page's name is read back with `fromSlug` rather than
+// guessed at — a slug split on '-' turned "Exam+MAS-I+(CAS)" into
+// "Exam+MAS I+(CAS)".
 function slugToTitle(slug: string): string {
-  return slug
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
+  return fromSlug(slug)
 }
 
 function getPageTitle(pathname: string): string {
   if (STATIC_TITLES[pathname]) return STATIC_TITLES[pathname]
 
+  // An exam's tab title drops the examining-body suffix its file name carries,
+  // the same as every other surface that shows an exam's name.
   const wikiExam = pathname.match(/^\/wiki\/exam\/(.+)$/)
-  if (wikiExam) return `${slugToTitle(wikiExam[1])} | Actuarial Notes`
+  if (wikiExam) return `${examDisplayName(slugToTitle(wikiExam[1]))} | Actuarial Notes`
 
   const wikiConcept = pathname.match(/^\/wiki\/concept\/(.+)$/)
   if (wikiConcept) return `${slugToTitle(wikiConcept[1])} | Actuarial Notes`

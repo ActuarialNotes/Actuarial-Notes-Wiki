@@ -35,11 +35,12 @@ import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { cn } from '@/lib/utils'
 import { getSittingPdfLink, getExamPdfLink, getExamSolutionsPdfLink } from '@/data/examPdfLinks'
 import { getPassRateLookup } from '@/data/pastExams'
-import { buildPastExamRows } from '@/lib/pastExams'
+import { buildPastExamRows, sittingLabel } from '@/lib/pastExams'
 import { applyPassRates } from '@/lib/passRates'
 import { useExamPassRates } from '@/hooks/useExamPassRates'
 import { PastExamBrowser } from '@/components/PastExamBrowser'
 import { examStatus } from '@/lib/examStatus'
+import { ExamLogo } from '@/components/ExamLogo'
 
 type ExamOrg = 'SOA' | 'CAS'
 
@@ -285,35 +286,42 @@ function ExamOptionCard({
           ? 'bg-primary/10 hover:bg-primary/25'
           : 'hover:bg-accent/30',
       )}>
-        <CardHeader className="p-4 pb-3">
-          <CardTitle className="text-base leading-snug">{exam.label}</CardTitle>
-          {description && (
-            <CardDescription className="mt-0.5">{description}</CardDescription>
-          )}
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
-              {questionCount} question{questionCount !== 1 ? 's' : ''}
-            </span>
-            {/* Style guide §4.1: blue is the info hue, amber means "caution".
-                A scheduled date is information; being part-way through an exam
-                is neither, so it stays neutral rather than borrowing the
-                warning colour. Beta *is* a caution, and takes the amber that
-                the mobile nav's Research chip already uses for the same word —
-                it used to be emerald here and amber there. */}
-            {isActive ? (
-              <span className={cn(
-                'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium',
-                targetDate
-                  ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
-                  : 'bg-muted text-muted-foreground',
-              )}>
-                {targetDate ? `Exam: ${formatTargetDate(targetDate)}` : 'In progress'}
+        <CardHeader className="flex-row items-start gap-3 space-y-0 p-4 pb-3">
+          {/* The exam's logo — the same monogram tile, at the same size, that
+              the Study Guides grid leads its cards with, in the exam's own
+              place on the colour ramp, so an exam is the same object across
+              the two tabs. Decorative: the title beside it names the exam. */}
+          <ExamLogo examKey={exam.progressKey} size="lg" className="mt-0.5" />
+          <div className="min-w-0 flex-1">
+            <CardTitle className="text-base leading-snug">{exam.label}</CardTitle>
+            {description && (
+              <CardDescription className="mt-0.5">{description}</CardDescription>
+            )}
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                {questionCount} question{questionCount !== 1 ? 's' : ''}
               </span>
-            ) : isBeta ? (
-              <span className="inline-flex items-center rounded-full bg-amber-500/15 px-2 py-0.5 text-xs font-medium text-amber-600 dark:text-amber-400">
-                Beta
-              </span>
-            ) : null}
+              {/* Style guide §4.1: blue is the info hue, amber means "caution".
+                  A scheduled date is information; being part-way through an exam
+                  is neither, so it stays neutral rather than borrowing the
+                  warning colour. Beta *is* a caution, and takes the amber that
+                  the mobile nav's Research chip already uses for the same word —
+                  it used to be emerald here and amber there. */}
+              {isActive ? (
+                <span className={cn(
+                  'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium',
+                  targetDate
+                    ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
+                    : 'bg-muted text-muted-foreground',
+                )}>
+                  {targetDate ? `Exam: ${formatTargetDate(targetDate)}` : 'In progress'}
+                </span>
+              ) : isBeta ? (
+                <span className="inline-flex items-center rounded-full bg-amber-500/15 px-2 py-0.5 text-xs font-medium text-amber-600 dark:text-amber-400">
+                  Beta
+                </span>
+              ) : null}
+            </div>
           </div>
         </CardHeader>
       </Card>
@@ -1099,6 +1107,14 @@ export default function Landing() {
   const searchFilter = useMemo(() => {
     if (selectedConcept) return { concept: selectedConcept }
     if (!topic) return {}
+    // Mock exam: the shelf's selection is the pool. Opening the search while
+    // Spring 2019 is picked should show that paper, not the whole exam.
+    if (mode === 'mock-exam') {
+      return {
+        exam: topic,
+        ...(selectedSitting && { year: selectedSitting.year, session: selectedSitting.session }),
+      }
+    }
     if (useTodaysPlan && plan) {
       const displayConcepts = plan.status === 'review_mode'
         ? (plan.reviewConcepts ?? [])
@@ -1112,7 +1128,7 @@ export default function Landing() {
       exam: topic,
       ...(selectedConcepts.length > 0 && { concepts: selectedConcepts }),
     }
-  }, [topic, selectedConcept, selectedConcepts, useTodaysPlan, plan])
+  }, [topic, mode, selectedSitting, selectedConcept, selectedConcepts, useTodaysPlan, plan])
 
   // Active filter chips shown in the search dropdown so the user can see and
   // remove concept filters without leaving the search panel.
@@ -1121,12 +1137,21 @@ export default function Landing() {
     if (selectedConcept) {
       pills.push({ label: selectedConcept, onRemove: () => setSelectedConcept('') })
     }
+    // The picked paper, removable in place — clearing it widens the search back
+    // to the whole exam and drops the shelf's selection with it, so the panel
+    // and the page behind it can't disagree about what is selected.
+    if (mode === 'mock-exam' && selectedSitting) {
+      pills.push({
+        label: `${examLabel} · ${sittingLabel(selectedSitting.year, selectedSitting.session)}`,
+        onRemove: () => setSelectedSitting(null),
+      })
+    }
     selectedConcepts.forEach(c => {
       pills.push({ label: c, onRemove: () => toggleConcept(c) })
     })
     return pills
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedConcept, selectedConcepts])
+  }, [selectedConcept, selectedConcepts, mode, selectedSitting, examLabel])
 
   // Dashboard launch is still resolving — hold a quiet loading state rather than
   // flashing the quiz config screen on the way into the quiz.

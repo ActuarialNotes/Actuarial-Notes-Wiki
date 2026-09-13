@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { examAccent, examAccentStyle, examHue } from './examColors'
+import { examAccent, examAccentStyle, examAccentVivid, examHue } from './examColors'
 
 describe('examHue', () => {
   it('starts at blue on the first preliminary exam', () => {
@@ -35,6 +35,7 @@ describe('examHue', () => {
     for (const key of ['VEE-ECON', 'CAS-IA', 'CAS-PCPA', 'CAS-APC', 'FAP', 'FSA-GI101', '']) {
       expect(examHue(key)).toBeUndefined()
       expect(examAccent(key)).toBeUndefined()
+      expect(examAccentVivid(key)).toBeUndefined()
       expect(examAccentStyle(key)).toBeUndefined()
     }
   })
@@ -51,11 +52,22 @@ describe('examAccent', () => {
   })
 })
 
+describe('examAccentVivid', () => {
+  it('is the same hue, turned up and darkened so white text sits on it', () => {
+    expect(examAccentVivid('P')).toBe('hsl(221 88% 46%)')
+    // Same hue as the accent proper — only saturation and lightness differ.
+    expect(examAccentVivid('MAS-I')).toBe('hsl(255.8 88% 46%)')
+  })
+})
+
 describe('examAccentStyle', () => {
-  it('exposes the three custom properties an exam surface can paint with', () => {
+  it('exposes the custom properties an exam surface can paint with', () => {
     const style = examAccentStyle('CAS-5') as Record<string, string>
-    expect(Object.keys(style).sort()).toEqual(['--exam-accent', '--exam-accent-muted', '--exam-accent-soft'])
+    expect(Object.keys(style).sort()).toEqual([
+      '--exam-accent', '--exam-accent-muted', '--exam-accent-soft', '--exam-accent-vivid',
+    ])
     expect(style['--exam-accent']).toBe('hsl(290.5 75% 55%)')
     expect(style['--exam-accent-soft']).toContain('/ 0.14')
+    expect(style['--exam-accent-vivid']).toBe('hsl(290.5 88% 46%)')
   })
 })

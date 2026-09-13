@@ -60,8 +60,17 @@ else to wire.
 
 ## Bands
 
-`readinessBand(pct)` maps the score onto a verdict: **Not started** (<15), **Building foundations** (<40), **Making progress** (<65),
-**Nearly exam ready** (<85), **Exam ready** (85+). A band is a label and nothing else.
+`readinessBand(pct)` maps the score onto a verdict: **Not started** (0), **Getting started** (<15),
+**Building foundations** (<40), **Making progress** (<65), **Nearly exam ready** (<85), **Exam ready** (85+).
+A band is a label and nothing else.
+
+It bands on the **rounded** score, so the verdict always agrees with the number printed beside
+it (the same rule `readinessDelta` follows), and **`not-started` means zero, not "low"**: it
+used to run all the way to 15, so a card could read *Not started* over a 5% score — the verdict
+contradicting work the learner had just done. *Getting started* is the band between them.
+The optional second argument, `readinessBand(pct, started)`, is what lifts a record with real
+progress out of *Not started* when its score still rounds to 0% (one concept on a 300-concept
+syllabus); `computeExamReadiness` passes `counts.studied > 0`.
 
 It used to carry a one-sentence `blurb` as well, printed under the label on the Dashboard
 card. That field is gone. One sentence shared by everyone inside a forty-point range cannot
@@ -81,12 +90,15 @@ started* label are the whole story. A record where no rule below finds anything 
 either. The card renders the paragraph only when the insight is non-null — nothing generic
 stands in for it.
 
-Two rules govern what may be said:
+Three rules govern what may be said:
 
 1. **It must name something the card does not already draw** — a concept, a section, a tally.
    "Syllabus coverage is low" is the criterion bar said twice.
 2. **It must be true of this learner specifically.** Anything that would read identically for
    every account in the band belongs in the band label, not here.
+3. **Say it the way a tutor would**: at most two short sentences, the fact and then what to do
+   about it. No em-dash asides, no "recovering those moves the score further than new material
+   does", nothing that has to be read twice on a phone.
 
 The rules are ordered by what costs a candidate the most, and the first hit wins:
 
@@ -155,6 +167,47 @@ There is no concept tally card beside it. A `Topics Learned` bar (`N/M at Level 
 sit under the ring; it restated what the ring already draws, so it and the topic list it
 expanded onto were removed.
 
+## Today's movement
+
+Beside the KPI, the readiness card prints **how far the score has moved today** — a green
+`↑ 3` when the day has added three points, a red `↓ 2` when it has lost two, and nothing at
+all when the number hasn't budged. It is the only thing on the card that reports *change*
+rather than state, which is what keeps it a signal; a zero is not worth an arrow.
+
+It needs a memory, because the data cannot reconstruct it. A `ConceptMasteryRecord` carries
+`state` and `correct_count` as they stand *now* — not a log — so yesterday's score cannot be
+recomputed from what the app already holds. `lib/readinessDelta.ts` is that memory: per exam,
+the local day of the last sighting, the score then, and the score the day is being measured
+against. `hooks/useReadinessDelta.ts` persists it (localStorage, like the daily gem and
+level-up buckets in `lib/dailyProgressStore.ts`) and the card observes its own score on every
+render that has one.
+
+Three rules decide the baseline, and the middle one is the point of the feature:
+
+- **Same day** — the baseline set this morning stands, so the delta grows as the learner works.
+- **The day after** — today opens at *yesterday's last seen score*, not at this morning's
+  first. Mastery decays overnight (`docs/concept-learning-progression.md`), and a score that
+  slipped while the learner slept is exactly what a red arrow is for; baselining on the first
+  sight of today would swallow it silently.
+- **A longer gap** — today opens at the current score. Four days of decay is not "today", and
+  attributing it to today would be a lie told in red. The day starts flat and the arrow
+  appears as soon as the learner earns it.
+
+Two details worth keeping:
+
+- The delta is measured between the **rounded** scores, because those are the numbers on
+  screen. An arrow reading `↑ 1` beside a percentage that hasn't visibly changed reads as a bug.
+- The card holds its sighting back (a `null` score) while the mastery records are still
+  loading — `masteryLoading`, passed down from the Dashboard. An empty record set scores near
+  zero, and baselining the day on that would turn the records arriving into a double-digit
+  jump the learner never earned.
+
+Device-local is a deliberate limit, not an oversight: the arrow is a nudge about the session
+in front of the learner, and a second device starting its own day's arrow costs nothing,
+while a table and a round-trip to carry one integer across devices would cost plenty. The
+score itself is derived from mastery, which *does* sync — nothing about the printed number
+depends on this store.
+
 ## Colour
 
 The dials and bars are green at every value (`LEVEL3_TEXT` from `lib/masteryFill.ts`) — the
@@ -162,7 +215,14 @@ arc length carries the score, so the hue doesn't have to. A readiness dial that 
 low scores would collide with the mastery ladder's use of red for decay, where red means
 *something you had has slipped*, not *you haven't started*.
 
-The one exception is the **keystone criterion's** bar, which is drawn in the keystone gold
+The **movement arrow** is the deliberate exception on the other side: green up, red down.
+Red is consistent with the mastery ladder rather than in tension with it — a score that fell
+today means *something you had has slipped*, which is precisely what red means everywhere else
+in the app. It is a text-only state signal, so it uses the mid shades
+(`text-green-600 dark:text-green-400` / `text-red-600 dark:text-red-400`, `docs/style-guide.md`
+§4.1) rather than a tinted pill.
+
+The one exception to the green dials is the **keystone criterion's** bar, which is drawn in the keystone gold
 (`KEYSTONE_TEXT`) rather than green. That is not a value signal either: it is the same gold
 as the keystone spokes in the ring beside it, so the bar and the arcs it measures read as the
 same thing (`docs/keystone-concepts.md`).

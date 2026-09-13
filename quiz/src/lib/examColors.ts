@@ -23,6 +23,9 @@
 //   --exam-accent         the solid hue: text, icons, rules, a ring
 //   --exam-accent-soft    a translucent wash of it: a tinted surface
 //   --exam-accent-muted   between the two: a hairline or a resting border
+//   --exam-accent-vivid   the hue turned up and darkened: a filled shape
+//                         carrying white text, where the accent is the
+//                         subject rather than a highlight (the exam logo)
 //
 //   <Card style={examAccentStyle('CAS-5')}
 //         className="ring-1 ring-transparent hover:ring-[var(--exam-accent)]
@@ -41,6 +44,16 @@ const HUE_END = 360
 
 const ACCENT_SATURATION = 75
 const ACCENT_LIGHTNESS = 55
+
+/**
+ * The vivid variant: the same hue with the saturation turned up and the
+ * lightness brought down. The accent proper is deliberately mid-lightness so
+ * it can wash over either theme's surface, which makes it too pale to *fill* a
+ * shape that has to carry white text. This is that fill — the exam logo's
+ * tile — and it is opaque by definition, so it needs no alpha.
+ */
+const VIVID_SATURATION = 88
+const VIVID_LIGHTNESS = 46
 
 /**
  * A rung of the ladder: one exam, or several that are alternatives to each
@@ -101,7 +114,17 @@ export function examAccent(examKey: string, alpha = 1): string | undefined {
 }
 
 /**
- * The three accent custom properties, to be spread onto the element that
+ * The exam's accent at full strength — saturated and dark enough to be filled
+ * behind white text. Undefined for anything that isn't an exam.
+ */
+export function examAccentVivid(examKey: string): string | undefined {
+  const hue = examHue(examKey)
+  if (hue === undefined) return undefined
+  return `hsl(${round(hue)} ${VIVID_SATURATION}% ${VIVID_LIGHTNESS}%)`
+}
+
+/**
+ * The accent custom properties, to be spread onto the element that
  * scopes an exam. Returns undefined for a non-exam so the caller can spread it
  * unconditionally and get no vars (and so no accent) rather than a wrong one.
  */
@@ -112,6 +135,7 @@ export function examAccentStyle(examKey: string): CSSProperties | undefined {
     '--exam-accent': solid,
     '--exam-accent-muted': examAccent(examKey, 0.45),
     '--exam-accent-soft': examAccent(examKey, 0.14),
+    '--exam-accent-vivid': examAccentVivid(examKey),
   } as CSSProperties
 }
 

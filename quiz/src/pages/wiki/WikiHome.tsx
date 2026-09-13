@@ -99,10 +99,6 @@ export default function WikiHome() {
     setFilterOverride(f)
   }
 
-  // Used to position sticky track headers just below the sticky Exams header
-  const examsHeaderRef = useRef<HTMLDivElement>(null)
-  const [headerHeight, setHeaderHeight] = useState(56)
-
   useEffect(() => {
     setPageRefs([])
     setExamId(null)
@@ -110,15 +106,6 @@ export default function WikiHome() {
 
   useEffect(() => {
     buildWikiIndex().then(setIndex).catch(() => setIndex([]))
-  }, [])
-
-  useEffect(() => {
-    const el = examsHeaderRef.current
-    if (!el) return
-    const observer = new ResizeObserver(() => setHeaderHeight(el.offsetHeight))
-    observer.observe(el)
-    setHeaderHeight(el.offsetHeight)
-    return () => observer.disconnect()
   }, [])
 
   const exams = useMemo(() => index.filter(i => i.category === 'exam'), [index])
@@ -137,27 +124,6 @@ export default function WikiHome() {
     }
     return map
   }, [exams])
-
-  // In-progress syllabi in the same order as Flashcards tab so colour indices align
-  const inProgressSyllabi = useMemo(
-    () => syllabi.filter(s => {
-      const key = wikiExamIdToProgressKey(s.examId)
-      return examProgress[key] === 'in_progress' && matchesSelectedVariant(key, s.examId, examVariants[key])
-    }),
-    [syllabi, examProgress, examVariants],
-  )
-
-  // Pill data for all in-progress exams (shown regardless of active body filter)
-  const inProgressPills = useMemo(() =>
-    inProgressSyllabi
-      .map((syllabus) => {
-        const progressKey = wikiExamIdToProgressKey(syllabus.examId)
-        const item = (examsByKey.get(progressKey) ?? [])[0]
-        return item ? { syllabus, item } : null
-      })
-      .filter((x): x is NonNullable<typeof x> => x != null),
-    [inProgressSyllabi, examsByKey],
-  )
 
   const allTrackGroups = useMemo(() => {
     const credTracks = TRACK_ORDER
@@ -189,6 +155,9 @@ export default function WikiHome() {
 
   return (
     <div className="space-y-6">
+      {/* The body picker rides the title row rather than a label row of its
+          own further down: it governs everything below it, and the ladder it
+          switches between needs no "Exams" heading to say what it is. */}
       <header className="flex items-center gap-2">
         <img
           src="/favicon.png"
@@ -196,7 +165,19 @@ export default function WikiHome() {
           aria-hidden="true"
           className="h-6 w-6 shrink-0 brightness-0 dark:invert"
         />
-        <h1 className="text-2xl font-bold tracking-tight">Study Guides</h1>
+        <h1 className="min-w-0 flex-1 truncate text-2xl font-bold tracking-tight">Study Guides</h1>
+        <SegmentedControl
+          label="Examining body"
+          size="lg"
+          pill
+          value={filter}
+          onChange={handleSetFilter}
+          options={[
+            { value: 'SOA', label: 'SOA' },
+            { value: 'CAS', label: 'CAS' },
+          ]}
+          className="shrink-0"
+        />
       </header>
 
       {/* The guides that belong to no single exam — read before there is an
@@ -233,53 +214,16 @@ export default function WikiHome() {
       )}
 
       <section>
-        {/* ── Sticky block: Exams heading + filter + in-progress pills ── */}
-        <div
-          ref={examsHeaderRef}
-          className="sticky z-20 -mx-4 sm:-mx-6 px-4 sm:px-6 py-2.5 bg-background/95 backdrop-blur-sm mb-3"
-          style={{ top: `${SEARCH_BAR_H}px` }}
-        >
-          {/* Same row the quiz builder leads with — a field label and the
-              body picker — so the two tabs open on the same shape. */}
-          <div className="flex items-center justify-between">
-            <p className="text-sm font-medium">Exams</p>
-            <SegmentedControl
-              label="Examining body"
-              size="sm"
-              value={filter}
-              onChange={handleSetFilter}
-              options={[
-                { value: 'SOA', label: 'SOA' },
-                { value: 'CAS', label: 'CAS' },
-              ]}
-              className="shrink-0"
-            />
-          </div>
-
-          {/* In-progress exam quick-links */}
-          {inProgressPills.length > 0 && (
-            <div className="mt-2 flex flex-wrap gap-1.5">
-              {inProgressPills.map(({ syllabus, item }) => (
-                <Link key={syllabus.examId} to={wikiRoute({ kind: 'exam', name: item.name })}>
-                  <span className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary transition-opacity hover:opacity-80">
-                    {syllabus.examLabel}
-                  </span>
-                </Link>
-              ))}
-            </div>
-          )}
-        </div>
-
         {loading && exams.length === 0 ? (
           <p className="text-sm text-muted-foreground">Loading exams…</p>
         ) : (
           <div className="space-y-4">
             {filteredTrackGroups.filter(g => g.exams.length > 0).map(({ track, exams: trackExams }) => (
               <div key={track.key}>
-                {/* Sticky track header — sits just below the sticky Exams block */}
+                {/* Sticky track header — sits just below the search bar */}
                 <div
                   className="sticky z-10 -mx-4 sm:-mx-6 px-4 sm:px-6 py-1.5 mb-2 bg-background/95 backdrop-blur-sm"
-                  style={{ top: `${SEARCH_BAR_H + headerHeight}px` }}
+                  style={{ top: `${SEARCH_BAR_H}px` }}
                 >
                   {/* The quiz builder's track heading, to the letter — one
                       `LABEL | Full name` line at `text-xs` — except that here

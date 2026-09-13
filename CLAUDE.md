@@ -361,6 +361,14 @@ Other important `lib/` modules:
   **Study Guide** card), the exam grid and the readiness projection. The exam study guide shows no
   readiness card (removed along with the orientation row). `computeReadiness` is the
   weighted section score it is built from — an input, not a second number to display.
+- `readinessDelta.ts` — the **movement arrow** beside that KPI: how far the score has moved
+  *today*, green up / red down, absent when it hasn't moved. A mastery record carries no
+  history, so yesterday's score can't be recomputed — this is the memory that makes the arrow
+  possible (pure core here, `hooks/useReadinessDelta.ts` persists it to localStorage). The rule
+  to keep: the day after a sighting baselines on **yesterday's last score**, so overnight decay
+  shows as a red arrow, while a gap longer than a day starts flat rather than blaming today for
+  a week of decay. The delta is measured between the *rounded* scores so it always agrees with
+  the number on screen. See `docs/exam-readiness.md`.
 - `readinessRing.ts` — the geometry behind the **readiness ring**: one arc per syllabus
   concept, each section sized by its exam weight, each arc filled by that concept's mastery
   state. Pure and tested. Two surfaces draw it and differ only in chrome — the Dashboard's
@@ -492,8 +500,8 @@ Other important `lib/` modules:
   60 requests/hour per IP without `VITE_GITHUB_TOKEN` — don't put it on a path that has to work.
 - `supabase.ts` — Supabase client + shared row types
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **100 test files /
-~1485 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **105 test files /
+~1550 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, and the research/resource-timeline
 modules).
 

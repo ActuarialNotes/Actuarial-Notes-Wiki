@@ -1,7 +1,7 @@
 import { useMemo, useState, useCallback, useEffect, useRef, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
-import { AlertTriangle, ArrowUp, Check, CheckCircle2, Circle, Gem, Lock, Settings2, X } from 'lucide-react'
+import { AlertTriangle, ArrowDown, ArrowUp, Check, CheckCircle2, Circle, Gem, Lock, Settings2, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -19,6 +19,7 @@ import { sanitizeMasteryState } from '@/lib/mastery'
 import { KEYSTONE_FILL, KEYSTONE_TEXT, LEVEL3_TEXT, LEVEL_FILL, masteryFill } from '@/lib/masteryFill'
 import { MASTERY_LABEL } from '@/lib/masteryBadge'
 import { computeExamReadiness } from '@/lib/readiness'
+import { useReadinessDelta } from '@/hooks/useReadinessDelta'
 import {
   RING_INNER_R,
   RING_OUTER_R,
@@ -284,6 +285,11 @@ interface Props {
   masteryStateByName: Map<string, MasteryState>
   config: StudyPlanConfig
   loading: boolean
+  /** Whether `masteryRecords` is still being fetched. The readiness score is derived from
+   *  those records, so until they land it reads near zero — which is fine to print (the
+   *  card is empty anyway) but must not become the day's baseline for the movement arrow
+   *  beside it, or the records arriving would look like a jump the learner earned. */
+  masteryLoading?: boolean
   examDate: string | null
   onConfigChange: (next: Partial<StudyPlanConfig>) => void
   onRegenerate: () => void
@@ -318,7 +324,7 @@ interface Props {
 
 export function ReadinessCard({
   syllabus, masteryRecords, sessions, plan, masteryStateByName,
-  config, loading, examDate, onConfigChange, onRegenerate, onReplaceConcepts, onExamDateChange,
+  config, loading, masteryLoading = false, examDate, onConfigChange, onRegenerate, onReplaceConcepts, onExamDateChange,
   openConceptsTrigger, startQuizTrigger, scrollToRadialTrigger,
   isPremium = true, onPlanCompletionChange, openDayCompleteInfoTrigger, studyScheduleSlot,
   readinessSlot, actions,
@@ -530,6 +536,14 @@ export function ReadinessCard({
   const readiness = useMemo(
     () => computeExamReadiness(syllabus, examRecords, now),
     [syllabus, examRecords, now],
+  )
+
+  // How far that score has moved today, in whole points — the arrow beside the number
+  // (lib/readinessDelta.ts). Held back with a null while the mastery records are still
+  // arriving, so an empty record set never becomes the day's starting line.
+  const readinessMoveToday = useReadinessDelta(
+    wikiExamIdToProgressKey(syllabus.examId),
+    !masteryLoading && readiness.counts.total > 0 ? readiness.overallPct : null,
   )
 
   const allConcepts = useMemo(
@@ -1116,15 +1130,40 @@ export function ReadinessCard({
                 <p className="text-sm text-muted-foreground leading-snug">{readiness.insight.text}</p>
               )}
             </div>
-            <p
-              className="shrink-0 text-4xl font-bold tabular-nums leading-none tracking-tight"
-              style={{
-                color: flashRadial ? '#22c55e' : undefined,
-                transition: 'color 0.8s ease-out',
-              }}
-            >
-              {readinessPct}%
-            </p>
+            {/* The score, and what today did to it. The arrow is the only thing on the
+                card that reports *change* rather than state — green up, red down, and
+                absent entirely when the number hasn't budged, so it stays a signal. It
+                needs no "today" caption under it: the whole card is about this exam right
+                now, and the label it carries for screen readers (and on hover) says the
+                rest without spending a grey line on it (docs/visual-noise-review.md). */}
+            <div className="flex shrink-0 items-center gap-2">
+              {readinessMoveToday !== 0 && (
+                <span
+                  className={
+                    'flex items-center gap-0.5 text-sm font-semibold tabular-nums ' +
+                    (readinessMoveToday > 0
+                      ? 'text-green-600 dark:text-green-400'
+                      : 'text-red-600 dark:text-red-400')
+                  }
+                  title={`${readinessMoveToday > 0 ? 'Up' : 'Down'} ${Math.abs(readinessMoveToday)} point${Math.abs(readinessMoveToday) === 1 ? '' : 's'} today`}
+                  aria-label={`${readinessMoveToday > 0 ? 'Up' : 'Down'} ${Math.abs(readinessMoveToday)} percentage point${Math.abs(readinessMoveToday) === 1 ? '' : 's'} today`}
+                >
+                  {readinessMoveToday > 0
+                    ? <ArrowUp className="h-4 w-4" aria-hidden="true" />
+                    : <ArrowDown className="h-4 w-4" aria-hidden="true" />}
+                  {Math.abs(readinessMoveToday)}
+                </span>
+              )}
+              <p
+                className="text-4xl font-bold tabular-nums leading-none tracking-tight"
+                style={{
+                  color: flashRadial ? '#22c55e' : undefined,
+                  transition: 'color 0.8s ease-out',
+                }}
+              >
+                {readinessPct}%
+              </p>
+            </div>
           </div>
 
           {/* The two ways to act on this score, under it in the same card. */}

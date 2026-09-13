@@ -894,6 +894,7 @@ export default function Dashboard() {
             masteryStateByName={masteryStateByName}
             config={planConfig}
             loading={planLoading}
+            masteryLoading={masteryLoading}
             examDate={activeTargetDate}
             onConfigChange={updatePlanConfig}
             onRegenerate={regeneratePlan}

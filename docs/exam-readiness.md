@@ -155,6 +155,47 @@ There is no concept tally card beside it. A `Topics Learned` bar (`N/M at Level 
 sit under the ring; it restated what the ring already draws, so it and the topic list it
 expanded onto were removed.
 
+## Today's movement
+
+Beside the KPI, the readiness card prints **how far the score has moved today** — a green
+`↑ 3` when the day has added three points, a red `↓ 2` when it has lost two, and nothing at
+all when the number hasn't budged. It is the only thing on the card that reports *change*
+rather than state, which is what keeps it a signal; a zero is not worth an arrow.
+
+It needs a memory, because the data cannot reconstruct it. A `ConceptMasteryRecord` carries
+`state` and `correct_count` as they stand *now* — not a log — so yesterday's score cannot be
+recomputed from what the app already holds. `lib/readinessDelta.ts` is that memory: per exam,
+the local day of the last sighting, the score then, and the score the day is being measured
+against. `hooks/useReadinessDelta.ts` persists it (localStorage, like the daily gem and
+level-up buckets in `lib/dailyProgressStore.ts`) and the card observes its own score on every
+render that has one.
+
+Three rules decide the baseline, and the middle one is the point of the feature:
+
+- **Same day** — the baseline set this morning stands, so the delta grows as the learner works.
+- **The day after** — today opens at *yesterday's last seen score*, not at this morning's
+  first. Mastery decays overnight (`docs/concept-learning-progression.md`), and a score that
+  slipped while the learner slept is exactly what a red arrow is for; baselining on the first
+  sight of today would swallow it silently.
+- **A longer gap** — today opens at the current score. Four days of decay is not "today", and
+  attributing it to today would be a lie told in red. The day starts flat and the arrow
+  appears as soon as the learner earns it.
+
+Two details worth keeping:
+
+- The delta is measured between the **rounded** scores, because those are the numbers on
+  screen. An arrow reading `↑ 1` beside a percentage that hasn't visibly changed reads as a bug.
+- The card holds its sighting back (a `null` score) while the mastery records are still
+  loading — `masteryLoading`, passed down from the Dashboard. An empty record set scores near
+  zero, and baselining the day on that would turn the records arriving into a double-digit
+  jump the learner never earned.
+
+Device-local is a deliberate limit, not an oversight: the arrow is a nudge about the session
+in front of the learner, and a second device starting its own day's arrow costs nothing,
+while a table and a round-trip to carry one integer across devices would cost plenty. The
+score itself is derived from mastery, which *does* sync — nothing about the printed number
+depends on this store.
+
 ## Colour
 
 The dials and bars are green at every value (`LEVEL3_TEXT` from `lib/masteryFill.ts`) — the
@@ -162,7 +203,14 @@ arc length carries the score, so the hue doesn't have to. A readiness dial that 
 low scores would collide with the mastery ladder's use of red for decay, where red means
 *something you had has slipped*, not *you haven't started*.
 
-The one exception is the **keystone criterion's** bar, which is drawn in the keystone gold
+The **movement arrow** is the deliberate exception on the other side: green up, red down.
+Red is consistent with the mastery ladder rather than in tension with it — a score that fell
+today means *something you had has slipped*, which is precisely what red means everywhere else
+in the app. It is a text-only state signal, so it uses the mid shades
+(`text-green-600 dark:text-green-400` / `text-red-600 dark:text-red-400`, `docs/style-guide.md`
+§4.1) rather than a tinted pill.
+
+The one exception to the green dials is the **keystone criterion's** bar, which is drawn in the keystone gold
 (`KEYSTONE_TEXT`) rather than green. That is not a value signal either: it is the same gold
 as the keystone spokes in the ring beside it, so the bar and the arcs it measures read as the
 same thing (`docs/keystone-concepts.md`).

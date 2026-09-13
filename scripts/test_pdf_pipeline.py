@@ -314,14 +314,14 @@ class TestCasPartPrompts(unittest.TestCase):
             {"label": "a", "points": 0.25, "samples": ["0.5 x 5"], "report": "r"},
             {"label": "b", "points": None, "samples": [], "report": ""},
         ]
-        stem = px._attach_part_prompts(self.BOOKLET, parts)
+        stem = px.attach_part_prompts(self.BOOKLET, parts)
         self.assertIn("Given the following:", stem)
         self.assertIn("written exposures", parts[0]["prompt"])
         self.assertEqual(parts[1]["points"], 0.5)
 
     def test_a_part_only_the_booklet_prices_is_added(self):
         parts = [{"label": "a", "points": 0.25, "samples": [], "report": ""}]
-        px._attach_part_prompts(self.BOOKLET, parts)
+        px.attach_part_prompts(self.BOOKLET, parts)
         self.assertEqual([p["label"] for p in parts], ["a", "b"])
 
 
@@ -340,8 +340,18 @@ class TestStructureGuards(unittest.TestCase):
             ["Policy", "Vehicles"], ["A", "2"], ["B", "3"],
         ]))
 
-    def test_sample_answer_heading_counts_as_structure(self):
-        self.assertTrue(px.swallows_structure([["Sample Answer 1", "x"], ["a", "b"]]))
+    def test_a_sample_answer_heading_does_not_reject_its_table(self):
+        # A worked solution's table sits right beside its `Sample Answer 2`
+        # heading; rejecting on that loses the table the solution *is*.
+        self.assertFalse(px.swallows_structure([
+            ["Sample Answer 2", "", ""],
+            ["Accident Year", "12", "24"],
+            ["2013", "300", "300"],
+        ]))
+
+    def test_the_question_scaffolding_still_rejects(self):
+        self.assertTrue(px.swallows_structure([
+            ["QUESTION 16", ""], ["SAMPLE ANSWERS", ""], ["a", "b"]]))
 
     def test_block_outside_the_cells_is_kept(self):
         table = "| AY | Loss |\n|---|---|\n| 2013 | 100 |"
@@ -410,6 +420,36 @@ class TestBookletAlignment(unittest.TestCase):
         self.assertIsNone(px.align_booklet("(1 point)\nx\n", [(1, None, [])]))
 
 
+class TestLocatingUnplacedQuestions(unittest.TestCase):
+    @staticmethod
+    def _rec(num, pages):
+        return {"num": num, "pages": {"question": list(pages)}, "warnings": []}
+
+    def test_a_gap_takes_the_pages_between_its_neighbours(self):
+        records = [self._rec(14, [17, 18, 19]), self._rec(15, []), self._rec(16, [19, 20])]
+        px._locate_unplaced(records)
+        self.assertEqual(records[1]["pages"]["question"], [19])
+        self.assertIn("not located", records[1]["warnings"][0])
+
+    def test_consecutive_gaps_share_the_span(self):
+        records = [self._rec(16, [20, 21]), self._rec(17, []), self._rec(18, []),
+                   self._rec(19, [22, 23])]
+        px._locate_unplaced(records)
+        self.assertEqual(records[1]["pages"]["question"], [21, 22])
+        self.assertEqual(records[2]["pages"]["question"], [21, 22])
+
+    def test_a_gap_at_the_end_uses_the_last_known_page(self):
+        records = [self._rec(26, [29, 30]), self._rec(27, [])]
+        px._locate_unplaced(records)
+        self.assertEqual(records[1]["pages"]["question"], [30])
+
+    def test_nothing_placed_leaves_it_alone(self):
+        records = [self._rec(1, []), self._rec(2, [])]
+        px._locate_unplaced(records)
+        self.assertEqual(records[0]["pages"]["question"], [])
+        self.assertEqual(records[0]["warnings"], [])
+
+
 class TestPublisherTextDefects(unittest.TestCase):
     """Shapes a real CAS report turned out to have."""
 
@@ -454,6 +494,15 @@ class TestTables(unittest.TestCase):
         self.assertEqual(md.splitlines()[1], "|---|---|")
         self.assertIn("| B | 3 |", md)
 
+    def test_empty_columns_are_dropped(self):
+        md = px.rows_to_markdown([
+            ["", "AY", "", "Frequency", ""],
+            ["", "2013", "", "0.100", ""],
+            ["", "2014", "", "0.100", ""],
+        ])
+        self.assertEqual(md.splitlines()[0], "| AY | Frequency |")
+        self.assertEqual(md.splitlines()[1], "|---|---|")
+
     def test_ragged_rows_are_padded(self):
         md = px.rows_to_markdown([["a", "b", "c"], ["1"]])
         self.assertIn("| 1 |  |  |", md)
@@ -492,9 +541,27 @@ class TestFurnitureAndReflow(unittest.TestCase):
         self.assertIn("Page 2 of 3", drop)
         self.assertNotIn("body 2", drop)
 
+    def test_a_repeated_structural_marker_is_not_furniture(self):
+        # `Sample Answer 1` heads an answer on most pages of a CAS report.
+        pages = [
+            px.Page(number=i, text=f"EXAM 5 FALL 2016 REPORT\nSample Answer 1\nwork {i}")
+            for i in range(1, 6)
+        ]
+        drop = px.furniture_lines(pages)
+        self.assertIn("EXAM 5 FALL 2016 REPORT", drop)
+        self.assertNotIn("Sample Answer 1", drop)
+
     def test_reflow_joins_wrapped_lines(self):
         out = px.reflow_block("Calculate the percentage of the\ngroup that watched none.")
         self.assertEqual(out, "Calculate the percentage of the group that watched none.")
+
+    def test_calculation_steps_stay_on_their_own_lines(self):
+        out = px.reflow_block(
+            "AY 2013: (7,500 - 1,000) * 0.25 / 0.7 = 2,321\n"
+            "AY 2014: (8,600 - 600) * 0.22 / 0.92 = 1,913\n"
+            "Total Expected Emergence = 4,234"
+        )
+        self.assertEqual(len(out.splitlines()), 3)
 
     def test_reflow_keeps_list_items_apart(self):
         out = px.reflow_block("Given:\n(i) 28% watched\ngymnastics\n(ii) 29% watched")
@@ -503,8 +570,40 @@ class TestFurnitureAndReflow(unittest.TestCase):
             ["Given:", "(i) 28% watched gymnastics", "(ii) 29% watched"],
         )
 
+    def test_a_bullet_on_its_own_line_joins_its_text(self):
+        out = px.reflow_block(
+            "Common mistakes included:\n\u2022\nNot taking half of the exposures\n"
+            "\u2022\nNot including all the policies\n\u2022\nCalculating earned instead"
+        )
+        self.assertEqual(
+            out.splitlines(),
+            [
+                "Common mistakes included:",
+                "- Not taking half of the exposures",
+                "- Not including all the policies",
+                "- Calculating earned instead",
+            ],
+        )
+
+    def test_a_bullet_line_keeps_its_trailing_space(self):
+        # PDF text lines carry trailing spaces; the real report extracts "\u2022 ".
+        self.assertEqual(
+            px.merge_lone_bullets(["\u2022 ", "Not taking half", "\u2022 ", "Not including"]),
+            ["- Not taking half", "- Not including"],
+        )
+
+    def test_merge_lone_bullets_leaves_normal_lines_alone(self):
+        self.assertEqual(
+            px.merge_lone_bullets(["- already a bullet", "plain text"]),
+            ["- already a bullet", "plain text"],
+        )
+
     def test_reflow_dehyphenates(self):
         self.assertEqual(px.reflow_block("expo-\nsure"), "exposure")
+
+    def test_reflow_keeps_a_compound_hyphen(self):
+        # `age-\nto-age` is one compound broken at a real hyphen, not a wrap.
+        self.assertEqual(px.reflow_block("age-\nto-age factors"), "age-to-age factors")
 
     def test_columnar_lines_become_a_table(self):
         md = px.columnar_table([
@@ -699,6 +798,34 @@ class TestWriter(unittest.TestCase):
         self.assertIn("### Examiner Report\n", md)
         self.assertIn("Apply the 0.5 factor.", md)
         self.assertNotIn("answer:", md.split("---")[1])
+
+    def test_point_label_is_singular_only_at_one(self):
+        self.assertEqual(qw._points(1), "1 point")
+        self.assertEqual(qw._points(0.5), "0.5 points")
+        self.assertEqual(qw._points(2.25), "2.25 points")
+
+    def test_per_part_explanation_override(self):
+        record = {
+            "num": 16, "id": "cas5-2016f-q16", "bank": "exam-5", "type": "multi-part",
+            "body": "Given the following:", "options": {}, "answer": None, "points": 1.5,
+            "parts": [
+                {"label": "a", "points": 0.75, "samples": ["garbled 100 150"], "report": "r"},
+                {"label": "b", "points": 0.75, "samples": ["fine as is"], "report": "r"},
+            ],
+            "solution": "", "pages": {"question": [1], "solution": [2]},
+            "needs_vision": False, "warnings": [],
+        }
+        md = qw.render(record, {"topic": "T", "learning_objective": "L",
+                                "difficulty": "medium", "wiki_link": ["Concepts/T"]},
+                       explanation="## Part a\n\nA proper triangle.")
+        self.assertIn("A proper triangle.", md)
+        self.assertNotIn("garbled", md)
+        self.assertIn("fine as is", md)  # the part not named keeps the publisher's
+
+    def test_split_explanation_override(self):
+        out = qw.split_explanation_override("## Part a\nfirst\n## Part b\nsecond")
+        self.assertEqual(out, {"a": "first", "b": "second"})
+        self.assertEqual(qw.split_explanation_override("no headings"), {"": "no headings"})
 
     def test_explanation_override_wins(self):
         md = qw.render(self.RECORD, self.JUDGMENT, explanation="Rewritten by hand.")

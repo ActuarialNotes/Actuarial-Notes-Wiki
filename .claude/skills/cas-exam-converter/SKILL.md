@@ -49,7 +49,7 @@ cat /tmp/exam-5/report.md
   tables badly — on Fall 2016 it dropped a column of policy counts and turned
   "earned" into "eared". `report.md` names every question whose prompt carries
   an exhibit and renders its pages; check every figure against the image and
-  re-transcribe the exhibit into `prompts/<id>.md`.
+  re-transcribe the exhibit into `/tmp/prompts/<id>.md`.
 
 **Read `report.md`.** It gives the coverage, the questions needing vision, the
 OCR'd ones, and any question whose part points do not sum to its
@@ -106,15 +106,20 @@ not invent a section the app does not render.
 
 ## 4. Fill the gaps the scripts name
 
+Both override directories live **outside** `/tmp/exam-5`. That directory is the
+build: stage 1 rewrites it and clearing it is how you re-extract. A transcribed
+exhibit and a rewritten solution are the only things in the run that cannot be
+recovered from the PDF, so they never sit inside it.
+
 - **`needs_vision`** — the booklet page is a scan and OCR was unavailable. Its
   page is rendered to `/tmp/exam-5/pages/`. Read the image and write the prompt
-  markdown to `/tmp/exam-5/prompts/<id>.md`, then pass `--prompts`. Transcribe
+  markdown to `/tmp/prompts/<id>.md`, then pass `--prompts`. Transcribe
   exactly: wording, all parts and their point values, every exhibit row as a
   markdown table, bullet assumptions before the lettered parts. Skip page
   furniture.
 - **A sample answer that does not read as a walkthrough** — CAS samples are
   candidate handwriting transcribed, so this is common. Rewrite into prose plus
-  `$$…$$` / `$…$` and save to `/tmp/exam-5/expl/<id>.md`, then pass
+  `$$…$$` / `$…$` and save to `/tmp/expl/<id>.md`, then pass
   `--explanations`. If a second sample shows a genuinely different valid
   approach, the writer already appends it as `Alternatively:`.
 - **A descriptive part with no numeric answer** — no `### Answer` section;

@@ -29,6 +29,13 @@ interface WikiPageContextValue {
   setPageRefs: (refs: WikiEntryRef[]) => void
   setExamId: (id: string | null) => void
   setPageTitle: (title: string | null) => void
+  /**
+   * The exam's logo, which *replaces* the title text in the header strip — a
+   * page whose whole body is headed "Exam P-1" doesn't need the strip to say
+   * it again. `pageTitle` is still required: it is what the tile is labelled
+   * with for a screen reader, and what the strip falls back to.
+   */
+  setPageIcon: (icon: ReactNode) => void
   setPageTitleBadge: (badge: ReactNode) => void
   setBackLink: (link: ReactNode) => void
   setStudyPlan: (plan: StudyPlanHeaderData | null) => void
@@ -48,6 +55,7 @@ export function WikiLayout({ children }: { children: ReactNode }) {
   const [pageRefs, setPageRefsState] = useState<WikiEntryRef[]>([])
   const [, setExamIdState] = useState<string | null>(null)
   const [pageTitle, setPageTitleState] = useState<string | null>(null)
+  const [pageIcon, setPageIconState] = useState<ReactNode>(null)
   const [pageTitleBadge, setPageTitleBadgeState] = useState<ReactNode>(null)
   const [backLink, setBackLinkState] = useState<ReactNode>(null)
   const [studyPlan, setStudyPlanState] = useState<StudyPlanHeaderData | null>(null)
@@ -60,6 +68,7 @@ export function WikiLayout({ children }: { children: ReactNode }) {
   const setPageRefs = useCallback((refs: WikiEntryRef[]) => setPageRefsState(refs), [])
   const setExamId = useCallback((id: string | null) => setExamIdState(id), [])
   const setPageTitle = useCallback((title: string | null) => setPageTitleState(title), [])
+  const setPageIcon = useCallback((icon: ReactNode) => setPageIconState(icon), [])
   const setPageTitleBadge = useCallback((badge: ReactNode) => setPageTitleBadgeState(badge), [])
   const setBackLink = useCallback((link: ReactNode) => setBackLinkState(link), [])
   const setStudyPlan = useCallback((plan: StudyPlanHeaderData | null) => setStudyPlanState(plan), [])
@@ -86,6 +95,7 @@ export function WikiLayout({ children }: { children: ReactNode }) {
     setPageRefsState([])
     setExamIdState(null)
     setPageTitleState(null)
+    setPageIconState(null)
     setPageTitleBadgeState(null)
     setBackLinkState(null)
     setStudyPlanState(null)
@@ -101,11 +111,12 @@ export function WikiLayout({ children }: { children: ReactNode }) {
   }, [location.pathname, location.search, closeOnNavigation])
 
   return (
-    <WikiPageContext.Provider value={{ setPageRefs, setExamId, setPageTitle, setPageTitleBadge, setBackLink, setStudyPlan, setIsInDevelopment, setIsBeta }}>
+    <WikiPageContext.Provider value={{ setPageRefs, setExamId, setPageTitle, setPageIcon, setPageTitleBadge, setBackLink, setStudyPlan, setIsInDevelopment, setIsBeta }}>
       <div className="min-h-screen flex flex-col">
         <WikiFloatingSearch
           pageRefs={pageRefs}
           pageTitle={pageTitle}
+          pageIcon={pageIcon}
           pageTitleBadge={pageTitleBadge}
           backLink={backLink}
           studyPlan={studyPlan}

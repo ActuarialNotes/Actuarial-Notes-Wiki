@@ -287,11 +287,11 @@ function ExamOptionCard({
           : 'hover:bg-accent/30',
       )}>
         <CardHeader className="flex-row items-start gap-3 space-y-0 p-4 pb-3">
-          {/* The exam's logo — the same monogram tile the Study Guides grid
-              leads its cards with, in the exam's own place on the colour ramp,
-              so an exam is recognisable across the two tabs. Decorative: the
-              title beside it names the exam. */}
-          <ExamLogo examKey={exam.progressKey} size="md" className="mt-0.5" />
+          {/* The exam's logo — the same monogram tile, at the same size, that
+              the Study Guides grid leads its cards with, in the exam's own
+              place on the colour ramp, so an exam is the same object across
+              the two tabs. Decorative: the title beside it names the exam. */}
+          <ExamLogo examKey={exam.progressKey} size="lg" className="mt-0.5" />
           <div className="min-w-0 flex-1">
             <CardTitle className="text-base leading-snug">{exam.label}</CardTitle>
             {description && (

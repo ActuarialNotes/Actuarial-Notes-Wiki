@@ -8,6 +8,7 @@ import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { ExamSyllabusButton } from '@/components/wiki/ExamSyllabusButton'
+import { ExamLogo } from '@/components/ExamLogo'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
@@ -103,7 +104,7 @@ export default function WikiExam() {
   const [searchParams] = useSearchParams()
   const conceptParam = searchParams.get('concept')
   const examFileName = fromSlug(slug)
-  const { setPageRefs, setExamId, setPageTitle, setPageTitleBadge, setBackLink, setStudyPlan, setIsInDevelopment, setIsBeta } = useWikiPage()
+  const { setPageRefs, setExamId, setPageTitle, setPageIcon, setPageTitleBadge, setBackLink, setStudyPlan, setIsInDevelopment, setIsBeta } = useWikiPage()
   const openAt = useConceptPopup(s => s.openAt)
   const [content, setContent] = useState<string | null>(null)
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
@@ -152,6 +153,14 @@ export default function WikiExam() {
       <ExamSyllabusButton examId={wikiExamId} examLabel={extractedTitle ?? examDisplayName(examFileName)} />
     </span>
   ), [progressKey, wikiExamId, extractedTitle, examFileName])
+
+  // What the sticky header shows instead of the exam's name: the exam's own
+  // logo, the same tile its card carries on the Study Guides grid and the quiz
+  // builder — so the strip says which exam you are in with the object you
+  // picked it with, rather than restating the heading a few pixels below it.
+  const pageIcon = useMemo(() => (
+    <ExamLogo examKey={progressKey} size="md" />
+  ), [progressKey])
 
   const smallTitleBadge = useMemo(() => (
     <span className="inline-flex items-center gap-1.5 not-prose shrink-0">
@@ -271,6 +280,10 @@ export default function WikiExam() {
     setIsInDevelopment(contentStatus === 'development')
     setIsBeta(contentStatus === 'beta')
   }, [extractedTitle, contentStatus, setPageTitle, setIsInDevelopment, setIsBeta])
+
+  useEffect(() => {
+    setPageIcon(pageIcon)
+  }, [pageIcon, setPageIcon])
 
   useEffect(() => {
     setPageTitleBadge(smallTitleBadge)

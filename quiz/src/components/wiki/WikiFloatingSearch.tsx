@@ -25,6 +25,13 @@ type Scope = 'page' | 'all'
 interface WikiFloatingSearchProps {
   pageRefs: WikiEntryRef[]
   pageTitle?: string | null
+  /**
+   * Stands in for the title text in the strip — see `setPageIcon` in
+   * `WikiLayout`. `pageTitle` is still what the strip is *named*: the icon
+   * carries it as its accessible label, and the text comes back if no icon
+   * is supplied.
+   */
+  pageIcon?: React.ReactNode
   pageTitleBadge?: React.ReactNode
   backLink?: React.ReactNode
   studyPlan?: StudyPlanHeaderData | null
@@ -32,7 +39,7 @@ interface WikiFloatingSearchProps {
   isBeta?: boolean
 }
 
-export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, backLink, studyPlan, isInDevelopment, isBeta }: WikiFloatingSearchProps) {
+export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBadge, backLink, studyPlan, isInDevelopment, isBeta }: WikiFloatingSearchProps) {
   const [index, setIndex] = useState<WikiIndexItem[]>([])
   const [query, setQuery] = useState('')
   const [scope, setScope] = useState<Scope>('page')
@@ -295,7 +302,20 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, backLi
           {pageTitle && (
             <div className="flex items-center gap-2.5 h-[calc(3.5rem-1px)]">
               {backLink}
-              <span className="font-semibold text-sm truncate flex-1 min-w-0">{pageTitle}</span>
+              {/* The exam's logo where the exam's name used to be. The page
+                  under the strip opens with that name set in display type, so
+                  the strip repeating it in bold 14px was the same word twice
+                  in the same eyeful; the tile says which exam you are in
+                  without competing with the heading. The name is still here
+                  for a screen reader — the tile itself is decorative. */}
+              {pageIcon ? (
+                <span className="flex flex-1 min-w-0 items-center">
+                  {pageIcon}
+                  <span className="sr-only">{pageTitle}</span>
+                </span>
+              ) : (
+                <span className="font-semibold text-sm truncate flex-1 min-w-0">{pageTitle}</span>
+              )}
               {hasPlan && (
                 <button
                   type="button"

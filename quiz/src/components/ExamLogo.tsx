@@ -9,7 +9,7 @@
 //
 // The monogram and its type scale are `lib/examLogo.ts`; the size here is a
 // single edge length in pixels and everything inside scales off it, so the
-// same tile works at 28px on a quiz card and 44px on a study-guide card.
+// same tile works at 26px in a list row and 48px on an exam card.
 //
 // A requirement that is not an exam has no accent (VEE, the DISCs, PCPA, the
 // professionalism courses), so it gets a neutral tile rather than a borrowed
@@ -22,10 +22,14 @@ import { cn } from '@/lib/utils'
 const SIZES = {
   /** A list row or a pill. */
   sm: 26,
-  /** The quiz builder's exam cards. */
+  /** The wiki header strip, where the tile stands in for the exam's title. */
   md: 34,
-  /** The Study Guides grid. */
-  lg: 40,
+  /**
+   * An exam card. One size for both grids that show them — the Study Guides
+   * grid and the quiz builder — so the same exam is the same object on either
+   * tab rather than two tiles that nearly match.
+   */
+  lg: 48,
 } as const
 
 export function ExamLogo({

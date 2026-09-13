@@ -56,7 +56,15 @@ export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '
   const sheenClass = phase === 'spin' ? '' : flashcardFoilClass(true, foilState)
   const phaseClass = phase === 'won' ? 'collect-card-won' : ''
 
-  function handleClick() {
+  // A control rendered inside the card — the back's "Read the concept" button —
+  // is its own action: a click, or an Enter/Space on it while focused, must not
+  // also flip the card out from under what it opened.
+  function fromInnerControl(e: React.SyntheticEvent): boolean {
+    const el = e.target as HTMLElement | null
+    return !!el?.closest('button, a, input, select, textarea')
+  }
+
+  function toggleSide() {
     if (!flippable) return
     setSide(s => (s === 'front' ? 'back' : 'front'))
   }
@@ -64,22 +72,28 @@ export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '
   return (
     <div
       className={`relative shrink-0 rounded-xl bg-card text-card-foreground ${dims} ${sheenClass} ${phaseClass} ${className} ${flippable ? 'cursor-pointer' : ''}`}
-      onClick={handleClick}
+      onClick={e => { if (!fromInnerControl(e)) toggleSide() }}
       role={flippable ? 'button' : undefined}
       tabIndex={flippable ? 0 : undefined}
       aria-label={flippable ? `${name} flashcard, tap to flip` : undefined}
       aria-hidden={flippable ? undefined : true}
-      onKeyDown={flippable ? e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick() } } : undefined}
+      onKeyDown={flippable ? e => {
+        if (fromInnerControl(e)) return
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleSide() }
+      } : undefined}
     >
       <div className="absolute inset-0 rounded-xl overflow-hidden">
         {/* Front — concept name, styled like the gallery tile */}
         <div
           data-card-face="front"
-          className={`collect-card-pane absolute inset-0 flex flex-col items-center justify-center gap-3 px-4 text-center ${keystone ? 'keystone-wash' : ''} ${shownSide === 'back' ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+          aria-hidden={shownSide === 'back' || undefined}
+          className={`collect-card-pane absolute inset-0 flex flex-col items-center justify-center gap-3 px-4 text-center ${shownSide === 'back' ? 'collect-card-pane--hidden opacity-0 pointer-events-none' : 'opacity-100'}`}
         >
           {/* Keystone cards are worth more than the card you're collecting —
-              say so on the card itself. Gold chip, not a gold border: the edge
-              already belongs to the foil/rarity material. */}
+              say so on the card itself. The chip is the whole signal: no gold
+              border (the edge already belongs to the foil/rarity material) and
+              no gold wash across the face, which tinted the card's own colour
+              gold and left the concept name reading as a label on brass. */}
           {keystone && (
             <span className="keystone-ring inline-flex items-center gap-1 rounded-full px-2 py-0.5">
               <KeystoneIcon className="h-3.5 w-3.5" />
@@ -96,7 +110,8 @@ export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '
         {flippable && (
           <div
             data-card-face="back"
-            className={`collect-card-pane collect-card-back-scroll absolute inset-0 overflow-y-auto px-4 py-5 pointer-events-auto ${shownSide === 'front' ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+            aria-hidden={shownSide === 'front' || undefined}
+            className={`collect-card-pane collect-card-back-scroll absolute inset-0 overflow-y-auto px-4 py-5 pointer-events-auto ${shownSide === 'front' ? 'collect-card-pane--hidden opacity-0 pointer-events-none' : 'opacity-100'}`}
           >
             <div className="flex min-h-full flex-col items-center justify-center text-center">
               {back}

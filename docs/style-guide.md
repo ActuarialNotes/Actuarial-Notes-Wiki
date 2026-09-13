@@ -306,7 +306,8 @@ get a second rarity material: **polished gold**. On a *name* it is always an und
 `.wiki-link--keystone` in prose, `.keystone-underline` for a title or heading — and never an
 icon or badge beside the word, so one signal covers every surface and the name itself stays
 the tap target. On a *panel* it is `.keystone-ring` (gradient edge, same padding +
-mask-exclude trick) with `.keystone-wash` behind it. In the Dashboard's Study Guide ring the
+mask-exclude trick) — an edge or a chip, never a wash tinting the surface itself. In the
+Dashboard's Study Guide ring the
 same gold replaces green as the mastery ladder for keystone spokes (`lib/masteryFill.ts`).
 
 Gold and foil mean different things and must stay distinguishable:

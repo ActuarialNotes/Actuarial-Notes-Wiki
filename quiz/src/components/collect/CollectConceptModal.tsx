@@ -288,16 +288,35 @@ export function CollectConceptModal() {
   // to plain text, but LaTeX is rendered (not dropped) so formulae read
   // correctly. KaTeX inherits the card's white text; wide display math scrolls
   // horizontally rather than overflowing the narrow card.
-  const cardBack = def ? (
-    <MarkdownText
-      className="text-sm sm:text-base leading-relaxed text-card-foreground [&_.katex]:text-card-foreground [&_.katex-display]:overflow-x-auto [&_.katex-display]:overflow-y-hidden"
-    >
-      {cleanWikiLinks(def)}
-    </MarkdownText>
-  ) : (
-    <p className="text-sm text-muted-foreground">
-      {defError ? 'Definition unavailable.' : 'Loading definition…'}
-    </p>
+  //
+  // The definition is only the page's opening paragraph, so the back ends in
+  // the way to the rest of it: the same reader the locked panel opens, over the
+  // collect modal rather than instead of it. Only a concept has a page to read
+  // (the reader fetches `Concepts/<name>.md`), so nothing else draws the row.
+  const cardBack = (
+    <>
+      {def ? (
+        <MarkdownText
+          className="text-sm sm:text-base leading-relaxed text-card-foreground [&_.katex]:text-card-foreground [&_.katex-display]:overflow-x-auto [&_.katex-display]:overflow-y-hidden"
+        >
+          {cleanWikiLinks(def)}
+        </MarkdownText>
+      ) : (
+        <p className="text-sm text-muted-foreground">
+          {defError ? 'Definition unavailable.' : 'Loading definition…'}
+        </p>
+      )}
+      {ref?.kind === 'concept' && (
+        <button
+          type="button"
+          onClick={() => setShowRead(true)}
+          className="mt-4 inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-border/70 bg-background/70 px-3 py-1.5 text-xs font-medium text-foreground hover:bg-accent transition-colors"
+        >
+          <BookOpen className="h-3.5 w-3.5" />
+          Read the concept
+        </button>
+      )}
+    </>
   )
 
   const runCollectAnimation = useCallback(() => {
@@ -567,7 +586,7 @@ export function CollectConceptModal() {
               while the check is still loading too — that's exactly when you
               might want out. */}
           {(showLockNote || canSkip) && (
-            <div className="shrink-0 flex flex-col items-center gap-1 px-5 pb-4">
+            <div className="shrink-0 flex flex-col items-stretch gap-2 px-5 pb-4">
               {showLockNote && (wrong ? (
                 <p className="text-xs text-center text-destructive">
                   Not quite — this check is locked for{' '}
@@ -581,13 +600,16 @@ export function CollectConceptModal() {
                   A wrong answer locks this check for {nextLockLabel}.
                 </p>
               ))}
+              {/* A real secondary button, not a link: skipping is one of the two
+                  ways out of this screen (the other is answering), and as a
+                  small grey link under the fine print it read as a footnote. */}
               {canSkip && (
                 <button
                   type="button"
                   onClick={skip}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
+                  className="inline-flex w-full items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-muted/40 text-sm font-medium hover:bg-accent transition-colors"
                 >
-                  <SkipForward className="h-3.5 w-3.5" />
+                  <SkipForward className="h-4 w-4" />
                   Skip for now
                 </button>
               )}
@@ -662,8 +684,9 @@ export function CollectConceptModal() {
         onQuizStart={close}
       />
     )}
-    {/* The concept page over the locked check. The collect modal stays open
-        underneath, so closing the reader lands back on the card. */}
+    {/* The concept page, opened from the locked check or from the back of the
+        card. The collect modal stays open underneath, so closing the reader
+        lands back on the card. */}
     {showRead && (
       <ConceptReadModal conceptName={name} onClose={() => setShowRead(false)} />
     )}

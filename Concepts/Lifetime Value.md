@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-09-12
+  last_checked_by: agent:validate-v1
   content_hash: sha256:92a154318bdb3e37ef07b67275eb8ddc0460c957a1c0d721ee29d4f39591bddd
-  sources: []
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 13 p.257 and Tables 13.16-13.17 with their column notes (PDF pp.269-270), and Ch. 1 p.10 (PDF p.22), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Lifetime Value.md

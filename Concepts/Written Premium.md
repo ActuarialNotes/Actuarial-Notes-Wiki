@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-09-12
+  last_checked_by: agent:validate-v1
   content_hash: sha256:616fb7c42d77d95a7c960355ad713c94acd559823b9e9d949d7916e273ede80a
-  sources: []
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 p.2 (PDF p.14), Ch. 5 pp.66-70 (PDF pp.78-82) and Ch. 5 premium trend pp.78-79 (PDF pp.90-91), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Written Premium.md

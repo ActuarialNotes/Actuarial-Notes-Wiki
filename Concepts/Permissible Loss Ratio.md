@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-12
+  last_checked_by: agent:validate-v1
   content_hash: sha256:2626c7c17d03b9e3a9afadda3c24556ddbf3070ffec3b622f59d2562c6b333bc
-  sources: []
-  open_findings: 0
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 pp.129-130 and p.139 (PDF pp.141-142, 151), and Appendix B-5 / C-7 (PDF pp.363, 380), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Permissible Loss Ratio.md
 ---

@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-09-12
+  last_checked_by: agent:validate-v1
   content_hash: sha256:f056190d9350f7bb4f214494c5f261e38b09e6ada29cacdcd8f5e2c0c1327a11
-  sources: []
-  open_findings: 0
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 9 'Bornhuetter-Ferguson Technique' pp.160-163 (PDF pp.166-169), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Benktander Method.md
 ---

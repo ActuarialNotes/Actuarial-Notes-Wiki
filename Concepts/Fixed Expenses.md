@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-09-12
+  last_checked_by: agent:validate-v1
   content_hash: sha256:0da16c098c3fd44a40cf641651818759247d9998fd48b2e3c4e86799ee21f7a4
-  sources: []
-  open_findings: 0
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 pp. 125-135 (PDF pp. 137-147), simple example, All Variable Expense Method and Table 7.3, Premium-based Projection Method and Table 7.4, Exposure/Policy-based Projection Method, Trending Expenses, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 8 p. 143 (PDF p. 155), indicated average rate = (PP + E_F)/(1.0 - V - Q_T), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Fixed Expenses.md
 ---

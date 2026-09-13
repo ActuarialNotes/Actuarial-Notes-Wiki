@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:86074a36b3ffb7d86699da5a473a91f08bfcf436817db189b4f5cba9bafb3e06
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-09-12
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:dfbb31979b2f4a1f98f8ee8821c26294c02de460fa001c687b58fe23b91997d2
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 6 pp.94 and 98-99 (PDF pp.106, 110-111), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Catastrophe Loss.md
@@ -19,7 +20,7 @@ verification:
 
 - Catastrophe losses are **removed** from the experience period and replaced with a long-run expected load. A five-year experience period either contains the hurricane or does not, and neither answer is the expected cost.
 - Two ways to build the load:
-  - **Long-run historical**, for perils with enough history relative to their return period — hail, wind, winter storm. Werner's approach: express historical catastrophe losses as a ratio to a stable base (non-catastrophe losses, or amount of insurance years) over $20$–$30$ years, and apply that ratio to the current book.
+  - **Long-run historical**, for perils with enough history relative to their return period — hail, wind, winter storm. Werner's approach: express historical catastrophe losses as a ratio to a stable base (non-catastrophe losses, or amount of insurance years) over $10$–$30$ years, and apply that ratio to the current book.
   - **Modelled**, for perils whose return periods exceed any usable history — hurricane, earthquake. A catastrophe model simulates an event set against the insurer's actual exposure to produce an **average annual loss** (AAL) and the full loss distribution.
 - The **exposure base must be current**. Historical hurricane losses reflect the book as it was; the load must reflect where the insurer writes today, which is what a model does naturally and a historical ratio does only if the base is adjusted.
 - Modelled output also drives capital and reinsurance decisions through the **exceedance probability curve** — the $1$-in-$100$ and $1$-in-$250$ PMLs — so the same model serves pricing, [[Reinsurance|reinsurance]] purchasing and solvency work.
@@ -57,7 +58,7 @@ verification:
 > >
 > > The number is arithmetically fine and actuarially useless:
 > >
-> > - **The median year is zero.** Six of ten years had no catastrophe at all. The mean is driven entirely by one event.
+> > - **The median year is $\$0.5$M.** Five of ten years had no catastrophe at all. The mean is driven entirely by one event.
 > > - **Drop the $\$38$M year** and the average falls to $\$0.9$M — a $1.8\%$ load. Add a second such event and it doubles. An estimator that swings by a factor of five on one observation has no credibility.
 > > - **The return period exceeds the data.** If a $\$38$M event is a $1$-in-$25$-year loss for this book, ten years of history cannot estimate its frequency; observing one says almost nothing about whether the true rate is $1$-in-$10$ or $1$-in-$50$.
 > >

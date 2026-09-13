@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-12
+  last_checked_by: agent:validate-v1
   content_hash: sha256:9fd34b1feeccaac6072e55238d9bce721a5d33aff2c0dd9c5d8d10994be72757
-  sources: []
-  open_findings: 0
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 overview (PDF pp.2,4) and Ch. 8 pp.142-148 (PDF pp.154-160), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+    - "CAS Statement of Principles Regarding Property and Casualty Insurance Ratemaking (1988), Principles 1-4"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Ratemaking.md
 ---

@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:2993798ec2e5588b93b4a6f89220028e170b1e19818132665555b3f110bf1d2b
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-09-12
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:847d0dba490e61c18f75c0089e873cd80d515c4271d73812a2184d092ec788a5
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 4 pp. 61-62 (PDF pp. 73-74), EXPOSURE TREND, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 6 pp. 119-120 (PDF pp. 131-132), Coordinating Exposure, Premium and Loss Trends, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Exposure Trend.md
@@ -36,23 +38,23 @@ verification:
 > >
 > > $$\begin{align*}
 > > \text{Trended payroll} &= \$50{,}000{,}000 \times 1.03^{2.5} \\
-> > &= \$50{,}000{,}000 \times 1.0764 \\
-> > &= \$53{,}820{,}000 \\[6pt]
+> > &= \$50{,}000{,}000 \times 1.0767 \\
+> > &= \$53{,}835{,}000 \\[6pt]
 > > \text{Trended losses} &= \$1{,}600{,}000 \times 1.06^{2.5} \\
-> > &= \$1{,}600{,}000 \times 1.1593 \\
-> > &= \$1{,}854{,}880
+> > &= \$1{,}600{,}000 \times 1.1568 \\
+> > &= \$1{,}850{,}880
 > > \end{align*}$$
 > >
 > > $$\begin{align*}
-> > \text{Projected PP per \$100} &= \frac{\$1{,}854{,}880}{\$53{,}820{,}000 / 100} \\
-> > &= \$3.446
+> > \text{Projected PP per \$100} &= \frac{\$1{,}850{,}880}{\$53{,}835{,}000 / 100} \\
+> > &= \$3.438
 > > \end{align*}$$
 > >
 > > Against the historical pure premium of $\$1{,}600{,}000 / (\$50{,}000{,}000/100) = \$3.200$, the net increase is
 > >
-> > $$\frac{1.06^{2.5}}{1.03^{2.5}} = \frac{1.1593}{1.0764} = 1.0770$$
+> > $$\frac{1.06^{2.5}}{1.03^{2.5}} = \frac{1.1568}{1.0767} = 1.0744$$
 > >
-> > i.e. $+7.7\%$ over $2.5$ years, or about $3.0\%$ a year — the $6\%$ loss trend net of the $3\%$ wage trend.
+> > i.e. $+7.4\%$ over $2.5$ years, or about $2.9\%$ a year — the $6\%$ loss trend net of the $3\%$ wage trend.
 
 > [!example]- The Cost of Forgetting Exposure Trend {Example}
 > Using the same book, an actuary trends losses at $6\%$ but leaves payroll at its historical level.
@@ -61,12 +63,12 @@ verification:
 >
 > > [!answer]-
 > > $$\begin{align*}
-> > \text{Untrended-exposure PP} &= \frac{\$1{,}854{,}880}{\$50{,}000{,}000 / 100} \\
-> > &= \$3.710
+> > \text{Untrended-exposure PP} &= \frac{\$1{,}850{,}880}{\$50{,}000{,}000 / 100} \\
+> > &= \$3.702
 > > \end{align*}$$
 > >
-> > against the correct $\$3.446$:
+> > against the correct $\$3.438$:
 > >
-> > $$\frac{3.710}{3.446} - 1 = +7.7\%$$
+> > $$\frac{3.702}{3.438} - 1 = +7.7\%$$
 > >
 > > The actuary would indicate a rate $7.7\%$ higher than needed. The reason is that the rate is charged *per $\$100$ of payroll*: as wages inflate, premium rises automatically at the current rate level without any filing. Charging a higher rate on top of an already-inflating base double-counts wage inflation — the exposure-side twin of the classic "trend and develop the same growth twice" error described in [[Loss Development]].

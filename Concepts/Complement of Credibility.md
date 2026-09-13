@@ -1,13 +1,14 @@
 ---
 verification:
-  status: unverified
+  status: disputed
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-09-12
+  last_checked_by: agent:validate-v1
   content_hash: sha256:c57ae73adc34bb7f3140c71c5caa67f6236a844292225d4b49128814397fe8d2
-  sources: []
-  open_findings: 0
-  open_critical: 0
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 12 pp.223-230 (PDF pp.235-242), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+  open_findings: 3
+  open_critical: 1
   log: .verify/Concepts/Complement of Credibility.md
 ---
 

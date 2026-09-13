@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-13
+  last_checked_by: agent:validate-v1
   content_hash: sha256:a9c1c3928d28e4dd6e2160a2897b2864e8dbf3515d5998c3b8b969854dc13cc3
-  sources: []
-  open_findings: 0
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 16 pp.313-319 (PDF pp.325-331), Ch. 2 p.26 (PDF p.38), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch. 3 pp.38, 42-43 (PDF pp.44, 48-49), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Claims Made Coverage.md
 ---

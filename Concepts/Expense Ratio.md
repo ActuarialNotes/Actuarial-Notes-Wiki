@@ -1,13 +1,16 @@
 ---
 verification:
-  status: unverified
+  status: disputed
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-09-12
+  last_checked_by: agent:validate-v1
   content_hash: sha256:dfbb44910ab1ea500498aeb4bf6f745e30b1281a4dbce2358229fd199b57d61a
-  sources: []
-  open_findings: 0
-  open_critical: 0
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 pp. 9-10 (PDF pp. 21-22), Underwriting Expense Ratio, Operating Expense Ratio, Combined Ratio, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 pp. 126-131 (PDF pp. 138-143), expense categories and the Premium-based Projection Method, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 8 p. 144 (PDF p. 156), Profit % at Current Rates = 1.0 - Loss Ratio - OER = 1.0 - Combined Ratio, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+  open_findings: 3
+  open_critical: 1
   log: .verify/Concepts/Expense Ratio.md
 ---
 

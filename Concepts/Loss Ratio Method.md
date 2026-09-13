@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:3671205d48cc0d95ed9eb83811a291052168fff92edeb3298b8fe0fba34c7b30
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: high
+  last_checked: 2026-09-12
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:c3fcb3300fd193d0ec13f0f59bdd5473556d22499832f0964e50b9c3e239abe7
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 8 pp.143-147 (PDF pp.155-159), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Loss Ratio Method.md
 ---
@@ -38,7 +39,7 @@ verification:
 > > &= 1.0685
 > > \end{align*}$$
 > >
-> > $$\text{Indicated change} = +6.9\%$$
+> > $$\text{Indicated change} = +6.8\%$$
 > >
 > > Under the all-variable shortcut, $\text{PLR} = 1 - 0.22 - 0.06 - 0.05 = 0.67$ and the indication is $0.72/0.67 - 1 = +7.5\%$. Both are defensible; using $0.78/0.67 = +16.4\%$ is not.
 

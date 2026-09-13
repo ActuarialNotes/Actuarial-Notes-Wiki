@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:83df27a4286bca79477dd81e7856d4bde9c557800c494d97707acf8ac297ed90
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-09-12
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:a2c4cac43f90b718060a57f2ea39acc0647811263ce2e37c80e24f557384325d
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 8 pp.141-142 and 145-147 (PDF pp.153-154, 157-159), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 2 p.29 (PDF p.41) — NCCI loss costs adjusted by each insurer for its own expenses, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Pure Premium Method.md
@@ -51,7 +53,7 @@ verification:
 > > &= +3.8\%
 > > \end{align*}$$
 > >
-> > Note that exposure trend appears in the **denominator** of the pure premium, partially offsetting the loss trend. Omitting it (dividing by $5{,}000$ instead of $5{,}126$) would give a pure premium of $\$304.43$ and an indication of $+6.3\%$ — an increase the insurer would collect automatically as its inflating exposure base grows.
+> > Note that exposure trend appears in the **denominator** of the pure premium, partially offsetting the loss trend. Omitting it (dividing by $5{,}000$ instead of $5{,}126$) would give a pure premium of $\$304.43$ and an indication of $+6.2\%$ — an increase the insurer would collect automatically as its inflating exposure base grows.
 
 > [!example]- Pure Premium and Loss Ratio Methods Agree {Example}
 > Same book: trended on-level earned premium is $\$2{,}178{,}550$ ($5{,}126$ trended exposures at the current $\$425$ rate), fixed expense ratio $5.7\%$, variable expenses $22\%$, target profit $5\%$.

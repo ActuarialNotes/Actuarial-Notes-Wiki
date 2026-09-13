@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-12
+  last_checked_by: agent:validate-v1
   content_hash: sha256:043a3b4fa6921fcd1f68763f387954e6581182a139503d1c848da2674b94ea59
-  sources: []
-  open_findings: 0
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch. 1 pp.14-15 (PDF pp.20-21), Ch. 3 p.31 (PDF p.37), Ch. 11 pp.206-208 (PDF pp.212-214), Ch. 13 pp.283-308 (PDF pp.289-314), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf"
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Close Year.md
 ---

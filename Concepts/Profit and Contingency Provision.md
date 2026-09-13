@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-12
+  last_checked_by: agent:validate-v1
   content_hash: sha256:1d6c24acb58de83b4ab183c3b50d967fceb0d57d74011b9f9b2a27f5eb1f78fd
-  sources: []
-  open_findings: 0
+  sources:
+    - "CAS Statement of Principles Regarding Property and Casualty Insurance Ratemaking (adopted May 1988), sha256:f240ea62dd033aac827c2073e56c0a4061d5c84531e5cf6be02d333a8f9f2140 — p.2 (definition of the underwriting profit and contingency provisions; Principle 4) and p.4 ('Risk' consideration)"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 p.138 (PDF p.150) — underwriting profit provision, investment income on capital and policyholder-supplied funds, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Profit and Contingency Provision.md
 ---

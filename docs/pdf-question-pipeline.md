@@ -170,6 +170,12 @@ explanation. Two per-question overrides, each a directory of `<id>.md`:
 `--explanations` (a rewritten walkthrough) and `--prompts` (a transcribed
 scanned page). `--only 1-25`, `--dry-run` and `--force` bound a run.
 
+**Keep both directories outside `--out`.** Everything in the build directory is
+regenerable — re-running stage 1 rewrites it, and clearing it is the usual way
+to re-extract — while a transcription and a rewritten solution are the one part
+of the run that cost real attention and cannot be recovered from the PDF. Put
+them beside it (`<build>/../prompts`, `<build>/../expl`), not inside.
+
 It refuses to write a file that would land incomplete — no prompt, no topic, or
 nothing under its explanation heading — and names it instead. A missing
 `verification:` block is **correct**: that is derived state owned by

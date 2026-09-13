@@ -277,10 +277,14 @@ def _find_tables(page) -> list[tuple[float, float, float, float, str]]:
 # of ruled boxes, and PyMuPDF will read the whole page — headings included — as
 # one table, which hides `QUESTION 1` inside a markdown cell where no segmenter
 # can see it. A candidate holding any of these is a page, not an exhibit.
+# Only the *section* headings. A sample answer's own table often sits right
+# beside `Sample Answer 2` or `Part b:`, and rejecting on those threw away the
+# very tables this is meant to preserve — the worked solutions came out as
+# columns of bare numbers. What must never end up inside a table is the
+# question's own scaffolding.
 STRUCTURE_CELL_RE = re.compile(
     r"(?i)(?:^QUESTION\s+\d{1,3}\b|TOTAL POINT VALUE|LEARNING OBJECTIVE"
-    r"|SAMPLE ANSWERS?\b|EXAMINER'?.?S REPORT"
-    r"|^Part\s+[a-h]\s*[:.]|^Sample(?:\s+Answer)?\s+\d+\b)"
+    r"|SAMPLE ANSWERS\b|EXAMINER'?.?S REPORT)"
 )
 
 
@@ -342,6 +346,15 @@ def rows_to_markdown(rows: list[list[str | None]]) -> str:
         return ""
     width = max(len(row) for row in cleaned)
     cleaned = [row + [""] * (width - len(row)) for row in cleaned]
+
+    # A column empty in every row carries nothing. Hand-typed exhibits in a
+    # CAS report routinely detect with several of them between the real ones,
+    # which turns a three-column table into a twelve-column one.
+    keep = [i for i in range(width) if any(row[i] for row in cleaned)]
+    if not keep:
+        return ""
+    cleaned = [[row[i] for i in keep] for row in cleaned]
+    width = len(keep)
     header, *body = cleaned
     if not any(header):
         header = [f"Column {i + 1}" for i in range(width)]
@@ -392,6 +405,13 @@ def furniture_lines(pages: list[Page]) -> set[str]:
     for shape, concrete in shapes.items():
         if len(per_page[shape]) < threshold:
             continue
+        # A structural marker repeats on nearly every page by design —
+        # `Sample Answer 1` heads an answer on most pages of a CAS report — and
+        # dropping it as furniture silently merges everything it separated.
+        # Repetition is what makes these markers useful, not what makes them
+        # noise.
+        if is_content_marker(next(iter(concrete))):
+            continue
         letters = sum(1 for ch in shape if ch.isalpha())
         if letters >= FURNITURE_MIN_LETTERS or PAGE_NUMBER_RE.match(shape):
             drop |= concrete
@@ -402,22 +422,77 @@ def furniture_lines(pages: list[Page]) -> set[str]:
 
 LIST_START_RE = re.compile(r"^\s*(?:\(?[ivxIVX]+\)|\(?[A-Ea-e]\)|[-*•]|\d+[.)])\s")
 DEHYPHEN_RE = re.compile(r"([a-z])-\n([a-z])")
+# A hyphen at a line break is usually the typesetter wrapping one word
+# (`expo-\nsure`), and `DEHYPHEN_RE` closes it up. It is *not* when the
+# fragment below carries a hyphen of its own: `age-\nto-age` is a compound
+# broken at a real hyphen, and de-hyphenating it yields `ageto-age`. Closing
+# the break first leaves nothing for `DEHYPHEN_RE` to match.
+COMPOUND_WRAP_RE = re.compile(r"([a-z]-)\n(?=[a-z]+-)")
 # Lines that carry document structure. A publisher's section markers are what
 # the segmenters key on, so they are never folded into the line above. The
 # all-caps heading test has to stay case-sensitive — under IGNORECASE it would
 # match any word at all.
 CAPS_HEADING_RE = re.compile(r"^\s*[A-Z][A-Z0-9 '(),./-]{4,}$")
-MARKER_RE = re.compile(
+# The markers that separate one piece of content from the next. These repeat
+# on nearly every page *by design*, so they are the one thing furniture
+# detection must never eat — unlike a running header or a page number, which
+# repeat for the opposite reason.
+CONTENT_MARKER_RE = re.compile(
     r"^\s*(?:Part\s+[a-h]\b|Sample(?:\s+Answer)?\s+\d+\b|Solution\s*[:#]"
-    r"|Question\s*#?\s*\d+\b|Page\s+\d+\b)",
+    r"|Question\s*#?\s*\d+\b)",
     re.IGNORECASE,
 )
+MARKER_RE = re.compile(
+    CONTENT_MARKER_RE.pattern.rstrip(")") + r"|Page\s+\d+\b)", re.IGNORECASE
+)
+
+
+def is_content_marker(line: str) -> bool:
+    """Whether a line separates content, rather than decorating the page."""
+    return bool(CONTENT_MARKER_RE.match(line))
 
 
 def is_structural(line: str) -> bool:
     return bool(CAPS_HEADING_RE.match(line) or MARKER_RE.match(line))
 # Sentence-final punctuation: the line below starts a new one, not a wrap.
 TERMINAL_RE = re.compile(r"""[.:;!?]['")\]]?$""")
+# A line that ends on a number, a percentage or a closing brace is a finished
+# calculation step — `AY 2013: (7,500 - 1,000) * 0.25 / 0.7 = 2,321`. Folding
+# the next step into it runs a worked solution into one unreadable paragraph,
+# and a CAS sample answer is nothing but such steps. A wrapped sentence that
+# happens to end on a number is split instead, which markdown renders as a
+# space, so the cost of being wrong here is nil and the cost of joining is the
+# whole solution.
+STEP_END_RE = re.compile(r"[0-9%\)\]}]$")
+
+
+# A bullet glyph alone on its line. Word writes the bullet as its own run, so
+# a PDF often extracts it separately from the text it introduces — including
+# the Wingdings bullets that land in the private-use area.
+LONE_BULLET_RE = re.compile(
+    r"^\s*[-*\u2022\u00b7\u25aa\u25cf\u25e6\u2023\uf0a7\uf0b7\uf0d8\u00a9\u00b0]\s*$"
+)
+
+
+def merge_lone_bullets(lines: list[str]) -> list[str]:
+    """Attach a bullet that sits on its own line to the text it introduces.
+
+    Left alone, the bullet is just another line with no sentence-ending
+    punctuation, so `reflow_block` folds it into its neighbour and then folds
+    the next item in too — a whole list collapses onto one line.
+    """
+    out: list[str] = []
+    pending = False
+    for line in lines:
+        if LONE_BULLET_RE.match(line):
+            pending = True
+            continue
+        if pending and line.strip():
+            out.append(f"- {line.strip()}")
+            pending = False
+        else:
+            out.append(line)
+    return out
 
 
 def reflow_block(text: str) -> str:
@@ -432,9 +507,9 @@ def reflow_block(text: str) -> str:
     Being conservative costs nothing on screen: a single newline inside a
     markdown paragraph renders as a space either way.
     """
-    text = DEHYPHEN_RE.sub(r"\1\2", text)
+    text = DEHYPHEN_RE.sub(r"\1\2", COMPOUND_WRAP_RE.sub(r"\1", text))
     out: list[str] = []
-    for raw in text.splitlines():
+    for raw in merge_lone_bullets(text.splitlines()):
         line = raw.strip()
         if not line:
             continue
@@ -444,6 +519,7 @@ def reflow_block(text: str) -> str:
             and not is_structural(line)
             and not is_structural(out[-1])
             and not TERMINAL_RE.search(out[-1])
+            and not STEP_END_RE.search(out[-1])
         )
         if runs_on:
             out[-1] = f"{out[-1]} {line}"
@@ -936,7 +1012,7 @@ def cas_records(
             p_start, p_end = prompts[bound.num]
             body = mdmath.normalize_markdown(b_text[p_start:p_end]).strip()
             pages = sorted({b_index[i] for i in range(p_start, min(p_end, len(b_index)))})
-            body = _attach_part_prompts(body, parsed["parts"])
+            body = attach_part_prompts(body, parsed["parts"])
             ocred = sorted({p for p in pages if booklet_pages[p - 1].ocred})
         else:
             # No prompt text for this question. When the booklet has no text
@@ -993,7 +1069,36 @@ def cas_records(
                 "warnings": warnings,
             }
         )
+    _locate_unplaced(records)
     return records
+
+
+def _locate_unplaced(records: list[dict]) -> None:
+    """Give a question the alignment could not place the pages around it.
+
+    A question the booklet alignment skipped has no prompt and no page, which
+    leaves nothing to transcribe *from*. Its neighbours do have pages, and the
+    paper is in order, so it lies between them: the pages from where the
+    previous question ended to where the next one starts. That is a located
+    range, not a match, so it is labelled as one — but it is the difference
+    between "read these two pages" and "search the booklet".
+    """
+    placed = [(i, r) for i, r in enumerate(records) if r["pages"]["question"]]
+    for index, record in enumerate(records):
+        if record["pages"]["question"]:
+            continue
+        before = [r for i, r in placed if i < index]
+        after = [r for i, r in placed if i > index]
+        low = before[-1]["pages"]["question"][-1] if before else None
+        high = after[0]["pages"]["question"][0] if after else None
+        if low is None and high is None:
+            continue
+        first, last = low or high, high or low
+        record["pages"]["question"] = list(range(first, last + 1))
+        record["warnings"].append(
+            f"prompt not located — it lies in page {_ranges(record['pages']['question'])}, "
+            "between the questions either side; transcribe it from pages/"
+        )
 
 
 # A bare point-value line: `(1.25 points)` for a whole question, `(0.5 point)`
@@ -1098,7 +1203,7 @@ def _has_exhibit(body: str) -> bool:
     return "|---" in body or bool(COLUMN_GAP_RE.search(body))
 
 
-def _attach_part_prompts(body: str, parts: list[dict]) -> str:
+def attach_part_prompts(body: str, parts: list[dict]) -> str:
     """Move the booklet's lettered sub-prompts onto the report's parts.
 
     Returns the question stem. A part the booklet prices but the report never
@@ -1298,6 +1403,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--dpi", type=int, default=DEFAULT_DPI)
     ap.add_argument("--no-tables", action="store_true", help="skip table detection")
     ap.add_argument("--no-render", action="store_true", help="skip page rendering")
+    ap.add_argument("--render-all", action="store_true",
+                    help="render every booklet page, not just the ones a prompt "
+                         "still has to be read off — what a full transcription needs")
     ap.add_argument("--ocr", action="store_true",
                     help="read pages with no text layer via local tesseract "
                          "instead of leaving them for vision")
@@ -1348,7 +1456,8 @@ def main(argv: list[str] | None = None) -> int:
     rendered = 0
     if not args.no_render:
         rendered = _render_needed(
-            records, sources["question"], offsets["question"], out, args.dpi, booklet
+            records, sources["question"], offsets["question"], out, args.dpi, booklet,
+            render_all=args.render_all,
         )
 
     with (out / "records.jsonl").open("w", encoding="utf-8") as fh:
@@ -1371,13 +1480,21 @@ def _split_combined(pages: list[Page]) -> int:
     return 0
 
 
-def _render_needed(records, source, offset, out: Path, dpi: int, booklet=()) -> int:
+def _render_needed(
+    records, source, offset, out: Path, dpi: int, booklet=(), render_all: bool = False
+) -> int:
     """Render the pages a prompt still has to be read off, and count them.
 
     A question that names its pages gets just those. A booklet with no text
     layer at all names none — nothing says which page holds which question —
-    so every scanned page is rendered once for the whole document.
+    so every scanned page is rendered once for the whole document. With
+    `render_all`, every booklet page is rendered regardless: transcribing a
+    whole paper needs the pages whose prompts OCR read cleanly too.
     """
+    if render_all:
+        wanted = sorted(p.number for p in booklet if p.scanned or p.ocred)
+        return _render(wanted, source, offset, out, dpi)
+
     wanted = sorted(
         {
             p
@@ -1388,6 +1505,10 @@ def _render_needed(records, source, offset, out: Path, dpi: int, booklet=()) -> 
     )
     if not wanted and any(r["needs_vision"] for r in records):
         wanted = sorted(p.number for p in booklet if p.scanned)
+    return _render(wanted, source, offset, out, dpi)
+
+
+def _render(wanted, source, offset, out: Path, dpi: int) -> int:
     if not wanted or not source:
         return 0
     pymupdf = _pymupdf()

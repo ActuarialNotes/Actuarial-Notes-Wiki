@@ -93,7 +93,11 @@ question you have not looked at.
 The SOA's own worked solution becomes the `## Explanation` after normalisation,
 which is usually right. Rewrite one only when it reads badly — raw OCR
 fragments, no steps, a table that needs prose around it. Write the replacement
-to `/tmp/exam-p/expl/<id>.md` and pass `--explanations /tmp/exam-p/expl`.
+to `/tmp/expl/<id>.md` and pass `--explanations /tmp/expl`.
+
+Keep that directory, and `--prompts` below, **outside** `/tmp/exam-p`: the build
+directory is regenerable and gets cleared to re-extract, while a hand-written
+solution or transcription cannot be recovered from the PDF.
 
 When you do rewrite: prose + LaTeX, one `align*` block per derivation with each
 step on its own `&=` line, no repeat of the options, no `### Answer` heading
@@ -102,7 +106,7 @@ re-derive the style rules, run stage 5.
 
 A question whose booklet page is a scan is marked `needs_vision` and its page is
 rendered to `/tmp/exam-p/pages/`. Read that image, write the prompt markdown to
-`/tmp/exam-p/prompts/<id>.md`, and pass `--prompts`. Transcribe exactly:
+`/tmp/prompts/<id>.md`, and pass `--prompts`. Transcribe exactly:
 wording, numbers, dates, all five options, tables as markdown tables.
 
 ## 5. Check

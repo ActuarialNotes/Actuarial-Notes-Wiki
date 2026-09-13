@@ -16,7 +16,9 @@ Two things may be supplied per question by dropping `<id>.md` into a directory:
 
 * `--explanations` — a rewritten walkthrough, for a publisher solution too
   terse or too OCR-mangled to read as one. This is the one part of a question
-  file genuinely worth a model's attention.
+  file genuinely worth a model's attention. For a multi-part question the file
+  mirrors the question: `## Part a` headings, each followed by that part's
+  explanation, and only the parts it names are replaced.
 * `--prompts` — the prompt for a question whose booklet page is a scan with no
   text layer (`needs_vision` in the record). Transcribe the rendered page from
   `<out>/pages/`, save it here, and the file assembles like any other.
@@ -33,11 +35,13 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import mdmath  # noqa: E402
+from pdf_extract import attach_part_prompts  # noqa: E402
 from validate_content import EXAM_LABEL_BY_DIR  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -54,6 +58,11 @@ def _num(value) -> str:
     """Render a point value the way the bank does: 2.5 stays, 2.0 becomes 2."""
     number = float(value)
     return str(int(number)) if number == int(number) else str(number)
+
+
+def _points(value) -> str:
+    """`1 point`, `0.5 points` — the bank's label for a part's weight."""
+    return f"{_num(value)} point" + ("" if float(value) == 1 else "s")
 
 
 def _scalar(key: str, value) -> str:
@@ -100,14 +109,38 @@ def options_block(options: dict[str, str]) -> str:
     return "\n".join(f"- {letter}) {options[letter]}" for letter in sorted(options))
 
 
+PART_OVERRIDE_RE = re.compile(r"(?mi)^#{1,3}\s*Part\s+([a-h])\b[^\n]*$")
+
+
+def split_explanation_override(text: str) -> dict[str, str]:
+    """Split an explanation override into per-part walkthroughs.
+
+    A multi-part question needs a way to fix one part's solution without
+    touching the others, so an override for such a question mirrors the
+    question's own shape: `## Part a` headings, each followed by that part's
+    explanation. Text with no such heading belongs to the whole question, and
+    is returned under the empty key.
+    """
+    marks = list(PART_OVERRIDE_RE.finditer(text or ""))
+    if not marks:
+        return {"": (text or "").strip()}
+    out: dict[str, str] = {}
+    for i, m in enumerate(marks):
+        stop = marks[i + 1].start() if i + 1 < len(marks) else len(text)
+        out[m.group(1).lower()] = text[m.end() : stop].strip()
+    return out
+
+
 def part_sections(record: dict, explanation: str | None) -> str:
     """`## Part a (…)` sections for a CAS multi-part question."""
+    overrides = split_explanation_override(explanation) if explanation else {}
+    whole = overrides.get("", "")
     out: list[str] = []
     for part in record.get("parts") or []:
         label = part["label"]
         header = f"## Part {label}"
         if part.get("points") is not None:
-            header += f" ({_num(part['points'])} points)"
+            header += f" ({_points(part['points'])})"
         out.append(header)
 
         if part.get("prompt"):
@@ -116,12 +149,15 @@ def part_sections(record: dict, explanation: str | None) -> str:
             out.append("### Answer\n" + str(part["answer"]).strip())
 
         samples = part.get("samples") or []
-        body = (explanation or "").strip() if len(record.get("parts") or []) == 1 else ""
-        if not body:
-            body = samples[0].strip() if samples else ""
+        override = overrides.get(label) or (
+            whole if len(record.get("parts") or []) == 1 else ""
+        )
+        body = override or (samples[0].strip() if samples else "")
         if body:
             out.append("### Explanation\n" + body)
-            if len(samples) > 1 and samples[1].strip():
+            # An alternative sample is the publisher's second approach; a
+            # rewritten part speaks for itself and does not carry it along.
+            if not override and len(samples) > 1 and samples[1].strip():
                 out.append("Alternatively:\n\n" + samples[1].strip())
         if part.get("report"):
             out.append("### Examiner Report\n" + part["report"].strip())
@@ -222,10 +258,14 @@ def main(argv: list[str] | None = None) -> int:
             explanation = (overrides / f"{record['id']}.md").read_text(encoding="utf-8")
 
         if prompts and (prompts / f"{record['id']}.md").is_file():
-            record = dict(
-                record,
-                body=(prompts / f"{record['id']}.md").read_text(encoding="utf-8").strip(),
-            )
+            # A transcription is the page as printed, lettered sub-prompts and
+            # all, so it is re-split the same way an extracted prompt is —
+            # otherwise the stem would be corrected while each `## Part a`
+            # kept the text the override was written to replace.
+            transcribed = (prompts / f"{record['id']}.md").read_text(encoding="utf-8")
+            parts = [dict(part) for part in record.get("parts") or []]
+            stem = attach_part_prompts(mdmath.normalize_markdown(transcribed), parts)
+            record = dict(record, body=stem.strip(), parts=parts)
         if not (record.get("body") or "").strip():
             hint = " (needs_vision — transcribe the rendered page into --prompts)" \
                 if record.get("needs_vision") else ""

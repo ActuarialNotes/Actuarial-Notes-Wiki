@@ -60,8 +60,17 @@ else to wire.
 
 ## Bands
 
-`readinessBand(pct)` maps the score onto a verdict: **Not started** (<15), **Building foundations** (<40), **Making progress** (<65),
-**Nearly exam ready** (<85), **Exam ready** (85+). A band is a label and nothing else.
+`readinessBand(pct)` maps the score onto a verdict: **Not started** (0), **Getting started** (<15),
+**Building foundations** (<40), **Making progress** (<65), **Nearly exam ready** (<85), **Exam ready** (85+).
+A band is a label and nothing else.
+
+It bands on the **rounded** score, so the verdict always agrees with the number printed beside
+it (the same rule `readinessDelta` follows), and **`not-started` means zero, not "low"**: it
+used to run all the way to 15, so a card could read *Not started* over a 5% score — the verdict
+contradicting work the learner had just done. *Getting started* is the band between them.
+The optional second argument, `readinessBand(pct, started)`, is what lifts a record with real
+progress out of *Not started* when its score still rounds to 0% (one concept on a 300-concept
+syllabus); `computeExamReadiness` passes `counts.studied > 0`.
 
 It used to carry a one-sentence `blurb` as well, printed under the label on the Dashboard
 card. That field is gone. One sentence shared by everyone inside a forty-point range cannot
@@ -81,12 +90,15 @@ started* label are the whole story. A record where no rule below finds anything 
 either. The card renders the paragraph only when the insight is non-null — nothing generic
 stands in for it.
 
-Two rules govern what may be said:
+Three rules govern what may be said:
 
 1. **It must name something the card does not already draw** — a concept, a section, a tally.
    "Syllabus coverage is low" is the criterion bar said twice.
 2. **It must be true of this learner specifically.** Anything that would read identically for
    every account in the band belongs in the band label, not here.
+3. **Say it the way a tutor would**: at most two short sentences, the fact and then what to do
+   about it. No em-dash asides, no "recovering those moves the score further than new material
+   does", nothing that has to be read twice on a phone.
 
 The rules are ordered by what costs a candidate the most, and the first hit wins:
 

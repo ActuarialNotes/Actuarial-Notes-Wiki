@@ -241,51 +241,64 @@ Where the way in sits depends on the surface:
   checking live on the concept and resource pages it links to.
 
 Either way opens `FactCheckDialog` over `FactCheckPanel` — a bottom sheet on a
-phone, a centred `max-w-lg` card above `sm`, per `docs/style-guide.md` §8.1 — laid
-out as the answers to the two questions a reader arrives with: *what was this
-checked against?* and *what has changed since?*
+phone, a centred `max-w-lg` card above `sm`, per `docs/style-guide.md` §8.1.
+
+A reader arrives with one question — *can I trust what I just read?* — and the
+verdict answers it in a line. Everything else is the working behind that verdict,
+and it is a lot: findings, the notes people have left, and the books the page was
+read against. So the panel shows the verdict and nothing else until it is asked
+for more; the record unfolds under it on a tap, and folds away again.
 
 - **The verdict tile.** The tone's tinted mark beside the verdict, on the
-  `rounded-xl bg-muted/50` block the question-info sheet leads with. One
-  supporting line under it, never two: the one-sentence `detail` for the statuses
-  whose label doesn't say what to do about it (`in_review`, `stale`, `disputed`),
-  otherwise the check date when the label doesn't already carry it.
-- **Checked against** — each citation cut down by `summarizeSource` to the name a
-  reader recognises, drawn as the app's document row (bordered `bg-card`, a
-  `text-primary` file mark, an external-link glyph when there is a URL to open).
-  A citation is written for an auditor: it carries the URL, a sha256 of the exact
-  file that was read, a version string and the pages the claim was checked on.
-  All of that stays in the vault, where `verify_check.py` can enforce it, and
-  reaches the screen through the row's `title` rather than as a wall of hashes.
-- **Open / Fixed / Notes** — the log, fetched on demand through `fetchWikiFile`
-  and split by `summarizeLog`. Open findings show first, worst severity first,
-  and are the only section expanded by default; a resolution is folded into the
-  finding it closes rather than listed twice. A finding is one row of a list card,
-  its severity a chip on the same four tones as the verdict, expanding in place to
-  the substance — `claim`, `evidence`, `proposed_action`, `note` — and not to the
-  run id, locus or fingerprint beside them. A `✓` marks an open finding whose
-  `applied: true` says the page in front of the reader has already been corrected.
-- **Syllabus sources** — on a *concept* page, under all of the above: the
-  readings the concept's exam is taught from, as the same
-  `components/wiki/ResourceMetaCard.tsx` the resource page leads with — cover,
-  title, author, the bibliographic chips and the link to go and get it.
-  `lib/factCheckSources.ts` derives them: the concept's exam pages
-  (`findSyllabiForConcept` over the bundled `virtual:exam-pages`), then those
-  pages' `## Source Material` readings, unioned and deduplicated, each card
-  carrying the exams that list it.
+  `rounded-xl bg-muted/50` block the question-info sheet leads with, with a
+  chevron: it is the panel's one control as well as its answer. One supporting
+  line under it, never two: the one-sentence `detail` for the statuses whose
+  label doesn't say what to do about it (`in_review`, `stale`, `disputed`),
+  otherwise the check date when the label doesn't already carry it. The **Report
+  an issue** action stays out of the disclosure — it is what the panel is *for*,
+  not something it tells you.
+- **Open / Fixed / Notes** — the log, fetched through `fetchWikiFile` on the
+  first unfolding (not on mount: a reader who only wanted the verdict never pays
+  for it) and split by `summarizeLog`. It comes first because what has been
+  *found* on a page is what a reader came for. Open findings show first, worst
+  severity first, and are the only section expanded by default; a resolution is
+  folded into the finding it closes rather than listed twice. A finding is one
+  row of a list card, its severity a chip on the same four tones as the verdict,
+  expanding in place to the substance — `claim`, `evidence`, `proposed_action`,
+  `note` — and not to the run id, locus or fingerprint beside them. A `✓` marks
+  an open finding whose `applied: true` says the page in front of the reader has
+  already been corrected.
+- **Checked against** — the sources the pass actually cited, as the same
+  `components/wiki/ResourceMetaCard.tsx` the resource page leads with: cover,
+  title, author, the bibliographic chips, the link to go and get it, and under
+  them the chapters and pages the claim was checked on. It is under the record
+  because it is how a reader would go and settle a finding themselves.
 
-  It exists because of what the vault mostly says. *Not fact checked* is the
-  honest state of almost every page, and on its own it tells a reader what has
-  not happened without telling them what would: these are the books the claim
-  would be checked against — rank 2 of the hierarchy above — named, with a way to
-  go and check it themselves. It sits below the record because what has been
-  *found* on a page outranks the material it would be checked against; on the
-  unchecked pages there is no record above it anyway. Nothing is inferred: a
-  concept no exam page teaches renders no shelf rather than a list of unrelated
-  books, and a resource page (which *is* a source) and a question (which cites
-  the paper it was sat on) get none. Inside the dialog the cards are `linkOnly`
-  — the in-app PDF reader is an aside below the overlay layer, so a document
-  opened from here would slide in behind the sheet that opened it.
+  A citation is written for an auditor — the work, the pages, a sha256 of the
+  exact file that was read, a version string, a URL — so
+  `summarizeSource` cuts that line into the work's name, its locator and its
+  link, and the fingerprint never reaches the screen: it is what makes the check
+  reproducible, not something a student can act on. `lib/factCheckSources.ts`
+  then finds the vault's own page for the work, matching the citation against
+  every reading of every exam page (`syllabusSourcePages` over the bundled
+  `virtual:exam-pages`) on words rather than on the string, because the two are
+  authored independently and never agree character for character — the vault
+  files *Basic Ratemaking (Werner - 2016)*, an auditor writes "Werner & Modlin,
+  Basic Ratemaking (CAS, 5th ed. May 2016)". The test is one-directional and
+  strict: every word of the page's title has to appear in the citation, so a
+  near-neighbour on the shelf can't answer for a book that was never cited, and
+  a citation that names something the vault has no page for — a content outline,
+  a paper — is drawn from the citation alone rather than matched to a book it
+  isn't. Inside the dialog the cards are `linkOnly`: the in-app PDF reader is an
+  aside below the overlay layer, so a document opened from here would slide in
+  behind the sheet that opened it.
+
+  This is the *cited* shelf, and it is the only one. An earlier version of the
+  panel also listed the syllabus readings a concept's exam is taught from, so an
+  unchecked page would still say what checking it would mean; it was removed
+  because on a page that *has* been checked the two shelves disagreed about what
+  "sources" meant, and the record's job is to say what was done, not what could
+  be. An unchecked page shows the verdict and no shelf.
 
 `lib/factCheckTone.ts` is the feature's one palette — the tinted surface per tone
 and the icon per tone, plus the severity → tone map — shared by the badge, the

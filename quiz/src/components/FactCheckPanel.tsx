@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Check, ChevronDown, ExternalLink, FileText, Flag, Loader2 } from 'lucide-react'
+import { Check, ChevronDown, ExternalLink, Flag, Loader2 } from 'lucide-react'
 import { fetchWikiFile, githubBlobUrl } from '@/lib/github'
 import { Button } from '@/components/ui/button'
 import { ReportIssueModal } from '@/components/ReportIssueModal'
@@ -15,7 +15,6 @@ import {
   factCheckBadge,
   formatCheckedDate,
   summarizeLog,
-  summarizeSource,
   verificationLogPath,
   type LogEntry,
   type LogEntryGroup,
@@ -26,33 +25,35 @@ import {
 /**
  * The read-only **Fact Check** record for one page.
  *
- * A reader opens this with two questions, and the panel is laid out as their
- * answers: *what was this checked against?* and *what has been changed since?*
- * Everything else the record carries — content hashes, run ids, fingerprints,
- * the page locator a finding was written against — is auditor's material. It
- * stays in the vault, where `verify_check.py` can enforce it, and reaches the
- * screen only through a link's accessible name. Showing the work is the point;
- * showing the paperwork is not.
+ * A reader opens this with one question — *can I trust what I just read?* — and
+ * the verdict answers it in a line. Everything else is the working behind that
+ * verdict, and it is a lot: findings, the notes people have left, and the books
+ * the page was read against. So the verdict is all the panel shows until it is
+ * asked for more; the record unfolds under it on a tap. Everything the record
+ * carries beyond that — content hashes, run ids, fingerprints, the page locator
+ * a finding was written against — is auditor's material. It stays in the vault,
+ * where `verify_check.py` can enforce it, and reaches the screen only through a
+ * link's accessible name. Showing the work is the point; showing the paperwork
+ * is not.
  *
- * Three shapes carry it, each already established elsewhere in the app:
+ * Unfolded, it reads in the order the reader asks it in: *what is still wrong
+ * with this page?* first, *what was it checked against?* second.
  *
  *  - the **verdict tile** — the tinted mark from `lib/factCheckTone.ts` on the
- *    `rounded-xl bg-muted/50` block the question-info sheet leads with;
- *  - a **source** as a document row, the same bordered `bg-card` affordance the
- *    quiz and a resource page use for "open this paper";
+ *    `rounded-xl bg-muted/50` block the question-info sheet leads with, and the
+ *    disclosure for everything below it;
  *  - a **finding** as one row of a list card, with its severity as a chip on the
  *    same four tones, expanding in place to the evidence behind it. The evidence
  *    runs to a paragraph of citations, which is right in the log and unreadable
  *    as a wall — so it stays folded until asked for;
- *  - and, under all of it, the **syllabus sources** a check on a concept is run
- *    against (`components/FactCheckSources.tsx`) — the same resource cards the
- *    resource page leads with, so an unchecked page still says what checking it
- *    would mean.
+ *  - a **source** as the resource card a resource page leads with, carrying the
+ *    chapters and pages the claim was checked on
+ *    (`components/FactCheckSources.tsx`).
  *
  * Sidecar logs are deliberately not bundled at build time — they grow without
- * bound and only matter when someone opens this panel — so the log is fetched on
- * demand. The verdict and the sources come from the page's own `verification:`
- * block and need no fetch.
+ * bound and only matter when someone opens this panel — so the log is fetched
+ * when the record is opened, not when the panel mounts. The verdict and the
+ * sources come from the page's own `verification:` block and need no fetch.
  */
 
 /**
@@ -84,28 +85,38 @@ export function FactCheckPanel({
   contentPath,
   contentName,
 }: FactCheckPanelProps) {
+  const [open, setOpen] = useState(false)
   const [log, setLog] = useState<VerificationLog | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [loaded, setLoaded] = useState(false)
   const [reporting, setReporting] = useState(false)
 
   const logPath = verification?.log || verificationLogPath(contentPath)
 
+  // Fetched on the first unfolding rather than on mount: a reader who only
+  // wanted the verdict never pays for the log, and re-folding the record keeps
+  // what was already read.
   useEffect(() => {
+    if (!open || loaded) return
     let cancelled = false
-    setLoading(true)
     fetchWikiFile(logPath)
       .then((raw) => { if (!cancelled) setLog(parseVerificationLog(raw)) })
       // A page with nothing recorded yet has no log file at all. That is the
       // normal state for most of the vault, not an error.
       .catch(() => { if (!cancelled) setLog(null) })
-      .finally(() => { if (!cancelled) setLoading(false) })
+      .finally(() => { if (!cancelled) setLoaded(true) })
     return () => { cancelled = true }
+  }, [open, loaded, logPath])
+
+  // A path change is a different page's record — drop what was loaded for the
+  // last one rather than showing its findings under this page's verdict.
+  useEffect(() => {
+    setLog(null)
+    setLoaded(false)
   }, [logPath])
 
   const badge = factCheckBadge(verification)
   const ToneIcon = FACT_CHECK_TONE_ICONS[badge.tone]
   const checked = formatCheckedDate(verification?.lastChecked ?? null)
-  const sources = (verification?.sources ?? []).map((raw) => ({ raw, ...summarizeSource(raw) }))
   // One supporting line under the verdict, never two: what to do about the
   // status where the label doesn't say, otherwise the date the label lacks.
   const support = verification && NEEDS_DETAIL.has(verification.status)
@@ -115,56 +126,54 @@ export function FactCheckPanel({
 
   return (
     <div className="space-y-5 text-sm">
-      <div className="flex items-center gap-3 rounded-xl bg-muted/50 p-3">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        data-sound="tap"
+        className={cn('flex w-full items-center gap-3 rounded-xl bg-muted/50 p-3 text-left transition-colors hover:bg-muted', ROW_FOCUS)}
+      >
         <span
           className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-lg',
             FACT_CHECK_TONE_CLASSES[badge.tone])}
         >
           <ToneIcon className="h-4 w-4" aria-hidden />
         </span>
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <p className="font-medium leading-tight">{badge.label}</p>
           {support && <p className="mt-0.5 text-xs text-muted-foreground">{support}</p>}
         </div>
-      </div>
+        <ChevronDown
+          className={cn('h-4 w-4 shrink-0 text-muted-foreground transition-transform', open && 'rotate-180')}
+          aria-hidden
+        />
+      </button>
 
-      {sources.length > 0 && (
-        <section>
-          <h3 className={cn('mb-2', HEADING)}>Checked against</h3>
-          <ul className="space-y-2">
-            {sources.map((source) => (
-              <li key={source.raw}>
-                <SourceRow source={source} />
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {loading ? (
-        <p className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-          Loading
-        </p>
-      ) : !log || !groups || log.entries.length === 0 ? (
-        verification && verification.status !== 'unverified' && (
-          <p className="text-sm text-muted-foreground">Nothing recorded yet.</p>
-        )
-      ) : (
+      {open && (
         <>
-          <EntrySection title="Open" groups={groups.open} defaultOpen />
-          <EntrySection title="Fixed" groups={groups.resolved} />
-          <EntrySection title="Notes" groups={groups.notes} />
+          {!loaded ? (
+            <p className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+              Loading
+            </p>
+          ) : !log || !groups || log.entries.length === 0 ? (
+            verification && verification.status !== 'unverified' && (
+              <p className="text-sm text-muted-foreground">Nothing recorded yet.</p>
+            )
+          ) : (
+            <>
+              <EntrySection title="Open" groups={groups.open} defaultOpen />
+              <EntrySection title="Fixed" groups={groups.resolved} />
+              <EntrySection title="Notes" groups={groups.notes} />
+            </>
+          )}
+
+          {/* What the page was actually read against, under the record: what has
+              been *found* on a page is what a reader came for, and the books it
+              was checked on are how they'd go and settle it themselves. */}
+          <FactCheckSources sources={verification?.sources ?? []} />
         </>
       )}
-
-      {/* What a check on this page is run against — its exam's syllabus
-          readings. Below the record, because what has been found on the page
-          outranks the material it would be checked against; on the unchecked
-          pages that are most of the vault there is no record above it, and this
-          is the whole answer. Concept pages only — every other page renders
-          nothing (see the component). */}
-      <FactCheckSources contentPath={contentPath} />
 
       <div className="flex items-center justify-between gap-2 border-t border-border pt-4">
         {log ? (
@@ -191,41 +200,6 @@ export function FactCheckPanel({
         contentName={contentName}
       />
     </div>
-  )
-}
-
-/**
- * One cited source. A citation with a URL is a document you can open, and gets
- * the app's document affordance; one without is the same row, inert — the
- * shelf stays one shape either way.
- */
-function SourceRow({ source }: { source: { raw: string; label: string; url: string | null } }) {
-  const inner = (
-    <>
-      <FileText
-        className={cn('mt-0.5 h-4 w-4 shrink-0', source.url ? 'text-primary' : 'text-muted-foreground')}
-        aria-hidden
-      />
-      <span className="min-w-0 flex-1 break-words">{source.label}</span>
-      {source.url && (
-        <ExternalLink className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
-      )}
-    </>
-  )
-  const shape = 'flex items-start gap-2.5 rounded-lg border border-border bg-card px-3 py-2.5 text-sm'
-
-  if (!source.url) return <div className={shape} title={source.raw}>{inner}</div>
-  return (
-    <a
-      href={source.url}
-      target="_blank"
-      rel="noreferrer"
-      title={source.raw}
-      data-sound="tap"
-      className={cn(shape, 'transition-colors hover:bg-accent hover:text-accent-foreground', ROW_FOCUS)}
-    >
-      {inner}
-    </a>
   )
 }
 

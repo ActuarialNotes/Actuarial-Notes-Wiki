@@ -253,7 +253,7 @@ describe('verificationLogPath', () => {
 })
 
 describe('summarizeSource', () => {
-  it('keeps the name and drops the hash, version and page locators', () => {
+  it('keeps the name, lifts out the pages and drops the hash and version', () => {
     const raw =
       'Werner, G. & Modlin, C., Basic Ratemaking, 5th ed., May 2016 (CAS) — ' +
       'https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf ' +
@@ -261,24 +261,73 @@ describe('summarizeSource', () => {
     expect(summarizeSource(raw)).toEqual({
       label: 'Werner, G. & Modlin, C., Basic Ratemaking, 5th ed., May 2016 (CAS)',
       url: 'https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf',
+      locator: 'printed Table of Contents PDF pp.8-12',
     })
   })
 
-  it('keeps a citation with no URL whole, minus the locator', () => {
+  it('cuts at the chapter when the locator runs on after a comma', () => {
+    const raw =
+      'Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), ' +
+      'Ch. 1 overview (PDF pp.2,4) and Ch. 8 pp.142-148 (PDF pp.154-160), ' +
+      `sha256:${'6'.repeat(64)} — ` +
+      'https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf'
+    expect(summarizeSource(raw)).toEqual({
+      label: 'Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016)',
+      url: 'https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf',
+      locator: 'Ch. 1 overview (PDF pp.2,4) and Ch. 8 pp.142-148 (PDF pp.154-160)',
+    })
+  })
+
+  it('keeps a comma that belongs to the name — the title runs past it', () => {
+    const raw =
+      'ASOP No. 43, Property/Casualty Unpaid Claim Estimates (ASB, June 2007), ' +
+      `sections 2.1, 3.3(a), 4.1 and 4.2(b), standard pp.2, 4, 9-10, sha256:${'b'.repeat(64)}`
+    expect(summarizeSource(raw)).toEqual({
+      label: 'ASOP No. 43, Property/Casualty Unpaid Claim Estimates (ASB, June 2007)',
+      url: null,
+      locator: 'sections 2.1, 3.3(a), 4.1 and 4.2(b), standard pp.2, 4, 9-10',
+    })
+  })
+
+  it('reads a locator the hash was sitting in front of', () => {
+    const raw =
+      'CAS Statement of Principles Regarding Property and Casualty Insurance Ratemaking ' +
+      `(adopted May 1988), sha256:${'f'.repeat(64)} — p.3, Principle 3`
+    expect(summarizeSource(raw)).toEqual({
+      label: 'CAS Statement of Principles Regarding Property and Casualty Insurance Ratemaking (adopted May 1988)',
+      url: null,
+      locator: 'p.3, Principle 3',
+    })
+  })
+
+  it('keeps a citation with no locator whole', () => {
+    expect(summarizeSource('CAS Statement of Principles (1988)'))
+      .toEqual({ label: 'CAS Statement of Principles (1988)', url: null, locator: null })
+  })
+
+  it('cuts a no-URL citation at the dash, and at a chapter without one', () => {
     expect(summarizeSource('CAS Exam 5 Fall 2019, Q17 — official solution PDF, p.4'))
-      .toEqual({ label: 'CAS Exam 5 Fall 2019, Q17', url: null })
+      .toEqual({ label: 'CAS Exam 5 Fall 2019, Q17', url: null, locator: 'official solution PDF, p.4' })
     expect(summarizeSource('Werner & Modlin, Basic Ratemaking 5th ed., ch. 8 p.142'))
-      .toEqual({ label: 'Werner & Modlin, Basic Ratemaking 5th ed., ch. 8 p.142', url: null })
+      .toEqual({ label: 'Werner & Modlin, Basic Ratemaking 5th ed.', url: null, locator: 'ch. 8 p.142' })
   })
 
   it('cuts at the URL when the citation has no dash', () => {
     expect(summarizeSource('ASOP No. 13, https://www.actuarialstandardsboard.org/asop13.pdf'))
-      .toEqual({ label: 'ASOP No. 13', url: 'https://www.actuarialstandardsboard.org/asop13.pdf' })
+      .toEqual({
+        label: 'ASOP No. 13',
+        url: 'https://www.actuarialstandardsboard.org/asop13.pdf',
+        locator: null,
+      })
   })
 
   it('falls back to the URL rather than rendering an empty row', () => {
     expect(summarizeSource('https://www.soa.org/p-sample.pdf'))
-      .toEqual({ label: 'https://www.soa.org/p-sample.pdf', url: 'https://www.soa.org/p-sample.pdf' })
+      .toEqual({
+        label: 'https://www.soa.org/p-sample.pdf',
+        url: 'https://www.soa.org/p-sample.pdf',
+        locator: null,
+      })
   })
 })
 

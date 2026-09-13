@@ -25,6 +25,12 @@ import type { ResourceMeta } from '@/lib/resourceMeta'
 interface ResourceMetaCardProps {
   meta: ResourceMeta
   compact?: boolean
+  /**
+   * One line of context the host adds under the bibliographic facts — the Fact
+   * Check shelf's "which chapters and pages this page was checked on". Part of
+   * the citation, so it sits with the facts rather than above the action.
+   */
+  note?: string
   /** Extra classes on the card itself — a host that wants it to fill a column. */
   className?: string
   /**
@@ -54,6 +60,7 @@ interface ResourceMetaCardProps {
 export function ResourceMetaCard({
   meta,
   compact,
+  note,
   className,
   linkOnly = false,
   hostFullScreen,
@@ -147,6 +154,10 @@ export function ResourceMetaCard({
               </li>
             ))}
           </ul>
+        )}
+
+        {note && (
+          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{note}</p>
         )}
 
         {meta.getCopyUrl && (

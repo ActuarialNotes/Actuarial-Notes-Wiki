@@ -75,6 +75,12 @@ DEFAULT_DPI = 110
 PROBE_DPI = 36  # cheap pass used only to find the inked area
 MARGIN_PT = 6.0
 
+# Local OCR is resolution-hungry and, unlike a render, costs nothing but CPU —
+# so it is deliberately not the rendering budget. At 110 dpi Tesseract reads
+# Exam 5 Spring 2016 as "Eamed", "Abenefit", "ofone" and loses a column of the
+# exhibit; at 300 the same pages come back clean prose. Keep the two apart.
+OCR_DPI = 300
+
 # A line repeated on at least this share of pages is running furniture.
 FURNITURE_SHARE = 0.55
 
@@ -170,13 +176,13 @@ def read_pages(path: str, want_tables: bool = True, ocr: bool = False) -> list[P
     use_ocr = ocr and ocr_available()
     pages: list[Page] = []
     for index, page in enumerate(doc):
-        raw_text = page.get_text()
+        raw_text = mdmath.normalize_spaces(page.get_text())
         textpage = None
         ocred = False
         if use_ocr and len(raw_text.strip()) < SCAN_TEXT_THRESHOLD and page.get_images():
-            textpage = _ocr_page(page, DEFAULT_DPI)
+            textpage = _ocr_page(page, OCR_DPI)
             if textpage is not None:
-                raw_text = page.get_text(textpage=textpage)
+                raw_text = mdmath.normalize_spaces(page.get_text(textpage=textpage))
                 ocred = bool(raw_text.strip())
 
         tables: list[tuple[float, float, float, float, str]] = []
@@ -192,6 +198,9 @@ def read_pages(path: str, want_tables: bool = True, ocr: bool = False) -> list[P
         for x0, y0, x1, y1, text, _no, kind in raw_blocks:
             if kind != 0 or not text.strip():
                 continue
+            # Every structural regex below keys on plain spaces; a text layer
+            # set entirely in U+00A0 (Exam 5 Spring 2016) would match none.
+            text = mdmath.normalize_spaces(text)
             if any(
                 _overlaps((x0, y0, x1, y1), table[:4]) and _inside_table(text, table[4])
                 for table in tables
@@ -284,7 +293,11 @@ def _find_tables(page) -> list[tuple[float, float, float, float, str]]:
 # question's own scaffolding.
 STRUCTURE_CELL_RE = re.compile(
     r"(?i)(?:^QUESTION\s+\d{1,3}\b|TOTAL POINT VALUE|LEARNING OBJECTIVE"
-    r"|SAMPLE ANSWERS\b|EXAMINER'?.?S REPORT)"
+    r"|SAMPLE ANSWERS\b|EXAMINER'?.?S REPORT"
+    # A report that boxes a question's sample answers puts `Part b: 0.5 point`
+    # and `Sample 1` inside the box. Read as a table, those markers stop being
+    # line-initial and the per-part parse loses every sample after the first.
+    r"|^Part\s+[a-h]\b|^Sample\s+\d{1,2}\b)"
 )
 
 
@@ -432,7 +445,10 @@ COMPOUND_WRAP_RE = re.compile(r"([a-z]-)\n(?=[a-z]+-)")
 # the segmenters key on, so they are never folded into the line above. The
 # all-caps heading test has to stay case-sensitive — under IGNORECASE it would
 # match any word at all.
-CAPS_HEADING_RE = re.compile(r"^\s*[A-Z][A-Z0-9 '(),./-]{4,}$")
+# The apostrophe may be typographic: a publisher setting EXAMINER'S REPORT with
+# U+2019 still means it as a heading, and missing it folds the heading into the
+# line above, which loses the split between sample answers and commentary.
+CAPS_HEADING_RE = re.compile(r"^\s*[A-Z][A-Z0-9 '\u2018\u2019(),./-]{4,}$")
 # The markers that separate one piece of content from the next. These repeat
 # on nearly every page *by design*, so they are the one thing furniture
 # detection must never eat — unlike a running header or a page number, which
@@ -991,8 +1007,14 @@ def cas_records(
     # A booklet whose numbering survived is read directly. One whose numbering
     # did not — every scanned CAS booklet — is aligned on its point values
     # against the report's, which is why the report is parsed first.
-    prompts = numbered
-    if b_text.strip() and len(numbered) < len(bounds) / 2:
+    #
+    # A scan can also land in between: good OCR recovers the `10.` of the later
+    # questions while the earlier ones' numbers stay in a margin it reorders
+    # (Exam 5 Spring 2016 numbers 10-25 and not 1-9). So the two readings are
+    # merged rather than chosen between — direct numbering first, since it is
+    # the question's own label, and alignment only for the numbers it missed.
+    prompts = dict(numbered)
+    if b_text.strip() and len(numbered) < len(bounds):
         aligned = align_booklet(
             b_text,
             [
@@ -1000,9 +1022,15 @@ def cas_records(
                  [p["points"] for p in parsed_by_num[b.num]["parts"]])
                 for b in bounds
             ],
-        )
-        if aligned:
-            prompts = aligned
+        ) or {}
+        taken = sorted(prompts.values())
+        for num, span in aligned.items():
+            # Never over a span another question already owns: a prompt filed
+            # under the wrong question is worse than a missing one.
+            if num not in prompts and not any(
+                span[0] < end and start < span[1] for start, end in taken
+            ):
+                prompts[num] = span
 
     records: list[dict] = []
     for bound in bounds:
@@ -1212,7 +1240,7 @@ def attach_part_prompts(body: str, parts: list[dict]) -> str:
     """
     stem, prompts = split_part_prompts(body)
     if not prompts:
-        return body
+        return stem  # a single-part question: its total is already frontmatter
     by_label = {part["label"]: part for part in parts}
     for label, found in prompts.items():
         part = by_label.get(label)

@@ -16,9 +16,10 @@ function json(body: unknown, status = 200) {
   })
 }
 
-// Mirror of the client-side isActivePremium check (useSubscription.ts) so quota
-// is only spent for genuinely premium users.
-function isActivePremium(tier: string, status: string, periodEnd: string | null): boolean {
+// Mirror of the client-side isActivePro check (useSubscription.ts) so quota
+// is only spent for genuinely Pro users. The stored tier value is still
+// `premium` — see the note on SubscriptionTier in useSubscription.ts.
+function isActivePro(tier: string, status: string, periodEnd: string | null): boolean {
   if (tier !== 'premium') return false
   if (status !== 'active') return false
   if (!periodEnd) return true
@@ -44,14 +45,14 @@ Deno.serve(async (req: Request) => {
     const { data: { user }, error: userErr } = await admin.auth.getUser(token)
     if (userErr || !user) return json({ error: 'Unauthorized' }, 401)
 
-    // Enforce active premium server-side before calling the paid API.
+    // Enforce active Pro server-side before calling the paid API.
     const { data: sub } = await admin
       .from('user_subscriptions')
       .select('tier, status, current_period_end')
       .eq('user_id', user.id)
       .maybeSingle()
-    if (!sub || !isActivePremium(sub.tier, sub.status, sub.current_period_end)) {
-      return json({ error: 'Premium subscription required' }, 403)
+    if (!sub || !isActivePro(sub.tier, sub.status, sub.current_period_end)) {
+      return json({ error: 'Pro subscription required' }, 403)
     }
 
     const { ssml, rate } = await req.json().catch(() => ({}))

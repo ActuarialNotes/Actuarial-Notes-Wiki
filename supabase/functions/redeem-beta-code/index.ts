@@ -77,7 +77,9 @@ Deno.serve(async (req: Request) => {
     return json({ error: 'Failed to redeem code' }, 500)
   }
 
-  // Grant premium access (no expiry — use a far-future date for compatibility)
+  // Grant Pro access (no expiry — use a far-future date for compatibility).
+  // The stored tier value is `premium`; it is what the DB constraint and every
+  // existing row use. See the note on SubscriptionTier in useSubscription.ts.
   const farFuture = new Date('2099-12-31T23:59:59Z').toISOString()
   const { error: upsertErr } = await admin
     .from('user_subscriptions')
@@ -96,7 +98,7 @@ Deno.serve(async (req: Request) => {
     console.error('redeem-beta-code: upsert subscription error:', upsertErr)
     // Roll back redemption record on failure
     await admin.from('beta_code_redemptions').delete().eq('user_id', user.id)
-    return json({ error: 'Failed to activate premium' }, 500)
+    return json({ error: 'Failed to activate Pro' }, 500)
   }
 
   return json({ success: true })

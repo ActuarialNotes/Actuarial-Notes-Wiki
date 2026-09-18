@@ -18,7 +18,7 @@ export interface Cosmetic {
   priceGems: number
   tier?: 'basic' | 'rare'    // basic = 10 gems, rare = 50 gems
   rarity: CosmeticRarity
-  premiumOnly?: boolean
+  proOnly?: boolean
 }
 
 // Default palettes match the original AvatarDisplay colors so existing avatars
@@ -84,8 +84,8 @@ export const COSMETICS: Cosmetic[] = [
     palette: { primary: '#D97706', secondary: '#1D4ED8', belly: '#FEF9C3' },
     priceGems: 50, tier: 'rare', rarity: 'rare' },
 
-  // Premium-only
-  { id: 'badge:custom', type: 'badge', variantName: 'Custom Badge', priceGems: 100, rarity: 'mythic', premiumOnly: true },
+  // Pro-only
+  { id: 'badge:custom', type: 'badge', variantName: 'Custom Badge', priceGems: 100, rarity: 'mythic', proOnly: true },
 ]
 
 // Alias kept for any code that imports PAINTS

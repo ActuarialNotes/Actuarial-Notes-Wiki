@@ -92,7 +92,7 @@ paragraph.
 Keep the icon flow and one sentence. The three bullets are the sentence enumerated; the Tip
 is a different feature (the **Replace** button) and belongs next to that button, not here.
 
-### 3.3 Locked / premium overlays
+### 3.3 Locked / Pro overlays
 
 - `components/ReadinessCard.tsx` ~L1393 and `components/TodayCard.tsx` ~L331 both render
   "Custom Study Plan" + "A daily plan tailored to you" + **Upgrade**. The subtitle is the

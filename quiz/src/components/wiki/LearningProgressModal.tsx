@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronDown, Lock, Loader2, X } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
+import { ProBadge } from '@/components/ProBadge'
 import { useSubscription } from '@/hooks/useSubscription'
 import { useConceptLearningHistory, type ConceptLearningHistory } from '@/hooks/useConceptLearningHistory'
 import type { MasteryState } from '@/lib/mastery'
@@ -61,7 +62,7 @@ export function LearningProgressPanelView({
   collapsible = false,
   onLevelChange,
 }: PanelProps & { history: ConceptLearningHistory }) {
-  const { isPremium, isBetaTester, loading: subLoading } = useSubscription()
+  const { isPro, isBetaTester, loading: subLoading } = useSubscription()
   const { levelEvents, attemptDots, questions, currentLevel, loading, error } = history
   const [hoveredLevel, setHoveredLevel] = useState<MasteryState | null>(null)
   const [graphOpen, setGraphOpen] = useState(false)
@@ -79,7 +80,7 @@ export function LearningProgressPanelView({
     setSelectedQuestionId(null)
   }, [questions])
 
-  const isAccessible = isPremium || isBetaTester
+  const isAccessible = isPro || isBetaTester
   const isLoading = loading || subLoading
   const isEmpty = !isLoading && isAccessible && levelEvents.length === 0 && attemptDots.length === 0
   const displayLevel = hoveredLevel ?? currentLevel
@@ -103,13 +104,16 @@ export function LearningProgressPanelView({
             <Lock className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <p className="font-semibold">Learning Progress</p>
+            <p className="flex items-center justify-center gap-1.5 font-semibold">
+              Learning Progress
+              <ProBadge />
+            </p>
             <p className="text-sm text-muted-foreground mt-1">
               Track your mastery journey over time
             </p>
           </div>
           <Link to="/upgrade" className={buttonVariants({ size: 'sm' })}>
-            Upgrade to Premium
+            Upgrade to Pro
           </Link>
         </div>
       )}

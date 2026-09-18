@@ -8,6 +8,7 @@ import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { supabase } from '@/lib/supabase'
 import { playSound } from '@/lib/soundEngine'
 import { AvatarDisplay, serializeAvatar, ANIMAL_LABELS, type AnimalType } from '@/components/AvatarDisplay'
+import { ProBadge } from '@/components/ProBadge'
 import { COSMETICS, type Cosmetic, type CosmeticRarity } from '@/lib/cosmetics'
 import { CHARACTERS, type CharacterDefinition, type CharacterRarity } from '@/lib/characters'
 import {
@@ -49,7 +50,7 @@ function RarityBadge({ rarity }: { rarity: AnyRarity }) {
 export default function Store() {
   const navigate = useNavigate()
   const { user } = useAuth()
-  const { isPremium, isBetaTester, loading: subLoading } = useSubscription()
+  const { isPro, isBetaTester, loading: subLoading } = useSubscription()
   const { balance, loading: gemsLoading, refresh: refreshGems } = useGems()
   const { progress } = useExamProgress()
 
@@ -399,7 +400,10 @@ export default function Store() {
                         <p className="text-xs text-muted-foreground">
                           {cosmetic.type === 'badge' ? 'Profile badge' : ANIMAL_LABELS[cosmetic.animal!]}
                         </p>
-                        <RarityBadge rarity={cosmetic.rarity} />
+                        <div className="flex flex-wrap items-center justify-center gap-1.5">
+                          <RarityBadge rarity={cosmetic.rarity} />
+                          {cosmetic.proOnly && <ProBadge />}
+                        </div>
                       </div>
 
                       {isOwned ? (
@@ -428,7 +432,7 @@ export default function Store() {
                         <Button size="sm" variant="outline" onClick={() => setActiveTab('characters')} className="w-full gap-1.5 text-xs">
                           <Lock className="h-3.5 w-3.5" />Get {charDef?.label} first
                         </Button>
-                      ) : cosmetic.premiumOnly && !isPremium ? (
+                      ) : cosmetic.proOnly && !isPro ? (
                         <Button size="sm" variant="outline" onClick={() => navigate('/upgrade')} className="w-full gap-1.5">
                           <Lock className="h-3.5 w-3.5" />Upgrade to buy
                         </Button>

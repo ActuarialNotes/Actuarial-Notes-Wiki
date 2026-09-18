@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { segmentsToSsml, type SpeechSegment } from '@/lib/listenTokens'
 
 export type ListenStatus = 'idle' | 'loading' | 'playing' | 'paused' | 'ended' | 'unsupported'
-export type ListenEngine = 'browser' | 'premium'
+export type ListenEngine = 'browser' | 'pro'
 
 export interface ListenSpeech {
   status: ListenStatus
@@ -61,12 +61,12 @@ function pickEnglishVoice(synth: SpeechSynthesis): SpeechSynthesisVoice | null {
 
 /**
  * Controller for the Listen view. Plays the given speech segments and reports
- * the token index currently being spoken. Premium users get Google Cloud TTS
+ * the token index currently being spoken. Pro users get Google Cloud TTS
  * (with SSML mark timepoints); everyone else (and any cloud failure) uses the
  * browser's Web Speech API with word-boundary highlighting.
  */
 export function useListenSpeech(segments: SpeechSegment[], rate: number): ListenSpeech {
-  const { isPremium } = useSubscription()
+  const { isPro } = useSubscription()
   const [status, setStatus] = useState<ListenStatus>('idle')
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
   const [engine, setEngine] = useState<ListenEngine>('browser')
@@ -76,12 +76,12 @@ export function useListenSpeech(segments: SpeechSegment[], rate: number): Listen
   const rateRef = useRef(rate)
   const runIdRef = useRef(0)
   const audioRef = useRef<HTMLAudioElement | null>(null)
-  const isPremiumRef = useRef(isPremium)
+  const isProRef = useRef(isPro)
   const activeIndexRef = useRef<number | null>(null)
 
   segmentsRef.current = segments
   rateRef.current = rate
-  isPremiumRef.current = isPremium
+  isProRef.current = isPro
 
   const synth = typeof window !== 'undefined' ? window.speechSynthesis : undefined
 
@@ -158,7 +158,7 @@ export function useListenSpeech(segments: SpeechSegment[], rate: number): Listen
     speakSegment(fromSeg, runId)
   }, [synth, speakSegment])
 
-  // --- Premium cloud path ---
+  // --- Pro cloud path ---
   const playCloudChunk = useCallback(async (chunks: SpeechSegment[][], idx: number, runId: number) => {
     if (runId !== runIdRef.current) return
     if (idx >= chunks.length) {
@@ -199,7 +199,7 @@ export function useListenSpeech(segments: SpeechSegment[], rate: number): Listen
   }, [teardownAudio, setActive])
 
   const startCloud = useCallback(async (runId: number, fromSeg: number) => {
-    setEngine('premium')
+    setEngine('pro')
     setStatus('loading')
     try {
       const chunks = chunkSegments(segmentsRef.current.slice(fromSeg), MAX_SSML_CHARS)
@@ -221,7 +221,7 @@ export function useListenSpeech(segments: SpeechSegment[], rate: number): Listen
     if (segs.length === 0) { setActive(null); setStatus('ended'); return }
     const clamped = Math.max(0, Math.min(fromSeg, segs.length - 1))
     setActive(segs[clamped].ranges[0]?.index ?? null)
-    if (isPremiumRef.current) startCloud(runId, clamped)
+    if (isProRef.current) startCloud(runId, clamped)
     else startBrowser(runId, clamped)
   }, [hardStop, startCloud, startBrowser, setActive])
 
@@ -231,13 +231,13 @@ export function useListenSpeech(segments: SpeechSegment[], rate: number): Listen
   const skipForward = useCallback(() => begin(currentSegmentIndex() + 1), [begin, currentSegmentIndex])
 
   const pause = useCallback(() => {
-    if (engine === 'premium') audioRef.current?.pause()
+    if (engine === 'pro') audioRef.current?.pause()
     else synth?.pause()
     setStatus('paused')
   }, [engine, synth])
 
   const resume = useCallback(() => {
-    if (engine === 'premium') void audioRef.current?.play()
+    if (engine === 'pro') void audioRef.current?.play()
     else synth?.resume()
     setStatus('playing')
   }, [engine, synth])

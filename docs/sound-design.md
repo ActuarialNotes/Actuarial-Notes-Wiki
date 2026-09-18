@@ -53,6 +53,10 @@ costs zero bytes of assets and every cue is tunable from one table.
 9. **Beginnings are shaped differently from endings.** `begin`, `launch` and
    `study` are the only cues that open something instead of closing it, so none
    of them resolves: see "The cues that start something" below.
+10. **One moment, one sound.** Two cues for the same event don't read as richer,
+   they read as a glitch — and the second chime is what turns a small win into
+   something that sounds like it fired twice. A flow gets a cue per *thing that
+   happened*, not per function call on the way there: see "Collecting a card".
 
 ## The pieces
 
@@ -210,7 +214,7 @@ two-concept ceremony and a ten-concept one both climb from the root.
 | `ruffle` | Stepping through a sequence: a Previous / Next footer, or a drag along the position bar above it. The quietest cue in the app — see "Stepping through a sequence" |
 | `shuffle` | Riffling the flashcard deck into a new order |
 | `fileAway` | One finished card going green and collapsing into itself during "Clear Completed Flashcards". Climbs across the sweep — see "The combo" |
-| `correct` | A right answer, anywhere: quiz, comprehension check, flashcard "Got it". Climbs endlessly across a run — see "The combo" |
+| `correct` | A right answer in a run: quiz, flashcard "Got it". Climbs endlessly across a run — see "The combo". Not the collect check — see "Collecting a card" |
 | `addToDeck` | A card filed into the study deck ("Add to Flashcards") |
 | `collect` | A flashcard landing in the deck via the collect ceremony |
 | `levelUp` | A concept climbing the mastery ladder — a lone one, on the quiz-completion ceremony |
@@ -221,7 +225,6 @@ two-concept ceremony and a ten-concept one both climb from the root.
 | `begin` | Pressing Start Quiz — every button in the app that opens one. The count-in and one struck note |
 | `launch` | The *second* Start Quiz, on the pre-quiz collect gate: the press that puts a question on screen. Finishes `begin`'s phrase |
 | `study` | Opening the flashcard study view: the Study toggle, a card's "Study" action, "Study again" |
-| `unlock` | The locked comprehension-check screen gating a flashcard's collection |
 
 ## The cues that start something
 
@@ -267,7 +270,7 @@ deck is not an achievement, and a cue that congratulates you for a press you mak
 twenty times a session wears out fast. So `study` has no triad and no third in
 it — just an open fifth, the interval with no mood attached — pulled warm (the
 partials are scaled down via `bell`'s `sparkle`, and the lowpass is the darkest
-in the catalogue outside `unlock`). It begins on paper, like the rest of the
+in the catalogue). It begins on paper, like the rest of the
 flashcard family, and it *opens* rather than arriving: a slow A5 fades in over
 the held fifth across a fifth of a second, a lamp coming up over a desk.
 
@@ -311,6 +314,44 @@ can't stack a press cue on the first stop of a drag.
 
 `page` is what's left over for a single sheet actually turning: a flashcard
 flipping over, a stacked page being returned to, an image gallery stepping on.
+
+## Collecting a card
+
+Collecting is the longest ceremony in the app — a modal opens, a check is
+answered, a card spins, dissolves and lands — and it is also a flow you run
+*five times in a row* off the pre-quiz collect gate. That combination is what
+makes rule 10 load-bearing here: every cue stacked onto it is heard five times
+before the quiz has even started.
+
+So the whole flow makes four sounds, one per thing that actually happened:
+
+| | |
+| --- | --- |
+| The modal opens | `open` — the same paper slide every modal in the app gets |
+| An option is tapped | `select` — the reader's own press |
+| **The card lands** | **`collect` — the one success chime** |
+| The modal closes | `close` |
+
+Two cues used to sit on top of that and both are gone:
+
+- **`unlock`**, a 1.5-second drone that swelled under the `open` as the check
+  appeared. Two cues for one event (rule 10), and the one carrying the mood was
+  the longer of the two, so opening five checks in a row was five overlapping
+  drones. The cue is deleted, not just unhooked — nothing else played it.
+- **`correct`**, fired the instant the right option was tapped, a beat ahead of
+  `collect`. It made passing a one-question gate sound like two separate wins.
+  The check is the *door* to the ceremony, not a reward beside it, so the
+  landing keeps the chime and the answer keeps only its press.
+
+Dropping `correct` here also fixes something quieter. `correct` climbs a combo,
+and a climb only means anything if something ends it — which is why the quiz and
+the flashcard rating both call `resetSoundCombo` on their failure paths. The
+collect check has no such path: a wrong answer is deliberately silent and shuts
+the card behind a lockout. So a collect dropped into the middle of a quiz was
+walking the streak's pitch up without being part of the streak.
+
+The reduced-motion path skips the spin and the bloom, so `collect` fires
+immediately instead of 1.1 s in — same one chime, just sooner.
 
 ## Wiring a new interaction
 

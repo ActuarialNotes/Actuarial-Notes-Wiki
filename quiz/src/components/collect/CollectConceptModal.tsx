@@ -193,10 +193,11 @@ export function CollectConceptModal() {
     setHeaderLevel(null)
     setShakeHold(false)
     if (!ref) return
-    // The locked comprehension check gets its own low drone under the paper
-    // slide `open` already plays — a card that's already been collected has
-    // nothing to unlock, so it stays quiet.
-    if (!alreadyCollected) play('unlock')
+    // Opening the check makes exactly one sound — the paper slide `open` that
+    // every modal in the app shares. The low drone that used to swell under it
+    // was a second cue for the same event, and collecting a card is a flow you
+    // run five times in a row off the pre-quiz gate.
+
     // An authored comprehension check is self-contained — no wiki fetch needed
     // to build the question, so the question flow doesn't wait on one. The
     // definition is still fetched below (in the background) for the card's
@@ -319,8 +320,14 @@ export function CollectConceptModal() {
     </>
   )
 
+  // One chime, and it is `collect` — the ceremony's landing, played when the
+  // card actually lands. Answering the check used to fire `correct` on top of
+  // it a beat earlier, which made passing a one-question gate sound like two
+  // separate wins; the check is the door to the ceremony, not a reward of its
+  // own. `correct` also means "a right answer in a run" everywhere else, and
+  // this isn't one — it has no failure path to reset the combo, so a collect
+  // dropped into a quiz nudged the streak's pitch up without belonging to it.
   const runCollectAnimation = useCallback(() => {
-    play('correct')
     trackConceptCollected({ concept: name })
     // Passed — there is nothing left to lock, so the miss history goes with it.
     clearLockout(name)

@@ -44,6 +44,7 @@ function focusPopupZ(): number {
 
 // Every overlay reachable from more than one host, and the layer it must clear.
 const SHARED_OVERLAYS = [
+  'components/ConceptActionMenu.tsx',
   'components/wiki/ImageGalleryModal.tsx',
   'components/wiki/ConceptQuestionsModal.tsx',
   'components/wiki/LearningProgressModal.tsx',
@@ -78,6 +79,18 @@ describe('shared overlays', () => {
     ]) {
       expect(overlayZ(rel)).toBeGreaterThan(collect)
     }
+  })
+
+  it('the concept action menu clears every surface that opens it', () => {
+    // Not a full-screen overlay — it hangs off its trigger — but it is opened
+    // from the popup and from three flashcard surfaces, and inside any of them
+    // its own z is capped at the host's. The flashcard gallery is the case that
+    // showed: hosted at z-40, the menu's rows were painted over by the bottom
+    // nav (z-[45]) and the deck's action bar (z-[46]).
+    const src = read('components/ConceptActionMenu.tsx')
+    const z = Number(src.match(/`fixed [^`]*z-\[(\d+)\]/)?.[1])
+    expect(z).toBeGreaterThan(46)
+    expect(z).toBeGreaterThan(focusPopupZ())
   })
 
   it('the floating search backdrop dims the concept popup under it', () => {

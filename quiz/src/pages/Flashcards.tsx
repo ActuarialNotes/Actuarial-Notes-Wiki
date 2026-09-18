@@ -1502,7 +1502,6 @@ function SortableCard({
               open={showPlayMenu}
               onClose={() => setShowPlayMenu(false)}
               anchorRef={playBtnRef}
-              placement="anchored"
               content={markdown}
               stopPropagation
               leading={studyMenuItem}
@@ -1608,7 +1607,6 @@ function SortableCard({
             open={showPlayMenu}
             onClose={() => setShowPlayMenu(false)}
             anchorRef={playBtnRef}
-            placement="anchored"
             content={markdown}
             stopPropagation
             leading={studyMenuItem}
@@ -2296,7 +2294,6 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
                   open={showPlayMenu}
                   onClose={() => setShowPlayMenu(false)}
                   anchorRef={playBtnRef}
-                  placement="anchored"
                   content={markdown}
                   stopPropagation
                 />

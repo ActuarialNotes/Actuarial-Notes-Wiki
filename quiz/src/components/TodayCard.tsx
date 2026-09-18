@@ -6,7 +6,6 @@ import { useState, useEffect, useMemo, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Settings2,
-  AlertTriangle,
   CheckCircle2,
   Check,
   Circle,
@@ -54,22 +53,6 @@ function todayLongDate(): string {
 }
 
 // ── Sub-components ────────────────────────────────────────────────────────────
-
-function BehindWarning({ plan }: { plan: StudyPlan }) {
-  return (
-    <div className="rounded-lg bg-amber-50 dark:bg-amber-950/30 px-3 py-2.5 text-xs text-amber-800 dark:text-amber-300 space-y-1">
-      <div className="flex items-center gap-1.5 font-medium">
-        <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
-        {plan.status === 'target_passed'
-          ? 'Your target ready date has passed. Pacing to exam date instead.'
-          : `Behind pace: ${plan.conceptsPerDay} concept${plan.conceptsPerDay === 1 ? '' : 's'} per day needed to catch up.`}
-      </div>
-      {plan.status === 'behind' && (
-        <p>Consider an extended quiz session today to cover more ground.</p>
-      )}
-    </div>
-  )
-}
 
 function ReviewModeNote({ concepts }: { concepts: string[] }) {
   return (
@@ -488,9 +471,6 @@ export function TodayCard({
           )}
 
           {/* Warnings / info panels */}
-          {!loading && plan && (plan.status === 'behind' || plan.status === 'target_passed') && (
-            <BehindWarning plan={plan} />
-          )}
           {!loading && plan?.status === 'review_mode' && (
             <ReviewModeNote concepts={reviewConcepts} />
           )}

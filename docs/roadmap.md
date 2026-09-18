@@ -270,12 +270,11 @@ item here is a direct application of §2.2._
   `exam-mas-i` (90) and `exam-5` (99) toward parity, (c) extend toward CAS 6/7/8/9 whose
   wiki pages exist but have no banks. Content-validation CI (P0.2) and the converter
   skills (`cas-exam-converter`, `soa-exam-converter`) de-risk the bulk imports.
-- ✅ **P2.5 — Richer mastery analytics for the learner.** _Shipped:_ collapsible "Mastery
-  insights" Dashboard card (`lib/masteryAnalytics.ts`) with concepts-about-to-decay,
-  a predicted exam-readiness-by-date curve, and a weakest-topics ranking that deep-links
-  into a targeted quiz — decision support, not vanity stats. Gated by
-  `MASTERY_ANALYTICS_ENABLED`. _(Shipped without the P3.1 ReadinessCard split it was
-  originally sequenced behind — that debt still stands, see P3.1.)_
+- ◻️ **P2.5 — Richer mastery analytics for the learner.** _Shipped, then removed:_ the
+  "Fading Concepts" Dashboard card and its `MASTERY_ANALYTICS_ENABLED` flag are gone —
+  the Dashboard says enough about pacing without a second card repeating it. The pure
+  engine (`lib/masteryAnalytics.ts`) stays, and the heatmap's day panel still reads it,
+  so a future surface can be rebuilt on top of it.
 - ⬜ **P2.6 — Interleaved practice** _(new, §2.2.2)._ Quiz and study-plan session assembly
   currently blocks by concept/topic. Add an interleaving mode that mixes questions from
   related concepts within a session (the ontology in `scripts/ontology_map.py` +

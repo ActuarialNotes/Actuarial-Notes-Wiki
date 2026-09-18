@@ -484,7 +484,7 @@ Other important `lib/` modules:
   plays for a wrong answer — that's deliberate and pinned by a test. See
   `docs/sound-design.md`.
 - `featureFlags.ts` — build-time feature flags (`RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
-  `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`, `MASTERY_ANALYTICS_ENABLED`,
+  `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`,
   `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `FACT_CHECK_UI_ENABLED`, `TOUR_ENABLED`). `TOUR_ENABLED` is
   **off**: the guided onboarding tour (`components/OnboardingTour.tsx` +
   `hooks/useOnboardingTour.ts`) is parked pending a simpler rebuild, so `App.tsx` doesn't

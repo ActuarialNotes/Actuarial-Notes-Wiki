@@ -35,13 +35,12 @@ import { matchesSelectedVariant } from '@/data/examSittings'
 import { EXAM_ID_TO_TRACK_NAME } from '@/data/tracks'
 import { useGems } from '@/hooks/useGems'
 import { LevelBadge } from '@/components/LevelBadge'
-import { MasteryAnalyticsCard } from '@/components/MasteryAnalyticsCard'
 import { FixMistakesButton } from '@/components/FixMistakesButton'
 import type { LeagueExamOption } from '@/components/LeaderboardPanel'
 import { DashboardExportModal } from '@/components/DashboardExportModal'
 import { DashboardRemindersModal } from '@/components/DashboardRemindersModal'
 import { DashboardGuideModal } from '@/components/DashboardGuideModal'
-import { DAILY_PLAN_EMAIL_ENABLED, MASTERY_ANALYTICS_ENABLED, MISTAKES_REVIEW_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
+import { DAILY_PLAN_EMAIL_ENABLED, MISTAKES_REVIEW_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 
 const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
 const WELCOME_DISMISSED_KEY = 'quiz.dashboard.welcomeDismissed'
@@ -911,17 +910,6 @@ export default function Dashboard() {
           />
         )}
       </div>
-
-      {/* Mastery insights — richer learner analytics (roadmap P2.5). Full-width
-          now that Fix Mistakes has moved up into the primary actions. */}
-      {!isGuest && activeSyllabus && MASTERY_ANALYTICS_ENABLED && (
-        <MasteryAnalyticsCard
-          syllabus={activeSyllabus}
-          masteryRecords={activeExamRecords}
-        />
-      )}
-
-
 
       {!isGuest && user && (
         <DashboardExportModal open={exportOpen} onClose={() => setExportOpen(false)} user={user} />

@@ -28,7 +28,6 @@ export interface AnalyticsEventMap {
   quest_completed: { quest: string; gems: number; xp: number }
   quest_claimed: { quests: number; gems: number; xp: number }
   daily_quests_cleared: { quests: number }
-  mastery_analytics_quiz: { source: 'weak_topic' | 'decay_warning'; exam: string; topic?: string }
   league_joined: { tier: number }
   league_left: Record<string, never>
   search_query: { query: string; exam: string; difficulty: string }
@@ -118,11 +117,6 @@ export function trackDailyQuestsCleared(params: AnalyticsEventMap['daily_quests_
 
 export function trackUpgradeClicked() {
   track('upgrade_clicked')
-}
-
-/** Fires when a targeted quiz is launched from the mastery-analytics card (P2.5). */
-export function trackMasteryAnalyticsQuiz(params: AnalyticsEventMap['mastery_analytics_quiz']) {
-  track('mastery_analytics_quiz', params)
 }
 
 /** Fires when the student opts in to the weekly XP league (roadmap P4.1). */

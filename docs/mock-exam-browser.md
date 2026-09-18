@@ -1,9 +1,31 @@
-# The Mock Exam browser (past papers)
+# The past-paper browser
 
-The **Mock Exam** source on the quiz builder (`quiz/src/pages/Landing.tsx`) is a browser of
+The **Past Papers** source on the quiz builder (`quiz/src/pages/Landing.tsx`) is a browser of
 the exam's **past sittings**, not a single generated draw. Scrolling the shelf shows every
 paper the exam has released, how many questions each one holds, and — once the figures are
 filled in — the sitting's **effective pass ratio**.
+
+## What it's called on screen
+
+The mode id is still `mock-exam` — it is in URLs (`/quiz?mode=mock-exam`), in stored quiz
+sessions and in the `quiz_sessions` table, so renaming it would break saved links and
+history — but nothing on screen says "mock" any more. Two labels replace it, both in
+`lib/pastExams.ts`:
+
+| Label | Where | When |
+|---|---|---|
+| `examSourceLabel(rows)` → **Past Papers** | The source tab on the quiz builder | The exam has released sittings (Exam 5, MAS-I, MAS-II) |
+| `examSourceLabel(rows)` → **Practice Exam** | The same tab | It has none — Exam P and FM draw on the SOA's rolling sample set, so their shelf is the Mix row alone |
+| `PRACTICE_EXAM_LABEL` → **Practice Exam** | The Start button, the in-quiz mode pill, the quit dialog, the completion heading | Always — a session is practice whether it was drawn from Fall 2019 or from the Mix |
+
+The rule is the one the report button follows (`Examiner's Report` vs `Exam & Answer Key`):
+**the label follows the content.** "Mock" said the paper was a fabrication, which for most of
+this shelf is the one thing it isn't — these are the real released papers. Calling the
+generated Mix "past papers" would be the same mistake in the other direction, which is why
+the tab reads the shelf rather than being a constant.
+
+Because the tab is named after the rows, `pastExamRows` is computed near the top of
+`Landing.tsx`'s render, above the `sourceOptions` memo that consumes it.
 
 This replaced a row of pills (`Mix · Spring 2019 · Spring 2018 · …`) in the bottom action
 bar. A pill can carry a label and nothing else: it couldn't say how long a paper was, how
@@ -44,8 +66,8 @@ Rows sort **newest first**, with Fall ahead of Spring within a year. Session str
 frontmatter are inconsistent (`Spring`, `spring`, `Sp`), so `normalizeSession` folds them —
 without it one sitting splits into two rows.
 
-The first entry in the shelf is always **Mix**: the generated, syllabus-distributed mock
-exam (`MOCK_EXAM_QUESTIONS` in `Landing.tsx`), which is what Mock Exam meant before there
+The first entry in the shelf is always **Mix**: the generated, syllabus-distributed practice
+exam (`MOCK_EXAM_QUESTIONS` in `Landing.tsx`), which is all this source was before there
 was a browser. Selecting it is `selectedSitting === null`, exactly as before.
 
 ### Scope of the catalogue

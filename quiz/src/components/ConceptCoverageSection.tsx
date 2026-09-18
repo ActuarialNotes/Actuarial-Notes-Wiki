@@ -6,6 +6,7 @@ import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { CollectLevelUpCard } from '@/components/collect/CollectLevelUpCard'
 import { Button } from '@/components/ui/button'
 import { questionCredit, questionOutcome } from '@/lib/parser'
+import { PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
 import type { Question, SelfGrade, QuestionOutcome } from '@/lib/parser'
 import type { MasteryState } from '@/lib/mastery'
 import type { MasteryTransition } from '@/stores/quizStore'
@@ -326,7 +327,7 @@ export function ConceptCoverageSection({
           <div className="flex items-start justify-between gap-4">
             <div>
               <h1 className="text-xl font-bold">
-                {score.mode === 'mock-exam' ? 'Mock Exam Complete' : 'Quiz Complete'}
+                {score.mode === 'mock-exam' ? `${PRACTICE_EXAM_LABEL} Complete` : 'Quiz Complete'}
               </h1>
             </div>
             <div className={`text-4xl font-black tabular-nums leading-none ${pctColor}`}>

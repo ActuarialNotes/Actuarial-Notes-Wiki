@@ -35,7 +35,7 @@ import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { cn } from '@/lib/utils'
 import { getSittingPdfLink, getExamPdfLink, getExamSolutionsPdfLink } from '@/data/examPdfLinks'
 import { getPassRateLookup } from '@/data/pastExams'
-import { buildPastExamRows, sittingLabel } from '@/lib/pastExams'
+import { buildPastExamRows, examSourceLabel, sittingLabel, PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
 import { applyPassRates } from '@/lib/passRates'
 import { useExamPassRates } from '@/hooks/useExamPassRates'
 import { PastExamBrowser } from '@/components/PastExamBrowser'
@@ -812,6 +812,20 @@ export default function Landing() {
     )
   }
 
+  // The exam's past sittings — the authored catalogue merged with whatever the
+  // question bank holds, so papers that exist but haven't been imported still
+  // appear (greyed out) in the browser. Published pass ratios, fetched live
+  // through `api/pass-rates.js`, are laid over the authored figures; when the
+  // source is unconfigured or unreachable the catalogue stands on its own.
+  // Read this far up the render because the source tab is named after it: an
+  // exam with released papers offers "Past Papers", one without a "Practice Exam".
+  const livePassRates = useExamPassRates(topic)
+  const pastExamRows = useMemo(
+    () => (topic ? applyPassRates(buildPastExamRows(allQuestions, topic), livePassRates) : []),
+    [allQuestions, topic, livePassRates],
+  )
+  const examSourceName = examSourceLabel(pastExamRows)
+
   // The one control that says what this quiz is drawn from. "Today's Plan" only
   // appears for a signed-in learner working toward this exam — for everyone else
   // it isn't a choice, so it isn't offered.
@@ -855,10 +869,10 @@ export default function Landing() {
     options.push({
       value: 'mock-exam',
       flex: showTodayOption ? 2 : 1,
-      label: <span className="truncate">Mock Exam</span>,
+      label: <span className="truncate">{examSourceName}</span>,
     })
     return options
-  }, [showTodayOption, isPro, planConceptCount, selectedConcepts.length])
+  }, [showTodayOption, isPro, planConceptCount, selectedConcepts.length, examSourceName])
 
   function handleSourceChange(next: QuizSource) {
     setSource(next)
@@ -915,17 +929,6 @@ export default function Landing() {
     }
     navigate(`/quiz?${params.toString()}`)
   }
-
-  // The exam's past sittings — the authored catalogue merged with whatever the
-  // question bank holds, so papers that exist but haven't been imported still
-  // appear (greyed out) in the browser. Published pass ratios, fetched live
-  // through `api/pass-rates.js`, are laid over the authored figures; when the
-  // source is unconfigured or unreachable the catalogue stands on its own.
-  const livePassRates = useExamPassRates(topic)
-  const pastExamRows = useMemo(
-    () => (topic ? applyPassRates(buildPastExamRows(allQuestions, topic), livePassRates) : []),
-    [allQuestions, topic, livePassRates],
-  )
 
   // Questions belonging to the selected sitting — shared by the launch params,
   // the browser's footer line, and the availability count in the action bar.
@@ -1434,7 +1437,7 @@ export default function Landing() {
               className="h-14 w-full gap-3 rounded-xl text-base font-semibold"
             >
               <Play className="h-5 w-5" aria-hidden />
-              Start {mode === 'mock-exam' ? 'Mock Exam' : 'Quiz'}
+              Start {mode === 'mock-exam' ? PRACTICE_EXAM_LABEL : 'Quiz'}
             </Button>
             {/* Only badge a launch that's actually sized to finish today's plan —
                 picking a smaller count means this quiz won't complete it. */}

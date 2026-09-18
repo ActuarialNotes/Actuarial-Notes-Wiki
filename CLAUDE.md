@@ -162,7 +162,9 @@ before touching that area**:
   draws one from front matter for the pages with no real jacket, and the rule that a real
   jacket always wins — drop it in under a name that isn't `… - Cover.svg` and the generator
   leaves it alone forever.
-- `docs/mock-exam-browser.md` — the **Mock Exam past-paper browser** on the quiz builder: the
+- `docs/mock-exam-browser.md` — the **past-paper browser** on the quiz builder (the mode id is
+  still `mock-exam`; on screen the tab reads **Past Papers**, or **Practice Exam** for an exam
+  with no released sittings — `examSourceLabel` / `PRACTICE_EXAM_LABEL` in `lib/pastExams.ts`): the
   authored sitting catalogue (`data/pastExams.ts`), how `lib/pastExams.ts` merges it with the
   question bank so unimported papers still list (greyed out), the **live pass-rate
   pipeline** (`api/pass-rates.js` → `lib/passRates.ts` → `hooks/useExamPassRates`) that lays
@@ -300,7 +302,7 @@ Other important `lib/` modules:
   hung on the wiki index's `document` items as `exams`, which is what lets a resource card
   lead its pill row with **Exam P-1** / **Exam MAS-I** without re-reading every exam page.
   Imports are relative, not `@/`-aliased — the vite config pulls it into its own Node graph.
-- `pastExams.ts` — the past-sitting shelf behind the quiz builder's **Mock Exam** source:
+- `pastExams.ts` — the past-sitting shelf behind the quiz builder's **Past Papers** source:
   `buildPastExamRows` unions the authored catalogue (`data/pastExams.ts`) with the sittings the
   question bank actually holds, so a released paper that hasn't been imported still lists
   (greyed out, "Not added yet") and a freshly converted one appears without a catalogue edit.

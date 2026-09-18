@@ -191,6 +191,25 @@ def _sub(chunk: str, table: dict[str, str]) -> str:
     return chunk
 
 
+# The whitespace glyphs of `UNIVERSAL`, which a PDF's text layer sometimes uses
+# for *every* space (CAS Exam 5 Spring 2016 sets the whole document in U+00A0).
+# Structural parsing keys on `^QUESTION 1`, `TOTAL POINT VALUE:` and the like,
+# and `[ \t]` does not match those glyphs, so the split has to happen before the
+# text is segmented rather than in `normalize_chars` afterwards.
+SPACE_CHARS = {ch: sub for ch, sub in UNIVERSAL.items() if sub == " "}
+_SPACE_RE = re.compile("[" + "".join(SPACE_CHARS) + "]")
+
+
+def normalize_spaces(text: str) -> str:
+    """Exotic space glyphs turned into plain spaces, and nothing else changed.
+
+    Length-preserving and safe to apply to raw page text before any parsing:
+    unlike `normalize_chars` it never rewrites a character a math span would
+    have to see intact, so it cannot disturb the table finder or the reflow.
+    """
+    return _SPACE_RE.sub(" ", text)
+
+
 def normalize_chars(text: str) -> str:
     """Normalise OCR/PDF characters, choosing a table per span kind."""
     out: list[str] = []

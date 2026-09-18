@@ -23,6 +23,7 @@ import { SoundSettingsCard } from '@/components/SoundSettingsCard'
 import { EmailSettingsCard } from '@/components/EmailSettingsCard'
 import { DAILY_PLAN_EMAIL_ENABLED, LEAGUES_ENABLED, TOUR_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
+import { ProBadge } from '@/components/ProBadge'
 import { CharacterSkinSelector } from '@/components/MascotWidget'
 import { supabase } from '@/lib/supabase'
 import { useTheme } from '@/hooks/useTheme'
@@ -259,7 +260,7 @@ function InlineAuthForm() {
 // Account sections, rendered first for signed-in users
 const ACCOUNT_NAV_ITEMS = [
   { id: 'profile',    label: 'Profile' },
-  { id: 'premium',    label: 'Premium' },
+  { id: 'pro',        label: 'Pro' },
   { id: 'exams',      label: 'Credential Path & Exams' },
 ]
 
@@ -269,7 +270,7 @@ export default function Settings() {
   const navigate = useNavigate()
   const { user, loading: authLoading } = useAuth()
   const { theme, toggleTheme } = useTheme()
-  const { isPremium, isBetaTester, currentPeriodEnd, loading: subLoading } = useSubscription()
+  const { isPro, isBetaTester, currentPeriodEnd, loading: subLoading } = useSubscription()
   const { sessions } = useProgress()
   const {
     profile, setProfile,
@@ -321,7 +322,7 @@ export default function Settings() {
     return () => window.removeEventListener('beforeunload', handler)
   }, [isAnyDirty])
 
-  // ---- Premium: manage subscription via Stripe portal ----
+  // ---- Pro: manage subscription via Stripe portal ----
   const [portalLoading, setPortalLoading] = useState(false)
   const [portalError, setPortalError] = useState<string | null>(null)
   const [restoreLoading, setRestoreLoading] = useState(false)
@@ -334,7 +335,7 @@ export default function Settings() {
       const { data, error } = await supabase.functions.invoke('stripe-sync-session', { body: {} })
       if (error) throw new Error(error.message)
       if (data?.synced && data?.tier === 'premium') {
-        setRestoreMessage('Premium restored! Your features should appear shortly.')
+        setRestoreMessage('Pro restored! Your features should appear shortly.')
       } else {
         setRestoreMessage('No active subscription found. If you believe this is an error, contact support.')
       }
@@ -742,33 +743,32 @@ export default function Settings() {
               </Card>
             </section>
 
-            {/* ---- Premium ---- */}
-            <section ref={el => { sectionRefs.current.premium = el }} id="premium">
+            {/* ---- Pro ---- */}
+            <section ref={el => { sectionRefs.current.pro = el }} id="pro">
               <Card>
                 <CardHeader>
-                  <CardTitle>Premium</CardTitle>
+                  <CardTitle>Pro</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {subLoading ? (
                     <div className="flex justify-center py-4"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>
-                  ) : isPremium && isBetaTester ? (
+                  ) : isPro && isBetaTester ? (
                     <>
                       <div className="flex items-center gap-2">
+                        <ProBadge size="md" />
                         <span className="inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full bg-violet-500/15 text-violet-600 dark:text-violet-400">
                           <Star className="h-3 w-3 fill-current" />
                           Beta Tester
                         </span>
                       </div>
                       <p className="text-sm text-muted-foreground">
-                        You have Premium access via a beta tester code. Thank you for helping us build Actuarial Notes!
+                        You have Pro access via a beta tester code. Thank you for helping us build Actuarial Notes!
                       </p>
                     </>
-                  ) : isPremium ? (
+                  ) : isPro ? (
                     <>
                       <div className="flex items-center gap-2">
-                        <span className="inline-flex items-center text-xs font-semibold px-2 py-1 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400">
-                          Premium
-                        </span>
+                        <ProBadge size="md" />
                       </div>
                       {currentPeriodEnd && (
                         <p className="text-sm text-muted-foreground">
@@ -796,11 +796,11 @@ export default function Settings() {
                         </span>
                       </div>
                       <p className="text-sm text-muted-foreground">
-                        Upgrade to Premium for a custom study plan and exclusive features.
+                        Upgrade to Pro for a custom study plan and exclusive features.
                       </p>
                       <div className="flex flex-wrap gap-3">
                         <Link to="/upgrade">
-                          <Button variant="default">Upgrade to Premium →</Button>
+                          <Button variant="default">Upgrade to Pro →</Button>
                         </Link>
                         <Button
                           variant="outline"

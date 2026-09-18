@@ -6,6 +6,7 @@ import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useSplitHeight } from '@/hooks/useSplitHeight'
 import { ConceptPagePanel } from '@/components/wiki/ConceptPagePanel'
 import { PageStackBar } from '@/components/wiki/PageStackBar'
+import { ProBadge } from '@/components/ProBadge'
 import { samePage } from '@/lib/pageStack'
 import { clearPageScrollMemory } from '@/lib/pageScrollMemory'
 import { useAuth } from '@/hooks/useAuth'
@@ -41,7 +42,7 @@ export function ConceptPopup() {
   // strips the chrome back to the concept title, its text, and Previous/Next.
   const [focusMode, setFocusMode] = useState(false)
   const [viewingDropdownOpen, setViewingDropdownOpen] = useState(false)
-  const [showPremiumInfo, setShowPremiumInfo] = useState(false)
+  const [showProInfo, setShowProInfo] = useState(false)
   const [showGalleryInPanel, setShowGalleryInPanel] = useState(false)
   // A source document being read on the open page (`PdfViewerPanel`, opened
   // from a resource page's "Read PDF"). It lays over the popup and binds the
@@ -54,7 +55,7 @@ export function ConceptPopup() {
   const gallerySeekRef = useRef<0 | 1 | -1>(0)
   const viewingRef = useRef<HTMLDivElement>(null)
   const { user } = useAuth()
-  const { isPremium } = useSubscription()
+  const { isPro } = useSubscription()
 
   // The panel's own sound — a sheet of paper sliding out, and back in on close.
   // It lives here rather than on the buttons because the popup can be opened
@@ -149,18 +150,18 @@ export function ConceptPopup() {
     return () => window.removeEventListener('keydown', onKey)
   }, [open, close, turnPage, focusMode, showGalleryInPanel, readerInPanel])
 
-  // Close viewing dropdown / premium info when clicking outside.
+  // Close viewing dropdown / Pro info when clicking outside.
   useEffect(() => {
-    if (!viewingDropdownOpen && !showPremiumInfo) return
+    if (!viewingDropdownOpen && !showProInfo) return
     function onPointerDown(e: PointerEvent) {
       if (viewingRef.current && !viewingRef.current.contains(e.target as Node)) {
         setViewingDropdownOpen(false)
-        setShowPremiumInfo(false)
+        setShowProInfo(false)
       }
     }
     document.addEventListener('pointerdown', onPointerDown)
     return () => document.removeEventListener('pointerdown', onPointerDown)
-  }, [viewingDropdownOpen, showPremiumInfo])
+  }, [viewingDropdownOpen, showProInfo])
 
   // Publish the pane's height to the layout so it can reserve space below
   // the main column. Cleaned up on close.
@@ -233,7 +234,7 @@ export function ConceptPopup() {
   const navCurrent = occMode ? occurrenceIndex + 1 : index + 1
   const hasStudyPlan = !!(dashboardContext?.studyPlanList?.length)
   const hasSourceMaterial = !!(dashboardContext?.resourceList?.length)
-  const isLoggedInPremium = !!user && isPremium
+  const isLoggedInPro = !!user && isPro
   const currentFilter = dashboardContext?.filter ?? 'entire-syllabus'
 
   const todayLabel = `Study Plan — ${new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}`
@@ -367,7 +368,7 @@ export function ConceptPopup() {
           <div className="relative">
             <button
               type="button"
-              onClick={() => { setViewingDropdownOpen(v => !v); setShowPremiumInfo(false) }}
+              onClick={() => { setViewingDropdownOpen(v => !v); setShowProInfo(false) }}
               className="appearance-none px-2 py-2 rounded-md text-xs text-muted-foreground hover:text-foreground hover:bg-accent transition-colors cursor-pointer focus:outline-none inline-flex items-center gap-1"
             >
               {currentFilter === 'study-plan' ? todayLabel : currentFilter === 'source-material' ? 'Source Material' : 'Entire Syllabus'}
@@ -384,7 +385,7 @@ export function ConceptPopup() {
                   >
                     {todayLabel}
                   </button>
-                ) : isLoggedInPremium ? (
+                ) : isLoggedInPro ? (
                   <Link
                     to="/dashboard"
                     onClick={() => { close(); setViewingDropdownOpen(false) }}
@@ -395,7 +396,7 @@ export function ConceptPopup() {
                 ) : (
                   <button
                     type="button"
-                    onClick={() => { setShowPremiumInfo(v => !v); setViewingDropdownOpen(false) }}
+                    onClick={() => { setShowProInfo(v => !v); setViewingDropdownOpen(false) }}
                     className="w-full flex items-center gap-1.5 px-3 py-2 text-xs opacity-50 hover:opacity-70 transition-opacity text-left"
                   >
                     <Lock className="h-3 w-3 shrink-0" />
@@ -421,24 +422,25 @@ export function ConceptPopup() {
               </div>
             )}
 
-            {showPremiumInfo && (
+            {showProInfo && (
               <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 z-50 w-60 rounded-md bg-popover text-popover-foreground shadow-md p-3">
                 <div className="flex items-center gap-1.5 mb-1.5 text-xs font-medium">
                   <Lock className="h-3 w-3 shrink-0" />
-                  Premium feature
+                  <ProBadge />
+                  feature
                 </div>
                 <p className="text-xs text-muted-foreground mb-2.5">
                   {user
-                    ? 'Upgrade to Premium to access personalised daily Study Plans.'
-                    : 'Sign in and upgrade to Premium to access personalised daily Study Plans.'
+                    ? 'Upgrade to Pro to access personalised daily Study Plans.'
+                    : 'Sign in and upgrade to Pro to access personalised daily Study Plans.'
                   }
                 </p>
                 <Link
                   to={user ? '/upgrade' : '/auth'}
-                  onClick={() => setShowPremiumInfo(false)}
+                  onClick={() => setShowProInfo(false)}
                   className="text-xs text-primary hover:underline"
                 >
-                  {user ? 'Upgrade to Premium →' : 'Sign in →'}
+                  {user ? 'Upgrade to Pro →' : 'Sign in →'}
                 </Link>
               </div>
             )}

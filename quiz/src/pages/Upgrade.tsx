@@ -7,12 +7,13 @@ import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { ProBadge } from '@/components/ProBadge'
 import { trackUpgradeClicked } from '@/lib/analytics'
 
 export default function Upgrade() {
   const navigate = useNavigate()
   const { user } = useAuth()
-  const { isPremium, loading: subLoading } = useSubscription()
+  const { isPro, loading: subLoading } = useSubscription()
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [betaCode, setBetaCode] = useState('')
@@ -88,8 +89,9 @@ export default function Upgrade() {
   return (
     <div className="container max-w-xl mx-auto px-4 py-12 space-y-6">
       <div className="text-center space-y-3">
-        <h1 className="text-xl font-semibold">
-          Actuarial Notes Premium
+        <h1 className="flex items-center justify-center gap-2 text-xl font-semibold">
+          Actuarial Notes
+          <ProBadge size="md" />
         </h1>
         <p className="text-muted-foreground">
           Unlock custom Study Plans.
@@ -150,10 +152,10 @@ export default function Upgrade() {
               <Loader2 className="h-4 w-4 animate-spin mr-2" />
               Loading…
             </Button>
-          ) : isPremium ? (
+          ) : isPro ? (
             <div className="space-y-2">
               <div className="rounded-md bg-green-500/10 px-3 py-2 text-sm text-green-700 dark:text-green-400">
-                You're already a Premium member. Thanks for your support!
+                You're already a Pro member. Thanks for your support!
               </div>
               <Button variant="outline" className="w-full" onClick={() => navigate('/dashboard')}>
                 Back to Dashboard
@@ -180,7 +182,7 @@ export default function Upgrade() {
         </CardContent>
       </Card>
 
-      {!isPremium && !subLoading && (
+      {!isPro && !subLoading && (
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-base">
@@ -191,7 +193,7 @@ export default function Upgrade() {
           <CardContent className="space-y-3">
             {betaSuccess ? (
               <div className="rounded-md bg-green-500/10 px-3 py-2 text-sm text-green-700 dark:text-green-400">
-                Code redeemed! You now have Premium access. Welcome aboard.
+                Code redeemed! You now have Pro access. Welcome aboard.
               </div>
             ) : (
               <>

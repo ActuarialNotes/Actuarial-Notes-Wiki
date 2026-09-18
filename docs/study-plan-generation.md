@@ -202,7 +202,7 @@ have no badge — they don't complete the plan.
   show (0 once the plan is done — a finished plan still has a re-launchable question count,
   but nothing left to nag about).
 - `hooks/useTodayQuizCount.ts` assembles the per-exam study plans and exposes
-  `useTodayQuizCounts()` → `{ byExam, total }`. Premium-only, same as Today's Plan itself.
+  `useTodayQuizCounts()` → `{ byExam, total }`. Pro-only, same as Today's Plan itself.
 - `components/TodayQuizBadge.tsx` is the shared look (orange, corner or inline variant).
 
 **When you add a new way to start a plan-completing quiz, badge it** — pull the count from

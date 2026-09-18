@@ -9,6 +9,7 @@ import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
 import { ExamHeatmap } from '@/components/ExamHeatmap'
 import { ExamLogo } from '@/components/ExamLogo'
+import { ProBadge } from '@/components/ProBadge'
 import { QuizSessionCard } from '@/components/QuizSessionCard'
 import { SessionCompletionOverlay } from '@/components/SessionCompletionOverlay'
 import { StreakNavBadge } from '@/components/StreakBadge'
@@ -307,7 +308,7 @@ interface Props {
   startQuizTrigger?: number
   scrollToRadialTrigger?: number
   /** Whether the user has access to the custom Study Plan. Defaults to true. */
-  isPremium?: boolean
+  isPro?: boolean
   /** Reports whether today's study plan is fully complete, so the Dashboard's readiness stat can show a checkmark. */
   onPlanCompletionChange?: (complete: boolean) => void
   /** Bumped by the Dashboard (e.g. tapping the readiness-stat checkmark) to open the day-complete/bonus info panel. */
@@ -333,7 +334,7 @@ export function ReadinessCard({
   syllabus, masteryRecords, sessions, plan, masteryStateByName,
   config, loading, masteryLoading = false, examDate, onConfigChange, onRegenerate, onReplaceConcepts, onExamDateChange,
   openConceptsTrigger, startQuizTrigger, scrollToRadialTrigger,
-  isPremium = true, onPlanCompletionChange, openDayCompleteInfoTrigger, studyScheduleSlot,
+  isPro = true, onPlanCompletionChange, openDayCompleteInfoTrigger, studyScheduleSlot,
   readinessSlot, actions,
 }: Props) {
   const navigate = useNavigate()
@@ -461,7 +462,7 @@ export function ReadinessCard({
   // regenerates in the owner's effect a render or two after the save, so the
   // sweep waits a beat and then reads whatever plan has landed.
   useEffect(() => {
-    if (!isPremium) return
+    if (!isPro) return
     function handlePlanLocked(e: Event) {
       const detail = (e as CustomEvent<PlanLockedDetail>).detail
       if (detail?.examId !== progressKey) return
@@ -473,7 +474,7 @@ export function ReadinessCard({
     }
     window.addEventListener(PLAN_LOCKED_EVENT, handlePlanLocked)
     return () => window.removeEventListener(PLAN_LOCKED_EVENT, handlePlanLocked)
-  }, [progressKey, examDate, isPremium, playback])
+  }, [progressKey, examDate, isPro, playback])
 
 
   // Fetch all daily_completions for this exam — used for heatmap plan-completion coloring
@@ -535,7 +536,7 @@ export function ReadinessCard({
   // it is made of — so the two can never quote different numbers.
   //
   // Scored from real mastery on every tier. Mastery is recorded for every
-  // account — the daily study *plan* is what Premium buys, not the record of
+  // account — the daily study *plan* is what Pro buys, not the record of
   // what has been learned — so scoring a free account against an empty record
   // list reported 0% readiness to someone who had just levelled concepts up,
   // which reads as a broken app rather than as a locked feature.
@@ -743,9 +744,9 @@ export function ReadinessCard({
 
   // Report completion status up so the Dashboard can mark the readiness stat done
   useEffect(() => {
-    onPlanCompletionChange?.(isPremium && displayConcepts.length > 0 && allConceptsDone)
+    onPlanCompletionChange?.(isPro && displayConcepts.length > 0 && allConceptsDone)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPremium, displayConcepts.length, allConceptsDone])
+  }, [isPro, displayConcepts.length, allConceptsDone])
 
   // Open the day-complete/bonus info panel when the Dashboard's readiness-stat checkmark is tapped
   useEffect(() => {
@@ -759,7 +760,7 @@ export function ReadinessCard({
 
     const topicValue = questionExamLabel(syllabus)
 
-    // No daily plan to sweep through — a free account, or a premium one that
+    // No daily plan to sweep through — a free account, or a Pro one that
     // hasn't set a target date. The cascade is an animation *of the plan*, and
     // `autostart` needs one, so both would be a second of nothing before the
     // quiz builder appeared anyway. Go straight there, with the exam already
@@ -866,9 +867,9 @@ export function ReadinessCard({
   // score and the ring, so it portals into the Dashboard's slot with them.
   const studyPlanCardContent = (
     <>
-      {/* Premium: today's concepts. Stays visible regardless of which day is
+      {/* Pro: today's concepts. Stays visible regardless of which day is
           selected on the Study Schedule heatmap. */}
-      {isPremium && displayConcepts.length > 0 && (
+      {isPro && displayConcepts.length > 0 && (
         <Card
           ref={studyPlanCardRef}
           className={`border-0 relative transition-colors ${allConceptsDone ? 'bg-green-500/10 dark:bg-green-500/15' : ''}`}
@@ -910,7 +911,10 @@ export function ReadinessCard({
           )}
           <CardContent className="p-6 space-y-4">
             <div className="space-y-4">
-              <h3 className="text-sm font-semibold">Today's Study Plan</h3>
+              <div className="flex items-center gap-2">
+                <h3 className="text-sm font-semibold">Today's Study Plan</h3>
+                <ProBadge />
+              </div>
 
               {/* Progress pills — shown when there's activity today */}
               {todayQuestionsAnswered > 0 && !allConceptsDone && (
@@ -1024,15 +1028,18 @@ export function ReadinessCard({
         </Card>
       )}
 
-      {/* Locked study plan — non-premium only, standing in the same place as
-          the premium Today's Study Plan card. */}
-      {!isPremium && (
+      {/* Locked study plan — non-Pro only, standing in the same place as
+          the Pro Today's Study Plan card. */}
+      {!isPro && (
         <div className="relative rounded-xl overflow-hidden">
           {/* Blurred background: Custom Study Plan card */}
           <div className="absolute inset-0 pointer-events-none select-none blur-sm opacity-50 rounded-xl" aria-hidden="true">
             <div className="h-full bg-card rounded-xl p-5 space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-semibold">Today's Study Plan</h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-sm font-semibold">Today's Study Plan</h3>
+                  <ProBadge />
+                </div>
                 <Settings2 className="h-4 w-4 text-muted-foreground" />
               </div>
               <div className="space-y-0.5">
@@ -1060,6 +1067,7 @@ export function ReadinessCard({
               <div className="space-y-1">
                 <div className="flex items-center justify-center gap-1.5">
                   <p className="text-base font-semibold">Custom Study Plan</p>
+                  <ProBadge />
                 </div>
                 <p className="text-xs text-muted-foreground max-w-[220px]">
                   A daily plan tailored to you
@@ -1406,7 +1414,7 @@ export function ReadinessCard({
                 )}
 
                 {/* Study plan for this day */}
-                {isPremium && (() => {
+                {isPro && (() => {
                   // Today's plan lives in its own card, so clicking today's cell
                   // normally shows nothing here — except during the sweep, where
                   // landing on today is the whole point.
@@ -1488,7 +1496,7 @@ export function ReadinessCard({
                 {!playback.active && daySessions.length === 0 && (() => {
                   if (isFutureDay) {
                     // A future day with a plan already shows "Planned for this day".
-                    if (isPremium && plan) return null
+                    if (isPro && plan) return null
                     return <p className="text-sm text-muted-foreground">This day is still ahead — nothing recorded yet.</p>
                   }
                   if (displayDay === todayStr) {
@@ -1543,7 +1551,7 @@ export function ReadinessCard({
           examLabel={syllabus.examLabel}
           examId={wikiExamIdToProgressKey(syllabus.examId)}
           initialStep={configInitialStep}
-          isPremium={isPremium}
+          isPro={isPro}
           onSave={next => {
             onConfigChange(next)
             onRegenerate()

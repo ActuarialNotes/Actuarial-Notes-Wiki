@@ -113,7 +113,7 @@ function GroupSection({
   onToggle,
   onSelectAll,
   conceptLevelMap,
-  isPremium,
+  isPro,
 }: {
   group: { name: string; weight?: string; subtopics: string[] }
   selectedSubtopics: string[]
@@ -121,7 +121,7 @@ function GroupSection({
   onToggle: (subtopic: string) => void
   onSelectAll: (group: { subtopics: string[] }, e: React.MouseEvent) => void
   conceptLevelMap?: Map<string, MasteryState>
-  isPremium?: boolean
+  isPro?: boolean
 }) {
   const selectedCount = group.subtopics.filter(s => selectedSubtopics.includes(s)).length
   const allSelected = selectedCount === group.subtopics.length
@@ -233,10 +233,10 @@ function GroupSection({
                 </span>
                 {/* Both signals, not one or the other. These used to be an
                     if/else on mastery, and `conceptLevelMap` has an entry for
-                    every concept — so a premium user, the only kind with a
+                    every concept — so a Pro user, the only kind with a
                     study plan, could never see which concepts were in it. */}
                 {isToday && <TodayChip />}
-                {isPremium && conceptLevel !== undefined && (
+                {isPro && conceptLevel !== undefined && (
                   <MasteryBadge state={conceptLevel} compact />
                 )}
               </button>
@@ -340,7 +340,7 @@ export default function Landing() {
   const { questions: allQuestions } = useAllQuestions()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
   const { syllabi } = useWikiSyllabus()
-  const { isPremium, loading: subLoading } = useSubscription()
+  const { isPro, loading: subLoading } = useSubscription()
   // Per-exam "questions left in today's plan" — badges the exam cards, so the
   // count is visible before an exam is even picked.
   const { byExam: todayQuizByExam } = useTodayQuizCounts()
@@ -535,7 +535,7 @@ export default function Landing() {
     return result
   }, [syllabusForTopic, orderedConcepts])
 
-  // For premium users: map each concept name to its mastery level
+  // For Pro users: map each concept name to its mastery level
   const conceptLevelMap = useMemo(() => {
     if (!examIdForPlan) return new Map<string, MasteryState>()
     const now = new Date()
@@ -587,7 +587,7 @@ export default function Landing() {
   }, [plan, allQuestions, topic])
 
   // Derived: whether today's plan is the active filter
-  const useTodaysPlan = examInProgress && conceptMode === 'today' && isPremium && !!plan && planConceptCount > 0
+  const useTodaysPlan = examInProgress && conceptMode === 'today' && isPro && !!plan && planConceptCount > 0
 
   // True once the async data that decides the initial Today's Plan vs. By Topic
   // mode (mastery, concepts, study plan, subscription) has settled, so the
@@ -677,7 +677,7 @@ export default function Landing() {
     return true
   }, [buildTodaysPlanSelection, navigate, todayAnsweredIds])
 
-  // Auto-activate today's study plan for premium users when it has concepts.
+  // Auto-activate today's study plan for Pro users when it has concepts.
   // If the dashboard passed a custom concept selection (some deselected), apply that instead.
   useEffect(() => {
     if (!user || masteryLoading || conceptsLoading || planLoading || subLoading || mode !== 'quiz' || !topic) return
@@ -691,13 +691,13 @@ export default function Landing() {
       return
     }
 
-    if (!didApplyOverrideRef.current && examInProgress && isPremium && plan && planConceptCount > 0) {
+    if (!didApplyOverrideRef.current && examInProgress && isPro && plan && planConceptCount > 0) {
       setSource('today')
       setSelectedConcepts([])
       setIsAdaptive(false)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [topic, mode, user?.id, masteryLoading, conceptsLoading, planLoading, subLoading, isPremium, planConceptCount, examInProgress])
+  }, [topic, mode, user?.id, masteryLoading, conceptsLoading, planLoading, subLoading, isPro, planConceptCount, examInProgress])
 
   // Auto-size Today's Quiz to cover the entire (remaining) plan, until the user
   // picks a specific count. This is what makes "Start Today's Quiz" pull exactly
@@ -710,13 +710,13 @@ export default function Landing() {
 
   // One-click launch from the dashboard: as soon as the plan + question bank are
   // ready, jump straight into a quiz sized to complete today's plan. Falls back to
-  // the normal config screen if the user isn't premium or has no plan.
+  // the normal config screen if the user is not Pro or has no plan.
   //
   // While this is pending we render a brief loading state (see `isAutostarting`
   // below) instead of the config screen — the dashboard's launch animation flows
   // straight into the quiz's collect gate with no flash of the config UI in
   // between. `autostartFailed` flips us back to the config screen only once we
-  // know autostart can't proceed (not premium / no plan / no questions).
+  // know autostart can't proceed (not Pro / no plan / no questions).
   const didAutostartRef = useRef(false)
   const [autostartFailed, setAutostartFailed] = useState(false)
   useEffect(() => {
@@ -726,7 +726,7 @@ export default function Landing() {
     if (masteryLoading || conceptsLoading || planLoading || subLoading) return
     // Everything the autostart decision depends on has loaded. If we're not
     // eligible, reveal the config screen instead of holding the spinner forever.
-    if (!examInProgress || !isPremium || !plan || planConceptCount === 0 || allQuestions.length === 0) {
+    if (!examInProgress || !isPro || !plan || planConceptCount === 0 || allQuestions.length === 0) {
       setAutostartFailed(true)
       return
     }
@@ -737,7 +737,7 @@ export default function Landing() {
     }
     didAutostartRef.current = true
     launchTodaysPlan(minQuestionsToCoverConcepts(sel.todayQs, sel.concepts, { seenIds: todayAnsweredIds }))
-  }, [searchParams, user, mode, topic, masteryLoading, conceptsLoading, planLoading, subLoading, isPremium, plan, planConceptCount, allQuestions, buildTodaysPlanSelection, launchTodaysPlan, examInProgress, todayAnsweredIds])
+  }, [searchParams, user, mode, topic, masteryLoading, conceptsLoading, planLoading, subLoading, isPro, plan, planConceptCount, allQuestions, buildTodaysPlanSelection, launchTodaysPlan, examInProgress, todayAnsweredIds])
 
   // True while a dashboard-initiated autostart is still resolving (loading data
   // or navigating into the quiz). Suppresses the config screen so the launch is
@@ -822,15 +822,15 @@ export default function Landing() {
       options.push({
         value: 'today',
         flex: 2,
-        ariaLabel: isPremium
+        ariaLabel: isPro
           ? `Today's plan${planConceptCount > 0 ? `, ${planConceptCount} concepts` : ''}`
-          : "Today's plan (premium)",
+          : "Today's plan (Pro)",
         label: (
           <>
             <CalendarCheck className="h-3.5 w-3.5 shrink-0" aria-hidden />
             <span className="truncate">Today's Plan</span>
-            {!isPremium && <Lock className="h-3 w-3 shrink-0 text-amber-500" aria-hidden />}
-            {isPremium && planConceptCount > 0 && (
+            {!isPro && <Lock className="h-3 w-3 shrink-0 text-muted-foreground" aria-hidden />}
+            {isPro && planConceptCount > 0 && (
               <span className="text-xs tabular-nums text-muted-foreground">{planConceptCount}</span>
             )}
           </>
@@ -858,11 +858,11 @@ export default function Landing() {
       label: <span className="truncate">Mock Exam</span>,
     })
     return options
-  }, [showTodayOption, isPremium, planConceptCount, selectedConcepts.length])
+  }, [showTodayOption, isPro, planConceptCount, selectedConcepts.length])
 
   function handleSourceChange(next: QuizSource) {
     setSource(next)
-    if (next === 'today' && isPremium) {
+    if (next === 'today' && isPro) {
       setSelectedConcepts([])
       setIsAdaptive(false)
     }
@@ -1297,7 +1297,7 @@ export default function Landing() {
 
                 {/* Today's Plan content */}
                 {quizModeResolved && source === 'today' && (
-                  !isPremium ? (
+                  !isPro ? (
                     <div className="rounded-lg bg-muted/40 px-4 py-3 flex items-start gap-3">
                       <div className="flex-1 space-y-1">
                         <p className="text-sm font-medium">Personalized daily study plan</p>
@@ -1353,8 +1353,8 @@ export default function Landing() {
                             todaySubtopics={todayConcepts}
                             onToggle={toggleConcept}
                             onSelectAll={selectAllInGroup}
-                            conceptLevelMap={isPremium ? conceptLevelMap : undefined}
-                            isPremium={isPremium}
+                            conceptLevelMap={isPro ? conceptLevelMap : undefined}
+                            isPro={isPro}
                           />
                         ))}
                       </>

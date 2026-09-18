@@ -56,7 +56,9 @@ quiz/                                             — the React app (this is whe
   concept popup (whose title is its only trigger) and every flashcard surface open that one
   component, so the two can't drift apart. A surface adds only rows about *itself* (a card's
   Study and Remove) through `leading` / `trailing`; view switches (Listen, the deck's view
-  modes) are each surface's own control, never menu rows.
+  modes) are each surface's own control, never menu rows. It always portals to the body and
+  is placed by `lib/menuPlacement.ts`, so no host's stacking context or viewport edge can
+  clip it — the only way to collect a card is through it.
 - `lib/` — core logic, mostly pure/testable modules (this is where the interesting algorithms live)
 - `data/` — authored static tables bundled into the app: `comprehensionChecks.ts` (parses the
   flashcard-collect gate questions from `comprehension-checks/<exam-id>/*.md` at build time via the
@@ -349,6 +351,11 @@ Other important `lib/` modules:
   `hooks/useConceptPopup.ts`, the rendering is `ConceptPopup` (shell + bars) over
   `ConceptPagePanel` (the open page, mounted per ref, with the scroll memory that lets a
   folded page come back where it was left). See `docs/stacked-pages.md`.
+- `menuPlacement.ts` — where a menu hangs off the control that opened it. Aligning with the
+  trigger is only a preference: the viewport gets the last word, so a control near an edge has
+  the menu shifted back inside, one with no room below has it opened upwards, and the height is
+  cut to the room there is rather than spilling past the fold. Pure and tested; read by
+  `components/ConceptActionMenu.tsx`.
 - `navScrub.ts` — the maths behind a **scrubbable** progress bar: which item a point on the
   track means (the exact inverse of `navProgressPercent`, so a drag can't land off by one),
   where a key press moves to, and how a list of chapter marks becomes the **segments** the

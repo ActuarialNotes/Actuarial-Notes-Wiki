@@ -1,5 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useState, type ReactNode, type RefObject } from 'react'
-import { createPortal } from 'react-dom'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useState, type ReactNode, type RefObject } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { BookOpen, CheckCheck, Play, Sparkles, TrendingUp } from 'lucide-react'
 import { fetchAllQuestions, fetchWikiFile } from '@/lib/github'
@@ -21,6 +20,8 @@ import { MasteryBadge } from '@/components/MasteryBadge'
 import { FactCheckDialog } from '@/components/FactCheckBadge'
 import { FACT_CHECK_TONE_CLASSES } from '@/lib/factCheckTone'
 import { factCheckBadge, parseVerification } from '@/lib/verification'
+import { placeMenu, type MenuPlacement } from '@/lib/menuPlacement'
+import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import { AddToProjectMenuItem } from '@/components/wiki/AddToProjectMenuItem'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
@@ -39,10 +40,17 @@ import { FACT_CHECK_UI_ENABLED, RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
  * modes are the deck's dropdown, so the menu stays a list of actions.
  *
  * Everything it needs it reads for itself (mastery, collection, question
- * count, the page's `verification:` block), so a host only has to say where
- * the menu hangs and whether it is open. Rows that belong to one surface only
- * — Study and Remove, which are about a *card* rather than a concept — are
- * passed in as `leading` / `trailing`.
+ * count, the page's `verification:` block), so a host only has to say which
+ * control the menu hangs off and whether it is open. Rows that belong to one
+ * surface only — Study and Remove, which are about a *card* rather than a
+ * concept — are passed in as `leading` / `trailing`.
+ *
+ * It always renders into <body>, placed against its trigger by `placeMenu`.
+ * Hosting it inside the surface that opened it is what used to hide it: a
+ * flashcard tile's menu is inside the gallery's own `z-40` layer, under the
+ * bottom nav, and inside a scroller that clips it. From the body it answers to
+ * the viewport alone — which is the one promise this menu has to keep, since
+ * collecting a card is only reachable from it.
  *
  * It stays mounted while closed: the modals it opens (questions, learning
  * progress, fact check) outlive the menu that opened them.
@@ -53,13 +61,6 @@ export interface ConceptActionMenuProps {
   onClose: () => void
   /** The control that toggles the menu — the menu is anchored to its box. */
   anchorRef: RefObject<HTMLElement | null>
-  /**
-   * `portal` renders into <body> with fixed positioning, for a host inside a
-   * stacking context the menu has to escape. `anchored` renders absolutely
-   * under the trigger, so the menu travels with a host that scrolls or drags;
-   * that host must be `relative`.
-   */
-  placement?: 'portal' | 'anchored'
   /**
    * The page's markdown, when the host already has it — what the Fact Check
    * row reads. Omitted, the menu fetches it itself when first opened.
@@ -78,7 +79,6 @@ export function ConceptActionMenu({
   open,
   onClose,
   anchorRef,
-  placement = 'portal',
   content,
   stopPropagation = false,
   leading,
@@ -87,8 +87,7 @@ export function ConceptActionMenu({
   const [showQuestionsModal, setShowQuestionsModal] = useState(false)
   const [showLearningProgress, setShowLearningProgress] = useState(false)
   const [showFactCheck, setShowFactCheck] = useState(false)
-  const [alignRight, setAlignRight] = useState(false)
-  const [anchorRect, setAnchorRect] = useState<DOMRect | null>(null)
+  const [box, setBox] = useState<MenuPlacement | null>(null)
   const [questionCount, setQuestionCount] = useState<number | null>(null)
   const [fetchedContent, setFetchedContent] = useState<string | null>(null)
 
@@ -104,21 +103,45 @@ export function ConceptActionMenu({
   const isOnWiki = location.pathname.startsWith('/wiki/')
   const markdown = content ?? fetchedContent
 
-  // Anchor the menu to whatever opened it, measured as it opens. The trigger
-  // sits in non-scrolling chrome on every host that portals, so the rect holds
-  // for the life of the menu; an `anchored` menu only needs the side to flip to.
-  useLayoutEffect(() => {
-    if (!open) return
+  // Anchor the menu to whatever opened it. `placeMenu` owns the one rule that
+  // matters here — the menu is never off screen — so the trigger is only a
+  // preference: a control near an edge gets the menu shifted back inside, and
+  // one with no room below gets it opened upwards.
+  const measure = useCallback(() => {
     const el = anchorRef.current
     if (!el) return
     const rect = el.getBoundingClientRect()
-    setAnchorRect(rect)
-    setAlignRight(window.innerWidth - rect.right < MENU_WIDTH_PX)
-  }, [open, anchorRef])
+    const next = placeMenu(
+      rect,
+      { width: window.innerWidth, height: window.innerHeight },
+      { width: MENU_WIDTH_PX, maxHeight: MENU_MAX_HEIGHT_PX },
+    )
+    // A scroll fires this on every frame; re-render only when it actually moved.
+    setBox(prev => (prev && samePlacement(prev, next) ? prev : next))
+  }, [anchorRef])
 
-  // Close on a press outside. The "Add to Project" submenu and (in portal
-  // placement) the menu itself live in their own portals, and the trigger
-  // toggles the menu on click — all three would otherwise read as "outside".
+  useLayoutEffect(() => {
+    if (!open) return
+    measure()
+  }, [open, measure])
+
+  // Re-place it if the trigger moves under it: a rotation, a phone keyboard,
+  // or a scroll that carries the trigger up the screen. Without this the menu
+  // keeps a position that was only correct at the moment it opened.
+  useEffect(() => {
+    if (!open) return
+    const onViewportChange = () => measure()
+    window.addEventListener('resize', onViewportChange)
+    window.addEventListener('scroll', onViewportChange, true)
+    return () => {
+      window.removeEventListener('resize', onViewportChange)
+      window.removeEventListener('scroll', onViewportChange, true)
+    }
+  }, [open, measure])
+
+  // Close on a press outside. The menu and the "Add to Project" submenu each
+  // live in their own portal, and the trigger toggles the menu on click — all
+  // three would otherwise read as "outside".
   useEffect(() => {
     if (!open) return
     function onPointerDown(e: PointerEvent) {
@@ -182,16 +205,15 @@ export function ConceptActionMenu({
   const inCollectedStore = collectedCards.some(c => c.name.toLowerCase() === entry.name.toLowerCase())
   const collected = inCollectedStore || !(masteryState === null || masteryState === 'new')
 
-  const menuClass = placement === 'portal'
-    ? `fixed ${MENU_WIDTH_CLASS} rounded-md bg-popover text-popover-foreground shadow-md z-[70] py-1 max-h-[min(28rem,80vh)] overflow-y-auto`
-    : `absolute top-full mt-1 ${MENU_WIDTH_CLASS} rounded-md bg-popover text-popover-foreground shadow-md z-50 py-1 max-h-[min(28rem,80vh)] overflow-y-auto ${alignRight ? 'right-0' : 'left-0'}`
+  const menuClass = `fixed ${MENU_WIDTH_CLASS} rounded-md bg-popover text-popover-foreground shadow-md z-[70] py-1 overflow-y-auto`
 
-  const menuStyle = placement === 'portal' && anchorRect
+  // The height comes from the room measured, so a long menu scrolls inside the
+  // viewport instead of continuing past its edge.
+  const menuStyle = box
     ? {
-        top: anchorRect.bottom + 4,
-        ...(alignRight
-          ? { right: Math.max(8, window.innerWidth - anchorRect.right) }
-          : { left: anchorRect.left }),
+        left: box.left,
+        ...(box.top !== null ? { top: box.top } : { bottom: box.bottom ?? 0 }),
+        maxHeight: box.maxHeight,
       }
     : undefined
 
@@ -319,9 +341,7 @@ export function ConceptActionMenu({
 
   return (
     <>
-      {open && (placement === 'portal'
-        ? (anchorRect ? createPortal(menu, document.body) : null)
-        : menu)}
+      {open && box && <OverlayPortal>{menu}</OverlayPortal>}
       {showQuestionsModal && (
         <ConceptQuestionsModal conceptName={entry.name} onClose={() => setShowQuestionsModal(false)} />
       )}
@@ -339,9 +359,20 @@ export function ConceptActionMenu({
   )
 }
 
-/** The menu's width — as a class, and in pixels for the flip-to-left test. */
+/** The menu's width — as a class, and in pixels for the placement maths. */
 const MENU_WIDTH_CLASS = 'w-56'
 const MENU_WIDTH_PX = 224
+
+/** How tall it grows given the room; past this it scrolls. */
+const MENU_MAX_HEIGHT_PX = 448
+
+function samePlacement(a: MenuPlacement, b: MenuPlacement): boolean {
+  return a.left === b.left
+    && a.top === b.top
+    && a.bottom === b.bottom
+    && a.maxHeight === b.maxHeight
+    && a.above === b.above
+}
 
 /**
  * The row every host uses for a menu item it adds through `leading` /

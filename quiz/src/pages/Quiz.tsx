@@ -15,6 +15,7 @@ import { QuestionInfoButton } from '@/components/QuestionInfoButton'
 import { PreQuizCollectGate } from '@/components/collect/PreQuizCollectGate'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
 import { isAnswerCorrect, isMultiPartAnswerComplete } from '@/lib/parser'
 import { pendingAnswerFor, tagPendingAnswer } from '@/lib/pendingAnswer'
 import type { PendingAnswer } from '@/lib/pendingAnswer'
@@ -537,7 +538,7 @@ export default function Quiz() {
                 : 'bg-muted text-muted-foreground border-border')
             }
           >
-            {mode === 'mock-exam' ? 'Mock Exam' : 'Quiz'}
+            {mode === 'mock-exam' ? PRACTICE_EXAM_LABEL : 'Quiz'}
           </span>
           <Button
             variant="ghost"

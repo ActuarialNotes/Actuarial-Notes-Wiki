@@ -40,12 +40,12 @@ export interface TodayQuizCounts {
 const EMPTY_COUNTS: TodayQuizCounts = { byExam: {}, total: 0 }
 
 /**
- * Questions left in today's study plan, per exam and in total. Premium-only,
+ * Questions left in today's study plan, per exam and in total. Pro-only,
  * same as Today's Plan on the Quiz tab; returns empty for signed-out/free users.
  */
 export function useTodayQuizCounts(): TodayQuizCounts {
   const { user } = useAuth()
-  const { isPremium } = useSubscription()
+  const { isPro } = useSubscription()
   const { progress: examProgress, targetDates } = useExamProgress()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
   const { syllabi } = useWikiSyllabus()
@@ -72,7 +72,7 @@ export function useTodayQuizCounts(): TodayQuizCounts {
   const { plan: planCAS5 } = useStudyPlan(syllabusCAS5, masteryRecords, targetDates['CAS-5'] ?? null, masteryLoading)
 
   return useMemo(() => {
-    if (!user || !isPremium) return EMPTY_COUNTS
+    if (!user || !isPro) return EMPTY_COUNTS
 
     const plansByExamId: Record<string, StudyPlan | null> = {
       P: planP, FM: planFM, 'MAS-I': planMAS, 'CAS-5': planCAS5,
@@ -103,7 +103,7 @@ export function useTodayQuizCounts(): TodayQuizCounts {
       if (!entry.complete) total += entry.count
     }
     return { byExam, total }
-  }, [user, isPremium, examProgress, allQuestions, planP, planFM, planMAS, planCAS5,
+  }, [user, isPro, examProgress, allQuestions, planP, planFM, planMAS, planCAS5,
       syllabusP, syllabusFM, syllabusMAS, syllabusCAS5, masteryRecords, completedToday, answeredQuestionIds])
 }
 

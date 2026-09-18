@@ -35,6 +35,7 @@ import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { matchesSelectedVariant } from '@/data/examSittings'
 import ExamsPopout from '@/components/ExamsPopout'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
+import { ProBadge } from '@/components/ProBadge'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { parseBanner, DESIGNATION_BANNERS } from '@/lib/banners'
 import { RESEARCH_TAB_ENABLED, STREAK_ENABLED } from '@/lib/featureFlags'
@@ -256,7 +257,7 @@ function ExamPill({ syllabus, isOpen, onToggle, onClose, todayQuizCount = 0 }: E
 export default function Sidebar() {
   const { user, signOut } = useAuth()
   const { balance: gemBalance } = useGems()
-  const { isPremium, isBetaTester } = useSubscription()
+  const { isPro, isBetaTester } = useSubscription()
   const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
   const location = useLocation()
@@ -691,14 +692,14 @@ export default function Sidebar() {
                     <Settings2 className="h-4 w-4 shrink-0" />
                     <span>Settings</span>
                   </button>
-                  {!isPremium && (
+                  {!isPro && (
                     <button
                       type="button"
                       onClick={() => { navigate('/upgrade'); setProfileOpen(false); closeMobile() }}
                       className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 transition-colors"
                     >
                       <Sparkles className="h-4 w-4 shrink-0" />
-                      <span>Upgrade to Premium</span>
+                      <span>Upgrade to Pro</span>
                     </button>
                   )}
                   {signOutConfirm ? (
@@ -759,13 +760,8 @@ export default function Sidebar() {
                       {bannerLabel}
                     </span>
                   )}
-                  {isPremium && (
-                    <span
-                      title={isBetaTester ? 'Beta Tester' : undefined}
-                      className="shrink-0 text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 leading-none"
-                    >
-                      {isBetaTester ? '★ Premium' : 'Premium'}
-                    </span>
+                  {isPro && (
+                    <ProBadge star={isBetaTester} title={isBetaTester ? 'Beta Tester' : undefined} />
                   )}
                 </span>
               </button>

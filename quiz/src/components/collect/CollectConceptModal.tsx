@@ -469,7 +469,7 @@ export function CollectConceptModal() {
                 {/* Learning-progress graph appears once there's history to plot —
                     a level change or at least one recorded attempt. A freshly
                     collected concept with no activity has nothing to graph, so we
-                    skip the panel (and its premium upsell) until there's real
+                    skip the panel (and its Pro upsell) until there's real
                     progress to show. The level itself is drawn beside the modal
                     title, so the panel's own level row stays off; that puts the
                     "Show exam history" toggle directly under Start Quiz. */}

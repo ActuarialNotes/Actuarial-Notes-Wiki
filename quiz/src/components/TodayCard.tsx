@@ -19,6 +19,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { ConceptDetailModal } from '@/components/ConceptDetailModal'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
+import { ProBadge } from '@/components/ProBadge'
 import { ConceptScheduleBadge } from '@/components/TopicProgressSection'
 import {
   todayISO,
@@ -223,8 +224,8 @@ interface Props {
   onConfigChange: (next: Partial<StudyPlanConfig>) => void
   onRegenerate: () => void
   onExamDateChange?: (date: string | null) => void
-  /** When false, the Study Plan card is locked behind a Premium upgrade CTA. Defaults to true. */
-  isPremium?: boolean
+  /** When false, the Study Plan card is locked behind a Pro upgrade CTA. Defaults to true. */
+  isPro?: boolean
 }
 
 export function TodayCard({
@@ -238,7 +239,7 @@ export function TodayCard({
   onConfigChange,
   onRegenerate,
   onExamDateChange,
-  isPremium = true,
+  isPro = true,
 }: Props) {
   const [showConfig, setShowConfig] = useState(false)
   const [selectedStudyPlanIdx, setSelectedStudyPlanIdx] = useState<number | null>(null)
@@ -298,7 +299,7 @@ export function TodayCard({
   }, [allOnTarget, loading])
 
   // Locked state — free users see a preview of the card with an upgrade CTA.
-  if (!isPremium) {
+  if (!isPro) {
     const previewConcepts = displayConcepts.length > 0
       ? displayConcepts.slice(0, 3)
       : syllabus.topics[0]?.concepts.slice(0, 3).map(c => c.name) ?? []
@@ -329,6 +330,7 @@ export function TodayCard({
           <div className="space-y-1">
             <div className="flex items-center gap-1.5">
               <h3 className="text-base font-semibold">Custom Study Plan</h3>
+              <ProBadge />
             </div>
             <p className="text-sm text-muted-foreground max-w-xs">
               A daily plan tailored to you

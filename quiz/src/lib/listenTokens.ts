@@ -1,7 +1,7 @@
 // Turn a concept's markdown into an ordered token model that drives the Listen
 // view. Each token carries both how it is *displayed* (a word, or rendered
 // KaTeX) and how it is *spoken*. Both speech engines (browser Web Speech and the
-// premium cloud TTS) consume the same tokens so the word-highlighting logic is
+// Pro cloud TTS) consume the same tokens so the word-highlighting logic is
 // engine-agnostic.
 
 import { stripFrontmatter, BREADCRUMB_RE } from '@/components/wiki/WikiArticle'
@@ -235,7 +235,7 @@ function xmlEscape(s: string): string {
 }
 
 /**
- * Build SSML for the premium cloud path: a `<mark>` is emitted before each
+ * Build SSML for the Pro cloud path: a `<mark>` is emitted before each
  * token so the API's returned timepoints can be mapped back to token indices.
  */
 export function segmentsToSsml(segments: SpeechSegment[]): string {

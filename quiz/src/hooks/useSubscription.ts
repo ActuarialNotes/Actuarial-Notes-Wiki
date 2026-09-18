@@ -2,13 +2,20 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 
+/**
+ * The paid tier is called **Pro** everywhere a reader can see it. The stored
+ * value is still `'premium'`: it is the `user_subscriptions.tier` CHECK
+ * constraint, what the Stripe webhook and `redeem-beta-code` write, and what
+ * every existing subscriber's row already holds — renaming it would be a data
+ * migration, not a rename. Keep the literal, read it as "Pro".
+ */
 export type SubscriptionTier = 'free' | 'premium'
 export type SubscriptionStatus = 'active' | 'canceled' | 'past_due' | 'inactive'
 
 export interface SubscriptionState {
   tier: SubscriptionTier
   status: SubscriptionStatus
-  isPremium: boolean
+  isPro: boolean
   isBetaTester: boolean
   currentPeriodEnd: string | null
   loading: boolean
@@ -17,13 +24,13 @@ export interface SubscriptionState {
 const DEFAULT: SubscriptionState = {
   tier: 'free',
   status: 'inactive',
-  isPremium: false,
+  isPro: false,
   isBetaTester: false,
   currentPeriodEnd: null,
   loading: false,
 }
 
-function isActivePremium(tier: string, status: string, periodEnd: string | null): boolean {
+function isActivePro(tier: string, status: string, periodEnd: string | null): boolean {
   if (tier !== 'premium') return false
   if (status !== 'active') return false
   if (!periodEnd) return true
@@ -37,7 +44,7 @@ export function useSubscription(): SubscriptionState & { refresh: () => void } {
   // "cannot add postgres_changes callbacks after subscribe()" that fires when
   // multiple mounted components share the same channel topic.
   const channelId = useRef(`sub-${Math.random().toString(36).slice(2)}`)
-  // Start in loading state — we don't know premium status until the DB resolves.
+  // Start in loading state — we don't know Pro status until the DB resolves.
   const [state, setState] = useState<SubscriptionState>({ ...DEFAULT, loading: true })
   const [refreshCount, setRefreshCount] = useState(0)
 
@@ -83,7 +90,7 @@ export function useSubscription(): SubscriptionState & { refresh: () => void } {
       setState({
         tier,
         status,
-        isPremium: isActivePremium(tier, status, row.current_period_end),
+        isPro: isActivePro(tier, status, row.current_period_end),
         isBetaTester,
         currentPeriodEnd: row.current_period_end,
         loading: false,
@@ -114,7 +121,7 @@ export function useSubscription(): SubscriptionState & { refresh: () => void } {
             return {
               tier,
               status,
-              isPremium: isActivePremium(tier, status, row.current_period_end),
+              isPro: isActivePro(tier, status, row.current_period_end),
               isBetaTester,
               currentPeriodEnd: row.current_period_end,
               loading: false,

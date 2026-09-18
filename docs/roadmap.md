@@ -352,11 +352,11 @@ and depth (Phase 2 ← in progress) are proven._
   deferred. Gated by `LEAGUES_ENABLED`. _Watch (§2.2.6): weekly league retention split by
   final rank — if bottom-quartile finishers churn, add effort-based framing before any
   further social surface._
-- ⬜ **P4.2 — Referrals.** Gem/premium-day rewards for inviting a study buddy; instrument
+- ⬜ **P4.2 — Referrals.** Gem/Pro-day rewards for inviting a study buddy; instrument
   virality (K-factor) via the P0.4 analytics.
-- ⬜ **P4.3 — Monetization depth.** Revisit the free/premium boundary now that the loop
-  exists: premium study-plan features, cosmetics, streak freezes, and exam-simulation
-  packs (P2.2 makes this a natural premium unit). The Stripe plumbing is already in
+- ⬜ **P4.3 — Monetization depth.** Revisit the free/Pro boundary now that the loop
+  exists: Pro study-plan features, cosmetics, streak freezes, and exam-simulation
+  packs (P2.2 makes this a natural Pro unit). The Stripe plumbing is already in
   place — this is packaging, not new infrastructure. One boundary per §2.2.6: never
   paywall the core retrieval loop or the decay-driven review queue — monetize
   convenience and depth, not the pedagogy.
@@ -366,7 +366,7 @@ and depth (Phase 2 ← in progress) are proven._
   note: most valuable after P2.4 extends question banks toward CAS 6+, when upper-exam
   candidates actually inhabit the app.
 
-**Exit criteria:** a working referral loop with measured K-factor; a premium tier whose
+**Exit criteria:** a working referral loop with measured K-factor; a Pro tier whose
 value is tied to the engagement loop; a data-backed decision on Research reactivation.
 
 ---
@@ -406,7 +406,7 @@ Phase 0 instrumented these; later phases are judged on evidence, not vibes.
 | Economy | Gem earn/spend balance; quest completion rate; quest-vs-plan adherence ratio (§2.2.6) | Detects a broken/inflationary economy — or reward-chasing displacing learning | Partially instrumented (`quest_claimed`) |
 | Social | League weekly retention by final rank | Detects leaderboard demotivation (§2.2.6) | ⬜ needs a rollover-retention query |
 | Reliability | Crash-free session rate | Gated by P0.3 monitoring | Instrumented (`exception` events) |
-| Monetization | Trial→paid conversion; premium retention | Judges Phase 4 packaging | Existing Stripe data |
+| Monetization | Trial→paid conversion; Pro retention | Judges Phase 4 packaging | Existing Stripe data |
 
 ---
 
@@ -456,7 +456,7 @@ next three, in order:
    and trains the metacognitive skill exams actually punish.
 2. **P2.2 (finish) — Timed, sitting-shaped mock exams.** The mode skeleton exists; adding
    the timer, weighted assembly from `data/examSittings.ts`, and the post-exam readiness
-   delta turns it into the product's summative-assessment pillar — and the natural premium
+   delta turns it into the product's summative-assessment pillar — and the natural Pro
    unit for P4.3.
 3. **Instrument + extend the two just-shipped surfaces.** Add the reminder→session
    conversion event the daily email (P1.3) needs to prove it works, and grow the

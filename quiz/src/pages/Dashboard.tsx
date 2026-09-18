@@ -67,7 +67,7 @@ function WelcomeModal({ onAddExam, onClose }: { onAddExam: () => void; onClose: 
 
         <div className="text-center space-y-1.5">
           <h2 className="text-xl font-bold tracking-tight">Welcome to Actuarial Notes!</h2>
-          {/* No promise of a study plan here — that's Premium, and a free
+          {/* No promise of a study plan here — that's Pro, and a free
               account seeing it promised and then locked is a worse first
               minute than not hearing about it. Everything named below is
               free. */}
@@ -130,7 +130,7 @@ export default function Dashboard() {
   const { syllabi, loading: syllabusLoading, error: syllabusError } = useWikiSyllabus()
   const { progress: examProgress, targetDates, examVariants, updateTargetDate, loadingExams } = useExamProgress()
   const { records: masteryRecords, loading: masteryLoading, refresh: refreshMastery } = useConceptMastery()
-  const { isPremium, refresh: refreshSubscription } = useSubscription()
+  const { isPro, refresh: refreshSubscription } = useSubscription()
   const { balance: gemBalance } = useGems()
   const { questions: allQuestions } = useAllQuestions()
 
@@ -526,13 +526,13 @@ export default function Dashboard() {
   // copy in the pinned exam header (which only has room for a one-word label).
   // Once today's plan is finished the same launch keeps working, but it's no
   // longer the day's work — it reads as "Extra Credit".
-  // A daily plan is the Premium feature — starting a quiz is not. With a plan,
+  // A daily plan is the Pro feature — starting a quiz is not. With a plan,
   // the button launches exactly today's plan; without one (free account, or a
-  // premium account that hasn't set a target date) it opens the quiz builder
+  // Pro account that hasn't set a target date) it opens the quiz builder
   // with this exam already chosen. Hiding it from free users left their
   // dashboard with no way into a quiz at all.
-  const hasTodaysPlan = isPremium && displayConcepts.length > 0
-  const showQuizAction = hasTodaysPlan || !isPremium
+  const hasTodaysPlan = isPro && displayConcepts.length > 0
+  const showQuizAction = hasTodaysPlan || !isPro
   const quizActionLabel = isLaunchingQuiz
     ? 'Get ready…'
     : (hasTodaysPlan && planComplete ? 'Extra Credit' : 'Start Quiz')
@@ -677,14 +677,14 @@ export default function Dashboard() {
                   <Settings2 className="h-4 w-4 shrink-0" />
                   <span>Settings</span>
                 </button>
-                {!isPremium && (
+                {!isPro && (
                   <button
                     type="button"
                     onClick={() => { navigate('/upgrade'); setProfileOpen(false) }}
                     className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 transition-colors"
                   >
                     <Sparkles className="h-4 w-4 shrink-0" />
-                    <span>Upgrade to Premium</span>
+                    <span>Upgrade to Pro</span>
                   </button>
                 )}
                 {signOutConfirm ? (
@@ -858,9 +858,9 @@ export default function Dashboard() {
           <div className="flex items-start gap-2">
             <Sparkles className="h-5 w-5 text-green-500 mt-0.5 shrink-0" />
             <div>
-              <p className="text-sm font-semibold text-green-700 dark:text-green-400">Welcome to Premium!</p>
+              <p className="text-sm font-semibold text-green-700 dark:text-green-400">Welcome to Pro!</p>
               <p className="text-xs text-green-600 dark:text-green-500 mt-0.5">
-                Your subscription is confirmed. Premium features are activating now.
+                Your subscription is confirmed. Pro features are activating now.
               </p>
             </div>
           </div>
@@ -903,7 +903,7 @@ export default function Dashboard() {
             onOpenOnboarding={(step = 1) => { setOnboardingStep(step); setOnboardingOpen(true) }}
             openConceptsTrigger={conceptsOpenCounter}
             startQuizTrigger={startQuizCounter}
-            isPremium={isPremium}
+            isPro={isPro}
             onPlanCompletionChange={setPlanComplete}
             studyScheduleSlot={studyScheduleSlotEl}
             readinessSlot={readinessSlotEl}
@@ -951,7 +951,7 @@ export default function Dashboard() {
           examLabel={activeSyllabus.examLabel}
           examId={activeProgressKey ?? undefined}
           initialStep={onboardingStep}
-          isPremium={isPremium}
+          isPro={isPro}
           onSave={updatePlanConfig}
           onExamDateChange={handleTargetDateChange}
           onClose={() => setOnboardingOpen(false)}

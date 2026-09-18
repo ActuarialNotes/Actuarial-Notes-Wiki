@@ -110,7 +110,7 @@ export default function ExamsPopout({ open, onClose }: Props) {
   useSoundOnToggle(open, 'open', 'close')
   const { user } = useAuth()
   const navigate = useNavigate()
-  const { isPremium } = useSubscription()
+  const { isPro } = useSubscription()
   const { syllabi } = useWikiSyllabus()
   const { examRows, loadingExams, selectedTrack, setSelectedTrack, saveExamRows, examsState, updateStudyPlanConfig, updateTargetDate } = useExamProgress()
   const [localExamMap, setLocalExamMap] = useState<Record<string, { status: ItemStatus; targetDate: string }>>({})
@@ -459,7 +459,7 @@ export default function ExamsPopout({ open, onClose }: Props) {
           examDate={onboarding.examDate}
           examLabel={onboarding.examLabel}
           examId={onboarding.examId}
-          isPremium={isPremium}
+          isPro={isPro}
           onSave={handleOnboardingConfigSave}
           onExamDateChange={handleOnboardingExamDateChange}
           onClose={() => setOnboarding(null)}

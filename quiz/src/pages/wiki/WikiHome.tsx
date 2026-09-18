@@ -154,7 +154,7 @@ export default function WikiHome() {
   )
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* The body picker rides the title row rather than a label row of its
           own further down: it governs everything below it, and the ladder it
           switches between needs no "Exams" heading to say what it is. */}
@@ -186,7 +186,7 @@ export default function WikiHome() {
           thing to open, not a prose block introducing the page. */}
       {GENERAL_GUIDES.length > 0 && (
         <section>
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          <div className="grid grid-cols-1 items-start gap-3 sm:grid-cols-2">
             {GENERAL_GUIDES.map(guide => (
               <button
                 key={guide.ref.path ?? guide.title}
@@ -194,12 +194,16 @@ export default function WikiHome() {
                 onClick={() => openAt([guide.ref], 0, '/wiki')}
                 className="w-full text-left appearance-none bg-transparent p-0"
               >
-                <Card className="h-full transition-all duration-150 hover:bg-accent/30">
-                  <CardHeader className="flex-row items-start gap-3 space-y-0 p-4 pb-3">
+                <Card className="transition-all duration-150 hover:bg-accent/30">
+                  {/* One line of title beside a 48px tile: centre the row on
+                      the tile rather than hanging the title off its top edge,
+                      and pad the card evenly so the object sits in the middle
+                      of it. */}
+                  <CardHeader className="flex-row items-center gap-3 space-y-0 p-4">
                     {/* The exam cards' tile, carrying an icon instead of a
                         monogram — a guide has no place on the colour ramp, so
                         it takes the wiki's teal rather than borrowing a hue. */}
-                    <LogoTile size="lg" className="mt-0.5 bg-teal-500 text-white shadow-sm">
+                    <LogoTile size="lg" className="bg-teal-500 text-white shadow-sm">
                       <Compass className="h-6 w-6" />
                     </LogoTile>
                     <div className="min-w-0 flex-1">
@@ -217,12 +221,12 @@ export default function WikiHome() {
         {loading && exams.length === 0 ? (
           <p className="text-sm text-muted-foreground">Loading exams…</p>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-6">
             {filteredTrackGroups.filter(g => g.exams.length > 0).map(({ track, exams: trackExams }) => (
               <div key={track.key}>
                 {/* Sticky track header — sits just below the search bar */}
                 <div
-                  className="sticky z-10 -mx-4 sm:-mx-6 px-4 sm:px-6 py-1.5 mb-2 bg-background/95 backdrop-blur-sm"
+                  className="sticky z-10 -mx-4 sm:-mx-6 px-4 sm:px-6 py-1.5 mb-3 bg-background/95 backdrop-blur-sm"
                   style={{ top: `${SEARCH_BAR_H}px` }}
                 >
                   {/* The quiz builder's track heading, to the letter — one
@@ -247,7 +251,10 @@ export default function WikiHome() {
                   )}
                 </div>
 
-                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                {/* `items-start`: a card is as tall as what it holds. Left to
+                    stretch, a row's short card (no readiness bar) would be padded
+                    out to match its tall neighbour and read as half empty. */}
+                <div className="grid grid-cols-1 items-start gap-3 sm:grid-cols-2">
                   {trackExams.map(exam => {
                     const examId = examNameToTrackKey(exam.name)
                     const examIdCleaned = exam.name.replace(/^Exam\s+/i, '').replace(/\s*\([^)]*\)\s*$/, '').trim()
@@ -297,11 +304,7 @@ export default function WikiHome() {
                         <Card
                           style={accent}
                           className={cn(
-                            'h-full flex flex-col transition-all duration-150 overflow-hidden ring-1 ring-transparent',
-                            // Center content vertically when the card is only a header
-                            // (completed / beta cards) so it stays balanced if the card
-                            // is stretched to match a taller sibling in the grid row.
-                            !hasProgressBar && 'justify-center',
+                            'transition-all duration-150 overflow-hidden ring-1 ring-transparent',
                             isInProgress && !inDevelopment && 'bg-primary/10',
                             // Unbuilt exam: no card surface, a dashed outline and
                             // dimmed contents — the same "nothing here yet" material
@@ -409,7 +412,7 @@ export default function WikiHome() {
         {books.length === 0 ? (
           <p className="text-sm text-muted-foreground">Loading resources…</p>
         ) : (
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {books.map((book, bookIdx) => (
               <button
                 key={book.path}

@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { CalendarCheck, Check, CheckCircle2, ChevronDown, ChevronLeft, Circle, Loader2, Lock, Play, X } from 'lucide-react'
 import { QuizFloatingSearch } from '@/components/QuizFloatingSearch'
 import { QuestionDeckCard } from '@/components/QuestionDeckCard'
+import { QuizSettingsMenu } from '@/components/QuizSettingsMenu'
 import { TodayQuizCornerBadge } from '@/components/TodayQuizBadge'
 import { useTodayQuizCounts } from '@/hooks/useTodayQuizCount'
 import { badgeCountFor } from '@/lib/todayPlanCount'
@@ -1408,66 +1409,37 @@ export default function Landing() {
         className="fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-20 border-t border-border bg-background/95 backdrop-blur-sm"
       >
         <div className="container max-w-4xl mx-auto px-4 sm:px-6 pt-3 pb-4 space-y-3">
-          {/* ── Question deck: availability + shuffle the draw ────────── */}
-          {poolCount > 0 && (
-            <QuestionDeckCard
-              available={poolCount}
-              selected={quizQuestionCount}
-              newCount={poolNewCount}
-              attemptsTracked={attemptsTracked}
-              onShuffle={handleShuffle}
-              shuffleTick={shuffleTick}
-              justShuffled={justShuffled}
-              disabled={shuffleDisabled}
-            />
-          )}
-
-          {/* ── How many questions ────────────────────────────────────
-              Counts only. "Mock Exam" used to sit at the end of this row,
-              which made a mode switch look like a quantity — it lives in the
-              source control at the top of the page now. */}
-          {mode === 'quiz' && (
-            <SegmentedControl
-              label="Question count"
-              value={countValue}
-              onChange={handleCountChange}
-              options={countOptions}
-            />
-          )}
-
-          {/* The sitting picker used to live here as a row of pills. It's the
-              past-exam browser in the page body now — a pill row can't carry a
-              paper's size or its pass rate, and it had no room to list the
-              sittings that exist but aren't in the bank yet. */}
-
-          {/* ── When the answers show ─────────────────────────────────
-              Ticked, each answer is marked and explained as soon as it's
-              confirmed; unticked, nothing is given away until the review
-              screen. Offered for both modes — a practice exam run for
-              feedback is as reasonable as a quiz run as a dry run. */}
-          <button
-            type="button"
-            role="checkbox"
-            aria-checked={reveal === 'during'}
-            data-sound="tick"
-            onClick={() => handleRevealChange(reveal === 'during' ? 'end' : 'during')}
-            className={cn(
-              'flex min-h-10 w-full items-center gap-2.5 rounded-lg border px-3 py-2.5 text-left transition-colors',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-              reveal === 'during'
-                ? 'border-primary/30 bg-primary/10 text-primary hover:bg-primary/15'
-                : 'border-border bg-muted/50 text-foreground hover:bg-accent/40',
+          {/* ── Question deck: availability + shuffle the draw, and the
+                 settings that shape it ────────────────────────────────────
+              The deck says what the quiz draws from; the button beside it
+              holds how the quiz is run — how many questions, and when the
+              answers show. Those two were full-width rows stacked here, which
+              on a phone pushed Start Quiz to the edge of the fold. */}
+          <div className="flex items-stretch gap-2">
+            {poolCount > 0 && (
+              <QuestionDeckCard
+                className="min-w-0 flex-1"
+                available={poolCount}
+                selected={quizQuestionCount}
+                newCount={poolNewCount}
+                attemptsTracked={attemptsTracked}
+                onShuffle={handleShuffle}
+                shuffleTick={shuffleTick}
+                justShuffled={justShuffled}
+                disabled={shuffleDisabled}
+              />
             )}
-          >
-            {reveal === 'during' ? (
-              <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
-            ) : (
-              <Circle className="h-4 w-4 shrink-0 text-muted-foreground/50" />
-            )}
-            <span className="min-w-0 flex-1 text-sm font-medium leading-snug">
-              Show answers after each question
-            </span>
-          </button>
+            {/* A practice exam is sat whole, so it carries no count — the
+                menu opens on the reveal choice alone. */}
+            <QuizSettingsMenu
+              countOptions={mode === 'quiz' ? countOptions : undefined}
+              countValue={mode === 'quiz' ? countValue : undefined}
+              onCountChange={mode === 'quiz' ? handleCountChange : undefined}
+              reveal={reveal}
+              onRevealChange={handleRevealChange}
+              className={poolCount > 0 ? undefined : 'h-14'}
+            />
+          </div>
 
           <div className="relative">
             <Button

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Check, Shuffle } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 // The deck on the quiz setup screen: one large card standing in for the pool of
 // questions the current selection can draw from. Tapping it re-draws which
@@ -25,6 +26,8 @@ interface QuestionDeckCardProps {
   justShuffled: boolean
   /** Nothing to draw from, or the draw is the whole pool and can't change. */
   disabled?: boolean
+  /** Sizing from the row the card shares with the settings button. */
+  className?: string
 }
 
 export function QuestionDeckCard({
@@ -36,6 +39,7 @@ export function QuestionDeckCard({
   shuffleTick,
   justShuffled,
   disabled = false,
+  className,
 }: QuestionDeckCardProps) {
   // Drop the animation class and re-add it next frame so a second tap restarts
   // the riffle instead of landing on an already-running animation.
@@ -48,12 +52,17 @@ export function QuestionDeckCard({
   }, [shuffleTick])
 
   const subline: string[] = []
+  // How many of the pool this quiz will actually pull. The big number is what
+  // is *available*, and the count that decides it moved into the settings menu
+  // beside the card — so without this the card no longer says how long the
+  // quiz is. Redundant when the draw takes everything, so left off there.
+  if (selected > 0 && selected < available) subline.push(`${selected} drawn`)
   if (attemptsTracked && newCount !== undefined) {
     subline.push(newCount === 0 ? 'all attempted before' : `${newCount} new to you`)
   }
 
   return (
-    <div className="flex justify-center">
+    <div className={cn('flex justify-center', className)}>
       <button
         type="button"
         onClick={onShuffle}

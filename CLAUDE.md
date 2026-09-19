@@ -260,8 +260,9 @@ Other important `lib/` modules:
 - `revealMode.ts` — **when the answers show**: `'during'` marks and explains each
   answer as soon as it's confirmed, `'end'` holds the lot back for /review. The quiz
   page has always read a `reveal` search param; this module is the reader's side of
-  it — the checkbox above the quiz builder's Start button, remembered per mode in
-  localStorage. The defaults split (`DEFAULT_REVEAL`) because the two modes are for
+  it — the checkbox in the quiz builder's settings menu
+  (`components/QuizSettingsMenu.tsx`, the button beside the deck card),
+  remembered per mode in localStorage. The defaults split (`DEFAULT_REVEAL`) because the two modes are for
   different things: a quiz is practice *with* feedback (`during`), a practice exam is
   a rehearsal of the sitting (`end`). Reveal is a *choice*, not a property of the
   mode — `Quiz.tsx` gates `showExplanation` on the choice alone, so a practice exam

@@ -257,6 +257,18 @@ Other important `lib/` modules:
   matching, no fuzzy hits) and `keystoneProgress` (decay-aware mastery roll-up per exam).
   Rendered by `components/KeystoneName.tsx`. No surface lists an exam's keystones since the
   readiness card was removed; keystone mastery is still a criterion of the readiness score.
+- `revealMode.ts` — **when the answers show**: `'during'` marks and explains each
+  answer as soon as it's confirmed, `'end'` holds the lot back for /review. The quiz
+  page has always read a `reveal` search param; this module is the reader's side of
+  it — the checkbox above the quiz builder's Start button, remembered per mode in
+  localStorage. The defaults split (`DEFAULT_REVEAL`) because the two modes are for
+  different things: a quiz is practice *with* feedback (`during`), a practice exam is
+  a rehearsal of the sitting (`end`). Reveal is a *choice*, not a property of the
+  mode — `Quiz.tsx` gates `showExplanation` on the choice alone, so a practice exam
+  run for feedback reveals and a quiz run as a dry run doesn't. A launch surface that
+  sets no `reveal` param gets the saved choice rather than a hardcoded `during`.
+  Pure and tested (the storage read/write wrap pure `revealFromStored` /
+  `storedWithReveal`).
 - `questionAttempts.ts` — turns a learner's per-question response tally (`hooks/useQuestionAttempts`,
   backed by `question_responses`) into the display state every question list shows: attempted or not,
   and how many attempts were successful vs unsuccessful. Rendered by `components/QuestionAttemptBadge.tsx`,

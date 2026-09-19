@@ -365,14 +365,32 @@ Spacing uses the default Tailwind 4px scale. A few defaults carry most screens:
   `max-w-2xl`/`max-w-lg` for focused flows, `max-w-md`/`max-w-sm` for dialogs. Pad the page
   gutter (`px-4`) so content never touches the viewport edge on mobile.
 - Layout is responsive with a **one-sidebar** shell (`Sidebar.tsx`): in flow beside the
-  content at `lg`, and below `lg` a fixed `h-14` top header whose hamburger slides the same
-  sidebar in as a full-width drawer. There is no bottom tab bar — a phone and a tablet get
-  the same navigation, so a destination is added in exactly one place. Content therefore
-  reserves `pt-14 lg:pt-0` (`App.tsx`) and anything pinned to the top of the viewport
-  offsets by the header below `lg` (`sticky top-14 lg:top-0`). The sidebar width is
-  published as `--sidebar-width` (16rem expanded / 3.5rem collapsed) — fixed overlays that
-  must clear the sidebar read that variable (see the concept-popup and gallery-panel rules
-  in `index.css`). Reuse it; don't hard-code 16rem.
+  content at `lg`, and below `lg` a full-width drawer. There is no bottom tab bar — a phone
+  and a tablet get the same navigation, so a destination is added in exactly one place.
+  The sidebar width is published as `--sidebar-width` (16rem expanded / 3.5rem collapsed) —
+  fixed overlays that must clear the sidebar read that variable (see the concept-popup and
+  gallery-panel rules in `index.css`). Reuse it; don't hard-code 16rem.
+
+### 5.0 One row of top chrome below `lg`
+
+`components/MobileNavButton.tsx` is the hamburger that opens that drawer, and it has two
+homes. A page that already pins a bar to the top of the viewport — a floating search bar —
+carries it **on that bar's line**, left of the search icon; every other page gets the app
+header (`Sidebar.tsx`), the same `h-14` row plus the wordmark and the in-progress exam
+pills. Either way a phone spends **one** 3.5rem row on chrome, never two stacked bars, and
+the hamburger is always in the same corner.
+
+`lib/mobileNavHost.ts` is the one place that says which route does which; `App.tsx` reads it
+to decide whether the content reserves `pt-14`, and `Sidebar.tsx` reads it to decide whether
+to render the header at all. A page whose bar hosts the button starts at the top of the
+viewport (`sticky top-0`); a page with the header offsets by it (`sticky top-14 lg:top-0`).
+Add a route to that module only together with the `<MobileNavButton />` in its bar — the two
+move together, or the page ends up with two hamburgers or none.
+
+When the search on a hosting bar goes **active**, the button folds to zero width and the
+input grows over it: it is the only thing on that line the reader is not using, and typing
+wants the width more than the drawer does. Pass `collapsed` and let the button animate;
+don't unmount it.
 
 ### 5.1 Fixed bottom action bars
 

@@ -6,6 +6,7 @@ import type { Question, QuestionFilter } from '@/lib/parser'
 import { questionSittingLabel, sittingLabels } from '@/lib/pastExams'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
+import { MobileNavButton } from '@/components/MobileNavButton'
 import { QuestionSearchRow, DifficultyDots } from '@/components/QuestionSearchRow'
 import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
 
@@ -311,11 +312,14 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
 
       <div
         ref={containerRef}
-        className="sticky top-14 lg:top-0 z-50 border-b bg-background/90 backdrop-blur-md"
+        className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur-md"
       >
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           {/* Input row */}
           <div className="flex items-center gap-2 h-14">
+            {/* See WikiFloatingSearch — below lg this bar carries the nav
+                button, and searching folds it away. */}
+            <MobileNavButton collapsed={active} className="-ml-1.5" />
             <Search className="h-4 w-4 text-muted-foreground shrink-0" />
             <input
               ref={inputRef}

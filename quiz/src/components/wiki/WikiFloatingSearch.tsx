@@ -4,6 +4,7 @@ import { BookMarked, Check, FileText, GraduationCap, ListChecks, Play, Search, S
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { fromSlug, pathToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { findSyllabiForConcept } from '@/lib/conceptMatch'
+import { MobileNavButton } from '@/components/MobileNavButton'
 import { ChooseSyllabusModal } from '@/components/wiki/ChooseSyllabusModal'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
@@ -267,11 +268,15 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
       <div
         ref={containerRef}
         data-floating-search
-        className="sticky top-14 lg:top-0 z-50 border-b bg-background/90 backdrop-blur-md"
+        className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur-md"
       >
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           {/* Input row */}
           <div className="flex items-center gap-2 h-[calc(3.5rem-1px)]">
+            {/* The way into the nav below lg: this bar is the page's only row of
+                top chrome, so it carries the hamburger as well as the search.
+                Searching folds the button away and the input takes the line. */}
+            <MobileNavButton collapsed={active} className="-ml-1.5" />
             <Search className="h-4 w-4 text-muted-foreground shrink-0" />
             <input
               ref={inputRef}

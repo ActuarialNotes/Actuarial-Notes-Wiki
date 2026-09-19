@@ -1204,7 +1204,7 @@ export default function Landing() {
       {/* Same treatment as the Dashboard's sticky header — a translucent blurred
           background rather than a rule, which would stop at this container's
           edge rather than spanning the viewport. */}
-      <div className="sticky top-28 lg:top-14 z-20 -mx-4 sm:-mx-6 space-y-2 bg-background/95 px-4 sm:px-6 py-2.5 backdrop-blur-sm">
+      <div className="sticky top-14 z-20 -mx-4 sm:-mx-6 space-y-2 bg-background/95 px-4 sm:px-6 py-2.5 backdrop-blur-sm">
         <div className="flex items-center gap-2">
           {hasTopic && (
             <button

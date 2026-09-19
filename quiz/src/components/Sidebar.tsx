@@ -11,7 +11,6 @@ import {
   Layers,
   LayoutDashboard,
   LogOut,
-  Menu,
   Microscope,
   Moon,
   Play,
@@ -23,7 +22,10 @@ import {
 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useFlashcards } from '@/hooks/useFlashcards'
-import { COLLECTED_EVENT } from '@/hooks/useCollectedCards'
+import { useCollectGlow } from '@/hooks/useCollectGlow'
+import { useMobileNav } from '@/hooks/useMobileNav'
+import { MobileNavButton } from '@/components/MobileNavButton'
+import { pageHostsNavButton } from '@/lib/mobileNavHost'
 import { useGems } from '@/hooks/useGems'
 import { getDailyQuizStats, DAILY_QUIZ_EVENT } from '@/lib/dailyProgressStore'
 import { useSubscription } from '@/hooks/useSubscription'
@@ -270,14 +272,8 @@ export default function Sidebar() {
   const { cards } = useFlashcards()
   const { byExam: todayQuizByExam, total: todayQuizTotal } = useTodayQuizCounts()
   const [dailyQuizStats, setDailyQuizStats] = useState(() => getDailyQuizStats())
-  const [collectGlow, setCollectGlow] = useState(0)
-
-  // Light up the Flashcards item whenever a card is collected.
-  useEffect(() => {
-    const onCollected = () => setCollectGlow(k => k + 1)
-    window.addEventListener(COLLECTED_EVENT, onCollected)
-    return () => window.removeEventListener(COLLECTED_EVENT, onCollected)
-  }, [])
+  // Lights up the Flashcards item whenever a card is collected.
+  const collectGlow = useCollectGlow()
 
   // Keep daily quiz stats fresh after each quiz completion.
   useEffect(() => {
@@ -320,7 +316,10 @@ export default function Sidebar() {
   }, [todayQuizTotal, dailyQuizStats.correct, dailyQuizStats.total])
 
   const [collapsed, setCollapsed] = useState<boolean>(getInitialCollapsed)
-  const [mobileOpen, setMobileOpen] = useState(false)
+  const { open: mobileOpen, closeNav } = useMobileNav()
+  // This route pins a bar of its own to the top of the viewport and carries the
+  // hamburger on it, so the app header below would be a second row of chrome.
+  const navHostedByPage = pageHostsNavButton(location.pathname)
   const [profileOpen, setProfileOpen] = useState(false)
   const { open: examsOpen, openExams, closeExams } = useExamsPopout()
   const [signOutConfirm, setSignOutConfirm] = useState(false)
@@ -387,7 +386,7 @@ export default function Sidebar() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [profileOpen])
 
-  const closeMobile = () => setMobileOpen(false)
+  const closeMobile = closeNav
 
   const touchStartX = useRef<number | null>(null)
 
@@ -412,46 +411,40 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Below lg: the persistent top header bar housing the hamburger. This is
-          the only way into the nav on a phone as well as a tablet — there is no
-          bottom tab bar, so the drawer behind this button carries every
-          destination. The collect ring/glow rides the hamburger for the same
-          reason the Flashcards tab used to wear it: a card landing in the deck
-          has to show somewhere, and the deck now lives behind this button. */}
-      <header className="fixed top-0 left-0 right-0 h-14 z-30 flex items-center gap-2 px-3 bg-background border-b lg:hidden">
-        <button
-          type="button"
-          onClick={() => setMobileOpen(true)}
-          aria-label="Open navigation"
-          data-flashcard-nav
-          className="relative flex items-center justify-center h-9 w-9 rounded-lg hover:bg-accent transition-colors shrink-0"
-        >
-          {collectGlow > 0 && <span key={`ring-${collectGlow}`} className="flashcard-nav-ring" aria-hidden="true" />}
-          <Menu key={`icon-${collectGlow}`} className={`h-4 w-4 ${collectGlow > 0 ? 'flashcard-nav-glow' : ''}`} />
-        </button>
-        <div className="flex items-center gap-1.5 flex-1 min-w-0">
-          <Link
-            to="/dashboard"
-            className="flex items-center gap-1.5 font-semibold text-foreground text-sm min-w-0"
-          >
-            <img src="/favicon.png" alt="" className="h-5 w-5 shrink-0 brightness-0 dark:invert" />
-            <span className="truncate">Actuarial Notes</span>
-          </Link>
-          {user && inProgressSyllabi.map(s => {
-            const key = wikiExamIdToProgressKey(s.examId)
-            return (
-              <ExamPill
-                key={key}
-                syllabus={s}
-                isOpen={openExamDropdown === key}
-                onToggle={() => setOpenExamDropdown(prev => prev === key ? null : key)}
-                onClose={() => setOpenExamDropdown(null)}
-                todayQuizCount={badgeCountFor(todayQuizByExam[key])}
-              />
-            )
-          })}
-        </div>
-      </header>
+      {/* Below lg: the app header — the hamburger, the wordmark and the
+          in-progress exam pills. It is the row a page gets when it pins nothing
+          to the top of the viewport itself; a page with a floating search bar
+          puts the hamburger on that bar's line instead and this header is not
+          rendered at all, so the phone spends one 3.5rem row on chrome rather
+          than two. `lib/mobileNavHost.ts` is the one place that says which is
+          which, and `App.tsx` reserves the room from the same call. */}
+      {!navHostedByPage && (
+        <header className="fixed top-0 left-0 right-0 h-14 z-30 flex items-center gap-2 px-3 bg-background border-b lg:hidden">
+          <MobileNavButton className="-ml-0.5" />
+          <div className="flex items-center gap-1.5 flex-1 min-w-0">
+            <Link
+              to="/dashboard"
+              className="flex items-center gap-1.5 font-semibold text-foreground text-sm min-w-0"
+            >
+              <img src="/favicon.png" alt="" className="h-5 w-5 shrink-0 brightness-0 dark:invert" />
+              <span className="truncate">Actuarial Notes</span>
+            </Link>
+            {user && inProgressSyllabi.map(s => {
+              const key = wikiExamIdToProgressKey(s.examId)
+              return (
+                <ExamPill
+                  key={key}
+                  syllabus={s}
+                  isOpen={openExamDropdown === key}
+                  onToggle={() => setOpenExamDropdown(prev => prev === key ? null : key)}
+                  onClose={() => setOpenExamDropdown(null)}
+                  todayQuizCount={badgeCountFor(todayQuizByExam[key])}
+                />
+              )
+            })}
+          </div>
+        </header>
+      )}
 
       {/* Mobile: backdrop — z-[55] so it covers the sticky search bar (z-50) */}
       {mobileOpen && (

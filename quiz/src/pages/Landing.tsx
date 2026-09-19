@@ -40,6 +40,7 @@ import { applyPassRates } from '@/lib/passRates'
 import { useExamPassRates } from '@/hooks/useExamPassRates'
 import { PastExamBrowser } from '@/components/PastExamBrowser'
 import { examStatus } from '@/lib/examStatus'
+import { loadRevealMode, saveRevealMode, type RevealMode } from '@/lib/revealMode'
 import { ExamLogo } from '@/components/ExamLogo'
 
 type ExamOrg = 'SOA' | 'CAS'
@@ -401,7 +402,16 @@ export default function Landing() {
   const [selectedConcepts, setSelectedConcepts] = useState<string[]>([])
   const [isAdaptive, setIsAdaptive] = useState(false)
   const [count, setCount] = useState<number>(3)
-  const reveal = 'during' as const
+
+  // When answers are shown — after each question, or all at once on the review
+  // screen. Kept per mode (see lib/revealMode.ts) so the two defaults, and the
+  // two choices, don't overwrite each other when the source control is switched.
+  const [reveal, setReveal] = useState<RevealMode>(() => loadRevealMode(mode))
+  useEffect(() => { setReveal(loadRevealMode(mode)) }, [mode])
+  function handleRevealChange(next: RevealMode) {
+    setReveal(next)
+    saveRevealMode(mode, next)
+  }
 
   // Set once the user picks a specific question count, so the auto-sizing effect
   // (which defaults Today's Quiz to the whole-plan coverage count) stops overriding
@@ -675,7 +685,7 @@ export default function Landing() {
     } catch { /* ignore */ }
     navigate(`/quiz?selection=stored&mode=quiz&reveal=${reveal}&count=${selected.length}&from=home`)
     return true
-  }, [buildTodaysPlanSelection, navigate, todayAnsweredIds])
+  }, [buildTodaysPlanSelection, navigate, todayAnsweredIds, reveal])
 
   // Auto-activate today's study plan for Pro users when it has concepts.
   // If the dashboard passed a custom concept selection (some deselected), apply that instead.
@@ -895,15 +905,22 @@ export default function Landing() {
         selection: 'stored',
         mode,
         count: String(drawnIds.length),
+        reveal,
         from: 'home',
       })
-      if (mode === 'quiz') params.set('reveal', reveal)
       navigate(`/quiz?${params.toString()}`)
       return
     }
 
     if (selectedConcept) {
-      const params = new URLSearchParams({ concept: selectedConcept, mode: 'quiz', reveal, from: 'home' })
+      // Always a quiz, whichever source tab happens to be showing, so it takes
+      // the quiz's saved reveal rather than the tab's.
+      const params = new URLSearchParams({
+        concept: selectedConcept,
+        mode: 'quiz',
+        reveal: loadRevealMode('quiz'),
+        from: 'home',
+      })
       if (count < conceptAvailableCount) params.set('count', String(count))
       navigate(`/quiz?${params.toString()}`)
       return
@@ -915,11 +932,10 @@ export default function Landing() {
       if (launchTodaysPlan(count)) return
     }
 
-    const params = new URLSearchParams({ exam: topic, mode })
+    const params = new URLSearchParams({ exam: topic, mode, reveal })
     if (mode === 'quiz') {
       if (selectedConcepts.length > 0) params.set('concepts', selectedConcepts.join(','))
       params.set('count', String(count))
-      params.set('reveal', reveal)
     } else if (selectedSitting !== null) {
       params.set('year', String(selectedSitting.year))
       if (selectedSitting.session) params.set('session', selectedSitting.session)
@@ -1423,6 +1439,35 @@ export default function Landing() {
               past-exam browser in the page body now — a pill row can't carry a
               paper's size or its pass rate, and it had no room to list the
               sittings that exist but aren't in the bank yet. */}
+
+          {/* ── When the answers show ─────────────────────────────────
+              Ticked, each answer is marked and explained as soon as it's
+              confirmed; unticked, nothing is given away until the review
+              screen. Offered for both modes — a practice exam run for
+              feedback is as reasonable as a quiz run as a dry run. */}
+          <button
+            type="button"
+            role="checkbox"
+            aria-checked={reveal === 'during'}
+            data-sound="tick"
+            onClick={() => handleRevealChange(reveal === 'during' ? 'end' : 'during')}
+            className={cn(
+              'flex min-h-10 w-full items-center gap-2.5 rounded-lg border px-3 py-2.5 text-left transition-colors',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              reveal === 'during'
+                ? 'border-primary/30 bg-primary/10 text-primary hover:bg-primary/15'
+                : 'border-border bg-muted/50 text-foreground hover:bg-accent/40',
+            )}
+          >
+            {reveal === 'during' ? (
+              <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
+            ) : (
+              <Circle className="h-4 w-4 shrink-0 text-muted-foreground/50" />
+            )}
+            <span className="min-w-0 flex-1 text-sm font-medium leading-snug">
+              Show answers after each question
+            </span>
+          </button>
 
           <div className="relative">
             <Button

@@ -474,6 +474,51 @@ class AppendOnlyTests(TempVault):
         self.assertEqual(C.check_append_only("HEAD~2"), [])
 
 
+class AppendOnlyBranchWalkTests(AppendOnlyTests):
+    """History that is not a straight line through the walk."""
+
+    def test_a_merged_branch_is_not_read_as_a_deletion(self) -> None:
+        """`rev-list` order is not parent order once a branch is merged.
+
+        Walking consecutive revs diffs the tip of one line of development
+        against the tip of another, and every log the second line carries that
+        the first does not reads as deleted. On a branch merged from main that
+        is dozens of logs nobody touched — noise that hides a real violation.
+        """
+        base = self.git("rev-parse", "HEAD").strip()
+
+        self.git("checkout", "-q", "-b", "side")
+        side = "questions/exam-5/side.md"
+        self.write(side, QUESTION)
+        V.append_entry(side, self.ENTRY.strip(), self.root)
+        self.commit("side: file a finding")
+
+        self.git("checkout", "-q", "main")
+        trunk = "questions/exam-5/trunk.md"
+        self.write(trunk, QUESTION)
+        V.append_entry(trunk, self.ENTRY.strip(), self.root)
+        self.commit("main: file another finding")
+
+        self.git("merge", "-q", "--no-ff", "side", "-m", "merge side")
+
+        problems = C.check_append_only(base)
+        self.assertEqual(
+            [f"{p.path}: {p.message}" for p in problems], [],
+            "logs added on either side of a merge are additions, not deletions",
+        )
+
+    def test_a_deletion_on_a_branch_is_still_caught(self) -> None:
+        base = self.git("rev-parse", "HEAD").strip()
+        self.git("checkout", "-q", "-b", "side")
+        V.log_path_for(self.rel, self.root).unlink()
+        self.commit("side: drop a log")
+        self.git("checkout", "-q", "main")
+        self.git("merge", "-q", "--no-ff", "side", "-m", "merge side")
+
+        problems = C.check_append_only(base)
+        self.assertTrue(any("deleted" in p.message for p in problems))
+
+
 # ─── Recording a pass (P1 + idempotency) ──────────────────────────────────────
 
 class RecordTests(TempVault):

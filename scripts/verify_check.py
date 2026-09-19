@@ -347,7 +347,9 @@ def check_append_only(base: str) -> list[Problem]:
       created *and then* rewritten inside the same PR shows up as a plain "added"
       file, and an edit that is reverted in a later commit shows up as nothing at
       all. A sweep writes its own logs, so this is exactly the shape a sweep
-      could produce — an agent rewriting a finding it had just filed.
+      could produce — an agent rewriting a finding it had just filed. Each
+      commit is compared with its own first parent, so a merge in the range
+      does not turn two lines of development into a mass of phantom deletions.
 
     Findings are deduplicated, so a violation visible to both passes is reported
     once.
@@ -364,10 +366,18 @@ def check_append_only(base: str) -> list[Problem]:
     except subprocess.CalledProcessError:  # pragma: no cover - git-level failure
         revs = []
     if 0 < len(revs) <= MAX_WALK_COMMITS:
-        previous = merge_base
         for rev in revs:
-            problems.extend(_diff_pair(previous, rev))
-            previous = rev
+            # Each commit against its own first parent, never against the
+            # previous entry in the list: `rev-list` order is not parent order
+            # once a branch has been merged, and diffing the tip of one line of
+            # development against the tip of another reads every log the other
+            # line carries as deleted — dozens of them on a branch that merged
+            # main, which is noise a real violation then hides in.
+            try:
+                parent = _git("rev-parse", "--verify", "--quiet", f"{rev}^").strip()
+            except subprocess.CalledProcessError:
+                continue  # a root commit: nothing for it to have changed from
+            problems.extend(_diff_pair(parent, rev))
 
     seen: set[tuple[str, str]] = set()
     unique: list[Problem] = []

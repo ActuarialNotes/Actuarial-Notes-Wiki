@@ -56,6 +56,9 @@ import os
 import re
 import shutil
 import sys
+import unicodedata
+from collections import Counter
+from collections.abc import Callable
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
 
@@ -1024,23 +1027,41 @@ def cas_records(
             ],
         ) or {}
         taken = sorted(prompts.values())
-        for num, span in aligned.items():
-            # Never over a span another question already owns: a prompt filed
-            # under the wrong question is worse than a missing one.
-            if num not in prompts and not any(
-                span[0] < end and start < span[1] for start, end in taken
-            ):
-                prompts[num] = span
+        for num, span in sorted(aligned.items()):
+            if num in prompts:
+                continue
+            # Never over text another question already owns: a prompt filed
+            # under the wrong question is worse than a missing one. An aligned
+            # span ends at the *next point marker*, which on a paper whose
+            # numbering half survived sits just past the next question's `10.`
+            # — so the tail is trimmed back to that label rather than the
+            # whole span being thrown away for a few characters of overlap.
+            start, end = span
+            for other_start, other_end in taken:
+                if other_start <= start < other_end:
+                    start = end  # begins inside another question: not ours
+                    break
+                if start < other_start < end:
+                    end = other_start
+            if start < end:
+                prompts[num] = (start, end)
+                taken = sorted(taken + [(start, end)])
 
     records: list[dict] = []
     for bound in bounds:
         parsed = parsed_by_num[bound.num]
         body, pages, needs_vision = "", [], False
+        warnings: list[str] = []
+        source = "numbered" if bound.num in numbered else (
+            "aligned" if bound.num in prompts else ""
+        )
         if bound.num in prompts:
             p_start, p_end = prompts[bound.num]
             body = mdmath.normalize_markdown(b_text[p_start:p_end]).strip()
             pages = sorted({b_index[i] for i in range(p_start, min(p_end, len(b_index)))})
-            body = attach_part_prompts(body, parsed["parts"])
+            body = _strip_trailing_label(
+                attach_part_prompts(body, parsed["parts"], parsed["points"], warnings)
+            )
             ocred = sorted({p for p in pages if booklet_pages[p - 1].ocred})
         else:
             # No prompt text for this question. When the booklet has no text
@@ -1052,7 +1073,6 @@ def cas_records(
             pages = []
             needs_vision = any(p.scanned for p in booklet_pages)
 
-        warnings = []
         if not body and not needs_vision:
             warnings.append("no prompt text found in the booklet")
         if ocred:
@@ -1094,9 +1114,13 @@ def cas_records(
                 },
                 "needs_vision": needs_vision,
                 "ocr": bool(ocred),
+                "prompt_source": source,
+                "rewrite_flags": [],
                 "warnings": warnings,
             }
         )
+    for record in records:
+        record["rewrite_flags"] = rewrite_flags(record)
     _locate_unplaced(records)
     return records
 
@@ -1225,34 +1249,192 @@ def _match_question(
     return pos
 
 
+# ─── Which sample answers will not read as a walkthrough ──────────────────────
+#
+# A publisher's sample answer is shipped as the explanation whenever it reads
+# as one, and rewriting the rest is the largest model cost left in a
+# conversion. Finding them by reading all 25 costs as much as the rewriting
+# does, so the shapes that *always* read badly are detected here and named in
+# the report — every one of them a way a table or an equation loses its
+# structure on the way out of a PDF, never a judgment about style.
+
+# A line that is nothing but a number is the same shape as a table cell that
+# is nothing but a number, so the exhibit finder's test is reused verbatim.
+BARE_NUMBER_RE = NUMERIC_CELL_RE
+COLUMN_LINE_RE = re.compile(r"\S {2,}\S")
+# A run this long is a table that lost its shape; two numbers under each other
+# are just two steps of a calculation.
+FLAT_RUN = 3
+# An equation line this long with this many `=` is several steps run together
+# (`EP x OLF = 1500 x 1.0484 = 1572.54 = On-Level EP 2013 Loss x ...`). The
+# length gate is what separates it from an honest `A = 1 + 2 = 3`.
+CHAIN_EQUALS = 3
+CHAIN_CHARS = 80
+
+
+def _line_run(text: str, matches: Callable[[str], bool]) -> int:
+    """The longest run of consecutive non-blank lines satisfying `matches`."""
+    run = best = 0
+    for line in (text or "").splitlines():
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if matches(stripped):
+            run += 1
+            best = max(best, run)
+        else:
+            run = 0
+    return best
+
+
+def _collapsed_row(text: str) -> bool:
+    """A markdown row whose every cell holds a whole column of numbers.
+
+    The table finder sometimes reads a report's hand-typed exhibit as one row
+    per *column*, so `| A B C | 76.7% 71.9% 79.0% |` is what reaches the file —
+    a table on screen, unreadable as one.
+    """
+    for line in (text or "").splitlines():
+        stripped = line.strip()
+        if not stripped.startswith("|") or set(stripped) <= set("|- "):
+            continue
+        for cell in stripped.strip("|").split("|"):
+            tokens = cell.split()
+            if len(tokens) >= 3 and all(BARE_NUMBER_RE.match(t) for t in tokens):
+                return True
+    return False
+
+
+def _broken_font(text: str) -> bool:
+    """Letters no English exam solution contains: the PDF's font map failed.
+
+    A solution set in a maths font with no usable encoding extracts as runs of
+    unrelated letters (`0146ത`, `൅`, `ൌ`), which no normalisation can repair.
+    """
+    strange = 0
+    for ch in text or "":
+        if ord(ch) < 0x250 or not unicodedata.category(ch).startswith("L"):
+            continue
+        if unicodedata.name(ch, "").startswith(("GREEK", "MATHEMATICAL")):
+            continue
+        strange += 1
+        if strange >= 2:
+            return True
+    return False
+
+
+def unreadable_sample(text: str) -> str | None:
+    """Why a sample answer will not read as a walkthrough, or None if it will.
+
+    Reported, never acted on: the pipeline does not rewrite anything by
+    itself, and a sample this misses is still a sample worth a second look.
+    """
+    if not (text or "").strip():
+        return None
+    if _line_run(text, lambda line: bool(BARE_NUMBER_RE.match(line))) >= FLAT_RUN:
+        return "a column of bare numbers — the triangle lost its shape"
+    if _collapsed_row(text):
+        return "a markdown row holding a whole column per cell"
+    if _line_run(text, lambda line: len(COLUMN_LINE_RE.findall(line)) >= 2) >= FLAT_RUN:
+        return "space-aligned columns that never became a table"
+    if any(
+        line.count("=") >= CHAIN_EQUALS and len(line) > CHAIN_CHARS
+        for line in text.splitlines()
+    ):
+        return "several calculation steps run onto one line"
+    if _broken_font(text):
+        return "characters from a font the PDF could not map"
+    return None
+
+
+def rewrite_flags(record: dict) -> list[str]:
+    """The parts of one question whose sample answer needs rewriting."""
+    flags = []
+    for label, text in [("the solution", record.get("solution") or "")] + [
+        (f"part {part['label']}", (part.get("samples") or [""])[0])
+        for part in record.get("parts") or []
+    ]:
+        reason = unreadable_sample(text)
+        if reason:
+            flags.append(f"{label}: {reason}")
+    return flags
+
+
 # A markdown table or a run of aligned columns in a prompt: the exhibit a
 # ratemaking question turns on, and the part of a scan OCR is worst at.
 def _has_exhibit(body: str) -> bool:
     return "|---" in body or bool(COLUMN_GAP_RE.search(body))
 
 
-def attach_part_prompts(body: str, parts: list[dict]) -> str:
+def attach_part_prompts(
+    body: str,
+    parts: list[dict],
+    total: float | None = None,
+    warnings: list[str] | None = None,
+) -> str:
     """Move the booklet's lettered sub-prompts onto the report's parts.
 
     Returns the question stem. A part the booklet prices but the report never
     mentions is appended, so the file still carries every prompt the candidate
-    was given.
+    was given — *unless* adding it would break the report's own total. A
+    scanned booklet's spans can over-run into the next question's page, and a
+    `c. (0.5 point)` borrowed from the question after this one is a part that
+    will never have an answer under it. The report prices the paper, so it
+    decides: the surplus part is dropped and `warnings` says so.
     """
     stem, prompts = split_part_prompts(body)
     if not prompts:
         return stem  # a single-part question: its total is already frontmatter
     by_label = {part["label"]: part for part in parts}
-    for label, found in prompts.items():
+    priced = sum(p["points"] for p in parts if p.get("points") is not None)
+    for label, found in sorted(prompts.items()):
         part = by_label.get(label)
         if part is None:
+            over = (
+                total is not None
+                and priced + (found["points"] or 0) - total > POINT_EPS
+            )
+            if over:
+                if warnings is not None:
+                    warnings.append(
+                        f"booklet part {label} ({points_label(found['points'])}) dropped: "
+                        f"the report prices only {points_label(total)} and never mentions "
+                        "it — an over-run into the next question's page"
+                    )
+                continue
             part = {"label": label, "points": found["points"], "samples": [], "report": ""}
             parts.append(part)
             by_label[label] = part
+            priced += found["points"] or 0
         part["prompt"] = found["prompt"]
         if part.get("points") is None:
             part["points"] = found["points"]
+            priced += found["points"] or 0
     parts.sort(key=lambda p: p["label"])
     return stem
+
+
+# The next question's own `10.`, left at the end of a span that reaches to the
+# following point marker. A prompt never ends on an empty list marker, so a
+# bare number and full stop with nothing under it is always the neighbour's.
+TRAILING_LABEL_RE = re.compile(r"\n\s*\d{1,3}\.\s*$")
+
+
+def _strip_trailing_label(body: str) -> str:
+    return TRAILING_LABEL_RE.sub("", body).rstrip()
+
+
+def points_label(value: float | None) -> str:
+    """`1 point`, `0.5 points` — a point value as the publisher prints it.
+
+    Shared with `question_write`, which heads each `## Part a` with it, so a
+    warning about a part and the part itself are weighed the same way.
+    """
+    if value is None:
+        return "no points"
+    number = float(value)
+    shown = str(int(number)) if number == int(number) else str(number)
+    return f"{shown} point" + ("" if number == 1 else "s")
 
 
 SOA_PREFIX = {"p": "p", "fm": "fm", "mas-i": "mas1", "mas-ii": "mas2"}
@@ -1344,15 +1526,89 @@ def token_estimate(
     return est
 
 
+@dataclass
+class SplitInfo:
+    """Where a combined CAS PDF was cut, and how big each half came out.
+
+    Carried into the report because the cut is the one decision everything
+    downstream depends on and the one nothing downstream can question: a
+    split in the wrong place still yields questions, solutions and a clean
+    report — just no prompts.
+    """
+
+    total_pages: int
+    booklet_pages: int
+    combined: bool = True
+
+    @property
+    def report_pages(self) -> int:
+        return self.total_pages - self.booklet_pages
+
+
+def _coverage_lines(
+    split: SplitInfo | None, by_source: "Counter[str]", total: int
+) -> list[str]:
+    """How the booklet was read, and a banner when it was not read at all."""
+    if split is None:
+        return []
+    placed = total - by_source.get("unplaced", 0)
+    routes = ", ".join(
+        f"{by_source[key]} by {name}"
+        for key, name in (("numbered", "the booklet's own numbering"),
+                          ("aligned", "point-value alignment"))
+        if by_source.get(key)
+    )
+    lines = [
+        "## Booklet coverage",
+        "",
+        f"- the combined PDF was cut at page **{split.booklet_pages + 1}** of "
+        f"{split.total_pages}: {split.booklet_pages} booklet page(s), "
+        f"{split.report_pages} report page(s)"
+        if split.combined else
+        f"- booklet: **{split.booklet_pages}** page(s); "
+        f"report: {split.report_pages} page(s)",
+        f"- prompts placed: **{placed} of {total}**"
+        + (f" ({routes})" if routes else ""),
+        "",
+    ]
+    if split.booklet_pages and not placed:
+        lines += [
+            "> **No prompt came out of the booklet at all.** Every question "
+            "below has a point value, a sample answer and commentary — from "
+            "the report — and no question text, so the extraction looks "
+            "healthy and is not. Suspect the parse, not the paper: check that "
+            "the split landed in the right place, and that the booklet half "
+            "holds text a `QUESTION 1` / `1.` / `(2.5 points)` pattern can "
+            "match (a text layer set in exotic spaces or a scan with no "
+            "`--ocr` are the two that have done this).",
+            "",
+        ]
+    elif not split.booklet_pages and split.combined:
+        lines += [
+            "> **The split put every page in the report half.** A combined CAS "
+            "PDF is a booklet followed by `SAMPLE ANSWERS AND EXAMINER'S "
+            "REPORT`; finding that header on page 1 means the header search "
+            "matched nothing and fell through. No prompt can be read this way.",
+            "",
+        ]
+    return lines
+
+
 def write_report(
-    path: Path, records: list[dict], dpi: int, rendered_pages: int = 0
+    path: Path,
+    records: list[dict],
+    dpi: int,
+    rendered_pages: int = 0,
+    split: SplitInfo | None = None,
 ) -> str:
     have_answer = sum(1 for r in records if r.get("answer"))
     have_solution = sum(1 for r in records if r.get("solution") or r.get("parts"))
     vision = [r["num"] for r in records if r["needs_vision"]]
     ocred = [r["num"] for r in records if r.get("ocr")]
     flagged = [r for r in records if r["warnings"]]
+    rewrites = [r for r in records if r.get("rewrite_flags")]
     est = token_estimate(records, dpi, rendered_pages)
+    by_source = Counter(r.get("prompt_source") or "unplaced" for r in records)
 
     lines = [
         "# Extraction report",
@@ -1366,7 +1622,10 @@ def write_report(
         + (f" (questions {_ranges(ocred)})" if ocred else ""),
         f"- booklet pages rendered for transcription: **{rendered_pages}**",
         f"- flagged with warnings: **{len(flagged)}**",
+        f"- explanations the publisher wrote unreadably: **{len(rewrites)}**"
+        + (f" (questions {_ranges([r['num'] for r in rewrites])})" if rewrites else ""),
         "",
+        *_coverage_lines(split, by_source, len(records)),
         "## Token estimate",
         "",
         "| | input | output |",
@@ -1393,6 +1652,23 @@ def write_report(
             "against the image — OCR drops columns.",
             "",
         ]
+
+    if rewrites:
+        lines += [
+            "## Explanations worth rewriting",
+            "",
+            "These sample answers lost their structure in the PDF — a triangle "
+            "flattened into a column of numbers, a row holding a whole column, "
+            "calculation steps run together. Rewrite each into "
+            "`<build>/../expl/<id>.md` (a `## Part a` heading per part) and pass "
+            "`--explanations`. Everything not listed here reads as the "
+            "publisher wrote it and should be shipped unchanged.",
+            "",
+        ]
+        for rec in rewrites:
+            for flag in rec["rewrite_flags"]:
+                lines.append(f"- **{rec['id']}** {flag}")
+        lines.append("")
 
     if flagged:
         lines += ["## Warnings", ""]
@@ -1463,12 +1739,14 @@ def main(argv: list[str] | None = None) -> int:
             | furniture_lines(pages[:split])
             | furniture_lines(pages[split:])
         )
+        split_info = SplitInfo(len(pages), len(booklet))
     else:
         booklet = read_pages(args.questions, want_tables, args.ocr) if args.questions else []
         report = read_pages(args.solutions, want_tables, args.ocr) if args.solutions else []
         sources = {"question": args.questions, "solution": args.solutions}
         offsets = {"question": 0, "solution": 0}
         furniture = None  # two documents, each with its own furniture
+        split_info = SplitInfo(len(booklet) + len(report), len(booklet), combined=False)
 
     if cas:
         if not args.year:
@@ -1492,7 +1770,7 @@ def main(argv: list[str] | None = None) -> int:
         for rec in records:
             fh.write(json.dumps(rec, ensure_ascii=False) + "\n")
 
-    print(write_report(out / "report.md", records, args.dpi, rendered))
+    print(write_report(out / "report.md", records, args.dpi, rendered, split_info))
     print(f"wrote {out / 'records.jsonl'}")
     return 0
 

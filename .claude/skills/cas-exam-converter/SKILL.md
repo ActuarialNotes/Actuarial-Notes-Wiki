@@ -51,10 +51,17 @@ cat /tmp/exam-5/report.md
   an exhibit and renders its pages; check every figure against the image and
   re-transcribe the exhibit into `/tmp/prompts/<id>.md`.
 
-**Read `report.md`.** It gives the coverage, the questions needing vision, the
-OCR'd ones, and any question whose part points do not sum to its
-`TOTAL POINT VALUE` — which is the one arithmetic check worth doing by hand
-before anything else.
+**Read `report.md`, starting with `Booklet coverage`.** That section is the
+one check worth doing before any other, because it is the one thing the rest
+of the run cannot tell you: a split in the wrong place still produces a full
+set of questions with point values, sample answers and commentary, and no
+question text at all. It names where the PDF was cut and how many prompts each
+route placed; a banner appears when the booklet half yielded nothing. If
+prompts placed is `0 of N`, stop and fix the parse — do not start
+transcribing 25 prompts by hand.
+
+Then read the rest: the questions needing vision, the OCR'd ones, the
+explanations flagged as unreadable, and any remaining point-sum warning.
 
 ## 2. Classify
 
@@ -117,11 +124,24 @@ recovered from the PDF, so they never sit inside it.
   exactly: wording, all parts and their point values, every exhibit row as a
   markdown table, bullet assumptions before the lettered parts. Skip page
   furniture.
+- **Every exhibit on a scanned paper**, whether or not the question is marked
+  `needs_vision`. OCR reads a scan's prose well and its tables badly, and a
+  wrong figure in an exhibit is worse than a missing prompt, so on a scanned
+  booklet plan to transcribe *all* of them from `pages/` — that is the real
+  cost of the conversion and where the time goes. Pass `--render-all` so every
+  booklet page is there to read, rather than only the ones the extractor
+  flagged.
 - **A sample answer that does not read as a walkthrough** — CAS samples are
-  candidate handwriting transcribed, so this is common. Rewrite into prose plus
-  `$$…$$` / `$…$` and save to `/tmp/expl/<id>.md`, then pass
-  `--explanations`. If a second sample shows a genuinely different valid
-  approach, the writer already appends it as `Alternatively:`.
+  candidate handwriting transcribed, so this is common. `report.md` lists the
+  ones whose structure the PDF destroyed under **Explanations worth
+  rewriting**; work that list rather than reading all of them, and ship
+  everything it does not name unchanged. Rewrite into prose plus `$$…$$` /
+  `$…$` and save to `/tmp/expl/<id>.md` (one `## Part a` heading per part for a
+  multi-part question), then pass `--explanations`. Every figure in a rewrite
+  is the publisher's own — a rewrite reorganises, it never recomputes. If a
+  second sample shows a genuinely different valid approach, the writer already
+  appends it as `Alternatively:`; an override replaces it, so carry it over
+  yourself if it is worth keeping.
 - **A descriptive part with no numeric answer** — no `### Answer` section;
   synthesise a model answer from what the commentary says was expected.
 - **An `### Answer` value** — add it to the part in `records.jsonl` if the

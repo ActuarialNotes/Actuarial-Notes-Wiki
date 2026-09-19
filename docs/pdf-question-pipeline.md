@@ -67,6 +67,11 @@ be read the way the report can. Three routes, in order of preference:
 1. **A text layer.** Nothing to do. Post-2020 papers increasingly have one.
 2. **Local OCR (`--ocr`, needs `tesseract` on PATH).** Free, and good at prose:
    on Fall 2016 it recovered 22 of 26 prompts and every lettered sub-prompt.
+   It reads at `OCR_DPI`, which is deliberately **not** the rendering budget:
+   a render is paid for in vision tokens and OCR is paid for in CPU, so it runs
+   at 300 dpi while pages render at 110. At the render budget the same Spring
+   2016 pages come back as "Eamed", "Abenefit" and "ofone", with a column of
+   the exhibit missing; at 300 the prose is clean.
    It is *not* good at tables — it dropped a column of policy counts from
    Q1's exhibit and misread "earned" as "eared" — so a record read this way is
    marked `ocr`, and one whose prompt contains an exhibit has its pages
@@ -86,6 +91,26 @@ span ends at its own last marker, so an unmatched question can never have its
 text absorbed into a neighbour — the property that makes a partial alignment
 safe. On Fall 2016 that placed 22 of 26 prompts, stepping over the markers of
 QUESTION 8, which the report omits entirely.
+
+A scan can also land **between** the two cases, and Spring 2016 does: OCR good
+enough to recover the `10.` of the later questions still loses the `1.` of the
+earlier ones, whose numbers sit in a margin the engine reorders. So the two
+readings are merged rather than chosen between — the booklet's own numbering
+first, since it is the question's own label, and alignment only for the numbers
+numbering missed. An aligned span may not begin inside a span numbering already
+owns, and where it merely runs past one (its end is the *next* point marker,
+which sits just after the next question's label) its tail is trimmed back to
+that label rather than the span being thrown away.
+
+### What `report.md` says about all this
+
+Two lines under **Booklet coverage** state the things nothing downstream can
+question: where the combined PDF was cut, and how many prompts each route
+placed. They exist because a split in the wrong place still yields a full set
+of questions, point values, sample answers and commentary — everything except
+the question text — so the run *looks* healthy. When the booklet half produced
+no prompt at all, the report says so in a banner instead of leaving it to be
+inferred from 25 identical warnings.
 
 ### Stage 1 — `pdf_extract.py`
 
@@ -131,6 +156,21 @@ schema is in the module docstring). What it does that is worth knowing:
 letter and a solution, which need vision, which came from OCR, and every
 warning — plus the token estimate below. **Read it before going further**: it is
 the cheapest possible statement of what is left to do.
+
+### Which explanations to rewrite
+
+A publisher's sample answer ships as the explanation whenever it reads as one,
+and rewriting the rest is the largest model cost left in a conversion — so
+*finding* them by reading every sample costs about as much as the rewriting
+does. `unreadable_sample` names them instead, from the shapes that always read
+badly because a PDF lost their structure: a column of bare numbers where a
+triangle was, a markdown row holding a whole column per cell, space-aligned
+columns that never became a table, several calculation steps run onto one line,
+and letters from a font the PDF could not map. They are listed in `report.md`
+under **Explanations worth rewriting**; measured against a hand review of
+Spring 2016 the list named 10 of the 12 that needed work and nothing that did
+not. It is advisory in both directions — nothing is rewritten automatically,
+and a sample it does not name is still worth a glance.
 
 ### Stage 2 — `question_classify.py`
 
@@ -312,6 +352,11 @@ PDF-reading cases when PyMuPDF is absent).
 | a question's numbers disagree with its exhibit, record says `ocr` | OCR dropped or misread a table column | re-transcribe that exhibit from `pages/` into `--prompts`; never publish the OCR'd figures |
 | the report skips a question number | the publisher omitted it (Fall 2016 has no QUESTION 8) | nothing to do — it is not in the paper's report |
 | a field parses as `OTAL POINT VALUE` | the PDF's text layer dropped a leading glyph | already handled: the field labels accept a missing first letter |
+| every question has a solution and **no prompt at all** | the booklet half was never read — see the `Booklet coverage` banner in `report.md` | check where the split landed and whether the booklet's text needs `--ocr`; this looks like a healthy run and is not |
+| the split lands at page 1 (no booklet half) | the `SAMPLE ANSWERS AND EXAMINER'S REPORT` header did not match | already handled for exotic whitespace (below); otherwise the header shape is new and belongs in `_split_combined` |
+| a whole question's parts carry the *commentary* as their answer | `EXAMINER'S REPORT` was not recognised as a heading, so the sample/commentary split never happened | already handled for a typographic apostrophe; a new heading shape goes in `CAPS_HEADING_RE` |
+| one question loses every sample after the first | the report boxes its samples, and the box was read as a table, so `Part b:` stopped being line-initial | already handled: `Part a`/`Sample 1` in a cell mark the candidate as structure |
+| part points do not sum to `TOTAL POINT VALUE` | a booklet span over-ran into the next question's page and took its `c. (0.5 point)` with it | already handled: the surplus part is dropped and the warning says so — the report prices the paper |
 
 ## The rules this pipeline does not bend
 

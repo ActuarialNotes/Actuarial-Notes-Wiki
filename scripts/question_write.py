@@ -41,7 +41,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import mdmath  # noqa: E402
-from pdf_extract import attach_part_prompts  # noqa: E402
+from pdf_extract import attach_part_prompts, points_label  # noqa: E402
 from validate_content import EXAM_LABEL_BY_DIR  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -58,11 +58,6 @@ def _num(value) -> str:
     """Render a point value the way the bank does: 2.5 stays, 2.0 becomes 2."""
     number = float(value)
     return str(int(number)) if number == int(number) else str(number)
-
-
-def _points(value) -> str:
-    """`1 point`, `0.5 points` — the bank's label for a part's weight."""
-    return f"{_num(value)} point" + ("" if float(value) == 1 else "s")
 
 
 def _scalar(key: str, value) -> str:
@@ -140,7 +135,7 @@ def part_sections(record: dict, explanation: str | None) -> str:
         label = part["label"]
         header = f"## Part {label}"
         if part.get("points") is not None:
-            header += f" ({_points(part['points'])})"
+            header += f" ({points_label(part['points'])})"
         out.append(header)
 
         if part.get("prompt"):
@@ -264,7 +259,14 @@ def main(argv: list[str] | None = None) -> int:
             # kept the text the override was written to replace.
             transcribed = (prompts / f"{record['id']}.md").read_text(encoding="utf-8")
             parts = [dict(part) for part in record.get("parts") or []]
-            stem = attach_part_prompts(mdmath.normalize_markdown(transcribed), parts)
+            surplus: list[str] = []
+            stem = attach_part_prompts(
+                mdmath.normalize_markdown(transcribed),
+                parts,
+                record.get("points"),
+                surplus,
+            )
+            problems += [f"{record['id']}: {note}" for note in surplus]
             record = dict(record, body=stem.strip(), parts=parts)
         if not (record.get("body") or "").strip():
             hint = " (needs_vision — transcribe the rendered page into --prompts)" \

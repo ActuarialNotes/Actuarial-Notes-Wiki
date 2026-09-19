@@ -484,6 +484,251 @@ class TestPublisherTextDefects(unittest.TestCase):
         self.assertIn("expected to round", part["report"])
 
 
+def _page(number: int, text: str) -> "px.Page":
+    """A Page carrying one text block, the way `read_pages` builds one."""
+    return px.Page(number=number, text=text, blocks=[(0.0, 0.0, text)])
+
+
+class TestSpring2016Faults(unittest.TestCase):
+    """Four faults the CAS Exam 5 Spring 2016 paper exposed.
+
+    Each one silently cost content the documents actually contained: prompts,
+    or a question's sample answers. None of them raised, and the run before
+    the fix reported 25 clean questions with no prompt text in any of them —
+    so each is pinned here by its own failure shape rather than by the fix.
+    """
+
+    def test_a_text_layer_set_in_non_breaking_spaces_still_parses(self):
+        # Every space in the Spring 2016 text layer is U+00A0, which `[ \t]`
+        # does not match: no structural regex fired and the whole paper read
+        # as one report half.
+        nbsp = (
+            "EXAM\u00a05\u00a0SPRING\u00a02016\u00a0SAMPLE\u00a0ANSWERS\u00a0AND\u00a0"
+            "EXAMINER\u2019S\u00a0REPORT\nQUESTION\u00a01\u00a0\n"
+            "TOTAL\u00a0POINT\u00a0VALUE:\u00a02.5\u00a0\n"
+        )
+        flat = mdmath.normalize_spaces(nbsp)
+        self.assertEqual(len(flat), len(nbsp))  # length-preserving
+        self.assertTrue(px.CAS_QUESTION_RE.search(flat))
+        self.assertTrue(px.CAS_POINTS_RE.search(flat))
+        self.assertRegex(flat, r"(?i)sample answers and examiner")
+
+    def test_normalize_spaces_leaves_everything_else_alone(self):
+        text = "a \u2019quoted\u2019 On\u2010Level \u00d7 value\u00a0here"
+        self.assertEqual(
+            mdmath.normalize_spaces(text), "a \u2019quoted\u2019 On\u2010Level \u00d7 value here"
+        )
+
+    def test_ocr_is_read_at_its_own_resolution_not_the_render_budget(self):
+        # At the 110 dpi render budget Tesseract reads "Eamed", "Abenefit",
+        # "ofone" and drops an exhibit column. OCR costs CPU, not tokens.
+        self.assertGreater(px.OCR_DPI, px.DEFAULT_DPI)
+
+    def test_numbering_and_alignment_are_merged_not_chosen_between(self):
+        # Good OCR recovered the booklet's `2.` but not its `1.`, and the
+        # numbered path used to replace alignment wholesale — losing every
+        # prompt whose number the scan had eaten.
+        booklet = (
+            "(1.5 points)\nGiven the exposures:\nCalculate the written car-years.\n"
+            "2. (2 points)\nGiven the premium:\nCalculate the on-level factor.\n"
+        )
+        report = (
+            "QUESTION 1\nTOTAL POINT VALUE: 1.5\nSAMPLE ANSWERS\n2 x 0.75\n"
+            "QUESTION 2\nTOTAL POINT VALUE: 2\nSAMPLE ANSWERS\n1.05 / 1.02\n"
+        )
+        records = px.cas_records(
+            "5", 2016, "Spring", [_page(1, booklet)], [_page(2, report)]
+        )
+        self.assertEqual([r["num"] for r in records], [1, 2])
+        self.assertIn("written car-years", records[0]["body"])
+        self.assertIn("on-level factor", records[1]["body"])
+        self.assertEqual(records[0]["prompt_source"], "aligned")
+        self.assertEqual(records[1]["prompt_source"], "numbered")
+
+    def test_an_aligned_span_never_overlaps_one_numbering_already_owns(self):
+        booklet = "2. (2 points)\nGiven the premium:\nCalculate the factor.\n"
+        report = (
+            "QUESTION 1\nTOTAL POINT VALUE: 2\nSAMPLE ANSWERS\nx\n"
+            "QUESTION 2\nTOTAL POINT VALUE: 2\nSAMPLE ANSWERS\ny\n"
+        )
+        records = px.cas_records(
+            "5", 2016, "Spring", [_page(1, booklet)], [_page(2, report)]
+        )
+        bodies = [r["body"] for r in records]
+        self.assertEqual(sum(1 for b in bodies if "Calculate the factor" in b), 1)
+
+    def test_a_heading_with_a_typographic_apostrophe_is_structural(self):
+        # Unrecognised, `EXAMINER’S REPORT` folds into the bullet above it,
+        # the sample/commentary split never happens, and every part takes the
+        # commentary as its answer.
+        self.assertTrue(px.is_structural("EXAMINER\u2019S REPORT"))
+        self.assertTrue(px.is_structural("SAMPLE ANSWERS"))
+        lines = ["- Policy year losses develop to ult", "EXAMINER\u2019S REPORT"]
+        self.assertEqual(px.reflow_block("\n".join(lines)).splitlines(), lines)
+
+    def test_boxed_sample_markers_are_not_read_as_a_table(self):
+        # A report that boxes its samples puts `Part b:` and `Sample 1` inside
+        # the box; read as a table they stop being line-initial and every part
+        # after the first loses its sample answer.
+        self.assertTrue(px.swallows_structure([
+            ["Part b: 0.5 point", ""],
+            ["Sample 1 Select the all-year average of 2.01", ""],
+        ]))
+        self.assertFalse(px.swallows_structure([
+            ["Accident Year", "12", "24"], ["2013", "1.44", "1.12"],
+        ]))
+
+
+    def test_the_next_questions_label_is_not_left_on_the_prompt(self):
+        booklet = "(2 points)\nCalculate the large deductible premium.\n\n10.\n"
+        report = "QUESTION 9\nTOTAL POINT VALUE: 2\nSAMPLE ANSWERS\n619,207\n"
+        records = px.cas_records(
+            "5", 2016, "Spring", [_page(1, booklet)], [_page(2, report)]
+        )
+        self.assertTrue(records[0]["body"].endswith("premium."))
+
+
+class TestSurplusBookletParts(unittest.TestCase):
+    """A booklet part the report never prices, from a span that over-ran."""
+
+    BOOKLET = (
+        "1. (2.5 points)\nGiven the following:\n"
+        "a. (2 points)\nCalculate the indicated change.\n"
+        "b. (0.5 points)\nDiscuss two benefits.\n"
+        "c. (0.5 points)\nThis one belongs to question 2.\n"
+    )
+
+    def test_a_part_that_breaks_the_report_total_is_dropped(self):
+        parts = [
+            {"label": "a", "points": 2.0, "samples": ["x"], "report": ""},
+            {"label": "b", "points": 0.5, "samples": ["y"], "report": ""},
+        ]
+        warnings: list[str] = []
+        px.attach_part_prompts(self.BOOKLET, parts, 2.5, warnings)
+        self.assertEqual([p["label"] for p in parts], ["a", "b"])
+        self.assertEqual(sum(p["points"] for p in parts), 2.5)
+        self.assertIn("booklet part c", warnings[0])
+
+    def test_a_part_the_total_has_room_for_is_still_added(self):
+        parts = [
+            {"label": "a", "points": 2.0, "samples": ["x"], "report": ""},
+            {"label": "b", "points": 0.5, "samples": ["y"], "report": ""},
+        ]
+        warnings: list[str] = []
+        px.attach_part_prompts(self.BOOKLET, parts, 3.0, warnings)
+        self.assertEqual([p["label"] for p in parts], ["a", "b", "c"])
+        self.assertEqual(warnings, [])
+
+    def test_with_no_total_known_nothing_is_dropped(self):
+        parts = [{"label": "a", "points": 2.0, "samples": ["x"], "report": ""}]
+        px.attach_part_prompts(self.BOOKLET, parts, None, [])
+        self.assertEqual([p["label"] for p in parts], ["a", "b", "c"])
+
+    def test_a_single_part_question_loses_its_redundant_total(self):
+        stem = px.attach_part_prompts("(2.5 points)\n\nCalculate the premium.\n", [])
+        self.assertEqual(stem.strip(), "Calculate the premium.")
+
+
+class TestUnreadableSamples(unittest.TestCase):
+    """Naming the sample answers that will not ship as explanations."""
+
+    def test_a_flattened_triangle(self):
+        self.assertIsNotNone(px.unreadable_sample(
+            "AY 12 - 24\n24 - 36\n1.118\n2.053\n1.256\n3.143\n"
+        ))
+
+    def test_a_row_holding_a_whole_column(self):
+        self.assertIsNotNone(px.unreadable_sample(
+            "| Class | Loss Ratio |\n|---|---|\n| A B C | 76.7% 71.9% 79.0% |\n"
+        ))
+
+    def test_space_aligned_columns_that_never_became_a_table(self):
+        self.assertIsNotNone(px.unreadable_sample(
+            "2013      .917         .92            1\n"
+            "2014      .889         .887\n"
+            "2015      .867         .12\n"
+        ))
+
+    def test_calculation_steps_run_onto_one_line(self):
+        self.assertIsNotNone(px.unreadable_sample(
+            "2013 EP x On-Level Factor = 1500 x 1.0484 = 1572.54 = On-Level EP "
+            "2013 Loss x On-Level Factor x Loss Trend = 800 x 1.0164 = 888.9\n"
+        ))
+
+    def test_characters_from_an_unmappable_font(self):
+        self.assertIsNotNone(px.unreadable_sample(
+            "Average fixed expenses = 137.7\n600 \u072b137.7\n"
+            "1 \u0d241593 \u072b1023.59\n"
+        ))
+
+    def test_a_readable_sample_is_left_alone(self):
+        for good in [
+            "Credibility = sqrt(109/683) = 39.95%\n"
+            "Complement = 8.5% (countrywide indication)\n"
+            "Weighted = 41.99% x 39.95% + 60.05% x 8.5% = 21.88%\n",
+            "Insured A = 1000+2000+3000+4000 = 10,000\n",
+            "| Territory | Indicated |\n|---|---|\n| A | 1.275 |\n| B | 0.919 |\n",
+            "",
+        ]:
+            self.assertIsNone(px.unreadable_sample(good), good[:40])
+
+    def test_flags_name_the_part_they_belong_to(self):
+        record = {
+            "solution": "",
+            "parts": [
+                {"label": "a", "samples": ["1.118\n2.053\n1.256\n3.143\n"]},
+                {"label": "b", "samples": ["Select the industry average and justify it."]},
+            ],
+        }
+        flags = px.rewrite_flags(record)
+        self.assertEqual(len(flags), 1)
+        self.assertTrue(flags[0].startswith("part a:"))
+
+
+class TestBookletCoverageReport(unittest.TestCase):
+    """The report has to say when the booklet was not read at all."""
+
+    @staticmethod
+    def _records(sources):
+        return [
+            {
+                "num": i + 1, "id": f"cas5-2016s-q{i + 1}", "needs_vision": not src,
+                "ocr": False, "warnings": [], "rewrite_flags": [], "prompt_source": src,
+                "solution": "x", "parts": [], "pages": {"question": [], "solution": []},
+                "body": "", "options": {}, "answer": None,
+            }
+            for i, src in enumerate(sources)
+        ]
+
+    def _report(self, sources, split):
+        with tempfile.TemporaryDirectory() as tmp:
+            return px.write_report(
+                Path(tmp) / "report.md", self._records(sources), 110, 0, split
+            )
+
+    def test_a_booklet_that_yielded_nothing_is_called_out(self):
+        text = self._report(["", "", ""], px.SplitInfo(97, 30))
+        self.assertIn("cut at page **31** of 97", text)
+        self.assertIn("prompts placed: **0 of 3**", text)
+        self.assertIn("No prompt came out of the booklet at all", text)
+
+    def test_a_split_that_found_no_booklet_is_called_out(self):
+        text = self._report(["", ""], px.SplitInfo(97, 0))
+        self.assertIn("every page in the report half", text)
+
+    def test_a_healthy_run_gets_the_routes_and_no_banner(self):
+        text = self._report(["numbered", "aligned", "aligned"], px.SplitInfo(97, 30))
+        self.assertIn("prompts placed: **3 of 3**", text)
+        self.assertIn("1 by the booklet's own numbering", text)
+        self.assertIn("2 by point-value alignment", text)
+        self.assertNotIn("No prompt came out", text)
+
+    def test_two_documents_report_their_halves_without_a_cut(self):
+        text = self._report(["numbered"], px.SplitInfo(40, 12, combined=False))
+        self.assertIn("booklet: **12** page(s)", text)
+        self.assertNotIn("cut at page", text)
+
+
 # ─── Tables, furniture, reflow ────────────────────────────────────────────────
 
 
@@ -800,9 +1045,10 @@ class TestWriter(unittest.TestCase):
         self.assertNotIn("answer:", md.split("---")[1])
 
     def test_point_label_is_singular_only_at_one(self):
-        self.assertEqual(qw._points(1), "1 point")
-        self.assertEqual(qw._points(0.5), "0.5 points")
-        self.assertEqual(qw._points(2.25), "2.25 points")
+        self.assertEqual(px.points_label(1), "1 point")
+        self.assertEqual(px.points_label(0.5), "0.5 points")
+        self.assertEqual(px.points_label(2.25), "2.25 points")
+        self.assertEqual(px.points_label(2.0), "2 points")
 
     def test_per_part_explanation_override(self):
         record = {

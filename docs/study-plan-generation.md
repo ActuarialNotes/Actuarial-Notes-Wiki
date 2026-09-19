@@ -188,7 +188,7 @@ front of them is the one that finishes the day. Today that's:
 
 | Surface | Scope |
 |---|---|
-| Quiz tab in the bottom nav / Quiz row in the sidebar | all active exams, summed |
+| Quiz row in the sidebar | all active exams, summed |
 | Sidebar exam pill + its **Start Quiz** menu item | that exam |
 | Quiz tab exam cards (`Landing`) | that exam |
 | Quiz tab **Start Quiz** button | that exam, and only when the picked count is sized to finish the plan |

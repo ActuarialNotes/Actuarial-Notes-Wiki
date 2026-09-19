@@ -48,7 +48,7 @@ import { FACT_CHECK_UI_ENABLED, RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
  * It always renders into <body>, placed against its trigger by `placeMenu`.
  * Hosting it inside the surface that opened it is what used to hide it: a
  * flashcard tile's menu is inside the gallery's own `z-40` layer, under the
- * bottom nav, and inside a scroller that clips it. From the body it answers to
+ * mobile header, and inside a scroller that clips it. From the body it answers to
  * the viewport alone — which is the one promise this menu has to keep, since
  * collecting a card is only reachable from it.
  *

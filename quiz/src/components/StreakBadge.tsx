@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 import type { StreakStatus } from '@/lib/streak'
 
 // Shared visual language for the streak across the three surfaces it appears on
-// (Sidebar row, BottomNav corner badge, Dashboard stat). `active`/`at_risk`
+// (Sidebar row, collapsed-sidebar corner badge, Dashboard stat). `active`/`at_risk`
 // burn orange; a lapsed/absent streak is muted.
 function flameClass(status: StreakStatus, count: number): string {
   if (status === 'inactive' || count <= 0) return 'text-muted-foreground'
@@ -38,7 +38,8 @@ export function StreakNavBadge() {
 }
 
 /**
- * BottomNav variant — a compact corner badge to overlay on a nav-tab icon.
+ * Corner variant — a compact badge to overlay on a nav icon, for the
+ * collapsed (icon-only) sidebar where the row badge has nowhere to sit.
  * Renders nothing when there's no active streak, so the tab stays clean.
  * `className` overrides the corner it pins to, for icons that already carry a
  * badge on the top-right (the Quiz tab's questions-left count).

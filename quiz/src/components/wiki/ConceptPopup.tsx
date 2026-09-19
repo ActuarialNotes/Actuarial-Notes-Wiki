@@ -38,7 +38,8 @@ export function ConceptPopup() {
   const activePage: WikiEntryRef | undefined = pages[pageIndex]
   const { height, beginDrag } = useSplitHeight()
   // Focus mode — the popup's counterpart to the Flashcards page focus mode:
-  // it fills the viewport (covering the sidebar, bottom nav and search bar) and
+  // it fills the viewport (covering the sidebar, the mobile header and the
+  // search bar) and
   // strips the chrome back to the concept title, its text, and Previous/Next.
   const [focusMode, setFocusMode] = useState(false)
   const [viewingDropdownOpen, setViewingDropdownOpen] = useState(false)
@@ -256,7 +257,7 @@ export function ConceptPopup() {
 
   return (
     <aside
-      className="concept-popup-aside fixed left-0 right-0 bottom-14 md:bottom-0 z-40 border-t bg-card text-card-foreground shadow-2xl flex flex-col"
+      className="concept-popup-aside fixed left-0 right-0 bottom-0 z-40 border-t bg-card text-card-foreground shadow-2xl flex flex-col"
       data-focus={focusMode}
       style={{ height: focusMode ? undefined : `min(${height}px, 100vh)` }}
       role="complementary"

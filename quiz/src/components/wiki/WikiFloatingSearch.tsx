@@ -250,8 +250,7 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
       {isExpanded && (
         <div
           // z-[44] dims the concept popup (z-40) as well: at a tied z-40 the popup
-          // stayed bright under a dropdown that overlapped it. It stays under
-          // the bottom nav (z-[45]), which keeps working.
+          // stayed bright under a dropdown that overlapped it.
           className="fixed inset-0 z-[44] bg-background/60 backdrop-blur-sm"
           onMouseDown={e => { e.preventDefault(); dismiss() }}
         />
@@ -268,7 +267,7 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
       <div
         ref={containerRef}
         data-floating-search
-        className="sticky top-0 md:top-14 lg:top-0 z-50 border-b bg-background/90 backdrop-blur-md"
+        className="sticky top-14 lg:top-0 z-50 border-b bg-background/90 backdrop-blur-md"
       >
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           {/* Input row */}

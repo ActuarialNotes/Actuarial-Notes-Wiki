@@ -5,7 +5,7 @@
 // overlay rendered *within* the concept popup (z-40, z-56 in focus mode), the
 // add-flashcards sheet (z-[64]) or the collect dialog (z-[120]) is pinned to
 // that host's layer however high its own value is — it opens behind the
-// floating search bar, the bottom nav, or the dialog that opened it. A
+// floating search bar, or the dialog that opened it. A
 // transformed ancestor (the flashcard's swipe transform) is worse still: it
 // makes `position: fixed` resolve against the card, so the overlay lands glued
 // to it rather than covering the screen. Both failures look like a modal that

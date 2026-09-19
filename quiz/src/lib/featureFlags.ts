@@ -42,10 +42,9 @@ export const RESEARCH_AI_ENABLED: boolean = false
  *
  * The nav no longer shows a "Research" entry, and the `/research` route
  * redirects to the wiki. Because "Study Guides" only has one child left when
- * Research is hidden, the sidebar/bottom-nav also drop the nested
- * group/panel and render a single flat "Study Guides" link — see the
- * `RESEARCH_TAB_ENABLED` checks in components/Sidebar.tsx and
- * components/BottomNav.tsx, and the `/research` route in App.tsx.
+ * Research is hidden, the sidebar also drops the nested group and renders a
+ * single flat "Study Guides" link — see the `RESEARCH_TAB_ENABLED` checks in
+ * components/Sidebar.tsx and the `/research` route in App.tsx.
  *
  * All the underlying code, routes, and Supabase tables are left intact.
  * Re-enabling is a one-line change: set this to `true`.
@@ -55,7 +54,7 @@ export const RESEARCH_TAB_ENABLED: boolean = false
 /**
  * Daily streak system (roadmap P1.1) — the first piece of the retention loop.
  *
- * When ON, a flame streak badge appears in the Sidebar, BottomNav, and Dashboard
+ * When ON, a flame streak badge appears in the Sidebar and Dashboard
  * and a day of study extends the streak (see lib/streak.ts / lib/streakStore.ts).
  * Gated so the surface can be dark-launched or rolled back independently; the
  * pure streak engine and its tests stay compiled either way. The `: boolean`

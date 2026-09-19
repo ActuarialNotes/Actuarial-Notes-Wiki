@@ -213,7 +213,7 @@ export function MistakesReviewModal({ mistakes, masteryRecords, onFixedChange, o
       // The concept popup's class: it carries the sidebar-width offset on
       // desktop and the whole focus-mode layer in index.css, so both panels
       // sit and expand identically.
-      className="concept-popup-aside fixed left-0 right-0 bottom-14 md:bottom-0 z-50 border-t bg-card text-card-foreground shadow-2xl flex flex-col"
+      className="concept-popup-aside fixed left-0 right-0 bottom-0 z-50 border-t bg-card text-card-foreground shadow-2xl flex flex-col"
       data-focus={focusMode}
       style={{ height: focusMode ? undefined : `min(${height}px, 100vh)` }}
       // Non-modal, like the concept popup: the page behind stays live and

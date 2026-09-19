@@ -412,23 +412,30 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Mobile: persistent top header bar housing the hamburger */}
-      <header className="fixed top-0 left-0 right-0 h-14 z-30 hidden md:flex items-center gap-3 px-3 bg-background border-b lg:hidden">
+      {/* Below lg: the persistent top header bar housing the hamburger. This is
+          the only way into the nav on a phone as well as a tablet — there is no
+          bottom tab bar, so the drawer behind this button carries every
+          destination. The collect ring/glow rides the hamburger for the same
+          reason the Flashcards tab used to wear it: a card landing in the deck
+          has to show somewhere, and the deck now lives behind this button. */}
+      <header className="fixed top-0 left-0 right-0 h-14 z-30 flex items-center gap-2 px-3 bg-background border-b lg:hidden">
         <button
           type="button"
           onClick={() => setMobileOpen(true)}
           aria-label="Open navigation"
-          className="flex items-center justify-center h-9 w-9 rounded-lg hover:bg-accent transition-colors shrink-0"
+          data-flashcard-nav
+          className="relative flex items-center justify-center h-9 w-9 rounded-lg hover:bg-accent transition-colors shrink-0"
         >
-          <Menu className="h-4 w-4" />
+          {collectGlow > 0 && <span key={`ring-${collectGlow}`} className="flashcard-nav-ring" aria-hidden="true" />}
+          <Menu key={`icon-${collectGlow}`} className={`h-4 w-4 ${collectGlow > 0 ? 'flashcard-nav-glow' : ''}`} />
         </button>
         <div className="flex items-center gap-1.5 flex-1 min-w-0">
           <Link
             to="/dashboard"
-            className="flex items-center gap-1.5 font-semibold text-foreground text-sm truncate shrink-0"
+            className="flex items-center gap-1.5 font-semibold text-foreground text-sm min-w-0"
           >
             <img src="/favicon.png" alt="" className="h-5 w-5 shrink-0 brightness-0 dark:invert" />
-            Actuarial Notes
+            <span className="truncate">Actuarial Notes</span>
           </Link>
           {user && inProgressSyllabi.map(s => {
             const key = wikiExamIdToProgressKey(s.examId)

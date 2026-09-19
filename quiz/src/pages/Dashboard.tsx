@@ -757,9 +757,9 @@ export default function Dashboard() {
       </div>
 
       {/* Exam switcher — pinned to the top of the viewport so the active exam
-          is always visible. Sticky offsets match the nav chrome: the mobile
-          bottom-nav leaves the top free, the md top bar is 3.5rem tall, and
-          the lg sidebar is beside the content.
+          is always visible. Sticky offsets match the nav chrome: the fixed top
+          bar below lg is 3.5rem tall, and the lg sidebar is beside the
+          content.
 
           This row, the study-schedule slot and the primary actions are direct
           children of the page container *on purpose*: a sticky element only
@@ -768,7 +768,7 @@ export default function Dashboard() {
           (i.e. at the top of Today's Study Plan) and would leave the compact
           actions below no room to ever show. Don't re-wrap them. */}
       {hasActiveExams && (
-        <div className="sticky top-0 md:top-14 lg:top-0 z-20 -mx-5 sm:-mx-8 px-5 sm:px-8 py-1.5 bg-background/95 backdrop-blur-sm">
+        <div className="sticky top-14 lg:top-0 z-20 -mx-5 sm:-mx-8 px-5 sm:px-8 py-1.5 bg-background/95 backdrop-blur-sm">
           <div ref={examTabsRowRef} className="flex items-center gap-2">
             <div
               ref={examTabsScrollRef}

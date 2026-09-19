@@ -30,8 +30,7 @@ Wired in at two places:
   the tap-to-close pointer handlers so the controls stay usable. It layers at `z-[57]`, which is
   what puts it above a concept popup in **focus mode** (`z-index: 56`); at its old `z-50` the
   simulator opened *behind* the focus-mode popup and the card looked unresponsive. The
-  `hostFocusMode` prop also shrinks the bottom inset to the popup's own footer, since focus
-  mode drops the mobile bottom nav.
+  bottom inset is the popup's own footer, in focus mode and out of it.
 - `components/wiki/ConceptImageBanner.tsx` — the figure at the top of the concept popup. A
   distribution illustration is never drawn there as a picture: the banner shows a **card**
   (a sparkline of the default-parameter shape, plus the distribution's name) that opens the

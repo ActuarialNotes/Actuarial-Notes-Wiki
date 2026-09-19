@@ -413,8 +413,8 @@ export default function Review() {
         the top of the viewport. The wrapper is `h-0` on purpose so the bar
         floats over the review content instead of reserving space for itself —
         and so mounting it costs no layout shift at the top of the page. Sticky
-        offsets match the nav chrome (mobile bottom-nav, md top bar, lg sidebar). */}
-    <div ref={pinnedHeaderRef} className="sticky top-0 md:top-14 lg:top-0 z-20 h-0">
+        offsets match the nav chrome (the fixed top bar below lg, the sidebar at lg). */}
+    <div ref={pinnedHeaderRef} className="sticky top-14 lg:top-0 z-20 h-0">
       <div
         aria-hidden={!actionsPinned}
         className={`border-b border-border/60 bg-background/95 backdrop-blur-md transition-all duration-200 ${
@@ -577,7 +577,7 @@ export default function Review() {
         type="button"
         aria-label="Back to top"
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className={`fixed bottom-20 md:bottom-6 right-6 z-50 flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-foreground shadow-lg transition-all duration-200 hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${showBackToTop ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4 pointer-events-none'}`}
+        className={`fixed bottom-6 right-6 z-50 flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-foreground shadow-lg transition-all duration-200 hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${showBackToTop ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4 pointer-events-none'}`}
       >
         <ArrowUp className="h-4 w-4" />
       </button>

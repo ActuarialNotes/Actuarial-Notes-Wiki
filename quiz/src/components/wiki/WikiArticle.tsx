@@ -363,9 +363,13 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
         .getPropertyValue('--concept-split-height').trim()
       const splitHeight = parseFloat(splitHeightStr) || 0
       const effectiveBottom = window.innerHeight - splitHeight
-      // Account for the sticky floating search bar (h-14 = 56px) so concepts
-      // near the top of the page aren't treated as "in view" when hidden behind it.
-      const stickyOffset = 56
+      // Account for whatever chrome is pinned to the top of the viewport — the
+      // sticky floating search bar, and below lg the fixed nav header it rests
+      // under — so concepts near the top of the page aren't treated as "in
+      // view" when they are hidden behind it. Measured rather than hardcoded:
+      // the bar sits at a different offset on either side of the lg breakpoint.
+      const searchBar = document.querySelector<HTMLElement>('[data-floating-search]')
+      const stickyOffset = searchBar ? searchBar.getBoundingClientRect().bottom : 56
       const rect = target!.getBoundingClientRect()
       const inView = rect.top >= stickyOffset && rect.bottom <= effectiveBottom
       if (!inView) {

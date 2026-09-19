@@ -425,7 +425,7 @@ Other important `lib/` modules:
   to play a flame animation when today's streak grew, then resolves so the
   `QuestCompleteOverlay` follows (sequenced by `PostQuizCelebrations` in `pages/Review.tsx`).
   Also surfaced via `hooks/useStreak.ts` + `components/StreakBadge.tsx` in the
-  Sidebar/BottomNav/Dashboard. Gated by `STREAK_ENABLED`.
+  Sidebar/Dashboard. Gated by `STREAK_ENABLED`.
 - `xp.ts` / `xpStore.ts` — daily goal + XP engine (roadmap P1.2). `xp.ts` is the
   pure, tested core: per-answer XP weighted toward hard + decaying (revived) concepts,
   a level curve, and the configurable daily-goal presets (`DAILY_GOALS`). `xpStore.ts`
@@ -546,7 +546,7 @@ annotated `: boolean` so both branches stay type-checked). Two of them gate a la
 with search, a resource timeline, source-collection "projects", and an AI "Ask" assistant:
 
 - `RESEARCH_TAB_ENABLED = false` — hides the whole tab. The nav drops the Research entry and
-  `/research` redirects to `/wiki` (see `App.tsx`, `Sidebar.tsx`, `BottomNav.tsx`).
+  `/research` redirects to `/wiki` (see `App.tsx`, `Sidebar.tsx`).
 - `RESEARCH_AI_ENABLED = false` — hides only the AI surfaces (the "Ask AI" search button +
   answer panel, and the project "Ask"/FAQ views) while leaving keyword search + source
   collection working.

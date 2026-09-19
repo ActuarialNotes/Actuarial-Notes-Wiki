@@ -364,10 +364,15 @@ Spacing uses the default Tailwind 4px scale. A few defaults carry most screens:
 - Page content is centred with a `max-w-*` container: `max-w-4xl` for content pages,
   `max-w-2xl`/`max-w-lg` for focused flows, `max-w-md`/`max-w-sm` for dialogs. Pad the page
   gutter (`px-4`) so content never touches the viewport edge on mobile.
-- Layout is responsive with a **desktop sidebar / mobile bottom-nav** shell (`Sidebar.tsx`,
-  `BottomNav.tsx`). The sidebar width is published as `--sidebar-width` (16rem expanded /
-  3.5rem collapsed) — fixed overlays that must clear the sidebar read that variable (see the
-  concept-popup and gallery-panel rules in `index.css`). Reuse it; don't hard-code 16rem.
+- Layout is responsive with a **one-sidebar** shell (`Sidebar.tsx`): in flow beside the
+  content at `lg`, and below `lg` a fixed `h-14` top header whose hamburger slides the same
+  sidebar in as a full-width drawer. There is no bottom tab bar — a phone and a tablet get
+  the same navigation, so a destination is added in exactly one place. Content therefore
+  reserves `pt-14 lg:pt-0` (`App.tsx`) and anything pinned to the top of the viewport
+  offsets by the header below `lg` (`sticky top-14 lg:top-0`). The sidebar width is
+  published as `--sidebar-width` (16rem expanded / 3.5rem collapsed) — fixed overlays that
+  must clear the sidebar read that variable (see the concept-popup and gallery-panel rules
+  in `index.css`). Reuse it; don't hard-code 16rem.
 
 ### 5.1 Fixed bottom action bars
 
@@ -375,12 +380,13 @@ Several views pin their commit action to the bottom (`Landing`, `Flashcards`, `S
 The shape:
 
 ```
-fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0
+fixed bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0
 border-t border-border bg-background/95 backdrop-blur-sm
 ```
 
-`bottom-14` clears the mobile bottom-nav; the `border-t` is not optional — without an edge,
-a row scrolling underneath a translucent bar reads as a clipping bug rather than an overlay.
+The bar sits on the bottom edge at every width — nothing is parked down there any more — and
+the `border-t` is not optional: without an edge, a row scrolling underneath a translucent bar
+reads as a clipping bug rather than an overlay.
 
 **Never reserve space for one with a hard-coded `pb-*`.** These bars change height with their
 contents, so the guess is wrong in both directions — it clips the last row or leaves a hole.
@@ -605,7 +611,7 @@ new overlays on this ladder and comment the intent rather than picking a free nu
 | Band | Range | Layer |
 |---|---|---|
 | Base | `z-0`–`z-20` | In-flow raised bits (sticky headers, floating search, nav) |
-| Chrome | `z-40`–`z-50` | Sidebar, bottom-nav, standard modals/scrims |
+| Chrome | `z-40`–`z-50` | Sidebar, mobile header, standard modals/scrims |
 | Popup stack | `z-[55]`–`z-[70]` | Concept popup (56 in focus mode), image gallery (57), PDF reader (58), action menus |
 | Onboarding | `z-[72]` | Tour spotlight (must sit above the popup stack) |
 | Ceremony | `z-[120]`+ | Full-screen celebrations that must cover everything |
@@ -629,7 +635,7 @@ that panel's layer no matter how high its own number is. The hosts that do this:
 | Exams popout, sidebar drawer, PDF viewer, mistakes review | `z-[50]`–`z-[60]` |
 
 A modal opened from one of those and left in place opens *behind* whatever paints above the
-host — the floating search bar (`z-50`), the bottom nav, a sibling panel — which reads as a
+host — the floating search bar (`z-50`), a sibling panel — which reads as a
 half-drawn or clipped panel rather than as a layering bug. A **transformed** ancestor is worse:
 the flashcard's swipe/flip `transform` is never `none`, so it both creates a stacking context
 *and* makes `position: fixed` resolve against the card, and the overlay lands glued to it

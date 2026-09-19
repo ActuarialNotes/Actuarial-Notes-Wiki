@@ -1,5 +1,5 @@
 import { lazy, Suspense, Component, useEffect, type ReactNode, type ErrorInfo } from 'react'
-import { BrowserRouter, Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Link, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { usePageTracking } from '@/hooks/usePageTracking'
 import { Loader2 } from 'lucide-react'
 import type { Session } from '@supabase/supabase-js'
@@ -27,6 +27,7 @@ import { AuthProvider } from '@/contexts/AuthContext'
 import { ExamProgressProvider } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
 import { RESEARCH_TAB_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
+import { pageHostsNavButton } from '@/lib/mobileNavHost'
 import { captureError } from '@/lib/errorMonitoring'
 
 const Research    = lazy(() => import('@/pages/Research'))
@@ -147,6 +148,20 @@ function GlobalKeyHandler() {
   return null
 }
 
+// Below lg the app header is fixed, so the content reserves its height — but
+// only on the routes that get one. A route whose own top bar carries the nav
+// button has no header above it and starts at the top of the viewport; the
+// decision is `lib/mobileNavHost.ts`, read here and in `Sidebar.tsx` so the two
+// can't disagree about whether that row exists.
+function Main({ children }: { children: ReactNode }) {
+  const { pathname } = useLocation()
+  return (
+    <main className={`flex-1 min-w-0 lg:pt-0 ${pageHostsNavButton(pathname) ? '' : 'pt-14'}`}>
+      {children}
+    </main>
+  )
+}
+
 function RequireAuth({ children }: { children: ReactNode }) {
   const { user } = useAuth()
   if (!user) return <Navigate to="/auth" replace />
@@ -164,7 +179,7 @@ export default function App({ initialSession }: { initialSession: Session | null
         <ExamProgressProvider>
           <div className="min-h-screen bg-background text-foreground flex">
             <Sidebar />
-            <main className="flex-1 min-w-0 pt-14 lg:pt-0">
+            <Main>
               <Routes>
                 <Route path="/" element={<Landing />} />
                 <Route path="/auth" element={<Auth />} />
@@ -213,7 +228,7 @@ export default function App({ initialSession }: { initialSession: Session | null
                 } />
                 <Route path="*" element={<NotFound />} />
               </Routes>
-            </main>
+            </Main>
             {TOUR_ENABLED && <OnboardingTour />}
             <CollectModalBoundary />
             <MathFocus />

@@ -363,6 +363,15 @@ Other important `lib/` modules:
   `hooks/useConceptPopup.ts`, the rendering is `ConceptPopup` (shell + bars) over
   `ConceptPagePanel` (the open page, mounted per ref, with the scroll memory that lets a
   folded page come back where it was left). See `docs/stacked-pages.md`.
+- `mobileNavHost.ts` — below `lg` the app is one row of top chrome, and this says who owns
+  it on a given route: a page with a floating search bar carries the hamburger
+  (`components/MobileNavButton.tsx`) on that bar's line, and every other page gets the app
+  header `Sidebar.tsx` draws (the same row, plus the wordmark and the in-progress exam
+  pills). `App.tsx` reads it to decide whether the content reserves `pt-14`, `Sidebar.tsx`
+  to decide whether to render the header — so a route added here must gain a
+  `<MobileNavButton />` in its bar at the same time, or it ends up with two hamburgers or
+  none. The drawer's own open state is `hooks/useMobileNav.ts`, since the button that opens
+  it is no longer inside `Sidebar`. Pure and tested. See `docs/style-guide.md` §5.0.
 - `menuPlacement.ts` — where a menu hangs off the control that opened it. Aligning with the
   trigger is only a preference: the viewport gets the last word, so a control near an edge has
   the menu shifted back inside, one with no room below has it opened upwards, and the height is

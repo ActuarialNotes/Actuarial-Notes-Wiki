@@ -9,7 +9,7 @@ import { createPortal } from 'react-dom'
  * (`z-40`, `z-56` in focus mode), the add-flashcards sheet (`z-[64]`), the
  * collect dialog (`z-[120]`) — is therefore capped at that ancestor's layer no
  * matter how high its own `z-[NN]` is, so it opens *behind* anything painted
- * above the host: the floating search bar (`z-50`), the bottom nav, a sibling
+ * above the host: the floating search bar (`z-50`), a sibling
  * panel. Worse, a transformed ancestor (the flashcard's swipe/flip transform)
  * makes `position: fixed` resolve against that element instead of the
  * viewport, and the overlay lands glued to a card rather than covering the

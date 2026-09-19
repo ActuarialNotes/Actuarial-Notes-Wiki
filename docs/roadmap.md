@@ -201,7 +201,7 @@ everywhere (P1.5, Exam 5 only now).
 - ✅ **P1.1 — Daily streak system.** _Shipped:_ pure engine in `lib/streak.ts`
   (timezone-correct day boundaries, Duolingo-style auto-consumed freeze tokens, same-day
   gem repair), persisted via `user_streaks`/localStorage, surfaced in
-  Sidebar/BottomNav/Dashboard. Gated by `STREAK_ENABLED`.
+  Sidebar/Dashboard. Gated by `STREAK_ENABLED`.
 - ✅ **P1.2 — Daily goal + XP.** _Shipped:_ `lib/xp.ts` — per-answer XP weighted toward
   hard and decaying concepts (the reward aligns with the learning model), a level curve,
   configurable `DAILY_GOALS` presets; level ring + XP popup on the Dashboard, goal picker

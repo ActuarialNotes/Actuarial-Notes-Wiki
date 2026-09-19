@@ -1943,7 +1943,7 @@ function GalleryPanel({
         ref={scrollContainerRef}
         className={inline
           ? 'space-y-4'
-          : 'flex-1 overflow-y-auto overscroll-contain px-4 py-4 space-y-4 pb-32 md:pb-28'}
+          : 'flex-1 overflow-y-auto overscroll-contain px-4 py-4 space-y-4 pb-28'}
       >
         <div className="space-y-4">
           {/* Clear-completed — the only thing left in this row now that the
@@ -2873,7 +2873,7 @@ function FlashcardsDeck({
   if (cards.length === 0) {
     return (
       <>
-        <div className="container mx-auto px-4 sm:px-6 py-6 min-h-[calc(100vh-9rem)] pb-40 md:pb-32 space-y-6">
+        <div className="container mx-auto px-4 sm:px-6 py-6 min-h-[calc(100vh-9rem)] pb-32 space-y-6">
           <GalleryPanel
             inline
             onCardsAdded={() => setGalleryExpanded(true)}
@@ -2905,7 +2905,7 @@ function FlashcardsDeck({
             and so the + (the only way in with an empty deck) stays reachable.
             Flip / Back content act on the gallery cards; the deck controls
             (sort, manage) stay hidden until there's a deck. */}
-        <div className="fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-[46]">
+        <div className="fixed bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-[46]">
           <FlashcardControlsBar
             reverseCardModes={reverseCardModes}
             onToggleMode={toggleReverseMode}
@@ -3029,7 +3029,7 @@ function FlashcardsDeck({
       )}
 
       <div
-        className={`container max-w-4xl mx-auto pb-44 md:pb-36${studyFocus ? ' relative z-[56] pointer-events-none' : ''}`}
+        className={`container max-w-4xl mx-auto pb-36${studyFocus ? ' relative z-[56] pointer-events-none' : ''}`}
         style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
       >
         {/* Study area — no page title here; the nav already says "Flashcards"
@@ -3078,9 +3078,9 @@ function FlashcardsDeck({
         />
       )}
 
-      {/* Fixed controls footer — always at bottom, above mobile nav */}
+      {/* Fixed controls footer — always on the bottom edge */}
       <div
-        className={`fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 transition-opacity duration-300 ${
+        className={`fixed bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 transition-opacity duration-300 ${
           focusMode ? 'z-[57] opacity-30 hover:opacity-100 focus-within:opacity-100' : 'z-[46]'
         }`}
       >

@@ -15,14 +15,12 @@ interface GalleryImage {
 /**
  * Where the modal sits.
  *
- * `popup` — hosted by the concept popup, whose Previous/Next footer (and the
- * mobile bottom nav under it) stays live below the modal and seeks to the next
- * concept that has a figure.
+ * `popup` — hosted by the concept popup, whose Previous/Next footer stays live
+ * below the modal and seeks to the next concept that has a figure.
  *
  * `popup-focus` — the same host in focus mode, which moves the popup to the top
- * of the viewport (see `.concept-popup-aside[data-focus="true"]` in index.css)
- * and drops the mobile bottom nav, so the modal's bottom inset shrinks to the
- * popup's own footer.
+ * of the viewport (see `.concept-popup-aside[data-focus="true"]` in index.css).
+ * The inset is the popup's own footer either way, so this matches `popup`.
  *
  * `fullscreen` — the standalone viewer opened by tapping a content image
  * anywhere in the app (`components/ImageFocus.tsx`). There is no host chrome to
@@ -31,7 +29,7 @@ interface GalleryImage {
 export type GalleryPlacement = 'popup' | 'popup-focus' | 'fullscreen'
 
 const PLACEMENT_INSET: Record<GalleryPlacement, string> = {
-  popup: 'bottom-[7.5rem] md:bottom-16',
+  popup: 'bottom-16',
   'popup-focus': 'bottom-16',
   fullscreen: 'bottom-0',
 }

@@ -615,7 +615,7 @@ export function PdfViewerPanel({ url, title, subtitle, hostFullScreen = false, o
       // reader is opened *from* a page — a resource page's Read PDF button, an
       // exam page's syllabus button — so it has to layer above the popup that
       // page may be read in, in focus mode included. See index.css.
-      className="concept-popup-aside pdf-viewer-aside fixed left-0 right-0 bottom-14 md:bottom-0 z-[58] border-t bg-card text-card-foreground shadow-2xl flex flex-col"
+      className="concept-popup-aside pdf-viewer-aside fixed left-0 right-0 bottom-0 z-[58] border-t bg-card text-card-foreground shadow-2xl flex flex-col"
       data-focus={focusMode}
       data-host-focus={hostFullScreen}
       style={{ height: focusMode ? undefined : `min(${height}px, 100vh)` }}

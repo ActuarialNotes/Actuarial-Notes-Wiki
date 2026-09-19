@@ -15,7 +15,6 @@ import Settings from '@/pages/Settings'
 import Upgrade from '@/pages/Upgrade'
 import Store from '@/pages/Store'
 import Sidebar from '@/components/Sidebar'
-import BottomNav from '@/components/BottomNav'
 import OnboardingTour from '@/components/OnboardingTour'
 import SoundEffects from '@/components/SoundEffects'
 import MathFocus from '@/components/MathFocus'
@@ -165,7 +164,7 @@ export default function App({ initialSession }: { initialSession: Session | null
         <ExamProgressProvider>
           <div className="min-h-screen bg-background text-foreground flex">
             <Sidebar />
-            <main className="flex-1 min-w-0 md:pt-14 lg:pt-0 pb-16 md:pb-0">
+            <main className="flex-1 min-w-0 pt-14 lg:pt-0">
               <Routes>
                 <Route path="/" element={<Landing />} />
                 <Route path="/auth" element={<Auth />} />
@@ -215,7 +214,6 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>
-            <BottomNav />
             {TOUR_ENABLED && <OnboardingTour />}
             <CollectModalBoundary />
             <MathFocus />

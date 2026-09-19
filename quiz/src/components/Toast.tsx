@@ -29,9 +29,9 @@ export default function Toast() {
     // The live region stays mounted so screen readers announce each message.
     // z-[80] clears the popup stack (z-[55]–z-[70]) — confirmations fired from
     // the concept popup's action menu must be visible above it — while staying
-    // below the ceremony band. Bottom offset clears the mobile bottom nav.
+    // below the ceremony band.
     <div
-      className="fixed bottom-20 md:bottom-6 left-0 lg:left-[var(--sidebar-width)] right-0 z-[80] flex justify-center px-4 pointer-events-none"
+      className="fixed bottom-6 left-0 lg:left-[var(--sidebar-width)] right-0 z-[80] flex justify-center px-4 pointer-events-none"
       role="status"
       aria-live="polite"
     >

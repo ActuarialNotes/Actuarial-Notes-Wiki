@@ -506,11 +506,11 @@ export default function OnboardingTour() {
         : null
     if (onDocClick) document.addEventListener('click', onDocClick, true)
 
-    // Several copies of a target can be mounted at once (a bottom-nav tab and
-    // its hidden sidebar twin, the inline gallery and the overlay one). Prefer
-    // the one the visitor can actually see and touch; fall back to any in-
-    // viewport match, then to any non-zero-sized one, so a target that is only
-    // scrolled out of view still gets found — and scrolled to.
+    // Several copies of a target can be mounted at once (the mobile header's
+    // copy and its hidden sidebar twin, the inline gallery and the overlay
+    // one). Prefer the one the visitor can actually see and touch; fall back to
+    // any in-viewport match, then to any non-zero-sized one, so a target that is
+    // only scrolled out of view still gets found — and scrolled to.
     const resolve = (): HTMLElement | null => {
       let visible: HTMLElement | null = null
       let onscreen: HTMLElement | null = null
@@ -650,8 +650,7 @@ export default function OnboardingTour() {
       <div
         className={cn(
           'fixed right-3 z-[140] md:right-4 print:hidden',
-          'bottom-[calc(4rem+var(--action-bar-height,0px))]',
-          'md:bottom-[calc(1rem+var(--action-bar-height,0px))]',
+          'bottom-[calc(1rem+var(--action-bar-height,0px))]',
         )}
       >
         <div className="onboarding-launcher-in flex items-center gap-0.5 rounded-full bg-primary p-1 text-primary-foreground shadow-lg ring-1 ring-black/5">
@@ -740,7 +739,7 @@ export default function OnboardingTour() {
           'inset-x-0 md:inset-x-auto md:right-4',
           placeTop
             ? 'top-3 md:top-4'
-            : 'bottom-[calc(4rem+var(--action-bar-height,0px))] md:bottom-[calc(1rem+var(--action-bar-height,0px))]',
+            : 'bottom-[calc(1rem+var(--action-bar-height,0px))]',
         )}
       >
         <div

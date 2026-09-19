@@ -18,8 +18,9 @@ export interface CollectedCard {
 
 const STORAGE_KEY = 'actuarial_collected_cards'
 
-// Fired on every successful collection so always-mounted nav (BottomNav /
-// Sidebar) can light up the Flashcards tab without subscribing to the store.
+// Fired on every successful collection so the always-mounted nav — the
+// sidebar's Flashcards row, and below lg the hamburger the deck now lives
+// behind — can light up without subscribing to the store.
 export const COLLECTED_EVENT = 'flashcard-collected'
 
 function load(): CollectedCard[] {

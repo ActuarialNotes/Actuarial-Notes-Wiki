@@ -478,9 +478,9 @@ nothing. Three things follow, and all of them live with the panel:
   takes `z-index: 58` — a step above the popup and the image gallery (57) — in its own focus
   mode too (`index.css`; the ladder is `docs/style-guide.md` §8.2).
 - **No chrome gaps over a full-screen host.** `hostFullScreen` (passed down as
-  `ConceptPagePanel`'s `focusMode`) drops the `bottom-14` the mobile bottom nav needs and the
-  desktop sidebar inset, because the page underneath has already covered both — leaving them
-  would show a strip of that page instead of the chrome they were reserved for.
+  `ConceptPagePanel`'s `focusMode`) drops the desktop sidebar inset, because the page
+  underneath has already covered it — leaving it would show a strip of that page instead of
+  the chrome it was reserved for.
 - **The keys.** The popup binds Esc and the arrows too, so `ResourceMetaCard` reports the
   reader opening (`onViewerOpenChange` → `ConceptPagePanel`'s `onReaderOpenChange` →
   `ConceptPopup`) and the popup hands them over while it is up — the same hand-over the image

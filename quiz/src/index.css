@@ -387,21 +387,16 @@
   }
 }
 
-/* Gallery panel: mobile has no top header so start at top:0; tablet has a fixed
-   h-14 header so offset by 3.5rem; desktop uses sidebar offset instead. */
+/* Gallery panel: below lg the fixed h-14 header sits above everything, so start
+   under it; on desktop there is no top bar and the panel respects the sidebar
+   width instead, so the sidebar stays visible. */
 .gallery-panel {
-  top: 0;
+  top: 3.5rem;
 }
 
-@media (min-width: 768px) and (max-width: 1023px) {
-  .gallery-panel {
-    top: 3.5rem;
-  }
-}
-
-/* Gallery panel: respect sidebar width on desktop so the sidebar stays visible. */
 @media (min-width: 1024px) {
   .gallery-panel {
+    top: 0;
     left: var(--sidebar-width, 16rem);
     transition-property: left;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -410,8 +405,8 @@
 }
 
 /* Focus mode: the concept is the only thing on screen. The panel fills the
-   viewport and layers above the floating search bar (z-50), the bottom nav
-   (z-45/46) and the in-flow desktop sidebar, so no other chrome shows through
+   viewport and layers above the floating search bar (z-50), the fixed mobile
+   header (z-30) and the in-flow desktop sidebar, so no other chrome shows through
    — the popup's counterpart to the Flashcards page focus mode.
    dvh (dynamic viewport height) is used instead of vh so the panel never extends
    below the visual viewport on iOS when the URL bar is visible — which previously
@@ -443,12 +438,8 @@
 }
 
 /* Opened from a page that is itself full screen: that page has already covered
-   the mobile bottom nav and the desktop sidebar, so the insets the reader
-   normally leaves for them would only show a strip of the page underneath. */
-.pdf-viewer-aside[data-host-focus="true"] {
-  bottom: 0;
-}
-
+   the desktop sidebar, so the inset the reader normally leaves for it would
+   only show a strip of the page underneath. */
 @media (min-width: 1024px) {
   .pdf-viewer-aside[data-host-focus="true"] {
     left: 0 !important;

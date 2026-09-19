@@ -765,10 +765,16 @@ CAS_POINTS_RE = re.compile(r"(?i)T?OTAL POINT VALUE[ \t]*[:=]?[ \t]*([\d.]+)")
 CAS_LO_RE = re.compile(r"(?i)L?EARNING OBJECTIVE\(?S?\)?[ \t]*[:=]?[ \t]*(.+)")
 CAS_PART_RE = re.compile(r"(?mi)^[ \t]*Part[ \t]+([a-h])[ \t]*[:.]?[ \t]*"
                          r"(?:([\d.]+)[ \t]*points?)?[ \t]*")
-CAS_SAMPLE_RE = re.compile(r"(?mi)^[ \t]*S?AMPLE ANSWERS?\b")
+# `SAMPLE ANSWERS`, and Spring 2015's `SAMPLE/ACCEPTED ANSWERS:` — the
+# qualifier is the publisher's, not a different section. Missing it costs the
+# whole paper: with no sample heading there is no block to split, so every
+# question ships commentary and no answer at all.
+CAS_SAMPLE_RE = re.compile(
+    r"(?mi)^[ \t]*S?AMPLE(?:[ \t]*/[ \t]*[A-Z]+)?[ \t]+ANSWERS?\b[ \t]*:?"
+)
 # `_joined` normalises the curly apostrophe away, but the parser is called
 # directly too, so it reads both spellings itself.
-CAS_REPORT_RE = re.compile("(?mi)^[ \t]*E?XAMINER['\u2019]?S? REPORT\\b")
+CAS_REPORT_RE = re.compile("(?mi)^[ \t]*E?XAMINER['\u2019]?S? REPORT\\b[ \t]*:?")
 
 
 # `a. (0.25 points) Calculate …` — how the booklet introduces each sub-part.

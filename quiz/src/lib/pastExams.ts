@@ -150,6 +150,30 @@ export function buildPastExamRows(questions: Question[], exam: string): PastExam
   })
 }
 
+/**
+ * What a session drawn from this source is called on screen.
+ *
+ * "Mock" says the paper is a fabrication, which is the one thing it usually
+ * isn't: what the shelf hands you is a real released sitting, sat as practice.
+ * The session is practice either way — a generated Mix and Fall 2019 alike —
+ * so the mode carries one name and only the *source* below distinguishes them.
+ */
+export const PRACTICE_EXAM_LABEL = 'Practice Exam'
+
+/**
+ * What the source itself is called: the tab on the quiz builder, above the shelf.
+ *
+ * The label follows the content, the same rule the report button follows
+ * (`Examiner's Report` vs `Exam & Answer Key`): an exam whose body released its
+ * papers offers **Past Papers**, and one with none — Exam P and FM draw on the
+ * SOA's rolling sample set, so their shelf is the generated Mix row alone —
+ * offers a **Practice Exam**. Naming real papers "mock" understated them; naming
+ * the Mix "past papers" would overstate it.
+ */
+export function examSourceLabel(rows: PastExamRow[]): string {
+  return rows.length > 0 ? 'Past Papers' : PRACTICE_EXAM_LABEL
+}
+
 /** A percentage for display: `40` → `"40%"`, `40.6` → `"40.6%"`, nothing → `null`. */
 export function formatPassRate(rate?: number): string | null {
   if (rate === undefined || Number.isNaN(rate)) return null

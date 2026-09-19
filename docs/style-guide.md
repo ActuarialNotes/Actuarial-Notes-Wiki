@@ -204,7 +204,8 @@ big type is rare and reserved for hero numbers and empty-state headings.
   deliberate focal point. `text-sm` (~540 uses) and `text-xs` (~465) dominate for a reason.
 - Weight is the primary emphasis lever: `font-medium` (labels/active) and `font-semibold`
   (titles/headings) are the two you'll use constantly. `font-bold` is for numeric heroes and
-  badges only; avoid `font-extrabold`.
+  badges only; avoid `font-extrabold` — the single exception is the **Pro** label (§7.3),
+  which is deliberately the heaviest thing on any surface it sits on.
 - Prefer `tracking-tight` on large semibold/bold headings (matches `CardTitle`).
 - One heading level of contrast per block is enough. Don't stack `text-2xl` + `text-xl` +
   `text-lg` in the same card — pick the title size and let muted body carry the rest.
@@ -247,7 +248,8 @@ so a colour always means the same thing.
 | **Incorrect / error / destructive** | `red` (→ `--destructive` for actions) | Wrong answers, delete actions, error text |
 | **Warning / caution / "at risk"** | `amber` (with `yellow`/`orange` siblings) | Forgotten/decaying concepts, cautions, "due" nudges |
 | **Info / neutral highlight** | `blue` | Informational callouts, neutral tips |
-| **Reward / premium / rare** | `amber`/gold + the rainbow **foil** gradient | Gems, L3 mastery, collected cards, premium |
+| **Reward / rare** | `amber`/gold + the rainbow **foil** gradient | Gems, L3 mastery, collected cards |
+| **Pro (the paid tier)** | monochrome — `bg-foreground` / `text-background` | The **Pro** label, wherever the tier is named (`components/ProBadge.tsx`) |
 | **Streak / energy** | `orange` (flame) | Streak flame & celebrations |
 
 ### 4.2 Standard shade pairings (light / dark)
@@ -461,6 +463,17 @@ if you need multiple headings, you probably need multiple cards.
 use the §4 semantic families. `TopicBadge`/`StreakBadge`/`LevelBadge`/`MasteryBadge`
 (§4.2) / `QuestionAttemptBadge` are the domain-specific wrappers — reuse them rather than
 restyling a raw badge.
+
+**The Pro label** (`components/ProBadge.tsx`) is the one exception to the semantic palette,
+and deliberately so: the paid tier is marked in pure monochrome — `bg-foreground` over
+`text-background`, `font-extrabold`, `tracking-wide` — so it reads white-on-black
+in the light theme and black-on-white in the dark one. It carries no hue because every hue
+in §4.1 already means something else, and a tier mark that borrowed amber would read as a
+reward. Every surface that names the tier renders this component: the account chip, the
+Settings card, the Upgrade header, and any feature the tier gates (the Dashboard's *Today's
+Study Plan*, the locked *Custom Study Plan* overlays, the Learning Progress panel, the quiz
+builder's plan row, a Pro-only cosmetic in the Store). Never write the word in a hand-rolled
+span — a Pro label that isn't this component is a bug.
 
 ### 7.3a Segmented controls (`ui/SegmentedControl.tsx`)
 

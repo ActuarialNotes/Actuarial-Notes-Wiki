@@ -56,7 +56,9 @@ quiz/                                             — the React app (this is whe
   concept popup (whose title is its only trigger) and every flashcard surface open that one
   component, so the two can't drift apart. A surface adds only rows about *itself* (a card's
   Study and Remove) through `leading` / `trailing`; view switches (Listen, the deck's view
-  modes) are each surface's own control, never menu rows.
+  modes) are each surface's own control, never menu rows. It always portals to the body and
+  is placed by `lib/menuPlacement.ts`, so no host's stacking context or viewport edge can
+  clip it — the only way to collect a card is through it.
 - `lib/` — core logic, mostly pure/testable modules (this is where the interesting algorithms live)
 - `data/` — authored static tables bundled into the app: `comprehensionChecks.ts` (parses the
   flashcard-collect gate questions from `comprehension-checks/<exam-id>/*.md` at build time via the
@@ -162,7 +164,9 @@ before touching that area**:
   draws one from front matter for the pages with no real jacket, and the rule that a real
   jacket always wins — drop it in under a name that isn't `… - Cover.svg` and the generator
   leaves it alone forever.
-- `docs/mock-exam-browser.md` — the **Mock Exam past-paper browser** on the quiz builder: the
+- `docs/mock-exam-browser.md` — the **past-paper browser** on the quiz builder (the mode id is
+  still `mock-exam`; on screen the tab reads **Past Papers**, or **Practice Exam** for an exam
+  with no released sittings — `examSourceLabel` / `PRACTICE_EXAM_LABEL` in `lib/pastExams.ts`): the
   authored sitting catalogue (`data/pastExams.ts`), how `lib/pastExams.ts` merges it with the
   question bank so unimported papers still list (greyed out), the **live pass-rate
   pipeline** (`api/pass-rates.js` → `lib/passRates.ts` → `hooks/useExamPassRates`) that lays
@@ -253,6 +257,18 @@ Other important `lib/` modules:
   matching, no fuzzy hits) and `keystoneProgress` (decay-aware mastery roll-up per exam).
   Rendered by `components/KeystoneName.tsx`. No surface lists an exam's keystones since the
   readiness card was removed; keystone mastery is still a criterion of the readiness score.
+- `revealMode.ts` — **when the answers show**: `'during'` marks and explains each
+  answer as soon as it's confirmed, `'end'` holds the lot back for /review. The quiz
+  page has always read a `reveal` search param; this module is the reader's side of
+  it — the checkbox above the quiz builder's Start button, remembered per mode in
+  localStorage. The defaults split (`DEFAULT_REVEAL`) because the two modes are for
+  different things: a quiz is practice *with* feedback (`during`), a practice exam is
+  a rehearsal of the sitting (`end`). Reveal is a *choice*, not a property of the
+  mode — `Quiz.tsx` gates `showExplanation` on the choice alone, so a practice exam
+  run for feedback reveals and a quiz run as a dry run doesn't. A launch surface that
+  sets no `reveal` param gets the saved choice rather than a hardcoded `during`.
+  Pure and tested (the storage read/write wrap pure `revealFromStored` /
+  `storedWithReveal`).
 - `questionAttempts.ts` — turns a learner's per-question response tally (`hooks/useQuestionAttempts`,
   backed by `question_responses`) into the display state every question list shows: attempted or not,
   and how many attempts were successful vs unsuccessful. Rendered by `components/QuestionAttemptBadge.tsx`,
@@ -300,7 +316,7 @@ Other important `lib/` modules:
   hung on the wiki index's `document` items as `exams`, which is what lets a resource card
   lead its pill row with **Exam P-1** / **Exam MAS-I** without re-reading every exam page.
   Imports are relative, not `@/`-aliased — the vite config pulls it into its own Node graph.
-- `pastExams.ts` — the past-sitting shelf behind the quiz builder's **Mock Exam** source:
+- `pastExams.ts` — the past-sitting shelf behind the quiz builder's **Past Papers** source:
   `buildPastExamRows` unions the authored catalogue (`data/pastExams.ts`) with the sittings the
   question bank actually holds, so a released paper that hasn't been imported still lists
   (greyed out, "Not added yet") and a freshly converted one appears without a catalogue edit.
@@ -347,6 +363,11 @@ Other important `lib/` modules:
   `hooks/useConceptPopup.ts`, the rendering is `ConceptPopup` (shell + bars) over
   `ConceptPagePanel` (the open page, mounted per ref, with the scroll memory that lets a
   folded page come back where it was left). See `docs/stacked-pages.md`.
+- `menuPlacement.ts` — where a menu hangs off the control that opened it. Aligning with the
+  trigger is only a preference: the viewport gets the last word, so a control near an edge has
+  the menu shifted back inside, one with no room below has it opened upwards, and the height is
+  cut to the room there is rather than spilling past the fold. Pure and tested; read by
+  `components/ConceptActionMenu.tsx`.
 - `navScrub.ts` — the maths behind a **scrubbable** progress bar: which item a point on the
   track means (the exact inverse of `navProgressPercent`, so a drag can't land off by one),
   where a key press moves to, and how a list of chapter marks becomes the **segments** the
@@ -482,7 +503,7 @@ Other important `lib/` modules:
   plays for a wrong answer — that's deliberate and pinned by a test. See
   `docs/sound-design.md`.
 - `featureFlags.ts` — build-time feature flags (`RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
-  `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`, `MASTERY_ANALYTICS_ENABLED`,
+  `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`,
   `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `FACT_CHECK_UI_ENABLED`, `TOUR_ENABLED`). `TOUR_ENABLED` is
   **off**: the guided onboarding tour (`components/OnboardingTour.tsx` +
   `hooks/useOnboardingTour.ts`) is parked pending a simpler rebuild, so `App.tsx` doesn't

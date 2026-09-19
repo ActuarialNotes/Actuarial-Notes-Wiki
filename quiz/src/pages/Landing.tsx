@@ -35,11 +35,12 @@ import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { cn } from '@/lib/utils'
 import { getSittingPdfLink, getExamPdfLink, getExamSolutionsPdfLink } from '@/data/examPdfLinks'
 import { getPassRateLookup } from '@/data/pastExams'
-import { buildPastExamRows, sittingLabel } from '@/lib/pastExams'
+import { buildPastExamRows, examSourceLabel, sittingLabel, PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
 import { applyPassRates } from '@/lib/passRates'
 import { useExamPassRates } from '@/hooks/useExamPassRates'
 import { PastExamBrowser } from '@/components/PastExamBrowser'
 import { examStatus } from '@/lib/examStatus'
+import { loadRevealMode, saveRevealMode, type RevealMode } from '@/lib/revealMode'
 import { ExamLogo } from '@/components/ExamLogo'
 
 type ExamOrg = 'SOA' | 'CAS'
@@ -113,7 +114,7 @@ function GroupSection({
   onToggle,
   onSelectAll,
   conceptLevelMap,
-  isPremium,
+  isPro,
 }: {
   group: { name: string; weight?: string; subtopics: string[] }
   selectedSubtopics: string[]
@@ -121,7 +122,7 @@ function GroupSection({
   onToggle: (subtopic: string) => void
   onSelectAll: (group: { subtopics: string[] }, e: React.MouseEvent) => void
   conceptLevelMap?: Map<string, MasteryState>
-  isPremium?: boolean
+  isPro?: boolean
 }) {
   const selectedCount = group.subtopics.filter(s => selectedSubtopics.includes(s)).length
   const allSelected = selectedCount === group.subtopics.length
@@ -233,10 +234,10 @@ function GroupSection({
                 </span>
                 {/* Both signals, not one or the other. These used to be an
                     if/else on mastery, and `conceptLevelMap` has an entry for
-                    every concept — so a premium user, the only kind with a
+                    every concept — so a Pro user, the only kind with a
                     study plan, could never see which concepts were in it. */}
                 {isToday && <TodayChip />}
-                {isPremium && conceptLevel !== undefined && (
+                {isPro && conceptLevel !== undefined && (
                   <MasteryBadge state={conceptLevel} compact />
                 )}
               </button>
@@ -340,7 +341,7 @@ export default function Landing() {
   const { questions: allQuestions } = useAllQuestions()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
   const { syllabi } = useWikiSyllabus()
-  const { isPremium, loading: subLoading } = useSubscription()
+  const { isPro, loading: subLoading } = useSubscription()
   // Per-exam "questions left in today's plan" — badges the exam cards, so the
   // count is visible before an exam is even picked.
   const { byExam: todayQuizByExam } = useTodayQuizCounts()
@@ -401,7 +402,16 @@ export default function Landing() {
   const [selectedConcepts, setSelectedConcepts] = useState<string[]>([])
   const [isAdaptive, setIsAdaptive] = useState(false)
   const [count, setCount] = useState<number>(3)
-  const reveal = 'during' as const
+
+  // When answers are shown — after each question, or all at once on the review
+  // screen. Kept per mode (see lib/revealMode.ts) so the two defaults, and the
+  // two choices, don't overwrite each other when the source control is switched.
+  const [reveal, setReveal] = useState<RevealMode>(() => loadRevealMode(mode))
+  useEffect(() => { setReveal(loadRevealMode(mode)) }, [mode])
+  function handleRevealChange(next: RevealMode) {
+    setReveal(next)
+    saveRevealMode(mode, next)
+  }
 
   // Set once the user picks a specific question count, so the auto-sizing effect
   // (which defaults Today's Quiz to the whole-plan coverage count) stops overriding
@@ -535,7 +545,7 @@ export default function Landing() {
     return result
   }, [syllabusForTopic, orderedConcepts])
 
-  // For premium users: map each concept name to its mastery level
+  // For Pro users: map each concept name to its mastery level
   const conceptLevelMap = useMemo(() => {
     if (!examIdForPlan) return new Map<string, MasteryState>()
     const now = new Date()
@@ -587,7 +597,7 @@ export default function Landing() {
   }, [plan, allQuestions, topic])
 
   // Derived: whether today's plan is the active filter
-  const useTodaysPlan = examInProgress && conceptMode === 'today' && isPremium && !!plan && planConceptCount > 0
+  const useTodaysPlan = examInProgress && conceptMode === 'today' && isPro && !!plan && planConceptCount > 0
 
   // True once the async data that decides the initial Today's Plan vs. By Topic
   // mode (mastery, concepts, study plan, subscription) has settled, so the
@@ -675,9 +685,9 @@ export default function Landing() {
     } catch { /* ignore */ }
     navigate(`/quiz?selection=stored&mode=quiz&reveal=${reveal}&count=${selected.length}&from=home`)
     return true
-  }, [buildTodaysPlanSelection, navigate, todayAnsweredIds])
+  }, [buildTodaysPlanSelection, navigate, todayAnsweredIds, reveal])
 
-  // Auto-activate today's study plan for premium users when it has concepts.
+  // Auto-activate today's study plan for Pro users when it has concepts.
   // If the dashboard passed a custom concept selection (some deselected), apply that instead.
   useEffect(() => {
     if (!user || masteryLoading || conceptsLoading || planLoading || subLoading || mode !== 'quiz' || !topic) return
@@ -691,13 +701,13 @@ export default function Landing() {
       return
     }
 
-    if (!didApplyOverrideRef.current && examInProgress && isPremium && plan && planConceptCount > 0) {
+    if (!didApplyOverrideRef.current && examInProgress && isPro && plan && planConceptCount > 0) {
       setSource('today')
       setSelectedConcepts([])
       setIsAdaptive(false)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [topic, mode, user?.id, masteryLoading, conceptsLoading, planLoading, subLoading, isPremium, planConceptCount, examInProgress])
+  }, [topic, mode, user?.id, masteryLoading, conceptsLoading, planLoading, subLoading, isPro, planConceptCount, examInProgress])
 
   // Auto-size Today's Quiz to cover the entire (remaining) plan, until the user
   // picks a specific count. This is what makes "Start Today's Quiz" pull exactly
@@ -710,13 +720,13 @@ export default function Landing() {
 
   // One-click launch from the dashboard: as soon as the plan + question bank are
   // ready, jump straight into a quiz sized to complete today's plan. Falls back to
-  // the normal config screen if the user isn't premium or has no plan.
+  // the normal config screen if the user is not Pro or has no plan.
   //
   // While this is pending we render a brief loading state (see `isAutostarting`
   // below) instead of the config screen — the dashboard's launch animation flows
   // straight into the quiz's collect gate with no flash of the config UI in
   // between. `autostartFailed` flips us back to the config screen only once we
-  // know autostart can't proceed (not premium / no plan / no questions).
+  // know autostart can't proceed (not Pro / no plan / no questions).
   const didAutostartRef = useRef(false)
   const [autostartFailed, setAutostartFailed] = useState(false)
   useEffect(() => {
@@ -726,7 +736,7 @@ export default function Landing() {
     if (masteryLoading || conceptsLoading || planLoading || subLoading) return
     // Everything the autostart decision depends on has loaded. If we're not
     // eligible, reveal the config screen instead of holding the spinner forever.
-    if (!examInProgress || !isPremium || !plan || planConceptCount === 0 || allQuestions.length === 0) {
+    if (!examInProgress || !isPro || !plan || planConceptCount === 0 || allQuestions.length === 0) {
       setAutostartFailed(true)
       return
     }
@@ -737,7 +747,7 @@ export default function Landing() {
     }
     didAutostartRef.current = true
     launchTodaysPlan(minQuestionsToCoverConcepts(sel.todayQs, sel.concepts, { seenIds: todayAnsweredIds }))
-  }, [searchParams, user, mode, topic, masteryLoading, conceptsLoading, planLoading, subLoading, isPremium, plan, planConceptCount, allQuestions, buildTodaysPlanSelection, launchTodaysPlan, examInProgress, todayAnsweredIds])
+  }, [searchParams, user, mode, topic, masteryLoading, conceptsLoading, planLoading, subLoading, isPro, plan, planConceptCount, allQuestions, buildTodaysPlanSelection, launchTodaysPlan, examInProgress, todayAnsweredIds])
 
   // True while a dashboard-initiated autostart is still resolving (loading data
   // or navigating into the quiz). Suppresses the config screen so the launch is
@@ -812,6 +822,20 @@ export default function Landing() {
     )
   }
 
+  // The exam's past sittings — the authored catalogue merged with whatever the
+  // question bank holds, so papers that exist but haven't been imported still
+  // appear (greyed out) in the browser. Published pass ratios, fetched live
+  // through `api/pass-rates.js`, are laid over the authored figures; when the
+  // source is unconfigured or unreachable the catalogue stands on its own.
+  // Read this far up the render because the source tab is named after it: an
+  // exam with released papers offers "Past Papers", one without a "Practice Exam".
+  const livePassRates = useExamPassRates(topic)
+  const pastExamRows = useMemo(
+    () => (topic ? applyPassRates(buildPastExamRows(allQuestions, topic), livePassRates) : []),
+    [allQuestions, topic, livePassRates],
+  )
+  const examSourceName = examSourceLabel(pastExamRows)
+
   // The one control that says what this quiz is drawn from. "Today's Plan" only
   // appears for a signed-in learner working toward this exam — for everyone else
   // it isn't a choice, so it isn't offered.
@@ -822,15 +846,15 @@ export default function Landing() {
       options.push({
         value: 'today',
         flex: 2,
-        ariaLabel: isPremium
+        ariaLabel: isPro
           ? `Today's plan${planConceptCount > 0 ? `, ${planConceptCount} concepts` : ''}`
-          : "Today's plan (premium)",
+          : "Today's plan (Pro)",
         label: (
           <>
             <CalendarCheck className="h-3.5 w-3.5 shrink-0" aria-hidden />
             <span className="truncate">Today's Plan</span>
-            {!isPremium && <Lock className="h-3 w-3 shrink-0 text-amber-500" aria-hidden />}
-            {isPremium && planConceptCount > 0 && (
+            {!isPro && <Lock className="h-3 w-3 shrink-0 text-muted-foreground" aria-hidden />}
+            {isPro && planConceptCount > 0 && (
               <span className="text-xs tabular-nums text-muted-foreground">{planConceptCount}</span>
             )}
           </>
@@ -855,14 +879,14 @@ export default function Landing() {
     options.push({
       value: 'mock-exam',
       flex: showTodayOption ? 2 : 1,
-      label: <span className="truncate">Mock Exam</span>,
+      label: <span className="truncate">{examSourceName}</span>,
     })
     return options
-  }, [showTodayOption, isPremium, planConceptCount, selectedConcepts.length])
+  }, [showTodayOption, isPro, planConceptCount, selectedConcepts.length, examSourceName])
 
   function handleSourceChange(next: QuizSource) {
     setSource(next)
-    if (next === 'today' && isPremium) {
+    if (next === 'today' && isPro) {
       setSelectedConcepts([])
       setIsAdaptive(false)
     }
@@ -881,15 +905,22 @@ export default function Landing() {
         selection: 'stored',
         mode,
         count: String(drawnIds.length),
+        reveal,
         from: 'home',
       })
-      if (mode === 'quiz') params.set('reveal', reveal)
       navigate(`/quiz?${params.toString()}`)
       return
     }
 
     if (selectedConcept) {
-      const params = new URLSearchParams({ concept: selectedConcept, mode: 'quiz', reveal, from: 'home' })
+      // Always a quiz, whichever source tab happens to be showing, so it takes
+      // the quiz's saved reveal rather than the tab's.
+      const params = new URLSearchParams({
+        concept: selectedConcept,
+        mode: 'quiz',
+        reveal: loadRevealMode('quiz'),
+        from: 'home',
+      })
       if (count < conceptAvailableCount) params.set('count', String(count))
       navigate(`/quiz?${params.toString()}`)
       return
@@ -901,11 +932,10 @@ export default function Landing() {
       if (launchTodaysPlan(count)) return
     }
 
-    const params = new URLSearchParams({ exam: topic, mode })
+    const params = new URLSearchParams({ exam: topic, mode, reveal })
     if (mode === 'quiz') {
       if (selectedConcepts.length > 0) params.set('concepts', selectedConcepts.join(','))
       params.set('count', String(count))
-      params.set('reveal', reveal)
     } else if (selectedSitting !== null) {
       params.set('year', String(selectedSitting.year))
       if (selectedSitting.session) params.set('session', selectedSitting.session)
@@ -915,17 +945,6 @@ export default function Landing() {
     }
     navigate(`/quiz?${params.toString()}`)
   }
-
-  // The exam's past sittings — the authored catalogue merged with whatever the
-  // question bank holds, so papers that exist but haven't been imported still
-  // appear (greyed out) in the browser. Published pass ratios, fetched live
-  // through `api/pass-rates.js`, are laid over the authored figures; when the
-  // source is unconfigured or unreachable the catalogue stands on its own.
-  const livePassRates = useExamPassRates(topic)
-  const pastExamRows = useMemo(
-    () => (topic ? applyPassRates(buildPastExamRows(allQuestions, topic), livePassRates) : []),
-    [allQuestions, topic, livePassRates],
-  )
 
   // Questions belonging to the selected sitting — shared by the launch params,
   // the browser's footer line, and the availability count in the action bar.
@@ -1297,7 +1316,7 @@ export default function Landing() {
 
                 {/* Today's Plan content */}
                 {quizModeResolved && source === 'today' && (
-                  !isPremium ? (
+                  !isPro ? (
                     <div className="rounded-lg bg-muted/40 px-4 py-3 flex items-start gap-3">
                       <div className="flex-1 space-y-1">
                         <p className="text-sm font-medium">Personalized daily study plan</p>
@@ -1353,8 +1372,8 @@ export default function Landing() {
                             todaySubtopics={todayConcepts}
                             onToggle={toggleConcept}
                             onSelectAll={selectAllInGroup}
-                            conceptLevelMap={isPremium ? conceptLevelMap : undefined}
-                            isPremium={isPremium}
+                            conceptLevelMap={isPro ? conceptLevelMap : undefined}
+                            isPro={isPro}
                           />
                         ))}
                       </>
@@ -1421,6 +1440,35 @@ export default function Landing() {
               paper's size or its pass rate, and it had no room to list the
               sittings that exist but aren't in the bank yet. */}
 
+          {/* ── When the answers show ─────────────────────────────────
+              Ticked, each answer is marked and explained as soon as it's
+              confirmed; unticked, nothing is given away until the review
+              screen. Offered for both modes — a practice exam run for
+              feedback is as reasonable as a quiz run as a dry run. */}
+          <button
+            type="button"
+            role="checkbox"
+            aria-checked={reveal === 'during'}
+            data-sound="tick"
+            onClick={() => handleRevealChange(reveal === 'during' ? 'end' : 'during')}
+            className={cn(
+              'flex min-h-10 w-full items-center gap-2.5 rounded-lg border px-3 py-2.5 text-left transition-colors',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              reveal === 'during'
+                ? 'border-primary/30 bg-primary/10 text-primary hover:bg-primary/15'
+                : 'border-border bg-muted/50 text-foreground hover:bg-accent/40',
+            )}
+          >
+            {reveal === 'during' ? (
+              <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
+            ) : (
+              <Circle className="h-4 w-4 shrink-0 text-muted-foreground/50" />
+            )}
+            <span className="min-w-0 flex-1 text-sm font-medium leading-snug">
+              Show answers after each question
+            </span>
+          </button>
+
           <div className="relative">
             <Button
               type="button"
@@ -1434,7 +1482,7 @@ export default function Landing() {
               className="h-14 w-full gap-3 rounded-xl text-base font-semibold"
             >
               <Play className="h-5 w-5" aria-hidden />
-              Start {mode === 'mock-exam' ? 'Mock Exam' : 'Quiz'}
+              Start {mode === 'mock-exam' ? PRACTICE_EXAM_LABEL : 'Quiz'}
             </Button>
             {/* Only badge a launch that's actually sized to finish today's plan —
                 picking a smaller count means this quiz won't complete it. */}

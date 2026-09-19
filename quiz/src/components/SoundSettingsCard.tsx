@@ -96,7 +96,6 @@ export function SoundSettingsCard() {
               ['Start quiz', 'begin'],
               ['Launch quiz', 'launch'],
               ['Study', 'study'],
-              ['Unlock check', 'unlock'],
             ] as const).map(([label, event]) => (
               <button
                 key={event}

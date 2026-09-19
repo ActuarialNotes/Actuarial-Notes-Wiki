@@ -93,8 +93,6 @@ export type SoundEvent =
   | 'launch'
   /** Settling in to study: entering the flashcard study view. */
   | 'study'
-  /** The locked comprehension-check screen gating a flashcard's collection. */
-  | 'unlock'
 
 export interface ToneSpec {
   /** Start offset from the cue's own start, in seconds. */
@@ -268,8 +266,6 @@ export function nextComboIndex(previous: number, elapsedMs: number, combo: Combo
 
 // Equal-tempered reference pitches (Hz), so the recipes below read musically.
 const D2 = 73.42
-const E2 = 82.41
-const F2 = 87.31
 const A2 = 110.0
 const C3 = 130.81
 const D3 = 146.83
@@ -776,9 +772,9 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     // pressing Study is how a cue wears out. So this one deliberately has no
     // triad and no third in it — just an open fifth, which is the interval with
     // no mood attached. Warm rather than bright (the partials are pulled down
-    // with `sparkle` and the lowpass is the darkest in the catalogue outside
-    // `unlock`), and it *opens* instead of arriving: a slow A5 fades in over the
-    // held fifth across a fifth of a second, like a lamp coming up over a desk.
+    // with `sparkle` and the lowpass is the darkest in the catalogue), and it
+    // *opens* instead of arriving: a slow A5 fades in over the held fifth
+    // across a fifth of a second, like a lamp coming up over a desk.
     //
     // It starts on paper, not on a note — the deck squared off on the desk, a
     // short downward sweep with the mallet landing in it — so it stays in the
@@ -800,25 +796,6 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
       { at: 0.16, dur: 0.75, freq: A5, type: 'sine', gain: 0.12, attack: 0.22 },
       { at: 0, dur: 0.9, freq: A2, type: 'sine', gain: 0.2, attack: 0.06 },
     ],
-  },
-  unlock: {
-    // The locked comprehension-check screen: a low, dissonant drone swelling
-    // in like something dimming. Two low tones a semitone apart beat against
-    // each other for the "mysterious" texture, a faint high wisp fades
-    // overhead, and a slow rumble rises underneath — an eclipse settling in,
-    // not a jump-scare.
-    gain: 0.4,
-    throttleMs: 500,
-    lowpass: 950,
-    // The one non-reward cue with room on it: the tail is what makes the
-    // locked screen feel like a space rather than a sound.
-    space: 0.5,
-    tones: [
-      { at: 0, dur: 1.5, freq: E2, type: 'sine', gain: 0.32, attack: 0.4 },
-      { at: 0, dur: 1.5, freq: F2, type: 'sine', gain: 0.24, attack: 0.45 },
-      { at: 0.2, dur: 1.1, freq: A3, glide: G3, type: 'sine', gain: 0.08, attack: 0.5 },
-    ],
-    noise: [{ at: 0, dur: 1.5, from: 380, to: 110, type: 'bandpass', q: 0.5, gain: 0.34, swell: 0.65 }],
   },
 }
 

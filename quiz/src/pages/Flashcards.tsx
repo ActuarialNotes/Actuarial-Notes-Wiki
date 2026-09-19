@@ -1,6 +1,7 @@
 import { createContext, forwardRef, useCallback, useContext, useEffect, useImperativeHandle, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import {
+  CalendarCheck,
   Check,
   CheckCircle2,
   ChevronDown,
@@ -48,6 +49,7 @@ import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useStudyPlan } from '@/hooks/useStudyPlan'
+import { useTodayPlanCardNames } from '@/hooks/useTodayPlanCardNames'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath } from '@/lib/wikiRoutes'
@@ -705,7 +707,10 @@ const SHEET_EXIT_MS = 200
 // card slammed the sheet shut mid-browse; hoisting it above that switch keeps
 // the sheet — and its search text, exam pill and scroll position — exactly
 // where it was.
-const AddFlashcardsSheetContext = createContext<{ openSheet: () => void }>({ openSheet: () => {} })
+const AddFlashcardsSheetContext = createContext<{
+  openSheet: () => void
+  onCardsAdded: () => void
+}>({ openSheet: () => {}, onCardsAdded: () => {} })
 
 // The "add flashcards" sheet — one full-screen view that covers both ways into
 // the deck: a free-form concept search pinned to the top, and, whenever the
@@ -831,23 +836,168 @@ function AddFlashcardsSheet({
   )
 }
 
-// The round primary "+" that opens the add-flashcards sheet. Lives at the
-// right-hand end of the controls footer, in every flashcards view. Only the
-// button is here — the sheet itself is mounted by the page, above the
-// empty-deck/deck switch this footer sits below.
-function AddFlashcardsButton() {
-  const { openSheet } = useContext(AddFlashcardsSheetContext)
+// One row of the "+" menu. Same shape as the rows of ConceptActionMenu, the
+// app's other action menu — icon, label, and a `trailing` slot where a row
+// states its own count.
+function AddFlashcardsMenuRow({
+  icon,
+  label,
+  trailing,
+  disabled = false,
+  sound,
+  onClick,
+}: {
+  icon: ReactNode
+  label: string
+  trailing?: ReactNode
+  disabled?: boolean
+  /** Overrides the delegated press cue — "none" for a row that plays its own. */
+  sound?: string
+  onClick: () => void
+}) {
   return (
     <button
       type="button"
-      data-tour="add-flashcards-btn"
-      onClick={openSheet}
-      title="Add flashcards"
-      aria-label="Add flashcards"
-      className="inline-flex items-center justify-center h-11 w-11 shrink-0 rounded-full bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 active:scale-95 transition-all"
+      role="menuitem"
+      data-sound={sound}
+      disabled={disabled}
+      onClick={onClick}
+      className={`w-full inline-flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-left transition-colors ${
+        disabled
+          ? 'text-muted-foreground/60 cursor-default'
+          : 'text-foreground hover:bg-accent'
+      }`}
     >
-      <Plus className="h-5 w-5" />
+      <span className="shrink-0">{icon}</span>
+      <span className="whitespace-nowrap">{label}</span>
+      {trailing && <span className="ml-auto pl-3 shrink-0 inline-flex items-center">{trailing}</span>}
     </button>
+  )
+}
+
+// The menu itself, mounted only while it is open. That is deliberate rather
+// than incidental: reading today's plan means generating one per in-progress
+// exam (`useTodayPlanCardNames`), and the "+" sits in a footer that is on
+// screen the whole time the deck is. Keeping the hook inside the open menu
+// means the plans are built when someone asks what today holds, not on every
+// flashcards render.
+function AddFlashcardsMenu({
+  onAdded,
+  onBrowseAll,
+}: {
+  onAdded: () => void
+  onBrowseAll: () => void
+}) {
+  const { addCard, hasCard } = useFlashcards()
+  const { names: planNames, loading: planLoading, hasPlan } = useTodayPlanCardNames()
+
+  // What today's plan would actually add — the plan's concepts minus whatever
+  // is already in the deck, so the row's count is the number of *new* cards and
+  // tapping it twice is a no-op rather than a pile of duplicates.
+  const missing = planNames.filter(n => !hasCard(n))
+  const allInDeck = planNames.length > 0 && missing.length === 0
+
+  function addToday() {
+    if (missing.length === 0) return
+    for (const name of missing) addCard({ kind: 'concept', name })
+    playSound('addToDeck')
+    showAddedToDeck(missing.length)
+    onAdded()
+  }
+
+  return (
+    <div
+      role="menu"
+      aria-label="Add flashcards"
+      // Surface and layer match ConceptActionMenu's inline form: `bg-popover`
+      // is a step off `--background`, which pure black is not, and the menu
+      // floats over whatever card is behind the footer. z-50 is the same step
+      // its neighbour in this footer (ViewModeDropdown) opens on.
+      className="absolute bottom-full mb-2 right-0 z-50 flex w-max min-w-[248px] flex-col gap-0.5 rounded-xl border border-border bg-popover p-1.5 text-popover-foreground shadow-lg"
+    >
+      <AddFlashcardsMenuRow
+        icon={<CalendarCheck className="h-4 w-4" />}
+        label="Today's study plan"
+        disabled={planLoading || missing.length === 0}
+        sound="none"
+        onClick={addToday}
+        trailing={
+          planLoading ? (
+            <Loader2 className="h-3.5 w-3.5 shrink-0 animate-spin text-muted-foreground" />
+          ) : allInDeck ? (
+            <Check className="h-4 w-4 shrink-0 text-green-500" />
+          ) : missing.length > 0 ? (
+            <span
+              className="shrink-0 inline-flex items-center rounded-full bg-orange-500 px-1.5 py-0.5 text-[11px] font-bold leading-none text-white tabular-nums"
+              aria-label={`${missing.length} card${missing.length === 1 ? '' : 's'} to add`}
+            >
+              {missing.length}
+            </span>
+          ) : (
+            <span className="shrink-0 text-xs">{hasPlan ? 'None today' : 'Not set up'}</span>
+          )
+        }
+      />
+      <AddFlashcardsMenuRow
+        icon={<Search className="h-4 w-4" />}
+        label="Browse all"
+        onClick={onBrowseAll}
+      />
+    </div>
+  )
+}
+
+// The round primary "+" in the controls footer, and the little menu it opens
+// above itself. The two ways into the deck are not equals: the plan already
+// knows what today is for, so building that deck should be one tap, while
+// everything else is a browse. So the "+" no longer opens the sheet directly —
+// it offers today's plan first, and "Browse all" is what reaches the sheet.
+//
+// Only the button and its menu are here — the sheet itself is mounted by the
+// page, above the empty-deck/deck switch this footer sits below.
+function AddFlashcardsButton() {
+  const { openSheet, onCardsAdded } = useContext(AddFlashcardsSheetContext)
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    function handleOutside(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    document.addEventListener('mousedown', handleOutside)
+    document.addEventListener('keydown', handleKey)
+    return () => {
+      document.removeEventListener('mousedown', handleOutside)
+      document.removeEventListener('keydown', handleKey)
+    }
+  }, [open])
+
+  return (
+    <div className="relative shrink-0" ref={ref}>
+      <button
+        type="button"
+        data-tour="add-flashcards-btn"
+        onClick={() => setOpen(v => !v)}
+        title="Add flashcards"
+        aria-label="Add flashcards"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        className="inline-flex items-center justify-center h-11 w-11 shrink-0 rounded-full bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 active:scale-95 transition-all"
+      >
+        <Plus className={`h-5 w-5 transition-transform ${open ? 'rotate-45' : ''}`} />
+      </button>
+
+      {open && (
+        <AddFlashcardsMenu
+          onAdded={() => { setOpen(false); onCardsAdded() }}
+          onBrowseAll={() => { setOpen(false); openSheet() }}
+        />
+      )}
+    </div>
   )
 }
 
@@ -889,7 +1039,14 @@ function AddFlashcardsSheetHost({
     setOpen(true)
   }, [])
 
-  const ctx = useMemo(() => ({ openSheet }), [openSheet])
+  // `onCardsAdded` reaches the "+" menu through the same context as `openSheet`:
+  // the menu's quick add happens in the footer, below this host, and has to
+  // announce itself exactly as an add made inside the sheet does.
+  const notifyCardsAdded = useCallback(() => { onCardsAdded?.() }, [onCardsAdded])
+  const ctx = useMemo(
+    () => ({ openSheet, onCardsAdded: notifyCardsAdded }),
+    [openSheet, notifyCardsAdded],
+  )
 
   return (
     <AddFlashcardsSheetContext.Provider value={ctx}>
@@ -1345,7 +1502,6 @@ function SortableCard({
               open={showPlayMenu}
               onClose={() => setShowPlayMenu(false)}
               anchorRef={playBtnRef}
-              placement="anchored"
               content={markdown}
               stopPropagation
               leading={studyMenuItem}
@@ -1451,7 +1607,6 @@ function SortableCard({
             open={showPlayMenu}
             onClose={() => setShowPlayMenu(false)}
             anchorRef={playBtnRef}
-            placement="anchored"
             content={markdown}
             stopPropagation
             leading={studyMenuItem}
@@ -1831,8 +1986,8 @@ function GalleryPanel({
               <Layers className="h-9 w-9 mx-auto text-muted-foreground/50" />
               <p className="text-sm text-muted-foreground">Your deck is empty.</p>
               <p className="text-xs text-muted-foreground">
-                Tap the <span className="font-medium">+</span> button below to search for
-                flashcards or add a whole pack.
+                Tap the <span className="font-medium">+</span> button below to add today's
+                study plan, or browse everything.
               </p>
             </div>
           ) : (
@@ -2139,7 +2294,6 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
                   open={showPlayMenu}
                   onClose={() => setShowPlayMenu(false)}
                   anchorRef={playBtnRef}
-                  placement="anchored"
                   content={markdown}
                   stopPropagation
                 />

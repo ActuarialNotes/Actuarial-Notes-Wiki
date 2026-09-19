@@ -1,5 +1,6 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { renderToStaticMarkup } from 'react-dom/server'
+import { setFiguresCollapsed } from '@/hooks/useFiguresCollapsed'
 import { ConceptImageBanner, type BannerImage } from './ConceptImageBanner'
 
 const RAW = 'https://raw.githubusercontent.com/Owner/Repo/main'
@@ -13,6 +14,24 @@ function render(images: BannerImage[]): string {
 }
 
 describe('ConceptImageBanner', () => {
+  // Figures start folded (see hooks/useFiguresCollapsed); everything below is
+  // about the picture itself, so unfold it first. The default is its own test.
+  beforeEach(() => {
+    setFiguresCollapsed(false)
+  })
+
+  it('starts folded, so the definition leads the popup', async () => {
+    // A fresh module graph, so the store is back at its default rather than
+    // whatever the last test left it at.
+    vi.resetModules()
+    const { ConceptImageBanner: Fresh } = await import('./ConceptImageBanner')
+    const html = renderToStaticMarkup(
+      <Fresh images={[img('Media/Figures/One.svg')]} onOpen={() => {}} />,
+    )
+    expect(html).toContain('Show figure')
+    expect(html).not.toContain('<img')
+  })
+
   it('renders nothing when the concept has no figures', () => {
     expect(render([])).toBe('')
   })

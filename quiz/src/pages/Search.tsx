@@ -19,6 +19,7 @@ import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { LatexText } from '@/components/LatexText'
 import { MarkdownText } from '@/components/MarkdownText'
+import { ProBadge } from '@/components/ProBadge'
 import { QuestionAnswerReveal } from '@/components/QuestionAnswerReveal'
 import { QuestionAttemptBadge } from '@/components/QuestionAttemptBadge'
 import { useQuestionAttempts, type QuestionAttemptSummary } from '@/hooks/useQuestionAttempts'
@@ -270,7 +271,7 @@ export default function Search() {
   const { byExam: subtopicsByTopic, loading: subtopicsLoading } = useTopics()
   const { user } = useAuth()
   const { syllabi } = useWikiSyllabus()
-  const { isPremium } = useSubscription()
+  const { isPro } = useSubscription()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
   const { byQuestionId: attemptsByQuestionId, tracked: attemptsTracked } = useQuestionAttempts()
 
@@ -757,7 +758,7 @@ export default function Search() {
 
                   {/* Today's Study Plan quick-select */}
                   {user && (
-                    isPremium && plan && planConceptCount > 0 ? (
+                    isPro && plan && planConceptCount > 0 ? (
                       <button
                         type="button"
                         onClick={() => {
@@ -778,14 +779,14 @@ export default function Search() {
                           {planConceptCount} concept{planConceptCount !== 1 ? 's' : ''}
                         </span>
                       </button>
-                    ) : !isPremium ? (
+                    ) : !isPro ? (
                       <Link
                         to="/upgrade"
                         className="flex items-center gap-2 w-full px-3 py-2 rounded-lg bg-muted/30 text-sm text-muted-foreground hover:bg-muted/40 transition-colors"
                       >
                         <Lock className="h-4 w-4 shrink-0 text-muted-foreground/60" />
                         <span className="flex-1 text-left">Today's Study Plan</span>
-                        <span className="text-xs text-muted-foreground/60 shrink-0">Premium</span>
+                        <ProBadge />
                       </Link>
                     ) : null
                   )}

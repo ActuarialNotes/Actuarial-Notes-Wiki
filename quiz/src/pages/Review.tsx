@@ -340,9 +340,13 @@ export default function Review() {
     const params = new URLSearchParams({
       selection: 'stored',
       mode: retryMode,
-      reveal: searchParams.get('reveal') ?? 'during',
       count: String(retryIds.length),
     })
+    // Carry the reveal the finished session ran under; with none in the URL the
+    // quiz falls back to the reader's saved choice for this mode, which is a
+    // better guess than pinning the retry to 'during'.
+    const reveal = searchParams.get('reveal')
+    if (reveal) params.set('reveal', reveal)
     const from = searchParams.get('from')
     if (from) params.set('from', from)
     resetQuiz()

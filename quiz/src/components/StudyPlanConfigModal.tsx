@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import { ProBadge } from '@/components/ProBadge'
 import { X, CalendarDays, Sparkles, BookOpen, Lock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ExamSittingsList } from '@/components/ExamSittingsList'
@@ -34,13 +35,13 @@ interface Props {
   examLabel: string
   examId?: string
   initialStep?: number
-  isPremium?: boolean
+  isPro?: boolean
   onSave: (next: Partial<StudyPlanConfig>) => void
   onExamDateChange?: (date: string | null) => void
   onClose: () => void
 }
 
-export function StudyPlanConfigModal({ config, examDate, examLabel, examId, initialStep, isPremium = true, onSave, onExamDateChange, onClose }: Props) {
+export function StudyPlanConfigModal({ config, examDate, examLabel, examId, initialStep, isPro = true, onSave, onExamDateChange, onClose }: Props) {
   // Paper: the panel sliding in.
   useSoundOnMount('open')
   const today = todayISO()
@@ -180,7 +181,7 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
             const s = i + 1
             const isActive = step === s
             const isDone = step > s
-            const isStrategyLocked = s === STRATEGY_STEP && !isPremium
+            const isStrategyLocked = s === STRATEGY_STEP && !isPro
             return (
               <button
                 key={s}
@@ -355,12 +356,12 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                 <p className="text-xs text-destructive">Date must be in the future</p>
               )}
 
-              {!isPremium && (
+              {!isPro && (
                 <div className="flex items-start gap-2 rounded-lg bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
                   <Lock className="h-3.5 w-3.5 shrink-0 mt-0.5 text-primary/60" />
                   <span>
                     Study strategy customization is a{' '}
-                    <Link to="/upgrade" className="underline text-primary hover:text-primary/80">Premium</Link>{' '}
+                    <Link to="/upgrade" className="rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"><ProBadge /></Link>{' '}
                     feature.
                   </span>
                 </div>
@@ -439,7 +440,7 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                 Cancel
               </Button>
             )}
-            {step < TOTAL_STEPS && !(step === READY_DATE_STEP && !isPremium) ? (
+            {step < TOTAL_STEPS && !(step === READY_DATE_STEP && !isPro) ? (
               <Button
                 size="sm"
                 onClick={() => setStep(step + 1)}

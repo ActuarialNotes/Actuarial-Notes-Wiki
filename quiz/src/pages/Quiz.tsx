@@ -15,8 +15,10 @@ import { QuestionInfoButton } from '@/components/QuestionInfoButton'
 import { PreQuizCollectGate } from '@/components/collect/PreQuizCollectGate'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
 import { isAnswerCorrect, isMultiPartAnswerComplete } from '@/lib/parser'
 import { pendingAnswerFor, tagPendingAnswer } from '@/lib/pendingAnswer'
+import { loadRevealMode, parseRevealMode } from '@/lib/revealMode'
 import type { PendingAnswer } from '@/lib/pendingAnswer'
 import type { QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
 import { decayIfStale } from '@/lib/mastery'
@@ -36,8 +38,11 @@ export default function Quiz() {
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
 
   const mode = (searchParams.get('mode') as QuizMode | null) ?? 'quiz'
-  // reveal='during' shows explanation after each answer; 'end' defers to review
-  const reveal = searchParams.get('reveal') ?? 'during'
+  // reveal='during' shows the explanation after each answer; 'end' defers the
+  // whole lot to /review. The launching surface says so in the URL; a surface
+  // that doesn't (a quiz started from Search, say) falls back to the reader's
+  // saved choice rather than to a fixed 'during'.
+  const reveal = parseRevealMode(searchParams.get('reveal')) ?? loadRevealMode(mode)
   const countParam = searchParams.get('count')
 
   const filters: QuestionFilter = useMemo(() => {
@@ -327,8 +332,10 @@ export default function Quiz() {
     setIsChangingAnswer(true)
   }
 
-  // Show explanation inline only in quiz mode when user chose to reveal during
-  const showExplanation = isLocked && mode === 'quiz' && reveal === 'during'
+  // Show the explanation inline whenever the reader asked to see answers as they
+  // go. That is a choice, not a property of the mode: a practice exam run for
+  // feedback reveals too, and a quiz run as a dry run holds everything back.
+  const showExplanation = isLocked && reveal === 'during'
 
   async function submitQuiz() {
     if (isSubmitting) return
@@ -537,7 +544,7 @@ export default function Quiz() {
                 : 'bg-muted text-muted-foreground border-border')
             }
           >
-            {mode === 'mock-exam' ? 'Mock Exam' : 'Quiz'}
+            {mode === 'mock-exam' ? PRACTICE_EXAM_LABEL : 'Quiz'}
           </span>
           <Button
             variant="ghost"

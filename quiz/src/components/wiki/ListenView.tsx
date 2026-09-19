@@ -115,8 +115,8 @@ export function ListenView({ markdown }: Props) {
           ))}
         </div>
         <span className="ml-auto inline-flex items-center gap-1 text-[11px] text-muted-foreground shrink-0">
-          {engine === 'premium'
-            ? <><Sparkles className="h-3 w-3" /> Premium voice</>
+          {engine === 'pro'
+            ? <><Sparkles className="h-3 w-3" /> Pro voice</>
             : <><Volume2 className="h-3 w-3" /> Browser voice</>}
         </span>
       </div>

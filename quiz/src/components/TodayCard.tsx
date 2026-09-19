@@ -6,7 +6,6 @@ import { useState, useEffect, useMemo, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Settings2,
-  AlertTriangle,
   CheckCircle2,
   Check,
   Circle,
@@ -19,6 +18,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { ConceptDetailModal } from '@/components/ConceptDetailModal'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
+import { ProBadge } from '@/components/ProBadge'
 import { ConceptScheduleBadge } from '@/components/TopicProgressSection'
 import {
   todayISO,
@@ -53,22 +53,6 @@ function todayLongDate(): string {
 }
 
 // ── Sub-components ────────────────────────────────────────────────────────────
-
-function BehindWarning({ plan }: { plan: StudyPlan }) {
-  return (
-    <div className="rounded-lg bg-amber-50 dark:bg-amber-950/30 px-3 py-2.5 text-xs text-amber-800 dark:text-amber-300 space-y-1">
-      <div className="flex items-center gap-1.5 font-medium">
-        <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
-        {plan.status === 'target_passed'
-          ? 'Your target ready date has passed. Pacing to exam date instead.'
-          : `Behind pace: ${plan.conceptsPerDay} concept${plan.conceptsPerDay === 1 ? '' : 's'} per day needed to catch up.`}
-      </div>
-      {plan.status === 'behind' && (
-        <p>Consider an extended quiz session today to cover more ground.</p>
-      )}
-    </div>
-  )
-}
 
 function ReviewModeNote({ concepts }: { concepts: string[] }) {
   return (
@@ -223,8 +207,8 @@ interface Props {
   onConfigChange: (next: Partial<StudyPlanConfig>) => void
   onRegenerate: () => void
   onExamDateChange?: (date: string | null) => void
-  /** When false, the Study Plan card is locked behind a Premium upgrade CTA. Defaults to true. */
-  isPremium?: boolean
+  /** When false, the Study Plan card is locked behind a Pro upgrade CTA. Defaults to true. */
+  isPro?: boolean
 }
 
 export function TodayCard({
@@ -238,7 +222,7 @@ export function TodayCard({
   onConfigChange,
   onRegenerate,
   onExamDateChange,
-  isPremium = true,
+  isPro = true,
 }: Props) {
   const [showConfig, setShowConfig] = useState(false)
   const [selectedStudyPlanIdx, setSelectedStudyPlanIdx] = useState<number | null>(null)
@@ -298,7 +282,7 @@ export function TodayCard({
   }, [allOnTarget, loading])
 
   // Locked state — free users see a preview of the card with an upgrade CTA.
-  if (!isPremium) {
+  if (!isPro) {
     const previewConcepts = displayConcepts.length > 0
       ? displayConcepts.slice(0, 3)
       : syllabus.topics[0]?.concepts.slice(0, 3).map(c => c.name) ?? []
@@ -329,6 +313,7 @@ export function TodayCard({
           <div className="space-y-1">
             <div className="flex items-center gap-1.5">
               <h3 className="text-base font-semibold">Custom Study Plan</h3>
+              <ProBadge />
             </div>
             <p className="text-sm text-muted-foreground max-w-xs">
               A daily plan tailored to you
@@ -486,9 +471,6 @@ export function TodayCard({
           )}
 
           {/* Warnings / info panels */}
-          {!loading && plan && (plan.status === 'behind' || plan.status === 'target_passed') && (
-            <BehindWarning plan={plan} />
-          )}
           {!loading && plan?.status === 'review_mode' && (
             <ReviewModeNote concepts={reviewConcepts} />
           )}

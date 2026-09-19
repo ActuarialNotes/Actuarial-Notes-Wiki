@@ -130,7 +130,8 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
     try {
       sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(ids))
     } catch { /* ignore */ }
-    navigate(`/quiz?mode=quiz&selection=stored&topic=${encodeURIComponent(storageTopic)}&reveal=during&from=browse`)
+    // No `reveal` — the quiz reads the reader's saved choice for the mode.
+    navigate(`/quiz?mode=quiz&selection=stored&topic=${encodeURIComponent(storageTopic)}&from=browse`)
     setSelectedIds(new Set())
     closeDropdown()
   }

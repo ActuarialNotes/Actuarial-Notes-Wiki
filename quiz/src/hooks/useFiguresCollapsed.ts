@@ -3,10 +3,16 @@ import { useSyncExternalStore } from 'react'
 /**
  * Whether concept figures are collapsed in the concept popup.
  *
+ * Figures start **collapsed**: a concept popup opens on a definition, and a
+ * figure at the top of it pushes that definition below the fold. The corner
+ * control unfolds it, and that choice is what gets remembered.
+ *
  * The preference is deliberately *global*, not per-concept: someone who folds
  * the figure away to get at the definition wants it to stay folded as they page
  * through concepts, and to come back only when they expand it again. It is
  * persisted for the same reason — a reload shouldn't quietly undo the choice.
+ * Only an explicit choice is stored, so `'0'` (expanded) is a real value here
+ * rather than the absence of one.
  *
  * A module-level store (rather than component state) keeps every banner in
  * agreement and survives the banner unmounting, which it does whenever the
@@ -14,11 +20,16 @@ import { useSyncExternalStore } from 'react'
  */
 const STORAGE_KEY = 'concept-figures-collapsed'
 
+const DEFAULT_COLLAPSED = true
+
 function readStored(): boolean {
   try {
-    return localStorage.getItem(STORAGE_KEY) === '1'
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (stored === '1') return true
+    if (stored === '0') return false
+    return DEFAULT_COLLAPSED
   } catch {
-    return false
+    return DEFAULT_COLLAPSED
   }
 }
 
@@ -36,9 +47,9 @@ function getSnapshot(): boolean {
   return collapsed
 }
 
-/** Server render always starts expanded; the stored value arrives on hydration. */
+/** The app never hydrates, so this is only reached when a test renders to markup. */
 function getServerSnapshot(): boolean {
-  return false
+  return collapsed
 }
 
 export function setFiguresCollapsed(next: boolean): void {

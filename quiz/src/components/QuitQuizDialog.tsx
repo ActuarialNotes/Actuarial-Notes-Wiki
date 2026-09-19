@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
+import { PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 
 interface QuitQuizDialogProps {
@@ -12,7 +13,7 @@ interface QuitQuizDialogProps {
 export function QuitQuizDialog({ mode, onCancel, onConfirm, onFinish }: QuitQuizDialogProps) {
   // Paper: the panel sliding in.
   useSoundOnMount('open')
-  const label = mode === 'mock-exam' ? 'mock exam' : 'quiz'
+  const label = mode === 'mock-exam' ? PRACTICE_EXAM_LABEL.toLowerCase() : 'quiz'
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {

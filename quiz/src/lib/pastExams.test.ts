@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import {
   buildPastExamRows,
+  examSourceLabel,
   formatPassRate,
   hasPublishedStats,
   normalizeSession,
@@ -8,6 +9,7 @@ import {
   sittingLabel,
   sittingLabels,
 } from './pastExams'
+import type { PastExamRow } from './pastExams'
 import type { Question } from './parser'
 
 function q(partial: Partial<Question>): Question {
@@ -217,5 +219,25 @@ describe('sittingLabels', () => {
 
   it('is empty for a pool with no dated questions', () => {
     expect(sittingLabels([q({})])).toEqual([])
+  })
+})
+
+describe('examSourceLabel', () => {
+  const row = (year: number): PastExamRow => ({
+    key: `${year}|Fall`,
+    year,
+    session: 'Fall',
+    label: `Fall ${year}`,
+    bankCount: 24,
+    available: true,
+  })
+
+  it('names the source after real papers when the exam has them', () => {
+    expect(examSourceLabel([row(2019), row(2018)])).toBe('Past Papers')
+  })
+
+  it('falls back to Practice Exam when the shelf is the generated Mix alone', () => {
+    // Exam P and FM release no dated sittings, so their shelf has no rows.
+    expect(examSourceLabel([])).toBe('Practice Exam')
   })
 })

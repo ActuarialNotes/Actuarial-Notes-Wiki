@@ -37,13 +37,15 @@ import { isThemedFigure, themedFigureSrc } from '@/lib/figureTheme'
  * picture to look at. The two are counted separately: the Previous/Next pager
  * and the collapse control belong to the pictures alone.
  *
- * A picture can be folded away with the control in its top-right corner,
- * leaving nothing behind but that same corner control (an image icon and an
- * expand icon) to bring it back — not a full-width strip, which would read as
- * content where there is none. That choice is global and
- * persisted (`hooks/useFiguresCollapsed`), so it holds as the reader pages
- * through concepts and only comes undone when they expand a figure again — the
- * definition stays at the top of the popup until then. The simulator card is
+ * A picture starts folded away, leaving nothing behind but the corner control
+ * (an image icon and an expand icon) that brings it back — not a full-width
+ * strip, which would read as content where there is none. The popup opens on a
+ * definition and a figure above it pushes that definition below the fold, so
+ * the reader asks for the picture rather than scrolling past it. Unfolded with
+ * that control, a picture takes the collapse control in its own top-right
+ * corner. The state is global and persisted (`hooks/useFiguresCollapsed`), so
+ * it holds as the reader pages through concepts and only changes when they use
+ * one of those two controls. The simulator card is
  * not collapsible: it is already a single row, and folding a live control away
  * behind another control buys nothing.
  */

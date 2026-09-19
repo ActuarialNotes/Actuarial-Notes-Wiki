@@ -260,8 +260,25 @@ ALIGN_ENV_RE = re.compile(r"\\begin\{(align\*?|aligned)\}(.*?)\\end\{\1\}", re.D
 _CHAIN_RE = re.compile(r"^(?P<head>.*?&\s*=.*?)\s=\s(?P<tail>[^=]*)$")
 
 
+# `\\` ends a row, optionally carrying a spacing argument: `\\[4pt]`. The two
+# are one token — splitting on `\\` alone strands the `[4pt]` at the head of the
+# next row, where KaTeX renders it as literal text instead of extra leading.
+ROW_BREAK_RE = re.compile(r"\\\\(\[[^\]\n]*\])?")
+
+
+def _split_rows(body: str) -> list[tuple[str, str]]:
+    """The rows of an align body, each paired with the break that ends it."""
+    rows: list[tuple[str, str]] = []
+    pos = 0
+    for m in ROW_BREAK_RE.finditer(body):
+        rows.append((body[pos : m.start()], m.group(1) or ""))
+        pos = m.end()
+    rows.append((body[pos:], ""))
+    return rows
+
+
 def _chain_lines(body: str) -> list[str]:
-    return [ln for ln in body.split("\\\\") if "&=" in ln.replace(" ", "")]
+    return [row for row, _ in _split_rows(body) if "&=" in row.replace(" ", "")]
 
 
 def align_chain_lines(text: str) -> list[str]:
@@ -321,20 +338,25 @@ def split_align_chains(text: str) -> str:
         if not chains:
             return match.group(0)
 
-        rows = body.split("\\\\")
-        trailing = rows[-1][len(rows[-1].rstrip()) :]  # whitespace before \end
-        out: list[str] = []
-        for row in rows:
+        rows = _split_rows(body)
+        trailing = rows[-1][0][len(rows[-1][0].rstrip()) :]  # whitespace before \end
+        # Each line carries the row break that follows it, so a split row's
+        # spacing argument stays with the break at the *end* of the pair.
+        out: list[tuple[str, str]] = []
+        for row, spacing in rows:
             stripped = row.strip()
             m = _CHAIN_RE.match(stripped)
             if stripped in chains and m:
                 lhs = m.group("head").split("&=", 1)[0].strip()
                 pad = " " * len(lhs)
-                out.append(f"{m.group('head').strip()}")
-                out.append(f"{pad} &= {m.group('tail').strip()}")
+                out.append((f"{m.group('head').strip()}", ""))
+                out.append((f"{pad} &= {m.group('tail').strip()}", spacing))
             elif stripped:
-                out.append(stripped)
-        joined = " \\\\\n".join(out)
+                out.append((stripped, spacing))
+        joined = "".join(
+            line + (f" \\\\{spacing}\n" if i < len(out) - 1 else "")
+            for i, (line, spacing) in enumerate(out)
+        )
         tail = trailing if trailing.strip("\t ") else "\n"
         return f"\\begin{{{env}}}\n{joined}{tail}\\end{{{env}}}"
 

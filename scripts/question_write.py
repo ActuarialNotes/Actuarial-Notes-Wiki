@@ -181,6 +181,14 @@ def render(record: dict, judgment: dict, explanation: str | None = None) -> str:
         if record.get("options"):
             chunks.append(options_block(record["options"]))
         text = (explanation if explanation is not None else record.get("solution") or "").strip()
+        if explanation is None:
+            # Same rule the parts take: the publisher's second approach rides
+            # along under the first, and a rewrite speaks for itself.
+            alternative = next(
+                (a.strip() for a in (record.get("alternatives") or []) if a.strip()), ""
+            )
+            if text and alternative:
+                text = f"{text}\n\nAlternatively:\n\n{alternative}"
         chunks.append("## Explanation\n\n" + text if text else "## Explanation")
 
     return mdmath.normalize_markdown("\n\n".join(chunks))
@@ -268,7 +276,14 @@ def main(argv: list[str] | None = None) -> int:
             )
             problems += [f"{record['id']}: {note}" for note in surplus]
             record = dict(record, body=stem.strip(), parts=parts)
-        if not (record.get("body") or "").strip():
+        # A CAS question is sometimes nothing but its lettered sub-prompts —
+        # Fall 2015 Q2 and Q15 open straight on `a. (0.75 point)` with no
+        # narrative or exhibit above them. Such a question has all the prompt
+        # text it was ever given, so an empty stem is only a gap when the
+        # parts are empty too.
+        if not (record.get("body") or "").strip() and not any(
+            (part.get("prompt") or "").strip() for part in record.get("parts") or []
+        ):
             hint = " (needs_vision — transcribe the rendered page into --prompts)" \
                 if record.get("needs_vision") else ""
             problems.append(f"{record['id']}: no prompt text{hint}")

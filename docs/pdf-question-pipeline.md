@@ -356,6 +356,10 @@ PDF-reading cases when PyMuPDF is absent).
 | the split lands at page 1 (no booklet half) | the `SAMPLE ANSWERS AND EXAMINER'S REPORT` header did not match | already handled for exotic whitespace (below); otherwise the header shape is new and belongs in `_split_combined` |
 | a whole question's parts carry the *commentary* as their answer | `EXAMINER'S REPORT` was not recognised as a heading, so the sample/commentary split never happened | already handled for a typographic apostrophe; a new heading shape goes in `CAPS_HEADING_RE` |
 | one question loses every sample after the first | the report boxes its samples, and the box was read as a table, so `Part b:` stopped being line-initial | already handled: `Part a`/`Sample 1` in a cell mark the candidate as structure |
+| the whole report is parsed but question 1 is missing | its heading reads `QUESTION: 1` where the rest read `QUESTION 2` (Fall 2015) | already handled: the heading accepts an optional `:` or `#` before the number |
+| a single-part question's explanation is one short heading | the report heads its samples by approach (`2-Step Method:`) and the heading landed in front of the first `Sample Answer 1` marker | already handled: a heading travels with the sample it introduces |
+| a single-part question ships only the first of several samples | the publisher's other approaches were parsed but never written | already handled: `alternatives` rides along under `Alternatively:`, as it does for a part |
+| the writer refuses a question for `no prompt text` and its parts read fine | the question has no stem — Fall 2015 Q2 and Q15 open straight on `a. (0.75 point)` | already handled: an empty stem is only a gap when the parts are empty too |
 | part points do not sum to `TOTAL POINT VALUE` | a booklet span over-ran into the next question's page and took its `c. (0.5 point)` with it | already handled: the surplus part is dropped and the warning says so — the report prices the paper |
 
 ## The rules this pipeline does not bend

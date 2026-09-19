@@ -295,7 +295,7 @@ def _find_tables(page) -> list[tuple[float, float, float, float, str]]:
 # columns of bare numbers. What must never end up inside a table is the
 # question's own scaffolding.
 STRUCTURE_CELL_RE = re.compile(
-    r"(?i)(?:^QUESTION\s+\d{1,3}\b|TOTAL POINT VALUE|LEARNING OBJECTIVE"
+    r"(?i)(?:^QUESTION[ \t]*[:#]?[ \t]*\d{1,3}\b|TOTAL POINT VALUE|LEARNING OBJECTIVE"
     r"|SAMPLE ANSWERS\b|EXAMINER'?.?S REPORT"
     # A report that boxes a question's sample answers puts `Part b: 0.5 point`
     # and `Sample 1` inside the box. Read as a table, those markers stop being
@@ -629,7 +629,7 @@ QUESTION_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
     ("N.", re.compile(r"(?m)^[ \t]*(\d{1,3})\.[ \t]+(?=\S)")),
     ("N)", re.compile(r"(?m)^[ \t]*(\d{1,3})\)[ \t]+(?=\S)")),
     ("Question N", re.compile(r"(?mi)^[ \t]*question[ \t]*#?[ \t]*(\d{1,3})\b[.:]?")),
-    ("QUESTION N", re.compile(r"(?m)^[ \t]*QUESTION[ \t]+(\d{1,3})\b")),
+    ("QUESTION N", re.compile(r"(?m)^[ \t]*QUESTION[ \t]*[:#]?[ \t]*(\d{1,3})\b")),
     ("**N.**", re.compile(r"(?m)^[ \t]*\*\*(\d{1,3})\.?\*\*[ \t]*")),
 ]
 
@@ -752,7 +752,10 @@ def strip_solution_header(text: str) -> tuple[str, str | None]:
 
 # ─── CAS examiner's report ────────────────────────────────────────────────────
 
-CAS_QUESTION_RE = re.compile(r"(?m)^[ \t]*QUESTION[ \t]+(\d{1,3})\b")
+# A report's own heading is not typed to one shape either: Fall 2015 prints
+# `QUESTION: 1` for its first question and `QUESTION 2` for every one after, so
+# a colon that appears once in a paper is enough to lose a question entirely.
+CAS_QUESTION_RE = re.compile(r"(?m)^[ \t]*QUESTION[ \t]*[:#]?[ \t]*(\d{1,3})\b")
 # The leading glyph of a field label is sometimes missing from a publisher
 # PDF's text layer — Fall 2016 page 45 extracts as `OTAL POINT VALUE: 3.25`,
 # the `T` simply absent. The label is being *recognised*, not transcribed, and
@@ -867,11 +870,29 @@ def _split_parts(block: str) -> list[tuple[str, str | None, str]]:
     return out
 
 
+# `2-Step Method:` — a heading the report puts above the samples that take
+# that approach, rather than inside any one of them.
+SAMPLE_HEADING_RE = re.compile(r"^[^\n]{1,60}:$")
+
+
 def _split_samples(chunk: str) -> list[str]:
-    pieces = re.split(
+    pieces = [p.strip() for p in re.split(
         r"(?mi)^[ \t]*Sample(?:[ \t]+Answer)?[ \t]+\d+[ \t]*:?[ \t]*$", chunk
-    )
-    return [p.strip() for p in pieces if len(p.strip()) > 2]
+    )]
+    # A heading introducing the samples under it is left by the split either
+    # alone in front of the first sample or trailing the one above it — Fall
+    # 2015 Q4 heads its five samples `2-Step Method:` and `1-Step Method:`.
+    # It describes the approach the *next* sample takes, so it travels with
+    # that sample; left where the split put it, it is either read as a sample
+    # of its own (and, being first, becomes the question's whole solution) or
+    # dangles off the end of the sample before it.
+    for i in range(len(pieces) - 1):
+        lines = pieces[i].splitlines()
+        if lines and SAMPLE_HEADING_RE.match(lines[-1].strip()):
+            heading = lines.pop().strip()
+            pieces[i] = "\n".join(lines).strip()
+            pieces[i + 1] = f"{heading}\n\n{pieces[i + 1]}".strip()
+    return [p for p in pieces if len(p) > 2]
 
 
 # ─── Page rendering (vision, only where unavoidable) ──────────────────────────
@@ -1073,7 +1094,11 @@ def cas_records(
             pages = []
             needs_vision = any(p.scanned for p in booklet_pages)
 
-        if not body and not needs_vision:
+        if not body and not needs_vision and not any(
+            (part.get("prompt") or "").strip() for part in parsed["parts"]
+        ):
+            # A question whose lettered sub-prompts were all placed has no gap
+            # to report: some CAS questions simply have no stem above them.
             warnings.append("no prompt text found in the booklet")
         if ocred:
             note = f"prompt read by OCR (page {_ranges(ocred)}) — spot-check it"
@@ -1104,6 +1129,7 @@ def cas_records(
                 "session": session,
                 "parts": parsed["parts"],
                 "solution": parsed["solution"],
+                "alternatives": parsed["alternatives"],
                 "examiner_report": parsed["examiner_report"],
                 "learning_objective_codes": parsed["learning_objective_codes"],
                 "pages": {

@@ -101,6 +101,11 @@ function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, ba
     )
   }
 
+  // `data-view-transition` is what makes a tab switch a *transition* rather
+  // than a cut: the exam an exam card stands for on the Quiz and Study Guides
+  // tabs is the same exam the Dashboard draws as a pill, so it moves between
+  // them instead of being cut away and redrawn somewhere else.
+  // `components/ViewTransitions.tsx` is the one listener that reads the mark.
   return (
     <NavLink
       to={to}
@@ -110,6 +115,7 @@ function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, ba
       onClick={onNavigate}
       data-tour={dataTour}
       data-flashcard-nav={dataFlashcardNav ? '' : undefined}
+      data-view-transition=""
     >
       <span className="flex h-5 w-5 shrink-0 items-center justify-center">{icon}</span>
       <span className={`flex-1 truncate ${collapsed ? 'lg:hidden' : ''}`}>{label}</span>

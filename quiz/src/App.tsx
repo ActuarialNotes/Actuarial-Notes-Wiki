@@ -18,6 +18,7 @@ import Sidebar from '@/components/Sidebar'
 import OnboardingTour from '@/components/OnboardingTour'
 import SoundEffects from '@/components/SoundEffects'
 import MathFocus from '@/components/MathFocus'
+import ViewTransitions from '@/components/ViewTransitions'
 import ImageFocus from '@/components/ImageFocus'
 import FlashcardSync from '@/components/FlashcardSync'
 import Toast from '@/components/Toast'
@@ -30,13 +31,40 @@ import { RESEARCH_TAB_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
 import { pageHostsNavButton } from '@/lib/mobileNavHost'
 import { captureError } from '@/lib/errorMonitoring'
 
-const Research    = lazy(() => import('@/pages/Research'))
+// The dynamic imports are named rather than inlined into `lazy()` so the
+// route preloader below can reach for the same chunk. Calling one twice is
+// free — the module graph hands back the promise it already has.
+const loadResearch     = () => import('@/pages/Research')
+const loadWikiLayout   = () => import('@/components/wiki/WikiLayout')
+const loadWikiHome     = () => import('@/pages/wiki/WikiHome')
+const loadWikiExam     = () => import('@/pages/wiki/WikiExam')
+const loadWikiConcept  = () => import('@/pages/wiki/WikiConcept')
+const loadWikiResource = () => import('@/pages/wiki/WikiResource')
 
-const WikiLayout  = lazy(() => import('@/components/wiki/WikiLayout'))
-const WikiHome    = lazy(() => import('@/pages/wiki/WikiHome'))
-const WikiExam    = lazy(() => import('@/pages/wiki/WikiExam'))
-const WikiConcept = lazy(() => import('@/pages/wiki/WikiConcept'))
-const WikiResource = lazy(() => import('@/pages/wiki/WikiResource'))
+const Research    = lazy(loadResearch)
+
+const WikiLayout  = lazy(loadWikiLayout)
+const WikiHome    = lazy(loadWikiHome)
+const WikiExam    = lazy(loadWikiExam)
+const WikiConcept = lazy(loadWikiConcept)
+const WikiResource = lazy(loadWikiResource)
+
+/**
+ * Warm the chunks a path needs before navigating to it, or null when it needs
+ * none. `ViewTransitions` waits on this: a view transition snapshots the page
+ * as soon as the route has rendered, so flushing straight into a lazy route
+ * would snapshot its Suspense fallback and animate the exam card into a
+ * spinner. Returning null is the common case — every eagerly imported page.
+ */
+function preloadRoute(path: string): Promise<unknown> | null {
+  const route = path.split('?')[0].split('#')[0]
+  if (route === '/research' || route.startsWith('/research/')) return loadResearch()
+  if (route === '/wiki') return Promise.all([loadWikiLayout(), loadWikiHome()])
+  if (route.startsWith('/wiki/exam/')) return Promise.all([loadWikiLayout(), loadWikiExam()])
+  if (route.startsWith('/wiki/concept/')) return Promise.all([loadWikiLayout(), loadWikiConcept()])
+  if (route.startsWith('/wiki/resource/')) return Promise.all([loadWikiLayout(), loadWikiResource()])
+  return null
+}
 
 function WikiFallback() {
   return (
@@ -174,6 +202,9 @@ export default function App({ initialSession }: { initialSession: Session | null
       <PageTracker />
       <GlobalKeyHandler />
       <SoundEffects />
+      {/* Tab switches morph the exam an exam card or pill stands for, rather
+          than cutting — see lib/viewTransition.ts. */}
+      <ViewTransitions preload={preloadRoute} />
       <AuthProvider initialSession={initialSession}>
         <FlashcardSync />
         <ExamProgressProvider>

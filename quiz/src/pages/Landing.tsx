@@ -43,8 +43,11 @@ import { PastExamBrowser } from '@/components/PastExamBrowser'
 import { examStatus } from '@/lib/examStatus'
 import { loadRevealMode, saveRevealMode, type RevealMode } from '@/lib/revealMode'
 import { ExamLogo } from '@/components/ExamLogo'
+import { examAccentStyle } from '@/lib/examColors'
+import { defaultBody, loadBody, saveBody, type ExamBody } from '@/lib/bodyFilter'
+import { examTransitionStyle } from '@/lib/viewTransition'
 
-type ExamOrg = 'SOA' | 'CAS'
+type ExamOrg = ExamBody
 
 const EXAMS = [
   { value: 'Probability', label: 'Exam P-1', tracks: ['ASA', 'ACAS'] as const, progressKey: 'P' },
@@ -61,8 +64,8 @@ const QUIZ_TRACK_GROUPS = [
   { key: 'FSA',  name: 'FSA | Fellow of the Society of Actuaries', org: 'SOA' as ExamOrg },
 ]
 
-const SOA_TRACK_KEYS = new Set(['ASA', 'FSA'])
-const BODY_FILTER_KEY = 'quiz.bodyFilter'
+// QuizFloatingSearch height: h-[calc(3.5rem-1px)] + 1px border = 56px (sticky top-0)
+const SEARCH_BAR_H = 56
 
 
 function formatTargetDate(dateStr: string): string {
@@ -275,6 +278,12 @@ function ExamOptionCard({
   const isBeta = examStatus(exam.progressKey) === 'beta'
   const description = subtitle ?? null
 
+  // The exam's place on the ladder, as a colour — the same custom properties
+  // the Study Guides card scopes to itself, so the hover highlight is the
+  // exam's own hue on both tabs rather than a shared neutral here and a hue
+  // there. See lib/examColors.ts.
+  const accent = examAccentStyle(exam.progressKey)
+
   return (
     <button
       type="button"
@@ -282,12 +291,21 @@ function ExamOptionCard({
       onClick={onClick}
       className="relative w-full rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
-      <Card className={cn(
-        'h-full transition-all duration-150 overflow-hidden',
-        isActive
-          ? 'bg-primary/10 hover:bg-primary/25'
-          : 'hover:bg-accent/30',
-      )}>
+      <Card
+        // The exam's name for the tab-switch view transition: the Study
+        // Guides card and the Dashboard pill for this exam carry the same
+        // one, so switching tabs moves this card there rather than cutting.
+        style={{ ...accent, ...examTransitionStyle(exam.progressKey) }}
+        className={cn(
+          'transition-all duration-150 overflow-hidden ring-1 ring-transparent',
+          isActive && 'bg-primary/10',
+          accent
+            ? 'hover:bg-[var(--exam-accent-soft)] hover:ring-[var(--exam-accent-muted)]'
+            : isActive
+              ? 'hover:bg-primary/25'
+              : 'hover:bg-accent/30',
+        )}
+      >
         <CardHeader className="flex-row items-start gap-3 space-y-0 p-4 pb-3">
           {/* The exam's logo — the same monogram tile, at the same size, that
               the Study Guides grid leads its cards with, in the exam's own
@@ -353,17 +371,16 @@ export default function Landing() {
   const initialMode = (searchParams.get('mode') as QuizMode | null) ?? 'quiz'
   const initialConcept = searchParams.get('concept') ?? ''
 
-  const [filterOverride, setFilterOverride] = useState<ExamOrg | null>(() => {
-    try {
-      const saved = localStorage.getItem(BODY_FILTER_KEY)
-      return saved === 'SOA' || saved === 'CAS' ? saved : null
-    } catch { return null }
-  })
-  const defaultFilter: ExamOrg = SOA_TRACK_KEYS.has(selectedTrack) ? 'SOA' : 'CAS'
-  const activeFilter = filterOverride ?? defaultFilter
+  // Shared with the Study Guides tab — same key, same fallback. This page used
+  // to derive its own, from the other direction ("is this an SOA track"), so a
+  // reader on the DEFAULT track (neither body's) opened this tab on CAS and
+  // that one on SOA, and switching tabs looked like the picker changing itself.
+  // See lib/bodyFilter.ts.
+  const [filterOverride, setFilterOverride] = useState<ExamOrg | null>(loadBody)
+  const activeFilter = filterOverride ?? defaultBody(selectedTrack)
 
   function handleSetFilter(f: ExamOrg) {
-    try { localStorage.setItem(BODY_FILTER_KEY, f) } catch { /* ignore */ }
+    saveBody(f)
     setFilterOverride(f)
   }
 
@@ -1187,24 +1204,41 @@ export default function Landing() {
   return (
     <>
     <QuizFloatingSearch filter={searchFilter} filterPills={filterPills} />
-    {/* Bottom padding tracks the action bar's measured height rather than a
+    {/* The exam list is the Study Guides home page's shell, to the pixel:
+        the same container (`px-4 sm:px-6 py-8 max-w-4xl`), the same `space-y-8`
+        and the same title row. The two tabs open on the same thing — a ladder
+        of exam cards under a body picker — and switching between them used to
+        shift every one of them by a few pixels, which reads as the page
+        twitching rather than as the tab changing. Picking an exam is a
+        different screen, and keeps its own compact sticky header.
+
+        Bottom padding tracks the action bar's measured height rather than a
         fixed guess — the bar grows and shrinks with the deck card and the
         sitting selector, and the old `pb-72` both clipped and over-reserved. */}
     <div
-      className="container max-w-4xl mx-auto px-4 sm:px-6 pt-0 space-y-6"
-      style={{
-        paddingBottom: hasSelection
-          ? 'calc(var(--action-bar-height, 16rem) + 1.5rem)'
-          : '3rem',
-      }}
+      className={cn(
+        'max-w-4xl mx-auto w-full px-4 sm:px-6',
+        hasTopic ? 'pt-0 space-y-6' : 'py-8 space-y-8',
+      )}
+      style={hasSelection
+        ? { paddingBottom: 'calc(var(--action-bar-height, 16rem) + 1.5rem)' }
+        : undefined}
     >
       {/* One compact row: back out of the exam, and the exam's name. This was a
           three-row block ~155px tall on a phone, on a screen where fixed chrome
-          already took two-thirds of the viewport. */}
-      {/* Same treatment as the Dashboard's sticky header — a translucent blurred
-          background rather than a rule, which would stop at this container's
-          edge rather than spanning the viewport. */}
-      <div className="sticky top-14 z-20 -mx-4 sm:-mx-6 space-y-2 bg-background/95 px-4 sm:px-6 py-2.5 backdrop-blur-sm">
+          already took two-thirds of the viewport.
+
+          Inside an exam it pins to the top — the name of the exam being
+          configured has to stay in sight while the concept list scrolls. On the
+          exam list there is nothing to keep in sight and the row is the Study
+          Guides page's plain title row instead, so the two tabs' titles sit on
+          the same line. Same treatment as the Dashboard's sticky header when it
+          does pin: a translucent blurred background rather than a rule, which
+          would stop at this container's edge rather than spanning the
+          viewport. */}
+      <div className={cn(
+        hasTopic && 'sticky top-14 z-20 -mx-4 sm:-mx-6 space-y-2 bg-background/95 px-4 sm:px-6 py-2.5 backdrop-blur-sm',
+      )}>
         <div className="flex items-center gap-2">
           {hasTopic && (
             <button
@@ -1271,13 +1305,22 @@ export default function Landing() {
 
       <div className="space-y-6">
           {!hasTopic && (
-            <div className="space-y-4">
+            <div className="space-y-6">
               {filteredTrackGroups.map(group => (
                 <div key={group.key}>
-                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                    {group.name}
-                  </p>
-                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  {/* Sticky track header — sits just below the search bar, the
+                      same row the Study Guides ladder pins its headings to. */}
+                  <div
+                    className="sticky z-10 -mx-4 sm:-mx-6 px-4 sm:px-6 py-1.5 mb-3 bg-background/95 backdrop-blur-sm"
+                    style={{ top: `${SEARCH_BAR_H}px` }}
+                  >
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                      {group.name}
+                    </p>
+                  </div>
+                  {/* `items-start`: a card is as tall as what it holds, rather
+                      than being padded out to match a taller neighbour. */}
+                  <div className="grid grid-cols-1 items-start gap-3 sm:grid-cols-2">
                     {group.exams.map(exam => {
                       const colorIdx = activeExamValues.indexOf(exam.value)
                       const isActive = colorIdx >= 0

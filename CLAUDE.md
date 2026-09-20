@@ -373,6 +373,25 @@ Other important `lib/` modules:
   `<MobileNavButton />` in its bar at the same time, or it ends up with two hamburgers or
   none. The drawer's own open state is `hooks/useMobileNav.ts`, since the button that opens
   it is no longer inside `Sidebar`. Pure and tested. See `docs/style-guide.md` §5.0.
+- `viewTransition.ts` — **tab switches**: an exam is one object seen three ways (a card on
+  the Quiz tab, a card on Study Guides, a pill on the Dashboard), so switching tabs moves it
+  between its two positions while the rest of the page cross-fades, rather than cutting.
+  The browser's View Transitions API does the work; this module hands out the *name* per exam
+  that makes two elements one object (`examTransitionStyle`, spread like `examAccentStyle`)
+  and holds the click/motion decisions. `components/ViewTransitions.tsx` is the one delegated
+  listener (mounted in `App`, same shape as `SoundEffects`/`MathFocus`); a link opts in with
+  `data-view-transition`. Two rules, both of which fail *silently*: two live elements sharing
+  a name aborts the whole transition (hence the exam-id suffix for a localized exam like
+  `CAS-6`, and the duplicate sweep in `e2e/view-transitions.spec.ts`), and the shared element
+  must be on screen in the *first* frame of the new route — which is why `preloadRoute` in
+  `App.tsx` warms a lazy route's chunk before the transition starts, and why the Study Guides
+  index is seeded synchronously from the bundle (`bundledWikiIndex`). Pure and tested.
+  See `docs/style-guide.md` §9.1.
+- `bodyFilter.ts` — the **SOA/CAS picker** that rides the title row on both the Quiz and Study
+  Guides tabs. One choice, one storage key, one fallback: the two tabs are one ladder seen
+  twice, and they each used to own a copy of the rule. The copies had drifted in opposite
+  directions, so a reader on the DEFAULT track (neither body's) opened one tab on CAS and the
+  other on SOA and switching tabs looked like the picker changing itself. Pure and tested.
 - `menuPlacement.ts` — where a menu hangs off the control that opened it. Aligning with the
   trigger is only a preference: the viewport gets the last word, so a control near an edge has
   the menu shifted back inside, one with no room below has it opened upwards, and the height is
@@ -542,8 +561,8 @@ Other important `lib/` modules:
   60 requests/hour per IP without `VITE_GITHUB_TOKEN` — don't put it on a path that has to work.
 - `supabase.ts` — Supabase client + shared row types
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **105 test files /
-~1550 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **111 test files /
+~1620 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, and the research/resource-timeline
 modules).
 

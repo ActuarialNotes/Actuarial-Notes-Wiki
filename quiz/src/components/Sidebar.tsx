@@ -271,6 +271,11 @@ function ExamPill({ syllabus, isOpen, onToggle, onClose, todayQuizCount = 0 }: E
 function CoworkNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: () => void }) {
   const libraryCount = useCoworkLibrary(s => s.entityIds.length + s.resourceIds.length)
   const deliverableCount = useCoworkDeliverables(s => s.deliverables.length)
+  // A source has its own page under /cowork/sources, and the nav is now the
+  // only thing saying which of Cowork's two places you are in (the page carries
+  // no tabs), so the Sources row has to stay lit while you are reading one.
+  const { pathname } = useLocation()
+  const onSourcePage = pathname.startsWith('/cowork/sources')
 
   return (
     <>
@@ -280,6 +285,7 @@ function CoworkNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: 
         icon={<Library className="h-4 w-4" />}
         collapsed={collapsed}
         end
+        forceActive={onSourcePage}
         onNavigate={onNavigate}
         badge={
           libraryCount > 0 ? (

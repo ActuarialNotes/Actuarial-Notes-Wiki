@@ -96,6 +96,20 @@ export interface SourceEntity {
   about: string
   /** The publisher's own site, when there is one to link. */
   site?: string
+  /**
+   * The publisher's **own** logo or app icon, hotlinked from their site — the
+   * mark a reader recognises the source by, on the source's page and in its
+   * header strip.
+   *
+   * It is authored per entity and transcribed from the publisher's own markup
+   * (their `<link rel="icon">` / `apple-touch-icon`), never constructed from a
+   * domain by guessing `/favicon.ico`, and never drawn by us: an approximated
+   * logo is an invented brand, which is the same mistake as an invented
+   * citation. An entity whose site publishes no usable mark simply has none,
+   * and `EntityLogo` falls back to the monogram tile — so does a logo that
+   * fails to load.
+   */
+  logo?: string
   practiceAreas: PracticeArea[]
 }
 
@@ -356,6 +370,16 @@ export function hasResource(state: LibraryState, resourceId: string): boolean {
 export function libraryResources(state: LibraryState, resources: SourceResource[]): SourceResource[] {
   const taken = new Set(state.resourceIds)
   return resources.filter(r => taken.has(r.id))
+}
+
+/** One publisher by id — the source page's whole lookup. */
+export function entityById(entities: SourceEntity[], id: string): SourceEntity | null {
+  return entities.find(e => e.id === id) ?? null
+}
+
+/** Everything one publisher published, newest first. */
+export function entityResources(resources: SourceResource[], entityId: string): SourceResource[] {
+  return sortResourcesByDate(resources.filter(r => r.entityId === entityId))
 }
 
 /** The library's publishers, in catalogue order. */

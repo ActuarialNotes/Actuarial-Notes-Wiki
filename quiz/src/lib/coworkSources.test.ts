@@ -3,6 +3,8 @@ import {
   EMPTY_LIBRARY,
   addEntity,
   addResource,
+  entityById,
+  entityResources,
   formatPublished,
   groupSources,
   hasEntity,
@@ -220,5 +222,21 @@ describe('library', () => {
     state = addResource(state, MCT)
     expect(libraryResources(state, RESOURCES).map(r => r.id)).toEqual(['mct', 'news'])
     expect(libraryEntities(state, ENTITIES).map(e => e.id)).toEqual(['osfi', 'cu'])
+  })
+})
+
+
+describe('entityById / entityResources', () => {
+  it('finds a publisher by id, and says so when there is none', () => {
+    expect(entityById(ENTITIES, 'osfi')?.short).toBe('OSFI')
+    expect(entityById(ENTITIES, 'nobody')).toBeNull()
+  })
+
+  it("lists one publisher's catalogue, newest first, and nobody else's", () => {
+    // The source page is the only place a reader sees a publisher's whole
+    // shelf, so it has to be exactly theirs and in the shelf's order.
+    expect(entityResources(RESOURCES, 'osfi').map(r => r.id)).toEqual(['mct', 'orsa'])
+    expect(entityResources(RESOURCES, 'cu').map(r => r.id)).toEqual(['news'])
+    expect(entityResources(RESOURCES, 'nobody')).toEqual([])
   })
 })

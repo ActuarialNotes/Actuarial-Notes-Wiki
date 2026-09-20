@@ -265,8 +265,15 @@ export default function Search() {
   const [error, setError] = useState<string | null>(null)
   const [retryCount, setRetryCount] = useState(0)
 
-  const [searchType, setSearchType] = useState<SearchType>('questions')
-  const [textQuery, setTextQuery] = useState('')
+  // `?type=` and `?q=` are how another surface hands its query over — the
+  // Dashboard's top bar, whose dropdown shows what the bundled index can answer
+  // and sends "search all of it" here. An unknown type falls back to questions,
+  // the page's own default.
+  const [searchType, setSearchType] = useState<SearchType>(() => {
+    const requested = searchParams.get('type')
+    return SEARCH_TYPES.some(t => t.value === requested) ? (requested as SearchType) : 'questions'
+  })
+  const [textQuery, setTextQuery] = useState(() => searchParams.get('q') ?? '')
   const [wikiIndex, setWikiIndex] = useState<WikiIndexItem[]>([])
   const [wikiLoading, setWikiLoading] = useState(false)
   const wikiIndexFetchedRef = useRef(false)

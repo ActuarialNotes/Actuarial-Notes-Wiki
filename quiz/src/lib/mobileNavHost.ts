@@ -17,6 +17,9 @@
 export function pageHostsNavButton(pathname: string): boolean {
   // The quiz builder (QuizFloatingSearch) — `/` exactly, nothing below it.
   if (pathname === '/') return true
+  // The Dashboard (DashboardSearchBar) and Flashcards (FlashcardsSearchBar) —
+  // both exactly, nothing below them.
+  if (pathname === '/dashboard' || pathname === '/flashcards') return true
   // The wiki (WikiFloatingSearch), the flag-gated research tab
   // (ResearchTopSearch) and Cowork (CoworkTopBar) — each of which bars every
   // page under them.

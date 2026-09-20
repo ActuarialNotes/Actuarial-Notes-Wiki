@@ -43,6 +43,7 @@ import type { LeagueExamOption } from '@/components/LeaderboardPanel'
 import { DashboardExportModal } from '@/components/DashboardExportModal'
 import { DashboardRemindersModal } from '@/components/DashboardRemindersModal'
 import { DashboardGuideModal } from '@/components/DashboardGuideModal'
+import { DashboardSearchBar } from '@/components/DashboardSearchBar'
 import { DAILY_PLAN_EMAIL_ENABLED, MISTAKES_REVIEW_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 
 const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
@@ -597,6 +598,11 @@ export default function Dashboard() {
 
   return (
     <>
+    {/* The dashboard's top chrome. Below `lg` it stands in for the app header
+        (see lib/mobileNavHost.ts): a search bar rather than the wordmark, since
+        the dashboard is where a reader arrives looking for something. It sits
+        outside the guest blur below so signing in stays reachable. */}
+    <DashboardSearchBar questions={allQuestions} />
     <div className="relative">
       {/* Blur overlay for logged-out users — covers only the dashboard content, not the nav */}
       {isGuest && (

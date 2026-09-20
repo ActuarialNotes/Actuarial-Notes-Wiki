@@ -630,10 +630,11 @@ new overlays on this ladder and comment the intent rather than picking a free nu
 |---|---|---|
 | Base | `z-0`–`z-20` | In-flow raised bits (sticky headers, floating search, nav) |
 | Chrome | `z-40`–`z-50` | Sidebar, mobile header, standard modals/scrims |
-| Popup stack | `z-[55]`–`z-[70]` | Concept popup (56 in focus mode), image gallery (57), PDF reader (58), action menus |
+| Popup stack | `z-[55]`–`z-[70]` | Concept popup (56 in focus mode), image gallery (57), action menus |
 | Onboarding | `z-[72]` | Tour spotlight (must sit above the popup stack) |
 | Ceremony | `z-[120]`+ | Full-screen celebrations that must cover everything |
-| Over a ceremony | `z-[130]` | The concept modals a collect dialog can open over itself |
+| Over a ceremony | `z-[130]` | The concept modals and record sheets a collect dialog can open over itself |
+| PDF reader | `z-[135]` | The one exam-PDF reader — opened from any of the above, so it clears all of them |
 
 Keep a portalled element and the thing it visually sits *above* only a few steps apart, and
 leave a comment (as the existing code does) explaining what a non-obvious value is clearing.
@@ -650,7 +651,8 @@ that panel's layer no matter how high its own number is. The hosts that do this:
 | Concept popup (`.concept-popup-aside`) | `z-40`, `z-index: 56` in focus mode |
 | Add-flashcards sheet (`pages/Flashcards.tsx`) | `z-[64]` |
 | Collect dialog (`CollectConceptModal`) | `z-[120]` |
-| Exams popout, sidebar drawer, PDF viewer, mistakes review | `z-[50]`–`z-[60]` |
+| Fact Check sheet, question-info panel, record modals | `z-[80]`, `z-[130]` |
+| Exams popout, sidebar drawer, mistakes review | `z-[50]`–`z-[60]` |
 
 A modal opened from one of those and left in place opens *behind* whatever paints above the
 host — the floating search bar (`z-50`), a sibling panel — which reads as a

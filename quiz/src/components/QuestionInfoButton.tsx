@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ChevronRight, ExternalLink, FileText, Info, X } from 'lucide-react'
+import { ChevronRight, ExternalLink, Info, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { githubBlobUrl } from '@/lib/github'
 import { questionSource } from '@/lib/questionSource'
@@ -9,6 +9,7 @@ import { FACT_CHECK_UI_ENABLED } from '@/lib/featureFlags'
 import { FACT_CHECK_TONE_CLASSES, FACT_CHECK_TONE_ICONS } from '@/lib/factCheckTone'
 import { factCheckBadge } from '@/lib/verification'
 import { FactCheckDialog } from '@/components/FactCheckBadge'
+import { PdfLinkButton } from '@/components/PdfLinkButton'
 import type { Question } from '@/lib/parser'
 
 /**
@@ -149,20 +150,22 @@ export function QuestionInfoDialog({
             <p className="text-sm font-medium">{source.label}</p>
             <p className="mt-0.5 text-xs text-muted-foreground">{source.detail}</p>
             {source.document && (
-              // The publisher's own paper, in a new tab rather than the in-app
-              // reader: a PDF over a half-finished quiz buries the quiz.
-              <a
-                href={source.document.url}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-3 inline-flex min-h-[36px] items-center gap-2 rounded-md border border-border bg-card px-3 py-1.5 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground"
-              >
-                <FileText className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-                {source.document.label}
-                <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-                  PDF
-                </span>
-              </a>
+              // The publisher's own paper, read in the app like every other PDF
+              // — a candidate mid-quiz who wants to see what the examiners said
+              // should not have to leave for a browser tab and find their way
+              // back to a half-finished paper.
+              //
+              // This panel closes as it hands over. It is a signpost, not a
+              // reading surface: once the document is up, the only thing behind
+              // it worth returning to is the question, so closing the reader
+              // puts the candidate back on it rather than on a dialog about it.
+              <PdfLinkButton
+                url={source.document.url}
+                label={source.document.label}
+                subtitle={source.label}
+                onOpen={onClose}
+                className="mt-3"
+              />
             )}
           </section>
 

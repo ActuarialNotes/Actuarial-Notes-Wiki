@@ -612,10 +612,11 @@ export function PdfViewerPanel({ url, title, subtitle, hostFullScreen = false, o
       // The concept popup's class carries the sidebar-width offset on desktop
       // and the whole focus-mode layer in index.css, so both panels sit and
       // expand identically. `pdf-viewer-aside` is the one difference: the
-      // reader is opened *from* a page — a resource page's Read PDF button, an
-      // exam page's syllabus button — so it has to layer above the popup that
-      // page may be read in, in focus mode included. See index.css.
-      className="concept-popup-aside pdf-viewer-aside fixed left-0 right-0 bottom-0 z-[58] border-t bg-card text-card-foreground shadow-2xl flex flex-col"
+      // reader is opened *from* something else — a resource page's Read PDF
+      // button, an exam page's syllabus button, the quiz's Question info panel,
+      // the Fact Check sheet — so it layers above every host that can open it,
+      // in focus mode included. See index.css.
+      className="concept-popup-aside pdf-viewer-aside fixed left-0 right-0 bottom-0 z-[135] border-t bg-card text-card-foreground shadow-2xl flex flex-col"
       data-focus={focusMode}
       data-host-focus={hostFullScreen}
       style={{ height: focusMode ? undefined : `min(${height}px, 100vh)` }}

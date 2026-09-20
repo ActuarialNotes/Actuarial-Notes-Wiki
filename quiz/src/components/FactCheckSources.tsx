@@ -23,9 +23,10 @@ import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
  * the screen — it is what makes the check reproducible, not something a student
  * can act on.
  *
- * Inside a dialog the cards are `linkOnly`: the in-app PDF reader is an aside
- * below the overlay layer, so a document opened from here would slide in behind
- * the sheet that opened it.
+ * The card's "Read PDF" opens in the app's reader like every other PDF button,
+ * over the Fact Check sheet rather than in a browser tab — the sheet stays
+ * behind it, so closing the document puts the reader back on the finding that
+ * sent them to it.
  */
 
 interface FactCheckSourcesProps {
@@ -89,7 +90,6 @@ function SourceShelf({ sources }: { sources: CitedSource[] }) {
                 }}
                 note={source.locator ?? undefined}
                 compact
-                linkOnly
                 className="mb-0 w-full"
               />
             </li>

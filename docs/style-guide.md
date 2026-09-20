@@ -630,10 +630,11 @@ new overlays on this ladder and comment the intent rather than picking a free nu
 |---|---|---|
 | Base | `z-0`–`z-20` | In-flow raised bits (sticky headers, floating search, nav) |
 | Chrome | `z-40`–`z-50` | Sidebar, mobile header, standard modals/scrims |
-| Popup stack | `z-[55]`–`z-[70]` | Concept popup (56 in focus mode), image gallery (57), PDF reader (58), action menus |
+| Popup stack | `z-[55]`–`z-[70]` | Concept popup (56 in focus mode), image gallery (57), action menus |
 | Onboarding | `z-[72]` | Tour spotlight (must sit above the popup stack) |
 | Ceremony | `z-[120]`+ | Full-screen celebrations that must cover everything |
-| Over a ceremony | `z-[130]` | The concept modals a collect dialog can open over itself |
+| Over a ceremony | `z-[130]` | The concept modals and record sheets a collect dialog can open over itself |
+| PDF reader | `z-[135]` | The one exam-PDF reader — opened from any of the above, so it clears all of them |
 
 Keep a portalled element and the thing it visually sits *above* only a few steps apart, and
 leave a comment (as the existing code does) explaining what a non-obvious value is clearing.
@@ -650,7 +651,8 @@ that panel's layer no matter how high its own number is. The hosts that do this:
 | Concept popup (`.concept-popup-aside`) | `z-40`, `z-index: 56` in focus mode |
 | Add-flashcards sheet (`pages/Flashcards.tsx`) | `z-[64]` |
 | Collect dialog (`CollectConceptModal`) | `z-[120]` |
-| Exams popout, sidebar drawer, PDF viewer, mistakes review | `z-[50]`–`z-[60]` |
+| Fact Check sheet, question-info panel, record modals | `z-[80]`, `z-[130]` |
+| Exams popout, sidebar drawer, mistakes review | `z-[50]`–`z-[60]` |
 
 A modal opened from one of those and left in place opens *behind* whatever paints above the
 host — the floating search bar (`z-50`), a sibling panel — which reads as a
@@ -703,6 +705,38 @@ Motion is defined as named keyframes in `index.css` and triggered by adding a cl
   (that a card *was* collected) purely on motion; keep a static end state.
 - **Reuse existing keyframes.** The foil-shift, pop-in, pulse-ring, and bloom animations are
   parameterized via CSS variables — extend those before adding new ones.
+
+### 9.1 Tab switches — the exam moves, the page changes around it
+
+Switching between the Quiz tab, the Study Guides tab and the Dashboard is a **view
+transition**, not a cut. An exam is one object seen three ways — a card on each of the two
+tabs, a pill on the Dashboard — so it tweens between its two positions while everything else
+on the page cross-fades. That is the honest reading of the change: the exam stayed, the page
+around it changed, and the eye doesn't have to find the exam again on the other side.
+
+The browser does the work. What the app supplies is a *name* per exam:
+
+- `lib/viewTransition.ts` hands out the names (`examTransitionName` / `examTransitionStyle`,
+  spread like `examAccentStyle` onto the element that **is** the exam) and holds the
+  decisions — is this click ours, where does the link point, may we animate.
+- `components/ViewTransitions.tsx` is the single delegated click listener, mounted in `App`
+  beside `SoundEffects` / `MathFocus` / `ImageFocus`. A link opts in with
+  `data-view-transition`; nothing else has to change.
+- `index.css` sets the timing: 280ms on `cubic-bezier(0.32, 0.72, 0, 1)`, the decelerating
+  curve for something *arriving*.
+
+Two rules to keep:
+
+- **One name, one live element.** Two elements sharing a `view-transition-name` aborts the
+  whole transition — not just theirs — and the browser only warns. Where a progress key covers
+  more than one page (`CAS-6` is both Exam 6C and Exam 6U), pass the exam id too.
+  `e2e/view-transitions.spec.ts` sweeps both tabs under both examining bodies for duplicates,
+  because nothing on screen says when this breaks.
+- **The shared element has to exist on the first frame.** The transition snapshots the new
+  page as soon as it has rendered, so a card that arrives a microtask later (an `await`ed
+  index, a lazy route's Suspense fallback) has nothing to move to. `preloadRoute` in `App.tsx`
+  warms a lazy route's chunk first, and a surface whose data is already bundled should seed
+  its state from it synchronously rather than in an effect.
 
 ---
 
@@ -771,6 +805,7 @@ Before shipping a screen or component, confirm:
 - [ ] Overlays use the standard scrim and sit correctly on the z-index ladder (§8.2).
 - [ ] An overlay that more than one surface can open is wrapped in `OverlayPortal` (§8.3).
 - [ ] Any animation is purposeful and has a reduced-motion fallback.
+- [ ] Anything that draws a whole exam as one object carries `examTransitionStyle` (§9.1).
 - [ ] Icons are lucide, sized 4/5, coloured via `currentColor`, labelled where interactive.
 - [ ] Works in light **and** dark, and separates by surface (`bg-card`/`bg-muted`) before
       reaching for a `border`.

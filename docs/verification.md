@@ -289,9 +289,11 @@ for more; the record unfolds under it on a tap, and folds away again.
   near-neighbour on the shelf can't answer for a book that was never cited, and
   a citation that names something the vault has no page for — a content outline,
   a paper — is drawn from the citation alone rather than matched to a book it
-  isn't. Inside the dialog the cards are `linkOnly`: the in-app PDF reader is an
-  aside below the overlay layer, so a document opened from here would slide in
-  behind the sheet that opened it.
+  isn't. A card whose source is a PDF the proxy serves carries the same **Read
+  PDF** button a resource page does, and it reads the document in the app, over
+  this sheet — the sheet waits underneath, so closing the document puts the
+  reader back on the finding that sent them to it. See "One reader, mounted
+  once" in `docs/mock-exam-browser.md`.
 
   This is the *cited* shelf, and it is the only one. An earlier version of the
   panel also listed the syllabus readings a concept's exam is taught from, so an

@@ -382,7 +382,17 @@ Other important `lib/` modules:
   shared list, copied out of node_modules by `vite.config.ts`. `wasm` is the load-bearing
   one: CCITT fax and JBIG2 decode through it, so without it every *scanned* page renders
   as a ghost, and pdf.js only warns. Rendered by
-  `components/PdfViewerPanel.tsx` in the concept popup's shell. See
+  `components/PdfViewerPanel.tsx` in the concept popup's shell, mounted **once** at the app
+  root by `components/PdfReaderHost.tsx` off the `hooks/usePdfReader.ts` store — there is
+  one reader, and `components/PdfLinkButton.tsx` is the one PDF button that opens it. The
+  rule: *every* PDF the app offers is read in the app, never in a browser tab — the
+  past-paper shelf's report and solutions, an exam's syllabus, a resource card's **Read
+  PDF**, the paper behind the question in the quiz's **Info** panel, and the sources on the
+  Fact Check panel's *Checked against* shelf. `opensInReader` (in `examPdf.ts`) decides:
+  a plain left click reads here, a modified or middle click stays a link, and a source the
+  proxy won't serve is left as an out-link rather than opening a panel that can't load. A
+  surface that binds `Esc` or the arrows hands them over while a document is up
+  (`useIsReadingPdf()`). Pinned by `components/PdfLinkButton.test.ts`. See
   `docs/mock-exam-browser.md`.
 - `pageStack.ts` — the concept popup's **page stack**: which pages a followed link leaves
   open and which one of them is open on screen (one at a time — the rest are folded into
@@ -399,6 +409,25 @@ Other important `lib/` modules:
   `<MobileNavButton />` in its bar at the same time, or it ends up with two hamburgers or
   none. The drawer's own open state is `hooks/useMobileNav.ts`, since the button that opens
   it is no longer inside `Sidebar`. Pure and tested. See `docs/style-guide.md` §5.0.
+- `viewTransition.ts` — **tab switches**: an exam is one object seen three ways (a card on
+  the Quiz tab, a card on Study Guides, a pill on the Dashboard), so switching tabs moves it
+  between its two positions while the rest of the page cross-fades, rather than cutting.
+  The browser's View Transitions API does the work; this module hands out the *name* per exam
+  that makes two elements one object (`examTransitionStyle`, spread like `examAccentStyle`)
+  and holds the click/motion decisions. `components/ViewTransitions.tsx` is the one delegated
+  listener (mounted in `App`, same shape as `SoundEffects`/`MathFocus`); a link opts in with
+  `data-view-transition`. Two rules, both of which fail *silently*: two live elements sharing
+  a name aborts the whole transition (hence the exam-id suffix for a localized exam like
+  `CAS-6`, and the duplicate sweep in `e2e/view-transitions.spec.ts`), and the shared element
+  must be on screen in the *first* frame of the new route — which is why `preloadRoute` in
+  `App.tsx` warms a lazy route's chunk before the transition starts, and why the Study Guides
+  index is seeded synchronously from the bundle (`bundledWikiIndex`). Pure and tested.
+  See `docs/style-guide.md` §9.1.
+- `bodyFilter.ts` — the **SOA/CAS picker** that rides the title row on both the Quiz and Study
+  Guides tabs. One choice, one storage key, one fallback: the two tabs are one ladder seen
+  twice, and they each used to own a copy of the rule. The copies had drifted in opposite
+  directions, so a reader on the DEFAULT track (neither body's) opened one tab on CAS and the
+  other on SOA and switching tabs looked like the picker changing itself. Pure and tested.
 - `menuPlacement.ts` — where a menu hangs off the control that opened it. Aligning with the
   trigger is only a preference: the viewport gets the last word, so a control near an edge has
   the menu shifted back inside, one with no room below has it opened upwards, and the height is
@@ -583,8 +612,8 @@ Other important `lib/` modules:
   60 requests/hour per IP without `VITE_GITHUB_TOKEN` — don't put it on a path that has to work.
 - `supabase.ts` — Supabase client + shared row types
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **116 test files /
-~1730 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **120 test files /
+~1785 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, and the research/resource-timeline
 modules).
 

@@ -49,13 +49,6 @@ export interface ConceptPagePanelProps {
   onGallerySeekResolved?: (hadImages: boolean) => void
   /** Reports the gallery opening and closing, so the footer can hand it over. */
   onGalleryOpenChange?: (open: boolean) => void
-  /**
-   * Reports the PDF reader (a resource page's "Read PDF") opening and closing,
-   * so the popup can hand it the keys it binds too. Kept apart from the gallery
-   * flag above: that one also makes the footer's Previous / Next carry the
-   * gallery to the next concept, which a document being read must not do.
-   */
-  onReaderOpenChange?: (open: boolean) => void
 }
 
 export function ConceptPagePanel({
@@ -67,7 +60,6 @@ export function ConceptPagePanel({
   gallerySeek = 0,
   onGallerySeekResolved,
   onGalleryOpenChange,
-  onReaderOpenChange,
 }: ConceptPagePanelProps) {
   const [content, setContent] = useState<string | null>(null)
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
@@ -276,7 +268,6 @@ export function ConceptPagePanel({
                   // The reader opens over this page, and in focus mode this
                   // page *is* the screen — so it has no chrome to keep clear of.
                   hostFullScreen={focusMode}
-                  onViewerOpenChange={onReaderOpenChange}
                 />
               )}
               <WikiArticle

@@ -3,12 +3,14 @@ import { Link, useLocation, useNavigationType } from 'react-router-dom'
 import { Compass, Hammer } from 'lucide-react'
 import { CheckMark } from '@/components/CheckMark'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
-import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
+import { buildWikiIndex, bundledWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { examDisplayName, wikiRoute } from '@/lib/wikiRoutes'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { TRACKS, type Track } from '@/data/tracks'
 import { GENERAL_GUIDES } from '@/data/examGuides'
 import { examAccentStyle } from '@/lib/examColors'
+import { defaultBody, loadBody, saveBody, SOA_TRACK_KEYS, CAS_TRACK_KEYS, type ExamBody } from '@/lib/bodyFilter'
+import { examTransitionStyle } from '@/lib/viewTransition'
 import { ExamLogo } from '@/components/ExamLogo'
 import { LogoTile } from '@/components/LogoTile'
 import { matchesSelectedVariant } from '@/data/examSittings'
@@ -33,12 +35,7 @@ function examNameToTrackKey(name: string): string {
   return wikiExamIdToProgressKey(cleaned)
 }
 
-type BodyFilter = 'SOA' | 'CAS'
-
 const TRACK_ORDER = ['ACAS', 'FCAS', 'ASA', 'FSA']
-const SOA_TRACK_KEYS = new Set(['ASA', 'FSA'])
-const CAS_TRACK_KEYS = new Set(['ACAS', 'FCAS'])
-const BODY_FILTER_KEY = 'quiz.bodyFilter'
 
 // WikiFloatingSearch height: h-[calc(3.5rem-1px)] + 1px border = 56px (sticky top-0 on mobile)
 const SEARCH_BAR_H = 56
@@ -55,7 +52,13 @@ export default function WikiHome() {
   const { progress: examProgress, targetDates, examVariants, selectedTrack } = useExamProgress()
   const { records: masteryRecords } = useConceptMastery()
   const openAt = useConceptPopup(s => s.openAt)
-  const [index, setIndex] = useState<WikiIndexItem[]>([])
+  // Seeded from the bundle rather than left empty for a tick: `buildWikiIndex`
+  // resolves with the very same array, but it resolves a microtask *after* the
+  // first commit, which is one frame of "Loading exams…" on every visit — and
+  // one frame in which a tab switch's view transition has no exam card to
+  // match the card it came from. The effect below still runs, for the build
+  // that shipped no bundle.
+  const [index, setIndex] = useState<WikiIndexItem[]>(() => bundledWikiIndex() ?? [])
   const location = useLocation()
   const navigationType = useNavigationType()
 
@@ -84,19 +87,15 @@ export default function WikiHome() {
     return () => { sessionStorage.setItem('wiki-home:scroll', String(window.scrollY)) }
   }, [])
 
-  // Default to the user's current track body; user can override with the control
-  // Persisted in localStorage so the Quiz tab stays in sync
-  const [filterOverride, setFilterOverride] = useState<BodyFilter | null>(() => {
-    try {
-      const saved = localStorage.getItem(BODY_FILTER_KEY)
-      return saved === 'SOA' || saved === 'CAS' ? saved : null
-    } catch { return null }
-  })
-  const defaultFilter: BodyFilter = CAS_TRACK_KEYS.has(selectedTrack) ? 'CAS' : 'SOA'
-  const filter = filterOverride ?? defaultFilter
+  // Default to the reader's own track's body; the control overrides it, and the
+  // choice is stored so the Quiz tab opens on the same body — one ladder, seen
+  // twice. `lib/bodyFilter.ts` holds the key, the track sets and the fallback,
+  // so the two tabs cannot drift apart on any of them.
+  const [filterOverride, setFilterOverride] = useState<ExamBody | null>(loadBody)
+  const filter = filterOverride ?? defaultBody(selectedTrack)
 
-  function handleSetFilter(f: BodyFilter) {
-    try { localStorage.setItem(BODY_FILTER_KEY, f) } catch { /* ignore */ }
+  function handleSetFilter(f: ExamBody) {
+    saveBody(f)
     setFilterOverride(f)
   }
 
@@ -160,12 +159,6 @@ export default function WikiHome() {
           own further down: it governs everything below it, and the ladder it
           switches between needs no "Exams" heading to say what it is. */}
       <header className="flex items-center gap-2">
-        <img
-          src="/favicon.png"
-          alt=""
-          aria-hidden="true"
-          className="h-6 w-6 shrink-0 brightness-0 dark:invert"
-        />
         <h1 className="min-w-0 flex-1 truncate text-2xl font-bold tracking-tight">Study Guides</h1>
         <SegmentedControl
           label="Examining body"
@@ -303,7 +296,11 @@ export default function WikiHome() {
                     return (
                       <Link key={exam.path} to={wikiRoute({ kind: 'exam', name: exam.name })} data-tour={examId === 'P' ? 'exam-p' : undefined}>
                         <Card
-                          style={accent}
+                          // The exam's name for the tab-switch view transition
+                          // — the Quiz tab's card and the Dashboard's pill
+                          // carry the same one, which is what lets the browser
+                          // move this card there rather than cut to it.
+                          style={{ ...accent, ...examTransitionStyle(examId, examIdCleaned) }}
                           className={cn(
                             'transition-all duration-150 overflow-hidden ring-1 ring-transparent',
                             isInProgress && !inDevelopment && 'bg-primary/10',

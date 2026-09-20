@@ -5,6 +5,7 @@ import { FACT_CHECK_UI_ENABLED } from '@/lib/featureFlags'
 import { factCheckBadge, type Verification } from '@/lib/verification'
 import { FACT_CHECK_TONE_CLASSES, FACT_CHECK_TONE_ICONS } from '@/lib/factCheckTone'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
+import { useIsReadingPdf } from '@/hooks/usePdfReader'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import { FactCheckPanel } from '@/components/FactCheckPanel'
 
@@ -105,7 +106,12 @@ function FactCheckSheet({
 }: FactCheckDialogProps) {
   // Paper: the panel sliding in, the same cue as the question-info sheet.
   useSoundOnMount('open')
+  // A source from the "Checked against" shelf is read over this sheet, and the
+  // reader binds Esc itself — so the sheet hands the key over while a document
+  // is up, or one press closed the document *and* the record behind it.
+  const readingPdf = useIsReadingPdf()
   useEffect(() => {
+    if (readingPdf) return
     function onKey(e: KeyboardEvent) {
       if (e.key === 'Escape') {
         e.preventDefault()
@@ -114,7 +120,7 @@ function FactCheckSheet({
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [onClose])
+  }, [onClose, readingPdf])
 
   return (
     <OverlayPortal>

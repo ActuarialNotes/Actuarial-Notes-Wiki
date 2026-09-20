@@ -112,3 +112,34 @@ export function pdfSourceHost(sourceUrl: string): string {
     return ''
   }
 }
+
+/**
+ * The modifier state of a click, as far as "does this open a new tab" goes.
+ * Taken as a plain shape rather than a `MouseEvent` so the rule is testable
+ * without a DOM.
+ */
+export interface ClickModifiers {
+  metaKey: boolean
+  ctrlKey: boolean
+  shiftKey: boolean
+  altKey: boolean
+  button: number
+}
+
+/**
+ * Does this click on a PDF link belong to the in-app reader?
+ *
+ * Every PDF button in the app is an anchor to the publisher underneath, so the
+ * real URL stays visible and ⌘/ctrl-click, middle-click, shift-click and
+ * long-press keep doing what a link does. A *plain* left click is the one the
+ * reader takes — and only for a source `quiz/api/exam-pdf.js` will actually
+ * serve, since opening a panel that can't load is worse than the tab.
+ *
+ * `linkOnly` is the host's veto, for a surface the reader can't paint above.
+ */
+export function opensInReader(url: string, click: ClickModifiers, linkOnly = false): boolean {
+  if (linkOnly) return false
+  if (click.metaKey || click.ctrlKey || click.shiftKey || click.altKey) return false
+  if (click.button !== 0) return false
+  return isSupportedPdfSource(url)
+}

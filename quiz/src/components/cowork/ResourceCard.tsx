@@ -14,7 +14,7 @@ import { cn } from '@/lib/utils'
 /**
  * One document, as a **card**.
  *
- * Every surface that lists documents — a source's page, the library, a
+ * Every surface that lists documents — the Sources shelf, a source's page, a
  * deliverable's attached and attachable sources — uses this one component, and
  * it is deliberately the same object the study guide's resource shelf is built
  * from (`components/wiki/SourceMaterialGallery.tsx`): a jacket or a kind icon
@@ -22,14 +22,21 @@ import { cn } from '@/lib/utils'
  * product, not a second design system, so a document looks the same here as a
  * syllabus reading looks there.
  *
- * The card opens the document — in the popup viewer, the same one the study
- * guide reads a concept in — and the add/remove control is the one thing that
- * does not. Those are the card's only two actions and they answer different
- * questions: "what is this?" and "am I working from it?"
+ * **The whole card opens the document** — in the popup viewer, the same one the
+ * study guide reads a concept in — and the add/remove control at its right edge
+ * is the one thing that does not. Those are the card's only two actions and
+ * they answer different questions: "what is this?" and "am I working from it?"
+ * A card whose title alone was the target made the other nine tenths of it a
+ * dead surface that looked live.
  *
- * A **Sample** chip is not decoration. It says the entry stands for a class of
- * document rather than naming one Cowork carries, which is what a reader has to
- * know before citing it (see `data/coworkSources.ts`).
+ * The pills are what the card says about the document; the one-line summary
+ * that used to sit under the title is not repeated here, because the document
+ * itself is one tap away and a grid of cards each carrying a grey sentence is
+ * the page explaining itself instead of showing itself
+ * (`docs/visual-noise-review.md`). A **Sample** chip, though, is not
+ * decoration: it says the entry stands for a class of document rather than
+ * naming one Cowork carries, which is what a reader has to know before citing
+ * it (see `data/coworkSources.ts`).
  */
 
 const KIND_ICON: Record<ResourceKind, typeof FileText> = {
@@ -71,43 +78,44 @@ export function ResourceCard({
   const showCover = Boolean(cover) && !coverFailed
 
   return (
-    <Card className="flex h-full flex-col overflow-hidden transition-colors duration-150 hover:bg-accent/40">
-      <div className="flex flex-1 items-stretch">
+    <Card
+      className={cn(
+        'relative overflow-hidden transition-colors duration-150 focus-within:ring-2 focus-within:ring-ring',
+        openable && 'hover:bg-accent/40',
+      )}
+    >
+      {/* The card *is* the target. It opens a panel rather than navigating, so
+          it is a stretched button where the publisher's card is a stretched
+          link — same geometry, the right element for what it does. */}
+      {openable && (
+        <button
+          type="button"
+          onClick={() => onOpen(resource)}
+          aria-label={`Open ${resource.title}`}
+          data-sound="open"
+          className="absolute inset-0 z-0 rounded-lg focus:outline-none"
+        />
+      )}
+
+      <div className="pointer-events-none relative z-10 flex items-center gap-3 p-3">
         {showCover ? (
-          <div className="flex flex-shrink-0 items-start p-2 pt-4">
-            <img
-              src={cover}
-              alt=""
-              loading="lazy"
-              onError={() => setCoverFailed(true)}
-              className="max-h-28 w-16 rounded-md bg-muted/20 object-contain sm:w-20"
-            />
-          </div>
+          <img
+            src={cover}
+            alt=""
+            loading="lazy"
+            onError={() => setCoverFailed(true)}
+            className="max-h-[4.5rem] w-12 shrink-0 rounded-md bg-muted/20 object-contain sm:w-14"
+          />
         ) : (
-          <div className="flex flex-shrink-0 items-start p-4 pr-0">
-            <span className="flex h-8 w-8 items-center justify-center rounded-md bg-muted/60 text-muted-foreground">
-              <Icon className="h-4 w-4" aria-hidden />
-            </span>
-          </div>
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-muted/60 text-muted-foreground">
+            <Icon className="h-4 w-4" aria-hidden />
+          </span>
         )}
 
-        <div className="flex min-w-0 flex-1 flex-col gap-2 p-4">
-          <button
-            type="button"
-            onClick={() => onOpen(resource)}
-            disabled={!openable}
-            data-sound="open"
-            className={cn(
-              'text-left text-sm font-semibold leading-snug',
-              openable ? 'hover:text-primary hover:underline' : 'cursor-default',
-            )}
-          >
-            {resource.title}
-          </button>
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-semibold leading-snug">{resource.title}</p>
 
-          <p className="text-xs leading-relaxed text-muted-foreground">{resource.summary}</p>
-
-          <div className="flex flex-wrap items-center gap-1">
+          <div className="mt-1.5 flex flex-wrap items-center gap-1">
             <MetaPill>{resourceKindLabel(resource.kind)}</MetaPill>
             <MetaPill>{formatPublished(resource.published)}</MetaPill>
             {resource.wikiRef && (
@@ -128,9 +136,7 @@ export function ResourceCard({
             )}
           </div>
         </div>
-      </div>
 
-      <div className="flex justify-end border-t px-3 py-2">
         <button
           type="button"
           onClick={() => onToggleLibrary(resource)}
@@ -140,7 +146,7 @@ export function ResourceCard({
           }
           data-sound="press"
           className={cn(
-            'inline-flex h-7 items-center gap-1 rounded-full px-2.5 text-xs font-medium transition-colors',
+            'pointer-events-auto inline-flex h-7 shrink-0 items-center gap-1 rounded-full px-2.5 text-xs font-medium transition-colors',
             inLibrary
               ? 'bg-emerald-500/15 text-emerald-700 hover:bg-emerald-500/25 dark:text-emerald-300'
               : 'border text-muted-foreground hover:bg-accent hover:text-foreground',
@@ -157,7 +163,7 @@ export function ResourceCard({
 /** The grid every list of resource cards is laid out on. */
 export function ResourceCardGrid({ children }: { children: React.ReactNode }) {
   // `items-start` keeps a card its own size: a grid track otherwise stretches
-  // every card to the tallest in its row, which turns a one-line summary into a
-  // box of empty space beside a three-line one.
+  // every card to the tallest in its row, which turns a short card into a box
+  // of empty space beside a card with a jacket.
   return <div className="grid grid-cols-1 items-start gap-3 sm:grid-cols-2 lg:grid-cols-3">{children}</div>
 }

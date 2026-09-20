@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ChevronLeft } from 'lucide-react'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
@@ -38,36 +38,21 @@ import '@/lib/coworkContent'
  * Four addresses, and a source is one of them, the way an exam's study guide is
  * (`/cowork`, `/cowork/sources/:id`, `/cowork/deliverables`,
  * `/cowork/deliverables/:id`), so a source or a deliverable can be linked to
- * and the back button works through the loop.
+ * and the back button works through the loop. The search is not among them: it
+ * is a question the bar answers with a list of places to go
+ * (`components/cowork/CoworkTopBar.tsx`), exactly as the wiki's is, so there is
+ * no filtered state of a page for a URL to carry.
  */
 
 export default function Cowork() {
   const navigate = useNavigate()
   const params = useParams()
-  const [searchParams, setSearchParams] = useSearchParams()
   const openPopup = useConceptPopup(s => s.openAt)
   const popupOpen = useConceptPopup(s => s.open)
 
   const onDeliverables = params.tab === 'deliverables'
   const entityId = params.tab === 'sources' ? params.id ?? null : null
   const deliverableId = onDeliverables ? params.id ?? null : null
-
-  // The search term lives in the URL too, so a filtered view is a link.
-  const query = searchParams.get('q') ?? ''
-  const setQuery = useCallback(
-    (value: string) => {
-      setSearchParams(
-        prev => {
-          const next = new URLSearchParams(prev)
-          if (value) next.set('q', value)
-          else next.delete('q')
-          return next
-        },
-        { replace: true },
-      )
-    },
-    [setSearchParams],
-  )
 
   /**
    * Open a document in the popup viewer.
@@ -115,12 +100,12 @@ export default function Cowork() {
   return (
     <div className="min-h-screen">
       <CoworkTopBar
-        query={query}
-        onQueryChange={setQuery}
-        placeholder={onDeliverables ? 'Search your deliverables' : 'Search sources and documents'}
+        placeholder="Search sources and documents"
         pageTitle={entity?.name ?? null}
         pageIcon={entity ? <EntityLogo entity={entity} size="md" /> : undefined}
         backLink={backLink}
+        entityId={entityId}
+        onOpenResource={openResource}
       />
 
       <div
@@ -135,16 +120,11 @@ export default function Cowork() {
             onBrowseSources={() => navigate('/cowork')}
           />
         ) : onDeliverables ? (
-          <DeliverablesView query={query} onOpen={id => navigate(`/cowork/deliverables/${id}`)} />
+          <DeliverablesView onOpen={id => navigate(`/cowork/deliverables/${id}`)} />
         ) : entityId ? (
-          <SourcePage
-            entityId={entityId}
-            query={query}
-            onOpenResource={openResource}
-            onBack={() => navigate('/cowork')}
-          />
+          <SourcePage entityId={entityId} onOpenResource={openResource} onBack={() => navigate('/cowork')} />
         ) : (
-          <SourcesView query={query} onOpenResource={openResource} />
+          <SourcesView onOpenResource={openResource} />
         )}
       </div>
 

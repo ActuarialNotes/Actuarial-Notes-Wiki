@@ -69,11 +69,58 @@ approximated logo is an invented brand. A publisher with no usable mark, and a m
 fails to load, fall back to the monogram tile (`components/cowork/EntityLogo.tsx`).
 
 **Documents are always cards, never rows.** One component draws them everywhere they are
-listed — a source's page, the library, a deliverable's attached and attachable sources —
-and it is the study guide's resource card (`components/cowork/ResourceCard.tsx` beside
-`components/wiki/SourceMaterialGallery.tsx`): the work's jacket when the vault has one
-(`lib/coworkCovers.ts`), otherwise its kind icon, then the title and a row of metadata
-pills. Cowork is a second product, not a second design system.
+listed — the shelf's Documents view, a source's page, a deliverable's attached and
+attachable sources — and it is the study guide's resource card
+(`components/cowork/ResourceCard.tsx` beside `components/wiki/SourceMaterialGallery.tsx`):
+the work's jacket when the vault has one (`lib/coworkCovers.ts`), otherwise its kind icon,
+then the title and a row of metadata pills. Cowork is a second product, not a second design
+system.
+
+**A card is the target, and it carries facts rather than prose.** The whole publisher card
+is a stretched link to their page; the whole document card is a stretched button that opens
+the document — a card whose title alone was clickable left nine tenths of a live-looking
+surface dead. The one control that does not navigate sits at the card's **right edge**
+(Follow, Add), so the eye finds it in the same place on every row. What a card says is pills
+— a publisher's region and the year it was established, a document's kind and date — not a
+paragraph of grey text repeated down a grid; the account of what something is belongs on its
+own page, which is one tap away (`docs/visual-noise-review.md`).
+
+`SourceEntity.established` follows the same rule as the logo and the dates: **transcribed,
+never constructed**, and it is the year *this body* came into being, not the year its
+business began — Intact Financial Corporation dates from 2009 though the Halifax Insurance
+Company it grew out of dates from 1809. No record worth citing, no pill.
+
+### Two filters, and the library is one of them
+
+The shelf's **primary** filter is *Sources or Documents*, because those are two different
+questions and each is answered by a different card. Everything else — the query, the
+category pills, the library — means the same thing in both views.
+
+**My Library leads the secondary row.** It is a filter, not a section: it narrows the shelf
+to publishers the reader follows (Sources) or documents they have taken (Documents). It used
+to be a block stacked above the shelf, which made what a reader *had* a different place from
+what they *could have*, pushed the filters below the fold, and showed the same card in both
+its states on one screen. An empty array is a library with nothing in it and matches nothing;
+`undefined` is the filter switched off — `lib/coworkSources.ts` turns on that distinction and
+the tests pin it.
+
+### Search
+
+The bar is the wiki's floating search, built from the same parts
+(`components/FloatingSearchBar.tsx` — sticky blurred bar, input line with the hamburger
+folding away as you type, dimmed backdrop, scope pills, result rows; `SearchHighlight.tsx`
+marks the matched run). Cowork is a second product, not a second design system, and searching
+should not feel like a different app one mode over.
+
+It behaves like the wiki's too: a query is **a question with answers**, not a filter that
+quietly thins the page behind the bar. Typing opens a list and picking a row goes to the
+thing — a publisher to their page, a document into `ConceptPopup`, a deliverable to its
+detail. Publishers and documents are listed apart and each matches **on its own account**
+(`searchSources`): on the shelf a publisher that matched answers with its whole catalogue,
+but in a list of results a document that only matched because its publisher did is a row
+nobody asked for, under the row that opens the page it is already on. Scope is **This
+Source** (on a source's page) or **Everywhere**, mirroring the wiki's *This Page* /
+*Everywhere*. Nothing goes in the URL, because there is no filtered state of a page to carry.
 
 Adding a document implies following its publisher (you cannot work from a document whose
 source you do not list), and dropping a publisher drops the documents taken from it — a
@@ -241,7 +288,7 @@ clean, Cowork is an ~88 KB lazy chunk that a Study-mode reader never downloads.
 ```
 quiz/src/lib/appMode.ts               modes: labels, routes, Pro gating, preview
 quiz/src/lib/coworkFacets.ts          the five facet axes, as data
-quiz/src/lib/coworkSources.ts         entity/resource types, search, library reducers
+quiz/src/lib/coworkSources.ts         entity/resource types, search, filters, library reducers
 quiz/src/lib/coworkDeliverables.ts    the wizard engine + derivation (pure)
 quiz/src/lib/coworkExport.ts          deliverable → workbook sheets
 quiz/src/lib/coworkContent.ts         wiki-bundle + virtual-file registration (side effects)
@@ -253,6 +300,8 @@ quiz/src/hooks/useCoworkLibrary.ts    library persistence (ids only)
 quiz/src/hooks/useCoworkDeliverables.ts  deliverable persistence (ids + answers only)
 quiz/src/components/ModeSwitcher.tsx  the mode pill
 quiz/src/lib/coworkCovers.ts          a resource card's vault cover, looked up (pure)
+quiz/src/components/FloatingSearchBar.tsx  the shared search-bar chrome (with the wiki's)
+quiz/src/components/SearchHighlight.tsx    the shared marked-match run
 quiz/src/components/cowork/           the mode's own UI (EntityCard, EntityLogo,
                                       ResourceCard, NewDeliverableFab, CoworkTopBar, …)
 quiz/src/pages/Cowork/                index (routing) + Sources shelf / a Source's page /

@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import { ChevronRight, Trash2 } from 'lucide-react'
 import {
   STATUS_LABEL,
@@ -20,6 +19,10 @@ import { cn } from '@/lib/utils'
  * top of the page — see `components/cowork/NewDeliverableFab.tsx`. Picking a
  * type there creates the deliverable and opens it straight into its scoping
  * flow, which is where the questions belong.
+ *
+ * The page lists them all: finding one by name is the top bar's job, and it
+ * answers with a row that opens the deliverable rather than by thinning this
+ * list (`components/cowork/CoworkTopBar.tsx`).
  */
 
 const STATUS_TONE = {
@@ -29,21 +32,11 @@ const STATUS_TONE = {
 } as const
 
 export interface DeliverablesViewProps {
-  query: string
   onOpen: (id: string) => void
 }
 
-export default function DeliverablesView({ query, onOpen }: DeliverablesViewProps) {
+export default function DeliverablesView({ onOpen }: DeliverablesViewProps) {
   const { deliverables, create, remove } = useCoworkDeliverables()
-
-  const matching = useMemo(() => {
-    const needle = query.trim().toLowerCase()
-    if (!needle) return deliverables
-    return deliverables.filter(d => {
-      const haystack = [deliverableDisplayTitle(d), deliverableTypeSpec(d.type).label].join(' ').toLowerCase()
-      return needle.split(/\s+/).every(term => haystack.includes(term))
-    })
-  }, [deliverables, query])
 
   function start(type: DeliverableType) {
     onOpen(create(type).id)
@@ -60,15 +53,13 @@ export default function DeliverablesView({ query, onOpen }: DeliverablesViewProp
         )}
       </h2>
 
-      {matching.length === 0 ? (
+      {deliverables.length === 0 ? (
         <p className="rounded-lg border border-dashed px-4 py-10 text-center text-sm text-muted-foreground">
-          {deliverables.length === 0
-            ? 'Nothing yet. Start an analysis, a report or a piece of documentation with the button below.'
-            : 'No deliverable matches that search.'}
+          Nothing yet. Start an analysis, a report or a piece of documentation with the button below.
         </p>
       ) : (
         <ul className="space-y-2">
-          {matching.map(deliverable => {
+          {deliverables.map(deliverable => {
             const steps = stepsFor(deliverable.type)
             const status = deliverableStatus(steps, deliverable.answers, deliverable.resourceIds)
             const facets = facetsFromAnswers(steps, deliverable.answers)

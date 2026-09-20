@@ -5,6 +5,7 @@ import {
   addResource,
   entityById,
   entityResources,
+  filterResources,
   formatPublished,
   groupSources,
   hasEntity,
@@ -14,6 +15,7 @@ import {
   removeEntity,
   removeResource,
   resourceEntryRef,
+  searchSources,
   sortResourcesByDate,
   type SourceEntity,
   type SourceResource,
@@ -168,6 +170,70 @@ describe('groupSources', () => {
     // OSFI publishes no news, so a news filter must not surface it empty.
     const groups = groupSources(ENTITIES, RESOURCES, { kinds: ['news'], query: 'osfi' })
     expect(groups).toHaveLength(0)
+  })
+})
+
+describe('the library as a filter', () => {
+  it('keeps only the publishers followed', () => {
+    const groups = groupSources(ENTITIES, RESOURCES, { entityIds: ['cu'] })
+    expect(groups.map(g => g.entity.id)).toEqual(['cu'])
+  })
+
+  it('shows an empty library as nothing, not as everything', () => {
+    // The distinction the filter turns on: `[]` is a library with nothing in
+    // it, `undefined` is the filter switched off.
+    expect(groupSources(ENTITIES, RESOURCES, { entityIds: [] })).toHaveLength(0)
+    expect(groupSources(ENTITIES, RESOURCES, {})).toHaveLength(2)
+  })
+
+  it('keeps a followed publisher its whole catalogue', () => {
+    const groups = groupSources(ENTITIES, RESOURCES, { entityIds: ['osfi'] })
+    expect(groups[0].resources.map(r => r.id).sort()).toEqual(['mct', 'orsa'])
+  })
+
+  it('narrows documents to the ones taken, not to their publishers', () => {
+    // OSFI is kept because one of its documents is in the library — but only
+    // that document is, not the rest of what OSFI publishes.
+    expect(filterResources(ENTITIES, RESOURCES, { resourceIds: ['mct'] }).map(r => r.id)).toEqual(['mct'])
+  })
+})
+
+describe('filterResources', () => {
+  it('flattens the catalogue newest first', () => {
+    expect(filterResources(ENTITIES, RESOURCES).map(r => r.id)).toEqual(['news', 'mct', 'orsa'])
+  })
+
+  it("answers a publisher's name with that publisher's documents", () => {
+    expect(filterResources(ENTITIES, RESOURCES, { query: 'osfi' }).map(r => r.id).sort()).toEqual(['mct', 'orsa'])
+  })
+
+  it('still filters by category, which is a fact about the publisher', () => {
+    expect(filterResources(ENTITIES, RESOURCES, { categories: ['media'] }).map(r => r.id)).toEqual(['news'])
+  })
+})
+
+describe('searchSources', () => {
+  it('finds nothing on an empty query, rather than everything', () => {
+    expect(searchSources(ENTITIES, RESOURCES, '   ')).toEqual({ entities: [], resources: [] })
+  })
+
+  it('returns the publisher that matched and the documents that matched, apart', () => {
+    const found = searchSources(ENTITIES, RESOURCES, 'osfi')
+    expect(found.entities.map(e => e.id)).toEqual(['osfi'])
+    // The documents did not match "osfi" themselves — the publisher's row is
+    // the way to the page they are listed on.
+    expect(found.resources).toHaveLength(0)
+  })
+
+  it('matches a document on its own title', () => {
+    const found = searchSources(ENTITIES, RESOURCES, 'orsa')
+    expect(found.resources.map(r => r.id)).toEqual(['orsa'])
+    expect(found.entities).toHaveLength(0)
+  })
+
+  it('caps each list so a broad query cannot flood the dropdown', () => {
+    const many = Array.from({ length: 30 }, (_, i) => resource({ id: `r${i}`, entityId: 'osfi', title: 'A document' }))
+    expect(searchSources(ENTITIES, many, 'document', 5).resources).toHaveLength(5)
   })
 })
 

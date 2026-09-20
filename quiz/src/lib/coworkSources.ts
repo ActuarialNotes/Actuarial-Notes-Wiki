@@ -110,6 +110,18 @@ export interface SourceEntity {
    * fails to load.
    */
   logo?: string
+  /**
+   * The year the organisation was established, as a bare `YYYY` — the pill
+   * beside its region on the source card.
+   *
+   * Same rule as everything else here: **transcribed, never constructed**. It
+   * is the year *this* body came into being, which for a renamed or
+   * restructured one is not the year its business began — Intact Financial
+   * Corporation dates from 2009 even though the Halifax Insurance Company it
+   * grew out of dates from 1809. An entity whose founding is not on record in
+   * a form worth citing simply has none, and the card shows no pill.
+   */
+  established?: string
   practiceAreas: PracticeArea[]
 }
 
@@ -217,6 +229,18 @@ export interface SourceFilters {
   categories?: EntityCategory[]
   practiceAreas?: PracticeArea[]
   kinds?: ResourceKind[]
+  /**
+   * Keep only these publishers. This is how **My Library** narrows the shelf —
+   * the library is a filter over the catalogue, not a second shelf above it, so
+   * a reader sees what they have in the same place, in the same cards, as what
+   * they could have.
+   *
+   * An empty array means *nothing matches*, which is what an empty library
+   * should show; `undefined` means the filter is off.
+   */
+  entityIds?: string[]
+  /** Keep only these documents. The same, for a list of documents. */
+  resourceIds?: string[]
 }
 
 function matchesQuery(haystack: string[], query: string): boolean {
@@ -232,6 +256,7 @@ function matchesQuery(haystack: string[], query: string): boolean {
 }
 
 export function resourceMatches(resource: SourceResource, filters: SourceFilters): boolean {
+  if (filters.resourceIds && !filters.resourceIds.includes(resource.id)) return false
   if (filters.kinds?.length && !filters.kinds.includes(resource.kind)) return false
   if (filters.practiceAreas?.length && !resource.practiceAreas.some(p => filters.practiceAreas!.includes(p))) {
     return false
@@ -273,18 +298,30 @@ export function groupSources(
   }
 
   const hasFilter = Boolean(
-    filters.query?.trim() || filters.categories?.length || filters.practiceAreas?.length || filters.kinds?.length,
+    filters.query?.trim() ||
+      filters.categories?.length ||
+      filters.practiceAreas?.length ||
+      filters.kinds?.length ||
+      filters.entityIds ||
+      filters.resourceIds,
   )
 
   const groups: EntityGroup[] = []
   for (const entity of entities) {
     const all = byEntity.get(entity.id) ?? []
     if (filters.categories?.length && !filters.categories.includes(entity.category)) continue
+    if (filters.entityIds && !filters.entityIds.includes(entity.id)) continue
 
+    // A publisher can carry its own group on its own account — but only where
+    // the surviving filters are about publishers. A document-level filter (a
+    // kind, a set of document ids) asked a question about documents, and an
+    // entity answering it with its whole catalogue would be answering a
+    // different one.
     const entityMatches =
       (!filters.practiceAreas?.length || entity.practiceAreas.some(p => filters.practiceAreas!.includes(p))) &&
       (!filters.query || matchesQuery([entity.name, entity.short, entity.about, entity.jurisdiction], filters.query)) &&
-      !filters.kinds?.length
+      !filters.kinds?.length &&
+      !filters.resourceIds
 
     const matched = all.filter(r => resourceMatches(r, filters))
     if (!hasFilter) {
@@ -300,6 +337,58 @@ export function groupSources(
     }
   }
   return groups
+}
+
+/** Does the publisher itself answer to this query — its name, short form, blurb or region? */
+export function entityMatchesQuery(entity: SourceEntity, query: string): boolean {
+  return matchesQuery([entity.name, entity.short, entity.about, entity.jurisdiction], query)
+}
+
+export interface SourceSearchResults {
+  entities: SourceEntity[]
+  resources: SourceResource[]
+}
+
+/**
+ * What a typed query turns up, as two lists — the search bar's dropdown.
+ *
+ * Each side matches **on its own account**, which is the difference between
+ * this and `groupSources`. On the shelf, a publisher that matched answers with
+ * its whole catalogue, because the shelf is showing publishers *and* what they
+ * publish. In a list of results, a document that only matched because its
+ * publisher did is not a result — it is a row the reader did not ask for, under
+ * a row they did (the publisher's, which opens the page those documents are
+ * on).
+ */
+export function searchSources(
+  entities: SourceEntity[],
+  resources: SourceResource[],
+  query: string,
+  limit = 20,
+): SourceSearchResults {
+  const q = query.trim()
+  if (!q) return { entities: [], resources: [] }
+  return {
+    entities: entities.filter(e => entityMatchesQuery(e, q)).slice(0, limit),
+    resources: sortResourcesByDate(resources.filter(r => resourceMatches(r, { query: q }))).slice(0, limit),
+  }
+}
+
+/**
+ * The same catalogue as a **flat list of documents**, newest first.
+ *
+ * The shelf offers one primary choice — am I looking for a publisher or for a
+ * document? — and this is the second answer. It is `groupSources` flattened
+ * rather than a second search, so the two views agree about what a query means:
+ * searching "OSFI" in Documents lists OSFI's documents, because the publisher
+ * matched and its catalogue is the answer.
+ */
+export function filterResources(
+  entities: SourceEntity[],
+  resources: SourceResource[],
+  filters: SourceFilters = {},
+): SourceResource[] {
+  return sortResourcesByDate(groupSources(entities, resources, filters).flatMap(g => g.resources))
 }
 
 /* ------------------------------------------------------------------ library */

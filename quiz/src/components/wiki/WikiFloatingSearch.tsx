@@ -1,11 +1,18 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BookMarked, FileText, GraduationCap, ListChecks, Play, Search, Sparkles, X } from 'lucide-react'
+import { BookMarked, FileText, GraduationCap, ListChecks, Play, Sparkles } from 'lucide-react'
 import { CheckMark } from '@/components/CheckMark'
+import {
+  FloatingSearchBar,
+  FloatingSearchInput,
+  FloatingSearchStrip,
+  SearchBackdrop,
+  SearchScopePill,
+} from '@/components/FloatingSearchBar'
+import { highlightMatch } from '@/components/SearchHighlight'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { fromSlug, pathToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { findSyllabiForConcept } from '@/lib/conceptMatch'
-import { MobileNavButton } from '@/components/MobileNavButton'
 import { ChooseSyllabusModal } from '@/components/wiki/ChooseSyllabusModal'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
@@ -249,78 +256,41 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
 
   return (
     <>
-      {isExpanded && (
-        <div
-          // z-[44] dims the concept popup (z-40) as well: at a tied z-40 the popup
-          // stayed bright under a dropdown that overlapped it.
-          className="fixed inset-0 z-[44] bg-background/60 backdrop-blur-sm"
-          onMouseDown={e => { e.preventDefault(); dismiss() }}
-        />
-      )}
+      {isExpanded && <SearchBackdrop onDismiss={dismiss} />}
+      {planOpen && <SearchBackdrop onDismiss={() => setShowPlan(false)} />}
 
-      {planOpen && (
-        <div
-          // z-[44] — see the search backdrop above.
-          className="fixed inset-0 z-[44] bg-background/60 backdrop-blur-sm"
-          onMouseDown={e => { e.preventDefault(); setShowPlan(false) }}
-        />
-      )}
-
-      <div
+      <FloatingSearchBar
         ref={containerRef}
-        data-floating-search
-        className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur-md"
-      >
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          {/* Input row */}
-          <div className="flex items-center gap-2 h-[calc(3.5rem-1px)]">
-            {/* The way into the nav below lg: this bar is the page's only row of
-                top chrome, so it carries the hamburger as well as the search.
-                Searching folds the button away and the input takes the line. */}
-            <MobileNavButton collapsed={active} className="-ml-1.5" />
-            <Search className="h-4 w-4 text-muted-foreground shrink-0" />
-            <input
-              ref={inputRef}
-              type="text"
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-              onFocus={() => { setActive(true); setShowPlan(false) }}
-              className="flex-1 min-w-0 bg-transparent border-0 focus:outline-none text-[16px] sm:text-sm text-foreground placeholder:text-muted-foreground"
-              placeholder="Search concepts"
-              aria-label="Search study guides"
-              autoComplete="off"
-              spellCheck={false}
-            />
-            {query && (
-              <button
-                type="button"
-                onClick={dismiss}
-                aria-label="Clear search"
-                className="text-muted-foreground hover:text-foreground transition-colors shrink-0"
-              >
-                <X className="h-4 w-4" />
-              </button>
+        banner={
+          <>
+            {/* Status banner — thin, full-width, hidden while a dropdown is open */}
+            {pageTitle && isInDevelopment && !isExpanded && !planOpen && (
+              <div className="bg-amber-500/10 py-1.5 text-center text-[11px] font-medium tracking-wide text-amber-600 dark:text-amber-400">
+                In Development — syllabus outline only, not yet available to study
+              </div>
             )}
-          </div>
+            {pageTitle && isBeta && !isExpanded && !planOpen && (
+              <div className="bg-emerald-500/10 py-1.5 text-center text-[11px] font-medium tracking-wide text-emerald-600 dark:text-emerald-400">
+                Beta
+              </div>
+            )}
+          </>
+        }
+      >
+        <>
+          <FloatingSearchInput
+            inputRef={inputRef}
+            value={query}
+            onChange={setQuery}
+            onFocus={() => { setActive(true); setShowPlan(false) }}
+            onClear={dismiss}
+            placeholder="Search concepts"
+            ariaLabel="Search study guides"
+            navCollapsed={active}
+          />
 
-          {/* Exam title strip — same height as search bar */}
           {pageTitle && (
-            <div className="flex items-center gap-2.5 h-[calc(3.5rem-1px)]">
-              {backLink}
-              {/* The exam's logo where the exam's name used to be. The page
-                  under the strip opens with that name set in display type, so
-                  the strip repeating it in bold 14px was the same word twice
-                  in the same eyeful; the tile says which exam you are in
-                  without competing with the heading. The name is still here
-                  for a screen reader — the tile itself is decorative. */}
-              {pageIcon ? (
-                <span className="flex flex-1 min-w-0 items-center">
-                  {pageIcon}
-                  <span className="sr-only">{pageTitle}</span>
-                </span>
-              ) : (
-                <span className="font-semibold text-sm truncate flex-1 min-w-0">{pageTitle}</span>
-              )}
+            <FloatingSearchStrip title={pageTitle} icon={pageIcon} backLink={backLink}>
               {hasPlan && (
                 <button
                   type="button"
@@ -339,7 +309,7 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
                 </button>
               )}
               {pageTitleBadge && <span className="shrink-0">{pageTitleBadge}</span>}
-            </div>
+            </FloatingSearchStrip>
           )}
 
           {/* Study plan dropdown — today's concepts */}
@@ -382,31 +352,12 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
             <div className="pb-3">
               {/* Scope pills */}
               <div className="flex flex-wrap gap-1.5 py-2.5">
-                <button
-                  type="button"
-                  onClick={() => setScope('page')}
-                  disabled={pageDisabled}
-                  className={
-                    'px-3 py-1 rounded-full text-xs font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed ' +
-                    (scope === 'page'
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-accent hover:bg-accent/80 text-foreground')
-                  }
-                >
+                <SearchScopePill active={scope === 'page'} disabled={pageDisabled} onClick={() => setScope('page')}>
                   This Page
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setScope('all')}
-                  className={
-                    'px-3 py-1 rounded-full text-xs font-medium transition-colors ' +
-                    (scope === 'all'
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-accent hover:bg-accent/80 text-foreground')
-                  }
-                >
+                </SearchScopePill>
+                <SearchScopePill active={scope === 'all'} onClick={() => setScope('all')}>
                   Everywhere
-                </button>
+                </SearchScopePill>
               </div>
 
               {/* Results */}
@@ -432,20 +383,8 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
               </ul>
             </div>
           )}
-        </div>
-
-        {/* Status banner — thin, full-width, hidden while search dropdown is open */}
-        {pageTitle && isInDevelopment && !isExpanded && !planOpen && (
-          <div className="bg-amber-500/10 py-1.5 text-center text-amber-600 dark:text-amber-400 text-[11px] font-medium tracking-wide">
-            In Development — syllabus outline only, not yet available to study
-          </div>
-        )}
-        {pageTitle && isBeta && !isExpanded && !planOpen && (
-          <div className="bg-emerald-500/10 py-1.5 text-center text-emerald-600 dark:text-emerald-400 text-[11px] font-medium tracking-wide">
-            Beta
-          </div>
-        )}
-      </div>
+        </>
+      </FloatingSearchBar>
 
       {chooser && (
         <ChooseSyllabusModal
@@ -515,7 +454,7 @@ function ConceptResultRow({
       >
         <Icon className={`h-4 w-4 shrink-0 mt-0.5 ${iconColor}`} />
         <div className="min-w-0 flex-1">
-          <div className="text-sm truncate">{highlight(display, query)}</div>
+          <div className="text-sm truncate">{highlightMatch(display, query)}</div>
           {(item.author || item.year) && (
             <div className="text-[11px] text-muted-foreground truncate">
               {[item.author, item.year].filter(Boolean).join(' · ')}
@@ -596,21 +535,5 @@ function ConceptActions({
         </button>
       )}
     </div>
-  )
-}
-
-function highlight(text: string, query: string) {
-  const q = query.trim()
-  if (!q) return text
-  const idx = text.toLowerCase().indexOf(q.toLowerCase())
-  if (idx < 0) return text
-  return (
-    <>
-      {text.slice(0, idx)}
-      <mark className="bg-primary/20 text-foreground rounded px-0.5">
-        {text.slice(idx, idx + q.length)}
-      </mark>
-      {text.slice(idx + q.length)}
-    </>
   )
 }

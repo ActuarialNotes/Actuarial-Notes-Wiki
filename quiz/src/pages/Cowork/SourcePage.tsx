@@ -1,11 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { ArrowLeft, Check, ExternalLink, Plus } from 'lucide-react'
-import {
-  entityById,
-  entityResources,
-  resourceMatches,
-  type SourceResource,
-} from '@/lib/coworkSources'
+import { entityById, entityResources, type SourceResource } from '@/lib/coworkSources'
 import { COWORK_ENTITIES, COWORK_RESOURCES } from '@/data/coworkSources'
 import { useCoworkLibrary } from '@/hooks/useCoworkLibrary'
 import { useCoworkCovers } from '@/hooks/useCoworkCovers'
@@ -24,28 +19,24 @@ import { cn } from '@/lib/utils'
  * linked to, could not be scrolled on its own, and put the documents at the
  * bottom of whatever else the shelf was showing.
  *
- * The search term still applies here, so a query typed on the shelf and
- * followed into a source narrows what that source shows rather than being
- * silently dropped.
+ * Searching does not thin this page: the bar's **This Source** scope asks the
+ * query of this publisher's catalogue and answers with a list
+ * (`components/cowork/CoworkTopBar.tsx`), so the page keeps showing everything
+ * they publish while the reader looks for one of them.
  */
 
 export interface SourcePageProps {
   entityId: string
-  query: string
   onOpenResource: (resource: SourceResource) => void
   onBack: () => void
 }
 
-export default function SourcePage({ entityId, query, onOpenResource, onBack }: SourcePageProps) {
+export default function SourcePage({ entityId, onOpenResource, onBack }: SourcePageProps) {
   const library = useCoworkLibrary()
   const covers = useCoworkCovers()
   const entity = useMemo(() => entityById(COWORK_ENTITIES, entityId), [entityId])
 
-  const all = useMemo(() => entityResources(COWORK_RESOURCES, entityId), [entityId])
-  const resources = useMemo(
-    () => (query.trim() ? all.filter(r => resourceMatches(r, { query })) : all),
-    [all, query],
-  )
+  const resources = useMemo(() => entityResources(COWORK_RESOURCES, entityId), [entityId])
 
   // The store holds ids only, so the cascade that drops a publisher's documents
   // is handed the catalogue here — see `hooks/useCoworkLibrary.ts`.
@@ -121,18 +112,16 @@ export default function SourcePage({ entityId, query, onOpenResource, onBack }: 
       <section>
         <h2 className="mb-3 text-sm font-semibold text-foreground">
           Documents
-          {all.length > 0 && (
+          {resources.length > 0 && (
             <span className="ml-1.5 rounded-full bg-muted px-1.5 py-0.5 text-[11px] font-semibold leading-none tabular-nums text-muted-foreground">
-              {resources.length === all.length ? all.length : `${resources.length}/${all.length}`}
+              {resources.length}
             </span>
           )}
         </h2>
 
         {resources.length === 0 ? (
           <p className="rounded-lg border border-dashed px-4 py-10 text-center text-sm text-muted-foreground">
-            {all.length === 0
-              ? 'Cowork carries nothing from this source yet.'
-              : 'No document from this source matches that search.'}
+            Cowork carries nothing from this source yet.
           </p>
         ) : (
           <ResourceCardGrid>

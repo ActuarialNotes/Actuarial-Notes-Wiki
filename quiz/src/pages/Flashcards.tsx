@@ -72,6 +72,7 @@ import { matchesSelectedVariant } from '@/data/examSittings'
 import { Button } from '@/components/ui/button'
 import { WikiArticle, stripFrontmatter, extractMathBlockquotes, extractImages } from '@/components/wiki/WikiArticle'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
+import { FlashcardsSearchBar } from '@/components/FlashcardsSearchBar'
 import { trackFlashcardReviewed } from '@/lib/analytics'
 import { playSound, resetSoundCombo } from '@/lib/soundEngine'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
@@ -2866,6 +2867,18 @@ function FlashcardsDeck({
     // itself into its new slot.
   }
 
+  // Go to a card by name — how the top search bar reaches one. The deck is
+  // addressed by name everywhere else too (the `?highlight=` param, the active
+  // card), because a position follows the slot and not the card.
+  function goToCardByName(name: string) {
+    const idx = orderedCards.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
+    if (idx < 0) return
+    setActiveIndex(idx)
+    setFlashingCard(name)
+    if (flashTimerRef.current) clearTimeout(flashTimerRef.current)
+    flashTimerRef.current = setTimeout(() => setFlashingCard(null), 1700)
+  }
+
   // Empty state — no cards in the deck yet. Show the tabbed gallery inline so
   // the user can browse Packs / Collected and add cards to start studying. The
   // layout fills the viewport (rather than contracting to its content) and
@@ -2873,6 +2886,11 @@ function FlashcardsDeck({
   if (cards.length === 0) {
     return (
       <>
+        <FlashcardsSearchBar
+          cards={orderedCards}
+          onSelectCard={goToCardByName}
+          onCardsAdded={() => setGalleryExpanded(true)}
+        />
         <div className="container mx-auto px-4 sm:px-6 py-6 min-h-[calc(100vh-9rem)] pb-32 space-y-6">
           <GalleryPanel
             inline
@@ -2985,6 +3003,21 @@ function FlashcardsDeck({
 
   return (
     <>
+      {/* The deck's top chrome. Below `lg` it stands in for the app header (see
+          lib/mobileNavHost.ts): a search bar rather than the wordmark, because a
+          deck of a hundred cards is a thing you look *into*. It stays up over
+          the gallery, which is why `.gallery-panel` starts 3.5rem down the
+          viewport — that row was the app header's and is now this bar's. Focus
+          mode is the one view that takes it, and takes it by covering
+          everything (the panel goes `inset-0` at z-[56], above this bar). */}
+      {!focusMode && (
+        <FlashcardsSearchBar
+          cards={orderedCards}
+          onSelectCard={goToCardByName}
+          onCardsAdded={() => setGalleryExpanded(true)}
+        />
+      )}
+
       {/* Focus mode backdrop — clicking it closes focus mode */}
       {focusMode && (
         <div

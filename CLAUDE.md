@@ -572,10 +572,23 @@ Other important `lib/` modules:
   blurred container, the input line (the hamburger on the search's own row, folding away as
   you type — see `mobileNavHost.ts`), the title strip, the scope pills and the dimmed
   backdrop. What a query *means* differs per place; the chrome around it does not, so the
-  wiki's `WikiFloatingSearch` and Cowork's `CoworkTopBar` are both built from these and a
-  search feels the same in either mode. `components/SearchHighlight.tsx` is the matched run,
+  wiki's `WikiFloatingSearch`, Cowork's `CoworkTopBar`, `DashboardSearchBar` and
+  `FlashcardsSearchBar` are all built from these and a
+  search feels the same wherever a reader is. `components/SearchHighlight.tsx` is the matched run,
   marked — the one implementation the wiki search, the search panel, the Search page and
   Cowork all call. (The quiz builder's `QuizFloatingSearch` still draws its own.)
+- `appSearch.ts` — the matching behind the **Dashboard** and **Flashcards** top bars
+  (`components/DashboardSearchBar.tsx`, `components/FlashcardsSearchBar.tsx`), which stand
+  where the app header's wordmark and mode pill used to be — those two routes are in
+  `mobileNavHost.ts` now, so `Sidebar` draws no header over them. `rankMatch` / `searchBy`
+  are the ranking every one of those lists shares (a name that *starts* with the query, then
+  one that contains it, then one every query word appears in; a hit on a later field —
+  an author, a question's prose — never outranks one on the name). `buildStudyIndex` is what
+  the Dashboard's Concepts and Resources pills search: the bundled exam pages
+  (`useWikiSyllabus`), deliberately **not** `buildWikiIndex`, whose fallback is GitHub's
+  rate-limited Contents API — the first screen of the app has to find things offline. What
+  the bundle can't answer, the foot of the results hands to the Search page, which now takes
+  `?type=` and `?q=`. Pure and tested.
 - `appMode.ts` / `cowork*.ts` / `xlsx.ts` — **Cowork**, the app's second product (Pro-only,
   Preview, `COWORK_ENABLED`). `appMode.ts` is the one definition of what a mode *is* — label,
   home, routes, what it takes to enter it — read by the pill (`components/ModeSwitcher.tsx`),

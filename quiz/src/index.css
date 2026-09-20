@@ -387,16 +387,17 @@
   }
 }
 
-/* Gallery panel: below lg the fixed h-14 header sits above everything, so start
-   under it; on desktop there is no top bar and the panel respects the sidebar
-   width instead, so the sidebar stays visible. */
+/* Gallery panel: the page's top bar sits above everything, so start under it —
+   the 3.5rem row the app header used to hold below lg, and the Flashcards
+   search bar holds at every width (see components/FlashcardsSearchBar.tsx).
+   On desktop the panel also respects the sidebar width, so the sidebar stays
+   visible. */
 .gallery-panel {
   top: 3.5rem;
 }
 
 @media (min-width: 1024px) {
   .gallery-panel {
-    top: 0;
     left: var(--sidebar-width, 16rem);
     transition-property: left;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);

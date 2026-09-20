@@ -2,7 +2,6 @@ import { createContext, forwardRef, useCallback, useContext, useEffect, useImper
 import { Link, useSearchParams } from 'react-router-dom'
 import {
   CalendarCheck,
-  Check,
   CheckCircle2,
   ChevronDown,
   ChevronLeft,
@@ -25,6 +24,7 @@ import {
   Trash2,
   X,
 } from 'lucide-react'
+import { CheckMark } from '@/components/CheckMark'
 import {
   DndContext,
   closestCenter,
@@ -455,7 +455,7 @@ function ConceptCardGrid({
               {name}
             </span>
             {added && (
-              <Check className="absolute top-1 right-1 h-3 w-3 text-green-600 dark:text-green-400" aria-hidden="true" />
+              <CheckMark className="absolute top-1 right-1 h-3.5 w-3.5" />
             )}
             {!collected && (
               <Lock className="absolute top-1 left-1 h-2.5 w-2.5 text-muted-foreground/70" aria-hidden="true" />
@@ -818,7 +818,7 @@ function AddFlashcardsSheet({
                       }`}
                     >
                       {added
-                        ? <Check className="h-3.5 w-3.5 shrink-0 text-green-500" />
+                        ? <CheckMark className="h-3.5 w-3.5" />
                         : <Plus className="h-3.5 w-3.5 shrink-0 text-primary" />}
                       <span className="flex-1 min-w-0 truncate">{name}</span>
                       {added && <span className="text-[10px] shrink-0">In deck</span>}
@@ -925,7 +925,7 @@ function AddFlashcardsMenu({
           planLoading ? (
             <Loader2 className="h-3.5 w-3.5 shrink-0 animate-spin text-muted-foreground" />
           ) : allInDeck ? (
-            <Check className="h-4 w-4 shrink-0 text-green-500" />
+            <CheckMark className="h-4 w-4" />
           ) : missing.length > 0 ? (
             <span
               className="shrink-0 inline-flex items-center rounded-full bg-orange-500 px-1.5 py-0.5 text-[11px] font-bold leading-none text-white tabular-nums"
@@ -1215,7 +1215,7 @@ function ViewModeDropdown({
               >
                 {icon}
                 <span>{label}</span>
-                {active && <Check className="h-3.5 w-3.5 ml-auto" />}
+                {active && <CheckMark className="ml-auto h-3.5 w-3.5 text-current" />}
               </button>
             )
           })}

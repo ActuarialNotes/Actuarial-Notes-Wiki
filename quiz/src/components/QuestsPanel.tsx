@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { playSound } from '@/lib/soundEngine'
-import { Check, ChevronLeft, ChevronRight, Gem, Loader2, Target } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Gem, Loader2, Target } from 'lucide-react'
+import { CheckMark } from '@/components/CheckMark'
 import { useQuests } from '@/hooks/useQuests'
 import { KIND_STYLE, CollectButton } from '@/components/QuestsCard'
 import { PERFECT_QUIZ_MIN, type QuestKind } from '@/data/quests'
@@ -111,7 +112,7 @@ function DailyGoalRow({ xp }: { xp: XpView }) {
           <p className="truncate text-sm font-semibold">Daily goal</p>
           {xp.met ? (
             <span className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-green-600 dark:text-green-400">
-              <Check className="h-3.5 w-3.5" /> Reached
+              <CheckMark className="h-3.5 w-3.5 text-current" /> Reached
             </span>
           ) : (
             <span className="shrink-0 text-xs tabular-nums text-muted-foreground">

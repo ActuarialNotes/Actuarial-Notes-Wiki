@@ -176,9 +176,11 @@ interface ExamPillProps {
   onClose: () => void
   /** Questions left in this exam's plan today — badges the pill and its Start Quiz item. */
   todayQuizCount?: number
+  /** Today's plan for this exam is finished — the pill wears a check instead. */
+  todayQuizComplete?: boolean
 }
 
-function ExamPill({ syllabus, isOpen, onToggle, onClose, todayQuizCount = 0 }: ExamPillProps) {
+function ExamPill({ syllabus, isOpen, onToggle, onClose, todayQuizCount = 0, todayQuizComplete = false }: ExamPillProps) {
   const navigate = useNavigate()
   const buttonRef = useRef<HTMLButtonElement>(null)
   const [dropdownPos, setDropdownPos] = useState<{ top: number; left: number } | null>(null)
@@ -217,7 +219,7 @@ function ExamPill({ syllabus, isOpen, onToggle, onClose, todayQuizCount = 0 }: E
         >
           {shortLabel}
         </button>
-        <TodayQuizCornerBadge count={todayQuizCount} size="sm" className="-top-1 -right-1.5" />
+        <TodayQuizCornerBadge count={todayQuizCount} complete={todayQuizComplete} size="sm" className="-top-1 -right-1.5" />
       </span>
       {isOpen && dropdownPos && createPortal(
         <>
@@ -246,7 +248,7 @@ function ExamPill({ syllabus, isOpen, onToggle, onClose, todayQuizCount = 0 }: E
             >
               <Play className="h-4 w-4 shrink-0" />
               <span className="flex-1 text-left">Start Quiz</span>
-              <TodayQuizNavBadge count={todayQuizCount} />
+              <TodayQuizNavBadge count={todayQuizCount} complete={todayQuizComplete} />
             </button>
           </div>
         </>,
@@ -270,7 +272,7 @@ export default function Sidebar() {
     return examProgress[key] === 'in_progress' && matchesSelectedVariant(key, s.examId, examVariants[key])
   })
   const { cards } = useFlashcards()
-  const { byExam: todayQuizByExam, total: todayQuizTotal } = useTodayQuizCounts()
+  const { byExam: todayQuizByExam, total: todayQuizTotal, allComplete: todayQuizAllComplete } = useTodayQuizCounts()
   const [dailyQuizStats, setDailyQuizStats] = useState(() => getDailyQuizStats())
   // Lights up the Flashcards item whenever a card is collected.
   const collectGlow = useCollectGlow()
@@ -302,10 +304,10 @@ export default function Sidebar() {
   // Questions left in today's plan (orange, same badge the Quiz tab and the
   // Dashboard's Start button carry) alongside today's answered tally.
   const quizBadge = useMemo(() => {
-    if (todayQuizTotal <= 0 && dailyQuizStats.total <= 0) return null
+    if (todayQuizTotal <= 0 && !todayQuizAllComplete && dailyQuizStats.total <= 0) return null
     return (
       <span className="flex items-center gap-1.5">
-        <TodayQuizNavBadge count={todayQuizTotal} />
+        <TodayQuizNavBadge count={todayQuizTotal} complete={todayQuizAllComplete} />
         {dailyQuizStats.total > 0 && (
           <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground tabular-nums">
             {dailyQuizStats.correct}/{dailyQuizStats.total}
@@ -313,7 +315,7 @@ export default function Sidebar() {
         )}
       </span>
     )
-  }, [todayQuizTotal, dailyQuizStats.correct, dailyQuizStats.total])
+  }, [todayQuizTotal, todayQuizAllComplete, dailyQuizStats.correct, dailyQuizStats.total])
 
   const [collapsed, setCollapsed] = useState<boolean>(getInitialCollapsed)
   const { open: mobileOpen, closeNav } = useMobileNav()
@@ -439,6 +441,7 @@ export default function Sidebar() {
                   onToggle={() => setOpenExamDropdown(prev => prev === key ? null : key)}
                   onClose={() => setOpenExamDropdown(null)}
                   todayQuizCount={badgeCountFor(todayQuizByExam[key])}
+                  todayQuizComplete={todayQuizByExam[key]?.complete ?? false}
                 />
               )
             })}
@@ -498,6 +501,7 @@ export default function Sidebar() {
                   onToggle={() => setOpenExamDropdown(prev => prev === key ? null : key)}
                   onClose={() => setOpenExamDropdown(null)}
                   todayQuizCount={badgeCountFor(todayQuizByExam[key])}
+                  todayQuizComplete={todayQuizByExam[key]?.complete ?? false}
                 />
               )
             })}
@@ -622,7 +626,7 @@ export default function Sidebar() {
                     questions-left count as a corner badge on the icon. */}
                 {collapsed && (
                   <span className="hidden lg:block">
-                    <TodayQuizCornerBadge count={todayQuizTotal} size="sm" className="-top-1.5 -right-2" />
+                    <TodayQuizCornerBadge count={todayQuizTotal} complete={todayQuizAllComplete} size="sm" className="-top-1.5 -right-2" />
                   </span>
                 )}
               </span>

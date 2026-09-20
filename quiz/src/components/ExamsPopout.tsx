@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
-import { X, Loader2, GraduationCap, Play, LogIn, CalendarDays, Plus, Hammer, Check } from 'lucide-react'
+import { X, Loader2, GraduationCap, Play, LogIn, CalendarDays, Plus, Hammer } from 'lucide-react'
+import { CheckMark } from '@/components/CheckMark'
 import { useNavigate } from 'react-router-dom'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
@@ -425,7 +426,7 @@ export default function ExamsPopout({ open, onClose }: Props) {
                 </p>
               ) : examsState.success ? (
                 <p className="flex items-center gap-1.5 text-xs text-green-600 dark:text-green-400">
-                  <Check className="h-3 w-3" />
+                  <CheckMark className="h-3.5 w-3.5 text-current" />
                   Saved
                 </p>
               ) : null}

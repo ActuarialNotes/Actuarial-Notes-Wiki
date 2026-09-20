@@ -21,6 +21,8 @@ import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { questionsNeededForPlan } from '@/lib/todayPlanCount'
 import { TodayQuizCornerBadge } from '@/components/TodayQuizBadge'
+import { useTodayQuizCounts } from '@/hooks/useTodayQuizCount'
+import { CheckMark } from '@/components/CheckMark'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { questionExamLabel } from '@/lib/examIds'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
@@ -379,6 +381,9 @@ export default function Dashboard() {
   // Questions today's quizzes already served — the launch prefers unseen ones,
   // so the badge has to size itself the same way.
   const todayAnsweredIds = useTodayAnsweredQuestions()
+  // Per-exam plan state for the tab strip — the active exam's own count is
+  // computed just below, but the tabs need every exam's.
+  const { byExam: todayQuizByExam } = useTodayQuizCounts()
   const todaysQuizBadgeCount = useMemo(() => {
     if (!activeSyllabus) return 0
     return questionsNeededForPlan(studyPlan, questionExamLabel(activeSyllabus), allQuestions, doneConceptSlugs, todayAnsweredIds)
@@ -775,21 +780,31 @@ export default function Dashboard() {
               onScroll={measureTabsOverflow}
               className={`exam-tab-strip flex flex-1 min-w-0 gap-1.5 overflow-x-auto${tabsOverflowRight ? ' exam-tab-strip--fade' : ''}`}
             >
-              {inProgressSyllabi.map((s, i) => (
-                <button
-                  key={s.examId}
-                  type="button"
-                  data-exam-tab-active={i === clampedIdx}
-                  onClick={() => setActiveExamIdx(i)}
-                  className={`shrink-0 h-10 px-4 rounded-full text-base font-semibold transition-colors ${
-                    i === clampedIdx
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-transparent text-muted-foreground hover:text-foreground'
-                  }`}
-                >
-                  {s.examLabel}
-                </button>
-              ))}
+              {inProgressSyllabi.map((s, i) => {
+                // The tab strip is the one place every active exam is visible
+                // at once, so it's where "which of my exams are done for today"
+                // gets answered. Inline rather than a corner badge: the strip
+                // scrolls under `overflow-x-auto`, which would clip an overhang.
+                const planDone = todayQuizByExam[wikiExamIdToProgressKey(s.examId)]?.complete ?? false
+                return (
+                  <button
+                    key={s.examId}
+                    type="button"
+                    data-exam-tab-active={i === clampedIdx}
+                    onClick={() => setActiveExamIdx(i)}
+                    className={`shrink-0 h-10 px-4 rounded-full text-base font-semibold transition-colors inline-flex items-center gap-2 ${
+                      i === clampedIdx
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-transparent text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    {s.examLabel}
+                    {planDone && (
+                      <CheckMark className="h-4 w-4" label={`${s.examLabel}: today's study plan complete`} />
+                    )}
+                  </button>
+                )
+              })}
             </div>
 
             {/* Compact copies of the primary actions — only once the full-size

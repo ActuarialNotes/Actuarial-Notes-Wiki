@@ -717,6 +717,29 @@ Motion is defined as named keyframes in `index.css` and triggered by adding a cl
   `text-primary`, semantic state colours), not fills.
 - Decorative icons get `aria-hidden`; an icon that *is* the control needs an `aria-label`.
 
+### 10.1 The checkmark
+
+The one exception to "lucide only": a check is not decoration, it is a verdict — *this is
+done*, or *this is picked* — and the app draws exactly one of them, `components/CheckMark.tsx`.
+It is a **filled disc with the tick cut out of it**, not lucide's `Check` / `CheckCircle2`
+(whose tick is a drawn stroke). The tick is genuinely void: the disc is masked, so whatever
+the mark sits on shows through it. That is what lets the same mark ride a card, a tinted
+row, a pill or an overhung corner without carrying a background of its own — and it is why
+the old "green circle, white tick" pattern is gone, since a white tick is only invisible
+against one surface.
+
+- **Colour** comes from `currentColor`, defaulting to the `green-500` of §4.1. Override only
+  where the mark belongs to something that already owns a colour — the streak badge's check
+  is orange because it marks the flame, not a finished plan.
+- **Sizes** follow §10: `h-3.5 w-3.5` in a chip, `h-4 w-4` in a row, `h-5 w-5` in a group
+  header, `h-7 w-7` on a card corner.
+- **Corners** use `CompletionCornerBadge`, which is the same mark at the sizes
+  `TodayQuizCornerBadge` counts at — so a count and a check occupy one corner at one weight,
+  and a countdown ends in a mark rather than in nothing. Its `ring-2 ring-background` sits on
+  the wrapper, never on the mark, or the ring would fill the tick back in.
+- A check is **decorative by default** (`aria-hidden`); pass `label` where the mark is the
+  only thing saying the state.
+
 ---
 
 ## 11. Accessibility Baseline

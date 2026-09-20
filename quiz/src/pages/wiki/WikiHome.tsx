@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigationType } from 'react-router-dom'
-import { CheckCircle2, Compass, Hammer } from 'lucide-react'
+import { Compass, Hammer } from 'lucide-react'
+import { CheckMark } from '@/components/CheckMark'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { examDisplayName, wikiRoute } from '@/lib/wikiRoutes'
@@ -337,7 +338,7 @@ export default function WikiHome() {
                                   {examDisplayName(exam.name)}
                                 </CardTitle>
                                 {isCompleted && (
-                                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                                  <CheckMark className="h-4 w-4 text-emerald-500" />
                                 )}
                               </div>
                               {match && (

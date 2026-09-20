@@ -51,6 +51,14 @@ quiz/                                             — the React app (this is whe
   Upgrade, wiki/*, and `Research/` — the last is flag-gated)
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
   `components/collect/` (flashcard-collection modal + 3D card), `components/research/` (flag-gated).
+  `components/CheckMark.tsx` is **the** checkmark — a filled disc with the tick masked out
+  of it, so the tick shows whatever the mark is sitting on. Everything that means *done* or
+  *picked* draws it (completed plan rows, a levelled-up concept's card, a selected quiz
+  topic), and `CompletionCornerBadge` is its corner form — the same corner, at the same
+  sizes, that `TodayQuizBadge` counts down in, so a finished plan ends in a mark rather than
+  an empty corner. Don't reach for lucide's `Check` / `CheckCircle2` for these: their tick is
+  a drawn stroke, and the white-tick-on-green-disc it replaces is only invisible against one
+  surface. See `docs/style-guide.md` §10.1.
   `components/ConceptActionMenu.tsx` is **the** concept action menu — quiz, study guide, deck,
   collect, learning progress, fact check — and the owner of the modals those rows open; the
   concept popup (whose title is its only trigger) and every flashcard surface open that one

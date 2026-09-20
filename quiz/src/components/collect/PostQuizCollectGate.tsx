@@ -11,7 +11,8 @@
 // result down, so this gate and the cards behind it can't both promote the same
 // collection.
 
-import { Check, Loader2, Lock, Sparkles } from 'lucide-react'
+import { Loader2, Lock, Sparkles } from 'lucide-react'
+import { CheckMark } from '@/components/CheckMark'
 import { useCollect } from '@/hooks/useCollect'
 import { CollectGateButton } from '@/components/collect/CollectGateButton'
 import { LevelPill } from '@/components/wiki/LearningProgressModal'
@@ -63,7 +64,7 @@ export function PostQuizCollectGate({ concepts, promoted, pending, onDone }: Pro
               <li key={name}>
                 <div className="flex items-center gap-2.5 rounded-lg bg-muted/30 px-3 py-2.5">
                   {isPromoted ? (
-                    <Check className="h-4 w-4 text-emerald-500 shrink-0" />
+                    <CheckMark className="h-4 w-4 text-emerald-500" />
                   ) : isPending ? (
                     <Loader2 className="h-4 w-4 shrink-0 animate-spin text-muted-foreground" />
                   ) : (

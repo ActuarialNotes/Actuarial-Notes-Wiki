@@ -1,4 +1,5 @@
-import { Check, Flame } from 'lucide-react'
+import { Flame } from 'lucide-react'
+import { CheckMark } from '@/components/CheckMark'
 import { useStreak } from '@/hooks/useStreak'
 import { cn } from '@/lib/utils'
 import type { StreakStatus } from '@/lib/streak'
@@ -99,11 +100,15 @@ export function StreakStat({
       </span>
       {activeToday && (
         <span
-          className="absolute -top-1.5 -right-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-orange-500 text-white shadow ring-2 ring-background"
-          aria-label="Answered a question correctly today"
+          className="absolute -top-1.5 -right-1.5 inline-flex rounded-full shadow ring-2 ring-background"
           title="Answered a question correctly today"
         >
-          <Check className="h-3.5 w-3.5" strokeWidth={3} />
+          {/* The app's checkmark in the streak's own orange, not the "done"
+              green: this marks the flame beside it, not a finished plan. */}
+          <CheckMark
+            className="block h-6 w-6 text-orange-500"
+            label="Answered a question correctly today"
+          />
         </span>
       )}
     </div>

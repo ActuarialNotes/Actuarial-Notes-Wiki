@@ -4,6 +4,7 @@ import { ArrowRight, LayoutDashboard, XCircle } from 'lucide-react'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { CollectLevelUpCard } from '@/components/collect/CollectLevelUpCard'
+import { CompletionCornerBadge } from '@/components/CheckMark'
 import { Button } from '@/components/ui/button'
 import { questionCredit, questionOutcome } from '@/lib/parser'
 import { PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
@@ -369,7 +370,7 @@ export function ConceptCoverageSection({
               key={`${t.conceptSlug}-${i}`}
               type="button"
               onClick={() => openConceptPopup(levelUpRefs, i)}
-              className="flex flex-col gap-1.5 rounded-xl bg-card shadow-sm px-4 py-3 text-left transition-all hover:shadow-md active:scale-[0.98]"
+              className="relative flex flex-col gap-1.5 rounded-xl bg-card shadow-sm px-4 py-3 text-left transition-all hover:shadow-md active:scale-[0.98]"
             >
               <span className="text-sm font-semibold leading-snug text-foreground line-clamp-2">
                 {t.conceptSlug}
@@ -379,6 +380,13 @@ export function ConceptCoverageSection({
                 <ArrowRight className="h-3 w-3 shrink-0" />
                 {LEVEL_LABEL[t.to]}
               </span>
+              {/* The card beside it is a card still to be *earned*, and wears a
+                  lock. This one is already won, so it wears the check — the
+                  same corner, the same mark the study plan ticks with. */}
+              <CompletionCornerBadge
+                size="md"
+                label={`${t.conceptSlug} levelled up to ${LEVEL_LABEL[t.to]}`}
+              />
             </button>
           ))}
           {collectCards.map(name => (

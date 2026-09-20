@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Check } from 'lucide-react'
+import { CheckMark } from '@/components/CheckMark'
 import type { Question } from '@/lib/parser'
 import type { AttemptCounts } from '@/lib/questionAttempts'
 import { questionPreview } from '@/lib/questionPreview'
@@ -97,13 +97,11 @@ export function QuestionSearchRow({ question, query, selected = false, onToggleS
               role="checkbox"
               aria-checked={selected}
               aria-label={`Select question ${question.id}`}
-              className={`h-5 w-5 shrink-0 rounded-full border-2 flex items-center justify-center transition-colors ${
-                selected
-                  ? 'bg-primary border-primary text-primary-foreground'
-                  : 'border-input'
+              className={`h-5 w-5 shrink-0 rounded-full flex items-center justify-center transition-colors ${
+                selected ? '' : 'border-2 border-input'
               }`}
             >
-              {selected && <Check className="h-3 w-3" />}
+              {selected && <CheckMark className="h-5 w-5" />}
             </div>
           )}
           {/* Attempt history sits at the head of the chip strip: the strip

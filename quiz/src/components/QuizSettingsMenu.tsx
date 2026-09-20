@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { CheckCircle2, Circle, SlidersHorizontal } from 'lucide-react'
+import { Circle, SlidersHorizontal } from 'lucide-react'
+import { CheckMark } from '@/components/CheckMark'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import { SegmentedControl, type SegmentedOption } from '@/components/ui/SegmentedControl'
 import { placeMenu, type MenuPlacement } from '@/lib/menuPlacement'
@@ -167,7 +168,7 @@ export function QuizSettingsMenu({
         )}
       >
         {reveal === 'during' ? (
-          <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
+          <CheckMark className="h-4 w-4" />
         ) : (
           <Circle className="h-4 w-4 shrink-0 text-muted-foreground/50" />
         )}

@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
-import { BookOpen, Check, Loader2, Lock, Play, SkipForward, Sparkles, TimerReset, X } from 'lucide-react'
+import { BookOpen, Loader2, Lock, Play, SkipForward, Sparkles, TimerReset, X } from 'lucide-react'
+import { CheckMark } from '@/components/CheckMark'
 import { useCollect } from '@/hooks/useCollect'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { useCollectLockout, useCollectLockouts } from '@/hooks/useCollectLockouts'
@@ -652,7 +653,7 @@ export function CollectConceptModal() {
                 </>
               )}
               <div className="mt-2.5 flex items-start gap-2 rounded-lg bg-emerald-500/10 px-3 py-2">
-                <Check className="h-4 w-4 shrink-0 mt-0.5 text-emerald-600 dark:text-emerald-400" />
+                <CheckMark className="mt-0.5 h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                 <MarkdownText
                   inline
                   className="min-w-0 text-sm font-medium text-emerald-700 dark:text-emerald-300 [&_p]:my-0 [&_.katex]:text-current [&_.katex-display]:overflow-x-auto [&_.katex-display]:overflow-y-hidden"

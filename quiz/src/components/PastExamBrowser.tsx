@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Check, ExternalLink, FileText, Shuffle } from 'lucide-react'
+import { ExternalLink, FileText, Shuffle } from 'lucide-react'
+import { CheckMark } from '@/components/CheckMark'
 import { cn } from '@/lib/utils'
 import { formatPassRate, hasPublishedStats, type PastExamRow } from '@/lib/pastExams'
 import { isSupportedPdfSource } from '@/lib/examPdf'
@@ -194,7 +195,7 @@ export function PastExamBrowser({
               {mixCount} question{mixCount === 1 ? '' : 's'} across all topics
             </span>
           </span>
-          {selected === null && <Check className="h-4 w-4 shrink-0 text-primary" aria-hidden />}
+          {selected === null && <CheckMark className="h-4 w-4" />}
         </button>
 
         {rows.map(row => {
@@ -231,7 +232,7 @@ export function PastExamBrowser({
                 </span>
               </span>
               {showStats && <StatCell row={row} effectiveColumn={effectiveColumn} />}
-              {isSelected && <Check className="h-4 w-4 shrink-0 text-primary" aria-hidden />}
+              {isSelected && <CheckMark className="h-4 w-4" />}
             </button>
           )
         })}

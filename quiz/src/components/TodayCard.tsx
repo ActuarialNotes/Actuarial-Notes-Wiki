@@ -7,13 +7,13 @@ import { Link } from 'react-router-dom'
 import {
   Settings2,
   CheckCircle2,
-  Check,
   Circle,
   Loader2,
   ChevronDown,
   TrendingUp,
   Lock,
 } from 'lucide-react'
+import { CheckMark } from '@/components/CheckMark'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { ConceptDetailModal } from '@/components/ConceptDetailModal'
@@ -450,7 +450,7 @@ export function TodayCard({
                       className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors"
                     >
                       {isCompleted
-                        ? <Check className="h-4 w-4 text-green-500 shrink-0" />
+                        ? <CheckMark className="h-4 w-4" />
                         : <Circle className="h-4 w-4 text-muted-foreground shrink-0" />}
                       <span className={`text-sm flex-1 min-w-0 truncate ${isCompleted ? 'text-muted-foreground line-through' : ''}`}>
                         {name}

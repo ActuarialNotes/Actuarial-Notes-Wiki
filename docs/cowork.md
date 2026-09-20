@@ -216,6 +216,10 @@ every sample is dateless and linkless, and no wiki-backed page is marked a sampl
 
 **Replacing a sample with real documents is the shape of the next phase.**
 
+Which publisher comes next, and why, is kept in `docs/cowork-source-inventory.md` — the
+prioritised backlog behind this catalogue, including the vault pages that are already
+citable and only need a `wikiRef`.
+
 ---
 
 ## 4. There is no second reader

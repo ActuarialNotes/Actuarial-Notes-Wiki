@@ -26,11 +26,15 @@ import { useCollect } from '@/hooks/useCollect'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ExamProgressProvider } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
-import { RESEARCH_TAB_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
+import { useSubscription } from '@/hooks/useSubscription'
+import { COWORK_ENABLED, RESEARCH_TAB_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
 import { pageHostsNavButton } from '@/lib/mobileNavHost'
 import { captureError } from '@/lib/errorMonitoring'
 
 const Research    = lazy(() => import('@/pages/Research'))
+// Cowork is the app's second product (see `lib/appMode.ts`). Lazy, because a
+// reader in Study mode should never pay for its catalogue or its xlsx writer.
+const Cowork      = lazy(() => import('@/pages/Cowork'))
 
 const WikiLayout  = lazy(() => import('@/components/wiki/WikiLayout'))
 const WikiHome    = lazy(() => import('@/pages/wiki/WikiHome'))
@@ -168,6 +172,39 @@ function RequireAuth({ children }: { children: ReactNode }) {
   return <>{children}</>
 }
 
+
+/**
+ * A Pro-only route. A viewer who is not signed in goes to sign in; one who is
+ * signed in but not Pro goes to the upgrade page — the same two destinations
+ * `modeDestination` sends the mode pill to, so the pill and the URL can never
+ * disagree about where a locked mode leads.
+ *
+ * `loading` matters: subscription state resolves asynchronously, and bouncing a
+ * Pro subscriber to /upgrade for the frame before their row arrives is a bug
+ * they would see every time they open the app.
+ */
+function RequirePro({ children }: { children: ReactNode }) {
+  const { user } = useAuth()
+  const { isPro, loading } = useSubscription()
+  if (!user) return <Navigate to="/auth" replace />
+  if (loading) return <WikiFallback />
+  if (!isPro) return <Navigate to="/upgrade" replace />
+  return <>{children}</>
+}
+
+function CoworkRoute() {
+  if (!COWORK_ENABLED) return <Navigate to="/dashboard" replace />
+  return (
+    <RequirePro>
+      <ErrorBoundary>
+        <Suspense fallback={<WikiFallback />}>
+          <Cowork />
+        </Suspense>
+      </ErrorBoundary>
+    </RequirePro>
+  )
+}
+
 export default function App({ initialSession }: { initialSession: Session | null }) {
   return (
     <BrowserRouter>
@@ -206,6 +243,14 @@ export default function App({ initialSession }: { initialSession: Session | null
                     <Navigate to="/wiki" replace />
                   )
                 } />
+                {/* Cowork — Pro-only and in Preview. The three paths are one
+                    page: the tab and the open deliverable live in the URL so a
+                    deliverable can be linked to and Back walks the loop.
+                    `RequirePro` is what keeps the mode's own rule (`canEnterMode`)
+                    true of the route and not only of the pill. */}
+                <Route path="/cowork" element={<CoworkRoute />} />
+                <Route path="/cowork/:tab" element={<CoworkRoute />} />
+                <Route path="/cowork/:tab/:id" element={<CoworkRoute />} />
                 <Route path="/wiki" element={
                   <Suspense fallback={<WikiFallback />}>
                     <WikiLayout><WikiHome /></WikiLayout>

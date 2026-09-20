@@ -17,9 +17,10 @@
 export function pageHostsNavButton(pathname: string): boolean {
   // The quiz builder (QuizFloatingSearch) — `/` exactly, nothing below it.
   if (pathname === '/') return true
-  // The wiki (WikiFloatingSearch) and the flag-gated research tab
-  // (ResearchTopSearch), both of which bar every page under them.
-  return isUnder(pathname, '/wiki') || isUnder(pathname, '/research')
+  // The wiki (WikiFloatingSearch), the flag-gated research tab
+  // (ResearchTopSearch) and Cowork (CoworkTopBar) — each of which bars every
+  // page under them.
+  return isUnder(pathname, '/wiki') || isUnder(pathname, '/research') || isUnder(pathname, '/cowork')
 }
 
 function isUnder(pathname: string, route: string): boolean {

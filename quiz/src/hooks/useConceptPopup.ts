@@ -21,6 +21,20 @@ import {
 
 type DashboardFilter = 'study-plan' | 'entire-syllabus' | 'source-material'
 
+/**
+ * What the walk handed to the popup *is*.
+ *
+ * `syllabus` — the default, and everything the wiki opens: a sequence of
+ * concepts belonging to an exam, which the footer's picker can re-slice into
+ * today's plan or the source material behind it.
+ *
+ * `corpus` — a sequence of documents with no syllabus behind it (Cowork's
+ * sources). The picker is dropped for the same reason a guide walk drops it:
+ * every filter it offers would be either a no-op or a lie about what is being
+ * read.
+ */
+export type WalkKind = 'syllabus' | 'corpus'
+
 // A single mention of a concept on the source page, in document order. The
 // same concept mentioned N times (a primary link + N-1 dimmed repeats) yields
 // N entries with occurrence 0..N-1. `occurrence` is the concept's position
@@ -61,6 +75,9 @@ interface ConceptPopupState {
   occurrenceIndex: number
   // What triggered the popup — used by "This Page" search to compute scope.
   sourcePath: string | null
+  // What the walk is — see WalkKind. Decides whether the footer offers the
+  // syllabus-filter picker at all.
+  walkKind: WalkKind
   // Which learning objective each concept of the source page belongs to, keyed
   // by lowercased name (`lib/syllabusChapters.ts`). Set when the popup is opened
   // from an exam page, which is the only place a syllabus's objectives exist;
@@ -69,7 +86,7 @@ interface ConceptPopupState {
   objectives: ObjectiveIndex | null
   // Set when opened from the dashboard to support the Viewing filter bar.
   dashboardContext: DashboardContext | null
-  openAt: (list: WikiEntryRef[], index: number, sourcePath?: string | null, studyPlanList?: WikiEntryRef[] | null, resourceList?: WikiEntryRef[] | null, options?: { initialFilter?: DashboardFilter; fullList?: WikiEntryRef[]; occurrences?: OccurrenceRef[] | null; occurrenceIndex?: number; objectives?: ObjectiveIndex | null }) => void
+  openAt: (list: WikiEntryRef[], index: number, sourcePath?: string | null, studyPlanList?: WikiEntryRef[] | null, resourceList?: WikiEntryRef[] | null, options?: { initialFilter?: DashboardFilter; fullList?: WikiEntryRef[]; occurrences?: OccurrenceRef[] | null; occurrenceIndex?: number; objectives?: ObjectiveIndex | null; walk?: WalkKind }) => void
   // Opens the popup from the dashboard with optional study-plan/entire-syllabus filter.
   openDashboard: (
     fullList: WikiEntryRef[],
@@ -111,6 +128,7 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
   occurrences: null,
   occurrenceIndex: 0,
   sourcePath: null,
+  walkKind: 'syllabus',
   objectives: null,
   dashboardContext: null,
   openAt: (list, index, sourcePath = null, studyPlanList, resourceList, options) => {
@@ -126,6 +144,7 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
       occurrences: filter === 'entire-syllabus' ? occurrences : null,
       occurrenceIndex: filter === 'entire-syllabus' ? Math.max(0, options?.occurrenceIndex ?? 0) : 0,
       sourcePath,
+      walkKind: options?.walk ?? 'syllabus',
       // Kept whatever the filter is: a study-plan or source-material walk is
       // still a walk through the same syllabus, so its concepts still belong to
       // the objectives that introduce them.
@@ -144,6 +163,7 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
       occurrences: null,
       occurrenceIndex: 0,
       sourcePath: null,
+      walkKind: 'syllabus',
       // The dashboard's walk is cross-exam, so it has no one syllabus to cut by.
       objectives: null,
       dashboardContext: {
@@ -257,11 +277,11 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
     }
     set({ pages: next.pages, pageIndex: next.index })
   },
-  close: () => set({ open: false, list: [], index: 0, pages: [], pageIndex: 0, occurrences: null, occurrenceIndex: 0, sourcePath: null, objectives: null, dashboardContext: null }),
+  close: () => set({ open: false, list: [], index: 0, pages: [], pageIndex: 0, occurrences: null, occurrenceIndex: 0, sourcePath: null, walkKind: 'syllabus', objectives: null, dashboardContext: null }),
   closeOnNavigation: pathname => {
     const { open, sourcePath } = get()
     if (open && sourcePath && sourcePath !== pathname) {
-      set({ open: false, list: [], index: 0, pages: [], pageIndex: 0, occurrences: null, occurrenceIndex: 0, sourcePath: null, objectives: null, dashboardContext: null })
+      set({ open: false, list: [], index: 0, pages: [], pageIndex: 0, occurrences: null, occurrenceIndex: 0, sourcePath: null, walkKind: 'syllabus', objectives: null, dashboardContext: null })
     }
   },
 }))

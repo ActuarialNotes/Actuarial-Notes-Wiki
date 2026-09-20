@@ -161,13 +161,11 @@ export default function Dashboard() {
   const [remindersOpen, setRemindersOpen] = useState(false)
   const [guideOpen, setGuideOpen] = useState(false)
   const profileRef = useRef<HTMLDivElement>(null)
-  // ReadinessCard portals its cards into these slots so they render at the top
-  // of the page: the readiness group first — the Exam readiness card, which is
-  // the answer to the question the dashboard exists to answer and carries the
-  // primary actions that act on it, then Today's Study Plan and the Study Guide
-  // ring — and the Study Schedule below it.
+  // ReadinessCard portals its cards into this slot so they render at the top of
+  // the page: the Exam readiness card, which is the answer to the question the
+  // dashboard exists to answer and carries the schedule strip and the primary
+  // actions that act on it, then Today's Study Plan and the Study Guide ring.
   const [readinessSlotEl, setReadinessSlotEl] = useState<HTMLDivElement | null>(null)
-  const [studyScheduleSlotEl, setStudyScheduleSlotEl] = useState<HTMLDivElement | null>(null)
   // FixMistakesButton portals its compact copy into this slot in the pinned
   // header row (the slot only exists while the actions are pinned).
   const [mistakesSlotEl, setMistakesSlotEl] = useState<HTMLDivElement | null>(null)
@@ -847,10 +845,6 @@ export default function Dashboard() {
           ride inside the readiness card (`primaryActions`). */}
       {activeSyllabus && <div ref={setReadinessSlotEl} />}
 
-      {/* Study Schedule card — also portaled here by ReadinessCard, below the
-          readiness group. */}
-      {activeSyllabus && <div ref={setStudyScheduleSlotEl} />}
-
       {/* Congratulations banner — shown after returning from Stripe checkout */}
       {showUpgradedBanner && (
         <div className="rounded-lg bg-green-500/10 px-4 py-3 flex items-start justify-between gap-3">
@@ -904,7 +898,6 @@ export default function Dashboard() {
             startQuizTrigger={startQuizCounter}
             isPro={isPro}
             onPlanCompletionChange={setPlanComplete}
-            studyScheduleSlot={studyScheduleSlotEl}
             readinessSlot={readinessSlotEl}
             actions={primaryActions}
           />

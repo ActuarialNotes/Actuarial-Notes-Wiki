@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
+import { highlightMatch } from '@/components/SearchHighlight'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { X, Search as SearchIcon, BookMarked, FileText, GraduationCap, ChevronDown, CalendarCheck, Lock } from 'lucide-react'
 import { CheckMark } from '@/components/CheckMark'
@@ -184,21 +185,6 @@ function QuestionRow({ question, selected, onToggleSelect, activeDifficulty, act
   )
 }
 
-function highlight(text: string, query: string) {
-  const q = query.trim()
-  if (!q) return text
-  const idx = text.toLowerCase().indexOf(q.toLowerCase())
-  if (idx < 0) return text
-  return (
-    <>
-      {text.slice(0, idx)}
-      <mark className="bg-primary/20 text-foreground rounded px-0.5">
-        {text.slice(idx, idx + q.length)}
-      </mark>
-      {text.slice(idx + q.length)}
-    </>
-  )
-}
 
 function ConceptResultRow({ item, query, syllabi }: { item: WikiIndexItem; query: string; syllabi: WikiExamSyllabus[] }) {
   const navigate = useNavigate()
@@ -239,7 +225,7 @@ function ConceptResultRow({ item, query, syllabi }: { item: WikiIndexItem; query
       >
         <Icon className={`h-4 w-4 shrink-0 mt-0.5 ${iconColor}`} />
         <div className="min-w-0 flex-1">
-          <div className="text-sm truncate">{highlight(display, query)}</div>
+          <div className="text-sm truncate">{highlightMatch(display, query)}</div>
           {(item.author || item.year) && (
             <div className="text-[11px] text-muted-foreground truncate mt-0.5">
               {[item.author, item.year].filter(Boolean).join(' · ')}

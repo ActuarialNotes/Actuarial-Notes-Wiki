@@ -95,11 +95,21 @@ describe('shared overlays', () => {
 
   it('the floating search backdrop dims the concept popup under it', () => {
     // The popup is z-40; a tied backdrop left it bright under the dropdown.
+    // `FloatingSearchBar` is the shared one — the wiki's bar and Cowork's are
+    // both built from it — and the quiz builder still draws its own.
     for (const rel of [
-      'components/wiki/WikiFloatingSearch.tsx',
+      'components/FloatingSearchBar.tsx',
       'components/QuizFloatingSearch.tsx',
     ]) {
       expect(overlayZ(rel)).toBeGreaterThan(40)
+    }
+  })
+
+  it('leaves the bars that share it without a backdrop of their own to drift', () => {
+    for (const rel of ['components/wiki/WikiFloatingSearch.tsx', 'components/cowork/CoworkTopBar.tsx']) {
+      const src = read(rel)
+      expect(src).toContain('SearchBackdrop')
+      expect(src).not.toMatch(/fixed inset-0 z-/)
     }
   })
 })

@@ -568,14 +568,26 @@ Other important `lib/` modules:
   Override per element with `data-sound="<cue>"` / `data-sound="none"`. Nothing
   plays for a wrong answer — that's deliberate and pinned by a test. See
   `docs/sound-design.md`.
+- `components/FloatingSearchBar.tsx` — the **floating search bar**, as parts: the sticky
+  blurred container, the input line (the hamburger on the search's own row, folding away as
+  you type — see `mobileNavHost.ts`), the title strip, the scope pills and the dimmed
+  backdrop. What a query *means* differs per place; the chrome around it does not, so the
+  wiki's `WikiFloatingSearch` and Cowork's `CoworkTopBar` are both built from these and a
+  search feels the same in either mode. `components/SearchHighlight.tsx` is the matched run,
+  marked — the one implementation the wiki search, the search panel, the Search page and
+  Cowork all call. (The quiz builder's `QuizFloatingSearch` still draws its own.)
 - `appMode.ts` / `cowork*.ts` / `xlsx.ts` — **Cowork**, the app's second product (Pro-only,
   Preview, `COWORK_ENABLED`). `appMode.ts` is the one definition of what a mode *is* — label,
   home, routes, what it takes to enter it — read by the pill (`components/ModeSwitcher.tsx`),
   the sidebar's nav and `App.tsx`'s route guard, so none of the three re-decides it.
   `coworkFacets.ts` is the five facet axes as data; `coworkSources.ts` is the
-  entity/resource model, the search, the per-publisher lookups a source page reads
-  (`entityById` / `entityResources`) and the library reducers (adding a document follows its
-  publisher; dropping a publisher drops its documents); `coworkCovers.ts` finds a resource
+  entity/resource model, the shelf's filters (`groupSources` for publishers,
+  `filterResources` for the flat document list, both honouring the `entityIds`/`resourceIds`
+  the **My Library** pill passes — `[]` is an empty library, `undefined` is the filter off),
+  the search bar's two-list lookup (`searchSources`, where each side matches on its *own*
+  account), the per-publisher lookups a source page reads (`entityById` / `entityResources`)
+  and the library reducers (adding a document follows its publisher; dropping a publisher
+  drops its documents); `coworkCovers.ts` finds a resource
   card's cover in the wiki index, or says there is none; `coworkDeliverables.ts` is the
   step-by-step scoping engine (which question comes next, and `answerStep`, which drops the
   answers a change orphans); `coworkExport.ts` turns a deliverable into workbook sheets; and
@@ -813,14 +825,19 @@ built on, and exports the exhibit the scoping earned as `.xlsx` or `.csv`. The a
 register fills in from *both* the answers and the attached documents, every row naming what
 supports it.
 
-Four surfaces, and the shape of each is deliberate: the Sources shelf (`/cowork`) is
-publishers only; **a source is its own page** (`/cowork/sources/:id`), the way an exam's
-study guide is, with the publisher's *own* logo in the sticky header (`SourceEntity.logo`,
-transcribed from their site, monogram tile as the fallback) and their catalogue below it;
-**a document is always a card**, never a row — one component
-(`components/cowork/ResourceCard.tsx`) draws it everywhere, and it is the study guide's
-resource card; and a deliverable is started from **one floating button** bottom right, which
-opens the three types in line and drops straight into the scoping flow.
+Four surfaces, and the shape of each is deliberate: the Sources shelf (`/cowork`) answers
+one primary filter — **Sources or Documents** — with a grid of publisher cards or document
+cards, over a secondary pill row led by **My Library** (a filter narrowing the shelf to what
+the reader follows/has taken, not a section stacked above it); **a source is its own page**
+(`/cowork/sources/:id`), the way an exam's study guide is, with the publisher's *own* logo in
+the sticky header (`SourceEntity.logo`, transcribed from their site, monogram tile as the
+fallback) and their catalogue below it; **a document is always a card**, never a row — one
+component (`components/cowork/ResourceCard.tsx`) draws it everywhere, and it is the study
+guide's resource card; and a deliverable is started from **one floating button** bottom
+right, which opens the three types in line and drops straight into the scoping flow. On both
+kinds of card the **whole card** is the target and the one control that doesn't navigate
+(Follow, Add) sits at its right edge; a card carries pills, not a paragraph — a publisher's
+region and `established` year, a document's kind and date.
 
 Three things to know before changing any of it — all three are load-bearing, and
 `docs/cowork.md` is the full account:

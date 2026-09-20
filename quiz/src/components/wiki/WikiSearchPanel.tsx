@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { highlightMatch } from '@/components/SearchHighlight'
 import { Link, useLocation } from 'react-router-dom'
 import { BookMarked, FileText, GraduationCap, Search, X } from 'lucide-react'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
@@ -302,7 +303,7 @@ function SearchResultRow({ item, query }: { item: WikiIndexItem; query: string }
         {/* A keystone result is marked the same way it is everywhere else: a
             gold underline on the concept's name, not a second icon. */}
         <div className={`text-sm truncate ${item.category === 'concept' && isKeystone(item.name) ? 'keystone-underline' : ''}`}>
-          {highlight(display, query)}
+          {highlightMatch(display, query)}
         </div>
         {(item.author || item.year) && (
           <div className="text-[11px] text-muted-foreground truncate">
@@ -314,18 +315,3 @@ function SearchResultRow({ item, query }: { item: WikiIndexItem; query: string }
   )
 }
 
-function highlight(text: string, query: string) {
-  const q = query.trim()
-  if (!q) return text
-  const idx = text.toLowerCase().indexOf(q.toLowerCase())
-  if (idx < 0) return text
-  return (
-    <>
-      {text.slice(0, idx)}
-      <mark className="bg-primary/20 text-foreground rounded px-0.5">
-        {text.slice(idx, idx + q.length)}
-      </mark>
-      {text.slice(idx + q.length)}
-    </>
-  )
-}

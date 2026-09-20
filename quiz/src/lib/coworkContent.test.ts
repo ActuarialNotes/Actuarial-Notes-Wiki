@@ -95,6 +95,19 @@ describe('the source catalogue', () => {
     }
   })
 
+  it('writes an establishment year as a bare year, and never a future one', () => {
+    // The pill says "Est. 1987", so a full date or a range would read wrong —
+    // and a year we could not have transcribed is a year we invented.
+    const thisYear = new Date().getUTCFullYear()
+    for (const entity of COWORK_ENTITIES) {
+      if (entity.established === undefined) continue
+      expect(entity.established, entity.id).toMatch(/^\d{4}$/)
+      const year = Number(entity.established)
+      expect(year, entity.id).toBeGreaterThan(1700)
+      expect(year, entity.id).toBeLessThanOrEqual(thisYear)
+    }
+  })
+
   it('keeps every entity monogram short enough for the logo tile', () => {
     // `EntityLogo` steps the type down to 0.19 of the tile's edge at six
     // characters; past that a monogram stops fitting the square.

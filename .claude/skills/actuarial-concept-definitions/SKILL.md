@@ -20,6 +20,10 @@ It also covers the two adjacent page types that share the vault's link graph:
 **auditing an exam syllabus** for unlinked terms and dead links (see "Reviewing a
 syllabus page").
 
+A `Resources/Books/` page now serves two products: it is a syllabus reading in
+Study mode *and* the only way a real, citable document enters **Cowork's** source
+catalogue. Registering it there is the `cowork-sources` skill.
+
 ## The filename *is* the API — read this first
 
 A page's filename is its link target, and the build is unforgiving about it.
@@ -264,20 +268,22 @@ them. Re-derive the defining formula against the source text before you keep it.
 ## Source-material pages (`Resources/Books/`)
 
 Exam syllabi end with a **Source Material** callout linking one page per reading.
-These are a different shape from concept pages — they *do* have YAML frontmatter,
-and they exist to give each reading a chapter-level map into the concept vault:
+These carry richer frontmatter than a concept page, and they exist to give each
+reading a chapter-level map into the concept vault:
 
 ```markdown
 ---
-Title: Basic Ratemaking
+Title: "Basic Ratemaking"
 Authors: "Geoff Werner, Claudine Modlin"
 Year: "2016"
 date: "2016"
-Edition: 5th
-Publisher: Casualty Actuarial Society
-Type: Study Note
+Edition: "5th"
+Publisher: "Casualty Actuarial Society"
+Type: "Study Note"
 Available from: "[casact.org](https://…)"
 ---
+![[Basic Ratemaking (Werner - 2016) - Cover.svg]]
+
 One-line framing sentence, linking the exam and the core concept.
 
 ## 1 Introduction
@@ -291,12 +297,75 @@ One-line framing sentence, linking the exam and the core concept.
 - `Year`/`date` feed the Resources timeline; `Author`/`Authors`, `Edition`,
   `Publisher` populate the index card. Books use `Find at your local library at:`;
   papers, ASOPs and study notes use `Available from:` with a real URL.
-- Everything lives in `Resources/Books/` — that is the only directory the wiki
-  collector reads for documents, even for ASOPs and statements of principles.
-- Only add a `![[…Cover.png]]` embed if the image **already exists** in
-  `Media/Attachments/`. Most do not; omit rather than invent.
+- **Every content file needs a `verification:` block** as the last key of its
+  frontmatter (`docs/verification.md`) — but **do not write it by hand.** Author
+  the page without one, then run from the repo root:
+
+  ```bash
+  python3 scripts/verify_check.py --sync "Resources/Books/<your page>.md"
+  ```
+
+  which backfills the whole block and owns its derived fields. Hand-writing it is
+  a trap: `content_hash: null` is an *error* in the plain check, so a page copied
+  from a template and committed un-synced fails
+  `.github/workflows/verify-check.yml`, which gates every PR. Never hand-edit
+  `content_hash`, `status`, `open_findings` or `open_critical` afterwards either —
+  and note any edit to the page downgrades a `verified` status to `stale`, by
+  design (principle P4).
+- **Every page carries a cover**, and you do not have to find one. The metadata
+  card (`ResourceMetaCard`) shows the **first image embed in the body** as the
+  jacket and lifts it out so it is never rendered twice; a shelf of sources with no
+  pictures is much harder to scan than one with them. Write the page, then run:
+
+  ```bash
+  python3 scripts/generate_resource_covers.py     # draws a jacket from the front matter
+  ```
+
+  It draws one for any page lacking a cover and **never touches a page whose first
+  embed it does not own**, so a real publisher jacket dropped into
+  `Media/Attachments/` under a name not ending in `- Cover.svg` wins permanently.
+  A real jacket is the better picture — but a generated one is correct, and
+  omitting the cover is not. See `docs/resource-covers.md`.
 - The outline's job is linking, not summarizing. Each chapter bullet should point
-  at the concept page that teaches it.
+  at the concept page that teaches it. Build it with the `textbook-toc` skill — the
+  chapter titles come from the real work, never from memory.
+
+### Which `Resources/` directory
+
+`Resources/Books/` is the only one `virtual:wiki-content` bundles, so a page there
+opens from the bundle — offline, rate-limited, or not. **ASOPs, OSFI guidelines and
+statements of principles all live in `Resources/Books/`** for that reason, despite
+the folder's name.
+
+The vault's other `Resources/` directories — `Regulation/`, `Events/`,
+`Benchmarks/` — are dated pages that feed the Resources timeline/heatmap and use a
+different frontmatter schema (`date`/`type`, `source_url`, `source_type`,
+`pdf_url`; see `docs/research-corpus-plan.md`). They are **not** in the wiki
+bundle, so a page there is fetched from GitHub at runtime. Put a *reading* in
+`Books/`; put a dated *event or instrument* in the timeline directories.
+
+### These pages are also Cowork's source catalogue
+
+A `Resources/Books/` page is not only a syllabus reading. Cowork — the app's second
+product (`docs/cowork.md`) — lists documents an actuary works *from*, and a vault
+page is the **only** way a real, citable document gets into that catalogue: a
+Cowork entry either points at a vault page with a `wikiRef`, or it is a dateless,
+linkless `sample`. So a page written here is what turns a Cowork sample into a real
+source. Adding the catalogue entry is the `cowork-sources` skill.
+
+Two consequences for how you write the page:
+
+- **The filename is the API a third time.** `wikiRef.name` in
+  `quiz/src/data/coworkSources.ts` is the filename without `.md` — not the authored
+  `Title:`. Renaming or deleting a page that Cowork references fails
+  `quiz/src/lib/coworkContent.test.ts`, by design: the alternative is a Cowork row
+  that quietly opens an empty panel. If you rename one, grep
+  `quiz/src/data/coworkSources.ts` for the old name and update it in the same
+  change.
+- **The cover is doing double duty.** `lib/coworkCovers.ts` gives a Cowork resource
+  card its jacket by looking the vault page up *by name*, so a page with no cover
+  leads its card with a bare kind icon in both products. One more reason to run the
+  cover generator rather than omit.
 
 ## Reviewing a syllabus page
 
@@ -323,7 +392,7 @@ app can never display — so the concept looks permanently unstudied.
 
 ## Quality checklist (per page)
 
-- [ ] Starts with `**Term**` + definition; no frontmatter
+- [ ] Body starts with `**Term**` + definition, under a `verification:`-only frontmatter block (`scripts/verify_check.py --sync` writes it; never hand-edit its derived fields)
 - [ ] Definition is 1–2 precise sentences with relevant `[[wiki-links]]`
 - [ ] Defining formula is in a `> $$` block **immediately after** the definition
 - [ ] Each `> $$` block is mobile-narrow: no two formulas side-by-side via `\qquad`/`\quad`; distinct formulas in separate stacked blocks; long lines broken across `\\`
@@ -335,11 +404,13 @@ app can never display — so the concept looks permanently unstudied.
 - [ ] Multi-step solutions use `align*`, one `&=` step per line, `$$` on own lines
 - [ ] LaTeX is clean (no smart quotes, OCR dashes, Unicode fractions; `\$` for money)
 - [ ] Image embeds only reference files that exist in `Media/`
+- [ ] `Resources/Books/` page only: it carries a cover — run `python3 scripts/generate_resource_covers.py`
 - [ ] All `[[wiki-links]]` resolve to existing `Concepts/` pages
 - [ ] Filename ends in `.md`, uses spaces (not underscores), and matches inbound links character-for-character
 - [ ] Namesake check: linked the exam-appropriate page (`Deductible Rating` vs `Deductible`, etc.)
 - [ ] If the page already existed, the defining formula was re-derived, not just reformatted
 - [ ] `validate_links.py` passes for the affected exam
+- [ ] If a `Resources/` page was renamed, `quiz/src/data/coworkSources.ts` was grepped for the old name (Cowork `wikiRef`s are filenames)
 - [ ] `npm run build && npm test` pass if any file was added or renamed
 
 ## Topic reference

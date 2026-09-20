@@ -40,14 +40,14 @@ export function MobileNavButton({ collapsed = false, className }: MobileNavButto
       tabIndex={collapsed ? -1 : undefined}
       data-flashcard-nav
       className={cn(
-        'relative flex h-9 shrink-0 items-center justify-center overflow-hidden rounded-lg',
+        'relative flex h-10 shrink-0 items-center justify-center overflow-hidden rounded-lg',
         'text-foreground transition-[width,opacity,margin] duration-200 lg:hidden',
-        collapsed ? 'pointer-events-none -mr-2 w-0 opacity-0' : 'w-9 opacity-100 hover:bg-accent',
+        collapsed ? 'pointer-events-none -mr-2 w-0 opacity-0' : 'w-10 opacity-100 hover:bg-accent',
         className,
       )}
     >
       {collectGlow > 0 && <span key={`ring-${collectGlow}`} className="flashcard-nav-ring" aria-hidden="true" />}
-      <Menu key={`icon-${collectGlow}`} className={cn('h-4 w-4 shrink-0', collectGlow > 0 && 'flashcard-nav-glow')} />
+      <Menu key={`icon-${collectGlow}`} className={cn('h-5 w-5 shrink-0', collectGlow > 0 && 'flashcard-nav-glow')} />
     </button>
   )
 }

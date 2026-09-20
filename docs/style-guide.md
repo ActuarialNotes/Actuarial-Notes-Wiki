@@ -202,6 +202,8 @@ big type is rare and reserved for hero numbers and empty-state headings.
 
 - Default to `text-sm`. Reach for `text-base`+ only for genuine reading content or a
   deliberate focal point. `text-sm` (~540 uses) and `text-xs` (~465) dominate for a reason.
+  The one structural exception is the sidebar *below* `lg`, where the drawer is the whole
+  screen and its rows go `text-base` — and take it back at `lg` (§5.0).
 - Weight is the primary emphasis lever: `font-medium` (labels/active) and `font-semibold`
   (titles/headings) are the two you'll use constantly. `font-bold` is for numeric heroes and
   badges only; avoid `font-extrabold` — the single exception is the **Pro** label (§7.3),
@@ -391,6 +393,17 @@ When the search on a hosting bar goes **active**, the button folds to zero width
 input grows over it: it is the only thing on that line the reader is not using, and typing
 wants the width more than the drawer does. Pass `collapsed` and let the button animate;
 don't unmount it.
+
+**The drawer's rows are sized for a thumb, the rail's for a rail.** Below `lg` the sidebar
+is the whole screen, so a nav row is the one place the app leaves the `text-sm` default
+behind: `px-3 py-3 text-base rounded-lg` with a `h-6` icon slot (a 20px glyph) — a 48px
+full-width target carrying 16px type, well past the 40px floor in §11. At `lg` every one of
+those classes is taken back (`lg:py-2 lg:text-sm lg:rounded-md`, `lg:h-5` slot, 16px glyph)
+so the 16rem rail keeps the app's body size and nav text never outranks page text. The same
+pair rides the group headers, the theme/profile rows in the footer and the popover menus the
+profile and exam pills open — a row is a row wherever it is drawn, so add the `lg:` half
+whenever you add the mobile half. `SidebarItem`'s `base` string is where it lives; the
+hamburger matches it at `h-10 w-10`.
 
 ### 5.1 Fixed bottom action bars
 

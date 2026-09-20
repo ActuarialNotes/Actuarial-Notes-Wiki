@@ -33,7 +33,7 @@ function pageKey(ref: WikiEntryRef): string {
  * sequence from the stack: stepping to another concept starts a new trail.
  */
 export function ConceptPopup() {
-  const { open, list, index, pages, pageIndex, occurrences, occurrenceIndex, objectives, navigate, pushPage, focusPage, closePage, close, dashboardContext, setDashboardFilter } = useConceptPopup()
+  const { open, list, index, pages, pageIndex, occurrences, occurrenceIndex, objectives, walkKind, navigate, pushPage, focusPage, closePage, close, dashboardContext, setDashboardFilter } = useConceptPopup()
   const current: WikiEntryRef | undefined = list[index]
   const activePage: WikiEntryRef | undefined = pages[pageIndex]
   const { height, beginDrag } = useSplitHeight()
@@ -226,6 +226,9 @@ export function ConceptPopup() {
   // The tips behind an exam's "How to Study" card: a walk of its own, not a
   // slice of the syllabus. See components/wiki/ExamGuideCards.tsx.
   const isGuideWalk = current?.kind === 'guide'
+  // A walk with no syllabus behind it — an exam's tips, or Cowork's corpus of
+  // source documents — has nothing for the filter picker to re-slice.
+  const hasSyllabusToFilter = walkKind === 'syllabus' && !isGuideWalk
 
   const canNext = isCircular || (occMode ? occurrenceIndex < occurrences!.length - 1 : index < list.length - 1)
   // The footer bar measures the sequence prev/next actually walks, which in
@@ -364,7 +367,7 @@ export function ConceptPopup() {
             A guide walk (an exam's How to Study tips) drops it too: those pages
             are not a view of the syllabus, so every filter it offers is either
             a no-op or a lie about what is being read. */}
-        {!focusMode && !isGuideWalk && (
+        {!focusMode && hasSyllabusToFilter && (
         <div className="self-center flex flex-col items-center px-2 shrink-0" ref={viewingRef}>
           <div className="relative">
             <button

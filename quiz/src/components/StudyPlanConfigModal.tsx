@@ -121,8 +121,8 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
     if (onExamDateChange) {
       onExamDateChange(localExamDate || null)
     }
-    // The Dashboard's Study Schedule card picks this up and plays the schedule
-    // forming on itself, once the plan has regenerated from the config above.
+    // The Dashboard's readiness card picks this up and plays the schedule
+    // forming on its strip, once the plan has regenerated from the config above.
     if (examId) emitPlanLocked(examId)
     onClose()
   }

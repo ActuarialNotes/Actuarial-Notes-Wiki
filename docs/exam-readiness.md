@@ -134,22 +134,30 @@ while they render at the top of the page:
    without re-printing its name, and carries that exam's accent (`lib/examColors.ts`) so the
    card sits on the same ladder as every other surface that shows one.
 
-   The dates row is the deadline the score is racing — a readiness percentage means nothing
-   without one, so the card carries it rather than leaving it to the Study Schedule further
-   down the page. It prints the chosen exam date and how many days that leaves, and falls
-   back to *Set your exam date* when there is none; under either, the **next published
-   sitting window** for this exam (`data/examSittings.ts`) appears only when it adds
-   something — no date chosen yet, or a date that falls outside every known window. Nothing
-   there is inferred: the countdown is the chosen date and the window is transcribed from the
-   sittings table, so an exam with no scheduled sitting simply offers the picker. Tapping the
-   row opens the same Study Plan step the heatmap's date row does.
+   The dates block is the deadline the score is racing — a readiness percentage means
+   nothing without one, so the card carries it. It prints the chosen exam date and how many
+   days that leaves, and falls back to *Set your exam date* when there is none; under either,
+   the **next published sitting window** for this exam (`data/examSittings.ts`) appears only
+   when it adds something — no date chosen yet, or a date that falls outside every known
+   window. Nothing there is inferred: the countdown is the chosen date and the window is
+   transcribed from the sittings table, so an exam with no scheduled sitting simply offers
+   the picker. Tapping the block's date line opens the Study Plan modal at the exam-date step.
+
+   Under those two lines is the **schedule strip** — what used to be the Study Schedule card,
+   drawn as a *linear* heatmap (`<ExamHeatmap layout="linear">`): one thin bar per day from a
+   fortnight before the first session to a fortnight past exam day, shaded by how much of
+   that day's plan was completed, with today ringed, the exam day solid and the target-ready
+   day amber. Merging it here is what makes the deadline and the record of what has been done
+   about it one object rather than two cards saying the same thing at opposite ends of the
+   page. It keeps everything the card did: tapping a day opens that day's panel below the
+   block (its sessions, gems, level-ups and what the plan schedules for it), the
+   *schedule-forming* sweep plays out on it when a plan is locked in, and the **Target ready**
+   date row sits under the strip.
 2. **Today's Study Plan** — what to do about that score today. It follows the number rather
    than the ring: a reader who has just read *Not started* is looking for the next step, not
    for a breakdown of how the number was reached.
 3. **Study Guide** — the **ring** beside the **criteria**, the breakdown for the reader who
    wants one.
-
-Then the **Study Schedule** heatmap, in its own slot below the group.
 
 The actions (*Read concepts* / *Fix mistakes* / *Start Quiz*) are the Dashboard's: it owns
 their triggers and the pinned-header copies, and hands them to `ReadinessCard` as the

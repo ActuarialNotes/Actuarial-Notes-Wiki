@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { Check, Circle, Gem, X, Loader2, Lock, Unlock } from 'lucide-react'
+import { Circle, Gem, X, Loader2, Lock, Unlock } from 'lucide-react'
+import { CheckMark } from '@/components/CheckMark'
 import { Button } from '@/components/ui/button'
 import { supabase } from '@/lib/supabase'
 import { todayISO } from '@/lib/studyPlan'
@@ -249,7 +250,7 @@ export function StudyPlanCompletionCeremony({ concepts, gemsEarnedToday, onClose
                     className="ceremony-concept-in flex items-center gap-2.5 px-3 py-2 rounded-xl bg-green-50 dark:bg-green-950/25"
                   >
                     <span className="study-plan-check-in shrink-0" style={{ animationDelay: '100ms' }}>
-                      <Check className="h-4 w-4 text-green-500" />
+                      <CheckMark className="h-4 w-4" />
                     </span>
                     <span className="text-sm flex-1 min-w-0 truncate font-medium text-green-800 dark:text-green-200">
                       {c.name}
@@ -280,7 +281,7 @@ export function StudyPlanCompletionCeremony({ concepts, gemsEarnedToday, onClose
 
                 {/* Concept summary strip */}
                 <div className="flex items-center justify-center gap-1.5 text-green-500 mb-4">
-                  <Check className="h-4 w-4" />
+                  <CheckMark className="h-4 w-4 text-current" />
                   <span className="text-sm font-medium">
                     {concepts.length} concept{concepts.length !== 1 ? 's' : ''} completed
                   </span>

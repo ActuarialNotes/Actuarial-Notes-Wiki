@@ -35,9 +35,14 @@ export interface TodayQuizCounts {
   /** Sum of the still-outstanding counts. Exams whose plan is already complete
    *  contribute 0, so the badge disappears once the day's work is done. */
   total: number
+  /** True when every active exam with a plan today has finished it. The
+   *  aggregate surfaces (the Sidebar's Quiz row and icon) badge the whole
+   *  day's work, so this is what turns their count into a checkmark — and it
+   *  is false when there is no plan at all, which is not an accomplishment. */
+  allComplete: boolean
 }
 
-const EMPTY_COUNTS: TodayQuizCounts = { byExam: {}, total: 0 }
+const EMPTY_COUNTS: TodayQuizCounts = { byExam: {}, total: 0, allComplete: false }
 
 /**
  * Questions left in today's study plan, per exam and in total. Pro-only,
@@ -102,7 +107,8 @@ export function useTodayQuizCounts(): TodayQuizCounts {
       byExam[examId] = entry
       if (!entry.complete) total += entry.count
     }
-    return { byExam, total }
+    const entries = Object.values(byExam)
+    return { byExam, total, allComplete: entries.length > 0 && entries.every(e => e.complete) }
   }, [user, isPro, examProgress, allQuestions, planP, planFM, planMAS, planCAS5,
       syllabusP, syllabusFM, syllabusMAS, syllabusCAS5, masteryRecords, completedToday, answeredQuestionIds])
 }

@@ -1,7 +1,8 @@
 import { useMemo, useState, useCallback, useEffect, useRef, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
-import { ArrowDown, ArrowUp, CalendarDays, Check, CheckCircle2, Circle, Gem, Lock, Settings2, X } from 'lucide-react'
+import { ArrowDown, ArrowUp, CalendarDays, CheckCircle2, Circle, Gem, Lock, Settings2, X } from 'lucide-react'
+import { CheckMark } from '@/components/CheckMark'
 import { Link } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -857,11 +858,11 @@ export function ReadinessCard({
             <button
               type="button"
               onClick={() => setShowDayCompleteInfo(true)}
-              className="absolute -top-2 -right-2 flex h-7 w-7 items-center justify-center rounded-full bg-green-500 text-white shadow ring-2 ring-background hover:bg-green-600 transition-colors z-10"
+              className="absolute -top-2 -right-2 z-10 inline-flex rounded-full text-green-500 shadow ring-2 ring-background transition-colors hover:text-green-600"
               aria-label="Today's study plan complete — view bonus details"
               title="Today's study plan complete — tap for details"
             >
-              <Check className="h-4 w-4" strokeWidth={3} />
+              <CheckMark className="block h-7 w-7 text-current" />
             </button>
           )}
           {tracePlanBorder && (
@@ -899,7 +900,7 @@ export function ReadinessCard({
               {todayQuestionsAnswered > 0 && !allConceptsDone && (
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
-                    <Check className="h-3 w-3 text-green-500" />
+                    <CheckMark className="h-3.5 w-3.5" />
                     {todayGemsEarned}/{todayQuestionsAnswered} correct
                   </span>
                   {todayGemsEarned > 0 && (
@@ -939,7 +940,7 @@ export function ReadinessCard({
                         return (
                           <div key={name} className={`flex items-center gap-2 w-full${isCascadeHighlighted ? ' concept-row-foil' : (flashingConcept?.toLowerCase() === name.toLowerCase() ? ' concept-row-highlight' : '')}${recentlyCompletedConcepts.has(name.toLowerCase()) ? ' concept-success' : ''}`}>
                             {isCompleted
-                              ? <Check className="h-4 w-4 text-green-500 shrink-0" />
+                              ? <CheckMark className="h-4 w-4" />
                               : <Circle className="h-4 w-4 text-muted-foreground shrink-0" />}
                             {/* Concept name — opens popup */}
                             <button
@@ -976,7 +977,7 @@ export function ReadinessCard({
                           onClick={() => openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'entire-syllabus', globalIdx === -1 ? 0 : globalIdx)}
                           className={`w-full flex items-center gap-2 text-left transition-colors${flashingConcept?.toLowerCase() === lu.conceptSlug.toLowerCase() ? ' concept-row-highlight' : ''}`}
                         >
-                          <Check className="h-4 w-4 text-green-500 shrink-0" />
+                          <CheckMark className="h-4 w-4" />
                           <span className="text-xs py-1 flex-1 min-w-0 truncate text-muted-foreground line-through hover:text-foreground/80">
                             {lu.conceptSlug}
                           </span>
@@ -1313,7 +1314,7 @@ export function ReadinessCard({
                     const cIdx = allConcepts.findIndex(c => c.name.toLowerCase() === lu.conceptSlug.toLowerCase())
                     return (
                       <div key={lu.conceptSlug + lu.at} className="flex items-center gap-2.5 px-2 py-1.5">
-                        <Check className="h-4 w-4 text-green-500 shrink-0" />
+                        <CheckMark className="h-4 w-4" />
                         <button
                           type="button"
                           onClick={() => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', cIdx === -1 ? 0 : cIdx)}
@@ -1622,7 +1623,7 @@ function DayCompleteInfoPanel({
             <div className="rounded-lg border bg-muted/30 px-3 py-2.5 space-y-1 max-h-40 overflow-y-auto">
               {conceptsCompleted.map(c => (
                 <div key={c.name} className="flex items-center gap-2 text-xs">
-                  <Check className="h-3.5 w-3.5 text-green-500 shrink-0" />
+                  <CheckMark className="h-3.5 w-3.5" />
                   <span className="flex-1 min-w-0 truncate">{c.name}</span>
                   <span className="text-green-600 dark:text-green-400 font-medium shrink-0">→ {c.label}</span>
                 </div>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Check, Shuffle } from 'lucide-react'
+import { Shuffle } from 'lucide-react'
+import { CheckMark } from '@/components/CheckMark'
 import { cn } from '@/lib/utils'
 
 // The deck on the quiz setup screen: one large card standing in for the pool of
@@ -110,7 +111,7 @@ export function QuestionDeckCard({
           {justShuffled ? (
             <span className="inline-flex items-center gap-1 text-xs font-medium text-green-600 dark:text-green-400">
               Shuffled
-              <Check className="h-3.5 w-3.5 shrink-0" />
+              <CheckMark className="h-3.5 w-3.5 text-current" />
             </span>
           ) : (
             <span

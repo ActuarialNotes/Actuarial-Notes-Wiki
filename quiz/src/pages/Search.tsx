@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { X, Check, Search as SearchIcon, BookMarked, FileText, GraduationCap, ChevronDown, CalendarCheck, Lock } from 'lucide-react'
+import { X, Search as SearchIcon, BookMarked, FileText, GraduationCap, ChevronDown, CalendarCheck, Lock } from 'lucide-react'
+import { CheckMark } from '@/components/CheckMark'
 import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions, filterQuestions } from '@/lib/parser'
 import type { Question, Difficulty } from '@/lib/parser'
@@ -84,13 +85,11 @@ function QuestionRow({ question, selected, onToggleSelect, activeDifficulty, act
             type="button"
             onClick={() => onToggleSelect(question.id)}
             aria-label={`Select question ${question.id}`}
-            className={`h-6 w-6 shrink-0 rounded-full border-2 flex items-center justify-center transition-colors cursor-pointer ${
-              selected
-                ? 'bg-primary border-primary text-primary-foreground'
-                : 'border-input hover:border-primary'
+            className={`h-6 w-6 shrink-0 rounded-full flex items-center justify-center transition-colors cursor-pointer ${
+              selected ? '' : 'border-2 border-input hover:border-primary'
             }`}
           >
-            {selected && <Check className="h-3.5 w-3.5" />}
+            {selected && <CheckMark className="h-6 w-6" />}
           </button>
           <QuestionAttemptBadge summary={attemptSummary} showNew={attemptsTracked} />
           <span className={`text-xs px-2 py-0.5 rounded-full shrink-0 transition-colors ${
@@ -774,7 +773,7 @@ export default function Search() {
                       >
                         <CalendarCheck className="h-4 w-4 shrink-0" />
                         <span className="flex-1 text-left">Today's Study Plan</span>
-                        {useTodaysPlan && <Check className="h-3.5 w-3.5 shrink-0" />}
+                        {useTodaysPlan && <CheckMark className="h-3.5 w-3.5" />}
                         <span className={`text-xs shrink-0 ${useTodaysPlan ? 'text-primary/70' : 'text-muted-foreground'}`}>
                           {planConceptCount} concept{planConceptCount !== 1 ? 's' : ''}
                         </span>
@@ -844,11 +843,11 @@ export default function Search() {
                                       onClick={() => toggleSubtopic(subtopic)}
                                       className="flex items-center gap-2.5 w-full py-2.5 text-left text-sm rounded hover:bg-muted/40 transition-colors"
                                     >
-                                      <div className={`h-5 w-5 shrink-0 rounded border flex items-center justify-center ${
-                                        isSelected ? 'bg-primary border-primary' : 'border-input bg-background'
-                                      }`}>
-                                        {isSelected && <Check className="h-3 w-3 text-primary-foreground" />}
-                                      </div>
+                                      {isSelected ? (
+                                        <CheckMark className="h-5 w-5" />
+                                      ) : (
+                                        <div className="h-5 w-5 shrink-0 rounded-full border border-input bg-background" />
+                                      )}
                                       <span className={`flex-1 truncate ${isSelected ? 'font-medium text-primary' : isToday ? 'text-primary/80' : ''}`}>
                                         {subtopic}
                                       </span>

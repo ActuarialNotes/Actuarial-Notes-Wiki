@@ -6,7 +6,8 @@
 // stalling them at New.
 
 import { useMemo } from 'react'
-import { Check, Lock, Play, X } from 'lucide-react'
+import { Lock, Play, X } from 'lucide-react'
+import { CheckMark } from '@/components/CheckMark'
 import { useCollect } from '@/hooks/useCollect'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { CollectGateButton } from '@/components/collect/CollectGateButton'
@@ -82,7 +83,7 @@ export function PreQuizCollectGate({ concepts, planConcepts, onStart, onQuit }: 
                     title={highlight ? "In today's study plan" : undefined}
                   >
                     {isCollected ? (
-                      <Check className="h-4 w-4 text-green-500 shrink-0" />
+                      <CheckMark className="h-4 w-4" />
                     ) : (
                       <Lock className="h-4 w-4 text-muted-foreground shrink-0" />
                     )}

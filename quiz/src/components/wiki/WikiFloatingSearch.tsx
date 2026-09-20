@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BookMarked, Check, FileText, GraduationCap, ListChecks, Play, Search, Sparkles, X } from 'lucide-react'
+import { BookMarked, FileText, GraduationCap, ListChecks, Play, Search, Sparkles, X } from 'lucide-react'
+import { CheckMark } from '@/components/CheckMark'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { fromSlug, pathToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { findSyllabiForConcept } from '@/lib/conceptMatch'
@@ -355,7 +356,7 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
                         className="flex items-center gap-2 min-w-0 text-left rounded-md px-2 py-1.5 text-sm hover:bg-accent/60 transition-colors"
                       >
                         {done
-                          ? <Check className="h-4 w-4 shrink-0 text-green-500" aria-hidden="true" />
+                          ? <CheckMark className="h-4 w-4" />
                           : <FileText className="h-4 w-4 shrink-0 text-violet-500" aria-hidden="true" />}
                         <span className={`truncate ${done ? 'text-muted-foreground line-through' : ''}`}>
                           {item.name}

@@ -1,10 +1,11 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
-import { CalendarCheck, Check, CheckCircle2, ChevronDown, ChevronLeft, Circle, Loader2, Lock, Play, X } from 'lucide-react'
+import { CalendarCheck, ChevronDown, ChevronLeft, Circle, Loader2, Lock, Play, X } from 'lucide-react'
 import { QuizFloatingSearch } from '@/components/QuizFloatingSearch'
 import { QuestionDeckCard } from '@/components/QuestionDeckCard'
 import { QuizSettingsMenu } from '@/components/QuizSettingsMenu'
 import { TodayQuizCornerBadge } from '@/components/TodayQuizBadge'
+import { CheckMark } from '@/components/CheckMark'
 import { useTodayQuizCounts } from '@/hooks/useTodayQuizCount'
 import { badgeCountFor } from '@/lib/todayPlanCount'
 import { useAuth } from '@/hooks/useAuth'
@@ -173,9 +174,9 @@ function GroupSection({
             aria-label={allSelected ? `Deselect all ${group.name}` : `Select all ${group.name}`}
           >
             {allSelected ? (
-              <CheckCircle2 className="h-5 w-5 text-primary" />
+              <CheckMark className="h-5 w-5" />
             ) : someSelected ? (
-              <CheckCircle2 className="h-5 w-5 text-primary/40" />
+              <CheckMark className="h-5 w-5 text-green-500/40" />
             ) : (
               <Circle className="h-5 w-5 text-muted-foreground/60" />
             )}
@@ -229,7 +230,7 @@ function GroupSection({
                 )}
               >
                 {isSelected ? (
-                  <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
+                  <CheckMark className="h-4 w-4" />
                 ) : (
                   <Circle className="h-4 w-4 shrink-0 text-muted-foreground/50" />
                 )}
@@ -261,6 +262,7 @@ function ExamOptionCard({
   targetDate,
   subtitle,
   todayQuizCount = 0,
+  todayQuizComplete = false,
 }: {
   exam: { value: string; label: string; progressKey: string }
   onClick: () => void
@@ -270,6 +272,8 @@ function ExamOptionCard({
   subtitle?: string | null
   /** Questions left in this exam's plan today — picking the card starts here. */
   todayQuizCount?: number
+  /** Today's plan for this exam is finished — the corner carries a check. */
+  todayQuizComplete?: boolean
 }) {
   const isActive = colorIdx >= 0
   // P and FM are the mature exams with a full question bank; the rest of what
@@ -345,8 +349,9 @@ function ExamOptionCard({
           </div>
         </CardHeader>
       </Card>
-      {/* After the Card so it paints above the card surface. */}
-      <TodayQuizCornerBadge count={todayQuizCount} size="md" />
+      {/* After the Card so it paints above the card surface. A count while
+          there's work left today, the checkmark once there isn't. */}
+      <TodayQuizCornerBadge count={todayQuizCount} complete={todayQuizComplete} size="md" />
     </button>
   )
 }
@@ -1334,6 +1339,7 @@ export default function Landing() {
                           targetDate={isActive ? (targetDates[exam.progressKey] ?? null) : null}
                           subtitle={examTopicByProgressKey[exam.progressKey]}
                           todayQuizCount={badgeCountFor(todayQuizByExam[exam.progressKey])}
+                          todayQuizComplete={todayQuizByExam[exam.progressKey]?.complete ?? false}
                         />
                       )
                     })}
@@ -1381,7 +1387,7 @@ export default function Landing() {
                     <ul className="overflow-hidden rounded-lg bg-muted/30">
                       {todayConceptDisplayNames.map(concept => (
                         <li key={concept} className="flex items-center gap-2.5 px-3 py-2.5">
-                          <Check className="h-4 w-4 shrink-0 text-primary/60" aria-hidden />
+                          <CheckMark className="h-4 w-4" />
                           <span className="min-w-0 flex-1 text-sm font-medium leading-snug">{concept}</span>
                         </li>
                       ))}
@@ -1502,7 +1508,11 @@ export default function Landing() {
             {/* Only badge a launch that's actually sized to finish today's plan —
                 picking a smaller count means this quiz won't complete it. */}
             {mode === 'quiz' && useTodaysPlan && count === todaysPlanFullCount && (
-              <TodayQuizCornerBadge count={badgeCountFor(todayQuizByExam[examIdForPlan ?? ''])} size="lg" />
+              <TodayQuizCornerBadge
+                count={badgeCountFor(todayQuizByExam[examIdForPlan ?? ''])}
+                complete={todayQuizByExam[examIdForPlan ?? '']?.complete ?? false}
+                size="lg"
+              />
             )}
           </div>
 

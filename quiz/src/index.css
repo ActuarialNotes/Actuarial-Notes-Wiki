@@ -1722,3 +1722,51 @@ summary .katex-display,
   .schedule-playback-day { animation: none; }
   .schedule-playback-concept { animation: none; }
 }
+
+/* ── Tab switches: the exam moves, the page around it changes ──────────────
+   A view transition per tab switch (components/ViewTransitions.tsx starts it,
+   lib/viewTransition.ts hands out the names). An exam card on the Quiz tab, an
+   exam card on Study Guides and an exam pill on the Dashboard are one object
+   seen three ways, so they carry one `view-transition-name` and the browser
+   tweens between them while the rest of the page cross-fades.
+
+   The timing is the app's own: 280ms on the decelerating curve the style guide
+   uses for something arriving, rather than the browser's flat 250ms ease. The
+   default duration is fine for a fade, but here it also paces a shape crossing
+   half the viewport, where an ease-out reads as the object *landing*. */
+::view-transition-group(*) {
+  animation-duration: 280ms;
+  animation-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation-duration: 280ms;
+  animation-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* A card and a pill are very different shapes, so between them the group box
+   is briefly neither. Clip to it: a snapshot scaled to the box's width spills
+   out of it otherwise, and a card bleeding past a pill's rounded ends is the
+   one frame that gives the trick away. */
+::view-transition-image-pair(*) {
+  overflow: clip;
+  border-radius: inherit;
+}
+
+/* The page itself is not one of those objects — it is the backdrop the exam
+   moves across, and it only ever cross-fades with itself at the same size. */
+::view-transition-image-pair(root) {
+  overflow: visible;
+}
+
+/* Reduced motion is decided in JS (`motionAllowed`), so a reader who asked for
+   less never starts a transition at all. This is the backstop for one already
+   running when the preference changes. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

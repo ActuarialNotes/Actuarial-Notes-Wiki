@@ -22,6 +22,7 @@ import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { questionsNeededForPlan } from '@/lib/todayPlanCount'
 import { TodayQuizCornerBadge } from '@/components/TodayQuizBadge'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { examTransitionStyle } from '@/lib/viewTransition'
 import { questionExamLabel } from '@/lib/examIds'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import type { QuestContext } from '@/lib/quests'
@@ -779,6 +780,11 @@ export default function Dashboard() {
                   type="button"
                   data-exam-tab-active={i === clampedIdx}
                   onClick={() => setActiveExamIdx(i)}
+                  // The exam's name for the tab-switch view transition. The
+                  // Quiz and Study Guides tabs draw this same exam as a card,
+                  // so arriving here the card shrinks into its pill rather
+                  // than the two cutting past each other.
+                  style={examTransitionStyle(wikiExamIdToProgressKey(s.examId), s.examId)}
                   className={`shrink-0 h-10 px-4 rounded-full text-base font-semibold transition-colors ${
                     i === clampedIdx
                       ? 'bg-primary text-primary-foreground'

@@ -95,6 +95,15 @@ function parseFrontmatter(raw: string): Record<string, string> {
 let bundledIndex: WikiIndexItem[] | null = null
 export function setWikiIndexBundle(items: WikiIndexItem[]): void { bundledIndex = items }
 
+/**
+ * The bundled index if it has been set, synchronously — for a surface that has
+ * to have it on its *first* render rather than a microtask later (the Study
+ * Guides home page, whose exam cards are what a tab-switch view transition
+ * matches against). `buildWikiIndex` is still the way to ask for it in
+ * general: it falls back to the cache and the network, this does not.
+ */
+export function bundledWikiIndex(): WikiIndexItem[] | null { return bundledIndex }
+
 // Synchronous check against the bundled index. Returns true when the entry
 // exists or when the index hasn't been loaded yet (fail-open so links aren't
 // incorrectly styled as missing during hydration).

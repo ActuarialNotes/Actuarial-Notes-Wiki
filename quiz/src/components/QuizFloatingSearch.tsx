@@ -315,8 +315,13 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
         className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur-md"
       >
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          {/* Input row */}
-          <div className="flex items-center gap-2 h-14">
+          {/* Input row. The height is 3.5rem *minus the bottom border* so the
+              whole bar comes to exactly 56px — the same total the Study Guides
+              bar measures, and the offset every sticky header below it is
+              written against. At a flat `h-14` this bar was a pixel taller
+              than that one, which showed as the page nudging down by one on
+              every switch between the two tabs. */}
+          <div className="flex items-center gap-2 h-[calc(3.5rem-1px)]">
             {/* See WikiFloatingSearch — below lg this bar carries the nav
                 button, and searching folds it away. */}
             <MobileNavButton collapsed={active} className="-ml-1.5" />

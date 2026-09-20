@@ -14,11 +14,13 @@ import { libraryResources, type SourceResource } from '@/lib/coworkSources'
 import { availableExports, type ExportContext } from '@/lib/coworkExport'
 import { useCoworkDeliverables } from '@/hooks/useCoworkDeliverables'
 import { useCoworkLibrary } from '@/hooks/useCoworkLibrary'
+import { useCoworkCovers } from '@/hooks/useCoworkCovers'
+import { resourceCover } from '@/lib/coworkCovers'
 import { DeliverableWizard } from '@/components/cowork/DeliverableWizard'
 import { AssumptionsTable, KeyDetailsTable } from '@/components/cowork/AssumptionsTable'
 import { ExportPanel } from '@/components/cowork/ExportPanel'
 import { FacetPills } from '@/components/cowork/FacetPills'
-import { ResourceRow } from '@/components/cowork/ResourceRow'
+import { ResourceCard, ResourceCardGrid } from '@/components/cowork/ResourceCard'
 import { cn } from '@/lib/utils'
 
 /**
@@ -48,6 +50,7 @@ export default function DeliverableDetail({
 }: DeliverableDetailProps) {
   const { deliverables, answer, unanswer, attach, detach, rename } = useCoworkDeliverables()
   const library = useCoworkLibrary()
+  const covers = useCoworkCovers()
   const [editingTitle, setEditingTitle] = useState(false)
 
   const deliverable = deliverables.find(d => d.id === deliverableId)
@@ -178,16 +181,20 @@ export default function DeliverableDetail({
       <section>
         <h2 className="mb-2 text-sm font-semibold text-foreground">2 · Attach sources</h2>
         {attached.length > 0 && (
-          <div className="-mx-2 mb-2">
-            {attached.map(resource => (
-              <ResourceRow
-                key={resource.id}
-                resource={resource}
-                inLibrary
-                onToggleLibrary={() => detach(deliverable.id, resource.id)}
-                onOpen={onOpenResource}
-              />
-            ))}
+          <div className="mb-3">
+            <ResourceCardGrid>
+              {attached.map(resource => (
+                <ResourceCard
+                  key={resource.id}
+                  resource={resource}
+                  cover={resourceCover(covers, resource)}
+                  inLibrary
+                  onToggleLibrary={() => detach(deliverable.id, resource.id)}
+                  onOpen={onOpenResource}
+                  attachLabel="Attach"
+                />
+              ))}
+            </ResourceCardGrid>
           </div>
         )}
 
@@ -200,17 +207,20 @@ export default function DeliverableDetail({
                 {available.length}
               </span>
             </summary>
-            <div className="border-t px-2 py-1.5">
-              {available.map(resource => (
-                <ResourceRow
-                  key={resource.id}
-                  resource={resource}
-                  inLibrary={false}
-                  onToggleLibrary={() => attach(deliverable.id, resource.id)}
-                  onOpen={onOpenResource}
-                  attachLabel="Attach"
-                />
-              ))}
+            <div className="border-t p-3">
+              <ResourceCardGrid>
+                {available.map(resource => (
+                  <ResourceCard
+                    key={resource.id}
+                    resource={resource}
+                    cover={resourceCover(covers, resource)}
+                    inLibrary={false}
+                    onToggleLibrary={() => attach(deliverable.id, resource.id)}
+                    onOpen={onOpenResource}
+                    attachLabel="Attach"
+                  />
+                ))}
+              </ResourceCardGrid>
             </div>
           </details>
         ) : (

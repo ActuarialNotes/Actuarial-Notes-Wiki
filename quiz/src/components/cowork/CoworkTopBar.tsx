@@ -1,41 +1,48 @@
+import type { ReactNode } from 'react'
 import { Search, X } from 'lucide-react'
 import { MobileNavButton } from '@/components/MobileNavButton'
-import { cn } from '@/lib/utils'
 
 /**
- * Cowork's top bar — the search input, the tabs, and (below `lg`) the way into
- * the sidebar drawer.
+ * Cowork's top bar — the search input, the page strip, and (below `lg`) the way
+ * into the sidebar drawer.
  *
  * It is the same shape as the wiki's and the quiz builder's floating search
  * bars, and for the same reason: a page that pins a bar to the top of the
- * viewport carries the hamburger on that bar's line rather than under a second
- * app header, so the phone spends one row on chrome instead of two. The route
- * is registered in `lib/mobileNavHost.ts`, which is what tells `App.tsx` not to
+ * viewport carries the hamburger in that bar, on the same line as the search
+ * input, so the phone spends one row on chrome instead of two. The route is
+ * registered in `lib/mobileNavHost.ts`, which is what tells `App.tsx` not to
  * reserve room for a header above it — the two have to move together.
+ *
+ * There are **no tabs here**. Sources and Deliverables are the mode's two
+ * places and the sidebar is where a place is chosen, the same as every route in
+ * Study mode; a second row of tabs restating the nav cost a phone a row of
+ * chrome to say what the drawer already says.
+ *
+ * The strip below the search line is the wiki's: on a page *about* something —
+ * a source — it carries that thing's logo where the exam page carries the
+ * exam's, with a way back to the shelf. The name rides along for a screen
+ * reader, since the page under the strip opens with it in display type.
  */
-
-export interface CoworkTab {
-  id: string
-  label: string
-  count?: number
-}
 
 export interface CoworkTopBarProps {
   query: string
   onQueryChange: (value: string) => void
   placeholder: string
-  tabs: CoworkTab[]
-  activeTab: string
-  onTabChange: (id: string) => void
+  /** The strip's subject, when the page has one. */
+  pageTitle?: string | null
+  /** Stands in for the strip's title text — a logo tile. */
+  pageIcon?: ReactNode
+  /** The way back out of a page, at the head of the strip. */
+  backLink?: ReactNode
 }
 
 export function CoworkTopBar({
   query,
   onQueryChange,
   placeholder,
-  tabs,
-  activeTab,
-  onTabChange,
+  pageTitle,
+  pageIcon,
+  backLink,
 }: CoworkTopBarProps) {
   return (
     <div className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
@@ -68,31 +75,19 @@ export function CoworkTopBar({
           </div>
         </div>
 
-        <div className="flex gap-1" role="tablist" aria-label="Cowork sections">
-          {tabs.map(tab => (
-            <button
-              key={tab.id}
-              type="button"
-              role="tab"
-              aria-selected={activeTab === tab.id}
-              onClick={() => onTabChange(tab.id)}
-              data-sound="select"
-              className={cn(
-                '-mb-px flex items-center gap-1.5 border-b-2 px-3 py-2.5 text-sm font-medium transition-colors',
-                activeTab === tab.id
-                  ? 'border-primary text-foreground'
-                  : 'border-transparent text-muted-foreground hover:text-foreground',
-              )}
-            >
-              {tab.label}
-              {tab.count !== undefined && tab.count > 0 && (
-                <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-semibold leading-none tabular-nums text-muted-foreground">
-                  {tab.count}
-                </span>
-              )}
-            </button>
-          ))}
-        </div>
+        {pageTitle && (
+          <div className="flex h-[calc(3.5rem-1px)] items-center gap-2.5">
+            {backLink}
+            {pageIcon ? (
+              <span className="flex min-w-0 flex-1 items-center">
+                {pageIcon}
+                <span className="sr-only">{pageTitle}</span>
+              </span>
+            ) : (
+              <span className="min-w-0 flex-1 truncate text-sm font-semibold">{pageTitle}</span>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )

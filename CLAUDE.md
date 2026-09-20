@@ -57,7 +57,8 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
 
 ### Inside `quiz/src/`
 - `pages/` — route-level views (Quiz, Review, Dashboard, Flashcards, Search, Settings, Store,
-  Upgrade, wiki/*, `Cowork/` — the second product's two tabs — and `Research/`, which is
+  Upgrade, wiki/*, `Cowork/` — the second product's shelf, source pages and deliverables —
+  and `Research/`, which is
   flag-gated)
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
   `components/collect/` (flashcard-collection modal + 3D card), `components/research/` (flag-gated).
@@ -572,8 +573,10 @@ Other important `lib/` modules:
   home, routes, what it takes to enter it — read by the pill (`components/ModeSwitcher.tsx`),
   the sidebar's nav and `App.tsx`'s route guard, so none of the three re-decides it.
   `coworkFacets.ts` is the five facet axes as data; `coworkSources.ts` is the
-  entity/resource model, the search, and the library reducers (adding a document follows its
-  publisher; dropping a publisher drops its documents); `coworkDeliverables.ts` is the
+  entity/resource model, the search, the per-publisher lookups a source page reads
+  (`entityById` / `entityResources`) and the library reducers (adding a document follows its
+  publisher; dropping a publisher drops its documents); `coworkCovers.ts` finds a resource
+  card's cover in the wiki index, or says there is none; `coworkDeliverables.ts` is the
   step-by-step scoping engine (which question comes next, and `answerStep`, which drops the
   answers a change orphans); `coworkExport.ts` turns a deliverable into workbook sheets; and
   `xlsx.ts` is a minimal dependency-free `.xlsx` writer (stored ZIP + CRC-32 + inline
@@ -794,8 +797,9 @@ deploy via the GitHub Action above.
 
 ## Cowork (the second product)
 
-Pro-only, in **Preview**, gated by `COWORK_ENABLED`. Two tabs — **Sources** and
-**Deliverables** — which are the two halves of one loop:
+Pro-only, in **Preview**, gated by `COWORK_ENABLED`. Two places — **Sources** and
+**Deliverables** — chosen from the sidebar, like every route in Study mode (the page carries
+no tab row). They are the two halves of one loop:
 
 ```
 Sources ──► Library ──► Deliverable ──► Scoping ──► Attach ──► Populate ──► Export
@@ -808,6 +812,15 @@ step-by-step sequence of multiple-choice questions to scope it, attaches the doc
 built on, and exports the exhibit the scoping earned as `.xlsx` or `.csv`. The assumptions
 register fills in from *both* the answers and the attached documents, every row naming what
 supports it.
+
+Four surfaces, and the shape of each is deliberate: the Sources shelf (`/cowork`) is
+publishers only; **a source is its own page** (`/cowork/sources/:id`), the way an exam's
+study guide is, with the publisher's *own* logo in the sticky header (`SourceEntity.logo`,
+transcribed from their site, monogram tile as the fallback) and their catalogue below it;
+**a document is always a card**, never a row — one component
+(`components/cowork/ResourceCard.tsx`) draws it everywhere, and it is the study guide's
+resource card; and a deliverable is started from **one floating button** bottom right, which
+opens the three types in line and drops straight into the scoping flow.
 
 Three things to know before changing any of it — all three are load-bearing, and
 `docs/cowork.md` is the full account:

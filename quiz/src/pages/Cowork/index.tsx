@@ -1,14 +1,14 @@
 import { useCallback, useMemo } from 'react'
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { ChevronLeft } from 'lucide-react'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { CoworkTopBar } from '@/components/cowork/CoworkTopBar'
-import { ProBadge } from '@/components/ProBadge'
-import { resourceEntryRef, type SourceResource } from '@/lib/coworkSources'
-import { COWORK_RESOURCES } from '@/data/coworkSources'
-import { useCoworkLibrary } from '@/hooks/useCoworkLibrary'
-import { useCoworkDeliverables } from '@/hooks/useCoworkDeliverables'
+import { EntityLogo } from '@/components/cowork/EntityLogo'
+import { entityById, resourceEntryRef, type SourceResource } from '@/lib/coworkSources'
+import { COWORK_ENTITIES, COWORK_RESOURCES } from '@/data/coworkSources'
 import SourcesView from './SourcesView'
+import SourcePage from './SourcePage'
 import DeliverablesView from './DeliverablesView'
 import DeliverableDetail from './DeliverableDetail'
 // Registers Cowork's sample source documents as virtual vault files, which is
@@ -19,12 +19,13 @@ import '@/lib/coworkContent'
 /**
  * **Cowork** — the second product under the Actuarial Notes roof.
  *
- * Two tabs, which are the two halves of one loop: **Sources** is what an
+ * Two places, which are the two halves of one loop: **Sources** is what an
  * actuary reads, **Deliverables** is what they produce from it. A reader
  * follows publishers and takes documents into a library, scopes a deliverable
  * by answering a short sequence of questions, attaches the documents it is
  * built on, watches the assumptions register fill in from both, and exports the
- * exhibit in a format they can work in.
+ * exhibit in a format they can work in. Which place you are in is chosen in the
+ * sidebar, like every other route in the app — this page carries no tab row.
  *
  * The one thing worth understanding before changing this file: **there is no
  * second reader.** A resource opens in `ConceptPopup` — the same split pane the
@@ -34,12 +35,11 @@ import '@/lib/coworkContent'
  * Anything that would need a bespoke viewer should become a page at a
  * vault-shaped path instead.
  *
- * The tab lives in the URL (`/cowork`, `/cowork/deliverables`,
- * `/cowork/deliverables/:id`) so a deliverable can be linked to and the back
- * button works through the loop.
+ * Four addresses, and a source is one of them, the way an exam's study guide is
+ * (`/cowork`, `/cowork/sources/:id`, `/cowork/deliverables`,
+ * `/cowork/deliverables/:id`), so a source or a deliverable can be linked to
+ * and the back button works through the loop.
  */
-
-type Tab = 'sources' | 'deliverables'
 
 export default function Cowork() {
   const navigate = useNavigate()
@@ -47,11 +47,10 @@ export default function Cowork() {
   const [searchParams, setSearchParams] = useSearchParams()
   const openPopup = useConceptPopup(s => s.openAt)
   const popupOpen = useConceptPopup(s => s.open)
-  const libraryCount = useCoworkLibrary(s => s.resourceIds.length)
-  const deliverableCount = useCoworkDeliverables(s => s.deliverables.length)
 
-  const tab: Tab = params.tab === 'deliverables' ? 'deliverables' : 'sources'
-  const deliverableId = params.id ?? null
+  const onDeliverables = params.tab === 'deliverables'
+  const entityId = params.tab === 'sources' ? params.id ?? null : null
+  const deliverableId = onDeliverables ? params.id ?? null : null
 
   // The search term lives in the URL too, so a filtered view is a link.
   const query = searchParams.get('q') ?? ''
@@ -93,49 +92,41 @@ export default function Cowork() {
     [openPopup],
   )
 
-  const tabs = useMemo(
-    () => [
-      { id: 'sources', label: 'Sources', count: libraryCount },
-      { id: 'deliverables', label: 'Deliverables', count: deliverableCount },
-    ],
-    [libraryCount, deliverableCount],
-  )
+  // The source's own logo in the sticky header, where an exam page puts the
+  // exam's — the strip says which source you are in with the mark you picked it
+  // with, rather than restating the heading a few pixels below it.
+  const entity = useMemo(() => (entityId ? entityById(COWORK_ENTITIES, entityId) : null), [entityId])
 
-  function goTab(id: string) {
-    navigate(id === 'sources' ? '/cowork' : '/cowork/deliverables')
-  }
+  const backLink = useMemo(
+    () =>
+      entity ? (
+        <Link
+          to="/cowork"
+          aria-label="All sources"
+          title="All sources"
+          className="-ml-1.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </Link>
+      ) : null,
+    [entity],
+  )
 
   return (
     <div className="min-h-screen">
       <CoworkTopBar
         query={query}
         onQueryChange={setQuery}
-        placeholder={tab === 'sources' ? 'Search sources and documents' : 'Search your deliverables'}
-        tabs={tabs}
-        activeTab={tab}
-        onTabChange={goTab}
+        placeholder={onDeliverables ? 'Search your deliverables' : 'Search sources and documents'}
+        pageTitle={entity?.name ?? null}
+        pageIcon={entity ? <EntityLogo entity={entity} size="md" /> : undefined}
+        backLink={backLink}
       />
 
       <div
         className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6"
         style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
       >
-        <header className="mb-5">
-          <div className="flex flex-wrap items-center gap-2">
-            <h1 className="text-2xl font-bold text-foreground">Cowork</h1>
-            <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-[11px] font-semibold leading-none text-amber-600 dark:text-amber-400">
-              Preview
-            </span>
-            <ProBadge />
-          </div>
-          <p className="mt-1 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            Follow the entities that publish what you work from, and turn what they publish into the analyses,
-            reports and documentation you produce. Entries marked{' '}
-            <span className="font-medium text-foreground">Sample</span> stand for a class of document rather than
-            naming one Cowork carries yet — cite the real thing.
-          </p>
-        </header>
-
         {deliverableId ? (
           <DeliverableDetail
             deliverableId={deliverableId}
@@ -143,8 +134,15 @@ export default function Cowork() {
             onOpenResource={openResource}
             onBrowseSources={() => navigate('/cowork')}
           />
-        ) : tab === 'deliverables' ? (
+        ) : onDeliverables ? (
           <DeliverablesView query={query} onOpen={id => navigate(`/cowork/deliverables/${id}`)} />
+        ) : entityId ? (
+          <SourcePage
+            entityId={entityId}
+            query={query}
+            onOpenResource={openResource}
+            onBack={() => navigate('/cowork')}
+          />
         ) : (
           <SourcesView query={query} onOpenResource={openResource} />
         )}

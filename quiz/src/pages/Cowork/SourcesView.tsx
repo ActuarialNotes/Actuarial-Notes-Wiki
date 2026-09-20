@@ -1,19 +1,25 @@
 import { useCallback, useMemo, useState } from 'react'
-import { Library, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import { ENTITY_CATEGORIES, groupSources, type EntityCategory, type SourceResource } from '@/lib/coworkSources'
 import { COWORK_ENTITIES, COWORK_RESOURCES } from '@/data/coworkSources'
 import { useCoworkLibrary } from '@/hooks/useCoworkLibrary'
+import { useCoworkCovers } from '@/hooks/useCoworkCovers'
+import { resourceCover } from '@/lib/coworkCovers'
 import { EntityCard } from '@/components/cowork/EntityCard'
-import { ResourceRow } from '@/components/cowork/ResourceRow'
+import { ResourceCard, ResourceCardGrid } from '@/components/cowork/ResourceCard'
 import { cn } from '@/lib/utils'
 
 /**
- * The **Sources** tab: every publisher Cowork follows, what they publish, and
- * what the reader has taken from them.
+ * The **Sources** shelf: every publisher Cowork follows, and what the reader
+ * has taken from them.
  *
- * The library is shown inline at the top rather than behind a drawer, because
- * it is the thing a deliverable draws from — a reader building one needs to see
- * what they have without leaving the page they are adding to.
+ * A publisher is a card and the card opens that publisher's own page — the
+ * documents are there, not folded into the shelf (see
+ * `components/cowork/EntityCard.tsx`).
+ *
+ * The library sits at the top rather than behind a drawer, because it is what a
+ * deliverable draws from: a reader building one needs to see what they have
+ * without leaving the page they are adding to.
  */
 
 export interface SourcesViewProps {
@@ -24,13 +30,13 @@ export interface SourcesViewProps {
 export default function SourcesView({ query, onOpenResource }: SourcesViewProps) {
   const [categories, setCategories] = useState<EntityCategory[]>([])
   const library = useCoworkLibrary()
+  const covers = useCoworkCovers()
 
   const groups = useMemo(
     () => groupSources(COWORK_ENTITIES, COWORK_RESOURCES, { query, categories }),
     [query, categories],
   )
 
-  const filtered = query.trim().length > 0 || categories.length > 0
   const takenResources = useMemo(
     () => COWORK_RESOURCES.filter(r => library.resourceIds.includes(r.id)),
     [library.resourceIds],
@@ -50,12 +56,11 @@ export default function SourcesView({ query, onOpenResource }: SourcesViewProps)
   return (
     <div className="space-y-6">
       {takenResources.length > 0 && (
-        <section className="rounded-xl border bg-card p-4">
-          <div className="flex items-center justify-between gap-2">
-            <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground">
-              <Library className="h-4 w-4 text-muted-foreground" aria-hidden />
+        <section>
+          <div className="mb-3 flex items-center justify-between gap-2">
+            <h2 className="text-sm font-semibold text-foreground">
               Your library
-              <span className="rounded-full bg-muted px-1.5 py-0.5 text-[11px] font-semibold leading-none tabular-nums text-muted-foreground">
+              <span className="ml-1.5 rounded-full bg-muted px-1.5 py-0.5 text-[11px] font-semibold leading-none tabular-nums text-muted-foreground">
                 {takenResources.length}
               </span>
             </h2>
@@ -68,21 +73,18 @@ export default function SourcesView({ query, onOpenResource }: SourcesViewProps)
               Clear
             </button>
           </div>
-          <p className="mt-1 text-xs text-muted-foreground">
-            The documents a deliverable can draw on. Following {library.entityIds.length}{' '}
-            {library.entityIds.length === 1 ? 'source' : 'sources'}.
-          </p>
-          <div className="mt-2 -mx-2">
+          <ResourceCardGrid>
             {takenResources.map(resource => (
-              <ResourceRow
+              <ResourceCard
                 key={resource.id}
                 resource={resource}
+                cover={resourceCover(covers, resource)}
                 inLibrary
                 onToggleLibrary={library.toggleResource}
                 onOpen={onOpenResource}
               />
             ))}
-          </div>
+          </ResourceCardGrid>
         </section>
       )}
 
@@ -115,17 +117,14 @@ export default function SourcesView({ query, onOpenResource }: SourcesViewProps)
           No source matches that. Try a publisher’s name, a document title, or clear the filters.
         </p>
       ) : (
-        <div className="space-y-3">
+        <div className="grid grid-cols-1 items-start gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {groups.map(group => (
             <EntityCard
               key={group.entity.id}
               group={group}
               followed={library.entityIds.includes(group.entity.id)}
               onToggleFollow={toggleEntity}
-              inLibrary={id => library.resourceIds.includes(id)}
-              onToggleResource={library.toggleResource}
-              onOpenResource={onOpenResource}
-              defaultOpen={filtered}
+              href={`/cowork/sources/${group.entity.id}${query.trim() ? `?q=${encodeURIComponent(query)}` : ''}`}
             />
           ))}
         </div>

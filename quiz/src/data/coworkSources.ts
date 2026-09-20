@@ -43,6 +43,7 @@ export const COWORK_ENTITIES: SourceEntity[] = [
     about:
       'The prudential supervisor of federally regulated insurers, banks and pension plans. Its guidelines set the capital tests, the stress-testing expectations and the annual returns a Canadian insurer files — so most solvency and capital work starts from something OSFI published.',
     site: 'https://www.osfi-bsif.gc.ca',
+    logo: 'https://www.osfi-bsif.gc.ca/themes/custom/osfi_wxt/favicon.ico',
     practiceAreas: ['pc', 'life', 'erm', 'pensions'],
   },
   {
@@ -65,6 +66,7 @@ export const COWORK_ENTITIES: SourceEntity[] = [
     about:
       'The national actuarial body. Its Standards of Practice bind a Canadian actuary’s work, and its educational notes are what practice actually follows between the standard and the file — the discount-rate guidance, the appointed actuary’s report, the IFRS 17 measurement notes.',
     site: 'https://www.cia-ica.ca',
+    logo: 'https://www.cia-ica.ca/app/themes/wicket/assets/icons/android-chrome-192x192.png',
     practiceAreas: ['life', 'pc', 'pensions', 'erm'],
   },
   {
@@ -76,6 +78,7 @@ export const COWORK_ENTITIES: SourceEntity[] = [
     about:
       'The US standard setter, whose Actuarial Standards of Practice are the reference point for unpaid-claim estimates, trending and risk classification — and are on the CAS syllabus, so a Canadian actuary reads them too.',
     site: 'https://www.actuarialstandardsboard.org',
+    logo: 'https://www.actuarialstandardsboard.org/wp-content/themes/asb/images/apple-icon-144x144.png',
     practiceAreas: ['pc', 'life'],
   },
   {
@@ -87,6 +90,7 @@ export const COWORK_ENTITIES: SourceEntity[] = [
     about:
       'The P&C actuarial body. Its statements of principles and the textbooks on its syllabus are the methodological baseline a ratemaking or reserving deliverable is built on.',
     site: 'https://www.casact.org',
+    logo: 'https://www.casact.org/sites/default/files/CAS_20Favicon.png',
     practiceAreas: ['pc'],
   },
   {
@@ -98,6 +102,7 @@ export const COWORK_ENTITIES: SourceEntity[] = [
     about:
       'The national industry association for home, car and business insurers. Its aggregate loss statistics — particularly on severe weather — are the usual external benchmark for a catastrophe or inflation discussion.',
     site: 'https://www.ibc.ca',
+    logo: 'https://www.ibc.ca/favicon.svg',
     practiceAreas: ['pc'],
   },
   {
@@ -109,6 +114,7 @@ export const COWORK_ENTITIES: SourceEntity[] = [
     about:
       'The P&C policyholder protection fund. Its research on insurer failure and its assessment mechanics are the standard reference for what insolvency costs the industry, and for the tail a Canadian ERM deliverable reasons about.',
     site: 'https://www.pacicc.ca',
+    logo: 'https://www.pacicc.ca/wp-content/themes/wp-bootstrap-starter-child-pacicc/images/apple-touch-icon.png',
     practiceAreas: ['pc', 'erm'],
   },
   {
@@ -131,6 +137,7 @@ export const COWORK_ENTITIES: SourceEntity[] = [
     about:
       'The largest Canadian P&C insurer. A listed carrier’s own disclosure — its annual report, quarterly supplements and MD&A — is a public benchmark for combined ratios, reserve development and catastrophe load.',
     site: 'https://www.intactfc.com',
+    logo: 'https://www.intactfc.com/apple-icon-180x180.png',
     practiceAreas: ['pc'],
   },
   {
@@ -142,6 +149,7 @@ export const COWORK_ENTITIES: SourceEntity[] = [
     about:
       'A listed Canadian P&C carrier. Read alongside its peers, its disclosure is the second point that turns a single company’s result into a market view.',
     site: 'https://www.definityfinancial.com',
+    logo: 'https://www.definityfinancial.com/favicon.ico',
     practiceAreas: ['pc'],
   },
   {
@@ -164,6 +172,7 @@ export const COWORK_ENTITIES: SourceEntity[] = [
     about:
       'A consultancy whose actuarial practice publishes benchmark and reform-costing work that is cited in Canadian auto filings and reserve reviews.',
     site: 'https://www.oliverwyman.com',
+    logo: 'https://www.oliverwyman.com/content/dam/oliver-wyman/v3/logos/favicon-marsh-sky-blue-48px.svg',
     practiceAreas: ['pc', 'life', 'erm'],
   },
 ]

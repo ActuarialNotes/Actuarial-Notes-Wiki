@@ -23,7 +23,9 @@ in preview. Three surfaces read it and none of them re-decides any of it:
   row can be answered right or wrong. The pill portals to the body and is placed by
   `lib/menuPlacement.ts`, like every other menu in the app.
 - `components/Sidebar.tsx` — which nav rows exist. In Cowork the rows are Cowork's two
-  tabs; the footer (theme, sound, account) belongs to neither mode and stays put.
+  places, and they are the **only** switch between them: the page carries no tab row, the
+  same as every route in Study mode. (The Sources row stays lit on a source's own page —
+  `forceActive`.) The footer (theme, sound, account) belongs to neither mode and stays put.
 - `App.tsx` — `RequirePro` guards the `/cowork` tree. A mode whose pill says "Pro" but
   whose URL lets anyone in is the one bug here a reader would find by typing an address, so
   the route enforces `canEnterMode`, not just the pill. It waits for
@@ -52,8 +54,26 @@ Adding a third mode is one entry in `APP_MODES` plus its routes.
 
 A source is an **entity**, not a document. An actuary does not follow "documents", they
 follow *publishers* — OSFI, FSRA, the CIA, a competitor's annual report, one trade paper —
-and take whatever those publish. So the card is the publisher and its action is **Follow**;
-each document under it carries its own **Add**.
+and take whatever those publish. So the card is the publisher and its action is **Follow**.
+
+**A source is a page**, at `/cowork/sources/:id`, the way an exam's study guide is a page:
+the publisher's logo in the sticky header, their description and Follow control below it,
+and their whole catalogue under that as cards, each with its own **Add**
+(`pages/Cowork/SourcePage.tsx`). The shelf at `/cowork` is publishers only — a catalogue
+folded inside a card on a shelf could not be linked to or scrolled on its own.
+
+The mark in the header and on the card is the publisher's **own** logo, hotlinked from
+their site and authored on the entity (`SourceEntity.logo`), transcribed from their own
+markup rather than guessed from their domain — and never drawn by us, because an
+approximated logo is an invented brand. A publisher with no usable mark, and a mark that
+fails to load, fall back to the monogram tile (`components/cowork/EntityLogo.tsx`).
+
+**Documents are always cards, never rows.** One component draws them everywhere they are
+listed — a source's page, the library, a deliverable's attached and attachable sources —
+and it is the study guide's resource card (`components/cowork/ResourceCard.tsx` beside
+`components/wiki/SourceMaterialGallery.tsx`): the work's jacket when the vault has one
+(`lib/coworkCovers.ts`), otherwise its kind icon, then the title and a row of metadata
+pills. Cowork is a second product, not a second design system.
 
 Adding a document implies following its publisher (you cannot work from a document whose
 source you do not list), and dropping a publisher drops the documents taken from it — a
@@ -62,6 +82,12 @@ not who issued it. Dropping a document leaves the publisher followed: the two ar
 claims. All of this is pure and tested in `lib/coworkSources.ts`.
 
 ### Deliverables
+
+One button starts one, bottom right, and it is the only way in
+(`components/cowork/NewDeliverableFab.tsx`): pressing it opens the three types **in line**
+above it, nearest first, and picking one creates the deliverable and opens it straight into
+its scoping flow. The type is all that control asks — everything else is the scoping's to
+ask, one question at a time, on the page it opens.
 
 Three fundamental types, and the difference is what the deliverable is **for**:
 
@@ -226,8 +252,11 @@ quiz/src/data/coworkDeliverables.ts   the scoping flows, export specs, outlines
 quiz/src/hooks/useCoworkLibrary.ts    library persistence (ids only)
 quiz/src/hooks/useCoworkDeliverables.ts  deliverable persistence (ids + answers only)
 quiz/src/components/ModeSwitcher.tsx  the mode pill
-quiz/src/components/cowork/           the tab's own UI
-quiz/src/pages/Cowork/                index (tabs) + Sources / Deliverables / detail
+quiz/src/lib/coworkCovers.ts          a resource card's vault cover, looked up (pure)
+quiz/src/components/cowork/           the mode's own UI (EntityCard, EntityLogo,
+                                      ResourceCard, NewDeliverableFab, CoworkTopBar, …)
+quiz/src/pages/Cowork/                index (routing) + Sources shelf / a Source's page /
+                                      Deliverables / a deliverable's detail
 quiz/e2e/cowork.spec.ts               the Pro lock, from a signed-out browser
 ```
 

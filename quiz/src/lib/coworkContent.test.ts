@@ -81,6 +81,20 @@ describe('the source catalogue', () => {
     }
   })
 
+  it('takes every logo from the publisher\u2019s own site, over https', () => {
+    // A source is recognised by its mark, so the mark has to be theirs: it is
+    // transcribed from the publisher's own markup, never drawn by us and never
+    // fetched through someone else's icon service. An entity with no usable
+    // mark simply has none \u2014 `EntityLogo` falls back to the monogram.
+    for (const e of COWORK_ENTITIES) {
+      if (!e.logo) continue
+      const logo = new URL(e.logo)
+      expect(logo.protocol, `${e.id}`).toBe('https:')
+      expect(e.site, `${e.id} has a logo but no site`).toBeTruthy()
+      expect(logo.hostname, `${e.id}`).toBe(new URL(e.site!).hostname)
+    }
+  })
+
   it('keeps every entity monogram short enough for the logo tile', () => {
     // `EntityLogo` steps the type down to 0.19 of the tile's edge at six
     // characters; past that a monogram stops fitting the square.

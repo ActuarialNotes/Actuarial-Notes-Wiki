@@ -84,8 +84,11 @@ type ItemProps = {
 }
 
 function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, badge, forceActive, dataTour, dataFlashcardNav }: ItemProps) {
+  // Phone-first sizing: below `lg` the drawer *is* the screen, so a row is a
+  // full-width 48px target carrying 16px type; at `lg` it narrows back into the
+  // 16rem rail at the app's default body size (style guide §3, §11).
   const base =
-    'flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors'
+    'flex items-center gap-3 rounded-lg px-3 py-3 text-base transition-colors lg:rounded-md lg:py-2 lg:text-sm'
   const inactive = 'text-muted-foreground hover:text-foreground hover:bg-accent/60'
   const active = 'bg-card text-foreground font-medium'
 
@@ -100,7 +103,7 @@ function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, ba
         onClick={onNavigate}
         data-tour={dataTour}
       >
-        <span className="flex h-5 w-5 shrink-0 items-center justify-center">{icon}</span>
+        <span className="flex h-6 w-6 shrink-0 items-center justify-center lg:h-5 lg:w-5">{icon}</span>
         <span className={`flex-1 truncate ${collapsed ? 'lg:hidden' : ''}`}>{label}</span>
         {badge && <span className={`shrink-0 ${collapsed ? 'lg:hidden' : ''}`}>{badge}</span>}
       </a>
@@ -123,7 +126,7 @@ function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, ba
       data-flashcard-nav={dataFlashcardNav ? '' : undefined}
       data-view-transition=""
     >
-      <span className="flex h-5 w-5 shrink-0 items-center justify-center">{icon}</span>
+      <span className="flex h-6 w-6 shrink-0 items-center justify-center lg:h-5 lg:w-5">{icon}</span>
       <span className={`flex-1 truncate ${collapsed ? 'lg:hidden' : ''}`}>{label}</span>
       {badge && <span className={`shrink-0 ${collapsed ? 'lg:hidden' : ''}`}>{badge}</span>}
     </NavLink>
@@ -160,16 +163,16 @@ function SidebarGroup({
       <button
         type="button"
         onClick={() => setOpen(v => !v)}
-        className={`w-full flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors ${
+        className={`w-full flex items-center gap-3 rounded-lg px-3 py-3 text-base transition-colors lg:rounded-md lg:py-2 lg:text-sm ${
           isActive
             ? 'text-foreground font-medium'
             : 'text-muted-foreground hover:text-foreground hover:bg-accent/60'
         }`}
       >
-        <span className="flex h-5 w-5 shrink-0 items-center justify-center">{icon}</span>
+        <span className="flex h-6 w-6 shrink-0 items-center justify-center lg:h-5 lg:w-5">{icon}</span>
         <span className="flex-1 truncate text-left">{label}</span>
         <ChevronDown
-          className={`h-3.5 w-3.5 shrink-0 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+          className={`h-4 w-4 shrink-0 transition-transform duration-200 lg:h-3.5 lg:w-3.5 ${open ? 'rotate-180' : ''}`}
         />
       </button>
       {open && (
@@ -227,7 +230,7 @@ function ExamPill({ syllabus, isOpen, onToggle, onClose, todayQuizCount = 0, tod
           ref={buttonRef}
           type="button"
           onClick={onToggle}
-          className="rounded-full bg-primary/10 text-primary text-xs font-semibold px-2 py-0.5 hover:bg-primary/20 transition-colors"
+          className="rounded-full bg-primary/10 text-primary text-[0.8125rem] font-semibold px-2.5 py-1 hover:bg-primary/20 transition-colors lg:text-xs lg:px-2 lg:py-0.5"
         >
           {shortLabel}
         </button>
@@ -248,17 +251,17 @@ function ExamPill({ syllabus, isOpen, onToggle, onClose, todayQuizCount = 0, tod
             <button
               type="button"
               onClick={handleReadConcepts}
-              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
+              className="w-full flex items-center gap-2.5 px-3 py-2.5 text-base text-foreground hover:bg-accent/60 transition-colors lg:gap-2 lg:py-2 lg:text-sm"
             >
-              <BookOpen className="h-4 w-4 shrink-0" />
+              <BookOpen className="h-5 w-5 shrink-0 lg:h-4 lg:w-4" />
               <span>Read Concepts</span>
             </button>
             <button
               type="button"
               onClick={handleStartQuiz}
-              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
+              className="w-full flex items-center gap-2.5 px-3 py-2.5 text-base text-foreground hover:bg-accent/60 transition-colors lg:gap-2 lg:py-2 lg:text-sm"
             >
-              <Play className="h-4 w-4 shrink-0" />
+              <Play className="h-5 w-5 shrink-0 lg:h-4 lg:w-4" />
               <span className="flex-1 text-left">Start Quiz</span>
               <TodayQuizNavBadge count={todayQuizCount} complete={todayQuizComplete} />
             </button>
@@ -290,7 +293,7 @@ function CoworkNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: 
       <SidebarItem
         to="/cowork"
         label="Sources"
-        icon={<Library className="h-4 w-4" />}
+        icon={<Library className="h-5 w-5 lg:h-4 lg:w-4" />}
         collapsed={collapsed}
         end
         forceActive={onSourcePage}
@@ -306,7 +309,7 @@ function CoworkNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: 
       <SidebarItem
         to="/cowork/deliverables"
         label="Deliverables"
-        icon={<FileSpreadsheet className="h-4 w-4" />}
+        icon={<FileSpreadsheet className="h-5 w-5 lg:h-4 lg:w-4" />}
         collapsed={collapsed}
         onNavigate={onNavigate}
         badge={
@@ -361,7 +364,7 @@ export default function Sidebar() {
     cards.length > 0 ? (
       <span
         key={collectGlow}
-        className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground tabular-nums ${collectGlow > 0 ? 'flashcard-badge-pop' : ''}`}
+        className={`text-xs font-semibold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground tabular-nums lg:text-[10px] ${collectGlow > 0 ? 'flashcard-badge-pop' : ''}`}
       >
         {cards.length}
       </span>
@@ -376,7 +379,7 @@ export default function Sidebar() {
       <span className="flex items-center gap-1.5">
         <TodayQuizNavBadge count={todayQuizTotal} complete={todayQuizAllComplete} />
         {dailyQuizStats.total > 0 && (
-          <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground tabular-nums">
+          <span className="text-xs font-semibold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground tabular-nums lg:text-[10px]">
             {dailyQuizStats.correct}/{dailyQuizStats.total}
           </span>
         )}
@@ -493,7 +496,7 @@ export default function Sidebar() {
           <div className="flex items-center gap-1.5 flex-1 min-w-0">
             <Link
               to="/dashboard"
-              className="flex items-center gap-1.5 font-semibold text-foreground text-sm min-w-0"
+              className="flex items-center gap-1.5 font-semibold text-foreground text-base min-w-0"
             >
               <img src="/favicon.png" alt="" className="h-5 w-5 shrink-0 brightness-0 dark:invert" />
               <span className="truncate">Actuarial Notes</span>
@@ -590,13 +593,13 @@ export default function Sidebar() {
             type="button"
             onClick={closeMobile}
             aria-label="Close navigation"
-            className="lg:hidden ml-auto h-8 w-8 flex items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground transition-colors text-muted-foreground"
+            className="lg:hidden ml-auto h-10 w-10 flex items-center justify-center rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors text-muted-foreground"
           >
-            <X className="h-4 w-4" />
+            <X className="h-5 w-5 lg:h-4 lg:w-4" />
           </button>
         </div>
 
-        <nav className="flex-1 overflow-y-auto px-2 py-3 space-y-1">
+        <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-1 lg:px-2">
           {appMode === 'cowork' ? (
             <CoworkNav collapsed={collapsed} onNavigate={closeMobile} />
           ) : (
@@ -608,7 +611,7 @@ export default function Sidebar() {
               label="Dashboard"
               icon={
                 <span className="relative inline-flex items-center justify-center">
-                  <LayoutDashboard className="h-4 w-4" />
+                  <LayoutDashboard className="h-5 w-5 lg:h-4 lg:w-4" />
                   {/* Collapsed sidebar hides the row badge, so mirror the streak as
                       a corner badge on the icon (matches the Flashcards count). */}
                   {STREAK_ENABLED && collapsed && (
@@ -626,7 +629,7 @@ export default function Sidebar() {
           {RESEARCH_TAB_ENABLED ? (
             <SidebarGroup
               label="Study Guides"
-              icon={<BookOpen className="h-4 w-4" />}
+              icon={<BookOpen className="h-5 w-5 lg:h-4 lg:w-4" />}
               collapsed={collapsed}
               isActive={
                 location.pathname.startsWith('/wiki') ||
@@ -636,7 +639,7 @@ export default function Sidebar() {
               <SidebarItem
                 to={getLastWikiPath()}
                 label="Actuarial Exams"
-                icon={<GraduationCap className="h-4 w-4" />}
+                icon={<GraduationCap className="h-5 w-5 lg:h-4 lg:w-4" />}
                 collapsed={collapsed}
                 onNavigate={closeMobile}
                 forceActive={location.pathname.startsWith('/wiki')}
@@ -645,7 +648,7 @@ export default function Sidebar() {
                 <SidebarItem
                   to="/research"
                   label="Research"
-                  icon={<Microscope className="h-4 w-4" />}
+                  icon={<Microscope className="h-5 w-5 lg:h-4 lg:w-4" />}
                   collapsed={collapsed}
                   onNavigate={closeMobile}
                   badge={
@@ -660,7 +663,7 @@ export default function Sidebar() {
             <SidebarItem
               to={getLastWikiPath()}
               label="Study Guides"
-              icon={<BookOpen className="h-4 w-4" />}
+              icon={<BookOpen className="h-5 w-5 lg:h-4 lg:w-4" />}
               collapsed={collapsed}
               onNavigate={closeMobile}
               forceActive={location.pathname.startsWith('/wiki')}
@@ -672,7 +675,7 @@ export default function Sidebar() {
             icon={
               <span className="relative inline-flex items-center justify-center">
                 {collectGlow > 0 && <span key={`ring-${collectGlow}`} className="flashcard-nav-ring" aria-hidden="true" />}
-                <Layers key={`icon-${collectGlow}`} className={`h-4 w-4 ${collectGlow > 0 ? 'flashcard-nav-glow' : ''}`} />
+                <Layers key={`icon-${collectGlow}`} className={`h-5 w-5 lg:h-4 lg:w-4 ${collectGlow > 0 ? 'flashcard-nav-glow' : ''}`} />
                 {/* Collapsed sidebar hides the row badge, so mirror the count as a
                     corner badge on the icon itself when icon-only. */}
                 {collapsed && cards.length > 0 && (
@@ -695,7 +698,7 @@ export default function Sidebar() {
             label="Quiz"
             icon={
               <span className="relative inline-flex items-center justify-center">
-                <Play className="h-4 w-4" />
+                <Play className="h-5 w-5 lg:h-4 lg:w-4" />
                 {/* Collapsed sidebar hides the row badge, so mirror the
                     questions-left count as a corner badge on the icon. */}
                 {collapsed && (
@@ -715,17 +718,17 @@ export default function Sidebar() {
           )}
         </nav>
 
-        <div className="border-t px-2 py-3 space-y-1">
+        <div className="border-t px-3 py-3 space-y-1 lg:px-2">
           <div className={cn('flex items-stretch gap-1', collapsed && 'lg:flex-col')}>
             <button
               type="button"
               onClick={toggleTheme}
               aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
               title={collapsed ? (theme === 'dark' ? 'Light mode' : 'Dark mode') : undefined}
-              className="flex-1 flex items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors"
+              className="flex-1 flex items-center gap-3 rounded-lg px-3 py-3 text-base text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors lg:rounded-md lg:py-2 lg:text-sm"
             >
-              <span className="flex h-5 w-5 shrink-0 items-center justify-center">
-                {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center lg:h-5 lg:w-5">
+                {theme === 'dark' ? <Sun className="h-5 w-5 lg:h-4 lg:w-4" /> : <Moon className="h-5 w-5 lg:h-4 lg:w-4" />}
               </span>
               <span className={`truncate ${collapsed ? 'lg:hidden' : ''}`}>
                 {theme === 'dark' ? 'Light mode' : 'Dark mode'}
@@ -743,9 +746,9 @@ export default function Sidebar() {
                   <button
                     type="button"
                     onClick={() => { navigate('/store'); setProfileOpen(false); closeMobile() }}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
+                    className="w-full flex items-center gap-2.5 px-3 py-2.5 text-base text-foreground hover:bg-accent/60 transition-colors lg:gap-2 lg:py-2 lg:text-sm"
                   >
-                    <ShoppingBag className="h-4 w-4 shrink-0" />
+                    <ShoppingBag className="h-5 w-5 shrink-0 lg:h-4 lg:w-4" />
                     <span>Store</span>
                     <span
                       key={gemAnimKey}
@@ -759,26 +762,26 @@ export default function Sidebar() {
                   <button
                     type="button"
                     onClick={() => { openExams(); setProfileOpen(false); closeMobile() }}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
+                    className="w-full flex items-center gap-2.5 px-3 py-2.5 text-base text-foreground hover:bg-accent/60 transition-colors lg:gap-2 lg:py-2 lg:text-sm"
                   >
-                    <GraduationCap className="h-4 w-4 shrink-0" />
+                    <GraduationCap className="h-5 w-5 shrink-0 lg:h-4 lg:w-4" />
                     <span>Exams</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => { navigate('/settings'); setProfileOpen(false); closeMobile() }}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
+                    className="w-full flex items-center gap-2.5 px-3 py-2.5 text-base text-foreground hover:bg-accent/60 transition-colors lg:gap-2 lg:py-2 lg:text-sm"
                   >
-                    <Settings2 className="h-4 w-4 shrink-0" />
+                    <Settings2 className="h-5 w-5 shrink-0 lg:h-4 lg:w-4" />
                     <span>Settings</span>
                   </button>
                   {!isPro && (
                     <button
                       type="button"
                       onClick={() => { navigate('/upgrade'); setProfileOpen(false); closeMobile() }}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 transition-colors"
+                      className="w-full flex items-center gap-2.5 px-3 py-2.5 text-base font-medium text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 transition-colors lg:gap-2 lg:py-2 lg:text-sm"
                     >
-                      <Sparkles className="h-4 w-4 shrink-0" />
+                      <Sparkles className="h-5 w-5 shrink-0 lg:h-4 lg:w-4" />
                       <span>Upgrade to Pro</span>
                     </button>
                   )}
@@ -806,9 +809,9 @@ export default function Sidebar() {
                   <button
                     type="button"
                     onClick={() => setSignOutConfirm(true)}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
+                    className="w-full flex items-center gap-2.5 px-3 py-2.5 text-base text-foreground hover:bg-accent/60 transition-colors lg:gap-2 lg:py-2 lg:text-sm"
                   >
-                    <LogOut className="h-4 w-4 shrink-0" />
+                    <LogOut className="h-5 w-5 shrink-0 lg:h-4 lg:w-4" />
                     <span>Sign out</span>
                   </button>
                   )}
@@ -818,9 +821,9 @@ export default function Sidebar() {
                 type="button"
                 onClick={() => setProfileOpen(v => !v)}
                 title={collapsed ? profileName : undefined}
-                className="w-full flex items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors"
+                className="w-full flex items-center gap-3 rounded-lg px-3 py-3 text-base text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors lg:rounded-md lg:py-2 lg:text-sm"
               >
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center lg:h-5 lg:w-5">
                   <AvatarDisplay avatarUrl={avatarUrl} initials={profileInitials} size={20} />
                 </span>
                 <span className={`flex items-center gap-1.5 min-w-0 ${collapsed ? 'lg:hidden' : ''}`}>
@@ -851,10 +854,10 @@ export default function Sidebar() {
               type="button"
               onClick={() => { navigate('/settings'); closeMobile() }}
               title={collapsed ? 'You' : undefined}
-              className="w-full flex items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors"
+              className="w-full flex items-center gap-3 rounded-lg px-3 py-3 text-base text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors lg:rounded-md lg:py-2 lg:text-sm"
             >
-              <span className="flex h-5 w-5 shrink-0 items-center justify-center">
-                <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center lg:h-5 lg:w-5">
+                <svg viewBox="0 0 20 20" fill="none" className="h-5 w-5 lg:h-4 lg:w-4">
                   <circle cx="10" cy="10" r="8.25" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3.5 2.5" />
                 </svg>
               </span>

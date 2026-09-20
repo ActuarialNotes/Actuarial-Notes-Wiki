@@ -188,3 +188,21 @@ export const TOUR_ENABLED: boolean = false
  * See docs/verification.md.
  */
 export const FACT_CHECK_UI_ENABLED: boolean = true
+
+/**
+ * **Cowork** — the second product under the Actuarial Notes roof, and the mode
+ * switcher that reaches it. ON, in Preview.
+ *
+ * When ON, three things appear: the mode pill beside the wordmark
+ * (`components/ModeSwitcher.tsx`), the `/cowork` route tree, and Cowork's own
+ * sidebar nav when a reader is inside it. The mode is Pro-only and marked
+ * Preview — both facts live in `lib/appMode.ts` rather than here, because they
+ * are properties of the mode and every surface has to state them the same way.
+ *
+ * Gating the flag off removes the pill and redirects `/cowork` back into Study
+ * mode; nothing behind it is deleted, and the pure engines
+ * (`lib/cowork*.ts`, `lib/xlsx.ts`) and their tests stay compiled either way.
+ * The `: boolean` annotation keeps both branches of every gate type-checked
+ * (see the flags above). See `docs/cowork.md`.
+ */
+export const COWORK_ENABLED: boolean = true

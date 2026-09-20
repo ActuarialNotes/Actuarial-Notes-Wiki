@@ -6,10 +6,12 @@ import {
   ChevronDown,
   ChevronsLeft,
   ChevronsRight,
+  FileSpreadsheet,
   Gem,
   GraduationCap,
   Layers,
   LayoutDashboard,
+  Library,
   LogOut,
   Microscope,
   Moon,
@@ -40,7 +42,11 @@ import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { ProBadge } from '@/components/ProBadge'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { parseBanner, DESIGNATION_BANNERS } from '@/lib/banners'
-import { RESEARCH_TAB_ENABLED, STREAK_ENABLED } from '@/lib/featureFlags'
+import { COWORK_ENABLED, RESEARCH_TAB_ENABLED, STREAK_ENABLED } from '@/lib/featureFlags'
+import { ModeSwitcher } from '@/components/ModeSwitcher'
+import { useCoworkLibrary } from '@/hooks/useCoworkLibrary'
+import { useCoworkDeliverables } from '@/hooks/useCoworkDeliverables'
+import { modeForPath } from '@/lib/appMode'
 import { StreakNavBadge, StreakCornerBadge } from '@/components/StreakBadge'
 import { TodayQuizCornerBadge, TodayQuizNavBadge } from '@/components/TodayQuizBadge'
 import { useTodayQuizCounts } from '@/hooks/useTodayQuizCount'
@@ -258,6 +264,51 @@ function ExamPill({ syllabus, isOpen, onToggle, onClose, todayQuizCount = 0, tod
   )
 }
 
+/**
+ * The nav rows of **Cowork** mode — the two tabs of the product, mirrored into
+ * the sidebar so the drawer and the page agree about what Cowork contains.
+ * Study's rows are not hidden behind a flag here; they are simply not this
+ * mode's rows (see `lib/appMode.ts`).
+ */
+function CoworkNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: () => void }) {
+  const libraryCount = useCoworkLibrary(s => s.entityIds.length + s.resourceIds.length)
+  const deliverableCount = useCoworkDeliverables(s => s.deliverables.length)
+
+  return (
+    <>
+      <SidebarItem
+        to="/cowork"
+        label="Sources"
+        icon={<Library className="h-4 w-4" />}
+        collapsed={collapsed}
+        end
+        onNavigate={onNavigate}
+        badge={
+          libraryCount > 0 ? (
+            <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-semibold tabular-nums text-muted-foreground">
+              {libraryCount}
+            </span>
+          ) : undefined
+        }
+      />
+      <SidebarItem
+        to="/cowork/deliverables"
+        label="Deliverables"
+        icon={<FileSpreadsheet className="h-4 w-4" />}
+        collapsed={collapsed}
+        onNavigate={onNavigate}
+        badge={
+          deliverableCount > 0 ? (
+            <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-semibold tabular-nums text-muted-foreground">
+              {deliverableCount}
+            </span>
+          ) : undefined
+        }
+      />
+    </>
+  )
+}
+
 export default function Sidebar() {
   const { user, signOut } = useAuth()
   const { balance: gemBalance } = useGems()
@@ -272,6 +323,10 @@ export default function Sidebar() {
     return examProgress[key] === 'in_progress' && matchesSelectedVariant(key, s.examId, examVariants[key])
   })
   const { cards } = useFlashcards()
+  // Which product the current route belongs to. In Cowork the nav is Cowork's
+  // own rows — the two modes are places, not tabs of each other — while the
+  // footer (theme, sound, account) stays put because it belongs to neither.
+  const appMode = modeForPath(location.pathname)
   const { byExam: todayQuizByExam, total: todayQuizTotal, allComplete: todayQuizAllComplete } = useTodayQuizCounts()
   const [dailyQuizStats, setDailyQuizStats] = useState(() => getDailyQuizStats())
   // Lights up the Flashcards item whenever a card is collected.
@@ -431,6 +486,7 @@ export default function Sidebar() {
               <img src="/favicon.png" alt="" className="h-5 w-5 shrink-0 brightness-0 dark:invert" />
               <span className="truncate">Actuarial Notes</span>
             </Link>
+            {COWORK_ENABLED && <ModeSwitcher mode={appMode} onNavigate={closeMobile} />}
             {user && inProgressSyllabi.map(s => {
               const key = wikiExamIdToProgressKey(s.examId)
               return (
@@ -486,11 +542,12 @@ export default function Sidebar() {
             <Link
               to="/dashboard"
               onClick={closeMobile}
-              className="flex items-center gap-1.5 font-semibold text-foreground hover:text-primary transition-colors truncate shrink-0"
+              className="flex min-w-0 items-center gap-1.5 truncate font-semibold text-foreground transition-colors hover:text-primary"
             >
               <img src="/favicon.png" alt="" className="h-5 w-5 shrink-0 brightness-0 dark:invert" />
               Actuarial Notes
             </Link>
+            {COWORK_ENABLED && <ModeSwitcher mode={appMode} onNavigate={closeMobile} />}
             {user && inProgressSyllabi.map(s => {
               const key = wikiExamIdToProgressKey(s.examId)
               return (
@@ -528,6 +585,11 @@ export default function Sidebar() {
         </div>
 
         <nav className="flex-1 overflow-y-auto px-2 py-3 space-y-1">
+          {appMode === 'cowork' ? (
+            <CoworkNav collapsed={collapsed} onNavigate={closeMobile} />
+          ) : (
+            <>
+
           {user && (
             <SidebarItem
               to="/dashboard"
@@ -637,6 +699,8 @@ export default function Sidebar() {
             badge={quizBadge}
             dataTour="nav-quiz"
           />
+            </>
+          )}
         </nav>
 
         <div className="border-t px-2 py-3 space-y-1">

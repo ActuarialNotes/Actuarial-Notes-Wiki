@@ -298,11 +298,6 @@ interface Props {
   onPlanCompletionChange?: (complete: boolean) => void
   /** Bumped by the Dashboard (e.g. tapping the readiness-stat checkmark) to open the day-complete/bonus info panel. */
   openDayCompleteInfoTrigger?: number
-  /** DOM node the Study Schedule (heatmap) card portals into (e.g. a slot the Dashboard
-   *  places below its primary actions), so the card can render near the top of the page
-   *  while its state/logic stays owned here. Renders inline, last in this card's own
-   *  stack, when omitted. */
-  studyScheduleSlot?: HTMLElement | null
   /** DOM node the Exam readiness card portals into — the Dashboard puts it directly
    *  under the exam tabs so readiness is the first thing on the page. Renders inline
    *  at the top of this card's own stack when omitted. */
@@ -319,7 +314,7 @@ export function ReadinessCard({
   syllabus, masteryRecords, sessions, plan, masteryStateByName,
   config, loading, masteryLoading = false, examDate, onConfigChange, onRegenerate, onReplaceConcepts, onExamDateChange,
   openConceptsTrigger, startQuizTrigger, scrollToRadialTrigger,
-  isPro = true, onPlanCompletionChange, openDayCompleteInfoTrigger, studyScheduleSlot,
+  isPro = true, onPlanCompletionChange, openDayCompleteInfoTrigger,
   readinessSlot, actions,
 }: Props) {
   const navigate = useNavigate()
@@ -1074,10 +1069,12 @@ export function ReadinessCard({
   //
   //   1. **Exam readiness** — the headline answer to "how ready am I?". The
   //      score as a KPI beside the band verdict and its insight line, then the
-  //      date it is racing (`examDatesRow`) and the primary actions (`actions`)
-  //      that move it. The deadline earns its place between them: a percentage
-  //      says nothing on its own, and the two ways to change it are what a
-  //      reader who has just seen how little time is left reaches for.
+  //      date it is racing — and, under it, the schedule strip that used to be
+  //      the Study Schedule card (`examScheduleBlock`, with `dayDetailPanel` for
+  //      whichever day is tapped) — and then the primary actions (`actions`)
+  //      that move the score. The deadline earns its place between them: a
+  //      percentage says nothing on its own, and the two ways to change it are
+  //      what a reader who has just seen how little time is left reaches for.
   //   2. **Today's Study Plan** (`studyPlanCardContent`) — what to do about that
   //      score today. It follows the number rather than the ring: the reader who
   //      has just read "Not started" is looking for the next step, not for a
@@ -1091,9 +1088,9 @@ export function ReadinessCard({
   // All three portal into `readinessSlot` when the Dashboard supplies one.
   const readinessPct = readiness.counts.total > 0 ? Math.round(readiness.overallPct) : 0
 
-  // The dates row inside that card. Two facts, in the order a candidate asks for
-  // them: the day they are sitting — with how many days that leaves — and then
-  // the next published sitting window, the second only when it says something
+  // The dates block inside that card. Two facts, in the order a candidate asks
+  // for them: the day they are sitting — with how many days that leaves — and
+  // then the next published sitting window, the second only when it says something
   // the first doesn't (no date chosen yet, or a date that falls outside every
   // known window for this exam). Nothing is inferred: the countdown is the
   // chosen date and the window is transcribed from `data/examSittings.ts`, so an
@@ -1108,39 +1105,255 @@ export function ReadinessCard({
       : daysToExam === 1 ? 'Tomorrow'
       : daysToExam === 0 ? 'Today'
       : 'Passed'
-  const examDatesRow = (
-    <button
-      type="button"
-      onClick={() => { setConfigInitialStep(examDateStep); setShowConfig(true) }}
-      className="flex w-full flex-col gap-1 rounded-lg border bg-muted/30 px-3 py-2.5 text-left transition-colors hover:bg-accent/60"
-      aria-label={examDate
-        ? `Exam date ${formatReadableDate(examDate)}${countdownLabel ? `, ${countdownLabel}` : ''} — change it`
-        : 'Set your exam date'}
-    >
-      <span className="flex w-full items-center gap-2">
-        <CalendarDays className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-        <span className="min-w-0 flex-1 truncate text-sm font-medium">
-          {examDate ? formatReadableDate(examDate) : 'Set your exam date'}
+  // The exam date, the countdown beside it, and — under both — the schedule
+  // itself: the Study Schedule card's timeline, drawn linear so it spans exactly
+  // the stretch the two lines above it name. The card used to sit further down
+  // the dashboard saying the same thing twice; merged here, the date is the
+  // deadline, the strip is what has been done about it, and tapping a day opens
+  // that day below. Everything the separate card did — the day panel, the
+  // schedule-forming sweep, the target-ready date — happens in this block.
+  const examScheduleBlock = (
+    <div ref={studyScheduleCardRef} className="rounded-lg border bg-muted/30">
+      <button
+        type="button"
+        onClick={() => { setConfigInitialStep(examDateStep); setShowConfig(true) }}
+        className="flex w-full flex-col gap-1 rounded-t-lg px-3 py-2.5 text-left transition-colors hover:bg-accent/60"
+        aria-label={examDate
+          ? `Exam date ${formatReadableDate(examDate)}${countdownLabel ? `, ${countdownLabel}` : ''} — change it`
+          : 'Set your exam date'}
+      >
+        <span className="flex w-full items-center gap-2">
+          <CalendarDays className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+          <span className="min-w-0 flex-1 truncate text-sm font-medium">
+            {examDate ? formatReadableDate(examDate) : 'Set your exam date'}
+          </span>
+          {countdownLabel && (
+            <span
+              className={
+                'shrink-0 text-sm font-semibold tabular-nums ' +
+                (daysToExam !== null && daysToExam < 0 ? 'text-muted-foreground' : '')
+              }
+            >
+              {countdownLabel}
+            </span>
+          )}
         </span>
-        {countdownLabel && (
-          <span
-            className={
-              'shrink-0 text-sm font-semibold tabular-nums ' +
-              (daysToExam !== null && daysToExam < 0 ? 'text-muted-foreground' : '')
-            }
-          >
-            {countdownLabel}
+        {showNextSitting && nextSitting && (
+          <span className="flex w-full items-center gap-2 pl-6 text-xs text-muted-foreground">
+            <span className="min-w-0 flex-1 truncate">Next sitting · {formatSittingDate(nextSitting)}</span>
+            <span className="shrink-0 font-medium">{nextSitting.format}</span>
           </span>
         )}
-      </span>
-      {showNextSitting && nextSitting && (
-        <span className="flex w-full items-center gap-2 pl-6 text-xs text-muted-foreground">
-          <span className="min-w-0 flex-1 truncate">Next sitting · {formatSittingDate(nextSitting)}</span>
-          <span className="shrink-0 font-medium">{nextSitting.format}</span>
-        </span>
-      )}
-    </button>
+      </button>
+
+      <div className="space-y-2 px-3 pb-3">
+        {/* Schedule-forming status — only while the sweep is running */}
+        {playback.active && (
+          <p className="text-xs font-medium text-primary" aria-live="polite">
+            {playback.landed && playback.summary
+              ? `Schedule locked in — ${playback.summary.concepts} concept${playback.summary.concepts === 1 ? '' : 's'} across ${playback.summary.studyDays} study day${playback.summary.studyDays === 1 ? '' : 's'}`
+              : 'Building your schedule…'}
+          </p>
+        )}
+
+        <ExamHeatmap
+          layout="linear"
+          showExamDateRow={false}
+          sessions={examSessions}
+          examProgressKey={progressKey}
+          targetDate={examDate}
+          onTargetDateChange={onExamDateChange ?? (() => {})}
+          targetReadyDate={config.targetReadyDate}
+          onTargetReadyDateChange={date => onConfigChange({ targetReadyDate: date })}
+          onOpenStudyPlan={(step) => { setConfigInitialStep(step ?? 1); setShowConfig(true) }}
+          onDayClick={date => { playback.stop(); setSelectedDay(date) }}
+          dayPlanPct={dayPlanPct}
+          highlightedDay={displayDay}
+          playbackDay={playback.day}
+          playbackStepMs={playback.stepMs}
+        />
+      </div>
+    </div>
   )
+
+  // The day panel the strip above opens: whatever day was tapped (or, while a
+  // locked-in plan is playing back, the day the sweep is on) — its sessions,
+  // its gems and level-ups, and what the plan has scheduled for it.
+  const dayDetailPanel = (
+    <>
+    {/* Day panel — shown when a heatmap day is clicked, and driven by the
+        sweep while a locked-in schedule is playing back */}
+    {displayDay && (() => {
+      const daySessions = examSessions.filter(s => {
+        const d = new Date(s.completed_at)
+        const localDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+        return localDate === displayDay
+      })
+      const dayTotal = daySessions.reduce((s, r) => s + r.total_questions, 0)
+      const dayCorrect = daySessions.reduce((s, r) => s + r.correct_count, 0)
+      const dayLevelUps = selectedDayLevelUps.length
+      const dayLabel = new Date(displayDay + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })
+      const isFutureDay = displayDay > todayStr
+      return (
+        <div className="border-t pt-4 mt-1 space-y-4">
+          {/* Header row */}
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-semibold">{dayLabel}</span>
+            <button
+              type="button"
+              onClick={() => { playback.stop(); setSelectedDay(null) }}
+              className="flex items-center justify-center h-8 w-8 rounded-full border border-border bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Clear day filter"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+
+          {/* Large stats */}
+          {daySessions.length > 0 && (
+            <div className="flex items-center gap-5 flex-wrap">
+              <div className="flex flex-col items-center">
+                <span className="text-2xl font-bold tabular-nums leading-none">
+                  {dayCorrect}
+                  <span className="text-muted-foreground text-lg font-normal">/{dayTotal}</span>
+                </span>
+                <span className="text-[10px] text-muted-foreground mt-0.5">correct</span>
+              </div>
+              {dayCorrect > 0 && (
+                <div className="flex flex-col items-center">
+                  <span className="text-2xl font-bold tabular-nums leading-none text-cyan-500 inline-flex items-center gap-1">
+                    {dayCorrect} <Gem className="h-5 w-5" />
+                  </span>
+                  <span className="text-[10px] text-muted-foreground mt-0.5">gems</span>
+                </div>
+              )}
+              {dayLevelUps > 0 && (
+                <div className="flex flex-col items-center">
+                  <span className="text-2xl font-bold tabular-nums leading-none text-primary inline-flex items-center gap-1">
+                    {dayLevelUps} <ArrowUp className="h-5 w-5" />
+                  </span>
+                  <span className="text-[10px] text-muted-foreground mt-0.5">levelled up</span>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Session flashcard grid — a day with no sessions simply shows
+              none: the day's plan below is the useful half, and during the
+              schedule sweep an empty-state line would flicker on every day. */}
+          {daySessions.length > 0 && (
+            <div className="grid grid-cols-2 gap-2">
+              {daySessions.map(session => (
+                <QuizSessionCard
+                  key={session.id}
+                  session={session}
+                  onClick={() => {
+                    savedScrollY.current = window.scrollY
+                    setViewingSession(session)
+                  }}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Study plan for this day */}
+          {isPro && (() => {
+            // Today's plan lives in its own card, so clicking today's cell
+            // normally shows nothing here — except during the sweep, where
+            // landing on today is the whole point.
+            if (displayDay === todayStr && !playback.active) return null
+            if ((isFutureDay || playback.active) && plan) {
+              const dayConcepts = plan.assignments.filter(a => a.scheduledDate === displayDay)
+              // Capped and height-reserved during the sweep so a busy day
+              // followed by a quiet one doesn't pump the whole dashboard.
+              const futureConcepts = playback.active ? dayConcepts.slice(0, 4) : dayConcepts
+              return (
+                <div className={`border-t pt-3 space-y-1${playback.active ? ' min-h-[152px]' : ''}`}>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Planned for this day</p>
+                  {futureConcepts.length === 0 && (
+                    <p className="px-2 py-1.5 text-sm text-muted-foreground">Nothing scheduled — review and rest.</p>
+                  )}
+                  {futureConcepts.map((a, i) => {
+                    const cIdx = allConcepts.findIndex(c => c.name.toLowerCase() === a.conceptName.toLowerCase())
+                    return (
+                      <div
+                        key={a.conceptName}
+                        // The sweep passes a day in well under the time an
+                        // entry animation takes, so mid-sweep the rows just
+                        // swap — the list reads as scrubbing through the
+                        // schedule. Only the day it lands on flashes in.
+                        style={playback.landed ? { animationDelay: `${i * 40}ms` } : undefined}
+                        className={`flex items-center gap-2.5 px-2 py-1.5${playback.landed ? ' schedule-playback-concept' : ''}`}
+                      >
+                        <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
+                        <button
+                          type="button"
+                          onClick={() => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', cIdx === -1 ? 0 : cIdx)}
+                          className="text-sm flex-1 min-w-0 truncate text-left hover:text-foreground/70 transition-colors"
+                        >
+                          {a.conceptName}
+                        </button>
+                        <span className="text-xs text-muted-foreground shrink-0">→ {MASTERY_LABEL[NEXT_STATE[a.initialState] ?? a.initialState]}</span>
+                      </div>
+                    )
+                  })}
+                  {playback.active && dayConcepts.length > futureConcepts.length && (
+                    <p className="px-2 text-xs text-muted-foreground">
+                      +{dayConcepts.length - futureConcepts.length} more
+                    </p>
+                  )}
+                </div>
+              )
+            }
+            // Past day: show level-ups
+            if (selectedDayLevelUps.length > 0) {
+              return (
+                <div className="border-t pt-3 space-y-1">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Concepts mastered</p>
+                  {selectedDayLevelUps.map(lu => {
+                    const cIdx = allConcepts.findIndex(c => c.name.toLowerCase() === lu.conceptSlug.toLowerCase())
+                    return (
+                      <div key={lu.conceptSlug + lu.at} className="flex items-center gap-2.5 px-2 py-1.5">
+                        <CheckMark className="h-4 w-4" />
+                        <button
+                          type="button"
+                          onClick={() => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', cIdx === -1 ? 0 : cIdx)}
+                          className="text-sm flex-1 min-w-0 truncate text-left text-muted-foreground line-through hover:line-through hover:text-foreground/70 transition-colors"
+                        >
+                          {lu.conceptSlug}
+                        </button>
+                        <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">→ {MASTERY_LABEL[lu.to]}</span>
+                      </div>
+                    )
+                  })}
+                </div>
+              )
+            }
+            return null
+          })()}
+
+          {/* Empty state — every square on the strip opens this panel, so a
+              day with nothing on it has to say so rather than render an
+              empty box. Suppressed during the sweep, which passes days too
+              fast for a message to be read. */}
+          {!playback.active && daySessions.length === 0 && (() => {
+            if (isFutureDay) {
+              // A future day with a plan already shows "Planned for this day".
+              if (isPro && plan) return null
+              return <p className="text-sm text-muted-foreground">This day is still ahead — nothing recorded yet.</p>
+            }
+            if (displayDay === todayStr) {
+              return <p className="text-sm text-muted-foreground">No quizzes finished yet today.</p>
+            }
+            if (selectedDayLevelUps.length > 0) return null
+            return <p className="text-sm text-muted-foreground">No study activity on this day.</p>
+          })()}
+        </div>
+      )
+    })()}
+    </>
+  )
+
   const readinessCardContent = (
     <div className="order-none flex flex-col gap-4">
       <Card className="border-0">
@@ -1158,6 +1371,10 @@ export function ReadinessCard({
               <div className="flex items-center gap-2">
                 <ExamLogo examKey={progressKey} size="sm" />
                 <h3 className="text-sm font-semibold">Exam readiness</h3>
+                {/* The study streak. It used to ride the Study Schedule card's
+                    header; that card is now this card's date block, and the
+                    badge renders nothing at all without a live streak. */}
+                {STREAK_ENABLED && user && <StreakNavBadge />}
               </div>
               <p className="text-xl font-semibold tracking-tight leading-tight">{readiness.band.label}</p>
               {/* The insight line, when there is one. `readiness.insight` is
@@ -1204,14 +1421,18 @@ export function ReadinessCard({
             </div>
           </div>
 
-          {/* The date the score is racing. A readiness percentage only means
-              something against a deadline, so the card carries it rather than
-              leaving it to the Study Schedule further down the page: the day
-              itself, how far off it is, and — when no date is set, or the one
-              set isn't a real sitting — the next published sitting window for
-              this exam (data/examSittings.ts). Tapping it opens the same Study
-              Plan step the heatmap's date row does. */}
-          {examDatesRow}
+          {/* The date the score is racing, and the schedule under it. A
+              readiness percentage only means something against a deadline, so
+              the card carries the day itself, how far off it is, and — when no
+              date is set, or the one set isn't a real sitting — the next
+              published sitting window for this exam (data/examSittings.ts).
+              Under those two lines is the same timeline the Study Schedule card
+              used to draw further down the page, laid out linear so it spans
+              exactly the stretch they name; tapping a day on it opens that day
+              in `dayDetailPanel` below. */}
+          {examScheduleBlock}
+
+          {dayDetailPanel}
 
           {/* The two ways to act on this score, under it in the same card. */}
           {actions}
@@ -1281,241 +1502,19 @@ export function ReadinessCard({
     </div>
   )
 
-  // Study Schedule (heatmap) card. Portals into `studyScheduleSlot` when the
-  // Dashboard supplies one (a slot below the readiness card), so the card
-  // renders near the top of the page while its state/logic stays owned by this
-  // component; otherwise renders inline below in its default bento-grid position.
-  const studyScheduleCardContent = (
-      <Card className="order-4 border-0 shadow-none" ref={studyScheduleCardRef}>
-        <CardContent className="p-6 space-y-5">
-          {/* Header */}
-          <div className="flex items-center justify-between gap-3">
-            <div className="min-w-0 flex items-center gap-2 flex-wrap">
-              <h3 className="text-sm font-semibold truncate">Study Schedule</h3>
-            </div>
-            <div className="flex items-center gap-2 shrink-0">
-              {STREAK_ENABLED && user && <StreakNavBadge />}
-            </div>
-          </div>
-
-          {/* Schedule-forming status — only while the sweep is running */}
-          {playback.active && (
-            <p className="-mt-3 text-xs font-medium text-primary" aria-live="polite">
-              {playback.landed && playback.summary
-                ? `Schedule locked in — ${playback.summary.concepts} concept${playback.summary.concepts === 1 ? '' : 's'} across ${playback.summary.studyDays} study day${playback.summary.studyDays === 1 ? '' : 's'}`
-                : 'Building your schedule…'}
-            </p>
-          )}
-
-          {/* Heatmap */}
-          <ExamHeatmap
-            sessions={examSessions}
-            examProgressKey={progressKey}
-            targetDate={examDate}
-            onTargetDateChange={onExamDateChange ?? (() => {})}
-            targetReadyDate={config.targetReadyDate}
-            onTargetReadyDateChange={date => onConfigChange({ targetReadyDate: date })}
-            onOpenStudyPlan={(step) => { setConfigInitialStep(step ?? 1); setShowConfig(true) }}
-            onDayClick={date => { playback.stop(); setSelectedDay(date) }}
-            dayPlanPct={dayPlanPct}
-            highlightedDay={displayDay}
-            playbackDay={playback.day}
-            playbackStepMs={playback.stepMs}
-          />
-
-          {/* Day panel — shown when a heatmap day is clicked, and driven by the
-              sweep while a locked-in schedule is playing back */}
-          {displayDay && (() => {
-            const daySessions = examSessions.filter(s => {
-              const d = new Date(s.completed_at)
-              const localDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
-              return localDate === displayDay
-            })
-            const dayTotal = daySessions.reduce((s, r) => s + r.total_questions, 0)
-            const dayCorrect = daySessions.reduce((s, r) => s + r.correct_count, 0)
-            const dayLevelUps = selectedDayLevelUps.length
-            const dayLabel = new Date(displayDay + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })
-            const isFutureDay = displayDay > todayStr
-            return (
-              <div className="border-t pt-4 mt-1 space-y-4">
-                {/* Header row */}
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold">{dayLabel}</span>
-                  <button
-                    type="button"
-                    onClick={() => { playback.stop(); setSelectedDay(null) }}
-                    className="flex items-center justify-center h-8 w-8 rounded-full border border-border bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
-                    aria-label="Clear day filter"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
-
-                {/* Large stats */}
-                {daySessions.length > 0 && (
-                  <div className="flex items-center gap-5 flex-wrap">
-                    <div className="flex flex-col items-center">
-                      <span className="text-2xl font-bold tabular-nums leading-none">
-                        {dayCorrect}
-                        <span className="text-muted-foreground text-lg font-normal">/{dayTotal}</span>
-                      </span>
-                      <span className="text-[10px] text-muted-foreground mt-0.5">correct</span>
-                    </div>
-                    {dayCorrect > 0 && (
-                      <div className="flex flex-col items-center">
-                        <span className="text-2xl font-bold tabular-nums leading-none text-cyan-500 inline-flex items-center gap-1">
-                          {dayCorrect} <Gem className="h-5 w-5" />
-                        </span>
-                        <span className="text-[10px] text-muted-foreground mt-0.5">gems</span>
-                      </div>
-                    )}
-                    {dayLevelUps > 0 && (
-                      <div className="flex flex-col items-center">
-                        <span className="text-2xl font-bold tabular-nums leading-none text-primary inline-flex items-center gap-1">
-                          {dayLevelUps} <ArrowUp className="h-5 w-5" />
-                        </span>
-                        <span className="text-[10px] text-muted-foreground mt-0.5">levelled up</span>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Session flashcard grid — a day with no sessions simply shows
-                    none: the day's plan below is the useful half, and during the
-                    schedule sweep an empty-state line would flicker on every day. */}
-                {daySessions.length > 0 && (
-                  <div className="grid grid-cols-2 gap-2">
-                    {daySessions.map(session => (
-                      <QuizSessionCard
-                        key={session.id}
-                        session={session}
-                        onClick={() => {
-                          savedScrollY.current = window.scrollY
-                          setViewingSession(session)
-                        }}
-                      />
-                    ))}
-                  </div>
-                )}
-
-                {/* Study plan for this day */}
-                {isPro && (() => {
-                  // Today's plan lives in its own card, so clicking today's cell
-                  // normally shows nothing here — except during the sweep, where
-                  // landing on today is the whole point.
-                  if (displayDay === todayStr && !playback.active) return null
-                  if ((isFutureDay || playback.active) && plan) {
-                    const dayConcepts = plan.assignments.filter(a => a.scheduledDate === displayDay)
-                    // Capped and height-reserved during the sweep so a busy day
-                    // followed by a quiet one doesn't pump the whole dashboard.
-                    const futureConcepts = playback.active ? dayConcepts.slice(0, 4) : dayConcepts
-                    return (
-                      <div className={`border-t pt-3 space-y-1${playback.active ? ' min-h-[152px]' : ''}`}>
-                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Planned for this day</p>
-                        {futureConcepts.length === 0 && (
-                          <p className="px-2 py-1.5 text-sm text-muted-foreground">Nothing scheduled — review and rest.</p>
-                        )}
-                        {futureConcepts.map((a, i) => {
-                          const cIdx = allConcepts.findIndex(c => c.name.toLowerCase() === a.conceptName.toLowerCase())
-                          return (
-                            <div
-                              key={a.conceptName}
-                              // The sweep passes a day in well under the time an
-                              // entry animation takes, so mid-sweep the rows just
-                              // swap — the list reads as scrubbing through the
-                              // schedule. Only the day it lands on flashes in.
-                              style={playback.landed ? { animationDelay: `${i * 40}ms` } : undefined}
-                              className={`flex items-center gap-2.5 px-2 py-1.5${playback.landed ? ' schedule-playback-concept' : ''}`}
-                            >
-                              <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
-                              <button
-                                type="button"
-                                onClick={() => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', cIdx === -1 ? 0 : cIdx)}
-                                className="text-sm flex-1 min-w-0 truncate text-left hover:text-foreground/70 transition-colors"
-                              >
-                                {a.conceptName}
-                              </button>
-                              <span className="text-xs text-muted-foreground shrink-0">→ {MASTERY_LABEL[NEXT_STATE[a.initialState] ?? a.initialState]}</span>
-                            </div>
-                          )
-                        })}
-                        {playback.active && dayConcepts.length > futureConcepts.length && (
-                          <p className="px-2 text-xs text-muted-foreground">
-                            +{dayConcepts.length - futureConcepts.length} more
-                          </p>
-                        )}
-                      </div>
-                    )
-                  }
-                  // Past day: show level-ups
-                  if (selectedDayLevelUps.length > 0) {
-                    return (
-                      <div className="border-t pt-3 space-y-1">
-                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Concepts mastered</p>
-                        {selectedDayLevelUps.map(lu => {
-                          const cIdx = allConcepts.findIndex(c => c.name.toLowerCase() === lu.conceptSlug.toLowerCase())
-                          return (
-                            <div key={lu.conceptSlug + lu.at} className="flex items-center gap-2.5 px-2 py-1.5">
-                              <CheckMark className="h-4 w-4" />
-                              <button
-                                type="button"
-                                onClick={() => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', cIdx === -1 ? 0 : cIdx)}
-                                className="text-sm flex-1 min-w-0 truncate text-left text-muted-foreground line-through hover:line-through hover:text-foreground/70 transition-colors"
-                              >
-                                {lu.conceptSlug}
-                              </button>
-                              <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">→ {MASTERY_LABEL[lu.to]}</span>
-                            </div>
-                          )
-                        })}
-                      </div>
-                    )
-                  }
-                  return null
-                })()}
-
-                {/* Empty state — every square on the strip opens this panel, so a
-                    day with nothing on it has to say so rather than render an
-                    empty box. Suppressed during the sweep, which passes days too
-                    fast for a message to be read. */}
-                {!playback.active && daySessions.length === 0 && (() => {
-                  if (isFutureDay) {
-                    // A future day with a plan already shows "Planned for this day".
-                    if (isPro && plan) return null
-                    return <p className="text-sm text-muted-foreground">This day is still ahead — nothing recorded yet.</p>
-                  }
-                  if (displayDay === todayStr) {
-                    return <p className="text-sm text-muted-foreground">No quizzes finished yet today.</p>
-                  }
-                  if (selectedDayLevelUps.length > 0) return null
-                  return <p className="text-sm text-muted-foreground">No study activity on this day.</p>
-                })()}
-              </div>
-            )
-          })()}
-
-        </CardContent>
-      </Card>
-  )
-
   return (
     <div className="space-y-4">
       {/* One column. The cards the Dashboard wants at the very top of the
-          page — Exam readiness, Today's Study Plan, Study Guide, then Study
-          Schedule — portal into the slots it supplies; what's left here is the
-          plan's warnings, full width. The `order-*` classes keep the inline
-          (no-slot) fallback in the same reading order: the readiness group,
-          warnings, schedule. */}
+          page — Exam readiness (which now carries the schedule strip too),
+          Today's Study Plan and the Study Guide — portal into the slot it
+          supplies; what's left here is the plan's warnings, full width. The
+          `order-*` classes keep the inline (no-slot) fallback in the same
+          reading order: the readiness group, then warnings. */}
       <div className="flex flex-col gap-4">
       {/* Exam readiness + Today's Study Plan + Study Guide — portal to
           `readinessSlot` when the Dashboard supplies one, otherwise render inline
           here (`order-none`, so they stay first). */}
       {readinessSlot ? createPortal(readinessCardContent, readinessSlot) : readinessCardContent}
-
-      {/* Study Schedule (heatmap) card — portals to `studyScheduleSlot` when the Dashboard
-          supplies one (see the `studyScheduleCardContent` definition above), otherwise
-          renders inline here (`order-4`, below the readiness group and warnings). */}
-      {studyScheduleSlot ? createPortal(studyScheduleCardContent, studyScheduleSlot) : studyScheduleCardContent}
 
       {/* Warnings — `order-3` sits them below the primary actions; `empty:hidden`
           drops the flex gap when the note isn't shown. */}

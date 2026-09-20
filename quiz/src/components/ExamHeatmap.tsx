@@ -89,6 +89,20 @@ interface Props {
   playbackDay?: string | null
   /** How long each day stays lit — the beat the flare and its fade are timed to. */
   playbackStepMs?: number
+  /**
+   * `grid` — the calendar shape: weeks as columns, Monday→Sunday down each one.
+   * `linear` — the same days on one line, oldest to newest, as a strip that
+   * reads like a timeline. The Dashboard's readiness card uses the linear one:
+   * it sits under the exam date and the countdown beside it, so the bar spans
+   * exactly the stretch those two words describe.
+   */
+  layout?: 'grid' | 'linear'
+  /**
+   * Whether the exam-date row under the strip is drawn. The readiness card
+   * prints that date above the strip already, so it turns this off and keeps
+   * only the target-ready row.
+   */
+  showExamDateRow?: boolean
 }
 
 /**
@@ -112,16 +126,44 @@ const ROWS = 7
  */
 const MAX_CELL_PX = 40
 
+/** Cell gutter for the linear strip, in css px — must match its `gap-px`. */
+const LINEAR_GAP = 1
 /**
- * The Study Schedule timeline: one square per day, weeks as columns, from a
- * fortnight before the first session to a fortnight past exam day. It is the
- * card's only view — every day between today and the exam is on screen at
- * once, so the schedule-forming sweep plays out right here.
+ * Ceiling on one day's width in the linear strip. A whole exam season on one
+ * line is a few hundred days at most, but a schedule only a fortnight long
+ * would otherwise stretch each day into a tile — the strip stops widening here
+ * and leaves the slack to its right, the way the grid does.
+ */
+const LINEAR_MAX_CELL_PX = 14
+/** Floor on a day's width, so the marked days (today, exam day, target ready)
+ *  stay findable on a phone where the run divides down to a couple of pixels —
+ *  and wide enough that today's inset ring still reads as a ring rather than
+ *  filling the bar and passing for a solid marker. */
+const LINEAR_MARKED_MIN_PX = 4
+
+/**
+ * The Study Schedule timeline: one cell per day, from a fortnight before the
+ * first session to a fortnight past exam day. Every day between today and the
+ * exam is on screen at once — nothing scrolls — so the schedule-forming sweep
+ * plays out right here.
  *
- * A day really is a square: the columns split the available width and each cell
- * takes its height from that width (`aspect-square`, capped by `MAX_CELL_PX`),
- * so the strip reads as a calendar rather than a barcode, and every day is a
- * target a thumb can hit.
+ * Two layouts, one set of days:
+ *
+ *  - `grid` (the default) — weeks as columns, Monday→Sunday down each one, and
+ *    a day really is a square: the columns split the available width and each
+ *    cell takes its height from that width (`aspect-square`, capped by
+ *    `MAX_CELL_PX`), so the strip reads as a calendar rather than a barcode and
+ *    every day is a target a thumb can hit.
+ *  - `linear` — the same days on one line, a thin bar each. This is the one the
+ *    Dashboard's readiness card draws, under the exam date and the countdown
+ *    beside it: on one line the strip spans exactly the stretch those two words
+ *    name, so how much of it is green answers "and what have I done with it".
+ *    A day divides down to a couple of css px on a phone, so the marked days
+ *    carry a floor width (`LINEAR_MARKED_MIN_PX`) and a tap between two bars is
+ *    resolved against the strip's geometry rather than swallowed.
+ *
+ * The linear strip is the flattened grid — `linearDays` is `columns` unrolled —
+ * so the two can never disagree about which days exist or what colour one is.
  */
 export function ExamHeatmap({
   sessions,
@@ -136,6 +178,8 @@ export function ExamHeatmap({
   highlightedDay,
   playbackDay,
   playbackStepMs = 60,
+  layout = 'grid',
+  showExamDateRow = true,
 }: Props) {
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState('')
@@ -260,6 +304,24 @@ export function ExamHeatmap({
     })
   }, [gridStart, totalWeeks, today, scoreByDay, examDateWeekIdx, targetReadyDateWeekIdx, targetDate, targetReadyDate])
 
+  // The same days, on one line. The grid's columns already hold every cell in
+  // calendar order (Monday first, week after week), so the linear strip is that
+  // list flattened — the two layouts can't disagree about which days exist or
+  // what colour one is.
+  const linearDays = useMemo(() => columns.flatMap(col => col.days), [columns])
+
+  // Month ticks for the strip: the label goes on the first day of each month it
+  // crosses, so the bar carries the same "Aug … Sep … Oct" run the grid does.
+  const linearMonthLabels = useMemo(() => {
+    let prevMonth = -1
+    return linearDays.map(day => {
+      const month = Number(day.key.slice(5, 7)) - 1
+      const label = month !== prevMonth ? MONTH_ABBR[month] : null
+      prevMonth = month
+      return label
+    })
+  }, [linearDays])
+
   const daysLeft = targetDate ? daysUntil(targetDate) : null
   const examDateLabel = targetDate
     ? new Date(targetDate + 'T00:00:00').toLocaleDateString(undefined, {
@@ -303,18 +365,22 @@ export function ExamHeatmap({
     const grid = gridRef.current
     if (!grid) return
     const rect = grid.getBoundingClientRect()
+    const isLinear = layout === 'linear'
     const hit = dayCellAt(
-      { width: rect.width, height: rect.height, columns: totalWeeks, rows: ROWS, gap: CELL_GAP },
+      isLinear
+        ? { width: rect.width, height: rect.height, columns: linearDays.length, rows: 1, gap: LINEAR_GAP }
+        : { width: rect.width, height: rect.height, columns: totalWeeks, rows: ROWS, gap: CELL_GAP },
       e.clientX - rect.left,
       e.clientY - rect.top,
     )
     if (!hit) return
-    const day = columns[hit.col]?.days[hit.row]
+    const day = isLinear ? linearDays[hit.col] : columns[hit.col]?.days[hit.row]
     if (day) onDayClick(day.key)
   }
 
   const dateRows = (
-    <div className="flex flex-col gap-1 pt-0.5">
+    <div className="flex flex-col gap-1 pt-0.5 empty:hidden">
+      {showExamDateRow && (
       <div className="flex items-center gap-1.5">
         {!editing || onOpenStudyPlan ? (
           <button
@@ -357,6 +423,7 @@ export function ExamHeatmap({
           </div>
         )}
       </div>
+      )}
 
       {onTargetReadyDateChange !== undefined && (
         <div className="flex items-center gap-1.5">
@@ -408,6 +475,90 @@ export function ExamHeatmap({
   // be bigger than `MAX_CELL_PX`. The month row is capped to the same width so
   // its labels stay over the weeks they name.
   const gridMaxWidth = totalWeeks * (MAX_CELL_PX + CELL_GAP) - CELL_GAP
+
+  // ── Linear strip ────────────────────────────────────────────────────────────
+  //
+  // The same run of days on one line: oldest at the left, exam day near the
+  // right, each day a thin bar shaded by what was done on it. It lives under the
+  // exam date and the countdown on the readiness card, so the bar is literally
+  // the stretch those two words name — how much of it is green is the answer to
+  // "and what have I done with it".
+  if (layout === 'linear') {
+    const stripMaxWidth = linearDays.length * (LINEAR_MAX_CELL_PX + LINEAR_GAP) - LINEAR_GAP
+    return (
+      <div className="space-y-1.5">
+        {/* Month ticks, over the days they name. */}
+        <div className="flex gap-px" style={{ height: 11, maxWidth: stripMaxWidth }}>
+          {linearMonthLabels.map((label, i) => (
+            <div key={linearDays[i].key} className="flex-1 min-w-0 relative">
+              {label && (
+                <span className="absolute left-0 bottom-0 text-[10px] text-muted-foreground leading-none whitespace-nowrap">
+                  {label}
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* The strip itself. Days share the width, so a season of them divides
+            down to a couple of css px on a phone — the marked days (today, exam
+            day, target ready) carry a floor width so they stay findable, and a
+            tap that lands between two bars is resolved against the strip's own
+            geometry by `handleGridClick`. */}
+        <div
+          ref={gridRef}
+          className="flex items-stretch gap-px"
+          style={playbackDay
+            ? ({ touchAction: 'manipulation', maxWidth: stripMaxWidth, '--playback-step': `${Math.max(playbackStepMs, MIN_FLARE_MS)}ms` } as CSSProperties)
+            : { touchAction: 'manipulation', maxWidth: stripMaxWidth }}
+          onClick={handleGridClick}
+        >
+          {linearDays.map(cell => {
+            const isClickable = onDayClick !== undefined
+            const isMarked = cell.isExamDay || cell.isReadyDay || cell.isToday
+              || cell.key === highlightedDay || cell.key === playbackDay
+            // A day with nothing on it still has to be *there*: on one line the
+            // empty days are the timeline itself, so the track carries real
+            // contrast and the days still to come are the paler half of it —
+            // which is what makes the bar read against the countdown above it.
+            let cls = `h-6 flex-1 min-w-0 rounded-[2px] ${
+              cell.isExamDay ? 'bg-primary'
+                : cell.isReadyDay ? 'bg-amber-400'
+                : cell.isFuture ? 'bg-muted-foreground/10'
+                : cell.data === null ? 'bg-muted-foreground/35' : ''
+            }`
+            if (isClickable && !playbackDay) cls += ' cursor-pointer hover:opacity-80'
+            if (playbackDay) cls += ' transition-all'
+            if (cell.key === playbackDay) cls += ' schedule-playback-day'
+            else if (cell.key === highlightedDay) cls += ' ring-2 ring-white/90'
+            else if (cell.isToday) cls += ' ring-1 ring-inset ring-foreground/70 dark:ring-white/80'
+            // A marked day that isn't the exam or the target keeps its own
+            // shade; the two dated ones are drawn solid, so their colour has to
+            // survive the `cellStyle` wash a studied past day would get.
+            const style = !cell.isFuture && !cell.isExamDay && !cell.isReadyDay
+              ? cellStyle(resolvedPct(cell.key, cell.data, dayPlanPct))
+              : undefined
+            return (
+              <div
+                key={cell.key}
+                data-heatmap-cell
+                title={cell.title}
+                role={isClickable ? 'button' : undefined}
+                aria-label={isClickable
+                  ? cell.isFuture ? `View what is planned for ${cell.key}` : `View sessions for ${cell.key}`
+                  : undefined}
+                onClick={isClickable ? () => onDayClick!(cell.key) : undefined}
+                style={isMarked ? { minWidth: LINEAR_MARKED_MIN_PX, ...style } : style}
+                className={cls}
+              />
+            )
+          })}
+        </div>
+
+        {dateRows}
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-3">

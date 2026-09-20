@@ -1,5 +1,5 @@
 // View-model for the "schedule forming" playback that runs on the Dashboard's
-// Study Schedule card when a study plan is locked in (see
+// readiness card when a study plan is locked in (see
 // hooks/useSchedulePlayback.ts).
 //
 // A generated StudyPlan is a flat list of assignments keyed by date; the
@@ -28,10 +28,10 @@ export interface PlanFormingSummary {
 }
 
 /**
- * Fired when a study plan is locked in, so the Dashboard's Study Schedule card
- * can play the schedule forming. The config modal is opened from four places
- * and none of them own that card, so the two are joined by an event rather than
- * by threading a callback through every caller.
+ * Fired when a study plan is locked in, so the Dashboard's readiness card can
+ * play the schedule forming on its strip. The config modal is opened from four
+ * places and none of them own that card, so the two are joined by an event
+ * rather than by threading a callback through every caller.
  */
 export const PLAN_LOCKED_EVENT = 'actuarial_study_plan_locked'
 

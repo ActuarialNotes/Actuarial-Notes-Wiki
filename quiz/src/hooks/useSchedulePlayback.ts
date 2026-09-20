@@ -1,11 +1,11 @@
-// Drives the "schedule forming" playback on the Dashboard's Study Schedule
-// card: after a plan is locked in, the card rewinds through the schedule from
-// exam day back to today, stopping on every day along the way — briefly, but
-// none of them skipped.
+// Drives the "schedule forming" playback on the Dashboard's readiness card:
+// after a plan is locked in, the card rewinds through the schedule from exam
+// day back to today, stopping on every day along the way — briefly, but none of
+// them skipped.
 //
-// The hook owns only the *day cursor*. The card reacts to it — ExamHeatmap
-// glides its strip to the day, and the day panel below shows that day's plan —
-// so the animation is the real card, not a stand-in for it.
+// The hook owns only the *day cursor*. The card reacts to it — the schedule
+// strip under the exam date glides to the day, and the day panel below shows
+// that day's plan — so the animation is the real card, not a stand-in for it.
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {

@@ -6,6 +6,10 @@ Read this first, every session. It should save you a re-discovery pass through t
 
 A two-part product for people studying for actuarial exams (CAS/SOA):
 
+The app has **two modes** — two products under one roof, switched from the pill beside the
+wordmark (`lib/appMode.ts`). **Study Mode** is everything below; **Cowork** is the second
+product, Pro-only and in Preview — see "Cowork" at the end of this file and `docs/cowork.md`.
+
 1. **Content vault** (repo root) — an Obsidian-style markdown wiki: exam syllabus pages
    (`Exam *.md`), concept pages (`Concepts/*.md`), resource/timeline pages
    (`Resources/{Books,Regulation,Events,Benchmarks,Data}/*.md`), and a practice-question
@@ -46,9 +50,15 @@ supabase/migrations/, supabase/functions/         — DB schema + edge functions
 quiz/                                             — the React app (this is where most code changes go)
 ```
 
+Cowork's source catalogue is **not** in the vault: it is authored as seed data in
+`quiz/src/data/cowork*.ts`, and its sample documents are registered as *virtual* vault files
+so they open in the same popup viewer as a real page. See `docs/cowork.md`.
+
+
 ### Inside `quiz/src/`
 - `pages/` — route-level views (Quiz, Review, Dashboard, Flashcards, Search, Settings, Store,
-  Upgrade, wiki/*, and `Research/` — the last is flag-gated)
+  Upgrade, wiki/*, `Cowork/` — the second product's two tabs — and `Research/`, which is
+  flag-gated)
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
   `components/collect/` (flashcard-collection modal + 3D card), `components/research/` (flag-gated).
   `components/ConceptActionMenu.tsx` is **the** concept action menu — quiz, study guide, deck,
@@ -133,6 +143,14 @@ before touching that area**:
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
   work stays consistent, minimalistic, and hierarchy-aware.
+- `docs/cowork.md` — **Cowork**, the second product: the mode switch (`lib/appMode.ts`), the
+  Sources → Library → Deliverable → Export loop, the three deliverable types and their five
+  facets, and the two rules that hold the whole thing up — *nothing is invented* (exports
+  carry structure and blank value cells, because the app holds no experience data; a `Sample`
+  entry carries no date and no link because it names no particular document) and *there is no
+  second reader* (a Cowork resource opens in `ConceptPopup`; its own documents are registered
+  as virtual vault files to keep that true). Read before touching anything named `cowork*`,
+  `ModeSwitcher`, `appMode` or `xlsx`.
 - `docs/stacked-pages.md` — the concept popup's **page stack** (Obsidian's stacked pages):
   a link followed inside the popup opens a new page on top of the one being read, and the
   pages behind it fold up into title bars — vertically, along the pane's short axis, so a
@@ -356,7 +374,17 @@ Other important `lib/` modules:
   shared list, copied out of node_modules by `vite.config.ts`. `wasm` is the load-bearing
   one: CCITT fax and JBIG2 decode through it, so without it every *scanned* page renders
   as a ghost, and pdf.js only warns. Rendered by
-  `components/PdfViewerPanel.tsx` in the concept popup's shell. See
+  `components/PdfViewerPanel.tsx` in the concept popup's shell, mounted **once** at the app
+  root by `components/PdfReaderHost.tsx` off the `hooks/usePdfReader.ts` store — there is
+  one reader, and `components/PdfLinkButton.tsx` is the one PDF button that opens it. The
+  rule: *every* PDF the app offers is read in the app, never in a browser tab — the
+  past-paper shelf's report and solutions, an exam's syllabus, a resource card's **Read
+  PDF**, the paper behind the question in the quiz's **Info** panel, and the sources on the
+  Fact Check panel's *Checked against* shelf. `opensInReader` (in `examPdf.ts`) decides:
+  a plain left click reads here, a modified or middle click stays a link, and a source the
+  proxy won't serve is left as an out-link rather than opening a panel that can't load. A
+  surface that binds `Esc` or the arrows hands them over while a document is up
+  (`useIsReadingPdf()`). Pinned by `components/PdfLinkButton.test.ts`. See
   `docs/mock-exam-browser.md`.
 - `pageStack.ts` — the concept popup's **page stack**: which pages a followed link leaves
   open and which one of them is open on screen (one at a time — the rest are folded into
@@ -531,7 +559,22 @@ Other important `lib/` modules:
   Override per element with `data-sound="<cue>"` / `data-sound="none"`. Nothing
   plays for a wrong answer — that's deliberate and pinned by a test. See
   `docs/sound-design.md`.
-- `featureFlags.ts` — build-time feature flags (`RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
+- `appMode.ts` / `cowork*.ts` / `xlsx.ts` — **Cowork**, the app's second product (Pro-only,
+  Preview, `COWORK_ENABLED`). `appMode.ts` is the one definition of what a mode *is* — label,
+  home, routes, what it takes to enter it — read by the pill (`components/ModeSwitcher.tsx`),
+  the sidebar's nav and `App.tsx`'s route guard, so none of the three re-decides it.
+  `coworkFacets.ts` is the five facet axes as data; `coworkSources.ts` is the
+  entity/resource model, the search, and the library reducers (adding a document follows its
+  publisher; dropping a publisher drops its documents); `coworkDeliverables.ts` is the
+  step-by-step scoping engine (which question comes next, and `answerStep`, which drops the
+  answers a change orphans); `coworkExport.ts` turns a deliverable into workbook sheets; and
+  `xlsx.ts` is a minimal dependency-free `.xlsx` writer (stored ZIP + CRC-32 + inline
+  strings), pure and byte-reproducible. `coworkContent.ts` is the one impure one: it installs
+  the wiki bundle's lookup *and* registers Cowork's sample documents as virtual vault files,
+  which is what lets both kinds of resource open in `ConceptPopup` rather than a second
+  reader. The two rules to keep are in `docs/cowork.md` — nothing is invented, and there is
+  no second viewer.
+- `featureFlags.ts` — build-time feature flags (`COWORK_ENABLED`, `RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
   `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`,
   `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `FACT_CHECK_UI_ENABLED`, `TOUR_ENABLED`). `TOUR_ENABLED` is
   **off**: the guided onboarding tour (`components/OnboardingTour.tsx` +
@@ -561,8 +604,8 @@ Other important `lib/` modules:
   60 requests/hour per IP without `VITE_GITHUB_TOKEN` — don't put it on a path that has to work.
 - `supabase.ts` — Supabase client + shared row types
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **111 test files /
-~1620 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **119 test files /
+~1775 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, and the research/resource-timeline
 modules).
 
@@ -740,6 +783,47 @@ Both the root site and `quiz/` have their own `vercel.json` (root handles `/api/
 headers for the serverless functions — `chat.js` and the flag-gated `research*.js`; `quiz/`
 rewrites all routes to `index.html` for the SPA). Deploys to Vercel; Supabase edge functions
 deploy via the GitHub Action above.
+
+## Cowork (the second product)
+
+Pro-only, in **Preview**, gated by `COWORK_ENABLED`. Two tabs — **Sources** and
+**Deliverables** — which are the two halves of one loop:
+
+```
+Sources ──► Library ──► Deliverable ──► Scoping ──► Attach ──► Populate ──► Export
+```
+
+A reader follows the **entities** that publish (OSFI, FSRA, the CIA, Intact, Canadian
+Underwriter…), takes documents into a library, creates a deliverable (**Analysis**,
+**Report** or **Documentation** — the difference is what it is *for*), answers a short
+step-by-step sequence of multiple-choice questions to scope it, attaches the documents it is
+built on, and exports the exhibit the scoping earned as `.xlsx` or `.csv`. The assumptions
+register fills in from *both* the answers and the attached documents, every row naming what
+supports it.
+
+Three things to know before changing any of it — all three are load-bearing, and
+`docs/cowork.md` is the full account:
+
+1. **Nothing is invented.** The app holds no experience data, so an export carries the right
+   columns, the right periods and every assumption and source with its basis named, and
+   leaves its **value cells empty**. An assumption a document supplies the *row* but not the
+   number for stays visibly blank with its locator. Same rule as the vault's pass rates and
+   examiner's reports: transcribed, never constructed.
+2. **There is no second reader.** A Cowork resource opens in `ConceptPopup`, the same split
+   pane the study guide reads a concept in. Resources that are vault pages carry a `wikiRef`;
+   Cowork's own documents are registered as **virtual vault files** at vault-shaped paths
+   (`lib/coworkContent.ts`) so they render through the same `WikiArticle`. Anything that
+   seems to need a bespoke viewer should become a page at a vault-shaped path instead.
+3. **A `Sample` entry names no particular document.** The catalogue is seed data; entries
+   marked `sample: true` stand for a *class* of document a publisher issues and carry no date
+   and no link, because inventing a plausible one would put a citation in a deliverable that
+   nothing supports. Tests enforce this both ways (`lib/coworkContent.test.ts`), including
+   that every `wikiRef` still resolves to a file that is actually in the vault.
+
+The stores (`hooks/useCoworkLibrary.ts`, `hooks/useCoworkDeliverables.ts`) are localStorage
+only and hold **ids only** — the catalogue and the scoping flow are passed in. That is what
+keeps Cowork an ~88 KB lazy chunk instead of pulling its catalogue into the main bundle
+through the sidebar's nav badges. Populating the corpus more deeply is the next phase.
 
 ## Working conventions observed in this repo
 

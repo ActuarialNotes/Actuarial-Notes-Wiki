@@ -8,6 +8,7 @@ import {
   pdfFileName,
   pdfProxyUrl,
   pdfSourceHost,
+  opensInReader,
 } from './examPdf'
 import {
   allExamPdfLinks,
@@ -197,5 +198,39 @@ describe('the syllabus catalogue', () => {
     // content outline a syllabus promises the readings list it doesn't carry.
     expect(getSyllabusPdfLink('p-1')?.url).toContain('soa.org')
     expect(getSyllabusPdfLink('5-1')?.url).toContain('casact.org')
+  })
+})
+
+describe('opensInReader', () => {
+  const PAPER = 'https://www.casact.org/sites/default/files/2021-04/sp19-5.pdf'
+  const plain = { metaKey: false, ctrlKey: false, shiftKey: false, altKey: false, button: 0 }
+
+  it('takes a plain left click on a source the proxy will serve', () => {
+    expect(opensInReader(PAPER, plain)).toBe(true)
+  })
+
+  it('leaves a modified click to the browser', () => {
+    // ⌘/ctrl-click, shift-click and alt-click are how a reader asks for a tab,
+    // a window or a download. A PDF button is an anchor underneath precisely so
+    // those keep working — taking them would break the link, not improve it.
+    for (const key of ['metaKey', 'ctrlKey', 'shiftKey', 'altKey'] as const) {
+      expect(opensInReader(PAPER, { ...plain, [key]: true })).toBe(false)
+    }
+  })
+
+  it('leaves a middle click to the browser', () => {
+    expect(opensInReader(PAPER, { ...plain, button: 1 })).toBe(false)
+  })
+
+  it('leaves a source the endpoint would refuse as an ordinary out-link', () => {
+    // Opening a panel that then can't load is worse than the tab it replaced,
+    // so the allowlist is checked before the reader, not after.
+    expect(opensInReader('https://example.com/paper.pdf', plain)).toBe(false)
+    expect(opensInReader('https://www.casact.org/exam/index.html', plain)).toBe(false)
+    expect(opensInReader('not a url', plain)).toBe(false)
+  })
+
+  it('obeys a host that vetoes the reader', () => {
+    expect(opensInReader(PAPER, plain, true)).toBe(false)
   })
 })

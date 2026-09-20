@@ -469,23 +469,18 @@ is: only an unmodified left click is intercepted, so ⌘/ctrl-click, middle-clic
 long-press still behave like a link and the real URL stays visible on hover.
 
 Because that card is read *inside* the concept popup as often as on the standalone page, the
-reader has to open **over** the page that asked for it, and the popup's own layer is what it
-would otherwise open behind: the popup paints at `z-index: 56` in focus mode, above the
-panel's `z-50`, so a Read PDF press on a full-screen resource page looked like it did
-nothing. Three things follow, and all of them live with the panel:
+reader has to open **over** the page that asked for it — and the popup's own layer is what it
+would otherwise open behind. That problem generalises, which is what §"One reader, mounted
+once" below is about. Two consequences belong here:
 
-- **Its own layer.** The panel carries `.pdf-viewer-aside` alongside the popup's class and
-  takes `z-index: 58` — a step above the popup and the image gallery (57) — in its own focus
-  mode too (`index.css`; the ladder is `docs/style-guide.md` §8.2).
 - **No chrome gaps over a full-screen host.** `hostFullScreen` (passed down as
   `ConceptPagePanel`'s `focusMode`) drops the desktop sidebar inset, because the page
   underneath has already covered it — leaving it would show a strip of that page instead of
   the chrome it was reserved for.
-- **The keys.** The popup binds Esc and the arrows too, so `ResourceMetaCard` reports the
-  reader opening (`onViewerOpenChange` → `ConceptPagePanel`'s `onReaderOpenChange` →
-  `ConceptPopup`) and the popup hands them over while it is up — the same hand-over the image
-  gallery gets, but kept on its own flag: the gallery's also makes the footer's Previous /
-  Next carry the gallery to the next concept, which a document being read must not do.
+- **The keys.** The popup binds Esc and the arrows too, so it hands them over while a
+  document is up — `useIsReadingPdf()` (`hooks/usePdfReader.ts`) is the flag. Kept apart from
+  the image gallery's hand-over, which *also* makes the footer's Previous / Next carry the
+  gallery to the next concept: a document being read must not do that.
 
 What decides between reading and out-linking is `isSupportedPdfSource` — the same predicate
 the exam shelf uses, so the viewer never opens on a request the endpoint would refuse. A
@@ -503,3 +498,51 @@ MAS-II was first sat in **Fall 2018**. Fall 2012 Exam 5 has not been located. Wh
 published also differs by exam — Exams 5–9 are written papers with an Examiner's Report,
 while the MAS exams are multiple choice and come with a final answer key — so the button's
 label follows the document (`Examiner's Report` vs `Exam & Answer Key`), not the button.
+
+## One reader, mounted once
+
+**Every PDF button in the app reads its document in the app.** The rule has no exceptions:
+the past-paper shelf's report and solutions, the study guide's syllabus, a resource card's
+**Read PDF**, the paper behind the question on screen (the quiz's **Info** panel), and the
+sources on the Fact Check panel's *Checked against* shelf all open the same panel. A
+published paper opened in a browser tab costs a candidate their place; mid-quiz it costs them
+the quiz.
+
+Three pieces hold that up:
+
+| Piece | Role |
+|---|---|
+| `quiz/src/hooks/usePdfReader.ts` | The store: which document is being read, `openPdfReader`, and `useIsReadingPdf()` |
+| `quiz/src/components/PdfReaderHost.tsx` | The one `PdfViewerPanel`, mounted in `App` |
+| `quiz/src/components/PdfLinkButton.tsx` | The button every surface uses |
+
+It is one store rather than a panel each surface mounts for itself because a panel mounted
+inside its opener fails in two ways, and both read on screen as *the button did nothing*:
+
+- **Layering.** A `z-index` only orders an element inside its nearest stacking context, so a
+  reader rendered inside a dialog is pinned to that dialog's layer. That is why the Fact
+  Check shelf's cards carried a `linkOnly` flag and the quiz's Question info panel sent its
+  paper to a new tab — neither could paint above the sheet that opened it. Hosted at the app
+  root the panel is a top-level child, and takes `z-index: 135` (`.pdf-viewer-aside` in
+  `index.css`, matching the class on the panel): above every sheet that can open it
+  (`z-[130]`), below the onboarding tour's spotlight (141). The ladder is
+  `docs/style-guide.md` §8.2.
+- **Lifetime.** A reader rendered inside a card unmounts when the card does — stepping to the
+  next concept, or closing the panel that opened it, took the document with it.
+
+`PdfLinkButton` is where the click rule lives, as `opensInReader` in `lib/examPdf.ts`
+(pure, tested): a plain left click reads here, and a ⌘/ctrl-click, shift-click, alt-click or
+middle-click stays an ordinary link, because the button is an anchor to the publisher
+underneath. A source `isSupportedPdfSource` refuses never opens the panel at all — a reader
+that can't load is worse than the tab it replaced.
+
+Two hosts do something extra when they hand over:
+
+- **The quiz's Question info panel closes.** It is a signpost, not a reading surface: once
+  the paper is up, the only thing behind it worth returning to is the question.
+- **The Fact Check sheet stays.** It is a record the reader came from and goes back to, so it
+  waits underneath; it only stops binding `Esc` while the document is up.
+
+`components/PdfLinkButton.test.ts` pins both halves — every listed surface goes through the
+button (or through `opensInReader` + `openPdfReader`, for the research feed's differently
+shaped chip), and the reader's layer clears every host that can open it.

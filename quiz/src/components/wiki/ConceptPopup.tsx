@@ -4,6 +4,7 @@ import { ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Lock, Maximize2
 import { type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useSplitHeight } from '@/hooks/useSplitHeight'
+import { useIsReadingPdf } from '@/hooks/usePdfReader'
 import { ConceptPagePanel } from '@/components/wiki/ConceptPagePanel'
 import { PageStackBar } from '@/components/wiki/PageStackBar'
 import { ProBadge } from '@/components/ProBadge'
@@ -33,7 +34,7 @@ function pageKey(ref: WikiEntryRef): string {
  * sequence from the stack: stepping to another concept starts a new trail.
  */
 export function ConceptPopup() {
-  const { open, list, index, pages, pageIndex, occurrences, occurrenceIndex, objectives, navigate, pushPage, focusPage, closePage, close, dashboardContext, setDashboardFilter } = useConceptPopup()
+  const { open, list, index, pages, pageIndex, occurrences, occurrenceIndex, objectives, walkKind, navigate, pushPage, focusPage, closePage, close, dashboardContext, setDashboardFilter } = useConceptPopup()
   const current: WikiEntryRef | undefined = list[index]
   const activePage: WikiEntryRef | undefined = pages[pageIndex]
   const { height, beginDrag } = useSplitHeight()
@@ -45,10 +46,13 @@ export function ConceptPopup() {
   const [viewingDropdownOpen, setViewingDropdownOpen] = useState(false)
   const [showProInfo, setShowProInfo] = useState(false)
   const [showGalleryInPanel, setShowGalleryInPanel] = useState(false)
-  // A source document being read on the open page (`PdfViewerPanel`, opened
-  // from a resource page's "Read PDF"). It lays over the popup and binds the
-  // same keys, so while it is up the popup keeps its hands off them.
-  const [readerInPanel, setReaderInPanel] = useState(false)
+  // A source document being read (`PdfViewerPanel`, opened from a resource
+  // page's "Read PDF" or from anywhere else in the app). It lays over the popup
+  // and binds the same keys, so while it is up the popup keeps its hands off
+  // them. Read from the reader's own store rather than reported up by the page
+  // that opened it — the reader outlives that page, and can be put up by a
+  // surface the popup knows nothing about.
+  const readingPdf = useIsReadingPdf()
   // Set when Previous / Next is pressed with the gallery open, so the page
   // stepped onto opens its own gallery. Mirrored in a ref because it is read
   // back from a panel's load callback, not from a render.
@@ -134,7 +138,7 @@ export function ConceptPopup() {
       if (showGalleryInPanel) return
       // Same hand-over for a document opened on the page: Esc closes the
       // reader, arrows turn its pages, and neither reaches the concept behind.
-      if (readerInPanel) return
+      if (readingPdf) return
       // Esc unwinds one layer at a time: the page just opened, then focus mode,
       // then the popup — so a link followed by mistake costs one key, not the
       // whole reading position.
@@ -149,7 +153,7 @@ export function ConceptPopup() {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [open, close, turnPage, focusMode, showGalleryInPanel, readerInPanel])
+  }, [open, close, turnPage, focusMode, showGalleryInPanel, readingPdf])
 
   // Close viewing dropdown / Pro info when clicking outside.
   useEffect(() => {
@@ -226,6 +230,9 @@ export function ConceptPopup() {
   // The tips behind an exam's "How to Study" card: a walk of its own, not a
   // slice of the syllabus. See components/wiki/ExamGuideCards.tsx.
   const isGuideWalk = current?.kind === 'guide'
+  // A walk with no syllabus behind it — an exam's tips, or Cowork's corpus of
+  // source documents — has nothing for the filter picker to re-slice.
+  const hasSyllabusToFilter = walkKind === 'syllabus' && !isGuideWalk
 
   const canNext = isCircular || (occMode ? occurrenceIndex < occurrences!.length - 1 : index < list.length - 1)
   // The footer bar measures the sequence prev/next actually walks, which in
@@ -309,7 +316,6 @@ export function ConceptPopup() {
                 gallerySeek={gallerySeek}
                 onGallerySeekResolved={handleGallerySeek}
                 onGalleryOpenChange={setShowGalleryInPanel}
-                onReaderOpenChange={setReaderInPanel}
               />
             </div>
           ) : (
@@ -364,7 +370,7 @@ export function ConceptPopup() {
             A guide walk (an exam's How to Study tips) drops it too: those pages
             are not a view of the syllabus, so every filter it offers is either
             a no-op or a lie about what is being read. */}
-        {!focusMode && !isGuideWalk && (
+        {!focusMode && hasSyllabusToFilter && (
         <div className="self-center flex flex-col items-center px-2 shrink-0" ref={viewingRef}>
           <div className="relative">
             <button

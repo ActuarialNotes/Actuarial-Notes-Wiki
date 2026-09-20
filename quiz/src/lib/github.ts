@@ -190,6 +190,25 @@ type ContentLookup = (path: string) => string | undefined
 let wikiContentLookup: ContentLookup | null = null
 export function setWikiContentLookup(fn: ContentLookup): void { wikiContentLookup = fn }
 
+/**
+ * Pages that exist only in the app, registered under a vault-shaped path.
+ *
+ * `setWikiContentLookup` is a single slot owned by the wiki bundle
+ * (`WikiLayout`), so a second feature with pages of its own cannot use it
+ * without one of the two winning by module-load order. This registry is the
+ * second way in: entries are merged rather than replaced, and consulted ahead
+ * of the bundle so a virtual page never has to exist as a file to be readable.
+ *
+ * Cowork's sample source documents are registered here
+ * (`lib/coworkContent.ts`), which is what lets them open in the same popup
+ * viewer as a real vault page instead of needing a reader of their own.
+ */
+const virtualWikiFiles = new Map<string, string>()
+
+export function registerVirtualWikiFiles(files: Record<string, string>): void {
+  for (const [path, content] of Object.entries(files)) virtualWikiFiles.set(path, content)
+}
+
 const wikiFileMemCache = new Map<string, string>()
 const WIKI_FILE_SS_PREFIX = 'wf_'
 function ssRead(p: string): string | null {
@@ -200,6 +219,8 @@ function ssWrite(p: string, v: string): void {
 }
 
 export async function fetchWikiFile(filePath: string): Promise<string> {
+  const virtual = virtualWikiFiles.get(filePath)
+  if (virtual !== undefined) return virtual
   if (wikiContentLookup) {
     const bundled = wikiContentLookup(filePath)
     if (bundled !== undefined) return bundled

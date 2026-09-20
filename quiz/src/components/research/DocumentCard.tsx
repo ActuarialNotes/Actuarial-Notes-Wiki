@@ -6,6 +6,8 @@ import { agentMeta } from '@/lib/researchOntology'
 import { metricDef, metricOrder } from '@/lib/researchMetrics'
 import { comparePeriods } from '@/lib/researchPeriods'
 import type { ResearchDocumentRow, ResearchMetricSummary } from '@/hooks/useResearchFeed'
+import { opensInReader } from '@/lib/examPdf'
+import { openPdfReader } from '@/hooks/usePdfReader'
 
 function formatDocType(type: string): string {
   return type.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
@@ -161,7 +163,20 @@ export function DocumentCard({
         {(document.pdf_url || (document.exam_tags && document.exam_tags.length > 0)) && (
           <div className="flex flex-wrap gap-1.5 pt-1">
             {document.pdf_url && (
-              <a href={document.pdf_url} target="_blank" rel="noreferrer">
+              // Read in the app where the proxy can serve the publisher
+              // (`lib/examPdf.ts`), a link out where it can't — the corpus
+              // spans regulators the allowlist doesn't cover. Same rule as
+              // every other PDF button; only the chip's shape differs.
+              <a
+                href={document.pdf_url}
+                target="_blank"
+                rel="noreferrer"
+                onClick={e => {
+                  if (!document.pdf_url || !opensInReader(document.pdf_url, e)) return
+                  e.preventDefault()
+                  openPdfReader({ url: document.pdf_url, title: document.title })
+                }}
+              >
                 <Badge variant="outline" className="text-[10px] uppercase text-primary border-primary/40 hover:bg-primary/10 transition-colors cursor-pointer">
                   PDF
                 </Badge>

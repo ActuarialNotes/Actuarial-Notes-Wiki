@@ -356,7 +356,17 @@ Other important `lib/` modules:
   shared list, copied out of node_modules by `vite.config.ts`. `wasm` is the load-bearing
   one: CCITT fax and JBIG2 decode through it, so without it every *scanned* page renders
   as a ghost, and pdf.js only warns. Rendered by
-  `components/PdfViewerPanel.tsx` in the concept popup's shell. See
+  `components/PdfViewerPanel.tsx` in the concept popup's shell, mounted **once** at the app
+  root by `components/PdfReaderHost.tsx` off the `hooks/usePdfReader.ts` store — there is
+  one reader, and `components/PdfLinkButton.tsx` is the one PDF button that opens it. The
+  rule: *every* PDF the app offers is read in the app, never in a browser tab — the
+  past-paper shelf's report and solutions, an exam's syllabus, a resource card's **Read
+  PDF**, the paper behind the question in the quiz's **Info** panel, and the sources on the
+  Fact Check panel's *Checked against* shelf. `opensInReader` (in `examPdf.ts`) decides:
+  a plain left click reads here, a modified or middle click stays a link, and a source the
+  proxy won't serve is left as an out-link rather than opening a panel that can't load. A
+  surface that binds `Esc` or the arrows hands them over while a document is up
+  (`useIsReadingPdf()`). Pinned by `components/PdfLinkButton.test.ts`. See
   `docs/mock-exam-browser.md`.
 - `pageStack.ts` — the concept popup's **page stack**: which pages a followed link leaves
   open and which one of them is open on screen (one at a time — the rest are folded into

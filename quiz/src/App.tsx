@@ -19,6 +19,7 @@ import OnboardingTour from '@/components/OnboardingTour'
 import SoundEffects from '@/components/SoundEffects'
 import MathFocus from '@/components/MathFocus'
 import ImageFocus from '@/components/ImageFocus'
+import PdfReaderHost from '@/components/PdfReaderHost'
 import FlashcardSync from '@/components/FlashcardSync'
 import Toast from '@/components/Toast'
 import { CollectConceptModal } from '@/components/collect/CollectConceptModal'
@@ -233,6 +234,9 @@ export default function App({ initialSession }: { initialSession: Session | null
             <CollectModalBoundary />
             <MathFocus />
             <ImageFocus />
+            {/* The app's one PDF reader. Root-level so a document opened from a
+                dialog, a sheet or a card clears it and outlives it. */}
+            <PdfReaderHost />
             <Toast />
           </div>
         </ExamProgressProvider>

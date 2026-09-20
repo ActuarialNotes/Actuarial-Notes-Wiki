@@ -4,6 +4,7 @@ import { ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Lock, Maximize2
 import { type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useSplitHeight } from '@/hooks/useSplitHeight'
+import { useIsReadingPdf } from '@/hooks/usePdfReader'
 import { ConceptPagePanel } from '@/components/wiki/ConceptPagePanel'
 import { PageStackBar } from '@/components/wiki/PageStackBar'
 import { ProBadge } from '@/components/ProBadge'
@@ -45,10 +46,13 @@ export function ConceptPopup() {
   const [viewingDropdownOpen, setViewingDropdownOpen] = useState(false)
   const [showProInfo, setShowProInfo] = useState(false)
   const [showGalleryInPanel, setShowGalleryInPanel] = useState(false)
-  // A source document being read on the open page (`PdfViewerPanel`, opened
-  // from a resource page's "Read PDF"). It lays over the popup and binds the
-  // same keys, so while it is up the popup keeps its hands off them.
-  const [readerInPanel, setReaderInPanel] = useState(false)
+  // A source document being read (`PdfViewerPanel`, opened from a resource
+  // page's "Read PDF" or from anywhere else in the app). It lays over the popup
+  // and binds the same keys, so while it is up the popup keeps its hands off
+  // them. Read from the reader's own store rather than reported up by the page
+  // that opened it — the reader outlives that page, and can be put up by a
+  // surface the popup knows nothing about.
+  const readingPdf = useIsReadingPdf()
   // Set when Previous / Next is pressed with the gallery open, so the page
   // stepped onto opens its own gallery. Mirrored in a ref because it is read
   // back from a panel's load callback, not from a render.
@@ -134,7 +138,7 @@ export function ConceptPopup() {
       if (showGalleryInPanel) return
       // Same hand-over for a document opened on the page: Esc closes the
       // reader, arrows turn its pages, and neither reaches the concept behind.
-      if (readerInPanel) return
+      if (readingPdf) return
       // Esc unwinds one layer at a time: the page just opened, then focus mode,
       // then the popup — so a link followed by mistake costs one key, not the
       // whole reading position.
@@ -149,7 +153,7 @@ export function ConceptPopup() {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [open, close, turnPage, focusMode, showGalleryInPanel, readerInPanel])
+  }, [open, close, turnPage, focusMode, showGalleryInPanel, readingPdf])
 
   // Close viewing dropdown / Pro info when clicking outside.
   useEffect(() => {
@@ -309,7 +313,6 @@ export function ConceptPopup() {
                 gallerySeek={gallerySeek}
                 onGallerySeekResolved={handleGallerySeek}
                 onGalleryOpenChange={setShowGalleryInPanel}
-                onReaderOpenChange={setReaderInPanel}
               />
             </div>
           ) : (

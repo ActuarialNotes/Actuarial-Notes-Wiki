@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
-import { Check, ExternalLink, FileText, Shuffle } from 'lucide-react'
+import { useEffect, useRef } from 'react'
+import { Check, ExternalLink, Shuffle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { formatPassRate, hasPublishedStats, type PastExamRow } from '@/lib/pastExams'
-import { isSupportedPdfSource } from '@/lib/examPdf'
-import { PdfViewerPanel } from '@/components/PdfViewerPanel'
+import { usePdfReader } from '@/hooks/usePdfReader'
+import { PdfLinkButton } from '@/components/PdfLinkButton'
 
 // The mock-exam shelf: scroll through the exam's past sittings, see how big
 // each paper is and how many candidates actually passed it, and sit one.
@@ -62,45 +62,6 @@ function StatCell({ row, effectiveColumn }: { row: PastExamRow; effectiveColumn:
   )
 }
 
-/**
- * One published document — the paper, its examiner's report, its solutions —
- * as a button that reads it in the in-app viewer.
- *
- * Still an anchor to the publisher underneath: a plain click reads it here, but
- * ⌘/ctrl-click, middle-click and long-press keep working the way a link does,
- * and the real URL stays visible. Only a source the proxy will serve opens in
- * the panel; anything else stays an ordinary out-link.
- */
-function PdfLinkButton({
-  link,
-  onView,
-}: {
-  link: { url: string; label: string }
-  onView: () => void
-}) {
-  const canView = isSupportedPdfSource(link.url)
-  return (
-    <a
-      href={link.url}
-      target="_blank"
-      rel="noreferrer"
-      aria-label={canView ? `View ${link.label} (PDF)` : `Open ${link.label} (PDF)`}
-      onClick={e => {
-        if (!canView || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return
-        e.preventDefault()
-        onView()
-      }}
-      className="inline-flex min-h-[36px] items-center gap-2 rounded-md border border-border bg-card px-3 py-1.5 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-    >
-      <FileText className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-      {link.label}
-      <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-        PDF
-      </span>
-    </a>
-  )
-}
-
 export function PastExamBrowser({
   rows,
   selected,
@@ -125,23 +86,26 @@ export function PastExamBrowser({
     (link): link is { url: string; label: string } => !!link,
   )
 
-  // A document is read in a panel over the builder rather than in a new tab, so
-  // a candidate can check what the examiners said about a question and still be
-  // one tap from starting the paper. Only a source the proxy will serve opens
-  // that way; anything else stays an ordinary out-link.
-  const [viewingUrl, setViewingUrl] = useState<string | null>(null)
-  const viewing = documents.find(d => d.url === viewingUrl) ?? null
+  // A document is read in the app's reader (`hooks/usePdfReader.ts`) rather
+  // than in a new tab, so a candidate can check what the examiners said about a
+  // question and still be one tap from starting the paper.
+  const closePdfIf = usePdfReader(state => state.closePdfIf)
   const selectedRow = rows.find(
     r => r.year === selected?.year && (r.session ?? undefined) === (selected?.session ?? undefined),
   )
   const reportSubtitle = selectedRow ? `${examLabel} · ${selectedRow.label}` : examLabel
-  // The panel shows *the current selection's* papers, so it follows the shelf
-  // while it's open — and forgets the document it was on when the new selection
-  // doesn't carry it, rather than springing back open on the way past.
+  // The reader shows *the current selection's* papers, so the shelf closes the
+  // document it put up when the new selection doesn't carry it, rather than
+  // leaving the previous sitting's report over a different paper. Only a
+  // document this shelf opened is its to close — the ref is what keeps it off
+  // one something else is showing.
+  const openedHere = useRef(new Set<string>())
   const documentKey = documents.map(d => d.url).join(' ')
   useEffect(() => {
-    setViewingUrl(url => (url && documentKey.includes(url) ? url : null))
-  }, [documentKey])
+    for (const url of openedHere.current) {
+      if (!documentKey.includes(url)) closePdfIf(url)
+    }
+  }, [documentKey, closePdfIf])
 
   return (
     <div className="space-y-2">
@@ -152,7 +116,13 @@ export function PastExamBrowser({
       {(documents.length > 0 || lookup) && (
         <div className="flex flex-wrap items-center justify-end gap-2 px-1">
           {documents.map(doc => (
-            <PdfLinkButton key={doc.url} link={doc} onView={() => setViewingUrl(doc.url)} />
+            <PdfLinkButton
+              key={doc.url}
+              url={doc.url}
+              label={doc.label}
+              subtitle={reportSubtitle}
+              onOpen={() => openedHere.current.add(doc.url)}
+            />
           ))}
           {lookup && (
             <a
@@ -236,15 +206,6 @@ export function PastExamBrowser({
           )
         })}
       </div>
-
-      {viewing && (
-        <PdfViewerPanel
-          url={viewing.url}
-          title={viewing.label}
-          subtitle={reportSubtitle}
-          onClose={() => setViewingUrl(null)}
-        />
-      )}
     </div>
   )
 }

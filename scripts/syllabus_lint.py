@@ -11,7 +11,8 @@ this lint, nothing checked one. It fails a page for:
               {lo–hi%}` (en-dash, single spaces), weights whose ranges contain
               100%, at least one objective per section, no `### Title` repeating
               the callout's own title
-  links       every objective links at least one concept (its own words or its
+  links       every noun phrase of an objective links a note (a warning — the
+              chunker is a heuristic); every objective links at least one concept (its own words or its
               `*Key concepts:*` line); no dated `(Author - YYYY)` reading linked
               inside a callout (the app would make it a concept); no link in a
               table row, no target ending in `\\` (the table-pipe bug); every
@@ -160,6 +161,18 @@ def _lint_links(rel: str, page: sl.ExamPage, vault: vl.Vault, report: Report, st
             if not any(list(vl.iter_links(l)) for l in o.all_lines()):
                 strict(rel, o.line_no, "unlinked-objective",
                        f"{s.title} {o.num}. links no concept — link its own words or give it a `*Key concepts:*` line")
+
+    # Every noun phrase an objective (or a section's preamble) names should be a
+    # note. A chunker can't be sure what a noun phrase is, so this only warns.
+    for s in page.sections:
+        lines = [(ln, l) for ln, l in zip(s.line_nos, s.lines) if l in s.preamble and l.strip()
+                 and not re.match(r"^\s*\*\*.*\*\*\s*$", l)]
+        lines += [(o.line_no, o.text) for o in s.objectives]
+        for ln, line in lines:
+            missing = sl.unlinked_noun_phrases(line)
+            if missing:
+                report.warn(rel, ln, "unlinked-noun",
+                            "noun phrase(s) with no note: " + ", ".join(f"`{m}`" for m in missing))
 
     for ln, link, _ in sl.source_entries(page):
         status, _ = vault.resolve(link.target)

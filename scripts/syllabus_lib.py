@@ -230,3 +230,88 @@ def source_entries(page: ExamPage) -> list[tuple[int, "vault_links.Link", list[s
         if sub and out:
             out[-1][2].append(sub.group(1).strip())
     return out
+
+
+# ── noun phrases: every one an objective names should be a note ─────────────
+#
+# The rule for an exam page is that every noun phrase in an objective links to
+# a concept note — written or not yet written (an unwritten one is a gap on the
+# Pipeline B worklist, which is the point). There is no parser in the stdlib, so
+# this is a chunker: an objective is cut at verbs, function words and
+# punctuation, and what's left between the cuts are its noun phrases. It errs
+# towards finding too many, which is the safe side — `syllabus_lint.py` reports
+# an unlinked chunk as a warning for a person to link or dismiss, never as an
+# error, and `syllabus_link.py` offers the same chunks as proposals.
+
+BREAK_WORDS = frozenset("""
+a an the this that these those its their his her any each every various given certain other such
+some all both either neither several different specific specified same
+and or nor but vs versus versus. i.e. e.g. etc etc. as such than
+of for to in into on onto with within without by from at about under over between among through using
+via per upon toward towards against across after before during including include includes excluding
+is are be been being was were can may will should must would could has have had do does
+who whom which whose what when where why how whether if then also only not more most less least
+well both either very so candidates candidate expected able
+them it they one ones themselves itself
+""".split())
+
+VERBS = frozenset("""
+analyze analyse apply articulate assess build calculate collect communicate compare compute consider
+construct define demonstrate derive describe determine develop discuss distinguish estimate evaluate
+explain fit forecast identify illustrate interpret justify list measure model monitor organize
+organise perform recognize recognise select separate simulate solve state summarize summarise test
+understand use utilize write adjust aggregate apply calculating determine differentiate discuss
+identify implement integrate manage price protect match construct achieve arise arising evaluating
+underlying listed shown used given based related involving involved associated remaining regarding
+represent represents obtain choose
+""".split())
+
+WORD_RE = re.compile(r"[A-Za-z][A-Za-z'’\-/]*|\d[\d.,%]*")
+
+
+def noun_phrases(text: str) -> list[tuple[int, int, str]]:
+    """(start, end, phrase) for each noun-phrase chunk of plain `text`."""
+    out: list[tuple[int, int, str]] = []
+    run: list[re.Match] = []
+
+    def flush() -> None:
+        if run:
+            words = [m.group(0) for m in run]
+            if not all(w[0].isdigit() for w in words):
+                out.append((run[0].start(), run[-1].end(), text[run[0].start():run[-1].end()]))
+        run.clear()
+
+    pos = 0
+    for m in WORD_RE.finditer(text):
+        between = text[pos:m.start()]
+        if re.search(r"[^\s]", between):   # punctuation between words ends a phrase
+            flush()
+        w = m.group(0).lower().strip("'’")
+        if w in BREAK_WORDS or w in VERBS or len(w) == 1:
+            flush()
+        else:
+            run.append(m)
+        pos = m.end()
+    flush()
+    return out
+
+
+def unlinked_noun_phrases(line: str) -> list[str]:
+    """Noun phrases of a page line that no `[[link]]` covers."""
+    plain_parts: list[tuple[int, int]] = []   # spans of the plain text that were links
+    plain = ""
+    last = 0
+    for m in vault_links.LINK_RE.finditer(line):
+        plain += line[last:m.start()]
+        shown = m.group(3) if m.group(3) else vault_links.link_basename(m.group(2))
+        plain_parts.append((len(plain), len(plain) + len(shown)))
+        plain += shown
+        last = m.end()
+    plain += line[last:]
+    plain = re.sub(r"\*\*|__|\*", "", plain) if not plain_parts else plain
+    missing = []
+    for start, end, phrase in noun_phrases(plain):
+        covered = sum(max(0, min(end, b) - max(start, a)) for a, b in plain_parts)
+        if covered < (end - start) * 0.5:
+            missing.append(phrase)
+    return missing

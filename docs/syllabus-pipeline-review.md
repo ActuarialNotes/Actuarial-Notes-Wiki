@@ -195,6 +195,11 @@ syllabus PDF ─► syllabus_extract.py ─► syllabus.json  (verbatim, hashed,
   not PDFs).
 
 ### Stage 2 — `scripts/syllabus_link.py` (deterministic first)
+- **Owner rule (2026-09-25): every noun phrase in an objective links to a note**
+  — an existing page, or the name of the page that should exist (which is then a
+  gap on the Stage 5 worklist). `syllabus_lib.noun_phrases` is the stdlib chunker
+  that finds them; `syllabus_lint.py` warns on any left unlinked (`unlinked-noun`)
+  and the linker proposes the same chunks. Exam 7 is the worked example.
 - For each objective, propose `[[…]]` spans by matching n-grams of the **verbatim text**
   against existing `Concepts/*.md` names + a new committed alias file
   (`scripts/concept_aliases.py` or `.json`: variant → canonical page, plus a per-exam

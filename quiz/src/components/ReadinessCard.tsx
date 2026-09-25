@@ -1582,7 +1582,7 @@ function DayCompleteInfoPanel({
   if (!open) return null
   return (
     <div
-      className="fixed inset-0 z-[70] flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto"
+      className="fixed inset-0 z-[70] flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto paper-scrim"
       role="dialog"
       aria-modal="true"
       aria-label="Today's study plan complete"

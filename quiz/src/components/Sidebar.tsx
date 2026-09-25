@@ -110,11 +110,6 @@ function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, ba
     )
   }
 
-  // `data-view-transition` is what makes a tab switch a *transition* rather
-  // than a cut: the exam an exam card stands for on the Quiz and Study Guides
-  // tabs is the same exam the Dashboard draws as a pill, so it moves between
-  // them instead of being cut away and redrawn somewhere else.
-  // `components/ViewTransitions.tsx` is the one listener that reads the mark.
   return (
     <NavLink
       to={to}
@@ -124,7 +119,6 @@ function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, ba
       onClick={onNavigate}
       data-tour={dataTour}
       data-flashcard-nav={dataFlashcardNav ? '' : undefined}
-      data-view-transition=""
     >
       <span className="flex h-6 w-6 shrink-0 items-center justify-center lg:h-5 lg:w-5">{icon}</span>
       <span className={`flex-1 truncate ${collapsed ? 'lg:hidden' : ''}`}>{label}</span>
@@ -491,7 +485,7 @@ export default function Sidebar() {
           than two. `lib/mobileNavHost.ts` is the one place that says which is
           which, and `App.tsx` reserves the room from the same call. */}
       {!navHostedByPage && (
-        <header className="fixed top-0 left-0 right-0 h-14 z-30 flex items-center gap-2 px-3 bg-background border-b lg:hidden">
+        <header className="paper-chrome-header fixed top-0 left-0 right-0 h-14 z-30 flex items-center gap-2 px-3 bg-background border-b lg:hidden">
           <MobileNavButton className="-ml-0.5" />
           <div className="flex items-center gap-1.5 flex-1 min-w-0">
             <Link
@@ -538,7 +532,9 @@ export default function Sidebar() {
           touchStartX.current = null
         }}
         className={[
-          'flex flex-col bg-background border-r',
+          // `paper-chrome-rail` keeps the desktop rail still while the page
+          // beside it slides (index.css, "Paper on a desk").
+          'paper-chrome-rail flex flex-col bg-background border-r',
           // Mobile: fixed full-width overlay, slides in/out — z-[60] so it sits
           // above the sticky wiki search bar (z-50) and the backdrop (z-[55])
           'fixed inset-y-0 left-0 z-[60] w-full',

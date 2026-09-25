@@ -420,14 +420,14 @@ export function CharacterSkinSelector({ currentAvatarUrl, onClose, onSelect }: C
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 z-[65] bg-black/50 backdrop-blur-sm"
+        className="fixed inset-0 z-[65] bg-black/50 backdrop-blur-sm paper-fade"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Popup — centered on all screen sizes */}
       <div
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[66] w-[calc(100vw-2rem)] max-w-[340px] bg-card rounded-2xl shadow-2xl p-4 outline-none"
+        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[66] w-[calc(100vw-2rem)] max-w-[340px] bg-card rounded-2xl shadow-2xl p-4 outline-none paper-drop"
         role="dialog"
         aria-modal="true"
         aria-label="Choose character and skin"

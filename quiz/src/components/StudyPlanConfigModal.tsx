@@ -152,7 +152,7 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
     <div
       // z-[70]: above the popup stack and the sidebar drawer, both of which
       // can be open behind the surface that opens this.
-      className="fixed inset-0 z-[70] flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto"
+      className="fixed inset-0 z-[70] flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto paper-scrim"
       role="dialog"
       aria-modal="true"
       aria-label="Study plan configuration"

@@ -46,7 +46,7 @@ export function ConceptReadModal({ conceptName, onClose }: Props) {
     <div
       // z-[130] clears the collect dialog (z-[120]) that opens it over a
       // locked comprehension check.
-      className="fixed inset-0 z-[130] flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto"
+      className="fixed inset-0 z-[130] flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto paper-scrim"
       role="dialog"
       aria-modal="true"
       aria-label={`Read: ${conceptName}`}

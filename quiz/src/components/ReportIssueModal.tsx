@@ -55,7 +55,7 @@ export function ReportIssueModal({
   return (
     <OverlayPortal>
       <div
-        className="fixed inset-0 z-[130] flex items-end justify-center bg-black/40 sm:items-center"
+        className="fixed inset-0 z-[130] flex items-end justify-center bg-black/40 sm:items-center paper-scrim"
         onClick={onClose}
         role="presentation"
       >

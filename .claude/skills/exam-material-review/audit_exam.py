@@ -38,23 +38,17 @@ import sys
 from collections import Counter
 
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
+sys.path.insert(0, os.path.join(REPO_ROOT, "scripts"))
+import vault_links  # noqa: E402 — the shared resolver, see scripts/vault_links.py
 
-# Question-bank directory -> the syllabus page that defines that exam.
+# Question-bank directory -> the syllabus page that defines that exam, from the
+# one exam catalogue (scripts/exam_catalog.json).
 SYLLABUS_BY_EXAM = {
-    "exam-p": "Exam P-1 (SOA).md",
-    "exam-fm": "Exam FM-2 (SOA).md",
-    "exam-mas-i": "Exam MAS-I (CAS).md",
-    "exam-mas-ii": "Exam MAS-II (CAS).md",
-    "exam-5": "Exam 5 (CAS).md",
-    "exam-6c": "Exam 6C (CAS).md",
-    "exam-6u": "Exam 6U (CAS).md",
-    "exam-7": "Exam 7 (CAS).md",
-    "exam-8": "Exam 8 (CAS).md",
-    "exam-9": "Exam 9 (CAS).md",
+    (e["bank"] or "exam-" + e["exam_id"].lower()): e["page"] for e in vault_links.load_catalog()
 }
 
 STUB_MARKERS = ("to be written", "to be added", "TODO")
-LINK_RE = re.compile(r"\[\[([^\]]+)\]\]")
+VAULT = vault_links.Vault(REPO_ROOT)
 
 
 def read(path):
@@ -63,19 +57,20 @@ def read(path):
 
 
 def concept_exists(name):
-    return os.path.exists(os.path.join(REPO_ROOT, "Concepts", name + ".md"))
+    """True when `[[name]]` lands on a concept page — in the app, not only in
+    Obsidian (which also forgives a case mismatch the app's fetch does not)."""
+    status, path = VAULT.resolve(name)
+    return status == "exact" and path.startswith("Concepts/")
 
 
 def link_targets(text):
-    """Every [[wiki-link]] target in `text`, display aliases stripped.
+    """Every [[wiki-link]] target in `text`, as the app reads it.
 
-    Note the escaped pipe: inside a markdown table a link must be written
-    `[[Page\\|Display]]`, but the app's own link regex stops at the first `|`
-    and keeps the backslash, producing a dead target. Such links are reported
-    as broken here, which is the correct result — don't put wiki links in
-    tables.
+    A `[[Page\\|Display]]` written in a table cell keeps its backslash in the
+    target (the app's regex stops at the first `|`), so it is reported as
+    broken — which is the correct result; `scripts/page_lint.py` fails it too.
     """
-    return [m.split("|")[0].strip() for m in LINK_RE.findall(text)]
+    return [link.name for link in vault_links.iter_links(text)]
 
 
 def question_files(exam):
@@ -100,11 +95,7 @@ def audit(exam, syllabus_file, verbose):
     # Syllabus concepts, in document order, de-duplicated.
     syl_targets = list(dict.fromkeys(link_targets(syllabus)))
     syl_concepts = [t for t in syl_targets if concept_exists(t)]
-    syl_missing = [
-        t for t in syl_targets
-        if not concept_exists(t)
-        and not os.path.exists(os.path.join(REPO_ROOT, t + ".md"))
-    ]
+    syl_missing = [t for t in syl_targets if VAULT.resolve(t)[0] != "exact"]
 
     # Question bank: wiki_link targets and metadata.
     qfiles = question_files(exam)
@@ -112,8 +103,8 @@ def audit(exam, syllabus_file, verbose):
     difficulty = Counter()
     for path in qfiles:
         fm = frontmatter(open(path, encoding="utf-8").read())
-        for slug in re.findall(r"- Concepts/(\S+)", fm):
-            linked[slug.replace("+", " ")] += 1
+        for entry in re.findall(r"^\s*-\s*(Concepts/\S+)\s*$", fm, re.M):
+            linked[vault_links.question_link_slug(entry)] += 1
         d = re.search(r"difficulty:\s*(\S+)", fm)
         difficulty[d.group(1).strip('"') if d else "unset"] += 1
 

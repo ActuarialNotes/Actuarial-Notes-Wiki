@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:f7ad79bcee51d20c085ecb0ee4ad97412c3bf50105775ff3475089a1ce28a42e
+  content_hash: sha256:fc53821c3e7b651e23c30b781a733ef6c7d831b279308eda3f1cbc7fd1e73dc9
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,50 +21,50 @@ verification:
 ## 1 Combinatorial Probability
 
 - 1.1 The Language of Probability
-- 1.2 [[Basic Principle of Counting|Counting Techniques]]
+- 1.2 Counting Techniques
 - 1.3 [[Permutation|Permutations]] and [[Combination|Combinations]]
 
 ## 2 General Rules of Probability
 
 - 2.1 [[Axioms of Probability]]
 - 2.2 [[Conditional Probability]] and [[Independent Events|Independence]]
-- 2.3 [[Bayes' Theorem]]
+- 2.3 [[Bayes Theorem|Bayes' Theorem]]
 
 ## 3 Discrete Random Variables
 
 - 3.1 [[Random Variable|Discrete Random Variables]]
 - 3.2 [[Expected Value]] and [[Variance]]
-- 3.3 [[Moment-Generating Function|Moment-Generating Functions]]
+- 3.3 Moment-Generating Functions
 
 ## 4 Some Discrete Distributions
 
-- 4.1 [[Binomial]] and [[Bernoulli]] Distributions
+- 4.1 [[Binomial Distribution|Binomial]] and Bernoulli Distributions
 - 4.2 [[Hypergeometric Distribution]]
 - 4.3 [[Geometric Distribution|Geometric]] and [[Negative Binomial Distribution|Negative Binomial]]
-- 4.4 [[Poisson]] Distribution
+- 4.4 [[Poisson Distribution|Poisson]] Distribution
 
 ## 5 Calculus, Probability, and Continuous Distributions
 
-- 5.1 [[Continuous Random Variable|Continuous Random Variables]]
-- 5.2 [[Cumulative Distribution Function]]
+- 5.1 Continuous Random Variables
+- 5.2 [[Cumulative Distribution Function (CDF)|Cumulative Distribution Function]]
 - 5.3 [[Expected Value]] and [[Variance]] of Continuous Variables
 
 ## 6 Some Continuous Distributions
 
-- 6.1 [[Uniform Distribution|Uniform]] Distribution
-- 6.2 [[Exponential Distribution|Exponential]] and [[Gamma Distribution|Gamma]] Distributions
+- 6.1 Uniform Distribution
+- 6.2 [[Exponential Distribution|Exponential]] and [[Gamma|Gamma]] Distributions
 - 6.3 [[Normal Distribution|Normal]] Distribution
-- 6.4 [[Lognormal Distribution|Lognormal]], [[Pareto Distribution|Pareto]], and [[Beta Distribution|Beta]]
+- 6.4 [[Lognormal Distribution|Lognormal]], Pareto, and [[Beta|Beta]]
 
 ## 7 Multivariate Distributions
 
-- 7.1 [[Joint Distribution Function|Joint Distributions]]
+- 7.1 [[Joint Cumulative Distribution Function|Joint Distributions]]
 - 7.2 [[Covariance]] and [[Correlation]]
-- 7.3 [[Conditional Distribution|Conditional Distributions]] and Expectation
+- 7.3 Conditional Distributions and Expectation
 
 ## 8 A Probability Potpourri
 
-- 8.1 [[Moment-Generating Function|Moment-Generating Function]] Techniques
+- 8.1 Moment-Generating Function Techniques
 - 8.2 [[Central Limit Theorem]]
 - 8.3 [[Order Statistics]]
 
@@ -78,7 +78,7 @@ verification:
 
 - 10.1 Elements of a Statistical Test
 - 10.2 Tests for Means and Proportions
-- 10.3 [[Chi-Square Distribution|Chi-Square]] Tests
+- 10.3 Chi-Square Tests
 
 ## 11 Theory of Estimation and Hypothesis Testing
 

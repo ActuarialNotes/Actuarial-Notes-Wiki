@@ -4,14 +4,14 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:021e00ff4c0536843552c24be2106a23ab40b4e124136e3046d6b7a03a272206
+  content_hash: sha256:c11701f4e0caf7e04ee2956afb0aa0db7260521b1c61e28f0b53c9a707c7cee0
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Actuarial Math.md
 ---
 
-The ==Mathematics of Actuarial Science== is motivated by the problem of how to evaluate and manage [[risk]], especially in financial and insurance contexts.
+The ==Mathematics of Actuarial Science== is motivated by the problem of how to evaluate and manage [[Risk|risk]], especially in financial and insurance contexts.
 
 | Domain                    | Description                                                                                                                                                                                                             |
 | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

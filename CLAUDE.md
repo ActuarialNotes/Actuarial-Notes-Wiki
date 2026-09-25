@@ -84,7 +84,7 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
   retired comprehension checks from `comprehension-checks/<exam-id>/*.md` via the
   `virtual:comprehension-checks` vite module — nothing imports it, so it isn't bundled; see
   `docs/flashcard-collection.md`), `examSittings.ts` / `examPdfLinks.ts` (sitting dates, examiner reports, and each
-  exam's published syllabus — the PDF an exam page's title-row button opens),
+  exam's published syllabus — the PDF an exam page's header button opens),
   `mnemonics.ts` / `stories.ts` (per-concept, per-avatar content), `quests.ts` (daily-quest
   catalogue), `keystoneConcepts.ts` (the per-exam keystone catalogue — see
   `docs/keystone-concepts.md`), `examGuides.ts` (the exam-page orientation guide — the tip

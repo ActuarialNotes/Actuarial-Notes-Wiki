@@ -7,13 +7,15 @@ Publisher: "Canadian Institute of Actuaries"
 Type: "Report"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/6C_CIA_Reinsurance_Treatment.pdf)"
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-09-25
+  last_checked_by: agent:validate-v1
   content_hash: sha256:ea3915fb4f9b5a0a1290b66ccf14dff10528bd8f74167536d7f52bdbe58e24cc
-  sources: []
-  open_findings: 0
+  sources:
+    - "CIA Task Force on the Appropriate Treatment of Reinsurance, Report (Document 207081, October 2007), https://www.casact.org/sites/default/files/2021-03/6C_CIA_Reinsurance_Treatment.pdf, sha256 9c41c17ab88467e61d49026825e1ea263634a0f9b5092fa6adf102806e7bb519"
+    - "CAS Exam 6C Content Outline Fall 2026, https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf, sha256 1bd4b2b802cf0976c797bc068c2903fa8deaf43d9366a85aadf5b34a568275c1"
+  open_findings: 2
   open_critical: 0
   log: .verify/Resources/Books/CIA Reinsurance Treatment.md
 ---

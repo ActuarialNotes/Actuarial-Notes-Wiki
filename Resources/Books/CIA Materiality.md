@@ -7,13 +7,15 @@ Publisher: "Canadian Institute of Actuaries"
 Type: "Report"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/6C_CIA_Materiality.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:93af5a1e59dd8bf4990856c8509a702ad386835b547152eb114561310bedec34
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-25
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:a9bbc5d014f4fb02cb4d5d090b8b8eda83b4fa9f44e4e5a08104bd23a0fb4d94
+  sources:
+    - "CIA Task Force on Materiality, Report: Materiality (October 2007, doc 207099), https://www.casact.org/sites/default/files/2021-03/6C_CIA_Materiality.pdf sha256:d3577342add2540b3be85d40ab119548467c5ca88e5f48f3168d75ebdac7233a — printed TOC p.3, §§5-8"
+    - "CAS Exam 6C Content Outline Fall 2026, https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf sha256:1bd4b2b802cf0976c797bc068c2903fa8deaf43d9366a85aadf5b34a568275c1"
+  open_findings: 1
   open_critical: 0
   log: .verify/Resources/Books/CIA Materiality.md
 ---
@@ -41,7 +43,7 @@ The CIA Task Force on Materiality's October 2007 report, developed *for discreti
 - **Materiality is about the user, not the number.** An amount is material if it would change the decision or the understanding of the person the work is prepared for. The same dollar amount is material in one engagement and immaterial in another; §5 is the section the whole report turns on.
 - **The actuary selects the standard.** [[CIA CSOP|Standards of Practice]] §1240 requires the actuary to choose a materiality standard for the work and to have a reason for it. It is not inherited from the auditor and not read off a rule of thumb.
 - **Considerations in the determination** (§6) — the purpose of the work, the users and their needs, the entity's size and capital position, the nature of the item, and whether the effect accumulates with other items.
-- **Accounting versus actuarial materiality** (§7) — the [[External Auditor|auditor]] sets materiality for the financial statements as a whole, usually as a percentage of a benchmark such as pre-tax income or equity. The actuary's standard serves a different purpose and may legitimately be tighter or looser. The two are not required to agree, but the difference has to be understood by both, which is why §8 pairs it with communication.
+- **Accounting versus actuarial materiality** (§7) — the [[External Auditor|auditor]] sets materiality for the financial statements as a whole. The two are not required to agree, but the difference has to be understood by both, which is why §8 pairs it with communication.
 - **Communication and disclosure** (§8) — the standard used should be capable of being explained, and disclosed where a user needs it to interpret the report.
 
 ## Where it bites on this syllabus

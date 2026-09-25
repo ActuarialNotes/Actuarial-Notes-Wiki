@@ -7,13 +7,15 @@ Publisher: "Canadian Institute of Actuaries"
 Type: "Educational Note"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/6C_CIA_Runoff.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-25
+  last_checked_by: agent:validate-v1
   content_hash: sha256:9b593486fd549369ead87c2febd8e5b08e2f51d386436203091b70ca4577dc95
-  sources: []
-  open_findings: 0
+  sources:
+    - "CIA PCFRC, Educational Note: Evaluation of the Runoff of P&C Claim Liabilities when the Liabilities are Discounted in Accordance with Accepted Actuarial Practice (Minor Amendment, June 2011, Document 211064), https://www.casact.org/sites/default/files/2021-03/6C_CIA_Runoff.pdf, sha256 632d770b86fd2789e0d437477439edbda78d4c1d25b2c0ca0ca519c14abb7f36"
+    - "CAS Exam 6C Content Outline Fall 2026, https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf, sha256 1bd4b2b802cf0976c797bc068c2903fa8deaf43d9366a85aadf5b34a568275c1"
+  open_findings: 2
   open_critical: 0
   log: .verify/Resources/Books/CIA Runoff.md
 ---

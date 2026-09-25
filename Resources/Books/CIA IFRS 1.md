@@ -7,13 +7,15 @@ Publisher: "Canadian Institute of Actuaries"
 Type: "Educational Note"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=610928&fid=610931)"
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-09-25
+  last_checked_by: agent:validate-v1
   content_hash: sha256:3daaad078963b39f18aa42825d73d7fc50a9b060d1d17d2d6951bd186816d8c3
-  sources: []
-  open_findings: 0
+  sources:
+    - "CIA Educational Note: IFRS 17 – Actuarial Considerations Related to Reinsurance Contracts Issued and Held, June 17 2025 — https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=610928&fid=610931 (sha256 ce688039c5e2007481b5c2a36788b7b3ff885423c8798ddd8f93e66ae1a08a19)"
+    - "CAS Exam 6C (Canada) Content Outline, Fall 2026 — https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf (sha256 1bd4b2b802cf0976c797bc068c2903fa8deaf43d9366a85aadf5b34a568275c1)"
+  open_findings: 2
   open_critical: 0
   log: .verify/Resources/Books/CIA IFRS 1.md
 ---

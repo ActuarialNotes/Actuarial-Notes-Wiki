@@ -7,12 +7,14 @@ Publisher: "Canadian Institute of Actuaries"
 Type: "Educational Note"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2023-05/6C_CIA_Educational_Note_IFRS_17_Actuarial_Considerations_Related_to_Liability.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:710aa9f00e43bc1cacf141b796c4deae9940114f5661b8182cdb3d12369769d5
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-09-25
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:277453c7ee6f170cac7f1ff401ad06a80e1927d75badb3f7821a0a4da9ded302
+  sources:
+    - "CIA Educational Note, IFRS 17 – Actuarial Considerations Related to Liability for Remaining Coverage in P&C Insurance Contracts (June 2022, doc 222092), https://www.casact.org/sites/default/files/2023-05/6C_CIA_Educational_Note_IFRS_17_Actuarial_Considerations_Related_to_Liability.pdf sha256:a7e5ecea716dc20bffcc88045f20c950e71400ac3de3bfb1544736dac46a0333 — bookmark outline and title page; §§5.1, 5.3.2, 5.6.1, 6.5.3, 8.2"
+    - "CAS Exam 6C Content Outline Fall 2026, https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf sha256:1bd4b2b802cf0976c797bc068c2903fa8deaf43d9366a85aadf5b34a568275c1"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/CIA IFRS 17 - LRC.md
@@ -37,7 +39,7 @@ The CIA's June 2022 note on measuring the **[[Liability for Remaining Coverage]]
 
 - **PAA initial recognition** — the LRC starts at premium received less [[Insurance Acquisition Cash Flows|acquisition cash flows]] paid (unless the insurer elects to expense them for groups with coverage of a year or less), then unwinds as coverage is provided.
 - **The onerousness test under the PAA.** The PAA does not measure fulfilment cash flows for remaining coverage as a matter of course, so an insurer must test — using facts and circumstances — whether a group is onerous, and if it is, measure the FCF and carry a **loss component** as the excess over the PAA LRC. Section 7's worked example is the one to be able to reproduce.
-- **Discounting** — the PAA LRC is not discounted unless there is a significant financing component, or the insurer elects to discount; the loss component *is* measured on FCF and therefore is.
+- **Discounting** — the PAA LRC is not discounted unless there is a significant financing component, or the insurer elects to discount.
 - **Reinsurance held is not a mirror.** Grouping, boundary, and the allowance for the reinsurer's **non-performance** are all determined separately, and the **loss-recovery component** on reinsurance held is recognised when the underlying group's loss component is.
 - **Section 8** connects the accounting to the capital test: the [[MCT]] insurance risk margin on unearned exposure uses expected loss ratios, and this section says how to derive them under IFRS 17 presentation.
 

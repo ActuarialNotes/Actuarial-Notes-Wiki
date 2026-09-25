@@ -7,13 +7,15 @@ Publisher: "Canadian Institute of Actuaries"
 Type: "Educational Note"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/225109e/)"
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-09-25
+  last_checked_by: agent:validate-v1
   content_hash: sha256:9b3e2010310d4f1d255e1056966c45c36978106f74d3ee885ac27dd1b50b98c9
-  sources: []
-  open_findings: 0
+  sources:
+    - "CIA PCFRC, Educational Note: IFRS 17 Discount Rates and Cash Flow Considerations for Property and Casualty Insurance Contracts (October 2025), https://www.cia-ica.ca/publications/225109e/ (PDF dl_file.php?p=628504&fid=628505), sha256 ba5d55e4e3429fa74681b03719336d5e186a812856f0445a5c4f8438fec5c4dc"
+    - "CAS Exam 6C Content Outline Fall 2026, https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf, sha256 1bd4b2b802cf0976c797bc068c2903fa8deaf43d9366a85aadf5b34a568275c1"
+  open_findings: 3
   open_critical: 0
   log: .verify/Resources/Books/CIA Discount Rates.md
 ---

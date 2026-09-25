@@ -7,13 +7,15 @@ Publisher: "Actuarial Standards Board (Canada)"
 Type: "Standards of Practice"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=713004&fid=713005)"
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-09-25
+  last_checked_by: agent:validate-v1
   content_hash: sha256:960a1fdc736f11fd6fedc7f08e6b410a4bd5ed78153f350c73b7eca685b367ff
-  sources: []
-  open_findings: 0
+  sources:
+    - "Actuarial Standards Board (Canada), Standards of Practice, April 2026 consolidation, https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=713004&fid=713005, sha256 cc9fedc79c4d758a081d75d157071edef0b26dbcdc7968fe12b7700179344a6c"
+    - "CAS Exam 6C Content Outline Fall 2026, https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf, sha256 1bd4b2b802cf0976c797bc068c2903fa8deaf43d9366a85aadf5b34a568275c1"
+  open_findings: 5
   open_critical: 0
   log: .verify/Resources/Books/CIA CSOP.md
 ---

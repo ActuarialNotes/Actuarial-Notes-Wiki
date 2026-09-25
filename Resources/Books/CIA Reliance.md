@@ -7,13 +7,16 @@ Publisher: "Canadian Institute of Actuaries"
 Type: "Research Paper"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=323297&fid=323299)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-25
+  last_checked_by: agent:validate-v1
   content_hash: sha256:9b8a7acc3ead45085ea82b3728ef1fdfd60775bfb565d60780223d957fc22120
-  sources: []
-  open_findings: 0
+  sources:
+    - "CIA, Reliance on the Work of Others in Property and Casualty Insurance Pricing, Document 224033, March 6 2024 — https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=323297&fid=323299 (sha256 c9c934f516ee6c8c803dea4ee797b397950455fa0a6d0e38ca5ddfb521df3f72)"
+    - "CAS Exam 6C (Canada) Content Outline, Fall 2026 — https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf (sha256 1bd4b2b802cf0976c797bc068c2903fa8deaf43d9366a85aadf5b34a568275c1)"
+    - "CIA Standards of Practice, April 2026 (Actuarial Standards Board) — https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=713004&fid=713005 (sha256 cc9fedc79c4d758a081d75d157071edef0b26dbcdc7968fe12b7700179344a6c)"
+  open_findings: 3
   open_critical: 0
   log: .verify/Resources/Books/CIA Reliance.md
 ---

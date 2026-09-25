@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:736265f865849ca5593a63fa00e3fc085db345e088c4f1d2a6b445bb34319cdd
+  content_hash: sha256:6aae26908e6dc8da015691aa1682637672359872bfd66dce6d82e8f3d4aacbd4
   sources: []
   open_findings: 0
   open_critical: 0
@@ -12,7 +12,7 @@ verification:
 ---
 
 <div class="exam-nav"
-     data-current="8|Advanced Ratemaking"
+     data-current="8|Advanced Ratemaking">
 </div>
 
 # Exam 8

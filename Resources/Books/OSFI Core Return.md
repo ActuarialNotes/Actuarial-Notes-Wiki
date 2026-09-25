@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:44983617dcad12236131060096dce1028125464ca295edc3aee0c8ad94e35afe
+  content_hash: sha256:2d1e7de556d6d084701205159b1c5ce9de3920c63d3a07c24e131bb3d61de934
   sources: []
   open_findings: 0
   open_critical: 0
@@ -27,22 +27,20 @@ The **core financial statements** of the [[Canadian Annual Return]] — the P&C 
 
 ## The pages
 
-| Page | Statement | C | F |
-|---|---|:-:|:-:|
-| **20.10** | **Assets** | ● | ● |
-| **20.11** | **Liabilities and equity** | ● | ● |
-| **20.12** | Liability roll-forward — analysis by **measurement component** (insurance contracts *not* measured under the [[Premium Allocation Approach\|PAA]], excluding segregated funds) | ● | ● |
-| **20.14** | Liability roll-forward — analysis by **remaining coverage and incurred claims** (all insurance contracts) | ● | ● |
-| **20.16** | Liability roll-forward — **[[Reinsurance Contracts Held\|reinsurance contracts held]]**, by measurement component (non-PAA) | ● | ● |
-| **20.18** | Liability roll-forward — reinsurance contracts held, by remaining coverage and incurred claims | ● | ● |
-| **20.22** | **Statement of profit or loss** | ● | ● |
-| **20.41** | Statement of residual interest — policyholders' equity / liabilities | ● | |
-| **20.42** | **[[Comprehensive Income\|Comprehensive income (loss)]] and accumulated other comprehensive income (loss)** | ● | ● |
-| **20.45** | **Reserves** (and, for a foreign branch, the **head office account**) | ● | ● |
-| **20.52** | Statement of cash flows | ● | ● |
-| **20.54** | **[[Statement of Changes in Equity\|Statement of changes in equity]]** | ● | |
-| **20.60** | **[[Notes to Financial Statements\|Notes to the financial statements]]** | ● | ● |
-| **99.16** | Certification | ● | ● |
+- **20.10** — **Assets** · (C, F)
+- **20.11** — **Liabilities and equity** · (C, F)
+- **20.12** — Liability roll-forward — analysis by **measurement component** (insurance contracts *not* measured under the [[Premium Allocation Approach|PAA]], excluding segregated funds) · (C, F)
+- **20.14** — Liability roll-forward — analysis by **remaining coverage and incurred claims** (all insurance contracts) · (C, F)
+- **20.16** — Liability roll-forward — **[[Reinsurance Contracts Held|reinsurance contracts held]]**, by measurement component (non-PAA) · (C, F)
+- **20.18** — Liability roll-forward — reinsurance contracts held, by remaining coverage and incurred claims · (C, F)
+- **20.22** — **Statement of profit or loss** · (C, F)
+- **20.41** — Statement of residual interest — policyholders' equity / liabilities · (C)
+- **20.42** — **[[Comprehensive Income|Comprehensive income (loss)]] and accumulated other comprehensive income (loss)** · (C, F)
+- **20.45** — **Reserves** (and, for a foreign branch, the **head office account**) · (C, F)
+- **20.52** — Statement of cash flows · (C, F)
+- **20.54** — **[[Statement of Changes in Equity|Statement of changes in equity]]** · (C)
+- **20.60** — **[[Notes to Financial Statements|Notes to the financial statements]]** · (C, F)
+- **99.16** — Certification · (C, F)
 
 *(C = Canadian insurer, F = foreign branch. A foreign branch files the head office account in place of equity, because a branch has no share capital.)*
 

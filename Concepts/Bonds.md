@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:5e7389a4f79332782a2c27ad352b21a3cb357809e8edc78ebad0468b61b32c9b
+  content_hash: sha256:10d654a7a43c4c1fcba91334bf58ba433c4ff198de90f8d05b7c768ac5790aa1
   sources: []
   open_findings: 0
   open_critical: 0
@@ -13,15 +13,13 @@ verification:
 
 A **bond** is a fixed-income debt instrument in which an issuer (borrower) promises to pay the bondholder (lender) periodic [[Coupon]] payments and to return the [[Face Value]] (par value) at maturity. Key bond terms:
 
-| Term | Definition |
-|---|---|
-| [[Face Value]] | Principal amount repaid at maturity (par value) |
-| [[Coupon Rate]] | Annual interest rate applied to face value to set coupon payments |
-| [[Coupon]] | Periodic interest payment = Face Value × Coupon Rate / payments per year |
-| [[Yield Rate]] | Rate of return actually earned by the bondholder (may differ from coupon rate) |
-| [[Bond Price\|Price]] | Present value of all future cash flows at the yield rate |
-| [[Term of Bond]] | Time from issue to maturity |
-| [[Book Value]] | Amortized value of the bond at any point during its term |
+- **[[Face Value]]** — Principal amount repaid at maturity (par value)
+- **[[Coupon Rate]]** — Annual interest rate applied to face value to set coupon payments
+- **[[Coupon]]** — Periodic interest payment = Face Value × Coupon Rate / payments per year
+- **[[Yield Rate]]** — Rate of return actually earned by the bondholder (may differ from coupon rate)
+- **[[Bond Price|Price]]** — Present value of all future cash flows at the yield rate
+- **[[Term of Bond]]** — Time from issue to maturity
+- **[[Book Value]]** — Amortized value of the bond at any point during its term
 
 - The **basic bond price formula**: $P = Fr \cdot a_{\overline{n}|j} + C \cdot v^n$ where $F$ = face value, $r$ = coupon rate per period, $C$ = redemption value, $n$ = number of coupons, $j$ = yield rate per period.
 

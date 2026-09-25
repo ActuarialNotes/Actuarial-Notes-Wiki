@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a8d8f1f9b83265d38b4de7d92296586c13f94cde53ccc0eab54f5052031fbda8
+  content_hash: sha256:faa8f721b6a724d61317a6951c2cfb3547ad814934dc9c79bcc69fad41be605d
   sources: []
   open_findings: 0
   open_critical: 0
@@ -12,7 +12,7 @@ verification:
 ---
 
 <div class="exam-nav"
-     data-current="MAS-I|Modern Actuarial Statistics I"
+     data-current="MAS-I|Modern Actuarial Statistics I">
 </div>
 
 # Exam MAS-I

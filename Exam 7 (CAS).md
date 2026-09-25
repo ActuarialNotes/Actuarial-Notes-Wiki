@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:8893482125bb248ab84aa21f4c2dff23b7cbd4c14ae609b29f2f67362d629195
+  content_hash: sha256:e40825cddc695e241db062d8f1a0348de01cc869b758e5afbb6d998ecc5acec7
   sources: []
   open_findings: 0
   open_critical: 0
@@ -12,9 +12,9 @@ verification:
 ---
 
 <div class="exam-nav"
-	 data-color="#65a30d"
+     data-color="#65a30d"
      data-current="7|Advanced Estimation of Claims Liabilities"
-     data-tracks="FCAS|Fellow of the Casualty Actuarial Society (FCAS).md"
+     data-tracks="FCAS|Fellow of the Casualty Actuarial Society (FCAS).md">
 </div>
 
 # Exam 7

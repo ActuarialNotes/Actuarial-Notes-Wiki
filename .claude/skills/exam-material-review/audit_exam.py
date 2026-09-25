@@ -24,9 +24,11 @@ Usage:
     python3 .claude/skills/exam-material-review/audit_exam.py --exam exam-p
     python3 .claude/skills/exam-material-review/audit_exam.py --exam exam-fm --verbose
 
-`--exam` takes the question-bank directory name (exam-p, exam-fm, exam-mas-i,
-exam-5). The matching syllabus page is found automatically; override it with
-`--syllabus "Exam P-1 (SOA).md"` if the guess is wrong.
+`--exam` takes the question-bank directory name — any key of
+`SYLLABUS_BY_EXAM` below (exam-p, exam-fm, exam-mas-i, exam-mas-ii, exam-5,
+exam-6c, exam-6u, exam-7, exam-8, exam-9). An exam with no bank directory yet
+stops with a note — `scripts/syllabus_gaps.py` covers the syllabus side of those. The matching syllabus page is found automatically;
+override it with `--syllabus "Exam P-1 (SOA).md"` if the guess is wrong.
 """
 
 import argparse

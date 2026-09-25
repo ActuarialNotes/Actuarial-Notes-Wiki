@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:e6c5a56427ae862710f0880c238d0ecdfcd67a2edf2cf0e7438fedcb486a4f4e
+  content_hash: sha256:2660b4567186afcebf1eb48bb6a8263f64ca858bc5d996556f490d848f8b8192
   sources: []
   open_findings: 0
   open_critical: 0
@@ -34,21 +34,19 @@ OSFI's August 2024 **Memorandum to the Appointed Actuary** — what the **[[Appo
 
 ## §4 — required contents of the AAR
 
-| | |
-|---|---|
-| 4.1 | Table of contents |
-| 4.2 | Identification of the **[[Appointed Actuary]]** and the **[[Peer Review\|peer review]] actuary** |
-| 4.3 | **[[Materiality\|Materiality]]** — the standard used and why |
-| 4.4 | **Expression of [[Statement of Actuarial Opinion\|opinion]]** |
-| 4.5 | **Changes that influenced the valuation** — in method, assumption, data or business, and the effect of each |
-| 4.6 | **Product** — the business valued |
-| 4.7 | **[[Reinsurance Contracts Held\|Reinsurance held]]** — 4.7.1 the arrangements · 4.7.2 accounting for reinsurance held assets and liabilities under **[[IFRS 17]]** · 4.7.3 other IFRSs |
-| 4.8 | **Data** — sources, reconciliation to the financial statements, and sufficiency |
-| 4.9 | **Actual versus expected experience** — 4.9.2 for P&C and mortgage insurers |
-| 4.10 | **Methodology** |
-| 4.11 | **Assumptions** |
-| 4.12 | **[[CIA Reliance\|Reliance on the work of others]]** |
-| 4.13 | Table of exhibits and appendices |
+- **4.1** — Table of contents
+- **4.2** — Identification of the **[[Appointed Actuary]]** and the **[[Peer Review|peer review]] actuary**
+- **4.3** — **[[Materiality|Materiality]]** — the standard used and why
+- **4.4** — **Expression of [[Statement of Actuarial Opinion|opinion]]**
+- **4.5** — **Changes that influenced the valuation** — in method, assumption, data or business, and the effect of each
+- **4.6** — **Product** — the business valued
+- **4.7** — **[[Reinsurance Contracts Held|Reinsurance held]]** — 4.7.1 the arrangements · 4.7.2 accounting for reinsurance held assets and liabilities under **[[IFRS 17]]** · 4.7.3 other IFRSs
+- **4.8** — **Data** — sources, reconciliation to the financial statements, and sufficiency
+- **4.9** — **Actual versus expected experience** — 4.9.2 for P&C and mortgage insurers
+- **4.10** — **Methodology**
+- **4.11** — **Assumptions**
+- **4.12** — **[[CIA Reliance|Reliance on the work of others]]**
+- **4.13** — Table of exhibits and appendices
 
 ## §5 and Appendix II — the capital link
 

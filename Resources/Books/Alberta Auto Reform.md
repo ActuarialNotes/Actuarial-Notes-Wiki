@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:3f4b78d743b8a833cb5ff3aafaf75679c96b54bbbf5dc8570f65e3a389b3bc45
+  content_hash: sha256:1160023748e456e0bfe116c2a6528b866890848cccce597c1a6c9331e6b9f73b
   sources: []
   open_findings: 0
   open_critical: 0
@@ -26,17 +26,15 @@ The Alberta Automobile Insurance Advisory Committee's October 2020 report to the
 
 ## Structure of the report
 
-| Part | Contents |
-|---|---|
-| I | Executive summary |
-| II | Summary of conclusions and recommendations |
-| III–IV | Introduction; chronological review of [[Automobile Insurance Reform\|auto insurance reform]] in Alberta and other jurisdictions, and analysis of alternative legislative models |
-| V | Legal considerations — the statutory framework and *Charter* challenges (ss. 1, 7 and 15(1)) |
-| VI | Review of health-outcomes evidence, including expert testimony in *Morrow v. Zhang* |
-| VII | Actuarial evidence from tort accident injury claims (Cheng 1990, the 1998 NSW Ernst & Young report, KPMG 2003, closed-claim studies, the 2017 Pinnacle study) |
-| VIII | Consultations — 2003 public consultations, 2020 public surveys, industry submissions |
-| IX–XI | The proposed reforms: auto insurance compensation, health care delivery, and the regulatory regime |
-| XII–XIII | Actuarial forecast of the impact of the proposed reforms; appendices |
+- **I** — Executive summary
+- **II** — Summary of conclusions and recommendations
+- **III–IV** — Introduction; chronological review of [[Automobile Insurance Reform|auto insurance reform]] in Alberta and other jurisdictions, and analysis of alternative legislative models
+- **V** — Legal considerations — the statutory framework and *Charter* challenges (ss. 1, 7 and 15(1))
+- **VI** — Review of health-outcomes evidence, including expert testimony in *Morrow v. Zhang*
+- **VII** — Actuarial evidence from tort accident injury claims (Cheng 1990, the 1998 NSW Ernst & Young report, KPMG 2003, closed-claim studies, the 2017 Pinnacle study)
+- **VIII** — Consultations — 2003 public consultations, 2020 public surveys, industry submissions
+- **IX–XI** — The proposed reforms: auto insurance compensation, health care delivery, and the regulatory regime
+- **XII–XIII** — Actuarial forecast of the impact of the proposed reforms; appendices
 
 ## The argument, in the committee's terms
 

@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:73bab23a598d5ef79ca8404c5ab1e97107f6298846fe611e68323bb5ae5a916f
+  content_hash: sha256:539c2163eace91c9ab8d189836891c070fe2b3d0e8d2631a4fd9acff9fcd8e31
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,13 +23,11 @@ The CIA's August 2025 educational note on **[[FCT|financial condition testing]]*
 
 ## Contents
 
-| Section | Subject |
-|---|---|
-| 1 | Introduction |
-| **2** | **Method** — process; approach; recent and current financial position; **forecast period**; **[[Materiality\|materiality]] standard**; 2.1 **scenario determination** (a. base scenario, b. adverse scenario selection and assessment of percentile ranking); 2.2 **[[Ripple Effect\|ripple effects]] and corrective management actions** (a. ripple effects, b. corrective management actions, c. classification of management actions); recent events |
-| **3** | **Modelling** — basic requirements of the model; IFRS 17 modelling considerations; model reasonability; modelling of ripple effects; organizational considerations |
-| **4** | **Reporting** — the FCT and [[ORSA\|ORSA]] integrated report; disclosure of routine versus corrective management actions |
-| App. | Discussion and analysis of risk categories — Appendix A life insurers (mortality, morbidity, persistency/lapse, market and credit, inflation, reinsurance, business volume and mix risk); further appendices by insurer type |
+- **1** — Introduction
+- **2** — **Method** — process; approach; recent and current financial position; **forecast period**; **[[Materiality|materiality]] standard**; 2.1 **scenario determination** (a. base scenario, b. adverse scenario selection and assessment of percentile ranking); 2.2 **[[Ripple Effect|ripple effects]] and corrective management actions** (a. ripple effects, b. corrective management actions, c. classification of management actions); recent events
+- **3** — **Modelling** — basic requirements of the model; IFRS 17 modelling considerations; model reasonability; modelling of ripple effects; organizational considerations
+- **4** — **Reporting** — the FCT and [[ORSA|ORSA]] integrated report; disclosure of routine versus corrective management actions
+- **App.** — Discussion and analysis of risk categories — Appendix A life insurers (mortality, morbidity, persistency/lapse, market and credit, inflation, reinsurance, business volume and mix risk); further appendices by insurer type
 
 ## The mechanics
 

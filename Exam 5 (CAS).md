@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:0a7033e53a6ee53abf364096505630b6ed993b7218dff02ae84454dc95868a71
+  content_hash: sha256:b06ba4c8c91b212a1888c71fcb554442e19e73cf9bf40e226cefe02daeb48108
   sources: []
   open_findings: 0
   open_critical: 0
@@ -12,7 +12,7 @@ verification:
 ---
 
 <div class="exam-nav"
-     data-current="5|Basic Techniques for Ratemaking and Estimating Claim Liabilities"
+     data-current="5|Basic Techniques for Ratemaking and Estimating Claim Liabilities">
 </div>
 
 # Exam 5

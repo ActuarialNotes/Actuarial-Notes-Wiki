@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:59892f0472636c30b9c63a6b9763d2b9db3a7d01c4f455436f813d8fca625c74
+  content_hash: sha256:00b373eb3e2e8f9768a3f5bd4a6abd8d9491316a7727d682a96e4d440e1c0874
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,16 +23,14 @@ The CIA's September 2024 annual guidance to the P&C **[[Appointed Actuary]]** an
 
 ## Contents
 
-| Section | Subject |
-|---|---|
-| 1 | Introduction |
-| 2 | **[[Standards of Practice\|Standards of practice]]** — amendments in force for the valuation |
-| 3 | **Recent guidance** — educational notes and research papers issued since the last edition |
-| 4 | **Upcoming guidance** — what is in exposure draft, so the actuary is not surprised next year |
-| 5 | **[[FCT\|Financial condition testing]]** |
-| 6 | **Regulatory guidance** — 6.1 [[OSFI]] requirements · 6.2 the [[Autorité des marchés financiers\|AMF]] |
-| 7 | **Emerging issues and other considerations** — 7.1 product reforms · 7.2 recent judicial, legislative, regulatory and political events · 7.3 catastrophic events · 7.4 the macroeconomic environment |
-| App. | References |
+- **1** — Introduction
+- **2** — **[[Standards of Practice|Standards of practice]]** — amendments in force for the valuation
+- **3** — **Recent guidance** — educational notes and research papers issued since the last edition
+- **4** — **Upcoming guidance** — what is in exposure draft, so the actuary is not surprised next year
+- **5** — **[[FCT|Financial condition testing]]**
+- **6** — **Regulatory guidance** — 6.1 [[OSFI]] requirements · 6.2 the [[Autorité des marchés financiers|AMF]]
+- **7** — **Emerging issues and other considerations** — 7.1 product reforms · 7.2 recent judicial, legislative, regulatory and political events · 7.3 catastrophic events · 7.4 the macroeconomic environment
+- **App.** — References
 
 ## How to read it
 

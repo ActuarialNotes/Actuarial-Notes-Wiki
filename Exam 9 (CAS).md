@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a5856d89efdc52c7f507deedc38cae55c2ae9281713aea01d942e2943ecc5d05
+  content_hash: sha256:9418f1ae211df14a5926f2721bdd851814f03a80c595364c1091d7b168dbf242
   sources: []
   open_findings: 0
   open_critical: 0
@@ -12,7 +12,7 @@ verification:
 ---
 
 <div class="exam-nav"
-     data-current="9|Risk Management for Actuaries"
+     data-current="9|Risk Management for Actuaries">
 </div>
 
 # Exam 9

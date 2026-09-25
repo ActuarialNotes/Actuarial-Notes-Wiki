@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:3daaad078963b39f18aa42825d73d7fc50a9b060d1d17d2d6951bd186816d8c3
+  content_hash: sha256:0d45b89bbcf9b556c8397807d657b0df5ad5bcc45156f95f2e088efff5058926
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,13 +23,11 @@ The CIA's June 2025 note on **[[Reinsurance Accounting|reinsurance under IFRS 17
 
 ## Contents
 
-| Section | Subject |
-|---|---|
-| 1 | Introduction |
-| **2** | **[[Level of Aggregation\|Level of aggregation]]** — 2.1 portfolios and groups · 2.2 the contract as the smallest unit of account · 2.3 [[Onerous Contract\|onerous]] contracts at initial recognition · 2.4 onerous contracts on subsequent measurement |
-| **3** | **[[Fulfilment Cash Flows\|FCF]] projections** — 3.1 discounting and cash flow considerations (3.1.1 liquidity of contracts issued and held; 3.1.2 **risk of non-performance by the reinsurer**) · 3.2 the [[Risk Adjustment for Non-Financial Risk\|risk adjustment]] associated with reinsurance held |
-| **4** | **[[Insurance Service Result\|Insurance service result]]** — 4.1 revenue accruals on reinsurance issued · 4.2 revenue recognition pattern · 4.3 presentation: reinstatement premiums (contemplated in the original contract, versus additionally negotiated), commissions, non-distinct investment components, premium adjustments reflecting an adjusted exposure base |
-| **5** | **LRC/ARC under the PAA and GMA** — 5.1 estimating the LRC/ARC · 5.2 [[Premium Allocation Approach\|PAA]] eligibility (risk-attaching contracts; coverage period and [[Contract Boundary\|contract boundary]]) · 5.3 GMA considerations ([[Coverage Units\|coverage units]] and the [[Contractual Service Margin\|CSM]], business combinations and retrospective reinsurance, boundary) · 5.4 groups deemed onerous — the loss component on contracts issued, and the **loss-recovery component** on reinsurance held |
+- **1** — Introduction
+- **2** — **[[Level of Aggregation|Level of aggregation]]** — 2.1 portfolios and groups · 2.2 the contract as the smallest unit of account · 2.3 [[Onerous Contract|onerous]] contracts at initial recognition · 2.4 onerous contracts on subsequent measurement
+- **3** — **[[Fulfilment Cash Flows|FCF]] projections** — 3.1 discounting and cash flow considerations (3.1.1 liquidity of contracts issued and held; 3.1.2 **risk of non-performance by the reinsurer**) · 3.2 the [[Risk Adjustment for Non-Financial Risk|risk adjustment]] associated with reinsurance held
+- **4** — **[[Insurance Service Result|Insurance service result]]** — 4.1 revenue accruals on reinsurance issued · 4.2 revenue recognition pattern · 4.3 presentation: reinstatement premiums (contemplated in the original contract, versus additionally negotiated), commissions, non-distinct investment components, premium adjustments reflecting an adjusted exposure base
+- **5** — **LRC/ARC under the PAA and GMA** — 5.1 estimating the LRC/ARC · 5.2 [[Premium Allocation Approach|PAA]] eligibility (risk-attaching contracts; coverage period and [[Contract Boundary|contract boundary]]) · 5.3 GMA considerations ([[Coverage Units|coverage units]] and the [[Contractual Service Margin|CSM]], business combinations and retrospective reinsurance, boundary) · 5.4 groups deemed onerous — the loss component on contracts issued, and the **loss-recovery component** on reinsurance held
 
 ## The asymmetries to remember
 

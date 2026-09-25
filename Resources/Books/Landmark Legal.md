@@ -7,7 +7,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9b3fc1898924e13262b3054db39a704fc7e5812143683f3daa70c4096df8abb3
+  content_hash: sha256:aac65af713872f7972dc8a2dd4531725c7d345194ab2366146c26890bc19657b
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,25 +19,23 @@ The compilation of Canadian insurance decisions on the [[Exam 6C (CAS)|Exam 6C]]
 
 ## The cases
 
-| Case | The issue |
-|---|---|
-| **Whiten v. Pilot Insurance Co.** | [[Bad Faith Damages\|Bad faith]] handling of a fire claim; the Supreme Court upheld \$1M in [[Punitive Damages\|punitive damages]]. The leading Canadian authority on the insurer's [[Duty of Good Faith\|duty of good faith]] as an independent actionable wrong |
-| **Somersall v. Friedman** | Whether a settlement with the tortfeasor cuts off the insured's underinsured-motorist claim, and the treatment of [[Collateral Benefits\|collateral benefits]] |
-| **Somersall v. Scottish and York** | The companion appeal on the same underinsured-motorist question |
-| **Sansalone v. Wawanesa Mutual Insurance Co.** | Whether a policy exclusion for intentional acts bars coverage for a co-insured who did nothing wrong |
-| **Nichols v. American Home Assurance Co.** | The [[Duty to Defend\|duty to defend]] is triggered by the *pleadings*, and is wider than the duty to indemnify |
-| **Amos v. Insurance Corporation of British Columbia** | When an injury "arises out of the ownership, use or operation" of a vehicle — the causal test for auto coverage |
-| **Alie v. Bertrand & Frere Construction Company Limited** | Coverage for defective product/workmanship claims, and trigger and allocation across successive policies |
-| **Resurfice Corp. v. Hanke** | Causation in negligence — "but for" is the test; the material-contribution exception is narrow |
-| **Morrow v. Zhang** | *Charter* challenge to Alberta's [[Minor Injury Guideline\|minor injury]] cap on non-pecuniary damages; the cap was upheld on appeal. Assigned Sections I, II, III, IV, VI(E), VII, VIII and IX |
-| **PIPEDA Report of Findings #2012-005** | Privacy — an insurer's collection and use of personal information |
-| **Kusnierz v. Economical Mutual Insurance Company** | Whether physical and psychological impairments may be combined in determining [[Catastrophic Impairment\|catastrophic impairment]] |
-| **Aviva Canada Inc. v. Pastore** | Catastrophic impairment based on a marked mental or behavioural impairment in a single functional area |
-| **Belanger v. Sudbury** | Municipal liability |
-| **Precision Plating Ltd. v. Axa Pacific Insurance Co.** | The pollution exclusion, and whether it applies where the pollution was itself caused by a covered peril |
-| **Saadati v. Moorhead** | Mental injury needs no recognised psychiatric diagnosis to be compensable |
-| **Tomec v. Economical** | A two-year limitation period to dispute a denial of accident benefits is subject to **discoverability** — see [[Limitation Period]]. *Not in the study kit; available online* |
-| **Loblaws v. RSA** | The Ontario Court of Appeal rejected the "all sums" approach to defence costs. *Not in the study kit; available online* |
+- **Whiten v. Pilot Insurance Co.** — [[Bad Faith Damages|Bad faith]] handling of a fire claim; the Supreme Court upheld \$1M in [[Punitive Damages|punitive damages]]. The leading Canadian authority on the insurer's [[Duty of Good Faith|duty of good faith]] as an independent actionable wrong
+- **Somersall v. Friedman** — Whether a settlement with the tortfeasor cuts off the insured's underinsured-motorist claim, and the treatment of [[Collateral Benefits|collateral benefits]]
+- **Somersall v. Scottish and York** — The companion appeal on the same underinsured-motorist question
+- **Sansalone v. Wawanesa Mutual Insurance Co.** — Whether a policy exclusion for intentional acts bars coverage for a co-insured who did nothing wrong
+- **Nichols v. American Home Assurance Co.** — The [[Duty to Defend|duty to defend]] is triggered by the *pleadings*, and is wider than the duty to indemnify
+- **Amos v. Insurance Corporation of British Columbia** — When an injury "arises out of the ownership, use or operation" of a vehicle — the causal test for auto coverage
+- **Alie v. Bertrand & Frere Construction Company Limited** — Coverage for defective product/workmanship claims, and trigger and allocation across successive policies
+- **Resurfice Corp. v. Hanke** — Causation in negligence — "but for" is the test; the material-contribution exception is narrow
+- **Morrow v. Zhang** — *Charter* challenge to Alberta's [[Minor Injury Guideline|minor injury]] cap on non-pecuniary damages; the cap was upheld on appeal. Assigned Sections I, II, III, IV, VI(E), VII, VIII and IX
+- **PIPEDA Report of Findings #2012-005** — Privacy — an insurer's collection and use of personal information
+- **Kusnierz v. Economical Mutual Insurance Company** — Whether physical and psychological impairments may be combined in determining [[Catastrophic Impairment|catastrophic impairment]]
+- **Aviva Canada Inc. v. Pastore** — Catastrophic impairment based on a marked mental or behavioural impairment in a single functional area
+- **Belanger v. Sudbury** — Municipal liability
+- **Precision Plating Ltd. v. Axa Pacific Insurance Co.** — The pollution exclusion, and whether it applies where the pollution was itself caused by a covered peril
+- **Saadati v. Moorhead** — Mental injury needs no recognised psychiatric diagnosis to be compensable
+- **Tomec v. Economical** — A two-year limitation period to dispute a denial of accident benefits is subject to **discoverability** — see [[Limitation Period]]. *Not in the study kit; available online*
+- **Loblaws v. RSA** — The Ontario Court of Appeal rejected the "all sums" approach to defence costs. *Not in the study kit; available online*
 
 ## The threads to carry into the exam
 

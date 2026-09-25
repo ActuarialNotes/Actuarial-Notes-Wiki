@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1f1b37931b91d3ea1560aafb88bc0c48bb8f17c7fe4bc12516aa14135b7fcf49
+  content_hash: sha256:236f181162b88e300e5383f183bf85f8e17ee6165cd566451725a9b41dd659b8
   sources: []
   open_findings: 0
   open_critical: 0
@@ -12,7 +12,7 @@ verification:
 ---
 
 <div class="exam-nav"
-     data-current="P-1|Probability"
+     data-current="P-1|Probability">
 </div>
 
 # Exam P-1

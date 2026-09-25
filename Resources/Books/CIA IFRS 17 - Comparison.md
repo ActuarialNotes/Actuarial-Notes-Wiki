@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:dac5369860cf92d9c5fac2a09bd53ad5cc741947c858d29e743804bb266b0079
+  content_hash: sha256:589d36fff4e8e0ad40c335f42e82853b32d6f098ebb4a74344ac23ed8611dce8
   sources: []
   open_findings: 0
   open_critical: 0
@@ -34,15 +34,13 @@ The CIA's June 2022 note setting **[[IFRS 17]] against the Canadian valuation pr
 
 ## The comparison that matters for P&C
 
-| Pre-IFRS 17 (CIA standards) | IFRS 17 |
-|---|---|
-| Policy liabilities = discounted best estimate **+ [[Margin for Adverse Deviations\|provisions for adverse deviations]] (PfADs)** on claims development, reinsurance recovery and interest rate | [[Fulfilment Cash Flows\|Fulfilment cash flows]] = discounted probability-weighted best estimate **+ an explicit [[Risk Adjustment for Non-Financial Risk\|risk adjustment for non-financial risk]]**, with the **confidence level** disclosed |
-| PfADs selected from a prescribed range by margin category | Risk adjustment is entity-specific: any method, but the confidence level it corresponds to must be disclosed |
-| One liability for unpaid claims, plus unearned premium | Two: the **[[Liability for Remaining Coverage\|LRC]]** and the **[[Liability for Incurred Claims\|LIC]]** |
-| Discount rate based on the **insurer's own asset portfolio** | Discount rate reflects the **characteristics of the liability** — bottom-up (risk-free plus illiquidity premium) or top-down (reference portfolio less credit and market risk) |
-| Unit of account: the line of business | Unit of account: the **group of contracts**, within a portfolio, within an annual cohort, split by profitability at inception (see [[Level of Aggregation]]) |
-| Profit emerges as earned premium less incurred loss | A **[[Contractual Service Margin\|CSM]]** under the general model, released over [[Coverage Units\|coverage units]]; under the PAA the LRC is premium-based, but an [[Onerous Contract\|onerous]] group still carries a [[Loss Component\|loss component]] recognised immediately |
-| Reinsurance netted in presentation | **Reinsurance held is a separate asset**, measured separately, with its own risk adjustment and non-performance allowance |
+- **Policy liabilities = discounted best estimate **+ [[Margin for Adverse Deviations|provisions for adverse deviations]] (PfADs)** on claims development, reinsurance recovery and interest rate** — [[Fulfilment Cash Flows|Fulfilment cash flows]] = discounted probability-weighted best estimate **+ an explicit [[Risk Adjustment for Non-Financial Risk|risk adjustment for non-financial risk]]**, with the **confidence level** disclosed
+- **PfADs selected from a prescribed range by margin category** — Risk adjustment is entity-specific: any method, but the confidence level it corresponds to must be disclosed
+- **One liability for unpaid claims, plus unearned premium** — Two: the **[[Liability for Remaining Coverage|LRC]]** and the **[[Liability for Incurred Claims|LIC]]**
+- **Discount rate based on the **insurer's own asset portfolio**** — Discount rate reflects the **characteristics of the liability** — bottom-up (risk-free plus illiquidity premium) or top-down (reference portfolio less credit and market risk)
+- **Unit of account: the line of business** — Unit of account: the **group of contracts**, within a portfolio, within an annual cohort, split by profitability at inception (see [[Level of Aggregation]])
+- **Profit emerges as earned premium less incurred loss** — A **[[Contractual Service Margin|CSM]]** under the general model, released over [[Coverage Units|coverage units]]; under the PAA the LRC is premium-based, but an [[Onerous Contract|onerous]] group still carries a [[Loss Component|loss component]] recognised immediately
+- **Reinsurance netted in presentation** — **Reinsurance held is a separate asset**, measured separately, with its own risk adjustment and non-performance allowance
 
 ## Why it is on the syllabus
 

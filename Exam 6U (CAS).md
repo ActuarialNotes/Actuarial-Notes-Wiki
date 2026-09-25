@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:70e15664929ab2bc82b94c1b0fd24375df851e9e4160c30453d09e7fa44d227d
+  content_hash: sha256:1f8e9b90b8abba900ac442eb97521db46a81504d99923d246629698810ef42e0
   sources: []
   open_findings: 0
   open_critical: 0
@@ -12,7 +12,7 @@ verification:
 ---
 
 <div class="exam-nav"
-     data-current="6U|Regulation and Financial Reporting (United States)"
+     data-current="6U|Regulation and Financial Reporting (United States)">
 </div>
 
 # Exam 6U

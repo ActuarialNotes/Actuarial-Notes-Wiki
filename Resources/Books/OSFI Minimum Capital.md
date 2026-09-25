@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:56e9dba84146cb2758713cc840995e656f7972ab04a2b2bad107f5c7517d4431
+  content_hash: sha256:09466bdc08d6d96728eacd6c1014f4232a2e531ded774d43b04c601be5d505e5
   sources: []
   open_findings: 0
   open_critical: 0
@@ -24,22 +24,20 @@ The **capital return** — the form on which a P&C insurer computes its **[[MCT]
 
 ## The pages, and the calculation they trace
 
-| Page | Exhibit | C | F |
-|---|---|:-:|:-:|
-| **10.00** | **MCT (BAAT) ratio — summary calculations** | ● | ● |
-| **20.00** | MCT: **[[Capital Available\|capital available]]** | ● | |
-| **30.00** | BAAT: net assets available | | ● |
-| **40.00** | **[[Insurance Risk Margin\|Insurance risk]]** — capital (margin) required for **[[Liability for Incurred Claims\|liabilities for incurred claims]]** | ● | ● |
-| **40.05** | Insurance risk — capital (margin) required for **unexpired coverage** | ● | ● |
-| **40.11 / 40.21** | Reinsurance contracts held summary — **[[Unregistered Reinsurance\|unregistered reinsurance]]** (MCT / BAAT) | ● | ● |
-| **40.40** | Insurance risk — accident and sickness business | ● | ● |
-| **50.00** | **[[Market Risk Margin\|Market risk]]** — capital (margin) requirements | ● | ● |
-| **60.00** | **[[Credit Risk Margin\|Credit risk]]** — balance sheet (vested) assets based on **external credit ratings** | ● | ● |
-| **60.05** | Credit risk — balance sheet assets based on external credit ratings (**Quebec**) | ● | |
-| **60.20 / 60.30** | Credit risk — selected balance sheet items and recoverables/receivables (MCT / BAAT) | ● | ● |
-| **60.40** | Credit risk — **off-balance-sheet exposures** | ● | ● |
-| **60.50** | Credit risk — **collateral held for unregistered reinsurance exposures** | ● | ● |
-| **70.00** | **[[Operational Risk Margin\|Operational risk]]** — capital (margin) required | ● | ● |
+- **10.00** — **MCT (BAAT) ratio — summary calculations** · (C, F)
+- **20.00** — MCT: **[[Capital Available|capital available]]** · (C)
+- **30.00** — BAAT: net assets available · (F)
+- **40.00** — **[[Insurance Risk Margin|Insurance risk]]** — capital (margin) required for **[[Liability for Incurred Claims|liabilities for incurred claims]]** · (C, F)
+- **40.05** — Insurance risk — capital (margin) required for **unexpired coverage** · (C, F)
+- **40.11 / 40.21** — Reinsurance contracts held summary — **[[Unregistered Reinsurance|unregistered reinsurance]]** (MCT / BAAT) · (C, F)
+- **40.40** — Insurance risk — accident and sickness business · (C, F)
+- **50.00** — **[[Market Risk Margin|Market risk]]** — capital (margin) requirements · (C, F)
+- **60.00** — **[[Credit Risk Margin|Credit risk]]** — balance sheet (vested) assets based on **external credit ratings** · (C, F)
+- **60.05** — Credit risk — balance sheet assets based on external credit ratings (**Quebec**) · (C)
+- **60.20 / 60.30** — Credit risk — selected balance sheet items and recoverables/receivables (MCT / BAAT) · (C, F)
+- **60.40** — Credit risk — **off-balance-sheet exposures** · (C, F)
+- **60.50** — Credit risk — **collateral held for unregistered reinsurance exposures** · (C, F)
+- **70.00** — **[[Operational Risk Margin|Operational risk]]** — capital (margin) required · (C, F)
 
 ## What the layout tells you
 

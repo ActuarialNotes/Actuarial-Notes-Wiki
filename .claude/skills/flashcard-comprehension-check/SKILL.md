@@ -1,9 +1,14 @@
 ---
 name: flashcard-comprehension-check
-description: Write the single "quick comprehension check" question that gates flashcard collection in Actuarial Notes — the question shown in the "Collect this flashcard" modal (`quiz/src/components/collect/CollectConceptModal.tsx`) before a concept card can be added to the user's deck. Use this skill whenever the user asks for a comprehension check, quiz question, gate question, or "quick check" for a specific concept, or mentions writing questions for the flashcard collection flow, even if they just name a concept ("write a comprehension check for Bayes Theorem," "quiz question for the Poisson flashcard"). The defining requirement: the correct answer must never be the concept's own name or a restatement of its definition — someone who only recognizes the term, without understanding it, should not be able to guess correctly. Do not use this skill for full study guides or exam-style question banks — those belong in `questions/<exam-id>/*.md` following the frontmatter format described in `CLAUDE.md`, not this modal.
+description: Write the single "quick comprehension check" question for a concept in Actuarial Notes (`comprehension-checks/<exam-id>/<Concept Name>.md`). These checks used to gate flashcard collection; that gate has been removed (a card is now collected when its concept first reaches Level 1) and nothing renders them today, so the content is authored only to keep the parked corpus valid. Use this skill whenever the user asks for a comprehension check, quiz question, gate question, or "quick check" for a specific concept, or mentions writing questions for the flashcard collection flow, even if they just name a concept ("write a comprehension check for Bayes Theorem," "quiz question for the Poisson flashcard"). The defining requirement: the correct answer must never be the concept's own name or a restatement of its definition — someone who only recognizes the term, without understanding it, should not be able to guess correctly. Do not use this skill for full study guides or exam-style question banks — those belong in `questions/<exam-id>/*.md` following the frontmatter format described in `CLAUDE.md`, not this modal.
 ---
 
 # Flashcard Comprehension Check Generator
+
+> **Parked.** The collect modal this skill wrote for is gone — a flashcard is now
+> collected when its concept first reaches Level 1, and no surface renders these
+> checks (see `docs/flashcard-collection.md`). Keep authoring to the rules below
+> only if the user asks; mention that the checks are currently unused.
 
 ## Why this exists
 

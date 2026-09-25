@@ -1,17 +1,17 @@
 import { test, expect } from '@playwright/test'
 
 // Runs the core learning flow end-to-end against a single bundled
-// multiple-choice question (p-004), signed out: skip the collect gate, answer,
+// multiple-choice question (p-004), signed out: skip the concept list, answer,
 // confirm, finish, and land on the review/results screen. Mastery is written to
 // localStorage (the offline fallback), so no Supabase backend is exercised.
 test.describe('quiz', () => {
   test('answers a question and reaches the results screen', async ({ page }) => {
     await page.goto('/quiz?ids=p-004')
 
-    // A fresh signed-out session has no collected concepts, so the pre-quiz
-    // collect gate appears first. Skip it straight into the questions. The page
+    // A fresh signed-out session has every concept at New, so the pre-quiz
+    // concept list appears first. Skip it straight into the questions. The page
     // holds a spinner until mastery loads, so wait for whichever it settles on
-    // rather than probing the gate button before it can exist.
+    // rather than probing the list's button before it can exist.
     const startQuiz = page.getByRole('button', { name: 'Start Quiz' })
     // The question card renders four options; p-004's answer is A.
     const optionA = page.getByRole('button', { name: 'Option A' })

@@ -15,8 +15,8 @@ product, Pro-only and in Preview — see "Cowork" at the end of this file and `d
    (`Resources/{Books,Regulation,Events,Benchmarks,Data}/*.md`), and a practice-question
    bank (`questions/<exam-id>/*.md`).
 2. **Quiz app** (`quiz/`) — a React + Vite + TypeScript SPA that reads the markdown content
-   at build time, renders the wiki, runs quizzes/flashcards (with a "collect the card"
-   gate), tracks per-concept mastery, generates personalized study plans, and layers on
+   at build time, renders the wiki, runs quizzes/flashcards (a concept's card is
+   collected when it first reaches Level 1), tracks per-concept mastery, generates personalized study plans, and layers on
    gamification (gems, cosmetics, avatars, a Store). Backed by Supabase (auth, sync,
    payments). A **Research** tab (Canadian P&C research corpus + AI "Ask") is fully built
    but currently **disabled behind feature flags** — see "Feature flags & the Research tab".
@@ -38,8 +38,9 @@ Guides/<Exam page>/*.md                           — study tips, one page per t
 Guides/*.md                                       — general guides, belonging to no exam ("How to Study
                                                     for Actuarial Exams"). Listed on the Study Guides
                                                     home page — data/examGuides.ts, GENERAL_GUIDES
-comprehension-checks/<exam-id>/*.md               — flashcard-collect gate questions (one .md per concept,
-                                                    parsed by lib/comprehensionCheckParser.ts)
+comprehension-checks/<exam-id>/*.md               — retired flashcard-collect gate questions (one .md per
+                                                    concept, parsed by lib/comprehensionCheckParser.ts);
+                                                    kept in the vault, rendered nowhere
 Media/Attachments/                                — images referenced via ![[...]]
 .verify/<mirrors the vault path>.md               — VERIFY: one append-only fact-check log per
                                                     content file (+ `_runs/` batch summaries)
@@ -61,7 +62,7 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
   and `Research/`, which is
   flag-gated)
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
-  `components/collect/` (flashcard-collection modal + 3D card), `components/research/` (flag-gated).
+  `components/collect/` (the 3D card the level-up ceremony spins), `components/research/` (flag-gated).
   `components/CheckMark.tsx` is **the** checkmark — a filled disc with the tick masked out
   of it, so the tick shows whatever the mark is sitting on. Everything that means *done* or
   *picked* draws it (completed plan rows, a levelled-up concept's card, a selected quiz
@@ -71,17 +72,17 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
   a drawn stroke, and the white-tick-on-green-disc it replaces is only invisible against one
   surface. See `docs/style-guide.md` §10.1.
   `components/ConceptActionMenu.tsx` is **the** concept action menu — quiz, study guide, deck,
-  collect, learning progress, fact check — and the owner of the modals those rows open; the
+  learning progress, fact check — and the owner of the modals those rows open; the
   concept popup (whose title is its only trigger) and every flashcard surface open that one
   component, so the two can't drift apart. A surface adds only rows about *itself* (a card's
   Study and Remove) through `leading` / `trailing`; view switches (Listen, the deck's view
   modes) are each surface's own control, never menu rows. It always portals to the body and
   is placed by `lib/menuPlacement.ts`, so no host's stacking context or viewport edge can
-  clip it — the only way to collect a card is through it.
+  clip it.
 - `lib/` — core logic, mostly pure/testable modules (this is where the interesting algorithms live)
 - `data/` — authored static tables bundled into the app: `comprehensionChecks.ts` (parses the
-  flashcard-collect gate questions from `comprehension-checks/<exam-id>/*.md` at build time via the
-  `virtual:comprehension-checks` vite module — see `lib/comprehensionCheckParser.ts` +
+  retired comprehension checks from `comprehension-checks/<exam-id>/*.md` via the
+  `virtual:comprehension-checks` vite module — nothing imports it, so it isn't bundled; see
   `docs/flashcard-collection.md`), `examSittings.ts` / `examPdfLinks.ts` (sitting dates, examiner reports, and each
   exam's published syllabus — the PDF an exam page's title-row button opens),
   `mnemonics.ts` / `stories.ts` (per-concept, per-avatar content), `quests.ts` (daily-quest
@@ -104,9 +105,12 @@ before touching that area**:
   trailed by what its page links to, from the build-time `data/keystoneLinks.ts` map) when the
   strategy is *Key concepts first*. Never alphabetical: on a fresh account every concept is
   New, so that tiebreak *is* the plan.
-- `docs/flashcard-collection.md` — the "collect this card" gate: a concept must be collected
-  (pass a comprehension check) before its mastery can advance past **New**. `applyAnswer`
-  in `mastery.ts` takes a `collected` flag; the gate UI lives in `components/collect/`.
+- `docs/flashcard-collection.md` — collecting a card: a concept's card is collected the first
+  time it reaches **Level 1** (its first correct answer) — no check, no modal, no lock.
+  `collectLevelledConcepts` in `stores/quizStore.ts` collects and decks it and marks the
+  transition `collected`, which is what makes `ConceptLevelUpCeremony` play the collect
+  animation on /review. Before a quiz, `components/PreQuizConcepts.tsx` lists the quiz's New
+  concepts, each opening in the concept popup.
 - `docs/verification.md` — **VERIFY**, the fact-check layer (**Fact Check** is what it is
   called on screen; the vault-side schema and toolchain keep the `verify`/`verification`
   spelling): the `verification:`
@@ -627,20 +631,13 @@ Other important `lib/` modules:
   it, mounted at the app root as `components/FlashcardSync.tsx`. The rule to keep in mind:
   local state is unioned into the server **once per device per user** (so guest work
   survives sign-in), and after that the server wins — see `docs/flashcard-collection.md`.
-- `collectLockout.ts` — the collect-check **lockout**: a wrong answer on a flashcard's
-  comprehension check shuts it for 1 minute, then 5, per concept (misses never
-  decay; passing clears the record). Pure core here, persisted by
-  `hooks/useCollectLockouts.ts` (localStorage only — see the doc for why), rendered by
-  `CollectConceptModal`'s locked panel and `components/collect/CollectGateButton.tsx`.
-  The wait is announced before it's applied and always points at the concept page.
-  See `docs/flashcard-collection.md`.
 - `localMasteryStore.ts` / `dailyProgressStore.ts` — localStorage-backed offline fallbacks that sync with Supabase
 - `github.ts` — fetches wiki content from GitHub raw URLs at runtime (for the live site, vs. the
   build-time bundle). Note that `listRepoContents` hits the GitHub **API**, which is limited to
   60 requests/hour per IP without `VITE_GITHUB_TOKEN` — don't put it on a path that has to work.
 - `supabase.ts` — Supabase client + shared row types
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **120 test files /
+`*.test.ts` files sit alongside the modules they test (vitest). There are **118 test files /
 ~1785 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, and the research/resource-timeline
 modules).
@@ -713,8 +710,8 @@ compile — don't "clean up" the flagged code as dead.
   of concept paths), `answer`, `points` — followed by the question body, options, and an
   `## Explanation` section (LaTeX via `$$...$$`). Current banks: `exam-p`, `exam-fm`,
   `exam-mas-i`, `exam-5` (hundreds of questions each).
-- Comprehension-check files (`comprehension-checks/<exam-id>/<Concept Name>.md`) gate flashcard
-  collection: YAML frontmatter (`concept`, `exam`, `topic`, `correct` letter) + a `- A) …` option
+- Comprehension-check files (`comprehension-checks/<exam-id>/<Concept Name>.md`) used to gate
+  flashcard collection and are now rendered nowhere (kept in the vault): YAML frontmatter (`concept`, `exam`, `topic`, `correct` letter) + a `- A) …` option
   list, then an authoring-only `<!-- rationale -->` comment. One file per concept; the filename is
   the concept's display name. See `docs/flashcard-collection.md` and the
   `flashcard-comprehension-check` skill.

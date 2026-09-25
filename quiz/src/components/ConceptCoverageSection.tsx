@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { ArrowRight, LayoutDashboard, XCircle } from 'lucide-react'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
-import { CollectLevelUpCard } from '@/components/collect/CollectLevelUpCard'
 import { CompletionCornerBadge } from '@/components/CheckMark'
 import { Button } from '@/components/ui/button'
 import { questionCredit, questionOutcome } from '@/lib/parser'
@@ -259,18 +258,6 @@ interface ConceptCoverageSectionProps {
   /** Concepts that levelled up on this quiz — one card each (two-column grid). */
   levelUpTransitions?: MasteryTransition[]
   /**
-   * Concepts this quiz answered correctly but which stayed New because they
-   * aren't collected yet (docs/flashcard-collection.md). They share the
-   * level-up grid as clickable "Collect → Level 1" cards, so the level-up the
-   * quiz nearly earned stays on the results screen instead of vanishing with
-   * the post-quiz gate.
-   */
-  collectableConcepts?: string[]
-  /** Lower-cased names whose promotion is in flight (card shows a spinner). */
-  pendingCollectConcepts?: Set<string>
-  /** Opens the collect modal for a card. Required for the cards to render. */
-  onCollectConcept?: (name: string) => void
-  /**
    * Attached to the actions row (Go to Dashboard / Review Incorrect) so a page
    * can tell when it has scrolled out of view — Review uses it to swap in its
    * pinned header, the same way the Dashboard swaps in its compact actions.
@@ -302,16 +289,12 @@ export function ConceptCoverageSection({
   manualGrades = {},
   onReviewIncorrect,
   levelUpTransitions = [],
-  collectableConcepts = [],
-  pendingCollectConcepts,
-  onCollectConcept,
   actionsRef,
 }: ConceptCoverageSectionProps) {
   const navigate = useNavigate()
   const openConceptPopup = useConceptPopup(s => s.openAt)
   // Prev/next list for the popup — the levelled-up concepts, in card order.
   const levelUpRefs: WikiEntryRef[] = levelUpTransitions.map(t => ({ kind: 'concept' as const, name: t.conceptSlug }))
-  const collectCards = onCollectConcept ? collectableConcepts : []
   const credits = questions.map(q => questionCredit(q, responses[q.id]?.chosen, manualGrades))
   const outcomes = questions.map(q => questionOutcome(q, responses[q.id]?.chosen, manualGrades))
   const hasIncorrect = outcomes.some(o => o !== 'correct')
@@ -360,10 +343,8 @@ export function ConceptCoverageSection({
         </div>
       </div>
 
-      {/* ── Concepts levelled up: standalone cards, two-column grid ──
-          Concepts that only *missed* a level-up for want of being collected
-          share the grid, as cards that earn themselves when tapped. */}
-      {(levelUpTransitions.length > 0 || collectCards.length > 0) && (
+      {/* ── Concepts levelled up: standalone cards, two-column grid ── */}
+      {levelUpTransitions.length > 0 && (
         <div className="grid grid-cols-2 gap-3">
           {levelUpTransitions.map((t, i) => (
             <button
@@ -380,22 +361,13 @@ export function ConceptCoverageSection({
                 <ArrowRight className="h-3 w-3 shrink-0" />
                 {LEVEL_LABEL[t.to]}
               </span>
-              {/* The card beside it is a card still to be *earned*, and wears a
-                  lock. This one is already won, so it wears the check — the
-                  same corner, the same mark the study plan ticks with. */}
+              {/* Already won, so it wears the check — the same corner, the
+                  same mark the study plan ticks with. */}
               <CompletionCornerBadge
                 size="md"
                 label={`${t.conceptSlug} levelled up to ${LEVEL_LABEL[t.to]}`}
               />
             </button>
-          ))}
-          {collectCards.map(name => (
-            <CollectLevelUpCard
-              key={`collect-${name}`}
-              name={name}
-              pending={pendingCollectConcepts?.has(name.toLowerCase()) ?? false}
-              onClick={() => onCollectConcept?.(name)}
-            />
           ))}
         </div>
       )}

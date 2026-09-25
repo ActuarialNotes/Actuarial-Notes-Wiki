@@ -1,9 +1,10 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 
-// promoteMissedLevelUp banks a level-up the post-quiz collect gate earned after
-// the quiz was already scored. The guest path (userId = null) touches nothing
-// but localStorage, so we stub that and mock the DB / side-effect imports the
-// module pulls in at load time.
+// A concept's flashcard is collected the moment it first reaches Level 1 — no
+// comprehension check (docs/flashcard-collection.md). The guest path of
+// completeQuiz (userId = null) touches nothing but localStorage and the local
+// stores, so we stub those and mock the DB / side-effect imports the module
+// pulls in at load time.
 vi.mock('@/lib/supabase', () => ({ supabase: {} }))
 vi.mock('@/lib/dailyProgressStore', () => ({
   appendTodayLevelUps: vi.fn(),
@@ -11,27 +12,59 @@ vi.mock('@/lib/dailyProgressStore', () => ({
   addDailyQuizStats: vi.fn(),
   appendTodayAnsweredIds: vi.fn(),
 }))
+vi.mock('@/lib/streakStore', () => ({ recordStreakActivity: vi.fn() }))
+vi.mock('@/lib/xpStore', () => ({ recordXp: vi.fn() }))
+vi.mock('@/lib/questStore', () => ({ recordQuestProgress: vi.fn() }))
+vi.mock('@/lib/leagueStore', () => ({ recordLeagueXp: vi.fn() }))
+vi.mock('@/lib/analytics', () => ({ trackConceptCollected: vi.fn() }))
+
+const collected = new Set<string>()
+const collect = vi.fn((name: string, _opts?: { silent?: boolean }) => void collected.add(name.toLowerCase()))
 vi.mock('@/hooks/useCollectedCards', () => ({
-  useCollectedCards: { getState: () => ({ cards: [] }) },
+  useCollectedCards: {
+    getState: () => ({
+      isCollected: (name: string) => collected.has(name.toLowerCase()),
+      collect,
+    }),
+  },
+}))
+const addCard = vi.fn()
+vi.mock('@/hooks/useFlashcards', () => ({
+  useFlashcards: { getState: () => ({ cards: [], addCard }) },
 }))
 
-import { promoteMissedLevelUp, readLastSession, LAST_SESSION_KEY } from './quizStore'
-import type { CompletedSession, MasteryTransition } from './quizStore'
+import { useQuizStore, readLastSession } from './quizStore'
+import type { Question } from '@/lib/parser'
+import type { ConceptMasteryRecord } from '@/lib/mastery'
 
 let store: Map<string, string>
 
-function seedSession(masteryTransitions?: MasteryTransition[]) {
-  const session: CompletedSession = {
-    questions: [],
-    responses: {},
-    mode: 'practice',
-    correctCount: 1,
-    totalQuestions: 1,
-    timeTakenSeconds: 10,
-    completedAt: new Date().toISOString(),
-    ...(masteryTransitions ? { masteryTransitions } : {}),
+function question(id: string, concept: string): Question {
+  return {
+    id,
+    exam: 'Financial Mathematics',
+    topic: 'Interest',
+    learning_objective: '',
+    difficulty: 'easy',
+    type: 'multiple-choice',
+    wiki_link: [concept],
+    answer: 'A',
+    explanation: '',
+    points: 1,
+    stem: '',
+    options: [],
   }
-  store.set(LAST_SESSION_KEY, JSON.stringify(session))
+}
+
+async function finish(answers: Array<[Question, string]>, prior: ConceptMasteryRecord[] = []) {
+  useQuizStore.setState({
+    questions: answers.map(([q]) => q),
+    responses: Object.fromEntries(answers.map(([q, chosen]) => [q.id, { chosen, timeSpent: 1 }])),
+    mode: 'quiz',
+    startedAt: new Date(),
+    manualGrades: {},
+  })
+  await useQuizStore.getState().completeQuiz(null, prior)
 }
 
 beforeEach(() => {
@@ -44,47 +77,53 @@ beforeEach(() => {
     key: () => null,
     length: 0,
   })
+  collected.clear()
+  collect.mockClear()
+  addCard.mockClear()
 })
 
 afterEach(() => {
   vi.unstubAllGlobals()
 })
 
-describe('promoteMissedLevelUp (guest)', () => {
-  it('records the level-up on the stored session so the results screen lists it', async () => {
-    seedSession()
+describe('completeQuiz collects a card on reaching Level 1 (guest)', () => {
+  it('collects and decks a New concept answered correctly', async () => {
+    await finish([[question('q1', 'Accumulation Function'), 'A']])
 
-    const transition = await promoteMissedLevelUp(null, 'FM', 'Accumulation Function')
-
-    expect(transition).toEqual({ conceptSlug: 'Accumulation Function', from: 'new', to: 'level1' })
+    expect(collect).toHaveBeenCalledWith('Accumulation Function')
+    expect(addCard).toHaveBeenCalledWith({ kind: 'concept', name: 'Accumulation Function' })
+    // The stored session marks the level-up as the collection, so /review's
+    // ceremony plays the collect animation for it.
     expect(readLastSession()?.masteryTransitions).toEqual([
-      { conceptSlug: 'Accumulation Function', from: 'new', to: 'level1' },
+      { conceptSlug: 'Accumulation Function', from: 'new', to: 'level1', collected: true },
     ])
   })
 
-  it("keeps the transitions the quiz itself produced", async () => {
-    seedSession([{ conceptSlug: 'Force of Interest', from: 'new', to: 'level1' }])
+  it('collects nothing for a wrong answer — the concept stays New', async () => {
+    await finish([[question('q1', 'Accumulation Function'), 'B']])
 
-    await promoteMissedLevelUp(null, 'FM', 'Accumulation Function')
-
-    expect(readLastSession()?.masteryTransitions).toEqual([
-      { conceptSlug: 'Force of Interest', from: 'new', to: 'level1' },
-      { conceptSlug: 'Accumulation Function', from: 'new', to: 'level1' },
-    ])
+    expect(collect).not.toHaveBeenCalled()
+    expect(addCard).not.toHaveBeenCalled()
   })
 
-  it('does not duplicate a concept the session already lists', async () => {
-    seedSession([{ conceptSlug: 'Accumulation Function', from: 'new', to: 'level1' }])
+  it('does not re-collect a card the learner already holds', async () => {
+    collected.add('accumulation function')
+    await finish([[question('q1', 'Accumulation Function'), 'A']])
 
-    await promoteMissedLevelUp(null, 'FM', 'accumulation function')
-
-    expect(readLastSession()?.masteryTransitions).toHaveLength(1)
+    expect(collect).not.toHaveBeenCalled()
+    expect(readLastSession()?.masteryTransitions?.[0]?.collected).toBeUndefined()
   })
 
-  it('still promotes when there is no stored session', async () => {
-    const transition = await promoteMissedLevelUp(null, 'FM', 'Accumulation Function')
+  it('back-fills a card learned before collection silently, with no ceremony', async () => {
+    const forgotten: ConceptMasteryRecord = {
+      user_id: '', exam_id: 'FM', concept_slug: 'Accumulation Function', state: 'forgotten',
+      correct_count: 3, hard_correct_count: 0, incorrect_streak: 0,
+      last_correct_at: '2020-01-01T00:00:00.000Z', last_attempted_at: '2020-01-01T00:00:00.000Z',
+    }
+    await finish([[question('q1', 'Accumulation Function'), 'A']], [forgotten])
 
-    expect(transition).toEqual({ conceptSlug: 'Accumulation Function', from: 'new', to: 'level1' })
-    expect(readLastSession()).toBeNull()
+    expect(collect).toHaveBeenCalledWith('Accumulation Function', { silent: true })
+    expect(addCard).not.toHaveBeenCalled()
+    expect(readLastSession()?.masteryTransitions?.[0]?.collected).toBeUndefined()
   })
 })

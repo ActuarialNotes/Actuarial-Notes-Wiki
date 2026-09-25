@@ -1,126 +1,35 @@
 import { test, expect } from '@playwright/test'
-import { readdirSync, readFileSync } from 'node:fs'
-import { fileURLToPath } from 'node:url'
-import path from 'node:path'
-import { parseAllComprehensionChecks } from '../src/lib/comprehensionCheckParser'
 
-// Load the comprehension-check corpus the same way the app does, but from disk
-// rather than the build-time `virtual:comprehension-checks` module: Playwright's
-// Node ESM loader can't resolve `virtual:` ids, so importing src/data/
-// comprehensionChecks (which does) would blow up the whole run at collection
-// time. This mirrors collectComprehensionChecks() in vite.config.ts.
-function loadComprehensionChecks() {
-  const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
-  const root = path.join(repoRoot, 'comprehension-checks')
-  const raw: string[] = []
-  for (const examDir of readdirSync(root)) {
-    const examPath = path.join(root, examDir)
-    let files: string[]
-    try {
-      files = readdirSync(examPath)
-    } catch {
-      continue // skip non-directory entries
-    }
-    for (const name of files) {
-      if (!name.endsWith('.md')) continue
-      raw.push(readFileSync(path.join(examPath, name), 'utf-8'))
-    }
-  }
-  return parseAllComprehensionChecks(raw)
-}
-
-const COMPREHENSION_CHECKS = loadComprehensionChecks()
-
-// Collecting a flashcard is the gate that unlocks a concept's mastery (see
-// docs/flashcard-collection.md). This drives the collect modal from the
-// pre-quiz gate and passes its comprehension check.
+// A flashcard is collected the first time its concept reaches Level 1 — there
+// is no comprehension check to pass (docs/flashcard-collection.md). This walks
+// that path signed out: the pre-quiz list names the quiz's New concepts and
+// opens one in the concept popup, a right answer levels it up, and the results
+// screen's ceremony plays the collect animation for it.
 //
-// Visiting /wiki first arms the bundled wiki-content lookup (WikiLayout calls
-// setWikiContentLookup at import time), so the modal can build its check from
-// the bundled concept page without any network request.
+// p-004 links Combinatorics and Conditional Probability; its answer is A.
 test.describe('flashcard collection', () => {
-  test('collects a concept by passing its comprehension check', async ({ page }) => {
-    await page.goto('/wiki')
-    await expect(page.getByRole('heading', { name: 'Study Guides' })).toBeVisible()
-
+  test('collects a concept by answering its question right', async ({ page }) => {
     await page.goto('/quiz?ids=p-004')
 
-    // The pre-quiz collect gate lists this quiz's New concepts with Collect
-    // buttons. Open the first one.
-    const collectButton = page.getByRole('button', { name: 'Collect' }).first()
-    await expect(collectButton).toBeVisible()
-    await collectButton.click()
+    // Every concept is New on a fresh session, so the list comes first.
+    await expect(page.getByRole('heading', { name: 'New concepts in this quiz' })).toBeVisible()
 
-    // The collect modal opens with a multiple-choice comprehension check. Scope
-    // to its "Collect <name>" aria-label so it isn't confused with the always-
-    // mounted onboarding-tour dialog.
-    const dialog = page.getByRole('dialog', { name: /^Collect / })
-    await expect(dialog).toBeVisible()
+    // A row opens the concept in the popup, to read before the questions start.
+    await page.getByRole('button', { name: 'Combinatorics' }).click()
+    await expect(page.getByRole('complementary', { name: 'Concept: Combinatorics' })).toBeVisible()
 
-    // Resolve the correct answer from the same source the app uses: an authored
-    // comprehension check when one exists, otherwise the fallback question whose
-    // answer is the concept's own name.
-    const label = (await dialog.getAttribute('aria-label')) ?? ''
-    const conceptName = label.replace(/^Collect /, '').trim()
-    const check = COMPREHENSION_CHECKS[conceptName]
-    const answer = check ? check.options[check.correctIndex] : conceptName
+    await page.getByRole('button', { name: 'Start Quiz' }).click()
+    // Starting the quiz leaves the popup behind with the list.
+    await expect(page.getByRole('complementary', { name: /^Concept: / })).toHaveCount(0)
 
-    await dialog.getByRole('button', { name: answer, exact: true }).click()
+    await page.getByRole('button', { name: 'Option A' }).click()
+    await page.getByRole('button', { name: 'Confirm Answer' }).click()
+    await page.getByRole('button', { name: /Finish Quiz/i }).click()
 
-    await expect(page.getByText('Collected!')).toBeVisible()
-  })
-})
-
-// The card can be flipped to read its definition before answering. Flipping is
-// switched off the moment the collect ceremony starts, which unmounts the back
-// pane — so a card left flipped has to fall back to its front, or it spins and
-// dissolves completely blank.
-//
-// The spin/flash phases only exist when motion is allowed: under the suite's
-// default `reducedMotion: 'reduce'` a correct answer jumps straight to the
-// "Collected!" screen (a freshly mounted card), which never reproduced this.
-test.describe('flashcard collection (animated)', () => {
-  test.use({ reducedMotion: 'no-preference' })
-
-  test('shows the concept name during collection even if the card was flipped', async ({ page }) => {
-    await page.goto('/wiki')
-    await expect(page.getByRole('heading', { name: 'Study Guides' })).toBeVisible()
-
-    await page.goto('/quiz?ids=p-004')
-
-    const collectButton = page.getByRole('button', { name: 'Collect' }).first()
-    await expect(collectButton).toBeVisible()
-    await collectButton.click()
-
-    const dialog = page.getByRole('dialog', { name: /^Collect / })
-    await expect(dialog).toBeVisible()
-
-    const label = (await dialog.getAttribute('aria-label')) ?? ''
-    const conceptName = label.replace(/^Collect /, '').trim()
-    const check = COMPREHENSION_CHECKS[conceptName]
-    const answer = check ? check.options[check.correctIndex] : conceptName
-
-    // Flip to the definition side. The panes cross-fade in place, so "hidden"
-    // here means opacity 0 — Playwright still counts a transparent element as
-    // visible, hence the CSS assertions.
-    const front = dialog.locator('[data-card-face="front"]')
-    const back = dialog.locator('[data-card-face="back"]')
-    await expect(front).toHaveCSS('opacity', '1')
-    await dialog.getByRole('button', { name: /flashcard, tap to flip$/ }).click()
-    await expect(back).toHaveCSS('opacity', '1')
-    await expect(front).toHaveCSS('opacity', '0')
-
-    await dialog.getByRole('button', { name: answer, exact: true }).click()
-
-    // Mid-ceremony the card must be showing its name again, not an empty face.
-    // The ceremony runs ~1.7s before the "Collected!" screen mounts a fresh
-    // (front-facing) card, so these are bounded well inside it — on the default
-    // 5s expect timeout a blank card would simply be retried until the ceremony
-    // ended and pass. 700ms leaves room for the 260ms pane cross-fade.
-    await expect(dialog.getByText('Collecting…')).toBeVisible()
-    await expect(front).toHaveCSS('opacity', '1', { timeout: 700 })
-    await expect(front).toContainText(conceptName, { timeout: 700 })
-
-    await expect(page.getByText('Collected!')).toBeVisible()
+    await expect(page).toHaveURL(/\/review/)
+    // The ceremony plays the collect animation, then recaps the collection.
+    const ceremony = page.getByRole('dialog', { name: 'Concepts leveled up' })
+    await expect(ceremony.getByText('Collected!')).toBeVisible()
+    await expect(ceremony.getByTitle('Flashcard collected').first()).toBeVisible({ timeout: 15_000 })
   })
 })

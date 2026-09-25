@@ -364,9 +364,11 @@ function questionsContentPlugin(): Plugin {
   }
 }
 
-// Flashcard-collect comprehension checks: one markdown file per concept under
+// Comprehension checks: one markdown file per concept under
 // comprehension-checks/<exam-id>/<Concept Name>.md, parsed at runtime by
 // lib/comprehensionCheckParser.ts. Structured just like the question bank above.
+// No surface renders them since flashcard collection stopped gating on them
+// (see data/comprehensionChecks.ts).
 async function collectComprehensionChecks(): Promise<string[]> {
   const rawFiles: string[] = []
   const root = path.join(REPO_ROOT, 'comprehension-checks')

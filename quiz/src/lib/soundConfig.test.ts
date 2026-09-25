@@ -27,7 +27,7 @@ const REWARDS = ['correct', 'addToDeck', 'collect', 'levelUp', 'levelUpStep', 'r
 
 /**
  * The cues that open a session rather than close one: the two halves of a quiz
- * launch (pressing Start Quiz, then the collect gate's Start Quiz) and settling
+ * launch (pressing Start Quiz, then the concept list's Start Quiz) and settling
  * in to study. They're built like reward cues (struck, in a room) but they mark
  * a beginning, so they have their own rules — see "the launch cues".
  */
@@ -334,7 +334,7 @@ describe('sound catalogue', () => {
     })
 
     it('splits the launch across the two Start Quiz presses', () => {
-      // Opening a quiz is two presses — Start Quiz, then the collect gate's
+      // Opening a quiz is two presses — Start Quiz, then the concept list's
       // Start Quiz — so the bugle is split between them: the first strikes one
       // note and leaves it hanging, the second picks it up a fourth higher.
       // Whatever happened in between, the phrase resumes rather than restarts.

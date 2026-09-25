@@ -71,7 +71,7 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
   const [result, setResult] = useState<ConceptLearningHistory>({ ...EMPTY, loading: true })
   const [version, setVersion] = useState(0)
   // Per-instance channel suffix. Two components can hold this hook for the same
-  // concept at once (the collect modal and the progress panel inside it); a
+  // concept at once (a modal and the progress panel inside it); a
   // shared topic makes the second subscribe fail with "cannot add
   // postgres_changes callbacks after subscribe()", and unmounting either one
   // tears down the other's subscription.
@@ -98,9 +98,9 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
   }, [userId, conceptName])
 
   useEffect(() => {
-    // No concept means nothing to load — the always-mounted collect modal holds
-    // this hook with an empty name whenever it's closed, and querying for it
-    // costs a question fetch plus two round-trips on every page load.
+    // No concept means nothing to load — an always-mounted caller may hold this
+    // hook with an empty name while it's closed, and querying for it costs a
+    // question fetch plus two round-trips on every page load.
     if (!userId || !conceptName) {
       setResult(EMPTY)
       return

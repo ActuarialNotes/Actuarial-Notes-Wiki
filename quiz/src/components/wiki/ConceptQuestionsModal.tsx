@@ -33,7 +33,7 @@ interface ConceptQuestionsModalProps {
   conceptName: string
   onClose: () => void
   /** Called (in addition to onClose) when the user actually starts a quiz from here —
-   *  lets callers that nest this modal inside another dialog (e.g. CollectConceptModal)
+   *  lets callers that nest this modal inside another dialog
    *  dismiss that outer dialog too, instead of leaving it stuck open behind the quiz. */
   onQuizStart?: () => void
 }
@@ -185,10 +185,8 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
     [questions, selectedIds],
   )
 
-  // Quizzing is not gated on collection. Collecting a card is what lets a
-  // concept's mastery move past New (`applyAnswer`'s `collected` flag), so an
-  // uncollected concept still gets prompted to collect inside the quiz itself
-  // (`PreQuizCollectGate`) — but nothing here withholds the questions.
+  // Quizzing is never gated: a right answer on a New concept is what levels it
+  // to Level 1 and collects its card (docs/flashcard-collection.md).
   function handleStartQuiz() {
     if (selectedQuestions.length === 0) return
     try {

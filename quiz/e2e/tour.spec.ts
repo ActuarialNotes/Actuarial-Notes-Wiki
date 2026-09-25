@@ -6,7 +6,7 @@ import { test, expect } from '@playwright/test'
 // control silently strands the tour on a step with nothing to point at.
 //
 // This spec walks the opening leg of the guided path (launcher → study guide →
-// concept → collect gate) and the minimize/resume round-trip, so a broken
+// concept → flashcards) and the minimize/resume round-trip, so a broken
 // anchor fails here rather than in front of a first-time user.
 
 const tour = (page: import('@playwright/test').Page) =>
@@ -15,7 +15,7 @@ const tour = (page: import('@playwright/test').Page) =>
 const spotlight = (page: import('@playwright/test').Page) => page.locator('.onboarding-spotlight')
 
 test.describe('onboarding tour', () => {
-  test('starts collapsed, then guides the visitor to their first card', async ({ page }) => {
+  test('starts collapsed, then guides the visitor to their deck', async ({ page }) => {
     await page.goto('/')
 
     // A first-time visitor gets a small corner button, not a popup over the page.
@@ -37,29 +37,9 @@ test.describe('onboarding tour', () => {
     await expect(tour(page).getByText('Meet a concept')).toBeVisible()
 
     await page.locator('[data-wikiref="concept:calculus"]').first().click()
-    await expect(tour(page).getByText('Collect the card')).toBeVisible()
-    await expect(spotlight(page)).toBeVisible()
-
-    await page.locator('[data-tour="collect-card"]').first().click()
-    await expect(tour(page).getByText('Pass the quick check')).toBeVisible()
-
-    // The collect modal is a full-screen overlay: the tour has to layer above
-    // it, or the instructions and the ring vanish behind the dimmer.
-    const modal = page.getByRole('dialog', { name: /^Collect / })
-    await expect(modal).toBeVisible()
-    const tourZ = await tour(page).evaluate(el => {
-      // The positioned ancestor carries the z-index, not the dialog itself.
-      let n: HTMLElement | null = el as HTMLElement
-      while (n) {
-        const z = getComputedStyle(n).zIndex
-        if (z !== 'auto') return Number(z)
-        n = n.parentElement
-      }
-      return 0
-    })
-    const ringZ = await spotlight(page).evaluate(el => Number(getComputedStyle(el).zIndex))
-    expect(tourZ).toBeGreaterThan(130)
-    expect(ringZ).toBeGreaterThan(130)
+    // Cards are collected by quizzing now, so the tour goes on to the deck.
+    await expect(page).toHaveURL(/\/flashcards/)
+    await expect(tour(page).getByText('Flip through your deck')).toBeVisible()
   })
 
   test('minimizes back to the corner button and resumes on the same step', async ({ page }) => {

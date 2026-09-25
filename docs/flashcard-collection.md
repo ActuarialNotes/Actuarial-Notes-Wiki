@@ -1,42 +1,40 @@
 # Flashcard Collection
 
-"Collecting" a concept is the first **active-learning** step. A concept must be
-collected before its mastery can advance past **New** — collection is the gate to
-Level 1 (see [Concept Learning Progression](concept-learning-progression.md)).
+"Collecting" a concept is what puts its card in the learner's collection, and it
+happens the first time the concept reaches **Level 1** — that is, its first
+correct quiz answer (see [Concept Learning Progression](concept-learning-progression.md)).
+There is no separate step: no comprehension check, no collect modal, no lock.
+
+> **History.** Collection used to be a *gate*: a card had to pass a one-question
+> comprehension check in a collect modal before its mastery could leave New,
+> with lockouts for wrong answers, a pre-quiz gate listing locked concepts and
+> a post-quiz gate for level-ups missed for want of collecting. All of that is
+> gone — the first right answer is the proof of understanding the check was
+> standing in for. The authored checks are still in the vault (see
+> [The retired comprehension checks](#the-retired-comprehension-checks)).
 
 ## How it works
 
-1. Collecting **withholds nothing**. Every surface offers its full set of
-   actions on an uncollected concept — the concept popup's action menu (Start
-   Quiz, Open in Study Guide, Add to Flashcards, Collect Flashcard, Learning
-   Progress, Fact Check), the same menu in a flashcard's corner, and the
-   per-concept question browser's **Start Quiz**. It is literally the same
-   menu: `components/ConceptActionMenu.tsx` is what both surfaces open, so a
-   row added on one appears on the other. What collecting buys is the *level-up*:
-   mastery cannot move off New until the card is collected (see
-   [Mastery gate](#mastery-gate) below). The lock icons that used to stand in
-   front of those controls are gone; a reader who has not met a concept yet is
-   the reader who most needs to read it.
-2. The way *in* to the check is therefore an offer, not a barrier:
-   - **Concept popup** — a **Collect Flashcard** row in the action menu (the
-     menu the title opens), shown only while the concept is uncollected. It used
-     to be a mastery pill beside the name; the level now reads on that menu's
-     **Learning Progress** row instead, so the check needed a row of its own.
-   - **Flashcard** (`pages/Flashcards.tsx`) — the same **Collect Flashcard**
-     row, on the same menu, shown only while the card is uncollected. The two
-     rows a card adds for itself — **Study** at the top and **Remove** at the
-     bottom — are all that differ from the popup's menu.
-   - **Search / today's plan rows** (`WikiFloatingSearch`) — a small **Collect**
-     pill beside the concept name, hidden once it is collected.
-   - The **pre-quiz gate**, the **post-quiz gate** and the flashcard study loop,
-     which are described further down.
+1. **Quiz.** A correct answer on a **New** concept promotes it to Level 1
+   (`applyAnswer` in `lib/mastery.ts` — no `collected` flag any more).
+2. **Collect.** When the quiz is written, `collectLevelledConcepts`
+   (`stores/quizStore.ts`) walks the session's upward transitions. Every
+   `new → level1` for a card the store doesn't already hold is collected
+   (`useCollectedCards.collect`, which fires `COLLECTED_EVENT` and lights up the
+   Flashcards nav), added to the deck (`useFlashcards.addCard`) and tracked
+   (`concept_collected`). Its transition is marked `collected: true`. It runs on
+   every write path that banks mastery: `completeQuiz` (guest and signed-in) and
+   `recordReviewAnswers` (the Fix-Mistakes panel).
+3. **Celebrate.** On `/review`, `ConceptLevelUpCeremony` plays the **collect
+   animation** for each transition marked `collected`: the sealed card spins
+   under "Collecting…", blooms into light on the `collect` chime, and settles
+   back in on a "Collected!" beat before the next card. Other level-ups keep the
+   ordinary level-up spin. The summary tags each collected concept with a
+   **Collected** mark.
 
-   Each of these opens the **collect modal**: a 3D flashcard render plus a quick
-   **comprehension check**.
-3. Passing the check **collects** the concept — a card-spin → screen-bloom →
-   distilled-drop animation flies into and lights up the Flashcards tab. The
-   concept is recorded as collected (`useCollectedCards`) and added to the
-   flashcard gallery.
+Nothing in the app withholds a feature from an uncollected concept — it can be
+read, studied as a flashcard, listened to and quizzed like any other. Collecting
+is simply what the first level-up looks like.
 
 ## Where collected cards are stored
 
@@ -68,25 +66,11 @@ before changing it:
   server refresh is skipped while writes are still queued so it can't revert a
   change the user just made.
 
-Before this existed, collected cards partly self-healed on a new device: the
-collect modal back-fills the local store for any concept whose (server-synced)
-mastery is past New. That back-fill is still there — it costs nothing and covers
-the case where the sync tables aren't reachable — but it is no longer the only
-thing carrying collection state across devices.
-
-## Mastery gate
-
-`applyAnswer` (in `lib/mastery.ts`) takes a `collected` flag. For a **New**
-concept a correct answer only promotes it to Level 1 when `collected` is true;
-otherwise it stays New while still accumulating `correct_count`, so progress is
-never lost. Previously-learned concepts (Level 1+, or Forgotten) are unaffected —
-they were already collected, so existing users are grandfathered in. The flag is
-read from the collected store in the three quiz write paths (`quizStore`
-upsert + optimistic simulation, and `Quiz.tsx`'s level-up preview).
-
-Users can browse, study, listen to and quiz uncollected concepts freely — they
-just won't reach Level 1 until they collect. The mastery gate in `applyAnswer`
-is the *only* thing collection gates; no UI withholds a feature.
+Collected cards also self-heal on a device whose collected store is missing
+them: the next time a concept past New moves up a level,
+`collectLevelledConcepts` back-fills it *silently* (no nav glow, no ceremony —
+the card isn't being won now). It costs nothing and covers the case where the
+sync tables aren't reachable.
 
 ## What a collected card looks like
 
@@ -121,223 +105,62 @@ like the same card wherever it appears:
 | --- | --- |
 | Deck / gallery card | `SortableCard` in `pages/Flashcards.tsx` (the deck passes `animateCollected={false}` so the Level 3 border doesn't travel while you read) |
 | Picker tile in the add-flashcards sheet | `ConceptCardGrid` → `tileFoilClass`, plus `.flashcard-tile` for the smaller surface: a lighter edge, and the ring lifted over the tile's own content |
-| The card in the collect modal | `components/collect/CollectCard3D.tsx` — an uncollected card always shows the Level 3 edge, so the sealed pack looks like the prize |
+| The card in the level-up ceremony | `components/collect/CollectCard3D.tsx` — a card being collected shows the Level 3 edge until it lands, so the sealed pack looks like the prize |
 
 The edge belongs to foil, so nothing else may claim it: a keystone concept moves
 its gold inside as an underline on the name, and a tile already in the deck
 shows that as its green wash and tick rather than a second ring (see
 `docs/style-guide.md` §4.3–4.4).
 
-## Missing a check (lockouts)
+## Before the quiz: the concepts it introduces
 
-A check has four options, so a reader who doesn't know the answer can tap until
-one sticks and the gate certifies nothing. A wrong answer therefore takes the
-check off the table for a while:
+When a quiz-mode session starts, `Quiz.tsx` collects the concepts its questions
+link to that are currently **New** and, if there are any, shows
+`components/PreQuizConcepts.tsx` *before* the first question — "New concepts in
+this quiz", with a note that getting one right collects its card. Nothing on it
+is locked and nothing needs doing: each row opens the concept in the **concept
+popup** (`useConceptPopup.openAt`, over the list of the quiz's New concepts, so
+Previous/Next walks them), the same split pane the study guide reads concepts
+in, so the reader can look a concept over before the questions start. **Start
+Quiz** proceeds.
 
-| Miss | The check reopens in |
-| --- | --- |
-| 1st | 1 minute |
-| 2nd | 5 minutes |
-| 3rd and after | 5 minutes |
+The screen mounts its own `<ConceptPopup />` and closes the popup when it
+unmounts: left open, the store would pop it back up over the next page that
+mounts one (the results screen does). The quiz's keyboard shortcuts are off
+while it is up, so the popup's arrows and Esc don't reach a hidden question.
 
-The waits are short on purpose: long enough to send the reader to the concept
-page and break the tap-until-it-sticks rhythm, short enough that a study session
-survives them.
+It only appears:
 
-The escalation is **per concept** and the miss count **never decays**, so the
-second miss costs five minutes even though the first wait lifted long ago.
-Passing the check clears the record — a collected card has nothing left to lock.
-`misses` only stops growing because the last step repeats: a wait that kept
-doubling would abandon the concept rather than teach it.
-
-`lib/collectLockout.ts` is the pure core (the steps, the escalation, the
-`formatLockoutRemaining` / `formatLockoutShort` readouts — which still speak
-hours and days, because a wait read out of storage can predate a change to the
-steps; `sanitizeLockouts` caps such a wait at the longest current step, so
-shortening the steps releases anyone the old ones locked);
-`hooks/useCollectLockouts.ts` persists it and exposes `useCollectLockout(name)`,
-which re-renders once a second while a wait runs and stops the moment it lifts,
-so a check reopens under the reader without a reload.
-
-Two rules the UI keeps to:
-
-- **The penalty is announced before it is applied.** The question phase carries a
-  line naming what the *next* miss costs (`nextLockoutDurationMs`), because a
-  cost nobody was told about is a trap rather than an incentive. That line and the
-  **Skip** button live in a footer *outside* the modal's scrolling body: a
-  four-option check fills a phone screen, and neither a warning nor an exit does
-  its job from under the fold. **Skip** is drawn as a full-width secondary button
-  rather than a small grey link — it is one of the two ways out of this screen,
-  and a link tucked under the fine print read as a footnote on the warning above
-  it.
-- **The wait always points at the material.** The locked panel replaces the
-  options with the countdown and a **Read the concept** button, which opens
-  `components/ConceptReadModal` *over* the collect modal — not the concept popup
-  (not mounted on every route the modal opens from, e.g. the Quiz page's
-  pre-quiz gate) and not a navigation, which would abandon a quiz or a study
-  session. The card behind it stays flippable, so its definition is one tap away.
-  Being sent to read the concept is the point of the wait, not a consolation.
-- **The back of the card is a way in, not a dead end.** The flipped card shows
-  only the page's opening paragraph, so it ends in a secondary **Read the
-  concept** button that opens the same `ConceptReadModal` over the collect modal
-  — available from the first frame of the check, not only after a miss, and on
-  the *Collected!* card too. `CollectCard3D` ignores a click or an Enter that
-  came from a control inside itself (`fromInnerControl`), so pressing that button
-  doesn't also flip the card out from under what it opened. Only a `concept` ref
-  draws it: the reader fetches `Concepts/<name>.md`.
-
-Storage is **localStorage only** (`actuarial_collect_lockouts`), unlike the
-collected set, which syncs. That's deliberate: the wait exists to send a guessing
-reader back to the concept page, not to police them, so it costs little that
-clearing site data or switching devices resets it — while a server read on every
-render of a lock icon would cost plenty. If it ever needs to follow the learner,
-it belongs in the flashcard sync tables beside the collected set.
-
-The pre- and post-quiz gates share `components/collect/CollectGateButton.tsx`,
-which counts the wait down in place of its "Collect" label. It stays clickable
-while locked: the modal is where the wait is explained and where the link to the
-concept lives, which is exactly where a reader who just missed should land.
-
-## Skipping a check (flashcard study)
-
-In the Flashcards study loop, rating an uncollected card **Got it** opens its
-comprehension check instead of completing the card (Introduce → Flashcard →
-Collect → Quiz). That puts a gate in the middle of a session, so the check
-reached this way carries a **Skip for now** button: the card is left exactly as
-it was — uncollected, unrated, still in rotation — and the deck advances to the
-next unfinished card. The point is to give a reader who doesn't know the answer
-yet an exit that isn't guessing at four options.
-
-The button is opener-driven, not a property of the modal: `open()` takes an
-`onSkip` callback (`hooks/useCollect.ts`) and the modal only draws **Skip** when
-one was supplied. `useCollect.skip()` closes the modal *before* running the
-handler, so the opener is moving a deck the check is no longer sitting on. Every
-other opener — the concept popup's **Collect Flashcard** row, the Flashcards pack shop, the
-pre-quiz gate — has nowhere to send the reader next and so passes nothing,
-keeping the plain close button it always had.
-
-## Collect-then-quiz flow (daily quiz)
-
-Because a **New** concept only advances to Level 1 once collected, the quiz
-itself prompts for collection up front. When a quiz-mode session starts,
-`Quiz.tsx` inspects the concepts referenced by its questions and, for any that
-are currently **New** and **uncollected**, shows the `PreQuizCollectGate`
-(`components/collect/PreQuizCollectGate.tsx`) *before* the first question. Each
-listed concept has a **Collect** button that opens the shared
-`CollectConceptModal`; collected concepts flip to a checkmark. A **Start Quiz**
-button proceeds into the questions.
-
-The gate is intentionally a *soft* prompt — the user can start without
-collecting (uncollected concepts still won't pass New until collected, matching
-the mastery gate). It only appears:
-
-- in ordinary **quiz** mode (never a mock exam),
+- in ordinary **quiz** mode (never a practice exam / past paper),
 - at the very start of the session (before any answer), and
-- once mastery has loaded, so the New/collected classification is accurate.
-
-Concepts already collected or already past New (grandfathered users) never
-appear, so a single-concept quiz launched from an already-collected concept
-shows no gate.
+- once mastery has loaded, so the New classification is accurate (the page
+  holds its spinner until then rather than flashing the first question).
 
 ### Today's-plan highlight
 
 A quiz usually covers more concepts than today's study plan asks for, so the
-gate marks the rows that actually move the plan forward: an uncollected concept
-that is in today's plan wears the travelling **rainbow foil border**
-(`.plan-foil-ring` in `index.css` — the same material as the L3 flashcard and
-the concept popup's collect icon), and the card gains a one-line legend.
+list marks the rows that actually move the plan forward: a concept that is in
+today's plan wears the travelling **rainbow foil border**
+(`.plan-foil-ring` in `index.css` — the same material as the L3 flashcard), and the card's subtitle gains a legend.
 
 The plan is read by `hooks/useTodayPlanConcepts.ts`, which resolves the
 syllabus for the quiz's exam (derived from the questions' `exam` label via
 `TOPIC_TO_EXAM_ID`) and reduces its plan to the lower-cased key set
 `planConceptKeys` builds (`lib/planCompletion.ts`). That helper keys an aliased
 syllabus link under *both* its display name and its raw target, because the
-plan schedules `[[Bond Price|Price]]` as "Price" while the gate holds the
+plan schedules `[[Bond Price|Price]]` as "Price" while the list holds the
 `slugForLink` slug "Bond Price". Exams with no configured plan simply get no
-highlight — the gate is unchanged.
+highlight — the list is unchanged.
 
-## Missed level-ups on the results screen
+## The retired comprehension checks
 
-The same New-and-uncollected concepts get a second, non-modal home on `/review`.
-`Review.tsx` derives them once (frozen after mastery loads — see the comment on
-`missedLevelUpConcepts`), shows the `PostQuizCollectGate` modal for them right
-after the level-up ceremony, and then keeps a **card per concept** in the results
-card's level-up grid for as long as they are still uncollected. Dismissing the
-gate no longer puts the level-up out of reach.
-
-`components/collect/CollectLevelUpCard.tsx` is that card. It deliberately wears
-the shape of the "levelled up" card beside it — the level-up really is one
-comprehension check away — but stays clearly unearned and clearly a control: a
-lock beside the name, a primary-coloured **Collect → Level 1** line instead of
-the earned card's emerald `New → Level 1`, and a primary ring. Like
-`CollectGateButton` it counts a lockout down in place of its label and stays
-clickable while shut, because the modal is where the wait is explained. Tapping
-it opens the shared `CollectConceptModal`; when the collection lands, the card
-is replaced in place by a real level-up card.
-
-The promotion itself belongs to neither surface. `hooks/useMissedLevelUpPromotion.ts`
-watches the collected set and calls `promoteMissedLevelUp` the instant a listed
-concept flips to collected, and **Review mounts it once for the whole screen**,
-passing `promoted` / `pending` down to both the gate and the cards. That is the
-rule to keep: the gate modal and the cards behind it list the same concepts, so
-two copies of the watcher would bank two level-ups for one collection.
-
-## Where the comprehension checks live
-
-The authored checks are markdown, **one file per concept**, under
-`comprehension-checks/<exam-id>/<Concept Name>.md` at the repo root — edited like
-the question bank (`questions/<exam-id>/*.md`) rather than as a TS object. Each
-file is YAML frontmatter (`concept`, `exam`, `topic`, `correct` letter) plus a
-`- A) …` option list, and an authoring-only `<!-- rationale -->` comment naming
-the misconception each distractor targets:
-
-```markdown
----
-concept: Axioms of Probability
-exam: exam-p
-topic: General Probability
-correct: A
----
-Which statement is NOT one of the three axioms of probability?
-
-- A) For any two events, P(A ∪ B) = P(A) + P(B)
-- B) P(S) = 1 for the sample space S
-- C) P(E) ≥ 0 for every event E
-- D) For disjoint events, P(A ∪ B) = P(A) + P(B)
-
-<!-- rationale: 0: correct — additivity holds only for disjoint events · … -->
-```
-
-Vite bundles them at build time via the `virtual:comprehension-checks` module
-(`vite.config.ts`), `lib/comprehensionCheckParser.ts` parses them, and
-`data/comprehensionChecks.ts` exposes the concept-keyed `COMPREHENSION_CHECKS`
-lookup the modal reads — the same public API as before. A corpus test
-(`comprehensionCheckParser.test.ts`) validates every file (4 options, in-range
-`correct`, concept name matches filename, correct answer isn't the concept name),
-recovering the compile-time guarantees the old TS constant gave.
-
-Stems and options render through `MarkdownText`, so authored **LaTeX** (`$…$`)
-displays as KaTeX rather than literal dollar signs. That makes `$` a math
-delimiter, so **currency has to be escaped** (`\$900,000`) — two bare currency
-signs on a line would otherwise turn the prose between them into a formula. The
-corpus test enforces this and the matching authoring rule that inline math never
-opens on a bare digit.
-
-The `flashcard-comprehension-check` skill authors these; its output target is a
-new `.md` file in the right exam folder.
-
-## Open tasks
-
-- **TODO — better comprehension questions.** The *fallback* check (for a concept
-  with no authored file) is still a "which concept does this describe?"
-  multiple-choice built from the concept's own definition (name masked) plus
-  sibling-concept distractors, which is too easy — the answer is essentially the
-  card title. Authored `.md` checks supersede it per concept; the remaining work
-  is content, not storage: keep authoring genuine conceptual checks (via the
-  `flashcard-comprehension-check` skill) to retire the fallback.
-- ~~**move the checks out of one big TS file.**~~ Done — the checks are now
-  per-concept markdown under `comprehension-checks/` (see "Where the comprehension
-  checks live" above).
-- ~~**collect-then-quiz flow.**~~ Done — see "Collect-then-quiz flow" above.
-  The daily quiz now surfaces a collection prompt for its New, uncollected
-  concepts before the questions.
+The authored checks are still in the vault — `comprehension-checks/<exam-id>/<Concept Name>.md`,
+one file per concept (frontmatter `concept`, `exam`, `topic`, `correct` plus a
+`- A) …` option list and an authoring-only `<!-- rationale -->` comment) — along
+with their parser (`lib/comprehensionCheckParser.ts`), its corpus test and
+`data/comprehensionChecks.ts`. **Nothing renders them.** They are kept the way
+the unrendered `Guides/` tips are, so the content stays valid if a surface for
+it comes back; with no importer, Vite leaves the `virtual:comprehension-checks`
+module out of the bundle. Deleting the folder, the parser and the
+`flashcard-comprehension-check` skill is a follow-up decision, not something
+this change made.

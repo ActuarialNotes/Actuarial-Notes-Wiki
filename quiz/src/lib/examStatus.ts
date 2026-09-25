@@ -7,8 +7,8 @@ import type { ItemStatus } from '@/data/tracks'
 // Three states:
 //   'ready'       — a mature syllabus page plus a full question bank (P, FM)
 //   'beta'        — usable, still being filled out (MAS-I, MAS-II, Exam 5)
-//   'development' — syllabus scaffolding only: no question bank, no
-//                   comprehension checks, concept pages mostly unwritten. Not
+//   'development' — syllabus scaffolding only: no question bank, concept
+//                   pages mostly unwritten. Not
 //                   something a candidate can study from yet (Exams 6–9).
 //
 // Surfaces read this rather than re-deriving "not P and not FM" locally: the

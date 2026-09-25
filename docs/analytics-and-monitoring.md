@@ -56,7 +56,7 @@ backed, unit-tested). Call sites:
 | `signup` | `Auth.tsx`, on signup success | once per account (the action) |
 | `first_quiz` | `Quiz.tsx`, when a quiz starts | `reachMilestone` (once/device) |
 | `first_correct` | `Quiz.tsx`, on first correct answer | `reachMilestone` |
-| `concept_collected` | `CollectConceptModal.tsx`, on collect | `reachMilestone` |
+| `concept_collected` | `stores/quizStore.ts` (`collectLevelledConcepts`), when a concept's first Level 1 collects its card | `reachMilestone` |
 | `day2_return` | `main.tsx`, on boot | `recordVisitAndCheckDay2` (once/device) |
 
 `day2_return` fires the first time a user opens the app on a **later calendar

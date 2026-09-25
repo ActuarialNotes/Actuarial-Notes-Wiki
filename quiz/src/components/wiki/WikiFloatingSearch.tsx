@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BookMarked, FileText, GraduationCap, ListChecks, Play, Sparkles } from 'lucide-react'
+import { BookMarked, FileText, GraduationCap, ListChecks, Play } from 'lucide-react'
 import { CheckMark } from '@/components/CheckMark'
 import {
   FloatingSearchBar,
@@ -17,8 +17,6 @@ import { ChooseSyllabusModal } from '@/components/wiki/ChooseSyllabusModal'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
-import { useCollect } from '@/hooks/useCollect'
-import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useTodayCompletions } from '@/hooks/useTodayCompletions'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
@@ -63,7 +61,6 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
   const navigate = useNavigate()
   const { openAt } = useConceptPopup()
   const { syllabi } = useWikiSyllabus()
-  const collectedCards = useCollectedCards(s => s.cards)
   const { records: masteryRecords } = useConceptMastery()
   const completedToday = useTodayCompletions(studyPlan?.examProgressKey ?? null)
 
@@ -133,19 +130,6 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
     setQuery('')
     setActive(false)
     inputRef.current?.blur()
-  }
-
-  // A concept is collected once its flashcard has been earned — or, for
-  // pre-collect users, once mastery moved past New. Resolved from a single
-  // mastery/collected read shared across every row. Nothing is withheld from an
-  // uncollected concept; this only decides whether the row offers the collect
-  // shortcut, since collecting is what lets a concept level up past New.
-  function isUnlocked(name: string): boolean {
-    const lower = name.toLowerCase()
-    if (collectedCards.some(c => c.name.toLowerCase() === lower)) return true
-    const record = masteryRecords.find(r => r.concept_slug.toLowerCase() === lower)
-    if (!record) return false
-    return decayIfStale(record, new Date()).state !== 'new'
   }
 
   // Current (decay-adjusted) mastery per concept, keyed lower-case — the input
@@ -335,10 +319,8 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
                       </button>
                       <ConceptActions
                         name={item.name}
-                        unlocked={isUnlocked(item.name)}
                         questionCount={questionCountFor(item.name)}
                         onStartQuiz={startQuiz}
-                        onDismiss={() => setShowPlan(false)}
                       />
                     </li>
                   )
@@ -372,10 +354,8 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
                         query={query}
                         onSelect={dismiss}
                         onConceptSelect={handleConceptSelect}
-                        unlocked={item.category === 'concept' ? isUnlocked(item.name) : true}
                         questionCount={item.category === 'concept' ? questionCountFor(item.name) : null}
                         onStartQuiz={startQuiz}
-                        onDismiss={dismiss}
                       />
                     </li>
                   ))
@@ -411,19 +391,15 @@ function ConceptResultRow({
   query,
   onSelect,
   onConceptSelect,
-  unlocked,
   questionCount,
   onStartQuiz,
-  onDismiss,
 }: {
   item: WikiIndexItem
   query: string
   onSelect: () => void
   onConceptSelect: (ref: WikiEntryRef) => void
-  unlocked: boolean
   questionCount: number | null
   onStartQuiz: (name: string) => void
-  onDismiss: () => void
 }) {
   const ref = pathToEntryRef(item.path) ?? { kind: 'concept' as const, name: item.name }
   const route = wikiRoute(ref)
@@ -465,54 +441,28 @@ function ConceptResultRow({
       {isConcept && (
         <ConceptActions
           name={item.name}
-          unlocked={unlocked}
           questionCount={questionCount}
           onStartQuiz={onStartQuiz}
-          onDismiss={onDismiss}
         />
       )}
     </div>
   )
 }
 
-// Inline "Collect" + "Start Quiz" actions shown beside a concept name in the
-// search results and Today's Study Plan lists. Collect opens the flashcard
-// collect flow (hidden once the concept is already collected) — it withholds
-// nothing, it is the shortcut to the check that lets the concept level up past
-// New; Start Quiz opens the per-concept question picker, labelled with how many
-// questions exist.
+// Inline "Start Quiz" action shown beside a concept name in the search results
+// and Today's Study Plan lists. It opens the per-concept question picker,
+// labelled with how many questions exist.
 function ConceptActions({
   name,
-  unlocked,
   questionCount,
   onStartQuiz,
-  onDismiss,
 }: {
   name: string
-  unlocked: boolean
   questionCount: number | null
   onStartQuiz: (name: string) => void
-  onDismiss: () => void
 }) {
-  const openCollect = useCollect(s => s.open)
   return (
     <div className="flex items-center gap-1 shrink-0">
-      {!unlocked && (
-        <button
-          type="button"
-          onClick={e => {
-            e.preventDefault()
-            e.stopPropagation()
-            onDismiss()
-            openCollect({ kind: 'concept', name })
-          }}
-          className="inline-flex items-center gap-1 rounded-full px-2 py-1 text-[11px] font-medium bg-accent text-muted-foreground hover:text-foreground hover:bg-accent/80 transition-colors"
-          title={`Collect ${name}`}
-          aria-label={`Collect ${name}`}
-        >
-          <Sparkles className="h-3 w-3 shrink-0" />
-        </button>
-      )}
       {questionCount !== 0 && (
         <button
           type="button"

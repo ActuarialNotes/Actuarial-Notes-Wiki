@@ -188,7 +188,7 @@
 .onboarding-spotlight {
   position: fixed;
   /* Above every overlay in the app — the concept popup's actions menu (z-70),
-     the collect modal and its dimmer (z-120/121) and the questions modal
+     the level-up ceremony and its dimmer (z-120/121) and the questions modal
      (z-130). The tour spotlights elements *inside* those overlays, so anything
      lower leaves the ring buried under the dimmer. Keep in step with the tour
      card's z-[140] in OnboardingTour.tsx. */
@@ -604,10 +604,10 @@
    carry no border of its own, or the two edges double up.
    `--foil-ring-width` tunes the edge weight per host.
 
-   Also worn by the pre-quiz collect gate's rows for the concepts in today's
-   study plan (`.plan-foil-ring`): same "this one is live" reading — collecting
-   it is what moves today's plan forward — on a row that otherwise has no
-   border of its own. */
+   Also worn by the pre-quiz concept list's rows for the concepts in today's
+   study plan (`.plan-foil-ring`): same "this one is live" reading — getting
+   it right is what moves today's plan forward — on a row that otherwise has
+   no border of its own. */
 .simulator-foil-ring,
 .plan-foil-ring {
   position: relative;

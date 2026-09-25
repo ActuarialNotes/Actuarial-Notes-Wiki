@@ -8,8 +8,8 @@ import type { Page } from '@playwright/test'
 async function answerFirstOption(page: Page) {
   const startQuiz = page.getByRole('button', { name: 'Start Quiz' })
   const optionA = page.getByRole('button', { name: 'Option A' })
-  // A signed-out session has collected nothing, so the pre-quiz collect gate
-  // comes first; wait for whichever the page settles on.
+  // A signed-out session has every concept at New, so the pre-quiz concept
+  // list comes first; wait for whichever the page settles on.
   await expect(startQuiz.or(optionA).first()).toBeVisible()
   if (await startQuiz.isVisible()) await startQuiz.click()
   await expect(optionA).toBeVisible()

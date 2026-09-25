@@ -7,7 +7,6 @@ import { mergeLocalMastery } from '@/lib/localMasteryStore'
 import { slugForLink } from '@/lib/conceptMatch'
 import { appendTodayLevelUps, addDailyGems, addDailyQuizStats, appendTodayAnsweredIds } from '@/lib/dailyProgressStore'
 import { recordStreakActivity } from '@/lib/streakStore'
-import { localDayKey } from '@/lib/streak'
 import { todayISO } from '@/lib/studyPlan'
 import { xpForAnswers } from '@/lib/xp'
 import { recordXp } from '@/lib/xpStore'
@@ -17,15 +16,41 @@ import type { QuestAnswer } from '@/lib/quests'
 import { LEAGUES_ENABLED, QUESTS_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
+import { useFlashcards } from '@/hooks/useFlashcards'
+import { trackConceptCollected } from '@/lib/analytics'
 
-// A concept must be collected (comprehension check passed) before a correct
-// answer can advance it from 'new' to level1. Read straight from the collected
-// store so this works outside React (the quiz store is a plain module).
-function isConceptCollected(conceptName: string): boolean {
+// A concept's flashcard is collected the moment it first reaches Level 1 —
+// there is no separate comprehension check (docs/flashcard-collection.md).
+// Collecting also puts the card in the deck, as the old collect modal did, and
+// the returned transitions mark each card collected *now* (`collected: true`)
+// so the level-up ceremony on /review plays the collect animation for exactly
+// those. Any other upward move of a concept the store doesn't hold — learned
+// before collection existed, or on a device whose collected store never synced
+// — is back-filled silently: that card isn't being won now. Best-effort: a
+// storage failure must not break the quiz write.
+function collectLevelledConcepts(transitions: MasteryTransition[]): MasteryTransition[] {
   try {
-    return useCollectedCards.getState().isCollected(conceptName)
-  } catch {
-    return false
+    const { isCollected, collect } = useCollectedCards.getState()
+    const { cards, addCard } = useFlashcards.getState()
+    return transitions.map(t => {
+      if (t.to !== 'level1' && t.to !== 'level2' && t.to !== 'level3') return t
+      const name = t.conceptSlug
+      if (isCollected(name)) return t
+      if (t.from !== 'new') {
+        collect(name, { silent: true })
+        return t
+      }
+      collect(name)
+      trackConceptCollected({ concept: name })
+      const lower = name.toLowerCase()
+      if (!cards.some(c => c.kind === 'concept' && c.name.toLowerCase() === lower)) {
+        addCard({ kind: 'concept', name })
+      }
+      return { ...t, collected: true }
+    })
+  } catch (err) {
+    console.warn('collecting levelled-up concepts failed:', err)
+    return transitions
   }
 }
 
@@ -185,8 +210,7 @@ async function upsertMasteryFromResponses(
   for (const ev of events) {
     const key = `${ev.examId}::${ev.conceptSlug}`
     const prev = byKey.get(key)!
-    const collected = isConceptCollected(ev.conceptSlug)
-    byKey.set(key, applyAnswer(prev, { isCorrect: ev.isCorrect, isHard: ev.isHard, at: now, collected }))
+    byKey.set(key, applyAnswer(prev, { isCorrect: ev.isCorrect, isHard: ev.isHard, at: now }))
   }
 
   const rows = [...byKey.entries()]
@@ -214,72 +238,16 @@ async function upsertMasteryFromResponses(
   return transitions
 }
 
-// Promotes a single concept from New → Level 1 after the fact, when the user
-// collects it from the PostQuizCollectGate (docs/flashcard-collection.md):
-// a concept answered correctly during the quiz that just finished, but still
-// New because it wasn't collected yet. Collecting it there should retroactively
-// bank that correct answer rather than requiring another quiz. Only promotes
-// if the concept is still New — if something else (another device, another
-// quiz) already advanced it, this is a no-op.
-export async function promoteMissedLevelUp(
-  userId: string | null,
-  examId: string,
-  conceptSlug: string,
-): Promise<MasteryTransition | null> {
-  const now = new Date()
-
-  if (!userId) {
-    appendTodayLevelUps([{ conceptSlug, from: 'new', to: 'level1', at: now.toISOString() }])
-    const transition: MasteryTransition = { conceptSlug, from: 'new', to: 'level1' }
-    appendSessionTransition(transition)
-    return transition
-  }
-
-  const { data: existing, error: selectError } = await supabase
-    .from('concept_mastery')
-    .select('*')
-    .eq('user_id', userId)
-    .eq('exam_id', examId)
-    .eq('concept_slug', conceptSlug)
-    .maybeSingle()
-  if (selectError) throw new Error(`concept_mastery select: ${selectError.message}`)
-
-  const prev: ConceptMasteryRecord = existing
-    ? { ...(existing as ConceptMasteryRecord), state: sanitizeMasteryState((existing as ConceptMasteryRecord).state) }
-    : emptyRecord(userId, examId, conceptSlug)
-  if (prev.state !== 'new') return null
-
-  const promoted = { ...prev, state: 'level1' as const, updated_at: now.toISOString() }
-  mergeLocalMastery([promoted])
-
-  const { error: upsertError } = await supabase
-    .from('concept_mastery')
-    .upsert([promoted], { onConflict: 'user_id,exam_id,concept_slug' })
-  if (upsertError) throw new Error(`concept_mastery upsert: ${upsertError.message}`)
-
-  try {
-    const day = localDayKey(now)
-    const { error: completionError } = await supabase
-      .from('daily_completions')
-      .upsert([{
-        user_id: userId, exam_id: examId, concept_slug: conceptSlug, day,
-        from_state: 'new', to_state: 'level1', at: now.toISOString(),
-      }], { onConflict: 'user_id,exam_id,concept_slug,day' })
-    if (completionError) console.warn('daily_completions upsert failed:', completionError.message)
-  } catch (err) {
-    console.warn('daily_completions upsert threw:', err)
-  }
-
-  appendTodayLevelUps([{ conceptSlug, from: 'new', to: 'level1', at: now.toISOString() }])
-  const transition: MasteryTransition = { conceptSlug, from: 'new', to: 'level1' }
-  appendSessionTransition(transition)
-  return transition
-}
-
 export interface MasteryTransition {
   conceptSlug: string
   from: MasteryState
   to: MasteryState
+  /**
+   * This level-up is what collected the concept's flashcard (its first
+   * new → level1). Set by `collectLevelledConcepts`; the level-up ceremony
+   * plays the collect animation for these.
+   */
+  collected?: boolean
 }
 
 // Returns the effective correctness of a question, taking manual grade overrides
@@ -388,8 +356,7 @@ function computeMasteryTransitions(
     for (const conceptSlug of conceptsForQuestion(q)) {
       const key = conceptSlug.toLowerCase()
       const current = simulated.get(key) ?? bySlug.get(key) ?? emptyRecord('', examId, conceptSlug)
-      const collected = isConceptCollected(conceptSlug)
-      simulated.set(key, applyAnswer(current, { isCorrect, isHard, at: now, collected }))
+      simulated.set(key, applyAnswer(current, { isCorrect, isHard, at: now }))
     }
   }
 
@@ -662,7 +629,9 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
       // Unauthenticated: no DB to fetch from, so compute transitions from the
       // caller-provided priorMasteryRecords (localStorage). Fire the level-up
       // event so TodayCard reflects progress, then return early.
-      const masteryTransitions = computeMasteryTransitions(questions, responses, priorMasteryRecords, manualGrades)
+      const masteryTransitions = collectLevelledConcepts(
+        computeMasteryTransitions(questions, responses, priorMasteryRecords, manualGrades),
+      )
       const upward = masteryTransitions.filter(
         t => t.to === 'level1' || t.to === 'level2' || t.to === 'level3',
       )
@@ -716,6 +685,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
       // still carry approximate data rather than being empty.
       masteryTransitions = computeMasteryTransitions(questions, responses, priorMasteryRecords, manualGrades)
     }
+    masteryTransitions = collectLevelledConcepts(masteryTransitions)
 
     const upward = masteryTransitions.filter(
       t => t.to === 'level1' || t.to === 'level2' || t.to === 'level3',
@@ -786,27 +756,6 @@ export function readLastSession(): CompletedSession | null {
     return JSON.parse(raw) as CompletedSession
   } catch {
     return null
-  }
-}
-
-// Records a level-up banked *after* the quiz was written — currently only
-// promoteMissedLevelUp, when the user collects a concept from the post-quiz
-// gate. Without this the results screen's "levelled up" list (which reads the
-// stored session) would keep ignoring a concept the gate just promoted, even
-// though its mastery really did advance. Best-effort: a storage failure must
-// not break the collect flow.
-function appendSessionTransition(transition: MasteryTransition): void {
-  try {
-    const session = readLastSession()
-    if (!session) return
-    const existing = session.masteryTransitions ?? []
-    if (existing.some(t => t.conceptSlug.toLowerCase() === transition.conceptSlug.toLowerCase())) return
-    localStorage.setItem(LAST_SESSION_KEY, JSON.stringify({
-      ...session,
-      masteryTransitions: [...existing, transition],
-    }))
-  } catch {
-    /* ignore quota/private-mode errors */
   }
 }
 
@@ -905,6 +854,7 @@ export async function recordReviewAnswers(
   } else {
     masteryTransitions = computeMasteryTransitions(answered, responses, priorMasteryRecords, manualGrades)
   }
+  masteryTransitions = collectLevelledConcepts(masteryTransitions)
 
   const upward = masteryTransitions.filter(
     t => t.to === 'level1' || t.to === 'level2' || t.to === 'level3',

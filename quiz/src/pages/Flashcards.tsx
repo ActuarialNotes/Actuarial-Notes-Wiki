@@ -68,7 +68,7 @@ import {
 } from '@/lib/flashcardStudy'
 import { buildCollectedList } from '@/lib/collectedList'
 import { wikiExamIdToProgressKey, type WikiExamSyllabus } from '@/lib/wikiParser'
-import { matchesSelectedVariant } from '@/data/examSittings'
+import { flashcardShelfExams } from '@/lib/flashcardShelf'
 import { Button } from '@/components/ui/button'
 import { WikiArticle, stripFrontmatter, extractMathBlockquotes, extractImages } from '@/components/wiki/WikiArticle'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
@@ -238,33 +238,22 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
     [packMasteryMap],
   )
 
-  const inProgressSyllabi = useMemo(
-    () => syllabi.filter(s => {
-      const key = wikiExamIdToProgressKey(s.examId)
-      return examProgress[key] === 'in_progress' && matchesSelectedVariant(key, s.examId, examVariants[key])
-    }),
-    [syllabi, examProgress, examVariants],
-  )
-
-  // One group per exam (fallbacks to P and FM when nothing is in progress),
-  // each with the whole-exam concept list plus its learning-objective packs.
+  // Every exam with material to study, the ones in progress first — see
+  // lib/flashcardShelf.ts. Each carries the whole-exam concept list plus its
+  // learning-objective packs.
   const examGroups = useMemo(() => {
-    const source: typeof inProgressSyllabi = inProgressSyllabi.length === 0
-      ? (['P-1', 'FM-2']
-          .map(id => syllabi.find(s => s.examId === id))
-          .filter((s): s is typeof syllabi[number] => !!s)
-          .filter(s => examProgress[wikiExamIdToProgressKey(s.examId)] !== 'completed'))
-      : inProgressSyllabi
+    const source = flashcardShelfExams(syllabi, examProgress, examVariants)
     return source.map(syllabus => ({
       examId: syllabus.examId,
       examLabel: syllabus.examLabel,
       syllabus,
+      studying: examProgress[wikiExamIdToProgressKey(syllabus.examId)] === 'in_progress',
       allConcepts: syllabus.topics.flatMap(t => t.concepts.map(c => c.name)),
       learningObjectives: syllabus.topics
         .filter(t => t.concepts.length > 0)
         .map(t => ({ name: t.name, concepts: t.concepts.map(c => c.name) })),
     }))
-  }, [inProgressSyllabi, syllabi, examProgress])
+  }, [syllabi, examProgress, examVariants])
 
   // The "Collected" filter's shelf: only what the learner has unlocked, newest
   // first, as individual cards rather than packs.
@@ -372,8 +361,7 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
       )}
       {!isLoading && !hasContent && (
         <p className="text-sm text-muted-foreground py-6 text-center">
-          No cards available yet. Mark an exam as in progress on the{' '}
-          <Link to="/dashboard" className="text-primary hover:underline">Dashboard</Link>.
+          No cards available yet.
         </p>
       )}
     </div>
@@ -647,12 +635,15 @@ interface ExamShelfGroup {
   examId: string
   examLabel: string
   syllabus: WikiExamSyllabus
+  /** In progress — the only exams a study plan is scheduling today. */
+  studying: boolean
   allConcepts: string[]
   learningObjectives: { name: string; concepts: string[] }[]
 }
 
 // An exam's shelf. The same tiles as the Collected shelf, grouped under today's
-// study plan and then the exam's learning objectives — the syllabus structure
+// study plan (for an exam in progress — one being browsed has no plan to show)
+// and then the exam's learning objectives — the syllabus structure
 // the pack cards carried survives the switch from packs to cards, and each
 // section keeps its own "add what's missing" action.
 function ExamCardShelf({
@@ -673,14 +664,16 @@ function ExamCardShelf({
   return (
     <div className="space-y-5">
       <ShelfSummary concepts={group.allConcepts} isCollected={isCollected} onCardsAdded={onCardsAdded} />
-      <TodayStudyPlanSection
-        syllabus={group.syllabus}
-        masteryRecords={masteryRecords}
-        masteryLoading={masteryLoading}
-        masteryOf={masteryOf}
-        isCollected={isCollected}
-        onCardsAdded={onCardsAdded}
-      />
+      {group.studying && (
+        <TodayStudyPlanSection
+          syllabus={group.syllabus}
+          masteryRecords={masteryRecords}
+          masteryLoading={masteryLoading}
+          masteryOf={masteryOf}
+          isCollected={isCollected}
+          onCardsAdded={onCardsAdded}
+        />
+      )}
       {group.learningObjectives.map(lo => (
         <ShelfSection
           key={lo.name}

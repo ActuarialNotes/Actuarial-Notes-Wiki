@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1e63428599874d6baf8306818192f8368976e8a04628446d8555f6d6a885710a
+  content_hash: sha256:2c52965c2a39fa810d1470c94d866429051c96a7c0736905e7b480c44ca1bc6c
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,8 +22,7 @@ verification:
 The **Canada Regulation and Financial Reporting (6C) Exam** is a 4 hour exam with mixed question types about Canadian insurance regulation, government insurance programs, financial reporting, and solvency.
 ## Learning Objectives
 
-> [!example]- A. Regulation of Insurance and Canadian Insurance Law {20-25%}
-> ### A. Regulation of Insurance and Canadian Insurance Law
+> [!example]- A. Regulation of Insurance and Canadian Insurance Law {20–25%}
 > Understand the role of the insurance business as a supplier of a vital service, and navigate Canadian [[Insurance Legislation]], regulations, and judicial decisions that affect [[Insurance Regulation]] and insurance benefits.
 > 1. Discuss the current state of [[Insurance Regulation]] in Canada — the [[Federal-Provincial Jurisdiction|division of federal and provincial powers]], [[OSFI]] and the provincial [[Superintendent of Insurance]] (the [[Financial Services Regulatory Authority of Ontario|FSRA]], the [[Autorité des marchés financiers|AMF]]), the [[Canadian Council of Insurance Regulators]], the split between [[Solvency Regulation]] and [[Market Conduct Regulation]], [[Rate Regulation]] and [[Risk Classification Restrictions]] (e.g., [[Territorial Rating]], [[Unfair Discrimination]], [[Bias in Actuarial Practice]], the [[Take-All-Comers Rule]]), [[Automobile Insurance Reform]] and the compulsory auto product ([[No-Fault Insurance]], [[Statutory Accident Benefits]], the [[Minor Injury Guideline]], [[Catastrophic Impairment]], [[Tort Threshold and Deductible|thresholds and deductibles]], [[Direct Compensation Property Damage]], the [[Fault Determination Rules]], [[Uninsured Automobile Coverage]]), and industry self-regulation through the [[Insurance Bureau of Canada]] and its [[Code of Consumer Rights and Responsibilities]].
 > 2. Discuss the issues, outcomes, rationale and implications of [[Court Case]] decisions for the insurance industry (e.g., the [[Duty of Good Faith]], [[Bad Faith Damages]], [[Punitive Damages]], the [[Duty to Defend]], [[Vicarious Liability]], [[Limitation Period|limitation periods]], [[Prejudgment Interest]], [[Collateral Benefits]]).
@@ -31,8 +30,7 @@ The **Canada Regulation and Financial Reporting (6C) Exam** is a 4 hour exam wit
 >
 > **Readings:** Baer and Rendall · CFAI · CIA Bias · CIA CSOP · CIA Reliance · CIA Territories · Davidson · FSCO Coverages · FSCO Private Auto · FSCO Tech Notes · FSRA Risk Management · GAO · IBC Code of Conduct · KPMG PACICC · KPMG Regulatory Oversight · Landmark Legal · Marshall · McDonald · Ontario Reg. 664
 
-> [!example]- B. Canadian Government and Industry Insurance Programs {10-15%}
-> ### B. Canadian Government and Industry Insurance Programs
+> [!example]- B. Canadian Government and Industry Insurance Programs {10–15%}
 > Understand and apply the objectives, operations, and effectiveness of government and industry insurance programs, including [[Agricultural Insurance]], [[Employment Insurance]], [[Flood Insurance]], [[Guaranty Funds]] (including [[PACICC]]), [[Health Care Insurance]], [[Residual Market|residual personal insurance markets]], and [[Workers Compensation Insurance]].
 > 1. Describe the origin, purpose, historical significance, and philosophy of specific government and insurance industry programs (e.g., [[Agricultural Insurance|Agricultural programs]], the [[Facility Association]] residual market (FARM), [[Risk Sharing Pool|Risk Sharing Pools]] (RSP), the *plan de répartition des risques* (PRR)), including the [[Meredith Principles]] behind [[Workers Compensation Insurance|workers' compensation]], [[Public Auto Insurance]], [[Disaster Financial Assistance Arrangements|disaster financial assistance]], and the [[Social Insurance]] rationale for compulsory participation.
 > 2. Describe the operations and [[Risk Transfer]] process for each government and insurance industry program and interactions with the voluntary private insurance sector, including the [[Adverse Selection]] and [[Moral Hazard]] problems each program is designed to manage.
@@ -40,8 +38,7 @@ The **Canada Regulation and Financial Reporting (6C) Exam** is a 4 hour exam wit
 >
 > **Readings:** Agricultural Programs · Dutil · GOC Flood Risks · Government Insurers Study Note · Morneau Shepell · PACICC
 
-> [!example]- C. Canadian Financial Reporting, Solvency, and Professional Responsibility {60-70%}
-> ### C. Canadian Financial Reporting, Solvency, and Professional Responsibility
+> [!example]- C. Canadian Financial Reporting, Solvency, and Professional Responsibility {60–70%}
 > Demonstrate detailed knowledge of the [[Canadian Annual Return]], including guidelines from [[OSFI]] and provincial regulatory authorities. Understand the [[Appointed Actuary]]'s professional responsibilities related to financial reporting under the [[Insurance Companies Act]] and Provincial Insurance Acts.
 > 1. Describe the elements of the [[Canadian Annual Return]] using standards (e.g., [[Financial Position]], [[Net Income]], [[Comprehensive Income]], the [[Statement of Changes in Equity|statement of changes in equity]], the OSFI annual return and [[Quarterly Return]], [[Notes to Financial Statements|notes to financial statements]], and the [[MSA Ratios|key financial ratios]] derived from them).
 > 2. Value liabilities in accordance with [[Accepted Actuarial Practice|accepted actuarial practice]] in Canada under [[IFRS 17]] (e.g., [[Insurance Contract Liabilities]] — the [[Liability for Remaining Coverage]] and the [[Liability for Incurred Claims]] — [[Fulfilment Cash Flows]], the [[Risk Adjustment for Non-Financial Risk|risk adjustment]], [[IFRS 17 Discount Rates|discount rates]], the [[Contractual Service Margin]], the [[General Measurement Model]] and the [[Premium Allocation Approach]], the [[Contract Boundary]], [[Level of Aggregation]], [[Coverage Units]], [[Onerous Contract|onerous contracts]] and the [[Loss Component]], [[Insurance Acquisition Cash Flows]], [[Insurance Revenue]], [[Insurance Service Expenses]], the [[Insurance Service Result]], [[Insurance Finance Income or Expenses]], the [[Other Comprehensive Income Option]], [[Transition to IFRS 17]], [[Reinsurance Contract Liabilities]], and the [[Margin for Adverse Deviations|margins for adverse deviations]] that IFRS 17 replaced).

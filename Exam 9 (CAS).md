@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9418f1ae211df14a5926f2721bdd851814f03a80c595364c1091d7b168dbf242
+  content_hash: sha256:add235c1a9e4094f0cf1aa7d8be0600e6f7db2fece85d828ca6d52bd84ec71f3
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,8 +20,7 @@ The **Risk Management for Actuaries (Exam 9)** is a 4 hour exam covering catastr
 
 ## Learning Objectives
 
-> [!example]- A. Catastrophe and Reinsurance {25-35%}
-> ### A. Catastrophe and Reinsurance
+> [!example]- A. Catastrophe and Reinsurance {25–35%}
 > Interpret methods used to model losses due to catastrophic events for the purpose of generating a [[Catastrophe Expected Loss Cost]]. Manage total exposure from catastrophic events within an insurance portfolio. Apply current and historical methods used to price [[Reinsurance]] contracts.
 > 1. Fit loss distribution-based [[Exposure Curves]].
 > 2. Determine the [[Loss Cost]] of various types of reinsurance contracts (e.g., [[Excess of Loss]], [[Quota Share]], [[Surplus Share]], treaty, [[Aggregate Excess of Loss]], and facultative).
@@ -31,8 +30,7 @@ The **Risk Management for Actuaries (Exam 9)** is a 4 hour exam covering catastr
 >
 > **Readings:** Swiss Re Exposure Curves and the MBBEFD Distribution Class · Basics of Reinsurance Pricing · Catastrophe Modeling: A New Approach to Managing Risk
 
-> [!example]- B. Risk and Return {20-30%}
-> ### B. Risk and Return
+> [!example]- B. Risk and Return {20–30%}
 > Define, compare, select, and apply appropriate [[Risk Measures]] to compute a risk-loaded technical premium. Evaluate the economic value of insurance cash flows reflecting the [[Time Value of Money]]. Explain and apply the insurance concepts of margin, return, and leverage.
 > 6. Define and apply [[Risk Taxonomies]] and the concept of a [[Risk Measure]].
 > 7. Calculate and compare financial risk using risk measures.
@@ -42,8 +40,7 @@ The **Risk Management for Actuaries (Exam 9)** is a 4 hour exam covering catastr
 >
 > **Readings:** Pricing Insurance Risk: Theory and Practice (Chapters 3–11)
 
-> [!example]- C. Financial Risk Management (FRM) {20-30%}
-> ### C. Financial Risk Management (FRM)
+> [!example]- C. Financial Risk Management (FRM) {20–30%}
 > Describe and explain the need, purpose, design, and execution of insurer [[Financial Risk Management]] (FRM). Perform calculations to allocate the [[Cost of Capital]], estimate risk-adjusted prices, and evaluate economic performance by line or unit.
 > 11. Describe and explain the financial risk and [[Capital Structure]] of insurers, the [[Cost of Capital|cost of insurance capital]], and the impact of insurance market imperfections.
 > 12. Allocate the cost of [[Risk Capital]] to business units or lines of business.
@@ -55,8 +52,7 @@ The **Risk Management for Actuaries (Exam 9)** is a 4 hour exam covering catastr
 >
 > **Readings:** The Economics of Structured Finance · Allocation of Capital in the Insurance Industry · CAT Bonds and Other Risk-Linked Securities · Pricing Insurance Risk: Theory and Practice (Chapters 2, 8, 12–15) · Managing Interest Rate Risk: ALM, Franchise Value, and Strategy
 
-> [!example]- D. Enterprise Risk Management (ERM) {15-25%}
-> ### D. Enterprise Risk Management (ERM)
+> [!example]- D. Enterprise Risk Management (ERM) {15–25%}
 > Define and explain [[Enterprise Risk Management]] (ERM), including model selection and calculations necessary to implement a realistic program. Describe the relationship between ERM and the overall risk that a business faces, and the impact of different ERM tools on business risk and strategy.
 > 18. Determine [[Operational Risk|operational risks]].
 > 19. Analyze insurance and financial risk quantitatively.

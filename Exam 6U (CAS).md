@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1f8e9b90b8abba900ac442eb97521db46a81504d99923d246629698810ef42e0
+  content_hash: sha256:096a8fc7ecba6795fdec0c972c7eae96223168b77285c0adad74aae9c47d1bcd
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,7 +21,6 @@ The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour com
 ## Learning Objectives
 
 > [!example]- A. United States Laws and Regulations {10–20%}
-> ### A. United States Laws and Regulations
 > Candidates navigate [[Insurance Regulation]] required by governmental agencies overseeing insurers, including the dual U.S. state and federal regulatory system, [[Rate Regulation]], [[Solvency Regulation]], [[Antitrust Law]], [[Risk-Based Capital]], and [[Tort Law]].
 >
 > 1. Describe the historic development and the current state of [[Insurance Regulation]] and governance.
@@ -35,7 +34,6 @@ The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour com
 > **Readings:** CASTF Predictive Models · CAS Financial Reporting · Cole and Marzen · Emmanuel · Feldblum (Rating Agencies) · FIO Report · Kucera · McCarty · NAIC IRIS · NAIC Price · NAIC RRG · NAIC Solvency Regulatory Framework · Porter 1 · Porter 2 · Vaughn
 
 > [!example]- B. Government Programs {5–15%}
-> ### B. Government Programs
 > Candidates identify major U.S. insurance programs administered by government agencies and industry organizations, understanding objectives, operations, and effectiveness of programs such as [[Automobile Plans]], [[Crop Insurance]], [[Flood Insurance]], [[TRIA]], [[Florida Hurricane Catastrophe Fund|FHCF]], [[Guaranty Funds]], [[Residual Markets]], and [[Workers Compensation]].
 >
 > 8. Describe the purpose of government and industry insurance programs.
@@ -45,7 +43,6 @@ The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour com
 > **Readings:** Cook · FHCF Annual Report · Government Insurers Study Note · Horn & Webel · Porter 2 · Webel
 
 > [!example]- C. Financial Reporting and Professional Responsibilities of the Actuary {60–75%}
-> ### C. Financial Reporting and Professional Responsibilities of the Actuary
 > Candidates apply detailed knowledge of the [[NAIC Annual Statement]], [[Insurance Expense Exhibit]], [[Statutory Accounting Principles|SAP]], [[GAAP]], and [[IFRS]], as well as the statutory requirements of the [[Appointed Actuary]] and professional standards issued by the [[American Academy of Actuaries]].
 >
 > 11. Describe the primary financial statements (i.e., [[Balance Sheet]], [[Income Statement]], [[Cash Flow Statement]], [[Capital and Surplus]], notes to financial statements).
@@ -62,7 +59,6 @@ The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour com
 > **Readings:** 2025 IEE · AAA Materiality · AAA Retained Risk · ASOP 20 · ASOP 36 · ASOP 41 · ASOP 43 · Brandt & Maxwell · CAS Financial Reporting · COPLFR P&C Practice Note · Feldblum (Surplus) · NAIC Annual Statement · NAIC Annual Statement Examples · NAIC APPM Preamble · NAIC IRIS · NAIC Solvency Regulatory Framework · NAIC SSAP 5R · SSAP 9 · SSAP 53 · SSAP 55 · SSAP 62R · SSAP 63 · SSAP 65
 
 > [!example]- D. Reinsurance Accounting Principles {5–10%}
-> ### D. Reinsurance Accounting Principles
 > Candidates use [[Reinsurance Accounting]] terminology and practice, including evaluating risk transfer, [[Commutations]], and the financial statement impact of [[Reinsurance]] strategies.
 >
 > 21. Describe [[Reinsurance Accounting]] and its impact on financial statements.

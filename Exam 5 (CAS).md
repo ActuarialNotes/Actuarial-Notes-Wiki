@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:b06ba4c8c91b212a1888c71fcb554442e19e73cf9bf40e226cefe02daeb48108
+  content_hash: sha256:6b1a02fc98a676cb23d720382283e61f7739ef2378225a7b785a7f21919760c0
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,15 +21,12 @@ The **Basic Techniques for Ratemaking and Estimating Claim Liabilities** is a 4-
 ## Learning Objectives
 
 > [!example]- A. Ratemaking {45–55%}
-> 
-> ### A. Ratemaking
-> 
 > Candidates should have a thorough understanding of basic [[Ratemaking]] so that they can analyze data, select appropriate techniques, and develop solutions to problems.
 > 
 > 1. Define and describe [[Exposure Base]]s as used in the ratemaking process
 > 2. Evaluate and select an exposure base in a given scenario (e.g., [[Line of Business|line of business]], use cases)
 > 3. Aggregate and/or organize [[Ratemaking Data Organization|ratemaking data]] by: [[Calendar Year]], [[Policy Year]], [[Accident Year]], [[Report Year]], [[Close Year|close year]], [[In-Force|in-force]], [[Net of Reinsurance|net of reinsurance]]; collect [[Written Premium|written]], [[Earned Premium|earned]] and [[Unearned Premium|unearned]] premium and [[Earned Exposure]]
-> 4. Evaluate ratemaking data and analyses for errors and reasonableness
+> 4. Evaluate [[Ratemaking Data Organization|ratemaking data]] and analyses for errors and reasonableness
 > 5. Separate data into groups that balance [[Homogeneity]] and [[Credibility]] and summarize the considerations for determining such groups
 > 6. Calculate [[Loss and Loss Adjustment Expense]]s for ratemaking (e.g., common ratios such as [[Frequency]], [[Severity]], [[Pure Premium]] and [[Loss Ratio]]; adjustments to losses such as [[Loss Development|development]] and [[Loss Trend|trend]]; [[Claims Made Coverage|claims-made]] vs [[Occurrence Coverage|occurrence coverage]])
 > 7. Calculate various adjustments to the premium used for ratemaking (e.g., [[On Level Premium]], [[On-Leveling]] via the parallelogram method or extension of exposures, [[Premium Audit|premium audit]])
@@ -52,13 +49,10 @@ The **Basic Techniques for Ratemaking and Estimating Claim Liabilities** is a 4-
 > - ASOP 43
 
 > [!example]- B. Estimating Claim Liabilities (Reserving) {45–55%}
-> 
-> ### B. Estimating Claim Liabilities (Reserving)
-> 
 > Candidates should understand how to estimate [[Unpaid Claims]] for both insurance entities and non-insurance entities that retain risk (e.g., [[Self-Insured Retention|self-insureds]]). See [[Loss Reserving]] for the overall framework.
 > 
 > 18. Organize [[Reserving Data Organization|reserving data]] by: [[Calendar Year]], [[Accident Year]], [[Policy Year]], [[Underwriting Year]], [[Report Year]]
-> 19. Evaluate reserving data and analyses for errors and reasonableness
+> 19. Evaluate [[Reserving Data Organization|reserving data]] and analyses for errors and reasonableness
 > 20. Describe the role of [[Homogeneity]] and [[Credibility]] of data in estimating unpaid claims
 > 21. Describe the fundamentals of different [[Types of Insurance]] (e.g., [[Long Tail Lines|long tail]] vs. [[Short Tail Insurance|short tail]] lines, low [[Frequency|frequency]] vs. high frequency lines, [[Occurrence Coverage|occurrence]] vs. [[Claims Made Coverage|claims made]])
 > 22. Articulate the importance of accurate estimates of [[Unpaid Claims|unpaid claims]]

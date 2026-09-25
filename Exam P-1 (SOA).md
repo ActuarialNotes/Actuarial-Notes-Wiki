@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:236f181162b88e300e5383f183bf85f8e17ee6165cd566451725a9b41dd659b8
+  content_hash: sha256:50ddc4b8e4fa4bdf19c973a82ace9bb3ec4d31885694759332ad7eaa6e2cd7cb
   sources: []
   open_findings: 0
   open_critical: 0
@@ -24,7 +24,7 @@ The Probability (P-1) Exam is a 3 hour SOA exam with 30 multiple choice question
 
 ## Learning Objectives
 
-> [!example]- General Probability {23-30%}
+> [!example]- General Probability {23–30%}
 > Understand basic concepts of [[Probability]] and [[Discrete Mathematics]].
 > 1. Define [[Set Function]], [[Venn Diagram]], [[Sample Space]], and [[Event]]. Define probability as a set function on a collection of events and state the basic [[Axioms of Probability]]. Use [[Set Theory]] to represent and analyze events.
 > 2. Calculate probabilities using [[Combinatorics]], such as [[Combination]] and [[Permutation]].
@@ -35,7 +35,7 @@ The Probability (P-1) Exam is a 3 hour SOA exam with 30 multiple choice question
 > 7. State [[Bayes Theorem]] and [[The Law of Total Probability]] and use them to calculate conditional probabilities.
 > 
 
-> [!example]- Univariate Random Variables {44-50%}
+> [!example]- Univariate Random Variables {44–50%}
 > Understand [[Discrete Univariate Distributions]] and [[Continuous Univariate Distributions]] and their applications. 
 > 1. Explain and apply the concepts of [[Probability]], [[Random Variable|Random Variables]], [[Probability Density Function (PDF)|probability density functions]], and [[Cumulative Distribution Function (CDF)|cumulative distribution functions]].
 > 2. Calculate [[Conditional Probability|Conditional Probabilities]].
@@ -60,7 +60,7 @@ The Probability (P-1) Exam is a 3 hour SOA exam with 30 multiple choice question
 > - [[Normal Distribution]]
 > - [[Uniform Continuous Distribution|Uniform]]
 
-> [!example]- Multivariate Random Variables {23-30%}
+> [!example]- Multivariate Random Variables {23–30%}
 > Understand key concepts in the discrete and continuous settings concerning [[Multivariate Distribution|Multivariate Distributions]], the [[Order Statistics|Distribution of Order Statistics]] for [[Independent Random Variables]], and [[Linear Combinations of Random Variables|linear combinations]] of independent random variables, along with associated applications. In the continuous setting the same calculations are carried out on a [[Joint Probability Density Function]], where the work is setting up the region of integration.
 > 1. Determine [[Joint Probability Function|Joint Probability Functions]] and [[Joint Cumulative Distribution Function|Joint Cumulative Distribution Functions]] for discrete random variables.
 > 2. Determine [[Conditional Probability Function]] and [[Marginal Probability Function]] for discrete random variables.

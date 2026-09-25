@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:3e18e308b26e6a134d9b76d240cd908f84ec565f1fb3de2bd5f47f2d4aecbc24
+  content_hash: sha256:471d00023a66efe5f3a48f142eef7840e98bd28d891344ca61e7eecb11683bc0
   sources: []
   open_findings: 0
   open_critical: 0
@@ -24,12 +24,10 @@ OSFI **Guideline A-4** (December 2017, effective 1 January 2018), setting out OS
 
 ## Contents
 
-| Section | Subject |
-|---|---|
-| **I** | The role of capital in OSFI's risk assessment process |
-| **II** | Regulatory capital |
-| **III** | [[Internal Target Capital Ratio\|Internal capital targets]] |
-| **IV** | Capital management policy |
+- **I** — The role of capital in OSFI's risk assessment process
+- **II** — Regulatory capital
+- **III** — [[Internal Target Capital Ratio|Internal capital targets]]
+- **IV** — Capital management policy
 
 ## I. Capital in OSFI's risk assessment
 

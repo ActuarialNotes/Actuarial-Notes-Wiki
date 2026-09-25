@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:960a1fdc736f11fd6fedc7f08e6b410a4bd5ed78153f350c73b7eca685b367ff
+  content_hash: sha256:c84867f5cfe70b9c9420997fab5cef3fd2da21bdfbd317da2d2f0d08a85053a8
   sources: []
   open_findings: 0
   open_critical: 0
@@ -29,32 +29,26 @@ The **Consolidated [[Standards of Practice]]** — the binding standards for act
 
 ### General practice (1000)
 
-| Section | Subject |
-|---|---|
-| **1240** | [[Materiality]] — the actuary selects a materiality standard for the work, and it depends on the *user* and the use |
-| **1400** | The actuary's use of another's work, data and assumptions (see [[CIA Reliance]]) |
-| **1510** | Selection of assumptions and methods, and the margin for adverse deviations where one applies |
-| **1520** | [[Subsequent Events]] — events after the calculation date, and the decision tree for whether they are taken into account, disclosed, or neither |
-| **1600** | Reporting — the report, its users, and what must be disclosed |
-| **1700** | Control of the work, including [[Peer Review\|review]] and documentation |
+- **1240** — [[Materiality]] — the actuary selects a materiality standard for the work, and it depends on the *user* and the use
+- **1400** — The actuary's use of another's work, data and assumptions (see [[CIA Reliance]])
+- **1510** — Selection of assumptions and methods, and the margin for adverse deviations where one applies
+- **1520** — [[Subsequent Events]] — events after the calculation date, and the decision tree for whether they are taken into account, disclosed, or neither
+- **1600** — Reporting — the report, its users, and what must be disclosed
+- **1700** — Control of the work, including [[Peer Review|review]] and documentation
 
 ### Insurance practice (2000)
 
-| Section | Subject |
-|---|---|
-| **2100** | Scope of the insurance standards |
-| **2200** | The [[Appointed Actuary]] — the role, its reporting lines, and the [[Duty to Report\|duty to report]] to the board and the regulator |
-| **2300** | Valuation of [[Insurance Contract Liabilities\|insurance contract liabilities]] |
-| **2400** | The [[Appointed Actuary's Report\|actuary's report]] on insurance contract liabilities, and the [[Statement of Actuarial Opinion\|opinion]] |
-| **2500** | **[[FCT\|Financial condition testing]]** — the base scenario, adverse scenarios, [[Ripple Effect\|ripple effects]], corrective management actions, and the opinion on satisfactory financial condition |
-| **2600** | **Ratemaking** — the section assigned for objective A1: rates should not be excessive, inadequate or [[Unfair Discrimination\|unfairly discriminatory]], and the actuary's obligations in selecting data, methods and assumptions for a rate |
+- **2100** — Scope of the insurance standards
+- **2200** — The [[Appointed Actuary]] — the role, its reporting lines, and the [[Duty to Report|duty to report]] to the board and the regulator
+- **2300** — Valuation of [[Insurance Contract Liabilities|insurance contract liabilities]]
+- **2400** — The [[Appointed Actuary's Report|actuary's report]] on insurance contract liabilities, and the [[Statement of Actuarial Opinion|opinion]]
+- **2500** — **[[FCT|Financial condition testing]]** — the base scenario, adverse scenarios, [[Ripple Effect|ripple effects]], corrective management actions, and the opinion on satisfactory financial condition
+- **2600** — **Ratemaking** — the section assigned for objective A1: rates should not be excessive, inadequate or [[Unfair Discrimination|unfairly discriminatory]], and the actuary's obligations in selecting data, methods and assumptions for a rate
 
 ### Public personal injury compensation plans (8000)
 
-| Section | Subject |
-|---|---|
-| **8100** | Scope — the plans this part applies to ([[Workers Compensation Insurance\|workers' compensation]] boards, public auto plans) |
-| **8200** | Valuation and funding of a public personal injury compensation plan |
+- **8100** — Scope — the plans this part applies to ([[Workers Compensation Insurance|workers' compensation]] boards, public auto plans)
+- **8200** — Valuation and funding of a public personal injury compensation plan
 
 ## How the exam uses it
 

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:736265f865849ca5593a63fa00e3fc085db345e088c4f1d2a6b445bb34319cdd
+  content_hash: sha256:587b22b5cd6333194d3c76cede83267583bd906dcc8c009d4089d6745bef43d4
   sources: []
   open_findings: 0
   open_critical: 0
@@ -12,7 +12,7 @@ verification:
 ---
 
 <div class="exam-nav"
-     data-current="8|Advanced Ratemaking"
+     data-current="8|Advanced Ratemaking">
 </div>
 
 # Exam 8
@@ -20,8 +20,7 @@ The **Advanced Ratemaking (Exam 8)** is a 4 hour exam covering classification ra
 
 ## Learning Objectives
 
-> [!example]- A. Classification Ratemaking {60-80%}
-> ### A. Classification Ratemaking
+> [!example]- A. Classification Ratemaking {60–80%}
 > Candidates are expected to go beyond mechanical construction to the comparison and evaluation of alternative [[Classification Ratemaking]] schemes.
 > 1. Interpret classification ratemaking models (e.g., [[GLM]]).
 > 2. Evaluate the validity of [[Rate Classes]].
@@ -34,8 +33,7 @@ The **Advanced Ratemaking (Exam 8)** is a 4 hour exam covering classification ra
 >
 > **Readings:** Actuarial Standard of Practice No. 12 · Bailey and Simon · Couret and Venter · Generalized Linear Models for Insurance Rating · Mahler
 
-> [!example]- B. Excess, Deductible, and Individual Risk Rating {20-40%}
-> ### B. Excess, Deductible, and Individual Risk Rating
+> [!example]- B. Excess, Deductible, and Individual Risk Rating {20–40%}
 > Candidates will be able to design and manage excess, deductible, and individual risk rating systems, covering three areas:
 > - **[[Excess and Deductible Rating]]**: Apply general knowledge of excess coverages and the problems inherent in pricing these coverages for different lines of business.
 > - **[[Experience Rating]]**: Adjust an individual risk's rate to reflect the extent to which that risk's own experience identifies it as being different from other risks in the same class.

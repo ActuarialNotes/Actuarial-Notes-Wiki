@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1416b9fcded4b0a07c9ad5d422b391247101da16f921c6f721b7da9983bd6ba2
+  content_hash: sha256:faae6f3575b987e894707859bd4c83967e9b7c3dbb2dfc55d7d5e9a464a3cc3e
   sources: []
   open_findings: 0
   open_critical: 0
@@ -43,11 +43,9 @@ OSFI **Guideline E-19** (December 2017) on the **[[ORSA|Own Risk and Solvency As
 
 ## ORSA against MCT, and against FCT
 
-| | Set by | Basis | Question answered |
-|---|---|---|---|
-| **[[MCT]]** | OSFI, industry-wide | Standardised factors on a point-in-time balance sheet | Does this insurer hold the capital the formula requires? |
-| **[[FCT]]** | The [[Appointed Actuary]], under [[CIA CSOP\|CSOP]] §2500 | Forward-looking base and plausible adverse scenarios | Is the insurer's financial condition satisfactory over the forecast period? |
-| **ORSA** | Management and the board, under E-19 | The insurer's own risk profile and own capital model | How much capital does *this* insurer actually need, and for which risks? |
+- **[[MCT]]** — *Set by:* OSFI, industry-wide · *Basis:* Standardised factors on a point-in-time balance sheet · *Question answered:* Does this insurer hold the capital the formula requires?
+- **[[FCT]]** — *Set by:* The [[Appointed Actuary]], under [[CIA CSOP|CSOP]] §2500 · *Basis:* Forward-looking base and plausible adverse scenarios · *Question answered:* Is the insurer's financial condition satisfactory over the forecast period?
+- **ORSA** — *Set by:* Management and the board, under E-19 · *Basis:* The insurer's own risk profile and own capital model · *Question answered:* How much capital does *this* insurer actually need, and for which risks?
 
 The three are complementary and the exam asks candidates to distinguish them: who owns it, what it covers, what it produces, and what each misses. [[CIA FCT 1]] §4 addresses producing an **integrated FCT and ORSA report** — permitted, but the accountability for each half stays where it was.
 

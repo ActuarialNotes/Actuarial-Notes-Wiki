@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:e6ac138ddd85caa3e6be350bea09567e16a148913df8b1bc6f6162100940d3d5
+  content_hash: sha256:04eda98a06ff272500d37ab0e4f1f17ef44c7b9b535b78171d48bfdee7d2672e
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,15 +23,13 @@ FSCO's October 2014 consumer brochure defining the coverages in an Ontario autom
 
 ## First-party benefits — the [[Statutory Accident Benefits|Statutory Accident Benefits Schedule]]
 
-| Benefit | What it pays |
-|---|---|
-| **Income replacement** | Basic weekly benefit up to **\$400**, commencing after one week, when the insured cannot work as a result of the accident |
-| **Medical and rehabilitation** | Reasonable and necessary medical and rehabilitation expenses listed in the SABS and not covered by OHIP or a disability plan |
-| **Attendant care** | An aide or attendant to look after a seriously injured insured |
-| **Caregiver** | Reimburses the cost of hiring someone to care for dependants when a [[Catastrophic Impairment\|catastrophic injury]] stops the insured providing full-time care |
-| **Housekeeping and home maintenance** | Additional expense of someone completing the insured's usual duties after a catastrophic injury |
-| **Death and funeral** | Lump sum to spouse and dependants; lump sum for funeral expenses |
-| **Indexation** | Automatic CPI adjustment of the income replacement, non-earner, attendant care and medical/rehabilitation benefits |
+- **Income replacement** — Basic weekly benefit up to **\$400**, commencing after one week, when the insured cannot work as a result of the accident
+- **Medical and rehabilitation** — Reasonable and necessary medical and rehabilitation expenses listed in the SABS and not covered by OHIP or a disability plan
+- **Attendant care** — An aide or attendant to look after a seriously injured insured
+- **Caregiver** — Reimburses the cost of hiring someone to care for dependants when a [[Catastrophic Impairment|catastrophic injury]] stops the insured providing full-time care
+- **Housekeeping and home maintenance** — Additional expense of someone completing the insured's usual duties after a catastrophic injury
+- **Death and funeral** — Lump sum to spouse and dependants; lump sum for funeral expenses
+- **Indexation** — Automatic CPI adjustment of the income replacement, non-earner, attendant care and medical/rehabilitation benefits
 
 **[[Minor Injury Guideline|Minor injury]]** — sprains, strains, contusions, lacerations and whiplash. A minor injury caps medical and rehabilitation benefits at **\$3,500**, regardless of optional increased benefits purchased.
 

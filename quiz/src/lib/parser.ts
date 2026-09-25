@@ -516,6 +516,19 @@ export function isFromAnotherExamsPaper(q: Question, exam: string): boolean {
   return !!from && from.toLowerCase() !== exam.trim().toLowerCase()
 }
 
+/**
+ * How a question's `learning_objective` is matched to a syllabus section. The
+ * CAS content outlines letter their domains (`A. Ratemaking`) and the exam page
+ * keeps the letter; a question names the domain by its words. So the letter is
+ * dropped, with case and spacing, before comparing — `A. Ratemaking`,
+ * `ratemaking` and `Ratemaking` are one objective. Mirrors `objective_key` in
+ * scripts/syllabus_lib.py, which is what scripts/syllabus_lint.py holds every
+ * bank to.
+ */
+export function objectiveKey(title: string): string {
+  return title.trim().replace(/^[A-Z]\.\s+/, '').replace(/\s+/g, ' ').toLowerCase()
+}
+
 export function filterQuestions(questions: Question[], filters: QuestionFilter): Question[] {
   return questions.filter(q => {
     // Before anything else, and ahead of the `ids` short-circuit: a question the
@@ -529,9 +542,10 @@ export function filterQuestions(questions: Question[], filters: QuestionFilter):
     if (filters.topics?.length) {
       if (!filters.topics.some(s => q.topic.toLowerCase() === s.toLowerCase())) return false
     }
-    if (filters.learningObjective && q.learning_objective.toLowerCase() !== filters.learningObjective.toLowerCase()) return false
+    if (filters.learningObjective && objectiveKey(q.learning_objective) !== objectiveKey(filters.learningObjective)) return false
     if (filters.learningObjectives?.length) {
-      if (!filters.learningObjectives.some(s => q.learning_objective.toLowerCase() === s.toLowerCase())) return false
+      const key = objectiveKey(q.learning_objective)
+      if (!filters.learningObjectives.some(s => key === objectiveKey(s))) return false
     }
     if (filters.difficulty && q.difficulty !== filters.difficulty) return false
     if (filters.author) {

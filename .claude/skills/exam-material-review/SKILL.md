@@ -148,8 +148,8 @@ These break the built app while looking perfect in the markdown and in Obsidian.
   `/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/` — it stops at the first `|` and keeps the
   backslash, so the target becomes `Bond Price\` and dead-ends. Comparison tables
   are the obvious way to write a "which distribution?" selector and the wrong
-  one. Use a bullet list, which also reads better on a phone. (`Concepts/Bonds.md`
-  still carries this bug.)
+  one. Use a bullet list, which also reads better on a phone.
+  (`scripts/page_lint.py` fails a page that does this.)
 - **Only `[!answer]` callouts hold source material on an exam page.**
   `parseExamSyllabus` treats `[!example]` callouts as learning objectives and, at
   one point, *every other* callout as a source-material block — so an

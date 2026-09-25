@@ -10,7 +10,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:99f6f6bce2a05a70d2df7d92eb3d15671d3965e7a93214aa7c80baa16bb7f5ca
+  content_hash: sha256:1244bc6ef973e8a094349420bd4cbe4192846f7f2dd4a4f3bcb1e037d9cb500f
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,34 +22,34 @@ verification:
 
 - Economic [[Risk]] as the possibility of losing economic security
 - [[Standard Deviation|Standard deviation]] of outcomes as a measure of risk
-- Pooling: from informal community arrangements to formal [[Insurance]]
+- Pooling: from informal community arrangements to formal Insurance
 
 ## II. How Insurance Works
 
-- The insurance agreement: [[Insurance Premium|premiums]], claim payments, and benefits
-- Insurer, [[Insurance Premium|policyholder]], policy, perils, and hazards
+- The insurance agreement: premiums, claim payments, and benefits
+- Insurer, policyholder, policy, perils, and hazards
 - Transferring [[Risk]] from the policyholder to the insurer
 
 ## III. A Mathematical Explanation
 
 - Frequency and severity distributions combine to form the [[Loss Random Variable|loss distribution]]
 - [[Expected Value]] and [[Variance]] of a loss random variable $X$
-- Pooling independent risks: $E[S_n] = n\mu$ and $Var[S_n] = n\sigma^2$ ([[Law of Large Numbers (LLN)|the basis for risk pooling]])
+- Pooling independent risks: $E[S_n] = n\mu$ and $Var[S_n] = n\sigma^2$ ([[Law of Large Numbers|the basis for risk pooling]])
 - [[Coefficient of Variation]] as a measure of relative variability
-- [[Insurance Premium|Net (benefit) premium]] versus gross premium
+- Net (benefit) premium versus gross premium
 
 ## IV. Characteristics of an Insurable Risk
 
-- The potential loss must be significant enough to justify [[Insurance Premium|insurance]]
+- The potential loss must be significant enough to justify insurance
 - The loss must be well-defined and outside the policyholder's control
 - Covered losses should be reasonably independent
 
 ## V. Examples of Insurance
 
-- Auto: liability, collision, and other-than-collision coverage ([[Property and Casualty Insurance (P&C)]])
+- Auto: liability, collision, and other-than-collision coverage (Property and Casualty Insurance (P&C))
 - Homeowners coverage for the residence and its contents
-- [[Life Insurance]] and annuities
-- Disability income insurance and [[Health Insurance]]
+- Life Insurance and annuities
+- Disability income insurance and Health Insurance
 
 ## VI. Limits on Policy Benefits
 
@@ -71,7 +71,7 @@ verification:
 ## IX. The Role of the Actuary
 
 - Estimating frequency and severity distributions from past experience
-- Developing [[Insurance Premium|net and gross premiums]]
+- Developing net and gross premiums
 - Projecting assets, cash flows, and the insurer's future financial position
 
 ## X. Conclusion

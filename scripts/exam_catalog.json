@@ -1,0 +1,15 @@
+{
+  "_comment": "One row per exam page. `status` mirrors quiz/src/lib/examStatus.ts (pinned by quiz/src/lib/examCatalog.test.ts); `exam_id` is the page's data-current id; `wiki_id` is lib/wikiRoutes.examIdFromFile(page) — the key of quiz/src/data/examPdfLinks.ts's syllabus table and the directory under .syllabus/; `bank` is questions/<bank>/, null while an exam has none. Read by scripts/vault_links.py.",
+  "exams": [
+    { "page": "Exam P-1 (SOA).md",    "exam_id": "P-1",    "wiki_id": "p-1",    "progress_key": "P",      "body": "SOA", "bank": "exam-p",      "status": "ready" },
+    { "page": "Exam FM-2 (SOA).md",   "exam_id": "FM-2",   "wiki_id": "fm-2",   "progress_key": "FM",     "body": "SOA", "bank": "exam-fm",     "status": "ready" },
+    { "page": "Exam MAS-I (CAS).md",  "exam_id": "MAS-I",  "wiki_id": "mas-i",  "progress_key": "MAS-I",  "body": "CAS", "bank": "exam-mas-i",  "status": "beta" },
+    { "page": "Exam MAS-II (CAS).md", "exam_id": "MAS-II", "wiki_id": "mas-ii", "progress_key": "MAS-II", "body": "CAS", "bank": "exam-mas-ii", "status": "beta" },
+    { "page": "Exam 5 (CAS).md",      "exam_id": "5",      "wiki_id": "5-1",    "progress_key": "CAS-5",  "body": "CAS", "bank": "exam-5",      "status": "beta" },
+    { "page": "Exam 6C (CAS).md",     "exam_id": "6C",     "wiki_id": "6c-1",   "progress_key": "CAS-6",  "body": "CAS", "bank": null,          "status": "development" },
+    { "page": "Exam 6U (CAS).md",     "exam_id": "6U",     "wiki_id": "6u-1",   "progress_key": "CAS-6",  "body": "CAS", "bank": null,          "status": "development" },
+    { "page": "Exam 7 (CAS).md",      "exam_id": "7",      "wiki_id": "7-1",    "progress_key": "CAS-7",  "body": "CAS", "bank": null,          "status": "development" },
+    { "page": "Exam 8 (CAS).md",      "exam_id": "8",      "wiki_id": "8-1",    "progress_key": "CAS-8",  "body": "CAS", "bank": null,          "status": "development" },
+    { "page": "Exam 9 (CAS).md",      "exam_id": "9",      "wiki_id": "9-1",    "progress_key": "CAS-9",  "body": "CAS", "bank": null,          "status": "development" }
+  ]
+}

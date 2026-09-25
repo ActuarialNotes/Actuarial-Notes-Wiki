@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:2f8aaf2520dd3312c189118f0435bcd5b2d7d278cc221f6e387dd2504062a821
+  content_hash: sha256:715036c1f0713ed4baa5afe04f65f001f4bfc4718c41ffa2d776367324b18153
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,10 +23,10 @@ verification:
 
 ## 1 Combinatorial Analysis
 - 1.1 Introduction
-- 1.2 The [[Basic Principle of Counting]]
+- 1.2 The Basic Principle of Counting
 - 1.3 [[Permutation|Permutations]]
 - 1.4 [[Combination|Combinations]]
-- 1.5 [[Multinomial Coefficients]]
+- 1.5 Multinomial Coefficients
 - 1.6 The Number of Integer Solutions of Equations
 
 ## 2 Axioms of Probability
@@ -41,7 +41,7 @@ verification:
 ## 3 Conditional Probability and Independence
 - 3.1 Introduction
 - 3.2 [[Conditional Probability|Conditional Probabilities]]
-- 3.3 [[Bayes' Theorem|Bayes’s Formula]]
+- 3.3 [[Bayes Theorem|Bayes’s Formula]]
 - 3.4 [[Independent Events]]
 - 3.5 P(·|F) Is a Probability
 
@@ -51,37 +51,37 @@ verification:
 - 4.3 [[Expected Value]]
 - 4.4 Expectation of a Function of a Random Variable
 - 4.5 [[Variance]]
-- 4.6 The [[Bernoulli]] and [[Binomial]] Random Variables
+- 4.6 The Bernoulli and [[Binomial Distribution|Binomial]] Random Variables
     - 4.6.1 Properties of Binomial Random Variables
     - 4.6.2 Computing the Binomial Distribution Function
-- 4.7 The [[Poisson]] Random Variable
+- 4.7 The [[Poisson Distribution|Poisson]] Random Variable
     - 4.7.1 Computing the Poisson Distribution Function
 - 4.8 Other Discrete Probability Distributions
     - 4.8.1 The [[Geometric Distribution|Geometric Random Variable]]
     - 4.8.2 [[Negative Binomial Distribution|Negative Binomial Random Variable]]
     - 4.8.3 [[Hypergeometric Distribution|Hypergeometric Random Variable]]
-    - 4.8.4 [[Zipf's Law|Zeta (Zipf) Distribution]]
+    - 4.8.4 Zeta (Zipf) Distribution
 - 4.9 Expected Value of Sums of Random Variables
 - 4.10 Properties of the Cumulative Distribution Function
 
 ## 5 Continuous Random Variables
 - 5.1 Introduction
 - 5.2 Expectation and Variance of Continuous Random Variables
-- 5.3 [[Uniform Distribution|Uniform Random Variable]]
+- 5.3 Uniform Random Variable
 - 5.4 [[Normal Distribution|Normal Random Variables]]
     - 5.4.1 Normal Approximation to the Binomial Distribution
 - 5.5 [[Exponential Distribution|Exponential Random Variables]]
     - 5.5.1 Hazard Rate Functions
 - 5.6 Other Continuous Distributions
-    - 5.6.1 [[Gamma Distribution]]
-    - 5.6.2 [[Weibull Distribution]]
-    - 5.6.3 [[Cauchy Distribution]]
-    - 5.6.4 [[Beta Distribution]]
-    - 5.6.5 [[Pareto Distribution]]
+    - 5.6.1 [[Gamma|Gamma Distribution]]
+    - 5.6.2 Weibull Distribution
+    - 5.6.3 Cauchy Distribution
+    - 5.6.4 [[Beta|Beta Distribution]]
+    - 5.6.5 Pareto Distribution
 - 5.7 Distribution of a Function of a Random Variable
 
 ## 6 Jointly Distributed Random Variables
-- 6.1 [[Joint Distribution Function|Joint Distribution Functions]]
+- 6.1 [[Joint Cumulative Distribution Function|Joint Distribution Functions]]
 - 6.2 Independent Random Variables
 - 6.3 Sums of Independent Random Variables
     - 6.3.1 Identically Distributed Uniform Random Variables
@@ -116,7 +116,7 @@ verification:
 
 ## 8 Limit Theorems
 - 8.1 Introduction
-- 8.2 [[Chebyshev's Inequality]] and Weak Law of Large Numbers
+- 8.2 Chebyshev's Inequality and Weak Law of Large Numbers
 - 8.3 [[Central Limit Theorem]]
 - 8.4 Strong Law of Large Numbers
 - 8.5 Other Inequalities and Poisson Limit Result
@@ -126,7 +126,7 @@ verification:
 ## 9 Additional Topics in Probability
 - 9.1 [[Poisson Process]]
 - 9.2 [[Markov Chain|Markov Chains]]
-- 9.3 Surprise, Uncertainty, and [[Entropy (information theory)|Entropy]]
+- 9.3 Surprise, Uncertainty, and Entropy
 - 9.4 Coding Theory and Entropy
 
 ## 10 Simulation

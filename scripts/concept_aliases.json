@@ -1,0 +1,38 @@
+{
+  "_comment": "Read by scripts/vault_links.py (and pinned against the vault by quiz/src/lib/examCatalog.test.ts). `aliases`: a variant a syllabus or an author writes -> the concept page it means. Keys are compared after vault_links.normalize_term (lower-case, hyphens and underscores as spaces, collapsed whitespace), so write them that way. Only what a resolver cannot guess belongs here: abbreviations and wording that shares no words with the page name; plurals are handled by the matcher. `namesakes`: a term that has a page per exam family, and which one each exam means. `default` is the page for any exam not listed; exam keys are the wiki ids of scripts/exam_catalog.json. Linking the other one resolves, so no link checker can see it — this table is what makes it visible.",
+  "aliases": {
+    "glm": "Generalized Linear Model",
+    "glms": "Generalized Linear Model",
+    "mle": "Maximum Likelihood Estimation",
+    "maximum likelihood": "Maximum Likelihood Estimation",
+    "aic": "AIC",
+    "akaike information criterion": "AIC",
+    "anova": "ANOVA",
+    "analysis of variance": "ANOVA",
+    "qq": "QQ Plot",
+    "q q plot": "QQ Plot",
+    "alae": "Allocated Loss Adjustment Expense",
+    "allocated loss adjustment expenses": "Allocated Loss Adjustment Expense",
+    "ulae": "Unallocated Loss Adjustment Expenses ULAE",
+    "unallocated loss adjustment expense": "Unallocated Loss Adjustment Expenses ULAE",
+    "unallocated loss adjustment expenses": "Unallocated Loss Adjustment Expenses ULAE",
+    "pdf": "Probability Density Function (PDF)",
+    "probability density function": "Probability Density Function (PDF)",
+    "probability density functions": "Probability Density Function (PDF)",
+    "cdf": "Cumulative Distribution Function (CDF)",
+    "cumulative distribution function": "Cumulative Distribution Function (CDF)",
+    "cumulative distribution functions": "Cumulative Distribution Function (CDF)",
+    "clt": "Central Limit Theorem",
+    "lev": "Limited Expected Value",
+    "bayes' theorem": "Bayes Theorem",
+    "minimum capital test": "MCT",
+    "own risk and solvency assessment": "ORSA",
+    "financial condition testing": "FCT"
+  },
+  "namesakes": {
+    "deductible": { "default": "Deductible", "5-1": "Deductible Rating" },
+    "deductibles": { "default": "Deductible", "5-1": "Deductible Rating" },
+    "coinsurance": { "default": "Coinsurance", "5-1": "Coinsurance Rating" },
+    "trend": { "default": "Trend", "5-1": "Loss Trend" }
+  }
+}

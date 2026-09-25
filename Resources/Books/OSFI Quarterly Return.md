@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:41dc19d4bad267830a80310a7868190df9e4ee68a15cab33062d389700b9a002
+  content_hash: sha256:8ff4482d98a9ed0734cb3d57cd3db03bad97c1ddf5abf4b3296ec1e8e908541a
   sources: []
   open_findings: 0
   open_critical: 0
@@ -27,14 +27,12 @@ The **quarterly supervisory return** — the exhibits behind the core financial 
 
 ## The six assigned pages
 
-| Page | Exhibit | Why it is assigned |
-|---|---|---|
-| **40.74** | **Investment return** | The investment result, separate from the insurance result — the split [[IFRS 17]] enforces between the [[Insurance Service Result\|insurance service result]] and [[Insurance Finance Income or Expenses\|insurance finance income or expenses]] |
-| **60.25** | **[[Insurance Service Result\|Insurance service result]]** | [[Insurance Revenue\|Insurance revenue]] less [[Insurance Service Expenses\|insurance service expenses]] less net expenses from reinsurance held — the IFRS 17 replacement for "underwriting income" |
-| **60.80** | **[[Onerous Contract\|Onerous contracts]]** | The [[Loss Component\|loss component]] recognised in the period. A rising loss component is direct evidence of inadequate pricing |
-| **70.50** | Reinsurance contracts held summary — **[[Registered Reinsurance\|registered]] reinsurance** | |
-| **70.60** | Reinsurance contracts held summary — **[[Unregistered Reinsurance\|unregistered]] reinsurance** | The registered/unregistered split drives capital: unregistered cessions earn [[MCT\|MCT]] credit only to the extent they are collateralised, and count toward the exposure limit in [[OSFI Concentration]] |
-| **80.15** | **Commissions** | |
+- **40.74** — **Investment return** · *Why it is assigned:* The investment result, separate from the insurance result — the split [[IFRS 17]] enforces between the [[Insurance Service Result|insurance service result]] and [[Insurance Finance Income or Expenses|insurance finance income or expenses]]
+- **60.25** — **[[Insurance Service Result|Insurance service result]]** · *Why it is assigned:* [[Insurance Revenue|Insurance revenue]] less [[Insurance Service Expenses|insurance service expenses]] less net expenses from reinsurance held — the IFRS 17 replacement for "underwriting income"
+- **60.80** — **[[Onerous Contract|Onerous contracts]]** · *Why it is assigned:* The [[Loss Component|loss component]] recognised in the period. A rising loss component is direct evidence of inadequate pricing
+- **70.50** — Reinsurance contracts held summary — **[[Registered Reinsurance|registered]] reinsurance**
+- **70.60** — Reinsurance contracts held summary — **[[Unregistered Reinsurance|unregistered]] reinsurance** · *Why it is assigned:* The registered/unregistered split drives capital: unregistered cessions earn [[MCT|MCT]] credit only to the extent they are collateralised, and count toward the exposure limit in [[OSFI Concentration]]
+- **80.15** — **Commissions**
 
 ## The full return
 

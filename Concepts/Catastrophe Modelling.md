@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:13bf47a23ab6cab67ab522f37ec3f52d7cbf5704f1e1a35915a12b89a86c07a3
+  content_hash: sha256:1a285d9f8871111140c3e32e14b1685e5e4f102c598c280691f7a88528c0c7fc
   sources: []
   open_findings: 0
   open_critical: 0
@@ -26,6 +26,6 @@ verification:
 
 ## Catastrophe Modelling for Reinsurers
 
-In the [[reinsurance]] industry, catastrophic risk assessment is crucial for pricing, reserve setting, and capital allocation.
+In the [[Reinsurance|reinsurance]] industry, catastrophic risk assessment is crucial for pricing, reserve setting, and capital allocation.
 ## Sources
 1. [A Guide to Catastrophe Modelling](https://forms2.rms.com/rs/729-DJX-565/images/rms_guide_catastrophe_modeling_2008.pdf) (The Review - Worldwide Insurance in Collaboration with RMS, 2008)

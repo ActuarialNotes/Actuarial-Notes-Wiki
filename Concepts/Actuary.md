@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:6e3e16d946022a976a05c88df73b3fb037df3323906ad62eb5856680178f5415
+  content_hash: sha256:7c2378abeaa41dba753686b605f59bd773446797c2716c82c826e244d7e7cafc
   sources: []
   open_findings: 0
   open_critical: 0
@@ -14,7 +14,7 @@ verification:
 [[Actuarial Notes Wiki|Wiki]] / [[Actuarial Glossary]] / **Actuary**
 
 ## Actuary
-An **Actuary** is a business professional who deals with the financial impact of [[risk]] and uncertainty. ([Wikidata](https://www.wikidata.org/wiki/Q179985))
+An **Actuary** is a business professional who deals with the financial impact of [[Risk|risk]] and uncertainty. ([Wikidata](https://www.wikidata.org/wiki/Q179985))
 
 ## What does an Actuary do?
 

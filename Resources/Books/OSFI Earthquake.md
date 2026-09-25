@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:08725895ab49bb32d4feffac06e7e0cf602e0d622d748c9a9696fa4dbd45b369
+  content_hash: sha256:43ce80512459f3c5c6ad3f31809a54ddf6f69900145baeb39004e86cd1a3b405
   sources: []
   open_findings: 0
   open_critical: 0
@@ -24,14 +24,12 @@ OSFI **Guideline B-9** (February 2013) on **earthquake exposure**. Read for [[Ex
 
 ## Contents
 
-| Section | Subject |
-|---|---|
-| **I** | Purpose and scope |
-| **II** | **Key principles** — 1. earthquake exposure risk management · 2. earthquake exposure data · 3. earthquake models · 4. **[[Probable Maximum Loss\|PML]] estimates** · 5. financial resources and contingency plans |
-| **III** | Regulatory reporting |
-| **IV** | Guideline administration |
-| **V** | Description of terms |
-| **VI** | Other OSFI guidance |
+- **I** — Purpose and scope
+- **II** — **Key principles** — 1. earthquake exposure risk management · 2. earthquake exposure data · 3. earthquake models · 4. **[[Probable Maximum Loss|PML]] estimates** · 5. financial resources and contingency plans
+- **III** — Regulatory reporting
+- **IV** — Guideline administration
+- **V** — Description of terms
+- **VI** — Other OSFI guidance
 
 ## The five key principles
 

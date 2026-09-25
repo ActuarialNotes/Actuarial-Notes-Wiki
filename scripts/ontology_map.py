@@ -97,8 +97,37 @@ ONTOLOGY: dict[str, tuple[str, str]] = {
     "Financial Mathematics": ("Time Value of Money", FM_TVM),
 }
 
+# CAS syllabus learning objectives — the callout titles of "Exam MAS-I (CAS).md",
+# "Exam MAS-II (CAS).md" and "Exam 5 (CAS).md" with the domain letter dropped
+# (`A. Ratemaking` → `Ratemaking`). The letter is the content outline's, and the
+# app and scripts/syllabus_lint.py match a question to a section with it ignored
+# (`objective_key` / `objectiveKey`), so a question names the domain by its words.
+MAS1_PROB = "Probability Models (Stochastic Processes and Survival Models)"
+MAS1_STATS = "Statistics"
+MAS1_ELM = "Extended Linear Models"
+MAS2_CRED = "Introduction to Credibility"
+MAS2_LMM = "Linear Mixed Models"
+MAS2_SL = "Statistical Learning"
+MAS2_TS = "Time Series with Constant Variance"
+E5_RATEMAKING = "Ratemaking"
+E5_RESERVING = "Estimating Claim Liabilities (Reserving)"
+
 # Valid learning objectives per exam, for the validation guard.
 LEARNING_OBJECTIVES = {
     "P": [P_GENERAL, P_UNIVARIATE, P_MULTIVARIATE],
     "FM": [FM_TVM, FM_ANNUITIES, FM_LOANS, FM_BONDS, FM_GENERAL],
+    "MAS-I": [MAS1_PROB, MAS1_STATS, MAS1_ELM],
+    "MAS-II": [MAS2_CRED, MAS2_LMM, MAS2_SL, MAS2_TS],
+    "5": [E5_RATEMAKING, E5_RESERVING],
+}
+
+# Learning-objective values a CAS bank was written with that name a domain by a
+# short form of its title. `standardize_questions.py --objectives` rewrites them to
+# the title (question bank dir -> {old value: callout title}). The CAS banks are
+# not in ONTOLOGY — their topics are too many to map by hand yet — so this is the
+# one part of the ontology they share with P and FM.
+OBJECTIVE_RENAMES: dict[str, dict[str, str]] = {
+    "exam-mas-i": {"Probability Models": MAS1_PROB},
+    "exam-mas-ii": {"Time Series": MAS2_TS},
+    "exam-5": {"Reserving": E5_RESERVING},
 }

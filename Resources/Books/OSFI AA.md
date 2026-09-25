@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:2bb5d0aea09758c038542d792f42bfc4dc4915039b69c53c8d671cc0df3e8083
+  content_hash: sha256:3d5c388c20a4b659cc8677dcb3acec72af3ae6b81939ec62c215b408e0132540
   sources: []
   open_findings: 0
   open_critical: 0
@@ -24,13 +24,11 @@ OSFI **Guideline E-15** (August 2023) on the **[[Appointed Actuary]]** — the l
 
 ## Contents
 
-| Section | Subject |
-|---|---|
-| 1 | Introduction |
-| **2** | **Legal requirements of the Appointed Actuary** — 2.1 appointment of an actuary · 2.2 role and duties |
-| **3** | **Qualifications required** |
-| **4** | **Peer review of the work of the Appointed Actuary** — 4.1 background · 4.2 general objectives · 4.3 **work to be reviewed** · 4.4 **[[Materiality\|materiality]] considerations** · 4.5 contents of peer review reports · 4.6 **peer review cycle** · 4.7 timing of the review work and reports |
-| **5** | **Peer reviewer** — 5.1 selecting a peer reviewer · 5.2 the peer reviewer and the external audit · 5.3 changing a peer reviewer |
+- **1** — Introduction
+- **2** — **Legal requirements of the Appointed Actuary** — 2.1 appointment of an actuary · 2.2 role and duties
+- **3** — **Qualifications required**
+- **4** — **Peer review of the work of the Appointed Actuary** — 4.1 background · 4.2 general objectives · 4.3 **work to be reviewed** · 4.4 **[[Materiality|materiality]] considerations** · 4.5 contents of peer review reports · 4.6 **peer review cycle** · 4.7 timing of the review work and reports
+- **5** — **Peer reviewer** — 5.1 selecting a peer reviewer · 5.2 the peer reviewer and the external audit · 5.3 changing a peer reviewer
 
 ## 2. The legal requirements
 

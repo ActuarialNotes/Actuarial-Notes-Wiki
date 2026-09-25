@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { parseQuestion, isAnswerCorrect, normalizeAnswerText, questionCredit, questionOutcome, filterQuestions } from './parser'
+import { parseQuestion, isAnswerCorrect, normalizeAnswerText, questionCredit, questionOutcome, filterQuestions, objectiveKey } from './parser'
 import type { Question } from './parser'
 
 // ── normalizeAnswerText ───────────────────────────────────────────────────────
@@ -413,5 +413,26 @@ describe('filterQuestions — sitting filters vs. questions moved between exams'
       exam: 'Exam MAS-II', year: 2019, session: 'Fall',
     })
     expect(got.map(q => q.id)).toEqual(['masii-2019f-001'])
+  })
+})
+
+describe('filterQuestions — learning objectives match the syllabus section', () => {
+  // The exam page keeps the content outline's domain letter; a question names the
+  // domain by its words. scripts/syllabus_lint.py holds each bank to the same rule.
+  const reserving = {
+    id: 'cas5-x', exam: 'Exam 5', learning_objective: 'Estimating Claim Liabilities (Reserving)',
+  } as Question
+  const ratemaking = { id: 'cas5-y', exam: 'Exam 5', learning_objective: 'Ratemaking' } as Question
+
+  it('drops the domain letter, case and spacing', () => {
+    expect(objectiveKey('B. Estimating Claim Liabilities  (Reserving)')).toBe('estimating claim liabilities (reserving)')
+    expect(objectiveKey('General Probability')).toBe('general probability')
+  })
+
+  it('finds a question by its section’s callout title', () => {
+    const got = filterQuestions([reserving, ratemaking], { learningObjective: 'B. Estimating Claim Liabilities (Reserving)' })
+    expect(got.map(q => q.id)).toEqual(['cas5-x'])
+    const both = filterQuestions([reserving, ratemaking], { learningObjectives: ['A. Ratemaking', 'b. nothing'] })
+    expect(both.map(q => q.id)).toEqual(['cas5-y'])
   })
 })

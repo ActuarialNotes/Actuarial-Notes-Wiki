@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9c15800ae1e9cdccad682b5d086e9b2ae85b3c863a3e524dc39798da22d85716
+  content_hash: sha256:2f3f523151a33b4ad059658c3b113ac4985715ed33fbcf7729cc8493e96dd68e
   sources: []
   open_findings: 0
   open_critical: 0
@@ -12,7 +12,7 @@ verification:
 ---
 
 <div class="exam-nav"
-     data-current="FM-2|Financial Mathematics"
+     data-current="FM-2|Financial Mathematics">
 </div>
 
 # Exam FM-2
@@ -20,14 +20,14 @@ The **Financial Mathematics (FM-2) Exam** is a 2.5 hour SOA exam with 35 multipl
 
 ## Learning Objectives
 
-> [!example]- Time Value of Money  {5-15%}
+> [!example]- Time Value of Money {5–15%}
 > Understand and be able to perform calculations relating to [[Present Value]], [[Current Value]], and [[Accumulated Value]].
 > 1. Define and recognize the definitions of the following terms: [[Interest Rate]] (rate of interest), [[Simple Interest]], [[Compound Interest]], [[Accumulation Function]], [[Fund Accumulation]], [[Future Value]], current value, present value, [[Net Present Value]], [[Discount Factor]], [[Discount Rate]] (rate of discount), [[Convertible m-thly]], [[Nominal Interest Rate|Nominal Rate]], [[Effective Rate]], [[Inflation]] and [[Real Rate of Interest]], [[Force of Interest]], [[Equation of Value]].
 > 2. Given any three of [[Interest Rate|interest rate]], **period of time**, [[Present Value|present value]], and [[Future Value|future value]], calculate the remaining item using [[Simple Interest|simple]] or [[Compound Interest|compound interest]]. Solve [[Time Value of Money Equations]] involving [[Variable Force of Interest]].
 > 3. Given any one of the [[Effective Rate|effective interest rate]], the [[Nominal Interest Rate Convertible m-thly]], the [[Effective Discount Rate]], the [[Nominal Discount Rate Convertible m-thly]], or the [[Force of Interest|force of interest]], calculate any of the other items.
 > 4. Write the [[Equation of Value|equation of value]] given a set of [[Cash Flow|cash flows]] and an [[Interest Rate|interest rate]]
 
-> [!example]- Annuities/Cash Flows with Non-Contingent Payments  {20-30%}
+> [!example]- Annuities/Cash Flows with Non-Contingent Payments {20–30%}
 > 1. Define and recognize the definitions of the following terms: [[Annuity Immediate]], [[Annuity Due]], [[Perpetuity]], [[Payable m-thly]] or [[Payable Continuously]], [[Level Payment Annuity]], [[Arithmetic Increasing Annuity|Arithmetic Increasing/Decreasing Annuity]], [[Geometric Increasing Annuity|Geometric Increasing/Decreasing Annuity]], [[Decreasing Annuity]], [[Continuous Annuity]], [[Term of Annuity]].
 > 2. For each of the following types of [[Annuities|annuity]]/[[Cash Flow|cash flows]], given sufficient information of [[Annuity Immediate|immediate]] or [[Annuity Due|due]], [[Present Value|present value]], [[Future Value|future value]], [[Current Value|current value]], [[Interest Rate|interest rate]], **payment amount**, and term of annuity, calculate any remaining item.
 >	- [[Level Annuity]], finite term.
@@ -37,7 +37,7 @@ The **Financial Mathematics (FM-2) Exam** is a 2.5 hour SOA exam with 35 multipl
 >		- [[Geometric Progression]], finite term and perpetuity.
 >		- Other non-level annuities/cash flows.
 
-> [!example]- Loans {15-25%}
+> [!example]- Loans {15–25%}
 > Understand key concepts concerning [[Loans]] and how to perform related calculations.
 > 1. Define and recognize the definitions of the following terms: [[Principal]], [[Interest]], [[Term of Loan]], [[Outstanding Balance]], [[Final Payment]], [[Drop Payment]], [[Balloon Payment]], [[Amortization]], [[Loan Repayment Comparison]]
 > 2. Calculate:
@@ -46,18 +46,18 @@ The **Financial Mathematics (FM-2) Exam** is a 2.5 hour SOA exam with 35 multipl
 > 	- The amount of [[Interest|interest]] and **principal repayment** in a given payment.
 > 	- Similar calculations to the above when refinancing is involved.
 
-> [!example]-  Bonds {15-25%}
+> [!example]- Bonds {15–25%}
 > Understand key concepts concerning [[Bonds]], and how to perform related calculations.
 > 1. Define and recognize the definitions of the following terms: [[Bond Price|Price]], [[Book Value]], [[Market Value]], [[Amortization of Premium]], [[Accumulation of Discount]], [[Redemption Value]], Par Value/[[Face Value]], [[Yield Rate]], [[Coupon]], [[Coupon Rate]], [[Term of Bond]], [[Callable Bond|Callable]]/[[Non-Callable Bond|Non-Callable]], [[Call Price]], [[Call Premium]], [[Accumulated Value]] with [[Reinvestment of Coupons]].
 > 2. Given sufficient partial information about the items listed below, calculate any of the remaining items
-> 	- Price, book value, market value, accumulated value with reinvestment of coupons, amortization of premium, accumulation of discount. (Note that valuation of bonds between coupon payment dates will not be covered).
+> 	- [[Bond Price|Price]], [[Book Value|book value]], [[Market Value|market value]], accumulated value with reinvestment of coupons, [[Amortization of Premium|amortization of premium]], [[Accumulation of Discount|accumulation of discount]]. (Note that valuation of bonds between coupon payment dates will not be covered).
 > 	- Redemption value, face value.
 > 	- Yield rate
 > 	- Coupon, coupon rate
 > 	- Term of bond, point in time that a bond has a given book value, amortization of premium, or accumulation of discount
-> 3. Calculate the price of a callable bond to achieve a specified minimum yield
+> 3. Calculate the price of a [[Callable Bond|callable bond]] to achieve a specified minimum yield
 
-> [!example]- General Cash Flows, Portfolios, and Asset Liability Management {20-30%}
+> [!example]- General Cash Flows, Portfolios, and Asset Liability Management {20–30%}
 > Understand key concepts concerning yield curves, rates of return, measures of duration and convexity, cash flow matching and immunization, and how to perform related calculations.
 > 1. Define and recognize the definitions of the following terms: [[Yield Rate]]/rate of return, [[Current Value]], [[Duration]] and [[Convexity]] ([[Macaulay Duration|Macaulay]] and [[Modified Duration|Modified]]), [[Portfolio]], [[Spot Rate]], [[Forward Rate]], [[Yield Curve]], [[Cash Flow]] and [[Duration Matching]], and [[Immunization]] (including [[Full Immunization]] and [[Redington Immunization]]).
 > 2. Calculate:

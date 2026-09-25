@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:2e199287a1ed36d0965a06ed0cd911d9469d9c004f2a5056465f438f22e0a26a
+  content_hash: sha256:9063642c769c554086980c9183fe5173dceeaa12b120c079922d9c850f774196
   sources: []
   open_findings: 0
   open_critical: 0
@@ -24,14 +24,12 @@ Regulation 664 of the Revised Regulations of Ontario 1990, made under the Ontari
 
 ## What the assigned sections do
 
-| Section | Subject |
-|---|---|
-| **1** | Definitions used throughout the regulation |
-| **2** | Fleets — the conditions under which automobiles are treated as a group |
-| **3** | **[[Take-All-Comers Rule\|Take-all-comers]]** — the classes of contract an insurer must issue to any applicant who qualifies. A contract is caught where it is written on **Ontario Automobile Policy 1 or Ontario Policy Form 2**, does not insure a commercial or public vehicle, does not insure five or more vehicles under common ownership or management, and carries an annual premium over **\$300** |
-| **4** | Grounds on which an insurer may **decline, refuse to renew or terminate** a contract — the closed list, outside which refusal is not permitted |
-| **5** | Prohibited elements of a [[Risk Classification Restrictions\|risk classification system]] |
-| **16** | [[Uninsured Automobile Coverage\|Uninsured automobile coverage]] and related requirements |
+- **1** — Definitions used throughout the regulation
+- **2** — Fleets — the conditions under which automobiles are treated as a group
+- **3** — **[[Take-All-Comers Rule|Take-all-comers]]** — the classes of contract an insurer must issue to any applicant who qualifies. A contract is caught where it is written on **Ontario Automobile Policy 1 or Ontario Policy Form 2**, does not insure a commercial or public vehicle, does not insure five or more vehicles under common ownership or management, and carries an annual premium over **\$300**
+- **4** — Grounds on which an insurer may **decline, refuse to renew or terminate** a contract — the closed list, outside which refusal is not permitted
+- **5** — Prohibited elements of a [[Risk Classification Restrictions|risk classification system]]
+- **16** — [[Uninsured Automobile Coverage|Uninsured automobile coverage]] and related requirements
 
 ## Section 5 — the prohibited rating variables
 

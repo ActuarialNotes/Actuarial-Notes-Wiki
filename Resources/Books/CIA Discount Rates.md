@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9b3e2010310d4f1d255e1056966c45c36978106f74d3ee885ac27dd1b50b98c9
+  content_hash: sha256:cd1a20175c73959052c2293f5a0742334871035551d8da59b0f3e9aa4d2b80c9
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,12 +23,10 @@ The CIA's October 2025 note on **[[IFRS 17 Discount Rates|IFRS 17 discount rates
 
 ## Contents
 
-| Section | Subject |
-|---|---|
-| 1–2 | Introduction; terminology |
-| **3** | **Determining estimates of future cash flows** — 3.1 selecting a payment pattern · 3.2 timing of future payments |
-| **4** | **Determining discount rates** — 4.1 discount rates · 4.2 **bottom-up** (4.2.1 risk-free rate, 4.2.2 theoretical illiquidity premium) · 4.3 **top-down** (4.3.1 selection of a reference portfolio) · 4.4 reference portfolio discount rate (4.4.1 credit risk adjustment, 4.4.2 market risk and other adjustments) · 4.5 illiquidity premium based on the reference portfolio · 4.6 liquidity of P&C insurance contract liabilities (contracts issued; **liquidity of reinsurance held**; a single illiquidity premium) · 4.7 duration of the observable market · 4.8 the long-term (unobservable ultimate) rate |
-| **5** | **Reference curves** — defining the curve in the observable and unobservable periods, and considerations for using the **CIA-published reference curves**: appropriateness of the risk-free rates, of the reference portfolio, of the share of spread treated as illiquidity premium and its shape, of any additional illiquidity premium on the illiquid curve, when to deviate, and [[Materiality\|materiality]] |
+- **1–2** — Introduction; terminology
+- **3** — **Determining estimates of future cash flows** — 3.1 selecting a payment pattern · 3.2 timing of future payments
+- **4** — **Determining discount rates** — 4.1 discount rates · 4.2 **bottom-up** (4.2.1 risk-free rate, 4.2.2 theoretical illiquidity premium) · 4.3 **top-down** (4.3.1 selection of a reference portfolio) · 4.4 reference portfolio discount rate (4.4.1 credit risk adjustment, 4.4.2 market risk and other adjustments) · 4.5 illiquidity premium based on the reference portfolio · 4.6 liquidity of P&C insurance contract liabilities (contracts issued; **liquidity of reinsurance held**; a single illiquidity premium) · 4.7 duration of the observable market · 4.8 the long-term (unobservable ultimate) rate
+- **5** — **Reference curves** — defining the curve in the observable and unobservable periods, and considerations for using the **CIA-published reference curves**: appropriateness of the risk-free rates, of the reference portfolio, of the share of spread treated as illiquidity premium and its shape, of any additional illiquidity premium on the illiquid curve, when to deviate, and [[Materiality|materiality]]
 
 ## The principle
 

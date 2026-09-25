@@ -4,20 +4,42 @@ name: Content Validation
 # The app's parser silently drops any question it can't parse and any duplicate
 # id, so bad frontmatter or a mismatched answer key means the question just never
 # appears in-app. This check reproduces that contract so drift fails the PR
-# instead of shipping. Path-filtered to content the validator reads.
+# instead of shipping. Path-filtered to content the validators read.
+#
+# The second job gates the exam pages (docs/syllabus-pipeline.md): their
+# structure, their links, and the question bank's learning objectives against
+# their sections (scripts/syllabus_lint.py), then the link graph of every
+# ready/beta exam (validate_links.py --studiable). Exams 6–9 are a syllabus
+# outline by design, so their unwritten pages warn rather than fail.
 on:
   pull_request:
     paths:
       - 'questions/**'
       - 'Concepts/**'
+      - 'Resources/**'
+      - 'Exam *.md'
+      - '.syllabus/**'
+      - 'comprehension-checks/**'
       - 'scripts/validate_content.py'
+      - 'scripts/syllabus_*.py'
+      - 'scripts/vault_links.py'
+      - 'scripts/*.json'
+      - '.claude/skills/actuarial-concept-definitions/validate_links.py'
       - '.github/workflows/content-validation.yml'
   push:
     branches: [main]
     paths:
       - 'questions/**'
       - 'Concepts/**'
+      - 'Resources/**'
+      - 'Exam *.md'
+      - '.syllabus/**'
+      - 'comprehension-checks/**'
       - 'scripts/validate_content.py'
+      - 'scripts/syllabus_*.py'
+      - 'scripts/vault_links.py'
+      - 'scripts/*.json'
+      - '.claude/skills/actuarial-concept-definitions/validate_links.py'
       - '.github/workflows/content-validation.yml'
   workflow_dispatch:
 
@@ -39,3 +61,21 @@ jobs:
       # Standard library only — no dependencies to install.
       - name: Validate content
         run: python3 scripts/validate_content.py
+
+  syllabus:
+    name: lint exam pages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Standard library only. Warnings (development exams, missing
+      # comprehension checks) print but don't fail; errors do.
+      - name: Lint exam pages
+        run: python3 scripts/syllabus_lint.py
+
+      - name: Link graph of the studiable exams
+        run: python3 .claude/skills/actuarial-concept-definitions/validate_links.py --studiable

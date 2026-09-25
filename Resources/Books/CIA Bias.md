@@ -7,13 +7,15 @@ Publisher: "Canadian Institute of Actuaries"
 Type: "Practice Resource Document"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/223056e/)"
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-09-25
+  last_checked_by: agent:validate-v1
   content_hash: sha256:5a6979703c12e995520519e8a68a793c99c058233b3313e0068eb0c3ba91f49e
-  sources: []
-  open_findings: 0
+  sources:
+    - "CIA, Bias and Fairness in Pricing and Underwriting of Property and Casualty (P&C) Risks (April 2023, Document 223056), https://www.cia-ica.ca/publications/223056e/ (PDF dl_file.php?p=36259&fid=17085), sha256 558193e3d8344daf933360215a5e1463758c5d833da639bd91b280febfbf8bb2"
+    - "CAS Exam 6C Content Outline Fall 2026, https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf, sha256 1bd4b2b802cf0976c797bc068c2903fa8deaf43d9366a85aadf5b34a568275c1"
+  open_findings: 5
   open_critical: 0
   log: .verify/Resources/Books/CIA Bias.md
 ---

@@ -7,13 +7,15 @@ Publisher: "Canadian Institute of Actuaries"
 Type: "Educational Note"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/224090e/)"
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:b30571f9f5975d2e5e08cc0638ecff452125f015fad10a362b19d60e04fa1fd5
-  sources: []
-  open_findings: 0
+  last_checked: 2026-09-25
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:58fca790dc118bebace9a819aa68d82bd549b0c6732e34b8ec916d84b7327fdd
+  sources:
+    - "CIA Educational Note: IFRS 17 Risk Adjustment for Non-Financial Risk for Property and Casualty Insurance Contracts, August 14 2024 — https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=348400&fid=348401 via https://www.cia-ica.ca/publications/224090e/ (sha256 c34ba39e72404117d9827b3a71f478242b379024de017eea798f7f0e337d9d71)"
+    - "CAS Exam 6C (Canada) Content Outline, Fall 2026 — https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf (sha256 1bd4b2b802cf0976c797bc068c2903fa8deaf43d9366a85aadf5b34a568275c1)"
+  open_findings: 2
   open_critical: 0
   log: .verify/Resources/Books/CIA IFRS 2.md
 ---
@@ -23,7 +25,7 @@ The CIA's August 2024 note on computing the **[[Risk Adjustment for Non-Financia
 
 ## What the risk adjustment is
 
-IFRS 17 defines it as the compensation the entity requires for bearing the uncertainty about the **amount and timing** of cash flows that arises from **non-financial** risk. IFRS 17 prescribes no method — only that the entity **disclose the **confidence level**** to which its risk adjustment corresponds, which is what makes the choice of method examinable rather than arbitrary. It replaces the pre-2023 [[Margin for Adverse Deviations|PfADs]].
+IFRS 17 defines it as the compensation the entity requires for bearing the uncertainty about the **amount and timing** of cash flows that arises from **non-financial** risk. IFRS 17 prescribes no method — only that the entity **disclose the confidence level** to which its risk adjustment corresponds, which is what makes the choice of method examinable rather than arbitrary. It replaces the pre-2023 [[Margin for Adverse Deviations|PfADs]].
 
 ## Contents
 
@@ -32,7 +34,7 @@ IFRS 17 defines it as the compensation the entity requires for bearing the uncer
 | 1–2 | Introduction; **transition from IFRS 4 to IFRS 17** |
 | **3** | General considerations — 3.1 measurement approach · 3.2 diversification, allocation and aggregation · 3.3 [[Reinsurance Contracts Held\|reinsurance held]] · 3.4 discount rate · 3.5 time horizon · 3.6 disclosure requirements · 3.7 risk adjustment under the [[Premium Allocation Approach\|PAA]] |
 | **4** | **Quantile methods** — 4.1 introduction · 4.2 generating a distribution · 4.3 measuring risk · 4.4 aggregation and allocation |
-| **5** | **Cost of capital method** — 5.2 the general formula · 5.3 capital \(C_t\) · 5.4 the cost of capital rate \(r_t\) |
+| **5** | **Cost of capital method** — 5.2 the general formula · 5.3 capital $C_t$ · 5.4 the cost of capital rate $r_t$ |
 | **6** | **Margin method** |
 | **7** | Reinsurance held methods — quantile methods, catastrophe models, proportional scaling, cost of capital |
 | **8** | Catastrophe reinsurance |

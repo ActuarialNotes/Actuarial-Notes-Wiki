@@ -7,13 +7,15 @@ Publisher: "Canadian Institute of Actuaries"
 Type: "Educational Note"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/225015e/)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-25
+  last_checked_by: agent:validate-v1
   content_hash: sha256:0532febc09c666e5fed32312c08613f6419b7ec0adab567561d4cab1ed376c18
-  sources: []
-  open_findings: 0
+  sources:
+    - "CIA Educational Note: Guidance for the 2025 Reporting of Capital, Financial Condition Testing, and Own Risk and Solvency Assessment for Life and Health, P&C and Mortgage Insurers, Document 225015 (Feb 2025; archived Feb 11 2026) — https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=471250&fid=471251 via https://www.cia-ica.ca/publications/225015e/ (sha256 61fca56ff76325e18d5402a9e74e579f3af9c30e813072f39c77f92c6a88d577)"
+    - "CAS Exam 6C (Canada) Content Outline, Fall 2026 — https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf (sha256 1bd4b2b802cf0976c797bc068c2903fa8deaf43d9366a85aadf5b34a568275c1)"
+  open_findings: 3
   open_critical: 0
   log: .verify/Resources/Books/CIA FCT 2.md
 ---

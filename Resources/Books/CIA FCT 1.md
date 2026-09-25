@@ -7,14 +7,17 @@ Publisher: "Canadian Institute of Actuaries"
 Type: "Educational Note"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/225095e/)"
 verification:
-  status: unverified
+  status: disputed
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-09-25
+  last_checked_by: agent:validate-v1
   content_hash: sha256:73bab23a598d5ef79ca8404c5ab1e97107f6298846fe611e68323bb5ae5a916f
-  sources: []
-  open_findings: 0
-  open_critical: 0
+  sources:
+    - "CIA Educational Note: Financial Condition Testing, Document 225095, August 27 2025 — https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=623006&fid=623007 via https://www.cia-ica.ca/publications/225095e/ (sha256 a7000684b226d0bc23a50fb6fa1e4193da8ebfa05ea0aea619df186acb3aa3f8)"
+    - "CAS Exam 6C (Canada) Content Outline, Fall 2026 — https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf (sha256 1bd4b2b802cf0976c797bc068c2903fa8deaf43d9366a85aadf5b34a568275c1)"
+    - "CIA Standards of Practice, April 2026 (Actuarial Standards Board) — https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=713004&fid=713005 (sha256 cc9fedc79c4d758a081d75d157071edef0b26dbcdc7968fe12b7700179344a6c)"
+  open_findings: 3
+  open_critical: 1
   log: .verify/Resources/Books/CIA FCT 1.md
 ---
 ![[CIA FCT 1 - Cover.svg]]

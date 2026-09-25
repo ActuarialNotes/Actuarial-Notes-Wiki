@@ -7,13 +7,16 @@ Publisher: "Canadian Institute of Actuaries"
 Type: "Educational Note"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/223127e/)"
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:c42d370a8e6d575d9e17a6137737345b42663d3ea85a90c904491c709f5298a6
-  sources: []
-  open_findings: 0
+  last_checked: 2026-09-25
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:f7ba7b98c1b7e6b54359fb032bd3be1091041f8f8fd2ade7821f35923f27106e
+  sources:
+    - "CIA Educational Note: Subsequent Events, August 10 2023 — https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36335&fid=17259 via https://www.cia-ica.ca/publications/223127e/ (sha256 0e7a8802fab748518eca08438b81f3e7b481a667eeb5302bd7ecef0f09becc6a)"
+    - "CAS Exam 6C (Canada) Content Outline, Fall 2026 — https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf (sha256 1bd4b2b802cf0976c797bc068c2903fa8deaf43d9366a85aadf5b34a568275c1)"
+    - "CIA Standards of Practice, April 2026 (Actuarial Standards Board) — https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=713004&fid=713005 (sha256 cc9fedc79c4d758a081d75d157071edef0b26dbcdc7968fe12b7700179344a6c)"
+  open_findings: 2
   open_critical: 0
   log: .verify/Resources/Books/CIA Subsequent Events.md
 ---
@@ -48,7 +51,7 @@ It is a rule that produces a definite answer from a fact pattern, which makes it
 Section 7 matters too: the actuary, management and the **[[External Auditor|external auditor]]** may each learn of an event first, and each has a different reporting obligation and a different cut-off date. That connects to [[OSFI Memorandum]] and to the actuary–auditor relationship in Domain C5.
 
 ## Related readings
-- [[CIA CSOP]] §1520 — the binding standard
+- [[CIA CSOP]] §1430 — the binding standard
 - [[CIA Materiality]] — the threshold at which an event matters
 - [[CIA Valuation]] §7.2 — recent judicial, legislative and regulatory events
 

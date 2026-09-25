@@ -7,13 +7,16 @@ Publisher: "Canadian Institute of Actuaries"
 Type: "Educational Note"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/223126e/)"
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-09-25
+  last_checked_by: agent:validate-v1
   content_hash: sha256:aad3d6fb04b6a628f9eb439ee3f8b613a0dd2c69c559831768dd1d8e84d4ef91
-  sources: []
-  open_findings: 0
+  sources:
+    - "CIA PCFRC, Educational Note: Duration Considerations for P&C Insurers (August 10, 2023, Document 223126), https://www.cia-ica.ca/publications/223126e/ (PDF dl_file.php?p=38858&fid=17251), sha256 b8b49f0c35ec5af64b806fe4221ba32bf860035117b4fd36efd984eb36218f5a"
+    - "CIA Duration Excel illustrations, https://www.cia-ica.ca/publications/223126te/ (xlsx fetched, not reviewed)"
+    - "CAS Exam 6C Content Outline Fall 2026, https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf, sha256 1bd4b2b802cf0976c797bc068c2903fa8deaf43d9366a85aadf5b34a568275c1"
+  open_findings: 2
   open_critical: 0
   log: .verify/Resources/Books/CIA Duration.md
 ---

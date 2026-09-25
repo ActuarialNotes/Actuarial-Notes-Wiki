@@ -7,13 +7,15 @@ Publisher: "Canadian Institute of Actuaries"
 Type: "Educational Note"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2023-05/6C_CIA_Educatitional_Note_Comparision_of_IFRS_17_to_CurrentCIA.pdf)"
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:dac5369860cf92d9c5fac2a09bd53ad5cc741947c858d29e743804bb266b0079
-  sources: []
-  open_findings: 0
+  last_checked: 2026-09-25
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:898097c64aa2948147e8aaa5476ad15d4a35b41977dcb6c321c4123ac4615ac5
+  sources:
+    - "CIA Educational Note, Comparison of IFRS 17 to Current CIA Standards of Practice (June 2022, doc 222094), https://www.casact.org/sites/default/files/2023-05/6C_CIA_Educatitional_Note_Comparision_of_IFRS_17_to_CurrentCIA.pdf sha256:dad0c798ecf3320c7887ed8bdb2820811617951a5c94c1ede6b05da9706560db — bookmark outline, §§5.2, 6.1, 7.1, 8.1.1, 9"
+    - "CAS Exam 6C Content Outline Fall 2026, https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf sha256:1bd4b2b802cf0976c797bc068c2903fa8deaf43d9366a85aadf5b34a568275c1"
+  open_findings: 3
   open_critical: 0
   log: .verify/Resources/Books/CIA IFRS 17 - Comparison.md
 ---
@@ -27,9 +29,9 @@ The CIA's June 2022 note setting **[[IFRS 17]] against the Canadian valuation pr
 2. **IFRS 17 overview and comparison to current practice**
 3. **Classification of contracts** — 3.1 general, *(3.2 life and health excluded)*, 3.3 P&C, 3.4 reinsurance
 4. **Separation of contract components** — embedded derivatives, investment components, service components
-5. **Selection of measurement approach** — overview, the [[Premium Allocation Approach|PAA]], the variable fee approach, *(5.3 excluded)*, measurement approach for typical Canadian products
+5. **Selection of measurement approach** — overview, the [[Premium Allocation Approach|PAA]], *(5.3 excluded)*, measurement approach for typical Canadian products
 6. **Measurement considerations** — [[Level of Aggregation|level of aggregation]], [[Contract Boundary|contract boundary]] and coverage period
-7. **Probability-weighted cash flows** — comparison to current practice, cash flows varying with financial risk, deferrable acquisition expenses *(7.2 excluded)*
+7. **Probability-weighted cash flows** — comparison to current practice, deferrable acquisition expenses *(7.2 excluded)*
 8. **Discounting** — comparison to current practice (8.1.1 P&C; *8.1.2 life and health excluded*), the bottom-up and top-down approaches
 
 ## The comparison that matters for P&C

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:07d7871ecca7d8cbb1b7b38074904cc43025333b1cfb297a61447634606363ac
+  content_hash: sha256:c8139ddd2a55f290c90cec30496dfcee59c742e0a697f1442f2b97f54e738909
   sources: []
   open_findings: 0
   open_critical: 0
@@ -36,19 +36,23 @@ verification:
 > Compute each slow-pay ratio and the provision.
 >
 > > [!answer]-
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{Ratio}_X &= \frac{1.2}{10.0 + 6.0} \\
 > > &= 7.5\% \\[4pt]
 > > \text{Provision}_X &= 0.20 \times 1.2 \\
 > > &= \$0.24\text{M}
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{Ratio}_Y &= \frac{1.5}{4.0 + 2.0} \\
 > > &= 25\% \\[4pt]
 > > \text{Provision}_Y &= \max(0.20 \times 18.0,\ 0.20 \times 1.5) \\
 > > &= \$3.60\text{M}
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > Total provision $\$3.84$M, charged directly to surplus. Y's overdue balance is only $\$1.5$M, but crossing the $20\%$ slow-pay line extends the charge to everything Y owes — including IBNR recoverables not yet billed. The penalty is designed to bite before a reinsurer fails, not after.
 
@@ -56,13 +60,15 @@ verification:
 > An unauthorized reinsurer owes $\$25.0$M: $\$3.0$M on paid losses (of which $\$0.5$M over 90 days past due, none disputed), $\$18.0$M on unpaid losses and LAE, and $\$4.0$M of ceded unearned premium. The cedant holds a $\$15.0$M letter of credit and $\$4.0$M of funds withheld. Compute the provision.
 >
 > > [!answer]-
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{Unsecured} &= 25.0 - 15.0 - 4.0 \\
 > > &= \$6.0\text{M} \\[4pt]
 > > \text{Overdue charge} &= 0.20 \times 0.5 \\
 > > &= \$0.1\text{M} \\[4pt]
 > > \text{Provision} &= 6.0 + 0.1 \\
 > > &= \$6.1\text{M}
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > Unauthorized reinsurance earns statutory credit only where it is collateralised, so the unsecured $\$6.0$M is charged in full regardless of the reinsurer's actual strength. A cedant can remove the charge by obtaining more collateral — which is why letters of credit and trusts are negotiated into treaties with non-U.S. reinsurers.

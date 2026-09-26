@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:6483b2766e8e18d2a4154dfac34a5c7aa2ecb249f76f5171c9d44ad54b860bf0
+  content_hash: sha256:d269eb0646252871ecb9b84648f569fd8173886e36e8c29621d52f3eef296626
   sources: []
   open_findings: 0
   open_critical: 0
@@ -25,11 +25,11 @@ verification:
   - $G'(0) = 1/E[y]$, so the slope at the origin gives the mean damage ratio.
   - $p = G'(1)/G'(0)$ is the probability of a total loss.
   - $F(y) = 1 - G'(y)/G'(0)$ for $y < 1$, so the curve and the distribution determine each other.
-- **Fitting a loss-distribution-based curve.** Bernegger's **MBBEFD** class has two parameters, $b > 0$ and $g \ge 1$:
+- **The MBBEFD class.** Bernegger's loss-distribution-based family of curves has two parameters, $b > 0$ and $g > 1$, with separate limiting forms when $b = 1$ or $gb = 1$:
 
-  > $$G_{b,g}(d) = \frac{\ln\!\left[\dfrac{(g-1)b + (1-gb)\,b^{d}}{1-b}\right]}{\ln(gb)}$$
+> $$G_{b,g}(d) = \frac{\ln\!\left[\dfrac{(g-1)b + (1-gb)\,b^{d}}{1-b}\right]}{\ln(gb)}$$
 
-  Fit it to the total-loss probability and the mean: $g = 1/p$ directly, then solve for $b$ iteratively from $\mu = E[y]$, which falls as $b$ rises. It can also be fitted to $\mu$ and the standard deviation.
+- **Fitting it.** Match the total-loss probability and the mean: $g = 1/p$ directly, then solve for $b$ iteratively from $\mu = E[y]$, which falls as $b$ rises. It can also be fitted to $\mu$ and the standard deviation.
 - **The Swiss Re curves.** The one-parameter family $b(c) = e^{3.1 - 0.15(1+c)c}$, $g(c) = e^{(0.78 + 0.12c)c}$ reproduces the Swiss Re curves Y1–Y4 at $c = 1.5$, $2$, $3$, $4$ and a Lloyd's industrial curve at $c = 5$. At $c = 0$ every loss is a total loss. Higher $c$ gives a more concave curve: small partial losses relative to the MPL, typical of large industrial risks.
 - **Exposure rating.** Band the risk profile by MPL, estimate each band's expected loss as ELR × premium, and apply $G$ band by band. For casualty lines, [[Increased Limits|ILFs]] play the role of $G$ ([[Reinsurance Pricing]]). The curve prices a *per-risk* cover and says nothing about catastrophe accumulation.
 

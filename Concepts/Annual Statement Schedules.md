@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:b4b4f3116b3f8b3a3883cda8a329484e5b37fb3874d6be50a02b1c4a8f75cc3b
+  content_hash: sha256:ec4cdd810a13f7a9fab15b7a9975e4d368cb73c740bd64194e6693953151e4df
   sources: []
   open_findings: 0
   open_critical: 0
@@ -30,7 +30,8 @@ verification:
 > > [!answer]-
 > > Designations $1$ and $2$ are investment grade; $3$ to $6$ are not.
 > >
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{Total bonds} &= 1{,}050 + 300 + 90 + 45 + 12 + 3 \\
 > > &= \$1{,}500\text{M} \\[4pt]
 > > \text{Below investment grade} &= 90 + 45 + 12 + 3 \\
@@ -41,7 +42,8 @@ verification:
 > > &= 30\% \\[4pt]
 > > \text{Loss at } 20\% &= 0.20 \times \$150\text{M} \\
 > > &= \$30\text{M}
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > A $\$30$M loss is $6\%$ of surplus. The $10\%$ share of the portfolio looks modest; measured against surplus — the cushion that actually protects policyholders — the exposure is three times as large. Schedule analysis almost always normalises to surplus for that reason.
 

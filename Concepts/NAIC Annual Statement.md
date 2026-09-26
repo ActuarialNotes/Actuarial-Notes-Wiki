@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:cef24c841f01d0fe6b9dc11454f5b1bdd414f9835613c8f2dc565f97b63a3ce5
+  content_hash: sha256:2236d4c4bb1fca406445e0f280cb2a6aed25351083777ad2a4359ddc7b5ee8f8
   sources: []
   open_findings: 0
   open_critical: 0
@@ -30,10 +30,12 @@ verification:
 > Compute year-end surplus and say where in the statement each item would be investigated.
 >
 > > [!answer]-
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{Surplus}_t &= 500.0 + 40.0 - 12.0 - 3.0 - 2.0 - 15.0 \\
 > > &= \$508.0\text{M}
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > Net income was $\$40$M, yet surplus grew only $\$8$M. Where to look:
 > >

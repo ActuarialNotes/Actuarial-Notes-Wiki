@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a97701f844ac7a77d3ea6c439b3d23b00e94c23585c25fc15d53eaea215415f6
+  content_hash: sha256:57003b70b26654a67fa28b78023b3be40e26da1607a827cdd5860bcb0e38d666
   sources: []
   open_findings: 0
   open_critical: 0
@@ -53,14 +53,16 @@ verification:
 > > | $2022$ | $3{,}200$ | $4{,}500$ | |
 > > | $2023$ | $3{,}500$ | | |
 > >
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > f_{12 \to 24} &= \frac{4{,}200 + 4{,}500}{3{,}000 + 3{,}200} \\
 > > &= 1.403 \\[4pt]
 > > f_{24 \to 36} &= \frac{4{,}850}{4{,}200} \\
 > > &= 1.155 \\[4pt]
 > > \text{Case}_{2021,36} &= 5{,}450 - 3{,}900 - 600 \\
 > > &= 950
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > Developing Part 2 directly would project the company's *own* IBNR forward and mix a reserving judgement into the data; stripping Part 4 out first gives an independent view — which is what an opining actuary needs. See [[Age to Age Factor]] and [[Chain Ladder Method]].
 
@@ -68,13 +70,15 @@ verification:
 > Using the Part 2 figures above, compute the one-year development at the latest year end for AY 2021 and 2022, and compare it with prior-year surplus of $\$9{,}000$ thousand.
 >
 > > [!answer]-
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{AY 2021} &= 5{,}450 - 5{,}300 \\
 > > &= +150 \\[4pt]
 > > \text{AY 2022} &= 5{,}800 - 5{,}400 \\
 > > &= +400 \\[4pt]
 > > \text{Total} &= +550 \\[4pt]
 > > \frac{550}{9{,}000} &= 6.1\%
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > Positive development is **adverse**: last year's estimates of these accident years were $\$550$ thousand too low, and the shortfall came out of this year's income. Both years moved the same way, and the younger year moved more, so the actuary should ask whether the latest accident year, estimated on the same basis, is also understated.

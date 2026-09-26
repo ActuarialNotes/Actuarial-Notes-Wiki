@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a1c9f5c9969472da4da437d959e201d009d746d600791ba64a1f6b61a0696ce4
+  content_hash: sha256:82aa4774b5308f92bbe97381844b3f9f61da2ce13d69e6391bef9c360eade70e
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,7 +23,7 @@ verification:
 - **The four phases.** *Diagnose*: a high-level assessment of the risks that could seriously threaten the firm's value — general environment, industry and firm-specific. *Analyze*: model the critical risks as probability distributions of outcomes, with their correlations, and rank what drives the bad outcomes. *Implement*: treat each risk — avoid it, reduce its frequency or severity, transfer it, retain it, or exploit it ([[Risk Mitigation]]). *Monitor*: compare results with expectations and update. ERM is a continuing cycle, not a project.
 - **What makes it "enterprise".** Every [[Risk Taxonomies|category]] — insurance hazard, [[Financial Risk|financial]], [[Operational Risk|operational]] and strategic — is managed as one portfolio, so correlations and concentrations that no silo sees become visible, and upside is exploited as well as downside controlled. That is its link to the overall [[Business Risk|risk of the business]] and to [[Business Strategy|strategy]].
 - **The internal risk model is its engine.** A realistic program needs an internal model ([[Risk Modeling]]) of underwriting, reserve, catastrophe and asset risk with their dependencies, used for capital adequacy, capital allocation, reinsurance, asset allocation and planning. Brehm's implementation issues are practical: staffing and scope; [[Model Selection|model choice]] and parameter development, much of it expert opinion, with correlations sensitive enough to need executive ownership; and integration into the planning and reinsurance-buying calendar so the output is actually used.
-- **It is anchored by [[Risk Appetite|risk appetite]]** and expressed through [[Risk Measure|risk measures]] (VaR, TVaR, expected policyholder deficit) that turn the model's output into capital targets and limits. Regulators now expect insurers to document it in an [[ORSA]].
+- **It is anchored by [[Risk Appetite|risk appetite]]** and expressed through [[Risk Measure|risk measures]] (VaR, TVaR, expected policyholder deficit) that turn the model's output into capital targets and limits. Regulators — OSFI in Canada, Solvency II in Europe, and the NAIC for U.S. insurers above a size threshold — now expect insurers to document it in an [[ORSA]].
 
 > [!example]- Setting Up the Program at a Regional Insurer {Example}
 > A regional insurer writes Gulf Coast homeowners and commercial property plus a fast-growing commercial auto book, and holds mostly long-duration corporate bonds. The CEO asks the new chief risk officer to "set up ERM". What should each phase produce in the first year?

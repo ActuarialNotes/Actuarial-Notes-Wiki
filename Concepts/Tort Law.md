@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:af2a2ac9ff21b08b78adee2a2b2bb1efc35d288a9707afddc87c50ce8e09fffc
+  content_hash: sha256:2ee2ad33256623866e62aab054caa03df8c0e02ecc8c558d40ae9ef64704f28a
   sources: []
   open_findings: 0
   open_critical: 0
@@ -32,23 +32,27 @@ verification:
 > > [!answer]-
 > > **(a) $p = 30\%$:**
 > >
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > R_{\text{pure}} &= 0.70 \times \$800{,}000 \\
 > > &= \$560{,}000 \\
 > > R_{50\%\text{ bar}} &= \$560{,}000 \\
 > > R_{51\%\text{ bar}} &= \$560{,}000 \\
 > > R_{\text{contributory}} &= \$0
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > **(b) $p = 50\%$:**
 > >
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > R_{\text{pure}} &= 0.50 \times \$800{,}000 \\
 > > &= \$400{,}000 \\
 > > R_{50\%\text{ bar}} &= \$0 \\
 > > R_{51\%\text{ bar}} &= \$400{,}000 \\
 > > R_{\text{contributory}} &= \$0
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > The insurer's cost for the identical accident ranges from $\$0$ to $\$560{,}000$ depending only on the state — why liability rates and reserves are built state by state, and why a switch of regime is a reserve event for every open claim.
 
@@ -68,13 +72,15 @@ verification:
 > >
 > > **(c) Hybrid** — joint for economic, several for non-economic:
 > >
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{Economic} &= 0.90 \times \$400{,}000 \\
 > > &= \$360{,}000 \\
 > > \text{Non-economic} &= 0.20 \times \$600{,}000 \\
 > > &= \$120{,}000 \\
 > > \text{Total} &= \$360{,}000 + \$120{,}000 \\
 > > &= \$480{,}000
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > The same verdict costs the insurer $\$200{,}000$, $\$480{,}000$ or $\$900{,}000$. Joint and several liability is why a solvent, insured defendant with a small share of fault can bear most of a loss — and why its reform is a standing item on tort-reform agendas.

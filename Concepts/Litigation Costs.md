@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:11bfb98dda03556697cf81bd31da67658e49be0e71fe8e4565442d35344fa48d
+  content_hash: sha256:6dca90eba30a9acaa630fc1ae03b4cb70d6712392527f87ee509bfdd81e18bf5
   sources: []
   open_findings: 0
   open_critical: 0
@@ -30,7 +30,8 @@ verification:
 > Classify the insurer's costs and find the share of its outlay that reaches the claimant.
 >
 > > [!answer]-
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{DCC} &= \$110{,}000 + \$30{,}000 \\
 > > &= \$140{,}000 \\[4pt]
 > > \text{AO} &= \$25{,}000 \\[4pt]
@@ -40,7 +41,8 @@ verification:
 > > &= \$570{,}000 \\[4pt]
 > > \text{Share} &= \frac{\$570{,}000}{\$1{,}065{,}000} \\
 > > &= 53.5\%
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > Nearly half of what the insurer pays — $\$495{,}000$ — is consumed by lawyers and experts on both sides. The coverage-counsel fee is AO even though it is litigation, because it concerns *whether* the policy applies, not the defence of the claim.
 

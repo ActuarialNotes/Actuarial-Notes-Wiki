@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:d1bffd61c2ba6692136b15883605b649a2ed1a5755b16acb22081b48433a99b6
+  content_hash: sha256:d1cf8812f7d167f4915792a94101e3c6a4f74d8b72add40b6a659fdd9c3748a5
   sources: []
   open_findings: 0
   open_critical: 0
@@ -13,9 +13,9 @@ verification:
 
 **IFRS** (International Financial Reporting Standards) are the accounting standards issued by the International Accounting Standards Board (IASB) and required or permitted for listed companies in many jurisdictions — the EU, the UK, Canada and Australia among them. For insurers the governing standard is **[[IFRS 17]] *Insurance Contracts***, effective for annual periods beginning on or after 1 January 2023, with IFRS 9 for the investments. A U.S. actuary meets IFRS mainly through a U.S. subsidiary reporting to a foreign parent.
 
-> $$\text{LIC} = \text{PV(future claim cash flows)} + \text{Risk adjustment}$$
+> $$\text{LIC} = \text{PV(claim cash flows)} + \text{RA}$$
 
-- **The measurement gap with the U.S. bases.** [[Statutory Accounting Principles|SAP]] and [[GAAP]] carry P&C claim liabilities at an undiscounted estimate with no explicit margin; the IFRS 17 [[Liability for Incurred Claims]] is discounted at current rates and carries an explicit [[Risk Adjustment for Non-Financial Risk|risk adjustment]] whose confidence level is disclosed.
+- **The measurement gap with the U.S. bases.** [[Statutory Accounting Principles|SAP]] and [[GAAP]] carry P&C claim liabilities at an undiscounted estimate with no explicit margin; the IFRS 17 [[Liability for Incurred Claims]] (LIC) is discounted at current rates and carries an explicit [[Risk Adjustment for Non-Financial Risk|risk adjustment]] (RA) whose confidence level is disclosed.
 - **The premium side.** Under the [[Premium Allocation Approach]] — available for coverage periods of one year or less, so most P&C business — the [[Liability for Remaining Coverage]] resembles unearned premium less deferred acquisition costs; there is no separate DAC asset, and on such contracts acquisition costs may instead be expensed as incurred. An [[Onerous Contract|onerous]] group recognises its expected loss at once.
 - **Reinsurance** is presented gross, as under GAAP and unlike SAP: [[Reinsurance Contracts Held]] are a separately measured asset, reduced for the reinsurer's risk of non-performance.
 - **The income statement** replaces written and earned premium with [[Insurance Revenue]], and separates the [[Insurance Service Result]] from [[Insurance Finance Income or Expenses|insurance finance income or expense]] (the unwinding of discount). Neither SAP nor GAAP makes that split.

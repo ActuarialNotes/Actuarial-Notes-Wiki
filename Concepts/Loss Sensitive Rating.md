@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:12bec7411f39a1b5fbf1e093e537b80d7201b13e8cc31fec120354764f2cb598
+  content_hash: sha256:6eac6529e388b2c4a71303c8e090bd1cfb27c865e710b9e6e3ead448f9d410cd
   sources: []
   open_findings: 0
   open_critical: 0
@@ -15,12 +15,12 @@ verification:
 
 > $$L = \min\left(\max(A,\ r_H E),\ r_G E\right)$$
 
-> $$E[L] = E\left[1 - \phi(r_G) + \psi(r_H)\right]$$
+> $$\mathrm{E}[L] = E\left(1 - \phi(r_G) + \psi(r_H)\right)$$
 
 > $$B = e - (c - 1)E + cI$$
 
-- $A$ is the actual aggregate (ratable) loss, $E$ its expected value, and $r = A/E$ the **entry ratio**. $r_G$ and $r_H$ are the entry ratios at the maximum and minimum. The **Table M charge** $\phi(r) = E[\max(A/E - r,\,0)]$ is the expected loss above $rE$ per unit of $E$, and the **savings** $\psi(r) = E[\max(r - A/E,\,0)]$ is the expected shortfall below it. Always $\psi(r) = \phi(r) + r - 1$.
-- **Retro premium** is $R = (B + cL)\,T$, with loss conversion factor $c$ (loads LAE) and tax multiplier $T = 1/(1 - \text{tax rate})$. Setting $E[R]/T = e + E$ gives the basic premium $B$ above. Here $e$ is total expense before taxes, including LAE and profit, and $I = E[\phi(r_G) - \psi(r_H)]$ is the **net insurance charge**. Fisher et al. note that this *balanced* premium is no longer required or desirable for most plans, because the plans transfer less risk than guaranteed cost; the *expected losses* must still balance.
+- $A$ is the actual aggregate (ratable) loss, $E = \mathrm{E}[A]$ its expected value, and $r = A/E$ the **entry ratio**. $r_G$ and $r_H$ are the entry ratios at the maximum and minimum. The **Table M charge** $\phi(r) = \mathrm{E}[\max(A/E - r,\,0)]$ is the expected loss above $rE$ per unit of $E$, and the **savings** $\psi(r) = \mathrm{E}[\max(r - A/E,\,0)]$ is the expected shortfall below it. Always $\psi(r) = \phi(r) + r - 1$.
+- **Retro premium** is $R = (B + cL)\,T$, with loss conversion factor $c$ (loads LAE) and tax multiplier $T = 1/(1 - \text{tax rate})$. Setting $\mathrm{E}[R]/T = e + E$ gives the basic premium $B$ above. Here $e$ is total expense before taxes, including LAE and profit, and $I = E[\phi(r_G) - \psi(r_H)]$ is the **net insurance charge**. Fisher et al. note that this *balanced* premium is no longer required or desirable for most plans, because the plans transfer less risk than guaranteed cost; the *expected losses* must still balance.
 - **Per-occurrence limits.** A loss limit adds an excess-loss charge. The aggregate charge is then computed on *limited* losses (Table M$_D$), or both are combined in one charge (Table L). Table M is entered by risk size, because small risks have volatile entry ratios and therefore larger charges.
 - **The other plans** (large deductibles are now more common than retro plans):
   - *Large deductible:* the insurer pays every claim and bills the deductible back. It must have a per-occurrence limit, may have an aggregate, and has no minimum. Reimbursements are not premium, so they escape premium tax.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:12017635bc7d0a9770369cdaac287451d76f38f1ed51f06f0d6b56c20f167412
+  content_hash: sha256:21cbba377382fca1b10e0046bb069feed3153f7e62b6d6436b140fb43bdd8cc2
   sources: []
   open_findings: 0
   open_critical: 0
@@ -34,14 +34,16 @@ verification:
 > An insurer writes $\$12{,}000{,}000$ of annual policies, all effective July 1. Acquisition costs (commissions, premium tax and other acquisition) are $20\%$ of written premium, paid at issue. Ignoring losses and tax, compare the year-end statutory and GAAP positions.
 >
 > > [!answer]-
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{Unearned premium} &= 0.5 \times \$12{,}000{,}000 \\
 > > &= \$6{,}000{,}000 \\[4pt]
 > > \text{Acquisition cost} &= 0.20 \times \$12{,}000{,}000 \\
 > > &= \$2{,}400{,}000 \\[4pt]
 > > \text{GAAP DAC} &= 0.20 \times \$6{,}000{,}000 \\
 > > &= \$1{,}200{,}000
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > Under SAP the full $\$2{,}400{,}000$ is expensed this year, while the unearned premium reserve is held at the full $\$6{,}000{,}000$. Under GAAP only $\$1{,}200{,}000$ is expensed and the other $\$1{,}200{,}000$ is an asset. GAAP equity is therefore $\$1{,}200{,}000$ higher before tax — the equity in the unearned premium reserve.
 > >
@@ -51,13 +53,15 @@ verification:
 > An insurer's total assets are $\$950$M and liabilities $\$700$M. Included in assets are furniture and equipment $\$6$M, prepaid expenses $\$3$M, uncollected premium more than 90 days overdue $\$5$M, and $\$8$M of deferred tax assets above the admissibility limit. Compute statutory surplus.
 >
 > > [!answer]-
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{Nonadmitted} &= 6 + 3 + 5 + 8 \\
 > > &= \$22\text{M} \\[4pt]
 > > \text{Admitted assets} &= 950 - 22 \\
 > > &= \$928\text{M} \\[4pt]
 > > \text{Statutory surplus} &= 928 - 700 \\
 > > &= \$228\text{M}
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > Had every asset been admitted, surplus would have been $\$250$M; nonadmission removes $8.8\%$ of it. Each excluded item is real, but none can be relied on to pay a claim in a wind-up — the recognition concept at work.

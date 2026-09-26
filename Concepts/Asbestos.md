@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:b7b9099597b7f2c506b953bc3142b2dd1715acd253b6997f070c2e6cb88cbfbf
+  content_hash: sha256:98b9514b6b56b8bdd0b00e2f5745e2fe72d71b7d752faef2f6b178fd8a8d5b33
   sources: []
   open_findings: 0
   open_critical: 0
@@ -35,14 +35,16 @@ verification:
 > >
 > > **(c) Continuous trigger, pro rata:** the triggered period is 1965–2004, $40$ years, of which A covers $11$, B covers $10$ and $19$ are excluded.
 > >
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{A} &= \frac{11}{40} \times \$2{,}000{,}000 \\
 > > &= \$550{,}000 \\[4pt]
 > > \text{B} &= \frac{10}{40} \times \$2{,}000{,}000 \\
 > > &= \$500{,}000 \\[4pt]
 > > \text{Contractor} &= \frac{19}{40} \times \$2{,}000{,}000 \\
 > > &= \$950{,}000
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > **(d) Continuous trigger, all sums:** the contractor selects a triggered A or B policy to pay the full $\$2{,}000{,}000$; that insurer seeks contribution from the other. The excluded years bear nothing, so **insurers pay the whole claim**.
 > >

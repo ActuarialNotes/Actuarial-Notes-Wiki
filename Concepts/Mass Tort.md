@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:3285721f2fb0f8346b259a36e0c1caaf9d35c951ade193dd1448b6eba07e5fd5
+  content_hash: sha256:3fec7bf9d964d1e81366a9cba5612919ac186abd4f928b1aacd20f0d953b2b8e
   sources: []
   open_findings: 0
   open_critical: 0
@@ -28,20 +28,24 @@ verification:
 > > [!answer]-
 > > **(a) Each claim $\$400{,}000$; total $\$20$M.**
 > >
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{One occurrence} &= \min(\$20{,}000{,}000 - \$100{,}000,\ \$1{,}000{,}000) \\
 > > &= \$1{,}000{,}000 \\[4pt]
 > > \text{Fifty occurrences} &= 50 \times \min(\$300{,}000,\ \$1{,}000{,}000) \\
 > > &= \$15{,}000{,}000
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > **(b) Each claim $\$80{,}000$; total $\$4$M.**
 > >
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{One occurrence} &= \min(\$4{,}000{,}000 - \$100{,}000,\ \$1{,}000{,}000) \\
 > > &= \$1{,}000{,}000 \\[4pt]
 > > \text{Fifty occurrences} &= 50 \times \$0 \\
 > > &= \$0
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > With large claims the policyholder argues for fifty occurrences (fifty limits) and the insurer for one; with small claims the positions reverse, because fifty deductibles swallow every claim. The legal characterisation of a mass tort can move the insurer's cost by an order of magnitude with no change in the underlying injuries — which is why the occurrence question is litigated so heavily and why an actuary must reserve under the interpretation actually likely to prevail.

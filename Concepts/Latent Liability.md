@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ca072a392e7e95da18b3320dc71fa09682c36ea37c0ffd1c571af8428a6649be
+  content_hash: sha256:eef2a3bb0118b4e4b7db18fc4767ff1799ea5e8c865e34723470f85c0e76ac5b
   sources: []
   open_findings: 0
   open_critical: 0
@@ -34,29 +34,35 @@ verification:
 > > [!answer]-
 > > **As reported:**
 > >
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{Average paid} &= \frac{30 + 45 + 45}{3} \\
 > > &= \$40.0\text{M} \\[4pt]
 > > \text{Survival ratio} &= \frac{360}{40.0} \\
 > > &= 9.0 \text{ years}
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > **Excluding the buyback** — a one-time payment that also removed future liability:
 > >
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{Average paid} &= \frac{30 + 45 + 25}{3} \\
 > > &= \$33.3\text{M} \\[4pt]
 > > \text{Survival ratio} &= \frac{360}{33.3} \\
 > > &= 10.8 \text{ years}
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > **Peer benchmark:**
 > >
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{Implied reserve} &= 13 \times \$33.3\text{M} \\
 > > &= \$433\text{M} \\[4pt]
 > > \text{Gap} &= \$433\text{M} - \$360\text{M} \\
 > > &= \$73\text{M}
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > The buyback made the reserve look nearly two years thinner than it is, which is why the payment history should be cleaned before the ratio is read. Even after cleaning, $10.8$ years against a peer $13$ suggests a possible $\$73$M shortfall — a flag for an exposure-based study, not a reserve estimate, since the peers' mix of policyholders and remaining claim lifetimes may differ.

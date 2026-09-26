@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:b2a15395f3c29a4c704dce0825fb5282fe1350681649d562176b32d5ef4fb9ac
+  content_hash: sha256:9582dd89667d7ddd6b7c2564e7651bebf7832458f2493b49586a6e407a71e8dc
   sources: []
   open_findings: 0
   open_critical: 0
@@ -30,7 +30,8 @@ verification:
 > Compute the three profit measures and interpret them.
 >
 > > [!answer]-
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{LAE-inclusive losses} &= 68{,}000 + 7{,}000 + 6{,}000 \\
 > > &= 81{,}000 \\[4pt]
 > > \text{UW expenses} &= 12{,}000 + 2{,}500 + 5{,}000 + 6{,}000 \\
@@ -41,7 +42,8 @@ verification:
 > > &= 2{,}500 \\[4pt]
 > > \text{Total profit} &= 2{,}500 + 4{,}000 \\
 > > &= 6{,}500
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > The line runs at a $107\%$ combined ratio to earned premium — an underwriting loss of $7\%$ — and is rescued by investment income on its long-tailed reserves. Only $\$2.5$ million is earned from the insurance operation once its own funds are credited; the remaining $\$4.0$ million is income on surplus allocated by formula, which the NAIC itself cautions against reading as line profitability.
 
@@ -57,13 +59,15 @@ verification:
 > Compute three-year ratios for other acquisition expense to written premium and general expense to earned premium.
 >
 > > [!answer]-
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{Other acquisition} &= \frac{2{,}600 + 2{,}750 + 3{,}000}{50{,}000 + 54{,}000 + 58{,}000} \\
 > > &= \frac{8{,}350}{162{,}000} \\
 > > &= 5.15\% \\[4pt]
 > > \text{General} &= \frac{3{,}000 + 3{,}250 + 3{,}450}{48{,}000 + 52{,}000 + 56{,}500} \\
 > > &= \frac{9{,}700}{156{,}500} \\
 > > &= 6.20\%
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > Acquisition costs are incurred as policies are written, so they are related to written premium; general expenses are incurred through the policy term, so they are related to earned premium. Direct (Part III) data are the natural base because rates are charged on direct business. The selected ratios then feed the fixed and variable expense provisions of the indicated rate.

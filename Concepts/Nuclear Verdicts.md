@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:f7bf6b24729f8f26f28b74b7b6dbbc827ffcc06dc9dc2efb601f7c77ee5403c8
+  content_hash: sha256:975a8ab6bde2e8d1bd8599dcfb5b1023c0b5206c302d0d57b859700703c2a40a
   sources: []
   open_findings: 0
   open_critical: 0
@@ -30,10 +30,12 @@ verification:
 > > [!answer]-
 > > **(a)**
 > >
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > 1 + s &= \frac{1.10}{1.03} \\
 > > &= 1.0680
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > so $s \approx 6.8\%$ a year.
 > >
@@ -46,11 +48,13 @@ verification:
 > > | Excess, before | $0$ | $0.50$ | $2.00$ | $2.50$ |
 > > | Excess, after | $0$ | $0.65$ | $2.30$ | $2.95$ |
 > >
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{Ground-up: } \frac{5.83}{5.30} &= 1.100 \\
 > > \text{Primary: } \frac{2.88}{2.80} &= 1.029 \\
 > > \text{Excess: } \frac{2.95}{2.50} &= 1.180
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > Ground-up losses rise $10\%$, the primary layer only $2.9\%$, the excess layer $18\%$. A trend the primary insurer barely notices nearly doubles in the layers above it — which is why excess and reinsurance pricing reacted to social inflation before primary pricing did.
 
@@ -60,13 +64,15 @@ verification:
 > > [!answer]-
 > > **At the verdict:**
 > >
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{Primary} &= \$1\text{M} \\
 > > \text{Umbrella} &= \$4\text{M} \\
 > > \text{Excess} &= \$10\text{M} \\
 > > \text{Uninsured} &= \$18\text{M} - \$15\text{M} \\
 > > &= \$3\text{M}
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > **At a $\$12$M settlement:** primary $\$1$M, umbrella $\$4$M, excess $\$7$M, insured nothing.
 > >

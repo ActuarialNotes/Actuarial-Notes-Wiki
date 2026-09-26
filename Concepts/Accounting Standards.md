@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:95b5e052d2f20711e81b79a7c76dcb4d0fc93266085a4433f7776ed0e39758f7
+  content_hash: sha256:c85a0446543a755de47d66c7133057766b0ccdd6beee18391efbfdbc99ae3c52
   sources: []
   open_findings: 0
   open_critical: 0
@@ -13,7 +13,7 @@ verification:
 
 **Accounting Standards** are the authoritative rules that decide how transactions are recognised, measured, presented and disclosed in financial statements. A U.S. P&C insurer reports under several at once — [[Statutory Accounting Principles|statutory accounting (SAP)]] for regulators, [[GAAP]] for investors if it is SEC-registered, a tax basis for the IRS, and sometimes [[IFRS]] for a foreign parent — because each is built for a different user asking a different question.
 
-> $$\text{State SAP} = \text{NAIC AP\&P Manual} \pm \text{Prescribed or permitted practices}$$
+> $$\begin{aligned} \text{State SAP} = {} & \text{NAIC AP\&P Manual} \\ & \pm \text{Prescribed or permitted practices} \end{aligned}$$
 
 - **Who sets them.** SAP: the NAIC, through the Statements of Statutory Accounting Principles (SSAPs) in its *Accounting Practices and Procedures Manual*, with each state's law the final authority. GAAP: FASB's Accounting Standards Codification, enforced for public companies by the SEC. IFRS: the IASB. Tax: the Internal Revenue Code, which for a P&C insurer starts from the annual statement ([[Insurance Income Tax]]).
 - **Objectives explain every difference.** SAP's primary users are regulators judging solvency, and the Preamble to the Manual rests it on three concepts: **conservatism** (surplus should not be overstated, and valuation should damp swings over economic cycles), **recognition** (only assets available to pay policyholder obligations are admitted; the rest are charged against surplus) and **consistency** (comparable across companies and over time). GAAP serves investors in a going concern, so it matches costs to the revenue they earn.

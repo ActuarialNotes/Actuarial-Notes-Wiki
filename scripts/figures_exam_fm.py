@@ -597,29 +597,26 @@ def cash_flow() -> Fig:
     return f
 
 
-@figure("Annuities", "One timeline carrying the annuity family: due payments at the start "
-        "of each period, immediate ones at the end, a perpetuity's carrying on past n, and a "
-        "continuous stream as a band", width=WID)
+@figure("Annuities", "One timeline carrying the annuity family: short due payments at the "
+        "start of each period, tall immediate ones at the end, and a perpetuity's carrying "
+        "on past n", width=WID)
 def annuities() -> Fig:
     f = vcard()
 
-    y, n, h = 310, 4, 170
-    xs = timeline(f, y, 46, 306, 6, labels=["0", "1", "2", "3", "n", "", ""], label_dy=44)
-    f.rect(xs[0], y + 4, xs[n] - xs[0], 22, rx=3, fill=TEAL, fill_opacity="0.4",
-           stroke=TEAL, stroke_width="1.2")
-    f.text((xs[1] + xs[2]) / 2, y + 19, "continuous", cls="sm bold", fill=TEAL)
+    y, n = 320, 4
+    xs = timeline(f, y, 46, 306, 6, labels=["0", "1", "2", "3", "n", "", ""])
     for k in range(n):
-        cash_arrow(f, xs[k] - 4, y, h, colour=VIOLET, width=2)
+        cash_arrow(f, xs[k] - 5, y, 130, colour=VIOLET, width=2.2)
     for k in range(1, n + 1):
-        cash_arrow(f, xs[k] + 4, y, h, colour=BLUE, width=2)
+        cash_arrow(f, xs[k] + 5, y, 196, colour=BLUE, width=2.2)
     for k, fo in ((5, 0.55), (6, 0.25)):             # a perpetuity never stops
         f.raw(f'<g opacity="{fo}">')
-        cash_arrow(f, xs[k] + 4, y, h, colour=BLUE, width=2)
+        cash_arrow(f, xs[k] + 5, y, 196, colour=BLUE, width=2.2)
         f.raw("</g>")
-    f.text(xs[6] + 16, y - h / 2, "…", cls="bold", anchor="start")
-    f.text(xs[0] - 4, y - h - 8, "due", cls="sm bold", fill=VIOLET)
-    f.text(xs[n] + 4, y - h - 8, "immediate", cls="sm bold", fill=BLUE)
-    f.text((xs[5] + xs[6]) / 2 + 4, y - h - 26, "perpetuity", cls="sm bold", fill=BLUE)
+    f.text(xs[6] + 18, y - 98, "…", cls="bold", anchor="start")
+    f.text(xs[0] - 5, y - 142, "due", cls="sm bold")
+    f.text(xs[n] + 5, y - 208, "immediate", cls="sm bold")
+    f.text((xs[5] + xs[6]) / 2 + 5, y - 226, "perpetuity", cls="sm bold")
     return f
 
 
@@ -1636,7 +1633,7 @@ def convexity() -> Fig:
     dmac, _ = _macaulay(j0, flows=_dur_cashflows(n=n_long))
     dmod = dmac / (1 + j0)
     lo, hi = 0.015, 0.09
-    a = vaxes(f, lo, hi, 500, 1750, left=58, top=24)
+    a = vaxes(f, lo, hi, 500, 1950, left=58, top=24)
     curve_pts = [a.p(lo + (hi - lo) * k / 60, price(lo + (hi - lo) * k / 60))
                  for k in range(61)]
     tangent_pts = [a.p(lo + (hi - lo) * k / 60,
@@ -1647,13 +1644,13 @@ def convexity() -> Fig:
     a.polyline([(lo, p0 + dmod * p0 * (j0 - lo)),
                 (hi, max(500, p0 - dmod * p0 * (hi - j0)))], colour=AMBER, width=1.6)
     a.point(j0, p0, colour="var(--dim)", r=3.2)
-    a.label(0.021, 1470, "convexity", cls="sm bold", anchor="start", fill=GREEN)
+    a.label(0.024, 1620, "convexity", cls="sm bold", anchor="start", fill=GREEN)
     a.label(0.052, price(0.052), "price", cls="sm bold", anchor="start", dx=8, dy=-8,
             fill=BLUE)
     a.label(0.074, p0 - dmod * p0 * (0.074 - j0), "tangent", cls="sm bold",
             anchor="end", dx=-4, dy=14, fill=AMBER)
     a.frame(xlabel="yield j", xticks=[0.02, 0.05, 0.08],
-            xfmt=lambda t: f"{t * 100:.0f}%", yticks=[700, 1100, 1500],
+            xfmt=lambda t: f"{t * 100:.0f}%", yticks=[700, 1100, 1500, 1900],
             yfmt=lambda t: f"{t:,.0f}")
     return f
 
@@ -1828,22 +1825,21 @@ def full_immunization() -> Fig:
     return f
 
 
-@figure("Asset-Liability Portfolio", "Asset cash flows set against the liabilities they "
-        "fund", width=WID)
+@figure("Asset-Liability Portfolio", "Asset cash flows rising above the timeline set "
+        "against the liability outflows they fund falling below it", width=WID)
 def asset_liability_portfolio() -> Fig:
     f = vcard()
 
-    y = 236
-    xs = timeline(f, y, 52, 302, 8,
-                  labels=["0", "1", "2", "3", "4", "5", "6", "7", "8"])
+    y, k_h = 226, 2.2
+    xs = timeline(f, y, 52, 302, 8, labels=["0"] + [""] * 8)
     assets = {1: 28, 2: 36, 3: 32, 4: 44, 5: 32, 6: 36, 7: 28, 8: 66}
     liabs = {2: 32, 4: 40, 6: 32, 8: 54}
     for k, h in assets.items():
-        cash_arrow(f, xs[k] - 4, y, h, colour=BLUE)
+        cash_arrow(f, xs[k] - 5, y, h * k_h, colour=BLUE, width=2.2)
     for k, h in liabs.items():
-        cash_arrow(f, xs[k] + 4, y, h, colour=ROSE, up=False)
-    f.text(BCX, 128, "assets", cls="bold", fill=BLUE)
-    f.text(BCX, 366, "liabilities", cls="bold", fill=ROSE)
+        cash_arrow(f, xs[k] + 5, y, h * k_h, colour=ROSE, up=False, width=2.2)
+    f.text(xs[1] - 5, y - 28 * k_h - 10, "assets", cls="sm bold")
+    f.text(xs[2] + 5, y + 32 * k_h + 18, "liabilities", cls="sm bold")
     return f
 
 

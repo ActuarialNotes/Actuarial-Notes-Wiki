@@ -28,15 +28,16 @@ export interface ExamMonogram {
 /**
  * The exam's monogram lines, from its `exam_progress` key.
  *
- * The CAS upper-level keys are namespaced (`CAS-5`) but the exam is called
- * "Exam 5", so the prefix is dropped — the tile says what the candidate says.
+ * The CAS upper-level keys are namespaced (`CAS-5`, `CAS-PCPA`) but the exam is
+ * called "Exam 5" or "PCPA", so the prefix is dropped — the tile says what the
+ * candidate says.
  * Anything longer than three characters is split over two lines: at the name's
  * own hyphen when it has one (`MAS-I` → MAS / I), otherwise down the middle
  * with the shorter line on top (`ALTAM` → AL / TAM), which keeps the letter
  * that distinguishes ALTAM from ASTAM on the line the eye reads first.
  */
 export function examMonogramLines(examKey: string): string[] {
-  const name = examKey.replace(/^CAS-(?=\d)/, '').trim().toUpperCase()
+  const name = examKey.replace(/^CAS-/, '').trim().toUpperCase()
   if (!name) return ['?']
   if (name.length <= 3) return [name]
 

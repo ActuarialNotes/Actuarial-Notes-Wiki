@@ -230,6 +230,12 @@ const SYLLABUS_PDF_LINKS: Record<string, ExamPdfLink> = {
     url: 'https://www.casact.org/sites/default/files/2023-06/MASII_Content_Outline.pdf',
     label: 'Content Outline',
   },
+  // v.8, updated 9 Sep 2026 and effective September 2026 — the document the
+  // CAS PCPA page links as its content outline, despite the `2025_F` filename.
+  'pcpa-1': {
+    url: 'https://www.casact.org/sites/default/files/2024-05/Exam_PCPA_2025_F_Content_Outlines.pdf',
+    label: 'Content Outline',
+  },
   // Exams 6U, 8 and 9 have no entry: their current document hasn't been
   // located on casact.org. Adding a guess is the one thing this file forbids.
 }

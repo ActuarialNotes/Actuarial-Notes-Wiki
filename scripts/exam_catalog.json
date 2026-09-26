@@ -6,6 +6,7 @@
     { "page": "Exam MAS-I (CAS).md",  "exam_id": "MAS-I",  "wiki_id": "mas-i",  "progress_key": "MAS-I",  "body": "CAS", "bank": "exam-mas-i",  "status": "beta" },
     { "page": "Exam MAS-II (CAS).md", "exam_id": "MAS-II", "wiki_id": "mas-ii", "progress_key": "MAS-II", "body": "CAS", "bank": "exam-mas-ii", "status": "beta" },
     { "page": "Exam 5 (CAS).md",      "exam_id": "5",      "wiki_id": "5-1",    "progress_key": "CAS-5",  "body": "CAS", "bank": "exam-5",      "status": "beta" },
+    { "page": "Exam PCPA (CAS).md",   "exam_id": "PCPA",   "wiki_id": "pcpa-1", "progress_key": "CAS-PCPA", "body": "CAS", "bank": null,        "status": "development" },
     { "page": "Exam 6C (CAS).md",     "exam_id": "6C",     "wiki_id": "6c-1",   "progress_key": "CAS-6",  "body": "CAS", "bank": null,          "status": "development" },
     { "page": "Exam 6U (CAS).md",     "exam_id": "6U",     "wiki_id": "6u-1",   "progress_key": "CAS-6",  "body": "CAS", "bank": null,          "status": "development" },
     { "page": "Exam 7 (CAS).md",      "exam_id": "7",      "wiki_id": "7-1",    "progress_key": "CAS-7",  "body": "CAS", "bank": null,          "status": "development" },

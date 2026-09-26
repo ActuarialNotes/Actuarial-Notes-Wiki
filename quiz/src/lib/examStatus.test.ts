@@ -17,8 +17,8 @@ describe('examStatus', () => {
     }
   })
 
-  it('treats Exams 6-9 as in development, never beta', () => {
-    for (const key of ['CAS-6', 'CAS-7', 'CAS-8', 'CAS-9']) {
+  it('treats PCPA and Exams 6-9 as in development, never beta', () => {
+    for (const key of ['CAS-PCPA', 'CAS-6', 'CAS-7', 'CAS-8', 'CAS-9']) {
       expect(examStatus(key)).toBe('development')
       expect(isExamInDevelopment(key)).toBe(true)
       expect(isExamBeta(key)).toBe(false)
@@ -28,7 +28,7 @@ describe('examStatus', () => {
 
   it('matches the progress keys the exam pages resolve to', () => {
     // The vault's file names, cleaned the way WikiHome/WikiExam clean them.
-    const devPages = ['6C', '6U', '7', '8', '9']
+    const devPages = ['PCPA', '6C', '6U', '7', '8', '9']
     for (const id of devPages) {
       expect(isExamInDevelopment(wikiExamIdToProgressKey(id))).toBe(true)
     }

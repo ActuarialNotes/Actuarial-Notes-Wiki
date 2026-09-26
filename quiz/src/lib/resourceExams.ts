@@ -33,6 +33,7 @@ const EXAM_ORDER = [
   'Exam MAS-I',
   'Exam MAS-II',
   'Exam 5',
+  'Exam PCPA',
   'Exam 6C',
   'Exam 6U',
   'Exam 7',

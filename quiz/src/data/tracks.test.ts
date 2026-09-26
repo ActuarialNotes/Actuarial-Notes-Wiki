@@ -16,6 +16,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { TRACKS, EXAM_ID_TO_TRACK_NAME } from './tracks'
 import { parseExamMetadata, wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { isExamInDevelopment } from '@/lib/examStatus'
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..')
 
@@ -53,11 +54,12 @@ describe('credential tracks', () => {
 
   it('offers every studiable exam on the DEFAULT track', () => {
     // An exam with material that only appears under a credential track is an
-    // exam a candidate has to guess their way to. Exams 6–9 are excluded: they
-    // are a syllabus outline with no question bank (see lib/examStatus).
+    // exam a candidate has to guess their way to. Exams in development (PCPA,
+    // Exams 6–9) are excluded: they are a syllabus outline with no question
+    // bank (see lib/examStatus).
     const offered = new Set(defaultTrack.sections.flatMap(s => s.items).map(i => i.id))
     const missing = [...syllabusExamKeys()]
-      .filter(key => !/^CAS-[6789]$/.test(key))
+      .filter(key => !isExamInDevelopment(key))
       .filter(key => !offered.has(key))
     expect(missing).toEqual([])
   })

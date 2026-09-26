@@ -14,6 +14,8 @@ describe('examMonogramLines', () => {
     // The progress key is CAS-5; the exam is called "Exam 5".
     expect(examMonogramLines('CAS-5')).toEqual(['5'])
     expect(examMonogramLines('CAS-9')).toEqual(['9'])
+    // …and for a lettered requirement: PCPA, not CAS / PCPA.
+    expect(examMonogramLines('CAS-PCPA')).toEqual(['PC', 'PA'])
   })
 
   it('splits a hyphenated name at its own hyphen', () => {

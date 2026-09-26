@@ -1871,8 +1871,8 @@ def autoregressive_model() -> Fig:
     return f
 
 
-@figure("Moving Average Model", "An MA(1)'s memory ending after one period, so the "
-        "forecast returns to the mean", width=WID)
+@figure("Moving Average Model", "An MA(1) series around its mean of 50 and a dashed "
+        "forecast that moves once, to 48.8, then sits on the mean", width=WID)
 def moving_average_model() -> Fig:
     f = vcard()
 
@@ -1880,7 +1880,7 @@ def moving_average_model() -> Fig:
     eps = [r.n(0, 5) for _ in range(26)]
     eps[25] = -3.0
     ys = [50 + eps[t] + 0.4 * eps[t - 1] for t in range(1, 26)]
-    ax = vaxes(f, 0, 34, 36, 64, left=44, right=16, top=34, bottom=82)
+    ax = vaxes(f, 0, 34, 36, 64, left=44, right=16, top=28, bottom=44)
     ax.frame(xticks=[0, 12, 24, 33], yticks=[40, 50, 60], grid=True,
              xfmt=lambda t: "now" if t == 24 else "")
     ax.polyline(list(enumerate(ys)), colour=BLUE, width=1.9)
@@ -1892,163 +1892,160 @@ def moving_average_model() -> Fig:
     ax.label(25, 48.8, "48.8", cls="sm bold", fill=GREEN, dy=-9, anchor="start",
              dx=6)
     ax.vline(24, colour="var(--dim)", y_top=62)
-    f.text(BCX, ax.y1 + 32, "two steps out the shock has left the model —",
-           cls="sm dim")
-    f.text(BCX, ax.y1 + 47, "the forecast is simply μ", cls="sm dim")
-    f.text(BCX, ax.y1 + 65, "always stationary; |ρ₁| ≤ 0.5 for an MA(1)",
-           cls="sm bold")
     return f
 
 
-@figure("ARIMA", "The three ARIMA parts assembled, with the ACF/PACF table that "
-        "identifies them", width=WID)
+@figure("ARIMA", "The current value of a differenced series drawn as a node fed by "
+        "arrows from its own past values (AR) and from past shocks (MA), with the "
+        "series row tinted for differencing (I)", width=WID)
 def arima() -> Fig:
     f = vcard()
 
-    parts = [("AR (p)", "p lags of Y", BLUE), ("I (d)", "d differences", AMBER),
-             ("MA (q)", "q lags of ε", GREEN)]
-    for i, (lab, sub, colour) in enumerate(parts):
-        x = 62 + i * 118
-        f.box(x - 50, 96, 100, 50, label=lab, colour=colour, sub=sub,
-              label_cls="sm bold")
-    rows = [("AR(p)", "tails off", "cuts off at p"),
-            ("MA(q)", "cuts off at q", "tails off"),
-            ("ARMA", "tails off", "tails off")]
-    y0 = 196
-    f.text(70, y0, "model", cls="sm dim")
-    f.text(180, y0, "ACF", cls="sm dim")
-    f.text(286, y0, "PACF", cls="sm dim")
-    f.line(38, y0 + 8, 322, y0 + 8, cls="rule")
-    for i, row in enumerate(rows):
-        y = y0 + 30 + i * 28
-        for j, (cell, x) in enumerate(zip(row, (70, 180, 286))):
-            f.text(x, y, cell, cls="sm bold" if j == 0 else "sm")
-        f.line(38, y + 9, 322, y + 9, cls="rule")
-    f.text(BCX, 322, "ARIMA(0,1,1): difference once, one MA term", cls="sm")
-    f.text(BCX, 348, "seasonal form (p,d,q)(P,D,Q)_s adds lag-s terms",
-           cls="sm dim")
-    f.text(BCX, BY1 - 2, "identify · estimate · check the residuals",
-           cls="sm dim")
+    xs = [116, 204, 292]
+    yy, ye, ry, re = 178, 314, 18, 15
+    f.rect(xs[0] - 30, yy - 30, xs[-1] - xs[0] + 60, 60, rx=30, fill=AMBER,
+           fill_opacity="0.1", stroke=AMBER, stroke_width="1.3", stroke_dasharray="4 3")
+    # AR: the series' own past
+    f.arrow(xs[1] + ry + 2, yy, xs[2] - ry - 3, yy, colour=BLUE, width=2)
+    q = lambda t: ((1 - t) ** 2 * xs[0] + 2 * t * (1 - t) * xs[1] + t * t * xs[2],
+                   (1 - t) ** 2 * (yy - ry) + 2 * t * (1 - t) * (yy - 94) + t * t * (yy - ry))
+    f.poly([q(i / 40) for i in range(37)], cls="curve", stroke=BLUE, stroke_width="2")
+    f.arrow(*q(0.9), *q(0.985), colour=BLUE, width=2)
+    # MA: past and present shocks
+    f.arrow(xs[1] + 11, ye - 11, xs[2] - 14, yy + 14, colour=GREEN, width=2)
+    f.arrow(xs[2], ye - re - 2, xs[2], yy + ry + 3, colour="var(--ink)", width=1.6)
+    for x in xs:
+        f.circle(x, yy, ry, fill=BLUE, fill_opacity="0.2", stroke=BLUE,
+                 stroke_width="1.6" if x != xs[2] else "2.4")
+        f.circle(x, ye, re, fill=GREEN, fill_opacity="0.2", stroke=GREEN,
+                 stroke_width="1.5")
+    for x, lab in zip(xs, ("t−2", "t−1", "t")):
+        f.text(x, ye + 34, lab, cls="sm dim")
+    f.text(BX0 + 4, yy + 5, "∇ᵈY", cls="bold", anchor="start")
+    f.text(BX0 + 4, ye + 5, "ε", cls="bold", anchor="start")
+    f.text(xs[1], yy - 62, "AR(p)", cls="sm bold")
+    f.text(xs[2] - 30, (yy + ye) / 2 + 4, "MA(q)", cls="sm bold", anchor="end")
+    f.text(160, yy + 52, "I(d)", cls="sm bold")
     return f
 
 
-@figure("Seasonality", "An additive seasonal pattern beside a multiplicative one "
-        "growing with the level", width=WID)
+@figure("Seasonality", "Two quarterly series on one axis, each repeating every four "
+        "quarters: an additive one whose swing stays constant between parallel "
+        "envelopes and a multiplicative one whose swing widens with its level",
+        width=WID)
 def seasonality() -> Fig:
     f = vcard()
 
-    for panel, (title, mult, colour) in enumerate((("additive", False, BLUE),
-                                                   ("multiplicative", True, VIOLET))):
-        y0 = 94 + panel * 136
-        ys = []
-        for t in range(28):
-            level = 900 + 46 * t
-            season = _SEASON[t % 4] * (0.13 * level if mult else 120)
-            ys.append(level + season)
-        lo, hi = min(ys), max(ys)
-        pad = (hi - lo) * 0.14
-        ax = Axes(f, BX0 + 34, y0 + 16, BX1 - 16, y0 + 104, 0, 27,
-                  lo - pad, hi + pad)
-        f.text(BCX, y0 + 8, title, cls="sm bold", fill=colour)
-        f.rect(ax.x0, ax.y0, ax.x1 - ax.x0, ax.y1 - ax.y0, rx=5,
-               fill="var(--soft)", stroke="var(--edge)")
-        ax.polyline(list(enumerate(ys)), colour=colour, width=1.8)
-        ax.polyline([(t, 900 + 46 * t) for t in (0, 27)], colour="var(--dim)",
-                    width=1.3, dash=True)
-    f.text(BCX, BY1 - 20, "constant swing vs. a constant percentage",
-           cls="sm dim")
-    f.text(BCX, BY1 - 2, "a log transform turns the second into the first",
-           cls="sm dim")
+    n = 28
+    add_level = lambda t: 900 + 46 * t
+    mul_level = lambda t: 1750 + 46 * t
+    add = [add_level(t) + _SEASON[t % 4] * 120 for t in range(n)]
+    mul = [mul_level(t) * (1 + 0.13 * _SEASON[t % 4]) for t in range(n)]
+    lo, hi = min(add), max(mul)
+    ax = vaxes(f, 0, n - 1, lo - 260, hi + 60, left=20, right=12, top=22, bottom=24)
+    f.line(ax.x0, ax.y1, ax.x1, ax.y1, cls="axis")
+    envelopes = ((add_level, lambda v: v + 1.5 * 120, lambda v: v - 1.0 * 120, BLUE),
+                 (mul_level, lambda v: v * (1 + 0.13 * 1.5), lambda v: v * (1 - 0.13),
+                  VIOLET))
+    for level, up, down, colour in envelopes:
+        for edge in (up, down):
+            ax.polyline([(t, edge(level(t))) for t in (0, n - 1)], colour=colour,
+                        width=1.1, dash=True)
+    ax.polyline(list(enumerate(add)), colour=BLUE, width=1.9)
+    ax.polyline(list(enumerate(mul)), colour=VIOLET, width=1.9)
+    ax.label(0, mul_level(12) * 1.2, "multiplicative", cls="sm bold", anchor="start",
+             dy=-8)
+    ax.label(n - 1, add_level(n - 1) - 120, "additive", cls="sm bold", anchor="end",
+             dy=18)
+    y = ax.py(add_level(4) - 120) + 12
+    brace(f, ax.px(2), ax.px(6), y, depth=7, label="s = 4", label_cls="sm bold")
     return f
 
 
-@figure("Deterministic and Stochastic Trend", "A trend-stationary series returning "
-        "to its line against a unit-root series that does not", width=WID)
+@figure("Deterministic and Stochastic Trend", "Two series along the same dashed trend "
+        "line hit by the same shock: the trend-stationary one returns to the line, the "
+        "unit-root one stays shifted for good", width=WID)
 def det_stoch_trend() -> Fig:
     f = vcard()
 
-    r = _Rand(101)
+    r = _Rand(165)
     n = 44
-    det, sto, y = [], [], 0.0
+    det, sto, z, y = [], [], 0.0, 0.0
     for t in range(n):
-        shock = 7.0 if t == 18 else 0.0
-        det.append(4 + 0.85 * t + r.n(0, 1.4) + shock)
-        y += 0.85 + r.n(0, 1.4) + shock
+        shock = 9.0 if t == 18 else 0.0
+        z = 0.55 * z + r.n(0, 0.8) + shock
+        det.append(4 + 0.85 * t + z)
+        y += 0.85 + r.n(0, 0.8) + shock
         sto.append(4 + y)
-    for panel, (ys, title, colour) in enumerate((
-            (det, "deterministic — returns to the line", GREEN),
-            (sto, "stochastic — the level never comes back", ROSE))):
-        y0 = 94 + panel * 136
-        lo, hi = min(ys), max(ys)
-        pad = (hi - lo) * 0.16
-        ax = Axes(f, BX0 + 34, y0 + 16, BX1 - 16, y0 + 104, 0, n - 1,
-                  lo - pad, hi + pad)
-        f.text(BCX, y0 + 8, title, cls="sm bold", fill=colour)
-        f.rect(ax.x0, ax.y0, ax.x1 - ax.x0, ax.y1 - ax.y0, rx=5,
-               fill="var(--soft)", stroke="var(--edge)")
-        ax.polyline([(t, 4 + 0.85 * t) for t in (0, n - 1)], colour="var(--dim)",
-                    width=1.4, dash=True)
-        ax.polyline(list(enumerate(ys)), colour=colour, width=1.7)
-        ax.vline(18, colour=AMBER, y_top=hi)
-        if not panel:
-            ax.label(18, lo, "shock", cls="sm bold", fill=AMBER, dy=-4)
-    f.text(BCX, BY1 - 20, "detrend the first; difference the second",
-           cls="sm dim")
-    f.text(BCX, BY1 - 2, "getting it wrong gives a spurious regression",
-           cls="sm dim")
+    lo, hi = min(det + sto), max(det + sto)
+    ax = vaxes(f, 0, n - 1, lo - 2, hi + 3, left=24, right=12, top=22, bottom=30)
+    f.line(ax.x0, ax.y1, ax.x1, ax.y1, cls="axis")
+    ax.polyline([(t, 4 + 0.85 * t) for t in (0, n - 1)], colour="var(--dim)",
+                width=1.4, dash=True)
+    ax.vline(18, colour=AMBER, y_top=hi + 1)
+    ax.label(18, hi + 1, "shock", cls="sm bold", dy=-6)
+    ax.polyline(list(enumerate(det)), colour=GREEN, width=1.9)
+    ax.polyline(list(enumerate(sto)), colour=ROSE, width=1.9)
+    ax.label(n - 1, sto[-1], "stochastic", cls="sm bold", anchor="end", dy=-12)
+    ax.label(n - 1, det[-1], "deterministic", cls="sm bold", anchor="end", dy=20)
     return f
 
 
-@figure("Time Series Decomposition", "A series split into its trend, seasonal and "
-        "irregular components", width=WID)
+@figure("Time Series Decomposition", "Twelve quarterly observations, each built up from "
+        "a trend line, a seasonal bar off that line, and a small irregular step to the "
+        "observed dot", width=WID)
 def decomposition() -> Fig:
     f = vcard()
 
     r = _Rand(107)
-    n = 32
-    trend = [900 + 34 * t for t in range(n)]
+    n = 12
+    trend = [900 + 56 * t for t in range(n)]
     season = [_SEASON[t % 4] * 110 for t in range(n)]
-    irreg = [r.n(0, 40) for _ in range(n)]
+    irreg = [r.n(0, 55) for _ in range(n)]
     obs = [a + b + c for a, b, c in zip(trend, season, irreg)]
-    panels = [(obs, "Y_t observed", BLUE), (trend, "m_t trend", AMBER),
-              (season, "s_t seasonal", VIOLET), (irreg, "z_t irregular", GREEN)]
-    for i, (ys, lab, colour) in enumerate(panels):
-        y0 = 88 + i * 74
-        lo, hi = min(ys), max(ys)
-        pad = (hi - lo) * 0.2 or 1
-        ax = Axes(f, BX0 + 66, y0, BX1 - 14, y0 + 52, 0, n - 1, lo - pad, hi + pad)
-        f.text(BX0 + 60, y0 + 30, lab, cls="sm bold", anchor="end", fill=colour)
-        f.rect(ax.x0, ax.y0, ax.x1 - ax.x0, ax.y1 - ax.y0, rx=4,
-               fill="var(--soft)", stroke="var(--edge)")
-        ax.polyline(list(enumerate(ys)), colour=colour, width=1.6)
-    f.text(BCX, BY1 - 2, "the moving average loses s/2 points at each end",
-           cls="sm dim")
+    lo, hi = min(obs + trend), max(obs + trend)
+    ax = vaxes(f, -0.6, n - 0.4, lo - 60, hi + 60, left=20, right=12, top=22,
+               bottom=30)
+    f.line(ax.x0, ax.y1, ax.x1, ax.y1, cls="axis")
+    ax.polyline([(t, 900 + 56 * t) for t in (-0.4, n - 0.6)], colour=AMBER, width=2.4)
+    for t in range(n):
+        x = ax.px(t)
+        s_top = trend[t] + season[t]
+        f.rect(x - 6, min(ax.py(trend[t]), ax.py(s_top)), 12,
+               abs(ax.py(trend[t]) - ax.py(s_top)), rx=2, fill=VIOLET,
+               fill_opacity="0.6")
+        f.line(x, ax.py(s_top), x, ax.py(obs[t]), cls="thin", stroke=GREEN,
+               stroke_width="3")
+    for t, v in enumerate(obs):
+        ax.point(t, v, colour=BLUE, r=4.2)
+    ti = max(range(n), key=lambda t: abs(irreg[t]))
+    ax.label(ti, (obs[ti] + trend[ti] + season[ti]) / 2, "irregular", cls="sm bold",
+             anchor="start", dx=9, dy=4)
+    ax.label(2, trend[2] + season[2], "seasonal", cls="sm bold", anchor="end", dx=-10,
+             dy=4)
+    ax.label(1, trend[1], "trend", cls="sm bold", anchor="start", dx=10, dy=16)
     return f
 
 
-@figure("Exponential Smoothing", "Geometrically decaying weights on past "
-        "observations, and the flat forecast they give", width=WID)
+@figure("Exponential Smoothing", "Bars of the weight α(1 − α)ʲ each past observation "
+        "gets, falling geometrically from the latest at α = 0.3", width=WID)
 def exponential_smoothing() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -0.6, 9.6, 0, 0.36, left=44, right=16, top=36, bottom=104)
-    ax.frame(xticks=[0, 2, 4, 6, 8], yticks=[0, 0.15, 0.3], grid=True,
+    ax = vaxes(f, -0.6, 9.6, 0, 0.34, left=44, right=16, top=30, bottom=44)
+    ax.frame(xticks=[0, 2, 4, 6, 8], yticks=[0, 0.1, 0.2, 0.3], grid=True,
              arrows=False, xfmt=lambda t: f"t−{int(t)}" if t else "t")
-    ax.bars([(j, 0.3 * 0.7 ** j) for j in range(10)], colour=BLUE, bw=17,
+    ax.bars([(j, 0.3 * 0.7 ** j) for j in range(10)], colour=BLUE, bw=20,
             opacity="0.7")
-    ax.label(2.6, 0.245, "α = 0.3", cls="sm bold", fill=BLUE, anchor="start")
-
-    f.line(40, 322, 320, 322, cls="rule")
-    f.text(BCX, 344, "Ŷ₁₁ = 0.3(470) + 0.7(420) = 435", cls="sm")
-    f.text(BCX, 364, "α near 1 reacts fast; α near 0 smooths hard",
-           cls="sm dim")
-    f.text(BCX, BY1 - 2, "Holt adds a trend; Holt-Winters adds a season",
-           cls="sm dim")
+    ax.curve(lambda j: 0.3 * 0.7 ** j, colour=AMBER, width=1.6, dash=True, xa=0,
+             xb=9.3)
+    ax.label(1.4, 0.26, "α = 0.3", cls="sm bold", anchor="start")
     return f
 
 
-@figure("Time Series Forecast", "An AR(1) forecast with a prediction interval "
-        "widening to the stationary bound", width=WID)
+@figure("Time Series Forecast", "An AR(1) series up to now, then a forecast easing "
+        "back to its mean of 50 inside a 95% interval that widens and then levels off",
+        width=WID)
 def ts_forecast() -> Fig:
     f = vcard()
 
@@ -2059,25 +2056,22 @@ def ts_forecast() -> Fig:
         y = mu + phi * (y - mu) + r.n(0, sig)
         ys.append(y)
     ys[-1] = 61.0
-    ax = vaxes(f, 0, 32, 30, 78, left=44, right=16, top=34, bottom=78)
+    ax = vaxes(f, 0, 32, 30, 78, left=44, right=16, top=28, bottom=44)
     ax.frame(xticks=[0, 10, 21, 31], yticks=[40, 50, 60, 70], grid=True,
              xfmt=lambda t: "now" if t == 21 else "")
     ax.polyline(list(enumerate(ys)), colour=BLUE, width=1.9)
     var = lambda h: sig ** 2 * sum(phi ** (2 * j) for j in range(h))
     fut = [(21 + h, mu + phi ** h * (61 - mu)) for h in range(11)]
+    upper = [(t, v + 1.96 * math.sqrt(var(t - 21))) for t, v in fut]
+    lower = [(t, v - 1.96 * math.sqrt(var(t - 21))) for t, v in fut]
+    f.polygon([ax.p(*q) for q in upper + lower[::-1]], fill=GREEN, fill_opacity="0.12",
+              stroke="none")
     ax.polyline(fut, colour=GREEN, width=2.3, dash=True)
-    for sgn in (1, -1):
-        ax.polyline([(21 + h, mu + phi ** h * (61 - mu)
-                      + sgn * 1.96 * math.sqrt(var(h))) for h in range(11)],
-                    colour=GREEN, width=1.2)
+    for edge in (upper, lower):
+        ax.polyline(edge, colour=GREEN, width=1.2)
     ax.hline(mu, colour=AMBER, x_to=32)
     ax.vline(21, colour="var(--dim)", y_top=74)
     ax.point(23, mu + phi ** 2 * 11, colour=GREEN)
     ax.label(23, mu + phi ** 2 * 11, "53.96", cls="sm bold", fill=GREEN,
              anchor="start", dx=8, dy=-8)
-    f.text(BCX, ax.y1 + 32, "two steps: (44.8, 63.1) at 95%", cls="sm bold")
-    f.text(BCX, ax.y1 + 50, "the interval stops widening — unlike a walk's",
-           cls="sm dim")
-    f.text(BCX, BY1 - 2, "it carries process variance only, not model risk",
-           cls="sm dim")
     return f

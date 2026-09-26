@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions, filterQuestions } from '@/lib/parser'
+import { drawByDifficulty, shuffle } from '@/lib/quizDifficulty'
 import type { Question, QuestionFilter } from '@/lib/parser'
 import { useShowFlaggedQuestions } from '@/hooks/useShowFlaggedQuestions'
 
@@ -29,13 +30,13 @@ export function useQuestions(filters: QuestionFilter) {
         if (cancelled) return
         const parsed = parseAllQuestions(rawFiles)
         const filtered = filterQuestions(parsed, { ...filters, includeFlagged: showFlagged })
-        // Fisher-Yates shuffle (uniform; sort+random is biased)
-        for (let i = filtered.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1))
-          ;[filtered[i], filtered[j]] = [filtered[j], filtered[i]]
-        }
-        // Limit to requested count if specified
-        const result = filters.count ? filtered.slice(0, filters.count) : filtered
+        const limit = filters.count || filtered.length
+        // A difficulty lean weights the draw toward the slider's level; without
+        // one it is a uniform shuffle. A pinned id list is taken whole either
+        // way, so the lean has nothing to choose between there.
+        const result = filters.difficultyTarget !== undefined && !filters.ids?.length
+          ? drawByDifficulty(filtered, limit, filters.difficultyTarget)
+          : shuffle(filtered).slice(0, limit)
         setQuestions(result)
       })
       .catch(err => {
@@ -49,7 +50,7 @@ export function useQuestions(filters: QuestionFilter) {
 
     return () => { cancelled = true }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters.exam, filters.topic, filters.difficulty, filters.mode, filters.count, topicsKey, idsKey, filters.concept, conceptsKey, filters.year, filters.session, showFlagged])
+  }, [filters.exam, filters.topic, filters.difficulty, filters.mode, filters.count, filters.difficultyTarget, topicsKey, idsKey, filters.concept, conceptsKey, filters.year, filters.session, showFlagged])
 
   return { questions, loading, error }
 }

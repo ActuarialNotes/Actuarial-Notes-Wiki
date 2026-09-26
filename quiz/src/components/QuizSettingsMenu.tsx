@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { Circle, SlidersHorizontal } from 'lucide-react'
 import { CheckMark } from '@/components/CheckMark'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import { SegmentedControl, type SegmentedOption } from '@/components/ui/SegmentedControl'
 import { placeMenu, type MenuPlacement } from '@/lib/menuPlacement'
 import type { RevealMode } from '@/lib/revealMode'
+import { difficultyLabel, type DifficultyTarget } from '@/lib/quizDifficulty'
 import { cn } from '@/lib/utils'
 
 /**
@@ -12,15 +13,16 @@ import { cn } from '@/lib/utils'
  * the menu it opens.
  *
  * What it holds is how the quiz is *run* rather than what it draws from: how
- * many questions it pulls, and whether each answer is marked as it is confirmed
- * or held back for the review screen. Both used to be full-width rows stacked
+ * many questions it pulls and how hard they lean, whether each answer is marked
+ * as it is confirmed or held back for the review screen, and whether the quiz
+ * is sat against the clock. Both used to be full-width rows stacked
  * under the deck in the action bar, which on a phone pushed Start Quiz to the
  * edge of the fold — the two settings a learner sets once and rarely revisits
  * were taking more of the bar than the button the page exists for.
  *
- * The count is the *only* thing on here that is mode-specific: a practice exam
- * is sat whole, so `countOptions` is omitted for it and the menu opens on the
- * reveal choice alone.
+ * The count and the difficulty are the mode-specific ones: a practice exam is
+ * sat whole, as the paper sets it, so both are omitted for it and the menu
+ * opens on the reveal and timing choices alone.
  *
  * Like `ConceptActionMenu`, the menu renders into <body> and is placed by
  * `placeMenu`. It has to: its trigger lives inside the action bar, a `fixed`
@@ -34,8 +36,15 @@ export interface QuizSettingsMenuProps {
   countOptions?: SegmentedOption<string>[]
   countValue?: string
   onCountChange?: (value: string) => void
+  /** Where the difficulty slider sits. Omitted, the menu carries no slider. */
+  difficulty?: DifficultyTarget
+  onDifficultyChange?: (next: DifficultyTarget) => void
   reveal: RevealMode
   onRevealChange: (next: RevealMode) => void
+  timed: boolean
+  onTimedChange: (next: boolean) => void
+  /** The exam's pace, e.g. "6:00 per question" — said beside the Timed choice. */
+  timedPace?: string
   className?: string
 }
 
@@ -43,8 +52,13 @@ export function QuizSettingsMenu({
   countOptions,
   countValue,
   onCountChange,
+  difficulty,
+  onDifficultyChange,
   reveal,
   onRevealChange,
+  timed,
+  onTimedChange,
+  timedPace,
   className,
 }: QuizSettingsMenuProps) {
   const [open, setOpen] = useState(false)
@@ -52,6 +66,8 @@ export function QuizSettingsMenu({
   const triggerRef = useRef<HTMLButtonElement>(null)
 
   const showCount = countOptions !== undefined && countValue !== undefined && onCountChange !== undefined
+  const showDifficulty = difficulty !== undefined && onDifficultyChange !== undefined
+  const difficultyLabelId = useId()
 
   // Anchor the menu to the button. `placeMenu` owns the rule that matters here
   // — the menu is never off screen — so the trigger is only a preference: this
@@ -150,32 +166,57 @@ export function QuizSettingsMenu({
         </div>
       )}
 
+      {/* ── How hard the draw leans ─────────────────────────────────────
+          Continuous, because it blends: the bank only has three levels, and a
+          position between two stops draws a mix of both (lib/quizDifficulty.ts).
+          It only ever *says* the three words, though — a percentage would
+          promise a precision the bank doesn't have. */}
+      {showDifficulty && (
+        <div className={cn('px-3 pt-3 pb-2', showCount && 'border-t border-border')}>
+          <div className="flex items-baseline justify-between">
+            <p id={difficultyLabelId} className="text-xs font-medium text-muted-foreground">Difficulty</p>
+            <span className="text-xs font-semibold">{difficultyLabel(difficulty)}</span>
+          </div>
+          <input
+            type="range"
+            min={0}
+            max={1}
+            step={0.01}
+            value={difficulty}
+            aria-labelledby={difficultyLabelId}
+            aria-valuetext={difficultyLabel(difficulty)}
+            onChange={e => onDifficultyChange(Number(e.target.value))}
+            className="sim-slider"
+          />
+          {/* The stops, under the points of the track they name. */}
+          <div className="flex justify-between text-[11px] text-muted-foreground" aria-hidden>
+            <span>Easy</span>
+            <span>Med</span>
+            <span>Hard</span>
+          </div>
+        </div>
+      )}
+
       {/* ── When the answers show ───────────────────────────────────────
           Ticked, each answer is marked and explained as soon as it's
-          confirmed; unticked, nothing is given away until the review screen.
-          Offered for both modes — a practice exam run for feedback is as
-          reasonable as a quiz run as a dry run. */}
-      <button
-        type="button"
-        role="checkbox"
-        aria-checked={reveal === 'during'}
-        data-sound="tick"
-        onClick={() => onRevealChange(reveal === 'during' ? 'end' : 'during')}
-        className={cn(
-          'flex w-full items-center gap-2.5 px-3 py-3 text-left text-sm transition-colors hover:bg-accent',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring',
-          showCount && 'border-t border-border',
-        )}
+          confirmed; unticked, nothing is given away until the review screen —
+          not even by the right-answer chime. Offered for both modes — a
+          practice exam run for feedback is as reasonable as a quiz run as a
+          dry run. */}
+      <CheckRow
+        checked={reveal === 'during'}
+        onToggle={() => onRevealChange(reveal === 'during' ? 'end' : 'during')}
+        divided={showCount || showDifficulty}
       >
-        {reveal === 'during' ? (
-          <CheckMark className="h-4 w-4" />
-        ) : (
-          <Circle className="h-4 w-4 shrink-0 text-muted-foreground/50" />
-        )}
-        <span className="min-w-0 flex-1 font-medium leading-snug">
-          Show answers after each question
-        </span>
-      </button>
+        Show answers after each question
+      </CheckRow>
+
+      {/* ── Against the clock ───────────────────────────────────────────
+          The budget is the real paper's pace (lib/quizTiming.ts), so the pace
+          is the one thing worth saying beside it. */}
+      <CheckRow checked={timed} onToggle={() => onTimedChange(!timed)} divided detail={timedPace}>
+        Timed
+      </CheckRow>
     </div>
   )
 
@@ -206,12 +247,52 @@ export function QuizSettingsMenu({
   )
 }
 
+/** One tickable row of the menu — a checkbox drawn with the app's check mark. */
+function CheckRow({
+  checked,
+  onToggle,
+  divided,
+  detail,
+  children,
+}: {
+  checked: boolean
+  onToggle: () => void
+  /** Rule it off from whatever sits above it. */
+  divided: boolean
+  /** A short aside, right-aligned on the row. */
+  detail?: string
+  children: ReactNode
+}) {
+  return (
+    <button
+      type="button"
+      role="checkbox"
+      aria-checked={checked}
+      data-sound="tick"
+      onClick={onToggle}
+      className={cn(
+        'flex w-full items-center gap-2.5 px-3 py-3 text-left text-sm transition-colors hover:bg-accent',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring',
+        divided && 'border-t border-border',
+      )}
+    >
+      {checked ? (
+        <CheckMark className="h-4 w-4" />
+      ) : (
+        <Circle className="h-4 w-4 shrink-0 text-muted-foreground/50" />
+      )}
+      <span className="min-w-0 flex-1 font-medium leading-snug">{children}</span>
+      {detail && <span className="shrink-0 text-xs tabular-nums text-muted-foreground">{detail}</span>}
+    </button>
+  )
+}
+
 /** The menu's width — as a class, and in pixels for the placement maths. */
 const MENU_WIDTH_CLASS = 'w-72'
 const MENU_WIDTH_PX = 288
 
 /** How tall it grows given the room; past this it scrolls. */
-const MENU_MAX_HEIGHT_PX = 320
+const MENU_MAX_HEIGHT_PX = 420
 
 function samePlacement(a: MenuPlacement, b: MenuPlacement): boolean {
   return a.left === b.left

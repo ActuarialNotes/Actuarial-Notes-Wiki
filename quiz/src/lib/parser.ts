@@ -62,6 +62,12 @@ export interface QuestionFilter {
   difficulty?: Difficulty
   mode?: QuizMode
   count?: number        // max questions to return
+  /**
+   * Where the quiz builder's difficulty slider sits (0 Easy … 1 Hard). Not a
+   * filter — `filterQuestions` ignores it — but a lean on which `count`
+   * questions are drawn. See lib/quizDifficulty.ts.
+   */
+  difficultyTarget?: number
   author?: string       // partial match, case-insensitive
   year?: number
   session?: string      // filter by sitting session, e.g. "Spring" or "Fall"

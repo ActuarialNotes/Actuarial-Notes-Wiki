@@ -20,6 +20,9 @@ import { PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
 import { isAnswerCorrect, isMultiPartAnswerComplete } from '@/lib/parser'
 import { pendingAnswerFor, tagPendingAnswer } from '@/lib/pendingAnswer'
 import { loadRevealMode, parseRevealMode } from '@/lib/revealMode'
+import { difficultyFromParam } from '@/lib/quizDifficulty'
+import { timeAllowanceSeconds } from '@/lib/quizTiming'
+import { QuizTimer } from '@/components/QuizTimer'
 import { startViewTransition } from '@/lib/viewTransition'
 import type { PendingAnswer } from '@/lib/pendingAnswer'
 import type { QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
@@ -45,6 +48,9 @@ export default function Quiz() {
   // saved choice rather than to a fixed 'during'.
   const reveal = parseRevealMode(searchParams.get('reveal')) ?? loadRevealMode(mode)
   const countParam = searchParams.get('count')
+  // Timed: a countdown sized to what these questions would get on the real
+  // paper (lib/quizTiming.ts). Set by the quiz builder's settings menu.
+  const timed = searchParams.get('timed') === '1'
 
   const filters: QuestionFilter = useMemo(() => {
     const topicsParam = searchParams.get('topics')
@@ -69,6 +75,7 @@ export default function Quiz() {
       topics: topicsParam ? topicsParam.split(',') : undefined,
       concepts: conceptsParam ? conceptsParam.split(',') : undefined,
       difficulty: (searchParams.get('difficulty') as Difficulty | null) ?? undefined,
+      difficultyTarget: difficultyFromParam(searchParams.get('level')) ?? undefined,
       mode,
       count: countParam ? Number(countParam) : undefined,
       ids,
@@ -225,6 +232,21 @@ export default function Quiz() {
     status === 'active' &&
     Object.keys(responses).length === 0
 
+  // ── Timed ────────────────────────────────────────────────────────────────
+  // The budget is the set's, fixed once the questions are in; the clock starts
+  // on the first question, not under the pre-quiz concept list — reading that
+  // list is preparation, not the paper.
+  const timeAllowance = useMemo(
+    () => (timed ? timeAllowanceSeconds(storeQuestions) : null),
+    [timed, storeQuestions],
+  )
+  const [timerStartedAt, setTimerStartedAt] = useState<number | null>(null)
+  const questionOnScreen =
+    status !== 'idle' && status !== 'complete' && !showConceptList && !awaitingConceptListDecision
+  useEffect(() => {
+    if (timeAllowance !== null && questionOnScreen && timerStartedAt === null) setTimerStartedAt(Date.now())
+  }, [timeAllowance, questionOnScreen, timerStartedAt])
+
   // Scroll to top whenever the question changes. The pending selection needs no
   // clearing here — it is tagged with its question and read back through
   // `pendingAnswer` below, so it simply stops applying.
@@ -327,7 +349,9 @@ export default function Quiz() {
     // reveal already says it, and a buzzer is punishment, not feedback. What a
     // miss does instead is end the run: the arpeggio climbs a step for each
     // right answer in a row, and this drops it back to where it started.
-    if (correct && !isChangingAnswer) {
+    // With the answers held back for the review screen the arpeggio would give
+    // the verdict away, so it only plays when the answer is revealed anyway.
+    if (correct && !isChangingAnswer && reveal === 'during') {
       playSound('correct')
     } else if (!correct) {
       resetSoundCombo('correct')
@@ -560,6 +584,9 @@ export default function Quiz() {
           >
             {mode === 'mock-exam' ? PRACTICE_EXAM_LABEL : 'Quiz'}
           </span>
+          {timeAllowance !== null && timerStartedAt !== null && (
+            <QuizTimer startedAt={timerStartedAt} allowanceSeconds={timeAllowance} />
+          )}
           <Button
             variant="ghost"
             size="sm"

@@ -1855,30 +1855,27 @@ def short_tail_insurance() -> Fig:
 # B. Estimating claim liabilities — triangles and development factors
 # ═══════════════════════════════════════════════════════════════════════════
 
-@figure("Development Triangle", "A cumulative reported-loss triangle with its rows, "
-        "columns and latest diagonal marked", width=WID)
+@figure("Development Triangle", "The running reported-loss triangle, accident years "
+        "down and ages across, with the latest diagonal shaded", width=WID)
 def development_triangle() -> Fig:
     f = vcard()
 
-    f.text(BCX, 110, "cumulative reported losses ($000)", cls="sm dim")
-    _triangle(f, TRI, y0=140,
-              shade=lambda i, j: i + j == 4, shade_colour=ROSE)
-    f.text(BCX, 300, "age in months →", cls="sm dim")
-    f.text(BCX, 328, "the shaded diagonal is 12/31/2024 — every", cls="sm dim")
-    f.text(BCX, 346, "cell on it was valued on the same day", cls="sm dim")
-    f.text(BCX, 372, "a pattern that moves along it is a calendar-year effect",
-           cls="sm dim")
+    at = _triangle(f, TRI, x0=26, y0=128, cw=54, ch=44,
+                   shade=lambda i, j: i + j == 4, shade_colour=ROSE)
+    f.text(66 + 54 * 2.5, 98, "age in months", cls="sm dim")
+    cx, cy = at[(4, 0)]
+    f.text(cx + 34, cy + 4, "latest diagonal", cls="sm bold", anchor="start")
     return f
 
 
-@figure("Paid Losses", "Paid losses developing toward the same ultimate as reported "
+@figure("Paid Losses", "Paid losses climbing to the same ultimate as reported "
         "losses, from further below", width=WID)
 def paid_losses() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 84, 0, 3200, left=54, right=20, top=32, bottom=66)
-    ax.frame(xticks=[12, 36, 60, 84], yticks=[0, 1500, 3000],
-             yfmt=lambda t: f"{t:,.0f}", grid=True)
+    ax = vaxes(f, 0, 84, 0, 3200, left=54, right=20, top=28, bottom=48)
+    ax.frame(xlabel="age in months", xticks=[12, 36, 60, 84],
+             yticks=[0, 1500, 3000], yfmt=lambda t: f"{t:,.0f}", grid=True)
     rpt = [(12, 1500), (24, 2250), (36, 2610), (48, 2767), (60, 2822),
            (72, 2845), (84, 2850)]
     pd_ = [(12, 600), (24, 1500), (36, 2150), (48, 2560), (60, 2740),
@@ -1886,26 +1883,24 @@ def paid_losses() -> Fig:
     ax.polyline(rpt, colour=BLUE, width=2.2)
     ax.polyline(pd_, colour=GREEN, width=2.4)
     ax.hline(2850, colour="var(--dim)", x_to=84)
-    ax.label(30, 2500, "reported", cls="sm bold", fill=BLUE, dy=-6)
-    ax.label(46, 1900, "paid", cls="sm bold", fill=GREEN, dy=14)
+    ax.label(20, 2250, "reported", cls="sm bold", fill=BLUE, anchor="end", dx=-4)
+    ax.label(40, 2000, "paid", cls="sm bold", fill=GREEN, dy=14)
     ax.label(78, 2850, "ultimate", cls="sm dim", anchor="end", dy=-8)
-    f.text(BCX, ax.y1 + 32, "age in months", cls="sm dim")
-    f.text(BCX, BY1 - 18, "immune to case-reserving changes, and", cls="sm dim")
-    f.text(BCX, BY1 - 2, "distorted instead by the speed of settlement",
-           cls="sm dim")
     return f
 
 
-@figure("Incurred Losses", "Reported losses as paid losses plus the case reserves "
-        "still outstanding", width=WID)
+@figure("Incurred Losses", "Each accident year's reported losses stacked as paid "
+        "losses plus the case reserves still outstanding, case shrinking as the year "
+        "ages", width=WID)
 def incurred_losses() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0.4, 5.6, 0, 3000, left=54, right=20, top=34, bottom=76)
-    ax.frame(xticks=[1, 2, 3, 4, 5], xfmt=lambda t: AGES[int(t) - 1],
-             yticks=[0, 1500, 3000], yfmt=lambda t: f"{t:,.0f}", grid=True)
-    reported = [1882, 2029, 2088, 2025, 1500]
-    paid = [1830, 1870, 1681, 1282, 600]
+    ax = vaxes(f, 0.4, 5.6, 0, 2400, left=54, right=20, top=28, bottom=48)
+    ax.frame(xlabel="accident year", xticks=[1, 2, 3, 4, 5],
+             xfmt=lambda t: AYS[int(t) - 1], yticks=[0, 1000, 2000],
+             yfmt=lambda t: f"{t:,.0f}", grid=True)
+    reported = [row[-1] for row in TRI]
+    paid = [row[-1] for row in PAID]
     bw = (ax.px(2) - ax.px(1)) * 0.56
     for k in range(5):
         cx = ax.px(k + 1)
@@ -1914,105 +1909,110 @@ def incurred_losses() -> Fig:
         f.rect(cx - bw / 2, ax.py(reported[k]), bw,
                ax.py(paid[k]) - ax.py(reported[k]), rx=2, fill=AMBER,
                fill_opacity="0.72")
-    f.text(BCX, ax.y1 + 30, "age of each accident year at 12/31/2024",
-           cls="sm dim")
-    f.legend_row(60, ax.y1 + 52, [(GREEN, "paid"), (AMBER, "case")], gap=104)
-    f.text(BCX, BY1 - 2, "case reserves are an estimate — so reported is too",
-           cls="sm dim")
+    ax.label(1, paid[0] / 2, "paid", cls="sm bold", dy=4)
+    ax.label(5, (paid[4] + reported[4]) / 2, "case", cls="sm bold", dy=4)
+    ax.label(3, reported[2], "reported", cls="sm bold", dy=-8)
     return f
 
 
-@figure("Claim Count Triangle", "A claim-count development triangle beside the "
-        "severity it makes computable", width=WID)
+@figure("Claim Count Triangle", "The running claim-count triangle, with AY 2024's 700 "
+        "claims developed to 1,000 ultimate claims", width=WID)
 def claim_count_triangle() -> Fig:
     f = vcard()
 
-    f.text(BCX, 110, "cumulative reported claim counts", cls="sm dim")
-    _triangle(f, CNT, y0=140)
-    f.text(BCX, 300, "age in months →", cls="sm dim")
-    f.text(BCX, 332, "AY 2024: 700 × 1.429 = 1,000 ultimate claims",
-           cls="sm")
-    f.text(BCX, 360, "2,850,000 / 1,000 = $2,850 average severity",
-           cls="sm dim")
+    at = _triangle(f, CNT, x0=16, y0=128, cw=46, ch=44)
+    f.text(56 + 46 * 2.5, 98, "age in months", cls="sm dim")
+    cx, cy = 56 + 46 * 5.5, 128 + 44 * 4.5
+    f.text(cx, 120, "ult", cls="sm dim")
+    f.rect(cx - 21.5, cy - 20.5, 43, 41, rx=3, fill=GREEN, fill_opacity="0.18",
+           stroke=GREEN, stroke_width="1.4")
+    f.text(cx, cy + 4, "1,000", cls="sm bold")
+    x_start = at[(4, 0)][0] + 18
+    f.arrow(x_start, cy, cx - 25, cy, colour=GREEN, width=1.6, dash=True)
+    f.text((x_start + cx - 25) / 2, cy - 8, "× 1.429", cls="sm bold")
     return f
 
 
-@figure("Allocated Loss Adjustment Expense", "ALAE developing more slowly than "
-        "indemnity, as a rising ratio to loss", width=WID)
+@figure("Allocated Loss Adjustment Expense", "The ratio of ALAE to loss rising with "
+        "age to 17% at ultimate, because defence costs develop more slowly than "
+        "indemnity", width=WID)
 def allocated_lae() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 84, 0, 0.24, left=52, right=22, top=36, bottom=70)
-    ax.frame(xticks=[12, 36, 60, 84], yticks=[0, 0.1, 0.2],
+    ax = vaxes(f, 0, 84, 0, 0.24, left=52, right=22, top=28, bottom=48)
+    ax.frame(xlabel="age in months", ylabel="ALAE / loss",
+             xticks=[12, 36, 60, 84], yticks=[0, 0.1, 0.2],
              yfmt=lambda t: f"{t:.0%}", grid=True)
     ratio = [(12, 0.085), (24, 0.112), (36, 0.135), (48, 0.152), (60, 0.163),
              (72, 0.168), (84, 0.170)]
     _emergence(ax, ratio, VIOLET)
     ax.label(56, 0.163, "17% at ultimate", cls="sm bold", fill=VIOLET, dy=-10)
-    f.text(BCX, ax.y1 + 32, "age in months", cls="sm dim")
-    f.text(BCX, BY1 - 16, "ALAE outlives the indemnity it defends, so its",
-           cls="sm dim")
-    f.text(BCX, BY1 + 2, "own triangle develops longer — reserve it apart",
-           cls="sm dim")
     return f
 
 
-@figure("Age to Age Factor", "One column of link ratios and the selections drawn "
-        "from it", width=WID)
+@figure("Age to Age Factor", "The 12 and 24-month columns of the running triangle "
+        "linked by a 1.500 factor, which carries AY 2024's 1,500 to 2,250 at 24 "
+        "months", width=WID)
 def age_to_age_factor() -> Fig:
     f = vcard()
 
-    f.text(BCX, 108, "the 12–24 column of the reported triangle", cls="sm dim")
-    rows = [("2020", 1500, 1000), ("2021", 1650, 1100), ("2022", 1800, 1200),
-            ("2023", 2025, 1350)]
-    for i, (ay, num, den) in enumerate(rows):
-        y = 140 + i * 32
-        f.text(52, y, ay, cls="sm dim", anchor="start")
-        f.text(160, y, f"{num:,} / {den:,}", cls="sm", anchor="end")
-        f.text(232, y, f"{num / den:.3f}", cls="sm", anchor="end")
-    f.line(46, 284, 314, 284, cls="rule")
-    f.text(160, 306, "6,975 / 4,650", cls="sm dim", anchor="end")
-    f.text(232, 306, "1.500", cls="sm bold", anchor="end")
-    f.text(280, 306, "selected", cls="sm dim", anchor="start")
-    f.text(BCX, 344, "factors need not exceed 1.000 — salvage and", cls="sm dim")
-    f.text(BCX, 362, "over-reserved claims develop downward", cls="sm dim")
+    x0, y0, cw, ch = 70, 128, 54, 44
+    for j, age in enumerate(AGES):
+        f.text(x0 + cw * (j + 0.5), y0 - 10, age, cls="sm dim")
+    for i, row in enumerate(TRI):
+        cy = y0 + ch * (i + 0.5)
+        f.text(x0 - 8, cy + 4, AYS[i], cls="sm dim", anchor="end")
+        for j, v in enumerate(row):
+            cx = x0 + cw * (j + 0.5)
+            colour = (AMBER, BLUE)[j] if j < 2 else None
+            f.rect(cx - cw / 2 + 1.5, cy - ch / 2 + 1.5, cw - 3, ch - 3, rx=3,
+                   fill=colour or "var(--soft)",
+                   fill_opacity="0.2" if colour else None,
+                   stroke=colour or "var(--edge)", stroke_width="1")
+            if j < 2:
+                f.text(cx, cy + 4, _money(v), cls="sm")
+    cx, cy = x0 + cw * 1.5, y0 + ch * 4.5
+    f.rect(cx - cw / 2 + 1.5, cy - ch / 2 + 1.5, cw - 3, ch - 3, rx=3, fill="none",
+           stroke=ROSE, stroke_width="1.4", stroke_dasharray="3 2")
+    f.text(cx, cy + 4, "2,250", cls="sm bold")
+    f.arrow(x0 + cw * 0.5 + 10, y0 - 34, x0 + cw * 1.5 - 10, y0 - 34, colour=BLUE,
+            width=1.8)
+    f.text(x0 + cw, y0 - 44, "× 1.500", cls="sm bold")
     return f
 
 
-@figure("Cumulative Development Factor", "The selected link ratios multiplied "
-        "through to a factor to ultimate", width=WID)
+@figure("Cumulative Development Factor", "The cumulative factor at each age drawn as a "
+        "bar, each one the bar below it times one link ratio, climbing from 1.000 at "
+        "ultimate to 1.900 at 12 months", width=WID)
 def cumulative_development_factor() -> Fig:
     f = vcard()
 
-    ages = ["12–24", "24–36", "36–48", "48–60", "tail"]
-    facs = [1.500, 1.160, 1.060, 1.020, 1.010]
-    x0, slot = 40, 56
-    for i, (name, fac) in enumerate(zip(ages, facs)):
-        cx = x0 + slot * i + slot / 2
-        f.chip(cx, 148, f"{fac:.3f}", colour=BLUE if i < 4 else AMBER,
-               w=slot - 8, h=28)
-        f.text(cx, 122, name, cls="sm dim")
-        if i:
-            f.text(cx - slot / 2, 152, "×", cls="sm dim")
-    f.text(BCX, 202, "cumulated back from ultimate", cls="sm dim")
-    cdfs = [(0, 1.900), (1, 1.267), (2, 1.092), (3, 1.030), (4, 1.010)]
-    for i, (k, v) in enumerate(cdfs):
-        cx = x0 + slot * i + slot / 2
-        f.chip(cx, 232, f"{v:.3f}", colour=GREEN, w=slot - 8, h=28)
-        f.text(cx, 262, AGES[i], cls="sm dim")
-    f.text(BCX, 306, "1 / 1.900 = 52.6% of AY 2024 is reported", cls="sm")
-    f.text(BCX, 344, "the CDF is a property of the pattern, not of", cls="sm dim")
-    f.text(BCX, 362, "the year it is applied to", cls="sm dim")
+    ages = AGES + ["ult"]
+    cdfs = CDF + [1.0]
+    x0, scale, ys = 70, 90, [100 + 50 * k for k in range(6)]
+    ends = [x0 + scale * c for c in cdfs]
+    for k, (age, c) in enumerate(zip(ages, cdfs)):
+        colour = AMBER if k == 5 else BLUE
+        f.rect(x0, ys[k] - 13, ends[k] - x0, 26, rx=3, fill=colour,
+               fill_opacity="0.3", stroke=colour, stroke_width="1.2")
+        f.text(x0 - 8, ys[k] + 4, age, cls="sm dim", anchor="end")
+    f.text(ends[0] - 6, ys[0] + 4, f"{CDF[0]:.3f}", cls="sm bold", anchor="end")
+    for k, fac in enumerate(LDF + [TAIL]):
+        f.arrow(ends[k + 1] + 4, ys[k + 1] - 13, ends[k] + 4, ys[k] + 13,
+                colour="var(--dim)", width=1.4)
+        f.text(max(ends[k], ends[k + 1]) + 18, (ys[k] + ys[k + 1]) / 2 + 4,
+               f"× {fac:.3f}", cls="sm", anchor="start")
     return f
 
 
-@figure("Tail Factor", "The development the triangle cannot see, beyond its last "
-        "observed age", width=WID)
+@figure("Tail Factor", "Observed link ratios falling toward 1.000 until the data "
+        "ends at 48 months, and the dashed extrapolation beyond it that the 1.010 "
+        "tail factor stands for", width=WID)
 def tail_factor() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 132, 0.95, 1.62, left=52, right=20, top=34, bottom=70)
-    ax.frame(xticks=[12, 60, 108], yticks=[1.0, 1.3, 1.6],
+    ax = vaxes(f, 0, 132, 0.95, 1.62, left=52, right=20, top=28, bottom=48)
+    ax.frame(xlabel="age in months", xticks=[12, 60, 108], yticks=[1.0, 1.3, 1.6],
              yfmt=lambda t: f"{t:.1f}", grid=True)
     obs = [(12, 1.500), (24, 1.160), (36, 1.060), (48, 1.020)]
     ax.polyline(obs, colour=BLUE, width=2.4)
@@ -2023,32 +2023,24 @@ def tail_factor() -> Fig:
                 width=2.2, dash=True)
     ax.vline(54, colour="var(--dim)")
     ax.label(54, 1.44, "data ends", cls="sm dim", anchor="end", dx=-6)
-    ax.label(84, 1.10, "extrapolated", cls="sm bold", fill=AMBER)
-    f.text(BCX, ax.y1 + 32, "age in months", cls="sm dim")
-    f.text(BCX, BY1 - 16, "a curve fit or an industry benchmark — and on",
-           cls="sm dim")
-    f.text(BCX, BY1 + 2, "a long tail, the largest assumption in the analysis",
-           cls="sm dim")
+    ax.label(88, 1.10, "tail 1.010", cls="sm bold", fill=AMBER)
     return f
 
 
-@figure("Severity Analysis", "Average claim severity by accident year with the "
-        "trend fitted through it", width=WID)
+@figure("Severity Analysis", "Average claim severity by accident year rising from "
+        "2,380 to 2,850, with a 4.6% annual trend fitted through it", width=WID)
 def severity_analysis() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -0.4, 4.4, 2200, 3000, left=56, right=20, top=34, bottom=70)
-    ax.frame(xticks=[0, 1, 2, 3, 4], xfmt=lambda t: AYS[int(t)],
-             yticks=[2200, 2600, 3000], yfmt=lambda t: f"{t:,.0f}", grid=True)
+    ax = vaxes(f, -0.4, 4.4, 2200, 3000, left=56, right=20, top=28, bottom=48)
+    ax.frame(xlabel="accident year", ylabel="severity", xticks=[0, 1, 2, 3, 4],
+             xfmt=lambda t: AYS[int(t)], yticks=[2200, 2600, 3000],
+             yfmt=lambda t: f"{t:,.0f}", grid=True)
     sev = [2380, 2470, 2600, 2705, 2850]
     ax.bars([(k, v) for k, v in enumerate(sev)], colour=BLUE, opacity="0.6",
             base=2200)
     ax.curve(lambda x: 2380 * 1.0455 ** x, colour=ROSE, width=2.2)
-    ax.label(2.1, 2900, "4.6% a year", cls="sm bold", fill=ROSE)
-    f.text(BCX, ax.y1 + 30, "ultimate severity by accident year", cls="sm dim")
-    f.text(BCX, BY1 - 18, "read down the column for trend and across",
-           cls="sm dim")
-    f.text(BCX, BY1 - 2, "the row for a change in case reserving", cls="sm dim")
+    ax.label(1.6, 2860, "4.6% a year", cls="sm bold", fill=ROSE)
     return f
 
 
@@ -2056,72 +2048,85 @@ def severity_analysis() -> Fig:
 # B. Estimating claim liabilities — the methods
 # ═══════════════════════════════════════════════════════════════════════════
 
-@figure("Chain Ladder Method", "The latest diagonal of the triangle multiplied by "
-        "each year's cumulative development factor", width=WID)
+@figure("Chain Ladder Method", "Each accident year's latest diagonal cell carried "
+        "out to an ultimate column, AY 2024's 1,500 multiplied by 1.900 to 2,850",
+        width=WID)
 def chain_ladder_method() -> Fig:
     f = vcard()
 
-    f.text(BCX, 108, "reported to date × CDF = ultimate ($000)", cls="sm dim")
-    rows = [("2020", 1882, 1.010), ("2021", 2029, 1.030), ("2022", 2088, 1.092),
-            ("2023", 2025, 1.267), ("2024", 1500, 1.900)]
-    for i, (ay, c, cdf) in enumerate(rows):
-        y = 146 + i * 34
-        last = i == 4
-        f.text(56, y, ay, cls="sm bold" if last else "sm dim", anchor="start")
-        f.text(150, y, f"{c:,}", cls="sm", anchor="end")
-        f.text(216, y, f"× {cdf:.3f}", cls="sm dim", anchor="end")
-        f.text(304, y, f"{c * cdf:,.0f}", cls="sm bold" if last else "sm",
-               anchor="end", fill=GREEN if last else "var(--ink)")
-    f.text(BCX, 320, "every dollar of the diagonal is scaled by the", cls="sm dim")
-    f.text(BCX, 338, "full factor — so a distorted diagonal is", cls="sm dim")
-    f.text(BCX, 356, "multiplied, not merely added to", cls="sm dim")
+    x0, y0, cw, ch, xu = 56, 128, 40, 44, 302
+    for j, age in enumerate(AGES):
+        f.text(x0 + cw * (j + 0.5), y0 - 10, age, cls="sm dim")
+    f.text(xu, y0 - 10, "ult", cls="sm dim")
+    for i, row in enumerate(TRI):
+        cy = y0 + ch * (i + 0.5)
+        f.text(x0 - 8, cy + 4, AYS[i], cls="sm dim", anchor="end")
+        for j in range(len(row)):
+            cx = x0 + cw * (j + 0.5)
+            last = j == len(row) - 1
+            f.rect(cx - cw / 2 + 1.5, cy - ch / 2 + 1.5, cw - 3, ch - 3, rx=3,
+                   fill=BLUE if last else "var(--soft)",
+                   fill_opacity="0.3" if last else None,
+                   stroke=BLUE if last else "var(--edge)", stroke_width="1")
+        f.rect(xu - cw / 2 + 1.5, cy - ch / 2 + 1.5, cw - 3, ch - 3, rx=3,
+               fill=GREEN, fill_opacity="0.3", stroke=GREEN, stroke_width="1")
+        f.arrow(x0 + cw * len(row) + 2, cy, xu - cw / 2 - 2, cy, colour=GREEN,
+                width=1.4, dash=True)
+    cy = y0 + ch * 4.5
+    f.text(x0 + cw / 2, cy + 4, "1,500", cls="sm bold")
+    f.text(xu, cy + 4, "2,850", cls="sm bold")
+    f.text((x0 + cw + xu - cw / 2) / 2, cy - 8, "× 1.900", cls="sm bold")
     return f
 
 
-@figure("Case Outstanding Development Method", "Future payments projected from the "
-        "case reserve balance instead of from reported losses", width=WID)
+@figure("Case Outstanding Development Method", "AY 2024's 900 of case reserves "
+        "fanned out by a 2.500 factor into 2,250 of future payments, which with the "
+        "600 already paid make the 2,850 ultimate", width=WID)
 def case_outstanding_development_method() -> Fig:
     f = vcard()
 
-    x0, x1 = 46, 314
-    f.text(BCX, 116, "AY 2024 at 12 months ($000)", cls="sm dim")
-    f.rect(x0, 140, (x1 - x0) * 600 / 2850, 34, rx=4, fill=GREEN,
-           fill_opacity="0.6")
-    f.text(x0 + 8, 162, "paid 600", cls="sm", anchor="start")
-    f.rect(x0, 196, (x1 - x0) * 900 / 2850, 34, rx=4, fill=AMBER,
-           fill_opacity="0.6")
-    f.text(x0 + 8, 218, "case 900", cls="sm", anchor="start")
-    f.arrow(x0 + (x1 - x0) * 900 / 2850 + 6, 213, x0 + (x1 - x0) * 2250 / 2850,
-            213, colour=ROSE, width=1.6)
-    f.text(x0 + (x1 - x0) * 1600 / 2850, 205, "× 2.500", cls="sm bold", fill=ROSE)
-    f.rect(x0, 252, (x1 - x0) * 2250 / 2850, 34, rx=4, fill=ROSE,
-           fill_opacity="0.35", stroke=ROSE, stroke_width="1.2")
-    f.text(x0 + 8, 274, "future payments 2,250", cls="sm", anchor="start")
-    f.text(BCX, 322, "the factor is all future payments per dollar", cls="sm dim")
-    f.text(BCX, 340, "of case reserve, so it inherits every change", cls="sm dim")
-    f.text(BCX, 358, "in case-reserving adequacy directly", cls="sm dim")
+    x0, x1 = 40, 320
+
+    def px(v):
+        return x0 + (x1 - x0) * v / 2850
+
+    top, bot, h = 110, 256, 44
+    f.rect(px(0), top, px(600) - px(0), h, rx=4, fill=GREEN, fill_opacity="0.4",
+           stroke=GREEN, stroke_width="1.2")
+    f.text((px(0) + px(600)) / 2, top + h / 2 + 4, "paid 600", cls="sm bold")
+    f.rect(px(600), top, px(1500) - px(600), h, rx=4, fill=AMBER,
+           fill_opacity="0.4", stroke=AMBER, stroke_width="1.2")
+    f.text((px(600) + px(1500)) / 2, top + h / 2 + 4, "case 900", cls="sm bold")
+    f.polygon([(px(600), top + h), (px(1500), top + h), (px(2850), bot),
+               (px(600), bot)], fill=ROSE, fill_opacity="0.1", stroke="none")
+    f.text((px(600) + px(2850)) / 2 - 20, (top + h + bot) / 2 + 4, "× 2.500",
+           cls="sm bold")
+    f.rect(px(0), bot, px(600) - px(0), h, rx=4, fill=GREEN, fill_opacity="0.4",
+           stroke=GREEN, stroke_width="1.2")
+    f.rect(px(600), bot, px(2850) - px(600), h, rx=4, fill=ROSE,
+           fill_opacity="0.34", stroke=ROSE, stroke_width="1.2")
+    f.text((px(600) + px(2850)) / 2, bot + h / 2 + 4, "future 2,250", cls="sm bold")
+    brace(f, px(0), px(2850), bot + h + 6, depth=8, label="ultimate 2,850",
+          label_cls="sm bold")
     return f
 
 
-@figure("Expected Loss Method", "An ultimate taken wholly from the a priori "
-        "expectation, ignoring what has been reported", width=WID)
+@figure("Expected Loss Method", "The expected-loss ultimate held flat at 2,600 "
+        "whatever has been reported, against a chain-ladder ultimate that moves with "
+        "reported losses", width=WID)
 def expected_loss_method() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 3000, 2000, 3200, left=54, right=22, top=40, bottom=76)
-    ax.frame(xticks=[0, 1000, 2000, 3000], xfmt=lambda t: f"{t:,.0f}",
+    ax = vaxes(f, 0, 3000, 2000, 3200, left=54, right=22, top=28, bottom=48)
+    ax.frame(xlabel="reported losses", ylabel="ultimate",
+             xticks=[0, 1000, 2000, 3000], xfmt=lambda t: f"{t:,.0f}",
              yticks=[2000, 2600, 3200], yfmt=lambda t: f"{t:,.0f}", grid=True)
     ax.curve(lambda c: 2600, colour=VIOLET, width=2.6)
     ax.curve(lambda c: c * 1.900, colour="var(--dim)", width=1.6, dash=True,
              xa=1050, xb=1680)
     ax.point(1500, 2600, colour=VIOLET, r=4.4)
-    ax.label(2050, 2720, "expected loss", cls="sm bold", fill=VIOLET)
+    ax.label(2350, 2600, "expected loss", cls="sm bold", fill=VIOLET, dy=-8)
     ax.label(1500, 2850, "chain ladder", cls="sm dim", anchor="start", dx=6)
-    f.text(BCX, ax.y1 + 30, "reported losses to date", cls="sm dim")
-    f.text(BCX, ax.y1 + 56, "the estimate does not move when the data does",
-           cls="sm dim")
-    f.text(BCX, ax.y1 + 74, "— the right answer only when the data is useless",
-           cls="sm dim")
     return f
 
 

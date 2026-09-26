@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:d9f27f61e93722ffa9bb7509803837b802c02488dbecd1108e1542da435d382f
+  content_hash: sha256:5f8e914cec24783c3ff92254f2c63550d7b3938907a13afd54362d282a2d5d45
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,7 +20,7 @@ verification:
 - **One regulator for solvency.** The domiciliary state licenses, examines and supervises the RRG's solvency. A non-domiciliary state may require only a limited set of things: registration, premium taxes, compliance with its unfair claims practices laws, participation in residual market mechanisms, a copy of the annual financial statement — certified by an independent accountant and including an opinion on loss and LAE reserves by an actuary or qualified loss reserve specialist — and compliance with a court injunction if the RRG is found to be in hazardous financial condition.
 - **No guaranty fund.** State law may not make an RRG a member of a state insurance guaranty fund, so an RRG's insureds are unprotected if it fails. Every RRG policy must carry a prominent notice to that effect, stating that the RRG may not be subject to all of the state's insurance laws and that state insolvency guaranty funds are not available.
 - **Purchasing groups** are the LRRA's other vehicle: a group of similar buyers that purchases liability insurance *from* an insurer, rather than owning one. The group bears no risk; the insurer does.
-- **Regulatory concern.** Because solvency rests on one domicile — often a captive-friendly state — regulators worry about domicile shopping, thin capitalisation and governance by service providers rather than owners. The NAIC has extended its accreditation standards to RRG-domiciling states and adopted governance standards for RRGs. Compare [[Excess and Surplus Lines]], the other route by which a buyer reaches coverage outside the admitted market, and [[Specialized Insurance Topics]].
+- **Regulatory concern.** Because solvency rests on one domicile — often a captive-friendly state — regulators worry about domicile shopping, thin capitalisation and governance by service providers rather than owners. The NAIC's response has been to apply its solvency accreditation standards to a state's supervision of the multi-state RRGs it domiciles, including those formed as captives. Compare [[Excess and Surplus Lines]], the other route by which a buyer reaches coverage outside the admitted market, and [[Specialized Insurance Topics]].
 
 > [!example]- What Can the Contractors' RRG Write? {Example}
 > Forty regional building contractors form an RRG domiciled in Vermont. They want it to cover their (a) general liability, (b) commercial auto liability, (c) workers' compensation, (d) equipment and building property, and (e) the owners' personal auto policies. They operate in Vermont, New York and Texas.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:c255ed8db4c3263b1696ebddc398dd992fab7bb6ab521a9ad60a9316adaddeb3
+  content_hash: sha256:1c80a5d6993983df0f6f28cd7872008494150282c873cee58a9ded38d8e19ac4
   sources: []
   open_findings: 0
   open_critical: 0
@@ -59,4 +59,9 @@ verification:
 > >
 > > The plug-in gives $22 + (68 - 63.7) = 26.3\%$, for a technical ratio of $63.7 + 26.3 = 90.0\%$.
 > >
-> > The true expected technical ratio is $63.7 + 28.45 = 92.15\%$. The plug-in understates the reinsurer's cost by more than two points. In the $85\%$ year the commission floors at $22\%$ where the slide would have taken it far lower, and the good years land on the richer $0.5{:}1$ and maximum part of the scale. To hit a $90\%$ technical ratio, the reinsurer must lower the scale or narrow the maximum.
+> > The true expected technical ratio is $63.7 + 28.45 = 92.15\%$, so the plug-in understates the reinsurer's cost by more than two points. The plug-in behaves as if the $1{:}1$ slide ran on forever, $c = 90 - \text{LR}$. Against that line:
+> >
+> > - The floor in the $85\%$ year adds $0.25(22 - 5) = 4.25$ points.
+> > - The flatter slide and the maximum in the good years take back only $0.15(45 - 36) + 0.30(35 - 32.5) = 2.10$ points.
+> >
+> > The net is $+2.15$ points, and the asymmetry comes from the right-skewed loss ratio: the bad tail runs further past the minimum than the good tail runs past the maximum. To hit a $90\%$ technical ratio, the reinsurer must lower the scale or the minimum.

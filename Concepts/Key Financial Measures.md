@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1a8239ea5c7524f39e86e57856a6609e272023ca96797420f59503412b88f003
+  content_hash: sha256:581e7a1c2b9e7fd0f309703daafb2044a892459436630f34a1de60fbd089ef83
   sources: []
   open_findings: 0
   open_critical: 0
@@ -32,21 +32,25 @@ verification:
 > >
 > > **Surplus relief** on the ceded unearned premium:
 > >
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{Relief} &= 0.30 \times (0.25 \times 300) \\
 > > &= 22.5 \\[4pt]
 > > \text{P/S after} &= \frac{0.75 \times 600}{200 + 22.5} \\
 > > &= \frac{450}{222.5} \\
 > > &= 2.02
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > **Profit ceded** each year, on ceded premium of $\$150$ million:
 > >
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{Reinsurer's margin} &= 150 - 0.30(150) - 0.66(150) \\
 > > &= 150 - 45 - 99 \\
 > > &= 6
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > Leverage falls from $3.00$ to about $2.02$, at a cost of $\$6$ million a year — a quarter of the $\$24$ million expected underwriting profit. Whether that is worth it depends on the reinsurer's credit quality and on how a rating agency treats the $\$22.5$ million of relief, which it may reverse.
 

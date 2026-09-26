@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:49f144e2ad96cc799b42c7ab25498e116d08a6344eff9dec4f31f3d9fcb7ef36
+  content_hash: sha256:e5209d0e4085e7c760c179c248f2d0fe7fadfd5ffa73531d576f5ed4c54153bb
   sources: []
   open_findings: 0
   open_critical: 0
@@ -30,14 +30,16 @@ verification:
 > A jurisdiction has $2{,}000{,}000$ insured vehicles, $90{,}000$ of them in the residual plan. The plan's annual deficit of $\$36$ million is shared by voluntary market share. An insurer with $12\%$ of the voluntary market writes $\$300$ million of voluntary premium. Find the residual share and the insurer's burden.
 >
 > > [!answer]-
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{Residual share} &= \frac{90{,}000}{2{,}000{,}000} \\
 > > &= 4.5\% \\[4pt]
 > > \text{Insurer's share} &= 0.12 \times \$36\text{M} \\
 > > &= \$4.32\text{M} \\[4pt]
 > > \text{As \% of premium} &= \frac{4.32}{300} \\
 > > &= 1.44\%
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > Voluntary policyholders pay about $1.4\%$ more to subsidise drivers the voluntary market would not write at approved rates. If rate suppression doubled the plan to $180{,}000$ vehicles ($9\%$), the deficit and the load would grow with it — the residual market's cost always returns to the voluntary market.
 

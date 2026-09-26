@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a9508113a038ed62a111bb680b9614040fbc7ba769007c9a86030acf4c5f9887
+  content_hash: sha256:e48e92ff83302e3acc3527a42d7da743ae098a3dab3ccebb0b167f0c2975f535
   sources: []
   open_findings: 0
   open_critical: 0
@@ -35,7 +35,7 @@ verification:
 > On-level subject premium is $\$4.0$M in each year. Find the loss cost, and compare trended layer losses with untrended ones.
 >
 > > [!answer]-
-> > Trend first, then layer ($\$$K):
+> > Trend first, then layer (in \$ thousands):
 > >
 > > - 2021: $504$, layer $254$
 > > - 2022: $276$, layer $26$ (untrended, $230$ misses the layer)

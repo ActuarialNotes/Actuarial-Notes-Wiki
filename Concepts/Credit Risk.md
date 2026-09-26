@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:59dfd670754bef35d5dbe976e83614393d655bc469ab6c6111fcc6b408b4c47b
+  content_hash: sha256:99d02b0566eb71a359ebe3468265584e8d3a046ab15221aa651955ec6b34c098
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,7 +20,7 @@ verification:
 - **Prepayment** is the opposite behaviour by a borrower — paying back early, usually when rates fall — and is grouped with default because it also changes the cash flows the insurer receives; see [[Prepayment Risk]].
 - **Loss before default.** A downgrade widens the spread and cuts the price by about $-D \times \Delta s$ for spread duration $D$. [[Credit Rating Migration]] matrices model movements between grades, so a portfolio's credit risk includes mark-to-market loss, not only default.
 - **Correlation is the portfolio risk.** Defaults cluster, so the loss distribution of a credit portfolio is skewed with a heavy tail whose size is set by **default correlation**. This is the central lesson of [[Structured Finance]]: senior tranches of pooled credit are safe only while defaults stay close to independent, and their losses fall in exactly the economic states where investors are worst off.
-- **Managing it.** Diversification and concentration limits by issuer, sector and reinsurer ([[Concentration Risk]]); rating floors; collateral; credit derivatives. Regulators charge capital for it — the U.S. [[Risk-Based Capital]] formula and, in Canada, the [[Credit Risk Margin]] of the [[MCT]]. Together with [[Interest Rate Risk]] it is the main [[Financial Risk|financial risk]] on the asset side.
+- **Managing it.** Diversification and concentration limits by issuer, sector and reinsurer ([[Concentration Risk]]); rating floors; collateral; credit derivatives. Regulators charge capital for it — the U.S. [[Risk-Based Capital]] formula and, in Canada, the [[Credit Risk Margin]] of the [[MCT]]. Together with [[Interest Rate Risk]] it is the main [[Financial Risk|financial risk]] of a bond portfolio.
 
 > [!example]- Expected Loss versus Spread on a Corporate Bond {Example}
 > An insurer holds $\$50$M of BBB corporate bonds. The one-year probability of default is $0.25\%$, the expected recovery $40\%$, and the bonds yield $1.30\%$ over Treasuries. Compare the expected credit loss with the spread earned.

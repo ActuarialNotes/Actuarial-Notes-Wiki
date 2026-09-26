@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:54d6cf82854d55f5381d3f56d69cbda8b45cbf5fdeedde4c66c9125554c4e204
+  content_hash: sha256:62f1bda9521d9fc519028f0d1d7590f516f2ca27687f8ae231f2f4dbc13f7f41
   sources: []
   open_findings: 0
   open_critical: 0
@@ -28,14 +28,16 @@ verification:
 > An insurer's direct earned premium in TRIA-eligible lines last year was $\$500$ million. A certified act of terrorism causes it $\$400$ million of insured losses; industry losses exceed the $\$200$ million program trigger. The insurer deductible is $20\%$ of prior-year premium and the federal share is $80\%$ of losses above it. Split the loss.
 >
 > > [!answer]-
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{Deductible} &= 0.20 \times 500 \\
 > > &= 100 \\[4pt]
 > > \text{Federal share} &= 0.80 \times (400 - 100) \\
 > > &= 240 \\[4pt]
 > > \text{Insurer retains} &= 100 + 0.20 \times 300 \\
 > > &= 160
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > The insurer bears $\$160$ million ($40\%$), the Treasury $\$240$ million — and federal payments may later be recouped through surcharges on policyholders. By capping the tail, the program is what lets private insurers keep offering terrorism cover at all: it is a backstop to the voluntary market, not a replacement for it.
 

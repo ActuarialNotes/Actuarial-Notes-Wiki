@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:2849775c098a7f4d0f272a2f9ae4e117e078102fbc28bd7b1ca7f73059a0a114
+  content_hash: sha256:481ebeac05ae329ef9380fee7e511c7511569ed8a9314f7b1e20f42204859ed0
   sources: []
   open_findings: 0
   open_critical: 0
@@ -17,7 +17,7 @@ verification:
 >
 > $$\text{U.S.} = \underbrace{\text{Domiciliary state}}_{\text{solvency lead}} + \underbrace{\text{Each licensing state}}_{\text{rates, forms, conduct}}$$
 
-- **United States.** Each state's department, headed by a commissioner (appointed in most states, elected in some), licenses insurers, reviews rates and forms, and conducts financial and market-conduct examinations. The McCarran-Ferguson Act (1945) leaves the business of insurance to the states, with federal law — including [[Antitrust Law|antitrust law]] — applying only to the extent states do not regulate. The **domiciliary** state leads solvency supervision; every other state where the insurer is licensed regulates its rates and conduct there. See [[State and Federal Insurance Regulation]].
+- **United States.** Each state's department, headed by a commissioner (appointed in most states, elected in some), licenses insurers, reviews rates and forms, and conducts financial and market-conduct examinations. The McCarran-Ferguson Act (1945) leaves the business of insurance to the states: a federal statute does not override state insurance law unless it specifically relates to insurance, and federal [[Antitrust Law|antitrust law]] applies only to the extent the states do not regulate (boycott, coercion and intimidation excepted). The **domiciliary** state leads solvency supervision; every other state where the insurer is licensed regulates its rates and conduct there. See [[State and Federal Insurance Regulation]].
 - **The NAIC is not a regulator.** It is the commissioners' association: it writes model laws, the [[NAIC Annual Statement]] and its instructions, the statutory accounting manual, the [[Risk-Based Capital|RBC]] formula and the [[IRIS Ratios]], and its accreditation program makes adoption of core solvency standards effectively mandatory. At federal level the Federal Insurance Office, created by [[Dodd-Frank]], monitors the industry but does not regulate it.
 - **Canada.** [[OSFI]] supervises federally regulated insurers' solvency through the [[MCT]], guidelines and staged intervention; provincial regulators ([[Financial Services Regulatory Authority of Ontario|FSRA]], the [[Autorité des marchés financiers|AMF]] and others) license insurers, approve auto rates where required and police conduct, and prudentially supervise provincially incorporated insurers. The [[Canadian Council of Insurance Regulators]] coordinates them. See [[Insurance Regulation]].
 - **What regulators require of the actuary.** In both countries the board must appoint a qualified actuary whose opinion on the reserves the regulator relies on. U.S.: the SAO attached to the Annual Statement, the confidential [[Actuarial Opinion Summary]], an [[Actuarial Report]] available by May 1, and notice to the domiciliary commissioner when the actuary is appointed or replaced. Canada: the [[Appointed Actuary]]'s opinion and report, [[FCT]], the [[Duty to Report]], and OSFI's qualification and [[Peer Review|peer review]] expectations.

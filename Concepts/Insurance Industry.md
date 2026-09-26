@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:06776b28f015679034a38097e6ac8be8d0011383d00d74df7d735064f45c99c6
+  content_hash: sha256:296292f98b68db4210714bbc228687edde56818b14224acf83ac87cc33893911
   sources: []
   open_findings: 0
   open_critical: 0
@@ -31,12 +31,14 @@ verification:
 > >
 > > **Continuous trigger:** every policy from 1972 through 1985 is triggered — $14$ policy years.
 > >
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{Available limit} &= 14 \times \$1\text{M} \\
 > > &= \$14\text{M} \\[4pt]
 > > \text{Pro rata share} &= \frac{\$7\text{M}}{14} \\
 > > &= \$0.5\text{M per year}
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > The insurer pays the full $\$7$ million out of policies priced in the 1970s for risks nobody then associated with the product. Which trigger and allocation rule apply depends on the jurisdiction — which is itself the problem: the liability is set by courts decades after the premium was earned.
 
@@ -44,11 +46,13 @@ verification:
 > An appellate court rules that a common water-damage exclusion in homeowners' wordings is ambiguous and must be read in favour of the insured. Over the past two years insurers denied about $12{,}000$ claims under that exclusion, averaging $\$18{,}000$ each. An insurer holds $8\%$ of the market. Assess the impact.
 >
 > > [!answer]-
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{Industry exposure} &= 12{,}000 \times \$18{,}000 \\
 > > &= \$216\text{M} \\[4pt]
 > > \text{Insurer's share} &= 0.08 \times \$216\text{M} \\
 > > &= \$17.28\text{M}
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > That is an upper bound if every denied claim is re-opened. The consequences: reserves for past accident years must be re-estimated (the decision states the law as it always was, so for a valuation not yet signed it is a [[Subsequent Events|subsequent event]] to recognise, not merely disclose); current rates are inadequate for the in-force book; and every insurer will re-draft the wording. The industry absorbs retroactively a cost it never priced.

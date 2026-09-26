@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a1047af6f5fd1e6fa0b7952a5eb2aea49243c188c479a81d3f5c789418f2941b
+  content_hash: sha256:dba084d1c80c2518f01054986b870addbd4386c39383c31249d4283b87933495
   sources: []
   open_findings: 0
   open_critical: 0
@@ -25,12 +25,14 @@ verification:
 > At year end the actuary increases the estimate of unpaid claims by $\$24$ million. Before the change, the insurer's pre-tax income was $\$60$ million and its surplus $\$300$ million. Ignoring tax, what does each audience see?
 >
 > > [!answer]-
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{Pre-tax income} &= \$60\text{M} - \$24\text{M} \\
 > > &= \$36\text{M} \\[4pt]
 > > \text{Surplus} &= \$300\text{M} - \$24\text{M} \\
 > > &= \$276\text{M}
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > - **Investors** see earnings fall by $40\%$ — a headline result.
 > > - **The regulator** sees surplus fall by $8\%$ and asks whether the capital ratio and leverage remain acceptable.
@@ -46,7 +48,8 @@ verification:
 > >
 > > **Canadian IFRS 17:**
 > >
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > PV &= \frac{50}{1.04} + \frac{50}{1.04^2} \\
 > > &= 48.077 + 46.228 \\
 > > &= 94.305 \\[4pt]
@@ -54,6 +57,7 @@ verification:
 > > &= 4.715 \\[4pt]
 > > LIC &= 94.305 + 4.715 \\
 > > &= 99.02
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > About $\$99.0$ million. The two totals are close, but for different reasons: statutory accounting keeps an implicit margin by not discounting, while IFRS 17 discounts and then adds an explicit, disclosed margin. Change the interest rate or the confidence level and they diverge — so a comparison across bases must reconcile the components, not the totals.

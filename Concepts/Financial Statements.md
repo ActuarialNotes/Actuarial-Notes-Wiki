@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:06ffda308ee80fd5f31237e7a9401353ddec50137dd0e001aba23ea109c8db62
+  content_hash: sha256:2784d08a859e651477e71be7fda724c2c6cf708287b27f95d7f4a94a6d1ae634
   sources: []
   open_findings: 0
   open_critical: 0
@@ -29,23 +29,27 @@ verification:
 > > [!answer]-
 > > **Without the treaty.** Cash received is $10 - 2.5 = 7.5$.
 > >
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \Delta\text{Surplus}_{\text{SAP}} &= 7.5 - 10 \\
 > > &= -2.5 \\[4pt]
 > > \Delta\text{Equity}_{\text{GAAP}} &= 7.5 + 2.5 - 10 \\
 > > &= 0
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > GAAP carries the $\$2.5$ million as DAC; SAP expenses it against a full unearned premium reserve.
 > >
 > > **With the treaty.** Ceded premium $4.0$ less commission $1.0$: the insurer pays $3.0$, leaving cash of $4.5$ and net unearned premium of $6.0$.
 > >
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \Delta\text{Surplus}_{\text{SAP}} &= 4.5 - 6.0 \\
 > > &= -1.5 \\[4pt]
 > > \Delta\text{Equity}_{\text{GAAP}} &= 4.5 + (2.5 - 1.0) - 6.0 \\
 > > &= 0
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > Statutory surplus improves by $\$1.0$ million — the ceding commission, which here exactly matches the acquisition cost on the ceded share, so none of it must be deferred. GAAP equity does not move: the commission simply reduces DAC. The relief is an artefact of SAP's conservatism, which is why rating agencies adjust for it.
 
@@ -55,12 +59,14 @@ verification:
 > > [!answer]-
 > > A ceding commission not contingent on claims reduces the premium paid to the reinsurer, so the allocation of reinsurance premium is $100 - 25 = 75$; recoveries are $0.20 \times 360 = 72$.
 > >
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{Net reinsurance expense} &= 75 - 72 \\
 > > &= 3 \\[4pt]
 > > \text{Service result} &= 500 - 360 - 80 - 3 \\
 > > &= 57
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > **Netted (pre-IFRS 17):** net earned $400$, net claims $288$, net expenses $80 - 25 = 55$, so the underwriting result is $400 - 288 - 55 = 57$.
 > >

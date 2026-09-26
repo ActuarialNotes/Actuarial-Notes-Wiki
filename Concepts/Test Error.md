@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:74c5b8921aa68fa38a44e74d12b115c610eeac6fc242e6ddc20b2cde4d8ba6d3
+  content_hash: sha256:9ad3cd46029509b5c5ec9d0a25176abc9b8228fc26e6167f30829be497d693d6
   sources: []
   open_findings: 0
   open_critical: 0
@@ -56,4 +56,4 @@ verification:
 > > &= 3.68
 > > \end{align*}
 > > $$
-> > Predicting a held-out territory costs about three times the training MSE. The end territories, with the highest leverage, drive the gap: each one pulls the line toward itself when it is included.
+> > Predicting a held-out territory costs about three times the training MSE. The end territories have the highest leverage, and their squared errors grow elevenfold (from $0.25$ to $2.78$) when they are left out, because each pulls the line toward itself when it is included.

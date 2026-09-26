@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1a74a95368b2ec9a19b01d0836d24f0c76f35c7ccb7d993d7215305c07d0b3c5
+  content_hash: sha256:a48fbc32bd2d6066ee385cb8856f44004596b579def4a7a840f7a253f1b72fcb
   sources: []
   open_findings: 0
   open_critical: 0
@@ -45,10 +45,12 @@ verification:
 > > [!answer]-
 > > Let capital available be $C$, so liabilities are $3.2C$. A $10\%$ deficiency is $0.32C$.
 > >
-> > $$\begin{align*}
+> > $$
+> > \begin{align*}
 > > \text{MCT}_{\text{new}} &= 210\% \times \frac{C - 0.32C}{C} \\
 > > &= 210\% \times 0.68 \\
 > > &= 142.8\%
-> > \end{align*}$$
+> > \end{align*}
+> > $$
 > >
 > > Below the $150\%$ supervisory target — and understated, since strengthening reserves also raises the buffer. The same $10\%$ error at Insurer A costs $0.15C$ and leaves it at $178.5\%$. Identical ratios, very different health: the reserves-to-capital leverage and the development trend are what separate them.

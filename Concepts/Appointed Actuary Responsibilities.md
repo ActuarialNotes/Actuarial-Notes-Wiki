@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:08787a4c470b8009acda1ec7451f58e7a33a7f412e23d15659eb88df1c9d7860
+  content_hash: sha256:d9b2eb2565a20cfe5908ad38f1542a188852de64c71c613b00d2169ac1482de9
   sources: []
   open_findings: 0
   open_critical: 0
@@ -16,7 +16,7 @@ verification:
 > $$\begin{aligned} \text{Appointment} &: \text{by Dec 31 of the opinion year} \\ \text{Opinion} &: \text{with the Annual Statement, Mar 1} \\ \text{AOS} &: \text{to the domiciliary state, Mar 15} \\ \text{Report} &: \text{available by May 1} \end{aligned}$$
 
 - **Appointment.** On first engagement the board — or its equivalent, or a committee reporting directly to it — appoints the actuary by December 31 of the year the opinion covers. Within **5 business days** the company tells the domiciliary commissioner who was appointed, by whom and when, and that the actuary is a Qualified Actuary (or commissioner-approved) whose qualification documentation went to the board.
-- **Qualification.** A **Qualified Actuary** (i) meets the USQS Specific Qualification Standard for P&C opinions set by the [[American Academy of Actuaries]] — basic education, three years of responsible experience and continuing education; (ii) holds an **Accepted Actuarial Designation**: an [[Fellow of the Casualty Actuarial Society (FCAS)|FCAS]] whose education includes Exam 6 (United States), an [[Associate of the Casualty Actuarial Society (ACAS)|ACAS]] with Exam 6 (US) *and* Exam 7, or an [[Fellow of the Society of Actuaries (FSA)|FSA]] with the SOA's specified general insurance exams, with substitutions for older syllabi; and (iii) belongs to an organization that enforces the Academy's Code, the USQS and ABCD participation. The board receives and documents a qualification description; the actuary attests to CE each year through the CAS or SOA.
+- **Qualification.** A **Qualified Actuary** (i) meets the USQS Specific Qualification Standard for P&C opinions set by the [[American Academy of Actuaries]] — basic education, three years of responsible experience and continuing education; (ii) holds an **Accepted Actuarial Designation**: an [[Fellow of the Casualty Actuarial Society (FCAS)|FCAS]] whose education includes Exam 6 (United States), an [[Associate of the Casualty Actuarial Society (ACAS)|ACAS]] with Exam 6 (US) *and* Exam 7, or an [[Fellow of the Society of Actuaries (FSA)|FSA]] with the SOA's specified general insurance exams, with substitutions for older syllabi; and (iii) belongs to an organization that requires adherence to the Academy's Code and the USQS and participates in the ABCD. The board receives and documents a qualification description; the actuary attests to CE each year through the CAS or SOA.
 - **Three deliverables, three audiences:**
   - the **Statement of Actuarial Opinion** — public, attached to page 1 of the [[NAIC Annual Statement]], in four prescribed sections with Exhibits A and B (see [[SAO Language]]);
   - the **[[Actuarial Opinion Summary]]** — confidential, to the domiciliary state: the actuary's point estimate and/or range against the carried reserves;

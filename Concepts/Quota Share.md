@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:51cc4f77bcbc45eb7dec7072965b21be3462eaa638838009d532919f0a0eac78
+  content_hash: sha256:65937c7fa7d48df42f442277e424b4d1546afebb19521914f3b162a0e61b4e7f
   sources: []
   open_findings: 0
   open_critical: 0
@@ -54,7 +54,7 @@ verification:
 > Same treaty. The cedant's annual catastrophe loss (one event per year at most) is $\$0$ with probability $0.70$, $\$10$M with $0.20$, $\$30$M with $0.08$ and $\$60$M with $0.02$. The reinsurer proposes limiting ceded catastrophe loss to $\$8$ million per occurrence. Find the new catastrophe load and combined ratio.
 >
 > > [!answer]-
-> > Ceded catastrophe loss at $40\%$ is $0, 4, 12, 24$ ($\$$M) before the cap, and $0, 4, 8, 8$ after it:
+> > Ceded catastrophe loss at $40\%$ is $0, 4, 12, 24$ (in \$ millions) before the cap, and $0, 4, 8, 8$ after it:
 > >
 > > $$
 > > \begin{align*}

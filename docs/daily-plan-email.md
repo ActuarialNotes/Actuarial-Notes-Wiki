@@ -4,7 +4,7 @@ An opt-in morning email that lists the concepts the [study plan](study-plan-gene
 
 ## User experience
 
-- **Opt in**: Settings → *Daily plan email* (signed-in only — the email goes to the account address). A toggle turns the email on, and a picker chooses the local send hour (default 8:00 AM). The browser's IANA timezone is stored alongside the hour and refreshed on every save, so the send time follows whichever device last touched the setting.
+- **Opt in**: the Dashboard's reminders bell (signed-in only — the email goes to the account address). A toggle turns the email on, and a picker chooses the local send hour (default 8:00 AM). The browser's IANA timezone is stored alongside the hour and refreshed on every save, so the send time follows whichever device last touched the setting.
 - **The email**: one section per exam that has a cached study plan, each with a pacing line (day number, pacing status, days to target), today's concept list (capped at 12, "+N more" beyond that), and the plan's "worth a refresher" concepts. A CTA links to the quiz; the footer links back to Settings to change the time or turn it off.
 - **Quiet days**: if no exam has anything scheduled or worth reviewing, no email is sent.
 
@@ -24,7 +24,7 @@ This derivation (`deriveTodaysConcepts`), the pacing phrasing, and the timezone 
 | Prefs table `user_email_prefs` + hourly pg_cron job | `supabase/migrations/20260721_daily_plan_email.sql` |
 | Sender edge function | `supabase/functions/daily-plan-email/index.ts` |
 | Pure derivation core + tests | `quiz/src/lib/dailyEmail.ts` / `.test.ts` |
-| Settings card + hook | `quiz/src/components/EmailSettingsCard.tsx`, `quiz/src/hooks/useEmailPrefs.ts` |
+| Reminders modal + hook | `quiz/src/components/DashboardRemindersModal.tsx`, `quiz/src/hooks/useEmailPrefs.ts` |
 | Feature flag `DAILY_PLAN_EMAIL_ENABLED` | `quiz/src/lib/featureFlags.ts` |
 
 ### Send loop

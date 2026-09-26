@@ -8,9 +8,8 @@ import { useSoundOnToggle } from '@/hooks/useSoundEffects'
 const HOURS = Array.from({ length: 24 }, (_, h) => h)
 
 // Daily reminder email settings, surfaced from the Dashboard header via the
-// notification icon. Mirrors EmailSettingsCard (Settings) — the opt-in toggle
-// plus a local send-time picker persisted to user_email_prefs — so both entry
-// points drive the same preference. The email itself is sent server-side by the
+// notification icon — the one place the preference is set: the opt-in toggle
+// plus a local send-time picker persisted to user_email_prefs. The email itself is sent server-side by the
 // daily-plan-email edge function (see docs/daily-plan-email.md).
 
 interface Props {

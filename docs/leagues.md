@@ -22,7 +22,6 @@ Where the pieces live:
 | Hook (load + realtime + event + focus refresh) | `quiz/src/hooks/useLeague.ts` — `useLeague(exam)` |
 | Leaderboard UI (Level popup tab) + its exam selector | `quiz/src/components/LeaderboardPanel.tsx` |
 | Level badge popup that hosts the tab (Level / Quests / League) | `quiz/src/components/LevelBadge.tsx` |
-| Settings opt-in card | `quiz/src/components/LeagueSettingsCard.tsx` |
 | Tables + RLS + all server logic | `supabase/migrations/20260710_leagues.sql` |
 | Feature flag | `LEAGUES_ENABLED` in `quiz/src/lib/featureFlags.ts` |
 
@@ -35,8 +34,8 @@ The popup's header carries the current level and level-progress bar, and the
 daily goal is shown as the first row of the Quests tab (there is no separate
 Level tab). Because leagues are per-exam, the League tab carries a
 compact exam selector (styled like the Dashboard exam pills, smaller) when more
-than one exam is active, defaulting to the Dashboard's active exam. Settings has
-a parallel opt-in card with its own exam selector.
+than one exam is active, defaulting to the Dashboard's active exam. Joining and leaving both happen
+there — Settings has no league section.
 
 ## Privacy model
 
@@ -44,7 +43,7 @@ Display name and avatar normally live in `auth.users.user_metadata`, which is
 **not readable across users** — so a leaderboard has to copy them somewhere
 cohort-mates can see. The design makes that copy an explicit, reversible act:
 
-- **Nothing is shared until join.** The join UI (League tab and Settings)
+- **Nothing is shared until join.** The join UI (the League tab)
   previews exactly what will be shared: display name, avatar, weekly XP —
   never email, user id, or any study data.
 - **Joining snapshots** the profile name/avatar into `league_members` (visible

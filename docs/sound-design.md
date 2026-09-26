@@ -67,7 +67,7 @@ costs zero bytes of assets and every cue is tunable from one table.
 | `quiz/src/lib/soundInteractions.ts` | Pure decision table: given a description of the pressed element, which cue plays. |
 | `quiz/src/components/SoundEffects.tsx` | Mounted once in `App`. One delegated listener gives every control its press cue (see "When a press counts as a press"); also unlocks the AudioContext on the first gesture. |
 | `quiz/src/hooks/useSoundEffects.ts` | `useSoundEffects()` (settings + `play`), plus `useSoundOnMount` / `useSoundOnToggle` for surfaces whose sound belongs to the surface. |
-| `quiz/src/components/SoundSettingsCard.tsx` | Settings → Sound: on/off, volume, and previews. |
+| `quiz/src/components/SoundSettingsCard.tsx` | Settings → Sound: on/off and volume. |
 | `quiz/src/components/SoundPopover.tsx` | The sidebar popout beside the theme picker: mute + volume, reachable from any page. |
 
 ## When a press counts as a press

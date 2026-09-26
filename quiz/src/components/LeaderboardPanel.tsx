@@ -52,6 +52,8 @@ export function LeaderboardPanel({
   )
   const league = useLeague(selectedExam)
   const [joining, setJoining] = useState(false)
+  const [confirmingLeave, setConfirmingLeave] = useState(false)
+  const [leaving, setLeaving] = useState(false)
   const [dismissedWeek, setDismissedWeek] = useState<string | null>(null)
 
   // Same identity derivation as the Dashboard header — this is what joining shares.
@@ -66,6 +68,13 @@ export function LeaderboardPanel({
     setJoining(true)
     await league.join(displayName, avatarUrl)
     setJoining(false)
+  }
+
+  const handleLeave = async () => {
+    setLeaving(true)
+    await league.leave()
+    setLeaving(false)
+    setConfirmingLeave(false)
   }
 
   if (exams.length === 0) {
@@ -91,7 +100,7 @@ export function LeaderboardPanel({
             <button
               key={e.id}
               type="button"
-              onClick={() => setSelectedExam(e.id)}
+              onClick={() => { setSelectedExam(e.id); setConfirmingLeave(false) }}
               className={cn(
                 'rounded-full px-3 py-1 text-xs font-semibold transition-colors',
                 e.id === selectedExam
@@ -135,6 +144,39 @@ export function LeaderboardPanel({
             Top finishers move up a league on Monday (00:00 UTC); the bottom — and anyone who
             ends the week with 0 XP — move down.
           </p>
+          {confirmingLeave ? (
+            <div className="space-y-2 rounded-xl bg-muted/40 p-3">
+              <p className="text-xs text-muted-foreground">
+                Leave this league? Your shared name, avatar, and weekly XP are deleted.
+              </p>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => void handleLeave()}
+                  disabled={leaving}
+                  className="rounded-full bg-destructive px-3 py-1 text-xs font-semibold text-destructive-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
+                >
+                  {leaving ? 'Leaving…' : 'Leave league'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setConfirmingLeave(false)}
+                  disabled={leaving}
+                  className="rounded-full px-3 py-1 text-xs font-semibold text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setConfirmingLeave(true)}
+              className="text-xs text-muted-foreground hover:text-foreground hover:underline"
+            >
+              Leave league
+            </button>
+          )}
         </>
       )}
     </div>

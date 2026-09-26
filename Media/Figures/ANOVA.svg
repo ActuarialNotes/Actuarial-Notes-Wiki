@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The analysis-of-variance table as a split of the total sum of squares</title>
+  <title>A total sum of squares of 1,000 split into regression (680, in 2 slices of 340) and residual (320, in 47 slices of 6.8); one slice of each compared gives the F ratio of 50</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,32 +42,68 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
+  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="42" y="96" width="276" height="34" rx="6" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
-    <text x="54" y="118" text-anchor="start" class="sm bold">Source</text>
-    <text x="180" y="118" text-anchor="middle" class="sm bold">SS</text>
-    <text x="228" y="118" text-anchor="middle" class="sm bold">df</text>
-    <text x="276" y="118" text-anchor="middle" class="sm bold">MS</text>
-    <line x1="42" y1="170" x2="318" y2="170" class="rule"/>
-    <text x="54" y="158" text-anchor="start" class="sm">Regression</text>
-    <text x="180" y="158" text-anchor="middle" class="sm">680</text>
-    <text x="228" y="158" text-anchor="middle" class="sm">2</text>
-    <text x="276" y="158" text-anchor="middle" class="sm">340</text>
-    <line x1="42" y1="210" x2="318" y2="210" class="rule"/>
-    <text x="54" y="198" text-anchor="start" class="sm">Residual</text>
-    <text x="180" y="198" text-anchor="middle" class="sm">320</text>
-    <text x="228" y="198" text-anchor="middle" class="sm">47</text>
-    <text x="276" y="198" text-anchor="middle" class="sm">6.8</text>
-    <line x1="42" y1="250" x2="318" y2="250" class="rule"/>
-    <text x="54" y="238" text-anchor="start" class="sm">Total</text>
-    <text x="180" y="238" text-anchor="middle" class="sm">1,000</text>
-    <text x="228" y="238" text-anchor="middle" class="sm">49</text>
-    <text x="276" y="238" text-anchor="middle" class="sm"></text>
-    <rect x="66" y="276" width="228" height="52" rx="7" fill="#e11d48" fill-opacity="0.12" stroke="#e11d48" stroke-width="1.2"/>
-    <text x="180" y="296" text-anchor="middle" class="bold">F = 340 / 6.8 = 50.0</text>
-    <text x="180" y="314" text-anchor="middle" class="sm dim">p &lt; 0.001 — the model beats the mean</text>
-    <text x="180" y="354" text-anchor="middle" class="sm dim">for nested GLMs the same table holds</text>
-    <text x="180" y="372" text-anchor="middle" class="sm dim">deviances in place of sums of squares</text>
+    <rect x="146" y="283.68" width="68" height="88.32" fill="#e11d48" fill-opacity="0.22"/>
+    <line x1="146" y1="370.12" x2="214" y2="370.12" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="368.25" x2="214" y2="368.25" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="366.37" x2="214" y2="366.37" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="364.49" x2="214" y2="364.49" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="362.62" x2="214" y2="362.62" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="360.74" x2="214" y2="360.74" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="358.86" x2="214" y2="358.86" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="356.99" x2="214" y2="356.99" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="355.11" x2="214" y2="355.11" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="353.23" x2="214" y2="353.23" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="351.36" x2="214" y2="351.36" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="349.48" x2="214" y2="349.48" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="347.6" x2="214" y2="347.6" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="345.72" x2="214" y2="345.72" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="343.85" x2="214" y2="343.85" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="341.97" x2="214" y2="341.97" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="340.09" x2="214" y2="340.09" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="338.22" x2="214" y2="338.22" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="336.34" x2="214" y2="336.34" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="334.46" x2="214" y2="334.46" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="332.59" x2="214" y2="332.59" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="330.71" x2="214" y2="330.71" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="328.83" x2="214" y2="328.83" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="326.96" x2="214" y2="326.96" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="325.08" x2="214" y2="325.08" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="323.2" x2="214" y2="323.2" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="321.33" x2="214" y2="321.33" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="319.45" x2="214" y2="319.45" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="317.57" x2="214" y2="317.57" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="315.7" x2="214" y2="315.7" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="313.82" x2="214" y2="313.82" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="311.94" x2="214" y2="311.94" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="310.07" x2="214" y2="310.07" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="308.19" x2="214" y2="308.19" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="306.31" x2="214" y2="306.31" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="304.44" x2="214" y2="304.44" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="302.56" x2="214" y2="302.56" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="300.68" x2="214" y2="300.68" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="298.8" x2="214" y2="298.8" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="296.93" x2="214" y2="296.93" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="295.05" x2="214" y2="295.05" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="293.17" x2="214" y2="293.17" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="291.3" x2="214" y2="291.3" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="289.42" x2="214" y2="289.42" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="287.54" x2="214" y2="287.54" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <line x1="146" y1="285.67" x2="214" y2="285.67" stroke="#e11d48" stroke-width="0.5" stroke-opacity="0.6"/>
+    <rect x="146" y="283.68" width="68" height="1.88" fill="#e11d48" fill-opacity="0.95"/>
+    <rect x="146" y="189.84" width="68" height="92.84" fill="#3b82f6" fill-opacity="0.8"/>
+    <rect x="146" y="96" width="68" height="92.84" fill="#3b82f6" fill-opacity="0.3"/>
+    <rect x="146" y="96" width="68" height="276" fill="none" stroke="var(--edge)" stroke-width="1.2"/>
+    <text x="134" y="193.84" text-anchor="end" class="sm bold">regression</text>
+    <text x="134" y="331.84" text-anchor="end" class="sm bold">residual</text>
+    <text x="226" y="240.76" text-anchor="start" class="sm bold">340</text>
+    <line x1="216" y1="285.18" x2="224" y2="285.18" stroke="#e11d48" stroke-width="1.2"/>
+    <text x="226" y="289.18" text-anchor="start" class="sm bold">6.8</text>
+    <line x1="266" y1="277.68" x2="266" y2="244.76" class="thin" stroke="var(--dim)" stroke-width="1.4" marker-end="url(#ahvardim)"/>
+    <text x="274" y="264.22" text-anchor="start" class="sm bold">× 50</text>
   </g>
 </svg>

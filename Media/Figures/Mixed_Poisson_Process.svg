@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>A random rate across risks widening the count distribution</title>
+  <title>Three risks' Poisson count distributions at rates 2, 4 and 8, and the wider mixed distribution of the portfolio drawn as bars</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,49 +47,44 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="64" y1="184" x2="334" y2="184" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="64" y1="184" x2="64" y2="72" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="64" y1="184" x2="64" y2="188" class="tick"/>
-    <text x="64" y="200" text-anchor="middle" class="sm dim">0</text>
-    <line x1="150.67" y1="184" x2="150.67" y2="188" class="tick"/>
-    <text x="150.67" y="200" text-anchor="middle" class="sm dim">0.2</text>
-    <line x1="237.33" y1="184" x2="237.33" y2="188" class="tick"/>
-    <text x="237.33" y="200" text-anchor="middle" class="sm dim">0.4</text>
-    <line x1="324" y1="184" x2="324" y2="188" class="tick"/>
-    <text x="324" y="200" text-anchor="middle" class="sm dim">0.6</text>
-    <polyline points="64,184 65.44,83.69 66.89,85.34 68.33,86.97 69.78,88.58 71.22,90.16 72.67,91.71 74.11,93.23 75.56,94.73 77,96.21 78.44,97.66 79.89,99.09 81.33,100.49 82.78,101.87 84.22,103.23 85.67,104.56 87.11,105.88 88.56,107.17 90,108.44 91.44,109.69 92.89,110.91 94.33,112.12 95.78,113.31 97.22,114.48 98.67,115.63 100.11,116.76 101.56,117.87 103,118.96 104.44,120.04 105.89,121.09 107.33,122.13 108.78,123.16 110.22,124.16 111.67,125.15 113.11,126.12 114.56,127.08 116,128.02 117.44,128.95 118.89,129.86 120.33,130.75 121.78,131.63 123.22,132.5 124.67,133.35 126.11,134.19 127.56,135.01 129,135.82 130.44,136.61 131.89,137.4 133.33,138.17 134.78,138.93 136.22,139.67 137.67,140.4 139.11,141.12 140.56,141.83 142,142.53 143.44,143.22 144.89,143.89 146.33,144.55 147.78,145.2 149.22,145.85 150.67,146.48 152.11,147.1 153.56,147.71 155,148.31 156.44,148.9 157.89,149.48 159.33,150.05 160.78,150.61 162.22,151.16 163.67,151.7 165.11,152.24 166.56,152.76 168,153.28 169.44,153.79 170.89,154.29 172.33,154.78 173.78,155.26 175.22,155.73 176.67,156.2 178.11,156.66 179.56,157.11 181,157.56 182.44,157.99 183.89,158.42 185.33,158.85 186.78,159.26 188.22,159.67 189.67,160.07 191.11,160.47 192.56,160.86 194,161.24 195.44,161.62 196.89,161.99 198.33,162.35 199.78,162.71 201.22,163.06 202.67,163.41 204.11,163.75 205.56,164.08 207,164.41 208.44,164.73 209.89,165.05 211.33,165.37 212.78,165.67 214.22,165.98 215.67,166.28 217.11,166.57 218.56,166.86 220,167.14 221.44,167.42 222.89,167.69 224.33,167.96 225.78,168.23 227.22,168.49 228.67,168.74 230.11,169 231.56,169.24 233,169.49 234.44,169.73 235.89,169.96 237.33,170.2 238.78,170.42 240.22,170.65 241.67,170.87 243.11,171.09 244.56,171.3 246,171.51 247.44,171.72 248.89,171.92 250.33,172.12 251.78,172.31 253.22,172.51 254.67,172.7 256.11,172.88 257.56,173.07 259,173.25 260.44,173.43 261.89,173.6 263.33,173.77 264.78,173.94 266.22,174.11 267.67,174.27 269.11,174.43 270.56,174.59 272,174.75 273.44,174.9 274.89,175.05 276.33,175.2 277.78,175.34 279.22,175.49 280.67,175.63 282.11,175.77 283.56,175.9 285,176.04 286.44,176.17 287.89,176.3 289.33,176.42 290.78,176.55 292.22,176.67 293.67,176.79 295.11,176.91 296.56,177.03 298,177.15 299.44,177.26 300.89,177.37 302.33,177.48 303.78,177.59 305.22,177.69 306.67,177.8 308.11,177.9 309.56,178 311,178.1 312.44,178.2 313.89,178.29 315.33,178.39 316.78,178.48 318.22,178.57 319.67,178.66 321.11,178.75 322.56,178.84 324,178.92" class="curve" stroke="#7c3aed" stroke-width="2.2"/>
-    <text x="246" y="114.64" text-anchor="middle" class="sm" fill="#7c3aed">Λ varies by risk</text>
-    <text x="64" y="76" text-anchor="start" class="sm dim">mixing distribution of Λ</text>
-    <line x1="64" y1="352" x2="334" y2="352" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="64" y1="352" x2="64" y2="224" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="64" y1="352" x2="64" y2="356" class="tick"/>
-    <text x="64" y="368" text-anchor="middle" class="sm dim">0</text>
-    <line x1="116" y1="352" x2="116" y2="356" class="tick"/>
-    <text x="116" y="368" text-anchor="middle" class="sm dim">1</text>
-    <line x1="168" y1="352" x2="168" y2="356" class="tick"/>
-    <text x="168" y="368" text-anchor="middle" class="sm dim">2</text>
-    <line x1="220" y1="352" x2="220" y2="356" class="tick"/>
-    <text x="220" y="368" text-anchor="middle" class="sm dim">3</text>
-    <line x1="272" y1="352" x2="272" y2="356" class="tick"/>
-    <text x="272" y="368" text-anchor="middle" class="sm dim">4</text>
-    <line x1="324" y1="352" x2="324" y2="356" class="tick"/>
-    <text x="324" y="368" text-anchor="middle" class="sm dim">5</text>
-    <text x="324" y="384" text-anchor="end" class="sm dim">claims in a year</text>
-    <rect x="57.5" y="238.34" width="13" height="113.66" rx="1.5" fill="#3b82f6" fill-opacity="0.75"/>
-    <rect x="109.5" y="329.27" width="13" height="22.73" rx="1.5" fill="#3b82f6" fill-opacity="0.75"/>
-    <rect x="161.5" y="349.73" width="13" height="2.27" rx="1.5" fill="#3b82f6" fill-opacity="0.75"/>
-    <rect x="213.5" y="351.85" width="13" height="0.15" rx="1.5" fill="#3b82f6" fill-opacity="0.75"/>
-    <rect x="265.5" y="351.99" width="13" height="0.01" rx="1.5" fill="#3b82f6" fill-opacity="0.75"/>
-    <rect x="317.5" y="352" width="13" height="0" rx="1.5" fill="#3b82f6" fill-opacity="0.75"/>
-    <rect x="74.14" y="235.94" width="13" height="116.06" rx="1.5" fill="#e11d48" fill-opacity="0.75"/>
-    <rect x="126.14" y="332.7" width="13" height="19.3" rx="1.5" fill="#e11d48" fill-opacity="0.75"/>
-    <rect x="178.14" y="349.08" width="13" height="2.92" rx="1.5" fill="#e11d48" fill-opacity="0.75"/>
-    <rect x="230.14" y="351.58" width="13" height="0.42" rx="1.5" fill="#e11d48" fill-opacity="0.75"/>
-    <rect x="282.14" y="351.93" width="13" height="0.07" rx="1.5" fill="#e11d48" fill-opacity="0.75"/>
-    <rect x="334.14" y="351.99" width="13" height="0.01" rx="1.5" fill="#e11d48" fill-opacity="0.75"/>
-    <line x1="170" y1="252" x2="183" y2="252" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round"/>
-    <text x="189" y="255.6" text-anchor="start" class="sm">single Poisson</text>
-    <line x1="170" y1="267" x2="183" y2="267" stroke="#e11d48" stroke-width="2.4" stroke-linecap="round"/>
-    <text x="189" y="270.6" text-anchor="start" class="sm">mixed (negative binomial)</text>
+    <line x1="60" y1="348" x2="336" y2="348" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="60" y1="348" x2="60" y2="80" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="72.09" y1="348" x2="72.09" y2="352" class="tick"/>
+    <text x="72.09" y="364" text-anchor="middle" class="sm dim">0</text>
+    <line x1="141.18" y1="348" x2="141.18" y2="352" class="tick"/>
+    <text x="141.18" y="364" text-anchor="middle" class="sm dim">4</text>
+    <line x1="210.27" y1="348" x2="210.27" y2="352" class="tick"/>
+    <text x="210.27" y="364" text-anchor="middle" class="sm dim">8</text>
+    <line x1="279.36" y1="348" x2="279.36" y2="352" class="tick"/>
+    <text x="279.36" y="364" text-anchor="middle" class="sm dim">12</text>
+    <line x1="56" y1="348" x2="60" y2="348" class="tick"/>
+    <text x="52" y="351.6" text-anchor="end" class="sm dim">0</text>
+    <line x1="56" y1="262" x2="60" y2="262" class="tick"/>
+    <text x="52" y="265.6" text-anchor="end" class="sm dim">0.1</text>
+    <line x1="56" y1="176" x2="60" y2="176" class="tick"/>
+    <text x="52" y="179.6" text-anchor="end" class="sm dim">0.2</text>
+    <text x="326" y="380" text-anchor="end" class="sm dim">claims</text>
+    <rect x="66.09" y="303.86" width="12" height="44.14" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="83.36" y="248.64" width="12" height="99.36" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="100.64" y="225.33" width="12" height="122.67" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="117.91" y="232.06" width="12" height="115.94" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="135.18" y="249.72" width="12" height="98.28" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="152.45" y="266.59" width="12" height="81.41" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="169.73" y="279.67" width="12" height="68.33" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="187" y="289.93" width="12" height="58.07" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="204.27" y="299.2" width="12" height="48.8" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="221.55" y="308.58" width="12" height="39.42" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="238.82" y="318.02" width="12" height="29.98" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="256.09" y="326.75" width="12" height="21.25" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="273.36" y="334.02" width="12" height="13.98" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="290.64" y="339.45" width="12" height="8.55" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="307.91" y="343.13" width="12" height="4.87" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+    <polyline points="72.09,231.61 89.36,115.22 106.64,115.22 123.91,192.82 141.18,270.41 158.45,316.96 175.73,337.65 193,345.04 210.27,347.26 227.55,347.84 244.82,347.97 262.09,347.99 279.36,348 296.64,348 313.91,348" class="curve" stroke="#7c3aed" stroke-width="1.5"/>
+    <text x="89.36" y="106.22" text-anchor="middle" class="sm bold">Λ = 2</text>
+    <polyline points="72.09,332.25 89.36,284.99 106.64,221.99 123.91,179.98 141.18,179.98 158.45,213.59 175.73,258.39 193,296.8 210.27,322.4 227.55,336.62 244.82,343.45 262.09,346.34 279.36,347.45 296.64,347.83 313.91,347.95" class="curve" stroke="#7c3aed" stroke-width="1.5"/>
+    <text x="123.91" y="170.98" text-anchor="middle" class="sm bold">Λ = 4</text>
+    <polyline points="72.09,347.71 89.36,345.69 106.64,338.77 123.91,323.38 141.18,298.76 158.45,269.22 175.73,242.96 193,227.96 210.27,227.96 227.55,241.29 244.82,262.64 262.09,285.92 279.36,306.61 296.64,322.53 313.91,333.45" class="curve" stroke="#7c3aed" stroke-width="1.5"/>
+    <text x="193" y="218.96" text-anchor="middle" class="sm bold">Λ = 8</text>
+    <text x="250" y="305" text-anchor="middle" class="sm bold" fill="#3b82f6">mixed</text>
   </g>
 </svg>

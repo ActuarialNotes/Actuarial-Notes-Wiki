@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Deviance as the gap between the fitted model's likelihood and the saturated model's</title>
+  <title>Three model levels on a deviance scale: the saturated model at zero, the fitted model's deviance D above it, and the null model higher still</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -44,29 +44,29 @@ text {
   <g id="light"/><g id="dark"/>
   <defs>
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
     <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="60" y1="327.29" x2="336" y2="327.29" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="60" y1="344" x2="60" y2="100" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="56" y1="327.29" x2="60" y2="327.29" class="tick"/>
-    <text x="52" y="330.89" text-anchor="end" class="sm dim">0</text>
-    <line x1="56" y1="243.71" x2="60" y2="243.71" class="tick"/>
-    <text x="52" y="247.31" text-anchor="end" class="sm dim">20</text>
-    <line x1="56" y1="160.14" x2="60" y2="160.14" class="tick"/>
-    <text x="52" y="163.74" text-anchor="end" class="sm dim">40</text>
-    <text x="56" y="96" text-anchor="start" class="sm dim">deviance</text>
-    <line x1="75.96" y1="327.29" x2="310.04" y2="327.29" class="thin" stroke="#059669" stroke-width="2.2"/>
-    <text x="81.28" y="319.29" text-anchor="start" class="sm bold" fill="#059669">saturated model</text>
-    <text x="304.72" y="319.29" text-anchor="end" class="sm dim">one parameter per row</text>
-    <line x1="75.96" y1="198.59" x2="310.04" y2="198.59" class="thin" stroke="#3b82f6" stroke-width="2.2"/>
-    <text x="81.28" y="190.59" text-anchor="start" class="sm bold" fill="#3b82f6">fitted model</text>
-    <text x="304.72" y="190.59" text-anchor="end" class="sm dim">D = 30.8</text>
-    <line x1="75.96" y1="138.41" x2="310.04" y2="138.41" class="thin" stroke="var(--dim)" stroke-width="2.2"/>
-    <text x="81.28" y="130.41" text-anchor="start" class="sm bold" fill="var(--dim)">null model</text>
-    <text x="304.72" y="130.41" text-anchor="end" class="sm dim">intercept only</text>
-    <line x1="193" y1="138.41" x2="193" y2="198.59" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
-    <text x="201" y="172.5" text-anchor="start" class="sm bold" fill="#e11d48">ΔD = 14.4 on 2 df</text>
+    <line x1="50" y1="337.43" x2="336" y2="337.43" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="50" y1="356" x2="50" y2="86" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="46" y1="337.43" x2="50" y2="337.43" class="tick"/>
+    <text x="42" y="341.03" text-anchor="end" class="sm dim">0</text>
+    <line x1="46" y1="244.57" x2="50" y2="244.57" class="tick"/>
+    <text x="42" y="248.17" text-anchor="end" class="sm dim">20</text>
+    <line x1="46" y1="151.71" x2="50" y2="151.71" class="tick"/>
+    <text x="42" y="155.31" text-anchor="end" class="sm dim">40</text>
+    <text x="46" y="82" text-anchor="start" class="sm dim">deviance</text>
+    <line x1="66.56" y1="337.43" x2="309.44" y2="337.43" class="thin" stroke="#059669" stroke-width="2.4"/>
+    <text x="72.08" y="329.43" text-anchor="start" class="sm bold">saturated model</text>
+    <line x1="66.56" y1="194.43" x2="309.44" y2="194.43" class="thin" stroke="#3b82f6" stroke-width="2.4"/>
+    <text x="72.08" y="186.43" text-anchor="start" class="sm bold">fitted model</text>
+    <line x1="66.56" y1="127.57" x2="309.44" y2="127.57" class="thin" stroke="var(--dim)" stroke-width="2.4"/>
+    <text x="72.08" y="119.57" text-anchor="start" class="sm bold">null model</text>
+    <line x1="243.2" y1="335.43" x2="243.2" y2="196.43" class="thin" stroke="#3b82f6" stroke-width="2" marker-end="url(#ah3b82f6)"/>
+    <text x="251.2" y="269.93" text-anchor="start" class="bold">D</text>
+    <line x1="243.2" y1="129.57" x2="243.2" y2="197.43" class="thin" stroke="#e11d48" stroke-width="1.6" marker-end="url(#ahe11d48)"/>
+    <text x="251.2" y="165" text-anchor="start" class="sm bold">ΔD</text>
   </g>
 </svg>

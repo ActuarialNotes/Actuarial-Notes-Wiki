@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>A three-level rating factor expanded into dummy variables against a base level</title>
+  <title>Three territory levels: the rural base at zero and one coefficient bar each for suburban and urban, measured from that base</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,31 +42,22 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <text x="88" y="102" text-anchor="middle" class="sm bold" fill="var(--ink)">territory</text>
-    <text x="188" y="102" text-anchor="middle" class="sm bold" fill="#3b82f6">urban</text>
-    <text x="288" y="102" text-anchor="middle" class="sm bold" fill="#3b82f6">suburban</text>
-    <rect x="41" y="112" width="94" height="38" rx="7" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1.2"/>
-    <text x="88" y="135" text-anchor="middle" class="sm">rural</text>
-    <rect x="141" y="112" width="94" height="38" rx="7" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1.2"/>
-    <text x="188" y="135" text-anchor="middle" class="sm bold">0</text>
-    <rect x="241" y="112" width="94" height="38" rx="7" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1.2"/>
-    <text x="288" y="135" text-anchor="middle" class="sm bold">0</text>
-    <rect x="41" y="156" width="94" height="38" rx="7" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1.2"/>
-    <text x="88" y="179" text-anchor="middle" class="sm">suburban</text>
-    <rect x="141" y="156" width="94" height="38" rx="7" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1.2"/>
-    <text x="188" y="179" text-anchor="middle" class="sm bold">0</text>
-    <rect x="241" y="156" width="94" height="38" rx="7" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="288" y="179" text-anchor="middle" class="sm bold">1</text>
-    <rect x="41" y="200" width="94" height="38" rx="7" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1.2"/>
-    <text x="88" y="223" text-anchor="middle" class="sm">urban</text>
-    <rect x="141" y="200" width="94" height="38" rx="7" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="188" y="223" text-anchor="middle" class="sm bold">1</text>
-    <rect x="241" y="200" width="94" height="38" rx="7" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1.2"/>
-    <text x="288" y="223" text-anchor="middle" class="sm bold">0</text>
-    <text x="180" y="260" text-anchor="middle" class="sm dim">rural is the base level — all dummies 0</text>
-    <text x="180" y="296" text-anchor="middle" class="sm dim">ordinal levels may instead be scored 1, 2, 3;</text>
-    <text x="180" y="314" text-anchor="middle" class="sm dim">a continuous predictor needs no dummies at all</text>
+    <line x1="50" y1="356" x2="336" y2="356" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="50" y1="356" x2="50" y2="86" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <text x="46" y="82" text-anchor="start" class="sm dim">β</text>
+    <text x="101.75" y="374" text-anchor="middle" class="sm bold">rural</text>
+    <line x1="69.75" y1="355" x2="133.75" y2="355" stroke="var(--ink)" stroke-width="3"/>
+    <text x="101.75" y="346" text-anchor="middle" class="sm">base</text>
+    <text x="188" y="374" text-anchor="middle" class="sm bold">suburban</text>
+    <rect x="156" y="208.67" width="64" height="147.33" rx="1.5" fill="#d97706" fill-opacity="0.7"/>
+    <text x="188" y="200.67" text-anchor="middle" class="sm">0.17</text>
+    <text x="274.25" y="374" text-anchor="middle" class="sm bold">urban</text>
+    <rect x="242.25" y="130.67" width="64" height="225.33" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+    <text x="274.25" y="122.67" text-anchor="middle" class="sm">0.26</text>
   </g>
 </svg>

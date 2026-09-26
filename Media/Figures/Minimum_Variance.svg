@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Variances of competing unbiased estimators, with the smallest marked</title>
+  <title>Variances of four competing unbiased estimators, with the sample mean's the smallest</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,31 +47,27 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="72" y1="344" x2="336" y2="344" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="72" y1="344" x2="72" y2="108" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="68" y1="344" x2="72" y2="344" class="tick"/>
-    <text x="64" y="347.6" text-anchor="end" class="sm dim">0</text>
-    <line x1="68" y1="251.76" x2="72" y2="251.76" class="tick"/>
-    <text x="64" y="255.36" text-anchor="end" class="sm dim">2</text>
-    <line x1="68" y1="159.51" x2="72" y2="159.51" class="tick"/>
-    <text x="64" y="163.11" text-anchor="end" class="sm dim">4</text>
-    <text x="68" y="104" text-anchor="start" class="sm dim">n · Var(θ̂) / σ²</text>
-    <rect x="91.41" y="297.88" width="42" height="46.12" rx="1.5" fill="#3b82f6" fill-opacity="0.35"/>
-    <rect x="149.14" y="271.59" width="42" height="72.41" rx="1.5" fill="#3b82f6" fill-opacity="0.35"/>
-    <rect x="206.86" y="237.92" width="42" height="106.08" rx="1.5" fill="#3b82f6" fill-opacity="0.35"/>
-    <rect x="264.59" y="159.51" width="42" height="184.49" rx="1.5" fill="#3b82f6" fill-opacity="0.35"/>
-    <rect x="91.41" y="297.88" width="42" height="46.12" rx="1.5" fill="#059669" fill-opacity="0.7"/>
-    <text x="112.41" y="362" text-anchor="middle" class="sm">X̄</text>
-    <text x="112.41" y="289.88" text-anchor="middle" class="sm">1.00</text>
-    <rect x="149.14" y="271.59" width="42" height="72.41" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
-    <text x="170.14" y="362" text-anchor="middle" class="sm">median</text>
-    <text x="170.14" y="263.59" text-anchor="middle" class="sm">1.57</text>
-    <rect x="206.86" y="237.92" width="42" height="106.08" rx="1.5" fill="#d97706" fill-opacity="0.7"/>
-    <text x="227.86" y="362" text-anchor="middle" class="sm">midrange</text>
-    <text x="227.86" y="229.92" text-anchor="middle" class="sm">2.30</text>
-    <rect x="264.59" y="159.51" width="42" height="184.49" rx="1.5" fill="#e11d48" fill-opacity="0.7"/>
-    <text x="285.59" y="362" text-anchor="middle" class="sm">X₁</text>
-    <text x="285.59" y="151.51" text-anchor="middle" class="sm">4.00</text>
-    <line x1="72" y1="297.88" x2="320.23" y2="297.88" class="thin dash" stroke="#059669" stroke-width="1.3"/>
+    <line x1="50" y1="356" x2="336" y2="356" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="50" y1="356" x2="50" y2="86" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="46" y1="356" x2="50" y2="356" class="tick"/>
+    <text x="42" y="359.6" text-anchor="end" class="sm dim">0</text>
+    <line x1="46" y1="242.96" x2="50" y2="242.96" class="tick"/>
+    <text x="42" y="246.56" text-anchor="end" class="sm dim">2</text>
+    <line x1="46" y1="129.91" x2="50" y2="129.91" class="tick"/>
+    <text x="42" y="133.51" text-anchor="end" class="sm dim">4</text>
+    <text x="46" y="82" text-anchor="start" class="sm dim">Var(θ̂)</text>
+    <rect x="70.91" y="299.48" width="46" height="56.52" rx="1.5" fill="#059669" fill-opacity="0.7"/>
+    <text x="93.91" y="374" text-anchor="middle" class="sm">X̄</text>
+    <text x="93.91" y="291.48" text-anchor="middle" class="sm">1.00</text>
+    <rect x="133.64" y="267.26" width="46" height="88.74" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+    <text x="156.64" y="374" text-anchor="middle" class="sm">median</text>
+    <text x="156.64" y="259.26" text-anchor="middle" class="sm">1.57</text>
+    <rect x="196.36" y="226" width="46" height="130" rx="1.5" fill="#d97706" fill-opacity="0.7"/>
+    <text x="219.36" y="374" text-anchor="middle" class="sm">midrange</text>
+    <text x="219.36" y="218" text-anchor="middle" class="sm">2.30</text>
+    <rect x="259.09" y="129.91" width="46" height="226.09" rx="1.5" fill="#e11d48" fill-opacity="0.7"/>
+    <text x="282.09" y="374" text-anchor="middle" class="sm">X₁</text>
+    <text x="282.09" y="121.91" text-anchor="middle" class="sm">4.00</text>
+    <line x1="50" y1="299.48" x2="319.73" y2="299.48" class="thin dash" stroke="#059669" stroke-width="1.3"/>
   </g>
 </svg>

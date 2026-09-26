@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>A stepwise path through candidate models, scored by AIC</title>
+  <title>A forward stepwise path: AIC falls as territory, vehicle age and driver age are added, then rises when prior claim is tried, so the path stops at driver age</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,31 +42,27 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
-  <defs>
-    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
-  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="34" y="94" width="208" height="44" rx="7" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="138" y="120" text-anchor="middle" class="sm bold">intercept only</text>
-    <text x="328" y="122" text-anchor="end" class="sm">4,172</text>
-    <line x1="138" y1="140" x2="138" y2="150" class="thin" stroke="var(--dim)" stroke-width="1.2" marker-end="url(#ahvardim)"/>
-    <rect x="34" y="152" width="208" height="44" rx="7" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="138" y="178" text-anchor="middle" class="sm bold">+ territory</text>
-    <text x="328" y="180" text-anchor="end" class="sm">4,131</text>
-    <line x1="138" y1="198" x2="138" y2="208" class="thin" stroke="var(--dim)" stroke-width="1.2" marker-end="url(#ahvardim)"/>
-    <rect x="34" y="210" width="208" height="44" rx="7" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="138" y="236" text-anchor="middle" class="sm bold">+ vehicle age</text>
-    <text x="328" y="238" text-anchor="end" class="sm">4,102</text>
-    <line x1="138" y1="256" x2="138" y2="266" class="thin" stroke="var(--dim)" stroke-width="1.2" marker-end="url(#ahvardim)"/>
-    <rect x="34" y="268" width="208" height="44" rx="7" fill="#059669" fill-opacity="0.12" stroke="#059669" stroke-width="1.2"/>
-    <text x="138" y="294" text-anchor="middle" class="sm bold">+ driver age</text>
-    <text x="328" y="296" text-anchor="end" class="sm bold" fill="#059669">4,085</text>
-    <line x1="138" y1="314" x2="138" y2="324" class="thin" stroke="var(--dim)" stroke-width="1.2" marker-end="url(#ahvardim)"/>
-    <rect x="34" y="326" width="208" height="44" rx="7" fill="var(--dim)" fill-opacity="0.12" stroke="var(--dim)" stroke-width="1.2"/>
-    <text x="138" y="352" text-anchor="middle" class="sm bold">+ prior claim</text>
-    <text x="328" y="354" text-anchor="end" class="sm">4,089</text>
-    <text x="328" y="84" text-anchor="end" class="sm dim">AIC</text>
-    <text x="180" y="384" text-anchor="middle" class="sm dim">stop where AIC turns back up</text>
+    <line x1="112" y1="318.23" x2="320" y2="318.23" class="axis"/>
+    <line x1="112" y1="90" x2="112" y2="348" class="axis"/>
+    <line x1="156.86" y1="318.23" x2="156.86" y2="322.23" class="tick"/>
+    <text x="156.86" y="334.23" text-anchor="middle" class="sm dim">4,100</text>
+    <line x1="258.82" y1="318.23" x2="258.82" y2="322.23" class="tick"/>
+    <text x="258.82" y="334.23" text-anchor="middle" class="sm dim">4,150</text>
+    <text x="320" y="350.23" text-anchor="end" class="sm dim">AIC</text>
+    <polyline points="303.69,119.77 220.08,169.38 160.94,219 126.27,268.62" class="curve" stroke="#3b82f6" stroke-width="2"/>
+    <polyline points="126.27,268.62 134.43,318.23" class="curve dash" stroke="var(--dim)" stroke-width="1.6"/>
+    <circle cx="303.69" cy="119.77" r="4" fill="#3b82f6"/>
+    <text x="104" y="123.77" text-anchor="end" class="sm">intercept</text>
+    <circle cx="220.08" cy="169.38" r="4" fill="#3b82f6"/>
+    <text x="104" y="173.38" text-anchor="end" class="sm">+ territory</text>
+    <circle cx="160.94" cy="219" r="4" fill="#3b82f6"/>
+    <text x="104" y="223" text-anchor="end" class="sm">+ vehicle age</text>
+    <circle cx="126.27" cy="268.62" r="6" fill="#059669"/>
+    <text x="104" y="272.62" text-anchor="end" class="sm">+ driver age</text>
+    <circle cx="134.43" cy="318.23" r="4" fill="var(--dim)"/>
+    <text x="104" y="322.23" text-anchor="end" class="sm">+ prior claim</text>
+    <line x1="126.27" y1="348" x2="126.27" y2="268.62" class="thin dash" stroke="#059669" stroke-width="1.3"/>
   </g>
 </svg>

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Annual payments continuing only while the annuitant is alive</title>
+  <title>Payments of 1 promised every year, each drawn only as tall as the chance ₖpₓ that the annuitant is still alive to collect it</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -48,39 +48,45 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="36" y1="275" x2="328" y2="275" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-    <line x1="46" y1="271" x2="46" y2="279" class="tick"/>
-    <text x="46" y="293" text-anchor="middle" class="sm dim">0</text>
-    <line x1="90" y1="271" x2="90" y2="279" class="tick"/>
-    <text x="90" y="293" text-anchor="middle" class="sm dim">1</text>
-    <line x1="134" y1="271" x2="134" y2="279" class="tick"/>
-    <text x="134" y="293" text-anchor="middle" class="sm dim">2</text>
-    <line x1="178" y1="271" x2="178" y2="279" class="tick"/>
-    <text x="178" y="293" text-anchor="middle" class="sm dim">3</text>
-    <line x1="222" y1="271" x2="222" y2="279" class="tick"/>
-    <text x="222" y="293" text-anchor="middle" class="sm dim">4</text>
-    <line x1="266" y1="271" x2="266" y2="279" class="tick"/>
-    <text x="266" y="293" text-anchor="middle" class="sm dim">5</text>
-    <line x1="310" y1="271" x2="310" y2="279" class="tick"/>
-    <text x="310" y="293" text-anchor="middle" class="sm dim">…</text>
-    <line x1="46" y1="269" x2="46" y2="187" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="46" y="179" text-anchor="middle" class="sm bold" fill="#3b82f6">1</text>
-    <text x="46" y="165" text-anchor="middle" class="sm dim">1.00</text>
-    <line x1="90" y1="269" x2="90" y2="188.86" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="90" y="180.86" text-anchor="middle" class="sm bold" fill="#3b82f6">1</text>
-    <text x="90" y="166.86" text-anchor="middle" class="sm dim">0.97</text>
-    <line x1="134" y1="269" x2="134" y2="191.34" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="134" y="183.34" text-anchor="middle" class="sm bold" fill="#3b82f6">1</text>
-    <text x="134" y="169.34" text-anchor="middle" class="sm dim">0.93</text>
-    <line x1="178" y1="269" x2="178" y2="194.44" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="178" y="186.44" text-anchor="middle" class="sm bold" fill="#3b82f6">1</text>
-    <text x="178" y="172.44" text-anchor="middle" class="sm dim">0.88</text>
-    <line x1="222" y1="269" x2="222" y2="198.78" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="222" y="190.78" text-anchor="middle" class="sm bold" fill="#3b82f6">1</text>
-    <text x="222" y="176.78" text-anchor="middle" class="sm dim">0.81</text>
-    <line x1="266" y1="269" x2="266" y2="204.36" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="266" y="196.36" text-anchor="middle" class="sm bold" fill="#3b82f6">1</text>
-    <text x="266" y="182.36" text-anchor="middle" class="sm dim">0.72</text>
-    <text x="180" y="96" text-anchor="middle" class="sm dim">each payment weighted by ₖpₓ</text>
+    <line x1="32" y1="348" x2="328" y2="348" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <line x1="40" y1="344" x2="40" y2="352" class="tick"/>
+    <text x="40" y="366" text-anchor="middle" class="sm dim">0</text>
+    <line x1="72.09" y1="344" x2="72.09" y2="352" class="tick"/>
+    <text x="72.09" y="366" text-anchor="middle" class="sm dim">1</text>
+    <line x1="104.19" y1="344" x2="104.19" y2="352" class="tick"/>
+    <text x="104.19" y="366" text-anchor="middle" class="sm dim">2</text>
+    <line x1="136.28" y1="344" x2="136.28" y2="352" class="tick"/>
+    <text x="136.28" y="366" text-anchor="middle" class="sm dim">3</text>
+    <line x1="168.37" y1="344" x2="168.37" y2="352" class="tick"/>
+    <text x="168.37" y="366" text-anchor="middle" class="sm dim">4</text>
+    <line x1="200.47" y1="344" x2="200.47" y2="352" class="tick"/>
+    <text x="200.47" y="366" text-anchor="middle" class="sm dim">5</text>
+    <line x1="232.56" y1="344" x2="232.56" y2="352" class="tick"/>
+    <text x="232.56" y="366" text-anchor="middle" class="sm dim">6</text>
+    <line x1="264.65" y1="344" x2="264.65" y2="352" class="tick"/>
+    <text x="264.65" y="366" text-anchor="middle" class="sm dim">7</text>
+    <line x1="296.74" y1="344" x2="296.74" y2="352" class="tick"/>
+    <text x="296.74" y="366" text-anchor="middle" class="sm dim">8</text>
+    <line x1="40" y1="112.29" x2="40" y2="112.29" class="thin dash" stroke="#3b82f6" stroke-width="1.3" stroke-opacity="0.6"/>
+    <line x1="40" y1="346" x2="40" y2="112.29" class="thin" stroke="#3b82f6" stroke-width="2.2" marker-end="url(#ah3b82f6)"/>
+    <line x1="72.09" y1="119.36" x2="72.09" y2="112.29" class="thin dash" stroke="#3b82f6" stroke-width="1.3" stroke-opacity="0.6"/>
+    <line x1="72.09" y1="346" x2="72.09" y2="119.36" class="thin" stroke="#3b82f6" stroke-width="2.2" marker-end="url(#ah3b82f6)"/>
+    <line x1="104.19" y1="128.79" x2="104.19" y2="112.29" class="thin dash" stroke="#3b82f6" stroke-width="1.3" stroke-opacity="0.6"/>
+    <line x1="104.19" y1="346" x2="104.19" y2="128.79" class="thin" stroke="#3b82f6" stroke-width="2.2" marker-end="url(#ah3b82f6)"/>
+    <line x1="136.28" y1="140.57" x2="136.28" y2="112.29" class="thin dash" stroke="#3b82f6" stroke-width="1.3" stroke-opacity="0.6"/>
+    <line x1="136.28" y1="346" x2="136.28" y2="140.57" class="thin" stroke="#3b82f6" stroke-width="2.2" marker-end="url(#ah3b82f6)"/>
+    <line x1="168.37" y1="157.07" x2="168.37" y2="112.29" class="thin dash" stroke="#3b82f6" stroke-width="1.3" stroke-opacity="0.6"/>
+    <line x1="168.37" y1="346" x2="168.37" y2="157.07" class="thin" stroke="#3b82f6" stroke-width="2.2" marker-end="url(#ah3b82f6)"/>
+    <line x1="200.47" y1="178.29" x2="200.47" y2="112.29" class="thin dash" stroke="#3b82f6" stroke-width="1.3" stroke-opacity="0.6"/>
+    <line x1="200.47" y1="346" x2="200.47" y2="178.29" class="thin" stroke="#3b82f6" stroke-width="2.2" marker-end="url(#ah3b82f6)"/>
+    <line x1="232.56" y1="201.86" x2="232.56" y2="112.29" class="thin dash" stroke="#3b82f6" stroke-width="1.3" stroke-opacity="0.6"/>
+    <line x1="232.56" y1="346" x2="232.56" y2="201.86" class="thin" stroke="#3b82f6" stroke-width="2.2" marker-end="url(#ah3b82f6)"/>
+    <line x1="264.65" y1="227.79" x2="264.65" y2="112.29" class="thin dash" stroke="#3b82f6" stroke-width="1.3" stroke-opacity="0.6"/>
+    <line x1="264.65" y1="346" x2="264.65" y2="227.79" class="thin" stroke="#3b82f6" stroke-width="2.2" marker-end="url(#ah3b82f6)"/>
+    <line x1="296.74" y1="253.71" x2="296.74" y2="112.29" class="thin dash" stroke="#3b82f6" stroke-width="1.3" stroke-opacity="0.6"/>
+    <line x1="296.74" y1="346" x2="296.74" y2="253.71" class="thin" stroke="#3b82f6" stroke-width="2.2" marker-end="url(#ah3b82f6)"/>
+    <polyline points="40,112.29 72.09,119.36 104.19,128.79 136.28,140.57 168.37,157.07 200.47,178.29 232.56,201.86 264.65,227.79 296.74,253.71" class="curve dash" stroke="#d97706" stroke-width="1.4"/>
+    <text x="40" y="104.29" text-anchor="middle" class="bold">1</text>
+    <text x="310.74" y="257.71" text-anchor="start" class="sm bold">ₖpₓ</text>
   </g>
 </svg>

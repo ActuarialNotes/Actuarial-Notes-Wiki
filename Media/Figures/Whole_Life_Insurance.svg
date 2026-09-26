@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>A death benefit of 1 discounted from the year of death back to issue</title>
+  <title>Bars for the chance of dying in each policy year, and a benefit of 1 paid at the end of year 4 discounted back to issue by v⁴</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -49,49 +49,31 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="36" y1="162" x2="330" y2="162" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-    <line x1="46" y1="158" x2="46" y2="166" class="tick"/>
-    <text x="46" y="180" text-anchor="middle" class="sm dim">0</text>
-    <line x1="90.67" y1="158" x2="90.67" y2="166" class="tick"/>
-    <text x="90.67" y="180" text-anchor="middle" class="sm dim">1</text>
-    <line x1="135.33" y1="158" x2="135.33" y2="166" class="tick"/>
-    <text x="135.33" y="180" text-anchor="middle" class="sm dim">2</text>
-    <line x1="180" y1="158" x2="180" y2="166" class="tick"/>
-    <text x="180" y="180" text-anchor="middle" class="sm dim">3</text>
-    <line x1="224.67" y1="158" x2="224.67" y2="166" class="tick"/>
-    <text x="224.67" y="180" text-anchor="middle" class="sm dim">4</text>
-    <line x1="269.33" y1="158" x2="269.33" y2="166" class="tick"/>
-    <text x="269.33" y="180" text-anchor="middle" class="sm dim">5</text>
-    <line x1="314" y1="158" x2="314" y2="166" class="tick"/>
-    <text x="314" y="180" text-anchor="middle" class="sm dim">…</text>
-    <text x="46" y="128" text-anchor="middle" class="sm dim">issue</text>
-    <circle cx="224.67" cy="162" r="4.6" fill="#e11d48"/>
-    <text x="224.67" y="198" text-anchor="middle" class="sm" fill="#e11d48">death in year 4</text>
-    <line x1="224.67" y1="150" x2="224.67" y2="104" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
-    <text x="224.67" y="98" text-anchor="middle" class="bold" fill="#e11d48">1</text>
-    <line x1="218.67" y1="88" x2="50" y2="88" class="thin dash" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#ah3b82f6)"/>
-    <text x="135.33" y="82" text-anchor="middle" class="sm" fill="#3b82f6">discount v⁴</text>
-    <line x1="66" y1="352" x2="330" y2="352" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="66" y1="352" x2="66" y2="246" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="87.17" y1="352" x2="87.17" y2="356" class="tick"/>
-    <text x="87.17" y="368" text-anchor="middle" class="sm dim">0</text>
-    <line x1="129.5" y1="352" x2="129.5" y2="356" class="tick"/>
-    <text x="129.5" y="368" text-anchor="middle" class="sm dim">1</text>
-    <line x1="171.83" y1="352" x2="171.83" y2="356" class="tick"/>
-    <text x="171.83" y="368" text-anchor="middle" class="sm dim">2</text>
-    <line x1="214.17" y1="352" x2="214.17" y2="356" class="tick"/>
-    <text x="214.17" y="368" text-anchor="middle" class="sm dim">3</text>
-    <line x1="256.5" y1="352" x2="256.5" y2="356" class="tick"/>
-    <text x="256.5" y="368" text-anchor="middle" class="sm dim">4</text>
-    <line x1="298.83" y1="352" x2="298.83" y2="356" class="tick"/>
-    <text x="298.83" y="368" text-anchor="middle" class="sm dim">5</text>
-    <text x="320" y="384" text-anchor="end" class="sm dim">year of death k</text>
-    <rect x="76.17" y="336" width="22" height="16" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
-    <rect x="118.5" y="329.6" width="22" height="22.4" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
-    <rect x="160.83" y="320" width="22" height="32" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
-    <rect x="203.17" y="307.2" width="22" height="44.8" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
-    <rect x="245.5" y="291.2" width="22" height="60.8" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
-    <rect x="287.83" y="275.2" width="22" height="76.8" rx="1.5" fill="#e11d48" fill-opacity="0.6"/>
-    <text x="66" y="250" text-anchor="start" class="sm dim">probability of dying in year k</text>
+    <line x1="32" y1="348" x2="332" y2="348" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <line x1="40" y1="344" x2="40" y2="352" class="tick"/>
+    <text x="40" y="366" text-anchor="middle" class="sm dim">0</text>
+    <line x1="82.42" y1="344" x2="82.42" y2="352" class="tick"/>
+    <text x="82.42" y="366" text-anchor="middle" class="sm dim">1</text>
+    <line x1="124.85" y1="344" x2="124.85" y2="352" class="tick"/>
+    <text x="124.85" y="366" text-anchor="middle" class="sm dim">2</text>
+    <line x1="167.27" y1="344" x2="167.27" y2="352" class="tick"/>
+    <text x="167.27" y="366" text-anchor="middle" class="sm dim">3</text>
+    <line x1="209.7" y1="344" x2="209.7" y2="352" class="tick"/>
+    <text x="209.7" y="366" text-anchor="middle" class="sm dim">4</text>
+    <line x1="252.12" y1="344" x2="252.12" y2="352" class="tick"/>
+    <text x="252.12" y="366" text-anchor="middle" class="sm dim">5</text>
+    <line x1="294.55" y1="344" x2="294.55" y2="352" class="tick"/>
+    <text x="294.55" y="366" text-anchor="middle" class="sm dim">…</text>
+    <rect x="45.94" y="327.08" width="30.55" height="20.92" rx="1.5" fill="#e11d48" fill-opacity="0.3"/>
+    <rect x="88.36" y="318.71" width="30.55" height="29.29" rx="1.5" fill="#e11d48" fill-opacity="0.3"/>
+    <rect x="130.79" y="306.15" width="30.55" height="41.85" rx="1.5" fill="#e11d48" fill-opacity="0.3"/>
+    <rect x="173.21" y="289.42" width="30.55" height="58.58" rx="1.5" fill="#e11d48" fill-opacity="0.75"/>
+    <rect x="215.64" y="268.49" width="30.55" height="79.51" rx="1.5" fill="#e11d48" fill-opacity="0.3"/>
+    <rect x="258.06" y="247.57" width="30.55" height="100.43" rx="1.5" fill="#e11d48" fill-opacity="0.3"/>
+    <text x="273.33" y="240.57" text-anchor="middle" class="sm bold">ₖ|qₓ</text>
+    <line x1="209.7" y1="346" x2="209.7" y2="149.23" class="thin" stroke="#e11d48" stroke-width="2" marker-end="url(#ahe11d48)"/>
+    <text x="209.7" y="142.23" text-anchor="middle" class="bold">1</text>
+    <line x1="205.7" y1="109.48" x2="42" y2="109.48" class="thin dash" stroke="#3b82f6" stroke-width="1.6" marker-end="url(#ah3b82f6)"/>
+    <text x="124.85" y="102.48" text-anchor="middle" class="bold">v⁴</text>
   </g>
 </svg>

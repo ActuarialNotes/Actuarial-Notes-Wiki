@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The ladder from ordinary regression to the extended linear model, and what each rung relaxes</title>
+  <title>Three nested regions: ordinary linear regression inside the generalized linear model, inside the extended linear model</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,23 +42,21 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
-  <defs>
-    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
-  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="34" y="100" width="292" height="62" rx="7" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="180" y="125" text-anchor="middle" class="bold">Ordinary regression</text>
-    <text x="180" y="143" text-anchor="middle" class="sm dim">Normal · identity link</text>
-    <line x1="180" y1="164" x2="180" y2="184" class="thin" stroke="var(--dim)" stroke-width="1.4" marker-end="url(#ahvardim)"/>
-    <rect x="34" y="188" width="292" height="62" rx="7" fill="#d97706" fill-opacity="0.12" stroke="#d97706" stroke-width="1.2"/>
-    <text x="180" y="213" text-anchor="middle" class="bold">Generalized linear model</text>
-    <text x="180" y="231" text-anchor="middle" class="sm dim">exponential family · any link</text>
-    <line x1="180" y1="252" x2="180" y2="272" class="thin" stroke="var(--dim)" stroke-width="1.4" marker-end="url(#ahvardim)"/>
-    <rect x="34" y="276" width="292" height="62" rx="7" fill="#059669" fill-opacity="0.12" stroke="#059669" stroke-width="1.2"/>
-    <text x="180" y="301" text-anchor="middle" class="bold">Extended linear model</text>
-    <text x="180" y="319" text-anchor="middle" class="sm dim">+ interactions, transforms, mixed effects</text>
-    <text x="332" y="368" text-anchor="end" class="sm dim">more flexible</text>
-    <line x1="34" y1="372" x2="326" y2="372" class="thin" stroke="var(--dim)" stroke-width="1.2" marker-end="url(#ahvardim)"/>
+    <ellipse cx="180" cy="228" rx="156" ry="158" fill="#059669" fill-opacity="0.12" stroke="#059669" stroke-width="1.6"/>
+    <ellipse cx="180" cy="274" rx="116" ry="112" fill="#d97706" fill-opacity="0.12" stroke="#d97706" stroke-width="1.6"/>
+    <ellipse cx="180" cy="324" rx="70" ry="62" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.6"/>
+    <text x="180" y="94" text-anchor="middle" class="bold">extended</text>
+    <text x="180" y="186" text-anchor="middle" class="bold">GLM</text>
+    <text x="180" y="286" text-anchor="middle" class="bold">linear</text>
+    <line x1="154" y1="138" x2="206" y2="118" stroke="#059669" stroke-width="2"/>
+    <line x1="154" y1="122" x2="206" y2="136" stroke="#059669" stroke-width="2"/>
+    <path d="M150.0,234 Q192.0,234 210.0,208" class="curve" stroke="#d97706"/>
+    <line x1="150" y1="350" x2="210" y2="324" stroke="#3b82f6" stroke-width="2"/>
+    <circle cx="158" cy="340" r="2.6" fill="#3b82f6"/>
+    <circle cx="172" cy="346" r="2.6" fill="#3b82f6"/>
+    <circle cx="186" cy="328" r="2.6" fill="#3b82f6"/>
+    <circle cx="200" cy="334" r="2.6" fill="#3b82f6"/>
   </g>
 </svg>

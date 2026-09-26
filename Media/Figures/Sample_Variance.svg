@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Squared deviations from the sample mean, divided by n − 1</title>
+  <title>Five observations as stems from their mean of 10, each stem the deviation that gets squared</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,32 +47,30 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="64" y1="344" x2="336" y2="344" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="64" y1="344" x2="64" y2="96" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="60" y1="344" x2="64" y2="344" class="tick"/>
-    <text x="56" y="347.6" text-anchor="end" class="sm dim">0</text>
-    <line x1="60" y1="235.82" x2="64" y2="235.82" class="tick"/>
-    <text x="56" y="239.42" text-anchor="end" class="sm dim">10</text>
-    <line x1="60" y1="127.64" x2="64" y2="127.64" class="tick"/>
-    <text x="56" y="131.24" text-anchor="end" class="sm dim">20</text>
-    <line x1="64" y1="235.82" x2="326" y2="235.82" class="thin dash" stroke="#e11d48" stroke-width="1.3"/>
-    <text x="79.28" y="229.82" text-anchor="start" class="sm" fill="#e11d48">X̄ = 10</text>
-    <polyline points="107.67,235.82 107.67,300.73" class="curve" stroke="#3b82f6" stroke-width="1.6"/>
-    <circle cx="107.67" cy="300.73" r="4" fill="#3b82f6"/>
-    <text x="120.67" y="268.27" text-anchor="middle" class="sm" fill="#3b82f6">-6</text>
-    <polyline points="151.33,235.82 151.33,279.09" class="curve" stroke="#3b82f6" stroke-width="1.6"/>
-    <circle cx="151.33" cy="279.09" r="4" fill="#3b82f6"/>
-    <text x="164.33" y="257.45" text-anchor="middle" class="sm" fill="#3b82f6">-4</text>
-    <polyline points="195,235.82 195,246.64" class="curve" stroke="#3b82f6" stroke-width="1.6"/>
-    <circle cx="195" cy="246.64" r="4" fill="#3b82f6"/>
-    <text x="208" y="241.23" text-anchor="middle" class="sm" fill="#3b82f6">-1</text>
-    <polyline points="238.67,235.82 238.67,225" class="curve" stroke="#3b82f6" stroke-width="1.6"/>
-    <circle cx="238.67" cy="225" r="4" fill="#3b82f6"/>
-    <text x="251.67" y="230.41" text-anchor="middle" class="sm" fill="#3b82f6">+1</text>
-    <polyline points="282.33,235.82 282.33,127.64" class="curve" stroke="#3b82f6" stroke-width="1.6"/>
-    <circle cx="282.33" cy="127.64" r="4" fill="#3b82f6"/>
-    <text x="295.33" y="181.73" text-anchor="middle" class="sm" fill="#3b82f6">+10</text>
-    <text x="44" y="382" text-anchor="start" class="sm">Σ(Xᵢ − X̄)² = 154</text>
-    <text x="316" y="382" text-anchor="end" class="sm bold">S² = 154 / 4 = 38.5</text>
+    <line x1="50" y1="356" x2="336" y2="356" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="50" y1="356" x2="50" y2="86" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="46" y1="356" x2="50" y2="356" class="tick"/>
+    <text x="42" y="359.6" text-anchor="end" class="sm dim">0</text>
+    <line x1="46" y1="237.82" x2="50" y2="237.82" class="tick"/>
+    <text x="42" y="241.42" text-anchor="end" class="sm dim">10</text>
+    <line x1="46" y1="119.64" x2="50" y2="119.64" class="tick"/>
+    <text x="42" y="123.24" text-anchor="end" class="sm dim">20</text>
+    <line x1="50" y1="237.82" x2="326" y2="237.82" class="thin dash" stroke="#e11d48" stroke-width="1.3"/>
+    <text x="63.8" y="230.82" text-anchor="start" class="sm bold">X̄</text>
+    <polyline points="96,237.82 96,308.73" class="curve" stroke="#3b82f6" stroke-width="1.6"/>
+    <circle cx="96" cy="308.73" r="4" fill="#3b82f6"/>
+    <text x="109" y="273.27" text-anchor="middle" class="sm" fill="#3b82f6">-6</text>
+    <polyline points="142,237.82 142,285.09" class="curve" stroke="#3b82f6" stroke-width="1.6"/>
+    <circle cx="142" cy="285.09" r="4" fill="#3b82f6"/>
+    <text x="155" y="261.45" text-anchor="middle" class="sm" fill="#3b82f6">-4</text>
+    <polyline points="188,237.82 188,249.64" class="curve" stroke="#3b82f6" stroke-width="1.6"/>
+    <circle cx="188" cy="249.64" r="4" fill="#3b82f6"/>
+    <text x="201" y="243.73" text-anchor="middle" class="sm" fill="#3b82f6">-1</text>
+    <polyline points="234,237.82 234,226" class="curve" stroke="#3b82f6" stroke-width="1.6"/>
+    <circle cx="234" cy="226" r="4" fill="#3b82f6"/>
+    <text x="247" y="231.91" text-anchor="middle" class="sm" fill="#3b82f6">+1</text>
+    <polyline points="280,237.82 280,119.64" class="curve" stroke="#3b82f6" stroke-width="1.6"/>
+    <circle cx="280" cy="119.64" r="4" fill="#3b82f6"/>
+    <text x="293" y="178.73" text-anchor="middle" class="sm" fill="#3b82f6">+10</text>
   </g>
 </svg>

@@ -2209,361 +2209,349 @@ def ifrs_17_discount_rates() -> Fig:
     return f
 
 
-@figure("Contractual Service Margin", "The CSM set so there is no day-one gain, "
-        "then released over coverage units", width=WID)
+@figure("Contractual Service Margin", "The running GMM group's $60M premium split into "
+        "$44M of outflows, a $5M risk adjustment and an $11M CSM, and the CSM released "
+        "as profit over three years of coverage: $4.4M, $3.85M and $2.75M", width=WID)
 def contractual_service_margin() -> Fig:
     f = vcard()
 
-    _hbar(f, 124, [(44.0, "outflows 44", AMBER), (5.0, "RA", VIOLET),
-                   (11.0, "CSM 11", GREEN)], x0=40, x1=320, height=34)
-    f.text(BCX, 162, "the $60M premium, divided so no gain", cls="sm dim")
-    f.text(BCX, 178, "is recognised on day one", cls="sm dim")
-    f.line(30, 198, 330, 198, cls="rule")
-    _vbars(f, [4.4, 3.85, 2.75], ["year 1", "year 2", "year 3"], 306,
-           x0=68, x1=292, top=5.0, height=84, fmt=lambda v: f"{v:.1f}",
-           colours=[GREEN, GREEN, GREEN])
-    f.text(BCX, 340, "released on coverage units — 40%, 35%, 25%",
-           cls="sm dim")
-    f.text(BCX, 364, "a revision to future service adjusts the CSM;",
-           cls="sm dim")
-    f.text(BCX, 380, "one to past service hits profit at once", cls="sm dim")
+    x0, x1 = 40, 320
+    per = (x1 - x0) / GMM_PREM
+    brace(f, x0, x1, 112, depth=10, below=False, label=f"premium {GMM_PREM:.0f}",
+          label_cls="sm bold")
+    x = x0
+    for value, name, colour in ((GMM_OUT, f"outflows {GMM_OUT:.0f}", AMBER),
+                                (GMM_RA, "RA", VIOLET),
+                                (CSM0, f"CSM {CSM0:.0f}", GREEN)):
+        w = value * per
+        f.rect(x, 118, w, 44, rx=4, fill=colour, fill_opacity="0.30", stroke=colour,
+               stroke_width="1.3")
+        f.text(x + w / 2, 144, name, cls="sm bold")
+        x += w
+    csm_x = x1 - CSM0 * per / 2
+
+    # the CSM, released on coverage units
+    base, scale = 352, 30
+    f.arrow(csm_x, 168, 258, 226, colour=GREEN)
+    for k, share in enumerate(CU):
+        v = CSM0 * share
+        cx = 100 + k * 80
+        f.rect(cx - 24, base - v * scale, 48, v * scale, rx=3, fill=GREEN,
+               fill_opacity="0.55")
+        f.text(cx, base - v * scale - 7, f"{v:.2f}".rstrip("0").rstrip("."),
+               cls="sm")
+        f.text(cx, base + 17, f"yr {k + 1}", cls="sm dim")
+    f.line(52, base, 308, base, cls="axis")
     return f
 
 
-@figure("General Measurement Model", "The GMM's three building blocks stacked "
-        "into one liability, all remeasured every period", width=WID)
+@figure("General Measurement Model", "The running GMM group's liability as three "
+        "stacked building blocks — $44M present value of cash flows, a $5M risk "
+        "adjustment and an $11M CSM — with an arrow looping round to show all three "
+        "remeasured every period", width=WID)
 def general_measurement_model() -> Fig:
     f = vcard()
 
-    x0, w = 116, 128
-    f.rect(x0, 230, w, 74, rx=6, fill=BLUE, fill_opacity="0.28", stroke=BLUE,
-           stroke_width="1.2")
-    f.text(x0 + w / 2, 262, "PV of expected", cls="sm")
-    f.text(x0 + w / 2, 278, "cash flows", cls="sm")
-    f.rect(x0, 178, w, 48, rx=6, fill=VIOLET, fill_opacity="0.28",
-           stroke=VIOLET, stroke_width="1.2")
-    f.text(x0 + w / 2, 207, "risk adjustment", cls="sm")
-    f.rect(x0, 126, w, 48, rx=6, fill=GREEN, fill_opacity="0.28", stroke=GREEN,
-           stroke_width="1.2")
-    f.text(x0 + w / 2, 155, "CSM", cls="sm")
-    f.text(x0 - 8, 150, "profit", cls="sm dim", anchor="end")
-    f.text(x0 - 8, 203, "risk", cls="sm dim", anchor="end")
-    f.text(x0 - 8, 270, "cost", cls="sm dim", anchor="end")
-    f.text(BCX, 328, "the LIC is measured the same way under both",
-           cls="sm dim")
-    f.text(BCX, 344, "models — the choice only ever touches the LRC",
-           cls="sm dim")
-    f.text(BCX, 370, "and it is the expensive one: full projection, a",
-           cls="sm dim")
-    f.text(BCX, 386, "locked-in rate, and coverage units to track", cls="sm dim")
+    base, scale, x0, w = 364, 4.5, 124, 112
+    y = base
+    for value, name, side, colour in ((GMM_OUT, f"PV {GMM_OUT:.0f}", "cost", BLUE),
+                                      (GMM_RA, f"RA {GMM_RA:.0f}", "risk", VIOLET),
+                                      (CSM0, f"CSM {CSM0:.0f}", "profit", GREEN)):
+        h = value * scale
+        f.rect(x0, y - h, w, h, rx=4, fill=colour, fill_opacity="0.30",
+               stroke=colour, stroke_width="1.3")
+        f.text(x0 + w / 2, y - h / 2 + 4, name, cls="sm bold")
+        f.text(x0 - 10, y - h / 2 + 4, side, cls="sm dim", anchor="end")
+        y -= h
+    # remeasured each period
+    top, bot, rx = y + 10, base - 10, x0 + w + 16
+    f.path(f"M{rx},{bot} C{rx + 56},{bot} {rx + 56},{top} {rx + 12},{top}",
+           cls="thin", stroke=TEAL, stroke_width="1.8")
+    f.arrow(rx + 14, top, rx + 2, top, colour=TEAL, width=1.8)
+    f.text(rx + 60, (top + bot) / 2, "remeasure", cls="sm",
+           transform=f"rotate(-90 {rx + 60} {(top + bot) / 2})")
     return f
 
 
-@figure("Premium Allocation Approach", "The PAA eligibility test, and the half of "
-        "the liability it does not simplify", width=WID)
+@figure("Premium Allocation Approach", "The running PAA book's LRC over its one-year "
+        "coverage: a straight line of unearned premium less acquisition cash flows, "
+        "$9.6M at 31 December, running almost on top of the curve the general model "
+        "would give", width=WID)
 def premium_allocation_approach() -> Fig:
     f = vcard()
 
-    f.text(BCX, 102, "eligible if either holds", cls="sm dim")
-    f.box(36, 118, 130, 64, label="coverage ≤", colour=GREEN,
-          sub="one year")
-    f.box(194, 118, 130, 64, label="or it gives", colour=TEAL,
-          sub="a similar answer")
-    f.line(30, 198, 330, 198, cls="rule")
-    f.text(BCX, 220, "but only the LRC is simplified", cls="sm bold")
-    f.box(36, 236, 130, 62, label="LRC", colour=GREEN, sub="simplified")
-    f.box(194, 236, 130, 62, label="LIC", colour=ROSE,
-          sub="identical to GMM")
-    f.text(BCX, 326, "no CSM, so profit emerges as revenue exceeds",
-           cls="sm dim")
-    f.text(BCX, 342, "claims — but the onerous test still bites", cls="sm dim")
-    f.text(BCX, 368, "not available for multi-year commercial contracts,",
-           cls="sm dim")
-    f.text(BCX, 384, "extended warranty, surety or long-term liability",
-           cls="sm dim")
+    start = PAA_PREM - PAA_ACQ                                  # 19.2
+    ax = vaxes(f, 0, 1, 0, 22, left=44, right=18, top=24, bottom=72)
+    ax.frame(xticks=[0, 0.5, 1], yticks=[start],
+             xfmt=lambda t: {0: "Jul", 0.5: "Dec", 1: "Jun"}[t],
+             yfmt=lambda v: f"{v:.1f}")
+    ax.curve(lambda t: start * (1 - t) + 1.4 * math.sin(math.pi * t), colour=VIOLET,
+             width=2, dash=True)
+    ax.polyline([(0, start), (1, 0)], colour=BLUE, width=2.6)
+    ax.vline(0.5, colour="var(--dim)", y_top=PAA_LRC)
+    ax.point(0.5, PAA_LRC, colour=BLUE, r=4.5)
+    ax.label(0.5, PAA_LRC, f"{PAA_LRC:.1f}", cls="sm bold", dx=-10, dy=-6,
+             anchor="end")
+    ax.label(0.22, start * 0.78, "PAA", cls="bold", dx=-8, dy=18, anchor="end")
+    ax.label(0.68, start * 0.32 + 1.2, "GMM", cls="bold", dx=8, anchor="start")
+    brace(f, ax.px(0), ax.px(1), ax.y1 + 26, depth=9, colour=BLUE,
+          label="1 year", label_cls="sm bold")
     return f
 
 
-@figure("Contract Boundary", "The boundary ending where the insurer can reprice, "
-        "and the guarantee that pushes it out", width=WID)
+@figure("Contract Boundary", "One timeline with two boundaries: an ordinary annual "
+        "policy's ends at the first renewal, where the insurer can reprice, while a "
+        "guaranteed-renewable policy's runs through every capped renewal", width=WID)
 def contract_boundary() -> Fig:
     f = vcard()
 
-    y = 148
-    f.arrow(40, y, 330, y, colour="var(--axis)", width=1.2)
-    for x, lab in ((56, "issue"), (168, "renewal"), (280, "renewal")):
+    y = 318
+    xs = [56, 146, 236, 326]
+    f.arrow(36, y, 336, y, colour="var(--axis)", width=1.2)
+    for x, lab in zip(xs, ["issue", "renew", "renew", "renew"]):
         f.line(x, y - 5, x, y + 5, cls="tick")
         f.text(x, y + 19, lab, cls="sm dim")
-    f.rect(56, y - 26, 112, 18, rx=3, fill=BLUE, fill_opacity="0.50")
-    f.text(112, y - 13, "in boundary", cls="sm")
-    f.text(240, y - 13, "outside", cls="sm dim")
-    f.text(BCX, 108, "an ordinary annual policy", cls="sm dim")
-    f.line(30, 190, 330, 190, cls="rule")
-    y2 = 250
-    f.arrow(40, y2, 330, y2, colour="var(--axis)", width=1.2)
-    f.rect(56, y2 - 26, 224, 18, rx=3, fill=ROSE, fill_opacity="0.50")
-    f.text(168, y2 - 13, "in boundary", cls="sm")
-    f.text(BCX, 214, "guaranteed renewable, at a capped price",
-           cls="sm dim")
-    f.text(BCX, y2 + 20, "the insurer cannot price for deterioration",
-           cls="sm dim")
-    f.text(BCX, 306, "so the boundary picks the model too: one year", cls="sm dim")
-    f.text(BCX, 322, "makes a group PAA-eligible without argument",
-           cls="sm dim")
-    f.text(BCX, 350, "it is a legal and practical judgement, not", cls="sm dim")
-    f.text(BCX, 366, "arithmetic — a regulatory cap on repricing", cls="sm dim")
-    f.text(BCX, 382, "can extend a boundary the wording does not",
-           cls="sm dim")
+    f.rect(xs[0], 136, xs[3] - xs[0], 52, rx=5, fill=ROSE, fill_opacity="0.26",
+           stroke=ROSE, stroke_width="1.3")
+    f.text((xs[0] + xs[3]) / 2, 167, "guaranteed", cls="bold")
+    f.rect(xs[0], 222, xs[1] - xs[0], 52, rx=5, fill=BLUE, fill_opacity="0.30",
+           stroke=BLUE, stroke_width="1.3")
+    f.text((xs[0] + xs[1]) / 2, 253, "annual", cls="bold")
+    for x, y_top, colour in ((xs[1], 222, BLUE), (xs[3], 136, ROSE)):
+        f.line(x, y_top - 14, x, y, cls="thin dash", stroke=colour, stroke_width="1.6")
+    f.text(xs[1] + 8, 252, "reprice", cls="sm", anchor="start")
     return f
 
 
-@figure("Level of Aggregation", "A portfolio cut by annual cohort and by "
-        "profitability into the groups IFRS 17 measures", width=WID)
+@figure("Level of Aggregation", "A personal auto portfolio cut into six groups — two "
+        "annual cohorts, each split into onerous, at-risk and profitable contracts — "
+        "with a dot for each contract", width=WID)
 def level_of_aggregation() -> Fig:
     f = vcard()
 
-    f.chip(BCX, 106, "portfolio — personal auto, Ontario", colour=VIOLET,
-           w=276, h=28)
-    for j, cohort in enumerate(["2024", "2025"]):
-        x0 = 44 + j * 142
-        f.text(x0 + 60, 146, cohort, cls="sm bold", fill=BLUE)
-        for i, (name, colour) in enumerate(
-                [("onerous", ROSE), ("may become", AMBER),
-                 ("profitable", GREEN)]):
-            y = 160 + i * 44
-            f.rect(x0, y, 120, 36, rx=5, fill=colour, fill_opacity="0.22",
-                   stroke=colour, stroke_width="1.2")
-            f.text(x0 + 60, y + 22, name, cls="sm")
-    f.text(BCX, 318, "six groups from one portfolio, and the onerous",
-           cls="sm dim")
-    f.text(BCX, 334, "test runs in each of them separately", cls="sm dim")
-    f.text(BCX, 360, "the annual cohort is what stops new profitable",
-           cls="sm dim")
-    f.text(BCX, 376, "business from hiding an older loss", cls="sm dim")
+    car(f, 52, 104, 50, VIOLET)
+    f.text(84, 108, "portfolio", cls="sm bold", anchor="start")
+    rows = [("onerous", ROSE, 3), ("at risk", AMBER, 5), ("profitable", GREEN, 8)]
+    for j, year in enumerate(["2024", "2025"]):
+        cx0 = 114 + j * 110
+        f.text(cx0 + 50, 142, year, cls="sm bold")
+        for i, (name, colour, n) in enumerate(rows):
+            ry = 154 + i * 76
+            f.rect(cx0, ry, 100, 68, rx=6, fill=colour, fill_opacity="0.16",
+                   stroke=colour, stroke_width="1.3")
+            for k in range(n + j):
+                dx = 16 + (k % 4) * 22 + (6 if (k // 4) % 2 else 0)
+                dy = 16 + (k // 4) * 18 + (k * 7 % 5)
+                f.circle(cx0 + dx, ry + dy, 4.5, fill=colour, fill_opacity="0.85")
+            if j == 0:
+                f.text(cx0 - 10, ry + 38, name, cls="sm", anchor="end")
     return f
 
 
-@figure("Coverage Units", "The same CSM released on two different drivers, and "
-        "the profit pattern each produces", width=WID)
+@figure("Coverage Units", "The running GMM group's $11M CSM released over three "
+        "years on two drivers: evenly by policy count, or front-loaded by sum insured "
+        "(40%, 35%, 25%) — the same total landing in different years", width=WID)
 def coverage_units() -> Fig:
     f = vcard()
 
-    f.text(BCX, 102, "$11M of CSM, released three ways ($M)", cls="sm dim")
-    for i, (name, pat, colour) in enumerate(
-            [("policy count", [3.67, 3.67, 3.66], BLUE),
-             ("sum insured", [4.40, 3.85, 2.75], AMBER)]):
-        y = 126 + i * 100
-        f.text(40, y, name, cls="sm bold", anchor="start", fill=colour)
-        for k, v in enumerate(pat):
-            f.rect(56 + k * 88, y + 62 - v * 10, 62, v * 10, rx=3, fill=colour,
-                   fill_opacity="0.70")
-            f.text(87 + k * 88, y + 58 - v * 10, f"{v:.1f}", cls="sm")
-            f.text(87 + k * 88, y + 78, f"yr {k + 1}", cls="sm dim")
-        f.line(50, y + 62, 300, y + 62, cls="axis")
-    f.text(BCX, 330, "same total, different years — which is why the",
-           cls="sm dim")
-    f.text(BCX, 346, "driver has to be disclosed", cls="sm dim")
-    f.text(BCX, 372, "units count expected coverage, so expected lapses are",
-           cls="sm dim")
-    f.text(BCX, 388, "in them — and none of it applies under the PAA",
-           cls="sm dim")
+    ax = vaxes(f, 0.4, 3.6, 0, 5, left=40, right=18, top=24, bottom=40)
+    ax.frame(xticks=[], yticks=[0, 2, 4])
+    even = CSM0 / 3
+    for k, share in enumerate(CU, start=1):
+        for dx, v, colour in ((-0.19, even, BLUE), (0.19, CSM0 * share, AMBER)):
+            x0, x1 = ax.px(k + dx - 0.17), ax.px(k + dx + 0.17)
+            f.rect(x0, ax.py(v), x1 - x0, ax.py(0) - ax.py(v), rx=3, fill=colour,
+                   fill_opacity="0.55")
+        f.text(ax.px(k), ax.y1 + 17, f"yr {k}", cls="sm dim")
+    for dx, name in ((-0.19, "policy count"), (0.19, "sum insured")):
+        x, yy = ax.px(1 + dx) + 4, (ax.py(0) + ax.py(2.2)) / 2
+        f.text(x, yy, name, cls="sm bold", transform=f"rotate(-90 {x - 4} {yy})")
     return f
 
 
-@figure("Onerous Contract", "The onerous test at group level, and the asymmetry "
-        "between a loss and a profit", width=WID)
+@figure("Onerous Contract", "Two groups' inflows against their fulfilment cash "
+        "flows: where inflows exceed them the margin is deferred as CSM, and where "
+        "the fulfilment cash flows exceed the inflows the excess is a loss recognised "
+        "at once", width=WID)
 def onerous_contract() -> Fig:
     f = vcard()
 
-    for i, (name, inflow, outflow, colour) in enumerate(
-            [("group A", 100, 86, GREEN), ("group B", 100, 118, ROSE)]):
-        y = 112 + i * 100
-        f.text(40, y, name, cls="sm bold", anchor="start")
-        f.rect(40, y + 12, inflow * 2.3, 22, rx=3, fill=BLUE,
-               fill_opacity="0.35")
-        f.text(46, y + 28, "consideration", cls="sm", anchor="start")
-        f.rect(40, y + 42, outflow * 2.3, 22, rx=3, fill=colour,
-               fill_opacity="0.50")
-        f.text(46, y + 58, "fulfilment cash flows", cls="sm", anchor="start")
-    f.text(BCX, 188, "profitable — the margin is deferred as CSM",
-           cls="sm dim")
-    f.text(BCX, 296, "onerous — the shortfall is a loss today", cls="sm",
-           fill=ROSE)
-    f.line(30, 316, 330, 316, cls="rule")
-    f.text(BCX, 338, "tested per group, at issue and at every", cls="sm dim")
-    f.text(BCX, 354, "reporting date — no profitable group offsets it",
-           cls="sm dim")
-    f.text(BCX, 380, "a rate approved below the indication is the warning",
-           cls="sm dim")
+    base, scale, bw = 330, 2.0, 44
+    for x, fcf, gap_colour, gap_name, group in (
+            (62, 86, GREEN, "CSM", "profitable"),
+            (206, 118, ROSE, "loss", "onerous")):
+        inflow = 100
+        f.rect(x, base - inflow * scale, bw, inflow * scale, rx=3, fill=BLUE,
+               fill_opacity="0.30", stroke=BLUE, stroke_width="1.2")
+        f.rect(x + bw + 6, base - fcf * scale, bw, fcf * scale, rx=3, fill=AMBER,
+               fill_opacity="0.30", stroke=AMBER, stroke_width="1.2")
+        lo, hi = sorted((inflow, fcf))
+        gx = x + bw + 6 if fcf < inflow else x
+        f.rect(gx, base - hi * scale, bw, (hi - lo) * scale, rx=3, fill=gap_colour,
+               fill_opacity="0.40", stroke=gap_colour, stroke_width="1.3",
+               stroke_dasharray="4 3" if fcf < inflow else None)
+        f.text(gx + bw / 2, base - hi * scale - 8, gap_name, cls="sm bold")
+        f.text(x + bw / 2, base + 16, "in", cls="sm dim")
+        f.text(x + 1.5 * bw + 6, base + 16, "FCF", cls="sm dim")
+        f.text(x + bw + 3, base + 38, group, cls="sm bold")
+    f.line(40, base, 320, base, cls="axis")
     return f
 
 
-@figure("Loss Component", "The two parts of an onerous group's LRC, and why only "
-        "one of them ever becomes revenue", width=WID)
+@figure("Loss Component", "The running PAA book's LRC as one column — $9.6M of "
+        "remaining coverage under a $1.9M loss component — with the coverage part "
+        "released to revenue and the loss component released against expenses",
+        width=WID)
 def loss_component() -> Fig:
     f = vcard()
 
-    _hbar(f, 128, [(9.6, "coverage 9.6", BLUE), (1.9, "1.9", ROSE)],
-          x0=40, x1=320, height=36)
-    f.text(320, 164, "the loss component", cls="sm", fill=ROSE, anchor="end")
-    f.text(BCX, 196, "the blue is released as revenue; the red is", cls="sm dim")
-    f.text(BCX, 212, "released against expenses and never becomes any",
-           cls="sm dim")
-    f.line(30, 232, 330, 232, cls="rule")
-    _bullets(f, 254, ["the loss is already in profit or loss, so the",
-                      "claims it anticipated must not be charged twice",
-                      "so reported revenue on an onerous group is",
-                      "lower than the premium written for it"],
-             x=38, gap=24, colour=AMBER)
-    f.text(BCX, 366, "improve the estimate and the loss component reverses",
-           cls="sm dim")
-    f.text(BCX, 382, "first — before any CSM can be established", cls="sm dim")
+    base, scale, x0, w = 350, 21, 58, 80
+    y_split = base - PAA_LRC * scale
+    y_top = y_split - PAA_LOSS * scale
+    f.rect(x0, y_split, w, base - y_split, rx=4, fill=BLUE, fill_opacity="0.30",
+           stroke=BLUE, stroke_width="1.3")
+    f.text(x0 + w / 2, (y_split + base) / 2 + 4, f"{PAA_LRC:.1f}", cls="bold")
+    f.rect(x0, y_top, w, y_split - y_top, rx=4, fill=ROSE, fill_opacity="0.34",
+           stroke=ROSE, stroke_width="1.3")
+    f.text(x0 + w / 2, (y_top + y_split) / 2 + 4, f"{PAA_LOSS:.1f}", cls="bold")
+    f.text(x0 + w / 2, base + 18, "LRC", cls="sm bold")
+
+    # where each part goes when it is released
+    f.arrow(x0 + w + 6, (y_top + y_split) / 2, 226, (y_top + y_split) / 2,
+            colour=ROSE, width=1.8)
+    coins(f, 266, (y_top + y_split) / 2 + 22, 4, 16, AMBER)
+    f.text(266, (y_top + y_split) / 2 + 44, "expenses", cls="sm")
+    f.arrow(x0 + w + 6, (y_split + base) / 2, 226, (y_split + base) / 2,
+            colour=BLUE, width=1.8)
+    coins(f, 266, (y_split + base) / 2 + 22, 4, 16, BLUE)
+    f.text(266, (y_split + base) / 2 + 44, "revenue", cls="sm")
     return f
 
 
-@figure("Insurance Acquisition Cash Flows", "Directly attributable acquisition "
-        "costs absorbed into the LRC — with no deferred asset left behind",
-        width=WID)
+@figure("Insurance Acquisition Cash Flows", "The running PAA book's $24M premium "
+        "less $4.8M of acquisition cash flows leaving a $19.2M LRC, with the deferred "
+        "acquisition asset that used to hold them struck out", width=WID)
 def insurance_acquisition_cash_flows() -> Fig:
     f = vcard()
 
-    _columns(f, 100, ["Directly", "Not"],
-             [["commission", "premium tax", "underwriting", "policy issue"],
-              ["brand advertising", "product design", "sales overhead",
-               "IT projects"]],
-             x0=30, x1=330, row_h=22, colours=(GREEN, ROSE))
-    f.text(BCX, 242, "attributable to the portfolio, or not", cls="sm dim")
-    f.line(30, 256, 330, 256, cls="rule")
-    f.text(BCX, 278, "and the choice under the PAA", cls="sm bold")
-    _pill_row(f, 306, ["defer into the LRC", "or expense at once"],
-              [BLUE, AMBER], x0=36, x1=324, h=26)
-    f.text(BCX, 342, "available only where coverage is a year or less,",
-           cls="sm dim")
-    f.text(BCX, 358, "applied consistently by group, and disclosed",
-           cls="sm dim")
-    f.text(BCX, 384, "they are fulfilment cash flows — so they feed the "
-           "onerous test", cls="sm dim")
+    base, top = 350, 236
+    scale = top / PAA_PREM
+    _waterfall(f, base,
+               [("premium", PAA_PREM, BLUE), ("acquisition", -PAA_ACQ, AMBER),
+                ("LRC", None, TEAL)],
+               x0=36, x1=258, top=top, bar_frac=0.62,
+               fmt=lambda v: f"{abs(v):.1f}")
+    # the deferred acquisition asset IFRS 17 no longer has
+    y0, y1 = base - PAA_PREM * scale, base - (PAA_PREM - PAA_ACQ) * scale
+    f.rect(280, y0, 44, y1 - y0, rx=3, fill="none", stroke=AMBER,
+           stroke_width="1.3", stroke_dasharray="4 3")
+    for a, b in (((280, y0), (324, y1)), ((324, y0), (280, y1))):
+        f.line(*a, *b, cls="", stroke=ROSE, stroke_width="2.2", stroke_linecap="round")
+    f.text(302, base + 15, "DAC", cls="sm dim")
     return f
 
 
-@figure("Insurance Revenue", "The GMM revenue build-up for year one of the running "
-        "group, component by component", width=WID)
+@figure("Insurance Revenue", "Year one of the running GMM group's revenue built as a "
+        "waterfall: $17.6M of expected claims, $2.0M of risk adjustment and $4.4M of "
+        "CSM released, to $24.0M", width=WID)
 def insurance_revenue() -> Fig:
     f = vcard()
 
-    _waterfall(f, 254,
-               [("claims", 17.6, BLUE), ("RA", 2.0, VIOLET),
-                ("CSM", 4.4, GREEN), ("revenue", None, TEAL)],
-               x0=52, x1=310, top=118, bar_frac=0.56,
-               fmt=lambda v: f"{v:.1f}")
-    f.text(BCX, 292, "$M — year 1 of the running group, 40% of coverage",
-           cls="sm dim")
-    f.line(30, 312, 330, 312, cls="rule")
-    _bullets(f, 334, ["deposit components are excluded",
-                      "ceded premium is not deducted from it",
-                      "under the PAA it is simply premium earned"],
-             x=38, gap=24, colour=AMBER)
+    share = CU[0]
+    _waterfall(f, 350,
+               [("claims", GMM_OUT * share, BLUE), ("RA", GMM_RA * share, VIOLET),
+                ("CSM", CSM0 * share, GREEN), ("revenue", None, TEAL)],
+               x0=44, x1=318, top=236, bar_frac=0.58, fmt=lambda v: f"{v:.1f}")
     return f
 
 
-@figure("Insurance Service Expenses", "What lands in insurance service expenses "
-        "and what is routed to finance instead", width=WID)
+@figure("Insurance Service Expenses", "Incurred claims, acquisition cash flows and "
+        "onerous losses routed into insurance service expenses, while the discount "
+        "unwind is routed past them to insurance finance", width=WID)
 def insurance_service_expenses() -> Fig:
     f = vcard()
 
-    _columns(f, 100, ["In", "Out"],
-             [["incurred claims", "and ALAE", "claims handling",
-               "acquisition", "amortised", "onerous losses"],
-              ["discount unwind", "rate changes", "general overhead",
-               "not attributable", "reinsurance", "recoveries"]],
-             x0=30, x1=330, row_h=20, head_h=24, colours=(BLUE, ROSE))
-    f.line(30, 288, 330, 288, cls="rule")
-    f.text(BCX, 310, "the routing rule, in one line", cls="sm bold")
-    f.text(BCX, 334, "past service → here, in profit or loss", cls="sm",
-           fill=BLUE)
-    f.text(BCX, 354, "future service → the CSM, or a loss component",
-           cls="sm", fill=GREEN)
-    f.text(BCX, 380, "and on an onerous group the loss component offsets it",
-           cls="sm dim")
+    # the destination: service expenses above the line, finance below it
+    f.rect(206, 96, 122, 196, rx=8, fill=AMBER, fill_opacity="0.16", stroke=AMBER,
+           stroke_width="1.3")
+    f.text(267, 198, "service expenses", cls="sm bold")
+    f.rect(206, 318, 122, 52, rx=8, fill=TEAL, fill_opacity="0.16", stroke=TEAL,
+           stroke_width="1.3")
+    f.text(267, 348, "finance", cls="bold")
+
+    for dx in (-20, 0, 20):
+        _moral_burst(f, 62 + dx, 112, 9, ROSE)
+    f.text(62, 138, "claims", cls="sm")
+    f.arrow(96, 118, 200, 148, colour=AMBER)
+    coins(f, 62, 206, 3, 13, AMBER)
+    f.text(62, 224, "acquisition", cls="sm")
+    f.arrow(96, 196, 200, 196, colour=AMBER)
+    document(f, 62, 268, 34, ROSE)
+    f.text(62, 300, "onerous", cls="sm")
+    f.arrow(96, 266, 200, 238, colour=AMBER)
+    coins(f, 62, 362, 3, 13, TEAL)
+    f.text(62, 380, "discount", cls="sm")
+    f.arrow(96, 346, 200, 346, colour=TEAL)
     return f
 
 
-@figure("Insurance Service Result", "The IFRS 17 income statement down to the "
-        "insurance service result, with reinsurance on its own line", width=WID)
+@figure("Insurance Service Result", "The running insurer's insurance service result "
+        "as a waterfall: $420M of insurance revenue, less $370M of service expenses "
+        "and $12M of net reinsurance expense, to $38M", width=WID)
 def insurance_service_result() -> Fig:
     f = vcard()
 
-    rows = [("Insurance revenue", "420", BLUE),
-            ("Insurance service expenses", "(370)", AMBER),
-            ("Net reinsurance expense", "(12)", VIOLET),
-            ("Insurance service result", "38", GREEN)]
-    for i, (name, amount, colour) in enumerate(rows):
-        y = 108 + i * 52
-        f.rect(34, y, 292, 40, rx=6, fill=colour, fill_opacity="0.16",
-               stroke=colour, stroke_width="1.2")
-        f.text(46, y + 25, name, cls="sm", anchor="start")
-        f.text(314, y + 25, amount, cls="sm bold", anchor="end")
-        if i == 3:
-            f.line(34, y - 6, 326, y - 6, cls="rule")
-    f.text(BCX, 336, "$M, the running insurer — investment return and",
-           cls="sm dim")
-    f.text(BCX, 352, "every interest-rate effect are reported below this",
-           cls="sm dim")
-    f.text(BCX, 380, "close to an underwriting result, but not the "
-           "combined ratio", cls="sm dim")
+    _waterfall(f, 350,
+               [("revenue", REVENUE, BLUE), ("expenses", -SVC_EXP, AMBER),
+                ("reinsurance", -NET_REINS, VIOLET), ("ISR", None, GREEN)],
+               x0=40, x1=322, top=236, bar_frac=0.6,
+               fmt=lambda v: f"{abs(v):,.0f}")
     return f
 
 
-@figure("Insurance Finance Income or Expenses", "The predictable unwind of "
-        "discount beside the volatile effect of a rate change", width=WID)
+@figure("Insurance Finance Income or Expenses", "The liability period by period: "
+        "a steady rise from the unwind of discount, then a sudden jump when interest "
+        "rates fall", width=WID)
 def insurance_finance_income_or_expenses() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 6, 380, 540, left=48, right=16, top=28, bottom=160)
+    ax = vaxes(f, 0, 6, 380, 545, left=40, right=18, top=24, bottom=40)
     ax.frame(xticks=[], yticks=[], arrows=True)
     ax.polyline([(0, 420), (1, 431), (2, 443), (3, 455), (4, 468), (5, 481),
                  (6, 495)], colour=TEAL, width=2.4)
     ax.polyline([(3, 455), (3.06, 500)], colour=ROSE, width=2.4)
     ax.polyline([(3.06, 500), (4, 512), (5, 525), (6, 538)], colour=ROSE,
                 width=2.4, dash=True)
-    ax.label(1.5, 428, "unwind", cls="sm bold", fill=TEAL, dy=13)
-    ax.label(3.2, 512, "rates fall", cls="sm bold", fill=ROSE, anchor="start")
-    f.text(BCX, ax.y1 + 22, "the liability, period by period", cls="sm dim")
-    f.line(30, 274, 330, 274, cls="rule")
-    f.text(BCX, 296, "kept out of the insurance service result, so", cls="sm dim")
-    f.text(BCX, 312, "underwriting is measured on its own", cls="sm dim")
-    f.text(BCX, 340, "a fall in rates raises the liability and produces",
-           cls="sm dim")
-    f.text(BCX, 356, "a finance expense — while the bonds backing it",
-           cls="sm dim")
-    f.text(BCX, 372, "gain in value, often through OCI", cls="sm dim")
+    ax.label(1.5, 428, "unwind", cls="bold", dy=18)
+    ax.label(3, 500, "rates fall", cls="bold", anchor="end", dx=-8, dy=4)
+    f.text(ax.x1, ax.y1 + 20, "period", cls="sm dim", anchor="end")
+    f.text(ax.x0 + 6, ax.y0 - 6, "liability", cls="sm dim", anchor="start")
     return f
 
 
-@figure("Other Comprehensive Income Option", "The same rate effect routed to OCI "
-        "instead of profit, leaving a systematic amount behind", width=WID)
+@figure("Other Comprehensive Income Option", "One period's insurance finance "
+        "expense split in two: the systematic amount at the locked-in rate in profit "
+        "or loss, and the effect of the rate change in OCI, adding up to the same "
+        "total", width=WID)
 def other_comprehensive_income_option() -> Fig:
     f = vcard()
 
-    f.chip(BCX, 106, "IFIE for the period", colour=VIOLET, w=210, h=28)
-    f.arrow(BCX - 40, 122, 106, 152, colour="var(--dim)", width=1.3)
-    f.arrow(BCX + 40, 122, 254, 152, colour="var(--dim)", width=1.3)
-    f.box(38, 164, 132, 74, label="profit or loss", colour=BLUE,
-          sub="systematic, at the")
-    f.text(104, 226, "locked-in rate", cls="sm dim")
-    f.box(190, 164, 132, 74, label="OCI", colour=TEAL,
-          sub="the effect of the")
-    f.text(256, 226, "rate change", cls="sm dim")
-    f.line(30, 256, 330, 256, cls="rule")
-    f.text(BCX, 278, "comprehensive income is identical either way",
-           cls="sm bold")
-    f.text(BCX, 306, "elected by portfolio, applied to every group in it",
-           cls="sm dim")
-    f.text(BCX, 332, "the point is the mismatch: bonds at FVOCI move",
-           cls="sm dim")
-    f.text(BCX, 348, "through OCI, so the liability should too", cls="sm dim")
-    f.text(BCX, 376, "and what is left in OCI is the duration mismatch",
-           cls="sm dim")
+    base, total, locked = 350, 232, 132
+    f.rect(46, base - total, 72, total, rx=4, fill=VIOLET, fill_opacity="0.30",
+           stroke=VIOLET, stroke_width="1.3")
+    f.rect(160, base - locked, 72, locked, rx=4, fill=BLUE, fill_opacity="0.30",
+           stroke=BLUE, stroke_width="1.3")
+    f.text(196, base - locked / 2 + 4, "locked-in", cls="sm")
+    f.rect(256, base - total, 72, total - locked, rx=4, fill=TEAL,
+           fill_opacity="0.34", stroke=TEAL, stroke_width="1.3")
+    f.text(292, base - (total + locked) / 2 + 4, "rate change", cls="sm")
+    f.line(118, base - total, 256, base - total, cls="thin dash",
+           stroke="var(--dim)", stroke_width="1.2")
+    f.line(232, base - locked, 256, base - locked, cls="thin dash",
+           stroke="var(--dim)", stroke_width="1.2")
+    f.line(34, base, 334, base, cls="axis")
+    for x, name in ((82, "IFIE"), (196, "P&L"), (292, "OCI")):
+        f.text(x, base + 18, name, cls="sm bold")
     return f
 
 

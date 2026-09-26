@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:fe8430ee6c2fd84ca253121a0d378acd4d6f430f5e46da58d952a423ae3d04f9
+  content_hash: sha256:9d15d14ae348c460fe4ab0758e52d18b66cf4d8aae6c94919aea503793c9369a
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,10 +22,11 @@ verification:
 ## Learning Objectives
 
 > [!example]- A. Dealing with Data {35%}
-> Candidates should be able to evaluate the [[Exploratory Data Analysis|data set]] and manipulate it so it can be used in a [[Predictive Model|predictive analytics model]].
+> Candidates should be able to [[Exploratory Data Analysis|evaluate the data set]] and manipulate it so it can be used in a [[Predictive Analytics|predictive analytics model]].
 >
-> 1. Gather and assess the relevance of information from [[Stakeholder Reporting|stakeholders]] in actuarial analysis.
-> 2. Import, manipulate, and evaluate [[Data Set|data sets]] using generally available programming languages and software packages (e.g., .csv file).
+> 1. Gather and assess the relevance of information from stakeholders in actuarial analysis.
+>    - *Key concepts:* [[Data Quality]] · [[Predictive Analytics]]
+> 2. Import, manipulate, and evaluate [[Tidy Data|data sets]] using generally available programming languages and software packages (e.g., .csv file).
 > 3. Evaluate the need for [[Variable Transformation|variable transformation]] and apply appropriate transformations to data.
 > 4. Identify and appropriately manage [[Outlier|outliers]] and [[Missing Data|missing data]].
 >
@@ -36,17 +37,17 @@ verification:
 >
 > 1. Create and run a [[Generalized Linear Model|GLM]].
 > 2. Evaluate and improve a [[Generalized Linear Model|GLM]] (e.g., create and interpret [[Residual Plot|diagnostics]], conduct [[Cross-Validation|cross-validation]], incorporate [[Offset Variable|offsets]], mitigate [[Multicollinearity|multicollinearity]] issues, avoid [[Bias-Variance Tradeoff|underfitting and overfitting]]) for the data provided and business goals.
->    - *Key concepts:* [[Link Function]] · [[Tweedie Distribution]] · [[AIC]] · [[BIC]] · [[Deviance]]
+>    - *Key concepts:* [[Holdout Sample]] · [[Link Function]] · [[Tweedie Distribution]] · [[AIC]] · [[BIC]] · [[Deviance]]
 >
 > **Readings:** De Jong and Heller · Fannin · Frees, Derrig and Meyers · GLM (Monograph) · Venables and Ripley
 
 > [!example]- C. Model Interpretation and Presentation {30%}
-> Candidates should be able to interpret the findings from a [[Predictive Model|predictive analytics model]] and present their findings to technical and non-technical audiences.
+> Candidates should be able to interpret the findings from a [[Predictive Analytics|predictive analytics model]] and present their findings to technical and non-technical audiences.
 >
 > 1. Create and interpret statistical/tabular and [[Data Visualization|graphical/visual representations of data]].
 > 2. Communicate project technical information, including details on methodologies, [[Variable Selection|modeling decisions]], and [[Parameter Estimate Tables|interpretation of output]].
 > 3. Communicate project findings to non-technical audiences, including the implications on business outcomes or decisions.
->    - *Key concepts:* [[Lift]] · [[Double Lift Chart]] · [[Gini Index]]
+>    - *Key concepts:* [[Quantile Plot]] · [[Double Lift Chart]] · [[Gini Index]]
 >
 > **Readings:** Cairo · Few · Knaflic
 

@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:7673380f1f46a35510261fa8f0b7f61c718d20915768bf2d4ebeb243c04acf48
+  content_hash: sha256:003261cff10004613cccdc5746b78fbc67b60ba93ef6a269be4bc3d4e259a3e7
   sources: []
   open_findings: 0
   open_critical: 0
@@ -34,7 +34,7 @@ Where [[An Introduction to Statistical Learning (James et al. - 2021)|James et a
 
 ### Comparing candidate models
 
-- [[Lift|Simple lift charts]] and the spread between the best and worst buckets
+- [[Quantile Plot|Simple lift charts]] and the spread between the best and worst buckets
 - The [[Double Lift Chart|double lift chart]] — sorting on the *ratio* of two models' predictions to see where they disagree and which one the actuals favour
 - [[Gini Index|Gini coefficient]] and the Lorenz curve as a one-number summary of ranking power
 

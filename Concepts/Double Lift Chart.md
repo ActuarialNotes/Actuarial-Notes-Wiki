@@ -4,14 +4,14 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:5fe34bc2e38764ebff0fc0c8493ec88b862dc4eaf4b611bd0a9572ac4f32469d
+  content_hash: sha256:af958143af04f6e3e963c0bcac7b477786dcc7b55734e7ae99a8571d7a50dd63
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Double Lift Chart.md
 ---
 
-A **double lift chart** compares two candidate models directly by sorting the data on the *ratio* of their predictions and plotting each model's average prediction against the actual over that sort. Where a single [[Lift|lift chart]] asks "is this model any good?", a double lift chart asks "**which of these two is better, and where?**"
+A **double lift chart** compares two candidate models directly by sorting the data on the *ratio* of their predictions and plotting each model's average prediction against the actual over that sort. Where a single [[Quantile Plot|lift chart]] asks "is this model any good?", a double lift chart asks "**which of these two is better, and where?**"
 
 > $$\text{sort by } r_i = \frac{\hat{y}_i^{\text{(model A)}}}{\hat{y}_i^{\text{(model B)}}}, \quad \text{bucket, then plot } \frac{\overline{\hat{y}}^{A}}{\bar{y}},\ \frac{\overline{\hat{y}}^{B}}{\bar{y}} \text{ per bucket}$$
 
@@ -19,7 +19,7 @@ A **double lift chart** compares two candidate models directly by sorting the da
 - The winner is the model whose curve tracks the **actual** line across the buckets; the loser bends away at the ends, where the disagreement is largest
 - Everything is normalized to the overall average so a systematic level difference does not mask the shape
 - Requires a **held-out** dataset — on training data the more flexible model wins by construction
-- Complements the other comparison tools: a [[Quantile Plot]] or [[Lift]] chart scores one model at a time, [[AUROC]] and the [[Gini Index]] give a single number and no picture of *where* the models differ
+- Complements the other comparison tools: a [[Quantile Plot]] scores one model at a time, [[AUROC]] and the [[Gini Index]] give a single number and no picture of *where* the models differ
 
 ![[Media/Figures/Double_Lift_Chart.svg|340]]
 

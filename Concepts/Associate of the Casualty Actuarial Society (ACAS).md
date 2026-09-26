@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:e2e40a0b9c643b77ab0aa600fe3fb17c14da941a3404e448d817f961edc7361d
+  content_hash: sha256:b4c3257dbf222a46e8d2f6debff34da4d96d56bc4e0e44527b649e65b257b059
   sources: []
   open_findings: 0
   open_critical: 0
@@ -34,7 +34,7 @@ It is the first of the two CAS designations. [[Fellow of the Casualty Actuarial 
 >     - [[Credibility Theory]], [[Linear Mixed Model|linear mixed models]], [[Statistical Learning]] and [[Time Series]].
 > - **[[Exam 5 (CAS)|Exam 5]]** — Basic Techniques for Ratemaking and Estimating Claim Liabilities
 >     - The first exam written entirely in the language of the job: [[Ratemaking]] and [[Loss Reserving|reserving]].
-> - **PCPA** — Property and Casualty Predictive Analytics
+> - **[[Exam PCPA (CAS)|PCPA]]** — Property and Casualty Predictive Analytics
 >     - An exam and a project, required of candidates seeking the ACAS from 1 January 2026.
 > - **Exam 6** — Regulation and Financial Reporting
 >     - Sat in the jurisdiction you practise in: [[Exam 6C (CAS)|Canada (6C)]], [[Exam 6U (CAS)|United States (6U)]], International, or Taipei.

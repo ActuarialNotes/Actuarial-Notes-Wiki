@@ -1386,39 +1386,46 @@ def deviance() -> Fig:
     return f
 
 
-@figure("R-Squared", "The total sum of squares split into the part the model explains "
-        "and the part it does not", width=WID)
+@figure("R-Squared", "Each point's distance from the mean split into the part the "
+        "fitted line explains and the residual it leaves", width=WID)
 def r_squared() -> Fig:
     f = vcard()
 
-    x0, w = BX0 + 40, 240
-    f.text(BCX, BY0 + 30, "SS_Tot = 1,000", cls="bold")
-    f.rect(x0, BY0 + 44, w, 46, rx=6, fill="var(--soft)", stroke="var(--edge)",
-           stroke_width="1.2")
-    f.rect(x0, BY0 + 44, w * 0.68, 46, rx=6, fill=BLUE, fill_opacity="0.55")
-    f.text(x0 + w * 0.34, BY0 + 73, "SS_Reg = 680", cls="sm bold")
-    f.text(x0 + w * 0.84, BY0 + 73, "RSS = 320", cls="sm")
-
-    ax = vaxes(f, 0, 10, 0, 60, left=46, top=150, bottom=48)
-    ax.frame(xticks=[], yticks=[])
-    fit = lambda x: 16 + 3.1 * x
     pts = [(0.9, 22), (2.1, 20), (3.0, 30), (4.2, 26), (5.1, 36), (6.0, 32),
            (7.2, 44), (8.1, 38), (9.1, 47)]
-    ax.curve(fit, colour=BLUE, width=2.2)
-    ax.hline(31.7, colour="var(--dim)", dash=True)
-    ax.label(0.6, 31.7, "ȳ", cls="sm dim", dy=-6, anchor="start")
+    n = len(pts)
+    xbar = sum(x for x, _ in pts) / n
+    ybar = sum(y for _, y in pts) / n
+    slope = (sum((x - xbar) * (y - ybar) for x, y in pts)
+             / sum((x - xbar) ** 2 for x, _ in pts))
+    fit = lambda x: ybar + slope * (x - xbar)
+    ax = vaxes(f, -3.4, 10.4, 10, 54, left=20, right=24, top=24, bottom=36)
+    ax.frame(xticks=[], yticks=[])
+    ax.hline(ybar, colour="var(--dim)", dash=True)
+    ax.label(-3.2, ybar, "ȳ", cls="bold", dy=-7, anchor="start")
+    ax.curve(fit, colour=BLUE, width=2.2, xa=0.3, xb=10.2)
+    ax.label(10.2, fit(10.2), "ŷ", cls="bold", dx=4, dy=-6, anchor="start")
     for x, y in pts:
-        ax.point(x, y, colour=BLUE, r=3.2)
-    f.text(BCX, BY1 - 8, "R² = 680 / 1,000 = 0.68", cls="bold")
+        f.line(ax.px(x), ax.py(ybar), ax.px(x), ax.py(fit(x)), cls="", stroke=BLUE,
+               stroke_width="5", stroke_opacity="0.45")
+        f.line(ax.px(x), ax.py(fit(x)), ax.px(x), ax.py(y), cls="", stroke=ROSE,
+               stroke_width="2")
+        ax.point(x, y, colour="var(--ink)", r=3)
+    x, y = pts[0]
+    ax.label(x, (ybar + fit(x)) / 2, "explained", cls="sm bold", dx=-10, dy=4,
+             anchor="end")
+    ax.label(x, (fit(x) + y) / 2, "residual", cls="sm bold", dx=-10, dy=6,
+             anchor="end")
     return f
 
 
-@figure("Residual Sum of Squares", "Squared residuals as literal squares hung off the "
-        "fitted line", width=WID)
+@figure("Residual Sum of Squares", "Each residual drawn as a literal square hung off "
+        "the fitted line, so the total shaded area is the residual sum of squares",
+        width=WID)
 def residual_sum_of_squares() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 10, 0, 62, left=46, top=48, bottom=48)
+    ax = vaxes(f, 0, 10, 0, 62, left=30, top=30, bottom=44)
     ax.frame(xlabel="x", xticks=[], yticks=[], ylabel="y")
     fit = lambda x: 16 + 3.4 * x
     pts = [(1.4, 30), (3.2, 21), (5.0, 40), (6.8, 30), (8.4, 52)]
@@ -1431,131 +1438,126 @@ def residual_sum_of_squares() -> Fig:
         f.rect(left, top, side, side, fill=ROSE, fill_opacity="0.18", stroke=ROSE,
                stroke_width="1.1")
         ax.point(x, y, colour=BLUE, r=3.4)
-    f.text(BX0 + 12, BY1 - 8, "each square is one residual, squared", cls="sm dim",
-           anchor="start")
     return f
 
 
-@figure("ANOVA", "The analysis-of-variance table as a split of the total sum of "
-        "squares", width=WID)
+@figure("ANOVA", "A total sum of squares of 1,000 split into regression (680, in 2 "
+        "slices of 340) and residual (320, in 47 slices of 6.8); one slice of each "
+        "compared gives the F ratio of 50", width=WID)
 def anova() -> Fig:
     f = vcard()
 
-    x0, w = BX0 + 22, 276
-    rows = [("Source", "SS", "df", "MS", True),
-            ("Regression", "680", "2", "340", False),
-            ("Residual", "320", "47", "6.8", False),
-            ("Total", "1,000", "49", "", False)]
-    for i, (a, b, c, d, head) in enumerate(rows):
-        y = BY0 + 30 + i * 40
-        if head:
-            f.rect(x0, y, w, 34, rx=6, fill="var(--soft)", stroke="var(--edge)",
-                   stroke_width="1")
-        else:
-            f.line(x0, y + 34, x0 + w, y + 34, cls="rule")
-        cls = "sm bold" if head else "sm"
-        f.text(x0 + 12, y + 22, a, cls=cls, anchor="start")
-        for j, cell in enumerate((b, c, d)):
-            f.text(x0 + 138 + j * 48, y + 22, cell, cls=cls, anchor="middle")
-
-    f.box(BX0 + 46, BY0 + 210, 228, 52, label="F = 340 / 6.8 = 50.0", colour=ROSE,
-          sub="p < 0.001 — the model beats the mean", label_cls="bold")
-    f.text(BCX, BY0 + 288, "for nested GLMs the same table holds", cls="sm dim")
-    f.text(BCX, BY0 + 306, "deviances in place of sums of squares", cls="sm dim")
+    x0, x1 = BCX - 34, BCX + 34
+    top, bottom = BY0 + 30, BY1 - 20
+    per = (bottom - top) / 1000
+    res_top = bottom - 320 * per
+    f.rect(x0, res_top, x1 - x0, bottom - res_top, fill=ROSE, fill_opacity="0.22")
+    for k in range(1, 47):
+        y = bottom - k * 6.8 * per
+        f.line(x0, y, x1, y, cls="", stroke=ROSE, stroke_width="0.5",
+               stroke_opacity="0.6")
+    f.rect(x0, res_top, x1 - x0, 6.8 * per, fill=ROSE, fill_opacity="0.95")
+    for k in range(2):
+        y = res_top - (k + 1) * 340 * per
+        f.rect(x0, y, x1 - x0, 340 * per - 1, fill=BLUE,
+               fill_opacity="0.8" if k == 0 else "0.3")
+    f.rect(x0, top, x1 - x0, bottom - top, fill="none", stroke="var(--edge)",
+           stroke_width="1.2")
+    f.text(x0 - 12, res_top - 340 * per + 4, "regression", cls="sm bold", anchor="end")
+    f.text(x0 - 12, (res_top + bottom) / 2 + 4, "residual", cls="sm bold", anchor="end")
+    ymid = res_top - 170 * per
+    f.text(x1 + 12, ymid + 4, "340", cls="sm bold", anchor="start")
+    f.line(x1 + 2, res_top + 1.5, x1 + 10, res_top + 1.5, cls="", stroke=ROSE,
+           stroke_width="1.2")
+    f.text(x1 + 12, res_top + 5.5, "6.8", cls="sm bold", anchor="start")
+    f.arrow(x1 + 52, res_top - 6, x1 + 52, ymid + 8, colour="var(--dim)", width=1.4)
+    f.text(x1 + 60, (res_top + ymid) / 2 + 4, "× 50", cls="sm bold", anchor="start")
     return f
 
 
-@figure("Parameter Estimate Tables", "A GLM coefficient table read as multiplicative "
-        "rating relativities", width=WID)
+@figure("Parameter Estimate Tables", "Three coefficient estimates drawn as dots with "
+        "two-standard-error whiskers against zero, each tagged with its relativity; "
+        "prior claim's whisker crosses zero", width=WID)
 def parameter_estimate_tables() -> Fig:
     f = vcard()
 
-    x0, w = BX0 + 8, 304
-    cols = (10, 118, 168, 214, 262)
-    rows = [("term", "β̂", "SE", "p", "e^β̂", True, None),
-            ("intercept", "−2.30", "0.06", "<.001", "0.100", False, None),
-            ("urban", "0.26", "0.08", "0.001", "1.30", False, GREEN),
-            ("young driver", "0.41", "0.09", "<.001", "1.51", False, GREEN),
-            ("prior claim", "0.18", "0.10", "0.069", "1.20", False, AMBER)]
-    for i, (a, b, c, d, e, head, mark) in enumerate(rows):
-        y = BY0 + 34 + i * 46
-        if head:
-            f.rect(x0, y, w, 36, rx=6, fill="var(--soft)", stroke="var(--edge)",
-                   stroke_width="1")
-        else:
-            f.line(x0, y + 36, x0 + w, y + 36, cls="rule")
-        cls = "sm bold" if head else "sm"
-        f.text(x0 + cols[0], y + 23, a, cls=cls, anchor="start")
-        for j, cell in enumerate((b, c, d, e)):
-            colour = mark if (mark and j == 2) else None
-            f.text(x0 + cols[j + 1], y + 23, cell,
-                   cls="sm bold" if (head or colour) else "sm",
-                   anchor="middle", fill=colour)
-    f.text(BCX, BY1 - 26, "e^0.26 = 1.30 → urban risks 30% more often",
-           cls="sm dim")
-    f.text(BCX, BY1 - 8, "p = 0.069 → prior claim is not significant at 5%",
-           cls="sm dim")
+    rows = [("urban", 0.26, 0.08, GREEN), ("young driver", 0.41, 0.09, GREEN),
+            ("prior claim", 0.18, 0.10, AMBER)]
+    ax = vaxes(f, -0.2, 0.75, 0, 3.6, left=74, right=20, top=24, bottom=44)
+    ax.frame(xlabel="β̂", xticks=[0, 0.2, 0.4, 0.6], xfmt=lambda t: f"{t:g}",
+             yticks=[], arrows=False)
+    ax.vline(0, colour="var(--dim)")
+    for i, (name, beta, se, colour) in enumerate(rows):
+        y = 3 - i
+        ax.polyline([(beta - 2 * se, y), (beta + 2 * se, y)], colour=colour, width=2.4)
+        for end in (beta - 2 * se, beta + 2 * se):
+            f.line(ax.px(end), ax.py(y) - 6, ax.px(end), ax.py(y) + 6, cls="",
+                   stroke=colour, stroke_width="1.6")
+        ax.point(beta, y, colour=colour, r=5)
+        f.text(ax.x0 - 8, ax.py(y) + 4, name, cls="sm", anchor="end")
+        ax.label(beta, y, f"× {math.exp(beta):.2f}", cls="sm bold", dy=-12)
     return f
 
 
-@figure("Variable Selection", "A stepwise path through candidate models, scored by "
-        "AIC", width=WID)
+@figure("Variable Selection", "A forward stepwise path: AIC falls as territory, "
+        "vehicle age and driver age are added, then rises when prior claim is tried, so "
+        "the path stops at driver age", width=WID)
 def variable_selection() -> Fig:
     f = vcard()
 
-    steps = [("intercept only", 4172, False),
-             ("+ territory", 4131, False),
-             ("+ vehicle age", 4102, False),
-             ("+ driver age", 4085, True),
-             ("+ prior claim", 4089, False)]
-    for i, (name, aic_, best) in enumerate(steps):
-        y = BY0 + 28 + i * 58
-        colour = GREEN if best else ("var(--dim)" if i == 4 else BLUE)
-        f.box(BX0 + 14, y, 208, 44, label=name, colour=colour, label_cls="sm bold")
-        f.text(BX1 - 12, y + 28, f"{aic_:,}", cls="sm bold" if best else "sm",
-               anchor="end", fill=colour if best else None)
-        if i < 4:
-            f.arrow(BX0 + 118, y + 46, BX0 + 118, y + 56, colour="var(--dim)",
-                    width=1.2)
-    f.text(BX1 - 12, BY0 + 18, "AIC", cls="sm dim", anchor="end")
-    f.text(BCX, BY1 - 8, "stop where AIC turns back up", cls="sm dim")
+    steps = [("intercept", 4172), ("+ territory", 4131), ("+ vehicle age", 4102),
+             ("+ driver age", 4085), ("+ prior claim", 4089)]
+    ax = vaxes(f, 4078, 4180, -0.6, 4.6, left=92, right=20, top=24, bottom=44)
+    ax.frame(xlabel="AIC", xticks=[4100, 4150], xfmt=lambda v: f"{v:,.0f}", yticks=[],
+             arrows=False)
+    path = [(a, 4 - i) for i, (_, a) in enumerate(steps)]
+    ax.polyline(path[:4], colour=BLUE, width=2)
+    ax.polyline(path[3:], colour="var(--dim)", width=1.6, dash=True)
+    for i, (name, a) in enumerate(steps):
+        colour = GREEN if i == 3 else ("var(--dim)" if i == 4 else BLUE)
+        ax.point(a, 4 - i, colour=colour, r=6 if i == 3 else 4)
+        f.text(ax.x0 - 8, ax.py(4 - i) + 4, name, cls="sm", anchor="end")
+    ax.vline(4085, colour=GREEN, y_top=1)
     return f
 
 
-@figure("Cross-Validation", "Five folds, each held out in turn, and the error curve "
-        "that results", width=WID)
+@figure("Cross-Validation", "Five folds of the data, each held out once as the test "
+        "set while the other four train the model, with each fold's test error drawn "
+        "beside it and their average marked", width=WID)
 def cross_validation() -> Fig:
     f = vcard()
 
-    x0, w = BX0 + 34, 264
+    x0, cw, ch = BX0 + 26, 42, 30
+    errs = [412, 380, 455, 398, 430]
+    ex0 = x0 + 5 * cw + 14
+    scale = (BX1 - 6 - ex0) / 480
     for i in range(5):
-        y = BY0 + 28 + i * 30
+        y = BY0 + 40 + i * 56
         for j in range(5):
             held = j == i
-            f.rect(x0 + j * (w / 5) + 2, y, w / 5 - 4, 22, rx=4,
+            f.rect(x0 + j * cw + 2, y, cw - 4, ch, rx=4,
                    fill=ROSE if held else BLUE, fill_opacity="0.6" if held else "0.22",
                    stroke="none")
-        f.text(x0 - 8, y + 16, f"fit {i + 1}", cls="sm dim", anchor="end")
-    f.legend(BX0 + 34, BY0 + 190, [(ROSE, "held out"), (BLUE, "trained on")], gap=16)
-
-    ax = Axes(f, BX0 + 60, BY0 + 232, BX1 - 24, BY1 - 32, 0.6, 5.4, 280, 560)
-    ax.frame(xticks=[1, 2, 3, 4, 5], xfmt=lambda t: f"{t:.0f}", yticks=[])
-    ax.polyline([(1, 530), (2, 430), (3, 395), (4, 415), (5, 470)], colour=ROSE,
-                width=2.2)
-    ax.polyline([(1, 520), (2, 410), (3, 350), (4, 320), (5, 305)], colour=BLUE,
-                width=2, dash=True)
-    ax.point(3, 395, colour=ROSE, r=4)
-    ax.label(3, 395, "best", cls="sm bold", fill=ROSE, dy=-10)
-    ax.label(4.7, 320, "training", cls="sm", fill=BLUE, anchor="end", dy=-6)
+        f.text(x0 - 10, y + ch / 2 + 4, str(i + 1), cls="sm bold", anchor="end")
+        f.rect(ex0, y + 7, errs[i] * scale, ch - 14, rx=2, fill=ROSE,
+               fill_opacity="0.6")
+    f.text(x0 + cw / 2, BY0 + 40 + ch / 2 + 4, "test", cls="sm bold")
+    f.text(x0 + cw * 1.5, BY0 + 40 + ch / 2 + 4, "train", cls="sm")
+    mean = sum(errs) / len(errs)
+    xm = ex0 + mean * scale
+    f.line(xm, BY0 + 32, xm, BY0 + 40 + 4 * 56 + ch + 8, cls="thin dash",
+           stroke="var(--ink)", stroke_width="1.4")
+    f.text(xm, BY0 + 24, "CV", cls="sm bold")
     return f
 
 
-@figure("Bias-Variance Tradeoff", "Test error as a U-curve over model complexity, "
-        "with training error falling past it", width=WID)
+@figure("Bias-Variance Tradeoff", "Test error as a U-curve over model complexity: "
+        "squared bias falling, variance rising, and an irreducible floor beneath both",
+        width=WID)
 def bias_variance_tradeoff() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0.6, 9.4, 0, 62, left=46, top=52, bottom=52)
+    ax = vaxes(f, 0.6, 9.4, 0, 62, left=30, top=30, bottom=44)
     ax.frame(xlabel="model complexity", xticks=[], yticks=[], ylabel="error")
     bias2 = lambda c: 44 * math.exp(-0.55 * c)
     var = lambda c: 1.4 * math.exp(0.34 * c)
@@ -1570,43 +1572,36 @@ def bias_variance_tradeoff() -> Fig:
     ax.point(best / 10, bias2(best / 10) + var(best / 10) + 8, colour=ROSE, r=4.4)
     ax.label(best / 10, bias2(best / 10) + var(best / 10) + 8, "test error",
              cls="sm bold", fill=ROSE, dy=-12)
-    f.text(BX0 + 12, BY1 - 8, "underfit ← → overfit", cls="sm dim", anchor="start")
     return f
 
 
 # ── diagnostic plots ─────────────────────────────────────────────────────────
 
-@figure("Residual Plot", "A healthy residual band beside a funnel that fails the "
-        "constant-variance assumption", width=WID)
+@figure("Residual Plot", "Residuals against fitted values fanning out as the fitted "
+        "value grows, a funnel that fails the constant-variance assumption", width=WID)
 def residual_plot() -> Fig:
     f = vcard()
 
-    for i, (title, fan, colour) in enumerate((("healthy", False, GREEN),
-                                              ("variance grows", True, ROSE))):
-        py = BY0 + 34 + i * 152
-        ax = Axes(f, BX0 + 44, py, BX1 - 20, py + 108, 0, 10, -1.15, 1.15)
-        f.text(BX0 + 44, py - 8, title, cls="sm bold", fill=colour, anchor="start")
-        ax.frame(xticks=[], yticks=[0], yfmt=lambda v: "0", arrows=False)
-        u = _rng(61 + i * 29)
-        for k in range(26):
-            x = 0.4 + u() * 9.2
-            scale = (0.25 + 0.085 * x) if fan else 0.62
-            ax.point(x, max(-1.1, min(1.1, (u() - 0.5) * 2 * scale)), colour=colour,
-                     r=2.8)
-        if fan:
-            ax.curve(lambda x: 0.28 + 0.088 * x, colour=colour, width=1.3, dash=True)
-            ax.curve(lambda x: -(0.28 + 0.088 * x), colour=colour, width=1.3,
-                     dash=True)
-    f.text(BX0 + 12, BY1 - 8, "fitted values →", cls="sm dim", anchor="start")
+    ax = vaxes(f, 0, 10, -1.3, 1.3, left=30, top=30, bottom=44)
+    ax.frame(xticks=[], yticks=[0], yfmt=lambda v: "0", ylabel="residual",
+             arrows=False)
+    f.text(ax.x1, ax.y1 + 18, "fitted ŷ", cls="sm dim", anchor="end")
+    u = _rng(90)
+    for _ in range(34):
+        x = 0.4 + u() * 9.2
+        ax.point(x, max(-1.25, min(1.25, (u() - 0.5) * 2 * (0.22 + 0.09 * x))),
+                 colour=BLUE, r=3)
+    ax.curve(lambda x: 0.26 + 0.095 * x, colour=ROSE, width=1.4, dash=True)
+    ax.curve(lambda x: -(0.26 + 0.095 * x), colour=ROSE, width=1.4, dash=True)
     return f
 
 
-@figure("QQ Plot", "Sample quantiles against theoretical ones, straight for a good "
-        "fit and bending in a heavy tail", width=WID)
+@figure("QQ Plot", "Sample quantiles against theoretical ones, straight in the middle "
+        "and bending away from the line in both heavy tails", width=WID)
 def qq_plot() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -2.6, 2.6, -3.4, 3.4, left=44, top=44, bottom=52)
+    ax = vaxes(f, -2.6, 2.6, -3.4, 3.4, left=30, top=30, bottom=44)
     ax.frame(xlabel="theoretical quantile", xticks=[-2, 0, 2], yticks=[-2, 0, 2],
              ylabel="sample quantile")
     ax.curve(lambda x: x, colour="var(--dim)", width=1.6, dash=True)
@@ -1617,17 +1612,16 @@ def qq_plot() -> Fig:
         ax.point(q, y, colour=BLUE, r=3)
     ax.label(1.4, 3.1, "heavy right tail", cls="sm", fill=BLUE, anchor="end")
     ax.label(-1.55, -3.1, "heavy left tail", cls="sm", fill=BLUE, anchor="start")
-    f.text(BX0 + 12, BY1 - 8, "S-shape → tails fatter than assumed", cls="sm dim",
-           anchor="start")
     return f
 
 
-@figure("Marginal Model Plot", "Observed and fitted averages compared across the "
-        "range of one predictor", width=WID)
+@figure("Marginal Model Plot", "Observed average frequency by vehicle age rising and "
+        "falling, against the model's straight fitted line that misses both ends",
+        width=WID)
 def marginal_model_plot() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 10, 0, 60, left=46, top=48, bottom=52)
+    ax = vaxes(f, 0, 10, 0, 60, left=30, top=30, bottom=44)
     ax.frame(xlabel="vehicle age", xticks=[], yticks=[], ylabel="frequency")
     obs = [(0.8, 20), (2.0, 24), (3.2, 31), (4.4, 40), (5.6, 46), (6.8, 47),
            (8.0, 44), (9.2, 38)]
@@ -1638,103 +1632,96 @@ def marginal_model_plot() -> Fig:
     ax.label(3.0, 45, "observed", cls="sm", fill=BLUE, anchor="start")
     ax.label(6.0, 19 + 3.0 * 6.0, "fitted", cls="sm", fill=ROSE, anchor="start",
              dy=18)
-    f.text(BX0 + 12, BY1 - 8, "the gap at both ends: add a curved term",
-           cls="sm dim", anchor="start")
     return f
 
 
-@figure("Added Variable Plot", "The extra variable's slope, once both it and the "
-        "response are stripped of the other predictors", width=WID)
+@figure("Added Variable Plot", "Residuals of the response against residuals of the new "
+        "variable, both net of the other predictors, with the fitted slope β̂₄",
+        width=WID)
 def added_variable_plot() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -3.4, 3.4, -3.4, 3.4, left=48, top=48, bottom=54)
-    ax.frame(xlabel="x₄ | other predictors", xticks=[], yticks=[0],
-             yfmt=lambda v: "0", ylabel="y | other predictors")
+    ax = vaxes(f, -3.4, 3.4, -3.4, 3.4, left=30, top=30, bottom=44)
+    ax.frame(xticks=[], yticks=[0], yfmt=lambda v: "0", ylabel="y residual")
+    f.text(ax.x1, ax.y1 + 18, "x₄ residual", cls="sm dim", anchor="end")
     u = _rng(909)
     for _ in range(24):
         x = (u() - 0.5) * 6
         ax.point(x, max(-3.2, min(3.2, 0.62 * x + (u() - 0.5) * 2.4)), colour=BLUE,
                  r=3)
     ax.curve(lambda x: 0.62 * x, colour=ROSE, width=2.2)
-    ax.label(3.2, 0.62 * 3.2, "slope = β̂₄", cls="sm bold", fill=ROSE, dy=-12,
-             anchor="end")
-    f.text(BX0 + 12, BY1 - 8, "a flat cloud means the variable adds nothing",
-           cls="sm dim", anchor="start")
+    ax.label(3.2, 0.62 * 3.2, "β̂₄", cls="bold", dy=-12, anchor="end")
     return f
 
 
 # ── exploratory data analysis ────────────────────────────────────────────────
 
-@figure("Exploratory Data Analysis", "Four exploratory views of the same data set",
-        width=WID)
+@figure("Exploratory Data Analysis", "A scatter plot of two variables with each one's "
+        "histogram along its edge and one outlier standing apart", width=WID)
 def exploratory_data_analysis() -> Fig:
     f = vcard()
 
-    pw, ph = 138, 96
-    slots = [(BX0 + 14, BY0 + 34, "histogram"), (BX0 + 172, BY0 + 34, "box plot"),
-             (BX0 + 14, BY0 + 196, "scatter"), (BX0 + 172, BY0 + 196, "bar chart")]
-    for (px, py, name), colour in zip(slots, (BLUE, AMBER, GREEN, VIOLET)):
-        f.text(px + pw / 2, py - 8, name, cls="sm bold", fill=colour)
-        f.line(px, py + ph, px + pw, py + ph, cls="axis")
-        ax = Axes(f, px, py, px + pw, py + ph, 0, 10, 0, 1.12)
-        if name == "histogram":
-            hs = [0.22, 0.55, 0.95, 0.78, 0.5, 0.3, 0.16, 0.08]
-            ax.bars([(0.9 + i * 1.1, h) for i, h in enumerate(hs)], colour=colour,
-                    bw=13, opacity="0.65")
-        elif name == "box plot":
-            ymid = 0.5
-            f.rect(ax.px(2.6), ax.py(ymid + 0.26), ax.px(6.4) - ax.px(2.6),
-                   ax.py(ymid - 0.26) - ax.py(ymid + 0.26), rx=3, fill=colour,
-                   fill_opacity="0.2", stroke=colour, stroke_width="1.4")
-            f.line(ax.px(4.2), ax.py(ymid + 0.26), ax.px(4.2), ax.py(ymid - 0.26),
-                   cls="", stroke=colour, stroke_width="2")
-            f.line(ax.px(0.8), ax.py(ymid), ax.px(2.6), ax.py(ymid), cls="thin",
-                   stroke=colour, stroke_width="1.4")
-            f.line(ax.px(6.4), ax.py(ymid), ax.px(8.4), ax.py(ymid), cls="thin",
-                   stroke=colour, stroke_width="1.4")
-            f.circle(ax.px(9.4), ax.py(ymid), 3, fill=colour)
-        elif name == "scatter":
-            u = _rng(1234)
-            for _ in range(18):
-                x = u() * 9.6
-                ax.point(x, min(1.05, 0.14 + 0.075 * x + (u() - 0.5) * 0.34),
-                         colour=colour, r=2.6)
-        else:
-            ax.bars([(1.6, 0.9), (4.0, 0.62), (6.4, 0.34), (8.8, 0.12)],
-                    colour=colour, bw=22, opacity="0.65")
+    sx0, sx1, sy0, sy1 = BX0 + 14, BX1 - 66, BY0 + 64, BY1 - 14
+    ax = Axes(f, sx0, sy0, sx1, sy1, -3, 3, -3, 3)
+    f.line(sx0, sy1, sx1, sy1, cls="axis")
+    f.line(sx0, sy0, sx0, sy1, cls="axis")
+    pts = []
+    for z1, z2 in _normals(77, 60):
+        x = max(-2.8, min(2.8, z1))
+        pts.append((x, max(-2.8, min(2.8, 0.75 * x + 0.62 * z2))))
+    for x, y in pts:
+        ax.point(x, y, colour=BLUE, r=2.8)
+    ax.point(-2.2, 2.4, colour=ROSE, r=4.4)
+    ax.label(-2.2, 2.4, "outlier", cls="sm bold", dx=8, dy=4, anchor="start")
+
+    width = 0.5
+    for axis, (lo, hi) in ((0, (sy0 - 50, sy0 - 6)), (1, (sx1 + 6, sx1 + 50))):
+        counts = {}
+        for p in pts:
+            k = math.floor(p[axis] / width)
+            counts[k] = counts.get(k, 0) + 1
+        top = max(counts.values())
+        for k, c in counts.items():
+            a, b = k * width, (k + 1) * width
+            size = (hi - lo) * c / top
+            if axis == 0:
+                f.rect(ax.px(a) + 1, hi - size, ax.px(b) - ax.px(a) - 2, size, rx=1.5,
+                       fill=AMBER, fill_opacity="0.6")
+            else:
+                f.rect(lo, ax.py(b) + 1, size, ax.py(a) - ax.py(b) - 2, rx=1.5,
+                       fill=GREEN, fill_opacity="0.6")
     return f
 
 
-@figure("Histogram", "Binned counts of a right-skewed variable with its density "
-        "overlaid", width=WID)
+@figure("Histogram", "Binned claim sizes of a right-skewed variable with a fitted "
+        "density curve over the bars", width=WID)
 def histogram() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 20, 0, 0.115, left=46, top=48, bottom=50)
+    ax = vaxes(f, 0, 20, 0, 0.135, left=30, top=30, bottom=44)
     ax.frame(xlabel="claim size (000s)", xticks=[0, 5, 10, 15, 20], yticks=[],
              ylabel="density")
     dens = lambda x: _gammapdf(x, 1.9, 3.1)
     bars = [(1, 0.075), (3, 0.101), (5, 0.083), (7, 0.058), (9, 0.038),
             (11, 0.024), (13, 0.015), (15, 0.009), (17, 0.005), (19, 0.003)]
-    ax.bars(bars, colour=BLUE, bw=27, opacity="0.55")
+    ax.bars(bars, colour=BLUE, bw=ax.px(1.8) - ax.px(0), opacity="0.55")
     ax.curve(dens, colour=AMBER, width=2.4)
-    ax.label(11.6, 0.062, "fitted density", cls="sm", fill=AMBER, anchor="start")
+    ax.label(9.2, 0.062, "fitted density", cls="sm", anchor="start")
     brace(f, ax.px(14), ax.px(16), ax.py(0.017), depth=6, colour="var(--dim)",
           label="bin width w", below=False, label_cls="sm dim")
     return f
 
 
-@figure("Box Plot", "The five-number summary, the fences, and one outlier beyond "
-        "them", width=WID)
+@figure("Box Plot", "A box from Q₁ = 4 to Q₃ = 11 with the median at 7, whiskers to 2 "
+        "and 14, the upper fence at 21.5, and one outlier at 40 beyond it", width=WID)
 def box_plot() -> Fig:
     f = vcard()
 
     q1, med, q3, lo, hi, out = 4, 7, 11, 2, 14, 40
-    ax = vaxes(f, 0, 44, 0, 10, left=26, top=150, bottom=54)
+    ax = vaxes(f, 0, 44, 0, 10, left=20, top=30, bottom=44)
     ax.frame(xlabel="claim size (000s)", xticks=[0, 10, 20, 30, 40],
              xfmt=lambda t: f"{t:.0f}", yticks=[])
-    ycen, half = 6.4, 2.6
+    ycen, half = 5.6, 2.2
     f.rect(ax.px(q1), ax.py(ycen + half), ax.px(q3) - ax.px(q1),
            ax.py(ycen - half) - ax.py(ycen + half), rx=3, fill=BLUE,
            fill_opacity="0.18", stroke=BLUE, stroke_width="1.6")
@@ -1744,108 +1731,97 @@ def box_plot() -> Fig:
         f.line(ax.px(a), ax.py(ycen), ax.px(b), ax.py(ycen), cls="thin", stroke=BLUE,
                stroke_width="1.6")
     for x in (lo, hi):
-        f.line(ax.px(x), ax.py(ycen + 1.4), ax.px(x), ax.py(ycen - 1.4), cls="",
+        f.line(ax.px(x), ax.py(ycen + 1.2), ax.px(x), ax.py(ycen - 1.2), cls="",
                stroke=BLUE, stroke_width="1.6")
+    for v in (lo, q1, med, q3, hi):
+        ax.label(v, ycen - half, str(v), cls="sm bold", dy=16)
     ax.point(out, ycen, colour=ROSE, r=4.6)
-    ax.label(out, ycen, "outlier", cls="sm bold", fill=ROSE, dy=-14)
-    ax.vline(21.5, colour=ROSE, y_top=9.6, label="fence 21.5", label_cls="sm",
+    ax.label(out, ycen, "outlier", cls="sm bold", dy=-14)
+    ax.vline(21.5, colour=ROSE, y_top=9.4, label="fence", label_cls="sm",
              label_dy=-6)
     brace(f, ax.px(q1), ax.px(q3), ax.py(ycen + half) - 6, depth=7, colour=AMBER,
-          label="IQR = 7", below=False, label_cls="sm")
-
-    # The five numbers as a column, so three labels do not fight over 50 pixels.
-    rows = [("minimum", lo), ("Q₁", q1), ("median", med), ("Q₃", q3),
-            ("maximum (whisker)", hi)]
-    for i, (name, v) in enumerate(rows):
-        y = BY0 + 26 + i * 20
-        f.text(BX0 + 96, y, name, cls="sm dim", anchor="end")
-        f.text(BX0 + 108, y, str(v), cls="sm bold", anchor="start")
-    f.text(BX0 + 150, BY0 + 66, "the box holds the middle 50%", cls="sm dim",
-           anchor="start")
-    f.text(BX0 + 150, BY0 + 86, "of the claims", cls="sm dim", anchor="start")
+          label="IQR", below=False, label_cls="sm")
     return f
 
 
-@figure("Univariate Plot", "The same sample seen three ways: histogram, box plot, "
-        "empirical CDF", width=WID)
+@figure("Univariate Plot", "One sample seen three ways at once: a histogram, its "
+        "empirical CDF rising over the bars, and a box plot along the axis with one "
+        "outlier", width=WID)
 def univariate_plot() -> Fig:
     f = vcard()
 
-    px, pw = BX0 + 44, BX1 - BX0 - 64
     dens = lambda x: _gammapdf(x, 1.9, 3.1)
+    ax = vaxes(f, 0, 20, 0, 0.13, left=20, right=24, top=30, bottom=66)
+    f.line(ax.x0, ax.y1, ax.x1, ax.y1, cls="axis")
+    ax.bars([(1, 0.075), (3, 0.101), (5, 0.083), (7, 0.058), (9, 0.038),
+             (11, 0.024), (13, 0.015), (15, 0.009), (17, 0.005), (19, 0.003)],
+            colour=BLUE, bw=ax.px(1.8) - ax.px(0), opacity="0.5")
 
-    py = BY0 + 30
-    f.text(px, py - 8, "histogram — shape", cls="sm bold", fill=BLUE, anchor="start")
-    ax1 = Axes(f, px, py, px + pw, py + 74, 0, 20, 0, 0.115)
-    f.line(px, py + 74, px + pw, py + 74, cls="axis")
-    ax1.bars([(1, 0.075), (3, 0.101), (5, 0.083), (7, 0.058), (9, 0.038),
-              (11, 0.024), (13, 0.015), (15, 0.009), (17, 0.005), (19, 0.003)],
-             colour=BLUE, bw=23, opacity="0.55")
-
-    py = BY0 + 140
-    f.text(px, py - 8, "box plot — outliers", cls="sm bold", fill=AMBER,
-           anchor="start")
-    ax2 = Axes(f, px, py, px + pw, py + 46, 0, 20, 0, 1)
-    f.line(px, py + 46, px + pw, py + 46, cls="axis")
-    f.rect(ax2.px(3.4), ax2.py(0.86), ax2.px(8.4) - ax2.px(3.4),
-           ax2.py(0.24) - ax2.py(0.86), rx=3, fill=AMBER, fill_opacity="0.2",
-           stroke=AMBER, stroke_width="1.4")
-    f.line(ax2.px(5.4), ax2.py(0.86), ax2.px(5.4), ax2.py(0.24), cls="",
-           stroke=AMBER, stroke_width="2.2")
-    f.line(ax2.px(0.7), ax2.py(0.55), ax2.px(3.4), ax2.py(0.55), cls="thin",
-           stroke=AMBER, stroke_width="1.4")
-    f.line(ax2.px(8.4), ax2.py(0.55), ax2.px(14.5), ax2.py(0.55), cls="thin",
-           stroke=AMBER, stroke_width="1.4")
-    f.circle(ax2.px(17.6), ax2.py(0.55), 3.4, fill=ROSE)
-
-    py = BY0 + 232
-    f.text(px, py - 8, "empirical CDF — quantiles", cls="sm bold", fill=GREEN,
-           anchor="start")
-    ax3 = Axes(f, px, py, px + pw, py + 74, 0, 20, 0, 1.05)
-    ax3.frame(xticks=[0, 5, 10, 15, 20], yticks=[0, 1], yfmt=lambda v: f"{v:g}")
+    cdf_ax = Axes(f, ax.x0, ax.y0, ax.x1, ax.y1, 0, 20, 0, 1.05)
     cdf = 0.0
     pts = [(0.0, 0.0)]
     for x in range(1, 21):
         cdf += dens(x) * 1.0
         pts.append((x, min(1.0, cdf)))
-    ax3.polyline(pts, colour=GREEN, width=2.2)
+    cdf_ax.polyline(pts, colour=GREEN, width=2.4)
+    cdf_ax.label(19.5, pts[-1][1], "ECDF", cls="sm bold", anchor="end", dy=-10)
+
+    y0, y1 = ax.y1 + 14, ax.y1 + 38
+    ym = (y0 + y1) / 2
+    f.rect(ax.px(3.4), y0, ax.px(8.4) - ax.px(3.4), y1 - y0, rx=3, fill=AMBER,
+           fill_opacity="0.2", stroke=AMBER, stroke_width="1.4")
+    f.line(ax.px(5.4), y0, ax.px(5.4), y1, cls="", stroke=AMBER, stroke_width="2.2")
+    f.line(ax.px(0.7), ym, ax.px(3.4), ym, cls="thin", stroke=AMBER, stroke_width="1.4")
+    f.line(ax.px(8.4), ym, ax.px(14.5), ym, cls="thin", stroke=AMBER, stroke_width="1.4")
+    f.circle(ax.px(17.6), ym, 3.6, fill=ROSE)
     return f
 
 
-@figure("Scatter Plot", "A curved relationship that a correlation of zero would "
-        "hide", width=WID)
+@figure("Scatter Plot", "Pure premium against driver age falling then rising in a U, "
+        "with the best straight line through it nearly flat", width=WID)
 def scatter_plot() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 16, 84, 0, 100, left=48, top=48, bottom=52)
+    ax = vaxes(f, 16, 84, 0, 100, left=30, top=30, bottom=44)
     ax.frame(xlabel="driver age", xticks=[20, 40, 60, 80],
              xfmt=lambda t: f"{t:.0f}", yticks=[], ylabel="pure premium")
     u = _rng(3131)
     curve = lambda a: 20 + 0.038 * (a - 46) ** 2
+    pts = []
     for _ in range(30):
         a = 18 + u() * 64
-        ax.point(a, max(4, min(96, curve(a) + (u() - 0.5) * 26)), colour=BLUE, r=3)
-    ax.curve(curve, colour=ROSE, width=2.2, dash=True)
-    ax.label(50, 88, "r = −0.04", cls="sm bold", fill=ROSE)
-    f.text(BX0 + 12, BY1 - 8, "band the variable or add a squared term",
-           cls="sm dim", anchor="start")
+        pts.append((a, max(4, min(96, curve(a) + (u() - 0.5) * 26))))
+    abar = sum(a for a, _ in pts) / len(pts)
+    ybar = sum(y for _, y in pts) / len(pts)
+    slope = (sum((a - abar) * (y - ybar) for a, y in pts)
+             / sum((a - abar) ** 2 for a, _ in pts))
+    ax.curve(lambda a: ybar + slope * (a - abar), colour="var(--dim)", width=1.8,
+             dash=True, xa=18, xb=82)
+    ax.curve(curve, colour=ROSE, width=2.2, xa=18, xb=83)
+    for a, y in pts:
+        ax.point(a, y, colour=BLUE, r=3)
+    ax.label(82, ybar + slope * (82 - abar), "linear fit", cls="sm bold", anchor="end",
+             dy=18)
     return f
 
 
-@figure("Correlation", "Three scatter clouds at correlations of +0.9, 0 and −0.9",
+@figure("Correlation", "Three scatter clouds drawn as outlines on one set of axes: a "
+        "narrow one rising at +0.9, a narrow one falling at −0.9, and a round one at 0",
         width=WID)
 def correlation() -> Fig:
     f = vcard()
 
-    for i, (r, colour) in enumerate(((0.9, GREEN), (0.0, "var(--dim)"), (-0.9, ROSE))):
-        py = BY0 + 34 + i * 104
-        ax = Axes(f, BX0 + 54, py, BX1 - 26, py + 74, -3, 3, -3, 3)
-        f.line(BX0 + 54, py + 74, BX1 - 26, py + 74, cls="axis")
-        f.line(BX0 + 54, py, BX0 + 54, py + 74, cls="axis")
-        f.text(BX0 + 46, py + 40, f"ρ = {r:+.1f}".replace("+0.0", "0.0"), cls="sm bold",
-               anchor="end", fill=colour)
-        for x, z in _normals(41 + i * 17, 22):
-            y = r * x + math.sqrt(max(0.0, 1 - r * r)) * z
-            ax.point(max(-2.8, min(2.8, x * 1.3)), max(-2.8, min(2.8, y * 1.3)),
-                     colour=colour, r=2.6)
+    ax = vaxes(f, -3.3, 3.3, -3.3, 3.3, left=20, right=20, top=24, bottom=24)
+    f.line(ax.x0, ax.y1, ax.x1, ax.y1, cls="axis")
+    f.line(ax.x0, ax.y0, ax.x0, ax.y1, cls="axis")
+    cx, cy = ax.p(0, 0)
+    unit = ax.px(1) - ax.px(0)
+    for r, colour, tilt in ((0.0, "var(--dim)", 0), (0.9, GREEN, -45), (-0.9, ROSE, 45)):
+        f.ellipse(cx, cy, 2.1 * math.sqrt(1 + abs(r)) * unit,
+                  2.1 * math.sqrt(1 - abs(r)) * unit, fill=colour, fill_opacity="0.16",
+                  stroke=colour, stroke_width="1.8",
+                  transform=f"rotate({tilt} {cx:.1f} {cy:.1f})")
+    ax.label(2.35, 2.35, "+0.9", cls="sm bold", dx=6, anchor="start")
+    ax.label(-2.35, 2.35, "−0.9", cls="sm bold", dx=-6, anchor="end")
+    ax.label(0, -2.1, "0", cls="sm bold", dy=16)
     return f

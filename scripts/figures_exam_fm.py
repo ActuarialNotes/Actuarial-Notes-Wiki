@@ -1159,11 +1159,14 @@ def _book_values(j, n=BOND_N, F=BOND_F, r=BOND_R, C=BOND_C):
 
 
 def _bond_timeline(f, y, n=6, x0=56, x1=300, coupon_h=30, redemption_h=72,
-                   coupon_label="Fr", redemption_label="C"):
+                   coupon_label="Fr", redemption_label="C", zero_above=False):
     labels = ["0"] + [str(k) for k in range(1, n)] + ["n"]
     if n > 4:
         for k in range(3, n - 1):
             labels[k] = "…" if k == 3 else ""
+    if zero_above:                     # leave the space below 0 to a price drawn down
+        labels[0] = ""
+        f.text(x0, y - 9, "0", cls="sm dim")
     xs = timeline(f, y, x0, x1, n, labels=labels)
     for k in range(1, n + 1):
         cash_arrow(f, xs[k], y, coupon_h, colour=BLUE,
@@ -1172,20 +1175,19 @@ def _bond_timeline(f, y, n=6, x0=56, x1=300, coupon_h=30, redemption_h=72,
     return xs
 
 
-@figure("Bonds", "A bond's coupon stream and redemption payment on one timeline",
-        width=WID)
+@figure("Bonds", "A bond on one timeline: the price P paid down at time 0, a coupon Fr up "
+        "at every period, and the redemption C up at maturity", width=WID)
 def bonds() -> Fig:
     f = vcard()
 
-    y = 236
-    xs = _bond_timeline(f, y, 6)
-    cash_arrow(f, xs[0], y, 56, colour=AMBER, label="P", up=False)
-    f.text(BCX, 128, "coupons Fr, then C at maturity", cls="sm dim")
+    y = 250
+    xs = _bond_timeline(f, y, 6, coupon_h=44, redemption_h=160, zero_above=True)
+    cash_arrow(f, xs[0], y, 100, colour=AMBER, label="P", up=False, width=2.2)
     return f
 
 
-@figure("Bond Price", "Bond price against yield, showing premium, par and discount",
-        width=WID)
+@figure("Bond Price", "Bond price falling as the yield rises: above par at yields under "
+        "the coupon rate, at par where they meet, below par beyond", width=WID)
 def bond_price() -> Fig:
     f = vcard()
 
@@ -1194,7 +1196,7 @@ def bond_price() -> Fig:
     a.hline(BOND_C, colour="var(--dim)")
     a.vline(BOND_R, y_top=_bond_price(BOND_R), colour=GREEN)
     a.point(BOND_R, BOND_C, colour=GREEN)
-    a.label(BOND_R, BOND_C, "par:  j = r", cls="sm bold", dy=-12, dx=30)
+    a.label(BOND_R, BOND_C, "par", cls="sm bold", dy=-12, dx=16)
     a.area(lambda j: _bond_price(j), 0.012, BOND_R, colour=AMBER, opacity="0.14",
            base=BOND_C)
     a.label(0.028, 1250, "premium", cls="sm bold", fill=AMBER)
@@ -1227,12 +1229,12 @@ def book_value() -> Fig:
     return f
 
 
-@figure("Market Value", "Market value moving with the prevailing yield while book value "
-        "follows its own schedule", width=WID)
+@figure("Market Value", "The 1,000 par bond's market value swinging with the prevailing "
+        "yield while its book value holds a steady line, both ending at 1,000", width=WID)
 def market_value() -> Fig:
     f = vcard()
 
-    a = vaxes(f, 0, BOND_N, 850, 1200, left=58, top=44)
+    a = vaxes(f, 0, BOND_N, 850, 1120, left=58, top=24)
     book = _book_values(0.05)
     a.polyline(list(enumerate(book)), colour=VIOLET, width=2)
     market_yields = [0.05, 0.045, 0.038, 0.042, 0.055, 0.065, 0.058, 0.05, 0.046,
@@ -1243,7 +1245,8 @@ def market_value() -> Fig:
     a.polyline(list(enumerate(market)), colour=BLUE)
     a.frame(xlabel="coupons paid", xticks=[0, 5, 10],
             yticks=[900, 1000, 1100], yfmt=lambda t: f"{t:,.0f}")
-    f.legend(62, 92, [(VIOLET, "book value"), (BLUE, "market value")])
+    a.label(2, market[2], "market value", cls="sm bold", dy=-10, fill=BLUE)
+    a.label(8.2, BOND_C, "book value", cls="sm bold", dy=18, fill=VIOLET)
     return f
 
 
@@ -1262,7 +1265,7 @@ def amortization_of_premium() -> Fig:
     for k, b in enumerate(book):
         a.point(k, b, colour=AMBER, r=2.8)
     a.hline(BOND_C, colour="var(--dim)", label="C", anchor="end", label_dx=-6)
-    a.label(2.6, 1200, "premium P − C", cls="sm bold", anchor="start")
+    a.label(3.2, 1060, "premium", cls="sm bold", anchor="start")
     a.frame(xlabel="coupons paid", ylabel="book value", xticks=[0, 5, 10],
             yticks=[1000, 1100, 1200], yfmt=lambda t: f"{t:,.0f}")
     return f
@@ -1283,88 +1286,102 @@ def accumulation_of_discount() -> Fig:
     for k, b in enumerate(book):
         a.point(k, b, colour=BLUE, r=2.8)
     a.hline(BOND_C, colour="var(--dim)", label="C", anchor="end", label_dx=-6)
-    a.label(2.8, 890, "discount C − P", cls="sm bold", anchor="start")
+    a.label(2.2, 972, "discount", cls="sm bold", anchor="start")
     a.frame(xlabel="coupons paid", ylabel="book value", xticks=[0, 5, 10],
             yticks=[850, 950, 1050], yfmt=lambda t: f"{t:,.0f}")
     return f
 
 
-@figure("Face Value", "Face value as the base for coupons and, usually, the redemption",
-        width=WID)
+@figure("Face Value", "The face value of 1,000 drawn as a column of twenty 50 blocks, one of "
+        "them the coupon, beside a dashed price bar of 1,081 that differs from it", width=WID)
 def face_value() -> Fig:
     f = vcard()
 
-    f.box(66, 108, 228, 84, colour=GREEN)
-    f.text(180, 144, "F = 1,000", cls="ttl")
-    f.text(180, 168, "face (par) value", cls="sm dim")
-    f.arrow(180, 202, 180, 244, colour=BLUE, width=1.8)
-    f.text(192, 228, "× r", cls="sm bold", fill=BLUE, anchor="start")
-    f.box(66, 254, 228, 84, colour=BLUE)
-    f.text(180, 290, "coupon = 50", cls="ttl")
-    f.text(180, 314, "F × r each period", cls="sm dim")
-    f.text(BCX, 374, "price P is a third thing again", cls="sm dim")
+    y, s, bw = 350, 0.24, 64                          # s: pixels per unit of money
+    xf, xp = 120, 236
+    block = BOND_F * BOND_R * s                       # one coupon, F × r = 50
+    for k in range(int(round(1 / BOND_R))):
+        top = k == int(round(1 / BOND_R)) - 1
+        f.rect(xf - bw / 2, y - (k + 1) * block, bw, block, rx=1.5,
+               fill=BLUE if top else GREEN, fill_opacity="0.8" if top else "0.5",
+               stroke="var(--surf)", stroke_width="1")
+    price = _bond_price(0.04)
+    f.rect(xp - bw / 2, y - price * s, bw, price * s, rx=3, fill=AMBER,
+           fill_opacity="0.12", stroke=AMBER, stroke_width="1.4", stroke_dasharray="4 3")
+    f.line(xf - bw / 2 - 10, y, xp + bw / 2 + 10, y, cls="axis")
+    f.text(xf, y - BOND_F * s - 22, "1,000", cls="sm bold")
+    f.text(xf - bw / 2 - 8, y - BOND_F * s + block / 2 + 4, "50", cls="sm bold",
+           anchor="end", fill=BLUE)
+    f.text(xp, y - price * s - 8, f"{price:,.0f}", cls="sm bold")
+    f.text(xf, y + 18, "F", cls="bold")
+    f.text(xp, y + 18, "P", cls="bold")
     return f
 
 
-@figure("Redemption Value", "The redemption payment at maturity, at, above or below par",
+@figure("Redemption Value", "Coupons along a timeline and, at maturity, three possible "
+        "redemption payments around the dashed face-value level: above it, at it, below it",
         width=WID)
 def redemption_value() -> Fig:
     f = vcard()
 
-    y = 224
-    _bond_timeline(f, y, 6)
-    f.text(BCX, 102, "the coupons use F, the last payment uses C", cls="sm dim")
-    for k, (lab, colour) in enumerate((("C = F", GREEN), ("C > F", AMBER),
-                                       ("C < F", ROSE))):
-        x = 66 + k * 106
-        f.line(x, 296, x, 320, cls="", stroke=colour, stroke_width="2.8",
-               stroke_linecap="round")
-        f.text(x + 12, 312, lab, cls="bold", anchor="start")
-    f.text(BCX, 350, "for a callable bond, C depends on the call date", cls="sm dim")
+    y, n, hf = 330, 6, 170                           # hf: the height of F
+    xs = timeline(f, y, 56, 272, n, labels=["0", "1", "2", "…", "", "", "n"])
+    for k in range(1, n + 1):
+        cash_arrow(f, xs[k], y, 36, colour=BLUE, width=2)
+    f.text(xs[1], y - 44, "Fr", cls="sm bold")
+    f.line(xs[1] - 12, y - hf, xs[n] + 30, y - hf, cls="thin dash", stroke="var(--dim)",
+           stroke_width="1.2")
+    f.text(xs[1] - 16, y - hf + 4, "F", cls="bold", anchor="end")
+    for dx, ratio, colour, lab in ((-16, 0.8, ROSE, "C < F"), (0, 1.0, GREEN, "C = F"),
+                                   (16, 1.22, AMBER, "C > F")):
+        cash_arrow(f, xs[n] + dx, y, hf * ratio, colour=colour, label=lab,
+                   label_cls="sm bold", width=2.2)
     return f
 
 
-@figure("Coupon", "The level coupon stream a bond pays until maturity", width=WID)
+@figure("Coupon", "Eight equal coupons Fr rising from a timeline, spanned by a brace, with "
+        "the redemption at the end drawn only as a dashed outline", width=WID)
 def coupon() -> Fig:
     f = vcard()
 
-    y = 230
+    y, h = 318, 90
     xs = timeline(f, y, 56, 300, 8,
                   labels=["0", "1", "2", "3", "4", "5", "6", "7", "8"])
+    f.arrow(xs[8], y, xs[8], y - 2.5 * h, colour="var(--axis)", width=2, dash=True)
+    f.text(xs[8], y - 2.5 * h - 8, "C", cls="sm dim")
     for k in range(1, 9):
-        cash_arrow(f, xs[k], y, 40, colour=BLUE, label="Fr" if k in (1, 8) else None,
-                   up=True)
-    brace(f, xs[1], xs[8], y + 34, depth=9, label="n coupons", colour=BLUE)
-    f.text(BCX, 340, "the capital gain or loss is the other half of the return",
-           cls="sm dim")
+        cash_arrow(f, xs[k], y, h, colour=BLUE, width=2.2)
+    f.text(xs[1], y - h - 8, "Fr", cls="bold")
+    brace(f, xs[1], xs[8], y + 32, depth=9, label="n coupons", colour=BLUE,
+          label_cls="sm bold")
     return f
 
 
-@figure("Coupon Rate", "Coupon rate against yield rate, and the pricing it implies",
-        width=WID)
+@figure("Coupon Rate", "Three price bars against the dashed redemption level: above it when "
+        "the coupon rate exceeds the yield, level with it at par, below it when the yield is "
+        "higher", width=WID)
 def coupon_rate() -> Fig:
     f = vcard()
 
-    cases = [("r > j", "premium", "P > C", AMBER, 1.18),
-             ("r = j", "par", "P = C", GREEN, 1.0),
-             ("r < j", "discount", "P < C", BLUE, 0.84)]
-    base_y, height = 300, 128
-    for k, (rel, name, price, colour, ratio) in enumerate(cases):
-        cx = 82 + k * 98
+    cases = [("r > j", "premium", AMBER, 1.18),
+             ("r = j", "par", GREEN, 1.0),
+             ("r < j", "discount", BLUE, 0.84)]
+    base_y, height = 330, 190
+    f.line(40, base_y - height, 322, base_y - height, cls="thin dash",
+           stroke="var(--dim)", stroke_width="1.2")
+    f.text(34, base_y - height + 4, "C", cls="sm bold", anchor="end")
+    for k, (rel, name, colour, ratio) in enumerate(cases):
+        cx = 88 + k * 94
         h = height * ratio
-        f.rect(cx - 34, base_y - h, 68, h, rx=4, fill=colour, fill_opacity="0.35",
+        f.rect(cx - 32, base_y - h, 64, h, rx=4, fill=colour, fill_opacity="0.35",
                stroke=colour, stroke_width="1.3")
-        f.line(cx - 44, base_y - height, cx + 44, base_y - height, cls="thin dash",
-               stroke="var(--dim)", stroke_width="1.2")
-        f.text(cx, base_y - h / 2 + 4, price, cls="sm bold")
+        f.text(cx, base_y - h - 8, name, cls="sm bold")
         f.text(cx, base_y + 20, rel, cls="bold")
-        f.text(cx, base_y + 38, name, cls="sm dim")
-    f.text(46, base_y - height + 4, "C", cls="sm dim", anchor="end")
     return f
 
 
-@figure("Yield Rate", "The yield rate as the discount rate that reproduces the market "
-        "price", width=WID)
+@figure("Yield Rate", "The price–yield curve of the 1,000 par bond, read across from a "
+        "market price of 920 and down to the yield j that produces it", width=WID)
 def yield_rate() -> Fig:
     f = vcard()
 
@@ -1374,77 +1391,84 @@ def yield_rate() -> Fig:
     a.hline(target, colour=AMBER, x_to=jstar)
     a.vline(jstar, y_top=target, colour=AMBER)
     a.point(jstar, target, colour=AMBER)
-    a.label(jstar, target, "solve for j", cls="sm bold", dy=-14, dx=36)
-    a.label(0.015, 990, "market price", cls="sm dim", anchor="start")
-    a.frame(xlabel="yield j", ylabel="price", xticks=[0.02, 0.05, 0.08],
+    a.label(0.015, target, "market price", cls="sm bold", anchor="start", dy=-7,
+            fill=AMBER)
+    a.frame(xlabel="yield", ylabel="price", xticks=[0.02, 0.05, 0.08],
             xfmt=lambda t: f"{t * 100:.0f}%", yticks=[800, 1000, 1200],
             yfmt=lambda t: f"{t:,.0f}")
+    f.text(a.px(jstar), a.y1 + 16, "j", cls="sm bold")
     return f
 
 
-@figure("Term of Bond", "How the bond's term drives its price sensitivity", width=WID)
+@figure("Term of Bond", "Price against term for the 1,000 par bond at three yields: the "
+        "longer the term, the further the price strays from par", width=WID)
 def term_of_bond() -> Fig:
     f = vcard()
 
-    a = vaxes(f, 0, 30, 700, 1350, left=58, top=30)
-    for j, colour, lab in ((0.03, AMBER, "j = 3%"), (0.05, "var(--dim)", "j = 5%"),
-                           (0.07, BLUE, "j = 7%")):
+    a = vaxes(f, 0, 30, 650, 1450, left=58, top=30)
+    for j, colour, lab, dy in ((0.03, AMBER, "j = 3%", -8), (0.05, "var(--dim)", "j = 5%", -8),
+                               (0.07, BLUE, "j = 7%", 16)):
         a.curve(lambda n, jj=j: _bond_price(jj, n=max(n, 0.5)), colour=colour, xa=1,
                 xb=30)
-        a.label(30, _bond_price(j, n=30), lab, cls="sm bold", dx=-6, dy=-8, fill=colour,
+        a.label(30, _bond_price(j, n=30), lab, cls="sm bold", dx=-6, dy=dy, fill=colour,
                 anchor="end")
-    a.frame(xlabel="term n (coupon periods)", ylabel="price", xticks=[0, 10, 20, 30],
-            yticks=[800, 1000, 1200], yfmt=lambda t: f"{t:,.0f}")
+    a.frame(xlabel="term n", ylabel="price", xticks=[0, 10, 20, 30],
+            yticks=[800, 1000, 1200, 1400], yfmt=lambda t: f"{t:,.0f}")
     return f
 
 
-@figure("Callable Bond", "The issuer's call option and the worst-case pricing rule",
+@figure("Callable Bond", "Coupons to maturity with the redemption possible at any call date "
+        "from the earliest call on: dashed arrows at each call date, a solid one at maturity",
         width=WID)
 def callable_bond() -> Fig:
     f = vcard()
 
-    y = 218
-    xs = timeline(f, y, 56, 300, 8,
-                  labels=["0", "", "…", "", "call", "", "…", "", "n"])
+    y, h = 318, 200
+    xs = timeline(f, y, 56, 300, 8, labels=["0", "", "", "", "", "", "", "", "n"])
     for k in range(1, 9):
-        cash_arrow(f, xs[k], y, 26, colour=BLUE, up=True)
-    for k, colour, lab in ((4, AMBER, "earliest call"), (8, GREEN, "maturity")):
-        cash_arrow(f, xs[k], y, 62, colour=colour, up=True)
-        f.text(xs[k] - (0 if k == 4 else 10), y - 72, lab, cls="sm bold", fill=colour,
-               anchor="middle" if k == 4 else "end")
-    f.line(xs[4], y + 30, xs[8], y + 30, cls="thin dash", stroke=VIOLET,
-           stroke_width="1.3")
-    f.text(BCX, y + 50, "the issuer picks somewhere in here", cls="sm dim")
-    f.text(BCX, 348, "issuers call when rates fall", cls="sm dim")
+        cash_arrow(f, xs[k], y, 36, colour=BLUE, width=2)
+    for k in range(4, 8):                             # the issuer may call on any of these
+        f.arrow(xs[k], y, xs[k], y - h, colour=AMBER, width=1.8, dash=True)
+    cash_arrow(f, xs[8], y, h, colour=GREEN, width=2.2)
+    f.text(xs[4], y - h - 8, "earliest call", cls="sm bold", fill=AMBER)
+    f.text(xs[8], y - h - 8, "maturity", cls="sm bold", anchor="end", fill=GREEN)
+    brace(f, xs[4], xs[8], y + 30, depth=9, colour=AMBER, label="call dates",
+          label_cls="sm bold")
     return f
 
 
-@figure("Non-Callable Bond", "A bullet bond with certain cash flows to maturity",
-        width=WID)
+@figure("Non-Callable Bond", "A bullet bond's coupons and redemption on one timeline, "
+        "the whole schedule fixed from issue to maturity", width=WID)
 def non_callable_bond() -> Fig:
     f = vcard()
 
-    y = 230
-    _bond_timeline(f, y, 8, coupon_h=30, redemption_h=68)
-    f.text(BCX, 130, "the schedule cannot be cut short", cls="sm dim")
-    f.text(BCX, 340, "the baseline case for every bond formula", cls="sm dim")
+    y = 318
+    xs = _bond_timeline(f, y, 8, coupon_h=44, redemption_h=210)
+    brace(f, xs[0], xs[8], y + 32, depth=9, colour=GREEN, label="fixed term",
+          label_cls="sm bold")
     return f
 
 
-@figure("Call Price", "The call price replacing the redemption value at a call date",
+@figure("Call Price", "Coupons with a call date part-way along: the call price paid there "
+        "stands a little above the dashed face-value level, and the coupons after it fade",
         width=WID)
 def call_price() -> Fig:
     f = vcard()
 
-    y = 236
-    xs = timeline(f, y, 56, 300, 8, labels=["0", "", "", "n_c", "", "", "", "", "n"])
+    y, h, kc = 330, 190, 4
+    xs = timeline(f, y, 56, 300, 8, labels=["0", "", "", "", "", "", "", "", "n"])
     for k in range(1, 9):
-        cash_arrow(f, xs[k], y, 26, colour=BLUE, up=True)
-    cash_arrow(f, xs[3], y, 68, colour=AMBER, label="C_call", up=True)
-    cash_arrow(f, xs[8], y, 68, colour=GREEN, label="C", up=True)
-    f.line(xs[3], y - 88, xs[3], y - 12, cls="thin dash", stroke=AMBER,
+        f.raw(f'<g opacity="{1 if k <= kc else 0.35}">')
+        cash_arrow(f, xs[k], y, 36, colour=BLUE, width=2)
+        f.raw("</g>")
+    f.line(xs[1] - 12, y - h, xs[8] + 14, y - h, cls="thin dash", stroke="var(--dim)",
            stroke_width="1.2")
-    f.text(BCX, 132, "call price ≥ face value", cls="sm dim")
+    f.text(xs[1] - 16, y - h + 4, "F", cls="bold", anchor="end")
+    cash_arrow(f, xs[kc], y, 1.14 * h, colour=AMBER, label="call price",
+               label_cls="sm bold", width=2.4)
+    f.raw('<g opacity="0.35">')
+    cash_arrow(f, xs[8], y, h, colour=GREEN, width=2.2)
+    f.raw("</g>")
     return f
 
 
@@ -1469,24 +1493,28 @@ def call_premium() -> Fig:
     return f
 
 
-@figure("Reinvestment of Coupons", "Realised return depending on the rate coupons are "
-        "reinvested at", width=WID)
+@figure("Reinvestment of Coupons", "The 1,000 par bond's value at maturity against the rate "
+        "its coupons are reinvested at: short of the promised amount below the 5% yield, "
+        "ahead of it above", width=WID)
 def reinvestment_of_coupons() -> Fig:
     f = vcard()
 
     j = 0.05
     coupon_amt = BOND_F * BOND_R
+    av = lambda ri: coupon_amt * _acc(BOND_N, max(ri, 1e-4)) + BOND_C
     a = vaxes(f, 0.01, 0.09, 1480, 1800, left=62, top=30)
-    a.curve(lambda ri: coupon_amt * _acc(BOND_N, max(ri, 1e-4)) + BOND_C,
-            colour=BLUE, xa=0.012, xb=0.09)
-    target = coupon_amt * _acc(BOND_N, j) + BOND_C
+    target = av(j)
+    for lo, hi, colour in ((0.012, j, ROSE), (j, 0.09, GREEN)):
+        pts = [a.p(lo + (hi - lo) * t / 40, av(lo + (hi - lo) * t / 40)) for t in range(41)]
+        f.polygon(pts + [a.p(hi, target), a.p(lo, target)], fill=colour,
+                  fill_opacity="0.2", stroke="none")
+    a.curve(av, colour=BLUE, xa=0.012, xb=0.09)
     a.hline(target, colour="var(--dim)")
-    a.vline(j, y_top=target, colour=GREEN)
-    a.point(j, target, colour=GREEN)
-    a.label(j, target, "r_i = j", cls="sm bold", dy=-12, dx=26)
-    a.label(0.016, 1508, "short of the yield", cls="sm", anchor="start")
-    a.label(0.086, 1760, "ahead of it", cls="sm", anchor="end")
-    a.frame(xlabel="reinvestment rate r_i", ylabel="accumulated value",
+    a.vline(j, y_top=target, colour=VIOLET)
+    a.point(j, target, colour=VIOLET)
+    a.label(0.03, 1596, "short", cls="sm bold", fill=ROSE)
+    a.label(0.075, 1686, "ahead", cls="sm bold", fill=GREEN)
+    a.frame(xlabel="reinvestment rate", ylabel="accumulated value",
             xticks=[0.02, 0.05, 0.08], xfmt=lambda t: f"{t * 100:.0f}%",
             yticks=[1500, 1600, 1700], yfmt=lambda t: f"{t:,.0f}")
     return f
@@ -1507,28 +1535,28 @@ def _macaulay(j, flows=None):
     return sum(t * v for t, v in pv) / total, total
 
 
-@figure("Duration", "Duration as the balance point of the discounted cash flows",
-        width=WID)
+@figure("Duration", "The present values of the 1,000 par bond's cash flows standing as "
+        "weights on the time axis, which balances on a fulcrum at 8.11", width=WID)
 def duration() -> Fig:
     f = vcard()
 
     j = 0.05
     pv = [(t, c * (1 + j) ** -t) for t, c in _dur_cashflows()]
     dmac, _ = _macaulay(j)
-    a = vaxes(f, 0, BOND_N + 0.8, 0, 700, left=54, top=30, bottom=76)
+    a = vaxes(f, 0, BOND_N + 0.8, 0, 700, left=54, top=20, bottom=60)
     a.bars(pv, colour=BLUE, opacity="0.7")
-    a.frame(xlabel="time t", ylabel="PV of cash flow",
-            xticks=list(range(1, BOND_N + 1)), yticks=[0, 300, 600],
+    a.frame(ylabel="PV", xticks=[1, 5, 10], yticks=[0, 300, 600], arrows=False,
             yfmt=lambda t: f"{t:,.0f}")
+    # the time axis is a beam: the fulcrum under it sits where the weights balance
     px = a.px(dmac)
-    f.line(a.x0, a.y1 + 44, a.x1, a.y1 + 44, cls="", stroke=AMBER, stroke_width="1.8")
-    f.polygon([(px, a.y1 + 44), (px - 10, a.y1 + 60), (px + 10, a.y1 + 60)], fill=AMBER)
-    f.text(px, a.y0 + 14, f"D_Mac = {dmac:.2f}", cls="sm bold", fill=AMBER)
+    f.line(a.x0, a.y1, a.x1, a.y1, cls="", stroke=AMBER, stroke_width="2.4")
+    f.polygon([(px, a.y1 + 2), (px - 13, a.y1 + 24), (px + 13, a.y1 + 24)], fill=AMBER)
+    f.text(px, a.y1 + 40, f"{dmac:.2f}", cls="sm bold")
     return f
 
 
-@figure("Macaulay Duration", "Each cash flow's present value weighting its own time",
-        width=WID)
+@figure("Macaulay Duration", "Each cash flow's share of the bond's price as a bar at its "
+        "time, the weights' average time marked by a line at 8.11", width=WID)
 def macaulay_duration() -> Fig:
     f = vcard()
 
@@ -1537,7 +1565,7 @@ def macaulay_duration() -> Fig:
     dmac, price = _macaulay(j)
     a = vaxes(f, 0, BOND_N + 0.8, 0, 0.72, left=54, top=30)
     a.bars([(t, v / price) for t, v in pv], colour=VIOLET, opacity="0.7")
-    a.frame(xlabel="time t", ylabel="weight PV(C_t)/P",
+    a.frame(xlabel="time t", ylabel="weight",
             xticks=list(range(1, BOND_N + 1)), yticks=[0, 0.25, 0.5],
             yfmt=lambda t: f"{t:g}")
     a.vline(dmac, colour=AMBER)
@@ -1566,8 +1594,9 @@ def modified_duration() -> Fig:
     return f
 
 
-@figure("1st-Order Linear Approximation", "The duration estimate against the true price "
-        "change", width=WID)
+@figure("1st-Order Linear Approximation", "The price–yield curve with its tangent at 5%: "
+        "at yields either side the tangent's estimate falls short of the true price by the "
+        "red gaps", width=WID)
 def first_order_approximation() -> Fig:
     f = vcard()
 
@@ -1575,28 +1604,29 @@ def first_order_approximation() -> Fig:
     p0 = _bond_price(j0)
     dmac, _ = _macaulay(j0)
     dmod = dmac / (1 + j0)
-    a = vaxes(f, 0.02, 0.08, 800, 1250, left=58, top=44)
+    tangent = lambda jj: p0 - dmod * p0 * (jj - j0)
+    a = vaxes(f, 0.02, 0.08, 740, 1300, left=58, top=24)
     a.curve(lambda j: _bond_price(j), colour=BLUE, xa=0.02, xb=0.08)
-    a.polyline([(0.02, p0 + dmod * p0 * (j0 - 0.02)),
-                (0.08, p0 - dmod * p0 * (0.08 - j0))], colour=AMBER, width=1.6)
+    a.polyline([(0.02, tangent(0.02)), (0.08, tangent(0.08))], colour=AMBER, width=1.6)
     a.point(j0, p0, colour="var(--dim)", r=3.2)
     for jj in (0.03, 0.07):
         true = _bond_price(jj)
-        approx = p0 - dmod * p0 * (jj - j0)
-        f.line(a.px(jj), a.py(true), a.px(jj), a.py(approx), cls="", stroke=ROSE,
+        f.line(a.px(jj), a.py(true), a.px(jj), a.py(tangent(jj)), cls="", stroke=ROSE,
                stroke_width="2.6")
         a.point(jj, true, colour=BLUE, r=3)
-        a.point(jj, approx, colour=AMBER, r=3)
-    a.label(0.036, 1195, "understates the gain", cls="sm", anchor="start")
-    a.label(0.074, 880, "overstates the loss", cls="sm", anchor="end")
+        a.point(jj, tangent(jj), colour=AMBER, r=3)
+    a.label(0.0205, _bond_price(0.0205), "true price", cls="sm bold", anchor="start",
+            dx=8, dy=-2, fill=BLUE)
+    a.label(0.0785, tangent(0.0785), "duration estimate", cls="sm bold", anchor="end",
+            dy=16, fill=AMBER)
     a.frame(xlabel="yield j", xticks=[0.03, 0.05, 0.07],
             xfmt=lambda t: f"{t * 100:.0f}%", yticks=[900, 1100],
             yfmt=lambda t: f"{t:,.0f}")
-    f.legend(62, 92, [(BLUE, "true price"), (AMBER, "duration estimate")])
     return f
 
 
-@figure("Convexity", "Convexity as the curvature the duration line misses", width=WID)
+@figure("Convexity", "A long bond's curved price–yield line against its straight duration "
+        "tangent, the shaded gap between them the convexity the tangent misses", width=WID)
 def convexity() -> Fig:
     f = vcard()
 
@@ -1606,7 +1636,7 @@ def convexity() -> Fig:
     dmac, _ = _macaulay(j0, flows=_dur_cashflows(n=n_long))
     dmod = dmac / (1 + j0)
     lo, hi = 0.015, 0.09
-    a = vaxes(f, lo, hi, 500, 1750, left=58, top=44)
+    a = vaxes(f, lo, hi, 500, 1750, left=58, top=24)
     curve_pts = [a.p(lo + (hi - lo) * k / 60, price(lo + (hi - lo) * k / 60))
                  for k in range(61)]
     tangent_pts = [a.p(lo + (hi - lo) * k / 60,
@@ -1617,38 +1647,41 @@ def convexity() -> Fig:
     a.polyline([(lo, p0 + dmod * p0 * (j0 - lo)),
                 (hi, max(500, p0 - dmod * p0 * (hi - j0)))], colour=AMBER, width=1.6)
     a.point(j0, p0, colour="var(--dim)", r=3.2)
-    a.label(0.042, 1420, "the gap is convexity", cls="sm bold", anchor="start")
+    a.label(0.021, 1470, "convexity", cls="sm bold", anchor="start", fill=GREEN)
+    a.label(0.052, price(0.052), "price", cls="sm bold", anchor="start", dx=8, dy=-8,
+            fill=BLUE)
+    a.label(0.074, p0 - dmod * p0 * (0.074 - j0), "tangent", cls="sm bold",
+            anchor="end", dx=-4, dy=14, fill=AMBER)
     a.frame(xlabel="yield j", xticks=[0.02, 0.05, 0.08],
             xfmt=lambda t: f"{t * 100:.0f}%", yticks=[700, 1100, 1500],
             yfmt=lambda t: f"{t:,.0f}")
-    f.legend(62, 92, [(BLUE, "true price"), (AMBER, "duration only")])
     return f
 
 
-@figure("Portfolio", "Portfolio duration as the value-weighted average of its holdings",
+@figure("Portfolio", "Three holdings of 300k, 500k and 200k standing at their durations of "
+        "2.1, 6.4 and 14.2 on a beam, which balances on a fulcrum at the portfolio's 6.67",
         width=WID)
 def portfolio() -> Fig:
     f = vcard()
 
-    holdings = [("Short", 300_000, 2.1, BLUE), ("Medium", 500_000, 6.4, VIOLET),
-                ("Long", 200_000, 14.2, ROSE)]
-    total_v = sum(v for _, v, _, _ in holdings)
-    port_d = sum(v * d for _, v, d, _ in holdings) / total_v
+    holdings = [(300_000, 2.1, BLUE), (500_000, 6.4, VIOLET), (200_000, 14.2, ROSE)]
+    total_v = sum(v for v, _, _ in holdings)
+    port_d = sum(v * d for v, d, _ in holdings) / total_v
 
-    x0, bar_w = 92, 168
-    for k, (lab, val, dur, colour) in enumerate(holdings):
-        y = 122 + k * 62
-        f.text(x0 - 8, y + 20, lab, cls="sm bold", anchor="end")
-        w = bar_w * val / 500_000
-        f.rect(x0, y, w, 30, rx=4, fill=colour, fill_opacity="0.4", stroke=colour,
-               stroke_width="1.2")
-        f.text(x0 + w / 2, y + 21, f"{val / 1000:,.0f}k", cls="sm bold")
-        f.text(x0 + bar_w + 12, y + 21, f"D = {dur:.1f}", cls="sm", anchor="start")
-    f.line(40, 316, 320, 316, cls="rule")
-    f.text(x0 - 8, 344, "Portfolio", cls="sm bold", anchor="end")
-    f.text(x0 + bar_w / 2, 344, f"{total_v / 1000:,.0f}k", cls="sm bold")
-    f.text(x0 + bar_w + 12, 344, f"D = {port_d:.2f}", cls="sm bold", anchor="start",
-           fill=GREEN)
+    y, x0, s, bw = 290, 44, 18.0, 34                  # s: pixels per year of duration
+    for val, dur, colour in holdings:
+        h = 180 * val / 500_000
+        f.rect(x0 + s * dur - bw / 2, y - h, bw, h, rx=3, fill=colour, fill_opacity="0.4",
+               stroke=colour, stroke_width="1.3")
+        f.text(x0 + s * dur, y - h - 8, f"{val / 1000:,.0f}k", cls="sm bold")
+    f.line(x0, y, x0 + s * 15.5, y, cls="", stroke=AMBER, stroke_width="2.4")
+    for t in (0, 5, 10, 15):
+        f.line(x0 + s * t, y, x0 + s * t, y + 4, cls="tick")
+        f.text(x0 + s * t, y + 18, str(t), cls="sm dim")
+    px = x0 + s * port_d
+    f.polygon([(px, y + 2), (px - 13, y + 24), (px + 13, y + 24)], fill=AMBER)
+    f.text(px, y + 40, f"{port_d:.2f}", cls="sm bold")
+    f.text(x0 + s * 15.5, y + 40, "duration", cls="sm dim", anchor="end")
     return f
 
 
@@ -1668,19 +1701,26 @@ def spot_rate() -> Fig:
     return f
 
 
-@figure("Forward Rate", "The forward rate implied by two spot rates", width=WID)
+@figure("Forward Rate", "One unit grown to year 3 two ways — at the 3-year spot rate all "
+        "the way, or at the 2-year spot rate and then the forward rate for year 3 — both "
+        "arriving at the same value", width=WID)
 def forward_rate() -> Fig:
     f = vcard()
 
-    y = 250
-    xs = timeline(f, y, 66, 296, 4, labels=["0", "1", "2", "3", "4"])
-    f.arrow(xs[0] + 6, y - 40, xs[2] - 6, y - 40, colour=BLUE, width=1.5)
-    f.text((xs[0] + xs[2]) / 2, y - 48, "s₂ for 2 years", cls="sm", fill=BLUE)
-    f.arrow(xs[0] + 6, y - 76, xs[3] - 6, y - 76, colour=VIOLET, width=1.5)
-    f.text((xs[0] + xs[3]) / 2, y - 84, "s₃ for 3 years", cls="sm", fill=VIOLET)
-    f.arrow(xs[2] + 6, y + 40, xs[3] - 6, y + 40, colour=AMBER, width=1.7)
-    f.text((xs[2] + xs[3]) / 2, y + 60, "f₂,₃", cls="bold", fill=AMBER)
-    f.text(BCX, 340, "implied, not quoted", cls="sm dim")
+    s2, s3 = 0.035, 0.039                             # the spot curve's 2- and 3-year rates
+    fwd = (1 + s3) ** 3 / (1 + s2) ** 2 - 1
+    a = vaxes(f, 0, 3.3, 0.99, 1.135, left=44, top=24)
+    a.curve(lambda t: (1 + s3) ** t, colour=VIOLET, xa=0, xb=3)
+    a.curve(lambda t: (1 + s2) ** t, colour=BLUE, xa=0, xb=2)
+    a.curve(lambda t: (1 + s2) ** 2 * (1 + fwd) ** (t - 2), colour=AMBER, xa=2, xb=3,
+            width=2.6)
+    a.point(2, (1 + s2) ** 2, colour=BLUE, r=3.4)
+    a.point(3, (1 + s3) ** 3, colour=VIOLET, r=4.5)
+    a.label(1.5, (1 + s3) ** 1.5, "s₃", cls="bold", dx=-8, dy=-8, fill=VIOLET)
+    a.label(1.2, (1 + s2) ** 1.2, "s₂", cls="bold", dx=8, dy=16, fill=BLUE)
+    a.label(2.5, (1 + s2) ** 2 * (1 + fwd) ** 0.5, "f₂,₃", cls="bold", dx=10, dy=14,
+            fill=AMBER)
+    a.frame(xlabel="year", xticks=[0, 1, 2, 3], yticks=[1], yfmt=lambda t: "1")
     return f
 
 
@@ -1708,24 +1748,29 @@ def yield_curve() -> Fig:
     return f
 
 
-@figure("Duration Matching", "Assets and liabilities matched in value and duration",
-        width=WID)
+@figure("Duration Matching", "Two asset payments above a timeline and one liability below "
+        "it, equal in value, with the assets' balance point and the liability's falling on "
+        "the same dashed line", width=WID)
 def duration_matching() -> Fig:
     f = vcard()
 
-    y = 216
+    y, u = 220, 120                                    # u: the height of the total value
     xs = timeline(f, y, 56, 300, 8, labels=["0", "", "", "", "", "", "", "", ""])
-    for k, h in ((2, 44), (7, 58)):
-        cash_arrow(f, xs[k], y, h, colour=BLUE, label="asset", up=True)
-    cash_arrow(f, xs[5], y, 58, colour=ROSE, label="liability", up=False)
-    dbar = (xs[0] + xs[8]) / 2
-    f.line(xs[0], y + 100, xs[8], y + 100, cls="", stroke=AMBER, stroke_width="1.8")
-    f.polygon([(dbar, y + 100), (dbar - 10, y + 116), (dbar + 10, y + 116)], fill=AMBER)
-    f.text(dbar, y + 140, "both streams balance at the same point", cls="sm dim")
+    # 2 and 7 weighted 2 : 3 balance at 5, where the liability falls
+    for k, w in ((2, 0.4), (7, 0.6)):
+        cash_arrow(f, xs[k], y, u * w, colour=BLUE, width=2.4)
+    f.text(xs[7], y - u * 0.6 - 8, "assets", cls="sm bold")
+    cash_arrow(f, xs[5], y, u, colour=ROSE, up=False, width=2.4)
+    f.text(xs[5], y + u + 18, "liability", cls="sm bold")
+    f.line(xs[5], y - u + 6, xs[5], y - 6, cls="thin dash", stroke=VIOLET,
+           stroke_width="1.6")
+    f.polygon([(xs[5], y - 2), (xs[5] - 8, y - 14), (xs[5] + 8, y - 14)], fill=VIOLET)
+    f.text(xs[5], y - u - 2, "D", cls="bold", fill=VIOLET)
     return f
 
 
-@figure("Immunization", "The surplus curve under each immunization strategy", width=WID)
+@figure("Immunization", "Surplus against a shift in yield: the immunized curve bottoms out "
+        "at zero and rises either way, the unmatched one falls below zero", width=WID)
 def immunization() -> Fig:
     f = vcard()
 
@@ -1733,47 +1778,53 @@ def immunization() -> Fig:
     a.curve(lambda d: 25000 * d * d, colour=GREEN)
     a.curve(lambda d: -450 * d - 3000 * d * d, colour=ROSE, dash=True)
     a.hline(0, colour="var(--dim)", dash=False)
-    a.frame(ylabel="surplus S = V_A − V_L", xticks=[-0.02, 0.02],
+    a.frame(ylabel="surplus", xticks=[-0.02, 0.02],
             xfmt=lambda t: f"{t * 100:+.0f}%", yticks=[-15, 0, 15],
             yfmt=lambda t: f"{t:g}")
-    f.text(a.x1, a.y1 + 30, "shift in yield Δj", cls="sm dim", anchor="end")
+    f.text(a.x1, a.y1 + 30, "Δj", cls="sm dim", anchor="end")
     a.label(0.020, 25, "immunized", cls="sm bold", anchor="end", fill=GREEN)
-    a.label(0.024, -14, "not", cls="sm bold", anchor="end", fill=ROSE)
+    a.label(0.027, -14, "not immunized", cls="sm bold", anchor="end", fill=ROSE)
     return f
 
 
-@figure("Redington Immunization", "The three Redington conditions and the surplus they "
-        "produce", width=WID)
+@figure("Redington Immunization", "Surplus against a shift in yield: a local minimum of "
+        "zero at the current yield, positive for small shifts either way, negative again for "
+        "large ones", width=WID)
 def redington_immunization() -> Fig:
     f = vcard()
 
-    a = vaxes(f, -0.025, 0.025, -4, 24, left=58, top=30)
-    a.area(lambda d: 32000 * d * d, -0.025, 0.025, colour=GREEN, opacity="0.16")
-    a.curve(lambda d: 32000 * d * d, colour=GREEN)
+    s_fn = lambda d: 30000 * d * d - 30e6 * d ** 4
+    edge = 0.001 ** 0.5                                # where the surplus turns negative
+    a = vaxes(f, -0.04, 0.04, -30, 12, left=48, top=24)
+    a.area(s_fn, -edge, edge, colour=GREEN, opacity="0.22", base=0)
+    for lo, hi in ((-0.04, -edge), (edge, 0.04)):
+        pts = [a.p(lo + (hi - lo) * k / 30, s_fn(lo + (hi - lo) * k / 30))
+               for k in range(31)]
+        f.polygon(pts + [a.p(hi, 0), a.p(lo, 0)], fill=ROSE, fill_opacity="0.2",
+                  stroke="none")
+    a.curve(s_fn, colour=GREEN)
     a.hline(0, colour="var(--dim)", dash=False)
     a.point(0, 0, colour=AMBER, r=4)
-    a.label(0, 0, "S = 0 at the current yield", cls="sm", dy=30)
-    a.frame(ylabel="surplus S", xticks=[-0.02, 0.02],
-            xfmt=lambda t: f"{t * 100:+.0f}%", yticks=[0, 10, 20],
-            yfmt=lambda t: f"{t:g}")
+    a.label(0, 0, "local minimum", cls="sm bold", dy=18)
+    a.frame(ylabel="surplus", xticks=[-0.02, 0.02], xfmt=lambda t: f"{t * 100:+.0f}%",
+            yticks=[-20, 0, 10], yfmt=lambda t: f"{t:g}")
     f.text(a.x1, a.y1 + 30, "Δj", cls="sm dim", anchor="end")
     return f
 
 
-@figure("Full Immunization", "Asset cash flows surrounding each liability payment",
-        width=WID)
+@figure("Full Immunization", "A liability below the timeline with an asset payment on each "
+        "side of it above, the pair shielding it", width=WID)
 def full_immunization() -> Fig:
     f = vcard()
 
-    y = 232
+    y, h = 230, 110
     xs = timeline(f, y, 56, 300, 8, labels=["0", "", "", "", "", "", "", "", ""])
-    cash_arrow(f, xs[2], y, 50, colour=BLUE, label="asset", up=True)
-    cash_arrow(f, xs[7], y, 50, colour=BLUE, label="asset", up=True)
-    cash_arrow(f, xs[5], y, 54, colour=ROSE, label="liability", up=False)
-    f.line(xs[2], y - 62, xs[7], y - 62, cls="thin dash", stroke=GREEN,
-           stroke_width="1.4")
-    f.text(BCX, y - 72, "the liability is surrounded", cls="sm bold", fill=GREEN)
-    f.text(BCX, 352, "protects against any single shift", cls="sm dim")
+    for k in (2, 7):
+        cash_arrow(f, xs[k], y, h, colour=BLUE, label="asset", label_cls="sm bold",
+                   width=2.4)
+    cash_arrow(f, xs[5], y, h, colour=ROSE, label="liability", label_cls="sm bold",
+               up=False, width=2.4)
+    shield(f, xs[5], y - 62, 64, GREEN)
     return f
 
 
@@ -1796,18 +1847,23 @@ def asset_liability_portfolio() -> Fig:
     return f
 
 
-@figure("Annuity Immediate", "An annuity-immediate paying at the end of each period, "
-        "valued at both ends", width=WID)
+@figure("Annuity Immediate", "Five periods shaded along a timeline, each ending in a "
+        "payment of 1 at its right edge, with a₍ₙ₎ marked one period before the first "
+        "payment and s₍ₙ₎ at the last", width=WID)
 def annuity_immediate() -> Fig:
     f = vcard()
 
-    y = 250
-    xs = timeline(f, y, 66, 300, 5, labels=["0", "1", "2", "3", "4", "5"])
-    for j in range(1, 6):
-        cash_arrow(f, xs[j], y, 42, colour=BLUE, label="1", up=True)
-    f.line(xs[0], y - 88, xs[0], y - 8, cls="thin dash", stroke=AMBER, stroke_width="1.3")
-    f.text(xs[0], y - 96, "a₍ₙ₎ here", cls="sm bold", fill=AMBER)
-    f.line(xs[5], y - 88, xs[5], y - 8, cls="thin dash", stroke=GREEN, stroke_width="1.3")
-    f.text(xs[5], y - 96, "s₍ₙ₎ here", cls="sm bold", fill=GREEN)
-    f.text(BCX, 342, "at i = 6%, n = 5:  a₍₅₎ = 4.2124,  s₍₅₎ = 5.6371", cls="sm dim")
+    y, n, h = 330, 5, 150
+    xs = timeline(f, y, 66, 300, n, labels=["0", "1", "2", "3", "4", "5"])
+    for k in range(1, n + 1):                         # the period, paid for at its end
+        f.rect(xs[k - 1] + 3, y - h, xs[k] - xs[k - 1] - 6, h - 2, rx=4, fill=BLUE,
+               fill_opacity="0.1" if k % 2 else "0.18")
+        cash_arrow(f, xs[k], y, h, colour=BLUE, width=2.2)
+    f.text(xs[1], y - h - 8, "1", cls="bold")
+    f.line(xs[0], y - h - 44, xs[0], y - 6, cls="thin dash", stroke=AMBER,
+           stroke_width="1.6")
+    f.text(xs[0], y - h - 52, "a₍ₙ₎", cls="bold", fill=AMBER)
+    f.line(xs[n], y - h - 44, xs[n], y - h - 16, cls="thin dash", stroke=GREEN,
+           stroke_width="1.6")
+    f.text(xs[n], y - h - 52, "s₍ₙ₎", cls="bold", fill=GREEN)
     return f

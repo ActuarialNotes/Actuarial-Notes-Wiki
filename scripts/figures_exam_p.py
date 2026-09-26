@@ -1496,239 +1496,248 @@ def moments_for_joint() -> Fig:
     return f
 
 
-@figure("Covariance", "Covariance as the signed contribution of each quadrant around the "
-        "means", width=WID)
+@figure("Covariance", "A rising scatter cloud centred on the two means, the quadrants "
+        "where the deviations share a sign marked plus and the other two minus", width=WID)
 def covariance() -> Fig:
     f = vcard()
 
-    px0, py0, side = 84, 100, 220
+    px0, py0, side = 70, 90, 256
     f.rect(px0, py0, side, side, rx=4, fill="var(--soft)", stroke="var(--edge)",
            stroke_width="1")
     mx, my = px0 + side / 2, py0 + side / 2
     for qx, qy, sign, colour in ((0, 0, "−", ROSE), (1, 0, "+", GREEN),
                                  (0, 1, "+", GREEN), (1, 1, "−", ROSE)):
         rx_, ry_ = px0 + qx * side / 2, py0 + qy * side / 2
-        f.rect(rx_, ry_, side / 2, side / 2, fill=colour, fill_opacity="0.10")
-        f.text(rx_ + side / 4, ry_ + side / 4 + 5, sign, cls="bold", fill=colour)
+        f.rect(rx_, ry_, side / 2, side / 2, fill=colour, fill_opacity="0.12")
+        f.text(rx_ + side / 4, ry_ + side / 4 + 5, sign, cls="bold")
     f.line(mx, py0, mx, py0 + side, cls="thin", stroke="var(--dim)", stroke_width="1.2")
     f.line(px0, my, px0 + side, my, cls="thin", stroke="var(--dim)", stroke_width="1.2")
-    for z1, z2 in _std_normals(7, 52):
+    for z1, z2 in _std_normals(7, 60):
         x = mx + z1 * side / 6.4
         y = my - (0.72 * z1 + 0.7 * z2) * side / 6.4
         if px0 + 3 < x < px0 + side - 3 and py0 + 3 < y < py0 + side - 3:
-            f.circle(x, y, 2.8, fill=BLUE, fill_opacity="0.75")
-    f.text(mx, py0 + side + 20, "μₓ", cls="sm dim")
+            f.circle(x, y, 3, fill=BLUE, fill_opacity="0.8")
+    f.text(mx, py0 + side + 18, "μₓ", cls="sm dim")
     f.text(px0 - 8, my + 4, "μ_Y", cls="sm dim", anchor="end")
-    f.text(BCX, 366, "Cov > 0: the + quadrants win", cls="sm dim")
     return f
 
 
-@figure("Correlation Coefficient", "The same scatter cloud at six correlations, from a "
-        "falling line through a shapeless blob to a rising line", width=WID)
+@figure("Correlation Coefficient", "A scatter cloud with correlation 0.8 packed along "
+        "the diagonal, drawn inside the ellipse that bounds it", width=WID)
 def correlation_coefficient() -> Fig:
     f = vcard()
 
-    # One cloud, drawn six times: only ρ changes, so the panels read as the same
-    # points tilting rather than six unrelated pictures.
-    cloud = _std_normals(23, 64)
-    pw = 92
-    for i, rho in enumerate((-1, -0.8, -0.4, 0, 0.6, 1)):
-        px = 28 + (i % 3) * 106
-        py = 100 + (i // 3) * 130
-        f.rect(px, py, pw, pw, rx=4, fill="var(--soft)", stroke="var(--edge)",
-               stroke_width="1")
-        scale, spread = pw / 6.6, math.sqrt(1 - rho * rho)
-        for z1, z2 in cloud:
-            x = px + pw / 2 + z1 * scale
-            y = py + pw / 2 - (rho * z1 + spread * z2) * scale
-            if px + 3 < x < px + pw - 3 and py + 3 < y < py + pw - 3:
-                f.circle(x, y, 2.1, fill=BLUE, fill_opacity="0.7")
-        f.text(px + pw / 2, py + pw + 16, f"ρ = {rho:g}".replace("-", "−"),
-               cls="sm bold")
+    px0, py0, side, rho = 66, 84, 262, 0.8
+    cx, cy = px0 + side / 2, py0 + side / 2
+    scale, spread = side / 6.6, math.sqrt(1 - rho * rho)
+    f.rect(px0, py0, side, side, rx=4, fill="var(--soft)", stroke="var(--edge)",
+           stroke_width="1")
+    f.line(px0 + 6, py0 + side - 6, px0 + side - 6, py0 + 6, cls="thin dash",
+           stroke="var(--axis)", stroke_width="1.2")
+    # The 2σ ellipse of the cloud: long along the diagonal, thin across it —
+    # the thinner it is, the nearer |ρ| is to 1.
+    a_, b_ = 2 * math.sqrt(1 + rho) * scale, 2 * math.sqrt(1 - rho) * scale
+    f.raw(f'<ellipse cx="{cx}" cy="{cy}" rx="{a_:.1f}" ry="{b_:.1f}" '
+          f'transform="rotate(-45 {cx} {cy})" fill="{BLUE}" fill-opacity="0.1" '
+          f'stroke="{BLUE}" stroke-width="1.4"/>')
+    for z1, z2 in _std_normals(23, 110):
+        x = cx + z1 * scale
+        y = cy - (rho * z1 + spread * z2) * scale
+        if px0 + 4 < x < px0 + side - 4 and py0 + 4 < y < py0 + side - 4:
+            f.circle(x, y, 2.6, fill=BLUE, fill_opacity="0.8")
+    f.text(px0 + side / 2, py0 + side + 18, "x", cls="sm dim")
+    f.text(px0 - 10, py0 + side / 2 + 4, "y", cls="sm dim", anchor="end")
     return f
 
 
-@figure("Independent Random Variables", "Independent variables give a rectangular, "
-        "untilted joint density", width=WID)
+@figure("Independent Random Variables", "Contours of a joint density lined up square "
+        "with the axes, untilted, with the marginal density of X drawn under it and that "
+        "of Y beside it", width=WID)
 def independent_random_variables() -> Fig:
     f = vcard()
 
-    for k, (label, rot, colour) in enumerate((("Independent", 0, GREEN),
-                                              ("Dependent", -30, ROSE))):
-        px0, py0, side = 106, 88 + k * 156, 148
-        cx, cy = px0 + side / 2, py0 + side / 2
-        f.rect(px0, py0, side, side, rx=4, fill="var(--soft)", stroke="var(--edge)",
-               stroke_width="1")
-        for j, op in ((1.0, "0.28"), (1.7, "0.17"), (2.4, "0.08")):
-            f.raw(f'<ellipse cx="{cx}" cy="{cy}" rx="{25 * j:.0f}" ry="{17 * j:.0f}" '
-                  f'transform="rotate({rot} {cx} {cy})" fill="{colour}" '
-                  f'fill-opacity="{op}" stroke="{colour}" stroke-width="1"/>')
-        f.arrow(px0, py0 + side, px0 + side + 12, py0 + side, colour="var(--axis)",
-                width=1.1)
-        f.arrow(px0, py0 + side, px0, py0 - 10, colour="var(--axis)", width=1.1)
-        f.text(px0 + side + 24, py0 + side / 2, label, cls="sm bold", fill=colour,
-               anchor="middle")
-        f.text(px0 + side + 24, py0 + side / 2 + 16,
-               "Cov = 0" if k == 0 else "Cov ≠ 0", cls="sm dim", anchor="middle")
+    bx0, by0, side = 128, 104, 192
+    bx1, by1 = bx0 + side, by0 + side
+    ccx, ccy = bx0 + side / 2, by0 + side / 2
+    sx, sy = 30, 20
+    f.rect(bx0, by0, side, side, rx=4, fill="var(--soft)", stroke="var(--edge)",
+           stroke_width="1")
+    for k, op in ((1, "0.30"), (1.8, "0.17"), (2.6, "0.08")):
+        f.ellipse(ccx, ccy, sx * k, sy * k, fill=GREEN, fill_opacity=op, stroke=GREEN,
+                  stroke_width="1")
+    # Each contour sits square to the axes, touching the same x-band and the
+    # same y-band as the marginal it projects to — the joint is their product.
+    f.line(ccx - sx, by0, ccx - sx, by1 + 56, cls="thin dot", stroke="var(--axis)",
+           stroke_width="1.1")
+    f.line(ccx + sx, by0, ccx + sx, by1 + 56, cls="thin dot", stroke="var(--axis)",
+           stroke_width="1.1")
+    f.arrow(bx0, by1, bx1 + 12, by1, colour="var(--axis)", width=1.1)
+    f.arrow(bx0, by1, bx0, by0 - 12, colour="var(--axis)", width=1.1)
+    f.text(bx1 + 16, by1 + 4, "x", cls="sm dim", anchor="start")
+    f.text(bx0 - 6, by0 - 16, "y", cls="sm dim", anchor="end")
+
+    fx = [(bx0 + side * i / 80, by1 + 56 - 44 * math.exp(-((side * i / 80 - side / 2) / sx)
+                                                          ** 2 / 2)) for i in range(81)]
+    f.poly(fx, cls="curve", stroke=AMBER, stroke_width="2")
+    f.text(bx1 + 6, by1 + 50, "f_X", cls="sm bold", anchor="start")
+    fy = [(bx0 - 8 - 40 * math.exp(-((side * i / 80 - side / 2) / sy) ** 2 / 2),
+           by1 - side * i / 80) for i in range(81)]
+    f.poly(fy, cls="curve", stroke=VIOLET, stroke_width="2")
+    f.text(bx0 - 42, by0 - 8, "f_Y", cls="sm bold")
     return f
 
 
-@figure("Order Statistics", "A sample sorted into order statistics, with the densities of "
-        "the minimum and maximum", width=WID)
+@figure("Order Statistics", "Five sample points on the unit interval, the smallest and "
+        "largest picked out, under the densities of the minimum and the maximum of five "
+        "uniform draws", width=WID)
 def order_statistics() -> Fig:
     f = vcard()
 
-    sample = [0.62, 0.18, 0.87, 0.41, 0.29]
-    lx0, lx1 = 68, 300
-    for row, (vals, lab, colour) in enumerate((
-            (sample, "X₁ … X₅  as observed", "var(--dim)"),
-            (sorted(sample), "X₍₁₎ … X₍₅₎  sorted", BLUE))):
-        y = 108 + row * 74
-        f.arrow(lx0 - 12, y, lx1 + 14, y, colour="var(--axis)", width=1.1)
-        for i, v in enumerate(vals):
-            x = lx0 + v * (lx1 - lx0)
-            f.circle(x, y, 5, fill=colour)
-            f.text(x, y - 12, f"{'X' if row == 0 else 'X₍'}{i + 1}{'' if row == 0 else '₎'}",
-                   cls="sm dim")
-        f.text((lx0 + lx1) / 2, y + 24, lab, cls="sm dim")
-    f.arrow(44, 146, 44, 170, colour=VIOLET, width=1.5)
-    f.text(52, 164, "sort", cls="sm", fill=VIOLET, anchor="start")
-
-    a = Axes(f, 68, 240, 314, 348, 0, 1, 0, 5.2)
+    sample = sorted([0.62, 0.18, 0.87, 0.41, 0.29])
+    a = vaxes(f, 0, 1, 0, 5.4, top=24, bottom=58)
+    a.area(lambda t: 5 * (1 - t) ** 4, 0, 1, colour=AMBER, opacity="0.12")
+    a.area(lambda t: 5 * t ** 4, 0, 1, colour=ROSE, opacity="0.12")
     a.curve(lambda t: 5 * (1 - t) ** 4, colour=AMBER)
     a.curve(lambda t: 5 * t ** 4, colour=ROSE)
-    a.frame(xticks=[0, 1], yticks=[])
-    f.text(a.px(0.18), a.py(3.4), "min", cls="sm bold", fill=AMBER)
-    f.text(a.px(0.82), a.py(3.4), "max", cls="sm bold", fill=ROSE)
-    f.text((a.x0 + a.x1) / 2, a.y1 + 34, "Uniform(0, 1), n = 5", cls="sm dim")
+    a.frame(xticks=[0, 1], ylabel="density")
+    a.label(0.2, 2.1, "min", cls="sm bold", anchor="start")
+    a.label(0.8, 2.1, "max", cls="sm bold", anchor="end")
+    for i, v in enumerate(sample):
+        colour = AMBER if i == 0 else ROSE if i == len(sample) - 1 else "var(--dim)"
+        f.circle(a.px(v), a.y1, 6, fill=colour, stroke="var(--surf)", stroke_width="1.5")
+    f.text(a.px(sample[0]), a.y1 + 34, "X₍₁₎", cls="sm bold")
+    f.text(a.px(sample[-1]), a.y1 + 34, "X₍₅₎", cls="sm bold")
     return f
 
 
-@figure("Variance for Conditional and Marginal Distributions", "The law of total variance "
-        "splitting spread into within-group and between-group parts", width=WID)
+@figure("Variance for Conditional and Marginal Distributions", "Three group densities "
+        "and the marginal they add up to, with an arrow across one group for the spread "
+        "within and an arrow between the group means for the spread between", width=WID)
 def conditional_variance() -> Fig:
     f = vcard()
 
-    a = vaxes(f, 0, 10, 0, 0.62, top=44)
-    groups = [(2.4, 0.62, BLUE, "Y = 1"), (5.0, 0.62, VIOLET, "Y = 2"),
-              (7.6, 0.62, GREEN, "Y = 3")]
-    for mu, sd, colour, lab in groups:
+    a = vaxes(f, 0, 10, 0, 0.33, top=24)
+    groups = [(2.4, 0.62, BLUE), (5.0, 0.62, VIOLET), (7.6, 0.62, GREEN)]
+    for mu, sd, colour in groups:
         a.curve(lambda t, m=mu, s=sd: _npdf(t, m, s) / 3, colour=colour, width=1.7)
-        a.vline(mu, y_top=0.24, colour=colour)
-        a.label(mu, 0.235, lab, cls="sm", dy=-6)
-    a.curve(lambda t: sum(_npdf(t, m, s) for m, s, _, _ in groups) / 3, colour=AMBER,
-            width=2.2)
+        a.vline(mu, y_top=0.25, colour=colour)
+    a.curve(lambda t: sum(_npdf(t, m, s) for m, s, _ in groups) / 3, colour=AMBER,
+            width=2.4)
     a.frame(xlabel="x", ylabel="density")
-    a.label(9.4, 0.15, "marginal", cls="sm bold", anchor="end", fill=AMBER)
-    x1, y1 = a.p(2.4 - 0.62, 0.06)
-    x2, _ = a.p(2.4 + 0.62, 0.06)
-    f.arrow(x1, y1, x2, y1, colour=BLUE, width=1.2)
-    f.arrow(x2, y1, x1, y1, colour=BLUE, width=1.2)
-    f.text(a.px(2.4), y1 + 16, "within", cls="sm", fill=BLUE)
-    bx1, by1 = a.p(2.4, 0.31)
-    bx2, _ = a.p(7.6, 0.31)
-    f.arrow(bx1, by1, bx2, by1, colour=ROSE, width=1.2)
-    f.arrow(bx2, by1, bx1, by1, colour=ROSE, width=1.2)
-    f.text(a.px(5.0), by1 - 8, "between", cls="sm", fill=ROSE)
+    a.label(8.4, 0.2, "marginal", cls="sm bold", anchor="start")
+    x1, y1 = a.p(2.4 - 0.62, 0.03)
+    x2, _ = a.p(2.4 + 0.62, 0.03)
+    f.arrow(x1, y1, x2, y1, colour=BLUE, width=1.4)
+    f.arrow(x2, y1, x1, y1, colour=BLUE, width=1.4)
+    f.text(a.px(2.4), y1 + 18, "within", cls="sm bold")
+    bx1, by1 = a.p(2.4, 0.28)
+    bx2, _ = a.p(7.6, 0.28)
+    f.arrow(bx1, by1, bx2, by1, colour=ROSE, width=1.4)
+    f.arrow(bx2, by1, bx1, by1, colour=ROSE, width=1.4)
+    f.text(a.px(5.0), by1 - 9, "between", cls="sm bold")
     return f
 
 
-@figure("Linear Combinations of Random Variables", "Several variables collapsing into one "
-        "weighted sum", width=WID)
+@figure("Linear Combinations of Random Variables", "Three weighted densities feeding into "
+        "a summing node, and the single density of their sum coming out of it", width=WID)
 def linear_combinations() -> Fig:
     f = vcard()
 
-    for i, (mu, sd, colour, lab) in enumerate(((0, 1.0, BLUE, "c₁X₁"),
-                                               (0, 0.7, VIOLET, "c₂X₂"),
-                                               (0, 1.3, GREEN, "c₃X₃"))):
+    node = (180, 212)
+    for i, (sd, colour, lab) in enumerate(((1.0, BLUE, "c₁X₁"), (0.7, VIOLET, "c₂X₂"),
+                                           (1.3, GREEN, "c₃X₃"))):
         px = 30 + i * 104
-        a = Axes(f, px, 96, px + 92, 156, -3.4, 3.4, 0, 0.6)
-        a.area(lambda t, s=sd: _npdf(t, mu, s), -3.4, 3.4, colour=colour, opacity="0.18")
-        a.curve(lambda t, s=sd: _npdf(t, mu, s), colour=colour, width=1.7)
-        f.line(px, 156, px + 92, 156, cls="axis")
-        f.text(px + 46, 90, lab, cls="sm bold", fill=colour)
-        f.arrow(px + 46, 166, 180, 206, colour="var(--dim)", width=1.2, dash=True)
+        a = Axes(f, px, 102, px + 92, 160, -3.4, 3.4, 0, 0.6)
+        a.area(lambda t, s=sd: _npdf(t, 0, s), -3.4, 3.4, colour=colour, opacity="0.18")
+        a.curve(lambda t, s=sd: _npdf(t, 0, s), colour=colour, width=1.8)
+        f.line(px, 160, px + 92, 160, cls="axis")
+        f.text(px + 46, 92, lab, cls="sm bold")
+        dx, dy = node[0] - (px + 46), node[1] - 170
+        d = math.hypot(dx, dy)
+        f.arrow(px + 46, 170, node[0] - dx / d * 16, node[1] - dy / d * 16,
+                colour="var(--dim)", width=1.3)
+    f.circle(*node, 13, fill="var(--soft)", stroke="var(--ink)", stroke_width="1.4")
+    f.text(node[0], node[1] + 5, "+", cls="bold")
+    f.arrow(node[0], node[1] + 14, node[0], 250, colour="var(--dim)", width=1.3)
 
-    a = Axes(f, 60, 232, 320, 348, -5, 5, 0, 0.30)
+    a = Axes(f, 60, 258, 320, 364, -5, 5, 0, 0.26)
     tot = math.sqrt(1.0 ** 2 + 0.7 ** 2 + 1.3 ** 2)
     a.area(lambda t: _npdf(t, 0, tot), -5, 5, colour=AMBER, opacity="0.2")
-    a.curve(lambda t: _npdf(t, 0, tot), colour=AMBER, width=2.2)
-    a.frame(xticks=[0], xfmt=lambda t: "E[L]")
-    f.text(190, 226, "L = c₁X₁ + c₂X₂ + c₃X₃", cls="bold", fill=AMBER)
+    a.curve(lambda t: _npdf(t, 0, tot), colour=AMBER, width=2.4)
+    f.line(60, 364, 320, 364, cls="axis")
+    f.text(262, 316, "L", cls="bold")
     return f
 
 
-@figure("Moments for Linear Combinations", "Variance of a sum with and without the "
-        "covariance term", width=WID)
+@figure("Moments for Linear Combinations", "Two stacked bars on one baseline: the "
+        "variance of a sum of independent variables, the two variances alone, and of "
+        "correlated ones, the same two plus a covariance block on top", width=WID)
 def moments_for_linear_combinations() -> Fig:
     f = vcard()
 
-    scale = 280 / (1.0 + 0.7 + 2 * 0.35)
-    for k, (head, cov, colour) in enumerate((("Independent", 0.0, GREEN),
-                                             ("Positively correlated", 0.35, ROSE))):
-        y = 100 + k * 148
-        f.text(BCX, y, head, cls="bold", fill=colour)
-        segs = [(1.0, BLUE, "Var(X₁)"), (0.7, VIOLET, "Var(X₂)")]
-        if cov:
-            segs.append((2 * cov, ROSE, "2 Cov"))
-        x = 40
-        for v, c, _ in segs:
-            wpx = v * scale
-            f.rect(x, y + 16, wpx, 36, rx=3, fill=c, fill_opacity="0.55")
-            f.text(x + wpx / 2, y + 40, f"{v:.2f}", cls="sm bold")
-            x += wpx
-        f.line(40, y + 62, x, y + 62, cls="", stroke=colour, stroke_width="1.8")
-        f.text((40 + x) / 2, y + 80, f"Var = {1.7 + 2 * cov:.2f}", cls="bold")
-        for i, (_, c, lab) in enumerate(segs):
-            lx = 40 + i * 96
-            f.line(lx, y + 98, lx + 12, y + 98, cls="", stroke=c, stroke_width="2.6",
-                   stroke_linecap="round")
-            f.text(lx + 18, y + 102, lab, cls="sm dim", anchor="start")
+    base, scale, bw = 346, 106, 76
+    segs = [(1.0, BLUE, "Var X₁"), (0.7, VIOLET, "Var X₂"), (0.7, ROSE, "2 Cov")]
+    f.line(50, base, 310, base, cls="axis")
+    for k, (x, n, lab) in enumerate(((78, 2, "independent"), (206, 3, "correlated"))):
+        y = base
+        for v, colour, name in segs[:n]:
+            h = v * scale
+            f.rect(x, y - h, bw, h, rx=3, fill=colour, fill_opacity="0.6", stroke=colour,
+                   stroke_width="1.2")
+            if k == 1:
+                f.text(x + bw / 2, y - h / 2 + 4, name, cls="sm bold")
+            y -= h
+        f.text(x + bw / 2, base + 18, lab, cls="sm dim")
+    top = base - 1.7 * scale
+    f.line(78 + bw, top, 206, top, cls="thin dash", stroke="var(--dim)",
+           stroke_width="1.2")
     return f
 
 
-@figure("Probabilities for Linear Combinations", "A sum of independent normals is normal "
-        "with added means and added variances", width=WID)
+@figure("Probabilities for Linear Combinations", "Two normal densities and, further "
+        "right and wider, the normal density of their sum", width=WID)
 def probabilities_for_linear_combinations() -> Fig:
     f = vcard()
 
-    a = vaxes(f, -2, 22, 0, 0.34, top=30)
+    a = vaxes(f, -2, 22, 0, 0.32, top=24)
     a.curve(lambda t: _npdf(t, 5, 1.4), colour=BLUE)
     a.curve(lambda t: _npdf(t, 8, 2.0), colour=VIOLET)
     a.curve(lambda t: _npdf(t, 13, math.sqrt(1.4 ** 2 + 2.0 ** 2)), colour=AMBER,
             width=2.4)
     a.frame(xlabel="value", ylabel="density", xticks=[5, 8, 13], xfmt=lambda t: f"{t:g}")
-    a.label(5, _npdf(0, 0, 1.4), "X₁", cls="sm bold", fill=BLUE, dy=-8)
-    a.label(8, _npdf(0, 0, 2.0), "X₂", cls="sm bold", fill=VIOLET, dy=-8)
+    a.label(5, _npdf(0, 0, 1.4), "X₁", cls="sm bold", dy=-8)
+    a.label(8, _npdf(0, 0, 2.0), "X₂", cls="sm bold", dy=-8)
     a.label(13, _npdf(0, 0, math.sqrt(1.4 ** 2 + 2.0 ** 2)), "X₁ + X₂", cls="sm bold",
-            fill=AMBER, dy=-8)
+            dy=-8)
     return f
 
 
-@figure("Central Limit Theorem", "The density of the sample mean of n uniform draws, "
-        "flat at n = 1 and normal by n = 30", width=WID)
+@figure("Central Limit Theorem", "The standardized density of an average of n uniform "
+        "draws for n = 1, 2 and 5 — a flat box, a triangle, a near-bell — closing in on "
+        "the dashed normal curve", width=WID)
 def central_limit_theorem() -> Fig:
     f = vcard()
 
-    bars, x0, x1, ph = 26, 84, 326, 54
-    bw = (x1 - x0) / bars
-    for row, n in enumerate((1, 2, 5, 30)):
-        py = 92 + row * 72
-        dens = [_mean_density(n, j, bars) for j in range(bars)]
-        peak = max(dens)
-        for j, d in enumerate(dens):
-            hgt = d / peak * ph
-            f.rect(x0 + j * bw + 0.5, py + ph - hgt, bw - 1, hgt, rx=1, fill=BLUE,
-                   fill_opacity="0.6")
-        f.line(x0, py + ph, x1, py + ph, cls="axis")
-        f.text(x0 - 12, py + ph - 4, f"n = {n}", cls="sm bold", anchor="end")
-        if n == 30:
-            # Each panel is scaled to its own peak, so the convergence shows up as
-            # the spread narrowing — with the limiting normal drawn over the last.
-            mu, sd = 0.5, 1 / math.sqrt(12 * n)
-            top = _npdf(mu, mu, sd)
-            f.poly([(x0 + t / 80 * (x1 - x0), py + ph - _npdf(t / 80, mu, sd) / top * ph)
-                    for t in range(81)], cls="curve", stroke=ROSE, stroke_width="1.8")
-            f.text(x1, py - 4, "N(μ, σ²/n)", cls="sm bold", fill=ROSE, anchor="end")
-    f.note(BCX, 380, "sample mean x̄ of n Uniform(0, 1) draws")
+    def standardized(n):
+        """Density of (S − n/2) / √(n/12) for S a sum of n Uniform(0, 1) draws."""
+        sd = math.sqrt(n / 12)
+
+        def dens(z):
+            s = n / 2 + z * sd
+            if not 0 < s < n:
+                return 0.0
+            tot = sum((-1) ** k * math.comb(n, k) * (s - k) ** (n - 1)
+                      for k in range(int(s) + 1))
+            return tot / math.factorial(n - 1) * sd
+        return dens
+
+    a = vaxes(f, -3.2, 3.2, 0, 0.46, top=24)
+    a.curve(_npdf, colour=ROSE, dash=True, width=2)
+    for n, colour in ((1, AMBER), (2, GREEN), (5, BLUE)):
+        a.curve(standardized(n), colour=colour, n=320, width=2.2)
+    a.frame(xlabel="z", xticks=[-2, 0, 2], xfmt=lambda t: f"{t:g}".replace("-", "−"))
+    a.label(-1.3, 0.2887, "n = 1", cls="sm bold", dy=-8)
+    a.label(1.55, 0.408 * (1 - 1.55 / math.sqrt(6)), "n = 2", cls="sm bold",
+            anchor="start", dx=10)
+    a.label(-0.55, 0.36, "n = 5", cls="sm bold", anchor="end", dx=-6)
     return f

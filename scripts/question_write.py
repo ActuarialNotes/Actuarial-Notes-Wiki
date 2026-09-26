@@ -41,7 +41,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import mdmath  # noqa: E402
-from pdf_extract import attach_part_prompts, points_label  # noqa: E402
+from pdf_extract import attach_part_prompts, parts_total, points_label  # noqa: E402
 from validate_content import EXAM_LABEL_BY_DIR  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -102,7 +102,10 @@ def frontmatter(record: dict, judgment: dict) -> str:
         "session": record.get("session"),
         "wiki_link": judgment.get("wiki_link") or [],
         "answer": record.get("answer"),
-        "points": record.get("points") if record.get("points") is not None else 1,
+        "points": next(
+            (v for v in (record.get("points"), parts_total(record.get("parts") or [])) if v is not None),
+            1,
+        ),
     }
 
     lines = ["---"]
@@ -150,7 +153,16 @@ def part_sections(record: dict, explanation: str | None) -> str:
     overrides = split_explanation_override(explanation) if explanation else {}
     whole = overrides.get("", "")
     out: list[str] = []
-    for part in record.get("parts") or []:
+    parts = record.get("parts") or []
+    # A report that comments on the question as a whole and on no part in
+    # particular — every pre-2014 report, and some later questions — would
+    # otherwise ship no commentary at all. It goes under the last part: the
+    # point at which the whole question has been answered, so it gives nothing
+    # away, and it is the publisher's text unchanged.
+    overall = (record.get("examiner_report") or "").strip()
+    if parts and overall and not any((p.get("report") or "").strip() for p in parts):
+        parts = [*parts[:-1], dict(parts[-1], report=overall)]
+    for part in parts:
         label = part["label"]
         header = f"## Part {label}"
         if part.get("points") is not None:
@@ -225,6 +237,25 @@ def render(record: dict, judgment: dict, explanation: str | None = None) -> str:
     return mdmath.normalize_markdown("\n\n".join(chunks))
 
 
+def apply_report_override(record: dict, text: str) -> dict:
+    """Replace examiner commentary the PDF's text layer garbled.
+
+    Same shape as an explanation override: `## Part a` headings for the parts
+    it re-transcribes, and text under no heading for the question as a whole.
+    It is the publisher's commentary read off the rendered page — a fix to how
+    it was extracted, never a rewrite of what it says.
+    """
+    overrides = split_explanation_override(text)
+    parts = [
+        dict(part, report=overrides[part["label"]]) if part["label"] in overrides else part
+        for part in record.get("parts") or []
+    ]
+    record = dict(record, parts=parts)
+    if overrides.get(""):
+        record["examiner_report"] = overrides[""]
+    return record
+
+
 def missing_explanation(record: dict, explanation: str | None) -> bool:
     """True when the file would land with nothing under its explanation heading."""
     if explanation and explanation.strip():
@@ -265,6 +296,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--explanations", help="directory of per-id explanation overrides")
     ap.add_argument("--prompts", help="directory of per-id prompt transcriptions "
                                       "(for needs_vision questions)")
+    ap.add_argument("--reports", help="directory of per-id examiner-report re-transcriptions "
+                                      "(`## Part a` headings; none for the whole question)")
     ap.add_argument("--root", default=str(REPO_ROOT), help="repo root to write into")
     ap.add_argument("--only", help="question numbers to write, e.g. 1-25,30")
     ap.add_argument("--dry-run", action="store_true")
@@ -279,6 +312,7 @@ def main(argv: list[str] | None = None) -> int:
     wanted = _parse_only(args.only)
     overrides = Path(args.explanations) if args.explanations else None
     prompts = Path(args.prompts) if args.prompts else None
+    reports = Path(args.reports) if args.reports else None
     root = Path(args.root)
 
     written = skipped = 0
@@ -307,6 +341,10 @@ def main(argv: list[str] | None = None) -> int:
             )
             problems += [f"{record['id']}: {note}" for note in surplus]
             record = dict(record, body=stem.strip(), parts=parts)
+        if reports and (reports / f"{record['id']}.md").is_file():
+            record = apply_report_override(
+                record, (reports / f"{record['id']}.md").read_text(encoding="utf-8")
+            )
         # A CAS question is sometimes nothing but its lettered sub-prompts —
         # Fall 2015 Q2 and Q15 open straight on `a. (0.75 point)` with no
         # narrative or exhibit above them. Such a question has all the prompt

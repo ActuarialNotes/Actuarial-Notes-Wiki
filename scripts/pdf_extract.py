@@ -610,6 +610,37 @@ def split_columnar(lines: list[str]) -> list[tuple[str, str]]:
     return out
 
 
+# A block that opens a new item rather than continuing a sentence: a lettered
+# or numbered label (`f)`, `b.`, `(ii)`, `3.`), a bullet (including the `o`
+# Word sets for a second-level bullet), or a table row.
+NEW_ITEM_RE = re.compile(r"^\s*(?:\(?(?:[a-h]|[ivx]+)[.)]|[-*\u2022o]\s|\d+[.)]|\|)")
+PROSE_WORD_RE = re.compile(r"[A-Za-z]{2,}")
+
+
+def continues(prev: str, nxt: str) -> bool:
+    """Whether `nxt` is the rest of a sentence `prev` broke off.
+
+    A PDF ends a text block at a column or page edge as readily as at a
+    paragraph, so a sentence can arrive as two blocks — `…the normalized
+    residual using the results from` / `part a). A very common error…` — which
+    the blank line between blocks turns into two paragraphs. Only prose on both
+    sides is joined: the line above must be words that stop without sentence
+    punctuation, and the line below must open on a lower-case word. A worked
+    step (`= 50k` / `x = 1250k`) is never joined, and neither is a new item.
+    """
+    last = prev.rstrip().rsplit("\n", 1)[-1].strip()
+    first = nxt.lstrip().split("\n", 1)[0].strip()
+    # The line below may *look* structural — `part a) of the problem …` — but a
+    # real heading is capitalised (`Part a`), and it must open lower-case here.
+    if not last or not first or is_structural(last):
+        return False
+    if TERMINAL_RE.search(last) or STEP_END_RE.search(last) or NEW_ITEM_RE.match(first):
+        return False
+    if not re.match(r"[a-z]{2,}\b", first) or last.startswith("|"):
+        return False
+    return len(PROSE_WORD_RE.findall(last)) >= 3 and len(PROSE_WORD_RE.findall(first)) >= 2
+
+
 def page_markdown(page: Page, drop: set[str]) -> str:
     """A page's prose and exhibits as markdown, furniture removed."""
     chunks: list[str] = []
@@ -620,7 +651,11 @@ def page_markdown(page: Page, drop: set[str]) -> str:
         kept = [ln for ln in raw.splitlines() if ln.strip() not in drop]
         for kind, piece in split_columnar(kept):
             body = piece if kind == "table" else reflow_block(piece)
-            if body.strip():
+            if not body.strip():
+                continue
+            if kind != "table" and chunks and continues(chunks[-1], body):
+                chunks[-1] = f"{chunks[-1].rstrip()} {body.lstrip()}"
+            else:
                 chunks.append(body)
     return "\n\n".join(chunks)
 
@@ -790,8 +825,12 @@ CAS_SAMPLE_RE = re.compile(
     r"(?mi)^[ \t]*S?AMPLE(?:[ \t]*/[ \t]*[A-Z]+)?[ \t]+ANSWERS?\b[ \t]*:?"
 )
 # `_joined` normalises the curly apostrophe away, but the parser is called
-# directly too, so it reads both spellings itself.
-CAS_REPORT_RE = re.compile("(?mi)^[ \t]*E?XAMINER['\u2019]?S? REPORT\\b[ \t]*:?")
+# directly too, so it reads both spellings itself — and both possessives:
+# Exam 7 Spring 2015 heads every question's commentary `EXAMINERS' REPORT`,
+# and missing it filed all 29 questions' commentary as their sample answers.
+CAS_REPORT_RE = re.compile(
+    "(?mi)^[ \t]*E?XAMINER(?:['\u2019]?S|S['\u2019])? REPORT\\b[ \t]*:?"
+)
 
 
 # `a. (0.25 points) Calculate …` — how the booklet introduces each sub-part.
@@ -885,7 +924,14 @@ def parse_cas_question(text: str) -> dict:
 
 
 def _split_parts(block: str) -> list[tuple[str, str | None, str]]:
-    matches = list(CAS_PART_RE.finditer(block))
+    # Parts only climb. A sentence that ends "…the development factor
+    # calculation in / Part a." puts `Part a` at the start of a line inside part
+    # b's commentary (Exam 7 Spring 2017 Q3), and read as a heading it replaced
+    # part a's own report with the tail of part b's.
+    matches: list[re.Match[str]] = []
+    for m in CAS_PART_RE.finditer(block):
+        if not matches or m.group(1).lower() > matches[-1].group(1).lower():
+            matches.append(m)
     out = []
     for i, m in enumerate(matches):
         stop = matches[i + 1].start() if i + 1 < len(matches) else len(block)
@@ -1218,6 +1264,8 @@ def cas_records(
             body = _strip_trailing_label(
                 attach_part_prompts(body, parsed["parts"], parsed["points"], warnings)
             )
+            if parsed["points"] is None:
+                parsed["points"] = parts_total(parsed["parts"])
             ocred = sorted({p for p in pages if booklet_pages[p - 1].ocred})
         else:
             # No prompt text for this question. When the booklet has no text
@@ -1572,7 +1620,36 @@ def attach_part_prompts(
             part["points"] = found["points"]
             priced += found["points"] or 0
     parts.sort(key=lambda p: p["label"])
+    _prefer_closing_points(parts, prompts, total, warnings)
     return stem
+
+
+def _prefer_closing_points(
+    parts: list[dict], prompts: dict[str, dict], total: float | None, warnings: list[str] | None
+) -> None:
+    """Take the booklet's part values when only the booklet's add up.
+
+    Two printings of one paper can disagree on a part: Exam 7 Spring 2014's
+    report gives Q21 part c 1.5 points where the booklet — and its own point
+    table — give 1, and only the booklet's values sum to the report's
+    `TOTAL POINT VALUE`. The total is the one figure both sides agree on, so
+    the split that closes on it is the one printed correctly.
+    """
+    if total is None or not parts or any(p["label"] not in prompts for p in parts):
+        return
+    report_sum = sum(p.get("points") or 0 for p in parts)
+    booklet_sum = sum(prompts[p["label"]]["points"] or 0 for p in parts)
+    if abs(report_sum - total) <= POINT_EPS or abs(booklet_sum - total) > POINT_EPS:
+        return
+    for part in parts:
+        booklet = prompts[part["label"]]["points"]
+        if part.get("points") != booklet and warnings is not None:
+            warnings.append(
+                f"part {part['label']} priced at {points_label(booklet)} from the booklet, "
+                f"not the report's {points_label(part.get('points'))}: only the booklet's "
+                f"parts sum to the total of {points_label(total)}"
+            )
+        part["points"] = booklet
 
 
 # The next question's own `10.`, left at the end of a span that reaches to the
@@ -1583,6 +1660,19 @@ TRAILING_LABEL_RE = re.compile(r"\n\s*\d{1,3}\.\s*$")
 
 def _strip_trailing_label(body: str) -> str:
     return TRAILING_LABEL_RE.sub("", body).rstrip()
+
+
+def parts_total(parts: list[dict]) -> float | None:
+    """A question's total from its parts, when every part is priced.
+
+    For a total nothing printed legibly — the pre-2014 reports print none, and
+    OCR can lose the booklet's `(3 points)` — the parts' own printed values are
+    still the publisher's figures, and their sum is the total.
+    """
+    values = [p.get("points") for p in parts]
+    if not values or any(v is None for v in values):
+        return None
+    return round(sum(values), 4)
 
 
 def points_label(value: float | None) -> str:
@@ -1603,6 +1693,31 @@ SOA_BANK = {"p": "exam-p", "fm": "exam-fm", "mas-i": "exam-mas-i", "mas-ii": "ex
 
 
 UNESCAPED_DOLLAR_RE = re.compile(r"(?<!\\)\$")
+# Letters set in a maths font come out of a text layer as Unicode's
+# Mathematical Alphanumeric Symbols (`𝑁𝑃𝑉`, `𝜙`): the same letters in an
+# italic face, which a reader sees as a different alphabet. NFKC folds each
+# to its plain letter.
+MATH_ALNUM_RE = re.compile("[\U0001D400-\U0001D7FF]")
+# Word's list bullets from a symbol font (`\uf0b7`, `\uf0a7`, `\uf0d8`),
+# private-use code points that render as nothing. At the head of a line they
+# are that line's bullet; mid-line, each starts the next item.
+SYMBOL_BULLET_HEAD_RE = re.compile("(?m)^[ \t]*[\uf0a7\uf0b7\uf0d8][ \t]*")
+SYMBOL_BULLET_INLINE_RE = re.compile("[ \t]+[\uf0a7\uf0b7\uf0d8][ \t]+")
+
+
+def normalize_text_layer(md: str) -> str:
+    """What a PDF's text layer gets wrong on its way to markdown, fixed.
+
+    A text layer carries no LaTeX, so every `$` is money — and left bare, the
+    app's markdown pairs `$25,000 … $10,000` into one span of math. Maths-font
+    letters are folded to plain ones and symbol-font bullets become list items.
+    """
+    md = UNESCAPED_DOLLAR_RE.sub(r"\\$", md)
+    md = MATH_ALNUM_RE.sub(lambda m: unicodedata.normalize("NFKC", m.group()), md)
+    md = SYMBOL_BULLET_HEAD_RE.sub("- ", md)
+    # Word autocorrects `-->` to a Wingdings arrow, which extracts as U+F0E0.
+    md = md.replace("\uf0e0", "\u2192")
+    return SYMBOL_BULLET_INLINE_RE.sub("\n- ", md)
 
 
 def _joined(pages: list[Page], furniture: set[str] | None = None) -> tuple[str, list[int]]:
@@ -1614,11 +1729,13 @@ def _joined(pages: list[Page], furniture: set[str] | None = None) -> tuple[str, 
         # Normalise here rather than per record: the publisher writes
         # `EXAMINER’S REPORT` with a curly apostrophe, and every marker regex
         # downstream is written with a straight one.
-        md = mdmath.normalize_chars(page_markdown(page, drop))
-        # A PDF's text layer carries no LaTeX, so every `$` in it is a dollar
-        # sign — and left bare, the app's markdown pairs `$25,000 … $10,000`
-        # into one span of math and sets the words between them in italics.
-        md = UNESCAPED_DOLLAR_RE.sub(r"\\$", md)
+        md = normalize_text_layer(mdmath.normalize_chars(page_markdown(page, drop)))
+        if chunks and md.strip() and continues(chunks[-1], md):
+            # A sentence carried over the page break: the page's first words
+            # finish the last paragraph of the page before.
+            chunks[-1] = chunks[-1].rstrip("\n") + " "
+            del index[len("".join(chunks)):]
+            md = md.lstrip()
         piece = md + "\n\n"
         chunks.append(piece)
         index.extend([page.number] * len(piece))

@@ -583,12 +583,69 @@ class TestExam7Layouts(unittest.TestCase):
         ]
         self.assertEqual(px._split_combined(pages), 1)
 
+    def test_a_part_named_inside_a_later_parts_report_is_not_a_heading(self):
+        parsed = px.parse_cas_question(
+            "TOTAL POINT VALUE: 2\nSAMPLE ANSWERS\nPart a: 1 point\nSample 1\nf = 2.06\n"
+            "Part b: 1 point\nSample 1\nResidual = -110\n"
+            "EXAMINER'S REPORT\nPart a\nApply the constant-variance factor.\n"
+            "Part b\nCommon errors include using the factor calculation in\n"
+            "Part a.\n- Mislabelling the x-axis\n"
+        )
+        parts = {p["label"]: p for p in parsed["parts"]}
+        self.assertIn("constant-variance", parts["a"]["report"])
+        self.assertIn("Mislabelling", parts["b"]["report"])
+
+    def test_a_plural_possessive_report_heading_splits_the_report_off(self):
+        parsed = px.parse_cas_question(
+            "TOTAL POINT VALUE: 0.5\nSAMPLE ANSWERS\nPart a: 0.5 point\n"
+            "Sample Answer 1\nThe CV will be reduced.\n"
+            "EXAMINERS\u2019 REPORT\nPart a\nCandidates were expected to explain.\n"
+        )
+        part = parsed["parts"][0]
+        self.assertIn("CV will be reduced", part["samples"][0])
+        self.assertNotIn("expected to explain", part["samples"][0])
+        self.assertIn("expected to explain", part["report"])
+
+    def test_a_sentence_broken_across_blocks_is_rejoined(self):
+        self.assertTrue(px.continues(
+            "A very common error was to use the normalized residual from", "part a) instead."))
+        self.assertTrue(px.continues(
+            "Candidates who did not receive full credit often confused the",
+            "process and parameter variance."))
+
+    def test_steps_items_and_sentences_are_not_rejoined(self):
+        self.assertFalse(px.continues("= 50k", "x = 1250k"))                 # a worked step
+        self.assertFalse(px.continues("Common errors were in the setup of", "f) Describe"))
+        self.assertFalse(px.continues("The residuals look random.", "this is fine"))
+        self.assertFalse(px.continues("The expected loss ratio is", "| AY | Loss |"))
+        self.assertFalse(px.continues("Expenses are expected to fall with", "o Expenses rise"))
+
+    def test_a_sentence_carried_over_the_page_break_is_rejoined(self):
+        text, index = px._joined([
+            _page(1, "Candidates were expected to explain why the residuals"),
+            _page(2, "should be scattered randomly around zero."),
+        ])
+        self.assertIn("residuals should be scattered", text)
+        self.assertEqual(len(index), len(text))
+        self.assertEqual(index[text.index("scattered")], 2)
+
     def test_a_dollar_sign_from_the_text_layer_is_escaped(self):
         # `$25,000 … $10,000` would otherwise pair into one span of math.
         text, _ = px._joined([_page(1, "A limit of $25,000 and a basic limit of $10,000.")])
         self.assertIn(r"of \$25,000 and a basic limit of \$10,000.", text)
         again, _ = px._joined([_page(1, text)])
         self.assertNotIn(r"\\$", again)
+
+    def test_maths_font_letters_and_symbol_bullets_are_normalised(self):
+        md = px.normalize_text_layer(
+            "\U0001D441\U0001D443\U0001D449 = 12, \U0001D719 = 0.4\n"
+            "Credit was given as follows:\n\uf0b7 for identifying the problem\n"
+            "\uf0a7 g = ROE x b \uf0a7 g = FCFE growth\n"
+        )
+        self.assertIn("NPV = 12, \u03c6 = 0.4", md)
+        self.assertIn("\n- for identifying the problem", md)
+        self.assertIn("\n- g = ROE x b\n- g = FCFE growth", md)
+        self.assertEqual(px.normalize_text_layer("higher \uf0e0 CL reacts"), "higher \u2192 CL reacts")
 
     def test_a_number_alone_on_its_line_starts_a_booklet_question(self):
         booklet = (
@@ -1176,6 +1233,79 @@ class TestWriter(unittest.TestCase):
         self.assertIn("A proper triangle.", md)
         self.assertNotIn("garbled", md)
         self.assertIn("fine as is", md)  # the part not named keeps the publisher's
+
+    LEGACY_RECORD = {
+        "num": 3, "id": "cas7-2012-q3", "bank": "exam-7", "type": "multi-part",
+        "body": "Given the triangle:", "options": {}, "answer": None, "points": None,
+        "year": 2012, "session": "Spring",
+        "parts": [
+            {"label": "a", "points": 1.5, "samples": ["f = 1.613"], "report": ""},
+            {"label": "b", "points": 0.75, "samples": ["Random around zero."], "report": ""},
+        ],
+        "solution": "", "examiner_report": "Most candidates knew the weighted LDF.",
+        "pages": {"question": [1], "solution": [2]}, "needs_vision": False, "warnings": [],
+    }
+    JUDGED = {"topic": "T", "learning_objective": "L", "difficulty": "medium",
+              "wiki_link": ["Concepts/T"]}
+
+    def test_a_missing_total_is_the_sum_of_the_parts(self):
+        md = qw.render(self.LEGACY_RECORD, self.JUDGED)
+        self.assertIn("\npoints: 2.25\n", md)
+
+    def test_a_question_wide_report_goes_under_the_last_part(self):
+        md = qw.render(self.LEGACY_RECORD, self.JUDGED)
+        part_b = md.split("## Part b")[1]
+        self.assertIn("### Examiner Report\nMost candidates knew the weighted LDF.", part_b)
+        self.assertNotIn("weighted LDF", md.split("## Part b")[0])
+
+    def test_a_question_wide_report_stays_out_when_parts_have_their_own(self):
+        record = dict(self.LEGACY_RECORD, parts=[
+            dict(self.LEGACY_RECORD["parts"][0], report="Part a comment."),
+            self.LEGACY_RECORD["parts"][1],
+        ])
+        md = qw.render(record, self.JUDGED)
+        self.assertIn("Part a comment.", md)
+        self.assertNotIn("weighted LDF", md)
+
+    def test_report_override_replaces_the_named_part(self):
+        record = qw.apply_report_override(
+            dict(self.LEGACY_RECORD, parts=[dict(p, report="garbled \u0d6b") for p in self.LEGACY_RECORD["parts"]]),
+            "## Part b\nRe-read from the page.",
+        )
+        self.assertEqual(record["parts"][1]["report"], "Re-read from the page.")
+        self.assertEqual(record["parts"][0]["report"], "garbled \u0d6b")
+        whole = qw.apply_report_override(self.LEGACY_RECORD, "The question as a whole.")
+        self.assertEqual(whole["examiner_report"], "The question as a whole.")
+
+    def test_the_booklet_split_wins_when_only_it_closes_on_the_total(self):
+        parts = [{"label": "a", "points": 4.0}, {"label": "b", "points": 1.5}]
+        prompts = {"a": {"points": 4.0, "prompt": "x"}, "b": {"points": 1.0, "prompt": "y"}}
+        warnings: list[str] = []
+        px._prefer_closing_points(parts, prompts, 5.0, warnings)
+        self.assertEqual([p["points"] for p in parts], [4.0, 1.0])
+        self.assertEqual(len(warnings), 1)
+        # When the report's own split closes, it stands.
+        parts = [{"label": "a", "points": 4.0}, {"label": "b", "points": 1.0}]
+        px._prefer_closing_points(parts, {"a": {"points": 3.5}, "b": {"points": 1.5}}, 5.0, None)
+        self.assertEqual([p["points"] for p in parts], [4.0, 1.0])
+
+    def test_single_part_cas_question_uses_the_implicit_part_sections(self):
+        record = dict(self.LEGACY_RECORD, parts=[], solution="Stable earnings.",
+                      examiner_report="Most listed two.", points=1.0)
+        md = qw.render(record, self.JUDGED)
+        self.assertIn("### Explanation\nStable earnings.", md)
+        self.assertIn("### Examiner Report\nMost listed two.", md)
+        self.assertNotRegex(md, r"(?m)^## Explanation")
+
+    def test_a_moved_question_records_its_paper(self):
+        md = qw.render(self.LEGACY_RECORD, dict(self.JUDGED, bank="exam-9"))
+        head = md.split("---")[1]
+        self.assertIn('exam: "Exam 9"', head)
+        self.assertIn('originally_exam: "Exam 7"', head)
+        self.assertEqual(qw.target_bank(self.LEGACY_RECORD, {"bank": "exam-9"}), "exam-9")
+        off = qw.render(self.LEGACY_RECORD, dict(self.JUDGED, off_syllabus=True)).split("---")[1]
+        self.assertIn("off_syllabus: true", off)
+        self.assertNotIn("originally_exam", off)
 
     def test_split_explanation_override(self):
         out = qw.split_explanation_override("## Part a\nfirst\n## Part b\nsecond")

@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>Policies observed to a limit, with the true values beyond it unknown</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>Six claims drawn as bars from zero: four observed in full, two stopped at the policy limit with their true size unknown</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -50,42 +46,37 @@ text {
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
   </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">Known to exceed the limit, size unknown</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">contribute S(u) to the likelihood</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">not the density f(x)</text>
-    <line x1="60" y1="323.77" x2="336" y2="323.77" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="60" y1="344" x2="60" y2="98" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="60" y1="323.77" x2="60" y2="327.77" class="tick"/>
-    <text x="60" y="339.77" text-anchor="middle" class="sm dim">0</text>
-    <line x1="113.2" y1="323.77" x2="113.2" y2="327.77" class="tick"/>
-    <text x="113.2" y="339.77" text-anchor="middle" class="sm dim">2</text>
-    <line x1="166.4" y1="323.77" x2="166.4" y2="327.77" class="tick"/>
-    <text x="166.4" y="339.77" text-anchor="middle" class="sm dim">4</text>
-    <line x1="219.6" y1="323.77" x2="219.6" y2="327.77" class="tick"/>
-    <text x="219.6" y="339.77" text-anchor="middle" class="sm dim">6</text>
-    <line x1="272.8" y1="323.77" x2="272.8" y2="327.77" class="tick"/>
-    <text x="272.8" y="339.77" text-anchor="middle" class="sm dim">8</text>
-    <line x1="326" y1="323.77" x2="326" y2="327.77" class="tick"/>
-    <text x="326" y="339.77" text-anchor="middle" class="sm dim">10</text>
-    <text x="326" y="355.77" text-anchor="end" class="sm dim">claim size (000s)</text>
-    <line x1="219.6" y1="344" x2="219.6" y2="114.74" class="thin dash" stroke="#e11d48" stroke-width="1.3"/>
-    <text x="219.6" y="108.74" text-anchor="middle" class="sm">policy limit u</text>
-    <polyline points="60,134.97 150.44,134.97" class="curve" stroke="#3b82f6" stroke-width="2"/>
-    <circle cx="150.44" cy="134.97" r="3.6" fill="#3b82f6"/>
-    <polyline points="60,167 195.66,167" class="curve" stroke="#3b82f6" stroke-width="2"/>
-    <circle cx="195.66" cy="167" r="3.6" fill="#3b82f6"/>
-    <polyline points="60,199.03 219.6,199.03" class="curve" stroke="#e11d48" stroke-width="2"/>
-    <circle cx="219.6" cy="199.03" r="3.6" fill="#e11d48"/>
-    <text x="241.6" y="203.03" text-anchor="middle" class="sm" fill="#e11d48">→ ?</text>
-    <polyline points="60,231.06 118.52,231.06" class="curve" stroke="#3b82f6" stroke-width="2"/>
-    <circle cx="118.52" cy="231.06" r="3.6" fill="#3b82f6"/>
-    <polyline points="60,263.09 219.6,263.09" class="curve" stroke="#e11d48" stroke-width="2"/>
-    <circle cx="219.6" cy="263.09" r="3.6" fill="#e11d48"/>
-    <text x="241.6" y="267.09" text-anchor="middle" class="sm" fill="#e11d48">→ ?</text>
-    <polyline points="60,295.11 177.04,295.11" class="curve" stroke="#3b82f6" stroke-width="2"/>
-    <circle cx="177.04" cy="295.11" r="3.6" fill="#3b82f6"/>
-    <text x="180" y="92" text-anchor="middle" class="sm dim">two claims hit the limit</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <line x1="40" y1="322.74" x2="336" y2="322.74" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="40" y1="344" x2="40" y2="86" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="40" y1="322.74" x2="40" y2="326.74" class="tick"/>
+    <text x="40" y="338.74" text-anchor="middle" class="sm dim">0</text>
+    <line x1="97.2" y1="322.74" x2="97.2" y2="326.74" class="tick"/>
+    <text x="97.2" y="338.74" text-anchor="middle" class="sm dim">2</text>
+    <line x1="154.4" y1="322.74" x2="154.4" y2="326.74" class="tick"/>
+    <text x="154.4" y="338.74" text-anchor="middle" class="sm dim">4</text>
+    <line x1="211.6" y1="322.74" x2="211.6" y2="326.74" class="tick"/>
+    <text x="211.6" y="338.74" text-anchor="middle" class="sm dim">6</text>
+    <line x1="268.8" y1="322.74" x2="268.8" y2="326.74" class="tick"/>
+    <text x="268.8" y="338.74" text-anchor="middle" class="sm dim">8</text>
+    <line x1="326" y1="322.74" x2="326" y2="326.74" class="tick"/>
+    <text x="326" y="338.74" text-anchor="middle" class="sm dim">10</text>
+    <text x="326" y="354.74" text-anchor="end" class="sm dim">claim size (000s)</text>
+    <line x1="211.6" y1="344" x2="211.6" y2="103.09" class="thin dash" stroke="#e11d48" stroke-width="1.3"/>
+    <text x="211.6" y="97.09" text-anchor="middle" class="sm">policy limit u</text>
+    <polyline points="40,124.34 137.24,124.34" class="curve" stroke="#3b82f6" stroke-width="2"/>
+    <circle cx="137.24" cy="124.34" r="3.6" fill="#3b82f6"/>
+    <polyline points="40,158 185.86,158" class="curve" stroke="#3b82f6" stroke-width="2"/>
+    <circle cx="185.86" cy="158" r="3.6" fill="#3b82f6"/>
+    <polyline points="40,191.66 211.6,191.66" class="curve" stroke="#e11d48" stroke-width="2"/>
+    <circle cx="211.6" cy="191.66" r="3.6" fill="#e11d48"/>
+    <text x="233.6" y="195.66" text-anchor="middle" class="sm" fill="#e11d48">→ ?</text>
+    <polyline points="40,225.31 102.92,225.31" class="curve" stroke="#3b82f6" stroke-width="2"/>
+    <circle cx="102.92" cy="225.31" r="3.6" fill="#3b82f6"/>
+    <polyline points="40,258.97 211.6,258.97" class="curve" stroke="#e11d48" stroke-width="2"/>
+    <circle cx="211.6" cy="258.97" r="3.6" fill="#e11d48"/>
+    <text x="233.6" y="262.97" text-anchor="middle" class="sm" fill="#e11d48">→ ?</text>
+    <polyline points="40,292.63 165.84,292.63" class="curve" stroke="#3b82f6" stroke-width="2"/>
+    <circle cx="165.84" cy="292.63" r="3.6" fill="#3b82f6"/>
   </g>
 </svg>

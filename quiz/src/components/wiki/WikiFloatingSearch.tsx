@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BookMarked, FileText, GraduationCap, ListChecks, Play } from 'lucide-react'
-import { CheckMark } from '@/components/CheckMark'
+import { BookMarked, FileText, GraduationCap, Play } from 'lucide-react'
 import {
   FloatingSearchBar,
   FloatingSearchInput,
@@ -17,15 +16,9 @@ import { ChooseSyllabusModal } from '@/components/wiki/ChooseSyllabusModal'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
-import { useConceptMastery } from '@/hooks/useConceptMastery'
-import { useTodayCompletions } from '@/hooks/useTodayCompletions'
-import { decayIfStale, type MasteryState } from '@/lib/mastery'
-import { buildTodayTargets, isConceptDoneToday } from '@/lib/planCompletion'
-import { todayISO } from '@/lib/studyPlan'
 import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
-import type { StudyPlanHeaderData } from '@/components/wiki/WikiLayout'
 
 type Scope = 'page' | 'all'
 
@@ -41,17 +34,15 @@ interface WikiFloatingSearchProps {
   pageIcon?: React.ReactNode
   pageTitleBadge?: React.ReactNode
   backLink?: React.ReactNode
-  studyPlan?: StudyPlanHeaderData | null
   isInDevelopment?: boolean
   isBeta?: boolean
 }
 
-export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBadge, backLink, studyPlan, isInDevelopment, isBeta }: WikiFloatingSearchProps) {
+export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBadge, backLink, isInDevelopment, isBeta }: WikiFloatingSearchProps) {
   const [index, setIndex] = useState<WikiIndexItem[]>([])
   const [query, setQuery] = useState('')
   const [scope, setScope] = useState<Scope>('page')
   const [active, setActive] = useState(false)
-  const [showPlan, setShowPlan] = useState(false)
   const [chooser, setChooser] = useState<{ conceptName: string; syllabi: WikiExamSyllabus[] } | null>(null)
   const [questionCounts, setQuestionCounts] = useState<Map<string, number> | null>(null)
   const [quizConcept, setQuizConcept] = useState<string | null>(null)
@@ -61,8 +52,6 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
   const navigate = useNavigate()
   const { openAt } = useConceptPopup()
   const { syllabi } = useWikiSyllabus()
-  const { records: masteryRecords } = useConceptMastery()
-  const completedToday = useTodayCompletions(studyPlan?.examProgressKey ?? null)
 
   useEffect(() => {
     let cancelled = false
@@ -103,7 +92,6 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
     setQuery('')
     setScope('page')
     setActive(false)
-    setShowPlan(false)
   }, [location.pathname])
 
   useEffect(() => {
@@ -132,29 +120,6 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
     inputRef.current?.blur()
   }
 
-  // Current (decay-adjusted) mastery per concept, keyed lower-case — the input
-  // both today's plan targets and the done check need.
-  const masteryStateByName = useMemo(() => {
-    const now = new Date()
-    const map = new Map<string, MasteryState>()
-    for (const r of masteryRecords) {
-      map.set(r.concept_slug.toLowerCase(), decayIfStale(r, now).state)
-    }
-    return map
-  }, [masteryRecords])
-
-  const planTargets = useMemo(
-    () => buildTodayTargets(studyPlan?.assignments ?? [], masteryStateByName, todayISO()),
-    [studyPlan?.assignments, masteryStateByName],
-  )
-
-  // Ticks off a plan concept once it's been advanced today (here or on another
-  // device) or already sits at today's target — same rule as the Dashboard's
-  // Today card, shared via lib/planCompletion.
-  function isDoneToday(name: string): boolean {
-    return isConceptDoneToday(name, planTargets, masteryStateByName, completedToday)
-  }
-
   // null while the question bank is still loading; a number once counted.
   function questionCountFor(name: string): number | null {
     if (!questionCounts) return null
@@ -163,7 +128,6 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
 
   function startQuiz(name: string) {
     dismiss()
-    setShowPlan(false)
     setQuizConcept(name)
   }
 
@@ -195,14 +159,6 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
   }, [index, query, scope, pageRefs])
 
   const isExpanded = active && hasQuery
-  const hasPlan = !!studyPlan && studyPlan.items.length > 0
-  const planOpen = showPlan && hasPlan && !isExpanded
-
-  function togglePlan() {
-    dismiss()
-    setShowPlan(v => !v)
-  }
-
   function handleConceptSelect(ref: WikiEntryRef) {
     dismiss()
     const conceptList = pageRefs
@@ -241,19 +197,18 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
   return (
     <>
       {isExpanded && <SearchBackdrop onDismiss={dismiss} />}
-      {planOpen && <SearchBackdrop onDismiss={() => setShowPlan(false)} />}
 
       <FloatingSearchBar
         ref={containerRef}
         banner={
           <>
             {/* Status banner — thin, full-width, hidden while a dropdown is open */}
-            {pageTitle && isInDevelopment && !isExpanded && !planOpen && (
+            {pageTitle && isInDevelopment && !isExpanded && (
               <div className="bg-amber-500/10 py-1.5 text-center text-[11px] font-medium tracking-wide text-amber-600 dark:text-amber-400">
                 In Development — syllabus outline only, not yet available to study
               </div>
             )}
-            {pageTitle && isBeta && !isExpanded && !planOpen && (
+            {pageTitle && isBeta && !isExpanded && (
               <div className="bg-emerald-500/10 py-1.5 text-center text-[11px] font-medium tracking-wide text-emerald-600 dark:text-emerald-400">
                 Beta
               </div>
@@ -266,7 +221,7 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
             inputRef={inputRef}
             value={query}
             onChange={setQuery}
-            onFocus={() => { setActive(true); setShowPlan(false) }}
+            onFocus={() => setActive(true)}
             onClear={dismiss}
             placeholder="Search concepts"
             ariaLabel="Search study guides"
@@ -275,58 +230,8 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
 
           {pageTitle && (
             <FloatingSearchStrip title={pageTitle} icon={pageIcon} backLink={backLink}>
-              {hasPlan && (
-                <button
-                  type="button"
-                  onClick={togglePlan}
-                  aria-expanded={planOpen}
-                  aria-label="Today's Study Plan"
-                  className={
-                    'shrink-0 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-colors ' +
-                    (planOpen
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-primary/10 text-primary hover:bg-primary/20')
-                  }
-                >
-                  <ListChecks className="h-4 w-4 shrink-0" />
-                  Today's Study Plan
-                </button>
-              )}
               {pageTitleBadge && <span className="shrink-0">{pageTitleBadge}</span>}
             </FloatingSearchStrip>
-          )}
-
-          {/* Study plan dropdown — today's concepts */}
-          {planOpen && studyPlan && (
-            <div className="pb-3">
-              <ul className="space-y-0.5 max-h-[50vh] overflow-y-auto">
-                {studyPlan.items.map((item, idx) => {
-                  const done = isDoneToday(item.name)
-                  return (
-                    <li key={item.name} className="flex items-center gap-1.5">
-                      <button
-                        type="button"
-                        onClick={() => { studyPlan.onSelect(idx); setShowPlan(false) }}
-                        className="flex items-center gap-2 min-w-0 text-left rounded-md px-2 py-1.5 text-sm hover:bg-accent/60 transition-colors"
-                      >
-                        {done
-                          ? <CheckMark className="h-4 w-4" />
-                          : <FileText className="h-4 w-4 shrink-0 text-violet-500" aria-hidden="true" />}
-                        <span className={`truncate ${done ? 'text-muted-foreground line-through' : ''}`}>
-                          {item.name}
-                        </span>
-                        {done && <span className="sr-only">(completed today)</span>}
-                      </button>
-                      <ConceptActions
-                        name={item.name}
-                        questionCount={questionCountFor(item.name)}
-                        onStartQuiz={startQuiz}
-                      />
-                    </li>
-                  )
-                })}
-              </ul>
-            </div>
           )}
 
           {/* Dropdown — only when query is non-empty */}
@@ -449,8 +354,8 @@ function ConceptResultRow({
   )
 }
 
-// Inline "Start Quiz" action shown beside a concept name in the search results
-// and Today's Study Plan lists. It opens the per-concept question picker,
+// Inline "Start Quiz" action shown beside a concept name in the search
+// results. It opens the per-concept question picker,
 // labelled with how many questions exist.
 function ConceptActions({
   name,

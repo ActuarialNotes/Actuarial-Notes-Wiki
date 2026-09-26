@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>Log-link coefficients acting as multiplicative relativities on frequency</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>Expected claim frequency as bars growing step by step from a base of 0.100 as each rating factor multiplies it</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -50,32 +46,30 @@ text {
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
   </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">Coefficients become rating relativities</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">ln μ = ln(exposure) + β₀ + Σ βⱼxⱼ</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">relativity = e^βⱼ</text>
-    <line x1="146" y1="342" x2="336" y2="342" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="146" y1="342" x2="146" y2="102" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="146" y1="342" x2="146" y2="346" class="tick"/>
-    <text x="146" y="358" text-anchor="middle" class="sm dim">0</text>
-    <line x1="206" y1="342" x2="206" y2="346" class="tick"/>
-    <text x="206" y="358" text-anchor="middle" class="sm dim">0.1</text>
-    <line x1="266" y1="342" x2="266" y2="346" class="tick"/>
-    <text x="266" y="358" text-anchor="middle" class="sm dim">0.2</text>
-    <text x="326" y="374" text-anchor="end" class="sm dim">expected claims / year</text>
-    <rect x="146" y="131" width="60" height="22" rx="3" fill="var(--dim)" fill-opacity="0.65"/>
-    <text x="138" y="146" text-anchor="end" class="sm">base  e^(−2.30)</text>
-    <text x="212" y="146" text-anchor="start" class="sm">0.100</text>
-    <rect x="146" y="181" width="78" height="22" rx="3" fill="#3b82f6" fill-opacity="0.65"/>
-    <text x="138" y="196" text-anchor="end" class="sm">× urban  e^0.26</text>
-    <text x="230" y="196" text-anchor="start" class="sm">0.130</text>
-    <rect x="146" y="231" width="117.6" height="22" rx="3" fill="#d97706" fill-opacity="0.65"/>
-    <text x="138" y="246" text-anchor="end" class="sm">× young  e^0.41</text>
-    <text x="269.6" y="246" text-anchor="start" class="sm">0.196</text>
-    <rect x="146" y="281" width="146.4" height="22" rx="3" fill="#e11d48" fill-opacity="0.65"/>
-    <text x="138" y="296" text-anchor="end" class="sm">× prior claim  e^0.22</text>
-    <text x="298.4" y="296" text-anchor="start" class="sm">0.244</text>
-    <text x="180" y="94" text-anchor="middle" class="sm dim">each factor multiplies the one above</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <line x1="108" y1="348" x2="336" y2="348" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="108" y1="348" x2="108" y2="76" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="108" y1="348" x2="108" y2="352" class="tick"/>
+    <text x="108" y="364" text-anchor="middle" class="sm dim">0</text>
+    <line x1="180.67" y1="348" x2="180.67" y2="352" class="tick"/>
+    <text x="180.67" y="364" text-anchor="middle" class="sm dim">0.1</text>
+    <line x1="253.33" y1="348" x2="253.33" y2="352" class="tick"/>
+    <text x="253.33" y="364" text-anchor="middle" class="sm dim">0.2</text>
+    <text x="326" y="380" text-anchor="end" class="sm dim">frequency</text>
+    <rect x="108" y="106.17" width="72.67" height="28" rx="3" fill="var(--dim)" fill-opacity="0.65"/>
+    <text x="100" y="124.17" text-anchor="end" class="sm">base</text>
+    <text x="186.67" y="124.17" text-anchor="start" class="sm">0.100</text>
+    <rect x="108" y="163.13" width="94.47" height="28" rx="3" fill="#3b82f6" fill-opacity="0.65"/>
+    <text x="100" y="181.13" text-anchor="end" class="sm">× urban</text>
+    <text x="208.47" y="181.13" text-anchor="start" class="sm">0.130</text>
+    <line x1="180.67" y1="134.17" x2="180.67" y2="163.13" class="thin dot" stroke="var(--dim)" stroke-width="1.2"/>
+    <rect x="108" y="220.09" width="142.43" height="28" rx="3" fill="#d97706" fill-opacity="0.65"/>
+    <text x="100" y="238.09" text-anchor="end" class="sm">× young</text>
+    <text x="256.43" y="238.09" text-anchor="start" class="sm">0.196</text>
+    <line x1="202.47" y1="191.13" x2="202.47" y2="220.09" class="thin dot" stroke="var(--dim)" stroke-width="1.2"/>
+    <rect x="108" y="277.04" width="177.31" height="28" rx="3" fill="#e11d48" fill-opacity="0.65"/>
+    <text x="100" y="295.04" text-anchor="end" class="sm">× prior claim</text>
+    <text x="291.31" y="295.04" text-anchor="start" class="sm">0.244</text>
+    <line x1="250.43" y1="248.09" x2="250.43" y2="277.04" class="thin dot" stroke="var(--dim)" stroke-width="1.2"/>
   </g>
 </svg>

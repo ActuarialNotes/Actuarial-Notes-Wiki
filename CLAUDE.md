@@ -189,8 +189,10 @@ before touching that area**:
 - `docs/concept-figures.md` — the **generated concept figures**: one SVG per Exam P / FM /
   MAS-I / MAS-II / 5 / 6C concept in `Media/Figures/`, drawn by
   `scripts/generate_concept_figures.py` on top of the dependency-free
-  `scripts/figure_kit.py`. Read before editing a figure — they are generated, so a hand
-  edit to an SVG is lost on the next run.
+  `scripts/figure_kit.py`. Each is **one picture and nothing else** — no title, formula,
+  caption or table; labels of a word or two where the picture needs them, and the words
+  in the `alt` text. Read before editing a figure — they are generated, so a hand edit
+  to an SVG is lost on the next run.
 - `docs/resource-covers.md` — the **resource cover images**: where the metadata card gets
   a source's cover (the page's first image embed), how `scripts/generate_resource_covers.py`
   draws one from front matter for the pages with no real jacket, and the rule that a real
@@ -235,6 +237,12 @@ Other important `lib/` modules:
   of quiz sessions — ahead of the `ids` short-circuit, so a saved mistake-review link can't
   serve one either. Sidecar logs are deliberately *not* bundled; the panel fetches one on
   demand through `github.ts`.
+- `reportIssue.ts` — the panel's **Report** flow as data: the category catalogue (split by
+  question vs page), the three steps of `components/ReportIssueModal.tsx` (category →
+  description → credit + consent), and the credit name (display name, never the email).
+  A category value must also be in the `content_reports_severity` CHECK constraint and in
+  `SEVERITY_HINT` in `scripts/sync_reports.py`; `reportIssue.test.ts` reads both. See
+  `docs/verification.md`, "The reader's write path".
 - `vaultMath.ts` — normalises the vault's math delimiters into the shapes `remark-math`
   can tokenise. The content is authored for Obsidian, whose math parser is looser: an
   escaped dollar inside inline math (`$\$400$` — currency is everywhere in ratemaking

@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>The predictable unwind of discount beside the volatile effect of a rate change</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>The liability period by period: a steady rise from the unwind of discount, then a sudden jump when interest rates fall</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -50,24 +46,15 @@ text {
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
   </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">Two effects, one predictable and one not</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">IFIE = unwind of discount</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">+ effect of rate changes</text>
-    <line x1="68" y1="232" x2="334" y2="232" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="68" y1="232" x2="68" y2="84" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <polyline points="68,197.5 110.67,188.01 153.33,177.66 196,167.31 238.67,156.1 281.33,144.89 324,132.81" class="curve" stroke="#0d9488" stroke-width="2.4"/>
-    <polyline points="196,167.31 198.56,128.5" class="curve" stroke="#e11d48" stroke-width="2.4"/>
-    <polyline points="198.56,128.5 238.67,118.15 281.33,106.94 324,95.72" class="curve dash" stroke="#e11d48" stroke-width="2.4"/>
-    <text x="132" y="203.6" text-anchor="middle" class="sm bold" fill="#0d9488">unwind</text>
-    <text x="204.53" y="118.15" text-anchor="start" class="sm bold" fill="#e11d48">rates fall</text>
-    <text x="180" y="254" text-anchor="middle" class="sm dim">the liability, period by period</text>
-    <line x1="30" y1="274" x2="330" y2="274" class="rule"/>
-    <text x="180" y="296" text-anchor="middle" class="sm dim">kept out of the insurance service result, so</text>
-    <text x="180" y="312" text-anchor="middle" class="sm dim">underwriting is measured on its own</text>
-    <text x="180" y="340" text-anchor="middle" class="sm dim">a fall in rates raises the liability and produces</text>
-    <text x="180" y="356" text-anchor="middle" class="sm dim">a finance expense — while the bonds backing it</text>
-    <text x="180" y="372" text-anchor="middle" class="sm dim">gain in value, often through OCI</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <line x1="60" y1="352" x2="332" y2="352" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="60" y1="352" x2="60" y2="80" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <polyline points="60,288.48 103.67,271.02 147.33,251.96 191,232.91 234.67,212.27 278.33,191.62 322,169.39" class="curve" stroke="#0d9488" stroke-width="2.4"/>
+    <polyline points="191,232.91 193.62,161.45" class="curve" stroke="#e11d48" stroke-width="2.4"/>
+    <polyline points="193.62,161.45 234.67,142.4 278.33,121.76 322,101.12" class="curve dash" stroke="#e11d48" stroke-width="2.4"/>
+    <text x="125.5" y="293.78" text-anchor="middle" class="bold">unwind</text>
+    <text x="183" y="165.45" text-anchor="end" class="bold">rates fall</text>
+    <text x="322" y="372" text-anchor="end" class="sm dim">period</text>
+    <text x="66" y="84" text-anchor="start" class="sm dim">liability</text>
   </g>
 </svg>

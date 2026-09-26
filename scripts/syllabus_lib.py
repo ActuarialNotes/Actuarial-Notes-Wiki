@@ -95,6 +95,7 @@ class Objective:
     line_no: int                 # 1-based line in the file
     text: str                    # the numbered line, marker removed
     extra: list[str] = field(default_factory=list)   # continuation / sub-item lines
+    extra_line_nos: list[int] = field(default_factory=list)
     key_concepts: list[str] = field(default_factory=list)  # link targets on *Key concepts:* lines
 
     def all_lines(self) -> list[str]:
@@ -214,6 +215,7 @@ def _split_section(s: Section) -> None:
             obj.key_concepts.extend(l.name for l in vault_links.iter_links(kc.group(1)))
         if line.strip():
             obj.extra.append(line.rstrip())
+            obj.extra_line_nos.append(ln)
 
 
 def source_entries(page: ExamPage) -> list[tuple[int, "vault_links.Link", list[str]]]:
@@ -254,6 +256,8 @@ who whom which whose what when where why how whether if then also only not more 
 well both either very so candidates candidate expected able
 them it they one ones themselves itself
 generating quantitatively necessary realistic historical
+and/or concerning along out up due behind below above following notably typically generally
+exactly appropriately alternative similar out-of
 """.split())
 
 VERBS = frozenset("""
@@ -265,6 +269,10 @@ understand use utilize write adjust aggregate apply calculating determine differ
 identify implement integrate manage price protect match construct achieve arise arising evaluating
 underlying listed shown used given based related involving involved associated remaining regarding
 represent represents obtain choose designed defined replaced administered issued inherent create qualifies make set go covering identifies reflect allocate recalibrate
+pays applying carried relating developed covered calculated determining estimating retain accounting
+deriving counting valued built relate accommodate assumed know requires coincide estimated
+measured identified check smooth control sit gather import manipulate refine run improve incorporate
+provided present relates stripping indicated
 """.split())
 
 # Abstract nouns that name no concept of their own — "the *role* of…", "the
@@ -281,21 +289,46 @@ current regard support section sections calculation calculations content content
 general understanding extent response interaction interactions impact impacts management
 application applications accordance historical significance supplier program programs use uses
 canada major further mechanical construction practice terminology beyond three area areas adjustment adjustments analysis
+analyses basic key collection amount factors setting settings work definitions terms item items remaining sufficient
+partial information missing four two point time change changes value note thorough appropriate technique techniques
+solution solutions problem problems scenario cases considerations ratio ratios proper handling purposes method methods
+choice choices goal goals organization's overall framework fundamentals importance influence treatment shift presence
+criteria second semester two-semester undergraduate sequence behavior behaviour usage form tabular function draw part
+parts starting models assumption assumptions specification specifications mechanics strengths weaknesses procedure
+procedures task tasks hand improvements computations measure measures relationships limiting actuarial available
+relevance findings details methodologies decisions
 """.split())
 
 WORD_RE = re.compile(r"[^\W\d_][\w'’\-/]*|\d[\d.,%]*")
 
 
+# Inline math is notation, not a noun phrase: `$\lambda(t)$` is not the word
+# "lambda". A math span is read as punctuation, so it also ends a phrase.
+INLINE_MATH_RE = re.compile(r"\$[^$\n]+\$")
+
+
+def _generic(word: str) -> bool:
+    return word[0].isdigit() or word.lower().strip("'’") in GENERIC_NOUNS
+
+
 def noun_phrases(text: str) -> list[tuple[int, int, str]]:
-    """(start, end, phrase) for each noun-phrase chunk of plain `text`."""
+    """(start, end, phrase) for each noun-phrase chunk of plain `text`.
+
+    Generic words at either edge of a chunk are trimmed off it — "the
+    [[Hazard Rate]] calculations" names the hazard rate, and "calculations"
+    names nothing — so a chunk is only what a note could be about."""
     out: list[tuple[int, int, str]] = []
     run: list[re.Match] = []
+    text = INLINE_MATH_RE.sub(lambda m: "," + " " * (len(m.group(0)) - 1), text)
 
     def flush() -> None:
-        if run:
-            words = [m.group(0) for m in run]
-            if not all(w[0].isdigit() or w.lower() in GENERIC_NOUNS for w in words):
-                out.append((run[0].start(), run[-1].end(), text[run[0].start():run[-1].end()]))
+        words = list(run)
+        while words and _generic(words[0].group(0)):
+            words.pop(0)
+        while words and _generic(words[-1].group(0)):
+            words.pop()
+        if words:
+            out.append((words[0].start(), words[-1].end(), text[words[0].start():words[-1].end()]))
         run.clear()
 
     pos = 0
@@ -304,7 +337,7 @@ def noun_phrases(text: str) -> list[tuple[int, int, str]]:
         if re.search(r"[^\s]", between):   # punctuation between words ends a phrase
             flush()
         w = m.group(0).lower().strip("'’")
-        if w in BREAK_WORDS or w in VERBS or len(w) == 1:
+        if w in BREAK_WORDS or w.strip("-") in BREAK_WORDS or w in VERBS or len(w) == 1:
             flush()
         else:
             run.append(m)

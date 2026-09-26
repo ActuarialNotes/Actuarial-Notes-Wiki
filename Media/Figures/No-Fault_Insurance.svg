@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>The trade a no-fault scheme makes — first-party benefits at once against the right to sue</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>After a collision the injured driver is paid benefits by their own insurer, and the right to sue the driver at fault is crossed out</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -46,36 +42,41 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
+    <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
+  </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">Certainty of benefit bought with the</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">right to sue</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">Benefits from your own insurer,</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">whoever caused the collision</text>
-    <rect x="30" y="98" width="143" height="134" rx="7" fill="#059669" fill-opacity="0.08" stroke="#059669" stroke-width="1.2"/>
-    <rect x="30" y="98" width="143" height="28" rx="7" fill="#059669" fill-opacity="0.22" stroke="none"/>
-    <text x="101.5" y="116" text-anchor="middle" class="sm bold" fill="#059669">You gain</text>
-    <text x="101.5" y="146" text-anchor="middle" class="sm">payment in weeks</text>
-    <text x="101.5" y="170" text-anchor="middle" class="sm">no fault to prove</text>
-    <text x="101.5" y="194" text-anchor="middle" class="sm">everyone covered</text>
-    <text x="101.5" y="218" text-anchor="middle" class="sm">lower legal cost</text>
-    <rect x="187" y="98" width="143" height="134" rx="7" fill="#e11d48" fill-opacity="0.08" stroke="#e11d48" stroke-width="1.2"/>
-    <rect x="187" y="98" width="143" height="28" rx="7" fill="#e11d48" fill-opacity="0.22" stroke="none"/>
-    <text x="258.5" y="116" text-anchor="middle" class="sm bold" fill="#e11d48">You give up</text>
-    <text x="258.5" y="146" text-anchor="middle" class="sm">the tort action</text>
-    <text x="258.5" y="170" text-anchor="middle" class="sm">pain and suffering</text>
-    <text x="258.5" y="194" text-anchor="middle" class="sm">full damages</text>
-    <text x="258.5" y="218" text-anchor="middle" class="sm">deterrence</text>
-    <text x="180" y="244" text-anchor="middle" class="sm bold">Canadian schemes are almost all partial</text>
-    <rect x="40" y="262" width="280" height="30" rx="5" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.2"/>
-    <rect x="40" y="262" width="168" height="30" rx="5" fill="#3b82f6" fill-opacity="0.34" stroke="none"/>
-    <text x="124" y="281" text-anchor="middle" class="sm">accident benefits</text>
-    <text x="264" y="281" text-anchor="middle" class="sm">tort above</text>
-    <line x1="208" y1="256" x2="208" y2="300" class="thin dash" stroke="#e11d48" stroke-width="1.4"/>
-    <text x="208" y="314" text-anchor="middle" class="sm" fill="#e11d48">threshold</text>
-    <text x="180" y="348" text-anchor="middle" class="sm dim">Quebec and Manitoba bodily injury are pure —</text>
-    <text x="180" y="364" text-anchor="middle" class="sm dim">the tort action is gone entirely</text>
-    <text x="180" y="388" text-anchor="middle" class="sm dim">severity risk becomes frequency risk</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <path d="M109,131.4 V121.04 L123.8,118.08 L134.16,106.24 H159.32 L169.68,118.08 L183,122.52 V131.4 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="125.28" cy="132.88" r="6.66" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.6"/>
+    <circle cx="166.72" cy="132.88" r="6.66" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.6"/>
+    <g transform="translate(436,0) scale(-1,1)">
+    <path d="M181,131.4 V121.04 L195.8,118.08 L206.16,106.24 H231.32 L241.68,118.08 L255,122.52 V131.4 Z" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="197.28" cy="132.88" r="6.66" fill="var(--surf)" stroke="#e11d48" stroke-width="1.6"/>
+    <circle cx="238.72" cy="132.88" r="6.66" fill="var(--surf)" stroke="#e11d48" stroke-width="1.6"/>
+    </g>
+    <rect x="41.2" y="102" width="33.6" height="60" rx="2" fill="#059669" fill-opacity="0.18" stroke="#059669" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="47.8" y="109.2" width="7.2" height="6" fill="#059669" fill-opacity="0.55"/>
+    <rect x="61" y="109.2" width="7.2" height="6" fill="#059669" fill-opacity="0.55"/>
+    <rect x="47.8" y="121.2" width="7.2" height="6" fill="#059669" fill-opacity="0.55"/>
+    <rect x="61" y="121.2" width="7.2" height="6" fill="#059669" fill-opacity="0.55"/>
+    <rect x="47.8" y="133.2" width="7.2" height="6" fill="#059669" fill-opacity="0.55"/>
+    <rect x="61" y="133.2" width="7.2" height="6" fill="#059669" fill-opacity="0.55"/>
+    <rect x="47.8" y="145.2" width="7.2" height="6" fill="#059669" fill-opacity="0.55"/>
+    <rect x="61" y="145.2" width="7.2" height="6" fill="#059669" fill-opacity="0.55"/>
+    <text x="58" y="184" text-anchor="middle" class="sm bold">own insurer</text>
+    <circle cx="72" cy="287.4" r="11.16" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M52.16,337 V313.44 Q52.16,303.52 63.32,303.52 H80.68 Q91.84,303.52 91.84,313.44 V337 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="72" y="362" text-anchor="middle" class="bold">you</text>
+    <circle cx="292" cy="287.4" r="11.16" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M272.16,337 V313.44 Q272.16,303.52 283.32,303.52 H300.68 Q311.84,303.52 311.84,313.44 V337 Z" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="292" y="362" text-anchor="middle" class="bold">at fault</text>
+    <line x1="64" y1="196" x2="70" y2="262" class="thin" stroke="#059669" stroke-width="2.2" marker-end="url(#ah059669)"/>
+    <text x="78" y="234" text-anchor="start" class="sm">benefits</text>
+    <line x1="112" y1="312" x2="250" y2="312" class="thin dash" stroke="#e11d48" stroke-width="1.6" marker-end="url(#ahe11d48)"/>
+    <circle cx="180" cy="312" r="20" fill="none" stroke="#e11d48" stroke-width="3"/>
+    <line x1="165.86" y1="297.86" x2="194.14" y2="326.14" stroke="#e11d48" stroke-width="3"/>
+    <text x="180" y="280" text-anchor="middle" class="sm bold">sue</text>
   </g>
 </svg>

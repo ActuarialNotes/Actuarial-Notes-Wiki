@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>The complement carrying the weight that experience does not</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>Three stacked bars for a thin class, the 300-claim class and a large class: experience fills Z of each and the complement carries the rest, shrinking as Z grows</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -47,27 +43,19 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">The complement carries the other (1 − Z)</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="438" text-anchor="middle" class="fml">Est = Z × experience + (1 − Z) × complement</text>
-    <rect x="48" y="107" width="224.4" height="26" rx="4" fill="#d97706" fill-opacity="0.28" stroke="#d97706" stroke-width="1.2"/>
-    <rect x="272.4" y="107" width="39.6" height="26" rx="4" fill="#3b82f6" fill-opacity="0.4" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="160.2" y="124" text-anchor="middle" class="sm">complement</text>
-    <text x="292.2" y="124" text-anchor="middle" class="sm">experience</text>
-    <text x="180" y="98" text-anchor="middle" class="sm dim">thin class — Z = 0.15</text>
-    <rect x="48" y="169" width="124.08" height="26" rx="4" fill="#d97706" fill-opacity="0.28" stroke="#d97706" stroke-width="1.2"/>
-    <rect x="172.08" y="169" width="139.92" height="26" rx="4" fill="#3b82f6" fill-opacity="0.4" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="110.04" y="186" text-anchor="middle" class="sm">complement</text>
-    <text x="242.04" y="186" text-anchor="middle" class="sm">experience</text>
-    <text x="180" y="160" text-anchor="middle" class="sm dim">300 claims — Z = 0.53</text>
-    <rect x="48" y="231" width="26.4" height="26" rx="4" fill="#d97706" fill-opacity="0.28" stroke="#d97706" stroke-width="1.2"/>
-    <rect x="74.4" y="231" width="237.6" height="26" rx="4" fill="#3b82f6" fill-opacity="0.4" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="61.2" y="248" text-anchor="middle" class="sm">complement</text>
-    <text x="193.2" y="248" text-anchor="middle" class="sm">experience</text>
-    <text x="180" y="222" text-anchor="middle" class="sm dim">large class — Z = 0.90</text>
-    <text x="180" y="322" text-anchor="middle" class="sm dim">the smaller Z is, the more the complement</text>
-    <text x="180" y="338" text-anchor="middle" class="sm dim">decides the answer — so choose it well</text>
-    <text x="180" y="390" text-anchor="middle" class="sm bold">accurate · unbiased · independent · available</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <rect x="32" y="298.9" width="76" height="35.1" rx="3" fill="#3b82f6" fill-opacity="0.45" stroke="#3b82f6" stroke-width="1.2"/>
+    <rect x="32" y="100" width="76" height="198.9" rx="3" fill="#d97706" fill-opacity="0.3" stroke="#d97706" stroke-width="1.2"/>
+    <text x="70" y="354" text-anchor="middle" class="sm">Z = 0.15</text>
+    <rect x="142" y="209.98" width="76" height="124.02" rx="3" fill="#3b82f6" fill-opacity="0.45" stroke="#3b82f6" stroke-width="1.2"/>
+    <rect x="142" y="100" width="76" height="109.98" rx="3" fill="#d97706" fill-opacity="0.3" stroke="#d97706" stroke-width="1.2"/>
+    <text x="180" y="354" text-anchor="middle" class="sm bold">Z = 0.53</text>
+    <rect x="252" y="123.4" width="76" height="210.6" rx="3" fill="#3b82f6" fill-opacity="0.45" stroke="#3b82f6" stroke-width="1.2"/>
+    <rect x="252" y="100" width="76" height="23.4" rx="3" fill="#d97706" fill-opacity="0.3" stroke="#d97706" stroke-width="1.2"/>
+    <text x="290" y="354" text-anchor="middle" class="sm">Z = 0.90</text>
+    <line x1="108" y1="298.9" x2="142" y2="209.98" class="thin dash" stroke="var(--axis)" stroke-width="1.2"/>
+    <line x1="218" y1="209.98" x2="252" y2="123.4" class="thin dash" stroke="var(--axis)" stroke-width="1.2"/>
+    <text x="70" y="203.45" text-anchor="middle" class="sm">complement</text>
+    <text x="290" y="232.7" text-anchor="middle" class="sm">experience</text>
   </g>
 </svg>

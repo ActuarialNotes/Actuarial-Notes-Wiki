@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>A flat per-exposure expense weighing far more heavily on a small policy than a large one</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>The same $25 fixed expense shaded on three premiums of $200, $520 and $2,000, where it is 12.5%, 4.8% and 1.25% of the bar</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -47,22 +43,18 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">The same dollars whatever the premium</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">F = Fixed Expenses / Earned Exposures</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">Rate = (Pure Premium + F) / (1 − V − Q)</text>
-    <text x="180" y="112" text-anchor="middle" class="sm dim">$25 of fixed expense, as a share of premium</text>
-    <text x="46" y="140" text-anchor="start" class="sm bold">a $200 policy</text>
-    <rect x="46" y="152" width="268" height="34" rx="4" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
-    <rect x="46" y="152" width="33.5" height="34" rx="4" fill="#e11d48" fill-opacity="0.75"/>
-    <text x="304" y="175" text-anchor="end" class="sm">F = 12.50%</text>
-    <text x="46" y="236" text-anchor="start" class="sm bold">a $2,000 policy</text>
-    <rect x="46" y="248" width="268" height="34" rx="4" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
-    <rect x="46" y="248" width="3.35" height="34" rx="4" fill="#3b82f6" fill-opacity="0.75"/>
-    <text x="304" y="271" text-anchor="end" class="sm">F = 1.25%</text>
-    <text x="180" y="358" text-anchor="middle" class="sm dim">the same $25 is a tenth of one premium</text>
-    <text x="180" y="376" text-anchor="middle" class="sm dim">and a rounding error in the other — so it is</text>
-    <text x="180" y="394" text-anchor="middle" class="sm dim">charged per exposure, never as a percentage</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <text x="30" y="94" text-anchor="start" class="sm bold">$200 policy</text>
+    <rect x="30" y="104" width="300" height="46" rx="4" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
+    <rect x="30" y="104" width="37.5" height="46" rx="4" fill="#d97706" fill-opacity="0.75"/>
+    <text x="75.5" y="131" text-anchor="start" class="sm">12.5%</text>
+    <text x="30" y="204" text-anchor="start" class="sm bold">$520 policy</text>
+    <rect x="30" y="214" width="300" height="46" rx="4" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
+    <rect x="30" y="214" width="14.42" height="46" rx="4" fill="#d97706" fill-opacity="0.75"/>
+    <text x="52.42" y="241" text-anchor="start" class="sm">4.81%</text>
+    <text x="30" y="314" text-anchor="start" class="sm bold">$2,000 policy</text>
+    <rect x="30" y="324" width="300" height="46" rx="4" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
+    <rect x="30" y="324" width="3.75" height="46" rx="4" fill="#d97706" fill-opacity="0.75"/>
+    <text x="41.75" y="351" text-anchor="start" class="sm">1.25%</text>
   </g>
 </svg>

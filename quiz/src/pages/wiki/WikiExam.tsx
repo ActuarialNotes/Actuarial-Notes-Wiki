@@ -8,6 +8,7 @@ import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { ExamSyllabusButton } from '@/components/wiki/ExamSyllabusButton'
+import { ExamVersionMenu } from '@/components/wiki/ExamVersionMenu'
 import { ExamLogo } from '@/components/ExamLogo'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
@@ -38,8 +39,8 @@ function formatExamDate(iso: string): string {
 // Only the two statuses worth a mark of their own. A not-started exam shows
 // nothing beside its title — the dashed-plus icon it used to show read as an
 // "add" control rather than a status.
-function ExamStatusIcon({ status, size = 'md' }: { status: Exclude<ItemStatus, 'not_started'>; size?: 'sm' | 'md' }) {
-  const cls = size === 'sm' ? 'h-5 w-5' : 'h-7 w-7'
+function ExamStatusIcon({ status }: { status: Exclude<ItemStatus, 'not_started'> }) {
+  const cls = 'h-7 w-7'
   if (status === 'completed') {
     return (
       <svg className={`${cls} text-green-500`} viewBox="0 0 20 20" fill="none" aria-hidden="true">
@@ -57,7 +58,7 @@ function ExamStatusIcon({ status, size = 'md' }: { status: Exclude<ItemStatus, '
   )
 }
 
-function ExamStatusBadge({ progressKey, size = 'md' }: { progressKey: string; size?: 'sm' | 'md' }) {
+function ExamStatusBadge({ progressKey }: { progressKey: string }) {
   const { user } = useAuth()
   const { progress, targetDates } = useExamProgress()
   const currentStatus = ((progress[progressKey] as ItemStatus) ?? 'not_started')
@@ -85,15 +86,13 @@ function ExamStatusBadge({ progressKey, size = 'md' }: { progressKey: string; si
     >
       {examDateLabel ? (
         <span
-          className={`inline-flex items-center gap-1 rounded-full bg-amber-500/10 font-medium text-amber-600 dark:text-amber-500 ${
-            size === 'sm' ? 'px-2 py-0.5 text-[11px]' : 'px-2.5 py-1 text-xs'
-          }`}
+          className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2.5 py-1 text-xs font-medium text-amber-600 dark:text-amber-500"
         >
-          <CalendarDays className={size === 'sm' ? 'h-3 w-3' : 'h-3.5 w-3.5'} />
+          <CalendarDays className="h-3.5 w-3.5" />
           {examDateLabel}
         </span>
       ) : (
-        <ExamStatusIcon status={currentStatus} size={size} />
+        <ExamStatusIcon status={currentStatus} />
       )}
     </button>
   )
@@ -104,7 +103,7 @@ export default function WikiExam() {
   const [searchParams] = useSearchParams()
   const conceptParam = searchParams.get('concept')
   const examFileName = fromSlug(slug)
-  const { setPageRefs, setExamId, setPageTitle, setPageIcon, setPageTitleBadge, setBackLink, setStudyPlan, setIsInDevelopment, setIsBeta } = useWikiPage()
+  const { setPageRefs, setExamId, setPageTitle, setPageIcon, setPageTitleBadge, setBackLink, setIsInDevelopment, setIsBeta } = useWikiPage()
   const openAt = useConceptPopup(s => s.openAt)
   const [content, setContent] = useState<string | null>(null)
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
@@ -248,20 +247,18 @@ export default function WikiExam() {
     return refs.length > 0 ? refs : null
   }, [todaysPlan, conceptList])
 
-  // The sticky header's right-hand end: the status badge, then the examining
-  // body's own syllabus — the document this whole page is a reading of. With
-  // today's plan pill also on the row, the syllabus button goes icon-only on a
-  // phone so the row still fits.
+  // The sticky header's right-hand end: the version — which sitting of the
+  // exam the page is being read for — then the examining body's own syllabus,
+  // the document this whole page is a reading of.
   const smallTitleBadge = useMemo(() => (
     <span className="inline-flex items-center gap-1.5 not-prose shrink-0">
-      <ExamStatusBadge progressKey={progressKey} size="sm" />
+      <ExamVersionMenu progressKey={progressKey} />
       <ExamSyllabusButton
         examId={wikiExamId}
         examLabel={extractedTitle ?? examDisplayName(examFileName)}
-        iconOnlyOnPhone={studyPlanRefs !== null}
       />
     </span>
-  ), [progressKey, wikiExamId, extractedTitle, examFileName, studyPlanRefs])
+  ), [progressKey, wikiExamId, extractedTitle, examFileName])
 
   const resourceRefs = useMemo(() => {
     const seen = new Set<string>()
@@ -300,26 +297,6 @@ export default function WikiExam() {
   useEffect(() => {
     setBackLink(backLink)
   }, [backLink, setBackLink])
-
-  // Feed today's study plan into the sticky header (button + expandable list).
-  useEffect(() => {
-    if (!studyPlanRefs) {
-      setStudyPlan(null)
-      return
-    }
-    setStudyPlan({
-      items: studyPlanRefs.map(r => ({ name: r.name })),
-      examProgressKey: progressKey,
-      assignments: todaysPlan?.assignments ?? [],
-      onSelect: idx =>
-        openAt(studyPlanRefs, idx, `${examFileName}.md`, studyPlanRefs, resourceRefs, {
-          initialFilter: 'study-plan',
-          fullList: conceptList,
-          occurrences: conceptOccurrences,
-          objectives,
-        }),
-    })
-  }, [studyPlanRefs, resourceRefs, conceptList, conceptOccurrences, examFileName, openAt, setStudyPlan, progressKey, todaysPlan, objectives])
 
   const onWikiLink = useCallback((ref: WikiEntryRef, e: React.MouseEvent<HTMLAnchorElement>) => {
     if (ref.kind === 'exam') return false

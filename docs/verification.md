@@ -334,10 +334,27 @@ ever appears once something is green is not a trust signal.
 log, as a `comment` entry the next sweep reads in full. A student working a
 question line by line is the best-placed error detector this project has.
 
+The modal is three pages, one decision each: **what kind of problem** (a
+category — the question-only ones are *wrong answer*, *mistake in the solution*
+and *doesn't match the original*, the page-only ones *incorrect fact or formula*
+and *something's missing*, and every page gets *out of date*, *typo*, *hard to
+follow*, *display problem*, *broken link* and *something else*), **what's
+wrong** in one text box, and **how it's credited** — *Report anonymously* is
+ticked by default. The last page shows the report exactly as it will appear in
+the log, says what happens to it next, and keeps *Send* off until the reader
+ticks their consent to publish it; changing the text or category after that
+asks for consent again. The catalogue, the steps and the credit name are
+`quiz/src/lib/reportIssue.ts`. A category value is a contract with the
+`content_reports_severity` CHECK constraint and with `SEVERITY_HINT` in
+`sync_reports.py` — `reportIssue.test.ts` reads both and fails if either is
+missing one, so a new category is three edits and a migration.
+
 The account identity never leaves the database: an entry is authored as
-`human:<the name they chose>` or `human:anon`, and the sync redacts emails and
-token-shaped strings on the way out. The modal says the report will be public
-*before* it is written, not after.
+`human:<display name>` or `human:anon`. The name is the display name from
+Settings, else the sign-in provider's name, and **never** anything derived from
+the email; an account with neither can only report anonymously. The sync
+redacts emails and token-shaped strings on the way out. The modal says the
+report will be public *before* it is sent, not after.
 
 ## Related
 

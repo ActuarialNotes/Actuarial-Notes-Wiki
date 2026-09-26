@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>Observations nested inside groups nested inside a population</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>A tree from one population node through five territory nodes to three observations each, its levels marked β₀, bᵢ and εᵢⱼ</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -46,46 +42,51 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
-  <defs>
-    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
-  </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">Levels nested inside levels</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="438" text-anchor="middle" class="fml">y_ij = β₀ + b_i + ε_ij</text>
-    <rect x="74" y="92" width="212" height="34" rx="7" fill="#7c3aed" fill-opacity="0.12" stroke="#7c3aed" stroke-width="1.2"/>
-    <text x="180" y="113" text-anchor="middle" class="sm bold">population  β₀</text>
-    <rect x="32" y="168" width="88" height="34" rx="7" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="76" y="189" text-anchor="middle" class="sm">group 1</text>
-    <line x1="180" y1="128" x2="76" y2="164" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <circle cx="50" cy="264" r="9" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
-    <line x1="76" y1="204" x2="50" y2="252" class="thin" stroke="var(--axis)" stroke-width="1.0" marker-end="url(#ahvaraxis)"/>
-    <circle cx="76" cy="264" r="9" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
-    <line x1="76" y1="204" x2="76" y2="252" class="thin" stroke="var(--axis)" stroke-width="1.0" marker-end="url(#ahvaraxis)"/>
-    <circle cx="102" cy="264" r="9" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
-    <line x1="76" y1="204" x2="102" y2="252" class="thin" stroke="var(--axis)" stroke-width="1.0" marker-end="url(#ahvaraxis)"/>
-    <rect x="132" y="168" width="88" height="34" rx="7" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="176" y="189" text-anchor="middle" class="sm">group 2</text>
-    <line x1="180" y1="128" x2="176" y2="164" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <circle cx="150" cy="264" r="9" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
-    <line x1="176" y1="204" x2="150" y2="252" class="thin" stroke="var(--axis)" stroke-width="1.0" marker-end="url(#ahvaraxis)"/>
-    <circle cx="176" cy="264" r="9" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
-    <line x1="176" y1="204" x2="176" y2="252" class="thin" stroke="var(--axis)" stroke-width="1.0" marker-end="url(#ahvaraxis)"/>
-    <circle cx="202" cy="264" r="9" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
-    <line x1="176" y1="204" x2="202" y2="252" class="thin" stroke="var(--axis)" stroke-width="1.0" marker-end="url(#ahvaraxis)"/>
-    <rect x="232" y="168" width="88" height="34" rx="7" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="276" y="189" text-anchor="middle" class="sm">group 3</text>
-    <line x1="180" y1="128" x2="276" y2="164" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <circle cx="250" cy="264" r="9" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
-    <line x1="276" y1="204" x2="250" y2="252" class="thin" stroke="var(--axis)" stroke-width="1.0" marker-end="url(#ahvaraxis)"/>
-    <circle cx="276" cy="264" r="9" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
-    <line x1="276" y1="204" x2="276" y2="252" class="thin" stroke="var(--axis)" stroke-width="1.0" marker-end="url(#ahvaraxis)"/>
-    <circle cx="302" cy="264" r="9" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
-    <line x1="276" y1="204" x2="302" y2="252" class="thin" stroke="var(--axis)" stroke-width="1.0" marker-end="url(#ahvaraxis)"/>
-    <text x="180" y="300" text-anchor="middle" class="sm dim">level 3 · level 2 · level 1</text>
-    <text x="180" y="326" text-anchor="middle" class="sm dim">variance is split across the levels,</text>
-    <text x="180" y="342" text-anchor="middle" class="sm dim">one component each</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">observations in a group are correlated</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <line x1="196" y1="125" x2="76" y2="210" class="thin" stroke="var(--axis)" stroke-width="1.3"/>
+    <line x1="76" y1="234" x2="59" y2="327" class="thin" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="76" y1="234" x2="76" y2="327" class="thin" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="76" y1="234" x2="93" y2="327" class="thin" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="196" y1="125" x2="136" y2="210" class="thin" stroke="var(--axis)" stroke-width="1.3"/>
+    <line x1="136" y1="234" x2="119" y2="327" class="thin" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="136" y1="234" x2="136" y2="327" class="thin" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="136" y1="234" x2="153" y2="327" class="thin" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="196" y1="125" x2="196" y2="210" class="thin" stroke="var(--axis)" stroke-width="1.3"/>
+    <line x1="196" y1="234" x2="179" y2="327" class="thin" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="196" y1="234" x2="196" y2="327" class="thin" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="196" y1="234" x2="213" y2="327" class="thin" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="196" y1="125" x2="256" y2="210" class="thin" stroke="var(--axis)" stroke-width="1.3"/>
+    <line x1="256" y1="234" x2="239" y2="327" class="thin" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="256" y1="234" x2="256" y2="327" class="thin" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="256" y1="234" x2="273" y2="327" class="thin" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="196" y1="125" x2="316" y2="210" class="thin" stroke="var(--axis)" stroke-width="1.3"/>
+    <line x1="316" y1="234" x2="299" y2="327" class="thin" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="316" y1="234" x2="316" y2="327" class="thin" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="316" y1="234" x2="333" y2="327" class="thin" stroke="var(--axis)" stroke-width="1.1"/>
+    <circle cx="196" cy="110" r="15" fill="#7c3aed" fill-opacity="0.25" stroke="#7c3aed" stroke-width="1.6"/>
+    <circle cx="76" cy="222" r="12" fill="#3b82f6" fill-opacity="0.25" stroke="#3b82f6" stroke-width="1.5"/>
+    <circle cx="59" cy="334" r="6.5" fill="#3b82f6" fill-opacity="0.55"/>
+    <circle cx="76" cy="334" r="6.5" fill="#3b82f6" fill-opacity="0.55"/>
+    <circle cx="93" cy="334" r="6.5" fill="#3b82f6" fill-opacity="0.55"/>
+    <circle cx="136" cy="222" r="12" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.5"/>
+    <circle cx="119" cy="334" r="6.5" fill="#d97706" fill-opacity="0.55"/>
+    <circle cx="136" cy="334" r="6.5" fill="#d97706" fill-opacity="0.55"/>
+    <circle cx="153" cy="334" r="6.5" fill="#d97706" fill-opacity="0.55"/>
+    <circle cx="196" cy="222" r="12" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.5"/>
+    <circle cx="179" cy="334" r="6.5" fill="#059669" fill-opacity="0.55"/>
+    <circle cx="196" cy="334" r="6.5" fill="#059669" fill-opacity="0.55"/>
+    <circle cx="213" cy="334" r="6.5" fill="#059669" fill-opacity="0.55"/>
+    <circle cx="256" cy="222" r="12" fill="#7c3aed" fill-opacity="0.25" stroke="#7c3aed" stroke-width="1.5"/>
+    <circle cx="239" cy="334" r="6.5" fill="#7c3aed" fill-opacity="0.55"/>
+    <circle cx="256" cy="334" r="6.5" fill="#7c3aed" fill-opacity="0.55"/>
+    <circle cx="273" cy="334" r="6.5" fill="#7c3aed" fill-opacity="0.55"/>
+    <circle cx="316" cy="222" r="12" fill="#e11d48" fill-opacity="0.25" stroke="#e11d48" stroke-width="1.5"/>
+    <circle cx="299" cy="334" r="6.5" fill="#e11d48" fill-opacity="0.55"/>
+    <circle cx="316" cy="334" r="6.5" fill="#e11d48" fill-opacity="0.55"/>
+    <circle cx="333" cy="334" r="6.5" fill="#e11d48" fill-opacity="0.55"/>
+    <text x="24" y="115" text-anchor="start" class="bold">β₀</text>
+    <text x="24" y="227" text-anchor="start" class="bold">bᵢ</text>
+    <text x="24" y="339" text-anchor="start" class="bold">εᵢⱼ</text>
   </g>
 </svg>

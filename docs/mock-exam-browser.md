@@ -443,8 +443,9 @@ The same table also holds each exam's **syllabus** (`SYLLABUS_PDF_LINKS`, keyed 
 exam id — so Exam 5 is `5-1`, as in `data/examGuides.ts`). That one is read by
 `components/wiki/ExamSyllabusButton.tsx`, which sits in a study-guide page's sticky header,
 at the right-hand end of the strip beside the exam's logo (`pages/wiki/WikiExam.tsx` passes
-it in the `pageTitleBadge` slot, so it stays in reach however far down the page you are;
-with today's-plan pill also on the row it drops its word below `sm` and keeps the icon) and opens the publisher's
+it in the `pageTitleBadge` slot, so it stays in reach however far down the page you are,
+after the exam's **version** menu — `components/wiki/ExamVersionMenu.tsx`, which names the
+sitting the page is read for from `data/examSittings.ts`) and opens the publisher's
 document in the same `PdfViewerPanel`: the page under it is *our* reading of that syllabus,
 and checking one against the other shouldn't cost you the page you were on.
 

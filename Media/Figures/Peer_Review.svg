@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>What a peer review adds, and the one thing it cannot move</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>An independent reviewer outside the insurer examining the Appointed Actuary's opinion through a magnifying glass and sending a challenge back — while the opinion itself stays with the Appointed Actuary</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -46,29 +42,29 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ah0d9488" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#0d9488"/></marker>
+  </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">Independent challenge — and the opinion</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">stays yours</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">A reviewer's concurrence is not a defence</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">for an opinion that was wrong</text>
-    <text x="180" y="102" text-anchor="middle" class="sm dim">how deep the review goes</text>
-    <text x="40" y="124" text-anchor="start" class="sm">full re-performance</text>
-    <rect x="40" y="130" width="246" height="16" rx="3" fill="#3b82f6" fill-opacity="0.55"/>
-    <text x="40" y="166" text-anchor="start" class="sm">methods and assumptions</text>
-    <rect x="40" y="172" width="176" height="16" rx="3" fill="#0d9488" fill-opacity="0.55"/>
-    <text x="40" y="208" text-anchor="start" class="sm">targeted — one line, one issue</text>
-    <rect x="40" y="214" width="106" height="16" rx="3" fill="#d97706" fill-opacity="0.55"/>
-    <line x1="30" y1="258" x2="330" y2="258" class="rule"/>
-    <text x="36" y="280" text-anchor="start" class="sm" fill="#e11d48">•</text>
-    <text x="52" y="280" text-anchor="start" class="sm">independence is the whole value — a reviewer</text>
-    <text x="36" y="304" text-anchor="start" class="sm" fill="#e11d48">•</text>
-    <text x="52" y="304" text-anchor="start" class="sm">reporting to the same management adds little</text>
-    <text x="36" y="328" text-anchor="start" class="sm" fill="#e11d48">•</text>
-    <text x="52" y="328" text-anchor="start" class="sm">OSFI may require one after adverse development</text>
-    <text x="36" y="352" text-anchor="start" class="sm" fill="#e11d48">•</text>
-    <text x="52" y="352" text-anchor="start" class="sm">and the findings have to be recorded and actioned</text>
-    <text x="180" y="388" text-anchor="middle" class="sm dim">an unaddressed finding is worse than no review</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <rect x="26" y="188" width="180" height="196" rx="12" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
+    <text x="40" y="208" text-anchor="start" class="sm dim">insurer</text>
+    <circle cx="76" cy="271.4" r="11.16" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M56.16,321 V297.44 Q56.16,287.52 67.32,287.52 H84.68 Q95.84,287.52 95.84,297.44 V321 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="76" y="346" text-anchor="middle" class="bold">AA</text>
+    <polygon points="136.4,260 167.6,260 179.6,272 179.6,320 136.4,320" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M167.6,260 V272 H179.6" fill="none" stroke="#d97706" stroke-width="1.2"/>
+    <line x1="144.8" y1="284" x2="170" y2="284" stroke="#d97706" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="144.8" y1="294.2" x2="170" y2="294.2" stroke="#d97706" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="144.8" y1="304.4" x2="161.6" y2="304.4" stroke="#d97706" stroke-width="1.4" stroke-linecap="round"/>
+    <text x="158" y="346" text-anchor="middle" class="sm bold">opinion</text>
+    <circle cx="294" cy="271.4" r="11.16" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M274.16,321 V297.44 Q274.16,287.52 285.32,287.52 H302.68 Q313.84,287.52 313.84,297.44 V321 Z" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="294" y="346" text-anchor="middle" class="sm bold">reviewer</text>
+    <circle cx="196" cy="266" r="20" fill="#0d9488" fill-opacity="0.12" stroke="#0d9488" stroke-width="2.4"/>
+    <line x1="211.62" y1="278.49" x2="228.8" y2="292.24" stroke="#0d9488" stroke-width="4.4" stroke-linecap="round"/>
+    <path d="M290,244 Q190,84 88,244" class="thin" stroke="#0d9488" stroke-width="2"/>
+    <line x1="100.24" y1="224.8" x2="88" y2="244" class="thin" stroke="#0d9488" stroke-width="2" marker-end="url(#ah0d9488)"/>
+    <text x="190" y="152" text-anchor="middle" class="sm bold">challenge</text>
   </g>
 </svg>

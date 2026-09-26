@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>What the report has to record, and the actual-versus-expected section that tests last year's estimate</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>The Appointed Actuary handing a report to another actuary, whose redone result stands the same height as the original — the report is detailed enough to reproduce</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -46,41 +42,31 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
+    <marker id="ah0d9488" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#0d9488"/></marker>
+  </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">Detailed enough for another actuary to</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">redo it</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">Data · methods · assumptions · results</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">· sensitivity · subsequent events</text>
-    <text x="36" y="106" text-anchor="start" class="sm" fill="#3b82f6">•</text>
-    <text x="52" y="106" text-anchor="start" class="sm">data, reconciled — and its deficiencies</text>
-    <text x="36" y="132" text-anchor="start" class="sm" fill="#3b82f6">•</text>
-    <text x="52" y="132" text-anchor="start" class="sm">methods by line and by LIC / LRC component</text>
-    <text x="36" y="158" text-anchor="start" class="sm" fill="#3b82f6">•</text>
-    <text x="52" y="158" text-anchor="start" class="sm">assumptions, and why each was selected</text>
-    <text x="36" y="184" text-anchor="start" class="sm" fill="#3b82f6">•</text>
-    <text x="52" y="184" text-anchor="start" class="sm">results against the prior valuation</text>
-    <text x="36" y="210" text-anchor="start" class="sm" fill="#3b82f6">•</text>
-    <text x="52" y="210" text-anchor="start" class="sm">sensitivity, and the range of reasonable estimates</text>
-    <text x="36" y="236" text-anchor="start" class="sm" fill="#3b82f6">•</text>
-    <text x="52" y="236" text-anchor="start" class="sm">subsequent events, materiality, reliance</text>
-    <line x1="30" y1="274" x2="330" y2="274" class="rule"/>
-    <text x="180" y="296" text-anchor="middle" class="sm bold">and the section that earns its place</text>
-    <text x="180" y="312" text-anchor="middle" class="sm dim">actual versus expected</text>
-    <rect x="76.18" y="357.14" width="33.64" height="6.86" rx="3" fill="#e11d48" fill-opacity="0.75"/>
-    <text x="93" y="350.14" text-anchor="middle" class="sm">+2%</text>
-    <text x="93" y="379" text-anchor="middle" class="sm dim">2022</text>
-    <rect x="134.18" y="340" width="33.64" height="24" rx="3" fill="#e11d48" fill-opacity="0.75"/>
-    <text x="151" y="333" text-anchor="middle" class="sm">+7%</text>
-    <text x="151" y="379" text-anchor="middle" class="sm dim">2023</text>
-    <rect x="192.18" y="333.14" width="33.64" height="30.86" rx="3" fill="#e11d48" fill-opacity="0.75"/>
-    <text x="209" y="326.14" text-anchor="middle" class="sm">+9%</text>
-    <text x="209" y="379" text-anchor="middle" class="sm dim">2024</text>
-    <rect x="250.18" y="322.86" width="33.64" height="41.14" rx="3" fill="#e11d48" fill-opacity="0.75"/>
-    <text x="267" y="315.86" text-anchor="middle" class="sm">+12%</text>
-    <text x="267" y="379" text-anchor="middle" class="sm dim">2025</text>
-    <line x1="58" y1="364" x2="302" y2="364" class="axis"/>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">four years of adverse development is a method problem</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <circle cx="64" cy="114.6" r="10.44" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M45.44,161 V138.96 Q45.44,129.68 55.88,129.68 H72.12 Q82.56,129.68 82.56,138.96 V161 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="64" y="180" text-anchor="middle" class="bold">AA</text>
+    <polygon points="152.64,94 192.16,94 207.36,109.2 207.36,170 152.64,170" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M192.16,94 V109.2 H207.36" fill="none" stroke="#d97706" stroke-width="1.2"/>
+    <line x1="163.28" y1="124.4" x2="195.2" y2="124.4" stroke="#d97706" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="163.28" y1="137.32" x2="195.2" y2="137.32" stroke="#d97706" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="163.28" y1="150.24" x2="184.56" y2="150.24" stroke="#d97706" stroke-width="1.4" stroke-linecap="round"/>
+    <text x="180" y="190" text-anchor="middle" class="bold">report</text>
+    <circle cx="296" cy="114.6" r="10.44" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M277.44,161 V138.96 Q277.44,129.68 287.88,129.68 H304.12 Q314.56,129.68 314.56,138.96 V161 Z" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="296" y="180" text-anchor="middle" class="sm bold">another actuary</text>
+    <line x1="92" y1="132" x2="146" y2="132" class="thin" stroke="#3b82f6" stroke-width="2" marker-end="url(#ah3b82f6)"/>
+    <line x1="214" y1="132" x2="268" y2="132" class="thin" stroke="#0d9488" stroke-width="2" marker-end="url(#ah0d9488)"/>
+    <rect x="42" y="244" width="44" height="108" rx="3" fill="#3b82f6" fill-opacity="0.6"/>
+    <rect x="274" y="244" width="44" height="108" rx="3" fill="#0d9488" fill-opacity="0.6"/>
+    <line x1="86" y1="244" x2="274" y2="244" class="thin dot" stroke="var(--dim)"/>
+    <text x="180" y="302" text-anchor="middle" class="bold" style="font-size:30px">=</text>
+    <line x1="24" y1="352" x2="336" y2="352" class="axis"/>
+    <text x="180" y="372" text-anchor="middle" class="sm dim">same result</text>
   </g>
 </svg>

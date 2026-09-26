@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>The duty running both ways, and the imbalance in what a breach costs each side</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>Scales with the insurer weighing down one pan and the insured lifted on the other, and arrows of duty running both ways above them</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -47,40 +43,37 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <defs>
-    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
     <marker id="ahd97706" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#d97706"/></marker>
+    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
   </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">A duty owed in both directions,</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">unequally felt</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">uberrimae fidei — utmost good faith</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">at application, in force, and on the claim</text>
-    <rect x="36" y="98" width="104" height="28" rx="14.0" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="88" y="116" text-anchor="middle" class="sm">insured</text>
-    <rect x="220" y="98" width="104" height="28" rx="14.0" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2"/>
-    <text x="272" y="116" text-anchor="middle" class="sm">insurer</text>
-    <line x1="146" y1="104" x2="214" y2="104" class="thin" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#ah3b82f6)"/>
-    <line x1="214" y1="122" x2="146" y2="122" class="thin" stroke="#d97706" stroke-width="1.5" marker-end="url(#ahd97706)"/>
-    <rect x="30" y="148" width="143" height="100" rx="7" fill="#3b82f6" fill-opacity="0.08" stroke="#3b82f6" stroke-width="1.2"/>
-    <rect x="30" y="148" width="143" height="24" rx="7" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
-    <text x="101.5" y="164" text-anchor="middle" class="sm bold" fill="#3b82f6">owes</text>
-    <text x="101.5" y="192" text-anchor="middle" class="sm">full disclosure</text>
-    <text x="101.5" y="214" text-anchor="middle" class="sm">honest claims</text>
-    <text x="101.5" y="236" text-anchor="middle" class="sm">cooperation</text>
-    <rect x="187" y="148" width="143" height="122" rx="7" fill="#d97706" fill-opacity="0.08" stroke="#d97706" stroke-width="1.2"/>
-    <rect x="187" y="148" width="143" height="24" rx="7" fill="#d97706" fill-opacity="0.22" stroke="none"/>
-    <text x="258.5" y="164" text-anchor="middle" class="sm bold" fill="#d97706">owes</text>
-    <text x="258.5" y="192" text-anchor="middle" class="sm">prompt, fair</text>
-    <text x="258.5" y="214" text-anchor="middle" class="sm">investigation</text>
-    <text x="258.5" y="236" text-anchor="middle" class="sm">reasons on denial</text>
-    <text x="258.5" y="258" text-anchor="middle" class="sm">equal regard</text>
-    <line x1="30" y1="274" x2="330" y2="274" class="rule"/>
-    <text x="180" y="296" text-anchor="middle" class="sm bold" fill="#e11d48">but the positions are not equal</text>
-    <text x="180" y="320" text-anchor="middle" class="sm dim">the claimant has just suffered a loss and</text>
-    <text x="180" y="336" text-anchor="middle" class="sm dim">cannot fund years of litigation — which is why</text>
-    <text x="180" y="352" text-anchor="middle" class="sm dim">the duty is enforced with damages of its own</text>
-    <text x="180" y="380" text-anchor="middle" class="sm dim">in Quebec it comes from the Civil Code, not equity</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <line x1="180" y1="192.2" x2="180" y2="348" stroke="#7c3aed" stroke-width="1.8"/>
+    <rect x="138.2" y="348" width="83.6" height="19" rx="2" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <line x1="92.6" y1="233.24" x2="267.4" y2="196.76" stroke="#7c3aed" stroke-width="1.8" stroke-linecap="round"/>
+    <circle cx="180" cy="188.4" r="9.5" fill="#7c3aed"/>
+    <line x1="92.6" y1="233.24" x2="62.2" y2="290.24" stroke="#7c3aed" stroke-width="1"/>
+    <line x1="92.6" y1="233.24" x2="123" y2="290.24" stroke="#7c3aed" stroke-width="1"/>
+    <path d="M54.6,290.24 Q92.6,316.84 130.6,290.24 Z" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <line x1="267.4" y1="196.76" x2="237" y2="253.76" stroke="#7c3aed" stroke-width="1"/>
+    <line x1="267.4" y1="196.76" x2="297.8" y2="253.76" stroke="#7c3aed" stroke-width="1"/>
+    <path d="M229.4,253.76 Q267.4,280.36 305.4,253.76 Z" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="75.24" y="225" width="34.72" height="62" rx="2" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="82.06" y="232.44" width="7.44" height="6.2" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="95.7" y="232.44" width="7.44" height="6.2" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="82.06" y="244.84" width="7.44" height="6.2" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="95.7" y="244.84" width="7.44" height="6.2" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="82.06" y="257.24" width="7.44" height="6.2" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="95.7" y="257.24" width="7.44" height="6.2" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="82.06" y="269.64" width="7.44" height="6.2" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="95.7" y="269.64" width="7.44" height="6.2" fill="#d97706" fill-opacity="0.55"/>
+    <text x="92.6" y="334" text-anchor="middle" class="bold">insurer</text>
+    <circle cx="267.4" cy="213" r="9" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M251.4,253 V234 Q251.4,226 260.4,226 H274.4 Q283.4,226 283.4,234 V253 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="267.4" y="300" text-anchor="middle" class="bold">insured</text>
+    <line x1="80" y1="118" x2="280" y2="118" class="thin" stroke="#d97706" stroke-width="1.8" marker-end="url(#ahd97706)"/>
+    <text x="180" y="110" text-anchor="middle" class="sm">fair dealing</text>
+    <line x1="280" y1="150" x2="80" y2="150" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <text x="180" y="168" text-anchor="middle" class="sm">disclosure</text>
   </g>
 </svg>

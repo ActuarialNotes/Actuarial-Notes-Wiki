@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>Earned premium less losses, LAE and expenses leaving the underwriting margin</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>A waterfall from $558 of premium down through $300 of losses, $60 of LAE and $170 of expenses to $28 of underwriting profit</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -47,23 +43,25 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">What the insurance operation earns on</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">its own</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">UW Profit = EP − Loss − LAE − Expenses</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">UW Margin = 1 − Combined Ratio</text>
-    <text x="180" y="116" text-anchor="middle" class="sm dim">per $520 of earned premium</text>
-    <rect x="46" y="136" width="268" height="30" rx="4" fill="#7c3aed" fill-opacity="0.24" stroke="#7c3aed" stroke-width="1.2"/>
-    <text x="180" y="156" text-anchor="middle" class="sm">earned premium  520</text>
-    <rect x="46" y="190" width="154.62" height="26" rx="3" fill="#3b82f6" fill-opacity="0.6"/>
-    <text x="210.62" y="208" text-anchor="start" class="sm">− losses 300</text>
-    <rect x="46" y="234" width="30.92" height="26" rx="3" fill="#0d9488" fill-opacity="0.6"/>
-    <text x="86.92" y="252" text-anchor="start" class="sm">− LAE 60</text>
-    <rect x="46" y="278" width="69.06" height="26" rx="3" fill="#d97706" fill-opacity="0.6"/>
-    <text x="125.06" y="296" text-anchor="start" class="sm">− expenses 134</text>
-    <rect x="46" y="322" width="13.4" height="26" rx="3" fill="#059669" fill-opacity="0.6"/>
-    <text x="69.4" y="340" text-anchor="start" class="sm bold">= profit 26</text>
-    <text x="180" y="380" text-anchor="middle" class="sm dim">26 / 520 = 5.0% — a 95% combined ratio</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <rect x="23" y="108" width="42" height="240" rx="2" fill="#7c3aed" fill-opacity="0.34" stroke="#7c3aed" stroke-width="1.2"/>
+    <text x="44" y="100" text-anchor="middle" class="sm">558</text>
+    <text x="44" y="366" text-anchor="middle" class="sm dim">premium</text>
+    <rect x="85" y="108" width="42" height="129.04" rx="2" fill="#3b82f6" fill-opacity="0.34" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="106" y="100" text-anchor="middle" class="sm">300</text>
+    <text x="106" y="366" text-anchor="middle" class="sm dim">losses</text>
+    <line x1="65" y1="108" x2="85" y2="108" class="thin dash" stroke="var(--dim)" stroke-width="1"/>
+    <rect x="147" y="237.04" width="42" height="25.81" rx="2" fill="#0d9488" fill-opacity="0.34" stroke="#0d9488" stroke-width="1.2"/>
+    <text x="168" y="229.04" text-anchor="middle" class="sm">60</text>
+    <text x="168" y="366" text-anchor="middle" class="sm dim">LAE</text>
+    <line x1="127" y1="237.04" x2="147" y2="237.04" class="thin dash" stroke="var(--dim)" stroke-width="1"/>
+    <rect x="209" y="262.85" width="42" height="73.15" rx="2" fill="#d97706" fill-opacity="0.34" stroke="#d97706" stroke-width="1.2"/>
+    <text x="230" y="254.85" text-anchor="middle" class="sm">170</text>
+    <text x="230" y="366" text-anchor="middle" class="sm dim">expenses</text>
+    <line x1="189" y1="262.85" x2="209" y2="262.85" class="thin dash" stroke="var(--dim)" stroke-width="1"/>
+    <line x1="251" y1="336" x2="271" y2="336" class="thin dash" stroke="var(--dim)" stroke-width="1"/>
+    <rect x="271" y="336" width="42" height="12" rx="2" fill="#059669" fill-opacity="0.6" stroke="#059669" stroke-width="1.2"/>
+    <text x="292" y="328" text-anchor="middle" class="sm bold">28</text>
+    <text x="292" y="366" text-anchor="middle" class="sm bold">profit</text>
   </g>
 </svg>

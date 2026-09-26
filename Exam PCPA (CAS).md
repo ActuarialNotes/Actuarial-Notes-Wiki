@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9d15d14ae348c460fe4ab0758e52d18b66cf4d8aae6c94919aea503793c9369a
+  content_hash: sha256:82e1521a2e56b380cd55ce2291caba69e64ba578439c8b35a6695866d7d793d9
   sources: []
   open_findings: 0
   open_critical: 0
@@ -24,10 +24,10 @@ verification:
 > [!example]- A. Dealing with Data {35%}
 > Candidates should be able to [[Exploratory Data Analysis|evaluate the data set]] and manipulate it so it can be used in a [[Predictive Analytics|predictive analytics model]].
 >
-> 1. Gather and assess the relevance of information from stakeholders in actuarial analysis.
+> 1. Gather and assess the relevance of information from [[Stakeholder Reporting|stakeholders]] in actuarial analysis.
 >    - *Key concepts:* [[Data Quality]] · [[Predictive Analytics]]
-> 2. Import, manipulate, and evaluate [[Tidy Data|data sets]] using generally available programming languages and software packages (e.g., .csv file).
-> 3. Evaluate the need for [[Variable Transformation|variable transformation]] and apply appropriate transformations to data.
+> 2. Import, manipulate, and evaluate [[Tidy Data|data sets]] using generally available [[Statistical Software|programming languages]] and [[Statistical Software|software packages]] (e.g., [[Tidy Data|.csv file]]).
+> 3. Evaluate the need for [[Variable Transformation|variable transformation]] and apply [[Variable Transformation|appropriate transformations]] to [[Tidy Data|data]].
 > 4. Identify and appropriately manage [[Outlier|outliers]] and [[Missing Data|missing data]].
 >
 > **Readings:** ASOP 23 · ASOP 56 · Gelman and Unwin · Grolemund and Wickham · McKinney
@@ -36,17 +36,17 @@ verification:
 > Candidates should be able to create and refine a [[Generalized Linear Model|GLM]].
 >
 > 1. Create and run a [[Generalized Linear Model|GLM]].
-> 2. Evaluate and improve a [[Generalized Linear Model|GLM]] (e.g., create and interpret [[Residual Plot|diagnostics]], conduct [[Cross-Validation|cross-validation]], incorporate [[Offset Variable|offsets]], mitigate [[Multicollinearity|multicollinearity]] issues, avoid [[Bias-Variance Tradeoff|underfitting and overfitting]]) for the data provided and business goals.
+> 2. Evaluate and improve a [[Generalized Linear Model|GLM]] (e.g., create and interpret [[Residual Plot|diagnostics]], conduct [[Cross-Validation|cross-validation]], incorporate [[Offset Variable|offsets]], mitigate [[Multicollinearity|multicollinearity]] issues, avoid [[Bias-Variance Tradeoff|underfitting and overfitting]]) for the [[Tidy Data|data]] provided and [[Business Strategy|business goals]].
 >    - *Key concepts:* [[Holdout Sample]] · [[Link Function]] · [[Tweedie Distribution]] · [[AIC]] · [[BIC]] · [[Deviance]]
 >
 > **Readings:** De Jong and Heller · Fannin · Frees, Derrig and Meyers · GLM (Monograph) · Venables and Ripley
 
 > [!example]- C. Model Interpretation and Presentation {30%}
-> Candidates should be able to interpret the findings from a [[Predictive Analytics|predictive analytics model]] and present their findings to technical and non-technical audiences.
+> Candidates should be able to interpret the findings from a [[Predictive Analytics|predictive analytics model]] and present their findings to [[Actuarial Communication|technical and non-technical audiences]].
 >
-> 1. Create and interpret statistical/tabular and [[Data Visualization|graphical/visual representations of data]].
-> 2. Communicate project technical information, including details on methodologies, [[Variable Selection|modeling decisions]], and [[Parameter Estimate Tables|interpretation of output]].
-> 3. Communicate project findings to non-technical audiences, including the implications on business outcomes or decisions.
+> 1. Create and interpret [[Summary Statistics|statistical/tabular]] and [[Data Visualization|graphical/visual representations of data]].
+> 2. Communicate [[Actuarial Communication|project technical information]], including details on methodologies, [[Variable Selection|modeling decisions]], and [[Parameter Estimate Tables|interpretation of output]].
+> 3. Communicate [[Actuarial Communication|project findings]] to [[Actuarial Communication|non-technical audiences]], including the implications on [[Business Strategy|business outcomes]] or decisions.
 >    - *Key concepts:* [[Quantile Plot]] · [[Double Lift Chart]] · [[Gini Index]]
 >
 > **Readings:** Cairo · Few · Knaflic

@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>The loss ratio method comparing the projected ratio with the permissible loss ratio</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>The projected ratio of 74.0 — 69.2 of loss and LAE plus 4.8 of fixed expense — standing taller than the 69.0 permissible column, a gap of +7.3%</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -47,22 +43,18 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">Compare the projected ratio with the</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">permissible</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">Change = (Proj Loss Ratio + F%) / PLR − 1</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">(0.692 + 0.048) / 0.69 − 1 = +7.3%</text>
-    <text x="180" y="116" text-anchor="middle" class="sm dim">projected loss &amp; LAE ratio plus fixed expense</text>
-    <rect x="46" y="140" width="231.82" height="34" rx="4" fill="#3b82f6" fill-opacity="0.34" stroke="#3b82f6" stroke-width="1.2"/>
-    <rect x="277.82" y="140" width="16.08" height="34" rx="4" fill="#0d9488" fill-opacity="0.55"/>
-    <text x="161.91" y="163" text-anchor="middle" class="sm">69.2%</text>
-    <text x="285.86" y="190" text-anchor="middle" class="sm dim">+4.8%</text>
-    <rect x="46" y="232" width="231.15" height="34" rx="4" fill="#d97706" fill-opacity="0.30" stroke="#d97706" stroke-width="1.2"/>
-    <text x="161.57" y="255" text-anchor="middle" class="sm">PLR 69.0%</text>
-    <text x="180" y="218" text-anchor="middle" class="sm dim">against what the premium makes available</text>
-    <text x="180" y="300" text-anchor="middle" class="bold" fill="#059669">74.0 / 69.0 = 1.073 ⇒ +7.3%</text>
-    <text x="180" y="344" text-anchor="middle" class="sm dim">works without exposure counts, but the</text>
-    <text x="180" y="362" text-anchor="middle" class="sm dim">premium must be brought on level first</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <rect x="55" y="116.62" width="90" height="235.38" rx="2" fill="#3b82f6" fill-opacity="0.34" stroke="#3b82f6" stroke-width="1.2"/>
+    <rect x="55" y="100.27" width="90" height="16.35" rx="2" fill="#0d9488" fill-opacity="0.34" stroke="#0d9488" stroke-width="1.2"/>
+    <text x="100" y="370" text-anchor="middle" class="sm dim">projected</text>
+    <rect x="195" y="117.4" width="90" height="234.6" rx="2" fill="#d97706" fill-opacity="0.34" stroke="#d97706" stroke-width="1.2"/>
+    <text x="240" y="370" text-anchor="middle" class="sm dim">permissible</text>
+    <text x="100" y="238.31" text-anchor="middle" class="sm">69.2</text>
+    <text x="100" y="112.44" text-anchor="middle" class="sm">4.8</text>
+    <text x="240" y="238.7" text-anchor="middle" class="sm">69.0</text>
+    <text x="100" y="90.27" text-anchor="middle" class="bold">74.0</text>
+    <line x1="145" y1="100.27" x2="195" y2="100.27" class="thin dash" stroke="var(--dim)" stroke-width="1.2"/>
+    <rect x="195" y="100.27" width="90" height="17.13" rx="2" fill="#e11d48" fill-opacity="0.14" stroke="#e11d48" stroke-width="1.4" stroke-dasharray="4 3"/>
+    <text x="293" y="112.83" text-anchor="start" class="bold">+7.3%</text>
   </g>
 </svg>

@@ -249,7 +249,7 @@ export function ConceptImageBanner({ images, onOpen, className }: ConceptImageBa
               // reader on the default dark app got a white panel on a black card.
               src={themedFigureSrc(current.src, theme)}
               alt={current.alt}
-              // Concept figures are portrait (see docs/concept-figures.md), so a
+              // Concept figures are near-square (see docs/concept-figures.md), so a
               // landscape-era height cap would shrink them to an unreadable column.
               className="mx-auto max-h-80 w-full object-contain"
               onError={() => setFailed(prev => new Set(prev).add(current.src))}

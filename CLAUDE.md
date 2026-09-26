@@ -189,8 +189,10 @@ before touching that area**:
 - `docs/concept-figures.md` — the **generated concept figures**: one SVG per Exam P / FM /
   MAS-I / MAS-II / 5 / 6C concept in `Media/Figures/`, drawn by
   `scripts/generate_concept_figures.py` on top of the dependency-free
-  `scripts/figure_kit.py`. Read before editing a figure — they are generated, so a hand
-  edit to an SVG is lost on the next run.
+  `scripts/figure_kit.py`. Each is **one picture and nothing else** — no title, formula,
+  caption or table; labels of a word or two where the picture needs them, and the words
+  in the `alt` text. Read before editing a figure — they are generated, so a hand edit
+  to an SVG is lost on the next run.
 - `docs/resource-covers.md` — the **resource cover images**: where the metadata card gets
   a source's cover (the page's first image embed), how `scripts/generate_resource_covers.py`
   draws one from front matter for the pages with no real jacket, and the rule that a real

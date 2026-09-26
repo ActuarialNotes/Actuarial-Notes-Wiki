@@ -1648,7 +1648,8 @@ def _corr_panel(f: Fig, y0, y1, vals, n, title, colour, ylab=True):
     """A correlogram with ±1.96/√n bands. Returns the axes."""
     band = 1.96 / math.sqrt(n)
     ax = Axes(f, BX0 + 42, y0, BX1 - 16, y1, 0.4, len(vals) + 0.6, -1.05, 1.05)
-    f.text(BCX, y0 - 8, title, cls="sm bold", fill=colour)
+    if title:
+        f.text(BCX, y0 - 8, title, cls="sm bold", fill=colour)
     for v in (band, -band):
         f.line(ax.x0, ax.py(v), ax.x1, ax.py(v), cls="thin dash", stroke=ROSE,
                stroke_width="1.1")
@@ -1664,33 +1665,31 @@ def _corr_panel(f: Fig, y0, y1, vals, n, title, colour, ylab=True):
     return ax
 
 
-@figure("Time Series", "A quarterly loss index showing trend, seasonality and "
-        "irregular movement", width=WID)
+@figure("Time Series", "Forty quarters of a loss index climbing along a dashed trend "
+        "line with a repeating seasonal wiggle and irregular noise", width=WID)
 def time_series() -> Fig:
     f = vcard()
 
     ys = _index_series()
-    ax = _ts_axes(f, ys, top=34, bottom=80)
+    ax = _ts_axes(f, ys, top=28, bottom=44)
     ax.frame(xticks=[0, 8, 16, 24, 32, 40], yticks=[], grid=True,
              xfmt=lambda t: f"Y{int(t/4)+1}" if t % 8 == 0 else "")
     ax.polyline(list(enumerate(ys)), colour=BLUE, width=2)
+    for t, y in enumerate(ys):
+        ax.point(t, y, colour=BLUE, r=2)
     ax.polyline([(t, 10 + 0.9 * (t + 1)) for t in (0, len(ys) - 1)],
                 colour=AMBER, width=1.8, dash=True)
     ax.label(len(ys) - 2, 10 + 0.9 * len(ys), "trend", cls="sm bold", fill=AMBER,
              anchor="end", dy=16)
-    f.text(BCX, ax.y1 + 34, "consecutive values are correlated —", cls="sm dim")
-    f.text(BCX, ax.y1 + 49, "the assumption regression starts by denying",
-           cls="sm dim")
-    f.text(BCX, BY1 - 2, "40 quarters of a loss index", cls="sm dim")
     return f
 
 
-@figure("Stationarity", "A stationary series oscillating about a fixed mean above "
-        "a non-stationary one that wanders", width=WID)
+@figure("Stationarity", "A stationary AR(1) series oscillating inside a fixed band "
+        "about its mean, and a random walk from the same start wandering off", width=WID)
 def stationarity() -> Fig:
     f = vcard()
 
-    r = _Rand(13)
+    r = _Rand(90)
     stat, y = [], 0.0
     for _ in range(60):
         y = 0.55 * y + r.n(0, 1)
@@ -1699,51 +1698,42 @@ def stationarity() -> Fig:
     for _ in range(60):
         y += r.n(0, 1)
         walk.append(y)
-
-    for panel, (ys, title, colour, mean) in enumerate((
-            (stat, "stationary — AR(1), φ = 0.55", GREEN, True),
-            (walk, "non-stationary — random walk", ROSE, False))):
-        y0 = 96 + panel * 132
-        lo, hi = min(ys), max(ys)
-        pad = (hi - lo) * 0.18
-        ax = Axes(f, BX0 + 34, y0 + 14, BX1 - 16, y0 + 100, 0, 59,
-                  lo - pad, hi + pad)
-        f.text(BCX, y0 + 6, title, cls="sm bold", fill=colour)
-        f.rect(ax.x0, ax.y0, ax.x1 - ax.x0, ax.y1 - ax.y0, rx=5,
-               fill="var(--soft)", stroke="var(--edge)")
-        if mean:
-            ax.hline(0, colour="var(--dim)", x_to=59)
-        ax.polyline(list(enumerate(ys)), colour=colour, width=1.7)
-    f.text(BCX, BY1 - 20, "|φ| < 1 is stationary; φ = 1 is a unit root",
-           cls="sm dim")
-    f.text(BCX, BY1 - 2, "difference, or the ARIMA results do not hold",
-           cls="sm dim")
+    lo, hi = min(stat + walk), max(stat + walk)
+    pad = (hi - lo) * 0.08
+    ax = vaxes(f, 0, 59, lo - pad, hi + pad, left=24, right=16, top=24, bottom=24)
+    band = 2 / math.sqrt(1 - 0.55 ** 2)
+    f.rect(ax.x0, ax.py(band), ax.x1 - ax.x0, ax.py(-band) - ax.py(band),
+           fill=GREEN, fill_opacity="0.12")
+    ax.hline(0, colour="var(--dim)", x_to=59)
+    f.line(ax.x0, ax.y1, ax.x1, ax.y1, cls="axis")
+    ax.polyline(list(enumerate(stat)), colour=GREEN, width=1.8)
+    ax.polyline(list(enumerate(walk)), colour=ROSE, width=1.8)
+    ax.label(59, -band, "stationary", cls="sm bold", anchor="end", dy=16)
+    ax.label(59, max(walk), "random walk", cls="sm bold", anchor="end", dy=-4)
     return f
 
 
-@figure("White Noise", "An uncorrelated series and the flat correlogram it "
-        "produces", width=WID)
+@figure("White Noise", "Sixty uncorrelated draws jumping about zero, every one inside "
+        "the same constant band", width=WID)
 def white_noise() -> Fig:
     f = vcard()
 
     r = _Rand(17)
     ys = [r.n(0, 1) for _ in range(60)]
-    ax = Axes(f, BX0 + 34, 100, BX1 - 16, 190, 0, 59, -3.2, 3.2)
-    f.rect(ax.x0, ax.y0, ax.x1 - ax.x0, ax.y1 - ax.y0, rx=5, fill="var(--soft)",
-           stroke="var(--edge)")
+    ax = vaxes(f, 0, 59, -3.4, 3.4, left=36, right=16, top=24, bottom=30)
+    ax.frame(yticks=[-2, 0, 2], arrows=False)
+    f.rect(ax.x0, ax.py(1.96), ax.x1 - ax.x0, ax.py(-1.96) - ax.py(1.96),
+           fill=BLUE, fill_opacity="0.1")
     ax.hline(0, colour="var(--dim)", x_to=59)
     ax.polyline(list(enumerate(ys)), colour=BLUE, width=1.6)
-
-    lags = [0.06, -0.09, 0.03, 0.11, -0.05, 0.07, -0.02, 0.08]
-    _corr_panel(f, 232, 322, lags, 60, "residual ACF", BLUE)
-    f.text(BCX, 346, "every spike inside ±1.96/√n", cls="sm bold")
-    f.text(BCX, BY1 - 2, "what a fitted model's residuals must look like",
-           cls="sm dim")
+    for t, y in enumerate(ys):
+        ax.point(t, y, colour=BLUE, r=2)
     return f
 
 
-@figure("Random Walk", "A random walk with drift and its flat forecast with a "
-        "fan-shaped interval", width=WID)
+@figure("Random Walk", "A random walk with drift up to now, then its forecast line "
+        "continuing the drift inside an interval that fans out with the square root "
+        "of the horizon", width=WID)
 def random_walk() -> Fig:
     f = vcard()
 
@@ -1753,89 +1743,110 @@ def random_walk() -> Fig:
         y += 1.4 + r.n(0, 3)
         ys.append(y)
     last = ys[-1]
-    ax = vaxes(f, 0, 34, min(ys) - 14, last + 34, left=44, right=16, top=34,
-               bottom=76)
+    ax = vaxes(f, 0, 34, min(ys) - 14, last + 34, left=24, right=16, top=28,
+               bottom=44)
     ax.frame(xticks=[0, 12, 24, 33], yticks=[], grid=True,
              xfmt=lambda t: "now" if t == 24 else "")
     ax.polyline(list(enumerate(ys)), colour=BLUE, width=1.9)
     fut = [(24 + h, last + 1.4 * h) for h in range(10)]
+    upper = [(24 + h, last + 1.4 * h + 1.96 * 3 * math.sqrt(h)) for h in range(10)]
+    lower = [(24 + h, last + 1.4 * h - 1.96 * 3 * math.sqrt(h)) for h in range(10)]
+    f.polygon([ax.p(*q) for q in upper + lower[::-1]], fill=GREEN, fill_opacity="0.12",
+              stroke="none")
     ax.polyline(fut, colour=GREEN, width=2.2, dash=True)
-    for sgn in (1, -1):
-        ax.polyline([(24 + h, last + 1.4 * h + sgn * 1.96 * 3 * math.sqrt(h))
-                     for h in range(10)], colour=GREEN, width=1.2)
+    for edge in (upper, lower):
+        ax.polyline(edge, colour=GREEN, width=1.2)
     ax.vline(24, colour="var(--dim)", y_top=last + 30)
     ax.label(22, last + 26, "±1.96σ√h", cls="sm bold", fill=GREEN, anchor="end")
-    f.text(BCX, ax.y1 + 32, "the forecast is the last value plus hδ", cls="sm dim")
-    f.text(BCX, ax.y1 + 50, "the interval widens with √h, not h", cls="sm dim")
-    f.text(BCX, BY1 - 2, "Var(Y_t) = tσ² — it never settles", cls="sm dim")
     return f
 
 
-@figure("Differencing", "A trending series turned stationary by taking first "
-        "differences", width=WID)
+@figure("Differencing", "A trending series Y_t drawn as a staircase whose green risers "
+        "are its differences, and those same differences laid out below as bars "
+        "hovering around a flat level", width=WID)
 def differencing() -> Fig:
     f = vcard()
 
-    ys = _index_series(n=48, season=False, seed=71)
+    ys = _index_series(n=30, season=False, seed=89, noise=0.55)
     diff = [b - a for a, b in zip(ys, ys[1:])]
-    for panel, (series, title, colour) in enumerate((
-            (ys, "Y_t — trending, non-stationary", ROSE),
-            (diff, "∇Y_t — stationary", GREEN))):
-        y0 = 96 + panel * 132
-        lo, hi = min(series), max(series)
-        pad = (hi - lo) * 0.18
-        ax = Axes(f, BX0 + 36, y0 + 14, BX1 - 16, y0 + 100, 0, len(series) - 1,
-                  lo - pad, hi + pad)
-        f.text(BCX, y0 + 6, title, cls="sm bold", fill=colour)
-        f.rect(ax.x0, ax.y0, ax.x1 - ax.x0, ax.y1 - ax.y0, rx=5,
-               fill="var(--soft)", stroke="var(--edge)")
-        if panel:
-            ax.hline(0, colour="var(--dim)", x_to=len(series) - 1)
-        ax.polyline(list(enumerate(series)), colour=colour, width=1.7)
-    f.text(BCX, BY1 - 20, "d = 1 for a linear trend, 2 for a quadratic",
-           cls="sm dim")
-    f.text(BCX, BY1 - 2, "over-differencing injects a negative MA(1)",
-           cls="sm dim")
+    n = len(ys)
+    lo, hi = min(ys), max(ys)
+    x0, x1 = BX0 + 16, BX1 - 8
+    top = Axes(f, x0, BY0 + 18, x1, BY0 + 196, -0.5, n - 0.5, lo - 1, hi + 1)
+    dmax = max(abs(d) for d in diff)
+    low = Axes(f, x0, BY1 - 96, x1, BY1 - 20, -0.5, n - 0.5, -0.1, dmax * 1.1)
+    hl = 17
+    for t in range(n):
+        top.fig.line(top.px(t - 0.5), top.py(ys[t]), top.px(t + 0.5), top.py(ys[t]),
+                     cls="thin", stroke=ROSE, stroke_width="1.8")
+    for t, d in enumerate(diff, start=1):
+        xr = top.px(t - 0.5)
+        wide = t == hl
+        f.line(xr, top.py(ys[t - 1]), xr, top.py(ys[t]), cls="thin", stroke=GREEN,
+               stroke_width="3" if wide else "1.8")
+        f.rect(xr - 3, min(low.py(0), low.py(d)), 6, abs(low.py(d) - low.py(0)),
+               rx=1, fill=GREEN, fill_opacity="0.9" if wide else "0.55")
+    f.line(low.x0, low.py(0), low.x1, low.py(0), cls="axis")
+    mean = sum(diff) / len(diff)
+    f.line(low.x0, low.py(mean), low.x1, low.py(mean), cls="thin dash",
+           stroke="var(--ink)", stroke_width="1.2")
+    xr = top.px(hl - 0.5)
+    f.line(xr, top.py(ys[hl - 1]) + 6, xr, low.py(diff[hl - 1]) - 6, cls="thin dash",
+           stroke="var(--axis)", stroke_width="1.2")
+    top.label(n - 1, ys[-1], "Y_t", cls="bold", anchor="end", dx=-4, dy=-10)
+    low.label(-0.5, dmax * 1.1, "∇Y_t", cls="bold", anchor="start", dy=-6)
     return f
 
 
-@figure("Autocorrelation Function", "A correlogram cutting off after lag 1, the "
-        "signature of an MA(1)", width=WID)
+@figure("Autocorrelation Function", "A correlogram of a differenced series with one "
+        "large negative spike at lag 1 and every later lag inside the ±1.96/√n band",
+        width=WID)
 def acf() -> Fig:
     f = vcard()
 
     ac = [-0.52, 0.06, -0.04, 0.09, -0.03, 0.05, 0.02, -0.06, 0.04, 0.01]
-    ax = _corr_panel(f, 118, 240, ac, 144, "ACF of ∇Y_t", BLUE)
-    f.text(ax.px(2.4), ax.py(-0.52) + 6, "ρ₁ = −0.52", cls="sm bold", fill=BLUE,
+    ax = _corr_panel(f, BY0 + 24, BY1 - 44, ac, 144, None, BLUE)
+    f.text(ax.px(1.5), ax.py(-0.52) + 6, "ρ₁ = −0.52", cls="sm bold",
            anchor="start")
-    f.text(ax.x1, 254, "lag k", cls="sm dim", anchor="end")
-    f.text(BCX, 288, "±1.96/√144 = ±0.163 — only lag 1 clears it", cls="sm")
-    f.text(BCX, 316, "MA(q): the ACF cuts off after lag q", cls="sm bold")
-    f.text(BCX, 336, "AR(p): the ACF tails off geometrically", cls="sm dim")
-    f.text(BCX, 358, "slow, near-linear decay ⇒ difference first", cls="sm dim")
-    f.text(BCX, BY1 - 2, "on residuals, it is the white-noise check",
-           cls="sm dim")
+    f.text(ax.x1, ax.py(1.96 / 12) - 6, "±0.163", cls="sm dim", anchor="end")
+    for k in (1, 5, 10):
+        f.text(ax.px(k), ax.y1 + 16, str(k), cls="sm dim")
+    f.text(BCX, ax.y1 + 32, "lag k", cls="sm dim")
     return f
 
 
-@figure("Partial Autocorrelation Function", "A PACF cutting off after lag 1 beside "
-        "the ACF of the same AR(1) tailing off", width=WID)
+@figure("Partial Autocorrelation Function", "Paired spikes at each lag for an AR(1): "
+        "the ACF tailing off geometrically, the PACF cutting off after lag 1", width=WID)
 def pacf() -> Fig:
     f = vcard()
 
     phi = 0.71
     ac = [phi ** k for k in range(1, 9)]
     pac = [0.71, -0.05, 0.08, 0.02, -0.03, 0.05, -0.01, 0.03]
-    _corr_panel(f, 112, 200, ac, 100, "ACF — tails off", "var(--dim)")
-    _corr_panel(f, 244, 332, pac, 100, "PACF — cuts off at 1", VIOLET)
-    f.text(BCX, 214, "ρ₂ = 0.48 only because lag 1 carried it", cls="sm dim")
-    f.text(BCX, 356, "AR(1): the direct link at lag 2 is zero", cls="sm bold")
-    f.text(BCX, BY1 - 2, "AR cuts the PACF, MA cuts the ACF", cls="sm dim")
+    ax = vaxes(f, 0.4, 8.6, -0.35, 0.85, left=40, right=16, top=30, bottom=44)
+    band = 1.96 / math.sqrt(100)
+    for v in (band, -band):
+        f.line(ax.x0, ax.py(v), ax.x1, ax.py(v), cls="thin dash", stroke=ROSE,
+               stroke_width="1.1")
+    ax.frame(xticks=list(range(1, 9)), yticks=[0, 0.5], arrows=False,
+             xfmt=lambda t: "")
+    for k in range(1, 9):
+        f.text(ax.px(k), ax.y1 + 16, str(k), cls="sm dim")
+    f.line(ax.x0, ax.py(0), ax.x1, ax.py(0), cls="axis")
+    for series, colour, off in ((ac, "var(--dim)", -0.16), (pac, VIOLET, 0.16)):
+        for k, v in enumerate(series, start=1):
+            x = ax.px(k + off)
+            f.line(x, ax.py(0), x, ax.py(v), cls="", stroke=colour,
+                   stroke_width="3", stroke_linecap="round")
+            f.circle(x, ax.py(v), 2.8, fill=colour)
+    ax.label(2 - 0.16, ac[1], "ACF", cls="sm bold", dy=-9)
+    ax.label(1 + 0.16, pac[0], "PACF", cls="sm bold", anchor="start", dx=8, dy=4)
+    f.text(BCX, ax.y1 + 32, "lag k", cls="sm dim")
     return f
 
 
-@figure("Autoregressive Model", "An AR(1) forecast decaying geometrically back to "
-        "the long-run mean", width=WID)
+@figure("Autoregressive Model", "An AR(1) series up to now and its dashed forecast "
+        "decaying geometrically back to the long-run mean of 0.80", width=WID)
 def autoregressive_model() -> Fig:
     f = vcard()
 
@@ -1846,20 +1857,17 @@ def autoregressive_model() -> Fig:
         y = mu + phi * (y - mu) + r.n(0, 0.05)
         ys.append(y)
     ys[-1] = 0.92
-    ax = vaxes(f, 0, 34, 0.62, 1.06, left=44, right=16, top=34, bottom=80)
+    ax = vaxes(f, 0, 34, 0.62, 1.06, left=44, right=16, top=28, bottom=44)
     ax.frame(xticks=[0, 12, 23, 33], yticks=[0.7, 0.8, 0.9, 1.0], grid=True,
              xfmt=lambda t: "now" if t == 23 else "")
     ax.polyline(list(enumerate(ys)), colour=BLUE, width=1.9)
     fut = [(23 + h, mu + phi ** h * (0.92 - mu)) for h in range(11)]
     ax.polyline(fut, colour=GREEN, width=2.2, dash=True)
+    for t, v in fut[1:4]:
+        ax.point(t, v, colour=GREEN, r=3)
     ax.hline(mu, colour=AMBER, x_to=34)
-    ax.label(33, 0.665, "μ = c/(1 − φ) = 0.80", cls="sm bold", fill=AMBER,
-             anchor="end")
+    ax.label(33, 0.665, "μ = 0.80", cls="sm bold", fill=AMBER, anchor="end")
     ax.vline(23, colour="var(--dim)", y_top=1.02)
-    f.text(BCX, ax.y1 + 34, "Ŷ_{t+h} = μ + φ^h (Y_t − μ)", cls="sm bold")
-    f.text(BCX, ax.y1 + 52, "0.884, then 0.859, then 0.841 …", cls="sm dim")
-    f.text(BCX, BY1 - 2, "stationary iff every root lies outside the circle",
-           cls="sm dim")
     return f
 
 

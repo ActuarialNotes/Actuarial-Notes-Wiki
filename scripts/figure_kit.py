@@ -30,9 +30,10 @@ this module. It exists instead of matplotlib for three reasons:
 Coordinates are plain user units and the viewBox is unscaled, so a figure
 authored at 360×470 renders at whatever width the `![[...|340]]` embed asks for.
 
-Every concept figure is **portrait** and carries three things and no more — a
-title, the picture, and the one formula worth remembering. `vcard()` lays those
-out; builders draw into the fixed box `(BX0, BY0)-(BX1, BY1)` between them.
+Every concept figure is one picture and nothing else — no title, no formula, no
+caption, no table. The concept page around it already says all of those in
+words; the figure is the part that has to be *seen*. `vcard()` makes the card,
+and builders draw into the fixed box `(BX0, BY0)-(BX1, BY1)` inside it.
 """
 
 from __future__ import annotations
@@ -113,10 +114,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -160,12 +157,15 @@ class Fig:
     """An SVG canvas. Draw into it, then `save()`.
 
     Every figure gets the same rounded card so a page that stacks several of
-    them reads as one system.
+    them reads as one system. `oy` is the drawing coordinate the canvas's top
+    edge sits at — the viewBox starts there rather than at 0, so a builder's
+    coordinates don't have to move when the card around its picture does.
     """
 
     w: float = 560
     h: float = 300
     alt: str = ""
+    oy: float = 0
     parts: list[str] = field(default_factory=list)
     defs: list[str] = field(default_factory=list)
     _marker_ids: set[str] = field(default_factory=set)
@@ -231,11 +231,6 @@ class Fig:
             )
         return mid
 
-    def title(self, s, sub=None) -> None:
-        self.text(self.w / 2, 22, s, cls="ttl")
-        if sub:
-            self.text(self.w / 2, 38, sub, cls="sub")
-
     def legend(self, x, y, items, gap=16, swatch=13) -> None:
         """items: list of (colour, label). Stacked vertically, left-aligned."""
         for i, (colour, label) in enumerate(items):
@@ -290,12 +285,13 @@ class Fig:
         defs = ("\n  <defs>\n    " + "\n    ".join(self.defs) + "\n  </defs>") if self.defs else ""
         title = f"\n  <title>{escape(self.alt)}</title>" if self.alt else ""
         return (
-            f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {_fmt(self.w)} {_fmt(self.h)}" '
+            f'<svg xmlns="http://www.w3.org/2000/svg" '
+            f'viewBox="0 {_fmt(self.oy)} {_fmt(self.w)} {_fmt(self.h)}" '
             f'width="{_fmt(self.w)}" height="{_fmt(self.h)}" role="img">{title}\n'
             f"  <style>{STYLE}</style>\n"
             f"  {THEME_ANCHORS}{defs}\n"
             f'  <g class="art">\n'
-            f'    <rect class="card" x="0.6" y="0.6" width="{_fmt(self.w - 1.2)}" '
+            f'    <rect class="card" x="0.6" y="{_fmt(self.oy + 0.6)}" width="{_fmt(self.w - 1.2)}" '
             f'height="{_fmt(self.h - 1.2)}" rx="10"/>\n'
             f"    {body}\n  </g>\n</svg>\n"
         )
@@ -453,53 +449,30 @@ def axes(fig: Fig, xmin, xmax, ymin, ymax, left=48, right=24, top=52, bottom=40)
     return Axes(fig, left, top, fig.w - right, fig.h - bottom, xmin, xmax, ymin, ymax)
 
 
-# ── the portrait card ────────────────────────────────────────────────────────
-# One shape for every concept figure: a title, a picture, and one formula.
-# Everything else — the annotation columns, the footnotes, the "worth
-# remembering" asides — belongs on the concept page, not inside the image.
-VW, VH = 360, 470          # canvas
+# ── the card ─────────────────────────────────────────────────────────────────
+# One shape for every concept figure: the picture, and nothing around it. The
+# title, the formula, the captions and the tallies these figures used to carry
+# all say in words what the concept page beside the figure already says — and
+# at phone size a line of prose inside an image is unreadable anyway.
+#
+# The drawing box is where it has always been, in the coordinates every builder
+# is written in; the card is that box plus a 20-unit margin, so the viewBox
+# starts at y = OY rather than at 0 (see `Fig.oy`).
 BX0, BY0, BX1, BY1 = 20, 66, 340, 392   # the box a builder draws into
 BW, BH = BX1 - BX0, BY1 - BY0
 BCX, BCY = (BX0 + BX1) / 2, (BY0 + BY1) / 2
+MARGIN = 20
+OY = BY0 - MARGIN                       # the card's top edge
+VW, VH = BW + 2 * MARGIN, BH + 2 * MARGIN   # 360 × 366
 
 
-def wrap(text: str, width: int = 40) -> list[str]:
-    """Greedy word wrap, measured in characters."""
-    lines: list[str] = []
-    cur = ""
-    for word in text.split():
-        cand = f"{cur} {word}".strip()
-        if len(cand) > width and cur:
-            lines.append(cur)
-            cur = word
-        else:
-            cur = cand
-    if cur:
-        lines.append(cur)
-    return lines
-
-
-def vcard(title: str, formula: str | list[str] | None = None, alt: str = "") -> Fig:
-    """A portrait figure: title on top, drawing box, formula in the footer.
+def vcard(alt: str = "") -> Fig:
+    """The figure card: a bare surface around the drawing box.
 
     The box is the same rectangle in every figure, so a reader flipping through
     concept pages sees the picture land in the same place each time.
     """
-    f = Fig(VW, VH, alt=alt)
-    lines = wrap(title, 40)[:3]
-    ys = {1: [40], 2: [31, 50], 3: [23, 42, 61]}[len(lines)]
-    for y, line in zip(ys, lines):
-        f.text(VW / 2, y, line, cls="ttl")
-
-    if formula:
-        rows = [formula] if isinstance(formula, str) else list(formula)[:2]
-        f.line(28, 406, VW - 28, 406, cls="rule")
-        if len(rows) == 1:
-            f.text(VW / 2, 438, rows[0], cls="fml")
-        else:
-            f.text(VW / 2, 430, rows[0], cls="fml")
-            f.text(VW / 2, 452, rows[1], cls="fml2")
-    return f
+    return Fig(VW, VH, alt=alt, oy=OY)
 
 
 def vaxes(fig: Fig, xmin, xmax, ymin, ymax, left=44, right=14, top=20, bottom=42) -> Axes:
@@ -592,6 +565,133 @@ def stacked_bars(fig: Fig, x0, ybase, bw, gap, rows, height_scale, colours,
     return centres
 
 
+# ── icons ────────────────────────────────────────────────────────────────────
+# Small pictograms for the figures whose concept is *who does what to whom* —
+# a regulator, an insurer, a policyholder, a claim, a car, a house. A picture
+# of the parties and the arrows between them says in one glance what a box of
+# prose never does. Each is centred on (cx, cy), `s` units tall, drawn in one
+# series colour as a tinted fill with a solid outline.
+def _ink(colour, opacity="0.18"):
+    return dict(fill=colour, fill_opacity=opacity, stroke=colour, stroke_width="1.4",
+                stroke_linejoin="round")
+
+
+def person(fig: Fig, cx, cy, s=40, colour=BLUE):
+    """Head and shoulders — a policyholder, a claimant, an actuary."""
+    fig.circle(cx, cy - 0.3 * s, 0.18 * s, **_ink(colour))
+    w, top, bot = 0.32 * s, cy - 0.04 * s, cy + 0.5 * s
+    d = (f"M{_fmt(cx - w)},{_fmt(bot)} V{_fmt(top + 0.16 * s)} "
+         f"Q{_fmt(cx - w)},{_fmt(top)} {_fmt(cx - 0.14 * s)},{_fmt(top)} "
+         f"H{_fmt(cx + 0.14 * s)} Q{_fmt(cx + w)},{_fmt(top)} {_fmt(cx + w)},{_fmt(top + 0.16 * s)} "
+         f"V{_fmt(bot)} Z")
+    fig.path(d, cls="", **_ink(colour))
+
+
+def building(fig: Fig, cx, cy, s=40, colour=BLUE):
+    """A pediment on columns — a regulator, a court, a government."""
+    hw = 0.5 * s
+    fig.polygon([(cx - hw, cy - 0.2 * s), (cx, cy - 0.5 * s), (cx + hw, cy - 0.2 * s)],
+                **_ink(colour))
+    for k in range(4):
+        x = cx - 0.36 * s + k * 0.24 * s
+        fig.rect(x - 0.05 * s, cy - 0.14 * s, 0.1 * s, 0.46 * s, **_ink(colour))
+    fig.rect(cx - hw, cy + 0.36 * s, s, 0.14 * s, **_ink(colour))
+
+
+def tower(fig: Fig, cx, cy, s=40, colour=BLUE):
+    """An office block — an insurer, a company, a reinsurer."""
+    w = 0.56 * s
+    fig.rect(cx - w / 2, cy - 0.5 * s, w, s, rx=2, **_ink(colour))
+    for r in range(4):
+        for c in range(2):
+            fig.rect(cx - 0.17 * s + c * 0.22 * s, cy - 0.38 * s + r * 0.2 * s,
+                     0.12 * s, 0.1 * s, fill=colour, fill_opacity="0.55")
+
+
+def document(fig: Fig, cx, cy, s=40, colour=BLUE, lines=3):
+    """A page with a folded corner — a policy, a return, a report, a statute."""
+    w, h, fold = 0.72 * s, s, 0.2 * s
+    x0, y0 = cx - w / 2, cy - h / 2
+    fig.polygon([(x0, y0), (x0 + w - fold, y0), (x0 + w, y0 + fold), (x0 + w, y0 + h),
+                 (x0, y0 + h)], **_ink(colour))
+    fig.path(f"M{_fmt(x0 + w - fold)},{_fmt(y0)} V{_fmt(y0 + fold)} H{_fmt(x0 + w)}",
+             cls="", fill="none", stroke=colour, stroke_width="1.2")
+    for k in range(lines):
+        y = y0 + 0.4 * h + k * 0.17 * h
+        x_end = x0 + w - 0.16 * s - (0.14 * s if k == lines - 1 else 0)
+        fig.line(x0 + 0.14 * s, y, x_end, y, cls="", stroke=colour, stroke_width="1.4",
+                 stroke_linecap="round")
+
+
+def house(fig: Fig, cx, cy, s=40, colour=BLUE):
+    """A house — a homeowner's risk, a dwelling, property."""
+    hw = 0.36 * s
+    fig.polygon([(cx - hw, cy - 0.06 * s), (cx - hw, cy + 0.5 * s), (cx + hw, cy + 0.5 * s),
+                 (cx + hw, cy - 0.06 * s), (cx, cy - 0.46 * s)], **_ink(colour))
+    fig.rect(cx - 0.09 * s, cy + 0.18 * s, 0.18 * s, 0.32 * s, fill=colour, fill_opacity="0.55")
+
+
+def car(fig: Fig, cx, cy, s=40, colour=BLUE):
+    """A car, side on — an auto risk, a vehicle, a driver's exposure. `s` is its length."""
+    L = s
+    d = (f"M{_fmt(cx - 0.5 * L)},{_fmt(cy + 0.1 * L)} V{_fmt(cy - 0.04 * L)} "
+         f"L{_fmt(cx - 0.3 * L)},{_fmt(cy - 0.08 * L)} L{_fmt(cx - 0.16 * L)},{_fmt(cy - 0.24 * L)} "
+         f"H{_fmt(cx + 0.18 * L)} L{_fmt(cx + 0.32 * L)},{_fmt(cy - 0.08 * L)} "
+         f"L{_fmt(cx + 0.5 * L)},{_fmt(cy - 0.02 * L)} V{_fmt(cy + 0.1 * L)} Z")
+    fig.path(d, cls="", **_ink(colour))
+    for x in (cx - 0.28 * L, cx + 0.28 * L):
+        fig.circle(x, cy + 0.12 * L, 0.09 * L, fill="var(--surf)", stroke=colour,
+                   stroke_width="1.6")
+
+
+def coins(fig: Fig, cx, base_y, n=3, r=12, colour=AMBER):
+    """A stack of `n` coins standing on `base_y` — premium, a payment, capital."""
+    for k in range(n):
+        y = base_y - 5 - k * 6
+        fig.rect(cx - r, y - 3, 2 * r, 6, fill=colour, fill_opacity="0.25", stroke="none")
+        fig.ellipse(cx, y + 3, r, 3.4, fill=colour, fill_opacity="0.25", stroke=colour,
+                    stroke_width="1.2")
+        fig.ellipse(cx, y - 3, r, 3.4, fill="var(--surf)", stroke=colour, stroke_width="1.2")
+        fig.ellipse(cx, y - 3, r, 3.4, fill=colour, fill_opacity="0.3", stroke="none")
+
+
+def scales(fig: Fig, cx, cy, s=40, colour=BLUE, tilt=0.0):
+    """The scales of justice — a court, a ruling, a statute. `tilt` in [-1, 1] dips a pan."""
+    hw = 0.46 * s
+    dy = tilt * 0.12 * s
+    fig.line(cx, cy - 0.42 * s, cx, cy + 0.4 * s, cls="", stroke=colour, stroke_width="1.8")
+    fig.rect(cx - 0.22 * s, cy + 0.4 * s, 0.44 * s, 0.1 * s, rx=2, **_ink(colour))
+    fig.line(cx - hw, cy - 0.3 * s + dy, cx + hw, cy - 0.3 * s - dy, cls="", stroke=colour,
+             stroke_width="1.8", stroke_linecap="round")
+    fig.circle(cx, cy - 0.44 * s, 0.05 * s, fill=colour)
+    for side, dd in ((-1, dy), (1, -dy)):
+        x, y = cx + side * hw, cy - 0.3 * s + dd
+        fig.line(x, y, x - 0.16 * s, y + 0.3 * s, cls="", stroke=colour, stroke_width="1")
+        fig.line(x, y, x + 0.16 * s, y + 0.3 * s, cls="", stroke=colour, stroke_width="1")
+        fig.path(f"M{_fmt(x - 0.2 * s)},{_fmt(y + 0.3 * s)} "
+                 f"Q{_fmt(x)},{_fmt(y + 0.44 * s)} {_fmt(x + 0.2 * s)},{_fmt(y + 0.3 * s)} Z",
+                 cls="", **_ink(colour))
+
+
+def shield(fig: Fig, cx, cy, s=40, colour=GREEN):
+    """A shield — protection, a guarantee, cover."""
+    hw = 0.4 * s
+    d = (f"M{_fmt(cx)},{_fmt(cy - 0.5 * s)} L{_fmt(cx + hw)},{_fmt(cy - 0.36 * s)} "
+         f"V{_fmt(cy - 0.02 * s)} Q{_fmt(cx + hw)},{_fmt(cy + 0.34 * s)} {_fmt(cx)},{_fmt(cy + 0.5 * s)} "
+         f"Q{_fmt(cx - hw)},{_fmt(cy + 0.34 * s)} {_fmt(cx - hw)},{_fmt(cy - 0.02 * s)} "
+         f"V{_fmt(cy - 0.36 * s)} Z")
+    fig.path(d, cls="", **_ink(colour))
+
+
+def cross(fig: Fig, cx, cy, s=40, colour=ROSE):
+    """A medical cross — health care, injury, a benefit for treatment."""
+    a, b = 0.5 * s, 0.17 * s
+    pts = [(cx - b, cy - a), (cx + b, cy - a), (cx + b, cy - b), (cx + a, cy - b),
+           (cx + a, cy + b), (cx + b, cy + b), (cx + b, cy + a), (cx - b, cy + a),
+           (cx - b, cy + b), (cx - a, cy + b), (cx - a, cy - b), (cx - b, cy - b)]
+    fig.polygon(pts, **_ink(colour))
+
+
 def fmt_money(v: float) -> str:
     return f"{v:,.0f}"
 
@@ -599,6 +699,8 @@ def fmt_money(v: float) -> str:
 __all__ = [
     "Fig", "Axes", "axes", "timeline", "cash_arrow", "brace", "venn2", "universe",
     "stacked_bars", "fmt_money", "BLUE", "AMBER", "GREEN", "ROSE", "VIOLET", "TEAL",
-    "SERIES", "vcard", "vaxes", "wrap", "VW", "VH", "BX0", "BY0", "BX1", "BY1",
-    "BW", "BH", "BCX", "BCY",
+    "SERIES", "vcard", "vaxes", "VW", "VH", "BX0", "BY0", "BX1", "BY1",
+    "BW", "BH", "BCX", "BCY", "OY", "MARGIN",
+    "person", "building", "tower", "document", "house", "car", "coins", "scales",
+    "shield", "cross",
 ]

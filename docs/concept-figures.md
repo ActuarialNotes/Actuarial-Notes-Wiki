@@ -22,24 +22,30 @@ an SVG by hand — a hand edit will be overwritten on the next run.
 
 ## The card
 
-Every figure is the same **portrait card**, 360 × 470, built by `figure_kit.vcard()`,
-and carries exactly three things:
+Every figure is **one picture and nothing else**. No title, no formula, no subtitle, no
+caption, no table. The concept page around the figure already says all of those in
+words. The figure is the part that has to be *seen*, and it is read at a glance: at
+phone size, a line of prose inside an image is unreadable anyway.
 
-1. a **title** — one line of plain English, wrapped to at most two lines;
-2. the **picture**, drawn into the fixed box `(20, 66)–(340, 392)`;
-3. one **formula** in the footer, with an optional second line for an equivalent form
-   (`Var(X) = E[(X − μ)²]` / `= E[X²] − μ²`).
+So a figure is never two drawings stacked, a grid of small multiples, or a diagram with
+a chart under it. Where a concept has two sides worth showing, they are combined into
+one visual. *Term of Annuity* used to be a payment timeline over a separate
+a₍ₙ₎-against-n chart. It is now one set of bars: each bar is the present value of that
+many payments, a PV line crosses them, and a brace counts off the n payments that reach
+it.
 
-Nothing else. The annotation columns, worked tallies and "worth remembering" asides
-that these figures used to carry belong on the concept page, not inside the image — a
-figure is read at a glance, and at phone size a paragraph inside it is unreadable
-anyway. Labels *inside* the picture are fine when they are needed to read it (axis
-names, which curve is which, a marked value); a legend box or a stack of prose lines is
-not.
+Labels *inside* the picture are fine when they are needed to read it. That means axis
+ticks, which curve is which, a marked value, or the name of a node (`OSFI`, `board`,
+`AA`). A label is one to three words, never a sentence and never an equation. A legend
+box, a stack of prose lines, a bullet list or a box that holds a phrase is not a label.
+The words about a figure live in its `alt` text, which describes the picture in one
+sentence for a screen reader.
 
-The card is portrait because that is the shape of the space it is shown in: the
-full-screen figure viewer on a phone, and the figure banner at the top of the concept
-popup.
+The card is built by `figure_kit.vcard()`. It is **360 × 366**: the drawing box
+`(20, 66)–(340, 392)` plus a 20-unit margin. The box stays in the coordinates the
+builders were first written in, so the SVG's viewBox starts at y = 46 (`OY`) rather
+than 0. Nearly square is what fits the two places a figure is shown: the figure banner
+at the top of the concept popup, which caps its height, and the full-screen viewer.
 
 ```bash
 python3 scripts/generate_concept_figures.py            # write the SVGs
@@ -59,7 +65,7 @@ still gets its figure, inserted below the plot (`SIMULATOR_EMBEDS` /
 
 | File | Role |
 |---|---|
-| `scripts/figure_kit.py` | The SVG toolkit: the `vcard()` portrait card, cartesian `Axes` (`vaxes()` insets one into the card's box), timelines, cash-flow arrows, Venn helpers, palette and stylesheet. No dependencies — pure Python. |
+| `scripts/figure_kit.py` | The SVG toolkit: the `vcard()` card, cartesian `Axes` (`vaxes()` insets one into the card's box), timelines, cash-flow arrows, Venn helpers, the pictograms (`person`, `building`, `tower`, `document`, `house`, `car`, `coins`, `scales`, `shield`, `cross`), palette and stylesheet. No dependencies — pure Python. |
 | `scripts/figure_registry.py` | The `@figure(concept, alt, width)` decorator and the registry it fills. |
 | `scripts/figures_exam_p.py` | The 66 Exam P builders, in syllabus order. |
 | `scripts/figures_exam_fm.py` | The 82 Exam FM builders, in syllabus order. |
@@ -102,8 +108,8 @@ test until `figure_kit.py` moves with it and the figures are regenerated.
 |---|---|---|
 | `--surf` | `--card` | the figure's own rounded card |
 | `--edge` | `--border` | its hairline |
-| `--ink` | `--foreground` | titles, labels, the formula |
-| `--dim` | `--muted-foreground` | captions and secondary labels |
+| `--ink` | `--foreground` | labels |
+| `--dim` | `--muted-foreground` | tick values and secondary labels |
 | `--grid` | `--accent` | plot gridlines |
 | `--soft` | `--muted` | shaded regions |
 | `--axis` | `--input` | axes, ticks, arrowheads |
@@ -148,14 +154,15 @@ media query's colour while the rest of the figure switched.
 
 1. Write a builder in `figures_exam_p.py`, `figures_exam_fm.py`,
    `figures_exam_mas_i.py`, `figures_exam_mas_ii.py`, `figures_exam_5.py` or
-   `figures_exam_6c.py` that opens with
-   `vcard(title, formula)` and draws into the box, and decorate it with
-   `@figure("Concept Name", "alt text", width=WID)`. The concept name must match
-   `Concepts/<name>.md` exactly; the slug is derived from it.
+   `figures_exam_6c.py` that opens with `vcard()` and draws into the box. Decorate it
+   with `@figure("Concept Name", "alt text", width=WID)`, where the alt text describes
+   the picture in one sentence. The concept name must match `Concepts/<name>.md`
+   exactly; the slug is derived from it.
 2. Run the generator and look at the result — the fastest check is to open the SVG
    directly, in both light and dark, before committing. Opening the file plain follows
    your OS setting; append `#dark` or `#light` to the URL to see what the app will show.
-   `python3 -m unittest scripts.test_figure_kit` re-checks the palette and its contrast.
+   `python3 -m unittest scripts.test_figure_kit` re-checks the palette and its contrast,
+   and fails any figure with a text run of four words or more — a caption, not a label.
 3. `--check` exits non-zero while any exam concept still lacks a figure.
    `--embed` inserts a missing embed and rewrites the width of an existing one, so a
    change of canvas size reaches the pages too.
@@ -163,11 +170,13 @@ media query's colour while the rest of the figure switched.
 Conventions worth keeping:
 
 - **A structure is a picture too.** 6C is a qualitative exam, so most of its figures are
-  shapes rather than plots — a jurisdictional split, a hierarchy of layers, a ladder of
-  thresholds, a decision tree, a waterfall. The rule is unchanged: one idea, drawn, with
-  labels only where the picture needs them to be read.
-- **One idea per figure**, and one formula under it. If a second idea needs saying, it
-  belongs in the page's prose.
+  shapes rather than plots: a jurisdictional split, a hierarchy of layers, a ladder of
+  thresholds, a decision tree, a waterfall. A concept about *who does what to whom* is
+  drawn with the pictograms. A person, a regulator's building and an insurer's tower
+  with arrows between them say in one glance what a box of prose never does. A
+  flowchart whose boxes hold phrases is still prose.
+- **One idea per figure.** If a second idea needs saying, it belongs in the page's
+  prose, not in a second panel.
 - **Real numbers.** Where a worked value fits (an annuity factor, a bond price, a
   posterior probability), use one — a labelled example teaches more than a generic curve.
 - **Consistent examples across a family.** The loan pages all draw the same 10,000 loan
@@ -195,16 +204,18 @@ Conventions worth keeping:
 - **Label curves where they run**, rather than in a legend box, when there is room —
   a legend is a block of text competing with the picture. Where a legend is
   unavoidable, drop the y-axis name: the two collide in the box's top-left corner.
+- **Label text is ink.** The stylesheet's `text { fill: var(--ink) }` rule beats a
+  `fill=` attribute, so a label passed a series colour still renders in the ink colour.
+  That is deliberate: the series colours clear 3:1 for a shape but not 4.5:1 for text.
+  Carry the colour on the shape the label names, not on the label.
 - **Stay inside the card.** Text anchored `start` near x = 300, or an axis label under a
   plot whose x-axis sits mid-box (any plot with negative values), runs off or lands on
-  top of something surprisingly easily. Check, don't assume. Two recurring collisions:
-  `Axes.frame(xlabel=…)` draws at `y1 + 32`, which is exactly where a first footer line
-  wants to sit — pass the axis name as a footer line instead; and a footer formula over
-  ~40 characters is clipped by the card edge, so shorten it or split it into the two-row
-  form `vcard(title, [row1, row2])`. Character counting only approximates this: the real
-  check is to measure the rendered `getBBox()` of every `<text>` in a headless browser
-  and flag any that escapes the 360 × 470 card or overlaps another — that catches both
-  the clipped footer and the label sitting on top of its neighbour.
+  top of something surprisingly easily. Check, don't assume. `Axes.frame(xlabel=…)`
+  draws at `y1 + 32`, which is below the box when the plot fills it, so leave room with
+  `vaxes(bottom=…)` or leave the axis unnamed. Character counting only approximates
+  this. The real check is to measure the rendered `getBBox()` of every `<text>` in a
+  headless browser and flag any that escapes the 360 × 366 card or overlaps another.
+  That catches both a clipped label and a label sitting on top of its neighbour.
 
 ## Interaction with the distribution simulators
 

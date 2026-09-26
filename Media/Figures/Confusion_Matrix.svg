@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>The four cells of a confusion matrix with the metrics each one feeds</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>A two-by-two grid of predicted against actual fraud for 1,000 claims: 45 true positives, 45 false positives, 15 false negatives and 895 true negatives</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -47,34 +43,20 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">Every classification metric comes from</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">four cells</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">sensitivity = TP / (TP + FN)</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">specificity = TN / (TN + FP)</text>
-    <text x="220" y="100" text-anchor="middle" class="sm dim">actual</text>
-    <text x="174" y="120" text-anchor="middle" class="sm bold">+</text>
-    <text x="266" y="120" text-anchor="middle" class="sm bold">−</text>
-    <text x="114" y="166" text-anchor="end" class="sm bold">+</text>
-    <text x="114" y="226" text-anchor="end" class="sm bold">−</text>
-    <text x="98" y="192" text-anchor="end" class="sm dim">pred</text>
-    <rect x="130" y="134" width="88" height="56" rx="5" fill="#059669" fill-opacity="0.16" stroke="#059669" stroke-width="1.2"/>
-    <text x="174" y="158" text-anchor="middle" class="sm bold">TP</text>
-    <text x="174" y="176" text-anchor="middle" class="sm">45</text>
-    <rect x="222" y="134" width="88" height="56" rx="5" fill="#e11d48" fill-opacity="0.16" stroke="#e11d48" stroke-width="1.2"/>
-    <text x="266" y="158" text-anchor="middle" class="sm bold">FP</text>
-    <text x="266" y="176" text-anchor="middle" class="sm">45</text>
-    <rect x="130" y="194" width="88" height="56" rx="5" fill="#e11d48" fill-opacity="0.16" stroke="#e11d48" stroke-width="1.2"/>
-    <text x="174" y="218" text-anchor="middle" class="sm bold">FN</text>
-    <text x="174" y="236" text-anchor="middle" class="sm">15</text>
-    <rect x="222" y="194" width="88" height="56" rx="5" fill="#059669" fill-opacity="0.16" stroke="#059669" stroke-width="1.2"/>
-    <text x="266" y="218" text-anchor="middle" class="sm bold">TN</text>
-    <text x="266" y="236" text-anchor="middle" class="sm">895</text>
-    <text x="180" y="278" text-anchor="middle" class="sm dim">1,000 claims, 60 fraudulent, 90 flagged</text>
-    <text x="180" y="306" text-anchor="middle" class="sm">sensitivity 45/60 = 75%   specificity 95.2%</text>
-    <text x="180" y="328" text-anchor="middle" class="sm">precision 45/90 = 50%     accuracy 94.0%</text>
-    <text x="180" y="350" text-anchor="middle" class="sm bold">flagging nothing also scores 94% accuracy</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">the threshold moves every number here</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <text x="226" y="94" text-anchor="middle" class="sm dim">actual</text>
+    <text x="174" y="116" text-anchor="middle" class="bold">+</text>
+    <text x="278" y="116" text-anchor="middle" class="bold">−</text>
+    <text x="108" y="183" text-anchor="end" class="bold">+</text>
+    <text x="108" y="283" text-anchor="end" class="bold">−</text>
+    <text x="78" y="228" text-anchor="middle" class="sm dim" transform="rotate(-90 78 228)">predicted</text>
+    <rect x="125" y="131" width="98" height="94" rx="6" fill="#059669" fill-opacity="0.18" stroke="#059669" stroke-width="1.4"/>
+    <text x="174" y="183" text-anchor="middle" class="bold">TP 45</text>
+    <rect x="229" y="131" width="98" height="94" rx="6" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4"/>
+    <text x="278" y="183" text-anchor="middle" class="bold">FP 45</text>
+    <rect x="125" y="231" width="98" height="94" rx="6" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4"/>
+    <text x="174" y="283" text-anchor="middle" class="bold">FN 15</text>
+    <rect x="229" y="231" width="98" height="94" rx="6" fill="#059669" fill-opacity="0.18" stroke="#059669" stroke-width="1.4"/>
+    <text x="278" y="283" text-anchor="middle" class="bold">TN 895</text>
   </g>
 </svg>

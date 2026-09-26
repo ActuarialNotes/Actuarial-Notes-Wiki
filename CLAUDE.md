@@ -59,7 +59,7 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
 
 ### Inside `quiz/src/`
 - `pages/` — route-level views (Quiz, Review, Dashboard, Flashcards, Search, Settings, Store,
-  Upgrade, wiki/*, `Cowork/` — the second product's shelf, source pages and deliverables —
+  Upgrade, wiki/*, `Project/` — the PCPA project simulator, `Cowork/` — the second product's shelf, source pages and deliverables —
   and `Research/`, which is
   flag-gated)
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
@@ -182,6 +182,16 @@ before touching that area**:
   far more than its share of the syllabus. `computeExamReadiness` is the *one* readiness
   number — the exam-page card, the Dashboard radial, the exam grid and the readiness
   projection all call it. Read before changing `lib/readiness.ts` or any readiness readout.
+- `docs/pcpa-project.md` — the **PCPA project simulator** (`/project/pcpa`, entered from the
+  **Project** button on the PCPA study guide's header): a 16-day window, a case assigned from a
+  pool (`data/pcpaProjects.ts` — the CAS's published rules transcribed, the cases invented and
+  labelled so), data drawn per attempt from a known model with every planted problem counted
+  (`lib/pcpaData.ts`), a workspace running **webR** and **Pyodide** from their CDNs plus a
+  Fortune-sheet spreadsheet, the 1,250-word / five-appendix report, submission with a clean run
+  of the code, and grading on fresh assessment data against the true model. Read before touching
+  anything named `pcpa*`, `project/` or `Project`. Two rules: nothing is interpreted by the app
+  (the languages are their official Wasm builds), and the CAS's data sets are read-only in the
+  workspace — a run can't overwrite them.
 - `docs/distribution-simulators.md` — the **interactive distribution simulators** that replace the
   static `Media/*_pdf.svg` / `*_pmf.svg` embeds on the distribution concept pages: parameter
   sliders, live moments, PDF↔CDF, and a Monte-Carlo histogram. Read before touching
@@ -189,8 +199,10 @@ before touching that area**:
 - `docs/concept-figures.md` — the **generated concept figures**: one SVG per Exam P / FM /
   MAS-I / MAS-II / 5 / 6C concept in `Media/Figures/`, drawn by
   `scripts/generate_concept_figures.py` on top of the dependency-free
-  `scripts/figure_kit.py`. Read before editing a figure — they are generated, so a hand
-  edit to an SVG is lost on the next run.
+  `scripts/figure_kit.py`. Each is **one picture and nothing else** — no title, formula,
+  caption or table; labels of a word or two where the picture needs them, and the words
+  in the `alt` text. Read before editing a figure — they are generated, so a hand edit
+  to an SVG is lost on the next run.
 - `docs/resource-covers.md` — the **resource cover images**: where the metadata card gets
   a source's cover (the page's first image embed), how `scripts/generate_resource_covers.py`
   draws one from front matter for the pages with no real jacket, and the rule that a real
@@ -671,8 +683,8 @@ Other important `lib/` modules:
   60 requests/hour per IP without `VITE_GITHUB_TOKEN` — don't put it on a path that has to work.
 - `supabase.ts` — Supabase client + shared row types
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **125 test files /
-~1940 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **132 test files /
+~2010 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, and the research/resource-timeline
 modules).
 
@@ -750,7 +762,16 @@ compile — don't "clean up" the flagged code as dead.
   `learning_objective`, `difficulty` (`easy`/`medium`/`hard`), `type`, `wiki_link` (array
   of concept paths), `answer`, `points` — followed by the question body, options, and an
   `## Explanation` section (LaTeX via `$$...$$`). Current banks: `exam-p`, `exam-fm`,
-  `exam-mas-i`, `exam-5` (hundreds of questions each).
+  `exam-mas-i`, `exam-mas-ii`, `exam-5` (hundreds of questions each), and `exam-7` /
+  `exam-9` — the 2012–2019 Exam 7 papers: reserving in `exam-7`, their ERM questions in
+  `exam-9` with `originally_exam: "Exam 7"` (CAS moved Brehm's ERM there). Two optional keys
+  say a question has outlived its paper's syllabus: `originally_exam` (the material moved to
+  the exam in `exam`, so it stays off that exam's past-paper shelf) and `off_syllabus: true`
+  (no current exam covers it — Exam 7's old valuation questions; kept for the record, out of
+  quiz draws, still found by its sitting, its id or a search, and not held to the exam page
+  by `syllabus_lint.py`). A CAS question with no lettered parts is `type: multi-part` with
+  `### Explanation` / `### Examiner Report` and no `## Part` heading — under `## Explanation`
+  the app parses it to nothing; `lib/questionBank.test.ts` fails on any file that doesn't parse.
 - Comprehension-check files (`comprehension-checks/<exam-id>/<Concept Name>.md`) used to gate
   flashcard collection and are now rendered nowhere (kept in the vault): YAML frontmatter (`concept`, `exam`, `topic`, `correct` letter) + a `- A) …` option
   list, then an authoring-only `<!-- rationale -->` comment. One file per concept; the filename is

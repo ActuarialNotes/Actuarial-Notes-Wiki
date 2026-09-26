@@ -201,6 +201,11 @@ def _lint_questions(rel: str, page: sl.ExamPage, report: Report, exam: dict) -> 
                 continue
             with open(os.path.join(dirpath, fn), encoding="utf-8") as fh:
                 fm, _ = sl.split_frontmatter(fh.read())
+            # A question kept only for the record declares that no current
+            # syllabus covers it (the 2012–2019 Exam 7 valuation questions),
+            # so its objective is the old syllabus's and is not held to this page.
+            if re.search(r"^off_syllabus:\s*true\s*$", fm, re.M):
+                continue
             m = re.search(r'^learning_objective:\s*"?(.*?)"?\s*$', fm, re.M)
             lo = m.group(1) if m else ""
             if sl.objective_key(lo) not in keys:

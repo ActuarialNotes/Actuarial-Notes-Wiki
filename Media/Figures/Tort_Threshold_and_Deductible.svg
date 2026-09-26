@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>Four bodily injury awards against a verbal threshold and a $45,000 deductible</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>Three bodily injury awards of $40,000, $120,000 and $350,000 cut by a dashed $45,000 deductible line to $0, $75,000 and $305,000 paid</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -47,28 +43,23 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">The threshold truncates, the deductible</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">shifts</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="438" text-anchor="middle" class="fml">Paid = max(0, damages − deductible)</text>
-    <text x="180" y="100" text-anchor="middle" class="sm dim">assessed vs paid, deductible $45,000</text>
-    <text x="44" y="132" text-anchor="start" class="sm">$40,000</text>
-    <rect x="44" y="140" width="24" height="20" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.1"/>
-    <rect x="44" y="140" width="0" height="20" rx="3" fill="#e11d48" fill-opacity="0.65"/>
-    <text x="76" y="155" text-anchor="start" class="sm" fill="#e11d48">$0</text>
-    <text x="44" y="190" text-anchor="start" class="sm">$120,000</text>
-    <rect x="44" y="198" width="72" height="20" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.1"/>
-    <rect x="44" y="198" width="45" height="20" rx="3" fill="#d97706" fill-opacity="0.65"/>
-    <text x="124" y="213" text-anchor="start" class="sm" fill="#d97706">$75,000</text>
-    <text x="44" y="248" text-anchor="start" class="sm">$350,000</text>
-    <rect x="44" y="256" width="210" height="20" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.1"/>
-    <rect x="44" y="256" width="183" height="20" rx="3" fill="#059669" fill-opacity="0.65"/>
-    <text x="262" y="271" text-anchor="start" class="sm" fill="#059669">$305,000</text>
-    <line x1="71" y1="126" x2="71" y2="300" class="thin dash" stroke="#7c3aed" stroke-width="1.4"/>
-    <text x="75" y="314" text-anchor="start" class="sm" fill="#7c3aed">deductible</text>
-    <text x="180" y="344" text-anchor="middle" class="sm dim">a claim that fails the threshold never gets</text>
-    <text x="180" y="360" text-anchor="middle" class="sm dim">as far as the deductible — it is paid nothing</text>
-    <text x="180" y="386" text-anchor="middle" class="sm dim">the deductible takes 100% from one and 13% from another</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <text x="40" y="128" text-anchor="start" class="sm dim">$40,000</text>
+    <line x1="67.9" y1="132" x2="67.9" y2="174" class="thin dash" stroke="#7c3aed" stroke-width="1.6"/>
+    <rect x="40" y="138" width="24.8" height="30" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.1"/>
+    <rect x="67.9" y="138" width="0" height="30" rx="3" fill="#e11d48" fill-opacity="0.65"/>
+    <text x="72.8" y="158" text-anchor="start" class="sm bold">$0</text>
+    <text x="40" y="220" text-anchor="start" class="sm dim">$120,000</text>
+    <line x1="67.9" y1="224" x2="67.9" y2="266" class="thin dash" stroke="#7c3aed" stroke-width="1.6"/>
+    <rect x="40" y="230" width="74.4" height="30" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.1"/>
+    <rect x="67.9" y="230" width="46.5" height="30" rx="3" fill="#d97706" fill-opacity="0.65"/>
+    <text x="122.4" y="250" text-anchor="start" class="sm bold">$75,000</text>
+    <text x="40" y="312" text-anchor="start" class="sm dim">$350,000</text>
+    <line x1="67.9" y1="316" x2="67.9" y2="358" class="thin dash" stroke="#7c3aed" stroke-width="1.6"/>
+    <rect x="40" y="322" width="217" height="30" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.1"/>
+    <rect x="67.9" y="322" width="189.1" height="30" rx="3" fill="#059669" fill-opacity="0.65"/>
+    <text x="265" y="342" text-anchor="start" class="sm bold">$305,000</text>
+    <line x1="67.9" y1="358" x2="67.9" y2="368" class="thin dash" stroke="#7c3aed" stroke-width="1.6"/>
+    <text x="67.9" y="382" text-anchor="middle" class="sm bold">deductible</text>
   </g>
 </svg>

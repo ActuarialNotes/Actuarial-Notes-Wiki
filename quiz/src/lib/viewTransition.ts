@@ -62,6 +62,10 @@ const DESK: { prefix: string; tab: number; depth: number; below?: number }[] = [
   { prefix: '/wiki/exam', tab: 1, depth: 1 },
   { prefix: '/wiki/concept', tab: 1, depth: 2 },
   { prefix: '/wiki/resource', tab: 1, depth: 2 },
+  // The PCPA project opens from the PCPA exam page, so it lies on the Study
+  // Guides tab: the portal a sheet over the exam, an attempt a sheet over that.
+  { prefix: '/project', tab: 1, depth: 2 },
+  { prefix: '/project/pcpa', tab: 1, depth: 2, below: 3 },
   { prefix: '/research', tab: 1.5, depth: 0, below: 1 },
   { prefix: '/flashcards', tab: 2, depth: 0 },
   { prefix: '/', tab: 3, depth: 0 },

@@ -23,7 +23,8 @@ export function pageHostsNavButton(pathname: string): boolean {
   // The wiki (WikiFloatingSearch), the flag-gated research tab
   // (ResearchTopSearch) and Cowork (CoworkTopBar) — each of which bars every
   // page under them.
-  return isUnder(pathname, '/wiki') || isUnder(pathname, '/research') || isUnder(pathname, '/cowork')
+  // The PCPA project (ProjectTopBar) bars every page under it too.
+  return isUnder(pathname, '/wiki') || isUnder(pathname, '/research') || isUnder(pathname, '/cowork') || isUnder(pathname, '/project')
 }
 
 function isUnder(pathname: string, route: string): boolean {

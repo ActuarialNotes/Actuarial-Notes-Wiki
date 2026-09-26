@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>The band of filed changes the regulatory, competitive and operational limits leave open</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>A regulator, the market and the insurer's own systems pressing down on a narrow band of allowed rate changes, while the +7.3% indication sits outside it</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -47,34 +43,49 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <defs>
+    <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
+    <marker id="ahd97706" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#d97706"/></marker>
+    <marker id="ah7c3aed" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#7c3aed"/></marker>
     <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
   </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">The indication is the start of the</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">conversation</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="438" text-anchor="middle" class="fml">Selected = f(Indication, Z, Constraints)</text>
-    <line x1="52" y1="168" x2="312" y2="168" class="axis"/>
-    <line x1="52" y1="163" x2="52" y2="173" class="tick"/>
-    <text x="52" y="188" text-anchor="middle" class="sm dim">0%</text>
-    <line x1="182" y1="163" x2="182" y2="173" class="tick"/>
-    <text x="182" y="188" text-anchor="middle" class="sm dim">+5%</text>
-    <line x1="312" y1="163" x2="312" y2="173" class="tick"/>
-    <text x="312" y="188" text-anchor="middle" class="sm dim">+10%</text>
-    <rect x="130" y="134" width="91" height="24" rx="4" fill="#059669" fill-opacity="0.24" stroke="#059669" stroke-width="1.2"/>
-    <text x="175.5" y="151" text-anchor="middle" class="sm" fill="#059669">filable band</text>
-    <line x1="241.8" y1="110" x2="241.8" y2="160" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="241.8" y="102" text-anchor="middle" class="sm bold" fill="#3b82f6">indicated +7.3%</text>
-    <rect x="52" y="237" width="11" height="11" rx="2" fill="#e11d48" fill-opacity="0.8"/>
-    <text x="70" y="247" text-anchor="start" class="sm bold">Regulatory</text>
-    <text x="70" y="263" text-anchor="start" class="sm dim">prior approval, capping rules</text>
-    <rect x="52" y="279" width="11" height="11" rx="2" fill="#d97706" fill-opacity="0.8"/>
-    <text x="70" y="289" text-anchor="start" class="sm bold">Competitive</text>
-    <text x="70" y="305" text-anchor="start" class="sm dim">what the market will bear</text>
-    <rect x="52" y="321" width="11" height="11" rx="2" fill="#7c3aed" fill-opacity="0.8"/>
-    <text x="70" y="331" text-anchor="start" class="sm bold">Operational</text>
-    <text x="70" y="347" text-anchor="start" class="sm dim">systems, filing lead times</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">compute it properly, then say why you departed</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <polygon points="48,109.2 70,96 92,109.2" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="51.96" y="111.84" width="4.4" height="20.24" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="62.52" y="111.84" width="4.4" height="20.24" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="73.08" y="111.84" width="4.4" height="20.24" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="83.64" y="111.84" width="4.4" height="20.24" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="48" y="133.84" width="44" height="6.16" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="70" y="162" text-anchor="middle" class="sm">regulator</text>
+    <line x1="70" y1="172" x2="136" y2="252" class="thin" stroke="#e11d48" stroke-width="1.5" marker-end="url(#ahe11d48)"/>
+    <rect x="167.68" y="96" width="24.64" height="44" rx="2" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="172.52" y="101.28" width="5.28" height="4.4" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="182.2" y="101.28" width="5.28" height="4.4" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="172.52" y="110.08" width="5.28" height="4.4" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="182.2" y="110.08" width="5.28" height="4.4" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="172.52" y="118.88" width="5.28" height="4.4" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="182.2" y="118.88" width="5.28" height="4.4" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="172.52" y="127.68" width="5.28" height="4.4" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="182.2" y="127.68" width="5.28" height="4.4" fill="#d97706" fill-opacity="0.55"/>
+    <text x="180" y="162" text-anchor="middle" class="sm">market</text>
+    <line x1="180" y1="172" x2="180" y2="252" class="thin" stroke="#d97706" stroke-width="1.5" marker-end="url(#ahd97706)"/>
+    <polygon points="274.16,96 297.04,96 305.84,104.8 305.84,140 274.16,140" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M297.04,96 V104.8 H305.84" fill="none" stroke="#7c3aed" stroke-width="1.2"/>
+    <line x1="280.32" y1="113.6" x2="298.8" y2="113.6" stroke="#7c3aed" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="280.32" y1="121.08" x2="298.8" y2="121.08" stroke="#7c3aed" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="280.32" y1="128.56" x2="292.64" y2="128.56" stroke="#7c3aed" stroke-width="1.4" stroke-linecap="round"/>
+    <text x="290" y="162" text-anchor="middle" class="sm">systems</text>
+    <line x1="290" y1="172" x2="210" y2="252" class="thin" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#ah7c3aed)"/>
+    <rect x="124" y="256" width="98" height="30" rx="3" fill="#059669" fill-opacity="0.26" stroke="#059669" stroke-width="1.2"/>
+    <text x="173" y="275" text-anchor="middle" class="sm">allowed</text>
+    <line x1="34" y1="286" x2="326" y2="286" class="axis"/>
+    <line x1="40" y1="286" x2="40" y2="291" class="tick"/>
+    <text x="40" y="305" text-anchor="middle" class="sm dim">0%</text>
+    <line x1="180" y1="286" x2="180" y2="291" class="tick"/>
+    <text x="180" y="305" text-anchor="middle" class="sm dim">+5%</text>
+    <line x1="320" y1="286" x2="320" y2="291" class="tick"/>
+    <text x="320" y="305" text-anchor="middle" class="sm dim">+10%</text>
+    <line x1="244.46" y1="350" x2="244.46" y2="290" class="thin" stroke="#3b82f6" stroke-width="2" marker-end="url(#ah3b82f6)"/>
+    <text x="244.46" y="366" text-anchor="middle" class="sm bold">indicated +7.3%</text>
   </g>
 </svg>

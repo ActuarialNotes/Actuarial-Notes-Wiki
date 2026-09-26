@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>The CSM set so there is no day-one gain, then released over coverage units</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>The running GMM group's $60M premium split into $44M of outflows, a $5M risk adjustment and an $11M CSM, and the CSM released as profit over three years of coverage: $4.4M, $3.85M and $2.75M</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -46,34 +42,29 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
+  </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">Unearned profit, released as coverage is</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">given</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">CSM₀ = PV(inflows) − PV(outflows) − RA</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">$60M − $44M − $5M = $11M</text>
-    <rect x="40" y="107" width="205.33" height="34" rx="4" fill="#d97706" fill-opacity="0.30" stroke="#d97706" stroke-width="1.2"/>
-    <text x="142.67" y="128" text-anchor="middle" class="sm">outflows 44</text>
-    <rect x="245.33" y="107" width="23.33" height="34" rx="4" fill="#7c3aed" fill-opacity="0.30" stroke="#7c3aed" stroke-width="1.2"/>
-    <text x="257" y="128" text-anchor="middle" class="sm">RA</text>
-    <rect x="268.67" y="107" width="51.33" height="34" rx="4" fill="#059669" fill-opacity="0.30" stroke="#059669" stroke-width="1.2"/>
-    <text x="294.33" y="128" text-anchor="middle" class="sm">CSM 11</text>
-    <text x="180" y="162" text-anchor="middle" class="sm dim">the $60M premium, divided so no gain</text>
-    <text x="180" y="178" text-anchor="middle" class="sm dim">is recognised on day one</text>
-    <line x1="30" y1="198" x2="330" y2="198" class="rule"/>
-    <rect x="83.68" y="232.08" width="43.31" height="73.92" rx="3" fill="#059669" fill-opacity="0.75"/>
-    <text x="105.33" y="225.08" text-anchor="middle" class="sm">4.4</text>
-    <text x="105.33" y="321" text-anchor="middle" class="sm dim">year 1</text>
-    <rect x="158.35" y="241.32" width="43.31" height="64.68" rx="3" fill="#059669" fill-opacity="0.75"/>
-    <text x="180" y="234.32" text-anchor="middle" class="sm">3.9</text>
-    <text x="180" y="321" text-anchor="middle" class="sm dim">year 2</text>
-    <rect x="233.01" y="259.8" width="43.31" height="46.2" rx="3" fill="#059669" fill-opacity="0.75"/>
-    <text x="254.67" y="252.8" text-anchor="middle" class="sm">2.8</text>
-    <text x="254.67" y="321" text-anchor="middle" class="sm dim">year 3</text>
-    <line x1="62" y1="306" x2="298" y2="306" class="axis"/>
-    <text x="180" y="340" text-anchor="middle" class="sm dim">released on coverage units — 40%, 35%, 25%</text>
-    <text x="180" y="364" text-anchor="middle" class="sm dim">a revision to future service adjusts the CSM;</text>
-    <text x="180" y="380" text-anchor="middle" class="sm dim">one to past service hits profit at once</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <path d="M40,112 v-6 H175 q5,0 5,-5.5 q0,5.5 5,5.5 H320 v6" class="thin" stroke="var(--dim)" stroke-width="1.2"/>
+    <text x="180" y="89" text-anchor="middle" class="sm bold">premium 60</text>
+    <rect x="40" y="118" width="205.33" height="44" rx="4" fill="#d97706" fill-opacity="0.30" stroke="#d97706" stroke-width="1.3"/>
+    <text x="142.67" y="144" text-anchor="middle" class="sm bold">outflows 44</text>
+    <rect x="245.33" y="118" width="23.33" height="44" rx="4" fill="#7c3aed" fill-opacity="0.30" stroke="#7c3aed" stroke-width="1.3"/>
+    <text x="257" y="144" text-anchor="middle" class="sm bold">RA</text>
+    <rect x="268.67" y="118" width="51.33" height="44" rx="4" fill="#059669" fill-opacity="0.30" stroke="#059669" stroke-width="1.3"/>
+    <text x="294.33" y="144" text-anchor="middle" class="sm bold">CSM 11</text>
+    <line x1="294.33" y1="168" x2="258" y2="226" class="thin" stroke="#059669" stroke-width="1.6" marker-end="url(#ah059669)"/>
+    <rect x="76" y="220" width="48" height="132" rx="3" fill="#059669" fill-opacity="0.55"/>
+    <text x="100" y="213" text-anchor="middle" class="sm">4.4</text>
+    <text x="100" y="369" text-anchor="middle" class="sm dim">yr 1</text>
+    <rect x="156" y="236.5" width="48" height="115.5" rx="3" fill="#059669" fill-opacity="0.55"/>
+    <text x="180" y="229.5" text-anchor="middle" class="sm">3.85</text>
+    <text x="180" y="369" text-anchor="middle" class="sm dim">yr 2</text>
+    <rect x="236" y="269.5" width="48" height="82.5" rx="3" fill="#059669" fill-opacity="0.55"/>
+    <text x="260" y="262.5" text-anchor="middle" class="sm">2.75</text>
+    <text x="260" y="369" text-anchor="middle" class="sm dim">yr 3</text>
+    <line x1="52" y1="352" x2="308" y2="352" class="axis"/>
   </g>
 </svg>

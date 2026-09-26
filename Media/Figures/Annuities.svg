@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>The annuity family, sorted by payment timing and pattern</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>One timeline carrying the annuity family: short due payments at the start of each period, tall immediate ones at the end, and a perpetuity's carrying on past n</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -48,57 +44,41 @@ text {
   <g id="light"/><g id="dark"/>
   <defs>
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
-    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
     <marker id="ah7c3aed" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#7c3aed"/></marker>
-    <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
+    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
   </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">One payment stream, valued four ways</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">a₍ₙ₎ = (1 − vⁿ)/i</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">everything else is built from it</text>
-    <text x="180" y="82" text-anchor="middle" class="bold" fill="#3b82f6">a₍ₙ₎  immediate</text>
-    <line x1="60" y1="116" x2="314" y2="116" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-    <line x1="68" y1="112" x2="68" y2="120" class="tick"/>
-    <line x1="125" y1="112" x2="125" y2="120" class="tick"/>
-    <line x1="182" y1="112" x2="182" y2="120" class="tick"/>
-    <line x1="239" y1="112" x2="239" y2="120" class="tick"/>
-    <line x1="296" y1="112" x2="296" y2="120" class="tick"/>
-    <line x1="125" y1="116" x2="125" y2="92" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <line x1="182" y1="116" x2="182" y2="92" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <line x1="239" y1="116" x2="239" y2="92" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <line x1="296" y1="116" x2="296" y2="92" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="180" y="158" text-anchor="middle" class="bold" fill="#7c3aed">ä₍ₙ₎  due</text>
-    <line x1="60" y1="192" x2="314" y2="192" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-    <line x1="68" y1="188" x2="68" y2="196" class="tick"/>
-    <line x1="125" y1="188" x2="125" y2="196" class="tick"/>
-    <line x1="182" y1="188" x2="182" y2="196" class="tick"/>
-    <line x1="239" y1="188" x2="239" y2="196" class="tick"/>
-    <line x1="296" y1="188" x2="296" y2="196" class="tick"/>
-    <line x1="68" y1="192" x2="68" y2="168" class="thin" stroke="#7c3aed" stroke-width="1.8" marker-end="url(#ah7c3aed)"/>
-    <line x1="125" y1="192" x2="125" y2="168" class="thin" stroke="#7c3aed" stroke-width="1.8" marker-end="url(#ah7c3aed)"/>
-    <line x1="182" y1="192" x2="182" y2="168" class="thin" stroke="#7c3aed" stroke-width="1.8" marker-end="url(#ah7c3aed)"/>
-    <line x1="239" y1="192" x2="239" y2="168" class="thin" stroke="#7c3aed" stroke-width="1.8" marker-end="url(#ah7c3aed)"/>
-    <text x="180" y="234" text-anchor="middle" class="bold" fill="#059669">a₍∞₎  perpetuity</text>
-    <line x1="60" y1="268" x2="314" y2="268" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-    <line x1="68" y1="264" x2="68" y2="272" class="tick"/>
-    <line x1="125" y1="264" x2="125" y2="272" class="tick"/>
-    <line x1="182" y1="264" x2="182" y2="272" class="tick"/>
-    <line x1="239" y1="264" x2="239" y2="272" class="tick"/>
-    <line x1="296" y1="264" x2="296" y2="272" class="tick"/>
-    <line x1="125" y1="268" x2="125" y2="244" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
-    <line x1="182" y1="268" x2="182" y2="244" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
-    <line x1="239" y1="268" x2="239" y2="244" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
-    <line x1="296" y1="268" x2="296" y2="244" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
-    <text x="310" y="262" text-anchor="start" class="bold" fill="#059669">…</text>
-    <text x="180" y="310" text-anchor="middle" class="bold" fill="#0d9488">ā₍ₙ₎  continuous</text>
-    <line x1="60" y1="344" x2="314" y2="344" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-    <line x1="68" y1="340" x2="68" y2="348" class="tick"/>
-    <line x1="125" y1="340" x2="125" y2="348" class="tick"/>
-    <line x1="182" y1="340" x2="182" y2="348" class="tick"/>
-    <line x1="239" y1="340" x2="239" y2="348" class="tick"/>
-    <line x1="296" y1="340" x2="296" y2="348" class="tick"/>
-    <rect x="68" y="322" width="228" height="22" rx="2" fill="#0d9488" fill-opacity="0.42"/>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <line x1="38" y1="320" x2="324" y2="320" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <line x1="46" y1="316" x2="46" y2="324" class="tick"/>
+    <text x="46" y="337" text-anchor="middle" class="sm dim">0</text>
+    <line x1="89.33" y1="316" x2="89.33" y2="324" class="tick"/>
+    <text x="89.33" y="337" text-anchor="middle" class="sm dim">1</text>
+    <line x1="132.67" y1="316" x2="132.67" y2="324" class="tick"/>
+    <text x="132.67" y="337" text-anchor="middle" class="sm dim">2</text>
+    <line x1="176" y1="316" x2="176" y2="324" class="tick"/>
+    <text x="176" y="337" text-anchor="middle" class="sm dim">3</text>
+    <line x1="219.33" y1="316" x2="219.33" y2="324" class="tick"/>
+    <text x="219.33" y="337" text-anchor="middle" class="sm dim">n</text>
+    <line x1="262.67" y1="316" x2="262.67" y2="324" class="tick"/>
+    <line x1="306" y1="316" x2="306" y2="324" class="tick"/>
+    <line x1="41" y1="320" x2="41" y2="190" class="thin" stroke="#7c3aed" stroke-width="2.2" marker-end="url(#ah7c3aed)"/>
+    <line x1="84.33" y1="320" x2="84.33" y2="190" class="thin" stroke="#7c3aed" stroke-width="2.2" marker-end="url(#ah7c3aed)"/>
+    <line x1="127.67" y1="320" x2="127.67" y2="190" class="thin" stroke="#7c3aed" stroke-width="2.2" marker-end="url(#ah7c3aed)"/>
+    <line x1="171" y1="320" x2="171" y2="190" class="thin" stroke="#7c3aed" stroke-width="2.2" marker-end="url(#ah7c3aed)"/>
+    <line x1="94.33" y1="320" x2="94.33" y2="124" class="thin" stroke="#3b82f6" stroke-width="2.2" marker-end="url(#ah3b82f6)"/>
+    <line x1="137.67" y1="320" x2="137.67" y2="124" class="thin" stroke="#3b82f6" stroke-width="2.2" marker-end="url(#ah3b82f6)"/>
+    <line x1="181" y1="320" x2="181" y2="124" class="thin" stroke="#3b82f6" stroke-width="2.2" marker-end="url(#ah3b82f6)"/>
+    <line x1="224.33" y1="320" x2="224.33" y2="124" class="thin" stroke="#3b82f6" stroke-width="2.2" marker-end="url(#ah3b82f6)"/>
+    <g opacity="0.55">
+    <line x1="267.67" y1="320" x2="267.67" y2="124" class="thin" stroke="#3b82f6" stroke-width="2.2" marker-end="url(#ah3b82f6)"/>
+    </g>
+    <g opacity="0.25">
+    <line x1="311" y1="320" x2="311" y2="124" class="thin" stroke="#3b82f6" stroke-width="2.2" marker-end="url(#ah3b82f6)"/>
+    </g>
+    <text x="324" y="222" text-anchor="start" class="bold">…</text>
+    <text x="41" y="178" text-anchor="middle" class="sm bold">due</text>
+    <text x="224.33" y="112" text-anchor="middle" class="sm bold">immediate</text>
+    <text x="289.33" y="94" text-anchor="middle" class="sm bold">perpetuity</text>
   </g>
 </svg>

@@ -490,6 +490,172 @@ def _page(number: int, text: str) -> "px.Page":
     return px.Page(number=number, text=text, blocks=[(0.0, 0.0, text)])
 
 
+class TestExam7Layouts(unittest.TestCase):
+    """The two report layouts the Exam 7 papers added.
+
+    Spring 2018 names the sitting in front of every question heading, and the
+    May 2012 and Spring 2013 reports predate `QUESTION N` / `TOTAL POINT VALUE`
+    altogether. Each segmented to nothing — or to two stray hits inside a
+    prompt — while reporting a run that had merely found few questions.
+    """
+
+    LEGACY = (
+        "Question 1 Sample Answer\nSolution 1\n"
+        "a) Chain ladder = 700,000 x 2.5 = 1,750,000\n"
+        "b) x = 550,000\n"
+        "Sample 2\na) 700k x 2.5 = 1.75M\nb) x = 1250k - 700k = 550k\n"
+        "Examiner Comment\nThe a. part of this question was fairly straightforward.\n"
+        "The b. part involved solving a system of equations.\n"
+        "Question 2 Sample Answer\nSolution 1\n"
+        "Stable earnings reduce the cost of financial distress.\n"
+        "Solution 2\nLower taxes on smoothed income.\n"
+        "Examiner Comment\nMost candidates listed two reasons.\n"
+    )
+
+    def test_a_heading_that_names_the_sitting_still_segments(self):
+        report = (
+            "SPRING 2018 EXAM 7, QUESTION 1\nTOTAL POINT VALUE: 2\n"
+            "SAMPLE ANSWERS\nPart a: 2 points\nSample 1\nIBNR = 400\n"
+            "SPRING 2018 EXAM 7, QUESTION 2\nTOTAL POINT VALUE: 1\n"
+            "SAMPLE ANSWERS\nPart a: 1 point\nSample 1\nCV = 0.16\n"
+        )
+        bounds = px.segment(report, px.CAS_QUESTION_RE)
+        self.assertEqual([b.num for b in bounds], [1, 2])
+
+    def test_legacy_samples_are_gathered_per_part(self):
+        bounds = px.segment(self.LEGACY, px.LEGACY_QUESTION_RE)
+        self.assertEqual([b.num for b in bounds], [1, 2])
+        parsed = px.parse_legacy_question(self.LEGACY[bounds[0].start : bounds[0].end])
+        parts = {p["label"]: p for p in parsed["parts"]}
+        self.assertEqual(sorted(parts), ["a", "b"])
+        self.assertEqual(len(parts["a"]["samples"]), 2)
+        self.assertIn("1,750,000", parts["a"]["samples"][0])
+        self.assertIn("1.75M", parts["a"]["samples"][1])
+        self.assertIsNone(parsed["points"])
+
+    def test_legacy_commentary_that_names_its_part_is_split(self):
+        bounds = px.segment(self.LEGACY, px.LEGACY_QUESTION_RE)
+        parsed = px.parse_legacy_question(self.LEGACY[bounds[0].start : bounds[0].end])
+        parts = {p["label"]: p for p in parsed["parts"]}
+        # The label is the subject of its sentence, so it stays.
+        self.assertTrue(parts["a"]["report"].startswith("The a. part"))
+        self.assertIn("system of equations", parts["b"]["report"])
+        self.assertNotIn("system of equations", parts["a"]["report"])
+
+    def test_legacy_question_without_parts_is_single_part(self):
+        bounds = px.segment(self.LEGACY, px.LEGACY_QUESTION_RE)
+        parsed = px.parse_legacy_question(self.LEGACY[bounds[1].start : bounds[1].end])
+        self.assertEqual(parsed["parts"], [])
+        self.assertIn("financial distress", parsed["solution"])
+        self.assertIn("smoothed income", parsed["alternatives"][0])
+        self.assertIn("two reasons", parsed["examiner_report"])
+
+    def test_a_lettered_list_inside_a_part_is_not_a_new_part(self):
+        parsed = px.parse_legacy_question(
+            "Solution 1\na) Two reasons:\nb) first\nc) second\n"
+            "Solution 2\na) One reason\nb) Another answer\n"
+            "a) nested\n"
+        )
+        labels = [p["label"] for p in parsed["parts"]]
+        self.assertEqual(labels, ["a", "b", "c"])
+
+    def test_legacy_points_come_from_the_booklet(self):
+        booklet = (
+            "1.\n(2.75 points)\nGiven the following:\n"
+            "a.\n(1.25 points)\nCalculate the chain ladder estimate.\n"
+            "b.\n(1.5 points)\nDetermine the incremental paid loss.\n"
+            "2.\n(1 point)\nDescribe two reasons to smooth earnings.\n"
+        )
+        report = self.LEGACY
+        records = px.cas_records("7", 2012, None, [_page(1, booklet)], [_page(2, report)])
+        self.assertEqual([r["points"] for r in records], [2.75, 1.0])
+        self.assertEqual([p["points"] for p in records[0]["parts"]], [1.25, 1.5])
+        self.assertIn("chain ladder estimate", records[0]["parts"][0]["prompt"])
+        self.assertEqual(records[0]["id"], "cas7-2012-q1")
+        once = px.cas_records("7", 2012, "Spring", [_page(1, booklet)], [_page(2, report)],
+                              single_sitting=True)
+        self.assertEqual((once[0]["id"], once[0]["session"]), ("cas7-2012-q1", "Spring"))
+
+    def test_the_legacy_cover_page_splits_the_combined_pdf(self):
+        pages = [
+            _page(1, "1.\n(2 points)\nGiven the following"),
+            _page(2, "Exam 7\nMay 2012\nExaminers’ Report\nwith Sample Solutions"),
+            _page(3, "Question 1 Sample Answer\nSolution 1\na) 1,750,000"),
+        ]
+        self.assertEqual(px._split_combined(pages), 1)
+
+    def test_a_part_named_inside_a_later_parts_report_is_not_a_heading(self):
+        parsed = px.parse_cas_question(
+            "TOTAL POINT VALUE: 2\nSAMPLE ANSWERS\nPart a: 1 point\nSample 1\nf = 2.06\n"
+            "Part b: 1 point\nSample 1\nResidual = -110\n"
+            "EXAMINER'S REPORT\nPart a\nApply the constant-variance factor.\n"
+            "Part b\nCommon errors include using the factor calculation in\n"
+            "Part a.\n- Mislabelling the x-axis\n"
+        )
+        parts = {p["label"]: p for p in parsed["parts"]}
+        self.assertIn("constant-variance", parts["a"]["report"])
+        self.assertIn("Mislabelling", parts["b"]["report"])
+
+    def test_a_plural_possessive_report_heading_splits_the_report_off(self):
+        parsed = px.parse_cas_question(
+            "TOTAL POINT VALUE: 0.5\nSAMPLE ANSWERS\nPart a: 0.5 point\n"
+            "Sample Answer 1\nThe CV will be reduced.\n"
+            "EXAMINERS\u2019 REPORT\nPart a\nCandidates were expected to explain.\n"
+        )
+        part = parsed["parts"][0]
+        self.assertIn("CV will be reduced", part["samples"][0])
+        self.assertNotIn("expected to explain", part["samples"][0])
+        self.assertIn("expected to explain", part["report"])
+
+    def test_a_sentence_broken_across_blocks_is_rejoined(self):
+        self.assertTrue(px.continues(
+            "A very common error was to use the normalized residual from", "part a) instead."))
+        self.assertTrue(px.continues(
+            "Candidates who did not receive full credit often confused the",
+            "process and parameter variance."))
+
+    def test_steps_items_and_sentences_are_not_rejoined(self):
+        self.assertFalse(px.continues("= 50k", "x = 1250k"))                 # a worked step
+        self.assertFalse(px.continues("Common errors were in the setup of", "f) Describe"))
+        self.assertFalse(px.continues("The residuals look random.", "this is fine"))
+        self.assertFalse(px.continues("The expected loss ratio is", "| AY | Loss |"))
+        self.assertFalse(px.continues("Expenses are expected to fall with", "o Expenses rise"))
+
+    def test_a_sentence_carried_over_the_page_break_is_rejoined(self):
+        text, index = px._joined([
+            _page(1, "Candidates were expected to explain why the residuals"),
+            _page(2, "should be scattered randomly around zero."),
+        ])
+        self.assertIn("residuals should be scattered", text)
+        self.assertEqual(len(index), len(text))
+        self.assertEqual(index[text.index("scattered")], 2)
+
+    def test_a_dollar_sign_from_the_text_layer_is_escaped(self):
+        # `$25,000 … $10,000` would otherwise pair into one span of math.
+        text, _ = px._joined([_page(1, "A limit of $25,000 and a basic limit of $10,000.")])
+        self.assertIn(r"of \$25,000 and a basic limit of \$10,000.", text)
+        again, _ = px._joined([_page(1, text)])
+        self.assertNotIn(r"\\$", again)
+
+    def test_maths_font_letters_and_symbol_bullets_are_normalised(self):
+        md = px.normalize_text_layer(
+            "\U0001D441\U0001D443\U0001D449 = 12, \U0001D719 = 0.4\n"
+            "Credit was given as follows:\n\uf0b7 for identifying the problem\n"
+            "\uf0a7 g = ROE x b \uf0a7 g = FCFE growth\n"
+        )
+        self.assertIn("NPV = 12, \u03c6 = 0.4", md)
+        self.assertIn("\n- for identifying the problem", md)
+        self.assertIn("\n- g = ROE x b\n- g = FCFE growth", md)
+        self.assertEqual(px.normalize_text_layer("higher \uf0e0 CL reacts"), "higher \u2192 CL reacts")
+
+    def test_a_number_alone_on_its_line_starts_a_booklet_question(self):
+        booklet = (
+            "1.\n(2.75 points)\nGiven the following:\n"
+            "The 80.\n2.\n(1 point)\nDescribe it.\n10. (2 points)\nCalculate it.\n"
+        )
+        self.assertEqual([b.num for b in px.segment(booklet)], [1, 2, 10])
+
+
 class TestSpring2016Faults(unittest.TestCase):
     """Four faults the CAS Exam 5 Spring 2016 paper exposed.
 
@@ -1068,6 +1234,79 @@ class TestWriter(unittest.TestCase):
         self.assertIn("A proper triangle.", md)
         self.assertNotIn("garbled", md)
         self.assertIn("fine as is", md)  # the part not named keeps the publisher's
+
+    LEGACY_RECORD = {
+        "num": 3, "id": "cas7-2012-q3", "bank": "exam-7", "type": "multi-part",
+        "body": "Given the triangle:", "options": {}, "answer": None, "points": None,
+        "year": 2012, "session": "Spring",
+        "parts": [
+            {"label": "a", "points": 1.5, "samples": ["f = 1.613"], "report": ""},
+            {"label": "b", "points": 0.75, "samples": ["Random around zero."], "report": ""},
+        ],
+        "solution": "", "examiner_report": "Most candidates knew the weighted LDF.",
+        "pages": {"question": [1], "solution": [2]}, "needs_vision": False, "warnings": [],
+    }
+    JUDGED = {"topic": "T", "learning_objective": "L", "difficulty": "medium",
+              "wiki_link": ["Concepts/T"]}
+
+    def test_a_missing_total_is_the_sum_of_the_parts(self):
+        md = qw.render(self.LEGACY_RECORD, self.JUDGED)
+        self.assertIn("\npoints: 2.25\n", md)
+
+    def test_a_question_wide_report_goes_under_the_last_part(self):
+        md = qw.render(self.LEGACY_RECORD, self.JUDGED)
+        part_b = md.split("## Part b")[1]
+        self.assertIn("### Examiner Report\nMost candidates knew the weighted LDF.", part_b)
+        self.assertNotIn("weighted LDF", md.split("## Part b")[0])
+
+    def test_a_question_wide_report_stays_out_when_parts_have_their_own(self):
+        record = dict(self.LEGACY_RECORD, parts=[
+            dict(self.LEGACY_RECORD["parts"][0], report="Part a comment."),
+            self.LEGACY_RECORD["parts"][1],
+        ])
+        md = qw.render(record, self.JUDGED)
+        self.assertIn("Part a comment.", md)
+        self.assertNotIn("weighted LDF", md)
+
+    def test_report_override_replaces_the_named_part(self):
+        record = qw.apply_report_override(
+            dict(self.LEGACY_RECORD, parts=[dict(p, report="garbled \u0d6b") for p in self.LEGACY_RECORD["parts"]]),
+            "## Part b\nRe-read from the page.",
+        )
+        self.assertEqual(record["parts"][1]["report"], "Re-read from the page.")
+        self.assertEqual(record["parts"][0]["report"], "garbled \u0d6b")
+        whole = qw.apply_report_override(self.LEGACY_RECORD, "The question as a whole.")
+        self.assertEqual(whole["examiner_report"], "The question as a whole.")
+
+    def test_the_booklet_split_wins_when_only_it_closes_on_the_total(self):
+        parts = [{"label": "a", "points": 4.0}, {"label": "b", "points": 1.5}]
+        prompts = {"a": {"points": 4.0, "prompt": "x"}, "b": {"points": 1.0, "prompt": "y"}}
+        warnings: list[str] = []
+        px._prefer_closing_points(parts, prompts, 5.0, warnings)
+        self.assertEqual([p["points"] for p in parts], [4.0, 1.0])
+        self.assertEqual(len(warnings), 1)
+        # When the report's own split closes, it stands.
+        parts = [{"label": "a", "points": 4.0}, {"label": "b", "points": 1.0}]
+        px._prefer_closing_points(parts, {"a": {"points": 3.5}, "b": {"points": 1.5}}, 5.0, None)
+        self.assertEqual([p["points"] for p in parts], [4.0, 1.0])
+
+    def test_single_part_cas_question_uses_the_implicit_part_sections(self):
+        record = dict(self.LEGACY_RECORD, parts=[], solution="Stable earnings.",
+                      examiner_report="Most listed two.", points=1.0)
+        md = qw.render(record, self.JUDGED)
+        self.assertIn("### Explanation\nStable earnings.", md)
+        self.assertIn("### Examiner Report\nMost listed two.", md)
+        self.assertNotRegex(md, r"(?m)^## Explanation")
+
+    def test_a_moved_question_records_its_paper(self):
+        md = qw.render(self.LEGACY_RECORD, dict(self.JUDGED, bank="exam-9"))
+        head = md.split("---")[1]
+        self.assertIn('exam: "Exam 9"', head)
+        self.assertIn('originally_exam: "Exam 7"', head)
+        self.assertEqual(qw.filed_bank(self.LEGACY_RECORD, {"bank": "exam-9"}), "exam-9")
+        off = qw.render(self.LEGACY_RECORD, dict(self.JUDGED, off_syllabus=True)).split("---")[1]
+        self.assertIn("off_syllabus: true", off)
+        self.assertNotIn("originally_exam", off)
 
     def test_split_explanation_override(self):
         out = qw.split_explanation_override("## Part a\nfirst\n## Part b\nsecond")

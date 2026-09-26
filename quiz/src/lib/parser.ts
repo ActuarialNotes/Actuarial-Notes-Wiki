@@ -46,6 +46,14 @@ export interface Question {
    */
   originally_exam?: string
   /**
+   * Set on a question from a part of an old syllabus that no current exam
+   * covers — the insurance-company valuation questions on the 2012–2019
+   * Exam 7 papers. Kept for the record, not for study: `filterQuestions`
+   * leaves it out of quiz draws unless a reader asks for its sitting, for it by
+   * id, or searches for it.
+   */
+  off_syllabus?: boolean
+  /**
    * The question's VERIFY record — what has been checked about it, against what
    * source, and when. Undefined only for a file with no `verification:` block,
    * which CI does not allow into the bank.
@@ -81,6 +89,12 @@ export interface QuestionFilter {
    * flagged questions can actually be fixed.
    */
   includeFlagged?: boolean
+  /**
+   * Include questions no current syllabus covers (`off_syllabus`) even with no
+   * sitting, id or search to ask for them — for surfaces that list the bank
+   * rather than draw a quiz from it.
+   */
+  includeOffSyllabus?: boolean
 }
 
 interface QuestionFrontmatter {
@@ -98,6 +112,7 @@ interface QuestionFrontmatter {
   year?: unknown
   session?: unknown
   originally_exam?: unknown
+  off_syllabus?: unknown
   verification?: unknown
 }
 
@@ -344,6 +359,7 @@ export function parseQuestion(raw: string): Question | null {
       year: data.year ? Number(data.year) : undefined,
       session: data.session ? String(data.session) : undefined,
       originally_exam: data.originally_exam ? String(data.originally_exam) : undefined,
+      off_syllabus: String(data.off_syllabus).toLowerCase() === 'true' ? true : undefined,
       verification: verificationFromAttributes(data) ?? undefined,
     }
 
@@ -543,6 +559,10 @@ export function filterQuestions(questions: Question[], filters: QuestionFilter):
     // flagged questions.
     if (!filters.includeFlagged && hasCriticalFinding(q.verification)) return false
     if (filters.ids?.length) return filters.ids.includes(q.id)
+    // A question kept only for the record: it belongs to its paper, so a
+    // sitting filter still finds it, and so does a search — but a quiz drawn
+    // from an exam, a topic or a concept never serves it.
+    if (q.off_syllabus && !filters.includeOffSyllabus && !filters.year && !filters.session && !filters.search) return false
     if (filters.exam && q.exam.toLowerCase() !== filters.exam.toLowerCase()) return false
     if (filters.topic && q.topic.toLowerCase() !== filters.topic.toLowerCase()) return false
     if (filters.topics?.length) {

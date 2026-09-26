@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>Four lines of business with their exposure bases and indicated changes</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>Four lines of business — auto, home, workers comp and liability — each with its own indicated rate change</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -47,28 +43,35 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">Each line is priced and reserved on its</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">own</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="438" text-anchor="middle" class="fml">Rate is set per line, per class, per territory</text>
-    <text x="34" y="122" text-anchor="start" class="sm bold">Personal auto</text>
-    <text x="34" y="138" text-anchor="start" class="sm dim">car-year</text>
-    <rect x="236" y="116" width="33.58" height="20" rx="3" fill="#3b82f6" fill-opacity="0.65"/>
-    <text x="277.58" y="131" text-anchor="start" class="sm">+7.3%</text>
-    <text x="34" y="174" text-anchor="start" class="sm bold">Homeowners</text>
-    <text x="34" y="190" text-anchor="start" class="sm dim">house-year</text>
-    <rect x="236" y="168" width="57.5" height="20" rx="3" fill="#d97706" fill-opacity="0.65"/>
-    <text x="301.5" y="183" text-anchor="start" class="sm">+12.5%</text>
-    <text x="34" y="226" text-anchor="start" class="sm bold">Workers comp</text>
-    <text x="34" y="242" text-anchor="start" class="sm dim">payroll/100</text>
-    <rect x="224.96" y="220" width="11.04" height="20" rx="3" fill="#059669" fill-opacity="0.65"/>
-    <text x="216.96" y="235" text-anchor="end" class="sm">-2.4%</text>
-    <text x="34" y="278" text-anchor="start" class="sm bold">General liability</text>
-    <text x="34" y="294" text-anchor="start" class="sm dim">sales/1,000</text>
-    <rect x="236" y="272" width="18.86" height="20" rx="3" fill="#7c3aed" fill-opacity="0.65"/>
-    <text x="262.86" y="287" text-anchor="start" class="sm">+4.1%</text>
-    <line x1="236" y1="106" x2="236" y2="340" class="rule"/>
-    <text x="180" y="366" text-anchor="middle" class="sm dim">one exposure base, one rating plan, one triangle</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <line x1="176" y1="78" x2="176" y2="380" class="rule"/>
+    <path d="M41,103 V96 L51,94 L58,86 H75 L82,94 L91,97 V103 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="52" cy="104" r="4.5" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.6"/>
+    <circle cx="80" cy="104" r="4.5" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.6"/>
+    <text x="66" y="134" text-anchor="middle" class="sm">Personal auto</text>
+    <rect x="176" y="87" width="65.7" height="22" rx="3" fill="#3b82f6" fill-opacity="0.65"/>
+    <text x="249.7" y="102" text-anchor="start" class="sm">+7.3%</text>
+    <polygon points="52.32,175.72 52.32,197 79.68,197 79.68,175.72 66,160.52" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="62.58" y="184.84" width="6.84" height="12.16" fill="#d97706" fill-opacity="0.55"/>
+    <text x="66" y="214" text-anchor="middle" class="sm">Homeowners</text>
+    <rect x="176" y="167" width="112.5" height="22" rx="3" fill="#d97706" fill-opacity="0.65"/>
+    <text x="296.5" y="182" text-anchor="start" class="sm">+12.5%</text>
+    <circle cx="66" cy="246.6" r="6.84" fill="#059669" fill-opacity="0.18" stroke="#059669" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M53.84,277 V262.56 Q53.84,256.48 60.68,256.48 H71.32 Q78.16,256.48 78.16,262.56 V277 Z" fill="#059669" fill-opacity="0.18" stroke="#059669" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="66" y="294" text-anchor="middle" class="sm">Workers comp</text>
+    <rect x="154.4" y="247" width="21.6" height="22" rx="3" fill="#059669" fill-opacity="0.65"/>
+    <text x="146.4" y="262" text-anchor="end" class="sm">−2.4%</text>
+    <rect x="55.92" y="320" width="20.16" height="36" rx="2" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="59.88" y="324.32" width="4.32" height="3.6" fill="#7c3aed" fill-opacity="0.55"/>
+    <rect x="67.8" y="324.32" width="4.32" height="3.6" fill="#7c3aed" fill-opacity="0.55"/>
+    <rect x="59.88" y="331.52" width="4.32" height="3.6" fill="#7c3aed" fill-opacity="0.55"/>
+    <rect x="67.8" y="331.52" width="4.32" height="3.6" fill="#7c3aed" fill-opacity="0.55"/>
+    <rect x="59.88" y="338.72" width="4.32" height="3.6" fill="#7c3aed" fill-opacity="0.55"/>
+    <rect x="67.8" y="338.72" width="4.32" height="3.6" fill="#7c3aed" fill-opacity="0.55"/>
+    <rect x="59.88" y="345.92" width="4.32" height="3.6" fill="#7c3aed" fill-opacity="0.55"/>
+    <rect x="67.8" y="345.92" width="4.32" height="3.6" fill="#7c3aed" fill-opacity="0.55"/>
+    <text x="66" y="374" text-anchor="middle" class="sm">General liability</text>
+    <rect x="176" y="327" width="36.9" height="22" rx="3" fill="#7c3aed" fill-opacity="0.65"/>
+    <text x="220.9" y="342" text-anchor="start" class="sm">+4.1%</text>
   </g>
 </svg>

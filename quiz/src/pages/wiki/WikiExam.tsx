@@ -9,6 +9,7 @@ import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { ExamSyllabusButton } from '@/components/wiki/ExamSyllabusButton'
 import { ExamVersionMenu } from '@/components/wiki/ExamVersionMenu'
+import { ExamProjectButton } from '@/components/wiki/ExamProjectButton'
 import { ExamLogo } from '@/components/ExamLogo'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
@@ -249,7 +250,8 @@ export default function WikiExam() {
 
   // The sticky header's right-hand end: the version — which sitting of the
   // exam the page is being read for — then the examining body's own syllabus,
-  // the document this whole page is a reading of.
+  // the document this whole page is a reading of. PCPA adds its project, the
+  // requirement's second half.
   const smallTitleBadge = useMemo(() => (
     <span className="inline-flex items-center gap-1.5 not-prose shrink-0">
       <ExamVersionMenu progressKey={progressKey} />
@@ -257,6 +259,8 @@ export default function WikiExam() {
         examId={wikiExamId}
         examLabel={extractedTitle ?? examDisplayName(examFileName)}
       />
+      {/* PCPA's second part: the project, which the syllabus page can't be. */}
+      {progressKey === 'CAS-PCPA' && <ExamProjectButton />}
     </span>
   ), [progressKey, wikiExamId, extractedTitle, examFileName])
 

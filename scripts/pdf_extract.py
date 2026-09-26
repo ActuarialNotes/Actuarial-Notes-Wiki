@@ -479,9 +479,13 @@ CAPS_HEADING_RE = re.compile(r"^\s*[A-Z][A-Z0-9 '\u2018\u2019(),./-]{4,}$")
 # on nearly every page *by design*, so they are the one thing furniture
 # detection must never eat — unlike a running header or a page number, which
 # repeat for the opposite reason.
+# The last two are the pre-2014 report's own headings (`Solution 2`,
+# `Examiner Comment`): folded into the line below, the comment heading takes
+# the first sentence of the commentary with it and the split never finds it.
 CONTENT_MARKER_RE = re.compile(
     r"^\s*(?:Part\s+[a-h]\b|Sample(?:\s+Answer)?\s+\d+\b|Solution\s*[:#]"
-    r"|Question\s*#?\s*\d+\b)",
+    r"|Question\s*#?\s*\d+\b|Solution\s*\d+\s*$"
+    "|Examiners?['’]?s?\\s+Comments?\\b)",
     re.IGNORECASE,
 )
 MARKER_RE = re.compile(
@@ -629,6 +633,37 @@ def split_columnar(lines: list[str]) -> list[tuple[str, str]]:
     return out
 
 
+# A block that opens a new item rather than continuing a sentence: a lettered
+# or numbered label (`f)`, `b.`, `(ii)`, `3.`), a bullet (including the `o`
+# Word sets for a second-level bullet), or a table row.
+NEW_ITEM_RE = re.compile(r"^\s*(?:\(?(?:[a-h]|[ivx]+)[.)]|[-*\u2022o]\s|\d+[.)]|\|)")
+PROSE_WORD_RE = re.compile(r"[A-Za-z]{2,}")
+
+
+def continues(prev: str, nxt: str) -> bool:
+    """Whether `nxt` is the rest of a sentence `prev` broke off.
+
+    A PDF ends a text block at a column or page edge as readily as at a
+    paragraph, so a sentence can arrive as two blocks — `…the normalized
+    residual using the results from` / `part a). A very common error…` — which
+    the blank line between blocks turns into two paragraphs. Only prose on both
+    sides is joined: the line above must be words that stop without sentence
+    punctuation, and the line below must open on a lower-case word. A worked
+    step (`= 50k` / `x = 1250k`) is never joined, and neither is a new item.
+    """
+    last = prev.rstrip().rsplit("\n", 1)[-1].strip()
+    first = nxt.lstrip().split("\n", 1)[0].strip()
+    # The line below may *look* structural — `part a) of the problem …` — but a
+    # real heading is capitalised (`Part a`), and it must open lower-case here.
+    if not last or not first or is_structural(last):
+        return False
+    if TERMINAL_RE.search(last) or STEP_END_RE.search(last) or NEW_ITEM_RE.match(first):
+        return False
+    if not re.match(r"[a-z]{2,}\b", first) or last.startswith("|"):
+        return False
+    return len(PROSE_WORD_RE.findall(last)) >= 3 and len(PROSE_WORD_RE.findall(first)) >= 2
+
+
 def page_markdown(page: Page, drop: set[str]) -> str:
     """A page's prose and exhibits as markdown, furniture removed."""
     chunks: list[str] = []
@@ -639,7 +674,11 @@ def page_markdown(page: Page, drop: set[str]) -> str:
         kept = [ln for ln in raw.splitlines() if ln.strip() not in drop]
         for kind, piece in split_columnar(kept):
             body = piece if kind == "table" else reflow_block(piece)
-            if body.strip():
+            if not body.strip():
+                continue
+            if kind != "table" and chunks and continues(chunks[-1], body):
+                chunks[-1] = f"{chunks[-1].rstrip()} {body.lstrip()}"
+            else:
                 chunks.append(body)
     return "\n\n".join(chunks)
 
@@ -654,6 +693,13 @@ QUESTION_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
     ("Question N", re.compile(r"(?mi)^[ \t]*question[ \t]*#?[ \t]*(\d{1,3})\b[.:]?")),
     ("QUESTION N", re.compile(r"(?m)^[ \t]*QUESTION[ \t]*[:#]?[ \t]*(\d{1,3})\b")),
     ("**N.**", re.compile(r"(?m)^[ \t]*\*\*(\d{1,3})\.?\*\*[ \t]*")),
+    # A scanned CAS booklet OCRs `1.` alone on its line with the point value
+    # below it; `N.` needs text after the dot, so it finds only the two-digit
+    # questions set on one line (Exam 7 May 2012 placed 6 of 24). Keyed on the
+    # point value that must follow, a stray `80.` in an exhibit cannot match.
+    ("N. (points)", re.compile(
+        r"(?m)^[ \t]*(\d{1,3})\.[ \t]*\n?[ \t]*(?=\(\s*[\d.]+\s*points?\s*\))"
+    )),
 ]
 
 # `(A) 24`, `A) 24`, `A. I only` (the CAS MAS papers) and `- A) 24` — the last
@@ -860,7 +906,13 @@ def strip_solution_header(text: str) -> tuple[str, str | None]:
 # A report's own heading is not typed to one shape either: Fall 2015 prints
 # `QUESTION: 1` for its first question and `QUESTION 2` for every one after, so
 # a colon that appears once in a paper is enough to lose a question entirely.
-CAS_QUESTION_RE = re.compile(r"(?m)^[ \t]*QUESTION[ \t]*[:#]?[ \t]*(\d{1,3})\b")
+# Exam 7 Spring 2018 names the sitting in front of every heading —
+# `SPRING 2018 EXAM 7, QUESTION 1` — which a line-anchored `QUESTION` never
+# sees, so the whole report segmented to nothing.
+CAS_QUESTION_RE = re.compile(
+    r"(?m)^[ \t]*(?:(?:SPRING|FALL)[ \t]+\d{4}[ \t]+EXAM[ \t]+[\w-]+[ \t]*,?[ \t]*)?"
+    r"QUESTION[ \t]*[:#]?[ \t]*(\d{1,3})\b"
+)
 # The leading glyph of a field label is sometimes missing from a publisher
 # PDF's text layer — Fall 2016 page 45 extracts as `OTAL POINT VALUE: 3.25`,
 # the `T` simply absent. The label is being *recognised*, not transcribed, and
@@ -878,8 +930,12 @@ CAS_SAMPLE_RE = re.compile(
     r"(?mi)^[ \t]*S?AMPLE(?:[ \t]*/[ \t]*[A-Z]+)?[ \t]+ANSWERS?\b[ \t]*:?"
 )
 # `_joined` normalises the curly apostrophe away, but the parser is called
-# directly too, so it reads both spellings itself.
-CAS_REPORT_RE = re.compile("(?mi)^[ \t]*E?XAMINER['\u2019]?S? REPORT\\b[ \t]*:?")
+# directly too, so it reads both spellings itself — and both possessives:
+# Exam 7 Spring 2015 heads every question's commentary `EXAMINERS' REPORT`,
+# and missing it filed all 29 questions' commentary as their sample answers.
+CAS_REPORT_RE = re.compile(
+    "(?mi)^[ \t]*E?XAMINER(?:['\u2019]?S|S['\u2019])? REPORT\\b[ \t]*:?"
+)
 
 
 # `a. (0.25 points) Calculate …` — how the booklet introduces each sub-part.
@@ -973,7 +1029,14 @@ def parse_cas_question(text: str) -> dict:
 
 
 def _split_parts(block: str) -> list[tuple[str, str | None, str]]:
-    matches = list(CAS_PART_RE.finditer(block))
+    # Parts only climb. A sentence that ends "…the development factor
+    # calculation in / Part a." puts `Part a` at the start of a line inside part
+    # b's commentary (Exam 7 Spring 2017 Q3), and read as a heading it replaced
+    # part a's own report with the tail of part b's.
+    matches: list[re.Match[str]] = []
+    for m in CAS_PART_RE.finditer(block):
+        if not matches or m.group(1).lower() > matches[-1].group(1).lower():
+            matches.append(m)
     out = []
     for i, m in enumerate(matches):
         stop = matches[i + 1].start() if i + 1 < len(matches) else len(block)
@@ -1004,6 +1067,104 @@ def _split_samples(chunk: str) -> list[str]:
             pieces[i] = "\n".join(lines).strip()
             pieces[i + 1] = f"{heading}\n\n{pieces[i + 1]}".strip()
     return [p for p in pieces if len(p) > 2]
+
+
+# ─── The pre-2014 report layout ───────────────────────────────────────────────
+#
+# CAS's first examiner's reports (Exam 7 May 2012 and Spring 2013) predate the
+# `QUESTION N` / `TOTAL POINT VALUE` / `Part a: 0.5 point` layout. Each question
+# opens `Question 1 Sample Answer`, its candidate answers follow as
+# `Solution 1`, `Solution 2`, … with the parts lettered `a)` inside them, and
+# one `Examiner Comment` closes it. No point value is printed anywhere in the
+# report — the booklet's `(2.75 points)` / `a. (1.25 points)` are the only
+# source, so `cas_records` reads them from there.
+#
+# The samples are not ordered one way. Question 1 of 2012 runs Solution 1
+# through parts a and b, then Solution 2 through a and b again; Question 9 runs
+# six solutions of part a and then starts over at `Solution 1` for part d. So a
+# part's samples are collected in reading order from wherever its letter
+# appears, which reads both shapes the same way.
+LEGACY_QUESTION_RE = re.compile(
+    r"(?m)^[ \t]*Question[ \t]+(\d{1,3})[ \t]+Sample[ \t]+(?:Answers?|Solutions?)\b"
+)
+LEGACY_SAMPLE_RE = re.compile(r"(?mi)^[ \t]*(?:Solution|Sample)[ \t]*\d+[ \t]*:?[ \t]*$")
+LEGACY_COMMENT_RE = re.compile("(?mi)^[ \t]*Examiners?['’]?s?[ \t]+Comments?\\b[ \t]*:?[ \t]*")
+LEGACY_PART_RE = re.compile(r"(?m)^[ \t]*\(?([a-h])\)[ \t]*")
+# The commentary names its parts in prose as often as with a label:
+# `Part a) of the problem required …`, `The b. part requires …`,
+# `For the a. part, candidates would …`, or `a)` alone on a line.
+LEGACY_COMMENT_PART_RE = re.compile(
+    r"(?mi)^[ \t]*(?:Part[ \t]+\(?([a-h])\)?(?=[\s),:.]|$)|\(?([a-h])\)"
+    r"|(?:The|For[ \t]+the)[ \t]+([a-h])\.?[ \t]+part\b)"
+)
+
+
+def parse_legacy_question(text: str) -> dict:
+    """Pull samples and commentary out of one `Question N Sample Answer`
+    section of a pre-2014 CAS examiner's report. Same shape as
+    `parse_cas_question`, with no point values — the report prints none."""
+    comment_at = LEGACY_COMMENT_RE.search(text)
+    samples_block = text[: comment_at.start()] if comment_at else text
+    report_block = text[comment_at.end() :] if comment_at else ""
+
+    parts: dict[str, CasPart] = {}
+    loose: list[str] = []
+    current: str | None = None
+    for sample in (s for s in LEGACY_SAMPLE_RE.split(samples_block) if s.strip()):
+        marks: list[re.Match[str]] = []
+        for m in LEGACY_PART_RE.finditer(sample):
+            # Letters only climb inside one sample: an `a)` below a `c)` is a
+            # list inside the answer, not the start of part a again.
+            if not marks or m.group(1) > marks[-1].group(1):
+                marks.append(m)
+        lead = sample[: marks[0].start()] if marks else sample
+        if lead.strip():
+            # A sample that opens without a letter continues the part the one
+            # before it was answering; before any part at all, the question
+            # has none, and the text is its single-part solution.
+            if current:
+                parts[current].samples.append(lead.strip())
+            else:
+                loose.append(lead.strip())
+        for i, m in enumerate(marks):
+            stop = marks[i + 1].start() if i + 1 < len(marks) else len(sample)
+            chunk = sample[m.end() : stop].strip()
+            current = m.group(1)
+            part = parts.setdefault(current, CasPart(label=current))
+            if len(chunk) > 2:
+                part.samples.append(chunk)
+
+    overall = report_block.strip()
+    marks = []
+    for m in LEGACY_COMMENT_PART_RE.finditer(report_block):
+        label = (m.group(1) or m.group(2) or m.group(3)).lower()
+        if label in parts and (not marks or label > marks[-1][0]):
+            marks.append((label, m))
+    if marks:
+        overall = report_block[: marks[0][1].start()].strip()
+        for i, (label, m) in enumerate(marks):
+            stop = marks[i + 1][1].start() if i + 1 < len(marks) else len(report_block)
+            # A label heading its paragraph (`a) Most candidates …`, `Part b)`
+            # alone on a line) is dropped; one that is the subject of its
+            # sentence (`The a. part involved …`, `Part a) of the problem …`)
+            # is kept, or the sentence loses its subject.
+            rest = report_block[m.end() : stop]
+            prose = bool(m.group(3)) or bool(re.match(r"[ \t]*[a-z,]", rest))
+            parts[label].report = (report_block[m.start() : stop] if prose else rest).strip()
+
+    return {
+        "points": None,
+        "learning_objective_codes": "",
+        "examiner_report": overall,
+        "solution": loose[0] if loose and not parts else "",
+        "alternatives": loose[1:] if not parts else [],
+        "parts": [asdict(parts[k]) for k in sorted(parts)],
+    }
+
+
+# `1. (2.75 points)` at the head of a booklet span: the total a pre-2014 report
+# never prints, read off the booklet before the stem is stripped of it.
+BOOKLET_TOTAL_RE = re.compile(r"^\s*\(\s*([\d.]+)\s*points?\s*\)", re.IGNORECASE)
 
 
 # ─── Page rendering (vision, only where unavoidable) ──────────────────────────
@@ -1178,20 +1339,31 @@ def cas_records(
     booklet_pages: list[Page],
     report_pages: list[Page],
     furniture: set[str] | None = None,
+    single_sitting: bool = False,
 ) -> list[dict]:
-    """Build records for a CAS essay/calculation exam."""
+    """Build records for a CAS essay/calculation exam.
+
+    `single_sitting` is for an exam sat once a year (Exam 7): the session is
+    still recorded — the past-paper shelf filters on it — but the id carries no
+    `s`/`f` suffix, since there is no other sitting that year to tell it from.
+    """
     b_text, b_index = _joined(booklet_pages, furniture)
     r_text, r_index = _joined(report_pages, furniture)
 
     numbered = {b.num: (b.start, b.end) for b in segment(b_text)} if b_text.strip() else {}
     suffix = ""
-    if session:
+    if session and not single_sitting:
         suffix = "s" if session.lower().startswith("sp") else "f"
 
     bounds = list(segment(r_text, CAS_QUESTION_RE))
-    parsed_by_num = {
-        b.num: parse_cas_question(r_text[b.start : b.end]) for b in bounds
-    }
+    parse = parse_cas_question
+    legacy = not bounds
+    if legacy:
+        # The pre-2014 layout (see `parse_legacy_question`): no point value in
+        # the report, so the booklet is the only place a total comes from.
+        bounds = list(segment(r_text, LEGACY_QUESTION_RE))
+        parse = parse_legacy_question
+    parsed_by_num = {b.num: parse(r_text[b.start : b.end]) for b in bounds}
 
     # A booklet whose numbering survived is read directly. One whose numbering
     # did not — every scanned CAS booklet — is aligned on its point values
@@ -1245,9 +1417,14 @@ def cas_records(
             p_start, p_end = prompts[bound.num]
             body = mdmath.normalize_markdown(b_text[p_start:p_end]).strip()
             pages = sorted({b_index[i] for i in range(p_start, min(p_end, len(b_index)))})
+            total = BOOKLET_TOTAL_RE.match(body)
+            if parsed["points"] is None and total:
+                parsed["points"] = float(total.group(1))
             body = _strip_trailing_label(
                 attach_part_prompts(body, parsed["parts"], parsed["points"], warnings)
             )
+            if parsed["points"] is None:
+                parsed["points"] = parts_total(parsed["parts"])
             ocred = sorted({p for p in pages if booklet_pages[p - 1].ocred})
         else:
             # No prompt text for this question. When the booklet has no text
@@ -1602,7 +1779,36 @@ def attach_part_prompts(
             part["points"] = found["points"]
             priced += found["points"] or 0
     parts.sort(key=lambda p: p["label"])
+    _prefer_closing_points(parts, prompts, total, warnings)
     return stem
+
+
+def _prefer_closing_points(
+    parts: list[dict], prompts: dict[str, dict], total: float | None, warnings: list[str] | None
+) -> None:
+    """Take the booklet's part values when only the booklet's add up.
+
+    Two printings of one paper can disagree on a part: Exam 7 Spring 2014's
+    report gives Q21 part c 1.5 points where the booklet — and its own point
+    table — give 1, and only the booklet's values sum to the report's
+    `TOTAL POINT VALUE`. The total is the one figure both sides agree on, so
+    the split that closes on it is the one printed correctly.
+    """
+    if total is None or not parts or any(p["label"] not in prompts for p in parts):
+        return
+    report_sum = sum(p.get("points") or 0 for p in parts)
+    booklet_sum = sum(prompts[p["label"]]["points"] or 0 for p in parts)
+    if abs(report_sum - total) <= POINT_EPS or abs(booklet_sum - total) > POINT_EPS:
+        return
+    for part in parts:
+        booklet = prompts[part["label"]]["points"]
+        if part.get("points") != booklet and warnings is not None:
+            warnings.append(
+                f"part {part['label']} priced at {points_label(booklet)} from the booklet, "
+                f"not the report's {points_label(part.get('points'))}: only the booklet's "
+                f"parts sum to the total of {points_label(total)}"
+            )
+        part["points"] = booklet
 
 
 # The next question's own `10.`, left at the end of a span that reaches to the
@@ -1613,6 +1819,19 @@ TRAILING_LABEL_RE = re.compile(r"\n\s*\d{1,3}\.\s*$")
 
 def _strip_trailing_label(body: str) -> str:
     return TRAILING_LABEL_RE.sub("", body).rstrip()
+
+
+def parts_total(parts: list[dict]) -> float | None:
+    """A question's total from its parts, when every part is priced.
+
+    For a total nothing printed legibly — the pre-2014 reports print none, and
+    OCR can lose the booklet's `(3 points)` — the parts' own printed values are
+    still the publisher's figures, and their sum is the total.
+    """
+    values = [p.get("points") for p in parts]
+    if not values or any(v is None for v in values):
+        return None
+    return round(sum(values), 4)
 
 
 def points_label(value: float | None) -> str:
@@ -1632,6 +1851,34 @@ SOA_PREFIX = {"p": "p", "fm": "fm", "mas-i": "masi", "mas-ii": "masii"}
 SOA_BANK = {"p": "exam-p", "fm": "exam-fm", "mas-i": "exam-mas-i", "mas-ii": "exam-mas-ii"}
 
 
+UNESCAPED_DOLLAR_RE = re.compile(r"(?<!\\)\$")
+# Letters set in a maths font come out of a text layer as Unicode's
+# Mathematical Alphanumeric Symbols (`𝑁𝑃𝑉`, `𝜙`): the same letters in an
+# italic face, which a reader sees as a different alphabet. NFKC folds each
+# to its plain letter.
+MATH_ALNUM_RE = re.compile("[\U0001D400-\U0001D7FF]")
+# Word's list bullets from a symbol font (`\uf0b7`, `\uf0a7`, `\uf0d8`),
+# private-use code points that render as nothing. At the head of a line they
+# are that line's bullet; mid-line, each starts the next item.
+SYMBOL_BULLET_HEAD_RE = re.compile("(?m)^[ \t]*[\uf0a7\uf0b7\uf0d8][ \t]*")
+SYMBOL_BULLET_INLINE_RE = re.compile("[ \t]+[\uf0a7\uf0b7\uf0d8][ \t]+")
+
+
+def normalize_text_layer(md: str) -> str:
+    """What a PDF's text layer gets wrong on its way to markdown, fixed.
+
+    A text layer carries no LaTeX, so every `$` is money — and left bare, the
+    app's markdown pairs `$25,000 … $10,000` into one span of math. Maths-font
+    letters are folded to plain ones and symbol-font bullets become list items.
+    """
+    md = UNESCAPED_DOLLAR_RE.sub(r"\\$", md)
+    md = MATH_ALNUM_RE.sub(lambda m: unicodedata.normalize("NFKC", m.group()), md)
+    md = SYMBOL_BULLET_HEAD_RE.sub("- ", md)
+    # Word autocorrects `-->` to a Wingdings arrow, which extracts as U+F0E0.
+    md = md.replace("\uf0e0", "\u2192")
+    return SYMBOL_BULLET_INLINE_RE.sub("\n- ", md)
+
+
 def _joined(pages: list[Page], furniture: set[str] | None = None) -> tuple[str, list[int]]:
     """Concatenate page markdown, plus a char-index → page-number map."""
     drop = furniture if furniture is not None else (furniture_lines(pages) if pages else set())
@@ -1641,7 +1888,13 @@ def _joined(pages: list[Page], furniture: set[str] | None = None) -> tuple[str, 
         # Normalise here rather than per record: the publisher writes
         # `EXAMINER’S REPORT` with a curly apostrophe, and every marker regex
         # downstream is written with a straight one.
-        md = mdmath.normalize_chars(page_markdown(page, drop))
+        md = normalize_text_layer(mdmath.normalize_chars(page_markdown(page, drop)))
+        if chunks and md.strip() and continues(chunks[-1], md):
+            # A sentence carried over the page break: the page's first words
+            # finish the last paragraph of the page before.
+            chunks[-1] = chunks[-1].rstrip("\n") + " "
+            del index[len("".join(chunks)):]
+            md = md.lstrip()
         piece = md + "\n\n"
         chunks.append(piece)
         index.extend([page.number] * len(piece))
@@ -1896,6 +2149,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--out", required=True, help="output directory")
     ap.add_argument("--year", type=int, help="sitting year (CAS)")
     ap.add_argument("--session", help="Spring | Fall (CAS)")
+    ap.add_argument("--single-sitting", action="store_true",
+                    help="the exam is sat once a year (Exam 7): record --session "
+                         "but leave it out of the id")
     ap.add_argument("--dpi", type=int, default=DEFAULT_DPI)
     ap.add_argument("--no-tables", action="store_true", help="skip table detection")
     ap.add_argument("--no-render", action="store_true", help="skip page rendering")
@@ -1955,7 +2211,8 @@ def main(argv: list[str] | None = None) -> int:
     if cas:
         if not args.year:
             ap.error("--year is required for CAS exams (the sitting year)")
-        records = cas_records(args.exam, args.year, args.session, booklet, report, furniture)
+        records = cas_records(args.exam, args.year, args.session, booklet, report, furniture,
+                              single_sitting=args.single_sitting)
     else:
         records = soa_records(
             args.exam.lower(), booklet, report, furniture,
@@ -1987,8 +2244,15 @@ def _split_combined(pages: list[Page]) -> int:
     for page in pages:
         if re.search(r"(?i)sample answers and examiner", page.text):
             return page.number - 1
+    # The pre-2014 reports title themselves the other way round — Exam 7 May
+    # 2012's cover page reads `Examiners' Report with Sample Solutions`.
+    for page in pages:
+        if re.search("(?i)examiners?['’]?s?\\s+report\\s+with\\s+sample", page.text):
+            return page.number - 1
     for page in pages:
         if CAS_QUESTION_RE.search(page.text) and CAS_POINTS_RE.search(page.text):
+            return page.number - 1
+        if LEGACY_QUESTION_RE.search(page.text):
             return page.number - 1
     return 0
 

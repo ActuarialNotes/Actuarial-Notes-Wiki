@@ -69,10 +69,12 @@ EXAM_LABEL_BY_DIR = {
     "exam-mas-i": "Exam MAS-I",
     "exam-mas-ii": "Exam MAS-II",
     "exam-5": "Exam 5",
+    "exam-7": "Exam 7",
+    "exam-9": "Exam 9",
 }
 # Banks whose concept pages are not fully authored yet: an orphan wiki_link there
 # is a warning, not an error, so their questions can link ahead of page creation.
-ORPHAN_WARN_ONLY = {"exam-5"}
+ORPHAN_WARN_ONLY = {"exam-5", "exam-7", "exam-9"}
 
 OPTION_RE = re.compile(r"^- ([A-E])\)\s+.+", re.MULTILINE)
 FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---\n", re.DOTALL)

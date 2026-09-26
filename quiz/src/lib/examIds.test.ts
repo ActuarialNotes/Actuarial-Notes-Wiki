@@ -105,7 +105,7 @@ describe('questionExamLabel', () => {
   })
 
   it('falls back to the syllabus topic for an exam with no question bank', () => {
-    expect(questionExamLabel({ examId: '7', examTopic: 'Advanced Estimation of Claims Liabilities' }))
-      .toBe('Advanced Estimation of Claims Liabilities')
+    expect(questionExamLabel({ examId: '8', examTopic: 'Advanced Ratemaking' }))
+      .toBe('Advanced Ratemaking')
   })
 })

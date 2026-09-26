@@ -138,7 +138,7 @@ const STYLES_XML =
 
 /* --------------------------------------------------------------------- ZIP */
 
-interface ZipEntry {
+export interface ZipEntry {
   name: string
   data: Uint8Array
 }
@@ -164,7 +164,10 @@ export function buildZip(entries: ZipEntry[], date = new Date(2020, 0, 1)): Uint
   const dosTime = ((date.getHours() << 11) | (date.getMinutes() << 5) | (Math.floor(date.getSeconds() / 2))) & 0xffff
   const dosDate = (((date.getFullYear() - 1980) << 9) | ((date.getMonth() + 1) << 5) | date.getDate()) & 0xffff
 
-  const local: number[] = []
+  // Headers are small number arrays; entry data is copied in with `set`, never
+  // spread — a plot or a data file is far more bytes than a call can take as
+  // arguments.
+  const parts: (number[] | Uint8Array)[] = []
   const central: number[] = []
   let offset = 0
 
@@ -180,7 +183,7 @@ export function buildZip(entries: ZipEntry[], date = new Date(2020, 0, 1)): Uint
       ...u32(crc), ...u32(size), ...u32(size),
       ...u16(nameBytes.length), ...u16(0),
     ]
-    local.push(...header, ...nameBytes, ...entry.data)
+    parts.push(header, nameBytes, entry.data)
 
     central.push(
       ...u32(0x02014b50), ...u16(20), ...u16(20), ...u16(0x0800), ...u16(0),
@@ -199,8 +202,15 @@ export function buildZip(entries: ZipEntry[], date = new Date(2020, 0, 1)): Uint
     ...u16(entries.length), ...u16(entries.length),
     ...u32(central.length), ...u32(offset), ...u16(0),
   ]
+  parts.push(central, end)
 
-  return Uint8Array.from([...local, ...central, ...end])
+  const out = new Uint8Array(parts.reduce((n, p) => n + p.length, 0))
+  let at = 0
+  for (const p of parts) {
+    out.set(p, at)
+    at += p.length
+  }
+  return out
 }
 
 /* ---------------------------------------------------------------- workbook */

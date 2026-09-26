@@ -83,6 +83,19 @@ export const PAST_EXAM_SITTINGS: PastExamSitting[] = [
   { exam: 'Exam 5', year: 2011, session: 'Fall' },
   { exam: 'Exam 5', year: 2011, session: 'Spring' },
 
+  // ── CAS Exam 7 ─── sat once a year, in the spring. Released papers run from
+  //    May 2012, the first with an Examiner's Report, to Spring 2019. Their
+  //    ERM questions now sit in the Exam 9 bank (`originally_exam`), so a
+  //    sitting here holds its reserving and valuation questions ─────────────
+  { exam: 'Exam 7', year: 2019, session: 'Spring' },
+  { exam: 'Exam 7', year: 2018, session: 'Spring' },
+  { exam: 'Exam 7', year: 2017, session: 'Spring' },
+  { exam: 'Exam 7', year: 2016, session: 'Spring' },
+  { exam: 'Exam 7', year: 2015, session: 'Spring' },
+  { exam: 'Exam 7', year: 2014, session: 'Spring' },
+  { exam: 'Exam 7', year: 2013, session: 'Spring' },
+  { exam: 'Exam 7', year: 2012, session: 'Spring' },
+
   // ── CAS Exam MAS-I ─── first sat Spring 2018 ──────────────────────────────
   { exam: 'Exam MAS-I', year: 2019, session: 'Fall', officialQuestionCount: 45 },
   { exam: 'Exam MAS-I', year: 2019, session: 'Spring', officialQuestionCount: 45 },

@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>A trend-stationary series returning to its line against a unit-root series that does not</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>Two series along the same dashed trend line hit by the same shock: the trend-stationary one returns to the line, the unit-root one stays shifted for good</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -47,23 +43,14 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">Does a shock fade, or move the level for</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">good?</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="438" text-anchor="middle" class="fml">α + βt + z_t   vs.   δ + Y_{t−1} + ε_t</text>
-    <text x="180" y="102" text-anchor="middle" class="sm bold" fill="#059669">deterministic — returns to the line</text>
-    <rect x="54" y="110" width="270" height="88" rx="5" fill="var(--soft)" stroke="var(--edge)"/>
-    <polyline points="54,186.33 324,118.35" class="curve dash" stroke="var(--dim)" stroke-width="1.4"/>
-    <polyline points="54,186.22 60.28,187.33 66.56,182.66 72.84,183.22 79.12,179.77 85.4,180 91.67,177.37 97.95,171.37 104.23,176.31 110.51,171.29 116.79,172.16 123.07,170.24 129.35,168.57 135.63,166.37 141.91,167.51 148.19,161.3 154.47,163.12 160.74,161.67 167.02,143.78 173.3,156.17 179.58,151.8 185.86,151.6 192.14,151.16 198.42,151.49 204.7,149.05 210.98,145.86 217.26,141.96 223.53,141.68 229.81,142.08 236.09,141.75 242.37,138.01 248.65,139.31 254.93,132.8 261.21,136.94 267.49,133.72 273.77,127.67 280.05,127.4 286.33,127.39 292.6,128.2 298.88,127.22 305.16,122.37 311.44,120.67 317.72,125.45 324,121.31" class="curve" stroke="#059669" stroke-width="1.7"/>
-    <line x1="167.02" y1="198" x2="167.02" y2="120.67" class="thin dash" stroke="#d97706" stroke-width="1.3"/>
-    <text x="167.02" y="183.33" text-anchor="middle" class="sm bold" fill="#d97706">shock</text>
-    <text x="180" y="238" text-anchor="middle" class="sm bold" fill="#e11d48">stochastic — the level never comes back</text>
-    <rect x="54" y="246" width="270" height="88" rx="5" fill="var(--soft)" stroke="var(--edge)"/>
-    <polyline points="54,322.86 324,273.04" class="curve dash" stroke="var(--dim)" stroke-width="1.4"/>
-    <polyline points="54,323.33 60.28,322.57 66.56,320.11 72.84,318.61 79.12,313.67 85.4,311.77 91.67,310.88 97.95,311.47 104.23,306.72 110.51,305.08 116.79,304.52 123.07,304.06 129.35,301.01 135.63,299.14 141.91,294.64 148.19,294.65 154.47,294.26 160.74,295.56 167.02,283.95 173.3,284.12 179.58,281.09 185.86,282.23 192.14,281.55 198.42,279.27 204.7,277.2 210.98,278.16 217.26,276.6 223.53,273.5 229.81,275.28 236.09,272.16 242.37,271.63 248.65,271.47 254.93,268.48 261.21,269.56 267.49,267.35 273.77,266.54 280.05,266.75 286.33,263.22 292.6,260.96 298.88,259.22 305.16,257.06 311.44,256.67 317.72,257.53 324,256.79" class="curve" stroke="#e11d48" stroke-width="1.7"/>
-    <line x1="167.02" y1="334" x2="167.02" y2="256.67" class="thin dash" stroke="#d97706" stroke-width="1.3"/>
-    <text x="180" y="372" text-anchor="middle" class="sm dim">detrend the first; difference the second</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">getting it wrong gives a spurious regression</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <line x1="44" y1="362" x2="328" y2="362" class="axis"/>
+    <polyline points="44,348.53 328,153.5" class="curve dash" stroke="var(--dim)" stroke-width="1.4"/>
+    <line x1="162.88" y1="362" x2="162.88" y2="98.67" class="thin dash" stroke="#d97706" stroke-width="1.3"/>
+    <text x="162.88" y="92.67" text-anchor="middle" class="sm bold">shock</text>
+    <polyline points="44,351.33 50.6,347.34 57.21,342.43 63.81,332.19 70.42,333.33 77.02,320.61 83.63,321.58 90.23,317.04 96.84,315.42 103.44,312.85 110.05,314.8 116.65,313.65 123.26,302.9 129.86,303.54 136.47,287.71 143.07,276.29 149.67,277.34 156.28,276.17 162.88,220.81 169.49,242.27 176.09,251.28 182.7,252.75 189.3,253.8 195.91,241.77 202.51,237.53 209.12,229.65 215.72,224 222.33,226.89 228.93,215.08 235.53,210.58 242.14,210.18 248.74,206.07 255.35,203.4 261.95,201.2 268.56,194.92 275.16,194.77 281.77,200.12 288.37,185.25 294.98,181.45 301.58,178.85 308.19,173.9 314.79,162.86 321.4,160.43 328,149.83" class="curve" stroke="#059669" stroke-width="1.9"/>
+    <polyline points="44,345.53 50.6,345.29 57.21,336.64 63.81,330.33 70.42,328.82 77.02,327.26 83.63,319.17 90.23,311.65 96.84,307.08 103.44,311.92 110.05,300.17 116.65,291.66 123.26,291.07 129.86,285.61 136.47,280.77 143.07,278.42 149.67,276.4 156.28,276.06 162.88,224.54 169.49,215.36 176.09,216.1 182.7,214.2 189.3,205.47 195.91,202.7 202.51,197.01 209.12,189.18 215.72,181.27 222.33,175.1 228.93,171.9 235.53,174.71 242.14,174.28 248.74,163.48 255.35,161.83 261.95,151.74 268.56,145.51 275.16,150.74 281.77,150.68 288.37,145.41 294.98,135.93 301.58,127.58 308.19,120.25 314.79,113.99 321.4,105.19 328,104.01" class="curve" stroke="#e11d48" stroke-width="1.9"/>
+    <text x="328" y="92.01" text-anchor="end" class="sm bold">stochastic</text>
+    <text x="328" y="179.83" text-anchor="end" class="sm bold">deterministic</text>
   </g>
 </svg>

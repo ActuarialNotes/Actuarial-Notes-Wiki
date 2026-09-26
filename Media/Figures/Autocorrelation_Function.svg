@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>A correlogram cutting off after lag 1, the signature of an MA(1)</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>A correlogram of a differenced series with one large negative spike at lag 1 and every later lag inside the ±1.96/√n band</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -47,44 +43,38 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">Correlation with the series k periods</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">back</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="438" text-anchor="middle" class="fml">ρ_k = γ_k / γ_0</text>
-    <text x="180" y="110" text-anchor="middle" class="sm bold" fill="#3b82f6">ACF of ∇Y_t</text>
-    <line x1="62" y1="169.51" x2="324" y2="169.51" class="thin dash" stroke="#e11d48" stroke-width="1.1"/>
-    <line x1="62" y1="188.49" x2="324" y2="188.49" class="thin dash" stroke="#e11d48" stroke-width="1.1"/>
-    <line x1="62" y1="179" x2="324" y2="179" class="axis"/>
-    <text x="55" y="240.7" text-anchor="end" class="sm dim">-1</text>
-    <text x="55" y="182.6" text-anchor="end" class="sm dim">0</text>
-    <text x="55" y="124.5" text-anchor="end" class="sm dim">1</text>
-    <line x1="77.41" y1="179" x2="77.41" y2="209.21" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
-    <circle cx="77.41" cy="209.21" r="2.6" fill="#3b82f6"/>
-    <line x1="103.1" y1="179" x2="103.1" y2="175.51" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
-    <circle cx="103.1" cy="175.51" r="2.6" fill="#3b82f6"/>
-    <line x1="128.78" y1="179" x2="128.78" y2="181.32" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
-    <circle cx="128.78" cy="181.32" r="2.6" fill="#3b82f6"/>
-    <line x1="154.47" y1="179" x2="154.47" y2="173.77" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
-    <circle cx="154.47" cy="173.77" r="2.6" fill="#3b82f6"/>
-    <line x1="180.16" y1="179" x2="180.16" y2="180.74" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
-    <circle cx="180.16" cy="180.74" r="2.6" fill="#3b82f6"/>
-    <line x1="205.84" y1="179" x2="205.84" y2="176.1" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
-    <circle cx="205.84" cy="176.1" r="2.6" fill="#3b82f6"/>
-    <line x1="231.53" y1="179" x2="231.53" y2="177.84" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
-    <circle cx="231.53" cy="177.84" r="2.6" fill="#3b82f6"/>
-    <line x1="257.22" y1="179" x2="257.22" y2="182.49" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
-    <circle cx="257.22" cy="182.49" r="2.6" fill="#3b82f6"/>
-    <line x1="282.9" y1="179" x2="282.9" y2="176.68" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
-    <circle cx="282.9" cy="176.68" r="2.6" fill="#3b82f6"/>
-    <line x1="308.59" y1="179" x2="308.59" y2="178.42" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
-    <circle cx="308.59" cy="178.42" r="2.6" fill="#3b82f6"/>
-    <text x="113.37" y="215.21" text-anchor="start" class="sm bold" fill="#3b82f6">ρ₁ = −0.52</text>
-    <text x="324" y="254" text-anchor="end" class="sm dim">lag k</text>
-    <text x="180" y="288" text-anchor="middle" class="sm">±1.96/√144 = ±0.163 — only lag 1 clears it</text>
-    <text x="180" y="316" text-anchor="middle" class="sm bold">MA(q): the ACF cuts off after lag q</text>
-    <text x="180" y="336" text-anchor="middle" class="sm dim">AR(p): the ACF tails off geometrically</text>
-    <text x="180" y="358" text-anchor="middle" class="sm dim">slow, near-linear decay ⇒ difference first</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">on residuals, it is the white-noise check</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <line x1="62" y1="198.93" x2="324" y2="198.93" class="thin dash" stroke="#e11d48" stroke-width="1.1"/>
+    <line x1="62" y1="239.07" x2="324" y2="239.07" class="thin dash" stroke="#e11d48" stroke-width="1.1"/>
+    <line x1="62" y1="219" x2="324" y2="219" class="axis"/>
+    <text x="55" y="345.46" text-anchor="end" class="sm dim">-1</text>
+    <text x="55" y="222.6" text-anchor="end" class="sm dim">0</text>
+    <text x="55" y="99.74" text-anchor="end" class="sm dim">1</text>
+    <line x1="77.41" y1="219" x2="77.41" y2="282.89" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="77.41" cy="282.89" r="2.6" fill="#3b82f6"/>
+    <line x1="103.1" y1="219" x2="103.1" y2="211.63" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="103.1" cy="211.63" r="2.6" fill="#3b82f6"/>
+    <line x1="128.78" y1="219" x2="128.78" y2="223.91" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="128.78" cy="223.91" r="2.6" fill="#3b82f6"/>
+    <line x1="154.47" y1="219" x2="154.47" y2="207.94" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="154.47" cy="207.94" r="2.6" fill="#3b82f6"/>
+    <line x1="180.16" y1="219" x2="180.16" y2="222.69" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="180.16" cy="222.69" r="2.6" fill="#3b82f6"/>
+    <line x1="205.84" y1="219" x2="205.84" y2="212.86" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="205.84" cy="212.86" r="2.6" fill="#3b82f6"/>
+    <line x1="231.53" y1="219" x2="231.53" y2="216.54" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="231.53" cy="216.54" r="2.6" fill="#3b82f6"/>
+    <line x1="257.22" y1="219" x2="257.22" y2="226.37" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="257.22" cy="226.37" r="2.6" fill="#3b82f6"/>
+    <line x1="282.9" y1="219" x2="282.9" y2="214.09" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="282.9" cy="214.09" r="2.6" fill="#3b82f6"/>
+    <line x1="308.59" y1="219" x2="308.59" y2="217.77" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="308.59" cy="217.77" r="2.6" fill="#3b82f6"/>
+    <text x="90.25" y="288.89" text-anchor="start" class="sm bold">ρ₁ = −0.52</text>
+    <text x="324" y="192.93" text-anchor="end" class="sm dim">±0.163</text>
+    <text x="77.41" y="364" text-anchor="middle" class="sm dim">1</text>
+    <text x="180.16" y="364" text-anchor="middle" class="sm dim">5</text>
+    <text x="308.59" y="364" text-anchor="middle" class="sm dim">10</text>
+    <text x="180" y="380" text-anchor="middle" class="sm dim">lag k</text>
   </g>
 </svg>

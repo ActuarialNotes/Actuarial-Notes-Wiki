@@ -595,6 +595,13 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: true,
   },
+  // The PCPA workspace's Python runs in a module worker that imports Pyodide
+  // from its CDN at run time (lib/project/pythonWorker.ts). The default `iife`
+  // worker bundle is a classic script, where that dynamic import isn't
+  // guaranteed; emit workers as ES modules to match `{ type: 'module' }`.
+  worker: {
+    format: 'es',
+  },
   // Unit tests (vitest) live alongside the modules they cover under src/. Scope
   // collection to src/ so the Playwright E2E specs in e2e/*.spec.ts — which
   // import @playwright/test and only run under `playwright test` — aren't swept

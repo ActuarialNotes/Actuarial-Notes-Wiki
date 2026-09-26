@@ -944,12 +944,13 @@ def tree_pruning() -> Fig:
     return f
 
 
-@figure("Gini Index", "Node impurity as a function of the class proportion, "
-        "compared with entropy", width=WID)
+@figure("Gini Index", "Gini impurity against the class-1 share, peaking at one half "
+        "for a 50-50 node and falling to zero at a pure one, with entropy/2 dashed for "
+        "comparison", width=WID)
 def gini_index() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 1, 0, 0.78, left=44, right=16, top=30, bottom=76)
+    ax = vaxes(f, 0, 1, 0, 0.78, left=44, right=16, top=30, bottom=44)
     ax.frame(xticks=[0, 0.25, 0.5, 0.75, 1], yticks=[0, 0.25, 0.5, 0.75],
              grid=True)
     ax.curve(lambda p: 2 * p * (1 - p), colour=BLUE, width=2.4)
@@ -961,182 +962,208 @@ def gini_index() -> Fig:
     ax.point(0.5, 0.5, colour=BLUE, r=3.6)
     ax.point(0.9, 2 * 0.9 * 0.1, colour=GREEN, r=3.6)
     ax.label(0.9, 0.18, "0.18", cls="sm", fill=GREEN, anchor="end", dx=-7, dy=-7)
-    f.text(BCX, ax.y1 + 32, "proportion in class 1", cls="sm dim")
-    f.text(BCX, ax.y1 + 50, "0 at a pure node, ½ at 50-50", cls="sm dim")
-    f.text(BCX, BY1 - 2, "in a lift context, Gini = 2·AUROC − 1", cls="sm dim")
+    f.text(BCX, ax.y1 + 32, "class-1 share", cls="sm dim")
     return f
 
 
-@figure("Entropy", "Entropy peaking at maximum uncertainty and vanishing at "
-        "certainty", width=WID)
+def _entropy_node(f: Fig, cx, cy, ones):
+    """A node of four observations, `ones` of them in class 1 (rose)."""
+    f.circle(cx, cy, 13, fill="var(--soft)", stroke="var(--edge)", stroke_width="1.2")
+    for k in range(4):
+        x = cx + (-4.5 if k % 2 == 0 else 4.5)
+        y = cy + (-4.5 if k < 2 else 4.5)
+        f.circle(x, y, 3.2, fill=ROSE if k < ones else BLUE)
+
+
+@figure("Entropy", "Entropy against the class-1 share, one bit at a 50-50 node and zero "
+        "at either pure node, with the nodes drawn beneath the axis", width=WID)
 def entropy() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 1, 0, 1.12, left=44, right=16, top=30, bottom=76)
-    ax.frame(xticks=[0, 0.25, 0.5, 0.75, 1], yticks=[0, 0.5, 1.0], grid=True)
+    ax = vaxes(f, 0, 1, 0, 1.12, left=44, right=18, top=30, bottom=48)
+    ax.frame(xticks=[0, 0.5, 1], yticks=[0, 0.5, 1.0], grid=True,
+             xfmt=lambda t: "")
     ax.curve(lambda p: 0 if p <= 0 or p >= 1 else
              -(p * math.log2(p) + (1 - p) * math.log2(1 - p)),
              colour=VIOLET, width=2.4, xa=0.002, xb=0.998)
     ax.point(0.5, 1.0, colour=VIOLET, r=4)
-    ax.label(0.5, 1.0, "1 bit — a coin flip", cls="sm bold", fill=VIOLET, dy=-8)
+    ax.label(0.5, 1.0, "1 bit", cls="sm bold", fill=VIOLET, dy=-9)
     ax.point(0.9, -(0.9 * math.log2(0.9) + 0.1 * math.log2(0.1)), colour=GREEN)
     ax.label(0.9, 0.47, "0.47", cls="sm", fill=GREEN, anchor="end", dx=-8, dy=-7)
-    f.text(BCX, ax.y1 + 32, "proportion in class 1", cls="sm dim")
-    f.text(BCX, ax.y1 + 50, "0 when the node is pure", cls="sm dim")
-    f.text(BCX, BY1 - 2, "like Gini, but steeper near a pure node", cls="sm dim")
+    for p, ones in ((0, 0), (0.5, 2), (1, 4)):
+        _entropy_node(f, ax.px(p), ax.y1 + 25, ones)
     return f
 
 
-@figure("Tree Ensemble", "Many trees fitted and combined into one prediction",
-        width=WID)
+@figure("Tree Ensemble", "Three small trees whose predictions all flow into one combined "
+        "prediction", width=WID)
 def tree_ensemble() -> Fig:
     f = vcard()
 
-    for i in range(3):
-        x = 78 + i * 102
-        _tree(f, x, 118, 2, 26, 40, SERIES[i % len(SERIES)], r=6)
-        f.text(x, 214, f"tree {i+1}", cls="sm dim")
-    f.text(BCX + 96, 178, "…", cls="bold")
-    for i in range(3):
-        f.arrow(78 + i * 102, 226, BCX, 258, colour="var(--axis)", width=1.1)
-    f.box(102, 262, 156, 34, label="average / vote", colour=GREEN,
-          label_cls="sm bold")
-    f.text(BCX, 322, "bagging & random forests: parallel, cut variance",
-           cls="sm dim")
-    f.text(BCX, 338, "boosting: sequential, cuts bias", cls="sm dim")
-    f.text(BCX, BY1 - 2, "accuracy bought with interpretability", cls="sm dim")
+    for i, x in enumerate((70, 180, 290)):
+        _tree(f, x, 108, 2, 24, 40, SERIES[i % len(SERIES)], r=6)
+        f.arrow(x, 202, BCX + (x - BCX) * 0.14, 286, colour="var(--axis)", width=1.3)
+    f.circle(BCX, 310, 22, fill=GREEN, fill_opacity="0.25", stroke=GREEN,
+             stroke_width="1.8")
+    f.text(BCX, 315, "ŷ", cls="bold")
+    f.text(BCX, 352, "average", cls="sm bold")
     return f
 
 
-@figure("Bagging", "Bootstrap resamples each growing their own tree, averaged into "
-        "one prediction", width=WID)
+@figure("Bagging", "Six observations resampled with replacement into three coloured "
+        "bootstrap samples, each growing its own tree, their predictions averaged into one",
+        width=WID)
 def bagging() -> Fig:
     f = vcard()
 
-    f.box(112, 92, 136, 30, label="training data", colour="var(--edge)",
-          label_cls="sm")
-    for i in range(3):
-        x = 78 + i * 102
-        f.arrow(180, 124, x, 152, colour="var(--axis)", width=1.1)
-        f.rect(x - 34, 154, 68, 22, rx=4, fill=BLUE, fill_opacity="0.18",
-               stroke=BLUE, stroke_width="1.1")
-        f.text(x, 169, f"resample {i+1}", cls="sm")
-        _tree(f, x, 200, 2, 22, 32, SERIES[i % len(SERIES)], r=5)
-        f.arrow(x, 278, BCX, 302, colour="var(--axis)", width=1.1)
-    f.box(112, 306, 136, 30, label="average", colour=GREEN, label_cls="sm bold")
-    f.text(BCX, 358, "Var = ρσ² + (1 − ρ)σ²/B — averaging kills", cls="sm dim")
-    f.text(BCX, 374, "the second term, never the first", cls="sm dim")
-    f.text(BCX, BY1 - 2, "trees grown deep and unpruned", cls="sm dim")
+    sq, gap = 12, 2
+    strip = 6 * sq + 5 * gap
+
+    def cells(cx, y, colours):
+        x0 = cx - strip / 2
+        for j, colour in enumerate(colours):
+            f.rect(x0 + j * (sq + gap), y, sq, sq, rx=2, fill=colour, fill_opacity="0.75")
+
+    cells(BCX, 90, SERIES)
+    draws = ([2, 0, 4, 2, 5, 1], [1, 1, 3, 5, 0, 3], [4, 2, 2, 0, 5, 5])
+    for i, row in enumerate(draws):
+        x = 70 + i * 110
+        f.arrow(BCX + (x - BCX) * 0.3, 108, x, 142, colour="var(--axis)", width=1.2)
+        cells(x, 148, [SERIES[k] for k in row])
+        f.line(x, 164, x, 180, cls="thin", stroke="var(--axis)", stroke_width="1.2")
+        _tree(f, x, 188, 2, 20, 32, "var(--ink)", r=5)
+        f.arrow(x, 262, BCX + (x - BCX) * 0.14, 300, colour="var(--axis)", width=1.2)
+    f.circle(BCX, 320, 18, fill=GREEN, fill_opacity="0.25", stroke=GREEN,
+             stroke_width="1.8")
+    f.text(BCX, 325, "ŷ", cls="bold")
+    f.text(BCX, 356, "average", cls="sm bold")
     return f
 
 
-@figure("Random Forest", "Splits restricted to a random subset of predictors so "
-        "the trees decorrelate", width=WID)
+def _forest_node(f: Fig, cx, cy, eligible, chosen):
+    """A split node: nine predictors, the eligible few tinted, the one used inked."""
+    sq, gap = 12, 3
+    w = 9 * sq + 8 * gap
+    f.rect(cx - w / 2 - 6, cy - sq / 2 - 6, w + 12, sq + 12, rx=6, fill="var(--soft)",
+           stroke="var(--edge)", stroke_width="1.2")
+    for j in range(9):
+        x = cx - w / 2 + j * (sq + gap)
+        on = j in eligible
+        f.rect(x, cy - sq / 2, sq, sq, rx=2,
+               fill=BLUE if on else "var(--axis)",
+               fill_opacity=("1" if j == chosen else "0.6") if on else "0.3",
+               stroke="var(--ink)" if j == chosen else "none",
+               stroke_width="1.4" if j == chosen else None)
+    return w / 2 + 6
+
+
+@figure("Random Forest", "A tree whose every split may choose only among m = 3 of the "
+        "p = 9 predictors, a different random three at each node", width=WID)
 def random_forest() -> Fig:
     f = vcard()
 
-    p = 9
-    for row, (m, label, colour) in enumerate(((9, "bagging: m = p", "var(--dim)"),
-                                              (3, "forest: m = √p = 3", BLUE))):
-        y = 108 + row * 74
-        f.text(BCX, y - 10, label, cls="sm bold", fill=colour)
-        chosen = ({0, 1, 2, 3, 4, 5, 6, 7, 8} if m == 9 else {1, 4, 7})
-        for j in range(p):
-            x = 62 + j * 28
-            on = j in chosen
-            f.rect(x, y, 22, 22, rx=4, fill=colour if on else "var(--soft)",
-                   fill_opacity="0.55" if on else "1",
-                   stroke=colour if on else "var(--edge)", stroke_width="1.1")
-        f.text(BCX, y + 42, "eligible at this split" if row else
-               "every predictor eligible — the strong one always wins",
-               cls="sm dim")
-
-    ax = Axes(f, BX0 + 46, 258, BX1 - 20, 338, 1, 40, 0, 1.08)
-    ax.frame(xticks=[], yticks=[], arrows=False)
-    for rho, colour, lab in ((0.85, "var(--dim)", "bagging, ρ = 0.85"),
-                             (0.35, BLUE, "forest, ρ = 0.35")):
-        ax.curve(lambda b, r=rho: r + (1 - r) / b, colour=colour, width=2.2)
-        ax.hline(rho, colour=colour, x_to=40)
-        ax.label(39, rho + 0.09, lab, cls="sm bold", fill=colour, anchor="end")
-    f.text(BCX, ax.y1 + 18, "trees B →   variance floors at ρσ²", cls="sm dim")
-    f.text(BCX, BY1 - 2, "m = p is bagging; small m decorrelates more",
-           cls="sm dim")
+    nodes = {(0, 0): (BCX, 116, {1, 4, 7}, 4),
+             (1, 0): (100, 222, {0, 5, 6}, 5),
+             (1, 1): (260, 222, {2, 3, 8}, 2)}
+    for (lv, _), (x, y, _, _) in nodes.items():
+        if lv == 1:
+            f.line(BCX, 130, x, y - 14, cls="thin", stroke="var(--axis)",
+                   stroke_width="1.3")
+            for dx in (-34, 34):
+                f.line(x, y + 14, x + dx, 318, cls="thin", stroke="var(--axis)",
+                       stroke_width="1.2")
+                f.rect(x + dx - 11, 318, 22, 16, rx=3, fill=GREEN, fill_opacity="0.55")
+    halves = [_forest_node(f, x, y, eligible, chosen)
+              for x, y, eligible, chosen in nodes.values()]
+    f.text(BCX + halves[0] + 8, 120, "p = 9", cls="sm dim", anchor="start")
+    f.text(BCX - halves[0] - 8, 120, "m = 3", cls="sm bold", anchor="end")
     return f
 
 
-@figure("Boosting", "Trees fitted in sequence to the residuals left by the ones "
-        "before", width=WID)
+@figure("Boosting", "Three stumps fitted in turn, each to the residuals the ones before "
+        "it left, the residual bars shrinking from one round to the next", width=WID)
 def boosting() -> Fig:
     f = vcard()
 
-    for i in range(3):
-        x = 66 + i * 96
-        f.rect(x - 30, 100, 60, 22, rx=4, fill=ROSE, fill_opacity="0.18",
-               stroke=ROSE, stroke_width="1.1")
-        f.text(x, 115, f"residual r{i+1}", cls="sm")
-        f.arrow(x, 124, x, 144, colour="var(--axis)", width=1.1)
-        _tree(f, x, 156, 1, 18, 28, BLUE, r=5)
+    base = [0.9, -0.7, 1.0, -0.4, 0.8, -0.9]
+    xs = [70, 180, 290]
+    for i, x in enumerate(xs):
+        shrink = 0.5 ** i
+        y0 = 166
+        f.line(x - 42, y0, x + 42, y0, cls="axis")
+        for j, v in enumerate(base):
+            h = 46 * v * shrink * (1 if j % 3 else 0.8)
+            bx = x - 38 + j * 13.5
+            f.rect(bx, min(y0, y0 - h), 9.5, abs(h), rx=1.5, fill=ROSE,
+                   fill_opacity="0.7")
+        f.text(x, 108, f"r{'₁₂₃'[i]}", cls="bold")
+        f.arrow(x, 224, x, 258, colour="var(--axis)", width=1.3)
+        _tree(f, x, 274, 1, 22, 38, BLUE, r=7)
         if i < 2:
-            f.arrow(x + 34, 156, x + 62, 111, colour="var(--axis)", width=1.1)
-    f.text(BCX, 214, "stumps, depth d = 1–4 — deliberately weak", cls="sm dim")
-
-    ax = Axes(f, BX0 + 46, 244, BX1 - 20, 334, 0, 5000, 0, 1)
-    ax.frame(xticks=[0, 2500, 5000], yticks=[], grid=True,
-             xfmt=lambda t: f"{int(t/1000)}k" if t else "0")
-    ax.curve(lambda b: 0.9 * math.exp(-b / 1400) + 0.04, colour=BLUE, width=2)
-    ax.curve(lambda b: 0.42 + 0.55 * math.exp(-b / 700) + (b / 5000) ** 2 * 0.42,
-             colour=ROSE, width=2.2)
-    ax.vline(1200, colour=GREEN, y_top=0.95)
-    ax.label(1200, 0.95, "stop", cls="sm bold", fill=GREEN, dy=-5)
-    ax.label(4200, 0.16, "train", cls="sm", fill=BLUE)
-    ax.label(4100, 0.86, "CV", cls="sm bold", fill=ROSE)
-    f.text(BCX, ax.y1 + 36, "trees B →", cls="sm dim")
-    f.text(BCX, BY1 - 2, "too many trees overfits — unlike bagging", cls="sm dim")
+            f.arrow(x + 34, 276, xs[i + 1] - 44, 196, colour=ROSE, width=1.3,
+                    dash=True)
+    for k in range(2):
+        f.text((xs[k] + xs[k + 1]) / 2, 318, "+", cls="bold")
     return f
 
 
-@figure("Out-of-Bag Error", "The observations a bootstrap resample leaves out, "
-        "used as a free test set", width=WID)
+@figure("Out-of-Bag Error", "A grid of rows by trees with each cell in the bag or out of "
+        "it; one row's out-of-bag cells, about a third of the trees, supply its "
+        "prediction", width=WID)
 def oob_error() -> Fig:
     f = vcard()
 
-    rows, cols = 6, 6
-    inbag = {0, 1, 3, 4, 6, 8, 9, 11, 12, 14, 15, 17, 18, 20, 22, 23, 24, 26,
-             28, 29, 30, 32, 34, 35}
-    x0, y0, cell = 96, 100, 26
-    for i in range(rows * cols):
-        cx = x0 + (i % cols) * cell
-        cy = y0 + (i // cols) * cell
-        on = i in inbag
-        f.rect(cx, cy, cell - 3, cell - 3, rx=3,
-               fill=BLUE if on else ROSE, fill_opacity="0.5" if on else "0.55")
-    f.legend_row(BX0 + 40, 268, [(BLUE, "in the bag"), (ROSE, "out of bag")],
-                 gap=124)
-    f.text(BCX, 300, "each row is predicted by the ~37% of trees", cls="sm dim")
-    f.text(BCX, 316, "that never saw it — a free held-out set", cls="sm dim")
-    f.text(BCX, 348, "B = 600 ⇒ ≈ 221 trees vote on each row", cls="sm")
-    f.text(BCX, BY1 - 2, "≈ LOOCV, at no extra fitting cost", cls="sm dim")
+    r = _Rand(3)
+    rows, cols, cw, ch = 8, 7, 28, 24
+    x0, y0 = 58, 136
+    focus = 3
+    for j in range(cols):
+        x = x0 + j * cw + cw / 2
+        for dx in (-6, 6):
+            f.line(x, 104, x + dx, 116, cls="thin", stroke="var(--axis)",
+                   stroke_width="1.1")
+            f.rect(x + dx - 3.5, 115, 7, 6, rx=1.5, fill=GREEN, fill_opacity="0.7")
+        f.circle(x, 102, 3.4, fill="var(--surf)", stroke="var(--ink)",
+                 stroke_width="1.2")
+    for i in range(rows):
+        for j in range(cols):
+            out = r.u() < 0.37
+            x, y = x0 + j * cw, y0 + i * ch
+            f.rect(x + 2, y + 2, cw - 4, ch - 4, rx=3, fill=ROSE if out else BLUE,
+                   fill_opacity=("0.85" if i == focus else "0.45") if out else "0.28")
+    yf = y0 + focus * ch
+    f.rect(x0 - 2, yf, cols * cw + 4, ch, rx=4, fill="none", stroke="var(--ink)",
+           stroke_width="1.6")
+    xe = x0 + cols * cw + 4
+    f.arrow(xe, yf + ch / 2, xe + 26, yf + ch / 2, colour=ROSE, width=1.8)
+    f.circle(xe + 40, yf + ch / 2, 12, fill=ROSE, fill_opacity="0.2", stroke=ROSE,
+             stroke_width="1.6")
+    f.text(xe + 40, yf + ch / 2 + 4, "ŷ", cls="bold")
+    f.legend_row(x0 + 4, y0 + rows * ch + 26, [(BLUE, "in bag"), (ROSE, "out of bag")],
+                 gap=100)
     return f
 
 
-@figure("Variable Importance", "Predictors ranked by the impurity they remove "
-        "across the trees of an ensemble", width=WID)
+@figure("Variable Importance", "Six claim predictors ranked by the impurity they remove, "
+        "prior claims longest and gender barely there", width=WID)
 def variable_importance() -> Fig:
     f = vcard()
 
     items = [("prior claims", 100), ("claim amount", 71), ("days to report", 64),
              ("territory", 12), ("policy age", 9), ("gender", 2)]
-    x0, w = 130, 178
+    x0, w, y0, step = 128, 184, 94, 40
     for i, (lab, v) in enumerate(items):
-        y = 108 + i * 34
-        f.text(x0 - 10, y + 14, lab, cls="sm", anchor="end")
-        f.rect(x0, y, w * v / 100, 20, rx=3, fill=BLUE,
+        y = y0 + i * step
+        f.text(x0 - 10, y + 16, lab, cls="sm", anchor="end")
+        f.rect(x0, y, max(w * v / 100, 2), 24, rx=3, fill=BLUE,
                fill_opacity=f"{0.25 + 0.005 * v:.2f}")
-        f.text(x0 + w * v / 100 + 7, y + 14, str(v), cls="sm dim", anchor="start")
-    f.line(x0, 100, x0, 320, cls="rule")
-    f.text(BCX, 344, "importance says a variable matters,", cls="sm dim")
-    f.text(BCX, 360, "not which way it pushes the prediction", cls="sm dim")
-    f.text(BCX, BY1 - 2, "correlated predictors split the credit", cls="sm dim")
+    ya = y0 + len(items) * step + 2
+    f.line(x0, y0 - 8, x0, ya, cls="axis")
+    f.line(x0, ya, x0 + w + 6, ya, cls="axis")
+    for t in (0, 50, 100):
+        x = x0 + w * t / 100
+        f.line(x, ya, x, ya + 4, cls="tick")
+        f.text(x, ya + 17, str(t), cls="sm dim")
     return f
 
 

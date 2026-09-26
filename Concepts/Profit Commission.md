@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:c808ae4c92a0cd6caca05a3c14f13dc7678ff84c8c69349e1f832f92a8616e2c
+  content_hash: sha256:2a503c51e77686a1f4f17b46559a172694884b9f62ee96f255cc745f9f8847f7
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,7 +20,7 @@ verification:
 - All terms are ratios to ceded premium. $k$ is the share of profit returned, $\text{LR}$ the treaty loss ratio, $c$ the ceding commission and $m$ the reinsurer's margin. $p_i$ is the probability of loss-ratio outcome $\text{LR}_i$ from an [[Aggregate Loss Model|aggregate distribution]].
 - **It is a call option held by the cedant.** The payoff is convex, so $E[\text{PC}] \ge \text{PC}(E[\text{LR}])$, and the gap grows with the loss ratio's volatility. Evaluate it over the distribution (Clark). The plug-in understates what the reinsurer gives away, and gives zero whenever the expected loss ratio exceeds $1 - c - m$.
 - **It only ever costs the reinsurer.** A profit commission never increases the reinsurer's expected margin. To leave that margin unchanged, the base terms must tighten: a lower flat commission, a higher rate, or both. Contrast a [[Sliding Scale Commissions|sliding scale]], which moves the commission both ways within bounds.
-- **Carryforward.** A deficit (negative profit) in one year is often carried into the next year's calculation. That lowers the expected profit commission, but a single-year pricing view ignores it, and there is no standard method for pricing it.
+- **Carryforward.** A deficit (negative profit) in one year is often carried into the next year's calculation. That lowers the expected profit commission, but a single-year pricing view ignores it. Clark notes the same ambiguity in pricing carryforwards as for sliding scales.
 - Profit commissions also appear on excess and catastrophe covers — for example, returning a large share of premium if the contract is loss-free for several years. Heavy profit commissions are a hallmark of [[Finite Reinsurance]] and one of the features that can defeat [[Risk Transfer]]. See [[Reinsurance Contract Provisions]].
 
 > [!example]- Profit Commission with a Deficit Carryforward {Example}

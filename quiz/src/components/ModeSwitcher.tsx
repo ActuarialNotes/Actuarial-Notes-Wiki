@@ -2,11 +2,12 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import { useNavigate } from 'react-router-dom'
 import { Check, ChevronDown, Lock } from 'lucide-react'
 import {
-  APP_MODES,
   canEnterMode,
   modeDestination,
   modeLockReason,
   modeSpec,
+  showsModeSwitcher,
+  visibleModes,
   type AppMode,
   type ModeViewer,
 } from '@/lib/appMode'
@@ -31,6 +32,10 @@ import { cn } from '@/lib/utils'
  * than a verdict, and it is the only green chip that ever sits on the header
  * row — nothing on that row can be answered right or wrong. Cowork's own pill
  * is violet so the two places never read as the same one at a glance.
+ *
+ * The pill is drawn only for a viewer who can see more than one mode. Cowork
+ * is in Preview and open to approved accounts alone (`PREVIEW_APPROVED_EMAILS`),
+ * so for everyone else there is nothing to switch to and no pill at all.
  *
  * Like every other menu in the app it portals to the body and is placed by
  * `lib/menuPlacement.ts`, so the header's stacking context and the viewport's
@@ -67,7 +72,7 @@ export function ModeSwitcher({ mode, onNavigate, className }: ModeSwitcherProps)
   const { user } = useAuth()
   const { isPro } = useSubscription()
 
-  const viewer: ModeViewer = { signedIn: !!user, isPro }
+  const viewer: ModeViewer = { signedIn: !!user, isPro, email: user?.email }
   const active = modeSpec(mode)
 
   const measure = useCallback(() => {
@@ -117,6 +122,8 @@ export function ModeSwitcher({ mode, onNavigate, className }: ModeSwitcherProps)
     }
   }, [open])
 
+  if (!showsModeSwitcher(viewer)) return null
+
   function pick(id: AppMode) {
     setOpen(false)
     navigate(modeDestination(id, viewer))
@@ -163,7 +170,7 @@ export function ModeSwitcher({ mode, onNavigate, className }: ModeSwitcherProps)
             style={menuStyle}
             className="fixed z-[70] overflow-y-auto rounded-lg border bg-popover p-1 shadow-lg"
           >
-            {APP_MODES.map(spec => {
+            {visibleModes(viewer).map(spec => {
               const entitled = canEnterMode(spec.id, viewer)
               const lock = modeLockReason(spec.id, viewer)
               const current = spec.id === mode

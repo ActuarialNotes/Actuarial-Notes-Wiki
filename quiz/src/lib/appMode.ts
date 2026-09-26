@@ -16,6 +16,11 @@
  * Availability is a property of the mode, not of a surface: Cowork is Pro-only
  * and in Preview, and both facts live here so the pill, the nav and the route
  * guard all state them the same way.
+ *
+ * While a mode is in Preview it is open only to the accounts on
+ * `PREVIEW_APPROVED_EMAILS` — not to every Pro subscriber — and to everyone
+ * else it doesn't exist: the pill isn't drawn at all (`showsModeSwitcher`),
+ * so there is nothing to switch to and nothing locked to wonder about.
  */
 
 export type AppMode = 'study' | 'cowork'
@@ -70,6 +75,25 @@ export const APP_MODES: AppModeSpec[] = [
 
 export const DEFAULT_MODE: AppMode = 'study'
 
+/**
+ * The accounts a Preview mode is open to, by sign-in email (compared
+ * case-insensitively). Approving someone for Cowork is adding a line here.
+ *
+ * This is a UI gate, not a security boundary: it decides what the app shows
+ * and which routes it serves, and Cowork's catalogue is bundled seed data and
+ * its stores are localStorage, so there is no server data behind it to guard.
+ */
+export const PREVIEW_APPROVED_EMAILS: readonly string[] = [
+  'jordan@actuarialnotes.com',
+]
+
+/** Whether an account is approved for the modes still in Preview. */
+export function isPreviewApproved(email: string | null | undefined): boolean {
+  if (!email) return false
+  const normalized = email.trim().toLowerCase()
+  return PREVIEW_APPROVED_EMAILS.some(e => e.toLowerCase() === normalized)
+}
+
 export function modeSpec(id: AppMode): AppModeSpec {
   return APP_MODES.find(m => m.id === id) ?? APP_MODES[0]
 }
@@ -98,16 +122,45 @@ export function modeForPath(pathname: string): AppMode {
 export interface ModeViewer {
   signedIn: boolean
   isPro: boolean
+  /** The signed-in account's email — what Preview approval is keyed on. */
+  email?: string | null
 }
 
 /**
- * Whether this viewer may enter the mode. An `open` mode always lets them in;
- * a `pro` mode needs an active Pro subscription, and being signed out is just
- * one way of not having one.
+ * Whether this viewer can see the mode at all. A mode out of Preview is
+ * visible to everyone (locked or not); one in Preview only to an approved,
+ * signed-in account.
+ */
+export function isModeVisible(id: AppMode, viewer: ModeViewer): boolean {
+  const spec = modeSpec(id)
+  if (!spec.preview) return true
+  return viewer.signedIn && isPreviewApproved(viewer.email)
+}
+
+/** The modes this viewer can see, in `APP_MODES` order. */
+export function visibleModes(viewer: ModeViewer): AppModeSpec[] {
+  return APP_MODES.filter(m => isModeVisible(m.id, viewer))
+}
+
+/**
+ * Whether the mode pill is drawn for this viewer. A switcher with one place
+ * in it switches nothing, so a viewer who can see only Study sees no pill.
+ */
+export function showsModeSwitcher(viewer: ModeViewer): boolean {
+  return visibleModes(viewer).length > 1
+}
+
+/**
+ * Whether this viewer may enter the mode. An `open` mode always lets them in.
+ * A mode in Preview lets in exactly its approved accounts — approval is the
+ * whole gate while it is being built, Pro or not. Otherwise a `pro` mode needs
+ * an active Pro subscription, and being signed out is just one way of not
+ * having one.
  */
 export function canEnterMode(id: AppMode, viewer: ModeViewer): boolean {
   const spec = modeSpec(id)
   if (spec.access === 'open') return true
+  if (spec.preview) return isModeVisible(id, viewer)
   return viewer.signedIn && viewer.isPro
 }
 
@@ -122,11 +175,15 @@ export function modeLockReason(id: AppMode, viewer: ModeViewer): string | null {
 }
 
 /**
- * Where a viewer who picked a mode should land: its home when they may enter,
- * and the upgrade page when they may not. Signing in comes first — there is
- * nothing to upgrade until there is an account to upgrade.
+ * Where a viewer who picked a mode — or followed a link into one — should
+ * land: its home when they may enter. A Preview mode they aren't approved for
+ * doesn't exist for them, so they land on the default mode's home rather than
+ * on a sign-in or upgrade page that couldn't let them in. Otherwise signing in
+ * comes first — there is nothing to upgrade until there is an account to
+ * upgrade.
  */
 export function modeDestination(id: AppMode, viewer: ModeViewer): string {
   if (canEnterMode(id, viewer)) return modeSpec(id).home
+  if (!isModeVisible(id, viewer)) return modeSpec(DEFAULT_MODE).home
   return viewer.signedIn ? '/upgrade' : '/auth'
 }

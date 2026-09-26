@@ -22,6 +22,11 @@ product, in Preview and open only to approved accounts (`PREVIEW_APPROVED_EMAILS
    payments). A **Research** tab (Canadian P&C research corpus + AI "Ask") is fully built
    but currently **disabled behind feature flags** — see "Feature flags & the Research tab".
 
+The vault also reaches **Claude and ChatGPT** directly: the app deploys an MCP server
+(`quiz/api/mcp.js`, `https://quiz.actuarialnotes.com/api/mcp`) that a reader adds as a custom
+connector, backed by a build-time export of the whole vault and paired with an uploadable Agent
+Skill — see "The AI connector" at the end of this file and `docs/ai-connector.md`.
+
 Almost all day-to-day development work happens inside `quiz/`. The markdown content at
 the repo root is the "database" the app is built on top of.
 
@@ -48,6 +53,8 @@ Media/Attachments/                                — images referenced via ![[.
 scripts/                                          — Python content-maintenance scripts (one-off/batch)
 docs/                                             — design docs for app algorithms (read these!)
 api/chat.js, api/research.js, api/research-ask.js — Vercel serverless fns, proxy to Anthropic API
+quiz/api/mcp.js, quiz/api/_mcp/                   — the Claude/ChatGPT connector: an MCP server over the vault
+quiz/skills/actuarial-notes/                      — the Agent Skill the build zips for Claude/ChatGPT upload
 supabase/migrations/, supabase/functions/         — DB schema + edge functions (Stripe, TTS, beta codes, research)
 quiz/                                             — the React app (this is where most code changes go)
 ```
@@ -165,6 +172,15 @@ before touching that area**:
   second reader* (a Cowork resource opens in `ConceptPopup`; its own documents are registered
   as virtual vault files to keep that true). Read before touching anything named `cowork*`,
   `ModeSwitcher`, `appMode` or `xlsx`.
+- `docs/ai-connector.md` — the **AI connector**: Actuarial Notes as an MCP server that Claude and
+  ChatGPT add as a custom connector (facts = the build-time vault export, tools = search / fetch /
+  syllabus / concept / practice / marking, skills = MCP prompts + the uploadable Agent Skill). Covers
+  the contract (nothing invented, the fact check travels with every fact, withheld questions reach
+  nobody, a practice answer is never shown first), why the function fetches its own static export,
+  the **two MCP protocol eras** it speaks on one endpoint (the 2026-07-28 stateless revision and the
+  `initialize`-handshake ones before it), and the mirrors kept in step with the app by tests. Read
+  before touching anything under `quiz/api/_mcp/`, `quiz/api/mcp.js`, `lib/knowledgeBase.ts` or
+  `quiz/skills/`.
 - `docs/stacked-pages.md` — the concept popup's **page stack** (Obsidian's stacked pages):
   a link followed inside the popup opens a new page on top of the one being read, and the
   pages behind it fold up into title bars — vertically, along the pane's short axis, so a
@@ -660,6 +676,17 @@ Other important `lib/` modules:
   which is what lets both kinds of resource open in `ConceptPopup` rather than a second
   reader. The two rules to keep are in `docs/cowork.md` — nothing is invented, and there is
   no second viewer.
+- `knowledgeBase.ts` / `aiConnector.ts` — the **AI connector**'s build-time half
+  (`docs/ai-connector.md`). `readKnowledgeBaseSources` is the one list of what an assistant can
+  read (root exam pages, `Concepts/`, all of `Resources/`, `Guides/`, the question bank, the exam
+  catalogue and alias table), taking an injected `VaultReader` so it stays free of Node imports;
+  `buildKnowledgeBase` turns it into the export through the app's own parsers (`parseQuestion`,
+  `parseExamSyllabus`, `extractSourceMaterial`, `factCheckBadge`), withholding any question with an
+  open critical finding. `aiConnector.ts` holds the public addresses (connector URL, skill zip) the
+  Settings card (`components/AiConnectorCard.tsx`) and `llms.txt` hand out. The run-time half is
+  plain JS under `quiz/api/_mcp/` (`protocol.js` both MCP eras, `server.js` tools/resources/prompts,
+  `knowledgeBase.js` index + search, `load.js`); a few helpers are mirrored there
+  (`normalizeTerm`, `objectiveKey`, `normalizeAnswerText`) and pinned by `mcpServer.test.ts`.
 - `featureFlags.ts` — build-time feature flags (`COWORK_ENABLED`, `RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
   `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`,
   `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `FACT_CHECK_UI_ENABLED`, `TOUR_ENABLED`). `TOUR_ENABLED` is
@@ -683,10 +710,11 @@ Other important `lib/` modules:
   60 requests/hour per IP without `VITE_GITHUB_TOKEN` — don't put it on a path that has to work.
 - `supabase.ts` — Supabase client + shared row types
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **132 test files /
-~2010 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
-matching, the gamification engines, the sound catalogue, and the research/resource-timeline
-modules).
+`*.test.ts` files sit alongside the modules they test (vitest). There are **136 test files /
+~2115 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+matching, the gamification engines, the sound catalogue, the research/resource-timeline
+modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
+endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).
 
 ## Feature flags & the Research tab
 
@@ -819,6 +847,7 @@ npm run dev        # vite dev server
 npm run build      # tsc + vite build
 npm run lint       # eslint src --ext ts,tsx
 npm test           # vitest run
+npm run mcp:local  # after a build: the AI connector at http://localhost:8787/api/mcp
 ```
 
 Vite plugins (`vite.config.ts`) bundle the markdown content at build time via virtual
@@ -843,8 +872,13 @@ modules that read directly from the repo root:
 - `virtual:keystone-links` — for each keystone concept page, the concept pages it links to
   (the study plan's *Key concepts first* order)
 
+The `ai-connector-assets` plugin also **emits** three files into the build (not virtual modules —
+the app never imports them): `ai/knowledge-base.json` (the whole vault for the MCP endpoint,
+~10 MB), `ai/actuarial-notes-skill.zip` (`quiz/skills/actuarial-notes/`, zipped with
+`lib/xlsx.ts`'s `buildZip`) and `llms.txt`; the dev server serves all three, rebuilt per request.
+
 If you add new top-level exam files or content directories, make sure the relevant collector
-picks them up.
+picks them up — `readKnowledgeBaseSources` in `lib/knowledgeBase.ts` included.
 
 `quiz/.env.example` lists required env vars: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`,
 `VITE_GITHUB_REPO`/`VITE_GITHUB_BRANCH` (for runtime content fetches), `VITE_GITHUB_TOKEN`.
@@ -877,7 +911,9 @@ via `supabase secrets set`, never as `VITE_*`.
 Both the root site and `quiz/` have their own `vercel.json` (root handles `/api/*` CORS
 headers for the serverless functions — `chat.js` and the flag-gated `research*.js`; `quiz/`
 rewrites all routes to `index.html` for the SPA). Deploys to Vercel; Supabase edge functions
-deploy via the GitHub Action above.
+deploy via the GitHub Action above. Functions that must share the app's origin live in
+`quiz/api/` (`exam-pdf.js`, and `mcp.js` — the AI connector, which reads the knowledge-base
+export from its own deployment); `quiz/api/_mcp/` is `_`-prefixed so Vercel doesn't route it.
 
 ## Cowork (the second product)
 
@@ -951,3 +987,23 @@ through the sidebar's nav badges. Populating the corpus more deeply is the next 
 - AI is used for content organization, code, and review — but the README is explicit that
   no wiki content is published 100% AI-written without human review. Keep that in mind if
   asked to generate concept/exam content.
+
+## The AI connector (Claude and ChatGPT)
+
+A reader adds `https://quiz.actuarialnotes.com/api/mcp` as a custom connector in Claude
+(*Customize → Connectors*) or ChatGPT (developer mode) — no sign-in, read-only — and the assistant
+can search the vault, read syllabi and concept pages, draw practice questions without their
+answers and mark the student's answer against the official solution. Settings → **AI assistants**
+shows the address and the skill download. `docs/ai-connector.md` is the full account; three things
+to know before changing it:
+
+1. **It speaks two MCP eras on one endpoint.** Revision 2026-07-28 dropped the `initialize`
+   handshake for per-request `_meta` plus `Mcp-Method`/`Mcp-Name` headers; older clients still
+   handshake. `quiz/api/_mcp/protocol.js` reads the era off each request and answers each with the
+   errors its era expects — keep `mcpProtocol.test.ts` green, and re-run the official SDK clients
+   (`docs/ai-connector.md` → Testing) after touching it.
+2. **The contract is the product.** Everything comes through the app's parsers, every result carries
+   its fact-check verdict, withheld questions stay withheld, and practice never shows the answer
+   first. `search`/`fetch` keep ChatGPT's exact result shapes; tool names are public API.
+3. **The export and the endpoint are versioned together.** Change the export's shape → bump
+   `KNOWLEDGE_BASE_VERSION` and `SUPPORTED_KB_VERSION` in the same change.

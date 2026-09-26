@@ -8,6 +8,15 @@ import fm from 'front-matter'
 import { KEYSTONE_EXAMS } from './src/data/keystoneConcepts'
 import { buildResourceExamMap, examsForResource } from './src/lib/resourceExams'
 import { examDisplayName, examIdFromFile } from './src/lib/wikiRoutes'
+import {
+  KNOWLEDGE_BASE_ASSET,
+  buildKnowledgeBase,
+  buildLlmsTxt,
+  readKnowledgeBaseSources,
+  type VaultReader,
+} from './src/lib/knowledgeBase'
+import { PUBLIC_SITE_URL, SKILL_ASSET, connectorUrl, skillUrl } from './src/lib/aiConnector'
+import { buildZip } from './src/lib/xlsx'
 
 const REPO_ROOT = path.resolve(__dirname, '..')
 
@@ -508,6 +517,100 @@ function keystoneLinksPlugin(): Plugin {
   }
 }
 
+// ── AI connector assets ──────────────────────────────────────────────────────
+// What Claude and ChatGPT read the vault through (docs/ai-connector.md):
+//
+//   ai/knowledge-base.json       every page and question, processed by
+//                                lib/knowledgeBase.ts — the MCP endpoint
+//                                (api/mcp.js) loads it from its own deployment
+//   ai/actuarial-notes-skill.zip the Agent Skill in quiz/skills/actuarial-notes/,
+//                                zipped the way Claude and ChatGPT upload it
+//   llms.txt                     a short index for an assistant that is only
+//                                browsing the site
+//
+// Emitted into the build rather than bundled: the app itself never imports any
+// of it, and the export is ~10 MB.
+
+const vaultReader: VaultReader = {
+  list: async (dir) =>
+    (await readdir(path.join(REPO_ROOT, dir), { withFileTypes: true }).catch(() => []))
+      .map(entry => ({ name: entry.name, isDirectory: entry.isDirectory() })),
+  read: (file) => readFile(path.join(REPO_ROOT, file), 'utf-8').catch(() => null),
+}
+
+async function collectKnowledgeBase() {
+  const sources = await readKnowledgeBaseSources(vaultReader)
+  return buildKnowledgeBase({
+    ...sources,
+    keystones: KEYSTONE_EXAMS,
+    site: {
+      url: _buildEnv.VITE_SITE_URL || PUBLIC_SITE_URL,
+      repo: GITHUB_REPO,
+      branch: GITHUB_BRANCH,
+      // Vercel exposes the commit being built; elsewhere the export is undated by commit.
+      commit: process.env.VERCEL_GIT_COMMIT_SHA || null,
+      builtAt: new Date().toISOString(),
+    },
+  })
+}
+
+const SKILL_DIR = 'quiz/skills/actuarial-notes'
+
+/** The skill folder as a zip whose root is the folder itself — the layout the upload dialogs expect. */
+async function buildSkillZip(): Promise<Uint8Array> {
+  const files: { name: string; data: Uint8Array }[] = []
+  const walk = async (dir: string, prefix: string) => {
+    for (const entry of (await vaultReader.list(dir)).sort((a, b) => a.name.localeCompare(b.name))) {
+      if (entry.name.startsWith('.')) continue
+      if (entry.isDirectory) {
+        await walk(`${dir}/${entry.name}`, `${prefix}${entry.name}/`)
+        continue
+      }
+      const data = await readFile(path.join(REPO_ROOT, dir, entry.name)).catch(() => null)
+      if (data) files.push({ name: `${prefix}${entry.name}`, data: new Uint8Array(data) })
+    }
+  }
+  await walk(SKILL_DIR, `${path.basename(SKILL_DIR)}/`)
+  return buildZip(files)
+}
+
+function aiConnectorAssetsPlugin(): Plugin {
+  const origin = _buildEnv.VITE_SITE_URL || PUBLIC_SITE_URL
+  const assets: Record<string, { type: string; build: () => Promise<string | Uint8Array> }> = {
+    [KNOWLEDGE_BASE_ASSET]: { type: 'application/json', build: async () => JSON.stringify(await collectKnowledgeBase()) },
+    [SKILL_ASSET]: { type: 'application/zip', build: buildSkillZip },
+    'llms.txt': {
+      type: 'text/plain; charset=utf-8',
+      build: async () => buildLlmsTxt(await collectKnowledgeBase(), connectorUrl(origin), skillUrl(origin)),
+    },
+  }
+  return {
+    name: 'ai-connector-assets',
+    // In dev each asset is rebuilt on request, so an edit to the vault shows up
+    // on the next fetch — and `vercel dev` can run the connector against the
+    // working tree. (scripts/mcp-local.mjs reads a production build instead.)
+    configureServer(server) {
+      for (const [file, asset] of Object.entries(assets)) {
+        server.middlewares.use(`/${file}`, async (_req, res, next) => {
+          try {
+            const body = await asset.build()
+            res.setHeader('Content-Type', asset.type)
+            res.end(body)
+          } catch (err) {
+            next(err)
+          }
+        })
+      }
+    },
+    async generateBundle() {
+      const kb = await collectKnowledgeBase()
+      this.emitFile({ type: 'asset', fileName: KNOWLEDGE_BASE_ASSET, source: JSON.stringify(kb) })
+      this.emitFile({ type: 'asset', fileName: SKILL_ASSET, source: await buildSkillZip() })
+      this.emitFile({ type: 'asset', fileName: 'llms.txt', source: buildLlmsTxt(kb, connectorUrl(origin), skillUrl(origin)) })
+    },
+  }
+}
+
 /**
  * Serves the asset directories pdf.js loads at runtime, from `/pdf-<dir>/`.
  *
@@ -587,7 +690,7 @@ function pdfjsAssetsPlugin(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), examPagesPlugin(), wikiContentPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), examGuidesPlugin(), keystoneLinksPlugin(), pdfjsAssetsPlugin()],
+  plugins: [react(), examPagesPlugin(), wikiContentPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), examGuidesPlugin(), keystoneLinksPlugin(), pdfjsAssetsPlugin(), aiConnectorAssetsPlugin()],
   resolve: {
     alias: { '@': path.resolve(__dirname, 'src') },
   },

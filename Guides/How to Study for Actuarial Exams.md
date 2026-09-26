@@ -1,212 +1,210 @@
-Becoming a qualified actuary is a course of study that anyone can pursue. You don't need a university degree, or even a high school diploma — nobody checks your transcript when you register for your first exam. What the profession asks for instead is that you pass its exams and finish a short list of courses, and then it hands you the letters.
+Anyone can become an actuary. There's no degree requirement to register for the first exam, and nobody asks to see a transcript. What the profession asks for instead is a long run of exams and courses. Finish them and you get the letters after your name.
 
-That is the appeal and the catch in one sentence. The door is open to anybody, but walking through it takes most people seven to ten years, sitting exams a couple of times a year while holding down a full-time job. Nobody sets that schedule for you.
+It is a long run, though. Most people do it while working full time, writing an exam or two a year, and it's normal for the whole thing to take the better part of a decade. Nobody hands you a schedule. You make one, and then you remake it the first time a result doesn't go your way.
 
-This page answers the questions candidates ask on the way. Open the ones you need.
+Below are the questions I'd want answered if I were starting over. Open whichever ones are useful to you.
 
 ## Choosing a path
 
 > [!question]- Do I need a degree to become an actuary?
 >
-> No. There is no educational prerequisite to register for an exam, and people come into actuarial work from statistics, economics, engineering, physics and computer science, as well as mathematics. Some come in with no degree at all and a stack of exam passes.
+> Not to write the exams. There's no educational prerequisite for registering, and people come into this from math, statistics, economics, engineering, physics, computer science and all sorts of other places.
 >
-> What a degree does is get your résumé read. The exams are what prove you can do the work.
+> In practice, most employers hiring entry-level analysts will expect a degree, and some requirements (the VEEs, further down) are usually met with university courses. So a degree helps a lot. It just isn't the thing that qualifies you. The exams are.
 
-> [!question]- How do I choose between writing exams with the SOA or the CAS?
+> [!question]- Should I write exams with the SOA or the CAS?
 >
-> The choice between them is really a choice about which industry you want to work in.
+> It mostly comes down to which kind of insurance you'd like to work in.
 >
-> **The Society of Actuaries (SOA)** covers life insurance, health insurance, pensions and retirement, and investments. Pricing a term life policy, setting reserves for a block of annuities, valuing what a pension plan owes its members thirty years out, building the models a life insurer runs its balance sheet on. Its designations are [[Associate of the Society of Actuaries (ASA)|ASA]] first, then [[Fellow of the Society of Actuaries (FSA)|FSA]].
+> The Society of Actuaries (SOA) covers life insurance, health, pensions and retirement, and investments. Think pricing a term life policy, reserving for a block of annuities, or working out what a pension plan owes people who won't retire for another thirty years. Its designations are [[Associate of the Society of Actuaries (ASA)|ASA]] and then [[Fellow of the Society of Actuaries (FSA)|FSA]].
 >
-> **The Casualty Actuarial Society (CAS)** covers property and casualty insurance, also called general insurance: auto, home, commercial liability, workers compensation, and the reinsurance sitting behind all of it. Pricing an auto book by territory and driving record, working out how much is still owed on claims that were reported three years ago and haven't settled, modelling what one bad hurricane season does to a portfolio. Its designations are [[Associate of the Casualty Actuarial Society (ACAS)|ACAS]] first, then [[Fellow of the Casualty Actuarial Society (FCAS)|FCAS]].
+> The Casualty Actuarial Society (CAS) covers property and casualty insurance, sometimes called general insurance: auto, home, commercial liability, workers' compensation, and the reinsurance behind all of it. The day-to-day might be pricing an auto book by territory and driving record, or estimating what's still owed on claims from a few years back that haven't closed yet. Its designations are [[Associate of the Casualty Actuarial Society (ACAS)|ACAS]] and then [[Fellow of the Casualty Actuarial Society (FCAS)|FCAS]].
 >
-> Neither one is the harder path and neither one is the prestigious one, whatever you read on a forum. They are different products with different time horizons, so the mathematics leans different ways: P&C work is heavier on statistics and modelling claims that arrive at random, life and pension work is heavier on interest, mortality and projections that run for decades. Salaries are broadly comparable. Pick the industry you'd rather spend a career in.
+> I wouldn't put much weight on forum arguments about which one is harder or more respected. They're different jobs with different time horizons. P&C work tends to lean on statistics and on modelling claims that turn up at random. Life and pension work leans more on interest, mortality and projections that run for decades. If you already have a feel for which of those you'd rather spend your days on, that's probably your answer.
 
-> [!question]- Do I have to decide before I start studying?
+> [!question]- Do I have to decide before I start?
 >
-> No — and most candidates don't.
+> No. The first two exams are shared. [[Exam P-1 (SOA)|Probability]] and [[Exam FM-2 (SOA)|Financial Mathematics]] are the same papers for both societies (the SOA calls them P and FM, the CAS calls them Exams 1 and 2), and a pass counts toward either one.
 >
-> The first two exams are administered jointly by both societies. [[Exam P-1 (SOA)|Probability]] and [[Exam FM-2 (SOA)|Financial Mathematics]] are the same papers whichever society you're registered with — the SOA calls them P and FM, the CAS calls them 1 and 2, and a pass counts at both.
->
-> So start. Plenty of candidates end up choosing a society based on who offers them a job. The decision can wait a year or more, and the studying can't.
+> Plenty of people pick a society after they land a job, because the job more or less picks it for them. So you can put the decision off for a year or more. I just wouldn't put off the studying while you wait.
 
 > [!question]- What if I'm not in the United States?
 >
-> In Canada, the right to sign statutory actuarial work runs through the [[Canadian Institute of Actuaries (CIA)]] and its own membership requirements, not through a CAS or SOA designation on its own — you'll hold both.
+> In Canada, the [[Canadian Institute of Actuaries (CIA)]] has its own membership requirements, and some of the work that has to be signed by an actuary goes through the CIA rather than through an SOA or CAS designation alone. Many Canadian actuaries end up holding both.
 >
-> In the UK it's the Institute and Faculty of Actuaries, and most countries have their own body with its own exams. Mutual recognition agreements exist between several of them but they're specific, so check before assuming an exam travels.
+> The UK has the Institute and Faculty of Actuaries, and many other countries have a national body with its own exams. Some of these have recognition agreements with the SOA or CAS, but the details differ from one to the next. Check with the body you'd actually be practising under before assuming a credential carries over.
 
 ## The path to a credential
 
-> [!question]- What does the whole path actually look like?
+Pick a society below to see how the pieces fit together, from the first exam through to the continuing education that keeps a credential current. Tap any stage to see what's in it.
+
+%%credential-path%%
+
+> [!question]- How long does it take?
 >
-> Both societies have two tiers, and both ask for more than exams.
+> Longer than most people expect going in. Both societies have two levels. Associateship ([[Associate of the Casualty Actuarial Society (ACAS)|ACAS]] or [[Associate of the Society of Actuaries (ASA)|ASA]]) is the first real milestone, and it often takes somewhere around three to five years of part-time study alongside a job. Fellowship ([[Fellow of the Casualty Actuarial Society (FCAS)|FCAS]] or [[Fellow of the Society of Actuaries (FSA)|FSA]]) usually adds a few more years on top.
 >
-> **Associateship** — [[Associate of the Casualty Actuarial Society (ACAS)|ACAS]] or [[Associate of the Society of Actuaries (ASA)|ASA]] — is the first real milestone. It typically takes three to five years of part-time study while working, and at the end of it you are a credentialed actuary who can do the job.
->
-> **Fellowship** — [[Fellow of the Casualty Actuarial Society (FCAS)|FCAS]] or [[Fellow of the Society of Actuaries (FSA)|FSA]] — adds two or three specialty exams on top and usually another two to four years. On the SOA side you choose a track (retirement, group and health, individual life, investment, corporate finance and ERM, general insurance) and it decides which exams you sit. On the CAS side everybody sits Exams 7, 8 and 9.
+> Treat those as rough numbers. Some people move faster and some slower. A failed sitting, a job change or a new baby can each add a year, and none of that means you're off track.
 
 > [!question]- What do I have to do besides pass exams?
 >
-> Alongside the exams, both pathways include:
+> More than you might think. Alongside the exams, both paths include:
 >
-> - **VEE** — Validation by Educational Experience. University coursework in economics, accounting and finance, and (for the SOA) mathematical statistics, approved in advance against a published list. If you took those courses at university with a good enough grade, you may already have this. If not, there are approved online courses that fill the gap, and you can do them any time.
-> - **Online courses and modules.** The SOA has PAF, ASF, ATPA and the FAP course; the CAS has its three Data and Insurance Series courses run through The Institutes. Some are graded projects rather than sat exams, and candidates routinely underestimate the time they take.
-> - **A professionalism course.** One sitting, in person or virtual, on the code of conduct and what membership actually obliges you to do. It's a requirement, not an exam.
-> - **The CAS also requires PCPA** (Property and Casualty Predictive Analytics), an exam plus a project, for candidates seeking the ACAS from 2026 onward.
+> - VEE (Validation by Educational Experience). University-level courses in economics and in accounting and finance, plus mathematical statistics for the SOA. If you took approved courses at school with a high enough grade, you may already have these covered. If not, there are approved online options you can fit in whenever suits you.
+> - Online courses and modules. The SOA has PAF, ASF, ATPA and the FAP course. The CAS has three Data and Insurance Series Courses (the DISCs), run through The Institutes. Some of these are graded projects rather than sit-down exams, and they can take more time than you'd guess.
+> - A professionalism course, covering the code of conduct and what membership actually commits you to.
+> - For the CAS, PCPA (Property and Casualty Predictive Analytics), which is an exam plus a project, for candidates going for the ACAS from 2026 on.
 >
-> The four designation pages — [[Associate of the Casualty Actuarial Society (ACAS)|ACAS]], [[Associate of the Society of Actuaries (ASA)|ASA]], [[Fellow of the Casualty Actuarial Society (FCAS)|FCAS]], [[Fellow of the Society of Actuaries (FSA)|FSA]] — carry the current requirement list in full. Read them before you plan a long sequence, because both bodies restructure their syllabi every few years and publish transition rules saying what your existing passes convert into. A requirement can change under you mid-pathway. It has happened to everyone who has been at this a while.
+> The designation pages for [[Associate of the Casualty Actuarial Society (ACAS)|ACAS]], [[Associate of the Society of Actuaries (ASA)|ASA]], [[Fellow of the Casualty Actuarial Society (FCAS)|FCAS]] and [[Fellow of the Society of Actuaries (FSA)|FSA]] list the requirements in full. Both societies revise their pathways every few years and publish transition rules for what your existing credit turns into, so it's worth a look at those before you plan too far ahead.
 
-> [!question]- What order should I sit the exams in?
+> [!question]- What order should I write the exams in?
 >
-> Start with [[Exam P-1 (SOA)|Probability]]. Everything statistical downstream depends on it, and it's the cleanest entry point for someone who hasn't studied this material before. Then [[Exam FM-2 (SOA)|Financial Mathematics]], which can overlap with a job hunt.
+> Most people start with [[Exam P-1 (SOA)|Probability]], since so much of the later statistics builds on it. [[Exam FM-2 (SOA)|Financial Mathematics]] usually comes next, and it can overlap with looking for a job.
 >
-> Those two are what make you employable. After that, the track you've chosen largely dictates the order, your manager will have an opinion, and the transition rules will have a say too. On the CAS side the usual run is [[Exam MAS-I (CAS)|MAS-I]], [[Exam MAS-II (CAS)|MAS-II]], [[Exam 5 (CAS)|Exam 5]], then Exam 6 in the jurisdiction where you practise. The SOA side has more branching and depends on which fellowship track you're heading toward.
+> After those two, the order depends on your path, your employer (who will probably have an opinion) and whichever transition rules are in force. On the CAS side a common order is [[Exam MAS-I (CAS)|MAS-I]], [[Exam MAS-II (CAS)|MAS-II]], [[Exam 5 (CAS)|Exam 5]], then Exam 6 for the country you practise in. The SOA side branches more, depending on which fellowship track you're heading toward.
 >
-> One thing to get right regardless: knock out the VEE requirements and the online modules in the gaps between exam sittings, rather than leaving them as a surprise between you and your associateship.
+> One small suggestion. Chip away at the VEEs and the online modules in the gaps between sittings. They're much less fun to discover as the last thing standing between you and your associateship.
 
 ## Getting hired
 
 > [!question]- How many exams do I need before I can get a job?
 >
-> You don't finish the exams and then go looking for work. It runs the other way around.
+> Probably fewer than you think. Entry-level jobs (usually titled actuarial analyst or actuarial student) are set up on the assumption that you'll keep writing exams after you're hired.
 >
-> **Two exams and an internship is the standard entry ticket.** Employers hire "actuarial analysts" or "actuarial students" — that is the actual job title — and expect you to keep sitting exams on the job. Passing P and FM before you graduate puts you ahead of most of the applicant pool. Three exams and a good internship makes you a strong candidate almost anywhere.
->
-> Grinding through five exams before you look for a job is usually the wrong trade: you're paying for exams you could have been paid to sit, and you're a year or two behind on the experience that actually gets you promoted.
+> For students coming out of university, a pass or two plus an internship is a common starting point. It varies a lot by employer, by country and by how busy the hiring market is that year. More passes can help you stand out. Past a certain point, though, you're paying for exams an employer might have covered, and missing out on work experience that counts for something too.
 
 > [!question]- What do employers look for besides exams?
 >
-> - **Excel, seriously.** Not "I've used Excel." Lookups, pivot tables, array formulas, and the ability to open somebody else's model and work out whether it's right.
-> - **SQL.** Nearly every piece of actuarial work starts with pulling data out of a warehouse.
-> - **R, Python or SAS.** One of them, properly, beats a line about all three on a résumé.
-> - **Writing.** Every analysis ends in a memo somebody non-technical reads and makes a decision on. This is the skill that separates people ten years in.
+> A few things come up again and again:
+>
+> - Excel, and more than the basics. Lookups, pivot tables, and being able to open someone else's workbook and figure out whether it's right.
+> - SQL. Plenty of actuarial work starts with pulling data out of a database.
+> - A programming language, usually R or Python (SAS still turns up in some places). Knowing one of them reasonably well tends to be more useful than listing three.
+> - Writing. Your analysis usually ends up in front of someone non-technical who has to make a decision based on it. Being able to explain it plainly matters more the longer you're in the job.
 
 > [!question]- Will my employer pay for my exams?
 >
-> Usually, yes — and it's why the whole system is built around candidates who are working. A typical North American actuarial employer will:
+> Often, yes. In North America the whole system more or less assumes you're studying while employed, and many actuarial employers run a formal study program. These usually include some mix of:
 >
-> - pay your exam registration fees, and your study manuals
-> - give you paid study hours during work time, often somewhere around 80 to 120 per sitting
-> - give you the exam day off, and usually a day or two either side
-> - pay a salary increase or a bonus for each exam you pass
+> - exam fees and study materials paid for
+> - paid study time during work hours
+> - time off for the exam itself
+> - a raise or bonus for each pass
 >
-> **Ask about the study program in the interview.** Programs vary a lot. How many study hours, whether they roll over, whether a failed exam costs you anything, how big the raise per exam is, and whether the hours are real or theoretical. The answers tell you more about what it's like to work there than most other questions will.
+> The details vary a lot, so ask about the study program in your interviews. How many hours you get, whether unused hours carry over, what happens if you fail, and whether people actually get to use the time are all fair questions. The answers can tell you a fair bit about a place.
 
-## Sitting an exam
+## Writing an exam
 
 > [!question]- How does registration work, and what does it cost?
 >
-> A sitting is a date, a seat at a test centre, and a fee, booked months ahead.
+> You register for a sitting, pay a fee, and book a seat at a test centre, usually months ahead. Both societies publish their exam calendars well in advance.
 >
-> **Registration closes weeks before the exam, and the deadline is the thing candidates genuinely miss.** Both societies publish a calendar a year out. Book early, because seats at convenient centres go first and the fee is usually non-refundable past the deadline.
->
-> Fees run a few hundred dollars per preliminary exam and more for upper-level ones; both societies publish a fee schedule and both charge extra for late registration.
+> Keep an eye on the registration deadline. It's easy to lose track of, and seats at the nearest centres can go quickly. Fees run a few hundred US dollars for the preliminary exams and more for the upper levels. Each society posts its current fee schedule and refund policy on its website.
 
 > [!question]- What is the exam itself like?
 >
-> **The preliminary exams are multiple choice, on a computer.** Exam P is 3 hours and 30 questions. Exam FM is 2.5 hours and 35 questions, which is noticeably tighter. [[Exam MAS-I (CAS)|MAS-I]] and [[Exam MAS-II (CAS)|MAS-II]] are 4 hours and 45 questions. Nothing is subtracted for a wrong answer, so there is never a reason to leave one blank. You'll see a preliminary pass or fail on the screen before you leave the centre.
+> The early exams are multiple choice, on a computer. [[Exam P-1 (SOA)|Exam P]] gives you 3 hours for 30 questions. [[Exam FM-2 (SOA)|Exam FM]] gives you 2.5 hours for 35, which feels noticeably tighter. [[Exam MAS-I (CAS)|MAS-I]] and [[Exam MAS-II (CAS)|MAS-II]] are 4 hours each for 45 questions. Wrong answers don't cost you anything, so there's no reason to leave one blank. For P and FM you'll usually see a preliminary result on screen before you leave.
 >
-> **The upper-level exams are written answer**, also delivered by computer, and graded by volunteer actuaries against a rubric. [[Exam 5 (CAS)|Exam 5]] is 4 hours, roughly 25 questions worth about 55 points. Partial credit is real and it is most of the game: graders award marks for the method, so state your assumptions, label your quantities and show the steps even when you're not confident in the final number. An unlabelled correct answer often scores less than a clearly-reasoned wrong one.
+> The upper-level exams, like [[Exam 5 (CAS)|Exam 5]], are written answer. You still type your answers on a computer, but they're graded by volunteer actuaries against a marking scheme, and partial credit matters. Show your work, label what you're calculating and state your assumptions, even when you aren't sure of the final number. A clear method with a small slip in it can often still pick up most of the marks.
 
-> [!question]- What are the approved calculators?
+> [!question]- Which calculators can I bring?
 >
-> Calculators are restricted to a short approved list — the TI BA-35, BA II Plus and BA II Plus Professional, and the TI-30Xa, TI-30X II and TI-30X MultiView. Anything else disqualifies the exam.
+> Only the ones on the approved list, which is a short set of Texas Instruments models: the BA-35, BA II Plus, BA II Plus Professional, TI-30Xa, TI-30X II and TI-30X MultiView. The rules on this are strict, so check the current list before you buy anything.
 >
-> Buy one early and do every practice problem on it so the keystrokes are automatic. Bring two, with fresh batteries.
+> Get yours early and use it for all of your practice, so the keystrokes are automatic by exam day. Bring a spare with fresh batteries.
 >
-> For FM, make one of them a BA II Plus: it's the only model on the list with the time-value-of-money and cash-flow worksheets the exam is built around.
+> For FM, most people use a BA II Plus (or the Professional) for its time-value-of-money and cash flow worksheets.
 
-> [!question]- How is the exam scored, and what counts as a pass?
+> [!question]- How is it scored, and what counts as a pass?
 >
-> **Scoring is scaled 0 to 10, with 6 required to pass.** The pass mark is set from the difficulty of the paper before the sitting, not from how the room did, so you are not competing against the other candidates. If you fail you get a number, and that number tells you something: a 5 and a 2 are different problems.
+> Results are reported on a scale from 0 to 10, and 6 or higher is a pass. The pass mark is based on how hard the questions are rather than on a set share of candidates, so you aren't competing with the other people in the room. If you fail, the number is still worth looking at. A 5 and a 2 point to quite different problems.
 >
-> **Results take weeks.** Preliminary pass rates sit somewhere in the 40–55% range most sittings, and the upper exams are similar. A failure is an ordinary outcome for a well-prepared candidate, not a verdict on whether you belong here.
+> Results take a few weeks. Pass rates are published after each sitting, and it's common for a big share of candidates not to pass. Failing an exam is a normal part of this. It doesn't mean you're not cut out for it.
 
 ## Studying
 
-> [!question]- How much time should I dedicate to studying?
+> [!question]- How much should I study?
 >
-> **Work backwards from the sitting date.** Pick the date first, register, then count the weeks.
+> Start from the exam date and work backwards. Register first, then count the weeks you actually have.
 >
-> The old rule of thumb is about 100 hours of study per hour of exam, which puts a preliminary exam somewhere near 300 hours — fifteen hours a week for twenty weeks, or twenty-five hours a week for twelve. The upper exams take more.
+> The rule of thumb you'll hear everywhere is about 100 hours of study for every hour of exam, which puts a three-hour paper at around 300 hours. Take it as a starting point and nothing more. Some people need far less and some need more, depending mostly on how familiar the material already is. Written-answer exams generally take more.
 >
-> "When I have time" is not a plan, and it's the most common reason a well-intentioned candidate arrives underprepared.
+> Whatever your number is, try to get it onto a calendar. "I'll study when I have time" has a way of turning into the last three weekends before the exam.
 
-> [!question]- How should I divide my time across the syllabus?
+> [!question]- How should I split my time across the syllabus?
 >
-> **Follow the syllabus weights.** Every exam publishes its learning objectives with a percentage weight attached. This wiki's exam pages list them, weights included.
+> Every exam publishes its learning objectives with a weight on each one, and the exam pages on this wiki list them. Letting those weights decide where your hours go is a sensible default.
 >
-> Allocate time in proportion. An interesting 5% topic does not get a fortnight, and a boring 25% topic gets what it's worth whether you like it or not.
+> It's very tempting to spend a week on a topic you enjoy that's only worth 5%. Try to notice when you're doing it.
 
 > [!question]- Should I read first and do problems later?
 >
-> No. **Do problems from the first week.** These exams test whether you can produce a correct answer against a clock, and reading is not practice for that. Work problems from day one, badly at first, and treat every one you get wrong as the thing you actually learned that day.
+> I'd start doing problems early, before you feel ready for them. These exams test whether you can get to a right answer under time pressure, and reading on its own doesn't really practise that. Your first attempts will be rough. That's fine. The problems you get wrong are usually where the learning happens.
 >
-> **Test yourself instead of re-reading.** Pulling an answer out of memory strengthens it in a way that recognising it on the page does not. Close the manual and reproduce the formula, then check. Cover the worked solution and redo the example from scratch. This wiki's flashcards and quizzes exist for exactly this.
+> It also helps to test yourself instead of re-reading. Close the manual and try to write out the formula, then check it. Cover up a worked solution and redo it from scratch. Recall practice like this tends to stick better than re-reading does, and it's what the flashcards and quizzes on this wiki are built around.
 
-> [!question]- What is an error log, and do I need one?
+> [!question]- What's an error log, and is it worth keeping?
 >
-> Yes, and it's the highest-return habit on this page.
+> It's a running list of the problems you got wrong and why. It takes a few minutes a day, and it's one of the more useful habits you can build.
 >
-> For every problem you miss, write down what the question was and *why* you missed it, sorted into: didn't know it, knew it and misapplied it, arithmetic slip, or misread the question. Those four have completely different fixes, and most candidates discover their real problem is the last two rather than the first.
+> For each miss, note roughly what the question was and what went wrong. Was it something you didn't know? Something you knew but applied wrong? An arithmetic slip? Or did you misread the question? Each of those needs a different fix, and people are often surprised by how many of their misses turn out to be the last two kinds.
 >
-> Redo the entries a week later, cold.
+> Go back and redo the entries a week or so later, without your notes.
 
-> [!question]- How do I make the material stick?
+> [!question]- How do I make it stick?
 >
-> **Space the hours out.** The same total hours spread over more days produce a more durable memory than the same hours stacked into weekends. This is the most reliable finding in the whole study literature.
+> Spread your studying out. The same hours spread over more days are usually remembered better than the same hours crammed into a few long sessions. There's a good body of research behind this, usually under the name "spacing effect".
 >
-> And revisiting a topic *after* you've started to forget it is exactly when the review does the most work, so a little discomfort on review day is a sign it's working.
+> Coming back to a topic just as it starts to fade is also useful. If a review session feels harder than you'd like, that's normal, and it's often a sign the review is doing its job.
 
-> [!question]- When should I start sitting past papers?
+> [!question]- When should I start on past papers?
 >
-> **About a month out, under exam conditions.** Whole paper, whole clock, approved calculator, no notes, phone in another room. Pacing is learned here and nowhere else, and pacing is what fails candidates who knew the material perfectly well.
+> Around a month out is a common time to start sitting full papers. Try to do them under real conditions: the full time limit, your approved calculator, no notes, phone in another room. Pacing is hard to learn any other way, and running out of time catches plenty of people who knew the material well.
 >
-> **Then read the examiner's report.** Every CAS sitting is followed by one, carrying sample answers and the marks each earned. It is the only published statement of what full credit actually looks like, and it is consistently under-read. The SOA publishes worked solutions to its sample questions in the same spirit. Read them as part of studying, not as a post-mortem after a result.
+> For written-answer exams, read the examiner's reports. The CAS publishes one after each sitting, with sample answers and the points they earned, which gives you a good feel for what the graders are looking for. The SOA publishes sample questions with worked solutions that are worth reading the same way. Use them while you're studying, not only after a result comes back.
 
-> [!question]- What should I do in the last two weeks?
+> [!question]- What about the last couple of weeks?
 >
-> **Review, not new material.** Go back through the error log, redo everything you flagged, sit one more full paper, and then stop.
+> Mostly review. Go back through your error log, redo the problems you flagged, maybe sit one more full paper, and try to get some decent sleep.
 >
-> Cramming a new topic in the final week trades sleep and pacing for a couple of marks you probably won't get anyway.
+> Unless it's heavily weighted, a brand-new topic in the final week is usually a worse use of the time than tightening up what you already know.
 
-> [!question]- Do I need a study manual, and which one?
+> [!question]- Do I need a study manual?
 >
-> The syllabus lists the source readings, and you can pass from them alone, but almost nobody does. Most candidates work from a study manual, which is the syllabus condensed and rebuilt around worked problems.
+> You don't strictly need one. The syllabus lists the source readings, and you can study from those directly. Most candidates do use a manual or an online course, though, because it condenses the readings and adds a lot of practice problems.
 >
-> The names you'll hear most are ACTEX and ASM for the written manuals, Coaching Actuaries for an adaptive problem bank that tracks readiness, and The Infinite Actuary for video-led courses, especially on the upper exams. Your employer will usually pay.
+> Names you'll hear often include ACTEX and ASM for written manuals, Coaching Actuaries for an adaptive practice bank, and The Infinite Actuary for video courses. Ask around at work too, since employers often cover the cost.
 >
-> Pick one and finish it. Buying three manuals is a way of feeling prepared rather than being prepared, and the problem bank you actually work through beats the one with the better reviews.
+> My advice would be to pick one and work through it properly. It's easy to buy three and finish none of them.
 
 ## When it goes wrong
 
 > [!question]- I failed. What now?
 >
-> You probably will, at least once, and most fellows have a list. The published pass rates mean roughly half the room doesn't pass, and the half that doesn't is mostly people who studied.
+> First, you're in good company. Look at the pass rates for almost any sitting and you'll see that many people don't pass, including people who studied hard. Plenty of fellows have a failed exam or two in their history.
 >
-> - **Look at the score.** A 5 means you were a handful of questions away and your plan was basically sound. A 2 or 3 means something structural was wrong and repeating the same approach won't fix it.
-> - **Diagnose honestly.** Knowledge gap, speed, or accuracy? Most near-misses are speed and careless errors, not gaps, and those are fixed by timed practice and an error log rather than by rereading the manual.
-> - **Don't restart from page one.** The material is still in your head. Re-sit the next available sitting if you can, because the gap between sittings costs more retention than the extra study buys you.
-> - **Register again before you've finished being annoyed about it.** The deadline won't wait for you to feel ready.
+> - Look at your score. A 5 suggests you were close and your approach was mostly working. A lower score may mean something bigger needs to change, so it's worth rethinking the plan rather than just repeating it.
+> - Try to pin down what went wrong. Gaps in the material, running out of time, or careless errors? Timing and accuracy problems tend to respond better to timed practice and an error log than to another pass through the manual.
+> - You probably don't need to start from scratch. Most of what you learned is still there. If you can, think about booking the next sitting while it's all still fresh.
+> - Give yourself a few days to be annoyed about it. Then check the next registration deadline.
 
-> [!warning]- What are the common ways candidates lose a sitting?
+> [!question]- What are the avoidable ways to lose a sitting?
 >
-> The avoidable ones:
+> The ones I see most often:
 >
-> - Missing the registration deadline, or booking so late that the only seat left is two hours away.
-> - Reading the manual cover to cover and never sitting a full timed paper.
-> - Spending a fortnight on an interesting topic worth 5% of the exam.
-> - Doing every practice problem untimed, then meeting a clock for the first time on exam day.
-> - Turning up with the wrong calculator, or the right one with a dying battery.
-> - Skipping the examiner's reports on a written-answer exam and never learning what full credit looks like.
-> - Leaving a multiple-choice question blank. There is no penalty for a wrong answer.
+> - Missing the registration deadline, or booking late and ending up at a test centre two hours away.
+> - Reading the whole manual but never sitting a full timed paper.
+> - Spending weeks on a favourite topic that's only a small part of the exam.
+> - Only ever practising untimed, then meeting the clock for the first time on exam day.
+> - Bringing a calculator that isn't on the list, or the right one with a dying battery.
+> - On written-answer exams, never looking at an examiner's report to see what full credit looks like.
+> - Leaving a multiple-choice question blank when there's no penalty for guessing.
 
 ## Using this wiki
 
-> [!question]- What does this wiki give me?
+> [!question]- What's on this wiki?
 >
-> - **Study guides** — one page per exam, with the published learning objectives and their weights, the source material, and links into the concept pages behind each objective.
-> - **Concept pages** — the definition, the formula and worked examples for every concept on a syllabus.
-> - **Questions** — past-paper and sample questions with worked explanations, attached to the concepts they test.
-> - **Flashcards and a study plan** — spaced repetition and self-testing, applied to whichever exam you've marked as in progress.
+> - Study guides: one page per exam, with the learning objectives and their weights, the source readings, and links to the concept pages behind each objective.
+> - Concept pages: definitions, formulas and worked examples for the concepts on each syllabus.
+> - Questions: past-paper and sample questions with worked explanations, linked to the concepts they test.
+> - Flashcards and a study plan: spaced review and self-testing, set up for whichever exam you've marked as in progress.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ec1ef54f7da34b85e31451b0735c055cc18c62c73201cedd884f32c084fc031a
+  content_hash: sha256:7758a96885cc5d966a7af47efb8b1a4ba1ee67e6e56205a46ea16dc1bd7af607
   sources: []
   open_findings: 0
   open_critical: 0
@@ -24,7 +24,7 @@ verification:
 - **Return is margin times leverage**: $\iota = (M/P)(P/Q)$. A return target can be met by pricing (margin) or by capital management ([[Insurance Leverage|leverage]]).
 - **The target** comes from the [[Cost of Capital|cost of capital]] — the return investors need to support the firm's market value — often blended with the cheaper, fixed costs of debt and reinsurance into a weighted average ([[Capital Structure]]).
 - **Expected is not reported.** Pricing uses the expected return on allocated capital. Reported return on equity is net income over book surplus, including investment income, realised gains and reserve development on prior years; the two answer different questions.
-- **Constant or varying?** A constant cost of capital charges the same $\iota$ on every layer of capital. Pricing with a distortion $g$ instead implies a return of $(g(s) - s)/(1 - g(s))$ on the layer of assets whose attachment probability is $s$, falling as layers become more remote — as in bond markets, where safer layers of capital earn lower spreads. See [[Risk-Adjusted Performance]] for return by line.
+- **Constant or varying?** A constant cost of capital charges the same $\iota$ on every layer of capital. Pricing with a distortion $g$ implies a return of $(g(s) - s)/(1 - g(s))$ on the layer of assets whose attachment probability is $s$; for most distortions (the constant-cost-of-capital one excepted) it falls as layers become more remote — as in bond markets, where safer layers of capital earn lower spreads. See [[Risk-Adjusted Performance]] for return by line.
 
 > [!example]- Return, Risk Discount Factor and Rate {Example}
 > A portfolio is written at premium $105$ with expected loss $95$ and is supported by assets of $180$. Find $\iota$, $\nu$ and $\delta$, and confirm $P = \nu L + \delta a$.

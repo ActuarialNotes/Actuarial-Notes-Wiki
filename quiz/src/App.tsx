@@ -27,6 +27,7 @@ import { AuthProvider } from '@/contexts/AuthContext'
 import { ExamProgressProvider } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
 import { useSubscription } from '@/hooks/useSubscription'
+import { canEnterMode, modeDestination, type AppMode } from '@/lib/appMode'
 import { COWORK_ENABLED, RESEARCH_TAB_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
 import { pageHostsNavButton } from '@/lib/mobileNavHost'
 import { captureError } from '@/lib/errorMonitoring'
@@ -182,34 +183,36 @@ function RequireAuth({ children }: { children: ReactNode }) {
 
 
 /**
- * A Pro-only route. A viewer who is not signed in goes to sign in; one who is
- * signed in but not Pro goes to the upgrade page — the same two destinations
- * `modeDestination` sends the mode pill to, so the pill and the URL can never
- * disagree about where a locked mode leads.
+ * A route that belongs to a gated mode. The rule is the mode's own
+ * (`canEnterMode` in `lib/appMode.ts`), and a viewer it keeps out goes where
+ * `modeDestination` sends them — the same place the mode pill would — so the
+ * pill and the URL can never disagree about who gets in or where a locked
+ * mode leads. For a Preview mode that means an account that isn't approved
+ * lands back on the dashboard, as if the route didn't exist.
  *
- * `loading` matters: subscription state resolves asynchronously, and bouncing a
- * Pro subscriber to /upgrade for the frame before their row arrives is a bug
+ * `loading` matters: subscription state resolves asynchronously, and bouncing
+ * an entitled viewer away for the frame before their row arrives is a bug
  * they would see every time they open the app.
  */
-function RequirePro({ children }: { children: ReactNode }) {
+function RequireMode({ mode, children }: { mode: AppMode; children: ReactNode }) {
   const { user } = useAuth()
   const { isPro, loading } = useSubscription()
-  if (!user) return <Navigate to="/auth" replace />
-  if (loading) return <WikiFallback />
-  if (!isPro) return <Navigate to="/upgrade" replace />
-  return <>{children}</>
+  const viewer = { signedIn: !!user, isPro, email: user?.email }
+  if (canEnterMode(mode, viewer)) return <>{children}</>
+  if (user && loading) return <WikiFallback />
+  return <Navigate to={modeDestination(mode, viewer)} replace />
 }
 
 function CoworkRoute() {
   if (!COWORK_ENABLED) return <Navigate to="/dashboard" replace />
   return (
-    <RequirePro>
+    <RequireMode mode="cowork">
       <ErrorBoundary>
         <Suspense fallback={<WikiFallback />}>
           <Cowork />
         </Suspense>
       </ErrorBoundary>
-    </RequirePro>
+    </RequireMode>
   )
 }
 
@@ -253,11 +256,12 @@ export default function App({ initialSession }: { initialSession: Session | null
                     <Navigate to="/wiki" replace />
                   )
                 } />
-                {/* Cowork — Pro-only and in Preview. The three paths are one
-                    page: the tab and the open deliverable live in the URL so a
-                    deliverable can be linked to and Back walks the loop.
-                    `RequirePro` is what keeps the mode's own rule (`canEnterMode`)
-                    true of the route and not only of the pill. */}
+                {/* Cowork — in Preview, open to approved accounts only. The
+                    three paths are one page: the tab and the open deliverable
+                    live in the URL so a deliverable can be linked to and Back
+                    walks the loop. `RequireMode` is what keeps the mode's own
+                    rule (`canEnterMode`) true of the route and not only of the
+                    pill. */}
                 <Route path="/cowork" element={<CoworkRoute />} />
                 <Route path="/cowork/:tab" element={<CoworkRoute />} />
                 <Route path="/cowork/:tab/:id" element={<CoworkRoute />} />

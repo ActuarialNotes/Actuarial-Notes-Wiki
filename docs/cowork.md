@@ -5,8 +5,11 @@ someone preparing to *become* an actuary, Cowork is for someone doing the work: 
 the entities that publish what they work from, and turning what those entities publish into
 the analyses, reports and documentation they produce.
 
-It is **Pro-only** and in **Preview**, gated by `COWORK_ENABLED` in
-`quiz/src/lib/featureFlags.ts`.
+It is in **Preview**, gated by `COWORK_ENABLED` in `quiz/src/lib/featureFlags.ts`, and
+while it is in Preview it is open **only to approved accounts** — `PREVIEW_APPROVED_EMAILS`
+in `quiz/src/lib/appMode.ts` (today, `jordan@actuarialnotes.com`). To everyone else it does
+not exist: no mode pill, and `/cowork` redirects to the dashboard. Once it leaves Preview it
+is Pro-only.
 
 ---
 
@@ -21,20 +24,25 @@ in preview. Three surfaces read it and none of them re-decides any of it:
   **violet** in Cowork. The green is a deliberate exception to the style guide's semantic
   palette (§2.2: green is *correct*): here it is a place marker, and nothing on the header
   row can be answered right or wrong. The pill portals to the body and is placed by
-  `lib/menuPlacement.ts`, like every other menu in the app.
+  `lib/menuPlacement.ts`, like every other menu in the app. It is drawn only when the
+  viewer can see more than one mode (`showsModeSwitcher`) — a Preview mode is visible to
+  approved accounts alone, so for everyone else there is no pill at all.
 - `components/Sidebar.tsx` — which nav rows exist. In Cowork the rows are Cowork's two
   places, and they are the **only** switch between them: the page carries no tab row, the
   same as every route in Study mode. (The Sources row stays lit on a source's own page —
   `forceActive`.) The footer (theme, sound, account) belongs to neither mode and stays put.
-- `App.tsx` — `RequirePro` guards the `/cowork` tree. A mode whose pill says "Pro" but
+- `App.tsx` — `RequireMode` guards the `/cowork` tree. A mode whose pill is hidden but
   whose URL lets anyone in is the one bug here a reader would find by typing an address, so
   the route enforces `canEnterMode`, not just the pill. It waits for
-  `useSubscription().loading` to settle first — bouncing a real subscriber to `/upgrade` for
-  one frame is a bug they would see on every visit.
+  `useSubscription().loading` to settle first — bouncing a real subscriber away for one
+  frame is a bug they would see on every visit.
 
-A locked mode's destination is `modeDestination`: `/auth` when signed out, `/upgrade` when
-signed in without Pro. The pill and the URL give the same answer because they call the same
-function.
+A locked mode's destination is `modeDestination`: the dashboard for a Preview mode the
+viewer isn't approved for (it doesn't exist for them), otherwise `/auth` when signed out and
+`/upgrade` when signed in without Pro. The pill and the URL give the same answer because
+they call the same function. The approval list is a UI gate, not a security boundary —
+Cowork's catalogue is bundled seed data and its stores are localStorage, so there is no
+server data behind it to guard.
 
 Adding a third mode is one entry in `APP_MODES` plus its routes.
 

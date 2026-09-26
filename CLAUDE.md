@@ -8,7 +8,8 @@ A two-part product for people studying for actuarial exams (CAS/SOA):
 
 The app has **two modes** — two products under one roof, switched from the pill beside the
 wordmark (`lib/appMode.ts`). **Study Mode** is everything below; **Cowork** is the second
-product, Pro-only and in Preview — see "Cowork" at the end of this file and `docs/cowork.md`.
+product, in Preview and open only to approved accounts (`PREVIEW_APPROVED_EMAILS` in
+`lib/appMode.ts`; everyone else sees no pill at all) — see "Cowork" at the end of this file and `docs/cowork.md`.
 
 1. **Content vault** (repo root) — an Obsidian-style markdown wiki: exam syllabus pages
    (`Exam *.md`), concept pages (`Concepts/*.md`), resource/timeline pages
@@ -603,8 +604,8 @@ Other important `lib/` modules:
   rate-limited Contents API — the first screen of the app has to find things offline. What
   the bundle can't answer, the foot of the results hands to the Search page, which now takes
   `?type=` and `?q=`. Pure and tested.
-- `appMode.ts` / `cowork*.ts` / `xlsx.ts` — **Cowork**, the app's second product (Pro-only,
-  Preview, `COWORK_ENABLED`). `appMode.ts` is the one definition of what a mode *is* — label,
+- `appMode.ts` / `cowork*.ts` / `xlsx.ts` — **Cowork**, the app's second product (Preview,
+  approved accounts only via `PREVIEW_APPROVED_EMAILS`, `COWORK_ENABLED`). `appMode.ts` is the one definition of what a mode *is* — label,
   home, routes, what it takes to enter it — read by the pill (`components/ModeSwitcher.tsx`),
   the sidebar's nav and `App.tsx`'s route guard, so none of the three re-decides it.
   `coworkFacets.ts` is the five facet axes as data; `coworkSources.ts` is the
@@ -829,7 +830,9 @@ deploy via the GitHub Action above.
 
 ## Cowork (the second product)
 
-Pro-only, in **Preview**, gated by `COWORK_ENABLED`. Two places — **Sources** and
+In **Preview**, gated by `COWORK_ENABLED`, and open only to the approved accounts in
+`PREVIEW_APPROVED_EMAILS` (`lib/appMode.ts`) — no one else sees the mode pill, and `/cowork`
+redirects them to the dashboard. Two places — **Sources** and
 **Deliverables** — chosen from the sidebar, like every route in Study mode (the page carries
 no tab row). They are the two halves of one loop:
 

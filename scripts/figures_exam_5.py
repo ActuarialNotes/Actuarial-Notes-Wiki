@@ -2130,66 +2130,85 @@ def expected_loss_method() -> Fig:
     return f
 
 
-@figure("Bornhuetter-Ferguson Method", "Reported losses taken at face value with "
-        "only the unreported portion estimated from the a priori", width=WID)
+@figure("Bornhuetter-Ferguson Method", "The a priori 2,600 split into its expected "
+        "reported and unreported shares, the unreported 47.4% carried down beside "
+        "AY 2024's actual 1,500 reported to make a 2,732 ultimate", width=WID)
 def bornhuetter_ferguson_method() -> Fig:
     f = vcard()
 
-    x0, x1 = 46, 314
-    f.text(BCX, 116, "AY 2024, CDF = 1.900 ⇒ 52.6% reported", cls="sm dim")
-    f.rect(x0, 142, (x1 - x0) * 1500 / 2732, 36, rx=4, fill=BLUE,
-           fill_opacity="0.42", stroke=BLUE, stroke_width="1.2")
-    f.text(x0 + (x1 - x0) * 750 / 2732, 165, "reported 1,500", cls="sm")
-    f.rect(x0 + (x1 - x0) * 1500 / 2732, 142, (x1 - x0) * 1232 / 2732, 36, rx=4,
-           fill=VIOLET, fill_opacity="0.34", stroke=VIOLET, stroke_width="1.2")
-    f.text(x0 + (x1 - x0) * 2116 / 2732, 165, "IBNR 1,232", cls="sm")
-    f.text(x0 + (x1 - x0) * 2116 / 2732, 200, "0.474 × 2,600", cls="sm dim")
+    x0, x1 = 40, 320
 
-    f.text(BCX, 246, "it is a credibility blend in disguise", cls="sm dim")
-    _hbar(f, 286, [(0.474, "a priori 2,600", VIOLET),
-                   (0.526, "chain ladder 2,850", BLUE)], x0=46, x1=314,
-          height=30)
-    f.text(BCX, 320, "Z = 1 / CDF = 0.526", cls="sm dim")
-    f.text(BCX, 358, "a reporting anomaly moves BF dollar for dollar",
-           cls="sm dim")
-    f.text(BCX, 376, "and the chain ladder by CDF times as much", cls="sm dim")
+    def px(v):
+        return x0 + (x1 - x0) * v / U_BF
+
+    c, ibnr = TRI[4][0], (1 - PCT_RPT) * U_EL
+    top, bot, h = 130, 280, 44
+    f.text(x0, top - 10, "a priori 2,600", cls="sm bold", anchor="start")
+    f.rect(px(0), top, px(U_EL - ibnr) - px(0), h, rx=4, fill="var(--dim)",
+           fill_opacity="0.14", stroke="var(--dim)", stroke_width="1.2",
+           stroke_dasharray="4 3")
+    f.text((px(0) + px(U_EL - ibnr)) / 2, top + h / 2 + 4,
+           f"{PCT_RPT:.1%}", cls="sm")
+    f.rect(px(U_EL - ibnr), top, px(U_EL) - px(U_EL - ibnr), h, rx=4, fill=VIOLET,
+           fill_opacity="0.34", stroke=VIOLET, stroke_width="1.2")
+    f.text((px(U_EL - ibnr) + px(U_EL)) / 2, top + h / 2 + 4,
+           f"{1 - PCT_RPT:.1%}", cls="sm bold")
+    f.polygon([(px(U_EL - ibnr), top + h), (px(U_EL), top + h), (px(U_BF), bot),
+               (px(c), bot)], fill=VIOLET, fill_opacity="0.1", stroke="none")
+    f.rect(px(0), bot, px(c) - px(0), h, rx=4, fill=BLUE, fill_opacity="0.4",
+           stroke=BLUE, stroke_width="1.2")
+    f.text((px(0) + px(c)) / 2, bot + h / 2 + 4, f"reported {c:,}", cls="sm bold")
+    f.rect(px(c), bot, px(U_BF) - px(c), h, rx=4, fill=VIOLET, fill_opacity="0.34",
+           stroke=VIOLET, stroke_width="1.2")
+    f.text((px(c) + px(U_BF)) / 2, bot + h / 2 + 4, f"IBNR {ibnr:,.0f}",
+           cls="sm bold")
+    brace(f, px(0), px(U_BF), bot + h + 6, depth=8, label=f"BF {U_BF:,.0f}",
+          label_cls="sm bold")
     return f
 
 
-@figure("Cape Cod Method", "The a priori loss ratio derived from the triangle's own "
-        "used-up premium", width=WID)
+@figure("Cape Cod Method", "Five years' premium, the used-up share of it and their "
+        "reported losses, each stacked by accident year, with the losses coming to "
+        "66.2% of the used-up premium", width=WID)
 def cape_cod_method() -> Fig:
     f = vcard()
 
-    f.text(BCX, 110, "used-up premium: EP ÷ CDF ($000)", cls="sm dim")
-    rows = list(zip(AYS, EP, list(reversed(CDF)), [1882, 2029, 2088, 2025, 1500]))
-    for i, (ay, ep, cdf, c) in enumerate(rows):
-        y = 140 + i * 30
-        f.text(52, y, ay, cls="sm dim", anchor="start")
-        f.text(140, y, f"{ep:,}", cls="sm", anchor="end")
-        f.text(206, y, f"÷ {cdf:.3f}", cls="sm dim", anchor="end")
-        f.text(272, y, f"{ep / cdf:,.0f}", cls="sm", anchor="end")
-        f.text(312, y, f"{c:,}", cls="sm dim", anchor="end")
-    f.line(46, 300, 314, 300, cls="rule")
-    f.text(272, 322, "14,387", cls="sm bold", anchor="end")
-    f.text(312, 322, "9,524", cls="sm bold", anchor="end")
-    f.text(BCX, 356, "an ELR that reflects this book's own rate level",
-           cls="sm dim")
-    f.text(BCX, 374, "and mix — no external assumption to go stale",
-           cls="sm dim")
+    used = [ep / cdf for ep, cdf in zip(EP, reversed(CDF))]
+    rpt = [row[-1] for row in TRI]
+    base, scale, w = 360, 250 / sum(EP), 64
+    tops = []
+    for cx, parts, colour, name in ((80, EP, "var(--dim)", "premium"),
+                                    (180, used, BLUE, "used up"),
+                                    (280, rpt, AMBER, "reported")):
+        y = base
+        for v in parts:
+            h = v * scale
+            f.rect(cx - w / 2, y - h, w, h, fill=colour, fill_opacity="0.3",
+                   stroke=colour, stroke_width="1")
+            y -= h
+        f.text(cx, base + 18, name, cls="sm")
+        tops.append(y)
+    f.text(180, tops[1] - 8, f"{sum(used):,.0f}", cls="sm bold")
+    f.text(280, tops[2] - 8, f"{sum(rpt):,}", cls="sm bold")
+    f.arrow(180 + w / 2 + 2, tops[1] + 2, 280 - w / 2 - 2, tops[2] - 2,
+            colour="var(--dim)", width=1.4)
+    f.text(240, (tops[1] + tops[2]) / 2 - 6, f"ELR {sum(rpt) / sum(used):.1%}",
+           cls="sm bold", anchor="start")
     return f
 
 
-@figure("Benktander Method", "The four ultimates for one accident year, with "
-        "Benktander sitting between BF and the chain ladder", width=WID)
+@figure("Benktander Method", "AY 2024's four ultimates in a column, the iteration "
+        "stepping from expected loss through BF to Benktander and on toward the "
+        "chain ladder", width=WID)
 def benktander_method() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 2500, 2920, 0, 4.4, left=44, right=24, top=42, bottom=70)
-    ax.frame(xticks=[2600, 2700, 2800, 2900], xfmt=lambda t: f"{t:,.0f}",
-             yticks=[], grid=True)
-    rows = [("expected loss", U_EL, VIOLET), ("Bornhuetter-Ferguson", U_BF, TEAL),
+    ax = vaxes(f, 2500, 2920, 0, 4.4, left=44, right=24, top=28, bottom=48)
+    ax.frame(xlabel="AY 2024 ultimate", xticks=[2600, 2700, 2800, 2900],
+             xfmt=lambda t: f"{t:,.0f}", yticks=[], grid=True)
+    rows = [("expected loss", U_EL, VIOLET), ("BF", U_BF, TEAL),
             ("Benktander", U_GB, GREEN), ("chain ladder", U_CL, BLUE)]
+    pts = []
     for i, (name, value, colour) in enumerate(rows):
         y = 3.6 - i * 0.95
         px_, py_ = ax.p(value, y)
@@ -2199,108 +2218,114 @@ def benktander_method() -> Fig:
         f.text(px_ + 9, py_ + 4, f"{value:,.0f}", cls="sm bold", fill=colour,
                anchor="start")
         f.text(ax.x0 + 4, py_ - 9, name, cls="sm dim", anchor="start")
-    f.text(BCX, ax.y1 + 30, "AY 2024 ultimate ($000)", cls="sm dim")
-    f.text(BCX, BY1 - 16, "each iteration leans a little further on the",
-           cls="sm dim")
-    f.text(BCX, BY1 + 2, "data; iterate forever and you reach chain ladder",
-           cls="sm dim")
+        pts.append((px_, py_))
+    for k in range(3):
+        (xa, ya), (xb, yb) = pts[k], pts[k + 1]
+        f.arrow(xa + 3, ya + 8, xb - 3, yb - 8, colour="var(--dim)", width=1.3,
+                dash=k == 2)
     return f
 
 
-@figure("Frequency-Severity Method", "Ultimate counts and ultimate severity "
-        "projected separately, then multiplied", width=WID)
+@figure("Frequency-Severity Method", "Ultimate losses drawn as a rectangle 1,000 "
+        "ultimate claims wide and $2,850 of severity tall, with the 700 claims "
+        "reported so far marked off", width=WID)
 def frequency_severity_method() -> Fig:
     f = vcard()
 
-    y = 176
-    f.chip(94, y, "1,000", colour=BLUE, w=110, h=44, cls="ttl")
-    f.text(94, y - 34, "ultimate counts", cls="sm dim")
-    f.text(94, y + 42, "700 × 1.429", cls="sm dim")
-    f.text(BCX, y + 6, "×", cls="ttl")
-    f.chip(266, y, "$2,850", colour=AMBER, w=110, h=44, cls="ttl")
-    f.text(266, y - 34, "ultimate severity", cls="sm dim")
-    f.text(266, y + 42, "trended 4.6%/yr", cls="sm dim")
-    f.arrow(BCX, y + 62, BCX, 274, colour="var(--dim)", width=1.4)
-    f.chip(BCX, 296, "$2,850,000 ultimate", colour=GREEN, w=200, h=40, cls="ttl")
-    f.text(BCX, 350, "counts develop faster and more stably than", cls="sm dim")
-    f.text(BCX, 368, "dollars, and severity carries the inflation", cls="sm dim")
+    x0, x1, y0, y1 = 96, 320, 100, 330
+    xr = x0 + (x1 - x0) * 0.7
+    f.rect(x0, y0, xr - x0, y1 - y0, fill=GREEN, fill_opacity="0.3", stroke=GREEN,
+           stroke_width="1.4")
+    f.rect(xr, y0, x1 - xr, y1 - y0, fill=GREEN, fill_opacity="0.12", stroke=GREEN,
+           stroke_width="1.4", stroke_dasharray="4 3")
+    f.text((x0 + x1) / 2, (y0 + y1) / 2 + 4, "2,850,000", cls="bold")
+    f.text(xr, y0 - 8, "700 reported", cls="sm")
+    brace(f, x0, x1, y1 + 6, depth=8, label="1,000 claims", label_cls="sm bold")
+    f.path(f"M{x0 - 6},{y0} H{x0 - 14} V{y1} H{x0 - 6}", cls="thin",
+           stroke="var(--dim)", stroke_width="1.3")
+    f.text(x0 - 20, (y0 + y1) / 2 + 4, "$2,850", cls="sm bold", anchor="end")
     return f
 
 
-@figure("Berquist-Sherman Method", "Historical case reserves restated onto the "
-        "latest year's adequacy before factors are selected", width=WID)
+@figure("Berquist-Sherman Method", "Average case outstanding by accident year as "
+        "reported, jumping in 2023, and restated onto 2024's adequacy as a smooth "
+        "trend, with each old year raised to it", width=WID)
 def berquist_sherman_method() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -0.4, 4.4, 0, 1500, left=56, right=22, top=40, bottom=74)
-    ax.frame(xticks=[0, 1, 2, 3, 4], xfmt=lambda t: AYS[int(t)],
-             yticks=[0, 700, 1400], yfmt=lambda t: f"{t:,.0f}", grid=True)
+    ax = vaxes(f, -0.4, 4.4, 400, 1300, left=56, right=22, top=28, bottom=48)
+    ax.frame(xlabel="accident year", ylabel="average case", xticks=[0, 1, 2, 3, 4],
+             xfmt=lambda t: AYS[int(t)], yticks=[400, 800, 1200],
+             yfmt=lambda t: f"{t:,.0f}", grid=True)
     actual = [620, 660, 720, 900, 1180]
     restated = [880, 940, 1010, 1090, 1180]
-    bw = (ax.px(1) - ax.px(0)) * 0.34
+    for k in range(4):
+        x, ya = ax.px(k), ax.py(actual[k])
+        f.arrow(x, ya - 6, x, ax.py(restated[k]) + 6, colour="var(--dim)",
+                width=1.3)
+    ax.polyline(list(enumerate(actual)), colour="var(--dim)", width=1.8, dash=True)
+    ax.polyline(list(enumerate(restated)), colour=BLUE, width=2.4)
     for k in range(5):
-        x = ax.px(k)
-        f.rect(x - bw - 1, ax.py(actual[k]), bw, ax.y1 - ax.py(actual[k]), rx=2,
-               fill="var(--dim)", fill_opacity="0.45")
-        f.rect(x + 1, ax.py(restated[k]), bw, ax.y1 - ax.py(restated[k]), rx=2,
-               fill=BLUE, fill_opacity="0.72")
-    f.legend_row(120, 100, [("var(--dim)", "as reported"), (BLUE, "restated")],
-                 gap=112)
-    f.text(BCX, ax.y1 + 30, "average case outstanding at 12 months", cls="sm dim")
-    f.text(BCX, BY1 - 16, "case adequacy strengthened, so old years are",
-           cls="sm dim")
-    f.text(BCX, BY1 + 2, "raised to it — then factors are reselected",
-           cls="sm dim")
+        ax.point(k, actual[k], colour="var(--dim)", r=3.2)
+        ax.point(k, restated[k], colour=BLUE, r=3.6)
+    ax.label(2.5, 1050, "restated", cls="sm bold", fill=BLUE, dy=-18)
+    ax.label(2.6, 720, "as reported", cls="sm dim", dy=24)
     return f
 
 
-@figure("IBNR", "IBNR split into claims not yet reported and further development on "
-        "claims already known", width=WID)
+@figure("IBNR", "Reported claims whose case reserves will still grow, the IBNER, "
+        "beside claims not yet reported at all, the pure IBNR", width=WID)
 def ibnr() -> Fig:
     f = vcard()
 
-    f.text(BCX, 116, "AY 2024 IBNR of 1,350 ($000)", cls="sm dim")
-    _hbar(f, 156, [(780, "pure IBNR 780", VIOLET), (570, "IBNER 570", ROSE)],
-          x0=44, x1=316, height=36)
-    rows = [("Pure IBNR", "claims that have happened but", VIOLET,
-             "have not been reported at all"),
-            ("IBNER", "development on the claims", ROSE,
-             "already in the case reserves")]
-    for i, (name, line1, colour, line2) in enumerate(rows):
-        y = 220 + i * 78
-        f.rect(48, y - 9, 11, 11, rx=2, fill=colour, fill_opacity="0.8")
-        f.text(66, y + 1, name, cls="sm bold", anchor="start")
-        f.text(66, y + 20, line1, cls="sm dim", anchor="start")
-        f.text(66, y + 37, line2, cls="sm dim", anchor="start")
-    f.text(BCX, BY1 - 2, "a triangle estimates the sum; only claim data "
-           "splits it", cls="sm dim")
+    base, w = 340, 28
+    known = [(50, 110, 70), (90, 65, 50), (130, 120, 68), (170, 65, 40)]
+    unknown = [(230, 95), (270, 130), (310, 87)]
+    for x, case, dev in known:
+        f.rect(x - w / 2, base - case, w, case, rx=2, fill=AMBER, fill_opacity="0.5",
+               stroke=AMBER, stroke_width="1.2")
+        f.rect(x - w / 2, base - case - dev, w, dev, rx=2, fill=ROSE,
+               fill_opacity="0.16", stroke=ROSE, stroke_width="1.3",
+               stroke_dasharray="4 3")
+    for x, h in unknown:
+        f.rect(x - w / 2, base - h, w, h, rx=2, fill=VIOLET, fill_opacity="0.16",
+               stroke=VIOLET, stroke_width="1.3", stroke_dasharray="4 3")
+    f.line(28, base, 332, base, cls="axis")
+    top_known = min(base - case - dev for _, case, dev in known)
+    top_unknown = min(base - h for _, h in unknown)
+    f.text(110, top_known - 10, "IBNER 570", cls="sm bold")
+    f.text(270, top_unknown - 10, "pure IBNR 780", cls="sm bold")
+    f.text(110, base + 18, "case 900", cls="sm")
     return f
 
 
-@figure("Ultimate Loss", "Four methods' ultimates for one accident year and the "
-        "figure selected from them", width=WID)
+@figure("Ultimate Loss", "AY 2024's losses by age as bands of paid, case reserves and "
+        "IBNR that always stack to the same 2,850 ultimate, paid filling it as the "
+        "claims settle", width=WID)
 def ultimate_loss() -> Fig:
     f = vcard()
 
-    f.text(BCX, 112, "AY 2024 at 12 months ($000)", cls="sm dim")
-    rows = [("Expected loss", U_EL, VIOLET), ("Bornhuetter-Ferguson", U_BF, TEAL),
-            ("Benktander", U_GB, GREEN), ("Chain ladder", U_CL, BLUE),
-            ("Selected", 2780, AMBER)]
-    x0, base, scale = 176, 2550, 0.45
-    for i, (name, value, colour) in enumerate(rows):
-        y = 146 + i * 38
-        sel = i == 4
-        f.text(168, y + 4, name, cls="sm bold" if sel else "sm", anchor="end")
-        f.rect(x0, y - 10, (value - base) * scale, 22, rx=3, fill=colour,
-               fill_opacity="0.8" if sel else "0.6")
-        f.text(x0 + (value - base) * scale + 7, y + 4, f"{value:,.0f}",
-               cls="sm bold" if sel else "sm", anchor="start")
-    f.line(x0, 128, x0, 330, cls="rule")
-    f.text(x0, 346, "2,550", cls="sm dim")
-    f.text(BCX, 374, "the selection is a judgment about which method",
-           cls="sm dim")
-    f.text(BCX, 390, "the data supports — and it has to be documented",
-           cls="sm dim")
+    ax = vaxes(f, 12, 84, 0, 3200, left=54, right=20, top=28, bottom=48)
+    ax.frame(xlabel="age in months", xticks=[12, 36, 60, 84],
+             yticks=[0, 1500, 3000], yfmt=lambda t: f"{t:,.0f}", grid=False)
+    rpt = [(12, 1500), (24, 2250), (36, 2610), (48, 2767), (60, 2822),
+           (72, 2845), (84, 2850)]
+    paid = [(12, 600), (24, 1500), (36, 2150), (48, 2560), (60, 2740),
+            (72, 2820), (84, 2850)]
+    ult = U_CL
+    bands = [([(12, 0)] + paid + [(84, 0)], GREEN),
+             (paid + rpt[::-1], AMBER),
+             (rpt + [(84, ult), (12, ult)], VIOLET)]
+    for pts, colour in bands:
+        f.polygon([ax.p(x, y) for x, y in pts], fill=colour, fill_opacity="0.3",
+                  stroke="none")
+    ax.polyline(paid, colour=GREEN, width=2)
+    ax.polyline(rpt, colour=AMBER, width=2)
+    ax.hline(ult, colour=VIOLET, dash=False, x_to=84)
+    ax.label(22, 560, "paid", cls="sm bold")
+    ax.label(20, 1500, "case", cls="sm bold")
+    ax.label(22, 2500, "IBNR", cls="sm bold")
+    ax.label(84, ult, f"ultimate {ult:,.0f}", cls="sm bold", anchor="end", dy=-8)
     return f
 
 
@@ -2308,33 +2333,48 @@ def ultimate_loss() -> Fig:
 # B. Estimating claim liabilities — operational changes
 # ═══════════════════════════════════════════════════════════════════════════
 
-@figure("Claims Coding Changes", "A recoding moving claim volume between segments "
-        "without changing the total", width=WID)
+@figure("Claims Coding Changes", "Two bins of claims, four of them recoded out of "
+        "coverage A and into coverage B, so each segment's count moves while the "
+        "total stays the same", width=WID)
 def claims_coding_changes() -> Fig:
     f = vcard()
 
-    for k, (title, split, y0) in enumerate((("before", (0.62, 0.38), 146),
-                                            ("after", (0.44, 0.56), 250))):
-        f.text(46, y0 - 12, title, cls="sm bold", anchor="start")
-        _hbar(f, y0 + 16, [(split[0], "coverage A", BLUE),
-                           (split[1], "coverage B", AMBER)],
-              x0=46, x1=314, height=32)
-    f.arrow(BCX, 198, BCX, 232, colour=ROSE, width=1.6)
-    f.text(BCX + 8, 220, "recoded", cls="sm bold", fill=ROSE, anchor="start")
-    f.text(BCX, 322, "coverage B's triangle now shows a jump in", cls="sm dim")
-    f.text(BCX, 340, "counts that never happened — and A a drop", cls="sm dim")
-    f.text(BCX, 372, "the total is unchanged, so only the segments lie",
-           cls="sm dim")
+    r, gap, base = 12, 38, 350
+
+    def spot(cx, k):
+        return cx + (k % 3 - 1) * gap, base - 20 - (k // 3) * gap
+
+    for cx, colour, name in ((100, BLUE, "coverage A"), (260, AMBER, "coverage B")):
+        f.rect(cx - 66, 146, 132, base - 146 + 8, rx=8, fill="var(--soft)",
+               stroke="var(--edge)", stroke_width="1.2")
+        f.text(cx, base + 26, name, cls="sm bold")
+    for k in range(14):
+        x, y = spot(100, k)
+        if k < 10:
+            f.circle(x, y, r, fill=BLUE, fill_opacity="0.5", stroke=BLUE,
+                     stroke_width="1.2")
+        else:
+            f.circle(x, y, r, fill="none", stroke=BLUE, stroke_width="1.2",
+                     stroke_dasharray="3 2")
+    for k in range(13):
+        x, y = spot(260, k)
+        moved = k >= 9
+        f.circle(x, y, r, fill=AMBER, fill_opacity="0.5",
+                 stroke=ROSE if moved else AMBER,
+                 stroke_width="1.8" if moved else "1.2")
+    f.arrow(130, 132, 230, 132, colour=ROSE, width=1.8)
+    f.text(BCX, 120, "recoded", cls="sm bold")
     return f
 
 
-@figure("Claims Processing Changes", "A faster settlement pattern distorting the "
-        "paid development it is measured with", width=WID)
+@figure("Claims Processing Changes", "The share of claims closed by each age, "
+        "higher at every age after claims start settling faster", width=WID)
 def claims_processing_changes() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 60, 0, 1.05, left=52, right=22, top=34, bottom=66)
-    ax.frame(xticks=[12, 24, 36, 48, 60], yticks=[0, 0.5, 1.0],
+    ax = vaxes(f, 0, 60, 0, 1.05, left=52, right=22, top=28, bottom=48)
+    ax.frame(xlabel="age in months", ylabel="claims closed",
+             xticks=[12, 24, 36, 48, 60], yticks=[0, 0.5, 1.0],
              yfmt=lambda t: f"{t:.0%}", grid=True)
     old = [(12, 0.36), (24, 0.62), (36, 0.80), (48, 0.92), (60, 0.98)]
     new = [(12, 0.52), (24, 0.76), (36, 0.89), (48, 0.96), (60, 0.99)]
@@ -2342,92 +2382,99 @@ def claims_processing_changes() -> Fig:
     _emergence(ax, new, ROSE)
     ax.label(30, 0.52, "before", cls="sm dim", dy=12)
     ax.label(26, 0.80, "after", cls="sm bold", fill=ROSE, dy=-8)
-    f.text(BCX, ax.y1 + 32, "disposal rate by age in months", cls="sm dim")
-    f.text(BCX, BY1 - 16, "closing sooner raises paid losses at every age,",
-           cls="sm dim")
-    f.text(BCX, BY1 + 2, "so paid factors fall and the method under-reserves",
-           cls="sm dim")
     return f
 
 
-@figure("Underwriting Changes", "A shift in risk selection moving the aggregate loss "
-        "ratio while no segment's own ratio moves", width=WID)
+@figure("Underwriting Changes", "Three segments at fixed loss ratios on a beam, their "
+        "weights shifting from the 2022 mix to the 2024 mix, which moves the balance "
+        "point, the aggregate loss ratio, from 65.2% to 73.4%", width=WID)
 def underwriting_changes() -> Fig:
     f = vcard()
 
-    segs = [("Preferred", 0.55), ("Standard", 0.70), ("Non-standard", 0.88)]
-    mixes = [("2022", [0.50, 0.35, 0.15]), ("2024", [0.25, 0.35, 0.40])]
+    segs = [0.55, 0.70, 0.88]
+    old_w = [0.50, 0.35, 0.15]
+    new_w = [0.25, 0.35, 0.40]
     colours = [GREEN, BLUE, ROSE]
-    for k, (year, weights) in enumerate(mixes):
-        y = 146 + k * 96
-        f.text(46, y - 12, year, cls="sm bold", anchor="start")
-        parts = [(w, f"{w:.0%}", colours[j]) for j, w in enumerate(weights)]
-        _hbar(f, y + 16, parts, x0=46, x1=314, height=30)
-        lr = sum(w * s[1] for w, s in zip(weights, segs))
-        f.text(BCX, y + 54, f"aggregate loss ratio {lr:.1%}",
-               cls="sm bold" if k else "sm dim")
-    f.legend_row(46, 330, [(GREEN, "pref 55%"), (BLUE, "std 70%")], gap=112)
-    f.legend_row(46, 350, [(ROSE, "non-standard 88%")], gap=112)
-    f.text(BCX, 380, "no segment changed — only their weights did",
-           cls="sm dim")
+    beam, w = 300, 40
+
+    def px(lr):
+        return 40 + (lr - 0.45) * 560
+
+    for lr, wo, wn, colour in zip(segs, old_w, new_w, colours):
+        x = px(lr)
+        f.rect(x - w / 2, beam - wn * 360, w, wn * 360, rx=3, fill=colour,
+               fill_opacity="0.45", stroke=colour, stroke_width="1.2")
+        f.rect(x - w / 2, beam - wo * 360, w, wo * 360, rx=3, fill="none",
+               stroke="var(--dim)", stroke_width="1.3", stroke_dasharray="4 3")
+        f.text(x, beam - max(wo, wn) * 360 - 8, f"{lr:.0%}", cls="sm bold")
+    f.line(34, beam, 326, beam, cls="", stroke="var(--ink)", stroke_width="2.4",
+           stroke_linecap="round")
+    for ws, solid in ((old_w, False), (new_w, True)):
+        x = px(sum(wt * lr for wt, lr in zip(ws, segs)))
+        f.polygon([(x, beam + 2), (x - 10, beam + 20), (x + 10, beam + 20)],
+                  fill=ROSE if solid else "none", fill_opacity="0.5",
+                  stroke=ROSE if solid else "var(--dim)", stroke_width="1.4",
+                  stroke_dasharray=None if solid else "3 2")
+        f.text(x, beam + 36, f"{sum(wt * lr for wt, lr in zip(ws, segs)):.1%}",
+               cls="sm bold" if solid else "sm dim")
     return f
 
 
-@figure("Policy Provision Changes", "One loss shared differently after a deductible "
-        "and limit change", width=WID)
+@figure("Policy Provision Changes", "One 1,200 ground-up loss cut two ways: the old "
+        "terms pay the first 1,000 of it, the new 250 deductible and 750 limit pay "
+        "only the 750 above the deductible", width=WID)
 def policy_provision_changes() -> Fig:
     f = vcard()
 
-    f.text(BCX, 116, "a $1,200k ground-up loss ($000)", cls="sm dim")
-    for k, (title, d, L, y) in enumerate((("old: 100 xs 0, limit 1,000", 0, 1000,
-                                           158),
-                                          ("new: deductible 250, limit 750", 250,
-                                           750, 254))):
-        f.text(46, y - 14, title, cls="sm", anchor="start")
-        x0, x1, loss = 46, 314, 1200
-        scale = (x1 - x0) / loss
-        f.rect(x0, y, loss * scale, 32, rx=4, fill="var(--soft)",
-               stroke="var(--edge)", stroke_width="1.1")
-        f.rect(x0, y, d * scale, 32, rx=4, fill=AMBER, fill_opacity="0.6")
-        covered = min(loss, d + L) - d
-        f.rect(x0 + d * scale, y, covered * scale, 32, rx=4, fill=BLUE,
-               fill_opacity="0.55")
-        if loss > d + L:
-            f.rect(x0 + (d + L) * scale, y, (loss - d - L) * scale, 32, rx=4,
-                   fill=ROSE, fill_opacity="0.55")
-        f.text(x0 + d * scale + covered * scale / 2, y + 21, f"{covered:,}",
-               cls="sm")
-    f.legend_row(46, 322, [(AMBER, "insured keeps"), (BLUE, "insurer pays")],
-                 gap=140)
-    f.legend_row(46, 342, [(ROSE, "above the limit")], gap=140)
-    f.text(BCX, 374, "the loss did not change — the triangle did", cls="sm dim")
+    x0, x1, base, scale = 140, 220, 370, 260 / 1200
+
+    def py(v):
+        return base - v * scale
+
+    for lo, hi, colour, label in ((0, 250, AMBER, "deductible"),
+                                  (250, 1000, BLUE, None),
+                                  (1000, 1200, ROSE, "over limit")):
+        f.rect(x0, py(hi), x1 - x0, py(lo) - py(hi), rx=3, fill=colour,
+               fill_opacity="0.4", stroke=colour, stroke_width="1.2")
+        if label:
+            f.text((x0 + x1) / 2, (py(lo) + py(hi)) / 2 + 4, label, cls="sm")
+    f.text((x0 + x1) / 2, py(1200) - 8, "1,200 loss", cls="sm bold")
+
+    def bracket(x, lo, hi, tick):
+        f.path(f"M{x + tick},{py(lo):.1f} H{x} V{py(hi):.1f} H{x + tick}",
+               cls="thin", stroke="var(--ink)", stroke_width="1.4")
+
+    bracket(128, 0, 1000, 6)
+    f.text(120, (py(0) + py(1000)) / 2 + 4, "old 1,000", cls="sm bold",
+           anchor="end")
+    bracket(232, 250, 1000, -6)
+    f.text(240, (py(250) + py(1000)) / 2 + 4, "new 750", cls="sm bold",
+           anchor="start")
     return f
 
 
-@figure("Case Adequacy", "Average case outstanding strengthening along the calendar "
-        "diagonal", width=WID)
+@figure("Case Adequacy", "Average case outstanding at 12 and 24 months by accident "
+        "year, both stepping up together once case reserves are strengthened",
+        width=WID)
 def case_adequacy() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -0.4, 4.4, 0, 1400, left=56, right=22, top=42, bottom=76)
-    ax.frame(xticks=[0, 1, 2, 3, 4], xfmt=lambda t: AYS[int(t)],
-             yticks=[0, 700, 1400], yfmt=lambda t: f"{t:,.0f}", grid=True)
-    labels = []
-    for age, series, colour in (("at 12 months", [620, 660, 720, 900, 1180], BLUE),
-                                ("at 24 months", [880, 940, 1010, 1240, None],
-                                 AMBER)):
-        pts = [(k, v) for k, v in enumerate(series) if v is not None]
+    ax = vaxes(f, -0.4, 4.4, 0, 1400, left=56, right=22, top=28, bottom=48)
+    f.rect(ax.px(2.5), ax.y0, ax.px(4.4) - ax.px(2.5), ax.y1 - ax.y0, fill=ROSE,
+           fill_opacity="0.08", stroke="none")
+    ax.frame(xlabel="accident year", ylabel="average case", xticks=[0, 1, 2, 3, 4],
+             xfmt=lambda t: AYS[int(t)], yticks=[0, 700, 1400],
+             yfmt=lambda t: f"{t:,.0f}", grid=True)
+    for age, series, colour, at in (("12 months", [620, 660, 720, 900, 1180], BLUE,
+                                     (1, 660, 18)),
+                                    ("24 months", [880, 940, 1010, 1240], AMBER,
+                                     (1, 940, -10))):
+        pts = list(enumerate(series))
         ax.polyline(pts, colour=colour, width=2.2)
         for x, y in pts:
             ax.point(x, y, colour=colour, r=3.2)
-        labels.append((colour, age))
-    f.legend_row(120, 106, labels, gap=104)
-    f.text(BCX, ax.y1 + 30, "average case outstanding by accident year",
-           cls="sm dim")
-    f.text(BCX, BY1 - 16, "both ages jump together in 2023 — a calendar",
-           cls="sm dim")
-    f.text(BCX, BY1 + 2, "effect, so reported factors must be restated",
-           cls="sm dim")
+        ax.label(at[0], at[1], age, cls="sm bold", dy=at[2])
+    ax.label(3.45, 1400, "strengthened", cls="sm dim", dy=14)
     return f
 
 

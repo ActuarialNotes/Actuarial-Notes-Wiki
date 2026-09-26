@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:f9144f443c8775ec55051c567ee21e70481c63380dec4cb2d6906a42f178df9e
+  content_hash: sha256:da2100014da4ea8fbbea884decd51b9274c81bd6234ffd085cbb10d9086501ef
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,7 +22,6 @@ verification:
   - **Reinsurance:** [[Reinstatements|reinstatement premiums]] triggered by losses to a layer, swing-rated or loss-rated premiums, and loss-sensitive commissions such as [[Sliding Scale Commissions|sliding scales]] and [[Profit Commission|profit commissions]].
 - **It must move with the loss reserve.** If IBNR rises on a loss-sensitive book, so does the premium that those losses will generate. Estimating each on its own basis misstates the net position. Teng and Perkins' PDLD method makes the link explicit by projecting premium development from loss development.
 - **Collectability.** Premium billed after the fact carries credit risk. Only the collectable, or admitted, portion supports the balance sheet, and collateral held against it matters.
-- Under IFRS 17 in Canada, expected premium adjustments that depend on claims form part of an insurance contract's fulfilment cash flows rather than a separate reserve (see [[IFRS 17]]). The estimation problem is the same.
 
 > [!example]- Reinstatement Premium Owed on a Catastrophe Layer {Example}
 > A cedant buys a $\$10$M xs $\$10$M catastrophe layer for an annual premium of $\$2$M. It has one reinstatement at $100\%$, pro rata as to amount. After a hurricane, reported losses to the layer are $\$4$M and the actuary estimates layer IBNR of $\$2$M. Reinstatement premium has been billed on reported losses only.

@@ -699,134 +699,161 @@ def _tree(f: Fig, x, y, depth, spread, dy, colour, leaf_colours=None, r=7,
     return out
 
 
-@figure("Statistical Learning", "The supervised learning loop from training data "
-        "through a fitted model to test error", width=WID)
+@figure("Statistical Learning", "A curve f̂ fitted through filled training points, "
+        "judged by the gaps to hollow test points it never saw", width=WID)
 def statistical_learning() -> Fig:
     f = vcard()
 
-    steps = [("training data", BLUE), ("fit f̂", VIOLET), ("predict", GREEN),
-             ("test error", ROSE)]
-    for i, (lab, colour) in enumerate(steps):
-        y = 108 + i * 62
-        f.box(74, y, 212, 40, label=lab, colour=colour, label_cls="sm bold")
-        if i < len(steps) - 1:
-            f.arrow(BCX, y + 42, BCX, y + 58, colour="var(--axis)", width=1.4)
-    f.text(BCX, 366, "training error always falls with flexibility —",
-           cls="sm dim")
-    f.text(BCX, 382, "only test error decides", cls="sm dim")
+    r = _Rand(5)
+    true_f = lambda x: 2.2 + 0.55 * x + 1.5 * math.sin(0.85 * x)
+    fit = lambda x: 2.35 + 0.53 * x + 1.35 * math.sin(0.85 * x - 0.05)
+    ax = vaxes(f, 0, 10, 1.8, 10, left=36, right=14, top=24, bottom=40)
+    ax.frame(xlabel="X", ylabel="Y", xticks=[], yticks=[])
+    ax.curve(fit, colour=VIOLET, width=2.6, xa=0.3, xb=9.7)
+    for _ in range(16):
+        x = 0.4 + 9.2 * r.u()
+        ax.point(x, true_f(x) + r.n(0, 0.7), colour=BLUE, r=3.4)
+    for x in (1.3, 3.1, 4.6, 6.2, 7.4, 8.9):
+        y = true_f(x) + r.n(0, 0.9)
+        if x == 6.2:
+            ax.label(x, y, "test", cls="sm bold", dy=18)
+        f.line(ax.px(x), ax.py(y), ax.px(x), ax.py(fit(x)), cls="thin",
+               stroke=ROSE, stroke_width="1.8")
+        f.circle(ax.px(x), ax.py(y), 4.2, fill="var(--surf)", stroke=ROSE,
+                 stroke_width="1.8")
+    ax.label(9.7, fit(9.7), "f̂", cls="bold", anchor="start", dx=6, dy=5)
+    ax.label(5.2, 6.4, "training", cls="sm bold", fill=BLUE)
     return f
 
 
-@figure("Supervised Learning", "Labelled points fitted by a boundary, against "
-        "unlabelled points with no answer to fit", width=WID)
+@figure("Supervised Learning", "Labelled claim and no-claim points on either side of "
+        "a fitted boundary f̂", width=WID)
 def supervised_learning() -> Fig:
     f = vcard()
 
     r = _Rand(11)
-    ax = vaxes(f, 0, 10, 0, 10, left=34, right=14, top=34, bottom=76)
-    ax.frame(xticks=[], yticks=[], arrows=False, grid=False)
+    ax = vaxes(f, 0, 10, 0, 10, left=20, right=6, top=6, bottom=10)
     f.rect(ax.x0, ax.y0, ax.x1 - ax.x0, ax.y1 - ax.y0, rx=6, fill="var(--soft)",
            stroke="var(--edge)")
     for _ in range(26):
         x, y = 1 + 8 * r.u(), 1 + 8 * r.u()
         pos = y > 0.85 * x + 1.1
-        ax.point(x, y, colour=ROSE if pos else BLUE, r=3.4)
+        ax.point(x, y, colour=ROSE if pos else BLUE, r=3.8)
     ax.polyline([(0.4, 1.44), (9.6, 9.26)], colour="var(--ink)", width=2)
-    ax.label(7.4, 9.0, "f̂", cls="sm bold")
-    f.legend_row(BX0 + 34, BY1 - 62, [(ROSE, "claim"), (BLUE, "no claim")], gap=104)
-    f.text(BCX, BY1 - 36, "regression → numeric Y · classification → class Y",
-           cls="sm dim")
-    f.text(BCX, BY1 - 2, "scored against the label it was given", cls="sm dim")
+    ax.label(8.6, 8.4, "f̂", cls="bold", anchor="start", dx=8)
+    ax.label(1.6, 9.2, "claim", cls="sm bold", anchor="start")
+    ax.label(8.4, 0.6, "no claim", cls="sm bold", anchor="end")
     return f
 
 
-@figure("Unsupervised Learning", "Unlabelled points whose structure has to be "
-        "inferred without any response", width=WID)
+@figure("Unsupervised Learning", "Unlabelled grey points with no response, and the "
+        "three groups hiding in them circled", width=WID)
 def unsupervised_learning() -> Fig:
     f = vcard()
 
     r = _Rand(23)
-    ax = vaxes(f, 0, 10, 0, 10, left=34, right=14, top=34, bottom=74)
-    ax.frame(xticks=[], yticks=[], arrows=False)
+    ax = vaxes(f, 0, 10, 0, 10, left=20, right=6, top=6, bottom=10)
     f.rect(ax.x0, ax.y0, ax.x1 - ax.x0, ax.y1 - ax.y0, rx=6, fill="var(--soft)",
            stroke="var(--edge)")
     for cx, cy in ((2.8, 7.2), (7.2, 7.6), (5.2, 2.8)):
         for _ in range(9):
             ax.point(cx + r.n(0, 0.85), cy + r.n(0, 0.75), colour="var(--dim)",
-                     r=3.2)
+                     r=3.4)
     for cx, cy in ((2.8, 7.2), (7.2, 7.6), (5.2, 2.8)):
-        f.circle(ax.px(cx), ax.py(cy), 30, fill="none", stroke=VIOLET,
-                 stroke_width="1.4", stroke_dasharray="4 3")
-    f.text(BCX, BY1 - 50, "every point the same colour — there is", cls="sm dim")
-    f.text(BCX, BY1 - 34, "no label to score a fit against", cls="sm dim")
-    f.text(BCX, BY1 - 2, "PCA and clustering, judged by judgement", cls="sm dim")
+        f.circle(ax.px(cx), ax.py(cy), 44, fill="none", stroke=VIOLET,
+                 stroke_width="1.5", stroke_dasharray="4 3")
     return f
 
 
-@figure("Bootstrap", "One sample resampled with replacement into many bootstrap "
-        "samples", width=WID)
+@figure("Bootstrap", "A sample of six values and four resamples drawn from it with "
+        "replacement, repeated draws shaded darker", width=WID)
 def bootstrap() -> Fig:
     f = vcard()
 
     orig = [1, 2, 3, 4, 5, 6]
-    draws = [[3, 1, 5, 3, 6, 2], [2, 2, 4, 6, 1, 4], [5, 3, 3, 1, 6, 6]]
-    cw = 30
-    x0 = BCX - len(orig) * cw / 2
+    draws = [("*1", [3, 1, 5, 3, 6, 2]), ("*2", [2, 2, 4, 6, 1, 4]),
+             ("*3", [5, 3, 3, 1, 6, 6]), ("*B", [4, 6, 6, 2, 5, 1])]
+    cw, ch = 36, 28
+    x0 = BCX - len(orig) * cw / 2 + 10
     for j, v in enumerate(orig):
-        f.rect(x0 + j * cw + 2, 100, cw - 4, 24, rx=3, fill="var(--dim)",
-               fill_opacity="0.3", stroke="var(--edge)")
-        f.text(x0 + j * cw + cw / 2, 117, str(v), cls="sm")
-    f.text(BCX, 92, "the observed sample", cls="sm dim")
-    for i, row in enumerate(draws):
-        y = 164 + i * 44
+        f.rect(x0 + j * cw + 2, 90, cw - 4, ch, rx=3, fill="var(--dim)",
+               fill_opacity="0.3", stroke="var(--ink)", stroke_width="1.2")
+        f.text(x0 + j * cw + cw / 2, 109, str(v), cls="bold")
+    f.arrow(BCX + 10, 126, BCX + 10, 152, colour="var(--ink)", width=1.8)
+    for i, (name, row) in enumerate(draws):
+        y = 162 + i * 48 + (18 if i == 3 else 0)
         seen = set()
         for j, v in enumerate(row):
             dup = v in seen
             seen.add(v)
-            f.rect(x0 + j * cw + 2, y, cw - 4, 24, rx=3, fill=BLUE,
-                   fill_opacity="0.5" if dup else "0.24", stroke=BLUE,
+            f.rect(x0 + j * cw + 2, y, cw - 4, ch, rx=3, fill=BLUE,
+                   fill_opacity="0.55" if dup else "0.2", stroke=BLUE,
                    stroke_width="1")
-            f.text(x0 + j * cw + cw / 2, y + 17, str(v), cls="sm")
-        f.text(x0 - 10, y + 17, f"*{i+1}", cls="sm dim", anchor="end")
-    f.text(BCX, 316, "darker = a repeat draw", cls="sm dim")
-    f.text(BCX, 342, "(1 − 1/n)ⁿ → e⁻¹ : ~37% of rows are left out", cls="sm")
-    f.text(BCX, BY1 - 2, "those left out are the out-of-bag set", cls="sm dim")
+            f.text(x0 + j * cw + cw / 2, y + 19, str(v), cls="sm")
+        f.text(x0 - 10, y + 19, name, cls="sm dim", anchor="end")
+    f.text(BCX + 10, 318, "⋮", cls="bold")
     return f
 
 
-@figure("Regularization", "Ridge shrinking coefficients smoothly while lasso "
-        "drives them to zero", width=WID)
+@figure("Regularization", "RSS contour ellipses around the least-squares estimate "
+        "β̂, first touching the lasso diamond at a corner where β₁ = 0 and the ridge "
+        "circle at a point where neither coefficient is zero", width=WID)
 def regularization() -> Fig:
     f = vcard()
 
-    for panel, (name, colour, lasso) in enumerate((("ridge (ℓ₂)", BLUE, False),
-                                                   ("lasso (ℓ₁)", VIOLET, True))):
-        y0 = 92 + panel * 148
-        ax = Axes(f, BX0 + 42, y0 + 16, BX1 - 16, y0 + 108, 0, 6, -1.1, 1.5)
-        ax.frame(xticks=[2, 4, 6], yticks=[-1, 0, 1], grid=True, arrows=False)
-        f.text(BCX, y0 + 8, name, cls="sm bold", fill=colour)
-        starts = [1.30, 0.85, -0.90, 0.35, -0.20]
-        for i, b in enumerate(starts):
-            if lasso:
-                hit = 0.7 + 1.0 * abs(b)
-                fn = lambda t, b=b, h=hit: (0 if t >= h else b * (1 - t / h))
-            else:
-                fn = lambda t, b=b: b / (1 + 0.42 * t)
-            ax.curve(fn, colour=SERIES[i % len(SERIES)], width=1.8, n=90)
-        ax.hline(0, colour="var(--axis)", dash=False, x_to=6)
-    f.text(BCX, BY1 - 2, "λ → increasing;  lasso zeroes, ridge only shrinks",
-           cls="sm dim")
+    ax = vaxes(f, -1.4, 2.7, -1.2, 3.0, left=22, right=18, top=14, bottom=18)
+    c = (0.8, 1.4)                                # the least-squares estimate
+    th, a1, a2 = math.radians(-40), 1.0, 0.4      # the RSS ellipses' tilt and axes
+    ct, st = math.cos(th), math.sin(th)
+
+    def rss(b1, b2):
+        u, v = b1 - c[0], b2 - c[1]
+        p, q = ct * u + st * v, -st * u + ct * v
+        return (p / a1) ** 2 + (q / a2) ** 2
+
+    def ellipse(level, colour, width, opacity="1"):
+        k = math.sqrt(level)
+        pts = []
+        for i in range(121):
+            t = 2 * math.pi * i / 120
+            p, q = a1 * k * math.cos(t), a2 * k * math.sin(t)
+            pts.append(ax.p(c[0] + ct * p - st * q, c[1] + st * p + ct * q))
+        f.poly(pts, cls="curve", stroke=colour, stroke_width=str(width),
+               stroke_opacity=opacity)
+
+    ring = [2 * math.pi * i / 2000 for i in range(2000)]
+    lasso = min(((math.cos(t) / (abs(math.cos(t)) + abs(math.sin(t))),
+                  math.sin(t) / (abs(math.cos(t)) + abs(math.sin(t)))) for t in ring),
+                key=lambda b: rss(*b))
+    ridge = min(((math.cos(t), math.sin(t)) for t in ring), key=lambda b: rss(*b))
+
+    f.arrow(ax.px(-1.35), ax.py(0), ax.px(2.6), ax.py(0), colour="var(--axis)", width=1.1)
+    f.arrow(ax.px(0), ax.py(-1.15), ax.px(0), ax.py(2.9), colour="var(--axis)", width=1.1)
+    f.polygon([ax.p(1, 0), ax.p(0, 1), ax.p(-1, 0), ax.p(0, -1)], fill=VIOLET,
+              fill_opacity="0.2", stroke=VIOLET, stroke_width="1.6")
+    f.circle(ax.px(0), ax.py(0), ax.px(1) - ax.px(0), fill=BLUE, fill_opacity="0.12",
+             stroke=BLUE, stroke_width="1.6")
+    for level in (rss(*lasso), rss(*ridge)):
+        ellipse(level, AMBER, 1.8)
+    ellipse(rss(*lasso) * 0.2, AMBER, 1.2, "0.55")
+    ax.point(*c, colour=AMBER, r=4, label="β̂", dx=10, dy=-6, cls="bold")
+    ax.point(*lasso, colour=VIOLET, r=4.4)
+    ax.point(*ridge, colour=BLUE, r=4.4)
+    ax.label(-0.7, -0.62, "lasso", cls="sm bold", anchor="end")
+    ax.label(0.62, -0.95, "ridge", cls="sm bold", anchor="start")
+    ax.label(2.6, 0, "β₁", cls="sm dim", anchor="end", dy=16)
+    ax.label(0, 2.9, "β₂", cls="sm dim", anchor="start", dx=8, dy=6)
     return f
 
 
-@figure("K-Nearest Neighbors", "A query point classified by a vote of its five "
-        "nearest neighbours", width=WID)
+@figure("K-Nearest Neighbors", "A query point x₀ inside a dashed circle reaching its "
+        "five nearest neighbours, three blue and two rose, so it is classed blue",
+        width=WID)
 def knn() -> Fig:
     f = vcard()
 
     r = _Rand(31)
-    ax = vaxes(f, 0, 10, 0, 10, left=30, right=14, top=34, bottom=74)
-    ax.frame(xticks=[], yticks=[], arrows=False)
+    ax = vaxes(f, 0, 10, 0, 10, left=20, right=6, top=6, bottom=10)
     f.rect(ax.x0, ax.y0, ax.x1 - ax.x0, ax.y1 - ax.y0, rx=6, fill="var(--soft)",
            stroke="var(--edge)")
     q = (5.0, 5.2)
@@ -840,80 +867,80 @@ def knn() -> Fig:
              abs(ax.px(rad) - ax.px(0)), fill=GREEN, fill_opacity="0.10",
              stroke=GREEN, stroke_width="1.3", stroke_dasharray="4 3")
     for i, (x, y, pos) in enumerate(pts):
-        ax.point(x, y, colour=ROSE if pos else BLUE, r=3.8 if i < 5 else 3.0)
-    f.circle(ax.px(q[0]), ax.py(q[1]), 5, fill="var(--surf)", stroke="var(--ink)",
+        ax.point(x, y, colour=ROSE if pos else BLUE, r=4.4 if i < 5 else 3.2)
+    f.circle(ax.px(q[0]), ax.py(q[1]), 5.5, fill="var(--surf)", stroke="var(--ink)",
              stroke_width="1.8")
     ax.label(q[0], q[1], "x₀", cls="sm bold", dy=-11)
-    f.text(BCX, BY1 - 50, "k = 5 — three blue, two rose ⇒ blue", cls="sm")
-    f.text(BCX, BY1 - 30, "k = 1 interpolates: no bias, all variance", cls="sm dim")
-    f.text(BCX, BY1 - 2, "k large oversmooths: all bias, no variance",
-           cls="sm dim")
+    ax.label(q[0] + rad * 0.72, q[1] - rad * 0.72, "k = 5", cls="sm bold",
+             anchor="start", dx=6, dy=10)
     return f
 
 
-@figure("Decision Tree", "A tree of binary splits and the rectangles it carves "
-        "out of predictor space", width=WID)
+@figure("Decision Tree", "Predictor space cut by a first split on age at 25 and a "
+        "second on power at 150 into three rectangular regions R₁, R₂ and R₃",
+        width=WID)
 def decision_tree() -> Fig:
     f = vcard()
 
-    f.circle(BCX, 106, 9, fill=BLUE, fill_opacity="0.2", stroke=BLUE,
-             stroke_width="1.5")
-    f.text(BCX, 92, "age < 25?", cls="sm dim")
-    for sgn, lab in ((-1, "yes"), (1, "no")):
-        x = BCX + sgn * 74
-        f.line(BCX + sgn * 6, 113, x, 146, cls="thin", stroke="var(--axis)",
-               stroke_width="1.2")
-        f.text(BCX + sgn * 42, 128, lab, cls="sm dim")
-    f.circle(BCX - 74, 154, 9, fill=BLUE, fill_opacity="0.2", stroke=BLUE,
-             stroke_width="1.5")
-    f.text(BCX - 74, 142, "power > 150?", cls="sm dim")
-    f.rect(BCX + 56, 146, 36, 18, rx=3, fill=GREEN, fill_opacity="0.5")
-    f.text(BCX + 74, 159, "R₃", cls="sm")
-    for sgn, lab in ((-1, "R₁"), (1, "R₂")):
-        x = BCX - 74 + sgn * 38
-        f.line(BCX - 74 + sgn * 6, 161, x, 190, cls="thin", stroke="var(--axis)",
-               stroke_width="1.2")
-        f.rect(x - 18, 190, 36, 18, rx=3, fill=GREEN, fill_opacity="0.5")
-        f.text(x, 203, lab, cls="sm")
-
-    ax = Axes(f, BX0 + 46, 236, BX1 - 24, 348, 0, 1, 0, 1)
-    ax.frame(xticks=[], yticks=[], arrows=False)
-    f.rect(ax.x0, ax.y0, ax.x1 - ax.x0, ax.y1 - ax.y0, rx=4, fill="var(--soft)",
-           stroke="var(--edge)")
-    xs, ys = ax.px(0.45), ax.py(0.55)
-    f.rect(ax.x0, ax.y0, xs - ax.x0, ys - ax.y0, fill=BLUE, fill_opacity="0.16")
-    f.rect(ax.x0, ys, xs - ax.x0, ax.y1 - ys, fill=AMBER, fill_opacity="0.16")
-    f.rect(xs, ax.y0, ax.x1 - xs, ax.y1 - ax.y0, fill=GREEN, fill_opacity="0.16")
-    f.line(xs, ax.y0, xs, ax.y1, cls="thin", stroke="var(--ink)", stroke_width="1.4")
-    f.line(ax.x0, ys, xs, ys, cls="thin", stroke="var(--ink)", stroke_width="1.4")
-    for lab, px, py in (("R₁", 0.22, 0.28), ("R₂", 0.22, 0.78), ("R₃", 0.72, 0.5)):
-        ax.label(px, py, lab, cls="sm bold")
-    f.text(BCX, BY1 - 2, "age →,  power ↑", cls="sm dim")
+    r = _Rand(19)
+    ax = vaxes(f, 0, 1, 0, 1, left=44, right=14, top=22, bottom=44)
+    xs, ys = 0.45, 0.55
+    regions = ((0, 0, xs, ys, AMBER, "R₁"), (0, ys, xs, 1, BLUE, "R₂"),
+               (xs, 0, 1, 1, GREEN, "R₃"))
+    for xa, ya, xb, yb, colour, _ in regions:
+        f.rect(ax.px(xa), ax.py(yb), ax.px(xb) - ax.px(xa), ax.py(ya) - ax.py(yb),
+               fill=colour, fill_opacity="0.16")
+    for _ in range(34):
+        x, y = 0.04 + 0.92 * r.u(), 0.04 + 0.92 * r.u()
+        colour = GREEN if x > xs else (BLUE if y > ys else AMBER)
+        ax.point(x, y, colour=colour, r=2.8)
+    ax.frame(xlabel="age", ylabel="power", xticks=[xs], yticks=[ys],
+             xfmt=lambda t: "25", yfmt=lambda t: "150", arrows=False)
+    f.line(ax.px(xs), ax.y0, ax.px(xs), ax.y1, cls="thin", stroke="var(--ink)",
+           stroke_width="2.4")
+    f.line(ax.x0, ax.py(ys), ax.px(xs), ax.py(ys), cls="thin", stroke="var(--ink)",
+           stroke_width="1.8")
+    for xa, ya, xb, yb, _, lab in regions:
+        cx, cy = (xa + xb) / 2, (ya + yb) / 2
+        f.circle(ax.px(cx), ax.py(cy), 14, fill="var(--surf)", stroke="var(--edge)")
+        ax.label(cx, cy, lab, cls="bold", dy=4)
     return f
 
 
-@figure("Tree Pruning", "The cost-complexity score picking a subtree as alpha "
-        "rises", width=WID)
+@figure("Tree Pruning", "A large tree cut back to five leaves: the kept branches drawn "
+        "solid, the pruned subtrees below them dashed and faded", width=WID)
 def tree_pruning() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 9, 230, 580, left=48, right=20, top=42, bottom=76)
-    ax.frame(xticks=[1, 3, 5, 8], yticks=[300, 400, 500], grid=True)
-    data = [(1, 520), (3, 340), (5, 285), (8, 262)]
-    ax.polyline(data, colour="var(--dim)", width=1.8, dash=True)
-    ax.polyline([(n, r + 25 * n) for n, r in data], colour=BLUE, width=2.4)
-    for n, r in data:
-        ax.point(n, r + 25 * n, colour=GREEN if n == 5 else BLUE,
-                 r=5 if n == 5 else 3.4)
-    ax.label(5, 410, "best at α = 25", cls="sm bold", fill=GREEN, dy=-12)
-    ax.label(7.4, 262, "RSS", cls="sm dim", anchor="end", dy=14)
-    ax.label(1.2, 545, "RSS + α|T|", cls="sm bold", fill=BLUE, anchor="start",
-             dy=-8)
-    f.text(BCX, ax.y1 + 32, "terminal nodes |T|", cls="sm dim")
-    f.text(BCX, ax.y1 + 50, "raising α collapses the tree from the leaves up",
-           cls="sm dim")
-    f.text(BCX, BY1 - 2, "grow first, prune second — never stop early",
-           cls="sm dim")
+    depth, top, dy, x0, w = 4, 100, 62, BX0 + 6, BX1 - BX0 - 12
+    pos = lambda lv, i: (x0 + (i + 0.5) * w / 2 ** lv, top + lv * dy)
+    leaves = {(2, 0), (3, 2), (3, 3), (2, 2), (2, 3)}     # the pruned tree's |T| = 5
+
+    def kept(lv, i):
+        """Still in the pruned tree: no leaf of it lies above this node."""
+        return not any(lv > a and i >> (lv - a) == b for a, b in leaves)
+
+    for lv in range(depth):
+        for i in range(2 ** lv):
+            px_, py_ = pos(lv, i)
+            for c in (2 * i, 2 * i + 1):
+                cx, cy = pos(lv + 1, c)
+                on = kept(lv + 1, c)
+                f.line(px_, py_, cx, cy, cls="thin" if on else "thin dash",
+                       stroke="var(--ink)" if on else "var(--axis)",
+                       stroke_width="1.6" if on else "1.1")
+    for lv in range(depth + 1):
+        for i in range(2 ** lv):
+            x, y = pos(lv, i)
+            if (lv, i) in leaves:
+                f.rect(x - 9, y - 7, 18, 14, rx=3, fill=GREEN, fill_opacity="0.6")
+                f.line(x - 12, y + 18, x + 12, y + 18, cls="", stroke=ROSE,
+                       stroke_width="2.4", stroke_linecap="round")
+            elif kept(lv, i):
+                f.circle(x, y, 7, fill=BLUE, fill_opacity="0.25", stroke=BLUE,
+                         stroke_width="1.5")
+            else:
+                f.circle(x, y, 4, fill="var(--axis)", fill_opacity="0.6")
     return f
 
 

@@ -1,7 +1,6 @@
 import { createContext, useCallback, useContext, useLayoutEffect, useState, type ReactNode } from 'react'
 import { useLocation } from 'react-router-dom'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
-import type { ConceptAssignment } from '@/lib/studyPlan'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { WikiFloatingSearch } from '@/components/wiki/WikiFloatingSearch'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
@@ -11,19 +10,6 @@ import { setWikiIndexBundle } from '@/lib/wikiIndex'
 
 setWikiContentLookup((path: string) => wikiBundle.files[path])
 setWikiIndexBundle(wikiBundle.index)
-
-export interface StudyPlanHeaderData {
-  items: { name: string }[]
-  onSelect: (index: number) => void
-  /** Exam key ('P' | 'FM' | 'MAS-I' | …) — scopes the cross-device completion read. */
-  examProgressKey?: string | null
-  /**
-   * The cached plan's assignments, so the header can derive each concept's target
-   * for today and tick off the ones already done. Mastery is read by the header
-   * itself, which already subscribes to it for the unlock state.
-   */
-  assignments?: ConceptAssignment[]
-}
 
 interface WikiPageContextValue {
   setPageRefs: (refs: WikiEntryRef[]) => void
@@ -38,7 +24,6 @@ interface WikiPageContextValue {
   setPageIcon: (icon: ReactNode) => void
   setPageTitleBadge: (badge: ReactNode) => void
   setBackLink: (link: ReactNode) => void
-  setStudyPlan: (plan: StudyPlanHeaderData | null) => void
   setIsInDevelopment: (v: boolean) => void
   setIsBeta: (v: boolean) => void
 }
@@ -58,7 +43,6 @@ export function WikiLayout({ children }: { children: ReactNode }) {
   const [pageIcon, setPageIconState] = useState<ReactNode>(null)
   const [pageTitleBadge, setPageTitleBadgeState] = useState<ReactNode>(null)
   const [backLink, setBackLinkState] = useState<ReactNode>(null)
-  const [studyPlan, setStudyPlanState] = useState<StudyPlanHeaderData | null>(null)
   const [isInDevelopment, setIsInDevelopmentState] = useState(false)
   const [isBeta, setIsBetaState] = useState(false)
   const location = useLocation()
@@ -71,7 +55,6 @@ export function WikiLayout({ children }: { children: ReactNode }) {
   const setPageIcon = useCallback((icon: ReactNode) => setPageIconState(icon), [])
   const setPageTitleBadge = useCallback((badge: ReactNode) => setPageTitleBadgeState(badge), [])
   const setBackLink = useCallback((link: ReactNode) => setBackLinkState(link), [])
-  const setStudyPlan = useCallback((plan: StudyPlanHeaderData | null) => setStudyPlanState(plan), [])
   const setIsInDevelopment = useCallback((v: boolean) => setIsInDevelopmentState(v), [])
   const setIsBeta = useCallback((v: boolean) => setIsBetaState(v), [])
 
@@ -98,7 +81,6 @@ export function WikiLayout({ children }: { children: ReactNode }) {
     setPageIconState(null)
     setPageTitleBadgeState(null)
     setBackLinkState(null)
-    setStudyPlanState(null)
     setIsInDevelopmentState(false)
     setIsBetaState(false)
 
@@ -111,7 +93,7 @@ export function WikiLayout({ children }: { children: ReactNode }) {
   }, [location.pathname, location.search, closeOnNavigation])
 
   return (
-    <WikiPageContext.Provider value={{ setPageRefs, setExamId, setPageTitle, setPageIcon, setPageTitleBadge, setBackLink, setStudyPlan, setIsInDevelopment, setIsBeta }}>
+    <WikiPageContext.Provider value={{ setPageRefs, setExamId, setPageTitle, setPageIcon, setPageTitleBadge, setBackLink, setIsInDevelopment, setIsBeta }}>
       <div className="min-h-screen flex flex-col">
         <WikiFloatingSearch
           pageRefs={pageRefs}
@@ -119,7 +101,6 @@ export function WikiLayout({ children }: { children: ReactNode }) {
           pageIcon={pageIcon}
           pageTitleBadge={pageTitleBadge}
           backLink={backLink}
-          studyPlan={studyPlan}
           isInDevelopment={isInDevelopment}
           isBeta={isBeta}
         />

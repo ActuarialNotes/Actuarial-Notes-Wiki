@@ -4,14 +4,14 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:764ed9886324e2b368848eef2871a08d4395fbbdfce4767e0b731df9f5999a9f
+  content_hash: sha256:ee9d0e6112abf432b91b1a1c285d9fa1801f01099f635495daa2d4afb2e23347
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Actuarial Principles.md
 ---
 
-**Actuarial Principles**, in CAS usage, are the CAS **Statements of Principles**: short documents setting out what makes a property-casualty rate, a reserve estimate or a valuation actuarially sound. The [[Actuarial Standards of Practice|standards of practice]] were later written on this foundation. The Exam 7 preamble's "basic Principles and Standards of Practice for unpaid claim estimation" is naturally read as the principles on **unpaid claims** together with the ASOPs.
+**Actuarial Principles**, in CAS usage, are the CAS **Statements of Principles**: short documents setting out what makes a property-casualty rate, a reserve estimate or a valuation actuarially sound. The statements describe themselves as the foundation for actuarial procedures and [[Actuarial Standards of Practice|standards of practice]]. The Exam 7 preamble's "basic Principles and Standards of Practice for unpaid claim estimation" is naturally read as the principles on **unpaid claims** together with the ASOPs.
 
 > $$\text{Rate} = \widehat{E}\,[\text{future costs of the risk transfer}]$$
 
@@ -21,7 +21,7 @@ verification:
   - **Ratemaking** (May 1988): a rate is an estimate of the expected value of future costs and provides for all of them; see [[Principles of Ratemaking]]. It was rescinded in December 2020 and then reinstated for reference in U.S.-regulated ratemaking.
   - **Loss and LAE Reserves** (May 1988): replaced in November 2014 by the **Statement of Principles Regarding Property and Casualty Unpaid Claims Estimates**.
   - **Valuations** (September 1989).
-- **Why two were rescinded.** In December 2020 the CAS Board rescinded all three. It judged them unnecessary now that the ASOPs cover the same ground, and noted that principles, unlike standards, are not enforceable under the Code of Professional Conduct. Only the ratemaking statement was restored. The unpaid claims statement remains available as a historical and educational document, and its content is what Exam 7 means by "Principles".
+- **Why they were rescinded.** In December 2020 the CAS Board rescinded all three. It judged them unnecessary now that the ASOPs cover the same ground, and noted that principles, unlike standards, are not enforceable under the Code of Professional Conduct. Only the ratemaking statement was restored. The unpaid claims statement remains available as a historical and educational document, and it is still the clearest statement of the principles Exam 7 asks candidates to apply.
 - **The three unpaid claims principles (2014).**
   1. An unpaid claims estimate is **reasonable** if it comes from reasonable assumptions and appropriate methods or models, and has been validated by appropriate indicators or tests. All of this is judged as of the review and valuation dates, in the context of the **intended measure**.
   2. The estimate is **inherently uncertain**, so "a range of estimates can be reasonable". This is the second block above; see [[Range of Indications]].
@@ -29,7 +29,7 @@ verification:
 - **Definitions that do work.**
   - The **valuation date** is the date through which transactions are in the data. The **review date** is the later date through which known information is reflected. The **accounting date** is the cutoff for what counts as paid or unpaid.
   - The **intended measure** is what the number is meant to be. Examples include the mean, median, mode, actuarial central estimate, a mean plus risk margin, a high or low estimate, or a percentile, each nominal or discounted.
-- **Scope.** The statement expressly covers insurance, **reinsurance, self-insurance** and other risk transfer or funding mechanisms. It also applies beyond financial reporting, for example to commutations, capital adequacy and ratemaking. That breadth is why Exam 7 applies it to excess and [[Reinsurance Reserving|reinsurance]] liabilities.
+- **Scope.** The statement expressly covers insurance, **reinsurance, self-insurance** and other risk transfer or funding mechanisms. It also applies beyond financial reporting, for example to commutations, capital adequacy and ratemaking. That breadth is what makes it apply to the excess and [[Reinsurance Reserving|reinsurance]] liabilities named in Exam 7's preamble.
 - **U.S. standards.** In the U.S. the enforceable counterparts are [[ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007)|ASOP 43]] for unpaid claim estimates and ASOP 36 for statements of opinion on reserves. In Canada the equivalent role is played by the CIA's [[Standards of Practice]].
 
 > [!example]- Was the Old Estimate Wrong? {Example}

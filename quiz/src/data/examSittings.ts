@@ -204,3 +204,27 @@ export function formatSittingDate(sitting: ExamSitting): string {
   }
   return `${months[start.getMonth()]} ${start.getDate()} – ${months[end.getMonth()]} ${end.getDate()}, ${end.getFullYear()}`
 }
+
+/** Whether `date` (ISO YYYY-MM-DD) falls inside the sitting's window. */
+export function sittingContains(sitting: ExamSitting, date: string | null | undefined): boolean {
+  if (!date) return false
+  if (sitting.endDate) return date >= sitting.startDate && date <= sitting.endDate
+  return date === sitting.startDate
+}
+
+/**
+ * The sitting a study guide is being read *for* — its version. The reader's
+ * own exam date wins when it lands in one of the upcoming sittings; otherwise
+ * it is the next sitting. Null when no upcoming sitting is known, in which case
+ * the page names no version rather than inventing one.
+ */
+export function currentSitting(sittings: ExamSitting[], targetDate: string | null | undefined): ExamSitting | null {
+  return sittings.find(s => sittingContains(s, targetDate)) ?? sittings[0] ?? null
+}
+
+/** A sitting named as a version: its month and year, e.g. "Nov 2026". */
+export function sittingVersionLabel(sitting: ExamSitting): string {
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+  const [year, month] = sitting.startDate.split('-').map(Number)
+  return `${months[month - 1]} ${year}`
+}

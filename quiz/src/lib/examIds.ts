@@ -17,6 +17,10 @@ export const EXAM_LABEL_TO_ID: Record<string, string> = {
   'Exam MAS-I': 'MAS-I',
   'Exam MAS-II': 'MAS-II',
   'Exam 5': 'CAS-5',
+  'Exam 7': 'CAS-7',
+  // Exam 9's bank so far is the ERM questions from the 2012–2019 Exam 7 papers
+  // (`originally_exam: "Exam 7"`) — CAS moved Brehm's ERM to Exam 9.
+  'Exam 9': 'CAS-9',
 }
 
 export const EXAM_ID_TO_LABEL: Record<string, string> = Object.fromEntries(

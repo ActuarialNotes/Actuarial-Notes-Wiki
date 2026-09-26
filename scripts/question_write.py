@@ -48,10 +48,10 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 # Frontmatter key order, matching the files already in the bank.
 KEY_ORDER = [
-    "id", "exam", "topic", "learning_objective", "difficulty", "type",
-    "year", "session", "wiki_link", "answer", "points",
+    "id", "exam", "originally_exam", "topic", "learning_objective", "off_syllabus",
+    "difficulty", "type", "year", "session", "wiki_link", "answer", "points",
 ]
-QUOTED_KEYS = {"id", "exam", "topic", "learning_objective", "answer"}
+QUOTED_KEYS = {"id", "exam", "originally_exam", "topic", "learning_objective", "answer"}
 
 
 def _num(value) -> str:
@@ -69,14 +69,33 @@ def _scalar(key: str, value) -> str:
     return str(value)
 
 
+def target_bank(record: dict, judgment: dict) -> str:
+    """The bank a question is written into.
+
+    A paper's questions land in its own exam's bank unless the review moves
+    one: when a syllabus has since handed its material to another exam, the
+    judgment names that exam's bank (`"bank": "exam-9"` for an ERM question
+    off an old Exam 7 paper), and the file records where it was really sat.
+    """
+    return judgment.get("bank") or record["bank"]
+
+
 def frontmatter(record: dict, judgment: dict) -> str:
     """The YAML block, in canonical key order, omitting what does not apply."""
-    bank = record["bank"]
+    bank = target_bank(record, judgment)
+    moved = bank != record["bank"]
     values: dict[str, object] = {
         "id": record["id"],
         "exam": EXAM_LABEL_BY_DIR.get(bank, bank),
+        # Where the question was sat, when that is no longer the bank it is in
+        # — what keeps it out of the other exam's past-paper shelf.
+        "originally_exam": judgment.get("originally_exam") or (
+            EXAM_LABEL_BY_DIR.get(record["bank"], record["bank"]) if moved else None
+        ),
         "topic": judgment.get("topic", ""),
         "learning_objective": judgment.get("learning_objective", ""),
+        # On no current syllabus at all: kept for the record, out of quiz draws.
+        "off_syllabus": "true" if judgment.get("off_syllabus") else None,
         "difficulty": judgment.get("difficulty", "medium"),
         "type": record["type"],
         "year": record.get("year"),
@@ -177,7 +196,7 @@ def render(record: dict, judgment: dict, explanation: str | None = None) -> str:
             chunks.append(sections)
     else:
         # No lettered parts: a single-part question, whose answer sits under
-        # one `## Explanation` like a multiple-choice question's.
+        # one explanation heading like a multiple-choice question's.
         if record.get("options"):
             chunks.append(options_block(record["options"]))
         text = (explanation if explanation is not None else record.get("solution") or "").strip()
@@ -189,7 +208,19 @@ def render(record: dict, judgment: dict, explanation: str | None = None) -> str:
             )
             if text and alternative:
                 text = f"{text}\n\nAlternatively:\n\n{alternative}"
-        chunks.append("## Explanation\n\n" + text if text else "## Explanation")
+        if record["type"] == "multi-part":
+            # A CAS question with no lettered parts. The app reads a
+            # `multi-part` file with no `## Part` heading as one implicit part
+            # made of `###` sections (`parseQuestion` in quiz/src/lib/parser.ts);
+            # under `## Explanation` it finds no section at all and drops the
+            # question. Its commentary has a slot here too, unlike a lettered
+            # question's overall report, so it is written.
+            chunks.append("### Explanation\n" + text if text else "### Explanation")
+            report = (record.get("examiner_report") or "").strip()
+            if report:
+                chunks.append("### Examiner Report\n" + report)
+        else:
+            chunks.append("## Explanation\n\n" + text if text else "## Explanation")
 
     return mdmath.normalize_markdown("\n\n".join(chunks))
 
@@ -302,7 +333,7 @@ def main(argv: list[str] | None = None) -> int:
             problems.append(f"{record['id']}: no explanation available")
             continue
 
-        target = root / "questions" / record["bank"] / f"{record['id']}.md"
+        target = root / "questions" / target_bank(record, judgment) / f"{record['id']}.md"
         if target.exists() and not args.force:
             skipped += 1
             continue

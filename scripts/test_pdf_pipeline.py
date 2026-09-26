@@ -489,6 +489,105 @@ def _page(number: int, text: str) -> "px.Page":
     return px.Page(number=number, text=text, blocks=[(0.0, 0.0, text)])
 
 
+class TestExam7Layouts(unittest.TestCase):
+    """The two report layouts the Exam 7 papers added.
+
+    Spring 2018 names the sitting in front of every question heading, and the
+    May 2012 and Spring 2013 reports predate `QUESTION N` / `TOTAL POINT VALUE`
+    altogether. Each segmented to nothing — or to two stray hits inside a
+    prompt — while reporting a run that had merely found few questions.
+    """
+
+    LEGACY = (
+        "Question 1 Sample Answer\nSolution 1\n"
+        "a) Chain ladder = 700,000 x 2.5 = 1,750,000\n"
+        "b) x = 550,000\n"
+        "Sample 2\na) 700k x 2.5 = 1.75M\nb) x = 1250k - 700k = 550k\n"
+        "Examiner Comment\nThe a. part of this question was fairly straightforward.\n"
+        "The b. part involved solving a system of equations.\n"
+        "Question 2 Sample Answer\nSolution 1\n"
+        "Stable earnings reduce the cost of financial distress.\n"
+        "Solution 2\nLower taxes on smoothed income.\n"
+        "Examiner Comment\nMost candidates listed two reasons.\n"
+    )
+
+    def test_a_heading_that_names_the_sitting_still_segments(self):
+        report = (
+            "SPRING 2018 EXAM 7, QUESTION 1\nTOTAL POINT VALUE: 2\n"
+            "SAMPLE ANSWERS\nPart a: 2 points\nSample 1\nIBNR = 400\n"
+            "SPRING 2018 EXAM 7, QUESTION 2\nTOTAL POINT VALUE: 1\n"
+            "SAMPLE ANSWERS\nPart a: 1 point\nSample 1\nCV = 0.16\n"
+        )
+        bounds = px.segment(report, px.CAS_QUESTION_RE)
+        self.assertEqual([b.num for b in bounds], [1, 2])
+
+    def test_legacy_samples_are_gathered_per_part(self):
+        bounds = px.segment(self.LEGACY, px.LEGACY_QUESTION_RE)
+        self.assertEqual([b.num for b in bounds], [1, 2])
+        parsed = px.parse_legacy_question(self.LEGACY[bounds[0].start : bounds[0].end])
+        parts = {p["label"]: p for p in parsed["parts"]}
+        self.assertEqual(sorted(parts), ["a", "b"])
+        self.assertEqual(len(parts["a"]["samples"]), 2)
+        self.assertIn("1,750,000", parts["a"]["samples"][0])
+        self.assertIn("1.75M", parts["a"]["samples"][1])
+        self.assertIsNone(parsed["points"])
+
+    def test_legacy_commentary_that_names_its_part_is_split(self):
+        bounds = px.segment(self.LEGACY, px.LEGACY_QUESTION_RE)
+        parsed = px.parse_legacy_question(self.LEGACY[bounds[0].start : bounds[0].end])
+        parts = {p["label"]: p for p in parsed["parts"]}
+        # The label is the subject of its sentence, so it stays.
+        self.assertTrue(parts["a"]["report"].startswith("The a. part"))
+        self.assertIn("system of equations", parts["b"]["report"])
+        self.assertNotIn("system of equations", parts["a"]["report"])
+
+    def test_legacy_question_without_parts_is_single_part(self):
+        bounds = px.segment(self.LEGACY, px.LEGACY_QUESTION_RE)
+        parsed = px.parse_legacy_question(self.LEGACY[bounds[1].start : bounds[1].end])
+        self.assertEqual(parsed["parts"], [])
+        self.assertIn("financial distress", parsed["solution"])
+        self.assertIn("smoothed income", parsed["alternatives"][0])
+        self.assertIn("two reasons", parsed["examiner_report"])
+
+    def test_a_lettered_list_inside_a_part_is_not_a_new_part(self):
+        parsed = px.parse_legacy_question(
+            "Solution 1\na) Two reasons:\nb) first\nc) second\n"
+            "Solution 2\na) One reason\nb) Another answer\n"
+            "a) nested\n"
+        )
+        labels = [p["label"] for p in parsed["parts"]]
+        self.assertEqual(labels, ["a", "b", "c"])
+
+    def test_legacy_points_come_from_the_booklet(self):
+        booklet = (
+            "1.\n(2.75 points)\nGiven the following:\n"
+            "a.\n(1.25 points)\nCalculate the chain ladder estimate.\n"
+            "b.\n(1.5 points)\nDetermine the incremental paid loss.\n"
+            "2.\n(1 point)\nDescribe two reasons to smooth earnings.\n"
+        )
+        report = self.LEGACY
+        records = px.cas_records("7", 2012, None, [_page(1, booklet)], [_page(2, report)])
+        self.assertEqual([r["points"] for r in records], [2.75, 1.0])
+        self.assertEqual([p["points"] for p in records[0]["parts"]], [1.25, 1.5])
+        self.assertIn("chain ladder estimate", records[0]["parts"][0]["prompt"])
+        self.assertEqual(records[0]["id"], "cas7-2012-q1")
+
+    def test_the_legacy_cover_page_splits_the_combined_pdf(self):
+        pages = [
+            _page(1, "1.\n(2 points)\nGiven the following"),
+            _page(2, "Exam 7\nMay 2012\nExaminers’ Report\nwith Sample Solutions"),
+            _page(3, "Question 1 Sample Answer\nSolution 1\na) 1,750,000"),
+        ]
+        self.assertEqual(px._split_combined(pages), 1)
+
+    def test_a_number_alone_on_its_line_starts_a_booklet_question(self):
+        booklet = (
+            "1.\n(2.75 points)\nGiven the following:\n"
+            "The 80.\n2.\n(1 point)\nDescribe it.\n10. (2 points)\nCalculate it.\n"
+        )
+        self.assertEqual([b.num for b in px.segment(booklet)], [1, 2, 10])
+
+
 class TestSpring2016Faults(unittest.TestCase):
     """Four faults the CAS Exam 5 Spring 2016 paper exposed.
 

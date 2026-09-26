@@ -98,6 +98,43 @@ const SITTING_PDF_LINKS: Record<string, ExamPdfLink> = {
     label: "Examiner's Report",
   },
 
+  // ── CAS Exam 7 — sat once a year, in the spring; exam + Examiner's Report ──
+  // Transcribed from casact.org's Past Exams & Pass Marks page. The filenames
+  // are as irregular as Exam 5's: 2017 is upper-case `.PDF` under `2021-01/`,
+  // 2018 and 2019 carry a `_0` suffix.
+  'Exam 7|2012|spring': {
+    url: 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam7_12-7.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 7|2013|spring': {
+    url: 'https://www.casact.org/sites/default/files/2021-03/13-7.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 7|2014|spring': {
+    url: 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam7_14-7.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 7|2015|spring': {
+    url: 'https://www.casact.org/sites/default/files/2021-03/15-7.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 7|2016|spring': {
+    url: 'https://www.casact.org/sites/default/files/2021-03/16-7.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 7|2017|spring': {
+    url: 'https://www.casact.org/sites/default/files/2021-01/17-7.PDF',
+    label: "Examiner's Report",
+  },
+  'Exam 7|2018|spring': {
+    url: 'https://www.casact.org/sites/default/files/2021-03/18-7_0.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 7|2019|spring': {
+    url: 'https://www.casact.org/sites/default/files/2021-03/19-7_0.pdf',
+    label: "Examiner's Report",
+  },
+
   // ── CAS Exam MAS-I — multiple choice, so paper + final answer key ─────────
   'Exam MAS-I|2018|spring': {
     url: 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exammasi_spmasi-18.pdf',

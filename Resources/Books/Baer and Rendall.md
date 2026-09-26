@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:69630ad90c1bdffa29832a9da6f8fe0a608f54aec6fee949074fec0072a0777b
+  content_hash: sha256:1c3122751c7015045988c6b037cfae5a6496bdec72838dcd12a6a90337700b73
   sources: []
   open_findings: 0
   open_critical: 0
@@ -26,11 +26,9 @@ The [[Insurance Legislation|insurance law]] casebook on the [[Exam 6C (CAS)|Exam
 
 The CAS content outline assigns **pp. 67–91, 93–100, 302–304, 518–529, 821–827 and 829–831**, and names three cases candidates are responsible for:
 
-| Case | Chapter | What it settles |
-|---|---|---|
-| *Glenn v. Scottish Union and National Insurance Company Ltd.* | 1 | **Insurable interest** — who may insure property, and on what basis a loss is indemnified |
-| *Fletcher v. Manitoba Public Insurance Corp.* | 8 | The insurer's (and its agent's) **duty to inform** an insured of available coverage — the origin of the Canadian [[Duty of Good Faith\|good-faith]] duty owed at the point of sale |
-| *Dillon v. Guardian Insurance* | 11 | The scope of the liability policy and the insurer's [[Duty to Defend\|duty to defend]] |
+- ***Glenn v. Scottish Union and National Insurance Company Ltd.*** — 1 · *What it settles:* **Insurable interest** — who may insure property, and on what basis a loss is indemnified
+- ***Fletcher v. Manitoba Public Insurance Corp.*** — 8 · *What it settles:* The insurer's (and its agent's) **duty to inform** an insured of available coverage — the origin of the Canadian [[Duty of Good Faith|good-faith]] duty owed at the point of sale
+- ***Dillon v. Guardian Insurance*** — 11 · *What it settles:* The scope of the liability policy and the insurer's [[Duty to Defend|duty to defend]]
 
 ## Why it is on the syllabus
 

@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:08fecfb4142d94d5ab24d1f4d87a95974486d356a40bccae0468a3af5ceaf88d
+  content_hash: sha256:65ae249965cff4d4ee0ebf09e8d4006adc0913a27573e3eef508ce3fab277ae2
   sources: []
   open_findings: 0
   open_critical: 0
@@ -46,7 +46,7 @@ verification:
   - 2.1.2 [[Annuity Due]]
   - 2.1.3 [[Perpetuity]]
 - 2.2 [[Level Annuity|Level Payment Annuities]] — Generalizations
-  - 2.2.1 [[Annuity]] Values at Any Point in Time
+  - 2.2.1 [[Annuities|Annuity]] Values at Any Point in Time
   - 2.2.2 [[Payable m-thly|Annuities Payable m-thly]]
   - 2.2.3 [[Payable Continuously|Continuously Payable Annuities]]
 - 2.3 [[Non-level Annuities|Non-Level Payment Annuities]] — [[Arithmetic Progression]]

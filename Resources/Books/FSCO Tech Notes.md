@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:849ab80fc2dbd519dd7a13ef56c373dd121fb520ff54571cee297b2d70350988
+  content_hash: sha256:fe5fe07b6e1a5607369db8f241e467895f38bb99b5b0a8ff0ab61aa31e4b0fb2
   sources: []
   open_findings: 0
   open_critical: 0
@@ -30,30 +30,28 @@ The companion to [[FSCO Private Auto]]: what the regulator expects **technically
 
 ## The technical notes (Section E)
 
-| # | Item | The expectation |
-|---|---|---|
-| 1 | Loss data (4.b.) | Which experience period, on what basis, and how it is aggregated |
-| 2 | [[Loss Development\|Loss development]] (4.b.1.) | Method, selection of factors, and support for the tail |
-| 3 | [[Loss Trend\|Loss trend]] (4.b.2.) | Past and future trend, separately; support for the selected periods |
-| 4 | Treatment of [[Large Loss\|large losses]] (4.b.3.) | Capping, and the loading that puts the capped amount back |
-| 5 | Catastrophe provision (4.b.4.) | A long-term provision, not the experience-period cat load |
-| 6 | Reform adjustment factors (4.b.5.) | Restating history for [[Automobile Insurance Reform\|product reform]] so the experience is on the current benefit level |
-| 7 | [[On-Leveling\|On-level premium]] (4.e.1.) | Restating earned premium to current rate level |
-| 8 | Rate group drift (4.e.2.) | The premium change from vehicles migrating between rate groups, absent any rate change |
-| 9–10 | Finance fees and charges; tax rates (4.e.) | |
-| 11 | Expenses (4.f.) | Allocation between fixed and variable, and the basis for each |
-| 12 | [[Underwriting Profit\|Underwriting profit provision]] | The return target and how it is derived |
-| 13 | Investment returns and cash-flow rate | The rate applied to the loss and expense cash flows |
-| 14 | [[Credibility]] (4.h.) | Standard, complement, and how partial credibility is applied |
-| 15 | Indicated versus proposed rate changes (4.j.) | Where the two differ, the difference must be explained |
-| 16 | [[Territorial Rating\|Territory]], class, driving record and other differential changes (4.k., 4.m.) | |
-| 17 | Territorial definition changes (4.k.3.) | Support required when boundaries move (see [[CIA Territories]]) |
-| 18 | Vehicle rate group changes (4.l.) | |
-| 19 | Predictive models (4.m.) | Documentation of a model used to set differentials |
-| 20 | Usage-based insurance pricing (UBIP) programs | Initial discount, subsequent filings, form and endorsement requirements, and treatment of program costs and expenses |
-| 21 | New discounts, surcharges or differentials | |
-| 22 | Dislocation and capping premium increases (7.g.) | The requirements for capping a renewal increase |
-| 23 | Auto insurance manual pages | |
+- **1** — Loss data (4.b.) · *The expectation:* Which experience period, on what basis, and how it is aggregated
+- **2** — [[Loss Development|Loss development]] (4.b.1.) · *The expectation:* Method, selection of factors, and support for the tail
+- **3** — [[Loss Trend|Loss trend]] (4.b.2.) · *The expectation:* Past and future trend, separately; support for the selected periods
+- **4** — Treatment of [[Large Loss|large losses]] (4.b.3.) · *The expectation:* Capping, and the loading that puts the capped amount back
+- **5** — Catastrophe provision (4.b.4.) · *The expectation:* A long-term provision, not the experience-period cat load
+- **6** — Reform adjustment factors (4.b.5.) · *The expectation:* Restating history for [[Automobile Insurance Reform|product reform]] so the experience is on the current benefit level
+- **7** — [[On-Leveling|On-level premium]] (4.e.1.) · *The expectation:* Restating earned premium to current rate level
+- **8** — Rate group drift (4.e.2.) · *The expectation:* The premium change from vehicles migrating between rate groups, absent any rate change
+- **9–10** — Finance fees and charges; tax rates (4.e.)
+- **11** — Expenses (4.f.) · *The expectation:* Allocation between fixed and variable, and the basis for each
+- **12** — [[Underwriting Profit|Underwriting profit provision]] · *The expectation:* The return target and how it is derived
+- **13** — Investment returns and cash-flow rate · *The expectation:* The rate applied to the loss and expense cash flows
+- **14** — [[Credibility]] (4.h.) · *The expectation:* Standard, complement, and how partial credibility is applied
+- **15** — Indicated versus proposed rate changes (4.j.) · *The expectation:* Where the two differ, the difference must be explained
+- **16** — [[Territorial Rating|Territory]], class, driving record and other differential changes (4.k., 4.m.)
+- **17** — Territorial definition changes (4.k.3.) · *The expectation:* Support required when boundaries move (see [[CIA Territories]])
+- **18** — Vehicle rate group changes (4.l.)
+- **19** — Predictive models (4.m.) · *The expectation:* Documentation of a model used to set differentials
+- **20** — Usage-based insurance pricing (UBIP) programs · *The expectation:* Initial discount, subsequent filings, form and endorsement requirements, and treatment of program costs and expenses
+- **21** — New discounts, surcharges or differentials
+- **22** — Dislocation and capping premium increases (7.g.) · *The expectation:* The requirements for capping a renewal increase
+- **23** — Auto insurance manual pages
 
 ## Why it is on the syllabus
 

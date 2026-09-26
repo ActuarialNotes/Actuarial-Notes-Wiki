@@ -13,8 +13,8 @@ test.describe('console output in a question stem', () => {
     await page.goto('/quiz?ids=masii-2019f-q14')
 
     // The quiz page holds a spinner until mastery loads, so wait for whichever
-    // it settles on — the pre-quiz collect gate or the question itself — rather
-    // than probing the gate button before it can exist.
+    // it settles on — the pre-quiz concept list or the question itself — rather
+    // than probing the list's button before it can exist.
     const startQuiz = page.getByRole('button', { name: 'Start Quiz' })
     const block = page.locator('pre').first()
     await expect(startQuiz.or(block).first()).toBeVisible()

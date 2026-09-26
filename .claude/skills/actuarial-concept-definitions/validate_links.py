@@ -14,9 +14,21 @@ the built app:
      exist. These fail silently: slugForLink() still produces a slug, so the
      question records mastery against a concept the app can never display.
 
+  4. Links that resolve only case-insensitively. Obsidian forgives the case;
+     the app fetches `Concepts/<name>.md` from GitHub, which does not.
+
+Resolution is `scripts/vault_links.py` — the one resolver the syllabus lint and
+`audit_exam.py` use too, so the three can't disagree about whether a link lands.
+
 Usage:
     python3 .claude/skills/actuarial-concept-definitions/validate_links.py
     python3 .claude/skills/actuarial-concept-definitions/validate_links.py --exam "Exam 5 (CAS)"
+    python3 .claude/skills/actuarial-concept-definitions/validate_links.py --studiable
+
+`--studiable` is the CI scope: every exam page whose status is `ready` or `beta`
+(scripts/exam_catalog.json), the pages each links, and those exams' question
+banks. The bare vault-wide run is a report — Exams 6–9 carry a large known
+backlog of unwritten pages (see scripts/syllabus_gaps.py).
 
 Exits non-zero if any problem is found, so it can gate a commit.
 """
@@ -27,9 +39,12 @@ import re
 import sys
 from collections import defaultdict
 
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "scripts"))
+import vault_links  # noqa: E402
+
 SKIP_DIRS = {".git", "node_modules", "dist", "quiz", ".vercel"}
 CONTENT_DIRS = ("Concepts", "Resources", "questions", "comprehension-checks")
-LINK_RE = re.compile(r"\[\[([^\]\[]+)\]\]")
+LINK_RE = vault_links.LINK_RE
 WIKI_LINK_ENTRY_RE = re.compile(r"^\s*-\s*((?:Concepts|Resources)/\S+)\s*$", re.M)
 IMAGE_SUFFIXES = (".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp")
 
@@ -51,12 +66,8 @@ def walk_content(root):
 
 
 def build_index(root):
-    """Map lowercased page basename -> path, for every .md page in the vault."""
-    index = {}
-    for dirpath, name in walk_content(root):
-        if name.endswith(".md"):
-            index[os.path.splitext(name)[0].lower()] = os.path.join(dirpath, name)
-    return index
+    """The shared resolver's view of the vault."""
+    return vault_links.Vault(root)
 
 
 def find_extensionless(root):
@@ -83,49 +94,48 @@ def find_extensionless(root):
 
 def links_in(path):
     with open(path, encoding="utf-8") as fh:
-        text = fh.read()
-    targets = []
-    for m in LINK_RE.finditer(text):
-        raw = m.group(1)
-        # Skip Obsidian embeds (![[...]]) and image/attachment links
-        if m.start() > 0 and text[m.start() - 1] == "!":
-            continue
-        target = raw.split("|")[0].split("#")[0].strip()
-        if not target or target.lower().endswith(IMAGE_SUFFIXES):
-            continue
-        targets.append(target)
-    return targets
+        return [link.target.split("#")[0].strip() for link in vault_links.iter_links(fh.read())]
 
 
-def check_wiki_links(root, index, scope=None):
-    """Broken [[links]]. `scope` limits to a page and everything it links."""
-    if scope:
-        seed = os.path.join(root, scope + ".md")
-        if not os.path.exists(seed):
-            sys.exit(f"error: scope page not found: {seed}")
-        pages = [seed]
-        for target in links_in(seed):
-            hit = index.get(target.lower())
-            if hit:
-                pages.append(hit)
+def check_wiki_links(root, vault, scopes=None):
+    """Broken and case-only [[links]]. `scopes` limits to those pages and
+    everything each links."""
+    if scopes:
+        pages = []
+        for scope in scopes:
+            seed = os.path.join(root, scope + ".md")
+            if not os.path.exists(seed):
+                sys.exit(f"error: scope page not found: {seed}")
+            pages.append(seed)
+            for target in links_in(seed):
+                status, hit = vault.resolve(target)
+                if hit:
+                    pages.append(os.path.join(root, hit))
+        pages = list(dict.fromkeys(pages))
     else:
-        pages = sorted(set(index.values()))
+        pages = sorted(os.path.join(root, p) for p in set(vault.by_name.values()))
 
-    broken = defaultdict(set)
+    broken, case_only = defaultdict(set), defaultdict(set)
     for page in pages:
         src = os.path.splitext(os.path.basename(page))[0]
         for target in links_in(page):
-            if target.lower() not in index:
+            if not target:
+                continue
+            status, hit = vault.resolve(target)
+            if status == "missing":
                 broken[target].add(src)
-    return broken
+            elif status == "case":
+                case_only[f"{target} -> {os.path.splitext(os.path.basename(hit))[0]}"].add(src)
+    return broken, case_only
 
 
-def check_question_links(root, index, exam_dir=None):
-    """Question `wiki_link:` entries that resolve to no page."""
+def check_question_links(root, vault, exam_dirs=None):
+    """Question `wiki_link:` entries whose slug lands on no page — exactly, since
+    mastery is recorded under the slug and the app fetches the page by it."""
     qroot = os.path.join(root, "questions")
     if not os.path.isdir(qroot):
         return {}, 0
-    exams = [exam_dir] if exam_dir else sorted(os.listdir(qroot))
+    exams = exam_dirs if exam_dirs else sorted(os.listdir(qroot))
     broken = defaultdict(set)
     total = 0
     for exam in exams:
@@ -143,8 +153,8 @@ def check_question_links(root, index, exam_dir=None):
                 continue
             for entry in WIKI_LINK_ENTRY_RE.findall(parts[1]):
                 total += 1
-                page = entry.split("/")[-1].replace("+", " ").strip()
-                if page.lower() not in index:
+                page = vault_links.question_link_slug(entry) or entry
+                if vault.resolve(page)[0] != "exact":
                     broken[page].add(f"{exam}/{name}")
     return broken, total
 
@@ -157,14 +167,22 @@ def main():
                          'links, e.g. "Exam 5 (CAS)".')
     ap.add_argument("--questions", metavar="DIR",
                     help="Limit the question check to questions/<DIR>, e.g. exam-5.")
+    ap.add_argument("--studiable", action="store_true",
+                    help="CI scope: every ready/beta exam page, what it links, and its bank.")
     args = ap.parse_args()
 
     root = repo_root()
-    index = build_index(root)
+    vault = build_index(root)
     failures = 0
+    scopes = [args.exam] if args.exam else None
+    banks = [args.questions] if args.questions else None
+    if args.studiable:
+        studiable = [e for e in vault_links.load_catalog() if e["status"] in ("ready", "beta")]
+        scopes = [e["page"][:-3] for e in studiable]
+        banks = [e["bank"] for e in studiable if e["bank"]]
 
     print(f"Vault: {root}")
-    print(f"Indexed {len(index)} pages\n")
+    print(f"Indexed {len(vault.by_name)} pages\n")
 
     stray = find_extensionless(root)
     print("== Content files missing the .md extension ==")
@@ -176,9 +194,9 @@ def main():
     else:
         print("  none")
 
-    scope = f" (scope: {args.exam})" if args.exam else ""
+    scope = f" (scope: {', '.join(scopes)})" if scopes else ""
     print(f"\n== Broken [[wiki-links]]{scope} ==")
-    broken = check_wiki_links(root, index, args.exam)
+    broken, case_only = check_wiki_links(root, vault, scopes)
     if broken:
         failures += len(broken)
         for target, srcs in sorted(broken.items()):
@@ -188,8 +206,18 @@ def main():
     else:
         print("  none")
 
+    print("\n== Links that resolve only case-insensitively (Obsidian yes, the app no) ==")
+    if case_only:
+        failures += len(case_only)
+        for target, srcs in sorted(case_only.items()):
+            shown = ", ".join(sorted(srcs)[:4])
+            more = f" (+{len(srcs) - 4} more)" if len(srcs) > 4 else ""
+            print(f"  {target:45s} <- {shown}{more}")
+    else:
+        print("  none")
+
     print("\n== Question wiki_link entries with no matching page ==")
-    qbroken, qtotal = check_question_links(root, index, args.questions)
+    qbroken, qtotal = check_question_links(root, vault, banks)
     if qbroken:
         failures += len(qbroken)
         for page, files in sorted(qbroken.items(), key=lambda kv: -len(kv[1])):

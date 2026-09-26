@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:6ef0a6193ea008cfa3b519525e5811a12bba506033a92ba7efe3652522ef01e3
+  content_hash: sha256:120a9fb3742ac1f2e5813fe84b11abf35a1ac969c599fc8145ab5639ccc348f0
   sources: []
   open_findings: 0
   open_critical: 0
@@ -14,7 +14,7 @@ verification:
 **External Resources**
 1. [ProbStats](https://probstats.org/) for visual plots.
 2. ProbOnto (Probability Distribution Ontology) for data about distributions and their relationships.
-3. [[SIPMath 3.0]] for data structures for probability distributions.
+3. SIPMath 3.0 for data structures for probability distributions.
 ---
 
 ## Probability Distributions

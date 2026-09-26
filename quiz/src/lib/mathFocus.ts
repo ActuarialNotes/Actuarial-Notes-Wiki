@@ -3,7 +3,7 @@
  *
  * One delegated listener (`components/MathFocus.tsx`) turns every rendered
  * KaTeX display equation into a zoom target, so the behaviour is identical in
- * the concept popup, on a flashcard, in the wiki and inside the collect modal
+ * the concept popup, on a flashcard, in the wiki and inside a quiz question
  * without any of them wiring it up. This module holds the decisions that
  * listener makes: what counts as a hit, which equations travel together as one
  * prev/next set, and how large the magnified copy should be drawn.

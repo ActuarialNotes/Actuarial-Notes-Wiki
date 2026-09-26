@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:95fbcbbfb9ee8d2545f565e69f243443337122a9d551fb92b1f89291ffbf9375
+  content_hash: sha256:211fdad222a41522377c67b890e43bdda2eaef733ee246409d590385089af6d5
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,15 +23,13 @@ OSFI's **[[Corporate Governance]]** guideline (September 2018). Read for [[Exam 
 
 ## Structure
 
-| Section | Subject |
-|---|---|
-| I | Purpose and scope of the guideline |
-| II | The **board of directors** |
-| III | **Risk governance** |
-| IV | The role of the **audit committee** |
-| **V** | **Supervision of FRFIs** *(assigned)* |
-| Annex A | The special nature of financial institutions |
-| **Annex B** | **[[Risk Appetite\|Risk Appetite Framework]]** *(assigned)* |
+- **I** — Purpose and scope of the guideline
+- **II** — The **board of directors**
+- **III** — **Risk governance**
+- **IV** — The role of the **audit committee**
+- **V** — **Supervision of FRFIs** *(assigned)*
+- **Annex A** — The special nature of financial institutions
+- **Annex B** — **[[Risk Appetite|Risk Appetite Framework]]** *(assigned)*
 
 ## What the guideline sets out
 

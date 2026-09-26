@@ -130,7 +130,7 @@ concept name reading as a label on brass rather than a card that happens to be k
 | Flashcard tiles (`pages/Flashcards.tsx`) | Gold underline on the card name — never a ring, since the tile edge belongs to the collected-foil material |
 | Wiki search results (`components/wiki/WikiSearchPanel.tsx`) | Gold underline on the result's name; the category icon is untouched |
 | Standalone concept page (`pages/wiki/WikiConcept.tsx`) | Gold underline on the `<h1>`, same tap-to-explain |
-| Collect modal (`components/collect/CollectCard3D.tsx`) | A gold `KEYSTONE` chip on the card being collected — a moment, not a name, so the glyph is allowed here. The chip is all of it: the card's face keeps its own colour |
+| Level-up ceremony card (`components/collect/CollectCard3D.tsx`) | A gold `KEYSTONE` chip on the card being collected — a moment, not a name, so the glyph is allowed here. The chip is all of it: the card's face keeps its own colour |
 | Dashboard **Exam readiness** card (`components/ReadinessCard.tsx`) | Keystone spokes in the ring use the gold mastery ladder instead of the green one (`lib/masteryFill.ts`), and the **Keystone concepts** criterion bar beside it is drawn in the same gold |
 
 `components/KeystoneName.tsx` also exports `KeystoneSummary`, the explainer's

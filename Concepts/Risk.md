@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:33c6022cf5e08b72d2acc89c3144f6728175c5b8c30889e653a094388315dbb2
+  content_hash: sha256:5ecc2e61ea4b7bc90417e53534b2e9f5e1d2261516f0e82df8e68d0ae789010e
   sources: []
   open_findings: 0
   open_critical: 0
@@ -43,7 +43,7 @@ Risk can be categorized based on the **type of objective** which is at risk.
 These definitions are applied in different contexts within risk management. Fields such as finance, audit, or emergency response each adopt different definitions of risk to fit their use cases.
 
 ## The Impact of a Risk Definition
-The [[Risk Taxonomy|language]] used to define risk has a direct impact on [[decision-making]]. For example, if risk is viewed purely as a exposure to a negative outcome, then the primary objective becomes to avoid it. This perspective may be appropriate in the domain of [[Health and Safety]], where the risk is to human well-being and life.
+The [[Risk Taxonomy|language]] used to define risk has a direct impact on [[Decision-Making|decision-making]]. For example, if risk is viewed purely as a exposure to a negative outcome, then the primary objective becomes to avoid it. This perspective may be appropriate in the domain of [[Health and Safety]], where the risk is to human well-being and life.
 
 However, if risk is thought of as a deviation from an expected reference value - whether positive or negative - it might be useful to take on some risk to gain insights and [[learn]] from new experience. Through this lens, risk can be modeled as a priced [[commodity]] where higher risk is associated with higher *expected returns*, a perspective is commonly applied in finance. See [[Modern Portfolio Theory]] to learn more about risk and return.
 ## Risk and Resilience

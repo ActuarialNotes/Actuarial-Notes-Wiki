@@ -1,17 +1,17 @@
-// Authored "quick comprehension check" questions gating flashcard collection.
+// Authored "quick comprehension check" questions, one per concept.
 //
-// The questions themselves now live as markdown, one file per concept, under
-// comprehension-checks/<exam-id>/<Concept Name>.md at the repo root — edited like
-// the question bank (questions/<exam-id>/*.md) rather than as a TS object. Vite
-// bundles them at build time via the `virtual:comprehension-checks` module (see
-// vite.config.ts) and lib/comprehensionCheckParser.ts parses them here into the
-// concept-keyed lookup the collect modal reads.
+// **Nothing reads this today.** The checks used to gate flashcard collection —
+// a card had to pass its check before its mastery could leave New — but that
+// gate is gone: a card is now collected the first time its concept reaches
+// Level 1 (docs/flashcard-collection.md). The content, its parser and the
+// corpus test are kept, the way the unrendered `Guides/` tips are, so the
+// checks stay valid if a surface for them comes back; with no importer, Vite
+// leaves the `virtual:comprehension-checks` module out of the bundle.
 //
-// This module keeps the original public API (COMPREHENSION_CHECKS +
-// ComprehensionCheck) so consumers don't change. Each key is a concept's display
-// name — its Concepts/*.md filename without the extension — so it lines up with
-// `concept.name` from useWikiSyllabus and `allConceptNames` in
-// CollectConceptModal.tsx.
+// The questions live as markdown, one file per concept, under
+// comprehension-checks/<exam-id>/<Concept Name>.md at the repo root, parsed by
+// lib/comprehensionCheckParser.ts. Each key is a concept's display name — its
+// Concepts/*.md filename without the extension.
 //
 // Design rule (see .claude/skills/flashcard-comprehension-check): the correct
 // answer is never the concept's own name or a paraphrase of its definition. Each

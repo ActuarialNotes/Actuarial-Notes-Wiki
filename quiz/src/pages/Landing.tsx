@@ -747,7 +747,7 @@ export default function Landing() {
   //
   // While this is pending we render a brief loading state (see `isAutostarting`
   // below) instead of the config screen — the dashboard's launch animation flows
-  // straight into the quiz's collect gate with no flash of the config UI in
+  // straight into the quiz's concept list with no flash of the config UI in
   // between. `autostartFailed` flips us back to the config screen only once we
   // know autostart can't proceed (not Pro / no plan / no questions).
   const didAutostartRef = useRef(false)

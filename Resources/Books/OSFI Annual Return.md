@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:cd2f960e4e4f4c8fe8cbe5faa2fe652f21b95a5290692db6c406c52727908a8a
+  content_hash: sha256:6ebeda5fff283ac2c5bd22514fa98dfa639a3618fc91db8e834f442164092882
   sources: []
   open_findings: 0
   open_critical: 0
@@ -32,37 +32,35 @@ The **annual supervisory supplement** to the [[Canadian Annual Return]] — the 
 
 ## The full return
 
-| Page | Exhibit |
-|---|---|
-| **General information** | |
-| 10.10 | Annual supplement |
-| 10.20 | Shareholders |
-| 10.30 | Corporate organization chart |
-| 10.40 | Other information |
-| 10.42 | **Encumbered assets** |
-| 10.43 | **Outsourcing and service agreements** |
-| **10.60** | **Summary of selected financial data for five years** |
-| **Investments** | |
-| 40.12 / 40.22 / 40.32 / 40.42 / 40.52 | Short-term investments · bonds and debentures · mortgage loans · preferred shares · common shares |
-| 40.70 | Investment properties; own-use property and equipment |
-| **Miscellaneous** | |
-| 50.20 | Receivable from / payable to non-associated agents and brokers |
-| **Claims and insurance contracts** | |
-| 60.35 | Claims and adjustment expenses paid, **[[Liability for Incurred Claims\|liabilities for incurred claims]]**, and current- and prior-year claims development |
-| **60.45** | **Net ultimate claims and adjustment expenses — claims development** |
-| 60.60 | Remaining **[[Contractual Service Margin\|CSM]]** from insurance contracts estimated at year end |
-| 60.70 | Effect of **[[General Measurement Model\|GMM]]** contracts initially recognised in the year |
-| 60.90 / 60.95 | **[[IFRS 17 Discount Rates\|Discount rates]]** — LIC and LRC |
-| **Reinsurance ceded** | |
-| 70.10 | Net expenses from **[[Reinsurance Contracts Held\|reinsurance contracts held]]** |
-| 70.21 | Summary of **intragroup** reinsurance contracts issued and held |
-| 70.90 | **Reinsurance interrogatories** |
-| 70.95 | Summary of **non-traditional methods of risk mitigation** for in-Canada risk |
-| **Out of Canada / non-consolidated** | |
-| 90.15 | Out-of-Canada operations |
-| 93.35 / 93.65 | Non-consolidated claims and adjustment expenses; net ultimate claims development |
-| **Affidavits** | |
-| 99.10 / 99.11 / 99.15 | Canadian President/CEO · foreign Chief Agent · foreign President/CEO |
+- **General information**
+- **10.10** — Annual supplement
+- **10.20** — Shareholders
+- **10.30** — Corporate organization chart
+- **10.40** — Other information
+- **10.42** — **Encumbered assets**
+- **10.43** — **Outsourcing and service agreements**
+- **10.60** — **Summary of selected financial data for five years**
+- **Investments**
+- **40.12 / 40.22 / 40.32 / 40.42 / 40.52** — Short-term investments · bonds and debentures · mortgage loans · preferred shares · common shares
+- **40.70** — Investment properties; own-use property and equipment
+- **Miscellaneous**
+- **50.20** — Receivable from / payable to non-associated agents and brokers
+- **Claims and insurance contracts**
+- **60.35** — Claims and adjustment expenses paid, **[[Liability for Incurred Claims|liabilities for incurred claims]]**, and current- and prior-year claims development
+- **60.45** — **Net ultimate claims and adjustment expenses — claims development**
+- **60.60** — Remaining **[[Contractual Service Margin|CSM]]** from insurance contracts estimated at year end
+- **60.70** — Effect of **[[General Measurement Model|GMM]]** contracts initially recognised in the year
+- **60.90 / 60.95** — **[[IFRS 17 Discount Rates|Discount rates]]** — LIC and LRC
+- **Reinsurance ceded**
+- **70.10** — Net expenses from **[[Reinsurance Contracts Held|reinsurance contracts held]]**
+- **70.21** — Summary of **intragroup** reinsurance contracts issued and held
+- **70.90** — **Reinsurance interrogatories**
+- **70.95** — Summary of **non-traditional methods of risk mitigation** for in-Canada risk
+- **Out of Canada / non-consolidated**
+- **90.15** — Out-of-Canada operations
+- **93.35 / 93.65** — Non-consolidated claims and adjustment expenses; net ultimate claims development
+- **Affidavits**
+- **99.10 / 99.11 / 99.15** — Canadian President/CEO · foreign Chief Agent · foreign President/CEO
 
 ## Points worth noticing
 

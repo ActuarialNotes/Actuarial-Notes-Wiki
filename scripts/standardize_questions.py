@@ -15,6 +15,12 @@ page, writes scripts/ontology_report.md, and exits non-zero if any topic is
 unmapped (so the migration fails loudly rather than silently skipping).
 
 Idempotent: re-running is a no-op because canonical concepts self-map.
+
+`--objectives` runs only the learning-objective half, on every bank including the
+CAS ones ONTOLOGY doesn't cover yet: each `learning_objective` listed in
+ontology_map.OBJECTIVE_RENAMES is rewritten to the section title it abbreviates.
+It edits that one frontmatter line in place (no YAML round-trip, so nothing else
+in the file moves) and needs no PyYAML.
 """
 
 import re
@@ -22,10 +28,13 @@ import sys
 from pathlib import Path
 from collections import Counter
 
-import yaml
+try:
+    import yaml
+except ImportError:  # only the full standardization round-trips YAML
+    yaml = None
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from ontology_map import ONTOLOGY  # noqa: E402
+from ontology_map import ONTOLOGY, OBJECTIVE_RENAMES  # noqa: E402
 
 REPO = Path(__file__).resolve().parent.parent
 QDIR = REPO / "questions"
@@ -99,7 +108,34 @@ def build_frontmatter(data: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
+LO_LINE_RE = re.compile(r'^(learning_objective:\s*)"?(.*?)"?\s*$', re.M)
+
+
+def rename_objectives() -> int:
+    """Rewrite abbreviated `learning_objective` values to their section title."""
+    changed = 0
+    for bank, renames in sorted(OBJECTIVE_RENAMES.items()):
+        for path in sorted((QDIR / bank).rglob("*.md")):
+            text = path.read_text(encoding="utf-8")
+            m = FM_RE.match(text)
+            if not m:
+                continue
+            fm = m.group(1)
+            lo = LO_LINE_RE.search(fm)
+            if not lo or lo.group(2) not in renames:
+                continue
+            new_fm = fm[: lo.start()] + f'{lo.group(1)}{dq(renames[lo.group(2)])}' + fm[lo.end():]
+            path.write_text("---\n" + new_fm + "\n---\n" + m.group(2), encoding="utf-8")
+            changed += 1
+    print(f"learning objectives renamed: {changed}")
+    return 0
+
+
 def main() -> int:
+    if "--objectives" in sys.argv[1:]:
+        return rename_objectives()
+    if yaml is None:
+        sys.exit("standardize_questions.py needs PyYAML (pip install pyyaml); --objectives does not")
     files = sorted(QDIR.rglob("*.md"))
     unmapped: list[tuple[str, str]] = []
     changed = 0

@@ -4,7 +4,7 @@
  * One delegated listener (`components/ImageFocus.tsx`) turns every content
  * image into a way into the full-screen viewer (`ImageGalleryModal`), so a
  * diagram opens the same way in a quiz question, in an explanation and in the
- * collect modal without any of those surfaces wiring it up. This module holds
+ * concept popup without any of those surfaces wiring it up. This module holds
  * the decisions that listener makes: which images are content, which ones
  * travel together as one prev/next set, and what the viewer is handed for each.
  *

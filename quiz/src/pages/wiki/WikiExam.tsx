@@ -142,17 +142,16 @@ export default function WikiExam() {
     return match ? examDisplayName(match[1].trim()) : null
   }, [content])
 
-  // Beside the exam's title: its status/date, then the examining body's own
-  // syllabus — the document this whole page is a reading of. No fact-check
-  // badge here: an exam page is a syllabus outline, and the claims worth
-  // checking live on the concept and resource pages it links to, which is where
-  // the Fact Check action sits.
+  // Beside the exam's title: its status/date. The examining body's syllabus
+  // rides the sticky header instead (below), so it stays in reach down the
+  // page. No fact-check badge here: an exam page is a syllabus outline, and the
+  // claims worth checking live on the concept and resource pages it links to,
+  // which is where the Fact Check action sits.
   const titleBadge = useMemo(() => (
     <span className="inline-flex items-center gap-2 not-prose">
       <ExamStatusBadge progressKey={progressKey} />
-      <ExamSyllabusButton examId={wikiExamId} examLabel={extractedTitle ?? examDisplayName(examFileName)} />
     </span>
-  ), [progressKey, wikiExamId, extractedTitle, examFileName])
+  ), [progressKey])
 
   // What the sticky header shows instead of the exam's name: the exam's own
   // logo, the same tile its card carries on the Study Guides grid and the quiz
@@ -160,12 +159,6 @@ export default function WikiExam() {
   // picked it with, rather than restating the heading a few pixels below it.
   const pageIcon = useMemo(() => (
     <ExamLogo examKey={progressKey} size="md" />
-  ), [progressKey])
-
-  const smallTitleBadge = useMemo(() => (
-    <span className="inline-flex items-center gap-1.5 not-prose shrink-0">
-      <ExamStatusBadge progressKey={progressKey} size="sm" />
-    </span>
   ), [progressKey])
 
   const backLink = useMemo(() => (
@@ -254,6 +247,21 @@ export default function WikiExam() {
     const refs = conceptList.filter(r => planSet.has(r.name.toLowerCase()))
     return refs.length > 0 ? refs : null
   }, [todaysPlan, conceptList])
+
+  // The sticky header's right-hand end: the status badge, then the examining
+  // body's own syllabus — the document this whole page is a reading of. With
+  // today's plan pill also on the row, the syllabus button goes icon-only on a
+  // phone so the row still fits.
+  const smallTitleBadge = useMemo(() => (
+    <span className="inline-flex items-center gap-1.5 not-prose shrink-0">
+      <ExamStatusBadge progressKey={progressKey} size="sm" />
+      <ExamSyllabusButton
+        examId={wikiExamId}
+        examLabel={extractedTitle ?? examDisplayName(examFileName)}
+        iconOnlyOnPhone={studyPlanRefs !== null}
+      />
+    </span>
+  ), [progressKey, wikiExamId, extractedTitle, examFileName, studyPlanRefs])
 
   const resourceRefs = useMemo(() => {
     const seen = new Set<string>()

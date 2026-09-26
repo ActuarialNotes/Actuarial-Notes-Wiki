@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:5528f51e756b7fd2c8e638234a748cd334e22f8877b96e08e738d1ee72fd883f
+  content_hash: sha256:15b292a0538390f31879346832c0c9bf316004c745250b65da20f03f36ce3c11
   sources: []
   open_findings: 0
   open_critical: 0
@@ -32,12 +32,10 @@ Climate risks **drive** financial risks — credit, market, insurance and liquid
 
 ## Structure
 
-| | |
-|---|---|
-| **A. Overview** | A1 purpose and scope · A2 structure · **A3 outcomes** |
-| **Chapter 1 — Governance and risk management** | I. Governance · II. Risk management (A. identification, measurement and management; B. monitoring and reporting) · III. **Climate scenario analysis and [[Stress Testing\|stress testing]]** · IV. Capital and liquidity adequacy |
-| **Chapter 2 — Climate-related financial disclosures** | Purpose · scope of application · principles for effective disclosure · implementation date and comparative period · location and timing · OSFI's financial data websites · frequency · format |
-| **Annexes** | 1-1 other OSFI guidance · 1-2 examples of climate-related **transmission channels** · 2-1 greenhouse gas emissions accounting · 2-2 climate-related financial disclosure expectations |
+- **A. Overview** — A1 purpose and scope · A2 structure · **A3 outcomes**
+- **Chapter 1 — Governance and risk management** — I. Governance · II. Risk management (A. identification, measurement and management; B. monitoring and reporting) · III. **Climate scenario analysis and [[Stress Testing|stress testing]]** · IV. Capital and liquidity adequacy
+- **Chapter 2 — Climate-related financial disclosures** — Purpose · scope of application · principles for effective disclosure · implementation date and comparative period · location and timing · OSFI's financial data websites · frequency · format
+- **Annexes** — 1-1 other OSFI guidance · 1-2 examples of climate-related **transmission channels** · 2-1 greenhouse gas emissions accounting · 2-2 climate-related financial disclosure expectations
 
 ## The three expected outcomes (A3)
 

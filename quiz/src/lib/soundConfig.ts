@@ -86,7 +86,7 @@ export type SoundEvent =
    */
   | 'begin'
   /**
-   * The *second* Start Quiz: the one on the pre-quiz collect gate, which is
+   * The *second* Start Quiz: the one on the pre-quiz concept list, which is
    * what actually drops you into the questions. Picks the phrase `begin` left
    * hanging up a fourth and lands it.
    */
@@ -699,7 +699,7 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     // being fired out of something.
     //
     // Then a single struck note, and it stops there. Opening a quiz is *two*
-    // presses — this one, then the collect gate's Start Quiz — so the bugle is
+    // presses — this one, then the concept list's Start Quiz — so the bugle is
     // split across them: this half is the count-in and the D it lands on,
     // `launch` is the rest of the phrase. Ending on one note is what leaves it
     // hanging, and a cue that hangs is a cue you want to answer.
@@ -728,7 +728,7 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     ],
   },
   launch: {
-    // The second Start Quiz — the one on the pre-quiz collect gate, the press
+    // The second Start Quiz — the one on the pre-quiz concept list, the press
     // that actually puts a question on screen.
     //
     // It is the back half of `begin`'s bugle: up a fourth to G, up a whole tone

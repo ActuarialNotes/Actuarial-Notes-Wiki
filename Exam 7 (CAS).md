@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:8893482125bb248ab84aa21f4c2dff23b7cbd4c14ae609b29f2f67362d629195
+  content_hash: sha256:be9f021f0efbdc24b43730f4ff4847850382fc1373456313396da119fa866682
   sources: []
   open_findings: 0
   open_critical: 0
@@ -12,9 +12,9 @@ verification:
 ---
 
 <div class="exam-nav"
-	 data-color="#65a30d"
+     data-color="#65a30d"
      data-current="7|Advanced Estimation of Claims Liabilities"
-     data-tracks="FCAS|Fellow of the Casualty Actuarial Society (FCAS).md"
+     data-tracks="FCAS|Fellow of the Casualty Actuarial Society (FCAS).md">
 </div>
 
 # Exam 7
@@ -23,39 +23,40 @@ The **Advanced Estimation of Claims Liabilities (Exam 7)** is a 4 hour exam cove
 
 ## Learning Objectives
 
-> [!example]- Data Preparation, Organization, & Analysis
-> ### Data Preparation, Organization, & Analysis
+> [!example]- A. Estimation of Claims Liabilities {100%}
 > Candidates are expected to apply basic Principles and [[Standards of Practice]] for [[Unpaid Claim Estimation]], including evaluating liabilities arising in complex [[Risk Transfer]] agreements common in excess insurance and [[Reinsurance]] contracts.
+>
+> **Data Preparation, Organization, & Analysis**
+>
 > 1. Perform [[Data Diagnostic Analysis|data diagnostic analyses]] and adjust for data issues
-
-> [!example]- Unpaid Claim Point Estimates
-> ### Unpaid Claim Point Estimates
+>
+> **Unpaid Claim Point Estimates**
+>
 > 2. Calculate [[Unpaid Claims]] estimates
 > 3. Test unpaid claims estimates for reasonableness
 > 4. Estimate unpaid claims for various layers of coverage
 > 5. Forecast [[Premium Reserves]] (e.g., reserves for [[Retrospective Premiums]])
-
-> [!example]- Unpaid Claim Stochastic Distributions
-> ### Unpaid Claim Stochastic Distributions
+>
+> **Unpaid Claim Stochastic Distributions**
+>
 > 6. Estimate parameters of [[Unpaid Claims Distributions]]
 > 7. Calculate the [[Moments]] and [[Percentiles]] of unpaid claim distributions
 > 8. Simulate parameter percentiles and unpaid claims percentiles
 > 9. Calculate the mean and [[Prediction Error]] of a reserve
 > 10. Derive [[Predictive Distributions]] using stochastic methods
-
-> [!example]- Unpaid Claim Output & Diagnostic Analysis
-> ### Unpaid Claim Output & Diagnostic Analysis
+>
+> **Unpaid Claim Output & Diagnostic Analysis**
+>
 > 11. Test output of unpaid claim distributions for reasonableness
 > 12. Test assumptions underlying [[Reserving Models]]
 > 13. Develop a range of indications
 > 14. Calculate [[Risk Margins]]
-
-> [!example]- Reinsurance
-> ### Reinsurance
+>
+> **Reinsurance**
+>
 > 15. Adjust primary methods and data to be used for [[Reinsurance Reserving]]
 > 16. Calculate [[Ceded Loss Reserves]]
 > 17. Describe the function and types of [[Reinsurance]]
->
 
 ## Source Material
 

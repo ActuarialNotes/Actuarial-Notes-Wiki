@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:0532febc09c666e5fed32312c08613f6419b7ec0adab567561d4cab1ed376c18
+  content_hash: sha256:f6eb922ab6c23a674e723fb088a04550d61bde45e46afa5ab95b626ab2ac26a7
   sources: []
   open_findings: 0
   open_critical: 0
@@ -26,15 +26,13 @@ The CIA's February 2025 year-specific guidance on **capital and [[FCT|financial 
 
 ## Contents
 
-| Section | Subject | Assigned? |
-|---|---|---|
-| 1 | **General background** — 1.1 [[IFRS 17]] and IFRS 9; 1.2 [[Climate Risk\|climate risk management]] | Yes |
-| 2 | Regulatory capital requirements for 2025 — 2.1 life; **2.2 P&C**; 2.3 mortgage | **2.2 only** |
-| 3 | **Considerations for the 2025 financial condition testing** — 3.1 [[Standards of Practice\|Standards of Practice]] §2500 (unchanged); 3.2 recent events; 3.3 additional guidance (standardized stress tests, OSFI and AMF FCT templates, climate-related risk, technology and cyber risk) | Yes |
-| 4 | **Considerations for the 2025 [[ORSA\|ORSA]]** — 4.1 additional guidance (new); 4.2 economic capital modelling; 4.3 recent events | Yes |
-| 5 | Recently approved regulatory guidelines | No |
-| 6 | Upcoming regulatory guidelines | No |
-| A–C | OSFI documentation; [[Autorité des marchés financiers\|AMF]] documentation; CIA guidance | No |
+- **1** — **General background** — 1.1 [[IFRS 17]] and IFRS 9; 1.2 [[Climate Risk|climate risk management]] · *Assigned?:* Yes
+- **2** — Regulatory capital requirements for 2025 — 2.1 life; **2.2 P&C**; 2.3 mortgage · *Assigned?:* **2.2 only**
+- **3** — **Considerations for the 2025 financial condition testing** — 3.1 [[Standards of Practice|Standards of Practice]] §2500 (unchanged); 3.2 recent events; 3.3 additional guidance (standardized stress tests, OSFI and AMF FCT templates, climate-related risk, technology and cyber risk) · *Assigned?:* Yes
+- **4** — **Considerations for the 2025 [[ORSA|ORSA]]** — 4.1 additional guidance (new); 4.2 economic capital modelling; 4.3 recent events · *Assigned?:* Yes
+- **5** — Recently approved regulatory guidelines · *Assigned?:* No
+- **6** — Upcoming regulatory guidelines · *Assigned?:* No
+- **A–C** — OSFI documentation; [[Autorité des marchés financiers|AMF]] documentation; CIA guidance · *Assigned?:* No
 
 ## What to take from the assigned sections
 

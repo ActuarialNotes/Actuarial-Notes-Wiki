@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:4244e7627b15432342f2b8140bcf56ca39eabb5ee3df4e8229d0a3adfb55e1e9
+  content_hash: sha256:236efee68f7be3108d2671d9b325c1399624cdcfa599bd484240314f0ebbdba5
   sources: []
   open_findings: 0
   open_critical: 0
@@ -30,14 +30,12 @@ The October 2016 guidelines governing a **major rate filing** for Ontario privat
 
 ## C. Guidelines for a major filing
 
-| Section | What it requires |
-|---|---|
-| 1 | Table of contents |
-| 2 | Summary of information |
-| 3 | **Certificates** — of the officer/designate, and **of the actuary**. The actuary certifies the rates are not excessive, inadequate or [[Unfair Discrimination\|unfairly discriminatory]] and were prepared in accordance with [[Accepted Actuarial Practice\|accepted actuarial practice]] |
-| 4 | **Actuarial support** — the substance of the filing |
-| 5 | Discount/surcharge changes |
-| 6 | Rating rule changes |
+- **1** — Table of contents
+- **2** — Summary of information
+- **3** — **Certificates** — of the officer/designate, and **of the actuary**. The actuary certifies the rates are not excessive, inadequate or [[Unfair Discrimination|unfairly discriminatory]] and were prepared in accordance with [[Accepted Actuarial Practice|accepted actuarial practice]]
+- **4** — **Actuarial support** — the substance of the filing
+- **5** — Discount/surcharge changes
+- **6** — Rating rule changes
 
 ### Section 4 — the actuarial support
 

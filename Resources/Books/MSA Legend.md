@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:83d3ca2e0d034a956b364a34849f37f5c45eed44f94f0ba12f92cdab244744d0
+  content_hash: sha256:1f1821f2ba46332d88a28dc131db4caa5c20aa6278acc79d7d8a1e3b4297106a
   sources: []
   open_findings: 0
   open_critical: 0
@@ -35,13 +35,11 @@ That addressing is the point of the document: every KPI is defined as arithmetic
 
 The definitions were rebuilt for [[IFRS 17]] and no longer resemble their IFRS 4 predecessors — the exam's favourite point about them.
 
-| Ratio | Numerator (in words) | Denominator |
-|---|---|---|
-| **Net expense ratio** | Amortization of [[Insurance Acquisition Cash Flows\|insurance acquisition cash flows]] − amortization of reinsurance acquisition cash flows + general and operating expenses | Total [[Insurance Revenue\|insurance revenue]] + allocation of reinsurance premiums |
-| **Net claims ratio (partially discounted)** | Incurred claims and other [[Insurance Service Expenses\|insurance service expenses]] + adjustments to liabilities for incurred claims + losses and reversals on [[Onerous Contract\|onerous contracts]], **less** the corresponding reinsurance recoveries, recoveries of losses, adjustments to reinsurance assets, and the effect of changes in **non-performance risk of reinsurers** | Insurance revenue + allocation of reinsurance premiums |
-| **Net combined ratio (partially discounted)** | Insurance service expense + general and operating expenses − amounts recoverable from reinsurers − effect of changes in non-performance risk of reinsurers | Insurance revenue + allocation of reinsurance premiums |
-| **Net combined ratio (fully discounted)** | The above, **less** net finance income from insurance contracts and from reinsurance contracts held | Insurance revenue + allocation of reinsurance premiums |
-| **Gross expense ratio / gross claims ratio** | The same constructions before reinsurance | Total insurance revenue |
+- **Net expense ratio** — *Numerator (in words):* Amortization of [[Insurance Acquisition Cash Flows|insurance acquisition cash flows]] − amortization of reinsurance acquisition cash flows + general and operating expenses · *Denominator:* Total [[Insurance Revenue|insurance revenue]] + allocation of reinsurance premiums
+- **Net claims ratio (partially discounted)** — *Numerator (in words):* Incurred claims and other [[Insurance Service Expenses|insurance service expenses]] + adjustments to liabilities for incurred claims + losses and reversals on [[Onerous Contract|onerous contracts]], **less** the corresponding reinsurance recoveries, recoveries of losses, adjustments to reinsurance assets, and the effect of changes in **non-performance risk of reinsurers** · *Denominator:* Insurance revenue + allocation of reinsurance premiums
+- **Net combined ratio (partially discounted)** — *Numerator (in words):* Insurance service expense + general and operating expenses − amounts recoverable from reinsurers − effect of changes in non-performance risk of reinsurers · *Denominator:* Insurance revenue + allocation of reinsurance premiums
+- **Net combined ratio (fully discounted)** — *Numerator (in words):* The above, **less** net finance income from insurance contracts and from reinsurance contracts held · *Denominator:* Insurance revenue + allocation of reinsurance premiums
+- **Gross expense ratio / gross claims ratio** — *Numerator (in words):* The same constructions before reinsurance · *Denominator:* Total insurance revenue
 
 ## What to take from it
 

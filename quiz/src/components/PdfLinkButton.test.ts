@@ -26,7 +26,7 @@ function read(rel: string): string {
 const PDF_SURFACES = [
   // The past-paper shelf: a sitting's examiner's report and its solutions.
   'components/PastExamBrowser.tsx',
-  // The study guide's title row: the exam's published syllabus.
+  // The study guide's sticky header: the exam's published syllabus.
   'components/wiki/ExamSyllabusButton.tsx',
   // A resource page's metadata card: "Read PDF".
   'components/wiki/ResourceMetaCard.tsx',

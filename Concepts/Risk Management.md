@@ -6,7 +6,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9b8083528603b15d7b697f056f9a0652f44c3bf914f176dda151941cee34a5e2
+  content_hash: sha256:8285c3f4f755286c8d1fbc105d73e2919f14edc953a553116c308d127236ce7b
   sources: []
   open_findings: 0
   open_critical: 0
@@ -14,7 +14,7 @@ verification:
 ---
 [[Actuarial Notes Wiki|Wiki]] / [[Actuarial Methods]] / ==Risk Management==
 
-> **Risk Management** is ==coordinated activities to direct and control an organization with regard to [[risk]].== The purpose of risk management is to create and protect value.
+> **Risk Management** is ==coordinated activities to direct and control an organization with regard to [[Risk|risk]].== The purpose of risk management is to create and protect value.
 > - [ISO](https://www.iso.org/obp/ui/en/#iso:std:iso:31000:ed-2:v1:en), 2018
 
 The **ISO 31000 Risk Management - Guidelines (2018)** details a 6 step process for performing risk management.

@@ -6,9 +6,10 @@ import { KeystoneIcon } from '@/components/KeystoneName'
 
 // A flat flashcard showing a concept name, styled identically to a collected
 // tile in the Flashcards gallery (the same .flashcard-collected foil ladder,
-// via `lib/flashcardFoil.ts`) — no 3D perspective or tilt. A correct
-// answer triggers a rainbow "snake" that chases around the border, spinning
-// faster and faster, before the card dissolves into the collect flash.
+// via `lib/flashcardFoil.ts`) — no 3D perspective or tilt. Drawn by the
+// level-up ceremony (components/ConceptLevelUpCeremony.tsx): a rainbow "snake"
+// chases around the border, spinning faster and faster, before the card
+// dissolves into the collect flash.
 
 interface CollectCard3DProps {
   name: string
@@ -39,7 +40,7 @@ export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '
   const [side, setSide] = useState<'front' | 'back'>('front')
 
   // A new concept always opens showing its front, and so does a card that stops
-  // being flippable — the collect ceremony switches flipping off, which unmounts
+  // being flippable — a ceremony that switches flipping off, which unmounts
   // the back pane, so a card left flipped would spin and dissolve completely
   // blank. The derived side below is what covers the frame the ceremony starts
   // on (this effect only runs after it); the reset keeps the state honest if
@@ -56,8 +57,7 @@ export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '
   const sheenClass = phase === 'spin' ? '' : flashcardFoilClass(true, foilState)
   const phaseClass = phase === 'won' ? 'collect-card-won' : ''
 
-  // A control rendered inside the card — the back's "Read the concept" button —
-  // is its own action: a click, or an Enter/Space on it while focused, must not
+  // A control rendered inside the card's back is its own action: a click, or an Enter/Space on it while focused, must not
   // also flip the card out from under what it opened.
   function fromInnerControl(e: React.SyntheticEvent): boolean {
     const el = e.target as HTMLElement | null

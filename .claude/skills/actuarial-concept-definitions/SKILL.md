@@ -72,8 +72,11 @@ bullets *above* the formula; always put them *after*):
 > > <Worked solution. Multi-step → align*.>
 ```
 
-Concept pages have **no YAML frontmatter** — they start directly with the bold
-term. (A handful of older non-P/FM pages have frontmatter; do not copy that.)
+The only YAML frontmatter a concept page carries is its `verification:` block
+(`docs/verification.md`), and you don't write that by hand: author the page
+without frontmatter, then run `python3 scripts/verify_check.py --sync`, which
+adds it. The body starts directly with the bold term. (A handful of older
+non-P/FM pages carry other frontmatter keys too; do not copy those.)
 
 ### 1. The definition (first line)
 

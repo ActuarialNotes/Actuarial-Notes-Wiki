@@ -1,0 +1,21 @@
+{
+  "_comment": "Shared cases for the two link resolvers. Each `link` is a question wiki_link entry; `slug` is the concept slug mastery is recorded under. Asserted against scripts/vault_links.question_link_slug (scripts/test_vault_links.py) and quiz/src/lib/conceptMatch.slugForLink (quiz/src/lib/examCatalog.test.ts), so the Python checkers and the app can't disagree about what a link means.",
+  "question_links": [
+    { "link": "Concepts/Uniform+Continuous+Distribution", "slug": "Uniform Continuous Distribution" },
+    { "link": "Concepts/Expected Value", "slug": "Expected Value" },
+    { "link": "Concepts/Bayes%27+Theorem", "slug": "Bayes' Theorem" },
+    { "link": "concepts/Loss Ratio.md", "slug": "Loss Ratio" },
+    { "link": "Concepts/Probability+Density+Function+(PDF)", "slug": "Probability Density Function (PDF)" },
+    { "link": "/wiki/concept/Bond+Price", "slug": "Bond Price" },
+    { "link": "https://wiki.actuarialnotes.com/wiki/concept/Chain+Ladder+Method", "slug": "Chain Ladder Method" },
+    { "link": "Expected Value", "slug": "Expected Value" },
+    { "link": "Resources/Books/Basic-Ratemaking", "slug": "Basic Ratemaking" },
+    { "link": "https://example.com/some-page", "slug": "some page" }
+  ],
+  "wiki_links": [
+    { "link": "[[Bond Price|Price]]", "name": "Bond Price" },
+    { "link": "[[Resources/Books/Risk and Insurance (SOA)]]", "name": "Risk and Insurance (SOA)" },
+    { "link": "[[Capital Available\\|capital available]]", "name": "Capital Available\\" },
+    { "link": "[[Callable Bond|Callable]]", "name": "Callable Bond" }
+  ]
+}

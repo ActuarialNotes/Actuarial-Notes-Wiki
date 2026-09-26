@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ArrowUp, LayoutDashboard, X, XCircle } from 'lucide-react'
 import { useQuizStore, readLastSession, syncPendingSessionToCloud } from '@/stores/quizStore'
-import type { CompletedSession, MasteryTransition } from '@/stores/quizStore'
+import type { CompletedSession } from '@/stores/quizStore'
 import { useAuth } from '@/hooks/useAuth'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { loadCachedStudyPlan, todayISO } from '@/lib/studyPlan'
@@ -13,15 +13,12 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Loader2 } from 'lucide-react'
 import type { MasteryState } from '@/lib/mastery'
-import { buildMasteryLookup, resolveConceptState, slugForLink } from '@/lib/conceptMatch'
+import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { QuestCompleteOverlay } from '@/components/QuestCompleteOverlay'
 import { StreakCompleteOverlay } from '@/components/StreakCompleteOverlay'
 import { StudyPlanCompleteOverlay } from '@/components/StudyPlanCompleteOverlay'
 import { ConceptLevelUpCeremony } from '@/components/ConceptLevelUpCeremony'
-import { PostQuizCollectGate } from '@/components/collect/PostQuizCollectGate'
-import { useMissedLevelUpPromotion } from '@/hooks/useMissedLevelUpPromotion'
-import { useCollect } from '@/hooks/useCollect'
 import { QUESTS_ENABLED, STREAK_ENABLED } from '@/lib/featureFlags'
 import { readJustCompletedQuests } from '@/lib/questStore'
 import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
@@ -152,78 +149,15 @@ export default function Review() {
     return progressKey ? loadCachedStudyPlan(progressKey) : null
   }, [progressKey])
 
-  // Level-ups banked by the post-quiz collect gate, after the quiz was scored.
-  // Kept beside the session's own transitions (rather than folded into it) so
-  // they show up in the results card without re-triggering the level-up
-  // ceremony, which has already played by the time the gate is on screen.
-  const [gateTransitions, setGateTransitions] = useState<MasteryTransition[]>([])
-
   const newlyCompletedSlugs = useMemo(() => {
     const slugs = new Set<string>()
-    for (const t of [...(session?.masteryTransitions ?? []), ...gateTransitions]) {
+    for (const t of session?.masteryTransitions ?? []) {
       if (t.to === 'level1' || t.to === 'level2' || t.to === 'level3') {
         slugs.add(t.conceptSlug.toLowerCase())
       }
     }
     return slugs
-  }, [session, gateTransitions])
-
-  // Concepts this quiz answered correctly but that stayed New because they
-  // weren't collected yet (see docs/flashcard-collection.md) — collecting them
-  // now still banks the level-up via PostQuizCollectGate / promoteMissedLevelUp.
-  // Computed once and frozen (like planBonusHandledRef below): PostQuizCollectGate
-  // itself tracks which of these get collected, so this list must not shrink out
-  // from under it the instant a concept is collected (masteryRecords/collectedCards
-  // would otherwise flip it out of "New" mid-gate and collapse the screen).
-  const [missedLevelUpConcepts, setMissedLevelUpConcepts] = useState<string[]>([])
-  const missedConceptsComputedRef = useRef(false)
-
-  useEffect(() => {
-    if (missedConceptsComputedRef.current || !session || !progressKey || masteryLoading) return
-    missedConceptsComputedRef.current = true
-    const lookup = buildMasteryLookup(masteryRecords.filter(r => r.exam_id === progressKey))
-    const now = new Date()
-    const seen = new Set<string>()
-    const result: string[] = []
-    for (const q of session.questions) {
-      if (!effectiveOutcome(q, session.responses[q.id]?.chosen, session.manualGrades ?? {})) continue
-      for (const link of q.wiki_link) {
-        const slug = slugForLink(link)
-        if (!slug) continue
-        const key = slug.toLowerCase()
-        if (seen.has(key)) continue
-        seen.add(key)
-        if (resolveConceptState(lookup, { name: slug }, now) !== 'new') continue
-        result.push(slug)
-      }
-    }
-    setMissedLevelUpConcepts(result)
-  }, [session, progressKey, masteryLoading, masteryRecords])
-
-  const [missedGateDone, setMissedGateDone] = useState(false)
-
-  // One promotion watcher for the whole screen: the gate modal and the collect
-  // cards behind it list the same concepts, and collecting one from either
-  // place has to bank exactly one level-up.
-  const { promoted: promotedConcepts, pending: pendingConcepts } = useMissedLevelUpPromotion({
-    examId: progressKey,
-    userId: user?.id ?? null,
-    concepts: missedLevelUpConcepts,
-    onPromoted: t => setGateTransitions(prev =>
-      prev.some(p => p.conceptSlug.toLowerCase() === t.conceptSlug.toLowerCase()) ? prev : [...prev, t]
-    ),
-  })
-
-  // What's still one comprehension check short of Level 1 — the cards the
-  // results screen keeps after the gate is dismissed. A concept drops out the
-  // moment its promotion lands (it reappears as a level-up card); one whose
-  // collection is still in flight stays, spinning.
-  const collectableConcepts = useMemo(
-    () => missedLevelUpConcepts.filter(name => !promotedConcepts.has(name.toLowerCase())),
-    [missedLevelUpConcepts, promotedConcepts],
-  )
-
-  const openCollect = useCollect(s => s.open)
+  }, [session])
 
   // Today's Study Plan completion — mirrors ReadinessCard's "all concepts on
   // target" check, but scoped to what's needed here so we can surface the 2×
@@ -299,16 +233,11 @@ export default function Review() {
   )
   const percentage = totalQuestions > 0 ? Math.round((scoredPoints / totalQuestions) * 100) : 0
 
-  // Level-ups the quiz itself produced. These drive the ceremony; the results
-  // card below lists these *plus* anything the collect gate banked afterwards.
-  const quizTransitions = session.masteryTransitions?.filter(
+  // Level-ups the quiz produced. They drive the ceremony — where a New concept
+  // reaching Level 1 plays the collect animation — and the results card below.
+  const upwardTransitions = session.masteryTransitions?.filter(
     t => t.to === 'level1' || t.to === 'level2' || t.to === 'level3'
   ) ?? []
-  const quizTransitionSlugs = new Set(quizTransitions.map(t => t.conceptSlug.toLowerCase()))
-  const upwardTransitions = [
-    ...quizTransitions,
-    ...gateTransitions.filter(t => !quizTransitionSlugs.has(t.conceptSlug.toLowerCase())),
-  ]
 
   // Which questions to show in the review list
   const outcomes = session.questions.map(q =>
@@ -357,38 +286,20 @@ export default function Review() {
   // then hands off to the streak/quest/plan celebrations. For signed-in users we
   // wait for the gem balance to load so the running tally lands on the right
   // total; guests earn no gems so there's nothing to wait on.
-  // Driven by the quiz's own level-ups only: a level-up banked later by the
-  // collect gate must not re-open the ceremony on top of that gate.
-  const hasLevelUps = quizTransitions.length > 0
+  const hasLevelUps = upwardTransitions.length > 0
   const levelUpCeremonyReady = !user || !gemsLoading
   const showLevelUpCeremony = hasLevelUps && !levelUpsDone && levelUpCeremonyReady
-  const levelUpsReady = !hasLevelUps || levelUpsDone
-
-  // Collect gate for concepts this quiz got right but that stayed New (uncollected)
-  // — shown right after the level-up ceremony, before the streak/quest/plan chain.
-  const hasMissedLevelUps = missedLevelUpConcepts.length > 0
-  const showMissedLevelUpGate = levelUpsReady && hasMissedLevelUps && !missedGateDone
-  const celebrationsReady = levelUpsReady && (!hasMissedLevelUps || missedGateDone)
+  const celebrationsReady = !hasLevelUps || levelUpsDone
 
   return (
     <>
     {/* Ceremony for each concept levelled up by this quiz. */}
     {showLevelUpCeremony && (
       <ConceptLevelUpCeremony
-        transitions={quizTransitions}
+        transitions={upwardTransitions}
         gemsEarned={user ? correctCount : 0}
         totalGems={gemBalance}
         onResolved={() => setLevelUpsDone(true)}
-      />
-    )}
-    {/* Concepts answered correctly but still New because they weren't collected —
-        collecting here still banks the level-up. */}
-    {showMissedLevelUpGate && progressKey && (
-      <PostQuizCollectGate
-        concepts={missedLevelUpConcepts}
-        promoted={promotedConcepts}
-        pending={pendingConcepts}
-        onDone={() => setMissedGateDone(true)}
       />
     )}
     {/* Streak flame (if today's streak grew) then quests cleared by this quiz —
@@ -484,9 +395,6 @@ export default function Review() {
         manualGrades={session.manualGrades}
         onReviewIncorrect={handleReviewIncorrect}
         levelUpTransitions={upwardTransitions}
-        collectableConcepts={collectableConcepts}
-        pendingCollectConcepts={pendingConcepts}
-        onCollectConcept={name => openCollect({ kind: 'concept', name })}
         actionsRef={actionsRowRef}
       />
 

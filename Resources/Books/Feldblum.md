@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:4c46cfb3ec812da6867b09ff36739d311ec93ae4191b4574b05ecb84d8189dad
+  content_hash: sha256:ed23198afa31308ea17610c64ce1a762006d9c33c4e9cf4b2968990089de6d1b
   sources: []
   open_findings: 0
   open_critical: 0
@@ -47,12 +47,10 @@ Appendix A works through items an agency treats differently from the balance she
 
 Both assess capital adequacy, and the exam asks how they differ:
 
-| | Regulator ([[OSFI]]) | Rating agency |
-|---|---|---|
-| Objective | Protect policyholders; minimise loss on failure | Inform investors and buyers about relative financial strength |
-| Standard | A pass/fail minimum plus a [[Supervisory Target Capital Ratio\|supervisory target]] | A graded scale, with capital one factor among several |
-| Also weighs | Risk management quality, governance | **Operating performance**, business profile, management, market position |
-| Powers | Statutory intervention | None — but the market's reaction is the sanction |
+- **Objective** — *Regulator ([[OSFI]]):* Protect policyholders; minimise loss on failure · *Rating agency:* Inform investors and buyers about relative financial strength
+- **Standard** — *Regulator ([[OSFI]]):* A pass/fail minimum plus a [[Supervisory Target Capital Ratio|supervisory target]] · *Rating agency:* A graded scale, with capital one factor among several
+- **Also weighs** — *Regulator ([[OSFI]]):* Risk management quality, governance · *Rating agency:* **Operating performance**, business profile, management, market position
+- **Powers** — *Regulator ([[OSFI]]):* Statutory intervention · *Rating agency:* None — but the market's reaction is the sanction
 
 A. M. Best, founded in 1899, is the agency whose surveys are most widely reviewed in the insurance industry; agencies also rate short-term debt on simpler scales, and letter rating changes should show **negative serial correlation** if the scale is used consistently.
 

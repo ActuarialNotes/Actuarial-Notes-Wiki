@@ -23,8 +23,6 @@ import ImageFocus from '@/components/ImageFocus'
 import PdfReaderHost from '@/components/PdfReaderHost'
 import FlashcardSync from '@/components/FlashcardSync'
 import Toast from '@/components/Toast'
-import { CollectConceptModal } from '@/components/collect/CollectConceptModal'
-import { useCollect } from '@/hooks/useCollect'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ExamProgressProvider } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
@@ -80,7 +78,7 @@ interface ErrorBoundaryState { error: Error | null }
 interface ErrorBoundaryProps {
   children: ReactNode
   // When provided, this is rendered instead of the full-page crash screen. Used
-  // for app-level portals (e.g. the collect modal) that live outside a route
+  // for app-level portals that live outside a route
   // boundary — a crash there would otherwise unmount the whole tree and leave a
   // blank screen. `null` degrades gracefully by simply removing the failed UI.
   fallback?: ReactNode
@@ -143,21 +141,6 @@ function NotFound() {
 function PageTracker() {
   usePageTracking()
   return null
-}
-
-// The collect modal is an app-level portal rendered outside every route's
-// ErrorBoundary, so an unhandled error inside it (or the data it loads) would
-// unmount the whole tree and leave a blank screen. Contain it in its own
-// boundary that degrades to nothing on error, and key the boundary to the
-// active concept so a failure on one card resets when the next card is opened
-// (rather than staying broken until a reload).
-function CollectModalBoundary() {
-  const conceptName = useCollect(s => s.ref?.name ?? null)
-  return (
-    <ErrorBoundary key={conceptName ?? '∅'} fallback={null}>
-      <CollectConceptModal />
-    </ErrorBoundary>
-  )
 }
 
 function GlobalKeyHandler() {
@@ -302,7 +285,6 @@ export default function App({ initialSession }: { initialSession: Session | null
               </Routes>
             </Main>
             {TOUR_ENABLED && <OnboardingTour />}
-            <CollectModalBoundary />
             <MathFocus />
             <ImageFocus />
             {/* The app's one PDF reader. Root-level so a document opened from a

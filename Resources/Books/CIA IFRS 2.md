@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:b30571f9f5975d2e5e08cc0638ecff452125f015fad10a362b19d60e04fa1fd5
+  content_hash: sha256:aba5f2e7c738d7628a35dde5ac7c2b86f7faae86a8b65ddf945ab1ff9edf5a74
   sources: []
   open_findings: 0
   open_critical: 0
@@ -27,17 +27,15 @@ IFRS 17 defines it as the compensation the entity requires for bearing the uncer
 
 ## Contents
 
-| Section | Subject |
-|---|---|
-| 1–2 | Introduction; **transition from IFRS 4 to IFRS 17** |
-| **3** | General considerations — 3.1 measurement approach · 3.2 diversification, allocation and aggregation · 3.3 [[Reinsurance Contracts Held\|reinsurance held]] · 3.4 discount rate · 3.5 time horizon · 3.6 disclosure requirements · 3.7 risk adjustment under the [[Premium Allocation Approach\|PAA]] |
-| **4** | **Quantile methods** — 4.1 introduction · 4.2 generating a distribution · 4.3 measuring risk · 4.4 aggregation and allocation |
-| **5** | **Cost of capital method** — 5.2 the general formula · 5.3 capital \(C_t\) · 5.4 the cost of capital rate \(r_t\) |
-| **6** | **Margin method** |
-| **7** | Reinsurance held methods — quantile methods, catastrophe models, proportional scaling, cost of capital |
-| **8** | Catastrophe reinsurance |
-| **9** | Combining approaches and methods — 9.1 aggregate/entity-level · 9.2 hybrid |
-| **10** | **Quantification of the confidence level** — 10.1 quantile method as primary · 10.2 quantile method as secondary |
+- **1–2** — Introduction; **transition from IFRS 4 to IFRS 17**
+- **3** — General considerations — 3.1 measurement approach · 3.2 diversification, allocation and aggregation · 3.3 [[Reinsurance Contracts Held|reinsurance held]] · 3.4 discount rate · 3.5 time horizon · 3.6 disclosure requirements · 3.7 risk adjustment under the [[Premium Allocation Approach|PAA]]
+- **4** — **Quantile methods** — 4.1 introduction · 4.2 generating a distribution · 4.3 measuring risk · 4.4 aggregation and allocation
+- **5** — **Cost of capital method** — 5.2 the general formula · 5.3 capital \(C_t\) · 5.4 the cost of capital rate \(r_t\)
+- **6** — **Margin method**
+- **7** — Reinsurance held methods — quantile methods, catastrophe models, proportional scaling, cost of capital
+- **8** — Catastrophe reinsurance
+- **9** — Combining approaches and methods — 9.1 aggregate/entity-level · 9.2 hybrid
+- **10** — **Quantification of the confidence level** — 10.1 quantile method as primary · 10.2 quantile method as secondary
 
 ## The three families of method
 

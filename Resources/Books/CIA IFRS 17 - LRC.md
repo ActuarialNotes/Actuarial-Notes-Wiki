@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:710aa9f00e43bc1cacf141b796c4deae9940114f5661b8182cdb3d12369769d5
+  content_hash: sha256:28ca25c1ca47e9901b23189be212ebe83db086578f557890cdf1cea44bccef46
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,15 +23,13 @@ The CIA's June 2022 note on measuring the **[[Liability for Remaining Coverage]]
 
 ## Contents
 
-| Section | Subject |
-|---|---|
-| 1–3 | Introduction; definitions; [[Level of Aggregation\|level of aggregation]] and financial statement presentation |
-| **4** | **LRC under the [[General Measurement Model\|GMM]] — contracts issued**: 4.1 definition · 4.2 allocations · 4.3 estimates of future cash flows · 4.4 effect of discounting · 4.5 [[Risk Adjustment for Non-Financial Risk\|risk adjustment]] · 4.6 [[Contractual Service Margin\|contractual service margin]] · 4.7 [[Coverage Units\|coverage units]] · 4.8 [[Loss Component\|loss component]] |
-| **5** | **LRC under the [[Premium Allocation Approach\|PAA]] — contracts issued**: 5.1 initial recognition · 5.2 subsequent measurement · 5.3 [[Onerous Contract\|onerous groups]] · 5.4 premium · 5.5 [[Insurance Acquisition Cash Flows\|acquisition costs]] · 5.6 financing and investment components |
-| **6** | **Reinsurance issued and held**: 6.1 grouping of [[Reinsurance Contracts Held\|reinsurance held]] · 6.2 recognition · 6.3 [[Contract Boundary\|boundary]] · 6.4 risk of non-performance · 6.5 CSM and loss-recovery component · 6.6 investment components |
-| **7** | **Illustrative example — loss component calculation** |
-| **8** | **[[MCT\|MCT]] considerations**: 8.1 introduction · 8.2 expected loss ratios for MCT · 8.3 expected losses · 8.4 loss adjustment expenses and other directly attributable costs |
-| App. 1 | Premium received |
+- **1–3** — Introduction; definitions; [[Level of Aggregation|level of aggregation]] and financial statement presentation
+- **4** — **LRC under the [[General Measurement Model|GMM]] — contracts issued**: 4.1 definition · 4.2 allocations · 4.3 estimates of future cash flows · 4.4 effect of discounting · 4.5 [[Risk Adjustment for Non-Financial Risk|risk adjustment]] · 4.6 [[Contractual Service Margin|contractual service margin]] · 4.7 [[Coverage Units|coverage units]] · 4.8 [[Loss Component|loss component]]
+- **5** — **LRC under the [[Premium Allocation Approach|PAA]] — contracts issued**: 5.1 initial recognition · 5.2 subsequent measurement · 5.3 [[Onerous Contract|onerous groups]] · 5.4 premium · 5.5 [[Insurance Acquisition Cash Flows|acquisition costs]] · 5.6 financing and investment components
+- **6** — **Reinsurance issued and held**: 6.1 grouping of [[Reinsurance Contracts Held|reinsurance held]] · 6.2 recognition · 6.3 [[Contract Boundary|boundary]] · 6.4 risk of non-performance · 6.5 CSM and loss-recovery component · 6.6 investment components
+- **7** — **Illustrative example — loss component calculation**
+- **8** — **[[MCT|MCT]] considerations**: 8.1 introduction · 8.2 expected loss ratios for MCT · 8.3 expected losses · 8.4 loss adjustment expenses and other directly attributable costs
+- **App. 1** — Premium received
 
 ## The mechanics worth carrying into the exam
 

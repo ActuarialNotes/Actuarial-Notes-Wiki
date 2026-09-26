@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:3ac0ae816f1f8017fd523a6fbc63c189996ec56d2ffb9e759364626f6f1a5a40
+  content_hash: sha256:837c5ce5409acb91626856abd7822820baac3d514b3c22f1f2d55e385c5c1d8b
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,47 +23,47 @@ verification:
 
 - 1.1 [[Axioms of Probability]]
 - 1.2 [[Sample Space]] and [[Event|Events]]
-- 1.3 [[Basic Principle of Counting]]
+- 1.3 Basic Principle of Counting
 - 1.4 [[Permutation|Permutations]] and [[Combination|Combinations]]
 - 1.5 [[Conditional Probability]]
 - 1.6 [[Independent Events|Independence]]
-- 1.7 [[Bayes' Theorem]] and [[The Law of Total Probability]]
+- 1.7 [[Bayes Theorem|Bayes' Theorem]] and [[The Law of Total Probability]]
 
 ## 2 Random Variables
 
 - 2.1 [[Random Variable|Random Variables]]
-- 2.2 [[Cumulative Distribution Function]]
+- 2.2 [[Cumulative Distribution Function (CDF)|Cumulative Distribution Function]]
 - 2.3 [[Expected Value]]
 - 2.4 [[Variance]] and [[Standard Deviation]]
-- 2.5 [[Moment-Generating Function]]
-- 2.6 [[Percentile|Percentiles]] and [[Median]]
+- 2.5 Moment-Generating Function
+- 2.6 [[Percentile|Percentiles]] and Median
 
 ## 3 Discrete Distributions
 
-- 3.1 [[Bernoulli]] Distribution
-- 3.2 [[Binomial]] Distribution
-- 3.3 [[Geometric]] Distribution
-- 3.4 [[Negative Binomial]] Distribution
-- 3.5 [[Hypergeometric]] Distribution
-- 3.6 [[Poisson]] Distribution
+- 3.1 Bernoulli Distribution
+- 3.2 [[Binomial Distribution|Binomial]] Distribution
+- 3.3 [[Geometric Distribution|Geometric]] Distribution
+- 3.4 [[Negative Binomial Distribution|Negative Binomial]] Distribution
+- 3.5 [[Hypergeometric Distribution|Hypergeometric]] Distribution
+- 3.6 [[Poisson Distribution|Poisson]] Distribution
 - 3.7 [[Uniform Discrete|Discrete Uniform]] Distribution
 
 ## 4 Continuous Distributions
 
-- 4.1 [[Uniform Continuous|Uniform]] Distribution
-- 4.2 [[Normal]] Distribution
-- 4.3 [[Exponential]] Distribution
+- 4.1 [[Uniform Continuous Distribution|Uniform]] Distribution
+- 4.2 [[Normal Distribution|Normal]] Distribution
+- 4.3 [[Exponential Distribution|Exponential]] Distribution
 - 4.4 [[Gamma]] Distribution
 - 4.5 [[Beta]] Distribution
-- 4.6 [[Lognormal]] Distribution
+- 4.6 [[Lognormal Distribution|Lognormal]] Distribution
 
 ## 5 Additional Distributions and Properties
 
-- 5.1 [[Weibull Distribution]]
-- 5.2 [[Pareto Distribution]]
-- 5.3 [[Mixture Distribution]]
-- 5.4 [[Hazard Rate Function]]
-- 5.5 [[Skewness]] and [[Kurtosis]]
+- 5.1 Weibull Distribution
+- 5.2 Pareto Distribution
+- 5.3 Mixture Distribution
+- 5.4 [[Hazard Rate|Hazard Rate Function]]
+- 5.5 Skewness and Kurtosis
 - 5.6 Moment-Ratio Diagrams
 
 ## 6 Joint Distributions
@@ -75,23 +75,23 @@ verification:
 - 6.5 [[Independent Random Variables]]
 - 6.6 [[Covariance]] and [[Correlation Coefficient|Correlation]]
 - 6.7 [[Moments for Joint Distributions]]
-- 6.8 [[Bivariate Normal Distribution]]
+- 6.8 Bivariate Normal Distribution
 
 ## 7 Functions of Random Variables
 
 - 7.1 Discrete Transformations
 - 7.2 Continuous Transformations — CDF Method
 - 7.3 Continuous Transformations — PDF Method
-- 7.4 [[Sums of Independent Random Variables]]
-- 7.5 [[Moment-Generating Function]] Technique
+- 7.4 Sums of Independent Random Variables
+- 7.5 Moment-Generating Function Technique
 - 7.6 [[Order Statistics]]
 
 ## 8 Limit Theorems and Stochastic Processes
 
-- 8.1 [[Chebyshev's Inequality]]
+- 8.1 Chebyshev's Inequality
 - 8.2 Law of Large Numbers
 - 8.3 [[Central Limit Theorem]]
-- 8.4 [[Normal]] Approximations
+- 8.4 [[Normal Distribution|Normal]] Approximations
 - 8.5 [[Markov Chain|Markov Chains]]
 - 8.6 [[Poisson Process]]
 - 8.7 Univariate Distribution Relationships

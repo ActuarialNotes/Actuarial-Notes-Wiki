@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:da788600a11b4d0e1666ade5b7c5016aca3bc61eb966e070789f3187e12fea7e
+  content_hash: sha256:f83f1a0eeaccf5363fd8ff0ac5ba006160475bfc0f91786e15f9dfa416aa3a8b
   sources: []
   open_findings: 0
   open_critical: 0
@@ -25,7 +25,7 @@ verification:
 - The ratios built on it — [[Loss Ratio|loss]], [[Expense Ratio|expense]] and [[Combined Ratio|combined ratios]], the operating ratio — are the core [[Key Financial Measures]]; the [[Insurance Expense Exhibit]] allocates the same income by line of business.
 
 > [!example]- Building Statutory Net Income {Example}
-> For the year ($\$$ millions): premiums earned $1{,}000$; losses incurred $620$; LAE incurred $110$; other underwriting expenses $290$; net investment income $90$; realised capital gains $19$, less capital gains tax of $4$; finance and service charges $2$; policyholder dividends $7$; current federal income tax $12$. Common stocks also appreciated by $25$ after tax, unrealised.
+> For the year, in \$ millions: premiums earned $1{,}000$; losses incurred $620$; LAE incurred $110$; other underwriting expenses $290$; net investment income $90$; realised capital gains $19$, less capital gains tax of $4$; finance and service charges $2$; policyholder dividends $7$; current federal income tax $12$. Common stocks also appreciated by $25$ after tax, unrealised.
 >
 > Compute statutory net income and say where the unrealised gain goes.
 >

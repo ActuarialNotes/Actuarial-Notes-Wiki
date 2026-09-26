@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:082ae3fcab7759bc20981e4b956eef25203a5d6cdf52ec2fd1ffb90c0ca0f32a
+  content_hash: sha256:2606982e050dd8ea04fb10ede39f915ae158aa8325f15bbcbd56d4d80d2493fb
   sources: []
   open_findings: 0
   open_critical: 0
@@ -30,16 +30,16 @@ verification:
 > >
 > > $$
 > > \begin{align*}
-> > \text{H} &= 0.05 \times 200{,}000 = \$10{,}000 \\
-> > \text{B} &= 0.04 \times 120{,}000 = \$4{,}800 \\
-> > \text{C} &= 0.06 \times 80{,}000 = \$4{,}800 \\
+> > \text{H: } 0.05 \times 200{,}000 &= \$10{,}000 \\
+> > \text{B: } 0.04 \times 120{,}000 &= \$4{,}800 \\
+> > \text{C: } 0.06 \times 80{,}000 &= \$4{,}800 \\
 > > \text{Total} &= \$19{,}600
 > > \end{align*}
 > > $$
 > >
 > > **Home-state rule:**
 > >
-> > $$\text{H} = 0.05 \times 400{,}000 = \$20{,}000$$
+> > $$\text{H: } 0.05 \times 400{,}000 = \$20{,}000$$
 > >
 > > The tax bill barely moves; the compliance burden collapses. One state's broker licensing, diligent-search rules, filings and tax replace three. The Act allowed states to share tax through a compact, but such compacts never became widespread.
 

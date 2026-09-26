@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a4369e93421ed398d4d6f03769e757970f4571973e911e0b699726d9378757d3
+  content_hash: sha256:744f446c75eddd29b8afc6c591adcf592609105a8f0e61f3f37764ca3fb184e5
   sources: []
   open_findings: 0
   open_critical: 0
@@ -38,7 +38,7 @@ verification:
 > >
 > > Using the ordinary-year default rate, the shortfall would have been estimated at $0.01 \times \$100\text{M} \times 0.005 = \$0.005\text{M}$ — the correlation between the catastrophe and the reinsurer's failure makes it **16 times** larger.
 > >
-> > Option B's recovery is the full $\$1.00\text{M}$: the principal sits in a collateral trust, so there is no counterparty to fail — provided the collateral itself is safe, which 2008 tested when a swap counterparty's collapse impaired several cat bonds. That is part of what the insurer buys with the cat bond's higher cost.
+> > Option B's recovery is the full $\$1.00\text{M}$: the principal sits in a collateral trust, so there is no counterparty to fail — provided the collateral itself is safe, which 2008 tested when Lehman Brothers' failure as swap counterparty impaired several cat bonds. That is part of what the insurer buys with the cat bond's higher cost.
 
 > [!example]- Risk Retention: Vertical Slice vs. First-Loss Piece {Example}
 > An originator securitizes a $\$500$ million pool of auto loans and retains $5\%$ ($\$25$ million). Expected pool losses are $2\%$ ($\$10$ million). Lax underwriting would raise them to $4\%$ ($\$20$ million). How much of the extra $\$10$ million does the originator bear if its retention is (a) a $5\%$ vertical slice of every tranche, (b) a $\$25$ million first-loss piece?

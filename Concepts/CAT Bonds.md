@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:da03d824c786467c60959e69a0618ddd655f66c4429effbcad71c4931aeceb34
+  content_hash: sha256:de6ea036b81b9d6e85109c68f4a34be2b2b683bcbfe49d20e68bd92637a08969
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,7 +18,7 @@ verification:
 > $$\text{Principal lost} = \text{Principal} \times \min\!\left(1,\ \frac{(I - A)^+}{E - A}\right)$$
 
 - $r_{\text{mm}}$ is the money-market return on the collateral, $s$ the risk spread, $I$ the trigger's measured value, $A$ the attachment and $E$ the exhaustion point. A cat bond is a [[Layer of Insurance|layer]] — a tranche of the trigger's distribution ([[Structured Finance]]).
-- **Structure.** The sponsor enters a reinsurance (or derivative) contract with a single-purpose reinsurer, usually offshore, and pays it premium. The SPV issues the notes, commonly for about three years, and places the proceeds in a **collateral trust**. Historically a total return swap converted the trust's yield to a floating rate; after swap-counterparty failures in 2008, collateral moved mostly to Treasury money-market funds. If the trigger is hit the trust pays the sponsor; otherwise principal is repaid at maturity.
+- **Structure.** The sponsor enters a reinsurance (or derivative) contract with a single-purpose reinsurer, usually offshore, and pays it premium. The SPV issues the notes, commonly for about three years, and places the proceeds in a **collateral trust**. Historically a total return swap converted the trust's yield to a floating rate; after Lehman Brothers' 2008 failure impaired several bonds that relied on it as swap counterparty, collateral moved mostly to Treasury money-market funds. If the trigger is hit the trust pays the sponsor; otherwise principal is repaid at maturity.
 - **Triggers**, from least to most basis risk (and most to least moral hazard):
   - **Indemnity** — the sponsor's actual losses. No basis risk, but [[Moral Hazard|moral hazard]] in claims handling, disclosure of the sponsor's book, and slow settlement.
   - **Modelled loss** — the event's physical parameters run through an agreed [[Catastrophe Modelling|catastrophe model]] on the sponsor's exposure. Basis risk equals the model's error.

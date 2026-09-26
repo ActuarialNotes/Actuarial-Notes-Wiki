@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:becc4afe6b84598c689be0a699437433a389943f48965d9dd9e0c9425c2a5c26
+  content_hash: sha256:3da3b22803d26675dcaf8164e4d3134fb5b88f3e6180c4aee2a88af9e77e0692
   sources: []
   open_findings: 0
   open_critical: 0
@@ -48,7 +48,7 @@ verification:
 > > &= 2{,}545 \\
 > > \text{Loss cost rate} &= \frac{2{,}545}{33{,}000} \\
 > > &= 7.71\% \\
-> > \text{Expected loss} &= 0.0771(13{,}000) \\
+> > \text{Expected loss} &= 0.07712(13{,}000) \\
 > > &= 1{,}003 \\
 > > \text{Premium} &= \frac{1{,}003(1.03) + 50}{1 - 0.10} \\
 > > &= 1{,}203

@@ -421,178 +421,202 @@ _TERR = [(-0.26, 0.052), (-0.11, 0.030), (0.02, 0.041), (0.14, 0.024),
          (0.30, 0.038)]   # (intercept offset, slope offset) per territory
 
 
-@figure("Fixed Effects", "A fixed effect estimated separately per level against a "
-        "random effect shrunk toward the mean", width=WID)
+@figure("Fixed Effects", "Five territory bars above and below zero, each its own "
+        "separately estimated coefficient β̂, with nothing pulling them toward the mean",
+        width=WID)
 def fixed_effects() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0.3, 5.7, -0.42, 0.42, left=44, right=16, top=34, bottom=72)
+    ax = vaxes(f, 0.3, 5.7, -0.42, 0.42, left=44, right=16, top=24, bottom=40)
     ax.frame(yticks=[-0.3, 0, 0.3], grid=True, arrows=False)
-    for i in range(5):
-        f.text(ax.px(i + 1), ax.y1 + 17, f"T{i+1}", cls="sm dim")
     for i, (b0, _) in enumerate(_TERR):
+        f.text(ax.px(i + 1), ax.y1 + 17, f"T{i+1}", cls="sm dim")
         ax.fig.rect(ax.px(i + 0.78), min(ax.py(b0), ax.py(0)),
                     ax.px(1.22) - ax.px(0.78), abs(ax.py(b0) - ax.py(0)), rx=2,
                     fill=BLUE, fill_opacity="0.7")
+        ax.label(i + 1, b0, f"β̂{'₁₂₃₄₅'[i]}", cls="sm bold",
+                 dy=-7 if b0 > 0 else 15)
     ax.hline(0, colour="var(--axis)", dash=False, x_to=5.7)
     f.line(ax.x0, ax.y1, ax.x1, ax.y1, cls="rule")
-    f.text(BCX, ax.y1 + 38, "one coefficient per territory —", cls="sm dim")
-    f.text(BCX, ax.y1 + 53, "5 levels cost 4 parameters, no shrinkage", cls="sm dim")
-    f.text(BCX, BY1 - 2, "use when the levels themselves are the interest",
-           cls="sm dim")
     return f
 
 
-@figure("Random Effects", "Raw group deviations shrunk toward zero by a random "
-        "effect", width=WID)
+@figure("Random Effects", "Each territory's raw deviation pulled toward zero into its "
+        "predicted random effect b̂, beside the normal curve the effects are drawn from",
+        width=WID)
 def random_effects() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0.3, 5.7, -0.46, 0.52, left=44, right=16, top=42, bottom=76)
+    ax = vaxes(f, 0.3, 6.5, -0.46, 0.52, left=44, right=10, top=34, bottom=40)
     ax.frame(yticks=[-0.3, 0, 0.3], grid=True, arrows=False)
-    for i in range(5):
-        f.text(ax.px(i + 1), ax.y1 + 17, f"T{i+1}", cls="sm dim")
     zs = [0.35, 0.72, 0.55, 0.86, 0.48]
     for i, ((b0, _), z) in enumerate(zip(_TERR, zs)):
+        f.text(ax.px(i + 1), ax.y1 + 17, f"T{i+1}", cls="sm dim")
         x = ax.px(i + 1)
         ax.fig.circle(x - 7, ax.py(b0), 3.6, fill="var(--dim)")
         ax.fig.circle(x + 7, ax.py(b0 * z), 3.8, fill=BLUE)
         ax.fig.arrow(x - 3, ax.py(b0), x + 3.6, ax.py(b0 * z),
                      colour="var(--axis)", width=1.0)
-    ax.hline(0, colour="var(--axis)", dash=False, x_to=5.7)
+    ax.hline(0, colour="var(--axis)", dash=False, x_to=6.5)
     f.line(ax.x0, ax.y1, ax.x1, ax.y1, cls="rule")
-    f.legend_row(BX0 + 32, BY0 + 12, [("var(--dim)", "raw"), (BLUE, "predicted b̂")],
-                 gap=104)
-    f.text(BCX, ax.y1 + 40, "every group is pulled toward 0 —", cls="sm dim")
-    f.text(BCX, ax.y1 + 55, "the thin ones furthest", cls="sm dim")
-    f.text(BCX, BY1 - 2, "5 levels cost one variance, σ²_b", cls="sm dim")
+    ax.label(5, 0.30, "raw", cls="sm", dx=-7, dy=-9)
+    ax.label(5, 0.30 * zs[4], "b̂", cls="sm bold", fill=BLUE, anchor="start", dx=14,
+             dy=4)
+    # the distribution the effects are drawn from, on its side
+    sd = 0.16
+    pts = [(ax.px(5.75) + 34 * math.exp(-(v / sd) ** 2 / 2), ax.py(v))
+           for v in [(-0.44 + 0.88 * j / 60) for j in range(61)]]
+    f.polygon([(ax.px(5.75), ax.py(-0.44))] + pts + [(ax.px(5.75), ax.py(0.44))],
+              fill=VIOLET, fill_opacity="0.18", stroke="none")
+    f.poly(pts, cls="curve", stroke=VIOLET, stroke_width="1.8")
+    ax.label(5.75, 0.44, "N(0, σ²_b)", cls="sm", anchor="start", dy=-8, dx=-6)
     return f
 
 
-@figure("Hierarchical Model", "Observations nested inside groups nested inside a "
-        "population", width=WID)
+@figure("Hierarchical Model", "A tree from one population node through five territory "
+        "nodes to three observations each, its levels marked β₀, bᵢ and εᵢⱼ", width=WID)
 def hierarchical_model() -> Fig:
     f = vcard()
 
-    f.box(74, 92, 212, 34, label="population  β₀", colour=VIOLET,
-          label_cls="sm bold")
-    for i in range(3):
-        x = 32 + i * 100
-        f.box(x, 168, 88, 34, label=f"group {i+1}", colour=BLUE, label_cls="sm")
-        f.arrow(180, 128, x + 44, 164, colour="var(--axis)", width=1.1)
-        for j in range(3):
-            cx = x + 18 + j * 26
-            f.circle(cx, 264, 9, fill=GREEN, fill_opacity="0.25", stroke=GREEN,
-                     stroke_width="1.2")
-            f.arrow(x + 44, 204, cx, 252, colour="var(--axis)", width=1.0)
-    f.text(BCX, 300, "level 3 · level 2 · level 1", cls="sm dim")
-    f.text(BCX, 326, "variance is split across the levels,", cls="sm dim")
-    f.text(BCX, 342, "one component each", cls="sm dim")
-    f.text(BCX, BY1 - 2, "observations in a group are correlated", cls="sm dim")
+    root = (196, 110)
+    xs = [76 + j * 60 for j in range(5)]
+    ym, yo = 222, 334
+    for j, x in enumerate(xs):
+        f.line(root[0], root[1] + 15, x, ym - 12, cls="thin", stroke="var(--axis)",
+               stroke_width="1.3")
+        for dx in (-17, 0, 17):
+            f.line(x, ym + 12, x + dx, yo - 7, cls="thin", stroke="var(--axis)",
+                   stroke_width="1.1")
+    f.circle(*root, 15, fill=VIOLET, fill_opacity="0.25", stroke=VIOLET,
+             stroke_width="1.6")
+    for j, x in enumerate(xs):
+        colour = SERIES[j % len(SERIES)]
+        f.circle(x, ym, 12, fill=colour, fill_opacity="0.25", stroke=colour,
+                 stroke_width="1.5")
+        for dx in (-17, 0, 17):
+            f.circle(x + dx, yo, 6.5, fill=colour, fill_opacity="0.55")
+    for y, lab in ((root[1], "β₀"), (ym, "bᵢ"), (yo, "εᵢⱼ")):
+        f.text(BX0 + 4, y + 5, lab, cls="bold", anchor="start")
     return f
 
 
-@figure("Random Intercept and Slope", "Parallel group lines under a random "
-        "intercept against fanning lines when the slope is random too", width=WID)
+@figure("Random Intercept and Slope", "Five territory lines starting at different "
+        "heights and fanning at different slopes around a dashed mean line, the "
+        "intercept spread bracketed b₀ᵢ and one line's extra slope marked b₁ᵢ",
+        width=WID)
 def random_intercept_slope() -> Fig:
     f = vcard()
 
-    for panel, (title, use_slope) in enumerate((("random intercept", False),
-                                                ("+ random slope", True))):
-        y0 = 92 + panel * 150
-        ax = Axes(f, BX0 + 40, y0 + 16, BX1 - 18, y0 + 112, 0, 4.4, 0.55, 1.55)
-        ax.frame(xticks=[1, 2, 3, 4], yticks=[0.8, 1.2], grid=True, arrows=False)
-        f.text(BCX, y0 + 8, title, cls="sm bold")
-        for i, (b0, b1) in enumerate(_TERR):
-            colour = SERIES[i % len(SERIES)]
-            slope = 0.06 + (b1 - 0.037) * 4.0 if use_slope else 0.06
-            ax.polyline([(t, 0.98 + slope * t + b0) for t in (0.5, 4.3)],
-                        colour=colour, width=1.5)
-    f.text(BCX, BY1 - 2, "a random slope costs σ²₁ and σ₀₁", cls="sm dim")
+    ax = vaxes(f, 0, 4.4, 0.55, 1.65, left=52, right=16, top=20, bottom=40)
+    ax.frame(xticks=[1, 2, 3, 4], yticks=[], grid=True, arrows=False)
+    lines = []
+    for i, (b0, b1) in enumerate(_TERR):
+        a, s = 0.98 + b0, 0.06 + (b1 - 0.037) * 4.0
+        lines.append((a, s))
+        ax.polyline([(0, a), (4.3, a + s * 4.3)], colour=SERIES[i % len(SERIES)],
+                    width=1.8)
+        ax.point(0, a, colour=SERIES[i % len(SERIES)], r=3)
+    ax.polyline([(0, 0.98), (4.3, 0.98 + 0.06 * 4.3)], colour="var(--ink)", width=2.2,
+                dash=True)
+    # the intercepts' spread, bracketed on the y axis
+    lo, hi = min(a for a, _ in lines), max(a for a, _ in lines)
+    xb = ax.x0 - 10
+    f.path(f"M{xb + 4:.1f},{ax.py(hi):.1f} H{xb:.1f} V{ax.py(lo):.1f} H{xb + 4:.1f}",
+           cls="thin", stroke="var(--ink)", stroke_width="1.5")
+    f.text(xb - 5, (ax.py(lo) + ax.py(hi)) / 2 + 4, "b₀ᵢ", cls="bold", anchor="end")
+    # the steepest line's extra slope: its own direction against a parallel of the mean
+    a, s = lines[0]
+    ax.polyline([(0, a), (2.6, a + 0.06 * 2.6)], colour="var(--dim)", width=1.3,
+                dash=True)
+    x0, y0 = ax.p(0, a)
+    r = 118
+    t_mean = math.atan2(ax.py(a + 0.06) - y0, ax.px(1) - x0)
+    t_own = math.atan2(ax.py(a + s) - y0, ax.px(1) - x0)
+    p1 = (x0 + r * math.cos(t_mean), y0 + r * math.sin(t_mean))
+    p2 = (x0 + r * math.cos(t_own), y0 + r * math.sin(t_own))
+    f.path(f"M{p1[0]:.1f},{p1[1]:.1f} A{r},{r} 0 0 0 {p2[0]:.1f},{p2[1]:.1f}",
+           cls="thin", stroke=BLUE, stroke_width="1.6")
+    tm = (t_mean + t_own) / 2
+    f.text(x0 + (r + 16) * math.cos(tm), y0 + (r + 16) * math.sin(tm) + 4, "b₁ᵢ",
+           cls="bold")
     return f
 
 
-@figure("Variance Components", "Total variance split into a between-group and a "
-        "within-group component", width=WID)
+@figure("Variance Components", "One block of total variance 1,250 split into a "
+        "between-group slice of 250 and a within-group slice of 1,000", width=WID)
 def variance_components() -> Fig:
     f = vcard()
 
     sb, se = 250.0, 1000.0
-    total = sb + se
-    x0, w = 60, 200
-    ytop, h = 108, 150
-    hb = h * sb / total
+    x0, w, ytop, h = 118, 150, 96, 270
+    hb = h * sb / (sb + se)
     f.rect(x0, ytop, w, hb, rx=4, fill=VIOLET, fill_opacity="0.5")
-    f.rect(x0, ytop + hb, w, h - hb, rx=4, fill=BLUE, fill_opacity="0.35")
+    f.rect(x0, ytop + hb + 2, w, h - hb - 2, rx=4, fill=BLUE, fill_opacity="0.35")
     f.text(x0 + w / 2, ytop + hb / 2 + 4, "σ²_b = 250", cls="sm bold")
     f.text(x0 + w / 2, ytop + hb + (h - hb) / 2 + 4, "σ² = 1,000", cls="sm bold")
-    f.text(x0 - 10, ytop + hb / 2 + 4, "between", cls="sm dim", anchor="end")
-    f.text(x0 - 10, ytop + hb + (h - hb) / 2 + 4, "within", cls="sm dim", anchor="end")
-    f.text(BCX, 286, "total 1,250", cls="bold")
-    f.text(BCX, 314, "ICC = 250 / 1,250 = 0.20", cls="sm")
-    f.text(BCX, 340, "the mixed-model names for VHM and EPV", cls="sm dim")
-    f.text(BCX, BY1 - 2, "σ²_b = 0 collapses to ordinary regression", cls="sm dim")
+    f.text(x0 - 10, ytop + hb / 2 + 4, "between", cls="sm", anchor="end")
+    f.text(x0 - 10, ytop + hb + (h - hb) / 2 + 4, "within", cls="sm", anchor="end")
+    _eb_bracket(f, x0 + w + 14, ytop, ytop + h, "var(--ink)", "1,250")
     return f
 
 
-@figure("Covariance Structure", "Compound symmetry, AR(1) and unstructured "
-        "correlation matrices side by side", width=WID)
+@figure("Covariance Structure", "Correlation against lag under three structures: "
+        "compound symmetry flat at 0.6, AR(1) decaying as 0.6ᵏ, and unstructured "
+        "scattered freely", width=WID)
 def covariance_structure() -> Fig:
     f = vcard()
 
-    mats = [
-        ("compound symmetry", [[1, .6, .6, .6], [.6, 1, .6, .6],
-                               [.6, .6, 1, .6], [.6, .6, .6, 1]], BLUE),
-        ("AR(1), ρ = 0.6", [[1, .6, .36, .22], [.6, 1, .6, .36],
-                            [.36, .6, 1, .6], [.22, .36, .6, 1]], AMBER),
-        ("unstructured", [[1, .71, .28, .44], [.71, 1, .55, .19],
-                          [.28, .55, 1, .63], [.44, .19, .63, 1]], VIOLET),
-    ]
-    cell = 21
-    for r, (name, m, colour) in enumerate(mats):
-        y0 = 96 + r * 100
-        x0 = BCX - 2 * cell
-        f.text(BCX, y0 - 6, name, cls="sm bold", fill=colour)
-        for i in range(4):
-            for j in range(4):
-                v = m[i][j]
-                f.rect(x0 + j * cell, y0 + i * cell, cell - 1.5, cell - 1.5, rx=2,
-                       fill=colour, fill_opacity=f"{0.10 + 0.75 * v:.2f}")
-        f.text(x0 - 8, y0 + 2 * cell + 4, "R", cls="sm dim", anchor="end")
-    f.text(BCX, BY1 - 2, "darker = more correlated; params 2, 2, 10", cls="sm dim")
+    ax = vaxes(f, 0.5, 3.5, 0, 1.0, left=44, right=16, top=30, bottom=44)
+    ax.frame(xlabel="lag", ylabel="ρ", xticks=[1, 2, 3], yticks=[0, 0.5, 1.0],
+             grid=True, arrows=False)
+    ax.polyline([(0.7, 0.6), (3.3, 0.6)], colour=BLUE, width=2.4)
+    ax.curve(lambda k: 0.6 ** k, colour=AMBER, width=2.4, xa=0.7, xb=3.3)
+    for k in (1, 2, 3):
+        ax.point(k, 0.6, colour=BLUE, r=4)
+        ax.point(k, 0.6 ** k, colour=AMBER, r=4)
+    for k, v in ((0.9, .71), (1.0, .55), (1.1, .63), (1.95, .28), (2.05, .19),
+                 (3.0, .44)):
+        f.rect(ax.px(k) - 4, ax.py(v) - 4, 8, 8, rx=1.5, fill=VIOLET,
+               fill_opacity="0.8")
+    ax.label(3.3, 0.6, "compound symmetry", cls="sm bold", anchor="end", dy=-9)
+    ax.label(3.3, 0.6 ** 3.3, "AR(1)", cls="sm bold", anchor="end", dy=-9)
+    ax.label(3.0, 0.44, "unstructured", cls="sm bold", anchor="end", dx=-9, dy=4)
     return f
 
 
-@figure("Intraclass Correlation", "The share of variance sitting between groups, "
-        "and the design effect it causes", width=WID)
+@figure("Intraclass Correlation", "An axis bar split into the between-group share 0.20 "
+        "and the within-group 0.80, under the design-effect line that reaches 4.8 at "
+        "that share", width=WID)
 def intraclass_correlation() -> Fig:
     f = vcard()
 
-    x0, w, y, h = 56, 208, 112, 30
-    f.rect(x0, y, w * 0.2, h, rx=4, fill=VIOLET, fill_opacity="0.55")
-    f.rect(x0 + w * 0.2, y, w * 0.8, h, rx=4, fill=BLUE, fill_opacity="0.28")
-    f.text(x0 + w * 0.1, y + 20, "0.20", cls="sm bold")
-    f.text(x0 + w * 0.6, y + 20, "0.80", cls="sm")
-    f.text(x0 + w * 0.1, y - 8, "between", cls="sm dim")
-    f.text(x0 + w * 0.6, y - 8, "within", cls="sm dim")
-
-    ax = Axes(f, BX0 + 48, 186, BX1 - 20, 318, 0, 1, 0, 22)
-    ax.frame(xticks=[0, 0.25, 0.5, 0.75, 1], yticks=[1, 10, 20], grid=True)
-    f.text(BCX, ax.y1 + 32, "ρ", cls="sm dim")
-    ax.curve(lambda p: 1 + 19 * p, colour=ROSE, width=2.3)
-    ax.point(0.2, 1 + 19 * 0.2, colour=ROSE, label="4.8", dy=-9, dx=14)
-    ax.label(0.52, 17.5, "design effect, n = 20", cls="sm dim")
-    f.text(BCX, BY1 - 2, "500 clustered claims ≈ 104 independent ones",
-           cls="sm dim")
+    ax = vaxes(f, 0, 1, 0, 21, left=44, right=18, top=24, bottom=62)
+    ax.frame(yticks=[1, 10, 20], grid=True, arrows=False)
+    ax.curve(lambda p: 1 + 19 * p, colour=ROSE, width=2.4)
+    rho = 0.2
+    ax.vline(rho, colour="var(--dim)", y_top=1 + 19 * rho)
+    ax.hline(1 + 19 * rho, colour="var(--dim)", x_to=rho)
+    ax.point(rho, 1 + 19 * rho, colour=ROSE, r=4.2, label="4.8", dx=-14, dy=-8,
+             cls="sm bold")
+    ax.label(0.55, 1 + 19 * 0.55, "design effect", cls="sm bold", anchor="start",
+             dx=10, dy=8)
+    # the ρ axis drawn as the variance itself: between share, then within
+    y, h = ax.y1 + 6, 22
+    xs = ax.px(rho)
+    f.rect(ax.x0, y, xs - ax.x0, h, rx=3, fill=VIOLET, fill_opacity="0.55")
+    f.rect(xs + 1.5, y, ax.x1 - xs - 1.5, h, rx=3, fill=BLUE, fill_opacity="0.3")
+    f.text((ax.x0 + xs) / 2, y + 15, "between", cls="sm")
+    f.text((xs + ax.x1) / 2, y + 15, "within", cls="sm")
+    f.text(xs, y + h + 16, "ρ = 0.20", cls="sm bold")
     return f
 
 
-@figure("Restricted Maximum Likelihood", "REML correcting the downward bias in the "
-        "maximum-likelihood variance estimate", width=WID)
+@figure("Restricted Maximum Likelihood", "The sampling distribution of the ML variance "
+        "estimate centred below the truth, and REML's centred on it", width=WID)
 def reml() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 1.9, 0, 2.6, left=40, right=16, top=32, bottom=78)
+    ax = vaxes(f, 0, 1.9, 0, 2.6, left=40, right=16, top=32, bottom=44)
     ax.frame(xlabel="σ̂²", xticks=[0.5, 1.0, 1.5], yticks=[], grid=True)
     ax.curve(lambda s: _npdf(s, 0.86, 0.20), colour=ROSE, width=2.2)
     ax.curve(lambda s: _npdf(s, 1.00, 0.21), colour=BLUE, width=2.2)
@@ -600,59 +624,55 @@ def reml() -> Fig:
     ax.label(1.0, 2.3, "truth", cls="sm dim", dy=-6)
     ax.label(0.66, 1.55, "ML", cls="sm bold", fill=ROSE, anchor="end")
     ax.label(1.34, 1.55, "REML", cls="sm bold", fill=BLUE, anchor="start")
-    f.text(BCX, ax.y1 + 40, "ML ignores the p df spent on β̂ —", cls="sm dim")
-    f.text(BCX, ax.y1 + 55, "the same reason s² divides by n − 1", cls="sm dim")
-    f.text(BCX, BY1 - 2, "compare fixed effects on ML, random on REML",
-           cls="sm dim")
     return f
 
 
-@figure("Best Linear Unbiased Predictor", "Group deviations shrunk by a credibility "
-        "weight that grows with the group's size", width=WID)
+@figure("Best Linear Unbiased Predictor", "A group's fitted value rising with its size "
+        "from the overall mean 200 toward its raw mean 260, with a group of six shrunk "
+        "to 236", width=WID)
 def blup() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 22, 0, 1.05, left=44, right=18, top=30, bottom=78)
-    ax.frame(xticks=[0, 5, 10, 15, 20], yticks=[0, 0.5, 1.0], grid=True)
-    ax.curve(lambda n: n / (n + 4), colour=BLUE, width=2.4)
-    ax.vline(4, colour="var(--dim)", y_top=0.5)
-    ax.label(4, 0.5, "n = k = 4", cls="sm dim", dy=-7, anchor="start", dx=4)
-    ax.point(6, 6 / 10, colour=GREEN)
-    ax.label(6, 0.6, "Z = 0.60", cls="sm bold", fill=GREEN, anchor="start",
-             dx=10, dy=-6)
+    ax = vaxes(f, 0, 22, 186, 272, left=44, right=18, top=24, bottom=44)
+    ax.frame(xticks=[0, 5, 10, 15, 20], yticks=[200, 260], grid=True)
+    ax.hline(260, colour=ROSE, x_to=22)
+    ax.hline(200, colour="var(--dim)", x_to=22)
+    ax.label(21.8, 260, "raw", cls="sm bold", anchor="end", dy=-6)
+    ax.label(21.8, 200, "mean", cls="sm dim", anchor="end", dy=-6)
+    ax.curve(lambda n: 200 + 60 * n / (n + 4), colour=BLUE, width=2.4)
+    f.arrow(ax.px(6), ax.py(260), ax.px(6), ax.py(237.5), colour=ROSE, width=1.8)
+    ax.point(6, 236, colour=GREEN, r=4.4)
+    ax.label(6, 236, "236", cls="sm bold", anchor="start", dx=9, dy=12)
     f.text(BCX, ax.y1 + 32, "group size nᵢ", cls="sm dim")
-    f.text(BCX, ax.y1 + 50, "k = σ² / σ²_b — Bühlmann's k exactly", cls="sm dim")
-    f.text(BCX, ax.y1 + 66, "raw 260 vs mean 200 ⇒ fitted 236", cls="sm bold")
     return f
 
 
-@figure("Linear Algebra", "A design matrix times a coefficient vector giving the "
-        "fitted values", width=WID)
+@figure("Linear Algebra", "A 5 × 3 design matrix X times a 3 × 1 coefficient vector β "
+        "giving a 5 × 1 vector of fitted values ŷ, drawn as grids of cells", width=WID)
 def linear_algebra() -> Fig:
     f = vcard()
 
-    def matrix(x, y, rows, cols, label, colour, cw=22, ch=20):
+    cw, ch, top = 30, 32, 150
+
+    def matrix(x, rows, cols, name, dims, colour):
+        y = top + (5 - rows) * ch / 2
         f.rect(x - 5, y - 5, cols * cw + 10, rows * ch + 10, rx=5,
                fill=colour, fill_opacity="0.10", stroke=colour, stroke_width="1.3")
         for i in range(rows):
             for j in range(cols):
                 f.rect(x + j * cw + 2, y + i * ch + 2, cw - 4, ch - 4, rx=2,
                        fill=colour, fill_opacity="0.35")
-        f.text(x + cols * cw / 2, y + rows * ch + 24, label, cls="sm bold",
-               fill=colour)
-        return x + cols * cw + 10
+        mid = x + cols * cw / 2
+        f.text(mid, top - 18, name, cls="bold")
+        f.text(mid, top + 5 * ch + 26, dims, cls="sm dim")
+        return x + cols * cw + 5
 
-    x = 40
-    x = matrix(x, 128, 5, 3, "X  (n × p)", BLUE)
-    f.text(x + 8, 178, "×", cls="bold")
-    x = matrix(x + 22, 158, 3, 1, "β  (p × 1)", AMBER)
-    f.text(x + 8, 178, "=", cls="bold")
-    matrix(x + 22, 128, 5, 1, "ŷ  (n × 1)", GREEN)
-    f.text(BCX, 268, "each row is one observation,", cls="sm dim")
-    f.text(BCX, 284, "each column one predictor", cls="sm dim")
-    f.text(BCX, 320, "XᵀX must be invertible — collinear", cls="sm dim")
-    f.text(BCX, 336, "columns are what break it", cls="sm dim")
-    f.text(BCX, BY1 - 2, "eigenvectors of XᵀX are the PCA loadings", cls="sm dim")
+    ymid = top + 5 * ch / 2 + 5
+    x = matrix(66, 5, 3, "X", "n × p", BLUE)
+    f.text(x + 17, ymid, "×", cls="bold")
+    x = matrix(x + 34, 3, 1, "β", "p × 1", AMBER)
+    f.text(x + 17, ymid, "=", cls="bold")
+    matrix(x + 34, 5, 1, "ŷ", "n × 1", GREEN)
     return f
 
 

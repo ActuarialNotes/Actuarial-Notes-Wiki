@@ -1136,12 +1136,13 @@ def exponential_family() -> Fig:
     return f
 
 
-@figure("Logistic Regression", "The logistic curve fitted to a binary response",
+@figure("Logistic Regression", "A falling logistic curve of renewal probability "
+        "against rate increase, fitted to policies that renewed at 1 or lapsed at 0",
         width=WID)
 def logistic_regression() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 40, -0.08, 1.12, left=44, top=44, bottom=50)
+    ax = vaxes(f, 0, 40, -0.08, 1.12, left=30, top=30, bottom=44)
     ax.frame(xlabel="rate increase (%)", xticks=[0, 10, 20, 30, 40],
              yticks=[0, 0.5, 1.0], yfmt=lambda v: f"{v:g}", ylabel="P(renew)")
     curve = lambda x: 1 / (1 + math.exp(-(1.20 - 0.075 * x)))
@@ -1152,207 +1153,182 @@ def logistic_regression() -> Fig:
         hit = u() < curve(x)
         ax.point(x, 1.0 if hit else 0.0, colour=GREEN if hit else ROSE, r=2.8)
     ax.point(10, curve(10), colour=AMBER, r=4.4)
-    ax.label(10, curve(10), "π̂ = 0.71", cls="sm bold", fill=AMBER, dx=10, dy=-10,
-             anchor="start")
-    f.text(BX0 + 12, BY1 - 8, "one point per policy: renewed or not",
-           cls="sm dim", anchor="start")
+    ax.label(10, curve(10), "0.71", cls="sm bold", dx=10, dy=-10, anchor="start")
     return f
 
 
-@figure("Poisson Regression", "Log-link coefficients acting as multiplicative "
-        "relativities on frequency", width=WID)
+@figure("Poisson Regression", "Expected claim frequency as bars growing step by step "
+        "from a base of 0.100 as each rating factor multiplies it", width=WID)
 def poisson_regression() -> Fig:
     f = vcard()
 
-    rows = [("base  e^(−2.30)", 0.100, "var(--dim)"),
-            ("× urban  e^0.26", 0.130, BLUE),
-            ("× young  e^0.41", 0.196, AMBER),
-            ("× prior claim  e^0.22", 0.244, ROSE)]
-    ax = vaxes(f, 0, 0.30, 0, 4.6, left=126, top=46, bottom=50)
-    ax.frame(xlabel="expected claims / year", xticks=[0, 0.1, 0.2],
-             xfmt=lambda t: f"{t:g}", yticks=[])
+    rows = [("base", 0.100, "var(--dim)"), ("× urban", 0.130, BLUE),
+            ("× young", 0.196, AMBER), ("× prior claim", 0.244, ROSE)]
+    ax = vaxes(f, 0, 0.30, 0, 4.6, left=88, top=20, bottom=44)
+    ax.frame(xlabel="frequency", xticks=[0, 0.1, 0.2], xfmt=lambda t: f"{t:g}",
+             yticks=[])
     for i, (name, v, colour) in enumerate(rows):
         y = 4 - i
-        f.rect(ax.px(0), ax.py(y) - 11, ax.px(v) - ax.px(0), 22, rx=3,
+        f.rect(ax.px(0), ax.py(y) - 14, ax.px(v) - ax.px(0), 28, rx=3,
                fill=colour, fill_opacity="0.65")
         f.text(ax.px(0) - 8, ax.py(y) + 4, name, cls="sm", anchor="end")
         f.text(ax.px(v) + 6, ax.py(y) + 4, f"{v:.3f}", cls="sm", anchor="start")
-    f.text(BCX, BY0 + 28, "each factor multiplies the one above", cls="sm dim")
+        if i:
+            prev = rows[i - 1][1]
+            f.line(ax.px(prev), ax.py(y + 1) + 14, ax.px(prev), ax.py(y) - 14,
+                   cls="thin dot", stroke="var(--dim)", stroke_width="1.2")
     return f
 
 
-@figure("Tweedie Distribution", "A point mass at zero with a skewed continuous part "
-        "above it", width=WID)
+@figure("Tweedie Distribution", "A tall spike at zero for policies with no claim, "
+        "beside a right-skewed curve for the cost of those that do claim", width=WID)
 def tweedie_distribution() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -1.5, 26, 0, 0.115, left=44, top=52, bottom=50)
+    ax = vaxes(f, -1.5, 26, 0, 0.115, left=20, top=30, bottom=44)
     ax.frame(xlabel="pure premium", xticks=[0, 10, 20], yticks=[])
     dens = lambda x: _gammapdf(x, 1.9, 3.4) * 0.55
     ax.area(dens, 0.1, 26, colour=AMBER, opacity="0.16")
     ax.curve(dens, colour=AMBER, width=2.4, xa=0.1)
     f.rect(ax.px(0) - 7, ax.py(0.098), 14, ax.py(0) - ax.py(0.098), rx=2,
            fill=BLUE, fill_opacity="0.7")
-    ax.label(0, 0.098, "P(Y = 0)", cls="sm bold", fill=BLUE, dy=-9, dx=12,
-             anchor="start")
-    ax.label(12, 0.032, "claims, when they happen", cls="sm", fill=AMBER,
-             anchor="start")
-    f.text(BCX, BY0 + 30, "most policies claim nothing at all", cls="sm dim")
+    ax.label(0, 0.098, "no claim", cls="sm bold", dy=-9, dx=-4, anchor="start")
+    ax.label(11, 0.03, "claim cost", cls="sm bold", anchor="start")
     return f
 
 
-@figure("Dispersion Parameter", "The same fitted mean with three levels of scatter "
-        "around it", width=WID)
+@figure("Dispersion Parameter", "One fitted line with three nested bands of scatter "
+        "around it, widening as φ grows from 0.4 to 1 to 2.5", width=WID)
 def dispersion_parameter() -> Fig:
     f = vcard()
 
-    mean = lambda x: 12 + 2.4 * x
-    for i, (phi, colour, spread) in enumerate(((0.4, GREEN, 0.35),
-                                               (1.0, BLUE, 1.0),
-                                               (2.5, ROSE, 1.9))):
-        px = BX0 + 8 + i * 106
-        ax = Axes(f, px + 12, BY0 + 46, px + 96, BY1 - 54, 0, 10, 0, 44)
-        f.text(px + 54, BY0 + 38, f"φ = {phi:g}", cls="sm bold", fill=colour)
-        f.line(px + 12, BY1 - 54, px + 96, BY1 - 54, cls="axis")
-        ax.curve(mean, colour="var(--dim)", width=1.6)
-        u = _rng(31 + i * 13)
-        for k in range(9):
-            x = 0.6 + k * 1.05
-            y = mean(x) + (u() - 0.5) * 22 * spread
-            ax.point(x, max(2.0, min(42.0, y)), colour=colour, r=2.8)
-    f.text(BCX, BY0 + 20, "same fitted line, different φ", cls="sm dim")
-    f.text(BCX, BY1 - 30, "φ does not move β̂ — it scales SE(β̂) by √φ",
-           cls="sm dim")
-    f.text(BCX, BY1 - 12, "so every p-value moves with it", cls="sm dim")
+    ax = vaxes(f, 0, 10, 0, 48, left=20, right=20, top=24, bottom=36)
+    ax.frame(xlabel="x", xticks=[], yticks=[], ylabel="y")
+    mean = lambda x: 16 + 2.0 * x
+    for phi, colour in ((2.5, ROSE), (1.0, BLUE), (0.4, GREEN)):
+        half = 8 * math.sqrt(phi)
+        pts = [ax.p(x / 5, mean(x / 5) + half) for x in range(41)]
+        pts += [ax.p(x / 5, mean(x / 5) - half) for x in range(40, -1, -1)]
+        f.polygon(pts, fill=colour, fill_opacity="0.16", stroke=colour,
+                  stroke_width="1.1")
+        ax.label(8, mean(8) + half, f"φ = {phi:g}", cls="sm bold", anchor="start",
+                 dx=6, dy=4)
+    ax.curve(mean, colour="var(--ink)", width=2, xb=8)
+    u = _rng(31)
+    for k in range(11):
+        x = 0.3 + k * 0.74
+        ax.point(x, mean(x) + (u() - 0.5) * 16, colour="var(--dim)", r=2.6)
     return f
 
 
 # ── specifying the model ─────────────────────────────────────────────────────
 
-@figure("Categorical Predictor", "A three-level rating factor expanded into dummy "
-        "variables against a base level", width=WID)
+@figure("Categorical Predictor", "Three territory levels: the rural base at zero and "
+        "one coefficient bar each for suburban and urban, measured from that base",
+        width=WID)
 def categorical_predictor() -> Fig:
     f = vcard()
 
-    head = ["territory", "urban", "suburban"]
-    rows = [("rural", "0", "0"), ("suburban", "0", "1"), ("urban", "1", "0")]
-    x0, cw = BX0 + 18, 100
-    y0, rh = BY0 + 46, 44
-    for j, h in enumerate(head):
-        f.text(x0 + cw * j + cw / 2, y0 - 10, h, cls="sm bold",
-               fill=BLUE if j else "var(--ink)")
-    for i, row in enumerate(rows):
-        for j, cell in enumerate(row):
-            y = y0 + i * rh
-            colour = None if j == 0 else (BLUE if cell == "1" else None)
-            f.box(x0 + cw * j + 3, y, cw - 6, rh - 6, label=cell, colour=colour,
-                  label_cls="sm bold" if j else "sm")
-    f.text(BCX, y0 + 3 * rh + 16, "rural is the base level — all dummies 0",
-           cls="sm dim")
-    f.text(BCX, y0 + 3 * rh + 52, "ordinal levels may instead be scored 1, 2, 3;",
-           cls="sm dim")
-    f.text(BCX, y0 + 3 * rh + 70, "a continuous predictor needs no dummies at all",
-           cls="sm dim")
+    levels = [("rural", 0.0, "var(--dim)"), ("suburban", 0.17, AMBER),
+              ("urban", 0.26, BLUE)]
+    ax = vaxes(f, -0.6, 2.6, 0, 0.3, left=30, top=30, bottom=36)
+    ax.frame(xticks=[], yticks=[], ylabel="β")
+    for i, (name, beta, colour) in enumerate(levels):
+        ax.label(i, 0, name, cls="sm bold", dy=18)
+        if beta:
+            ax.bars([(i, beta)], colour=colour, bw=64, opacity="0.7")
+            ax.label(i, beta, f"{beta:.2f}", cls="sm", dy=-8)
+        else:
+            f.line(ax.px(i) - 32, ax.py(0) - 1, ax.px(i) + 32, ax.py(0) - 1, cls="",
+                   stroke="var(--ink)", stroke_width="3")
+            ax.label(i, 0, "base", cls="sm", dy=-10)
     return f
 
 
-@figure("Interaction", "Parallel lines when effects are additive, crossing lines when "
-        "they interact", width=WID)
+@figure("Interaction", "Two age groups' lines crossing, beside the dashed parallel "
+        "line young drivers would follow with no interaction", width=WID)
 def interaction() -> Fig:
     f = vcard()
 
-    for i, (title, slopes, colours) in enumerate(
-            (("no interaction", ((14, 2.2), (26, 2.2)), (BLUE, AMBER)),
-             ("interaction", ((14, 3.6), (30, 0.9)), (BLUE, AMBER)))):
-        py = BY0 + 32 + i * 152
-        ax = Axes(f, BX0 + 50, py, BX1 - 24, py + 108, 0, 10, 0, 60)
-        f.text(BX0 + 50, py - 8, title, cls="sm bold", anchor="start")
-        ax.frame(xticks=[], yticks=[], arrows=True)
-        for (b0, b1), colour in zip(slopes, colours):
-            ax.curve(lambda x, b0=b0, b1=b1: b0 + b1 * x, colour=colour, width=2.2)
-            ax.label(9.6, b0 + b1 * 9.6, "young" if colour is AMBER else "mature",
-                     cls="sm", fill=colour, anchor="end", dy=-7)
-    f.text(BCX, BY1 - 12, "crossing lines: the territory effect differs by age group",
-           cls="sm dim")
+    ax = vaxes(f, 0, 10, 0, 70, left=20, right=20, top=24, bottom=36)
+    ax.frame(xlabel="territory", xticks=[], yticks=[], ylabel="frequency")
+    ax.curve(lambda x: 30 + 3.6 * x, colour=AMBER, width=1.6, dash=True)
+    ax.curve(lambda x: 14 + 3.6 * x, colour=BLUE, width=2.4)
+    ax.curve(lambda x: 30 + 0.9 * x, colour=AMBER, width=2.4)
+    ax.label(9.6, 14 + 3.6 * 9.6, "mature", cls="sm bold", anchor="end", dx=-8, dy=4)
+    ax.label(9.6, 30 + 0.9 * 9.6, "young", cls="sm bold", anchor="end", dy=-8)
+    ax.label(5.2, 30 + 3.6 * 5.2, "no interaction", cls="sm", anchor="end", dx=-8,
+             dy=-6)
     return f
 
 
-@figure("Control Variable", "A predictor kept in the model so the effect of interest "
-        "is measured on like-for-like risks", width=WID)
+@figure("Control Variable", "Frequency against vehicle age for low- and high-mileage "
+        "groups, each with a gentle slope, and the steeper dashed line pooling them "
+        "without the mileage control", width=WID)
 def control_variable() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 10, 0, 60, left=44, top=52, bottom=54)
+    ax = vaxes(f, 0, 10, 0, 60, left=30, top=30, bottom=44)
     ax.frame(xlabel="vehicle age", xticks=[], yticks=[], ylabel="frequency")
     u = _rng(7)
-    groups = ((14, BLUE, "low mileage"), (34, AMBER, "high mileage"))
-    for b0, colour, name in groups:
+    groups = ((14, BLUE), (34, AMBER))
+    for b0, colour in groups:
         for k in range(7):
             x = 1.0 + k * 1.25 + (0 if colour is BLUE else 1.6)
             ax.point(x, b0 + 1.5 * x + (u() - 0.5) * 7, colour=colour, r=3)
         ax.curve(lambda x, b0=b0: b0 + 1.5 * x, colour=colour, width=1.8)
-        ax.label(9.7, b0 + 1.5 * 9.7, name, cls="sm", fill=colour, anchor="end",
-                 dy=-7)
+    ax.label(10.2, 20.8, "low mileage", cls="sm bold", anchor="end")
+    ax.label(0.2, 29.8, "high mileage", cls="sm bold", anchor="start")
     ax.curve(lambda x: 6 + 4.4 * x, colour=ROSE, width=2.2, dash=True)
-    ax.label(3.4, 6 + 4.4 * 3.4, "ignoring mileage", cls="sm", fill=ROSE,
-             anchor="end", dy=14)
-    f.text(BX0 + 12, BY1 - 8, "the pooled slope overstates the effect",
-           cls="sm dim", anchor="start")
+    ax.label(1.8, 7, "pooled", cls="sm bold", anchor="start")
     return f
 
 
-@figure("Offset Variable", "Exposure entering the model with its coefficient fixed at "
-        "one", width=WID)
+@figure("Offset Variable", "Expected claims rising in a straight line through the "
+        "origin as exposure grows from a quarter year to two years", width=WID)
 def offset_variable() -> Fig:
     f = vcard()
 
     rows = [(0.25, 0.025), (0.5, 0.050), (1.0, 0.100), (2.0, 0.200)]
-    ax = vaxes(f, 0, 2.3, 0, 0.235, left=54, top=54, bottom=52)
-    ax.frame(xlabel="exposure (years)", xticks=[0, 1, 2], yticks=[0, 0.1, 0.2],
-             yfmt=lambda v: f"{v:g}", ylabel="expected claims")
+    ax = vaxes(f, 0, 2.3, 0, 0.235, left=30, top=30, bottom=44)
+    ax.frame(xlabel="exposure (years)", xticks=[0, 1, 2], yticks=[],
+             ylabel="expected claims")
     ax.curve(lambda e: 0.1 * e, colour=BLUE, width=2.4)
     for e, mu in rows:
         ax.point(e, mu, colour=BLUE, r=3.6)
         ax.label(e, mu, f"{mu:.3f}", cls="sm", dy=-9, dx=-4, anchor="end")
-    f.text(BX0 + 12, BY1 - 8, "double the exposure, double the count",
-           cls="sm dim", anchor="start")
     return f
 
 
-@figure("Multicollinearity", "Two predictors moving together, and the variance "
-        "inflation that follows", width=WID)
+@figure("Multicollinearity", "Vehicle value against vehicle age: the points fall along "
+        "a tight downward band, so the two predictors carry the same information",
+        width=WID)
 def multicollinearity() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 10, 0, 10, left=50, top=48, bottom=132)
+    ax = vaxes(f, 0, 10, 0, 10, left=30, top=30, bottom=44)
     ax.frame(xlabel="vehicle age", xticks=[], yticks=[], ylabel="vehicle value")
+    cx, cy = ax.p(5, 4.85)
+    angle = math.degrees(math.atan2(ax.py(0) - ax.py(0.95), ax.px(1) - ax.px(0)))
+    f.ellipse(cx, cy, (ax.px(10) - ax.px(0)) * 0.6, 24, fill=ROSE, fill_opacity="0.08",
+              stroke=ROSE, stroke_width="1.4", stroke_dasharray="4 3",
+              transform=f"rotate({angle:.1f} {cx:.1f} {cy:.1f})")
     u = _rng(515)
     for _ in range(26):
         x = u() * 9.4 + 0.3
         ax.point(x, max(0.3, min(9.7, 9.6 - 0.95 * x + (u() - 0.5) * 1.5)),
-                 colour=BLUE, r=3)
-    ax.label(6.6, 8.4, "r = −0.94", cls="sm bold", fill=ROSE)
-
-    bars = [("uncorrelated", 1.0, GREEN), ("r = 0.92", 12.5, ROSE)]
-    bx = BX0 + 74
-    for i, (name, vif, colour) in enumerate(bars):
-        y = BY1 - 96 + i * 42
-        w = 6 + vif * 13
-        f.rect(bx, y, w, 26, rx=4, fill=colour, fill_opacity="0.65")
-        f.text(bx - 8, y + 18, name, cls="sm", anchor="end")
-        f.text(bx + w + 8, y + 18, f"VIF {vif:g}", cls="sm bold", anchor="start",
-               fill=colour)
+                 colour=BLUE, r=3.2)
     return f
 
 
 # ── evaluating the model ─────────────────────────────────────────────────────
 
-@figure("AIC", "The AIC curve bottoming out where fit stops paying for its "
-        "parameters", width=WID)
+@figure("AIC", "The AIC curve over model size, bottoming out at four parameters where "
+        "better fit stops paying for its parameters", width=WID)
 def aic() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0.4, 7.6, 4080, 4180, left=56, top=48, bottom=50)
+    ax = vaxes(f, 0.4, 7.6, 4080, 4180, left=46, top=30, bottom=44)
     ax.frame(xlabel="parameters p", xticks=[1, 3, 5, 7],
              xfmt=lambda t: f"{t:.0f}", yticks=[4100, 4150],
              yfmt=lambda v: f"{v:,.0f}", ylabel="AIC")
@@ -1362,48 +1338,51 @@ def aic() -> Fig:
         ax.point(p_, v, colour=BLUE, r=3.2)
     ax.point(4, vals[4], colour=ROSE, r=5)
     ax.label(4, vals[4], "best AIC", cls="sm bold", fill=ROSE, dy=20)
-    f.text(BX0 + 12, BY1 - 8, "adding terms stops paying at p = 4", cls="sm dim",
-           anchor="start")
     return f
 
 
-@figure("BIC", "BIC's heavier parameter penalty choosing a smaller model than AIC",
-        width=WID)
+@figure("BIC", "AIC and BIC curves over model size: BIC's heavier penalty per "
+        "parameter puts its minimum at a smaller model than AIC's", width=WID)
 def bic() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0.4, 7.6, 0, 60, left=48, top=52, bottom=50)
-    ax.frame(xlabel="parameters p", xticks=[1, 3, 5, 7],
-             xfmt=lambda t: f"{t:.0f}", yticks=[], ylabel="penalty")
-    ax.curve(lambda p_: 2 * p_, colour=BLUE, width=2.4)
-    ax.curve(lambda p_: math.log(500) * p_, colour=ROSE, width=2.4)
-    ax.label(6.4, 2 * 6.4, "AIC:  2p", cls="sm", fill=BLUE, anchor="end", dy=14)
-    ax.label(4.6, math.log(500) * 4.6, "BIC:  p·ln n", cls="sm", fill=ROSE,
-             anchor="end", dy=-8)
-    f.text(BX0 + 12, BY1 - 8, "n = 500 → ln n = 6.2, so BIC picks sparser models",
-           cls="sm dim", anchor="start")
+    fit = {1: 4170, 2: 4127, 3: 4088, 4: 4084, 5: 4083, 6: 4082.5, 7: 4082}
+    ax = vaxes(f, 0.4, 7.6, 4080, 4190, left=30, top=30, bottom=44)
+    ax.frame(xlabel="parameters p", xticks=[1, 3, 5, 7], xfmt=lambda t: f"{t:.0f}",
+             yticks=[])
+    for colour, per, name in ((BLUE, 2.0, "AIC"), (ROSE, math.log(500), "BIC")):
+        vals = sorted((p_, v + per * p_) for p_, v in fit.items())
+        ax.polyline(vals, colour=colour, width=2.4)
+        best = min(vals, key=lambda pv: pv[1])
+        for p_, v in vals:
+            ax.point(p_, v, colour=colour, r=5 if (p_, v) == best else 2.8)
+        ax.label(7, vals[-1][1], name, cls="sm bold", dx=10, dy=4, anchor="start")
+        f.line(ax.px(best[0]), ax.py(best[1]) + 7, ax.px(best[0]), ax.y1, cls="thin dash",
+               stroke=colour, stroke_width="1.2")
     return f
 
 
-@figure("Deviance", "Deviance as the gap between the fitted model's likelihood and "
-        "the saturated model's", width=WID)
+@figure("Deviance", "Three model levels on a deviance scale: the saturated model at "
+        "zero, the fitted model's deviance D above it, and the null model higher still",
+        width=WID)
 def deviance() -> Fig:
     f = vcard()
 
-    levels = [("saturated model", 0.0, GREEN, "one parameter per row"),
-              ("fitted model", 30.8, BLUE, "D = 30.8"),
-              ("null model", 45.2, "var(--dim)", "intercept only")]
-    ax = vaxes(f, 0, 10, -4, 52, left=40, top=44, bottom=48)
+    levels = [("saturated model", 0.0, GREEN), ("fitted model", 30.8, BLUE),
+              ("null model", 45.2, "var(--dim)")]
+    ax = vaxes(f, 0, 10, -4, 52, left=30, top=30, bottom=36)
     ax.frame(xticks=[], yticks=[0, 20, 40], ylabel="deviance")
-    for name, d, colour, note in levels:
+    for name, d, colour in levels:
         f.line(ax.px(0.6), ax.py(d), ax.px(9.4), ax.py(d), cls="thin",
-               stroke=colour, stroke_width="2.2")
-        f.text(ax.px(0.8), ax.py(d) - 8, name, cls="sm bold", anchor="start",
-               fill=colour)
-        f.text(ax.px(9.2), ax.py(d) - 8, note, cls="sm dim", anchor="end")
-    f.arrow(ax.px(5), ax.py(45.2), ax.px(5), ax.py(30.8), colour=ROSE, width=1.8)
-    f.text(ax.px(5) + 8, (ax.py(45.2) + ax.py(30.8)) / 2 + 4, "ΔD = 14.4 on 2 df",
-           cls="sm bold", anchor="start", fill=ROSE)
+               stroke=colour, stroke_width="2.4")
+        f.text(ax.px(0.8), ax.py(d) - 8, name, cls="sm bold", anchor="start")
+    f.arrow(ax.px(7), ax.py(0) - 2, ax.px(7), ax.py(30.8) + 2, colour=BLUE, width=2)
+    f.text(ax.px(7) + 8, (ax.py(0) + ax.py(30.8)) / 2 + 4, "D", cls="bold",
+           anchor="start")
+    f.arrow(ax.px(7), ax.py(45.2) + 2, ax.px(7), ax.py(30.8) + 3, colour=ROSE,
+            width=1.6)
+    f.text(ax.px(7) + 8, (ax.py(45.2) + ax.py(30.8)) / 2 + 4, "ΔD", cls="sm bold",
+           anchor="start")
     return f
 
 

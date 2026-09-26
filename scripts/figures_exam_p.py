@@ -118,315 +118,285 @@ def _trial_strip(f: Fig, y, wins, size=26, gap=5, colour=BLUE, ring=()):
 # 1. General probability
 # ═══════════════════════════════════════════════════════════════════════════
 
-@figure("Probability", "Five of twelve equally likely outcomes shaded, and the "
-        "resulting probability marked on a 0-to-1 scale", width=WID)
+@figure("Probability", "A disc cut into twelve equal slices, the equally likely "
+        "outcomes, with five of them shaded as the event E", width=WID)
 def probability() -> Fig:
     f = vcard()
 
-    universe(f, 40, 82, 280, 168, "S")
-    shaded = {0, 1, 4, 6, 9}
-    for i in range(12):
-        cx, cy = 86 + (i % 4) * 62, 122 + (i // 4) * 52
-        on = i in shaded
-        f.circle(cx, cy, 19, fill=BLUE if on else "var(--surf)",
-                 fill_opacity="0.85" if on else "1",
-                 stroke=BLUE if on else "var(--edge)", stroke_width="1.4")
-    f.text(BCX, 278, "5 of the 12 outcomes are in E", cls="sm dim")
-
-    x0, x1, y = 60, 300, 342
-    f.rect(x0, y - 8, x1 - x0, 16, rx=8, fill="var(--soft)", stroke="var(--edge)")
-    f.rect(x0, y - 8, (x1 - x0) * 5 / 12, 16, rx=8, fill=BLUE, fill_opacity="0.55")
-    for v, lab in ((0, "0"), (1, "1")):
-        x = x0 + (x1 - x0) * v
-        f.line(x, y + 10, x, y + 15, cls="tick")
-        f.text(x, y + 28, lab, cls="sm dim")
-    x = x0 + (x1 - x0) * 5 / 12
-    f.arrow(x, y - 34, x, y - 12, colour=BLUE, width=1.6)
-    f.text(x, y - 40, "P(E)", cls="sm bold", fill=BLUE)
+    cx, cy, r, n = BCX, 232, 140, 12
+    f.circle(cx, cy, r + 1.5, fill="none", stroke="var(--edge)", stroke_width="1.2")
+    for k in range(n):
+        a0, a1 = 2 * math.pi * k / n, 2 * math.pi * (k + 1) / n
+        x0, y0 = cx + r * math.sin(a0), cy - r * math.cos(a0)
+        x1, y1 = cx + r * math.sin(a1), cy - r * math.cos(a1)
+        on = k < 5
+        f.path(f"M{cx},{cy} L{x0:.2f},{y0:.2f} A{r},{r} 0 0 1 {x1:.2f},{y1:.2f} Z",
+               cls="", fill=BLUE if on else "var(--soft)", fill_opacity="0.7" if on else "1",
+               stroke="var(--surf)", stroke_width="3", stroke_linejoin="round")
+    mid = 2 * math.pi * 2.5 / n
+    f.text(cx + 0.58 * r * math.sin(mid), cy - 0.58 * r * math.cos(mid) + 7, "E",
+           cls="bold")
+    f.text(cx - 0.8 * r, cy - 0.8 * r, "S", cls="sm dim")
     return f
 
 
-@figure("Set Function", "A set function mapping events to real numbers", width=WID)
+@figure("Set Function", "Three sets A, B and C inside S, each sent by an arrow to its "
+        "own point on the real line", width=WID)
 def set_function() -> Fig:
     f = vcard()
 
-    universe(f, 30, 84, 176, 176, "S")
-    blobs = [(118, 116, "A", BLUE, 0.80), (118, 172, "B", AMBER, 0.48),
-             (118, 228, "C", GREEN, 0.18)]
+    universe(f, 30, 80, 180, 300, "S")
+    blobs = [(120, 138, "A", BLUE, 0.80), (120, 230, "B", AMBER, 0.48),
+             (120, 322, "C", GREEN, 0.18)]
     for cx, cy, lab, colour, _ in blobs:
-        f.ellipse(cx, cy, 56, 20, fill=colour, fill_opacity="0.16", stroke=colour,
+        f.ellipse(cx, cy, 62, 30, fill=colour, fill_opacity="0.16", stroke=colour,
                   stroke_width="1.4")
-        f.text(cx, cy + 5, lab, cls="bold", fill=colour)
-    f.text(192, 100, "𝓕", cls="sm dim", anchor="end")
+        f.text(cx, cy + 5, lab, cls="bold")
+    f.text(196, 96, "𝓕", cls="sm dim", anchor="end")
 
-    ax, ay0, ay1 = 268, 96, 268
-    f.arrow(ax, ay1 + 8, ax, ay0 - 10, colour="var(--axis)", width=1.1)
-    f.text(ax - 8, ay0 - 14, "ℝ", cls="sm dim", anchor="end")
-    for cx, cy, _, colour, v in blobs:
+    ax, ay0, ay1 = 268, 96, 368
+    f.arrow(ax, ay1 + 10, ax, ay0 - 14, colour="var(--axis)", width=1.1)
+    f.text(ax - 8, ay0 - 16, "ℝ", cls="sm dim", anchor="end")
+    for cx, cy, lab, colour, v in blobs:
         y = ay1 - (ay1 - ay0) * v
-        f.arrow(cx + 60, cy, ax - 10, y, colour=colour, width=1.1, dash=True)
+        f.arrow(cx + 66, cy, ax - 10, y, colour=colour, width=1.2, dash=True)
         f.line(ax - 4, y, ax + 4, y, cls="tick")
-        f.circle(ax, y, 4, fill=colour)
-    for lab, colour, v in (("f(A)", BLUE, 0.80), ("f(B)", AMBER, 0.48),
-                           ("f(C)", GREEN, 0.18)):
-        y = ay1 - (ay1 - ay0) * v
-        f.text(ax + 12, y + 4, lab, cls="sm", anchor="start", fill=colour)
-    f.text(BCX, 320, "probability is the set function with f(S) = 1", cls="sm dim")
+        f.circle(ax, y, 4.5, fill=colour)
+        f.text(ax + 12, y + 4, f"f({lab})", cls="sm", anchor="start")
     return f
 
 
-@figure("Sample Space", "A sample space partitioned into its elementary outcomes",
-        width=WID)
+def _p_die(f: Fig, cx, cy, s, n, colour=BLUE):
+    """A die face showing `n` pips, `s` units on a side."""
+    f.rect(cx - s / 2, cy - s / 2, s, s, rx=0.18 * s, fill=colour, fill_opacity="0.12",
+           stroke=colour, stroke_width="1.4")
+    o = 0.26 * s
+    spots = {1: [(0, 0)], 2: [(-1, -1), (1, 1)], 3: [(-1, -1), (0, 0), (1, 1)],
+             4: [(-1, -1), (1, -1), (-1, 1), (1, 1)],
+             5: [(-1, -1), (1, -1), (0, 0), (-1, 1), (1, 1)],
+             6: [(-1, -1), (1, -1), (-1, 0), (1, 0), (-1, 1), (1, 1)]}[n]
+    for dx, dy in spots:
+        f.circle(cx + dx * o, cy + dy * o, 0.085 * s, fill=colour)
+
+
+@figure("Sample Space", "The six faces of a die laid out inside S, one for each outcome "
+        "of a roll", width=WID)
 def sample_space() -> Fig:
     f = vcard()
 
-    universe(f, 36, 86, 288, 234, "S")
+    universe(f, 30, 80, 300, 300, "S")
     for i in range(6):
-        cx = 96 + (i % 3) * 84
-        cy = 152 + (i // 3) * 100
-        f.circle(cx, cy, 36, fill=BLUE, fill_opacity="0.12", stroke=BLUE,
-                 stroke_width="1.4")
-        f.text(cx, cy + 6, f"ω{'₁₂₃₄₅₆'[i]}", cls="")
-    f.text(BCX, 350, "one roll of a die", cls="sm dim")
+        _p_die(f, 88 + (i % 3) * 92, 176 + (i // 3) * 116, 74, i + 1)
     return f
 
 
-@figure("Event", "An event as a subset of the sample space, simple versus compound",
-        width=WID)
+@figure("Event", "Outcomes scattered in S, four of them ringed by the event E and one "
+        "alone in the simple event F", width=WID)
 def event() -> Fig:
     f = vcard()
 
-    universe(f, 30, 92, 296, 232, "S")
-    f.ellipse(116, 196, 74, 68, fill=BLUE, fill_opacity="0.15", stroke=BLUE,
+    universe(f, 30, 80, 300, 300, "S")
+    f.ellipse(126, 240, 86, 104, fill=BLUE, fill_opacity="0.15", stroke=BLUE,
               stroke_width="1.6")
-    f.text(116, 118, "E", cls="bold", fill=BLUE)
-    f.ellipse(258, 168, 30, 28, fill=VIOLET, fill_opacity="0.15", stroke=VIOLET,
-              stroke_width="1.6")
-    f.text(258, 126, "F", cls="bold", fill=VIOLET)
-    for x, y in ((88, 166), (152, 158), (210, 180), (258, 168),
-                 (96, 236), (156, 248), (216, 238), (276, 280)):
-        f.circle(x, y, 4.5, fill="var(--dim)")
-    f.text(BCX, 352, "outcomes ω ∈ S", cls="sm dim")
+    f.text(126, 124, "E", cls="bold")
+    f.circle(264, 156, 34, fill=VIOLET, fill_opacity="0.15", stroke=VIOLET,
+             stroke_width="1.6")
+    f.text(264, 110, "F", cls="bold")
+    for x, y in ((98, 192), (156, 178), (108, 282), (164, 300),
+                 (264, 156), (238, 256), (294, 232), (284, 336)):
+        f.circle(x, y, 5, fill="var(--dim)")
     return f
 
 
-@figure("Axioms of Probability", "The three Kolmogorov axioms shown as diagrams",
-        width=WID)
+@figure("Axioms of Probability", "S drawn as a unit-wide rectangle on a 0-to-1 ruler, "
+        "with two disjoint events side by side whose widths add to the width of their "
+        "union", width=WID)
 def axioms_of_probability() -> Fig:
     f = vcard()
 
-    for i, label in enumerate(("P(S) = 1", "P(E) ≥ 0", "P(E₁ ∪ E₂) = P(E₁) + P(E₂)")):
-        y = 74 + i * 106
-        f.box(26, y, 308, 92, colour=None)
-        f.text(180, y + 78, label, cls="bold")
+    x0, x1, y0, y1 = 46, 314, 104, 336
+    w = x1 - x0
+    e1, e2 = 0.30, 0.25
+    f.rect(x0, y0, w, y1 - y0, rx=6, fill="var(--soft)", stroke="var(--edge)",
+           stroke_width="1.2")
+    f.rect(x0, y0, w * e1, y1 - y0, fill=BLUE, fill_opacity="0.45")
+    f.rect(x0 + w * e1, y0, w * e2, y1 - y0, fill=VIOLET, fill_opacity="0.45")
+    f.line(x0 + w * e1, y0, x0 + w * e1, y1, cls="", stroke="var(--surf)",
+           stroke_width="2")
+    f.rect(x0, y0, w, y1 - y0, rx=6, fill="none", stroke="var(--edge)", stroke_width="1.2")
+    f.text(x0 + w * e1 / 2, (y0 + y1) / 2 + 5, "E₁", cls="bold")
+    f.text(x0 + w * (e1 + e2 / 2), (y0 + y1) / 2 + 5, "E₂", cls="bold")
+    f.text(x0 + w * (1 + e1 + e2) / 2, (y0 + y1) / 2 + 5, "S", cls="bold dim")
 
-        if i == 0:
-            f.rect(126, y + 14, 108, 44, rx=6, fill=BLUE, fill_opacity="0.22",
-                   stroke=BLUE, stroke_width="1.4")
-            f.text(180, y + 42, "S", cls="bold")
-        elif i == 1:
-            base = y + 46
-            f.line(112, base, 250, base, cls="axis")
-            f.line(181, base - 4, 181, base + 4, cls="tick")
-            f.text(181, base + 16, "0", cls="sm dim")
-            f.arrow(184, base - 12, 246, base - 12, colour=GREEN, width=1.6)
-            f.arrow(178, base - 12, 116, base - 12, colour=ROSE, width=1.6)
-            f.text(147, base - 18, "✗", cls="sm bold", fill=ROSE)
-        else:
-            f.circle(146, y + 36, 24, fill=AMBER, fill_opacity="0.2", stroke=AMBER,
-                     stroke_width="1.4")
-            f.circle(214, y + 36, 24, fill=VIOLET, fill_opacity="0.2", stroke=VIOLET,
-                     stroke_width="1.4")
-            f.text(146, y + 41, "E₁", cls="sm")
-            f.text(214, y + 41, "E₂", cls="sm")
+    for x, lab in ((x0, "0"), (x1, "1")):
+        f.line(x, y0 - 10, x, y0 - 2, cls="tick")
+        f.text(x, y0 - 16, lab, cls="sm dim")
+    brace(f, x0, x0 + w * (e1 + e2), y1 + 8, depth=10, label="E₁ ∪ E₂",
+          label_cls="sm bold")
     return f
 
 
-@figure("Set Theory", "Union, intersection, complement and difference on Venn diagrams",
-        width=WID)
+@figure("Set Theory", "One Venn diagram of A and B inside S with its four regions shaded "
+        "apart: A without B, the overlap, B without A, and the outside", width=WID)
 def set_theory() -> Fig:
     f = vcard()
 
-    labels = ["A ∪ B", "A ∩ B", "Aᶜ", "A \\ B"]
-    for i, lab in enumerate(labels):
-        cx = 100 + (i % 2) * 160
-        cy = 136 + (i // 2) * 148
-        r, sep = 36, 36
-        ax, bx = cx - sep / 2, cx + sep / 2
-        px, py, pw, ph = cx - 70, cy - 52, 140, 104
-        f.rect(px, py, pw, ph, rx=7, fill="var(--soft)", stroke="var(--edge)",
-               stroke_width="1")
-        f.text(px + 11, py + 15, "S", cls="sm dim")
-
-        # Regions are painted with clip paths so each operation shades exactly
-        # the right area at a single, uniform opacity.
-        cid = f"clipA{i}"
-        f.defs.append(f'<clipPath id="{cid}"><circle cx="{ax}" cy="{cy}" r="{r}"/></clipPath>')
-        blank = "var(--soft)"
-        if i == 0:      # union — one group so the overlap isn't double-painted
-            f.raw(f'<g opacity="0.22" fill="{BLUE}">'
-                  f'<circle cx="{ax}" cy="{cy}" r="{r}"/>'
-                  f'<circle cx="{bx}" cy="{cy}" r="{r}"/></g>')
-        elif i == 1:    # intersection — B, clipped to A
-            f.raw(f'<g clip-path="url(#{cid})">'
-                  f'<circle cx="{bx}" cy="{cy}" r="{r}" fill="{BLUE}" '
-                  f'fill-opacity="0.3"/></g>')
-        elif i == 2:    # complement — the whole space, then punch out A
-            f.rect(px, py, pw, ph, rx=7, fill=BLUE, fill_opacity="0.22")
-            f.circle(ax, cy, r, fill=blank)
-        else:           # difference — A, then punch out the lens
-            f.circle(ax, cy, r, fill=BLUE, fill_opacity="0.22")
-            f.raw(f'<g clip-path="url(#{cid})">'
-                  f'<circle cx="{bx}" cy="{cy}" r="{r}" fill="{blank}"/></g>')
-        f.circle(ax, cy, r, fill="none", stroke=BLUE, stroke_width="1.4")
-        f.circle(bx, cy, r, fill="none", stroke=AMBER, stroke_width="1.4")
-        f.text(ax - 26, cy - 28, "A", cls="sm bold", fill=BLUE)
-        f.text(bx + 26, cy - 28, "B", cls="sm bold", fill=AMBER)
-        f.text(cx, cy + 74, lab, cls="bold")
+    sx, sy, sw, sh = 26, 86, 308, 290
+    f.rect(sx, sy, sw, sh, rx=8, fill="var(--soft)", stroke="var(--edge)",
+           stroke_width="1.2")
+    f.text(sx + 13, sy + 18, "S", cls="sm dim")
+    cx, cy, r, sep = BCX, 222, 92, 92
+    ax, bx = cx - sep / 2, cx + sep / 2
+    hh = math.sqrt(r * r - (sep / 2) ** 2)
+    lens = (f"M{cx},{cy - hh:.2f} A{r},{r} 0 0 1 {cx},{cy + hh:.2f} "
+            f"A{r},{r} 0 0 1 {cx},{cy - hh:.2f} Z")
+    f.circle(ax, cy, r, fill=BLUE, fill_opacity="0.3", stroke="none")
+    f.circle(bx, cy, r, fill=AMBER, fill_opacity="0.3", stroke="none")
+    f.path(lens, cls="", fill="var(--surf)", stroke="none")
+    f.path(lens, cls="", fill=VIOLET, fill_opacity="0.5", stroke="none")
+    f.circle(ax, cy, r, fill="none", stroke=BLUE, stroke_width="1.6")
+    f.circle(bx, cy, r, fill="none", stroke=AMBER, stroke_width="1.6")
+    f.text(ax - 62, cy - 80, "A", cls="bold")
+    f.text(bx + 62, cy - 80, "B", cls="bold")
+    f.text(ax - 38, cy + 5, "A \\ B", cls="sm bold")
+    f.text(cx, cy + 5, "A ∩ B", cls="sm bold")
+    f.text(bx + 38, cy + 5, "B \\ A", cls="sm bold")
+    f.text(sx + sw - 14, sy + sh - 14, "(A ∪ B)ᶜ", cls="sm bold", anchor="end")
     return f
 
 
-@figure("Venn Diagram", "Two overlapping events with all four region probabilities "
-        "filled in", width=WID)
+@figure("Venn Diagram", "Two overlapping events A and B inside S, with the probability "
+        "of each of the four regions written in it", width=WID)
 def venn_diagram() -> Fig:
     f = vcard()
 
-    sx, sy, sw, sh = 32, 108, 296, 200
+    sx, sy, sw, sh = 26, 86, 308, 290
     universe(f, sx, sy, sw, sh)
-    cy = sy + sh / 2 + 6
-    (ax, _), (bx, _) = venn2(f, sx + sw / 2, cy, r=66, sep=68)
+    cy = sy + sh / 2
+    (ax, _), (bx, _) = venn2(f, sx + sw / 2, cy, r=86, sep=90)
     # The four regions a question can ask for, each carrying its probability.
-    f.text(ax - 30, cy + 5, "0.50", cls="bold", fill=BLUE)
+    f.text(ax - 38, cy + 5, "0.50", cls="bold")
     f.text((ax + bx) / 2, cy + 5, "0.20", cls="bold")
-    f.text(bx + 30, cy + 5, "0.20", cls="bold", fill=AMBER)
-    f.text(sx + sw - 34, sy + sh - 32, "neither", cls="sm dim")
-    f.text(sx + sw - 34, sy + sh - 14, "0.10", cls="bold dim")
-    f.note(BCX, 336, "P(A) = 0.70 auto,   P(B) = 0.40 home")
+    f.text(bx + 38, cy + 5, "0.20", cls="bold")
+    f.text(sx + sw - 30, sy + sh - 18, "0.10", cls="bold dim")
     return f
 
 
-@figure("Combinatorics", "Counting ordered arrangements versus unordered selections",
-        width=WID)
+@figure("Combinatorics", "A four-by-four grid of every ordered pick of two from A, B, C "
+        "and D: the diagonal repeats a letter, and the cells above and below it mirror "
+        "each other", width=WID)
 def combinatorics() -> Fig:
     f = vcard()
 
-    x0, cw, gap = 100, 118, 4
-    f.text(x0 + cw / 2, 100, "no repeats", cls="sm dim")
-    f.text(x0 + cw + gap + cw / 2, 100, "repeats", cls="sm dim")
-    rows = [
-        ("Order", "matters", [("n!/(n−k)!", "12", VIOLET), ("nᵏ", "16", AMBER)]),
-        ("Order", "ignored", [("n!/[k!(n−k)!]", "6", GREEN),
-                              ("C(n+k−1, k)", "10", TEAL)]),
-    ]
-    for r, (head, sub, cells) in enumerate(rows):
-        y = 110 + r * 96
-        f.text(92, y + 34, head, cls="sm bold", anchor="end")
-        f.text(92, y + 50, sub, cls="sm bold", anchor="end")
-        for c, (formula, value, colour) in enumerate(cells):
-            x = x0 + c * (cw + gap)
-            f.box(x, y, cw, 80, colour=colour)
-            f.text(x + cw / 2, y + 34, formula, cls="sm mono")
-            f.text(x + cw / 2, y + 58, value, cls="bold", fill=colour)
-    f.text(BCX, 326, "counts for n = 4, k = 2", cls="sm dim")
+    letters, cell = "ABCD", 60
+    x0, y0 = 96, 116
+    for i in range(4):
+        f.text(x0 - 14, y0 + (i + 0.5) * cell + 5, letters[i], cls="bold", anchor="end")
+        f.text(x0 + (i + 0.5) * cell, y0 - 12, letters[i], cls="bold")
+        for j in range(4):
+            colour, op = ((AMBER, "0.4") if i == j else
+                          (GREEN, "0.45") if j > i else (VIOLET, "0.3"))
+            f.rect(x0 + j * cell + 2, y0 + i * cell + 2, cell - 4, cell - 4, rx=6,
+                   fill=colour, fill_opacity=op, stroke=colour, stroke_width="1.2")
+    f.text(x0 - 30, y0 + 2 * cell + 4, "1st", cls="sm dim", anchor="end")
+    f.text(x0 + 2 * cell, y0 - 34, "2nd", cls="sm dim")
     return f
 
 
-@figure("Combination", "The six unordered pairs chosen from four objects", width=WID)
+def _p_pick_nodes():
+    """Four objects A–D at the corners of a square; returns their centres."""
+    return [(84, 134), (276, 134), (276, 326), (84, 326)]
+
+
+@figure("Combination", "Four objects joined by every possible line between two of them "
+        "— six lines, one for each unordered pair", width=WID)
 def combination() -> Fig:
     f = vcard()
 
-    for i, o in enumerate("ABCD"):
-        cx = 78 + i * 68
-        f.circle(cx, 104, 18, fill=BLUE, fill_opacity="0.14", stroke=BLUE,
-                 stroke_width="1.4")
-        f.text(cx, 110, o, cls="")
-    f.text(BCX, 152, "choose 2 of these 4", cls="sm dim")
-
-    for i, (a, b) in enumerate((("A", "B"), ("A", "C"), ("A", "D"),
-                                ("B", "C"), ("B", "D"), ("C", "D"))):
-        cx = 90 + (i % 3) * 90
-        cy = 200 + (i // 3) * 62
-        f.rect(cx - 32, cy - 18, 64, 36, rx=7, fill=GREEN, fill_opacity="0.14",
-               stroke=GREEN, stroke_width="1.3")
-        f.text(cx, cy + 6, f"{a}{b}", cls="")
-    f.text(BCX, 322, "AB and BA are the same choice", cls="sm dim")
+    pts, r = _p_pick_nodes(), 24
+    for i in range(4):
+        for j in range(i + 1, 4):
+            (xa, ya), (xb, yb) = pts[i], pts[j]
+            d = math.hypot(xb - xa, yb - ya)
+            ux, uy = (xb - xa) / d, (yb - ya) / d
+            f.line(xa + ux * (r + 4), ya + uy * (r + 4), xb - ux * (r + 4),
+                   yb - uy * (r + 4), cls="", stroke=GREEN, stroke_width="3",
+                   stroke_linecap="round")
+    for (x, y), lab in zip(pts, "ABCD"):
+        f.circle(x, y, r, fill=BLUE, fill_opacity="0.14", stroke=BLUE, stroke_width="1.5")
+        f.text(x, y + 5, lab, cls="bold")
     return f
 
 
-@figure("Permutation", "The twelve ordered pairs drawn from four objects", width=WID)
+@figure("Permutation", "Four objects with a pair of opposing arrows between every two "
+        "of them — twelve arrows, one for each ordered pair", width=WID)
 def permutation() -> Fig:
     f = vcard()
 
-    ordered = [("A", "B"), ("B", "A"), ("A", "C"), ("C", "A"),
-               ("A", "D"), ("D", "A"), ("B", "C"), ("C", "B"),
-               ("B", "D"), ("D", "B"), ("C", "D"), ("D", "C")]
-    for i, (a, b) in enumerate(ordered):
-        cx = 76 + (i % 4) * 72
-        cy = 116 + (i // 4) * 66
-        colour = VIOLET if i % 2 == 0 else BLUE
-        f.rect(cx - 30, cy - 17, 60, 34, rx=7, fill=colour, fill_opacity="0.13",
-               stroke=colour, stroke_width="1.3")
-        f.text(cx, cy + 5, f"{a}{b}", cls="")
-    f.text(BCX, 332, "AB ≠ BA — each pair counted twice", cls="sm dim")
+    pts, r = _p_pick_nodes(), 24
+    for i in range(4):
+        for j in range(i + 1, 4):
+            (xa, ya), (xb, yb) = pts[i], pts[j]
+            d = math.hypot(xb - xa, yb - ya)
+            ux, uy = (xb - xa) / d, (yb - ya) / d
+            nx, ny = -uy * 6, ux * 6
+            f.arrow(xa + ux * (r + 6) + nx, ya + uy * (r + 6) + ny,
+                    xb - ux * (r + 8) + nx, yb - uy * (r + 8) + ny, colour=BLUE, width=2)
+            f.arrow(xb - ux * (r + 6) - nx, yb - uy * (r + 6) - ny,
+                    xa + ux * (r + 8) - nx, ya + uy * (r + 8) - ny, colour=VIOLET,
+                    width=2)
+    for (x, y), lab in zip(pts, "ABCD"):
+        f.circle(x, y, r, fill=BLUE, fill_opacity="0.14", stroke=BLUE, stroke_width="1.5")
+        f.text(x, y + 5, lab, cls="bold")
     return f
 
 
-@figure("Independent Events", "Independence as a product of areas on the unit square",
-        width=WID)
+@figure("Independent Events", "A unit square split 0.6 across for A and 0.5 down for B, "
+        "so the corner where they cross has area 0.30", width=WID)
 def independent_events() -> Fig:
     f = vcard()
 
-    x0, y0, side = 92, 106, 200
+    x0, y0, side = 82, 92, 236
     pa, pb = 0.6, 0.5
     f.rect(x0, y0, side, side, rx=4, fill="var(--soft)", stroke="var(--edge)",
            stroke_width="1.2")
-    f.rect(x0, y0, side * pa, side, fill=BLUE, fill_opacity="0.14")
-    f.rect(x0, y0, side, side * pb, fill=AMBER, fill_opacity="0.14")
-    f.rect(x0, y0, side * pa, side * pb, fill=GREEN, fill_opacity="0.32")
+    f.rect(x0, y0, side * pa, side, fill=BLUE, fill_opacity="0.16")
+    f.rect(x0, y0, side, side * pb, fill=AMBER, fill_opacity="0.16")
+    f.rect(x0, y0, side * pa, side * pb, fill=GREEN, fill_opacity="0.34")
     f.line(x0 + side * pa, y0, x0 + side * pa, y0 + side, cls="thin", stroke=BLUE,
-           stroke_width="1.4")
+           stroke_width="1.6")
     f.line(x0, y0 + side * pb, x0 + side, y0 + side * pb, cls="thin", stroke=AMBER,
-           stroke_width="1.4")
-    brace(f, x0, x0 + side * pa, y0 + side + 8, depth=8, label="P(A) = 0.6", colour=BLUE)
-    f.text(x0 - 10, y0 + side * pb / 2, "P(B)", cls="sm", anchor="end", fill=AMBER)
-    f.text(x0 - 10, y0 + side * pb / 2 + 15, "= 0.5", cls="sm", anchor="end", fill=AMBER)
-    f.text(x0 + side * pa / 2, y0 + side * pb / 2 + 5, "0.30", cls="bold", fill=GREEN)
-    f.text(BCX, 358, "knowing B tells you nothing about A", cls="sm dim")
+           stroke_width="1.6")
+    f.text(x0 + side * pa / 2, y0 + side * 0.76, "A", cls="bold")
+    f.text(x0 + side * (1 + pa) / 2, y0 + side * pb / 2 + 5, "B", cls="bold")
+    f.text(x0 + side * pa / 2, y0 + side * pb / 2 + 5, "0.30", cls="bold")
+    brace(f, x0, x0 + side * pa, y0 + side + 8, depth=9, label="0.6", colour=BLUE,
+          label_cls="sm bold")
+    f.text(x0 - 12, y0 + side * pb / 2 + 4, "0.5", cls="sm bold", anchor="end")
+    f.line(x0 - 6, y0 + 2, x0 - 6, y0 + side * pb - 2, cls="", stroke=AMBER,
+           stroke_width="2", stroke_linecap="round")
     return f
 
 
-@figure("Mutually Exclusive Events", "Disjoint events versus overlapping events",
-        width=WID)
+@figure("Mutually Exclusive Events", "Two events A and B drawn apart inside S, with no "
+        "overlap between them", width=WID)
 def mutually_exclusive_events() -> Fig:
     f = vcard()
 
-    for i, (sep, caption) in enumerate(((92, "A ∩ B = ∅"), (48, "A ∩ B ≠ ∅"))):
-        y = 88 + i * 150
-        cy = y + 62
-        f.rect(34, y, 292, 124, rx=8, fill="var(--soft)", stroke="var(--edge)",
-               stroke_width="1")
-        f.text(46, y + 16, "S", cls="sm dim")
-        if i == 1:
-            f.defs.append(f'<clipPath id="meA"><circle cx="{180 - sep / 2}" cy="{cy}" '
-                          f'r="46"/></clipPath>')
-        venn2(f, 180, cy, r=46, sep=sep, colours=(BLUE, AMBER))
-        if i == 1:
-            f.raw(f'<g clip-path="url(#meA)"><circle cx="{180 + sep / 2}" cy="{cy}" '
-                  f'r="46" fill="{ROSE}" fill-opacity="0.4"/></g>')
-        f.text(180, y + 144, caption, cls="bold",
-               fill=BLUE if i == 0 else ROSE)
+    universe(f, 26, 86, 308, 290)
+    cy = 236
+    venn2(f, BCX, cy, r=68, sep=162, colours=(BLUE, AMBER))
     return f
 
 
-@figure("Probability Addition Rule", "The addition rule correcting for a double-counted "
-        "overlap", width=WID)
+@figure("Probability Addition Rule", "Two overlapping events A and B inside S with their "
+        "region probabilities, the overlap shaded as the part both circles count",
+        width=WID)
 def probability_addition_rule() -> Fig:
     f = vcard()
 
-    cx, cy, r, sep = 180, 200, 78, 78
-    f.rect(28, 100, 304, 200, rx=8, fill="var(--soft)", stroke="var(--edge)",
-           stroke_width="1")
-    f.text(42, 120, "S", cls="sm dim")
+    universe(f, 26, 86, 308, 290)
+    cx, cy, r, sep = BCX, 236, 92, 92
     ax, bx = cx - sep / 2, cx + sep / 2
     f.circle(ax, cy, r, fill=BLUE, fill_opacity="0.18", stroke=BLUE, stroke_width="1.6")
     f.circle(bx, cy, r, fill=AMBER, fill_opacity="0.18", stroke=AMBER, stroke_width="1.6")
@@ -434,227 +404,176 @@ def probability_addition_rule() -> Fig:
     f.path(f"M{cx},{cy - hh:.2f} A{r},{r} 0 0 1 {cx},{cy + hh:.2f} "
            f"A{r},{r} 0 0 1 {cx},{cy - hh:.2f} Z",
            cls="", fill=ROSE, fill_opacity="0.4", stroke="none")
-    f.text(ax - 36, cy + 5, "0.30", cls="")
+    f.text(ax - 42, cy + 5, "0.30", cls="")
     f.text(cx, cy + 5, "0.15", cls="bold")
-    f.text(bx + 36, cy + 5, "0.25", cls="")
-    f.text(ax - 44, cy - 62, "A", cls="bold", fill=BLUE)
-    f.text(bx + 44, cy - 62, "B", cls="bold", fill=AMBER)
-    f.text(BCX, 330, "the overlap belongs to both circles", cls="sm dim")
+    f.text(bx + 42, cy + 5, "0.25", cls="")
+    f.text(ax - 56, cy - 80, "A", cls="bold")
+    f.text(bx + 56, cy - 80, "B", cls="bold")
     return f
 
 
-@figure("Probability Multiplication Rule", "A two-stage probability tree whose branch "
-        "probabilities multiply", width=WID)
+@figure("Probability Multiplication Rule", "A two-stage probability tree, with the path "
+        "through A and then B picked out and its branch probabilities multiplied at the "
+        "leaf", width=WID)
 def probability_multiplication_rule() -> Fig:
     f = vcard()
 
-    f.circle(180, 92, 6, fill="var(--dim)")
-    stage1 = ((96, "A", 0.30, BLUE), (264, "Aᶜ", 0.70, "var(--dim)"))
+    root, y1, y2 = (180, 88), 206, 322
+    f.circle(*root, 6, fill="var(--dim)")
+    stage1 = ((100, "A", 0.30, BLUE), (260, "Aᶜ", 0.70, "var(--dim)"))
     for x, lab, p, colour in stage1:
-        f.arrow(180, 100, x, 168, colour=colour, width=1.5)
-        f.text((180 + x) / 2 + (-14 if x < 180 else 14), 132, f"{p:.2f}", cls="sm",
-               fill=colour)
-        f.circle(x, 184, 17, fill=colour, fill_opacity="0.14", stroke=colour,
+        on = lab == "A"
+        f.arrow(root[0], root[1] + 8, x, y1 - 20, colour=colour, width=2.4 if on else 1.4)
+        f.text((root[0] + x) / 2 + (-16 if x < 180 else 16), (root[1] + y1) / 2 - 4,
+               f"{p:.2f}", cls="sm bold" if on else "sm")
+        f.circle(x, y1, 18, fill=colour, fill_opacity="0.14", stroke=colour,
                  stroke_width="1.4")
-        f.text(x, 190, lab, cls="")
+        f.text(x, y1 + 5, lab, cls="")
 
-    leaves = [(96, 56, "B", 0.80, GREEN, "0.24", True),
-              (96, 148, "Bᶜ", 0.20, "var(--dim)", "0.06", False),
-              (264, 216, "B", 0.10, GREEN, "0.07", False),
-              (264, 308, "Bᶜ", 0.90, "var(--dim)", "0.63", False)]
-    for x_from, x_to, lab, p, colour, product, strong in leaves:
-        f.arrow(x_from, 201, x_to, 268, colour=colour, width=1.4)
-        f.text((x_from + x_to) / 2 + (-14 if x_to < x_from else 14), 234, f"{p:.2f}",
-               cls="sm", fill=colour)
-        f.circle(x_to, 284, 17, fill=colour, fill_opacity="0.14", stroke=colour,
+    leaves = [(100, 50, "B", 0.80, GREEN, True), (100, 144, "Bᶜ", 0.20, "var(--dim)", False),
+              (260, 216, "B", 0.10, GREEN, False), (260, 310, "Bᶜ", 0.90, "var(--dim)", False)]
+    for x_from, x_to, lab, p, colour, on in leaves:
+        f.arrow(x_from, y1 + 19, x_to, y2 - 20, colour=colour, width=2.4 if on else 1.4)
+        f.text((x_from + x_to) / 2 + (-16 if x_to < x_from else 16), (y1 + y2) / 2,
+               f"{p:.2f}", cls="sm bold" if on else "sm")
+        f.circle(x_to, y2, 18, fill=colour, fill_opacity="0.14", stroke=colour,
                  stroke_width="1.4")
-        f.text(x_to, 290, lab, cls="")
-        f.text(x_to, 322, product, cls="bold" if strong else "sm dim",
-               fill=colour if strong else None)
+        f.text(x_to, y2 + 5, lab, cls="")
+    f.text(50, y2 + 42, "0.24", cls="bold")
     return f
 
 
-@figure("Inclusion-Exclusion Principle", "Alternating signs over the seven regions of a "
-        "three-set Venn diagram", width=WID)
+@figure("Inclusion-Exclusion Principle", "Three overlapping circles with a plus sign in "
+        "each region covered once or three times and a minus sign in each region covered "
+        "twice", width=WID)
 def inclusion_exclusion() -> Fig:
     f = vcard()
 
-    cx, cy, r = 180, 216, 78
-    centres = [(cx, cy - 42), (cx - 46, cy + 34), (cx + 46, cy + 34)]
+    cx, cy, r = BCX, 238, 88
+    centres = [(cx, cy - 46), (cx - 50, cy + 38), (cx + 50, cy + 38)]
     for (x, y), colour in zip(centres, (BLUE, AMBER, GREEN)):
         f.circle(x, y, r, fill=colour, fill_opacity="0.16", stroke=colour,
                  stroke_width="1.6")
-    f.text(cx, cy - r - 52, "A", cls="bold", fill=BLUE)
-    f.text(cx - r - 34, cy + r + 16, "B", cls="bold", fill=AMBER)
-    f.text(cx + r + 34, cy + r + 16, "C", cls="bold", fill=GREEN)
-    for x, y, s in ((cx, cy - 86, "+"), (cx - 74, cy + 62, "+"), (cx + 74, cy + 62, "+"),
-                    (cx - 40, cy - 12, "−"), (cx + 40, cy - 12, "−"), (cx, cy + 62, "−"),
-                    (cx, cy + 18, "+")):
-        f.text(x, y + 4, s, cls="bold")
+    f.text(cx - 76, cy - 118, "A", cls="bold")
+    f.text(cx - r - 50, cy + r + 30, "B", cls="bold")
+    f.text(cx + r + 50, cy + r + 30, "C", cls="bold")
+    for x, y, s in ((cx, cy - 96, "+"), (cx - 82, cy + 70, "+"), (cx + 82, cy + 70, "+"),
+                    (cx - 44, cy - 12, "−"), (cx + 44, cy - 12, "−"), (cx, cy + 70, "−"),
+                    (cx, cy + 20, "+")):
+        f.text(x, y + 5, s, cls="bold")
     return f
 
 
-@figure("Conditional Probability", "Conditioning on B rescales the sample space to B",
-        width=WID)
+@figure("Conditional Probability", "Two overlapping events inside S with everything "
+        "outside B faded, so B becomes the whole space and the overlap is the share of it "
+        "that is also A", width=WID)
 def conditional_probability() -> Fig:
     f = vcard()
 
-    f.rect(30, 82, 300, 132, rx=8, fill="var(--soft)", stroke="var(--edge)",
-           stroke_width="1")
-    f.text(42, 100, "S", cls="sm dim")
-    cx, cy, r, sep = 180, 148, 50, 54
+    sx, sy, sw, sh = 26, 86, 308, 290
+    universe(f, sx, sy, sw, sh)
+    cx, cy, r, sep = BCX, 236, 92, 96
     ax, bx = cx - sep / 2, cx + sep / 2
-    f.circle(ax, cy, r, fill=BLUE, fill_opacity="0.16", stroke=BLUE, stroke_width="1.5")
-    f.circle(bx, cy, r, fill=AMBER, fill_opacity="0.16", stroke=AMBER, stroke_width="1.5")
+    f.circle(ax, cy, r, fill=BLUE, fill_opacity="0.2", stroke=BLUE, stroke_width="1.5")
+    f.circle(bx, cy, r, fill=AMBER, fill_opacity="0.2", stroke="none")
     hh = math.sqrt(r * r - (sep / 2) ** 2)
     f.path(f"M{cx},{cy - hh:.2f} A{r},{r} 0 0 1 {cx},{cy + hh:.2f} "
            f"A{r},{r} 0 0 1 {cx},{cy - hh:.2f} Z",
-           cls="", fill=VIOLET, fill_opacity="0.4", stroke="none")
-    f.text(ax - 30, cy - 40, "A", cls="bold", fill=BLUE)
-    f.text(bx + 30, cy - 40, "B", cls="bold", fill=AMBER)
-    f.text(cx, cy + 4, "0.12", cls="sm bold")
-    f.text(bx + 26, cy + 4, "0.28", cls="sm")
-
-    f.arrow(180, 224, 180, 250, colour="var(--dim)", width=1.5)
-    f.text(196, 242, "given B", cls="sm dim", anchor="start")
-
-    ccx, ccy, cr, frac = 180, 322, 60, 0.30
-    f.circle(ccx, ccy, cr, fill=AMBER, fill_opacity="0.12", stroke=AMBER,
-             stroke_width="1.6")
-    theta = 2 * math.pi * frac
-    ex, ey = ccx + cr * math.sin(theta), ccy - cr * math.cos(theta)
-    f.path(f"M{ccx},{ccy} L{ccx},{ccy - cr} A{cr},{cr} 0 0 1 {ex:.2f},{ey:.2f} Z",
-           cls="", fill=VIOLET, fill_opacity="0.42", stroke="none")
-    f.line(ccx, ccy, ccx, ccy - cr, cls="thin", stroke=VIOLET, stroke_width="1.2")
-    f.line(ccx, ccy, ex, ey, cls="thin", stroke=VIOLET, stroke_width="1.2")
-    f.text(ccx + 84, ccy - 24, "A ∩ B", cls="sm bold", fill=VIOLET)
-    f.text(ccx - 84, ccy + 24, "B", cls="bold", fill=AMBER)
+           cls="", fill=VIOLET, fill_opacity="0.5", stroke="none")
+    # Conditioning on B: everything outside B fades, and B is the new whole.
+    f.path(f"M{sx},{sy} h{sw} v{sh} h{-sw} Z "
+           f"M{bx - r},{cy} a{r},{r} 0 1 0 {2 * r},0 a{r},{r} 0 1 0 {-2 * r},0 Z",
+           cls="", fill="var(--surf)", fill_opacity="0.72", fill_rule="evenodd",
+           stroke="none")
+    f.circle(bx, cy, r, fill="none", stroke=AMBER, stroke_width="2.8")
+    f.text(ax - 56, cy - 80, "A", cls="bold dim")
+    f.text(bx + 56, cy - 80, "B", cls="bold")
+    f.text(cx, cy + 5, "0.12", cls="bold")
+    f.text(bx + 42, cy + 5, "0.28", cls="bold")
     return f
 
 
-@figure("Bayes Theorem", "The prior split into two columns whose shaded claim areas make "
-        "up P(C), half of it high-risk", width=WID)
+@figure("Bayes Theorem", "A square split into a narrow high-risk column and a wide "
+        "low-risk column, each with its claiming share shaded, the two shaded areas "
+        "equal", width=WID)
 def bayes_theorem() -> Fig:
     f = vcard()
 
     p_h, p_c_h, p_c_l = 0.20, 0.40, 0.10
-    x0, y0, w, h = 70, 108, 240, 168
+    x0, y0, w, h = 56, 100, 248, 262
     split = x0 + w * p_h
     # Width is the prior, height within a column is the likelihood, so a shaded
     # area is a joint probability and the two shaded areas add to P(C).
     f.rect(x0, y0, w * p_h, h, fill=BLUE, fill_opacity="0.12")
     f.rect(split, y0, w * (1 - p_h), h, fill=ROSE, fill_opacity="0.12")
-    f.rect(x0, y0 + h * (1 - p_c_h), w * p_h, h * p_c_h, fill=BLUE, fill_opacity="0.55")
+    f.rect(x0, y0 + h * (1 - p_c_h), w * p_h, h * p_c_h, fill=BLUE, fill_opacity="0.6")
     f.rect(split, y0 + h * (1 - p_c_l), w * (1 - p_h), h * p_c_l, fill=ROSE,
-           fill_opacity="0.55")
+           fill_opacity="0.6")
     f.rect(x0, y0, w, h, rx=3, fill="none", stroke="var(--edge)", stroke_width="1.2")
-    f.line(split, y0, split, y0 + h, cls="", stroke="var(--surf)", stroke_width="1.4")
-    f.text(x0 + w * p_h / 2, y0 - 8, "H 0.20", cls="sm bold", fill=BLUE)
-    f.text(split + w * (1 - p_h) / 2, y0 - 8, "L 0.80", cls="sm bold", fill=ROSE)
-    f.text(x0 + w * p_h / 2, y0 + h - 28, "0.08", cls="sm bold")
-    f.text(split + w * (1 - p_h) / 2, y0 + h - 4, "0.08", cls="sm bold")
-    f.note(BCX, y0 + h + 20, "shaded = files a claim")
-
-    # The same two shaded areas laid side by side: P(C), half of it blue.
-    by = 312
-    f.rect(80, by, 110, 26, rx=3, fill=BLUE, fill_opacity="0.55")
-    f.rect(190, by, 110, 26, rx=3, fill=ROSE, fill_opacity="0.55")
-    f.rect(80, by, 220, 26, rx=3, fill="none", stroke="var(--edge)", stroke_width="1.2")
-    f.text(135, by + 17, "0.08", cls="sm bold")
-    f.text(245, by + 17, "0.08", cls="sm bold")
-    f.note(BCX, by + 48, "P(C) = 0.16 — the blue half is P(H | C)")
+    f.line(split, y0, split, y0 + h, cls="", stroke="var(--surf)", stroke_width="1.6")
+    f.text(x0 + w * p_h / 2, y0 - 10, "H 0.20", cls="sm bold")
+    f.text(split + w * (1 - p_h) / 2, y0 - 10, "L 0.80", cls="sm bold")
+    f.text(x0 - 6, y0 + h * (1 - p_c_h) + 4, "0.40", cls="sm dim", anchor="end")
+    f.text(x0 + w + 6, y0 + h * (1 - p_c_l) + 4, "0.10", cls="sm dim", anchor="start")
+    f.text(x0 + w * p_h / 2, y0 + h - h * p_c_h / 2 + 4, "0.08", cls="sm bold")
+    f.text(split + w * (1 - p_h) / 2, y0 + h - h * p_c_l / 2 + 4, "0.08", cls="sm bold")
     return f
 
 
-@figure("The Law of Total Probability", "B decomposed across a partition of the sample "
-        "space", width=WID)
+@figure("The Law of Total Probability", "A sample space cut into four columns A1 to A4, "
+        "with an event B spanning them and each piece of B shaded in its column's colour "
+        "and marked with its probability", width=WID)
 def law_of_total_probability() -> Fig:
     f = vcard()
 
-    x0, y0, w, h = 30, 88, 300, 152
+    x0, y0, w, h = 26, 92, 308, 280
     f.rect(x0, y0, w, h, rx=8, fill="var(--soft)", stroke="var(--edge)", stroke_width="1")
     parts = [("A₁", 0.30, 0.10, BLUE), ("A₂", 0.25, 0.40, AMBER),
              ("A₃", 0.25, 0.20, GREEN), ("A₄", 0.20, 0.05, VIOLET)]
-    x = x0
-    for lab, frac, _, colour in parts:
+    ecx, ecy, erx, ery = 180, 262, 136, 74
+    f.defs.append(f'<clipPath id="ltpB"><ellipse cx="{ecx}" cy="{ecy}" rx="{erx}" '
+                  f'ry="{ery}"/></clipPath>')
+    x, pieces, values = x0, [], []
+    for lab, frac, q, colour in parts:
         pw = w * frac
-        f.rect(x, y0, pw, h, fill=colour, fill_opacity="0.12")
+        f.rect(x, y0, pw, h, fill=colour, fill_opacity="0.1")
         f.line(x, y0, x, y0 + h, cls="", stroke="var(--edge)", stroke_width="1")
-        f.text(x + pw / 2, y0 + 20, lab, cls="bold", fill=colour)
+        f.text(x + pw / 2, y0 + 24, lab, cls="bold")
+        pieces.append(f'<rect x="{x:.2f}" y="{ecy - ery}" width="{pw:.2f}" '
+                      f'height="{2 * ery}" fill="{colour}" fill-opacity="0.55"/>')
+        lo, hi = max(x, ecx - erx), min(x + pw, ecx + erx)
+        values.append(((lo + hi) / 2, f"{frac * q:.2f}"))
         x += pw
-    f.ellipse(x0 + w * 0.46, y0 + 92, 104, 42, fill=ROSE, fill_opacity="0.28",
-              stroke=ROSE, stroke_width="1.6")
-    f.text(x0 + w * 0.46, y0 + 97, "B", cls="bold", fill=ROSE)
-
-    total = sum(p * q for _, p, q, _ in parts)
-    bx, bw = 40, 280
-    f.text(BCX, 284, "P(B) split into P(B | Aᵢ) P(Aᵢ)", cls="sm dim")
-    x = bx
-    for lab, p, q, colour in parts:
-        seg = bw * (p * q) / total
-        f.rect(x, 298, seg, 30, rx=3, fill=colour, fill_opacity="0.6")
-        if seg > 26:
-            f.text(x + seg / 2, 318, f"{p * q:.2f}", cls="sm bold")
-        x += seg
-    f.line(bx, 336, bx + bw, 336, cls="", stroke=ROSE, stroke_width="1.6")
-    f.text(BCX, 356, f"P(B) = {total:.2f}", cls="bold", fill=ROSE)
+    f.raw(f'<g clip-path="url(#ltpB)">{"".join(pieces)}</g>')
+    for vx, v in values:
+        f.text(vx, ecy + 5, v, cls="sm bold")
+    f.ellipse(ecx, ecy, erx, ery, fill="none", stroke=ROSE, stroke_width="2")
+    f.text(ecx, ecy - ery - 10, "B", cls="bold")
     return f
 
 
-@figure("Discrete Univariate Distributions", "The six discrete families on the syllabus, "
-        "each drawn as a probability mass function", width=WID)
+@figure("Discrete Univariate Distributions", "A probability mass function drawn as "
+        "stems standing on the integers 0 to 8", width=WID)
 def discrete_univariate() -> Fig:
     f = vcard()
 
-    def binom(n, p, k):
-        c = math.factorial(n) / (math.factorial(k) * math.factorial(n - k))
-        return c * p ** k * (1 - p) ** (n - k)
-
-    specs = [
-        ("Binomial", BLUE, [binom(8, 0.4, k) for k in range(9)]),
-        ("Poisson", AMBER, [math.exp(-2.5) * 2.5 ** k / math.factorial(k)
-                            for k in range(9)]),
-        ("Geometric", GREEN, [0.45 * 0.55 ** k for k in range(9)]),
-        ("Negative binomial", TEAL,
-         [binom(k + 2, 0.5, 2) * 0.5 ** (k) if k >= 0 else 0 for k in range(9)]),
-        ("Hypergeometric", VIOLET, [binom(8, 0.5, k) * (1.4 if k in (3, 4, 5) else 0.6)
-                                    for k in range(9)]),
-        ("Discrete uniform", ROSE, [0.16] * 6 + [0, 0, 0]),
-    ]
-    for i, (name, colour, masses) in enumerate(specs):
-        px = 34 + (i % 2) * 156
-        py = 96 + (i // 2) * 100
-        a = _panel(f, px, py, 130, 58, name, colour)
-        a.xmin, a.xmax = -0.6, 8.6
-        a.ymin, a.ymax = 0, max(masses) * 1.2
-        a.stems([(k, m) for k, m in enumerate(masses) if m > 0], colour=colour,
-                dot=2.4, width=2.6)
+    masses = [_binom_pmf(8, 0.35, k) for k in range(9)]
+    a = vaxes(f, -0.7, 8.7, 0, max(masses) * 1.15, top=24)
+    a.stems(list(enumerate(masses)), colour=BLUE, dot=4.2, width=2.6)
+    a.frame(xlabel="k", ylabel="p(k)", xticks=list(range(9)))
     return f
 
 
-@figure("Continuous Univariate Distributions", "Shapes and supports of the six continuous "
-        "families on the syllabus", width=WID)
+@figure("Continuous Univariate Distributions", "A smooth right-skewed density over the "
+        "positive reals, the whole area under it shaded", width=WID)
 def continuous_univariate() -> Fig:
     f = vcard()
 
-    specs = [
-        (lambda x: 1.0 if 0.12 < x < 0.88 else 0.002, BLUE, 0, 1, "Uniform (a, b)"),
-        (lambda x: math.exp(-x), AMBER, 0, 4, "Exponential (θ)"),
-        (lambda x: x * math.exp(-x), GREEN, 0, 8, "Gamma (α, θ)"),
-        (lambda x: max(x, 1e-6) ** 1.5 * max(1 - x, 1e-6) ** 2.5, VIOLET, 0, 1,
-         "Beta (α, β)"),
-        (_npdf, ROSE, -3.2, 3.2, "Normal (μ, σ²)"),
-        (lambda x: _lognorm(x, 0.0, 0.6), TEAL, 0.02, 5, "Lognormal (μ, σ²)"),
-    ]
-    for i, (fn, colour, xa, xb, name) in enumerate(specs):
-        px = 34 + (i % 2) * 156
-        py = 96 + (i // 2) * 100
-        a = _panel(f, px, py, 130, 58, name, colour)
-        a.xmin, a.xmax = xa, xb
-        ys = [fn(xa + (xb - xa) * j / 60) for j in range(61)]
-        a.ymin, a.ymax = 0, max(ys) * 1.18
-        a.area(fn, xa, xb, colour=colour, opacity="0.16")
-        a.curve(fn, colour=colour, n=90)
+    dens = lambda t: _gamma_pdf(t, 2.4, 1.0)
+    a = vaxes(f, 0, 9, 0, 0.36, top=24)
+    a.area(dens, 0, 9, colour=BLUE, opacity="0.22")
+    a.curve(dens, colour=BLUE)
+    a.frame(xlabel="x", ylabel="f(x)", xticks=[0])
     return f
 
 
@@ -662,95 +581,98 @@ def continuous_univariate() -> Fig:
 # 2. Univariate random variables
 # ═══════════════════════════════════════════════════════════════════════════
 
-@figure("Random Variable", "A random variable mapping outcomes of two coin tosses to the "
-        "number of heads", width=WID)
+@figure("Random Variable", "The four outcomes of two coin tosses, each sent by an arrow "
+        "to its number of heads on the real line", width=WID)
 def random_variable() -> Fig:
     f = vcard()
 
-    universe(f, 36, 110, 288, 92, "S")
-    outcomes = [("TT", 0, 74), ("HT", 1, 146), ("TH", 1, 218), ("HH", 2, 290)]
+    universe(f, 30, 92, 300, 108, "S")
+    outcomes = [("TT", 0, 72), ("HT", 1, 144), ("TH", 1, 216), ("HH", 2, 288)]
     for lab, _, cx in outcomes:
-        f.rect(cx - 32, 152, 64, 34, rx=7, fill=BLUE, fill_opacity="0.12",
-               stroke=BLUE, stroke_width="1.3")
-        f.text(cx, 174, lab, cls="")
+        f.rect(cx - 30, 134, 60, 40, rx=8, fill=BLUE, fill_opacity="0.14",
+               stroke=BLUE, stroke_width="1.4")
+        f.text(cx, 159, lab, cls="bold")
 
-    lx0, lx1, ly = 66, 294, 330
-    f.arrow(lx0 - 16, ly, lx1 + 16, ly, colour="var(--axis)", width=1.1)
-    f.text(lx1 + 26, ly + 4, "ℝ", cls="sm dim", anchor="start")
+    lx0, lx1, ly = 72, 288, 342
+    f.arrow(lx0 - 30, ly, lx1 + 26, ly, colour="var(--axis)", width=1.1)
+    f.text(lx1 + 36, ly + 4, "ℝ", cls="sm dim", anchor="start")
     targets = {}
     for k in (0, 1, 2):
         x = lx0 + k * (lx1 - lx0) / 2
         targets[k] = x
         f.line(x, ly - 5, x, ly + 5, cls="tick")
-        f.circle(x, ly, 5, fill=VIOLET)
-        f.text(x, ly + 22, str(k), cls="")
+        f.circle(x, ly, 6, fill=VIOLET)
+        f.text(x, ly + 24, str(k), cls="bold")
     for _, k, cx in outcomes:
-        f.arrow(cx, 188, targets[k], ly - 14, colour="var(--dim)", width=1, dash=True)
+        f.arrow(cx, 178, targets[k], ly - 16, colour="var(--dim)", width=1.2, dash=True)
     return f
 
 
-@figure("Probability Density Function (PDF)", "Probability as the area under a density "
-        "curve between a and b", width=WID)
+@figure("Probability Density Function (PDF)", "A bell-shaped density with the area under "
+        "it between a and b shaded", width=WID)
 def pdf() -> Fig:
     f = vcard()
 
-    a = vaxes(f, -3.4, 3.4, 0, 0.46, top=40)
-    a.area(_npdf, -0.6, 1.5, colour=BLUE, opacity="0.28")
+    a = vaxes(f, -3.4, 3.4, 0, 0.44, top=24)
+    a.area(_npdf, -0.6, 1.5, colour=BLUE, opacity="0.3")
     a.curve(_npdf, colour=BLUE)
     a.frame(xlabel="x", ylabel="f(x)", xticks=[-0.6, 1.5],
             xfmt=lambda t: "a" if t < 0 else "b")
     a.vline(-0.6, y_top=_npdf(-0.6), colour=BLUE)
     a.vline(1.5, y_top=_npdf(1.5), colour=BLUE)
-    a.label(0.45, 0.11, "P(a ≤ X ≤ b)", cls="sm bold")
     return f
 
 
-@figure("Cumulative Distribution Function (CDF)", "A density and the CDF that accumulates "
-        "its area", width=WID)
+def _p_phi(t):
+    """The standard normal CDF."""
+    return 0.5 * (1 + math.erf(t / math.sqrt(2)))
+
+
+@figure("Cumulative Distribution Function (CDF)", "A density with its area to the left of "
+        "x shaded and, on the same axes, the S-shaped CDF whose height at x equals that "
+        "area", width=WID)
 def cdf() -> Fig:
     f = vcard()
 
     x_star = 0.7
-    a1 = Axes(f, 66, 86, 326, 212, -3.2, 3.2, 0, 0.46)
-    a1.area(_npdf, -3.2, x_star, colour=BLUE, opacity="0.26")
-    a1.curve(_npdf, colour=BLUE)
-    a1.frame(ylabel="f(t)", xticks=[x_star], xfmt=lambda t: "x")
-    a1.label(-1.1, 0.13, "area", cls="sm bold")
-
-    a2 = Axes(f, 66, 252, 326, 350, -3.2, 3.2, 0, 1.08)
-    a2.curve(lambda t: 0.5 * (1 + math.erf(t / math.sqrt(2))), colour=VIOLET)
-    a2.frame(ylabel="F(x)", xlabel="x", xticks=[x_star], yticks=[0, 0.5, 1],
-             xfmt=lambda t: "x", yfmt=lambda t: f"{t:g}")
-    fv = 0.5 * (1 + math.erf(x_star / math.sqrt(2)))
-    a2.hline(fv, x_to=x_star, colour=VIOLET)
-    a2.vline(x_star, y_top=fv, colour=VIOLET)
-    a2.point(x_star, fv, colour=VIOLET)
-    f.text(a2.x0 - 8, a2.py(fv) + 3.6, f"{fv:.2f}", cls="sm bold", anchor="end",
-           fill=VIOLET)
+    fv = _p_phi(x_star)
+    a = vaxes(f, -3.2, 3.2, 0, 1.08, top=24)
+    a.area(_npdf, -3.2, x_star, colour=BLUE, opacity="0.26")
+    a.curve(_npdf, colour=BLUE)
+    a.curve(_p_phi, colour=VIOLET)
+    a.frame(xlabel="x", xticks=[x_star], yticks=[0, 1], xfmt=lambda t: "x",
+            yfmt=lambda t: f"{t:g}")
+    a.hline(fv, x_to=x_star, colour=VIOLET)
+    xs = a.px(x_star)
+    f.line(xs, a.y1, xs, a.py(fv), cls="", stroke=VIOLET, stroke_width="2.6",
+           stroke_linecap="round")
+    a.point(x_star, fv, colour=VIOLET, r=4.2)
+    f.text(a.x0 - 8, a.py(fv) + 3.6, f"{fv:.2f}", cls="sm bold", anchor="end")
+    a.label(-2.1, 0.12, "f", cls="bold")
+    a.label(2.2, 0.99, "F", cls="bold", dy=-8)
     return f
 
 
-@figure("Percentile", "The percentile read off the CDF and the matching tail area",
-        width=WID)
+@figure("Percentile", "A density with its top ten percent shaded, and on the same axes "
+        "the CDF read backwards from 0.90 across to the curve and down to the 90th "
+        "percentile", width=WID)
 def percentile() -> Fig:
     f = vcard()
 
     p, xp = 0.90, 1.2816
-    a1 = Axes(f, 66, 86, 326, 212, -3.2, 3.4, 0, 0.46)
-    a1.area(_npdf, -3.2, xp, colour=BLUE, opacity="0.2")
-    a1.area(_npdf, xp, 3.4, colour=ROSE, opacity="0.34")
-    a1.curve(_npdf, colour=BLUE)
-    a1.frame(ylabel="f(x)", xticks=[xp], xfmt=lambda t: "x₀.₉₀")
-    a1.label(-0.8, 0.12, "0.90", cls="sm bold")
-    a1.label(2.2, 0.06, "0.10", cls="sm bold", fill=ROSE)
-
-    a2 = Axes(f, 66, 252, 326, 350, -3.2, 3.4, 0, 1.08)
-    a2.curve(lambda t: 0.5 * (1 + math.erf(t / math.sqrt(2))), colour=VIOLET)
-    a2.frame(ylabel="F(x)", xlabel="x", xticks=[xp], yticks=[0, 0.9],
-             xfmt=lambda t: "x₀.₉₀", yfmt=lambda t: f"{t:g}")
-    a2.hline(p, x_to=xp, colour=VIOLET)
-    a2.vline(xp, y_top=p, colour=VIOLET)
-    a2.point(xp, p, colour=VIOLET)
+    a = vaxes(f, -3.2, 3.4, 0, 1.08, top=24)
+    a.area(_npdf, -3.2, xp, colour=BLUE, opacity="0.2")
+    a.area(_npdf, xp, 3.4, colour=ROSE, opacity="0.45")
+    a.curve(_npdf, colour=BLUE)
+    a.curve(_p_phi, colour=VIOLET)
+    a.frame(xlabel="x", xticks=[xp], yticks=[0, p, 1], xfmt=lambda t: "x₀.₉₀",
+            yfmt=lambda t: f"{t:g}")
+    xs, ys = a.px(xp), a.py(p)
+    f.arrow(a.x0 + 2, ys, xs - 6, ys, colour=VIOLET, width=1.5, dash=True)
+    f.arrow(xs, ys + 6, xs, a.y1 - 3, colour=VIOLET, width=1.5, dash=True)
+    a.point(xp, p, colour=VIOLET, r=4.2)
+    a.label(-2.1, 0.12, "f", cls="bold")
+    a.label(2.3, 0.99, "F", cls="bold", dy=-8)
     return f
 
 

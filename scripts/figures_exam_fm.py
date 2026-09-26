@@ -1325,11 +1325,11 @@ def redemption_value() -> Fig:
     f = vcard()
 
     y, n, hf = 330, 6, 170                           # hf: the height of F
-    xs = timeline(f, y, 56, 272, n, labels=["0", "1", "2", "…", "", "", "n"])
+    xs = timeline(f, y, 56, 288, n, labels=["0", "1", "2", "…", "", "", "n"])
     for k in range(1, n + 1):
         cash_arrow(f, xs[k], y, 36, colour=BLUE, width=2)
     f.text(xs[1], y - 44, "Fr", cls="sm bold")
-    f.line(xs[1] - 12, y - hf, xs[n] + 30, y - hf, cls="thin dash", stroke="var(--dim)",
+    f.line(xs[1] - 12, y - hf, xs[n] - 32, y - hf, cls="thin dash", stroke="var(--dim)",
            stroke_width="1.2")
     f.text(xs[1] - 16, y - hf + 4, "F", cls="bold", anchor="end")
     for dx, ratio, colour, lab in ((-16, 0.8, ROSE, "C < F"), (0, 1.0, GREEN, "C = F"),

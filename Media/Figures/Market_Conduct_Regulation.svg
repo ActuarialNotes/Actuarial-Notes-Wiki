@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The conduct chain from sale to complaint, with claims handling carrying the largest exposure</title>
+  <title>A loop between insurer and customer: the product is designed and sold one way, the claim and the complaint come back the other, with the regulator watching every step</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,22 +47,61 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="34" y="100" width="292" height="44" rx="6" fill="#3b82f6" fill-opacity="0.16" stroke="#3b82f6" stroke-width="1.3"/>
-    <text x="180" y="119" text-anchor="middle" class="sm">Product design</text>
-    <text x="180" y="134" text-anchor="middle" class="sm dim">suitability, target market</text>
-    <rect x="34" y="156" width="292" height="44" rx="6" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.3"/>
-    <text x="180" y="175" text-anchor="middle" class="sm">Distribution</text>
-    <text x="180" y="190" text-anchor="middle" class="sm dim">licensing, disclosure, take-all-comers</text>
-    <line x1="180" y1="143" x2="180" y2="155" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <rect x="34" y="212" width="292" height="44" rx="6" fill="#e11d48" fill-opacity="0.16" stroke="#e11d48" stroke-width="1.3"/>
-    <text x="180" y="231" text-anchor="middle" class="sm">Claims handling</text>
-    <text x="180" y="246" text-anchor="middle" class="sm dim">good faith — bad faith is actionable</text>
-    <line x1="180" y1="199" x2="180" y2="211" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <rect x="34" y="268" width="292" height="44" rx="6" fill="#d97706" fill-opacity="0.16" stroke="#d97706" stroke-width="1.3"/>
-    <text x="180" y="287" text-anchor="middle" class="sm">Complaints</text>
-    <text x="180" y="302" text-anchor="middle" class="sm dim">ombudservice, regulator reporting</text>
-    <line x1="180" y1="255" x2="180" y2="267" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <text x="180" y="348" text-anchor="middle" class="sm dim">the Market Conduct Annual Statement is CCIR's,</text>
-    <text x="180" y="364" text-anchor="middle" class="sm dim">and separate from OSFI's prudential return</text>
+    <rect x="28.4" y="201" width="39.2" height="70" rx="2" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="36.1" y="209.4" width="8.4" height="7" fill="#7c3aed" fill-opacity="0.55"/>
+    <rect x="51.5" y="209.4" width="8.4" height="7" fill="#7c3aed" fill-opacity="0.55"/>
+    <rect x="36.1" y="223.4" width="8.4" height="7" fill="#7c3aed" fill-opacity="0.55"/>
+    <rect x="51.5" y="223.4" width="8.4" height="7" fill="#7c3aed" fill-opacity="0.55"/>
+    <rect x="36.1" y="237.4" width="8.4" height="7" fill="#7c3aed" fill-opacity="0.55"/>
+    <rect x="51.5" y="237.4" width="8.4" height="7" fill="#7c3aed" fill-opacity="0.55"/>
+    <rect x="36.1" y="251.4" width="8.4" height="7" fill="#7c3aed" fill-opacity="0.55"/>
+    <rect x="51.5" y="251.4" width="8.4" height="7" fill="#7c3aed" fill-opacity="0.55"/>
+    <text x="48" y="290" text-anchor="middle" class="sm bold">insurer</text>
+    <circle cx="312" cy="220.6" r="10.44" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M293.44,267 V244.96 Q293.44,235.68 303.88,235.68 H320.12 Q330.56,235.68 330.56,244.96 V267 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="312" y="290" text-anchor="middle" class="sm bold">customer</text>
+    <polygon points="154,227.6 180,212 206,227.6" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="158.68" y="230.72" width="5.2" height="23.92" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="171.16" y="230.72" width="5.2" height="23.92" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="183.64" y="230.72" width="5.2" height="23.92" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="196.12" y="230.72" width="5.2" height="23.92" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="154" y="256.72" width="52" height="7.28" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="180" y="290" text-anchor="middle" class="sm bold">regulator</text>
+    <line x1="62" y1="180" x2="298" y2="180" class="thin" stroke="var(--dim)" stroke-width="1.4" marker-end="url(#ahvardim)"/>
+    <line x1="298" y1="306" x2="62" y2="306" class="thin" stroke="var(--dim)" stroke-width="1.4" marker-end="url(#ahvardim)"/>
+    <polygon points="115.6,128 136.4,128 144.4,136 144.4,168 115.6,168" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M136.4,128 V136 H144.4" fill="none" stroke="#3b82f6" stroke-width="1.2"/>
+    <line x1="121.2" y1="144" x2="138" y2="144" stroke="#3b82f6" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="121.2" y1="150.8" x2="138" y2="150.8" stroke="#3b82f6" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="121.2" y1="157.6" x2="132.4" y2="157.6" stroke="#3b82f6" stroke-width="1.4" stroke-linecap="round"/>
+    <text x="130" y="116" text-anchor="middle" class="sm">design</text>
+    <rect x="217" y="164" width="26" height="6" fill="#0d9488" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="230" cy="170" rx="13" ry="3.4" fill="#0d9488" fill-opacity="0.25" stroke="#0d9488" stroke-width="1.2"/>
+    <ellipse cx="230" cy="164" rx="13" ry="3.4" fill="var(--surf)" stroke="#0d9488" stroke-width="1.2"/>
+    <ellipse cx="230" cy="164" rx="13" ry="3.4" fill="#0d9488" fill-opacity="0.3" stroke="none"/>
+    <rect x="217" y="158" width="26" height="6" fill="#0d9488" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="230" cy="164" rx="13" ry="3.4" fill="#0d9488" fill-opacity="0.25" stroke="#0d9488" stroke-width="1.2"/>
+    <ellipse cx="230" cy="158" rx="13" ry="3.4" fill="var(--surf)" stroke="#0d9488" stroke-width="1.2"/>
+    <ellipse cx="230" cy="158" rx="13" ry="3.4" fill="#0d9488" fill-opacity="0.3" stroke="none"/>
+    <rect x="217" y="152" width="26" height="6" fill="#0d9488" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="230" cy="158" rx="13" ry="3.4" fill="#0d9488" fill-opacity="0.25" stroke="#0d9488" stroke-width="1.2"/>
+    <ellipse cx="230" cy="152" rx="13" ry="3.4" fill="var(--surf)" stroke="#0d9488" stroke-width="1.2"/>
+    <ellipse cx="230" cy="152" rx="13" ry="3.4" fill="#0d9488" fill-opacity="0.3" stroke="none"/>
+    <rect x="217" y="146" width="26" height="6" fill="#0d9488" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="230" cy="152" rx="13" ry="3.4" fill="#0d9488" fill-opacity="0.25" stroke="#0d9488" stroke-width="1.2"/>
+    <ellipse cx="230" cy="146" rx="13" ry="3.4" fill="var(--surf)" stroke="#0d9488" stroke-width="1.2"/>
+    <ellipse cx="230" cy="146" rx="13" ry="3.4" fill="#0d9488" fill-opacity="0.3" stroke="none"/>
+    <text x="230" y="116" text-anchor="middle" class="sm">sale</text>
+    <polygon points="215.6,314 236.4,314 244.4,322 244.4,354 215.6,354" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M236.4,314 V322 H244.4" fill="none" stroke="#e11d48" stroke-width="1.2"/>
+    <line x1="221.2" y1="330" x2="238" y2="330" stroke="#e11d48" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="221.2" y1="336.8" x2="238" y2="336.8" stroke="#e11d48" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="221.2" y1="343.6" x2="232.4" y2="343.6" stroke="#e11d48" stroke-width="1.4" stroke-linecap="round"/>
+    <text x="230" y="372" text-anchor="middle" class="sm">claim</text>
+    <rect x="110" y="317.6" width="40" height="28.8" rx="8.0" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4"/>
+    <polygon points="118.8,345.4 115.6,356 128.4,345.4" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <line x1="130" y1="322.21" x2="130" y2="334.88" stroke="#d97706" stroke-width="2.4" stroke-linecap="round"/>
+    <circle cx="130" cy="340.64" r="1.5" fill="#d97706"/>
+    <text x="130" y="372" text-anchor="middle" class="sm">complaint</text>
   </g>
 </svg>

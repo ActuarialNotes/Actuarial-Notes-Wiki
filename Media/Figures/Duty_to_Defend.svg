@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The duty to defend read off the pleadings, sitting outside the narrower duty to indemnify</title>
+  <title>A large circle of what is alleged, where the insurer's shield defends, holding a smaller circle of what is proven, where it pays to indemnify</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -44,16 +44,28 @@ text {
   <g id="light"/><g id="dark"/>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <circle cx="178" cy="202" r="84" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.6"/>
-    <circle cx="178" cy="224" r="44" fill="#d97706" fill-opacity="0.22" stroke="#d97706" stroke-width="1.6"/>
-    <text x="178" y="138" text-anchor="middle" class="sm bold" fill="#3b82f6">alleged</text>
-    <text x="178" y="232" text-anchor="middle" class="sm bold" fill="#d97706">proven</text>
-    <text x="178" y="168" text-anchor="middle" class="sm" fill="#3b82f6">defend</text>
-    <text x="178" y="250" text-anchor="middle" class="sm" fill="#d97706">indemnify</text>
-    <text x="180" y="306" text-anchor="middle" class="sm dim">so an insurer defends claims it may never pay</text>
-    <text x="180" y="330" text-anchor="middle" class="sm dim">under a reservation of rights — and where the</text>
-    <text x="180" y="346" text-anchor="middle" class="sm dim">defence could steer the outcome, the insured</text>
-    <text x="180" y="362" text-anchor="middle" class="sm dim">picks independent counsel at the insurer's cost</text>
-    <text x="180" y="386" text-anchor="middle" class="sm dim">defence cost is ALAE, and it can rival indemnity</text>
+    <circle cx="180" cy="229" r="150" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.6"/>
+    <circle cx="180" cy="290" r="80" fill="#d97706" fill-opacity="0.20" stroke="#d97706" stroke-width="1.6"/>
+    <text x="180" y="108" text-anchor="middle" class="bold">alleged</text>
+    <path d="M180,129 L196.8,134.88 V149.16 Q196.8,164.28 180,171 Q163.2,164.28 163.2,149.16 V134.88 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="180" y="192" text-anchor="middle" class="sm bold">defend</text>
+    <text x="180" y="244" text-anchor="middle" class="bold">proven</text>
+    <rect x="162" y="298" width="36" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="180" cy="304" rx="18" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="180" cy="298" rx="18" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="180" cy="298" rx="18" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="162" y="292" width="36" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="180" cy="298" rx="18" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="180" cy="292" rx="18" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="180" cy="292" rx="18" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="162" y="286" width="36" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="180" cy="292" rx="18" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="180" cy="286" rx="18" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="180" cy="286" rx="18" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="162" y="280" width="36" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="180" cy="286" rx="18" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="180" cy="280" rx="18" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="180" cy="280" rx="18" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <text x="180" y="330" text-anchor="middle" class="sm bold">indemnify</text>
   </g>
 </svg>

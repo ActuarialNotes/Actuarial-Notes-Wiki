@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Written exposure earning out over the policy term in car-years</title>
+  <title>One car on an annual policy earning exposure in a straight line, 0.50 car-years at six months and 1.00 at twelve</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,36 +47,41 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="72" y1="98" x2="72" y2="326" class="grid"/>
-    <line x1="154.67" y1="98" x2="154.67" y2="326" class="grid"/>
-    <line x1="237.33" y1="98" x2="237.33" y2="326" class="grid"/>
-    <line x1="320" y1="98" x2="320" y2="326" class="grid"/>
-    <line x1="72" y1="326" x2="320" y2="326" class="grid"/>
-    <line x1="72" y1="222.36" x2="320" y2="222.36" class="grid"/>
-    <line x1="72" y1="118.73" x2="320" y2="118.73" class="grid"/>
-    <line x1="72" y1="326" x2="330" y2="326" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="72" y1="326" x2="72" y2="88" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="72" y1="326" x2="72" y2="330" class="tick"/>
-    <text x="72" y="342" text-anchor="middle" class="sm dim">0</text>
-    <line x1="154.67" y1="326" x2="154.67" y2="330" class="tick"/>
-    <text x="154.67" y="342" text-anchor="middle" class="sm dim">4</text>
-    <line x1="237.33" y1="326" x2="237.33" y2="330" class="tick"/>
-    <text x="237.33" y="342" text-anchor="middle" class="sm dim">8</text>
-    <line x1="320" y1="326" x2="320" y2="330" class="tick"/>
-    <text x="320" y="342" text-anchor="middle" class="sm dim">12</text>
-    <line x1="68" y1="326" x2="72" y2="326" class="tick"/>
-    <text x="64" y="329.6" text-anchor="end" class="sm dim">0.00</text>
-    <line x1="68" y1="222.36" x2="72" y2="222.36" class="tick"/>
-    <text x="64" y="225.96" text-anchor="end" class="sm dim">0.50</text>
-    <line x1="68" y1="118.73" x2="72" y2="118.73" class="tick"/>
-    <text x="64" y="122.33" text-anchor="end" class="sm dim">1.00</text>
-    <polyline points="72,326 320,118.73" class="curve" stroke="#059669" stroke-width="2.4"/>
-    <circle cx="196" cy="222.36" r="3.6" fill="#059669"/>
-    <text x="189" y="217.36" text-anchor="end" class="sm bold" fill="#059669">0.50</text>
-    <circle cx="320" cy="118.73" r="3.6" fill="#059669"/>
-    <text x="313" y="113.73" text-anchor="end" class="sm bold" fill="#059669">1.00</text>
-    <text x="180" y="358" text-anchor="middle" class="sm dim">months of a one-car annual policy</text>
-    <text x="180" y="374" text-anchor="middle" class="sm dim">a six-month policy is 0.5 car-years,</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">not one — exposure is counted, not policies</text>
+    <line x1="72" y1="98" x2="72" y2="350" class="grid"/>
+    <line x1="134" y1="98" x2="134" y2="350" class="grid"/>
+    <line x1="196" y1="98" x2="196" y2="350" class="grid"/>
+    <line x1="258" y1="98" x2="258" y2="350" class="grid"/>
+    <line x1="320" y1="98" x2="320" y2="350" class="grid"/>
+    <line x1="72" y1="350" x2="320" y2="350" class="grid"/>
+    <line x1="72" y1="235.45" x2="320" y2="235.45" class="grid"/>
+    <line x1="72" y1="120.91" x2="320" y2="120.91" class="grid"/>
+    <line x1="72" y1="350" x2="330" y2="350" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="72" y1="350" x2="72" y2="88" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="72" y1="350" x2="72" y2="354" class="tick"/>
+    <text x="72" y="366" text-anchor="middle" class="sm dim">0</text>
+    <line x1="134" y1="350" x2="134" y2="354" class="tick"/>
+    <text x="134" y="366" text-anchor="middle" class="sm dim">3</text>
+    <line x1="196" y1="350" x2="196" y2="354" class="tick"/>
+    <text x="196" y="366" text-anchor="middle" class="sm dim">6</text>
+    <line x1="258" y1="350" x2="258" y2="354" class="tick"/>
+    <text x="258" y="366" text-anchor="middle" class="sm dim">9</text>
+    <line x1="320" y1="350" x2="320" y2="354" class="tick"/>
+    <text x="320" y="366" text-anchor="middle" class="sm dim">12</text>
+    <line x1="68" y1="350" x2="72" y2="350" class="tick"/>
+    <text x="64" y="353.6" text-anchor="end" class="sm dim">0.00</text>
+    <line x1="68" y1="235.45" x2="72" y2="235.45" class="tick"/>
+    <text x="64" y="239.05" text-anchor="end" class="sm dim">0.50</text>
+    <line x1="68" y1="120.91" x2="72" y2="120.91" class="tick"/>
+    <text x="64" y="124.51" text-anchor="end" class="sm dim">1.00</text>
+    <text x="320" y="382" text-anchor="end" class="sm dim">months</text>
+    <text x="68" y="84" text-anchor="start" class="sm dim">car-years</text>
+    <polyline points="72,350 320,120.91" class="curve" stroke="#059669" stroke-width="2.4"/>
+    <circle cx="196" cy="235.45" r="3.6" fill="#059669"/>
+    <text x="189" y="230.45" text-anchor="end" class="sm bold">0.50</text>
+    <circle cx="320" cy="120.91" r="3.6" fill="#059669"/>
+    <text x="313" y="115.91" text-anchor="end" class="sm bold">1.00</text>
+    <path d="M214.47,286.67 V279.11 L225.27,276.95 L232.83,268.31 H251.19 L258.75,276.95 L268.47,280.19 V286.67 Z" fill="#059669" fill-opacity="0.18" stroke="#059669" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="226.35" cy="287.75" r="4.86" fill="var(--surf)" stroke="#059669" stroke-width="1.6"/>
+    <circle cx="256.59" cy="287.75" r="4.86" fill="var(--surf)" stroke="#059669" stroke-width="1.6"/>
   </g>
 </svg>

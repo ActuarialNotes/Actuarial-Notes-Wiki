@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The four opinions available to the Appointed Actuary, and the one thing the opinion is about</title>
+  <title>A liability scale with the actuary's range of reasonable estimates shaded: a carried amount inside the range stamped unqualified, and one below it stamped adverse</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,23 +42,45 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="30" y="104" width="300" height="40" rx="6" fill="#059669" fill-opacity="0.16" stroke="#059669" stroke-width="1.2"/>
-    <text x="42" y="129" text-anchor="start" class="sm bold">Unqualified</text>
-    <text x="318" y="129" text-anchor="end" class="sm dim">it does</text>
-    <rect x="30" y="154" width="300" height="40" rx="6" fill="#d97706" fill-opacity="0.16" stroke="#d97706" stroke-width="1.2"/>
-    <text x="42" y="179" text-anchor="start" class="sm bold">Qualified</text>
-    <text x="318" y="179" text-anchor="end" class="sm dim">except for one component</text>
-    <rect x="30" y="204" width="300" height="40" rx="6" fill="#e11d48" fill-opacity="0.16" stroke="#e11d48" stroke-width="1.2"/>
-    <text x="42" y="229" text-anchor="start" class="sm bold">Adverse</text>
-    <text x="318" y="229" text-anchor="end" class="sm dim">it does not</text>
-    <rect x="30" y="254" width="300" height="40" rx="6" fill="#7c3aed" fill-opacity="0.16" stroke="#7c3aed" stroke-width="1.2"/>
-    <text x="42" y="279" text-anchor="start" class="sm bold">Denial</text>
-    <text x="318" y="279" text-anchor="end" class="sm dim">the data will not support an opinion</text>
-    <line x1="30" y1="314" x2="330" y2="314" class="rule"/>
-    <text x="180" y="336" text-anchor="middle" class="sm dim">data sufficiency is a gate, not a formality: a</text>
-    <text x="180" y="352" text-anchor="middle" class="sm dim">margin cannot cure data that cannot be relied on</text>
-    <text x="180" y="378" text-anchor="middle" class="sm dim">subsequent events count up to the signing date</text>
+    <rect x="117.78" y="248" width="140" height="64" rx="3" fill="#059669" fill-opacity="0.2" stroke="#059669" stroke-width="1.2"/>
+    <text x="214.22" y="284" text-anchor="middle" class="sm bold">range</text>
+    <line x1="32" y1="312" x2="336" y2="312" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <line x1="71.11" y1="312" x2="71.11" y2="316" class="tick"/>
+    <text x="71.11" y="329" text-anchor="middle" class="sm dim">380</text>
+    <line x1="133.33" y1="312" x2="133.33" y2="316" class="tick"/>
+    <text x="133.33" y="329" text-anchor="middle" class="sm dim">400</text>
+    <line x1="195.56" y1="312" x2="195.56" y2="316" class="tick"/>
+    <text x="195.56" y="329" text-anchor="middle" class="sm dim">420</text>
+    <line x1="257.78" y1="312" x2="257.78" y2="316" class="tick"/>
+    <text x="257.78" y="329" text-anchor="middle" class="sm dim">440</text>
+    <line x1="320" y1="312" x2="320" y2="316" class="tick"/>
+    <text x="320" y="329" text-anchor="middle" class="sm dim">460</text>
+    <text x="336" y="348" text-anchor="end" class="sm dim">liability, $M</text>
+    <line x1="170.67" y1="180" x2="170.67" y2="312" class="thin" stroke="#059669" stroke-width="2"/>
+    <circle cx="170.67" cy="312" r="4" fill="#059669"/>
+    <polygon points="149.79,117 179.95,117 191.55,128.6 191.55,175 149.79,175" fill="#059669" fill-opacity="0.18" stroke="#059669" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M179.95,117 V128.6 H191.55" fill="none" stroke="#059669" stroke-width="1.2"/>
+    <line x1="157.91" y1="140.2" x2="182.27" y2="140.2" stroke="#059669" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="157.91" y1="150.06" x2="182.27" y2="150.06" stroke="#059669" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="157.91" y1="159.92" x2="174.15" y2="159.92" stroke="#059669" stroke-width="1.4" stroke-linecap="round"/>
+    <circle cx="188.67" cy="166" r="13" fill="var(--surf)" stroke="#059669" stroke-width="2"/>
+    <polyline points="182.67,166 187.17,171 195.67,161" class="curve" stroke="#059669" stroke-width="2.6"/>
+    <text x="170.67" y="100" text-anchor="middle" class="sm bold">unqualified</text>
+    <line x1="71.11" y1="180" x2="71.11" y2="312" class="thin" stroke="#e11d48" stroke-width="2"/>
+    <circle cx="71.11" cy="312" r="4" fill="#e11d48"/>
+    <polygon points="50.23,117 80.39,117 91.99,128.6 91.99,175 50.23,175" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M80.39,117 V128.6 H91.99" fill="none" stroke="#e11d48" stroke-width="1.2"/>
+    <line x1="58.35" y1="140.2" x2="82.71" y2="140.2" stroke="#e11d48" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="58.35" y1="150.06" x2="82.71" y2="150.06" stroke="#e11d48" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="58.35" y1="159.92" x2="74.59" y2="159.92" stroke="#e11d48" stroke-width="1.4" stroke-linecap="round"/>
+    <circle cx="89.11" cy="166" r="13" fill="var(--surf)" stroke="#e11d48" stroke-width="2"/>
+    <line x1="83.61" y1="160.5" x2="94.61" y2="171.5" stroke="#e11d48" stroke-width="2.6" stroke-linecap="round"/>
+    <line x1="83.61" y1="171.5" x2="94.61" y2="160.5" stroke="#e11d48" stroke-width="2.6" stroke-linecap="round"/>
+    <text x="71.11" y="100" text-anchor="middle" class="sm bold">adverse</text>
   </g>
 </svg>

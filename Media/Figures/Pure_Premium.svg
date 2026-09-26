@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Frequency times severity giving the loss cost per exposure</title>
+  <title>A rectangle 0.060 claims per car-year wide and $6,000 per claim tall, whose area is the $360 pure premium</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -43,24 +43,45 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <defs>
-    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="36" y="148" width="104" height="44" rx="22.0" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="88" y="174" text-anchor="middle" class="ttl">0.060</text>
-    <text x="88" y="136" text-anchor="middle" class="sm dim">frequency</text>
-    <text x="88" y="210" text-anchor="middle" class="sm dim">claims per</text>
-    <text x="88" y="224" text-anchor="middle" class="sm dim">car-year</text>
-    <text x="180" y="176" text-anchor="middle" class="ttl">×</text>
-    <rect x="220" y="148" width="104" height="44" rx="22.0" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2"/>
-    <text x="272" y="174" text-anchor="middle" class="ttl">6,000</text>
-    <text x="272" y="136" text-anchor="middle" class="sm dim">severity</text>
-    <text x="272" y="210" text-anchor="middle" class="sm dim">cost per</text>
-    <text x="272" y="224" text-anchor="middle" class="sm dim">claim</text>
-    <line x1="180" y1="236" x2="180" y2="288" class="thin" stroke="var(--dim)" stroke-width="1.4" marker-end="url(#ahvardim)"/>
-    <rect x="85" y="292" width="190" height="44" rx="22.0" fill="#059669" fill-opacity="0.14" stroke="#059669" stroke-width="1.2"/>
-    <text x="180" y="318" text-anchor="middle" class="ttl">$360 per car-year</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">the part of the rate that pays claims</text>
+    <line x1="72" y1="96" x2="72" y2="350" class="grid"/>
+    <line x1="134.5" y1="96" x2="134.5" y2="350" class="grid"/>
+    <line x1="197" y1="96" x2="197" y2="350" class="grid"/>
+    <line x1="259.5" y1="96" x2="259.5" y2="350" class="grid"/>
+    <line x1="322" y1="96" x2="322" y2="350" class="grid"/>
+    <line x1="72" y1="350" x2="322" y2="350" class="grid"/>
+    <line x1="72" y1="286.5" x2="322" y2="286.5" class="grid"/>
+    <line x1="72" y1="223" x2="322" y2="223" class="grid"/>
+    <line x1="72" y1="159.5" x2="322" y2="159.5" class="grid"/>
+    <line x1="72" y1="96" x2="322" y2="96" class="grid"/>
+    <line x1="72" y1="350" x2="332" y2="350" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="72" y1="350" x2="72" y2="86" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="72" y1="350" x2="72" y2="354" class="tick"/>
+    <text x="72" y="366" text-anchor="middle" class="sm dim">0</text>
+    <line x1="134.5" y1="350" x2="134.5" y2="354" class="tick"/>
+    <text x="134.5" y="366" text-anchor="middle" class="sm dim">0.02</text>
+    <line x1="197" y1="350" x2="197" y2="354" class="tick"/>
+    <text x="197" y="366" text-anchor="middle" class="sm dim">0.04</text>
+    <line x1="259.5" y1="350" x2="259.5" y2="354" class="tick"/>
+    <text x="259.5" y="366" text-anchor="middle" class="sm dim">0.06</text>
+    <line x1="322" y1="350" x2="322" y2="354" class="tick"/>
+    <text x="322" y="366" text-anchor="middle" class="sm dim">0.08</text>
+    <line x1="68" y1="350" x2="72" y2="350" class="tick"/>
+    <text x="64" y="353.6" text-anchor="end" class="sm dim">0</text>
+    <line x1="68" y1="286.5" x2="72" y2="286.5" class="tick"/>
+    <text x="64" y="290.1" text-anchor="end" class="sm dim">2,000</text>
+    <line x1="68" y1="223" x2="72" y2="223" class="tick"/>
+    <text x="64" y="226.6" text-anchor="end" class="sm dim">4,000</text>
+    <line x1="68" y1="159.5" x2="72" y2="159.5" class="tick"/>
+    <text x="64" y="163.1" text-anchor="end" class="sm dim">6,000</text>
+    <line x1="68" y1="96" x2="72" y2="96" class="tick"/>
+    <text x="64" y="99.6" text-anchor="end" class="sm dim">8,000</text>
+    <text x="322" y="382" text-anchor="end" class="sm dim">frequency</text>
+    <text x="68" y="82" text-anchor="start" class="sm dim">severity</text>
+    <rect x="72" y="159.5" width="187.5" height="190.5" fill="#059669" fill-opacity="0.3" stroke="#059669" stroke-width="1.6"/>
+    <text x="165.75" y="258.75" text-anchor="middle" class="bold">$360</text>
   </g>
 </svg>

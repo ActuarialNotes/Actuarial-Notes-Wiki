@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The indicated average rate against the current one</title>
+  <title>The current $520 average rate beside the indicated $558, the $38 gap between them marked +7.3%</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,21 +42,16 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
-  <defs>
-    <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
-  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <text x="180" y="134" text-anchor="middle" class="sm dim">current</text>
-    <rect x="62" y="148" width="208" height="34" rx="4" fill="#3b82f6" fill-opacity="0.34" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="166" y="171" text-anchor="middle" class="sm">$520.00</text>
-    <text x="180" y="208" text-anchor="middle" class="sm dim">indicated</text>
-    <rect x="62" y="222" width="223.19" height="34" rx="4" fill="#059669" fill-opacity="0.34" stroke="#059669" stroke-width="1.2"/>
-    <text x="173.59" y="245" text-anchor="middle" class="sm">$557.97</text>
-    <rect x="270" y="222" width="15.19" height="34" rx="4" fill="#059669" fill-opacity="0.75"/>
-    <line x1="331.19" y1="268" x2="281.19" y2="250" class="thin" stroke="#059669" stroke-width="1.5" marker-end="url(#ah059669)"/>
-    <text x="335.19" y="278" text-anchor="end" class="sm bold" fill="#059669">+$37.97 = +7.3%</text>
-    <text x="180" y="330" text-anchor="middle" class="sm dim">the aggregate answer — classification work</text>
-    <text x="180" y="348" text-anchor="middle" class="sm dim">distributes it but must not change it</text>
+    <rect x="66" y="123.01" width="88" height="232.99" rx="3" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="110" y="243.51" text-anchor="middle" class="sm bold">520</text>
+    <text x="110" y="374" text-anchor="middle" class="sm dim">current</text>
+    <rect x="186" y="106" width="88" height="250" rx="3" fill="#059669" fill-opacity="0.30" stroke="#059669" stroke-width="1.2"/>
+    <text x="230" y="235" text-anchor="middle" class="sm bold">558</text>
+    <text x="230" y="374" text-anchor="middle" class="sm dim">indicated</text>
+    <rect x="186" y="106" width="88" height="17.01" rx="3" fill="#059669" fill-opacity="0.75"/>
+    <line x1="154" y1="123.01" x2="186" y2="123.01" class="thin dash" stroke="var(--dim)" stroke-width="1.2"/>
+    <text x="230" y="96" text-anchor="middle" class="bold">+7.3%</text>
   </g>
 </svg>

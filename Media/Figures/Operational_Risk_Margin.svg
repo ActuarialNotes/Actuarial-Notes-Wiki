@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>A formula on volume and growth, blind to how well the insurer is actually run</title>
+  <title>The operational risk charge plotted against the year's premium growth: flat at the base charge up to 20% growth, then climbing — however well the insurer is run</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,27 +47,19 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="68" y1="232" x2="332" y2="232" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="68" y1="232" x2="68" y2="84" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="68" y1="232" x2="68" y2="236" class="tick"/>
-    <text x="68" y="248" text-anchor="middle" class="sm dim">0%</text>
-    <line x1="195" y1="232" x2="195" y2="236" class="tick"/>
-    <text x="195" y="248" text-anchor="middle" class="sm dim">20%</text>
-    <line x1="322" y1="232" x2="322" y2="236" class="tick"/>
-    <text x="322" y="248" text-anchor="middle" class="sm dim">40%</text>
-    <polyline points="68,190.6 195,190.6 322,190.6" class="curve dash" stroke="#3b82f6" stroke-width="2.2"/>
-    <polyline points="68,190.6 195,190.6 245.8,158.4 322,107.8" class="curve" stroke="#e11d48" stroke-width="2.4"/>
-    <text x="125.15" y="176.8" text-anchor="middle" class="sm dim">base charge</text>
-    <text x="277.55" y="130.8" text-anchor="end" class="sm bold" fill="#e11d48">growth</text>
-    <text x="180" y="266" text-anchor="middle" class="sm dim">premium growth in the year</text>
-    <line x1="30" y1="274" x2="330" y2="274" class="rule"/>
-    <text x="36" y="296" text-anchor="start" class="sm" fill="#d97706">•</text>
-    <text x="52" y="296" text-anchor="start" class="sm">not built from the insurer's own loss history —</text>
-    <text x="36" y="320" text-anchor="start" class="sm" fill="#d97706">•</text>
-    <text x="52" y="320" text-anchor="start" class="sm">operational losses are too rare to fit</text>
-    <text x="36" y="344" text-anchor="start" class="sm" fill="#d97706">•</text>
-    <text x="52" y="344" text-anchor="start" class="sm">added after the diversification credit, not into it</text>
-    <text x="36" y="368" text-anchor="start" class="sm" fill="#d97706">•</text>
-    <text x="52" y="368" text-anchor="start" class="sm">and it cannot see the quality of the controls</text>
+    <line x1="60" y1="344" x2="332" y2="344" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="60" y1="344" x2="60" y2="82" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="60" y1="344" x2="60" y2="348" class="tick"/>
+    <text x="60" y="360" text-anchor="middle" class="sm dim">0%</text>
+    <line x1="191" y1="344" x2="191" y2="348" class="tick"/>
+    <text x="191" y="360" text-anchor="middle" class="sm dim">20%</text>
+    <line x1="322" y1="344" x2="322" y2="348" class="tick"/>
+    <text x="322" y="360" text-anchor="middle" class="sm dim">40%</text>
+    <polyline points="60,268.4 191,268.4 322,268.4" class="curve dash" stroke="#3b82f6" stroke-width="2.2"/>
+    <polyline points="60,268.4 191,268.4 243.4,209.6 322,117.2" class="curve" stroke="#e11d48" stroke-width="2.4"/>
+    <text x="118.95" y="253.28" text-anchor="middle" class="sm">base charge</text>
+    <text x="263.05" y="159.2" text-anchor="end" class="sm bold">growth</text>
+    <text x="64" y="80" text-anchor="start" class="sm dim">charge</text>
+    <text x="322" y="378" text-anchor="end" class="sm dim">premium growth</text>
   </g>
 </svg>

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The statutory three-part rate standard and the three regimes, ordered by how tightly they grip</title>
+  <title>Rate against expected cost: a band along the diagonal is fair, the region above it is excessive and the region below it is inadequate</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,21 +42,21 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <text x="52" y="100" text-anchor="start" class="sm bold" fill="#3b82f6">not excessive</text>
-    <text x="52" y="116" text-anchor="start" class="sm dim">consumer protection</text>
-    <text x="52" y="140" text-anchor="start" class="sm bold" fill="#d97706">not inadequate</text>
-    <text x="52" y="156" text-anchor="start" class="sm dim">solvency</text>
-    <text x="52" y="180" text-anchor="start" class="sm bold" fill="#059669">not unfairly discriminatory</text>
-    <text x="52" y="196" text-anchor="start" class="sm dim">equity</text>
-    <line x1="30" y1="222" x2="330" y2="222" class="rule"/>
-    <rect x="40" y="246" width="268" height="32" rx="5" fill="#e11d48" fill-opacity="0.20" stroke="#e11d48" stroke-width="1.2"/>
-    <text x="50" y="266" text-anchor="start" class="sm">Prior approval — Ontario auto</text>
-    <rect x="40" y="290" width="196" height="32" rx="5" fill="#d97706" fill-opacity="0.20" stroke="#d97706" stroke-width="1.2"/>
-    <text x="50" y="310" text-anchor="start" class="sm">File-and-use — used at once</text>
-    <rect x="40" y="334" width="124" height="32" rx="5" fill="#059669" fill-opacity="0.20" stroke="#059669" stroke-width="1.2"/>
-    <text x="50" y="354" text-anchor="start" class="sm">Use-and-file — commercial lines</text>
-    <text x="180" y="388" text-anchor="middle" class="sm dim">the tighter the grip, the longer the lag</text>
+    <polygon points="56,84 56,317.92 284.76,84 322,84 322,84" fill="#e11d48" fill-opacity="0.12"/>
+    <polygon points="56,356 56,356 93.24,356 322,122.08 322,356" fill="#d97706" fill-opacity="0.14"/>
+    <polygon points="56,317.92 284.76,84 322,84 322,122.08 93.24,356 56,356" fill="#059669" fill-opacity="0.22"/>
+    <polyline points="56,356 322,84" class="curve" stroke="#059669" stroke-width="2"/>
+    <line x1="56" y1="356" x2="332" y2="356" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="56" y1="356" x2="56" y2="74" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <text x="322" y="388" text-anchor="end" class="sm dim">expected cost</text>
+    <text x="52" y="70" text-anchor="start" class="sm dim">rate</text>
+    <text x="125.16" y="149.28" text-anchor="middle" class="bold">excessive</text>
+    <text x="252.84" y="290.72" text-anchor="middle" class="bold">inadequate</text>
+    <text x="189.32" y="209.56" text-anchor="middle" class="bold" transform="rotate(-44 189.3 209.6)">fair</text>
   </g>
 </svg>

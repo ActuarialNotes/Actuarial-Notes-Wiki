@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Increased limits factors rising with the policy limit, and the cost of a layer between two of them</title>
+  <title>Increased limits factors rising and flattening from 1.00 at the 100k basic limit to 1.97 at 5M, the layer from 500k to 1M costing 0.18</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,43 +47,42 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="72.85" y1="100" x2="72.85" y2="322" class="grid"/>
-    <line x1="116.46" y1="100" x2="116.46" y2="322" class="grid"/>
-    <line x1="164.92" y1="100" x2="164.92" y2="322" class="grid"/>
-    <line x1="310.31" y1="100" x2="310.31" y2="322" class="grid"/>
-    <line x1="68" y1="303.5" x2="320" y2="303.5" class="grid"/>
-    <line x1="68" y1="211" x2="320" y2="211" class="grid"/>
-    <line x1="68" y1="118.5" x2="320" y2="118.5" class="grid"/>
-    <line x1="68" y1="322" x2="330" y2="322" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="68" y1="322" x2="68" y2="90" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="72.85" y1="322" x2="72.85" y2="326" class="tick"/>
-    <text x="72.85" y="338" text-anchor="middle" class="sm dim">100k</text>
-    <line x1="116.46" y1="322" x2="116.46" y2="326" class="tick"/>
-    <text x="116.46" y="338" text-anchor="middle" class="sm dim">1M</text>
-    <line x1="164.92" y1="322" x2="164.92" y2="326" class="tick"/>
-    <text x="164.92" y="338" text-anchor="middle" class="sm dim">2M</text>
-    <line x1="310.31" y1="322" x2="310.31" y2="326" class="tick"/>
-    <text x="310.31" y="338" text-anchor="middle" class="sm dim">5M</text>
-    <line x1="64" y1="303.5" x2="68" y2="303.5" class="tick"/>
-    <text x="60" y="307.1" text-anchor="end" class="sm dim">1.0</text>
-    <line x1="64" y1="211" x2="68" y2="211" class="tick"/>
-    <text x="60" y="214.6" text-anchor="end" class="sm dim">1.5</text>
-    <line x1="64" y1="118.5" x2="68" y2="118.5" class="tick"/>
-    <text x="60" y="122.1" text-anchor="end" class="sm dim">2.0</text>
-    <polyline points="72.85,303.5 80.12,244.3 92.23,201.75 116.46,168.45 164.92,144.4 310.31,124.05" class="curve" stroke="#3b82f6" stroke-width="2.4"/>
-    <circle cx="72.85" cy="303.5" r="3.2" fill="#3b82f6"/>
-    <circle cx="80.12" cy="244.3" r="3.2" fill="#3b82f6"/>
-    <circle cx="92.23" cy="201.75" r="3.2" fill="#3b82f6"/>
-    <circle cx="116.46" cy="168.45" r="3.2" fill="#3b82f6"/>
-    <circle cx="164.92" cy="144.4" r="3.2" fill="#3b82f6"/>
-    <circle cx="310.31" cy="124.05" r="3.2" fill="#3b82f6"/>
-    <line x1="92.23" y1="322" x2="92.23" y2="201.75" class="thin dash" stroke="#d97706" stroke-width="1.3"/>
-    <line x1="116.46" y1="322" x2="116.46" y2="168.45" class="thin dash" stroke="#d97706" stroke-width="1.3"/>
-    <line x1="92.23" y1="201.75" x2="116.46" y2="201.75" class="thin" stroke="#d97706" stroke-width="1.4"/>
-    <line x1="116.46" y1="201.75" x2="116.46" y2="168.45" class="thin" stroke="#d97706" stroke-width="1.4"/>
-    <text x="122.88" y="185.1" text-anchor="start" class="sm bold" fill="#d97706">0.18</text>
-    <text x="180" y="354" text-anchor="middle" class="sm dim">policy limit</text>
-    <text x="180" y="374" text-anchor="middle" class="sm dim">the curve must be concave — a layer higher</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">up cannot cost more than the one below it</text>
+    <line x1="72.85" y1="100" x2="72.85" y2="350" class="grid"/>
+    <line x1="116.46" y1="100" x2="116.46" y2="350" class="grid"/>
+    <line x1="164.92" y1="100" x2="164.92" y2="350" class="grid"/>
+    <line x1="310.31" y1="100" x2="310.31" y2="350" class="grid"/>
+    <line x1="68" y1="329.17" x2="320" y2="329.17" class="grid"/>
+    <line x1="68" y1="225" x2="320" y2="225" class="grid"/>
+    <line x1="68" y1="120.83" x2="320" y2="120.83" class="grid"/>
+    <line x1="68" y1="350" x2="330" y2="350" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="68" y1="350" x2="68" y2="90" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="72.85" y1="350" x2="72.85" y2="354" class="tick"/>
+    <text x="72.85" y="366" text-anchor="middle" class="sm dim">100k</text>
+    <line x1="116.46" y1="350" x2="116.46" y2="354" class="tick"/>
+    <text x="116.46" y="366" text-anchor="middle" class="sm dim">1M</text>
+    <line x1="164.92" y1="350" x2="164.92" y2="354" class="tick"/>
+    <text x="164.92" y="366" text-anchor="middle" class="sm dim">2M</text>
+    <line x1="310.31" y1="350" x2="310.31" y2="354" class="tick"/>
+    <text x="310.31" y="366" text-anchor="middle" class="sm dim">5M</text>
+    <line x1="64" y1="329.17" x2="68" y2="329.17" class="tick"/>
+    <text x="60" y="332.77" text-anchor="end" class="sm dim">1.0</text>
+    <line x1="64" y1="225" x2="68" y2="225" class="tick"/>
+    <text x="60" y="228.6" text-anchor="end" class="sm dim">1.5</text>
+    <line x1="64" y1="120.83" x2="68" y2="120.83" class="tick"/>
+    <text x="60" y="124.43" text-anchor="end" class="sm dim">2.0</text>
+    <text x="320" y="382" text-anchor="end" class="sm dim">limit</text>
+    <text x="64" y="86" text-anchor="start" class="sm dim">ILF</text>
+    <polyline points="72.85,329.17 80.12,262.5 92.23,214.58 116.46,177.08 164.92,150 310.31,127.08" class="curve" stroke="#3b82f6" stroke-width="2.4"/>
+    <circle cx="72.85" cy="329.17" r="3.2" fill="#3b82f6"/>
+    <circle cx="80.12" cy="262.5" r="3.2" fill="#3b82f6"/>
+    <circle cx="92.23" cy="214.58" r="3.2" fill="#3b82f6"/>
+    <circle cx="116.46" cy="177.08" r="3.2" fill="#3b82f6"/>
+    <circle cx="164.92" cy="150" r="3.2" fill="#3b82f6"/>
+    <circle cx="310.31" cy="127.08" r="3.2" fill="#3b82f6"/>
+    <line x1="92.23" y1="350" x2="92.23" y2="214.58" class="thin dash" stroke="#d97706" stroke-width="1.3"/>
+    <line x1="116.46" y1="350" x2="116.46" y2="177.08" class="thin dash" stroke="#d97706" stroke-width="1.3"/>
+    <line x1="92.23" y1="214.58" x2="116.46" y2="214.58" class="thin" stroke="#d97706" stroke-width="1.4"/>
+    <line x1="116.46" y1="214.58" x2="116.46" y2="177.08" class="thin" stroke="#d97706" stroke-width="1.4"/>
+    <text x="122.88" y="195.83" text-anchor="start" class="sm bold">0.18</text>
   </g>
 </svg>

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Quebec's integrated regulator and its split public–private auto market</title>
+  <title>One regulator for all of Quebec: the AMF with arrows down to insurers, securities, deposits and distribution</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -43,32 +43,62 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <defs>
-    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
+    <marker id="ah7c3aed" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#7c3aed"/></marker>
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="55" y="92" width="250" height="28" rx="14.0" fill="#7c3aed" fill-opacity="0.14" stroke="#7c3aed" stroke-width="1.2"/>
-    <text x="180" y="110" text-anchor="middle" class="sm">Autorité des marchés financiers</text>
-    <line x1="180" y1="122" x2="62" y2="150" class="thin" stroke="var(--dim)" stroke-width="1.1" marker-end="url(#ahvardim)"/>
-    <text x="62" y="168" text-anchor="middle" class="sm">insurance</text>
-    <line x1="180" y1="122" x2="141" y2="150" class="thin" stroke="var(--dim)" stroke-width="1.1" marker-end="url(#ahvardim)"/>
-    <text x="141" y="168" text-anchor="middle" class="sm">securities</text>
-    <line x1="180" y1="122" x2="220" y2="150" class="thin" stroke="var(--dim)" stroke-width="1.1" marker-end="url(#ahvardim)"/>
-    <text x="220" y="168" text-anchor="middle" class="sm">deposits</text>
-    <line x1="180" y1="122" x2="299" y2="150" class="thin" stroke="var(--dim)" stroke-width="1.1" marker-end="url(#ahvardim)"/>
-    <text x="299" y="168" text-anchor="middle" class="sm">distribution</text>
-    <line x1="30" y1="196" x2="330" y2="196" class="rule"/>
-    <text x="180" y="222" text-anchor="middle" class="sm bold">Quebec auto is split down the middle</text>
-    <rect x="34" y="240" width="139" height="80" rx="7" fill="#d97706" fill-opacity="0.08" stroke="#d97706" stroke-width="1.2"/>
-    <rect x="34" y="240" width="139" height="26" rx="7" fill="#d97706" fill-opacity="0.22" stroke="none"/>
-    <text x="103.5" y="257" text-anchor="middle" class="sm bold" fill="#d97706">Bodily injury</text>
-    <text x="103.5" y="286" text-anchor="middle" class="sm">public SAAQ</text>
-    <text x="103.5" y="308" text-anchor="middle" class="sm">no-fault</text>
-    <rect x="187" y="240" width="139" height="80" rx="7" fill="#3b82f6" fill-opacity="0.08" stroke="#3b82f6" stroke-width="1.2"/>
-    <rect x="187" y="240" width="139" height="26" rx="7" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
-    <text x="256.5" y="257" text-anchor="middle" class="sm bold" fill="#3b82f6">Property damage</text>
-    <text x="256.5" y="286" text-anchor="middle" class="sm">private insurers</text>
-    <text x="256.5" y="308" text-anchor="middle" class="sm">under the AMF</text>
-    <text x="180" y="372" text-anchor="middle" class="sm dim">the Civil Code governs the contract, not an Insurance Act</text>
+    <rect x="24" y="80" width="312" height="300" rx="12" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
+    <text x="40" y="100" text-anchor="start" class="sm dim">Quebec</text>
+    <polygon points="144,121.6 180,100 216,121.6" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="150.48" y="125.92" width="7.2" height="33.12" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="167.76" y="125.92" width="7.2" height="33.12" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="185.04" y="125.92" width="7.2" height="33.12" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="202.32" y="125.92" width="7.2" height="33.12" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="144" y="161.92" width="72" height="10.08" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="180" y="192" text-anchor="middle" class="bold">AMF</text>
+    <line x1="159.12" y1="204" x2="64" y2="262" class="thin" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#ah7c3aed)"/>
+    <text x="64" y="350" text-anchor="middle" class="sm bold">insurers</text>
+    <line x1="172.8" y1="204" x2="140" y2="262" class="thin" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#ah7c3aed)"/>
+    <text x="140" y="350" text-anchor="middle" class="sm bold">securities</text>
+    <line x1="186.48" y1="204" x2="216" y2="262" class="thin" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#ah7c3aed)"/>
+    <text x="216" y="350" text-anchor="middle" class="sm bold">deposits</text>
+    <line x1="199.8" y1="204" x2="290" y2="262" class="thin" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#ah7c3aed)"/>
+    <text x="290" y="350" text-anchor="middle" class="sm bold">distribution</text>
+    <rect x="48.32" y="270" width="31.36" height="56" rx="2" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="54.48" y="276.72" width="6.72" height="5.6" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="66.8" y="276.72" width="6.72" height="5.6" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="54.48" y="287.92" width="6.72" height="5.6" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="66.8" y="287.92" width="6.72" height="5.6" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="54.48" y="299.12" width="6.72" height="5.6" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="66.8" y="299.12" width="6.72" height="5.6" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="54.48" y="310.32" width="6.72" height="5.6" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="66.8" y="310.32" width="6.72" height="5.6" fill="#3b82f6" fill-opacity="0.55"/>
+    <polygon points="122,273 148,273 158,283 158,323 122,323" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M148,273 V283 H158" fill="none" stroke="#0d9488" stroke-width="1.2"/>
+    <line x1="129" y1="293" x2="150" y2="293" stroke="#0d9488" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="129" y1="301.5" x2="150" y2="301.5" stroke="#0d9488" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="129" y1="310" x2="143" y2="310" stroke="#0d9488" stroke-width="1.4" stroke-linecap="round"/>
+    <rect x="200" y="314" width="32" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="216" cy="320" rx="16" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="216" cy="314" rx="16" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="216" cy="314" rx="16" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="200" y="308" width="32" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="216" cy="314" rx="16" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="216" cy="308" rx="16" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="216" cy="308" rx="16" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="200" y="302" width="32" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="216" cy="308" rx="16" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="216" cy="302" rx="16" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="216" cy="302" rx="16" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="200" y="296" width="32" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="216" cy="302" rx="16" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="216" cy="296" rx="16" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="216" cy="296" rx="16" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="200" y="290" width="32" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="216" cy="296" rx="16" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="216" cy="290" rx="16" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="216" cy="290" rx="16" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <circle cx="290" cy="284.4" r="9.36" fill="#059669" fill-opacity="0.18" stroke="#059669" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M273.36,326 V306.24 Q273.36,297.92 282.72,297.92 H297.28 Q306.64,297.92 306.64,306.24 V326 Z" fill="#059669" fill-opacity="0.18" stroke="#059669" stroke-width="1.4" stroke-linejoin="round"/>
   </g>
 </svg>

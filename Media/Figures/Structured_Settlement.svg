@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>A lump sum against the annuity that replaces it, and why the tax exemption makes the annuity cheaper</title>
+  <title>A dashed $1M lump sum beside the solid $900k that buys the annuity instead, and the annuity's comb of $52k payments running for 30 years</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,28 +42,51 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
+  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="30" y="104" width="143" height="126" rx="7" fill="#d97706" fill-opacity="0.08" stroke="#d97706" stroke-width="1.2"/>
-    <rect x="30" y="104" width="143" height="28" rx="7" fill="#d97706" fill-opacity="0.22" stroke="none"/>
-    <text x="101.5" y="122" text-anchor="middle" class="sm bold" fill="#d97706">Lump sum</text>
-    <text x="101.5" y="152" text-anchor="middle" class="sm">costs $1,000,000</text>
-    <text x="101.5" y="174" text-anchor="middle" class="sm">invested at 5%,</text>
-    <text x="101.5" y="196" text-anchor="middle" class="sm">taxed at 40%</text>
-    <text x="101.5" y="218" text-anchor="middle" class="sm">spends $51k a year</text>
-    <rect x="187" y="104" width="143" height="126" rx="7" fill="#059669" fill-opacity="0.08" stroke="#059669" stroke-width="1.2"/>
-    <rect x="187" y="104" width="143" height="28" rx="7" fill="#059669" fill-opacity="0.22" stroke="none"/>
-    <text x="258.5" y="122" text-anchor="middle" class="sm bold" fill="#059669">Structure</text>
-    <text x="258.5" y="152" text-anchor="middle" class="sm">costs $900,000</text>
-    <text x="258.5" y="174" text-anchor="middle" class="sm">paid by annuity,</text>
-    <text x="258.5" y="196" text-anchor="middle" class="sm">tax-free</text>
-    <text x="258.5" y="218" text-anchor="middle" class="sm">spends $52k a year</text>
-    <text x="180" y="250" text-anchor="middle" class="sm dim">the claimant does better and the insurer</text>
-    <text x="180" y="266" text-anchor="middle" class="sm dim">pays $100,000 less for it</text>
-    <line x1="30" y1="292" x2="330" y2="292" class="rule"/>
-    <text x="180" y="314" text-anchor="middle" class="sm dim">the casualty insurer stays liable if the life</text>
-    <text x="180" y="330" text-anchor="middle" class="sm dim">insurer defaults, so the claim never fully closes</text>
-    <text x="180" y="356" text-anchor="middle" class="sm dim">CRA's conditions: the insurer owns the annuity,</text>
-    <text x="180" y="372" text-anchor="middle" class="sm dim">it is non-assignable, non-commutable and irrevocable</text>
+    <rect x="24" y="110" width="42" height="224" rx="3" fill="none" stroke="#d97706" stroke-width="1.6" stroke-dasharray="4 3"/>
+    <text x="45" y="102" text-anchor="middle" class="bold">$1M</text>
+    <rect x="84" y="132.4" width="42" height="201.6" rx="3" fill="#059669" fill-opacity="0.6"/>
+    <text x="105" y="124.4" text-anchor="middle" class="bold">$900k</text>
+    <text x="45" y="354" text-anchor="middle" class="sm bold">lump sum</text>
+    <text x="105" y="354" text-anchor="middle" class="sm bold">annuity</text>
+    <rect x="143" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="149.27" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="155.54" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="161.8" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="168.07" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="174.34" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="180.6" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="186.87" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="193.14" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="199.4" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="205.67" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="211.94" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="218.2" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="224.47" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="230.74" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="237" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="243.27" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="249.54" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="255.8" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="262.07" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="268.34" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="274.6" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="280.87" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="287.14" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="293.4" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="299.67" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="305.94" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="312.2" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="318.47" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <rect x="324.74" y="322.35" width="4.26" height="11.65" rx="1" fill="#059669" fill-opacity="0.8"/>
+    <line x1="138" y1="334" x2="332" y2="334" class="axis"/>
+    <line x1="130" y1="200" x2="170" y2="300" class="thin" stroke="#059669" stroke-width="1.6" marker-end="url(#ah059669)"/>
+    <text x="236" y="310.35" text-anchor="middle" class="sm bold">$52k a year</text>
+    <path d="M142,340 v4.8 H231 q5,0 5,4.4 q0,-4.4 5,-4.4 H330 v-4.8" class="thin" stroke="var(--dim)" stroke-width="1.2"/>
+    <text x="236" y="359" text-anchor="middle" class="sm bold">30 years</text>
   </g>
 </svg>

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>What the industry's trade association does, and the one thing it is not</title>
+  <title>Member insurers feeding up into the IBC, and the IBC's arrows out to government, to industry data and to consumers</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -43,31 +43,80 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <defs>
-    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
+    <marker id="ah7c3aed" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#7c3aed"/></marker>
+    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="56" y="92" width="248" height="28" rx="14.0" fill="#7c3aed" fill-opacity="0.14" stroke="#7c3aed" stroke-width="1.2"/>
-    <text x="180" y="110" text-anchor="middle" class="sm">Insurance Bureau of Canada</text>
-    <line x1="180" y1="122" x2="62" y2="152" class="thin" stroke="var(--dim)" stroke-width="1.1" marker-end="url(#ahvardim)"/>
-    <text x="62" y="170" text-anchor="middle" class="sm">advocacy</text>
-    <line x1="180" y1="122" x2="141" y2="152" class="thin" stroke="var(--dim)" stroke-width="1.1" marker-end="url(#ahvardim)"/>
-    <text x="141" y="170" text-anchor="middle" class="sm">data</text>
-    <line x1="180" y1="122" x2="220" y2="152" class="thin" stroke="var(--dim)" stroke-width="1.1" marker-end="url(#ahvardim)"/>
-    <text x="220" y="170" text-anchor="middle" class="sm">consumers</text>
-    <line x1="180" y1="122" x2="299" y2="152" class="thin" stroke="var(--dim)" stroke-width="1.1" marker-end="url(#ahvardim)"/>
-    <text x="299" y="170" text-anchor="middle" class="sm">the Code</text>
-    <line x1="30" y1="194" x2="330" y2="194" class="rule"/>
-    <text x="40" y="218" text-anchor="start" class="sm" fill="#3b82f6">•</text>
-    <text x="56" y="218" text-anchor="start" class="sm">auto reform, flood and tax consultations</text>
-    <text x="40" y="243" text-anchor="start" class="sm" fill="#3b82f6">•</text>
-    <text x="56" y="243" text-anchor="start" class="sm">industry aggregates and catastrophe totals</text>
-    <text x="40" y="268" text-anchor="start" class="sm" fill="#3b82f6">•</text>
-    <text x="56" y="268" text-anchor="start" class="sm">the Vehicle Information Centre rating data</text>
-    <text x="40" y="293" text-anchor="start" class="sm" fill="#3b82f6">•</text>
-    <text x="56" y="293" text-anchor="start" class="sm">disaster response and anti-fraud work</text>
-    <rect x="44" y="322" width="272" height="44" rx="7" fill="#e11d48" fill-opacity="0.12" stroke="#e11d48" stroke-width="1.2"/>
-    <text x="180" y="340" text-anchor="middle" class="sm" fill="#e11d48">it does not licence, approve rates,</text>
-    <text x="180" y="357" text-anchor="middle" class="sm" fill="#e11d48">set capital or adjudicate a complaint</text>
+    <text x="60" y="80" text-anchor="middle" class="sm bold">government</text>
+    <line x1="168" y1="178" x2="60" y2="144" class="thin" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#ah7c3aed)"/>
+    <text x="180" y="80" text-anchor="middle" class="sm bold">data</text>
+    <line x1="180" y1="178" x2="180" y2="144" class="thin" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#ah7c3aed)"/>
+    <text x="300" y="80" text-anchor="middle" class="sm bold">consumers</text>
+    <line x1="192" y1="178" x2="300" y2="144" class="thin" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#ah7c3aed)"/>
+    <polygon points="35,104 60,89 85,104" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="39.5" y="107" width="5" height="23" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="51.5" y="107" width="5" height="23" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="63.5" y="107" width="5" height="23" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="75.5" y="107" width="5" height="23" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="35" y="132" width="50" height="7" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <polygon points="163.44,91 187.36,91 196.56,100.2 196.56,137 163.44,137" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M187.36,91 V100.2 H196.56" fill="none" stroke="#0d9488" stroke-width="1.2"/>
+    <line x1="169.88" y1="109.4" x2="189.2" y2="109.4" stroke="#0d9488" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="169.88" y1="117.22" x2="189.2" y2="117.22" stroke="#0d9488" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="169.88" y1="125.04" x2="182.76" y2="125.04" stroke="#0d9488" stroke-width="1.4" stroke-linecap="round"/>
+    <circle cx="300" cy="101" r="9" fill="#059669" fill-opacity="0.18" stroke="#059669" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M284,141 V122 Q284,114 293,114 H307 Q316,114 316,122 V141 Z" fill="#059669" fill-opacity="0.18" stroke="#059669" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="162.08" y="182" width="35.84" height="64" rx="2" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="169.12" y="189.68" width="7.68" height="6.4" fill="#7c3aed" fill-opacity="0.55"/>
+    <rect x="183.2" y="189.68" width="7.68" height="6.4" fill="#7c3aed" fill-opacity="0.55"/>
+    <rect x="169.12" y="202.48" width="7.68" height="6.4" fill="#7c3aed" fill-opacity="0.55"/>
+    <rect x="183.2" y="202.48" width="7.68" height="6.4" fill="#7c3aed" fill-opacity="0.55"/>
+    <rect x="169.12" y="215.28" width="7.68" height="6.4" fill="#7c3aed" fill-opacity="0.55"/>
+    <rect x="183.2" y="215.28" width="7.68" height="6.4" fill="#7c3aed" fill-opacity="0.55"/>
+    <rect x="169.12" y="228.08" width="7.68" height="6.4" fill="#7c3aed" fill-opacity="0.55"/>
+    <rect x="183.2" y="228.08" width="7.68" height="6.4" fill="#7c3aed" fill-opacity="0.55"/>
+    <text x="206" y="218" text-anchor="start" class="bold">IBC</text>
+    <rect x="59.68" y="294" width="24.64" height="44" rx="2" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="64.52" y="299.28" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="74.2" y="299.28" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="64.52" y="308.08" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="74.2" y="308.08" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="64.52" y="316.88" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="74.2" y="316.88" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="64.52" y="325.68" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="74.2" y="325.68" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <line x1="84.96" y1="290" x2="167.04" y2="252" class="thin" stroke="#3b82f6" stroke-width="1.4" marker-end="url(#ah3b82f6)"/>
+    <rect x="131.68" y="294" width="24.64" height="44" rx="2" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="136.52" y="299.28" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="146.2" y="299.28" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="136.52" y="308.08" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="146.2" y="308.08" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="136.52" y="316.88" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="146.2" y="316.88" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="136.52" y="325.68" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="146.2" y="325.68" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <line x1="148.32" y1="290" x2="175.68" y2="252" class="thin" stroke="#3b82f6" stroke-width="1.4" marker-end="url(#ah3b82f6)"/>
+    <rect x="203.68" y="294" width="24.64" height="44" rx="2" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="208.52" y="299.28" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="218.2" y="299.28" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="208.52" y="308.08" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="218.2" y="308.08" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="208.52" y="316.88" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="218.2" y="316.88" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="208.52" y="325.68" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="218.2" y="325.68" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <line x1="211.68" y1="290" x2="184.32" y2="252" class="thin" stroke="#3b82f6" stroke-width="1.4" marker-end="url(#ah3b82f6)"/>
+    <rect x="275.68" y="294" width="24.64" height="44" rx="2" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="280.52" y="299.28" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="290.2" y="299.28" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="280.52" y="308.08" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="290.2" y="308.08" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="280.52" y="316.88" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="290.2" y="316.88" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="280.52" y="325.68" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="290.2" y="325.68" width="5.28" height="4.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <line x1="275.04" y1="290" x2="192.96" y2="252" class="thin" stroke="#3b82f6" stroke-width="1.4" marker-end="url(#ah3b82f6)"/>
+    <text x="180" y="364" text-anchor="middle" class="sm bold">members</text>
   </g>
 </svg>

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The pure premium method building the indicated rate from loss cost per exposure</title>
+  <title>Losses over exposures giving a $360 pure premium per car, which becomes the base of a $558 rate column topped by $25 of fixed expense and the variable and profit loads</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,33 +42,38 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
-  <defs>
-    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
-  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="39" y="123" width="84.67" height="26" rx="13.0" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="81.33" y="140" text-anchor="middle" class="sm">losses</text>
-    <rect x="137.67" y="123" width="84.67" height="26" rx="13.0" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="180" y="140" text-anchor="middle" class="sm">÷ exposures</text>
-    <line x1="124.67" y1="136" x2="136.67" y2="136" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <rect x="236.33" y="123" width="84.67" height="26" rx="13.0" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="278.67" y="140" text-anchor="middle" class="sm">PP 360</text>
-    <line x1="223.33" y1="136" x2="235.33" y2="136" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <line x1="180" y1="156" x2="180" y2="186" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <rect x="39" y="193" width="84.67" height="26" rx="13.0" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2"/>
-    <text x="81.33" y="210" text-anchor="middle" class="sm">+ F 25</text>
-    <rect x="137.67" y="193" width="84.67" height="26" rx="13.0" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2"/>
-    <text x="180" y="210" text-anchor="middle" class="sm">= 385</text>
-    <line x1="124.67" y1="206" x2="136.67" y2="206" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <rect x="236.33" y="193" width="84.67" height="26" rx="13.0" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2"/>
-    <text x="278.67" y="210" text-anchor="middle" class="sm">÷ 0.69</text>
-    <line x1="223.33" y1="206" x2="235.33" y2="206" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <line x1="180" y1="226" x2="180" y2="256" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <rect x="66" y="261" width="228" height="34" rx="17.0" fill="#059669" fill-opacity="0.14" stroke="#059669" stroke-width="1.2"/>
-    <text x="180" y="282" text-anchor="middle" class="sm">indicated rate  $557.97</text>
-    <text x="180" y="328" text-anchor="middle" class="sm dim">no on-levelling needed — premium never</text>
-    <text x="180" y="346" text-anchor="middle" class="sm dim">enters. It needs a reliable exposure count,</text>
-    <text x="180" y="364" text-anchor="middle" class="sm dim">which new or changed classes may not have</text>
+    <rect x="52" y="254" width="40" height="6" fill="#3b82f6" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="72" cy="260" rx="20" ry="3.4" fill="#3b82f6" fill-opacity="0.25" stroke="#3b82f6" stroke-width="1.2"/>
+    <ellipse cx="72" cy="254" rx="20" ry="3.4" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.2"/>
+    <ellipse cx="72" cy="254" rx="20" ry="3.4" fill="#3b82f6" fill-opacity="0.3" stroke="none"/>
+    <rect x="52" y="248" width="40" height="6" fill="#3b82f6" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="72" cy="254" rx="20" ry="3.4" fill="#3b82f6" fill-opacity="0.25" stroke="#3b82f6" stroke-width="1.2"/>
+    <ellipse cx="72" cy="248" rx="20" ry="3.4" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.2"/>
+    <ellipse cx="72" cy="248" rx="20" ry="3.4" fill="#3b82f6" fill-opacity="0.3" stroke="none"/>
+    <rect x="52" y="242" width="40" height="6" fill="#3b82f6" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="72" cy="248" rx="20" ry="3.4" fill="#3b82f6" fill-opacity="0.25" stroke="#3b82f6" stroke-width="1.2"/>
+    <ellipse cx="72" cy="242" rx="20" ry="3.4" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.2"/>
+    <ellipse cx="72" cy="242" rx="20" ry="3.4" fill="#3b82f6" fill-opacity="0.3" stroke="none"/>
+    <rect x="52" y="236" width="40" height="6" fill="#3b82f6" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="72" cy="242" rx="20" ry="3.4" fill="#3b82f6" fill-opacity="0.25" stroke="#3b82f6" stroke-width="1.2"/>
+    <ellipse cx="72" cy="236" rx="20" ry="3.4" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.2"/>
+    <ellipse cx="72" cy="236" rx="20" ry="3.4" fill="#3b82f6" fill-opacity="0.3" stroke="none"/>
+    <line x1="40" y1="276" x2="104" y2="276" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/>
+    <path d="M43,307.8 V299.68 L54.6,297.36 L62.72,288.08 H82.44 L90.56,297.36 L101,300.84 V307.8 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="55.76" cy="308.96" r="5.22" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.6"/>
+    <circle cx="88.24" cy="308.96" r="5.22" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.6"/>
+    <text x="72" y="220" text-anchor="middle" class="sm dim">losses</text>
+    <text x="72" y="338" text-anchor="middle" class="sm dim">exposures</text>
+    <line x1="128" y1="271" x2="148" y2="271" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round"/>
+    <line x1="128" y1="281" x2="148" y2="281" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round"/>
+    <rect x="176" y="194.7" width="84" height="161.3" rx="2" fill="#3b82f6" fill-opacity="0.32" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="218" y="279.35" text-anchor="middle" class="sm bold">360</text>
+    <rect x="176" y="183.5" width="84" height="11.2" rx="2" fill="#0d9488" fill-opacity="0.32" stroke="#0d9488" stroke-width="1.2"/>
+    <rect x="176" y="106" width="84" height="77.5" rx="2" fill="#d97706" fill-opacity="0.32" stroke="#d97706" stroke-width="1.2"/>
+    <text x="218" y="148.75" text-anchor="middle" class="sm bold">V + Q</text>
+    <text x="268" y="193.1" text-anchor="start" class="sm">+ 25</text>
+    <text x="218" y="96" text-anchor="middle" class="bold">558</text>
   </g>
 </svg>

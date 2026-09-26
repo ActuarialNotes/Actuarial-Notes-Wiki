@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The three lines model, and the Appointed Actuary's place outside management's reporting line</title>
+  <title>The three lines under a board: the business reporting through management, while the oversight functions and internal audit each report straight to the board</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,27 +42,49 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
+    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
+    <marker id="ah0d9488" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#0d9488"/></marker>
+    <marker id="ahd97706" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#d97706"/></marker>
+  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="30" y="100" width="300" height="48" rx="6" fill="#3b82f6" fill-opacity="0.16" stroke="#3b82f6" stroke-width="1.3"/>
-    <text x="180" y="121" text-anchor="middle" class="sm">The business</text>
-    <text x="180" y="136" text-anchor="middle" class="sm dim">owns and manages its risks</text>
-    <rect x="30" y="160" width="300" height="48" rx="6" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.3"/>
-    <text x="180" y="181" text-anchor="middle" class="sm">Oversight functions</text>
-    <text x="180" y="196" text-anchor="middle" class="sm dim">risk, compliance, the actuary</text>
-    <rect x="30" y="220" width="300" height="48" rx="6" fill="#7c3aed" fill-opacity="0.16" stroke="#7c3aed" stroke-width="1.3"/>
-    <text x="180" y="241" text-anchor="middle" class="sm">Internal audit</text>
-    <text x="180" y="256" text-anchor="middle" class="sm dim">independent assurance to the board</text>
-    <line x1="30" y1="268" x2="330" y2="268" class="rule"/>
-    <text x="36" y="290" text-anchor="start" class="sm" fill="#d97706">•</text>
-    <text x="52" y="290" text-anchor="start" class="sm">the board approves strategy and risk appetite</text>
-    <text x="36" y="313" text-anchor="start" class="sm" fill="#d97706">•</text>
-    <text x="52" y="313" text-anchor="start" class="sm">a majority of independent directors, and a chair</text>
-    <text x="36" y="336" text-anchor="start" class="sm" fill="#d97706">•</text>
-    <text x="52" y="336" text-anchor="start" class="sm">independent of management</text>
-    <text x="36" y="359" text-anchor="start" class="sm" fill="#d97706">•</text>
-    <text x="52" y="359" text-anchor="start" class="sm">and the actuary answers to the directors — which</text>
-    <text x="36" y="382" text-anchor="start" class="sm" fill="#d97706">•</text>
-    <text x="52" y="382" text-anchor="start" class="sm">is what makes the duty to report workable</text>
+    <circle cx="146" cy="101.2" r="6.48" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M134.48,130 V116.32 Q134.48,110.56 140.96,110.56 H151.04 Q157.52,110.56 157.52,116.32 V130 Z" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="180" cy="101.2" r="6.48" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M168.48,130 V116.32 Q168.48,110.56 174.96,110.56 H185.04 Q191.52,110.56 191.52,116.32 V130 Z" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="214" cy="101.2" r="6.48" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M202.48,130 V116.32 Q202.48,110.56 208.96,110.56 H219.04 Q225.52,110.56 225.52,116.32 V130 Z" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="240" y="118" text-anchor="start" class="bold">board</text>
+    <circle cx="72" cy="200.8" r="7.92" fill="var(--dim)" fill-opacity="0.18" stroke="var(--dim)" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M57.92,236 V219.28 Q57.92,212.24 65.84,212.24 H78.16 Q86.08,212.24 86.08,219.28 V236 Z" fill="var(--dim)" fill-opacity="0.18" stroke="var(--dim)" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="72" y="256" text-anchor="middle" class="sm">management</text>
+    <rect x="58.56" y="292" width="26.88" height="48" rx="2" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="63.84" y="297.76" width="5.76" height="4.8" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="74.4" y="297.76" width="5.76" height="4.8" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="63.84" y="307.36" width="5.76" height="4.8" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="74.4" y="307.36" width="5.76" height="4.8" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="63.84" y="316.96" width="5.76" height="4.8" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="74.4" y="316.96" width="5.76" height="4.8" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="63.84" y="326.56" width="5.76" height="4.8" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="74.4" y="326.56" width="5.76" height="4.8" fill="#3b82f6" fill-opacity="0.55"/>
+    <circle cx="180" cy="301.6" r="8.64" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M164.64,340 V321.76 Q164.64,314.08 173.28,314.08 H186.72 Q195.36,314.08 195.36,321.76 V340 Z" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="280" cy="310" r="15" fill="#d97706" fill-opacity="0.12" stroke="#d97706" stroke-width="2.4"/>
+    <line x1="290.61" y1="320.61" x2="302.27" y2="332.27" stroke="#d97706" stroke-width="4.4" stroke-linecap="round"/>
+    <text x="72" y="358" text-anchor="middle" class="sm bold">business</text>
+    <circle cx="38" cy="294" r="9" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.1"/>
+    <text x="38" y="298" text-anchor="middle" class="sm bold">1</text>
+    <text x="180" y="358" text-anchor="middle" class="sm bold">oversight</text>
+    <circle cx="146" cy="294" r="9" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.1"/>
+    <text x="146" y="298" text-anchor="middle" class="sm bold">2</text>
+    <text x="288" y="358" text-anchor="middle" class="sm bold">audit</text>
+    <circle cx="254" cy="294" r="9" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.1"/>
+    <text x="254" y="298" text-anchor="middle" class="sm bold">3</text>
+    <line x1="72" y1="286" x2="72" y2="266" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <line x1="94" y1="200" x2="136" y2="136" class="thin" stroke="var(--dim)" stroke-width="1.8" marker-end="url(#ahvardim)"/>
+    <line x1="180" y1="286" x2="180" y2="140" class="thin" stroke="#0d9488" stroke-width="1.8" marker-end="url(#ah0d9488)"/>
+    <line x1="282" y1="288" x2="222" y2="140" class="thin" stroke="#d97706" stroke-width="1.8" marker-end="url(#ahd97706)"/>
   </g>
 </svg>

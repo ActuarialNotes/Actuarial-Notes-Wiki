@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The four layers of Canadian insurance rules, with the line between what is law and what is expectation</title>
+  <title>Four documents stacked by force: a statute and a regulation above a dashed line under the scales of law, a guideline and a bulletin below it under the regulator's expectation</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,24 +47,53 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="34" y="92" width="292" height="44" rx="6" fill="#3b82f6" fill-opacity="0.16" stroke="#3b82f6" stroke-width="1.3"/>
-    <text x="180" y="111" text-anchor="middle" class="sm">Statute</text>
-    <text x="180" y="126" text-anchor="middle" class="sm dim">Insurance Companies Act, Insurance Acts</text>
-    <rect x="34" y="148" width="292" height="44" rx="6" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.3"/>
-    <text x="180" y="167" text-anchor="middle" class="sm">Regulation</text>
-    <text x="180" y="182" text-anchor="middle" class="sm dim">Ontario Reg. 664 — cabinet, not the House</text>
-    <line x1="180" y1="135" x2="180" y2="147" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <line x1="30" y1="208" x2="330" y2="208" class="thin dash" stroke="#e11d48" stroke-width="1.4"/>
-    <text x="180" y="202" text-anchor="middle" class="sm" fill="#e11d48">binding law above</text>
-    <text x="180" y="224" text-anchor="middle" class="sm" fill="#e11d48">supervisory expectation below</text>
-    <rect x="34" y="238" width="292" height="44" rx="6" fill="#d97706" fill-opacity="0.16" stroke="#d97706" stroke-width="1.3"/>
-    <text x="180" y="257" text-anchor="middle" class="sm">Guideline</text>
-    <text x="180" y="272" text-anchor="middle" class="sm dim">OSFI B-series, MCT — what OSFI expects</text>
-    <rect x="34" y="294" width="292" height="44" rx="6" fill="#7c3aed" fill-opacity="0.16" stroke="#7c3aed" stroke-width="1.3"/>
-    <text x="180" y="313" text-anchor="middle" class="sm">Bulletin</text>
-    <text x="180" y="328" text-anchor="middle" class="sm dim">the regulator's reading of the day</text>
-    <line x1="180" y1="226" x2="180" y2="236" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <text x="180" y="362" text-anchor="middle" class="sm dim">departing from a guideline is allowed —</text>
-    <text x="180" y="378" text-anchor="middle" class="sm dim">explaining it to OSFI is the price</text>
+    <rect x="30" y="80" width="300" height="142" rx="10" fill="#3b82f6" fill-opacity="0.07"/>
+    <rect x="30" y="234" width="300" height="146" rx="10" fill="#d97706" fill-opacity="0.07"/>
+    <line x1="30" y1="228" x2="330" y2="228" class="thin dash" stroke="#e11d48" stroke-width="1.6"/>
+    <polygon points="73.28,94 100.32,94 110.72,104.4 110.72,146 73.28,146" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M100.32,94 V104.4 H110.72" fill="none" stroke="#3b82f6" stroke-width="1.2"/>
+    <line x1="80.56" y1="114.8" x2="102.4" y2="114.8" stroke="#3b82f6" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="80.56" y1="123.64" x2="102.4" y2="123.64" stroke="#3b82f6" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="80.56" y1="132.48" x2="95.12" y2="132.48" stroke="#3b82f6" stroke-width="1.4" stroke-linecap="round"/>
+    <text x="126" y="124" text-anchor="start" class="sm bold">statute</text>
+    <polygon points="76.16,170 99.04,170 107.84,178.8 107.84,214 76.16,214" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M99.04,170 V178.8 H107.84" fill="none" stroke="#0d9488" stroke-width="1.2"/>
+    <line x1="82.32" y1="187.6" x2="100.8" y2="187.6" stroke="#0d9488" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="82.32" y1="195.08" x2="100.8" y2="195.08" stroke="#0d9488" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="82.32" y1="202.56" x2="94.64" y2="202.56" stroke="#0d9488" stroke-width="1.4" stroke-linecap="round"/>
+    <text x="126" y="196" text-anchor="start" class="sm bold">regulation</text>
+    <line x1="92" y1="150" x2="92" y2="165" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
+    <polygon points="77.6,252 98.4,252 106.4,260 106.4,292 77.6,292" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M98.4,252 V260 H106.4" fill="none" stroke="#d97706" stroke-width="1.2"/>
+    <line x1="83.2" y1="268" x2="100" y2="268" stroke="#d97706" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="83.2" y1="274.8" x2="100" y2="274.8" stroke="#d97706" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="83.2" y1="281.6" x2="94.4" y2="281.6" stroke="#d97706" stroke-width="1.4" stroke-linecap="round"/>
+    <text x="126" y="276" text-anchor="start" class="sm bold">guideline</text>
+    <line x1="92" y1="218" x2="92" y2="247" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
+    <polygon points="79.04,322 97.76,322 104.96,329.2 104.96,358 79.04,358" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M97.76,322 V329.2 H104.96" fill="none" stroke="#7c3aed" stroke-width="1.2"/>
+    <line x1="84.08" y1="336.4" x2="99.2" y2="336.4" stroke="#7c3aed" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="84.08" y1="342.52" x2="99.2" y2="342.52" stroke="#7c3aed" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="84.08" y1="348.64" x2="94.16" y2="348.64" stroke="#7c3aed" stroke-width="1.4" stroke-linecap="round"/>
+    <text x="126" y="344" text-anchor="start" class="sm bold">bulletin</text>
+    <line x1="92" y1="296" x2="92" y2="317" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
+    <line x1="272" y1="124.28" x2="272" y2="178.4" stroke="#3b82f6" stroke-width="1.8"/>
+    <rect x="257.48" y="178.4" width="29.04" height="6.6" rx="2" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <line x1="241.64" y1="132.2" x2="302.36" y2="132.2" stroke="#3b82f6" stroke-width="1.8" stroke-linecap="round"/>
+    <circle cx="272" cy="122.96" r="3.3" fill="#3b82f6"/>
+    <line x1="241.64" y1="132.2" x2="231.08" y2="152" stroke="#3b82f6" stroke-width="1"/>
+    <line x1="241.64" y1="132.2" x2="252.2" y2="152" stroke="#3b82f6" stroke-width="1"/>
+    <path d="M228.44,152 Q241.64,161.24 254.84,152 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <line x1="302.36" y1="132.2" x2="291.8" y2="152" stroke="#3b82f6" stroke-width="1"/>
+    <line x1="302.36" y1="132.2" x2="312.92" y2="152" stroke="#3b82f6" stroke-width="1"/>
+    <path d="M289.16,152 Q302.36,161.24 315.56,152 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="272" y="206" text-anchor="middle" class="bold">law</text>
+    <polygon points="243,286.4 272,269 301,286.4" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="248.22" y="289.88" width="5.8" height="26.68" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="262.14" y="289.88" width="5.8" height="26.68" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="276.06" y="289.88" width="5.8" height="26.68" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="289.98" y="289.88" width="5.8" height="26.68" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="243" y="318.88" width="58" height="8.12" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="272" y="350" text-anchor="middle" class="bold">expectation</text>
   </g>
 </svg>

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The three MfADs of the old Canadian regime, and where each of them went under IFRS 17</title>
+  <title>Two liability columns on one baseline: the old Canadian best estimate topped by three prescribed margins — claims, reinsurance and interest — and the IFRS 17 column topped by a single risk adjustment that replaces them</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -44,20 +44,23 @@ text {
   <g id="light"/><g id="dark"/>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="34" y="106" width="292" height="44" rx="6" fill="#7c3aed" fill-opacity="0.16" stroke="#7c3aed" stroke-width="1.2"/>
-    <text x="46" y="125" text-anchor="start" class="sm bold">claims development</text>
-    <text x="46" y="140" text-anchor="start" class="sm dim">→ the risk adjustment</text>
-    <rect x="34" y="160" width="292" height="44" rx="6" fill="#d97706" fill-opacity="0.16" stroke="#d97706" stroke-width="1.2"/>
-    <text x="46" y="179" text-anchor="start" class="sm bold">reinsurance recovery</text>
-    <text x="46" y="194" text-anchor="start" class="sm dim">→ non-performance risk</text>
-    <rect x="34" y="214" width="292" height="44" rx="6" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.2"/>
-    <text x="46" y="233" text-anchor="start" class="sm bold">interest rate</text>
-    <text x="46" y="248" text-anchor="start" class="sm dim">→ nothing; the rate is market</text>
-    <line x1="30" y1="284" x2="330" y2="284" class="rule"/>
-    <text x="180" y="306" text-anchor="middle" class="sm dim">prescribed ranges were comparable but arbitrary;</text>
-    <text x="180" y="322" text-anchor="middle" class="sm dim">an entity-specific RA is neither</text>
-    <text x="180" y="350" text-anchor="middle" class="sm dim">note the interest MfAD: prudence used to sit inside</text>
-    <text x="180" y="366" text-anchor="middle" class="sm dim">the discount rate, which confused financial risk</text>
-    <text x="180" y="382" text-anchor="middle" class="sm dim">with insurance risk — IFRS 17 separates them</text>
+    <rect x="100" y="192" width="82" height="160" rx="3" fill="#3b82f6" fill-opacity="0.5"/>
+    <rect x="226" y="192" width="82" height="160" rx="3" fill="#3b82f6" fill-opacity="0.5"/>
+    <text x="141" y="276" text-anchor="middle" class="sm">best estimate</text>
+    <text x="267" y="276" text-anchor="middle" class="sm">best estimate</text>
+    <rect x="100" y="170" width="82" height="22" rx="2" fill="#0d9488" fill-opacity="0.6"/>
+    <text x="94" y="185" text-anchor="end" class="sm">interest</text>
+    <line x1="184" y1="181" x2="224" y2="170" class="thin dash" stroke="#0d9488" stroke-width="1.3"/>
+    <rect x="100" y="152" width="82" height="18" rx="2" fill="#d97706" fill-opacity="0.6"/>
+    <text x="94" y="165" text-anchor="end" class="sm">reinsurance</text>
+    <line x1="184" y1="161" x2="224" y2="170" class="thin dash" stroke="#d97706" stroke-width="1.3"/>
+    <rect x="100" y="126" width="82" height="26" rx="2" fill="#7c3aed" fill-opacity="0.6"/>
+    <text x="94" y="143" text-anchor="end" class="sm">claims</text>
+    <line x1="184" y1="139" x2="224" y2="170" class="thin dash" stroke="#7c3aed" stroke-width="1.3"/>
+    <rect x="226" y="148" width="82" height="44" rx="2" fill="#7c3aed" fill-opacity="0.6"/>
+    <text x="267" y="174" text-anchor="middle" class="bold">RA</text>
+    <line x1="86" y1="352" x2="322" y2="352" class="axis"/>
+    <text x="141" y="370" text-anchor="middle" class="sm dim">pre-2023</text>
+    <text x="267" y="370" text-anchor="middle" class="sm dim">IFRS 17</text>
   </g>
 </svg>

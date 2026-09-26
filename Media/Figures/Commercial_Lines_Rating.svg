@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The chain of adjustments from a manual premium to a commercial risk's final price</title>
+  <title>A $100,000 manual premium stepping down through an experience mod of 0.88 and a schedule mod of 0.95 to a standard premium of $83,600</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -43,29 +43,31 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <defs>
-    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
+    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
+    <marker id="ah0d9488" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#0d9488"/></marker>
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="44" y="120" width="272" height="46" rx="6" fill="#7c3aed" fill-opacity="0.14" stroke="#7c3aed" stroke-width="1.2"/>
-    <text x="56" y="140" text-anchor="start" class="sm bold">Manual premium</text>
-    <text x="56" y="156" text-anchor="start" class="sm dim">class rate × exposure</text>
-    <text x="304" y="148" text-anchor="end" class="sm bold">100,000</text>
-    <rect x="44" y="182" width="272" height="46" rx="6" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="56" y="202" text-anchor="start" class="sm bold">× Experience mod</text>
-    <text x="56" y="218" text-anchor="start" class="sm dim">the risk's own losses</text>
-    <text x="304" y="210" text-anchor="end" class="sm bold">0.88</text>
-    <line x1="180" y1="167" x2="180" y2="180" class="thin" stroke="var(--dim)" stroke-width="1.2" marker-end="url(#ahvardim)"/>
-    <rect x="44" y="244" width="272" height="46" rx="6" fill="#0d9488" fill-opacity="0.14" stroke="#0d9488" stroke-width="1.2"/>
-    <text x="56" y="264" text-anchor="start" class="sm bold">× Schedule mod</text>
-    <text x="56" y="280" text-anchor="start" class="sm dim">underwriter judgment</text>
-    <text x="304" y="272" text-anchor="end" class="sm bold">0.95</text>
-    <line x1="180" y1="229" x2="180" y2="242" class="thin" stroke="var(--dim)" stroke-width="1.2" marker-end="url(#ahvardim)"/>
-    <rect x="44" y="306" width="272" height="46" rx="6" fill="#059669" fill-opacity="0.14" stroke="#059669" stroke-width="1.2"/>
-    <text x="56" y="326" text-anchor="start" class="sm bold">Standard premium</text>
-    <text x="56" y="342" text-anchor="start" class="sm dim">before any retro</text>
-    <text x="304" y="334" text-anchor="end" class="sm bold">83,600</text>
-    <line x1="180" y1="291" x2="180" y2="304" class="thin" stroke="var(--dim)" stroke-width="1.2" marker-end="url(#ahvardim)"/>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">and a retro plan can still move it afterwards</text>
+    <rect x="28" y="156" width="64" height="200" rx="3" fill="#7c3aed" fill-opacity="0.32" stroke="#7c3aed" stroke-width="1.2"/>
+    <text x="60" y="148" text-anchor="middle" class="sm bold">100,000</text>
+    <text x="60" y="374" text-anchor="middle" class="sm dim">manual</text>
+    <rect x="148" y="180" width="64" height="176" rx="3" fill="#3b82f6" fill-opacity="0.32" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="180" y="172" text-anchor="middle" class="sm bold">88,000</text>
+    <rect x="268" y="188.8" width="64" height="167.2" rx="3" fill="#059669" fill-opacity="0.32" stroke="#059669" stroke-width="1.2"/>
+    <text x="300" y="180.8" text-anchor="middle" class="sm bold">83,600</text>
+    <text x="300" y="374" text-anchor="middle" class="sm dim">standard</text>
+    <polygon points="107.76,87 125.44,87 132.24,93.8 132.24,121 107.76,121" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M125.44,87 V93.8 H132.24" fill="none" stroke="#3b82f6" stroke-width="1.2"/>
+    <line x1="112.52" y1="100.6" x2="126.8" y2="100.6" stroke="#3b82f6" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="112.52" y1="106.38" x2="126.8" y2="106.38" stroke="#3b82f6" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="112.52" y1="112.16" x2="122.04" y2="112.16" stroke="#3b82f6" stroke-width="1.4" stroke-linecap="round"/>
+    <text x="120" y="138" text-anchor="middle" class="sm">experience</text>
+    <line x1="96" y1="236" x2="144" y2="236" class="thin" stroke="#3b82f6" stroke-width="1.6" marker-end="url(#ah3b82f6)"/>
+    <text x="120" y="228" text-anchor="middle" class="sm bold">× 0.88</text>
+    <circle cx="240" cy="93.8" r="6.12" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M229.12,121 V108.08 Q229.12,102.64 235.24,102.64 H244.76 Q250.88,102.64 250.88,108.08 V121 Z" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="240" y="138" text-anchor="middle" class="sm">schedule</text>
+    <line x1="216" y1="236" x2="264" y2="236" class="thin" stroke="#0d9488" stroke-width="1.6" marker-end="url(#ah0d9488)"/>
+    <text x="240" y="228" text-anchor="middle" class="sm bold">× 0.95</text>
   </g>
 </svg>

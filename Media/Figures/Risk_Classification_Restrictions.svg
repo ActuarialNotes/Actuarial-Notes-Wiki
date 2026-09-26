@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>A banned rating variable's signal migrating into the permitted variables correlated with it</title>
+  <title>A banned credit score crossed out, its signal flowing down dashed arrows into the territory, the vehicle and the tenure that correlate with it</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,28 +47,39 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="75" y="94" width="210" height="28" rx="14.0" fill="#e11d48" fill-opacity="0.14" stroke="#e11d48" stroke-width="1.2"/>
-    <text x="180" y="112" text-anchor="middle" class="sm">credit score — banned</text>
-    <line x1="75" y1="108" x2="285" y2="108" class="thin" stroke="#e11d48" stroke-width="1.6"/>
-    <line x1="180" y1="126" x2="82" y2="162" class="thin dash" stroke="#d97706" stroke-width="1.4" marker-end="url(#ahd97706)"/>
-    <rect x="38" y="168" width="88" height="24" rx="12.0" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2"/>
-    <text x="82" y="184" text-anchor="middle" class="sm">territory</text>
-    <line x1="180" y1="126" x2="180" y2="162" class="thin dash" stroke="#d97706" stroke-width="1.4" marker-end="url(#ahd97706)"/>
-    <rect x="136" y="168" width="88" height="24" rx="12.0" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2"/>
-    <text x="180" y="184" text-anchor="middle" class="sm">vehicle</text>
-    <line x1="180" y1="126" x2="278" y2="162" class="thin dash" stroke="#d97706" stroke-width="1.4" marker-end="url(#ahd97706)"/>
-    <rect x="234" y="168" width="88" height="24" rx="12.0" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2"/>
-    <text x="278" y="184" text-anchor="middle" class="sm">tenure</text>
-    <text x="180" y="214" text-anchor="middle" class="sm bold" fill="#d97706">the signal reappears as a proxy</text>
-    <line x1="30" y1="238" x2="330" y2="238" class="rule"/>
-    <text x="40" y="262" text-anchor="start" class="sm" fill="#3b82f6">•</text>
-    <text x="56" y="262" text-anchor="start" class="sm">cross-subsidy: good risks pay for bad</text>
-    <text x="40" y="286" text-anchor="start" class="sm" fill="#3b82f6">•</text>
-    <text x="56" y="286" text-anchor="start" class="sm">good risks leave, or the residual market grows</text>
-    <text x="40" y="310" text-anchor="start" class="sm" fill="#3b82f6">•</text>
-    <text x="56" y="310" text-anchor="start" class="sm">the plan differs by province, so a national</text>
-    <text x="40" y="334" text-anchor="start" class="sm" fill="#3b82f6">•</text>
-    <text x="56" y="334" text-anchor="start" class="sm">insurer runs a different one in each</text>
-    <text x="180" y="380" text-anchor="middle" class="sm dim">restriction is a policy choice, not an actuarial one</text>
+    <polygon points="156.96,94 190.24,94 203.04,106.8 203.04,158 156.96,158" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M190.24,94 V106.8 H203.04" fill="none" stroke="#3b82f6" stroke-width="1.2"/>
+    <line x1="165.92" y1="119.6" x2="192.8" y2="119.6" stroke="#3b82f6" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="165.92" y1="130.48" x2="192.8" y2="130.48" stroke="#3b82f6" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="165.92" y1="141.36" x2="183.84" y2="141.36" stroke="#3b82f6" stroke-width="1.4" stroke-linecap="round"/>
+    <circle cx="180" cy="126" r="40" fill="none" stroke="#e11d48" stroke-width="3"/>
+    <line x1="151.72" y1="97.72" x2="208.28" y2="154.28" stroke="#e11d48" stroke-width="3"/>
+    <text x="180" y="188" text-anchor="middle" class="bold">credit score</text>
+    <line x1="158" y1="200" x2="70" y2="262" class="thin dash" stroke="#d97706" stroke-width="1.6" marker-end="url(#ahd97706)"/>
+    <text x="70" y="352" text-anchor="middle" class="sm bold">territory</text>
+    <line x1="180" y1="200" x2="180" y2="262" class="thin dash" stroke="#d97706" stroke-width="1.6" marker-end="url(#ahd97706)"/>
+    <text x="180" y="352" text-anchor="middle" class="sm bold">vehicle</text>
+    <line x1="202" y1="200" x2="290" y2="262" class="thin dash" stroke="#d97706" stroke-width="1.6" marker-end="url(#ahd97706)"/>
+    <text x="290" y="352" text-anchor="middle" class="sm bold">tenure</text>
+    <polygon points="48.4,296.4 48.4,330 91.6,330 91.6,296.4 70,272.4" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="64.6" y="310.8" width="10.8" height="19.2" fill="#d97706" fill-opacity="0.55"/>
+    <path d="M142,315.6 V304.96 L157.2,301.92 L167.84,289.76 H193.68 L204.32,301.92 L218,306.48 V315.6 Z" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="158.72" cy="317.12" r="6.84" fill="var(--surf)" stroke="#d97706" stroke-width="1.6"/>
+    <circle cx="201.28" cy="317.12" r="6.84" fill="var(--surf)" stroke="#d97706" stroke-width="1.6"/>
+    <circle cx="290" cy="304" r="28" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4"/>
+    <line x1="311.84" y1="304" x2="315.2" y2="304" stroke="#d97706" stroke-width="1.2"/>
+    <line x1="308.91" y1="314.92" x2="311.82" y2="316.6" stroke="#d97706" stroke-width="1.2"/>
+    <line x1="300.92" y1="322.91" x2="302.6" y2="325.82" stroke="#d97706" stroke-width="1.2"/>
+    <line x1="290" y1="325.84" x2="290" y2="329.2" stroke="#d97706" stroke-width="1.2"/>
+    <line x1="279.08" y1="322.91" x2="277.4" y2="325.82" stroke="#d97706" stroke-width="1.2"/>
+    <line x1="271.09" y1="314.92" x2="268.18" y2="316.6" stroke="#d97706" stroke-width="1.2"/>
+    <line x1="268.16" y1="304" x2="264.8" y2="304" stroke="#d97706" stroke-width="1.2"/>
+    <line x1="271.09" y1="293.08" x2="268.18" y2="291.4" stroke="#d97706" stroke-width="1.2"/>
+    <line x1="279.08" y1="285.09" x2="277.4" y2="282.18" stroke="#d97706" stroke-width="1.2"/>
+    <line x1="290" y1="282.16" x2="290" y2="278.8" stroke="#d97706" stroke-width="1.2"/>
+    <line x1="300.92" y1="285.09" x2="302.6" y2="282.18" stroke="#d97706" stroke-width="1.2"/>
+    <line x1="308.91" y1="293.08" x2="311.82" y2="291.4" stroke="#d97706" stroke-width="1.2"/>
+    <line x1="290" y1="304" x2="290" y2="286.64" stroke="#d97706" stroke-width="2" stroke-linecap="round"/>
+    <line x1="290" y1="304" x2="302.32" y2="307.36" stroke="#d97706" stroke-width="2" stroke-linecap="round"/>
   </g>
 </svg>

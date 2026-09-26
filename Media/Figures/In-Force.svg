@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>A vertical cut through the book at one date, counting the policies then providing coverage</title>
+  <title>A dashed valuation date cutting through five policies, the three it crosses highlighted as in force</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,25 +47,23 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="48" y1="124" x2="48" y2="306" class="grid"/>
-    <line x1="138" y1="124" x2="138" y2="306" class="grid"/>
-    <line x1="228" y1="124" x2="228" y2="306" class="grid"/>
-    <line x1="318" y1="124" x2="318" y2="306" class="grid"/>
-    <line x1="40" y1="306" x2="334" y2="306" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-    <text x="93" y="322" text-anchor="middle" class="sm dim">2023</text>
-    <text x="183" y="322" text-anchor="middle" class="sm dim">2024</text>
-    <text x="273" y="322" text-anchor="middle" class="sm dim">2025</text>
-    <rect x="61.5" y="140.5" width="90" height="11" rx="3" fill="#3b82f6" fill-opacity="0.34" stroke="#3b82f6" stroke-width="1.1"/>
-    <rect x="102" y="170.5" width="90" height="11" rx="3" fill="#3b82f6" fill-opacity="0.34" stroke="#3b82f6" stroke-width="1.1"/>
-    <rect x="142.5" y="200.5" width="90" height="11" rx="3" fill="#3b82f6" fill-opacity="0.34" stroke="#3b82f6" stroke-width="1.1"/>
-    <rect x="174" y="230.5" width="90" height="11" rx="3" fill="#3b82f6" fill-opacity="0.34" stroke="#3b82f6" stroke-width="1.1"/>
-    <rect x="205.5" y="260.5" width="90" height="11" rx="3" fill="#3b82f6" fill-opacity="0.34" stroke="#3b82f6" stroke-width="1.1"/>
-    <line x1="183" y1="122" x2="183" y2="306" class="thin dash" stroke="#e11d48" stroke-width="1.6"/>
-    <text x="183" y="114" text-anchor="middle" class="sm bold" fill="#e11d48">valuation date</text>
-    <circle cx="183" cy="176" r="4.4" fill="#e11d48"/>
-    <circle cx="183" cy="206" r="4.4" fill="#e11d48"/>
-    <circle cx="183" cy="236" r="4.4" fill="#e11d48"/>
-    <text x="180" y="344" text-anchor="middle" class="sm dim">3 of the 5 policies are in force —</text>
-    <text x="180" y="362" text-anchor="middle" class="sm dim">written and earned both count different things</text>
+    <line x1="48" y1="100" x2="48" y2="350" class="grid"/>
+    <line x1="138" y1="100" x2="138" y2="350" class="grid"/>
+    <line x1="228" y1="100" x2="228" y2="350" class="grid"/>
+    <line x1="318" y1="100" x2="318" y2="350" class="grid"/>
+    <line x1="40" y1="350" x2="334" y2="350" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <text x="93" y="366" text-anchor="middle" class="sm dim">2023</text>
+    <text x="183" y="366" text-anchor="middle" class="sm dim">2024</text>
+    <text x="273" y="366" text-anchor="middle" class="sm dim">2025</text>
+    <rect x="61.5" y="121" width="90" height="14" rx="3" fill="var(--axis)" fill-opacity="0.3" stroke="var(--axis)" stroke-width="1.1"/>
+    <rect x="102" y="167" width="90" height="14" rx="3" fill="#3b82f6" fill-opacity="0.45" stroke="#3b82f6" stroke-width="1.1"/>
+    <rect x="142.5" y="213" width="90" height="14" rx="3" fill="#3b82f6" fill-opacity="0.45" stroke="#3b82f6" stroke-width="1.1"/>
+    <rect x="174" y="259" width="90" height="14" rx="3" fill="#3b82f6" fill-opacity="0.45" stroke="#3b82f6" stroke-width="1.1"/>
+    <rect x="205.5" y="305" width="90" height="14" rx="3" fill="var(--axis)" fill-opacity="0.3" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="183" y1="98" x2="183" y2="350" class="thin dash" stroke="#e11d48" stroke-width="1.6"/>
+    <circle cx="183" cy="174" r="4.8" fill="#e11d48"/>
+    <circle cx="183" cy="220" r="4.8" fill="#e11d48"/>
+    <circle cx="183" cy="266" r="4.8" fill="#e11d48"/>
+    <text x="183" y="88" text-anchor="middle" class="sm bold">valuation date</text>
   </g>
 </svg>

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The projected loss and LAE ratio measured against the permissible loss ratio</title>
+  <title>A $520 premium column filled to 69.2% by $360 of losses, the other 30.8% left for expenses and profit</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -44,17 +44,17 @@ text {
   <g id="light"/><g id="dark"/>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="46" y="150" width="268" height="40" rx="5" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
-    <rect x="46" y="150" width="185.46" height="40" rx="5" fill="#3b82f6" fill-opacity="0.34" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="138.73" y="175" text-anchor="middle" class="sm">69.2% losses</text>
-    <text x="272.73" y="175" text-anchor="middle" class="sm dim">30.8%</text>
-    <text x="180" y="136" text-anchor="middle" class="sm dim">$520 of earned premium</text>
-    <text x="272.73" y="208" text-anchor="middle" class="sm dim">expenses</text>
-    <text x="272.73" y="223" text-anchor="middle" class="sm dim">+ profit</text>
-    <line x1="230.92" y1="126" x2="230.92" y2="194" class="thin dash" stroke="#e11d48" stroke-width="1.6"/>
-    <text x="230.92" y="118" text-anchor="middle" class="sm bold" fill="#e11d48">PLR 69.0%</text>
-    <text x="180" y="274" text-anchor="middle" class="sm dim">360 / 520 = 69.2%, against 69.0% available</text>
-    <text x="180" y="312" text-anchor="middle" class="sm">above the PLR ⇒ the rate is inadequate</text>
-    <text x="180" y="340" text-anchor="middle" class="sm dim">below it ⇒ there is room to give back</text>
+    <rect x="84" y="100" width="120" height="256" rx="5" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
+    <rect x="84" y="178.77" width="120" height="177.23" rx="5" fill="#3b82f6" fill-opacity="0.34" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="144" y="90" text-anchor="middle" class="sm bold">premium 520</text>
+    <text x="144" y="271.38" text-anchor="middle" class="sm">losses 360</text>
+    <line x1="224" y1="180.77" x2="224" y2="354" stroke="#3b82f6" stroke-width="1.6"/>
+    <line x1="219" y1="180.77" x2="229" y2="180.77" stroke="#3b82f6" stroke-width="1.6"/>
+    <line x1="219" y1="354" x2="229" y2="354" stroke="#3b82f6" stroke-width="1.6"/>
+    <text x="236" y="271.38" text-anchor="start" class="bold">69.2%</text>
+    <line x1="224" y1="102" x2="224" y2="176.77" stroke="var(--dim)" stroke-width="1.6"/>
+    <line x1="219" y1="102" x2="229" y2="102" stroke="var(--dim)" stroke-width="1.6"/>
+    <line x1="219" y1="176.77" x2="229" y2="176.77" stroke="var(--dim)" stroke-width="1.6"/>
+    <text x="236" y="143.38" text-anchor="start" class="sm dim">30.8%</text>
   </g>
 </svg>

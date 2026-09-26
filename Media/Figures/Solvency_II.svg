@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Solvency II's three pillars beside the Canadian pieces that answer to each</title>
+  <title>Solvency II drawn as a temple of three pillars — the SCR, ORSA and the SFCR — with the Canadian piece that answers to each beneath it: the MCT, ORSA and FCT, and the annual return</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,25 +42,27 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
+  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="30" y="104" width="300" height="46" rx="6" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="42" y="124" text-anchor="start" class="sm bold" fill="#3b82f6">Pillar 1</text>
-    <text x="42" y="140" text-anchor="start" class="sm dim">SCR, MCR</text>
-    <text x="318" y="134" text-anchor="end" class="sm">the MCT</text>
-    <rect x="30" y="162" width="300" height="46" rx="6" fill="#0d9488" fill-opacity="0.14" stroke="#0d9488" stroke-width="1.2"/>
-    <text x="42" y="182" text-anchor="start" class="sm bold" fill="#0d9488">Pillar 2</text>
-    <text x="42" y="198" text-anchor="start" class="sm dim">ORSA</text>
-    <text x="318" y="192" text-anchor="end" class="sm">ORSA, FCT</text>
-    <rect x="30" y="220" width="300" height="46" rx="6" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2"/>
-    <text x="42" y="240" text-anchor="start" class="sm bold" fill="#d97706">Pillar 3</text>
-    <text x="42" y="256" text-anchor="start" class="sm dim">SFCR</text>
-    <text x="318" y="250" text-anchor="end" class="sm">the annual return</text>
-    <line x1="30" y1="292" x2="330" y2="292" class="rule"/>
-    <text x="180" y="314" text-anchor="middle" class="sm dim">Solvency II states its calibration and is</text>
-    <text x="180" y="330" text-anchor="middle" class="sm dim">market-consistent throughout; the MCT is</text>
-    <text x="180" y="346" text-anchor="middle" class="sm dim">factor-based with a 1.5 multiplier on top</text>
-    <text x="180" y="374" text-anchor="middle" class="sm dim">and it permits an approved internal model —</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">Canada does not</text>
+    <polygon points="52,136 190,88 328,136" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.4"/>
+    <text x="190" y="126" text-anchor="middle" class="bold">Solvency II</text>
+    <rect x="52" y="136" width="276" height="14" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.4"/>
+    <rect x="72" y="150" width="56" height="168" fill="#3b82f6" fill-opacity="0.25" stroke="#3b82f6" stroke-width="1.4"/>
+    <text x="100" y="240" text-anchor="middle" class="bold">SCR</text>
+    <rect x="162" y="150" width="56" height="168" fill="#0d9488" fill-opacity="0.25" stroke="#0d9488" stroke-width="1.4"/>
+    <text x="190" y="240" text-anchor="middle" class="bold">ORSA</text>
+    <rect x="252" y="150" width="56" height="168" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.4"/>
+    <text x="280" y="240" text-anchor="middle" class="bold">SFCR</text>
+    <rect x="52" y="318" width="276" height="14" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.4"/>
+    <text x="22" y="370" text-anchor="start" class="sm dim">Canada</text>
+    <line x1="100" y1="336" x2="100" y2="352" class="thin" stroke="var(--dim)" stroke-width="1.2" marker-end="url(#ahvardim)"/>
+    <text x="100" y="370" text-anchor="middle" class="sm bold">MCT</text>
+    <line x1="190" y1="336" x2="190" y2="352" class="thin" stroke="var(--dim)" stroke-width="1.2" marker-end="url(#ahvardim)"/>
+    <text x="190" y="370" text-anchor="middle" class="sm bold">ORSA, FCT</text>
+    <line x1="280" y1="336" x2="280" y2="352" class="thin" stroke="var(--dim)" stroke-width="1.2" marker-end="url(#ahvardim)"/>
+    <text x="280" y="370" text-anchor="middle" class="sm bold">annual return</text>
   </g>
 </svg>

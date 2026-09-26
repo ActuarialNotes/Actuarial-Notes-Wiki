@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The four risk margins summed and then reduced by the diversification credit</title>
+  <title>A waterfall of the running insurer's risk margins — insurance $92M, market $54M, credit $21M and operational $17M — less the $26M diversification credit, landing on $158M of capital required</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -44,29 +44,24 @@ text {
   <g id="light"/><g id="dark"/>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="43.25" y="190" width="30.17" height="60" rx="3" fill="#3b82f6" fill-opacity="0.72"/>
-    <text x="58.33" y="182" text-anchor="middle" class="sm">92</text>
-    <text x="58.33" y="265" text-anchor="middle" class="sm dim">ins.</text>
-    <rect x="91.91" y="154.78" width="30.17" height="35.22" rx="3" fill="#0d9488" fill-opacity="0.72"/>
-    <text x="107" y="146.78" text-anchor="middle" class="sm">54</text>
-    <text x="107" y="265" text-anchor="middle" class="sm dim">mkt</text>
-    <rect x="140.58" y="141.09" width="30.17" height="13.7" rx="3" fill="#d97706" fill-opacity="0.72"/>
-    <text x="155.67" y="133.09" text-anchor="middle" class="sm">21</text>
-    <text x="155.67" y="265" text-anchor="middle" class="sm dim">cr.</text>
-    <rect x="189.25" y="130" width="30.17" height="11.09" rx="3" fill="#7c3aed" fill-opacity="0.72"/>
-    <text x="204.33" y="122" text-anchor="middle" class="sm">17</text>
-    <text x="204.33" y="265" text-anchor="middle" class="sm dim">ops</text>
-    <rect x="237.91" y="130" width="30.17" height="16.96" rx="3" fill="#059669" fill-opacity="0.72"/>
-    <text x="253" y="122" text-anchor="middle" class="sm">26</text>
-    <text x="253" y="265" text-anchor="middle" class="sm dim">div.</text>
-    <rect x="286.58" y="146.96" width="30.17" height="103.04" rx="3" fill="#e11d48" fill-opacity="0.72"/>
-    <text x="301.67" y="138.96" text-anchor="middle" class="sm">158</text>
-    <text x="301.67" y="265" text-anchor="middle" class="sm dim">CR</text>
-    <line x1="28" y1="250" x2="332" y2="250" class="axis"/>
-    <text x="180" y="288" text-anchor="middle" class="sm dim">$M, the running insurer</text>
-    <line x1="30" y1="306" x2="330" y2="306" class="rule"/>
-    <text x="180" y="328" text-anchor="middle" class="sm dim">insurance risk is normally the largest, and it</text>
-    <text x="180" y="344" text-anchor="middle" class="sm dim">grows with volume even at unchanged quality</text>
-    <text x="180" y="372" text-anchor="middle" class="sm bold">then × 1.5 for the base solvency buffer — $237M</text>
+    <rect x="36.67" y="234" width="33.66" height="118" rx="3" fill="#3b82f6" fill-opacity="0.72"/>
+    <text x="53.5" y="226" text-anchor="middle" class="sm">92</text>
+    <text x="53.5" y="367" text-anchor="middle" class="sm dim">insurance</text>
+    <rect x="87.67" y="164.74" width="33.66" height="69.26" rx="3" fill="#0d9488" fill-opacity="0.72"/>
+    <text x="104.5" y="156.74" text-anchor="middle" class="sm">54</text>
+    <text x="104.5" y="367" text-anchor="middle" class="sm dim">market</text>
+    <rect x="138.67" y="137.8" width="33.66" height="26.93" rx="3" fill="#d97706" fill-opacity="0.72"/>
+    <text x="155.5" y="129.8" text-anchor="middle" class="sm">21</text>
+    <text x="155.5" y="367" text-anchor="middle" class="sm dim">credit</text>
+    <rect x="189.67" y="116" width="33.66" height="21.8" rx="3" fill="#7c3aed" fill-opacity="0.72"/>
+    <text x="206.5" y="108" text-anchor="middle" class="sm">17</text>
+    <text x="206.5" y="367" text-anchor="middle" class="sm dim">ops</text>
+    <rect x="240.67" y="116" width="33.66" height="33.35" rx="3" fill="#059669" fill-opacity="0.72"/>
+    <text x="257.5" y="108" text-anchor="middle" class="sm">−26</text>
+    <text x="257.5" y="367" text-anchor="middle" class="sm dim">divers.</text>
+    <rect x="291.67" y="149.35" width="33.66" height="202.65" rx="3" fill="#e11d48" fill-opacity="0.72"/>
+    <text x="308.5" y="141.35" text-anchor="middle" class="sm">158</text>
+    <text x="308.5" y="367" text-anchor="middle" class="sm dim">required</text>
+    <line x1="22" y1="352" x2="340" y2="352" class="axis"/>
   </g>
 </svg>

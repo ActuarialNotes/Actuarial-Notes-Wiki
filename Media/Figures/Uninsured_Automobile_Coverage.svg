@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The two triggers — an uninsured driver and an unidentified one — and who ends up paying</title>
+  <title>An uninsured car and a hit-and-run car both striking the insured's car, and the insured's own insurer paying for it</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,29 +42,40 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
+    <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
+  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="30" y="100" width="143" height="134" rx="7" fill="#d97706" fill-opacity="0.08" stroke="#d97706" stroke-width="1.2"/>
-    <rect x="30" y="100" width="143" height="28" rx="7" fill="#d97706" fill-opacity="0.22" stroke="none"/>
-    <text x="101.5" y="118" text-anchor="middle" class="sm bold" fill="#d97706">Uninsured</text>
-    <text x="101.5" y="148" text-anchor="middle" class="sm">a real driver</text>
-    <text x="101.5" y="172" text-anchor="middle" class="sm">with no policy</text>
-    <text x="101.5" y="196" text-anchor="middle" class="sm">subrogation lies</text>
-    <text x="101.5" y="220" text-anchor="middle" class="sm">— rarely collects</text>
-    <rect x="187" y="100" width="143" height="134" rx="7" fill="#7c3aed" fill-opacity="0.08" stroke="#7c3aed" stroke-width="1.2"/>
-    <rect x="187" y="100" width="143" height="28" rx="7" fill="#7c3aed" fill-opacity="0.22" stroke="none"/>
-    <text x="258.5" y="118" text-anchor="middle" class="sm bold" fill="#7c3aed">Unidentified</text>
-    <text x="258.5" y="148" text-anchor="middle" class="sm">hit-and-run</text>
-    <text x="258.5" y="172" text-anchor="middle" class="sm">no defendant</text>
-    <text x="258.5" y="196" text-anchor="middle" class="sm">physical evidence</text>
-    <text x="258.5" y="220" text-anchor="middle" class="sm">requirements</text>
-    <text x="180" y="248" text-anchor="middle" class="sm dim">the insured must still show the other</text>
-    <text x="180" y="264" text-anchor="middle" class="sm dim">driver was legally liable — so tort law</text>
-    <text x="180" y="280" text-anchor="middle" class="sm dim">comes back inside a no-fault policy</text>
-    <line x1="30" y1="300" x2="330" y2="300" class="rule"/>
-    <text x="180" y="322" text-anchor="middle" class="sm bold">cost follows the province's uninsured rate</text>
-    <text x="180" y="350" text-anchor="middle" class="sm dim">underinsured motorist coverage is the adjacent —</text>
-    <text x="180" y="366" text-anchor="middle" class="sm dim">and usually optional — protection: insured,</text>
-    <text x="180" y="382" text-anchor="middle" class="sm dim">but for less than the loss</text>
+    <path d="M38,124 V112.8 L54,109.6 L65.2,96.8 H92.4 L103.6,109.6 L118,114.4 V124 Z" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="55.6" cy="125.6" r="7.2" fill="var(--surf)" stroke="#e11d48" stroke-width="1.6"/>
+    <circle cx="100.4" cy="125.6" r="7.2" fill="var(--surf)" stroke="#e11d48" stroke-width="1.6"/>
+    <text x="78" y="158" text-anchor="middle" class="sm bold">uninsured</text>
+    <g opacity="0.75" stroke-dasharray="3 2.5">
+    <g transform="translate(564,0) scale(-1,1)">
+    <path d="M242,124 V112.8 L258,109.6 L269.2,96.8 H296.4 L307.6,109.6 L322,114.4 V124 Z" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="259.6" cy="125.6" r="7.2" fill="var(--surf)" stroke="#e11d48" stroke-width="1.6"/>
+    <circle cx="304.4" cy="125.6" r="7.2" fill="var(--surf)" stroke="#e11d48" stroke-width="1.6"/>
+    </g>
+    </g>
+    <text x="282" y="158" text-anchor="middle" class="sm bold">hit-and-run</text>
+    <path d="M136,234.8 V222.48 L153.6,218.96 L165.92,204.88 H195.84 L208.16,218.96 L224,224.24 V234.8 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="155.36" cy="236.56" r="7.92" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.6"/>
+    <circle cx="204.64" cy="236.56" r="7.92" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.6"/>
+    <text x="232" y="242" text-anchor="start" class="sm bold">insured</text>
+    <line x1="96" y1="168" x2="140" y2="204" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
+    <line x1="264" y1="168" x2="220" y2="204" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
+    <rect x="163.76" y="295" width="32.48" height="58" rx="2" fill="#059669" fill-opacity="0.18" stroke="#059669" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="170.14" y="301.96" width="6.96" height="5.8" fill="#059669" fill-opacity="0.55"/>
+    <rect x="182.9" y="301.96" width="6.96" height="5.8" fill="#059669" fill-opacity="0.55"/>
+    <rect x="170.14" y="313.56" width="6.96" height="5.8" fill="#059669" fill-opacity="0.55"/>
+    <rect x="182.9" y="313.56" width="6.96" height="5.8" fill="#059669" fill-opacity="0.55"/>
+    <rect x="170.14" y="325.16" width="6.96" height="5.8" fill="#059669" fill-opacity="0.55"/>
+    <rect x="182.9" y="325.16" width="6.96" height="5.8" fill="#059669" fill-opacity="0.55"/>
+    <rect x="170.14" y="336.76" width="6.96" height="5.8" fill="#059669" fill-opacity="0.55"/>
+    <rect x="182.9" y="336.76" width="6.96" height="5.8" fill="#059669" fill-opacity="0.55"/>
+    <text x="180" y="374" text-anchor="middle" class="sm bold">own insurer</text>
+    <line x1="180" y1="292" x2="180" y2="260" class="thin" stroke="#059669" stroke-width="2" marker-end="url(#ah059669)"/>
   </g>
 </svg>

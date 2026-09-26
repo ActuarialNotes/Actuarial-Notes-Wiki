@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Historical earned premium restated at the rate level now in force</title>
+  <title>Three years of earned premium drawn as bars, the two older years lengthened by their on-level factors to today's rate level</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -44,22 +44,18 @@ text {
   <g id="light"/><g id="dark"/>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <text x="84" y="146" text-anchor="end" class="sm dim">2023</text>
-    <rect x="88" y="132" width="159.6" height="24" rx="3" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.1"/>
-    <rect x="247.6" y="132" width="16.5" height="24" rx="3" fill="#059669" fill-opacity="0.55"/>
-    <text x="96" y="149" text-anchor="start" class="sm">3,800</text>
-    <text x="274.1" y="149" text-anchor="start" class="sm dim">× 1.1034</text>
-    <text x="84" y="212" text-anchor="end" class="sm dim">2024</text>
-    <rect x="88" y="198" width="163.8" height="24" rx="3" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.1"/>
-    <rect x="251.8" y="198" width="2.23" height="24" rx="3" fill="#059669" fill-opacity="0.55"/>
-    <text x="96" y="215" text-anchor="start" class="sm">3,900</text>
-    <text x="264.03" y="215" text-anchor="start" class="sm dim">× 1.0136</text>
-    <text x="84" y="278" text-anchor="end" class="sm dim">2025</text>
-    <rect x="88" y="264" width="168" height="24" rx="3" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.1"/>
-    <text x="96" y="281" text-anchor="start" class="sm">4,000</text>
-    <text x="266" y="281" text-anchor="start" class="sm dim">× 1.0000</text>
-    <text x="180" y="116" text-anchor="middle" class="sm dim">earned premium ($000) and its on-level factor</text>
-    <text x="180" y="334" text-anchor="middle" class="sm dim">a 12% increase on 7/1/2023 takes two full</text>
-    <text x="180" y="352" text-anchor="middle" class="sm dim">years to work through earned premium</text>
+    <text x="68" y="138" text-anchor="end" class="sm dim">2023</text>
+    <rect x="76" y="112" width="220.4" height="40" rx="3" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.1"/>
+    <rect x="296.4" y="112" width="22.79" height="40" rx="3" fill="#059669" fill-opacity="0.6"/>
+    <text x="319.19" y="170" text-anchor="end" class="sm">× 1.1034</text>
+    <text x="86" y="137" text-anchor="start" class="sm">3,800</text>
+    <text x="68" y="230" text-anchor="end" class="sm dim">2024</text>
+    <rect x="76" y="204" width="226.2" height="40" rx="3" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.1"/>
+    <rect x="302.2" y="204" width="3.08" height="40" rx="3" fill="#059669" fill-opacity="0.6"/>
+    <text x="305.28" y="262" text-anchor="end" class="sm">× 1.0136</text>
+    <text x="86" y="229" text-anchor="start" class="sm">3,900</text>
+    <text x="68" y="322" text-anchor="end" class="sm dim">2025</text>
+    <rect x="76" y="296" width="232" height="40" rx="3" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.1"/>
+    <text x="86" y="321" text-anchor="start" class="sm">4,000</text>
   </g>
 </svg>

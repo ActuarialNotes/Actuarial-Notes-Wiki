@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The three kinds of test, from moving one variable to starting at failure and working back</title>
+  <title>A plane of two risk drivers with the failure region shaded beyond its frontier: a sensitivity test moving along one axis, a scenario moving both together, and a reverse test starting at the frontier and working back</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -43,25 +43,27 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <defs>
-    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
+    <marker id="ah0d9488" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#0d9488"/></marker>
+    <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="30" y="100" width="300" height="48" rx="6" fill="#3b82f6" fill-opacity="0.16" stroke="#3b82f6" stroke-width="1.3"/>
-    <text x="180" y="121" text-anchor="middle" class="sm">Sensitivity</text>
-    <text x="180" y="136" text-anchor="middle" class="sm dim">move one variable — +100 bp, +10% reserves</text>
-    <rect x="30" y="162" width="300" height="48" rx="6" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.3"/>
-    <text x="180" y="183" text-anchor="middle" class="sm">Scenario</text>
-    <text x="180" y="198" text-anchor="middle" class="sm dim">move a coherent set that could happen together</text>
-    <line x1="180" y1="147" x2="180" y2="161" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <rect x="30" y="224" width="300" height="48" rx="6" fill="#e11d48" fill-opacity="0.16" stroke="#e11d48" stroke-width="1.3"/>
-    <text x="180" y="245" text-anchor="middle" class="sm">Reverse</text>
-    <text x="180" y="260" text-anchor="middle" class="sm dim">start at non-viability and work backwards</text>
-    <line x1="180" y1="209" x2="180" y2="223" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <line x1="30" y1="292" x2="330" y2="292" class="rule"/>
-    <text x="180" y="314" text-anchor="middle" class="sm dim">too mild reveals nothing; too extreme is dismissed</text>
-    <text x="180" y="340" text-anchor="middle" class="sm dim">model the ripples and the realistic management</text>
-    <text x="180" y="356" text-anchor="middle" class="sm dim">actions — assuming neither gives the wrong answer</text>
-    <text x="180" y="382" text-anchor="middle" class="sm dim">a test that changes no limit was not worth running</text>
+    <polygon points="50,138.8 70.39,139.61 90.62,142.04 110.54,146.06 130.01,151.66 148.86,158.78 166.96,167.36 184.17,177.36 200.36,188.68 215.41,201.24 229.19,214.96 241.62,229.71 252.58,245.4 262,261.9 269.81,279.08 275.95,296.82 280.37,314.98 283.03,333.42 283.92,352 322,352 322,92 50,92" fill="#e11d48" fill-opacity="0.14" stroke="none"/>
+    <polyline points="50,138.8 70.39,139.61 90.62,142.04 110.54,146.06 130.01,151.66 148.86,158.78 166.96,167.36 184.17,177.36 200.36,188.68 215.41,201.24 229.19,214.96 241.62,229.71 252.58,245.4 262,261.9 269.81,279.08 275.95,296.82 280.37,314.98 283.03,333.42 283.92,352" class="curve" stroke="#e11d48" stroke-width="2"/>
+    <line x1="50" y1="352" x2="332" y2="352" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="50" y1="352" x2="50" y2="82" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <text x="294.8" y="118" text-anchor="end" class="sm bold">failure</text>
+    <circle cx="66.32" cy="336.4" r="4" fill="var(--ink)"/>
+    <text x="77.2" y="323.4" text-anchor="start" class="sm dim">base</text>
+    <line x1="66.32" y1="336.4" x2="202.32" y2="336.4" class="thin" stroke="#3b82f6" stroke-width="2.2" marker-end="url(#ah3b82f6)"/>
+    <text x="202.32" y="323.4" text-anchor="end" class="sm">sensitivity</text>
+    <line x1="66.32" y1="336.4" x2="175.12" y2="237.6" class="thin" stroke="#0d9488" stroke-width="2.2" marker-end="url(#ah0d9488)"/>
+    <text x="181.84" y="232.4" text-anchor="start" class="sm">scenario</text>
+    <line x1="130.01" y1="151.66" x2="93.52" y2="248" class="thin dash" stroke="#e11d48" stroke-width="2.2" marker-end="url(#ahe11d48)"/>
+    <text x="138.01" y="147.66" text-anchor="start" class="sm">reverse</text>
+    <text x="322" y="372" text-anchor="end" class="sm dim">reserve shock</text>
+    <text x="54" y="80" text-anchor="start" class="sm dim">market fall</text>
   </g>
 </svg>

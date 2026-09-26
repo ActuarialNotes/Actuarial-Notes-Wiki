@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>A failed insurer's shortfall assessed on the surviving members by market share, after the fact</title>
+  <title>A failed insurer crossed out, and four surviving insurers sized by market share paying up into the fund by arrows of matching weight, which covers the failed insurer's policyholders</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -43,33 +43,76 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <defs>
-    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
+    <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
+    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="70" y="90" width="220" height="28" rx="14.0" fill="#e11d48" fill-opacity="0.14" stroke="#e11d48" stroke-width="1.2"/>
-    <text x="180" y="108" text-anchor="middle" class="sm">insurer fails — shortfall</text>
-    <line x1="180" y1="120" x2="64" y2="152" class="thin" stroke="var(--dim)" stroke-width="1.1" marker-end="url(#ahvardim)"/>
-    <rect x="38" y="130" width="52" height="66" rx="4" fill="#3b82f6" fill-opacity="0.55"/>
-    <text x="64" y="214" text-anchor="middle" class="sm dim">A 40%</text>
-    <line x1="180" y1="120" x2="141" y2="152" class="thin" stroke="var(--dim)" stroke-width="1.1" marker-end="url(#ahvardim)"/>
-    <rect x="115" y="141" width="52" height="55" rx="4" fill="#0d9488" fill-opacity="0.55"/>
-    <text x="141" y="214" text-anchor="middle" class="sm dim">B 30%</text>
-    <line x1="180" y1="120" x2="218" y2="152" class="thin" stroke="var(--dim)" stroke-width="1.1" marker-end="url(#ahvardim)"/>
-    <rect x="192" y="152" width="52" height="44" rx="4" fill="#d97706" fill-opacity="0.55"/>
-    <text x="218" y="214" text-anchor="middle" class="sm dim">C 20%</text>
-    <line x1="180" y1="120" x2="295" y2="152" class="thin" stroke="var(--dim)" stroke-width="1.1" marker-end="url(#ahvardim)"/>
-    <rect x="269" y="163" width="52" height="33" rx="4" fill="#059669" fill-opacity="0.55"/>
-    <text x="295" y="214" text-anchor="middle" class="sm dim">D 10%</text>
-    <text x="180" y="240" text-anchor="middle" class="sm dim">none of them chose the failed insurer's risk</text>
-    <line x1="30" y1="262" x2="330" y2="262" class="rule"/>
-    <text x="36" y="284" text-anchor="start" class="sm" fill="#7c3aed">•</text>
-    <text x="52" y="284" text-anchor="start" class="sm">post-assessment: the fund holds little standing cash</text>
-    <text x="36" y="308" text-anchor="start" class="sm" fill="#7c3aed">•</text>
-    <text x="52" y="308" text-anchor="start" class="sm">coverage is capped per claim and per policy</text>
-    <text x="36" y="332" text-anchor="start" class="sm" fill="#7c3aed">•</text>
-    <text x="52" y="332" text-anchor="start" class="sm">an annual cap spreads a big failure over years</text>
-    <text x="36" y="356" text-anchor="start" class="sm" fill="#7c3aed">•</text>
-    <text x="52" y="356" text-anchor="start" class="sm">and capacity runs out on a very large member</text>
+    <rect x="47.2" y="94" width="33.6" height="60" rx="2" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="53.8" y="101.2" width="7.2" height="6" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="67" y="101.2" width="7.2" height="6" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="53.8" y="113.2" width="7.2" height="6" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="67" y="113.2" width="7.2" height="6" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="53.8" y="125.2" width="7.2" height="6" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="67" y="125.2" width="7.2" height="6" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="53.8" y="137.2" width="7.2" height="6" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="67" y="137.2" width="7.2" height="6" fill="#e11d48" fill-opacity="0.55"/>
+    <circle cx="64" cy="124" r="32" fill="none" stroke="#e11d48" stroke-width="3"/>
+    <line x1="41.38" y1="101.38" x2="86.62" y2="146.62" stroke="#e11d48" stroke-width="3"/>
+    <text x="64" y="178" text-anchor="middle" class="bold">failed</text>
+    <circle cx="250" cy="117.2" r="6.48" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M238.48,146 V132.32 Q238.48,126.56 244.96,126.56 H255.04 Q261.52,126.56 261.52,132.32 V146 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="280" cy="117.2" r="6.48" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M268.48,146 V132.32 Q268.48,126.56 274.96,126.56 H285.04 Q291.52,126.56 291.52,132.32 V146 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="310" cy="117.2" r="6.48" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M298.48,146 V132.32 Q298.48,126.56 304.96,126.56 H315.04 Q321.52,126.56 321.52,132.32 V146 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="280" y="94" text-anchor="middle" class="sm bold">policyholders</text>
+    <path d="M180,170 L204,178.4 V198.8 Q204,220.4 180,230 Q156,220.4 156,198.8 V178.4 Z" fill="#059669" fill-opacity="0.18" stroke="#059669" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="210" y="236" text-anchor="start" class="bold">fund</text>
+    <line x1="206" y1="184" x2="254" y2="154" class="thin" stroke="#059669" stroke-width="2.2" marker-end="url(#ah059669)"/>
+    <rect x="36.48" y="272" width="47.04" height="84" rx="2" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="45.72" y="282.08" width="10.08" height="8.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="64.2" y="282.08" width="10.08" height="8.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="45.72" y="298.88" width="10.08" height="8.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="64.2" y="298.88" width="10.08" height="8.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="45.72" y="315.68" width="10.08" height="8.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="64.2" y="315.68" width="10.08" height="8.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="45.72" y="332.48" width="10.08" height="8.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="64.2" y="332.48" width="10.08" height="8.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <text x="60" y="376" text-anchor="middle" class="sm bold">40%</text>
+    <line x1="72" y1="262" x2="158.4" y2="238" class="thin" stroke="#3b82f6" stroke-width="4.2" marker-end="url(#ah3b82f6)"/>
+    <rect x="119.28" y="282" width="41.44" height="74" rx="2" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="127.42" y="290.88" width="8.88" height="7.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="143.7" y="290.88" width="8.88" height="7.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="127.42" y="305.68" width="8.88" height="7.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="143.7" y="305.68" width="8.88" height="7.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="127.42" y="320.48" width="8.88" height="7.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="143.7" y="320.48" width="8.88" height="7.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="127.42" y="335.28" width="8.88" height="7.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="143.7" y="335.28" width="8.88" height="7.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <text x="140" y="376" text-anchor="middle" class="sm bold">30%</text>
+    <line x1="144" y1="272" x2="172.8" y2="238" class="thin" stroke="#3b82f6" stroke-width="3.4" marker-end="url(#ah3b82f6)"/>
+    <rect x="202.08" y="292" width="35.84" height="64" rx="2" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="209.12" y="299.68" width="7.68" height="6.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="223.2" y="299.68" width="7.68" height="6.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="209.12" y="312.48" width="7.68" height="6.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="223.2" y="312.48" width="7.68" height="6.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="209.12" y="325.28" width="7.68" height="6.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="223.2" y="325.28" width="7.68" height="6.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="209.12" y="338.08" width="7.68" height="6.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="223.2" y="338.08" width="7.68" height="6.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <text x="220" y="376" text-anchor="middle" class="sm bold">20%</text>
+    <line x1="216" y1="282" x2="187.2" y2="238" class="thin" stroke="#3b82f6" stroke-width="2.6" marker-end="url(#ah3b82f6)"/>
+    <rect x="284.88" y="302" width="30.24" height="54" rx="2" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="290.82" y="308.48" width="6.48" height="5.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="302.7" y="308.48" width="6.48" height="5.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="290.82" y="319.28" width="6.48" height="5.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="302.7" y="319.28" width="6.48" height="5.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="290.82" y="330.08" width="6.48" height="5.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="302.7" y="330.08" width="6.48" height="5.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="290.82" y="340.88" width="6.48" height="5.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="302.7" y="340.88" width="6.48" height="5.4" fill="#3b82f6" fill-opacity="0.55"/>
+    <text x="300" y="376" text-anchor="middle" class="sm bold">10%</text>
+    <line x1="288" y1="292" x2="201.6" y2="238" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
   </g>
 </svg>

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The four layers of a risk appetite framework, from the board's statement down to the breach that escalates</title>
+  <title>Three nested regions — risk capacity outermost, tolerance inside it and appetite at the centre — with the insurer's current risk profile a dot inside the appetite</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,29 +42,15 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
-  <defs>
-    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
-  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="30" y="96" width="300" height="46" rx="6" fill="#7c3aed" fill-opacity="0.16" stroke="#7c3aed" stroke-width="1.3"/>
-    <text x="180" y="116" text-anchor="middle" class="sm">Appetite statement</text>
-    <text x="180" y="131" text-anchor="middle" class="sm dim">the board says what risk, and why</text>
-    <rect x="30" y="152" width="300" height="46" rx="6" fill="#3b82f6" fill-opacity="0.16" stroke="#3b82f6" stroke-width="1.3"/>
-    <text x="180" y="172" text-anchor="middle" class="sm">Limits</text>
-    <text x="180" y="187" text-anchor="middle" class="sm dim">PML as % of capital, single risk, targets</text>
-    <line x1="180" y1="141" x2="180" y2="151" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <rect x="30" y="208" width="300" height="46" rx="6" fill="#d97706" fill-opacity="0.16" stroke="#d97706" stroke-width="1.3"/>
-    <text x="180" y="228" text-anchor="middle" class="sm">Tolerances</text>
-    <text x="180" y="243" text-anchor="middle" class="sm dim">the breach point, and who is told</text>
-    <line x1="180" y1="197" x2="180" y2="207" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <rect x="30" y="264" width="300" height="46" rx="6" fill="#059669" fill-opacity="0.16" stroke="#059669" stroke-width="1.3"/>
-    <text x="180" y="284" text-anchor="middle" class="sm">Monitoring</text>
-    <text x="180" y="299" text-anchor="middle" class="sm dim">measured, reported, and acted on</text>
-    <line x1="180" y1="253" x2="180" y2="263" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <line x1="30" y1="326" x2="330" y2="326" class="rule"/>
-    <text x="180" y="348" text-anchor="middle" class="sm dim">capacity is what you could bear before failing;</text>
-    <text x="180" y="364" text-anchor="middle" class="sm dim">appetite is how much of it you choose to use</text>
-    <text x="180" y="388" text-anchor="middle" class="sm dim">a framework that stops no transaction is decorative</text>
+    <circle cx="180" cy="232" r="156" fill="#e11d48" fill-opacity="0.08" stroke="#e11d48" stroke-width="1.6"/>
+    <text x="180" y="96" text-anchor="middle" class="sm bold">capacity</text>
+    <circle cx="180" cy="232" r="112" fill="#d97706" fill-opacity="0.12" stroke="#d97706" stroke-width="1.6"/>
+    <text x="180" y="140" text-anchor="middle" class="sm bold">tolerance</text>
+    <circle cx="180" cy="232" r="68" fill="#059669" fill-opacity="0.2" stroke="#059669" stroke-width="1.6"/>
+    <text x="180" y="184" text-anchor="middle" class="sm bold">appetite</text>
+    <circle cx="166" cy="248" r="7" fill="#3b82f6" stroke="var(--surf)" stroke-width="1.5"/>
+    <text x="166" y="272" text-anchor="middle" class="sm">profile</text>
   </g>
 </svg>

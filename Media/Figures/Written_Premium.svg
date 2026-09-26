@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>A full-term premium booked at inception against the premium earned month by month</title>
+  <title>A $600 annual policy's written premium jumping to the full $600 on the day it is issued, while earned premium climbs to it over twelve months</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,38 +47,40 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="68" y1="98" x2="68" y2="326" class="grid"/>
-    <line x1="131" y1="98" x2="131" y2="326" class="grid"/>
-    <line x1="194" y1="98" x2="194" y2="326" class="grid"/>
-    <line x1="257" y1="98" x2="257" y2="326" class="grid"/>
-    <line x1="320" y1="98" x2="320" y2="326" class="grid"/>
-    <line x1="68" y1="326" x2="320" y2="326" class="grid"/>
-    <line x1="68" y1="226.87" x2="320" y2="226.87" class="grid"/>
-    <line x1="68" y1="127.74" x2="320" y2="127.74" class="grid"/>
-    <line x1="68" y1="326" x2="330" y2="326" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="68" y1="326" x2="68" y2="88" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="68" y1="326" x2="68" y2="330" class="tick"/>
-    <text x="68" y="342" text-anchor="middle" class="sm dim">0</text>
-    <line x1="131" y1="326" x2="131" y2="330" class="tick"/>
-    <text x="131" y="342" text-anchor="middle" class="sm dim">3</text>
-    <line x1="194" y1="326" x2="194" y2="330" class="tick"/>
-    <text x="194" y="342" text-anchor="middle" class="sm dim">6</text>
-    <line x1="257" y1="326" x2="257" y2="330" class="tick"/>
-    <text x="257" y="342" text-anchor="middle" class="sm dim">9</text>
-    <line x1="320" y1="326" x2="320" y2="330" class="tick"/>
-    <text x="320" y="342" text-anchor="middle" class="sm dim">12</text>
-    <line x1="64" y1="326" x2="68" y2="326" class="tick"/>
-    <text x="60" y="329.6" text-anchor="end" class="sm dim">0%</text>
-    <line x1="64" y1="226.87" x2="68" y2="226.87" class="tick"/>
-    <text x="60" y="230.47" text-anchor="end" class="sm dim">50%</text>
-    <line x1="64" y1="127.74" x2="68" y2="127.74" class="tick"/>
-    <text x="60" y="131.34" text-anchor="end" class="sm dim">100%</text>
-    <polyline points="68,326 68,127.74 320,127.74" class="curve" stroke="#d97706" stroke-width="2.4"/>
-    <polyline points="68,326 320,127.74" class="curve" stroke="#3b82f6" stroke-width="2.4"/>
-    <text x="198.2" y="115.79" text-anchor="middle" class="sm bold" fill="#d97706">written</text>
-    <text x="248.6" y="211.08" text-anchor="middle" class="sm bold" fill="#3b82f6">earned</text>
-    <text x="180" y="358" text-anchor="middle" class="sm dim">months since inception</text>
-    <text x="180" y="374" text-anchor="middle" class="sm dim">a $600 annual policy written 12/1 is $600</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">of CY written premium and $50 of CY earned</text>
+    <line x1="68" y1="98" x2="68" y2="350" class="grid"/>
+    <line x1="131" y1="98" x2="131" y2="350" class="grid"/>
+    <line x1="194" y1="98" x2="194" y2="350" class="grid"/>
+    <line x1="257" y1="98" x2="257" y2="350" class="grid"/>
+    <line x1="320" y1="98" x2="320" y2="350" class="grid"/>
+    <line x1="68" y1="350" x2="320" y2="350" class="grid"/>
+    <line x1="68" y1="276.96" x2="320" y2="276.96" class="grid"/>
+    <line x1="68" y1="203.91" x2="320" y2="203.91" class="grid"/>
+    <line x1="68" y1="130.87" x2="320" y2="130.87" class="grid"/>
+    <line x1="68" y1="350" x2="330" y2="350" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="68" y1="350" x2="68" y2="88" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="68" y1="350" x2="68" y2="354" class="tick"/>
+    <text x="68" y="366" text-anchor="middle" class="sm dim">0</text>
+    <line x1="131" y1="350" x2="131" y2="354" class="tick"/>
+    <text x="131" y="366" text-anchor="middle" class="sm dim">3</text>
+    <line x1="194" y1="350" x2="194" y2="354" class="tick"/>
+    <text x="194" y="366" text-anchor="middle" class="sm dim">6</text>
+    <line x1="257" y1="350" x2="257" y2="354" class="tick"/>
+    <text x="257" y="366" text-anchor="middle" class="sm dim">9</text>
+    <line x1="320" y1="350" x2="320" y2="354" class="tick"/>
+    <text x="320" y="366" text-anchor="middle" class="sm dim">12</text>
+    <line x1="64" y1="350" x2="68" y2="350" class="tick"/>
+    <text x="60" y="353.6" text-anchor="end" class="sm dim">0</text>
+    <line x1="64" y1="276.96" x2="68" y2="276.96" class="tick"/>
+    <text x="60" y="280.56" text-anchor="end" class="sm dim">200</text>
+    <line x1="64" y1="203.91" x2="68" y2="203.91" class="tick"/>
+    <text x="60" y="207.51" text-anchor="end" class="sm dim">400</text>
+    <line x1="64" y1="130.87" x2="68" y2="130.87" class="tick"/>
+    <text x="60" y="134.47" text-anchor="end" class="sm dim">600</text>
+    <text x="320" y="382" text-anchor="end" class="sm dim">months</text>
+    <text x="64" y="84" text-anchor="start" class="sm dim">premium</text>
+    <polyline points="68,350 68,130.87 320,130.87" class="curve" stroke="#d97706" stroke-width="2.4"/>
+    <polyline points="68,350 320,130.87" class="curve" stroke="#3b82f6" stroke-width="2.4"/>
+    <text x="194" y="122.87" text-anchor="middle" class="sm bold">written</text>
+    <text x="248.6" y="222.14" text-anchor="middle" class="sm bold">earned</text>
   </g>
 </svg>

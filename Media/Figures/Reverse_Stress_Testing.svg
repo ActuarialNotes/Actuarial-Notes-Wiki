@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>A forward test searching outward from known risks, against a reverse test searching inward from failure</title>
+  <title>Two runs along one line from today to non-viability: a forward test applying one known shock that stops well short, and a reverse test starting at non-viability and working back to the combination of shocks that would reach it</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -48,29 +48,21 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="37" y="102" width="118" height="28" rx="14.0" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="96" y="120" text-anchor="middle" class="sm">known risks</text>
-    <line x1="158" y1="116" x2="214" y2="116" class="thin" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#ah3b82f6)"/>
-    <rect x="216" y="102" width="104" height="28" rx="14.0" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="268" y="120" text-anchor="middle" class="sm">outcomes</text>
-    <text x="180" y="150" text-anchor="middle" class="sm dim">forward — and it only ever tests what</text>
-    <text x="180" y="166" text-anchor="middle" class="sm dim">management already had in mind</text>
-    <line x1="30" y1="188" x2="330" y2="188" class="rule"/>
-    <rect x="34" y="206" width="124" height="28" rx="14.0" fill="#e11d48" fill-opacity="0.14" stroke="#e11d48" stroke-width="1.2"/>
-    <text x="96" y="224" text-anchor="middle" class="sm">failure modes</text>
-    <line x1="214" y1="220" x2="158" y2="220" class="thin" stroke="#e11d48" stroke-width="1.5" marker-end="url(#ahe11d48)"/>
-    <rect x="213" y="206" width="110" height="28" rx="14.0" fill="#e11d48" fill-opacity="0.14" stroke="#e11d48" stroke-width="1.2"/>
-    <text x="268" y="224" text-anchor="middle" class="sm">non-viable</text>
-    <text x="180" y="254" text-anchor="middle" class="sm dim">reverse — and it finds the combinations</text>
-    <text x="180" y="270" text-anchor="middle" class="sm dim">nobody thought to put together</text>
-    <line x1="30" y1="292" x2="330" y2="292" class="rule"/>
-    <text x="36" y="314" text-anchor="start" class="sm" fill="#d97706">•</text>
-    <text x="52" y="314" text-anchor="start" class="sm">the endpoint is non-viability, not a bad year</text>
-    <text x="36" y="337" text-anchor="start" class="sm" fill="#d97706">•</text>
-    <text x="52" y="337" text-anchor="start" class="sm">plausibility is judged afterwards, not first</text>
-    <text x="36" y="360" text-anchor="start" class="sm" fill="#d97706">•</text>
-    <text x="52" y="360" text-anchor="start" class="sm">and a credible failure mode has to be answered —</text>
-    <text x="36" y="383" text-anchor="start" class="sm" fill="#d97706">•</text>
-    <text x="52" y="383" text-anchor="start" class="sm">with capital, less exposure, or a recovery plan</text>
+    <rect x="268" y="84" width="64" height="290" rx="6" fill="#e11d48" fill-opacity="0.14" stroke="none"/>
+    <line x1="268" y1="84" x2="268" y2="374" class="thin" stroke="#e11d48" stroke-width="1.8"/>
+    <text x="300" y="110" text-anchor="middle" class="sm bold">non-viable</text>
+    <line x1="44" y1="84" x2="44" y2="374" class="thin dash" stroke="var(--dim)" stroke-width="1.2"/>
+    <text x="44" y="388" text-anchor="middle" class="sm dim">today</text>
+    <rect x="44" y="132" width="104" height="38" rx="3" fill="#3b82f6" fill-opacity="0.6"/>
+    <line x1="154" y1="151" x2="194" y2="151" class="thin" stroke="#3b82f6" stroke-width="2" marker-end="url(#ah3b82f6)"/>
+    <text x="50" y="122" text-anchor="start" class="sm bold">forward</text>
+    <line x1="266" y1="248" x2="104" y2="248" class="thin dash" stroke="#e11d48" stroke-width="2" marker-end="url(#ahe11d48)"/>
+    <text x="262" y="234" text-anchor="end" class="sm bold">reverse</text>
+    <rect x="44" y="278" width="89.6" height="38" rx="3" fill="#e11d48" fill-opacity="0.6"/>
+    <text x="88.8" y="301" text-anchor="middle" class="sm">cat</text>
+    <rect x="133.6" y="278" width="76.16" height="38" rx="3" fill="#d97706" fill-opacity="0.6"/>
+    <text x="171.68" y="301" text-anchor="middle" class="sm">reserves</text>
+    <rect x="209.76" y="278" width="58.24" height="38" rx="3" fill="#0d9488" fill-opacity="0.6"/>
+    <text x="238.88" y="301" text-anchor="middle" class="sm">reinsurer</text>
   </g>
 </svg>

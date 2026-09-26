@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Where an educational note sits — expected in practice, and binding on nobody</title>
+  <title>Bars of authority falling from the Rules of Professional Conduct and the Standards of Practice, which cross the binding line, to educational notes and draft notes, which stop short of it</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -44,20 +44,15 @@ text {
   <g id="light"/><g id="dark"/>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <text x="40" y="106" text-anchor="start" class="sm">Rules of Professional Conduct</text>
-    <rect x="40" y="114" width="262" height="20" rx="3" fill="#7c3aed" fill-opacity="0.55"/>
-    <text x="294" y="129" text-anchor="end" class="sm">binding</text>
-    <text x="40" y="154" text-anchor="start" class="sm">Standards of Practice</text>
-    <rect x="40" y="162" width="225.32" height="20" rx="3" fill="#3b82f6" fill-opacity="0.55"/>
-    <text x="257.32" y="177" text-anchor="end" class="sm">binding</text>
-    <text x="40" y="202" text-anchor="start" class="sm">Educational notes</text>
-    <rect x="40" y="210" width="141.48" height="20" rx="3" fill="#0d9488" fill-opacity="0.55"/>
-    <text x="40" y="250" text-anchor="start" class="sm">Draft notes</text>
-    <rect x="40" y="258" width="89.08" height="20" rx="3" fill="#059669" fill-opacity="0.55"/>
-    <line x1="30" y1="302" x2="330" y2="302" class="rule"/>
-    <text x="180" y="324" text-anchor="middle" class="sm dim">the standards are principles-based and prescribe</text>
-    <text x="180" y="340" text-anchor="middle" class="sm dim">no method — notes are what fills that gap</text>
-    <text x="180" y="366" text-anchor="middle" class="sm dim">they can lag a changed standard, and two written</text>
-    <text x="180" y="382" text-anchor="middle" class="sm dim">years apart need not agree with each other</text>
+    <text x="40" y="111" text-anchor="start" class="sm bold">conduct rules</text>
+    <rect x="40" y="120" width="276" height="30" rx="4" fill="#7c3aed" fill-opacity="0.6" stroke="none" stroke-width="1.6"/>
+    <text x="40" y="177" text-anchor="start" class="sm bold">standards</text>
+    <rect x="40" y="186" width="248.4" height="30" rx="4" fill="#3b82f6" fill-opacity="0.6" stroke="none" stroke-width="1.6"/>
+    <text x="40" y="243" text-anchor="start" class="sm bold">educational notes</text>
+    <rect x="40" y="252" width="154.56" height="30" rx="4" fill="#0d9488" fill-opacity="0.8" stroke="#0d9488" stroke-width="1.6"/>
+    <text x="40" y="309" text-anchor="start" class="sm bold">draft notes</text>
+    <rect x="40" y="318" width="99.36" height="30" rx="4" fill="#059669" fill-opacity="0.6" stroke="none" stroke-width="1.6"/>
+    <line x1="238.72" y1="96" x2="238.72" y2="372" class="thin dash" stroke="#e11d48" stroke-width="1.6"/>
+    <text x="238.72" y="388" text-anchor="middle" class="sm bold">binding</text>
   </g>
 </svg>

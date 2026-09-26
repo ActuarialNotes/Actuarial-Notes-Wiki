@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The indicated change, the selected change, and the gap between them</title>
+  <title>Indicated and selected rate changes for 2021–2025 drawn as two lines, the selected always below, with the gap between them shaded</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,51 +47,50 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="93.2" y1="106" x2="93.2" y2="314" class="grid"/>
-    <line x1="143.6" y1="106" x2="143.6" y2="314" class="grid"/>
-    <line x1="194" y1="106" x2="194" y2="314" class="grid"/>
-    <line x1="244.4" y1="106" x2="244.4" y2="314" class="grid"/>
-    <line x1="294.8" y1="106" x2="294.8" y2="314" class="grid"/>
-    <line x1="68" y1="314" x2="320" y2="314" class="grid"/>
-    <line x1="68" y1="249" x2="320" y2="249" class="grid"/>
-    <line x1="68" y1="184" x2="320" y2="184" class="grid"/>
-    <line x1="68" y1="119" x2="320" y2="119" class="grid"/>
-    <line x1="68" y1="314" x2="330" y2="314" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="68" y1="314" x2="68" y2="96" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="93.2" y1="314" x2="93.2" y2="318" class="tick"/>
-    <text x="93.2" y="330" text-anchor="middle" class="sm dim">2021</text>
-    <line x1="143.6" y1="314" x2="143.6" y2="318" class="tick"/>
-    <text x="143.6" y="330" text-anchor="middle" class="sm dim">2022</text>
-    <line x1="194" y1="314" x2="194" y2="318" class="tick"/>
-    <text x="194" y="330" text-anchor="middle" class="sm dim">2023</text>
-    <line x1="244.4" y1="314" x2="244.4" y2="318" class="tick"/>
-    <text x="244.4" y="330" text-anchor="middle" class="sm dim">2024</text>
-    <line x1="294.8" y1="314" x2="294.8" y2="318" class="tick"/>
-    <text x="294.8" y="330" text-anchor="middle" class="sm dim">2025</text>
-    <line x1="64" y1="314" x2="68" y2="314" class="tick"/>
-    <text x="60" y="317.6" text-anchor="end" class="sm dim">0%</text>
-    <line x1="64" y1="249" x2="68" y2="249" class="tick"/>
-    <text x="60" y="252.6" text-anchor="end" class="sm dim">5%</text>
-    <line x1="64" y1="184" x2="68" y2="184" class="tick"/>
-    <text x="60" y="187.6" text-anchor="end" class="sm dim">10%</text>
-    <line x1="64" y1="119" x2="68" y2="119" class="tick"/>
-    <text x="60" y="122.6" text-anchor="end" class="sm dim">15%</text>
-    <rect x="75.06" y="165.8" width="17.14" height="148.2" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
-    <rect x="94.2" y="223" width="17.14" height="91" rx="2" fill="#d97706" fill-opacity="0.7"/>
-    <rect x="125.46" y="186.6" width="17.14" height="127.4" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
-    <rect x="144.6" y="223" width="17.14" height="91" rx="2" fill="#d97706" fill-opacity="0.7"/>
-    <rect x="175.86" y="142.4" width="17.14" height="171.6" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
-    <rect x="195" y="197" width="17.14" height="117" rx="2" fill="#d97706" fill-opacity="0.7"/>
-    <rect x="226.26" y="202.2" width="17.14" height="111.8" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
-    <rect x="245.4" y="223" width="17.14" height="91" rx="2" fill="#d97706" fill-opacity="0.7"/>
-    <rect x="276.66" y="219.1" width="17.14" height="94.9" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
-    <rect x="295.8" y="249" width="17.14" height="65" rx="2" fill="#d97706" fill-opacity="0.7"/>
-    <line x1="96" y1="96" x2="109" y2="96" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round"/>
-    <text x="115" y="99.6" text-anchor="start" class="sm">indicated</text>
-    <line x1="200" y1="96" x2="213" y2="96" stroke="#d97706" stroke-width="2.4" stroke-linecap="round"/>
-    <text x="219" y="99.6" text-anchor="start" class="sm">selected</text>
-    <text x="180" y="358" text-anchor="middle" class="sm dim">taking less than the indication is allowed;</text>
-    <text x="180" y="376" text-anchor="middle" class="sm dim">taking it every year without closing the gap</text>
-    <text x="180" y="394" text-anchor="middle" class="sm dim">is how a book becomes permanently inadequate</text>
+    <line x1="89" y1="106" x2="89" y2="350" class="grid"/>
+    <line x1="141.5" y1="106" x2="141.5" y2="350" class="grid"/>
+    <line x1="194" y1="106" x2="194" y2="350" class="grid"/>
+    <line x1="246.5" y1="106" x2="246.5" y2="350" class="grid"/>
+    <line x1="299" y1="106" x2="299" y2="350" class="grid"/>
+    <line x1="68" y1="350" x2="320" y2="350" class="grid"/>
+    <line x1="68" y1="273.75" x2="320" y2="273.75" class="grid"/>
+    <line x1="68" y1="197.5" x2="320" y2="197.5" class="grid"/>
+    <line x1="68" y1="121.25" x2="320" y2="121.25" class="grid"/>
+    <line x1="68" y1="350" x2="330" y2="350" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="68" y1="350" x2="68" y2="96" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="89" y1="350" x2="89" y2="354" class="tick"/>
+    <text x="89" y="366" text-anchor="middle" class="sm dim">2021</text>
+    <line x1="141.5" y1="350" x2="141.5" y2="354" class="tick"/>
+    <text x="141.5" y="366" text-anchor="middle" class="sm dim">2022</text>
+    <line x1="194" y1="350" x2="194" y2="354" class="tick"/>
+    <text x="194" y="366" text-anchor="middle" class="sm dim">2023</text>
+    <line x1="246.5" y1="350" x2="246.5" y2="354" class="tick"/>
+    <text x="246.5" y="366" text-anchor="middle" class="sm dim">2024</text>
+    <line x1="299" y1="350" x2="299" y2="354" class="tick"/>
+    <text x="299" y="366" text-anchor="middle" class="sm dim">2025</text>
+    <line x1="64" y1="350" x2="68" y2="350" class="tick"/>
+    <text x="60" y="353.6" text-anchor="end" class="sm dim">0%</text>
+    <line x1="64" y1="273.75" x2="68" y2="273.75" class="tick"/>
+    <text x="60" y="277.35" text-anchor="end" class="sm dim">5%</text>
+    <line x1="64" y1="197.5" x2="68" y2="197.5" class="tick"/>
+    <text x="60" y="201.1" text-anchor="end" class="sm dim">10%</text>
+    <line x1="64" y1="121.25" x2="68" y2="121.25" class="tick"/>
+    <text x="60" y="124.85" text-anchor="end" class="sm dim">15%</text>
+    <polygon points="89,176.15 141.5,200.55 194,148.7 246.5,218.85 299,238.64 299,273.75 246.5,243.25 194,212.75 141.5,243.25 89,243.25" fill="#e11d48" fill-opacity="0.16" stroke="none"/>
+    <polyline points="89,176.15 141.5,200.55 194,148.7 246.5,218.85 299,238.64" class="curve" stroke="#3b82f6" stroke-width="2.4"/>
+    <circle cx="89" cy="176.15" r="3.6" fill="#3b82f6"/>
+    <circle cx="141.5" cy="200.55" r="3.6" fill="#3b82f6"/>
+    <circle cx="194" cy="148.7" r="3.6" fill="#3b82f6"/>
+    <circle cx="246.5" cy="218.85" r="3.6" fill="#3b82f6"/>
+    <circle cx="299" cy="238.64" r="3.6" fill="#3b82f6"/>
+    <polyline points="89,243.25 141.5,243.25 194,212.75 246.5,243.25 299,273.75" class="curve" stroke="#d97706" stroke-width="2.4"/>
+    <circle cx="89" cy="243.25" r="3.6" fill="#d97706"/>
+    <circle cx="141.5" cy="243.25" r="3.6" fill="#d97706"/>
+    <circle cx="194" cy="212.75" r="3.6" fill="#d97706"/>
+    <circle cx="246.5" cy="243.25" r="3.6" fill="#d97706"/>
+    <circle cx="299" cy="273.75" r="3.6" fill="#d97706"/>
+    <text x="89" y="166.15" text-anchor="middle" class="sm bold">indicated</text>
+    <text x="89" y="261.25" text-anchor="middle" class="sm bold">selected</text>
+    <text x="194" y="184.72" text-anchor="middle" class="sm dim">gap</text>
   </g>
 </svg>

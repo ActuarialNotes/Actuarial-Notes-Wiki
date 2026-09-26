@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Fault read off a diagram in 25% increments, mechanically and without regard to the facts around it</title>
+  <title>A rear-end collision drawn on a road, with the car in front pointed to 0% and the car behind to 100% on a fault scale in 25% steps</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -43,36 +43,38 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <defs>
-    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="44" y="100" width="272" height="96" rx="7" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
-    <text x="180" y="120" text-anchor="middle" class="sm dim">rear-end collision — scenario 6</text>
-    <rect x="96" y="140" width="52" height="24" rx="4" fill="#059669" fill-opacity="0.55"/>
-    <rect x="178" y="140" width="52" height="24" rx="4" fill="#e11d48" fill-opacity="0.55"/>
-    <line x1="238" y1="152" x2="274" y2="152" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <text x="122" y="180" text-anchor="middle" class="sm bold" fill="#059669">0%</text>
-    <text x="204" y="180" text-anchor="middle" class="sm bold" fill="#e11d48">100%</text>
-    <rect x="46" y="214" width="47.2" height="24" rx="12.0" fill="#059669" fill-opacity="0.14" stroke="#059669" stroke-width="1.2"/>
-    <text x="69.6" y="230" text-anchor="middle" class="sm">0%</text>
-    <rect x="101.2" y="214" width="47.2" height="24" rx="12.0" fill="#0d9488" fill-opacity="0.14" stroke="#0d9488" stroke-width="1.2"/>
-    <text x="124.8" y="230" text-anchor="middle" class="sm">25%</text>
-    <rect x="156.4" y="214" width="47.2" height="24" rx="12.0" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2"/>
-    <text x="180" y="230" text-anchor="middle" class="sm">50%</text>
-    <rect x="211.6" y="214" width="47.2" height="24" rx="12.0" fill="#e11d48" fill-opacity="0.14" stroke="#e11d48" stroke-width="1.2"/>
-    <text x="235.2" y="230" text-anchor="middle" class="sm">75%</text>
-    <rect x="266.8" y="214" width="47.2" height="24" rx="12.0" fill="#7c3aed" fill-opacity="0.14" stroke="#7c3aed" stroke-width="1.2"/>
-    <text x="290.4" y="230" text-anchor="middle" class="sm">100%</text>
-    <text x="180" y="258" text-anchor="middle" class="sm dim">50% or more counts as at fault</text>
-    <line x1="30" y1="278" x2="330" y2="278" class="rule"/>
-    <text x="40" y="300" text-anchor="start" class="sm" fill="#3b82f6">•</text>
-    <text x="56" y="300" text-anchor="start" class="sm">certainty beats accuracy at this volume</text>
-    <text x="40" y="324" text-anchor="start" class="sm" fill="#3b82f6">•</text>
-    <text x="56" y="324" text-anchor="start" class="sm">wrong in the odd case, and deliberately so</text>
-    <text x="40" y="348" text-anchor="start" class="sm" fill="#3b82f6">•</text>
-    <text x="56" y="348" text-anchor="start" class="sm">binds first-party recovery and rating —</text>
-    <text x="40" y="372" text-anchor="start" class="sm" fill="#3b82f6">•</text>
-    <text x="56" y="372" text-anchor="start" class="sm">not a court hearing a bodily injury action</text>
+    <rect x="24" y="110" width="312" height="132" rx="6" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.1"/>
+    <line x1="24" y1="176" x2="336" y2="176" class="thin dash" stroke="var(--axis)" stroke-width="1.6"/>
+    <line x1="318" y1="142" x2="282" y2="142" class="thin" stroke="var(--axis)" stroke-width="1.3" marker-end="url(#ahvaraxis)"/>
+    <line x1="318" y1="210" x2="282" y2="210" class="thin" stroke="var(--axis)" stroke-width="1.3" marker-end="url(#ahvaraxis)"/>
+    <g transform="translate(220,0) scale(-1,1)">
+    <path d="M68,218.4 V206.64 L84.8,203.28 L96.56,189.84 H125.12 L136.88,203.28 L152,208.32 V218.4 Z" fill="#059669" fill-opacity="0.18" stroke="#059669" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="86.48" cy="220.08" r="7.56" fill="var(--surf)" stroke="#059669" stroke-width="1.6"/>
+    <circle cx="133.52" cy="220.08" r="7.56" fill="var(--surf)" stroke="#059669" stroke-width="1.6"/>
+    </g>
+    <g transform="translate(412,0) scale(-1,1)">
+    <path d="M164,218.4 V206.64 L180.8,203.28 L192.56,189.84 H221.12 L232.88,203.28 L248,208.32 V218.4 Z" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="182.48" cy="220.08" r="7.56" fill="var(--surf)" stroke="#e11d48" stroke-width="1.6"/>
+    <circle cx="229.52" cy="220.08" r="7.56" fill="var(--surf)" stroke="#e11d48" stroke-width="1.6"/>
+    </g>
+    <line x1="60" y1="322" x2="300" y2="322" class="axis"/>
+    <line x1="60" y1="317" x2="60" y2="327" class="tick"/>
+    <text x="60" y="344" text-anchor="middle" class="sm bold">0%</text>
+    <line x1="120" y1="317" x2="120" y2="327" class="tick"/>
+    <text x="120" y="344" text-anchor="middle" class="sm bold">25%</text>
+    <line x1="180" y1="317" x2="180" y2="327" class="tick"/>
+    <text x="180" y="344" text-anchor="middle" class="sm bold">50%</text>
+    <line x1="240" y1="317" x2="240" y2="327" class="tick"/>
+    <text x="240" y="344" text-anchor="middle" class="sm bold">75%</text>
+    <line x1="300" y1="317" x2="300" y2="327" class="tick"/>
+    <text x="300" y="344" text-anchor="middle" class="sm bold">100%</text>
+    <line x1="110" y1="234" x2="60" y2="306" class="thin dot" stroke="#059669" stroke-width="1.6"/>
+    <polygon points="53,306 67,306 60,317" fill="#059669"/>
+    <line x1="206" y1="234" x2="300" y2="306" class="thin dot" stroke="#e11d48" stroke-width="1.6"/>
+    <polygon points="293,306 307,306 300,317" fill="#e11d48"/>
   </g>
 </svg>

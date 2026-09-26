@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Accident benefits deducted head by head from a tort award, before contributory negligence and the deductible</title>
+  <title>Three heads of a tort award as bars, the income and care heads each losing a red slice of accident benefits already paid, traced back to the benefits insurer</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,25 +42,35 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
+  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <text x="180" y="100" text-anchor="middle" class="sm dim">$500,000 assessed, by head ($000)</text>
-    <text x="44" y="124" text-anchor="start" class="sm">income loss</text>
-    <rect x="44" y="132" width="202.4" height="22" rx="3" fill="#3b82f6" fill-opacity="0.40"/>
-    <rect x="168.2" y="132" width="78.2" height="22" rx="3" fill="#e11d48" fill-opacity="0.55"/>
-    <text x="207.3" y="148" text-anchor="middle" class="sm">−85</text>
-    <text x="254.4" y="148" text-anchor="start" class="sm dim">220</text>
-    <text x="44" y="180" text-anchor="start" class="sm">future care</text>
-    <rect x="44" y="188" width="119.6" height="22" rx="3" fill="#0d9488" fill-opacity="0.40"/>
-    <rect x="126.8" y="188" width="36.8" height="22" rx="3" fill="#e11d48" fill-opacity="0.55"/>
-    <text x="145.2" y="204" text-anchor="middle" class="sm">−40</text>
-    <text x="171.6" y="204" text-anchor="start" class="sm dim">130</text>
-    <text x="44" y="236" text-anchor="start" class="sm">non-pecuniary</text>
-    <rect x="44" y="244" width="138" height="22" rx="3" fill="#d97706" fill-opacity="0.40"/>
-    <text x="190" y="260" text-anchor="start" class="sm dim">150</text>
-    <text x="180" y="302" text-anchor="middle" class="sm" fill="#e11d48">the red is the accident benefit already paid</text>
-    <text x="180" y="332" text-anchor="middle" class="sm dim">then contributory negligence, then the tort</text>
-    <text x="180" y="348" text-anchor="middle" class="sm dim">deductible on the non-pecuniary head — in that order</text>
-    <text x="180" y="378" text-anchor="middle" class="sm dim">where a benefit is not deducted, its payer subrogates</text>
+    <text x="36" y="112" text-anchor="start" class="sm bold">income loss</text>
+    <rect x="36" y="122" width="231" height="32" rx="3" fill="#3b82f6" fill-opacity="0.40"/>
+    <rect x="177.75" y="122" width="89.25" height="32" rx="3" fill="#e11d48" fill-opacity="0.60"/>
+    <text x="222.38" y="143" text-anchor="middle" class="sm">−$85k</text>
+    <text x="275" y="143" text-anchor="start" class="sm dim">$220k</text>
+    <text x="36" y="204" text-anchor="start" class="sm bold">future care</text>
+    <rect x="36" y="214" width="136.5" height="32" rx="3" fill="#0d9488" fill-opacity="0.40"/>
+    <rect x="130.5" y="214" width="42" height="32" rx="3" fill="#e11d48" fill-opacity="0.60"/>
+    <text x="151.5" y="235" text-anchor="middle" class="sm">−$40k</text>
+    <text x="180.5" y="235" text-anchor="start" class="sm dim">$130k</text>
+    <text x="36" y="296" text-anchor="start" class="sm bold">non-pecuniary</text>
+    <rect x="36" y="306" width="157.5" height="32" rx="3" fill="#d97706" fill-opacity="0.40"/>
+    <text x="201.5" y="327" text-anchor="start" class="sm dim">$150k</text>
+    <rect x="283.76" y="291" width="32.48" height="58" rx="2" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="290.14" y="297.96" width="6.96" height="5.8" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="302.9" y="297.96" width="6.96" height="5.8" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="290.14" y="309.56" width="6.96" height="5.8" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="302.9" y="309.56" width="6.96" height="5.8" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="290.14" y="321.16" width="6.96" height="5.8" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="302.9" y="321.16" width="6.96" height="5.8" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="290.14" y="332.76" width="6.96" height="5.8" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="302.9" y="332.76" width="6.96" height="5.8" fill="#e11d48" fill-opacity="0.55"/>
+    <text x="300" y="372" text-anchor="middle" class="sm bold">benefits</text>
+    <line x1="292" y1="286" x2="218" y2="158" class="thin dash" stroke="#e11d48" stroke-width="1.4" marker-end="url(#ahe11d48)"/>
+    <line x1="284" y1="292" x2="152" y2="250" class="thin dash" stroke="#e11d48" stroke-width="1.4" marker-end="url(#ahe11d48)"/>
   </g>
 </svg>

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Accident-year aggregation grouping losses by the date of the event</title>
+  <title>Accidents dotted along five policies, the four that happen in 2024 picked out whichever policy they fall on</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,26 +47,27 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="138" y="126" width="90" height="174" rx="3" fill="#d97706" fill-opacity="0.13"/>
-    <line x1="48" y1="126" x2="48" y2="300" class="grid"/>
-    <line x1="138" y1="126" x2="138" y2="300" class="grid"/>
-    <line x1="228" y1="126" x2="228" y2="300" class="grid"/>
-    <line x1="318" y1="126" x2="318" y2="300" class="grid"/>
-    <line x1="40" y1="300" x2="334" y2="300" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-    <text x="93" y="316" text-anchor="middle" class="sm dim">2023</text>
-    <text x="183" y="316" text-anchor="middle" class="sm dim">2024</text>
-    <text x="273" y="316" text-anchor="middle" class="sm dim">2025</text>
-    <rect x="97.5" y="144.5" width="90" height="11" rx="3" fill="#3b82f6" fill-opacity="0.34" stroke="#3b82f6" stroke-width="1.1"/>
-    <rect x="129" y="174.5" width="90" height="11" rx="3" fill="#3b82f6" fill-opacity="0.34" stroke="#3b82f6" stroke-width="1.1"/>
-    <rect x="169.5" y="204.5" width="90" height="11" rx="3" fill="#3b82f6" fill-opacity="0.34" stroke="#3b82f6" stroke-width="1.1"/>
-    <rect x="201" y="234.5" width="90" height="11" rx="3" fill="#3b82f6" fill-opacity="0.34" stroke="#3b82f6" stroke-width="1.1"/>
-    <circle cx="157.8" cy="150" r="4.2" fill="#e11d48"/>
-    <circle cx="147" cy="180" r="4.2" fill="#e11d48"/>
-    <circle cx="193.8" cy="180" r="4.2" fill="#e11d48"/>
-    <circle cx="181.2" cy="210" r="4.2" fill="#e11d48"/>
-    <circle cx="237" cy="240" r="4.2" fill="var(--dim)"/>
-    <text x="180" y="112" text-anchor="middle" class="sm bold" fill="#d97706">AY 2024</text>
-    <text x="180" y="336" text-anchor="middle" class="sm dim">four of the five accidents fall in 2024 —</text>
-    <text x="180" y="354" text-anchor="middle" class="sm dim">the policies they came from do not matter</text>
+    <rect x="138" y="100" width="90" height="250" rx="3" fill="#d97706" fill-opacity="0.13"/>
+    <line x1="48" y1="100" x2="48" y2="350" class="grid"/>
+    <line x1="138" y1="100" x2="138" y2="350" class="grid"/>
+    <line x1="228" y1="100" x2="228" y2="350" class="grid"/>
+    <line x1="318" y1="100" x2="318" y2="350" class="grid"/>
+    <line x1="40" y1="350" x2="334" y2="350" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <text x="93" y="366" text-anchor="middle" class="sm dim">2023</text>
+    <text x="183" y="366" text-anchor="middle" class="sm dim">2024</text>
+    <text x="273" y="366" text-anchor="middle" class="sm dim">2025</text>
+    <rect x="66" y="121" width="90" height="14" rx="3" fill="#3b82f6" fill-opacity="0.34" stroke="#3b82f6" stroke-width="1.1"/>
+    <rect x="97.5" y="167" width="90" height="14" rx="3" fill="#3b82f6" fill-opacity="0.34" stroke="#3b82f6" stroke-width="1.1"/>
+    <rect x="133.5" y="213" width="90" height="14" rx="3" fill="#3b82f6" fill-opacity="0.34" stroke="#3b82f6" stroke-width="1.1"/>
+    <rect x="165" y="259" width="90" height="14" rx="3" fill="#3b82f6" fill-opacity="0.34" stroke="#3b82f6" stroke-width="1.1"/>
+    <rect x="201" y="305" width="90" height="14" rx="3" fill="#3b82f6" fill-opacity="0.34" stroke="#3b82f6" stroke-width="1.1"/>
+    <circle cx="103.8" cy="128" r="5" fill="var(--dim)"/>
+    <circle cx="147" cy="128" r="5" fill="#e11d48"/>
+    <circle cx="174" cy="174" r="5" fill="#e11d48"/>
+    <circle cx="195.6" cy="220" r="5" fill="#e11d48"/>
+    <circle cx="215.4" cy="266" r="5" fill="#e11d48"/>
+    <circle cx="238.8" cy="266" r="5" fill="var(--dim)"/>
+    <circle cx="264" cy="312" r="5" fill="var(--dim)"/>
+    <text x="183" y="88" text-anchor="middle" class="sm bold">AY 2024</text>
   </g>
 </svg>

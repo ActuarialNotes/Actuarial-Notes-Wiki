@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The experience modification as a credibility blend between a risk's own loss ratio and the class average</title>
+  <title>A beam balanced at a mod of 0.88, carrying the risk's own 0.70 actual-to-expected with weight 0.40 at one end and the class's 1.00 with weight 0.60 at the other</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,28 +42,18 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
-  <defs>
-    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
-    <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
-  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <text x="180" y="112" text-anchor="middle" class="sm dim">actual losses 70% of expected, Z = 0.40</text>
-    <line x1="52" y1="196" x2="312" y2="196" class="axis"/>
-    <line x1="52" y1="191" x2="52" y2="201" class="tick"/>
-    <text x="52" y="216" text-anchor="middle" class="sm dim">0.60</text>
-    <line x1="182" y1="191" x2="182" y2="201" class="tick"/>
-    <text x="182" y="216" text-anchor="middle" class="sm dim">1.00</text>
-    <line x1="312" y1="191" x2="312" y2="201" class="tick"/>
-    <text x="312" y="216" text-anchor="middle" class="sm dim">1.40</text>
-    <text x="180" y="238" text-anchor="middle" class="sm dim">experience modification</text>
-    <line x1="182" y1="130" x2="182" y2="188" class="thin" stroke="var(--dim)" stroke-width="1.7" marker-end="url(#ahvardim)"/>
-    <text x="182" y="122" text-anchor="middle" class="sm bold" fill="var(--dim)">no mod 1.00</text>
-    <line x1="143" y1="156" x2="143" y2="188" class="thin" stroke="#059669" stroke-width="1.7" marker-end="url(#ah059669)"/>
-    <text x="143" y="148" text-anchor="middle" class="sm bold" fill="#059669">M = 0.88</text>
-    <text x="180" y="284" text-anchor="middle" class="sm">a credit of 12% on the manual premium</text>
-    <text x="180" y="322" text-anchor="middle" class="sm dim">Z rises with the risk's own volume — a small</text>
-    <text x="180" y="340" text-anchor="middle" class="sm dim">insured's good year barely moves the mod,</text>
-    <text x="180" y="358" text-anchor="middle" class="sm dim">and its bad year barely hurts</text>
+    <line x1="30" y1="268" x2="330" y2="268" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
+    <polygon points="206,270 184,318 228,318" fill="#059669" fill-opacity="0.3" stroke="#059669" stroke-width="1.4"/>
+    <text x="206" y="338" text-anchor="middle" class="bold">0.88</text>
+    <rect x="36.69" y="191.37" width="74.63" height="74.63" rx="4" fill="#3b82f6" fill-opacity="0.34" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="74" y="232.69" text-anchor="middle" class="sm">0.40</text>
+    <text x="74" y="181.37" text-anchor="middle" class="sm bold">risk</text>
+    <text x="74" y="286" text-anchor="middle" class="sm">0.70</text>
+    <rect x="248.3" y="174.6" width="91.4" height="91.4" rx="4" fill="#d97706" fill-opacity="0.34" stroke="#d97706" stroke-width="1.2"/>
+    <text x="294" y="224.3" text-anchor="middle" class="sm">0.60</text>
+    <text x="294" y="164.6" text-anchor="middle" class="sm bold">class</text>
+    <text x="294" y="286" text-anchor="middle" class="sm">1.00</text>
   </g>
 </svg>

@@ -21,7 +21,16 @@ Two things may be supplied per question by dropping `<id>.md` into a directory:
   explanation, and only the parts it names are replaced.
 * `--prompts` — the prompt for a question whose booklet page is a scan with no
   text layer (`needs_vision` in the record). Transcribe the rendered page from
-  `<out>/pages/`, save it here, and the file assembles like any other.
+  `<out>/pages/`, save it here, and the file assembles like any other. For a
+  multiple-choice question the transcription carries its options too, as
+  `- A) …` lines, and they replace the extracted ones — on a scan the options
+  are as likely to be misread as the stem.
+
+A judgment may also carry `bank`: the bank the question is *filed* in when that
+differs from the paper's. The CAS moved Time Series and Statistical Learning
+from MAS-I to MAS-II, so a 2019 MAS-I question on either is filed under MAS-II
+with `originally_exam: "Exam MAS-I"` — the paper it was sat on, which is what
+`quiz/src/lib/questionSource.ts` reads to cite it.
 
 Usage
 -----
@@ -41,17 +50,17 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import mdmath  # noqa: E402
-from pdf_extract import attach_part_prompts, points_label  # noqa: E402
+from pdf_extract import attach_part_prompts, points_label, split_options  # noqa: E402
 from validate_content import EXAM_LABEL_BY_DIR  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 # Frontmatter key order, matching the files already in the bank.
 KEY_ORDER = [
-    "id", "exam", "topic", "learning_objective", "difficulty", "type",
+    "id", "exam", "originally_exam", "topic", "learning_objective", "difficulty", "type",
     "year", "session", "wiki_link", "answer", "points",
 ]
-QUOTED_KEYS = {"id", "exam", "topic", "learning_objective", "answer"}
+QUOTED_KEYS = {"id", "exam", "originally_exam", "topic", "learning_objective", "answer"}
 
 
 def _num(value) -> str:
@@ -71,10 +80,14 @@ def _scalar(key: str, value) -> str:
 
 def frontmatter(record: dict, judgment: dict) -> str:
     """The YAML block, in canonical key order, omitting what does not apply."""
-    bank = record["bank"]
+    paper_bank = record["bank"]
+    bank = filed_bank(record, judgment)
     values: dict[str, object] = {
         "id": record["id"],
         "exam": EXAM_LABEL_BY_DIR.get(bank, bank),
+        "originally_exam": (
+            EXAM_LABEL_BY_DIR.get(paper_bank, paper_bank) if bank != paper_bank else None
+        ),
         "topic": judgment.get("topic", ""),
         "learning_objective": judgment.get("learning_objective", ""),
         "difficulty": judgment.get("difficulty", "medium"),
@@ -98,6 +111,11 @@ def frontmatter(record: dict, judgment: dict) -> str:
         lines.append(f"{key}: {_scalar(key, value)}")
     lines.append("---")
     return "\n".join(lines)
+
+
+def filed_bank(record: dict, judgment: dict) -> str:
+    """The bank a question is filed in: the paper's, unless the syllabus moved it."""
+    return judgment.get("bank") or record["bank"]
 
 
 def options_block(options: dict[str, str]) -> str:
@@ -266,6 +284,15 @@ def main(argv: list[str] | None = None) -> int:
             # otherwise the stem would be corrected while each `## Part a`
             # kept the text the override was written to replace.
             transcribed = (prompts / f"{record['id']}.md").read_text(encoding="utf-8")
+            if record.get("options"):
+                # A multiple-choice transcription carries its own options;
+                # without them the stem would be fixed and the choices not.
+                stem_only, options = split_options(transcribed)
+                if options:
+                    transcribed = stem_only
+                    record = dict(
+                        record, options={k: mdmath.normalize_chars(v) for k, v in options.items()}
+                    )
             parts = [dict(part) for part in record.get("parts") or []]
             surplus: list[str] = []
             stem = attach_part_prompts(
@@ -302,7 +329,10 @@ def main(argv: list[str] | None = None) -> int:
             problems.append(f"{record['id']}: no explanation available")
             continue
 
-        target = root / "questions" / record["bank"] / f"{record['id']}.md"
+        target = (
+            root / "questions" / filed_bank(record, judgment)
+            / f"{record.get('file') or record['id']}.md"
+        )
         if target.exists() and not args.force:
             skipped += 1
             continue

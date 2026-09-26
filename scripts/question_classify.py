@@ -34,6 +34,11 @@ Usage
         --out /tmp/build/judgments.jsonl        # also writes review.md beside it
 
     python3 scripts/question_classify.py --records … --review-only   # sheet only
+
+    # then apply the review's answers, one JSON object per line:
+    #   {"id": "masi-2019s-q28", "topic": "Ridge Regression", "bank": "exam-mas-ii"}
+    python3 scripts/question_classify.py --out /tmp/build/judgments.jsonl \
+        --settle /tmp/build/decisions.jsonl
 """
 
 from __future__ import annotations
@@ -68,6 +73,13 @@ EXAM_PAGE_BY_BANK = {
     "exam-8": "Exam 8 (CAS).md",
     "exam-9": "Exam 9 (CAS).md",
 }
+
+# Banks a paper's questions may be *filed* in besides its own. The CAS moved
+# Time Series and Statistical Learning (PCA included) from MAS-I to MAS-II, so
+# a MAS-I paper's question on either now belongs to MAS-II — filed there with
+# `originally_exam`, the way the 23 MAS-I 2018 questions already are. One way
+# only: nothing moved back, and no MAS-II question has ever been refiled.
+FILED_ELSEWHERE = {"exam-mas-i": ("exam-mas-ii",)}
 
 # A phrase shorter than this matches too much to identify anything.
 MIN_ALIAS = 5
@@ -139,6 +151,19 @@ def syllabus_objectives(bank: str, root: Path | None = None) -> dict[str, str]:
         for target in WIKILINK_RE.findall(line):
             objectives.setdefault(target.strip().lower(), current)
     return objectives
+
+
+def bank_objectives(bank: str) -> dict[str, str]:
+    """concept → objective for every syllabus a question from `bank` may be filed under.
+
+    The paper's own syllabus wins a concept both list; one only the other
+    syllabus lists falls back to it, which is what lets `filed_bank` move it.
+    """
+    merged = ontology_objectives()
+    for other in reversed(FILED_ELSEWHERE.get(bank, ())):
+        merged.update(syllabus_objectives(other))
+    merged.update(syllabus_objectives(bank))
+    return merged
 
 
 def ontology_objectives() -> dict[str, str]:
@@ -258,13 +283,24 @@ BODY_SPLIT_RE = re.compile(r"(?m)^#{2,3}\s+Explanation\s*$")
 
 @functools.lru_cache(maxsize=None)
 def build_bank_index(bank: str, root: str | None = None) -> BankIndex:
-    """Index the bank's existing questions, skipping any id in `exclude`."""
-    base = Path(root or REPO_ROOT) / "questions" / bank
-    if not base.is_dir():
-        return BankIndex()
+    """Index the questions a new one from `bank` could be filed beside.
 
+    That is the bank itself plus any it files into (`FILED_ELSEWHERE`), so a
+    MAS-I paper's time-series question finds its neighbours where they live.
+    Each label carries the bank it came from.
+    """
     labels: list[dict] = []
     bags: list[dict[str, int]] = []
+    for source in (bank, *FILED_ELSEWHERE.get(bank, ())):
+        base = Path(root or REPO_ROOT) / "questions" / source
+        if base.is_dir():
+            _index_bank(base, source, labels, bags)
+    if not bags:
+        return BankIndex()
+    return _tfidf(labels, bags)
+
+
+def _index_bank(base: Path, bank: str, labels: list[dict], bags: list[dict[str, int]]) -> None:
     for path in sorted(base.glob("*.md")):
         text = path.read_text(encoding="utf-8")
         data, body = parse_frontmatter(text)
@@ -272,6 +308,7 @@ def build_bank_index(bank: str, root: str | None = None) -> BankIndex:
             continue
         labels.append(
             {
+                "bank": bank,
                 "id": str(data.get("id") or path.stem),
                 "topic": str(data.get("topic") or ""),
                 "learning_objective": str(data.get("learning_objective") or ""),
@@ -283,9 +320,8 @@ def build_bank_index(bank: str, root: str | None = None) -> BankIndex:
         )
         bags.append(bag_of_words(body))
 
-    if not bags:
-        return BankIndex()
 
+def _tfidf(labels: list[dict], bags: list[dict[str, int]]) -> BankIndex:
     document_count = len(bags)
     frequency: dict[str, int] = {}
     for bag in bags:
@@ -459,7 +495,7 @@ def classify(
     """
     bank = record.get("bank", "")
     if objectives is None:
-        objectives = {**ontology_objectives(), **syllabus_objectives(bank)}
+        objectives = bank_objectives(bank)
     if bank_index is None:
         bank_index = build_bank_index(bank)
 
@@ -478,7 +514,11 @@ def classify(
             objective = objectives.get(concept.lower(), "")
             if objective:
                 break
-    objective = canonical_objective(objective, bank_labels(bank))
+    objective = canonical_objective(
+        objective,
+        tuple(label for b in (bank, *FILED_ELSEWHERE.get(bank, ())) for label in bank_labels(b)),
+    )
+    filed = filed_bank(objective, bank)
 
     neighbour_topic, topic_share = vote(neighbours[:NEIGHBOURS], "topic")
     phrase_topic = hits[0][0] if hits else ""
@@ -497,6 +537,8 @@ def classify(
         reasons.append(f"weak agreement on '{topic}'")
     if not objective:
         reasons.append("no learning objective could be derived")
+    if filed != bank:
+        reasons.append(f"filed under {filed}: '{objective}' is on that syllabus now")
 
     links: list[str] = []
     for name in [topic, *(c for c, _ in hits)]:
@@ -504,7 +546,7 @@ def classify(
         if name and link not in links:
             links.append(link)
 
-    return {
+    judgment = {
         "id": record.get("id"),
         "num": record.get("num"),
         "topic": topic,
@@ -519,6 +561,24 @@ def classify(
         "needs_review": bool(reasons),
         "review_reasons": reasons,
     }
+    if filed != bank:
+        judgment["bank"] = filed
+    return judgment
+
+
+def filed_bank(objective: str, bank: str) -> str:
+    """The bank a question with this objective is filed in.
+
+    Its own, unless the objective is one only a bank it files into uses — a
+    MAS-I question voted `Time Series with Constant Variance` belongs with the
+    MAS-II questions that carry that label.
+    """
+    if not objective or objective in bank_labels(bank):
+        return bank
+    for other in FILED_ELSEWHERE.get(bank, ()):
+        if objective in bank_labels(other):
+            return other
+    return bank
 
 
 # ─── CLI ──────────────────────────────────────────────────────────────────────
@@ -559,7 +619,8 @@ def review_sheet(judgments: list[dict]) -> str:
     for judgment in review:
         gist = judgment["fingerprint"]
         candidates = " · ".join(judgment["topic_candidates"]) or "(nothing matched)"
-        lines.append(f"{judgment['id']} | {gist} | {candidates}")
+        moved = f" | → {judgment['bank']}" if judgment.get("bank") else ""
+        lines.append(f"{judgment['id']} | {gist} | {candidates}{moved}")
 
     if no_objective:
         lines += [
@@ -573,15 +634,88 @@ def review_sheet(judgments: list[dict]) -> str:
     return "\n".join(lines) + "\n"
 
 
+# What a reviewer may decide for a question. `learning_objective`, `bank` and
+# `difficulty` usually stand as voted; they are here for the ones that do not —
+# and `difficulty` for a paper with no publisher solution to take a proxy from,
+# which is every CAS MAS paper.
+SETTLED_FIELDS = ("topic", "learning_objective", "bank", "difficulty", "wiki_link")
+DIFFICULTIES = ("easy", "medium", "hard")
+
+
+def settle(
+    judgments: list[dict], decisions: list[dict], root: Path | None = None
+) -> list[str]:
+    """Apply a review's decisions to the judgments in place; return the problems.
+
+    A decision names a question by `id` and sets any of `SETTLED_FIELDS`.
+    Setting the topic rebuilds `wiki_link` with the topic first, keeping the
+    phrase matches after it, unless the decision gives its own list. Every
+    page named must already exist in `Concepts/` — a decision can choose among
+    the vault's pages, never add one (`CLAUDE.md`) — and a decision with a
+    problem is not applied, so the question stays under review.
+    """
+    root = root or REPO_ROOT
+    by_id = {j["id"]: j for j in judgments}
+    problems: list[str] = []
+    for decision in decisions:
+        judgment = by_id.get(decision.get("id"))
+        if judgment is None:
+            problems.append(f"{decision.get('id')}: no such question")
+            continue
+        update = {k: decision[k] for k in SETTLED_FIELDS if decision.get(k)}
+        topic = update.get("topic", judgment.get("topic", ""))
+        links = update.get("wiki_link") or [
+            f"Concepts/{topic.replace(' ', '+')}",
+            *(link for link in judgment.get("wiki_link") or []
+              if link != f"Concepts/{judgment.get('topic', '').replace(' ', '+')}"),
+        ]
+        links = list(dict.fromkeys(links))[:MAX_LINKS]
+        missing = [
+            link for link in [f"Concepts/{topic}", *links]
+            if not (root / f"{link.replace('+', ' ')}.md").is_file()
+        ]
+        if missing:
+            problems.append(f"{judgment['id']}: no such page {', '.join(sorted(set(missing)))}")
+            continue
+        if update.get("difficulty") and update["difficulty"] not in DIFFICULTIES:
+            problems.append(f"{judgment['id']}: difficulty '{update['difficulty']}'")
+            continue
+        if update.get("bank") and not (root / "questions" / update["bank"]).is_dir():
+            problems.append(f"{judgment['id']}: no bank '{update['bank']}'")
+            continue
+        # A `bank` naming the paper's own bank undoes a proposed move; the
+        # writer only adds `originally_exam` when the two differ.
+        judgment.update(update, wiki_link=links, needs_review=False, review_reasons=[])
+    return problems
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
-    ap.add_argument("--records", required=True, help="records.jsonl from pdf_extract.py")
+    ap.add_argument("--records", help="records.jsonl from pdf_extract.py")
+    ap.add_argument("--settle", help="decisions.jsonl — apply a review's answers to "
+                                     "the judgments at --out, in place")
     ap.add_argument("--out", help="where to write judgments.jsonl")
     ap.add_argument("--review", help="where to write the review sheet "
                                      "(default: review.md beside --out)")
     ap.add_argument("--review-only", action="store_true",
                     help="print the review sheet to stdout and nothing else")
     args = ap.parse_args(argv)
+
+    if args.settle:
+        if not args.out:
+            ap.error("--settle needs --out, the judgments file to update")
+        judgments = load_records(args.out)
+        problems = settle(judgments, load_records(args.settle))
+        with open(args.out, "w", encoding="utf-8") as fh:
+            for judgment in judgments:
+                fh.write(json.dumps(judgment, ensure_ascii=False) + "\n")
+        left = sum(1 for j in judgments if j["needs_review"])
+        print(f"settled; {left} of {len(judgments)} still need a decision")
+        for problem in problems:
+            print(f"  not applied — {problem}")
+        return 1 if problems else 0
+    if not args.records:
+        ap.error("--records is required")
 
     records = load_records(args.records)
     index = concept_index()
@@ -590,7 +724,7 @@ def main(argv: list[str] | None = None) -> int:
     for record in records:
         bank = record.get("bank", "")
         if bank not in per_bank:
-            per_bank[bank] = {**ontology_objectives(), **syllabus_objectives(bank)}
+            per_bank[bank] = bank_objectives(bank)
         judgments.append(classify(record, index, per_bank[bank]))
 
     sheet = review_sheet(judgments)

@@ -166,6 +166,39 @@ readability, OCR characters. `verification:` is never hand-written
 Add CAS Exam 5 Spring 2019 questions 1-12
 ```
 
+## MAS-I / MAS-II papers
+
+The MAS exams are multiple choice: one scanned PDF of instructions, a booklet
+set a question to a page, and an answer key — no sample answers, no report.
+The same scripts handle them (design: **Multiple-choice sittings** in
+`docs/pdf-question-pipeline.md`); what changes is where the work is.
+
+```bash
+python3 scripts/pdf_extract.py --exam mas-i --year 2019 --session Spring \
+    --pdf spmasi-19.pdf --out /tmp/masi --ocr --render-all
+```
+
+- `Booklet coverage` should say every prompt was placed **by page order,
+  checked against the key's count**. If it does not, stop: a shifted page
+  would file every prompt under its neighbour's answer.
+- **Every prompt is transcribed from `pages/`** into `prompts/<id>.md`, options
+  included as `- A) …` lines — OCR drops whole lines and every formula on these
+  scans. Graphs are cropped into `Media/Attachments/<id>-<slug>.png` and
+  embedded by their raw GitHub URL with alt text a reader could reason from.
+- **Every explanation is written** into `expl/<id>.md`, worked to the key's
+  letter. One that will not reach the key is a finding for the user, never a
+  working bent to fit. A two-letter key (`B & E`) answers the first letter
+  and ends on a note that the key accepted both.
+- **Settle** topic, objective, difficulty and `bank` as JSON lines with
+  `question_classify.py --out judgments.jsonl --settle decisions.jsonl`. A
+  MAS-I question on time series or ISLR statistical learning is filed under
+  `exam-mas-ii` with `originally_exam: "Exam MAS-I"`; regression and GLM
+  mechanics stay in MAS-I. MAS-II questions never move.
+- MAS-II Q1–2 read a case study the CAS published separately
+  (`casact.org/sites/default/files/2021-03/mas-ii-case-study-f2018.pdf`,
+  `…-f2019.pdf`); reproduce the output the statements need, as
+  `questions/exam-mas-ii/masii-2019s-001.md` does.
+
 ## Known gaps
 
 - `scripts/standardize_questions.py` and `scripts/update_wiki_links.py` have no

@@ -9,8 +9,8 @@
     { "page": "Exam PCPA (CAS).md",   "exam_id": "PCPA",   "wiki_id": "pcpa-1", "progress_key": "CAS-PCPA", "body": "CAS", "bank": null,        "status": "development" },
     { "page": "Exam 6C (CAS).md",     "exam_id": "6C",     "wiki_id": "6c-1",   "progress_key": "CAS-6",  "body": "CAS", "bank": null,          "status": "development" },
     { "page": "Exam 6U (CAS).md",     "exam_id": "6U",     "wiki_id": "6u-1",   "progress_key": "CAS-6",  "body": "CAS", "bank": null,          "status": "development" },
-    { "page": "Exam 7 (CAS).md",      "exam_id": "7",      "wiki_id": "7-1",    "progress_key": "CAS-7",  "body": "CAS", "bank": null,          "status": "development" },
+    { "page": "Exam 7 (CAS).md",      "exam_id": "7",      "wiki_id": "7-1",    "progress_key": "CAS-7",  "body": "CAS", "bank": "exam-7",          "status": "development" },
     { "page": "Exam 8 (CAS).md",      "exam_id": "8",      "wiki_id": "8-1",    "progress_key": "CAS-8",  "body": "CAS", "bank": null,          "status": "development" },
-    { "page": "Exam 9 (CAS).md",      "exam_id": "9",      "wiki_id": "9-1",    "progress_key": "CAS-9",  "body": "CAS", "bank": null,          "status": "development" }
+    { "page": "Exam 9 (CAS).md",      "exam_id": "9",      "wiki_id": "9-1",    "progress_key": "CAS-9",  "body": "CAS", "bank": "exam-9",          "status": "development" }
   ]
 }

@@ -464,6 +464,8 @@ export default function Search() {
       topics: selectedSubtopics.length ? selectedSubtopics : undefined,
       difficulty: difficulty || undefined,
       search: textQuery.trim() || undefined,
+      // The search page lists the bank, questions kept only for the record included.
+      includeOffSyllabus: true,
     })
     if (conceptFilter) {
       result = result.filter(q =>

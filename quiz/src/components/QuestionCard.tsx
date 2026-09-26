@@ -405,6 +405,9 @@ export function QuestionCard({
               {question.originally_exam && (
                 <TopicBadge label={`Formerly ${question.originally_exam}`} variant="tag" />
               )}
+              {question.off_syllabus && (
+                <TopicBadge label="Not on a current syllabus" variant="tag" />
+              )}
             </div>
           )}
           <MarkdownText className="text-base leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0">
@@ -466,6 +469,9 @@ export function QuestionCard({
               {question.originally_exam && (
                 <TopicBadge label={`Formerly ${question.originally_exam}`} variant="tag" />
               )}
+              {question.off_syllabus && (
+                <TopicBadge label="Not on a current syllabus" variant="tag" />
+              )}
             </div>
           )}
           <MarkdownText className="text-base leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 [&_table]:text-sm [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_th]:border [&_th]:border-border [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1">
@@ -516,6 +522,9 @@ export function QuestionCard({
             <TopicBadge label={question.difficulty} variant="difficulty" />
             {question.originally_exam && (
               <TopicBadge label={`Formerly ${question.originally_exam}`} variant="tag" />
+            )}
+            {question.off_syllabus && (
+              <TopicBadge label="Not on a current syllabus" variant="tag" />
             )}
           </div>
         )}

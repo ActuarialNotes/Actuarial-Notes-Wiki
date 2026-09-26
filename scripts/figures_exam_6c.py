@@ -3,8 +3,8 @@ programs, financial reporting and solvency.
 
 Same contract as `figures_exam_p.py` / `figures_exam_fm.py` /
 `figures_exam_mas_i.py` / `figures_exam_mas_ii.py` / `figures_exam_5.py`: each
-builder returns a `Fig` from `vcard()` — a portrait card carrying a title, one
-picture and one formula. Grouped in syllabus order:
+builder returns a `Fig` from `vcard()` carrying one picture and nothing else — no
+title, no formula, no caption, no table. Grouped in syllabus order:
 
 A. Regulation of insurance and Canadian insurance law — who regulates what,
    rate and classification regulation, the compulsory auto product, the case law
@@ -51,7 +51,8 @@ import math
 
 from figure_kit import (
     AMBER, BLUE, GREEN, ROSE, TEAL, VIOLET,
-    Fig, brace, vaxes, vcard, BCX,
+    Fig, brace, vaxes, vcard,
+    BCX,
     building, car, coins, cross, document, house, person, scales, shield, tower,
 )
 from figure_registry import figure
@@ -94,50 +95,6 @@ CU = [0.40, 0.35, 0.25]
 
 
 # ── shared drawing helpers ───────────────────────────────────────────────────
-def _stack(f: Fig, y0, rows, x0=44, x1=316, h=40, gap=10, cls="sm",
-           arrows=True, sub_cls="sm dim"):
-    """A vertical stack of labelled boxes, top to bottom, optionally chained.
-
-    `rows` is a list of (label, sub, colour); `sub` may be None. Returns the
-    list of box centre y-positions.
-    """
-    ys = []
-    for i, (label, sub, colour) in enumerate(rows):
-        y = y0 + i * (h + gap)
-        f.rect(x0, y, x1 - x0, h, rx=6, fill=colour, fill_opacity="0.16",
-               stroke=colour, stroke_width="1.3")
-        if sub:
-            f.text((x0 + x1) / 2, y + h / 2 - 3, label, cls=cls)
-            f.text((x0 + x1) / 2, y + h / 2 + 12, sub, cls=sub_cls)
-        else:
-            f.text((x0 + x1) / 2, y + h / 2 + 4, label, cls=cls)
-        if arrows and i:
-            f.arrow((x0 + x1) / 2, y - gap - 1, (x0 + x1) / 2, y - 1,
-                    colour="var(--dim)", width=1.3)
-        ys.append(y + h / 2)
-    return ys
-
-
-def _columns(f: Fig, y0, heads, rows, x0=30, x1=330, gap=14, row_h=24,
-             head_h=28, colours=(BLUE, AMBER)):
-    """Two (or three) labelled columns of short lines — the workhorse for a
-    "this side / that side" split. `rows` is a list of per-column string lists.
-    """
-    n = len(heads)
-    w = (x1 - x0 - gap * (n - 1)) / n
-    for k, head in enumerate(heads):
-        cx = x0 + k * (w + gap) + w / 2
-        colour = colours[k % len(colours)]
-        depth = head_h + 10 + row_h * len(rows[k])
-        f.rect(x0 + k * (w + gap), y0, w, depth, rx=7, fill=colour,
-               fill_opacity="0.08", stroke=colour, stroke_width="1.2")
-        f.rect(x0 + k * (w + gap), y0, w, head_h, rx=7, fill=colour,
-               fill_opacity="0.22", stroke="none")
-        f.text(cx, y0 + head_h / 2 + 4, head, cls="sm bold", fill=colour)
-        for i, line in enumerate(rows[k]):
-            if line:
-                f.text(cx, y0 + head_h + 20 + i * row_h, line, cls="sm")
-    return w
 
 
 def _ladder(f: Fig, x, y_bottom, y_top, lo, hi, marks, at=None, label_x=None,
@@ -236,46 +193,6 @@ def _vbars(f: Fig, values, labels, y_base, x0=52, x1=316, top=None, colour=BLUE,
         f.text(cx, y_base + 15, labels[i], cls=label_cls)
         centres.append(cx)
     f.line(x0 - 6, y_base, x1 + 6, y_base, cls="axis")
-    return centres
-
-
-def _flow(f: Fig, y, labels, colours=None, x0=30, x1=330, h=26, cls="sm"):
-    """A left-to-right chain of chips joined by arrows."""
-    n = len(labels)
-    slot = (x1 - x0) / n
-    centres = []
-    for i, label in enumerate(labels):
-        cx = x0 + slot * (i + 0.5)
-        colour = (colours or [BLUE] * n)[i]
-        f.chip(cx, y, label, colour=colour, w=slot - 12, h=h, cls=cls)
-        centres.append(cx)
-        if i:
-            f.arrow(centres[i - 1] + (slot - 12) / 2 + 1, y,
-                    cx - (slot - 12) / 2 - 1, y, colour="var(--dim)", width=1.3)
-    return centres
-
-
-def _bullets(f: Fig, y0, lines, x=40, gap=24, colour=BLUE, cls="sm",
-             marker="•"):
-    """A left-aligned list with coloured markers. Returns the last y used."""
-    y = y0
-    for line in lines:
-        f.text(x, y, marker, cls="sm", fill=colour, anchor="start")
-        f.text(x + 16, y, line, cls=cls, anchor="start")
-        y += gap
-    return y - gap
-
-
-def _pill_row(f: Fig, y, labels, colours, x0=32, x1=328, h=24, cls="sm"):
-    """A row of pills sharing one line, no arrows."""
-    n = len(labels)
-    slot = (x1 - x0) / n
-    centres = []
-    for i, label in enumerate(labels):
-        cx = x0 + slot * (i + 0.5)
-        f.chip(cx, y, label, colour=colours[i % len(colours)], w=slot - 8, h=h,
-               cls=cls)
-        centres.append(cx)
     return centres
 
 

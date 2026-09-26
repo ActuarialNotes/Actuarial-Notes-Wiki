@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Cash flows moved to a reference date part-way through the timeline</title>
+  <title>Payments at times 0, 1, 5 and 6 moved to a reference date at time 3 and piled up there: the earlier ones grown, the later ones discounted</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -49,35 +49,38 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="48" y1="252" x2="324" y2="252" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-    <line x1="56" y1="248" x2="56" y2="256" class="tick"/>
-    <text x="56" y="269" text-anchor="middle" class="sm dim">0</text>
-    <line x1="97.67" y1="248" x2="97.67" y2="256" class="tick"/>
-    <text x="97.67" y="269" text-anchor="middle" class="sm dim">1</text>
-    <line x1="139.33" y1="248" x2="139.33" y2="256" class="tick"/>
-    <text x="139.33" y="269" text-anchor="middle" class="sm dim">2</text>
-    <line x1="181" y1="248" x2="181" y2="256" class="tick"/>
-    <text x="181" y="269" text-anchor="middle" class="sm dim">3</text>
-    <line x1="222.67" y1="248" x2="222.67" y2="256" class="tick"/>
-    <text x="222.67" y="269" text-anchor="middle" class="sm dim">4</text>
-    <line x1="264.33" y1="248" x2="264.33" y2="256" class="tick"/>
-    <text x="264.33" y="269" text-anchor="middle" class="sm dim">5</text>
-    <line x1="306" y1="248" x2="306" y2="256" class="tick"/>
-    <text x="306" y="269" text-anchor="middle" class="sm dim">6</text>
-    <line x1="181" y1="136" x2="181" y2="286" class="thin dash" stroke="#7c3aed" stroke-width="1.4"/>
-    <text x="181" y="128" text-anchor="middle" class="sm bold" fill="#7c3aed">reference date t</text>
-    <line x1="56" y1="252" x2="56" y2="206" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="56" y="200" text-anchor="middle" class="sm">C₀</text>
-    <line x1="97.67" y1="252" x2="97.67" y2="206" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="97.67" y="200" text-anchor="middle" class="sm">C₁</text>
-    <line x1="264.33" y1="252" x2="264.33" y2="206" class="thin" stroke="#d97706" stroke-width="1.8" marker-end="url(#ahd97706)"/>
-    <text x="264.33" y="200" text-anchor="middle" class="sm">C₅</text>
-    <line x1="306" y1="252" x2="306" y2="206" class="thin" stroke="#d97706" stroke-width="1.8" marker-end="url(#ahd97706)"/>
-    <text x="306" y="200" text-anchor="middle" class="sm">C₆</text>
-    <line x1="105.67" y1="178" x2="173" y2="178" class="thin" stroke="#3b82f6" stroke-width="1.4" marker-end="url(#ah3b82f6)"/>
-    <text x="139.33" y="170" text-anchor="middle" class="sm" fill="#3b82f6">grow</text>
-    <line x1="256.33" y1="178" x2="189" y2="178" class="thin" stroke="#d97706" stroke-width="1.4" marker-end="url(#ahd97706)"/>
-    <text x="222.67" y="170" text-anchor="middle" class="sm" fill="#d97706">discount</text>
-    <text x="180" y="340" text-anchor="middle" class="sm dim">PV is t = 0;  AV is t = n</text>
+    <line x1="48" y1="344" x2="324" y2="344" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <line x1="56" y1="340" x2="56" y2="348" class="tick"/>
+    <text x="56" y="361" text-anchor="middle" class="sm dim">0</text>
+    <line x1="97.67" y1="340" x2="97.67" y2="348" class="tick"/>
+    <text x="97.67" y="361" text-anchor="middle" class="sm dim">1</text>
+    <line x1="139.33" y1="340" x2="139.33" y2="348" class="tick"/>
+    <text x="139.33" y="361" text-anchor="middle" class="sm dim">2</text>
+    <line x1="181" y1="340" x2="181" y2="348" class="tick"/>
+    <text x="181" y="361" text-anchor="middle" class="sm dim">3</text>
+    <line x1="222.67" y1="340" x2="222.67" y2="348" class="tick"/>
+    <text x="222.67" y="361" text-anchor="middle" class="sm dim">4</text>
+    <line x1="264.33" y1="340" x2="264.33" y2="348" class="tick"/>
+    <text x="264.33" y="361" text-anchor="middle" class="sm dim">5</text>
+    <line x1="306" y1="340" x2="306" y2="348" class="tick"/>
+    <text x="306" y="361" text-anchor="middle" class="sm dim">6</text>
+    <rect x="44" y="294" width="24" height="50" rx="2" fill="#3b82f6" fill-opacity="0.8"/>
+    <text x="56" y="286" text-anchor="middle" class="sm">C₀</text>
+    <rect x="169" y="277.45" width="24" height="66.55" rx="2" fill="#3b82f6" fill-opacity="0.8"/>
+    <rect x="85.67" y="294" width="24" height="50" rx="2" fill="#3b82f6" fill-opacity="0.45"/>
+    <text x="97.67" y="286" text-anchor="middle" class="sm">C₁</text>
+    <rect x="169" y="216.95" width="24" height="60.5" rx="2" fill="#3b82f6" fill-opacity="0.45"/>
+    <rect x="252.33" y="294" width="24" height="50" rx="2" fill="#d97706" fill-opacity="0.8"/>
+    <text x="264.33" y="286" text-anchor="middle" class="sm">C₅</text>
+    <rect x="169" y="175.63" width="24" height="41.32" rx="2" fill="#d97706" fill-opacity="0.8"/>
+    <rect x="294" y="294" width="24" height="50" rx="2" fill="#d97706" fill-opacity="0.45"/>
+    <text x="306" y="286" text-anchor="middle" class="sm">C₆</text>
+    <rect x="169" y="138.06" width="24" height="37.57" rx="2" fill="#d97706" fill-opacity="0.45"/>
+    <line x1="181" y1="132.06" x2="181" y2="84" class="thin dash" stroke="#7c3aed" stroke-width="1.4"/>
+    <text x="181" y="74" text-anchor="middle" class="sm bold" fill="#7c3aed">reference date</text>
+    <line x1="105.67" y1="260" x2="161" y2="260" class="thin" stroke="#3b82f6" stroke-width="1.6" marker-end="url(#ah3b82f6)"/>
+    <text x="135.33" y="252" text-anchor="middle" class="sm" fill="#3b82f6">grow</text>
+    <line x1="256.33" y1="260" x2="201" y2="260" class="thin" stroke="#d97706" stroke-width="1.6" marker-end="url(#ahd97706)"/>
+    <text x="226.67" y="252" text-anchor="middle" class="sm" fill="#d97706">discount</text>
   </g>
 </svg>

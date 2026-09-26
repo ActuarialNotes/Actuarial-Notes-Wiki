@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The principal portion of each payment growing as the balance falls</title>
+  <title>The principal part of each payment on the 10,000 loan, growing from 940 to 1,611 as the interest part above it fades</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,22 +47,22 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="82.91" y="135.71" width="19.05" height="98.51" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
-    <rect x="82.91" y="234.23" width="19.05" height="115.77" rx="2" fill="#d97706" fill-opacity="0.7"/>
-    <rect x="113.64" y="135.71" width="19.05" height="89.25" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
-    <rect x="113.64" y="224.97" width="19.05" height="125.03" rx="2" fill="#d97706" fill-opacity="0.7"/>
-    <rect x="144.38" y="135.71" width="19.05" height="79.25" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
-    <rect x="144.38" y="214.96" width="19.05" height="135.04" rx="2" fill="#d97706" fill-opacity="0.7"/>
-    <rect x="175.11" y="135.71" width="19.05" height="68.45" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
-    <rect x="175.11" y="204.16" width="19.05" height="145.84" rx="2" fill="#d97706" fill-opacity="0.7"/>
-    <rect x="205.84" y="135.71" width="19.05" height="56.78" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
-    <rect x="205.84" y="192.49" width="19.05" height="157.51" rx="2" fill="#d97706" fill-opacity="0.7"/>
-    <rect x="236.57" y="135.71" width="19.05" height="44.18" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
-    <rect x="236.57" y="179.89" width="19.05" height="170.11" rx="2" fill="#d97706" fill-opacity="0.7"/>
-    <rect x="267.3" y="135.71" width="19.05" height="30.57" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
-    <rect x="267.3" y="166.28" width="19.05" height="183.72" rx="2" fill="#d97706" fill-opacity="0.7"/>
-    <rect x="298.03" y="135.71" width="19.05" height="15.87" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
-    <rect x="298.03" y="151.59" width="19.05" height="198.41" rx="2" fill="#d97706" fill-opacity="0.7"/>
+    <rect x="82.91" y="234.23" width="19.05" height="115.77" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+    <rect x="82.91" y="135.71" width="19.05" height="98.51" rx="2" fill="#d97706" fill-opacity="0.25"/>
+    <rect x="113.64" y="224.97" width="19.05" height="125.03" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+    <rect x="113.64" y="135.71" width="19.05" height="89.25" rx="2" fill="#d97706" fill-opacity="0.25"/>
+    <rect x="144.38" y="214.96" width="19.05" height="135.04" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+    <rect x="144.38" y="135.71" width="19.05" height="79.25" rx="2" fill="#d97706" fill-opacity="0.25"/>
+    <rect x="175.11" y="204.16" width="19.05" height="145.84" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+    <rect x="175.11" y="135.71" width="19.05" height="68.45" rx="2" fill="#d97706" fill-opacity="0.25"/>
+    <rect x="205.84" y="192.49" width="19.05" height="157.51" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+    <rect x="205.84" y="135.71" width="19.05" height="56.78" rx="2" fill="#d97706" fill-opacity="0.25"/>
+    <rect x="236.57" y="179.89" width="19.05" height="170.11" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+    <rect x="236.57" y="135.71" width="19.05" height="44.18" rx="2" fill="#d97706" fill-opacity="0.25"/>
+    <rect x="267.3" y="166.28" width="19.05" height="183.72" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+    <rect x="267.3" y="135.71" width="19.05" height="30.57" rx="2" fill="#d97706" fill-opacity="0.25"/>
+    <rect x="298.03" y="151.59" width="19.05" height="198.41" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+    <rect x="298.03" y="135.71" width="19.05" height="15.87" rx="2" fill="#d97706" fill-opacity="0.25"/>
     <line x1="74" y1="350" x2="336" y2="350" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
     <line x1="74" y1="350" x2="74" y2="100" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
     <line x1="92.44" y1="350" x2="92.44" y2="354" class="tick"/>
@@ -85,10 +85,8 @@ text {
     <text x="66" y="353.6" text-anchor="end" class="sm dim">0</text>
     <line x1="70" y1="226.86" x2="74" y2="226.86" class="tick"/>
     <text x="66" y="230.46" text-anchor="end" class="sm dim">1,000</text>
-    <text x="326" y="382" text-anchor="end" class="sm dim">payment number</text>
-    <line x1="58" y1="92" x2="71" y2="92" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round"/>
-    <text x="77" y="95.6" text-anchor="start" class="sm">principal repaid</text>
-    <line x1="58" y1="108" x2="71" y2="108" stroke="#d97706" stroke-width="2.4" stroke-linecap="round"/>
-    <text x="77" y="111.6" text-anchor="start" class="sm">interest</text>
+    <text x="326" y="382" text-anchor="end" class="sm dim">payment</text>
+    <text x="92.44" y="228.23" text-anchor="middle" class="sm bold">940</text>
+    <text x="307.56" y="145.59" text-anchor="middle" class="sm bold">1,611</text>
   </g>
 </svg>

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Two models compared on buckets sorted by the ratio of their predictions</title>
+  <title>Actual loss cost in buckets sorted by the ratio of two models' predictions, the new model's line tracking it and the current model's staying flat</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -44,60 +44,55 @@ text {
   <g id="light"/><g id="dark"/>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <text x="180" y="88" text-anchor="middle" class="sm dim">buckets by ŷ_new / ŷ_current</text>
-    <line x1="97.7" y1="112" x2="97.7" y2="306" class="grid"/>
-    <line x1="145.85" y1="112" x2="145.85" y2="306" class="grid"/>
-    <line x1="194" y1="112" x2="194" y2="306" class="grid"/>
-    <line x1="242.15" y1="112" x2="242.15" y2="306" class="grid"/>
-    <line x1="290.3" y1="112" x2="290.3" y2="306" class="grid"/>
-    <line x1="64" y1="260.35" x2="324" y2="260.35" class="grid"/>
-    <line x1="64" y1="214.71" x2="324" y2="214.71" class="grid"/>
-    <line x1="64" y1="169.06" x2="324" y2="169.06" class="grid"/>
-    <line x1="64" y1="123.41" x2="324" y2="123.41" class="grid"/>
-    <line x1="64" y1="306" x2="324" y2="306" class="axis"/>
-    <line x1="64" y1="112" x2="64" y2="306" class="axis"/>
-    <line x1="97.7" y1="306" x2="97.7" y2="310" class="tick"/>
-    <text x="97.7" y="322" text-anchor="middle" class="sm dim">1</text>
-    <line x1="145.85" y1="306" x2="145.85" y2="310" class="tick"/>
-    <text x="145.85" y="322" text-anchor="middle" class="sm dim">2</text>
-    <line x1="194" y1="306" x2="194" y2="310" class="tick"/>
-    <text x="194" y="322" text-anchor="middle" class="sm dim">3</text>
-    <line x1="242.15" y1="306" x2="242.15" y2="310" class="tick"/>
-    <text x="242.15" y="322" text-anchor="middle" class="sm dim">4</text>
-    <line x1="290.3" y1="306" x2="290.3" y2="310" class="tick"/>
-    <text x="290.3" y="322" text-anchor="middle" class="sm dim">5</text>
-    <line x1="60" y1="260.35" x2="64" y2="260.35" class="tick"/>
-    <text x="56" y="263.95" text-anchor="end" class="sm dim">0.8</text>
-    <line x1="60" y1="214.71" x2="64" y2="214.71" class="tick"/>
-    <text x="56" y="218.31" text-anchor="end" class="sm dim">1</text>
-    <line x1="60" y1="169.06" x2="64" y2="169.06" class="tick"/>
-    <text x="56" y="172.66" text-anchor="end" class="sm dim">1.2</text>
-    <line x1="60" y1="123.41" x2="64" y2="123.41" class="tick"/>
-    <text x="56" y="127.01" text-anchor="end" class="sm dim">1.4</text>
-    <rect x="83.7" y="264.92" width="28" height="41.08" rx="1.5" fill="var(--dim)" fill-opacity="0.22"/>
-    <rect x="131.85" y="235.25" width="28" height="70.75" rx="1.5" fill="var(--dim)" fill-opacity="0.22"/>
-    <rect x="180" y="214.71" width="28" height="91.29" rx="1.5" fill="var(--dim)" fill-opacity="0.22"/>
-    <rect x="228.15" y="182.75" width="28" height="123.25" rx="1.5" fill="var(--dim)" fill-opacity="0.22"/>
-    <rect x="276.3" y="143.95" width="28" height="162.05" rx="1.5" fill="var(--dim)" fill-opacity="0.22"/>
-    <polyline points="97.7,260.35 145.85,232.96 194,212.42 242.15,187.32 290.3,150.8" class="curve" stroke="#059669" stroke-width="2.3"/>
-    <circle cx="97.7" cy="260.35" r="3.2" fill="#059669"/>
-    <circle cx="145.85" cy="232.96" r="3.2" fill="#059669"/>
-    <circle cx="194" cy="212.42" r="3.2" fill="#059669"/>
-    <circle cx="242.15" cy="187.32" r="3.2" fill="#059669"/>
-    <circle cx="290.3" cy="150.8" r="3.2" fill="#059669"/>
-    <polyline points="97.7,210.14 145.85,214.71 194,214.71 242.15,210.14 290.3,203.29" class="curve dash" stroke="#e11d48" stroke-width="2.3"/>
-    <circle cx="97.7" cy="210.14" r="3.2" fill="#e11d48"/>
-    <circle cx="145.85" cy="214.71" r="3.2" fill="#e11d48"/>
-    <circle cx="194" cy="214.71" r="3.2" fill="#e11d48"/>
-    <circle cx="242.15" cy="210.14" r="3.2" fill="#e11d48"/>
-    <circle cx="290.3" cy="203.29" r="3.2" fill="#e11d48"/>
-    <line x1="32" y1="344" x2="45" y2="344" stroke="var(--dim)" stroke-width="2.4" stroke-linecap="round"/>
-    <text x="51" y="347.6" text-anchor="start" class="sm">actual</text>
-    <line x1="130" y1="344" x2="143" y2="344" stroke="#059669" stroke-width="2.4" stroke-linecap="round"/>
-    <text x="149" y="347.6" text-anchor="start" class="sm">new</text>
-    <line x1="228" y1="344" x2="241" y2="344" stroke="#e11d48" stroke-width="2.4" stroke-linecap="round"/>
-    <text x="247" y="347.6" text-anchor="start" class="sm">current</text>
-    <text x="180" y="370" text-anchor="middle" class="sm bold">the flat curve is the loser</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">the winner tracks the actuals in both tails</text>
+    <line x1="97.7" y1="92" x2="97.7" y2="348" class="grid"/>
+    <line x1="145.85" y1="92" x2="145.85" y2="348" class="grid"/>
+    <line x1="194" y1="92" x2="194" y2="348" class="grid"/>
+    <line x1="242.15" y1="92" x2="242.15" y2="348" class="grid"/>
+    <line x1="290.3" y1="92" x2="290.3" y2="348" class="grid"/>
+    <line x1="64" y1="287.76" x2="324" y2="287.76" class="grid"/>
+    <line x1="64" y1="227.53" x2="324" y2="227.53" class="grid"/>
+    <line x1="64" y1="167.29" x2="324" y2="167.29" class="grid"/>
+    <line x1="64" y1="107.06" x2="324" y2="107.06" class="grid"/>
+    <line x1="64" y1="348" x2="324" y2="348" class="axis"/>
+    <line x1="64" y1="92" x2="64" y2="348" class="axis"/>
+    <line x1="97.7" y1="348" x2="97.7" y2="352" class="tick"/>
+    <text x="97.7" y="364" text-anchor="middle" class="sm dim">1</text>
+    <line x1="145.85" y1="348" x2="145.85" y2="352" class="tick"/>
+    <text x="145.85" y="364" text-anchor="middle" class="sm dim">2</text>
+    <line x1="194" y1="348" x2="194" y2="352" class="tick"/>
+    <text x="194" y="364" text-anchor="middle" class="sm dim">3</text>
+    <line x1="242.15" y1="348" x2="242.15" y2="352" class="tick"/>
+    <text x="242.15" y="364" text-anchor="middle" class="sm dim">4</text>
+    <line x1="290.3" y1="348" x2="290.3" y2="352" class="tick"/>
+    <text x="290.3" y="364" text-anchor="middle" class="sm dim">5</text>
+    <line x1="60" y1="287.76" x2="64" y2="287.76" class="tick"/>
+    <text x="56" y="291.36" text-anchor="end" class="sm dim">0.8</text>
+    <line x1="60" y1="227.53" x2="64" y2="227.53" class="tick"/>
+    <text x="56" y="231.13" text-anchor="end" class="sm dim">1</text>
+    <line x1="60" y1="167.29" x2="64" y2="167.29" class="tick"/>
+    <text x="56" y="170.89" text-anchor="end" class="sm dim">1.2</text>
+    <line x1="60" y1="107.06" x2="64" y2="107.06" class="tick"/>
+    <text x="56" y="110.66" text-anchor="end" class="sm dim">1.4</text>
+    <rect x="83.7" y="293.79" width="28" height="54.21" rx="1.5" fill="var(--dim)" fill-opacity="0.22"/>
+    <rect x="131.85" y="254.64" width="28" height="93.36" rx="1.5" fill="var(--dim)" fill-opacity="0.22"/>
+    <rect x="180" y="227.53" width="28" height="120.47" rx="1.5" fill="var(--dim)" fill-opacity="0.22"/>
+    <rect x="228.15" y="185.36" width="28" height="162.64" rx="1.5" fill="var(--dim)" fill-opacity="0.22"/>
+    <rect x="276.3" y="134.16" width="28" height="213.84" rx="1.5" fill="var(--dim)" fill-opacity="0.22"/>
+    <polyline points="97.7,287.76 145.85,251.62 194,224.52 242.15,191.39 290.3,143.2" class="curve" stroke="#059669" stroke-width="2.3"/>
+    <circle cx="97.7" cy="287.76" r="3.2" fill="#059669"/>
+    <circle cx="145.85" cy="251.62" r="3.2" fill="#059669"/>
+    <circle cx="194" cy="224.52" r="3.2" fill="#059669"/>
+    <circle cx="242.15" cy="191.39" r="3.2" fill="#059669"/>
+    <circle cx="290.3" cy="143.2" r="3.2" fill="#059669"/>
+    <polyline points="97.7,221.51 145.85,227.53 194,227.53 242.15,221.51 290.3,212.47" class="curve dash" stroke="#e11d48" stroke-width="2.3"/>
+    <circle cx="97.7" cy="221.51" r="3.2" fill="#e11d48"/>
+    <circle cx="145.85" cy="227.53" r="3.2" fill="#e11d48"/>
+    <circle cx="194" cy="227.53" r="3.2" fill="#e11d48"/>
+    <circle cx="242.15" cy="221.51" r="3.2" fill="#e11d48"/>
+    <circle cx="290.3" cy="212.47" r="3.2" fill="#e11d48"/>
+    <text x="97.7" y="329.93" text-anchor="middle" class="sm">actual</text>
+    <text x="271.04" y="163.29" text-anchor="end" class="sm bold">new</text>
+    <text x="266.22" y="237.51" text-anchor="middle" class="sm bold">current</text>
+    <text x="180" y="380" text-anchor="middle" class="sm dim">ŷ_new / ŷ_current</text>
   </g>
 </svg>

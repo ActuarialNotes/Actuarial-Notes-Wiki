@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Predictors ranked by the impurity they remove across the trees of an ensemble</title>
+  <title>Six claim predictors ranked by the impurity they remove, prior claims longest and gender barely there</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -44,27 +44,25 @@ text {
   <g id="light"/><g id="dark"/>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <text x="120" y="122" text-anchor="end" class="sm">prior claims</text>
-    <rect x="130" y="108" width="178" height="20" rx="3" fill="#3b82f6" fill-opacity="0.75"/>
-    <text x="315" y="122" text-anchor="start" class="sm dim">100</text>
-    <text x="120" y="156" text-anchor="end" class="sm">claim amount</text>
-    <rect x="130" y="142" width="126.38" height="20" rx="3" fill="#3b82f6" fill-opacity="0.60"/>
-    <text x="263.38" y="156" text-anchor="start" class="sm dim">71</text>
-    <text x="120" y="190" text-anchor="end" class="sm">days to report</text>
-    <rect x="130" y="176" width="113.92" height="20" rx="3" fill="#3b82f6" fill-opacity="0.57"/>
-    <text x="250.92" y="190" text-anchor="start" class="sm dim">64</text>
-    <text x="120" y="224" text-anchor="end" class="sm">territory</text>
-    <rect x="130" y="210" width="21.36" height="20" rx="3" fill="#3b82f6" fill-opacity="0.31"/>
-    <text x="158.36" y="224" text-anchor="start" class="sm dim">12</text>
-    <text x="120" y="258" text-anchor="end" class="sm">policy age</text>
-    <rect x="130" y="244" width="16.02" height="20" rx="3" fill="#3b82f6" fill-opacity="0.29"/>
-    <text x="153.02" y="258" text-anchor="start" class="sm dim">9</text>
-    <text x="120" y="292" text-anchor="end" class="sm">gender</text>
-    <rect x="130" y="278" width="3.56" height="20" rx="3" fill="#3b82f6" fill-opacity="0.26"/>
-    <text x="140.56" y="292" text-anchor="start" class="sm dim">2</text>
-    <line x1="130" y1="100" x2="130" y2="320" class="rule"/>
-    <text x="180" y="344" text-anchor="middle" class="sm dim">importance says a variable matters,</text>
-    <text x="180" y="360" text-anchor="middle" class="sm dim">not which way it pushes the prediction</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">correlated predictors split the credit</text>
+    <text x="118" y="110" text-anchor="end" class="sm">prior claims</text>
+    <rect x="128" y="94" width="184" height="24" rx="3" fill="#3b82f6" fill-opacity="0.75"/>
+    <text x="118" y="150" text-anchor="end" class="sm">claim amount</text>
+    <rect x="128" y="134" width="130.64" height="24" rx="3" fill="#3b82f6" fill-opacity="0.60"/>
+    <text x="118" y="190" text-anchor="end" class="sm">days to report</text>
+    <rect x="128" y="174" width="117.76" height="24" rx="3" fill="#3b82f6" fill-opacity="0.57"/>
+    <text x="118" y="230" text-anchor="end" class="sm">territory</text>
+    <rect x="128" y="214" width="22.08" height="24" rx="3" fill="#3b82f6" fill-opacity="0.31"/>
+    <text x="118" y="270" text-anchor="end" class="sm">policy age</text>
+    <rect x="128" y="254" width="16.56" height="24" rx="3" fill="#3b82f6" fill-opacity="0.29"/>
+    <text x="118" y="310" text-anchor="end" class="sm">gender</text>
+    <rect x="128" y="294" width="3.68" height="24" rx="3" fill="#3b82f6" fill-opacity="0.26"/>
+    <line x1="128" y1="86" x2="128" y2="336" class="axis"/>
+    <line x1="128" y1="336" x2="318" y2="336" class="axis"/>
+    <line x1="128" y1="336" x2="128" y2="340" class="tick"/>
+    <text x="128" y="353" text-anchor="middle" class="sm dim">0</text>
+    <line x1="220" y1="336" x2="220" y2="340" class="tick"/>
+    <text x="220" y="353" text-anchor="middle" class="sm dim">50</text>
+    <line x1="312" y1="336" x2="312" y2="340" class="tick"/>
+    <text x="312" y="353" text-anchor="middle" class="sm dim">100</text>
   </g>
 </svg>

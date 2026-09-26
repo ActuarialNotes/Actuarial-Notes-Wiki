@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Group means whose spread must be corrected for process noise before it estimates the VHM</title>
+  <title>Five risks' yearly results scattered about their own means, with one risk's scatter bracketed as v̂ and the spread of the means bracketed as â</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,61 +47,62 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="92.48" y1="92" x2="92.48" y2="312" class="grid"/>
-    <line x1="141.74" y1="92" x2="141.74" y2="312" class="grid"/>
-    <line x1="191" y1="92" x2="191" y2="312" class="grid"/>
-    <line x1="240.26" y1="92" x2="240.26" y2="312" class="grid"/>
-    <line x1="289.52" y1="92" x2="289.52" y2="312" class="grid"/>
-    <line x1="58" y1="275.33" x2="324" y2="275.33" class="grid"/>
-    <line x1="58" y1="202" x2="324" y2="202" class="grid"/>
-    <line x1="58" y1="128.67" x2="324" y2="128.67" class="grid"/>
-    <line x1="58" y1="312" x2="334" y2="312" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="58" y1="312" x2="58" y2="82" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="92.48" y1="312" x2="92.48" y2="316" class="tick"/>
-    <text x="92.48" y="328" text-anchor="middle" class="sm dim">R1</text>
-    <line x1="141.74" y1="312" x2="141.74" y2="316" class="tick"/>
-    <text x="141.74" y="328" text-anchor="middle" class="sm dim">R2</text>
-    <line x1="191" y1="312" x2="191" y2="316" class="tick"/>
-    <text x="191" y="328" text-anchor="middle" class="sm dim">R3</text>
-    <line x1="240.26" y1="312" x2="240.26" y2="316" class="tick"/>
-    <text x="240.26" y="328" text-anchor="middle" class="sm dim">R4</text>
-    <line x1="289.52" y1="312" x2="289.52" y2="316" class="tick"/>
-    <text x="289.52" y="328" text-anchor="middle" class="sm dim">R5</text>
-    <line x1="54" y1="275.33" x2="58" y2="275.33" class="tick"/>
-    <text x="50" y="278.93" text-anchor="end" class="sm dim">4</text>
-    <line x1="54" y1="202" x2="58" y2="202" class="tick"/>
-    <text x="50" y="205.6" text-anchor="end" class="sm dim">8</text>
-    <line x1="54" y1="128.67" x2="58" y2="128.67" class="tick"/>
-    <text x="50" y="132.27" text-anchor="end" class="sm dim">12</text>
-    <circle cx="84.35" cy="254.36" r="2.8" fill="#3b82f6"/>
-    <circle cx="89.77" cy="259" r="2.8" fill="#3b82f6"/>
-    <circle cx="95.19" cy="245.81" r="2.8" fill="#3b82f6"/>
-    <circle cx="100.61" cy="243.43" r="2.8" fill="#3b82f6"/>
-    <line x1="81.64" y1="247.83" x2="103.32" y2="247.83" class="thin" stroke="#3b82f6" stroke-width="2.2"/>
-    <circle cx="133.61" cy="197.66" r="2.8" fill="#d97706"/>
-    <circle cx="139.03" cy="175.36" r="2.8" fill="#d97706"/>
-    <circle cx="144.45" cy="177.67" r="2.8" fill="#d97706"/>
-    <circle cx="149.87" cy="122.16" r="2.8" fill="#d97706"/>
-    <line x1="130.9" y1="180" x2="152.58" y2="180" class="thin" stroke="#d97706" stroke-width="2.2"/>
-    <circle cx="182.87" cy="225.13" r="2.8" fill="#059669"/>
-    <circle cx="188.29" cy="217.28" r="2.8" fill="#059669"/>
-    <circle cx="193.71" cy="280.93" r="2.8" fill="#059669"/>
-    <circle cx="199.13" cy="186.65" r="2.8" fill="#059669"/>
-    <line x1="180.16" y1="220.33" x2="201.84" y2="220.33" class="thin" stroke="#059669" stroke-width="2.2"/>
-    <circle cx="232.13" cy="157.71" r="2.8" fill="#7c3aed"/>
-    <circle cx="237.55" cy="141.22" r="2.8" fill="#7c3aed"/>
-    <circle cx="242.97" cy="149.36" r="2.8" fill="#7c3aed"/>
-    <circle cx="248.39" cy="157.64" r="2.8" fill="#7c3aed"/>
-    <line x1="229.42" y1="136" x2="251.1" y2="136" class="thin" stroke="#7c3aed" stroke-width="2.2"/>
-    <circle cx="281.39" cy="222.64" r="2.8" fill="#e11d48"/>
-    <circle cx="286.81" cy="232.57" r="2.8" fill="#e11d48"/>
-    <circle cx="292.23" cy="215.39" r="2.8" fill="#e11d48"/>
-    <circle cx="297.65" cy="203.64" r="2.8" fill="#e11d48"/>
-    <line x1="278.68" y1="231.33" x2="300.36" y2="231.33" class="thin" stroke="#e11d48" stroke-width="2.2"/>
-    <line x1="58" y1="203.1" x2="324" y2="203.1" class="thin dash" stroke="var(--dim)" stroke-width="1.3"/>
-    <text x="326" y="206.7" text-anchor="start" class="sm dim">X̄</text>
-    <text x="180" y="352" text-anchor="middle" class="sm dim">within-risk scatter ⇒ v̂</text>
-    <text x="180" y="369" text-anchor="middle" class="sm dim">spread of the bars, less v̂/n ⇒ â</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">â &lt; 0 is set to 0, giving Z = 0</text>
+    <line x1="89.8" y1="90" x2="89.8" y2="348" class="grid"/>
+    <line x1="135.22" y1="90" x2="135.22" y2="348" class="grid"/>
+    <line x1="180.64" y1="90" x2="180.64" y2="348" class="grid"/>
+    <line x1="226.07" y1="90" x2="226.07" y2="348" class="grid"/>
+    <line x1="271.49" y1="90" x2="271.49" y2="348" class="grid"/>
+    <line x1="58" y1="305" x2="326" y2="305" class="grid"/>
+    <line x1="58" y1="219" x2="326" y2="219" class="grid"/>
+    <line x1="58" y1="133" x2="326" y2="133" class="grid"/>
+    <line x1="58" y1="348" x2="336" y2="348" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="58" y1="348" x2="58" y2="80" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="89.8" y1="348" x2="89.8" y2="352" class="tick"/>
+    <text x="89.8" y="364" text-anchor="middle" class="sm dim">R1</text>
+    <line x1="135.22" y1="348" x2="135.22" y2="352" class="tick"/>
+    <text x="135.22" y="364" text-anchor="middle" class="sm dim">R2</text>
+    <line x1="180.64" y1="348" x2="180.64" y2="352" class="tick"/>
+    <text x="180.64" y="364" text-anchor="middle" class="sm dim">R3</text>
+    <line x1="226.07" y1="348" x2="226.07" y2="352" class="tick"/>
+    <text x="226.07" y="364" text-anchor="middle" class="sm dim">R4</text>
+    <line x1="271.49" y1="348" x2="271.49" y2="352" class="tick"/>
+    <text x="271.49" y="364" text-anchor="middle" class="sm dim">R5</text>
+    <line x1="54" y1="305" x2="58" y2="305" class="tick"/>
+    <text x="50" y="308.6" text-anchor="end" class="sm dim">4</text>
+    <line x1="54" y1="219" x2="58" y2="219" class="tick"/>
+    <text x="50" y="222.6" text-anchor="end" class="sm dim">8</text>
+    <line x1="54" y1="133" x2="58" y2="133" class="tick"/>
+    <text x="50" y="136.6" text-anchor="end" class="sm dim">12</text>
+    <circle cx="82.3" cy="280.4" r="2.8" fill="#3b82f6"/>
+    <circle cx="87.3" cy="285.85" r="2.8" fill="#3b82f6"/>
+    <circle cx="92.29" cy="270.37" r="2.8" fill="#3b82f6"/>
+    <circle cx="97.29" cy="267.58" r="2.8" fill="#3b82f6"/>
+    <line x1="79.8" y1="272.75" x2="99.79" y2="272.75" class="thin" stroke="#3b82f6" stroke-width="2.2"/>
+    <circle cx="127.73" cy="213.91" r="2.8" fill="#d97706"/>
+    <circle cx="132.72" cy="187.76" r="2.8" fill="#d97706"/>
+    <circle cx="137.72" cy="190.47" r="2.8" fill="#d97706"/>
+    <circle cx="142.72" cy="125.37" r="2.8" fill="#d97706"/>
+    <line x1="125.23" y1="193.2" x2="145.21" y2="193.2" class="thin" stroke="#d97706" stroke-width="2.2"/>
+    <circle cx="173.15" cy="246.12" r="2.8" fill="#059669"/>
+    <circle cx="178.15" cy="236.92" r="2.8" fill="#059669"/>
+    <circle cx="183.14" cy="311.56" r="2.8" fill="#059669"/>
+    <circle cx="188.14" cy="201" r="2.8" fill="#059669"/>
+    <line x1="170.65" y1="240.5" x2="190.64" y2="240.5" class="thin" stroke="#059669" stroke-width="2.2"/>
+    <circle cx="218.57" cy="167.07" r="2.8" fill="#7c3aed"/>
+    <circle cx="223.57" cy="147.72" r="2.8" fill="#7c3aed"/>
+    <circle cx="228.57" cy="157.27" r="2.8" fill="#7c3aed"/>
+    <circle cx="233.56" cy="166.98" r="2.8" fill="#7c3aed"/>
+    <line x1="216.07" y1="141.6" x2="236.06" y2="141.6" class="thin" stroke="#7c3aed" stroke-width="2.2"/>
+    <circle cx="264" cy="243.2" r="2.8" fill="#e11d48"/>
+    <circle cx="268.99" cy="254.85" r="2.8" fill="#e11d48"/>
+    <circle cx="273.99" cy="234.71" r="2.8" fill="#e11d48"/>
+    <circle cx="278.99" cy="220.92" r="2.8" fill="#e11d48"/>
+    <line x1="261.5" y1="253.4" x2="281.48" y2="253.4" class="thin" stroke="#e11d48" stroke-width="2.2"/>
+    <line x1="58" y1="220.29" x2="326" y2="220.29" class="thin dash" stroke="var(--dim)" stroke-width="1.3"/>
+    <text x="63.45" y="215.29" text-anchor="start" class="sm dim">X̄</text>
+    <path d="M144.8,125.4 H148.8 V213.9 H144.8" class="thin" stroke="var(--ink)" stroke-width="1.6"/>
+    <text x="154.85" y="173.64" text-anchor="start" class="bold">v̂</text>
+    <path d="M290.2,141.6 H294.2 V272.8 H290.2" class="thin" stroke="#7c3aed" stroke-width="1.6"/>
+    <text x="300.2" y="211.18" text-anchor="start" class="bold">â</text>
   </g>
 </svg>

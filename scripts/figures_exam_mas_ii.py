@@ -1,8 +1,8 @@
 """Figures for the Exam MAS-II (Modern Actuarial Statistics II) concept pages.
 
 Same contract as `figures_exam_p.py` / `figures_exam_fm.py`: each builder returns
-a `Fig` from `vcard()` — a portrait card carrying a title, one picture and one
-formula. Grouped in syllabus order:
+a `Fig` from `vcard()` carrying one picture and nothing else — no title, no
+formula, no caption, no table. Grouped in syllabus order:
 
 A. Credibility — classical, Bühlmann, Bayesian, empirical Bayes
 B. Linear mixed models — fixed/random effects, variance components, REML, BLUP
@@ -28,10 +28,9 @@ from __future__ import annotations
 import math
 
 from figure_kit import (
-    AMBER, BLUE, GREEN, ROSE, TEAL, VIOLET, SERIES,
+    AMBER, BLUE, GREEN, ROSE, SERIES, VIOLET,
     Axes, Fig, brace, vaxes, vcard,
     BX0, BY0, BX1, BY1, BCX, BCY,
-    building, car, coins, cross, document, house, person, scales, shield, tower,
 )
 from figure_registry import figure
 
@@ -73,21 +72,6 @@ class _Rand:
     def n(self, mu=0.0, sd=1.0) -> float:
         u1, u2 = self.u() + 1e-9, self.u()
         return mu + sd * math.sqrt(-2 * math.log(u1)) * math.cos(2 * math.pi * u2)
-
-
-def _blend_bar(f: Fig, y, z, left_label, right_label, mid_label, height=20,
-               x0=48, x1=312, left_colour=AMBER, right_colour=BLUE):
-    """The credibility bar: complement on the left, experience on the right."""
-    w = x1 - x0
-    f.rect(x0, y - height / 2, w * (1 - z), height, rx=4, fill=left_colour,
-           fill_opacity="0.28", stroke=left_colour, stroke_width="1.2")
-    f.rect(x0 + w * (1 - z), y - height / 2, w * z, height, rx=4, fill=right_colour,
-           fill_opacity="0.4", stroke=right_colour, stroke_width="1.2")
-    f.text(x0 + w * (1 - z) / 2, y + 4, left_label, cls="sm")
-    f.text(x0 + w * (1 - z) + w * z / 2, y + 4, right_label, cls="sm")
-    if mid_label:
-        f.text(BCX, y - height / 2 - 9, mid_label, cls="sm dim")
-    return x0 + w * (1 - z)
 
 
 # ═══════════════════════════════════════════════════════════════════════════

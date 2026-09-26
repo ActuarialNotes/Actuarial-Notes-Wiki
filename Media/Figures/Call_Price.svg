@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The call price replacing the redemption value at a call date</title>
+  <title>Coupons with a call date part-way along: the call price paid there stands a little above the dashed face-value level, and the coupons after it fade</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -50,32 +50,48 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="48" y1="236" x2="318" y2="236" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-    <line x1="56" y1="232" x2="56" y2="240" class="tick"/>
-    <text x="56" y="253" text-anchor="middle" class="sm dim">0</text>
-    <line x1="86.5" y1="232" x2="86.5" y2="240" class="tick"/>
-    <line x1="117" y1="232" x2="117" y2="240" class="tick"/>
-    <line x1="147.5" y1="232" x2="147.5" y2="240" class="tick"/>
-    <text x="147.5" y="253" text-anchor="middle" class="sm dim">n_c</text>
-    <line x1="178" y1="232" x2="178" y2="240" class="tick"/>
-    <line x1="208.5" y1="232" x2="208.5" y2="240" class="tick"/>
-    <line x1="239" y1="232" x2="239" y2="240" class="tick"/>
-    <line x1="269.5" y1="232" x2="269.5" y2="240" class="tick"/>
-    <line x1="300" y1="232" x2="300" y2="240" class="tick"/>
-    <text x="300" y="253" text-anchor="middle" class="sm dim">n</text>
-    <line x1="86.5" y1="236" x2="86.5" y2="210" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <line x1="117" y1="236" x2="117" y2="210" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <line x1="147.5" y1="236" x2="147.5" y2="210" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <line x1="178" y1="236" x2="178" y2="210" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <line x1="208.5" y1="236" x2="208.5" y2="210" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <line x1="239" y1="236" x2="239" y2="210" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <line x1="269.5" y1="236" x2="269.5" y2="210" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <line x1="300" y1="236" x2="300" y2="210" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <line x1="147.5" y1="236" x2="147.5" y2="168" class="thin" stroke="#d97706" stroke-width="1.8" marker-end="url(#ahd97706)"/>
-    <text x="147.5" y="162" text-anchor="middle" class="sm">C_call</text>
-    <line x1="300" y1="236" x2="300" y2="168" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
-    <text x="300" y="162" text-anchor="middle" class="sm">C</text>
-    <line x1="147.5" y1="148" x2="147.5" y2="224" class="thin dash" stroke="#d97706" stroke-width="1.2"/>
-    <text x="180" y="132" text-anchor="middle" class="sm dim">call price ≥ face value</text>
+    <line x1="48" y1="330" x2="318" y2="330" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <line x1="56" y1="326" x2="56" y2="334" class="tick"/>
+    <text x="56" y="347" text-anchor="middle" class="sm dim">0</text>
+    <line x1="86.5" y1="326" x2="86.5" y2="334" class="tick"/>
+    <line x1="117" y1="326" x2="117" y2="334" class="tick"/>
+    <line x1="147.5" y1="326" x2="147.5" y2="334" class="tick"/>
+    <line x1="178" y1="326" x2="178" y2="334" class="tick"/>
+    <line x1="208.5" y1="326" x2="208.5" y2="334" class="tick"/>
+    <line x1="239" y1="326" x2="239" y2="334" class="tick"/>
+    <line x1="269.5" y1="326" x2="269.5" y2="334" class="tick"/>
+    <line x1="300" y1="326" x2="300" y2="334" class="tick"/>
+    <text x="300" y="347" text-anchor="middle" class="sm dim">n</text>
+    <g opacity="1">
+    <line x1="86.5" y1="330" x2="86.5" y2="294" class="thin" stroke="#3b82f6" stroke-width="2" marker-end="url(#ah3b82f6)"/>
+    </g>
+    <g opacity="1">
+    <line x1="117" y1="330" x2="117" y2="294" class="thin" stroke="#3b82f6" stroke-width="2" marker-end="url(#ah3b82f6)"/>
+    </g>
+    <g opacity="1">
+    <line x1="147.5" y1="330" x2="147.5" y2="294" class="thin" stroke="#3b82f6" stroke-width="2" marker-end="url(#ah3b82f6)"/>
+    </g>
+    <g opacity="1">
+    <line x1="178" y1="330" x2="178" y2="294" class="thin" stroke="#3b82f6" stroke-width="2" marker-end="url(#ah3b82f6)"/>
+    </g>
+    <g opacity="0.35">
+    <line x1="208.5" y1="330" x2="208.5" y2="294" class="thin" stroke="#3b82f6" stroke-width="2" marker-end="url(#ah3b82f6)"/>
+    </g>
+    <g opacity="0.35">
+    <line x1="239" y1="330" x2="239" y2="294" class="thin" stroke="#3b82f6" stroke-width="2" marker-end="url(#ah3b82f6)"/>
+    </g>
+    <g opacity="0.35">
+    <line x1="269.5" y1="330" x2="269.5" y2="294" class="thin" stroke="#3b82f6" stroke-width="2" marker-end="url(#ah3b82f6)"/>
+    </g>
+    <g opacity="0.35">
+    <line x1="300" y1="330" x2="300" y2="294" class="thin" stroke="#3b82f6" stroke-width="2" marker-end="url(#ah3b82f6)"/>
+    </g>
+    <line x1="74.5" y1="140" x2="314" y2="140" class="thin dash" stroke="var(--dim)" stroke-width="1.2"/>
+    <text x="70.5" y="144" text-anchor="end" class="bold">F</text>
+    <line x1="178" y1="330" x2="178" y2="113.4" class="thin" stroke="#d97706" stroke-width="2.4" marker-end="url(#ahd97706)"/>
+    <text x="178" y="107.4" text-anchor="middle" class="sm bold">call price</text>
+    <g opacity="0.35">
+    <line x1="300" y1="330" x2="300" y2="140" class="thin" stroke="#059669" stroke-width="2.2" marker-end="url(#ah059669)"/>
+    </g>
   </g>
 </svg>

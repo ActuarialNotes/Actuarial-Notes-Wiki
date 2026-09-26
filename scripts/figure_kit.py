@@ -466,22 +466,6 @@ OY = BY0 - MARGIN                       # the card's top edge
 VW, VH = BW + 2 * MARGIN, BH + 2 * MARGIN   # 360 × 366
 
 
-def wrap(text: str, width: int = 40) -> list[str]:
-    """Greedy word wrap, measured in characters."""
-    lines: list[str] = []
-    cur = ""
-    for word in text.split():
-        cand = f"{cur} {word}".strip()
-        if len(cand) > width and cur:
-            lines.append(cur)
-            cur = word
-        else:
-            cur = cand
-    if cur:
-        lines.append(cur)
-    return lines
-
-
 def vcard(alt: str = "") -> Fig:
     """The figure card: a bare surface around the drawing box.
 
@@ -715,7 +699,7 @@ def fmt_money(v: float) -> str:
 __all__ = [
     "Fig", "Axes", "axes", "timeline", "cash_arrow", "brace", "venn2", "universe",
     "stacked_bars", "fmt_money", "BLUE", "AMBER", "GREEN", "ROSE", "VIOLET", "TEAL",
-    "SERIES", "vcard", "vaxes", "wrap", "VW", "VH", "BX0", "BY0", "BX1", "BY1",
+    "SERIES", "vcard", "vaxes", "VW", "VH", "BX0", "BY0", "BX1", "BY1",
     "BW", "BH", "BCX", "BCY", "OY", "MARGIN",
     "person", "building", "tower", "document", "house", "car", "coins", "scales",
     "shield", "cross",

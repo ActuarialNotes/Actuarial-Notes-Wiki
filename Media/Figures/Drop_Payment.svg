@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>A final payment smaller than the regular one, clearing a small remaining balance</title>
+  <title>Five level payments P, then a final drop payment filling only part of the dashed outline a full payment would have</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -49,35 +49,29 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="48" y1="250" x2="318" y2="250" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-    <line x1="56" y1="246" x2="56" y2="254" class="tick"/>
-    <text x="56" y="267" text-anchor="middle" class="sm dim">0</text>
-    <line x1="96.67" y1="246" x2="96.67" y2="254" class="tick"/>
-    <text x="96.67" y="267" text-anchor="middle" class="sm dim">1</text>
-    <line x1="137.33" y1="246" x2="137.33" y2="254" class="tick"/>
-    <text x="137.33" y="267" text-anchor="middle" class="sm dim">2</text>
-    <line x1="178" y1="246" x2="178" y2="254" class="tick"/>
-    <text x="178" y="267" text-anchor="middle" class="sm dim">3</text>
-    <line x1="218.67" y1="246" x2="218.67" y2="254" class="tick"/>
-    <text x="218.67" y="267" text-anchor="middle" class="sm dim">4</text>
-    <line x1="259.33" y1="246" x2="259.33" y2="254" class="tick"/>
-    <text x="259.33" y="267" text-anchor="middle" class="sm dim">5</text>
-    <line x1="300" y1="246" x2="300" y2="254" class="tick"/>
-    <text x="300" y="267" text-anchor="middle" class="sm dim">6</text>
-    <line x1="96.67" y1="250" x2="96.67" y2="196" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="96.67" y="190" text-anchor="middle" class="sm">P</text>
-    <line x1="137.33" y1="250" x2="137.33" y2="196" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="137.33" y="190" text-anchor="middle" class="sm">P</text>
-    <line x1="178" y1="250" x2="178" y2="196" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="178" y="190" text-anchor="middle" class="sm">P</text>
-    <line x1="218.67" y1="250" x2="218.67" y2="196" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="218.67" y="190" text-anchor="middle" class="sm">P</text>
-    <line x1="259.33" y1="250" x2="259.33" y2="196" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="259.33" y="190" text-anchor="middle" class="sm">P</text>
-    <line x1="300" y1="250" x2="300" y2="230" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
-    <text x="300" y="224" text-anchor="middle" class="sm">drop</text>
-    <line x1="84.67" y1="196" x2="312" y2="196" class="thin dash" stroke="var(--dim)" stroke-width="1.2"/>
-    <text x="180" y="174" text-anchor="middle" class="sm dim">level P</text>
-    <text x="180" y="340" text-anchor="middle" class="sm dim">P was rounded up, so the loan clears early</text>
+    <line x1="48" y1="330" x2="318" y2="330" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <line x1="56" y1="326" x2="56" y2="334" class="tick"/>
+    <text x="56" y="347" text-anchor="middle" class="sm dim">0</text>
+    <line x1="96.67" y1="326" x2="96.67" y2="334" class="tick"/>
+    <text x="96.67" y="347" text-anchor="middle" class="sm dim">1</text>
+    <line x1="137.33" y1="326" x2="137.33" y2="334" class="tick"/>
+    <text x="137.33" y="347" text-anchor="middle" class="sm dim">2</text>
+    <line x1="178" y1="326" x2="178" y2="334" class="tick"/>
+    <text x="178" y="347" text-anchor="middle" class="sm dim">3</text>
+    <line x1="218.67" y1="326" x2="218.67" y2="334" class="tick"/>
+    <text x="218.67" y="347" text-anchor="middle" class="sm dim">4</text>
+    <line x1="259.33" y1="326" x2="259.33" y2="334" class="tick"/>
+    <text x="259.33" y="347" text-anchor="middle" class="sm dim">5</text>
+    <line x1="300" y1="326" x2="300" y2="334" class="tick"/>
+    <text x="300" y="347" text-anchor="middle" class="sm dim">6</text>
+    <line x1="96.67" y1="330" x2="96.67" y2="160" class="thin" stroke="#3b82f6" stroke-width="2" marker-end="url(#ah3b82f6)"/>
+    <line x1="137.33" y1="330" x2="137.33" y2="160" class="thin" stroke="#3b82f6" stroke-width="2" marker-end="url(#ah3b82f6)"/>
+    <line x1="178" y1="330" x2="178" y2="160" class="thin" stroke="#3b82f6" stroke-width="2" marker-end="url(#ah3b82f6)"/>
+    <line x1="218.67" y1="330" x2="218.67" y2="160" class="thin" stroke="#3b82f6" stroke-width="2" marker-end="url(#ah3b82f6)"/>
+    <line x1="259.33" y1="330" x2="259.33" y2="160" class="thin" stroke="#3b82f6" stroke-width="2" marker-end="url(#ah3b82f6)"/>
+    <text x="96.67" y="152" text-anchor="middle" class="bold">P</text>
+    <line x1="300" y1="330" x2="300" y2="160" class="thin dash" stroke="var(--axis)" stroke-width="2" marker-end="url(#ahvaraxis)"/>
+    <line x1="300" y1="330" x2="300" y2="279" class="thin" stroke="#059669" stroke-width="2.6" marker-end="url(#ah059669)"/>
+    <text x="292" y="308.5" text-anchor="end" class="sm bold" fill="#059669">drop</text>
   </g>
 </svg>

@@ -1,8 +1,8 @@
 """Figures for the Exam P (Probability) concept pages.
 
-Each builder returns a `Fig` built by `vcard()`: a **portrait** card carrying a
-title, one picture, and one formula — nothing else. Annotations live inside the
-picture only when they are needed to read it. Grouped in syllabus order:
+Each builder returns a `Fig` built by `vcard()` carrying **one picture** and
+nothing else — no title, no formula, no caption, no table. Labels live inside
+the picture only when they are needed to read it. Grouped in syllabus order:
 
 1. General probability — sets, events, counting, conditioning
 2. Univariate random variables — PDF/CDF, moments, the two uniforms
@@ -14,13 +14,11 @@ picture only when they are needed to read it. Grouped in syllabus order:
 from __future__ import annotations
 
 import math
-from fractions import Fraction
 
 from figure_kit import (
-    AMBER, BLUE, GREEN, ROSE, SERIES, TEAL, VIOLET,
-    Axes, Fig, brace, universe, venn2, vaxes, vcard,
-    BX0, BY0, BX1, BY1, BCX,
-    building, car, coins, cross, document, house, person, scales, shield, tower,
+    AMBER, BLUE, GREEN, ROSE, SERIES, VIOLET,
+    Axes, Fig, brace, universe, vaxes, vcard, venn2,
+    BCX,
 )
 from figure_registry import figure
 
@@ -54,25 +52,6 @@ def _std_normals(seed: int, n: int) -> list[tuple[float, float]]:
     return out
 
 
-def _mean_density(n: int, j: int, bars: int) -> float:
-    """Density of the mean of `n` iid Uniform(0,1) draws at the centre of bar `j`.
-
-    The Irwin–Hall density, summed in exact rational arithmetic — for n = 30 the
-    alternating terms run to 40-odd digits and float64 cancels away the answer.
-    """
-    s = Fraction(n * (2 * j + 1), 2 * bars)          # the sum, on [0, n]
-    total = sum((-1) ** k * math.comb(n, k) * (s - k) ** (n - 1)
-                for k in range(int(s) + 1))
-    return float(total) * n / math.factorial(n - 1)
-
-
-def _panel(f: Fig, px, py, pw, ph, name, colour):
-    """A small titled sub-plot — used by the two "families" figures."""
-    f.text(px + pw / 2, py - 6, name, cls="sm bold", fill=colour)
-    f.line(px, py + ph, px + pw, py + ph, cls="axis")
-    return Axes(f, px, py, px + pw, py + ph, 0, 1, 0, 1)
-
-
 def _binom_pmf(n, p, k):
     return math.comb(n, k) * p ** k * (1 - p) ** (n - k)
 
@@ -89,29 +68,6 @@ def _beta_pdf(x, a, b):
         return 0.0
     log_beta = math.lgamma(a) + math.lgamma(b) - math.lgamma(a + b)
     return math.exp((a - 1) * math.log(x) + (b - 1) * math.log(1 - x) - log_beta)
-
-
-def _trial_strip(f: Fig, y, wins, size=26, gap=5, colour=BLUE, ring=()):
-    """A row of Bernoulli trial boxes, filled where the trial succeeded.
-
-    The five named discrete distributions share this strip: each of those
-    figures is the mechanism (which trials happened) above the mass function it
-    produces, so a reader flipping between them meets the same two-part story
-    every time. `ring` outlines the trials that were drawn or that ended the
-    count. Returns the box centres.
-    """
-    x = BCX - (len(wins) * size + (len(wins) - 1) * gap) / 2
-    centres = []
-    for i, win in enumerate(wins):
-        f.rect(x, y, size, size, rx=5, fill=colour if win else "var(--soft)",
-               fill_opacity="0.7" if win else "1",
-               stroke=colour if win else "var(--edge)", stroke_width="1.2")
-        if i in ring:
-            f.rect(x - 4, y - 4, size + 8, size + 8, rx=8, fill="none",
-                   stroke="var(--dim)", stroke_width="1.2", stroke_dasharray="3 2.5")
-        centres.append(x + size / 2)
-        x += size + gap
-    return centres
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -1268,39 +1224,6 @@ JOINT = [
     [0.06, 0.20, 0.14],   # x = 1
     [0.04, 0.12, 0.24],   # x = 2
 ]
-
-
-def _joint_table(f, x0, y0, cell=58, row_h=36, highlight=None, show_margins=True):
-    """Draw the shared 3×3 joint PMF, optionally with margins and a highlight."""
-    for j in range(3):
-        f.text(x0 + (j + 0.5) * cell, y0 - 8, f"y = {j}", cls="sm dim")
-    for i in range(3):
-        f.text(x0 - 8, y0 + (i + 0.5) * row_h + 4, f"x = {i}", cls="sm dim", anchor="end")
-    for i in range(3):
-        for j in range(3):
-            cx, cy = x0 + j * cell, y0 + i * row_h
-            on = highlight is not None and highlight(i, j)
-            f.rect(cx, cy, cell, row_h, rx=3, fill=BLUE if on else "var(--soft)",
-                   fill_opacity="0.26" if on else "1", stroke="var(--edge)",
-                   stroke_width="1")
-            f.text(cx + cell / 2, cy + row_h / 2 + 4, f"{JOINT[i][j]:.2f}",
-                   cls="sm bold" if on else "sm")
-    if show_margins:
-        f.text(x0 + 3.5 * cell + 6, y0 - 8, "pₓ(x)", cls="sm dim", fill=AMBER)
-        for i in range(3):
-            cx, cy = x0 + 3 * cell + 6, y0 + i * row_h
-            f.rect(cx, cy, cell, row_h, rx=3, fill=AMBER, fill_opacity="0.16",
-                   stroke=AMBER, stroke_width="1")
-            f.text(cx + cell / 2, cy + row_h / 2 + 4, f"{sum(JOINT[i]):.2f}",
-                   cls="sm bold")
-        f.text(x0 - 8, y0 + 3 * row_h + 28, "p_Y(y)", cls="sm dim", anchor="end",
-               fill=GREEN)
-        for j in range(3):
-            cx, cy = x0 + j * cell, y0 + 3 * row_h + 6
-            f.rect(cx, cy, cell, row_h, rx=3, fill=GREEN, fill_opacity="0.16",
-                   stroke=GREEN, stroke_width="1")
-            f.text(cx + cell / 2, cy + row_h / 2 + 4,
-                   f"{sum(JOINT[i][j] for i in range(3)):.2f}", cls="sm bold")
 
 
 @figure("Multivariate Distribution", "Contours of a tilted joint density in the x–y "

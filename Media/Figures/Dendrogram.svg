@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Two adjacent leaves that fuse high, against a distant pair that fuses low</title>
+  <title>A dendrogram where A, drawn beside B, fuses with C at height 3 and D at 6, while B joins only at 9</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -44,32 +44,30 @@ text {
   <g id="light"/><g id="dark"/>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <text x="76" y="318" text-anchor="middle" class="sm bold">B</text>
-    <text x="132" y="318" text-anchor="middle" class="sm bold">A</text>
-    <text x="200" y="318" text-anchor="middle" class="sm bold">C</text>
-    <text x="268" y="318" text-anchor="middle" class="sm bold">D</text>
-    <line x1="132" y1="300" x2="132" y2="234" class="thin" stroke="#059669" stroke-width="1.8"/>
-    <line x1="200" y1="300" x2="200" y2="234" class="thin" stroke="#059669" stroke-width="1.8"/>
-    <line x1="132" y1="234" x2="200" y2="234" class="thin" stroke="#059669" stroke-width="1.8"/>
-    <text x="166" y="227" text-anchor="middle" class="sm bold" fill="#059669">A + C at 3</text>
-    <line x1="166" y1="234" x2="166" y2="168" class="thin" stroke="#3b82f6" stroke-width="1.8"/>
-    <line x1="268" y1="300" x2="268" y2="168" class="thin" stroke="#3b82f6" stroke-width="1.8"/>
-    <line x1="166" y1="168" x2="268" y2="168" class="thin" stroke="#3b82f6" stroke-width="1.8"/>
-    <text x="217" y="161" text-anchor="middle" class="sm" fill="#3b82f6">+ D at 6</text>
-    <line x1="76" y1="300" x2="76" y2="102" class="thin" stroke="#e11d48" stroke-width="1.8"/>
-    <line x1="217" y1="168" x2="217" y2="102" class="thin" stroke="#e11d48" stroke-width="1.8"/>
-    <line x1="76" y1="102" x2="217" y2="102" class="thin" stroke="#e11d48" stroke-width="1.8"/>
-    <text x="146.5" y="94" text-anchor="middle" class="sm bold" fill="#e11d48">B joins only at 9</text>
-    <line x1="52" y1="300" x2="320" y2="300" class="axis"/>
-    <line x1="50" y1="300" x2="54" y2="300" class="tick"/>
-    <text x="46" y="304" text-anchor="end" class="sm dim">0</text>
-    <line x1="50" y1="234" x2="54" y2="234" class="tick"/>
-    <text x="46" y="238" text-anchor="end" class="sm dim">3</text>
-    <line x1="50" y1="168" x2="54" y2="168" class="tick"/>
-    <text x="46" y="172" text-anchor="end" class="sm dim">6</text>
-    <line x1="50" y1="102" x2="54" y2="102" class="tick"/>
-    <text x="46" y="106" text-anchor="end" class="sm dim">9</text>
-    <text x="180" y="346" text-anchor="middle" class="sm">A is drawn next to B, but fuses with C first</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">any branch may be flipped without changing the tree</text>
+    <text x="76" y="352" text-anchor="middle" class="sm bold">B</text>
+    <text x="132" y="352" text-anchor="middle" class="sm bold">A</text>
+    <text x="200" y="352" text-anchor="middle" class="sm bold">C</text>
+    <text x="268" y="352" text-anchor="middle" class="sm bold">D</text>
+    <line x1="132" y1="334" x2="132" y2="262" class="thin" stroke="#059669" stroke-width="1.8"/>
+    <line x1="200" y1="334" x2="200" y2="262" class="thin" stroke="#059669" stroke-width="1.8"/>
+    <line x1="132" y1="262" x2="200" y2="262" class="thin" stroke="#059669" stroke-width="1.8"/>
+    <text x="126" y="266" text-anchor="end" class="sm bold" fill="#059669">A + C</text>
+    <line x1="166" y1="262" x2="166" y2="190" class="thin" stroke="#3b82f6" stroke-width="1.8"/>
+    <line x1="268" y1="334" x2="268" y2="190" class="thin" stroke="#3b82f6" stroke-width="1.8"/>
+    <line x1="166" y1="190" x2="268" y2="190" class="thin" stroke="#3b82f6" stroke-width="1.8"/>
+    <text x="160" y="194" text-anchor="end" class="sm bold" fill="#3b82f6">+ D</text>
+    <line x1="76" y1="334" x2="76" y2="118" class="thin" stroke="#e11d48" stroke-width="1.8"/>
+    <line x1="217" y1="190" x2="217" y2="118" class="thin" stroke="#e11d48" stroke-width="1.8"/>
+    <line x1="76" y1="118" x2="217" y2="118" class="thin" stroke="#e11d48" stroke-width="1.8"/>
+    <text x="146.5" y="110" text-anchor="middle" class="sm bold" fill="#e11d48">+ B</text>
+    <line x1="52" y1="334" x2="320" y2="334" class="axis"/>
+    <line x1="50" y1="334" x2="54" y2="334" class="tick"/>
+    <text x="46" y="338" text-anchor="end" class="sm dim">0</text>
+    <line x1="50" y1="262" x2="54" y2="262" class="tick"/>
+    <text x="46" y="266" text-anchor="end" class="sm dim">3</text>
+    <line x1="50" y1="190" x2="54" y2="190" class="tick"/>
+    <text x="46" y="194" text-anchor="end" class="sm dim">6</text>
+    <line x1="50" y1="118" x2="54" y2="118" class="tick"/>
+    <text x="46" y="122" text-anchor="end" class="sm dim">9</text>
   </g>
 </svg>

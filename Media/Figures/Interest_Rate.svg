@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The interest rate as the two-way bridge between present and future value</title>
+  <title>A short stack of coins at time 0 and a taller one at time n, with arrows exchanging one for the other: forward at × (1+i)ⁿ, back at × vⁿ</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -43,20 +43,238 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
     <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
     <marker id="ahd97706" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#d97706"/></marker>
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="76" y="96" width="208" height="76" rx="7" fill="#d97706" fill-opacity="0.12" stroke="#d97706" stroke-width="1.2"/>
-    <text x="180" y="130" text-anchor="middle" class="ttl">PV</text>
-    <text x="180" y="152" text-anchor="middle" class="sm dim">value today</text>
-    <rect x="76" y="292" width="208" height="76" rx="7" fill="#059669" fill-opacity="0.12" stroke="#059669" stroke-width="1.2"/>
-    <text x="180" y="326" text-anchor="middle" class="ttl">FV</text>
-    <text x="180" y="348" text-anchor="middle" class="sm dim">value at time n</text>
-    <line x1="136" y1="182" x2="136" y2="282" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
-    <text x="126" y="236" text-anchor="end" class="sm bold" fill="#059669">× (1 + i)ⁿ</text>
-    <line x1="228" y1="282" x2="228" y2="182" class="thin" stroke="#d97706" stroke-width="1.8" marker-end="url(#ahd97706)"/>
-    <text x="238" y="236" text-anchor="start" class="sm bold" fill="#d97706">× vⁿ</text>
+    <line x1="80" y1="344" x2="290" y2="344" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <line x1="88" y1="340" x2="88" y2="348" class="tick"/>
+    <text x="88" y="361" text-anchor="middle" class="sm dim">0</text>
+    <line x1="272" y1="340" x2="272" y2="348" class="tick"/>
+    <text x="272" y="361" text-anchor="middle" class="sm dim">n</text>
+    <rect x="62" y="330" width="52" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="88" cy="336" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="330" rx="26" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="330" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="62" y="324" width="52" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="88" cy="330" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="324" rx="26" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="324" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="62" y="318" width="52" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="88" cy="324" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="318" rx="26" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="318" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="62" y="312" width="52" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="88" cy="318" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="312" rx="26" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="312" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="62" y="306" width="52" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="88" cy="312" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="306" rx="26" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="306" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="62" y="300" width="52" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="88" cy="306" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="300" rx="26" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="300" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="62" y="294" width="52" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="88" cy="300" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="294" rx="26" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="294" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="62" y="288" width="52" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="88" cy="294" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="288" rx="26" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="288" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="62" y="282" width="52" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="88" cy="288" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="282" rx="26" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="282" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="62" y="276" width="52" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="88" cy="282" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="276" rx="26" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="276" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="62" y="270" width="52" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="88" cy="276" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="270" rx="26" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="270" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="62" y="264" width="52" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="88" cy="270" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="264" rx="26" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="264" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="62" y="258" width="52" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="88" cy="264" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="258" rx="26" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="258" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="62" y="252" width="52" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="88" cy="258" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="252" rx="26" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="252" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="62" y="246" width="52" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="88" cy="252" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="246" rx="26" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="246" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="62" y="240" width="52" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="88" cy="246" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="240" rx="26" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="240" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="62" y="234" width="52" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="88" cy="240" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="234" rx="26" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="234" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="62" y="228" width="52" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="88" cy="234" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="228" rx="26" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="228" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="62" y="222" width="52" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="88" cy="228" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="222" rx="26" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="222" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="62" y="216" width="52" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="88" cy="222" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="216" rx="26" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="88" cy="216" rx="26" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="330" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="336" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="330" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="330" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="324" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="330" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="324" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="324" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="318" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="324" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="318" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="318" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="312" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="318" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="312" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="312" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="306" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="312" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="306" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="306" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="300" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="306" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="300" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="300" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="294" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="300" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="294" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="294" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="288" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="294" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="288" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="288" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="282" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="288" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="282" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="282" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="276" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="282" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="276" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="276" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="270" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="276" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="270" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="270" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="264" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="270" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="264" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="264" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="258" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="264" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="258" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="258" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="252" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="258" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="252" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="252" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="246" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="252" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="246" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="246" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="240" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="246" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="240" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="240" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="234" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="240" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="234" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="234" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="228" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="234" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="228" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="228" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="222" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="228" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="222" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="222" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="216" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="222" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="216" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="216" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="210" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="216" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="210" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="210" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="204" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="210" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="204" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="204" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="198" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="204" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="198" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="198" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="192" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="198" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="192" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="192" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="186" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="192" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="186" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="186" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="180" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="186" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="180" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="180" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="174" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="180" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="174" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="174" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="168" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="174" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="168" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="168" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="162" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="168" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="162" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="162" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="156" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="162" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="156" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="156" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="150" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="156" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="150" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="150" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="144" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="150" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="144" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="144" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="138" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="144" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="138" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="138" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <rect x="246" y="132" width="52" height="6" fill="#059669" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="272" cy="138" rx="26" ry="3.4" fill="#059669" fill-opacity="0.25" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="132" rx="26" ry="3.4" fill="var(--surf)" stroke="#059669" stroke-width="1.2"/>
+    <ellipse cx="272" cy="132" rx="26" ry="3.4" fill="#059669" fill-opacity="0.3" stroke="none"/>
+    <text x="88" y="198" text-anchor="middle" class="bold">PV</text>
+    <text x="272" y="114" text-anchor="middle" class="bold">FV</text>
+    <line x1="124" y1="236" x2="236" y2="236" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
+    <text x="180" y="226" text-anchor="middle" class="bold" fill="#059669">× (1+i)ⁿ</text>
+    <line x1="236" y1="280" x2="124" y2="280" class="thin" stroke="#d97706" stroke-width="1.8" marker-end="url(#ahd97706)"/>
+    <text x="180" y="300" text-anchor="middle" class="bold" fill="#d97706">× vⁿ</text>
   </g>
 </svg>

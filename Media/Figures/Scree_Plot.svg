@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Eigenvalues falling steeply and then flattening, with the elbow marked</title>
+  <title>Eigenvalues falling steeply over the first two components and then flattening, with the elbow marked and the λ = 1 line drawn</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,50 +47,48 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="88.97" y1="100" x2="88.97" y2="316" class="grid"/>
-    <line x1="130.58" y1="100" x2="130.58" y2="316" class="grid"/>
-    <line x1="172.19" y1="100" x2="172.19" y2="316" class="grid"/>
-    <line x1="213.81" y1="100" x2="213.81" y2="316" class="grid"/>
-    <line x1="255.42" y1="100" x2="255.42" y2="316" class="grid"/>
-    <line x1="297.03" y1="100" x2="297.03" y2="316" class="grid"/>
-    <line x1="64" y1="316" x2="322" y2="316" class="grid"/>
-    <line x1="64" y1="250.55" x2="322" y2="250.55" class="grid"/>
-    <line x1="64" y1="185.09" x2="322" y2="185.09" class="grid"/>
-    <line x1="64" y1="119.64" x2="322" y2="119.64" class="grid"/>
-    <line x1="64" y1="316" x2="332" y2="316" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="64" y1="316" x2="64" y2="90" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="88.97" y1="316" x2="88.97" y2="320" class="tick"/>
-    <text x="88.97" y="332" text-anchor="middle" class="sm dim">1</text>
-    <line x1="130.58" y1="316" x2="130.58" y2="320" class="tick"/>
-    <text x="130.58" y="332" text-anchor="middle" class="sm dim">2</text>
-    <line x1="172.19" y1="316" x2="172.19" y2="320" class="tick"/>
-    <text x="172.19" y="332" text-anchor="middle" class="sm dim">3</text>
-    <line x1="213.81" y1="316" x2="213.81" y2="320" class="tick"/>
-    <text x="213.81" y="332" text-anchor="middle" class="sm dim">4</text>
-    <line x1="255.42" y1="316" x2="255.42" y2="320" class="tick"/>
-    <text x="255.42" y="332" text-anchor="middle" class="sm dim">5</text>
-    <line x1="297.03" y1="316" x2="297.03" y2="320" class="tick"/>
-    <text x="297.03" y="332" text-anchor="middle" class="sm dim">6</text>
-    <line x1="60" y1="316" x2="64" y2="316" class="tick"/>
-    <text x="56" y="319.6" text-anchor="end" class="sm dim">0</text>
-    <line x1="60" y1="250.55" x2="64" y2="250.55" class="tick"/>
-    <text x="56" y="254.15" text-anchor="end" class="sm dim">1</text>
-    <line x1="60" y1="185.09" x2="64" y2="185.09" class="tick"/>
-    <text x="56" y="188.69" text-anchor="end" class="sm dim">2</text>
-    <line x1="60" y1="119.64" x2="64" y2="119.64" class="tick"/>
-    <text x="56" y="123.24" text-anchor="end" class="sm dim">3</text>
-    <polyline points="88.97,126.18 130.58,211.27 172.19,270.18 213.81,289.82 255.42,296.36 297.03,309.45" class="curve" stroke="#3b82f6" stroke-width="2.4"/>
-    <circle cx="88.97" cy="126.18" r="3.4" fill="#3b82f6"/>
-    <circle cx="130.58" cy="211.27" r="5" fill="#059669"/>
-    <circle cx="172.19" cy="270.18" r="3.4" fill="#3b82f6"/>
-    <circle cx="213.81" cy="289.82" r="3.4" fill="#3b82f6"/>
-    <circle cx="255.42" cy="296.36" r="3.4" fill="#3b82f6"/>
-    <circle cx="297.03" cy="309.45" r="3.4" fill="#3b82f6"/>
-    <line x1="64" y1="250.55" x2="322" y2="250.55" class="thin dash" stroke="#7c3aed" stroke-width="1.3"/>
-    <text x="313.68" y="243.55" text-anchor="end" class="sm bold" fill="#7c3aed">λ = 1</text>
-    <text x="144.58" y="200.27" text-anchor="middle" class="sm bold" fill="#059669">elbow</text>
-    <text x="180" y="348" text-anchor="middle" class="sm dim">component m</text>
-    <text x="180" y="366" text-anchor="middle" class="sm dim">the flat tail is the scree — noise</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">Kaiser agrees here: two components, 75%</text>
+    <line x1="88.97" y1="94" x2="88.97" y2="348" class="grid"/>
+    <line x1="130.58" y1="94" x2="130.58" y2="348" class="grid"/>
+    <line x1="172.19" y1="94" x2="172.19" y2="348" class="grid"/>
+    <line x1="213.81" y1="94" x2="213.81" y2="348" class="grid"/>
+    <line x1="255.42" y1="94" x2="255.42" y2="348" class="grid"/>
+    <line x1="297.03" y1="94" x2="297.03" y2="348" class="grid"/>
+    <line x1="64" y1="348" x2="322" y2="348" class="grid"/>
+    <line x1="64" y1="271.03" x2="322" y2="271.03" class="grid"/>
+    <line x1="64" y1="194.06" x2="322" y2="194.06" class="grid"/>
+    <line x1="64" y1="117.09" x2="322" y2="117.09" class="grid"/>
+    <line x1="64" y1="348" x2="332" y2="348" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="64" y1="348" x2="64" y2="84" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="88.97" y1="348" x2="88.97" y2="352" class="tick"/>
+    <text x="88.97" y="364" text-anchor="middle" class="sm dim">1</text>
+    <line x1="130.58" y1="348" x2="130.58" y2="352" class="tick"/>
+    <text x="130.58" y="364" text-anchor="middle" class="sm dim">2</text>
+    <line x1="172.19" y1="348" x2="172.19" y2="352" class="tick"/>
+    <text x="172.19" y="364" text-anchor="middle" class="sm dim">3</text>
+    <line x1="213.81" y1="348" x2="213.81" y2="352" class="tick"/>
+    <text x="213.81" y="364" text-anchor="middle" class="sm dim">4</text>
+    <line x1="255.42" y1="348" x2="255.42" y2="352" class="tick"/>
+    <text x="255.42" y="364" text-anchor="middle" class="sm dim">5</text>
+    <line x1="297.03" y1="348" x2="297.03" y2="352" class="tick"/>
+    <text x="297.03" y="364" text-anchor="middle" class="sm dim">6</text>
+    <line x1="60" y1="348" x2="64" y2="348" class="tick"/>
+    <text x="56" y="351.6" text-anchor="end" class="sm dim">0</text>
+    <line x1="60" y1="271.03" x2="64" y2="271.03" class="tick"/>
+    <text x="56" y="274.63" text-anchor="end" class="sm dim">1</text>
+    <line x1="60" y1="194.06" x2="64" y2="194.06" class="tick"/>
+    <text x="56" y="197.66" text-anchor="end" class="sm dim">2</text>
+    <line x1="60" y1="117.09" x2="64" y2="117.09" class="tick"/>
+    <text x="56" y="120.69" text-anchor="end" class="sm dim">3</text>
+    <polyline points="88.97,124.79 130.58,224.85 172.19,294.12 213.81,317.21 255.42,324.91 297.03,340.3" class="curve" stroke="#3b82f6" stroke-width="2.4"/>
+    <circle cx="88.97" cy="124.79" r="3.4" fill="#3b82f6"/>
+    <circle cx="130.58" cy="224.85" r="5" fill="#059669"/>
+    <circle cx="172.19" cy="294.12" r="3.4" fill="#3b82f6"/>
+    <circle cx="213.81" cy="317.21" r="3.4" fill="#3b82f6"/>
+    <circle cx="255.42" cy="324.91" r="3.4" fill="#3b82f6"/>
+    <circle cx="297.03" cy="340.3" r="3.4" fill="#3b82f6"/>
+    <line x1="64" y1="271.03" x2="322" y2="271.03" class="thin dash" stroke="#7c3aed" stroke-width="1.3"/>
+    <text x="313.68" y="264.03" text-anchor="end" class="sm bold" fill="#7c3aed">λ = 1</text>
+    <text x="144.58" y="213.85" text-anchor="middle" class="sm bold" fill="#059669">elbow</text>
+    <text x="180" y="380" text-anchor="middle" class="sm dim">component m</text>
   </g>
 </svg>

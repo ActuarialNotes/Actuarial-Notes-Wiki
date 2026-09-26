@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>A future payment discounted back to today along a timeline</title>
+  <title>A payment of 1,000 at time 5 carried back to time 0, its value shrinking along a dotted discount curve to 747.26</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -49,27 +49,27 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="48" y1="250" x2="324" y2="250" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-    <line x1="56" y1="246" x2="56" y2="254" class="tick"/>
-    <text x="56" y="267" text-anchor="middle" class="sm dim">0</text>
-    <line x1="106" y1="246" x2="106" y2="254" class="tick"/>
-    <text x="106" y="267" text-anchor="middle" class="sm dim">1</text>
-    <line x1="156" y1="246" x2="156" y2="254" class="tick"/>
-    <text x="156" y="267" text-anchor="middle" class="sm dim">2</text>
-    <line x1="206" y1="246" x2="206" y2="254" class="tick"/>
-    <text x="206" y="267" text-anchor="middle" class="sm dim">3</text>
-    <line x1="256" y1="246" x2="256" y2="254" class="tick"/>
-    <text x="256" y="267" text-anchor="middle" class="sm dim">4</text>
-    <line x1="306" y1="246" x2="306" y2="254" class="tick"/>
-    <text x="306" y="267" text-anchor="middle" class="sm dim">5</text>
-    <line x1="306" y1="250" x2="306" y2="172" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="306" y="166" text-anchor="middle" class="sm">1,000</text>
-    <line x1="298" y1="146" x2="64" y2="146" class="thin" stroke="#d97706" stroke-width="1.8" marker-end="url(#ahd97706)"/>
-    <text x="181" y="138" text-anchor="middle" class="bold" fill="#d97706">× v⁵</text>
-    <line x1="56" y1="250" x2="56" y2="200" class="thin" stroke="#d97706" stroke-width="1.8" marker-end="url(#ahd97706)"/>
-    <text x="56" y="194" text-anchor="middle" class="sm">747.26</text>
-    <text x="56" y="286" text-anchor="middle" class="sm dim">PV</text>
-    <text x="306" y="286" text-anchor="middle" class="sm dim">FV</text>
-    <text x="180" y="340" text-anchor="middle" class="sm dim">a dollar later is worth less than one now</text>
+    <line x1="48" y1="344" x2="324" y2="344" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <line x1="56" y1="340" x2="56" y2="348" class="tick"/>
+    <text x="56" y="361" text-anchor="middle" class="sm dim">0</text>
+    <line x1="106" y1="340" x2="106" y2="348" class="tick"/>
+    <text x="106" y="361" text-anchor="middle" class="sm dim">1</text>
+    <line x1="156" y1="340" x2="156" y2="348" class="tick"/>
+    <text x="156" y="361" text-anchor="middle" class="sm dim">2</text>
+    <line x1="206" y1="340" x2="206" y2="348" class="tick"/>
+    <text x="206" y="361" text-anchor="middle" class="sm dim">3</text>
+    <line x1="256" y1="340" x2="256" y2="348" class="tick"/>
+    <text x="256" y="361" text-anchor="middle" class="sm dim">4</text>
+    <line x1="306" y1="340" x2="306" y2="348" class="tick"/>
+    <text x="306" y="361" text-anchor="middle" class="sm dim">5</text>
+    <polyline points="56,197.54 61,196.68 66,195.82 71,194.95 76,194.08 81,193.21 86,192.33 91,191.44 96,190.55 101,189.65 106,188.75 111,187.84 116,186.93 121,186.01 126,185.09 131,184.16 136,183.23 141,182.29 146,181.34 151,180.39 156,179.43 161,178.47 166,177.51 171,176.53 176,175.55 181,174.57 186,173.58 191,172.58 196,171.58 201,170.57 206,169.56 211,168.54 216,167.52 221,166.48 226,165.45 231,164.4 236,163.35 241,162.3 246,161.24 251,160.17 256,159.09 261,158.01 266,156.93 271,155.83 276,154.73 281,153.63 286,152.52 291,151.4 296,150.27 301,149.14 306,148" class="thin dot" stroke="#d97706" stroke-width="1.6"/>
+    <line x1="306" y1="344" x2="306" y2="148" class="thin" stroke="#3b82f6" stroke-width="2.2" marker-end="url(#ah3b82f6)"/>
+    <text x="306" y="142" text-anchor="middle" class="sm">1,000</text>
+    <line x1="56" y1="344" x2="56" y2="197.54" class="thin" stroke="#d97706" stroke-width="2.2" marker-end="url(#ahd97706)"/>
+    <text x="56" y="191.54" text-anchor="middle" class="sm">747.26</text>
+    <line x1="296" y1="118" x2="66" y2="118" class="thin" stroke="#d97706" stroke-width="1.8" marker-end="url(#ahd97706)"/>
+    <text x="181" y="110" text-anchor="middle" class="bold" fill="#d97706">× v⁵</text>
+    <text x="56" y="378" text-anchor="middle" class="sm bold">PV</text>
+    <text x="306" y="378" text-anchor="middle" class="sm bold">FV</text>
   </g>
 </svg>

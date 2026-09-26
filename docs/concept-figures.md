@@ -161,7 +161,8 @@ media query's colour while the rest of the figure switched.
 2. Run the generator and look at the result — the fastest check is to open the SVG
    directly, in both light and dark, before committing. Opening the file plain follows
    your OS setting; append `#dark` or `#light` to the URL to see what the app will show.
-   `python3 -m unittest scripts.test_figure_kit` re-checks the palette and its contrast.
+   `python3 -m unittest scripts.test_figure_kit` re-checks the palette and its contrast,
+   and fails any figure with a text run of four words or more — a caption, not a label.
 3. `--check` exits non-zero while any exam concept still lacks a figure.
    `--embed` inserts a missing embed and rewrites the width of an existing one, so a
    change of canvas size reaches the pages too.

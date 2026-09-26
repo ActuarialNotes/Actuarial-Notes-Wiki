@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>An annuity-due paying at the start of each period, one period ahead of an annuity-immediate</title>
+  <title>Five payments at the start of each period, each shifted one period earlier from where an annuity-immediate pays it — leaving the grey payment at time 5 behind</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -44,60 +44,35 @@ text {
   <g id="light"/><g id="dark"/>
   <defs>
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
-    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
     <marker id="ah7c3aed" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#7c3aed"/></marker>
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <text x="180" y="88" text-anchor="middle" class="bold" fill="var(--dim)">a₍ₙ₎  immediate</text>
-    <line x1="58" y1="150" x2="318" y2="150" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-    <line x1="66" y1="146" x2="66" y2="154" class="tick"/>
-    <text x="66" y="167" text-anchor="middle" class="sm dim">0</text>
-    <line x1="112.8" y1="146" x2="112.8" y2="154" class="tick"/>
-    <text x="112.8" y="167" text-anchor="middle" class="sm dim">1</text>
-    <line x1="159.6" y1="146" x2="159.6" y2="154" class="tick"/>
-    <text x="159.6" y="167" text-anchor="middle" class="sm dim">2</text>
-    <line x1="206.4" y1="146" x2="206.4" y2="154" class="tick"/>
-    <text x="206.4" y="167" text-anchor="middle" class="sm dim">3</text>
-    <line x1="253.2" y1="146" x2="253.2" y2="154" class="tick"/>
-    <text x="253.2" y="167" text-anchor="middle" class="sm dim">4</text>
-    <line x1="300" y1="146" x2="300" y2="154" class="tick"/>
-    <text x="300" y="167" text-anchor="middle" class="sm dim">5</text>
-    <line x1="112.8" y1="150" x2="112.8" y2="116" class="thin" stroke="var(--dim)" stroke-width="1.8" marker-end="url(#ahvardim)"/>
-    <text x="112.8" y="110" text-anchor="middle" class="sm">1</text>
-    <line x1="159.6" y1="150" x2="159.6" y2="116" class="thin" stroke="var(--dim)" stroke-width="1.8" marker-end="url(#ahvardim)"/>
-    <text x="159.6" y="110" text-anchor="middle" class="sm">1</text>
-    <line x1="206.4" y1="150" x2="206.4" y2="116" class="thin" stroke="var(--dim)" stroke-width="1.8" marker-end="url(#ahvardim)"/>
-    <text x="206.4" y="110" text-anchor="middle" class="sm">1</text>
-    <line x1="253.2" y1="150" x2="253.2" y2="116" class="thin" stroke="var(--dim)" stroke-width="1.8" marker-end="url(#ahvardim)"/>
-    <text x="253.2" y="110" text-anchor="middle" class="sm">1</text>
-    <line x1="300" y1="150" x2="300" y2="116" class="thin" stroke="var(--dim)" stroke-width="1.8" marker-end="url(#ahvardim)"/>
-    <text x="300" y="110" text-anchor="middle" class="sm">1</text>
-    <text x="180" y="206" text-anchor="middle" class="bold" fill="#7c3aed">ä₍ₙ₎  due</text>
-    <line x1="58" y1="268" x2="318" y2="268" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-    <line x1="66" y1="264" x2="66" y2="272" class="tick"/>
-    <text x="66" y="285" text-anchor="middle" class="sm dim">0</text>
-    <line x1="112.8" y1="264" x2="112.8" y2="272" class="tick"/>
-    <text x="112.8" y="285" text-anchor="middle" class="sm dim">1</text>
-    <line x1="159.6" y1="264" x2="159.6" y2="272" class="tick"/>
-    <text x="159.6" y="285" text-anchor="middle" class="sm dim">2</text>
-    <line x1="206.4" y1="264" x2="206.4" y2="272" class="tick"/>
-    <text x="206.4" y="285" text-anchor="middle" class="sm dim">3</text>
-    <line x1="253.2" y1="264" x2="253.2" y2="272" class="tick"/>
-    <text x="253.2" y="285" text-anchor="middle" class="sm dim">4</text>
-    <line x1="300" y1="264" x2="300" y2="272" class="tick"/>
-    <text x="300" y="285" text-anchor="middle" class="sm dim">5</text>
-    <line x1="66" y1="268" x2="66" y2="234" class="thin" stroke="#7c3aed" stroke-width="1.8" marker-end="url(#ah7c3aed)"/>
-    <text x="66" y="228" text-anchor="middle" class="sm">1</text>
-    <line x1="112.8" y1="268" x2="112.8" y2="234" class="thin" stroke="#7c3aed" stroke-width="1.8" marker-end="url(#ah7c3aed)"/>
-    <text x="112.8" y="228" text-anchor="middle" class="sm">1</text>
-    <line x1="159.6" y1="268" x2="159.6" y2="234" class="thin" stroke="#7c3aed" stroke-width="1.8" marker-end="url(#ah7c3aed)"/>
-    <text x="159.6" y="228" text-anchor="middle" class="sm">1</text>
-    <line x1="206.4" y1="268" x2="206.4" y2="234" class="thin" stroke="#7c3aed" stroke-width="1.8" marker-end="url(#ah7c3aed)"/>
-    <text x="206.4" y="228" text-anchor="middle" class="sm">1</text>
-    <line x1="253.2" y1="268" x2="253.2" y2="234" class="thin" stroke="#7c3aed" stroke-width="1.8" marker-end="url(#ah7c3aed)"/>
-    <text x="253.2" y="228" text-anchor="middle" class="sm">1</text>
-    <line x1="160" y1="320" x2="114" y2="320" class="thin" stroke="#7c3aed" stroke-width="1.6" marker-end="url(#ah7c3aed)"/>
-    <text x="180" y="344" text-anchor="middle" class="sm" fill="#7c3aed">every payment moves one period earlier</text>
+    <line x1="58" y1="340" x2="318" y2="340" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <line x1="66" y1="336" x2="66" y2="344" class="tick"/>
+    <text x="66" y="357" text-anchor="middle" class="sm dim">0</text>
+    <line x1="112.8" y1="336" x2="112.8" y2="344" class="tick"/>
+    <text x="112.8" y="357" text-anchor="middle" class="sm dim">1</text>
+    <line x1="159.6" y1="336" x2="159.6" y2="344" class="tick"/>
+    <text x="159.6" y="357" text-anchor="middle" class="sm dim">2</text>
+    <line x1="206.4" y1="336" x2="206.4" y2="344" class="tick"/>
+    <text x="206.4" y="357" text-anchor="middle" class="sm dim">3</text>
+    <line x1="253.2" y1="336" x2="253.2" y2="344" class="tick"/>
+    <text x="253.2" y="357" text-anchor="middle" class="sm dim">4</text>
+    <line x1="300" y1="336" x2="300" y2="344" class="tick"/>
+    <text x="300" y="357" text-anchor="middle" class="sm dim">5</text>
+    <line x1="300" y1="340" x2="300" y2="190" class="thin dash" stroke="var(--axis)" stroke-width="2" marker-end="url(#ahvaraxis)"/>
+    <line x1="66" y1="340" x2="66" y2="190" class="thin" stroke="#7c3aed" stroke-width="2.2" marker-end="url(#ah7c3aed)"/>
+    <line x1="106.8" y1="174" x2="72" y2="174" class="thin" stroke="#7c3aed" stroke-width="1.4" marker-end="url(#ah7c3aed)"/>
+    <line x1="112.8" y1="340" x2="112.8" y2="190" class="thin" stroke="#7c3aed" stroke-width="2.2" marker-end="url(#ah7c3aed)"/>
+    <line x1="153.6" y1="174" x2="118.8" y2="174" class="thin" stroke="#7c3aed" stroke-width="1.4" marker-end="url(#ah7c3aed)"/>
+    <line x1="159.6" y1="340" x2="159.6" y2="190" class="thin" stroke="#7c3aed" stroke-width="2.2" marker-end="url(#ah7c3aed)"/>
+    <line x1="200.4" y1="174" x2="165.6" y2="174" class="thin" stroke="#7c3aed" stroke-width="1.4" marker-end="url(#ah7c3aed)"/>
+    <line x1="206.4" y1="340" x2="206.4" y2="190" class="thin" stroke="#7c3aed" stroke-width="2.2" marker-end="url(#ah7c3aed)"/>
+    <line x1="247.2" y1="174" x2="212.4" y2="174" class="thin" stroke="#7c3aed" stroke-width="1.4" marker-end="url(#ah7c3aed)"/>
+    <line x1="253.2" y1="340" x2="253.2" y2="190" class="thin" stroke="#7c3aed" stroke-width="2.2" marker-end="url(#ah7c3aed)"/>
+    <line x1="294" y1="174" x2="259.2" y2="174" class="thin" stroke="#7c3aed" stroke-width="1.4" marker-end="url(#ah7c3aed)"/>
+    <text x="66" y="158" text-anchor="middle" class="sm bold" fill="#7c3aed">due</text>
+    <text x="300" y="158" text-anchor="middle" class="sm bold">immediate</text>
   </g>
 </svg>

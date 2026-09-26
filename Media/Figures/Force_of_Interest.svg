@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The force of interest as the instantaneous growth rate of the accumulation function</title>
+  <title>The accumulation curve a(t) with its tangent at one point: the slope there, per unit of height, is the force of interest</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -64,6 +64,6 @@ text {
     <line x1="60" y1="197.6" x2="64" y2="197.6" class="tick"/>
     <text x="56" y="201.2" text-anchor="end" class="sm dim">1.5</text>
     <text x="326" y="382" text-anchor="end" class="sm dim">time t</text>
-    <text x="60" y="82" text-anchor="start" class="sm dim">a(t) = e^(δt)</text>
+    <text x="60" y="82" text-anchor="start" class="sm dim">a(t)</text>
   </g>
 </svg>

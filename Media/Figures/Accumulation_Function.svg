@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The accumulation function under the three standard interest regimes</title>
+  <title>The accumulation function under simple interest, compound interest and the equivalent constant force, all starting from 1 at time 0</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -65,7 +65,6 @@ text {
     <text x="326" y="382" text-anchor="end" class="sm dim">time t</text>
     <text x="60" y="82" text-anchor="start" class="sm dim">a(t)</text>
     <circle cx="64" cy="331.86" r="3.6" fill="var(--dim)"/>
-    <text x="96" y="319.86" text-anchor="middle" class="sm">a(0) = 1</text>
     <text x="316.18" y="114.14" text-anchor="end" class="sm bold" fill="#d97706">compound</text>
     <text x="316.18" y="161.31" text-anchor="end" class="sm bold" fill="#059669">force δ</text>
     <text x="316.18" y="201.23" text-anchor="end" class="sm bold" fill="#3b82f6">simple</text>

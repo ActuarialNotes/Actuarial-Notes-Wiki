@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The surplus curve under each immunization strategy</title>
+  <title>Surplus against a shift in yield: the immunized curve bottoms out at zero and rises either way, the unmatched one falls below zero</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -62,9 +62,9 @@ text {
     <text x="70" y="252" text-anchor="end" class="sm dim">0</text>
     <line x1="74" y1="172.2" x2="78" y2="172.2" class="tick"/>
     <text x="70" y="175.8" text-anchor="end" class="sm dim">15</text>
-    <text x="74" y="82" text-anchor="start" class="sm dim">surplus S = V_A − V_L</text>
-    <text x="326" y="380" text-anchor="end" class="sm dim">shift in yield Δj</text>
+    <text x="74" y="82" text-anchor="start" class="sm dim">surplus</text>
+    <text x="326" y="380" text-anchor="end" class="sm dim">Δj</text>
     <text x="284.67" y="121.4" text-anchor="end" class="sm bold" fill="#059669">immunized</text>
-    <text x="301.2" y="319.52" text-anchor="end" class="sm bold" fill="#e11d48">not</text>
+    <text x="313.6" y="319.52" text-anchor="end" class="sm bold" fill="#e11d48">not immunized</text>
   </g>
 </svg>

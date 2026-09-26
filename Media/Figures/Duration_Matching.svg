@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Assets and liabilities matched in value and duration</title>
+  <title>Two asset payments above a timeline and one liability below it, equal in value, with the assets' balance point and the liability's falling on the same dashed line</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -49,25 +49,24 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="48" y1="216" x2="318" y2="216" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-    <line x1="56" y1="212" x2="56" y2="220" class="tick"/>
-    <text x="56" y="233" text-anchor="middle" class="sm dim">0</text>
-    <line x1="86.5" y1="212" x2="86.5" y2="220" class="tick"/>
-    <line x1="117" y1="212" x2="117" y2="220" class="tick"/>
-    <line x1="147.5" y1="212" x2="147.5" y2="220" class="tick"/>
-    <line x1="178" y1="212" x2="178" y2="220" class="tick"/>
-    <line x1="208.5" y1="212" x2="208.5" y2="220" class="tick"/>
-    <line x1="239" y1="212" x2="239" y2="220" class="tick"/>
-    <line x1="269.5" y1="212" x2="269.5" y2="220" class="tick"/>
-    <line x1="300" y1="212" x2="300" y2="220" class="tick"/>
-    <line x1="117" y1="216" x2="117" y2="172" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="117" y="166" text-anchor="middle" class="sm">asset</text>
-    <line x1="269.5" y1="216" x2="269.5" y2="158" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="269.5" y="152" text-anchor="middle" class="sm">asset</text>
-    <line x1="208.5" y1="216" x2="208.5" y2="274" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
-    <text x="208.5" y="290" text-anchor="middle" class="sm">liability</text>
-    <line x1="56" y1="316" x2="300" y2="316" stroke="#d97706" stroke-width="1.8"/>
-    <polygon points="178,316 168,332 188,332" fill="#d97706"/>
-    <text x="178" y="356" text-anchor="middle" class="sm dim">both streams balance at the same point</text>
+    <line x1="48" y1="220" x2="318" y2="220" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <line x1="56" y1="216" x2="56" y2="224" class="tick"/>
+    <text x="56" y="237" text-anchor="middle" class="sm dim">0</text>
+    <line x1="86.5" y1="216" x2="86.5" y2="224" class="tick"/>
+    <line x1="117" y1="216" x2="117" y2="224" class="tick"/>
+    <line x1="147.5" y1="216" x2="147.5" y2="224" class="tick"/>
+    <line x1="178" y1="216" x2="178" y2="224" class="tick"/>
+    <line x1="208.5" y1="216" x2="208.5" y2="224" class="tick"/>
+    <line x1="239" y1="216" x2="239" y2="224" class="tick"/>
+    <line x1="269.5" y1="216" x2="269.5" y2="224" class="tick"/>
+    <line x1="300" y1="216" x2="300" y2="224" class="tick"/>
+    <line x1="117" y1="220" x2="117" y2="172" class="thin" stroke="#3b82f6" stroke-width="2.4" marker-end="url(#ah3b82f6)"/>
+    <line x1="269.5" y1="220" x2="269.5" y2="148" class="thin" stroke="#3b82f6" stroke-width="2.4" marker-end="url(#ah3b82f6)"/>
+    <text x="269.5" y="140" text-anchor="middle" class="sm bold">assets</text>
+    <line x1="208.5" y1="220" x2="208.5" y2="340" class="thin" stroke="#e11d48" stroke-width="2.4" marker-end="url(#ahe11d48)"/>
+    <text x="208.5" y="358" text-anchor="middle" class="sm bold">liability</text>
+    <line x1="208.5" y1="106" x2="208.5" y2="214" class="thin dash" stroke="#7c3aed" stroke-width="1.6"/>
+    <polygon points="208.5,218 200.5,206 216.5,206" fill="#7c3aed"/>
+    <text x="208.5" y="98" text-anchor="middle" class="bold" fill="#7c3aed">D</text>
   </g>
 </svg>

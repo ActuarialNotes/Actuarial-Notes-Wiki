@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The discount factor as the present value of 1 due in one period</title>
+  <title>A payment of 1 at time 4 valued at each earlier date, every step back one period multiplying it by v, down to v⁴ at time 0</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -44,26 +44,35 @@ text {
   <g id="light"/><g id="dark"/>
   <defs>
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
-    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
     <marker id="ahd97706" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#d97706"/></marker>
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="88" y1="190" x2="286" y2="190" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-    <line x1="96" y1="186" x2="96" y2="194" class="tick"/>
-    <text x="96" y="207" text-anchor="middle" class="sm dim">0</text>
-    <line x1="268" y1="186" x2="268" y2="194" class="tick"/>
-    <text x="268" y="207" text-anchor="middle" class="sm dim">1</text>
-    <line x1="268" y1="190" x2="268" y2="124" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="268" y="118" text-anchor="middle" class="sm">1</text>
-    <line x1="96" y1="190" x2="96" y2="144" class="thin" stroke="#d97706" stroke-width="1.8" marker-end="url(#ahd97706)"/>
-    <text x="96" y="138" text-anchor="middle" class="sm">v</text>
-    <line x1="258" y1="106" x2="106" y2="106" class="thin" stroke="#d97706" stroke-width="1.6" marker-end="url(#ahd97706)"/>
-    <text x="182" y="98" text-anchor="middle" class="bold" fill="#d97706">× v</text>
-    <rect x="62" y="288" width="194.34" height="30" rx="4" fill="#d97706" fill-opacity="0.3" stroke="#d97706" stroke-width="1.2"/>
-    <rect x="256.34" y="288" width="11.66" height="30" rx="4" fill="#e11d48" fill-opacity="0.3" stroke="#e11d48" stroke-width="1.2"/>
-    <text x="159.17" y="308" text-anchor="middle" class="sm bold">v = 0.9434</text>
-    <text x="276" y="308" text-anchor="start" class="sm bold" fill="#e11d48">d</text>
-    <text x="165" y="338" text-anchor="middle" class="sm dim">v + d = 1</text>
+    <line x1="48" y1="344" x2="324" y2="344" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <line x1="56" y1="340" x2="56" y2="348" class="tick"/>
+    <text x="56" y="361" text-anchor="middle" class="sm dim">0</text>
+    <line x1="118.5" y1="340" x2="118.5" y2="348" class="tick"/>
+    <text x="118.5" y="361" text-anchor="middle" class="sm dim">1</text>
+    <line x1="181" y1="340" x2="181" y2="348" class="tick"/>
+    <text x="181" y="361" text-anchor="middle" class="sm dim">2</text>
+    <line x1="243.5" y1="340" x2="243.5" y2="348" class="tick"/>
+    <text x="243.5" y="361" text-anchor="middle" class="sm dim">3</text>
+    <line x1="306" y1="340" x2="306" y2="348" class="tick"/>
+    <text x="306" y="361" text-anchor="middle" class="sm dim">4</text>
+    <rect x="42" y="204.19" width="28" height="139.81" rx="2" fill="#d97706" fill-opacity="0.75"/>
+    <rect x="104.5" y="187.41" width="28" height="156.59" rx="2" fill="#d97706" fill-opacity="0.4"/>
+    <rect x="167" y="168.62" width="28" height="175.38" rx="2" fill="#d97706" fill-opacity="0.4"/>
+    <rect x="229.5" y="147.57" width="28" height="196.43" rx="2" fill="#d97706" fill-opacity="0.4"/>
+    <rect x="292" y="124" width="28" height="220" rx="2" fill="#3b82f6" fill-opacity="0.75"/>
+    <line x1="101.5" y1="177.41" x2="73" y2="194.19" class="thin" stroke="#d97706" stroke-width="1.5" marker-end="url(#ahd97706)"/>
+    <text x="87.25" y="175.8" text-anchor="middle" class="sm bold" fill="#d97706">× v</text>
+    <line x1="164" y1="158.62" x2="135.5" y2="177.41" class="thin" stroke="#d97706" stroke-width="1.5" marker-end="url(#ahd97706)"/>
+    <text x="149.75" y="158.01" text-anchor="middle" class="sm bold" fill="#d97706">× v</text>
+    <line x1="226.5" y1="137.57" x2="198" y2="158.62" class="thin" stroke="#d97706" stroke-width="1.5" marker-end="url(#ahd97706)"/>
+    <text x="212.25" y="138.09" text-anchor="middle" class="sm bold" fill="#d97706">× v</text>
+    <line x1="289" y1="114" x2="260.5" y2="137.57" class="thin" stroke="#d97706" stroke-width="1.5" marker-end="url(#ahd97706)"/>
+    <text x="274.75" y="115.79" text-anchor="middle" class="sm bold" fill="#d97706">× v</text>
+    <text x="306" y="114" text-anchor="middle" class="bold">1</text>
+    <text x="56" y="194.19" text-anchor="middle" class="bold">v⁴</text>
   </g>
 </svg>

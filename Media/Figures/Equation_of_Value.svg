@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Inflows and outflows balanced at a chosen comparison date</title>
+  <title>Inflows above the timeline and outflows below it, each moved back to time 0, where their present values stack into two equal bars</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -49,37 +49,34 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="48" y1="236" x2="324" y2="236" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-    <line x1="56" y1="232" x2="56" y2="240" class="tick"/>
-    <text x="56" y="253" text-anchor="middle" class="sm dim">0</text>
-    <line x1="97.67" y1="232" x2="97.67" y2="240" class="tick"/>
-    <text x="97.67" y="253" text-anchor="middle" class="sm dim">1</text>
-    <line x1="139.33" y1="232" x2="139.33" y2="240" class="tick"/>
-    <text x="139.33" y="253" text-anchor="middle" class="sm dim">2</text>
-    <line x1="181" y1="232" x2="181" y2="240" class="tick"/>
-    <text x="181" y="253" text-anchor="middle" class="sm dim">3</text>
-    <line x1="222.67" y1="232" x2="222.67" y2="240" class="tick"/>
-    <text x="222.67" y="253" text-anchor="middle" class="sm dim">4</text>
-    <line x1="264.33" y1="232" x2="264.33" y2="240" class="tick"/>
-    <text x="264.33" y="253" text-anchor="middle" class="sm dim">5</text>
-    <line x1="306" y1="232" x2="306" y2="240" class="tick"/>
-    <text x="306" y="253" text-anchor="middle" class="sm dim">6</text>
-    <line x1="56" y1="130" x2="56" y2="310" class="thin dash" stroke="#7c3aed" stroke-width="1.4"/>
-    <text x="64" y="124" text-anchor="start" class="sm bold" fill="#7c3aed">comparison date</text>
-    <line x1="139.33" y1="236" x2="139.33" y2="188" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
-    <text x="139.33" y="182" text-anchor="middle" class="sm">in</text>
-    <line x1="131.33" y1="168" x2="64" y2="168" class="thin dash" stroke="#059669" stroke-width="1" marker-end="url(#ah059669)"/>
-    <line x1="222.67" y1="236" x2="222.67" y2="188" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
-    <text x="222.67" y="182" text-anchor="middle" class="sm">in</text>
-    <line x1="214.67" y1="168" x2="64" y2="168" class="thin dash" stroke="#059669" stroke-width="1" marker-end="url(#ah059669)"/>
-    <line x1="306" y1="236" x2="306" y2="188" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
-    <text x="306" y="182" text-anchor="middle" class="sm">in</text>
-    <line x1="298" y1="168" x2="64" y2="168" class="thin dash" stroke="#059669" stroke-width="1" marker-end="url(#ah059669)"/>
-    <line x1="97.67" y1="236" x2="97.67" y2="276" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
-    <text x="97.67" y="292" text-anchor="middle" class="sm">out</text>
-    <line x1="89.67" y1="310" x2="64" y2="310" class="thin dash" stroke="#e11d48" stroke-width="1" marker-end="url(#ahe11d48)"/>
-    <line x1="181" y1="236" x2="181" y2="276" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
-    <text x="181" y="292" text-anchor="middle" class="sm">out</text>
-    <line x1="173" y1="310" x2="64" y2="310" class="thin dash" stroke="#e11d48" stroke-width="1" marker-end="url(#ahe11d48)"/>
+    <line x1="68" y1="229" x2="324" y2="229" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <line x1="76" y1="225" x2="76" y2="233" class="tick"/>
+    <line x1="114.33" y1="225" x2="114.33" y2="233" class="tick"/>
+    <text x="114.33" y="246" text-anchor="middle" class="sm dim">1</text>
+    <line x1="152.67" y1="225" x2="152.67" y2="233" class="tick"/>
+    <text x="152.67" y="246" text-anchor="middle" class="sm dim">2</text>
+    <line x1="191" y1="225" x2="191" y2="233" class="tick"/>
+    <text x="191" y="246" text-anchor="middle" class="sm dim">3</text>
+    <line x1="229.33" y1="225" x2="229.33" y2="233" class="tick"/>
+    <text x="229.33" y="246" text-anchor="middle" class="sm dim">4</text>
+    <line x1="267.67" y1="225" x2="267.67" y2="233" class="tick"/>
+    <text x="267.67" y="246" text-anchor="middle" class="sm dim">5</text>
+    <line x1="306" y1="225" x2="306" y2="233" class="tick"/>
+    <text x="306" y="246" text-anchor="middle" class="sm dim">6</text>
+    <line x1="152.67" y1="229" x2="152.67" y2="179" class="thin" stroke="#059669" stroke-width="2" marker-end="url(#ah059669)"/>
+    <line x1="229.33" y1="229" x2="229.33" y2="179" class="thin" stroke="#059669" stroke-width="2" marker-end="url(#ah059669)"/>
+    <line x1="306" y1="229" x2="306" y2="179" class="thin" stroke="#059669" stroke-width="2" marker-end="url(#ah059669)"/>
+    <line x1="114.33" y1="229" x2="114.33" y2="291.45" class="thin" stroke="#e11d48" stroke-width="2" marker-end="url(#ahe11d48)"/>
+    <line x1="191" y1="229" x2="191" y2="291.45" class="thin" stroke="#e11d48" stroke-width="2" marker-end="url(#ahe11d48)"/>
+    <rect x="69" y="187.68" width="14" height="41.32" rx="2" fill="#059669" fill-opacity="0.7" stroke="var(--surf)" stroke-width="1"/>
+    <rect x="69" y="153.53" width="14" height="34.15" rx="2" fill="#059669" fill-opacity="0.7" stroke="var(--surf)" stroke-width="1"/>
+    <rect x="69" y="125.3" width="14" height="28.22" rx="2" fill="#059669" fill-opacity="0.7" stroke="var(--surf)" stroke-width="1"/>
+    <rect x="69" y="229" width="14" height="56.78" rx="2" fill="#e11d48" fill-opacity="0.7" stroke="var(--surf)" stroke-width="1"/>
+    <rect x="69" y="285.78" width="14" height="46.92" rx="2" fill="#e11d48" fill-opacity="0.7" stroke="var(--surf)" stroke-width="1"/>
+    <line x1="306" y1="111.3" x2="89" y2="111.3" class="thin dash" stroke="#059669" stroke-width="1.2" marker-end="url(#ah059669)"/>
+    <line x1="191" y1="346.7" x2="89" y2="346.7" class="thin dash" stroke="#e11d48" stroke-width="1.2" marker-end="url(#ahe11d48)"/>
+    <text x="63" y="233" text-anchor="end" class="sm dim">0</text>
+    <text x="76" y="99.3" text-anchor="middle" class="sm bold">PV in</text>
+    <text x="76" y="362.7" text-anchor="middle" class="sm bold">PV out</text>
   </g>
 </svg>

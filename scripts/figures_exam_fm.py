@@ -1,7 +1,7 @@
 """Figures for the Exam FM (Financial Mathematics) concept pages.
 
-Each builder returns a **portrait** `Fig` built by `vcard()`: a title, one
-picture, and the one formula worth remembering. Grouped in syllabus order:
+Each builder returns a `Fig` built by `vcard()` carrying **one picture** and
+nothing else — no title, no formula, no caption. Grouped in syllabus order:
 
 1. Interest theory — accumulation, discounting, rate conversions
 2. Annuities — the payment-timeline family
@@ -20,9 +20,9 @@ import math
 
 from figure_kit import (
     AMBER, BLUE, GREEN, ROSE, TEAL, VIOLET,
-    Axes, Fig, brace, cash_arrow, timeline, vaxes, vcard,
-    BX0, BY0, BX1, BY1, BCX,
-    building, car, coins, cross, document, house, person, scales, shield, tower,
+    Fig, brace, cash_arrow, timeline, vaxes, vcard,
+    BY0, BCX,
+    coins, shield,
 )
 from figure_registry import figure
 
@@ -33,10 +33,6 @@ TL0, TL1 = 56, 306          # the timeline's left and right ends
 
 def _ann_imm(n, i):
     return (1 - (1 + i) ** -n) / i
-
-
-def _ann_due(n, i):
-    return _ann_imm(n, i) * (1 + i)
 
 
 def _acc(n, i):

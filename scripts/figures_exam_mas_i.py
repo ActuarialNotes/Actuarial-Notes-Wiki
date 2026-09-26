@@ -1,8 +1,8 @@
 """Figures for the Exam MAS-I (Modern Actuarial Statistics I) concept pages.
 
 Same contract as `figures_exam_p.py` / `figures_exam_fm.py`: each builder returns
-a `Fig` from `vcard()` — a portrait card with a title, one picture, and one
-formula. Grouped in syllabus order:
+a `Fig` from `vcard()` carrying one picture and nothing else — no title, no
+formula, no caption, no table. Grouped in syllabus order:
 
 A. Probability models — Poisson processes, survival models, life contingencies
 B. Statistics — summarizing a sample, estimation, testing, incomplete data
@@ -21,8 +21,7 @@ import math
 from figure_kit import (
     AMBER, BLUE, GREEN, ROSE, TEAL, VIOLET,
     Axes, Fig, brace, vaxes, vcard,
-    BX0, BY0, BX1, BY1, BCX, BCY,
-    building, car, coins, cross, document, house, person, scales, shield, tower,
+    BX0, BY0, BX1, BY1, BCX,
 )
 from figure_registry import figure
 
@@ -65,17 +64,6 @@ def _normals(seed: int, n: int) -> list[tuple[float, float]]:
         t = 2 * math.pi * u()
         out.append((r * math.cos(t), r * math.sin(t)))
     return out
-
-
-def _panel(f: Fig, px, py, pw, ph, name, colour, cls="sm bold"):
-    """A small titled sub-plot, used by the figures that compare three pictures."""
-    f.text(px + pw / 2, py - 6, name, cls=cls, fill=colour)
-    f.line(px, py + ph, px + pw, py + ph, cls="axis")
-    return Axes(f, px, py, px + pw, py + ph, 0, 1, 0, 1)
-
-
-def _zcurve(ax: Axes, mu=0.0, sd=1.0, colour=BLUE, width=2):
-    return ax.curve(lambda x: _npdf(x, mu, sd), colour=colour, width=width)
 
 
 # ═══════════════════════════════════════════════════════════════════════════

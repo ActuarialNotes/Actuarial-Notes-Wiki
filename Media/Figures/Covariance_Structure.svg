@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Compound symmetry, AR(1) and unstructured correlation matrices side by side</title>
+  <title>Correlation against lag under three structures: compound symmetry flat at 0.6, AR(1) decaying as 0.6ᵏ, and unstructured scattered freely</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -44,60 +44,44 @@ text {
   <g id="light"/><g id="dark"/>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <text x="180" y="90" text-anchor="middle" class="sm bold" fill="#3b82f6">compound symmetry</text>
-    <rect x="138" y="96" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.85"/>
-    <rect x="159" y="96" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.55"/>
-    <rect x="180" y="96" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.55"/>
-    <rect x="201" y="96" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.55"/>
-    <rect x="138" y="117" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.55"/>
-    <rect x="159" y="117" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.85"/>
-    <rect x="180" y="117" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.55"/>
-    <rect x="201" y="117" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.55"/>
-    <rect x="138" y="138" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.55"/>
-    <rect x="159" y="138" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.55"/>
-    <rect x="180" y="138" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.85"/>
-    <rect x="201" y="138" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.55"/>
-    <rect x="138" y="159" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.55"/>
-    <rect x="159" y="159" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.55"/>
-    <rect x="180" y="159" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.55"/>
-    <rect x="201" y="159" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.85"/>
-    <text x="130" y="142" text-anchor="end" class="sm dim">R</text>
-    <text x="180" y="190" text-anchor="middle" class="sm bold" fill="#d97706">AR(1), ρ = 0.6</text>
-    <rect x="138" y="196" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.85"/>
-    <rect x="159" y="196" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.55"/>
-    <rect x="180" y="196" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.37"/>
-    <rect x="201" y="196" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.27"/>
-    <rect x="138" y="217" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.55"/>
-    <rect x="159" y="217" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.85"/>
-    <rect x="180" y="217" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.55"/>
-    <rect x="201" y="217" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.37"/>
-    <rect x="138" y="238" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.37"/>
-    <rect x="159" y="238" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.55"/>
-    <rect x="180" y="238" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.85"/>
-    <rect x="201" y="238" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.55"/>
-    <rect x="138" y="259" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.27"/>
-    <rect x="159" y="259" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.37"/>
-    <rect x="180" y="259" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.55"/>
-    <rect x="201" y="259" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.85"/>
-    <text x="130" y="242" text-anchor="end" class="sm dim">R</text>
-    <text x="180" y="290" text-anchor="middle" class="sm bold" fill="#7c3aed">unstructured</text>
-    <rect x="138" y="296" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.85"/>
-    <rect x="159" y="296" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.63"/>
-    <rect x="180" y="296" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.31"/>
-    <rect x="201" y="296" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.43"/>
-    <rect x="138" y="317" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.63"/>
-    <rect x="159" y="317" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.85"/>
-    <rect x="180" y="317" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.51"/>
-    <rect x="201" y="317" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.24"/>
-    <rect x="138" y="338" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.31"/>
-    <rect x="159" y="338" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.51"/>
-    <rect x="180" y="338" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.85"/>
-    <rect x="201" y="338" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.57"/>
-    <rect x="138" y="359" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.43"/>
-    <rect x="159" y="359" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.24"/>
-    <rect x="180" y="359" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.57"/>
-    <rect x="201" y="359" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.85"/>
-    <text x="130" y="342" text-anchor="end" class="sm dim">R</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">darker = more correlated; params 2, 2, 10</text>
+    <line x1="107.33" y1="96" x2="107.33" y2="348" class="grid"/>
+    <line x1="194" y1="96" x2="194" y2="348" class="grid"/>
+    <line x1="280.67" y1="96" x2="280.67" y2="348" class="grid"/>
+    <line x1="64" y1="348" x2="324" y2="348" class="grid"/>
+    <line x1="64" y1="222" x2="324" y2="222" class="grid"/>
+    <line x1="64" y1="96" x2="324" y2="96" class="grid"/>
+    <line x1="64" y1="348" x2="324" y2="348" class="axis"/>
+    <line x1="64" y1="96" x2="64" y2="348" class="axis"/>
+    <line x1="107.33" y1="348" x2="107.33" y2="352" class="tick"/>
+    <text x="107.33" y="364" text-anchor="middle" class="sm dim">1</text>
+    <line x1="194" y1="348" x2="194" y2="352" class="tick"/>
+    <text x="194" y="364" text-anchor="middle" class="sm dim">2</text>
+    <line x1="280.67" y1="348" x2="280.67" y2="352" class="tick"/>
+    <text x="280.67" y="364" text-anchor="middle" class="sm dim">3</text>
+    <line x1="60" y1="348" x2="64" y2="348" class="tick"/>
+    <text x="56" y="351.6" text-anchor="end" class="sm dim">0</text>
+    <line x1="60" y1="222" x2="64" y2="222" class="tick"/>
+    <text x="56" y="225.6" text-anchor="end" class="sm dim">0.5</text>
+    <line x1="60" y1="96" x2="64" y2="96" class="tick"/>
+    <text x="56" y="99.6" text-anchor="end" class="sm dim">1</text>
+    <text x="324" y="380" text-anchor="end" class="sm dim">lag</text>
+    <text x="60" y="82" text-anchor="start" class="sm dim">ρ</text>
+    <polyline points="81.33,196.8 306.67,196.8" class="curve" stroke="#3b82f6" stroke-width="2.4"/>
+    <polyline points="81.33,171.76 82.59,173.05 83.84,174.34 85.09,175.62 86.34,176.88 87.59,178.14 88.84,179.39 90.1,180.63 91.35,181.86 92.6,183.08 93.85,184.3 95.1,185.5 96.36,186.69 97.61,187.88 98.86,189.06 100.11,190.22 101.36,191.38 102.61,192.54 103.87,193.68 105.12,194.81 106.37,195.94 107.62,197.06 108.87,198.17 110.13,199.27 111.38,200.36 112.63,201.45 113.88,202.52 115.13,203.59 116.39,204.66 117.64,205.71 118.89,206.76 120.14,207.79 121.39,208.82 122.64,209.85 123.9,210.86 125.15,211.87 126.4,212.87 127.65,213.87 128.9,214.85 130.16,215.83 131.41,216.8 132.66,217.77 133.91,218.72 135.16,219.67 136.41,220.62 137.67,221.55 138.92,222.48 140.17,223.41 141.42,224.32 142.67,225.23 143.93,226.13 145.18,227.03 146.43,227.92 147.68,228.8 148.93,229.68 150.19,230.55 151.44,231.41 152.69,232.27 153.94,233.12 155.19,233.96 156.44,234.8 157.7,235.63 158.95,236.46 160.2,237.28 161.45,238.09 162.7,238.9 163.96,239.7 165.21,240.5 166.46,241.29 167.71,242.08 168.96,242.85 170.21,243.63 171.47,244.39 172.72,245.16 173.97,245.91 175.22,246.66 176.47,247.41 177.73,248.15 178.98,248.88 180.23,249.61 181.48,250.33 182.73,251.05 183.99,251.76 185.24,252.47 186.49,253.17 187.74,253.87 188.99,254.56 190.24,255.25 191.5,255.93 192.75,256.61 194,257.28 195.25,257.95 196.5,258.61 197.76,259.27 199.01,259.92 200.26,260.57 201.51,261.21 202.76,261.85 204.01,262.48 205.27,263.11 206.52,263.73 207.77,264.35 209.02,264.97 210.27,265.58 211.53,266.18 212.78,266.79 214.03,267.38 215.28,267.97 216.53,268.56 217.79,269.15 219.04,269.73 220.29,270.3 221.54,270.87 222.79,271.44 224.04,272 225.3,272.56 226.55,273.12 227.8,273.67 229.05,274.21 230.3,274.76 231.56,275.29 232.81,275.83 234.06,276.36 235.31,276.89 236.56,277.41 237.81,277.93 239.07,278.44 240.32,278.95 241.57,279.46 242.82,279.97 244.07,280.47 245.33,280.96 246.58,281.46 247.83,281.94 249.08,282.43 250.33,282.91 251.59,283.39 252.84,283.87 254.09,284.34 255.34,284.8 256.59,285.27 257.84,285.73 259.1,286.19 260.35,286.64 261.6,287.09 262.85,287.54 264.1,287.99 265.36,288.43 266.61,288.87 267.86,289.3 269.11,289.73 270.36,290.16 271.61,290.59 272.87,291.01 274.12,291.43 275.37,291.84 276.62,292.25 277.87,292.66 279.13,293.07 280.38,293.48 281.63,293.88 282.88,294.27 284.13,294.67 285.39,295.06 286.64,295.45 287.89,295.84 289.14,296.22 290.39,296.6 291.64,296.98 292.9,297.35 294.15,297.73 295.4,298.1 296.65,298.46 297.9,298.83 299.16,299.19 300.41,299.55 301.66,299.9 302.91,300.26 304.16,300.61 305.41,300.96 306.67,301.3" class="curve" stroke="#d97706" stroke-width="2.4"/>
+    <circle cx="107.33" cy="196.8" r="4" fill="#3b82f6"/>
+    <circle cx="107.33" cy="196.8" r="4" fill="#d97706"/>
+    <circle cx="194" cy="196.8" r="4" fill="#3b82f6"/>
+    <circle cx="194" cy="257.28" r="4" fill="#d97706"/>
+    <circle cx="280.67" cy="196.8" r="4" fill="#3b82f6"/>
+    <circle cx="280.67" cy="293.57" r="4" fill="#d97706"/>
+    <rect x="94.67" y="165.08" width="8" height="8" rx="1.5" fill="#7c3aed" fill-opacity="0.8"/>
+    <rect x="103.33" y="205.4" width="8" height="8" rx="1.5" fill="#7c3aed" fill-opacity="0.8"/>
+    <rect x="112" y="185.24" width="8" height="8" rx="1.5" fill="#7c3aed" fill-opacity="0.8"/>
+    <rect x="185.67" y="273.44" width="8" height="8" rx="1.5" fill="#7c3aed" fill-opacity="0.8"/>
+    <rect x="194.33" y="296.12" width="8" height="8" rx="1.5" fill="#7c3aed" fill-opacity="0.8"/>
+    <rect x="276.67" y="233.12" width="8" height="8" rx="1.5" fill="#7c3aed" fill-opacity="0.8"/>
+    <text x="306.67" y="187.8" text-anchor="end" class="sm bold">compound symmetry</text>
+    <text x="306.67" y="292.3" text-anchor="end" class="sm bold">AR(1)</text>
+    <text x="271.67" y="241.12" text-anchor="end" class="sm bold">unstructured</text>
   </g>
 </svg>

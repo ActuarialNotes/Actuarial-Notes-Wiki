@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>One year of interest split into m sub-period credits</title>
+  <title>A balance stepping up by × 1.03 at each quarter to 1.1255, above the straight dashed line to the quoted 1.12</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -44,32 +44,29 @@ text {
   <g id="light"/><g id="dark"/>
   <defs>
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
-    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="52" y1="220" x2="318" y2="220" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-    <line x1="60" y1="216" x2="60" y2="224" class="tick"/>
-    <text x="60" y="237" text-anchor="middle" class="sm dim">0</text>
-    <line x1="120" y1="216" x2="120" y2="224" class="tick"/>
-    <text x="120" y="237" text-anchor="middle" class="sm dim">¼</text>
-    <line x1="180" y1="216" x2="180" y2="224" class="tick"/>
-    <text x="180" y="237" text-anchor="middle" class="sm dim">½</text>
-    <line x1="240" y1="216" x2="240" y2="224" class="tick"/>
-    <text x="240" y="237" text-anchor="middle" class="sm dim">¾</text>
-    <line x1="300" y1="216" x2="300" y2="224" class="tick"/>
-    <text x="300" y="237" text-anchor="middle" class="sm dim">1</text>
-    <line x1="66" y1="180" x2="114" y2="180" class="thin" stroke="#3b82f6" stroke-width="1.3" marker-end="url(#ah3b82f6)"/>
-    <text x="90" y="172" text-anchor="middle" class="sm" fill="#3b82f6">× 1.03</text>
-    <line x1="126" y1="180" x2="174" y2="180" class="thin" stroke="#3b82f6" stroke-width="1.3" marker-end="url(#ah3b82f6)"/>
-    <text x="150" y="172" text-anchor="middle" class="sm" fill="#3b82f6">× 1.03</text>
-    <line x1="186" y1="180" x2="234" y2="180" class="thin" stroke="#3b82f6" stroke-width="1.3" marker-end="url(#ah3b82f6)"/>
-    <text x="210" y="172" text-anchor="middle" class="sm" fill="#3b82f6">× 1.03</text>
-    <line x1="246" y1="180" x2="294" y2="180" class="thin" stroke="#3b82f6" stroke-width="1.3" marker-end="url(#ah3b82f6)"/>
-    <text x="270" y="172" text-anchor="middle" class="sm" fill="#3b82f6">× 1.03</text>
-    <text x="180" y="142" text-anchor="middle" class="bold" fill="#3b82f6">i⁽⁴⁾ / 4 = 3% each quarter</text>
-    <text x="60" y="260" text-anchor="middle" class="sm dim">1</text>
-    <text x="300" y="260" text-anchor="middle" class="sm dim">1.1255</text>
-    <text x="180" y="330" text-anchor="middle" class="sm dim">a quoted rate is not an earned rate</text>
+    <polyline points="66,352 326,115.56" class="curve dash" stroke="var(--dim)" stroke-width="1.6"/>
+    <polyline points="66,352 131,352 131,292.89 196,292.89 196,232 261,232 261,169.29 326,169.29 326,104.7" class="curve" stroke="#3b82f6" stroke-width="2"/>
+    <text x="163.5" y="308.89" text-anchor="middle" class="sm bold" fill="#3b82f6">× 1.03</text>
+    <circle cx="326" cy="104.7" r="3.6" fill="#3b82f6"/>
+    <text x="302" y="100.7" text-anchor="middle" class="sm">1.1255</text>
+    <line x1="66" y1="352" x2="336" y2="352" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="66" y1="352" x2="66" y2="76" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="66" y1="352" x2="66" y2="356" class="tick"/>
+    <text x="66" y="368" text-anchor="middle" class="sm dim">0</text>
+    <line x1="131" y1="352" x2="131" y2="356" class="tick"/>
+    <text x="131" y="368" text-anchor="middle" class="sm dim">¼</text>
+    <line x1="196" y1="352" x2="196" y2="356" class="tick"/>
+    <text x="196" y="368" text-anchor="middle" class="sm dim">½</text>
+    <line x1="261" y1="352" x2="261" y2="356" class="tick"/>
+    <text x="261" y="368" text-anchor="middle" class="sm dim">¾</text>
+    <line x1="326" y1="352" x2="326" y2="356" class="tick"/>
+    <text x="326" y="368" text-anchor="middle" class="sm dim">1</text>
+    <line x1="62" y1="352" x2="66" y2="352" class="tick"/>
+    <text x="58" y="355.6" text-anchor="end" class="sm dim">1</text>
+    <line x1="62" y1="115.56" x2="66" y2="115.56" class="tick"/>
+    <text x="58" y="119.16" text-anchor="end" class="sm dim">1.12</text>
   </g>
 </svg>

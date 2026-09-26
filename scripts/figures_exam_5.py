@@ -2,8 +2,8 @@
 
 Same contract as `figures_exam_p.py` / `figures_exam_fm.py` /
 `figures_exam_mas_i.py` / `figures_exam_mas_ii.py`: each builder returns a `Fig`
-from `vcard()` — a portrait card carrying a title, one picture and one formula.
-Grouped in syllabus order:
+from `vcard()` carrying one picture and nothing else — no title, no formula, no
+caption, no table. Grouped in syllabus order:
 
 A. Ratemaking — data aggregation, premium, losses, trend, expenses, the overall
    indication, classification and individual risk rating
@@ -34,9 +34,9 @@ import math
 
 from figure_kit import (
     AMBER, BLUE, GREEN, ROSE, TEAL, VIOLET,
-    Axes, Fig, brace, timeline, vaxes, vcard,
-    BX0, BY0, BX1, BY1, BCX, BCY,
-    building, car, coins, cross, document, house, person, scales, shield, tower,
+    Axes, Fig, brace, vaxes, vcard,
+    BCX, BCY,
+    building, car, coins, document, house, person, scales, shield, tower,
 )
 from figure_registry import figure
 
@@ -107,91 +107,6 @@ def _money(v: float, dp: int = 0) -> str:
 
 
 # ── shared drawing helpers ───────────────────────────────────────────────────
-def _hbar(f: Fig, y, parts, x0=40, x1=320, height=30, label_cls="sm",
-          opacity="0.30"):
-    """A horizontal stacked bar. `parts` is a list of (share, label, colour).
-
-    Returns the list of segment centres, so a caller can hang a note under one.
-    """
-    total = sum(p[0] for p in parts) or 1.0
-    x, centres = x0, []
-    for share, label, colour in parts:
-        w = (x1 - x0) * share / total
-        f.rect(x, y - height / 2, w, height, rx=4, fill=colour,
-               fill_opacity=opacity, stroke=colour, stroke_width="1.2")
-        if label:
-            f.text(x + w / 2, y + 4, label, cls=label_cls)
-        centres.append(x + w / 2)
-        x += w
-    return centres
-
-
-def _vbars(f: Fig, values, labels, y_base, x0=52, x1=316, top=None, colour=BLUE,
-           fmt=None, bar_frac=0.58, value_cls="sm", label_cls="sm dim",
-           colours=None):
-    """A simple column chart drawn straight onto the card. Returns bar centres."""
-    top = top or (max(values) * 1.0)
-    n = len(values)
-    slot = (x1 - x0) / n
-    bw = slot * bar_frac
-    height = 132
-    centres = []
-    for i, v in enumerate(values):
-        cx = x0 + slot * (i + 0.5)
-        h = height * v / top
-        col = colours[i] if colours else colour
-        f.rect(cx - bw / 2, y_base - h, bw, h, rx=3, fill=col, fill_opacity="0.75")
-        if fmt:
-            f.text(cx, y_base - h - 7, fmt(v), cls=value_cls)
-        f.text(cx, y_base + 15, labels[i], cls=label_cls)
-        centres.append(cx)
-    f.line(x0 - 6, y_base, x1 + 6, y_base, cls="axis")
-    return centres
-
-
-def _flow(f: Fig, y, labels, colours=None, x0=32, x1=328, h=26, cls="sm"):
-    """A left-to-right chain of chips joined by arrows."""
-    n = len(labels)
-    slot = (x1 - x0) / n
-    centres = []
-    for i, label in enumerate(labels):
-        cx = x0 + slot * (i + 0.5)
-        colour = (colours or [BLUE] * n)[i]
-        f.chip(cx, y, label, colour=colour, w=slot - 14, h=h, cls=cls)
-        centres.append(cx)
-        if i:
-            f.arrow(centres[i - 1] + (slot - 14) / 2 + 1, y,
-                    cx - (slot - 14) / 2 - 1, y, colour="var(--dim)", width=1.3)
-    return centres
-
-
-def _triangle(f: Fig, rows, x0=32, y0=126, cw=52, ch=27, ages=None, labels=None,
-              fmt=_money, cell_cls="sm", head_cls="sm dim", shade=None,
-              shade_colour=BLUE, ring=None, ring_colour=ROSE):
-    """A development triangle: cohorts down, maturities across.
-
-    `shade` and `ring` are predicates on (row, col) — the first fills a cell,
-    the second outlines it. Returns a (row, col) → (cx, cy) map.
-    """
-    ages = ages or AGES
-    labels = labels or AYS
-    at = {}
-    for j, age in enumerate(ages):
-        f.text(x0 + 40 + cw * (j + 0.5), y0 - 8, age, cls=head_cls)
-    for i, row in enumerate(rows):
-        cy = y0 + ch * (i + 0.5)
-        f.text(x0 + 34, cy + 4, labels[i], cls=head_cls, anchor="end")
-        for j, v in enumerate(row):
-            cx = x0 + 40 + cw * (j + 0.5)
-            if shade and shade(i, j):
-                f.rect(cx - cw / 2 + 1.5, cy - ch / 2 + 1.5, cw - 3, ch - 3, rx=3,
-                       fill=shade_colour, fill_opacity="0.18")
-            if ring and ring(i, j):
-                f.rect(cx - cw / 2 + 1.5, cy - ch / 2 + 1.5, cw - 3, ch - 3, rx=3,
-                       fill="none", stroke=ring_colour, stroke_width="1.6")
-            f.text(cx, cy + 4, fmt(v), cls=cell_cls)
-            at[(i, j)] = (cx, cy)
-    return at
 
 
 def _fill_triangle(f: Fig, rows, x0, y0, cw, ch, scale, colour=BLUE, ncols=5,
@@ -1951,7 +1866,8 @@ def claim_count_triangle() -> Fig:
     f = vcard()
 
     x0, y0, cw, ch = 56, 108, 44, 54
-    ult = 1000
+    cdf = math.prod(CNT_LDF)                      # 1.429
+    ult = CNT[4][0] * cdf                         # 1,000
     at = _fill_triangle(f, CNT, x0, y0, cw, ch, scale=ult, colour=TEAL)
     for j, age in enumerate(AGES + ["ult"]):
         f.text(x0 + cw * (j + 0.5), y0 - 10, age, cls="sm dim")
@@ -1960,11 +1876,11 @@ def claim_count_triangle() -> Fig:
     cx, cy = x0 + cw * 5.5, y0 + ch * 4.5
     f.rect(cx - cw / 2 + 2, cy - ch / 2 + 2, cw - 4, ch - 4, rx=3, fill=GREEN,
            fill_opacity="0.75", stroke=GREEN, stroke_width="1.4")
-    f.text(cx, cy + ch / 2 + 16, "1,000", cls="sm bold")
+    f.text(cx, cy + ch / 2 + 16, _money(ult), cls="sm bold")
     x_start = at[(4, 0)][0] + cw / 2 - 2
     f.arrow(x_start, cy, cx - cw / 2 - 2, cy, colour=GREEN, width=1.6, dash=True)
-    f.text((x_start + cx - cw / 2) / 2, cy - 8, "× 1.429", cls="sm bold")
-    f.text(at[(4, 0)][0], cy + ch / 2 + 16, "700", cls="sm bold")
+    f.text((x_start + cx - cw / 2) / 2, cy - 8, f"× {cdf:.3f}", cls="sm bold")
+    f.text(at[(4, 0)][0], cy + ch / 2 + 16, _money(CNT[4][0]), cls="sm bold")
     return f
 
 

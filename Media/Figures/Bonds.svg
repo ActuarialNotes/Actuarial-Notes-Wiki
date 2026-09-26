@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>A bond's coupon stream and redemption payment on one timeline</title>
+  <title>A bond on one timeline: the price P paid down at time 0, a coupon Fr up at every period, and the redemption C up at maturity</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -50,31 +50,30 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="48" y1="236" x2="318" y2="236" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-    <line x1="56" y1="232" x2="56" y2="240" class="tick"/>
-    <text x="56" y="253" text-anchor="middle" class="sm dim">0</text>
-    <line x1="96.67" y1="232" x2="96.67" y2="240" class="tick"/>
-    <text x="96.67" y="253" text-anchor="middle" class="sm dim">1</text>
-    <line x1="137.33" y1="232" x2="137.33" y2="240" class="tick"/>
-    <text x="137.33" y="253" text-anchor="middle" class="sm dim">2</text>
-    <line x1="178" y1="232" x2="178" y2="240" class="tick"/>
-    <text x="178" y="253" text-anchor="middle" class="sm dim">…</text>
-    <line x1="218.67" y1="232" x2="218.67" y2="240" class="tick"/>
-    <line x1="259.33" y1="232" x2="259.33" y2="240" class="tick"/>
-    <text x="259.33" y="253" text-anchor="middle" class="sm dim">5</text>
-    <line x1="300" y1="232" x2="300" y2="240" class="tick"/>
-    <text x="300" y="253" text-anchor="middle" class="sm dim">n</text>
-    <line x1="96.67" y1="236" x2="96.67" y2="206" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <text x="56" y="241" text-anchor="middle" class="sm dim">0</text>
+    <line x1="48" y1="250" x2="318" y2="250" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <line x1="56" y1="246" x2="56" y2="254" class="tick"/>
+    <line x1="96.67" y1="246" x2="96.67" y2="254" class="tick"/>
+    <text x="96.67" y="267" text-anchor="middle" class="sm dim">1</text>
+    <line x1="137.33" y1="246" x2="137.33" y2="254" class="tick"/>
+    <text x="137.33" y="267" text-anchor="middle" class="sm dim">2</text>
+    <line x1="178" y1="246" x2="178" y2="254" class="tick"/>
+    <text x="178" y="267" text-anchor="middle" class="sm dim">…</text>
+    <line x1="218.67" y1="246" x2="218.67" y2="254" class="tick"/>
+    <line x1="259.33" y1="246" x2="259.33" y2="254" class="tick"/>
+    <text x="259.33" y="267" text-anchor="middle" class="sm dim">5</text>
+    <line x1="300" y1="246" x2="300" y2="254" class="tick"/>
+    <text x="300" y="267" text-anchor="middle" class="sm dim">n</text>
+    <line x1="96.67" y1="250" x2="96.67" y2="206" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
     <text x="96.67" y="200" text-anchor="middle" class="sm">Fr</text>
-    <line x1="137.33" y1="236" x2="137.33" y2="206" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <line x1="178" y1="236" x2="178" y2="206" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <line x1="218.67" y1="236" x2="218.67" y2="206" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <line x1="259.33" y1="236" x2="259.33" y2="206" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <line x1="300" y1="236" x2="300" y2="206" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <line x1="300" y1="236" x2="300" y2="164" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
-    <text x="300" y="158" text-anchor="middle" class="sm">C</text>
-    <line x1="56" y1="236" x2="56" y2="292" class="thin" stroke="#d97706" stroke-width="1.8" marker-end="url(#ahd97706)"/>
-    <text x="56" y="308" text-anchor="middle" class="sm">P</text>
-    <text x="180" y="128" text-anchor="middle" class="sm dim">coupons Fr, then C at maturity</text>
+    <line x1="137.33" y1="250" x2="137.33" y2="206" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <line x1="178" y1="250" x2="178" y2="206" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <line x1="218.67" y1="250" x2="218.67" y2="206" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <line x1="259.33" y1="250" x2="259.33" y2="206" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <line x1="300" y1="250" x2="300" y2="206" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <line x1="300" y1="250" x2="300" y2="90" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
+    <text x="300" y="84" text-anchor="middle" class="sm">C</text>
+    <line x1="56" y1="250" x2="56" y2="350" class="thin" stroke="#d97706" stroke-width="2.2" marker-end="url(#ahd97706)"/>
+    <text x="56" y="366" text-anchor="middle" class="sm">P</text>
   </g>
 </svg>

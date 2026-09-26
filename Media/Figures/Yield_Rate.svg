@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The yield rate as the discount rate that reproduces the market price</title>
+  <title>The price–yield curve of the 1,000 par bond, read across from a market price of 920 and down to the yield j that produces it</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -51,8 +51,7 @@ text {
     <line x1="78" y1="270.17" x2="221.29" y2="270.17" class="thin dash" stroke="#d97706" stroke-width="1.3"/>
     <line x1="221.29" y1="350" x2="221.29" y2="270.17" class="thin dash" stroke="#d97706" stroke-width="1.3"/>
     <circle cx="221.29" cy="270.17" r="3.6" fill="#d97706"/>
-    <text x="257.29" y="256.17" text-anchor="middle" class="sm bold">solve for j</text>
-    <text x="91.78" y="244.77" text-anchor="start" class="sm dim">market price</text>
+    <text x="91.78" y="263.17" text-anchor="start" class="sm bold" fill="#d97706">market price</text>
     <line x1="78" y1="350" x2="336" y2="350" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
     <line x1="78" y1="350" x2="78" y2="86" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
     <line x1="105.56" y1="350" x2="105.56" y2="354" class="tick"/>
@@ -67,7 +66,8 @@ text {
     <text x="70" y="244.74" text-anchor="end" class="sm dim">1,000</text>
     <line x1="74" y1="168.57" x2="78" y2="168.57" class="tick"/>
     <text x="70" y="172.17" text-anchor="end" class="sm dim">1,200</text>
-    <text x="326" y="382" text-anchor="end" class="sm dim">yield j</text>
+    <text x="326" y="382" text-anchor="end" class="sm dim">yield</text>
     <text x="74" y="82" text-anchor="start" class="sm dim">price</text>
+    <text x="221.29" y="366" text-anchor="middle" class="sm bold">j</text>
   </g>
 </svg>

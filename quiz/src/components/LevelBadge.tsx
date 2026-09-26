@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { X, Palette, Trophy, Swords } from 'lucide-react'
 import { useXp, type XpView } from '@/hooks/useXp'
 import { useQuests } from '@/hooks/useQuests'
 import { QUESTS_ENABLED, LEAGUES_ENABLED } from '@/lib/featureFlags'
 import { CharacterSkinSelector } from '@/components/MascotWidget'
 import { QuestsPanel } from '@/components/QuestsPanel'
+import { DailyGoalPicker } from '@/components/DailyGoalPicker'
 import { LeaderboardPanel, type LeagueExamOption } from '@/components/LeaderboardPanel'
 import type { QuestContext } from '@/lib/quests'
 
@@ -148,9 +148,10 @@ function LevelPopup({
   claimableCount: number
   onClose: () => void
 }) {
-  const navigate = useNavigate()
   const [tab, setTab] = useState<PopupTab>(DEFAULT_TAB)
   const [showCharacter, setShowCharacter] = useState(false)
+  // "Change goal" swaps the tab body for the goal presets, in place.
+  const [choosingGoal, setChoosingGoal] = useState(false)
   const levelRatio = xp.xpForLevel > 0 ? xp.xpIntoLevel / xp.xpForLevel : 0
 
   useEffect(() => {
@@ -212,7 +213,7 @@ function LevelPopup({
         </div>
 
         {/* Tabs */}
-        {visibleTabs.length > 1 && (
+        {!choosingGoal && visibleTabs.length > 1 && (
           <div className="mb-4 flex gap-1 rounded-xl bg-muted/50 p-1">
             {visibleTabs.map(t => (
               <button
@@ -243,13 +244,14 @@ function LevelPopup({
             content loaded and the size steady instead of flashing a loading
             spinner on each switch. A min-height stops short panels collapsing. */}
         <div className="max-h-[60vh] min-h-[16rem] overflow-y-auto">
+          {choosingGoal && <DailyGoalPicker />}
           {QUESTS_ENABLED && (
-            <div className={tab === 'quests' ? '' : 'hidden'}>
+            <div className={!choosingGoal && tab === 'quests' ? '' : 'hidden'}>
               <QuestsPanel context={questContext} xp={xp} />
             </div>
           )}
           {LEAGUES_ENABLED && (
-            <div className={tab === 'leaderboard' ? '' : 'hidden'}>
+            <div className={!choosingGoal && tab === 'leaderboard' ? '' : 'hidden'}>
               <LeaderboardPanel exams={leagueExams} initialExamId={activeExamId} />
             </div>
           )}
@@ -266,10 +268,11 @@ function LevelPopup({
           </button>
           <button
             type="button"
-            onClick={() => { navigate('/settings'); onClose() }}
+            onClick={() => setChoosingGoal(c => !c)}
+            aria-pressed={choosingGoal}
             className="text-xs text-muted-foreground hover:text-foreground hover:underline"
           >
-            Change goal
+            {choosingGoal ? 'Done' : 'Change goal'}
           </button>
         </div>
       </div>

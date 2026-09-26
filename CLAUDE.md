@@ -514,7 +514,7 @@ Other important `lib/` modules:
   called from `quizStore` on quiz completion (`recordXp`). Surfaced via `hooks/useXp.ts`
   + `components/LevelBadge.tsx` (the Dashboard header level badge — a level ring that
   replaces the mascot icon and opens an XP/daily-goal popup) and
-  `components/DailyGoalPicker.tsx` (Settings goal picker). Gated by `XP_ENABLED`.
+  `components/DailyGoalPicker.tsx` (the goal presets, behind the popup's *Change goal*). Gated by `XP_ENABLED`.
 - `quests.ts` / `questStore.ts` — daily-quest engine (roadmap P1.4), the gem-economy
   loop. `quests.ts` is the pure, tested core: it generates a *personalized* daily
   board from the catalogue authored in `data/quests.ts` (one always-achievable "core"
@@ -544,14 +544,14 @@ Other important `lib/` modules:
   as the **League tab** in the Level-badge popup (`components/LevelBadge.tsx` hosts
   Quests/League tabs — the popup header shows the level + level-progress bar and the
   daily goal is the first row of the Quests tab → `components/LeaderboardPanel.tsx` with
-  a per-exam selector, `components/QuestsPanel.tsx`), plus `components/LeagueSettingsCard.tsx` (Settings
-  opt-in/out). `hooks/useLeague.ts` is `useLeague(exam)`. Gated by `LEAGUES_ENABLED`.
+  a per-exam selector and the join/leave, `components/QuestsPanel.tsx`; its footer's *Change goal*
+  swaps in `components/DailyGoalPicker.tsx`). `hooks/useLeague.ts` is `useLeague(exam)`. Gated by `LEAGUES_ENABLED`.
 - `dailyEmail.ts` — pure core of the opt-in daily study-plan email: derives "today's
   concepts" from a cached (possibly stale) study plan and the local send-time math. The
   actual sending happens server-side in the `daily-plan-email` edge function, which
   mirrors these helpers verbatim (it can't import from `quiz/src` — same duplication
   contract as the league SQL). Prefs live in `user_email_prefs`
-  (`hooks/useEmailPrefs.ts` + `components/EmailSettingsCard.tsx` in Settings). Gated by
+  (`hooks/useEmailPrefs.ts` + `components/DashboardRemindersModal.tsx`, the Dashboard's bell). Gated by
   `DAILY_PLAN_EMAIL_ENABLED`. See `docs/daily-plan-email.md`.
 - `mathFocus.ts` — math focus mode: tapping a rendered equation magnifies it in a
   full-screen overlay with Previous/Next through the equations around it. This module

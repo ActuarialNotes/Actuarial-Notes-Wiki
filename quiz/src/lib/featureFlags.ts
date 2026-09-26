@@ -67,7 +67,7 @@ export const STREAK_ENABLED: boolean = true
  *
  * When ON, completing a quiz awards XP (weighted toward hard and decaying
  * concepts — see lib/xp.ts), and a configurable daily-goal ring appears on the
- * Dashboard with a matching goal picker in Settings. The pure XP/goal engine and
+ * Dashboard, with the goal picker behind the Level popup's "Change goal". The pure XP/goal engine and
  * its tests stay compiled either way; the `: boolean` annotation keeps both
  * branches of every gate type-checked (see the flags above). Gate it off to
  * dark-launch or roll back independently of the streak.
@@ -91,7 +91,7 @@ export const QUESTS_ENABLED: boolean = true
 /**
  * Weekly XP leagues (roadmap P4.1) — opt-in, privacy-first light social. When
  * ON, a collapsible "League" card appears on the Dashboard (signed-in only)
- * and a matching opt-in/out section appears in Settings. Joining places the
+ * (the Level popup's League tab, which also holds the join/leave). Joining places the
  * student in a cohort of up to 30 at their tier for the current UTC week,
  * ranked by weekly XP; at week end the top of the cohort promotes a tier and
  * the bottom relegates (Duolingo-style — pure math in lib/leagues.ts, the
@@ -110,8 +110,8 @@ export const LEAGUES_ENABLED: boolean = true
 
 /**
  * Daily study-plan email — an opt-in morning email listing what the study plan
- * has scheduled for today. When ON, an "Email" card appears in Settings
- * (signed-in only) with the opt-in toggle and a local send-time picker,
+ * has scheduled for today. When ON, the Dashboard's reminders modal
+ * (signed-in only) carries the opt-in toggle and a local send-time picker,
  * persisted to the user_email_prefs table. The email itself is sent
  * server-side by the daily-plan-email edge function on an hourly pg_cron
  * schedule (see docs/daily-plan-email.md) — the cron keeps running either

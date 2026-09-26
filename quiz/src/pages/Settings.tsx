@@ -17,11 +17,8 @@ import { cn } from '@/lib/utils'
 import { useSubscription } from '@/hooks/useSubscription'
 import { useOnboardingTour } from '@/hooks/useOnboardingTour'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
-import { DailyGoalPicker } from '@/components/DailyGoalPicker'
-import { LeagueSettingsCard } from '@/components/LeagueSettingsCard'
 import { SoundSettingsCard } from '@/components/SoundSettingsCard'
-import { EmailSettingsCard } from '@/components/EmailSettingsCard'
-import { DAILY_PLAN_EMAIL_ENABLED, LEAGUES_ENABLED, TOUR_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
+import { TOUR_ENABLED } from '@/lib/featureFlags'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { ProBadge } from '@/components/ProBadge'
 import { CharacterSkinSelector } from '@/components/MascotWidget'
@@ -293,9 +290,6 @@ export default function Settings() {
     { id: 'appearance', label: 'Appearance' },
     { id: 'sound', label: 'Sound' },
     { id: 'support', label: 'Support' },
-    ...(user && XP_ENABLED ? [{ id: 'dailygoal', label: 'Daily Goal' }] : []),
-    ...(user && LEAGUES_ENABLED ? [{ id: 'league', label: 'Leaderboard' }] : []),
-    ...(user && DAILY_PLAN_EMAIL_ENABLED ? [{ id: 'email', label: 'Daily Email' }] : []),
     ...(user ? [{ id: 'data', label: 'Progress & Data' }] : []),
   ]
 
@@ -984,27 +978,6 @@ export default function Settings() {
                 </CardContent>
               </Card>
             </section>
-
-            {/* ---- Daily goal (XP) ---- */}
-            {user && XP_ENABLED && (
-              <section ref={el => { sectionRefs.current.dailygoal = el }} id="dailygoal">
-                <DailyGoalPicker />
-              </section>
-            )}
-
-            {/* ---- Weekly XP league opt-in (roadmap P4.1) ---- */}
-            {user && LEAGUES_ENABLED && (
-              <section ref={el => { sectionRefs.current.league = el }} id="league">
-                <LeagueSettingsCard />
-              </section>
-            )}
-
-            {/* ---- Daily study-plan email opt-in ---- */}
-            {user && DAILY_PLAN_EMAIL_ENABLED && (
-              <section ref={el => { sectionRefs.current.email = el }} id="email">
-                <EmailSettingsCard />
-              </section>
-            )}
 
             {user && <>
 

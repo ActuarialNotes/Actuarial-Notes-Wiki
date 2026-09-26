@@ -82,19 +82,19 @@ def _zcurve(ax: Axes, mu=0.0, sd=1.0, colour=BLUE, width=2):
 # A. Probability models
 # ═══════════════════════════════════════════════════════════════════════════
 
-@figure("Stochastic Processes", "Three sample paths of a counting process over the "
-        "same time axis", width=WID)
+@figure("Stochastic Processes", "Three sample paths of one counting process over the "
+        "same time axis, one path per outcome", width=WID)
 def stochastic_processes() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 10, 0, 7, left=40, top=26, bottom=44)
+    ax = vaxes(f, 0, 10, 0, 7.4, left=40, right=30, top=26, bottom=44)
     ax.frame(xlabel="time t", xticks=[0, 2, 4, 6, 8, 10], yticks=[0, 2, 4, 6])
     paths = [
-        ([0.6, 1.5, 3.4, 5.0, 6.1, 8.2], BLUE),
-        ([1.2, 2.0, 2.6, 4.8, 7.4], AMBER),
-        ([0.9, 3.1, 4.2, 4.9, 6.6, 7.8, 9.1], GREEN),
+        ([0.6, 1.5, 3.4, 5.0, 6.1, 8.2], BLUE, "ω₁"),
+        ([1.2, 2.0, 2.6, 4.8, 7.4], AMBER, "ω₂"),
+        ([0.9, 3.1, 4.2, 4.9, 6.6, 7.8, 9.1], GREEN, "ω₃"),
     ]
-    for jumps, colour in paths:
+    for jumps, colour, name in paths:
         pts = [(0.0, 0.0)]
         n = 0
         for t in jumps:
@@ -103,17 +103,21 @@ def stochastic_processes() -> Fig:
             pts.append((t, n))
         pts.append((10.0, n))
         ax.polyline(pts, colour=colour, width=1.8)
+        ax.label(10, n, name, cls="sm bold", anchor="start", dx=6, dy=4)
     return f
 
 
-@figure("Poisson Process", "A Poisson counting path with exponential gaps between "
-        "jumps", width=WID)
+@figure("Poisson Process", "A counting path climbing around its mean line λt, with "
+        "exponential gaps between the jumps", width=WID)
 def poisson_process() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 3, 0, 8, left=40, top=36, bottom=40)
-    ax.frame(xlabel="months", xticks=[0, 1, 2, 3], yticks=[0, 2, 4, 6, 8])
-    jumps = [0.18, 0.42, 0.71, 1.05, 1.36, 1.9, 2.44]
+    lam = 4
+    ax = vaxes(f, 0, 3, 0, 13, left=40, top=26, bottom=40)
+    ax.frame(xlabel="months", xticks=[0, 1, 2, 3], yticks=[0, 4, 8, 12])
+    jumps = [0.12, 0.31, 0.58, 0.74, 1.02, 1.21, 1.62, 1.75, 1.97, 2.31, 2.52, 2.83]
+    ax.polyline([(0, 0), (3, lam * 3)], colour="var(--dim)", width=1.4, dash=True)
+    ax.label(1.6, 5.3, "λt", cls="sm bold", anchor="start")
     pts = [(0.0, 0.0)]
     n = 0
     for t in jumps:
@@ -124,16 +128,15 @@ def poisson_process() -> Fig:
     ax.polyline(pts, colour=BLUE, width=2)
     for i, t in enumerate(jumps):
         ax.point(t, i + 1, colour=BLUE, r=2.8)
-        f.line(ax.px(t), ax.py(0), ax.px(t), ax.py(0.28), cls="", stroke=AMBER,
+        f.line(ax.px(t), ax.py(0), ax.px(t), ax.py(0.45), cls="", stroke=AMBER,
                stroke_width="1.4")
-    brace(f, ax.px(jumps[4]), ax.px(jumps[5]), ax.py(1.4), depth=6, colour=AMBER,
+    brace(f, ax.px(jumps[5]), ax.px(jumps[6]), ax.py(0.8), depth=6, colour=AMBER,
           label="T ~ Exp(λ)", below=False, label_cls="sm")
-    f.text(BCX, BY0 + 20, "λ = 4 claims per month", cls="sm dim")
     return f
 
 
-@figure("Nonhomogeneous Poisson Process", "A time-varying intensity with the "
-        "integrated rate shaded", width=WID)
+@figure("Nonhomogeneous Poisson Process", "A rising intensity with the area under it "
+        "to month 4 shaded, and arrivals growing denser as the rate climbs", width=WID)
 def nonhomogeneous_poisson_process() -> Fig:
     f = vcard()
 
@@ -144,13 +147,20 @@ def nonhomogeneous_poisson_process() -> Fig:
     ax.area(rate, 0, 4, colour=BLUE, opacity="0.18")
     ax.curve(rate, colour=BLUE, width=2.2)
     ax.vline(4, colour=BLUE, y_top=rate(4))
-    ax.label(2.0, 5.0, "m(4) = 28", cls="bold", dy=4)
-    ax.label(5.1, 14.6, "λ(t) = 3 + 2t", cls="sm", fill=BLUE, anchor="end")
+    ax.label(2.0, 5.0, "m(4)", cls="bold", dy=4)
+    # arrivals: gaps shrink as the rate climbs
+    t, u = 0.0, _rng(11)
+    while True:
+        t += -math.log(1 - u() * 0.999) / rate(t)
+        if t >= 6:
+            break
+        f.line(ax.px(t), ax.py(0), ax.px(t), ax.py(0.9), cls="", stroke=AMBER,
+               stroke_width="1.3")
     return f
 
 
-@figure("Compound Poisson Process", "Aggregate losses as a staircase of randomly "
-        "sized jumps", width=WID)
+@figure("Compound Poisson Process", "Aggregate losses as a staircase whose steps come "
+        "at random times and have random sizes", width=WID)
 def compound_poisson_process() -> Fig:
     f = vcard()
 
@@ -168,65 +178,57 @@ def compound_poisson_process() -> Fig:
     pts.append((12.0, total))
     ax.polyline(pts, colour=BLUE, width=2)
     running = 0.0
-    for t, size in jumps[:3]:
+    for i, (t, size) in enumerate(jumps[:3]):
         f.arrow(ax.px(t) - 13, ax.py(running + size / 2), ax.px(t) - 13,
                 ax.py(running), colour=AMBER, width=1.3)
-        f.text(ax.px(t) - 17, ax.py(running + size / 2) - 2, "Xᵢ", cls="sm",
+        f.text(ax.px(t) - 17, ax.py(running + size / 2) - 2, f"X{'₁₂₃'[i]}", cls="sm",
                anchor="end", fill=AMBER)
         running += size
     return f
 
 
-@figure("Mixed Poisson Process", "A random rate across risks widening the count "
-        "distribution", width=WID)
+@figure("Mixed Poisson Process", "Three risks' Poisson count distributions at rates 2, "
+        "4 and 8, and the wider mixed distribution of the portfolio drawn as bars",
+        width=WID)
 def mixed_poisson_process() -> Fig:
     f = vcard()
 
-    ax1 = Axes(f, BX0 + 44, BY0 + 16, BX1 - 16, BY0 + 118, 0, 0.6, 0, 5)
-    ax1.frame(xticks=[0, 0.2, 0.4, 0.6], yticks=[])
-    ax1.curve(lambda x: _gammapdf(x, 1.0, 0.2), colour=VIOLET, width=2.2)
-    ax1.label(0.42, 3.4, "Λ varies by risk", cls="sm", fill=VIOLET)
-    f.text(BX0 + 44, BY0 + 10, "mixing distribution of Λ", cls="sm dim", anchor="start")
-
-    ax2 = Axes(f, BX0 + 44, BY0 + 168, BX1 - 16, BY1 - 40, 0, 5, 0, 0.85)
-    ax2.frame(xlabel="claims in a year", xticks=[0, 1, 2, 3, 4, 5], yticks=[])
-    ax2.bars([(k, _poispmf(k, 0.2)) for k in range(6)], colour=BLUE, bw=13,
-             opacity="0.75")
-    nb = [0.836, 0.139, 0.021, 0.003, 0.0005, 0.0001]
-    ax2.bars([(k + 0.32, p) for k, p in enumerate(nb)], colour=ROSE, bw=13,
-             opacity="0.75")
-    f.legend(BX0 + 150, BY0 + 186, [(BLUE, "single Poisson"),
-                                    (ROSE, "mixed (negative binomial)")], gap=15)
+    ax = vaxes(f, -0.7, 14.7, 0, 0.3, left=40, top=24, bottom=44)
+    ax.frame(xlabel="claims", xticks=[0, 4, 8, 12], yticks=[0, 0.1, 0.2],
+             yfmt=lambda v: f"{v:g}")
+    rates = (2, 4, 8)
+    ax.bars([(k, sum(_poispmf(k, r) for r in rates) / 3) for k in range(15)],
+            colour=BLUE, bw=12, opacity="0.55")
+    for r in rates:
+        pmf = [(k, _poispmf(k, r)) for k in range(15)]
+        ax.polyline(pmf, colour=VIOLET, width=1.5)
+        peak = max(pmf, key=lambda kp: kp[1])
+        ax.label(peak[0], peak[1], f"Λ = {r}", cls="sm bold", dy=-9)
+    ax.label(10.3, 0.05, "mixed", cls="sm bold", fill=BLUE)
     return f
 
 
-@figure("Interarrival Time", "Exponential gaps between arrivals, drawn against the "
-        "waiting-time density", width=WID)
+@figure("Interarrival Time", "The exponential waiting-time density, with twelve "
+        "observed gaps between arrivals marked along its axis and the mean 1/λ", width=WID)
 def interarrival_time() -> Fig:
     f = vcard()
 
-    y = BY0 + 42
-    xs = [BX0 + 20, BX0 + 74, BX0 + 116, BX0 + 196, BX0 + 234, BX0 + 292]
-    f.arrow(BX0 + 8, y, BX1 - 6, y, colour="var(--axis)", width=1.2)
-    for i, x in enumerate(xs):
-        f.line(x, y - 6, x, y + 6, cls="tick")
-        f.circle(x, y, 3.4, fill=BLUE)
-        f.text(x, y - 12, f"S{'₁₂₃₄₅₆'[i]}", cls="sm dim")
-    for i in range(3):
-        brace(f, xs[i], xs[i + 1], y + 9, depth=6, colour=AMBER,
-              label=f"T{'₁₂₃'[i]}", label_cls="sm")
-
-    ax = Axes(f, BX0 + 44, BY0 + 130, BX1 - 16, BY1 - 42, 0, 1.2, 0, 4.4)
-    ax.frame(xlabel="waiting time (months)", xticks=[0, 0.25, 0.5, 0.75, 1.0],
+    ax = vaxes(f, 0, 1.2, 0, 4.4, left=40, top=26, bottom=44)
+    ax.frame(xlabel="gap T (months)", xticks=[0, 0.25, 0.5, 0.75, 1.0],
              xfmt=lambda t: f"{t:g}", yticks=[])
-    ax.area(lambda x: 4 * math.exp(-4 * x), 0, 1.2, colour=AMBER, opacity="0.16")
-    ax.curve(lambda x: 4 * math.exp(-4 * x), colour=AMBER, width=2.2)
-    ax.vline(0.25, colour=AMBER, y_top=4 * math.exp(-1), label="mean 1/λ")
+    dens = lambda x: 4 * math.exp(-4 * x)
+    ax.area(dens, 0, 1.2, colour=AMBER, opacity="0.16")
+    ax.curve(dens, colour=AMBER, width=2.2)
+    ax.vline(0.25, colour=AMBER, y_top=dens(0.25))
+    ax.label(0.25, 0.7, "1/λ", cls="sm bold", anchor="start", dx=6)
+    gaps = [0.02, 0.05, 0.08, 0.11, 0.15, 0.19, 0.23, 0.29, 0.36, 0.47, 0.63, 0.94]
+    for g in gaps:
+        f.circle(ax.px(g), ax.py(0) - 7, 3.2, fill=BLUE, fill_opacity="0.85")
     return f
 
 
-@figure("Survival Model", "A survival function falling from one, with the "
-        "probability of surviving past t marked", width=WID)
+@figure("Survival Model", "A survival function falling from one, with its height at "
+        "age 60 marked as the probability of surviving past 60", width=WID)
 def survival_model() -> Fig:
     f = vcard()
 
@@ -234,58 +236,54 @@ def survival_model() -> Fig:
     ax.frame(xlabel="age t", xticks=[0, 25, 50, 75, 100], yticks=[0, 0.5, 1.0],
              ylabel="S(t)")
     surv = lambda t: math.exp(-((t / 82) ** 4.5))
-    ax.area(surv, 60, 100, colour=BLUE, opacity="0.14")
+    s60 = surv(60)
     ax.curve(surv, colour=BLUE, width=2.4)
-    ax.vline(60, colour=BLUE, y_top=surv(60))
-    ax.hline(surv(60), colour=BLUE, x_to=60, label="")
-    ax.point(60, surv(60), colour=BLUE, r=3.6)
-    ax.label(60, surv(60), "S(60) = 0.75", cls="sm bold", dy=-10, dx=22)
-    ax.label(84, 0.16, "P(T > 60)", cls="sm", fill=BLUE)
+    ax.hline(s60, colour=BLUE, x_to=60)
+    f.text(ax.x0 - 8, ax.py(s60) + 3.6, f"{s60:.2f}", cls="sm bold", anchor="end")
+    f.line(ax.px(60), ax.py(0), ax.px(60), ax.py(s60), cls="", stroke=BLUE,
+           stroke_width="3", stroke_opacity="0.55")
+    ax.point(60, s60, colour=BLUE, r=3.8)
+    ax.label(60, 0.25, "P(T > 60)", cls="sm bold", anchor="start", dx=7)
     return f
 
 
-@figure("Hazard Rate", "The bathtub hazard curve beside the survival function it "
-        "generates", width=WID)
+@figure("Hazard Rate", "The bathtub-shaped hazard curve: high in infancy, low and flat "
+        "through the useful life, rising again with wear-out", width=WID)
 def hazard_rate() -> Fig:
     f = vcard()
 
-    ax1 = Axes(f, BX0 + 46, BY0 + 22, BX1 - 16, BY0 + 150, 0, 100, 0, 0.1)
-    ax1.frame(xticks=[0, 25, 50, 75, 100], yticks=[], ylabel="h(t)")
+    ax = vaxes(f, 0, 100, 0, 0.05, left=40, top=30, bottom=46)
+    ax.frame(xlabel="age t", xticks=[0, 25, 50, 75, 100], yticks=[], ylabel="h(t)")
     haz = lambda t: 0.03 * math.exp(-t / 6) + 0.004 + 0.00000004 * t ** 3
-    ax1.curve(haz, colour=ROSE, width=2.4)
-    ax1.label(14, 0.062, "infant", cls="sm dim")
-    ax1.label(50, 0.026, "useful life", cls="sm dim")
-    ax1.label(88, 0.072, "wear-out", cls="sm dim")
-
-    ax2 = Axes(f, BX0 + 46, BY0 + 190, BX1 - 16, BY1 - 40, 0, 100, 0, 1.05)
-    ax2.frame(xlabel="age t", xticks=[0, 25, 50, 75, 100], yticks=[0, 1],
-              ylabel="S(t)")
-    ax2.curve(lambda t: math.exp(-(0.18 * (1 - math.exp(-t / 6))
-                                   + 0.004 * t + 0.00000001 * t ** 4)),
-              colour=BLUE, width=2.4)
+    ax.area(haz, 0, 100, colour=ROSE, opacity="0.12")
+    ax.curve(haz, colour=ROSE, width=2.4)
+    ax.label(8, 0.031, "infant", cls="sm bold", anchor="start")
+    ax.label(46, 0.016, "useful life", cls="sm bold")
+    ax.label(80, 0.041, "wear-out", cls="sm bold", anchor="end")
     return f
 
 
-@figure("Life Table", "The ℓx column falling with age and the deaths dx between "
-        "ages", width=WID)
+@figure("Life Table", "The ℓx column falling from 8,000 at age 60 to 7,170 at 64, with "
+        "the deaths dx drawn as the drop between ages", width=WID)
 def life_table() -> Fig:
     f = vcard()
 
     ages = [60, 61, 62, 63, 64]
     ell = [8000, 7840, 7650, 7430, 7170]
-    ax = vaxes(f, 59.7, 64.3, 6950, 8250, left=54, top=42, bottom=48)
-    ax.frame(xlabel="age x", xticks=ages, xfmt=lambda t: f"{t:.0f}",
-             yticks=[7000, 7500, 8000], yfmt=lambda v: f"{v:,.0f}", ylabel="ℓx")
+    ax = vaxes(f, 59.7, 64.3, 6950, 8250, left=30, top=30, bottom=48)
+    ax.frame(xlabel="age x", xticks=ages, xfmt=lambda t: f"{t:.0f}", yticks=[],
+             ylabel="ℓx")
     ax.polyline(list(zip(ages, ell)), colour=BLUE, width=2.2)
     for x, v in zip(ages, ell):
         ax.point(x, v, colour=BLUE, r=3.4)
-        ax.label(x, v, f"{v:,}", cls="sm", dy=17)
+        ax.label(x, v, f"{v:,}", cls="sm", dy=17, dx=-6)
     for i, (top, bot) in enumerate(zip(ell, ell[1:])):
         px = ax.px(ages[i + 1])
         f.arrow(px, ax.py(top), px, ax.py(bot) + 3, colour=ROSE, width=1.5)
-        if i == 0:
-            f.text(px + 6, (ax.py(top) + ax.py(bot)) / 2 + 4,
-                   f"dₓ = {top - bot}", cls="sm", anchor="start", fill=ROSE)
+        f.line(ax.px(ages[i]), ax.py(top), px, ax.py(top), cls="thin dot",
+               stroke=ROSE, stroke_width="1.2")
+    f.text(ax.px(61) + 6, (ax.py(8000) + ax.py(7840)) / 2 + 4, "d₆₀", cls="sm bold",
+           anchor="start")
     return f
 
 
@@ -303,64 +301,61 @@ def joint_life() -> Fig:
     ax.curve(py, colour=AMBER, width=1.6, dash=True)
     ax.curve(lambda t: px(t) + py(t) - px(t) * py(t), colour=GREEN, width=2.4)
     ax.label(9.5, 0.30, "joint life (xy)", cls="sm", fill=ROSE)
-    ax.label(22.5, 0.72, "last survivor", cls="sm", fill=GREEN, anchor="end")
+    ax.label(20.5, 0.92, "last survivor", cls="sm", fill=GREEN, anchor="start")
     ax.label(29, 0.30, "(x)", cls="sm", fill=BLUE)
     ax.label(29, 0.44, "(y)", cls="sm", fill=AMBER)
     return f
 
 
-@figure("Whole Life Insurance", "A death benefit of 1 discounted from the year of "
-        "death back to issue", width=WID)
+@figure("Whole Life Insurance", "Bars for the chance of dying in each policy year, and "
+        "a benefit of 1 paid at the end of year 4 discounted back to issue by v⁴",
+        width=WID)
 def whole_life_insurance() -> Fig:
     f = vcard()
 
-    y = BY0 + 96
-    n = 6
-    x0, x1 = BX0 + 26, BX1 - 26
-    xs = [x0 + (x1 - x0) * k / n for k in range(n + 1)]
-    f.arrow(x0 - 10, y, x1 + 16, y, colour="var(--axis)", width=1.2)
+    ax = vaxes(f, 0, 6.6, 0, 1.3, left=20, right=20, top=10, bottom=44)
+    xs = [ax.px(k) for k in range(7)]
+    y = ax.py(0)
+    f.arrow(xs[0] - 8, y, ax.x1 + 12, y, colour="var(--axis)", width=1.2)
     for k, x in enumerate(xs):
         f.line(x, y - 4, x, y + 4, cls="tick")
-        f.text(x, y + 18, str(k) if k < n else "…", cls="sm dim")
-    f.text(x0, y - 34, "issue", cls="sm dim")
+        f.text(x, y + 18, str(k) if k < 6 else "…", cls="sm dim")
 
-    death = xs[4]
-    f.circle(death, y, 4.6, fill=ROSE)
-    f.text(death, y + 36, "death in year 4", cls="sm", fill=ROSE)
-    f.arrow(death, y - 12, death, y - 58, colour=ROSE, width=1.8)
-    f.text(death, y - 64, "1", cls="bold", fill=ROSE)
-    f.arrow(death - 6, y - 74, x0 + 4, y - 74, colour=BLUE, width=1.5, dash=True)
-    f.text((x0 + death) / 2, y - 80, "discount v⁴", cls="sm", fill=BLUE)
+    probs = [0.05, 0.07, 0.10, 0.14, 0.19, 0.24]
+    for k, p in enumerate(probs):
+        ax.bars([(k + 0.5, p * 2)], colour=ROSE, bw=(xs[1] - xs[0]) * 0.72,
+                opacity="0.75" if k == 3 else "0.3")
+    ax.label(5.5, probs[-1] * 2, "ₖ|qₓ", cls="sm bold", dy=-7)
 
-    ax = Axes(f, BX0 + 46, BY0 + 190, BX1 - 20, BY1 - 40, -0.5, 5.5, 0, 0.3)
-    ax.frame(xlabel="year of death k", xticks=[0, 1, 2, 3, 4, 5], yticks=[])
-    ax.bars([(k, p) for k, p in enumerate([0.05, 0.07, 0.10, 0.14, 0.19, 0.24])],
-            colour=ROSE, bw=22, opacity="0.6")
-    f.text(BX0 + 46, BY0 + 184, "probability of dying in year k", cls="sm dim",
-           anchor="start")
+    f.arrow(xs[4], y - 2, xs[4], ax.py(0.95), colour=ROSE, width=2)
+    ax.label(4, 0.95, "1", cls="bold", dy=-7)
+    f.arrow(xs[4] - 4, ax.py(1.14), xs[0] + 2, ax.py(1.14), colour=BLUE, width=1.6,
+            dash=True)
+    ax.label(2, 1.14, "v⁴", cls="bold", dy=-7)
     return f
 
 
-@figure("Life Annuity", "Annual payments continuing only while the annuitant is "
-        "alive", width=WID)
+@figure("Life Annuity", "Payments of 1 promised every year, each one shaded down to "
+        "the chance ₖpₓ that the annuitant is still alive to collect it", width=WID)
 def life_annuity() -> Fig:
     f = vcard()
 
-    y = BCY + 46
-    n = 6
-    x0, x1 = BX0 + 26, BX1 - 30
-    xs = [x0 + (x1 - x0) * k / n for k in range(n + 1)]
-    f.arrow(x0 - 10, y, x1 + 18, y, colour="var(--axis)", width=1.2)
+    n = 9
+    ax = vaxes(f, 0, n - 0.4, 0, 1.12, left=20, right=24, top=18, bottom=44)
+    xs = [ax.px(k) for k in range(n)]
+    y = ax.py(0)
+    f.arrow(xs[0] - 8, y, ax.x1 + 12, y, colour="var(--axis)", width=1.2)
     for k, x in enumerate(xs):
         f.line(x, y - 4, x, y + 4, cls="tick")
-        f.text(x, y + 18, str(k) if k < n else "…", cls="sm dim")
-    probs = [1.00, 0.97, 0.93, 0.88, 0.81, 0.72]
-    for k, x in enumerate(xs[:-1]):
-        h = 26 + 62 * probs[k]
-        f.arrow(x, y - 6, x, y - h, colour=BLUE, width=1.8)
-        f.text(x, y - h - 8, "1", cls="sm bold", fill=BLUE)
-        f.text(x, y - h - 22, f"{probs[k]:.2f}", cls="sm dim")
-    f.text(BCX, BY0 + 30, "each payment weighted by ₖpₓ", cls="sm dim")
+        f.text(x, y + 18, str(k), cls="sm dim")
+    probs = [1.00, 0.97, 0.93, 0.88, 0.81, 0.72, 0.62, 0.51, 0.40]
+    for k, p in enumerate(probs):
+        f.line(xs[k], ax.py(p), xs[k], ax.py(1), cls="thin dash", stroke=BLUE,
+               stroke_width="1.3", stroke_opacity="0.6")
+        f.arrow(xs[k], y - 2, xs[k], ax.py(p), colour=BLUE, width=2.2)
+    ax.polyline(list(enumerate(probs)), colour=AMBER, width=1.4, dash=True)
+    ax.label(0, 1, "1", cls="bold", dy=-8)
+    ax.label(n - 1, probs[-1], "ₖpₓ", cls="sm bold", dx=14, dy=4, anchor="start")
     return f
 
 
@@ -382,48 +377,36 @@ def limited_expected_value() -> Fig:
     return f
 
 
-@figure("Probability Distributions", "Three distribution shapes an actuary reaches "
-        "for, side by side", width=WID)
+@figure("Probability Distributions", "A discrete Poisson distribution drawn as bars, "
+        "with the continuous normal curve that approximates it laid over them", width=WID)
 def probability_distributions() -> Fig:
     f = vcard()
 
-    px, pw = BX0 + 34, BX1 - BX0 - 54
-    for i, (name, colour, kind) in enumerate((("Poisson — counts", BLUE, "pois"),
-                                              ("Gamma — severity", AMBER, "gam"),
-                                              ("Normal — averages", GREEN, "norm"))):
-        py = BY0 + 26 + i * 100
-        ax = Axes(f, px, py, px + pw, py + 62, 0, 8, 0, 1.0)
-        f.text(px, py - 8, name, cls="sm bold", fill=colour, anchor="start")
-        f.line(px, py + 62, px + pw, py + 62, cls="axis")
-        if kind == "pois":
-            vals = [_poispmf(k, 2.2) for k in range(9)]
-            top = max(vals)
-            ax.bars([(k, v / top) for k, v in enumerate(vals)], colour=colour,
-                    bw=17, opacity="0.7")
-        elif kind == "gam":
-            top = max(_gammapdf(x / 20, 2, 1.2) for x in range(1, 160))
-            ax.curve(lambda x: _gammapdf(x, 2, 1.2) / top, colour=colour, width=2.2)
-        else:
-            ax.curve(lambda x: _npdf(x, 4, 1.1) / _npdf(4, 4, 1.1), colour=colour,
-                     width=2.2)
+    lam = 6
+    ax = vaxes(f, -0.8, 14.8, 0, 0.19, left=24, top=24, bottom=44)
+    ax.frame(xlabel="x", xticks=[0, 3, 6, 9, 12], yticks=[])
+    ax.bars([(k, _poispmf(k, lam)) for k in range(15)], colour=BLUE, bw=12,
+            opacity="0.6")
+    ax.curve(lambda x: _npdf(x, lam, math.sqrt(lam)), colour=GREEN, width=2.4)
+    ax.label(1.6, _poispmf(2, lam), "Poisson", cls="sm bold", dy=-8, anchor="end")
+    ax.label(9.3, _npdf(9.3, lam, math.sqrt(lam)), "Normal", cls="sm bold",
+             anchor="start", dx=6, dy=-6)
     return f
 
 
-@figure("Frequency", "The distribution of claim counts per policy, most of them "
-        "zero", width=WID)
+@figure("Frequency", "The distribution of claim counts per policy at 0.25 claims per "
+        "exposure-year, most of them zero", width=WID)
 def frequency() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -0.6, 4.6, 0, 0.9, left=48, top=44, bottom=48)
-    ax.frame(xlabel="claims in a year", xticks=[0, 1, 2, 3, 4],
-             xfmt=lambda t: f"{t:.0f}", yticks=[0, 0.4, 0.8],
-             yfmt=lambda v: f"{v:g}")
+    ax = vaxes(f, -0.6, 4.6, 0, 0.9, left=24, top=30, bottom=48)
+    ax.frame(xlabel="claims", xticks=[0, 1, 2, 3, 4], xfmt=lambda t: f"{t:.0f}",
+             yticks=[])
     vals = [_poispmf(k, 0.25) for k in range(5)]
-    ax.bars(list(enumerate(vals)), colour=BLUE, bw=30, opacity="0.7")
+    ax.bars(list(enumerate(vals)), colour=BLUE, bw=36, opacity="0.7")
     for k, v in enumerate(vals):
         if v > 0.005:
             ax.label(k, v, f"{v:.3f}", cls="sm", dy=-8)
-    f.text(BCX, BY0 + 24, "λ = 0.25 claims per exposure-year", cls="sm dim")
     return f
 
 
@@ -432,45 +415,54 @@ def frequency() -> Fig:
 def severity() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 30, 0, 0.115, left=44, top=42, bottom=48)
+    ax = vaxes(f, 0, 30, 0, 0.13, left=24, top=54, bottom=48)
     ax.frame(xlabel="claim size (000s)", xticks=[0, 10, 20, 30], yticks=[])
     dens = lambda x: _gammapdf(x, 1.8, 3.4)
     ax.area(dens, 0, 30, colour=AMBER, opacity="0.14")
     ax.curve(dens, colour=AMBER, width=2.4)
-    for x, lab, colour, dy in ((2.7, "mode", "var(--dim)", -46),
-                               (4.9, "median", TEAL, -30),
-                               (6.1, "mean", ROSE, -14)):
-        ax.vline(x, colour=colour, y_top=0.108)
-        ax.label(x, 0.108, lab, cls="sm", fill=colour, dy=dy, dx=8, anchor="start")
+    for x, lab, colour, dy in ((2.7, "mode", "var(--dim)", -36),
+                               (4.9, "median", TEAL, -20),
+                               (6.1, "mean", ROSE, -4)):
+        ax.vline(x, colour=colour, y_top=0.124)
+        ax.label(x, 0.124, lab, cls="sm", fill=colour, dy=dy, dx=6, anchor="start")
     return f
 
 
-@figure("Aggregate Loss Model", "Frequency and severity combining into the aggregate "
-        "loss distribution", width=WID)
+@figure("Aggregate Loss Model", "The aggregate loss distribution built as layers — "
+        "losses from one claim, two claims and three or more — with a spike at zero for "
+        "no claims", width=WID)
 def aggregate_loss_model() -> Fig:
     f = vcard()
 
-    ax1 = Axes(f, BX0 + 16, BY0 + 26, BX0 + 146, BY0 + 96, -0.6, 4.6, 0, 0.5)
-    f.text(BX0 + 81, BY0 + 18, "frequency N", cls="sm bold", fill=BLUE)
-    ax1.frame(xticks=[0, 1, 2, 3, 4], xfmt=lambda t: f"{t:.0f}", yticks=[])
-    ax1.bars([(k, _poispmf(k, 1.4)) for k in range(5)], colour=BLUE, bw=16,
-             opacity="0.7")
-
-    ax2 = Axes(f, BX0 + 186, BY0 + 26, BX1 - 14, BY0 + 96, 0, 20, 0, 0.14)
-    f.text((BX0 + 186 + BX1 - 14) / 2, BY0 + 18, "severity X", cls="sm bold", fill=AMBER)
-    ax2.frame(xticks=[0, 10, 20], yticks=[])
-    ax2.curve(lambda x: _gammapdf(x, 1.8, 3.0), colour=AMBER, width=2)
-
-    f.text(BCX, BY0 + 128, "⊕", cls="ttl", fill="var(--dim)")
-    f.arrow(BCX, BY0 + 136, BCX, BY0 + 162, colour="var(--dim)", width=1.4)
-
-    ax3 = Axes(f, BX0 + 46, BY0 + 186, BX1 - 20, BY1 - 40, 0, 40, 0, 0.075)
-    ax3.frame(xlabel="aggregate loss S", xticks=[0, 10, 20, 30, 40], yticks=[])
-    ax3.curve(lambda x: _gammapdf(x, 1.9, 4.2) if x > 0 else 0, colour=GREEN, width=2.4)
-    ax3.area(lambda x: _gammapdf(x, 1.9, 4.2) if x > 0 else 0, 0.01, 40, colour=GREEN,
-             opacity="0.14")
-    f.circle(ax3.px(0), ax3.py(0), 4.4, fill=GREEN)
-    ax3.label(1.6, 0.012, "P(S = 0)", cls="sm", fill=GREEN, anchor="start", dy=-6)
+    lam, shape, scale = 1.4, 1.8, 3.0
+    pn = [_poispmf(n, lam) for n in range(12)]
+    layers = [
+        (BLUE, "N = 1", lambda x: pn[1] * _gammapdf(x, shape, scale)),
+        (AMBER, "N = 2", lambda x: pn[2] * _gammapdf(x, 2 * shape, scale)),
+        (VIOLET, "N ≥ 3", lambda x: sum(pn[n] * _gammapdf(x, n * shape, scale)
+                                        for n in range(3, 12))),
+    ]
+    top = max(sum(g(x / 4) for _, _, g in layers) for x in range(1, 160))
+    ax = vaxes(f, 0, 40, 0, top * 1.12, left=30, top=24, bottom=44)
+    ax.frame(xlabel="aggregate loss S", xticks=[0, 10, 20, 30, 40], yticks=[])
+    below = lambda x: 0.0
+    for colour, _, g in layers:
+        upper = (lambda b, g_: lambda x: b(x) + g_(x))(below, g)
+        pts = [ax.p(x / 4, below(x / 4)) for x in range(1, 161)]
+        pts += [ax.p(x / 4, upper(x / 4)) for x in range(160, 0, -1)]
+        f.polygon(pts, fill=colour, fill_opacity="0.5", stroke=colour, stroke_width="1")
+        below = upper
+    ax.label(3.2, 0.3 * top, "N = 1", cls="sm bold", anchor="start")
+    for (colour, name, _), (x0, y0), (x1, y1) in zip(
+            layers[1:], ((8.6, 0.52), (14.5, 0.32)), ((17, 0.66), (21, 0.44))):
+        f.line(ax.px(x0), ax.py(y0 * top), ax.px(x1) - 3, ax.py(y1 * top) - 4, cls="",
+               stroke=colour, stroke_width="1.2")
+        f.circle(ax.px(x0), ax.py(y0 * top), 2.4, fill=colour)
+        ax.label(x1, y1 * top, name, cls="sm bold", anchor="start")
+    f.line(ax.px(0), ax.py(0), ax.px(0), ax.py(top * 1.02), cls="", stroke=GREEN,
+           stroke_width="3", stroke_linecap="round")
+    ax.point(0, top * 1.02, colour=GREEN, r=4.4)
+    ax.label(0, top * 1.02, "N = 0", cls="sm bold", anchor="start", dx=9, dy=4)
     return f
 
 
@@ -478,32 +470,29 @@ def aggregate_loss_model() -> Fig:
 # B. Statistics
 # ═══════════════════════════════════════════════════════════════════════════
 
-@figure("Statistics", "A sample condensed into the two summaries that estimate the "
-        "population mean and variance", width=WID)
+@figure("Statistics", "A population curve over the sample drawn from it, with the "
+        "sample mean X̄ and the spread S marked on the sample", width=WID)
 def statistics() -> Fig:
     f = vcard()
 
-    f.text(BCX, BY0 + 18, "population", cls="sm dim")
-    ax = Axes(f, BX0 + 40, BY0 + 26, BX1 - 20, BY0 + 96, -3.4, 3.4, 0, 0.42)
-    ax.curve(lambda x: _npdf(x), colour="var(--dim)", width=1.6)
-    f.line(BX0 + 40, BY0 + 96, BX1 - 20, BY0 + 96, cls="axis")
-    f.text(BX1 - 24, BY0 + 60, "μ, σ²", cls="sm dim", anchor="end")
-
-    f.arrow(BCX, BY0 + 104, BCX, BY0 + 132, colour="var(--dim)", width=1.4)
-    f.text(BCX + 8, BY0 + 122, "sample of n", cls="sm dim", anchor="start")
+    ax = Axes(f, BX0 + 20, BY0 + 34, BX1 - 20, BY0 + 196, -3.4, 3.4, 0, 0.42)
+    ax.area(lambda x: _npdf(x), -3.4, 3.4, colour="var(--dim)", opacity="0.12")
+    ax.curve(lambda x: _npdf(x), colour="var(--dim)", width=1.8)
+    f.line(ax.x0, ax.y1, ax.x1, ax.y1, cls="axis")
+    ax.vline(0, colour="var(--dim)", y_top=_npdf(0), label="μ", label_cls="sm bold",
+             label_dy=-10)
 
     pts = [-1.6, -0.9, -0.4, 0.1, 0.35, 0.8, 1.1, 1.9]
-    y = BY0 + 156
-    f.line(BX0 + 40, y, BX1 - 20, y, cls="axis")
-    sx = Axes(f, BX0 + 40, y - 20, BX1 - 20, y, -3.4, 3.4, 0, 1)
-    for v in pts:
-        f.circle(sx.px(v), y, 4.2, fill=BLUE, fill_opacity="0.85")
     mean = sum(pts) / len(pts)
-    f.arrow(sx.px(mean), y + 30, sx.px(mean), y + 8, colour=ROSE, width=1.6)
-
-    f.box(BX0 + 22, BY0 + 208, 132, 46, label="X̄ = 0.169", colour=ROSE, sub="centre")
-    f.box(BX0 + 168, BY0 + 208, 132, 46, label="S² = 1.30", colour=AMBER, sub="spread")
-    f.text(BCX, BY1 - 24, "estimates of μ and σ²", cls="sm dim")
+    sd = math.sqrt(sum((v - mean) ** 2 for v in pts) / (len(pts) - 1))
+    y = BY0 + 262
+    f.line(ax.x0, y, ax.x1, y, cls="axis")
+    for v in pts:
+        f.circle(ax.px(v), y, 5, fill=BLUE, fill_opacity="0.9")
+    brace(f, ax.px(mean - sd), ax.px(mean + sd), y - 11, depth=8, colour=AMBER,
+          label="± S", label_cls="sm bold", below=False)
+    f.arrow(ax.px(mean), y + 50, ax.px(mean), y + 9, colour=ROSE, width=1.8)
+    f.text(ax.px(mean) + 8, y + 50, "X̄", cls="bold", anchor="start")
     return f
 
 

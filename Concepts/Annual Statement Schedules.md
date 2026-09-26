@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ec4cdd810a13f7a9fab15b7a9975e4d368cb73c740bd64194e6693953151e4df
+  content_hash: sha256:a991a2391da1c85d6a3d54798330726e11ffedb6a81ae77d753e1c586006ebe1
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,7 +23,7 @@ verification:
 - **How they combine with the ratio tests.** [[Risk-Based Capital]] charges are built from them — asset charges from the investment schedules, a credit charge on reinsurance recoverables (Schedule F Part 3 carries the factors by reinsurer), and reserve and premium charges by Schedule P line — and the [[IRIS Ratios]] reserve-development tests come from Schedule P. Together with the [[Insurance Expense Exhibit]] they turn a set of summary numbers into a view of [[Financial Health|financial health]].
 
 > [!example]- Bond Quality Against Surplus {Example}
-> Schedule D Part 1A shows bonds at book/adjusted carrying value (in $\$$M) by NAIC designation: $1$: $1{,}050$; $2$: $300$; $3$: $90$; $4$: $45$; $5$: $12$; $6$: $3$. Surplus as regards policyholders is $\$500$M.
+> Schedule D Part 1A shows bonds at book/adjusted carrying value (in \$ millions) by NAIC designation: $1$: $1{,}050$; $2$: $300$; $3$: $90$; $4$: $45$; $5$: $12$; $6$: $3$. Surplus as regards policyholders is $\$500$M.
 >
 > Measure the below-investment-grade exposure and its potential effect on surplus if that block lost $20\%$ of its value.
 >

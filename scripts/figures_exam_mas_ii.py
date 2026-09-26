@@ -1167,13 +1167,14 @@ def variable_importance() -> Fig:
     return f
 
 
-@figure("Principal Components Analysis", "The first principal component drawn as "
-        "the direction of greatest variance in a scatter", width=WID)
+@figure("Principal Components Analysis", "A tilted scatter with the first principal "
+        "component drawn along its longest spread and the second at right angles to it",
+        width=WID)
 def pca() -> Fig:
     f = vcard()
 
     r = _Rand(41)
-    ax = vaxes(f, -3.4, 3.4, -3.4, 3.4, left=34, right=16, top=32, bottom=78)
+    ax = vaxes(f, -2.7, 2.7, -2.7, 2.7, left=20, right=16, top=18, bottom=22)
     ax.frame(xticks=[], yticks=[], arrows=True)
     for _ in range(48):
         a, b = r.n(), r.n()
@@ -1183,50 +1184,45 @@ def pca() -> Fig:
     for v, colour, lab, ln in (((0.85, 0.53), ROSE, "PC1", 2.9),
                                ((-0.53, 0.85), VIOLET, "PC2", 1.5)):
         f.arrow(ax.px(0), ax.py(0), ax.px(v[0] * ln), ax.py(v[1] * ln),
-                colour=colour, width=2.2)
+                colour=colour, width=2.4)
         ax.label(v[0] * ln, v[1] * ln, lab, cls="sm bold", fill=colour,
                  dy=-8 if lab == "PC1" else 12, dx=10 if lab == "PC1" else -6)
-    f.text(BCX, ax.y1 + 22, "φ₁ = (0.85, 0.53), ‖φ₁‖ = 1", cls="sm")
-    f.text(BCX, ax.y1 + 40, "λ₁ = 1.6, λ₂ = 0.4 ⇒ PVE₁ = 80%", cls="sm bold")
-    f.text(BCX, BY1 - 2, "components are orthogonal by construction",
-           cls="sm dim")
     return f
 
 
-@figure("Loading Vector", "The weights of a loading vector shown as a bar per "
-        "variable for two components", width=WID)
+@figure("Loading Vector", "Paired bars of the first two loading vectors across four "
+        "driving variables: φ₁ weighs all four about equally, φ₂ sets braking and "
+        "cornering against night and mileage", width=WID)
 def loading_vector() -> Fig:
     f = vcard()
 
     vars_ = ["braking", "cornering", "night", "mileage"]
-    pcs = [("φ₁ — overall size", [0.52, 0.51, 0.49, 0.48], BLUE),
-           ("φ₂ — a contrast", [0.61, 0.55, -0.42, -0.39], VIOLET)]
-    for r_i, (name, load, colour) in enumerate(pcs):
-        y0 = 104 + r_i * 132
-        f.text(BCX, y0 - 6, name, cls="sm bold", fill=colour)
-        base = y0 + 52
-        f.line(52, base, 316, base, cls="axis")
+    pcs = [([0.52, 0.51, 0.49, 0.48], BLUE, "φ₁", -0.19),
+           ([0.61, 0.55, -0.42, -0.39], VIOLET, "φ₂", 0.19)]
+    ax = vaxes(f, 0.4, 4.6, -0.55, 0.75, left=40, right=12, top=24, bottom=40)
+    ax.frame(yticks=[-0.5, 0, 0.5], grid=True, arrows=False)
+    for load, colour, name, off in pcs:
         for j, v in enumerate(load):
-            x = 66 + j * 62
-            h = v * 46
-            f.rect(x, base - max(h, 0), 34, abs(h), rx=2, fill=colour,
-                   fill_opacity="0.6")
-            f.text(x + 17, base + (16 if v > 0 else -8), vars_[j], cls="sm dim")
-            f.text(x + 17, base - h + (-6 if v > 0 else 14), f"{v:+.2f}",
-                   cls="sm")
-    f.text(BCX, BY1 - 2, "sign is arbitrary — φ and −φ are one component",
-           cls="sm dim")
+            x = j + 1 + off
+            ax.fig.rect(ax.px(x - 0.16), min(ax.py(v), ax.py(0)),
+                        ax.px(0.32) - ax.px(0), abs(ax.py(v) - ax.py(0)), rx=2,
+                        fill=colour, fill_opacity="0.7")
+        ax.label(1 + off, load[0], name, cls="sm bold", dy=-7)
+    ax.hline(0, colour="var(--axis)", dash=False, x_to=4.6)
+    for j, name in enumerate(vars_):
+        f.text(ax.px(j + 1), ax.y1 + 17, name, cls="sm dim")
     return f
 
 
-@figure("Proportion of Variance Explained", "Per-component and cumulative variance "
-        "explained across eight components", width=WID)
+@figure("Proportion of Variance Explained", "Bars of the variance each of eight "
+        "components explains, under a cumulative line that clears the 80% mark at the "
+        "third", width=WID)
 def pve() -> Fig:
     f = vcard()
 
     lam = [3.6, 1.9, 1.0, 0.6, 0.4, 0.3, 0.2, 0.0]
     total = sum(lam)
-    ax = vaxes(f, 0.3, 8.7, 0, 1.05, left=44, right=16, top=32, bottom=76)
+    ax = vaxes(f, 0.3, 8.7, 0, 1.05, left=44, right=16, top=28, bottom=44)
     ax.frame(xticks=[1, 2, 3, 4, 5, 6, 7, 8], yticks=[0, 0.5, 1.0], grid=True,
              arrows=False)
     ax.bars([(i + 1, v / total) for i, v in enumerate(lam)], colour=BLUE, bw=18,
@@ -1239,21 +1235,21 @@ def pve() -> Fig:
     for x, y in pts:
         ax.point(x, y, colour=ROSE, r=2.8)
     ax.hline(0.8, colour=GREEN, x_to=8.7, label=None)
-    ax.label(1.1, 0.84, "80% target", cls="sm bold", fill=GREEN, anchor="start")
+    ax.label(8.6, 0.8, "80%", cls="sm bold", fill=GREEN, anchor="end", dy=14)
     ax.vline(3, colour=GREEN, y_top=0.8125)
+    ax.label(1.4, 0.45, "each", cls="sm bold", fill=BLUE, anchor="start", dy=-3)
+    ax.label(5.0, cum, "cumulative", cls="sm bold", fill=ROSE, dy=-10)
     f.text(BCX, ax.y1 + 32, "component m", cls="sm dim")
-    f.text(BCX, ax.y1 + 50, "three components clear 80%", cls="sm bold")
-    f.text(BCX, BY1 - 2, "variance explained ≠ predictive power", cls="sm dim")
     return f
 
 
-@figure("Scree Plot", "Eigenvalues falling steeply and then flattening, with the "
-        "elbow marked", width=WID)
+@figure("Scree Plot", "Eigenvalues falling steeply over the first two components and "
+        "then flattening, with the elbow marked and the λ = 1 line drawn", width=WID)
 def scree_plot() -> Fig:
     f = vcard()
 
     lam = [2.9, 1.6, 0.7, 0.4, 0.3, 0.1]
-    ax = vaxes(f, 0.4, 6.6, 0, 3.3, left=44, right=18, top=34, bottom=76)
+    ax = vaxes(f, 0.4, 6.6, 0, 3.3, left=44, right=18, top=28, bottom=44)
     ax.frame(xticks=[1, 2, 3, 4, 5, 6], yticks=[0, 1, 2, 3], grid=True)
     ax.polyline([(i + 1, v) for i, v in enumerate(lam)], colour=BLUE, width=2.4)
     for i, v in enumerate(lam):
@@ -1263,39 +1259,32 @@ def scree_plot() -> Fig:
     ax.label(6.4, 1.0, "λ = 1", cls="sm bold", fill=VIOLET, anchor="end", dy=-7)
     ax.label(2, 1.6, "elbow", cls="sm bold", fill=GREEN, dy=-11, dx=14)
     f.text(BCX, ax.y1 + 32, "component m", cls="sm dim")
-    f.text(BCX, ax.y1 + 50, "the flat tail is the scree — noise", cls="sm dim")
-    f.text(BCX, BY1 - 2, "Kaiser agrees here: two components, 75%",
-           cls="sm dim")
     return f
 
 
-@figure("Clustering", "Points grouped into clusters that are tight inside and far "
-        "apart", width=WID)
+@figure("Clustering", "Three clusters of points, each tight around its own centre and "
+        "far from the others", width=WID)
 def clustering() -> Fig:
     f = vcard()
 
     r = _Rand(53)
-    ax = vaxes(f, 0, 10, 0, 10, left=32, right=14, top=32, bottom=80)
-    ax.frame(xticks=[], yticks=[], arrows=False)
+    ax = vaxes(f, 0, 10, 0, 10, left=20, right=6, top=6, bottom=10)
     f.rect(ax.x0, ax.y0, ax.x1 - ax.x0, ax.y1 - ax.y0, rx=6, fill="var(--soft)",
            stroke="var(--edge)")
     for (cx, cy), colour in (((2.7, 7.3), BLUE), ((7.4, 7.6), AMBER),
                              ((5.1, 2.7), GREEN)):
         for _ in range(10):
-            ax.point(cx + r.n(0, 0.8), cy + r.n(0, 0.72), colour=colour, r=3.2)
-        f.circle(ax.px(cx), ax.py(cy), 30, fill="none", stroke=colour,
-                 stroke_width="1.3", stroke_dasharray="4 3")
-        f.circle(ax.px(cx), ax.py(cy), 4.6, fill=colour, stroke="var(--surf)",
+            ax.point(cx + r.n(0, 0.8), cy + r.n(0, 0.72), colour=colour, r=3.6)
+        f.circle(ax.px(cx), ax.py(cy), 44, fill="none", stroke=colour,
+                 stroke_width="1.4", stroke_dasharray="4 3")
+        f.circle(ax.px(cx), ax.py(cy), 5.2, fill=colour, stroke="var(--surf)",
                  stroke_width="1.4")
-    f.text(BCX, BY1 - 56, "K-means: fix K, partition, iterate", cls="sm dim")
-    f.text(BCX, BY1 - 38, "hierarchical: no K, cut the dendrogram", cls="sm dim")
-    f.text(BCX, BY1 - 2, "standardize first — distance is scale-sensitive",
-           cls="sm dim")
     return f
 
 
-@figure("K-Means Clustering", "One iteration of K-means: assign to the nearest "
-        "centroid, then move the centroids", width=WID)
+@figure("K-Means Clustering", "Points coloured by the cluster they end in, with each "
+        "centroid's path from a hollow starting square, step by step, to its cluster's "
+        "centre", width=WID)
 def kmeans() -> Fig:
     f = vcard()
 
@@ -1304,53 +1293,60 @@ def kmeans() -> Fig:
     for (cx, cy) in ((2.8, 7.2), (7.2, 7.4), (5.0, 2.9)):
         for _ in range(9):
             pts.append((cx + r.n(0, 0.85), cy + r.n(0, 0.75)))
-    starts = [(2.0, 4.2), (6.4, 4.6), (5.4, 8.4)]
-    finals = [(2.8, 7.2), (7.2, 7.4), (5.0, 2.9)]
     colours = (BLUE, AMBER, GREEN)
-
-    for panel, (cents, title) in enumerate(((starts, "1 — assign"),
-                                            (finals, "2 — recentre, repeat"))):
-        y0 = 96 + panel * 148
-        ax = Axes(f, BX0 + 30, y0 + 14, BX1 - 16, y0 + 118, 0, 10, 0, 10)
-        ax.frame(xticks=[], yticks=[], arrows=False)
-        f.rect(ax.x0, ax.y0, ax.x1 - ax.x0, ax.y1 - ax.y0, rx=5,
-               fill="var(--soft)", stroke="var(--edge)")
-        f.text(BCX, y0 + 6, title, cls="sm bold")
+    cents = [(4.4, 5.2), (8.8, 4.4), (2.2, 1.6)]     # deliberately poor starts
+    paths = [[c] for c in cents]
+    for _ in range(10):                              # assign, recentre, repeat
+        groups = [[] for _ in cents]
         for x, y in pts:
             k = min(range(3), key=lambda j: (x - cents[j][0]) ** 2
                     + (y - cents[j][1]) ** 2)
-            ax.point(x, y, colour=colours[k], r=2.9)
-        for j, (cx, cy) in enumerate(cents):
-            f.rect(ax.px(cx) - 4.5, ax.py(cy) - 4.5, 9, 9, rx=1.5,
-                   fill=colours[j], stroke="var(--surf)", stroke_width="1.6")
-    f.text(BCX, BY1 - 2, "different starts can give different answers",
-           cls="sm dim")
+            groups[k].append((x, y))
+        new = [(sum(x for x, _ in g) / len(g), sum(y for _, y in g) / len(g))
+               for g in groups]
+        if new == cents:
+            break
+        cents = new
+        for j, c in enumerate(cents):
+            paths[j].append(c)
+    ax = vaxes(f, 0, 10, 0, 10, left=20, right=6, top=6, bottom=10)
+    f.rect(ax.x0, ax.y0, ax.x1 - ax.x0, ax.y1 - ax.y0, rx=6, fill="var(--soft)",
+           stroke="var(--edge)")
+    for j, members in enumerate(groups):
+        for x, y in members:
+            ax.point(x, y, colour=colours[j], r=3.4)
+    for j, path in enumerate(paths):
+        (sx, sy), (ex, ey) = path[0], path[-1]
+        f.rect(ax.px(sx) - 6, ax.py(sy) - 6, 12, 12, rx=2, fill="var(--surf)",
+               stroke=colours[j], stroke_width="1.8")
+        for (xa, ya), (xb, yb) in zip(path, path[1:]):
+            f.arrow(ax.px(xa), ax.py(ya), ax.px(xb), ax.py(yb), colour="var(--ink)",
+                    width=1.5)
+        f.rect(ax.px(ex) - 6, ax.py(ey) - 6, 12, 12, rx=2, fill=colours[j],
+               stroke="var(--surf)", stroke_width="1.6")
     return f
 
 
-@figure("Hierarchical Clustering", "Four territories fused pair by pair into a "
-        "single cluster", width=WID)
+@figure("Hierarchical Clustering", "A dendrogram fusing T1 with T2 at height 2 and T3 "
+        "with T4 at 4, then both pairs at 10, cut at 7 into two clusters", width=WID)
 def hierarchical_clustering() -> Fig:
     f = vcard()
 
     labels = ["T1", "T2", "T3", "T4"]
     xs = [70, 130, 230, 290]
-    base = 306
-    ax_y = lambda h: base - h * 20
+    base = 334
+    ax_y = lambda h: base - h * 21
     for x, lab in zip(xs, labels):
         f.text(x, base + 18, lab, cls="sm dim")
-        f.line(x, base, x, base - 2, cls="tick")
 
     def link(x1, x2, h, colour):
         y = ax_y(h)
         f.line(x1, base, x1, y, cls="thin", stroke=colour, stroke_width="1.8")
         f.line(x2, base, x2, y, cls="thin", stroke=colour, stroke_width="1.8")
         f.line(x1, y, x2, y, cls="thin", stroke=colour, stroke_width="1.8")
-        f.text((x1 + x2) / 2, y - 7, f"h = {h}", cls="sm", fill=colour)
+        f.text(x1 - 6, y + 4, f"h = {h}", cls="sm", fill=colour, anchor="end")
         return (x1 + x2) / 2, y
 
-    for x in xs:
-        f.line(x, base, x, base, cls="thin")
     a = link(70, 130, 2, BLUE)
     b = link(230, 290, 4, AMBER)
     f.line(a[0], a[1], a[0], ax_y(10), cls="thin", stroke=VIOLET, stroke_width="1.8")
@@ -1362,18 +1358,16 @@ def hierarchical_clustering() -> Fig:
     f.line(46, ax_y(7), 320, ax_y(7), cls="thin dash", stroke=GREEN,
            stroke_width="1.4")
     f.text(322, ax_y(7) + 4, "cut", cls="sm bold", fill=GREEN, anchor="end")
-    f.text(BCX, 348, "cutting at 7 leaves {T1,T2} and {T3,T4}", cls="sm")
-    f.text(BCX, BY1 - 2, "deterministic — no random start", cls="sm dim")
     return f
 
 
-@figure("Dendrogram", "Two adjacent leaves that fuse high, against a distant pair "
-        "that fuses low", width=WID)
+@figure("Dendrogram", "A dendrogram where A, drawn beside B, fuses with C at height 3 "
+        "and D at 6, while B joins only at 9", width=WID)
 def dendrogram() -> Fig:
     f = vcard()
 
-    base = 300
-    hy = lambda h: base - h * 22
+    base = 334
+    hy = lambda h: base - h * 24
     leaves = [("B", 76), ("A", 132), ("C", 200), ("D", 268)]
     for lab, x in leaves:
         f.text(x, base + 18, lab, cls="sm bold")
@@ -1386,19 +1380,16 @@ def dendrogram() -> Fig:
         return (x1 + x2) / 2, y
 
     ac = bar(132, 200, base, base, 3, GREEN)
-    f.text(ac[0], ac[1] - 7, "A + C at 3", cls="sm bold", fill=GREEN)
+    f.text(132 - 6, ac[1] + 4, "A + C", cls="sm bold", fill=GREEN, anchor="end")
     acd = bar(ac[0], 268, ac[1], base, 6, BLUE)
-    f.text(acd[0], acd[1] - 7, "+ D at 6", cls="sm", fill=BLUE)
+    f.text(ac[0] - 6, acd[1] + 4, "+ D", cls="sm bold", fill=BLUE, anchor="end")
     root = bar(76, acd[0], base, acd[1], 9, ROSE)
-    f.text(root[0], root[1] - 8, "B joins only at 9", cls="sm bold", fill=ROSE)
+    f.text(root[0], root[1] - 8, "+ B", cls="sm bold", fill=ROSE)
 
     f.line(52, base, 320, base, cls="axis")
     for h in (0, 3, 6, 9):
         f.line(50, hy(h), 54, hy(h), cls="tick")
         f.text(46, hy(h) + 4, str(h), cls="sm dim", anchor="end")
-    f.text(BCX, 346, "A is drawn next to B, but fuses with C first", cls="sm")
-    f.text(BCX, BY1 - 2, "any branch may be flipped without changing the tree",
-           cls="sm dim")
     return f
 
 

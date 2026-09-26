@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>An applicant who meets the filed rules must be written at the filed rate; one who fails them may be declined</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>An applicant with a car checked against the filed rules: meet them and the insurer must write the policy, fail them and the way leads to the Facility Association</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -48,32 +44,47 @@ text {
   <g id="light"/><g id="dark"/>
   <defs>
     <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
+    <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
+    <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
   </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">Meet the filed rules and the insurer</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">must write you</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">Compulsory product ⇒ compulsory offer</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">at the filed rate, on the filed rules</text>
-    <rect x="55" y="90" width="250" height="28" rx="14.0" fill="#7c3aed" fill-opacity="0.14" stroke="#7c3aed" stroke-width="1.2"/>
-    <text x="180" y="108" text-anchor="middle" class="sm">applicant for compulsory auto</text>
-    <text x="180" y="142" text-anchor="middle" class="sm dim">does the applicant meet the filed rules?</text>
-    <line x1="180" y1="152" x2="106" y2="178" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <line x1="180" y1="152" x2="254" y2="178" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <text x="120" y="172" text-anchor="middle" class="sm bold" fill="#059669">yes</text>
-    <text x="240" y="172" text-anchor="middle" class="sm bold" fill="#d97706">no</text>
-    <rect x="38" y="190" width="130" height="76" rx="7" fill="#059669" fill-opacity="0.12" stroke="#059669" stroke-width="1.2"/>
-    <text x="103" y="222" text-anchor="middle" class="sm">must write</text>
-    <text x="103" y="240" text-anchor="middle" class="sm dim">at the filed rate</text>
-    <rect x="192" y="190" width="130" height="76" rx="7" fill="#d97706" fill-opacity="0.12" stroke="#d97706" stroke-width="1.2"/>
-    <text x="257" y="222" text-anchor="middle" class="sm">may decline</text>
-    <text x="257" y="240" text-anchor="middle" class="sm dim">rule must be filed</text>
-    <line x1="257" y1="268" x2="257" y2="292" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <rect x="187" y="294" width="140" height="24" rx="12.0" fill="#e11d48" fill-opacity="0.14" stroke="#e11d48" stroke-width="1.2"/>
-    <text x="257" y="310" text-anchor="middle" class="sm">Facility Association</text>
-    <text x="180" y="344" text-anchor="middle" class="sm dim">so an insurer cannot underwrite its way out of</text>
-    <text x="180" y="360" text-anchor="middle" class="sm dim">an inadequate approved rate — it must file for more</text>
-    <text x="180" y="384" text-anchor="middle" class="sm dim">refusing to quote is a market-conduct offence</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <circle cx="56" cy="108.6" r="10.44" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M37.44,155 V132.96 Q37.44,123.68 47.88,123.68 H64.12 Q74.56,123.68 74.56,132.96 V155 Z" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M87,145.8 V137.68 L98.6,135.36 L106.72,126.08 H126.44 L134.56,135.36 L145,138.84 V145.8 Z" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="99.76" cy="146.96" r="5.22" fill="var(--surf)" stroke="#7c3aed" stroke-width="1.6"/>
+    <circle cx="132.24" cy="146.96" r="5.22" fill="var(--surf)" stroke="#7c3aed" stroke-width="1.6"/>
+    <text x="84" y="184" text-anchor="middle" class="bold">applicant</text>
+    <polygon points="234.4,96 265.6,96 277.6,108 277.6,156 234.4,156" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M265.6,96 V108 H277.6" fill="none" stroke="#3b82f6" stroke-width="1.2"/>
+    <line x1="242.8" y1="120" x2="268" y2="120" stroke="#3b82f6" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="242.8" y1="130.2" x2="268" y2="130.2" stroke="#3b82f6" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="242.8" y1="140.4" x2="259.6" y2="140.4" stroke="#3b82f6" stroke-width="1.4" stroke-linecap="round"/>
+    <text x="256" y="184" text-anchor="middle" class="bold">filed rules</text>
+    <line x1="150" y1="128" x2="218" y2="128" class="thin" stroke="var(--dim)" stroke-width="1.5" marker-end="url(#ahvardim)"/>
+    <line x1="238" y1="198" x2="128" y2="262" class="thin" stroke="#059669" stroke-width="2" marker-end="url(#ah059669)"/>
+    <text x="172" y="246" text-anchor="end" class="sm">meets</text>
+    <line x1="262" y1="198" x2="276" y2="262" class="thin dash" stroke="#e11d48" stroke-width="2" marker-end="url(#ahe11d48)"/>
+    <text x="282" y="232" text-anchor="start" class="sm">fails</text>
+    <rect x="84.4" y="271" width="39.2" height="70" rx="2" fill="#059669" fill-opacity="0.18" stroke="#059669" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="92.1" y="279.4" width="8.4" height="7" fill="#059669" fill-opacity="0.55"/>
+    <rect x="107.5" y="279.4" width="8.4" height="7" fill="#059669" fill-opacity="0.55"/>
+    <rect x="92.1" y="293.4" width="8.4" height="7" fill="#059669" fill-opacity="0.55"/>
+    <rect x="107.5" y="293.4" width="8.4" height="7" fill="#059669" fill-opacity="0.55"/>
+    <rect x="92.1" y="307.4" width="8.4" height="7" fill="#059669" fill-opacity="0.55"/>
+    <rect x="107.5" y="307.4" width="8.4" height="7" fill="#059669" fill-opacity="0.55"/>
+    <rect x="92.1" y="321.4" width="8.4" height="7" fill="#059669" fill-opacity="0.55"/>
+    <rect x="107.5" y="321.4" width="8.4" height="7" fill="#059669" fill-opacity="0.55"/>
+    <text x="104" y="366" text-anchor="middle" class="bold">must write</text>
+    <rect x="263.2" y="276" width="33.6" height="60" rx="2" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="269.8" y="283.2" width="7.2" height="6" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="283" y="283.2" width="7.2" height="6" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="269.8" y="295.2" width="7.2" height="6" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="283" y="295.2" width="7.2" height="6" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="269.8" y="307.2" width="7.2" height="6" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="283" y="307.2" width="7.2" height="6" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="269.8" y="319.2" width="7.2" height="6" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="283" y="319.2" width="7.2" height="6" fill="#e11d48" fill-opacity="0.55"/>
+    <text x="280" y="366" text-anchor="middle" class="sm bold">Facility Assoc.</text>
   </g>
 </svg>

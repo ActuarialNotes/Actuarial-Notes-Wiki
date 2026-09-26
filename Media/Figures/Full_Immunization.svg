@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>Asset cash flows surrounding each liability payment</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>A liability below the timeline with an asset payment on each side of it above, the pair shielding it</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -52,30 +48,24 @@ text {
     <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
   </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">Assets on both sides of every liability</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">PV(A) = PV(L),   D(A) = D(L)</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">one asset before and one after each liability date</text>
-    <line x1="48" y1="232" x2="318" y2="232" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-    <line x1="56" y1="228" x2="56" y2="236" class="tick"/>
-    <text x="56" y="249" text-anchor="middle" class="sm dim">0</text>
-    <line x1="86.5" y1="228" x2="86.5" y2="236" class="tick"/>
-    <line x1="117" y1="228" x2="117" y2="236" class="tick"/>
-    <line x1="147.5" y1="228" x2="147.5" y2="236" class="tick"/>
-    <line x1="178" y1="228" x2="178" y2="236" class="tick"/>
-    <line x1="208.5" y1="228" x2="208.5" y2="236" class="tick"/>
-    <line x1="239" y1="228" x2="239" y2="236" class="tick"/>
-    <line x1="269.5" y1="228" x2="269.5" y2="236" class="tick"/>
-    <line x1="300" y1="228" x2="300" y2="236" class="tick"/>
-    <line x1="117" y1="232" x2="117" y2="182" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="117" y="176" text-anchor="middle" class="sm">asset</text>
-    <line x1="269.5" y1="232" x2="269.5" y2="182" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="269.5" y="176" text-anchor="middle" class="sm">asset</text>
-    <line x1="208.5" y1="232" x2="208.5" y2="286" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
-    <text x="208.5" y="302" text-anchor="middle" class="sm">liability</text>
-    <line x1="117" y1="170" x2="269.5" y2="170" class="thin dash" stroke="#059669" stroke-width="1.4"/>
-    <text x="180" y="160" text-anchor="middle" class="sm bold" fill="#059669">the liability is surrounded</text>
-    <text x="180" y="352" text-anchor="middle" class="sm dim">protects against any single shift</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <line x1="48" y1="230" x2="318" y2="230" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <line x1="56" y1="226" x2="56" y2="234" class="tick"/>
+    <text x="56" y="247" text-anchor="middle" class="sm dim">0</text>
+    <line x1="86.5" y1="226" x2="86.5" y2="234" class="tick"/>
+    <line x1="117" y1="226" x2="117" y2="234" class="tick"/>
+    <line x1="147.5" y1="226" x2="147.5" y2="234" class="tick"/>
+    <line x1="178" y1="226" x2="178" y2="234" class="tick"/>
+    <line x1="208.5" y1="226" x2="208.5" y2="234" class="tick"/>
+    <line x1="239" y1="226" x2="239" y2="234" class="tick"/>
+    <line x1="269.5" y1="226" x2="269.5" y2="234" class="tick"/>
+    <line x1="300" y1="226" x2="300" y2="234" class="tick"/>
+    <line x1="117" y1="230" x2="117" y2="120" class="thin" stroke="#3b82f6" stroke-width="2.4" marker-end="url(#ah3b82f6)"/>
+    <text x="117" y="114" text-anchor="middle" class="sm bold">asset</text>
+    <line x1="269.5" y1="230" x2="269.5" y2="120" class="thin" stroke="#3b82f6" stroke-width="2.4" marker-end="url(#ah3b82f6)"/>
+    <text x="269.5" y="114" text-anchor="middle" class="sm bold">asset</text>
+    <line x1="208.5" y1="230" x2="208.5" y2="340" class="thin" stroke="#e11d48" stroke-width="2.4" marker-end="url(#ahe11d48)"/>
+    <text x="208.5" y="356" text-anchor="middle" class="sm bold">liability</text>
+    <path d="M208.5,136 L234.1,144.96 V166.72 Q234.1,189.76 208.5,200 Q182.9,189.76 182.9,166.72 V144.96 Z" fill="#059669" fill-opacity="0.18" stroke="#059669" stroke-width="1.4" stroke-linejoin="round"/>
   </g>
 </svg>

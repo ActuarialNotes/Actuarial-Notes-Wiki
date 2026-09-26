@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>A deposit premium corrected to the audited exposure after the policy expires</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>A $9,000 deposit premium beside the $12,400 audited premium, the $3,400 difference billed once the actual exposure is known</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -46,26 +42,16 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
-  <defs>
-    <marker id="ahd97706" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#d97706"/></marker>
-  </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">The exposure is only known afterwards</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">Audited Premium = Rate × Actual Exposure</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">Adjustment = Audited − Deposit</text>
-    <text x="180" y="112" text-anchor="middle" class="sm dim">workers compensation, payroll per $100</text>
-    <text x="88" y="161" text-anchor="end" class="sm dim">estimated</text>
-    <rect x="96" y="146" width="121.5" height="26" rx="3" fill="#3b82f6" fill-opacity="0.34" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="156.75" y="164" text-anchor="middle" class="sm">$9,000</text>
-    <text x="88" y="223" text-anchor="end" class="sm dim">actual</text>
-    <rect x="96" y="208" width="167.4" height="26" rx="3" fill="#059669" fill-opacity="0.34" stroke="#059669" stroke-width="1.2"/>
-    <text x="179.7" y="226" text-anchor="middle" class="sm">$12,400</text>
-    <rect x="217.5" y="208" width="45.9" height="26" rx="3" fill="#d97706" fill-opacity="0.55"/>
-    <line x1="217.5" y1="264" x2="263.4" y2="264" class="thin" stroke="#d97706" stroke-width="1.6" marker-end="url(#ahd97706)"/>
-    <text x="240.45" y="284" text-anchor="middle" class="sm bold" fill="#d97706">+$3,400 billed at audit</text>
-    <text x="180" y="326" text-anchor="middle" class="sm dim">audits also correct classification and</text>
-    <text x="180" y="344" text-anchor="middle" class="sm dim">must be booked before the data is used</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <rect x="60" y="180.71" width="80" height="171.29" rx="3" fill="#3b82f6" fill-opacity="0.34" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="100" y="172.71" text-anchor="middle" class="sm bold">9,000</text>
+    <text x="100" y="370" text-anchor="middle" class="sm dim">deposit</text>
+    <rect x="200" y="116" width="80" height="236" rx="3" fill="#059669" fill-opacity="0.34" stroke="#059669" stroke-width="1.2"/>
+    <text x="240" y="108" text-anchor="middle" class="sm bold">12,400</text>
+    <text x="240" y="370" text-anchor="middle" class="sm dim">audited</text>
+    <rect x="200" y="116" width="80" height="64.71" rx="3" fill="#d97706" fill-opacity="0.6" stroke="#d97706" stroke-width="1.2"/>
+    <text x="240" y="152.35" text-anchor="middle" class="sm bold">+3,400</text>
+    <line x1="140" y1="180.71" x2="200" y2="180.71" class="thin dash" stroke="var(--dim)" stroke-width="1.2"/>
   </g>
 </svg>

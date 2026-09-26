@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>A final payment larger than the regular one, retiring the remaining balance</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>Five reduced payments K, then a final balloon payment B towering over the dashed level of the others</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -52,39 +48,30 @@ text {
     <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
   </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">A balloon retires the balance left over</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">B = OB₍ₙ₋₁₎ (1 + i)</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">K was set below the amortising payment</text>
-    <line x1="48" y1="268" x2="318" y2="268" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-    <line x1="56" y1="264" x2="56" y2="272" class="tick"/>
-    <text x="56" y="285" text-anchor="middle" class="sm dim">0</text>
-    <line x1="96.67" y1="264" x2="96.67" y2="272" class="tick"/>
-    <text x="96.67" y="285" text-anchor="middle" class="sm dim">1</text>
-    <line x1="137.33" y1="264" x2="137.33" y2="272" class="tick"/>
-    <text x="137.33" y="285" text-anchor="middle" class="sm dim">2</text>
-    <line x1="178" y1="264" x2="178" y2="272" class="tick"/>
-    <text x="178" y="285" text-anchor="middle" class="sm dim">3</text>
-    <line x1="218.67" y1="264" x2="218.67" y2="272" class="tick"/>
-    <text x="218.67" y="285" text-anchor="middle" class="sm dim">4</text>
-    <line x1="259.33" y1="264" x2="259.33" y2="272" class="tick"/>
-    <text x="259.33" y="285" text-anchor="middle" class="sm dim">5</text>
-    <line x1="300" y1="264" x2="300" y2="272" class="tick"/>
-    <text x="300" y="285" text-anchor="middle" class="sm dim">6</text>
-    <line x1="96.67" y1="268" x2="96.67" y2="234" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="96.67" y="228" text-anchor="middle" class="sm">K</text>
-    <line x1="137.33" y1="268" x2="137.33" y2="234" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="137.33" y="228" text-anchor="middle" class="sm">K</text>
-    <line x1="178" y1="268" x2="178" y2="234" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="178" y="228" text-anchor="middle" class="sm">K</text>
-    <line x1="218.67" y1="268" x2="218.67" y2="234" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="218.67" y="228" text-anchor="middle" class="sm">K</text>
-    <line x1="259.33" y1="268" x2="259.33" y2="234" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="259.33" y="228" text-anchor="middle" class="sm">K</text>
-    <line x1="300" y1="268" x2="300" y2="168" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
-    <text x="300" y="162" text-anchor="middle" class="sm">B</text>
-    <line x1="84.67" y1="234" x2="271.33" y2="234" class="thin dash" stroke="var(--dim)" stroke-width="1.2"/>
-    <text x="180" y="118" text-anchor="middle" class="sm dim">principal is still outstanding at the end</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <line x1="48" y1="344" x2="318" y2="344" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <line x1="56" y1="340" x2="56" y2="348" class="tick"/>
+    <text x="56" y="361" text-anchor="middle" class="sm dim">0</text>
+    <line x1="96.67" y1="340" x2="96.67" y2="348" class="tick"/>
+    <text x="96.67" y="361" text-anchor="middle" class="sm dim">1</text>
+    <line x1="137.33" y1="340" x2="137.33" y2="348" class="tick"/>
+    <text x="137.33" y="361" text-anchor="middle" class="sm dim">2</text>
+    <line x1="178" y1="340" x2="178" y2="348" class="tick"/>
+    <text x="178" y="361" text-anchor="middle" class="sm dim">3</text>
+    <line x1="218.67" y1="340" x2="218.67" y2="348" class="tick"/>
+    <text x="218.67" y="361" text-anchor="middle" class="sm dim">4</text>
+    <line x1="259.33" y1="340" x2="259.33" y2="348" class="tick"/>
+    <text x="259.33" y="361" text-anchor="middle" class="sm dim">5</text>
+    <line x1="300" y1="340" x2="300" y2="348" class="tick"/>
+    <text x="300" y="361" text-anchor="middle" class="sm dim">6</text>
+    <line x1="96.67" y1="344" x2="96.67" y2="274" class="thin" stroke="#3b82f6" stroke-width="2" marker-end="url(#ah3b82f6)"/>
+    <line x1="137.33" y1="344" x2="137.33" y2="274" class="thin" stroke="#3b82f6" stroke-width="2" marker-end="url(#ah3b82f6)"/>
+    <line x1="178" y1="344" x2="178" y2="274" class="thin" stroke="#3b82f6" stroke-width="2" marker-end="url(#ah3b82f6)"/>
+    <line x1="218.67" y1="344" x2="218.67" y2="274" class="thin" stroke="#3b82f6" stroke-width="2" marker-end="url(#ah3b82f6)"/>
+    <line x1="259.33" y1="344" x2="259.33" y2="274" class="thin" stroke="#3b82f6" stroke-width="2" marker-end="url(#ah3b82f6)"/>
+    <text x="96.67" y="266" text-anchor="middle" class="bold">K</text>
+    <line x1="84.67" y1="274" x2="312" y2="274" class="thin dash" stroke="var(--dim)" stroke-width="1.2"/>
+    <line x1="300" y1="344" x2="300" y2="92" class="thin" stroke="#e11d48" stroke-width="2.6" marker-end="url(#ahe11d48)"/>
+    <text x="300" y="86" text-anchor="middle" class="bold">B</text>
   </g>
 </svg>

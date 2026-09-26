@@ -9,26 +9,20 @@
 // Signed-in only. Not for gatekeeping: an anonymous write path on a table whose
 // contents get committed to a public repo is an open door, and the reporter's
 // account is also the only way to come back to them if the report needs a
-// follow-up. The name credited in the log is the one they choose here, never
-// their account identity.
+// follow-up. The account identity never reaches the log: a report is credited
+// to the reader's display name, or to nobody if they report anonymously.
 
 import { useCallback, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
-
-export const REPORT_SEVERITIES = ['wrong answer', 'typo', 'unclear', 'other'] as const
-export type ReportSeverity = (typeof REPORT_SEVERITIES)[number]
-
-/** Mirrors the CHECK constraint on `content_reports.body`. */
-export const REPORT_MAX_LENGTH = 4000
+import { REPORT_MAX_LENGTH, reportCreditName, type ReportCategory } from '@/lib/reportIssue'
 
 export interface ContentReportDraft {
   contentPath: string
-  locus?: string
   body: string
-  severity?: ReportSeverity
-  /** How the reporter wants to be credited in the public log. */
-  reporterName?: string
+  category?: ReportCategory
+  /** Leave the credit off: the log entry is authored `human:anon`. */
+  anonymous: boolean
 }
 
 export interface UseContentReportsResult {
@@ -38,10 +32,17 @@ export interface UseContentReportsResult {
   submitted: boolean
   reset: () => void
   canReport: boolean
+  /**
+   * The name a non-anonymous report is credited to — the one the modal shows
+   * the reader before they consent, and the one `submit` sends. Null when the
+   * account has no name to credit, in which case every report is anonymous.
+   */
+  creditName: string | null
 }
 
 export function useContentReports(): UseContentReportsResult {
   const { user } = useAuth()
+  const creditName = reportCreditName(user?.user_metadata)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [submitted, setSubmitted] = useState(false)
@@ -67,10 +68,9 @@ export function useContentReports(): UseContentReportsResult {
       const { error: insertError } = await supabase.from('content_reports').insert({
         content_path: draft.contentPath,
         user_id: user.id,
-        reporter_name: draft.reporterName?.trim() || null,
-        locus: draft.locus?.trim() || null,
+        reporter_name: draft.anonymous ? null : creditName,
         body: body.slice(0, REPORT_MAX_LENGTH),
-        severity: draft.severity ?? null,
+        severity: draft.category ?? null,
       })
       if (insertError) throw insertError
       setSubmitted(true)
@@ -79,7 +79,7 @@ export function useContentReports(): UseContentReportsResult {
     } finally {
       setSubmitting(false)
     }
-  }, [user])
+  }, [user, creditName])
 
-  return { submit, submitting, error, submitted, reset, canReport: Boolean(user) }
+  return { submit, submitting, error, submitted, reset, canReport: Boolean(user), creditName }
 }

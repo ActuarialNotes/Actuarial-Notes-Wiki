@@ -12,11 +12,10 @@ import { PdfLinkButton } from '@/components/PdfLinkButton'
  * tap away inside it. It rides the header rather than the title so it stays in
  * reach however far down the syllabus the reader has scrolled.
  *
- * The header strip is one row shared with the exam's logo, today's-plan pill
- * and status badge, so the button is drawn at the pill's height rather than a
- * full PDF button's, and without the `PDF` chip (the icon and tooltip carry
- * it). `iconOnlyOnPhone` drops the word below `sm` for when the plan pill is
- * also on the row — three controls and the logo don't fit a phone otherwise.
+ * The header strip is one row shared with the exam's logo and its version
+ * menu (`ExamVersionMenu`), so the button is drawn at the menu's height rather
+ * than a full PDF button's, and without the `PDF` chip (the icon and tooltip
+ * carry it).
  *
  * An exam whose syllabus isn't in `data/examPdfLinks.ts` renders nothing —
  * `getSyllabusPdfLink` returning null is the honest answer, where a guessed URL
@@ -25,11 +24,9 @@ import { PdfLinkButton } from '@/components/PdfLinkButton'
 export function ExamSyllabusButton({
   examId,
   examLabel,
-  iconOnlyOnPhone = false,
 }: {
   examId: string
   examLabel: string
-  iconOnlyOnPhone?: boolean
 }) {
   const link = getSyllabusPdfLink(examId)
   if (!link) return null
@@ -41,7 +38,6 @@ export function ExamSyllabusButton({
       subtitle={examLabel}
       tooltip={`${examLabel} — the published syllabus (PDF)`}
       chip={false}
-      labelClassName={iconOnlyOnPhone ? 'hidden sm:inline' : undefined}
       className="shrink-0 min-h-0 h-8 gap-1.5 px-2.5 py-1 text-xs"
     />
   )

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:b5e8141f7881d5ba5149d68aa101633202ed26dd51ab7fb29f2ec45ff06e5bad
+  content_hash: sha256:da07bafaa4fd254b3cd59adf294245a9e6f478367d54f6bcc9cebd399eb15f8f
   sources: []
   open_findings: 0
   open_critical: 0
@@ -16,7 +16,7 @@ verification:
 </div>
 
 # Exam 6U
-The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour computer-based exam testing knowledge of [[Insurance Regulation]], [[Statutory Accounting]], and the professional responsibilities of the [[Appointed Actuary]] in the context of U.S. property and casualty insurance.
+The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour computer-based exam testing knowledge of [[Insurance Regulation]], [[Statutory Accounting Principles|Statutory Accounting]], and the professional responsibilities of the [[Appointed Actuary]] in the context of U.S. property and casualty insurance.
 
 ## Learning Objectives
 
@@ -25,16 +25,16 @@ The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour com
 >
 > 1. Describe the [[History of Insurance Regulation|historic development]] and the current state of [[Insurance Regulation]] and [[Insurance Governance|governance]].
 > 2. Discuss the [[History of Solvency Regulation|historic development]] of [[Solvency Regulation]]; describe current [[Solvency Monitoring|programs used to monitor solvency]].
-> 3. Describe the current state of [[Insurance Regulation|insurance regulation]] (e.g., [[Sarbanes-Oxley]], [[Dodd-Frank]]) and how current [[Insurance Regulations|regulations]] address [[Specialized Insurance Topics|specialized insurance topics]] (e.g., [[Excess and Surplus Lines]], [[Credit-Based Insurance Scoring]], [[Risk Retention Groups]]).
+> 3. Describe the current state of [[Insurance Regulation|insurance regulation]] (e.g., [[Sarbanes-Oxley]], [[Dodd-Frank]]) and how current [[Insurance Regulation|regulations]] address [[Specialized Insurance Topics|specialized insurance topics]] (e.g., [[Excess and Surplus Lines]], [[Credit-Based Insurance Scoring]], [[Risk Retention Groups]]).
 > 4. Discuss current [[Solvency Monitoring|programs used to monitor solvency]] ([[Risk-Based Capital|RBC]]).
 > 5. Describe [[Insurance Regulation|regulation]] related to [[Emerging Regulatory Issues|emerging issues]] (e.g., [[Price Optimization]] models, [[Predictive Analytics]]).
-> 6. Discuss [[Tort Litigation Trends|trends]] in [[Tort Litigation]] (e.g., [[Tort Reform]], [[Nuclear Verdicts]], [[Class Action|class action suits]]) and types of [[Litigation Costs|litigation costs]].
+> 6. Discuss [[Tort Litigation|trends]] in [[Tort Litigation]] (e.g., [[Tort Reform]], [[Nuclear Verdicts]], [[Class Action|class action suits]]) and types of [[Litigation Costs|litigation costs]].
 > 7. Describe ways in which [[Latent Liability]] (e.g., [[Mass Tort|mass torts]] like [[Asbestos]]) can affect [[Insurance Industry|P/C insurance companies]].
 >
 > **Readings:** CASTF Predictive Models · CAS Financial Reporting · Cole and Marzen · Emmanuel · Feldblum (Rating Agencies) · FIO Report · Kucera · McCarty · NAIC IRIS · NAIC Price · NAIC RRG · NAIC Solvency Regulatory Framework · Porter 1 · Porter 2 · Vaughn
 
 > [!example]- B. Government Programs {5–15%}
-> Candidates identify major U.S. [[Government and Industry Insurance Programs|insurance programs]] administered by [[Government Agency|government agencies]] and [[Industry Organization|industry organizations]], understanding objectives, operations, and effectiveness of programs such as [[Automobile Plans]], [[Crop Insurance]], [[Flood Insurance]], [[TRIA]], [[Florida Hurricane Catastrophe Fund|FHCF]], [[Guaranty Funds]], [[Residual Markets]], and [[Workers Compensation]].
+> Candidates identify major U.S. [[Government and Industry Insurance Programs|insurance programs]] administered by [[Government and Industry Insurance Programs|government agencies]] and [[Government and Industry Insurance Programs|industry organizations]], understanding objectives, operations, and effectiveness of programs such as [[Automobile Plans]], [[Crop Insurance]], [[Flood Insurance]], [[TRIA]], [[Florida Hurricane Catastrophe Fund|FHCF]], [[Guaranty Funds]], [[Residual Market|Residual Markets]], and [[Workers Compensation Insurance|Workers Compensation]].
 >
 > 8. Describe the purpose of [[Government and Industry Insurance Programs|government and industry insurance programs]].
 > 9. Describe the operations and [[Risk Transfer]] process for [[Government and Industry Insurance Programs|government/industry programs]] and their interaction with [[Voluntary Private Insurance Market|voluntary private insurance sector]].
@@ -43,18 +43,18 @@ The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour com
 > **Readings:** Cook · FHCF Annual Report · Government Insurers Study Note · Horn & Webel · Porter 2 · Webel
 
 > [!example]- C. Financial Reporting and Professional Responsibilities of the Actuary {60–75%}
-> Candidates apply detailed knowledge of the [[NAIC Annual Statement]], [[Insurance Expense Exhibit]], [[Statutory Accounting Principles|SAP]], [[GAAP]], and [[IFRS]], as well as the [[Statutory Requirements of the Appointed Actuary|statutory requirements]] of the [[Appointed Actuary]] and [[Actuarial Standards of Practice|professional standards]] issued by the [[American Academy of Actuaries]].
+> Candidates apply detailed knowledge of the [[NAIC Annual Statement]], [[Insurance Expense Exhibit]], [[Statutory Accounting Principles|SAP]], [[GAAP]], and [[IFRS]], as well as the [[Appointed Actuary Responsibilities|statutory requirements]] of the [[Appointed Actuary]] and [[Actuarial Standards of Practice|professional standards]] issued by the [[American Academy of Actuaries]].
 >
 > 11. Describe the [[Financial Statements|primary financial statements]] (i.e., [[Balance Sheet]], [[Income Statement]], [[Cash Flow Statement]], [[Capital and Surplus]], [[Notes to Financial Statements|notes to financial statements]]).
-> 12. Differentiate the [[Financial Statements|primary financial statements]] under [[SAP]], [[GAAP]], and [[IFRS]].
-> 13. Use the [[Annual Statement Schedules|annual statement schedules]], [[Insurance Expense Exhibit]], [[Risk-Based Capital|RBC]], [[IRIS Ratios]], and [[Statement of Actuarial Opinion|SAO]] to evaluate the [[Financial Health|financial health]] of an [[Insurance Entity|insurance entity]].
-> 14. Differentiate between various [[Accounting Principles|accounting reporting principles]] and [[Accounting Standards|standards]] (e.g., [[SAP]], [[GAAP]]).
+> 12. Differentiate the [[Financial Statements|primary financial statements]] under [[Statutory Accounting Principles|SAP]], [[GAAP]], and [[IFRS]].
+> 13. Use the [[Annual Statement Schedules|annual statement schedules]], [[Insurance Expense Exhibit]], [[Risk-Based Capital|RBC]], [[IRIS Ratios]], and [[Statement of Actuarial Opinion|SAO]] to evaluate the [[Financial Health|financial health]] of an [[Insurer|insurance entity]].
+> 14. Differentiate between various [[Accounting Standards|accounting reporting principles]] and [[Accounting Standards|standards]] (e.g., [[Statutory Accounting Principles|SAP]], [[GAAP]]).
 > 15. Explain the [[Professional Responsibilities of the Actuary|responsibilities of an actuary]] as defined by the [[Actuarial Standards of Practice]], [[Insurance Regulator|regulators]], and [[Insurance Legislation|insurance laws]] for [[Financial Reporting|financial reporting]].
 > 16. Explain the [[Appointed Actuary Responsibilities|responsibilities]] of the [[Appointed Actuary]] in regard to a [[Statement of Actuarial Opinion]], [[Actuarial Opinion Summary]], and [[Actuarial Report|actuarial report]].
 > 17. Identify and propose [[SAO Language|language]] for sections of the [[Statement of Actuarial Opinion]].
 > 18. Use [[Schedule P|Schedule P data]] in support of a [[Statement of Actuarial Opinion|SAO]].
 > 19. Create an [[Actuarial Opinion Summary]].
-> 20. Discuss and calculate specific elements of [[Insurance Income Tax|income tax]] and evaluate their implications for a [[Property and Casualty Insurer|property/casualty insurer]] ([[Loss Reserve Discounting|discounting]]).
+> 20. Discuss and calculate specific elements of [[Insurance Income Tax|income tax]] and evaluate their implications for a [[Insurer|property/casualty insurer]] ([[Loss Reserve Discounting|discounting]]).
 >
 > **Readings:** 2025 IEE · AAA Materiality · AAA Retained Risk · ASOP 20 · ASOP 36 · ASOP 41 · ASOP 43 · Brandt & Maxwell · CAS Financial Reporting · COPLFR P&C Practice Note · Feldblum (Surplus) · NAIC Annual Statement · NAIC Annual Statement Examples · NAIC APPM Preamble · NAIC IRIS · NAIC Solvency Regulatory Framework · NAIC SSAP 5R · SSAP 9 · SSAP 53 · SSAP 55 · SSAP 62R · SSAP 63 · SSAP 65
 
@@ -62,10 +62,10 @@ The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour com
 > Candidates use [[Reinsurance Accounting]] terminology and practice, including evaluating [[Risk Transfer|risk transfer]], [[Commutations]], and the [[Financial Statements|financial statement]] impact of [[Reinsurance Strategy|reinsurance strategies]].
 >
 > 21. Describe [[Reinsurance Accounting]] and its impact on [[Financial Statements|financial statements]].
-> 22. Evaluate whether a [[Reinsurance Contracts|contract]] qualifies for [[Insurance Accounting]] treatment or [[Deposit Accounting|deposit treatment]].
+> 22. Evaluate whether a [[Reinsurance|contract]] qualifies for [[Insurance Accounting]] treatment or [[Deposit Accounting|deposit treatment]].
 > 23. Describe the [[Reinsurance Accounting|accounting]] and [[Tax Treatment of Reinsurance|tax treatments]] of [[Commutations]].
 > 24. Evaluate the effectiveness of [[Reinsurance Strategy|reinsurance strategies]] based on the impact to the [[Financial Statements|financial statements]] and [[Key Financial Measures|key financial metrics]].
-> 25. Evaluate the [[Financial Health|health]] of an [[Insurance Entity|insurance entity]] using [[Schedule F]].
+> 25. Evaluate the [[Financial Health|health]] of an [[Insurer|insurance entity]] using [[Schedule F]].
 >
 > **Readings:** AAA CECL · ASC 944-020-15 · Cedar & Thompson · Freihaut & Vendetti · Klann · NAIC SSAP 62R · NAIC SSAP 66
 
@@ -78,7 +78,7 @@ The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour com
 >      - C7
 > - [[Actuarial Standard of Practice No. 41 Actuarial Communications (ASB - 2010)]]
 >      - C6
-> - [[Actuarial Standard of Practice No. 43 Property Casualty Unpaid Claim Estimates (ASB - 2007)]]
+> - [[ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007)]]
 >      - C6
 > - [[Estimating the Uncollectible Reinsurance Reserve for PC Companies New GAAP Requirements (AAA - 2019)]]
 >      - D1, D3–D4
@@ -112,7 +112,7 @@ The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour com
 >      - B1–B3
 > - [[Common Pitfalls and Practical Considerations in Risk Transfer Analysis (Freihaut & Vendetti - 2009)]]
 >      - D2
-> - [[Government Insurers Study Note (Germani et al. - 2017)]]
+> - [[Government Insurers Study Note]]
 >      - B1–B3
 > - [[Private Flood Insurance and the National Flood Insurance Program (Horn & Webel - 2023)]]
 >      - B1–B3

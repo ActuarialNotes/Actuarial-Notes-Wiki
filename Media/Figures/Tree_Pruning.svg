@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>The cost-complexity score picking a subtree as alpha rises</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>A large tree cut back to five leaves: the kept branches drawn solid, the pruned subtrees below them dashed and faded</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -46,48 +42,73 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
-  <defs>
-    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
-  </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">Grow it too big, then cut back</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="438" text-anchor="middle" class="fml">RSS + α·|T|,  α chosen by CV</text>
-    <line x1="96" y1="108" x2="96" y2="316" class="grid"/>
-    <line x1="152" y1="108" x2="152" y2="316" class="grid"/>
-    <line x1="208" y1="108" x2="208" y2="316" class="grid"/>
-    <line x1="292" y1="108" x2="292" y2="316" class="grid"/>
-    <line x1="68" y1="274.4" x2="320" y2="274.4" class="grid"/>
-    <line x1="68" y1="214.97" x2="320" y2="214.97" class="grid"/>
-    <line x1="68" y1="155.54" x2="320" y2="155.54" class="grid"/>
-    <line x1="68" y1="316" x2="330" y2="316" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="68" y1="316" x2="68" y2="98" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="96" y1="316" x2="96" y2="320" class="tick"/>
-    <text x="96" y="332" text-anchor="middle" class="sm dim">1</text>
-    <line x1="152" y1="316" x2="152" y2="320" class="tick"/>
-    <text x="152" y="332" text-anchor="middle" class="sm dim">3</text>
-    <line x1="208" y1="316" x2="208" y2="320" class="tick"/>
-    <text x="208" y="332" text-anchor="middle" class="sm dim">5</text>
-    <line x1="292" y1="316" x2="292" y2="320" class="tick"/>
-    <text x="292" y="332" text-anchor="middle" class="sm dim">8</text>
-    <line x1="64" y1="274.4" x2="68" y2="274.4" class="tick"/>
-    <text x="60" y="278" text-anchor="end" class="sm dim">300</text>
-    <line x1="64" y1="214.97" x2="68" y2="214.97" class="tick"/>
-    <text x="60" y="218.57" text-anchor="end" class="sm dim">400</text>
-    <line x1="64" y1="155.54" x2="68" y2="155.54" class="tick"/>
-    <text x="60" y="159.14" text-anchor="end" class="sm dim">500</text>
-    <polyline points="96,143.66 152,250.63 208,283.31 292,296.98" class="curve dash" stroke="var(--dim)" stroke-width="1.8"/>
-    <polyline points="96,128.8 152,206.06 208,209.03 292,178.13" class="curve" stroke="#3b82f6" stroke-width="2.4"/>
-    <circle cx="96" cy="128.8" r="3.4" fill="#3b82f6"/>
-    <circle cx="152" cy="206.06" r="3.4" fill="#3b82f6"/>
-    <circle cx="208" cy="209.03" r="5" fill="#059669"/>
-    <circle cx="292" cy="178.13" r="3.4" fill="#3b82f6"/>
-    <text x="208" y="197.03" text-anchor="middle" class="sm bold" fill="#059669">best at α = 25</text>
-    <text x="275.2" y="310.98" text-anchor="end" class="sm dim">RSS</text>
-    <text x="101.6" y="120.8" text-anchor="start" class="sm bold" fill="#3b82f6">RSS + α|T|</text>
-    <text x="180" y="348" text-anchor="middle" class="sm dim">terminal nodes |T|</text>
-    <text x="180" y="366" text-anchor="middle" class="sm dim">raising α collapses the tree from the leaves up</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">grow first, prune second — never stop early</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <line x1="180" y1="100" x2="103" y2="162" class="thin" stroke="var(--ink)" stroke-width="1.6"/>
+    <line x1="180" y1="100" x2="257" y2="162" class="thin" stroke="var(--ink)" stroke-width="1.6"/>
+    <line x1="103" y1="162" x2="64.5" y2="224" class="thin" stroke="var(--ink)" stroke-width="1.6"/>
+    <line x1="103" y1="162" x2="141.5" y2="224" class="thin" stroke="var(--ink)" stroke-width="1.6"/>
+    <line x1="257" y1="162" x2="218.5" y2="224" class="thin" stroke="var(--ink)" stroke-width="1.6"/>
+    <line x1="257" y1="162" x2="295.5" y2="224" class="thin" stroke="var(--ink)" stroke-width="1.6"/>
+    <line x1="64.5" y1="224" x2="45.25" y2="286" class="thin dash" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="64.5" y1="224" x2="83.75" y2="286" class="thin dash" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="141.5" y1="224" x2="122.25" y2="286" class="thin" stroke="var(--ink)" stroke-width="1.6"/>
+    <line x1="141.5" y1="224" x2="160.75" y2="286" class="thin" stroke="var(--ink)" stroke-width="1.6"/>
+    <line x1="218.5" y1="224" x2="199.25" y2="286" class="thin dash" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="218.5" y1="224" x2="237.75" y2="286" class="thin dash" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="295.5" y1="224" x2="276.25" y2="286" class="thin dash" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="295.5" y1="224" x2="314.75" y2="286" class="thin dash" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="45.25" y1="286" x2="35.62" y2="348" class="thin dash" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="45.25" y1="286" x2="54.88" y2="348" class="thin dash" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="83.75" y1="286" x2="74.12" y2="348" class="thin dash" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="83.75" y1="286" x2="93.38" y2="348" class="thin dash" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="122.25" y1="286" x2="112.62" y2="348" class="thin dash" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="122.25" y1="286" x2="131.88" y2="348" class="thin dash" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="160.75" y1="286" x2="151.12" y2="348" class="thin dash" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="160.75" y1="286" x2="170.38" y2="348" class="thin dash" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="199.25" y1="286" x2="189.62" y2="348" class="thin dash" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="199.25" y1="286" x2="208.88" y2="348" class="thin dash" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="237.75" y1="286" x2="228.12" y2="348" class="thin dash" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="237.75" y1="286" x2="247.38" y2="348" class="thin dash" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="276.25" y1="286" x2="266.62" y2="348" class="thin dash" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="276.25" y1="286" x2="285.88" y2="348" class="thin dash" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="314.75" y1="286" x2="305.12" y2="348" class="thin dash" stroke="var(--axis)" stroke-width="1.1"/>
+    <line x1="314.75" y1="286" x2="324.38" y2="348" class="thin dash" stroke="var(--axis)" stroke-width="1.1"/>
+    <circle cx="180" cy="100" r="7" fill="#3b82f6" fill-opacity="0.25" stroke="#3b82f6" stroke-width="1.5"/>
+    <circle cx="103" cy="162" r="7" fill="#3b82f6" fill-opacity="0.25" stroke="#3b82f6" stroke-width="1.5"/>
+    <circle cx="257" cy="162" r="7" fill="#3b82f6" fill-opacity="0.25" stroke="#3b82f6" stroke-width="1.5"/>
+    <rect x="55.5" y="217" width="18" height="14" rx="3" fill="#059669" fill-opacity="0.6"/>
+    <line x1="52.5" y1="242" x2="76.5" y2="242" stroke="#e11d48" stroke-width="2.4" stroke-linecap="round"/>
+    <circle cx="141.5" cy="224" r="7" fill="#3b82f6" fill-opacity="0.25" stroke="#3b82f6" stroke-width="1.5"/>
+    <rect x="209.5" y="217" width="18" height="14" rx="3" fill="#059669" fill-opacity="0.6"/>
+    <line x1="206.5" y1="242" x2="230.5" y2="242" stroke="#e11d48" stroke-width="2.4" stroke-linecap="round"/>
+    <rect x="286.5" y="217" width="18" height="14" rx="3" fill="#059669" fill-opacity="0.6"/>
+    <line x1="283.5" y1="242" x2="307.5" y2="242" stroke="#e11d48" stroke-width="2.4" stroke-linecap="round"/>
+    <circle cx="45.25" cy="286" r="4" fill="var(--axis)" fill-opacity="0.6"/>
+    <circle cx="83.75" cy="286" r="4" fill="var(--axis)" fill-opacity="0.6"/>
+    <rect x="113.25" y="279" width="18" height="14" rx="3" fill="#059669" fill-opacity="0.6"/>
+    <line x1="110.25" y1="304" x2="134.25" y2="304" stroke="#e11d48" stroke-width="2.4" stroke-linecap="round"/>
+    <rect x="151.75" y="279" width="18" height="14" rx="3" fill="#059669" fill-opacity="0.6"/>
+    <line x1="148.75" y1="304" x2="172.75" y2="304" stroke="#e11d48" stroke-width="2.4" stroke-linecap="round"/>
+    <circle cx="199.25" cy="286" r="4" fill="var(--axis)" fill-opacity="0.6"/>
+    <circle cx="237.75" cy="286" r="4" fill="var(--axis)" fill-opacity="0.6"/>
+    <circle cx="276.25" cy="286" r="4" fill="var(--axis)" fill-opacity="0.6"/>
+    <circle cx="314.75" cy="286" r="4" fill="var(--axis)" fill-opacity="0.6"/>
+    <circle cx="35.62" cy="348" r="4" fill="var(--axis)" fill-opacity="0.6"/>
+    <circle cx="54.88" cy="348" r="4" fill="var(--axis)" fill-opacity="0.6"/>
+    <circle cx="74.12" cy="348" r="4" fill="var(--axis)" fill-opacity="0.6"/>
+    <circle cx="93.38" cy="348" r="4" fill="var(--axis)" fill-opacity="0.6"/>
+    <circle cx="112.62" cy="348" r="4" fill="var(--axis)" fill-opacity="0.6"/>
+    <circle cx="131.88" cy="348" r="4" fill="var(--axis)" fill-opacity="0.6"/>
+    <circle cx="151.12" cy="348" r="4" fill="var(--axis)" fill-opacity="0.6"/>
+    <circle cx="170.38" cy="348" r="4" fill="var(--axis)" fill-opacity="0.6"/>
+    <circle cx="189.62" cy="348" r="4" fill="var(--axis)" fill-opacity="0.6"/>
+    <circle cx="208.88" cy="348" r="4" fill="var(--axis)" fill-opacity="0.6"/>
+    <circle cx="228.12" cy="348" r="4" fill="var(--axis)" fill-opacity="0.6"/>
+    <circle cx="247.38" cy="348" r="4" fill="var(--axis)" fill-opacity="0.6"/>
+    <circle cx="266.62" cy="348" r="4" fill="var(--axis)" fill-opacity="0.6"/>
+    <circle cx="285.88" cy="348" r="4" fill="var(--axis)" fill-opacity="0.6"/>
+    <circle cx="305.12" cy="348" r="4" fill="var(--axis)" fill-opacity="0.6"/>
+    <circle cx="324.38" cy="348" r="4" fill="var(--axis)" fill-opacity="0.6"/>
   </g>
 </svg>

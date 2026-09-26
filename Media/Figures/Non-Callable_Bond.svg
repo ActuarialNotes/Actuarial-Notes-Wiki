@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>A bullet bond with certain cash flows to maturity</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>A bullet bond's coupons and redemption on one timeline, the whole schedule fixed from issue to maturity</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -52,39 +48,35 @@ text {
     <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
   </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">A bullet bond ends when it says it will</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">P = Fr · a₍ₙ₎ⱼ + C · vⁿ</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">one term, one price, no cases</text>
-    <line x1="48" y1="230" x2="318" y2="230" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-    <line x1="56" y1="226" x2="56" y2="234" class="tick"/>
-    <text x="56" y="247" text-anchor="middle" class="sm dim">0</text>
-    <line x1="86.5" y1="226" x2="86.5" y2="234" class="tick"/>
-    <text x="86.5" y="247" text-anchor="middle" class="sm dim">1</text>
-    <line x1="117" y1="226" x2="117" y2="234" class="tick"/>
-    <text x="117" y="247" text-anchor="middle" class="sm dim">2</text>
-    <line x1="147.5" y1="226" x2="147.5" y2="234" class="tick"/>
-    <text x="147.5" y="247" text-anchor="middle" class="sm dim">…</text>
-    <line x1="178" y1="226" x2="178" y2="234" class="tick"/>
-    <line x1="208.5" y1="226" x2="208.5" y2="234" class="tick"/>
-    <line x1="239" y1="226" x2="239" y2="234" class="tick"/>
-    <line x1="269.5" y1="226" x2="269.5" y2="234" class="tick"/>
-    <text x="269.5" y="247" text-anchor="middle" class="sm dim">7</text>
-    <line x1="300" y1="226" x2="300" y2="234" class="tick"/>
-    <text x="300" y="247" text-anchor="middle" class="sm dim">n</text>
-    <line x1="86.5" y1="230" x2="86.5" y2="200" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <text x="86.5" y="194" text-anchor="middle" class="sm">Fr</text>
-    <line x1="117" y1="230" x2="117" y2="200" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <line x1="147.5" y1="230" x2="147.5" y2="200" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <line x1="178" y1="230" x2="178" y2="200" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <line x1="208.5" y1="230" x2="208.5" y2="200" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <line x1="239" y1="230" x2="239" y2="200" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <line x1="269.5" y1="230" x2="269.5" y2="200" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <line x1="300" y1="230" x2="300" y2="200" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-    <line x1="300" y1="230" x2="300" y2="162" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
-    <text x="300" y="156" text-anchor="middle" class="sm">C</text>
-    <text x="180" y="130" text-anchor="middle" class="sm dim">the schedule cannot be cut short</text>
-    <text x="180" y="340" text-anchor="middle" class="sm dim">the baseline case for every bond formula</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <line x1="48" y1="318" x2="318" y2="318" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <line x1="56" y1="314" x2="56" y2="322" class="tick"/>
+    <text x="56" y="335" text-anchor="middle" class="sm dim">0</text>
+    <line x1="86.5" y1="314" x2="86.5" y2="322" class="tick"/>
+    <text x="86.5" y="335" text-anchor="middle" class="sm dim">1</text>
+    <line x1="117" y1="314" x2="117" y2="322" class="tick"/>
+    <text x="117" y="335" text-anchor="middle" class="sm dim">2</text>
+    <line x1="147.5" y1="314" x2="147.5" y2="322" class="tick"/>
+    <text x="147.5" y="335" text-anchor="middle" class="sm dim">…</text>
+    <line x1="178" y1="314" x2="178" y2="322" class="tick"/>
+    <line x1="208.5" y1="314" x2="208.5" y2="322" class="tick"/>
+    <line x1="239" y1="314" x2="239" y2="322" class="tick"/>
+    <line x1="269.5" y1="314" x2="269.5" y2="322" class="tick"/>
+    <text x="269.5" y="335" text-anchor="middle" class="sm dim">7</text>
+    <line x1="300" y1="314" x2="300" y2="322" class="tick"/>
+    <text x="300" y="335" text-anchor="middle" class="sm dim">n</text>
+    <line x1="86.5" y1="318" x2="86.5" y2="274" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <text x="86.5" y="268" text-anchor="middle" class="sm">Fr</text>
+    <line x1="117" y1="318" x2="117" y2="274" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <line x1="147.5" y1="318" x2="147.5" y2="274" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <line x1="178" y1="318" x2="178" y2="274" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <line x1="208.5" y1="318" x2="208.5" y2="274" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <line x1="239" y1="318" x2="239" y2="274" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <line x1="269.5" y1="318" x2="269.5" y2="274" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <line x1="300" y1="318" x2="300" y2="274" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+    <line x1="300" y1="318" x2="300" y2="108" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
+    <text x="300" y="102" text-anchor="middle" class="sm">C</text>
+    <path d="M56,350 v5.4 H173 q5,0 5,4.95 q0,-4.95 5,-4.95 H300 v-5.4" class="thin" stroke="#059669" stroke-width="1.2"/>
+    <text x="178" y="370" text-anchor="middle" class="sm bold">fixed term</text>
   </g>
 </svg>

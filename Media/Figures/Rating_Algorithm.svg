@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>The ordered steps that turn a base rate into a quoted premium</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>A staircase of the premium through the filed steps in order: $558 base rate, × 1.25 class, × 0.90 territory, + $40 endorsements, − 5% discount and + $25 policy fee, ending at $659</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -46,36 +42,45 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
+    <marker id="ah0d9488" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#0d9488"/></marker>
+    <marker id="ahd97706" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#d97706"/></marker>
+  </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">The order of operations is part of the</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">filing</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">Premium = [Base × ∏Rᵢ + ΣAⱼ](1 − D) + Fees</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">558 × 1.25 × 0.90 + 40 − 5% = $636</text>
-    <rect x="46" y="118" width="190" height="30" rx="5" fill="#3b82f6" fill-opacity="0.16" stroke="#3b82f6" stroke-width="1.1"/>
-    <text x="56" y="138" text-anchor="start" class="sm">base rate</text>
-    <text x="300" y="138" text-anchor="end" class="sm bold">558</text>
-    <rect x="46" y="160" width="190" height="30" rx="5" fill="#3b82f6" fill-opacity="0.16" stroke="#3b82f6" stroke-width="1.1"/>
-    <text x="56" y="180" text-anchor="start" class="sm">× class 1.25</text>
-    <text x="300" y="180" text-anchor="end" class="sm bold">698</text>
-    <line x1="66" y1="148" x2="66" y2="160" class="thin" stroke="var(--dim)" stroke-width="1"/>
-    <rect x="46" y="202" width="190" height="30" rx="5" fill="#3b82f6" fill-opacity="0.16" stroke="#3b82f6" stroke-width="1.1"/>
-    <text x="56" y="222" text-anchor="start" class="sm">× territory 0.90</text>
-    <text x="300" y="222" text-anchor="end" class="sm bold">628</text>
-    <line x1="66" y1="190" x2="66" y2="202" class="thin" stroke="var(--dim)" stroke-width="1"/>
-    <rect x="46" y="244" width="190" height="30" rx="5" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.1"/>
-    <text x="56" y="264" text-anchor="start" class="sm">+ endorsements</text>
-    <text x="300" y="264" text-anchor="end" class="sm bold">668</text>
-    <line x1="66" y1="232" x2="66" y2="244" class="thin" stroke="var(--dim)" stroke-width="1"/>
-    <rect x="46" y="286" width="190" height="30" rx="5" fill="#d97706" fill-opacity="0.16" stroke="#d97706" stroke-width="1.1"/>
-    <text x="56" y="306" text-anchor="start" class="sm">− discounts 5%</text>
-    <text x="300" y="306" text-anchor="end" class="sm bold">634</text>
-    <line x1="66" y1="274" x2="66" y2="286" class="thin" stroke="var(--dim)" stroke-width="1"/>
-    <rect x="46" y="328" width="190" height="30" rx="5" fill="#059669" fill-opacity="0.16" stroke="#059669" stroke-width="1.1"/>
-    <text x="56" y="348" text-anchor="start" class="sm">+ policy fee</text>
-    <text x="300" y="348" text-anchor="end" class="sm bold">$636</text>
-    <line x1="66" y1="316" x2="66" y2="328" class="thin" stroke="var(--dim)" stroke-width="1"/>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">multiply before adding — a reordered algorithm is a different rate</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <line x1="68" y1="335.89" x2="326" y2="335.89" class="grid"/>
+    <line x1="68" y1="265.33" x2="326" y2="265.33" class="grid"/>
+    <line x1="68" y1="194.78" x2="326" y2="194.78" class="grid"/>
+    <line x1="68" y1="124.22" x2="326" y2="124.22" class="grid"/>
+    <line x1="68" y1="350" x2="326" y2="350" class="axis"/>
+    <line x1="68" y1="96" x2="68" y2="350" class="axis"/>
+    <line x1="64" y1="335.89" x2="68" y2="335.89" class="tick"/>
+    <text x="60" y="339.49" text-anchor="end" class="sm dim">550</text>
+    <line x1="64" y1="265.33" x2="68" y2="265.33" class="tick"/>
+    <text x="60" y="268.93" text-anchor="end" class="sm dim">600</text>
+    <line x1="64" y1="194.78" x2="68" y2="194.78" class="tick"/>
+    <text x="60" y="198.38" text-anchor="end" class="sm dim">650</text>
+    <line x1="64" y1="124.22" x2="68" y2="124.22" class="tick"/>
+    <text x="60" y="127.82" text-anchor="end" class="sm dim">700</text>
+    <text x="64" y="82" text-anchor="start" class="sm dim">premium</text>
+    <polyline points="68,324.64 111,324.64" class="curve" stroke="#7c3aed" stroke-width="2.6"/>
+    <text x="89.5" y="316.64" text-anchor="middle" class="sm bold">558</text>
+    <line x1="111" y1="324.64" x2="111" y2="130.8" class="thin" stroke="#3b82f6" stroke-width="2" marker-end="url(#ah3b82f6)"/>
+    <text x="105" y="230.22" text-anchor="end" class="sm bold">× 1.25</text>
+    <polyline points="111,127.8 154,127.8" class="curve" stroke="#7c3aed" stroke-width="2.6"/>
+    <line x1="154" y1="127.8" x2="154" y2="223.22" class="thin" stroke="#3b82f6" stroke-width="2" marker-end="url(#ah3b82f6)"/>
+    <text x="148" y="181.01" text-anchor="end" class="sm bold">× 0.90</text>
+    <polyline points="154,226.22 197,226.22" class="curve" stroke="#7c3aed" stroke-width="2.6"/>
+    <line x1="197" y1="226.22" x2="197" y2="172.78" class="thin" stroke="#0d9488" stroke-width="2" marker-end="url(#ah0d9488)"/>
+    <text x="191" y="202" text-anchor="end" class="sm bold">+ 40</text>
+    <polyline points="197,169.78 240,169.78" class="curve" stroke="#7c3aed" stroke-width="2.6"/>
+    <line x1="240" y1="169.78" x2="240" y2="213.89" class="thin" stroke="#d97706" stroke-width="2" marker-end="url(#ahd97706)"/>
+    <text x="234" y="197.33" text-anchor="end" class="sm bold">− 5%</text>
+    <polyline points="240,216.89 283,216.89" class="curve" stroke="#7c3aed" stroke-width="2.6"/>
+    <line x1="283" y1="216.89" x2="283" y2="184.61" class="thin" stroke="#0d9488" stroke-width="2" marker-end="url(#ah0d9488)"/>
+    <text x="277" y="203.25" text-anchor="end" class="sm bold">+ 25</text>
+    <polyline points="283,181.61 326,181.61" class="curve" stroke="#7c3aed" stroke-width="2.6"/>
+    <text x="304.5" y="172.61" text-anchor="middle" class="bold">$659</text>
   </g>
 </svg>

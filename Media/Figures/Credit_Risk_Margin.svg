@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>The credit exposures behind the margin, with reinsurance recoverables usually the largest</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>The credit charge by counterparty, largest for reinsurance recoverables and shrinking through corporate bonds and premiums receivable to almost nothing for Government of Canada bonds</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -47,26 +43,50 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">Cede the insurance risk, take on credit</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">risk</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">Credit = factors × exposure,</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">by counterparty type and quality</text>
-    <text x="40" y="112" text-anchor="start" class="sm">reinsurance recoverables</text>
-    <rect x="170" y="114" width="148" height="18" rx="3" fill="#e11d48" fill-opacity="0.60"/>
-    <text x="40" y="152" text-anchor="start" class="sm">corporate bonds</text>
-    <rect x="170" y="154" width="96" height="18" rx="3" fill="#d97706" fill-opacity="0.60"/>
-    <text x="40" y="192" text-anchor="start" class="sm">premiums receivable</text>
-    <rect x="170" y="194" width="52" height="18" rx="3" fill="#0d9488" fill-opacity="0.60"/>
-    <text x="40" y="232" text-anchor="start" class="sm">Government of Canada</text>
-    <rect x="170" y="234" width="6" height="18" rx="3" fill="#059669" fill-opacity="0.60"/>
-    <text x="180" y="288" text-anchor="middle" class="sm dim">and the formula cannot see concentration:</text>
-    <text x="180" y="304" text-anchor="middle" class="sm dim">80% of recoverables from one reinsurer attracts</text>
-    <text x="180" y="320" text-anchor="middle" class="sm dim">the same charge as a spread programme</text>
-    <line x1="30" y1="340" x2="330" y2="340" class="rule"/>
-    <text x="180" y="362" text-anchor="middle" class="sm dim">unregistered cessions get no credit at all unless</text>
-    <text x="180" y="378" text-anchor="middle" class="sm dim">collateralised — the IFRS 17 parallel is</text>
-    <text x="180" y="392" text-anchor="middle" class="sm dim">non-performance risk on the reinsurance asset</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <rect x="38.8" y="98" width="22.4" height="40" rx="2" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="43.2" y="102.8" width="4.8" height="4" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="52" y="102.8" width="4.8" height="4" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="43.2" y="110.8" width="4.8" height="4" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="52" y="110.8" width="4.8" height="4" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="43.2" y="118.8" width="4.8" height="4" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="52" y="118.8" width="4.8" height="4" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="43.2" y="126.8" width="4.8" height="4" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="52" y="126.8" width="4.8" height="4" fill="#e11d48" fill-opacity="0.55"/>
+    <text x="84" y="110" text-anchor="start" class="sm bold">reinsurers</text>
+    <rect x="84" y="118" width="226" height="20" rx="3" fill="#e11d48" fill-opacity="0.6"/>
+    <polygon points="35.6,174 56.4,174 64.4,182 64.4,214 35.6,214" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M56.4,174 V182 H64.4" fill="none" stroke="#d97706" stroke-width="1.2"/>
+    <line x1="41.2" y1="190" x2="58" y2="190" stroke="#d97706" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="41.2" y1="196.8" x2="58" y2="196.8" stroke="#d97706" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="41.2" y1="203.6" x2="52.4" y2="203.6" stroke="#d97706" stroke-width="1.4" stroke-linecap="round"/>
+    <text x="84" y="186" text-anchor="start" class="sm bold">corporate bonds</text>
+    <rect x="84" y="194" width="146" height="20" rx="3" fill="#d97706" fill-opacity="0.6"/>
+    <rect x="34" y="278" width="32" height="6" fill="#0d9488" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="50" cy="284" rx="16" ry="3.4" fill="#0d9488" fill-opacity="0.25" stroke="#0d9488" stroke-width="1.2"/>
+    <ellipse cx="50" cy="278" rx="16" ry="3.4" fill="var(--surf)" stroke="#0d9488" stroke-width="1.2"/>
+    <ellipse cx="50" cy="278" rx="16" ry="3.4" fill="#0d9488" fill-opacity="0.3" stroke="none"/>
+    <rect x="34" y="272" width="32" height="6" fill="#0d9488" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="50" cy="278" rx="16" ry="3.4" fill="#0d9488" fill-opacity="0.25" stroke="#0d9488" stroke-width="1.2"/>
+    <ellipse cx="50" cy="272" rx="16" ry="3.4" fill="var(--surf)" stroke="#0d9488" stroke-width="1.2"/>
+    <ellipse cx="50" cy="272" rx="16" ry="3.4" fill="#0d9488" fill-opacity="0.3" stroke="none"/>
+    <rect x="34" y="266" width="32" height="6" fill="#0d9488" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="50" cy="272" rx="16" ry="3.4" fill="#0d9488" fill-opacity="0.25" stroke="#0d9488" stroke-width="1.2"/>
+    <ellipse cx="50" cy="266" rx="16" ry="3.4" fill="var(--surf)" stroke="#0d9488" stroke-width="1.2"/>
+    <ellipse cx="50" cy="266" rx="16" ry="3.4" fill="#0d9488" fill-opacity="0.3" stroke="none"/>
+    <rect x="34" y="260" width="32" height="6" fill="#0d9488" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="50" cy="266" rx="16" ry="3.4" fill="#0d9488" fill-opacity="0.25" stroke="#0d9488" stroke-width="1.2"/>
+    <ellipse cx="50" cy="260" rx="16" ry="3.4" fill="var(--surf)" stroke="#0d9488" stroke-width="1.2"/>
+    <ellipse cx="50" cy="260" rx="16" ry="3.4" fill="#0d9488" fill-opacity="0.3" stroke="none"/>
+    <text x="84" y="262" text-anchor="start" class="sm bold">receivables</text>
+    <rect x="84" y="270" width="80" height="20" rx="3" fill="#0d9488" fill-opacity="0.6"/>
+    <polygon points="30,338 50,326 70,338" fill="#059669" fill-opacity="0.18" stroke="#059669" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="33.6" y="340.4" width="4" height="18.4" fill="#059669" fill-opacity="0.18" stroke="#059669" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="43.2" y="340.4" width="4" height="18.4" fill="#059669" fill-opacity="0.18" stroke="#059669" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="52.8" y="340.4" width="4" height="18.4" fill="#059669" fill-opacity="0.18" stroke="#059669" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="62.4" y="340.4" width="4" height="18.4" fill="#059669" fill-opacity="0.18" stroke="#059669" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="30" y="360.4" width="40" height="5.6" fill="#059669" fill-opacity="0.18" stroke="#059669" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="84" y="338" text-anchor="start" class="sm bold">Canada bonds</text>
+    <rect x="84" y="346" width="8" height="20" rx="3" fill="#059669" fill-opacity="0.6"/>
   </g>
 </svg>

@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>A voluntary code's two halves, and the four limits that make it self-regulation</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>An insurer and a consumer under a voluntary code, rights running one way and duties the other, above scales of law crossed out for want of a statutory remedy</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -46,38 +42,47 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
+    <marker id="ahd97706" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#d97706"/></marker>
+  </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">A voluntary bargain, with no statutory</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">remedy</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">Rights ↔ responsibilities</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">adopted by members, enacted by nobody</text>
-    <rect x="30" y="96" width="143" height="148" rx="7" fill="#059669" fill-opacity="0.08" stroke="#059669" stroke-width="1.2"/>
-    <rect x="30" y="96" width="143" height="28" rx="7" fill="#059669" fill-opacity="0.22" stroke="none"/>
-    <text x="101.5" y="114" text-anchor="middle" class="sm bold" fill="#059669">Your rights</text>
-    <text x="101.5" y="144" text-anchor="middle" class="sm">plain-language</text>
-    <text x="101.5" y="166" text-anchor="middle" class="sm">information</text>
-    <text x="101.5" y="188" text-anchor="middle" class="sm">professional</text>
-    <text x="101.5" y="210" text-anchor="middle" class="sm">service</text>
-    <text x="101.5" y="232" text-anchor="middle" class="sm">prompt claims</text>
-    <rect x="187" y="96" width="143" height="148" rx="7" fill="#d97706" fill-opacity="0.08" stroke="#d97706" stroke-width="1.2"/>
-    <rect x="187" y="96" width="143" height="28" rx="7" fill="#d97706" fill-opacity="0.22" stroke="none"/>
-    <text x="258.5" y="114" text-anchor="middle" class="sm bold" fill="#d97706">Your duties</text>
-    <text x="258.5" y="144" text-anchor="middle" class="sm">ask, and</text>
-    <text x="258.5" y="166" text-anchor="middle" class="sm">understand</text>
-    <text x="258.5" y="188" text-anchor="middle" class="sm">full and honest</text>
-    <text x="258.5" y="210" text-anchor="middle" class="sm">disclosure</text>
-    <text x="258.5" y="232" text-anchor="middle" class="sm">report promptly</text>
-    <line x1="30" y1="250" x2="330" y2="250" class="rule"/>
-    <text x="180" y="272" text-anchor="middle" class="sm bold" fill="#e11d48">and the four limits the exam wants</text>
-    <text x="40" y="296" text-anchor="start" class="sm" fill="#e11d48">•</text>
-    <text x="56" y="296" text-anchor="start" class="sm">no statutory remedy for a breach</text>
-    <text x="40" y="320" text-anchor="start" class="sm" fill="#e11d48">•</text>
-    <text x="56" y="320" text-anchor="start" class="sm">binds members only</text>
-    <text x="40" y="344" text-anchor="start" class="sm" fill="#e11d48">•</text>
-    <text x="56" y="344" text-anchor="start" class="sm">written by the industry it governs</text>
-    <text x="40" y="368" text-anchor="start" class="sm" fill="#e11d48">•</text>
-    <text x="56" y="368" text-anchor="start" class="sm">enforced only if a Superintendent acts</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <polygon points="162,83 188,83 198,93 198,133 162,133" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M188,83 V93 H198" fill="none" stroke="#7c3aed" stroke-width="1.2"/>
+    <line x1="169" y1="103" x2="190" y2="103" stroke="#7c3aed" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="169" y1="111.5" x2="190" y2="111.5" stroke="#7c3aed" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="169" y1="120" x2="183" y2="120" stroke="#7c3aed" stroke-width="1.4" stroke-linecap="round"/>
+    <text x="210" y="112" text-anchor="start" class="bold">code</text>
+    <rect x="37.84" y="154" width="40.32" height="72" rx="2" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="45.76" y="162.64" width="8.64" height="7.2" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="61.6" y="162.64" width="8.64" height="7.2" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="45.76" y="177.04" width="8.64" height="7.2" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="61.6" y="177.04" width="8.64" height="7.2" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="45.76" y="191.44" width="8.64" height="7.2" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="61.6" y="191.44" width="8.64" height="7.2" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="45.76" y="205.84" width="8.64" height="7.2" fill="#3b82f6" fill-opacity="0.55"/>
+    <rect x="61.6" y="205.84" width="8.64" height="7.2" fill="#3b82f6" fill-opacity="0.55"/>
+    <text x="58" y="246" text-anchor="middle" class="bold">insurer</text>
+    <circle cx="302" cy="172.8" r="11.52" fill="#059669" fill-opacity="0.18" stroke="#059669" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M281.52,224 V199.68 Q281.52,189.44 293.04,189.44 H310.96 Q322.48,189.44 322.48,199.68 V224 Z" fill="#059669" fill-opacity="0.18" stroke="#059669" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="302" y="246" text-anchor="middle" class="bold">consumer</text>
+    <line x1="92" y1="172" x2="266" y2="172" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
+    <text x="180" y="164" text-anchor="middle" class="sm">rights</text>
+    <line x1="266" y1="210" x2="92" y2="210" class="thin" stroke="#d97706" stroke-width="1.8" marker-end="url(#ahd97706)"/>
+    <text x="180" y="228" text-anchor="middle" class="sm">duties</text>
+    <line x1="180" y1="286.92" x2="180" y2="347.6" stroke="#7c3aed" stroke-width="1.8"/>
+    <rect x="163.72" y="347.6" width="32.56" height="7.4" rx="2" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <line x1="145.96" y1="295.8" x2="214.04" y2="295.8" stroke="#7c3aed" stroke-width="1.8" stroke-linecap="round"/>
+    <circle cx="180" cy="285.44" r="3.7" fill="#7c3aed"/>
+    <line x1="145.96" y1="295.8" x2="134.12" y2="318" stroke="#7c3aed" stroke-width="1"/>
+    <line x1="145.96" y1="295.8" x2="157.8" y2="318" stroke="#7c3aed" stroke-width="1"/>
+    <path d="M131.16,318 Q145.96,328.36 160.76,318 Z" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <line x1="214.04" y1="295.8" x2="202.2" y2="318" stroke="#7c3aed" stroke-width="1"/>
+    <line x1="214.04" y1="295.8" x2="225.88" y2="318" stroke="#7c3aed" stroke-width="1"/>
+    <path d="M199.24,318 Q214.04,328.36 228.84,318 Z" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="180" cy="314" r="42" fill="none" stroke="#e11d48" stroke-width="3"/>
+    <line x1="150.31" y1="284.31" x2="209.69" y2="343.69" stroke="#e11d48" stroke-width="3"/>
+    <text x="180" y="380" text-anchor="middle" class="sm bold">no remedy</text>
   </g>
 </svg>

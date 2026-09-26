@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>Many uneconomic claims aggregated into one action, gated by certification</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>A crowd of small claimants funnelled through the certification gate into one action before the court, with one claimant standing apart after opting out</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -50,39 +46,56 @@ text {
     <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
   </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">Certification is the whole exposure</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">Many small claims → one action</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">binding everyone who does not opt out</text>
-    <circle cx="52" cy="110" r="6" fill="#3b82f6" fill-opacity="0.55"/>
-    <circle cx="72" cy="110" r="6" fill="#3b82f6" fill-opacity="0.55"/>
-    <circle cx="92" cy="110" r="6" fill="#3b82f6" fill-opacity="0.55"/>
-    <circle cx="112" cy="110" r="6" fill="#3b82f6" fill-opacity="0.55"/>
-    <circle cx="132" cy="110" r="6" fill="#3b82f6" fill-opacity="0.55"/>
-    <circle cx="152" cy="110" r="6" fill="#3b82f6" fill-opacity="0.55"/>
-    <circle cx="52" cy="132" r="6" fill="#3b82f6" fill-opacity="0.55"/>
-    <circle cx="72" cy="132" r="6" fill="#3b82f6" fill-opacity="0.55"/>
-    <circle cx="92" cy="132" r="6" fill="#3b82f6" fill-opacity="0.55"/>
-    <circle cx="112" cy="132" r="6" fill="#3b82f6" fill-opacity="0.55"/>
-    <circle cx="132" cy="132" r="6" fill="#3b82f6" fill-opacity="0.55"/>
-    <circle cx="152" cy="132" r="6" fill="#3b82f6" fill-opacity="0.55"/>
-    <line x1="178" y1="122" x2="216" y2="122" class="thin" stroke="var(--dim)" stroke-width="1.4" marker-end="url(#ahvardim)"/>
-    <rect x="224" y="108" width="104" height="28" rx="14.0" fill="#7c3aed" fill-opacity="0.14" stroke="#7c3aed" stroke-width="1.2"/>
-    <text x="276" y="126" text-anchor="middle" class="sm">one action</text>
-    <text x="180" y="162" text-anchor="middle" class="sm dim">each claim is too small to litigate alone</text>
-    <line x1="30" y1="184" x2="330" y2="184" class="rule"/>
-    <text x="180" y="206" text-anchor="middle" class="sm bold">certification asks four questions</text>
-    <text x="44" y="230" text-anchor="start" class="sm" fill="#d97706">•</text>
-    <text x="60" y="230" text-anchor="start" class="sm">an identifiable class</text>
-    <text x="44" y="254" text-anchor="start" class="sm" fill="#d97706">•</text>
-    <text x="60" y="254" text-anchor="start" class="sm">common issues</text>
-    <text x="44" y="278" text-anchor="start" class="sm" fill="#d97706">•</text>
-    <text x="60" y="278" text-anchor="start" class="sm">a suitable representative</text>
-    <text x="44" y="302" text-anchor="start" class="sm" fill="#d97706">•</text>
-    <text x="60" y="302" text-anchor="start" class="sm">preferable to individual actions</text>
-    <text x="180" y="340" text-anchor="middle" class="sm dim">reserving is binary around that decision, and</text>
-    <text x="180" y="356" text-anchor="middle" class="sm dim">the exposure is to a practice, not to an event —</text>
-    <text x="180" y="372" text-anchor="middle" class="sm dim">so it does not develop like an ordinary claim</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <circle cx="44" cy="120.6" r="6.84" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M31.84,151 V136.56 Q31.84,130.48 38.68,130.48 H49.32 Q56.16,130.48 56.16,136.56 V151 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="76" cy="120.6" r="6.84" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M63.84,151 V136.56 Q63.84,130.48 70.68,130.48 H81.32 Q88.16,130.48 88.16,136.56 V151 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="108" cy="120.6" r="6.84" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M95.84,151 V136.56 Q95.84,130.48 102.68,130.48 H113.32 Q120.16,130.48 120.16,136.56 V151 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="140" cy="120.6" r="6.84" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M127.84,151 V136.56 Q127.84,130.48 134.68,130.48 H145.32 Q152.16,130.48 152.16,136.56 V151 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="44" cy="170.6" r="6.84" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M31.84,201 V186.56 Q31.84,180.48 38.68,180.48 H49.32 Q56.16,180.48 56.16,186.56 V201 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="76" cy="170.6" r="6.84" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M63.84,201 V186.56 Q63.84,180.48 70.68,180.48 H81.32 Q88.16,180.48 88.16,186.56 V201 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="108" cy="170.6" r="6.84" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M95.84,201 V186.56 Q95.84,180.48 102.68,180.48 H113.32 Q120.16,180.48 120.16,186.56 V201 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="140" cy="170.6" r="6.84" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M127.84,201 V186.56 Q127.84,180.48 134.68,180.48 H145.32 Q152.16,180.48 152.16,186.56 V201 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="44" cy="220.6" r="6.84" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M31.84,251 V236.56 Q31.84,230.48 38.68,230.48 H49.32 Q56.16,230.48 56.16,236.56 V251 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="76" cy="220.6" r="6.84" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M63.84,251 V236.56 Q63.84,230.48 70.68,230.48 H81.32 Q88.16,230.48 88.16,236.56 V251 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="108" cy="220.6" r="6.84" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M95.84,251 V236.56 Q95.84,230.48 102.68,230.48 H113.32 Q120.16,230.48 120.16,236.56 V251 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="140" cy="220.6" r="6.84" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M127.84,251 V236.56 Q127.84,230.48 134.68,230.48 H145.32 Q152.16,230.48 152.16,236.56 V251 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="92" y="276" text-anchor="middle" class="bold">class</text>
+    <line x1="166" y1="182" x2="184" y2="182" class="thin" stroke="var(--dim)" stroke-width="1.6" marker-end="url(#ahvardim)"/>
+    <rect x="187" y="149" width="6" height="66" rx="2" fill="#d97706" fill-opacity="0.5" stroke="#d97706" stroke-width="1.2"/>
+    <rect x="227" y="149" width="6" height="66" rx="2" fill="#d97706" fill-opacity="0.5" stroke="#d97706" stroke-width="1.2"/>
+    <line x1="193" y1="159" x2="227" y2="159" stroke="#d97706" stroke-width="2.4"/>
+    <line x1="193" y1="182" x2="227" y2="182" stroke="#d97706" stroke-width="2.4"/>
+    <line x1="193" y1="205" x2="227" y2="205" stroke="#d97706" stroke-width="2.4"/>
+    <line x1="193" y1="159" x2="227" y2="205" stroke="#d97706" stroke-width="2"/>
+    <text x="210" y="236" text-anchor="middle" class="sm bold">certification</text>
+    <line x1="236" y1="182" x2="258" y2="182" class="thin" stroke="var(--dim)" stroke-width="1.6" marker-end="url(#ahvardim)"/>
+    <line x1="296" y1="155.12" x2="296" y2="207.6" stroke="#7c3aed" stroke-width="1.8"/>
+    <rect x="281.92" y="207.6" width="28.16" height="6.4" rx="2" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <line x1="266.56" y1="162.8" x2="325.44" y2="162.8" stroke="#7c3aed" stroke-width="1.8" stroke-linecap="round"/>
+    <circle cx="296" cy="153.84" r="3.2" fill="#7c3aed"/>
+    <line x1="266.56" y1="162.8" x2="256.32" y2="182" stroke="#7c3aed" stroke-width="1"/>
+    <line x1="266.56" y1="162.8" x2="276.8" y2="182" stroke="#7c3aed" stroke-width="1"/>
+    <path d="M253.76,182 Q266.56,190.96 279.36,182 Z" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <line x1="325.44" y1="162.8" x2="315.2" y2="182" stroke="#7c3aed" stroke-width="1"/>
+    <line x1="325.44" y1="162.8" x2="335.68" y2="182" stroke="#7c3aed" stroke-width="1"/>
+    <path d="M312.64,182 Q325.44,190.96 338.24,182 Z" fill="#7c3aed" fill-opacity="0.18" stroke="#7c3aed" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="296" y="236" text-anchor="middle" class="sm bold">one action</text>
+    <g opacity="0.55">
+    <circle cx="60" cy="330.6" r="6.84" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M47.84,361 V346.56 Q47.84,340.48 54.68,340.48 H65.32 Q72.16,340.48 72.16,346.56 V361 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    </g>
+    <text x="86" y="350" text-anchor="start" class="sm">opts out</text>
   </g>
 </svg>

@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>An MA(1)'s memory ending after one period, so the forecast returns to the mean</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>An MA(1) series around its mean of 50 and a dashed forecast that moves once, to 48.8, then sits on the mean</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -50,39 +46,33 @@ text {
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
   </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">A weighted sum of the last q shocks</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="438" text-anchor="middle" class="fml">Y_t = μ + ε_t + θ₁ε_{t−1} + ⋯ + θ_qε_{t−q}</text>
-    <line x1="64" y1="100" x2="64" y2="310" class="grid"/>
-    <line x1="155.76" y1="100" x2="155.76" y2="310" class="grid"/>
-    <line x1="247.53" y1="100" x2="247.53" y2="310" class="grid"/>
-    <line x1="316.35" y1="100" x2="316.35" y2="310" class="grid"/>
-    <line x1="64" y1="280" x2="324" y2="280" class="grid"/>
-    <line x1="64" y1="205" x2="324" y2="205" class="grid"/>
-    <line x1="64" y1="130" x2="324" y2="130" class="grid"/>
-    <line x1="64" y1="310" x2="334" y2="310" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="64" y1="310" x2="64" y2="90" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="64" y1="310" x2="64" y2="314" class="tick"/>
-    <line x1="155.76" y1="310" x2="155.76" y2="314" class="tick"/>
-    <line x1="247.53" y1="310" x2="247.53" y2="314" class="tick"/>
-    <text x="247.53" y="326" text-anchor="middle" class="sm dim">now</text>
-    <line x1="316.35" y1="310" x2="316.35" y2="314" class="tick"/>
-    <line x1="60" y1="280" x2="64" y2="280" class="tick"/>
-    <text x="56" y="283.6" text-anchor="end" class="sm dim">40</text>
-    <line x1="60" y1="205" x2="64" y2="205" class="tick"/>
-    <text x="56" y="208.6" text-anchor="end" class="sm dim">50</text>
-    <line x1="60" y1="130" x2="64" y2="130" class="tick"/>
-    <text x="56" y="133.6" text-anchor="end" class="sm dim">60</text>
-    <polyline points="64,177.72 71.65,192.9 79.29,169.38 86.94,237.04 94.59,182.05 102.24,232.08 109.88,213.03 117.53,145.12 125.18,133.29 132.82,251.97 140.47,202.01 148.12,207.76 155.76,269.28 163.41,234.34 171.06,247.43 178.71,263.99 186.35,213.99 194,227.72 201.65,215 209.29,214.24 216.94,195.27 224.59,205.17 232.24,173.09 239.88,140.03 247.53,206.97" class="curve" stroke="#3b82f6" stroke-width="1.9"/>
-    <polyline points="247.53,206.97 255.18,214 262.82,205 270.47,205 278.12,205 285.76,205 293.41,205 301.06,205 308.71,205 316.35,205" class="curve dash" stroke="#059669" stroke-width="2.2"/>
-    <line x1="64" y1="205" x2="324" y2="205" class="thin dash" stroke="#d97706" stroke-width="1.3"/>
-    <text x="316.35" y="291.25" text-anchor="end" class="sm bold" fill="#d97706">μ = 50</text>
-    <circle cx="255.18" cy="214" r="3.6" fill="#059669"/>
-    <text x="261.18" y="205" text-anchor="start" class="sm bold" fill="#059669">48.8</text>
-    <line x1="247.53" y1="310" x2="247.53" y2="115" class="thin dash" stroke="var(--dim)" stroke-width="1.3"/>
-    <text x="180" y="342" text-anchor="middle" class="sm dim">two steps out the shock has left the model —</text>
-    <text x="180" y="357" text-anchor="middle" class="sm dim">the forecast is simply μ</text>
-    <text x="180" y="375" text-anchor="middle" class="sm bold">always stationary; |ρ₁| ≤ 0.5 for an MA(1)</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <line x1="64" y1="94" x2="64" y2="348" class="grid"/>
+    <line x1="155.76" y1="94" x2="155.76" y2="348" class="grid"/>
+    <line x1="247.53" y1="94" x2="247.53" y2="348" class="grid"/>
+    <line x1="316.35" y1="94" x2="316.35" y2="348" class="grid"/>
+    <line x1="64" y1="311.71" x2="324" y2="311.71" class="grid"/>
+    <line x1="64" y1="221" x2="324" y2="221" class="grid"/>
+    <line x1="64" y1="130.29" x2="324" y2="130.29" class="grid"/>
+    <line x1="64" y1="348" x2="334" y2="348" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="64" y1="348" x2="64" y2="84" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="64" y1="348" x2="64" y2="352" class="tick"/>
+    <line x1="155.76" y1="348" x2="155.76" y2="352" class="tick"/>
+    <line x1="247.53" y1="348" x2="247.53" y2="352" class="tick"/>
+    <text x="247.53" y="364" text-anchor="middle" class="sm dim">now</text>
+    <line x1="316.35" y1="348" x2="316.35" y2="352" class="tick"/>
+    <line x1="60" y1="311.71" x2="64" y2="311.71" class="tick"/>
+    <text x="56" y="315.31" text-anchor="end" class="sm dim">40</text>
+    <line x1="60" y1="221" x2="64" y2="221" class="tick"/>
+    <text x="56" y="224.6" text-anchor="end" class="sm dim">50</text>
+    <line x1="60" y1="130.29" x2="64" y2="130.29" class="tick"/>
+    <text x="56" y="133.89" text-anchor="end" class="sm dim">60</text>
+    <polyline points="64,188.01 71.65,206.37 79.29,177.92 86.94,259.76 94.59,193.24 102.24,253.76 109.88,230.71 117.53,148.57 125.18,134.26 132.82,277.81 140.47,217.39 148.12,224.34 155.76,298.75 163.41,256.49 171.06,272.31 178.71,292.35 186.35,231.88 194,248.49 201.65,233.09 209.29,232.18 216.94,209.23 224.59,221.2 232.24,182.41 239.88,142.41 247.53,223.38" class="curve" stroke="#3b82f6" stroke-width="1.9"/>
+    <polyline points="247.53,223.38 255.18,231.89 262.82,221 270.47,221 278.12,221 285.76,221 293.41,221 301.06,221 308.71,221 316.35,221" class="curve dash" stroke="#059669" stroke-width="2.2"/>
+    <line x1="64" y1="221" x2="324" y2="221" class="thin dash" stroke="#d97706" stroke-width="1.3"/>
+    <text x="316.35" y="325.32" text-anchor="end" class="sm bold" fill="#d97706">μ = 50</text>
+    <circle cx="255.18" cy="231.89" r="3.6" fill="#059669"/>
+    <text x="259.18" y="247.89" text-anchor="start" class="sm bold" fill="#059669">48.8</text>
+    <line x1="247.53" y1="348" x2="247.53" y2="112.14" class="thin dash" stroke="var(--dim)" stroke-width="1.3"/>
   </g>
 </svg>

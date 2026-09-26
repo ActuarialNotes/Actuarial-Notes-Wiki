@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>Two nested log-likelihoods and the deviance drop between them</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>A log-likelihood curve with the full model at its peak and the reduced model held lower down, the gap between them marked</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -51,27 +47,24 @@ text {
     <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
   </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">Compare the fits of nested models</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">−2 ln Λ = 2[ℓ(full) − ℓ(reduced)]</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">≈ χ²_r under H₀</text>
-    <line x1="74" y1="328" x2="336" y2="328" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="74" y1="328" x2="74" y2="96" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="70" y1="296.29" x2="74" y2="296.29" class="tick"/>
-    <text x="66" y="299.89" text-anchor="end" class="sm dim">-416</text>
-    <line x1="70" y1="232.86" x2="74" y2="232.86" class="tick"/>
-    <text x="66" y="236.46" text-anchor="end" class="sm dim">-412</text>
-    <line x1="70" y1="169.43" x2="74" y2="169.43" class="tick"/>
-    <text x="66" y="173.03" text-anchor="end" class="sm dim">-408</text>
-    <text x="70" y="92" text-anchor="start" class="sm dim">log-likelihood</text>
-    <line x1="74" y1="155.16" x2="326" y2="155.16" class="thin" stroke="#3b82f6" stroke-width="1.3"/>
-    <line x1="74" y1="242.37" x2="326" y2="242.37" class="thin" stroke="#d97706" stroke-width="1.3"/>
-    <text x="82.4" y="144.06" text-anchor="start" class="sm" fill="#3b82f6">full model</text>
-    <text x="82.4" y="262.99" text-anchor="start" class="sm" fill="#d97706">reduced model</text>
-    <line x1="267.2" y1="242.37" x2="267.2" y2="155.16" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
-    <text x="275.2" y="202.76" text-anchor="start" class="sm bold" fill="#e11d48">5.5</text>
-    <text x="180" y="364" text-anchor="middle" class="bold">−2 ln Λ = 11.0 on 2 df</text>
-    <text x="180" y="382" text-anchor="middle" class="sm dim">χ²₀.₀₅,₂ = 5.99 → reject the reduced model</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <line x1="44" y1="348" x2="336" y2="348" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="44" y1="348" x2="44" y2="86" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="89.12" y1="348" x2="89.12" y2="352" class="tick"/>
+    <text x="89.12" y="364" text-anchor="middle" class="sm dim">θ₀</text>
+    <line x1="190.64" y1="348" x2="190.64" y2="352" class="tick"/>
+    <text x="190.64" y="364" text-anchor="middle" class="sm dim">θ̂</text>
+    <text x="40" y="82" text-anchor="start" class="sm dim">log-likelihood</text>
+    <polyline points="44,325.56 45.57,321.72 47.13,317.92 48.7,314.16 50.27,310.44 51.83,306.77 53.4,303.13 54.97,299.54 56.53,295.99 58.1,292.48 59.67,289.01 61.23,285.58 62.8,282.19 64.37,278.84 65.93,275.54 67.5,272.27 69.07,269.05 70.63,265.87 72.2,262.73 73.77,259.63 75.33,256.58 76.9,253.56 78.47,250.58 80.03,247.65 81.6,244.76 83.17,241.91 84.73,239.1 86.3,236.33 87.87,233.6 89.43,230.92 91,228.27 92.57,225.67 94.13,223.11 95.7,220.58 97.27,218.11 98.83,215.67 100.4,213.27 101.97,210.91 103.53,208.6 105.1,206.33 106.67,204.09 108.23,201.9 109.8,199.75 111.37,197.64 112.93,195.58 114.5,193.55 116.07,191.57 117.63,189.62 119.2,187.72 120.77,185.86 122.33,184.04 123.9,182.26 125.47,180.53 127.03,178.83 128.6,177.18 130.17,175.56 131.73,173.99 133.3,172.46 134.87,170.97 136.43,169.52 138,168.12 139.57,166.75 141.13,165.43 142.7,164.14 144.27,162.9 145.83,161.7 147.4,160.54 148.97,159.42 150.53,158.34 152.1,157.31 153.67,156.31 155.23,155.36 156.8,154.45 158.37,153.58 159.93,152.75 161.5,151.96 163.07,151.22 164.63,150.51 166.2,149.85 167.77,149.22 169.33,148.64 170.9,148.1 172.47,147.6 174.03,147.14 175.6,146.73 177.17,146.35 178.73,146.02 180.3,145.72 181.87,145.47 183.43,145.26 185,145.09 186.57,144.96 188.13,144.88 189.7,144.83 191.27,144.83 192.83,144.87 194.4,144.94 195.97,145.06 197.53,145.22 199.1,145.43 200.67,145.67 202.23,145.95 203.8,146.28 205.37,146.65 206.93,147.06 208.5,147.51 210.07,148 211.63,148.53 213.2,149.1 214.77,149.72 216.33,150.37 217.9,151.07 219.47,151.81 221.03,152.59 222.6,153.41 224.17,154.27 225.73,155.18 227.3,156.12 228.87,157.11 230.43,158.13 232,159.2 233.57,160.31 235.13,161.46 236.7,162.66 238.27,163.89 239.83,165.17 241.4,166.48 242.97,167.84 244.53,169.24 246.1,170.68 247.67,172.16 249.23,173.68 250.8,175.24 252.37,176.85 253.93,178.5 255.5,180.18 257.07,181.91 258.63,183.68 260.2,185.49 261.77,187.35 263.33,189.24 264.9,191.18 266.47,193.15 268.03,195.17 269.6,197.23 271.17,199.33 272.73,201.47 274.3,203.65 275.87,205.88 277.43,208.14 279,210.45 280.57,212.79 282.13,215.18 283.7,217.61 285.27,220.09 286.83,222.6 288.4,225.15 289.97,227.75 291.53,230.38 293.1,233.06 294.67,235.78 296.23,238.54 297.8,241.34 299.37,244.19 300.93,247.07 302.5,249.99 304.07,252.96 305.63,255.97 307.2,259.02 308.77,262.11 310.33,265.24 311.9,268.41 313.47,271.63 315.03,274.88 316.6,278.18 318.17,281.52 319.73,284.9 321.3,288.32 322.87,291.78 324.43,295.28 326,298.83" class="curve" stroke="#3b82f6" stroke-width="2.4"/>
+    <line x1="190.64" y1="348" x2="190.64" y2="144.83" class="thin dash" stroke="#3b82f6" stroke-width="1.3"/>
+    <line x1="190.64" y1="144.83" x2="280.88" y2="144.83" class="thin dash" stroke="#3b82f6" stroke-width="1.3"/>
+    <circle cx="190.64" cy="144.83" r="4.4" fill="#3b82f6"/>
+    <line x1="89.12" y1="348" x2="89.12" y2="231.45" class="thin dash" stroke="#d97706" stroke-width="1.3"/>
+    <line x1="89.12" y1="231.45" x2="280.88" y2="231.45" class="thin dash" stroke="#d97706" stroke-width="1.3"/>
+    <circle cx="89.12" cy="231.45" r="4.4" fill="#d97706"/>
+    <text x="190.64" y="134.83" text-anchor="middle" class="sm bold">full</text>
+    <text x="81.12" y="223.45" text-anchor="end" class="sm bold">reduced</text>
+    <line x1="280.88" y1="231.45" x2="280.88" y2="146.83" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
+    <text x="288.88" y="192.14" text-anchor="start" class="sm bold">5.5</text>
   </g>
 </svg>

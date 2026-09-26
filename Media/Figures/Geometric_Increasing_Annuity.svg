@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>Payments growing at a constant rate against a level stream</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>Six payments, each 1.2 times the one before, rising from 1.00 to 2.49</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -50,12 +46,7 @@ text {
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
   </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">Geometric payments multiply, they do not</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">add</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">PV = [1 − ((1+g)/(1+i))ⁿ] / (i − g)</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">i = g:  PV = n v</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
     <line x1="48" y1="344" x2="318" y2="344" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
     <line x1="56" y1="340" x2="56" y2="348" class="tick"/>
     <text x="56" y="361" text-anchor="middle" class="sm dim">0</text>
@@ -71,18 +62,17 @@ text {
     <text x="259.33" y="361" text-anchor="middle" class="sm dim">5</text>
     <line x1="300" y1="340" x2="300" y2="348" class="tick"/>
     <text x="300" y="361" text-anchor="middle" class="sm dim">6</text>
-    <rect x="84.67" y="297.38" width="24" height="46.62" rx="2" fill="#e11d48" fill-opacity="0.6"/>
-    <text x="96.67" y="289.38" text-anchor="middle" class="sm">1.00</text>
-    <rect x="125.33" y="288.06" width="24" height="55.94" rx="2" fill="#e11d48" fill-opacity="0.6"/>
-    <text x="137.33" y="280.06" text-anchor="middle" class="sm">1.20</text>
-    <rect x="166" y="276.87" width="24" height="67.13" rx="2" fill="#e11d48" fill-opacity="0.6"/>
-    <text x="178" y="268.87" text-anchor="middle" class="sm">1.44</text>
-    <rect x="206.67" y="263.44" width="24" height="80.56" rx="2" fill="#e11d48" fill-opacity="0.6"/>
-    <text x="218.67" y="255.44" text-anchor="middle" class="sm">1.73</text>
-    <rect x="247.33" y="247.33" width="24" height="96.67" rx="2" fill="#e11d48" fill-opacity="0.6"/>
-    <text x="259.33" y="239.33" text-anchor="middle" class="sm">2.07</text>
-    <rect x="288" y="228" width="24" height="116" rx="2" fill="#e11d48" fill-opacity="0.6"/>
-    <text x="300" y="220" text-anchor="middle" class="sm">2.49</text>
-    <text x="180" y="98" text-anchor="middle" class="bold" fill="#e11d48">× (1 + g) each period</text>
+    <rect x="84.67" y="247.55" width="24" height="96.45" rx="2" fill="#e11d48" fill-opacity="0.6"/>
+    <text x="96.67" y="239.55" text-anchor="middle" class="sm">1.00</text>
+    <rect x="125.33" y="228.26" width="24" height="115.74" rx="2" fill="#e11d48" fill-opacity="0.6"/>
+    <text x="137.33" y="220.26" text-anchor="middle" class="sm">1.20</text>
+    <rect x="166" y="205.11" width="24" height="138.89" rx="2" fill="#e11d48" fill-opacity="0.6"/>
+    <text x="178" y="197.11" text-anchor="middle" class="sm">1.44</text>
+    <rect x="206.67" y="177.33" width="24" height="166.67" rx="2" fill="#e11d48" fill-opacity="0.6"/>
+    <text x="218.67" y="169.33" text-anchor="middle" class="sm">1.73</text>
+    <rect x="247.33" y="144" width="24" height="200" rx="2" fill="#e11d48" fill-opacity="0.6"/>
+    <text x="259.33" y="136" text-anchor="middle" class="sm">2.07</text>
+    <rect x="288" y="104" width="24" height="240" rx="2" fill="#e11d48" fill-opacity="0.6"/>
+    <text x="300" y="96" text-anchor="middle" class="sm">2.49</text>
   </g>
 </svg>

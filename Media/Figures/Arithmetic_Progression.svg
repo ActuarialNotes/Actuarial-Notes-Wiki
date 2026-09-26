@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>An arithmetic payment stream decomposed into level and increasing parts</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>Payments of 100 rising by 50 a period to 350, each bar a level block P with the accumulated increases Q on top</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -50,11 +46,7 @@ text {
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
   </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">Level P plus a pure increase of Q</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">PV = P · a₍ₙ₎ + (Q/i)( a₍ₙ₎ − n vⁿ )</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">a negative Q gives a decreasing annuity</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
     <line x1="48" y1="344" x2="318" y2="344" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
     <line x1="56" y1="340" x2="56" y2="348" class="tick"/>
     <text x="56" y="361" text-anchor="middle" class="sm dim">0</text>
@@ -70,26 +62,24 @@ text {
     <text x="259.33" y="361" text-anchor="middle" class="sm dim">5</text>
     <line x1="300" y1="340" x2="300" y2="348" class="tick"/>
     <text x="300" y="361" text-anchor="middle" class="sm dim">6</text>
-    <rect x="84.67" y="313.14" width="24" height="30.86" rx="2" fill="#3b82f6" fill-opacity="0.6"/>
-    <text x="96.67" y="305.14" text-anchor="middle" class="sm">100</text>
-    <rect x="125.33" y="313.14" width="24" height="30.86" rx="2" fill="#3b82f6" fill-opacity="0.6"/>
-    <rect x="125.33" y="297.71" width="24" height="15.43" rx="2" fill="#d97706" fill-opacity="0.6"/>
-    <text x="137.33" y="289.71" text-anchor="middle" class="sm">150</text>
-    <rect x="166" y="313.14" width="24" height="30.86" rx="2" fill="#3b82f6" fill-opacity="0.6"/>
-    <rect x="166" y="282.29" width="24" height="30.86" rx="2" fill="#d97706" fill-opacity="0.6"/>
-    <text x="178" y="274.29" text-anchor="middle" class="sm">200</text>
-    <rect x="206.67" y="313.14" width="24" height="30.86" rx="2" fill="#3b82f6" fill-opacity="0.6"/>
-    <rect x="206.67" y="266.86" width="24" height="46.29" rx="2" fill="#d97706" fill-opacity="0.6"/>
-    <text x="218.67" y="258.86" text-anchor="middle" class="sm">250</text>
-    <rect x="247.33" y="313.14" width="24" height="30.86" rx="2" fill="#3b82f6" fill-opacity="0.6"/>
-    <rect x="247.33" y="251.43" width="24" height="61.71" rx="2" fill="#d97706" fill-opacity="0.6"/>
-    <text x="259.33" y="243.43" text-anchor="middle" class="sm">300</text>
-    <rect x="288" y="313.14" width="24" height="30.86" rx="2" fill="#3b82f6" fill-opacity="0.6"/>
-    <rect x="288" y="236" width="24" height="77.14" rx="2" fill="#d97706" fill-opacity="0.6"/>
-    <text x="300" y="228" text-anchor="middle" class="sm">350</text>
-    <line x1="58" y1="94" x2="71" y2="94" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round"/>
-    <text x="77" y="97.6" text-anchor="start" class="sm">P = 100</text>
-    <line x1="58" y1="110" x2="71" y2="110" stroke="#d97706" stroke-width="2.4" stroke-linecap="round"/>
-    <text x="77" y="113.6" text-anchor="start" class="sm">+ Q = 50 each period</text>
+    <rect x="84.67" y="284" width="24" height="60" rx="2" fill="#3b82f6" fill-opacity="0.6"/>
+    <text x="96.67" y="276" text-anchor="middle" class="sm">100</text>
+    <rect x="125.33" y="284" width="24" height="60" rx="2" fill="#3b82f6" fill-opacity="0.6"/>
+    <rect x="125.33" y="254" width="24" height="30" rx="2" fill="#d97706" fill-opacity="0.6"/>
+    <text x="137.33" y="246" text-anchor="middle" class="sm">150</text>
+    <rect x="166" y="284" width="24" height="60" rx="2" fill="#3b82f6" fill-opacity="0.6"/>
+    <rect x="166" y="224" width="24" height="60" rx="2" fill="#d97706" fill-opacity="0.6"/>
+    <text x="178" y="216" text-anchor="middle" class="sm">200</text>
+    <rect x="206.67" y="284" width="24" height="60" rx="2" fill="#3b82f6" fill-opacity="0.6"/>
+    <rect x="206.67" y="194" width="24" height="90" rx="2" fill="#d97706" fill-opacity="0.6"/>
+    <text x="218.67" y="186" text-anchor="middle" class="sm">250</text>
+    <rect x="247.33" y="284" width="24" height="60" rx="2" fill="#3b82f6" fill-opacity="0.6"/>
+    <rect x="247.33" y="164" width="24" height="120" rx="2" fill="#d97706" fill-opacity="0.6"/>
+    <text x="259.33" y="156" text-anchor="middle" class="sm">300</text>
+    <rect x="288" y="284" width="24" height="60" rx="2" fill="#3b82f6" fill-opacity="0.6"/>
+    <rect x="288" y="134" width="24" height="150" rx="2" fill="#d97706" fill-opacity="0.6"/>
+    <text x="300" y="126" text-anchor="middle" class="sm">350</text>
+    <text x="79.67" y="318" text-anchor="end" class="bold">P</text>
+    <text x="154.33" y="273" text-anchor="start" class="bold">Q</text>
   </g>
 </svg>

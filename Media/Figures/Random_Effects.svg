@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>Raw group deviations shrunk toward zero by a random effect</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>Each territory's raw deviation pulled toward zero into its predicted random effect b̂, beside the normal curve the effects are drawn from</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -50,50 +46,44 @@ text {
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
   </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">Random effects are drawn from a</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">distribution</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="438" text-anchor="middle" class="fml">b ~ N(0, D)</text>
-    <line x1="64" y1="282.04" x2="324" y2="282.04" class="grid"/>
-    <line x1="64" y1="218.37" x2="324" y2="218.37" class="grid"/>
-    <line x1="64" y1="154.69" x2="324" y2="154.69" class="grid"/>
-    <line x1="64" y1="218.37" x2="324" y2="218.37" class="axis"/>
-    <line x1="64" y1="108" x2="64" y2="316" class="axis"/>
-    <line x1="60" y1="282.04" x2="64" y2="282.04" class="tick"/>
-    <text x="56" y="285.64" text-anchor="end" class="sm dim">-0.3</text>
-    <line x1="60" y1="218.37" x2="64" y2="218.37" class="tick"/>
-    <text x="56" y="221.97" text-anchor="end" class="sm dim">0</text>
-    <line x1="60" y1="154.69" x2="64" y2="154.69" class="tick"/>
-    <text x="56" y="158.29" text-anchor="end" class="sm dim">0.3</text>
-    <text x="97.7" y="333" text-anchor="middle" class="sm dim">T1</text>
-    <text x="145.85" y="333" text-anchor="middle" class="sm dim">T2</text>
-    <text x="194" y="333" text-anchor="middle" class="sm dim">T3</text>
-    <text x="242.15" y="333" text-anchor="middle" class="sm dim">T4</text>
-    <text x="290.3" y="333" text-anchor="middle" class="sm dim">T5</text>
-    <circle cx="90.7" cy="273.55" r="3.6" fill="var(--dim)"/>
-    <circle cx="104.7" cy="237.68" r="3.8" fill="#3b82f6"/>
-    <line x1="94.7" y1="273.55" x2="101.3" y2="237.68" class="thin" stroke="var(--axis)" stroke-width="1.0" marker-end="url(#ahvaraxis)"/>
-    <circle cx="138.85" cy="241.71" r="3.6" fill="var(--dim)"/>
-    <circle cx="152.85" cy="235.18" r="3.8" fill="#3b82f6"/>
-    <line x1="142.85" y1="241.71" x2="149.45" y2="235.18" class="thin" stroke="var(--axis)" stroke-width="1.0" marker-end="url(#ahvaraxis)"/>
-    <circle cx="187" cy="214.12" r="3.6" fill="var(--dim)"/>
-    <circle cx="201" cy="216.03" r="3.8" fill="#3b82f6"/>
-    <line x1="191" y1="214.12" x2="197.6" y2="216.03" class="thin" stroke="var(--axis)" stroke-width="1.0" marker-end="url(#ahvaraxis)"/>
-    <circle cx="235.15" cy="188.65" r="3.6" fill="var(--dim)"/>
-    <circle cx="249.15" cy="192.81" r="3.8" fill="#3b82f6"/>
-    <line x1="239.15" y1="188.65" x2="245.75" y2="192.81" class="thin" stroke="var(--axis)" stroke-width="1.0" marker-end="url(#ahvaraxis)"/>
-    <circle cx="283.3" cy="154.69" r="3.6" fill="var(--dim)"/>
-    <circle cx="297.3" cy="187.8" r="3.8" fill="#3b82f6"/>
-    <line x1="287.3" y1="154.69" x2="293.9" y2="187.8" class="thin" stroke="var(--axis)" stroke-width="1.0" marker-end="url(#ahvaraxis)"/>
-    <line x1="64" y1="218.37" x2="324" y2="218.37" class="thin" stroke="var(--axis)" stroke-width="1.3"/>
-    <line x1="64" y1="316" x2="324" y2="316" class="rule"/>
-    <line x1="52" y1="78" x2="65" y2="78" stroke="var(--dim)" stroke-width="2.4" stroke-linecap="round"/>
-    <text x="71" y="81.6" text-anchor="start" class="sm">raw</text>
-    <line x1="156" y1="78" x2="169" y2="78" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round"/>
-    <text x="175" y="81.6" text-anchor="start" class="sm">predicted b̂</text>
-    <text x="180" y="356" text-anchor="middle" class="sm dim">every group is pulled toward 0 —</text>
-    <text x="180" y="371" text-anchor="middle" class="sm dim">the thin ones furthest</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">5 levels cost one variance, σ²_b</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <line x1="64" y1="310.86" x2="330" y2="310.86" class="grid"/>
+    <line x1="64" y1="233.71" x2="330" y2="233.71" class="grid"/>
+    <line x1="64" y1="156.57" x2="330" y2="156.57" class="grid"/>
+    <line x1="64" y1="233.71" x2="330" y2="233.71" class="axis"/>
+    <line x1="64" y1="100" x2="64" y2="352" class="axis"/>
+    <line x1="60" y1="310.86" x2="64" y2="310.86" class="tick"/>
+    <text x="56" y="314.46" text-anchor="end" class="sm dim">-0.3</text>
+    <line x1="60" y1="233.71" x2="64" y2="233.71" class="tick"/>
+    <text x="56" y="237.31" text-anchor="end" class="sm dim">0</text>
+    <line x1="60" y1="156.57" x2="64" y2="156.57" class="tick"/>
+    <text x="56" y="160.17" text-anchor="end" class="sm dim">0.3</text>
+    <text x="94.03" y="369" text-anchor="middle" class="sm dim">T1</text>
+    <circle cx="87.03" cy="300.57" r="3.6" fill="var(--dim)"/>
+    <circle cx="101.03" cy="257.11" r="3.8" fill="#3b82f6"/>
+    <line x1="91.03" y1="300.57" x2="97.63" y2="257.11" class="thin" stroke="var(--axis)" stroke-width="1.0" marker-end="url(#ahvaraxis)"/>
+    <text x="136.94" y="369" text-anchor="middle" class="sm dim">T2</text>
+    <circle cx="129.94" cy="262" r="3.6" fill="var(--dim)"/>
+    <circle cx="143.94" cy="254.08" r="3.8" fill="#3b82f6"/>
+    <line x1="133.94" y1="262" x2="140.54" y2="254.08" class="thin" stroke="var(--axis)" stroke-width="1.0" marker-end="url(#ahvaraxis)"/>
+    <text x="179.84" y="369" text-anchor="middle" class="sm dim">T3</text>
+    <circle cx="172.84" cy="228.57" r="3.6" fill="var(--dim)"/>
+    <circle cx="186.84" cy="230.89" r="3.8" fill="#3b82f6"/>
+    <line x1="176.84" y1="228.57" x2="183.44" y2="230.89" class="thin" stroke="var(--axis)" stroke-width="1.0" marker-end="url(#ahvaraxis)"/>
+    <text x="222.74" y="369" text-anchor="middle" class="sm dim">T4</text>
+    <circle cx="215.74" cy="197.71" r="3.6" fill="var(--dim)"/>
+    <circle cx="229.74" cy="202.75" r="3.8" fill="#3b82f6"/>
+    <line x1="219.74" y1="197.71" x2="226.34" y2="202.75" class="thin" stroke="var(--axis)" stroke-width="1.0" marker-end="url(#ahvaraxis)"/>
+    <text x="265.65" y="369" text-anchor="middle" class="sm dim">T5</text>
+    <circle cx="258.65" cy="156.57" r="3.6" fill="var(--dim)"/>
+    <circle cx="272.65" cy="196.69" r="3.8" fill="#3b82f6"/>
+    <line x1="262.65" y1="156.57" x2="269.25" y2="196.69" class="thin" stroke="var(--axis)" stroke-width="1.0" marker-end="url(#ahvaraxis)"/>
+    <line x1="64" y1="233.71" x2="330" y2="233.71" class="thin" stroke="var(--axis)" stroke-width="1.3"/>
+    <line x1="64" y1="352" x2="330" y2="352" class="rule"/>
+    <text x="258.65" y="147.57" text-anchor="middle" class="sm">raw</text>
+    <text x="279.65" y="200.69" text-anchor="start" class="sm bold" fill="#3b82f6">b̂</text>
+    <polygon points="297.82,346.86 298.6,346.86 298.82,343.09 299.08,339.31 299.41,335.54 299.81,331.77 300.28,328 300.85,324.23 301.51,320.46 302.27,316.69 303.15,312.91 304.16,309.14 305.28,305.37 306.54,301.6 307.92,297.83 309.42,294.06 311.03,290.29 312.75,286.51 314.54,282.74 316.39,278.97 318.27,275.2 320.16,271.43 322.02,267.66 323.81,263.89 325.5,260.11 327.05,256.34 328.43,252.57 329.61,248.8 330.56,245.03 331.26,241.26 331.68,237.49 331.82,233.71 331.68,229.94 331.26,226.17 330.56,222.4 329.61,218.63 328.43,214.86 327.05,211.09 325.5,207.31 323.81,203.54 322.02,199.77 320.16,196 318.27,192.23 316.39,188.46 314.54,184.69 312.75,180.91 311.03,177.14 309.42,173.37 307.92,169.6 306.54,165.83 305.28,162.06 304.16,158.29 303.15,154.51 302.27,150.74 301.51,146.97 300.85,143.2 300.28,139.43 299.81,135.66 299.41,131.89 299.08,128.11 298.82,124.34 298.6,120.57 297.82,120.57" fill="#7c3aed" fill-opacity="0.18" stroke="none"/>
+    <polyline points="298.6,346.86 298.82,343.09 299.08,339.31 299.41,335.54 299.81,331.77 300.28,328 300.85,324.23 301.51,320.46 302.27,316.69 303.15,312.91 304.16,309.14 305.28,305.37 306.54,301.6 307.92,297.83 309.42,294.06 311.03,290.29 312.75,286.51 314.54,282.74 316.39,278.97 318.27,275.2 320.16,271.43 322.02,267.66 323.81,263.89 325.5,260.11 327.05,256.34 328.43,252.57 329.61,248.8 330.56,245.03 331.26,241.26 331.68,237.49 331.82,233.71 331.68,229.94 331.26,226.17 330.56,222.4 329.61,218.63 328.43,214.86 327.05,211.09 325.5,207.31 323.81,203.54 322.02,199.77 320.16,196 318.27,192.23 316.39,188.46 314.54,184.69 312.75,180.91 311.03,177.14 309.42,173.37 307.92,169.6 306.54,165.83 305.28,162.06 304.16,158.29 303.15,154.51 302.27,150.74 301.51,146.97 300.85,143.2 300.28,139.43 299.81,135.66 299.41,131.89 299.08,128.11 298.82,124.34 298.6,120.57" class="curve" stroke="#7c3aed" stroke-width="1.8"/>
+    <text x="291.82" y="112.57" text-anchor="start" class="sm">N(0, σ²_b)</text>
   </g>
 </svg>

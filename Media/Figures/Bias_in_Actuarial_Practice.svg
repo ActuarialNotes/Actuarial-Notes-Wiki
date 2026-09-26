@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>Testing a model on outputs by group, and the three fairness definitions that cannot all hold at once</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>One model's loss ratio by group, 63%, 72% and 66%, with group B's column standing out above the others</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -47,34 +43,23 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">Dropping the variable does not remove</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">the effect</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">Test the outputs, not the inputs</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">predicted vs actual cost, by group</text>
-    <text x="180" y="100" text-anchor="middle" class="sm dim">loss ratio by group, one model</text>
-    <rect x="77.22" y="147.22" width="47.56" height="60.78" rx="3" fill="#0d9488" fill-opacity="0.75"/>
-    <text x="101" y="140.22" text-anchor="middle" class="sm">63%</text>
-    <text x="101" y="223" text-anchor="middle" class="sm dim">group A</text>
-    <rect x="159.22" y="138.54" width="47.56" height="69.46" rx="3" fill="#e11d48" fill-opacity="0.75"/>
-    <text x="183" y="131.54" text-anchor="middle" class="sm">72%</text>
-    <text x="183" y="223" text-anchor="middle" class="sm dim">group B</text>
-    <rect x="241.22" y="144.33" width="47.56" height="63.67" rx="3" fill="#0d9488" fill-opacity="0.75"/>
-    <text x="265" y="137.33" text-anchor="middle" class="sm">66%</text>
-    <text x="265" y="223" text-anchor="middle" class="sm dim">group C</text>
-    <line x1="54" y1="208" x2="312" y2="208" class="axis"/>
-    <text x="180" y="244" text-anchor="middle" class="sm dim">group B pays too little for its cost —</text>
-    <text x="180" y="260" text-anchor="middle" class="sm dim">found only by looking at the output</text>
-    <line x1="30" y1="280" x2="330" y2="280" class="rule"/>
-    <text x="180" y="302" text-anchor="middle" class="sm bold">and these three cannot all hold</text>
-    <rect x="36" y="316" width="90.67" height="24" rx="12.0" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="81.33" y="332" text-anchor="middle" class="sm">equal premium</text>
-    <rect x="134.67" y="316" width="90.67" height="24" rx="12.0" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2"/>
-    <text x="180" y="332" text-anchor="middle" class="sm">equal LR</text>
-    <rect x="233.33" y="316" width="90.67" height="24" rx="12.0" fill="#059669" fill-opacity="0.14" stroke="#059669" stroke-width="1.2"/>
-    <text x="278.67" y="332" text-anchor="middle" class="sm">equal risk</text>
-    <text x="180" y="362" text-anchor="middle" class="sm dim">so fairness has to be chosen, stated and documented</text>
-    <text x="180" y="378" text-anchor="middle" class="sm dim">in the model risk framework — not assumed</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <text x="40" y="96" text-anchor="start" class="sm dim">loss ratio</text>
+    <rect x="50" y="154.38" width="68" height="149.62" rx="4" fill="#0d9488" fill-opacity="0.70"/>
+    <text x="84" y="146.38" text-anchor="middle" class="bold">63%</text>
+    <circle cx="84" cy="332" r="7.2" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M71.2,364 V348.8 Q71.2,342.4 78.4,342.4 H89.6 Q96.8,342.4 96.8,348.8 V364 Z" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="110" y="358" text-anchor="start" class="bold">A</text>
+    <rect x="146" y="133" width="68" height="171" rx="4" fill="#e11d48" fill-opacity="0.70"/>
+    <text x="180" y="125" text-anchor="middle" class="bold">72%</text>
+    <circle cx="180" cy="332" r="7.2" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M167.2,364 V348.8 Q167.2,342.4 174.4,342.4 H185.6 Q192.8,342.4 192.8,348.8 V364 Z" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="206" y="358" text-anchor="start" class="bold">B</text>
+    <rect x="242" y="147.25" width="68" height="156.75" rx="4" fill="#0d9488" fill-opacity="0.70"/>
+    <text x="276" y="139.25" text-anchor="middle" class="bold">66%</text>
+    <circle cx="276" cy="332" r="7.2" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M263.2,364 V348.8 Q263.2,342.4 270.4,342.4 H281.6 Q288.8,342.4 288.8,348.8 V364 Z" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="302" y="358" text-anchor="start" class="bold">C</text>
+    <line x1="34" y1="304" x2="326" y2="304" class="axis"/>
   </g>
 </svg>

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:50ddc4b8e4fa4bdf19c973a82ace9bb3ec4d31885694759332ad7eaa6e2cd7cb
+  content_hash: sha256:62c4bb32879483c96176f6c68ffe9e8352d946a1703ec796df6a78982151f4d4
   sources: []
   open_findings: 0
   open_critical: 0
@@ -26,23 +26,23 @@ The Probability (P-1) Exam is a 3 hour SOA exam with 30 multiple choice question
 
 > [!example]- General Probability {23–30%}
 > Understand basic concepts of [[Probability]] and [[Discrete Mathematics]].
-> 1. Define [[Set Function]], [[Venn Diagram]], [[Sample Space]], and [[Event]]. Define probability as a set function on a collection of events and state the basic [[Axioms of Probability]]. Use [[Set Theory]] to represent and analyze events.
-> 2. Calculate probabilities using [[Combinatorics]], such as [[Combination]] and [[Permutation]].
-> 3. Define [[Independent Events|Independence]] and calculate probabilities of [[Independent Events]].
-> 4. Calculate probabilities of [[Mutually Exclusive Events]].
-> 5. Calculate probabilities using [[Probability Addition Rule]] and [[Probability Multiplication Rule|Probability Multiplication Rules]], including the [[Inclusion-Exclusion Principle]].
+> 1. Define [[Set Function]], [[Venn Diagram]], [[Sample Space]], and [[Event]]. Define [[Probability|probability]] as a [[Set Function|set function]] on a collection of [[Event|events]] and state the basic [[Axioms of Probability]]. Use [[Set Theory]] to represent and analyze [[Event|events]].
+> 2. Calculate [[Probability|probabilities]] using [[Combinatorics]], such as [[Combination]] and [[Permutation]].
+> 3. Define [[Independent Events|Independence]] and calculate [[Probability|probabilities]] of [[Independent Events]].
+> 4. Calculate [[Probability|probabilities]] of [[Mutually Exclusive Events]].
+> 5. Calculate [[Probability|probabilities]] using [[Probability Addition Rule]] and [[Probability Multiplication Rule|Probability Multiplication Rules]], including the [[Inclusion-Exclusion Principle]].
 > 6. Define and calculate [[Conditional Probability]].
-> 7. State [[Bayes Theorem]] and [[The Law of Total Probability]] and use them to calculate conditional probabilities.
+> 7. State [[Bayes Theorem]] and [[The Law of Total Probability]] and use them to calculate [[Conditional Probability|conditional probabilities]].
 > 
 
 > [!example]- Univariate Random Variables {44–50%}
 > Understand [[Discrete Univariate Distributions]] and [[Continuous Univariate Distributions]] and their applications. 
 > 1. Explain and apply the concepts of [[Probability]], [[Random Variable|Random Variables]], [[Probability Density Function (PDF)|probability density functions]], and [[Cumulative Distribution Function (CDF)|cumulative distribution functions]].
 > 2. Calculate [[Conditional Probability|Conditional Probabilities]].
-> 3. Explain and calculate expected values, including moments, mode, median, and [[Percentile|percentiles]].
+> 3. Explain and calculate [[Expected Value|expected values]], including [[Moment|moments]], [[Mode|mode]], [[Median|median]], and [[Percentile|percentiles]].
 > 4. Explain and calculate [[Variance]], [[Standard Deviation]], and [[Coefficient of Variation]].
-> 5. Calculate the amount that an insurance company pays to a policyholder for a claim given [[Policy Information]], including [[Deductible|Deductibles]], [[Coinsurance Percentage|Coinsurance Percentages]], and [[Benefit Limit|Benefit Limits]], as well as other factors, such as [[Inflation]].
-> 6. Calculate the [[Expected Value]], [[Variance]], and [[Standard Deviation]] of both the [[Loss Random Variable]] and the corresponding [[Payment Random Variable]], applying the relevant [[Transformations of Random Variables|transformation]] to the loss.
+> 5. Calculate the amount that an [[Insurer|insurance company]] pays to a [[Policyholder|policyholder]] for a [[Claim|claim]] given [[Policy Information]], including [[Deductible|Deductibles]], [[Coinsurance Percentage|Coinsurance Percentages]], and [[Benefit Limit|Benefit Limits]], as well as other factors, such as [[Inflation]].
+> 6. Calculate the [[Expected Value]], [[Variance]], and [[Standard Deviation]] of both the [[Loss Random Variable]] and the corresponding [[Payment Random Variable]], applying the relevant [[Transformations of Random Variables|transformation]] to the [[Loss Random Variable|loss]].
 >
 > ### Discrete Univariate Distributions 
 > - [[Binomial Distribution]]
@@ -61,16 +61,16 @@ The Probability (P-1) Exam is a 3 hour SOA exam with 30 multiple choice question
 > - [[Uniform Continuous Distribution|Uniform]]
 
 > [!example]- Multivariate Random Variables {23–30%}
-> Understand key concepts in the discrete and continuous settings concerning [[Multivariate Distribution|Multivariate Distributions]], the [[Order Statistics|Distribution of Order Statistics]] for [[Independent Random Variables]], and [[Linear Combinations of Random Variables|linear combinations]] of independent random variables, along with associated applications. In the continuous setting the same calculations are carried out on a [[Joint Probability Density Function]], where the work is setting up the region of integration.
-> 1. Determine [[Joint Probability Function|Joint Probability Functions]] and [[Joint Cumulative Distribution Function|Joint Cumulative Distribution Functions]] for discrete random variables.
-> 2. Determine [[Conditional Probability Function]] and [[Marginal Probability Function]] for discrete random variables.
-> 3. Calculate [[Moments for Joint Distributions]] for joint, conditional, and marginal discrete distributions.
-> 4. Calculate [[Variance for Conditional and Marginal Distributions|Variance]] and standard deviation for conditional and marginal probability distributions for discrete random variables.
-> 5. Calculate the [[Covariance]] and the [[Correlation Coefficient]] for discrete random variables.
-> 6. Determine the [[Order Statistics|Joint Distribution of Order Statistics]] for a set of independent random variables.
-> 7. Calculate [[Probabilities for Linear Combinations]] of independent discrete random variables as well as for continuous normal random variables.
-> 8. Calculate [[Moments for Linear Combinations]] of independent random variables.
-> 9. Apply the [[Central Limit Theorem]] to calculate approximations of probabilities for linear combinations of independent and identically distributed random variables.
+> Understand key concepts in the [[Discrete Random Variable|discrete]] and [[Continuous Random Variable|continuous]] settings concerning [[Multivariate Distribution|Multivariate Distributions]], the [[Order Statistics|Distribution of Order Statistics]] for [[Independent Random Variables]], and [[Linear Combinations of Random Variables|linear combinations]] of [[Independent Random Variables|independent random variables]], along with associated applications. In the [[Continuous Random Variable|continuous]] setting the same calculations are carried out on a [[Joint Probability Density Function]], where the work is setting up the [[Region of Integration|region of integration]].
+> 1. Determine [[Joint Probability Function|Joint Probability Functions]] and [[Joint Cumulative Distribution Function|Joint Cumulative Distribution Functions]] for [[Discrete Random Variable|discrete random variables]].
+> 2. Determine [[Conditional Probability Function]] and [[Marginal Probability Function]] for [[Discrete Random Variable|discrete random variables]].
+> 3. Calculate [[Moments for Joint Distributions]] for [[Joint Probability Function|joint]], [[Conditional Probability Function|conditional]], and [[Marginal Probability Function|marginal discrete distributions]].
+> 4. Calculate [[Variance for Conditional and Marginal Distributions|Variance]] and [[Standard Deviation|standard deviation]] for [[Conditional Probability Function|conditional]] and [[Marginal Probability Function|marginal probability distributions]] for [[Discrete Random Variable|discrete random variables]].
+> 5. Calculate the [[Covariance]] and the [[Correlation Coefficient]] for [[Discrete Random Variable|discrete random variables]].
+> 6. Determine the [[Order Statistics|Joint Distribution of Order Statistics]] for a set of [[Independent Random Variables|independent random variables]].
+> 7. Calculate [[Probabilities for Linear Combinations]] of [[Independent Random Variables|independent]] [[Discrete Random Variable|discrete random variables]] as well as for [[Continuous Random Variable|continuous]] [[Normal Distribution|normal random variables]].
+> 8. Calculate [[Moments for Linear Combinations]] of [[Independent Random Variables|independent random variables]].
+> 9. Apply the [[Central Limit Theorem]] to calculate [[Normal Approximation|approximations]] of [[Probability|probabilities]] for [[Linear Combinations of Random Variables|linear combinations]] of [[Independent and Identically Distributed|independent and identically distributed random variables]].
 
 ## Source Material
 > [!answer]- Source Material

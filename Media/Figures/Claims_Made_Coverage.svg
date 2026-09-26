@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>The claims-made trigger drawn on the accident-date by report-date plane, with the retroactive date</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>On a plane of accident date against report date, the covered region is a band: claims reported inside the policy period for accidents after the retro date</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -47,26 +43,18 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">Covered by the policy in force when it</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">was reported</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">Covered ⇔ accident ≥ retro date</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">and report date inside the term</text>
-    <rect x="92" y="126" width="176" height="176" rx="6" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
-    <polygon points="92,302 268,126 268,302" fill="var(--edge)" fill-opacity="0.5"/>
-    <line x1="92" y1="302" x2="268" y2="126" class="thin dash" stroke="var(--axis)" stroke-width="1.1"/>
-    <text x="222.24" y="280.88" text-anchor="middle" class="sm dim">impossible</text>
-    <text x="180" y="346" text-anchor="middle" class="sm dim">accident date →</text>
-    <text x="84" y="214" text-anchor="end" class="sm dim">report</text>
-    <text x="84" y="228" text-anchor="end" class="sm dim">date ↑</text>
-    <polygon points="123.68,228.08 165.92,228.08 211.68,182.32 123.68,182.32" fill="#d97706" fill-opacity="0.26" stroke="#d97706" stroke-width="1.4"/>
-    <line x1="123.68" y1="302" x2="123.68" y2="126" class="thin dash" stroke="#e11d48" stroke-width="1.4"/>
-    <text x="123.68" y="118" text-anchor="middle" class="sm bold" fill="#e11d48">retro date</text>
-    <text x="148.32" y="209.2" text-anchor="middle" class="sm bold" fill="#d97706">covered</text>
-    <text x="222.24" y="209.2" text-anchor="start" class="sm dim">report</text>
-    <text x="222.24" y="223.2" text-anchor="start" class="sm dim">year</text>
-    <text x="180" y="374" text-anchor="middle" class="sm dim">no pure IBNR — but the retro date has to be</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">bought back, and a tail policy ends the cover</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <rect x="104" y="100" width="216" height="216" rx="6" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
+    <polygon points="104,316 320,100 320,316" fill="var(--edge)" fill-opacity="0.5"/>
+    <line x1="104" y1="316" x2="320" y2="100" class="thin dash" stroke="var(--axis)" stroke-width="1.1"/>
+    <text x="263.84" y="290.08" text-anchor="middle" class="sm dim">impossible</text>
+    <text x="320" y="364" text-anchor="end" class="sm dim">accident date</text>
+    <text x="96" y="112" text-anchor="end" class="sm dim">report date</text>
+    <polygon points="142.88,225.28 194.72,225.28 250.88,169.12 142.88,169.12" fill="#d97706" fill-opacity="0.26" stroke="#d97706" stroke-width="1.4"/>
+    <line x1="142.88" y1="316" x2="142.88" y2="100" class="thin dash" stroke="#e11d48" stroke-width="1.4"/>
+    <text x="142.88" y="92" text-anchor="middle" class="sm bold">retro date</text>
+    <text x="175.28" y="201.2" text-anchor="middle" class="sm bold">covered</text>
+    <path d="M102.0,225.3 H98.0 V169.1 H102.0" class="thin" stroke="var(--dim)" stroke-width="1.2"/>
+    <text x="92" y="201.2" text-anchor="end" class="sm dim">policy period</text>
   </g>
 </svg>

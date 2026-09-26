@@ -12,6 +12,7 @@ it is not installed, so CI without the dependency still runs everything else.
 from __future__ import annotations
 
 import importlib.util
+import json
 import os
 import sys
 import tempfile
@@ -1101,6 +1102,199 @@ def _make_pdf(path: Path, pages: list[str]) -> None:
         page.insert_textbox(pymupdf.Rect(56, 56, 556, 736), body, fontsize=11)
     doc.save(path)
     doc.close()
+
+
+# ─── CAS MAS papers: a scanned multiple-choice booklet plus a key ─────────────
+
+
+def _scan_page(number: int, text: str, ocred: bool = True) -> "px.Page":
+    """A scanned page read by OCR (or, with `ocred=False`, a text-layer page).
+
+    OCR returns a question's margin label as a block of its own, above the
+    prompt's first block, which is what the page is built with here.
+    """
+    first, _, rest = text.partition("\n")
+    blocks = [(0.0, 0.0, first), (1.0, 0.0, rest)] if rest else [(0.0, 0.0, text)]
+    return px.Page(number=number, text=text, blocks=blocks, ocred=ocred, n_images=1)
+
+
+class TestMasPapers(unittest.TestCase):
+    """What Spring 2019 MAS-I and Fall 2019 MAS-II taught the extractor."""
+
+    def test_full_stop_options_and_a_letter_alone_on_its_line(self):
+        prompt, options = px.split_options(
+            "Determine which are true.\n\nA. I only\nB. II only\nC. III only\n"
+            "D. I, II and III\nE.\nThe answer is not given by (A), (B), (C), or (D)"
+        )
+        self.assertEqual(prompt, "Determine which are true.")
+        self.assertEqual(options["A"], "I only")
+        # Nothing may be stripped off the end: `…, or (D)` keeps its bracket.
+        self.assertEqual(options["E"], "The answer is not given by (A), (B), (C), or (D)")
+
+    def test_bank_shaped_options_are_read_back(self):
+        # How a `--prompts` transcription carries its corrected options.
+        prompt, options = px.split_options("Calculate $k$.\n\n- A) 1\n- B) 2\n- C) 3")
+        self.assertEqual(prompt, "Calculate $k$.")
+        self.assertEqual(options, {"A": "1", "B": "2", "C": "3"})
+
+    def test_e_g_is_not_option_e(self):
+        _prompt, options = px.split_options("A) 1\nB) 2\nE.g. this is prose")
+        self.assertNotIn("E", options)
+
+    def test_option_lines_are_not_reflowed_together(self):
+        md = px.reflow_block("A. Less than 4\nB. At least 4\nE.\nAt least 16")
+        self.assertIn("A. Less than 4\nB. At least 4\nE.", md)
+
+    def test_key_set_one_cell_to_a_line_with_a_double_answer(self):
+        key_text = "Final Answer Key\nNumber\nAnswer Key\n1\nB\n2 \nC \n\n28\nB & E\n29\nA\n"
+        self.assertEqual(px.answer_key(key_text), {1: "B", 2: "C", 29: "A"})
+        self.assertEqual(px.accepted_answers(key_text), {28: ["B", "E"]})
+
+    def test_a_question_is_a_page_unless_the_page_says_it_continues(self):
+        pages = [
+            _scan_page(5, "ly\nCalculate x.\nA. 1\nB. 2"),
+            _scan_page(6, "23\nCalculate y.\nQuestion #2 continued on the next page."),
+            _scan_page(7, "a table of output\nA. 3\nB. 4"),
+            _scan_page(8, "3\nCalculate z.\nA. 5\nB. 6"),
+        ]
+        text, index = px._joined(pages, set())
+        bounds = px.page_bounds(text, index, pages, expected=3)
+        self.assertEqual([b.num for b in bounds], [1, 2, 3])
+        second = text[bounds[1].start : bounds[1].end]
+        self.assertIn("Calculate y.", second)
+        self.assertIn("a table of output", second)
+        # The OCR'd margin label (`23` for `2.`) is not part of the prompt.
+        self.assertFalse(second.lstrip().startswith("23"))
+        self.assertTrue(text[bounds[0].start : bounds[0].end].lstrip().startswith("Calculate x."))
+
+    def test_page_order_is_refused_when_it_disagrees_with_the_key(self):
+        pages = [_scan_page(5, "1\nCalculate x.\nA. 1"), _scan_page(6, "2\nCalculate y.\nA. 2")]
+        text, index = px._joined(pages, set())
+        self.assertEqual(px.page_bounds(text, index, pages, expected=3), [])
+
+    def test_instructions_booklet_and_key_are_split(self):
+        pages = [
+            _scan_page(1, "1. This 90 point examination consists of 45 multiple choice "
+                     "questions each worth 2 points."),
+            _scan_page(2, "10. The exam survey is available.\nEND OF INSTRUCTIONS"),
+            _scan_page(3, "1.\nCalculate x."),
+            _scan_page(4, "Exam MAS-II Fall 2019 FINAL\nAnswer\n" + "".join(
+                f"{n}\n{'ABCDE'[n % 5]}\n" for n in range(1, 13)), ocred=False),
+        ]
+        self.assertEqual(px._split_mc_paper(pages), (2, 3))
+        self.assertEqual(px.points_per_question(pages[:2]), 2.0)
+        self.assertIsNone(px.points_per_question(pages[2:3]))
+
+    def test_an_ocr_variant_of_the_running_header_is_furniture(self):
+        pages = [_scan_page(n, "Exam MAS-I Spring 2019\nprompt text %d" % n) for n in range(1, 9)]
+        pages.append(_scan_page(9, "Exam MAS.-I Spring 2019\nprompt text nine"))
+        drop = px.furniture_lines(pages)
+        self.assertIn("Exam MAS.-I Spring 2019", drop)
+        self.assertNotIn("prompt text nine", drop)
+
+    def test_sitting_ids_points_and_the_double_key(self):
+        booklet = [
+            _scan_page(5, "ly\nCars arrive at rate two.\nA. 1\nB. 2\nC. 3\nD. 4\nE. 5"),
+            _scan_page(6, "23\nCalculate the variance.\nA. 1\nB. 2\nC. 3\nD. 4\nE. 5"),
+        ]
+        key = [_scan_page(7, "Answer Key\n1\nC\n2\nB & E\n", ocred=False)]
+        records = px.soa_records(
+            "mas-i", booklet, key, set(), year=2019, session="Spring", points=2.0
+        )
+        self.assertEqual([r["id"] for r in records], ["masi-2019s-q1", "masi-2019s-q2"])
+        self.assertEqual(records[0]["file"], "masi-2019s-001")
+        self.assertEqual(records[0]["bank"], "exam-mas-i")
+        self.assertEqual((records[0]["year"], records[0]["session"]), (2019, "Spring"))
+        self.assertEqual(records[0]["points"], 2.0)
+        self.assertEqual(records[0]["prompt_source"], "paged")
+        self.assertEqual(records[1]["answer"], "B")
+        self.assertEqual(records[1]["accepted"], ["B", "E"])
+        # A dated paper publishes no solutions: that is expected, not a gap.
+        self.assertFalse(any("worked solution" in w for w in records[0]["warnings"]))
+
+
+class TestMasFiling(unittest.TestCase):
+    RECORD = {
+        "num": 42, "id": "masi-2019s-q42", "file": "masi-2019s-042", "bank": "exam-mas-i",
+        "type": "multiple-choice", "body": "Calculate the sample autocorrelation at lag 1.",
+        "options": {"A": "1", "B": "2"}, "answer": "B", "points": 2.0,
+        "year": 2019, "session": "Spring", "parts": [], "solution": "",
+    }
+
+    def test_a_moved_question_names_the_paper_it_was_sat_on(self):
+        judgment = {"id": "masi-2019s-q42", "topic": "Time Series",
+                    "learning_objective": "Time Series with Constant Variance",
+                    "difficulty": "medium", "wiki_link": ["Concepts/Time+Series"],
+                    "bank": "exam-mas-ii"}
+        md = qw.render(self.RECORD, judgment, "Lag-1 autocorrelation is the ratio.")
+        self.assertIn('exam: "Exam MAS-II"\noriginally_exam: "Exam MAS-I"\n', md)
+        self.assertIn("year: 2019\nsession: Spring\n", md)
+        self.assertIn("points: 2\n", md)
+
+    def test_an_unmoved_question_carries_no_originally_exam(self):
+        judgment = {"id": "masi-2019s-q42", "topic": "Time Series",
+                    "learning_objective": "Statistics", "difficulty": "easy",
+                    "wiki_link": ["Concepts/Time+Series"]}
+        md = qw.render(self.RECORD, judgment, "x")
+        self.assertIn('exam: "Exam MAS-I"\n', md)
+        self.assertNotIn("originally_exam", md)
+
+    def test_transcribed_options_replace_the_ocr_ones_and_the_file_is_padded(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            build = tmp / "build"
+            build.mkdir()
+            (build / "records.jsonl").write_text(
+                json.dumps(dict(self.RECORD, options={"A": "Tonly", "B": "Il only"})) + "\n")
+            (build / "judgments.jsonl").write_text(json.dumps(
+                {"id": "masi-2019s-q42", "topic": "Time Series", "difficulty": "easy",
+                 "learning_objective": "Time Series with Constant Variance",
+                 "wiki_link": ["Concepts/Time+Series"], "bank": "exam-mas-ii",
+                 "needs_review": False}) + "\n")
+            for sub, text in (("prompts", "Calculate $r_1$.\n\n- A) I only\n- B) II only\n"),
+                              ("expl", "Because.")):
+                (tmp / sub).mkdir()
+                (tmp / sub / "masi-2019s-q42.md").write_text(text)
+            (tmp / "questions" / "exam-mas-ii").mkdir(parents=True)
+            rc = qw.main(["--records", str(build / "records.jsonl"),
+                          "--judgments", str(build / "judgments.jsonl"),
+                          "--prompts", str(tmp / "prompts"),
+                          "--explanations", str(tmp / "expl"), "--root", str(tmp)])
+            self.assertEqual(rc, 0)
+            written = tmp / "questions" / "exam-mas-ii" / "masi-2019s-042.md"
+            md = written.read_text()
+            self.assertIn("Calculate $r_1$.\n\n- A) I only\n- B) II only\n", md)
+            self.assertNotIn("Tonly", md)
+
+
+class TestMasClassifying(unittest.TestCase):
+    def test_an_objective_only_mas_ii_uses_moves_the_question(self):
+        self.assertEqual(
+            qc.filed_bank("Time Series with Constant Variance", "exam-mas-i"), "exam-mas-ii")
+        self.assertEqual(qc.filed_bank("Statistics", "exam-mas-i"), "exam-mas-i")
+        # One way only: the syllabus moved topics from MAS-I to MAS-II.
+        self.assertEqual(
+            qc.filed_bank("Extended Linear Models", "exam-mas-ii"), "exam-mas-ii")
+
+    def test_settle_applies_a_decision_and_rebuilds_the_links(self):
+        judgments = [{"id": "q1", "topic": "Probability", "needs_review": True,
+                      "review_reasons": ["topic unsettled"], "difficulty": "easy",
+                      "wiki_link": ["Concepts/Probability", "Concepts/Poisson+Process"]}]
+        problems = qc.settle(judgments, [
+            {"id": "q1", "topic": "Poisson Process", "difficulty": "medium"}])
+        self.assertEqual(problems, [])
+        self.assertFalse(judgments[0]["needs_review"])
+        self.assertEqual(judgments[0]["difficulty"], "medium")
+        self.assertEqual(judgments[0]["wiki_link"][0], "Concepts/Poisson+Process")
+        self.assertNotIn("Concepts/Probability", judgments[0]["wiki_link"])
+
+    def test_settle_never_names_a_page_the_vault_lacks(self):
+        judgments = [{"id": "q1", "topic": "Probability", "needs_review": True,
+                      "wiki_link": ["Concepts/Probability"]}]
+        problems = qc.settle(judgments, [{"id": "q1", "topic": "Not A Real Concept Page"}])
+        self.assertEqual(len(problems), 1)
+        self.assertTrue(judgments[0]["needs_review"])
+        self.assertEqual(judgments[0]["topic"], "Probability")
 
 
 # `import importlib` alone does not bring in `importlib.util`, so the submodule

@@ -27,9 +27,13 @@ export interface WikiExamSyllabus {
 }
 
 // Maps a wikiParser examId to the exam_progress table key used in tracks.ts.
-// "P-1" → "P", "FM-2" → "FM", "MAS-I" → "MAS-I", "7" → "CAS-7", "6C" → "CAS-6"
+// "P-1" → "P", "FM-2" → "FM", "MAS-I" → "MAS-I", "7" → "CAS-7", "6C" → "CAS-6",
+// "PCPA" → "CAS-PCPA"
 export function wikiExamIdToProgressKey(examId: string): string {
   if (examId.startsWith('MAS-')) return examId
+  // PCPA is a CAS requirement named by letters rather than a number, and the
+  // tracks key it `CAS-PCPA` — the bare-letters branch below would give `PCPA`.
+  if (examId === 'PCPA') return 'CAS-PCPA'
   if (/^[A-Z]+-\d+$/.test(examId)) return examId.replace(/-\d+$/, '')
   if (/^[A-Z]+$/.test(examId)) return examId
   return 'CAS-' + examId.replace(/[A-Z]+$/, '')

@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import {
+  copySources,
   isNumberedOutline,
   librarySearchUrl,
   parseResourceMeta,
@@ -109,7 +110,15 @@ ISBN: 978-0134753119
 Available from: "[casact.org](https://www.casact.org/ratemaking.pdf)"
 ---
 Body`
-    expect(parseResourceMeta(md).getCopyUrl).toBe('https://www.casact.org/ratemaking.pdf')
+    const meta = parseResourceMeta(md)
+    expect(meta.getCopyUrl).toBe('https://www.casact.org/ratemaking.pdf')
+    expect(meta.copySources).toBeUndefined()
+  })
+
+  it('lists every ISBN search for a book with no authored link', () => {
+    const meta = parseResourceMeta('---\nTitle: A First Course in Probability\nISBN: 978-0134753119\n---\nBody')
+    expect(meta.copySources?.map(s => s.label)).toEqual(['WorldCat', 'Amazon', 'Library Genesis'])
+    expect(meta.getCopyUrl).toBe(meta.copySources?.[0].url)
   })
 
   it('offers no link for a page with neither a source nor an ISBN', () => {
@@ -170,5 +179,20 @@ Title: Probability Distributions
     const body = preprocessResourceMarkdown(md)
     expect(body).not.toContain('Reference - Cover.svg')
     expect(body).toContain('![[Media/Binomial_distribution_pmf.svg|500]]')
+  })
+})
+
+describe('copySources', () => {
+  it('searches each place on the bare ISBN', () => {
+    expect(copySources('978-0134753119')).toEqual([
+      { label: 'WorldCat', url: 'https://search.worldcat.org/search?q=bn%3A9780134753119' },
+      { label: 'Amazon', url: 'https://www.amazon.com/s?k=9780134753119&i=stripbooks' },
+      { label: 'Library Genesis', url: 'https://libgen.li/index.php?req=9780134753119' },
+    ])
+  })
+
+  it('offers nothing for a malformed or missing ISBN', () => {
+    expect(copySources('12345')).toEqual([])
+    expect(copySources(undefined)).toEqual([])
   })
 })

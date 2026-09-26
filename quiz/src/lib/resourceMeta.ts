@@ -14,6 +14,18 @@ export interface ResourceMeta {
   code?: string
   coverImageUrl?: string
   getCopyUrl?: string
+  /**
+   * Where a book with no authored link can be found, one row per place — the
+   * "Get a copy" menu. Only set when `getCopyUrl` is itself the ISBN search, so
+   * an authored link is never buried under a menu of guesses.
+   */
+  copySources?: CopySource[]
+}
+
+/** One place to look for a book, searched on its ISBN. */
+export interface CopySource {
+  label: string
+  url: string
 }
 
 function extractUrl(value: string): string | undefined {
@@ -41,10 +53,33 @@ function extractUrl(value: string): string | undefined {
  * no button at all beats a button onto an empty result page.
  */
 export function librarySearchUrl(isbn?: string): string | undefined {
+  return copySources(isbn)[0]?.url
+}
+
+/** The ISBN with its hyphens and spaces gone, or nothing if it isn't one. */
+function isbnDigits(isbn?: string): string | undefined {
   if (!isbn) return undefined
   const digits = isbn.replace(/[\s-]/g, '').toUpperCase()
-  if (!/^(?:\d{9}[\dX]|\d{13})$/.test(digits)) return undefined
-  return `https://search.worldcat.org/search?q=bn%3A${digits}`
+  return /^(?:\d{9}[\dX]|\d{13})$/.test(digits) ? digits : undefined
+}
+
+/**
+ * Every place the "Get a copy" menu offers for a book, library first — the
+ * same ISBN search `librarySearchUrl` returns leads the list, then a shop and a
+ * shadow library. Each is a *search* on the ISBN, never a record id, for the
+ * reason `librarySearchUrl` gives: a search derived from the book's own number
+ * can't point at the wrong edition or a page that doesn't exist.
+ *
+ * Empty unless the ISBN is well formed.
+ */
+export function copySources(isbn?: string): CopySource[] {
+  const digits = isbnDigits(isbn)
+  if (!digits) return []
+  return [
+    { label: 'WorldCat', url: `https://search.worldcat.org/search?q=bn%3A${digits}` },
+    { label: 'Amazon', url: `https://www.amazon.com/s?k=${digits}&i=stripbooks` },
+    { label: 'Library Genesis', url: `https://libgen.li/index.php?req=${digits}` },
+  ]
 }
 
 export function parseResourceMeta(raw: string): ResourceMeta {
@@ -62,7 +97,9 @@ export function parseResourceMeta(raw: string): ResourceMeta {
   // that is simply for sale) does the card fall back to finding it in a
   // library.
   const linkStr = str(attrs['Find at your local library at']) ?? str(attrs['Available from'])
-  const getCopyUrl = (linkStr ? extractUrl(linkStr) : undefined) ?? librarySearchUrl(isbn)
+  const authoredUrl = linkStr ? extractUrl(linkStr) : undefined
+  const isbnSources = authoredUrl ? [] : copySources(isbn)
+  const getCopyUrl = authoredUrl ?? isbnSources[0]?.url
 
   const body = raw.replace(/^---\n[\s\S]*?\n---\n?/, '')
   const imgMatch = /!\[\[([^\]|]+)\]\]/.exec(body)
@@ -86,6 +123,7 @@ export function parseResourceMeta(raw: string): ResourceMeta {
     code: str(attrs['Code']),
     coverImageUrl,
     getCopyUrl,
+    copySources: isbnSources.length > 0 ? isbnSources : undefined,
   }
 }
 

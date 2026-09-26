@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:050aafe302a6503ffbac7e5bed81992f8265aab797ac6065256c969bfe6e4ec0
+  content_hash: sha256:ab2ab2ea58888b66a81f21f5aff32f4b1d8262777403c13b718eefc352255e5d
   sources: []
   open_findings: 0
   open_critical: 0
@@ -42,7 +42,7 @@ verification:
 > > \end{align*}
 > > $$
 > >
-> > The book breaks even on underwriting ($460 - 320 - 140 = 0$) yet produces $\$124$M of operating cash, five times net income. The cash is not profit: it funds the $\$70$M reserve increase and the $\$40$M of unearned premium, and it will be invested (a matching outflow under cash from investments) until the claims are paid.
+> > The book breaks even on underwriting ($460 - 320 - 140 = 0$) yet produces $\$124$M of operating cash, about five times net income. The cash is not profit: it funds the $\$70$M reserve increase and the $\$40$M of unearned premium, and it will be invested (a matching outflow under cash from investments) until the claims are paid.
 
 > [!example]- The Same Year, Indirect Method {Example}
 > Reconcile the $\$24$M of net income above to the $\$124$M of operating cash, as a GAAP indirect-method statement would.

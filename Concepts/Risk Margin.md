@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:4cb7c9a2d989b9f390518e81e3f3d369019915032653d0006d97c6aa7ddce5db
+  content_hash: sha256:9b61421b9596cc3c1cbfb51d8a14d4ca40809e764c1ac1d810e2cc2f56d98ce5
   sources: []
   open_findings: 0
   open_critical: 0
@@ -36,11 +36,11 @@ verification:
 - The **[[Market Risk Margin|market risk margin]]** covers interest rate, foreign exchange, equity, real estate and other exposures. The **[[Credit Risk Margin|credit risk margin]]** covers counterparty default on and off the balance sheet, including collateral for unregistered reinsurance.
 - The **[[Operational Risk Margin|operational risk margin]]** is a formula in [[Capital Required|capital required]] (before operational risk and diversification) and premium volumes, capped at $30\%$ of that capital required.
 - **The diversification credit** recognises that asset risk and insurance risk do not peak together. With $A$ = market + credit and $I$ = insurance, it is $A + I - \sqrt{A^2 + I^2 + 2RAI}$ with $R = 50\%$.
-- **Calibration** is to a 99% CTE over one year, including a terminal provision. That sum, less the credit, is divided by $1.5$ to give **minimum capital required**. The MCT ratio is [[Capital Available|capital available]] over minimum capital required: $100\%$ is the minimum and $150\%$ the [[Supervisory Target Capital Ratio|supervisory target]], and each insurer also sets an [[Internal Target Capital Ratio|internal target]].
+- **Calibration.** The margins are set at a target level of 99% CTE over one year, including a terminal provision. Their sum less the credit (the second block) is divided by $1.5$ to give **minimum capital required**. The MCT ratio is [[Capital Available|capital available]] over minimum capital required: $100\%$ is the minimum and $150\%$ the [[Supervisory Target Capital Ratio|supervisory target]], and each insurer also sets an [[Internal Target Capital Ratio|internal target]].
 
 ### The accounting margin: IFRS 17
 
-The Canadian financial-statement margin is the [[Risk Adjustment for Non-Financial Risk|risk adjustment for non-financial risk]]. It is entity-specific, may be set by confidence level, cost of capital or CTE, and its equivalent confidence level must be disclosed. It replaced the [[Margin for Adverse Deviations|MfADs]]. [[Solvency II]]'s risk margin is instead a [[Cost of Capital|cost-of-capital]] amount.
+The Canadian financial-statement margin is the [[Risk Adjustment for Non-Financial Risk|risk adjustment for non-financial risk]]. It is entity-specific and is commonly set by a confidence-level, cost-of-capital or CTE technique. Whichever is used, its equivalent confidence level must be disclosed. It replaced the [[Margin for Adverse Deviations|MfADs]]. [[Solvency II]]'s risk margin is instead a [[Cost of Capital|cost-of-capital]] amount.
 
 > [!example]- Consolidating CoVs into a Risk Margin {Example}
 > For a casualty portfolio with a net central estimate of $\$200$ million, the analysis selects CoVs of $6\%$ for independent risk, $5\%$ for internal systemic risk and $8\%$ for external systemic risk. The target probability of adequacy is $75\%$.

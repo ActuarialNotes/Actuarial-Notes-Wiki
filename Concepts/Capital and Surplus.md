@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:68532abd36e44bf0e521814c0ae632c055dbdfe262790e873140540406743bf7
+  content_hash: sha256:2375e02aed6bc96e02de15c22b72bf730304ff7de91d5a74737266cf81c6f116
   sources: []
   open_findings: 0
   open_critical: 0
@@ -15,7 +15,7 @@ verification:
 
 > $$\begin{aligned} \text{PHS}_{\text{end}} = {} & \text{PHS}_{\text{begin}} + \text{Net income} \\ & + \text{Direct charges and credits to surplus} \\ & + \text{Capital paid in} - \text{Stockholder dividends} \end{aligned}$$
 
-- **Composition** (on the [[Balance Sheet]]): capital stock, gross paid-in and contributed surplus, surplus notes, special surplus funds and unassigned funds, less treasury stock. A mutual has no capital stock; its surplus is accumulated earnings and any surplus notes.
+- **Composition** (on the [[Balance Sheet]]): capital stock, gross paid-in and contributed surplus, surplus notes, special surplus funds and unassigned funds, less treasury stock. A mutual has no capital stock; its surplus is built from retained earnings and, often, surplus notes.
 - **Direct charges and credits** bypass net income: the change in net unrealised capital gains (less capital gains tax), the change in net deferred income tax, the change in nonadmitted assets, the change in the provision for reinsurance, the change in surplus notes, and the cumulative effect of changes in accounting principles. An **increase** in nonadmitted assets or in the provision for reinsurance **reduces** surplus.
 - **Why it protects policyholders.** Statutory conservatism — nonadmitted assets, expensed acquisition costs, undiscounted reserves, the [[Schedule F]] provision — is designed so that surplus is money a regulator could count on in a wind-up. Surplus notes qualify because interest and principal cannot be paid without the regulator's approval, which subordinates them to policyholders.
 - **How it is monitored.** [[Risk-Based Capital]] compares total adjusted capital (essentially surplus) with authorized control level RBC: a ratio below $200\%$ is the Company Action Level, $150\%$ the Regulatory Action Level, $100\%$ the Authorized Control Level and $70\%$ the Mandatory Control Level. Premium- and reserves-to-surplus ([[Insurance Leverage]]) and the year's change in surplus ([[IRIS Ratios]]) give earlier warning.
@@ -35,7 +35,7 @@ verification:
 > > \end{align*}
 > > $$
 > >
-> > Surplus rises $\$10$M, although net income was $\$40$M: $\$20$M of direct charges and the $\$20$M dividend absorbed most of it, and the $\$10$M capital contribution made up the rest. A reader who looks only at net income misses half of what moved the cushion.
+> > Surplus rises $\$10$M, although net income was $\$40$M: the $\$20$M of direct charges and the $\$20$M dividend absorbed all of it, and the whole increase is the $\$10$M capital contribution. A reader who looks only at net income misses half of what moved the cushion.
 
 > [!example]- How Much Adverse Development Can Surplus Absorb? {Example}
 > The insurer above has total adjusted capital of about $\$510$M, authorized control level RBC of $\$120$M, and net loss and LAE reserves of $\$1{,}500$M. Ignoring tax and any change in the RBC requirement itself, how much adverse reserve development would take it to the Company Action Level?

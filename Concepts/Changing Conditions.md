@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9b99d89acba68b3c1bcd8c15794ee42cb3c57d040552ead561e4ebf4858c8c79
+  content_hash: sha256:11e297b9ec84897a822c48f4cfeadc5f6fb8e0a64f26a8a04bbe306f136a154e
   sources: []
   open_findings: 0
   open_critical: 0
@@ -15,14 +15,14 @@ verification:
 
 > $$\widehat{\text{Ult}}_i = C_{i,k} \times \text{CDF}_k^{\,\text{hist}}$$
 
-- $C_{i,k}$ is accident year $i$'s reported (or paid) claims at age $k$ and $\text{CDF}_k^{\,\text{hist}}$ is estimated from older years. Friedland: with reported claims the [[Chain Ladder Method|development technique]] implicitly assumes no change in [[Case Adequacy|case adequacy]]; with paid claims, no change in the speed of settlement.
+- $C_{i,k}$ is accident year $i$'s reported (or paid) claims at age $k$; the CDF comes from older years. With reported claims the [[Chain Ladder Method|development technique]] assumes [[Case Adequacy|case adequacy]] has not changed; with paid claims, that settlement speed has not.
 - **Internal (operating) changes** — the subjects of Friedland's management interview:
   - [[Claims Coding Changes|claims coding]] (claimant vs. occurrence counts, reopened claims) and [[Claims Processing Changes|claims processing]] (staffing, systems, case reserving guidelines, fast-track limits, [[Settlement Rate|settlement speed]]);
   - [[Underwriting Changes|underwriting]] and [[Policy Provision Changes|policy provisions]] (eligibility, deductibles, limits, forms);
   - **marketing** — new programs, target markets or distribution channels, which change *who* is insured;
   - [[Reinsurance|reinsurance]] retentions and limits, which change what a net triangle contains;
   - the treatment of [[Recoveries|recoveries]] — whether data are net or gross of [[Deductible Recovery|deductibles]] and [[Salvage and Subrogation|salvage and subrogation]].
-- **External environment:** [[Inflation|inflation]] (a calendar-year effect on every open claim), the legal environment ([[Tort Reform|tort reform]], court decisions, [[Tort Litigation|litigation]] rates), and the [[Rate Level Change|rate level]] and [[Mix of Business|mix]] the market produces.
+- **External environment:** [[Inflation|inflation]] (a calendar-year effect on every open claim) and the legal environment ([[Tort Reform|tort reform]], court decisions, [[Tort Litigation|litigation]]). Changes in [[Rate Level Change|rate level]] and [[Mix of Business|mix of business]] come from both sides; they move claim ratios and development patterns respectively.
 - **Which estimate each change biases** (Friedland's worked scenarios):
   - *Rising claim ratios*: development techniques still work; the [[Expected Loss Method|expected claims]] technique fails unless its ratio is updated; [[Bornhuetter-Ferguson Method|BF]] and [[Cape Cod Method|Cape Cod]] understate, partially.
   - *Case strengthening*: reported development overstates, reported BF and Cape Cod overstate less; paid methods and expected claims are unaffected.

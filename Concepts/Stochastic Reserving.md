@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:df01e34c7426ee760f9e37047e534a8dd49184b8a4fd8b4f3b6930c749957f97
+  content_hash: sha256:95916883c87641b640860c02ad0e325934ba6c5c21cda321e0557300eed32db7
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,7 +23,7 @@ verification:
   - **Clark:** fits a loglogistic or Weibull growth curve by maximum likelihood under an ODP assumption, in LDF or [[Cape Cod Method|Cape Cod]] form. It gives process variance $\sigma^2 R$ and parameter variance from the information matrix.
   - **Shapland's ODP bootstrap:** resamples Pearson residuals to build pseudo-triangles (parameter risk), then adds gamma-distributed process noise to every future cell. This yields a simulated distribution by year and in total, with diagnostics.
   - **Taylor and McGuire's GLMs:** add calendar-period trends, covariates and other error distributions.
-  - **Verrall's Bayesian models:** bring expert opinion in through priors on row or column parameters; the [[Bornhuetter-Ferguson Method|BF]] method emerges as a special case.
+  - **Verrall's Bayesian models:** bring expert opinion in through priors on the row or column parameters. Strong priors on the row parameters reproduce the [[Bornhuetter-Ferguson Method|BF]] method, and vague priors the chain ladder.
   - **Meyers' Bayesian MCMC models:** validated against actual outcomes.
 - **What it adds.** Percentiles, [[Risk Margin|risk margins]], capital and ranges all need a distribution, and a point estimate cannot supply one. The simulated output also gives [[Parameter Risk|parameter percentiles]] and an [[Unpaid Claim Distribution|unpaid claim distribution]] by accident year.
 - **What it does not add.** A model fitted to the triangle only knows the volatility the triangle contains. Changes that are not in the data, such as reform, a new claims system or a shift in inflation, are systemic risk. So is the model being wrong. Marshall et al. assess these outside the stochastic model.

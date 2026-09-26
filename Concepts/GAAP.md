@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:705669b96fcab560686a006553dec6ff42402cd9851df5cf13674484a0d1a895
+  content_hash: sha256:4e99b6030aae79e7a6404f449b98cac2d54ca155127451fc34cb4092095f62c2
   sources: []
   open_findings: 0
   open_critical: 0
@@ -35,8 +35,10 @@ verification:
 > >
 > > $$
 > > \begin{align*}
-> > \text{Losses and LAE} &= 0.65 \times 600 = 390 \\
-> > \text{Acquisition costs} &= 0.20 \times 1{,}200 = 240
+> > \text{Losses and LAE} &= 0.65 \times 600 \\
+> > &= 390 \\
+> > \text{Acquisition costs} &= 0.20 \times 1{,}200 \\
+> > &= 240
 > > \end{align*}
 > > $$
 > >

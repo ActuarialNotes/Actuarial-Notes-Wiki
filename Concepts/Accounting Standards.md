@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:c85a0446543a755de47d66c7133057766b0ccdd6beee18391efbfdbc99ae3c52
+  content_hash: sha256:c83cf7a2e298228516ed76622de68c144d759133258c645256b7a3e174fc1bd0
   sources: []
   open_findings: 0
   open_critical: 0
@@ -31,7 +31,7 @@ verification:
 > 5. $\$50$M of surplus notes.
 >
 > > [!answer]-
-> > 1. **Recognition.** SAP nonadmits the balance — it is not reliably available to pay claims — and charges it to surplus; GAAP and IFRS carry it net of an allowance for credit losses.
+> > 1. **Recognition.** SAP nonadmits the balance — it is not reliably available to pay claims — and charges it to surplus; GAAP carries it net of an allowance for credit losses, and IFRS 17 folds it into the measurement of the insurance contract itself.
 > > 2. **Recognition (timing).** SAP expenses acquisition costs as incurred; GAAP defers them as DAC; IFRS 17 nets them in the liability for remaining coverage or, for one-year coverage, may expense them.
 > > 3. **Presentation.** SAP nets it against the loss reserve, with a provision for reinsurance where it is unsecured or overdue; GAAP and IFRS 17 gross it up as an asset.
 > > 4. **Measurement.** SAP and GAAP carry the undiscounted estimate; IFRS 17 discounts and adds a risk adjustment; the tax return discounts at IRS-prescribed rates and patterns ([[Loss Reserve Discounting]]).

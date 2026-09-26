@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:e5578f6209853e22615c7a7699c66d32d08a9fe09e7da7d386f575b9b9af1d67
+  content_hash: sha256:4b41339fde7f88fdd86bffcd08655ec2449c8d5523e672020fb59d07e8821762
   sources: []
   open_findings: 0
   open_critical: 0
@@ -24,7 +24,7 @@ The **Advanced Estimation of Claims Liabilities (Exam 7)** is a 4 hour exam cove
 ## Learning Objectives
 
 > [!example]- A. Estimation of Claims Liabilities {100%}
-> Candidates are expected to apply basic [[Actuarial Principles|Principles]] and [[Standards of Practice]] for [[Unpaid Claim Estimation|unpaid claim estimation]], including evaluating [[Claim Liabilities|liabilities]] arising in complex [[Risk Transfer|risk transfer agreements]] common in [[Excess Insurance|excess insurance]] and [[Reinsurance Contracts|reinsurance contracts]].
+> Candidates are expected to apply basic [[Actuarial Principles|Principles]] and [[Actuarial Standards of Practice|Standards of Practice]] for [[Unpaid Claims|unpaid claim estimation]], including evaluating [[Unpaid Claims|liabilities]] arising in complex [[Risk Transfer|risk transfer agreements]] common in [[Excess Insurance|excess insurance]] and [[Reinsurance|reinsurance contracts]].
 >
 > **Data Preparation, Organization, & Analysis**
 >
@@ -32,31 +32,31 @@ The **Advanced Estimation of Claims Liabilities (Exam 7)** is a 4 hour exam cove
 >
 > **Unpaid Claim Point Estimates**
 >
-> 2. Calculate [[Unpaid Claim Estimate|unpaid claims estimates]]
-> 3. Test [[Unpaid Claim Estimate|unpaid claims estimates]] for [[Reasonableness Testing|reasonableness]]
-> 4. Estimate [[Unpaid Claims|unpaid claims]] for various [[Layers of Coverage|layers of coverage]]
+> 2. Calculate [[Unpaid Claims|unpaid claims estimates]]
+> 3. Test [[Unpaid Claims|unpaid claims estimates]] for [[Reasonableness Testing|reasonableness]]
+> 4. Estimate [[Unpaid Claims|unpaid claims]] for various [[Layer of Insurance|layers of coverage]]
 > 5. Forecast [[Premium Reserve|premium reserves]] (e.g., [[Retrospective Premium Reserve|reserves for retrospective premiums]])
 >
 > **Unpaid Claim Stochastic Distributions**
 >
 > 6. Estimate [[Parameter Estimation|parameters]] of [[Unpaid Claim Distribution|unpaid claims distributions]]
 > 7. Calculate the [[Moment|moments]] and [[Percentile|percentiles]] of [[Unpaid Claim Distribution|unpaid claim distributions]]
-> 8. Simulate [[Parameter Percentile|parameter percentiles]] and [[Unpaid Claim Percentile|unpaid claims percentiles]]
-> 9. Calculate the [[Expected Value|mean]] and [[Prediction Error|prediction error]] of a [[Loss Reserve|reserve]]
+> 8. Simulate [[Parameter Risk|parameter percentiles]] and [[Unpaid Claim Distribution|unpaid claims percentiles]]
+> 9. Calculate the [[Expected Value|mean]] and [[Prediction Error|prediction error]] of a [[Unpaid Claims|reserve]]
 > 10. Derive [[Predictive Distribution|predictive distributions]] using [[Stochastic Reserving|stochastic methods]]
 >
 > **Unpaid Claim Output & Diagnostic Analysis**
 >
 > 11. Test [[Model Output|output]] of [[Unpaid Claim Distribution|unpaid claim distributions]] for [[Reasonableness Testing|reasonableness]]
-> 12. Test [[Actuarial Assumptions|assumptions]] underlying [[Reserving Model|reserving models]]
+> 12. Test [[Actuarial Assumptions|assumptions]] underlying [[Loss Reserving|reserving models]]
 > 13. Develop a [[Range of Indications|range of indications]]
 > 14. Calculate [[Risk Margin|risk margins]]
 >
 > **Reinsurance**
 >
-> 15. Adjust [[Primary Reserving Methods|primary methods]] and [[Reserving Data Organization|data]] to be used for [[Reinsurance Reserving|reinsurance reserving]]
+> 15. Adjust [[Loss Reserving|primary methods]] and [[Reserving Data Organization|data]] to be used for [[Reinsurance Reserving|reinsurance reserving]]
 > 16. Calculate [[Ceded Loss Reserve|ceded loss reserves]]
-> 17. Describe the [[Functions of Reinsurance|function]] and [[Types of Reinsurance|types of reinsurance]].
+> 17. Describe the [[Reinsurance|function]] and [[Types of Reinsurance|types of reinsurance]].
 
 ## Source Material
 

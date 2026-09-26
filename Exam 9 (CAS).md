@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:eb1b7c89046b83494a3fdbf8410c79759b6981401edfe5672d51681ee568252c
+  content_hash: sha256:b1d7e11615eb8bc0e3c88d8aed808de246cac48639e1ecac638a95d4a8c5b616
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,19 +21,19 @@ The **Risk Management for Actuaries (Exam 9)** is a 4 hour exam covering catastr
 ## Learning Objectives
 
 > [!example]- A. Catastrophe and Reinsurance {25–35%}
-> Interpret [[Catastrophe Modeling|methods used to model losses]] due to [[Catastrophic Event|catastrophic events]] for the purpose of generating a [[Catastrophe Expected Loss Cost]]. Manage [[Catastrophe Exposure Management|total exposure]] from [[Catastrophic Event|catastrophic events]] within an [[Insurance Portfolio|insurance portfolio]]. Apply current and historical [[Reinsurance Pricing|methods used to price]] [[Reinsurance Contracts|Reinsurance contracts]].
-> 1. Fit [[Loss Distribution|loss distribution]]-based [[Exposure Curves]].
+> Interpret [[Catastrophe Modelling|methods used to model losses]] due to [[Catastrophe Risk|catastrophic events]] for the purpose of generating a [[Catastrophe Expected Loss Cost]]. Manage [[Catastrophe Exposure Management|total exposure]] from [[Catastrophe Risk|catastrophic events]] within an [[Insurance Portfolio|insurance portfolio]]. Apply current and historical [[Reinsurance Pricing|methods used to price]] [[Reinsurance|Reinsurance contracts]].
+> 1. Fit [[Severity Distribution|loss distribution]]-based [[Exposure Curves]].
 > 2. Determine the [[Loss Cost]] of various [[Types of Reinsurance|types of reinsurance contracts]] (e.g., [[Excess of Loss]], [[Quota Share]], [[Surplus Share]], [[Treaty Reinsurance|treaty]], [[Aggregate Excess of Loss]], and [[Facultative Reinsurance|facultative]]).
-> 3. Determine the effect of [[Reinsurance Contract Provisions|common contract provisions]] (e.g., [[Reinstatements]], [[Loss Corridors]], [[Clash Cover|clash covers]], [[Profit Commission|profit]] and [[Sliding Scale Commissions]]) on the [[Loss Cost|loss cost]] of [[Reinsurance Contracts|reinsurance contracts]].
-> 4. Evaluate [[Catastrophe Models]].
-> 5. Apply [[Catastrophe Models|catastrophe models]] to [[Ratemaking|ratemaking]].
+> 3. Determine the effect of [[Reinsurance Contract Provisions|common contract provisions]] (e.g., [[Reinstatements]], [[Loss Corridors]], [[Clash Cover|clash covers]], [[Profit Commission|profit]] and [[Sliding Scale Commissions]]) on the [[Loss Cost|loss cost]] of [[Reinsurance|reinsurance contracts]].
+> 4. Evaluate [[Catastrophe Modelling|Catastrophe Models]].
+> 5. Apply [[Catastrophe Modelling|catastrophe models]] to [[Ratemaking|ratemaking]].
 >
 > **Readings:** Swiss Re Exposure Curves and the MBBEFD Distribution Class · Basics of Reinsurance Pricing · Catastrophe Modeling: A New Approach to Managing Risk
 
 > [!example]- B. Risk and Return {20–30%}
-> Define, compare, select, and apply appropriate [[Risk Measures]] to compute a [[Risk-Loaded Technical Premium|risk-loaded technical premium]]. Evaluate the [[Economic Value|economic value]] of [[Insurance Cash Flows|insurance cash flows]] reflecting the [[Time Value of Money]]. Explain and apply the [[Insurance Concepts|insurance concepts]] of [[Insurance Margin|margin]], [[Return on Capital|return]], and [[Insurance Leverage|leverage]].
+> Define, compare, select, and apply appropriate [[Risk Measure|Risk Measures]] to compute a [[Risk Loads|risk-loaded technical premium]]. Evaluate the [[Economic Value|economic value]] of [[Insurance Cash Flows|insurance cash flows]] reflecting the [[Time Value of Money]]. Explain and apply the [[Insurance Profitability|insurance concepts]] of [[Insurance Margin|margin]], [[Return on Capital|return]], and [[Insurance Leverage|leverage]].
 > 6. Define and apply [[Risk Taxonomies]] and the concept of a [[Risk Measure]].
-> 7. Calculate and compare [[Financial Risk|financial risk]] using [[Risk Measures|risk measures]].
+> 7. Calculate and compare [[Financial Risk|financial risk]] using [[Risk Measure|risk measures]].
 > 8. Evaluate the [[Economic Value|economic value]] of [[Insurance Cash Flows|insurance cash flows]] reflecting the [[Time Value of Money]].
 > 9. Determine [[Risk Loads]] for [[Insurance Pricing|insurance pricing]].
 > 10. Assess [[Insurance Profitability|insurance profitability]] ([[Return on Capital|return]], [[Insurance Margin|margin]], [[Insurance Leverage|leverage]]).
@@ -41,23 +41,23 @@ The **Risk Management for Actuaries (Exam 9)** is a 4 hour exam covering catastr
 > **Readings:** Pricing Insurance Risk: Theory and Practice (Chapters 3–11)
 
 > [!example]- C. Financial Risk Management (FRM) {20–30%}
-> Describe and explain the need, purpose, design, and execution of insurer [[Financial Risk Management]] ([[Financial Risk Management|FRM]]). Perform calculations to allocate the [[Cost of Capital]], estimate [[Risk-Adjusted Pricing|risk-adjusted prices]], and evaluate [[Economic Performance|economic performance]] by [[Line of Business|line]] or [[Business Unit|unit]].
+> Describe and explain the need, purpose, design, and execution of insurer [[Financial Risk Management]] ([[Financial Risk Management|FRM]]). Perform calculations to allocate the [[Cost of Capital]], estimate [[Risk-Adjusted Pricing|risk-adjusted prices]], and evaluate [[Risk-Adjusted Performance|economic performance]] by [[Line of Business|line]] or [[Business Unit|unit]].
 > 11. Describe and explain the [[Financial Risk|financial risk]] and [[Capital Structure]] of [[Insurer|insurers]], the [[Cost of Capital|cost of insurance capital]], and the impact of [[Insurance Market Imperfections|insurance market imperfections]].
 > 12. Allocate the [[Cost of Capital|cost]] of [[Risk Capital]] to [[Business Unit|business units]] or [[Line of Business|lines of business]].
-> 13. Set [[Insurance Price|prices]] for [[Insurance Policy|insurance policies]] on a [[Risk-Adjusted Pricing|risk-adjusted basis]].
+> 13. Set [[Insurance Pricing|prices]] for [[Insurance Policy|insurance policies]] on a [[Risk-Adjusted Pricing|risk-adjusted basis]].
 > 14. Assess [[Risk-Adjusted Performance]] of [[Business Unit|business units]] or [[Line of Business|lines of business]].
-> 15. Estimate and manage [[Interest Rate Risk]] and [[Credit Risk]] (e.g., [[Default Risk|default]], [[Prepayment Risk|prepayment]], [[Reinsurance Credit Risk|reinsurance]]).
+> 15. Estimate and manage [[Interest Rate Risk]] and [[Credit Risk]] (e.g., [[Credit Risk|default]], [[Prepayment Risk|prepayment]], [[Reinsurance Credit Risk|reinsurance]]).
 > 16. Describe and apply the basics of [[Structured Finance]].
 > 17. Describe and apply [[Securitization]] and its applications to the management of [[Catastrophe Risk|catastrophe risk]] (e.g., [[CAT Bonds]], [[Insurance-Linked Securities]]).
 >
 > **Readings:** The Economics of Structured Finance · Allocation of Capital in the Insurance Industry · CAT Bonds and Other Risk-Linked Securities · Pricing Insurance Risk: Theory and Practice (Chapters 2, 8, 12–15) · Managing Interest Rate Risk: ALM, Franchise Value, and Strategy
 
 > [!example]- D. Enterprise Risk Management (ERM) {15–25%}
-> Define and explain [[Enterprise Risk Management]] ([[Enterprise Risk Management|ERM]]), including [[Model Selection|model selection]] and calculations necessary to implement a realistic [[ERM Program|program]]. Describe the relationship between [[Enterprise Risk Management|ERM]] and the [[Overall Risk|overall risk]] that a [[Business Risk|business]] faces, and the impact of different [[ERM Tools|ERM tools]] on [[Business Risk|business risk]] and [[Business Strategy|strategy]].
+> Define and explain [[Enterprise Risk Management]] ([[Enterprise Risk Management|ERM]]), including [[Model Selection|model selection]] and calculations necessary to implement a realistic [[Enterprise Risk Management|program]]. Describe the relationship between [[Enterprise Risk Management|ERM]] and the [[Risk|overall risk]] that a [[Business Risk|business]] faces, and the impact of different [[Risk Mitigation|ERM tools]] on [[Business Risk|business risk]] and [[Business Strategy|strategy]].
 > 18. Determine [[Operational Risk|operational risks]].
 > 19. Analyze [[Insurance Risk|insurance]] and [[Financial Risk|financial risk]] quantitatively.
-> 20. Determine the effect of [[Risk Measures]] and [[Risk Modeling]] on [[Strategic Management]].
-> 21. Select [[Risk Model|models]] to manage [[Diverse Risks|diverse risks]].
+> 20. Determine the effect of [[Risk Measure|Risk Measures]] and [[Risk Modeling]] on [[Business Strategy|Strategic Management]].
+> 21. Select [[Risk Modeling|models]] to manage [[Risk Taxonomies|diverse risks]].
 > 22. Develop [[Risk Mitigation]] strategies.
 > 23. Assess effectiveness of [[Risk Mitigation|risk mitigation strategies]].
 >

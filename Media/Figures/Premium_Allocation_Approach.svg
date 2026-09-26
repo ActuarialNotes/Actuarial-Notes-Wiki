@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The PAA eligibility test, and the half of the liability it does not simplify</title>
+  <title>The running PAA book's LRC over its one-year coverage: a straight line of unearned premium less acquisition cash flows, $9.6M at 31 December, running almost on top of the curve the general model would give</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,26 +42,29 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <text x="180" y="102" text-anchor="middle" class="sm dim">eligible if either holds</text>
-    <rect x="36" y="118" width="130" height="64" rx="7" fill="#059669" fill-opacity="0.12" stroke="#059669" stroke-width="1.2"/>
-    <text x="101" y="144" text-anchor="middle" class="sm">coverage ≤</text>
-    <text x="101" y="162" text-anchor="middle" class="sm dim">one year</text>
-    <rect x="194" y="118" width="130" height="64" rx="7" fill="#0d9488" fill-opacity="0.12" stroke="#0d9488" stroke-width="1.2"/>
-    <text x="259" y="144" text-anchor="middle" class="sm">or it gives</text>
-    <text x="259" y="162" text-anchor="middle" class="sm dim">a similar answer</text>
-    <line x1="30" y1="198" x2="330" y2="198" class="rule"/>
-    <text x="180" y="220" text-anchor="middle" class="sm bold">but only the LRC is simplified</text>
-    <rect x="36" y="236" width="130" height="62" rx="7" fill="#059669" fill-opacity="0.12" stroke="#059669" stroke-width="1.2"/>
-    <text x="101" y="261" text-anchor="middle" class="sm">LRC</text>
-    <text x="101" y="279" text-anchor="middle" class="sm dim">simplified</text>
-    <rect x="194" y="236" width="130" height="62" rx="7" fill="#e11d48" fill-opacity="0.12" stroke="#e11d48" stroke-width="1.2"/>
-    <text x="259" y="261" text-anchor="middle" class="sm">LIC</text>
-    <text x="259" y="279" text-anchor="middle" class="sm dim">identical to GMM</text>
-    <text x="180" y="326" text-anchor="middle" class="sm dim">no CSM, so profit emerges as revenue exceeds</text>
-    <text x="180" y="342" text-anchor="middle" class="sm dim">claims — but the onerous test still bites</text>
-    <text x="180" y="368" text-anchor="middle" class="sm dim">not available for multi-year commercial contracts,</text>
-    <text x="180" y="384" text-anchor="middle" class="sm dim">extended warranty, surety or long-term liability</text>
+    <line x1="64" y1="320" x2="332" y2="320" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="64" y1="320" x2="64" y2="80" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="64" y1="320" x2="64" y2="324" class="tick"/>
+    <text x="64" y="336" text-anchor="middle" class="sm dim">Jul</text>
+    <line x1="193" y1="320" x2="193" y2="324" class="tick"/>
+    <text x="193" y="336" text-anchor="middle" class="sm dim">Dec</text>
+    <line x1="322" y1="320" x2="322" y2="324" class="tick"/>
+    <text x="322" y="336" text-anchor="middle" class="sm dim">Jun</text>
+    <line x1="60" y1="119.27" x2="64" y2="119.27" class="tick"/>
+    <text x="56" y="122.87" text-anchor="end" class="sm dim">19.2</text>
+    <polyline points="64,119.27 65.43,120.13 66.87,120.99 68.3,121.85 69.73,122.71 71.17,123.57 72.6,124.43 74.03,125.3 75.47,126.16 76.9,127.02 78.33,127.88 79.77,128.75 81.2,129.61 82.63,130.48 84.07,131.34 85.5,132.21 86.93,133.08 88.37,133.95 89.8,134.82 91.23,135.7 92.67,136.57 94.1,137.45 95.53,138.32 96.97,139.2 98.4,140.08 99.83,140.97 101.27,141.85 102.7,142.74 104.13,143.63 105.57,144.52 107,145.41 108.43,146.3 109.87,147.2 111.3,148.1 112.73,149 114.17,149.91 115.6,150.82 117.03,151.72 118.47,152.64 119.9,153.55 121.33,154.47 122.77,155.39 124.2,156.32 125.63,157.24 127.07,158.17 128.5,159.11 129.93,160.04 131.37,160.98 132.8,161.92 134.23,162.87 135.67,163.82 137.1,164.77 138.53,165.73 139.97,166.69 141.4,167.65 142.83,168.62 144.27,169.59 145.7,170.56 147.13,171.54 148.57,172.52 150,173.51 151.43,174.5 152.87,175.49 154.3,176.49 155.73,177.49 157.17,178.49 158.6,179.5 160.03,180.52 161.47,181.53 162.9,182.55 164.33,183.58 165.77,184.61 167.2,185.64 168.63,186.68 170.07,187.72 171.5,188.77 172.93,189.82 174.37,190.88 175.8,191.94 177.23,193 178.67,194.07 180.1,195.14 181.53,196.22 182.97,197.3 184.4,198.39 185.83,199.48 187.27,200.58 188.7,201.67 190.13,202.78 191.57,203.89 193,205 194.43,206.12 195.87,207.24 197.3,208.37 198.73,209.5 200.17,210.63 201.6,211.77 203.03,212.92 204.47,214.06 205.9,215.22 207.33,216.37 208.77,217.54 210.2,218.7 211.63,219.87 213.07,221.05 214.5,222.23 215.93,223.41 217.37,224.6 218.8,225.79 220.23,226.99 221.67,228.19 223.1,229.39 224.53,230.6 225.97,231.81 227.4,233.03 228.83,234.25 230.27,235.48 231.7,236.7 233.13,237.94 234.57,239.17 236,240.42 237.43,241.66 238.87,242.91 240.3,244.16 241.73,245.42 243.17,246.68 244.6,247.94 246.03,249.21 247.47,250.48 248.9,251.75 250.33,253.03 251.77,254.31 253.2,255.6 254.63,256.88 256.07,258.17 257.5,259.47 258.93,260.77 260.37,262.07 261.8,263.37 263.23,264.68 264.67,265.99 266.1,267.3 267.53,268.61 268.97,269.93 270.4,271.25 271.83,272.57 273.27,273.9 274.7,275.23 276.13,276.56 277.57,277.89 279,279.23 280.43,280.56 281.87,281.9 283.3,283.25 284.73,284.59 286.17,285.94 287.6,287.28 289.03,288.63 290.47,289.98 291.9,291.34 293.33,292.69 294.77,294.05 296.2,295.4 297.63,296.76 299.07,298.12 300.5,299.48 301.93,300.85 303.37,302.21 304.8,303.58 306.23,304.94 307.67,306.31 309.1,307.67 310.53,309.04 311.97,310.41 313.4,311.78 314.83,313.15 316.27,314.52 317.7,315.89 319.13,317.26 320.57,318.63 322,320" class="curve dash" stroke="#7c3aed" stroke-width="2"/>
+    <polyline points="64,119.27 322,320" class="curve" stroke="#3b82f6" stroke-width="2.6"/>
+    <line x1="193" y1="320" x2="193" y2="219.64" class="thin dash" stroke="var(--dim)" stroke-width="1.3"/>
+    <circle cx="193" cy="219.64" r="4.5" fill="#3b82f6"/>
+    <text x="183" y="213.64" text-anchor="end" class="sm bold">9.6</text>
+    <text x="112.76" y="181.43" text-anchor="end" class="bold">PAA</text>
+    <text x="247.44" y="243.22" text-anchor="start" class="bold">GMM</text>
+    <path d="M64,346 v5.4 H188 q5,0 5,4.95 q0,-4.95 5,-4.95 H322 v-5.4" class="thin" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="193" y="366" text-anchor="middle" class="sm bold">1 year</text>
   </g>
 </svg>

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The four Canadian public auto models and the trade each makes</title>
+  <title>The four provinces with public auto: in BC, Saskatchewan and Manitoba the Crown insurer covers the driver and the car, while in Quebec it covers only bodily injury and private insurers cover the car</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,32 +42,79 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
+    <marker id="ahd97706" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#d97706"/></marker>
+  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="40" y="100" width="280" height="32" rx="6" fill="#3b82f6" fill-opacity="0.16" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="52" y="121" text-anchor="start" class="sm bold">ICBC — BC</text>
-    <text x="308" y="121" text-anchor="end" class="sm dim">monopoly, basic</text>
-    <rect x="40" y="140" width="280" height="32" rx="6" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.2"/>
-    <text x="52" y="161" text-anchor="start" class="sm bold">SGI — Sask.</text>
-    <text x="308" y="161" text-anchor="end" class="sm dim">monopoly, basic</text>
-    <rect x="40" y="180" width="280" height="32" rx="6" fill="#059669" fill-opacity="0.16" stroke="#059669" stroke-width="1.2"/>
-    <text x="52" y="201" text-anchor="start" class="sm bold">MPI — Manitoba</text>
-    <text x="308" y="201" text-anchor="end" class="sm dim">monopoly, basic</text>
-    <rect x="40" y="220" width="280" height="32" rx="6" fill="#d97706" fill-opacity="0.16" stroke="#d97706" stroke-width="1.2"/>
-    <text x="52" y="241" text-anchor="start" class="sm bold">SAAQ — Quebec</text>
-    <text x="308" y="241" text-anchor="end" class="sm dim">bodily injury only</text>
-    <line x1="30" y1="274" x2="330" y2="274" class="rule"/>
-    <rect x="30" y="288" width="143" height="94" rx="7" fill="#059669" fill-opacity="0.08" stroke="#059669" stroke-width="1.2"/>
-    <rect x="30" y="288" width="143" height="24" rx="7" fill="#059669" fill-opacity="0.22" stroke="none"/>
-    <text x="101.5" y="304" text-anchor="middle" class="sm bold" fill="#059669">For</text>
-    <text x="101.5" y="332" text-anchor="middle" class="sm">no commission</text>
-    <text x="101.5" y="352" text-anchor="middle" class="sm">no profit load</text>
-    <text x="101.5" y="372" text-anchor="middle" class="sm">universal access</text>
-    <rect x="187" y="288" width="143" height="94" rx="7" fill="#e11d48" fill-opacity="0.08" stroke="#e11d48" stroke-width="1.2"/>
-    <rect x="187" y="288" width="143" height="24" rx="7" fill="#e11d48" fill-opacity="0.22" stroke="none"/>
-    <text x="258.5" y="304" text-anchor="middle" class="sm bold" fill="#e11d48">Against</text>
-    <text x="258.5" y="332" text-anchor="middle" class="sm">no competition</text>
-    <text x="258.5" y="352" text-anchor="middle" class="sm">political rates</text>
-    <text x="258.5" y="372" text-anchor="middle" class="sm">no MCT, no OSFI</text>
+    <text x="40" y="113" text-anchor="middle" class="bold">BC</text>
+    <polygon points="68,100 88,88 108,100" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="71.6" y="102.4" width="4" height="18.4" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="81.2" y="102.4" width="4" height="18.4" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="90.8" y="102.4" width="4" height="18.4" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="100.4" y="102.4" width="4" height="18.4" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="68" y="122.4" width="40" height="5.6" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <line x1="112" y1="108" x2="144" y2="108" class="thin" stroke="#3b82f6" stroke-width="1.6" marker-end="url(#ah3b82f6)"/>
+    <rect x="148" y="81" width="126" height="54" rx="8" fill="#3b82f6" fill-opacity="0.10" stroke="#3b82f6" stroke-width="1.2"/>
+    <circle cx="175" cy="98" r="7.2" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M162.2,130 V114.8 Q162.2,108.4 169.4,108.4 H180.6 Q187.8,108.4 187.8,114.8 V130 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M215,117 V110 L225,108 L232,100 H249 L256,108 L265,111 V117 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="226" cy="118" r="4.5" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.6"/>
+    <circle cx="254" cy="118" r="4.5" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.6"/>
+    <text x="40" y="189" text-anchor="middle" class="bold">SK</text>
+    <polygon points="68,176 88,164 108,176" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="71.6" y="178.4" width="4" height="18.4" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="81.2" y="178.4" width="4" height="18.4" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="90.8" y="178.4" width="4" height="18.4" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="100.4" y="178.4" width="4" height="18.4" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="68" y="198.4" width="40" height="5.6" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <line x1="112" y1="184" x2="144" y2="184" class="thin" stroke="#3b82f6" stroke-width="1.6" marker-end="url(#ah3b82f6)"/>
+    <rect x="148" y="157" width="126" height="54" rx="8" fill="#3b82f6" fill-opacity="0.10" stroke="#3b82f6" stroke-width="1.2"/>
+    <circle cx="175" cy="174" r="7.2" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M162.2,206 V190.8 Q162.2,184.4 169.4,184.4 H180.6 Q187.8,184.4 187.8,190.8 V206 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M215,193 V186 L225,184 L232,176 H249 L256,184 L265,187 V193 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="226" cy="194" r="4.5" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.6"/>
+    <circle cx="254" cy="194" r="4.5" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.6"/>
+    <text x="40" y="265" text-anchor="middle" class="bold">MB</text>
+    <polygon points="68,252 88,240 108,252" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="71.6" y="254.4" width="4" height="18.4" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="81.2" y="254.4" width="4" height="18.4" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="90.8" y="254.4" width="4" height="18.4" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="100.4" y="254.4" width="4" height="18.4" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="68" y="274.4" width="40" height="5.6" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <line x1="112" y1="260" x2="144" y2="260" class="thin" stroke="#3b82f6" stroke-width="1.6" marker-end="url(#ah3b82f6)"/>
+    <rect x="148" y="233" width="126" height="54" rx="8" fill="#3b82f6" fill-opacity="0.10" stroke="#3b82f6" stroke-width="1.2"/>
+    <circle cx="175" cy="250" r="7.2" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M162.2,282 V266.8 Q162.2,260.4 169.4,260.4 H180.6 Q187.8,260.4 187.8,266.8 V282 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M215,269 V262 L225,260 L232,252 H249 L256,260 L265,263 V269 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="226" cy="270" r="4.5" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.6"/>
+    <circle cx="254" cy="270" r="4.5" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.6"/>
+    <text x="40" y="341" text-anchor="middle" class="bold">QC</text>
+    <polygon points="68,328 88,316 108,328" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="71.6" y="330.4" width="4" height="18.4" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="81.2" y="330.4" width="4" height="18.4" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="90.8" y="330.4" width="4" height="18.4" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="100.4" y="330.4" width="4" height="18.4" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="68" y="350.4" width="40" height="5.6" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <line x1="112" y1="336" x2="144" y2="336" class="thin" stroke="#3b82f6" stroke-width="1.6" marker-end="url(#ah3b82f6)"/>
+    <rect x="148" y="309" width="56" height="54" rx="8" fill="#3b82f6" fill-opacity="0.10" stroke="#3b82f6" stroke-width="1.2"/>
+    <circle cx="175" cy="326" r="7.2" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M162.2,358 V342.8 Q162.2,336.4 169.4,336.4 H180.6 Q187.8,336.4 187.8,342.8 V358 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="210" y="309" width="64" height="54" rx="8" fill="#d97706" fill-opacity="0.10" stroke="#d97706" stroke-width="1.2"/>
+    <path d="M217,345 V338 L227,336 L234,328 H251 L258,336 L267,339 V345 Z" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="228" cy="346" r="4.5" fill="var(--surf)" stroke="#d97706" stroke-width="1.6"/>
+    <circle cx="256" cy="346" r="4.5" fill="var(--surf)" stroke="#d97706" stroke-width="1.6"/>
+    <line x1="302" y1="336" x2="278" y2="336" class="thin" stroke="#d97706" stroke-width="1.6" marker-end="url(#ahd97706)"/>
+    <rect x="304.8" y="316" width="22.4" height="40" rx="2" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="309.2" y="320.8" width="4.8" height="4" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="318" y="320.8" width="4.8" height="4" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="309.2" y="328.8" width="4.8" height="4" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="318" y="328.8" width="4.8" height="4" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="309.2" y="336.8" width="4.8" height="4" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="318" y="336.8" width="4.8" height="4" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="309.2" y="344.8" width="4.8" height="4" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="318" y="344.8" width="4.8" height="4" fill="#d97706" fill-opacity="0.55"/>
+    <text x="316" y="372" text-anchor="middle" class="sm">private</text>
   </g>
 </svg>

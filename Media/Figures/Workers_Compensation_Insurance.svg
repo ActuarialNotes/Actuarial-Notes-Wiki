@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The historic bargain — the worker's tort action traded for a no-fault benefit an employer pool funds</title>
+  <title>The historic bargain: the worker's right to sue the employer is struck out, and a board funded by employer assessments pays the worker a no-fault benefit instead</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -43,31 +43,52 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <defs>
-    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
+    <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
     <marker id="ahd97706" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#d97706"/></marker>
+    <marker id="ah0d9488" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#0d9488"/></marker>
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="40" y="94" width="112" height="28" rx="14.0" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="96" y="112" text-anchor="middle" class="sm">worker</text>
-    <rect x="208" y="94" width="112" height="28" rx="14.0" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2"/>
-    <text x="264" y="112" text-anchor="middle" class="sm">employer</text>
-    <line x1="152" y1="100" x2="208" y2="100" class="thin" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#ah3b82f6)"/>
-    <line x1="208" y1="118" x2="152" y2="118" class="thin" stroke="#d97706" stroke-width="1.5" marker-end="url(#ahd97706)"/>
-    <text x="180" y="146" text-anchor="middle" class="sm dim">gives up the right to sue</text>
-    <text x="180" y="162" text-anchor="middle" class="sm dim">gets a no-fault benefit for life</text>
-    <line x1="30" y1="184" x2="330" y2="184" class="rule"/>
-    <text x="36" y="208" text-anchor="start" class="sm" fill="#0d9488">•</text>
-    <text x="52" y="208" text-anchor="start" class="sm">no private insurer writes it, in any province</text>
-    <text x="36" y="232" text-anchor="start" class="sm" fill="#0d9488">•</text>
-    <text x="52" y="232" text-anchor="start" class="sm">WSIB · WorkSafeBC · WCB Alberta · CNESST</text>
-    <text x="36" y="256" text-anchor="start" class="sm" fill="#0d9488">•</text>
-    <text x="52" y="256" text-anchor="start" class="sm">rate groups by industry, experience rated</text>
-    <text x="36" y="280" text-anchor="start" class="sm" fill="#0d9488">•</text>
-    <text x="52" y="280" text-anchor="start" class="sm">permanent disability is a lifetime annuity —</text>
-    <text x="36" y="304" text-anchor="start" class="sm" fill="#0d9488">•</text>
-    <text x="52" y="304" text-anchor="start" class="sm">the board's liability behaves like a pension</text>
-    <text x="180" y="348" text-anchor="middle" class="sm dim">a general liability policy does not cover employee</text>
-    <text x="180" y="364" text-anchor="middle" class="sm dim">injury — the board has exclusive jurisdiction</text>
+    <circle cx="70" cy="116.8" r="11.52" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M49.52,168 V143.68 Q49.52,133.44 61.04,133.44 H78.96 Q90.48,133.44 90.48,143.68 V168 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="70" y="188" text-anchor="middle" class="sm bold">worker</text>
+    <rect x="272.08" y="104" width="35.84" height="64" rx="2" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="279.12" y="111.68" width="7.68" height="6.4" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="293.2" y="111.68" width="7.68" height="6.4" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="279.12" y="124.48" width="7.68" height="6.4" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="293.2" y="124.48" width="7.68" height="6.4" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="279.12" y="137.28" width="7.68" height="6.4" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="293.2" y="137.28" width="7.68" height="6.4" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="279.12" y="150.08" width="7.68" height="6.4" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="293.2" y="150.08" width="7.68" height="6.4" fill="#d97706" fill-opacity="0.55"/>
+    <text x="290" y="188" text-anchor="middle" class="sm bold">employer</text>
+    <line x1="108" y1="136" x2="252" y2="136" class="thin dash" stroke="#e11d48" stroke-width="1.6" marker-end="url(#ahe11d48)"/>
+    <line x1="170" y1="124" x2="190" y2="148" stroke="#e11d48" stroke-width="2.4" stroke-linecap="round"/>
+    <line x1="190" y1="124" x2="170" y2="148" stroke="#e11d48" stroke-width="2.4" stroke-linecap="round"/>
+    <text x="180" y="114" text-anchor="middle" class="sm">sue</text>
+    <polygon points="142,288.8 180,266 218,288.8" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="148.84" y="293.36" width="7.6" height="34.96" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="167.08" y="293.36" width="7.6" height="34.96" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="185.32" y="293.36" width="7.6" height="34.96" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="203.56" y="293.36" width="7.6" height="34.96" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="142" y="331.36" width="76" height="10.64" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="180" y="362" text-anchor="middle" class="sm bold">board</text>
+    <line x1="282" y1="202" x2="262" y2="228" class="thin" stroke="#d97706" stroke-width="1.6" marker-end="url(#ahd97706)"/>
+    <rect x="240" y="254" width="24" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="252" cy="260" rx="12" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="252" cy="254" rx="12" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="252" cy="254" rx="12" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="240" y="248" width="24" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="252" cy="254" rx="12" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="252" cy="248" rx="12" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="252" cy="248" rx="12" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="240" y="242" width="24" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="252" cy="248" rx="12" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="252" cy="242" rx="12" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="252" cy="242" rx="12" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <line x1="238" y1="258" x2="222" y2="276" class="thin" stroke="#d97706" stroke-width="1.6" marker-end="url(#ahd97706)"/>
+    <text x="270" y="250" text-anchor="start" class="sm">assessment</text>
+    <line x1="136" y1="270" x2="84" y2="204" class="thin" stroke="#0d9488" stroke-width="1.6" marker-end="url(#ah0d9488)"/>
+    <text x="104" y="252" text-anchor="end" class="sm">benefit</text>
   </g>
 </svg>

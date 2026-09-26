@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>How a driver reaches FARM, and the market-share formula that spreads its result across every auto insurer</title>
+  <title>A driver reaches FA through a broker and a servicing carrier, and FA's result is spread across every auto insurer by voluntary market share</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -44,36 +44,52 @@ text {
   <g id="light"/><g id="dark"/>
   <defs>
     <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
+    <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="36" y="97" width="63" height="26" rx="13.0" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="67.5" y="114" text-anchor="middle" class="sm">driver</text>
-    <rect x="111" y="97" width="63" height="26" rx="13.0" fill="#0d9488" fill-opacity="0.14" stroke="#0d9488" stroke-width="1.2"/>
-    <text x="142.5" y="114" text-anchor="middle" class="sm">broker</text>
-    <line x1="100" y1="110" x2="110" y2="110" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <rect x="186" y="97" width="63" height="26" rx="13.0" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2"/>
-    <text x="217.5" y="114" text-anchor="middle" class="sm">carrier</text>
-    <line x1="175" y1="110" x2="185" y2="110" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <rect x="261" y="97" width="63" height="26" rx="13.0" fill="#e11d48" fill-opacity="0.14" stroke="#e11d48" stroke-width="1.2"/>
-    <text x="292.5" y="114" text-anchor="middle" class="sm">FA</text>
-    <line x1="250" y1="110" x2="260" y2="110" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <text x="180" y="144" text-anchor="middle" class="sm dim">the servicing carrier issues and adjusts for</text>
-    <text x="180" y="160" text-anchor="middle" class="sm dim">a fee — it does not bear the risk</text>
-    <line x1="30" y1="182" x2="330" y2="182" class="rule"/>
-    <text x="180" y="204" text-anchor="middle" class="sm bold">and the result lands on everyone</text>
-    <rect x="40" y="225" width="95.2" height="30" rx="4" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="87.6" y="244" text-anchor="middle" class="sm">A</text>
-    <rect x="135.2" y="225" width="75.6" height="30" rx="4" fill="#0d9488" fill-opacity="0.30" stroke="#0d9488" stroke-width="1.2"/>
-    <text x="173" y="244" text-anchor="middle" class="sm">B</text>
-    <rect x="210.8" y="225" width="61.6" height="30" rx="4" fill="#d97706" fill-opacity="0.30" stroke="#d97706" stroke-width="1.2"/>
-    <text x="241.6" y="244" text-anchor="middle" class="sm">C</text>
-    <rect x="272.4" y="225" width="47.6" height="30" rx="4" fill="#059669" fill-opacity="0.30" stroke="#059669" stroke-width="1.2"/>
-    <text x="296.2" y="244" text-anchor="middle" class="sm">D</text>
-    <text x="180" y="274" text-anchor="middle" class="sm dim">by voluntary market share, serviced or not</text>
-    <text x="180" y="306" text-anchor="middle" class="sm dim">who ends up in FARM: serious conviction records,</text>
-    <text x="180" y="322" text-anchor="middle" class="sm dim">specialty vehicles no rating plan contemplates,</text>
-    <text x="180" y="338" text-anchor="middle" class="sm dim">and — where rates are suppressed — ordinary risks</text>
-    <text x="180" y="366" text-anchor="middle" class="sm dim">so FA volume reads the province's rate regime</text>
+    <path d="M22,123.6 V115.76 L33.2,113.52 L41.04,104.56 H60.08 L67.92,113.52 L78,116.88 V123.6 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="34.32" cy="124.72" r="5.04" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.6"/>
+    <circle cx="65.68" cy="124.72" r="5.04" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.6"/>
+    <text x="50" y="150" text-anchor="middle" class="sm">driver</text>
+    <line x1="82" y1="116" x2="118" y2="116" class="thin" stroke="var(--dim)" stroke-width="1.6" marker-end="url(#ahvardim)"/>
+    <circle cx="144" cy="102.2" r="8.28" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M129.28,139 V121.52 Q129.28,114.16 137.56,114.16 H150.44 Q158.72,114.16 158.72,121.52 V139 Z" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="144" y="150" text-anchor="middle" class="sm">broker</text>
+    <line x1="170" y1="116" x2="208" y2="116" class="thin" stroke="var(--dim)" stroke-width="1.6" marker-end="url(#ahvardim)"/>
+    <rect x="218" y="91" width="28" height="50" rx="2" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="223.5" y="97" width="6" height="5" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="234.5" y="97" width="6" height="5" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="223.5" y="107" width="6" height="5" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="234.5" y="107" width="6" height="5" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="223.5" y="117" width="6" height="5" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="234.5" y="117" width="6" height="5" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="223.5" y="127" width="6" height="5" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="234.5" y="127" width="6" height="5" fill="#d97706" fill-opacity="0.55"/>
+    <text x="232" y="158" text-anchor="middle" class="sm">carrier</text>
+    <line x1="232" y1="168" x2="204" y2="196" class="thin" stroke="#e11d48" stroke-width="1.6" marker-end="url(#ahe11d48)"/>
+    <rect x="163.2" y="196" width="33.6" height="60" rx="2" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="169.8" y="203.2" width="7.2" height="6" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="183" y="203.2" width="7.2" height="6" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="169.8" y="215.2" width="7.2" height="6" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="183" y="215.2" width="7.2" height="6" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="169.8" y="227.2" width="7.2" height="6" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="183" y="227.2" width="7.2" height="6" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="169.8" y="239.2" width="7.2" height="6" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="183" y="239.2" width="7.2" height="6" fill="#e11d48" fill-opacity="0.55"/>
+    <text x="206" y="230" text-anchor="start" class="sm bold">FA</text>
+    <rect x="40" y="306" width="95.2" height="36" rx="4" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="87.6" y="328" text-anchor="middle" class="sm bold">A</text>
+    <line x1="180" y1="260" x2="87.6" y2="302" class="thin" stroke="#e11d48" stroke-width="1.3" marker-end="url(#ahe11d48)"/>
+    <rect x="135.2" y="306" width="75.6" height="36" rx="4" fill="#7c3aed" fill-opacity="0.30" stroke="#7c3aed" stroke-width="1.2"/>
+    <text x="173" y="328" text-anchor="middle" class="sm bold">B</text>
+    <line x1="180" y1="260" x2="173" y2="302" class="thin" stroke="#e11d48" stroke-width="1.3" marker-end="url(#ahe11d48)"/>
+    <rect x="210.8" y="306" width="61.6" height="36" rx="4" fill="#059669" fill-opacity="0.30" stroke="#059669" stroke-width="1.2"/>
+    <text x="241.6" y="328" text-anchor="middle" class="sm bold">C</text>
+    <line x1="180" y1="260" x2="241.6" y2="302" class="thin" stroke="#e11d48" stroke-width="1.3" marker-end="url(#ahe11d48)"/>
+    <rect x="272.4" y="306" width="47.6" height="36" rx="4" fill="#d97706" fill-opacity="0.30" stroke="#d97706" stroke-width="1.2"/>
+    <text x="296.2" y="328" text-anchor="middle" class="sm bold">D</text>
+    <line x1="180" y1="260" x2="296.2" y2="302" class="thin" stroke="#e11d48" stroke-width="1.3" marker-end="url(#ahe11d48)"/>
+    <text x="180" y="362" text-anchor="middle" class="sm dim">market share</text>
   </g>
 </svg>

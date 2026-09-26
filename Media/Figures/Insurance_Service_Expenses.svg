@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>What lands in insurance service expenses and what is routed to finance instead</title>
+  <title>Incurred claims, acquisition cash flows and onerous losses routed into insurance service expenses, while the discount unwind is routed past them to insurance finance</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,30 +42,55 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ahd97706" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#d97706"/></marker>
+    <marker id="ah0d9488" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#0d9488"/></marker>
+  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="30" y="100" width="143" height="154" rx="7" fill="#3b82f6" fill-opacity="0.08" stroke="#3b82f6" stroke-width="1.2"/>
-    <rect x="30" y="100" width="143" height="24" rx="7" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
-    <text x="101.5" y="116" text-anchor="middle" class="sm bold" fill="#3b82f6">In</text>
-    <text x="101.5" y="144" text-anchor="middle" class="sm">incurred claims</text>
-    <text x="101.5" y="164" text-anchor="middle" class="sm">and ALAE</text>
-    <text x="101.5" y="184" text-anchor="middle" class="sm">claims handling</text>
-    <text x="101.5" y="204" text-anchor="middle" class="sm">acquisition</text>
-    <text x="101.5" y="224" text-anchor="middle" class="sm">amortised</text>
-    <text x="101.5" y="244" text-anchor="middle" class="sm">onerous losses</text>
-    <rect x="187" y="100" width="143" height="154" rx="7" fill="#e11d48" fill-opacity="0.08" stroke="#e11d48" stroke-width="1.2"/>
-    <rect x="187" y="100" width="143" height="24" rx="7" fill="#e11d48" fill-opacity="0.22" stroke="none"/>
-    <text x="258.5" y="116" text-anchor="middle" class="sm bold" fill="#e11d48">Out</text>
-    <text x="258.5" y="144" text-anchor="middle" class="sm">discount unwind</text>
-    <text x="258.5" y="164" text-anchor="middle" class="sm">rate changes</text>
-    <text x="258.5" y="184" text-anchor="middle" class="sm">general overhead</text>
-    <text x="258.5" y="204" text-anchor="middle" class="sm">not attributable</text>
-    <text x="258.5" y="224" text-anchor="middle" class="sm">reinsurance</text>
-    <text x="258.5" y="244" text-anchor="middle" class="sm">recoveries</text>
-    <line x1="30" y1="288" x2="330" y2="288" class="rule"/>
-    <text x="180" y="310" text-anchor="middle" class="sm bold">the routing rule, in one line</text>
-    <text x="180" y="334" text-anchor="middle" class="sm" fill="#3b82f6">past service → here, in profit or loss</text>
-    <text x="180" y="354" text-anchor="middle" class="sm" fill="#059669">future service → the CSM, or a loss component</text>
-    <text x="180" y="380" text-anchor="middle" class="sm dim">and on an onerous group the loss component offsets it</text>
+    <rect x="206" y="96" width="122" height="196" rx="8" fill="#d97706" fill-opacity="0.16" stroke="#d97706" stroke-width="1.3"/>
+    <text x="267" y="198" text-anchor="middle" class="sm bold">service expenses</text>
+    <rect x="206" y="318" width="122" height="52" rx="8" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.3"/>
+    <text x="267" y="348" text-anchor="middle" class="bold">finance</text>
+    <polygon points="51,112 45.74,113.55 48.36,118.36 43.55,115.74 42,121 40.45,115.74 35.64,118.36 38.26,113.55 33,112 38.26,110.45 35.64,105.64 40.45,108.26 42,103 43.55,108.26 48.36,105.64 45.74,110.45" fill="#e11d48" fill-opacity="0.30" stroke="#e11d48" stroke-width="1.3" stroke-linejoin="round"/>
+    <polygon points="71,112 65.74,113.55 68.36,118.36 63.55,115.74 62,121 60.45,115.74 55.64,118.36 58.26,113.55 53,112 58.26,110.45 55.64,105.64 60.45,108.26 62,103 63.55,108.26 68.36,105.64 65.74,110.45" fill="#e11d48" fill-opacity="0.30" stroke="#e11d48" stroke-width="1.3" stroke-linejoin="round"/>
+    <polygon points="91,112 85.74,113.55 88.36,118.36 83.55,115.74 82,121 80.45,115.74 75.64,118.36 78.26,113.55 73,112 78.26,110.45 75.64,105.64 80.45,108.26 82,103 83.55,108.26 88.36,105.64 85.74,110.45" fill="#e11d48" fill-opacity="0.30" stroke="#e11d48" stroke-width="1.3" stroke-linejoin="round"/>
+    <text x="62" y="138" text-anchor="middle" class="sm">claims</text>
+    <line x1="96" y1="118" x2="200" y2="148" class="thin" stroke="#d97706" stroke-width="1.6" marker-end="url(#ahd97706)"/>
+    <rect x="49" y="198" width="26" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="62" cy="204" rx="13" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="62" cy="198" rx="13" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="62" cy="198" rx="13" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="49" y="192" width="26" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="62" cy="198" rx="13" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="62" cy="192" rx="13" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="62" cy="192" rx="13" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <rect x="49" y="186" width="26" height="6" fill="#d97706" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="62" cy="192" rx="13" ry="3.4" fill="#d97706" fill-opacity="0.25" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="62" cy="186" rx="13" ry="3.4" fill="var(--surf)" stroke="#d97706" stroke-width="1.2"/>
+    <ellipse cx="62" cy="186" rx="13" ry="3.4" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <text x="62" y="224" text-anchor="middle" class="sm">acquisition</text>
+    <line x1="96" y1="196" x2="200" y2="196" class="thin" stroke="#d97706" stroke-width="1.6" marker-end="url(#ahd97706)"/>
+    <polygon points="49.76,251 67.44,251 74.24,257.8 74.24,285 49.76,285" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M67.44,251 V257.8 H74.24" fill="none" stroke="#e11d48" stroke-width="1.2"/>
+    <line x1="54.52" y1="264.6" x2="68.8" y2="264.6" stroke="#e11d48" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="54.52" y1="270.38" x2="68.8" y2="270.38" stroke="#e11d48" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="54.52" y1="276.16" x2="64.04" y2="276.16" stroke="#e11d48" stroke-width="1.4" stroke-linecap="round"/>
+    <text x="62" y="300" text-anchor="middle" class="sm">onerous</text>
+    <line x1="96" y1="266" x2="200" y2="238" class="thin" stroke="#d97706" stroke-width="1.6" marker-end="url(#ahd97706)"/>
+    <rect x="49" y="354" width="26" height="6" fill="#0d9488" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="62" cy="360" rx="13" ry="3.4" fill="#0d9488" fill-opacity="0.25" stroke="#0d9488" stroke-width="1.2"/>
+    <ellipse cx="62" cy="354" rx="13" ry="3.4" fill="var(--surf)" stroke="#0d9488" stroke-width="1.2"/>
+    <ellipse cx="62" cy="354" rx="13" ry="3.4" fill="#0d9488" fill-opacity="0.3" stroke="none"/>
+    <rect x="49" y="348" width="26" height="6" fill="#0d9488" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="62" cy="354" rx="13" ry="3.4" fill="#0d9488" fill-opacity="0.25" stroke="#0d9488" stroke-width="1.2"/>
+    <ellipse cx="62" cy="348" rx="13" ry="3.4" fill="var(--surf)" stroke="#0d9488" stroke-width="1.2"/>
+    <ellipse cx="62" cy="348" rx="13" ry="3.4" fill="#0d9488" fill-opacity="0.3" stroke="none"/>
+    <rect x="49" y="342" width="26" height="6" fill="#0d9488" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="62" cy="348" rx="13" ry="3.4" fill="#0d9488" fill-opacity="0.25" stroke="#0d9488" stroke-width="1.2"/>
+    <ellipse cx="62" cy="342" rx="13" ry="3.4" fill="var(--surf)" stroke="#0d9488" stroke-width="1.2"/>
+    <ellipse cx="62" cy="342" rx="13" ry="3.4" fill="#0d9488" fill-opacity="0.3" stroke="none"/>
+    <text x="62" y="380" text-anchor="middle" class="sm">discount</text>
+    <line x1="96" y1="346" x2="200" y2="346" class="thin" stroke="#0d9488" stroke-width="1.6" marker-end="url(#ah0d9488)"/>
   </g>
 </svg>

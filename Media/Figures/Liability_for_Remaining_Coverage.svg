@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The running PAA book's LRC at six months, and the loss component the onerous test adds to it</title>
+  <title>The running PAA book at 31 December: $12.0M of unearned premium less $2.4M of acquisition cash flows carries an LRC of $9.6M, which the $1.9M loss component tops up to the $11.5M of fulfilment cash flows</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -44,23 +44,21 @@ text {
   <g id="light"/><g id="dark"/>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <text x="180" y="100" text-anchor="middle" class="sm dim">$24M written 1 July, at 31 December ($M)</text>
-    <text x="40" y="124" text-anchor="start" class="sm">premium unearned</text>
-    <rect x="40" y="132" width="228" height="20" rx="3" fill="#3b82f6" fill-opacity="0.55"/>
-    <text x="276" y="147" text-anchor="start" class="sm">12.0</text>
-    <text x="40" y="168" text-anchor="start" class="sm">less acquisition</text>
-    <rect x="40" y="176" width="45.6" height="20" rx="3" fill="#d97706" fill-opacity="0.55"/>
-    <text x="93.6" y="191" text-anchor="start" class="sm">-2.4</text>
-    <text x="40" y="212" text-anchor="start" class="sm">LRC carried</text>
-    <rect x="40" y="220" width="182.4" height="20" rx="3" fill="#0d9488" fill-opacity="0.55"/>
-    <text x="230.4" y="235" text-anchor="start" class="sm">9.6</text>
-    <text x="40" y="256" text-anchor="start" class="sm">fulfilment cash flows</text>
-    <rect x="40" y="264" width="218.5" height="20" rx="3" fill="#e11d48" fill-opacity="0.55"/>
-    <text x="266.5" y="279" text-anchor="start" class="sm">11.5</text>
-    <line x1="30" y1="302" x2="330" y2="302" class="rule"/>
-    <rect x="40" y="316" width="280" height="46" rx="7" fill="#e11d48" fill-opacity="0.12" stroke="#e11d48" stroke-width="1.2"/>
-    <text x="180" y="336" text-anchor="middle" class="sm">the group is onerous by $1.9M — recognised</text>
-    <text x="180" y="353" text-anchor="middle" class="sm">in full now, and tracked as the loss component</text>
-    <text x="180" y="384" text-anchor="middle" class="sm dim">the test is per group: no profitable group offsets it</text>
+    <rect x="44" y="116" width="52" height="234" rx="3" fill="#3b82f6" fill-opacity="0.34" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="70" y="108" text-anchor="middle" class="sm">12.0</text>
+    <text x="70" y="367" text-anchor="middle" class="sm dim">unearned</text>
+    <rect x="119" y="116" width="52" height="46.8" rx="3" fill="#d97706" fill-opacity="0.34" stroke="#d97706" stroke-width="1.2"/>
+    <text x="145" y="108" text-anchor="middle" class="sm">−2.4</text>
+    <text x="145" y="367" text-anchor="middle" class="sm dim">acquisition</text>
+    <rect x="194" y="162.8" width="52" height="187.2" rx="3" fill="#0d9488" fill-opacity="0.34" stroke="#0d9488" stroke-width="1.2"/>
+    <rect x="194" y="125.75" width="52" height="37.05" rx="3" fill="#e11d48" fill-opacity="0.34" stroke="#e11d48" stroke-width="1.2"/>
+    <text x="220" y="367" text-anchor="middle" class="sm dim">LRC</text>
+    <rect x="269" y="125.75" width="52" height="224.25" rx="3" fill="#7c3aed" fill-opacity="0.34" stroke="#7c3aed" stroke-width="1.2"/>
+    <text x="295" y="117.75" text-anchor="middle" class="sm">11.5</text>
+    <text x="295" y="367" text-anchor="middle" class="sm dim">FCF</text>
+    <text x="220" y="260.4" text-anchor="middle" class="sm bold">9.6</text>
+    <text x="220" y="148.28" text-anchor="middle" class="sm bold">1.9</text>
+    <line x1="190" y1="125.75" x2="324" y2="125.75" class="thin dash" stroke="#7c3aed" stroke-width="1.3"/>
+    <line x1="38" y1="350" x2="326" y2="350" class="axis"/>
   </g>
 </svg>

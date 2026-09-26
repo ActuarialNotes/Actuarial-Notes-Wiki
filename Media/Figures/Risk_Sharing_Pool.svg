@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>A compelled policy ceded to the pool while the policyholder keeps the ordinary rate and never learns of it</title>
+  <title>The driver pays the insurer its normal rate and keeps the policy, while the insurer cedes the risk to a pool the driver never sees</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -43,29 +43,34 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <defs>
-    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
+    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
+    <marker id="ahd97706" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#d97706"/></marker>
     <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="55" y="90" width="250" height="28" rx="14.0" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="180" y="108" text-anchor="middle" class="sm">applicant meets the filed rules</text>
-    <line x1="180" y1="120" x2="180" y2="144" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <rect x="45" y="146" width="270" height="28" rx="14.0" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2"/>
-    <text x="180" y="164" text-anchor="middle" class="sm">insurer must write, at its filed rate</text>
-    <line x1="120" y1="176" x2="96" y2="208" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <line x1="240" y1="176" x2="264" y2="208" class="thin" stroke="#e11d48" stroke-width="1.3" marker-end="url(#ahe11d48)"/>
-    <rect x="36" y="220" width="130" height="66" rx="7" fill="#059669" fill-opacity="0.12" stroke="#059669" stroke-width="1.2"/>
-    <text x="101" y="247" text-anchor="middle" class="sm">policyholder</text>
-    <text x="101" y="265" text-anchor="middle" class="sm dim">normal rate, and</text>
-    <text x="101" y="274" text-anchor="middle" class="sm dim">never told</text>
-    <rect x="194" y="220" width="130" height="66" rx="7" fill="#e11d48" fill-opacity="0.12" stroke="#e11d48" stroke-width="1.2"/>
-    <text x="259" y="247" text-anchor="middle" class="sm">the pool</text>
-    <text x="259" y="265" text-anchor="middle" class="sm dim">premium and losses</text>
-    <text x="259" y="274" text-anchor="middle" class="sm dim">shared by share</text>
-    <text x="180" y="314" text-anchor="middle" class="sm dim">cede where your own expected loss exceeds the</text>
-    <text x="180" y="330" text-anchor="middle" class="sm dim">approved premium net of the pool's terms —</text>
-    <text x="180" y="346" text-anchor="middle" class="sm dim">inside a cession window and a cession limit</text>
-    <text x="180" y="374" text-anchor="middle" class="sm dim">no price signal ever reaches the driver</text>
+    <circle cx="70" cy="122.8" r="11.52" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M49.52,174 V149.68 Q49.52,139.44 61.04,139.44 H78.96 Q90.48,139.44 90.48,149.68 V174 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="70" y="196" text-anchor="middle" class="sm bold">driver</text>
+    <rect x="270.96" y="108" width="38.08" height="68" rx="2" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="278.44" y="116.16" width="8.16" height="6.8" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="293.4" y="116.16" width="8.16" height="6.8" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="278.44" y="129.76" width="8.16" height="6.8" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="293.4" y="129.76" width="8.16" height="6.8" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="278.44" y="143.36" width="8.16" height="6.8" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="293.4" y="143.36" width="8.16" height="6.8" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="278.44" y="156.96" width="8.16" height="6.8" fill="#d97706" fill-opacity="0.55"/>
+    <rect x="293.4" y="156.96" width="8.16" height="6.8" fill="#d97706" fill-opacity="0.55"/>
+    <text x="290" y="196" text-anchor="middle" class="sm bold">insurer</text>
+    <line x1="108" y1="134" x2="250" y2="134" class="thin" stroke="#3b82f6" stroke-width="1.6" marker-end="url(#ah3b82f6)"/>
+    <line x1="250" y1="152" x2="108" y2="152" class="thin" stroke="#d97706" stroke-width="1.6" marker-end="url(#ahd97706)"/>
+    <text x="180" y="124" text-anchor="middle" class="sm">normal rate</text>
+    <circle cx="180" cy="304" r="54" fill="#e11d48" fill-opacity="0.12" stroke="#e11d48" stroke-width="1.3"/>
+    <path d="M147,310.6 V301.36 L160.2,298.72 L169.44,288.16 H191.88 L201.12,298.72 L213,302.68 V310.6 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="161.52" cy="311.92" r="5.94" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.6"/>
+    <circle cx="198.48" cy="311.92" r="5.94" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.6"/>
+    <text x="180" y="376" text-anchor="middle" class="sm bold">pool</text>
+    <line x1="282" y1="206" x2="226" y2="268" class="thin dash" stroke="#e11d48" stroke-width="1.6" marker-end="url(#ahe11d48)"/>
+    <text x="266" y="246" text-anchor="start" class="sm">cede</text>
   </g>
 </svg>

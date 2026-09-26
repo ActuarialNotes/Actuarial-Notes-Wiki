@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Individual equity against social adequacy — the trade every social insurance program makes</title>
+  <title>Contribution against each person's own expected cost: private insurance charges along the diagonal, social insurance along a flatter line, so low-cost members pay more than their cost and high-cost members less</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,22 +47,15 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="68" y1="250" x2="332" y2="250" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="68" y1="250" x2="68" y2="84" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <polyline points="80.7,242.2 309.3,101.8" class="curve dash" stroke="#3b82f6" stroke-width="2"/>
-    <polyline points="80.7,196.96 309.3,147.04" class="curve" stroke="#e11d48" stroke-width="2.4"/>
-    <text x="261.04" y="112.72" text-anchor="middle" class="sm bold" fill="#3b82f6">private</text>
-    <text x="255.96" y="165.76" text-anchor="middle" class="sm bold" fill="#e11d48">social</text>
-    <text x="180" y="272" text-anchor="middle" class="sm dim">own expected cost</text>
-    <text x="52" y="80" text-anchor="start" class="sm dim">contribution</text>
-    <line x1="30" y1="292" x2="330" y2="292" class="rule"/>
-    <text x="38" y="314" text-anchor="start" class="sm" fill="#d97706">•</text>
-    <text x="54" y="314" text-anchor="start" class="sm">compulsory, because adverse selection unravels</text>
-    <text x="38" y="338" text-anchor="start" class="sm" fill="#d97706">•</text>
-    <text x="54" y="338" text-anchor="start" class="sm">a voluntary version of the same cover</text>
-    <text x="38" y="362" text-anchor="start" class="sm" fill="#d97706">•</text>
-    <text x="54" y="362" text-anchor="start" class="sm">and pay-as-you-go funding is the weak point</text>
-    <text x="38" y="386" text-anchor="start" class="sm" fill="#d97706">•</text>
-    <text x="54" y="386" text-anchor="start" class="sm">when the demographics turn</text>
+    <polygon points="73.2,338.9 192,221 73.2,262.92" fill="#d97706" fill-opacity="0.22" stroke="none"/>
+    <polygon points="192,221 310.8,103.1 310.8,179.08" fill="#059669" fill-opacity="0.22" stroke="none"/>
+    <line x1="60" y1="352" x2="334" y2="352" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="60" y1="352" x2="60" y2="80" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <polyline points="73.2,338.9 310.8,103.1" class="curve dash" stroke="#3b82f6" stroke-width="2"/>
+    <polyline points="73.2,262.92 310.8,179.08" class="curve" stroke="#e11d48" stroke-width="2.4"/>
+    <text x="250.08" y="126.68" text-anchor="middle" class="sm bold">private</text>
+    <text x="265.92" y="215.76" text-anchor="middle" class="sm bold">social</text>
+    <text x="324" y="372" text-anchor="end" class="sm dim">own expected cost</text>
+    <text x="66" y="84" text-anchor="start" class="sm dim">contribution</text>
   </g>
 </svg>

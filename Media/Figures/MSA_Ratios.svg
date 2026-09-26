@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The combined ratio split into its parts, and the four families of ratio a Canadian analyst reads</title>
+  <title>Earned premium as 100% beside claims of 64% and expenses of 31%: a 95% combined ratio, leaving a 5% underwriting profit</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -44,24 +44,20 @@ text {
   <g id="light"/><g id="dark"/>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="40" y="115" width="179.2" height="34" rx="4" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="129.6" y="136" text-anchor="middle" class="sm">loss 64%</text>
-    <rect x="219.2" y="115" width="86.8" height="34" rx="4" fill="#d97706" fill-opacity="0.30" stroke="#d97706" stroke-width="1.2"/>
-    <text x="262.6" y="136" text-anchor="middle" class="sm">exp 31%</text>
-    <rect x="306" y="115" width="14" height="34" rx="4" fill="#059669" fill-opacity="0.30" stroke="#059669" stroke-width="1.2"/>
-    <text x="320" y="166" text-anchor="end" class="sm" fill="#059669">underwriting profit 5%</text>
-    <line x1="30" y1="190" x2="330" y2="190" class="rule"/>
-    <text x="38" y="212" text-anchor="start" class="sm" fill="#0d9488">•</text>
-    <text x="54" y="212" text-anchor="start" class="sm">profitability — loss, expense, combined, ROE</text>
-    <text x="38" y="238" text-anchor="start" class="sm" fill="#0d9488">•</text>
-    <text x="54" y="238" text-anchor="start" class="sm">leverage — premium and reserves to surplus</text>
-    <text x="38" y="264" text-anchor="start" class="sm" fill="#0d9488">•</text>
-    <text x="54" y="264" text-anchor="start" class="sm">adequacy — one- and two-year development</text>
-    <text x="38" y="290" text-anchor="start" class="sm" fill="#0d9488">•</text>
-    <text x="54" y="290" text-anchor="start" class="sm">capital — the MCT ratio, and its trend</text>
-    <text x="180" y="336" text-anchor="middle" class="sm dim">no single ratio diagnoses anything — distress is</text>
-    <text x="180" y="352" text-anchor="middle" class="sm dim">rapid growth, thin capital and adverse development</text>
-    <text x="180" y="368" text-anchor="middle" class="sm dim">arriving together</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">and under IFRS 17 revenue is not earned premium</text>
+    <rect x="52" y="92" width="90" height="276" rx="4" fill="#0d9488" fill-opacity="0.24" stroke="#0d9488" stroke-width="1.3"/>
+    <text x="97" y="226" text-anchor="middle" class="sm bold">premium</text>
+    <text x="97" y="242" text-anchor="middle" class="sm">100%</text>
+    <rect x="176" y="191.36" width="90" height="176.64" rx="4" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.3"/>
+    <text x="221" y="275.68" text-anchor="middle" class="sm bold">loss</text>
+    <text x="221" y="291.68" text-anchor="middle" class="sm">64%</text>
+    <rect x="176" y="105.8" width="90" height="85.56" rx="4" fill="#d97706" fill-opacity="0.30" stroke="#d97706" stroke-width="1.3"/>
+    <text x="221" y="144.58" text-anchor="middle" class="sm bold">expense</text>
+    <text x="221" y="160.58" text-anchor="middle" class="sm">31%</text>
+    <rect x="176" y="92" width="90" height="13.8" rx="2" fill="#059669" fill-opacity="0.30" stroke="#059669" stroke-width="1.2" stroke-dasharray="3 2"/>
+    <line x1="142" y1="92" x2="300" y2="92" class="thin dash" stroke="var(--dim)" stroke-width="1.1"/>
+    <text x="272" y="97" text-anchor="start" class="sm">profit 5%</text>
+    <path d="M272,105.8 h8 V368 h-8" class="thin" stroke="var(--dim)" stroke-width="1.2"/>
+    <text x="286" y="240.9" text-anchor="start" class="bold">95%</text>
+    <line x1="40" y1="368" x2="320" y2="368" class="axis"/>
   </g>
 </svg>

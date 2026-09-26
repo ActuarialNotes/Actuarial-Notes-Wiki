@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The boundary ending where the insurer can reprice, and the guarantee that pushes it out</title>
+  <title>One timeline with two boundaries: an ordinary annual policy's ends at the first renewal, where the insurer can reprice, while a guaranteed-renewable policy's runs through every capped renewal</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,27 +47,21 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="40" y1="148" x2="330" y2="148" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-    <line x1="56" y1="143" x2="56" y2="153" class="tick"/>
-    <text x="56" y="167" text-anchor="middle" class="sm dim">issue</text>
-    <line x1="168" y1="143" x2="168" y2="153" class="tick"/>
-    <text x="168" y="167" text-anchor="middle" class="sm dim">renewal</text>
-    <line x1="280" y1="143" x2="280" y2="153" class="tick"/>
-    <text x="280" y="167" text-anchor="middle" class="sm dim">renewal</text>
-    <rect x="56" y="122" width="112" height="18" rx="3" fill="#3b82f6" fill-opacity="0.50"/>
-    <text x="112" y="135" text-anchor="middle" class="sm">in boundary</text>
-    <text x="240" y="135" text-anchor="middle" class="sm dim">outside</text>
-    <text x="180" y="108" text-anchor="middle" class="sm dim">an ordinary annual policy</text>
-    <line x1="30" y1="190" x2="330" y2="190" class="rule"/>
-    <line x1="40" y1="250" x2="330" y2="250" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-    <rect x="56" y="224" width="224" height="18" rx="3" fill="#e11d48" fill-opacity="0.50"/>
-    <text x="168" y="237" text-anchor="middle" class="sm">in boundary</text>
-    <text x="180" y="214" text-anchor="middle" class="sm dim">guaranteed renewable, at a capped price</text>
-    <text x="180" y="270" text-anchor="middle" class="sm dim">the insurer cannot price for deterioration</text>
-    <text x="180" y="306" text-anchor="middle" class="sm dim">so the boundary picks the model too: one year</text>
-    <text x="180" y="322" text-anchor="middle" class="sm dim">makes a group PAA-eligible without argument</text>
-    <text x="180" y="350" text-anchor="middle" class="sm dim">it is a legal and practical judgement, not</text>
-    <text x="180" y="366" text-anchor="middle" class="sm dim">arithmetic — a regulatory cap on repricing</text>
-    <text x="180" y="382" text-anchor="middle" class="sm dim">can extend a boundary the wording does not</text>
+    <line x1="36" y1="318" x2="336" y2="318" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <line x1="56" y1="313" x2="56" y2="323" class="tick"/>
+    <text x="56" y="337" text-anchor="middle" class="sm dim">issue</text>
+    <line x1="146" y1="313" x2="146" y2="323" class="tick"/>
+    <text x="146" y="337" text-anchor="middle" class="sm dim">renew</text>
+    <line x1="236" y1="313" x2="236" y2="323" class="tick"/>
+    <text x="236" y="337" text-anchor="middle" class="sm dim">renew</text>
+    <line x1="326" y1="313" x2="326" y2="323" class="tick"/>
+    <text x="326" y="337" text-anchor="middle" class="sm dim">renew</text>
+    <rect x="56" y="136" width="270" height="52" rx="5" fill="#e11d48" fill-opacity="0.26" stroke="#e11d48" stroke-width="1.3"/>
+    <text x="191" y="167" text-anchor="middle" class="bold">guaranteed</text>
+    <rect x="56" y="222" width="90" height="52" rx="5" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.3"/>
+    <text x="101" y="253" text-anchor="middle" class="bold">annual</text>
+    <line x1="146" y1="208" x2="146" y2="318" class="thin dash" stroke="#3b82f6" stroke-width="1.6"/>
+    <line x1="326" y1="122" x2="326" y2="318" class="thin dash" stroke="#e11d48" stroke-width="1.6"/>
+    <text x="154" y="252" text-anchor="start" class="sm">reprice</text>
   </g>
 </svg>

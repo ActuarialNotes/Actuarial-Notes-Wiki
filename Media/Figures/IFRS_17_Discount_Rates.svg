@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The bottom-up and top-down constructions arriving at the same curve from opposite ends</title>
+  <title>The discount rate built two ways: bottom-up, a risk-free rate plus an illiquidity premium; top-down, an asset yield less its credit and market risk — landing close, but not necessarily together</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,23 +42,26 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
+    <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
+  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <text x="100" y="112" text-anchor="middle" class="sm bold" fill="#3b82f6">bottom-up</text>
-    <text x="260" y="112" text-anchor="middle" class="sm bold" fill="#d97706">top-down</text>
-    <rect x="52" y="224" width="96" height="76" rx="6" fill="#3b82f6" fill-opacity="0.30"/>
-    <text x="100" y="266" text-anchor="middle" class="sm">risk-free</text>
-    <rect x="52" y="176" width="96" height="44" rx="6" fill="#0d9488" fill-opacity="0.40"/>
-    <text x="100" y="202" text-anchor="middle" class="sm">illiquidity</text>
-    <rect x="212" y="176" width="96" height="124" rx="6" fill="#d97706" fill-opacity="0.30"/>
-    <text x="260" y="242" text-anchor="middle" class="sm">what is left</text>
-    <rect x="212" y="124" width="96" height="46" rx="6" fill="#e11d48" fill-opacity="0.40"/>
-    <text x="260" y="143" text-anchor="middle" class="sm">less credit</text>
-    <text x="260" y="159" text-anchor="middle" class="sm">and market risk</text>
-    <line x1="40" y1="173" x2="320" y2="173" class="thin dash" stroke="#7c3aed" stroke-width="1.5"/>
-    <text x="180" y="322" text-anchor="middle" class="sm dim">the dashed line is the rate — built up from below</text>
-    <text x="180" y="338" text-anchor="middle" class="sm dim">or from above, and IFRS 17 does not make them meet</text>
-    <text x="180" y="364" text-anchor="middle" class="sm dim">current every period, except the CSM's locked-in rate</text>
-    <text x="180" y="386" text-anchor="middle" class="sm dim">the effects land in insurance finance income or expense</text>
+    <rect x="60" y="236" width="96" height="120" rx="5" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="108" y="300" text-anchor="middle" class="sm">risk-free</text>
+    <rect x="60" y="180" width="96" height="54" rx="5" fill="#0d9488" fill-opacity="0.36" stroke="#0d9488" stroke-width="1.2"/>
+    <text x="108" y="211" text-anchor="middle" class="sm">illiquidity</text>
+    <line x1="40" y1="340" x2="40" y2="186" class="thin" stroke="#3b82f6" stroke-width="1.6" marker-end="url(#ah3b82f6)"/>
+    <rect x="204" y="170" width="96" height="186" rx="5" fill="#d97706" fill-opacity="0.30" stroke="#d97706" stroke-width="1.2"/>
+    <text x="252" y="270" text-anchor="middle" class="sm">asset yield</text>
+    <rect x="204" y="108" width="96" height="60" rx="5" fill="#e11d48" fill-opacity="0.10" stroke="#e11d48" stroke-width="1.2" stroke-dasharray="4 3"/>
+    <text x="252" y="142" text-anchor="middle" class="sm">credit risk</text>
+    <line x1="320" y1="112" x2="320" y2="164" class="thin" stroke="#e11d48" stroke-width="1.6" marker-end="url(#ahe11d48)"/>
+    <line x1="52" y1="180" x2="164" y2="180" class="thin dash" stroke="#7c3aed" stroke-width="1.8"/>
+    <line x1="196" y1="170" x2="308" y2="170" class="thin dash" stroke="#7c3aed" stroke-width="1.8"/>
+    <line x1="34" y1="356" x2="330" y2="356" class="axis"/>
+    <text x="108" y="374" text-anchor="middle" class="sm bold">bottom-up</text>
+    <text x="252" y="374" text-anchor="middle" class="sm bold">top-down</text>
   </g>
 </svg>

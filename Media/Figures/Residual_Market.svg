@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The two residual structures — a facility the driver sees and a pool the driver never learns of</title>
+  <title>A driver no one will write reaches one of two residual structures: the Facility Association, which writes the driver directly, or an ordinary insurer that quietly cedes the policy to a pool</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,30 +42,52 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
+    <marker id="ah0d9488" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#0d9488"/></marker>
+  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="30" y="100" width="143" height="141" rx="7" fill="#e11d48" fill-opacity="0.08" stroke="#e11d48" stroke-width="1.2"/>
-    <rect x="30" y="100" width="143" height="26" rx="7" fill="#e11d48" fill-opacity="0.22" stroke="none"/>
-    <text x="101.5" y="117" text-anchor="middle" class="sm bold" fill="#e11d48">Facility</text>
-    <text x="101.5" y="146" text-anchor="middle" class="sm">written by FA</text>
-    <text x="101.5" y="167" text-anchor="middle" class="sm">FA's own rate</text>
-    <text x="101.5" y="188" text-anchor="middle" class="sm">the driver knows</text>
-    <text x="101.5" y="209" text-anchor="middle" class="sm">risks nobody</text>
-    <text x="101.5" y="230" text-anchor="middle" class="sm">will write</text>
-    <rect x="187" y="100" width="143" height="141" rx="7" fill="#0d9488" fill-opacity="0.08" stroke="#0d9488" stroke-width="1.2"/>
-    <rect x="187" y="100" width="143" height="26" rx="7" fill="#0d9488" fill-opacity="0.22" stroke="none"/>
-    <text x="258.5" y="117" text-anchor="middle" class="sm bold" fill="#0d9488">Pool</text>
-    <text x="258.5" y="146" text-anchor="middle" class="sm">written by an</text>
-    <text x="258.5" y="167" text-anchor="middle" class="sm">ordinary insurer</text>
-    <text x="258.5" y="188" text-anchor="middle" class="sm">at the normal rate</text>
-    <text x="258.5" y="209" text-anchor="middle" class="sm">risks everybody</text>
-    <text x="258.5" y="230" text-anchor="middle" class="sm">must write</text>
-    <line x1="30" y1="262" x2="330" y2="262" class="rule"/>
-    <text x="180" y="284" text-anchor="middle" class="sm bold">size is a diagnostic, not a goal</text>
-    <text x="180" y="308" text-anchor="middle" class="sm dim">a growing residual market says the approved</text>
-    <text x="180" y="324" text-anchor="middle" class="sm dim">rate no longer covers part of the risk —</text>
-    <text x="180" y="340" text-anchor="middle" class="sm dim">depopulation is the direction to want</text>
-    <text x="180" y="368" text-anchor="middle" class="sm dim">the business is adversely selected by construction,</text>
-    <text x="180" y="384" text-anchor="middle" class="sm dim">so its loss ratio exceeds the voluntary market's</text>
+    <path d="M26,238.4 V229.44 L38.8,226.88 L47.76,216.64 H69.52 L78.48,226.88 L90,230.72 V238.4 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="40.08" cy="239.68" r="5.76" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.6"/>
+    <circle cx="75.92" cy="239.68" r="5.76" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.6"/>
+    <text x="58" y="270" text-anchor="middle" class="sm bold">driver</text>
+    <rect x="274.08" y="100" width="35.84" height="64" rx="2" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="281.12" y="107.68" width="7.68" height="6.4" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="295.2" y="107.68" width="7.68" height="6.4" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="281.12" y="120.48" width="7.68" height="6.4" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="295.2" y="120.48" width="7.68" height="6.4" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="281.12" y="133.28" width="7.68" height="6.4" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="295.2" y="133.28" width="7.68" height="6.4" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="281.12" y="146.08" width="7.68" height="6.4" fill="#e11d48" fill-opacity="0.55"/>
+    <rect x="295.2" y="146.08" width="7.68" height="6.4" fill="#e11d48" fill-opacity="0.55"/>
+    <text x="292" y="180" text-anchor="middle" class="sm bold">FA</text>
+    <line x1="88" y1="210" x2="256" y2="144" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
+    <rect x="170.08" y="284" width="35.84" height="64" rx="2" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="177.12" y="291.68" width="7.68" height="6.4" fill="#0d9488" fill-opacity="0.55"/>
+    <rect x="191.2" y="291.68" width="7.68" height="6.4" fill="#0d9488" fill-opacity="0.55"/>
+    <rect x="177.12" y="304.48" width="7.68" height="6.4" fill="#0d9488" fill-opacity="0.55"/>
+    <rect x="191.2" y="304.48" width="7.68" height="6.4" fill="#0d9488" fill-opacity="0.55"/>
+    <rect x="177.12" y="317.28" width="7.68" height="6.4" fill="#0d9488" fill-opacity="0.55"/>
+    <rect x="191.2" y="317.28" width="7.68" height="6.4" fill="#0d9488" fill-opacity="0.55"/>
+    <rect x="177.12" y="330.08" width="7.68" height="6.4" fill="#0d9488" fill-opacity="0.55"/>
+    <rect x="191.2" y="330.08" width="7.68" height="6.4" fill="#0d9488" fill-opacity="0.55"/>
+    <text x="188" y="366" text-anchor="middle" class="sm bold">insurer</text>
+    <line x1="86" y1="254" x2="152" y2="300" class="thin" stroke="#0d9488" stroke-width="1.8" marker-end="url(#ah0d9488)"/>
+    <circle cx="292" cy="316" r="34" fill="#e11d48" fill-opacity="0.10" stroke="#e11d48" stroke-width="1.3" stroke-dasharray="4 3"/>
+    <rect x="279" y="326" width="26" height="6" fill="#e11d48" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="292" cy="332" rx="13" ry="3.4" fill="#e11d48" fill-opacity="0.25" stroke="#e11d48" stroke-width="1.2"/>
+    <ellipse cx="292" cy="326" rx="13" ry="3.4" fill="var(--surf)" stroke="#e11d48" stroke-width="1.2"/>
+    <ellipse cx="292" cy="326" rx="13" ry="3.4" fill="#e11d48" fill-opacity="0.3" stroke="none"/>
+    <rect x="279" y="320" width="26" height="6" fill="#e11d48" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="292" cy="326" rx="13" ry="3.4" fill="#e11d48" fill-opacity="0.25" stroke="#e11d48" stroke-width="1.2"/>
+    <ellipse cx="292" cy="320" rx="13" ry="3.4" fill="var(--surf)" stroke="#e11d48" stroke-width="1.2"/>
+    <ellipse cx="292" cy="320" rx="13" ry="3.4" fill="#e11d48" fill-opacity="0.3" stroke="none"/>
+    <rect x="279" y="314" width="26" height="6" fill="#e11d48" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="292" cy="320" rx="13" ry="3.4" fill="#e11d48" fill-opacity="0.25" stroke="#e11d48" stroke-width="1.2"/>
+    <ellipse cx="292" cy="314" rx="13" ry="3.4" fill="var(--surf)" stroke="#e11d48" stroke-width="1.2"/>
+    <ellipse cx="292" cy="314" rx="13" ry="3.4" fill="#e11d48" fill-opacity="0.3" stroke="none"/>
+    <text x="292" y="366" text-anchor="middle" class="sm bold">pool</text>
+    <line x1="214" y1="316" x2="254" y2="316" class="thin dash" stroke="#e11d48" stroke-width="1.6" marker-end="url(#ahe11d48)"/>
   </g>
 </svg>

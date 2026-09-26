@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Net income built from the insurance service result and the net financial result, separately</title>
+  <title>The running insurer's net income as a waterfall: the $38M insurance service result and the $22M net financial result as separate steps, less $6M of other expenses and tax, to $39M</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -44,26 +44,21 @@ text {
   <g id="light"/><g id="dark"/>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="49.02" y="185.27" width="38.35" height="74.73" rx="3" fill="#3b82f6" fill-opacity="0.72"/>
-    <text x="68.2" y="177.27" text-anchor="middle" class="sm">38</text>
-    <text x="68.2" y="275" text-anchor="middle" class="sm dim">ISR</text>
-    <rect x="105.42" y="142" width="38.35" height="43.27" rx="3" fill="#0d9488" fill-opacity="0.72"/>
-    <text x="124.6" y="134" text-anchor="middle" class="sm">22</text>
-    <text x="124.6" y="275" text-anchor="middle" class="sm dim">financial</text>
-    <rect x="161.82" y="142" width="38.35" height="11.8" rx="3" fill="#d97706" fill-opacity="0.72"/>
-    <text x="181" y="134" text-anchor="middle" class="sm">6</text>
-    <text x="181" y="275" text-anchor="middle" class="sm dim">other</text>
-    <rect x="218.22" y="153.8" width="38.35" height="28.71" rx="3" fill="#e11d48" fill-opacity="0.72"/>
-    <text x="237.4" y="145.8" text-anchor="middle" class="sm">15</text>
-    <text x="237.4" y="275" text-anchor="middle" class="sm dim">tax</text>
-    <rect x="274.62" y="182.51" width="38.35" height="77.49" rx="3" fill="#059669" fill-opacity="0.72"/>
-    <text x="293.8" y="174.51" text-anchor="middle" class="sm">39</text>
-    <text x="293.8" y="275" text-anchor="middle" class="sm dim">net</text>
-    <line x1="34" y1="260" x2="328" y2="260" class="axis"/>
-    <text x="180" y="298" text-anchor="middle" class="sm dim">$M, the running insurer</text>
-    <line x1="30" y1="318" x2="330" y2="318" class="rule"/>
-    <text x="180" y="338" text-anchor="middle" class="sm dim">before IFRS 17 the two were mingled, so a rate</text>
-    <text x="180" y="354" text-anchor="middle" class="sm dim">move could flatter or spoil the underwriting result</text>
-    <text x="180" y="380" text-anchor="middle" class="sm dim">and net income is not cash — premium comes first</text>
+    <rect x="49.02" y="200.53" width="38.35" height="149.47" rx="3" fill="#3b82f6" fill-opacity="0.72"/>
+    <text x="68.2" y="192.53" text-anchor="middle" class="sm">38</text>
+    <text x="68.2" y="365" text-anchor="middle" class="sm dim">ISR</text>
+    <rect x="105.42" y="114" width="38.35" height="86.53" rx="3" fill="#0d9488" fill-opacity="0.72"/>
+    <text x="124.6" y="106" text-anchor="middle" class="sm">22</text>
+    <text x="124.6" y="365" text-anchor="middle" class="sm dim">financial</text>
+    <rect x="161.82" y="114" width="38.35" height="23.6" rx="3" fill="#d97706" fill-opacity="0.72"/>
+    <text x="181" y="106" text-anchor="middle" class="sm">6</text>
+    <text x="181" y="365" text-anchor="middle" class="sm dim">other</text>
+    <rect x="218.22" y="137.6" width="38.35" height="57.35" rx="3" fill="#e11d48" fill-opacity="0.72"/>
+    <text x="237.4" y="129.6" text-anchor="middle" class="sm">15</text>
+    <text x="237.4" y="365" text-anchor="middle" class="sm dim">tax</text>
+    <rect x="274.62" y="194.95" width="38.35" height="155.05" rx="3" fill="#059669" fill-opacity="0.72"/>
+    <text x="293.8" y="186.95" text-anchor="middle" class="sm">39</text>
+    <text x="293.8" y="365" text-anchor="middle" class="sm dim">net</text>
+    <line x1="34" y1="350" x2="328" y2="350" class="axis"/>
   </g>
 </svg>

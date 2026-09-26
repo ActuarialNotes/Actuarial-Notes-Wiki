@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The death spiral — pricing at the average drives the good risks out, and the average rises behind them</title>
+  <title>The death spiral over rounds of repricing: the price climbs as the number insured falls, each round losing the best risks left</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,21 +47,26 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="68" y1="252" x2="332" y2="252" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="68" y1="252" x2="68" y2="82" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <polyline points="68,204 110.33,197.6 152.67,188 195,173.6 237.33,152.8 279.67,124 322,92" class="curve" stroke="#e11d48" stroke-width="2.6"/>
-    <polyline points="68,98.4 110.33,120.8 152.67,146.4 195,172 237.33,197.6 279.67,220 322,236" class="curve" stroke="#3b82f6" stroke-width="2.6"/>
-    <text x="254.27" y="111.2" text-anchor="middle" class="sm bold" fill="#e11d48">price</text>
-    <text x="254.27" y="210.4" text-anchor="middle" class="sm bold" fill="#3b82f6">insureds</text>
-    <text x="180" y="274" text-anchor="middle" class="sm dim">rounds of repricing — each loses the best risk</text>
-    <line x1="30" y1="292" x2="330" y2="292" class="rule"/>
-    <text x="38" y="314" text-anchor="start" class="sm" fill="#059669">•</text>
-    <text x="54" y="314" text-anchor="start" class="sm">defences: classification, underwriting,</text>
-    <text x="38" y="338" text-anchor="start" class="sm" fill="#059669">•</text>
-    <text x="54" y="338" text-anchor="start" class="sm">waiting periods, compulsory participation</text>
-    <text x="38" y="362" text-anchor="start" class="sm" fill="#059669">•</text>
-    <text x="54" y="362" text-anchor="start" class="sm">and every classification restriction puts</text>
-    <text x="38" y="386" text-anchor="start" class="sm" fill="#059669">•</text>
-    <text x="54" y="386" text-anchor="start" class="sm">a little of the spiral back</text>
+    <line x1="56" y1="352" x2="332" y2="352" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="56" y1="352" x2="56" y2="80" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <polyline points="56,273.4 100.33,262.92 144.67,247.2 189,223.62 233.33,189.56 277.67,142.4 322,90" class="curve" stroke="#e11d48" stroke-width="2.6"/>
+    <polyline points="56,100.48 100.33,137.16 144.67,179.08 189,221 233.33,262.92 277.67,299.6 322,325.8" class="curve" stroke="#3b82f6" stroke-width="2.6"/>
+    <circle cx="56" cy="273.4" r="3.4" fill="#e11d48"/>
+    <circle cx="56" cy="100.48" r="3.4" fill="#3b82f6"/>
+    <circle cx="100.33" cy="262.92" r="3.4" fill="#e11d48"/>
+    <circle cx="100.33" cy="137.16" r="3.4" fill="#3b82f6"/>
+    <circle cx="144.67" cy="247.2" r="3.4" fill="#e11d48"/>
+    <circle cx="144.67" cy="179.08" r="3.4" fill="#3b82f6"/>
+    <circle cx="189" cy="223.62" r="3.4" fill="#e11d48"/>
+    <circle cx="189" cy="221" r="3.4" fill="#3b82f6"/>
+    <circle cx="233.33" cy="189.56" r="3.4" fill="#e11d48"/>
+    <circle cx="233.33" cy="262.92" r="3.4" fill="#3b82f6"/>
+    <circle cx="277.67" cy="142.4" r="3.4" fill="#e11d48"/>
+    <circle cx="277.67" cy="299.6" r="3.4" fill="#3b82f6"/>
+    <circle cx="322" cy="90" r="3.4" fill="#e11d48"/>
+    <circle cx="322" cy="325.8" r="3.4" fill="#3b82f6"/>
+    <text x="242.2" y="126.68" text-anchor="middle" class="bold">price</text>
+    <text x="113.63" y="116.2" text-anchor="start" class="bold">insureds</text>
+    <text x="322" y="372" text-anchor="end" class="sm dim">rounds</text>
   </g>
 </svg>

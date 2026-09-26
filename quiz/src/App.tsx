@@ -66,6 +66,28 @@ function preloadRoute(path: string): Promise<unknown> | null {
   return null
 }
 
+/**
+ * Study Guides is one tap from every page, and its chunk carries the whole
+ * wiki bundle — the slowest route to open cold. Once the app is idle, fetch
+ * it, so the first switch to it moves at once instead of holding the old page
+ * on screen while it downloads. Skipped for a reader who has asked the browser
+ * to save data.
+ */
+function WarmStudyGuides() {
+  useEffect(() => {
+    const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection
+    if (connection?.saveData) return
+    const warm = () => { preloadRoute('/wiki')?.catch(() => { /* fetched again on the click */ }) }
+    if (typeof window.requestIdleCallback === 'function') {
+      const id = window.requestIdleCallback(warm, { timeout: 5000 })
+      return () => window.cancelIdleCallback(id)
+    }
+    const timer = window.setTimeout(warm, 3000)
+    return () => window.clearTimeout(timer)
+  }, [])
+  return null
+}
+
 function WikiFallback() {
   return (
     <div className="flex items-center gap-2 p-8 text-sm text-muted-foreground">
@@ -222,6 +244,7 @@ export default function App({ initialSession }: { initialSession: Session | null
     // see components/PaperRouter.tsx and lib/viewTransition.ts.
     <PaperRouter preload={preloadRoute}>
       <PageTracker />
+      <WarmStudyGuides />
       <GlobalKeyHandler />
       <SoundEffects />
       <AuthProvider initialSession={initialSession}>

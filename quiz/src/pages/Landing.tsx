@@ -46,7 +46,6 @@ import { loadRevealMode, saveRevealMode, type RevealMode } from '@/lib/revealMod
 import { ExamLogo } from '@/components/ExamLogo'
 import { examAccentStyle } from '@/lib/examColors'
 import { defaultBody, loadBody, saveBody, type ExamBody } from '@/lib/bodyFilter'
-import { examTransitionStyle } from '@/lib/viewTransition'
 
 type ExamOrg = ExamBody
 
@@ -296,10 +295,7 @@ function ExamOptionCard({
       className="relative w-full rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
       <Card
-        // The exam's name for the tab-switch view transition: the Study
-        // Guides card and the Dashboard pill for this exam carry the same
-        // one, so switching tabs moves this card there rather than cutting.
-        style={{ ...accent, ...examTransitionStyle(exam.progressKey) }}
+        style={accent}
         className={cn(
           'transition-all duration-150 overflow-hidden ring-1 ring-transparent',
           isActive && 'bg-primary/10',

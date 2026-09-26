@@ -426,19 +426,19 @@ Other important `lib/` modules:
   it to `data-paper` on the root and `index.css` ("Paper on a desk") draws it. **Every
   navigation goes through it** without opting in: `components/PaperRouter.tsx` is
   `BrowserRouter` with the history listener wrapped, so links, `navigate()` and the browser's
-  Back all animate; a `REPLACE` (a redirect) and a query/hash-only change don't. Between the
-  three pages that draw every exam (Dashboard, Study Guides home, Quiz builder —
-  `carriesExams`) the exam is *carried* across: `examTransitionStyle` puts its name in the
-  `--exam-card-name` custom property, and the CSS only promotes it to a
-  `view-transition-name` under `data-paper-carry`, so a card with no partner never floats
-  above an arriving sheet. Rules that fail *silently*: two live elements sharing a name
-  aborts the whole transition (hence the exam-id suffix for a localized exam like `CAS-6`,
-  and the duplicate sweep in `e2e/view-transitions.spec.ts`); a lazy page must render
-  synchronously on the transition's first frame, which is why the lazy routes are
-  `lib/lazyRoute.ts` (a plain `React.lazy` suspends once even with its chunk loaded) and
-  `preloadRoute` in `App.tsx` warms the chunk first; and the Study Guides index is seeded
-  synchronously from the bundle (`bundledWikiIndex`). Dialogs get the matching entrance from
-  the `paper-scrim` class (or `paper-fade` + `paper-drop` for a separate backdrop and panel).
+  Back all animate; a `REPLACE` (a redirect) and a query/hash-only change don't. One curve
+  and one pace for every move (`--paper-ease`, which decelerates *evenly* — a steeper curve
+  crawls its second half and reads as freezing, then snapping in), every move ends with the
+  arriving sheet exactly where the page lies, and **everything on a page travels with its
+  page**: nothing but the chrome (`paper-rail`, `paper-header`) is given a
+  `view-transition-name`, because an object lifted out flies against its sliding sheet —
+  `e2e/view-transitions.spec.ts` sweeps for strays. Nothing may hold the click up either,
+  since the old picture stays frozen on screen until the new page renders: lazy routes are
+  `lib/lazyRoute.ts` (a plain `React.lazy` suspends once even with its chunk loaded),
+  `PaperRouter` warms a route's chunk when the pointer reaches its link, and
+  `WarmStudyGuides` in `App.tsx` fetches the Study Guides chunk when the app is idle. Dialogs
+  get the matching entrance from the `paper-scrim` class (or `paper-fade` + `paper-drop` for
+  a separate backdrop and panel).
   Pure and tested. See `docs/style-guide.md` §9.1.
 - `bodyFilter.ts` — the **SOA/CAS picker** that rides the title row on both the Quiz and Study
   Guides tabs. One choice, one storage key, one fallback: the two tabs are one ladder seen

@@ -10,7 +10,6 @@ import { TRACKS, type Track } from '@/data/tracks'
 import { GENERAL_GUIDES } from '@/data/examGuides'
 import { examAccentStyle } from '@/lib/examColors'
 import { defaultBody, loadBody, saveBody, SOA_TRACK_KEYS, CAS_TRACK_KEYS, type ExamBody } from '@/lib/bodyFilter'
-import { examTransitionStyle } from '@/lib/viewTransition'
 import { ExamLogo } from '@/components/ExamLogo'
 import { LogoTile } from '@/components/LogoTile'
 import { matchesSelectedVariant } from '@/data/examSittings'
@@ -296,11 +295,7 @@ export default function WikiHome() {
                     return (
                       <Link key={exam.path} to={wikiRoute({ kind: 'exam', name: exam.name })} data-tour={examId === 'P' ? 'exam-p' : undefined}>
                         <Card
-                          // The exam's name for the tab-switch view transition
-                          // — the Quiz tab's card and the Dashboard's pill
-                          // carry the same one, which is what lets the browser
-                          // move this card there rather than cut to it.
-                          style={{ ...accent, ...examTransitionStyle(examId, examIdCleaned) }}
+                          style={accent}
                           className={cn(
                             'transition-all duration-150 overflow-hidden ring-1 ring-transparent',
                             isInProgress && !inDevelopment && 'bg-primary/10',

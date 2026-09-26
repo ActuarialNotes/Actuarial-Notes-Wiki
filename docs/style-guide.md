@@ -729,14 +729,14 @@ state is a sheet moving, and *which way* it moves says what kind of change it wa
 | `next` / `prev` | a tab switch | the desk slides: the tab to the right (or left) comes in beside the one going, both sheets moving together over a strip of desk |
 | `push` | a link deeper into a tab (Study Guides → an exam, the quiz builder → a quiz → its review) | a new sheet is laid over from the right, with a shadowed edge; the one it covers slips a little left and shades |
 | `pop` | Back, or a link *up* the tab (the review's "back to the builder") | the top sheet is swiped off to the right, uncovering the one it lay on |
-| `turn` / `return` | a quiz's Next / Back | the answered question is flicked off the pile, tipping as a thrown page does, and the next lifts into place; Back slides it back on |
+| `turn` / `return` | a quiz's Next / Back | the answered question slides off the pile, tipping a little as a pushed page does, and the next rises into place; Back slides it back on |
 | *(dialog)* | a modal opening | the room dims and the sheet settles into place from a little below — the arrival only, never a held exit |
 
 The tabs lie left to right in the order the sidebar lists them, so the direction is the same
 whichever way the reader gets there: Back from the Quiz tab to the Dashboard slides the
 Dashboard in from the left, exactly as clicking it would.
 
-The browser's View Transitions API does the drawing. The app supplies three things:
+The browser's View Transitions API does the drawing. The app supplies two things:
 
 - **The move.** `lib/viewTransition.ts` decides it — `paperMove` from the two paths and how
   the history moved, `deskPlace` being the tab/depth table a new route is added to — and
@@ -746,37 +746,38 @@ The browser's View Transitions API does the drawing. The app supplies three thin
   change of query or hash alone are not moves and land at once. A page's own run of sheets
   (the quiz) calls `startViewTransition` itself with `turn`/`return` and marks its sheet
   `.paper-sheet`.
-- **The pictures.** `index.css` ("Paper on a desk") animates the two snapshots per move:
-  one curve and one pace for all of them — 420ms on `cubic-bezier(0.32, 0.72, 0, 1)`, the
-  decelerating curve for something *arriving* — so a sheet always moves like the same paper.
+- **The pictures.** `index.css` ("Paper on a desk") animates the two snapshots per move.
   The sidebar rail and the phone header are lifted out and held still above the sheets, and
   each page sheet is cut to `<main>`'s width (`--paper-inset`) so it carries its own edge and
   shadow. The desk between sheets is the `--desk` token.
-- **The one object that isn't a sheet.** An exam is one object seen three ways — a card on
-  the Quiz and Study Guides tabs, a pill on the Dashboard — so moving between those three it
-  is lifted off the sheet leaving and set down on the one arriving while the sheets slide
-  underneath. `examTransitionStyle` (spread like `examAccentStyle` onto the element that
-  **is** the exam) carries the name in `--exam-card-name`, and the CSS promotes it only while
-  `data-paper-carry` is set (`carriesExams`). Named on every move, a card with no partner —
-  every card, when opening an exam's page — would be lifted out of its sheet and hang over
-  the one arriving.
 
-Rules to keep:
+Rules to keep — the first three are what make it read as *one* motion rather than several:
 
-- **One name, one live element.** Two elements sharing a `view-transition-name` aborts the
-  whole transition — not just theirs — and the browser only warns. Where a progress key covers
-  more than one page (`CAS-6` is both Exam 6C and Exam 6U), pass the exam id too.
-  `e2e/view-transitions.spec.ts` sweeps both tabs under both examining bodies for duplicates,
-  because nothing on screen says when this breaks.
-- **The new page has to exist on the first frame.** The transition snapshots the new page as
-  it commits, so a page that arrives a microtask later — a lazy route's Suspense fallback, an
-  `await`ed index — slides in as a spinner, and a card on it has nothing to be carried to.
-  Lazy routes are `lazyRoute` (`lib/lazyRoute.ts`; a plain `React.lazy` suspends once even
-  with its chunk already loaded), `preloadRoute` in `App.tsx` warms the chunk before the
-  transition starts, and a surface whose data is bundled seeds its state synchronously.
-- **Name only for the move that needs it.** A sheet or exam named all the time is lifted out
-  of every other move too. Put the name behind the move's attribute in CSS, as
-  `.paper-sheet` and `--exam-card-name` do.
+- **One curve, one pace, and a curve that keeps moving.** Every move — page, question, dialog
+  — runs on `--paper-ease` (`cubic-bezier(0.25, 0.6, 0.3, 1)`) over `--paper-duration`
+  (400ms). The curve decelerates *evenly*: 88% of the way at the halfway mark, 98% at
+  three-quarters. A steeper curve (the app used `cubic-bezier(0.32, 0.72, 0, 1)`, 95% there
+  at halfway) spends its second half crawling the last few pixels, which reads as the sheet
+  freezing and then snapping into place when the real page takes over. Don't steepen it.
+- **The last frame is the page.** Every move ends with the arriving sheet exactly where the
+  page lies — no leftover transform, scale or opacity — so the hand-off from the picture to
+  the live page is invisible. A keyframe that ends anywhere else is a snap.
+- **Everything on a sheet travels with its sheet.** Nothing on a page gets a
+  `view-transition-name` of its own: an object lifted out flies on its own path while its
+  sheet slides the other way, and two motions at once read as neither. The exam cards on the
+  Quiz and Study Guides tabs used to be carried between the tabs this way; they now ride
+  their sheets. Only the chrome is named (`paper-rail`, `paper-header`), and a within-page
+  sheet only while its own turn runs (`.paper-sheet` behind `data-paper="turn"`).
+  `e2e/view-transitions.spec.ts` sweeps the tab pages for anything else — two live
+  elements sharing a name also abort the whole transition, and nothing on screen says so.
+- **Nothing may hold the click up.** From the click until the new page has rendered, the
+  browser holds the old picture on screen, so every millisecond there reads as the app
+  freezing *before* it moves. A lazy page must render synchronously on the transition's first
+  frame — lazy routes are `lazyRoute` (`lib/lazyRoute.ts`; a plain `React.lazy` suspends once
+  even with its chunk loaded, and would slide in a spinner) — and its chunk should already be
+  here: `PaperRouter` warms a route's chunk as the pointer reaches a link to it, and
+  `WarmStudyGuides` in `App.tsx` fetches the Study Guides chunk once the app is idle.
+  A surface whose data is bundled seeds its state synchronously rather than in an effect.
 - **Dialogs animate in, never out**, and with the individual `translate`/`scale` properties
   and a `backwards` fill: a panel centred with Tailwind's translate utilities keeps its
   centring, and a landed panel carries no transform to capture a fixed menu inside it (§8.3).
@@ -852,7 +853,7 @@ Before shipping a screen or component, confirm:
 - [ ] Overlays use the standard scrim and sit correctly on the z-index ladder (§8.2).
 - [ ] An overlay that more than one surface can open is wrapped in `OverlayPortal` (§8.3).
 - [ ] Any animation is purposeful and has a reduced-motion fallback.
-- [ ] Anything that draws a whole exam as one object carries `examTransitionStyle` (§9.1).
+- [ ] Nothing on a page carries a `view-transition-name` of its own — it rides its sheet (§9.1).
 - [ ] Icons are lucide, sized 4/5, coloured via `currentColor`, labelled where interactive.
 - [ ] Works in light **and** dark, and separates by surface (`bg-card`/`bg-muted`) before
       reaching for a `border`.

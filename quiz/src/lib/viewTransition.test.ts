@@ -1,7 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
 import {
-  examTransitionName,
-  examTransitionStyle,
   viewTransitionsSupported,
   motionAllowed,
   startViewTransition,
@@ -9,69 +7,7 @@ import {
   deskPlace,
   paperMove,
   isPageMove,
-  carriesExams,
-  EXAM_NAME_PROPERTY,
 } from './viewTransition'
-
-describe('examTransitionName', () => {
-  it('names each exam once, from its progress key', () => {
-    expect(examTransitionName('P')).toBe('exam-card-P')
-    expect(examTransitionName('FM')).toBe('exam-card-FM')
-    expect(examTransitionName('MAS-I')).toBe('exam-card-MAS-I')
-    expect(examTransitionName('CAS-5')).toBe('exam-card-CAS-5')
-  })
-
-  it('never lets two exams share a name', () => {
-    const keys = ['P', 'FM', 'MAS-I', 'MAS-II', 'CAS-5', '5-1']
-    const names = keys.map(examTransitionName)
-    expect(new Set(names).size).toBe(keys.length)
-  })
-
-  it('folds what a CSS ident cannot hold', () => {
-    expect(examTransitionName('Exam 5')).toBe('exam-card-Exam-5')
-    expect(examTransitionName(' P ')).toBe('exam-card-P')
-  })
-
-  it('always leads with the prefix, so a numeric key stays a valid ident', () => {
-    expect(examTransitionName('5')).toBe('exam-card-5')
-  })
-
-  it('keeps a localized exam\'s two syllabus pages apart', () => {
-    // CAS-6 is one progress key over two pages, and both are listed at once.
-    expect(examTransitionName('CAS-6', '6C')).toBe('exam-card-CAS-6-6C')
-    expect(examTransitionName('CAS-6', '6U')).toBe('exam-card-CAS-6-6U')
-    expect(examTransitionName('CAS-6', '6C')).not.toBe(examTransitionName('CAS-6', '6U'))
-  })
-
-  it('ignores the exam id where the key is already the whole identity', () => {
-    // Otherwise the Quiz tab's `P` would stop matching Study Guides' `P-1`.
-    expect(examTransitionName('P', 'P-1')).toBe('exam-card-P')
-    expect(examTransitionName('CAS-5', '5')).toBe('exam-card-CAS-5')
-    expect(examTransitionName('MAS-I', 'MAS-I')).toBe('exam-card-MAS-I')
-  })
-
-  it('returns undefined rather than a name two keys could collide on', () => {
-    expect(examTransitionName('')).toBeUndefined()
-    expect(examTransitionName('   ')).toBeUndefined()
-    expect(examTransitionName('///')).toBeUndefined()
-  })
-})
-
-describe('examTransitionStyle', () => {
-  it('carries the name in a custom property, for index.css to promote on a tab switch', () => {
-    expect(EXAM_NAME_PROPERTY).toBe('--exam-card-name')
-    expect(examTransitionStyle('P')).toEqual({ '--exam-card-name': 'exam-card-P' })
-    expect(examTransitionStyle('CAS-6', '6C')).toEqual({ '--exam-card-name': 'exam-card-CAS-6-6C' })
-  })
-
-  it('never names the element outright — an exam with no partner must stay on its sheet', () => {
-    expect(examTransitionStyle('P')).not.toHaveProperty('viewTransitionName')
-  })
-
-  it('is undefined where there is no name', () => {
-    expect(examTransitionStyle('')).toBeUndefined()
-  })
-})
 
 describe('viewTransitionsSupported', () => {
   it('reads the API off the document', () => {
@@ -290,16 +226,3 @@ describe('isPageMove', () => {
   })
 })
 
-describe('carriesExams', () => {
-  it('carries an exam between the three pages that draw them all', () => {
-    expect(carriesExams('/dashboard', '/')).toBe(true)
-    expect(carriesExams('/', '/wiki')).toBe(true)
-    expect(carriesExams('/wiki/', '/dashboard?tab=x')).toBe(true)
-  })
-
-  it('carries nothing where the far side has no exam to set it down on', () => {
-    expect(carriesExams('/wiki', '/flashcards')).toBe(false)
-    expect(carriesExams('/wiki', '/wiki/exam/Exam%20P-1')).toBe(false)
-    expect(carriesExams('/quiz', '/')).toBe(false)
-  })
-})

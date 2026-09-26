@@ -16,78 +16,15 @@
 // paths and how the history moved) and starts it (`startViewTransition`).
 // `components/PaperRouter.tsx` is what calls it for every navigation.
 //
-// One object is more than a sheet: an exam is the same thing seen three ways
-// — a card on the Quiz tab, a card on Study Guides, a pill on the Dashboard —
-// so on a tab switch it is lifted off one sheet and set down on the other
-// while the sheets slide underneath. Every surface only has to agree on a
-// *name* per exam, which is what `examTransitionName` hands out.
+// Everything on a page travels with its page. An exam card on the Quiz tab
+// and the same exam's card on Study Guides are on two different sheets, so a
+// tab switch slides them apart with their sheets rather than lifting either
+// one out: an object flying one way across two sheets moving the other reads
+// as two motions fighting, not as one desk.
 //
 // This module is pure: nothing here reaches for a global it isn't handed. The
 // document and window it needs are arguments (defaulted for callers in the
 // browser), so every decision is testable.
-
-import type { CSSProperties } from 'react'
-import { LOCALIZED_EXAM_VARIANT_IDS } from '@/data/examSittings'
-
-/**
- * A `view-transition-name` is a CSS custom-ident: it can't contain spaces or
- * punctuation, and it can't start with a digit. Exam keys are already close
- * (`P`, `FM`, `MAS-I`, `CAS-5`), but they are authored data, so anything that
- * isn't ident-safe is folded to a hyphen and the constant prefix keeps the
- * result from ever leading with a digit.
- */
-const NAME_PREFIX = 'exam-card'
-
-/**
- * The shared name for one exam. Every surface that draws that exam as a single
- * object — card or pill — puts this on its outermost element.
- *
- * Normally the exam's progress key is the whole identity: `P` is one exam and
- * one card per tab. A **localized** exam is the exception — `CAS-6` covers two
- * syllabus pages, Exam 6C and Exam 6U, and the Study Guides ladder lists both
- * while a candidate who has picked no variant yet gets a Dashboard pill for
- * each. Two live elements sharing a name aborts the *whole* transition, not
- * just theirs, so where the key is one of those the page's own exam id joins
- * the name. Only there: adding it everywhere would stop `P` on the Quiz tab
- * (progress key `P`) matching `P` on Study Guides (exam id `P-1`).
- *
- * Returns undefined for a key with nothing ident-safe in it, so a caller
- * spreads "no name" rather than a constant two exams would collide on.
- *
- * @param examKey  the exam's progress key — `P`, `FM`, `MAS-I`, `CAS-5`
- * @param examId   the wiki exam id of the page this element stands for, where
- *                 the surface knows it — `6C`, `6U`
- */
-export function examTransitionName(examKey: string, examId?: string | null): string | undefined {
-  const parts = [examKey]
-  if (examId && LOCALIZED_EXAM_VARIANT_IDS[examKey]) parts.push(examId)
-  const cleaned = parts
-    .join('-')
-    .trim()
-    .replace(/[^A-Za-z0-9_-]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-  if (!cleaned) return undefined
-  return `${NAME_PREFIX}-${cleaned}`
-}
-
-/** The custom property an exam's name is carried in until a tab switch uses it. */
-export const EXAM_NAME_PROPERTY = '--exam-card-name'
-
-/**
- * The style object to spread onto the element that *is* the exam — the same
- * shape as `examAccentStyle`, and usually spread beside it.
- *
- * It carries the name in a custom property rather than as the element's
- * `view-transition-name`, and `index.css` promotes it only while a move
- * between two exam pages runs (`carriesExams`). Named all the time, an exam card with no partner on the
- * other side of a navigation — every card when you open an exam's page — is
- * lifted out of its sheet and floats above the one sliding in over it.
- */
-export function examTransitionStyle(examKey: string, examId?: string | null): CSSProperties | undefined {
-  const name = examTransitionName(examKey, examId)
-  if (!name) return undefined
-  return { [EXAM_NAME_PROPERTY]: name } as CSSProperties
-}
 
 // ── Moves ─────────────────────────────────────────────────────────────────
 
@@ -201,20 +138,6 @@ export function paperMove(
   return b.depth < a.depth ? 'pop' : 'push'
 }
 
-// The pages that draw every exam as one object — a pill on the Dashboard, a
-// card on the Study Guides and Quiz tabs.
-const EXAM_SURFACES = new Set(['/dashboard', '/wiki', '/'])
-
-/**
- * Is there an exam to carry across this move? Only between two pages that
- * both draw the exams: from Study Guides to Flashcards there is nothing on the
- * far side to set a card down on, and a card lifted anyway hangs over the
- * incoming sheet while it fades.
- */
-export function carriesExams(from: string, to: string): boolean {
-  return EXAM_SURFACES.has(normalizePath(from)) && EXAM_SURFACES.has(normalizePath(to))
-}
-
 /** Does a move lay down, uncover or slide a whole page (as opposed to a sheet within one)? */
 export function isPageMove(move: PaperMove): boolean {
   return move === 'next' || move === 'prev' || move === 'push' || move === 'pop'
@@ -258,8 +181,6 @@ interface StartOptions extends TransitionEnv {
    * drags a sidebar-shaped hole across the desk.
    */
   inset?: number
-  /** Carry the exams across — `data-paper-carry` on the root (see `carriesExams`). */
-  carry?: boolean
   /**
    * What to do instead when no transition runs, where that differs from
    * `update` — an update that has to `flushSync` inside a transition must not
@@ -290,8 +211,6 @@ export function startViewTransition(update: () => void, options: StartOptions = 
     if (root) {
       if (options.paper) root.dataset.paper = options.paper
       else delete root.dataset.paper
-      if (options.carry) root.dataset.paperCarry = ''
-      else delete root.dataset.paperCarry
       root.style?.setProperty('--paper-inset', `${Math.max(0, Math.round(options.inset ?? 0))}px`)
     }
     const transition = doc!.startViewTransition(update)
@@ -299,20 +218,14 @@ export function startViewTransition(update: () => void, options: StartOptions = 
     const settle = () => {
       if (current !== transition) return
       current = null
-      if (root) {
-        delete root.dataset.paper
-        delete root.dataset.paperCarry
-      }
+      if (root) delete root.dataset.paper
     }
     // A transition the browser skips (another one started, the tab hid) still
     // applies the update; the rejections that says so are not errors to report.
     transition.ready?.catch(() => { /* skipped */ })
     transition.finished?.then(settle, settle)
   } catch {
-    if (root) {
-      delete root.dataset.paper
-      delete root.dataset.paperCarry
-    }
+    if (root) delete root.dataset.paper
     plain()
   }
 }

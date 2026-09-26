@@ -1,61 +1,34 @@
 import { test, expect, type Page } from '@playwright/test'
 
 // Paper on a desk (lib/viewTransition.ts, components/PaperRouter.tsx): every
-// change of page is a view transition, and on a tab switch an exam — one
-// object seen three ways, a card on the Quiz tab, a card on Study Guides, a
-// pill on the Dashboard — is carried from one sheet to the other.
+// change of page is a view transition — the desk slides between tabs, a sheet
+// is laid over going deeper and swiped off coming back — and everything on a
+// page travels with its page.
 //
 // Two things here fail silently in the product, which is why they are asserted
 // rather than left to the eye:
 //
-//  - Two live elements sharing a `view-transition-name` abort the *whole*
-//    transition, so both tabs' ladders have to be checked for duplicates under
-//    each examining body.
+//  - Only the chrome may be lifted out of a page. Anything else carrying a
+//    `view-transition-name` flies on a path of its own while its sheet slides
+//    the other way — and two live elements sharing one abort the transition.
 //  - The two shells have to agree to the pixel. They are the same page — a
 //    ladder of exam cards under a body picker — so any drift between them
 //    reads as the page twitching on every switch rather than as the tab
 //    changing.
 
-/**
- * Every `view-transition-name` that would be live while an exam is carried
- * between tabs. The exam names are only promoted then (`data-paper-carry`), so
- * the sweep sets the flag for as long as it reads them.
- */
-function transitionNames(page: Page): Promise<string[]> {
-  return page.evaluate(() => {
+/** Every `view-transition-name` live on the page while the given move runs. */
+function transitionNames(page: Page, move: string): Promise<string[]> {
+  return page.evaluate(m => {
     const root = document.documentElement
-    root.dataset.paper = 'next'
-    root.dataset.paperCarry = ''
+    root.dataset.paper = m
     try {
       return Array.from(document.querySelectorAll<HTMLElement>('*'))
         .map(el => getComputedStyle(el).viewTransitionName)
         .filter(name => name && name !== 'none')
     } finally {
       delete root.dataset.paper
-      delete root.dataset.paperCarry
     }
-  })
-}
-
-/** The name an element carries when an exam is carried across, on any other move, and at rest. */
-function examName(page: Page, selector: string) {
-  return page.locator(selector).evaluate(el => {
-    const root = document.documentElement
-    const read = (move: string, carry: boolean) => {
-      root.dataset.paper = move
-      if (carry) root.dataset.paperCarry = ''
-      const name = getComputedStyle(el).viewTransitionName
-      delete root.dataset.paper
-      delete root.dataset.paperCarry
-      return name
-    }
-    return {
-      carried: read('next', true),
-      tabSwitch: read('next', false),
-      push: read('push', false),
-      atRest: getComputedStyle(el).viewTransitionName,
-    }
-  })
+  }, move)
 }
 
 /** The shell geometry the two tabs must share. */
@@ -78,29 +51,20 @@ function shell(page: Page) {
 test.describe('tab-switch view transitions', () => {
   test.use({ reducedMotion: 'no-preference' })
 
-  test('the exam card carries the same name on both tabs', async ({ page }) => {
-    await page.goto('/')
-    await expect(page.locator('button[data-tour="quiz-exam-p"]')).toBeVisible()
-    expect(await examName(page, 'button[data-tour="quiz-exam-p"] > div')).toEqual({
-      carried: 'exam-card-P', tabSwitch: 'none', push: 'none', atRest: 'none',
-    })
-
-    await page.goto('/wiki')
-    await expect(page.locator('a[data-tour="exam-p"]')).toBeVisible()
-    expect(await examName(page, 'a[data-tour="exam-p"] > div')).toEqual({
-      carried: 'exam-card-P', tabSwitch: 'none', push: 'none', atRest: 'none',
-    })
-  })
-
-  test('no two live elements share a name, on either tab or body', async ({ page }) => {
-    for (const path of ['/', '/wiki']) {
+  test('nothing but the chrome is lifted out of a page, on any move', async ({ page }) => {
+    for (const path of ['/', '/wiki', '/dashboard']) {
       for (const body of ['SOA', 'CAS']) {
         await page.goto(path)
-        await page.locator(`[data-segment="${body}"]`).click()
-        await expect(page.locator('[style*="--exam-card-name"]').first()).toBeVisible()
-        const names = await transitionNames(page)
-        expect(names.length, `${path} · ${body} names something`).toBeGreaterThan(0)
-        expect(new Set(names).size, `${path} · ${body}: ${names.join(', ')}`).toBe(names.length)
+        const segment = page.locator(`[data-segment="${body}"]`)
+        if (await segment.count()) await segment.click()
+        for (const move of ['next', 'prev', 'push', 'pop']) {
+          const names = await transitionNames(page, move)
+          // `root` is the page's own sheet (the html element); the rail and the
+          // phone header are the chrome held still over it.
+          const allowed = new Set(['root', 'paper-rail', 'paper-header'])
+          expect(names.every(n => allowed.has(n)), `${path} · ${body} · ${move}: ${names.join(', ')}`).toBe(true)
+          expect(new Set(names).size, `${path} · ${body} · ${move}: ${names.join(', ')}`).toBe(names.length)
+        }
       }
     }
   })
@@ -140,7 +104,7 @@ test.describe('tab-switch view transitions', () => {
       if (!original) return
       document.startViewTransition = ((cb: () => void) => {
         const root = document.documentElement
-        w.__moves.push(`${root.dataset.paper ?? '-'}${'paperCarry' in root.dataset ? '+carry' : ''}`)
+        w.__moves.push(root.dataset.paper ?? '-')
         return original(cb)
       }) as typeof document.startViewTransition
     })
@@ -149,20 +113,20 @@ test.describe('tab-switch view transitions', () => {
     await page.goto('/')
     await expect(page.locator('button[data-tour="quiz-exam-p"]')).toBeVisible()
 
-    // Quiz → Study Guides: the tab to the left, with the exams carried across.
+    // Quiz → Study Guides: the tab to the left.
     await page.getByRole('link', { name: 'Study Guides' }).first().click()
     await expect(page.locator('a[data-tour="exam-p"]')).toBeVisible()
-    // Study Guides → an exam's page: a sheet laid on top, nothing carried.
+    // Study Guides → an exam's page: a sheet laid on top.
     await page.locator('a[data-tour="exam-p"]').click()
     await page.waitForURL('**/wiki/exam/**')
     // Back: that sheet swiped off again.
     await page.goBack()
     await expect(page.locator('a[data-tour="exam-p"]')).toBeVisible()
-    // Study Guides → Flashcards: the tab to the right, with nothing to carry.
+    // Study Guides → Flashcards: the tab to the right.
     await page.getByRole('link', { name: 'Flashcards' }).first().click()
     await page.waitForURL('**/flashcards')
 
-    await expect.poll(moves).toEqual(['prev+carry', 'push', 'pop', 'next'])
+    await expect.poll(moves).toEqual(['prev', 'push', 'pop', 'next'])
     // Every move has landed, and taken its marks off the root with it.
     await expect.poll(() => page.evaluate(() => ({ ...document.documentElement.dataset }))).toEqual({})
   })

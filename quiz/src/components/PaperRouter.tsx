@@ -1,8 +1,8 @@
-import { useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { flushSync } from 'react-dom'
 import { Router } from 'react-router-dom'
 import { createBrowserHistory, type BrowserHistory, type Location, type Action } from '@remix-run/router'
-import { canTransition, carriesExams, isPageMove, paperMove, startViewTransition } from '@/lib/viewTransition'
+import { canTransition, isPageMove, paperMove, startViewTransition } from '@/lib/viewTransition'
 
 /**
  * `BrowserRouter`, with every change of page drawn as **paper on a desk** —
@@ -21,7 +21,9 @@ import { canTransition, carriesExams, isPageMove, paperMove, startViewTransition
  *   would be taken before the new page existed.
  * - **The preload.** The wiki and Cowork routes are `lazy()`, so flushing
  *   straight into one draws its Suspense spinner and slides *that* in. The
- *   route's chunk is warmed first and the transition starts once it has come.
+ *   route's chunk is warmed first and the transition starts once it has come
+ *   — and warmed earlier still, as the pointer reaches the link, so the click
+ *   doesn't wait on a download.
  * - **The newest update wins.** Every update takes a ticket; a transition that
  *   comes up after a newer update has already landed does nothing, so a slow
  *   chunk can never pull the reader back to the page they clicked past.
@@ -93,7 +95,6 @@ export default function PaperRouter({
           })
         }, {
           paper: move,
-          carry: carriesExams(from.pathname, location.pathname),
           inset: isPageMove(move) ? sheetInset() : 0,
           fallback: () => { if (mine === ticket) setState(next) },
         })
@@ -110,6 +111,27 @@ export default function PaperRouter({
       window.removeEventListener('popstate', onPopState)
     }
   }, [history])
+
+  // Warm a route's chunk the moment the reader shows intent — a pointer over a
+  // link, focus on one — rather than when they click. The page is frozen from
+  // the click until the new page has rendered (the transition holds the old
+  // picture on screen until then), so a chunk still downloading at the click
+  // is a pause the reader sees before anything moves.
+  useEffect(() => {
+    const onIntent = (e: Event) => {
+      const target = e.target
+      if (!(target instanceof Element)) return
+      const anchor = target.closest('a[href]')
+      if (!(anchor instanceof HTMLAnchorElement) || anchor.origin !== window.location.origin) return
+      preloadRef.current?.(anchor.pathname)?.catch(() => { /* retried on the click */ })
+    }
+    document.addEventListener('pointerover', onIntent, { capture: true, passive: true })
+    document.addEventListener('focusin', onIntent, true)
+    return () => {
+      document.removeEventListener('pointerover', onIntent, true)
+      document.removeEventListener('focusin', onIntent, true)
+    }
+  }, [])
 
   return (
     <Router location={state.location} navigationType={state.action} navigator={history}>

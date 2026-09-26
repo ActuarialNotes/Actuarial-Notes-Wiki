@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:dcb57b83b8a2ca08b65651803152f3d260ac9b62190087db064f25324330c975
+  content_hash: sha256:4a92c8fb1e6980d575369c7db8117958a9740854e6435de8fc3f328d2ed5dd37
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,26 +22,26 @@ The **Advanced Ratemaking (Exam 8)** is a 4 hour exam covering classification ra
 
 > [!example]- A. Classification Ratemaking {60–80%}
 > Candidates are expected to go beyond mechanical construction to the comparison and evaluation of alternative [[Classification Ratemaking]] schemes.
-> 1. Interpret [[Classification Ratemaking Model|classification ratemaking models]] (e.g., [[GLM]]).
-> 2. Evaluate the validity of [[Rate Classes]].
-> 3. Measure [[Statistical Significance|statistical significance]] of [[Rate Classes|rate classes]] including [[Loss Cost Estimate|estimates]] of [[Loss Costs]] of [[Rate Classes|rate classes]].
+> 1. Interpret [[Classification Ratemaking|classification ratemaking models]] (e.g., [[Generalized Linear Model|GLM]]).
+> 2. Evaluate the validity of [[Rating Class|Rate Classes]].
+> 3. Measure [[Statistical Significance|statistical significance]] of [[Rating Class|rate classes]] including [[Loss Cost|estimates]] of [[Loss Cost|Loss Costs]] of [[Rating Class|rate classes]].
 > 4. Measure and assess [[Model Fit]] (e.g., use results for a [[Rating Plan|rating plan]]).
-> 5. Evaluate [[Classification Ratemaking Model|classification ratemaking models]] (e.g., [[Model Benchmarking|benchmark]], recalibrate [[Rating Variable|variables]], [[Model Implementation|implementation]]).
-> 6. Describe approaches to stripping out [[Rating Factors]] using [[Predictive Models]] for further analysis (e.g., [[Territorial Rating|territorial]]).
-> 7. Describe approaches to [[Predictive Modeling|modeling]] with [[High Dimensional Variables|high dimensional variables]] (e.g., [[Vehicle Make and Model|vehicle make and model]], [[Workers Compensation Classification|workers compensation classes]]).
-> 8. Evaluate combinations of [[Ratemaking Component Model|ratemaking component models]] (e.g., [[Frequency-Severity Models|frequency/severity]]).
+> 5. Evaluate [[Classification Ratemaking|classification ratemaking models]] (e.g., [[Model Benchmarking|benchmark]], recalibrate [[Rating Variable|variables]], [[Model Implementation|implementation]]).
+> 6. Describe approaches to stripping out [[Rating Factors]] using [[Predictive Analytics|Predictive Models]] for further analysis (e.g., [[Territorial Rating|territorial]]).
+> 7. Describe approaches to [[Predictive Analytics|modeling]] with [[High Dimensional Variables|high dimensional variables]] (e.g., [[Vehicle Make and Model|vehicle make and model]], [[Workers Compensation Classification|workers compensation classes]]).
+> 8. Evaluate combinations of [[Frequency-Severity Models|ratemaking component models]] (e.g., [[Frequency-Severity Models|frequency/severity]]).
 >
 > **Readings:** Actuarial Standard of Practice No. 12 · Bailey and Simon · Couret and Venter · Generalized Linear Models for Insurance Rating · Mahler
 
 > [!example]- B. Excess, Deductible, and Individual Risk Rating {20–40%}
 > Candidates will be able to design and manage [[Excess and Deductible Rating|excess, deductible]], and [[Individual Risk Rating|individual risk rating systems]], covering three areas:
-> - **[[Excess and Deductible Rating]]**: Apply general knowledge of [[Excess Coverage|excess coverages]] and the [[Excess Pricing Problems|problems inherent in pricing]] these [[Excess Coverage|coverages]] for different [[Line of Business|lines of business]].
-> - **[[Experience Rating]]**: Adjust an [[Individual Risk Rating|individual risk's rate]] to reflect the extent to which that [[Risk Experience|risk's own experience]] identifies it as being different from other [[Insured Risk|risks]] in the same [[Rating Class|class]].
-> - **[[Retrospective Rating|Retrospective and Loss Sensitive Rating]]**: Make adjustments to [[Individual Risk Premium|individual risk premium]] after [[Policy Expiration|policy expiration]] in response to [[Actual Loss Experience|actual loss]] and [[Expenses|expenses]] associated with the [[Insurance Policy|policy]].
+> - **[[Excess and Deductible Rating]]**: Apply general knowledge of [[Excess Insurance|excess coverages]] and the [[Excess and Deductible Rating|problems inherent in pricing]] these [[Excess Insurance|coverages]] for different [[Line of Business|lines of business]].
+> - **[[Experience Rating]]**: Adjust an [[Individual Risk Rating|individual risk's rate]] to reflect the extent to which that [[Risk Experience|risk's own experience]] identifies it as being different from other [[Risk|risks]] in the same [[Rating Class|class]].
+> - **[[Retrospective Rating|Retrospective and Loss Sensitive Rating]]**: Make adjustments to [[Individual Risk Rating|individual risk premium]] after [[Insurance Policy|policy expiration]] in response to [[Risk Experience|actual loss]] and [[Expenses|expenses]] associated with the [[Insurance Policy|policy]].
 >
-> 1. Estimate [[Aggregate Loss Distributions]].
+> 1. Estimate [[Aggregate Loss Model|Aggregate Loss Distributions]].
 > 2. Determine [[Expected Loss|expected losses]] by [[Layer of Insurance|layer of insurance]] by applying [[Frequency]] and [[Severity]] [[Severity Distribution|distributions]].
-> 3. Calculate the [[Layer Cost|cost of the layer]] of [[Insured Risk|risk]] given the overall [[Loss Cost]].
+> 3. Calculate the [[Layer of Insurance|cost of the layer]] of [[Risk|risk]] given the overall [[Loss Cost]].
 > 4. Analyze a [[Loss Sensitive Rating]] plan (e.g., [[Retrospective Rating]]).
 > 5. Analyze an [[Experience Rating]] plan.
 > 6. Assess the effectiveness of [[Rating Plan|rating plans]].
@@ -52,7 +52,7 @@ The **Advanced Ratemaking (Exam 8)** is a 4 hour exam covering classification ra
 
 >[!answer]- Source Material {11 Sources}
 >
-> - [[Actuarial Standard of Practice No. 12 Risk Classification (ASB - 2005)]]
+> - [[ASOP 12 - Risk Classification (ASB - 2005)]]
 >      - A2
 > - [[Distributions for Actuaries (Bahnemann)]]
 >      - B1-B3
@@ -64,7 +64,7 @@ The **Advanced Ratemaking (Exam 8)** is a 4 hour exam covering classification ra
 >      - B1-B6
 > - [[Individual Risk Rating Case Study (Fisher et al.)]]
 >      - B1-B6
-> - [[Generalized Linear Models for Insurance Rating (Goldburd et al.)]]
+> - [[Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020)]]
 >      - A1, A4-A8
 > - [[CGL Experience and Schedule Rating Plan (ISO)]]
 >      - B5-B6

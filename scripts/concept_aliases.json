@@ -33,6 +33,9 @@
     "deductible": { "default": "Deductible", "5-1": "Deductible Rating" },
     "deductibles": { "default": "Deductible", "5-1": "Deductible Rating" },
     "coinsurance": { "default": "Coinsurance", "5-1": "Coinsurance Rating" },
-    "trend": { "default": "Trend", "5-1": "Loss Trend" }
+    "trend": { "default": "Trend", "5-1": "Loss Trend", "mas-ii": "Deterministic and Stochastic Trend" },
+    "payment": { "default": "Payment", "fm-2": "Payment Amount" },
+    "premium": { "default": "Insurance Premium", "fm-2": "Premium" },
+    "standards of practice": { "default": "Actuarial Standards of Practice", "6c-1": "Standards of Practice" }
   }
 }

@@ -200,23 +200,33 @@ syllabus PDF ─► syllabus_extract.py ─► syllabus.json  (verbatim, hashed,
   gap on the Stage 5 worklist). `syllabus_lib.noun_phrases` is the stdlib chunker
   that finds them; `syllabus_lint.py` warns on any left unlinked (`unlinked-noun`)
   and the linker proposes the same chunks. Applied to Exams 6C, 6U, 7, 8 and 9
-  (2026-09-26). Abstract nouns that name no concept ("role", "purpose",
-  "effectiveness") are exempt — `syllabus_lib.GENERIC_NOUNS`, short and explicit.
-  **Not yet applied to P, FM, 5, MAS-I, MAS-II** — measured first, below.
+  (2026-09-26), then to **all eleven exam pages** the same day: P, FM, 5, MAS-I,
+  MAS-II and PCPA too, and to an objective's sub-items (the lint now reads them
+  as objective text; headings, bold group labels, `*Key concepts:*` and
+  `**Readings:**` lines are not). Abstract nouns that name no concept ("role",
+  "purpose", "effectiveness") are exempt — `syllabus_lib.GENERIC_NOUNS`, short
+  and explicit — and are trimmed off a phrase's edges, so "[[Hazard Rate]]
+  calculations" is covered; inline maths is notation, not a noun.
+  `scripts/test_syllabus_lib.py` pins the chunker and holds every page to zero
+  unlinked phrases. Every note the objectives name now exists: 230 were written
+  (`Concepts/`, all `unverified`), after 70 links to near-duplicate names were
+  pointed at one page each.
 
-  | Exam | Concepts now | Links it would add | of which already concepts | Existing pages newly in the syllabus | New notes | Concepts after | A learner's coverage × |
-  |---|---|---|---|---|---|---|---|
-  | P | 65 | 23 | 11 | 1 | 10 | 76 | 0.86 |
-  | FM | 83 | 13 | 6 | 2 | 3 | 88 | 0.94 |
-  | MAS-I | 95 | 24 | 10 | 2 | 11 | 108 | 0.88 |
-  | MAS-II | 83 | 46 | 15 | 4 | 25 | 112 | 0.74 |
-  | 5 | 117 | 45 | 17 | 1 | 18 | 136 | 0.86 |
+  | Exam | Concepts before | Concepts after | A learner's coverage × | Readiness a fully covered learner loses until the new notes are studied |
+  |---|---|---|---|---|
+  | P | 65 | 76 | 0.86 | ~9 points |
+  | FM | 83 | 91 | 0.91 | ~5 |
+  | MAS-I | 95 | 135 | 0.70 | ~18 |
+  | MAS-II | 83 | 109 | 0.76 | ~14 |
+  | 5 | 117 | 136 | 0.86 | ~8 |
+  | PCPA | 25 | 30 | 0.83 | ~10 |
 
-  Hand-curated from the chunker's raw output (which proposes 41–96 phrases per
-  exam, most of them words like "along" or "tasks below"). Coverage is 60% of
-  the readiness score and new concepts start at New, so a fully covered learner
-  would lose roughly 60 × (1 − factor) points until the new notes are mastered:
-  ~8 on P, ~4 on FM, ~7 on MAS-I, ~16 on MAS-II, ~8 on Exam 5.
+  Coverage is 60% of the readiness score and a new concept starts at New, so the
+  loss is roughly 60 × (1 − factor). MAS-I moved most because its sub-items (the
+  Poisson-process, Markov-chain and model-family lists) name concepts —
+  thinning, stationary distributions, the hat matrix — that its numbered lines
+  don't. Exams 6C–9 lost concepts on net: merging duplicate names removed more
+  than the linking added.
 - For each objective, propose `[[…]]` spans by matching n-grams of the **verbatim text**
   against existing `Concepts/*.md` names + a new committed alias file
   (`scripts/concept_aliases.py` or `.json`: variant → canonical page, plus a per-exam

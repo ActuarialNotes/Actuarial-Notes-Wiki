@@ -9,6 +9,8 @@
 
 export type RuntimeLanguage = 'r' | 'python'
 
+export const LANGUAGE_LABEL: Record<RuntimeLanguage, string> = { r: 'R', python: 'Python' }
+
 export type ConsoleKind = 'input' | 'stdout' | 'stderr' | 'message' | 'warning' | 'error' | 'info'
 
 export interface ConsoleLine {

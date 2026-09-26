@@ -8,6 +8,7 @@ import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { ExamSyllabusButton } from '@/components/wiki/ExamSyllabusButton'
+import { ExamProjectButton } from '@/components/wiki/ExamProjectButton'
 import { ExamLogo } from '@/components/ExamLogo'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
@@ -251,15 +252,18 @@ export default function WikiExam() {
   // The sticky header's right-hand end: the status badge, then the examining
   // body's own syllabus — the document this whole page is a reading of. With
   // today's plan pill also on the row, the syllabus button goes icon-only on a
-  // phone so the row still fits.
+  // phone so the row still fits. PCPA adds its project, the requirement's second
+  // half — and gives the row the same treatment for the same reason.
   const smallTitleBadge = useMemo(() => (
     <span className="inline-flex items-center gap-1.5 not-prose shrink-0">
       <ExamStatusBadge progressKey={progressKey} size="sm" />
       <ExamSyllabusButton
         examId={wikiExamId}
         examLabel={extractedTitle ?? examDisplayName(examFileName)}
-        iconOnlyOnPhone={studyPlanRefs !== null}
+        iconOnlyOnPhone={studyPlanRefs !== null || progressKey === 'CAS-PCPA'}
       />
+      {/* PCPA's second part: the project, which the syllabus page can't be. */}
+      {progressKey === 'CAS-PCPA' && <ExamProjectButton iconOnlyOnPhone={studyPlanRefs !== null} />}
     </span>
   ), [progressKey, wikiExamId, extractedTitle, examFileName, studyPlanRefs])
 

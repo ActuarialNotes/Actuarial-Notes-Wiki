@@ -159,6 +159,13 @@ describe('deskPlace', () => {
     expect(deskPlace('/review').depth).toBeGreaterThan(deskPlace('/quiz').depth)
   })
 
+  it('lays the PCPA project over its exam page, and an attempt over the project', () => {
+    expect(deskPlace('/project/pcpa').tab).toBe(deskPlace('/wiki').tab)
+    expect(deskPlace('/project/pcpa').depth).toBeGreaterThan(deskPlace('/wiki/exam/Exam%20PCPA').depth)
+    expect(deskPlace('/project/pcpa/p-123').depth).toBeGreaterThan(deskPlace('/project/pcpa').depth)
+    expect(paperMove('/project/pcpa/p-123', '/project/pcpa/p-123?view=report', 'PUSH')).toBeNull()
+  })
+
   it('ignores the query, the hash and a trailing slash', () => {
     expect(deskPlace('/wiki/?q=x#top')).toEqual(deskPlace('/wiki'))
     expect(deskPlace('/quiz?exam=P')).toEqual(deskPlace('/quiz'))

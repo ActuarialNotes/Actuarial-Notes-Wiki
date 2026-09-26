@@ -1984,3 +1984,31 @@ summary .katex-display,
   }
 }
 
+
+/* ── PCPA workspace ──────────────────────────────────────────────────────────
+   docs/pcpa-project.md. Syntax colours for the code editor
+   (components/project/CodeEditor.tsx), kept quiet: code is read for hours,
+   so the tokens are tinted, not bright, and step for the dark ground rather
+   than flipping. */
+.cm-tok-keyword  { color: #7c3aed; }
+.cm-tok-string   { color: #047857; }
+.cm-tok-number   { color: #b45309; }
+.cm-tok-comment  { color: hsl(var(--muted-foreground)); font-style: italic; }
+.cm-tok-function { color: #1d4ed8; }
+.cm-tok-heading  { font-weight: 600; }
+.cm-tok-emphasis { font-style: italic; }
+.cm-tok-link     { color: #1d4ed8; text-decoration: underline; }
+.dark .cm-tok-keyword  { color: #c4b5fd; }
+.dark .cm-tok-string   { color: #6ee7b7; }
+.dark .cm-tok-number   { color: #fcd34d; }
+.dark .cm-tok-function { color: #93c5fd; }
+.dark .cm-tok-link     { color: #93c5fd; }
+
+/* The lift chart's three series (components/project/LiftChart.tsx): the
+   categorical palette's first three slots, validated all-pairs for
+   colour-vision deficiency in both themes. */
+.pcpa-lift { --lift-actual: #2a78d6; --lift-model: #eb6834; --lift-true: #1baf7a; }
+.dark .pcpa-lift { --lift-actual: #3987e5; --lift-model: #d95926; --lift-true: #199e70; }
+
+/* Fortune-sheet sizes itself to its parent; give it the whole pane. */
+.pcpa-sheet > div { height: 100%; }

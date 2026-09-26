@@ -1,9 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { X } from 'lucide-react'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
-import { downloadBlob } from '@/lib/xlsx'
-import { fileKind } from '@/lib/pcpaAttempt'
-import { fileBytes, type WorkspaceFile } from '@/hooks/usePcpaWorkspace'
 import { cn } from '@/lib/utils'
 
 /** The standard modal (style guide §8.1), portalled so no workspace pane can clip it. */
@@ -120,40 +117,4 @@ export function PopMenu({
       )}
     </div>
   )
-}
-
-const MIME: Record<string, string> = {
-  png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', gif: 'image/gif', svg: 'image/svg+xml', webp: 'image/webp',
-  csv: 'text/csv;charset=utf-8', r: 'text/plain;charset=utf-8', py: 'text/x-python;charset=utf-8', md: 'text/markdown;charset=utf-8',
-}
-
-export function mimeOf(path: string): string {
-  return MIME[path.split('.').pop()?.toLowerCase() ?? ''] ?? 'application/octet-stream'
-}
-
-export function fileBlob(file: WorkspaceFile): Blob {
-  return new Blob([fileBytes(file).slice().buffer as ArrayBuffer], { type: mimeOf(file.path) })
-}
-
-export function downloadWorkspaceFile(file: WorkspaceFile) {
-  downloadBlob(file.path.split('/').pop() ?? file.path, fileBlob(file))
-}
-
-/** An object URL for an image file, revoked when the file changes or the component leaves. */
-export function useFileUrl(file: WorkspaceFile | undefined): string | null {
-  const [url, setUrl] = useState<string | null>(null)
-  useEffect(() => {
-    if (!file || fileKind(file.path) !== 'image') { setUrl(null); return }
-    const next = URL.createObjectURL(fileBlob(file))
-    setUrl(next)
-    return () => URL.revokeObjectURL(next)
-  }, [file])
-  return url
-}
-
-/** Base64 of bytes, chunked so a large image doesn't overflow `String.fromCharCode`. */
-export function toBase64(bytes: Uint8Array): string {
-  let binary = ''
-  for (let i = 0; i < bytes.length; i += 0x8000) binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000))
-  return btoa(binary)
 }

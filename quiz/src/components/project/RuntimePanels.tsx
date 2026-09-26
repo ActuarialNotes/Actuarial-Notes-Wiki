@@ -3,10 +3,8 @@ import { ChevronLeft, ChevronRight, Download, Eraser, Loader2, Play, RotateCcw, 
 import { useProjectRuntime, type ConsoleEntry, type RuntimeStatus } from '@/hooks/useProjectRuntime'
 import { usePcpaWorkspace } from '@/hooks/usePcpaWorkspace'
 import { downloadBlob } from '@/lib/xlsx'
-import type { RuntimeLanguage } from '@/lib/project/runtimeTypes'
+import { LANGUAGE_LABEL, type RuntimeLanguage } from '@/lib/project/runtimeTypes'
 import { cn } from '@/lib/utils'
-
-export const LANGUAGE_LABEL: Record<RuntimeLanguage, string> = { r: 'R', python: 'Python' }
 
 const STATUS_DOT: Record<RuntimeStatus, string> = {
   off: 'bg-muted-foreground/40',
@@ -141,8 +139,10 @@ export function PlotsPanel() {
 
   if (plots.length === 0) {
     return (
-      <div className="flex h-full items-center justify-center p-6 text-center text-xs text-muted-foreground">
-        Plots from R (<code className="font-mono">plot()</code>, ggplot2) and Python (matplotlib) appear here.
+      <div className="flex h-full items-center justify-center p-6">
+        <p className="max-w-xs text-center text-xs text-muted-foreground">
+          Plots from R (<code className="font-mono">plot()</code>, ggplot2) and Python (matplotlib) appear here.
+        </p>
       </div>
     )
   }

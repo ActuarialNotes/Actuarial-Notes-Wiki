@@ -1,16 +1,18 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ArrowDown, ArrowUp, Eye, FileImage, ListTree, Paperclip, PenLine, Printer, Table2, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { CodeEditor } from './CodeEditor'
 import { ProjectDialog } from './shared'
-import { ReportDocument, reportHtml } from './reportDocument'
+import { ReportDocument } from './reportDocument'
+import { reportHtml } from './projectFiles'
 import { APPENDIX_LIMIT, type ProjectCase } from '@/data/pcpaProjects'
 import { usePcpaAttempts } from '@/hooks/usePcpaAttempts'
-import { fileText, usePcpaWorkspace } from '@/hooks/usePcpaWorkspace'
+import { usePcpaWorkspace } from '@/hooks/usePcpaWorkspace'
 import { useIsMobile } from '@/hooks/useIsMobile'
-import { appendixKind, appendixWords, countBodyImages, tallyWords, type Appendix } from '@/lib/pcpaReport'
+import { appendixKind, countBodyImages, type Appendix } from '@/lib/pcpaReport'
+import { useWordTally } from './useWordTally'
 import type { ProjectAttempt } from '@/lib/pcpaAttempt'
 import { cn } from '@/lib/utils'
 
@@ -43,16 +45,6 @@ function outline(projectCase: ProjectCase): string {
   ].join('\n')
 }
 
-export function useWordTally(attempt: ProjectAttempt) {
-  const files = usePcpaWorkspace(s => s.files)
-  return useMemo(() => {
-    const perAppendix = attempt.report.appendices.map(a => {
-      const file = files[a.path]
-      return appendixWords(a, a.kind === 'table' && file ? fileText(file) : undefined)
-    })
-    return { tally: tallyWords(attempt.report.body, perAppendix), perAppendix }
-  }, [attempt.report, files])
-}
 
 export function WordCounter({ attempt, className }: { attempt: ProjectAttempt; className?: string }) {
   const { tally } = useWordTally(attempt)

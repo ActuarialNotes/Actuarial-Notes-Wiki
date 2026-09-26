@@ -12,7 +12,7 @@ import {
 } from '@/data/pcpaProjects'
 import { usePcpaWorkspace } from '@/hooks/usePcpaWorkspace'
 import type { ProjectAttempt } from '@/lib/pcpaAttempt'
-import { downloadWorkspaceFile } from './shared'
+import { downloadWorkspaceFile } from './projectFiles'
 import { cn } from '@/lib/utils'
 
 /**

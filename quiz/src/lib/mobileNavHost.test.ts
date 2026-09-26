@@ -9,6 +9,8 @@ describe('pageHostsNavButton', () => {
     expect(pageHostsNavButton('/wiki/concept/Bayes Theorem')).toBe(true)
     expect(pageHostsNavButton('/research')).toBe(true)
     expect(pageHostsNavButton('/research/projects')).toBe(true)
+    expect(pageHostsNavButton('/project/pcpa')).toBe(true)
+    expect(pageHostsNavButton('/project/pcpa/p-1')).toBe(true)
     expect(pageHostsNavButton('/dashboard')).toBe(true)
     expect(pageHostsNavButton('/flashcards')).toBe(true)
   })

@@ -4,12 +4,13 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { CheckMark } from '@/components/CheckMark'
-import { mimeOf, ProjectDialog, toBase64 } from './shared'
-import { ReportDocument, reportHtml } from './reportDocument'
-import { useWordTally } from './ReportView'
+import { ProjectDialog } from './shared'
+import { ReportDocument } from './reportDocument'
+import { codeFilesOf, mimeOf, reportHtml, toBase64 } from './projectFiles'
+import { useWordTally } from './useWordTally'
 import { APPENDIX_LIMIT, ATTESTATION, type ProjectCase } from '@/data/pcpaProjects'
 import { usePcpaAttempts } from '@/hooks/usePcpaAttempts'
-import { fileBytes, fileText, usePcpaWorkspace, type WorkspaceFile } from '@/hooks/usePcpaWorkspace'
+import { fileBytes, fileText, usePcpaWorkspace } from '@/hooks/usePcpaWorkspace'
 import { cleanRun } from '@/hooks/useProjectRuntime'
 import { attemptPhase, fileKind, type ProjectAttempt } from '@/lib/pcpaAttempt'
 import { countBodyImages, submissionIssues } from '@/lib/pcpaReport'
@@ -31,11 +32,6 @@ import { cn } from '@/lib/utils'
 
 const encoder = new TextEncoder()
 
-export function codeFilesOf(files: Record<string, WorkspaceFile>): string[] {
-  return Object.keys(files)
-    .filter(p => !p.startsWith('submission/') && (['r', 'python'].includes(fileKind(p)) || p.toLowerCase().endsWith('.sas')))
-    .sort()
-}
 
 interface CleanRunState {
   status: 'running' | 'done'

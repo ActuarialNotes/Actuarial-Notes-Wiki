@@ -25,16 +25,17 @@ const SERIES = [
   { key: 'truth', label: 'True model', color: 'var(--lift-true)', dash: '5 4' },
 ] as const
 
-function niceMax(v: number): number {
-  const steps = [0.5, 1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10]
-  return steps.find(s => s >= v) ?? Math.ceil(v)
+/** A round top for the axis and a step that lands ticks on round numbers. */
+function niceScale(max: number): { top: number; step: number } {
+  const step = max <= 1.5 ? 0.25 : max <= 3 ? 0.5 : max <= 6 ? 1 : 2
+  return { top: Math.max(step * 2, Math.ceil(max / step) * step), step }
 }
 
 export function LiftChart({ lift, oracle }: { lift: LiftBin[]; oracle: LiftBin[] }) {
   const [hover, setHover] = useState<number | null>(null)
   const values = { actual: lift.map(b => b.actual), model: lift.map(b => b.predicted), truth: oracle.map(b => b.predicted) }
-  const yMax = niceMax(Math.max(...values.actual, ...values.model, ...values.truth) * 1.05)
-  const ticks = Array.from({ length: 5 }, (_, i) => (yMax * i) / 4)
+  const { top: yMax, step } = niceScale(Math.max(...values.actual, ...values.model, ...values.truth) * 1.05)
+  const ticks = Array.from({ length: Math.round(yMax / step) + 1 }, (_, i) => i * step)
   const x = (i: number) => PAD.left + ((i + 0.5) / lift.length) * (W - PAD.left - PAD.right)
   const y = (v: number) => PAD.top + (1 - v / yMax) * (H - PAD.top - PAD.bottom)
   const band = (W - PAD.left - PAD.right) / lift.length
@@ -54,7 +55,7 @@ export function LiftChart({ lift, oracle }: { lift: LiftBin[]; oracle: LiftBin[]
           {ticks.map(t => (
             <g key={t}>
               <line x1={PAD.left} x2={W - PAD.right} y1={y(t)} y2={y(t)} stroke="hsl(var(--border))" strokeWidth="1" />
-              <text x={PAD.left - 8} y={y(t)} dy="0.32em" textAnchor="end" className="fill-muted-foreground text-[10px]">{t.toFixed(1)}</text>
+              <text x={PAD.left - 8} y={y(t)} dy="0.32em" textAnchor="end" className="fill-muted-foreground text-[10px]">{step < 0.5 ? t.toFixed(2) : t.toFixed(1)}</text>
             </g>
           ))}
           <line x1={PAD.left} x2={W - PAD.right} y1={y(1)} y2={y(1)} stroke="hsl(var(--muted-foreground))" strokeWidth="1" opacity="0.6" />

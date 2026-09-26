@@ -15,6 +15,7 @@ import { python } from '@codemirror/lang-python'
 import { markdown } from '@codemirror/lang-markdown'
 import { r } from '@codemirror/legacy-modes/mode/r'
 import { tags as t } from '@lezer/highlight'
+import { selectionOrLine } from './editorSelection'
 
 /**
  * The workspace's code editor: CodeMirror 6 with R, Python or Markdown
@@ -73,13 +74,6 @@ function languageExtension(language: EditorLanguage): Extension {
   return []
 }
 
-/** The current selection, or — with nothing selected — the cursor's line. */
-function selectionOrLine(view: EditorView): { code: string; lineEnd: number | null } {
-  const sel = view.state.selection.main
-  if (!sel.empty) return { code: view.state.sliceDoc(sel.from, sel.to), lineEnd: null }
-  const line = view.state.doc.lineAt(sel.head)
-  return { code: line.text, lineEnd: line.number }
-}
 
 export function CodeEditor({
   value,
@@ -160,14 +154,4 @@ export function CodeEditor({
   }, [value])
 
   return <div ref={host} className="h-full min-h-0 overflow-hidden" data-math-magnify="none" />
-}
-
-/** Runs the selection or current line of the focused editor — for a toolbar button. */
-export function editorSelection(container: HTMLElement | null): string | null {
-  const dom = container?.querySelector('.cm-editor') as HTMLElement | null
-  if (!dom) return null
-  const v = EditorView.findFromDOM(dom)
-  if (!v) return null
-  const { code } = selectionOrLine(v)
-  return code
 }

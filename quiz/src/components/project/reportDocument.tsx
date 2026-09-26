@@ -3,7 +3,7 @@ import { MarkdownText } from '@/components/MarkdownText'
 import { parseCsv } from '@/lib/csv'
 import type { Appendix } from '@/lib/pcpaReport'
 import { fileText, type WorkspaceFile } from '@/hooks/usePcpaWorkspace'
-import { useFileUrl } from './shared'
+import { useFileUrl } from './projectFiles'
 
 /**
  * The report as a reader sees it — the body, then its appendices, numbered —
@@ -66,19 +66,3 @@ export const ReportDocument = forwardRef<HTMLDivElement, {
     </div>
   )
 })
-
-const PRINT_CSS = `
-  body { font: 11pt/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #000; max-width: 46rem; margin: 2rem auto; padding: 0 1rem; }
-  h1 { font-size: 18pt; } h2 { font-size: 14pt; margin-top: 1.4em; } h3 { font-size: 12pt; }
-  table { border-collapse: collapse; font-size: 9pt; } th, td { border-bottom: 1px solid #ccc; padding: 2px 6px; text-align: left; }
-  img { max-width: 100%; } section { page-break-inside: avoid; margin-top: 1.5em; }
-  .text-muted-foreground { color: #555; }
-`
-
-/** A standalone HTML document of the report, for printing to PDF or saving. */
-export function reportHtml(title: string, innerHtml: string): string {
-  const safeTitle = title.replace(/[<>&]/g, '')
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>${safeTitle}</title>`
-    + '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.45/dist/katex.min.css">'
-    + `<style>${PRINT_CSS}</style></head><body>${innerHtml}</body></html>`
-}

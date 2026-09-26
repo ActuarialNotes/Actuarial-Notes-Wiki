@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:8774d2dfcf7389e9e0bde84ca7cc9e97eebe2432042089e189572e7817b3deb4
+  content_hash: sha256:be6eb1784720a604d67df2b2449a39d849a40ba081c315df9a71d976023c1de1
   sources: []
   open_findings: 0
   open_critical: 0
@@ -42,9 +42,12 @@ verification:
 > > **Bühlmann.** Here $\mu(\Theta) = \Theta$ and $\sigma^2(\Theta) = \Theta^2$. For the inverse gamma, $E[\Theta^2] = \beta^2/[(\alpha-1)(\alpha-2)] = 2{,}000{,}000$:
 > > $$
 > > \begin{align*}
-> > v &= E[\Theta^2] = 2{,}000{,}000 \\
-> > a &= E[\Theta^2] - E[\Theta]^2 = 1{,}000{,}000 \\
-> > Z &= \frac{4}{4 + 2} = \frac{2}{3} \\
+> > v &= E[\Theta^2] \\
+> > &= 2{,}000{,}000 \\
+> > a &= E[\Theta^2] - E[\Theta]^2 \\
+> > &= 1{,}000{,}000 \\
+> > Z &= \frac{4}{4 + 2} \\
+> > &= \frac{2}{3} \\
 > > \hat{\mu} &= \tfrac{2}{3}(1{,}500) + \tfrac{1}{3}(1{,}000) \\
 > > &= 1{,}333.33
 > > \end{align*}
@@ -57,11 +60,14 @@ verification:
 > > [!answer]-
 > > $$
 > > \begin{align*}
-> > \mu &= 0.75(0.2) + 0.25(0.6) = 0.30 \\
-> > v &= E[\Lambda] = 0.30 \\
+> > \mu &= 0.75(0.2) + 0.25(0.6) \\
+> > &= 0.30 \\
+> > v &= E[\Lambda] \\
+> > &= 0.30 \\
 > > a &= 0.75(0.04) + 0.25(0.36) - 0.30^2 \\
 > > &= 0.03 \\
-> > Z &= \frac{1}{1 + 0.30/0.03} = \frac{1}{11}
+> > Z &= \frac{1}{1 + 0.30/0.03} \\
+> > &= \frac{1}{11}
 > > \end{align*}
 > > $$
 > > The Bühlmann estimate is $\frac{1}{11}N + \frac{10}{11}(0.30)$, giving $0.2727$, $0.3636$ and $0.4545$ for $N = 0, 1, 2$.

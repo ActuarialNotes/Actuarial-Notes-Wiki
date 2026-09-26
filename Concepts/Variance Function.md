@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:c09f82a5c82c1f35b17b17ccb09638e893a073e4dac731996af1f1806b27f2bd
+  content_hash: sha256:791b3f85da66e5cbd5303e6cfb08950eaf9744c399de0496a8cacdaa320d519e
   sources: []
   open_findings: 0
   open_critical: 0
@@ -36,8 +36,10 @@ verification:
 > > With $V(\mu) = \mu^2$, $\mathrm{SD} = \sqrt{\phi}\,\mu = 0.7071\mu$: $\$3{,}536$ for claim 1 and $\$35{,}355$ for claim 2.
 > > $$
 > > \begin{align*}
-> > r_1 &= \frac{8{,}000 - 5{,}000}{\sqrt{0.5}\,(5{,}000)} = 0.849 \\
-> > r_2 &= \frac{53{,}000 - 50{,}000}{\sqrt{0.5}\,(50{,}000)} = 0.085
+> > r_1 &= \frac{8{,}000 - 5{,}000}{\sqrt{0.5}\,(5{,}000)} \\
+> > &= 0.849 \\
+> > r_2 &= \frac{53{,}000 - 50{,}000}{\sqrt{0.5}\,(50{,}000)} \\
+> > &= 0.085
 > > \end{align*}
 > > $$
 > > The same $\$3{,}000$ miss is ten times as surprising on the small claim. A normal model with constant variance would have treated the two identically.

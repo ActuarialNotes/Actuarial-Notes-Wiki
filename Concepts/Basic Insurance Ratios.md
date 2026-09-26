@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1a70fdfc334e555aff1211fde31ce919a1711b58fcac543b5d10071b799cd0c1
+  content_hash: sha256:5ef72f2afa25e854385acce2fd0f7e2540b1fabe5ef4a96281335b28776dd90a
   sources: []
   open_findings: 0
   open_critical: 0
@@ -17,7 +17,7 @@ verification:
 
 > $$\text{Loss Ratio} = \frac{\text{Losses}}{\text{Premium}} = \frac{\text{Pure Premium}}{\text{Average Premium}}$$
 
-> $$\begin{aligned} \text{Combined Ratio} &= \frac{\text{Losses}}{\text{EP}} + \frac{\text{LAE}}{\text{EP}} + \frac{\text{UW Expenses}}{\text{WP}} \end{aligned}$$
+> $$\begin{aligned} \text{Combined Ratio} &= \frac{\text{Losses} + \text{LAE}}{\text{EP}} \\ &\quad + \frac{\text{UW Expenses}}{\text{WP}} \end{aligned}$$
 
 - **Loss side.** [[Frequency]] is claims ÷ exposures (normally reported claims over [[Earned Exposure|earned exposures]]); [[Severity]] is losses ÷ claims (a *paid* severity uses paid losses on closed claims over closed counts, a *reported* severity uses reported losses over reported counts, with ALAE in or out); [[Pure Premium]] is losses ÷ exposures.
 - **Premium side.** Average premium is premium ÷ exposures, with both on the **same basis** — written, earned or in-force. Once adjusted for rate changes, a moving average premium signals a shift in the mix of business ([[Premium Trend]]).

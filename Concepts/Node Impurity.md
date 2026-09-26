@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ad902ecd6e76282e2524a773865bf4390befd0f8e2081b9fd80dcf9f09d3014a
+  content_hash: sha256:3be70dfdace0a88c7c0629c509a0c9804f6df40ac05da6f81cdf6efdfa63c163
   sources: []
   open_findings: 0
   open_critical: 0
@@ -75,9 +75,12 @@ verification:
 > > [!answer]-
 > > $$
 > > \begin{align*}
-> > \text{Prior claims} &= \frac{0.060 + 0.052 + 0.018}{3} = 0.0433 \\
-> > \text{Claim amount} &= \frac{0.025 + 0 + 0.041}{3} = 0.0220 \\
-> > \text{Days to report} &= \frac{0 + 0.030 + 0.012}{3} = 0.0140
+> > \text{Prior claims} &= \frac{0.060 + 0.052 + 0.018}{3} \\
+> > &= 0.0433 \\
+> > \text{Claim amount} &= \frac{0.025 + 0 + 0.041}{3} \\
+> > &= 0.0220 \\
+> > \text{Days to report} &= \frac{0 + 0.030 + 0.012}{3} \\
+> > &= 0.0140
 > > \end{align*}
 > > $$
 > > Rescaled so the largest is $100$: prior claims $100$, claim amount $51$, days to report $32$. Tree 3 alone would have ranked claim amount first. Averaging over the trees is what makes the ranking stable.

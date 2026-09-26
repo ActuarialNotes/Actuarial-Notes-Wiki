@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9ad3cd46029509b5c5ec9d0a25176abc9b8228fc26e6167f30829be497d693d6
+  content_hash: sha256:d81d8b7cf66020befd0a13fd034042d35077e28b7751f07fd055bfdd2dd11dca
   sources: []
   open_findings: 0
   open_critical: 0
@@ -34,9 +34,11 @@ verification:
 > > [!answer]-
 > > $$
 > > \begin{align*}
-> > \text{CV}_A &= \frac{412 + 398 + 455 + 430 + 405}{5} = \frac{2{,}100}{5} \\
+> > \text{CV}_A &= \frac{412 + 398 + 455 + 430 + 405}{5} \\
+> > &= \frac{2{,}100}{5} \\
 > > &= 420 \\
-> > \text{CV}_B &= \frac{470 + 380 + 520 + 445 + 435}{5} = \frac{2{,}250}{5} \\
+> > \text{CV}_B &= \frac{470 + 380 + 520 + 445 + 435}{5} \\
+> > &= \frac{2{,}250}{5} \\
 > > &= 450
 > > \end{align*}
 > > $$

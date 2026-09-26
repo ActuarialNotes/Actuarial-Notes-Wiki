@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:694dc43078d5f30cae5e26b17fa0d9a362ff7822b00a434f96916d78c7c3dbd2
+  content_hash: sha256:08636fff41a72467fcf1258b2eb51631a5db84681ff1e9689b2188f62353c151
   sources: []
   open_findings: 0
   open_critical: 0
@@ -35,7 +35,8 @@ verification:
 > > (b) Count the fraud–legitimate pairs in which the fraudulent claim scores higher. $0.92$ beats all $7$, $0.74$ beats $6$ and $0.48$ beats $5$:
 > > $$
 > > \begin{align*}
-> > \text{AUROC} &= \frac{7 + 6 + 5}{3 \times 7} = \frac{18}{21} \\
+> > \text{AUROC} &= \frac{7 + 6 + 5}{3 \times 7} \\
+> > &= \frac{18}{21} \\
 > > &= 0.857 \\
 > > \text{Gini} &= 2(0.857) - 1 \\
 > > &= 0.714

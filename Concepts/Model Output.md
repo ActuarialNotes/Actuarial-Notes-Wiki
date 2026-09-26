@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:6431b1fc4f44a90b5550d42665acb3085b59637553dfa25dc3c3a7a615872edf
+  content_hash: sha256:4b7f6128d5ecbef8cc54ebdbeb1d3262ef605b9dbcb54d5f3405c200baaaa4ee
   sources: []
   open_findings: 0
   open_critical: 0
@@ -46,11 +46,16 @@ verification:
 > > [!answer]-
 > > $$
 > > \begin{align*}
-> > \text{MS}_{\text{Reg}} &= 1{,}200/3 = 400 \\
-> > \text{MS}_{\text{Res}} &= 1{,}840/46 = 40 \\
-> > F &= 400/40 = 10.0 \\
-> > R^2 &= 1{,}200/3{,}040 = 0.395 \\
-> > t &= 0.182/0.046 = 3.96
+> > \text{MS}_{\text{Reg}} &= 1{,}200/3 \\
+> > &= 400 \\
+> > \text{MS}_{\text{Res}} &= 1{,}840/46 \\
+> > &= 40 \\
+> > F &= 400/40 \\
+> > &= 10.0 \\
+> > R^2 &= 1{,}200/3{,}040 \\
+> > &= 0.395 \\
+> > t &= 0.182/0.046 \\
+> > &= 3.96
 > > \end{align*}
 > > $$
 > > The residual standard error is $\sqrt{40} = 6.32$. With $t = 3.96$ on $46$ df, the coefficient is clearly significant. Under a log link, $e^{0.182} = 1.20$: a one-unit increase in that predictor raises expected severity by about $20\%$.
@@ -61,8 +66,10 @@ verification:
 > > [!answer]-
 > > $$
 > > \begin{align*}
-> > \text{ICC} &= \frac{0.018}{0.018 + 0.054} = 0.25 \\
-> > \text{LRT} &= 425.1 - 412.8 = 12.3
+> > \text{ICC} &= \frac{0.018}{0.018 + 0.054} \\
+> > &= 0.25 \\
+> > \text{LRT} &= 425.1 - 412.8 \\
+> > &= 12.3
 > > \end{align*}
 > > $$
 > > The null value $\sigma^2_{\text{agency}} = 0$ is on the boundary, so the p-value is half the $\chi^2_1$ tail: $0.5 \times 0.00045 = 0.0002$. **Keep the random intercept.** A quarter of the variation in loss ratios is between agencies. Both fits share their fixed effects, so comparing REML likelihoods is valid.

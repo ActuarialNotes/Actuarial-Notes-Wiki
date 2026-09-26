@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:6ea0c0177be5cafbeefe782793c372697abfa74843c3cb2ceddd328c3650c503
+  content_hash: sha256:77ae8c0d0f896ec4ad4ac1cb3095e76109546e1e16e789a65d82821c0ecc3cde
   sources: []
   open_findings: 0
   open_critical: 0
@@ -35,8 +35,10 @@ verification:
 > >
 > > $$
 > > \begin{align*}
-> > \text{Primary} &= 0.6 + 1.0 + 1.0 = \$2.6\text{M} \\
-> > \text{Umbrella} &= 0 + 0.8 + 4.0 = \$4.8\text{M} \\
+> > \text{Primary} &= 0.6 + 1.0 + 1.0 \\
+> > &= \$2.6\text{M} \\[4pt]
+> > \text{Umbrella} &= 0 + 0.8 + 4.0 \\
+> > &= \$4.8\text{M} \\[4pt]
 > > \text{Uninsured} &= \$2.0\text{M}
 > > \end{align*}
 > > $$
@@ -50,11 +52,14 @@ verification:
 > > $$
 > > \begin{align*}
 > > \text{Ground-up factor} &= \frac{450 + 1{,}300 + 2{,}100}{300 + 800 + 1{,}500} \\
-> > &= \frac{3{,}850}{2{,}600} = 1.481 \\[6pt]
+> > &= \frac{3{,}850}{2{,}600} \\
+> > &= 1.481 \\[6pt]
 > > \text{Primary factor} &= \frac{450 + 1{,}000 + 1{,}000}{300 + 800 + 1{,}000} \\
-> > &= \frac{2{,}450}{2{,}100} = 1.167 \\[6pt]
+> > &= \frac{2{,}450}{2{,}100} \\
+> > &= 1.167 \\[6pt]
 > > \text{Excess factor} &= \frac{0 + 300 + 1{,}100}{0 + 0 + 500} \\
-> > &= \frac{1{,}400}{500} = 2.800
+> > &= \frac{1{,}400}{500} \\
+> > &= 2.800
 > > \end{align*}
 > > $$
 > >

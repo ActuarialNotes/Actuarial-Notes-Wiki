@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:66d71418155e349391ac15d03ba631994d0ff99cc1c59d9730eb7684da7c59dd
+  content_hash: sha256:cef24c841f01d0fe6b9dc11454f5b1bdd414f9835613c8f2dc565f97b63a3ce5
   sources: []
   open_findings: 0
   open_critical: 0
@@ -43,7 +43,7 @@ verification:
 > > - **Provision for reinsurance** — Schedule F Part 3: which reinsurers are unsecured, overdue or slow-paying.
 > > - **Dividends to the parent** — the Capital and Surplus Account, with affiliate transactions in Schedule Y.
 > >
-> > Three of the five items never touched net income, which is why solvency analysis starts from the surplus account rather than the income statement.
+> > Four of the five items never touched net income, which is why solvency analysis starts from the surplus account rather than the income statement.
 
 > [!example]- Which Part of the Statement Answers the Question? {Example}
 > For each question, name the part of the Annual Statement an analyst would open first: (1) Are the prior accident years developing adversely? (2) Are reinsurers paying on time? (3) How concentrated is premium in one state? (4) What share of bonds is below investment grade? (5) Did LAE rise because of defence costs or adjusting costs?

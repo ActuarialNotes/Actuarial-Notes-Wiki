@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:07068e2bf645d4f46edb6c4e64398bc2b0390997839f61d7bc53a0eb1014dea4
+  content_hash: sha256:732b36d5b052a89f58f0f70dcf28cbbcfa47ca004ab979d8bec99c7ca5fb4203
   sources: []
   open_findings: 0
   open_critical: 0
@@ -29,8 +29,10 @@ verification:
 > > [!answer]-
 > > $$
 > > \begin{align*}
-> > P(N = 1 \mid \text{good}) &= 0.2e^{-0.2} = 0.16375 \\
-> > P(N = 1 \mid \text{bad}) &= 0.6e^{-0.6} = 0.32929 \\
+> > P(N = 1 \mid \text{good}) &= 0.2e^{-0.2} \\
+> > &= 0.16375 \\
+> > P(N = 1 \mid \text{bad}) &= 0.6e^{-0.6} \\
+> > &= 0.32929 \\
 > > P(N = 1) &= 0.75(0.16375) + 0.25(0.32929) \\
 > > &= 0.12281 + 0.08232 \\
 > > &= 0.20513

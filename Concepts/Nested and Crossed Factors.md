@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:3343ea1a4e63a49b879b2b1ad15ae1e9c2809af74b73005e8dfb2673b585fcfb
+  content_hash: sha256:ec5403b37fe16bf206d6e377cbbf9f139acf746604df57d6c5a0a962d37922c4
   sources: []
   open_findings: 0
   open_critical: 0
@@ -40,9 +40,12 @@ verification:
 > > [!answer]-
 > > $$
 > > \begin{align*}
-> > \sigma_T^2 &= 0.04 + 0.06 + 0.30 = 0.40 \\
-> > \rho_{\text{same adjuster}} &= \frac{0.04 + 0.06}{0.40} = 0.25 \\
-> > \rho_{\text{same office}} &= \frac{0.04}{0.40} = 0.10
+> > \sigma_T^2 &= 0.04 + 0.06 + 0.30 \\
+> > &= 0.40 \\
+> > \rho_{\text{same adjuster}} &= \frac{0.04 + 0.06}{0.40} \\
+> > &= 0.25 \\
+> > \rho_{\text{same office}} &= \frac{0.04}{0.40} \\
+> > &= 0.10
 > > \end{align*}
 > > $$
 > > (c) Claims from different offices share no random effect, so their correlation is $0$.
@@ -55,9 +58,12 @@ verification:
 > > [!answer]-
 > > $$
 > > \begin{align*}
-> > \sigma_T^2 &= 0.012 + 0.008 + 0.020 = 0.040 \\
-> > \rho_{\text{territory}} &= \frac{0.012}{0.040} = 0.30 \\
-> > \rho_{\text{year}} &= \frac{0.008}{0.040} = 0.20
+> > \sigma_T^2 &= 0.012 + 0.008 + 0.020 \\
+> > &= 0.040 \\
+> > \rho_{\text{territory}} &= \frac{0.012}{0.040} \\
+> > &= 0.30 \\
+> > \rho_{\text{year}} &= \frac{0.008}{0.040} \\
+> > &= 0.20
 > > \end{align*}
 > > $$
 > > Two territories in the same accident year are correlated through the common year shock, even though neither territory is nested in the other. A nested specification could not represent that.

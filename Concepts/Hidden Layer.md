@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:e6dc8bd236254138454099429575ecf3a8f69061ce5b065d8a20f93eecf8a8a3
+  content_hash: sha256:13afc0ff33fad9d69f561f0bb4190551138b00ff996b7251dd8ecdea91373498
   sources: []
   open_findings: 0
   open_critical: 0
@@ -34,12 +34,18 @@ verification:
 > > [!answer]-
 > > $$
 > > \begin{align*}
-> > z_1 &= 0.1 + 0.8(1.2) - 0.6(-0.5) = 1.36 \\
-> > z_2 &= -0.4 - 0.5(1.2) + 1.0(-0.5) = -1.50 \\
-> > A_1 &= \max(0,\ 1.36) = 1.36 \\
-> > A_2 &= \max(0,\ -1.50) = 0 \\
-> > \eta &= -1.0 + 1.5(1.36) + 2.0(0) = 1.04 \\
-> > \hat{p} &= \frac{1}{1 + e^{-1.04}} = 0.739
+> > z_1 &= 0.1 + 0.8(1.2) - 0.6(-0.5) \\
+> > &= 1.36 \\
+> > z_2 &= -0.4 - 0.5(1.2) + 1.0(-0.5) \\
+> > &= -1.50 \\
+> > A_1 &= \max(0,\ 1.36) \\
+> > &= 1.36 \\
+> > A_2 &= \max(0,\ -1.50) \\
+> > &= 0 \\
+> > \eta &= -1.0 + 1.5(1.36) + 2.0(0) \\
+> > &= 1.04 \\
+> > \hat{p} &= \frac{1}{1 + e^{-1.04}} \\
+> > &= 0.739
 > > \end{align*}
 > > $$
 > > The claim scores a $73.9\%$ fraud probability. Unit 2 is switched off for this claim, so it contributes nothing to the score. In training, backpropagation would leave its weights unchanged for this observation.
@@ -50,9 +56,12 @@ verification:
 > > [!answer]-
 > > $$
 > > \begin{align*}
-> > \text{Layer 1} &= 16(12 + 1) = 208 \\
-> > \text{Layer 2} &= 8(16 + 1) = 136 \\
-> > \text{Output} &= 1(8 + 1) = 9 \\
+> > \text{Layer 1} &= 16(12 + 1) \\
+> > &= 208 \\
+> > \text{Layer 2} &= 8(16 + 1) \\
+> > &= 136 \\
+> > \text{Output} &= 1(8 + 1) \\
+> > &= 9 \\
 > > \text{Total} &= 353
 > > \end{align*}
 > > $$

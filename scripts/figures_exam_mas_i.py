@@ -209,7 +209,8 @@ def mixed_poisson_process() -> Fig:
 
 
 @figure("Interarrival Time", "The exponential waiting-time density, with twelve "
-        "observed gaps between arrivals marked along its axis and the mean 1/λ", width=WID)
+        "observed gaps between arrivals marked along its axis and the mean 1/λ",
+        width=WID)
 def interarrival_time() -> Fig:
     f = vcard()
 
@@ -335,7 +336,7 @@ def whole_life_insurance() -> Fig:
     return f
 
 
-@figure("Life Annuity", "Payments of 1 promised every year, each one shaded down to "
+@figure("Life Annuity", "Payments of 1 promised every year, each drawn only as tall as "
         "the chance ₖpₓ that the annuitant is still alive to collect it", width=WID)
 def life_annuity() -> Fig:
     f = vcard()
@@ -378,7 +379,8 @@ def limited_expected_value() -> Fig:
 
 
 @figure("Probability Distributions", "A discrete Poisson distribution drawn as bars, "
-        "with the continuous normal curve that approximates it laid over them", width=WID)
+        "with the continuous normal curve that approximates it laid over them",
+        width=WID)
 def probability_distributions() -> Fig:
     f = vcard()
 
@@ -429,8 +431,8 @@ def severity() -> Fig:
 
 
 @figure("Aggregate Loss Model", "The aggregate loss distribution built as layers — "
-        "losses from one claim, two claims and three or more — with a spike at zero for "
-        "no claims", width=WID)
+        "losses from one claim, two claims and three or more — with a spike at zero "
+        "for no claims", width=WID)
 def aggregate_loss_model() -> Fig:
     f = vcard()
 
@@ -504,7 +506,7 @@ def sample_mean() -> Fig:
 
     ax = vaxes(f, -3, 3, 0, 3.35, left=20, right=20, top=26, bottom=62)
     f.line(ax.x0, ax.y1, ax.x1, ax.y1, cls="axis")
-    for n, colour, sd in ((1, "var(--dim)", 1.0), (10, BLUE, 0.32), (50, GREEN, 0.14)):
+    for colour, sd in (("var(--dim)", 1.0), (BLUE, 0.32), (GREEN, 0.14)):
         ax.curve(lambda x, s=sd: _npdf(x, 0, s), colour=colour, width=2)
     ax.vline(0, colour="var(--dim)", y_top=3.2, label="μ", label_cls="sm bold")
     ax.label(-1.75, 0.42, "n = 1", cls="sm")
@@ -583,7 +585,8 @@ def sufficient_statistic() -> Fig:
 
 
 @figure("Sufficiency", "Likelihood curves of two samples with the same total: one is "
-        "a constant multiple of the other, so both peak at the same estimate", width=WID)
+        "a constant multiple of the other, so both peak at the same estimate",
+        width=WID)
 def sufficiency() -> Fig:
     f = vcard()
 
@@ -646,7 +649,8 @@ def method_of_moments() -> Fig:
 
 
 @figure("Fisher Information", "A sharply curved log-likelihood with high information "
-        "beside a flat one with low information, both peaking at the estimate", width=WID)
+        "beside a flat one with low information, both peaking at the estimate",
+        width=WID)
 def fisher_information() -> Fig:
     f = vcard()
 
@@ -705,8 +709,8 @@ def consistency() -> Fig:
 
     ax = vaxes(f, -3, 3, 0, 3.4, left=20, right=20, top=26, bottom=44)
     ax.frame(xticks=[0], xfmt=lambda t: "θ", yticks=[])
-    for n, sd, colour in ((25, 1.0, "var(--dim)"), (100, 0.5, BLUE),
-                          (400, 0.25, GREEN), (1600, 0.125, ROSE)):
+    for sd, colour in ((1.0, "var(--dim)"), (0.5, BLUE), (0.25, GREEN),
+                       (0.125, ROSE)):
         ax.curve(lambda x, s=sd: _npdf(x, 0, s), colour=colour, width=2)
     ax.label(-1.7, 0.30, "n = 25", cls="sm", fill="var(--dim)")
     ax.label(-0.95, 0.72, "n = 100", cls="sm", fill=BLUE, anchor="end")
@@ -824,8 +828,9 @@ def type_ii_error() -> Fig:
     return f
 
 
-@figure("Power of a Test", "The power curve rising from α as the truth moves away "
-        "from the null", width=WID)
+@figure("Power of a Test", "Power curves for samples of 25 and 100 rising from α as "
+        "the true mean moves away from the null, the larger sample rising faster",
+        width=WID)
 def power_of_a_test() -> Fig:
     f = vcard()
 
@@ -958,7 +963,7 @@ def truncation() -> Fig:
              xa=3, xb=12)
     ax.area(lambda x: dens(x) / surv, 3, 12, colour=BLUE, opacity="0.14")
     ax.vline(3, colour=ROSE, y_top=0.34, label="deductible d", label_cls="sm")
-    ax.label(1.75, 0.045, "never seen", cls="sm")
+    ax.label(1.85, 0.04, "never seen", cls="sm")
     ax.label(6.4, 0.16, "rescaled", cls="sm bold", anchor="start")
     return f
 
@@ -1357,8 +1362,8 @@ def bic() -> Fig:
         for p_, v in vals:
             ax.point(p_, v, colour=colour, r=5 if (p_, v) == best else 2.8)
         ax.label(7, vals[-1][1], name, cls="sm bold", dx=10, dy=4, anchor="start")
-        f.line(ax.px(best[0]), ax.py(best[1]) + 7, ax.px(best[0]), ax.y1, cls="thin dash",
-               stroke=colour, stroke_width="1.2")
+        f.line(ax.px(best[0]), ax.py(best[1]) + 7, ax.px(best[0]), ax.y1,
+               cls="thin dash", stroke=colour, stroke_width="1.2")
     return f
 
 
@@ -1500,8 +1505,8 @@ def parameter_estimate_tables() -> Fig:
 
 
 @figure("Variable Selection", "A forward stepwise path: AIC falls as territory, "
-        "vehicle age and driver age are added, then rises when prior claim is tried, so "
-        "the path stops at driver age", width=WID)
+        "vehicle age and driver age are added, then rises when prior claim is tried, "
+        "so the path stops at driver age", width=WID)
 def variable_selection() -> Fig:
     f = vcard()
 
@@ -1771,8 +1776,8 @@ def univariate_plot() -> Fig:
     f.rect(ax.px(3.4), y0, ax.px(8.4) - ax.px(3.4), y1 - y0, rx=3, fill=AMBER,
            fill_opacity="0.2", stroke=AMBER, stroke_width="1.4")
     f.line(ax.px(5.4), y0, ax.px(5.4), y1, cls="", stroke=AMBER, stroke_width="2.2")
-    f.line(ax.px(0.7), ym, ax.px(3.4), ym, cls="thin", stroke=AMBER, stroke_width="1.4")
-    f.line(ax.px(8.4), ym, ax.px(14.5), ym, cls="thin", stroke=AMBER, stroke_width="1.4")
+    for a, b in ((0.7, 3.4), (8.4, 14.5)):
+        f.line(ax.px(a), ym, ax.px(b), ym, cls="thin", stroke=AMBER, stroke_width="1.4")
     f.circle(ax.px(17.6), ym, 3.6, fill=ROSE)
     return f
 
@@ -1816,7 +1821,8 @@ def correlation() -> Fig:
     f.line(ax.x0, ax.y0, ax.x0, ax.y1, cls="axis")
     cx, cy = ax.p(0, 0)
     unit = ax.px(1) - ax.px(0)
-    for r, colour, tilt in ((0.0, "var(--dim)", 0), (0.9, GREEN, -45), (-0.9, ROSE, 45)):
+    for r, colour, tilt in ((0.0, "var(--dim)", 0), (0.9, GREEN, -45),
+                            (-0.9, ROSE, 45)):
         f.ellipse(cx, cy, 2.1 * math.sqrt(1 + abs(r)) * unit,
                   2.1 * math.sqrt(1 - abs(r)) * unit, fill=colour, fill_opacity="0.16",
                   stroke=colour, stroke_width="1.8",

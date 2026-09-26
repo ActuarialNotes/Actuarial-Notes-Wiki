@@ -2344,7 +2344,7 @@ def claims_coding_changes() -> Fig:
     def spot(cx, k):
         return cx + (k % 3 - 1) * gap, base - 20 - (k // 3) * gap
 
-    for cx, colour, name in ((100, BLUE, "coverage A"), (260, AMBER, "coverage B")):
+    for cx, name in ((100, "coverage A"), (260, "coverage B")):
         f.rect(cx - 66, 146, 132, base - 146 + 8, rx=8, fill="var(--soft)",
                stroke="var(--edge)", stroke_width="1.2")
         f.text(cx, base + 26, name, cls="sm bold")
@@ -2753,67 +2753,70 @@ def pure_premium_analysis() -> Fig:
     return f
 
 
-@figure("Actual vs Expected Analysis", "Emergence in the period against what the "
-        "previous valuation implied", width=WID)
+@figure("Actual vs Expected Analysis", "Each accident year's emergence during 2024 "
+        "drawn inside the outline of what the prior valuation expected, 2022 and 2023 "
+        "running over it at A/E ratios of 1.17 and 1.24", width=WID)
 def actual_vs_expected_analysis() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -0.5, 4.5, 0, 700, left=56, right=22, top=48, bottom=80)
-    ax.frame(xticks=[0, 1, 2, 3, 4], xfmt=lambda t: AYS[int(t)],
-             yticks=[0, 300, 600], yfmt=lambda t: f"{t:,.0f}", grid=True)
+    ax = vaxes(f, -0.5, 4.5, 0, 700, left=56, right=22, top=28, bottom=48)
+    ax.frame(xlabel="accident year", ylabel="emergence", xticks=[0, 1, 2, 3, 4],
+             xfmt=lambda t: AYS[int(t)], yticks=[0, 300, 600],
+             yfmt=lambda t: f"{t:,.0f}", grid=True)
     expected = [40, 90, 180, 340, 640]
     actual = [36, 84, 210, 420, 610]
-    bw = (ax.px(1) - ax.px(0)) * 0.32
     for k in range(5):
         x = ax.px(k)
-        f.rect(x - bw - 1, ax.py(expected[k]), bw, ax.y1 - ax.py(expected[k]),
-               rx=2, fill="var(--dim)", fill_opacity="0.45")
-        colour = ROSE if actual[k] > expected[k] * 1.05 else BLUE
-        f.rect(x + 1, ax.py(actual[k]), bw, ax.y1 - ax.py(actual[k]), rx=2,
+        hot = actual[k] > expected[k] * 1.05
+        colour = ROSE if hot else BLUE
+        f.rect(x - 11, ax.py(actual[k]), 22, ax.y1 - ax.py(actual[k]), rx=2,
                fill=colour, fill_opacity="0.72")
-    f.legend_row(104, 106, [("var(--dim)", "expected"), (BLUE, "actual")],
-                 gap=112)
-    f.text(BCX, ax.y1 + 30, "emergence during 2024 ($000)", cls="sm dim")
-    f.text(BCX, ax.y1 + 54, "2022 and 2023 ran hot: A/E 1.17 and 1.24",
-           cls="sm bold")
-    f.text(BCX, ax.y1 + 74, "— investigate before the next full review",
-           cls="sm dim")
+        f.rect(x - 17, ax.py(expected[k]), 34, ax.y1 - ax.py(expected[k]), rx=2,
+               fill="none", stroke="var(--dim)", stroke_width="1.3",
+               stroke_dasharray="4 3")
+        if hot:
+            ax.label(k, actual[k], f"{actual[k] / expected[k]:.2f}",
+                     cls="sm bold", dy=-8)
+    ax.label(3.55, 640, "expected", cls="sm dim", anchor="end", dy=4)
     return f
 
 
-@figure("Roll Forward Analysis", "The reserve balance reconciled from one valuation "
-        "to the next", width=WID)
+@figure("Roll Forward Analysis", "A waterfall taking the reserve from 5,200 at the "
+        "opening through 2,850 for the new accident year, 2,400 of payments and 180 of "
+        "prior-year development to 5,830 at the close", width=WID)
 def roll_forward_analysis() -> Fig:
     f = vcard()
 
     bars = [("opening", 5200, 0, VIOLET), ("new AY", 2850, 5200, GREEN),
-            ("paid", -2400, 5650, ROSE), ("PY dev", 180, 5650, AMBER),
+            ("paid", -2400, 8050, ROSE), ("PY dev", 180, 5650, AMBER),
             ("closing", 5830, 0, BLUE)]
-    ax = vaxes(f, -0.6, 4.6, 0, 8600, left=58, right=20, top=44, bottom=80)
+    ax = vaxes(f, -0.6, 4.6, 0, 8600, left=58, right=20, top=28, bottom=48)
     ax.frame(xticks=[0, 1, 2, 3, 4],
              xfmt=lambda t: bars[int(t)][0], yticks=[0, 4000, 8000],
              yfmt=lambda t: f"{t:,.0f}", grid=True)
     bw = (ax.px(1) - ax.px(0)) * 0.5
-    for k, (name, delta, base, colour) in enumerate(bars):
+    ends = []
+    for k, (_, delta, base, colour) in enumerate(bars):
         x = ax.px(k)
-        lo, hi = (base, base + delta) if delta > 0 else (base + delta, base)
+        lo, hi = sorted((base, base + delta))
         f.rect(x - bw / 2, ax.py(hi), bw, ax.py(lo) - ax.py(hi), rx=2,
                fill=colour, fill_opacity="0.72")
-        f.text(x, ax.py(hi) - 8, f"{abs(delta):,}", cls="sm")
-    f.text(BCX, ax.y1 + 32, "unpaid claims ($000) through calendar 2024",
-           cls="sm dim")
-    f.text(BCX, BY1 - 16, "only the prior-year development is a change of",
-           cls="sm dim")
-    f.text(BCX, BY1 + 2, "view — the rest is mechanics", cls="sm dim")
+        sign = "" if k in (0, 4) else ("+" if delta > 0 else "−")
+        f.text(x, ax.py(hi) - 8, f"{sign}{abs(delta):,}", cls="sm")
+        ends.append(base + delta)
+    for k in range(4):
+        y = ax.py(ends[k])
+        f.line(ax.px(k) + bw / 2, y, ax.px(k + 1) - bw / 2, y, cls="thin dot",
+               stroke="var(--dim)", stroke_width="1.2")
     return f
 
 
-@figure("Reserve Communication", "A point estimate shown with the range and the "
-        "drivers of its change", width=WID)
+@figure("Reserve Communication", "A 2,250 point estimate at the peak of a bell curve, "
+        "with the reasonable range from low to high shaded beneath it", width=WID)
 def reserve_communication() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 1700, 2800, 0, 1.15, left=44, right=22, top=40, bottom=104)
+    ax = vaxes(f, 1700, 2800, 0, 1.15, left=24, right=24, top=40, bottom=48)
 
     def dens(x):
         z = (x - 2250) / 190
@@ -2828,83 +2831,73 @@ def reserve_communication() -> Fig:
         f.line(x, ax.y1, x, ax.py(dens(v)), cls="thin dash", stroke=colour,
                stroke_width="1.3")
         f.text(x, ax.y1 + 17, lab, cls="sm bold" if colour is GREEN else "sm dim")
-    f.text(BCX, ax.y1 + 40, "estimate and reasonable range ($000)", cls="sm dim")
-    f.text(BCX, ax.y1 + 68, "ASOP 43 requires the intended measure, the",
-           cls="sm dim")
-    f.text(BCX, ax.y1 + 86, "basis, and any material change in method or",
-           cls="sm dim")
-    f.text(BCX, ax.y1 + 104, "assumption to be disclosed with the number",
-           cls="sm dim")
     return f
 
 
-@figure("Stakeholder Reporting", "One estimate reported at four depths to four "
-        "audiences", width=WID)
+@figure("Stakeholder Reporting", "The same estimate, drawn as one fixed core, reported "
+        "at four depths: in full in the actuarial report, then shorter to management, "
+        "to the board and regulator and to investors", width=WID)
 def stakeholder_reporting() -> Fig:
     f = vcard()
 
-    rows = [("Actuarial report", "methods, data, every selection", 272, VIOLET),
-            ("Management", "drivers, ranges, what changed", 236, BLUE),
-            ("Board & regulator", "adequacy and the opinion", 200, TEAL),
-            ("Investors", "the number and its move", 164, GREEN)]
-    for i, (name, note, w, colour) in enumerate(rows):
-        y = 130 + i * 62
-        f.rect(BCX - w / 2, y, w, 44, rx=6, fill=colour, fill_opacity="0.16",
+    x0, core = 90, 40
+    rows = [("actuarial report", 234, VIOLET, document),
+            ("management", 190, BLUE, person),
+            ("board & regulator", 146, TEAL, building),
+            ("investors", 102, AMBER, None)]
+    f.text(x0 + core / 2, 88, "estimate", cls="sm dim")
+    for i, (name, w, colour, icon) in enumerate(rows):
+        y = 118 + i * 72
+        if icon:
+            icon(f, 50, y, 40, colour)
+        else:
+            coins(f, 50, y + 18, 4, 13, colour)
+        f.rect(x0, y - 17, w, 34, rx=5, fill=colour, fill_opacity="0.16",
                stroke=colour, stroke_width="1.2")
-        f.text(BCX, y + 19, name, cls="sm bold")
-        f.text(BCX, y + 35, note, cls="sm dim")
-    f.text(BCX, BY1 - 2, "narrower is not different — it is the same estimate",
-           cls="sm dim")
+        f.rect(x0, y - 17, core, 34, rx=5, fill=GREEN, fill_opacity="0.6",
+               stroke=GREEN, stroke_width="1.2")
+        f.text(x0 + core + 8, y + 4, name, cls="sm", anchor="start")
     return f
 
 
-@figure("Regulatory Reporting", "The three linked regulatory deliverables and the "
-        "range the opinion turns on", width=WID)
+@figure("Regulatory Reporting", "Schedule P and the actuarial opinion filed with the "
+        "regulator, with the actuarial report standing behind the opinion", width=WID)
 def regulatory_reporting() -> Fig:
     f = vcard()
 
-    rows = [("Schedule P", "ten years of triangles, filed", BLUE),
-            ("Statement of Actuarial Opinion",
-             "reasonable / deficient / redundant", AMBER),
-            ("Actuarial Report", "the work supporting the opinion", VIOLET)]
-    for i, (name, note, colour) in enumerate(rows):
-        y = 122 + i * 68
-        f.rect(44, y, 272, 50, rx=6, fill=colour, fill_opacity="0.14",
-               stroke=colour, stroke_width="1.2")
-        f.text(BCX, y + 22, name, cls="sm bold")
-        f.text(BCX, y + 38, note, cls="sm dim")
-        if i:
-            f.arrow(BCX, y - 16, BCX, y - 2, colour="var(--dim)", width=1.2)
-
-    x0, x1, y = 66, 294, 348
-    f.line(x0, y, x1, y, cls="axis")
-    f.rect(x0 + (x1 - x0) * 0.2, y - 9, (x1 - x0) * 0.62, 18, rx=4, fill=GREEN,
-           fill_opacity="0.20", stroke=GREEN, stroke_width="1.1")
-    f.text(BCX, y - 18, "carried inside the range ⇒ reasonable", cls="sm dim")
-    f.text(x0, y + 18, "low", cls="sm dim")
-    f.text(x1, y + 18, "high", cls="sm dim")
+    docs = [(112, "Schedule P", BLUE), (232, "opinion", AMBER),
+            (340, "report", VIOLET)]
+    for y, name, colour in docs:
+        document(f, 80, y, 52, colour)
+        f.text(112, y + 4, name, cls="sm bold", anchor="start")
+    building(f, 284, 226, 72, ROSE)
+    f.text(284, 286, "regulator", cls="sm bold")
+    f.arrow(176, 118, 244, 196, colour=BLUE, width=1.8)
+    f.arrow(166, 232, 242, 232, colour=AMBER, width=1.8)
+    f.arrow(80, 312, 80, 262, colour=VIOLET, width=1.6, dash=True)
     return f
 
 
-@figure("External Information in Reserving", "Thin internal experience blended with "
-        "an industry development pattern", width=WID)
+@figure("External Information in Reserving", "Link ratios from four thin years of own "
+        "data swinging around a smooth industry pattern, and the selected pattern "
+        "blended mostly from the industry", width=WID)
 def external_information_in_reserving() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 60, 0.95, 2.0, left=54, right=24, top=36, bottom=84)
-    ax.frame(xticks=[12, 24, 36, 48, 60], yticks=[1.0, 1.5, 2.0],
-             yfmt=lambda t: f"{t:.1f}", grid=True)
+    ax = vaxes(f, -6, 60, 0.95, 1.75, left=54, right=24, top=28, bottom=48)
+    ax.frame(xlabel="age in months", ylabel="link ratio",
+             xticks=[12, 24, 36, 48, 60], yticks=[1.0, 1.25, 1.5],
+             yfmt=lambda t: f"{t:.2f}", grid=True)
     own = [(12, 1.62), (24, 1.09), (36, 1.14), (48, 0.99), (60, 1.03)]
     ind = [(12, 1.48), (24, 1.16), (36, 1.07), (48, 1.03), (60, 1.01)]
+    sel = [(x, 0.30 * a + 0.70 * b) for (x, a), (_, b) in zip(own, ind)]
     ax.polyline(ind, colour=AMBER, width=2.2, dash=True)
+    ax.polyline(own, colour=BLUE, width=1.6)
     for x, y in own:
         ax.point(x, y, colour=BLUE, r=3.6)
-    ax.polyline(own, colour=BLUE, width=1.6)
-    ax.label(30, 1.72, "own data — 4 observations", cls="sm bold", fill=BLUE)
-    ax.label(46, 1.28, "industry", cls="sm bold", fill=AMBER)
-    f.text(BCX, ax.y1 + 30, "age-to-age factors by age in months", cls="sm dim")
-    f.text(BCX, ax.y1 + 56, "an industry pattern is a complement, not a",
-           cls="sm dim")
-    f.text(BCX, ax.y1 + 74, "substitute — check the mix and limits behind it",
-           cls="sm dim")
+    ax.polyline(sel, colour=GREEN, width=2.6)
+    ax.label(36, 1.14, "own data", cls="sm bold", fill=BLUE, dy=-9)
+    ax.label(36, 1.07, "industry", cls="sm bold", fill=AMBER, dy=17)
+    ax.label(12, sel[0][1], "selected", cls="sm bold", fill=GREEN, anchor="end",
+             dx=-8, dy=4)
     return f

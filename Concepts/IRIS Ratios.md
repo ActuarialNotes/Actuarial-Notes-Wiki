@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:dbcf704928930f4da2b5e841129fd4f6f5d37cd49ee8e8b6b28b3267f534db53
+  content_hash: sha256:5cd2ed76c773df963fed16bc64345148ff21566bb5ac6ca17a38832d352add53
   sources: []
   open_findings: 0
   open_critical: 0
@@ -13,10 +13,11 @@ verification:
 
 **IRIS Ratios** are the thirteen property/casualty financial ratios that the NAIC's Insurance Regulatory Information System computes from each insurer's statutory annual statement and compares with a published **usual range**, so that state regulators can decide which insurers to look at first. They are a public screening tool, not a verdict.
 
-> $$\text{NPW to PHS} = \frac{\text{Net premiums written}}{\text{Policyholders' surplus}}$$
+> $$\text{Ratio 2} = \frac{\text{Net premiums written}}{\text{Policyholders' surplus}}$$
 >
-> $$\text{One-year development to PHS} = \frac{\text{One-year loss and LAE reserve development}}{\text{Prior year-end PHS}}$$
+> $$\text{Ratio 11} = \frac{\text{One-year reserve development}}{\text{Prior year-end PHS}}$$
 
+- PHS is policyholders' surplus; one-year reserve development is the change over the year in the estimate of loss and LAE for all prior accident years (payments plus remaining reserves, less last year's reserves).
 - **The thirteen P&C ratios and their usual ranges** (NAIC *IRIS Ratios Manual*, 2025 edition; a result is unusual when it is **equal to or beyond** the bound):
   - *Overall* — (1) gross premiums written to PHS, below $900\%$; (2) net premiums written to PHS, below $300\%$; (3) change in net premiums written, $-33\%$ to $+33\%$; (4) surplus aid to PHS, below $15\%$.
   - *Profitability* — (5) two-year overall operating ratio, below $100\%$; (6) investment yield, $2.0\%$ to $5.5\%$; (7) gross change in PHS, $-10\%$ to $+50\%$; (8) change in adjusted PHS, $-10\%$ to $+25\%$.
@@ -24,7 +25,7 @@ verification:
   - *Reserves* — (11) one-year and (12) two-year reserve development to PHS, each below $20\%$; (13) estimated current reserve deficiency to PHS, below $25\%$.
 - The ranges are reviewed every year and have moved (the investment-yield band in particular), so cite the current manual.
 - **Reading them together.** Ratios 1–2 measure [[Insurance Leverage|leverage]]; 3, 7 and 8 flag rapid change; 5–6 profitability; 9–10 liquidity; 11–13 reserve adequacy, built from [[Schedule P]] Part 2. A positive development ratio means reserves were **deficient**. Ratio 4 warns that ceding commissions may be flattering the others.
-- **What an unusual value means.** Only that the insurer merits a closer look. The manual says outright that stable insurers can fall outside several ranges in a volatile year — surplus is the denominator of most ratios, so an equity-market fall moves many at once — and that no state should rely on IRIS as its only surveillance.
+- **What an unusual value means.** Only that the insurer merits a closer look. The manual says outright that stable insurers can fall outside several ranges in a volatile year — surplus is the denominator of many ratios, so an equity-market fall moves many at once — and that no state should rely on IRIS as its only surveillance.
 - **Where it sits.** IRIS results are public; the NAIC's regulator-only scoring tools and the Analyst Team build on them within [[Solvency Monitoring]]. Unlike [[Risk-Based Capital]], an IRIS result carries no legal consequence.
 
 > [!example]- Two-Year Overall Operating Ratio {Example}

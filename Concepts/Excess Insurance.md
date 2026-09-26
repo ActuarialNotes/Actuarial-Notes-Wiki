@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:77ae8c0d0f896ec4ad4ac1cb3095e76109546e1e16e789a65d82821c0ecc3cde
+  content_hash: sha256:b8aa290f095c7209f3d19f1e9aed8d8d59969f0b6bd3ab9728854b7d937ac344
   sources: []
   open_findings: 0
   open_critical: 0
@@ -63,4 +63,4 @@ verification:
 > > \end{align*}
 > > $$
 > >
-> > The excess layer develops almost twice as far as the ground-up losses. Part of that comes from claim B, which showed nothing excess at 24 months and then pierced the attachment. Applying ground-up factors to an excess layer would understate its unpaid claims by nearly half.
+> > The excess layer develops almost twice as far as the ground-up losses. Part of that comes from claim B, which showed nothing excess at 24 months and then pierced the attachment. Applying the ground-up factor instead would project the layer at $500 \times 1.481 = \$741$K rather than $\$1.4$M, understating its ultimate by almost half.

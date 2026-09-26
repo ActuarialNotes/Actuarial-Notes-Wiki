@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:0e8e4913d8b2aa5a93da84e54aaf94345c6d1602c6716072f1525522ea7f4296
+  content_hash: sha256:ec1ef54f7da34b85e31451b0735c055cc18c62c73201cedd884f32c084fc031a
   sources: []
   open_findings: 0
   open_critical: 0
@@ -63,14 +63,14 @@ verification:
 > >
 > > $$
 > > \begin{align*}
-> > s = 0.20: \quad g &= 0.3807 \\
-> > \iota &= \frac{0.3807 - 0.20}{1 - 0.3807} \\
+> > g(0.20) &= 0.3807 \\
+> > \iota(0.20) &= \frac{0.3807 - 0.20}{1 - 0.3807} \\
 > > &= 29.2\% \\
-> > s = 0.05: \quad g &= 0.1657 \\
-> > \iota &= \frac{0.1657 - 0.05}{1 - 0.1657} \\
+> > g(0.05) &= 0.1657 \\
+> > \iota(0.05) &= \frac{0.1657 - 0.05}{1 - 0.1657} \\
 > > &= 13.9\% \\
-> > s = 0.01: \quad g &= 0.0631 \\
-> > \iota &= \frac{0.0631 - 0.01}{1 - 0.0631} \\
+> > g(0.01) &= 0.0631 \\
+> > \iota(0.01) &= \frac{0.0631 - 0.01}{1 - 0.0631} \\
 > > &= 5.7\%
 > > \end{align*}
 > > $$

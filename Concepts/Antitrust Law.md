@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ebed6fa68a070f7da09e4c64390e52e7fbfdcfbe81d517088d7f602d11d770b3
+  content_hash: sha256:41ae13ba6fc7529ae694f3564f903f21b1f8e13d6ce65e70349b58cfe8dcea19
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,7 +18,7 @@ verification:
 - **Why insurance needed an exemption.** Sound pricing needs pooled data — industry loss experience, development and trend — and early fire and casualty rates were set collectively by bureaus. After *South-Eastern Underwriters* (1944) that was price-fixing under Sherman Act section 1; McCarran-Ferguson (1945) let it continue under state supervision ([[History of Insurance Regulation]]).
 - **"Business of insurance" is read narrowly.** Under *Group Life & Health v. Royal Drug* (1979) and *Union Labor Life v. Pireno* (1982), courts ask whether the practice (1) transfers or spreads the policyholder's risk, (2) is an integral part of the policy relationship between insurer and insured, and (3) is limited to entities within the insurance industry. An insurer's agreements with pharmacies, and its use of a peer-review committee to judge providers' charges, failed the test; cooperative ratemaking and policy-form development sit at its core.
 - **The boycott exception.** In *Hartford Fire Insurance Co. v. California* (1993), primary insurers and reinsurers, including London market reinsurers, were alleged to have agreed to withhold reinsurance to force changes to the standard commercial general liability form. The Court held that such conduct could be a boycott outside the exemption, and that the Sherman Act reached the foreign reinsurers.
-- **Practice today.** Advisory organisations such as ISO collect statistics and file **prospective loss costs** and standard forms rather than final rates; each insurer adds its own expense and profit loadings, decides its own deviations and chooses whether to use the forms. Competitors keep to historical, aggregated data and do not exchange current or planned prices, commissions or underwriting intentions. State antitrust and unfair-trade-practices laws apply alongside.
+- **Practice today.** Advisory organisations such as ISO collect statistics and file **prospective loss costs** and standard forms rather than final rates; each insurer adds its own expense and profit loadings, decides its own deviations and chooses whether to use the forms. Competitors keep to historical, aggregated data and do not exchange current or planned prices, commissions or underwriting intentions. State antitrust and unfair-trade-practices laws apply alongside ([[State and Federal Insurance Regulation]]).
 - **Health insurance** lost the exemption in 2021 (the Competitive Health Insurance Reform Act of 2020), with safe harbours kept for collecting historical loss data, developing loss development factors, actuarial services not involving a restraint of trade, and non-mandatory standard forms. Property-casualty business keeps it; bills for full repeal recur.
 - **Where the actuary meets it.** Using industry [[Loss Development|development factors]] or ISO loss costs is the protected core. Sharing a company's own rate plans with a competitor, or joining any concerted refusal to deal, is not.
 

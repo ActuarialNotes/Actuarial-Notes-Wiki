@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:777dea8a7b95026fa22159f9e94d722b6e7fd6951ad12cbf0b9739f18ff1e6be
+  content_hash: sha256:6ddbbd80351c1d984dcef47edc5e9d772d10c8fa7ce934a8e112994c2853eae6
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,8 +23,8 @@ verification:
   - *Credibility-weight* each class toward its group, as in the formula above.
   - Use *multi-dimensional credibility* across injury types, estimating a class's rare serious-injury frequencies from its correlated, more common types (Couret and Venter).
   - Treat class as a random effect in a GLMM, whose shrinkage is the [[Bühlmann-Straub Credibility|Bühlmann–Straub]] blend ([[Random Effects]]).
-  - *[[Clustering|Cluster]]* the classes.
-- **Hazard groups.** NCCI moved to seven hazard groups in 2007, assigning classes by weighted [[K-Means Clustering|k-means]] on credibility-weighted vectors of excess ratios at five loss limits, from $\$100$K to $\$5$M (Robertson). Hazard groups set the excess loss factors used for retrospective-rating loss limits and large deductibles. The class sets the manual rate, and [[Experience Rating|experience rating]] captures the differences between employers *within* a class.
+  - *[[Clustering|Cluster]]* classes with similar loss characteristics into a few groups, as NCCI's hazard groups do.
+- **Hazard groups.** NCCI moved to seven hazard groups in 2007, assigning classes by weighted [[K-Means Clustering|k-means]] on credibility-weighted vectors of excess ratios at five loss limits, from $\$100$K to $\$5$M (Robertson). Classes in a hazard group share the same excess loss factors, which NCCI uses in class ratemaking and in pricing loss limits on retrospectively rated policies. The class sets the manual rate, and [[Experience Rating|experience rating]] captures the differences between employers *within* a class.
 - In Canada, workers compensation is run by provincial boards that assess employers by industry rate group. See [[Workers Compensation Insurance]].
 
 > [!example]- Manual Premium Across Two Classes {Example}

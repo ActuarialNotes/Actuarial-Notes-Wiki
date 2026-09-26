@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:b06deecd59024de643ea56a63cbae0c8067a1fbb4383fe41a9d6c9a093897291
+  content_hash: sha256:ef7536ff6dccc60f709b31b337f4738cc571d5f3c1038e1b502fdd3c99483bd8
   sources: []
   open_findings: 0
   open_critical: 0
@@ -45,11 +45,11 @@ The **Economic Value** of a set of insurance cash flows is their expected value 
 > > [!answer]-
 > > $$
 > > \begin{align*}
-> > \text{Invested at } t = 0 &= 100 - 20 + 50 \\
+> > \text{Invested at start} &= 100 - 20 + 50 \\
 > > &= 130 \\
-> > \text{Funds at } t = 2 &= 130(1.04)^2 \\
+> > \text{Funds after 2 years} &= 130(1.04)^2 \\
 > > &= 140.61 \\
-> > \text{Released at } t = 2 &= 140.61 - 75 \\
+> > \text{Released after 2 years} &= 140.61 - 75 \\
 > > &= 65.61 \\
 > > \text{NPV} &= -50 + \frac{65.61}{1.12^2} \\
 > > &= 2.30 \\

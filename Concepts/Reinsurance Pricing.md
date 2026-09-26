@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:3da3b22803d26675dcaf8164e4d3134fb5b88f3e6180c4aee2a88af9e77e0692
+  content_hash: sha256:335447cd7456f91959bd21b71ef0a522fbd65ef7c79b9484b51dda8f792808bd
   sources: []
   open_findings: 0
   open_critical: 0
@@ -25,7 +25,7 @@ verification:
 - **Reconciling the two:** *free cover* — no trended loss reaching the top of a layer — is priced from exposure-rating relativities; credibility rests on the claim count *expected* in the experience period (not the count observed) and on how stable the yearly loss costs are.
 - **Catastrophe covers** were once priced by *payback* — premium set so the limit is repaid over a chosen number of years — and are now priced from catastrophe-model output ([[Catastrophe Expected Loss Cost]]). [[Reinstatements]] are usually paid *pro rata as to amount*.
 - **Loss-sensitive features** — [[Sliding Scale Commissions]], [[Profit Commission|profit commissions]], [[Loss Corridors]], annual aggregate deductibles — respond non-linearly to results, so they are priced over an aggregate loss distribution, not at the expected loss ratio ([[Reinsurance Contract Provisions]]).
-- **The final price** adds variable expenses (ceding commission, brokerage), fixed overhead and reinsurer ULAE — reinsurers pay no premium tax. The traditional "100/80" load treats all expenses as a $20\%$ variable charge. Risk load and investment income sit beyond this formula ([[Risk Loads]]).
+- **The final price** adds variable expenses (ceding commission, brokerage), fixed overhead and reinsurer ULAE; unlike the cedant, the reinsurer pays no premium tax. The traditional "100/80" load treats all expenses as a $20\%$ variable charge. Risk load and investment income sit beyond this formula ([[Risk Loads]]).
 
 > [!example]- Experience Rating a Per-Risk Excess Layer {Example}
 > A cedant buys \$500K xs \$500K per risk. Three years are shown for brevity (\$000s; losses already trended to the treaty period, premium at the treaty period's rate level):

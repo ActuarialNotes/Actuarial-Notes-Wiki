@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:d269eb0646252871ecb9b84648f569fd8173886e36e8c29621d52f3eef296626
+  content_hash: sha256:0fdfe38cfb6341dfc29bd14299aba92de5c4a43f2831f420b65a261bd9fd97cd
   sources: []
   open_findings: 0
   open_critical: 0
@@ -31,7 +31,7 @@ verification:
 
 - **Fitting it.** Match the total-loss probability and the mean: $g = 1/p$ directly, then solve for $b$ iteratively from $\mu = E[y]$, which falls as $b$ rises. It can also be fitted to $\mu$ and the standard deviation.
 - **The Swiss Re curves.** The one-parameter family $b(c) = e^{3.1 - 0.15(1+c)c}$, $g(c) = e^{(0.78 + 0.12c)c}$ reproduces the Swiss Re curves Y1–Y4 at $c = 1.5$, $2$, $3$, $4$ and a Lloyd's industrial curve at $c = 5$. At $c = 0$ every loss is a total loss. Higher $c$ gives a more concave curve: small partial losses relative to the MPL, typical of large industrial risks.
-- **Exposure rating.** Band the risk profile by MPL, estimate each band's expected loss as ELR × premium, and apply $G$ band by band. For casualty lines, [[Increased Limits|ILFs]] play the role of $G$ ([[Reinsurance Pricing]]). The curve prices a *per-risk* cover and says nothing about catastrophe accumulation.
+- **Exposure rating.** Band the risk profile by MPL, estimate each band's expected loss as $\text{ELR} \times \text{premium}$, and apply $G$ band by band. For casualty lines, [[Increased Limits|ILFs]] play the role of $G$ ([[Reinsurance Pricing]]). The curve prices a *per-risk* cover and says nothing about catastrophe accumulation.
 
 > [!example]- Building a Curve from a Loss-Degree Distribution {Example}
 > For a class of warehouses, $10\%$ of losses are total, and below a total loss $1 - F(y) = 1 - 0.9y$ for $0 \le y < 1$. Derive $G$, check the slope properties, and find the share of expected loss between $20\%$ and $50\%$ of MPL.

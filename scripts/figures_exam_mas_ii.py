@@ -94,33 +94,40 @@ def _blend_bar(f: Fig, y, z, left_label, right_label, mid_label, height=20,
 # A. Credibility
 # ═══════════════════════════════════════════════════════════════════════════
 
-@figure("Credibility Theory", "A credibility estimate shown as a weighted blend "
-        "between a manual rate and observed experience", width=WID)
+@figure("Credibility Theory", "A seesaw balancing the manual rate of 380 against the "
+        "class's own 420, weighted 1 − Z and Z, so it tips at the estimate 401",
+        width=WID)
 def credibility_theory() -> Fig:
     f = vcard()
 
-    z = 0.527
-    x0, x1 = 48, 312
-    f.text(BCX, 104, "300 claims against a 1,082-claim standard", cls="sm dim")
-    _blend_bar(f, 150, z, "manual 380", "own data 420", "Z = 0.53")
-
-    # the resulting estimate on a scale from complement to experience
-    sy = 250
-    f.line(x0, sy, x1, sy, cls="axis")
-    for v, lab, colour in ((0.0, "380", AMBER), (1.0, "420", BLUE)):
-        x = x0 + (x1 - x0) * v
-        f.line(x, sy - 5, x, sy + 5, cls="tick")
-        f.text(x, sy + 19, lab, cls="sm", fill=colour)
-    xe = x0 + (x1 - x0) * z
-    f.arrow(xe, sy - 34, xe, sy - 7, colour=GREEN, width=1.8)
-    f.text(xe, sy - 41, "401", cls="bold", fill=GREEN)
-    f.text(BCX, 300, "Z = 0 leans wholly on the complement,", cls="sm dim")
-    f.text(BCX, 316, "Z = 1 wholly on the class's own data", cls="sm dim")
+    z = 0.527                      # 300 claims against the 1,082-claim standard
+    xl, xr = 64, 296               # the manual rate 380 and the class's own 420
+    xf = xl + (xr - xl) * z        # the balance point: 401
+    beam, ground, bw, tall = 262, 312, 58, 230
+    for x, share, colour, name, weight in ((xl, 1 - z, AMBER, "manual", "1 − Z"),
+                                           (xr, z, BLUE, "own data", "Z")):
+        h = tall * share
+        f.rect(x - bw / 2, beam - h, bw, h, rx=4, fill=colour, fill_opacity="0.3",
+               stroke=colour, stroke_width="1.4")
+        f.text(x, beam - h / 2 + 4, weight, cls="bold")
+        f.text(x, beam - h - 10, name, cls="sm")
+        f.line(x, beam + 6, x, ground, cls="thin dash", stroke="var(--axis)",
+               stroke_width="1.1")
+    f.rect(xl - bw / 2 - 4, beam, xr - xl + bw + 8, 6, rx=3, fill="var(--ink)",
+           fill_opacity="0.7")
+    f.polygon([(xf, beam + 6), (xf - 20, ground), (xf + 20, ground)], fill=GREEN,
+              fill_opacity="0.3", stroke=GREEN, stroke_width="1.4",
+              stroke_linejoin="round")
+    f.line(BX0 + 8, ground, BX1 - 8, ground, cls="axis")
+    for x, lab, cls in ((xl, "380", "sm dim"), (xf, "401", "bold"),
+                        (xr, "420", "sm dim")):
+        f.text(x, ground + 19, lab, cls=cls)
     return f
 
 
-@figure("Limited Fluctuation Credibility", "The square-root credibility curve "
-        "rising to full credibility at the standard", width=WID)
+@figure("Limited Fluctuation Credibility", "The square-root credibility curve rising "
+        "to full credibility at the 1,082-claim standard, with 300 claims earning 0.53",
+        width=WID)
 def limited_fluctuation() -> Fig:
     f = vcard()
 
@@ -132,18 +139,18 @@ def limited_fluctuation() -> Fig:
     ax.hline(1.0, colour="var(--dim)", x_to=2000, label=None)
     ax.vline(1082, colour=GREEN, y_top=1.0)
     ax.label(1082, 1.0, "n_F = 1,082", cls="sm bold", dy=-8, dx=-4, anchor="end")
-    ax.point(300, math.sqrt(300 / 1082), colour=AMBER, label="Z = 0.53", dy=-10, dx=22)
+    ax.point(300, math.sqrt(300 / 1082), colour=AMBER, label="Z = 0.53", dy=15, dx=30)
     f.text(BCX, ax.y1 + 32, "claims n", cls="sm dim")
-    f.text(BCX, BY1 - 2, "full credibility at the standard, √ below it", cls="sm dim")
     return f
 
 
-@figure("Full Credibility Standard", "The tolerance band around the true mean "
-        "that sets the full-credibility claim count", width=WID)
+@figure("Full Credibility Standard", "A normal curve with 90% of its area shaded "
+        "inside ±5% of the true mean, the band that sets the full-credibility claim count",
+        width=WID)
 def full_credibility_standard() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -3.6, 3.6, 0, 0.45, left=26, right=16, top=40, bottom=68)
+    ax = vaxes(f, -3.6, 3.6, 0, 0.45, left=26, right=16, top=30, bottom=64)
     ax.area(lambda x: _npdf(x), -1.645, 1.645, colour=BLUE, opacity="0.22")
     ax.curve(lambda x: _npdf(x), colour=BLUE, width=2.2)
     f.line(ax.x0, ax.y1, ax.x1, ax.y1, cls="axis")
@@ -156,175 +163,182 @@ def full_credibility_standard() -> Fig:
                    stroke="var(--dim)", stroke_width="1.1")
     f.text(ax.px(0), ax.py(0.17), "p = 90%", cls="bold", fill=BLUE)
     brace(f, ax.px(-1.645), ax.px(1.645), ax.y1 + 26, depth=7, label="±k = ±5%")
-    f.text(BCX, BY1 - 4, "tighter k or higher p ⇒ larger n_F", cls="sm dim")
     return f
 
 
-@figure("Partial Credibility", "The square-root rule compared with a "
-        "proportional rule below the full-credibility standard", width=WID)
+@figure("Partial Credibility", "The square-root credibility curve above the "
+        "proportional diagonal, lifting 300 claims from 0.28 of the standard to a "
+        "weight of 0.53", width=WID)
 def partial_credibility() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 1, 0, 1.05, left=42, right=18, top=24, bottom=62)
+    ax = vaxes(f, 0, 1, 0, 1.05, left=42, right=18, top=24, bottom=44)
     ax.frame(xticks=[0, 0.25, 0.5, 0.75, 1],
              yticks=[0, 0.5, 1.0], grid=True)
     ax.curve(lambda t: math.sqrt(t), colour=BLUE, width=2.4)
     ax.curve(lambda t: t, colour="var(--dim)", width=1.6, dash=True)
     ax.label(0.55, 0.80, "√(n/n_F)", cls="sm bold", fill=BLUE, dy=-4)
     ax.label(0.80, 0.72, "n/n_F", cls="sm dim", dy=6)
-    ax.point(300 / 1082, math.sqrt(300 / 1082), colour=AMBER)
-    ax.label(300 / 1082, math.sqrt(300 / 1082), "300 claims → 0.53",
-             cls="sm", anchor="start", dx=8, dy=-8)
+    t = 300 / 1082
+    f.line(ax.px(t), ax.py(t), ax.px(t), ax.py(math.sqrt(t)), cls="thin",
+           stroke=AMBER, stroke_width="2.2")
+    ax.point(t, t, colour="var(--dim)", r=3.2)
+    ax.point(t, math.sqrt(t), colour=AMBER)
+    ax.label(t, math.sqrt(t), "0.53", cls="sm bold", anchor="end", dx=-8, dy=-4)
+    ax.label(t, t, "0.28", cls="sm", anchor="start", dx=8, dy=10)
     f.text(BCX, ax.y1 + 32, "n / n_F", cls="sm dim")
-    f.text(BCX, BY1 - 2, "28% of the data still earns 53% of the weight", cls="sm dim")
     return f
 
 
-@figure("Bühlmann Credibility", "The Bühlmann credibility curve Z = n/(n+k) for "
-        "three values of k", width=WID)
+@figure("Bühlmann Credibility", "The Bühlmann credibility curve Z = n/(n+k) for k = 2, "
+        "6 and 20, each crossing one half where n equals k", width=WID)
 def buhlmann_credibility() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 30, 0, 1.05, left=42, right=44, top=24, bottom=62)
+    ax = vaxes(f, 0, 30, 0, 1.05, left=42, right=44, top=24, bottom=44)
     ax.frame(xticks=[0, 10, 20, 30], yticks=[0, 0.5, 1.0], grid=True)
     for k, colour in ((2, GREEN), (6, BLUE), (20, ROSE)):
         ax.curve(lambda n, k=k: n / (n + k), colour=colour, width=2.2)
         ax.label(30, 30 / (30 + k), f"k = {k}", cls="sm bold", fill=colour,
                  anchor="start", dx=6, dy=4)
     ax.point(6, 0.5, colour=BLUE)
-    ax.label(6, 0.5, "n = k ⇒ Z = ½", cls="sm", anchor="start", dx=8, dy=-8)
+    ax.label(6, 0.5, "n = k", cls="sm", anchor="start", dx=8, dy=-8)
     f.text(BCX, ax.y1 + 32, "years n", cls="sm dim")
-    f.text(BCX, BY1 - 2, "noisy risks (large k) earn credibility slowly", cls="sm dim")
     return f
 
 
-@figure("Expected Value of Process Variance", "Three risks with the same within-risk "
-        "spread, averaged to give the EPV", width=WID)
+@figure("Expected Value of Process Variance", "Three risks' loss distributions, each "
+        "with the same within-risk spread marked across it; averaging that spread "
+        "gives v", width=WID)
 def epv() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -1.2, 5.2, 0, 0.62, left=24, right=16, top=40, bottom=58)
+    ax = vaxes(f, -1.2, 5.2, 0, 0.7, left=24, right=16, top=30, bottom=44)
     f.line(ax.x0, ax.y1, ax.x1, ax.y1, cls="axis")
     for mu, colour in ((0.6, GREEN), (2.0, BLUE), (3.6, ROSE)):
         ax.area(lambda x, m=mu: _npdf(x, m, 0.62), mu - 1.9, mu + 1.9,
                 colour=colour, opacity="0.14")
         ax.curve(lambda x, m=mu: _npdf(x, m, 0.62), colour=colour, width=1.9)
         y = ax.py(_npdf(mu + 0.62, mu, 0.62))
-        f.line(ax.px(mu - 0.62), y, ax.px(mu + 0.62), y, cls="thin",
-               stroke=colour, stroke_width="1.6")
-    f.text(BCX, ax.y1 + 22, "each risk's own year-to-year noise", cls="sm dim")
-    f.text(BCX, ax.y1 + 40, "σ²(Θ) = 0.38 for all three  ⇒  v = 0.38",
-           cls="sm bold")
-    f.text(BCX, BY1 - 2, "large v ⇒ own data unreliable ⇒ Z falls", cls="sm dim")
+        for sgn in (-1, 1):
+            f.arrow(ax.px(mu), y, ax.px(mu + sgn * 0.62), y, colour=colour, width=1.8)
+    f.text(BCX, ax.y1 + 24, "v = 0.38", cls="bold")
     return f
 
 
-@figure("Variance of Hypothetical Means", "The spread between three risks' means, "
-        "which is the VHM", width=WID)
+@figure("Variance of Hypothetical Means", "Three risks' loss distributions with their "
+        "means marked on the axis and a brace spanning them: the spread of the means "
+        "is a", width=WID)
 def vhm() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -1.2, 5.2, 0, 0.62, left=24, right=16, top=40, bottom=58)
+    ax = vaxes(f, -1.2, 5.2, 0, 0.7, left=24, right=16, top=30, bottom=56)
     f.line(ax.x0, ax.y1, ax.x1, ax.y1, cls="axis")
     mus = (0.6, 2.0, 3.6)
     for mu, colour in zip(mus, (GREEN, BLUE, ROSE)):
         ax.curve(lambda x, m=mu: _npdf(x, m, 0.62), colour=colour, width=1.5)
         ax.vline(mu, colour=colour, y_top=_npdf(mu, mu, 0.62), dash=False)
         ax.point(mu, 0, colour=colour, r=4)
-    grand = sum(mus) / 3
-    ax.vline(grand, colour="var(--dim)", y_top=0.60)
-    ax.label(grand, 0.60, "μ", cls="sm dim", dy=-6)
-    brace(f, ax.px(mus[0]), ax.px(mus[2]), ax.y1 + 20, depth=7,
-          label="spread of the means = a")
-    f.text(BCX, ax.y1 + 47, "a = 1.51 here", cls="sm bold")
-    f.text(BCX, BY1 - 2, "a = 0 ⇒ identical risks ⇒ Z = 0", cls="sm dim")
+    brace(f, ax.px(mus[0]), ax.px(mus[2]), ax.y1 + 12, depth=9, colour=VIOLET,
+          label="a = 1.50", label_cls="bold")
     return f
 
 
-@figure("Bühlmann-Straub Credibility", "Credibility built on unequal yearly "
-        "exposures rather than a count of years", width=WID)
+@figure("Bühlmann-Straub Credibility", "Five years drawn as bars as wide as their "
+        "exposure, beside a complement block as wide as k = 480; the exposure-weighted "
+        "level across them all is the estimate, and the years carry Z = 0.73",
+        width=WID)
 def buhlmann_straub() -> Fig:
     f = vcard()
 
-    exposures = [140, 260, 190, 410, 320]
-    scale = 0.42
-    base = 268
-    for i, m in enumerate(exposures):
-        x = 52 + i * 55
-        h = m * scale
-        f.rect(x, base - h, 36, h, rx=3, fill=BLUE, fill_opacity="0.55")
-        f.text(x + 18, base + 15, f"Y{i+1}", cls="sm dim")
-        f.text(x + 18, base - h - 7, str(m), cls="sm")
-    f.line(44, base, 320, base, cls="axis")
-    f.text(BCX, 106, "exposures mᵢ by year", cls="sm dim")
-    brace(f, 52, 306, base + 24, depth=8, label="m = 1,320")
-    f.text(BCX, 350, "k = 480  ⇒  Z = 1,320 / 1,800 = 0.73", cls="bold")
-    f.text(BCX, BY1 - 2, "one big year can outweigh several small ones", cls="sm dim")
+    exposures = [140, 260, 190, 410, 320]      # m = 1,320
+    ratios = [0.82, 0.64, 0.74, 0.58, 0.69]    # each year's observed loss ratio
+    k, mu = 480, 0.75                          # the complement, as k units of exposure
+    x0, x1, base, top, gap = 34, 326, 334, 120, 3
+    scale = (x1 - x0 - len(exposures) * gap) / (sum(exposures) + k)
+    hy = lambda v: base - (base - top) * v
+    x = x0
+    for m, v in zip(exposures, ratios):
+        f.rect(x, hy(v), m * scale, base - hy(v), rx=2, fill=BLUE, fill_opacity="0.45",
+               stroke=BLUE, stroke_width="1.2")
+        x += m * scale + gap
+    xm, wk = x - gap, k * scale
+    f.rect(x, hy(mu), wk, base - hy(mu), rx=2, fill=AMBER, fill_opacity="0.4",
+           stroke=AMBER, stroke_width="1.2")
+    est = ((sum(m * v for m, v in zip(exposures, ratios)) + k * mu)
+           / (sum(exposures) + k))
+    f.line(x0 - 6, hy(est), x1 + 6, hy(est), cls="thin dash", stroke="var(--ink)",
+           stroke_width="1.6")
+    f.text(x + wk / 2, hy(est) + 16, "estimate", cls="sm")
+    f.line(x0 - 6, base, x1 + 6, base, cls="axis")
+    f.text((x0 + xm) / 2, hy(max(ratios)) - 14, "Z = 0.73", cls="bold")
+    brace(f, x0, xm, base + 8, depth=8, colour=BLUE, label="m = 1,320",
+          label_cls="sm bold")
+    brace(f, x, x + wk, base + 8, depth=8, colour=AMBER, label="k = 480",
+          label_cls="sm bold")
     return f
 
 
-@figure("Bayesian Credibility", "A prior distribution updated by observed "
-        "experience into a narrower posterior", width=WID)
+@figure("Bayesian Credibility", "A dashed Gamma prior and the posterior it becomes "
+        "after three years with one claim, its mean 0.231 pulled off the prior mean μ "
+        "toward the observed mean x̄", width=WID)
 def bayesian_credibility() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 0.9, 0, 9.0, left=26, right=16, top=34, bottom=56)
+    ax = vaxes(f, 0, 0.9, 0, 4.4, left=26, right=16, top=34, bottom=40)
     f.line(ax.x0, ax.y1, ax.x1, ax.y1, cls="axis")
     ax.curve(lambda t: _gamma_pdf(t, 2, 0.10), colour="var(--dim)", width=1.8,
              dash=True)
     ax.area(lambda t: _gamma_pdf(t, 3, 0.0769), 0.001, 0.9, colour=BLUE,
             opacity="0.16")
     ax.curve(lambda t: _gamma_pdf(t, 3, 0.0769), colour=BLUE, width=2.3)
-    ax.label(0.44, 3.2, "prior", cls="sm bold", anchor="start")
-    ax.label(0.30, 6.6, "posterior", cls="sm bold", fill=BLUE, anchor="start")
-    for v, lab, colour in ((0.20, "μ = 0.20", "var(--dim)"),
-                           (0.333, "x̄ = 0.33", AMBER),
-                           (0.231, "0.231", GREEN)):
-        ax.vline(v, colour=colour, y_top=8.6, dash=(colour != GREEN))
-    f.text(ax.px(0.231), ax.y1 + 20, "posterior mean 0.231", cls="sm bold",
-           fill=GREEN)
-    f.text(BCX, ax.y1 + 38, "3 years, 1 claim, Gamma(2, 0.10) prior", cls="sm dim")
-    f.text(BCX, BY1 - 2, "the posterior is narrower than the prior", cls="sm dim")
+    ax.label(0.45, 0.9, "prior", cls="sm bold", anchor="start")
+    ax.label(0.31, 2.3, "posterior", cls="sm bold", fill=BLUE, anchor="start")
+    ax.vline(0.20, colour="var(--dim)", y_top=4.2, label="μ", label_cls="sm bold")
+    ax.vline(0.333, colour=AMBER, y_top=4.2, label="x̄", label_cls="sm bold")
+    ax.vline(0.231, colour=GREEN, y_top=4.2, dash=False)
+    f.text(ax.px(0.231), ax.y1 + 17, "0.231", cls="sm bold")
     return f
 
 
-@figure("Conjugate Prior", "A Gamma prior updated by Poisson data staying in the "
-        "Gamma family", width=WID)
+@figure("Conjugate Prior", "A Gamma(2, 0.10) prior curve, an arrow carrying three "
+        "years of Poisson data with one claim, and the Gamma(3, 0.077) posterior "
+        "curve of the same family", width=WID)
 def conjugate_prior() -> Fig:
     f = vcard()
 
-    f.box(38, 100, 118, 62, label="Gamma(2, 0.10)", colour=VIOLET,
-          sub="prior", label_cls="sm bold")
-    f.box(204, 100, 118, 62, label="Gamma(3, 0.077)", colour=BLUE,
-          sub="posterior", label_cls="sm bold")
-    f.arrow(160, 131, 200, 131, colour="var(--ink)", width=1.6)
-    f.text(180, 122, "data", cls="sm dim")
-
-    f.text(BCX, 184, "n = 3 years, Σx = 1 claim", cls="sm dim")
-    rows = [("Poisson", "Gamma", "Gamma"),
-            ("Bernoulli", "Beta", "Beta"),
-            ("Normal", "Normal", "Normal"),
-            ("Exponential", "Inv. Gamma", "Inv. Gamma")]
-    y0 = 222
-    f.line(38, y0 - 14, 322, y0 - 14, cls="rule")
-    for j, lab in enumerate(("likelihood", "prior", "posterior")):
-        f.text(60 + j * 100, y0 - 20, lab, cls="sm dim")
-    for i, row in enumerate(rows):
-        y = y0 + 8 + i * 25
-        for j, cell in enumerate(row):
-            f.text(60 + j * 100, y, cell, cls="sm")
-        f.line(38, y + 8, 322, y + 8, cls="rule")
-    f.text(BCX, BY1 - 2, "conjugate ⇒ Bayesian = Bühlmann exactly", cls="sm dim")
+    base = 292
+    for x0, x1, a, th, colour, name, law in (
+            (30, 142, 2, 0.10, VIOLET, "prior", "Gamma(2, 0.10)"),
+            (218, 330, 3, 0.0769, BLUE, "posterior", "Gamma(3, 0.077)")):
+        ax = Axes(f, x0, 128, x1, base, 0, 0.7, 0, 4.0)
+        ax.area(lambda t, a=a, th=th: _gamma_pdf(t, a, th), 0.001, 0.7,
+                colour=colour, opacity="0.2")
+        ax.curve(lambda t, a=a, th=th: _gamma_pdf(t, a, th), colour=colour,
+                 width=2.3, xa=0.001)
+        f.line(x0, base, x1, base, cls="axis")
+        f.text((x0 + x1) / 2, 112, name, cls="sm bold")
+        f.text((x0 + x1) / 2, base + 22, law, cls="sm")
+    # the data: three policy years, one of them with a claim
+    for j in range(3):
+        x = 150 + j * 21
+        f.rect(x, 192, 18, 18, rx=3, fill=AMBER, fill_opacity="0.18", stroke=AMBER,
+               stroke_width="1.2")
+        if j == 1:
+            f.circle(x + 9, 201, 4, fill=AMBER)
+    f.text(180, 186, "Poisson", cls="sm")
+    f.arrow(150, 228, 212, 228, colour="var(--ink)", width=1.8)
     return f
 
 
-@figure("Predictive Distribution", "A Poisson pmf beside the wider negative "
-        "binomial that mixing it over a Gamma produces", width=WID)
+@figure("Predictive Distribution", "Poisson(1) claim-count bars beside the wider "
+        "negative binomial bars that mixing λ over a Gamma produces", width=WID)
 def predictive_distribution() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -0.7, 6.7, 0, 0.42, left=40, right=14, top=34, bottom=54)
-    ax.frame(xticks=[0, 1, 2, 3, 4, 5, 6], yticks=[0, 0.2, 0.4], arrows=False)
+    ax = vaxes(f, -0.7, 6.7, 0, 0.5, left=40, right=14, top=24, bottom=44)
+    ax.frame(xlabel="claims", xticks=[0, 1, 2, 3, 4, 5, 6], yticks=[0, 0.2, 0.4],
+             arrows=False)
     for k in range(7):
         p = _pois(k, 1.0)
         q = _nbin(k, 2, 0.5)
@@ -332,23 +346,29 @@ def predictive_distribution() -> Fig:
                     fill="var(--dim)", fill_opacity="0.55")
         ax.fig.rect(ax.px(k) + 1, ax.py(q), 9, ax.y1 - ax.py(q), rx=1.5,
                     fill=BLUE, fill_opacity="0.75")
-    f.legend(BX0 + 150, BY0 + 30, [("var(--dim)", "Poisson(1), fixed λ"),
-                                   (BLUE, "predictive, λ ~ Gamma")])
-    f.text(BCX, ax.y1 + 36, "same mean 1.0, variance 1.0 vs 1.5", cls="sm")
-    f.text(BCX, BY1 - 2, "parameter uncertainty fattens the tail", cls="sm dim")
+    f.legend(ax.px(3.3), ax.py(0.4), [("var(--dim)", "Poisson"), (BLUE, "predictive")])
     return f
 
 
-@figure("Empirical Bayes Credibility", "Group means whose spread must be corrected "
-        "for process noise before it estimates the VHM", width=WID)
+def _eb_bracket(f: Fig, x, ya, yb, colour, label):
+    """A vertical bracket from ya to yb, its label hung off the right side."""
+    f.path(f"M{x - 4:.1f},{ya:.1f} H{x:.1f} V{yb:.1f} H{x - 4:.1f}", cls="thin",
+           stroke=colour, stroke_width="1.6")
+    f.text(x + 6, (ya + yb) / 2 + 4, label, cls="bold", anchor="start")
+
+
+@figure("Empirical Bayes Credibility", "Five risks' yearly results scattered about "
+        "their own means, with one risk's scatter bracketed as v̂ and the spread of "
+        "the means bracketed as â", width=WID)
 def empirical_bayes() -> Fig:
     f = vcard()
 
     r = _Rand(7)
-    ax = vaxes(f, 0.3, 5.7, 2, 14, left=38, right=16, top=26, bottom=80)
+    ax = vaxes(f, 0.3, 6.2, 2, 14, left=38, right=14, top=24, bottom=44)
     ax.frame(xticks=[1, 2, 3, 4, 5], yticks=[4, 8, 12], grid=True,
              xfmt=lambda t: f"R{int(t)}")
     means = [5.5, 9.2, 7.0, 11.6, 6.4]
+    spread = None
     for i, m in enumerate(means):
         colour = SERIES[i % len(SERIES)]
         pts = [m + r.n(0, 1.15) for _ in range(4)]
@@ -356,28 +376,37 @@ def empirical_bayes() -> Fig:
             ax.point(i + 1 + (k - 1.5) * 0.11, v, colour=colour, r=2.8)
         ax.fig.line(ax.px(i + 0.78), ax.py(m), ax.px(i + 1.22), ax.py(m),
                     cls="thin", stroke=colour, stroke_width="2.2")
+        if i == 1:
+            spread = (min(pts), max(pts))
     grand = sum(means) / len(means)
-    ax.hline(grand, colour="var(--dim)", x_to=5.7, label="X̄", label_dx=2)
-    f.text(BCX, ax.y1 + 40, "within-risk scatter ⇒ v̂", cls="sm dim")
-    f.text(BCX, ax.y1 + 57, "spread of the bars, less v̂/n ⇒ â", cls="sm dim")
-    f.text(BCX, BY1 - 2, "â < 0 is set to 0, giving Z = 0", cls="sm dim")
+    ax.hline(grand, colour="var(--dim)", x_to=6.2)
+    ax.label(0.42, grand, "X̄", cls="sm dim", anchor="start", dy=-5)
+    _eb_bracket(f, ax.px(2.3), ax.py(spread[1]), ax.py(spread[0]), "var(--ink)", "v̂")
+    _eb_bracket(f, ax.px(5.5), ax.py(max(means)), ax.py(min(means)), VIOLET, "â")
     return f
 
 
-@figure("Complement of Credibility", "The complement carrying the weight that "
-        "experience does not", width=WID)
+@figure("Complement of Credibility", "Three stacked bars for a thin class, the "
+        "300-claim class and a large class: experience fills Z of each and the "
+        "complement carries the rest, shrinking as Z grows", width=WID)
 def complement_of_credibility() -> Fig:
     f = vcard()
 
-    for i, (z, lab) in enumerate(((0.15, "thin class"), (0.53, "300 claims"),
-                                  (0.90, "large class"))):
-        y = 120 + i * 62
-        _blend_bar(f, y, z, "complement", "experience", None, height=26)
-        f.text(BCX, y - 22, f"{lab} — Z = {z:.2f}", cls="sm dim")
-    f.text(BCX, 322, "the smaller Z is, the more the complement", cls="sm dim")
-    f.text(BCX, 338, "decides the answer — so choose it well", cls="sm dim")
-    f.text(BCX, BY1 - 2, "accurate · unbiased · independent · available",
-           cls="sm bold")
+    base, top, bw = 334, 100, 76
+    hy = lambda v: base - (base - top) * v
+    splits = []
+    for x, z in ((70, 0.15), (180, 0.53), (290, 0.90)):
+        f.rect(x - bw / 2, hy(z), bw, base - hy(z), rx=3, fill=BLUE,
+               fill_opacity="0.45", stroke=BLUE, stroke_width="1.2")
+        f.rect(x - bw / 2, top, bw, hy(z) - top, rx=3, fill=AMBER,
+               fill_opacity="0.3", stroke=AMBER, stroke_width="1.2")
+        f.text(x, base + 20, f"Z = {z:.2f}", cls="sm bold" if z == 0.53 else "sm")
+        splits.append((x, hy(z)))
+    for (xa, ya), (xb, yb) in zip(splits, splits[1:]):
+        f.line(xa + bw / 2, ya, xb - bw / 2, yb, cls="thin dash", stroke="var(--axis)",
+               stroke_width="1.2")
+    f.text(70, (top + hy(0.15)) / 2 + 4, "complement", cls="sm")
+    f.text(290, (hy(0.90) + base) / 2 + 4, "experience", cls="sm")
     return f
 
 

@@ -84,8 +84,8 @@ export const PAST_EXAM_SITTINGS: PastExamSitting[] = [
   { exam: 'Exam 5', year: 2011, session: 'Spring' },
 
   // ── CAS Exam MAS-I ─── first sat Spring 2018 ──────────────────────────────
-  { exam: 'Exam MAS-I', year: 2019, session: 'Fall' },
-  { exam: 'Exam MAS-I', year: 2019, session: 'Spring' },
+  { exam: 'Exam MAS-I', year: 2019, session: 'Fall', officialQuestionCount: 45 },
+  { exam: 'Exam MAS-I', year: 2019, session: 'Spring', officialQuestionCount: 45 },
   { exam: 'Exam MAS-I', year: 2018, session: 'Fall' },
   { exam: 'Exam MAS-I', year: 2018, session: 'Spring' },
 
@@ -93,7 +93,7 @@ export const PAST_EXAM_SITTINGS: PastExamSitting[] = [
   //    there is no Spring 2018 paper: three released sittings in total ───────
   { exam: 'Exam MAS-II', year: 2019, session: 'Fall', officialQuestionCount: 42 },
   { exam: 'Exam MAS-II', year: 2019, session: 'Spring', officialQuestionCount: 42 },
-  { exam: 'Exam MAS-II', year: 2018, session: 'Fall' },
+  { exam: 'Exam MAS-II', year: 2018, session: 'Fall', officialQuestionCount: 42 },
 ]
 
 /**

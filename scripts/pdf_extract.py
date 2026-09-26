@@ -431,12 +431,35 @@ def furniture_lines(pages: list[Page]) -> set[str]:
         letters = sum(1 for ch in shape if ch.isalpha())
         if letters >= FURNITURE_MIN_LETTERS or PAGE_NUMBER_RE.match(shape):
             drop |= concrete
+
+    # OCR reads the same running header slightly differently on some pages —
+    # `Exam MAS.-I Spring 2019` on eight pages of forty-five — and a variant
+    # that never reaches the share threshold lands in the prompt. It has the
+    # header's letters in the header's order, which prose never does.
+    skeletons = {
+        _skeleton(line) for line in drop if len(_skeleton(line)) >= FURNITURE_MIN_LETTERS
+    }
+    if skeletons:
+        drop |= {
+            line for concrete in shapes.values() for line in concrete
+            if _skeleton(line) in skeletons
+        }
     return drop
+
+
+def _skeleton(line: str) -> str:
+    """A line's letters alone, lower-cased: what OCR noise leaves unchanged."""
+    return re.sub(r"[^a-z]", "", line.lower())
 
 
 # ─── Prose reflow ─────────────────────────────────────────────────────────────
 
-LIST_START_RE = re.compile(r"^\s*(?:\(?[ivxIVX]+\)|\(?[A-Ea-e]\)|[-*•]|\d+[.)])\s")
+# `A.` and `II.` are list items too: the CAS MAS papers letter their options
+# `A. I only` and number their statements `I.`/`II.`/`III.`, and reflowing one
+# onto the next runs the whole option list into a single line.
+LIST_START_RE = re.compile(
+    r"^\s*(?:\(?[ivxIVX]+\)|[IVX]+\.|\(?[A-Ea-e]\)|[A-E]\.|[-*•]|\d+[.)])(?:\s|$)"
+)
 DEHYPHEN_RE = re.compile(r"([a-z])-\n([a-z])")
 # A hyphen at a line break is usually the typesetter wrapping one word
 # (`expo-\nsure`), and `DEHYPHEN_RE` closes it up. It is *not* when the
@@ -633,7 +656,14 @@ QUESTION_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
     ("**N.**", re.compile(r"(?m)^[ \t]*\*\*(\d{1,3})\.?\*\*[ \t]*")),
 ]
 
-OPTION_RE = re.compile(r"(?m)^[ \t]*\(?([A-E])\)[ \t]*(.*)$")
+# `(A) 24`, `A) 24`, `A. I only` (the CAS MAS papers) and `- A) 24` — the last
+# being the bank's own shape, which is how a transcribed prompt in `--prompts`
+# carries corrected options. The full-stop form needs a space after it, so
+# `E.g.` at the start of a line is not option E.
+# A scan can also set the letter alone on its line, `E.` over `At least 0.12`.
+OPTION_RE = re.compile(
+    r"(?m)^[ \t]*(?:[-*][ \t]+)?\(?([A-E])(?:\)[ \t]*|\.(?:[ \t]+|[ \t]*$))(.*)$"
+)
 INLINE_OPTION_RE = re.compile(r"\(([A-E])\)[ \t]*")
 
 
@@ -694,6 +724,56 @@ def segment(text: str, pattern: re.Pattern[str] | None = None) -> list[Boundary]
     return bounds
 
 
+# A question that runs past its page says so in print — MAS-II Fall 2019 sets
+# `Question #20 continued on the next page.` at the foot of page 24.
+CONTINUED_RE = re.compile(r"(?i)question\s*#?\s*\d{1,3}\s+continued\s+on\s+the\s+next\s+page")
+# What OCR leaves of a question's own label on a scan: `1.` comes back as `ly`,
+# `2.` as `23`, `32.` as `3)`. Never a real line of prompt, which is longer.
+PAGE_LABEL_RE = re.compile(r"\s*\S{1,4}[ \t]*\n")
+
+
+def page_bounds(
+    text: str, index: list[int], pages: list[Page], expected: int
+) -> list[Boundary]:
+    """One question per page, for a scanned paper whose numbering OCR lost.
+
+    The CAS MAS booklets start every question at the top of a page, and the
+    number in its margin is exactly what OCR garbles (`1.` → `ly`, `2.` →
+    `23`). The page is the more reliable unit: a question is a page, plus the
+    next one wherever the page prints that the question continues. That is
+    only trusted when it yields exactly the number of questions the answer key
+    has — otherwise nothing is returned rather than a shifted numbering, which
+    would file every prompt under its neighbour's answer.
+    """
+    groups: list[list[int]] = []
+    current: list[int] = []
+    for page in pages:
+        current.append(page.number)
+        if not CONTINUED_RE.search(page.text):
+            groups.append(current)
+            current = []
+    if current:
+        groups.append(current)
+    if not expected or len(groups) != expected:
+        return []
+
+    first: dict[int, int] = {}
+    last: dict[int, int] = {}
+    for i, number in enumerate(index):
+        first.setdefault(number, i)
+        last[number] = i + 1
+    bounds: list[Boundary] = []
+    for num, group in enumerate(groups, 1):
+        if group[0] not in first:
+            return []
+        start, end = first[group[0]], last[group[-1]]
+        label = PAGE_LABEL_RE.match(text, start)
+        if label and label.end() <= end:
+            start = label.end()
+        bounds.append(Boundary(num=num, start=start, end=end))
+    return bounds
+
+
 def split_options(body: str) -> tuple[str, dict[str, str]]:
     """Peel the lettered options off the end of a multiple-choice prompt."""
     matches = list(OPTION_RE.finditer(body))
@@ -712,7 +792,9 @@ def split_options(body: str) -> tuple[str, dict[str, str]]:
     options = {}
     for i, m in enumerate(matches):
         stop = matches[i + 1].start() if i + 1 < len(matches) else len(body)
-        options[m.group(1)] = re.sub(r"\s+", " ", body[m.end(1) + 1 : stop]).strip(" )\n")
+        # Sliced from after the delimiter, so there is nothing to strip but
+        # space: stripping `)` as well cut the close off `…, or (D)`.
+        options[m.group(1)] = re.sub(r"\s+", " ", body[m.start(2) : stop]).strip()
     return body[: matches[0].start()].strip(), options
 
 
@@ -722,6 +804,9 @@ ANSWER_PATTERNS = [
     re.compile(r"(?mi)^[ \t]*(?:question[ \t]*#?[ \t]*)?(\d{1,3})[.):]?[ \t]*"
                r"(?:solution|answer)[ \t]*[:=-]?[ \t]*\(?([A-E])\)?\b"),
     re.compile(r"(?mi)^[ \t]*(\d{1,3})[ \t]+([A-E])[ \t]*$"),
+    # The CAS MAS keys are a two-column table whose text layer reads a row at
+    # a time, one cell to a line: `1` then `B`.
+    re.compile(r"(?m)^[ \t]*(\d{1,3})[ \t]*\n[ \t]*([A-E])[ \t]*$"),
     re.compile(r"(?mi)\bquestion[ \t]*#?[ \t]*(\d{1,3})\b[^A-E\n]{0,40}?"
                r"answer[ \t]*[:=-][ \t]*\(?([A-E])\)?"),
 ]
@@ -737,6 +822,26 @@ def answer_key(text: str) -> dict[int, str]:
         if len(found) > len(best):
             best = found
     return best
+
+
+# A key row that accepts more than one letter: the CAS MAS keys print
+# `28   B & E` where a question was found to have two defensible answers.
+MULTI_ANSWER_RE = re.compile(
+    r"(?m)^[ \t]*(\d{1,3})[ \t]*\n?[ \t]*([A-E](?:[ \t]*(?:&|,|/|and|or)[ \t]*[A-E])+)[ \t]*$"
+)
+
+
+def accepted_answers(text: str) -> dict[int, list[str]]:
+    """Questions the key credits with more than one letter, and the letters.
+
+    Transcribed as printed, in the key's own order. The first letter becomes
+    the record's `answer` (the bank holds one); the rest ride along in
+    `accepted` so the explanation can say the key took both.
+    """
+    found: dict[int, list[str]] = {}
+    for m in MULTI_ANSWER_RE.finditer(text):
+        found.setdefault(int(m.group(1)), re.findall(r"[A-E]", m.group(2).upper()))
+    return found
 
 
 SOLUTION_ANSWER_RE = re.compile(r"(?i)\b(?:solution|answer)[ \t]*[:=-]?[ \t]*\(?([A-E])\)?\b")
@@ -955,22 +1060,56 @@ def soa_records(
     question_pages: list[Page],
     solution_pages: list[Page],
     furniture: set[str] | None = None,
+    year: int | None = None,
+    session: str | None = None,
+    points: float | None = None,
 ) -> list[dict]:
-    """Build records for an SOA-style multiple-choice set."""
+    """Build records for a multiple-choice set.
+
+    An SOA sample set has no sitting, so its ids are `p-004`. A dated
+    multiple-choice paper — the CAS MAS exams — passes `year` and `session`
+    and gets the sitting ids the bank already uses for them: `masi-2019s-q1`,
+    filed as `masi-2019s-001.md`. `points` is what the paper's instructions
+    print per question; a set that prints none keeps the bank's default of 1.
+    """
     prefix = SOA_PREFIX.get(exam, exam)
+    sitting = ""
+    if year:
+        sitting = f"{year}" + (("s" if session.lower().startswith("sp") else "f") if session else "")
     q_text, q_index = _joined(question_pages, furniture)
     s_text, s_index = _joined(solution_pages, furniture)
+    # Page numbers are the PDF's own, and a booklet cut out of the middle of a
+    # combined PDF does not start at page 1 — so look pages up by number.
+    by_number = {page.number: page for page in question_pages}
 
-    key = answer_key(s_text)
+    # A key is a table, and reflow is for prose: joining its rows turns
+    # `1 / B / 2 / C` into `1`, `B 2`, `C 3`. So it is read off the pages'
+    # own text as well as the reflowed markdown, and the fuller reading wins.
+    raw_key_text = "\n".join(page.text for page in solution_pages)
+    key = max(answer_key(s_text), answer_key(raw_key_text), key=len)
+    multi = accepted_answers(s_text) or accepted_answers(raw_key_text)
+    for num, letters in multi.items():
+        key.setdefault(num, letters[0])
     sol_bounds = {b.num: b for b in segment(s_text)} if s_text else {}
 
+    bounds = segment(q_text)
+    source = "numbered"
+    expected = max(key, default=0)
+    if expected and len(bounds) < expected and any(
+        p.scanned or p.ocred for p in question_pages
+    ):
+        # A scan whose numbering did not survive OCR: fall back on the page.
+        paged = page_bounds(q_text, q_index, question_pages, expected)
+        if paged:
+            bounds, source = paged, "paged"
+
     records: list[dict] = []
-    for bound in segment(q_text):
+    for bound in bounds:
         raw = q_text[bound.start : bound.end]
         prompt, options = split_options(raw)
         pages = sorted({q_index[i] for i in range(bound.start, min(bound.end, len(q_index)))})
-        scanned = [p for p in pages if question_pages[p - 1].scanned]
-        ocred = [p for p in pages if question_pages[p - 1].ocred]
+        scanned = [p for p in pages if by_number[p].scanned]
+        ocred = [p for p in pages if by_number[p].ocred]
 
         solution = ""
         sol_pages: list[int] = []
@@ -986,29 +1125,49 @@ def soa_records(
             warnings.append("no A-E options found")
         if not letter:
             warnings.append("no answer letter found")
-        if not solution:
+        # A dated MC paper publishes its key and nothing else, so no solution
+        # there is expected rather than a gap to chase: the explanation is
+        # the one part of such a question that is authored.
+        if not solution and not sitting:
             warnings.append("no worked solution found")
         if ocred:
             warnings.append(f"prompt read by OCR (page {_ranges(ocred)}) — spot-check it")
+        accepted = multi.get(bound.num) or []
+        if len(accepted) > 1:
+            warnings.append(
+                f"the key accepts {' & '.join(accepted)} — answer the letter the "
+                "explanation works to and note that the key took both"
+            )
 
-        records.append(
-            {
-                "num": bound.num,
-                "id": f"{prefix}-{bound.num:03d}",
-                "bank": SOA_BANK.get(exam, f"exam-{exam}"),
-                "type": "multiple-choice",
-                "body": mdmath.normalize_markdown(prompt).strip(),
-                "options": {k: mdmath.normalize_chars(v) for k, v in options.items()},
-                "answer": letter,
-                "points": 1,
-                "parts": [],
-                "solution": mdmath.normalize_markdown(solution).strip(),
-                "pages": {"question": pages, "solution": sol_pages},
-                "needs_vision": bool(scanned),
-                "ocr": bool(ocred),
-                "warnings": warnings,
-            }
-        )
+        record_id = f"{prefix}-{sitting}-q{bound.num}" if sitting else f"{prefix}-{bound.num:03d}"
+        record = {
+            "num": bound.num,
+            "id": record_id,
+            "bank": SOA_BANK.get(exam, f"exam-{exam}"),
+            "type": "multiple-choice",
+            "body": mdmath.normalize_markdown(prompt).strip(),
+            "options": {k: mdmath.normalize_chars(v) for k, v in options.items()},
+            "answer": letter,
+            "points": points if points is not None else 1,
+            "parts": [],
+            "solution": mdmath.normalize_markdown(solution).strip(),
+            "pages": {"question": pages, "solution": sol_pages},
+            "needs_vision": bool(scanned),
+            "ocr": bool(ocred),
+            "prompt_source": source,
+            "warnings": warnings,
+        }
+        if sitting:
+            record.update(
+                year=year,
+                session=session,
+                # The bank files a sitting's questions zero-padded
+                # (`masi-2018f-001.md`) under an unpadded id.
+                file=f"{prefix}-{sitting}-{bound.num:03d}",
+            )
+        if len(accepted) > 1:
+            record["accepted"] = accepted
+        records.append(record)
     return records
 
 
@@ -1469,7 +1628,7 @@ def points_label(value: float | None) -> str:
     return f"{shown} point" + ("" if number == 1 else "s")
 
 
-SOA_PREFIX = {"p": "p", "fm": "fm", "mas-i": "mas1", "mas-ii": "mas2"}
+SOA_PREFIX = {"p": "p", "fm": "fm", "mas-i": "masi", "mas-ii": "masii"}
 SOA_BANK = {"p": "exam-p", "fm": "exam-fm", "mas-i": "exam-mas-i", "mas-ii": "exam-mas-ii"}
 
 
@@ -1587,7 +1746,8 @@ def _coverage_lines(
     routes = ", ".join(
         f"{by_source[key]} by {name}"
         for key, name in (("numbered", "the booklet's own numbering"),
-                          ("aligned", "point-value alignment"))
+                          ("aligned", "point-value alignment"),
+                          ("paged", "page order, checked against the key's count"))
         if by_source.get(key)
     )
     lines = [
@@ -1756,7 +1916,19 @@ def main(argv: list[str] | None = None) -> int:
         print("--ocr asked for but tesseract is not on PATH; "
               "scanned pages will be rendered for vision instead", file=sys.stderr)
 
-    if args.pdf:
+    points = None
+    if args.pdf and not cas:
+        # A multiple-choice paper in one PDF — the CAS MAS exams — is
+        # instructions, then the booklet, then the answer key on its own page.
+        pages = read_pages(args.pdf, want_tables, args.ocr)
+        start, stop = _split_mc_paper(pages)
+        booklet, report = pages[start:stop], pages[stop:]
+        points = points_per_question(pages[:start])
+        sources = {"question": args.pdf, "solution": args.pdf}
+        offsets = {"question": 0, "solution": 0}
+        furniture = furniture_lines(booklet) | furniture_lines(report)
+        split_info = SplitInfo(len(booklet) + len(report), len(booklet), combined=False)
+    elif args.pdf:
         pages = read_pages(args.pdf, want_tables, args.ocr)
         split = _split_combined(pages)
         booklet, report = pages[:split], pages[split:]
@@ -1785,7 +1957,10 @@ def main(argv: list[str] | None = None) -> int:
             ap.error("--year is required for CAS exams (the sitting year)")
         records = cas_records(args.exam, args.year, args.session, booklet, report, furniture)
     else:
-        records = soa_records(args.exam.lower(), booklet, report, furniture)
+        records = soa_records(
+            args.exam.lower(), booklet, report, furniture,
+            year=args.year, session=args.session, points=points,
+        )
 
     if not records:
         print("no questions segmented — check the PDF layout", file=sys.stderr)
@@ -1816,6 +1991,49 @@ def _split_combined(pages: list[Page]) -> int:
         if CAS_QUESTION_RE.search(page.text) and CAS_POINTS_RE.search(page.text):
             return page.number - 1
     return 0
+
+
+INSTRUCTIONS_END_RE = re.compile(r"(?i)end\s+of\s+instructions")
+KEY_PAGE_RE = re.compile(r"(?i)\banswer\s*key\b")
+# A page with this many `question → letter` rows is a key, whatever its title.
+KEY_PAGE_ROWS = 10
+POINTS_EACH_RE = re.compile(r"(?i)each\s+worth\s+(\d+(?:\.\d+)?)\s+points?")
+
+
+def _split_mc_paper(pages: list[Page]) -> tuple[int, int]:
+    """Where a combined multiple-choice paper's booklet starts and stops.
+
+    The CAS MAS PDFs open on several pages of numbered instructions — which
+    `segment` would otherwise take for questions 1-10 — and close on the
+    answer key. The booklet is what lies between `END OF INSTRUCTIONS` and the
+    first page headed as a key. Either marker missing leaves that end open.
+    """
+    start = 0
+    for page in pages:
+        if INSTRUCTIONS_END_RE.search(page.text):
+            start = page.number  # the page after it, as an index
+            break
+    stop = len(pages)
+    for page in pages[start:]:
+        # Headed `Final Answer Key` on three papers and just `FINAL` over two
+        # `Answer` columns on the fourth, so the rows count as much as the title.
+        if KEY_PAGE_RE.search(page.text) or len(answer_key(page.text)) >= KEY_PAGE_ROWS:
+            stop = page.number - 1
+            break
+    return start, stop
+
+
+def points_per_question(pages: list[Page]) -> float | None:
+    """The per-question value the instructions print, if they print one.
+
+    `This 90 point examination consists of 45 multiple choice questions each
+    worth 2 points.` A value is read or absent, never assumed.
+    """
+    for page in pages:
+        m = POINTS_EACH_RE.search(page.text)
+        if m:
+            return float(m.group(1))
+    return None
 
 
 def _render_needed(

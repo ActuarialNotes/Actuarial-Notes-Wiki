@@ -112,6 +112,61 @@ the question text — so the run *looks* healthy. When the booklet half produced
 no prompt at all, the report says so in a banner instead of leaving it to be
 inferred from 25 identical warnings.
 
+### Multiple-choice sittings: the CAS MAS papers
+
+The MAS-I and MAS-II papers are a third shape, and every one of them is a
+scan: one PDF of numbered instructions, a booklet set one question to a page,
+and a final answer key on the last page — no worked solutions at all. Five
+things differ from the two routes above, and each is handled in the script
+rather than by hand:
+
+- **The cut.** `--pdf` on a MAS exam goes through `_split_mc_paper`: the
+  booklet runs from the page after `END OF INSTRUCTIONS` to the first key
+  page. Without the first cut, the instructions' own `1.`–`10.` are taken for
+  questions 1–10. A key page is recognised by its heading *or* by carrying ten
+  or more `question → letter` rows, because Fall 2019 MAS-II heads its key
+  just `FINAL` over two `Answer` columns.
+- **Segmentation by page.** OCR garbles exactly the part that numbers a
+  question — `1.` comes back as `ly`, `2.` as `23`, `32.` as `3)` — so
+  `segment` finds almost nothing. `page_bounds` treats each page as a
+  question, joined to the next wherever the page prints `Question #20
+  continued on the next page`, and is only trusted when it yields exactly as
+  many questions as the key has answers. On all four 2018–2019 papers that
+  placed every prompt (`page order` in **Booklet coverage**), and it agrees
+  with the 40 Fall 2019 MAS-II answers the bank already held.
+- **The key.** It is a text-layer table read a cell to a line (`1` / `B`),
+  which reflow would otherwise glue into `B 2`, so it is read off the pages'
+  raw text too. A row that credits more than one letter (`28  B & E`) is kept
+  whole in the record's `accepted`; the file answers the first unless a
+  review decides otherwise, and its explanation says the key took both.
+- **Points and ids.** The value is read from the instructions (`each worth 2
+  points`), never assumed. `--year`/`--session` give the sitting ids the bank
+  already uses — `masi-2019s-q1`, written to `masi-2019s-001.md` through the
+  record's `file` stem.
+- **Where a question is filed.** The CAS moved Time Series and Statistical
+  Learning from MAS-I to MAS-II, so `question_classify` votes a MAS-I
+  question's objective over both banks' neighbours (`FILED_ELSEWHERE`), and an
+  objective only MAS-II uses proposes filing it there. The writer then sets
+  `exam: "Exam MAS-II"` and `originally_exam: "Exam MAS-I"` — the paper it was
+  sat on, which is what `lib/questionSource.ts` cites. The move is always a
+  review item, and only ever MAS-I → MAS-II.
+
+What is left for a model is therefore the whole of a MAS question's value
+rather than a residue: every prompt re-read from its page image (the OCR loses
+whole lines — `E[T_2] = 2` vanished from Spring 2019 Q2 — and every formula),
+every figure cropped, and every explanation *written*, since the CAS never
+published one. Those land in `--prompts` (a multiple-choice transcription
+carries its own `- A) …` options, which replace the OCR'd ones) and
+`--explanations`, and the topic, objective, bank and difficulty — the last has
+no publisher solution to take a proxy from — are settled with
+`question_classify.py --settle`, which refuses any page `Concepts/` does not
+have.
+
+The MAS-II papers' first two questions read a *case study* handed out with
+the paper and not in its PDF. The CAS publishes each one separately
+(`mas-ii-case-study-f2018.pdf`, `-f2019.pdf`); the question file reproduces the
+output its statements need, as Spring 2019 Q1–2 do.
+
 ### Stage 1 — `pdf_extract.py`
 
 Reads the PDFs and writes `records.jsonl`, one JSON object per question (the
@@ -330,6 +385,17 @@ python3 scripts/question_classify.py --records /tmp/exam-p/records.jsonl \
 python3 scripts/question_write.py --records /tmp/exam-p/records.jsonl \
     --judgments /tmp/exam-p/judgments.jsonl --only 1-5 --dry-run   # pilot first
 
+# CAS MAS: one scanned PDF (instructions + booklet + key); --ocr is not optional
+python3 scripts/pdf_extract.py --exam mas-i --year 2019 --session Spring \
+    --pdf spmasi-19.pdf --out /tmp/masi --ocr --render-all
+python3 scripts/question_classify.py --records /tmp/masi/records.jsonl \
+    --out /tmp/masi/judgments.jsonl
+# … transcribe into /tmp/prompts, write /tmp/expl, decide into decisions.jsonl …
+python3 scripts/question_classify.py --out /tmp/masi/judgments.jsonl \
+    --settle /tmp/decisions.jsonl
+python3 scripts/question_write.py --records /tmp/masi/records.jsonl \
+    --judgments /tmp/masi/judgments.jsonl --prompts /tmp/prompts --explanations /tmp/expl
+
 python3 scripts/question_lint.py questions/exam-p
 python3 scripts/validate_content.py
 python3 scripts/verify_check.py --sync
@@ -361,6 +427,9 @@ PDF-reading cases when PyMuPDF is absent).
 | a single-part question's explanation is one short heading | the report heads its samples by approach (`2-Step Method:`) and the heading landed in front of the first `Sample Answer 1` marker | already handled: a heading travels with the sample it introduces |
 | a single-part question ships only the first of several samples | the publisher's other approaches were parsed but never written | already handled: `alternatives` rides along under `Alternatively:`, as it does for a part |
 | the writer refuses a question for `no prompt text` and its parts read fine | the question has no stem — Fall 2015 Q2 and Q15 open straight on `a. (0.75 point)` | already handled: an empty stem is only a gap when the parts are empty too |
+| a MAS paper segments questions 1–10 out of the instructions | the booklet was not cut at `END OF INSTRUCTIONS` | already handled by `_split_mc_paper`; a paper with a new instructions footer needs its marker in `INSTRUCTIONS_END_RE` |
+| a MAS paper segments almost nothing, or the report says prompts were not placed by page order | the page count did not match the key's, so `page_bounds` refused rather than shift every prompt onto its neighbour's answer | find the page that holds two questions or the question that spans two without printing `continued on the next page`; do not relax the count check |
+| every option reads `…, or (D` | an old `strip(" )")` on each option | already handled: options are sliced after their delimiter and only whitespace is stripped |
 | part points do not sum to `TOTAL POINT VALUE` | a booklet span over-ran into the next question's page and took its `c. (0.5 point)` with it | already handled: the surplus part is dropped and the warning says so — the report prices the paper |
 
 ## The rules this pipeline does not bend

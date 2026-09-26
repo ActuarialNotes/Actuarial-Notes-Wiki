@@ -20,7 +20,7 @@ export function IncompletePartsDialog({ onCancel, onConfirm }: IncompletePartsDi
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4 paper-scrim"
       onClick={onCancel}
       role="dialog"
       aria-modal="true"

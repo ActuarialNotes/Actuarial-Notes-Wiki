@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { flushSync } from 'react-dom'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { Loader2, X, ChevronLeft, Volume2, VolumeX, AlertCircle, Keyboard } from 'lucide-react'
 import { useQuestions } from '@/hooks/useQuestions'
@@ -19,6 +20,7 @@ import { PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
 import { isAnswerCorrect, isMultiPartAnswerComplete } from '@/lib/parser'
 import { pendingAnswerFor, tagPendingAnswer } from '@/lib/pendingAnswer'
 import { loadRevealMode, parseRevealMode } from '@/lib/revealMode'
+import { startViewTransition } from '@/lib/viewTransition'
 import type { PendingAnswer } from '@/lib/pendingAnswer'
 import type { QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
 import { decayIfStale } from '@/lib/mastery'
@@ -88,14 +90,32 @@ export default function Quiz() {
     startQuiz,
     answerQuestion,
     clearAnswer,
-    nextQuestion,
-    goToPreviousQuestion,
+    nextQuestion: advanceQuestion,
+    goToPreviousQuestion: stepBackQuestion,
     goToQuestion,
     toggleFlag,
     setManualGrade,
     completeQuiz,
     resetQuiz,
   } = useQuizStore()
+
+  // Next and Back turn the question like a sheet on a pile — the answered one
+  // is flicked off and the next lifts into place — rather than swapping it in
+  // place (see "Paper on a desk" in index.css). Past the last question Next
+  // finishes the quiz, which isn't a sheet to turn. A jump from the progress
+  // bar stays a jump: it can be dragged through a dozen questions a second.
+  function nextQuestion() {
+    if (currentIndex + 1 >= storeQuestions.length) {
+      advanceQuestion()
+      return
+    }
+    startViewTransition(() => flushSync(advanceQuestion), { paper: 'turn', fallback: advanceQuestion })
+  }
+
+  function goToPreviousQuestion() {
+    if (currentIndex <= 0) return
+    startViewTransition(() => flushSync(stepBackQuestion), { paper: 'return', fallback: stepBackQuestion })
+  }
 
   // Reset store on every new quiz navigation so filters always take effect
   useEffect(() => {
@@ -611,7 +631,8 @@ export default function Quiz() {
         />
       )}
 
-      <div className="mt-4">
+      {/* The sheet Next and Back turn. */}
+      <div className="paper-sheet mt-4">
         <QuestionCard
           // Keyed by question so nothing the card holds locally — a typed
           // free-entry answer, a self-grade — can outlive the question it

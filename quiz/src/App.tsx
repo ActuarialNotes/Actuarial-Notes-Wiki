@@ -1,5 +1,5 @@
-import { lazy, Suspense, Component, useEffect, type ReactNode, type ErrorInfo } from 'react'
-import { BrowserRouter, Routes, Route, Link, Navigate, useNavigate, useLocation } from 'react-router-dom'
+import { Suspense, Component, useEffect, type ReactNode, type ErrorInfo } from 'react'
+import { Routes, Route, Link, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { usePageTracking } from '@/hooks/usePageTracking'
 import { Loader2 } from 'lucide-react'
 import type { Session } from '@supabase/supabase-js'
@@ -18,7 +18,7 @@ import Sidebar from '@/components/Sidebar'
 import OnboardingTour from '@/components/OnboardingTour'
 import SoundEffects from '@/components/SoundEffects'
 import MathFocus from '@/components/MathFocus'
-import ViewTransitions from '@/components/ViewTransitions'
+import PaperRouter from '@/components/PaperRouter'
 import ImageFocus from '@/components/ImageFocus'
 import PdfReaderHost from '@/components/PdfReaderHost'
 import FlashcardSync from '@/components/FlashcardSync'
@@ -30,35 +30,29 @@ import { useSubscription } from '@/hooks/useSubscription'
 import { COWORK_ENABLED, RESEARCH_TAB_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
 import { pageHostsNavButton } from '@/lib/mobileNavHost'
 import { captureError } from '@/lib/errorMonitoring'
+import { lazyRoute } from '@/lib/lazyRoute'
 
-// The dynamic imports are named rather than inlined into `lazy()` so the
-// route preloader below can reach for the same chunk. Calling one twice is
-// free — the module graph hands back the promise it already has.
-const loadResearch     = () => import('@/pages/Research')
+// Each lazy page is a `lazyRoute`, which hands back its preloader beside the
+// component. `React.lazy` alone suspends on a page's first render even when
+// its chunk is already here, and a page change drawn as a view transition
+// would capture that frame's spinner (see lib/lazyRoute.ts).
+const { Component: Research, preload: loadResearch } = lazyRoute(() => import('@/pages/Research'))
 // Cowork is the app's second product (see `lib/appMode.ts`). Lazy, because a
 // reader in Study mode should never pay for its catalogue or its xlsx writer.
-const loadCowork       = () => import('@/pages/Cowork')
-const loadWikiLayout   = () => import('@/components/wiki/WikiLayout')
-const loadWikiHome     = () => import('@/pages/wiki/WikiHome')
-const loadWikiExam     = () => import('@/pages/wiki/WikiExam')
-const loadWikiConcept  = () => import('@/pages/wiki/WikiConcept')
-const loadWikiResource = () => import('@/pages/wiki/WikiResource')
+const { Component: Cowork, preload: loadCowork } = lazyRoute(() => import('@/pages/Cowork'))
 
-const Research    = lazy(loadResearch)
-const Cowork      = lazy(loadCowork)
-
-const WikiLayout  = lazy(loadWikiLayout)
-const WikiHome    = lazy(loadWikiHome)
-const WikiExam    = lazy(loadWikiExam)
-const WikiConcept = lazy(loadWikiConcept)
-const WikiResource = lazy(loadWikiResource)
+const { Component: WikiLayout, preload: loadWikiLayout } = lazyRoute(() => import('@/components/wiki/WikiLayout'))
+const { Component: WikiHome, preload: loadWikiHome } = lazyRoute(() => import('@/pages/wiki/WikiHome'))
+const { Component: WikiExam, preload: loadWikiExam } = lazyRoute(() => import('@/pages/wiki/WikiExam'))
+const { Component: WikiConcept, preload: loadWikiConcept } = lazyRoute(() => import('@/pages/wiki/WikiConcept'))
+const { Component: WikiResource, preload: loadWikiResource } = lazyRoute(() => import('@/pages/wiki/WikiResource'))
 
 /**
  * Warm the chunks a path needs before navigating to it, or null when it needs
- * none. `ViewTransitions` waits on this: a view transition snapshots the page
- * as soon as the route has rendered, so flushing straight into a lazy route
- * would snapshot its Suspense fallback and animate the exam card into a
- * spinner. Returning null is the common case — every eagerly imported page.
+ * none. `PaperRouter` waits on this: a view transition snapshots the page as
+ * soon as the route has rendered, so flushing straight into a lazy route would
+ * slide its Suspense spinner in instead of the page. Returning null is the
+ * common case — every eagerly imported page.
  */
 function preloadRoute(path: string): Promise<unknown> | null {
   const route = path.split('?')[0].split('#')[0]
@@ -221,13 +215,12 @@ function CoworkRoute() {
 
 export default function App({ initialSession }: { initialSession: Session | null }) {
   return (
-    <BrowserRouter>
+    // Every change of page slides like paper on a desk rather than cutting —
+    // see components/PaperRouter.tsx and lib/viewTransition.ts.
+    <PaperRouter preload={preloadRoute}>
       <PageTracker />
       <GlobalKeyHandler />
       <SoundEffects />
-      {/* Tab switches morph the exam an exam card or pill stands for, rather
-          than cutting — see lib/viewTransition.ts. */}
-      <ViewTransitions preload={preloadRoute} />
       <AuthProvider initialSession={initialSession}>
         <FlashcardSync />
         <ExamProgressProvider>
@@ -301,6 +294,6 @@ export default function App({ initialSession }: { initialSession: Session | null
           </div>
         </ExamProgressProvider>
       </AuthProvider>
-    </BrowserRouter>
+    </PaperRouter>
   )
 }

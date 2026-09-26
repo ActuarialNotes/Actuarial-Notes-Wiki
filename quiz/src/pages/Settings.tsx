@@ -95,7 +95,7 @@ function ConfirmModal({
 }) {
   if (!open) return null
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 paper-scrim">
       <div className="bg-background rounded-lg p-6 w-full max-w-md shadow-lg space-y-4">
         <h3 className="font-semibold text-lg">{title}</h3>
         <div className="text-sm text-muted-foreground space-y-2">{children}</div>

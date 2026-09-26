@@ -202,7 +202,7 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
     <div
       // z-[130]: openable from the concept popup, a flashcard and the collect
       // dialog (z-[120]) alike, so it sits above every host that can open it.
-      className="fixed inset-0 z-[130] flex items-start justify-center bg-background/80 backdrop-blur-sm overflow-y-auto"
+      className="fixed inset-0 z-[130] flex items-start justify-center bg-background/80 backdrop-blur-sm overflow-y-auto paper-scrim"
       role="dialog"
       aria-modal="true"
       aria-label={`Questions for ${conceptName}`}

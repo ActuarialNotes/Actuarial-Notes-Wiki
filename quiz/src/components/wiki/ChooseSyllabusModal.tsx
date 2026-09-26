@@ -19,7 +19,7 @@ export function ChooseSyllabusModal({ conceptName, syllabi, onChoose, onClose }:
   return (
     <OverlayPortal>
     <div
-      className="fixed inset-0 z-[70] flex items-center justify-center bg-background/80 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-background/80 backdrop-blur-sm p-4 paper-scrim"
       role="dialog"
       aria-modal="true"
       aria-label={`Choose exam study guide for ${conceptName}`}

@@ -235,7 +235,7 @@ export function LearningProgressModal({ conceptName, onClose }: LearningProgress
     <OverlayPortal>
     <div
       // z-[130] — same hosts as ConceptQuestionsModal; see the note there.
-      className="fixed inset-0 z-[130] flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto"
+      className="fixed inset-0 z-[130] flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto paper-scrim"
       role="dialog"
       aria-modal="true"
       aria-label={`Learning Progress: ${conceptName}`}

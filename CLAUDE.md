@@ -414,20 +414,30 @@ Other important `lib/` modules:
   `<MobileNavButton />` in its bar at the same time, or it ends up with two hamburgers or
   none. The drawer's own open state is `hooks/useMobileNav.ts`, since the button that opens
   it is no longer inside `Sidebar`. Pure and tested. See `docs/style-guide.md` §5.0.
-- `viewTransition.ts` — **tab switches**: an exam is one object seen three ways (a card on
-  the Quiz tab, a card on Study Guides, a pill on the Dashboard), so switching tabs moves it
-  between its two positions while the rest of the page cross-fades, rather than cutting.
-  The browser's View Transitions API does the work; this module hands out the *name* per exam
-  that makes two elements one object (`examTransitionStyle`, spread like `examAccentStyle`)
-  and holds the click/motion decisions. `components/ViewTransitions.tsx` is the one delegated
-  listener (mounted in `App`, same shape as `SoundEffects`/`MathFocus`); a link opts in with
-  `data-view-transition`. Two rules, both of which fail *silently*: two live elements sharing
-  a name aborts the whole transition (hence the exam-id suffix for a localized exam like
-  `CAS-6`, and the duplicate sweep in `e2e/view-transitions.spec.ts`), and the shared element
-  must be on screen in the *first* frame of the new route — which is why `preloadRoute` in
-  `App.tsx` warms a lazy route's chunk before the transition starts, and why the Study Guides
-  index is seeded synchronously from the bundle (`bundledWikiIndex`). Pure and tested.
-  See `docs/style-guide.md` §9.1.
+- `viewTransition.ts` — **paper on a desk**, the app's motion between states: every page is a
+  sheet and the app is the desk. Tabs lie side by side in sidebar order, so a tab switch
+  slides the desk (`next`/`prev`); a link deeper into a tab lays a sheet over the current
+  one (`push`); Back — or a link *up* the tab — swipes the top sheet off (`pop`); and within a
+  page a quiz's Next/Back flicks the question off the pile or slides it back
+  (`turn`/`return`). `paperMove` decides the move from two paths and the history action
+  (`deskPlace` is the tab/depth table — add a new route there); `startViewTransition` writes
+  it to `data-paper` on the root and `index.css` ("Paper on a desk") draws it. **Every
+  navigation goes through it** without opting in: `components/PaperRouter.tsx` is
+  `BrowserRouter` with the history listener wrapped, so links, `navigate()` and the browser's
+  Back all animate; a `REPLACE` (a redirect) and a query/hash-only change don't. Between the
+  three pages that draw every exam (Dashboard, Study Guides home, Quiz builder —
+  `carriesExams`) the exam is *carried* across: `examTransitionStyle` puts its name in the
+  `--exam-card-name` custom property, and the CSS only promotes it to a
+  `view-transition-name` under `data-paper-carry`, so a card with no partner never floats
+  above an arriving sheet. Rules that fail *silently*: two live elements sharing a name
+  aborts the whole transition (hence the exam-id suffix for a localized exam like `CAS-6`,
+  and the duplicate sweep in `e2e/view-transitions.spec.ts`); a lazy page must render
+  synchronously on the transition's first frame, which is why the lazy routes are
+  `lib/lazyRoute.ts` (a plain `React.lazy` suspends once even with its chunk loaded) and
+  `preloadRoute` in `App.tsx` warms the chunk first; and the Study Guides index is seeded
+  synchronously from the bundle (`bundledWikiIndex`). Dialogs get the matching entrance from
+  the `paper-scrim` class (or `paper-fade` + `paper-drop` for a separate backdrop and panel).
+  Pure and tested. See `docs/style-guide.md` §9.1.
 - `bodyFilter.ts` — the **SOA/CAS picker** that rides the title row on both the Quiz and Study
   Guides tabs. One choice, one storage key, one fallback: the two tabs are one ladder seen
   twice, and they each used to own a copy of the rule. The copies had drifted in opposite

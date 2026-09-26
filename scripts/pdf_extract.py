@@ -1134,14 +1134,20 @@ def cas_records(
     booklet_pages: list[Page],
     report_pages: list[Page],
     furniture: set[str] | None = None,
+    single_sitting: bool = False,
 ) -> list[dict]:
-    """Build records for a CAS essay/calculation exam."""
+    """Build records for a CAS essay/calculation exam.
+
+    `single_sitting` is for an exam sat once a year (Exam 7): the session is
+    still recorded — the past-paper shelf filters on it — but the id carries no
+    `s`/`f` suffix, since there is no other sitting that year to tell it from.
+    """
     b_text, b_index = _joined(booklet_pages, furniture)
     r_text, r_index = _joined(report_pages, furniture)
 
     numbered = {b.num: (b.start, b.end) for b in segment(b_text)} if b_text.strip() else {}
     suffix = ""
-    if session:
+    if session and not single_sitting:
         suffix = "s" if session.lower().startswith("sp") else "f"
 
     bounds = list(segment(r_text, CAS_QUESTION_RE))
@@ -1596,6 +1602,9 @@ SOA_PREFIX = {"p": "p", "fm": "fm", "mas-i": "mas1", "mas-ii": "mas2"}
 SOA_BANK = {"p": "exam-p", "fm": "exam-fm", "mas-i": "exam-mas-i", "mas-ii": "exam-mas-ii"}
 
 
+UNESCAPED_DOLLAR_RE = re.compile(r"(?<!\\)\$")
+
+
 def _joined(pages: list[Page], furniture: set[str] | None = None) -> tuple[str, list[int]]:
     """Concatenate page markdown, plus a char-index → page-number map."""
     drop = furniture if furniture is not None else (furniture_lines(pages) if pages else set())
@@ -1606,6 +1615,10 @@ def _joined(pages: list[Page], furniture: set[str] | None = None) -> tuple[str, 
         # `EXAMINER’S REPORT` with a curly apostrophe, and every marker regex
         # downstream is written with a straight one.
         md = mdmath.normalize_chars(page_markdown(page, drop))
+        # A PDF's text layer carries no LaTeX, so every `$` in it is a dollar
+        # sign — and left bare, the app's markdown pairs `$25,000 … $10,000`
+        # into one span of math and sets the words between them in italics.
+        md = UNESCAPED_DOLLAR_RE.sub(r"\\$", md)
         piece = md + "\n\n"
         chunks.append(piece)
         index.extend([page.number] * len(piece))
@@ -1859,6 +1872,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--out", required=True, help="output directory")
     ap.add_argument("--year", type=int, help="sitting year (CAS)")
     ap.add_argument("--session", help="Spring | Fall (CAS)")
+    ap.add_argument("--single-sitting", action="store_true",
+                    help="the exam is sat once a year (Exam 7): record --session "
+                         "but leave it out of the id")
     ap.add_argument("--dpi", type=int, default=DEFAULT_DPI)
     ap.add_argument("--no-tables", action="store_true", help="skip table detection")
     ap.add_argument("--no-render", action="store_true", help="skip page rendering")
@@ -1906,7 +1922,8 @@ def main(argv: list[str] | None = None) -> int:
     if cas:
         if not args.year:
             ap.error("--year is required for CAS exams (the sitting year)")
-        records = cas_records(args.exam, args.year, args.session, booklet, report, furniture)
+        records = cas_records(args.exam, args.year, args.session, booklet, report, furniture,
+                              single_sitting=args.single_sitting)
     else:
         records = soa_records(args.exam.lower(), booklet, report, furniture)
 

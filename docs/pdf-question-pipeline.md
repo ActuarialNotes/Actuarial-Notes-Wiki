@@ -221,6 +221,30 @@ nothing under its explanation heading — and names it instead. A missing
 `verification:` block is **correct**: that is derived state owned by
 `verify_check.py --sync` (see `docs/verification.md`), which backfills it.
 
+A CAS question with no lettered parts is still `type: multi-part`, and the app
+reads such a file as one implicit part built from `###` sections
+(`parseQuestion` in `quiz/src/lib/parser.ts`) — so the writer puts its answer
+under `### Explanation` and the report's commentary under `### Examiner Report`.
+Written under `## Explanation`, as it once was, the app found no section at all
+and dropped the question: forty Exam 5 questions sat in the vault and never
+reached a quiz. `quiz/src/lib/questionBank.test.ts` now parses every file in the
+bank and fails on one that comes back empty.
+
+Two judgments move a question off its paper's own bank, both set in
+`judgments.jsonl` rather than in the record:
+
+- **`"bank": "exam-9"`** — the syllabus has since handed the material to another
+  exam. The file is written into that bank and gets `originally_exam:` naming
+  the paper it was sat on, which keeps it off the new exam's past-paper shelf
+  (`isFromAnotherExamsPaper`). The ERM questions on the 2012–2019 Exam 7 papers
+  went to Exam 9 this way, as the 2018 MAS-I time-series questions went to
+  MAS-II.
+- **`"off_syllabus": true`** — no current exam covers it at all (Exam 7's old
+  insurance-company-valuation section). The question stays in its paper's bank
+  under its old objective, for the record: `syllabus_lint.py` does not hold it to
+  the exam page, and `filterQuestions` leaves it out of quiz draws while a
+  sitting, an id or a search still finds it.
+
 ### Stage 4 — `question_lint.py`
 
 The per-file checklist the skills used to spell out, as code: literal `\n`
@@ -362,6 +386,11 @@ PDF-reading cases when PyMuPDF is absent).
 | a single-part question ships only the first of several samples | the publisher's other approaches were parsed but never written | already handled: `alternatives` rides along under `Alternatively:`, as it does for a part |
 | the writer refuses a question for `no prompt text` and its parts read fine | the question has no stem — Fall 2015 Q2 and Q15 open straight on `a. (0.75 point)` | already handled: an empty stem is only a gap when the parts are empty too |
 | part points do not sum to `TOTAL POINT VALUE` | a booklet span over-ran into the next question's page and took its `c. (0.5 point)` with it | already handled: the surplus part is dropped and the warning says so — the report prices the paper |
+| the report segments to nothing, and every page reads `SPRING 2018 EXAM 7, QUESTION 1` | the heading names the sitting in front of `QUESTION` (Exam 7 Spring 2018) | already handled: `CAS_QUESTION_RE` takes an optional `SPRING 2018 EXAM 7,` prefix |
+| a paper yields two stray questions and `the split put every page in the report half` | the pre-2014 layout: the report is titled `Examiners' Report with Sample Solutions`, its questions open `Question 1 Sample Answer`, samples are `Solution N`, commentary is one `Examiner Comment`, and **no point value is printed** (Exam 7 2012, 2013) | already handled: `parse_legacy_question` reads it when no `QUESTION N` heading is found, the split finds the cover page, and the total is read off the booklet's `(2.75 points)` |
+| a scanned booklet places only its two-digit questions | OCR set `1.` alone on its line with `(2.75 points)` below it, which the `N.` pattern cannot see | already handled: the `N. (points)` pattern keys on the point value that must follow |
+| a sentence renders as italic math between two amounts | a bare `$25,000 … $10,000` pairs into one inline-math span | already handled for extracted text — a text layer carries no LaTeX, so `_joined` escapes every `$`; a transcription or rewrite must write `\$` itself |
+| a once-a-year exam's ids read `cas7-2018s-q1` | `--session` adds the sitting letter | pass `--single-sitting` with `--session Spring`: the session is recorded (the past-paper shelf filters on it) and the id stays `cas7-2018-q1` |
 
 ## The rules this pipeline does not bend
 

@@ -39,6 +39,8 @@ cat /tmp/exam-5/report.md
 - `--session` disambiguates the two sittings a year, giving ids
   `cas5-2019s-q1` / `cas5-2019f-q1`. Check `ls questions/exam-<N>/` for what
   the same year already uses and match it; ask the user if it is ambiguous.
+  An exam sat once a year (Exam 7) takes `--session Spring --single-sitting`:
+  the session is recorded and the id stays `cas7-2018-q1`.
 - `--ocr` reads scanned booklet pages locally instead of leaving them for
   vision. Always pass it when tesseract is there: on Fall 2016 it recovered 22
   of 26 prompts for nothing. The booklet's question numbers do not survive a
@@ -170,9 +172,18 @@ Add CAS Exam 5 Spring 2019 questions 1-12
 
 - `scripts/standardize_questions.py` and `scripts/update_wiki_links.py` have no
   Exam 5+ entries in `ontology_map.py` — do not run them on these banks.
-- Exam 6/7/8/9 have no question bank yet and `examStatus.ts` lists them as *in
-  development*; converting a paper for them is fine, but the exam does not
-  become studiable until that status moves.
+- Exam 7 and Exam 9 have banks (the 2012–2019 Exam 7 papers) but
+  `examStatus.ts` still lists them, with Exams 6 and 8, as *in development*;
+  converting a paper for them is fine, but the exam does not become studiable
+  until that status moves.
+- An old paper can test material the syllabus has since moved or dropped. Set
+  it per question in `judgments.jsonl`: `"bank": "exam-9"` writes it into the
+  exam that now covers it, with `originally_exam:` naming its paper; and
+  `"off_syllabus": true` keeps a question no current exam covers in its paper's
+  bank, for the record, out of quiz draws (`docs/pdf-question-pipeline.md`,
+  Stage 3). Its `learning_objective` is then the old syllabus's.
+- Every `$` in a transcription or rewrite that is money is `\$` — the extractor
+  escapes the text layer's, but it cannot tell yours from math.
 - The classifier leans on `Concepts/` coverage, which is thinner for Exam 5+
   than for P/FM, so expect a longer review list. Every concept page added
   shrinks it for the next paper.

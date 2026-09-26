@@ -14,7 +14,7 @@ history — but nothing on screen says "mock" any more. Two labels replace it, b
 
 | Label | Where | When |
 |---|---|---|
-| `examSourceLabel(rows)` → **Past Papers** | The source tab on the quiz builder | The exam has released sittings (Exam 5, MAS-I, MAS-II) |
+| `examSourceLabel(rows)` → **Past Papers** | The source tab on the quiz builder | The exam has released sittings (Exam 5, Exam 7, MAS-I, MAS-II) |
 | `examSourceLabel(rows)` → **Practice Exam** | The same tab | It has none — Exam P and FM draw on the SOA's rolling sample set, so their shelf is the Mix row alone |
 | `PRACTICE_EXAM_LABEL` → **Practice Exam** | The Start button, the in-quiz mode pill, the quit dialog, the completion heading | Always — a session is practice whether it was drawn from Fall 2019 or from the Mix |
 
@@ -76,7 +76,13 @@ Only sittings whose papers the examining body released publicly. CAS stopped pub
 papers, answer keys and examiners' reports when the exams moved to CBT, so the shelf ends at
 **Fall 2019** for Exam 5, MAS-I and MAS-II alike. It starts where each exam does: Exam 5 at
 Spring 2011, MAS-I at Spring 2018, and MAS-II at **Fall 2018** — MAS-II was introduced half a
-sitting behind MAS-I, so it has three released papers, not four. Exam P and Exam FM have
+sitting behind MAS-I, so it has three released papers, not four. Exam 7 is sat once a year,
+so its shelf is eight Spring papers, **May 2012 to Spring 2019** — 2012 is the first sitting
+CAS published an Examiner's Report for. Those papers predate CAS moving ERM to Exam 9, so
+their ERM questions sit in the Exam 9 bank with `originally_exam: "Exam 7"` and an Exam 7
+sitting row holds its reserving and valuation questions; the valuation ones carry
+`off_syllabus: true` (no current exam covers them), which keeps them out of quiz draws but
+not out of their paper. Exam P and Exam FM have
 **no** sittings — the SOA publishes a rolling sample-question set rather than dated papers —
 so their browser is the Mix row alone, with the sample-questions PDF linked underneath.
 

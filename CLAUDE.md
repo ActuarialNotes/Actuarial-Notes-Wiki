@@ -737,7 +737,16 @@ compile — don't "clean up" the flagged code as dead.
   `learning_objective`, `difficulty` (`easy`/`medium`/`hard`), `type`, `wiki_link` (array
   of concept paths), `answer`, `points` — followed by the question body, options, and an
   `## Explanation` section (LaTeX via `$$...$$`). Current banks: `exam-p`, `exam-fm`,
-  `exam-mas-i`, `exam-5` (hundreds of questions each).
+  `exam-mas-i`, `exam-mas-ii`, `exam-5` (hundreds of questions each), and `exam-7` /
+  `exam-9` — the 2012–2019 Exam 7 papers: reserving in `exam-7`, their ERM questions in
+  `exam-9` with `originally_exam: "Exam 7"` (CAS moved Brehm's ERM there). Two optional keys
+  say a question has outlived its paper's syllabus: `originally_exam` (the material moved to
+  the exam in `exam`, so it stays off that exam's past-paper shelf) and `off_syllabus: true`
+  (no current exam covers it — Exam 7's old valuation questions; kept for the record, out of
+  quiz draws, still found by its sitting, its id or a search, and not held to the exam page
+  by `syllabus_lint.py`). A CAS question with no lettered parts is `type: multi-part` with
+  `### Explanation` / `### Examiner Report` and no `## Part` heading — under `## Explanation`
+  the app parses it to nothing; `lib/questionBank.test.ts` fails on any file that doesn't parse.
 - Comprehension-check files (`comprehension-checks/<exam-id>/<Concept Name>.md`) used to gate
   flashcard collection and are now rendered nowhere (kept in the vault): YAML frontmatter (`concept`, `exam`, `topic`, `correct` letter) + a `- A) …` option
   list, then an authoring-only `<!-- rationale -->` comment. One file per concept; the filename is

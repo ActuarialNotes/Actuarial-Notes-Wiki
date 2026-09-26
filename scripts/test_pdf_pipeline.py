@@ -571,6 +571,9 @@ class TestExam7Layouts(unittest.TestCase):
         self.assertEqual([p["points"] for p in records[0]["parts"]], [1.25, 1.5])
         self.assertIn("chain ladder estimate", records[0]["parts"][0]["prompt"])
         self.assertEqual(records[0]["id"], "cas7-2012-q1")
+        once = px.cas_records("7", 2012, "Spring", [_page(1, booklet)], [_page(2, report)],
+                              single_sitting=True)
+        self.assertEqual((once[0]["id"], once[0]["session"]), ("cas7-2012-q1", "Spring"))
 
     def test_the_legacy_cover_page_splits_the_combined_pdf(self):
         pages = [
@@ -579,6 +582,13 @@ class TestExam7Layouts(unittest.TestCase):
             _page(3, "Question 1 Sample Answer\nSolution 1\na) 1,750,000"),
         ]
         self.assertEqual(px._split_combined(pages), 1)
+
+    def test_a_dollar_sign_from_the_text_layer_is_escaped(self):
+        # `$25,000 … $10,000` would otherwise pair into one span of math.
+        text, _ = px._joined([_page(1, "A limit of $25,000 and a basic limit of $10,000.")])
+        self.assertIn(r"of \$25,000 and a basic limit of \$10,000.", text)
+        again, _ = px._joined([_page(1, text)])
+        self.assertNotIn(r"\\$", again)
 
     def test_a_number_alone_on_its_line_starts_a_booklet_question(self):
         booklet = (

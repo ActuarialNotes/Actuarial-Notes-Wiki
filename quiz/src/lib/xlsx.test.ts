@@ -182,3 +182,12 @@ describe('sheetToCsv', () => {
     expect(csv).toContain("'=SUM(A1)")
   })
 })
+
+describe('buildZip with large entries', () => {
+  it('stores a multi-megabyte entry without overflowing the call stack', () => {
+    const data = new Uint8Array(3 * 1024 * 1024).fill(7)
+    const zip = buildZip([{ name: 'big.bin', data }])
+    // Local header (30) + name + data + central directory (46 + name) + end record (22).
+    expect(zip.length).toBe(30 + 7 + data.length + 46 + 7 + 22)
+  })
+})

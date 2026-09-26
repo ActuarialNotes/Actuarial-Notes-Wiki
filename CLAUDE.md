@@ -59,7 +59,7 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
 
 ### Inside `quiz/src/`
 - `pages/` — route-level views (Quiz, Review, Dashboard, Flashcards, Search, Settings, Store,
-  Upgrade, wiki/*, `Cowork/` — the second product's shelf, source pages and deliverables —
+  Upgrade, wiki/*, `Project/` — the PCPA project simulator, `Cowork/` — the second product's shelf, source pages and deliverables —
   and `Research/`, which is
   flag-gated)
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
@@ -182,6 +182,16 @@ before touching that area**:
   far more than its share of the syllabus. `computeExamReadiness` is the *one* readiness
   number — the exam-page card, the Dashboard radial, the exam grid and the readiness
   projection all call it. Read before changing `lib/readiness.ts` or any readiness readout.
+- `docs/pcpa-project.md` — the **PCPA project simulator** (`/project/pcpa`, entered from the
+  **Project** button on the PCPA study guide's header): a 16-day window, a case assigned from a
+  pool (`data/pcpaProjects.ts` — the CAS's published rules transcribed, the cases invented and
+  labelled so), data drawn per attempt from a known model with every planted problem counted
+  (`lib/pcpaData.ts`), a workspace running **webR** and **Pyodide** from their CDNs plus a
+  Fortune-sheet spreadsheet, the 1,250-word / five-appendix report, submission with a clean run
+  of the code, and grading on fresh assessment data against the true model. Read before touching
+  anything named `pcpa*`, `project/` or `Project`. Two rules: nothing is interpreted by the app
+  (the languages are their official Wasm builds), and the CAS's data sets are read-only in the
+  workspace — a run can't overwrite them.
 - `docs/distribution-simulators.md` — the **interactive distribution simulators** that replace the
   static `Media/*_pdf.svg` / `*_pmf.svg` embeds on the distribution concept pages: parameter
   sliders, live moments, PDF↔CDF, and a Monte-Carlo histogram. Read before touching
@@ -673,8 +683,8 @@ Other important `lib/` modules:
   60 requests/hour per IP without `VITE_GITHUB_TOKEN` — don't put it on a path that has to work.
 - `supabase.ts` — Supabase client + shared row types
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **118 test files /
-~1785 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **128 test files /
+~1960 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, and the research/resource-timeline
 modules).
 

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:71f5359c2db29b3e0ce7e1062b0124e27cec784706aef344dc4c48772275521b
+  content_hash: sha256:da07bafaa4fd254b3cd59adf294245a9e6f478367d54f6bcc9cebd399eb15f8f
   sources: []
   open_findings: 0
   open_critical: 0
@@ -16,7 +16,7 @@ verification:
 </div>
 
 # Exam 6U
-The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour computer-based exam testing knowledge of [[Insurance Regulation]], [[Statutory Accounting]], and the professional responsibilities of the [[Appointed Actuary]] in the context of U.S. property and casualty insurance.
+The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour computer-based exam testing knowledge of [[Insurance Regulation]], [[Statutory Accounting Principles|Statutory Accounting]], and the professional responsibilities of the [[Appointed Actuary]] in the context of U.S. property and casualty insurance.
 
 ## Learning Objectives
 

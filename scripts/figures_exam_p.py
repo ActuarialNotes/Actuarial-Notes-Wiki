@@ -676,50 +676,51 @@ def percentile() -> Fig:
     return f
 
 
-@figure("Expected Value", "The mean as the balance point of a distribution", width=WID)
+@figure("Expected Value", "A right-skewed density resting on a beam, balanced on a "
+        "fulcrum placed at its mean", width=WID)
 def expected_value() -> Fig:
     f = vcard()
 
-    a = vaxes(f, 0, 6.2, 0, 0.42, top=40, bottom=56)
+    a = vaxes(f, 0, 6.2, 0, 0.56, top=24, bottom=58)
     dens = lambda t: _lognorm(t, 0.55, 0.55)
-    a.area(dens, 0.02, 6.2, colour=BLUE, opacity="0.14")
+    a.area(dens, 0.02, 6.2, colour=BLUE, opacity="0.18")
     a.curve(dens, colour=BLUE)
     a.frame(xlabel="x", ylabel="f(x)")
     mu = math.exp(0.55 + 0.55 ** 2 / 2)
-    a.vline(mu, colour=AMBER, y_top=0.40)
-    a.label(mu, 0.31, "μ = E[X]", cls="sm bold", dx=40, dy=-2)
+    a.vline(mu, colour=AMBER, y_top=0.52)
+    a.label(mu, 0.52, "E[X]", cls="sm bold", anchor="start", dx=6, dy=4)
     px = a.px(mu)
     f.line(a.x0, a.y1 + 3, a.x1, a.y1 + 3, cls="", stroke=AMBER, stroke_width="1.8")
-    f.polygon([(px, a.y1 + 3), (px - 10, a.y1 + 19), (px + 10, a.y1 + 19)], fill=AMBER)
+    f.polygon([(px, a.y1 + 3), (px - 11, a.y1 + 21), (px + 11, a.y1 + 21)], fill=AMBER)
     return f
 
 
-@figure("Variance", "Two distributions with the same mean and different variance",
-        width=WID)
+@figure("Variance", "Two bell curves with the same mean, a tall narrow one and a low wide "
+        "one, each with an arrow spanning one standard deviation either side", width=WID)
 def variance() -> Fig:
     f = vcard()
 
-    a = vaxes(f, -5, 5, 0, 0.46, top=40)
-    a.curve(lambda t: _npdf(t, 0, 1.9), colour=AMBER)
-    a.curve(lambda t: _npdf(t, 0, 1.0), colour=BLUE)
+    a = vaxes(f, -5, 5, 0, 0.44, top=24)
+    for sd, colour in ((1.9, AMBER), (1.0, BLUE)):
+        a.area(lambda t, s=sd: _npdf(t, 0, s), -5, 5, colour=colour, opacity="0.1")
+        a.curve(lambda t, s=sd: _npdf(t, 0, s), colour=colour)
     a.frame(xlabel="x", ylabel="f(x)", xticks=[0], xfmt=lambda t: "μ")
-    a.label(0.5, 0.42, "σ² = 1", cls="sm bold", anchor="start", fill=BLUE)
-    a.label(2.5, 0.19, "σ² = 3.6", cls="sm bold", anchor="start", fill=AMBER)
-    for sd, colour, y in ((1.0, BLUE, 0.055), (1.9, AMBER, 0.02)):
+    for sd, colour in ((1.0, BLUE), (1.9, AMBER)):
+        y = _npdf(sd, 0, sd)
         x1, y1 = a.p(-sd, y)
         x2, _ = a.p(sd, y)
-        f.arrow(x1, y1, x2, y1, colour=colour, width=1.3)
-        f.arrow(x2, y1, x1, y1, colour=colour, width=1.3)
-    f.text(a.px(0), a.py(0.055) - 8, "±σ", cls="sm", fill=BLUE)
+        f.arrow(x1 + 4, y1, x2, y1, colour=colour, width=1.6)
+        f.arrow(x2 - 4, y1, x1, y1, colour=colour, width=1.6)
     return f
 
 
-@figure("Standard Deviation", "The one-, two- and three-sigma bands of a distribution",
+@figure("Standard Deviation", "A bell curve with the bands one, two and three standard "
+        "deviations either side of the mean shaded and marked 68%, 95% and 99.7%",
         width=WID)
 def standard_deviation() -> Fig:
     f = vcard()
 
-    a = vaxes(f, -3.7, 3.7, 0, 0.44, left=30, right=20, top=40)
+    a = vaxes(f, -3.7, 3.7, 0, 0.44, left=30, right=20, top=24)
     bands = [(1, "68%", BLUE), (2, "95%", VIOLET), (3, "99.7%", AMBER)]
     for k, _, colour in reversed(bands):
         a.area(_npdf, -k, k, colour=colour, opacity="0.14")
@@ -732,274 +733,266 @@ def standard_deviation() -> Fig:
         x2, _ = a.p(k, y)
         f.arrow(x1, y1, x2, y1, colour=colour, width=1.2)
         f.arrow(x2, y1, x1, y1, colour=colour, width=1.2)
-        f.text(a.px(0), y1 - 6, lab, cls="sm bold", fill=colour)
+        f.text(a.px(0), y1 - 6, lab, cls="sm bold")
     return f
 
 
-@figure("Coefficient of Variation", "Equal standard deviations meaning very different "
-        "relative risk", width=WID)
+@figure("Coefficient of Variation", "Two bell curves with the same spread, one near zero "
+        "and one far from it, so the same standard deviation is a large share of the "
+        "first mean and a small share of the second", width=WID)
 def coefficient_of_variation() -> Fig:
     f = vcard()
 
-    a = vaxes(f, 0, 12, 0, 0.50, top=40, bottom=52)
-    a.curve(lambda t: _npdf(t, 2.2, 0.9), colour=ROSE)
-    a.curve(lambda t: _npdf(t, 8.0, 0.9), colour=BLUE)
-    a.frame(ylabel="f(x)", xticks=[2.2, 8.0], xfmt=lambda t: f"μ = {t:g}")
-    a.label(2.2, 0.47, "CV = 0.41", cls="sm bold", fill=ROSE)
-    a.label(8.0, 0.47, "CV = 0.11", cls="sm bold", fill=BLUE)
+    a = vaxes(f, 0, 12, 0, 0.52, top=24)
     for mu, colour in ((2.2, ROSE), (8.0, BLUE)):
-        x1, y1 = a.p(mu - 0.9, 0.06)
-        x2, _ = a.p(mu + 0.9, 0.06)
-        f.arrow(x1, y1, x2, y1, colour=colour, width=1.2)
-        f.arrow(x2, y1, x1, y1, colour=colour, width=1.2)
-    f.text((a.x0 + a.x1) / 2, a.y1 + 44, "both have σ = 0.9", cls="sm dim")
+        a.area(lambda t, m=mu: _npdf(t, m, 0.9), 0, 12, colour=colour, opacity="0.1")
+        a.curve(lambda t, m=mu: _npdf(t, m, 0.9), colour=colour)
+        x1, y1 = a.p(mu - 0.9, _npdf(0.9, 0, 0.9))
+        x2, _ = a.p(mu + 0.9, 0)
+        f.arrow(x1 + 4, y1, x2, y1, colour=colour, width=1.5)
+        f.arrow(x2 - 4, y1, x1, y1, colour=colour, width=1.5)
+    a.frame(xlabel="x", ylabel="f(x)", xticks=[0, 2.2, 8.0], xfmt=lambda t: f"{t:g}")
+    a.label(2.2, 0.47, "CV 0.41", cls="sm bold")
+    a.label(8.0, 0.47, "CV 0.11", cls="sm bold")
     return f
 
 
-@figure("Binomial Distribution", "Ten policies with four of them claiming, above the "
-        "binomial mass function of the claim count", width=WID)
+@figure("Binomial Distribution", "The binomial mass function of the number of claims "
+        "among ten policies that each claim with probability 0.3, drawn as stems from 0 "
+        "to 10", width=WID)
 def binomial_distribution() -> Fig:
     f = vcard()
 
     n, p = 10, 0.3
-    f.text(BCX, 92, "10 policies, each claiming with probability 0.3", cls="sm dim")
-    _trial_strip(f, 102, (False, True, False, False, True, True, False, False, False, True))
-    f.text(BCX, 152, "4 of the 10 claimed → k = 4", cls="sm bold", fill=BLUE)
-
     masses = [_binom_pmf(n, p, k) for k in range(n + 1)]
-    a = Axes(f, 60, 190, 326, 330, -0.7, 10.7, 0, max(masses) * 1.35)
-    a.stems([(k, m) for k, m in enumerate(masses) if k != 4], colour=BLUE)
-    a.stems([(4, masses[4])], colour=AMBER, width=2.8, dot=3.8)
+    a = vaxes(f, -0.7, 10.7, 0, max(masses) * 1.15, top=24)
+    a.stems(list(enumerate(masses)), colour=BLUE, dot=4, width=2.6)
     a.frame(xlabel="k", ylabel="P(X = k)", xticks=list(range(n + 1)))
-    a.label(4, masses[4], "0.200", cls="sm bold", dy=-11, fill=AMBER)
     return f
 
 
-@figure("Geometric Distribution", "Two policies without a claim then one with, above the "
-        "geometric mass function of the trial the first claim lands on", width=WID)
+def _p_trial_axis(f: Fig, a: Axes, n, wins, labels, size=16):
+    """A row of trial boxes standing in for the x-axis ticks, trial k under k.
+
+    A filled box is a success and the last success is amber — the trial the
+    count ends on, which is the stem picked out above it. The trials after it
+    never happened, so they are dashed outlines. Tick numbers go under the boxes
+    for the trials in `labels`.
+    """
+    y, end = a.y1 + 6, max(wins)
+    for k in range(1, n + 1):
+        x = a.px(k)
+        colour = AMBER if k == end else BLUE
+        if k > end:
+            f.rect(x - size / 2, y, size, size, rx=3.5, fill="none", stroke="var(--edge)",
+                   stroke_width="1.2", stroke_dasharray="3 2.5")
+        else:
+            f.rect(x - size / 2, y, size, size, rx=3.5,
+                   fill=colour if k in wins else "var(--soft)",
+                   fill_opacity="0.75" if k in wins else "1",
+                   stroke=colour if k in wins else "var(--axis)", stroke_width="1.2")
+        if k in labels:
+            f.text(x, y + size + 14, str(k), cls="sm dim")
+
+
+@figure("Geometric Distribution", "The geometric mass function over trials 1 to 10, its "
+        "axis a row of trials where the first two fail and the third succeeds, the stem "
+        "at 3 picked out", width=WID)
 def geometric_distribution() -> Fig:
     f = vcard()
 
-    p = 0.2
-    f.text(BCX, 92, "each policy claims with probability 0.2", cls="sm dim")
-    _trial_strip(f, 102, (False, False, True), ring=(2,))
-    f.text(BCX, 154, "the first claim is the 3rd policy → k = 3", cls="sm bold", fill=BLUE)
-
+    p, first = 0.2, 3
     ks = list(range(1, 11))
     masses = [(1 - p) ** (k - 1) * p for k in ks]
-    a = Axes(f, 60, 192, 326, 330, 0.3, 10.7, 0, max(masses) * 1.35)
-    a.stems([(k, m) for k, m in zip(ks, masses) if k != 3], colour=BLUE)
-    a.stems([(3, masses[2])], colour=AMBER, width=2.8, dot=3.8)
-    a.frame(xlabel="k", ylabel="P(X = k)", xticks=ks)
-    a.label(3, masses[2], "0.128", cls="sm bold", dy=-11, fill=AMBER)
+    a = vaxes(f, 0.3, 10.7, 0, max(masses) * 1.15, top=24, bottom=50)
+    a.stems([(k, m) for k, m in zip(ks, masses) if k != first], colour=BLUE, dot=4,
+            width=2.6)
+    a.stems([(first, masses[first - 1])], colour=AMBER, dot=4.6, width=3)
+    a.frame(ylabel="P(X = k)")
+    _p_trial_axis(f, a, 10, {first}, set(ks))
     return f
 
 
-@figure("Hypergeometric Distribution", "Three of ten policies drawn without replacement, "
-        "above the hypergeometric mass function of the number drawn with errors",
-        width=WID)
+@figure("Hypergeometric Distribution", "A pool of ten policies, four of them with errors, "
+        "with three drawn out of it into a sample, leaving empty places behind", width=WID)
 def hypergeometric_distribution() -> Fig:
     f = vcard()
 
-    N, K, n = 10, 4, 3
-    f.text(BCX, 92, "10 policies, 4 with errors — 3 drawn (dashed)", cls="sm dim")
-    _trial_strip(f, 102, (True, True, False, False, True, False, True, False, False, False),
-                 colour=ROSE, ring=(1, 4, 7))
-    f.text(BCX, 154, "2 of the 3 drawn have errors → k = 2", cls="sm bold", fill=ROSE)
+    # The pool: two rows of five, the four with errors in rose. Three are drawn
+    # out and do not go back — their places in the pool are left empty.
+    errors = {1, 3, 5, 9}
+    drawn = [5, 7, 9]
+    xs = [72 + 54 * (i % 5) for i in range(10)]
+    ys = [132 + 62 * (i // 5) for i in range(10)]
+    f.rect(36, 92, 288, 142, rx=14, fill="var(--soft)", stroke="var(--edge)",
+           stroke_width="1.2")
+    for i in range(10):
+        colour = ROSE if i in errors else "var(--dim)"
+        if i in drawn:
+            f.circle(xs[i], ys[i], 19, fill="none", stroke="var(--edge)",
+                     stroke_width="1.4", stroke_dasharray="3 3")
+        else:
+            f.circle(xs[i], ys[i], 19, fill=colour, fill_opacity="0.55" if i in errors
+                     else "0.25", stroke=colour, stroke_width="1.4")
 
-    ks = list(range(n + 1))
-    masses = [math.comb(K, k) * math.comb(N - K, n - k) / math.comb(N, n) for k in ks]
-    a = Axes(f, 60, 192, 326, 330, -0.45, 3.45, 0, max(masses) * 1.35)
-    a.stems([(k, m) for k, m in zip(ks, masses) if k != 2], colour=BLUE)
-    a.stems([(2, masses[2])], colour=AMBER, width=2.8, dot=3.8)
-    a.frame(xlabel="k", ylabel="P(X = k)", xticks=ks)
-    a.label(2, masses[2], "0.300", cls="sm bold", dy=-11, fill=AMBER)
+    sx = [124, 180, 236]
+    f.rect(92, 294, 176, 76, rx=14, fill="var(--soft)", stroke="var(--edge)",
+           stroke_width="1.2")
+    for i, x in zip(drawn, sx):
+        colour = ROSE if i in errors else "var(--dim)"
+        f.arrow(xs[i], ys[i] + 22, x, 306, colour="var(--dim)", width=1.2, dash=True)
+        f.circle(x, 332, 19, fill=colour, fill_opacity="0.55" if i in errors else "0.25",
+                 stroke=colour, stroke_width="1.4")
     return f
 
 
-@figure("Negative Binomial Distribution", "Seven claims with the third large loss on the "
-        "seventh, above the negative binomial mass function of the trial count", width=WID)
+@figure("Negative Binomial Distribution", "The negative binomial mass function of the "
+        "trial the third success lands on, its axis a row of trials with successes on "
+        "the 2nd, 5th and 7th, the stem at 7 picked out", width=WID)
 def negative_binomial_distribution() -> Fig:
     f = vcard()
 
-    r, p = 3, 0.25
-    f.text(BCX, 92, "each claim is a large loss with probability 0.25", cls="sm dim")
-    _trial_strip(f, 102, (False, True, False, False, True, False, True), ring=(6,))
-    f.text(BCX, 154, "the 3rd large loss is the 7th claim → k = 7", cls="sm bold", fill=BLUE)
-
+    r, p, wins = 3, 0.25, {2, 5, 7}
     ks = list(range(r, 17))
     masses = [math.comb(k - 1, r - 1) * p ** r * (1 - p) ** (k - r) for k in ks]
-    a = Axes(f, 60, 192, 326, 330, 2.4, 16.6, 0, max(masses) * 1.4)
-    a.stems([(k, m) for k, m in zip(ks, masses) if k != 7], colour=BLUE, dot=2.8)
-    a.stems([(7, masses[ks.index(7)])], colour=AMBER, width=2.8, dot=3.8)
-    a.frame(xlabel="k", ylabel="P(X = k)", xticks=list(range(3, 17, 2)))
-    a.label(7, masses[ks.index(7)], "0.074", cls="sm bold", dy=-11, fill=AMBER)
+    a = vaxes(f, 0.4, 16.6, 0, max(masses) * 1.15, top=24, bottom=50)
+    a.stems([(k, m) for k, m in zip(ks, masses) if k != 7], colour=BLUE, dot=3.4,
+            width=2.4)
+    a.stems([(7, masses[ks.index(7)])], colour=AMBER, dot=4.4, width=3)
+    a.frame(ylabel="P(X = k)")
+    _p_trial_axis(f, a, 16, wins, set(range(1, 17, 2)), size=13)
     return f
 
 
-@figure("Poisson Distribution", "Three claims falling in one month, above the Poisson "
-        "mass function of the monthly claim count", width=WID)
+@figure("Poisson Distribution", "The Poisson mass function of a monthly claim count with "
+        "mean 3, drawn as stems from 0 to 10", width=WID)
 def poisson_distribution() -> Fig:
     f = vcard()
 
     lam = 3.0
-    f.text(BCX, 92, "claims arrive at a rate of λ = 3 per month", cls="sm dim")
-    tx0, tx1, ty = 46, 306, 126
-    f.arrow(tx0 - 8, ty, tx1 + 14, ty, colour="var(--axis)", width=1.2)
-    for t in (0.16, 0.43, 0.81):
-        ex = tx0 + t * (tx1 - tx0)
-        f.line(ex, ty, ex, ty - 15, cls="", stroke=BLUE, stroke_width="2.2",
-               stroke_linecap="round")
-        f.circle(ex, ty - 18, 3.4, fill=BLUE)
-    f.text(tx0, ty + 16, "0", cls="sm dim")
-    f.text(tx1 + 20, ty + 16, "1 month", cls="sm dim", anchor="end")
-    f.text(BCX, 158, "3 claims in the month → k = 3", cls="sm bold", fill=BLUE)
-
     ks = list(range(11))
     masses = [math.exp(-lam) * lam ** k / math.factorial(k) for k in ks]
-    a = Axes(f, 60, 196, 326, 330, -0.7, 10.7, 0, max(masses) * 1.35)
-    a.stems([(k, m) for k, m in zip(ks, masses) if k != 3], colour=BLUE)
-    a.stems([(3, masses[3])], colour=AMBER, width=2.8, dot=3.8)
+    a = vaxes(f, -0.7, 10.7, 0, max(masses) * 1.15, top=24)
+    a.stems(list(zip(ks, masses)), colour=BLUE, dot=4, width=2.6)
     a.frame(xlabel="k", ylabel="P(X = k)", xticks=ks)
-    a.label(3, masses[3], "0.224", cls="sm bold", dy=-11, fill=AMBER)
     return f
 
 
-@figure("Uniform Discrete", "The discrete uniform PMF and CDF for a fair die", width=WID)
+@figure("Uniform Discrete", "Six stems of equal height, one over each face of a die",
+        width=WID)
 def uniform_discrete() -> Fig:
     f = vcard()
 
-    a1 = Axes(f, 68, 90, 326, 208, 0.3, 6.7, 0, 0.24)
-    a1.stems([(k, 1 / 6) for k in range(1, 7)], colour=BLUE)
-    a1.frame(ylabel="P(X = k)", xticks=list(range(1, 7)), yticks=[1 / 6],
-             yfmt=lambda t: "1/6")
-
-    a2 = Axes(f, 68, 250, 326, 350, 0.3, 6.9, 0, 1.1)
-    a2.frame(xlabel="k", ylabel="F(k)", xticks=list(range(1, 7)), yticks=[0, 1],
-             yfmt=lambda t: f"{t:g}")
-    prev = 0.0
+    a = vaxes(f, 0.3, 6.7, 0, 0.21, top=24, bottom=56)
+    a.stems([(k, 1 / 6) for k in range(1, 7)], colour=BLUE, dot=4.4, width=2.8)
+    a.frame(ylabel="P(X = k)", yticks=[1 / 6], yfmt=lambda t: "1/6")
     for k in range(1, 7):
-        v = k / 6
-        x1 = a2.px(k)
-        x2 = a2.px(k + 1) if k < 6 else a2.x1
-        f.line(x1, a2.py(v), x2, a2.py(v), cls="curve", stroke=VIOLET, stroke_width="2")
-        f.line(x1, a2.py(prev), x1, a2.py(v), cls="curve dash", stroke=VIOLET,
-               stroke_width="1.2")
-        f.circle(x1, a2.py(v), 3, fill=VIOLET)
-        prev = v
+        _p_die(f, a.px(k), a.y1 + 24, 28, k)
     return f
 
 
 @figure("Beta", "Four beta densities on the unit interval — flat, right-skewed, "
-        "left-skewed and in between", width=WID)
+        "left-skewed and in between — each labelled with its two parameters", width=WID)
 def beta_distribution() -> Fig:
     f = vcard()
 
-    f.text(BCX, 90, "each curve is labelled (α, β)", cls="sm dim")
-    a = vaxes(f, 0, 1, 0, 2.95, left=40, right=16, top=52, bottom=46)
+    a = vaxes(f, 0, 1, 0, 2.95, left=40, right=16, top=24)
     for aa, bb, colour in ((1, 1, BLUE), (2, 5, AMBER), (5, 2, GREEN), (3, 2, VIOLET)):
         a.curve(lambda t, aa=aa, bb=bb: _beta_pdf(t, aa, bb), colour=colour, n=170,
                 xa=0.003, xb=0.997)
     a.frame(xlabel="x", ylabel="f(x)", xticks=[0, 0.25, 0.5, 0.75, 1],
             xfmt=lambda t: f"{t:g}", yticks=[1, 2], yfmt=lambda t: f"{t:g}")
-    a.label(0.15, 1, "(1, 1)", cls="sm bold", dy=-9, fill=BLUE)
-    a.label(0.2, _beta_pdf(0.2, 2, 5), "(2, 5)", cls="sm bold", dy=-10, fill=AMBER)
-    a.label(0.8, _beta_pdf(0.8, 5, 2), "(5, 2)", cls="sm bold", dy=-10, fill=GREEN)
-    a.label(0.47, _beta_pdf(0.47, 3, 2), "(3, 2)", cls="sm bold", dy=-10, fill=VIOLET)
+    a.label(0.15, 1, "(1, 1)", cls="sm bold", dy=-9)
+    a.label(0.2, _beta_pdf(0.2, 2, 5), "(2, 5)", cls="sm bold", dy=-10)
+    a.label(0.8, _beta_pdf(0.8, 5, 2), "(5, 2)", cls="sm bold", dy=-10)
+    a.label(0.47, _beta_pdf(0.47, 3, 2), "(3, 2)", cls="sm bold", dy=-10)
     return f
 
 
-@figure("Exponential Distribution", "An exponential density and, past a deductible, the "
-        "same curve starting over", width=WID)
+@figure("Exponential Distribution", "An exponential density with its tail past the "
+        "deductible d shaded, and the same curve drawn again starting over at d",
+        width=WID)
 def exponential_distribution() -> Fig:
     f = vcard()
 
     theta, d = 500.0, 300.0
     dens = lambda t: math.exp(-t / theta) / theta
-    a = Axes(f, 58, 122, 326, 322, 0, 2500, 0, 0.0024)
+    a = vaxes(f, 0, 2500, 0, 0.0022, top=24)
+    a.area(dens, d, 2500, colour=AMBER, opacity="0.18")
     a.curve(dens, colour=BLUE, n=180)
     a.curve(lambda t: dens(t - d), colour=AMBER, n=180, xa=d, dash=True)
-    a.frame(xlabel="x", ylabel="f(x)", xticks=[0, 500, 1000, 1500, 2000, 2500])
+    a.frame(xlabel="x", ylabel="f(x)", xticks=[0, 1000, 2000], xfmt=lambda t: f"{t:,.0f}")
     a.vline(d, colour="var(--dim)", y_top=1 / theta)
-    a.label(d, 1 / theta, "d = 300", cls="sm bold", dy=-9)
-    f.legend(180, 148, [(BLUE, "X ~ Exp(500)"), (AMBER, "X given X > 300")])
+    a.label(d, 1 / theta, "d", cls="sm bold", dy=-8)
     return f
 
 
-@figure("Gamma", "Four exponential waiting times laid end to end, and the gamma density "
-        "of their total", width=WID)
+@figure("Gamma", "A gamma density, with four exponential waits laid end to end along its "
+        "axis to make one draw from it", width=WID)
 def gamma_distribution() -> Fig:
     f = vcard()
 
     alpha, theta = 4, 250.0
-    f.text(BCX, 92, "4 waits, each Exp(θ = 250)", cls="sm dim")
-    bx0, bw, by = 34, 292, 106
-    x = bx0
-    for i, wait in enumerate((210, 430, 150, 320)):
-        seg = bw * wait / 1110
-        f.rect(x, by, seg - 3, 17, rx=3, fill=SERIES[i], fill_opacity="0.65")
-        x += seg
-    brace(f, bx0, bx0 + bw, by + 26, label="one Gamma(4, 250) draw")
-
     dens = lambda t: _gamma_pdf(t, alpha, theta)
-    a = Axes(f, 58, 198, 326, 330, 0, 2500, 0, 0.0011)
+    a = vaxes(f, 0, 2500, 0, 0.0011, top=24)
     a.area(dens, 0, 2500, colour=BLUE, opacity="0.14")
     a.curve(dens, colour=BLUE, n=200)
-    a.frame(xlabel="x", ylabel="f(x)", xticks=[0, 500, 1000, 1500, 2000, 2500])
-    a.vline(1000, colour=AMBER, y_top=dens(1000))
-    a.label(1000, dens(1000), "mean 1,000", cls="sm bold", dx=6, dy=-10, fill=AMBER,
-            anchor="start")
+    # One draw from the gamma is four exponential waits end to end.
+    x, top = 0, a.y1 - 18
+    for i, wait in enumerate((210, 430, 150, 320)):
+        f.rect(a.px(x) + 0.8, top, a.px(x + wait) - a.px(x) - 1.6, 14, rx=3,
+               fill=SERIES[i], fill_opacity="0.8")
+        x += wait
+    f.line(a.px(x), top - 6, a.px(x), a.y1, cls="", stroke="var(--ink)", stroke_width="1.6")
+    a.frame(xlabel="x", ylabel="f(x)", xticks=[0, 1000, 2000], xfmt=lambda t: f"{t:,.0f}")
     return f
 
 
-@figure("Lognormal Distribution", "A normal density in log dollars above the right-skewed "
-        "lognormal it exponentiates to, with the same tail shaded on both", width=WID)
+@figure("Lognormal Distribution", "A right-skewed lognormal density in dollars with its "
+        "tail past 1,000 shaded, over a second ruler in log dollars whose evenly spaced "
+        "marks spread apart to the right", width=WID)
 def lognormal_distribution() -> Fig:
     f = vcard()
 
     mu, sd = 6.0, 0.8
-    cut = math.log(1000)
-
-    a1 = Axes(f, 66, 100, 326, 196, mu - 3.2 * sd, mu + 3.2 * sd, 0, 0.56)
-    a1.area(lambda t: _npdf(t, mu, sd), cut, mu + 3.2 * sd, colour=AMBER, opacity="0.32")
-    a1.curve(lambda t: _npdf(t, mu, sd), colour=BLUE, n=170)
-    a1.frame(ylabel="ln X ~ N(6, 0.8²)", xticks=[mu, cut],
-             xfmt=lambda t: "μ" if t == mu else "ln 1000")
-    a1.label(7.72, 0.115, "0.128", cls="sm bold", fill=AMBER)
-
-    f.arrow(BCX, 222, BCX, 244, colour="var(--dim)", width=1.3)
-    f.text(BCX + 10, 240, "x = e^t", cls="sm dim", anchor="start")
-
     dens = lambda t: _lognorm(t, mu, sd)
-    a2 = Axes(f, 66, 256, 326, 348, 0, 2000, 0, 0.0019)
-    a2.area(dens, 1000, 2000, colour=AMBER, opacity="0.32")
-    a2.curve(dens, colour=BLUE, n=200, xa=1)
-    a2.frame(ylabel="X ~ Lognormal", xticks=[0, 1000, 2000],
-             xfmt=lambda t: f"{t:,.0f}")
-    a2.label(1360, 0.00028, "0.128", cls="sm bold", fill=AMBER)
+    a = vaxes(f, 0, 2000, 0, 0.0019, top=24, bottom=66)
+    a.area(dens, 1000, 2000, colour=AMBER, opacity="0.36")
+    a.area(dens, 1, 1000, colour=BLUE, opacity="0.14")
+    a.curve(dens, colour=BLUE, n=220, xa=1)
+    a.frame(ylabel="f(x)", xticks=[0, 1000, 2000], xfmt=lambda t: f"{t:,.0f}")
+    a.label(1330, 0.00022, "0.128", cls="sm bold")
+
+    # The same axis read in logs: equal steps in ln x land further and further
+    # apart in dollars, which is where the long right tail comes from.
+    ly = a.y1 + 34
+    f.line(a.x0, ly, a.x1, ly, cls="axis")
+    for v in (5, 6, 7):
+        x = a.px(math.exp(v))
+        f.line(x, ly - 4, x, ly + 4, cls="tick")
+        f.text(x, ly + 16, str(v), cls="sm dim")
+    f.text(a.x0 - 8, ly + 4, "ln x", cls="sm dim", anchor="end")
     return f
 
 
-@figure("Normal Distribution", "A normal density with its right tail shaded, over a "
-        "second ruler carrying the standardized z scale", width=WID)
+@figure("Normal Distribution", "A normal density of aggregate loss with the tail past 55 "
+        "shaded, over a second ruler carrying the standardized z scale", width=WID)
 def normal_distribution() -> Fig:
     f = vcard()
 
     mu, sd = 50.0, 6.3246
     dens = lambda t: _npdf(t, mu, sd)
-    f.text(BCX, 100, "aggregate loss S ~ N(50, 6.32²), in thousands", cls="sm dim")
-
-    a = Axes(f, 54, 116, 326, 286, mu - 3.4 * sd, mu + 3.4 * sd, 0, 0.072)
-    a.area(dens, 55, mu + 3.4 * sd, colour=AMBER, opacity="0.3")
+    a = Axes(f, 54, 90, 326, 300, mu - 3.4 * sd, mu + 3.4 * sd, 0, 0.068)
+    a.area(dens, 55, mu + 3.4 * sd, colour=AMBER, opacity="0.34")
     a.curve(dens, colour=BLUE, n=200)
     a.frame(xticks=[30, 40, 50, 60, 70], xfmt=lambda t: f"{t:g}")
     a.vline(55, colour=AMBER, y_top=dens(55))
-    a.label(55, dens(55), "55", cls="sm bold", dy=-8, fill=AMBER)
-    a.label(60.5, 0.0075, "0.215", cls="sm bold", fill=AMBER)
+    a.label(55, dens(55), "55", cls="sm bold", dy=-8)
+    a.label(60.5, 0.0075, "0.215", cls="sm bold")
 
     # The same axis, read again in standard deviations: the z ruler is what a
     # Φ table is indexed by, so the figure shows both scales at once.
-    zy = 330
+    zy = 346
     f.arrow(a.x0 - 8, zy, a.x1 + 12, zy, colour="var(--axis)", width=1.1)
     for z in (-3, -2, -1, 0, 1, 2, 3):
         zx = a.px(mu + z * sd)
@@ -1009,56 +1002,49 @@ def normal_distribution() -> Fig:
     zx = a.px(55)
     f.line(zx, a.y1, zx, zy, cls="thin dash", stroke=AMBER, stroke_width="1.2")
     f.line(zx, zy - 5, zx, zy + 5, cls="", stroke=AMBER, stroke_width="1.8")
-    f.text(zx, zy - 11, "0.79", cls="sm bold", fill=AMBER)
+    f.text(zx + 6, zy - 8, "0.79", cls="sm bold", anchor="start")
     return f
 
 
-@figure("Uniform Continuous Distribution", "The continuous uniform density and its "
-        "straight-line CDF", width=WID)
+@figure("Uniform Continuous Distribution", "A flat density on the interval from a to b, "
+        "the rectangle under it shaded", width=WID)
 def uniform_continuous() -> Fig:
     f = vcard()
 
     aa, bb = 2.0, 7.0
     dens = 1 / (bb - aa)
-    a1 = Axes(f, 76, 90, 326, 208, 0.5, 8.5, 0, 0.30)
-    a1.area(lambda t: dens if aa <= t <= bb else 0.0, aa, bb, colour=BLUE, opacity="0.2")
-    a1.polyline([(0.5, 0), (aa, 0), (aa, dens), (bb, dens), (bb, 0), (8.5, 0)],
-                colour=BLUE)
-    a1.frame(ylabel="f(x)", xticks=[aa, bb], xfmt=lambda t: "a" if t == aa else "b",
-             yticks=[dens], yfmt=lambda t: "1/(b−a)")
-    a1.label((aa + bb) / 2, dens / 2, "area = 1", cls="sm bold")
-
-    a2 = Axes(f, 76, 250, 326, 350, 0.5, 8.5, 0, 1.12)
-    a2.polyline([(0.5, 0), (aa, 0), (bb, 1), (8.5, 1)], colour=VIOLET)
-    a2.frame(xlabel="x", ylabel="F(x)", xticks=[aa, bb],
-             xfmt=lambda t: "a" if t == aa else "b", yticks=[0, 1],
-             yfmt=lambda t: f"{t:g}")
-    a2.label(5.6, 0.55, "(x−a)/(b−a)", cls="sm")
+    a = vaxes(f, 0.5, 8.5, 0, 0.26, left=62, top=24)
+    a.area(lambda t: dens if aa <= t <= bb else 0.0, aa, bb, colour=BLUE, opacity="0.24")
+    a.polyline([(0.5, 0), (aa, 0), (aa, dens), (bb, dens), (bb, 0), (8.5, 0)],
+               colour=BLUE, width=2.4)
+    a.frame(xlabel="x", ylabel="f(x)", xticks=[aa, bb],
+            xfmt=lambda t: "a" if t == aa else "b", yticks=[dens], yfmt=lambda t: "1/(b−a)")
     return f
 
 
-@figure("Transformations of Random Variables", "A monotone transformation carrying the "
-        "density of X into the density of Y", width=WID)
+@figure("Transformations of Random Variables", "The curve y = g(x) with the density of X "
+        "drawn under its x-axis and the reshaped density of Y drawn beside its y-axis",
+        width=WID)
 def transformations() -> Fig:
     f = vcard()
 
-    gx0, gx1, gy0, gy1 = 128, 328, 96, 268
+    gx0, gx1, gy0, gy1 = 128, 328, 84, 280
     a = Axes(f, gx0, gy0, gx1, gy1, 0, 2.6, 0, 6.8)
     a.frame(arrows=True)
     a.curve(lambda t: t * t, colour=VIOLET, xa=0, xb=2.6)
-    f.text(gx1 - 4, gy0 + 12, "y = g(x)", cls="sm bold", anchor="end", fill=VIOLET)
+    f.text(gx1 - 4, gy0 + 12, "g", cls="bold", anchor="end")
 
     xv = 1.5
     a.vline(xv, y_top=xv * xv, colour="var(--dim)")
     f.line(gx0, a.py(xv * xv), a.px(xv), a.py(xv * xv), cls="thin dash",
            stroke="var(--dim)", stroke_width="1.2")
-    a.point(xv, xv * xv, colour=VIOLET, r=3.4)
+    a.point(xv, xv * xv, colour=VIOLET, r=3.8)
 
-    dx = Axes(f, gx0, gy1 + 14, gx1, gy1 + 66, 0, 2.6, 0, 0.95)
+    dx = Axes(f, gx0, gy1 + 14, gx1, gy1 + 72, 0, 2.6, 0, 0.95)
     dx.area(lambda t: _npdf(t, 1.4, 0.45), 0, 2.6, colour=BLUE, opacity="0.2")
     dx.curve(lambda t: _npdf(t, 1.4, 0.45), colour=BLUE, n=90)
-    f.line(gx0, gy1 + 66, gx1, gy1 + 66, cls="axis")
-    f.text(gx1 - 4, gy1 + 60, "f_X(x)", cls="sm bold", fill=BLUE, anchor="end")
+    f.line(gx0, gy1 + 72, gx1, gy1 + 72, cls="axis")
+    f.text(gx1 - 4, gy1 + 64, "f_X", cls="sm bold", anchor="end")
 
     ypts = []
     for i in range(81):
@@ -1070,61 +1056,54 @@ def transformations() -> Fig:
     f.polygon([(gx0, a.py(0.06))] + poly + [(gx0, a.py(6.8))], fill=GREEN,
               fill_opacity="0.18", stroke="none")
     f.poly(poly, cls="curve", stroke=GREEN, stroke_width="2")
-    f.text(gx0 - 54, gy0 + 4, "f_Y(y)", cls="sm bold", fill=GREEN)
+    f.text(gx0 - 54, gy0 + 4, "f_Y", cls="sm bold")
     return f
 
 
-@figure("Calculus", "The derivative as a tangent slope and the integral as an area",
-        width=WID)
+@figure("Calculus", "One curve carrying both operations: a tangent line touching it at x "
+        "and the area under it between a and b shaded", width=WID)
 def calculus() -> Fig:
     f = vcard()
 
     fn = lambda t: 0.28 * t * t - 0.2 * t + 1.1
-
-    a1 = Axes(f, 72, 92, 320, 210, 0, 3.4, 0, 3.6)
-    a1.curve(fn, colour=BLUE)
-    a1.frame(arrows=True)
-    x0 = 2.2
+    a = vaxes(f, 0, 3.4, 0, 3.9, top=24)
+    a.area(fn, 0.4, 1.6, colour=GREEN, opacity="0.26")
+    a.curve(fn, colour=BLUE)
+    x0 = 2.5
     slope = 0.56 * x0 - 0.2
-    a1.polyline([(x0 - 1.1, fn(x0) - 1.1 * slope), (x0 + 1.0, fn(x0) + 1.0 * slope)],
-                colour=AMBER, width=1.6)
-    a1.point(x0, fn(x0), colour=AMBER)
-    f.text(196, 228, "the slope of the tangent", cls="sm dim")
-
-    a2 = Axes(f, 72, 256, 320, 348, 0, 3.4, 0, 3.6)
-    a2.area(fn, 0.8, 2.6, colour=GREEN, opacity="0.22")
-    a2.curve(fn, colour=BLUE)
-    a2.frame(xticks=[0.8, 2.6], xfmt=lambda t: "a" if t < 2 else "b", arrows=True)
-    a2.label(1.7, 0.8, "∫ₐᵇ f", cls="sm bold")
-    f.text(196, 384, "the area under the curve", cls="sm dim")
+    a.polyline([(x0 - 1.05, fn(x0) - 1.05 * slope), (x0 + 0.85, fn(x0) + 0.85 * slope)],
+               colour=AMBER, width=2)
+    a.vline(x0, y_top=fn(x0), colour="var(--dim)")
+    a.point(x0, fn(x0), colour=AMBER, r=4.2)
+    a.frame(xticks=[0.4, 1.6, x0], xfmt=lambda t: {0.4: "a", 1.6: "b"}.get(t, "x"))
+    a.label(1.0, 0.55, "∫ f", cls="bold")
+    a.label(x0 + 0.62, fn(x0) + 0.62 * slope, "f′", cls="bold", dx=-12, dy=-2)
     return f
 
 
-@figure("Discrete Mathematics", "The power set of a three-element set", width=WID)
+@figure("Discrete Mathematics", "The eight subsets of {a, b, c} stacked by size from the "
+        "empty set to the whole set, each linked to the subsets one element larger",
+        width=WID)
 def discrete_mathematics() -> Fig:
     f = vcard()
 
-    levels = [["∅"], ["{a}", "{b}", "{c}"], ["{a,b}", "{a,c}", "{b,c}"], ["{a,b,c}"]]
+    levels = [[""], ["a", "b", "c"], ["ab", "ac", "bc"], ["abc"]]
     colours = ["var(--dim)", BLUE, VIOLET, GREEN]
-    positions = []
+    nodes = {}
     for li, row in enumerate(levels):
-        y = 96 + li * 74
-        xs = []
-        for i, lab in enumerate(row):
-            x = 180 + (i - (len(row) - 1) / 2) * 104
-            f.rect(x - 34, y - 15, 68, 30, rx=7, fill=colours[li], fill_opacity="0.13",
-                   stroke=colours[li], stroke_width="1.3")
-            f.text(x, y + 5, lab, cls="")
-            xs.append(x)
-        positions.append((y, xs))
-    for li in range(3):
-        y_a, xs_a = positions[li]
-        y_b, xs_b = positions[li + 1]
-        for xa in xs_a:
-            for xb in xs_b:
-                f.line(xa, y_a + 15, xb, y_b - 15, cls="thin", stroke="var(--edge)",
-                       stroke_width="1")
-    f.text(BCX, 386, "each element is in or out — 2 × 2 × 2", cls="sm dim")
+        for i, s in enumerate(row):
+            nodes[s] = (180 + (i - (len(row) - 1) / 2) * 104, 98 + li * 88)
+    # An edge for each subset one element larger — the Hasse diagram of ⊆.
+    for s, (xa, ya) in nodes.items():
+        for t, (xb, yb) in nodes.items():
+            if len(t) == len(s) + 1 and set(s) <= set(t):
+                f.line(xa, ya + 16, xb, yb - 16, cls="thin", stroke="var(--axis)",
+                       stroke_width="1.1")
+    for s, (x, y) in nodes.items():
+        colour = colours[len(s)]
+        f.rect(x - 36, y - 16, 72, 32, rx=8, fill=colour, fill_opacity="0.14",
+               stroke=colour, stroke_width="1.3")
+        f.text(x, y + 5, "{" + ",".join(s) + "}" if s else "∅", cls="")
     return f
 
 

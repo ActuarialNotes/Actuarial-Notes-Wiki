@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:85301c567805a9c03502b8a51b5e79f8bfed2fc30baa76d7bce16335fe395b4b
+  content_hash: sha256:a0f41f010c9c19e5f154279a3e2a9843641bbccd289ffff7c0c3e7a37f6117fa
   sources: []
   open_findings: 0
   open_critical: 0
@@ -40,9 +40,11 @@ verification:
 > > [!answer]-
 > > $$
 > > \begin{align*}
-> > h = 1:\ 6.600 \pm 1.96(0.500) &= 6.600 \pm 0.980 \\
+> > \text{PI}_{1} &= 6.600 \pm 1.96(0.500) \\
+> > &= 6.600 \pm 0.980 \\
 > > &= (5.62,\ 7.58) \\
-> > h = 3:\ 6.216 \pm 1.96(0.610) &= 6.216 \pm 1.196 \\
+> > \text{PI}_{3} &= 6.216 \pm 1.96(0.610) \\
+> > &= 6.216 \pm 1.196 \\
 > > &= (5.02,\ 7.41)
 > > \end{align*}
 > > $$
@@ -51,7 +53,8 @@ verification:
 > > The ratio of the first two standard errors gives $\phi$:
 > > $$
 > > \begin{align*}
-> > \left(\frac{0.583}{0.500}\right)^{2} &= 1 + \phi^{2} = 1.36 \\
+> > 1 + \phi^{2} &= \left(\frac{0.583}{0.500}\right)^{2} \\
+> > &= 1.36 \\
 > > \phi &= 0.6
 > > \end{align*}
 > > $$

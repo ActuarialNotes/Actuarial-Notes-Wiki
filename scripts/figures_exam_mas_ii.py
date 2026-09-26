@@ -1393,66 +1393,61 @@ def dendrogram() -> Fig:
     return f
 
 
-@figure("Linkage", "Complete, single and average linkage measuring the distance "
-        "between the same two clusters", width=WID)
+@figure("Linkage", "Two clusters joined three ways: complete linkage by their farthest "
+        "pair, single linkage by their closest pair, and average linkage by every pair "
+        "at once", width=WID)
 def linkage() -> Fig:
     f = vcard()
 
-    left = [(1.6, 6.6), (2.3, 5.4), (1.3, 4.6)]
-    right = [(7.4, 6.9), (8.1, 5.3), (7.0, 4.2)]
-    for panel, (name, colour, pair) in enumerate((
-            ("complete — max", ROSE, ((1.3, 4.6), (7.4, 6.9))),
-            ("single — min", GREEN, ((2.3, 5.4), (7.0, 4.2))),
-            ("average — mean", BLUE, None))):
-        y0 = 92 + panel * 100
-        ax = Axes(f, BX0 + 20, y0 + 12, BX1 - 16, y0 + 76, 0, 10, 3.4, 8)
-        f.text(BCX, y0 + 6, name, cls="sm bold", fill=colour)
-        if pair is None:
-            for a in left:
-                for b in right:
-                    f.line(ax.px(a[0]), ax.py(a[1]), ax.px(b[0]), ax.py(b[1]),
-                           cls="thin", stroke=colour, stroke_width="0.9",
-                           stroke_opacity="0.55")
-        else:
-            a, b = pair
-            f.line(ax.px(a[0]), ax.py(a[1]), ax.px(b[0]), ax.py(b[1]),
-                   cls="thin", stroke=colour, stroke_width="2")
-        for a in left:
-            ax.point(a[0], a[1], colour="var(--dim)", r=3.4)
-        for b in right:
-            ax.point(b[0], b[1], colour="var(--dim)", r=3.4)
-    f.text(BCX, BY1 - 2, "single linkage chains; complete and average balance",
-           cls="sm dim")
+    left = [(1.4, 7.6), (2.4, 5.6), (1.2, 3.8)]
+    right = [(7.6, 7.2), (8.4, 5.0), (7.2, 3.2)]
+    ax = Axes(f, BX0 + 6, BY0 + 16, BX1 - 6, BY1 - 16, 0, 9.6, 2.5, 8.3)
+    pairs = [(a, b) for a in left for b in right]
+    far = max(pairs, key=lambda p: math.dist(*p))
+    near = min(pairs, key=lambda p: math.dist(*p))
+    for a, b in pairs:
+        f.line(ax.px(a[0]), ax.py(a[1]), ax.px(b[0]), ax.py(b[1]), cls="thin",
+               stroke=BLUE, stroke_width="1.1", stroke_opacity="0.5")
+    for (a, b), colour in ((far, ROSE), (near, GREEN)):
+        f.line(ax.px(a[0]), ax.py(a[1]), ax.px(b[0]), ax.py(b[1]), cls="thin",
+               stroke=colour, stroke_width="2.8")
+    for cluster in (left, right):
+        cx = sum(x for x, _ in cluster) / 3
+        cy = sum(y for _, y in cluster) / 3
+        f.ellipse(ax.px(cx), ax.py(cy), 46, 116, fill="none", stroke="var(--axis)",
+                  stroke_width="1.3", stroke_dasharray="4 3")
+        for x, y in cluster:
+            ax.point(x, y, colour="var(--ink)", r=4.2)
+    mid = lambda p: ((p[0][0] + p[1][0]) / 2, (p[0][1] + p[1][1]) / 2)
+    ax.label(*mid(far), "complete", cls="sm bold", dy=-12)
+    ax.label(*mid(near), "single", cls="sm bold", dy=20)
+    ax.label(4.2, 3.5, "average", cls="sm bold", dy=18)
     return f
 
 
-@figure("Neural Network", "A two-layer network with its input, hidden and output "
-        "units wired together", width=WID)
+@figure("Neural Network", "A network of four input units, five hidden units and one "
+        "output unit, every unit wired to every unit in the next layer", width=WID)
 def neural_network() -> Fig:
     f = vcard()
 
     layers = [(70, 4, "inputs Xⱼ", BLUE), (180, 5, "hidden A_k", VIOLET),
               (290, 1, "output f(x)", GREEN)]
+    step = 50
     coords = []
     for x, n, lab, colour in layers:
-        ys = [BCY - (n - 1) * 30 / 2 + i * 30 for i in range(n)]
+        ys = [BCY + 12 - (n - 1) * step / 2 + i * step for i in range(n)]
         coords.append(ys)
-        f.text(x, 116, lab, cls="sm dim")
+        f.text(x, BY0 + 22, lab, cls="sm dim")
     for a, (xa, _, _, _) in enumerate(layers[:-1]):
         xb = layers[a + 1][0]
         for ya in coords[a]:
             for yb in coords[a + 1]:
-                f.line(xa + 9, ya, xb - 9, yb, cls="thin", stroke="var(--axis)",
-                       stroke_width="0.7", stroke_opacity="0.55")
+                f.line(xa + 12, ya, xb - 12, yb, cls="thin", stroke="var(--axis)",
+                       stroke_width="0.8", stroke_opacity="0.6")
     for (x, n, _, colour), ys in zip(layers, coords):
         for y in ys:
-            f.circle(x, y, 9, fill=colour, fill_opacity="0.25", stroke=colour,
-                     stroke_width="1.4")
-    f.text(BCX, 336, "each hidden unit applies a non-linear g", cls="sm dim")
-    f.text(BCX, 356, "fitted by backpropagation + gradient descent",
-           cls="sm dim")
-    f.text(BCX, BY1 - 2, "flexible, but the weights do not interpret",
-           cls="sm dim")
+            f.circle(x, y, 12, fill=colour, fill_opacity="0.25", stroke=colour,
+                     stroke_width="1.5")
     return f
 
 
@@ -1461,90 +1456,76 @@ def neural_network() -> Fig:
 def activation_function() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -4, 4, -1.2, 2.6, left=40, right=16, top=44, bottom=76)
+    ax = vaxes(f, -4, 4, -1.2, 2.6, left=40, right=16, top=30, bottom=44)
     ax.frame(xticks=[-4, -2, 2, 4], yticks=[-1, 1, 2], grid=True)
-    ax.curve(lambda z: max(0.0, z), colour=BLUE, width=2.4, clip_top=2.6)
+    ax.curve(lambda z: max(0.0, z), colour=BLUE, width=2.4, xb=2.58)
     ax.curve(lambda z: 1 / (1 + math.exp(-z)), colour=AMBER, width=2.1)
     ax.curve(math.tanh, colour=VIOLET, width=2.1, dash=True)
-    ax.label(2.5, 2.35, "ReLU", cls="sm bold", fill=BLUE)
+    ax.label(2.1, 2.2, "ReLU", cls="sm bold", fill=BLUE, anchor="end", dx=-6)
     ax.label(3.8, 1.22, "sigmoid", cls="sm bold", fill=AMBER, anchor="end")
     ax.label(-2.2, -0.75, "tanh", cls="sm bold", fill=VIOLET)
-    f.text(BCX, ax.y1 + 32, "compose two linear layers and you get one —",
-           cls="sm dim")
-    f.text(BCX, ax.y1 + 47, "g is where the flexibility comes from", cls="sm dim")
-    f.text(BCX, BY1 - 2, "sigmoid and tanh saturate; ReLU does not",
-           cls="sm dim")
     return f
 
 
-@figure("Backpropagation", "A forward pass computing the loss and a backward pass "
-        "returning the gradients", width=WID)
+@figure("Backpropagation", "A chain from input x through a hidden unit and the "
+        "prediction ŷ to the loss L, a forward arrow running left to right above it and "
+        "a gradient arrow running back below it", width=WID)
 def backpropagation() -> Fig:
     f = vcard()
 
-    boxes = [("x", BLUE), ("hidden", VIOLET), ("ŷ", GREEN), ("L", ROSE)]
-    xs = [58, 138, 224, 298]
-    for x, (lab, colour) in zip(xs, boxes):
-        f.rect(x - 30, 150, 60, 34, rx=6, fill=colour, fill_opacity="0.16",
-               stroke=colour, stroke_width="1.3")
-        f.text(x, 172, lab, cls="sm bold")
+    nodes = [("x", BLUE), ("h", VIOLET), ("ŷ", GREEN), ("L", ROSE)]
+    xs = [58, 139, 221, 302]
+    y = 226
     for a, b in zip(xs, xs[1:]):
-        f.arrow(a + 32, 160, b - 32, 160, colour="var(--ink)", width=1.5)
-    for a, b in zip(xs[1:], xs):
-        f.arrow(a - 32, 176, b + 32, 176, colour=ROSE, width=1.5)
-    f.text(BCX, 132, "forward: activations, then the loss", cls="sm dim")
-    f.text(BCX, 208, "backward: ∂L/∂z carried layer by layer", cls="sm dim",)
-
-    f.line(40, 232, 320, 232, cls="rule")
-    f.text(BCX, 256, "one step, worked", cls="sm bold")
-    for i, line in enumerate(("∂L/∂ŷ = −2(5 − 3) = −4",
-                              "∂ŷ/∂w = A = 2  ⇒  ∂L/∂w = −8",
-                              "w ← 0.40 − 0.05(−8) = 0.80")):
-        f.text(BCX, 280 + i * 22, line, cls="sm")
-    f.text(BCX, BY1 - 2, "one backward pass gets every weight's gradient",
-           cls="sm dim")
+        f.line(a + 24, y, b - 24, y, cls="thin", stroke="var(--axis)", stroke_width="1.6")
+    for x, (lab, colour) in zip(xs, nodes):
+        f.circle(x, y, 24, fill=colour, fill_opacity="0.2", stroke=colour,
+                 stroke_width="1.6")
+        f.text(x, y + 5, lab, cls="bold")
+    f.arrow(xs[0] - 14, 150, xs[-1] + 14, 150, colour="var(--ink)", width=2.2)
+    f.text(BCX, 136, "forward", cls="sm bold")
+    f.arrow(xs[-1] + 14, 302, xs[0] - 14, 302, colour=ROSE, width=2.2)
+    f.text(BCX, 324, "gradients", cls="sm bold")
+    for x in xs:
+        f.line(x, 162, x, y - 30, cls="thin dot", stroke="var(--axis)", stroke_width="1.2")
+        f.line(x, y + 30, x, 290, cls="thin dot", stroke=ROSE, stroke_width="1.2")
     return f
 
 
-@figure("Confusion Matrix", "The four cells of a confusion matrix with the metrics "
-        "each one feeds", width=WID)
+@figure("Confusion Matrix", "A two-by-two grid of predicted against actual fraud for "
+        "1,000 claims: 45 true positives, 45 false positives, 15 false negatives and 895 "
+        "true negatives", width=WID)
 def confusion_matrix() -> Fig:
     f = vcard()
 
-    cw, ch = 92, 60
-    x0, y0 = 128, 132
-    f.text(x0 + cw, y0 - 32, "actual", cls="sm dim")
-    f.text(x0 + cw / 2, y0 - 12, "+", cls="sm bold")
-    f.text(x0 + cw * 1.5, y0 - 12, "−", cls="sm bold")
-    f.text(x0 - 14, y0 + ch / 2 + 4, "+", cls="sm bold", anchor="end")
-    f.text(x0 - 14, y0 + ch * 1.5 + 4, "−", cls="sm bold", anchor="end")
-    f.text(x0 - 30, y0 + ch, "pred", cls="sm dim", anchor="end")
+    cw, ch = 104, 100
+    x0, y0 = 122, 128
+    f.text(x0 + cw, y0 - 34, "actual", cls="sm dim")
+    f.text(x0 + cw / 2, y0 - 12, "+", cls="bold")
+    f.text(x0 + cw * 1.5, y0 - 12, "−", cls="bold")
+    f.text(x0 - 14, y0 + ch / 2 + 5, "+", cls="bold", anchor="end")
+    f.text(x0 - 14, y0 + ch * 1.5 + 5, "−", cls="bold", anchor="end")
+    f.text(x0 - 44, y0 + ch, "predicted", cls="sm dim",
+           transform=f"rotate(-90 {x0 - 44} {y0 + ch})")
     cells = [("TP", 45, GREEN), ("FP", 45, ROSE), ("FN", 15, ROSE),
              ("TN", 895, GREEN)]
     for i, (lab, n, colour) in enumerate(cells):
         cx = x0 + (i % 2) * cw
         cy = y0 + (i // 2) * ch
-        f.rect(cx + 2, cy + 2, cw - 4, ch - 4, rx=5, fill=colour,
-               fill_opacity="0.16", stroke=colour, stroke_width="1.2")
-        f.text(cx + cw / 2, cy + 26, lab, cls="sm bold")
-        f.text(cx + cw / 2, cy + 44, str(n), cls="sm")
-    f.text(BCX, 278, "1,000 claims, 60 fraudulent, 90 flagged", cls="sm dim")
-    for i, line in enumerate(("sensitivity 45/60 = 75%   specificity 95.2%",
-                              "precision 45/90 = 50%     accuracy 94.0%",
-                              "flagging nothing also scores 94% accuracy")):
-        f.text(BCX, 306 + i * 22, line,
-               cls="sm bold" if i == 2 else "sm")
-    f.text(BCX, BY1 - 2, "the threshold moves every number here", cls="sm dim")
+        f.rect(cx + 3, cy + 3, cw - 6, ch - 6, rx=6, fill=colour,
+               fill_opacity="0.18", stroke=colour, stroke_width="1.4")
+        f.text(cx + cw / 2, cy + ch / 2 + 5, f"{lab} {n}", cls="bold")
     return f
 
 
-@figure("AUROC", "An ROC curve with the area under it shaded against the diagonal "
-        "of a useless model", width=WID)
+@figure("AUROC", "An ROC curve bowing above the diagonal of a useless model, the area "
+        "under it shaded as the AUROC of 0.80", width=WID)
 def auroc() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 1, 0, 1, left=44, right=18, top=32, bottom=78)
-    ax.frame(xticks=[0, 0.5, 1], yticks=[0, 0.5, 1], grid=True, arrows=False)
+    ax = vaxes(f, 0, 1, 0, 1, left=44, right=18, top=30, bottom=44)
+    ax.frame(xlabel="FPR", ylabel="TPR", xticks=[0, 0.5, 1], yticks=[0, 0.5, 1],
+             grid=True, arrows=False)
     roc = lambda x: x ** 0.42
     ax.area(roc, 0, 1, colour=BLUE, opacity="0.16")
     ax.curve(roc, colour=BLUE, width=2.4)
@@ -1554,21 +1535,17 @@ def auroc() -> Fig:
     ax.point(0.18, roc(0.18), colour=ROSE)
     ax.label(0.18, roc(0.18), "one threshold", cls="sm", fill=ROSE,
              anchor="start", dx=9, dy=15)
-    f.text(BCX, ax.y1 + 30, "false positive rate →   sensitivity ↑", cls="sm dim")
-    f.text(BCX, ax.y1 + 48, "0.5 is worthless, 1.0 is perfect separation",
-           cls="sm dim")
-    f.text(BCX, BY1 - 2, "threshold-free — unlike accuracy", cls="sm dim")
     return f
 
 
-@figure("Lift", "A lift chart of actual against predicted loss cost across "
-        "equal-exposure buckets", width=WID)
+@figure("Lift", "Actual loss cost rising across five equal-exposure buckets with the "
+        "predicted line tracking it, the top bucket 2.1 times the bottom one", width=WID)
 def lift() -> Fig:
     f = vcard()
 
     actual = [0.68, 0.84, 0.97, 1.11, 1.42]
     pred = [0.71, 0.86, 0.98, 1.12, 1.33]
-    ax = vaxes(f, 0.3, 5.7, 0, 1.6, left=44, right=16, top=32, bottom=82)
+    ax = vaxes(f, 0.3, 6.1, 0, 1.6, left=44, right=10, top=26, bottom=44)
     ax.frame(xticks=[1, 2, 3, 4, 5], yticks=[0.5, 1.0, 1.5], grid=True,
              arrows=False)
     ax.bars([(i + 1, v) for i, v in enumerate(actual)], colour=BLUE, bw=26,
@@ -1576,24 +1553,27 @@ def lift() -> Fig:
     ax.polyline([(i + 1, v) for i, v in enumerate(pred)], colour=ROSE, width=2.2)
     for i, v in enumerate(pred):
         ax.point(i + 1, v, colour=ROSE, r=3.2)
-    ax.hline(1.0, colour="var(--dim)", x_to=5.7)
-    f.legend_row(BX0 + 44, ax.y1 + 38, [(BLUE, "actual"), (ROSE, "predicted")],
-                 gap=110)
-    f.text(BCX, ax.y1 + 62, "lift = 1.42 / 0.68 = 2.1×", cls="sm bold")
-    f.text(BCX, BY1 - 2, "rising bars = ranking; matching line = calibration",
-           cls="sm dim")
+    ax.hline(1.0, colour="var(--dim)", x_to=6.1)
+    ax.label(1, actual[0], "actual", cls="sm bold", dy=-8)
+    ax.label(3.6, 1.14, "predicted", cls="sm bold", anchor="end")
+    f.line(ax.px(1.2), ax.py(actual[0]), ax.px(5.55), ax.py(actual[0]),
+           cls="thin dash", stroke="var(--axis)", stroke_width="1.2")
+    f.arrow(ax.px(5.55), ax.py(actual[0]), ax.px(5.55), ax.py(actual[-1]),
+            colour="var(--ink)", width=1.6)
+    ax.label(5.55, (actual[0] + actual[-1]) / 2, "2.1×", cls="bold", anchor="start",
+             dx=5)
+    f.text(BCX, ax.y1 + 32, "bucket", cls="sm dim")
     return f
 
 
-@figure("Quantile Plot", "Held-out data sorted into equal-exposure buckets, actual "
-        "against predicted", width=WID)
+@figure("Quantile Plot", "Actual and predicted loss cost across five equal-exposure "
+        "buckets of held-out data, the gap in each bucket marked", width=WID)
 def quantile_plot() -> Fig:
     f = vcard()
 
     actual = [0.68, 0.84, 0.97, 1.11, 1.42]
     pred = [0.71, 0.86, 0.98, 1.12, 1.33]
-    f.text(BCX, BY0 + 22, "buckets, worst predicted → best", cls="sm dim")
-    ax = vaxes(f, 0.3, 5.7, 0.5, 1.6, left=44, right=16, top=46, bottom=84)
+    ax = vaxes(f, 0.3, 5.7, 0.5, 1.6, left=44, right=16, top=26, bottom=44)
     ax.frame(xticks=[1, 2, 3, 4, 5], yticks=[0.6, 1.0, 1.4], grid=True,
              arrows=False)
     for series, colour, dash in ((pred, ROSE, True), (actual, BLUE, False)):
@@ -1606,24 +1586,22 @@ def quantile_plot() -> Fig:
         f.line(ax.px(i + 1), ax.py(min(actual[i], pred[i])), ax.px(i + 1),
                ax.py(max(actual[i], pred[i])), cls="thin", stroke=GREEN,
                stroke_width="2")
-    f.legend_row(BX0 + 40, ax.y1 + 38, [(BLUE, "actual"), (ROSE, "predicted")],
-                 gap=112)
-    f.text(BCX, ax.y1 + 62, "top bucket under-predicted by 7%", cls="sm bold")
-    f.text(BCX, BY1 - 2, "held-out data only — never the training set",
-           cls="sm dim")
+    ax.label(4.6, 1.34, "actual", cls="sm bold", anchor="end", dy=-6)
+    ax.label(4.4, 1.12, "predicted", cls="sm bold", anchor="start", dx=8, dy=14)
+    f.text(BCX, ax.y1 + 32, "bucket", cls="sm dim")
     return f
 
 
-@figure("Double Lift Chart", "Two models compared on buckets sorted by the ratio of "
-        "their predictions", width=WID)
+@figure("Double Lift Chart", "Actual loss cost in buckets sorted by the ratio of two "
+        "models' predictions, the new model's line tracking it and the current model's "
+        "staying flat", width=WID)
 def double_lift_chart() -> Fig:
     f = vcard()
 
     actual = [0.78, 0.91, 1.00, 1.14, 1.31]
     new = [0.80, 0.92, 1.01, 1.12, 1.28]
     cur = [1.02, 1.00, 1.00, 1.02, 1.05]
-    f.text(BCX, BY0 + 22, "buckets by ŷ_new / ŷ_current", cls="sm dim")
-    ax = vaxes(f, 0.3, 5.7, 0.6, 1.45, left=44, right=16, top=46, bottom=86)
+    ax = vaxes(f, 0.3, 5.7, 0.6, 1.45, left=44, right=16, top=26, bottom=44)
     ax.frame(xticks=[1, 2, 3, 4, 5], yticks=[0.8, 1.0, 1.2, 1.4], grid=True,
              arrows=False)
     ax.bars([(i + 1, v) for i, v in enumerate(actual)], colour="var(--dim)",
@@ -1633,12 +1611,10 @@ def double_lift_chart() -> Fig:
                     width=2.3, dash=dash)
         for i, v in enumerate(series):
             ax.point(i + 1, v, colour=colour, r=3.2)
-    f.legend_row(BX0 + 12, ax.y1 + 38,
-                 [("var(--dim)", "actual"), (GREEN, "new"), (ROSE, "current")],
-                 gap=98)
-    f.text(BCX, ax.y1 + 64, "the flat curve is the loser", cls="sm bold")
-    f.text(BCX, BY1 - 2, "the winner tracks the actuals in both tails",
-           cls="sm dim")
+    ax.label(1, 0.66, "actual", cls="sm")
+    ax.label(4.6, 1.2, "new", cls="sm bold", anchor="end", dy=-4)
+    ax.label(4.5, 1.02, "current", cls="sm bold", dy=16)
+    f.text(BCX, ax.y1 + 32, "ŷ_new / ŷ_current", cls="sm dim")
     return f
 
 

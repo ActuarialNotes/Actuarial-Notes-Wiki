@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:41b688aecfe4157f39632ad190265728604fcdd88146ad3eb1ea4019005d6a70
+  content_hash: sha256:028ed3f4bd83211d22b1a30158c82ade3b32b182949baf3ba73b0f4260814bdb
   sources: []
   open_findings: 0
   open_critical: 0
@@ -26,7 +26,7 @@ verification:
 - **It does not diversify with volume.** Process CoV shrinks roughly like $1/\sqrt{\text{volume}}$. A misestimated factor, however, is applied to every year, so a large book still carries it in full. In Marshall et al.'s framework, the random part of parameter risk is *independent risk*, while *parameter selection error* is internal systemic risk, a [[Model Risk|model risk]] (see [[Risk Margin]]).
 
 > [!example]- Process and Parameter Variance in a Cape Cod Fit {Example}
-> A Clark Cape Cod fit gives $\widehat{\text{ELR}} = 0.70$ with standard error $0.05$. On-level premium is $10{,}000$ ($000s), the fitted growth curve says $40\%$ of ultimate is still unreported, and the ODP scale is $\sigma^2 = 50$. Ignore uncertainty in the curve parameters.
+> A Clark Cape Cod fit gives $\widehat{\text{ELR}} = 0.70$ with standard error $0.05$. On-level premium is $10{,}000$ (\$000s), the fitted growth curve says $40\%$ of ultimate is still unreported, and the ODP scale is $\sigma^2 = 50$. Ignore uncertainty in the curve parameters.
 >
 > Split the reserve's variance.
 >

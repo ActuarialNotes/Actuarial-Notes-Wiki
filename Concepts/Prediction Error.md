@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:df16058ddee950f55806ff2c780c03f2b6de9482cb7f92204c31b499c780fb05
+  content_hash: sha256:5e384f8a8bd9184bb8ad30566cf97084fe021b7b28ac3a918a360231cc405176
   sources: []
   open_findings: 0
   open_critical: 0
@@ -32,7 +32,7 @@ verification:
 - Other models get the same two parts by different routes. Clark uses $\sigma^2 R$ for process variance and the information matrix for parameter variance; the ODP bootstrap gets both by simulation (see [[Stochastic Reserving]]). A mean and a prediction error are turned into percentiles in [[Unpaid Claim Distribution]].
 
 > [!example]- Mack Standard Error for One Accident Year {Example}
-> Cumulative paid losses ($000s):
+> Cumulative paid losses (\$000s):
 >
 > | AY | 12 | 24 | 36 | 48 |
 > |---|---|---|---|---|

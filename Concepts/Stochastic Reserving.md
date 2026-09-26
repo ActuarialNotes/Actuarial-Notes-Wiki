@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:6fb79257782c9a7509f1033ba1f17502e90ccd7852934e72d22a5882768ec0b2
+  content_hash: sha256:df01e34c7426ee760f9e37047e534a8dd49184b8a4fd8b4f3b6930c749957f97
   sources: []
   open_findings: 0
   open_critical: 0
@@ -30,7 +30,7 @@ verification:
 - **Validation matters more than sophistication.** Meyers tested the models on hundreds of Schedule P triangles with known outcomes. On incurred data, Mack's distributions had tails that were too light. On paid data, both Mack and the ODP bootstrap gave means that ran high. Models allowing correlated accident years and changing settlement rates did better. See [[Reasonableness Testing]].
 
 > [!example]- The ODP Model Reproduces the Chain Ladder {Example}
-> Incremental paid losses ($000s):
+> Incremental paid losses (\$000s):
 >
 > | AY | 1 | 2 | 3 |
 > |---|---|---|---|

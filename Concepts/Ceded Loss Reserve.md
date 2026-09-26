@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:4b23f07a97b674929c6657985bf82c0e462f3c6024ec3d81c53c747811503085
+  content_hash: sha256:d6cc48fab828fa516a95703c89eb714eccf8dc9f2ab2246d74f48d4a37d24630
   sources: []
   open_findings: 0
   open_critical: 0
@@ -31,7 +31,7 @@ verification:
 - **It is an asset with credit risk.** Recoverables can be disputed, commuted ([[Commutations]]) or lost to a reinsurer's insolvency ([[Reinsurance Credit Risk]]), and the cedant stays liable to its policyholders. See [[Reinsurance Recovery]] and, for the reinsurer's side of the same liability, [[Reinsurance Reserving]].
 
 > [!example]- Inuring Order Across Three Covers {Example}
-> For one accident year the gross ultimate is $5{,}000$ and gross paid is $3{,}000$ ($000s). One large claim has an ultimate of $600$ and paid of $100$. The cedant has three covers, inuring in this order:
+> For one accident year the gross ultimate is $5{,}000$ and gross paid is $3{,}000$ (\$000s). One large claim has an ultimate of $600$ and paid of $100$. The cedant has three covers, inuring in this order:
 >
 > 1. a per-occurrence excess of $400$ xs $200$;
 > 2. a $30\%$ quota share;
@@ -69,7 +69,7 @@ verification:
 > > Check: gross unpaid $2{,}000 = 1{,}100 + 900$. ✓ Applying the quota share *before* the excess cover would have ceded $30\%$ of the large claim to the quota share and changed every figure. The treaty wording on inuring decides which is right.
 
 > [!example]- An Inconsistent Net Estimate {Example}
-> A cedant with a $\$1$M xs $\$500$K per-risk treaty estimates gross and net separately by chain ladder ($000s):
+> A cedant with a $\$1$M xs $\$500$K per-risk treaty estimates gross and net separately by chain ladder (\$000s):
 >
 > | AY | Gross ult | Gross rep | Net ult | Net rep |
 > |---|---|---|---|---|

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:5ef72f2afa25e854385acce2fd0f7e2540b1fabe5ef4a96281335b28776dd90a
+  content_hash: sha256:ffaf25745458452f2ab7c49872c07d82871bed456eb0f841c4bd90872185120f
   sources: []
   open_findings: 0
   open_critical: 0
@@ -13,9 +13,9 @@ verification:
 
 **Basic Insurance Ratios** are the standard ratios — frequency, severity, pure premium, average premium, loss ratio, LAE ratio, expense ratios, combined ratio, retention and close ratios — that insurers, regulators, rating agencies and investors use to monitor whether a book's rates are adequate. Werner & Modlin introduce them together in Chapter 1 of *Basic Ratemaking*; the rest of [[Ratemaking|ratemaking]] is largely about projecting them.
 
-> $$\text{Pure Premium} = \frac{\text{Losses}}{\text{Exposures}} = \text{Frequency} \times \text{Severity}$$
+> $$\begin{aligned} \text{Pure Premium} &= \frac{\text{Losses}}{\text{Exposures}} \\ &= \text{Frequency} \times \text{Severity} \end{aligned}$$
 
-> $$\text{Loss Ratio} = \frac{\text{Losses}}{\text{Premium}} = \frac{\text{Pure Premium}}{\text{Average Premium}}$$
+> $$\begin{aligned} \text{Loss Ratio} &= \frac{\text{Losses}}{\text{Premium}} \\ &= \frac{\text{Pure Premium}}{\text{Average Premium}} \end{aligned}$$
 
 > $$\begin{aligned} \text{Combined Ratio} &= \frac{\text{Losses} + \text{LAE}}{\text{EP}} \\ &\quad + \frac{\text{UW Expenses}}{\text{WP}} \end{aligned}$$
 

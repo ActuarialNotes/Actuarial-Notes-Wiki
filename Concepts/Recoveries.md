@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a1fe9b7c42b8e8281a5fb893320761c772c772d7c394932a597eead1deb22e75
+  content_hash: sha256:f8eb056f0ca51bc7451afb6d8fdda9818eb69bd400ca097eb7a5003a93cf38fd
   sources: []
   open_findings: 0
   open_critical: 0
@@ -13,9 +13,9 @@ verification:
 
 **Recoveries** are amounts an insurer collects that offset the claims it pays — deductibles billed back to insureds, [[Salvage and Subrogation|salvage and subrogation]], [[Reinsurance Recovery|reinsurance]], and collateral sources. In reserving they are estimated alongside the gross claims, and their unreceived portion (the recoverable) reduces the estimate of net [[Unpaid Claims|unpaid claims]].
 
-> $$\text{Net Ultimate} = \text{Gross Ultimate} - \text{Ultimate Recoveries}$$
+> $$\begin{aligned} \text{Net Ultimate} &= \text{Gross Ultimate} \\ &\quad - \text{Ultimate Recoveries} \end{aligned}$$
 
-> $$\text{Recoverable} = \text{Ultimate Recoveries} - \text{Recoveries Received}$$
+> $$\begin{aligned} \text{Recoverable} &= \text{Ultimate Recoveries} \\ &\quad - \text{Recoveries Received} \end{aligned}$$
 
 - **Know how the data record them** (Friedland Ch. 3). Some insurers keep separate payment and case-outstanding data by recovery type; others combine them, record payments only, or book recoveries as negative claim payments. [[Deductible Recovery|Deductibles]] differ by line: first-party auto physical damage payments are made *net* of the deductible, while general liability claims are paid in full and the deductible recovered afterwards; case reserves may be set net or gross. A change in any of these conventions is a [[Changing Conditions|changing condition]].
 - **Salvage and subrogation** (Friedland Ch. 14) are projected either by the development technique on reported or received S&S, or by the **ratio approach**: develop the ratio of received S&S to paid claims to an ultimate ratio, and multiply by selected ultimate claims gross of S&S. The ratio's development factors are less leveraged than those of S&S dollars, and the ultimate ratio is easier to select for immature years. Salvage (property) arrives quickly; subrogation (liability) can arrive years after the claim is paid, giving age-to-age factors below $1.000$ at older ages.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:95e6541af70eae64530a39bb905e12effba15ebc73041b9f3a12050734edcd5a
+  content_hash: sha256:590bf9f6544add560eb01e474d4c2e56f1582c98af51040f72d4f2a09df99c88
   sources: []
   open_findings: 0
   open_critical: 0
@@ -24,7 +24,7 @@ verification:
 - **Professional basis.** The CAS Statement of Principles on unpaid claims estimates (Principle 2, see [[Actuarial Principles]]) says uncertainty "implies that a range of estimates can be reasonable". [[ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007)|ASOP 43]] allows a point estimate, a range, or both. In the U.S., ASOP 36 treats carried reserves as a reasonable provision when they fall within a range of estimates the actuary considers reasonable.
 
 > [!example]- Screening Methods Before Stating a Range {Example}
-> Total IBNR indications ($000s) for a commercial auto book: reported development $4{,}200$; paid development $6{,}100$; expected claims $5{,}000$; BF (reported) $4{,}700$; BF (paid) $5{,}300$. Closure rates at every maturity have risen sharply over the last two calendar years, and paid-to-reported ratios with them.
+> Total IBNR indications (\$000s) for a commercial auto book: reported development $4{,}200$; paid development $6{,}100$; expected claims $5{,}000$; BF (reported) $4{,}700$; BF (paid) $5{,}300$. Closure rates at every maturity have risen sharply over the last two calendar years, and paid-to-reported ratios with them.
 >
 > State a range of reasonable estimates.
 >
@@ -47,7 +47,7 @@ verification:
 > > A bootstrap on the same data might put the 25th to 75th percentiles of *outcomes* at $4{,}300$ to $5{,}600$. That band is not a competing range of reasonable estimates. It says where the actual payments may land, not where a reasonable estimate of their mean may lie.
 
 > [!example]- Modeled Versus Weighted Range {Example}
-> Three bootstrap models give mean unpaid ($000s) for two accident years:
+> Three bootstrap models give mean unpaid (\$000s) for two accident years:
 >
 > - AY A (mature): paid CL $100$, incurred CL $110$, BF $105$. Weights $50\% / 50\% / 0\%$.
 > - AY B (latest): paid CL $900$, incurred CL $700$, BF $760$. Weights $0\% / 25\% / 75\%$.

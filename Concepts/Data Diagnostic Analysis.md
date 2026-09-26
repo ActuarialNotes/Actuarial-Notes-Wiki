@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:96ff3bf197c1a7f77a9454290a2fcf32c8431bb8ab0511a52acaa14700f3df49
+  content_hash: sha256:eb428ce4dfb870ba9d916f41497bf75542122525101b5c2880384cf094eabefc
   sources: []
   open_findings: 0
   open_critical: 0
@@ -39,7 +39,7 @@ verification:
 - **Data issues to adjust for** ([[Data Issues]]): negative incremental values, missing cells, outliers, a partial first or last diagonal, exposure changes and tail factors. Venter's tests for the age-to-age factor assumptions add linearity, stability over accident years, correlation between columns, and high or low diagonals.
 
 > [!example]- Spotting Case Strengthening {Example}
-> Average case outstanding ($) at year-end 2024, with severity trend of about $5\%$ a year:
+> Average case outstanding (\$) at year-end 2024, with severity trend of about $5\%$ a year:
 >
 > | AY | 12 | 24 | 36 |
 > |---|---|---|---|

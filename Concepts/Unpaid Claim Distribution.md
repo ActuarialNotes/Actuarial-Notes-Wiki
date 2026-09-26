@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:3aa363c31daf67d1c255da1f4945a882ee81f7c09447e3740cf2d00b72e12de6
+  content_hash: sha256:d18d080ea58658db50565492b80ca30414576d47a82a5b7b2f3d4a1b697c125b
   sources: []
   open_findings: 0
   open_critical: 0
@@ -33,7 +33,7 @@ verification:
 - The distribution drives [[Risk Margin|risk margins]], capital and reinsurance decisions. It is **not** a [[Range of Indications|range of reasonable estimates]]: its percentiles describe outcomes, not alternative estimates of the mean.
 
 > [!example]- Percentiles from a Mean and Standard Error {Example}
-> A Mack analysis gives a total reserve of $5{,}000$ with standard error $800$ ($000s). Assuming a lognormal, find the 75th and 95th percentiles and compare them with a normal.
+> A Mack analysis gives a total reserve of $5{,}000$ with standard error $800$ (\$000s). Assuming a lognormal, find the 75th and 95th percentiles and compare them with a normal.
 >
 > > [!answer]-
 > > $$
@@ -60,7 +60,7 @@ verification:
 > > The normal gives $5{,}000 + 0.6745(800) = 5{,}540$ and $5{,}000 + 1.645(800) = 6{,}316$. The lognormal is *lower* at the 75th percentile and *higher* at the 95th. The choice of distribution matters most exactly where capital and reinsurance decisions are made. The mean and standard error alone do not settle it.
 
 > [!example]- Reviewing Bootstrap Output {Example}
-> An ODP bootstrap on paid data (10,000 iterations, $000s) returns:
+> An ODP bootstrap on paid data (10,000 iterations, \$000s) returns:
 >
 > | AY | Mean | Std error | CoV |
 > |---|---|---|---|

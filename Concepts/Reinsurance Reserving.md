@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:4e78d37e430a010df772373238c7433f3a88eb003de94d36f35c8de513e137cf
+  content_hash: sha256:847b8aa771f37c4d63e929199073cb18b412556d7478272c553eff915785eba3
   sources: []
   open_findings: 0
   open_critical: 0
@@ -37,7 +37,7 @@ verification:
 - **Outputs are wider.** The spread of indicated IBNR across methods is larger than primary; see [[Range of Indications]]. External patterns such as RAA data help but mix unlike contracts. The cedant's side is [[Ceded Loss Reserve]], and cover types are in [[Types of Reinsurance]].
 
 > [!example]- Cape Cod IBNR for Casualty Excess Treaties {Example}
-> A reinsurer's casualty excess treaties ($000s):
+> A reinsurer's casualty excess treaties (\$000s):
 >
 > | Treaty year | Earned premium | Reported | Lag |
 > |---|---|---|---|

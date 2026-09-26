@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script>try{var t=localStorage.getItem('actuarial-notes-theme');if(t!=='light')document.documentElement.classList.add('dark');localStorage.removeItem('actuarial-notes-color-theme');localStorage.removeItem('actuarial-notes-colourful-variant')}catch(e){}</script>
+    <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('actuarial-notes-theme');if(t!=='light')document.documentElement.classList.add('dark');localStorage.removeItem('actuarial-notes-color-theme');localStorage.removeItem('actuarial-notes-colourful-variant')}catch(e){}</script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YTVSN1NTV9"></script>
     <script>
@@ -12,17 +12,50 @@
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Actuarial Notes</title>
-    <meta name="description" content="Practice questions for SOA Exam P and Exam FM" />
+    <!-- The page's own head. A page's static file (lib/seoPrerender.ts) swaps
+         in its title, description, canonical URL and JSON-LD between these
+         markers, and lib/documentHead.ts rewrites the same tags as the app
+         navigates. What is here is the site's own, for every other route. -->
+    <!-- page-head -->
+    <title>Actuarial Notes — Study Guides &amp; Practice Questions for Actuarial Exams</title>
+    <meta name="description" content="Study guides, concept pages and practice questions for SOA and CAS actuarial exams — Exam P, FM, MAS-I, MAS-II, Exam 5 and beyond." />
+    <meta property="og:site_name" content="Actuarial Notes" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Actuarial Notes — Study Guides &amp; Practice Questions for Actuarial Exams" />
+    <meta property="og:description" content="Study guides, concept pages and practice questions for SOA and CAS actuarial exams — Exam P, FM, MAS-I, MAS-II, Exam 5 and beyond." />
+    <meta property="og:image" content="https://quiz.actuarialnotes.com/actuarialnotes-logo-black-512.png" />
+    <meta name="twitter:card" content="summary" />
+    <!-- /page-head -->
+    <!-- A page's static file carries a crawlable copy of its article in #root.
+         Readers never see it: with scripting on it is hidden before first paint,
+         and React replaces it on mount. Without scripting it is the page. -->
+    <style>
+      html.js #prerender { display: none }
+      #prerender { max-width: 46rem; margin: 0 auto; padding: 2rem 1rem; font: 16px/1.6 system-ui, sans-serif }
+      #prerender h1 { font-size: 2rem; font-weight: 700; margin: 1rem 0 }
+      #prerender h2 { font-size: 1.4rem; font-weight: 600; margin: 1.5rem 0 .5rem }
+      #prerender p, #prerender blockquote { margin: .75rem 0 }
+      #prerender ul, #prerender ol { padding-left: 1.5rem; list-style: revert }
+      #prerender blockquote { border-left: 3px solid #ccc; padding-left: 1rem }
+      #prerender a { color: #2563eb; text-decoration: underline }
+    </style>
     <link rel="icon" type="image/png" href="/favicon.png" />
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "Actuarial Notes",
-      "url": "https://quiz.actuarialnotes.com",
-      "logo": "https://quiz.actuarialnotes.com/actuarialnotes-logo-black-512.png"
-    }
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Actuarial Notes",
+        "url": "https://quiz.actuarialnotes.com",
+        "logo": "https://quiz.actuarialnotes.com/actuarialnotes-logo-black-512.png"
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Actuarial Notes",
+        "url": "https://quiz.actuarialnotes.com/"
+      }
+    ]
     </script>
   </head>
   <body>

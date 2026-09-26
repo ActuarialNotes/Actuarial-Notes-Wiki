@@ -19,6 +19,7 @@ import { examStatus } from '@/lib/examStatus'
 import { buildObjectiveIndex, isSyllabusConcept } from '@/lib/syllabusChapters'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import type { ItemStatus } from '@/data/tracks'
+import { useWikiPageHead } from '@/hooks/useWikiPageHead'
 
 const STATUS_TITLE: Record<ItemStatus, string> = {
   not_started: 'Not started — click to update exam status',
@@ -108,6 +109,7 @@ export default function WikiExam() {
   const openAt = useConceptPopup(s => s.openAt)
   const [content, setContent] = useState<string | null>(null)
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
+  useWikiPageHead('exam', examFileName, status === 'error')
   const popupOpenedRef = useRef(false)
   const navigationType = useNavigationType()
 

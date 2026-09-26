@@ -153,6 +153,15 @@ before touching that area**:
   its place, and the surface-by-surface list to work through. The Exam Readiness popup (§3.1)
   is done and is the worked example; the rest is not. Read alongside the style guide before
   adding a `text-xs text-muted-foreground` line under anything.
+- `docs/seo.md` — **how each page is found**: one record per exam, concept and resource
+  page (`lib/seo.ts` — its title, and a description derived from the page itself: a
+  concept's opening definition, an exam's counts, a textbook's facts and chapters),
+  used three ways — the live head (`hooks/useWikiPageHead.ts`), a static
+  `dist/wiki/<kind>/<slug>/index.html` per page with that head and a crawlable copy of
+  the article, and the generated `sitemap.xml`. Also why a concept URL is shown, not
+  redirected, to whoever *lands* on it. Read before touching `lib/seo*.ts`,
+  `documentHead.ts`, `usePageTracking`, `index.html`'s `page-head` markers, or the
+  redirect in `WikiConcept`.
 - `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
@@ -682,9 +691,21 @@ Other important `lib/` modules:
   build-time bundle). Note that `listRepoContents` hits the GitHub **API**, which is limited to
   60 requests/hour per IP without `VITE_GITHUB_TOKEN` — don't put it on a path that has to work.
 - `supabase.ts` — Supabase client + shared row types
+- `seo.ts` / `seoPrerender.ts` / `seoPages.ts` / `documentHead.ts` — **SEO**
+  (`docs/seo.md`). `seo.ts` is pure and runs in both the vite config and the app:
+  `buildSeoPages` describes every public page from the vault (title, description,
+  canonical path, breadcrumb, `noindex` for stubs), `pageHead` / `fallbackHead` say
+  what the document head should hold, `headTagsHtml` writes it as HTML and
+  `sitemapXml` the sitemap. `seoPrerender.ts` is build-only (unified → a minimal hast
+  serialiser): the crawlable article each page's static file carries. `seoPages.ts`
+  looks the build's records up by route (`virtual:seo-pages`, wiki chunk only);
+  `documentHead.ts` writes a head into the live document by the same selectors the
+  static files use. Imports in `seo.ts` and everything it reaches are relative —
+  which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
+  `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **132 test files /
-~2010 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **134 test files /
+~2060 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, and the research/resource-timeline
 modules).
 
@@ -842,6 +863,10 @@ modules that read directly from the repo root:
   pages that power the Resources timeline/heatmap
 - `virtual:keystone-links` — for each keystone concept page, the concept pages it links to
   (the study plan's *Key concepts first* order)
+- `virtual:seo-pages` — every exam, concept and resource page, described (`lib/seo.ts`).
+  The same plugin (`seoPagesPlugin`) writes, after a build, one static
+  `dist/wiki/<kind>/<slug>/index.html` per page and `dist/sitemap.xml` — the sitemap is
+  generated, never hand-edited (see `docs/seo.md`)
 
 If you add new top-level exam files or content directories, make sure the relevant collector
 picks them up.

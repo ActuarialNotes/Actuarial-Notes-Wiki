@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useParams, useSearchParams, useNavigate } from 'react-router-dom'
 import { GraduationCap, Loader2 } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
-import { fromSlug, wikiRoute } from '@/lib/wikiRoutes'
+import { examDisplayName, fromSlug, wikiRoute } from '@/lib/wikiRoutes'
 import { extractWikiLinksFromText } from '@/lib/wikiExtract'
 import { findSyllabiForConcept } from '@/lib/conceptMatch'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
@@ -11,6 +11,8 @@ import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { FactCheckBadge } from '@/components/FactCheckBadge'
 import { parseVerification } from '@/lib/verification'
 import { KeystoneName } from '@/components/KeystoneName'
+import { useWikiPageHead } from '@/hooks/useWikiPageHead'
+import { compareExamLabels } from '@/lib/resourceExams'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 
 // Picks the syllabus to redirect to when it's unambiguous. Returns null when
@@ -27,12 +29,26 @@ function resolveSyllabusForConcept(
   return matches.length === 1 ? matches[0]! : null
 }
 
+// The study guide a concept is read in, opened at that concept.
+function studyGuideRoute(syllabus: WikiExamSyllabus, conceptName: string): string {
+  return `${wikiRoute({ kind: 'exam', name: syllabus.fileName ?? syllabus.examLabel })}?concept=${encodeURIComponent(conceptName)}`
+}
+
 export default function WikiConcept() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { slug = '' } = useParams()
   const [params] = useSearchParams()
   const fromExam = params.get('from')
   const conceptName = fromSlug(slug)
+  // Arrived on this URL rather than navigated to it inside the app — from a
+  // search result, a shared link, a bookmark, or a crawler (the router keys
+  // only the entry it started on 'default'). Such a visitor asked for this
+  // page, so they are shown it; redirecting them into the study guide would
+  // make every concept URL a redirect, and a redirect is never a search
+  // result. Following a link *inside* the app still opens the concept in its
+  // study guide, as it always has.
+  const landed = location.key === 'default'
 
   const { setPageRefs, setExamId } = useWikiPage()
   const { syllabi, loading: syllabiLoading } = useWikiSyllabus()
@@ -50,23 +66,32 @@ export default function WikiConcept() {
   )
   // Referenced by more than one exam's study guide and not disambiguated by
   // `?from=` — ask the user which one they meant instead of guessing.
-  const isAmbiguous = !syllabiLoading && !activeSyllabus && matchingSyllabi.length > 1
+  // A landed visitor is shown the page — unless there is no page to show (a
+  // syllabus names a concept that has no file of its own), when its study
+  // guide is still the better place to arrive.
+  const standalone = landed && status !== 'error'
+  // In ladder order (Exam P before Exam 7), the order the breadcrumb takes its exam from.
+  const studyGuides = useMemo(
+    () => matchingSyllabi
+      .map(s => ({ syllabus: s, label: s.fileName ? examDisplayName(s.fileName) : s.examLabel }))
+      .sort((a, b) => compareExamLabels(a.label, b.label)),
+    [matchingSyllabi],
+  )
+  const isAmbiguous = !standalone && !syllabiLoading && !activeSyllabus && matchingSyllabi.length > 1
+  const redirecting = !standalone && (syllabiLoading || activeSyllabus !== null)
 
   // Redirect to the exam's study guide with the popup open.
   // We wait until syllabi are loaded so we know definitively whether to redirect.
   useEffect(() => {
-    if (syllabiLoading || !activeSyllabus) return
-    const examName = activeSyllabus.fileName ?? activeSyllabus.examLabel
-    navigate(
-      `${wikiRoute({ kind: 'exam', name: examName })}?concept=${encodeURIComponent(conceptName)}`,
-      { replace: true },
-    )
-  }, [syllabiLoading, activeSyllabus, conceptName, navigate])
+    if (standalone || syllabiLoading || !activeSyllabus) return
+    navigate(studyGuideRoute(activeSyllabus, conceptName), { replace: true })
+  }, [standalone, syllabiLoading, activeSyllabus, conceptName, navigate])
 
-  // Only fetch and display the standalone concept page when we know there's no
-  // exam to redirect to (i.e. the concept isn't in any syllabus) and it isn't
-  // an ambiguous multi-exam concept awaiting a choice.
-  const shouldShowConcept = !syllabiLoading && !activeSyllabus && !isAmbiguous
+  // Fetch and display the standalone concept page when the visitor landed
+  // here, or when there's no exam to redirect to (the concept isn't in any
+  // syllabus) and it isn't an ambiguous multi-exam concept awaiting a choice.
+  const shouldShowConcept = landed || (!syllabiLoading && !activeSyllabus && !isAmbiguous)
+  useWikiPageHead('concept', conceptName, status === 'error')
 
   useEffect(() => {
     if (!shouldShowConcept) return
@@ -97,7 +122,7 @@ export default function WikiConcept() {
   }, [pageRefs, fromExam, setExamId, setPageRefs])
 
   // Show spinner while we decide whether to redirect.
-  if (syllabiLoading || activeSyllabus) {
+  if (redirecting) {
     return (
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <Loader2 className="h-4 w-4 animate-spin" /> Loading…
@@ -117,9 +142,7 @@ export default function WikiConcept() {
             <button
               key={s.examId}
               type="button"
-              onClick={() => navigate(
-                `${wikiRoute({ kind: 'exam', name: s.fileName ?? s.examLabel })}?concept=${encodeURIComponent(conceptName)}`,
-              )}
+              onClick={() => navigate(studyGuideRoute(s, conceptName))}
               className="w-full flex items-center gap-2.5 rounded-lg bg-muted/40 px-4 py-3 text-left hover:bg-accent transition-colors"
             >
               <GraduationCap className="h-4 w-4 shrink-0 text-teal-500" />
@@ -139,6 +162,24 @@ export default function WikiConcept() {
       <h1 className="text-2xl font-bold tracking-tight">
         <KeystoneName name={conceptName} />
       </h1>
+
+      {/* A visitor who landed here reads the concept on its own; these are the
+          way into the study guide(s) it belongs to, opened at this concept. */}
+      {studyGuides.length > 0 && (
+        <nav aria-label="Study guides" className="flex flex-wrap gap-1.5">
+          {studyGuides.map(({ syllabus, label }) => (
+            <Link
+              key={syllabus.examId}
+              to={studyGuideRoute(syllabus, conceptName)}
+              title={`Open in the ${label} study guide`}
+              className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary transition-colors hover:bg-primary/15"
+            >
+              <GraduationCap className="h-3.5 w-3.5" aria-hidden />
+              {label}
+            </Link>
+          ))}
+        </nav>
+      )}
 
       {status === 'loading' && (
         <div className="flex items-center gap-2 text-sm text-muted-foreground">

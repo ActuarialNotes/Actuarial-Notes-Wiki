@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:587b22b5cd6333194d3c76cede83267583bd906dcc8c009d4089d6745bef43d4
+  content_hash: sha256:dcb57b83b8a2ca08b65651803152f3d260ac9b62190087db064f25324330c975
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,29 +22,29 @@ The **Advanced Ratemaking (Exam 8)** is a 4 hour exam covering classification ra
 
 > [!example]- A. Classification Ratemaking {60–80%}
 > Candidates are expected to go beyond mechanical construction to the comparison and evaluation of alternative [[Classification Ratemaking]] schemes.
-> 1. Interpret classification ratemaking models (e.g., [[GLM]]).
+> 1. Interpret [[Classification Ratemaking Model|classification ratemaking models]] (e.g., [[GLM]]).
 > 2. Evaluate the validity of [[Rate Classes]].
-> 3. Measure statistical significance of rate classes including estimates of [[Loss Costs]] of rate classes.
-> 4. Measure and assess [[Model Fit]] (e.g., use results for a rating plan).
-> 5. Evaluate classification ratemaking models (e.g., benchmark, recalibrate variables, implementation).
-> 6. Describe approaches to stripping out [[Rating Factors]] using [[Predictive Models]] for further analysis (e.g., territorial).
-> 7. Describe approaches to modeling with high dimensional variables (e.g., vehicle make and model, workers compensation classes).
-> 8. Evaluate combinations of ratemaking component models (e.g., [[Frequency-Severity Models|frequency/severity]]).
+> 3. Measure [[Statistical Significance|statistical significance]] of [[Rate Classes|rate classes]] including [[Loss Cost Estimate|estimates]] of [[Loss Costs]] of [[Rate Classes|rate classes]].
+> 4. Measure and assess [[Model Fit]] (e.g., use results for a [[Rating Plan|rating plan]]).
+> 5. Evaluate [[Classification Ratemaking Model|classification ratemaking models]] (e.g., [[Model Benchmarking|benchmark]], recalibrate [[Rating Variable|variables]], [[Model Implementation|implementation]]).
+> 6. Describe approaches to stripping out [[Rating Factors]] using [[Predictive Models]] for further analysis (e.g., [[Territorial Rating|territorial]]).
+> 7. Describe approaches to [[Predictive Modeling|modeling]] with [[High Dimensional Variables|high dimensional variables]] (e.g., [[Vehicle Make and Model|vehicle make and model]], [[Workers Compensation Classification|workers compensation classes]]).
+> 8. Evaluate combinations of [[Ratemaking Component Model|ratemaking component models]] (e.g., [[Frequency-Severity Models|frequency/severity]]).
 >
 > **Readings:** Actuarial Standard of Practice No. 12 · Bailey and Simon · Couret and Venter · Generalized Linear Models for Insurance Rating · Mahler
 
 > [!example]- B. Excess, Deductible, and Individual Risk Rating {20–40%}
-> Candidates will be able to design and manage excess, deductible, and individual risk rating systems, covering three areas:
-> - **[[Excess and Deductible Rating]]**: Apply general knowledge of excess coverages and the problems inherent in pricing these coverages for different lines of business.
-> - **[[Experience Rating]]**: Adjust an individual risk's rate to reflect the extent to which that risk's own experience identifies it as being different from other risks in the same class.
-> - **[[Retrospective Rating|Retrospective and Loss Sensitive Rating]]**: Make adjustments to individual risk premium after policy expiration in response to actual loss and expenses associated with the policy.
+> Candidates will be able to design and manage [[Excess and Deductible Rating|excess, deductible]], and [[Individual Risk Rating|individual risk rating systems]], covering three areas:
+> - **[[Excess and Deductible Rating]]**: Apply general knowledge of [[Excess Coverage|excess coverages]] and the [[Excess Pricing Problems|problems inherent in pricing]] these [[Excess Coverage|coverages]] for different [[Line of Business|lines of business]].
+> - **[[Experience Rating]]**: Adjust an [[Individual Risk Rating|individual risk's rate]] to reflect the extent to which that [[Risk Experience|risk's own experience]] identifies it as being different from other [[Insured Risk|risks]] in the same [[Rating Class|class]].
+> - **[[Retrospective Rating|Retrospective and Loss Sensitive Rating]]**: Make adjustments to [[Individual Risk Premium|individual risk premium]] after [[Policy Expiration|policy expiration]] in response to [[Actual Loss Experience|actual loss]] and [[Expenses|expenses]] associated with the [[Insurance Policy|policy]].
 >
 > 1. Estimate [[Aggregate Loss Distributions]].
-> 2. Determine expected losses by layer of insurance by applying [[Frequency]] and [[Severity]] distributions.
-> 3. Calculate the cost of the layer of risk given the overall [[Loss Cost]].
+> 2. Determine [[Expected Loss|expected losses]] by [[Layer of Insurance|layer of insurance]] by applying [[Frequency]] and [[Severity]] [[Severity Distribution|distributions]].
+> 3. Calculate the [[Layer Cost|cost of the layer]] of [[Insured Risk|risk]] given the overall [[Loss Cost]].
 > 4. Analyze a [[Loss Sensitive Rating]] plan (e.g., [[Retrospective Rating]]).
 > 5. Analyze an [[Experience Rating]] plan.
-> 6. Assess the effectiveness of rating plans.
+> 6. Assess the effectiveness of [[Rating Plan|rating plans]].
 >
 > **Readings:** Distributions for Actuaries · Individual Risk Rating Study Note · Individual Risk Rating Case Study · CGL Experience and Schedule Rating Plan · Experience Rating Plan Manual · Retrospective Rating Plan Manual
 

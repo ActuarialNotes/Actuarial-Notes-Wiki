@@ -253,6 +253,7 @@ is are be been being was were can may will should must would could has have had 
 who whom which whose what when where why how whether if then also only not more most less least
 well both either very so candidates candidate expected able
 them it they one ones themselves itself
+generating quantitatively necessary realistic historical
 """.split())
 
 VERBS = frozenset("""
@@ -263,10 +264,26 @@ organise perform recognize recognise select separate simulate solve state summar
 understand use utilize write adjust aggregate apply calculating determine differentiate discuss
 identify implement integrate manage price protect match construct achieve arise arising evaluating
 underlying listed shown used given based related involving involved associated remaining regarding
-represent represents obtain choose
+represent represents obtain choose designed defined replaced administered issued inherent create qualifies make set go covering identifies reflect allocate recalibrate
 """.split())
 
-WORD_RE = re.compile(r"[A-Za-z][A-Za-z'’\-/]*|\d[\d.,%]*")
+# Abstract nouns that name no concept of their own — "the *role* of…", "the
+# *effectiveness* of a program". The owner's rule is that every noun is a note;
+# these are the exemptions, kept short and explicit so the rule stays measurable.
+# A phrase is exempt only when every word of it is here (or a break word), so
+# "financial health" still needs a note while "effectiveness" alone does not.
+GENERIC_NOUNS = frozenset("""
+role roles issue issues outcome outcomes rationale implication implications objective objectives
+operation operations effectiveness origin purpose purposes philosophy element elements effect effects
+type types way ways basics need concept concepts design execution selection relationship comparison
+evaluation validity result results approach approaches combination combinations implementation
+current regard support section sections calculation calculations content contents knowledge detailed
+general understanding extent response interaction interactions impact impacts management
+application applications accordance historical significance supplier program programs use uses
+canada major further mechanical construction practice terminology beyond three area areas adjustment adjustments analysis
+""".split())
+
+WORD_RE = re.compile(r"[^\W\d_][\w'’\-/]*|\d[\d.,%]*")
 
 
 def noun_phrases(text: str) -> list[tuple[int, int, str]]:
@@ -277,7 +294,7 @@ def noun_phrases(text: str) -> list[tuple[int, int, str]]:
     def flush() -> None:
         if run:
             words = [m.group(0) for m in run]
-            if not all(w[0].isdigit() for w in words):
+            if not all(w[0].isdigit() or w.lower() in GENERIC_NOUNS for w in words):
                 out.append((run[0].start(), run[-1].end(), text[run[0].start():run[-1].end()]))
         run.clear()
 

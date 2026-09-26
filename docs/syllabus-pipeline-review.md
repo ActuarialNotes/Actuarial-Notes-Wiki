@@ -199,7 +199,24 @@ syllabus PDF ─► syllabus_extract.py ─► syllabus.json  (verbatim, hashed,
   — an existing page, or the name of the page that should exist (which is then a
   gap on the Stage 5 worklist). `syllabus_lib.noun_phrases` is the stdlib chunker
   that finds them; `syllabus_lint.py` warns on any left unlinked (`unlinked-noun`)
-  and the linker proposes the same chunks. Exam 7 is the worked example.
+  and the linker proposes the same chunks. Applied to Exams 6C, 6U, 7, 8 and 9
+  (2026-09-26). Abstract nouns that name no concept ("role", "purpose",
+  "effectiveness") are exempt — `syllabus_lib.GENERIC_NOUNS`, short and explicit.
+  **Not yet applied to P, FM, 5, MAS-I, MAS-II** — measured first, below.
+
+  | Exam | Concepts now | Links it would add | of which already concepts | Existing pages newly in the syllabus | New notes | New checks needed | Concepts after | A learner's coverage × |
+  |---|---|---|---|---|---|---|---|---|
+  | P | 65 | 23 | 11 | 1 | 10 | 10 | 76 | 0.86 |
+  | FM | 83 | 13 | 6 | 2 | 3 | 5 | 88 | 0.94 |
+  | MAS-I | 95 | 24 | 10 | 2 | 11 | 11 | 108 | 0.88 |
+  | MAS-II | 83 | 46 | 15 | 4 | 25 | 26 | 112 | 0.74 |
+  | 5 | 117 | 45 | 17 | 1 | 18 | 19 | 136 | 0.86 |
+
+  Hand-curated from the chunker's raw output (which proposes 41–96 phrases per
+  exam, most of them words like "along" or "tasks below"). Coverage is 60% of
+  the readiness score and new concepts start at New, so a fully covered learner
+  would lose roughly 60 × (1 − factor) points until the new notes are mastered:
+  ~8 on P, ~4 on FM, ~7 on MAS-I, ~16 on MAS-II, ~8 on Exam 5.
 - For each objective, propose `[[…]]` spans by matching n-grams of the **verbatim text**
   against existing `Concepts/*.md` names + a new committed alias file
   (`scripts/concept_aliases.py` or `.json`: variant → canonical page, plus a per-exam

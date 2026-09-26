@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:03e0d66cfd94447c09518fb3dde6b723ae5620d2e1c19fb5b51598f9fb74dff9
+  content_hash: sha256:4a92c8fb1e6980d575369c7db8117958a9740854e6435de8fc3f328d2ed5dd37
   sources: []
   open_findings: 0
   open_critical: 0
@@ -52,7 +52,7 @@ The **Advanced Ratemaking (Exam 8)** is a 4 hour exam covering classification ra
 
 >[!answer]- Source Material {11 Sources}
 >
-> - [[Actuarial Standard of Practice No. 12 Risk Classification (ASB - 2005)]]
+> - [[ASOP 12 - Risk Classification (ASB - 2005)]]
 >      - A2
 > - [[Distributions for Actuaries (Bahnemann)]]
 >      - B1-B3
@@ -64,7 +64,7 @@ The **Advanced Ratemaking (Exam 8)** is a 4 hour exam covering classification ra
 >      - B1-B6
 > - [[Individual Risk Rating Case Study (Fisher et al.)]]
 >      - B1-B6
-> - [[Generalized Linear Models for Insurance Rating (Goldburd et al.)]]
+> - [[Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020)]]
 >      - A1, A4-A8
 > - [[CGL Experience and Schedule Rating Plan (ISO)]]
 >      - B5-B6

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1a22eaa6f4ee6a89ce9e8d76cf83d7415a2ce4ba810ab57de07d6563fd0c5300
+  content_hash: sha256:71f5359c2db29b3e0ce7e1062b0124e27cec784706aef344dc4c48772275521b
   sources: []
   open_findings: 0
   open_critical: 0
@@ -78,7 +78,7 @@ The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour com
 >      - C7
 > - [[Actuarial Standard of Practice No. 41 Actuarial Communications (ASB - 2010)]]
 >      - C6
-> - [[Actuarial Standard of Practice No. 43 Property Casualty Unpaid Claim Estimates (ASB - 2007)]]
+> - [[ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007)]]
 >      - C6
 > - [[Estimating the Uncollectible Reinsurance Reserve for PC Companies New GAAP Requirements (AAA - 2019)]]
 >      - D1, D3–D4
@@ -112,7 +112,7 @@ The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour com
 >      - B1–B3
 > - [[Common Pitfalls and Practical Considerations in Risk Transfer Analysis (Freihaut & Vendetti - 2009)]]
 >      - D2
-> - [[Government Insurers Study Note (Germani et al. - 2017)]]
+> - [[Government Insurers Study Note]]
 >      - B1–B3
 > - [[Private Flood Insurance and the National Flood Insurance Program (Horn & Webel - 2023)]]
 >      - B1–B3

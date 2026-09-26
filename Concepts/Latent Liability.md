@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:31e10f5a4d27ffaf66b2f45f1b569da259ec8c3442e4478b5791b3c6ff40a042
+  content_hash: sha256:ca072a392e7e95da18b3320dc71fa09682c36ea37c0ffd1c571af8428a6649be
   sources: []
   open_findings: 0
   open_critical: 0
@@ -16,7 +16,7 @@ verification:
 > $$\text{Survival ratio} = \frac{\text{Reserves (case + IBNR)}}{\text{Average annual paid losses}}$$
 
 - The **survival ratio** is the number of years the carried reserve would last at the recent payment rate; the paid denominator is usually the average of the last three calendar years. It is simple and computable from public data — the annual statement's Note 33 gives five calendar years of asbestos and environmental reserves and payments, direct, assumed and net — but crude: it ignores the shape of future payments and is distorted by one-off payments such as policy buybacks and [[Commutations|commutations]].
-- **Why ordinary reserving fails.** Claims emerge by calendar year of *manifestation*, driven by epidemiology, litigation and legal doctrine rather than by an accident-year pattern, so the [[Chain Ladder Method|chain ladder]] has no stable pattern to project. Practice uses exposure-based (policy-by-policy) projections, claim-count-times-severity models by report year, market-share benchmarks, and the survival ratio as a check. The whole [[IBNR]] is judgement.
+- **Why ordinary reserving fails.** Claims emerge by calendar year of *manifestation*, driven by epidemiology, litigation and legal doctrine rather than by an accident-year pattern, so the [[Chain Ladder Method|chain ladder]] has no stable pattern to project. Practice uses exposure-based (policy-by-policy) projections, claim-count-times-severity models by report year, market-share benchmarks, and the survival ratio as a check, so the [[IBNR]] rests heavily on judgement.
 - **How it affects P/C insurers:**
   - repeated adverse development and reserve strengthening, straining surplus, ratings and sometimes solvency;
   - old [[Occurrence Coverage|occurrence policies]] triggered decades later, with limits potentially stacked across many policy years — one reason [[Claims Made Coverage|claims-made]] forms and asbestos and absolute pollution exclusions spread in the mid-1980s;

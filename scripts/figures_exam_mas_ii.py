@@ -31,6 +31,7 @@ from figure_kit import (
     AMBER, BLUE, GREEN, ROSE, TEAL, VIOLET, SERIES,
     Axes, Fig, brace, vaxes, vcard,
     BX0, BY0, BX1, BY1, BCX, BCY,
+    building, car, coins, cross, document, house, person, scales, shield, tower,
 )
 from figure_registry import figure
 
@@ -96,8 +97,7 @@ def _blend_bar(f: Fig, y, z, left_label, right_label, mid_label, height=20,
 @figure("Credibility Theory", "A credibility estimate shown as a weighted blend "
         "between a manual rate and observed experience", width=WID)
 def credibility_theory() -> Fig:
-    f = vcard("Credibility blends experience with a complement",
-              "Est = Z·X̄ + (1 − Z)·μ")
+    f = vcard()
 
     z = 0.527
     x0, x1 = 48, 312
@@ -122,8 +122,7 @@ def credibility_theory() -> Fig:
 @figure("Limited Fluctuation Credibility", "The square-root credibility curve "
         "rising to full credibility at the standard", width=WID)
 def limited_fluctuation() -> Fig:
-    f = vcard("Classical credibility: √(n / n_F), capped at 1",
-              "Z = min(√(n / 1,082), 1)")
+    f = vcard()
 
     ax = vaxes(f, 0, 2000, 0, 1.15, left=42, right=16, top=26, bottom=44)
     ax.frame(xticks=[0, 500, 1000, 1500, 2000],
@@ -142,8 +141,7 @@ def limited_fluctuation() -> Fig:
 @figure("Full Credibility Standard", "The tolerance band around the true mean "
         "that sets the full-credibility claim count", width=WID)
 def full_credibility_standard() -> Fig:
-    f = vcard("Full credibility: inside ±k, p of the time",
-              "n_F = (z / k)² = (1.645 / 0.05)² = 1,082")
+    f = vcard()
 
     ax = vaxes(f, -3.6, 3.6, 0, 0.45, left=26, right=16, top=40, bottom=68)
     ax.area(lambda x: _npdf(x), -1.645, 1.645, colour=BLUE, opacity="0.22")
@@ -165,7 +163,7 @@ def full_credibility_standard() -> Fig:
 @figure("Partial Credibility", "The square-root rule compared with a "
         "proportional rule below the full-credibility standard", width=WID)
 def partial_credibility() -> Fig:
-    f = vcard("The square root, not the ratio", "Z = √(n / n_F)")
+    f = vcard()
 
     ax = vaxes(f, 0, 1, 0, 1.05, left=42, right=18, top=24, bottom=62)
     ax.frame(xticks=[0, 0.25, 0.5, 0.75, 1],
@@ -185,7 +183,7 @@ def partial_credibility() -> Fig:
 @figure("Bühlmann Credibility", "The Bühlmann credibility curve Z = n/(n+k) for "
         "three values of k", width=WID)
 def buhlmann_credibility() -> Fig:
-    f = vcard("Z rises with n, slowed by k = v / a", "Z = n / (n + k),  k = v / a")
+    f = vcard()
 
     ax = vaxes(f, 0, 30, 0, 1.05, left=42, right=44, top=24, bottom=62)
     ax.frame(xticks=[0, 10, 20, 30], yticks=[0, 0.5, 1.0], grid=True)
@@ -203,8 +201,7 @@ def buhlmann_credibility() -> Fig:
 @figure("Expected Value of Process Variance", "Three risks with the same within-risk "
         "spread, averaged to give the EPV", width=WID)
 def epv() -> Fig:
-    f = vcard("EPV averages the spread inside each risk",
-              "v = E[Var(X | Θ)]")
+    f = vcard()
 
     ax = vaxes(f, -1.2, 5.2, 0, 0.62, left=24, right=16, top=40, bottom=58)
     f.line(ax.x0, ax.y1, ax.x1, ax.y1, cls="axis")
@@ -225,8 +222,7 @@ def epv() -> Fig:
 @figure("Variance of Hypothetical Means", "The spread between three risks' means, "
         "which is the VHM", width=WID)
 def vhm() -> Fig:
-    f = vcard("VHM measures how far apart the risks are",
-              "a = Var(E[X | Θ])")
+    f = vcard()
 
     ax = vaxes(f, -1.2, 5.2, 0, 0.62, left=24, right=16, top=40, bottom=58)
     f.line(ax.x0, ax.y1, ax.x1, ax.y1, cls="axis")
@@ -248,8 +244,7 @@ def vhm() -> Fig:
 @figure("Bühlmann-Straub Credibility", "Credibility built on unequal yearly "
         "exposures rather than a count of years", width=WID)
 def buhlmann_straub() -> Fig:
-    f = vcard("Exposure, not years, drives the weight",
-              "Z = m / (m + k),  m = Σ mᵢ")
+    f = vcard()
 
     exposures = [140, 260, 190, 410, 320]
     scale = 0.42
@@ -271,8 +266,7 @@ def buhlmann_straub() -> Fig:
 @figure("Bayesian Credibility", "A prior distribution updated by observed "
         "experience into a narrower posterior", width=WID)
 def bayesian_credibility() -> Fig:
-    f = vcard("Data pulls the prior toward the observed mean",
-              "Est = E[θ | x] = posterior mean")
+    f = vcard()
 
     ax = vaxes(f, 0, 0.9, 0, 9.0, left=26, right=16, top=34, bottom=56)
     f.line(ax.x0, ax.y1, ax.x1, ax.y1, cls="axis")
@@ -297,8 +291,7 @@ def bayesian_credibility() -> Fig:
 @figure("Conjugate Prior", "A Gamma prior updated by Poisson data staying in the "
         "Gamma family", width=WID)
 def conjugate_prior() -> Fig:
-    f = vcard("The posterior stays in the prior's family",
-              ["Gamma prior + Poisson data", "⇒ Gamma(α + Σx, θ / (1 + nθ))"])
+    f = vcard()
 
     f.box(38, 100, 118, 62, label="Gamma(2, 0.10)", colour=VIOLET,
           sub="prior", label_cls="sm bold")
@@ -328,8 +321,7 @@ def conjugate_prior() -> Fig:
 @figure("Predictive Distribution", "A Poisson pmf beside the wider negative "
         "binomial that mixing it over a Gamma produces", width=WID)
 def predictive_distribution() -> Fig:
-    f = vcard("Mixing over the posterior widens the forecast",
-              "f(xₙ₊₁ | x) = ∫ f(xₙ₊₁ | θ) π(θ | x) dθ")
+    f = vcard()
 
     ax = vaxes(f, -0.7, 6.7, 0, 0.42, left=40, right=14, top=34, bottom=54)
     ax.frame(xticks=[0, 1, 2, 3, 4, 5, 6], yticks=[0, 0.2, 0.4], arrows=False)
@@ -350,8 +342,7 @@ def predictive_distribution() -> Fig:
 @figure("Empirical Bayes Credibility", "Group means whose spread must be corrected "
         "for process noise before it estimates the VHM", width=WID)
 def empirical_bayes() -> Fig:
-    f = vcard("Estimate v and a from the experience itself",
-              "â = between-group spread − v̂ / n")
+    f = vcard()
 
     r = _Rand(7)
     ax = vaxes(f, 0.3, 5.7, 2, 14, left=38, right=16, top=26, bottom=80)
@@ -376,8 +367,7 @@ def empirical_bayes() -> Fig:
 @figure("Complement of Credibility", "The complement carrying the weight that "
         "experience does not", width=WID)
 def complement_of_credibility() -> Fig:
-    f = vcard("The complement carries the other (1 − Z)",
-              "Est = Z × experience + (1 − Z) × complement")
+    f = vcard()
 
     for i, (z, lab) in enumerate(((0.15, "thin class"), (0.53, "300 claims"),
                                   (0.90, "large class"))):
@@ -405,8 +395,7 @@ _TERR = [(-0.26, 0.052), (-0.11, 0.030), (0.02, 0.041), (0.14, 0.024),
 @figure("Fixed Effects", "A fixed effect estimated separately per level against a "
         "random effect shrunk toward the mean", width=WID)
 def fixed_effects() -> Fig:
-    f = vcard("Fixed effects are estimated, one per level",
-              "E[y] = Xβ")
+    f = vcard()
 
     ax = vaxes(f, 0.3, 5.7, -0.42, 0.42, left=44, right=16, top=34, bottom=72)
     ax.frame(yticks=[-0.3, 0, 0.3], grid=True, arrows=False)
@@ -428,8 +417,7 @@ def fixed_effects() -> Fig:
 @figure("Random Effects", "Raw group deviations shrunk toward zero by a random "
         "effect", width=WID)
 def random_effects() -> Fig:
-    f = vcard("Random effects are drawn from a distribution",
-              "b ~ N(0, D)")
+    f = vcard()
 
     ax = vaxes(f, 0.3, 5.7, -0.46, 0.52, left=44, right=16, top=42, bottom=76)
     ax.frame(yticks=[-0.3, 0, 0.3], grid=True, arrows=False)
@@ -455,8 +443,7 @@ def random_effects() -> Fig:
 @figure("Hierarchical Model", "Observations nested inside groups nested inside a "
         "population", width=WID)
 def hierarchical_model() -> Fig:
-    f = vcard("Levels nested inside levels",
-              "y_ij = β₀ + b_i + ε_ij")
+    f = vcard()
 
     f.box(74, 92, 212, 34, label="population  β₀", colour=VIOLET,
           label_cls="sm bold")
@@ -479,8 +466,7 @@ def hierarchical_model() -> Fig:
 @figure("Random Intercept and Slope", "Parallel group lines under a random "
         "intercept against fanning lines when the slope is random too", width=WID)
 def random_intercept_slope() -> Fig:
-    f = vcard("Random intercept shifts; random slope fans",
-              "y = (β₀ + b₀ᵢ) + (β₁ + b₁ᵢ)x + ε")
+    f = vcard()
 
     for panel, (title, use_slope) in enumerate((("random intercept", False),
                                                 ("+ random slope", True))):
@@ -500,8 +486,7 @@ def random_intercept_slope() -> Fig:
 @figure("Variance Components", "Total variance split into a between-group and a "
         "within-group component", width=WID)
 def variance_components() -> Fig:
-    f = vcard("Total variance splits between and within",
-              "Var(y) = σ²_b + σ²")
+    f = vcard()
 
     sb, se = 250.0, 1000.0
     total = sb + se
@@ -524,8 +509,7 @@ def variance_components() -> Fig:
 @figure("Covariance Structure", "Compound symmetry, AR(1) and unstructured "
         "correlation matrices side by side", width=WID)
 def covariance_structure() -> Fig:
-    f = vcard("The pattern imposed on within-group correlation",
-              "V = ZDZᵀ + R")
+    f = vcard()
 
     mats = [
         ("compound symmetry", [[1, .6, .6, .6], [.6, 1, .6, .6],
@@ -553,8 +537,7 @@ def covariance_structure() -> Fig:
 @figure("Intraclass Correlation", "The share of variance sitting between groups, "
         "and the design effect it causes", width=WID)
 def intraclass_correlation() -> Fig:
-    f = vcard("ICC is the between-group share of variance",
-              "ρ = σ²_b / (σ²_b + σ²)")
+    f = vcard()
 
     x0, w, y, h = 56, 208, 112, 30
     f.rect(x0, y, w * 0.2, h, rx=4, fill=VIOLET, fill_opacity="0.55")
@@ -578,8 +561,7 @@ def intraclass_correlation() -> Fig:
 @figure("Restricted Maximum Likelihood", "REML correcting the downward bias in the "
         "maximum-likelihood variance estimate", width=WID)
 def reml() -> Fig:
-    f = vcard("REML pays for the fixed effects it estimated",
-              "ℓ_R adds log|XᵀV⁻¹X| to the likelihood")
+    f = vcard()
 
     ax = vaxes(f, 0, 1.9, 0, 2.6, left=40, right=16, top=32, bottom=78)
     ax.frame(xlabel="σ̂²", xticks=[0.5, 1.0, 1.5], yticks=[], grid=True)
@@ -599,8 +581,7 @@ def reml() -> Fig:
 @figure("Best Linear Unbiased Predictor", "Group deviations shrunk by a credibility "
         "weight that grows with the group's size", width=WID)
 def blup() -> Fig:
-    f = vcard("A BLUP is a credibility-weighted deviation",
-              "b̂ᵢ = [nᵢ / (nᵢ + k)] (ȳᵢ − ȳ)")
+    f = vcard()
 
     ax = vaxes(f, 0, 22, 0, 1.05, left=44, right=18, top=30, bottom=78)
     ax.frame(xticks=[0, 5, 10, 15, 20], yticks=[0, 0.5, 1.0], grid=True)
@@ -619,8 +600,7 @@ def blup() -> Fig:
 @figure("Linear Algebra", "A design matrix times a coefficient vector giving the "
         "fitted values", width=WID)
 def linear_algebra() -> Fig:
-    f = vcard("Regression is one matrix equation",
-              "β̂ = (XᵀX)⁻¹Xᵀy")
+    f = vcard()
 
     def matrix(x, y, rows, cols, label, colour, cw=22, ch=20):
         f.rect(x - 5, y - 5, cols * cw + 10, rows * ch + 10, rx=5,
@@ -673,8 +653,7 @@ def _tree(f: Fig, x, y, depth, spread, dy, colour, leaf_colours=None, r=7,
 @figure("Statistical Learning", "The supervised learning loop from training data "
         "through a fitted model to test error", width=WID)
 def statistical_learning() -> Fig:
-    f = vcard("Learn f from data, judge it on data it never saw",
-              "Y = f(X) + ε")
+    f = vcard()
 
     steps = [("training data", BLUE), ("fit f̂", VIOLET), ("predict", GREEN),
              ("test error", ROSE)]
@@ -692,8 +671,7 @@ def statistical_learning() -> Fig:
 @figure("Supervised Learning", "Labelled points fitted by a boundary, against "
         "unlabelled points with no answer to fit", width=WID)
 def supervised_learning() -> Fig:
-    f = vcard("Every training point carries its answer",
-              "fit f̂ minimizing Σ L(yᵢ, f(xᵢ))")
+    f = vcard()
 
     r = _Rand(11)
     ax = vaxes(f, 0, 10, 0, 10, left=34, right=14, top=34, bottom=76)
@@ -716,8 +694,7 @@ def supervised_learning() -> Fig:
 @figure("Unsupervised Learning", "Unlabelled points whose structure has to be "
         "inferred without any response", width=WID)
 def unsupervised_learning() -> Fig:
-    f = vcard("No response — only structure to find",
-              "given X₁, …, Xₙ ∈ ℝᵖ, find structure")
+    f = vcard()
 
     r = _Rand(23)
     ax = vaxes(f, 0, 10, 0, 10, left=34, right=14, top=34, bottom=74)
@@ -740,8 +717,7 @@ def unsupervised_learning() -> Fig:
 @figure("Bootstrap", "One sample resampled with replacement into many bootstrap "
         "samples", width=WID)
 def bootstrap() -> Fig:
-    f = vcard("Resample with replacement, B times",
-              "SE_B = sd of the B bootstrap estimates")
+    f = vcard()
 
     orig = [1, 2, 3, 4, 5, 6]
     draws = [[3, 1, 5, 3, 6, 2], [2, 2, 4, 6, 1, 4], [5, 3, 3, 1, 6, 6]]
@@ -772,8 +748,7 @@ def bootstrap() -> Fig:
 @figure("Regularization", "Ridge shrinking coefficients smoothly while lasso "
         "drives them to zero", width=WID)
 def regularization() -> Fig:
-    f = vcard("A penalty on size shrinks the coefficients",
-              ["ridge:  min RSS + λ Σ βⱼ²", "lasso:  min RSS + λ Σ |βⱼ|"])
+    f = vcard()
 
     for panel, (name, colour, lasso) in enumerate((("ridge (ℓ₂)", BLUE, False),
                                                    ("lasso (ℓ₁)", VIOLET, True))):
@@ -798,8 +773,7 @@ def regularization() -> Fig:
 @figure("K-Nearest Neighbors", "A query point classified by a vote of its five "
         "nearest neighbours", width=WID)
 def knn() -> Fig:
-    f = vcard("Vote among the k nearest points",
-              "ŷ₀ = majority of the k nearest xᵢ")
+    f = vcard()
 
     r = _Rand(31)
     ax = vaxes(f, 0, 10, 0, 10, left=30, right=14, top=34, bottom=74)
@@ -831,8 +805,7 @@ def knn() -> Fig:
 @figure("Decision Tree", "A tree of binary splits and the rectangles it carves "
         "out of predictor space", width=WID)
 def decision_tree() -> Fig:
-    f = vcard("Recursive binary splits of predictor space",
-              "split to minimize RSS (or Gini / entropy)")
+    f = vcard()
 
     f.circle(BCX, 106, 9, fill=BLUE, fill_opacity="0.2", stroke=BLUE,
              stroke_width="1.5")
@@ -873,8 +846,7 @@ def decision_tree() -> Fig:
 @figure("Tree Pruning", "The cost-complexity score picking a subtree as alpha "
         "rises", width=WID)
 def tree_pruning() -> Fig:
-    f = vcard("Grow it too big, then cut back",
-              "RSS + α·|T|,  α chosen by CV")
+    f = vcard()
 
     ax = vaxes(f, 0, 9, 230, 580, left=48, right=20, top=42, bottom=76)
     ax.frame(xticks=[1, 3, 5, 8], yticks=[300, 400, 500], grid=True)
@@ -899,8 +871,7 @@ def tree_pruning() -> Fig:
 @figure("Gini Index", "Node impurity as a function of the class proportion, "
         "compared with entropy", width=WID)
 def gini_index() -> Fig:
-    f = vcard("Impurity is highest at a 50-50 node",
-              "G = Σ p̂ₘₖ(1 − p̂ₘₖ)")
+    f = vcard()
 
     ax = vaxes(f, 0, 1, 0, 0.78, left=44, right=16, top=30, bottom=76)
     ax.frame(xticks=[0, 0.25, 0.5, 0.75, 1], yticks=[0, 0.25, 0.5, 0.75],
@@ -923,8 +894,7 @@ def gini_index() -> Fig:
 @figure("Entropy", "Entropy peaking at maximum uncertainty and vanishing at "
         "certainty", width=WID)
 def entropy() -> Fig:
-    f = vcard("Entropy measures uncertainty in bits",
-              "D = −Σ p̂ₘₖ log p̂ₘₖ")
+    f = vcard()
 
     ax = vaxes(f, 0, 1, 0, 1.12, left=44, right=16, top=30, bottom=76)
     ax.frame(xticks=[0, 0.25, 0.5, 0.75, 1], yticks=[0, 0.5, 1.0], grid=True)
@@ -944,8 +914,7 @@ def entropy() -> Fig:
 @figure("Tree Ensemble", "Many trees fitted and combined into one prediction",
         width=WID)
 def tree_ensemble() -> Fig:
-    f = vcard("Many weak trees beat one strong tree",
-              "f̂(x) = average (or vote) over B trees")
+    f = vcard()
 
     for i in range(3):
         x = 78 + i * 102
@@ -966,8 +935,7 @@ def tree_ensemble() -> Fig:
 @figure("Bagging", "Bootstrap resamples each growing their own tree, averaged into "
         "one prediction", width=WID)
 def bagging() -> Fig:
-    f = vcard("Average trees grown on bootstrap resamples",
-              "f̂_bag(x) = (1/B) Σ f̂*ᵇ(x)")
+    f = vcard()
 
     f.box(112, 92, 136, 30, label="training data", colour="var(--edge)",
           label_cls="sm")
@@ -989,8 +957,7 @@ def bagging() -> Fig:
 @figure("Random Forest", "Splits restricted to a random subset of predictors so "
         "the trees decorrelate", width=WID)
 def random_forest() -> Fig:
-    f = vcard("Only m of p predictors may split each node",
-              "m ≈ √p  (classification),  p/3  (regression)")
+    f = vcard()
 
     p = 9
     for row, (m, label, colour) in enumerate(((9, "bagging: m = p", "var(--dim)"),
@@ -1024,8 +991,7 @@ def random_forest() -> Fig:
 @figure("Boosting", "Trees fitted in sequence to the residuals left by the ones "
         "before", width=WID)
 def boosting() -> Fig:
-    f = vcard("Each small tree fits what is left over",
-              "f̂ ← f̂ + λ f̂ᵇ,   r ← r − λ f̂ᵇ")
+    f = vcard()
 
     for i in range(3):
         x = 66 + i * 96
@@ -1056,8 +1022,7 @@ def boosting() -> Fig:
 @figure("Out-of-Bag Error", "The observations a bootstrap resample leaves out, "
         "used as a free test set", width=WID)
 def oob_error() -> Fig:
-    f = vcard("Each resample leaves ~37% of rows out",
-              "(1 − 1/n)ⁿ → e⁻¹ ≈ 0.368")
+    f = vcard()
 
     rows, cols = 6, 6
     inbag = {0, 1, 3, 4, 6, 8, 9, 11, 12, 14, 15, 17, 18, 20, 22, 23, 24, 26,
@@ -1081,8 +1046,7 @@ def oob_error() -> Fig:
 @figure("Variable Importance", "Predictors ranked by the impurity they remove "
         "across the trees of an ensemble", width=WID)
 def variable_importance() -> Fig:
-    f = vcard("Rank predictors by impurity removed",
-              "Imp(Xⱼ) = mean Δ impurity over splits on Xⱼ")
+    f = vcard()
 
     items = [("prior claims", 100), ("claim amount", 71), ("days to report", 64),
              ("territory", 12), ("policy age", 9), ("gender", 2)]
@@ -1103,8 +1067,7 @@ def variable_importance() -> Fig:
 @figure("Principal Components Analysis", "The first principal component drawn as "
         "the direction of greatest variance in a scatter", width=WID)
 def pca() -> Fig:
-    f = vcard("PC1 is the direction of greatest variance",
-              "PVE_m = λ_m / Σλⱼ")
+    f = vcard()
 
     r = _Rand(41)
     ax = vaxes(f, -3.4, 3.4, -3.4, 3.4, left=34, right=16, top=32, bottom=78)
@@ -1130,8 +1093,7 @@ def pca() -> Fig:
 @figure("Loading Vector", "The weights of a loading vector shown as a bar per "
         "variable for two components", width=WID)
 def loading_vector() -> Fig:
-    f = vcard("A loading vector weights the variables",
-              "z_im = Σⱼ φ_jm x_ij,   Σⱼ φ²_jm = 1")
+    f = vcard()
 
     vars_ = ["braking", "cornering", "night", "mileage"]
     pcs = [("φ₁ — overall size", [0.52, 0.51, 0.49, 0.48], BLUE),
@@ -1157,8 +1119,7 @@ def loading_vector() -> Fig:
 @figure("Proportion of Variance Explained", "Per-component and cumulative variance "
         "explained across eight components", width=WID)
 def pve() -> Fig:
-    f = vcard("How much variance each component carries",
-              "PVE_m = λ_m / Σλⱼ")
+    f = vcard()
 
     lam = [3.6, 1.9, 1.0, 0.6, 0.4, 0.3, 0.2, 0.0]
     total = sum(lam)
@@ -1186,8 +1147,7 @@ def pve() -> Fig:
 @figure("Scree Plot", "Eigenvalues falling steeply and then flattening, with the "
         "elbow marked", width=WID)
 def scree_plot() -> Fig:
-    f = vcard("Keep the components before the elbow",
-              "plot λ_m against m")
+    f = vcard()
 
     lam = [2.9, 1.6, 0.7, 0.4, 0.3, 0.1]
     ax = vaxes(f, 0.4, 6.6, 0, 3.3, left=44, right=18, top=34, bottom=76)
@@ -1209,8 +1169,7 @@ def scree_plot() -> Fig:
 @figure("Clustering", "Points grouped into clusters that are tight inside and far "
         "apart", width=WID)
 def clustering() -> Fig:
-    f = vcard("Tight inside, far apart outside",
-              "minimize within-cluster variation")
+    f = vcard()
 
     r = _Rand(53)
     ax = vaxes(f, 0, 10, 0, 10, left=32, right=14, top=32, bottom=80)
@@ -1235,8 +1194,7 @@ def clustering() -> Fig:
 @figure("K-Means Clustering", "One iteration of K-means: assign to the nearest "
         "centroid, then move the centroids", width=WID)
 def kmeans() -> Fig:
-    f = vcard("Assign to nearest centroid, then recentre",
-              "minimize Σₖ Σ_{i∈Cₖ} ‖xᵢ − μₖ‖²")
+    f = vcard()
 
     r = _Rand(67)
     pts = []
@@ -1270,8 +1228,7 @@ def kmeans() -> Fig:
 @figure("Hierarchical Clustering", "Four territories fused pair by pair into a "
         "single cluster", width=WID)
 def hierarchical_clustering() -> Fig:
-    f = vcard("Fuse the closest pair, over and over",
-              "no K chosen up front — cut the tree after")
+    f = vcard()
 
     labels = ["T1", "T2", "T3", "T4"]
     xs = [70, 130, 230, 290]
@@ -1310,8 +1267,7 @@ def hierarchical_clustering() -> Fig:
 @figure("Dendrogram", "Two adjacent leaves that fuse high, against a distant pair "
         "that fuses low", width=WID)
 def dendrogram() -> Fig:
-    f = vcard("Height, not left-right position, is similarity",
-              "cut at height h ⇒ the clusters joined below h")
+    f = vcard()
 
     base = 300
     hy = lambda h: base - h * 22
@@ -1346,8 +1302,7 @@ def dendrogram() -> Fig:
 @figure("Linkage", "Complete, single and average linkage measuring the distance "
         "between the same two clusters", width=WID)
 def linkage() -> Fig:
-    f = vcard("Three ways to measure cluster distance",
-              ["complete = max · single = min", "average = mean"])
+    f = vcard()
 
     left = [(1.6, 6.6), (2.3, 5.4), (1.3, 4.6)]
     right = [(7.4, 6.9), (8.1, 5.3), (7.0, 4.2)]
@@ -1380,8 +1335,7 @@ def linkage() -> Fig:
 @figure("Neural Network", "A two-layer network with its input, hidden and output "
         "units wired together", width=WID)
 def neural_network() -> Fig:
-    f = vcard("Inputs, hidden units, output — all wired",
-              "f(x) = β₀ + Σ βₖ g(w_k0 + Σ w_kj xⱼ)")
+    f = vcard()
 
     layers = [(70, 4, "inputs Xⱼ", BLUE), (180, 5, "hidden A_k", VIOLET),
               (290, 1, "output f(x)", GREEN)]
@@ -1411,8 +1365,7 @@ def neural_network() -> Fig:
 @figure("Activation Function", "ReLU, sigmoid and tanh drawn on one pair of axes",
         width=WID)
 def activation_function() -> Fig:
-    f = vcard("The non-linearity that stops the layers collapsing",
-              "A_k = g(w_k0 + Σ w_kj Xⱼ)")
+    f = vcard()
 
     ax = vaxes(f, -4, 4, -1.2, 2.6, left=40, right=16, top=44, bottom=76)
     ax.frame(xticks=[-4, -2, 2, 4], yticks=[-1, 1, 2], grid=True)
@@ -1433,8 +1386,7 @@ def activation_function() -> Fig:
 @figure("Backpropagation", "A forward pass computing the loss and a backward pass "
         "returning the gradients", width=WID)
 def backpropagation() -> Fig:
-    f = vcard("Forward for the loss, backward for the gradient",
-              "w ← w − η ∂L/∂w")
+    f = vcard()
 
     boxes = [("x", BLUE), ("hidden", VIOLET), ("ŷ", GREEN), ("L", ROSE)]
     xs = [58, 138, 224, 298]
@@ -1463,9 +1415,7 @@ def backpropagation() -> Fig:
 @figure("Confusion Matrix", "The four cells of a confusion matrix with the metrics "
         "each one feeds", width=WID)
 def confusion_matrix() -> Fig:
-    f = vcard("Every classification metric comes from four cells",
-              ["sensitivity = TP / (TP + FN)",
-               "specificity = TN / (TN + FP)"])
+    f = vcard()
 
     cw, ch = 92, 60
     x0, y0 = 128, 132
@@ -1497,8 +1447,7 @@ def confusion_matrix() -> Fig:
 @figure("AUROC", "An ROC curve with the area under it shaded against the diagonal "
         "of a useless model", width=WID)
 def auroc() -> Fig:
-    f = vcard("Area under the ROC curve, over all thresholds",
-              "Gini = 2 × AUROC − 1")
+    f = vcard()
 
     ax = vaxes(f, 0, 1, 0, 1, left=44, right=18, top=32, bottom=78)
     ax.frame(xticks=[0, 0.5, 1], yticks=[0, 0.5, 1], grid=True, arrows=False)
@@ -1521,8 +1470,7 @@ def auroc() -> Fig:
 @figure("Lift", "A lift chart of actual against predicted loss cost across "
         "equal-exposure buckets", width=WID)
 def lift() -> Fig:
-    f = vcard("Does the model separate good risk from bad?",
-              "lift = worst bucket ÷ best bucket")
+    f = vcard()
 
     actual = [0.68, 0.84, 0.97, 1.11, 1.42]
     pred = [0.71, 0.86, 0.98, 1.12, 1.33]
@@ -1546,8 +1494,7 @@ def lift() -> Fig:
 @figure("Quantile Plot", "Held-out data sorted into equal-exposure buckets, actual "
         "against predicted", width=WID)
 def quantile_plot() -> Fig:
-    f = vcard("Sort by prediction, bucket by equal exposure",
-              ["ranking = the slope", "calibration = the gap"])
+    f = vcard()
 
     actual = [0.68, 0.84, 0.97, 1.11, 1.42]
     pred = [0.71, 0.86, 0.98, 1.12, 1.33]
@@ -1576,8 +1523,7 @@ def quantile_plot() -> Fig:
 @figure("Double Lift Chart", "Two models compared on buckets sorted by the ratio of "
         "their predictions", width=WID)
 def double_lift_chart() -> Fig:
-    f = vcard("Sort on the ratio to see where two models differ",
-              ["sort by ŷᴬ / ŷᴮ", "then plot both against actual"])
+    f = vcard()
 
     actual = [0.78, 0.91, 1.00, 1.14, 1.31]
     new = [0.80, 0.92, 1.01, 1.12, 1.28]
@@ -1651,8 +1597,7 @@ def _corr_panel(f: Fig, y0, y1, vals, n, title, colour, ylab=True):
 @figure("Time Series", "A quarterly loss index showing trend, seasonality and "
         "irregular movement", width=WID)
 def time_series() -> Fig:
-    f = vcard("Observations ordered in time, and dependent",
-              "Y_t = m_t + s_t + z_t")
+    f = vcard()
 
     ys = _index_series()
     ax = _ts_axes(f, ys, top=34, bottom=80)
@@ -1673,8 +1618,7 @@ def time_series() -> Fig:
 @figure("Stationarity", "A stationary series oscillating about a fixed mean above "
         "a non-stationary one that wanders", width=WID)
 def stationarity() -> Fig:
-    f = vcard("Mean, variance and autocovariance fixed in time",
-              "E[Y_t] = μ,  Cov(Y_t, Y_{t+k}) = γ_k")
+    f = vcard()
 
     r = _Rand(13)
     stat, y = [], 0.0
@@ -1710,8 +1654,7 @@ def stationarity() -> Fig:
 @figure("White Noise", "An uncorrelated series and the flat correlogram it "
         "produces", width=WID)
 def white_noise() -> Fig:
-    f = vcard("Uncorrelated, mean zero, constant variance",
-              "ρ_k = 0 for every k ≥ 1")
+    f = vcard()
 
     r = _Rand(17)
     ys = [r.n(0, 1) for _ in range(60)]
@@ -1732,8 +1675,7 @@ def white_noise() -> Fig:
 @figure("Random Walk", "A random walk with drift and its flat forecast with a "
         "fan-shaped interval", width=WID)
 def random_walk() -> Fig:
-    f = vcard("Every shock moves the level permanently",
-              "Y_t = δ + Y_{t−1} + ε_t")
+    f = vcard()
 
     r = _Rand(29)
     ys, y = [], 218.0
@@ -1762,8 +1704,7 @@ def random_walk() -> Fig:
 @figure("Differencing", "A trending series turned stationary by taking first "
         "differences", width=WID)
 def differencing() -> Fig:
-    f = vcard("Differences remove the trend",
-              "∇Y_t = Y_t − Y_{t−1} = (1 − B)Y_t")
+    f = vcard()
 
     ys = _index_series(n=48, season=False, seed=71)
     diff = [b - a for a, b in zip(ys, ys[1:])]
@@ -1791,8 +1732,7 @@ def differencing() -> Fig:
 @figure("Autocorrelation Function", "A correlogram cutting off after lag 1, the "
         "signature of an MA(1)", width=WID)
 def acf() -> Fig:
-    f = vcard("Correlation with the series k periods back",
-              "ρ_k = γ_k / γ_0")
+    f = vcard()
 
     ac = [-0.52, 0.06, -0.04, 0.09, -0.03, 0.05, 0.02, -0.06, 0.04, 0.01]
     ax = _corr_panel(f, 118, 240, ac, 144, "ACF of ∇Y_t", BLUE)
@@ -1811,8 +1751,7 @@ def acf() -> Fig:
 @figure("Partial Autocorrelation Function", "A PACF cutting off after lag 1 beside "
         "the ACF of the same AR(1) tailing off", width=WID)
 def pacf() -> Fig:
-    f = vcard("The direct link at lag k, intervening lags removed",
-              "φ_kk = Corr(Y_t, Y_{t−k} | Y_{t−1}, …)")
+    f = vcard()
 
     phi = 0.71
     ac = [phi ** k for k in range(1, 9)]
@@ -1828,8 +1767,7 @@ def pacf() -> Fig:
 @figure("Autoregressive Model", "An AR(1) forecast decaying geometrically back to "
         "the long-run mean", width=WID)
 def autoregressive_model() -> Fig:
-    f = vcard("Regress the series on its own past",
-              "Y_t = c + φ₁Y_{t−1} + ⋯ + φ_pY_{t−p} + ε_t")
+    f = vcard()
 
     r = _Rand(83)
     mu, phi = 0.80, 0.70
@@ -1858,8 +1796,7 @@ def autoregressive_model() -> Fig:
 @figure("Moving Average Model", "An MA(1)'s memory ending after one period, so the "
         "forecast returns to the mean", width=WID)
 def moving_average_model() -> Fig:
-    f = vcard("A weighted sum of the last q shocks",
-              "Y_t = μ + ε_t + θ₁ε_{t−1} + ⋯ + θ_qε_{t−q}")
+    f = vcard()
 
     r = _Rand(89)
     eps = [r.n(0, 5) for _ in range(26)]
@@ -1888,8 +1825,7 @@ def moving_average_model() -> Fig:
 @figure("ARIMA", "The three ARIMA parts assembled, with the ACF/PACF table that "
         "identifies them", width=WID)
 def arima() -> Fig:
-    f = vcard("Autoregressive, integrated, moving average",
-              "φ(B)∇ᵈY_t = θ(B)ε_t")
+    f = vcard()
 
     parts = [("AR (p)", "p lags of Y", BLUE), ("I (d)", "d differences", AMBER),
              ("MA (q)", "q lags of ε", GREEN)]
@@ -1921,8 +1857,7 @@ def arima() -> Fig:
 @figure("Seasonality", "An additive seasonal pattern beside a multiplicative one "
         "growing with the level", width=WID)
 def seasonality() -> Fig:
-    f = vcard("A pattern repeating at a fixed period s",
-              "s_t = s_{t+s},  Σ s_j = 0")
+    f = vcard()
 
     for panel, (title, mult, colour) in enumerate((("additive", False, BLUE),
                                                    ("multiplicative", True, VIOLET))):
@@ -1952,8 +1887,7 @@ def seasonality() -> Fig:
 @figure("Deterministic and Stochastic Trend", "A trend-stationary series returning "
         "to its line against a unit-root series that does not", width=WID)
 def det_stoch_trend() -> Fig:
-    f = vcard("Does a shock fade, or move the level for good?",
-              "α + βt + z_t   vs.   δ + Y_{t−1} + ε_t")
+    f = vcard()
 
     r = _Rand(101)
     n = 44
@@ -1990,8 +1924,7 @@ def det_stoch_trend() -> Fig:
 @figure("Time Series Decomposition", "A series split into its trend, seasonal and "
         "irregular components", width=WID)
 def decomposition() -> Fig:
-    f = vcard("Split the series into trend, season, remainder",
-              "Y_t = m_t + s_t + z_t")
+    f = vcard()
 
     r = _Rand(107)
     n = 32
@@ -2018,8 +1951,7 @@ def decomposition() -> Fig:
 @figure("Exponential Smoothing", "Geometrically decaying weights on past "
         "observations, and the flat forecast they give", width=WID)
 def exponential_smoothing() -> Fig:
-    f = vcard("Weights decaying geometrically into the past",
-              "Ŷ_{t+1} = αY_t + (1 − α)Ŷ_t")
+    f = vcard()
 
     ax = vaxes(f, -0.6, 9.6, 0, 0.36, left=44, right=16, top=36, bottom=104)
     ax.frame(xticks=[0, 2, 4, 6, 8], yticks=[0, 0.15, 0.3], grid=True,
@@ -2040,8 +1972,7 @@ def exponential_smoothing() -> Fig:
 @figure("Time Series Forecast", "An AR(1) forecast with a prediction interval "
         "widening to the stationary bound", width=WID)
 def ts_forecast() -> Fig:
-    f = vcard("A forecast is a mean plus an interval",
-              "Ŷ_{t+h} ± z·σ√(Σψ²_j)")
+    f = vcard()
 
     r = _Rand(113)
     mu, phi, sig = 50.0, 0.6, 4.0

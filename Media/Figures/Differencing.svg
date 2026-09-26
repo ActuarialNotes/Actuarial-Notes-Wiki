@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
   <title>A trending series turned stationary by taking first differences</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -47,10 +43,7 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">Differences remove the trend</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="438" text-anchor="middle" class="fml">∇Y_t = Y_t − Y_{t−1} = (1 − B)Y_t</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
     <text x="180" y="102" text-anchor="middle" class="sm bold" fill="#e11d48">Y_t — trending, non-stationary</text>
     <rect x="56" y="110" width="268" height="86" rx="5" fill="var(--soft)" stroke="var(--edge)"/>
     <polyline points="56,184.62 61.7,183.86 67.4,181.76 73.11,179.35 78.81,176.29 84.51,174.37 90.21,173.53 95.91,172.43 101.62,169.65 107.32,168.65 113.02,167.79 118.72,165.77 124.43,161.74 130.13,159.64 135.83,159.57 141.53,154.74 147.23,152.33 152.94,152.02 158.64,152.22 164.34,152.9 170.04,153.59 175.74,153.95 181.45,153.02 187.15,153.36 192.85,152 198.55,150.52 204.26,151.28 209.96,152.39 215.66,152.24 221.36,151.24 227.06,147.48 232.77,147.11 238.47,147.4 244.17,146.48 249.87,144.67 255.57,141.76 261.28,139.81 266.98,137.24 272.68,134.4 278.38,133.53 284.09,130.63 289.79,128.98 295.49,128.12 301.19,126.52 306.89,122.56 312.6,122.56 318.3,121.82 324,121.38" class="curve" stroke="#e11d48" stroke-width="1.7"/>

@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
   <title>The prior split into two columns whose shaded claim areas make up P(C), half of it high-risk</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -47,12 +43,7 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">The posterior is the claiming slice of</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">the prior</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">P(H | C) = P(C | H) P(H) / P(C)</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">= 0.08 / 0.16 = 0.50</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
     <rect x="70" y="108" width="48" height="168" fill="#3b82f6" fill-opacity="0.12"/>
     <rect x="118" y="108" width="192" height="168" fill="#e11d48" fill-opacity="0.12"/>
     <rect x="70" y="208.8" width="48" height="67.2" fill="#3b82f6" fill-opacity="0.55"/>

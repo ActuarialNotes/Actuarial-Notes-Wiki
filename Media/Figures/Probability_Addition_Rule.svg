@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
   <title>The addition rule correcting for a double-counted overlap</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -47,11 +43,7 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">Subtract the double-counted overlap</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">P(A ∪ B) = P(A) + P(B) − P(A ∩ B)</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">0.45 + 0.40 − 0.15 = 0.70</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
     <rect x="28" y="100" width="304" height="200" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
     <text x="42" y="120" text-anchor="middle" class="sm dim">S</text>
     <circle cx="141" cy="200" r="78" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.6"/>

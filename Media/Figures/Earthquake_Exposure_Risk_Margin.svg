@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
   <title>The 1-in-500 PML met by reinsurance, reserves and capital — with the shortfall the requirement</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -47,12 +43,7 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">Hold resources for the 1-in-500 year</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">event</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">Requirement = PML₁/₅₀₀ − reinsurance</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">− other financial resources</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
     <text x="180" y="104" text-anchor="middle" class="sm dim">$600M gross PML, and what meets it ($M)</text>
     <rect x="40" y="124" width="268" height="26" rx="4" fill="#e11d48" fill-opacity="0.45"/>
     <text x="174" y="142" text-anchor="middle" class="sm">PML 600</text>

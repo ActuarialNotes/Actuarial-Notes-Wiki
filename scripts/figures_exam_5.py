@@ -36,6 +36,7 @@ from figure_kit import (
     AMBER, BLUE, GREEN, ROSE, TEAL, VIOLET,
     Axes, Fig, brace, timeline, vaxes, vcard,
     BX0, BY0, BX1, BY1, BCX, BCY,
+    building, car, coins, cross, document, house, person, scales, shield, tower,
 )
 from figure_registry import figure
 
@@ -238,9 +239,7 @@ def _calendar_axis(f: Fig, y, years, x0=48, x1=318, band=None, band_colour=AMBER
 @figure("Ratemaking", "The premium dollar split into losses, LAE, expenses and "
         "underwriting profit", width=WID)
 def ratemaking() -> Fig:
-    f = vcard("Premium must fund every future cost",
-              ["Premium = Loss + LAE + Expense + Profit",
-               "the fundamental insurance equation"])
+    f = vcard()
 
     f.text(BCX, 100, "where a $520 average premium goes", cls="sm dim")
     x, w, y = 62, 78, 128
@@ -260,9 +259,7 @@ def ratemaking() -> Fig:
 @figure("Exposure Base", "Expected loss rising in proportion to the exposure base",
         width=WID)
 def exposure_base() -> Fig:
-    f = vcard("A good base moves with expected loss",
-              ["Premium = Rate × Exposures",
-               "Pure Premium = Losses / Earned Exposures"])
+    f = vcard()
 
     ax = vaxes(f, 0, 5, 0, 2000, left=52, right=18, top=30, bottom=66)
     ax.frame(xticks=[0, 1, 2, 3, 4, 5], yticks=[0, 1000, 2000],
@@ -281,8 +278,7 @@ def exposure_base() -> Fig:
 @figure("Line of Business", "Four lines of business with their exposure bases and "
         "indicated changes", width=WID)
 def line_of_business() -> Fig:
-    f = vcard("Each line is priced and reserved on its own",
-              "Rate is set per line, per class, per territory")
+    f = vcard()
 
     rows = [("Personal auto", "car-year", 7.3, BLUE),
             ("Homeowners", "house-year", 12.5, AMBER),
@@ -307,8 +303,7 @@ def line_of_business() -> Fig:
 @figure("Ratemaking Data Organization", "The four data aggregations placed on the "
         "accuracy-versus-availability trade-off", width=WID)
 def ratemaking_data_organization() -> Fig:
-    f = vcard("Accuracy and availability pull against each other",
-              ["Experience Ratio = developed losses", "÷ on-level premium"])
+    f = vcard()
 
     ax = vaxes(f, 0, 10, 0, 10, left=44, right=20, top=34, bottom=54)
     ax.frame(xticks=[], yticks=[], arrows=True)
@@ -329,9 +324,7 @@ def ratemaking_data_organization() -> Fig:
 @figure("Calendar Year", "Calendar-year aggregation capturing every transaction "
         "booked inside one year", width=WID)
 def calendar_year() -> Fig:
-    f = vcard("Everything booked in the year, whatever it belongs to",
-              ["CY EP = Written Premium − ΔUEP",
-               "CY Incurred = Paid + ΔCase + ΔIBNR"])
+    f = vcard()
 
     px = _calendar_axis(f, 300, ["2023", "2024", "2025"], band=1, y_top=126)
     spans = [(0.30, 1.30), (0.75, 1.75), (1.20, 2.20), (1.65, 2.65)]
@@ -346,9 +339,7 @@ def calendar_year() -> Fig:
 @figure("Policy Year", "Policy-year aggregation following the policies written in "
         "one year to their expiry", width=WID)
 def policy_year() -> Fig:
-    f = vcard("Every transaction on policies incepting in the year",
-              ["PY Loss Ratio = losses on those policies",
-               "÷ premium on those policies"])
+    f = vcard()
 
     _calendar_axis(f, 300, ["2023", "2024", "2025"], band=1, y_top=126)
     spans = [(1.02, 2.02), (1.28, 2.28), (1.55, 2.55), (1.86, 2.86)]
@@ -363,9 +354,7 @@ def policy_year() -> Fig:
 @figure("Accident Year", "Accident-year aggregation grouping losses by the date of "
         "the event", width=WID)
 def accident_year() -> Fig:
-    f = vcard("Losses by when the event happened",
-              ["AY Loss Ratio = losses occurring in the year",
-               "÷ premium earned in that year"])
+    f = vcard()
 
     _calendar_axis(f, 300, ["2023", "2024", "2025"], band=1, y_top=126)
     spans = [(0.55, 1.55), (0.90, 1.90), (1.35, 2.35), (1.70, 2.70)]
@@ -383,8 +372,7 @@ def accident_year() -> Fig:
 @figure("Report Year", "Claims grouped by report date, with the reporting lag drawn "
         "from each accident", width=WID)
 def report_year() -> Fig:
-    f = vcard("Claims by when the insurer heard about them",
-              "Report lag = report date − accident date")
+    f = vcard()
 
     px = _calendar_axis(f, 300, ["2023", "2024", "2025"], band=1, y_top=126)
     lags = [(0.45, 1.15), (0.80, 1.42), (1.10, 1.70), (1.35, 2.30)]
@@ -404,8 +392,7 @@ def report_year() -> Fig:
 @figure("Close Year", "Claims grouped by settlement date, with the settlement lag "
         "drawn from each accident", width=WID)
 def close_year() -> Fig:
-    f = vcard("Claims by when they finally settled",
-              "Settlement lag = close − accident date")
+    f = vcard()
 
     px = _calendar_axis(f, 300, ["2023", "2024", "2025"], band=1, y_top=126)
     lags = [(0.30, 1.05), (0.55, 1.60), (0.95, 1.85), (1.25, 2.50)]
@@ -424,9 +411,7 @@ def close_year() -> Fig:
 @figure("In-Force", "A vertical cut through the book at one date, counting the "
         "policies then providing coverage", width=WID)
 def in_force() -> Fig:
-    f = vcard("A stock at a date, not a flow over a period",
-              ["In-force = # { effective ≤ t < expiry }",
-               "measured at an instant, not over a period"])
+    f = vcard()
 
     px = _calendar_axis(f, 306, ["2023", "2024", "2025"], y_top=124)
     spans = [(0.15, 1.15), (0.60, 1.60), (1.05, 2.05), (1.40, 2.40),
@@ -446,9 +431,7 @@ def in_force() -> Fig:
 @figure("Net of Reinsurance", "Gross losses split into the reinsurer's share and "
         "the retained net", width=WID)
 def net_of_reinsurance() -> Fig:
-    f = vcard("What the insurer keeps after cessions",
-              ["Net = Gross − Ceded",
-               "the cedant stays liable to its policyholders"])
+    f = vcard()
 
     f.text(BCX, 118, "AY 2024 ultimate losses ($000)", cls="sm dim")
     f.text(46, 152, "Gross", cls="sm bold", anchor="start")
@@ -473,9 +456,7 @@ def net_of_reinsurance() -> Fig:
 @figure("Written Premium", "A full-term premium booked at inception against the "
         "premium earned month by month", width=WID)
 def written_premium() -> Fig:
-    f = vcard("Booked in full the day the policy is issued",
-              ["WP = full-term premium, at issue",
-               "Earned Premium = WP − ΔUEP"])
+    f = vcard()
 
     ax = vaxes(f, 0, 12, 0, 1.15, left=48, right=20, top=32, bottom=66)
     ax.frame(xticks=[0, 3, 6, 9, 12], yticks=[0, 0.5, 1.0],
@@ -493,9 +474,7 @@ def written_premium() -> Fig:
 @figure("Earned Premium", "Premium earned pro rata across the policy term",
         width=WID)
 def earned_premium() -> Fig:
-    f = vcard("Recognized as the coverage is provided",
-              ["EP = WP × (days elapsed / policy term)",
-               "EP = Written Premium − ΔUEP"])
+    f = vcard()
 
     ax = vaxes(f, 0, 12, 0, 1.1, left=48, right=20, top=32, bottom=66)
     ax.area(lambda t: t / 12, 0, 8, colour=BLUE, opacity="0.20")
@@ -517,9 +496,7 @@ def earned_premium() -> Fig:
 @figure("Unearned Premium", "The unearned portion of a policy shrinking to zero "
         "over its term", width=WID)
 def unearned_premium() -> Fig:
-    f = vcard("The coverage still owed — a balance-sheet liability",
-              ["UEP = WP × (days remaining / term)",
-               "UEP + EP = Written Premium"])
+    f = vcard()
 
     ax = vaxes(f, 0, 12, 0, 1.1, left=48, right=20, top=32, bottom=66)
     ax.area(lambda t: 1 - t / 12, 0, 12, colour=AMBER, opacity="0.20")
@@ -538,9 +515,7 @@ def unearned_premium() -> Fig:
 @figure("Earned Exposure", "Written exposure earning out over the policy term in "
         "car-years", width=WID)
 def earned_exposure() -> Fig:
-    f = vcard("Exposure earns exactly as premium does",
-              ["Earned Exposure = Written − ΔUnearned",
-               "Pure Premium = Losses / Earned Exposures"])
+    f = vcard()
 
     ax = vaxes(f, 0, 12, 0, 1.1, left=52, right=20, top=32, bottom=66)
     ax.frame(xticks=[0, 4, 8, 12], yticks=[0, 0.5, 1.0],
@@ -564,9 +539,7 @@ def earned_exposure() -> Fig:
 @figure("Homogeneity", "A homogeneous group's tight loss-cost distribution beside a "
         "heterogeneous group's two humps", width=WID)
 def homogeneity() -> Fig:
-    f = vcard("One rate only fits a group that is alike",
-              ["E[Loss Cost_i] ≈ E[Loss Cost_j]",
-               "for every i, j in the group"])
+    f = vcard()
 
     def bump(x, mu, sd):
         return math.exp(-((x - mu) ** 2) / (2 * sd * sd))
@@ -591,9 +564,7 @@ def homogeneity() -> Fig:
 @figure("Credibility", "A territory indication blended with the statewide "
         "indication by a credibility weight", width=WID)
 def credibility() -> Fig:
-    f = vcard("Blend the data you have with what it lacks",
-              ["Estimate = Z · Own + (1 − Z) · Complement",
-               "Z = √(n / n_F)  or  n / (n + K)"])
+    f = vcard()
 
     f.text(BCX, 106, "Territory 07: +18% indicated on 430 claims", cls="sm dim")
     x0, x1, z = 44, 316, 0.40
@@ -624,9 +595,7 @@ def credibility() -> Fig:
 @figure("Loss and Loss Adjustment Expense", "The claim dollar split into indemnity, "
         "ALAE and ULAE", width=WID)
 def loss_and_lae() -> Fig:
-    f = vcard("Claims cost more than the indemnity paid",
-              ["Loss & LAE = Loss + ALAE + ULAE",
-               "Ratio = (Loss + LAE) / Earned Premium"])
+    f = vcard()
 
     f.text(BCX, 106, "the $360 pure premium, by component", cls="sm dim")
     x, w, y = 60, 78, 128
@@ -653,9 +622,7 @@ def loss_and_lae() -> Fig:
 @figure("Pure Premium", "Frequency times severity giving the loss cost per exposure",
         width=WID)
 def pure_premium() -> Fig:
-    f = vcard("The loss cost of one unit of exposure",
-              ["Pure Premium = (Loss + LAE) / Exposures",
-               "= Frequency × Severity"])
+    f = vcard()
 
     y = 170
     f.chip(88, y, "0.060", colour=BLUE, w=104, h=44, cls="ttl")
@@ -677,9 +644,7 @@ def pure_premium() -> Fig:
 @figure("Loss Ratio", "The projected loss and LAE ratio measured against the "
         "permissible loss ratio", width=WID)
 def loss_ratio() -> Fig:
-    f = vcard("The share of premium the claims consume",
-              ["Loss Ratio = (Loss + LAE) / Premium",
-               "= Pure Premium / Average Premium"])
+    f = vcard()
 
     x0, x1, y = 46, 314, 150
     f.rect(x0, y, x1 - x0, 40, rx=5, fill="var(--soft)", stroke="var(--edge)",
@@ -705,9 +670,7 @@ def loss_ratio() -> Fig:
 @figure("Loss Development", "An immature accident year grown to ultimate by its "
         "cumulative development factor", width=WID)
 def loss_development() -> Fig:
-    f = vcard("Immature years must be grown to ultimate",
-              ["Ultimate = Losses at age n × CDF(n → ult)",
-               "1,500 × 1.900 = 2,850"])
+    f = vcard()
 
     ax = vaxes(f, 0, 84, 0, 3200, left=52, right=22, top=32, bottom=62)
     ax.frame(xticks=[12, 24, 36, 48, 60, 72, 84], yticks=[0, 1500, 3000],
@@ -733,9 +696,7 @@ def loss_development() -> Fig:
 @figure("Loss Trend", "Historical losses trended from the experience period's "
         "midpoint to the future policy period's", width=WID)
 def loss_trend() -> Fig:
-    f = vcard("Trend bridges two average accident dates",
-              ["Trend Factor = (1 + t)ⁿ = 1.05^2.75 = 1.142",
-               "1 + t_PP = (1 + t_freq)(1 + t_sev)"])
+    f = vcard()
 
     ax = vaxes(f, 0, 4.0, 300, 460, left=52, right=20, top=36, bottom=70)
     ax.frame(xticks=[0, 1, 2, 3, 4], yticks=[300, 380, 460],
@@ -776,8 +737,7 @@ def _trigger_plane(f: Fig, y0=126, size=176, x0=92):
 @figure("Occurrence Coverage", "The occurrence trigger drawn on the accident-date "
         "by report-date plane", width=WID)
 def occurrence_coverage() -> Fig:
-    f = vcard("Covered by the policy in force when it happened",
-              "Covered ⇔ effective ≤ accident ≤ expiry")
+    f = vcard()
 
     px, py, size = _trigger_plane(f)
     f.polygon([(px(0.34), py(0.34)), (px(0.66), py(0.66)), (px(0.66), py(1.0)),
@@ -794,9 +754,7 @@ def occurrence_coverage() -> Fig:
 @figure("Claims Made Coverage", "The claims-made trigger drawn on the accident-date "
         "by report-date plane, with the retroactive date", width=WID)
 def claims_made_coverage() -> Fig:
-    f = vcard("Covered by the policy in force when it was reported",
-              ["Covered ⇔ accident ≥ retro date",
-               "and report date inside the term"])
+    f = vcard()
 
     px, py, size = _trigger_plane(f)
     f.polygon([(px(0.18), py(0.42)), (px(0.42), py(0.42)), (px(0.68), py(0.68)),
@@ -818,9 +776,7 @@ def claims_made_coverage() -> Fig:
 @figure("On Level Premium", "Historical earned premium restated at the rate level "
         "now in force", width=WID)
 def on_level_premium() -> Fig:
-    f = vcard("Premium restated at today's rates",
-              ["On-Level Premium = Historical EP × OLF",
-               "OLF = current index / average index"])
+    f = vcard()
 
     rows = [("2023", 3800, 1.1034), ("2024", 3900, 1.0136), ("2025", 4000, 1.000)]
     x0, scale = 88, 0.042
@@ -845,9 +801,7 @@ def on_level_premium() -> Fig:
 @figure("On-Leveling", "The parallelogram method: a mid-year rate change earning "
         "over the unit square", width=WID)
 def on_leveling() -> Fig:
-    f = vcard("The parallelogram method reads areas as weights",
-              ["area at the new level = ½(1 − p)²",
-               "p = 0.5 ⇒ 0.125 of CY 2023 earned premium"])
+    f = vcard()
 
     x0, y0, s = 96, 122, 168
     f.rect(x0, y0, s, s, rx=4, fill="var(--soft)", stroke="var(--edge)",
@@ -872,9 +826,7 @@ def on_leveling() -> Fig:
 @figure("Premium Audit", "A deposit premium corrected to the audited exposure after "
         "the policy expires", width=WID)
 def premium_audit() -> Fig:
-    f = vcard("The exposure is only known afterwards",
-              ["Audited Premium = Rate × Actual Exposure",
-               "Adjustment = Audited − Deposit"])
+    f = vcard()
 
     f.text(BCX, 112, "workers compensation, payroll per $100", cls="sm dim")
     x0, scale = 96, 0.0135
@@ -899,9 +851,7 @@ def premium_audit() -> Fig:
 @figure("Exposure Trend", "An inflation-sensitive exposure base trending alongside "
         "losses, leaving only the net trend", width=WID)
 def exposure_trend() -> Fig:
-    f = vcard("An inflating base absorbs part of loss trend",
-              ["Trended Exposure = Exposure × (1 + t_E)ⁿ",
-               "1 + t_net = (1 + t_L) / (1 + t_E)"])
+    f = vcard()
 
     ax = vaxes(f, 0, 4, 0.95, 1.30, left=48, right=44, top=34, bottom=64)
     ax.frame(xticks=[0, 1, 2, 3, 4], yticks=[1.0, 1.1, 1.2, 1.3],
@@ -921,9 +871,7 @@ def exposure_trend() -> Fig:
 @figure("Premium Trend", "Average premium at current rate level drifting upward "
         "between the experience and forecast periods", width=WID)
 def premium_trend() -> Fig:
-    f = vcard("Average premium drifts even at a fixed rate level",
-              ["Avg Premium at CRL = On-Level EP / Exp",
-               "Premium Trend Factor = (1 + t_P)ⁿ"])
+    f = vcard()
 
     ax = vaxes(f, 0, 4.0, 480, 580, left=54, right=20, top=34, bottom=70)
     ax.frame(xticks=[0, 1, 2, 3, 4], xfmt=lambda t: "",
@@ -952,9 +900,7 @@ def premium_trend() -> Fig:
 @figure("Expense Provisions", "The rate built up from pure premium and fixed "
         "expense, then grossed up for variable expense and profit", width=WID)
 def expense_provisions() -> Fig:
-    f = vcard("Fixed expense is added, variable expense divided",
-              ["Rate = (Pure Premium + F) / (1 − V − Q)",
-               "(360 + 25) / (1 − 0.26 − 0.05) = 557.97"])
+    f = vcard()
 
     f.rect(72, 122, 216, 62, rx=6, fill=BLUE, fill_opacity="0.16", stroke=BLUE,
            stroke_width="1.2")
@@ -976,9 +922,7 @@ def expense_provisions() -> Fig:
 @figure("Fixed Expenses", "A flat per-exposure expense weighing far more heavily on "
         "a small policy than a large one", width=WID)
 def fixed_expenses() -> Fig:
-    f = vcard("The same dollars whatever the premium",
-              ["F = Fixed Expenses / Earned Exposures",
-               "Rate = (Pure Premium + F) / (1 − V − Q)"])
+    f = vcard()
 
     f.text(BCX, 112, "$25 of fixed expense, as a share of premium", cls="sm dim")
     x0, x1 = 46, 314
@@ -1002,9 +946,7 @@ def fixed_expenses() -> Fig:
 @figure("Variable Expenses", "Commission and taxes rising in proportion to premium",
         width=WID)
 def variable_expenses() -> Fig:
-    f = vcard("A constant share of whatever the premium is",
-              ["V = Variable Expenses / Premium = 26%",
-               "Rate = (Pure Premium + F) / (1 − V − Q)"])
+    f = vcard()
 
     ax = vaxes(f, 0, 2200, 0, 620, left=54, right=22, top=34, bottom=64)
     ax.frame(xticks=[0, 1000, 2000], yticks=[0, 300, 600],
@@ -1025,9 +967,7 @@ def variable_expenses() -> Fig:
 @figure("Expense Ratio", "The underwriting expense ratio broken into its four "
         "components", width=WID)
 def expense_ratio() -> Fig:
-    f = vcard("Non-claim cost as a share of premium",
-              ["Expense Ratio = UW Expenses / Premium",
-               "20.0 + 3.0 + 3.0 variable + 4.8 fixed = 30.8%"])
+    f = vcard()
 
     rows = [("Commission & brokerage", 20.0, True, BLUE),
             ("Taxes, licences, fees", 3.0, True, TEAL),
@@ -1050,9 +990,7 @@ def expense_ratio() -> Fig:
 @figure("Profit and Contingency Provision", "The profit provision as the last slice "
         "of the premium dollar and the combined ratio it targets", width=WID)
 def profit_and_contingency() -> Fig:
-    f = vcard("The margin for capital, and for being wrong",
-              ["Rate = (Pure Premium + F) / (1 − V − Q_T)",
-               "Target Combined Ratio = 1 − Q_T = 95%"])
+    f = vcard()
 
     f.text(BCX, 112, "the $520 premium dollar", cls="sm dim")
     _hbar(f, 152, [(0.692, "losses & LAE 69.2%", BLUE),
@@ -1073,9 +1011,7 @@ def profit_and_contingency() -> Fig:
 @figure("Underwriting Profit", "Earned premium less losses, LAE and expenses "
         "leaving the underwriting margin", width=WID)
 def underwriting_profit() -> Fig:
-    f = vcard("What the insurance operation earns on its own",
-              ["UW Profit = EP − Loss − LAE − Expenses",
-               "UW Margin = 1 − Combined Ratio"])
+    f = vcard()
 
     x0, x1 = 46, 314
     f.text(BCX, 116, "per $520 of earned premium", cls="sm dim")
@@ -1098,9 +1034,7 @@ def underwriting_profit() -> Fig:
 @figure("Overall Rate Level Indication", "The indicated average rate against the "
         "current one", width=WID)
 def overall_rate_level_indication() -> Fig:
-    f = vcard("What the average rate has to become",
-              ["Change = Indicated Rate / Current − 1",
-               "557.97 / 520 − 1 = +7.3%"])
+    f = vcard()
 
     x0, scale = 62, 0.40
     for i, (name, rate, colour) in enumerate((("current", CUR_RATE, BLUE),
@@ -1124,9 +1058,7 @@ def overall_rate_level_indication() -> Fig:
 @figure("Pure Premium Method", "The pure premium method building the indicated rate "
         "from loss cost per exposure", width=WID)
 def pure_premium_method() -> Fig:
-    f = vcard("Build the rate; never divide by premium",
-              ["Rate = (Pure Premium + F) / (1 − V − Q_T)",
-               "(360 + 25) / 0.69 = $557.97"])
+    f = vcard()
 
     _flow(f, 136, ["losses", "÷ exposures", "PP 360"],
           colours=[BLUE, BLUE, BLUE], x0=32, x1=328)
@@ -1144,9 +1076,7 @@ def pure_premium_method() -> Fig:
 @figure("Loss Ratio Method", "The loss ratio method comparing the projected ratio "
         "with the permissible loss ratio", width=WID)
 def loss_ratio_method() -> Fig:
-    f = vcard("Compare the projected ratio with the permissible",
-              ["Change = (Proj Loss Ratio + F%) / PLR − 1",
-               "(0.692 + 0.048) / 0.69 − 1 = +7.3%"])
+    f = vcard()
 
     x0, x1 = 46, 314
     f.text(BCX, 116, "projected loss & LAE ratio plus fixed expense", cls="sm dim")
@@ -1170,9 +1100,7 @@ def loss_ratio_method() -> Fig:
 @figure("Permissible Loss Ratio", "The share of the premium dollar left for losses "
         "once expenses and profit are provided for", width=WID)
 def permissible_loss_ratio() -> Fig:
-    f = vcard("What is left for losses after everything else",
-              ["PLR = 1 − V − Q_T = 1 − 0.26 − 0.05 = 0.69",
-               "Change = (Proj Ratio + F%) / PLR − 1"])
+    f = vcard()
 
     f.text(BCX, 122, "the premium dollar, from the top down", cls="sm dim")
     x, w, y = 88, 96, 148
@@ -1192,9 +1120,7 @@ def permissible_loss_ratio() -> Fig:
 @figure("Rate Change", "The indicated change, the selected change, and the gap "
         "between them", width=WID)
 def rate_change() -> Fig:
-    f = vcard("Indicated and selected are two different numbers",
-              ["Change = Indicated Rate / Current − 1",
-               "selected = indicated, adjusted and documented"])
+    f = vcard()
 
     ax = vaxes(f, -0.5, 4.5, 0, 16, left=48, right=20, top=40, bottom=78)
     ax.frame(xticks=[0, 1, 2, 3, 4], xfmt=lambda t: f"{2021 + int(t)}",
@@ -1221,8 +1147,7 @@ def rate_change() -> Fig:
 @figure("Ratemaking Constraints", "The band of filed changes the regulatory, "
         "competitive and operational limits leave open", width=WID)
 def ratemaking_constraints() -> Fig:
-    f = vcard("The indication is the start of the conversation",
-              "Selected = f(Indication, Z, Constraints)")
+    f = vcard()
 
     x0, x1, y = 52, 312, 168
     f.line(x0, y, x1, y, cls="axis")
@@ -1253,9 +1178,7 @@ def ratemaking_constraints() -> Fig:
 @figure("Considerations for Implementing Rates", "An off-balance correction keeping "
         "a relativity change revenue-neutral", width=WID)
 def considerations_for_implementing_rates() -> Fig:
-    f = vcard("Relativity changes move revenue on their own",
-              ["New Base = Base × (1 + overall) / (1 + OB)",
-               "1.073 / 1.030 ⇒ base rate +4.2%"])
+    f = vcard()
 
     _flow(f, 132, ["overall +7.3%", "relativities"], colours=[BLUE, AMBER],
           x0=44, x1=316, h=30)
@@ -1273,8 +1196,7 @@ def considerations_for_implementing_rates() -> Fig:
 @figure("Minimum Premium", "A premium floor holding the smallest risks above the "
         "cost of writing them", width=WID)
 def minimum_premium() -> Fig:
-    f = vcard("A floor under the smallest risks",
-              "Premium = max(Rate × Exposure, Min)")
+    f = vcard()
 
     ax = vaxes(f, 0, 1.0, 0, 620, left=54, right=20, top=36, bottom=66)
     ax.frame(xticks=[0, 0.25, 0.5, 0.75, 1.0], yticks=[0, 200, 400, 600],
@@ -1296,9 +1218,7 @@ def minimum_premium() -> Fig:
 @figure("Rating Algorithm", "The ordered steps that turn a base rate into a quoted "
         "premium", width=WID)
 def rating_algorithm() -> Fig:
-    f = vcard("The order of operations is part of the filing",
-              ["Premium = [Base × ∏Rᵢ + ΣAⱼ](1 − D) + Fees",
-               "558 × 1.25 × 0.90 + 40 − 5% = $636"])
+    f = vcard()
 
     steps = [("base rate", "558", BLUE), ("× class 1.25", "698", BLUE),
              ("× territory 0.90", "628", BLUE), ("+ endorsements", "668", TEAL),
@@ -1319,8 +1239,7 @@ def rating_algorithm() -> Fig:
 
 @figure("Principles of Ratemaking", "The four CAS ratemaking principles", width=WID)
 def principles_of_ratemaking() -> Fig:
-    f = vcard("Four statements define an actuarially sound rate",
-              "Rate = E[Loss + LAE + Expense + Capital]")
+    f = vcard()
 
     items = [("1", "A rate is an estimate of the expected value",
               "of future costs", BLUE),
@@ -1349,9 +1268,7 @@ def principles_of_ratemaking() -> Fig:
 @figure("Large Loss", "A claim-size distribution capped at a threshold, with the "
         "excess reloaded across the class", width=WID)
 def large_loss() -> Fig:
-    f = vcard("Cap the shock, then spread it back",
-              ["Capped Loss = min(X, M)",
-               "Excess Load = ILF(U) / ILF(M) − 1"])
+    f = vcard()
 
     ax = vaxes(f, 0, 12, 0, 1.05, left=44, right=20, top=34, bottom=76)
     cap = 5.0
@@ -1376,9 +1293,7 @@ def large_loss() -> Fig:
 @figure("Catastrophe Loss", "Twenty years of catastrophe ratios against the "
         "long-term load they average to", width=WID)
 def catastrophe_loss() -> Fig:
-    f = vcard("A load, not an average of recent years",
-              ["Total PP = Non-Cat PP + Cat Load",
-               "Cat Load = expected annual cat loss / exposures"])
+    f = vcard()
 
     ax = vaxes(f, 0.4, 20.6, 0, 68, left=48, right=18, top=34, bottom=66)
     ax.frame(xticks=[1, 5, 10, 15, 20], yticks=[0, 25, 50],
@@ -1401,9 +1316,7 @@ def catastrophe_loss() -> Fig:
 @figure("Classification Ratemaking", "Class relativities measured against the base "
         "class's pure premium", width=WID)
 def classification_ratemaking() -> Fig:
-    f = vcard("Each class pays its own expected cost",
-              ["Relativity_i = PP_i / PP_base",
-               "Rate_i = Base Rate × ∏ R_i,k"])
+    f = vcard()
 
     classes = [("Youthful", 612, 1.70), ("Adult single", 396, 1.10),
                ("Adult married", 360, 1.00), ("Mature", 288, 0.80),
@@ -1428,9 +1341,7 @@ def classification_ratemaking() -> Fig:
 @figure("Territory Ratemaking", "A grid of territories carrying spatially "
         "correlated relativities", width=WID)
 def territory_ratemaking() -> Fig:
-    f = vcard("Geography is correlated with its neighbours",
-              ["Territory Relativity = PP_i / PP_base",
-               "Rate_i = Base Rate × Territory Relativity"])
+    f = vcard()
 
     grid = [[0.72, 0.78, 0.88, 0.95],
             [0.80, 0.95, 1.15, 1.10],
@@ -1458,9 +1369,7 @@ def territory_ratemaking() -> Fig:
 @figure("Loss Elimination Ratio", "The share of ground-up losses a deductible "
         "removes, as the deductible rises", width=WID)
 def loss_elimination_ratio() -> Fig:
-    f = vcard("The share of loss a deductible removes",
-              ["LER(d) = E[X ∧ d] / E[X]",
-               "Deductible Relativity = 1 − LER(d)"])
+    f = vcard()
 
     mean = 2.4
 
@@ -1488,9 +1397,7 @@ def loss_elimination_ratio() -> Fig:
 @figure("Deductible Rating", "A ground-up loss distribution split at the deductible "
         "into the insured's retention and the insurer's share", width=WID)
 def deductible_rating() -> Fig:
-    f = vcard("The credit is what the insured keeps",
-              ["Deductible Relativity = 1 − LER(d)",
-               "1 − 0.34 = 0.66 for a $500 deductible"])
+    f = vcard()
 
     ax = vaxes(f, 0, 12, 0, 1.05, left=44, right=20, top=34, bottom=82)
 
@@ -1518,9 +1425,7 @@ def deductible_rating() -> Fig:
 @figure("Increased Limits", "Increased limits factors rising with the policy limit, "
         "and the cost of a layer between two of them", width=WID)
 def increased_limits() -> Fig:
-    f = vcard("The extra cost of a higher limit",
-              ["ILF(L) = E[X ∧ L] / E[X ∧ B]",
-               "layer (M, L] = Basic LC × [ILF(L) − ILF(M)]"])
+    f = vcard()
 
     pts = [(100, 1.00), (250, 1.32), (500, 1.55), (1000, 1.73), (2000, 1.86),
            (5000, 1.97)]
@@ -1549,9 +1454,7 @@ def increased_limits() -> Fig:
 @figure("Coinsurance Rating", "The coinsurance penalty applied when the insurance "
         "carried falls below the required percentage of value", width=WID)
 def coinsurance_rating() -> Fig:
-    f = vcard("Under-insure and the clause pays only a share",
-              ["Share = min(Carried / (Coins% × Value), 1)",
-               "600k / (0.80 × 1,000k) = 0.75, then × Loss"])
+    f = vcard()
 
     ax = vaxes(f, 0.4, 1.02, 0, 1.1, left=52, right=20, top=34, bottom=70)
     ax.frame(xticks=[0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
@@ -1577,8 +1480,7 @@ def coinsurance_rating() -> Fig:
 @figure("Commercial Lines Rating", "The chain of adjustments from a manual premium "
         "to a commercial risk's final price", width=WID)
 def commercial_lines_rating() -> Fig:
-    f = vcard("The manual rate is a starting point",
-              "Standard = Manual × M_exp × (1 + sched)")
+    f = vcard()
 
     steps = [("Manual premium", "100,000", "class rate × exposure", VIOLET),
              ("× Experience mod", "0.88", "the risk's own losses", BLUE),
@@ -1601,9 +1503,7 @@ def commercial_lines_rating() -> Fig:
 @figure("Experience Rating", "The experience modification as a credibility blend "
         "between a risk's own loss ratio and the class average", width=WID)
 def experience_rating() -> Fig:
-    f = vcard("The risk's own past, weighted by credibility",
-              ["M = Z × (A / E) + (1 − Z)",
-               "0.40 × 0.70 + 0.60 = 0.88"])
+    f = vcard()
 
     x0, x1, y = 52, 312, 196
     f.text(BCX, 112, "actual losses 70% of expected, Z = 0.40", cls="sm dim")
@@ -1630,9 +1530,7 @@ def experience_rating() -> Fig:
 @figure("Schedule Rating", "Underwriter debits and credits accumulating into one "
         "schedule modifier", width=WID)
 def schedule_rating() -> Fig:
-    f = vcard("Judgment the class plan does not capture",
-              ["Premium = Manual × (1 + Σ s_k)",
-               "−10 −5 +8 −3 +5 ⇒ 0.95"])
+    f = vcard()
 
     items = [("Premises condition", -10), ("Classification", -5),
              ("Employee selection", 8), ("Management", -3), ("Equipment", 5)]
@@ -1654,9 +1552,7 @@ def schedule_rating() -> Fig:
 @figure("Retrospective Rating", "Retrospective premium rising with the insured's own "
         "losses between a guaranteed minimum and maximum", width=WID)
 def retrospective_rating() -> Fig:
-    f = vcard("The insured pays for its own year, within limits",
-              ["R = (BP + CL × LCF) × TM",
-               "clamped to [R_min, R_max]"])
+    f = vcard()
 
     ax = vaxes(f, 0, 160, 0, 190, left=52, right=20, top=32, bottom=70)
     ax.frame(xticks=[0, 50, 100, 150], yticks=[0, 50, 100, 150],
@@ -1678,9 +1574,7 @@ def retrospective_rating() -> Fig:
 @figure("Self-Insured Retention", "Claims split at the retention between the "
         "entity's own layer and the insurer's", width=WID)
 def self_insured_retention() -> Fig:
-    f = vcard("The layer the entity funds itself",
-              ["Retained = Σ min(X_i, R)",
-               "Excess = Σ max(X_i − R, 0)"])
+    f = vcard()
 
     claims = [120, 340, 90, 780, 250, 60, 1150, 200]
     R = 250
@@ -1712,9 +1606,7 @@ def self_insured_retention() -> Fig:
         "cedant's retention, the reinsured layer and the excess above it",
         width=WID)
 def reinsurance() -> Fig:
-    f = vcard("The insurer's own insurance",
-              ["Net = Gross − Ceded",
-               "Ceded_XOL = min(max(X − R, 0), L)"])
+    f = vcard()
 
     claims = [180, 620, 300, 1400, 2600, 240, 900]
     R, L = 500, 1500
@@ -1745,9 +1637,7 @@ def reinsurance() -> Fig:
 @figure("Lifetime Value", "The present value of a customer's profit over the years "
         "they are expected to stay", width=WID)
 def lifetime_value() -> Fig:
-    f = vcard("A customer is worth more than one policy",
-              ["LTV = Σ (P_t − L_t − E_t) · ₜp / (1 + r)ᵗ",
-               "Retention = renewed / eligible to renew"])
+    f = vcard()
 
     ax = vaxes(f, 0.4, 6.6, -40, 60, left=52, right=18, top=36, bottom=72)
     ax.frame(xticks=[1, 2, 3, 4, 5, 6], yticks=[-40, 0, 40],
@@ -1775,9 +1665,7 @@ def lifetime_value() -> Fig:
 @figure("Loss Reserving", "Reserving looking backwards at claims already incurred "
         "while ratemaking looks forwards", width=WID)
 def loss_reserving() -> Fig:
-    f = vcard("The retrospective half of the actuarial job",
-              ["Total Reserve = Case Reserves + IBNR",
-               "IBNR = Pure IBNR + IBNER"])
+    f = vcard()
 
     y = 168
     f.line(44, y, 316, y, cls="axis")
@@ -1801,9 +1689,7 @@ def loss_reserving() -> Fig:
 @figure("Unpaid Claims", "The ultimate loss split into what has been paid, the case "
         "reserves and IBNR", width=WID)
 def unpaid_claims() -> Fig:
-    f = vcard("Everything still owed on losses already incurred",
-              ["Unpaid = Ultimate − Paid to date",
-               "Unpaid = Case Reserves + IBNR"])
+    f = vcard()
 
     f.text(BCX, 118, "AY 2024 at 12 months ($000)", cls="sm dim")
     x0, x1 = 44, 316
@@ -1830,9 +1716,7 @@ def unpaid_claims() -> Fig:
 @figure("Reserving Data Organization", "Segmenting a book into triangles that each "
         "hold a stable emergence pattern", width=WID)
 def reserving_data_organization() -> Fig:
-    f = vcard("Segment until each triangle behaves like itself",
-              ["Unpaid = Ultimate − Paid",
-               "IBNR = Ultimate − Reported"])
+    f = vcard()
 
     f.text(BCX, 112, "one book, three defensible segmentations", cls="sm dim")
     groups = [("Coverage", ["BI", "PD", "Coll", "Comp"], BLUE),
@@ -1854,9 +1738,7 @@ def reserving_data_organization() -> Fig:
 @figure("Underwriting Year", "Reinsurance treaties grouped by the year the contract "
         "was bound", width=WID)
 def underwriting_year() -> Fig:
-    f = vcard("Policy year, carried into reinsurance",
-              ["UY Loss Ratio = ceded losses ÷ premium",
-               "on the contracts bound that year"])
+    f = vcard()
 
     _calendar_axis(f, 296, ["2023", "2024", "2025"], band=1, y_top=128)
     spans = [(1.0, 2.0), (1.0, 2.4), (1.0, 3.0)]
@@ -1875,8 +1757,7 @@ def underwriting_year() -> Fig:
 @figure("Types of Insurance", "Lines of insurance placed by claim frequency and "
         "claim severity", width=WID)
 def types_of_insurance() -> Fig:
-    f = vcard("Frequency, severity and how long the tail runs",
-              "Pure Premium = Frequency × Severity")
+    f = vcard()
 
     ax = vaxes(f, 0, 10, 0, 10, left=48, right=24, top=36, bottom=70)
     ax.frame(xticks=[], yticks=[], arrows=True)
@@ -1906,9 +1787,7 @@ def _emergence(ax: Axes, pattern, colour, label=None, width=2.4, dash=False):
 @figure("Long Tail Lines", "A long-tail reporting pattern taking years to reach "
         "ultimate", width=WID)
 def long_tail_lines() -> Fig:
-    f = vcard("Most of the cost is still an estimate for years",
-              ["Reported % = 1 / CDF(n → ult)",
-               "52.6% reported at 12 months"])
+    f = vcard()
 
     ax = vaxes(f, 0, 96, 0, 1.08, left=50, right=22, top=32, bottom=66)
     ax.frame(xticks=[12, 36, 60, 84], yticks=[0, 0.5, 1.0],
@@ -1932,9 +1811,7 @@ def long_tail_lines() -> Fig:
 @figure("Short Tail Insurance", "A short-tail reporting pattern reaching ultimate "
         "within a year", width=WID)
 def short_tail_insurance() -> Fig:
-    f = vcard("Reported is almost ultimate straight away",
-              ["CDF(12 → ult) ≈ 1.0",
-               "IBNR is small beside the case reserves"])
+    f = vcard()
 
     ax = vaxes(f, 0, 60, 0, 1.08, left=50, right=22, top=32, bottom=66)
     ax.frame(xticks=[12, 24, 36, 48, 60], yticks=[0, 0.5, 1.0],
@@ -1959,9 +1836,7 @@ def short_tail_insurance() -> Fig:
 @figure("Development Triangle", "A cumulative reported-loss triangle with its rows, "
         "columns and latest diagonal marked", width=WID)
 def development_triangle() -> Fig:
-    f = vcard("Cohorts down, maturities across, valuations diagonal",
-              ["rows = accident year, columns = age",
-               "the latest diagonal is one valuation date"])
+    f = vcard()
 
     f.text(BCX, 110, "cumulative reported losses ($000)", cls="sm dim")
     _triangle(f, TRI, y0=140,
@@ -1977,9 +1852,7 @@ def development_triangle() -> Fig:
 @figure("Paid Losses", "Paid losses developing toward the same ultimate as reported "
         "losses, from further below", width=WID)
 def paid_losses() -> Fig:
-    f = vcard("The only figure that contains no estimate",
-              ["Reported = Paid + Case Reserves",
-               "Ultimate = Paid_n × CDF_paid(n → ult)"])
+    f = vcard()
 
     ax = vaxes(f, 0, 84, 0, 3200, left=54, right=20, top=32, bottom=66)
     ax.frame(xticks=[12, 36, 60, 84], yticks=[0, 1500, 3000],
@@ -2004,9 +1877,7 @@ def paid_losses() -> Fig:
 @figure("Incurred Losses", "Reported losses as paid losses plus the case reserves "
         "still outstanding", width=WID)
 def incurred_losses() -> Fig:
-    f = vcard("Paid plus case — what is known, not what is owed",
-              ["Reported = Paid + Case Reserves",
-               "Ultimate = Reported + IBNR"])
+    f = vcard()
 
     ax = vaxes(f, 0.4, 5.6, 0, 3000, left=54, right=20, top=34, bottom=76)
     ax.frame(xticks=[1, 2, 3, 4, 5], xfmt=lambda t: AGES[int(t) - 1],
@@ -2032,9 +1903,7 @@ def incurred_losses() -> Fig:
 @figure("Claim Count Triangle", "A claim-count development triangle beside the "
         "severity it makes computable", width=WID)
 def claim_count_triangle() -> Fig:
-    f = vcard("Counts separate more claims from costlier ones",
-              ["Ultimate Counts = N_n × CDF_count(n → ult)",
-               "Severity = Ultimate Losses / Ultimate Counts"])
+    f = vcard()
 
     f.text(BCX, 110, "cumulative reported claim counts", cls="sm dim")
     _triangle(f, CNT, y0=140)
@@ -2049,9 +1918,7 @@ def claim_count_triangle() -> Fig:
 @figure("Allocated Loss Adjustment Expense", "ALAE developing more slowly than "
         "indemnity, as a rising ratio to loss", width=WID)
 def allocated_lae() -> Fig:
-    f = vcard("Defence cost that belongs to one claim",
-              ["Loss & ALAE = Indemnity + ALAE",
-               "ALAE Ratio = ALAE / Indemnity"])
+    f = vcard()
 
     ax = vaxes(f, 0, 84, 0, 0.24, left=52, right=22, top=36, bottom=70)
     ax.frame(xticks=[12, 36, 60, 84], yticks=[0, 0.1, 0.2],
@@ -2071,9 +1938,7 @@ def allocated_lae() -> Fig:
 @figure("Age to Age Factor", "One column of link ratios and the selections drawn "
         "from it", width=WID)
 def age_to_age_factor() -> Fig:
-    f = vcard("The ratio of one maturity to the previous one",
-              ["f = C(AY, n+1) / C(AY, n)",
-               "vol-weighted = Σ C(·, n+1) / Σ C(·, n)"])
+    f = vcard()
 
     f.text(BCX, 108, "the 12–24 column of the reported triangle", cls="sm dim")
     rows = [("2020", 1500, 1000), ("2021", 1650, 1100), ("2022", 1800, 1200),
@@ -2095,9 +1960,7 @@ def age_to_age_factor() -> Fig:
 @figure("Cumulative Development Factor", "The selected link ratios multiplied "
         "through to a factor to ultimate", width=WID)
 def cumulative_development_factor() -> Fig:
-    f = vcard("The link ratios, multiplied out to ultimate",
-              ["CDF(n → ult) = ∏ f(k → k+1) × Tail",
-               "1.500 × 1.160 × 1.060 × 1.020 × 1.010 = 1.900"])
+    f = vcard()
 
     ages = ["12–24", "24–36", "36–48", "48–60", "tail"]
     facs = [1.500, 1.160, 1.060, 1.020, 1.010]
@@ -2124,9 +1987,7 @@ def cumulative_development_factor() -> Fig:
 @figure("Tail Factor", "The development the triangle cannot see, beyond its last "
         "observed age", width=WID)
 def tail_factor() -> Fig:
-    f = vcard("The development past the end of the data",
-              ["CDF(last → ult) = f(last observed) × Tail",
-               "1.020 × 1.010 = 1.030"])
+    f = vcard()
 
     ax = vaxes(f, 0, 132, 0.95, 1.62, left=52, right=20, top=34, bottom=70)
     ax.frame(xticks=[12, 60, 108], yticks=[1.0, 1.3, 1.6],
@@ -2152,9 +2013,7 @@ def tail_factor() -> Fig:
 @figure("Severity Analysis", "Average claim severity by accident year with the "
         "trend fitted through it", width=WID)
 def severity_analysis() -> Fig:
-    f = vcard("Average cost per claim, year over year",
-              ["Average Severity = Losses / Claim Counts",
-               "Annual Trend = (S_n / S_0)^(1/n) − 1"])
+    f = vcard()
 
     ax = vaxes(f, -0.4, 4.4, 2200, 3000, left=56, right=20, top=34, bottom=70)
     ax.frame(xticks=[0, 1, 2, 3, 4], xfmt=lambda t: AYS[int(t)],
@@ -2178,9 +2037,7 @@ def severity_analysis() -> Fig:
 @figure("Chain Ladder Method", "The latest diagonal of the triangle multiplied by "
         "each year's cumulative development factor", width=WID)
 def chain_ladder_method() -> Fig:
-    f = vcard("Multiply the latest diagonal out to ultimate",
-              ["U = C(AY, n) × CDF(n → ult)",
-               "1,500 × 1.900 = 2,850"])
+    f = vcard()
 
     f.text(BCX, 108, "reported to date × CDF = ultimate ($000)", cls="sm dim")
     rows = [("2020", 1882, 1.010), ("2021", 2029, 1.030), ("2022", 2088, 1.092),
@@ -2202,9 +2059,7 @@ def chain_ladder_method() -> Fig:
 @figure("Case Outstanding Development Method", "Future payments projected from the "
         "case reserve balance instead of from reported losses", width=WID)
 def case_outstanding_development_method() -> Fig:
-    f = vcard("Develop the case reserve, not the losses",
-              ["U = Paid to date + Case O/S × f_case",
-               "600 + 900 × 2.500 = 2,850"])
+    f = vcard()
 
     x0, x1 = 46, 314
     f.text(BCX, 116, "AY 2024 at 12 months ($000)", cls="sm dim")
@@ -2229,9 +2084,7 @@ def case_outstanding_development_method() -> Fig:
 @figure("Expected Loss Method", "An ultimate taken wholly from the a priori "
         "expectation, ignoring what has been reported", width=WID)
 def expected_loss_method() -> Fig:
-    f = vcard("The a priori, and nothing else",
-              ["U = ELR × Earned Premium",
-               "0.65 × 4,000 = 2,600"])
+    f = vcard()
 
     ax = vaxes(f, 0, 3000, 2000, 3200, left=54, right=22, top=40, bottom=76)
     ax.frame(xticks=[0, 1000, 2000, 3000], xfmt=lambda t: f"{t:,.0f}",
@@ -2253,9 +2106,7 @@ def expected_loss_method() -> Fig:
 @figure("Bornhuetter-Ferguson Method", "Reported losses taken at face value with "
         "only the unreported portion estimated from the a priori", width=WID)
 def bornhuetter_ferguson_method() -> Fig:
-    f = vcard("Trust what emerged, estimate only what has not",
-              ["U = C + (1 − 1/CDF) × U₀",
-               "1,500 + 0.474 × 2,600 = 2,732"])
+    f = vcard()
 
     x0, x1 = 46, 314
     f.text(BCX, 116, "AY 2024, CDF = 1.900 ⇒ 52.6% reported", cls="sm dim")
@@ -2281,9 +2132,7 @@ def bornhuetter_ferguson_method() -> Fig:
 @figure("Cape Cod Method", "The a priori loss ratio derived from the triangle's own "
         "used-up premium", width=WID)
 def cape_cod_method() -> Fig:
-    f = vcard("Bornhuetter-Ferguson with the ELR taken from the data",
-              ["ELR = Σ C_i / Σ (EP_i / CDF_i)",
-               "9,524 / 14,387 = 66.2%"])
+    f = vcard()
 
     f.text(BCX, 110, "used-up premium: EP ÷ CDF ($000)", cls="sm dim")
     rows = list(zip(AYS, EP, list(reversed(CDF)), [1882, 2029, 2088, 2025, 1500]))
@@ -2307,9 +2156,7 @@ def cape_cod_method() -> Fig:
 @figure("Benktander Method", "The four ultimates for one accident year, with "
         "Benktander sitting between BF and the chain ladder", width=WID)
 def benktander_method() -> Fig:
-    f = vcard("Bornhuetter-Ferguson, run a second time",
-              ["U_GB = C + (1 − 1/CDF) × U_BF",
-               "1,500 + 0.474 × 2,732 = 2,794"])
+    f = vcard()
 
     ax = vaxes(f, 2500, 2920, 0, 4.4, left=44, right=24, top=42, bottom=70)
     ax.frame(xticks=[2600, 2700, 2800, 2900], xfmt=lambda t: f"{t:,.0f}",
@@ -2336,9 +2183,7 @@ def benktander_method() -> Fig:
 @figure("Frequency-Severity Method", "Ultimate counts and ultimate severity "
         "projected separately, then multiplied", width=WID)
 def frequency_severity_method() -> Fig:
-    f = vcard("Project counts and severity, then multiply",
-              ["U = N_ult × S_ult",
-               "1,000 × 2,850 = 2,850,000"])
+    f = vcard()
 
     y = 176
     f.chip(94, y, "1,000", colour=BLUE, w=110, h=44, cls="ttl")
@@ -2358,9 +2203,7 @@ def frequency_severity_method() -> Fig:
 @figure("Berquist-Sherman Method", "Historical case reserves restated onto the "
         "latest year's adequacy before factors are selected", width=WID)
 def berquist_sherman_method() -> Fig:
-    f = vcard("Restate the triangle onto today's practice",
-              ["Adj Case = Case(latest, n) × (1 + t)^−k",
-               "Adj Reported = Paid + Adj Case"])
+    f = vcard()
 
     ax = vaxes(f, -0.4, 4.4, 0, 1500, left=56, right=22, top=40, bottom=74)
     ax.frame(xticks=[0, 1, 2, 3, 4], xfmt=lambda t: AYS[int(t)],
@@ -2387,9 +2230,7 @@ def berquist_sherman_method() -> Fig:
 @figure("IBNR", "IBNR split into claims not yet reported and further development on "
         "claims already known", width=WID)
 def ibnr() -> Fig:
-    f = vcard("Two different things under one name",
-              ["IBNR = Ultimate − Reported",
-               "IBNR = Pure IBNR + IBNER"])
+    f = vcard()
 
     f.text(BCX, 116, "AY 2024 IBNR of 1,350 ($000)", cls="sm dim")
     _hbar(f, 156, [(780, "pure IBNR 780", VIOLET), (570, "IBNER 570", ROSE)],
@@ -2412,9 +2253,7 @@ def ibnr() -> Fig:
 @figure("Ultimate Loss", "Four methods' ultimates for one accident year and the "
         "figure selected from them", width=WID)
 def ultimate_loss() -> Fig:
-    f = vcard("The number every method is trying to estimate",
-              ["U = Paid + Case Reserves + IBNR",
-               "U = Reported + IBNR"])
+    f = vcard()
 
     f.text(BCX, 112, "AY 2024 at 12 months ($000)", cls="sm dim")
     rows = [("Expected loss", U_EL, VIOLET), ("Bornhuetter-Ferguson", U_BF, TEAL),
@@ -2445,8 +2284,7 @@ def ultimate_loss() -> Fig:
 @figure("Claims Coding Changes", "A recoding moving claim volume between segments "
         "without changing the total", width=WID)
 def claims_coding_changes() -> Fig:
-    f = vcard("Volume moves between cells; nothing costs more",
-              "Apparent = True + Reclassification")
+    f = vcard()
 
     for k, (title, split, y0) in enumerate((("before", (0.62, 0.38), 146),
                                             ("after", (0.44, 0.56), 250))):
@@ -2466,9 +2304,7 @@ def claims_coding_changes() -> Fig:
 @figure("Claims Processing Changes", "A faster settlement pattern distorting the "
         "paid development it is measured with", width=WID)
 def claims_processing_changes() -> Fig:
-    f = vcard("A change of timing looks like a change of cost",
-              ["Disposal Rate = closed ÷ ultimate counts",
-               "Avg Case O/S = case reserves / open claims"])
+    f = vcard()
 
     ax = vaxes(f, 0, 60, 0, 1.05, left=52, right=22, top=34, bottom=66)
     ax.frame(xticks=[12, 24, 36, 48, 60], yticks=[0, 0.5, 1.0],
@@ -2490,8 +2326,7 @@ def claims_processing_changes() -> Fig:
 @figure("Underwriting Changes", "A shift in risk selection moving the aggregate loss "
         "ratio while no segment's own ratio moves", width=WID)
 def underwriting_changes() -> Fig:
-    f = vcard("The same segments, a different book",
-              "Aggregate LR = Σ wᵢ × LRᵢ")
+    f = vcard()
 
     segs = [("Preferred", 0.55), ("Standard", 0.70), ("Non-standard", 0.88)]
     mixes = [("2022", [0.50, 0.35, 0.15]), ("2024", [0.25, 0.35, 0.40])]
@@ -2514,9 +2349,7 @@ def underwriting_changes() -> Fig:
 @figure("Policy Provision Changes", "One loss shared differently after a deductible "
         "and limit change", width=WID)
 def policy_provision_changes() -> Fig:
-    f = vcard("The same loss, split on different terms",
-              ["Adjusted Loss = Σ [min(X, L_new)",
-               "− min(X, d_new)]"])
+    f = vcard()
 
     f.text(BCX, 116, "a $1,200k ground-up loss ($000)", cls="sm dim")
     for k, (title, d, L, y) in enumerate((("old: 100 xs 0, limit 1,000", 0, 1000,
@@ -2547,9 +2380,7 @@ def policy_provision_changes() -> Fig:
 @figure("Case Adequacy", "Average case outstanding strengthening along the calendar "
         "diagonal", width=WID)
 def case_adequacy() -> Fig:
-    f = vcard("A stronger case reserve looks like a bigger loss",
-              ["Avg Case O/S = case reserves / open claims",
-               "Adequacy = case reserve / eventual cost"])
+    f = vcard()
 
     ax = vaxes(f, -0.4, 4.4, 0, 1400, left=56, right=22, top=42, bottom=76)
     ax.frame(xticks=[0, 1, 2, 3, 4], xfmt=lambda t: AYS[int(t)],
@@ -2576,8 +2407,7 @@ def case_adequacy() -> Fig:
 @figure("Settlement Rate", "A shifting disposal rate distorting paid development",
         width=WID)
 def settlement_rate() -> Fig:
-    f = vcard("How much of the year is closed, by age",
-              "Disposal Rate = closed ÷ ultimate counts")
+    f = vcard()
 
     ax = vaxes(f, -0.4, 4.4, 0, 0.72, left=54, right=22, top=42, bottom=76)
     ax.frame(xticks=[0, 1, 2, 3, 4], xfmt=lambda t: AYS[int(t)],
@@ -2598,8 +2428,7 @@ def settlement_rate() -> Fig:
 @figure("Mix of Business", "A weighted average moving because the weights moved",
         width=WID)
 def mix_of_business() -> Fig:
-    f = vcard("The average moves when only the weights do",
-              "Aggregate LR = Σ wᵢ × LRᵢ")
+    f = vcard()
 
     segs = [("Territory 1", 0.58, GREEN), ("Territory 2", 0.72, BLUE),
             ("Territory 3", 0.91, ROSE)]
@@ -2630,9 +2459,7 @@ def mix_of_business() -> Fig:
 @figure("Rate Level Change", "The cumulative rate index that makes premium from "
         "different years comparable", width=WID)
 def rate_level_change() -> Fig:
-    f = vcard("Premium from different years is not comparable",
-              ["OLF = current index / index in force",
-               "1.278 / 1.000 = 1.278 for 2020"])
+    f = vcard()
 
     ax = vaxes(f, -0.3, 4.6, 0.95, 1.35, left=54, right=24, top=36, bottom=70)
     ax.frame(xticks=[0, 1, 2, 3, 4], xfmt=lambda t: AYS[int(t)],
@@ -2659,9 +2486,7 @@ def rate_level_change() -> Fig:
 @figure("Deductible Recovery", "Claims paid in full by the insurer and billed back "
         "within the insured's large deductible", width=WID)
 def deductible_recovery() -> Fig:
-    f = vcard("Paid in full, then billed back",
-              ["Recovery = min(X, d) per occurrence",
-               "Net Loss = Gross Paid − Collected Recoveries"])
+    f = vcard()
 
     _flow(f, 142, ["claim occurs", "insurer pays", "insured repays"],
           colours=[BLUE, BLUE, GREEN], x0=32, x1=328, h=30)
@@ -2682,8 +2507,7 @@ def deductible_recovery() -> Fig:
 @figure("Salvage and Subrogation", "Gross ultimate reduced by salvage and "
         "subrogation recoveries", width=WID)
 def salvage_and_subrogation() -> Fig:
-    f = vcard("Two recoveries that arrive after the payment",
-              "Net Ultimate = Gross Ultimate − S&S")
+    f = vcard()
 
     x0, x1 = 46, 314
     f.text(BCX, 120, "AY 2024 ultimate ($000)", cls="sm dim")
@@ -2710,9 +2534,7 @@ def salvage_and_subrogation() -> Fig:
 @figure("Reinsurance Recovery", "Gross unpaid claims split into the ceded "
         "recoverable and the insurer's net liability", width=WID)
 def reinsurance_recovery() -> Fig:
-    f = vcard("An asset, not a smaller liability",
-              ["Net Unpaid = Gross Unpaid − Ceded Unpaid",
-               "Ceded Ultimate = Ceded Reported × CDF_ceded"])
+    f = vcard()
 
     x0, x1 = 46, 314
     f.text(BCX, 120, "AY 2024 unpaid claims ($000)", cls="sm dim")
@@ -2734,9 +2556,7 @@ def reinsurance_recovery() -> Fig:
 @figure("Gross Losses", "Gross losses as the base from which net and ceded figures "
         "are derived", width=WID)
 def gross_losses() -> Fig:
-    f = vcard("Before any cession or recovery",
-              ["Gross = Net + Ceded + Other Recoveries",
-               "Gross Ultimate = Gross Reported × CDF_gross"])
+    f = vcard()
 
     f.text(BCX, 118, "AY 2024 ultimate ($000)", cls="sm dim")
     x, w, y = 100, 82, 146
@@ -2761,9 +2581,7 @@ def gross_losses() -> Fig:
 @figure("Ceded Losses", "The reinsurer's share of each claim under a quota share "
         "and an excess treaty", width=WID)
 def ceded_losses() -> Fig:
-    f = vcard("The reinsurer's share, claim by claim",
-              ["Ceded_QS = c × Gross",
-               "Ceded_XOL = min(max(X − R, 0), L)"])
+    f = vcard()
 
     ax = vaxes(f, 0, 2600, 0, 1400, left=56, right=22, top=40, bottom=76)
     ax.frame(xticks=[0, 1000, 2000], xfmt=lambda t: f"{t:,.0f}",
@@ -2785,9 +2603,7 @@ def ceded_losses() -> Fig:
 @figure("Net Losses", "Gross losses reduced step by step to what the insurer "
         "finally bears", width=WID)
 def net_losses() -> Fig:
-    f = vcard("What is left after every recovery",
-              ["Net = Gross − Ceded − S&S − Deductibles",
-               "2,850 − 640 − 250 − 350 = 1,610"])
+    f = vcard()
 
     x0, x1 = 46, 314
     steps = [("gross", 2850, VIOLET), ("− ceded 640", 2210, AMBER),
@@ -2809,9 +2625,7 @@ def net_losses() -> Fig:
         "charging half the ratio to case reserves and all of it to IBNR",
         width=WID)
 def ulae() -> Fig:
-    f = vcard("Overhead that belongs to no single claim",
-              ["Ratio = CY Paid ULAE / CY Paid Loss",
-               "Reserve = R × (0.5 × Case + 1.0 × IBNR)"])
+    f = vcard()
 
     f.text(BCX, 112, "R = 96 / 1,600 = 6.0%", cls="sm dim")
     rows = [("Case reserves", 900, 0.5, AMBER), ("IBNR", 1350, 1.0, VIOLET)]
@@ -2840,9 +2654,7 @@ def ulae() -> Fig:
 @figure("Reserve Adequacy", "The carried reserve compared with the indicated "
         "estimate and the range around it", width=WID)
 def reserve_adequacy() -> Fig:
-    f = vcard("Is the carried number enough?",
-              ["Redundancy = Carried − Indicated",
-               "2,180 − 2,250 = (70) deficient"])
+    f = vcard()
 
     x0, x1, y = 52, 312, 186
     f.rect(x0 + (x1 - x0) * 0.18, y - 30, (x1 - x0) * 0.62, 48, rx=6,
@@ -2872,9 +2684,7 @@ def reserve_adequacy() -> Fig:
 @figure("Pure Premium Analysis", "Pure premium by accident year decomposed into "
         "frequency and severity", width=WID)
 def pure_premium_analysis() -> Fig:
-    f = vcard("Which half of the loss cost moved?",
-              ["Pure Premium = Frequency × Severity",
-               "+4.6% severity, −1.2% frequency ⇒ +3.3%"])
+    f = vcard()
 
     ax = vaxes(f, -0.3, 4.3, 0.92, 1.20, left=54, right=26, top=40, bottom=72)
     ax.frame(xticks=[0, 1, 2, 3, 4], xfmt=lambda t: AYS[int(t)],
@@ -2898,9 +2708,7 @@ def pure_premium_analysis() -> Fig:
 @figure("Actual vs Expected Analysis", "Emergence in the period against what the "
         "previous valuation implied", width=WID)
 def actual_vs_expected_analysis() -> Fig:
-    f = vcard("Did the year emerge the way it was meant to?",
-              ["Expected = U_prior × Δ(1 / CDF)",
-               "A/E = Actual emergence / Expected emergence"])
+    f = vcard()
 
     ax = vaxes(f, -0.5, 4.5, 0, 700, left=56, right=22, top=48, bottom=80)
     ax.frame(xticks=[0, 1, 2, 3, 4], xfmt=lambda t: AYS[int(t)],
@@ -2928,9 +2736,7 @@ def actual_vs_expected_analysis() -> Fig:
 @figure("Roll Forward Analysis", "The reserve balance reconciled from one valuation "
         "to the next", width=WID)
 def roll_forward_analysis() -> Fig:
-    f = vcard("Where the reserve balance actually went",
-              ["R_end = R_begin + New AY − Paid ± PY dev",
-               "5,200 + 2,850 − 2,400 + 180 = 5,830"])
+    f = vcard()
 
     bars = [("opening", 5200, 0, VIOLET), ("new AY", 2850, 5200, GREEN),
             ("paid", -2400, 5650, ROSE), ("PY dev", 180, 5650, AMBER),
@@ -2957,8 +2763,7 @@ def roll_forward_analysis() -> Fig:
 @figure("Reserve Communication", "A point estimate shown with the range and the "
         "drivers of its change", width=WID)
 def reserve_communication() -> Fig:
-    f = vcard("The number, its basis, and how it moved",
-              "ΔReserve = New AY − Payments ± PY dev")
+    f = vcard()
 
     ax = vaxes(f, 1700, 2800, 0, 1.15, left=44, right=22, top=40, bottom=104)
 
@@ -2988,8 +2793,7 @@ def reserve_communication() -> Fig:
 @figure("Stakeholder Reporting", "One estimate reported at four depths to four "
         "audiences", width=WID)
 def stakeholder_reporting() -> Fig:
-    f = vcard("Same substance, four depths",
-              "one estimate, one basis, four depths")
+    f = vcard()
 
     rows = [("Actuarial report", "methods, data, every selection", 272, VIOLET),
             ("Management", "drivers, ranges, what changed", 236, BLUE),
@@ -3009,8 +2813,7 @@ def stakeholder_reporting() -> Fig:
 @figure("Regulatory Reporting", "The three linked regulatory deliverables and the "
         "range the opinion turns on", width=WID)
 def regulatory_reporting() -> Fig:
-    f = vcard("Schedule P, the opinion, and the report behind it",
-              "Opinion: Low ≤ Carried Reserve ≤ High")
+    f = vcard()
 
     rows = [("Schedule P", "ten years of triangles, filed", BLUE),
             ("Statement of Actuarial Opinion",
@@ -3038,9 +2841,7 @@ def regulatory_reporting() -> Fig:
 @figure("External Information in Reserving", "Thin internal experience blended with "
         "an industry development pattern", width=WID)
 def external_information_in_reserving() -> Fig:
-    f = vcard("Borrow a pattern when your own is too thin",
-              ["Selected = Z × own + (1 − Z) × industry",
-               "0.30 × 1.62 + 0.70 × 1.48 = 1.52"])
+    f = vcard()
 
     ax = vaxes(f, 0, 60, 0.95, 2.0, left=54, right=24, top=36, bottom=84)
     ax.frame(xticks=[12, 24, 36, 48, 60], yticks=[1.0, 1.5, 2.0],

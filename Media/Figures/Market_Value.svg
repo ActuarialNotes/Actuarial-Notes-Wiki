@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
   <title>Market value moving with the prevailing yield while book value follows its own schedule</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -50,11 +46,7 @@ text {
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
   </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">Market value follows today's yield</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">MV = Fr · a₍ₙ₎ + C · vⁿ at today's yield</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">book value keeps using the original yield</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
     <polyline points="78,247.14 102.8,247.14 127.6,247.14 152.4,247.14 177.2,247.14 202,247.14 226.8,247.14 251.6,247.14 276.4,247.14 301.2,247.14 326,247.14" class="curve" stroke="#7c3aed" stroke-width="2"/>
     <polyline points="78,247.14 102.8,222.22 127.6,191.28 152.4,214.46 177.2,264.27 202,289.89 226.8,266.24 251.6,247.14 276.4,242.01 301.2,247.14 326,247.14" class="curve" stroke="#3b82f6" stroke-width="2"/>
     <line x1="78" y1="350" x2="336" y2="350" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>

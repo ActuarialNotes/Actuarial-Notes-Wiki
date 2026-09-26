@@ -52,6 +52,7 @@ import math
 from figure_kit import (
     AMBER, BLUE, GREEN, ROSE, TEAL, VIOLET,
     Fig, brace, vaxes, vcard, BCX,
+    building, car, coins, cross, document, house, person, scales, shield, tower,
 )
 from figure_registry import figure
 
@@ -285,8 +286,7 @@ def _pill_row(f: Fig, y, labels, colours, x0=32, x1=328, h=24, cls="sm"):
 @figure("Insurance Legislation", "The four layers of Canadian insurance rules, "
         "with the line between what is law and what is expectation", width=WID)
 def insurance_legislation() -> Fig:
-    f = vcard("Four layers, and only two of them are law",
-              "Statute → Regulation → Guideline → Bulletin")
+    f = vcard()
 
     _stack(f, 92, [("Statute", "Insurance Companies Act, Insurance Acts", BLUE),
                    ("Regulation", "Ontario Reg. 664 — cabinet, not the House",
@@ -308,9 +308,7 @@ def insurance_legislation() -> Fig:
 @figure("Insurance Regulation", "One insurer answering to a federal solvency "
         "regulator and to every province it writes in", width=WID)
 def insurance_regulation() -> Fig:
-    f = vcard("No one regulator sees the whole insurer",
-              ["Regulation = Solvency + Market conduct",
-               "federal / provincial — the same company"])
+    f = vcard()
 
     f.chip(BCX, 100, "one insurer", colour=VIOLET, w=140, h=28)
     f.arrow(BCX - 30, 116, 116, 142, colour="var(--dim)", width=1.3)
@@ -328,9 +326,7 @@ def insurance_regulation() -> Fig:
 @figure("Federal-Provincial Jurisdiction", "The constitutional split: Parliament "
         "regulates the insurer, the provinces regulate the policy", width=WID)
 def federal_provincial_jurisdiction() -> Fig:
-    f = vcard("Parliament takes the insurer, the provinces take the policy",
-              ["Federal: the institution — s. 91",
-               "Provincial: the contract — s. 92(13)"])
+    f = vcard()
 
     _columns(f, 104, ["Federal", "Provincial"],
              [["incorporation", "capital, MCT", "Appointed Actuary",
@@ -352,9 +348,7 @@ def federal_provincial_jurisdiction() -> Fig:
 @figure("OSFI", "OSFI's intervention ladder, from normal supervision to "
         "non-viability", width=WID)
 def osfi() -> Fig:
-    f = vcard("Prudential supervision runs on a ladder",
-              ["Composite risk rating → stage 0–4",
-               "solvency only — never rates or conduct"])
+    f = vcard()
 
     rows = [("Stage 0 — normal", "routine supervision", GREEN),
             ("Stage 1 — early warning", "issues identified", TEAL),
@@ -375,9 +369,7 @@ def osfi() -> Fig:
 @figure("Superintendent of Insurance", "The provincial superintendent's powers "
         "beside the federal solvency regulator's", width=WID)
 def superintendent_of_insurance() -> Fig:
-    f = vcard("The province licenses; Ottawa capitalises",
-              ["One licence per province, every province",
-               "plus one federal order to commence"])
+    f = vcard()
 
     _columns(f, 96, ["Superintendent", "OSFI"],
              [["licence insurers", "licence agents", "approve rates",
@@ -398,9 +390,7 @@ def superintendent_of_insurance() -> Fig:
         "The Ontario file-and-approve auto rate cycle, from filing to "
         "implementation", width=WID)
 def fsra() -> Fig:
-    f = vcard("Ontario auto rates are used only once approved",
-              ["File → review → approve → use",
-               "the level and the classification plan"])
+    f = vcard()
 
     _flow(f, 116, ["file", "review", "approve", "use"],
           colours=[BLUE, AMBER, GREEN, TEAL], h=26)
@@ -421,9 +411,7 @@ def fsra() -> Fig:
 @figure("Autorité des marchés financiers", "Quebec's integrated regulator and its "
         "split public–private auto market", width=WID)
 def amf() -> Fig:
-    f = vcard("Quebec supervises everything in one body",
-              ["Prudential + conduct + securities",
-               "one regulator, one civil-law contract"])
+    f = vcard()
 
     f.chip(BCX, 106, "Autorité des marchés financiers", colour=VIOLET, w=250,
            h=28, cls="sm")
@@ -446,9 +434,7 @@ def amf() -> Fig:
 @figure("Canadian Council of Insurance Regulators", "CCIR harmonising a position "
         "that each member regulator must then adopt itself", width=WID)
 def ccir() -> Fig:
-    f = vcard("It harmonises; it cannot compel",
-              ["CCIR position → each regulator adopts",
-               "no legal authority of its own"])
+    f = vcard()
 
     f.chip(BCX, 108, "CCIR agrees a position", colour=VIOLET, w=220, h=28)
     for i, name in enumerate(["FSRA", "AMF", "BCFSA", "Alberta"]):
@@ -470,8 +456,7 @@ def ccir() -> Fig:
 @figure("Solvency Regulation", "The solvency condition — assets covering "
         "liabilities plus required capital — and the three pillars", width=WID)
 def solvency_regulation() -> Fig:
-    f = vcard("Assets must cover the liabilities and a buffer",
-              "Assets ≥ Liabilities + Required capital")
+    f = vcard()
 
     f.text(BCX, 100, "the balance sheet the regulator tests", cls="sm dim")
     f.rect(46, 118, 110, 176, rx=6, fill=BLUE, fill_opacity="0.20",
@@ -497,9 +482,7 @@ def solvency_regulation() -> Fig:
 @figure("Market Conduct Regulation", "The conduct chain from sale to complaint, "
         "with claims handling carrying the largest exposure", width=WID)
 def market_conduct_regulation() -> Fig:
-    f = vcard("How the insurer behaves, start to finish",
-              ["Fair treatment of customers",
-               "product design → sale → claim → complaint"])
+    f = vcard()
 
     rows = [("Product design", "suitability, target market", BLUE),
             ("Distribution", "licensing, disclosure, take-all-comers", TEAL),
@@ -515,9 +498,7 @@ def market_conduct_regulation() -> Fig:
 @figure("Rate Regulation", "The statutory three-part rate standard and the three "
         "regimes, ordered by how tightly they grip", width=WID)
 def rate_regulation() -> Fig:
-    f = vcard("Not excessive, not inadequate, not unfair",
-              ["Prior approval → file-and-use → use-and-file",
-               "grip loosens as the line gets less compulsory"])
+    f = vcard()
 
     for i, (label, why, colour) in enumerate(
             [("not excessive", "consumer protection", BLUE),
@@ -543,9 +524,7 @@ def rate_regulation() -> Fig:
 @figure("Risk Classification Restrictions", "A banned rating variable's signal "
         "migrating into the permitted variables correlated with it", width=WID)
 def risk_classification_restrictions() -> Fig:
-    f = vcard("Ban a variable and its signal moves next door",
-              ["Prohibited ≠ unpredictive",
-               "the question is whether pricing on it is acceptable"])
+    f = vcard()
 
     f.chip(BCX, 108, "credit score — banned", colour=ROSE, w=210, h=28)
     f.line(BCX - 105, 108, BCX + 105, 108, cls="thin", stroke=ROSE,
@@ -569,9 +548,7 @@ def risk_classification_restrictions() -> Fig:
 @figure("Territorial Rating", "Territory relativities across a city, with the "
         "cross-subsidy that flattening them creates", width=WID)
 def territorial_rating() -> Fig:
-    f = vcard("The most predictive variable, and the most contested",
-              ["Relativity = territory pure premium",
-               "÷ overall pure premium"])
+    f = vcard()
 
     cents = _vbars(f, [1.42, 1.15, 0.94, 0.78], ["urban", "suburb", "town", "rural"],
                    250, x0=48, x1=316, top=1.6, height=126,
@@ -594,8 +571,7 @@ def territorial_rating() -> Fig:
         "with no cost basis, and a cost-based difference on a barred basis",
         width=WID)
 def unfair_discrimination() -> Fig:
-    f = vcard("Same expected cost, same price",
-              "Premium ratio = expected loss ratio")
+    f = vcard()
 
     f.text(BCX, 100, "two failures that get confused", cls="sm dim")
     f.rect(36, 118, 288, 86, rx=7, fill=ROSE, fill_opacity="0.12", stroke=ROSE,
@@ -620,9 +596,7 @@ def unfair_discrimination() -> Fig:
 @figure("Bias in Actuarial Practice", "Testing a model on outputs by group, and "
         "the three fairness definitions that cannot all hold at once", width=WID)
 def bias_in_actuarial_practice() -> Fig:
-    f = vcard("Dropping the variable does not remove the effect",
-              ["Test the outputs, not the inputs",
-               "predicted vs actual cost, by group"])
+    f = vcard()
 
     f.text(BCX, 100, "loss ratio by group, one model", cls="sm dim")
     _vbars(f, [0.63, 0.72, 0.66], ["group A", "group B", "group C"], 208,
@@ -644,9 +618,7 @@ def bias_in_actuarial_practice() -> Fig:
         "written at the filed rate; one who fails them may be declined",
         width=WID)
 def take_all_comers_rule() -> Fig:
-    f = vcard("Meet the filed rules and the insurer must write you",
-              ["Compulsory product ⇒ compulsory offer",
-               "at the filed rate, on the filed rules"])
+    f = vcard()
 
     f.chip(BCX, 104, "applicant for compulsory auto", colour=VIOLET, w=250, h=28)
     f.text(BCX, 142, "does the applicant meet the filed rules?", cls="sm dim")
@@ -670,9 +642,7 @@ def take_all_comers_rule() -> Fig:
 @figure("Automobile Insurance Reform", "The reform cycle, and the levers ranked "
         "by the savings each delivers", width=WID)
 def automobile_insurance_reform() -> Fig:
-    f = vcard("Under rate regulation, only cost can be cut",
-              ["Premium ≈ Freq × Sev ÷ (1 − V − Q)",
-               "so the only durable saving is a cheaper product"])
+    f = vcard()
 
     cx, cy, r = BCX, 168, 62
     steps = [("costs rise", -90, BLUE), ("rates lag", 0, AMBER),
@@ -703,9 +673,7 @@ def automobile_insurance_reform() -> Fig:
 @figure("No-Fault Insurance", "The trade a no-fault scheme makes — first-party "
         "benefits at once against the right to sue", width=WID)
 def no_fault_insurance() -> Fig:
-    f = vcard("Certainty of benefit bought with the right to sue",
-              ["Benefits from your own insurer,",
-               "whoever caused the collision"])
+    f = vcard()
 
     _columns(f, 98, ["You gain", "You give up"],
              [["payment in weeks", "no fault to prove", "everyone covered",
@@ -730,9 +698,7 @@ def no_fault_insurance() -> Fig:
 @figure("Statutory Accident Benefits", "The benefit heads every auto policy must "
         "carry, and the tiered limits that drive their cost", width=WID)
 def statutory_accident_benefits() -> Fig:
-    f = vcard("First-party benefits set by regulation, not by the insurer",
-              ["Medical · attendant care · income",
-               "· death and funeral — regardless of fault"])
+    f = vcard()
 
     _bullets(f, 104, ["medical and rehabilitation",
                       "attendant care — the severe-claim driver",
@@ -757,9 +723,7 @@ def statutory_accident_benefits() -> Fig:
 @figure("Minor Injury Guideline", "The MIG cap turning a continuous severity "
         "distribution into a spike at the cap and a tail beyond it", width=WID)
 def minor_injury_guideline() -> Fig:
-    f = vcard("A cap turns severity into a spike and a tail",
-              ["Ontario MIG cap = $3,500 med/rehab",
-               "escape the MIG and the limit multiplies"])
+    f = vcard()
 
     ax = vaxes(f, 0, 10, 0, 1.0, left=40, right=16, top=34, bottom=72)
     ax.frame(xticks=[], yticks=[], arrows=True)
@@ -783,9 +747,7 @@ def minor_injury_guideline() -> Fig:
 @figure("Catastrophic Impairment", "The order-of-magnitude step between the "
         "non-catastrophic and catastrophic benefit limits", width=WID)
 def catastrophic_impairment() -> Fig:
-    f = vcard("One designation multiplies the limit tenfold",
-              ["A defined list, not a judgement",
-               "— and then a lifetime care annuity"])
+    f = vcard()
 
     f.text(BCX, 104, "Ontario medical, rehab and attendant care", cls="sm dim")
     f.rect(46, 126, 40, 10, rx=2, fill=AMBER, fill_opacity="0.75")
@@ -809,8 +771,7 @@ def catastrophic_impairment() -> Fig:
 @figure("Tort Threshold and Deductible", "Four bodily injury awards against a "
         "verbal threshold and a $45,000 deductible", width=WID)
 def tort_threshold_and_deductible() -> Fig:
-    f = vcard("The threshold truncates, the deductible shifts",
-              "Paid = max(0, damages − deductible)")
+    f = vcard()
 
     f.text(BCX, 100, "assessed vs paid, deductible $45,000", cls="sm dim")
     rows = [("$40,000", 40, 0, "$0", ROSE),
@@ -840,9 +801,7 @@ def tort_threshold_and_deductible() -> Fig:
 @figure("Direct Compensation Property Damage", "DCPD paying the insured's own "
         "vehicle damage in proportion to the other driver's fault", width=WID)
 def direct_compensation_property_damage() -> Fig:
-    f = vcard("Your own insurer pays for the other driver's fault",
-              ["Recovery = Damage × (1 − fault share)",
-               "first-party, but fault still decides how much"])
+    f = vcard()
 
     f.text(BCX, 100, "tort", cls="sm bold", fill=ROSE)
     f.chip(88, 128, "insured", colour=BLUE, w=100, h=24)
@@ -868,9 +827,7 @@ def direct_compensation_property_damage() -> Fig:
 @figure("Fault Determination Rules", "Fault read off a diagram in 25% increments, "
         "mechanically and without regard to the facts around it", width=WID)
 def fault_determination_rules() -> Fig:
-    f = vcard("Fault read off a diagram, not argued",
-              ["Fault ∈ {0, 25, 50, 75, 100}%",
-               "the physical facts, and nothing else"])
+    f = vcard()
 
     f.rect(44, 100, 272, 96, rx=7, fill="var(--soft)", stroke="var(--edge)",
            stroke_width="1.2")
@@ -895,9 +852,7 @@ def fault_determination_rules() -> Fig:
 @figure("Uninsured Automobile Coverage", "The two triggers — an uninsured driver "
         "and an unidentified one — and who ends up paying", width=WID)
 def uninsured_automobile_coverage() -> Fig:
-    f = vcard("Insured drivers absorb the cost of uninsured ones",
-              ["Two triggers: uninsured · unidentified",
-               "and the insured still proves liability"])
+    f = vcard()
 
     _columns(f, 100, ["Uninsured", "Unidentified"],
              [["a real driver", "with no policy", "subrogation lies",
@@ -919,9 +874,7 @@ def uninsured_automobile_coverage() -> Fig:
 @figure("Insurance Bureau of Canada", "What the industry's trade association does, "
         "and the one thing it is not", width=WID)
 def insurance_bureau_of_canada() -> Fig:
-    f = vcard("The industry's voice — and not a regulator",
-              ["Advocacy · data · consumer information",
-               "membership is voluntary, output is not law"])
+    f = vcard()
 
     f.chip(BCX, 106, "Insurance Bureau of Canada", colour=VIOLET, w=248, h=28)
     for i, (name, colour) in enumerate([("advocacy", BLUE), ("data", TEAL),
@@ -946,9 +899,7 @@ def insurance_bureau_of_canada() -> Fig:
         "two halves, and the four limits that make it self-regulation",
         width=WID)
 def code_of_consumer_rights() -> Fig:
-    f = vcard("A voluntary bargain, with no statutory remedy",
-              ["Rights ↔ responsibilities",
-               "adopted by members, enacted by nobody"])
+    f = vcard()
 
     _columns(f, 96, ["Your rights", "Your duties"],
              [["plain-language", "information", "professional", "service",
@@ -970,9 +921,7 @@ def code_of_consumer_rights() -> Fig:
 @figure("Court Case", "A single appellate decision moving the reserve on every "
         "open claim, not just the one before the court", width=WID)
 def court_case() -> Fig:
-    f = vcard("One decision reprices every open claim",
-              ["A ruling binds until a higher court",
-               "or the legislature answers it"])
+    f = vcard()
 
     for i, (name, colour, w) in enumerate(
             [("Supreme Court of Canada", VIOLET, 272),
@@ -1000,9 +949,7 @@ def court_case() -> Fig:
 @figure("Duty of Good Faith", "The duty running both ways, and the imbalance in "
         "what a breach costs each side", width=WID)
 def duty_of_good_faith() -> Fig:
-    f = vcard("A duty owed in both directions, unequally felt",
-              ["uberrimae fidei — utmost good faith",
-               "at application, in force, and on the claim"])
+    f = vcard()
 
     f.chip(88, 112, "insured", colour=BLUE, w=104, h=28)
     f.chip(272, 112, "insurer", colour=AMBER, w=104, h=28)
@@ -1027,9 +974,7 @@ def duty_of_good_faith() -> Fig:
 @figure("Bad Faith Damages", "An insurer's exposure to a bad-faith claim building "
         "past the policy limit", width=WID)
 def bad_faith_damages() -> Fig:
-    f = vcard("The policy limit does not cap this",
-              ["Exposure = benefit + aggravated",
-               "+ punitive + costs"])
+    f = vcard()
 
     _waterfall(f, 268,
                [("benefit", 320.0, BLUE), ("aggravated", 100.0, AMBER),
@@ -1054,9 +999,7 @@ def bad_faith_damages() -> Fig:
 @figure("Punitive Damages", "The four quantum factors a Canadian court weighs, "
         "and the rationality test that bounds the award", width=WID)
 def punitive_damages() -> Fig:
-    f = vcard("Punishment, not compensation — and exceptional",
-              ["Awarded only for an independent wrong",
-               "and only if compensation has not deterred"])
+    f = vcard()
 
     f.text(BCX, 102, "what raises the award", cls="sm dim")
     _bullets(f, 128, ["how reprehensible the conduct was",
@@ -1078,9 +1021,7 @@ def punitive_damages() -> Fig:
 @figure("Duty to Defend", "The duty to defend read off the pleadings, sitting "
         "outside the narrower duty to indemnify", width=WID)
 def duty_to_defend() -> Fig:
-    f = vcard("Read the pleadings, not the evidence",
-              ["Duty to defend ⊃ duty to indemnify",
-               "one arguable allegation defends the whole claim"])
+    f = vcard()
 
     f.circle(178, 202, 84, fill=BLUE, fill_opacity="0.14", stroke=BLUE,
              stroke_width="1.6")
@@ -1104,9 +1045,7 @@ def duty_to_defend() -> Fig:
 @figure("Vicarious Liability", "Liability passing to the vehicle owner and the "
         "employer, neither of whom was careless", width=WID)
 def vicarious_liability() -> Fig:
-    f = vcard("Liable for someone else's negligence",
-              ["Owner ← permitted driver",
-               "Employer ← employee, in the course of work"])
+    f = vcard()
 
     f.chip(96, 116, "driver", colour=ROSE, w=110, h=26)
     f.chip(264, 116, "owner", colour=BLUE, w=110, h=26)
@@ -1130,9 +1069,7 @@ def vicarious_liability() -> Fig:
 @figure("Limitation Period", "Discoverability starting the clock, tolling stopping "
         "it, and the ultimate period that ends exposure regardless", width=WID)
 def limitation_period() -> Fig:
-    f = vcard("The clock starts on discovery, not on the accident",
-              ["Basic: 2 years from discovery",
-               "Ultimate: 15 years from the act"])
+    f = vcard()
 
     y = 166
     f.arrow(40, y, 330, y, colour="var(--axis)", width=1.2)
@@ -1160,9 +1097,7 @@ def limitation_period() -> Fig:
 @figure("Prejudgment Interest", "Interest accruing on the heads of damage it "
         "applies to over five and a half years to settlement", width=WID)
 def prejudgment_interest() -> Fig:
-    f = vcard("Years of delay are paid for at a prescribed rate",
-              ["Judgment = Damages × (1 + r t)",
-               "$250,000 × 5% × 5.5 = $68,750"])
+    f = vcard()
 
     f.text(BCX, 102, "a $400,000 award settled 5.5 years on", cls="sm dim")
     for i, (head, amount, gets, colour) in enumerate(
@@ -1190,9 +1125,7 @@ def prejudgment_interest() -> Fig:
         "tort award, before contributory negligence and the deductible",
         width=WID)
 def collateral_benefits() -> Fig:
-    f = vcard("Deducted head by head, not off the total",
-              ["Net = damages − deductible benefits",
-               "income against income, care against care"])
+    f = vcard()
 
     f.text(BCX, 100, "$500,000 assessed, by head ($000)", cls="sm dim")
     rows = [("income loss", 220, 85, BLUE),
@@ -1223,9 +1156,7 @@ def collateral_benefits() -> Fig:
 @figure("Tort Litigation", "A bodily injury award built head by head, then reduced "
         "for contributory negligence and benefits received", width=WID)
 def tort_litigation() -> Fig:
-    f = vcard("Four elements to prove, then two reductions",
-              ["Damages = pecuniary + non-pecuniary",
-               "duty · breach · causation · damage"])
+    f = vcard()
 
     _flow(f, 106, ["duty", "breach", "cause", "damage"],
           colours=[BLUE, BLUE, BLUE, BLUE], h=24)
@@ -1249,9 +1180,7 @@ def tort_litigation() -> Fig:
 @figure("Tort Reform", "A reform's saving arriving at once and eroding as the "
         "courts and the bar adapt to it", width=WID)
 def tort_reform() -> Fig:
-    f = vcard("The saving is real, and it decays",
-              ["Reform lowers premium by lowering",
-               "compensation — say so plainly"])
+    f = vcard()
 
     ax = vaxes(f, 0, 10, 60, 108, left=44, right=16, top=28, bottom=134)
     ax.frame(xticks=[], yticks=[], arrows=True)
@@ -1275,9 +1204,7 @@ def tort_reform() -> Fig:
 @figure("Class Action", "Many uneconomic claims aggregated into one action, "
         "gated by certification", width=WID)
 def class_action() -> Fig:
-    f = vcard("Certification is the whole exposure",
-              ["Many small claims → one action",
-               "binding everyone who does not opt out"])
+    f = vcard()
 
     for i in range(12):
         f.circle(52 + (i % 6) * 20, 110 + (i // 6) * 22, 6, fill=BLUE,
@@ -1302,9 +1229,7 @@ def class_action() -> Fig:
 @figure("Structured Settlement", "A lump sum against the annuity that replaces it, "
         "and why the tax exemption makes the annuity cheaper", width=WID)
 def structured_settlement() -> Fig:
-    f = vcard("The tax exemption pays for the discount",
-              ["Annuity cost < equivalent lump sum",
-               "$900,000 buys $52,000 a year for 30"])
+    f = vcard()
 
     _columns(f, 104, ["Lump sum", "Structure"],
              [["costs $1,000,000", "invested at 5%,", "taxed at 40%",
@@ -1333,9 +1258,7 @@ def structured_settlement() -> Fig:
 @figure("Agricultural Insurance", "The four business risk management programs "
         "layered by the size of the income decline each answers", width=WID)
 def agricultural_insurance() -> Fig:
-    f = vcard("Four programs stacked by the size of the loss",
-              ["AgriInvest → AgriStability → AgriInsurance",
-               "→ AgriRecovery, as the loss grows"])
+    f = vcard()
 
     rows = [("AgriRecovery", "disaster response", ROSE),
             ("AgriInsurance", "yield loss, insured peril", AMBER),
@@ -1363,9 +1286,7 @@ def agricultural_insurance() -> Fig:
 @figure("Employment Insurance", "The 55% benefit rate against the maximum "
         "insurable earnings ceiling, and who pays the premium", width=WID)
 def employment_insurance() -> Fig:
-    f = vcard("55% of earnings, up to a ceiling",
-              ["Weekly benefit = 0.55 × insurable earnings",
-               "employer pays 1.4 × the employee rate"])
+    f = vcard()
 
     ax = vaxes(f, 0, 100, 0, 60, left=48, right=16, top=28, bottom=150)
     ax.frame(xticks=[], yticks=[], arrows=True)
@@ -1388,9 +1309,7 @@ def employment_insurance() -> Fig:
 @figure("Flood Insurance", "The share of homes that are insurable, and the "
         "high-risk tail that still is not", width=WID)
 def flood_insurance() -> Fig:
-    f = vcard("Priced at last — except at the top of the risk",
-              ["Overland water, not sewer backup",
-               "and not plumbing that let go inside"])
+    f = vcard()
 
     f.text(BCX, 104, "Canadian homes, by flood risk", cls="sm dim")
     cs = _hbar(f, 142, [(0.80, "insurable", GREEN), (0.14, "", AMBER),
@@ -1414,9 +1333,7 @@ def flood_insurance() -> Fig:
 @figure("Guaranty Funds", "A failed insurer's shortfall assessed on the surviving "
         "members by market share, after the fact", width=WID)
 def guaranty_funds() -> Fig:
-    f = vcard("The survivors pay, in proportion to market share",
-              ["Assessment = shortfall × premium share",
-               "levied after the failure, not before"])
+    f = vcard()
 
     f.chip(BCX, 104, "insurer fails — shortfall", colour=ROSE, w=220, h=28)
     for i, (name, share, colour) in enumerate(
@@ -1441,9 +1358,7 @@ def guaranty_funds() -> Fig:
 @figure("PACICC", "The causes of Canadian insurer failure, in the order PACICC's "
         "own research puts them", width=WID)
 def pacicc() -> Fig:
-    f = vcard("Pricing and reserves, not investments",
-              ["Canada's P&C guaranty fund —",
-               "compulsory for every licensed member"])
+    f = vcard()
 
     f.text(BCX, 100, "why insurers fail, in order", cls="sm dim")
     for i, (cause, w, colour) in enumerate(
@@ -1468,9 +1383,7 @@ def pacicc() -> Fig:
         "is left to fill, under the five Canada Health Act principles",
         width=WID)
 def health_care_insurance() -> Fig:
-    f = vcard("Single payer for the core, private for the rest",
-              ["Funded from taxation, not from premiums",
-               "— and private duplication is barred"])
+    f = vcard()
 
     f.text(BCX, 100, "one household's health spending", cls="sm dim")
     _hbar(f, 138, [(0.68, "medicare", BLUE), (0.32, "private", AMBER)],
@@ -1496,9 +1409,7 @@ def health_care_insurance() -> Fig:
 @figure("Residual Market", "The two residual structures — a facility the driver "
         "sees and a pool the driver never learns of", width=WID)
 def residual_market() -> Fig:
-    f = vcard("Compulsory to buy means someone must sell",
-              ["Results shared by voluntary market share,",
-               "whether or not you service the business"])
+    f = vcard()
 
     _columns(f, 100, ["Facility", "Pool"],
              [["written by FA", "FA's own rate", "the driver knows",
@@ -1522,9 +1433,7 @@ def residual_market() -> Fig:
         "tort action traded for a no-fault benefit an employer pool funds",
         width=WID)
 def workers_compensation_insurance() -> Fig:
-    f = vcard("A monopoly board, funded by employer assessment",
-              ["Assessment = rate per $100 of payroll",
-               "× payroll, adjusted by experience"])
+    f = vcard()
 
     f.chip(96, 108, "worker", colour=BLUE, w=112, h=28)
     f.chip(264, 108, "employer", colour=AMBER, w=112, h=28)
@@ -1549,9 +1458,7 @@ def workers_compensation_insurance() -> Fig:
 @figure("Facility Association", "How a driver reaches FARM, and the market-share "
         "formula that spreads its result across every auto insurer", width=WID)
 def facility_association() -> Fig:
-    f = vcard("Written by the industry, serviced by one carrier",
-              ["Member share = voluntary premium",
-               "÷ total voluntary premium"])
+    f = vcard()
 
     _flow(f, 110, ["driver", "broker", "carrier", "FA"],
           colours=[BLUE, TEAL, AMBER, ROSE], h=26)
@@ -1578,9 +1485,7 @@ def facility_association() -> Fig:
         "policyholder keeps the ordinary rate and never learns of it",
         width=WID)
 def risk_sharing_pool() -> Fig:
-    f = vcard("The risk is ceded; the customer is kept",
-              ["Cede the premium and the losses,",
-               "keep the relationship and the servicing"])
+    f = vcard()
 
     f.chip(BCX, 104, "applicant meets the filed rules", colour=BLUE, w=250,
            h=28)
@@ -1606,9 +1511,7 @@ def risk_sharing_pool() -> Fig:
 @figure("Meredith Principles", "The five principles of Canadian workers' "
         "compensation, and what each is under pressure from", width=WID)
 def meredith_principles() -> Fig:
-    f = vcard("Five principles, one bargain, 1913",
-              ["The worker's tort action, traded for",
-               "a guaranteed benefit the employers fund"])
+    f = vcard()
 
     rows = [("1. No-fault compensation", GREEN),
             ("2. Collective liability", TEAL),
@@ -1631,9 +1534,7 @@ def meredith_principles() -> Fig:
 @figure("Public Auto Insurance", "The four Canadian public auto models and the "
         "trade each makes", width=WID)
 def public_auto_insurance() -> Fig:
-    f = vcard("A monopoly buys expense, and sells competition",
-              ["BC · Saskatchewan · Manitoba — basic",
-               "Quebec — bodily injury only"])
+    f = vcard()
 
     for i, (name, note, colour) in enumerate(
             [("ICBC — BC", "monopoly, basic", BLUE),
@@ -1657,9 +1558,7 @@ def public_auto_insurance() -> Fig:
         "province's disaster cost rising in steps with cost per capita",
         width=WID)
 def dfaa() -> Fig:
-    f = vcard("Ottawa's share climbs as the disaster grows",
-              ["Federal share rises in steps with",
-               "provincial cost per capita"])
+    f = vcard()
 
     ax = vaxes(f, 0, 30, 0, 100, left=48, right=16, top=26, bottom=158)
     ax.frame(xticks=[], yticks=[0, 50, 90], yfmt=lambda v: f"{v:.0f}%",
@@ -1685,9 +1584,7 @@ def dfaa() -> Fig:
 @figure("Social Insurance", "Individual equity against social adequacy — the "
         "trade every social insurance program makes", width=WID)
 def social_insurance() -> Fig:
-    f = vcard("Contributions track earnings, benefits track need",
-              ["Compulsory · statutory benefit",
-               "· contribution by earnings, not by risk"])
+    f = vcard()
 
     ax = vaxes(f, 0, 10, 0, 10, left=48, right=18, top=28, bottom=142)
     ax.frame(xticks=[], yticks=[], arrows=True)
@@ -1709,9 +1606,7 @@ def social_insurance() -> Fig:
 @figure("Risk Transfer", "The two risks a reinsurance contract must transfer, and "
         "the features that destroy the transfer", width=WID)
 def risk_transfer() -> Fig:
-    f = vcard("Transfer both, or account for it as a deposit",
-              ["Insurance risk = underwriting + timing",
-               "how much is paid, and when"])
+    f = vcard()
 
     f.chip(102, 108, "underwriting", colour=BLUE, w=124, h=28)
     f.text(102, 136, "how much", cls="sm dim")
@@ -1736,9 +1631,7 @@ def risk_transfer() -> Fig:
 @figure("Adverse Selection", "The death spiral — pricing at the average drives the "
         "good risks out, and the average rises behind them", width=WID)
 def adverse_selection() -> Fig:
-    f = vcard("Price the average and the average moves",
-              ["E[loss | buys] > E[loss | population]",
-               "the buyer knows what the seller does not"])
+    f = vcard()
 
     ax = vaxes(f, 0, 6, 0, 100, left=48, right=18, top=26, bottom=140)
     ax.frame(xticks=[], yticks=[], arrows=True)
@@ -1762,9 +1655,7 @@ def adverse_selection() -> Fig:
 @figure("Moral Hazard", "The three moral hazards of an insured loss — before it, "
         "after it, and at the provider's desk", width=WID)
 def moral_hazard() -> Fig:
-    f = vcard("Behaviour changes because someone else pays",
-              ["Ex ante: less care taken",
-               "Ex post: more cost incurred"])
+    f = vcard()
 
     rows = [("Ex ante", "the sprinkler never gets installed", BLUE),
             ("Ex post", "treatment runs longer, repair runs richer", AMBER),
@@ -1788,9 +1679,7 @@ def moral_hazard() -> Fig:
 @figure("Solvency", "The three levels of solvency, and why only the third is the "
         "one a regulator acts on", width=WID)
 def solvency() -> Fig:
-    f = vcard("Three levels, and only one is the regulator's",
-              ["MCT = Capital available",
-               "÷ Base solvency buffer"])
+    f = vcard()
 
     rows = [("Balance sheet", "assets exceed liabilities", TEAL),
             ("Regulatory", "and by the required margin", BLUE),
@@ -1809,9 +1698,7 @@ def solvency() -> Fig:
 @figure("Canadian Annual Return", "What the annual return carries, and the "
         "quarterly return that keeps OSFI current between filings", width=WID)
 def canadian_annual_return() -> Fig:
-    f = vcard("One standardised filing, so insurers compare",
-              ["Statements + exhibits + MCT",
-               "+ the Appointed Actuary's opinion"])
+    f = vcard()
 
     rows = [("Audited statements", "position, income, OCI, equity, cash", BLUE),
             ("Supplementary exhibits", "by province and class; claims "
@@ -1830,38 +1717,40 @@ def canadian_annual_return() -> Fig:
     return f
 
 
-@figure("Appointed Actuary", "The Appointed Actuary's four statutory duties, and "
-        "the escalation that ends at OSFI", width=WID)
+@figure("Appointed Actuary", "Inside the insurer, the board appoints the Appointed Actuary "
+        "and receives the valuation; the Appointed Actuary can also escalate outside the "
+        "company to OSFI", width=WID)
 def appointed_actuary() -> Fig:
-    f = vcard("Appointed by the board, not by management",
-              ["Value · opine · report on condition",
-               "· escalate a material adverse matter"])
+    f = vcard()
 
-    _bullets(f, 106, ["value the liabilities (ICA s. 365)",
-                      "give the Statement of Actuarial Opinion",
-                      "report on financial condition — the FCT",
-                      "document the valuation in the AA's Report"],
-             x=38, gap=26, colour=BLUE)
-    f.line(30, 216, 330, 216, cls="rule")
-    f.text(BCX, 238, "and when something is materially wrong", cls="sm bold")
-    _flow(f, 272, ["CEO, CFO", "directors", "OSFI"],
-          colours=[TEAL, AMBER, ROSE], h=26)
-    f.text(BCX, 310, "the dual accountability is the whole difficulty:",
-           cls="sm dim")
-    f.text(BCX, 326, "an employee, paid by the company, who owes a", cls="sm dim")
-    f.text(BCX, 342, "duty that can run against it", cls="sm dim")
-    f.text(BCX, 370, "removable only by the directors, and OSFI is told",
-           cls="sm dim")
-    f.text(BCX, 386, "— which is what makes the protection real", cls="sm dim")
+    # the insurer: the board, and the actuary it appoints
+    f.rect(30, 84, 200, 292, rx=12, fill="var(--soft)", stroke="var(--edge)",
+           stroke_width="1.2")
+    f.text(44, 104, "insurer", cls="sm dim", anchor="start")
+    for x in (100, 130, 160):
+        person(f, x, 146, 34, VIOLET)
+    f.text(130, 186, "board", cls="sm bold")
+    f.arrow(112, 198, 112, 250, colour=VIOLET)
+    f.text(104, 228, "appoints", cls="sm", anchor="end")
+    f.arrow(148, 250, 148, 198, colour=BLUE, dash=True)
+    f.text(156, 228, "reports", cls="sm", anchor="start")
+    person(f, 130, 290, 50, BLUE)
+    f.text(130, 336, "AA", cls="bold")
+    document(f, 66, 296, 38, AMBER)
+    f.text(66, 336, "valuation", cls="sm")
+
+    # the regulator outside it
+    building(f, 290, 202, 60, ROSE)
+    f.text(290, 250, "OSFI", cls="bold")
+    f.arrow(160, 286, 268, 232, colour=ROSE, width=2)
+    f.text(236, 290, "escalates", cls="sm", anchor="middle")
     return f
 
 
 @figure("Insurance Companies Act", "The sections of the ICA that create and "
         "protect the Appointed Actuary's role", width=WID)
 def insurance_companies_act() -> Fig:
-    f = vcard("The statute that makes the actuary's role real",
-              ["s. 357 appoint · s. 365 value",
-               "s. 361 immunity · s. 515 adequate capital"])
+    f = vcard()
 
     rows = [("s. 357", "the directors appoint, and only they remove", BLUE),
             ("s. 365", "value in accordance with accepted practice", TEAL),
@@ -1883,9 +1772,7 @@ def insurance_companies_act() -> Fig:
 @figure("Financial Position", "The running insurer's balance sheet, and the step "
         "from equity to capital available", width=WID)
 def financial_position() -> Fig:
-    f = vcard("Equity is where capital available starts",
-              ["Assets = Liabilities + Equity",
-               "$1,240M = $980M + $260M"])
+    f = vcard()
 
     f.text(BCX, 100, "the running insurer, $M", cls="sm dim")
     scale = 200 / ASSETS
@@ -1912,9 +1799,7 @@ def financial_position() -> Fig:
 @figure("Net Income", "Net income built from the insurance service result and the "
         "net financial result, separately", width=WID)
 def net_income() -> Fig:
-    f = vcard("Underwriting and investment, kept apart",
-              ["Net income = (ISR + financial + other)",
-               "× (1 − tax)"])
+    f = vcard()
 
     _waterfall(f, 260,
                [("ISR", 38.0, BLUE), ("financial", 22.0, TEAL),
@@ -1935,9 +1820,7 @@ def net_income() -> Fig:
 @figure("Comprehensive Income", "Net income plus the items IFRS keeps outside "
         "profit or loss, and where they end up", width=WID)
 def comprehensive_income() -> Fig:
-    f = vcard("Everything but transactions with shareholders",
-              ["Comprehensive income = net income + OCI",
-               "$39M − $14M = $25M"])
+    f = vcard()
 
     _waterfall(f, 250,
                [("net income", 39.4, GREEN), ("OCI", -14.0, ROSE),
@@ -1957,9 +1840,7 @@ def comprehensive_income() -> Fig:
         "through comprehensive income, dividends and capital transactions",
         width=WID)
 def statement_of_changes_in_equity() -> Fig:
-    f = vcard("The audit trail from opening equity to closing",
-              ["Close = open + comprehensive income",
-               "− dividends + capital transactions"])
+    f = vcard()
 
     _waterfall(f, 264,
                [("open", 245.0, TEAL), ("net income", 39.4, GREEN),
@@ -1980,9 +1861,7 @@ def statement_of_changes_in_equity() -> Fig:
 @figure("Quarterly Return", "Three quarterly filings between annual returns, and "
         "what a regulator would otherwise miss", width=WID)
 def quarterly_return() -> Fig:
-    f = vcard("Eleven months is too long to wait",
-              ["A reduced annual return: statements,",
-               "the MCT, and the key exhibits"])
+    f = vcard()
 
     ax = vaxes(f, 0, 5, 100, 175, left=48, right=18, top=28, bottom=162)
     ax.frame(xticks=[], yticks=[100, 150], yfmt=lambda v: f"{v:.0f}%",
@@ -2013,9 +1892,7 @@ def quarterly_return() -> Fig:
 @figure("Notes to Financial Statements", "The IFRS 17 disclosures that decide "
         "whether two insurers' numbers can be compared at all", width=WID)
 def notes_to_financial_statements() -> Fig:
-    f = vcard("Where you find out what the numbers mean",
-              ["Judgement-heavy measurement ⇒",
-               "the notes carry the comparability"])
+    f = vcard()
 
     _bullets(f, 106, ["the LRC, loss component, LIC and CSM,",
                       "reconciled opening to closing",
@@ -2040,9 +1917,7 @@ def notes_to_financial_statements() -> Fig:
 @figure("MSA Ratios", "The combined ratio split into its parts, and the four "
         "families of ratio a Canadian analyst reads", width=WID)
 def msa_ratios() -> Fig:
-    f = vcard("One filing, one instruction set, comparable ratios",
-              ["Combined = (claims + expenses)",
-               "÷ earned premium — 64% + 31% = 95%"])
+    f = vcard()
 
     _hbar(f, 132, [(0.64, "loss 64%", BLUE), (0.31, "exp 31%", AMBER),
                    (0.05, "", GREEN)], x0=40, x1=320, height=34)
@@ -2067,9 +1942,7 @@ def msa_ratios() -> Fig:
 @figure("Accepted Actuarial Practice", "The hierarchy the phrase points at, and "
         "the statutory hook that gives it legal effect", width=WID)
 def accepted_actuarial_practice() -> Fig:
-    f = vcard("Parliament pointed at the profession's own rules",
-              ["ICA s. 365: value in accordance with",
-               "accepted actuarial practice in Canada"])
+    f = vcard()
 
     rows = [("Rules of Professional Conduct", "how to behave", VIOLET),
             ("Standards of Practice", "binding — what must be done", BLUE),
@@ -2088,9 +1961,7 @@ def accepted_actuarial_practice() -> Fig:
 @figure("IFRS 17", "The two liabilities, the three measurement models, and which "
         "one a Canadian P&C insurer actually uses", width=WID)
 def ifrs_17() -> Fig:
-    f = vcard("One current-value model, in force since 2023",
-              ["Insurance contract liability = LRC + LIC",
-               "future service, and claims already incurred"])
+    f = vcard()
 
     f.box(38, 100, 128, 62, label="LRC", colour=BLUE,
           sub="service not yet given")
@@ -2116,9 +1987,7 @@ def ifrs_17() -> Fig:
 @figure("Insurance Contract Liabilities", "The insurer's contract liability split "
         "into the two halves, measured on entirely different bases", width=WID)
 def insurance_contract_liabilities() -> Fig:
-    f = vcard("Two halves that share nothing but a total",
-              ["ICL = LRC + LIC",
-               "$190M + $450M = $640M"])
+    f = vcard()
 
     _hbar(f, 128, [(LRC_CO, "LRC 190", BLUE), (LIC_CO, "LIC 450", AMBER)],
           x0=40, x1=320, height=38)
@@ -2142,9 +2011,7 @@ def insurance_contract_liabilities() -> Fig:
 @figure("Liability for Remaining Coverage", "The running PAA book's LRC at six "
         "months, and the loss component the onerous test adds to it", width=WID)
 def liability_for_remaining_coverage() -> Fig:
-    f = vcard("Premium not yet earned, less what buying it cost",
-              ["LRC = premiums − acquisition amortised",
-               "− revenue recognised"])
+    f = vcard()
 
     f.text(BCX, 100, "$24M written 1 July, at 31 December ($M)", cls="sm dim")
     rows = [("premium unearned", 12.0, BLUE),
@@ -2173,9 +2040,7 @@ def liability_for_remaining_coverage() -> Fig:
 @figure("Liability for Incurred Claims", "The LIC as discounted fulfilment cash "
         "flows plus a risk adjustment, and no margin beyond", width=WID)
 def liability_for_incurred_claims() -> Fig:
-    f = vcard("Reserving's new name, and its two pieces",
-              ["LIC = PV(expected cash flows) + RA",
-               "$420M + $30M = $450M"])
+    f = vcard()
 
     _waterfall(f, 236,
                [("undiscounted", 486.0, "var(--dim)"),
@@ -2198,9 +2063,7 @@ def liability_for_incurred_claims() -> Fig:
 @figure("Fulfilment Cash Flows", "The three building blocks of a fulfilment "
         "measurement, and where each lands on the income statement", width=WID)
 def fulfilment_cash_flows() -> Fig:
-    f = vcard("What it will cost to discharge the obligation",
-              ["FCF = PV(E[cash flows]) + RA",
-               "the insurer's own view, not an exit price"])
+    f = vcard()
 
     rows = [("Expected cash flows", "unbiased, probability-weighted", BLUE),
             ("Time value of money", "current, market-consistent rates", TEAL),
@@ -2219,9 +2082,7 @@ def fulfilment_cash_flows() -> Fig:
         "the liability distribution, and the confidence level that must be "
         "disclosed", width=WID)
 def risk_adjustment() -> Fig:
-    f = vcard("Entity-specific, and the confidence level is disclosed",
-              ["RA = what the insurer requires for",
-               "bearing non-financial uncertainty"])
+    f = vcard()
 
     ax = vaxes(f, 0, 10, 0, 0.42, left=44, right=16, top=30, bottom=150)
     ax.area(lambda x: 0.40 * 2.718 ** (-0.5 * (x - 3.4) ** 2 / 1.6), 0, 4.2,
@@ -2249,9 +2110,7 @@ def risk_adjustment() -> Fig:
 @figure("IFRS 17 Discount Rates", "The bottom-up and top-down constructions "
         "arriving at the same curve from opposite ends", width=WID)
 def ifrs_17_discount_rates() -> Fig:
-    f = vcard("Two ways to build it, and they need not agree",
-              ["r = risk-free + illiquidity premium",
-               "or asset yield − credit − market risk"])
+    f = vcard()
 
     f.text(100, 112, "bottom-up", cls="sm bold", fill=BLUE)
     f.text(260, 112, "top-down", cls="sm bold", fill=AMBER)
@@ -2280,9 +2139,7 @@ def ifrs_17_discount_rates() -> Fig:
 @figure("Contractual Service Margin", "The CSM set so there is no day-one gain, "
         "then released over coverage units", width=WID)
 def contractual_service_margin() -> Fig:
-    f = vcard("Unearned profit, released as coverage is given",
-              ["CSM₀ = PV(inflows) − PV(outflows) − RA",
-               "$60M − $44M − $5M = $11M"])
+    f = vcard()
 
     _hbar(f, 124, [(44.0, "outflows 44", AMBER), (5.0, "RA", VIOLET),
                    (11.0, "CSM 11", GREEN)], x0=40, x1=320, height=34)
@@ -2303,9 +2160,7 @@ def contractual_service_margin() -> Fig:
 @figure("General Measurement Model", "The GMM's three building blocks stacked "
         "into one liability, all remeasured every period", width=WID)
 def general_measurement_model() -> Fig:
-    f = vcard("The default model: cash flows, risk, profit",
-              ["Liability = PV(cash flows) + RA + CSM",
-               "and all three are remeasured each period"])
+    f = vcard()
 
     x0, w = 116, 128
     f.rect(x0, 230, w, 74, rx=6, fill=BLUE, fill_opacity="0.28", stroke=BLUE,
@@ -2334,9 +2189,7 @@ def general_measurement_model() -> Fig:
 @figure("Premium Allocation Approach", "The PAA eligibility test, and the half of "
         "the liability it does not simplify", width=WID)
 def premium_allocation_approach() -> Fig:
-    f = vcard("Unearned premium, in IFRS 17 clothing",
-              ["LRC = premium − acquisition",
-               "− revenue recognised"])
+    f = vcard()
 
     f.text(BCX, 102, "eligible if either holds", cls="sm dim")
     f.box(36, 118, 130, 64, label="coverage ≤", colour=GREEN,
@@ -2361,9 +2214,7 @@ def premium_allocation_approach() -> Fig:
 @figure("Contract Boundary", "The boundary ending where the insurer can reprice, "
         "and the guarantee that pushes it out", width=WID)
 def contract_boundary() -> Fig:
-    f = vcard("It ends where full repricing begins",
-              ["In boundary ⟺ the insurer cannot",
-               "reprice fully for the risk"])
+    f = vcard()
 
     y = 148
     f.arrow(40, y, 330, y, colour="var(--axis)", width=1.2)
@@ -2396,9 +2247,7 @@ def contract_boundary() -> Fig:
 @figure("Level of Aggregation", "A portfolio cut by annual cohort and by "
         "profitability into the groups IFRS 17 measures", width=WID)
 def level_of_aggregation() -> Fig:
-    f = vcard("Measured in groups — never as a whole book",
-              ["Group = portfolio ∩ annual cohort",
-               "∩ profitability bucket"])
+    f = vcard()
 
     f.chip(BCX, 106, "portfolio — personal auto, Ontario", colour=VIOLET,
            w=276, h=28)
@@ -2424,9 +2273,7 @@ def level_of_aggregation() -> Fig:
 @figure("Coverage Units", "The same CSM released on two different drivers, and "
         "the profit pattern each produces", width=WID)
 def coverage_units() -> Fig:
-    f = vcard("The driver chooses when the profit appears",
-              ["Released = CSM × units this period",
-               "÷ total units remaining"])
+    f = vcard()
 
     f.text(BCX, 102, "$11M of CSM, released three ways ($M)", cls="sm dim")
     for i, (name, pat, colour) in enumerate(
@@ -2453,9 +2300,7 @@ def coverage_units() -> Fig:
 @figure("Onerous Contract", "The onerous test at group level, and the asymmetry "
         "between a loss and a profit", width=WID)
 def onerous_contract() -> Fig:
-    f = vcard("A loss is taken now; a profit is deferred",
-              ["Onerous ⟺ PV(outflows) + RA",
-               "> PV(inflows)"])
+    f = vcard()
 
     for i, (name, inflow, outflow, colour) in enumerate(
             [("group A", 100, 86, GREEN), ("group B", 100, 118, ROSE)]):
@@ -2483,9 +2328,7 @@ def onerous_contract() -> Fig:
 @figure("Loss Component", "The two parts of an onerous group's LRC, and why only "
         "one of them ever becomes revenue", width=WID)
 def loss_component() -> Fig:
-    f = vcard("The half of the LRC that never becomes revenue",
-              ["LRC = remaining coverage",
-               "+ loss component"])
+    f = vcard()
 
     _hbar(f, 128, [(9.6, "coverage 9.6", BLUE), (1.9, "1.9", ROSE)],
           x0=40, x1=320, height=36)
@@ -2509,9 +2352,7 @@ def loss_component() -> Fig:
         "costs absorbed into the LRC — with no deferred asset left behind",
         width=WID)
 def insurance_acquisition_cash_flows() -> Fig:
-    f = vcard("No deferred acquisition asset any more",
-              ["They reduce the LRC instead —",
-               "$24M premium less $4.8M of them"])
+    f = vcard()
 
     _columns(f, 100, ["Directly", "Not"],
              [["commission", "premium tax", "underwriting", "policy issue"],
@@ -2535,9 +2376,7 @@ def insurance_acquisition_cash_flows() -> Fig:
 @figure("Insurance Revenue", "The GMM revenue build-up for year one of the running "
         "group, component by component", width=WID)
 def insurance_revenue() -> Fig:
-    f = vcard("Built from what was released, not from premium",
-              ["Revenue = expected claims + RA released",
-               "+ CSM released + acquisition"])
+    f = vcard()
 
     _waterfall(f, 254,
                [("claims", 17.6, BLUE), ("RA", 2.0, VIOLET),
@@ -2557,9 +2396,7 @@ def insurance_revenue() -> Fig:
 @figure("Insurance Service Expenses", "What lands in insurance service expenses "
         "and what is routed to finance instead", width=WID)
 def insurance_service_expenses() -> Fig:
-    f = vcard("Past service here; the discount effect elsewhere",
-              ["Claims + acquisition amortised",
-               "+ onerous losses — and nothing financial"])
+    f = vcard()
 
     _columns(f, 100, ["In", "Out"],
              [["incurred claims", "and ALAE", "claims handling",
@@ -2581,9 +2418,7 @@ def insurance_service_expenses() -> Fig:
 @figure("Insurance Service Result", "The IFRS 17 income statement down to the "
         "insurance service result, with reinsurance on its own line", width=WID)
 def insurance_service_result() -> Fig:
-    f = vcard("Underwriting, with every financial effect stripped out",
-              ["ISR = revenue − service expenses",
-               "− net reinsurance expense"])
+    f = vcard()
 
     rows = [("Insurance revenue", "420", BLUE),
             ("Insurance service expenses", "(370)", AMBER),
@@ -2609,9 +2444,7 @@ def insurance_service_result() -> Fig:
 @figure("Insurance Finance Income or Expenses", "The predictable unwind of "
         "discount beside the volatile effect of a rate change", width=WID)
 def insurance_finance_income_or_expenses() -> Fig:
-    f = vcard("Two effects, one predictable and one not",
-              ["IFIE = unwind of discount",
-               "+ effect of rate changes"])
+    f = vcard()
 
     ax = vaxes(f, 0, 6, 380, 540, left=48, right=16, top=28, bottom=160)
     ax.frame(xticks=[], yticks=[], arrows=True)
@@ -2637,9 +2470,7 @@ def insurance_finance_income_or_expenses() -> Fig:
 @figure("Other Comprehensive Income Option", "The same rate effect routed to OCI "
         "instead of profit, leaving a systematic amount behind", width=WID)
 def other_comprehensive_income_option() -> Fig:
-    f = vcard("Same total, different line",
-              ["Profit keeps the locked-in unwind;",
-               "OCI takes the rate change"])
+    f = vcard()
 
     f.chip(BCX, 106, "IFIE for the period", colour=VIOLET, w=210, h=28)
     f.arrow(BCX - 40, 122, 106, 152, colour="var(--dim)", width=1.3)
@@ -2667,9 +2498,7 @@ def other_comprehensive_income_option() -> Fig:
         "first, and the two fallbacks only where it is impracticable",
         width=WID)
 def transition_to_ifrs_17() -> Fig:
-    f = vcard("A hierarchy, not a menu",
-              ["Full retrospective, unless impracticable",
-               "— then modified retrospective or fair value"])
+    f = vcard()
 
     f.box(38, 100, 284, 62, label="Full retrospective", colour=GREEN,
           sub="as if IFRS 17 had always applied")
@@ -2695,9 +2524,7 @@ def transition_to_ifrs_17() -> Fig:
         "as insurance issued — and the reporting lag that makes it harder",
         width=WID)
 def reinsurance_contract_liabilities() -> Fig:
-    f = vcard("Reinsurance assumed is insurance issued",
-              ["Liability = LRC + LIC, as always",
-               "— it is held reinsurance that is the asset"])
+    f = vcard()
 
     _columns(f, 100, ["Held", "Issued"],
              [["reinsurance bought", "an asset", "recoveries in"],
@@ -2724,9 +2551,7 @@ def reinsurance_contract_liabilities() -> Fig:
 @figure("Margin for Adverse Deviations", "The three MfADs of the old Canadian "
         "regime, and where each of them went under IFRS 17", width=WID)
 def margin_for_adverse_deviations() -> Fig:
-    f = vcard("Three prescribed margins, replaced by one judgement",
-              ["Old: best estimate × (1 + MfADs)",
-               "New: fulfilment cash flows + one RA"])
+    f = vcard()
 
     rows = [("claims development", "→ the risk adjustment", VIOLET),
             ("reinsurance recovery", "→ non-performance risk", AMBER),
@@ -2753,9 +2578,7 @@ def margin_for_adverse_deviations() -> Fig:
 @figure("Reinsurance Accounting", "Whether a contract transfers significant "
         "insurance risk, and the two accountings that follow", width=WID)
 def reinsurance_accounting() -> Fig:
-    f = vcard("Everything turns on the risk transfer test",
-              ["No significant risk transfer",
-               "⇒ deposit accounting"])
+    f = vcard()
 
     f.chip(BCX, 104, "does it transfer significant risk?", colour=VIOLET,
            w=270, h=28)
@@ -2780,9 +2603,7 @@ def reinsurance_accounting() -> Fig:
 @figure("Reinsurance Contracts Held", "The reinsurance asset's components, and the "
         "CSM that is normally a net cost rather than a profit", width=WID)
 def reinsurance_contracts_held() -> Fig:
-    f = vcard("An asset bought at more than it will recover",
-              ["Asset = PV(recoveries) − PV(premiums)",
-               "+ RA + CSM"])
+    f = vcard()
 
     _columns(f, 100, ["Issued", "Held"],
              [["a liability", "the RA raises it", "the CSM is", "unearned profit",
@@ -2804,9 +2625,7 @@ def reinsurance_contracts_held() -> Fig:
 @figure("Registered Reinsurance", "Full MCT credit for a cession OSFI can reach, "
         "and none for one it cannot", width=WID)
 def registered_reinsurance() -> Fig:
-    f = vcard("Credit follows the regulator's reach",
-              ["Registered ⇒ full capital credit",
-               "for the ceded liabilities"])
+    f = vcard()
 
     _columns(f, 100, ["Registered", "Unregistered"],
              [["OSFI licensed", "examined and", "supervised",
@@ -2832,9 +2651,7 @@ def registered_reinsurance() -> Fig:
 @figure("Unregistered Reinsurance", "Capital credit for an unregistered cession "
         "capped at the collateral posted behind it", width=WID)
 def unregistered_reinsurance() -> Fig:
-    f = vcard("Credit stops where the collateral stops",
-              ["Credit = min(ceded liabilities,",
-               "acceptable collateral)"])
+    f = vcard()
 
     f.text(BCX, 102, "$100M ceded, $70M collateralised", cls="sm dim")
     f.text(40, 132, "ceded liabilities", cls="sm", anchor="start")
@@ -2857,9 +2674,7 @@ def unregistered_reinsurance() -> Fig:
 @figure("Finite Reinsurance", "A finite contract's outcome band, narrow enough "
         "that the reinsurer's result barely moves", width=WID)
 def finite_reinsurance() -> Fig:
-    f = vcard("The reinsurer's result barely moves — so it is a loan",
-              ["Reinsurer's outcome ≈ fee",
-               "+ investment margin"])
+    f = vcard()
 
     ax = vaxes(f, 0, 10, -20, 40, left=52, right=16, top=28, bottom=152)
     ax.frame(xticks=[], yticks=[], arrows=True)
@@ -2883,9 +2698,7 @@ def finite_reinsurance() -> Fig:
 @figure("Commutations", "A commutation replacing a stream of future recoveries "
         "with cash today, and handing the tail back", width=WID)
 def commutations() -> Fig:
-    f = vcard("Cash today, and the tail comes home",
-              ["Price ≈ PV(future recoveries)",
-               "± who wants out more"])
+    f = vcard()
 
     y = 150
     f.arrow(48, y, 322, y, colour="var(--axis)", width=1.2)
@@ -2909,9 +2722,7 @@ def commutations() -> Fig:
 @figure("MCT", "The running insurer's MCT ratio against the minimum, supervisory "
         "and internal thresholds", width=WID)
 def mct() -> Fig:
-    f = vcard("One ratio, and three lines it has to clear",
-              ["MCT = capital available",
-               "÷ base solvency buffer = 104.6%"])
+    f = vcard()
 
     py = _ladder(f, 96, 340, 122, 0.80, 2.00,
                  [(MIN_RATIO, "100% minimum", ROSE),
@@ -2929,9 +2740,7 @@ def mct() -> Fig:
 @figure("Capital Available", "Accounting equity reduced to capital available by "
         "the deductions for things that would not absorb a loss", width=WID)
 def capital_available() -> Fig:
-    f = vcard("Only what would actually absorb a loss",
-              ["Available = category A + B − deductions",
-               "$260M equity − $12M = $248M"])
+    f = vcard()
 
     _waterfall(f, 244,
                [("equity", 260.0, GREEN), ("goodwill", -8.0, ROSE),
@@ -2954,9 +2763,7 @@ def capital_available() -> Fig:
 @figure("Capital Required", "The four risk margins summed and then reduced by the "
         "diversification credit", width=WID)
 def capital_required() -> Fig:
-    f = vcard("Four margins, less one credit",
-              ["CR = insurance + market + credit",
-               "+ operational − diversification"])
+    f = vcard()
 
     _waterfall(f, 250,
                [("ins.", M_INS, BLUE), ("mkt", M_MKT, TEAL),
@@ -2978,9 +2785,7 @@ def capital_required() -> Fig:
 @figure("Base Solvency Buffer", "The 1.5 multiplier, and how the supervisory "
         "target compounds it into 2.25 times capital required", width=WID)
 def base_solvency_buffer() -> Fig:
-    f = vcard("The multiplier that the ratio is measured against",
-              ["BSB = 1.5 × capital required",
-               "1.5 × $158M = $237M"])
+    f = vcard()
 
     f.text(BCX, 102, "capital required, and what it becomes", cls="sm dim")
     for i, (label, mult, colour) in enumerate(
@@ -3004,9 +2809,7 @@ def base_solvency_buffer() -> Fig:
 @figure("Insurance Risk Margin", "The three parts of the insurance risk margin, "
         "and why growth alone raises it", width=WID)
 def insurance_risk_margin() -> Fig:
-    f = vcard("The largest margin, and it grows with volume",
-              ["Insurance = claim liabilities",
-               "+ premium liabilities + catastrophe"])
+    f = vcard()
 
     _vbars(f, [58.0, 22.0, 12.0],
            ["claim", "premium", "catastrophe"], 240, x0=54, x1=310, top=64,
@@ -3024,9 +2827,7 @@ def insurance_risk_margin() -> Fig:
 @figure("Market Risk Margin", "Interest rate risk measured on the duration "
         "mismatch, not on the assets alone", width=WID)
 def market_risk_margin() -> Fig:
-    f = vcard("Interest rate risk is measured on the mismatch",
-              ["Market = interest + equity",
-               "+ real estate + currency"])
+    f = vcard()
 
     for i, (label, a, l, colour) in enumerate(
             [("matched", 3.4, 3.4, GREEN), ("mismatched", 6.2, 3.4, ROSE)]):
@@ -3052,9 +2853,7 @@ def market_risk_margin() -> Fig:
 @figure("Credit Risk Margin", "The credit exposures behind the margin, with "
         "reinsurance recoverables usually the largest", width=WID)
 def credit_risk_margin() -> Fig:
-    f = vcard("Cede the insurance risk, take on credit risk",
-              ["Credit = factors × exposure,",
-               "by counterparty type and quality"])
+    f = vcard()
 
     for i, (name, w, colour) in enumerate(
             [("reinsurance recoverables", 148, ROSE),
@@ -3082,9 +2881,7 @@ def credit_risk_margin() -> Fig:
 @figure("Operational Risk Margin", "A formula on volume and growth, blind to how "
         "well the insurer is actually run", width=WID)
 def operational_risk_margin() -> Fig:
-    f = vcard("A charge on volume — and on growth",
-              ["Operational ≈ f(premiums,",
-               "liabilities, growth)"])
+    f = vcard()
 
     ax = vaxes(f, 0, 40, 0, 30, left=48, right=18, top=28, bottom=160)
     ax.frame(xticks=[0, 20, 40], xfmt=lambda v: f"{v:.0f}%", yticks=[],
@@ -3106,9 +2903,7 @@ def operational_risk_margin() -> Fig:
 @figure("Diversification Credit", "The credit removing the over-statement in "
         "adding insurance and market risk together", width=WID)
 def diversification_credit() -> Fig:
-    f = vcard("A hurricane and a market crash are not the same event",
-              ["Credit applies between insurance",
-               "and market risk — and nothing else"])
+    f = vcard()
 
     _vbars(f, [92.0, 54.0, 146.0, 120.0],
            ["insurance", "market", "added", "combined"], 242,
@@ -3130,9 +2925,7 @@ def diversification_credit() -> Fig:
 @figure("Earthquake Exposure Risk Margin", "The 1-in-500 PML met by reinsurance, "
         "reserves and capital — with the shortfall the requirement", width=WID)
 def earthquake_exposure_risk_margin() -> Fig:
-    f = vcard("Hold resources for the 1-in-500 year event",
-              ["Requirement = PML₁/₅₀₀ − reinsurance",
-               "− other financial resources"])
+    f = vcard()
 
     f.text(BCX, 104, "$600M gross PML, and what meets it ($M)", cls="sm dim")
     f.rect(40, 124, 268, 26, rx=4, fill=ROSE, fill_opacity="0.45")
@@ -3164,9 +2957,7 @@ def earthquake_exposure_risk_margin() -> Fig:
 @figure("Probable Maximum Loss", "The catastrophe loss distribution with the "
         "1-in-500 tail read off it, gross and net of reinsurance", width=WID)
 def probable_maximum_loss() -> Fig:
-    f = vcard("A percentile of a modelled distribution",
-              ["PML(p) = VaR at return period p",
-               "1-in-500 = 0.2% in any one year"])
+    f = vcard()
 
     ax = vaxes(f, 0, 10, 0, 1.0, left=44, right=16, top=30, bottom=160)
     ax.area(lambda x: 0.95 * 2.718 ** (-0.62 * x), 0, 10, colour=BLUE,
@@ -3192,9 +2983,7 @@ def probable_maximum_loss() -> Fig:
 @figure("Supervisory Target Capital Ratio", "The 150% supervisory target and the "
         "100% minimum, and the space between them", width=WID)
 def supervisory_target_capital_ratio() -> Fig:
-    f = vcard("150% is where OSFI expects you to operate",
-              ["Supervisory target 150%",
-               "Minimum 100%"])
+    f = vcard()
 
     _ladder(f, 108, 322, 122, 0.80, 2.10,
             [(MIN_RATIO, "100% minimum", ROSE),
@@ -3217,9 +3006,7 @@ def supervisory_target_capital_ratio() -> Fig:
 @figure("Internal Target Capital Ratio", "The insurer's own target set above the "
         "supervisory one, derived from its own adverse scenarios", width=WID)
 def internal_target_capital_ratio() -> Fig:
-    f = vcard("Your own target, from your own scenarios",
-              ["Internal > 150% supervisory",
-               "— set by ORSA, tested by FCT"])
+    f = vcard()
 
     _flow(f, 110, ["scenarios", "capital need", "target"],
           colours=[BLUE, TEAL, VIOLET], h=28)
@@ -3246,9 +3033,7 @@ def internal_target_capital_ratio() -> Fig:
 @figure("Stress Testing", "The three kinds of test, from moving one variable to "
         "starting at failure and working back", width=WID)
 def stress_testing() -> Fig:
-    f = vcard("Severe but plausible — and it has to change something",
-              ["Sensitivity → scenario → reverse",
-               "one variable, a coherent set, then failure"])
+    f = vcard()
 
     rows = [("Sensitivity", "move one variable — +100 bp, +10% reserves", BLUE),
             ("Scenario", "move a coherent set that could happen together",
@@ -3270,9 +3055,7 @@ def stress_testing() -> Fig:
 @figure("Reverse Stress Testing", "A forward test searching outward from known "
         "risks, against a reverse test searching inward from failure", width=WID)
 def reverse_stress_testing() -> Fig:
-    f = vcard("Start at failure and search backwards",
-              ["Forward: what if X happens?",
-               "Reverse: what would have to happen?"])
+    f = vcard()
 
     f.chip(96, 116, "known risks", colour=BLUE, w=118, h=28)
     f.arrow(158, 116, 214, 116, colour=BLUE, width=1.5)
@@ -3297,9 +3080,7 @@ def reverse_stress_testing() -> Fig:
 @figure("Ripple Effect", "A catastrophe's direct cost compounded by the second-"
         "order effects FCT requires to be modelled", width=WID)
 def ripple_effect() -> Fig:
-    f = vcard("The first impact is never the whole cost",
-              ["Model the ripples — and the realistic",
-               "management actions against them"])
+    f = vcard()
 
     _waterfall(f, 248,
                [("cat", 50.0, ROSE), ("reinst.", 8.0, AMBER),
@@ -3321,9 +3102,7 @@ def ripple_effect() -> Fig:
 @figure("Risk Appetite", "The four layers of a risk appetite framework, from the "
         "board's statement down to the breach that escalates", width=WID)
 def risk_appetite() -> Fig:
-    f = vcard("The board's statement, made operational",
-              ["Appetite ≤ capacity",
-               "how much of what you could bear, you will"])
+    f = vcard()
 
     rows = [("Appetite statement", "the board says what risk, and why", VIOLET),
             ("Limits", "PML as % of capital, single risk, targets", BLUE),
@@ -3343,9 +3122,7 @@ def risk_appetite() -> Fig:
 @figure("Concentration Risk", "The five concentrations that turn separate "
         "exposures into one, and the formula that cannot see them", width=WID)
 def concentration_risk() -> Fig:
-    f = vcard("Exposures that look separate and are not",
-              ["Diversification is the assumption —",
-               "concentration is its failure"])
+    f = vcard()
 
     for i, (name, note, colour) in enumerate(
             [("Geographic", "one earthquake, one wildfire", ROSE),
@@ -3368,9 +3145,7 @@ def concentration_risk() -> Fig:
 @figure("Climate Risk", "Physical and transition risk reaching the insurer by "
         "different routes, and the non-stationarity behind both", width=WID)
 def climate_risk() -> Fig:
-    f = vcard("Two risks, and the past no longer predicts either",
-              ["Physical: acute and chronic",
-               "Transition: policy, technology, litigation"])
+    f = vcard()
 
     _columns(f, 100, ["Physical", "Transition"],
              [["acute — flood,", "wildfire, hail", "chronic — sea level,",
@@ -3397,9 +3172,7 @@ def climate_risk() -> Fig:
 @figure("Rating Agency", "The downgrade spiral — a rating cut feeding the metrics "
         "that produced it", width=WID)
 def rating_agency() -> Fig:
-    f = vcard("A published opinion, and it feeds back",
-              ["A- is the common commercial threshold",
-               "— below it, the business goes elsewhere"])
+    f = vcard()
 
     cx, cy, r = BCX, 178, 58
     steps = [("downgrade", -90, ROSE), ("business lost", 0, AMBER),
@@ -3424,9 +3197,7 @@ def rating_agency() -> Fig:
 @figure("Principles-Based Regulation", "The Canadian framework using both — a "
         "rules-based MCT with principles-based expectations on top", width=WID)
 def principles_based_regulation() -> Fig:
-    f = vcard("Canada uses both, and on purpose",
-              ["Rules say how; principles say what",
-               "— the MCT under ORSA, FCT and B-15"])
+    f = vcard()
 
     f.box(38, 100, 284, 54, label="ORSA · FCT · governance · B-15",
           colour=TEAL, sub="principles — the outcome is prescribed")
@@ -3446,9 +3217,7 @@ def principles_based_regulation() -> Fig:
 @figure("ORSA", "ORSA asking whether the standard formula fits this insurer, and "
         "setting the internal target that follows", width=WID)
 def orsa() -> Fig:
-    f = vcard("Does the standard formula fit this insurer?",
-              ["The insurer's own view of required capital",
-               "— and the internal target it implies"])
+    f = vcard()
 
     f.chip(BCX, 106, "the MCT's standardised requirement", colour=BLUE,
            w=276, h=28)
@@ -3472,9 +3241,7 @@ def orsa() -> Fig:
 @figure("FCT", "The FCT opinion — the base scenario above the supervisory target "
         "and every adverse scenario above the minimum", width=WID)
 def fct() -> Fig:
-    f = vcard("Satisfactory means both tests pass",
-              ["Base ≥ supervisory target",
-               "Every adverse scenario ≥ minimum"])
+    f = vcard()
 
     def py(v):
         return 300 - (v - 0.60) / 1.50 * (300 - 116)
@@ -3506,9 +3273,7 @@ def fct() -> Fig:
 @figure("Solvency II", "Solvency II's three pillars beside the Canadian pieces "
         "that answer to each", width=WID)
 def solvency_ii() -> Fig:
-    f = vcard("The international benchmark for the Canadian regime",
-              ["Ratio = own funds ÷ SCR",
-               "SCR = 99.5% VaR over one year"])
+    f = vcard()
 
     for i, (pillar, eu, ca, colour) in enumerate(
             [("Pillar 1", "SCR, MCR", "the MCT", BLUE),
@@ -3532,9 +3297,7 @@ def solvency_ii() -> Fig:
 @figure("Statement of Actuarial Opinion", "The four opinions available to the "
         "Appointed Actuary, and the one thing the opinion is about", width=WID)
 def statement_of_actuarial_opinion() -> Fig:
-    f = vcard("An opinion on the amount carried, not on your own estimate",
-              ["Does the reported liability make",
-               "appropriate provision for the obligations?"])
+    f = vcard()
 
     for i, (name, note, colour) in enumerate(
             [("Unqualified", "it does", GREEN),
@@ -3560,9 +3323,7 @@ def statement_of_actuarial_opinion() -> Fig:
         "actual-versus-expected section that tests last year's estimate",
         width=WID)
 def appointed_actuarys_report() -> Fig:
-    f = vcard("Detailed enough for another actuary to redo it",
-              ["Data · methods · assumptions · results",
-               "· sensitivity · subsequent events"])
+    f = vcard()
 
     _bullets(f, 106, ["data, reconciled — and its deficiencies",
                       "methods by line and by LIC / LRC component",
@@ -3585,9 +3346,7 @@ def appointed_actuarys_report() -> Fig:
 @figure("Standards of Practice", "The obligations an actuary works under, from "
         "conduct down to the guidance that is not binding", width=WID)
 def standards_of_practice() -> Fig:
-    f = vcard("Binding practice, and principles rather than a recipe",
-              ["General + practice-specific standards",
-               "— compliance is mandatory for members"])
+    f = vcard()
 
     rows = [("Rules of Professional Conduct", "binding — how to behave",
              VIOLET),
@@ -3607,9 +3366,7 @@ def standards_of_practice() -> Fig:
 @figure("Materiality", "One materiality standard, chosen for the purpose and "
         "applied in both directions", width=WID)
 def materiality() -> Fig:
-    f = vcard("A judgement for the purpose, not a percentage",
-              ["Would this change a user's decision?",
-               "— chosen, applied consistently, disclosed"])
+    f = vcard()
 
     f.text(BCX, 104, "common reference points, none of them a rule",
            cls="sm dim")
@@ -3633,9 +3390,7 @@ def materiality() -> Fig:
 @figure("Subsequent Events", "The one question that decides the treatment of an "
         "event between the valuation date and the report", width=WID)
 def subsequent_events() -> Fig:
-    f = vcard("Evidence of what was already true, or a new fact?",
-              ["Evidence at the valuation date → adjust",
-               "A new condition after it → disclose"])
+    f = vcard()
 
     y = 134
     f.arrow(40, y, 330, y, colour="var(--axis)", width=1.2)
@@ -3666,9 +3421,7 @@ def subsequent_events() -> Fig:
 @figure("Model Risk", "The three places a model goes wrong, and the validation "
         "that has to be independent of whoever built it", width=WID)
 def model_risk() -> Fig:
-    f = vcard("Wrong model, wrong data, or wrongly used",
-              ["Model error · input error · use error",
-               "— and the last is the one that travels"])
+    f = vcard()
 
     rows = [("Model error", "development factors from another line", ROSE),
             ("Input error", "a PML on mis-coded locations", AMBER),
@@ -3688,9 +3441,7 @@ def model_risk() -> Fig:
 @figure("Runoff", "What changes when an insurer stops writing — expenses first, "
         "and they are usually understated", width=WID)
 def runoff() -> Fig:
-    f = vcard("No new premium to spread the overhead across",
-              ["Every claim still has to be handled",
-               "— to the last one, with no new business"])
+    f = vcard()
 
     ax = vaxes(f, 0, 10, 0, 100, left=48, right=18, top=28, bottom=170)
     ax.frame(xticks=[], yticks=[], arrows=True)
@@ -3715,9 +3466,7 @@ def runoff() -> Fig:
 @figure("Educational Note", "Where an educational note sits — expected in "
         "practice, and binding on nobody", width=WID)
 def educational_note() -> Fig:
-    f = vcard("Not binding, and you will be asked why you ignored it",
-              ["It illustrates accepted practice —",
-               "it does not define it"])
+    f = vcard()
 
     for i, (name, weight, colour) in enumerate(
             [("Rules of Professional Conduct", 1.00, VIOLET),
@@ -3745,9 +3494,7 @@ def educational_note() -> Fig:
 @figure("Duty to Report", "The three-step escalation, each step given a real "
         "chance before the next", width=WID)
 def duty_to_report() -> Fig:
-    f = vcard("Escalate, one step at a time",
-              ["CEO and CFO → directors → OSFI",
-               "on any material adverse effect"])
+    f = vcard()
 
     rows = [("CEO and CFO", "and give them a real chance to fix it", BLUE),
             ("The directors", "if it is not suitably addressed", AMBER),
@@ -3766,9 +3513,7 @@ def duty_to_report() -> Fig:
 @figure("Peer Review", "What a peer review adds, and the one thing it cannot "
         "move", width=WID)
 def peer_review() -> Fig:
-    f = vcard("Independent challenge — and the opinion stays yours",
-              ["A reviewer's concurrence is not a defence",
-               "for an opinion that was wrong"])
+    f = vcard()
 
     f.text(BCX, 102, "how deep the review goes", cls="sm dim")
     for i, (name, w, colour) in enumerate(
@@ -3792,9 +3537,7 @@ def peer_review() -> Fig:
 @figure("External Auditor", "Actuary and auditor relying on each other, and the "
         "judgements they can genuinely disagree about", width=WID)
 def external_auditor() -> Fig:
-    f = vcard("Mutual reliance, and neither replaces the other",
-              ["The auditor opines on the statements;",
-               "the actuary on the liabilities"])
+    f = vcard()
 
     f.chip(92, 112, "actuary", colour=BLUE, w=112, h=28)
     f.chip(268, 112, "auditor", colour=AMBER, w=112, h=28)
@@ -3820,9 +3563,7 @@ def external_auditor() -> Fig:
 @figure("Corporate Governance", "The three lines model, and the Appointed "
         "Actuary's place outside management's reporting line", width=WID)
 def corporate_governance() -> Fig:
-    f = vcard("Oversight that can actually say no",
-              ["Three lines: own it · challenge it",
-               "· audit it — and a board that challenges"])
+    f = vcard()
 
     rows = [("The business", "owns and manages its risks", BLUE),
             ("Oversight functions", "risk, compliance, the actuary", TEAL),

@@ -20,6 +20,7 @@ from figure_kit import (
     AMBER, BLUE, GREEN, ROSE, SERIES, TEAL, VIOLET,
     Axes, Fig, brace, universe, venn2, vaxes, vcard,
     BX0, BY0, BX1, BY1, BCX,
+    building, car, coins, cross, document, house, person, scales, shield, tower,
 )
 from figure_registry import figure
 
@@ -120,8 +121,7 @@ def _trial_strip(f: Fig, y, wins, size=26, gap=5, colour=BLUE, ring=()):
 @figure("Probability", "Five of twelve equally likely outcomes shaded, and the "
         "resulting probability marked on a 0-to-1 scale", width=WID)
 def probability() -> Fig:
-    f = vcard("Probability counts the outcomes that work",
-              "P(E) = |E| / |S| = 5/12 ≈ 0.42")
+    f = vcard()
 
     universe(f, 40, 82, 280, 168, "S")
     shaded = {0, 1, 4, 6, 9}
@@ -148,7 +148,7 @@ def probability() -> Fig:
 
 @figure("Set Function", "A set function mapping events to real numbers", width=WID)
 def set_function() -> Fig:
-    f = vcard("A set function maps sets to numbers", "f : 𝓕 → ℝ")
+    f = vcard()
 
     universe(f, 30, 84, 176, 176, "S")
     blobs = [(118, 116, "A", BLUE, 0.80), (118, 172, "B", AMBER, 0.48),
@@ -178,7 +178,7 @@ def set_function() -> Fig:
 @figure("Sample Space", "A sample space partitioned into its elementary outcomes",
         width=WID)
 def sample_space() -> Fig:
-    f = vcard("The sample space lists every outcome once", "S = {ω₁, ω₂, …, ω₆}")
+    f = vcard()
 
     universe(f, 36, 86, 288, 234, "S")
     for i in range(6):
@@ -194,8 +194,7 @@ def sample_space() -> Fig:
 @figure("Event", "An event as a subset of the sample space, simple versus compound",
         width=WID)
 def event() -> Fig:
-    f = vcard("An event is a subset of the sample space",
-              "E ⊆ S,   F = {ω₄} is a simple event")
+    f = vcard()
 
     universe(f, 30, 92, 296, 232, "S")
     f.ellipse(116, 196, 74, 68, fill=BLUE, fill_opacity="0.15", stroke=BLUE,
@@ -214,7 +213,7 @@ def event() -> Fig:
 @figure("Axioms of Probability", "The three Kolmogorov axioms shown as diagrams",
         width=WID)
 def axioms_of_probability() -> Fig:
-    f = vcard("Kolmogorov's three axioms", "P(⋃ Eᵢ) = Σ P(Eᵢ)  for disjoint Eᵢ")
+    f = vcard()
 
     for i, label in enumerate(("P(S) = 1", "P(E) ≥ 0", "P(E₁ ∪ E₂) = P(E₁) + P(E₂)")):
         y = 74 + i * 106
@@ -246,7 +245,7 @@ def axioms_of_probability() -> Fig:
 @figure("Set Theory", "Union, intersection, complement and difference on Venn diagrams",
         width=WID)
 def set_theory() -> Fig:
-    f = vcard("Set operations are the language of events", "P(Aᶜ) = 1 − P(A)")
+    f = vcard()
 
     labels = ["A ∪ B", "A ∩ B", "Aᶜ", "A \\ B"]
     for i, lab in enumerate(labels):
@@ -290,9 +289,7 @@ def set_theory() -> Fig:
 @figure("Venn Diagram", "Two overlapping events with all four region probabilities "
         "filled in", width=WID)
 def venn_diagram() -> Fig:
-    f = vcard("Fill the overlap first, then work outwards",
-              ["P(A ∪ B) = P(A) + P(B) − P(A ∩ B)",
-               "= 0.70 + 0.40 − 0.20 = 0.90"])
+    f = vcard()
 
     sx, sy, sw, sh = 32, 108, 296, 200
     universe(f, sx, sy, sw, sh)
@@ -311,8 +308,7 @@ def venn_diagram() -> Fig:
 @figure("Combinatorics", "Counting ordered arrangements versus unordered selections",
         width=WID)
 def combinatorics() -> Fig:
-    f = vcard("Choosing k from n: the two questions",
-              ["P(n, k) = n! / (n − k)!", "C(n, k) = P(n, k) / k!"])
+    f = vcard()
 
     x0, cw, gap = 100, 118, 4
     f.text(x0 + cw / 2, 100, "no repeats", cls="sm dim")
@@ -337,7 +333,7 @@ def combinatorics() -> Fig:
 
 @figure("Combination", "The six unordered pairs chosen from four objects", width=WID)
 def combination() -> Fig:
-    f = vcard("Order ignored: C(4, 2) = 6", "C(n, k) = n! / [k! (n − k)!]")
+    f = vcard()
 
     for i, o in enumerate("ABCD"):
         cx = 78 + i * 68
@@ -359,7 +355,7 @@ def combination() -> Fig:
 
 @figure("Permutation", "The twelve ordered pairs drawn from four objects", width=WID)
 def permutation() -> Fig:
-    f = vcard("Order matters: P(4, 2) = 12", "P(n, k) = n! / (n − k)!")
+    f = vcard()
 
     ordered = [("A", "B"), ("B", "A"), ("A", "C"), ("C", "A"),
                ("A", "D"), ("D", "A"), ("B", "C"), ("C", "B"),
@@ -378,8 +374,7 @@ def permutation() -> Fig:
 @figure("Independent Events", "Independence as a product of areas on the unit square",
         width=WID)
 def independent_events() -> Fig:
-    f = vcard("Independence multiplies the areas",
-              ["P(A ∩ B) = P(A) · P(B)", "0.6 × 0.5 = 0.30"])
+    f = vcard()
 
     x0, y0, side = 92, 106, 200
     pa, pb = 0.6, 0.5
@@ -403,8 +398,7 @@ def independent_events() -> Fig:
 @figure("Mutually Exclusive Events", "Disjoint events versus overlapping events",
         width=WID)
 def mutually_exclusive_events() -> Fig:
-    f = vcard("Mutually exclusive events cannot overlap",
-              "A ∩ B = ∅  ⇒  P(A ∪ B) = P(A) + P(B)")
+    f = vcard()
 
     for i, (sep, caption) in enumerate(((92, "A ∩ B = ∅"), (48, "A ∩ B ≠ ∅"))):
         y = 88 + i * 150
@@ -427,8 +421,7 @@ def mutually_exclusive_events() -> Fig:
 @figure("Probability Addition Rule", "The addition rule correcting for a double-counted "
         "overlap", width=WID)
 def probability_addition_rule() -> Fig:
-    f = vcard("Subtract the double-counted overlap",
-              ["P(A ∪ B) = P(A) + P(B) − P(A ∩ B)", "0.45 + 0.40 − 0.15 = 0.70"])
+    f = vcard()
 
     cx, cy, r, sep = 180, 200, 78, 78
     f.rect(28, 100, 304, 200, rx=8, fill="var(--soft)", stroke="var(--edge)",
@@ -453,8 +446,7 @@ def probability_addition_rule() -> Fig:
 @figure("Probability Multiplication Rule", "A two-stage probability tree whose branch "
         "probabilities multiply", width=WID)
 def probability_multiplication_rule() -> Fig:
-    f = vcard("Chain the stages: P(A), then P(B | A)",
-              "P(A ∩ B) = P(A) · P(B | A) = 0.24")
+    f = vcard()
 
     f.circle(180, 92, 6, fill="var(--dim)")
     stage1 = ((96, "A", 0.30, BLUE), (264, "Aᶜ", 0.70, "var(--dim)"))
@@ -485,9 +477,7 @@ def probability_multiplication_rule() -> Fig:
 @figure("Inclusion-Exclusion Principle", "Alternating signs over the seven regions of a "
         "three-set Venn diagram", width=WID)
 def inclusion_exclusion() -> Fig:
-    f = vcard("Alternating signs count each region once",
-              ["P(A ∪ B ∪ C) = P(A) + P(B) + P(C)",
-               "− P(A∩B) − P(A∩C) − P(B∩C) + P(A∩B∩C)"])
+    f = vcard()
 
     cx, cy, r = 180, 216, 78
     centres = [(cx, cy - 42), (cx - 46, cy + 34), (cx + 46, cy + 34)]
@@ -507,8 +497,7 @@ def inclusion_exclusion() -> Fig:
 @figure("Conditional Probability", "Conditioning on B rescales the sample space to B",
         width=WID)
 def conditional_probability() -> Fig:
-    f = vcard("Conditioning shrinks the space to B",
-              ["P(A | B) = P(A ∩ B) / P(B)", "= 0.12 / 0.40 = 0.30"])
+    f = vcard()
 
     f.rect(30, 82, 300, 132, rx=8, fill="var(--soft)", stroke="var(--edge)",
            stroke_width="1")
@@ -546,8 +535,7 @@ def conditional_probability() -> Fig:
 @figure("Bayes Theorem", "The prior split into two columns whose shaded claim areas make "
         "up P(C), half of it high-risk", width=WID)
 def bayes_theorem() -> Fig:
-    f = vcard("The posterior is the claiming slice of the prior",
-              ["P(H | C) = P(C | H) P(H) / P(C)", "= 0.08 / 0.16 = 0.50"])
+    f = vcard()
 
     p_h, p_c_h, p_c_l = 0.20, 0.40, 0.10
     x0, y0, w, h = 70, 108, 240, 168
@@ -581,8 +569,7 @@ def bayes_theorem() -> Fig:
 @figure("The Law of Total Probability", "B decomposed across a partition of the sample "
         "space", width=WID)
 def law_of_total_probability() -> Fig:
-    f = vcard("Split B across a partition, then weight",
-              "P(B) = Σ P(B | Aᵢ) P(Aᵢ) = 0.19")
+    f = vcard()
 
     x0, y0, w, h = 30, 88, 300, 152
     f.rect(x0, y0, w, h, rx=8, fill="var(--soft)", stroke="var(--edge)", stroke_width="1")
@@ -617,9 +604,7 @@ def law_of_total_probability() -> Fig:
 @figure("Discrete Univariate Distributions", "The six discrete families on the syllabus, "
         "each drawn as a probability mass function", width=WID)
 def discrete_univariate() -> Fig:
-    f = vcard("The discrete families on the syllabus",
-              ["p(k) = P(X = k),   Σ p(k) = 1",
-               "variance ÷ mean:  <1 binomial, =1 Poisson"])
+    f = vcard()
 
     def binom(n, p, k):
         c = math.factorial(n) / (math.factorial(k) * math.factorial(n - k))
@@ -650,8 +635,7 @@ def discrete_univariate() -> Fig:
 @figure("Continuous Univariate Distributions", "Shapes and supports of the six continuous "
         "families on the syllabus", width=WID)
 def continuous_univariate() -> Fig:
-    f = vcard("The continuous families on the syllabus",
-              "P(a ≤ X ≤ b) = ∫ₐᵇ f(x) dx")
+    f = vcard()
 
     specs = [
         (lambda x: 1.0 if 0.12 < x < 0.88 else 0.002, BLUE, 0, 1, "Uniform (a, b)"),
@@ -681,8 +665,7 @@ def continuous_univariate() -> Fig:
 @figure("Random Variable", "A random variable mapping outcomes of two coin tosses to the "
         "number of heads", width=WID)
 def random_variable() -> Fig:
-    f = vcard("A random variable maps outcomes to numbers",
-              ["X : S → ℝ", "here X = number of heads"])
+    f = vcard()
 
     universe(f, 36, 110, 288, 92, "S")
     outcomes = [("TT", 0, 74), ("HT", 1, 146), ("TH", 1, 218), ("HH", 2, 290)]
@@ -709,8 +692,7 @@ def random_variable() -> Fig:
 @figure("Probability Density Function (PDF)", "Probability as the area under a density "
         "curve between a and b", width=WID)
 def pdf() -> Fig:
-    f = vcard("For a density, probability is area",
-              ["P(a ≤ X ≤ b) = ∫ₐᵇ f(x) dx", "f(x) ≥ 0,   ∫ f(x) dx = 1"])
+    f = vcard()
 
     a = vaxes(f, -3.4, 3.4, 0, 0.46, top=40)
     a.area(_npdf, -0.6, 1.5, colour=BLUE, opacity="0.28")
@@ -726,8 +708,7 @@ def pdf() -> Fig:
 @figure("Cumulative Distribution Function (CDF)", "A density and the CDF that accumulates "
         "its area", width=WID)
 def cdf() -> Fig:
-    f = vcard("The CDF accumulates the density",
-              ["F(x) = P(X ≤ x) = ∫₋∞ˣ f(t) dt", "f(x) = F′(x)"])
+    f = vcard()
 
     x_star = 0.7
     a1 = Axes(f, 66, 86, 326, 212, -3.2, 3.2, 0, 0.46)
@@ -752,8 +733,7 @@ def cdf() -> Fig:
 @figure("Percentile", "The percentile read off the CDF and the matching tail area",
         width=WID)
 def percentile() -> Fig:
-    f = vcard("A percentile inverts the CDF",
-              ["xₚ = F⁻¹(p)", "F(x₀.₉₀) = 0.90 — 10% of the mass is above"])
+    f = vcard()
 
     p, xp = 0.90, 1.2816
     a1 = Axes(f, 66, 86, 326, 212, -3.2, 3.4, 0, 0.46)
@@ -776,8 +756,7 @@ def percentile() -> Fig:
 
 @figure("Expected Value", "The mean as the balance point of a distribution", width=WID)
 def expected_value() -> Fig:
-    f = vcard("The mean is the balance point",
-              ["E[X] = ∫ x f(x) dx", "= Σ k p(k)  when X is discrete"])
+    f = vcard()
 
     a = vaxes(f, 0, 6.2, 0, 0.42, top=40, bottom=56)
     dens = lambda t: _lognorm(t, 0.55, 0.55)
@@ -796,8 +775,7 @@ def expected_value() -> Fig:
 @figure("Variance", "Two distributions with the same mean and different variance",
         width=WID)
 def variance() -> Fig:
-    f = vcard("Variance is the average squared distance from the mean",
-              ["Var(X) = E[(X − μ)²]", "= E[X²] − μ²"])
+    f = vcard()
 
     a = vaxes(f, -5, 5, 0, 0.46, top=40)
     a.curve(lambda t: _npdf(t, 0, 1.9), colour=AMBER)
@@ -817,8 +795,7 @@ def variance() -> Fig:
 @figure("Standard Deviation", "The one-, two- and three-sigma bands of a distribution",
         width=WID)
 def standard_deviation() -> Fig:
-    f = vcard("Standard deviation, in the units of X",
-              ["σ = √Var(X)", "σ(aX + b) = |a| σ(X)"])
+    f = vcard()
 
     a = vaxes(f, -3.7, 3.7, 0, 0.44, left=30, right=20, top=40)
     bands = [(1, "68%", BLUE), (2, "95%", VIOLET), (3, "99.7%", AMBER)]
@@ -840,7 +817,7 @@ def standard_deviation() -> Fig:
 @figure("Coefficient of Variation", "Equal standard deviations meaning very different "
         "relative risk", width=WID)
 def coefficient_of_variation() -> Fig:
-    f = vcard("Spread relative to the mean", "CV = σ / μ = √Var(X) / E[X]")
+    f = vcard()
 
     a = vaxes(f, 0, 12, 0, 0.50, top=40, bottom=52)
     a.curve(lambda t: _npdf(t, 2.2, 0.9), colour=ROSE)
@@ -860,9 +837,7 @@ def coefficient_of_variation() -> Fig:
 @figure("Binomial Distribution", "Ten policies with four of them claiming, above the "
         "binomial mass function of the claim count", width=WID)
 def binomial_distribution() -> Fig:
-    f = vcard("Successes in a fixed number of trials",
-              ["P(X = k) = C(n, k) pᵏ (1 − p)ⁿ⁻ᵏ",
-               "E[X] = np,   Var(X) = np(1 − p)"])
+    f = vcard()
 
     n, p = 10, 0.3
     f.text(BCX, 92, "10 policies, each claiming with probability 0.3", cls="sm dim")
@@ -881,9 +856,7 @@ def binomial_distribution() -> Fig:
 @figure("Geometric Distribution", "Two policies without a claim then one with, above the "
         "geometric mass function of the trial the first claim lands on", width=WID)
 def geometric_distribution() -> Fig:
-    f = vcard("Trials until the first success",
-              ["P(X = k) = (1 − p)ᵏ⁻¹ p,  k ≥ 1",
-               "E[X] = 1/p,   P(X > n) = (1 − p)ⁿ"])
+    f = vcard()
 
     p = 0.2
     f.text(BCX, 92, "each policy claims with probability 0.2", cls="sm dim")
@@ -904,9 +877,7 @@ def geometric_distribution() -> Fig:
         "above the hypergeometric mass function of the number drawn with errors",
         width=WID)
 def hypergeometric_distribution() -> Fig:
-    f = vcard("Drawing without replacement from a finite pool",
-              ["P(X = k) = C(K,k) C(N−K, n−k) / C(N,n)",
-               "E[X] = nK/N"])
+    f = vcard()
 
     N, K, n = 10, 4, 3
     f.text(BCX, 92, "10 policies, 4 with errors — 3 drawn (dashed)", cls="sm dim")
@@ -927,9 +898,7 @@ def hypergeometric_distribution() -> Fig:
 @figure("Negative Binomial Distribution", "Seven claims with the third large loss on the "
         "seventh, above the negative binomial mass function of the trial count", width=WID)
 def negative_binomial_distribution() -> Fig:
-    f = vcard("Trials until the r-th success",
-              ["P(X = k) = C(k−1, r−1) pʳ (1 − p)ᵏ⁻ʳ",
-               "E[X] = r/p,   Var(X) = r(1 − p)/p²"])
+    f = vcard()
 
     r, p = 3, 0.25
     f.text(BCX, 92, "each claim is a large loss with probability 0.25", cls="sm dim")
@@ -949,9 +918,7 @@ def negative_binomial_distribution() -> Fig:
 @figure("Poisson Distribution", "Three claims falling in one month, above the Poisson "
         "mass function of the monthly claim count", width=WID)
 def poisson_distribution() -> Fig:
-    f = vcard("Counting events in a fixed interval",
-              ["P(X = k) = e^(−λ) λᵏ / k!",
-               "E[X] = Var(X) = λ"])
+    f = vcard()
 
     lam = 3.0
     f.text(BCX, 92, "claims arrive at a rate of λ = 3 per month", cls="sm dim")
@@ -978,8 +945,7 @@ def poisson_distribution() -> Fig:
 
 @figure("Uniform Discrete", "The discrete uniform PMF and CDF for a fair die", width=WID)
 def uniform_discrete() -> Fig:
-    f = vcard("Discrete uniform: n equally likely values",
-              ["E[X] = (n + 1)/2 = 3.5", "Var(X) = (n² − 1)/12 ≈ 2.92"])
+    f = vcard()
 
     a1 = Axes(f, 68, 90, 326, 208, 0.3, 6.7, 0, 0.24)
     a1.stems([(k, 1 / 6) for k in range(1, 7)], colour=BLUE)
@@ -1005,9 +971,7 @@ def uniform_discrete() -> Fig:
 @figure("Beta", "Four beta densities on the unit interval — flat, right-skewed, "
         "left-skewed and in between", width=WID)
 def beta_distribution() -> Fig:
-    f = vcard("Any shape a proportion can take",
-              ["f(x) ∝ x^(α−1) (1 − x)^(β−1)",
-               "E[X] = α/(α + β);  α = β = 1 is uniform"])
+    f = vcard()
 
     f.text(BCX, 90, "each curve is labelled (α, β)", cls="sm dim")
     a = vaxes(f, 0, 1, 0, 2.95, left=40, right=16, top=52, bottom=46)
@@ -1026,9 +990,7 @@ def beta_distribution() -> Fig:
 @figure("Exponential Distribution", "An exponential density and, past a deductible, the "
         "same curve starting over", width=WID)
 def exponential_distribution() -> Fig:
-    f = vcard("Memoryless: the curve starts over at d",
-              ["S(x) = e^(−x/θ),   E[X] = θ",
-               "E[X − d | X > d] = θ"])
+    f = vcard()
 
     theta, d = 500.0, 300.0
     dens = lambda t: math.exp(-t / theta) / theta
@@ -1045,9 +1007,7 @@ def exponential_distribution() -> Fig:
 @figure("Gamma", "Four exponential waiting times laid end to end, and the gamma density "
         "of their total", width=WID)
 def gamma_distribution() -> Fig:
-    f = vcard("α exponential waits add up to a gamma",
-              ["f(x) = x^(α−1) e^(−x/θ) / [Γ(α) θ^α]",
-               "E[X] = αθ,   Var(X) = αθ²"])
+    f = vcard()
 
     alpha, theta = 4, 250.0
     f.text(BCX, 92, "4 waits, each Exp(θ = 250)", cls="sm dim")
@@ -1073,9 +1033,7 @@ def gamma_distribution() -> Fig:
 @figure("Lognormal Distribution", "A normal density in log dollars above the right-skewed "
         "lognormal it exponentiates to, with the same tail shaded on both", width=WID)
 def lognormal_distribution() -> Fig:
-    f = vcard("A lognormal is a normal in logs",
-              ["F(x) = Φ((ln x − μ)/σ)",
-               "E[X] = e^(μ + σ²/2)"])
+    f = vcard()
 
     mu, sd = 6.0, 0.8
     cut = math.log(1000)
@@ -1103,9 +1061,7 @@ def lognormal_distribution() -> Fig:
 @figure("Normal Distribution", "A normal density with its right tail shaded, over a "
         "second ruler carrying the standardized z scale", width=WID)
 def normal_distribution() -> Fig:
-    f = vcard("Any normal standardizes to the z scale",
-              ["Z = (X − μ)/σ ~ N(0, 1)",
-               "P(S > 55) = 1 − Φ(0.79) = 0.215"])
+    f = vcard()
 
     mu, sd = 50.0, 6.3246
     dens = lambda t: _npdf(t, mu, sd)
@@ -1138,8 +1094,7 @@ def normal_distribution() -> Fig:
 @figure("Uniform Continuous Distribution", "The continuous uniform density and its "
         "straight-line CDF", width=WID)
 def uniform_continuous() -> Fig:
-    f = vcard("Continuous uniform: a flat density on (a, b)",
-              ["f(x) = 1 / (b − a)", "E[X] = (a+b)/2,   Var(X) = (b−a)²/12"])
+    f = vcard()
 
     aa, bb = 2.0, 7.0
     dens = 1 / (bb - aa)
@@ -1163,8 +1118,7 @@ def uniform_continuous() -> Fig:
 @figure("Transformations of Random Variables", "A monotone transformation carrying the "
         "density of X into the density of Y", width=WID)
 def transformations() -> Fig:
-    f = vcard("A transformation reshapes the density",
-              ["f_Y(y) = f_X(g⁻¹(y)) · |d g⁻¹/dy|", "y = g(x) = x², x > 0"])
+    f = vcard()
 
     gx0, gx1, gy0, gy1 = 128, 328, 96, 268
     a = Axes(f, gx0, gy0, gx1, gy1, 0, 2.6, 0, 6.8)
@@ -1201,8 +1155,7 @@ def transformations() -> Fig:
 @figure("Calculus", "The derivative as a tangent slope and the integral as an area",
         width=WID)
 def calculus() -> Fig:
-    f = vcard("The two operations Exam P leans on",
-              ["F′(x) = f(x)", "∫ₐᵇ f(x) dx = F(b) − F(a)"])
+    f = vcard()
 
     fn = lambda t: 0.28 * t * t - 0.2 * t + 1.1
 
@@ -1227,7 +1180,7 @@ def calculus() -> Fig:
 
 @figure("Discrete Mathematics", "The power set of a three-element set", width=WID)
 def discrete_mathematics() -> Fig:
-    f = vcard("The power set of {a, b, c}", "|𝒫(S)| = 2ⁿ = 2³ = 8")
+    f = vcard()
 
     levels = [["∅"], ["{a}", "{b}", "{c}"], ["{a,b}", "{a,c}", "{b,c}"], ["{a,b,c}"]]
     colours = ["var(--dim)", BLUE, VIOLET, GREEN]
@@ -1274,8 +1227,7 @@ def _payment_axes(f: Fig, reference=True):
 @figure("Deductible", "Insurer payment against loss under an ordinary and a franchise "
         "deductible", width=WID)
 def deductible() -> Fig:
-    f = vcard("A deductible removes the first d",
-              ["Y = max(X − d, 0)", "E[Y] = ∫_d^∞ (x − d) f(x) dx"])
+    f = vcard()
 
     d = 3.0
     a = _payment_axes(f, reference=False)
@@ -1294,8 +1246,7 @@ def deductible() -> Fig:
 
 @figure("Benefit Limit", "Insurer payment capped at the benefit limit u", width=WID)
 def benefit_limit() -> Fig:
-    f = vcard("A limit caps what the insurer pays",
-              ["Y = min(X, u)", "the insured keeps every dollar above u"])
+    f = vcard()
 
     u = 6.0
     a = _payment_axes(f)
@@ -1314,8 +1265,7 @@ def benefit_limit() -> Fig:
 @figure("Coinsurance Percentage", "Coinsurance flattening the payment line by the factor "
         "alpha", width=WID)
 def coinsurance() -> Fig:
-    f = vcard("Coinsurance shares each covered dollar",
-              ["Y = α (X − d)₊,   α ∈ (0, 1]", "E[Y] scales by α,  Var(Y) by α²"])
+    f = vcard()
 
     d, alpha = 2.0, 0.8
     a = _payment_axes(f, reference=False)
@@ -1333,8 +1283,7 @@ def coinsurance() -> Fig:
 @figure("Policy Information", "Deductible, coinsurance and limit applied in order to a "
         "ground-up loss", width=WID)
 def policy_information() -> Fig:
-    f = vcard("Deductible, then coinsurance, then limit",
-              "Y = min( α (X − d)₊ , u )")
+    f = vcard()
 
     d, alpha, u = 2.0, 0.8, 4.0
     cap_x = d + u / alpha
@@ -1353,8 +1302,7 @@ def policy_information() -> Fig:
 @figure("Loss Random Variable", "The ground-up loss distribution and the part of it the "
         "insurer sees", width=WID)
 def loss_random_variable() -> Fig:
-    f = vcard("X is the ground-up loss",
-              ["E[(X − d)₊] = ∫_d^∞ (x − d) f(x) dx", "E[Y] ≠ E[X] − d"])
+    f = vcard()
 
     d = 1.6
     dens = lambda t: _lognorm(t, 0.6, 0.62)
@@ -1371,8 +1319,7 @@ def loss_random_variable() -> Fig:
 @figure("Payment Random Variable", "The mixed distribution of the insurer's payment",
         width=WID)
 def payment_random_variable() -> Fig:
-    f = vcard("Y is mixed: a mass at 0 and at u",
-              ["Y = α min( (X − d)₊ , u )", "compute E[Y] from Y — never rescale X"])
+    f = vcard()
 
     a = vaxes(f, -1.1, 8, 0, 0.42, top=48)
     dens = lambda t: _lognorm(t + 1.6, 0.6, 0.62) * 0.8
@@ -1394,8 +1341,7 @@ def payment_random_variable() -> Fig:
 @figure("Inflation", "Inflation shifting the loss distribution and leveraging the "
         "deductible", width=WID)
 def inflation() -> Fig:
-    f = vcard("Inflation leverages a fixed deductible",
-              ["X′ = (1 + r) X", "payments rise by more than r"])
+    f = vcard()
 
     d, r = 2.0, 0.25
     base = lambda t: _lognorm(t, 0.75, 0.55)
@@ -1462,8 +1408,7 @@ def _joint_table(f, x0, y0, cell=58, row_h=36, highlight=None, show_margins=True
 @figure("Multivariate Distribution", "A joint distribution with its marginals shown on "
         "the axes", width=WID)
 def multivariate_distribution() -> Fig:
-    f = vcard("The joint law, with both marginals",
-              ["f_X(x) = ∫ f(x, y) dy", "f_Y(y) = ∫ f(x, y) dx"])
+    f = vcard()
 
     bx0, by0, side = 128, 122, 186
     bx1, by1 = bx0 + side, by0 + side
@@ -1494,8 +1439,7 @@ def multivariate_distribution() -> Fig:
 @figure("Joint Probability Function", "A joint probability mass function laid out as a "
         "table", width=WID)
 def joint_probability_function() -> Fig:
-    f = vcard("One probability for every (x, y) pair",
-              ["p(x, y) = P(X = x, Y = y)", "Σ Σ p(x, y) = 1"])
+    f = vcard()
 
     _joint_table(f, 78, 140, cell=68, row_h=48, show_margins=False)
     f.text(BCX, 332, "every entry ≥ 0, and the table sums to 1", cls="sm dim")
@@ -1505,8 +1449,7 @@ def joint_probability_function() -> Fig:
 @figure("Marginal Probability Function", "Marginals as the row and column sums of a joint "
         "table", width=WID)
 def marginal_probability_function() -> Fig:
-    f = vcard("A marginal is a row or column sum",
-              ["pₓ(x) = Σ_y p(x, y)", "f_X(x) = ∫ f(x, y) dy"])
+    f = vcard()
 
     x0, y0, cell, row_h = 64, 126, 62, 42
     _joint_table(f, x0, y0, cell=cell, row_h=row_h)
@@ -1521,7 +1464,7 @@ def marginal_probability_function() -> Fig:
 @figure("Conditional Probability Function", "One row of a joint table renormalised into a "
         "conditional distribution", width=WID)
 def conditional_probability_function() -> Fig:
-    f = vcard("Fix a row, then renormalise it", "p(y | x) = p(x, y) / pₓ(x)")
+    f = vcard()
 
     x0, cell = 78, 68
     _joint_table(f, x0, 110, cell=cell, row_h=44, highlight=lambda i, j: i == 1,
@@ -1544,8 +1487,7 @@ def conditional_probability_function() -> Fig:
 @figure("Joint Cumulative Distribution Function", "The joint CDF as the probability mass "
         "in the lower-left quadrant", width=WID)
 def joint_cdf() -> Fig:
-    f = vcard("F(x, y) is a lower-left quadrant",
-              ["F(x, y) = P(X ≤ x, Y ≤ y)", "f(x, y) = ∂²F / ∂x ∂y"])
+    f = vcard()
 
     px0, py0, side = 88, 106, 216
     f.rect(px0, py0, side, side, rx=4, fill="var(--soft)", stroke="var(--edge)",
@@ -1567,8 +1509,7 @@ def joint_cdf() -> Fig:
 @figure("Joint Probability Density Function", "Setting up the limits of a double integral "
         "over a triangular support", width=WID)
 def joint_pdf() -> Fig:
-    f = vcard("Sketch the support, then set the limits",
-              ["∫₀¹ ∫ₓ¹ f(x, y) dy dx", "support 0 < x < y < 1"])
+    f = vcard()
 
     px0, py1, side = 92, 320, 200
     py0 = py1 - side
@@ -1594,8 +1535,7 @@ def joint_pdf() -> Fig:
 @figure("Moments for Joint Distributions", "E[XY] built cell by cell from a joint table",
         width=WID)
 def moments_for_joint() -> Fig:
-    f = vcard("Every joint moment is one weighted sum",
-              ["E[g(X, Y)] = Σ Σ g(x, y) p(x, y)", "E[XY] = 1.88,  E[X] E[Y] = 1.72"])
+    f = vcard()
 
     _joint_table(f, 78, 140, cell=68, row_h=48, show_margins=False)
     f.text(BCX, 332, "each cell contributes g(x, y) · p(x, y)", cls="sm dim")
@@ -1605,8 +1545,7 @@ def moments_for_joint() -> Fig:
 @figure("Covariance", "Covariance as the signed contribution of each quadrant around the "
         "means", width=WID)
 def covariance() -> Fig:
-    f = vcard("Covariance adds signed rectangles",
-              ["Cov(X, Y) = E[(X − μₓ)(Y − μ_Y)]", "= E[XY] − E[X] E[Y]"])
+    f = vcard()
 
     px0, py0, side = 84, 100, 220
     f.rect(px0, py0, side, side, rx=4, fill="var(--soft)", stroke="var(--edge)",
@@ -1633,8 +1572,7 @@ def covariance() -> Fig:
 @figure("Correlation Coefficient", "The same scatter cloud at six correlations, from a "
         "falling line through a shapeless blob to a rising line", width=WID)
 def correlation_coefficient() -> Fig:
-    f = vcard("ρ is how tightly the cloud hugs a line",
-              ["ρ(X, Y) = Cov(X, Y) / (σₓ σ_Y)", "−1 ≤ ρ ≤ 1, and ρ = ±1 is a line"])
+    f = vcard()
 
     # One cloud, drawn six times: only ρ changes, so the panels read as the same
     # points tilting rather than six unrelated pictures.
@@ -1659,8 +1597,7 @@ def correlation_coefficient() -> Fig:
 @figure("Independent Random Variables", "Independent variables give a rectangular, "
         "untilted joint density", width=WID)
 def independent_random_variables() -> Fig:
-    f = vcard("Independence: the joint density factors",
-              ["f(x, y) = f_X(x) · f_Y(y)", "⇒ E[XY] = E[X] E[Y]  and  Cov = 0"])
+    f = vcard()
 
     for k, (label, rot, colour) in enumerate((("Independent", 0, GREEN),
                                               ("Dependent", -30, ROSE))):
@@ -1685,8 +1622,7 @@ def independent_random_variables() -> Fig:
 @figure("Order Statistics", "A sample sorted into order statistics, with the densities of "
         "the minimum and maximum", width=WID)
 def order_statistics() -> Fig:
-    f = vcard("Order statistics are the sorted sample",
-              ["F_min(x) = 1 − [1 − F(x)]ⁿ", "F_max(x) = F(x)ⁿ"])
+    f = vcard()
 
     sample = [0.62, 0.18, 0.87, 0.41, 0.29]
     lx0, lx1 = 68, 300
@@ -1717,8 +1653,7 @@ def order_statistics() -> Fig:
 @figure("Variance for Conditional and Marginal Distributions", "The law of total variance "
         "splitting spread into within-group and between-group parts", width=WID)
 def conditional_variance() -> Fig:
-    f = vcard("Total variance splits in two",
-              "Var(X) = E[Var(X | Y)] + Var(E[X | Y])")
+    f = vcard()
 
     a = vaxes(f, 0, 10, 0, 0.62, top=44)
     groups = [(2.4, 0.62, BLUE, "Y = 1"), (5.0, 0.62, VIOLET, "Y = 2"),
@@ -1747,9 +1682,7 @@ def conditional_variance() -> Fig:
 @figure("Linear Combinations of Random Variables", "Several variables collapsing into one "
         "weighted sum", width=WID)
 def linear_combinations() -> Fig:
-    f = vcard("Collapsing many variables into one",
-              ["E[L] = Σ cᵢ E[Xᵢ]",
-               "Var(L) = Σ cᵢ²Var(Xᵢ) + 2Σᵢ<ⱼ cᵢcⱼCov(Xᵢ, Xⱼ)"])
+    f = vcard()
 
     for i, (mu, sd, colour, lab) in enumerate(((0, 1.0, BLUE, "c₁X₁"),
                                                (0, 0.7, VIOLET, "c₂X₂"),
@@ -1774,8 +1707,7 @@ def linear_combinations() -> Fig:
 @figure("Moments for Linear Combinations", "Variance of a sum with and without the "
         "covariance term", width=WID)
 def moments_for_linear_combinations() -> Fig:
-    f = vcard("Covariance is what independence removes",
-              "Var(X₁ + X₂) = Var X₁ + Var X₂ + 2 Cov")
+    f = vcard()
 
     scale = 280 / (1.0 + 0.7 + 2 * 0.35)
     for k, (head, cov, colour) in enumerate((("Independent", 0.0, GREEN),
@@ -1804,8 +1736,7 @@ def moments_for_linear_combinations() -> Fig:
 @figure("Probabilities for Linear Combinations", "A sum of independent normals is normal "
         "with added means and added variances", width=WID)
 def probabilities_for_linear_combinations() -> Fig:
-    f = vcard("Independent normals add to a normal",
-              ["X₁ + X₂ ~ N(μ₁ + μ₂,  σ₁² + σ₂²)", "13 = 5 + 8,  5.96 = 1.96 + 4.00"])
+    f = vcard()
 
     a = vaxes(f, -2, 22, 0, 0.34, top=30)
     a.curve(lambda t: _npdf(t, 5, 1.4), colour=BLUE)
@@ -1823,8 +1754,7 @@ def probabilities_for_linear_combinations() -> Fig:
 @figure("Central Limit Theorem", "The density of the sample mean of n uniform draws, "
         "flat at n = 1 and normal by n = 30", width=WID)
 def central_limit_theorem() -> Fig:
-    f = vcard("Average enough draws and the shape turns normal",
-              ["(Sₙ − nμ) / (σ√n) → N(0, 1)", "so Sₙ ≈ N(nμ, nσ²) for large n"])
+    f = vcard()
 
     bars, x0, x1, ph = 26, 84, 326, 54
     bw = (x1 - x0) / bars

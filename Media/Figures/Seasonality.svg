@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
   <title>An additive seasonal pattern beside a multiplicative one growing with the level</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -47,10 +43,7 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">A pattern repeating at a fixed period s</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="438" text-anchor="middle" class="fml">s_t = s_{t+s},  Σ s_j = 0</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
     <text x="180" y="102" text-anchor="middle" class="sm bold" fill="#3b82f6">additive</text>
     <rect x="54" y="110" width="270" height="88" rx="5" fill="var(--soft)" stroke="var(--edge)"/>
     <polyline points="54,188.38 64,179.02 74,170.77 84,182.54 94,179.85 104,170.49 114,162.25 124,174.01 134,171.33 144,161.97 154,153.72 164,165.49 174,162.8 184,153.44 194,145.2 204,156.96 214,154.28 224,144.92 234,136.67 244,148.44 254,145.75 264,136.4 274,128.15 284,139.92 294,137.23 304,127.87 314,119.63 324,131.39" class="curve" stroke="#3b82f6" stroke-width="1.8"/>

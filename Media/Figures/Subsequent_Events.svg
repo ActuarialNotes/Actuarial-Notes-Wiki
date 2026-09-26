@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
   <title>The one question that decides the treatment of an event between the valuation date and the report</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -50,12 +46,7 @@ text {
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
   </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">Evidence of what was already true, or a</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">new fact?</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">Evidence at the valuation date → adjust</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">A new condition after it → disclose</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
     <line x1="40" y1="134" x2="330" y2="134" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
     <line x1="78" y1="129" x2="78" y2="139" class="tick"/>
     <text x="78" y="153" text-anchor="middle" class="sm dim">valuation</text>

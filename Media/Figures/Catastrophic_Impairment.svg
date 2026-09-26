@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
   <title>The order-of-magnitude step between the non-catastrophic and catastrophic benefit limits</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -47,12 +43,7 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">One designation multiplies the limit</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">tenfold</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">A defined list, not a judgement</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">— and then a lifetime care annuity</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
     <text x="180" y="104" text-anchor="middle" class="sm dim">Ontario medical, rehab and attendant care</text>
     <rect x="46" y="126" width="40" height="10" rx="2" fill="#d97706" fill-opacity="0.75"/>
     <text x="96" y="136" text-anchor="start" class="sm">non-catastrophic — $65,000</text>

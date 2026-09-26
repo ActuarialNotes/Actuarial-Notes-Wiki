@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
   <title>A PACF cutting off after lag 1 beside the ACF of the same AR(1) tailing off</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -47,11 +43,7 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">The direct link at lag k, intervening</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">lags removed</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="438" text-anchor="middle" class="fml">φ_kk = Corr(Y_t, Y_{t−k} | Y_{t−1}, …)</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
     <text x="180" y="104" text-anchor="middle" class="sm bold" fill="var(--dim)">ACF — tails off</text>
     <line x1="62" y1="147.79" x2="324" y2="147.79" class="thin dash" stroke="#e11d48" stroke-width="1.1"/>
     <line x1="62" y1="164.21" x2="324" y2="164.21" class="thin dash" stroke="#e11d48" stroke-width="1.1"/>

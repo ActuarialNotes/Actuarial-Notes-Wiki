@@ -22,6 +22,7 @@ from figure_kit import (
     AMBER, BLUE, GREEN, ROSE, TEAL, VIOLET,
     Axes, Fig, brace, cash_arrow, timeline, vaxes, vcard,
     BX0, BY0, BX1, BY1, BCX,
+    building, car, coins, cross, document, house, person, scales, shield, tower,
 )
 from figure_registry import figure
 
@@ -50,8 +51,7 @@ def _acc(n, i):
 @figure("Present Value", "A future payment discounted back to today along a timeline",
         width=WID)
 def present_value() -> Fig:
-    f = vcard("Discounting moves a payment backwards",
-              ["PV = FV · vⁿ = FV (1 + i)⁻ⁿ", "747.26 = 1,000 × 1.06⁻⁵"])
+    f = vcard()
 
     y = 250
     xs = timeline(f, y, TL0, TL1, 5, labels=["0", "1", "2", "3", "4", "5"])
@@ -67,8 +67,7 @@ def present_value() -> Fig:
 
 @figure("Future Value", "Cash flows accumulated forward to a valuation date", width=WID)
 def future_value() -> Fig:
-    f = vcard("Accumulating moves payments forward",
-              "FVₙ = Σ C_t (1 + i)^(n − t)")
+    f = vcard()
 
     y = 250
     xs = timeline(f, y, TL0, TL1, 4, labels=["0", "1", "2", "3", "4"])
@@ -84,8 +83,7 @@ def future_value() -> Fig:
 @figure("Accumulated Value", "A single sum growing forward under the accumulation "
         "function", width=WID)
 def accumulated_value() -> Fig:
-    f = vcard("Accumulated value is present value run forward",
-              "AV = PV · a(t) = PV (1 + i)ᵗ")
+    f = vcard()
 
     a = vaxes(f, 0, 6, 0, 1.55, top=30)
     a.curve(lambda t: 1.07 ** t, colour=BLUE)
@@ -101,8 +99,7 @@ def accumulated_value() -> Fig:
 @figure("Current Value", "Cash flows moved to a reference date part-way through the "
         "timeline", width=WID)
 def current_value() -> Fig:
-    f = vcard("Pick a reference date, move everything to it",
-              "CV_t = Σ C_k · a(t) / a(t_k)")
+    f = vcard()
 
     y = 252
     xs = timeline(f, y, TL0, TL1, 6, labels=["0", "1", "2", "3", "4", "5", "6"])
@@ -123,8 +120,7 @@ def current_value() -> Fig:
 @figure("Interest Rate", "The interest rate as the two-way bridge between present and "
         "future value", width=WID)
 def interest_rate() -> Fig:
-    f = vcard("The rate is the exchange rate between dates",
-              ["FV = PV (1 + i)ⁿ", "PV = FV vⁿ"])
+    f = vcard()
 
     f.box(76, 96, 208, 76, colour=AMBER)
     f.text(180, 130, "PV", cls="ttl")
@@ -143,8 +139,7 @@ def interest_rate() -> Fig:
 @figure("Simple Interest", "Simple interest growing linearly against compound interest",
         width=WID)
 def simple_interest() -> Fig:
-    f = vcard("Simple interest never earns interest",
-              ["A(t) = P (1 + i t)", "compound: P (1 + i)ᵗ"])
+    f = vcard()
 
     i = 0.10
     a = vaxes(f, 0, 10, 0.9, 2.7, top=30)
@@ -163,8 +158,7 @@ def simple_interest() -> Fig:
 @figure("Compound Interest", "Compound growth split into principal, simple interest and "
         "interest on interest", width=WID)
 def compound_interest() -> Fig:
-    f = vcard("Compounding: interest that earns interest",
-              "A(t) = P (1 + i)ᵗ,   a(t) = (1 + i)ᵗ")
+    f = vcard()
 
     i = 0.10
     a = vaxes(f, 0, 10, 0, 2.8, top=30)
@@ -184,8 +178,7 @@ def compound_interest() -> Fig:
 @figure("Accumulation Function", "The accumulation function under the three standard "
         "interest regimes", width=WID)
 def accumulation_function() -> Fig:
-    f = vcard("a(t): the value at t of 1 invested at 0",
-              "a(t) = exp( ∫₀ᵗ δ(s) ds ),   a(0) = 1")
+    f = vcard()
 
     a = vaxes(f, 0, 8, 0.9, 2.3, top=30)
     a.curve(lambda t: 1 + 0.10 * t, colour=BLUE)
@@ -203,8 +196,7 @@ def accumulation_function() -> Fig:
 @figure("Fund Accumulation", "A fund balance stepping up with deposits and interest",
         width=WID)
 def fund_accumulation() -> Fig:
-    f = vcard("A fund grows from interest and from deposits",
-              "AVₙ = F₀(1 + i)ⁿ + Σ C_t (1 + i)^(n − t)")
+    f = vcard()
 
     i = 0.08
     bal = 1000.0
@@ -234,8 +226,7 @@ def fund_accumulation() -> Fig:
 @figure("Net Present Value", "Project cash flows discounted and summed into an NPV",
         width=WID)
 def net_present_value() -> Fig:
-    f = vcard("NPV discounts every flow to time 0",
-              ["NPV = Σ C_t v^t", "at i = 10%:  NPV ≈ 96"])
+    f = vcard()
 
     i = 0.10
     flows = [-1000, 300, 400, 400, 300]
@@ -260,8 +251,7 @@ def net_present_value() -> Fig:
 @figure("Discount Factor", "The discount factor as the present value of 1 due in one "
         "period", width=WID)
 def discount_factor() -> Fig:
-    f = vcard("v is what 1 next period is worth today",
-              ["v = (1 + i)⁻¹ = 1 − d", "n periods:  vⁿ = (1 + i)⁻ⁿ"])
+    f = vcard()
 
     y = 190
     xs = timeline(f, y, 96, 268, 1, labels=["0", "1"])
@@ -282,28 +272,37 @@ def discount_factor() -> Fig:
     return f
 
 
-@figure("Discount Rate", "Interest collected up front, so only 1 minus d is advanced",
-        width=WID)
+@figure("Discount Rate", "A loan of 1 due at time 1, with the interest d taken off the top "
+        "at time 0 so only 1 − d is advanced", width=WID)
 def discount_rate() -> Fig:
-    f = vcard("Discount charges the interest at the start",
-              ["d = i/(1 + i) = iv = 1 − v", "i = d/(1 − d),   d < i always"])
+    f = vcard()
 
-    for k, (head, colour, up_lab, down_lab) in enumerate((
-            ("Interest rate i", BLUE, "receive 1", "repay 1 + i"),
-            ("Discount rate d", AMBER, "receive 1 − d", "repay 1"))):
-        y = 160 + k * 136
-        f.text(BCX, y - 78, head, cls="bold", fill=colour)
-        xs = timeline(f, y, 110, 260, 1, labels=["0", "1"], label_dy=16)
-        cash_arrow(f, xs[0], y, 34, colour=colour, label=up_lab, up=True)
-        cash_arrow(f, xs[1], y, 34, colour="var(--dim)", label=down_lab, up=True)
+    y, top, d = 330, 130, 0.25          # d exaggerated so the slice can be seen
+    xs = timeline(f, y, 96, 264, 1, labels=["0", "1"])
+    h = y - top
+    bw = 56
+    # time 0: the loan of 1, with d kept by the lender and 1 − d advanced
+    f.rect(xs[0] - bw / 2, top + d * h, bw, (1 - d) * h, rx=3, fill=AMBER,
+           fill_opacity="0.7")
+    f.rect(xs[0] - bw / 2, top, bw, d * h, rx=3, fill=ROSE, fill_opacity="0.25",
+           stroke=ROSE, stroke_width="1.3", stroke_dasharray="4 3")
+    f.text(xs[0] - bw / 2 - 8, top + d * h / 2 + 4, "d", cls="bold", anchor="end",
+           fill=ROSE)
+    f.text(xs[0] - bw / 2 - 8, top + d * h + (1 - d) * h / 2 + 4, "1 − d",
+           cls="bold", anchor="end", fill=AMBER)
+    # time 1: the 1 repaid
+    f.rect(xs[1] - bw / 2, top, bw, h, rx=3, fill=BLUE, fill_opacity="0.7")
+    f.text(xs[1] + bw / 2 + 8, top + h / 2 + 4, "1", cls="bold", anchor="start",
+           fill=BLUE)
+    f.line(xs[0] + bw / 2, top, xs[1] - bw / 2, top, cls="thin dash",
+           stroke="var(--dim)", stroke_width="1.2")
     return f
 
 
 @figure("Effective Discount Rate", "The effective discount rate measured over one period",
         width=WID)
 def effective_discount_rate() -> Fig:
-    f = vcard("d is the interest taken off the front",
-              ["1 / (1 − d) = 1 + i", "d = i / (1 + i) = 1 − v"])
+    f = vcard()
 
     y = 240
     xs = timeline(f, y, 96, 268, 1, labels=["0", "1"])
@@ -318,8 +317,7 @@ def effective_discount_rate() -> Fig:
 @figure("Convertible m-thly", "Compounding m times a year climbing towards the effective "
         "annual rate", width=WID)
 def convertible_m_thly() -> Fig:
-    f = vcard("Interest credited m times a year",
-              ["(1 + i⁽ᵐ⁾/m)ᵐ = 1 + i", "i⁽ᵐ⁾ = 12% quoted throughout"])
+    f = vcard()
 
     nom = 0.12
     a = vaxes(f, 0, 1, 0.99, 1.135, left=52, top=30)
@@ -341,8 +339,7 @@ def convertible_m_thly() -> Fig:
 @figure("Nominal Interest Rate", "The nominal rate needed to hit a fixed effective annual "
         "rate as compounding gets more frequent", width=WID)
 def nominal_interest_rate() -> Fig:
-    f = vcard("For a fixed effective rate, i⁽ᵐ⁾ falls as m rises",
-              ["i⁽ᵐ⁾ = m[(1 + i)^(1/m) − 1]", "all equivalent to i = 8% effective"])
+    f = vcard()
 
     i_eff = 0.08
     a = vaxes(f, 1, 26, 0.0765, 0.0805, left=52, top=30)
@@ -361,8 +358,7 @@ def nominal_interest_rate() -> Fig:
 @figure("Nominal Interest Rate Convertible m-thly", "One year of interest split into m "
         "sub-period credits", width=WID)
 def nominal_convertible() -> Fig:
-    f = vcard("The periodic rate is i⁽ᵐ⁾ / m",
-              ["(1 + i⁽ᵐ⁾/m)ᵐ = 1 + i", "1.03⁴ = 1.1255,  so i = 12.55%"])
+    f = vcard()
 
     m, y = 4, 220
     xs = timeline(f, y, 60, 300, m, labels=["0", "¼", "½", "¾", "1"])
@@ -379,8 +375,7 @@ def nominal_convertible() -> Fig:
 @figure("Nominal Discount Rate Convertible m-thly", "Discount deducted at the start of "
         "each of m sub-periods", width=WID)
 def nominal_discount_convertible() -> Fig:
-    f = vcard("d⁽ᵐ⁾ deducts interest at each sub-period start",
-              ["(1 − d⁽ᵐ⁾/m)ᵐ = 1 − d = v", "d < d⁽ᵐ⁾ < δ < i⁽ᵐ⁾ < i"])
+    f = vcard()
 
     m, y = 4, 220
     xs = timeline(f, y, 60, 300, m, labels=["0", "¼", "½", "¾", "1"])
@@ -394,41 +389,36 @@ def nominal_discount_convertible() -> Fig:
     return f
 
 
-@figure("Effective Rate", "One period of growth, and the equivalent nominal rates that "
-        "produce it", width=WID)
+@figure("Effective Rate", "One unit grown over a year by annual, quarterly and continuous "
+        "compounding — three paths that all arrive at the same 1 + i", width=WID)
 def effective_rate() -> Fig:
-    f = vcard("The effective rate is what actually happened",
-              "1 + i = A(1) / A(0),   here i = 8%")
+    f = vcard()
 
-    y = 172
-    xs = timeline(f, y, 96, 268, 1, labels=["0", "1"])
-    cash_arrow(f, xs[0], y, 38, colour="var(--dim)", label="1", up=True)
-    cash_arrow(f, xs[1], y, 66, colour=BLUE, label="1 + i", up=True)
-    f.arrow(xs[0] + 10, y - 84, xs[1] - 10, y - 84, colour=BLUE, width=1.6)
-    f.text(BCX, y - 92, "one measurement period", cls="sm bold", fill=BLUE)
-
-    i_eff = 0.08
-    f.text(BCX, 240, "all of these are the same 8%", cls="sm dim")
-    entries = [
-        ("i", "8.0000%", BLUE),
-        ("i⁽²⁾", f"{2 * ((1 + i_eff) ** 0.5 - 1) * 100:.4f}%", VIOLET),
-        ("i⁽¹²⁾", f"{12 * ((1 + i_eff) ** (1 / 12) - 1) * 100:.4f}%", TEAL),
-        ("δ", f"{math.log(1 + i_eff) * 100:.4f}%", GREEN),
-    ]
-    for k, (lab, val, colour) in enumerate(entries):
-        yy = 254 + k * 32
-        f.line(58, yy, 58, yy + 20, cls="", stroke=colour, stroke_width="2.8",
-               stroke_linecap="round")
-        f.text(72, yy + 15, lab, cls="bold", anchor="start")
-        f.text(300, yy + 15, val, cls="bold", anchor="end", fill=colour)
+    i = 0.08
+    a = vaxes(f, 0, 1, 1, 1.09, left=46, bottom=40)
+    a.hline(1 + i, colour="var(--dim)")
+    for m, colour in ((1, BLUE), (4, AMBER)):
+        g = (1 + i) ** (1 / m)
+        pts = [(0, 1)]
+        for k in range(1, m + 1):
+            pts += [(k / m, g ** (k - 1)), (k / m, g ** k)]
+        a.polyline(pts, colour=colour)
+    a.curve(lambda t: (1 + i) ** t, colour=GREEN, dash=True)
+    a.point(1, 1 + i, colour=VIOLET, r=4.5)
+    a.label(0.5, 1, "annual", cls="sm bold", dy=-8, fill=BLUE)
+    a.label(0.56, (1 + i) ** 0.5, "quarterly", cls="sm bold", anchor="start", dx=10,
+            dy=12, fill=AMBER)
+    a.label(0.42, (1 + i) ** 0.42, "continuous", cls="sm bold", anchor="end", dx=-6,
+            dy=-8, fill=GREEN)
+    a.frame(xticks=[0, 1], yticks=[1, 1 + i],
+            yfmt=lambda t: "1" if t == 1 else "1 + i")
     return f
 
 
 @figure("Real Rate of Interest", "The nominal rate deflated by inflation into a real "
         "rate", width=WID)
 def real_rate_of_interest() -> Fig:
-    f = vcard("The real rate is what is left after inflation",
-              ["1 + i_r = (1 + i) / (1 + r)", "i_r ≈ i − r only for small rates"])
+    f = vcard()
 
     scale = 2600
     rows = [
@@ -450,8 +440,7 @@ def real_rate_of_interest() -> Fig:
 @figure("Force of Interest", "The force of interest as the instantaneous growth rate of "
         "the accumulation function", width=WID)
 def force_of_interest() -> Fig:
-    f = vcard("δ is the instantaneous rate a(t) grows at",
-              ["δ = a′(t) / a(t) = ln(1 + i)", "a(t) = e^(δt)"])
+    f = vcard()
 
     delta = 0.10
     a = vaxes(f, 0, 6, 0.9, 1.9, top=30)
@@ -470,8 +459,7 @@ def force_of_interest() -> Fig:
 @figure("Variable Force of Interest", "A time-varying force and the accumulation it "
         "integrates to", width=WID)
 def variable_force() -> Fig:
-    f = vcard("Under a varying force, accumulation is an integral",
-              "a(t) = exp( ∫₀ᵗ δ(s) ds )")
+    f = vcard()
 
     d_fn = lambda t: 0.04 + 0.016 * t
     a1 = Axes(f, 70, 96, 326, 214, 0, 6, 0, 0.16)
@@ -493,8 +481,7 @@ def variable_force() -> Fig:
 @figure("Equation of Value", "Inflows and outflows balanced at a chosen comparison date",
         width=WID)
 def equation_of_value() -> Fig:
-    f = vcard("Move every flow to one date, then balance",
-              ["PV(inflows) = PV(outflows)", "any date works — pick the one that cancels most"])
+    f = vcard()
 
     y = 236
     xs = timeline(f, y, TL0, TL1, 6, labels=["0", "1", "2", "3", "4", "5", "6"])
@@ -514,8 +501,7 @@ def equation_of_value() -> Fig:
 @figure("Time Value of Money Equations", "The moves that connect any two valuation dates",
         width=WID)
 def tvm_equations() -> Fig:
-    f = vcard("Every FM calculation is one of these moves",
-              ["FV = PV (1 + i)ⁿ,   PV = FV vⁿ", "s₍ₙ₎ = (1 + i)ⁿ a₍ₙ₎"])
+    f = vcard()
 
     nodes = [(88, 122, "PV", AMBER), (272, 122, "FV", GREEN),
              (88, 302, "a₍ₙ₎", BLUE), (272, 302, "s₍ₙ₎", VIOLET)]
@@ -543,8 +529,7 @@ def tvm_equations() -> Fig:
 @figure("Cash Flow", "A cash-flow stream with inflows above and outflows below the "
         "timeline", width=WID)
 def cash_flow() -> Fig:
-    f = vcard("A cash flow is an amount attached to a date",
-              "PV = Σ C_t v^t")
+    f = vcard()
 
     y = 236
     xs = timeline(f, y, TL0, TL1, 6, labels=["0", "1", "2", "3", "4", "5", "6"])
@@ -561,8 +546,7 @@ def cash_flow() -> Fig:
 @figure("Annuities", "The annuity family, sorted by payment timing and pattern",
         width=WID)
 def annuities() -> Fig:
-    f = vcard("One payment stream, valued four ways",
-              ["a₍ₙ₎ = (1 − vⁿ)/i", "everything else is built from it"])
+    f = vcard()
 
     rows = [
         ("a₍ₙ₎  immediate", 1, BLUE, False),
@@ -588,8 +572,7 @@ def annuities() -> Fig:
 @figure("Annuity Due", "An annuity-due paying at the start of each period, one period "
         "ahead of an annuity-immediate", width=WID)
 def annuity_due() -> Fig:
-    f = vcard("An annuity-due pays at the start of each period",
-              ["ä₍ₙ₎ = (1 + i) a₍ₙ₎ = (1 − vⁿ)/d", "s̈₍ₙ₎ = (1 + i) s₍ₙ₎"])
+    f = vcard()
 
     for k, (head, offset, colour) in enumerate((("a₍ₙ₎  immediate", 1, "var(--dim)"),
                                                 ("ä₍ₙ₎  due", 0, VIOLET))):
@@ -606,8 +589,7 @@ def annuity_due() -> Fig:
 @figure("Level Annuity", "A level annuity valued as a present value and as an accumulated "
         "value", width=WID)
 def level_annuity() -> Fig:
-    f = vcard("The same payment, every period",
-              ["PV = P · a₍ₙ₎", "FV = P · s₍ₙ₎ = (1 + i)ⁿ · PV"])
+    f = vcard()
 
     y = 230
     xs = timeline(f, y, 66, 300, 5, labels=["0", "1", "2", "3", "4", "5"])
@@ -623,9 +605,7 @@ def level_annuity() -> Fig:
 @figure("Level Payment Annuity", "The two standard annuity factors read off one payment "
         "stream", width=WID)
 def level_payment_annuity() -> Fig:
-    f = vcard("Level payments, two standard factors",
-              ["a₍ₙ₎ = (1 − vⁿ)/i,   s₍ₙ₎ = ((1+i)ⁿ − 1)/i",
-               "at i = 6%, n = 5:  a₍₅₎ = 4.2124,  s₍₅₎ = 5.6371"])
+    f = vcard()
 
     y = 250
     xs = timeline(f, y, 66, 300, 5, labels=["0", "1", "2", "3", "4", "5"])
@@ -645,8 +625,7 @@ def level_payment_annuity() -> Fig:
 @figure("Perpetuity", "A perpetuity's payments and the finite present value they "
         "converge to", width=WID)
 def perpetuity() -> Fig:
-    f = vcard("Payments forever, but a finite present value",
-              ["a₍∞₎ = 1/i", "ä₍∞₎ = 1/d = 1 + a₍∞₎"])
+    f = vcard()
 
     y = 132
     xs = timeline(f, y, 62, 288, 6, labels=["0", "1", "2", "3", "4", "5", "…"])
@@ -665,8 +644,7 @@ def perpetuity() -> Fig:
 @figure("Level Perpetuity", "Payments that never stop, discounted to a finite value",
         width=WID)
 def level_perpetuity() -> Fig:
-    f = vcard("Each payment's present value shrinks geometrically",
-              ["a₍∞₎ = Σ vᵏ = 1/i", "at i = 5%:  1/0.05 = 20"])
+    f = vcard()
 
     i = 0.05
     a = vaxes(f, 0, 21, 0, 1.05, left=50, top=30)
@@ -676,33 +654,31 @@ def level_perpetuity() -> Fig:
     return f
 
 
-@figure("Term of Annuity", "The term as the count of payments, solved from the present "
-        "value", width=WID)
+@figure("Term of Annuity", "Bars rising one payment at a time, each the present value of "
+        "that many payments; the term n is the count that reaches the loan's present value",
+        width=WID)
 def term_of_annuity() -> Fig:
-    f = vcard("The term n is how many payments there are",
-              "n = −ln(1 − i · PV/P) / ln(1 + i)")
+    f = vcard()
 
-    y = 130
-    xs = timeline(f, y, 60, 296, 6, labels=["0", "1", "2", "…", "n−1", "n", ""])
-    for j in range(1, 6):
-        cash_arrow(f, xs[j], y, 30, colour=BLUE, label="P", up=True)
-    brace(f, xs[1], xs[5], y + 34, depth=9, label="n payments", colour=VIOLET)
-
-    a = Axes(f, 76, 224, 320, 348, 0, 30, 0, 16)
-    a.curve(lambda n: (1 - 1.06 ** -n) / 0.06, colour=BLUE, xa=0.2)
-    a.point(12, (1 - 1.06 ** -12) / 0.06, colour=AMBER)
-    a.vline(12, y_top=(1 - 1.06 ** -12) / 0.06, colour=AMBER)
-    a.hline((1 - 1.06 ** -12) / 0.06, x_to=12, colour=AMBER)
-    a.frame(xlabel="term n", ylabel="a₍ₙ₎", xticks=[0, 12, 30], yticks=[5, 10, 15],
-            yfmt=lambda t: f"{t:g}")
+    i, n, last = 0.06, 12, 20
+    target = _ann_imm(n, i)
+    a = vaxes(f, 0, last + 0.8, 0, 12.4, left=40, bottom=64)
+    for k in range(1, last + 1):
+        colour = BLUE if k <= n else "var(--axis)"
+        a.bars([(k, _ann_imm(k, i))], colour=colour, bw=9.5,
+               opacity="0.8" if k <= n else "0.45")
+    a.hline(target, colour=AMBER, x_to=last + 0.8)
+    f.text(a.x0 - 8, a.py(target) + 4, "PV", cls="sm bold", anchor="end", fill=AMBER)
+    a.frame(xticks=[1, n, last], xfmt=lambda t: {1: "1", n: "n", last: ""}[t])
+    brace(f, a.px(1) - 5, a.px(n) + 5, a.y1 + 26, depth=9, colour=VIOLET,
+          label="n payments", label_cls="sm bold")
     return f
 
 
 @figure("Non-level Annuities", "Three non-level payment patterns on one timeline",
         width=WID)
 def non_level_annuities() -> Fig:
-    f = vcard("When payments vary, discount each one",
-              ["PV = Σ C_t v^t", "or decompose into level + increasing"])
+    f = vcard()
 
     patterns = [
         ("Arithmetic", [1, 2, 3, 4, 5], AMBER),
@@ -723,8 +699,7 @@ def non_level_annuities() -> Fig:
 @figure("Arithmetic Increasing Annuity", "Payments rising by a constant amount, split "
         "into a level and an increasing piece", width=WID)
 def arithmetic_increasing() -> Fig:
-    f = vcard("A level annuity plus a staircase",
-              ["(Ia)₍ₙ₎ = (ä₍ₙ₎ − n vⁿ) / i", "(Ia)₍ₙ₎ + (Da)₍ₙ₎ = (n + 1) a₍ₙ₎"])
+    f = vcard()
 
     y = 344
     xs = timeline(f, y, 56, 300, 6, labels=["0", "1", "2", "3", "4", "5", "6"])
@@ -743,8 +718,7 @@ def arithmetic_increasing() -> Fig:
 @figure("Decreasing Annuity", "Payments falling by a constant amount, and the identity "
         "pairing them with an increasing annuity", width=WID)
 def decreasing_annuity() -> Fig:
-    f = vcard("A decreasing annuity is the mirror of an increasing one",
-              ["(Da)₍ₙ₎ = (n − a₍ₙ₎) / i", "(Ia)₍ₙ₎ + (Da)₍ₙ₎ = (n + 1) a₍ₙ₎"])
+    f = vcard()
 
     y, n = 344, 5
     xs = timeline(f, y, 66, 300, n, labels=["0", "1", "2", "3", "4", "5"])
@@ -766,8 +740,7 @@ def decreasing_annuity() -> Fig:
 @figure("Arithmetic Progression", "An arithmetic payment stream decomposed into level "
         "and increasing parts", width=WID)
 def arithmetic_progression() -> Fig:
-    f = vcard("Level P plus a pure increase of Q",
-              ["PV = P · a₍ₙ₎ + (Q/i)( a₍ₙ₎ − n vⁿ )", "a negative Q gives a decreasing annuity"])
+    f = vcard()
 
     y = 344
     xs = timeline(f, y, 56, 300, 6, labels=["0", "1", "2", "3", "4", "5", "6"])
@@ -788,8 +761,7 @@ def arithmetic_progression() -> Fig:
 @figure("Geometric Increasing Annuity", "Payments growing at a constant rate against a "
         "level stream", width=WID)
 def geometric_increasing() -> Fig:
-    f = vcard("Geometric payments multiply, they do not add",
-              ["PV = [1 − ((1+g)/(1+i))ⁿ] / (i − g)", "i = g:  PV = n v"])
+    f = vcard()
 
     y = 344
     xs = timeline(f, y, 56, 300, 6, labels=["0", "1", "2", "3", "4", "5", "6"])
@@ -807,8 +779,7 @@ def geometric_increasing() -> Fig:
 @figure("Geometric Progression", "A geometric payment stream and the shifted rate that "
         "values it", width=WID)
 def geometric_progression() -> Fig:
-    f = vcard("A geometric stream is a level annuity at a shifted rate",
-              ["j = (1 + i)/(1 + g) − 1", "then PV = a₍ₙ₎ⱼ / (1 + g)"])
+    f = vcard()
 
     i, g = 0.08, 0.03
     a = vaxes(f, 0, 11, 0, 1.6, left=50, top=44)
@@ -824,8 +795,7 @@ def geometric_progression() -> Fig:
 @figure("Payable m-thly", "An annual payment of 1 split into m sub-period payments",
         width=WID)
 def payable_m_thly() -> Fig:
-    f = vcard("The same 1 per year, paid in m pieces",
-              ["a⁽ᵐ⁾₍ₙ₎ = (1 − vⁿ) / i⁽ᵐ⁾", "a⁽ᵐ⁾₍ₙ₎ > a₍ₙ₎ — the money arrives earlier"])
+    f = vcard()
 
     for k, (head, m, colour) in enumerate((("m = 1", 1, "var(--dim)"), ("m = 4", 4, BLUE))):
         y = 156 + k * 122
@@ -843,8 +813,7 @@ def payable_m_thly() -> Fig:
 @figure("Payable Continuously", "The m-thly annuity in the limit, paying as a continuous "
         "stream", width=WID)
 def payable_continuously() -> Fig:
-    f = vcard("Let m → ∞ and the payments become a stream",
-              ["ā₍ₙ₎ = ∫₀ⁿ e^(−δt) dt = (1 − vⁿ)/δ", "δ < i⁽ᵐ⁾ < i, so ā₍ₙ₎ is the largest"])
+    f = vcard()
 
     for k, (head, m, colour) in enumerate((("m = 4", 4, BLUE), ("m = 12", 12, VIOLET))):
         y = 130 + k * 92
@@ -863,8 +832,7 @@ def payable_continuously() -> Fig:
 @figure("Continuous Annuity", "The continuous annuity as area under the discount curve",
         width=WID)
 def continuous_annuity() -> Fig:
-    f = vcard("The area under the discount curve",
-              ["ā₍ₙ₎ = (1 − vⁿ) / δ", "only the denominator changes: i becomes δ"])
+    f = vcard()
 
     delta = math.log(1.06)
     n = 8
@@ -916,8 +884,7 @@ def _amort_bars(f, a, rows, P, bar_frac=0.62):
 @figure("Loans", "The four moving parts of a loan and the two ways to find the balance",
         width=WID)
 def loans() -> Fig:
-    f = vcard("Principal in, payments out, balance in between",
-              ["L = P · a₍ₙ₎", "OB_k = P · a₍ₙ₋ₖ₎ = L(1+i)ᵏ − P·s₍ₖ₎"])
+    f = vcard()
 
     y = 240
     xs = timeline(f, y, 60, 300, 6, labels=["0", "1", "2", "3", "…", "n−1", "n"])
@@ -931,8 +898,7 @@ def loans() -> Fig:
 @figure("Amortization", "A level payment splitting into shrinking interest and growing "
         "principal", width=WID)
 def amortization() -> Fig:
-    f = vcard("The payment is level; its split is not",
-              ["P = L / a₍ₙ₎ = 1,740.15", "I_k = P(1 − v^(n−k+1)),  PR_k = P v^(n−k+1)"])
+    f = vcard()
 
     rows, P = _schedule()
     a = vaxes(f, 0.4, LOAN_N + 0.6, 0, P * 1.12, left=54, top=44)
@@ -947,8 +913,7 @@ def amortization() -> Fig:
 @figure("Principal", "The principal portion of each payment growing as the balance falls",
         width=WID)
 def principal() -> Fig:
-    f = vcard("What each payment actually returns",
-              ["PR_k = P − I_k = P v^(n−k+1)", "Σ PR_k = L exactly"])
+    f = vcard()
 
     rows, P = _schedule()
     a = vaxes(f, 0.4, LOAN_N + 0.6, 0, P * 1.12, left=54, top=44)
@@ -962,8 +927,7 @@ def principal() -> Fig:
 @figure("Interest", "Interest charged on the declining balance, period by period",
         width=WID)
 def interest() -> Fig:
-    f = vcard("Interest is charged on whatever is still owed",
-              ["I_k = i · OB₍ₖ₋₁₎", "never on the original loan amount"])
+    f = vcard()
 
     rows, P = _schedule()
     a = vaxes(f, 0.4, LOAN_N + 0.6, 0, 11000, left=58, top=44)
@@ -983,9 +947,7 @@ def interest() -> Fig:
 @figure("Outstanding Balance", "The loan balance falling to zero, found prospectively or "
         "retrospectively", width=WID)
 def outstanding_balance() -> Fig:
-    f = vcard("Two routes to the same balance",
-              ["prospective:  OB_k = P · a₍ₙ₋ₖ₎",
-               "retrospective:  OB_k = L(1+i)ᵏ − P·s₍ₖ₎"])
+    f = vcard()
 
     rows, P = _schedule()
     balances = [LOAN_L] + [r[3] for r in rows]
@@ -1006,8 +968,7 @@ def outstanding_balance() -> Fig:
 
 @figure("Term of Loan", "How the term trades off against the level payment", width=WID)
 def term_of_loan() -> Fig:
-    f = vcard("Term and payment trade off against each other",
-              ["P = L / a₍ₙ₎", "L = 10,000 at i = 8%"])
+    f = vcard()
 
     a = vaxes(f, 2, 30, 0, 5200, left=58, top=30)
     a.curve(lambda n: LOAN_L / _ann_imm(n, LOAN_I), colour=BLUE, xa=2, xb=30)
@@ -1023,9 +984,7 @@ def term_of_loan() -> Fig:
 @figure("Final Payment", "A drop payment and a balloon payment against the regular "
         "payment", width=WID)
 def final_payment() -> Fig:
-    f = vcard("A non-integer term makes the last payment differ",
-              ["drop = B_n (1 + i),  smaller than P",
-               "balloon = OB₍ₙ₋₁₎ (1 + i),  larger than P"])
+    f = vcard()
 
     for k, (head, last_h, colour) in enumerate((("Drop payment", 18, GREEN),
                                                 ("Balloon payment", 70, ROSE))):
@@ -1041,8 +1000,7 @@ def final_payment() -> Fig:
 @figure("Drop Payment", "A final payment smaller than the regular one, clearing a small "
         "remaining balance", width=WID)
 def drop_payment() -> Fig:
-    f = vcard("A drop payment clears the small balance left",
-              ["drop = B_n (1 + i)", "the last balance, accumulated one period"])
+    f = vcard()
 
     y = 250
     xs = timeline(f, y, 56, 300, 6, labels=["0", "1", "2", "3", "4", "5", "6"])
@@ -1059,8 +1017,7 @@ def drop_payment() -> Fig:
 @figure("Balloon Payment", "A final payment larger than the regular one, retiring the "
         "remaining balance", width=WID)
 def balloon_payment() -> Fig:
-    f = vcard("A balloon retires the balance left over",
-              ["B = OB₍ₙ₋₁₎ (1 + i)", "K was set below the amortising payment"])
+    f = vcard()
 
     y = 268
     xs = timeline(f, y, 56, 300, 6, labels=["0", "1", "2", "3", "4", "5", "6"])
@@ -1076,8 +1033,7 @@ def balloon_payment() -> Fig:
 @figure("Loan Repayment Comparison", "Level payments against constant-principal "
         "repayment on the same loan", width=WID)
 def loan_repayment_comparison() -> Fig:
-    f = vcard("Same loan, two repayment shapes",
-              ["level:  P = L / a₍ₙ₎", "constant principal: interest = i·L·(n+1)/2"])
+    f = vcard()
 
     rows, P = _schedule()
     n, L, i = LOAN_N, LOAN_L, LOAN_I
@@ -1140,9 +1096,7 @@ def _bond_timeline(f, y, n=6, x0=56, x1=300, coupon_h=30, redemption_h=72,
 @figure("Bonds", "A bond's coupon stream and redemption payment on one timeline",
         width=WID)
 def bonds() -> Fig:
-    f = vcard("A coupon annuity plus a single redemption",
-              ["P = Fr · a₍ₙ₎ⱼ + C · vⁿ",
-               "Fr > Cj premium,  Fr < Cj discount"])
+    f = vcard()
 
     y = 236
     xs = _bond_timeline(f, y, 6)
@@ -1154,8 +1108,7 @@ def bonds() -> Fig:
 @figure("Bond Price", "Bond price against yield, showing premium, par and discount",
         width=WID)
 def bond_price() -> Fig:
-    f = vcard("Price falls as yield rises",
-              ["P = Fr · a₍ₙ₎ⱼ + C · vⁿ", "= C + (Fr − Cj) a₍ₙ₎"])
+    f = vcard()
 
     a = vaxes(f, 0.01, 0.10, 700, 1400, left=58, top=30)
     a.curve(lambda j: _bond_price(j), colour=BLUE, xa=0.012, xb=0.10)
@@ -1176,8 +1129,7 @@ def bond_price() -> Fig:
 @figure("Book Value", "Book value converging to the redemption value for a premium and a "
         "discount bond", width=WID)
 def book_value() -> Fig:
-    f = vcard("Book value walks the price to the redemption value",
-              ["BV_k = Fr · a₍ₙ₋ₖ₎ + C · v^(n−k)", "BV₀ = P  and  BVₙ = C"])
+    f = vcard()
 
     a = vaxes(f, 0, BOND_N, 800, 1250, left=58, top=30)
     prem = _book_values(0.03)
@@ -1199,9 +1151,7 @@ def book_value() -> Fig:
 @figure("Market Value", "Market value moving with the prevailing yield while book value "
         "follows its own schedule", width=WID)
 def market_value() -> Fig:
-    f = vcard("Market value follows today's yield",
-              ["MV = Fr · a₍ₙ₎ + C · vⁿ at today's yield",
-               "book value keeps using the original yield"])
+    f = vcard()
 
     a = vaxes(f, 0, BOND_N, 850, 1200, left=58, top=44)
     book = _book_values(0.05)
@@ -1221,9 +1171,7 @@ def market_value() -> Fig:
 @figure("Amortization of Premium", "A premium bond's book value written down to the "
         "redemption value", width=WID)
 def amortization_of_premium() -> Fig:
-    f = vcard("The premium is written off, coupon by coupon",
-              ["Fr > Cj  →  the coupon overpays",
-               "written off in period t:  (Fr − Cj) v^(n−t+1)"])
+    f = vcard()
 
     j = 0.03
     book = _book_values(j)
@@ -1244,9 +1192,7 @@ def amortization_of_premium() -> Fig:
 @figure("Accumulation of Discount", "A discount bond's book value written up to the "
         "redemption value", width=WID)
 def accumulation_of_discount() -> Fig:
-    f = vcard("The discount is written up, coupon by coupon",
-              ["Fr < Cj  →  the coupon underpays",
-               "written up in period t:  (Cj − Fr) v^(n−t+1)"])
+    f = vcard()
 
     j = 0.07
     book = _book_values(j)
@@ -1267,8 +1213,7 @@ def accumulation_of_discount() -> Fig:
 @figure("Face Value", "Face value as the base for coupons and, usually, the redemption",
         width=WID)
 def face_value() -> Fig:
-    f = vcard("Face value sets the coupon — it is not the price",
-              ["coupon = F × r", "usually C = F, but not always"])
+    f = vcard()
 
     f.box(66, 108, 228, 84, colour=GREEN)
     f.text(180, 144, "F = 1,000", cls="ttl")
@@ -1285,8 +1230,7 @@ def face_value() -> Fig:
 @figure("Redemption Value", "The redemption payment at maturity, at, above or below par",
         width=WID)
 def redemption_value() -> Fig:
-    f = vcard("C is what the bondholder is repaid at maturity",
-              ["P = Fr · a₍ₙ₎ⱼ + C · vⁿ", "C = F at par;  C > F or C < F otherwise"])
+    f = vcard()
 
     y = 224
     _bond_timeline(f, y, 6)
@@ -1303,8 +1247,7 @@ def redemption_value() -> Fig:
 
 @figure("Coupon", "The level coupon stream a bond pays until maturity", width=WID)
 def coupon() -> Fig:
-    f = vcard("The coupon is the bond's income stream",
-              ["coupon = F × r", "the coupon annuity is worth Fr · a₍ₙ₎"])
+    f = vcard()
 
     y = 230
     xs = timeline(f, y, 56, 300, 8,
@@ -1321,8 +1264,7 @@ def coupon() -> Fig:
 @figure("Coupon Rate", "Coupon rate against yield rate, and the pricing it implies",
         width=WID)
 def coupon_rate() -> Fig:
-    f = vcard("Coupon rate is fixed at issue; yield is not",
-              ["r = coupon / F", "what matters is Fr vs Cj, not r vs j"])
+    f = vcard()
 
     cases = [("r > j", "premium", "P > C", AMBER, 1.18),
              ("r = j", "par", "P = C", GREEN, 1.0),
@@ -1345,8 +1287,7 @@ def coupon_rate() -> Fig:
 @figure("Yield Rate", "The yield rate as the discount rate that reproduces the market "
         "price", width=WID)
 def yield_rate() -> Fig:
-    f = vcard("The yield makes the price come out right",
-              ["P = Fr · a₍ₙ₎ⱼ + C · vⁿ", "an IRR — solve for j numerically"])
+    f = vcard()
 
     a = vaxes(f, 0.01, 0.10, 700, 1400, left=58, top=30)
     a.curve(lambda j: _bond_price(j), colour=BLUE, xa=0.012, xb=0.10)
@@ -1364,8 +1305,7 @@ def yield_rate() -> Fig:
 
 @figure("Term of Bond", "How the bond's term drives its price sensitivity", width=WID)
 def term_of_bond() -> Fig:
-    f = vcard("A longer term means more price risk",
-              ["n = years × coupons per year", "at j = r the price stays at par"])
+    f = vcard()
 
     a = vaxes(f, 0, 30, 700, 1350, left=58, top=30)
     for j, colour, lab in ((0.03, AMBER, "j = 3%"), (0.05, "var(--dim)", "j = 5%"),
@@ -1382,9 +1322,7 @@ def term_of_bond() -> Fig:
 @figure("Callable Bond", "The issuer's call option and the worst-case pricing rule",
         width=WID)
 def callable_bond() -> Fig:
-    f = vcard("A callable bond can be redeemed early",
-              ["price at the worst redemption date",
-               "premium → earliest call;  discount → maturity"])
+    f = vcard()
 
     y = 218
     xs = timeline(f, y, 56, 300, 8,
@@ -1405,8 +1343,7 @@ def callable_bond() -> Fig:
 @figure("Non-Callable Bond", "A bullet bond with certain cash flows to maturity",
         width=WID)
 def non_callable_bond() -> Fig:
-    f = vcard("A bullet bond ends when it says it will",
-              ["P = Fr · a₍ₙ₎ⱼ + C · vⁿ", "one term, one price, no cases"])
+    f = vcard()
 
     y = 230
     _bond_timeline(f, y, 8, coupon_h=30, redemption_h=68)
@@ -1418,9 +1355,7 @@ def non_callable_bond() -> Fig:
 @figure("Call Price", "The call price replacing the redemption value at a call date",
         width=WID)
 def call_price() -> Fig:
-    f = vcard("At a call date the call price replaces C",
-              ["P_call = Fr · a₍n_c₎ⱼ + C_call · v^(n_c)",
-               "price every call date and take the lowest"])
+    f = vcard()
 
     y = 236
     xs = timeline(f, y, 56, 300, 8, labels=["0", "", "", "n_c", "", "", "", "", "n"])
@@ -1437,8 +1372,7 @@ def call_price() -> Fig:
 @figure("Call Premium", "The call premium shrinking to zero as maturity approaches",
         width=WID)
 def call_premium() -> Fig:
-    f = vcard("The call premium narrows towards maturity",
-              ["call premium = call price − F", "it reaches zero at maturity"])
+    f = vcard()
 
     a = vaxes(f, 4, 10, 980, 1075, left=58, top=30)
     call_prices = {4: 1060, 5: 1050, 6: 1040, 7: 1030, 8: 1020, 9: 1010, 10: 1000}
@@ -1459,8 +1393,7 @@ def call_premium() -> Fig:
 @figure("Reinvestment of Coupons", "Realised return depending on the rate coupons are "
         "reinvested at", width=WID)
 def reinvestment_of_coupons() -> Fig:
-    f = vcard("The promised yield assumes coupons are reinvested at it",
-              ["AV = Fr · s₍ₙ₎ at r_i  +  C", "r_i = j gives exactly P(1 + j)ⁿ"])
+    f = vcard()
 
     j = 0.05
     coupon_amt = BOND_F * BOND_R
@@ -1498,8 +1431,7 @@ def _macaulay(j, flows=None):
 @figure("Duration", "Duration as the balance point of the discounted cash flows",
         width=WID)
 def duration() -> Fig:
-    f = vcard("Duration is the balance point of the present values",
-              ["D_Mac = Σ t · PV(C_t) / P", "measured in periods, not percent"])
+    f = vcard()
 
     j = 0.05
     pv = [(t, c * (1 + j) ** -t) for t, c in _dur_cashflows()]
@@ -1519,8 +1451,7 @@ def duration() -> Fig:
 @figure("Macaulay Duration", "Each cash flow's present value weighting its own time",
         width=WID)
 def macaulay_duration() -> Fig:
-    f = vcard("Each date is weighted by its share of the price",
-              ["D_Mac = Σ t · PV(C_t) / P", "the weights sum to 1"])
+    f = vcard()
 
     j = 0.05
     pv = [(t, c * (1 + j) ** -t) for t, c in _dur_cashflows()]
@@ -1538,8 +1469,7 @@ def macaulay_duration() -> Fig:
 @figure("Modified Duration", "The tangent line duration provides at the current yield",
         width=WID)
 def modified_duration() -> Fig:
-    f = vcard("Modified duration is the slope of the price–yield curve",
-              ["D_Mod = −(1/P) dP/dj = D_Mac/(1 + j)", "ΔP ≈ −D_Mod · P · Δj"])
+    f = vcard()
 
     j0 = 0.05
     p0 = _bond_price(j0)
@@ -1560,8 +1490,7 @@ def modified_duration() -> Fig:
 @figure("1st-Order Linear Approximation", "The duration estimate against the true price "
         "change", width=WID)
 def first_order_approximation() -> Fig:
-    f = vcard("The duration estimate is a tangent",
-              ["ΔP ≈ −D_Mod · P · Δj", "always short: add ½ · C · P · (Δj)²"])
+    f = vcard()
 
     j0 = 0.05
     p0 = _bond_price(j0)
@@ -1590,9 +1519,7 @@ def first_order_approximation() -> Fig:
 
 @figure("Convexity", "Convexity as the curvature the duration line misses", width=WID)
 def convexity() -> Fig:
-    f = vcard("Convexity is the curvature the tangent leaves out",
-              ["ΔP/P ≈ −D_Mod · Δj + ½ · C · (Δj)²",
-               "C = (1/P) d²P/dj² = Σ t(t+1) C_t v^(t+2) / P"])
+    f = vcard()
 
     n_long, j0 = 30, 0.05
     price = lambda j: _bond_price(j, n=n_long)
@@ -1622,8 +1549,7 @@ def convexity() -> Fig:
 @figure("Portfolio", "Portfolio duration as the value-weighted average of its holdings",
         width=WID)
 def portfolio() -> Fig:
-    f = vcard("A portfolio's duration is its value-weighted average",
-              "D_port = Σ Pᵢ Dᵢ / Σ Pᵢ")
+    f = vcard()
 
     holdings = [("Short", 300_000, 2.1, BLUE), ("Medium", 500_000, 6.4, VIOLET),
                 ("Long", 200_000, 14.2, ROSE)]
@@ -1649,8 +1575,7 @@ def portfolio() -> Fig:
 
 @figure("Spot Rate", "Spot rates as the yield on each zero-coupon maturity", width=WID)
 def spot_rate() -> Fig:
-    f = vcard("A spot rate is the yield on one future payment",
-              ["P = Σ C_t / (1 + s_t)^t", "discount each flow at its own rate"])
+    f = vcard()
 
     spots = [(1, 0.030), (2, 0.035), (3, 0.039), (4, 0.042), (5, 0.044), (6, 0.045)]
     a = vaxes(f, 0.4, 6.6, 0.025, 0.050, left=58, top=30)
@@ -1666,9 +1591,7 @@ def spot_rate() -> Fig:
 
 @figure("Forward Rate", "The forward rate implied by two spot rates", width=WID)
 def forward_rate() -> Fig:
-    f = vcard("A forward rate is locked in today for a future period",
-              ["(1 + s₃)³ = (1 + s₂)² · (1 + f₂,₃)",
-               "two routes to year 3 must cost the same today"])
+    f = vcard()
 
     y = 250
     xs = timeline(f, y, 66, 296, 4, labels=["0", "1", "2", "3", "4"])
@@ -1685,8 +1608,7 @@ def forward_rate() -> Fig:
 @figure("Yield Curve", "Normal, flat and inverted term structures on one set of axes",
         width=WID)
 def yield_curve() -> Fig:
-    f = vcard("Three shapes the term structure takes",
-              ["P = Σ C_t / (1 + s_t)^t", "every maturity has its own spot rate"])
+    f = vcard()
 
     mats = [1, 2, 3, 5, 7, 10, 20, 30]
     shapes = (
@@ -1710,8 +1632,7 @@ def yield_curve() -> Fig:
 @figure("Duration Matching", "Assets and liabilities matched in value and duration",
         width=WID)
 def duration_matching() -> Fig:
-    f = vcard("Match value and duration and small rate moves cancel",
-              ["PV(A) = PV(L)   and   D(A) = D(L)", "add C(A) ≥ C(L) for Redington"])
+    f = vcard()
 
     y = 216
     xs = timeline(f, y, 56, 300, 8, labels=["0", "", "", "", "", "", "", "", ""])
@@ -1727,9 +1648,7 @@ def duration_matching() -> Fig:
 
 @figure("Immunization", "The surplus curve under each immunization strategy", width=WID)
 def immunization() -> Fig:
-    f = vcard("Immunization keeps the surplus non-negative",
-              ["PV(A) = PV(L),  D(A) = D(L),  C(A) > C(L)",
-               "ΔS ≈ ½ (C_A − C_L) V (Δj)² ≥ 0"])
+    f = vcard()
 
     a = vaxes(f, -0.03, 0.03, -20, 30, left=58, top=30)
     a.curve(lambda d: 25000 * d * d, colour=GREEN)
@@ -1747,9 +1666,7 @@ def immunization() -> Fig:
 @figure("Redington Immunization", "The three Redington conditions and the surplus they "
         "produce", width=WID)
 def redington_immunization() -> Fig:
-    f = vcard("Redington: a local minimum of the surplus",
-              ["ΔS ≈ ½ (C_A − C_L) · V · (Δj)²",
-               "small parallel shifts only"])
+    f = vcard()
 
     a = vaxes(f, -0.025, 0.025, -4, 24, left=58, top=30)
     a.area(lambda d: 32000 * d * d, -0.025, 0.025, colour=GREEN, opacity="0.16")
@@ -1767,9 +1684,7 @@ def redington_immunization() -> Fig:
 @figure("Full Immunization", "Asset cash flows surrounding each liability payment",
         width=WID)
 def full_immunization() -> Fig:
-    f = vcard("Assets on both sides of every liability",
-              ["PV(A) = PV(L),   D(A) = D(L)",
-               "one asset before and one after each liability date"])
+    f = vcard()
 
     y = 232
     xs = timeline(f, y, 56, 300, 8, labels=["0", "", "", "", "", "", "", "", ""])
@@ -1786,8 +1701,7 @@ def full_immunization() -> Fig:
 @figure("Asset-Liability Portfolio", "Asset cash flows set against the liabilities they "
         "fund", width=WID)
 def asset_liability_portfolio() -> Fig:
-    f = vcard("Assets are held to fund liabilities",
-              ["PV(A) = PV(L)", "match the cash flows, or the durations"])
+    f = vcard()
 
     y = 236
     xs = timeline(f, y, 52, 302, 8,
@@ -1806,8 +1720,7 @@ def asset_liability_portfolio() -> Fig:
 @figure("Annuity Immediate", "An annuity-immediate paying at the end of each period, "
         "valued at both ends", width=WID)
 def annuity_immediate() -> Fig:
-    f = vcard("An annuity-immediate pays at the end of each period",
-              ["a₍ₙ₎ = (1 − vⁿ)/i", "s₍ₙ₎ = (1 + i)ⁿ · a₍ₙ₎"])
+    f = vcard()
 
     y = 250
     xs = timeline(f, y, 66, 300, 5, labels=["0", "1", "2", "3", "4", "5"])

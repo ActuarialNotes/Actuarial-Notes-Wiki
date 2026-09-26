@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:fc4c41b6b8fe49cbd524d26a2164cffb277baf0203104a77d70ff09e08058242
+  content_hash: sha256:a6814a1bd5ccd4b5cea0c47f9c420ca3e98cbba579fabb262230a7040d3aba8a
   sources: []
   open_findings: 0
   open_critical: 0
@@ -41,7 +41,7 @@ verification:
 > > \end{align*}
 > > $$
 > >
-> > Coefficients add on the log scale, and factors multiply on the dollar scale. Rounding the factors to three decimals before multiplying gives $\$572.39$ instead. That is why the filed algorithm has to specify the rounding.
+> > Coefficients add on the log scale, and factors multiply on the dollar scale. Rounding the factors to three decimals before multiplying gives $\$572.40$ instead. That is why the filed algorithm has to specify the rounding.
 
 > [!example]- Stripping Territory Out with the GLM {Example}
 > Territory T has $3{,}000$ exposures and $\$1{,}320{,}000$ of losses, and the statewide pure premium is $\$300$. A class GLM built *without* territory, balanced statewide, predicts $\$1{,}100{,}000$ for T's policies. T's neighbours show an actual-to-predicted ratio of $1.10$, and T's own ratio is given credibility $0.60$. Estimate T's territory relativity.

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a53336d5c658001ae89b49df7c9e2533fe691343238c85915389dfdab72d417e
+  content_hash: sha256:0412c82a281aa898035f7c22712188fe57735d7ef5c6ec50666cd68cfaa1cdf4
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,7 +22,7 @@ An **Exponential Trend** models a ratemaking statistic — frequency, severity, 
 - $b$ is the [[Linear Regression|least-squares]] slope of $\ln y_t$ on $t$: $b = \sum (t - \bar{t})(\ln y_t - \overline{\ln y}) \big/ \sum (t - \bar{t})^2$. With $t$ in years, $\hat{T}$ is the annual trend; with $t$ in quarters, the annual trend is $e^{4b} - 1$.
 - The selected trend is applied as a factor $(1 + \hat{T})^{n}$, where $n$ is the trend period from the average date of the experience period to the average date of the forecast period. Separately selected frequency and severity trends combine multiplicatively: $1 + T_{PP} = (1 + T_F)(1 + T_S)$.
 - **Why it is preferred:** a constant rate of change compounds the way inflation does, and the fitted curve never goes negative. A [[Linear Trend|linear trend]] on a decreasing series eventually projects negative frequencies or severities, which Werner & Modlin call its shortcoming.
-- **How it is fitted in practice:** for short-tailed lines, calendar-year paid data for the 12 months ending each quarter (the rolling year smooths seasonality); for long-tailed lines, accident-year losses developed to ultimate. Werner fits windows of 20, 16, 12, 8, 6 and 4 points and reads $R^2$ alongside the slopes; the recent windows show whether the trend has shifted.
+- **How it is fitted in practice:** for short-tailed lines, calendar-year paid data for the 12 months ending each quarter (the rolling year smooths seasonality); for long-tailed lines, accident-year losses developed to ultimate. Werner's example fits windows of 20, 16, 12, 8, 6 and 4 points, and $R^2$ is the usual diagnostic; the recent windows show whether the trend has shifted.
 - Catastrophes are excluded from trend data (with rolling years, one event contaminates four points) and large losses capped; benefit-level changes are removed or the fit will read them as trend. Selection is a judgment informed by external indices, and [[ASOP 13 - Trending Procedures in Property Casualty Insurance (ASB - 2009)|ASOP 13]] requires it to be reasoned and disclosed.
 
 > [!example]- Fitting and Applying an Annual Severity Trend {Example}

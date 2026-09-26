@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:01e6e6281e0bf7182c818b60847fba2fced0f5f75b1ec72c9bb84161fd4fe1a5
+  content_hash: sha256:898d86e5a20a00ea415ee11e9418151979d67415bc1e2ffea417f7f5f445b407
   sources: []
   open_findings: 0
   open_critical: 0
@@ -47,7 +47,8 @@ verification:
 > > [!answer]-
 > > $$
 > > \begin{align*}
-> > \text{Var} &= 60^2 + 80^2 + 50^2 + 2[0.5(60)(80) + 0.25(80)(50)] \\
+> > \text{Var} &= 60^2 + 80^2 + 50^2 \\
+> > &\quad + 2[0.5(60)(80) + 0.25(80)(50)] \\
 > > &= 12{,}500 + 6{,}800 \\
 > > &= 19{,}300 \\
 > > \sigma &= 138.9

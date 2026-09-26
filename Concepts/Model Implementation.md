@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1f72d48ce1fa0a22368e76f21fed35aa9cf2e0c3c7f255ee108a9723ca68632e
+  content_hash: sha256:f0c1554f85a5023fe6131038741d247293c45bd47740c651f290033abb6506b8
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,7 +18,7 @@ verification:
 > $$\text{OB} = \frac{\sum_j w_j R_j^{\text{new}}}{\sum_j w_j R_j^{\text{current}}}$$
 
 - $B$ is the base rate, $\Delta$ the intended overall change, $R_j$ the relativity of level $j$, and $w_j$ its exposure weight. The **off-balance** OB is how much the new relativities alone would move average premium. Dividing it out makes the plan deliver $\Delta$ (see [[Rate Change]]).
-- **From model to product.** The [[Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020)|GLM monograph]] sets out three requirements:
+- **From model to product.** The [[Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020)|GLM monograph]] makes three points:
   - The plan must be clear, leaving no ambiguity about which class a risk falls in.
   - A factor that is in the plan but not in the model (a new safe-driving discount, say) may overlap variables that were modelled, and needs a judgmental adjustment.
   - Coverage options (deductibles, [[Increased Limits|increased limits]], peril groups) should be priced outside the GLM by loss-elimination methods and entered as [[Offset Variable|offsets]].

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ce34a365b0b556fd6f821b6e2d0d279a03839a349477cd23442d8560ac348f70
+  content_hash: sha256:50118a5798a3e4129dfdcbefe9d13b952ba4efca97cb2fb4edd5bc90acc90cf1
   sources: []
   open_findings: 0
   open_critical: 0
@@ -13,7 +13,12 @@ verification:
 
 **Actuarial Communication** is any written, electronic or oral communication an actuary issues about actuarial services, from a model's technical documentation to a two-minute verbal summary for an executive. In the U.S. it is governed by ASOP No. 41, *Actuarial Communications*. Form, content and language must suit the **intended users**, and anything meant to be relied on must be documented well enough for another qualified actuary to appraise it.
 
-> $$\text{Actuarial Report} \subseteq \text{Actuarial Documents} \subset \text{Actuarial Communications}$$
+> $$
+> \begin{aligned}
+> \text{Actuarial Report} &\subseteq \text{Actuarial Documents} \\
+> &\subset \text{Actuarial Communications}
+> \end{aligned}
+> $$
 
 > $$\%\ \text{change in mean} = e^{\hat{\beta}} - 1$$
 

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:7fb30445ff3039420aa444137d5f86b85cb45178631badd4bf65098cfb399436
+  content_hash: sha256:bb63dd1ee9e2a540db028a9d8c77f58a8427894278ecd9d684f82c08915c90bb
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,9 +20,9 @@ verification:
 - **Criteria (MAS-I).** An estimator is judged on several properties:
   - **Bias.** $\mathrm{Bias}(\hat{\theta}) = E[\hat{\theta}] - \theta$, and the estimator is [[Unbiasedness|unbiased]] when this is zero.
   - [[Consistency]]: $\hat{\theta}$ converges to $\theta$ as $n$ grows. MSE tending to zero is enough.
-  - [[Efficiency]]: an unbiased estimator whose variance reaches the [[Cramér-Rao Lower Bound]] $1/[nI(\theta)]$ is efficient. The best unbiased estimator is the [[Minimum Variance|minimum variance]] unbiased estimator.
+  - [[Efficiency]]: an unbiased estimator whose variance reaches the [[Cramér-Rao Lower Bound]] $1/[nI(\theta)]$ is efficient. The unbiased estimator with the smallest variance of all is the [[Minimum Variance|minimum variance]] unbiased estimator (MVUE).
   - [[Sufficiency]]: the estimator uses a [[Sufficient Statistic]] that carries all the sample's information about $\theta$.
-  - [[Mean Square Error]] combines bias and variance. A slightly biased estimator can beat an unbiased one on it.
+  - [[Mean Square Error]] combines bias and variance, so a slightly biased estimator can beat an unbiased one.
 - **Methods.** The [[Method of Moments]] equates sample moments to theoretical ones; it is quick but not always efficient. [[Maximum Likelihood Estimation]] maximizes $\ell(\theta)$; it is consistent, asymptotically normal and efficient, and invariant under transformation. MLE handles [[Incomplete Data|incomplete data]] directly: a [[Censoring|censored]] value contributes $S(u)$, and a loss [[Truncation|truncated]] at a deductible $d$ contributes $f(x)/S(d)$.
 - **The normal sample.** For a [[Normal Distribution|normal]] sample, $\bar{X}$ is the MLE of $\mu$. It is unbiased and sufficient, and it attains the Cramér-Rao bound. The MLE of $\sigma^2$ divides by $n$ and is biased low, while the [[Sample Variance|sample variance]] $S^2$ divides by $n-1$ and is unbiased.
 - **Unpaid claim distributions (Exam 7).** Reserve variability runs on the same ideas:
@@ -33,7 +33,7 @@ verification:
   Error in these estimates is [[Parameter Risk|parameter risk]], one part of [[Prediction Error|prediction error]].
 
 > [!example]- Two Estimators of a Loss Ceiling {Example}
-> Five claims (in $\$000$s) of $2, 7, 4, 9, 3$ are assumed uniform on $(0, \theta)$. Estimate $\theta$ by the method of moments and by MLE, and compare the two estimators' MSE.
+> Five claims (in \$000s) of $2, 7, 4, 9, 3$ are assumed uniform on $(0, \theta)$. Estimate $\theta$ by the method of moments and by MLE, and compare the two estimators' MSE.
 >
 > > [!answer]-
 > > **Method of moments:** $E[X] = \theta/2$, so $\tilde{\theta} = 2\bar{x} = 2(5) = 10$. It is unbiased, so its MSE is its variance:
@@ -55,7 +55,7 @@ verification:
 > > \end{align*}
 > > $$
 > >
-> > The **biased MLE has the lower MSE** ($\theta^2/21 < \theta^2/15$). The method of moments can even return a ceiling below the largest observed claim. Rescaling to $\tfrac{6}{5}X_{(5)} = 10.8$ removes the bias and cuts the MSE further, to $\theta^2/35$. That estimator is a function of the sufficient statistic $X_{(n)}$.
+> > The **biased MLE has the lower MSE** ($\theta^2/21 < \theta^2/15$), and the method of moments can even return a ceiling below the largest claim. Rescaling to $\tfrac{6}{5}X_{(5)} = 10.8$, a function of the sufficient statistic $X_{(n)}$, removes the bias and cuts the MSE to $\theta^2/35$.
 
 > [!example]- MLE with a Deductible and a Policy Limit {Example}
 > Ground-up losses are exponential with mean $\theta$. Only losses above a $\$500$ deductible are reported, and losses are capped at $\$10{,}000$. The five reported losses are $\$1{,}500$, $\$2{,}500$, $\$4{,}000$, and two recorded at the $\$10{,}000$ cap. Find $\hat{\theta}$.
@@ -70,7 +70,7 @@ verification:
 > > \end{align*}
 > > $$
 > >
-> > Setting $\ell'(\theta) = -3/\theta + 25{,}500/\theta^2 = 0$ gives $\hat{\theta} = 25{,}500/3 = 8{,}500$. The divisor counts only the **uncensored** losses. Treating the capped losses as exact would divide by 5 and understate the mean at $5{,}100$.
+> > Setting $\ell'(\theta) = -3/\theta + 25{,}500/\theta^2 = 0$ gives $\hat{\theta} = 25{,}500/3 = 8{,}500$. Only the **uncensored** losses count in the divisor; treating the capped losses as exact would give $5{,}100$, understating the mean.
 
 > [!example]- Clark's Cape Cod ELR by Maximum Likelihood {Example}
 > Premiums for accident years 1 to 3 are $1{,}000$, $1{,}100$ and $1{,}200$. A fitted growth curve gives $G(12) = 0.40$, $G(24) = 0.70$ and $G(36) = 0.85$. Incremental paid losses are $260, 190, 90$ (AY1), $300, 200$ (AY2) and $325$ (AY3). Holding the curve fixed, find the MLE of the ELR, the scale parameter $\sigma^2$ (with $p = 3$ parameters: ELR, $\omega$, $\theta$), and the reserve.

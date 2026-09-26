@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a0f41f010c9c19e5f154279a3e2a9843641bbccd289ffff7c0c3e7a37f6117fa
+  content_hash: sha256:783e6eea0d48915ecea03224a1e69b723d1d2854e2b1cc2afe614373b633f456
   sources: []
   open_findings: 0
   open_critical: 0
@@ -48,16 +48,17 @@ verification:
 > > &= (5.02,\ 7.41)
 > > \end{align*}
 > > $$
-> > Each extra step adds one more unknown shock, so the error variance is $\sigma^2(1 + \phi^2 + \phi^4 + \cdots)$. It levels off at $\sigma/\sqrt{1 - \phi^2} = 0.5/0.8 = 0.625$. Far ahead, the interval becomes the long-run mean $2.4/0.4 = 6.0$ plus or minus $1.96(0.625) = 1.225$.
+> > Each extra step adds one more unknown shock, so the error variance is $\sigma^2(1 + \phi^2 + \phi^4 + \cdots)$. The standard error levels off at $\sigma/\sqrt{1 - \phi^2} = 0.5/0.8 = 0.625$. Far ahead, the interval becomes the long-run mean $2.4/0.4 = 6.0$ plus or minus $1.96(0.625) = 1.225$.
 > >
 > > The ratio of the first two standard errors gives $\phi$:
 > > $$
 > > \begin{align*}
 > > 1 + \phi^{2} &= \left(\frac{0.583}{0.500}\right)^{2} \\
 > > &= 1.36 \\
-> > \phi &= 0.6
+> > \lvert\phi\rvert &= 0.6
 > > \end{align*}
 > > $$
+> > This matches the fitted coefficient: the `se` column alone carries the AR structure of the model.
 
 > [!example]- Back-Transforming a Log-Scale Interval {Example}
 > An ARIMA model is fitted to the log of monthly average paid severity. Next month's forecast is $8.70$ on the log scale, with standard error $0.08$. Give a $95\%$ prediction interval for the severity in dollars.

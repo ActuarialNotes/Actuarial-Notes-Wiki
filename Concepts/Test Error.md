@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:d81d8b7cf66020befd0a13fd034042d35077e28b7751f07fd055bfdd2dd11dca
+  content_hash: sha256:49f65726baf4f72048d6a09302c4f51eac3d225ee013de7396cb0f2db5ef3a2d
   sources: []
   open_findings: 0
   open_critical: 0
@@ -17,7 +17,7 @@ verification:
 >
 > $$\text{Test error rate} = \text{Ave}\left(I(y_0 \neq \hat{y}_0)\right)$$
 >
-> $$E\!\left[\left(y_0 - \hat{f}(x_0)\right)^{2}\right] = \mathrm{Var}(\hat{f}(x_0)) + \left[\mathrm{Bias}(\hat{f}(x_0))\right]^{2} + \mathrm{Var}(\varepsilon)$$
+> $$\begin{aligned} E\!\left[\left(y_0 - \hat{f}(x_0)\right)^{2}\right] &= \mathrm{Var}(\hat{f}(x_0)) \\ &\quad + \left[\mathrm{Bias}(\hat{f}(x_0))\right]^{2} \\ &\quad + \mathrm{Var}(\varepsilon) \end{aligned}$$
 
 - The averages run over test observations $(x_0, y_0)$. The [[Mean Square Error|MSE]] suits a numeric response and the error rate a classifier (see [[Confusion Matrix]]); a GLM uses holdout [[Deviance|deviance]].
 - **Its shape.** By the [[Bias-Variance Tradeoff|bias-variance tradeoff]], test error is U-shaped in flexibility: bias falls, variance rises. It can never fall below $\mathrm{Var}(\varepsilon)$. A growing gap between low training error and high test error is overfitting.

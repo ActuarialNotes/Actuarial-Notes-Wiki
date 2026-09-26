@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:791b3f85da66e5cbd5303e6cfb08950eaf9744c399de0496a8cacdaa320d519e
+  content_hash: sha256:40617703a59a7a9144fabcd702976efa3caaeab9412f84d7c317c204e2baf48f
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,7 +22,7 @@ verification:
   - [[Gamma|gamma]]: $\mu^2$ (constant coefficient of variation)
   - inverse Gaussian: $\mu^3$
   - [[Tweedie Distribution|Tweedie]] with $1 < p < 2$: $\mu^p$
-- **What it does in the fit.** A GLM's estimating equations weight each observation by $1/V(\hat{\mu}_i)$. Under a gamma model, a $\$3{,}000$ miss on a $\$50{,}000$ claim counts far less than the same miss on a $\$5{,}000$ claim. The Pearson residual $(y_i - \hat{\mu}_i)/\sqrt{V(\hat{\mu}_i)}$ puts all residuals on one scale. A fan shape in a [[Residual Plot|residual plot]] of such residuals means the wrong $V$ was chosen.
+- **What it does in the fit.** A GLM's estimating equations weight each residual $y_i - \mu_i$ by $w_i/V(\mu_i)$, along with a factor from the link. Under a gamma model, a $\$3{,}000$ miss on a $\$50{,}000$ claim counts far less than the same miss on a $\$5{,}000$ claim. The Pearson residual $(y_i - \hat{\mu}_i)/\sqrt{V(\hat{\mu}_i)}$ puts all residuals on one scale. A fan shape in a [[Residual Plot|residual plot]] of such residuals means the wrong $V$ was chosen.
 - **Choosing it.** Plot group variances against group means on log–log axes. The slope estimates $p$ in $V(\mu) = \mu^p$: $0$ for normal, $1$ for Poisson, $2$ for gamma, and between $1$ and $2$ for Tweedie.
 - **In a linear mixed model.** The default residual covariance is $\mathbf{R}_i = \sigma^2\mathbf{I}$: constant variance. It can be relaxed in two ways:
   - **heterogeneous variances**, a separate $\sigma_g^2$ for each level of a factor (a treatment group, a region)
@@ -55,7 +55,7 @@ verification:
 > > &= 1.585
 > > \end{align*}
 > > $$
-> > $V(\mu) = \mu^{1.6}$ lies between Poisson ($p = 1$) and gamma ($p = 2$). That is a **Tweedie** with $p \approx 1.6$, the compound Poisson–gamma shape expected of pure premium, with its point mass at zero.
+> > $V(\mu) \approx \mu^{1.6}$ lies between Poisson ($p = 1$) and gamma ($p = 2$). That is a **Tweedie** with $p \approx 1.6$, the compound Poisson–gamma shape expected of pure premium, with its point mass at zero.
 
 > [!example]- Testing Heterogeneous Residual Variance in an LMM {Example}
 > A random-intercept model of loss ratios by insured is fitted by REML twice, with identical fixed effects. With one common residual variance, $-2\ell_R = 1{,}254.6$. With a separate residual variance for each of three regions, $-2\ell_R = 1{,}241.2$. Test at $5\%$, given $\chi^2_{0.05,\,2} = 5.991$.

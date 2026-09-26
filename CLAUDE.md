@@ -301,8 +301,24 @@ Other important `lib/` modules:
   mode — `Quiz.tsx` gates `showExplanation` on the choice alone, so a practice exam
   run for feedback reveals and a quiz run as a dry run doesn't. A launch surface that
   sets no `reveal` param gets the saved choice rather than a hardcoded `during`.
-  Pure and tested (the storage read/write wrap pure `revealFromStored` /
+  With `'end'` the right-answer chime is silent too — it would give the verdict away
+  (`docs/sound-design.md` rule 7). Pure and tested (the storage read/write wrap pure `revealFromStored` /
   `storedWithReveal`).
+- `quizDifficulty.ts` — the quiz builder's **difficulty slider** (settings menu, quiz mode
+  only). Continuous, but it only ever *says* Easy / Med / Hard: the position is a target on
+  a 0–1 line (easy 0, medium ½, hard 1) and each question is drawn with a weight that falls
+  off with its level's distance from it — a lean, not a filter, so a pool short on the
+  target level still fills the quiz from its neighbours. It rides the URL as `level=0–100`
+  (`QuestionFilter.difficultyTarget`, applied by `useQuestions`); the builder's shuffle uses
+  the same draw, and Today's Plan hands the coverage greedy a difficulty-ordered pool so it
+  prefers the level among ties. Pure and tested.
+- `quizTiming.ts` — **Timed** quizzes: the per-exam pace table (transcribed from each exam's
+  `Guides/<exam page>/Format and pacing.md` — per question for the MC papers, per *point* for
+  Exam 5), the set's time budget (`timeAllowanceSeconds`, null rather than invented for an
+  exam with no pace), and the per-mode stored choice. The builder's settings menu sets
+  `timed=1`; `components/QuizTimer.tsx` counts down in the quiz header from the first
+  question (not the pre-quiz concept list), goes amber in the last tenth and counts the
+  overrun in red rather than ending the quiz. Pure and tested.
 - `questionAttempts.ts` — turns a learner's per-question response tally (`hooks/useQuestionAttempts`,
   backed by `question_responses`) into the display state every question list shows: attempted or not,
   and how many attempts were successful vs unsuccessful. Rendered by `components/QuestionAttemptBadge.tsx`,

@@ -44,6 +44,10 @@ costs zero bytes of assets and every cue is tunable from one table.
    is punishment, not feedback. `soundConfig.test.ts` pins this so it can't
    drift back in by accident. What a miss does instead is end the `correct`
    combo — the next right answer comes back at the pitch the run started from.
+   The corollary: a quiz run with the answers held back for /review (reveal
+   `'end'`, the builder's "Show answers after each question" unticked) plays no
+   `correct` either — a chime on the right answers would give the verdict away
+   as surely as the reveal it replaces. `pages/Quiz.tsx` gates it on the reveal.
 8. **Loudness is the hierarchy.** `correct` fires forty times to `complete`'s
    one, so it sits below the ceremonies; the ceremonies sit below the
    session fanfare; the interface sits below all of it, and `ruffle` — the most

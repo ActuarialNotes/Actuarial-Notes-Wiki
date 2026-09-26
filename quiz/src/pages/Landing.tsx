@@ -43,6 +43,16 @@ import { useExamPassRates } from '@/hooks/useExamPassRates'
 import { PastExamBrowser } from '@/components/PastExamBrowser'
 import { examStatus } from '@/lib/examStatus'
 import { loadRevealMode, saveRevealMode, type RevealMode } from '@/lib/revealMode'
+import {
+  difficultyToParam,
+  drawByDifficulty,
+  loadDifficultyTarget,
+  orderByDifficulty,
+  saveDifficultyTarget,
+  shuffle,
+  type DifficultyTarget,
+} from '@/lib/quizDifficulty'
+import { formatPace, loadTimed, paceForExam, saveTimed } from '@/lib/quizTiming'
 import { ExamLogo } from '@/components/ExamLogo'
 import { examAccentStyle } from '@/lib/examColors'
 import { defaultBody, loadBody, saveBody, type ExamBody } from '@/lib/bodyFilter'
@@ -432,6 +442,22 @@ export default function Landing() {
     saveRevealMode(mode, next)
   }
 
+  // Against the clock or not — per mode too, for the same reason.
+  const [timed, setTimed] = useState<boolean>(() => loadTimed(mode))
+  useEffect(() => { setTimed(loadTimed(mode)) }, [mode])
+  function handleTimedChange(next: boolean) {
+    setTimed(next)
+    saveTimed(mode, next)
+  }
+
+  // How hard a quiz's draw leans (lib/quizDifficulty.ts). One position for
+  // every quiz; a practice exam ignores it, since it is sat as the paper sets it.
+  const [difficulty, setDifficulty] = useState<DifficultyTarget>(loadDifficultyTarget)
+  function handleDifficultyChange(next: DifficultyTarget) {
+    setDifficulty(next)
+    saveDifficultyTarget(next)
+  }
+
   // Set once the user picks a specific question count, so the auto-sizing effect
   // (which defaults Today's Quiz to the whole-plan coverage count) stops overriding
   // their choice. Reset whenever the exam/mode changes.
@@ -697,14 +723,26 @@ export default function Landing() {
   const launchTodaysPlan = useCallback((desiredCount: number): boolean => {
     const sel = buildTodaysPlanSelection()
     if (!sel) return false
-    const selected = selectQuestionsForCoverage(sel.todayQs, sel.concepts, desiredCount, { seenIds: todayAnsweredIds })
+    // The cover takes the first best-covering question it meets, so handing it
+    // the pool in difficulty-weighted order makes it prefer the slider's level
+    // wherever the plan leaves it a choice — without giving up coverage.
+    const ordered = orderByDifficulty(sel.todayQs, difficulty)
+    const selected = selectQuestionsForCoverage(ordered, sel.concepts, desiredCount, { seenIds: todayAnsweredIds })
     if (selected.length === 0) return false
     try {
       sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(selected.map(q => q.id)))
     } catch { /* ignore */ }
-    navigate(`/quiz?selection=stored&mode=quiz&reveal=${reveal}&count=${selected.length}&from=home`)
+    const params = new URLSearchParams({
+      selection: 'stored',
+      mode: 'quiz',
+      reveal,
+      count: String(selected.length),
+      from: 'home',
+    })
+    if (timed) params.set('timed', '1')
+    navigate(`/quiz?${params.toString()}`)
     return true
-  }, [buildTodaysPlanSelection, navigate, todayAnsweredIds, reveal])
+  }, [buildTodaysPlanSelection, navigate, todayAnsweredIds, reveal, timed, difficulty])
 
   // Auto-activate today's study plan for Pro users when it has concepts.
   // If the dashboard passed a custom concept selection (some deselected), apply that instead.
@@ -927,6 +965,7 @@ export default function Landing() {
         reveal,
         from: 'home',
       })
+      if (timed) params.set('timed', '1')
       navigate(`/quiz?${params.toString()}`)
       return
     }
@@ -939,7 +978,9 @@ export default function Landing() {
         mode: 'quiz',
         reveal: loadRevealMode('quiz'),
         from: 'home',
+        level: difficultyToParam(difficulty),
       })
+      if (loadTimed('quiz')) params.set('timed', '1')
       if (count < conceptAvailableCount) params.set('count', String(count))
       navigate(`/quiz?${params.toString()}`)
       return
@@ -952,9 +993,11 @@ export default function Landing() {
     }
 
     const params = new URLSearchParams({ exam: topic, mode, reveal })
+    if (timed) params.set('timed', '1')
     if (mode === 'quiz') {
       if (selectedConcepts.length > 0) params.set('concepts', selectedConcepts.join(','))
       params.set('count', String(count))
+      params.set('level', difficultyToParam(difficulty))
     } else if (selectedSitting !== null) {
       params.set('year', String(selectedSitting.year))
       if (selectedSitting.session) params.set('session', selectedSitting.session)
@@ -981,6 +1024,11 @@ export default function Landing() {
 
   const mockExamCount = MOCK_EXAM_QUESTIONS[topic] ?? 30
   const examLabel = EXAMS.find(e => e.value === topic)?.label ?? topic
+
+  // The real paper's pace, said beside the Timed choice. `topic` is the same
+  // exam name a question carries, so it is what the pace table is keyed by.
+  const topicPace = paceForExam(topic)
+  const timedPace = topicPace ? formatPace(topicPace) : undefined
 
   // What the "Mix" row draws: the exam-shaped question count, unless the bank
   // holds fewer than that.
@@ -1057,6 +1105,7 @@ export default function Landing() {
     count,
     selectedSitting ? `${selectedSitting.year}|${selectedSitting.session ?? ''}` : '',
     [...selectedConcepts].sort().join(','),
+    mode === 'quiz' ? difficultyToParam(difficulty) : '',
   ].join('§')
 
   useEffect(() => {
@@ -1070,19 +1119,19 @@ export default function Landing() {
 
   function handleShuffle() {
     if (quizQuestionCount <= 0) return
-    const shuffled = [...currentPool]
-    // Fisher-Yates (uniform; sort+random is biased) — same draw the quiz itself uses.
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1))
-      ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
-    }
+    // The same draw the quiz itself makes: leaning toward the difficulty
+    // slider for a quiz, uniform for a practice exam, which is sat as the paper
+    // sets it.
+    const target = mode === 'quiz' ? difficulty : 0.5
     // Today's Plan keeps its coverage guarantee: the greedy cover takes the
-    // first best-covering question, so running it over a shuffled pool yields a
-    // different set that still covers the day's concepts.
+    // first best-covering question, so running it over a freshly ordered pool
+    // yields a different set that still covers the day's concepts.
     const planConcepts = useTodaysPlan ? buildTodaysPlanSelection()?.concepts : undefined
     const draw = planConcepts
-      ? selectQuestionsForCoverage(shuffled, planConcepts, quizQuestionCount, { seenIds: todayAnsweredIds })
-      : shuffled.slice(0, quizQuestionCount)
+      ? selectQuestionsForCoverage(orderByDifficulty(currentPool, target), planConcepts, quizQuestionCount, { seenIds: todayAnsweredIds })
+      : mode === 'quiz'
+      ? drawByDifficulty(currentPool, quizQuestionCount, target)
+      : shuffle(currentPool).slice(0, quizQuestionCount)
 
     setDrawnIds(draw.map(q => q.id))
     setShuffleTick(t => t + 1)
@@ -1474,14 +1523,20 @@ export default function Landing() {
                 disabled={shuffleDisabled}
               />
             )}
-            {/* A practice exam is sat whole, so it carries no count — the
-                menu opens on the reveal choice alone. */}
+            {/* A practice exam is sat whole, as the paper sets it, so it
+                carries no count and no difficulty — the menu opens on the
+                reveal and timing choices alone. */}
             <QuizSettingsMenu
               countOptions={mode === 'quiz' ? countOptions : undefined}
               countValue={mode === 'quiz' ? countValue : undefined}
               onCountChange={mode === 'quiz' ? handleCountChange : undefined}
+              difficulty={mode === 'quiz' ? difficulty : undefined}
+              onDifficultyChange={mode === 'quiz' ? handleDifficultyChange : undefined}
               reveal={reveal}
               onRevealChange={handleRevealChange}
+              timed={timed}
+              onTimedChange={handleTimedChange}
+              timedPace={timedPace}
               className={poolCount > 0 ? undefined : 'h-14'}
             />
           </div>

@@ -3,6 +3,7 @@ import { ExternalLink, FileText } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { isSupportedPdfSource } from '@/lib/examPdf'
 import { PdfLinkButton } from '@/components/PdfLinkButton'
+import { GetCopyMenu } from '@/components/wiki/GetCopyMenu'
 import type { ResourceMeta } from '@/lib/resourceMeta'
 
 /**
@@ -139,7 +140,8 @@ export function ResourceMetaCard({
           //
           // A PDF is read in the app (`PdfLinkButton`); everything else — a
           // library catalogue, a publisher's shop page — is a link out, and
-          // says so.
+          // says so. A book found by its ISBN has several places to look, so
+          // its button opens a menu of them instead of picking one.
           isPdf ? (
             <PdfLinkButton
               url={meta.getCopyUrl}
@@ -155,6 +157,8 @@ export function ResourceMetaCard({
               }
               className="mt-3 self-start bg-muted"
             />
+          ) : meta.copySources && meta.copySources.length > 0 ? (
+            <GetCopyMenu sources={meta.copySources} title={meta.title} className="mt-3 self-start" />
           ) : (
             <a
               href={meta.getCopyUrl}

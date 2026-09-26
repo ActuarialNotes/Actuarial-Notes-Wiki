@@ -79,13 +79,19 @@ describe('ResourceMetaCard', () => {
     expect(render(LANDMARK)).not.toContain('Get a copy')
   })
 
-  // A textbook names no place to fetch it from, so the card sends the reader to
-  // a library instead — searching on the ISBN printed beside it, which is the
-  // one identifier the page can be sure of.
-  it('sends a textbook to a library search on its own ISBN', () => {
+  // A textbook names no place to fetch it from, so the card offers the places
+  // to look — a menu of ISBN searches (lib/resourceMeta.test.ts pins the URLs),
+  // closed until the reader opens it.
+  it('offers a textbook as a menu of places to get a copy', () => {
     const html = render(HOGG)
     expect(html).toContain('Get a copy')
-    expect(html).toContain('https://search.worldcat.org/search?q=bn%3A9780134686998')
+    expect(html).toContain('aria-haspopup="menu"')
+    expect(html).not.toContain('worldcat.org')
+  })
+
+  // A standard links to its own PDF — no menu of searches in front of it.
+  it('keeps an authored source link as a single control', () => {
+    expect(render(ASOP)).not.toContain('aria-haspopup')
   })
 })
 

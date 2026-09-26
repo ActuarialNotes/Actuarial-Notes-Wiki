@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>Five folds, each held out in turn, and the error curve that results</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>Five folds of the data, each held out once as the test set while the other four train the model, with each fold's test error drawn beside it and their average marked</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -46,65 +42,46 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
-  <defs>
-    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
-  </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">Score the model on data it never saw</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">CV(k) = (1/k) Σ MSEⱼ</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">k = 5 or 10 is the usual choice</text>
-    <rect x="56" y="94" width="48.8" height="22" rx="4" fill="#e11d48" fill-opacity="0.6" stroke="none"/>
-    <rect x="108.8" y="94" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
-    <rect x="161.6" y="94" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
-    <rect x="214.4" y="94" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
-    <rect x="267.2" y="94" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
-    <text x="46" y="110" text-anchor="end" class="sm dim">fit 1</text>
-    <rect x="56" y="124" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
-    <rect x="108.8" y="124" width="48.8" height="22" rx="4" fill="#e11d48" fill-opacity="0.6" stroke="none"/>
-    <rect x="161.6" y="124" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
-    <rect x="214.4" y="124" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
-    <rect x="267.2" y="124" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
-    <text x="46" y="140" text-anchor="end" class="sm dim">fit 2</text>
-    <rect x="56" y="154" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
-    <rect x="108.8" y="154" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
-    <rect x="161.6" y="154" width="48.8" height="22" rx="4" fill="#e11d48" fill-opacity="0.6" stroke="none"/>
-    <rect x="214.4" y="154" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
-    <rect x="267.2" y="154" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
-    <text x="46" y="170" text-anchor="end" class="sm dim">fit 3</text>
-    <rect x="56" y="184" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
-    <rect x="108.8" y="184" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
-    <rect x="161.6" y="184" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
-    <rect x="214.4" y="184" width="48.8" height="22" rx="4" fill="#e11d48" fill-opacity="0.6" stroke="none"/>
-    <rect x="267.2" y="184" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
-    <text x="46" y="200" text-anchor="end" class="sm dim">fit 4</text>
-    <rect x="56" y="214" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
-    <rect x="108.8" y="214" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
-    <rect x="161.6" y="214" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
-    <rect x="214.4" y="214" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
-    <rect x="267.2" y="214" width="48.8" height="22" rx="4" fill="#e11d48" fill-opacity="0.6" stroke="none"/>
-    <text x="46" y="230" text-anchor="end" class="sm dim">fit 5</text>
-    <line x1="54" y1="256" x2="67" y2="256" stroke="#e11d48" stroke-width="2.4" stroke-linecap="round"/>
-    <text x="73" y="259.6" text-anchor="start" class="sm">held out</text>
-    <line x1="54" y1="272" x2="67" y2="272" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round"/>
-    <text x="73" y="275.6" text-anchor="start" class="sm">trained on</text>
-    <line x1="80" y1="360" x2="326" y2="360" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="80" y1="360" x2="80" y2="288" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="99.67" y1="360" x2="99.67" y2="364" class="tick"/>
-    <text x="99.67" y="376" text-anchor="middle" class="sm dim">1</text>
-    <line x1="148.83" y1="360" x2="148.83" y2="364" class="tick"/>
-    <text x="148.83" y="376" text-anchor="middle" class="sm dim">2</text>
-    <line x1="198" y1="360" x2="198" y2="364" class="tick"/>
-    <text x="198" y="376" text-anchor="middle" class="sm dim">3</text>
-    <line x1="247.17" y1="360" x2="247.17" y2="364" class="tick"/>
-    <text x="247.17" y="376" text-anchor="middle" class="sm dim">4</text>
-    <line x1="296.33" y1="360" x2="296.33" y2="364" class="tick"/>
-    <text x="296.33" y="376" text-anchor="middle" class="sm dim">5</text>
-    <polyline points="99.67,304.64 148.83,326.79 198,334.54 247.17,330.11 296.33,317.93" class="curve" stroke="#e11d48" stroke-width="2.2"/>
-    <polyline points="99.67,306.86 148.83,331.21 198,344.5 247.17,351.14 296.33,354.46" class="curve dash" stroke="#3b82f6" stroke-width="2"/>
-    <circle cx="198" cy="334.54" r="4" fill="#e11d48"/>
-    <text x="198" y="324.54" text-anchor="middle" class="sm bold" fill="#e11d48">best</text>
-    <text x="281.58" y="345.14" text-anchor="end" class="sm" fill="#3b82f6">training</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <rect x="48" y="106" width="38" height="30" rx="4" fill="#e11d48" fill-opacity="0.6" stroke="none"/>
+    <rect x="90" y="106" width="38" height="30" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+    <rect x="132" y="106" width="38" height="30" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+    <rect x="174" y="106" width="38" height="30" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+    <rect x="216" y="106" width="38" height="30" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+    <text x="36" y="125" text-anchor="end" class="sm bold">1</text>
+    <rect x="270" y="113" width="54.93" height="16" rx="2" fill="#e11d48" fill-opacity="0.6"/>
+    <rect x="48" y="162" width="38" height="30" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+    <rect x="90" y="162" width="38" height="30" rx="4" fill="#e11d48" fill-opacity="0.6" stroke="none"/>
+    <rect x="132" y="162" width="38" height="30" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+    <rect x="174" y="162" width="38" height="30" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+    <rect x="216" y="162" width="38" height="30" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+    <text x="36" y="181" text-anchor="end" class="sm bold">2</text>
+    <rect x="270" y="169" width="50.67" height="16" rx="2" fill="#e11d48" fill-opacity="0.6"/>
+    <rect x="48" y="218" width="38" height="30" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+    <rect x="90" y="218" width="38" height="30" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+    <rect x="132" y="218" width="38" height="30" rx="4" fill="#e11d48" fill-opacity="0.6" stroke="none"/>
+    <rect x="174" y="218" width="38" height="30" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+    <rect x="216" y="218" width="38" height="30" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+    <text x="36" y="237" text-anchor="end" class="sm bold">3</text>
+    <rect x="270" y="225" width="60.67" height="16" rx="2" fill="#e11d48" fill-opacity="0.6"/>
+    <rect x="48" y="274" width="38" height="30" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+    <rect x="90" y="274" width="38" height="30" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+    <rect x="132" y="274" width="38" height="30" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+    <rect x="174" y="274" width="38" height="30" rx="4" fill="#e11d48" fill-opacity="0.6" stroke="none"/>
+    <rect x="216" y="274" width="38" height="30" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+    <text x="36" y="293" text-anchor="end" class="sm bold">4</text>
+    <rect x="270" y="281" width="53.07" height="16" rx="2" fill="#e11d48" fill-opacity="0.6"/>
+    <rect x="48" y="330" width="38" height="30" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+    <rect x="90" y="330" width="38" height="30" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+    <rect x="132" y="330" width="38" height="30" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+    <rect x="174" y="330" width="38" height="30" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+    <rect x="216" y="330" width="38" height="30" rx="4" fill="#e11d48" fill-opacity="0.6" stroke="none"/>
+    <text x="36" y="349" text-anchor="end" class="sm bold">5</text>
+    <rect x="270" y="337" width="57.33" height="16" rx="2" fill="#e11d48" fill-opacity="0.6"/>
+    <text x="67" y="125" text-anchor="middle" class="sm bold">test</text>
+    <text x="109" y="125" text-anchor="middle" class="sm">train</text>
+    <line x1="325.33" y1="98" x2="325.33" y2="368" class="thin dash" stroke="var(--ink)" stroke-width="1.4"/>
+    <text x="325.33" y="90" text-anchor="middle" class="sm bold">CV</text>
   </g>
 </svg>

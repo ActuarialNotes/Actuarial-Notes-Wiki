@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>Policy-year aggregation following the policies written in one year to their expiry</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>The policies that incept in 2024 highlighted in full, running on into 2025, while the one written in 2023 is left out</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -50,27 +46,26 @@ text {
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
   </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">Every transaction on policies incepting</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">in the year</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">PY Loss Ratio = losses on those policies</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">÷ premium on those policies</text>
-    <rect x="138" y="126" width="90" height="174" rx="3" fill="#d97706" fill-opacity="0.13"/>
-    <line x1="48" y1="126" x2="48" y2="300" class="grid"/>
-    <line x1="138" y1="126" x2="138" y2="300" class="grid"/>
-    <line x1="228" y1="126" x2="228" y2="300" class="grid"/>
-    <line x1="318" y1="126" x2="318" y2="300" class="grid"/>
-    <line x1="40" y1="300" x2="334" y2="300" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-    <text x="93" y="316" text-anchor="middle" class="sm dim">2023</text>
-    <text x="183" y="316" text-anchor="middle" class="sm dim">2024</text>
-    <text x="273" y="316" text-anchor="middle" class="sm dim">2025</text>
-    <rect x="139.8" y="144.5" width="90" height="11" rx="3" fill="#d97706" fill-opacity="0.34" stroke="#d97706" stroke-width="1.1"/>
-    <rect x="163.2" y="174.5" width="90" height="11" rx="3" fill="#d97706" fill-opacity="0.34" stroke="#d97706" stroke-width="1.1"/>
-    <rect x="187.5" y="204.5" width="90" height="11" rx="3" fill="#d97706" fill-opacity="0.34" stroke="#d97706" stroke-width="1.1"/>
-    <rect x="215.4" y="234.5" width="90" height="11" rx="3" fill="#d97706" fill-opacity="0.34" stroke="#d97706" stroke-width="1.1"/>
-    <text x="180" y="112" text-anchor="middle" class="sm bold" fill="#d97706">PY 2024</text>
-    <text x="180" y="336" text-anchor="middle" class="sm dim">losses and premium come from the same policies</text>
-    <text x="180" y="354" text-anchor="middle" class="sm dim">— the cleanest match, and 24 months to fill</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <rect x="138" y="100" width="90" height="250" rx="3" fill="#d97706" fill-opacity="0.13"/>
+    <line x1="48" y1="100" x2="48" y2="350" class="grid"/>
+    <line x1="138" y1="100" x2="138" y2="350" class="grid"/>
+    <line x1="228" y1="100" x2="228" y2="350" class="grid"/>
+    <line x1="318" y1="100" x2="318" y2="350" class="grid"/>
+    <line x1="40" y1="350" x2="334" y2="350" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <text x="93" y="366" text-anchor="middle" class="sm dim">2023</text>
+    <text x="183" y="366" text-anchor="middle" class="sm dim">2024</text>
+    <text x="273" y="366" text-anchor="middle" class="sm dim">2025</text>
+    <rect x="103.8" y="121" width="90" height="14" rx="3" fill="var(--axis)" fill-opacity="0.3" stroke="var(--axis)" stroke-width="1.1"/>
+    <circle cx="103.8" cy="128" r="4.6" fill="var(--axis)"/>
+    <rect x="142.5" y="167" width="90" height="14" rx="3" fill="#d97706" fill-opacity="0.45" stroke="#d97706" stroke-width="1.1"/>
+    <circle cx="142.5" cy="174" r="4.6" fill="#d97706"/>
+    <rect x="169.5" y="213" width="90" height="14" rx="3" fill="#d97706" fill-opacity="0.45" stroke="#d97706" stroke-width="1.1"/>
+    <circle cx="169.5" cy="220" r="4.6" fill="#d97706"/>
+    <rect x="193.8" y="259" width="90" height="14" rx="3" fill="#d97706" fill-opacity="0.45" stroke="#d97706" stroke-width="1.1"/>
+    <circle cx="193.8" cy="266" r="4.6" fill="#d97706"/>
+    <rect x="219" y="305" width="90" height="14" rx="3" fill="#d97706" fill-opacity="0.45" stroke="#d97706" stroke-width="1.1"/>
+    <circle cx="219" cy="312" r="4.6" fill="#d97706"/>
+    <text x="183" y="88" text-anchor="middle" class="sm bold">PY 2024</text>
   </g>
 </svg>

@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>A Poisson counting path with exponential gaps between jumps</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>A counting path climbing around its mean line λt, with exponential gaps between the jumps</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -50,13 +46,9 @@ text {
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
   </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">Counts by time t are Poisson(λt)</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">N(t) ~ Poi(λt)</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">E[N(t)] = Var(N(t)) = λt</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
     <line x1="60" y1="352" x2="336" y2="352" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="60" y1="352" x2="60" y2="92" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="60" y1="352" x2="60" y2="82" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
     <line x1="60" y1="352" x2="60" y2="356" class="tick"/>
     <text x="60" y="368" text-anchor="middle" class="sm dim">0</text>
     <line x1="148.67" y1="352" x2="148.67" y2="356" class="tick"/>
@@ -67,32 +59,41 @@ text {
     <text x="326" y="368" text-anchor="middle" class="sm dim">3</text>
     <line x1="56" y1="352" x2="60" y2="352" class="tick"/>
     <text x="52" y="355.6" text-anchor="end" class="sm dim">0</text>
-    <line x1="56" y1="289.5" x2="60" y2="289.5" class="tick"/>
-    <text x="52" y="293.1" text-anchor="end" class="sm dim">2</text>
-    <line x1="56" y1="227" x2="60" y2="227" class="tick"/>
-    <text x="52" y="230.6" text-anchor="end" class="sm dim">4</text>
-    <line x1="56" y1="164.5" x2="60" y2="164.5" class="tick"/>
-    <text x="52" y="168.1" text-anchor="end" class="sm dim">6</text>
-    <line x1="56" y1="102" x2="60" y2="102" class="tick"/>
-    <text x="52" y="105.6" text-anchor="end" class="sm dim">8</text>
+    <line x1="56" y1="272" x2="60" y2="272" class="tick"/>
+    <text x="52" y="275.6" text-anchor="end" class="sm dim">4</text>
+    <line x1="56" y1="192" x2="60" y2="192" class="tick"/>
+    <text x="52" y="195.6" text-anchor="end" class="sm dim">8</text>
+    <line x1="56" y1="112" x2="60" y2="112" class="tick"/>
+    <text x="52" y="115.6" text-anchor="end" class="sm dim">12</text>
     <text x="326" y="384" text-anchor="end" class="sm dim">months</text>
-    <polyline points="60,352 75.96,352 75.96,320.75 97.24,320.75 97.24,289.5 122.95,289.5 122.95,258.25 153.1,258.25 153.1,227 180.59,227 180.59,195.75 228.47,195.75 228.47,164.5 276.35,164.5 276.35,133.25 326,133.25" class="curve" stroke="#3b82f6" stroke-width="2"/>
-    <circle cx="75.96" cy="320.75" r="2.8" fill="#3b82f6"/>
-    <line x1="75.96" y1="352" x2="75.96" y2="343.25" stroke="#d97706" stroke-width="1.4"/>
-    <circle cx="97.24" cy="289.5" r="2.8" fill="#3b82f6"/>
-    <line x1="97.24" y1="352" x2="97.24" y2="343.25" stroke="#d97706" stroke-width="1.4"/>
-    <circle cx="122.95" cy="258.25" r="2.8" fill="#3b82f6"/>
-    <line x1="122.95" y1="352" x2="122.95" y2="343.25" stroke="#d97706" stroke-width="1.4"/>
-    <circle cx="153.1" cy="227" r="2.8" fill="#3b82f6"/>
-    <line x1="153.1" y1="352" x2="153.1" y2="343.25" stroke="#d97706" stroke-width="1.4"/>
-    <circle cx="180.59" cy="195.75" r="2.8" fill="#3b82f6"/>
-    <line x1="180.59" y1="352" x2="180.59" y2="343.25" stroke="#d97706" stroke-width="1.4"/>
-    <circle cx="228.47" cy="164.5" r="2.8" fill="#3b82f6"/>
-    <line x1="228.47" y1="352" x2="228.47" y2="343.25" stroke="#d97706" stroke-width="1.4"/>
-    <circle cx="276.35" cy="133.25" r="2.8" fill="#3b82f6"/>
-    <line x1="276.35" y1="352" x2="276.35" y2="343.25" stroke="#d97706" stroke-width="1.4"/>
-    <path d="M180.59,308.25 v-3.6 H199.53 q5,0 5,-3.3 q0,3.3 5,3.3 H228.47 v3.6" class="thin" stroke="#d97706" stroke-width="1.2"/>
-    <text x="204.53" y="289.25" text-anchor="middle" class="sm">T ~ Exp(λ)</text>
-    <text x="180" y="86" text-anchor="middle" class="sm dim">λ = 4 claims per month</text>
+    <polyline points="60,352 326,112" class="curve dash" stroke="var(--dim)" stroke-width="1.4"/>
+    <text x="201.87" y="246" text-anchor="start" class="sm bold">λt</text>
+    <polyline points="60,352 70.64,352 70.64,332 87.49,332 87.49,312 111.43,312 111.43,292 125.61,292 125.61,272 150.44,272 150.44,252 167.29,252 167.29,232 203.64,232 203.64,212 215.17,212 215.17,192 234.67,192 234.67,172 264.82,172 264.82,152 283.44,152 283.44,132 310.93,132 310.93,112 326,112" class="curve" stroke="#3b82f6" stroke-width="2"/>
+    <circle cx="70.64" cy="332" r="2.8" fill="#3b82f6"/>
+    <line x1="70.64" y1="352" x2="70.64" y2="343" stroke="#d97706" stroke-width="1.4"/>
+    <circle cx="87.49" cy="312" r="2.8" fill="#3b82f6"/>
+    <line x1="87.49" y1="352" x2="87.49" y2="343" stroke="#d97706" stroke-width="1.4"/>
+    <circle cx="111.43" cy="292" r="2.8" fill="#3b82f6"/>
+    <line x1="111.43" y1="352" x2="111.43" y2="343" stroke="#d97706" stroke-width="1.4"/>
+    <circle cx="125.61" cy="272" r="2.8" fill="#3b82f6"/>
+    <line x1="125.61" y1="352" x2="125.61" y2="343" stroke="#d97706" stroke-width="1.4"/>
+    <circle cx="150.44" cy="252" r="2.8" fill="#3b82f6"/>
+    <line x1="150.44" y1="352" x2="150.44" y2="343" stroke="#d97706" stroke-width="1.4"/>
+    <circle cx="167.29" cy="232" r="2.8" fill="#3b82f6"/>
+    <line x1="167.29" y1="352" x2="167.29" y2="343" stroke="#d97706" stroke-width="1.4"/>
+    <circle cx="203.64" cy="212" r="2.8" fill="#3b82f6"/>
+    <line x1="203.64" y1="352" x2="203.64" y2="343" stroke="#d97706" stroke-width="1.4"/>
+    <circle cx="215.17" cy="192" r="2.8" fill="#3b82f6"/>
+    <line x1="215.17" y1="352" x2="215.17" y2="343" stroke="#d97706" stroke-width="1.4"/>
+    <circle cx="234.67" cy="172" r="2.8" fill="#3b82f6"/>
+    <line x1="234.67" y1="352" x2="234.67" y2="343" stroke="#d97706" stroke-width="1.4"/>
+    <circle cx="264.82" cy="152" r="2.8" fill="#3b82f6"/>
+    <line x1="264.82" y1="352" x2="264.82" y2="343" stroke="#d97706" stroke-width="1.4"/>
+    <circle cx="283.44" cy="132" r="2.8" fill="#3b82f6"/>
+    <line x1="283.44" y1="352" x2="283.44" y2="343" stroke="#d97706" stroke-width="1.4"/>
+    <circle cx="310.93" cy="112" r="2.8" fill="#3b82f6"/>
+    <line x1="310.93" y1="352" x2="310.93" y2="343" stroke="#d97706" stroke-width="1.4"/>
+    <path d="M167.29,336 v-3.6 H180.46 q5,0 5,-3.3 q0,3.3 5,3.3 H203.64 v3.6" class="thin" stroke="#d97706" stroke-width="1.2"/>
+    <text x="185.46" y="317" text-anchor="middle" class="sm">T ~ Exp(λ)</text>
   </g>
 </svg>

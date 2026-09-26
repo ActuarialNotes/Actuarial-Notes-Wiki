@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>A random walk with drift and its flat forecast with a fan-shaped interval</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>A random walk with drift up to now, then its forecast line continuing the drift inside an interval that fans out with the square root of the horizon</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -50,29 +46,24 @@ text {
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
   </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">Every shock moves the level permanently</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="438" text-anchor="middle" class="fml">Y_t = δ + Y_{t−1} + ε_t</text>
-    <line x1="64" y1="100" x2="64" y2="316" class="grid"/>
-    <line x1="155.76" y1="100" x2="155.76" y2="316" class="grid"/>
-    <line x1="247.53" y1="100" x2="247.53" y2="316" class="grid"/>
-    <line x1="316.35" y1="100" x2="316.35" y2="316" class="grid"/>
-    <line x1="64" y1="316" x2="334" y2="316" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="64" y1="316" x2="64" y2="90" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="64" y1="316" x2="64" y2="320" class="tick"/>
-    <line x1="155.76" y1="316" x2="155.76" y2="320" class="tick"/>
-    <line x1="247.53" y1="316" x2="247.53" y2="320" class="tick"/>
-    <text x="247.53" y="332" text-anchor="middle" class="sm dim">now</text>
-    <line x1="316.35" y1="316" x2="316.35" y2="320" class="tick"/>
-    <polyline points="64,247.22 71.65,252.4 79.29,258.7 86.94,257.24 94.59,254.29 102.24,249.14 109.88,253.03 117.53,257.85 125.18,258.5 132.82,268.69 140.47,275.13 148.12,260.74 155.76,262.98 163.41,256.25 171.06,248.04 178.71,247.64 186.35,242.58 194,243.47 201.65,237.49 209.29,227.5 216.94,222.96 224.59,223.74 232.24,205.93 239.88,199.26" class="curve" stroke="#3b82f6" stroke-width="1.9"/>
-    <polyline points="247.53,199.26 255.18,195.17 262.82,191.09 270.47,187 278.12,182.91 285.76,178.83 293.41,174.74 301.06,170.65 308.71,166.56 316.35,162.48" class="curve dash" stroke="#059669" stroke-width="2.2"/>
-    <polyline points="247.53,199.26 255.18,178.01 262.82,166.81 270.47,157.27 278.12,148.58 285.76,140.44 293.41,132.69 301.06,125.23 308.71,118.01 316.35,110.98" class="curve" stroke="#059669" stroke-width="1.2"/>
-    <polyline points="247.53,199.26 255.18,212.34 262.82,215.36 270.47,216.73 278.12,217.25 285.76,217.21 293.41,216.79 301.06,216.07 308.71,215.12 316.35,213.98" class="curve" stroke="#059669" stroke-width="1.2"/>
-    <line x1="247.53" y1="316" x2="247.53" y2="111.68" class="thin dash" stroke="var(--dim)" stroke-width="1.3"/>
-    <text x="232.24" y="123.36" text-anchor="end" class="sm bold" fill="#059669">±1.96σ√h</text>
-    <text x="180" y="348" text-anchor="middle" class="sm dim">the forecast is the last value plus hδ</text>
-    <text x="180" y="366" text-anchor="middle" class="sm dim">the interval widens with √h, not h</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">Var(Y_t) = tσ² — it never settles</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <line x1="44" y1="94" x2="44" y2="348" class="grid"/>
+    <line x1="142.82" y1="94" x2="142.82" y2="348" class="grid"/>
+    <line x1="241.65" y1="94" x2="241.65" y2="348" class="grid"/>
+    <line x1="315.76" y1="94" x2="315.76" y2="348" class="grid"/>
+    <line x1="44" y1="348" x2="334" y2="348" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="44" y1="348" x2="44" y2="84" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="44" y1="348" x2="44" y2="352" class="tick"/>
+    <line x1="142.82" y1="348" x2="142.82" y2="352" class="tick"/>
+    <line x1="241.65" y1="348" x2="241.65" y2="352" class="tick"/>
+    <text x="241.65" y="364" text-anchor="middle" class="sm dim">now</text>
+    <line x1="315.76" y1="348" x2="315.76" y2="352" class="tick"/>
+    <polyline points="44,267.12 52.24,273.22 60.47,280.62 68.71,278.9 76.94,275.43 85.18,269.37 93.41,273.95 101.65,279.62 109.88,280.38 118.12,292.36 126.35,299.94 134.59,283.02 142.82,285.65 151.06,277.74 159.29,268.08 167.53,267.61 175.76,261.66 184,262.71 192.24,255.67 200.47,243.93 208.71,238.59 216.94,239.51 225.18,218.57 233.41,210.72" class="curve" stroke="#3b82f6" stroke-width="1.9"/>
+    <polygon points="241.65,210.72 249.88,185.73 258.12,172.56 266.35,161.34 274.59,151.13 282.82,141.55 291.06,132.44 299.29,123.67 307.53,115.18 315.76,106.91 315.76,228.03 307.53,229.37 299.29,230.49 291.06,231.33 282.82,231.83 274.59,231.87 266.35,231.27 258.12,229.66 249.88,226.1 241.65,210.72" fill="#059669" fill-opacity="0.12" stroke="none"/>
+    <polyline points="241.65,210.72 249.88,205.92 258.12,201.11 266.35,196.31 274.59,191.5 282.82,186.69 291.06,181.89 299.29,177.08 307.53,172.27 315.76,167.47" class="curve dash" stroke="#059669" stroke-width="2.2"/>
+    <polyline points="241.65,210.72 249.88,185.73 258.12,172.56 266.35,161.34 274.59,151.13 282.82,141.55 291.06,132.44 299.29,123.67 307.53,115.18 315.76,106.91" class="curve" stroke="#059669" stroke-width="1.2"/>
+    <polyline points="241.65,210.72 249.88,226.1 258.12,229.66 266.35,231.27 274.59,231.87 282.82,231.83 291.06,231.33 299.29,230.49 307.53,229.37 315.76,228.03" class="curve" stroke="#059669" stroke-width="1.2"/>
+    <line x1="241.65" y1="348" x2="241.65" y2="107.73" class="thin dash" stroke="var(--dim)" stroke-width="1.3"/>
+    <text x="225.18" y="121.46" text-anchor="end" class="sm bold" fill="#059669">±1.96σ√h</text>
   </g>
 </svg>

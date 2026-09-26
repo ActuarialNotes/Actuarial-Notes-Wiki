@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>The three levels of solvency, and why only the third is the one a regulator acts on</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>Three hurdles against one level of assets: liabilities alone, liabilities plus the required buffer — the one OSFI enforces — and that again with a stress on top</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -46,31 +42,28 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
-  <defs>
-    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
-  </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">Three levels, and only one is the</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">regulator's</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">MCT = Capital available</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">÷ Base solvency buffer</text>
-    <rect x="34" y="100" width="292" height="48" rx="6" fill="#0d9488" fill-opacity="0.16" stroke="#0d9488" stroke-width="1.3"/>
-    <text x="180" y="121" text-anchor="middle" class="sm">Balance sheet</text>
-    <text x="180" y="136" text-anchor="middle" class="sm dim">assets exceed liabilities</text>
-    <rect x="34" y="162" width="292" height="48" rx="6" fill="#3b82f6" fill-opacity="0.16" stroke="#3b82f6" stroke-width="1.3"/>
-    <text x="180" y="183" text-anchor="middle" class="sm">Regulatory</text>
-    <text x="180" y="198" text-anchor="middle" class="sm dim">and by the required margin</text>
-    <line x1="180" y1="147" x2="180" y2="161" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <rect x="34" y="224" width="292" height="48" rx="6" fill="#7c3aed" fill-opacity="0.16" stroke="#7c3aed" stroke-width="1.3"/>
-    <text x="180" y="245" text-anchor="middle" class="sm">Economic</text>
-    <text x="180" y="260" text-anchor="middle" class="sm dim">and would still, under stress</text>
-    <line x1="180" y1="209" x2="180" y2="223" class="thin" stroke="var(--dim)" stroke-width="1.3" marker-end="url(#ahvardim)"/>
-    <text x="180" y="296" text-anchor="middle" class="sm dim">a ratio at a point in time says little —</text>
-    <text x="180" y="312" text-anchor="middle" class="sm dim">the questions are which way it is moving,</text>
-    <text x="180" y="328" text-anchor="middle" class="sm dim">and what would happen if the tail arrived</text>
-    <text x="180" y="358" text-anchor="middle" class="sm dim">OSFI does not promise zero failures: a regime</text>
-    <text x="180" y="374" text-anchor="middle" class="sm dim">with none is a regime charging far too much</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <line x1="34" y1="112" x2="326" y2="112" class="thin dash" stroke="#3b82f6" stroke-width="1.6"/>
+    <text x="36" y="104" text-anchor="start" class="sm bold">assets</text>
+    <rect x="44" y="232" width="80" height="118" rx="3" fill="#d97706" fill-opacity="0.28" stroke="#d97706" stroke-width="1.3"/>
+    <text x="84" y="368" text-anchor="middle" class="sm bold">balance sheet</text>
+    <rect x="140" y="232" width="80" height="118" rx="3" fill="#d97706" fill-opacity="0.28" stroke="#d97706" stroke-width="1.3"/>
+    <rect x="140" y="172" width="80" height="60" rx="3" fill="#e11d48" fill-opacity="0.28" stroke="#e11d48" stroke-width="1.3"/>
+    <text x="180" y="368" text-anchor="middle" class="sm bold">regulatory</text>
+    <rect x="236" y="232" width="80" height="118" rx="3" fill="#d97706" fill-opacity="0.28" stroke="#d97706" stroke-width="1.3"/>
+    <rect x="236" y="172" width="80" height="60" rx="3" fill="#e11d48" fill-opacity="0.28" stroke="#e11d48" stroke-width="1.3"/>
+    <rect x="236" y="136" width="80" height="36" rx="3" fill="#7c3aed" fill-opacity="0.10" stroke="#7c3aed" stroke-width="1.3" stroke-dasharray="4 3"/>
+    <text x="276" y="368" text-anchor="middle" class="sm bold">economic</text>
+    <polygon points="160,134 180,122 200,134" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="163.6" y="136.4" width="4" height="18.4" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="173.2" y="136.4" width="4" height="18.4" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="182.8" y="136.4" width="4" height="18.4" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="192.4" y="136.4" width="4" height="18.4" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <rect x="160" y="156.4" width="40" height="5.6" fill="#e11d48" fill-opacity="0.18" stroke="#e11d48" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="276" y="158" text-anchor="middle" class="sm">stress</text>
+    <text x="276" y="206" text-anchor="middle" class="sm">buffer</text>
+    <text x="276" y="295" text-anchor="middle" class="sm">liabilities</text>
+    <line x1="30" y1="350" x2="330" y2="350" class="axis"/>
   </g>
 </svg>

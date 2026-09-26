@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>One sample resampled with replacement into many bootstrap samples</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>A sample of six values and four resamples drawn from it with replacement, repeated draws shaded darker</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -46,65 +42,76 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ahvarink" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--ink)"/></marker>
+  </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">Resample with replacement, B times</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="438" text-anchor="middle" class="fml">SE_B = sd of the B bootstrap estimates</text>
-    <rect x="92" y="100" width="26" height="24" rx="3" fill="var(--dim)" fill-opacity="0.3" stroke="var(--edge)"/>
-    <text x="105" y="117" text-anchor="middle" class="sm">1</text>
-    <rect x="122" y="100" width="26" height="24" rx="3" fill="var(--dim)" fill-opacity="0.3" stroke="var(--edge)"/>
-    <text x="135" y="117" text-anchor="middle" class="sm">2</text>
-    <rect x="152" y="100" width="26" height="24" rx="3" fill="var(--dim)" fill-opacity="0.3" stroke="var(--edge)"/>
-    <text x="165" y="117" text-anchor="middle" class="sm">3</text>
-    <rect x="182" y="100" width="26" height="24" rx="3" fill="var(--dim)" fill-opacity="0.3" stroke="var(--edge)"/>
-    <text x="195" y="117" text-anchor="middle" class="sm">4</text>
-    <rect x="212" y="100" width="26" height="24" rx="3" fill="var(--dim)" fill-opacity="0.3" stroke="var(--edge)"/>
-    <text x="225" y="117" text-anchor="middle" class="sm">5</text>
-    <rect x="242" y="100" width="26" height="24" rx="3" fill="var(--dim)" fill-opacity="0.3" stroke="var(--edge)"/>
-    <text x="255" y="117" text-anchor="middle" class="sm">6</text>
-    <text x="180" y="92" text-anchor="middle" class="sm dim">the observed sample</text>
-    <rect x="92" y="164" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
-    <text x="105" y="181" text-anchor="middle" class="sm">3</text>
-    <rect x="122" y="164" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
-    <text x="135" y="181" text-anchor="middle" class="sm">1</text>
-    <rect x="152" y="164" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
-    <text x="165" y="181" text-anchor="middle" class="sm">5</text>
-    <rect x="182" y="164" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.5" stroke="#3b82f6" stroke-width="1"/>
-    <text x="195" y="181" text-anchor="middle" class="sm">3</text>
-    <rect x="212" y="164" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
-    <text x="225" y="181" text-anchor="middle" class="sm">6</text>
-    <rect x="242" y="164" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
-    <text x="255" y="181" text-anchor="middle" class="sm">2</text>
-    <text x="80" y="181" text-anchor="end" class="sm dim">*1</text>
-    <rect x="92" y="208" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
-    <text x="105" y="225" text-anchor="middle" class="sm">2</text>
-    <rect x="122" y="208" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.5" stroke="#3b82f6" stroke-width="1"/>
-    <text x="135" y="225" text-anchor="middle" class="sm">2</text>
-    <rect x="152" y="208" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
-    <text x="165" y="225" text-anchor="middle" class="sm">4</text>
-    <rect x="182" y="208" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
-    <text x="195" y="225" text-anchor="middle" class="sm">6</text>
-    <rect x="212" y="208" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
-    <text x="225" y="225" text-anchor="middle" class="sm">1</text>
-    <rect x="242" y="208" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.5" stroke="#3b82f6" stroke-width="1"/>
-    <text x="255" y="225" text-anchor="middle" class="sm">4</text>
-    <text x="80" y="225" text-anchor="end" class="sm dim">*2</text>
-    <rect x="92" y="252" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
-    <text x="105" y="269" text-anchor="middle" class="sm">5</text>
-    <rect x="122" y="252" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
-    <text x="135" y="269" text-anchor="middle" class="sm">3</text>
-    <rect x="152" y="252" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.5" stroke="#3b82f6" stroke-width="1"/>
-    <text x="165" y="269" text-anchor="middle" class="sm">3</text>
-    <rect x="182" y="252" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
-    <text x="195" y="269" text-anchor="middle" class="sm">1</text>
-    <rect x="212" y="252" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
-    <text x="225" y="269" text-anchor="middle" class="sm">6</text>
-    <rect x="242" y="252" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.5" stroke="#3b82f6" stroke-width="1"/>
-    <text x="255" y="269" text-anchor="middle" class="sm">6</text>
-    <text x="80" y="269" text-anchor="end" class="sm dim">*3</text>
-    <text x="180" y="316" text-anchor="middle" class="sm dim">darker = a repeat draw</text>
-    <text x="180" y="342" text-anchor="middle" class="sm">(1 − 1/n)ⁿ → e⁻¹ : ~37% of rows are left out</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">those left out are the out-of-bag set</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <rect x="84" y="90" width="32" height="28" rx="3" fill="var(--dim)" fill-opacity="0.3" stroke="var(--ink)" stroke-width="1.2"/>
+    <text x="100" y="109" text-anchor="middle" class="bold">1</text>
+    <rect x="120" y="90" width="32" height="28" rx="3" fill="var(--dim)" fill-opacity="0.3" stroke="var(--ink)" stroke-width="1.2"/>
+    <text x="136" y="109" text-anchor="middle" class="bold">2</text>
+    <rect x="156" y="90" width="32" height="28" rx="3" fill="var(--dim)" fill-opacity="0.3" stroke="var(--ink)" stroke-width="1.2"/>
+    <text x="172" y="109" text-anchor="middle" class="bold">3</text>
+    <rect x="192" y="90" width="32" height="28" rx="3" fill="var(--dim)" fill-opacity="0.3" stroke="var(--ink)" stroke-width="1.2"/>
+    <text x="208" y="109" text-anchor="middle" class="bold">4</text>
+    <rect x="228" y="90" width="32" height="28" rx="3" fill="var(--dim)" fill-opacity="0.3" stroke="var(--ink)" stroke-width="1.2"/>
+    <text x="244" y="109" text-anchor="middle" class="bold">5</text>
+    <rect x="264" y="90" width="32" height="28" rx="3" fill="var(--dim)" fill-opacity="0.3" stroke="var(--ink)" stroke-width="1.2"/>
+    <text x="280" y="109" text-anchor="middle" class="bold">6</text>
+    <line x1="190" y1="126" x2="190" y2="152" class="thin" stroke="var(--ink)" stroke-width="1.8" marker-end="url(#ahvarink)"/>
+    <rect x="84" y="162" width="32" height="28" rx="3" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1"/>
+    <text x="100" y="181" text-anchor="middle" class="sm">3</text>
+    <rect x="120" y="162" width="32" height="28" rx="3" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1"/>
+    <text x="136" y="181" text-anchor="middle" class="sm">1</text>
+    <rect x="156" y="162" width="32" height="28" rx="3" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1"/>
+    <text x="172" y="181" text-anchor="middle" class="sm">5</text>
+    <rect x="192" y="162" width="32" height="28" rx="3" fill="#3b82f6" fill-opacity="0.55" stroke="#3b82f6" stroke-width="1"/>
+    <text x="208" y="181" text-anchor="middle" class="sm">3</text>
+    <rect x="228" y="162" width="32" height="28" rx="3" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1"/>
+    <text x="244" y="181" text-anchor="middle" class="sm">6</text>
+    <rect x="264" y="162" width="32" height="28" rx="3" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1"/>
+    <text x="280" y="181" text-anchor="middle" class="sm">2</text>
+    <text x="72" y="181" text-anchor="end" class="sm dim">*1</text>
+    <rect x="84" y="210" width="32" height="28" rx="3" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1"/>
+    <text x="100" y="229" text-anchor="middle" class="sm">2</text>
+    <rect x="120" y="210" width="32" height="28" rx="3" fill="#3b82f6" fill-opacity="0.55" stroke="#3b82f6" stroke-width="1"/>
+    <text x="136" y="229" text-anchor="middle" class="sm">2</text>
+    <rect x="156" y="210" width="32" height="28" rx="3" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1"/>
+    <text x="172" y="229" text-anchor="middle" class="sm">4</text>
+    <rect x="192" y="210" width="32" height="28" rx="3" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1"/>
+    <text x="208" y="229" text-anchor="middle" class="sm">6</text>
+    <rect x="228" y="210" width="32" height="28" rx="3" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1"/>
+    <text x="244" y="229" text-anchor="middle" class="sm">1</text>
+    <rect x="264" y="210" width="32" height="28" rx="3" fill="#3b82f6" fill-opacity="0.55" stroke="#3b82f6" stroke-width="1"/>
+    <text x="280" y="229" text-anchor="middle" class="sm">4</text>
+    <text x="72" y="229" text-anchor="end" class="sm dim">*2</text>
+    <rect x="84" y="258" width="32" height="28" rx="3" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1"/>
+    <text x="100" y="277" text-anchor="middle" class="sm">5</text>
+    <rect x="120" y="258" width="32" height="28" rx="3" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1"/>
+    <text x="136" y="277" text-anchor="middle" class="sm">3</text>
+    <rect x="156" y="258" width="32" height="28" rx="3" fill="#3b82f6" fill-opacity="0.55" stroke="#3b82f6" stroke-width="1"/>
+    <text x="172" y="277" text-anchor="middle" class="sm">3</text>
+    <rect x="192" y="258" width="32" height="28" rx="3" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1"/>
+    <text x="208" y="277" text-anchor="middle" class="sm">1</text>
+    <rect x="228" y="258" width="32" height="28" rx="3" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1"/>
+    <text x="244" y="277" text-anchor="middle" class="sm">6</text>
+    <rect x="264" y="258" width="32" height="28" rx="3" fill="#3b82f6" fill-opacity="0.55" stroke="#3b82f6" stroke-width="1"/>
+    <text x="280" y="277" text-anchor="middle" class="sm">6</text>
+    <text x="72" y="277" text-anchor="end" class="sm dim">*3</text>
+    <rect x="84" y="324" width="32" height="28" rx="3" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1"/>
+    <text x="100" y="343" text-anchor="middle" class="sm">4</text>
+    <rect x="120" y="324" width="32" height="28" rx="3" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1"/>
+    <text x="136" y="343" text-anchor="middle" class="sm">6</text>
+    <rect x="156" y="324" width="32" height="28" rx="3" fill="#3b82f6" fill-opacity="0.55" stroke="#3b82f6" stroke-width="1"/>
+    <text x="172" y="343" text-anchor="middle" class="sm">6</text>
+    <rect x="192" y="324" width="32" height="28" rx="3" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1"/>
+    <text x="208" y="343" text-anchor="middle" class="sm">2</text>
+    <rect x="228" y="324" width="32" height="28" rx="3" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1"/>
+    <text x="244" y="343" text-anchor="middle" class="sm">5</text>
+    <rect x="264" y="324" width="32" height="28" rx="3" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1"/>
+    <text x="280" y="343" text-anchor="middle" class="sm">1</text>
+    <text x="72" y="343" text-anchor="end" class="sm dim">*B</text>
+    <text x="190" y="318" text-anchor="middle" class="bold">⋮</text>
   </g>
 </svg>

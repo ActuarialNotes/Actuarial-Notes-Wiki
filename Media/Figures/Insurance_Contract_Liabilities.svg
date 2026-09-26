@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>The insurer's contract liability split into the two halves, measured on entirely different bases</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>The running insurer's $640M contract liability as one bar split into a $190M liability for remaining coverage, fed by premium, and a $450M liability for incurred claims, fed by claims</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -46,36 +42,40 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
+    <marker id="ahd97706" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#d97706"/></marker>
+  </defs>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="31" text-anchor="middle" class="ttl">Two halves that share nothing but a</text>
-    <text x="180" y="50" text-anchor="middle" class="ttl">total</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="430" text-anchor="middle" class="fml">ICL = LRC + LIC</text>
-    <text x="180" y="452" text-anchor="middle" class="fml2">$190M + $450M = $640M</text>
-    <rect x="40" y="109" width="83.12" height="38" rx="4" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="81.56" y="132" text-anchor="middle" class="sm">LRC 190</text>
-    <rect x="123.12" y="109" width="196.88" height="38" rx="4" fill="#d97706" fill-opacity="0.30" stroke="#d97706" stroke-width="1.2"/>
-    <text x="221.56" y="132" text-anchor="middle" class="sm">LIC 450</text>
-    <rect x="30" y="168" width="143" height="134" rx="7" fill="#3b82f6" fill-opacity="0.08" stroke="#3b82f6" stroke-width="1.2"/>
-    <rect x="30" y="168" width="143" height="24" rx="7" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
-    <text x="101.5" y="184" text-anchor="middle" class="sm bold" fill="#3b82f6">LRC</text>
-    <text x="101.5" y="212" text-anchor="middle" class="sm">premium-driven</text>
-    <text x="101.5" y="232" text-anchor="middle" class="sm">released as</text>
-    <text x="101.5" y="252" text-anchor="middle" class="sm">coverage is given</text>
-    <text x="101.5" y="272" text-anchor="middle" class="sm">unearned premium's</text>
-    <text x="101.5" y="292" text-anchor="middle" class="sm">successor</text>
-    <rect x="187" y="168" width="143" height="134" rx="7" fill="#d97706" fill-opacity="0.08" stroke="#d97706" stroke-width="1.2"/>
-    <rect x="187" y="168" width="143" height="24" rx="7" fill="#d97706" fill-opacity="0.22" stroke="none"/>
-    <text x="258.5" y="184" text-anchor="middle" class="sm bold" fill="#d97706">LIC</text>
-    <text x="258.5" y="212" text-anchor="middle" class="sm">claim-driven</text>
-    <text x="258.5" y="232" text-anchor="middle" class="sm">run off as</text>
-    <text x="258.5" y="252" text-anchor="middle" class="sm">claims are paid</text>
-    <text x="258.5" y="272" text-anchor="middle" class="sm">case, IBNR, ALAE</text>
-    <text x="258.5" y="292" text-anchor="middle" class="sm">— the actuary's half</text>
-    <text x="180" y="322" text-anchor="middle" class="sm dim">confusing the two is the commonest IFRS 17 error</text>
-    <text x="180" y="348" text-anchor="middle" class="sm dim">reinsurance held is a separate asset, so the</text>
-    <text x="180" y="364" text-anchor="middle" class="sm dim">balance sheet shows both liabilities gross</text>
-    <text x="180" y="388" text-anchor="middle" class="sm dim">and the Appointed Actuary opines on the total</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <path d="M40,162 v-6 H175 q5,0 5,-5.5 q0,5.5 5,5.5 H320 v6" class="thin" stroke="var(--dim)" stroke-width="1.2"/>
+    <text x="180" y="139" text-anchor="middle" class="bold">640</text>
+    <rect x="40" y="170" width="83.12" height="66" rx="5" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.3"/>
+    <rect x="123.12" y="170" width="196.88" height="66" rx="5" fill="#d97706" fill-opacity="0.30" stroke="#d97706" stroke-width="1.3"/>
+    <text x="81.56" y="208" text-anchor="middle" class="bold">LRC 190</text>
+    <text x="221.56" y="208" text-anchor="middle" class="bold">LIC 450</text>
+    <line x1="81.56" y1="278" x2="81.56" y2="242" class="thin" stroke="#3b82f6" stroke-width="1.6" marker-end="url(#ah3b82f6)"/>
+    <rect x="65.56" y="322" width="32" height="6" fill="#3b82f6" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="81.56" cy="328" rx="16" ry="3.4" fill="#3b82f6" fill-opacity="0.25" stroke="#3b82f6" stroke-width="1.2"/>
+    <ellipse cx="81.56" cy="322" rx="16" ry="3.4" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.2"/>
+    <ellipse cx="81.56" cy="322" rx="16" ry="3.4" fill="#3b82f6" fill-opacity="0.3" stroke="none"/>
+    <rect x="65.56" y="316" width="32" height="6" fill="#3b82f6" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="81.56" cy="322" rx="16" ry="3.4" fill="#3b82f6" fill-opacity="0.25" stroke="#3b82f6" stroke-width="1.2"/>
+    <ellipse cx="81.56" cy="316" rx="16" ry="3.4" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.2"/>
+    <ellipse cx="81.56" cy="316" rx="16" ry="3.4" fill="#3b82f6" fill-opacity="0.3" stroke="none"/>
+    <rect x="65.56" y="310" width="32" height="6" fill="#3b82f6" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="81.56" cy="316" rx="16" ry="3.4" fill="#3b82f6" fill-opacity="0.25" stroke="#3b82f6" stroke-width="1.2"/>
+    <ellipse cx="81.56" cy="310" rx="16" ry="3.4" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.2"/>
+    <ellipse cx="81.56" cy="310" rx="16" ry="3.4" fill="#3b82f6" fill-opacity="0.3" stroke="none"/>
+    <rect x="65.56" y="304" width="32" height="6" fill="#3b82f6" fill-opacity="0.25" stroke="none"/>
+    <ellipse cx="81.56" cy="310" rx="16" ry="3.4" fill="#3b82f6" fill-opacity="0.25" stroke="#3b82f6" stroke-width="1.2"/>
+    <ellipse cx="81.56" cy="304" rx="16" ry="3.4" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.2"/>
+    <ellipse cx="81.56" cy="304" rx="16" ry="3.4" fill="#3b82f6" fill-opacity="0.3" stroke="none"/>
+    <text x="81.56" y="352" text-anchor="middle" class="sm">premium</text>
+    <line x1="221.56" y1="278" x2="221.56" y2="242" class="thin" stroke="#d97706" stroke-width="1.6" marker-end="url(#ahd97706)"/>
+    <polygon points="201.56,306 193.38,308.41 197.46,315.9 189.97,311.82 187.56,320 185.15,311.82 177.66,315.9 181.74,308.41 173.56,306 181.74,303.59 177.66,296.1 185.15,300.18 187.56,292 189.97,300.18 197.46,296.1 193.38,303.59" fill="#e11d48" fill-opacity="0.30" stroke="#e11d48" stroke-width="1.3" stroke-linejoin="round"/>
+    <polygon points="235.56,306 227.38,308.41 231.46,315.9 223.97,311.82 221.56,320 219.15,311.82 211.66,315.9 215.74,308.41 207.56,306 215.74,303.59 211.66,296.1 219.15,300.18 221.56,292 223.97,300.18 231.46,296.1 227.38,303.59" fill="#e11d48" fill-opacity="0.30" stroke="#e11d48" stroke-width="1.3" stroke-linejoin="round"/>
+    <polygon points="269.56,306 261.38,308.41 265.46,315.9 257.97,311.82 255.56,320 253.15,311.82 245.66,315.9 249.74,308.41 241.56,306 249.74,303.59 245.66,296.1 253.15,300.18 255.56,292 257.97,300.18 265.46,296.1 261.38,303.59" fill="#e11d48" fill-opacity="0.30" stroke="#e11d48" stroke-width="1.3" stroke-linejoin="round"/>
+    <text x="221.56" y="352" text-anchor="middle" class="sm">claims</text>
   </g>
 </svg>

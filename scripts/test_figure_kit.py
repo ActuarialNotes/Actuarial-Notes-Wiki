@@ -17,7 +17,9 @@ reader has no way to check by eye:
    4.5:1 against the surface they are drawn on.
 
 Plus the structural rule that makes host theming work at all: `<defs>` and the
-drawing both have to sit after the `:target` anchors.
+drawing both have to sit after the `:target` anchors — and the rule that a
+concept figure is one picture and nothing else (docs/concept-figures.md): the
+card carries no title or formula, and no figure carries a line of prose.
 """
 
 from __future__ import annotations
@@ -30,6 +32,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import figure_kit as fk  # noqa: E402
+from figure_registry import REGISTRY  # noqa: E402
+import figures_exam_p, figures_exam_fm, figures_exam_mas_i  # noqa: E401,F401,E402
+import figures_exam_mas_ii, figures_exam_5, figures_exam_6c  # noqa: E401,F401,E402
 
 INDEX_CSS = Path(__file__).resolve().parents[1] / "quiz" / "src" / "index.css"
 
@@ -159,6 +164,31 @@ class HostCanNameTheTheme(unittest.TestCase):
     def test_the_card_surface_is_inside_the_themed_group(self):
         art = self.svg.index('<g class="art">')
         self.assertGreater(self.svg.index('class="card"'), art)
+
+
+class AFigureIsOnlyAPicture(unittest.TestCase):
+    """The card holds the picture and nothing else; the words live in the alt."""
+
+    def test_the_card_carries_no_text_of_its_own(self):
+        svg = fk.vcard(alt="t").svg()
+        self.assertNotIn("<text", svg)
+
+    def test_the_card_is_the_drawing_box_plus_its_margin(self):
+        svg = fk.vcard().svg()
+        m = fk.MARGIN
+        self.assertIn(f'viewBox="0 {fk.BY0 - m} {fk.BX1 + m} {fk.BY1 - fk.BY0 + 2 * m}"',
+                      svg)
+
+    def test_no_figure_carries_a_line_of_prose(self):
+        # A label is one to three words. Four or more, or a run long enough to
+        # wrap on a phone, is a caption, a subtitle or a formula written out —
+        # which belongs on the concept page, not in the picture.
+        for spec in REGISTRY:
+            texts = re.findall(r"<text[^>]*>([^<]*)</text>", spec.build().svg())
+            for t in texts:
+                with self.subTest(figure=spec.concept, text=t):
+                    self.assertLess(len(t.split()), 4)
+                    self.assertLess(len(t), 28)
 
 
 if __name__ == "__main__":

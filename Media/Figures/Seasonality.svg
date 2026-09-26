@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>An additive seasonal pattern beside a multiplicative one growing with the level</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>Two quarterly series on one axis, each repeating every four quarters: an additive one whose swing stays constant between parallel envelopes and a multiplicative one whose swing widens with its level</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -47,19 +43,17 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">A pattern repeating at a fixed period s</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="438" text-anchor="middle" class="fml">s_t = s_{t+s},  Σ s_j = 0</text>
-    <text x="180" y="102" text-anchor="middle" class="sm bold" fill="#3b82f6">additive</text>
-    <rect x="54" y="110" width="270" height="88" rx="5" fill="var(--soft)" stroke="var(--edge)"/>
-    <polyline points="54,188.38 64,179.02 74,170.77 84,182.54 94,179.85 104,170.49 114,162.25 124,174.01 134,171.33 144,161.97 154,153.72 164,165.49 174,162.8 184,153.44 194,145.2 204,156.96 214,154.28 224,144.92 234,136.67 244,148.44 254,145.75 264,136.4 274,128.15 284,139.92 294,137.23 304,127.87 314,119.63 324,131.39" class="curve" stroke="#3b82f6" stroke-width="1.8"/>
-    <polyline points="54,183.37 324,125.83" class="curve dash" stroke="var(--dim)" stroke-width="1.3"/>
-    <text x="180" y="238" text-anchor="middle" class="sm bold" fill="#7c3aed">multiplicative</text>
-    <rect x="54" y="246" width="270" height="88" rx="5" fill="var(--soft)" stroke="var(--edge)"/>
-    <polyline points="54,324.38 64,316.31 74,308.67 84,320.02 94,317.84 104,308.53 114,299.83 124,313.58 134,311.31 144,300.75 154,290.99 164,307.15 174,304.78 184,292.97 194,282.15 204,300.71 214,298.25 224,285.19 234,273.31 244,294.27 254,291.71 264,277.4 274,264.47 284,287.84 294,285.18 304,269.62 314,255.62 324,281.4" class="curve" stroke="#7c3aed" stroke-width="1.8"/>
-    <polyline points="54,320.14 324,270.21" class="curve dash" stroke="var(--dim)" stroke-width="1.3"/>
-    <text x="180" y="372" text-anchor="middle" class="sm dim">constant swing vs. a constant percentage</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">a log transform turns the second into the first</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <line x1="40" y1="368" x2="328" y2="368" class="axis"/>
+    <polyline points="40,317.67 328,203.59" class="curve dash" stroke="#3b82f6" stroke-width="1.1"/>
+    <polyline points="40,345.22 328,231.14" class="curve dash" stroke="#3b82f6" stroke-width="1.1"/>
+    <polyline points="40,224.78 328,88.46" class="curve dash" stroke="#7c3aed" stroke-width="1.1"/>
+    <polyline points="40,277.02 328,177.78" class="curve dash" stroke="#7c3aed" stroke-width="1.1"/>
+    <polyline points="40,344.12 50.67,325.57 61.33,309.22 72,332.55 82.67,327.22 93.33,308.67 104,292.32 114.67,315.65 125.33,310.32 136,291.77 146.67,275.42 157.33,298.75 168,293.42 178.67,274.86 189.33,258.52 200,281.85 210.67,276.52 221.33,257.96 232,241.62 242.67,264.95 253.33,259.62 264,241.06 274.67,224.72 285.33,248.04 296,242.72 306.67,224.16 317.33,207.81 328,231.14" class="curve" stroke="#3b82f6" stroke-width="1.9"/>
+    <polyline points="40,274.93 50.67,243.32 61.33,214.69 72,266 82.67,260.01 93.33,225.55 104,194.49 114.67,251.29 125.33,245.09 136,207.77 146.67,174.29 157.33,236.59 168,230.16 178.67,189.99 189.33,154.1 200,221.89 210.67,215.24 221.33,172.21 232,133.9 242.67,207.18 253.33,200.32 264,154.43 274.67,113.71 285.33,192.48 296,185.4 306.67,136.65 317.33,93.51 328,177.78" class="curve" stroke="#7c3aed" stroke-width="1.9"/>
+    <text x="40" y="155.14" text-anchor="start" class="sm bold">multiplicative</text>
+    <text x="328" y="249.14" text-anchor="end" class="sm bold">additive</text>
+    <path d="M61.33,340.32 v4.2 H77.67 q5,0 5,3.85 q0,-3.85 5,-3.85 H104 v-4.2" class="thin" stroke="var(--dim)" stroke-width="1.2"/>
+    <text x="82.67" y="358.32" text-anchor="middle" class="sm bold">s = 4</text>
   </g>
 </svg>

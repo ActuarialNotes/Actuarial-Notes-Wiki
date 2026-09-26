@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>Credibility built on unequal yearly exposures rather than a count of years</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>Five years drawn as bars as wide as their exposure, beside a complement block as wide as k = 480; the exposure-weighted level across them all is the estimate, and the years carry Z = 0.73</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -24,10 +24,6 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 14px; font-weight: 600; }
-.fml { font-size: 14px; font-weight: 600; }
-.fml2 { font-size: 12.5px; fill: var(--dim); }
-.sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
 .mono {
@@ -47,30 +43,20 @@ text {
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
   <g class="art">
-    <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-    <text x="180" y="40" text-anchor="middle" class="ttl">Exposure, not years, drives the weight</text>
-    <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-    <text x="180" y="438" text-anchor="middle" class="fml">Z = m / (m + k),  m = Σ mᵢ</text>
-    <rect x="52" y="209.2" width="36" height="58.8" rx="3" fill="#3b82f6" fill-opacity="0.55"/>
-    <text x="70" y="283" text-anchor="middle" class="sm dim">Y1</text>
-    <text x="70" y="202.2" text-anchor="middle" class="sm">140</text>
-    <rect x="107" y="158.8" width="36" height="109.2" rx="3" fill="#3b82f6" fill-opacity="0.55"/>
-    <text x="125" y="283" text-anchor="middle" class="sm dim">Y2</text>
-    <text x="125" y="151.8" text-anchor="middle" class="sm">260</text>
-    <rect x="162" y="188.2" width="36" height="79.8" rx="3" fill="#3b82f6" fill-opacity="0.55"/>
-    <text x="180" y="283" text-anchor="middle" class="sm dim">Y3</text>
-    <text x="180" y="181.2" text-anchor="middle" class="sm">190</text>
-    <rect x="217" y="95.8" width="36" height="172.2" rx="3" fill="#3b82f6" fill-opacity="0.55"/>
-    <text x="235" y="283" text-anchor="middle" class="sm dim">Y4</text>
-    <text x="235" y="88.8" text-anchor="middle" class="sm">410</text>
-    <rect x="272" y="133.6" width="36" height="134.4" rx="3" fill="#3b82f6" fill-opacity="0.55"/>
-    <text x="290" y="283" text-anchor="middle" class="sm dim">Y5</text>
-    <text x="290" y="126.6" text-anchor="middle" class="sm">320</text>
-    <line x1="44" y1="268" x2="320" y2="268" class="axis"/>
-    <text x="180" y="106" text-anchor="middle" class="sm dim">exposures mᵢ by year</text>
-    <path d="M52,292 v4.8 H174 q5,0 5,4.4 q0,-4.4 5,-4.4 H306 v-4.8" class="thin" stroke="var(--dim)" stroke-width="1.2"/>
-    <text x="179" y="311" text-anchor="middle" class="sm dim">m = 1,320</text>
-    <text x="180" y="350" text-anchor="middle" class="bold">k = 480  ⇒  Z = 1,320 / 1,800 = 0.73</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">one big year can outweigh several small ones</text>
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <rect x="34" y="158.52" width="21.54" height="175.48" rx="2" fill="#3b82f6" fill-opacity="0.45" stroke="#3b82f6" stroke-width="1.2"/>
+    <rect x="58.54" y="197.04" width="40.01" height="136.96" rx="2" fill="#3b82f6" fill-opacity="0.45" stroke="#3b82f6" stroke-width="1.2"/>
+    <rect x="101.56" y="175.64" width="29.24" height="158.36" rx="2" fill="#3b82f6" fill-opacity="0.45" stroke="#3b82f6" stroke-width="1.2"/>
+    <rect x="133.79" y="209.88" width="63.09" height="124.12" rx="2" fill="#3b82f6" fill-opacity="0.45" stroke="#3b82f6" stroke-width="1.2"/>
+    <rect x="199.89" y="186.34" width="49.24" height="147.66" rx="2" fill="#3b82f6" fill-opacity="0.45" stroke="#3b82f6" stroke-width="1.2"/>
+    <rect x="252.13" y="173.5" width="73.87" height="160.5" rx="2" fill="#d97706" fill-opacity="0.4" stroke="#d97706" stroke-width="1.2"/>
+    <line x1="28" y1="186.53" x2="332" y2="186.53" class="thin dash" stroke="var(--ink)" stroke-width="1.6"/>
+    <text x="289.07" y="202.53" text-anchor="middle" class="sm">estimate</text>
+    <line x1="28" y1="334" x2="332" y2="334" class="axis"/>
+    <text x="141.57" y="144.52" text-anchor="middle" class="bold">Z = 0.73</text>
+    <path d="M34,342 v4.8 H136.57 q5,0 5,4.4 q0,-4.4 5,-4.4 H249.13 v-4.8" class="thin" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="141.57" y="361" text-anchor="middle" class="sm bold">m = 1,320</text>
+    <path d="M252.13,342 v4.8 H284.07 q5,0 5,4.4 q0,-4.4 5,-4.4 H326 v-4.8" class="thin" stroke="#d97706" stroke-width="1.2"/>
+    <text x="289.07" y="361" text-anchor="middle" class="sm bold">k = 480</text>
   </g>
 </svg>

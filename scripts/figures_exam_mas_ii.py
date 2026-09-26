@@ -847,7 +847,7 @@ def regularization() -> Fig:
 
 
 @figure("K-Nearest Neighbors", "A query point x₀ inside a dashed circle reaching its "
-        "five nearest neighbours, three blue and two rose, so it is classed blue",
+        "five nearest neighbours, four rose and one blue, so it is classed rose",
         width=WID)
 def knn() -> Fig:
     f = vcard()
@@ -961,7 +961,7 @@ def gini_index() -> Fig:
     ax.label(0.80, 0.44, "entropy/2", cls="sm", fill=VIOLET, anchor="start")
     ax.point(0.5, 0.5, colour=BLUE, r=3.6)
     ax.point(0.9, 2 * 0.9 * 0.1, colour=GREEN, r=3.6)
-    ax.label(0.9, 0.18, "0.18", cls="sm", fill=GREEN, anchor="end", dx=-7, dy=-7)
+    ax.label(0.9, 0.18, "0.18", cls="sm", fill=GREEN, anchor="start", dx=7, dy=14)
     f.text(BCX, ax.y1 + 32, "class-1 share", cls="sm dim")
     return f
 
@@ -1113,17 +1113,17 @@ def boosting() -> Fig:
 def oob_error() -> Fig:
     f = vcard()
 
-    r = _Rand(3)
-    rows, cols, cw, ch = 8, 7, 28, 24
-    x0, y0 = 58, 136
+    r = _Rand(36)
+    rows, cols, cw, ch = 8, 7, 33, 27
+    x0, y0 = 34, 124
     focus = 3
     for j in range(cols):
         x = x0 + j * cw + cw / 2
-        for dx in (-6, 6):
-            f.line(x, 104, x + dx, 116, cls="thin", stroke="var(--axis)",
+        for dx in (-7, 7):
+            f.line(x, y0 - 30, x + dx, y0 - 16, cls="thin", stroke="var(--axis)",
                    stroke_width="1.1")
-            f.rect(x + dx - 3.5, 115, 7, 6, rx=1.5, fill=GREEN, fill_opacity="0.7")
-        f.circle(x, 102, 3.4, fill="var(--surf)", stroke="var(--ink)",
+            f.rect(x + dx - 4, y0 - 17, 8, 7, rx=1.5, fill=GREEN, fill_opacity="0.7")
+        f.circle(x, y0 - 32, 3.8, fill="var(--surf)", stroke="var(--ink)",
                  stroke_width="1.2")
     for i in range(rows):
         for j in range(cols):
@@ -1713,8 +1713,8 @@ def stationarity() -> Fig:
     return f
 
 
-@figure("White Noise", "Sixty uncorrelated draws jumping about zero, every one inside "
-        "the same constant band", width=WID)
+@figure("White Noise", "Sixty uncorrelated draws jumping about a zero mean with the "
+        "same spread throughout, a constant ±1.96 band shaded behind them", width=WID)
 def white_noise() -> Fig:
     f = vcard()
 
@@ -1889,8 +1889,8 @@ def moving_average_model() -> Fig:
     ax.hline(50, colour=AMBER, x_to=34)
     ax.label(33, 38.5, "μ = 50", cls="sm bold", fill=AMBER, anchor="end")
     ax.point(25, 48.8, colour=GREEN)
-    ax.label(25, 48.8, "48.8", cls="sm bold", fill=GREEN, dy=-9, anchor="start",
-             dx=6)
+    ax.label(25, 48.8, "48.8", cls="sm bold", fill=GREEN, dy=16, anchor="start",
+             dx=4)
     ax.vline(24, colour="var(--dim)", y_top=62)
     return f
 
@@ -1987,7 +1987,7 @@ def det_stoch_trend() -> Fig:
     ax.polyline(list(enumerate(det)), colour=GREEN, width=1.9)
     ax.polyline(list(enumerate(sto)), colour=ROSE, width=1.9)
     ax.label(n - 1, sto[-1], "stochastic", cls="sm bold", anchor="end", dy=-12)
-    ax.label(n - 1, det[-1], "deterministic", cls="sm bold", anchor="end", dy=20)
+    ax.label(n - 1, det[-1], "deterministic", cls="sm bold", anchor="end", dy=30)
     return f
 
 

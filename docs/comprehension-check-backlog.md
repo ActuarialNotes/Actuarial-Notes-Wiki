@@ -1,5 +1,9 @@
 # Comprehension-check backlog
 
+> **Parked.** Comprehension checks no longer gate flashcard collection — a card is
+> collected when its concept first reaches Level 1 — and nothing renders them
+> (see `docs/flashcard-collection.md`). This backlog is kept for reference only.
+
 Concepts in `Concepts/*.md` that have **no authored flashcard-collect check** under
 `comprehension-checks/<exam-id>/`. Until a check is authored, the collect modal falls back
 to the "which concept does this describe?" question built from the concept's own definition —

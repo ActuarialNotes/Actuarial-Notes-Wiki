@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { flushSync } from 'react-dom'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { Loader2, X, ChevronLeft, Volume2, VolumeX, AlertCircle, Keyboard } from 'lucide-react'
 import { useQuestions } from '@/hooks/useQuestions'
@@ -12,17 +13,17 @@ import { QuitQuizDialog } from '@/components/QuitQuizDialog'
 import { IncompletePartsDialog } from '@/components/IncompletePartsDialog'
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
 import { QuestionInfoButton } from '@/components/QuestionInfoButton'
-import { PreQuizCollectGate } from '@/components/collect/PreQuizCollectGate'
+import { PreQuizConcepts } from '@/components/PreQuizConcepts'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
 import { isAnswerCorrect, isMultiPartAnswerComplete } from '@/lib/parser'
 import { pendingAnswerFor, tagPendingAnswer } from '@/lib/pendingAnswer'
 import { loadRevealMode, parseRevealMode } from '@/lib/revealMode'
+import { startViewTransition } from '@/lib/viewTransition'
 import type { PendingAnswer } from '@/lib/pendingAnswer'
 import type { QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
 import { decayIfStale } from '@/lib/mastery'
-import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { useTodayPlanConcepts } from '@/hooks/useTodayPlanConcepts'
 import { TOPIC_TO_EXAM_ID } from '@/hooks/useExamProgress'
 import type { ConceptMasteryRecord } from '@/lib/mastery'
@@ -89,14 +90,32 @@ export default function Quiz() {
     startQuiz,
     answerQuestion,
     clearAnswer,
-    nextQuestion,
-    goToPreviousQuestion,
+    nextQuestion: advanceQuestion,
+    goToPreviousQuestion: stepBackQuestion,
     goToQuestion,
     toggleFlag,
     setManualGrade,
     completeQuiz,
     resetQuiz,
   } = useQuizStore()
+
+  // Next and Back turn the question like a sheet on a pile — the answered one
+  // is flicked off and the next lifts into place — rather than swapping it in
+  // place (see "Paper on a desk" in index.css). Past the last question Next
+  // finishes the quiz, which isn't a sheet to turn. A jump from the progress
+  // bar stays a jump: it can be dragged through a dozen questions a second.
+  function nextQuestion() {
+    if (currentIndex + 1 >= storeQuestions.length) {
+      advanceQuestion()
+      return
+    }
+    startViewTransition(() => flushSync(advanceQuestion), { paper: 'turn', fallback: advanceQuestion })
+  }
+
+  function goToPreviousQuestion() {
+    if (currentIndex <= 0) return
+    startViewTransition(() => flushSync(stepBackQuestion), { paper: 'return', fallback: stepBackQuestion })
+  }
 
   // Reset store on every new quiz navigation so filters always take effect
   useEffect(() => {
@@ -143,13 +162,13 @@ export default function Quiz() {
   // Tracks whether the user clicked "Change Answer" on the current question
   const [isChangingAnswer, setIsChangingAnswer] = useState(false)
 
-  // ── Pre-quiz collection gate ─────────────────────────────────────────────
-  // Concepts must be collected (comprehension check passed) before a correct
-  // answer can advance them from New → Level 1. Surface the collect prompt up
-  // front so today's quiz can actually level up its concepts. Only applies to
-  // ordinary quizzes (never mock exams) and only for concepts currently at New.
-  const [collectGateDismissed, setCollectGateDismissed] = useState(false)
-  const collectedCards = useCollectedCards(s => s.cards)
+  // ── Pre-quiz concept list ────────────────────────────────────────────────
+  // The concepts this quiz introduces — those still at New — listed before the
+  // first question, each one openable in the concept popup so the reader can
+  // look it over first. A right answer on one levels it to Level 1 and collects
+  // its card (docs/flashcard-collection.md). Only applies to ordinary quizzes
+  // (never mock exams).
+  const [conceptListDismissed, setConceptListDismissed] = useState(false)
 
   const newQuizConcepts = useMemo(() => {
     if (mode !== 'quiz') return []
@@ -173,12 +192,8 @@ export default function Quiz() {
     return result
   }, [storeQuestions, masteryRecords, mode])
 
-  const hasUncollectedNewConcept = newQuizConcepts.some(
-    name => !collectedCards.some(c => c.name.toLowerCase() === name.toLowerCase()),
-  )
-
-  // Today's study plan for the exam this quiz is drawn from, so the gate can
-  // mark the concepts whose collection would move the plan forward. The quiz's
+  // Today's study plan for the exam this quiz is drawn from, so the list can
+  // mark the concepts that would move the plan forward. The quiz's
   // filters may not name the exam (an ids/concepts launch doesn't), so read it
   // off the questions themselves.
   const quizExamKey = useMemo(() => {
@@ -187,26 +202,25 @@ export default function Quiz() {
   }, [storeQuestions, filters.exam])
   const planConcepts = useTodayPlanConcepts(quizExamKey)
 
-  // Show the gate only at the very start of the session (before any answer) so
+  // Show the list only at the very start of the session (before any answer) so
   // it never interrupts a quiz already in progress, and only once mastery has
-  // loaded so the New/collected classification is accurate.
-  const showCollectGate =
+  // loaded so the New classification is accurate.
+  const showConceptList =
     mode === 'quiz' &&
-    !collectGateDismissed &&
+    !conceptListDismissed &&
     !masteryLoading &&
     status === 'active' &&
     Object.keys(responses).length === 0 &&
-    hasUncollectedNewConcept
+    newQuizConcepts.length > 0
 
-  // Whether the collect-gate decision is still pending: at the very start of a
-  // quiz session, `showCollectGate` depends on mastery, so if mastery is still
-  // loading we can't yet tell whether the gate should appear. Hold the loading
-  // state (below) rather than render the first question and then swap it out for
-  // the gate — that swap is the jarring "flash the first question" the collect
-  // launch is meant to avoid.
-  const awaitingCollectGateDecision =
+  // Whether the list decision is still pending: at the very start of a quiz
+  // session, `showConceptList` depends on mastery, so if mastery is still
+  // loading we can't yet tell whether the list should appear. Hold the loading
+  // state (below) rather than render the first question and then swap it out
+  // for the list — that swap is a jarring "flash the first question".
+  const awaitingConceptListDecision =
     mode === 'quiz' &&
-    !collectGateDismissed &&
+    !conceptListDismissed &&
     masteryLoading &&
     status === 'active' &&
     Object.keys(responses).length === 0
@@ -262,7 +276,7 @@ export default function Quiz() {
     'm': () => { toggleSound(); playSound('toggleOn') },
     '?': () => setShowShortcutsHelp(v => !v),
     'i': () => { if (currentQuestion) setShowQuestionInfo(v => !v) },
-  }, !anyDialogOpen && status !== 'idle' && status !== 'complete')
+  }, !anyDialogOpen && !showConceptList && status !== 'idle' && status !== 'complete')
 
   function handleQuit() {
     try { sessionStorage.removeItem('actuarial_selected_ids') } catch { /* ignore */ }
@@ -371,7 +385,7 @@ export default function Quiz() {
   }
 
   // ── Loading state ────────────────────────────────────────────────────
-  if (loading || (status === 'idle' && !error) || awaitingCollectGateDecision) {
+  if (loading || (status === 'idle' && !error) || awaitingConceptListDecision) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -422,13 +436,13 @@ export default function Quiz() {
 
   if (!currentQuestion) return null
 
-  // ── Pre-quiz collection gate ─────────────────────────────────────────────
-  if (showCollectGate) {
+  // ── Pre-quiz concept list ────────────────────────────────────────────────
+  if (showConceptList) {
     return (
-      <PreQuizCollectGate
+      <PreQuizConcepts
         concepts={newQuizConcepts}
         planConcepts={planConcepts}
-        onStart={() => setCollectGateDismissed(true)}
+        onStart={() => setConceptListDismissed(true)}
         onQuit={handleQuit}
       />
     )
@@ -617,7 +631,8 @@ export default function Quiz() {
         />
       )}
 
-      <div className="mt-4">
+      {/* The sheet Next and Back turn. */}
+      <div className="paper-sheet mt-4">
         <QuestionCard
           // Keyed by question so nothing the card holds locally — a typed
           // free-entry answer, a self-grade — can outlive the question it

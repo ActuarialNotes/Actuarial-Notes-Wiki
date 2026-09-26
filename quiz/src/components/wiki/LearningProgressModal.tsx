@@ -18,7 +18,7 @@ import { OverlayPortal } from '@/components/ui/OverlayPortal'
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-// `sm` sits inline with a small modal title (the collect modal's header);
+// `sm` sits inline with a small modal title;
 // `md` is the standalone-modal header / level-row pill.
 export function LevelPill({ level, size = 'md' }: { level: MasteryState; size?: 'sm' | 'md' }) {
   return <MasteryBadge state={level} size={size} className="font-bold tracking-wide" />
@@ -27,8 +27,8 @@ export function LevelPill({ level, size = 'md' }: { level: MasteryState; size?: 
 // ─── Reusable panel ─────────────────────────────────────────────────────────
 //
 // The level-pill + legend + graph, without any modal chrome. Rendered on its own
-// inside the standalone modal below, and embedded alongside the 3D flashcard in
-// the collect modal so a collected concept shows "card + progress" in one place.
+// inside the standalone modal below, or embedded in any surface that wants the
+// graph without the modal.
 
 interface PanelProps {
   /** Hide the internal "Current level" row — used when the level is shown elsewhere (e.g. beside a title). */
@@ -38,7 +38,7 @@ interface PanelProps {
   /**
    * Put the legend + graph behind a "Show exam history" toggle, collapsed by
    * default. Used where the graph is a secondary detail rather than the point of
-   * the view (the collect modal, where the card and quiz come first).
+   * the view.
    */
   collapsible?: boolean
   /** Bubbles up the level currently on display (current or hovered), or null while unavailable. */
@@ -51,8 +51,7 @@ export function LearningProgressPanel({ conceptName, ...props }: PanelProps & { 
 }
 
 // Same panel, driven by an already-loaded history. Callers that need the
-// concept's history themselves (the collect modal reads it to decide which face
-// of the card to show) pass theirs in rather than mounting a second copy of
+// concept's history themselves pass theirs in rather than mounting a second copy of
 // useConceptLearningHistory for the same concept — which would duplicate every
 // query and every realtime subscription behind it.
 export function LearningProgressPanelView({
@@ -236,7 +235,7 @@ export function LearningProgressModal({ conceptName, onClose }: LearningProgress
     <OverlayPortal>
     <div
       // z-[130] — same hosts as ConceptQuestionsModal; see the note there.
-      className="fixed inset-0 z-[130] flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto"
+      className="fixed inset-0 z-[130] flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto paper-scrim"
       role="dialog"
       aria-modal="true"
       aria-label={`Learning Progress: ${conceptName}`}

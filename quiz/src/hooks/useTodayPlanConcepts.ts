@@ -5,7 +5,7 @@
 //
 // This is the read-only "is this concept on today's list?" question, kept apart
 // from `useTodayQuizCount`, which assembles every exam's plan to *size* a quiz.
-// The pre-quiz collect gate uses it to mark the concepts whose collection would
+// The pre-quiz concept list uses it to mark the concepts whose level-up would
 // actually move today's plan forward.
 
 import { useMemo } from 'react'

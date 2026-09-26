@@ -13,8 +13,8 @@ import {
 // with the score it is about to print; the hook records the sighting and hands back how far
 // that score has moved today.
 //
-// localStorage only, like the daily gem/level-up buckets in `lib/dailyProgressStore.ts` and
-// the collect lockouts. Device-local is the deliberate limit: the arrow is a nudge about the
+// localStorage only, like the daily gem/level-up buckets in `lib/dailyProgressStore.ts`.
+// Device-local is the deliberate limit: the arrow is a nudge about the
 // session in front of the learner, and studying on a phone and then a laptop starting each
 // day's arrow separately costs nothing — while a table and a round-trip to carry one integer
 // across devices would. The score itself is derived from mastery, which *does* sync, so

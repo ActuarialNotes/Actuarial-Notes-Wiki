@@ -20,7 +20,7 @@
  * The classes live in `index.css` next to `.flashcard-collected`; this module
  * is the mapping every surface that draws a card shares, so one concept looks
  * like the same card in the deck, in the add-flashcards picker and in the
- * collect modal. See `docs/flashcard-collection.md`.
+ * level-up ceremony. See `docs/flashcard-collection.md`.
  */
 
 import type { MasteryState } from '@/lib/mastery'

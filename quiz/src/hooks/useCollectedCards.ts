@@ -1,9 +1,9 @@
 import { create } from 'zustand'
 import { queueCollectedSync } from '@/lib/flashcardSync'
 
-// "Collected" flashcards — a concept becomes collected once the user reads it
-// and passes a basic comprehension check (see CollectConceptModal). Collecting
-// is the first active-learning step and is distinct from manually adding a
+// "Collected" flashcards — a concept becomes collected the first time it reaches
+// Level 1, i.e. its first correct quiz answer (collectLevelledConcepts in
+// stores/quizStore.ts; docs/flashcard-collection.md). Collecting is distinct from manually adding a
 // concept to the flashcard gallery (useFlashcards). State is persisted to
 // localStorage, mirroring the offline-first pattern used elsewhere in the app,
 // and — for signed-in users — mirrored to the user_collected_cards table so the

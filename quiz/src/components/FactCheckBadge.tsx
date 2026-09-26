@@ -125,7 +125,7 @@ function FactCheckSheet({
   return (
     <OverlayPortal>
       <div
-        className="fixed inset-0 z-[130] flex items-end justify-center bg-black/50 backdrop-blur-sm sm:items-center sm:p-4"
+        className="fixed inset-0 z-[130] flex items-end justify-center bg-black/50 backdrop-blur-sm sm:items-center sm:p-4 paper-scrim"
         onClick={onClose}
         role="presentation"
       >

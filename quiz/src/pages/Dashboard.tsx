@@ -53,7 +53,7 @@ const WELCOME_DISMISSED_KEY = 'quiz.dashboard.welcomeDismissed'
 
 function WelcomeModal({ onAddExam, onClose }: { onAddExam: () => void; onClose: () => void }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm paper-scrim">
       <div className="relative bg-card rounded-2xl shadow-2xl max-w-sm w-full p-6 flex flex-col gap-4">
         <button
           type="button"

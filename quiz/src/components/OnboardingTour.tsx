@@ -6,14 +6,11 @@ import {
   ChevronDown,
   FlipHorizontal,
   GraduationCap,
-  Layers,
   LayoutGrid,
-  Lock,
   LogIn,
   MousePointerClick,
   Play,
   RotateCcw,
-  Sparkles,
   Target,
   TrendingUp,
   Trophy,
@@ -22,16 +19,9 @@ import {
 import { useOnboardingTour } from '@/hooks/useOnboardingTour'
 import { useAuth } from '@/hooks/useAuth'
 import { useQuizStore } from '@/stores/quizStore'
-import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
-import { useCollect } from '@/hooks/useCollect'
 import { wikiRoute } from '@/lib/wikiRoutes'
 import { cn } from '@/lib/utils'
-
-// The concept the tour walks the user through collecting. It must have a
-// wiki-link on the Exam P syllabus page (data-wikiref below) and a page to
-// read; the collect gate builds a comprehension check from it either way.
-const TOUR_CONCEPT = 'Calculus'
 
 // Route to the Exam P study guide — used as a fallback if the user lands on a
 // concept step without having tapped into the exam first.
@@ -75,7 +65,7 @@ interface TourStep {
   // Polled predicate for 'watch' steps.
   watch?: () => boolean
   // Skip the step entirely when it's already satisfied — replaying the tour
-  // shouldn't ask you to collect a card you collected months ago.
+  // shouldn't ask you to do something you did months ago.
   skipIf?: () => boolean
   // The target is genuinely optional (it depends on app state we don't
   // control). Move on instead of stalling when it never shows up.
@@ -97,32 +87,16 @@ const onFlashcards = (p: string) => p.startsWith('/flashcards')
 const inQuiz = (p: string) => p === '/quiz'
 const afterQuiz = (p: string) => p === '/review'
 
-// Has the tour concept been collected yet? The collect gate persists to the
-// collected-cards store, so this is what "the check was passed" looks like.
-const collectedTourConcept = () =>
-  useCollectedCards
-    .getState()
-    .cards.some(c => c.name.toLowerCase() === TOUR_CONCEPT.toLowerCase())
-
-// Whether the tour concept was already in the deck when *this run* of the tour
-// began. The three collect steps only have a screen to point at for someone who
-// doesn't own the card yet, so on a replay they're stepped over — but they must
-// not vanish mid-run just because the visitor has now collected it, or Back
-// would bounce straight off them. Set once per run, in the component below.
-let hadCardAtStart = false
-const alreadyOwnedTourCard = () => hadCardAtStart
-
 // The concept popup is a docked reader that deliberately survives navigation,
 // so it follows the tour out of the study guide and covers the next screen.
-// Steps that leave the wiki close it (and any collect modal) on the way out.
+// Steps that leave the wiki close it on the way out.
 const closeReaders = () => {
-  useCollect.getState().close()
   useConceptPopup.getState().close()
 }
 
 // Is this element genuinely *on screen*, not merely present in the DOM? Being
-// in the document isn't enough to earn a ring: the flashcards controls bar, the
-// concept popup and the collect modal all leave their buttons mounted while an
+// in the document isn't enough to earn a ring: the flashcards controls bar and
+// the concept popup both leave their buttons mounted while an
 // overlay covers them, and a ring drawn around something the visitor can't see
 // is the tour's worst failure — a border floating over blank space.
 //
@@ -164,13 +138,13 @@ function isSpotlightable(el: HTMLElement, r: DOMRect): boolean {
 }
 
 // The guided journey mirrors the real study loop:
-// study guide → meet a concept → collect it (comprehension gate) →
-// flashcards & daily packs → level up with a quiz → mastery → keep it all.
+// study guide → meet a concept → flashcards & daily packs → level up with a
+// quiz (which collects the card) → mastery → keep it all.
 const BASE_STEPS: TourStep[] = [
   {
     icon: GraduationCap,
     title: 'Welcome to Actuarial Notes',
-    body: 'The loop is simple: collect concepts, quiz them, level them up. Here it is in about 2 minutes — follow the highlights and tap where they point.',
+    body: 'The loop is simple: read concepts, quiz them, level them up. Here it is in about 2 minutes — follow the highlights and tap where they point.',
     advance: 'manual',
   },
   // ── Meet a concept ──
@@ -191,43 +165,6 @@ const BASE_STEPS: TourStep[] = [
     target: '[data-wikiref="concept:calculus"]',
     advance: 'tap',
   },
-  // ── Collect it (the comprehension gate) ──
-  {
-    icon: Lock,
-    title: 'Collect the card',
-    body: 'Concepts start locked, and a locked concept can\'t level up. Tap the lock to collect this one into your deck.',
-    // The collect steps live wherever the concept was opened from, so `match`
-    // stays broad — but a visitor who has wandered onto another exam page has
-    // nothing to tap, and `path` is where the step can find its screen again.
-    path: EXAM_P_ROUTE,
-    match: onExam,
-    target: '[data-tour="collect-card"]',
-    advance: 'tap',
-    skipIf: alreadyOwnedTourCard,
-  },
-  {
-    icon: Sparkles,
-    title: 'Pass the quick check',
-    body: 'Answer the short comprehension check — get it right and the card is yours.',
-    path: EXAM_P_ROUTE,
-    match: onExam,
-    target: '[data-tour="collect-options"]',
-    advance: 'watch',
-    watch: collectedTourConcept,
-    skipIf: alreadyOwnedTourCard,
-    optionalTarget: true,
-  },
-  {
-    icon: Layers,
-    title: 'Your first card!',
-    body: 'Nice — that\'s collected, and Calculus can now climb the mastery ladder. Tap View Flashcard to open your deck.',
-    path: EXAM_P_ROUTE,
-    match: onExam,
-    target: '[data-tour="collect-view-flashcard"]',
-    advance: 'tap',
-    skipIf: alreadyOwnedTourCard,
-    optionalTarget: true,
-  },
   // ── Flashcards & daily packs ──
   {
     icon: FlipHorizontal,
@@ -242,7 +179,7 @@ const BASE_STEPS: TourStep[] = [
   {
     icon: LayoutGrid,
     title: 'Grab a daily pack',
-    body: 'You don\'t have to collect cards one by one. Open the card controls, then tap + for search and ready-made packs — one for every exam and topic.',
+    body: 'You don\'t have to add cards one by one. Open the card controls, then tap + for search and ready-made packs — one for every exam and topic.',
     path: '/flashcards',
     match: onFlashcards,
     // The + lives in the controls bar, which is collapsed in study view — point
@@ -281,9 +218,9 @@ const BASE_STEPS: TourStep[] = [
     advance: 'tap',
   },
   {
-    icon: Lock,
-    title: 'Unlock before you drill',
-    body: 'Any still-locked concept in the quiz is listed here — collect the ones you want to level up, then tap Start Quiz to begin.',
+    icon: BookOpen,
+    title: 'Meet the new concepts',
+    body: 'Concepts new to you are listed here — tap one to read it first. Get a question on it right and you collect its card. Tap Start Quiz to begin.',
     match: inQuiz,
     target: '[data-tour="gate-start-quiz"]',
     advance: 'tap',
@@ -372,15 +309,6 @@ export default function OnboardingTour() {
   useEffect(() => {
     autoStart()
   }, [autoStart])
-
-  // Snapshot "do they already own the tour card?" as each run of the tour
-  // begins. Declared before the step-driving effect so the flag is set before
-  // the first step consults it. See `hadCardAtStart`.
-  const wasActive = useRef(false)
-  useEffect(() => {
-    if (active && !wasActive.current) hadCardAtStart = collectedTourConcept()
-    wasActive.current = active
-  }, [active])
 
   useEffect(() => {
     if (expanded) openedOnce.current = true

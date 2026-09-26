@@ -37,6 +37,10 @@
     --input: 0 0% 55%;
     --ring: 0 0% 0%;
     --radius: 0.5rem;
+    /* The desk the pages lie on — only ever seen between two sheets while one
+       slides (see "Paper on a desk"), so it is a step darker than the page. */
+    --desk: 0 0% 80%;
+    --shadow-sheet: rgba(0,0,0,0.30);
   }
 
   .dark {
@@ -60,6 +64,8 @@
     --border: 0 0% 26%;
     --input: 0 0% 42%;
     --ring: 0 0% 100%;
+    --desk: 0 0% 13%;
+    --shadow-sheet: rgba(0,0,0,0.75);
   }
 }
 
@@ -188,7 +194,7 @@
 .onboarding-spotlight {
   position: fixed;
   /* Above every overlay in the app — the concept popup's actions menu (z-70),
-     the collect modal and its dimmer (z-120/121) and the questions modal
+     the level-up ceremony and its dimmer (z-120/121) and the questions modal
      (z-130). The tour spotlights elements *inside* those overlays, so anything
      lower leaves the ring buried under the dimmer. Keep in step with the tour
      card's z-[140] in OnboardingTour.tsx. */
@@ -604,10 +610,10 @@
    carry no border of its own, or the two edges double up.
    `--foil-ring-width` tunes the edge weight per host.
 
-   Also worn by the pre-quiz collect gate's rows for the concepts in today's
-   study plan (`.plan-foil-ring`): same "this one is live" reading — collecting
-   it is what moves today's plan forward — on a row that otherwise has no
-   border of its own. */
+   Also worn by the pre-quiz concept list's rows for the concepts in today's
+   study plan (`.plan-foil-ring`): same "this one is live" reading — getting
+   it right is what moves today's plan forward — on a row that otherwise has
+   no border of its own. */
 .simulator-foil-ring,
 .plan-foil-ring {
   position: relative;
@@ -1724,26 +1730,153 @@ summary .katex-display,
   .schedule-playback-concept { animation: none; }
 }
 
-/* ── Tab switches: the exam moves, the page around it changes ──────────────
-   A view transition per tab switch (components/ViewTransitions.tsx starts it,
-   lib/viewTransition.ts hands out the names). An exam card on the Quiz tab, an
-   exam card on Study Guides and an exam pill on the Dashboard are one object
-   seen three ways, so they carry one `view-transition-name` and the browser
-   tweens between them while the rest of the page cross-fades.
+/* ── Paper on a desk ─────────────────────────────────────────────────────
+   Every page is a sheet of paper and the app is the desk it lies on. The
+   moves are decided in lib/viewTransition.ts and started by
+   components/PaperRouter.tsx (a change of page) or by the surface itself (a
+   quiz's next question); what arrives here is the move, as `data-paper` on
+   the root, and the browser's two snapshots of the page to move.
 
-   The timing is the app's own: 280ms on the decelerating curve the style guide
-   uses for something arriving, rather than the browser's flat 250ms ease. The
-   default duration is fine for a fade, but here it also paces a shape crossing
-   half the viewport, where an ease-out reads as the object *landing*. */
-::view-transition-group(*) {
-  animation-duration: 280ms;
-  animation-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+     next / prev    a tab switch: the desk slides, both sheets together
+     push           deeper into a tab: a sheet is laid over from the right
+     pop            back up: the top sheet is swiped off to the right
+     turn / return  a sheet within a page flicked off the pile, or slid back
+
+   One curve and one pace for all of them, so a sheet always moves like the
+   same paper: a quick start that settles — the decelerating curve the app
+   uses for things *arriving* — over 420ms, long enough to read the direction,
+   short enough that it never holds the reader up. The page stays live under
+   the pictures (pointer-events: none), so a click during a slide lands on the
+   page that is arriving rather than being swallowed. */
+:root {
+  --paper-duration: 420ms;
+  --paper-ease: cubic-bezier(0.32, 0.72, 0, 1);
+  /* How far a covered sheet slips, and how much it shades, as the next is
+     laid over it — enough to read as "underneath", not so much it vanishes. */
+  --paper-under-shift: -22%;
+  --paper-under-opacity: 0.4;
+  --paper-gap: 24px;
 }
 
+::view-transition {
+  background: hsl(var(--desk));
+  pointer-events: none;
+}
+
+/* Anything not given its own move below — a crossfade the browser would
+   otherwise run on its flat 250ms ease — keeps the app's pace. */
+::view-transition-group(*),
 ::view-transition-old(*),
 ::view-transition-new(*) {
-  animation-duration: 280ms;
-  animation-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+  animation-duration: var(--paper-duration);
+  animation-timing-function: var(--paper-ease);
+}
+
+/* ── The chrome stays put ──
+   The desktop rail and the phone's header are the frame the sheets move
+   under, not sheets themselves: each is lifted out of the page's picture and
+   held still, above everything that moves. */
+/* On a phone the rail is the drawer: lifted out the same way, it finishes
+   closing over the sheets rather than being carried off inside the old one. */
+.paper-chrome-rail { view-transition-name: paper-rail; }
+.paper-chrome-header { view-transition-name: paper-header; }
+
+::view-transition-group(paper-rail),
+::view-transition-group(paper-header) {
+  z-index: 10;
+  animation: none;
+}
+::view-transition-old(paper-rail),
+::view-transition-new(paper-rail),
+::view-transition-old(paper-header),
+::view-transition-new(paper-header) {
+  animation-duration: 160ms;
+}
+
+/* ── The page is the sheet ──
+   A page move animates the root's two pictures. Each is cut to the page's own
+   width — from `--paper-inset`, the left edge of <main> — so a sliding sheet
+   is exactly the page, with a paper edge and a shadow, rather than a
+   viewport-wide picture dragging a sidebar-shaped hole across the desk. The
+   cut is done by drawing the snapshot unscaled, aligned right, into a box the
+   page's width (`object-fit: none`), which leaves the box's own edge free to
+   carry the shadow. */
+:root:is([data-paper="next"], [data-paper="prev"], [data-paper="push"], [data-paper="pop"])::view-transition-old(root),
+:root:is([data-paper="next"], [data-paper="prev"], [data-paper="push"], [data-paper="pop"])::view-transition-new(root) {
+  left: var(--paper-inset, 0px);
+  width: calc(100% - var(--paper-inset, 0px));
+  height: 100%;
+  object-fit: none;
+  object-position: right top;
+  /* Unlike an <img>, these pseudo-elements don't clip their picture to their
+     box: without this the part cut away paints to the left of the sheet. */
+  overflow: clip;
+  mix-blend-mode: normal;
+  animation-duration: var(--paper-duration);
+  animation-timing-function: var(--paper-ease);
+  animation-fill-mode: both;
+}
+
+:root:is([data-paper="next"], [data-paper="prev"], [data-paper="push"], [data-paper="pop"])::view-transition-group(root) {
+  animation: none;
+}
+
+/* next: the desk slides left — the tab to the right comes in beside the one
+   going. prev is the mirror. */
+:root[data-paper="next"]::view-transition-old(root) { animation-name: paper-slide-out-left; }
+:root[data-paper="next"]::view-transition-new(root) { animation-name: paper-slide-in-right; }
+:root[data-paper="prev"]::view-transition-old(root) { animation-name: paper-slide-out-right; }
+:root[data-paper="prev"]::view-transition-new(root) { animation-name: paper-slide-in-left; }
+
+:root[data-paper="next"]::view-transition-old(root),
+:root[data-paper="next"]::view-transition-new(root),
+:root[data-paper="prev"]::view-transition-old(root),
+:root[data-paper="prev"]::view-transition-new(root) {
+  box-shadow: 0 0 28px 0 var(--shadow-sheet);
+}
+
+/* push: the new sheet is laid over from the right; the one it covers slips
+   a little left and shades. */
+:root[data-paper="push"]::view-transition-old(root) { animation-name: paper-slip-under; }
+:root[data-paper="push"]::view-transition-new(root) {
+  animation-name: paper-lay-over;
+  box-shadow: -6px 0 28px 0 var(--shadow-sheet), -1px 0 0 0 var(--shadow-sheet);
+}
+
+/* pop: the top sheet is swiped off to the right, over the one it uncovers —
+   so here the *old* picture is the one on top. */
+:root[data-paper="pop"]::view-transition-old(root) {
+  z-index: 1;
+  animation-name: paper-swipe-off;
+  box-shadow: -6px 0 28px 0 var(--shadow-sheet), -1px 0 0 0 var(--shadow-sheet);
+}
+:root[data-paper="pop"]::view-transition-new(root) { animation-name: paper-uncover; }
+
+@keyframes paper-slide-out-left  { to   { transform: translateX(calc(-100% - var(--paper-gap))); } }
+@keyframes paper-slide-in-right  { from { transform: translateX(calc(100% + var(--paper-gap))); } }
+@keyframes paper-slide-out-right { to   { transform: translateX(calc(100% + var(--paper-gap))); } }
+@keyframes paper-slide-in-left   { from { transform: translateX(calc(-100% - var(--paper-gap))); } }
+@keyframes paper-lay-over        { from { transform: translateX(100%); } }
+@keyframes paper-swipe-off       { to   { transform: translateX(100%); } }
+@keyframes paper-slip-under {
+  to { transform: translateX(var(--paper-under-shift)); opacity: var(--paper-under-opacity); }
+}
+@keyframes paper-uncover {
+  from { transform: translateX(var(--paper-under-shift)); opacity: var(--paper-under-opacity); }
+}
+
+/* ── The exam is lifted from one sheet to the other ──
+   An exam card on the Quiz tab, an exam card on Study Guides and an exam pill
+   on the Dashboard are one object seen three ways, so switching between those
+   three the one exam is picked up off the sheet leaving and set down on the
+   one arriving, while the sheets slide underneath. The name rides in
+   `--exam-card-name` (examTransitionStyle) and is only promoted while
+   `data-paper-carry` says both sides draw the exams (`carriesExams`): named on
+   every move, a card with no partner — every card, when you open an exam's
+   page or the Flashcards tab — would be lifted out of its sheet and hang over
+   the one arriving. */
+:root[data-paper-carry] [style*="--exam-card-name"] {
+  view-transition-name: var(--exam-card-name);
 }
 
 /* A card and a pill are very different shapes, so between them the group box
@@ -1755,15 +1888,127 @@ summary .katex-display,
   border-radius: inherit;
 }
 
-/* The page itself is not one of those objects — it is the backdrop the exam
-   moves across, and it only ever cross-fades with itself at the same size. */
-::view-transition-image-pair(root) {
+/* The pages and the question sheets travel well past their own box. */
+::view-transition-image-pair(root),
+::view-transition-image-pair(paper-sheet) {
   overflow: visible;
 }
 
-/* Reduced motion is decided in JS (`motionAllowed`), so a reader who asked for
-   less never starts a transition at all. This is the backstop for one already
-   running when the preference changes. */
+/* An exam on only one side of the switch — a Quiz-tab card the Dashboard has
+   no pill for — has nowhere to be carried to. It goes with its sheet's first
+   few frames, and one arriving settles in once its sheet has. */
+::view-transition-old(*):only-child {
+  animation: paper-lift-away 140ms ease-out both;
+}
+::view-transition-new(*):only-child {
+  animation: paper-set-down 180ms ease-out calc(var(--paper-duration) * 0.55) both;
+}
+@keyframes paper-lift-away { to   { opacity: 0; } }
+@keyframes paper-set-down  { from { opacity: 0; } }
+
+/* The page itself and the chrome are never "one side only" moves to fade. */
+::view-transition-old(root):only-child,
+::view-transition-new(root):only-child,
+::view-transition-old(paper-rail):only-child,
+::view-transition-new(paper-rail):only-child,
+::view-transition-old(paper-header):only-child,
+::view-transition-new(paper-header):only-child {
+  animation-delay: 0ms;
+  animation-duration: 160ms;
+}
+
+/* ── Sheets within a page ──
+   A run of sheets on one page — a quiz's questions — is a pile: Next flicks
+   the top sheet off to the left, tipping as a hand-thrown page does, and the
+   one beneath lifts into place; Back slides the last one thrown back on top.
+   The surface marks its sheet `.paper-sheet`; it is only named while a turn
+   is running, so a page move carries it with the rest of its page. The sheet
+   holds its new place throughout (the group doesn't travel): the page has
+   already scrolled back to the top for the next question, and the old sheet
+   leaves from there rather than sweeping down from wherever it was read. */
+:root:is([data-paper="turn"], [data-paper="return"]) .paper-sheet {
+  view-transition-name: paper-sheet;
+}
+
+::view-transition-group(paper-sheet) {
+  animation: none;
+}
+::view-transition-old(paper-sheet),
+::view-transition-new(paper-sheet) {
+  mix-blend-mode: normal;
+  transform-origin: 50% 100%;
+  animation-duration: 380ms;
+  animation-timing-function: var(--paper-ease);
+  animation-fill-mode: both;
+}
+
+:root[data-paper="turn"]::view-transition-old(paper-sheet) {
+  z-index: 1;
+  animation-name: paper-flick-off;
+}
+:root[data-paper="turn"]::view-transition-new(paper-sheet) { animation-name: paper-lift-up; }
+:root[data-paper="return"]::view-transition-old(paper-sheet) { animation-name: paper-settle-under; }
+:root[data-paper="return"]::view-transition-new(paper-sheet) { animation-name: paper-flick-on; }
+
+@keyframes paper-flick-off {
+  0%   { transform: none; opacity: 1; }
+  70%  { opacity: 1; }
+  100% { transform: translateX(-110%) rotate(-5deg); opacity: 0; }
+}
+@keyframes paper-flick-on {
+  0%   { transform: translateX(-110%) rotate(-5deg); opacity: 0; }
+  30%  { opacity: 1; }
+  100% { transform: none; opacity: 1; }
+}
+@keyframes paper-lift-up {
+  from { transform: scale(0.97); opacity: 0.4; }
+}
+@keyframes paper-settle-under {
+  to { transform: scale(0.97); opacity: 0; }
+}
+
+/* ── A sheet set down on the desk ──
+   A dialog is a sheet laid over the page, so it arrives the way one would:
+   the room dims, and the sheet settles into place from a little below. Only
+   the arrival is drawn — a dialog is dismissed to get back to work, and
+   holding it on screen to animate it away would be the one wait the reader
+   didn't ask for.
+
+   .paper-scrim   the dialog's full-screen backdrop: it fades in, and every
+                  child but a separate aria-hidden backdrop settles in
+   .paper-fade    a backdrop drawn as its own element
+   .paper-drop    a panel drawn as its own element
+
+   The offset is the individual `translate` / `scale` properties, not
+   `transform`, so a panel centred with Tailwind's translate utilities keeps
+   its centring; and the fill is `backwards`, so once it has landed the panel
+   carries no transform at all — a transformed ancestor would capture every
+   `position: fixed` menu opened inside it (style guide §8.3). */
+.paper-scrim,
+.paper-fade {
+  animation: paper-scrim-in 200ms ease-out backwards;
+}
+.paper-scrim > :not([aria-hidden="true"]),
+.paper-drop {
+  animation: paper-set-on 320ms var(--paper-ease) backwards;
+}
+@keyframes paper-scrim-in { from { opacity: 0; } }
+@keyframes paper-set-on {
+  from { opacity: 0; translate: 0 18px; scale: 0.985; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .paper-scrim,
+  .paper-fade,
+  .paper-scrim > :not([aria-hidden="true"]),
+  .paper-drop {
+    animation: none;
+  }
+}
+
+/* Reduced motion is decided in JS (`canTransition`), so a reader who asked
+   for less never starts a transition at all. This is the backstop for one
+   already running when the preference changes. */
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*),
   ::view-transition-old(*),

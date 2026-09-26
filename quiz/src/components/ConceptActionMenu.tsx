@@ -1,12 +1,10 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useState, type ReactNode, type RefObject } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BookOpen, CheckCheck, Play, Sparkles, TrendingUp } from 'lucide-react'
+import { BookOpen, CheckCheck, Play, TrendingUp } from 'lucide-react'
 import { fetchAllQuestions, fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { filterQuestions, parseAllQuestions } from '@/lib/parser'
 import { useFlashcards } from '@/hooks/useFlashcards'
-import { useCollect } from '@/hooks/useCollect'
-import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useAuth } from '@/hooks/useAuth'
@@ -34,12 +32,12 @@ import { FACT_CHECK_UI_ENABLED, RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
  * component, so the rows, their order and their wording can't drift apart.
  *
  * What it holds is what can be done with a concept: quiz it, read it in the
- * study guide, keep it as a card, collect it, look at how it's being learned,
+ * study guide, keep it as a card, look at how it's being learned,
  * and see what has been fact-checked about it. Viewing modes are deliberately
  * not here — Listen is the popup header's own toggle and the flashcard view
  * modes are the deck's dropdown, so the menu stays a list of actions.
  *
- * Everything it needs it reads for itself (mastery, collection, question
+ * Everything it needs it reads for itself (mastery, question
  * count, the page's `verification:` block), so a host only has to say which
  * control the menu hangs off and whether it is open. Rows that belong to one
  * surface only — Study and Remove, which are about a *card* rather than a
@@ -49,8 +47,7 @@ import { FACT_CHECK_UI_ENABLED, RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
  * Hosting it inside the surface that opened it is what used to hide it: a
  * flashcard tile's menu is inside the gallery's own `z-40` layer, under the
  * mobile header, and inside a scroller that clips it. From the body it answers to
- * the viewport alone — which is the one promise this menu has to keep, since
- * collecting a card is only reachable from it.
+ * the viewport alone — which is the one promise this menu has to keep.
  *
  * It stays mounted while closed: the modals it opens (questions, learning
  * progress, fact check) outlive the menu that opened them.
@@ -95,8 +92,6 @@ export function ConceptActionMenu({
   const routerNavigate = useNavigate()
   const { user } = useAuth()
   const { addCard, hasCard, cards } = useFlashcards()
-  const openCollect = useCollect(s => s.open)
-  const collectedCards = useCollectedCards(s => s.cards)
   const closePopup = useConceptPopup(s => s.close)
   const { records: masteryRecords } = useConceptMastery()
 
@@ -200,11 +195,6 @@ export function ConceptActionMenu({
   const verification = useMemo(() => (markdown ? parseVerification(markdown) : null), [markdown])
   const factCheck = useMemo(() => factCheckBadge(verification), [verification])
 
-  // A concept past New has necessarily been collected already (grandfathered
-  // users included), so treat it as collected even with no record in the store.
-  const inCollectedStore = collectedCards.some(c => c.name.toLowerCase() === entry.name.toLowerCase())
-  const collected = inCollectedStore || !(masteryState === null || masteryState === 'new')
-
   const menuClass = `fixed ${MENU_WIDTH_CLASS} rounded-md bg-popover text-popover-foreground shadow-md z-[70] py-1 overflow-y-auto`
 
   // The height comes from the room measured, so a long menu scrolls inside the
@@ -291,21 +281,6 @@ export function ConceptActionMenu({
         )}
       </div>
       {RESEARCH_TAB_ENABLED && user && <AddToProjectMenuItem item={entry} onNavigate={onClose} />}
-      {/* Collect. Passing the check is what lets a concept's mastery leave New
-          (`applyAnswer`'s `collected` flag), so it can't be left unreachable
-          from the concept it is about. */}
-      {entry.kind === 'concept' && !collected && (
-        <button
-          type="button"
-          data-tour="collect-card"
-          data-sound="actions"
-          onClick={() => { openCollect(entry); onClose() }}
-          className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
-        >
-          <Sparkles className="h-3.5 w-3.5 shrink-0" />
-          <span className="flex-1 text-left">Collect Flashcard</span>
-        </button>
-      )}
       <button
         type="button"
         onClick={() => { setShowLearningProgress(true); onClose() }}

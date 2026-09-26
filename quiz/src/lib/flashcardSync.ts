@@ -42,7 +42,7 @@ export interface FlashcardSnapshot {
 /**
  * Union of two collected-card sets, keyed by lowercased name. When both sides
  * know a card the *earliest* collection wins — that's when the learner actually
- * passed the comprehension check, and it keeps the "recently collected" order in
+ * earned it, and it keeps the "recently collected" order in
  * the Collected tab honest. Result is oldest-first for determinism.
  */
 export function mergeCollected(

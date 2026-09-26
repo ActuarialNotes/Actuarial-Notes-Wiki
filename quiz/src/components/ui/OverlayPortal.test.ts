@@ -49,7 +49,6 @@ const SHARED_OVERLAYS = [
   'components/wiki/ConceptQuestionsModal.tsx',
   'components/wiki/LearningProgressModal.tsx',
   'components/wiki/ChooseSyllabusModal.tsx',
-  'components/ConceptReadModal.tsx',
   'components/ConceptDetailModal.tsx',
   'components/StudyPlanConfigModal.tsx',
   'components/KeyboardShortcutsHelp.tsx',
@@ -68,17 +67,6 @@ describe('shared overlays', () => {
     expect(gallery).toBeGreaterThan(focusPopupZ())
     // The wiki/quiz floating search bar (z-50) paints over that host.
     expect(gallery).toBeGreaterThan(50)
-  })
-
-  it('the concept detail modals clear the collect dialog that opens them', () => {
-    // CollectConceptModal's own scrim; the modals it opens must sit over it.
-    const collect = overlayZ('components/collect/CollectConceptModal.tsx')
-    for (const rel of [
-      'components/wiki/ConceptQuestionsModal.tsx',
-      'components/ConceptReadModal.tsx',
-    ]) {
-      expect(overlayZ(rel)).toBeGreaterThan(collect)
-    }
   })
 
   it('the concept action menu clears every surface that opens it', () => {

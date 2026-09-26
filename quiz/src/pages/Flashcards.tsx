@@ -43,7 +43,6 @@ import {
 import { CSS } from '@dnd-kit/utilities'
 import { useFlashcards, type FlashCard } from '@/hooks/useFlashcards'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
-import { useCollect } from '@/hooks/useCollect'
 import { showAddedToDeck } from '@/hooks/useToast'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
@@ -68,7 +67,7 @@ import {
 } from '@/lib/flashcardStudy'
 import { buildCollectedList } from '@/lib/collectedList'
 import { wikiExamIdToProgressKey, type WikiExamSyllabus } from '@/lib/wikiParser'
-import { matchesSelectedVariant } from '@/data/examSittings'
+import { flashcardShelfExams } from '@/lib/flashcardShelf'
 import { Button } from '@/components/ui/button'
 import { WikiArticle, stripFrontmatter, extractMathBlockquotes, extractImages } from '@/components/wiki/WikiArticle'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
@@ -238,33 +237,22 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
     [packMasteryMap],
   )
 
-  const inProgressSyllabi = useMemo(
-    () => syllabi.filter(s => {
-      const key = wikiExamIdToProgressKey(s.examId)
-      return examProgress[key] === 'in_progress' && matchesSelectedVariant(key, s.examId, examVariants[key])
-    }),
-    [syllabi, examProgress, examVariants],
-  )
-
-  // One group per exam (fallbacks to P and FM when nothing is in progress),
-  // each with the whole-exam concept list plus its learning-objective packs.
+  // Every exam with material to study, the ones in progress first — see
+  // lib/flashcardShelf.ts. Each carries the whole-exam concept list plus its
+  // learning-objective packs.
   const examGroups = useMemo(() => {
-    const source: typeof inProgressSyllabi = inProgressSyllabi.length === 0
-      ? (['P-1', 'FM-2']
-          .map(id => syllabi.find(s => s.examId === id))
-          .filter((s): s is typeof syllabi[number] => !!s)
-          .filter(s => examProgress[wikiExamIdToProgressKey(s.examId)] !== 'completed'))
-      : inProgressSyllabi
+    const source = flashcardShelfExams(syllabi, examProgress, examVariants)
     return source.map(syllabus => ({
       examId: syllabus.examId,
       examLabel: syllabus.examLabel,
       syllabus,
+      studying: examProgress[wikiExamIdToProgressKey(syllabus.examId)] === 'in_progress',
       allConcepts: syllabus.topics.flatMap(t => t.concepts.map(c => c.name)),
       learningObjectives: syllabus.topics
         .filter(t => t.concepts.length > 0)
         .map(t => ({ name: t.name, concepts: t.concepts.map(c => c.name) })),
     }))
-  }, [inProgressSyllabi, syllabi, examProgress])
+  }, [syllabi, examProgress, examVariants])
 
   // The "Collected" filter's shelf: only what the learner has unlocked, newest
   // first, as individual cards rather than packs.
@@ -372,8 +360,7 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
       )}
       {!isLoading && !hasContent && (
         <p className="text-sm text-muted-foreground py-6 text-center">
-          No cards available yet. Mark an exam as in progress on the{' '}
-          <Link to="/dashboard" className="text-primary hover:underline">Dashboard</Link>.
+          No cards available yet.
         </p>
       )}
     </div>
@@ -647,12 +634,15 @@ interface ExamShelfGroup {
   examId: string
   examLabel: string
   syllabus: WikiExamSyllabus
+  /** In progress — the only exams a study plan is scheduling today. */
+  studying: boolean
   allConcepts: string[]
   learningObjectives: { name: string; concepts: string[] }[]
 }
 
 // An exam's shelf. The same tiles as the Collected shelf, grouped under today's
-// study plan and then the exam's learning objectives — the syllabus structure
+// study plan (for an exam in progress — one being browsed has no plan to show)
+// and then the exam's learning objectives — the syllabus structure
 // the pack cards carried survives the switch from packs to cards, and each
 // section keeps its own "add what's missing" action.
 function ExamCardShelf({
@@ -673,14 +663,16 @@ function ExamCardShelf({
   return (
     <div className="space-y-5">
       <ShelfSummary concepts={group.allConcepts} isCollected={isCollected} onCardsAdded={onCardsAdded} />
-      <TodayStudyPlanSection
-        syllabus={group.syllabus}
-        masteryRecords={masteryRecords}
-        masteryLoading={masteryLoading}
-        masteryOf={masteryOf}
-        isCollected={isCollected}
-        onCardsAdded={onCardsAdded}
-      />
+      {group.studying && (
+        <TodayStudyPlanSection
+          syllabus={group.syllabus}
+          masteryRecords={masteryRecords}
+          masteryLoading={masteryLoading}
+          masteryOf={masteryOf}
+          isCollected={isCollected}
+          onCardsAdded={onCardsAdded}
+        />
+      )}
       {group.learningObjectives.map(lo => (
         <ShelfSection
           key={lo.name}
@@ -1670,7 +1662,7 @@ function FlashcardsManageDialog({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4 paper-scrim"
       onClick={onCancel}
       role="dialog"
       aria-modal="true"
@@ -1730,7 +1722,7 @@ function StudySessionSummaryDialog({
 
   return (
     <div
-      className="fixed inset-0 z-[70] flex items-center justify-center bg-background/80 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-background/80 backdrop-blur-sm p-4 paper-scrim"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -2429,20 +2421,6 @@ function FlashcardsDeck({
   const { syllabi } = useWikiSyllabus()
   const { records: masteryRecords } = useConceptMastery()
   const popupOpen = useConceptPopup(s => s.open)
-  // "Got it" gates on collection (see docs/flashcard-collection.md): rating an
-  // uncollected card "Got it" opens the collect comprehension check instead of
-  // completing the card outright — Introduce → Flashcard → Collect → Quiz.
-  // `pendingGotNameRef` remembers which card triggered the gate so the study
-  // loop can pick up where it left off once the check is passed (or dropped,
-  // if the player backs out without collecting).
-  const collectedCards = useCollectedCards(s => s.cards)
-  const collectedSet = useMemo(
-    () => new Set(collectedCards.map(c => c.name.toLowerCase())),
-    [collectedCards],
-  )
-  const openCollect = useCollect(s => s.open)
-  const collectOpenRef = useCollect(s => s.ref)
-  const pendingGotNameRef = useRef<string | null>(null)
   const popupCurrentName = useConceptPopup(s => s.open ? (s.list[s.index]?.name ?? null) : null)
   const [searchParams, setSearchParams] = useSearchParams()
   const highlightName = searchParams.get('highlight')
@@ -2566,7 +2544,7 @@ function FlashcardsDeck({
     's': () => { handleShuffle() },
     'f': () => { setFocusMode(v => !v) },
     '?': () => setShowShortcutsHelp(v => !v),
-  }, !galleryExpanded && !popupOpen && !collectOpenRef && !showShortcutsHelp && !showSessionSummary && cards.length > 0)
+  }, !galleryExpanded && !popupOpen && !showShortcutsHelp && !showSessionSummary && cards.length > 0)
 
   function toggleReverseMode(mode: ReverseCardSection) {
     setReverseCardModes(prev => {
@@ -2723,9 +2701,7 @@ function FlashcardsDeck({
   // Rate a card and advance to the next unfinished one, wrapping around the
   // deck. "Got it" marks it complete; "Again" tallies a lapse (and
   // un-completes a previously finished card that has slipped). Once nothing is
-  // left unfinished, the session summary takes over. Split out from
-  // `handleRate` so the deferred "got it" path below (after the collect gate)
-  // can apply the same logic against whichever index the card ends up at.
+  // left unfinished, the session summary takes over.
   function applyRating(rating: StudyRating, card: FlashCard, index: number) {
     // "Got it" is a right answer like any other — and a run of them climbs in
     // pitch. "Again" is not a mistake, so it keeps the plain press cue the
@@ -2754,54 +2730,11 @@ function FlashcardsDeck({
     }
   }
 
-  // A concept must be collected before its mastery can pass New (see
-  // docs/flashcard-collection.md), so "Got it" on an uncollected card opens
-  // the collect comprehension check — Introduce → Flashcard → Collect → Quiz
-  // — instead of completing the card outright. The card only completes once
-  // the check is passed (picked up by the effect below); backing out of the
-  // modal without collecting leaves the card exactly as it was.
   function handleRate(rating: StudyRating) {
     const card = orderedCards[activeIndex]
     if (!card) return
-    if (rating === 'got' && !collectedSet.has(card.name.toLowerCase())) {
-      pendingGotNameRef.current = card.name
-      openCollect({ kind: 'concept', name: card.name }, { onSkip: () => skipCollectCheck(card.name) })
-      return
-    }
     applyRating(rating, card, activeIndex)
   }
-
-  // "Skip for now" in the collect check: the reader can't answer it yet, so the
-  // card is left exactly as it was — uncollected, unrated, still in rotation —
-  // and the session moves on to the next unfinished card rather than stalling
-  // on a gate. The card is found by name because the deck's order can be
-  // rebuilt while the modal is open (see resolveActiveIndex).
-  function skipCollectCheck(name: string) {
-    pendingGotNameRef.current = null
-    const list = orderedCardsRef.current
-    const index = list.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
-    if (index === -1) return
-    const next = nextIncompleteIndex(list.map(c => !!c.completedAt), index)
-    // -1: nothing left unfinished. next === index: this is the only card still
-    // going, so there is nowhere to move — leave it on screen.
-    if (next === -1 || next === index) return
-    setActiveIndex(next)
-  }
-
-  // Fires once the collect modal closes. If the card that triggered it is now
-  // collected, complete the "Got it" rating that was deferred; if the player
-  // closed the modal without passing the check, do nothing — the card stays
-  // in rotation.
-  useEffect(() => {
-    if (collectOpenRef) return
-    const pending = pendingGotNameRef.current
-    if (!pending) return
-    pendingGotNameRef.current = null
-    if (!collectedSet.has(pending.toLowerCase())) return
-    const idx = orderedCards.findIndex(c => c.name.toLowerCase() === pending.toLowerCase())
-    if (idx === -1) return
-    applyRating('got', orderedCards[idx], idx)
-  }, [collectOpenRef, collectedSet]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Navigate to and flash a card when arriving via the ?highlight= URL param.
   // Must be after orderedCards so the dep array re-fires when sort order changes

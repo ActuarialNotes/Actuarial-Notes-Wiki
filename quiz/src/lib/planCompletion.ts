@@ -98,7 +98,7 @@ export function planConceptsToday(plan: StudyPlan | null): string[] {
  * (`[[Bond Price|Price]]` is scheduled as "Price" but stored — and referenced
  * by a question's `wiki_link` — as "Bond Price").
  *
- * Lets a caller holding `slugForLink` slugs (the pre-quiz collect gate) ask
+ * Lets a caller holding `slugForLink` slugs (the pre-quiz concept list) ask
  * whether a concept is in today's plan without re-deriving the alias mapping.
  */
 export function planConceptKeys(

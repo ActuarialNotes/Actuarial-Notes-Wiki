@@ -1,5 +1,5 @@
-import { lazy, Suspense, Component, useEffect, type ReactNode, type ErrorInfo } from 'react'
-import { BrowserRouter, Routes, Route, Link, Navigate, useNavigate, useLocation } from 'react-router-dom'
+import { Suspense, Component, useEffect, type ReactNode, type ErrorInfo } from 'react'
+import { Routes, Route, Link, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { usePageTracking } from '@/hooks/usePageTracking'
 import { Loader2 } from 'lucide-react'
 import type { Session } from '@supabase/supabase-js'
@@ -18,13 +18,11 @@ import Sidebar from '@/components/Sidebar'
 import OnboardingTour from '@/components/OnboardingTour'
 import SoundEffects from '@/components/SoundEffects'
 import MathFocus from '@/components/MathFocus'
-import ViewTransitions from '@/components/ViewTransitions'
+import PaperRouter from '@/components/PaperRouter'
 import ImageFocus from '@/components/ImageFocus'
 import PdfReaderHost from '@/components/PdfReaderHost'
 import FlashcardSync from '@/components/FlashcardSync'
 import Toast from '@/components/Toast'
-import { CollectConceptModal } from '@/components/collect/CollectConceptModal'
-import { useCollect } from '@/hooks/useCollect'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ExamProgressProvider } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
@@ -32,35 +30,29 @@ import { useSubscription } from '@/hooks/useSubscription'
 import { COWORK_ENABLED, RESEARCH_TAB_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
 import { pageHostsNavButton } from '@/lib/mobileNavHost'
 import { captureError } from '@/lib/errorMonitoring'
+import { lazyRoute } from '@/lib/lazyRoute'
 
-// The dynamic imports are named rather than inlined into `lazy()` so the
-// route preloader below can reach for the same chunk. Calling one twice is
-// free — the module graph hands back the promise it already has.
-const loadResearch     = () => import('@/pages/Research')
+// Each lazy page is a `lazyRoute`, which hands back its preloader beside the
+// component. `React.lazy` alone suspends on a page's first render even when
+// its chunk is already here, and a page change drawn as a view transition
+// would capture that frame's spinner (see lib/lazyRoute.ts).
+const { Component: Research, preload: loadResearch } = lazyRoute(() => import('@/pages/Research'))
 // Cowork is the app's second product (see `lib/appMode.ts`). Lazy, because a
 // reader in Study mode should never pay for its catalogue or its xlsx writer.
-const loadCowork       = () => import('@/pages/Cowork')
-const loadWikiLayout   = () => import('@/components/wiki/WikiLayout')
-const loadWikiHome     = () => import('@/pages/wiki/WikiHome')
-const loadWikiExam     = () => import('@/pages/wiki/WikiExam')
-const loadWikiConcept  = () => import('@/pages/wiki/WikiConcept')
-const loadWikiResource = () => import('@/pages/wiki/WikiResource')
+const { Component: Cowork, preload: loadCowork } = lazyRoute(() => import('@/pages/Cowork'))
 
-const Research    = lazy(loadResearch)
-const Cowork      = lazy(loadCowork)
-
-const WikiLayout  = lazy(loadWikiLayout)
-const WikiHome    = lazy(loadWikiHome)
-const WikiExam    = lazy(loadWikiExam)
-const WikiConcept = lazy(loadWikiConcept)
-const WikiResource = lazy(loadWikiResource)
+const { Component: WikiLayout, preload: loadWikiLayout } = lazyRoute(() => import('@/components/wiki/WikiLayout'))
+const { Component: WikiHome, preload: loadWikiHome } = lazyRoute(() => import('@/pages/wiki/WikiHome'))
+const { Component: WikiExam, preload: loadWikiExam } = lazyRoute(() => import('@/pages/wiki/WikiExam'))
+const { Component: WikiConcept, preload: loadWikiConcept } = lazyRoute(() => import('@/pages/wiki/WikiConcept'))
+const { Component: WikiResource, preload: loadWikiResource } = lazyRoute(() => import('@/pages/wiki/WikiResource'))
 
 /**
  * Warm the chunks a path needs before navigating to it, or null when it needs
- * none. `ViewTransitions` waits on this: a view transition snapshots the page
- * as soon as the route has rendered, so flushing straight into a lazy route
- * would snapshot its Suspense fallback and animate the exam card into a
- * spinner. Returning null is the common case — every eagerly imported page.
+ * none. `PaperRouter` waits on this: a view transition snapshots the page as
+ * soon as the route has rendered, so flushing straight into a lazy route would
+ * slide its Suspense spinner in instead of the page. Returning null is the
+ * common case — every eagerly imported page.
  */
 function preloadRoute(path: string): Promise<unknown> | null {
   const route = path.split('?')[0].split('#')[0]
@@ -86,7 +78,7 @@ interface ErrorBoundaryState { error: Error | null }
 interface ErrorBoundaryProps {
   children: ReactNode
   // When provided, this is rendered instead of the full-page crash screen. Used
-  // for app-level portals (e.g. the collect modal) that live outside a route
+  // for app-level portals that live outside a route
   // boundary — a crash there would otherwise unmount the whole tree and leave a
   // blank screen. `null` degrades gracefully by simply removing the failed UI.
   fallback?: ReactNode
@@ -149,21 +141,6 @@ function NotFound() {
 function PageTracker() {
   usePageTracking()
   return null
-}
-
-// The collect modal is an app-level portal rendered outside every route's
-// ErrorBoundary, so an unhandled error inside it (or the data it loads) would
-// unmount the whole tree and leave a blank screen. Contain it in its own
-// boundary that degrades to nothing on error, and key the boundary to the
-// active concept so a failure on one card resets when the next card is opened
-// (rather than staying broken until a reload).
-function CollectModalBoundary() {
-  const conceptName = useCollect(s => s.ref?.name ?? null)
-  return (
-    <ErrorBoundary key={conceptName ?? '∅'} fallback={null}>
-      <CollectConceptModal />
-    </ErrorBoundary>
-  )
 }
 
 function GlobalKeyHandler() {
@@ -238,13 +215,12 @@ function CoworkRoute() {
 
 export default function App({ initialSession }: { initialSession: Session | null }) {
   return (
-    <BrowserRouter>
+    // Every change of page slides like paper on a desk rather than cutting —
+    // see components/PaperRouter.tsx and lib/viewTransition.ts.
+    <PaperRouter preload={preloadRoute}>
       <PageTracker />
       <GlobalKeyHandler />
       <SoundEffects />
-      {/* Tab switches morph the exam an exam card or pill stands for, rather
-          than cutting — see lib/viewTransition.ts. */}
-      <ViewTransitions preload={preloadRoute} />
       <AuthProvider initialSession={initialSession}>
         <FlashcardSync />
         <ExamProgressProvider>
@@ -309,7 +285,6 @@ export default function App({ initialSession }: { initialSession: Session | null
               </Routes>
             </Main>
             {TOUR_ENABLED && <OnboardingTour />}
-            <CollectModalBoundary />
             <MathFocus />
             <ImageFocus />
             {/* The app's one PDF reader. Root-level so a document opened from a
@@ -319,6 +294,6 @@ export default function App({ initialSession }: { initialSession: Session | null
           </div>
         </ExamProgressProvider>
       </AuthProvider>
-    </BrowserRouter>
+    </PaperRouter>
   )
 }

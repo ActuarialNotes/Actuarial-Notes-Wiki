@@ -30,7 +30,7 @@ function clampZoom(z: number) {
  *
  * The equations arrive as already-detached DOM nodes rather than as LaTeX
  * source, which is what lets this work anywhere KaTeX has rendered — the wiki,
- * a flashcard, the collect modal — without the caller knowing what it drew.
+ * a flashcard, a quiz question — without the caller knowing what it drew.
  */
 export function MathFocusOverlay({ equations, initialIndex, onClose }: Props) {
   // Paper: the same sheet-sliding cue every overlay in the app opens with.

@@ -5,9 +5,12 @@ import {
   viewTransitionsSupported,
   motionAllowed,
   startViewTransition,
-  isPlainLeftClick,
-  linkTargetPath,
-  shouldTransitionTo,
+  canTransition,
+  deskPlace,
+  paperMove,
+  isPageMove,
+  carriesExams,
+  EXAM_NAME_PROPERTY,
 } from './viewTransition'
 
 describe('examTransitionName', () => {
@@ -55,9 +58,14 @@ describe('examTransitionName', () => {
 })
 
 describe('examTransitionStyle', () => {
-  it('is the style object a surface spreads', () => {
-    expect(examTransitionStyle('P')).toEqual({ viewTransitionName: 'exam-card-P' })
-    expect(examTransitionStyle('CAS-6', '6C')).toEqual({ viewTransitionName: 'exam-card-CAS-6-6C' })
+  it('carries the name in a custom property, for index.css to promote on a tab switch', () => {
+    expect(EXAM_NAME_PROPERTY).toBe('--exam-card-name')
+    expect(examTransitionStyle('P')).toEqual({ '--exam-card-name': 'exam-card-P' })
+    expect(examTransitionStyle('CAS-6', '6C')).toEqual({ '--exam-card-name': 'exam-card-CAS-6-6C' })
+  })
+
+  it('never names the element outright — an exam with no partner must stay on its sheet', () => {
+    expect(examTransitionStyle('P')).not.toHaveProperty('viewTransitionName')
   })
 
   it('is undefined where there is no name', () => {
@@ -129,6 +137,50 @@ describe('startViewTransition', () => {
     expect(update).toHaveBeenCalledOnce()
   })
 
+  it('runs the fallback, not the update, when no transition can run', () => {
+    const update = vi.fn()
+    const fallback = vi.fn()
+    startViewTransition(update, { doc: {} as Document, win: allowsMotion, fallback })
+    expect(fallback).toHaveBeenCalledOnce()
+    expect(update).not.toHaveBeenCalled()
+  })
+
+  it('writes the move and the sheet inset to the root, and clears the move when it lands', async () => {
+    const dataset: Record<string, string> = {}
+    const props: Record<string, string> = {}
+    let finish!: () => void
+    const finished = new Promise<void>(resolve => { finish = resolve })
+    const doc = {
+      documentElement: { dataset, style: { setProperty: (k: string, v: string) => { props[k] = v } } },
+      startViewTransition: (cb: () => void) => { cb(); return { finished, ready: Promise.resolve() } },
+    } as unknown as Document
+    startViewTransition(() => {}, { doc, win: allowsMotion, paper: 'push', inset: 255.6 })
+    expect(dataset.paper).toBe('push')
+    expect(props['--paper-inset']).toBe('256px')
+    finish()
+    await finished
+    await Promise.resolve()
+    expect(dataset.paper).toBeUndefined()
+  })
+
+  it('leaves a newer transition\'s move in place when an older one lands', async () => {
+    const dataset: Record<string, string> = {}
+    const resolvers: (() => void)[] = []
+    const doc = {
+      documentElement: { dataset, style: { setProperty: () => {} } },
+      startViewTransition: (cb: () => void) => {
+        cb()
+        return { finished: new Promise<void>(r => resolvers.push(r)), ready: Promise.resolve() }
+      },
+    } as unknown as Document
+    startViewTransition(() => {}, { doc, win: allowsMotion, paper: 'next' })
+    startViewTransition(() => {}, { doc, win: allowsMotion, paper: 'turn' })
+    resolvers[0]()
+    await Promise.resolve()
+    await Promise.resolve()
+    expect(dataset.paper).toBe('turn')
+  })
+
   it('swallows a skipped transition rather than surfacing an unhandled rejection', () => {
     const update = vi.fn()
     expect(() => startViewTransition(update, {
@@ -143,45 +195,111 @@ describe('startViewTransition', () => {
   })
 })
 
-describe('isPlainLeftClick', () => {
-  it('takes a plain left click', () => {
-    expect(isPlainLeftClick({ button: 0 })).toBe(true)
-    expect(isPlainLeftClick({})).toBe(true)
-  })
-
-  it('leaves every other click to the browser', () => {
-    expect(isPlainLeftClick({ button: 1 })).toBe(false)
-    expect(isPlainLeftClick({ button: 0, metaKey: true })).toBe(false)
-    expect(isPlainLeftClick({ button: 0, ctrlKey: true })).toBe(false)
-    expect(isPlainLeftClick({ button: 0, shiftKey: true })).toBe(false)
-    expect(isPlainLeftClick({ button: 0, altKey: true })).toBe(false)
-    expect(isPlainLeftClick({ button: 0, defaultPrevented: true })).toBe(false)
+describe('canTransition', () => {
+  it('needs both the API and a reader who is fine with motion', () => {
+    const doc = { startViewTransition: () => {} } as unknown as Document
+    const win = (matches: boolean) => ({ matchMedia: () => ({ matches }) }) as unknown as Window
+    expect(canTransition({ doc, win: win(false) })).toBe(true)
+    expect(canTransition({ doc, win: win(true) })).toBe(false)
+    expect(canTransition({ doc: {} as Document, win: win(false) })).toBe(false)
   })
 })
 
-describe('linkTargetPath', () => {
-  const origin = 'https://example.com'
-
-  it('gives the router path of a same-origin link', () => {
-    expect(linkTargetPath('https://example.com/wiki', origin)).toBe('/wiki')
-    expect(linkTargetPath('/dashboard?tab=1', origin)).toBe('/dashboard?tab=1')
-    expect(linkTargetPath('/wiki#top', origin)).toBe('/wiki#top')
+describe('deskPlace', () => {
+  it('lays the tabs out left to right in the sidebar\'s order', () => {
+    const order = ['/dashboard', '/wiki', '/flashcards', '/'].map(p => deskPlace(p).tab)
+    expect([...order].sort((a, b) => a - b)).toEqual(order)
+    expect(new Set(order).size).toBe(order.length)
   })
 
-  it('declines anything that leaves this origin', () => {
-    expect(linkTargetPath('https://other.example/wiki', origin)).toBeNull()
-    expect(linkTargetPath('mailto:a@b.c', origin)).toBeNull()
+  it('puts a tab\'s deeper pages on the same tab, further down', () => {
+    expect(deskPlace('/wiki')).toEqual({ tab: deskPlace('/wiki').tab, depth: 0 })
+    expect(deskPlace('/wiki/exam/Exam%20P-1').tab).toBe(deskPlace('/wiki').tab)
+    expect(deskPlace('/wiki/exam/Exam%20P-1').depth).toBe(1)
+    expect(deskPlace('/wiki/concept/Bayes').depth).toBe(2)
+    expect(deskPlace('/wiki/resource/Werner').depth).toBe(2)
+    expect(deskPlace('/quiz').tab).toBe(deskPlace('/').tab)
+    expect(deskPlace('/quiz').depth).toBeGreaterThan(deskPlace('/').depth)
+    expect(deskPlace('/review').depth).toBeGreaterThan(deskPlace('/quiz').depth)
   })
 
-  it('declines a missing or unparseable href', () => {
-    expect(linkTargetPath(null, origin)).toBeNull()
-    expect(linkTargetPath('', origin)).toBeNull()
+  it('ignores the query, the hash and a trailing slash', () => {
+    expect(deskPlace('/wiki/?q=x#top')).toEqual(deskPlace('/wiki'))
+    expect(deskPlace('/quiz?exam=P')).toEqual(deskPlace('/quiz'))
+  })
+
+  it('keeps the quiz builder at `/` from swallowing every other path', () => {
+    expect(deskPlace('/settings').tab).not.toBe(deskPlace('/').tab)
+    expect(deskPlace('/nowhere').tab).not.toBe(deskPlace('/').tab)
+  })
+
+  it('reads Cowork as two tabs, with a source or deliverable a sheet over its shelf', () => {
+    expect(deskPlace('/cowork').tab).not.toBe(deskPlace('/cowork/deliverables').tab)
+    expect(deskPlace('/cowork/sources/osfi')).toEqual({ tab: deskPlace('/cowork').tab, depth: 1 })
+    expect(deskPlace('/cowork/deliverables/abc')).toEqual({ tab: deskPlace('/cowork/deliverables').tab, depth: 1 })
   })
 })
 
-describe('shouldTransitionTo', () => {
-  it('animates a move, not a re-click of the page you are on', () => {
-    expect(shouldTransitionTo('/', '/wiki')).toBe(true)
-    expect(shouldTransitionTo('/wiki', '/wiki')).toBe(false)
+describe('paperMove', () => {
+  it('slides the desk between tabs, toward the tab it is going to', () => {
+    expect(paperMove('/dashboard', '/', 'PUSH')).toBe('next')
+    expect(paperMove('/', '/wiki', 'PUSH')).toBe('prev')
+    expect(paperMove('/wiki/concept/Bayes', '/flashcards', 'PUSH')).toBe('next')
+  })
+
+  it('slides the same way on Back as a click would', () => {
+    expect(paperMove('/', '/dashboard', 'POP', -1)).toBe('prev')
+    expect(paperMove('/dashboard', '/', 'POP', 1)).toBe('next')
+  })
+
+  it('lays a sheet over for a link deeper into a tab, and swipes it off coming up', () => {
+    expect(paperMove('/wiki', '/wiki/exam/Exam%20P-1', 'PUSH')).toBe('push')
+    expect(paperMove('/', '/quiz?exam=P', 'PUSH')).toBe('push')
+    expect(paperMove('/quiz', '/review', 'PUSH')).toBe('push')
+    expect(paperMove('/review', '/', 'PUSH')).toBe('pop')
+    expect(paperMove('/wiki/concept/A', '/wiki/concept/B', 'PUSH')).toBe('push')
+  })
+
+  it('swipes the top sheet off on Back within a tab, and lays it back on Forward', () => {
+    expect(paperMove('/wiki/exam/Exam%20P-1', '/wiki', 'POP', -1)).toBe('pop')
+    expect(paperMove('/wiki/concept/A', '/wiki/concept/B', 'POP', -1)).toBe('pop')
+    expect(paperMove('/wiki', '/wiki/exam/Exam%20P-1', 'POP', 1)).toBe('push')
+  })
+
+  it('falls back on depth when the history cannot say which way it moved', () => {
+    expect(paperMove('/wiki/exam/Exam%20P-1', '/wiki', 'POP', null)).toBe('pop')
+    expect(paperMove('/wiki', '/wiki/exam/Exam%20P-1', 'POP')).toBe('push')
+  })
+
+  it('leaves the same page showing something else where it is', () => {
+    expect(paperMove('/search?q=a', '/search?q=ab', 'PUSH')).toBeNull()
+    expect(paperMove('/wiki', '/wiki#top', 'PUSH')).toBeNull()
+    expect(paperMove('/wiki', '/wiki/', 'PUSH')).toBeNull()
+  })
+
+  it('lands a redirect at once', () => {
+    expect(paperMove('/browse', '/search', 'REPLACE')).toBeNull()
+    expect(paperMove('/auth', '/dashboard', 'REPLACE')).toBeNull()
+  })
+})
+
+describe('isPageMove', () => {
+  it('tells a page move from a turn within a page', () => {
+    for (const move of ['next', 'prev', 'push', 'pop'] as const) expect(isPageMove(move)).toBe(true)
+    for (const move of ['turn', 'return'] as const) expect(isPageMove(move)).toBe(false)
+  })
+})
+
+describe('carriesExams', () => {
+  it('carries an exam between the three pages that draw them all', () => {
+    expect(carriesExams('/dashboard', '/')).toBe(true)
+    expect(carriesExams('/', '/wiki')).toBe(true)
+    expect(carriesExams('/wiki/', '/dashboard?tab=x')).toBe(true)
+  })
+
+  it('carries nothing where the far side has no exam to set it down on', () => {
+    expect(carriesExams('/wiki', '/flashcards')).toBe(false)
+    expect(carriesExams('/wiki', '/wiki/exam/Exam%20P-1')).toBe(false)
+    expect(carriesExams('/quiz', '/')).toBe(false)
   })
 })

@@ -81,17 +81,11 @@ interface AnswerInput {
   isCorrect: boolean
   isHard: boolean
   at: Date
-  // Whether the learner has "collected" this concept (passed its comprehension
-  // check). A brand-new concept must be collected before a correct answer can
-  // promote it to level1 — this is the gate that makes collection the first
-  // active-learning step. Defaults to true so untouched callers (and previously
-  // learned concepts) are unaffected.
-  collected?: boolean
 }
 
 export function applyAnswer(
   prev: ConceptMasteryRecord,
-  { isCorrect, isHard, at, collected = true }: AnswerInput,
+  { isCorrect, isHard, at }: AnswerInput,
 ): ConceptMasteryRecord {
   // Decay first so a stale Strong record doesn't skip the Forgotten checkpoint
   // when the user finally gets back to it.
@@ -118,7 +112,7 @@ export function applyAnswer(
     // Tracked as a statistic only — it no longer gates any promotion.
     next.hard_correct_count = decayed.hard_correct_count + (isHard ? 1 : 0)
     next.last_correct_at = atIso
-    next.state = nextStateOnCorrect(decayed.state, next.correct_count, alreadyAdvancedToday, collected)
+    next.state = nextStateOnCorrect(decayed.state, next.correct_count, alreadyAdvancedToday)
   } else {
     next.incorrect_streak = decayed.incorrect_streak + 1
     // Only forget a concept that was learned on a previous day. If last_correct_at
@@ -142,15 +136,11 @@ function nextStateOnCorrect(
   state: MasteryState,
   correctCount: number,
   alreadyAdvancedToday: boolean,
-  collected: boolean,
 ): MasteryState {
-  // A forgotten concept was learned on a prior day — it was already collected,
-  // so a correct answer always re-earns level1.
-  if (state === 'forgotten') return 'level1'
-  // A brand-new concept must be collected first. Until then a correct answer
-  // leaves it at 'new' (correct_count still accumulates), so the comprehension
-  // check is a hard prerequisite for reaching level1.
-  if (state === 'new') return collected ? 'level1' : 'new'
+  // A correct answer always earns level1 from new or forgotten. Reaching level1
+  // is also what collects a concept's flashcard (see
+  // docs/flashcard-collection.md) — the quiz store does that, not this module.
+  if (state === 'forgotten' || state === 'new') return 'level1'
   // Enforce one-level-per-day: if the concept was already answered correctly
   // today it already used its single daily advance.
   if (alreadyAdvancedToday) return state

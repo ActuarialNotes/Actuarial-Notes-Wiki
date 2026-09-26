@@ -496,193 +496,176 @@ def statistics() -> Fig:
     return f
 
 
-@figure("Sample Mean", "One sample's average, and how the average of n draws "
-        "concentrates as n grows", width=WID)
+@figure("Sample Mean", "A sample of eight draws scattered along the axis with their "
+        "average marked, over the distribution of the average narrowing around μ as n "
+        "grows from 1 to 10 to 50", width=WID)
 def sample_mean() -> Fig:
     f = vcard()
 
-    y = BY0 + 44
-    pts = [-1.7, -1.1, -0.5, -0.2, 0.3, 0.6, 1.2, 2.0]
-    sx = Axes(f, BX0 + 34, y - 18, BX1 - 24, y, -3, 3, 0, 1)
-    f.line(BX0 + 34, y, BX1 - 24, y, cls="axis")
-    for v in pts:
-        f.circle(sx.px(v), y, 4.2, fill=BLUE, fill_opacity="0.85")
-    mean = sum(pts) / len(pts)
-    f.arrow(sx.px(mean), y + 28, sx.px(mean), y + 7, colour=ROSE, width=1.7)
-    f.text(sx.px(mean), y + 42, "X̄", cls="sm bold", fill=ROSE)
-
-    ax = Axes(f, BX0 + 40, BY0 + 122, BX1 - 20, BY1 - 44, -3, 3, 0, 1.75)
-    ax.frame(xticks=[-2, 0, 2], xfmt=lambda t: "μ" if t == 0 else "", yticks=[])
+    ax = vaxes(f, -3, 3, 0, 3.35, left=20, right=20, top=26, bottom=62)
+    f.line(ax.x0, ax.y1, ax.x1, ax.y1, cls="axis")
     for n, colour, sd in ((1, "var(--dim)", 1.0), (10, BLUE, 0.32), (50, GREEN, 0.14)):
         ax.curve(lambda x, s=sd: _npdf(x, 0, s), colour=colour, width=2)
-    ax.label(-1.85, 0.36, "n = 1", cls="sm", fill="var(--dim)")
-    ax.label(-0.95, 1.05, "n = 10", cls="sm", fill=BLUE, anchor="end")
-    ax.label(0.72, 1.6, "n = 50", cls="sm", fill=GREEN, anchor="start")
+    ax.vline(0, colour="var(--dim)", y_top=3.2, label="μ", label_cls="sm bold")
+    ax.label(-1.75, 0.42, "n = 1", cls="sm")
+    ax.label(-0.72, 1.2, "n = 10", cls="sm", anchor="end")
+    ax.label(0.36, 2.55, "n = 50", cls="sm", anchor="start")
+
+    pts = [-1.8, -1.2, -0.7, -0.2, 0.4, 0.9, 1.5, 2.3]
+    mean = sum(pts) / len(pts)
+    y = ax.y1
+    for v in pts:
+        f.circle(ax.px(v), y + 14, 4.4, fill=BLUE, fill_opacity="0.85")
+    f.arrow(ax.px(mean), y + 48, ax.px(mean), y + 22, colour=ROSE, width=1.8)
+    f.text(ax.px(mean) + 8, y + 48, "X̄", cls="bold", anchor="start")
     return f
 
 
-@figure("Sample Variance", "Squared deviations from the sample mean, divided by "
-        "n − 1", width=WID)
+@figure("Sample Variance", "Five observations as stems from their mean of 10, each "
+        "stem the deviation that gets squared", width=WID)
 def sample_variance() -> Fig:
     f = vcard()
 
     data = [4, 6, 9, 11, 20]
-    ax = vaxes(f, 0, 6, 0, 22, left=44, top=40, bottom=48)
+    ax = vaxes(f, 0, 6, 0, 22, left=30, top=30, bottom=36)
     ax.frame(xticks=[], yticks=[0, 10, 20])
     ax.hline(10, colour=ROSE, dash=True)
-    ax.label(0.35, 10, "X̄ = 10", cls="sm", fill=ROSE, anchor="start", dy=-6)
+    ax.label(0.3, 10, "X̄", cls="sm bold", anchor="start", dy=-7)
     for i, v in enumerate(data):
         x = i + 1
         ax.polyline([(x, 10), (x, v)], colour=BLUE, width=1.6)
         ax.point(x, v, colour=BLUE, r=4)
         ax.label(x, (v + 10) / 2, f"{v - 10:+d}", cls="sm", dx=13, fill=BLUE)
-
-    f.text(BX0 + 24, BY1 - 10, "Σ(Xᵢ − X̄)² = 154", cls="sm", anchor="start")
-    f.text(BX1 - 24, BY1 - 10, "S² = 154 / 4 = 38.5", cls="sm bold", anchor="end")
     return f
 
 
-@figure("Sampling Distribution", "Repeated samples turning one statistic into a "
-        "distribution of its own", width=WID)
+@figure("Sampling Distribution", "Sample means from many repeated samples stacked into "
+        "a dot plot, with the normal curve they settle into drawn over them", width=WID)
 def sampling_distribution() -> Fig:
     f = vcard()
 
-    f.text(BX0 + 10, BY0 + 16, "samples", cls="sm dim", anchor="start")
-    seeds = [(0.28, BLUE), (-0.35, AMBER), (0.62, GREEN)]
-    for i, (m, colour) in enumerate(seeds):
-        y = BY0 + 34 + i * 30
-        sx = Axes(f, BX0 + 20, y - 10, BX0 + 190, y, -2.6, 2.6, 0, 1)
-        f.line(BX0 + 20, y, BX0 + 190, y, cls="rule")
-        u = _rng(17 + i * 7)
-        for _ in range(7):
-            v = m + (u() - 0.5) * 3
-            f.circle(sx.px(max(-2.5, min(2.5, v))), y - 4, 3, fill=colour,
-                     fill_opacity="0.8")
-        f.arrow(sx.px(m), y - 4, BX0 + 214, BY0 + 150, colour=colour, width=1.1,
-                dash=True)
-        f.text(BX0 + 198, y - 1, "X̄", cls="sm", fill=colour, anchor="start")
-
-    ax = Axes(f, BX0 + 44, BY0 + 186, BX1 - 20, BY1 - 44, -2.6, 2.6, 0, 0.46)
-    ax.frame(xticks=[0], xfmt=lambda t: "μ", yticks=[])
-    ax.area(lambda x: _npdf(x, 0, 0.9), -2.6, 2.6, colour=VIOLET, opacity="0.16")
-    ax.curve(lambda x: _npdf(x, 0, 0.9), colour=VIOLET, width=2.2)
-    f.text(BCX, BY0 + 178, "distribution of X̄ over samples", cls="sm dim")
+    n, width, r = 150, 0.3, 5.4
+    step = 2 * r + 0.6
+    ax = vaxes(f, -3, 3, 0, 1, left=20, right=20, top=26, bottom=44)
+    ax.ymax = (ax.y1 - ax.y0) / (n * width * step)   # one dot = one sample mean
+    ax.frame(xlabel="X̄", xticks=[0], xfmt=lambda t: "μ", yticks=[], arrows=False)
+    for k in range(-9, 10):
+        for j in range(round(n * width * _npdf(k * width))):
+            f.circle(ax.px(k * width), ax.y1 - r - 0.5 - j * step, r, fill=VIOLET,
+                     fill_opacity="0.7")
+    ax.curve(_npdf, colour=VIOLET, width=2.2)
     return f
 
 
-@figure("Sufficient Statistic", "A sample funnelled into one number that keeps every "
-        "piece of information about the parameter", width=WID)
+@figure("Sufficient Statistic", "Six claim counts funnelled into their total, the one "
+        "number the estimate of λ is built from", width=WID)
 def sufficient_statistic() -> Fig:
     f = vcard()
 
-    f.text(BCX, BY0 + 20, "X₁, X₂, …, Xₙ", cls="bold")
-    for i in range(6):
-        x = BX0 + 46 + i * 46
-        f.circle(x, BY0 + 52, 12, fill=BLUE, fill_opacity="0.16", stroke=BLUE,
-                 stroke_width="1.3")
-        f.text(x, BY0 + 56, "xᵢ", cls="sm")
-        f.arrow(x, BY0 + 66, BCX, BY0 + 104, colour=BLUE, width=1.1, dash=True)
-
-    f.chip(BCX, BY0 + 122, "T(X) = Σ Xᵢ", colour=ROSE, w=150, h=30, cls="bold")
-    f.arrow(BCX, BY0 + 140, BCX, BY0 + 168, colour="var(--dim)", width=1.4)
-    f.box(BX0 + 40, BY0 + 170, 240, 52, label="θ̂ built from T alone",
-          colour=GREEN, sub="loses nothing")
-
-    f.text(BCX, BY0 + 250, "the leftover detail carries no θ", cls="sm dim")
-    f.text(BCX, BY0 + 274, "Poisson: T = ΣXᵢ      Normal: T = (ΣXᵢ, ΣXᵢ²)",
-           cls="sm dim")
+    counts = [2, 0, 1, 3, 0, 1]
+    ty, ey = BY0 + 180, BY0 + 280
+    for i, c in enumerate(counts):
+        x = BX0 + 40 + i * 48
+        f.line(x, BY0 + 58, BCX, ty - 30, cls="", stroke=BLUE, stroke_width="1.1",
+               stroke_opacity="0.6")
+        f.circle(x, BY0 + 46, 15, fill=BLUE, fill_opacity="0.16", stroke=BLUE,
+                 stroke_width="1.4")
+        f.text(x, BY0 + 50.5, str(c), cls="bold")
+    f.circle(BCX, ty, 30, fill=ROSE, fill_opacity="0.16", stroke=ROSE,
+             stroke_width="1.8")
+    f.text(BCX, ty + 6, str(sum(counts)), cls="ttl")
+    f.text(BCX + 40, ty + 5, "T", cls="bold", anchor="start")
+    f.arrow(BCX, ty + 32, BCX, ey - 24, colour="var(--dim)", width=1.5)
+    f.circle(BCX, ey, 22, fill=GREEN, fill_opacity="0.16", stroke=GREEN,
+             stroke_width="1.6")
+    f.text(BCX, ey + 5, "λ̂", cls="ttl")
     return f
 
 
-@figure("Sufficiency", "The likelihood factorizing into a piece that sees θ and a "
-        "piece that does not", width=WID)
+@figure("Sufficiency", "Likelihood curves of two samples with the same total: one is "
+        "a constant multiple of the other, so both peak at the same estimate", width=WID)
 def sufficiency() -> Fig:
     f = vcard()
 
-    f.box(BX0 + 20, BY0 + 30, 300, 44, label="f(x₁, …, xₙ | θ)", colour=BLUE)
-    f.arrow(BX0 + 100, BY0 + 78, BX0 + 76, BY0 + 112, colour="var(--dim)", width=1.3)
-    f.arrow(BX0 + 240, BY0 + 78, BX0 + 264, BY0 + 112, colour="var(--dim)", width=1.3)
-
-    f.box(BX0 + 14, BY0 + 116, 146, 66, label="g(T(x), θ)", colour=ROSE,
-          sub="sees θ, only via T")
-    f.box(BX0 + 180, BY0 + 116, 146, 66, label="h(x)", colour="var(--dim)",
-          sub="free of θ")
-
-    f.text(BCX, BY0 + 214, "so once T is known,", cls="sm dim")
-    f.box(BX0 + 34, BY0 + 226, 252, 44, label="the rest of the data is noise",
-          colour=GREEN)
-    f.text(BCX, BY0 + 292, "Rao–Blackwell: conditioning on T", cls="sm dim")
-    f.text(BCX, BY0 + 310, "never raises the variance", cls="sm dim")
+    lik = lambda lam, h: h * math.exp(-6 * lam) * lam ** 7
+    a, b = 1 / 12, 1 / 4          # 1 / Π xᵢ! for (2,0,1,3,0,1) and (1,1,2,0,2,1)
+    hat = 7 / 6
+    ax = vaxes(f, 0, 3, 0, lik(hat, b) * 1.14, left=24, top=24, bottom=44)
+    ax.frame(xlabel="λ", xticks=[0, hat, 2, 3],
+             xfmt=lambda t: "λ̂" if abs(t - hat) < 1e-9 else f"{t:g}", yticks=[])
+    ax.area(lambda x: lik(x, b), 0, 3, colour=AMBER, opacity="0.1")
+    ax.curve(lambda x: lik(x, b), colour=AMBER, width=2.4)
+    ax.area(lambda x: lik(x, a), 0, 3, colour=BLUE, opacity="0.14")
+    ax.curve(lambda x: lik(x, a), colour=BLUE, width=2.4)
+    ax.vline(hat, colour="var(--dim)", y_top=lik(hat, a))
+    f.arrow(ax.px(hat), ax.py(lik(hat, a)) - 4, ax.px(hat), ax.py(lik(hat, b)) + 3,
+            colour=ROSE, width=1.8)
+    ax.label(hat, (lik(hat, a) + lik(hat, b)) / 2, "× 3", cls="sm bold", dx=8,
+             anchor="start", dy=4)
+    ax.label(2.05, lik(2.05, b), "sample B", cls="sm bold", anchor="start", dx=4, dy=-4)
+    ax.label(1.9, lik(1.9, a), "sample A", cls="sm bold", anchor="start", dx=4, dy=-4)
     return f
 
 
-@figure("Maximum Likelihood Estimation", "The log-likelihood curve peaking at the "
-        "maximum likelihood estimate", width=WID)
+@figure("Maximum Likelihood Estimation", "The log-likelihood of a Poisson rate given "
+        "20 claims in 80 exposure-years, peaking at the estimate 0.25", width=WID)
 def maximum_likelihood_estimation() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0.05, 0.55, -72, -48, left=46, top=36, bottom=46)
-    ax.frame(xlabel="λ", xticks=[0.1, 0.2, 0.3, 0.4, 0.5],
-             xfmt=lambda t: f"{t:g}", yticks=[], ylabel="ℓ(λ)")
+    ax = vaxes(f, 0.05, 0.55, -72, -48, left=30, top=30, bottom=46)
+    ax.frame(xlabel="λ", xticks=[0.1, 0.25, 0.4], xfmt=lambda t: f"{t:g}", yticks=[],
+             ylabel="ℓ(λ)")
     ll = lambda lam: -80 * lam + 20 * math.log(lam) - 4
     ax.curve(ll, colour=BLUE, width=2.4)
     hat = 0.25
     ax.vline(hat, colour=ROSE, y_top=ll(hat))
     ax.point(hat, ll(hat), colour=ROSE, r=4.4)
-    ax.label(hat, ll(hat), "λ̂ = 0.25", cls="sm bold", fill=ROSE, dy=-10, dx=30)
-    ax.label(0.52, ll(0.52) - 2.4, "ℓ(λ)", cls="sm", fill=BLUE, anchor="end")
-    f.text(BCX, BY0 + 22, "20 claims from 80 exposure-years", cls="sm dim")
+    ax.label(hat, ll(hat), "λ̂", cls="bold", dy=-12)
     return f
 
 
-@figure("Method of Moments", "Sample moments set equal to the model's moments and "
-        "solved", width=WID)
+@figure("Method of Moments", "A histogram of claim sizes with a gamma curve fitted by "
+        "matching moments, both sharing the mean of 500", width=WID)
 def method_of_moments() -> Fig:
     f = vcard()
 
-    f.box(BX0 + 12, BY0 + 24, 138, 56, label="X̄ = 500", colour=BLUE, sub="sample")
-    f.box(BX0 + 190, BY0 + 24, 138, 56, label="αθ", colour=AMBER, sub="model")
-    f.text(BCX, BY0 + 56, "=", cls="ttl")
-
-    f.box(BX0 + 12, BY0 + 96, 138, 56, label="s² = 125,000", colour=BLUE,
-          sub="sample")
-    f.box(BX0 + 190, BY0 + 96, 138, 56, label="αθ²", colour=AMBER, sub="model")
-    f.text(BCX, BY0 + 128, "=", cls="ttl")
-
-    f.arrow(BCX, BY0 + 160, BCX, BY0 + 190, colour="var(--dim)", width=1.4)
-    f.box(BX0 + 44, BY0 + 194, 232, 48, label="θ = 250,  α = 2", colour=GREEN,
-          label_cls="bold")
-    f.text(BCX, BY0 + 268, "two unknowns, two equations", cls="sm dim")
-    f.text(BCX, BY0 + 292, "simple, consistent — but not efficient", cls="sm dim")
+    u = _rng(22)
+    sizes = [-250 * (math.log(1 - u() * 0.999) + math.log(1 - u() * 0.999))
+             for _ in range(200)]
+    shares = [(b + 50, sum(b <= s < b + 100 for s in sizes) / len(sizes) / 100)
+              for b in range(0, 1800, 100)]
+    top = max(v for _, v in shares)
+    ax = vaxes(f, 0, 1800, 0, top * 1.12, left=20, right=20, top=26, bottom=44)
+    ax.frame(xlabel="claim size", xticks=[0, 500, 1000, 1500],
+             xfmt=lambda t: "X̄" if t == 500 else f"{t:,.0f}", yticks=[])
+    ax.bars(shares, colour=BLUE, bw=ax.px(88) - ax.px(0), opacity="0.45")
+    ax.curve(lambda x: _gammapdf(x, 2, 250), colour=AMBER, width=2.6)
+    ax.vline(500, colour=ROSE, y_top=top * 1.02)
+    ax.label(500, top * 1.02, "αθ", cls="bold", dy=-6)
     return f
 
 
-@figure("Fisher Information", "A sharply peaked likelihood beside a flat one, and the "
-        "bound the curvature sets", width=WID)
+@figure("Fisher Information", "A sharply curved log-likelihood with high information "
+        "beside a flat one with low information, both peaking at the estimate", width=WID)
 def fisher_information() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -3, 3, -5.2, 0.4, left=44, top=38, bottom=52)
+    ax = vaxes(f, -3, 3, -5.2, 0.4, left=30, top=30, bottom=20)
     ax.frame(xlabel="θ", xticks=[0], xfmt=lambda t: "θ̂", yticks=[], ylabel="ℓ(θ)")
     ax.curve(lambda x: -1.4 * x * x, colour=BLUE, width=2.4, xa=-1.9, xb=1.9)
     ax.curve(lambda x: -0.28 * x * x, colour=AMBER, width=2.4)
-    ax.label(1.25, -3.4, "high I(θ)", cls="sm", fill=BLUE, anchor="start")
-    ax.label(2.55, -1.5, "low I(θ)", cls="sm", fill=AMBER, anchor="end")
+    ax.label(1.25, -3.4, "high I(θ)", cls="sm bold", anchor="start")
+    ax.label(2.55, -1.5, "low I(θ)", cls="sm bold", anchor="end")
     ax.point(0, 0, colour=ROSE, r=4)
-
-    f.text(BX0 + 16, BY1 - 26, "sharp peak → small SE", cls="sm", anchor="start",
-           fill=BLUE)
-    f.text(BX0 + 16, BY1 - 10, "flat peak → wide SE", cls="sm", anchor="start",
-           fill=AMBER)
     return f
 
 
 @figure("Unbiasedness", "Two estimators' sampling distributions, one centred on the "
-        "parameter and one not", width=WID)
+        "parameter θ and one shifted off it by the bias", width=WID)
 def unbiasedness() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -4, 4, 0, 0.46, left=40, top=54, bottom=48)
+    ax = vaxes(f, -4, 4, 0, 0.46, left=20, right=20, top=30, bottom=44)
     ax.frame(xticks=[0], xfmt=lambda t: "θ", yticks=[])
     ax.area(lambda x: _npdf(x, 0, 1.0), -4, 4, colour=GREEN, opacity="0.14")
     ax.curve(lambda x: _npdf(x, 0, 1.0), colour=GREEN, width=2.4)
@@ -691,17 +674,17 @@ def unbiasedness() -> Fig:
     ax.vline(1.8, colour=ROSE, y_top=0.42)
     ax.label(-0.15, 0.44, "unbiased", cls="sm", fill=GREEN, anchor="end")
     ax.label(1.95, 0.44, "biased", cls="sm", fill=ROSE, anchor="start")
-    f.text(BCX, BY0 + 30, "distribution of θ̂ over repeated samples", cls="sm dim")
     brace(f, ax.px(0), ax.px(1.8), ax.py(0.06), depth=7, colour=ROSE, label="bias",
           label_cls="sm")
     return f
 
 
-@figure("Bias", "Bias and variance as the two parts of mean square error", width=WID)
+@figure("Bias", "An estimator's sampling distribution centred at E[θ̂], off the true θ "
+        "by the bias, with its spread marked", width=WID)
 def bias() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -3.4, 4.6, 0, 0.62, left=40, top=44, bottom=76)
+    ax = vaxes(f, -3.4, 4.6, 0, 0.62, left=20, right=20, top=30, bottom=48)
     ax.frame(xticks=[0], xfmt=lambda t: "θ", yticks=[])
     ax.curve(lambda x: _npdf(x, 1.5, 0.75), colour=ROSE, width=2.4)
     ax.area(lambda x: _npdf(x, 1.5, 0.75), -3.4, 4.6, colour=ROSE, opacity="0.12")
@@ -712,20 +695,15 @@ def bias() -> Fig:
           label_cls="sm")
     brace(f, ax.px(0.75), ax.px(2.25), ax.py(0.30), depth=8, colour=AMBER,
           label="spread", below=False, label_cls="sm")
-
-    f.text(BX0 + 20, BY1 - 26, "biased but tight can beat", cls="sm dim",
-           anchor="start")
-    f.text(BX0 + 20, BY1 - 10, "unbiased but wide — on MSE", cls="sm dim",
-           anchor="start")
     return f
 
 
-@figure("Consistency", "The sampling distribution collapsing onto the parameter as "
-        "the sample grows", width=WID)
+@figure("Consistency", "The sampling distribution collapsing onto the parameter θ as "
+        "the sample grows from 25 to 1,600", width=WID)
 def consistency() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -3, 3, 0, 3.1, left=40, top=44, bottom=48)
+    ax = vaxes(f, -3, 3, 0, 3.4, left=20, right=20, top=26, bottom=44)
     ax.frame(xticks=[0], xfmt=lambda t: "θ", yticks=[])
     for n, sd, colour in ((25, 1.0, "var(--dim)"), (100, 0.5, BLUE),
                           (400, 0.25, GREEN), (1600, 0.125, ROSE)):
@@ -734,112 +712,104 @@ def consistency() -> Fig:
     ax.label(-0.95, 0.72, "n = 100", cls="sm", fill=BLUE, anchor="end")
     ax.label(0.62, 1.5, "n = 400", cls="sm", fill=GREEN, anchor="start")
     ax.label(0.62, 2.9, "n = 1600", cls="sm", fill=ROSE, anchor="start")
-    f.text(BCX, BY0 + 30, "spread → 0, centre → θ", cls="sm dim")
     return f
 
 
-@figure("Efficiency", "Two unbiased estimators with different variances against the "
-        "Cramér–Rao bound", width=WID)
+@figure("Efficiency", "Two unbiased estimators centred on θ: the efficient one tight, "
+        "the other wider", width=WID)
 def efficiency() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -4, 4, 0, 0.86, left=40, top=52, bottom=52)
+    ax = vaxes(f, -4, 4, 0, 0.86, left=20, right=20, top=26, bottom=44)
     ax.frame(xticks=[0], xfmt=lambda t: "θ", yticks=[])
     ax.area(lambda x: _npdf(x, 0, 0.5), -4, 4, colour=GREEN, opacity="0.14")
     ax.curve(lambda x: _npdf(x, 0, 0.5), colour=GREEN, width=2.4)
     ax.curve(lambda x: _npdf(x, 0, 1.2), colour=AMBER, width=2.2)
-    ax.label(0.62, 0.80, "efficient", cls="sm", fill=GREEN, anchor="start")
-    ax.label(2.1, 0.20, "unbiased, but", cls="sm", fill=AMBER, anchor="start")
-    ax.label(2.1, 0.11, "wider", cls="sm", fill=AMBER, anchor="start")
-    f.text(BCX, BY0 + 28, "both centred on θ — only the spread differs",
-           cls="sm dim")
-    f.text(BCX, BY1 - 14, "no unbiased estimator beats 1 / (n I(θ))", cls="sm dim")
+    ax.label(0.62, 0.74, "efficient", cls="sm bold", anchor="start")
+    ax.label(2.0, 0.18, "inefficient", cls="sm bold", anchor="start")
     return f
 
 
-@figure("Minimum Variance", "Variances of competing unbiased estimators, with the "
-        "smallest marked", width=WID)
+@figure("Minimum Variance", "Variances of four competing unbiased estimators, with the "
+        "sample mean's the smallest", width=WID)
 def minimum_variance() -> Fig:
     f = vcard()
 
     ests = [("X̄", 1.00, GREEN), ("median", 1.57, BLUE), ("midrange", 2.30, AMBER),
             ("X₁", 4.00, ROSE)]
-    ax = vaxes(f, -0.7, 3.7, 0, 4.9, left=52, top=52, bottom=48)
-    ax.frame(xticks=[], yticks=[0, 2, 4], ylabel="n · Var(θ̂) / σ²")
-    ax.bars([(i, v) for i, (_, v, _) in enumerate(ests)], colour=BLUE, bw=42,
-            opacity="0.35")
+    ax = vaxes(f, -0.7, 3.7, 0, 4.6, left=30, top=30, bottom=36)
+    ax.frame(xticks=[], yticks=[0, 2, 4], ylabel="Var(θ̂)")
     for i, (name, v, colour) in enumerate(ests):
-        ax.bars([(i, v)], colour=colour, bw=42, opacity="0.7")
+        ax.bars([(i, v)], colour=colour, bw=46, opacity="0.7")
         ax.label(i, 0, name, cls="sm", dy=18)
         ax.label(i, v, f"{v:.2f}", cls="sm", dy=-8)
-    ax.hline(1.0, colour=GREEN, dash=True, label="", x_to=3.6)
+    ax.hline(1.0, colour=GREEN, dash=True, x_to=3.6)
     return f
 
 
-@figure("Mean Square Error", "Mean square error split into variance and squared "
-        "bias for three estimators", width=WID)
+@figure("Mean Square Error", "Three estimators' mean square errors as stacked bars of "
+        "variance plus squared bias", width=WID)
 def mean_square_error() -> Fig:
     f = vcard()
 
     rows = [("A", 100, 0), ("B", 50, 16), ("C", 20, 64)]
-    ax = vaxes(f, -0.7, 2.7, 0, 105, left=48, top=46, bottom=54)
+    ax = vaxes(f, -0.7, 2.7, 0, 105, left=36, top=30, bottom=36)
     ax.frame(xticks=[], yticks=[0, 50, 100], ylabel="MSE")
     for i, (name, var, b2) in enumerate(rows):
-        ax.bars([(i, var)], colour=BLUE, bw=56, opacity="0.7")
+        ax.bars([(i, var)], colour=BLUE, bw=64, opacity="0.7")
         yb, yt = ax.py(var), ax.py(var + b2)
-        f.rect(ax.px(i) - 28, yt, 56, yb - yt, rx=1.5, fill=ROSE, fill_opacity="0.7")
+        f.rect(ax.px(i) - 32, yt, 64, yb - yt, rx=1.5, fill=ROSE, fill_opacity="0.7")
         ax.label(i, 0, name, cls="sm", dy=18)
         ax.label(i, var + b2, f"{var + b2}", cls="sm bold", dy=-8)
-    f.legend(BX1 - 96, BY0 + 26, [(BLUE, "variance"), (ROSE, "bias²")], gap=15)
+    ax.label(0, 50, "Var", cls="sm bold", dy=4)
+    ax.label(2, 52, "bias²", cls="sm bold", dy=4)
     return f
 
 
-@figure("Hypothesis Testing", "The null distribution with its rejection region and "
-        "the observed statistic", width=WID)
+@figure("Hypothesis Testing", "The null distribution of Z with its rejection region "
+        "beyond 1.645 and an observed statistic of 2.50 falling in it", width=WID)
 def hypothesis_testing() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -3.6, 3.6, 0, 0.46, left=36, top=52, bottom=50)
-    ax.frame(xlabel="Z", xticks=[-2, 0, 1.645, 3],
+    ax = vaxes(f, -3.6, 3.6, 0, 0.46, left=20, right=20, top=30, bottom=44)
+    ax.frame(xlabel="Z", xticks=[0, 1.645],
              xfmt=lambda t: {1.645: "1.645", 0.0: "0"}.get(round(t, 3), ""),
              yticks=[])
     ax.area(lambda x: _npdf(x), -3.6, 1.645, colour=BLUE, opacity="0.12")
     ax.area(lambda x: _npdf(x), 1.645, 3.6, colour=ROSE, opacity="0.5")
     ax.curve(lambda x: _npdf(x), colour=BLUE, width=2.4)
     ax.vline(1.645, colour=ROSE, y_top=0.42)
-    ax.label(-0.9, 0.20, "do not reject", cls="sm", fill=BLUE)
-    ax.label(2.35, 0.10, "reject", cls="sm bold", fill=ROSE, dy=-16)
+    ax.label(-0.9, 0.20, "do not reject", cls="sm")
+    ax.label(2.35, 0.10, "reject", cls="sm bold", dy=-16)
     ax.point(2.5, 0.014, colour=AMBER, r=4.4)
-    ax.label(2.5, 0.014, "z = 2.50", cls="sm bold", fill=AMBER, dy=-10, dx=8,
-             anchor="start")
-    f.text(BCX, BY0 + 30, "distribution of Z when H₀ is true", cls="sm dim")
+    ax.label(2.5, 0.014, "2.50", cls="sm bold", dy=-10, dx=8, anchor="start")
     return f
 
 
-@figure("Type I Error", "The α tail of the null distribution — rejecting a true "
-        "null", width=WID)
+@figure("Type I Error", "The α tail of the null distribution beyond the critical "
+        "value — rejecting a null that is true", width=WID)
 def type_i_error() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -3.6, 3.6, 0, 0.46, left=36, top=64, bottom=56)
+    ax = vaxes(f, -3.6, 3.6, 0, 0.46, left=20, right=20, top=30, bottom=44)
     ax.frame(xticks=[0, 1.645], xfmt=lambda t: "μ₀" if t == 0 else "critical value",
              yticks=[])
     ax.curve(lambda x: _npdf(x), colour=BLUE, width=2.4)
     ax.area(lambda x: _npdf(x), 1.645, 3.6, colour=ROSE, opacity="0.55")
     ax.vline(1.645, colour=ROSE, y_top=0.42)
     f.arrow(ax.px(2.9), ax.py(0.20), ax.px(2.1), ax.py(0.045), colour=ROSE, width=1.5)
-    ax.label(2.9, 0.22, "α = 0.05", cls="sm bold", fill=ROSE)
-    f.text(BCX, BY0 + 34, "everything drawn under H₀", cls="sm dim")
-    f.text(BCX, BY1 - 20, "a false alarm: the claim was fine", cls="sm dim")
+    ax.label(2.9, 0.22, "α", cls="bold")
+    ax.label(-1.6, 0.34, "H₀", cls="sm bold")
     return f
 
 
-@figure("Type II Error", "The β region under the alternative — missing a false "
-        "null", width=WID)
+@figure("Type II Error", "The null and alternative distributions either side of the "
+        "critical value, with the β region of the alternative that fails to reject",
+        width=WID)
 def type_ii_error() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -3.4, 6.4, 0, 0.46, left=36, top=64, bottom=56)
+    ax = vaxes(f, -3.4, 6.4, 0, 0.46, left=20, right=20, top=30, bottom=44)
     ax.frame(xticks=[0, 1.645, 3], xfmt=lambda t: {0.0: "μ₀", 3.0: "μ₁"}.get(t, ""),
              yticks=[])
     ax.curve(lambda x: _npdf(x), colour="var(--dim)", width=1.8)
@@ -851,7 +821,6 @@ def type_ii_error() -> Fig:
     ax.label(2.2, 0.04, "α", cls="bold", fill=ROSE)
     ax.label(-1.5, 0.36, "H₀", cls="sm", fill="var(--dim)")
     ax.label(4.3, 0.36, "H₁", cls="sm", fill=BLUE)
-    f.text(BCX, BY1 - 20, "shift the line and α, β trade off", cls="sm dim")
     return f
 
 

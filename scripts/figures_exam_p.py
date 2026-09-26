@@ -1125,8 +1125,9 @@ def _payment_axes(f: Fig, reference=True):
     return a
 
 
-@figure("Deductible", "Insurer payment against loss under an ordinary and a franchise "
-        "deductible", width=WID)
+@figure("Deductible", "Payment against loss: nothing below the deductible d, then an "
+        "ordinary deductible's line one d below the diagonal and a franchise deductible's "
+        "line jumping up onto it", width=WID)
 def deductible() -> Fig:
     f = vcard()
 
@@ -1139,50 +1140,50 @@ def deductible() -> Fig:
     f.circle(a.px(d), a.py(0), 3.2, fill="var(--surf)", stroke=AMBER, stroke_width="1.4")
     a.frame(xlabel="loss X", ylabel="payment Y", xticks=[d], xfmt=lambda t: "d")
     a.vline(d, y_top=d, colour="var(--dim)")
-    a.label(1.4, 0.9, "pays 0", cls="sm dim")
-    a.label(9.4, 6.2, "ordinary", cls="sm bold", anchor="end", fill=BLUE)
-    a.label(7.4, 8.6, "franchise", cls="sm bold", anchor="end", fill=AMBER)
+    a.label(9.4, 6.2, "ordinary", cls="sm bold", anchor="end")
+    a.label(7.4, 8.6, "franchise", cls="sm bold", anchor="end")
     return f
 
 
-@figure("Benefit Limit", "Insurer payment capped at the benefit limit u", width=WID)
+@figure("Benefit Limit", "Payment against loss rising with the loss up to the limit u "
+        "and flat after it, the wedge above u that the insured keeps shaded", width=WID)
 def benefit_limit() -> Fig:
     f = vcard()
 
     u = 6.0
     a = _payment_axes(f)
+    f.polygon([a.p(u, u), a.p(10, 10), a.p(10, u)], fill=ROSE, fill_opacity="0.24",
+              stroke="none")
     a.polyline([(0, 0), (u, u)], colour=BLUE, width=2.4)
     a.polyline([(u, u), (10, u)], colour=BLUE, width=2.4)
-    f.polygon([a.p(u, u), a.p(10, 10), a.p(10, u)], fill=ROSE, fill_opacity="0.2",
-              stroke="none")
-    a.label(9.6, 7.0, "the insured", cls="sm", anchor="end", fill=ROSE)
-    a.label(9.6, 6.3, "keeps this", cls="sm", anchor="end", fill=ROSE)
+    a.label(8.7, 6.8, "retained", cls="sm bold")
     a.frame(xlabel="loss X", ylabel="payment Y", xticks=[u], xfmt=lambda t: "u",
             yticks=[u], yfmt=lambda t: "u")
-    a.hline(u, colour="var(--dim)")
+    a.vline(u, y_top=u, colour="var(--dim)")
     return f
 
 
-@figure("Coinsurance Percentage", "Coinsurance flattening the payment line by the factor "
-        "alpha", width=WID)
+@figure("Coinsurance Percentage", "Payment against loss past a deductible, the full "
+        "line dashed and the coinsured line below it flattened by the factor alpha, the "
+        "gap between them shaded", width=WID)
 def coinsurance() -> Fig:
     f = vcard()
 
-    d, alpha = 2.0, 0.8
+    d, alpha = 2.0, 0.75
     a = _payment_axes(f, reference=False)
-    a.polyline([(0, 0), (d, 0), (10, alpha * (10 - d))], colour=BLUE, width=2.4)
-    a.polyline([(0, 0), (d, 0), (10, 10 - d)], colour="var(--dim)", width=1.4, dash=True)
     f.polygon([a.p(d, 0), a.p(10, 10 - d), a.p(10, alpha * (10 - d))], fill=AMBER,
-              fill_opacity="0.24", stroke="none")
-    a.label(9.9, 8.5, "α = 1", cls="sm dim", anchor="end")
-    a.label(9.9, 5.2, "α = 0.8", cls="sm bold", anchor="end", fill=BLUE)
-    a.label(7.6, 5.05, "1 − α", cls="sm", fill=AMBER)
+              fill_opacity="0.3", stroke="none")
+    a.polyline([(0, 0), (d, 0), (10, 10 - d)], colour="var(--dim)", width=1.4, dash=True)
+    a.polyline([(0, 0), (d, 0), (10, alpha * (10 - d))], colour=BLUE, width=2.4)
+    a.label(9.2, 6.0, "1 − α", cls="sm bold")
+    a.label(8.4, alpha * (8.4 - d), "× α", cls="sm bold", dx=4, dy=18)
     a.frame(xlabel="loss X", ylabel="payment Y", xticks=[d], xfmt=lambda t: "d")
     return f
 
 
-@figure("Policy Information", "Deductible, coinsurance and limit applied in order to a "
-        "ground-up loss", width=WID)
+@figure("Policy Information", "Payment against loss with the deductible, coinsurance "
+        "and limit applied in turn: zero up to d, a line of slope alpha, then flat at u",
+        width=WID)
 def policy_information() -> Fig:
     f = vcard()
 
@@ -1194,68 +1195,64 @@ def policy_information() -> Fig:
             xfmt=lambda t: "d" if t < 3 else "d + u/α", yticks=[u], yfmt=lambda t: "u")
     a.hline(u, colour="var(--dim)")
     a.vline(d, y_top=u, colour="var(--dim)")
-    a.label(0.9, 0.9, "0", cls="sm dim")
-    a.label(4.3, 1.6, "slope α", cls="sm")
-    a.label(8.4, u - 1.1, "capped", cls="sm dim")
+    a.vline(cap_x, y_top=u, colour="var(--dim)")
+    a.label(4.9, 1.7, "slope α", cls="sm bold", anchor="start")
     return f
 
 
-@figure("Loss Random Variable", "The ground-up loss distribution and the part of it the "
-        "insurer sees", width=WID)
+@figure("Loss Random Variable", "A right-skewed loss density split at the deductible d, "
+        "the part below it grey and the part the insurer pays shaded", width=WID)
 def loss_random_variable() -> Fig:
     f = vcard()
 
     d = 1.6
     dens = lambda t: _lognorm(t, 0.6, 0.62)
-    a = vaxes(f, 0, 8, 0, 0.42, top=40)
-    a.area(dens, 0.02, d, colour="var(--dim)", opacity="0.2")
-    a.area(dens, d, 8, colour=BLUE, opacity="0.22")
+    a = vaxes(f, 0, 8, 0, 0.5, top=24)
+    a.area(dens, 0.02, d, colour="var(--dim)", opacity="0.25")
+    a.area(dens, d, 8, colour=BLUE, opacity="0.24")
     a.curve(dens, colour=BLUE, xa=0.02)
-    a.frame(xlabel="x", ylabel="f_X(x)", xticks=[d], xfmt=lambda t: "d")
+    a.frame(xlabel="x", ylabel="f(x)", xticks=[d], xfmt=lambda t: "d")
     a.vline(d, y_top=dens(d), colour=AMBER)
-    a.label(4.6, 0.16, "insurer pays X − d", cls="sm")
+    a.label(2.6, 0.08, "X − d", cls="sm bold")
     return f
 
 
-@figure("Payment Random Variable", "The mixed distribution of the insurer's payment",
-        width=WID)
+@figure("Payment Random Variable", "The insurer's payment as a mixed distribution: a "
+        "spike of probability at zero, a density between zero and the limit u, and a "
+        "second spike at u", width=WID)
 def payment_random_variable() -> Fig:
     f = vcard()
 
-    a = vaxes(f, -1.1, 8, 0, 0.42, top=48)
+    a = vaxes(f, -1.1, 8, 0, 0.4, top=24)
     dens = lambda t: _lognorm(t + 1.6, 0.6, 0.62) * 0.8
     a.area(lambda t: dens(t) if 0.05 <= t <= 5 else 0.0, 0.05, 5, colour=BLUE,
            opacity="0.22")
     a.curve(dens, colour=BLUE, xa=0.05, xb=5)
-    a.frame(xlabel="y", ylabel="density", xticks=[0, 5],
+    a.frame(xlabel="y", ylabel="f(y)", xticks=[0, 5],
             xfmt=lambda t: "0" if t == 0 else "u")
-    for x, height, colour, lab in ((0, 0.34, AMBER, "P(X ≤ d)"),
-                                   (5, 0.16, ROSE, "P(X ≥ d + u/α)")):
+    for x, height, colour in ((0, 0.34, AMBER), (5, 0.16, ROSE)):
         f.line(a.px(x), a.y1, a.px(x), a.py(height), cls="", stroke=colour,
-               stroke_width="3.4", stroke_linecap="round")
-        f.circle(a.px(x), a.py(height), 4.5, fill=colour)
-        f.text(a.px(x) + (0 if x == 0 else -6), a.py(height) - 11, lab, cls="sm bold",
-               fill=colour, anchor="middle" if x == 0 else "end")
+               stroke_width="3.6", stroke_linecap="round")
+        f.circle(a.px(x), a.py(height), 5, fill=colour)
     return f
 
 
-@figure("Inflation", "Inflation shifting the loss distribution and leveraging the "
-        "deductible", width=WID)
+@figure("Inflation", "A loss density and the same density stretched by inflation, the "
+        "inflated one's area past a fixed deductible d shaded", width=WID)
 def inflation() -> Fig:
     f = vcard()
 
     d, r = 2.0, 0.25
     base = lambda t: _lognorm(t, 0.75, 0.55)
     infl = lambda t: base(t / (1 + r)) / (1 + r)
-    a = vaxes(f, 0, 9, 0, 0.42, top=44)
+    a = vaxes(f, 0, 9, 0, 0.42, top=24)
     a.curve(base, colour="var(--dim)", xa=0.02)
-    a.area(infl, d, 9, colour=BLUE, opacity="0.18")
+    a.area(infl, d, 9, colour=BLUE, opacity="0.2")
     a.curve(infl, colour=BLUE, xa=0.02)
-    a.frame(xlabel="loss", ylabel="density", xticks=[d], xfmt=lambda t: "d")
-    a.vline(d, colour=AMBER, y_top=0.40)
-    a.label(2.05, 0.415, "X", cls="sm bold", anchor="end", dx=-6)
-    a.label(3.5, 0.335, "X′", cls="sm bold", fill=BLUE)
-    a.label(5.8, 0.14, "more mass clears d", cls="sm dim")
+    a.frame(xlabel="loss", ylabel="f(x)", xticks=[d], xfmt=lambda t: "d")
+    a.vline(d, colour=AMBER, y_top=0.41)
+    a.label(1.2, 0.405, "X", cls="sm bold")
+    a.label(3.4, 0.335, "X′", cls="sm bold", anchor="start")
     return f
 
 
@@ -1306,12 +1303,13 @@ def _joint_table(f, x0, y0, cell=58, row_h=36, highlight=None, show_margins=True
                    f"{sum(JOINT[i][j] for i in range(3)):.2f}", cls="sm bold")
 
 
-@figure("Multivariate Distribution", "A joint distribution with its marginals shown on "
-        "the axes", width=WID)
+@figure("Multivariate Distribution", "Contours of a tilted joint density in the x–y "
+        "plane, with the marginal density of X drawn under the x-axis and that of Y beside "
+        "the y-axis", width=WID)
 def multivariate_distribution() -> Fig:
     f = vcard()
 
-    bx0, by0, side = 128, 122, 186
+    bx0, by0, side = 128, 104, 192
     bx1, by1 = bx0 + side, by0 + side
     ccx, ccy = bx0 + side / 2, by0 + side / 2
     f.rect(bx0, by0, side, side, rx=4, fill="var(--soft)", stroke="var(--edge)",
@@ -1325,97 +1323,139 @@ def multivariate_distribution() -> Fig:
     f.text(bx1 + 16, by1 + 4, "x", cls="sm dim", anchor="start")
     f.text(bx0 - 6, by0 - 16, "y", cls="sm dim", anchor="end")
 
-    fx = [(bx0 + side * i / 60, by1 + 52 - 100 * _npdf(-3 + 6 * i / 60))
+    fx = [(bx0 + side * i / 60, by1 + 56 - 104 * _npdf(-3 + 6 * i / 60))
           for i in range(61)]
-    f.poly(fx, cls="curve", stroke=AMBER, stroke_width="1.8")
-    f.text(bx1 + 6, by1 + 46, "f_X", cls="sm bold", fill=AMBER, anchor="start")
-    fy = [(bx0 - 46 + 92 * _npdf(-3 + 6 * i / 60), by1 - side * i / 60)
+    f.poly(fx, cls="curve", stroke=AMBER, stroke_width="2")
+    f.text(bx1 + 6, by1 + 50, "f_X", cls="sm bold", anchor="start")
+    fy = [(bx0 - 48 + 96 * _npdf(-3 + 6 * i / 60), by1 - side * i / 60)
           for i in range(61)]
-    f.poly(fy, cls="curve", stroke=GREEN, stroke_width="1.8")
-    f.text(bx0 - 40, by0 - 6, "f_Y", cls="sm bold", fill=GREEN)
-    f.text(BCX, 386, "each marginal integrates the other variable out", cls="sm dim")
+    f.poly(fy, cls="curve", stroke=GREEN, stroke_width="2")
+    f.text(bx0 - 42, by0 - 8, "f_Y", cls="sm bold")
     return f
 
 
-@figure("Joint Probability Function", "A joint probability mass function laid out as a "
-        "table", width=WID)
+def _p_joint_grid(f: Fig, x0, y1, cell, scale=0.46, style=None):
+    """The shared joint PMF drawn as a 3×3 lattice of discs, area ∝ p(x, y).
+
+    x runs across and y runs up from the corner (x0, y1). `style(i, j)` gives
+    the (colour, opacity) of the disc at x = i, y = j. Returns each disc's
+    centre and radius, keyed (i, j).
+    """
+    pmax = max(max(row) for row in JOINT)
+    top, right = y1 - 3 * cell, x0 + 3 * cell
+    for k in range(3):
+        c, r = x0 + (k + 0.5) * cell, y1 - (k + 0.5) * cell
+        f.line(c, top, c, y1, cls="grid")
+        f.line(x0, r, right, r, cls="grid")
+        f.line(c, y1, c, y1 + 4, cls="tick")
+        f.text(c, y1 + 16, str(k), cls="sm dim")
+        f.line(x0 - 4, r, x0, r, cls="tick")
+        f.text(x0 - 8, r + 4, str(k), cls="sm dim", anchor="end")
+    f.arrow(x0, y1, right + 12, y1, colour="var(--axis)", width=1.1)
+    f.arrow(x0, y1, x0, top - 12, colour="var(--axis)", width=1.1)
+    f.text(right + 16, y1 + 4, "x", cls="sm dim", anchor="start")
+    f.text(x0 - 6, top - 16, "y", cls="sm dim", anchor="end")
+    out = {}
+    for i in range(3):
+        for j in range(3):
+            cx, cy = x0 + (i + 0.5) * cell, y1 - (j + 0.5) * cell
+            rad = scale * cell * math.sqrt(JOINT[i][j] / pmax)
+            colour, op = style(i, j) if style else (BLUE, "0.5")
+            f.circle(cx, cy, rad, fill=colour, fill_opacity=op, stroke=colour,
+                     stroke_width="1.3")
+            out[i, j] = (cx, cy, rad)
+    return out
+
+
+@figure("Joint Probability Function", "A three-by-three lattice of points (x, y), each "
+        "carrying a disc whose area is the probability of that pair", width=WID)
 def joint_probability_function() -> Fig:
     f = vcard()
 
-    _joint_table(f, 78, 140, cell=68, row_h=48, show_margins=False)
-    f.text(BCX, 332, "every entry ≥ 0, and the table sums to 1", cls="sm dim")
+    _p_joint_grid(f, 72, 346, 84)
     return f
 
 
-@figure("Marginal Probability Function", "Marginals as the row and column sums of a joint "
-        "table", width=WID)
+@figure("Marginal Probability Function", "The joint probabilities as discs on a "
+        "three-by-three lattice, with each column's total drawn as a bar above it and "
+        "each row's total as a bar beside it", width=WID)
 def marginal_probability_function() -> Fig:
     f = vcard()
 
-    x0, y0, cell, row_h = 64, 126, 62, 42
-    _joint_table(f, x0, y0, cell=cell, row_h=row_h)
-    f.arrow(x0 + 3 * cell - 10, y0 + 21, x0 + 3 * cell + 2, y0 + 21, colour=AMBER,
-            width=1.5)
-    f.arrow(x0 + cell / 2, y0 + 3 * row_h - 8, x0 + cell / 2, y0 + 3 * row_h + 2,
-            colour=GREEN, width=1.5)
-    f.text(BCX, 352, "both margins sum to 1 — a fast check", cls="sm dim")
+    x0, y1, cell = 62, 362, 66
+    _p_joint_grid(f, x0, y1, cell)
+    top, right = y1 - 3 * cell, x0 + 3 * cell
+    for k in range(3):
+        px = sum(JOINT[k])
+        py = sum(JOINT[i][k] for i in range(3))
+        c, r = x0 + (k + 0.5) * cell, y1 - (k + 0.5) * cell
+        hgt = 130 * px
+        f.rect(c - 14, top - 18 - hgt, 28, hgt, rx=3, fill=AMBER, fill_opacity="0.7")
+        wid = 130 * py
+        f.rect(right + 24, r - 14, wid, 28, rx=3, fill=GREEN, fill_opacity="0.7")
+    f.line(x0, top - 18, right, top - 18, cls="axis")
+    f.line(right + 24, top, right + 24, y1, cls="axis")
+    f.text(x0 - 8, top - 50, "pₓ", cls="sm bold", anchor="end")
+    f.text(right + 24, top - 6, "p_Y", cls="sm bold", anchor="start")
     return f
 
 
-@figure("Conditional Probability Function", "One row of a joint table renormalised into a "
-        "conditional distribution", width=WID)
+@figure("Conditional Probability Function", "The joint probabilities as discs on a "
+        "lattice with every column but x = 1 faded, and each disc in that column ringed "
+        "at its renormalised size", width=WID)
 def conditional_probability_function() -> Fig:
     f = vcard()
 
-    x0, cell = 78, 68
-    _joint_table(f, x0, 110, cell=cell, row_h=44, highlight=lambda i, j: i == 1,
-                 show_margins=False)
-    f.text(BCX, 264, "the row X = 1 sums to 0.40", cls="sm dim")
-    f.arrow(BCX, 274, BCX, 296, colour=VIOLET, width=1.6)
-    f.text(BCX + 12, 290, "÷ 0.40", cls="sm", fill=VIOLET, anchor="start")
-
+    x0, y1, cell, scale = 72, 346, 84, 0.3
     row = JOINT[1]
     total = sum(row)
-    for j, v in enumerate(row):
-        cx = x0 + j * cell
-        f.rect(cx, 306, cell, 40, rx=3, fill=VIOLET, fill_opacity="0.18", stroke=VIOLET,
-               stroke_width="1.2")
-        f.text(cx + cell / 2, 331, f"{v / total:.2f}", cls="sm bold")
-    f.text(BCX, 368, "0.15 + 0.50 + 0.35 = 1.00", cls="sm dim")
+    discs = _p_joint_grid(
+        f, x0, y1, cell, scale=scale,
+        style=lambda i, j: (VIOLET, "0.55") if i == 1 else ("var(--dim)", "0.18"))
+    for j in range(3):
+        cx, cy, rad = discs[1, j]
+        f.circle(cx, cy, rad / math.sqrt(total), fill="none", stroke=VIOLET,
+                 stroke_width="1.6", stroke_dasharray="4 3")
+        f.text(cx, cy + 4, f"{row[j] / total:.2f}", cls="sm bold")
+    f.text(x0 + 1.5 * cell, y1 - 3 * cell - 8, f"÷ {total:.2f}", cls="sm bold")
     return f
 
 
-@figure("Joint Cumulative Distribution Function", "The joint CDF as the probability mass "
-        "in the lower-left quadrant", width=WID)
+@figure("Joint Cumulative Distribution Function", "Contours of a joint density with the "
+        "quadrant below and to the left of the point (x, y) shaded", width=WID)
 def joint_cdf() -> Fig:
     f = vcard()
 
-    px0, py0, side = 88, 106, 216
+    px0, py0, side = 78, 92, 240
     f.rect(px0, py0, side, side, rx=4, fill="var(--soft)", stroke="var(--edge)",
            stroke_width="1")
-    xq, yq = px0 + side * 0.62, py0 + side * 0.42
-    f.rect(px0, yq, xq - px0, py0 + side - yq, fill=BLUE, fill_opacity="0.22")
-    f.line(xq, py0, xq, py0 + side, cls="thin dash", stroke=BLUE, stroke_width="1.3")
-    f.line(px0, yq, px0 + side, yq, cls="thin dash", stroke=BLUE, stroke_width="1.3")
+    ccx, ccy = px0 + side * 0.5, py0 + side * 0.5
+    for k in (1, 1.8, 2.6):
+        f.raw(f'<ellipse cx="{ccx}" cy="{ccy}" rx="{34 * k:.0f}" ry="{22 * k:.0f}" '
+              f'transform="rotate(-30 {ccx} {ccy})" fill="none" stroke="var(--axis)" '
+              f'stroke-width="1"/>')
+    xq, yq = px0 + side * 0.62, py0 + side * 0.4
+    f.rect(px0, yq, xq - px0, py0 + side - yq, fill=BLUE, fill_opacity="0.3")
+    f.line(xq, py0, xq, py0 + side, cls="thin dash", stroke=BLUE, stroke_width="1.4")
+    f.line(px0, yq, px0 + side, yq, cls="thin dash", stroke=BLUE, stroke_width="1.4")
+    f.circle(xq, yq, 4.5, fill=BLUE)
     f.arrow(px0, py0 + side, px0 + side + 16, py0 + side, colour="var(--axis)", width=1.1)
     f.arrow(px0, py0 + side, px0, py0 - 12, colour="var(--axis)", width=1.1)
-    f.text(xq, py0 + side + 20, "x", cls="sm dim")
+    f.text(xq, py0 + side + 18, "x", cls="sm dim")
     f.text(px0 - 10, yq + 4, "y", cls="sm dim", anchor="end")
-    f.text(px0 + (xq - px0) / 2, yq + (py0 + side - yq) / 2 + 5, "F(x, y)",
-           cls="bold", fill=BLUE)
-    f.text(BCX, 366, "F(∞, ∞) = 1,  F(−∞, y) = 0", cls="sm dim")
+    f.text(px0 + 44, py0 + side - 16, "F(x, y)", cls="bold")
     return f
 
 
-@figure("Joint Probability Density Function", "Setting up the limits of a double integral "
-        "over a triangular support", width=WID)
+@figure("Joint Probability Density Function", "The triangular support above the line "
+        "y = x in the unit square, with an arrow at a fixed x running from the line up "
+        "to y = 1", width=WID)
 def joint_pdf() -> Fig:
     f = vcard()
 
-    px0, py1, side = 92, 320, 200
-    py0 = py1 - side
-    px1 = px0 + side
-    f.polygon([(px0, py1), (px1, py0), (px0, py0)], fill=BLUE, fill_opacity="0.2",
+    px0, py1, side = 84, 340, 228
+    py0, px1 = py1 - side, px0 + side
+    f.polygon([(px0, py1), (px1, py0), (px0, py0)], fill=BLUE, fill_opacity="0.22",
               stroke=BLUE, stroke_width="1.4")
     f.arrow(px0, py1, px1 + 20, py1, colour="var(--axis)", width=1.1)
     f.arrow(px0, py1, px0, py0 - 18, colour="var(--axis)", width=1.1)
@@ -1424,22 +1464,35 @@ def joint_pdf() -> Fig:
     for v, lab in ((0, "0"), (1, "1")):
         f.text(px0 + v * side, py1 + 18, lab, cls="sm dim")
         f.text(px0 - 8, py1 - v * side + 4, lab, cls="sm dim", anchor="end")
-    xs = px0 + side * 0.42
-    f.arrow(xs, py1 - 3, xs, py0 + side * 0.58, colour=AMBER, width=1.8)
-    f.text(xs + 10, (py1 + py0 + side * 0.58) / 2, "y runs x → 1", cls="sm", fill=AMBER,
-           anchor="start")
-    f.text(xs, py1 + 34, "fix x", cls="sm dim")
-    f.text(px1 - 26, py0 + 18, "y = x", cls="sm", fill=BLUE, anchor="end")
+    # Fix x, and y runs from the line y = x up to the top of the square.
+    xv = 0.4
+    xs, yd = px0 + side * xv, py1 - side * xv
+    f.line(xs, py1, xs, yd, cls="thin dash", stroke="var(--dim)", stroke_width="1.2")
+    f.line(xs, py1 - 4, xs, py1 + 4, cls="tick")
+    f.text(xs, py1 + 18, "x", cls="sm bold")
+    f.arrow(xs, yd - 2, xs, py0 + 4, colour=AMBER, width=2.2)
+    f.circle(xs, yd, 3.6, fill=AMBER)
+    f.text(px1 - 30, py0 + 70, "y = x", cls="sm bold", anchor="start")
     return f
 
 
-@figure("Moments for Joint Distributions", "E[XY] built cell by cell from a joint table",
-        width=WID)
+@figure("Moments for Joint Distributions", "The joint probabilities as discs on a "
+        "three-by-three lattice, with their balance point — the pair of means — marked "
+        "by a crosshair", width=WID)
 def moments_for_joint() -> Fig:
     f = vcard()
 
-    _joint_table(f, 78, 140, cell=68, row_h=48, show_margins=False)
-    f.text(BCX, 332, "each cell contributes g(x, y) · p(x, y)", cls="sm dim")
+    x0, y1, cell = 72, 346, 84
+    _p_joint_grid(f, x0, y1, cell, scale=0.36)
+    ex = sum(i * sum(JOINT[i]) for i in range(3))
+    ey = sum(j * JOINT[i][j] for i in range(3) for j in range(3))
+    cx, cy = x0 + (ex + 0.5) * cell, y1 - (ey + 0.5) * cell
+    f.line(cx, y1, cx, cy, cls="thin dash", stroke=AMBER, stroke_width="1.4")
+    f.line(x0, cy, cx, cy, cls="thin dash", stroke=AMBER, stroke_width="1.4")
+    f.circle(cx, cy, 9, fill="none", stroke=AMBER, stroke_width="2")
+    f.line(cx - 14, cy, cx + 14, cy, cls="", stroke=AMBER, stroke_width="2")
+    f.line(cx, cy - 14, cx, cy + 14, cls="", stroke=AMBER, stroke_width="2")
+    f.text(cx + 12, cy - 16, "(E[X], E[Y])", cls="sm bold", anchor="start")
     return f
 
 

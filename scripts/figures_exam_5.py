@@ -194,6 +194,35 @@ def _triangle(f: Fig, rows, x0=32, y0=126, cw=52, ch=27, ages=None, labels=None,
     return at
 
 
+def _fill_triangle(f: Fig, rows, x0, y0, cw, ch, scale, colour=BLUE, ncols=5,
+                   ring=None, ring_colour=ROSE):
+    """A development triangle drawn as cells that fill up as losses develop.
+
+    Each known cell holds a bar whose height is its value over `scale`, so a
+    row reads as a cohort climbing towards its ultimate. The cells still to
+    come are left as dashed outlines. Returns a (row, col) → (cx, cy) map.
+    """
+    at = {}
+    for i in range(len(rows)):
+        for j in range(ncols):
+            cx, cy = x0 + cw * (j + 0.5), y0 + ch * (i + 0.5)
+            at[(i, j)] = (cx, cy)
+            x, y, w, h = cx - cw / 2 + 2, cy - ch / 2 + 2, cw - 4, ch - 4
+            if j >= len(rows[i]):
+                f.rect(x, y, w, h, rx=3, fill="none", stroke="var(--edge)",
+                       stroke_width="1", stroke_dasharray="3 3")
+                continue
+            f.rect(x, y, w, h, rx=3, fill="var(--soft)", stroke="var(--edge)",
+                   stroke_width="1")
+            fh = (h - 6) * rows[i][j] / scale
+            f.rect(x + 5, y + h - 3 - fh, w - 10, fh, rx=2, fill=colour,
+                   fill_opacity="0.75")
+            if ring and ring(i, j):
+                f.rect(x, y, w, h, rx=3, fill="none", stroke=ring_colour,
+                       stroke_width="1.8")
+    return at
+
+
 def _policy_bars(f: Fig, y0, spans, x0=48, x1=318, t0=0.0, t1=3.0, gap=22,
                  colour=BLUE, height=11, labels=None):
     """Policy terms drawn as bars on a shared calendar-time axis.
@@ -1852,16 +1881,19 @@ def short_tail_insurance() -> Fig:
 # B. Estimating claim liabilities — triangles and development factors
 # ═══════════════════════════════════════════════════════════════════════════
 
-@figure("Development Triangle", "The running reported-loss triangle, accident years "
-        "down and ages across, with the latest diagonal shaded", width=WID)
+@figure("Development Triangle", "The running reported-loss triangle as a grid of cells, "
+        "accident years down and ages across, each cell filled to its reported losses, "
+        "the latest diagonal outlined and the cells still to come left empty", width=WID)
 def development_triangle() -> Fig:
     f = vcard()
 
-    at = _triangle(f, TRI, x0=26, y0=128, cw=54, ch=44,
-                   shade=lambda i, j: i + j == 4, shade_colour=ROSE)
-    f.text(66 + 54 * 2.5, 98, "age in months", cls="sm dim")
-    cx, cy = at[(4, 0)]
-    f.text(cx + 34, cy + 4, "latest diagonal", cls="sm bold", anchor="start")
+    x0, y0, cw, ch = 64, 108, 52, 54
+    _fill_triangle(f, TRI, x0, y0, cw, ch, scale=U_CL, ring=lambda i, j: i + j == 4)
+    for j, age in enumerate(AGES):
+        f.text(x0 + cw * (j + 0.5), y0 - 10, age, cls="sm dim")
+    for i, ay in enumerate(AYS):
+        f.text(x0 - 8, y0 + ch * (i + 0.5) + 4, ay, cls="sm dim", anchor="end")
+    f.text(x0 + cw * 2.5, y0 - 28, "age in months", cls="sm dim")
     return f
 
 
@@ -1912,21 +1944,27 @@ def incurred_losses() -> Fig:
     return f
 
 
-@figure("Claim Count Triangle", "The running claim-count triangle, with AY 2024's 700 "
-        "claims developed to 1,000 ultimate claims", width=WID)
+@figure("Claim Count Triangle", "The running claim-count triangle as cells filled to "
+        "each reported count, with AY 2024's 700 claims carried across by 1.429 to "
+        "1,000 ultimate claims", width=WID)
 def claim_count_triangle() -> Fig:
     f = vcard()
 
-    at = _triangle(f, CNT, x0=16, y0=128, cw=46, ch=44)
-    f.text(56 + 46 * 2.5, 98, "age in months", cls="sm dim")
-    cx, cy = 56 + 46 * 5.5, 128 + 44 * 4.5
-    f.text(cx, 120, "ult", cls="sm dim")
-    f.rect(cx - 21.5, cy - 20.5, 43, 41, rx=3, fill=GREEN, fill_opacity="0.18",
-           stroke=GREEN, stroke_width="1.4")
-    f.text(cx, cy + 4, "1,000", cls="sm bold")
-    x_start = at[(4, 0)][0] + 18
-    f.arrow(x_start, cy, cx - 25, cy, colour=GREEN, width=1.6, dash=True)
-    f.text((x_start + cx - 25) / 2, cy - 8, "× 1.429", cls="sm bold")
+    x0, y0, cw, ch = 56, 108, 44, 54
+    ult = 1000
+    at = _fill_triangle(f, CNT, x0, y0, cw, ch, scale=ult, colour=TEAL)
+    for j, age in enumerate(AGES + ["ult"]):
+        f.text(x0 + cw * (j + 0.5), y0 - 10, age, cls="sm dim")
+    for i, ay in enumerate(AYS):
+        f.text(x0 - 8, y0 + ch * (i + 0.5) + 4, ay, cls="sm dim", anchor="end")
+    cx, cy = x0 + cw * 5.5, y0 + ch * 4.5
+    f.rect(cx - cw / 2 + 2, cy - ch / 2 + 2, cw - 4, ch - 4, rx=3, fill=GREEN,
+           fill_opacity="0.75", stroke=GREEN, stroke_width="1.4")
+    f.text(cx, cy + ch / 2 + 16, "1,000", cls="sm bold")
+    x_start = at[(4, 0)][0] + cw / 2 - 2
+    f.arrow(x_start, cy, cx - cw / 2 - 2, cy, colour=GREEN, width=1.6, dash=True)
+    f.text((x_start + cx - cw / 2) / 2, cy - 8, "× 1.429", cls="sm bold")
+    f.text(at[(4, 0)][0], cy + ch / 2 + 16, "700", cls="sm bold")
     return f
 
 
@@ -2831,29 +2869,35 @@ def reserve_communication() -> Fig:
     return f
 
 
-@figure("Stakeholder Reporting", "The same estimate, drawn as one fixed core, reported "
-        "at four depths: in full in the actuarial report, then shorter to management, "
-        "to the board and regulator and to investors", width=WID)
+@figure("Stakeholder Reporting", "One reserve estimate at the centre, fanning out to "
+        "the actuarial report, management, the regulator and investors in beams that "
+        "narrow as each audience gets less detail", width=WID)
 def stakeholder_reporting() -> Fig:
     f = vcard()
 
-    x0, core = 90, 40
-    rows = [("actuarial report", 234, VIOLET, document),
-            ("management", 190, BLUE, person),
-            ("board & regulator", 146, TEAL, building),
-            ("investors", 102, AMBER, None)]
-    f.text(x0 + core / 2, 88, "estimate", cls="sm dim")
-    for i, (name, w, colour, icon) in enumerate(rows):
-        y = 118 + i * 72
+    cx, cy, r = BCX, BCY + 4, 36
+    targets = [(76, 128, 46, "report", VIOLET, document),
+               (284, 128, 30, "management", BLUE, person),
+               (76, 322, 18, "regulator", TEAL, building),
+               (284, 322, 8, "investors", AMBER, None)]
+    for tx, ty, w, name, colour, icon in targets:
+        dx, dy = tx - cx, ty - cy
+        d = math.hypot(dx, dy)
+        ux, uy = dx / d, dy / d
+        nx, ny = -uy, ux
+        sx, sy = cx + ux * (r - 4), cy + uy * (r - 4)
+        ex, ey = tx - ux * 34, ty - uy * 34
+        f.polygon([(sx + nx * 3, sy + ny * 3), (ex + nx * w / 2, ey + ny * w / 2),
+                   (ex - nx * w / 2, ey - ny * w / 2), (sx - nx * 3, sy - ny * 3)],
+                  fill=colour, fill_opacity="0.3", stroke="none")
         if icon:
-            icon(f, 50, y, 40, colour)
+            icon(f, tx, ty, 44, colour)
         else:
-            coins(f, 50, y + 18, 4, 13, colour)
-        f.rect(x0, y - 17, w, 34, rx=5, fill=colour, fill_opacity="0.16",
-               stroke=colour, stroke_width="1.2")
-        f.rect(x0, y - 17, core, 34, rx=5, fill=GREEN, fill_opacity="0.6",
-               stroke=GREEN, stroke_width="1.2")
-        f.text(x0 + core + 8, y + 4, name, cls="sm", anchor="start")
+            coins(f, tx, ty + 20, 4, 15, colour)
+        f.text(tx, ty + 42, name, cls="sm bold")
+    f.circle(cx, cy, r, fill=GREEN, fill_opacity="0.25", stroke=GREEN,
+             stroke_width="1.6")
+    f.text(cx, cy + 5, "2,250", cls="bold")
     return f
 
 

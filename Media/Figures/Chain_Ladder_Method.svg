@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The latest diagonal of the triangle multiplied by each year's cumulative development factor</title>
+  <title>Each accident year's latest diagonal cell carried out to an ultimate column, AY 2024's 1,500 multiplied by 1.900 to 2,850</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,31 +42,49 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
+  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <text x="180" y="108" text-anchor="middle" class="sm dim">reported to date × CDF = ultimate ($000)</text>
-    <text x="56" y="146" text-anchor="start" class="sm dim">2020</text>
-    <text x="150" y="146" text-anchor="end" class="sm">1,882</text>
-    <text x="216" y="146" text-anchor="end" class="sm dim">× 1.010</text>
-    <text x="304" y="146" text-anchor="end" class="sm" fill="var(--ink)">1,901</text>
-    <text x="56" y="180" text-anchor="start" class="sm dim">2021</text>
-    <text x="150" y="180" text-anchor="end" class="sm">2,029</text>
-    <text x="216" y="180" text-anchor="end" class="sm dim">× 1.030</text>
-    <text x="304" y="180" text-anchor="end" class="sm" fill="var(--ink)">2,090</text>
-    <text x="56" y="214" text-anchor="start" class="sm dim">2022</text>
-    <text x="150" y="214" text-anchor="end" class="sm">2,088</text>
-    <text x="216" y="214" text-anchor="end" class="sm dim">× 1.092</text>
-    <text x="304" y="214" text-anchor="end" class="sm" fill="var(--ink)">2,280</text>
-    <text x="56" y="248" text-anchor="start" class="sm dim">2023</text>
-    <text x="150" y="248" text-anchor="end" class="sm">2,025</text>
-    <text x="216" y="248" text-anchor="end" class="sm dim">× 1.267</text>
-    <text x="304" y="248" text-anchor="end" class="sm" fill="var(--ink)">2,566</text>
-    <text x="56" y="282" text-anchor="start" class="sm bold">2024</text>
-    <text x="150" y="282" text-anchor="end" class="sm">1,500</text>
-    <text x="216" y="282" text-anchor="end" class="sm dim">× 1.900</text>
-    <text x="304" y="282" text-anchor="end" class="sm bold" fill="#059669">2,850</text>
-    <text x="180" y="320" text-anchor="middle" class="sm dim">every dollar of the diagonal is scaled by the</text>
-    <text x="180" y="338" text-anchor="middle" class="sm dim">full factor — so a distorted diagonal is</text>
-    <text x="180" y="356" text-anchor="middle" class="sm dim">multiplied, not merely added to</text>
+    <text x="76" y="118" text-anchor="middle" class="sm dim">12</text>
+    <text x="116" y="118" text-anchor="middle" class="sm dim">24</text>
+    <text x="156" y="118" text-anchor="middle" class="sm dim">36</text>
+    <text x="196" y="118" text-anchor="middle" class="sm dim">48</text>
+    <text x="236" y="118" text-anchor="middle" class="sm dim">60</text>
+    <text x="302" y="118" text-anchor="middle" class="sm dim">ult</text>
+    <text x="48" y="154" text-anchor="end" class="sm dim">2020</text>
+    <rect x="57.5" y="129.5" width="37" height="41" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="97.5" y="129.5" width="37" height="41" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="137.5" y="129.5" width="37" height="41" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="177.5" y="129.5" width="37" height="41" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="217.5" y="129.5" width="37" height="41" rx="3" fill="#3b82f6" fill-opacity="0.3" stroke="#3b82f6" stroke-width="1"/>
+    <rect x="283.5" y="129.5" width="37" height="41" rx="3" fill="#059669" fill-opacity="0.3" stroke="#059669" stroke-width="1"/>
+    <line x1="258" y1="150" x2="280" y2="150" class="thin dash" stroke="#059669" stroke-width="1.4" marker-end="url(#ah059669)"/>
+    <text x="48" y="198" text-anchor="end" class="sm dim">2021</text>
+    <rect x="57.5" y="173.5" width="37" height="41" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="97.5" y="173.5" width="37" height="41" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="137.5" y="173.5" width="37" height="41" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="177.5" y="173.5" width="37" height="41" rx="3" fill="#3b82f6" fill-opacity="0.3" stroke="#3b82f6" stroke-width="1"/>
+    <rect x="283.5" y="173.5" width="37" height="41" rx="3" fill="#059669" fill-opacity="0.3" stroke="#059669" stroke-width="1"/>
+    <line x1="218" y1="194" x2="280" y2="194" class="thin dash" stroke="#059669" stroke-width="1.4" marker-end="url(#ah059669)"/>
+    <text x="48" y="242" text-anchor="end" class="sm dim">2022</text>
+    <rect x="57.5" y="217.5" width="37" height="41" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="97.5" y="217.5" width="37" height="41" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="137.5" y="217.5" width="37" height="41" rx="3" fill="#3b82f6" fill-opacity="0.3" stroke="#3b82f6" stroke-width="1"/>
+    <rect x="283.5" y="217.5" width="37" height="41" rx="3" fill="#059669" fill-opacity="0.3" stroke="#059669" stroke-width="1"/>
+    <line x1="178" y1="238" x2="280" y2="238" class="thin dash" stroke="#059669" stroke-width="1.4" marker-end="url(#ah059669)"/>
+    <text x="48" y="286" text-anchor="end" class="sm dim">2023</text>
+    <rect x="57.5" y="261.5" width="37" height="41" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="97.5" y="261.5" width="37" height="41" rx="3" fill="#3b82f6" fill-opacity="0.3" stroke="#3b82f6" stroke-width="1"/>
+    <rect x="283.5" y="261.5" width="37" height="41" rx="3" fill="#059669" fill-opacity="0.3" stroke="#059669" stroke-width="1"/>
+    <line x1="138" y1="282" x2="280" y2="282" class="thin dash" stroke="#059669" stroke-width="1.4" marker-end="url(#ah059669)"/>
+    <text x="48" y="330" text-anchor="end" class="sm dim">2024</text>
+    <rect x="57.5" y="305.5" width="37" height="41" rx="3" fill="#3b82f6" fill-opacity="0.3" stroke="#3b82f6" stroke-width="1"/>
+    <rect x="283.5" y="305.5" width="37" height="41" rx="3" fill="#059669" fill-opacity="0.3" stroke="#059669" stroke-width="1"/>
+    <line x1="98" y1="326" x2="280" y2="326" class="thin dash" stroke="#059669" stroke-width="1.4" marker-end="url(#ah059669)"/>
+    <text x="76" y="330" text-anchor="middle" class="sm bold">1,500</text>
+    <text x="302" y="330" text-anchor="middle" class="sm bold">2,850</text>
+    <text x="189" y="318" text-anchor="middle" class="sm bold">× 1.900</text>
   </g>
 </svg>

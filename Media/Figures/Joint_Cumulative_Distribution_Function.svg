@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The joint CDF as the probability mass in the lower-left quadrant</title>
+  <title>Contours of a joint density with the quadrant below and to the left of the point (x, y) shaded</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,15 +47,18 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="88" y="106" width="216" height="216" rx="4" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
-    <rect x="88" y="196.72" width="133.92" height="125.28" fill="#3b82f6" fill-opacity="0.22"/>
-    <line x1="221.92" y1="106" x2="221.92" y2="322" class="thin dash" stroke="#3b82f6" stroke-width="1.3"/>
-    <line x1="88" y1="196.72" x2="304" y2="196.72" class="thin dash" stroke="#3b82f6" stroke-width="1.3"/>
-    <line x1="88" y1="322" x2="320" y2="322" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="88" y1="322" x2="88" y2="94" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <text x="221.92" y="342" text-anchor="middle" class="sm dim">x</text>
-    <text x="78" y="200.72" text-anchor="end" class="sm dim">y</text>
-    <text x="154.96" y="264.36" text-anchor="middle" class="bold" fill="#3b82f6">F(x, y)</text>
-    <text x="180" y="366" text-anchor="middle" class="sm dim">F(∞, ∞) = 1,  F(−∞, y) = 0</text>
+    <rect x="78" y="92" width="240" height="240" rx="4" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <ellipse cx="198.0" cy="212.0" rx="34" ry="22" transform="rotate(-30 198.0 212.0)" fill="none" stroke="var(--axis)" stroke-width="1"/>
+    <ellipse cx="198.0" cy="212.0" rx="61" ry="40" transform="rotate(-30 198.0 212.0)" fill="none" stroke="var(--axis)" stroke-width="1"/>
+    <ellipse cx="198.0" cy="212.0" rx="88" ry="57" transform="rotate(-30 198.0 212.0)" fill="none" stroke="var(--axis)" stroke-width="1"/>
+    <rect x="78" y="188" width="148.8" height="144" fill="#3b82f6" fill-opacity="0.3"/>
+    <line x1="226.8" y1="92" x2="226.8" y2="332" class="thin dash" stroke="#3b82f6" stroke-width="1.4"/>
+    <line x1="78" y1="188" x2="318" y2="188" class="thin dash" stroke="#3b82f6" stroke-width="1.4"/>
+    <circle cx="226.8" cy="188" r="4.5" fill="#3b82f6"/>
+    <line x1="78" y1="332" x2="334" y2="332" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="78" y1="332" x2="78" y2="80" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <text x="226.8" y="350" text-anchor="middle" class="sm dim">x</text>
+    <text x="68" y="192" text-anchor="end" class="sm dim">y</text>
+    <text x="122" y="316" text-anchor="middle" class="bold">F(x, y)</text>
   </g>
 </svg>

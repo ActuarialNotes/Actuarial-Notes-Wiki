@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>A weighted average moving because the weights moved</title>
+  <title>Three territories at fixed loss ratios on a beam, their shares shifting from the 2022 mix to the 2024 mix, which moves the balance point, the aggregate loss ratio, from 69.5% to 76.1%</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,43 +42,21 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
-  <defs>
-    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
-  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="116.33" y1="114" x2="116.33" y2="304" class="grid"/>
-    <line x1="197" y1="114" x2="197" y2="304" class="grid"/>
-    <line x1="277.67" y1="114" x2="277.67" y2="304" class="grid"/>
-    <line x1="76" y1="304" x2="318" y2="304" class="grid"/>
-    <line x1="76" y1="217.64" x2="318" y2="217.64" class="grid"/>
-    <line x1="76" y1="131.27" x2="318" y2="131.27" class="grid"/>
-    <line x1="76" y1="304" x2="328" y2="304" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="76" y1="304" x2="76" y2="104" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="116.33" y1="304" x2="116.33" y2="308" class="tick"/>
-    <text x="116.33" y="320" text-anchor="middle" class="sm dim">Terr 1</text>
-    <line x1="197" y1="304" x2="197" y2="308" class="tick"/>
-    <text x="197" y="320" text-anchor="middle" class="sm dim">Terr 2</text>
-    <line x1="277.67" y1="304" x2="277.67" y2="308" class="tick"/>
-    <text x="277.67" y="320" text-anchor="middle" class="sm dim">Terr 3</text>
-    <line x1="72" y1="304" x2="76" y2="304" class="tick"/>
-    <text x="68" y="307.6" text-anchor="end" class="sm dim">0%</text>
-    <line x1="72" y1="217.64" x2="76" y2="217.64" class="tick"/>
-    <text x="68" y="221.24" text-anchor="end" class="sm dim">25%</text>
-    <line x1="72" y1="131.27" x2="76" y2="131.27" class="tick"/>
-    <text x="68" y="134.87" text-anchor="end" class="sm dim">50%</text>
-    <rect x="89.52" y="148.55" width="25.81" height="155.45" rx="2" fill="var(--dim)" fill-opacity="0.45"/>
-    <rect x="117.33" y="217.64" width="25.81" height="86.36" rx="2" fill="#3b82f6" fill-opacity="0.72"/>
-    <rect x="170.19" y="183.09" width="25.81" height="120.91" rx="2" fill="var(--dim)" fill-opacity="0.45"/>
-    <rect x="198" y="183.09" width="25.81" height="120.91" rx="2" fill="#3b82f6" fill-opacity="0.72"/>
-    <rect x="250.85" y="234.91" width="25.81" height="69.09" rx="2" fill="var(--dim)" fill-opacity="0.45"/>
-    <rect x="278.67" y="165.82" width="25.81" height="138.18" rx="2" fill="#3b82f6" fill-opacity="0.72"/>
-    <line x1="66" y1="108" x2="79" y2="108" stroke="var(--dim)" stroke-width="2.4" stroke-linecap="round"/>
-    <text x="85" y="111.6" text-anchor="start" class="sm">2022 mix</text>
-    <line x1="178" y1="108" x2="191" y2="108" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round"/>
-    <text x="197" y="111.6" text-anchor="start" class="sm">2024 mix</text>
-    <text x="180" y="334" text-anchor="middle" class="sm dim">share of the book, by territory</text>
-    <text x="180" y="358" text-anchor="middle" class="sm bold">aggregate loss ratio 69.5% → 76.1%</text>
-    <text x="180" y="380" text-anchor="middle" class="sm dim">with every territory's own ratio unchanged</text>
+    <rect x="92.8" y="210" width="40" height="90" rx="3" fill="#059669" fill-opacity="0.45" stroke="#059669" stroke-width="1.2"/>
+    <rect x="92.8" y="138" width="40" height="162" rx="3" fill="none" stroke="var(--dim)" stroke-width="1.3" stroke-dasharray="4 3"/>
+    <text x="112.8" y="130" text-anchor="middle" class="sm bold">58%</text>
+    <rect x="171.2" y="174" width="40" height="126" rx="3" fill="#3b82f6" fill-opacity="0.45" stroke="#3b82f6" stroke-width="1.2"/>
+    <rect x="171.2" y="174" width="40" height="126" rx="3" fill="none" stroke="var(--dim)" stroke-width="1.3" stroke-dasharray="4 3"/>
+    <text x="191.2" y="166" text-anchor="middle" class="sm bold">72%</text>
+    <rect x="277.6" y="156" width="40" height="144" rx="3" fill="#e11d48" fill-opacity="0.45" stroke="#e11d48" stroke-width="1.2"/>
+    <rect x="277.6" y="228" width="40" height="72" rx="3" fill="none" stroke="var(--dim)" stroke-width="1.3" stroke-dasharray="4 3"/>
+    <text x="297.6" y="148" text-anchor="middle" class="sm bold">91%</text>
+    <line x1="34" y1="300" x2="326" y2="300" stroke="var(--ink)" stroke-width="2.4" stroke-linecap="round"/>
+    <polygon points="177.2,302 167.2,320 187.2,320" fill="none" fill-opacity="0.5" stroke="var(--dim)" stroke-width="1.4" stroke-dasharray="3 2"/>
+    <text x="183.2" y="336" text-anchor="end" class="sm dim">69.5%</text>
+    <polygon points="214.16,302 204.16,320 224.16,320" fill="#e11d48" fill-opacity="0.5" stroke="#e11d48" stroke-width="1.4"/>
+    <text x="208.16" y="336" text-anchor="start" class="sm bold">76.1%</text>
   </g>
 </svg>

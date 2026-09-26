@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>A short-tail reporting pattern reaching ultimate within a year</title>
+  <title>A short-tail reporting pattern already 94% reported at 12 months and complete by 36, beside a long-tail pattern still climbing</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,43 +47,42 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="119.6" y1="98" x2="119.6" y2="326" class="grid"/>
-    <line x1="169.2" y1="98" x2="169.2" y2="326" class="grid"/>
-    <line x1="218.8" y1="98" x2="218.8" y2="326" class="grid"/>
-    <line x1="268.4" y1="98" x2="268.4" y2="326" class="grid"/>
-    <line x1="318" y1="98" x2="318" y2="326" class="grid"/>
-    <line x1="70" y1="326" x2="318" y2="326" class="grid"/>
-    <line x1="70" y1="220.44" x2="318" y2="220.44" class="grid"/>
-    <line x1="70" y1="114.89" x2="318" y2="114.89" class="grid"/>
-    <line x1="70" y1="326" x2="328" y2="326" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="70" y1="326" x2="70" y2="88" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="119.6" y1="326" x2="119.6" y2="330" class="tick"/>
-    <text x="119.6" y="342" text-anchor="middle" class="sm dim">12</text>
-    <line x1="169.2" y1="326" x2="169.2" y2="330" class="tick"/>
-    <text x="169.2" y="342" text-anchor="middle" class="sm dim">24</text>
-    <line x1="218.8" y1="326" x2="218.8" y2="330" class="tick"/>
-    <text x="218.8" y="342" text-anchor="middle" class="sm dim">36</text>
-    <line x1="268.4" y1="326" x2="268.4" y2="330" class="tick"/>
-    <text x="268.4" y="342" text-anchor="middle" class="sm dim">48</text>
-    <line x1="318" y1="326" x2="318" y2="330" class="tick"/>
-    <text x="318" y="342" text-anchor="middle" class="sm dim">60</text>
-    <line x1="66" y1="326" x2="70" y2="326" class="tick"/>
-    <text x="62" y="329.6" text-anchor="end" class="sm dim">0%</text>
-    <line x1="66" y1="220.44" x2="70" y2="220.44" class="tick"/>
-    <text x="62" y="224.04" text-anchor="end" class="sm dim">50%</text>
-    <line x1="66" y1="114.89" x2="70" y2="114.89" class="tick"/>
-    <text x="62" y="118.49" text-anchor="end" class="sm dim">100%</text>
-    <polyline points="119.6,214.96 169.2,159.43 218.8,132.62 268.4,121.01 318,117" class="curve dash" stroke="var(--dim)" stroke-width="1.6"/>
-    <polyline points="119.6,127.56 169.2,117 218.8,114.89 268.4,114.89 318,114.89" class="curve" stroke="#059669" stroke-width="2.4"/>
-    <circle cx="119.6" cy="127.56" r="3" fill="#059669"/>
-    <circle cx="169.2" cy="117" r="3" fill="#059669"/>
-    <circle cx="218.8" cy="114.89" r="3" fill="#059669"/>
-    <circle cx="268.4" cy="114.89" r="3" fill="#059669"/>
-    <circle cx="318" cy="114.89" r="3" fill="#059669"/>
-    <text x="194" y="195.11" text-anchor="middle" class="sm dim">long tail</text>
-    <text x="210.53" y="119.56" text-anchor="middle" class="sm bold" fill="#059669">auto PD, property</text>
-    <text x="180" y="358" text-anchor="middle" class="sm dim">age in months</text>
-    <text x="180" y="374" text-anchor="middle" class="sm dim">development is a small correction, so a</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">distorted factor costs far less than on a long tail</text>
+    <line x1="119.6" y1="94" x2="119.6" y2="344" class="grid"/>
+    <line x1="169.2" y1="94" x2="169.2" y2="344" class="grid"/>
+    <line x1="218.8" y1="94" x2="218.8" y2="344" class="grid"/>
+    <line x1="268.4" y1="94" x2="268.4" y2="344" class="grid"/>
+    <line x1="318" y1="94" x2="318" y2="344" class="grid"/>
+    <line x1="70" y1="344" x2="318" y2="344" class="grid"/>
+    <line x1="70" y1="228.26" x2="318" y2="228.26" class="grid"/>
+    <line x1="70" y1="112.52" x2="318" y2="112.52" class="grid"/>
+    <line x1="70" y1="344" x2="328" y2="344" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="70" y1="344" x2="70" y2="84" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="119.6" y1="344" x2="119.6" y2="348" class="tick"/>
+    <text x="119.6" y="360" text-anchor="middle" class="sm dim">12</text>
+    <line x1="169.2" y1="344" x2="169.2" y2="348" class="tick"/>
+    <text x="169.2" y="360" text-anchor="middle" class="sm dim">24</text>
+    <line x1="218.8" y1="344" x2="218.8" y2="348" class="tick"/>
+    <text x="218.8" y="360" text-anchor="middle" class="sm dim">36</text>
+    <line x1="268.4" y1="344" x2="268.4" y2="348" class="tick"/>
+    <text x="268.4" y="360" text-anchor="middle" class="sm dim">48</text>
+    <line x1="318" y1="344" x2="318" y2="348" class="tick"/>
+    <text x="318" y="360" text-anchor="middle" class="sm dim">60</text>
+    <line x1="66" y1="344" x2="70" y2="344" class="tick"/>
+    <text x="62" y="347.6" text-anchor="end" class="sm dim">0%</text>
+    <line x1="66" y1="228.26" x2="70" y2="228.26" class="tick"/>
+    <text x="62" y="231.86" text-anchor="end" class="sm dim">50%</text>
+    <line x1="66" y1="112.52" x2="70" y2="112.52" class="tick"/>
+    <text x="62" y="116.12" text-anchor="end" class="sm dim">100%</text>
+    <text x="318" y="376" text-anchor="end" class="sm dim">age in months</text>
+    <polyline points="119.6,222.24 169.2,161.36 218.8,131.96 268.4,119.23 318,114.83" class="curve dash" stroke="var(--dim)" stroke-width="1.6"/>
+    <polyline points="119.6,126.41 169.2,114.83 218.8,112.52 268.4,112.52 318,112.52" class="curve" stroke="#059669" stroke-width="2.4"/>
+    <circle cx="119.6" cy="126.41" r="3" fill="#059669"/>
+    <circle cx="169.2" cy="114.83" r="3" fill="#059669"/>
+    <circle cx="218.8" cy="112.52" r="3" fill="#059669"/>
+    <circle cx="268.4" cy="112.52" r="3" fill="#059669"/>
+    <circle cx="318" cy="112.52" r="3" fill="#059669"/>
+    <text x="127.6" y="140.41" text-anchor="start" class="sm bold">94%</text>
+    <text x="243.6" y="103.52" text-anchor="middle" class="sm bold" fill="#059669">short tail</text>
+    <text x="194" y="200.48" text-anchor="middle" class="sm dim">long tail</text>
   </g>
 </svg>

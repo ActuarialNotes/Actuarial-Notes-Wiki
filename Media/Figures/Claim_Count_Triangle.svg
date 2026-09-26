@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>A claim-count development triangle beside the severity it makes computable</title>
+  <title>The running claim-count triangle as cells filled to each reported count, with AY 2024's 700 claims carried across by 1.429 to 1,000 ultimate claims</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,36 +42,66 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
+  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <text x="180" y="110" text-anchor="middle" class="sm dim">cumulative reported claim counts</text>
-    <text x="98" y="132" text-anchor="middle" class="sm dim">12</text>
-    <text x="150" y="132" text-anchor="middle" class="sm dim">24</text>
-    <text x="202" y="132" text-anchor="middle" class="sm dim">36</text>
-    <text x="254" y="132" text-anchor="middle" class="sm dim">48</text>
-    <text x="306" y="132" text-anchor="middle" class="sm dim">60</text>
-    <text x="66" y="157.5" text-anchor="end" class="sm dim">2020</text>
-    <text x="98" y="157.5" text-anchor="middle" class="sm">620</text>
-    <text x="150" y="157.5" text-anchor="middle" class="sm">806</text>
-    <text x="202" y="157.5" text-anchor="middle" class="sm">858</text>
-    <text x="254" y="157.5" text-anchor="middle" class="sm">877</text>
-    <text x="306" y="157.5" text-anchor="middle" class="sm">886</text>
-    <text x="66" y="184.5" text-anchor="end" class="sm dim">2021</text>
-    <text x="98" y="184.5" text-anchor="middle" class="sm">640</text>
-    <text x="150" y="184.5" text-anchor="middle" class="sm">832</text>
-    <text x="202" y="184.5" text-anchor="middle" class="sm">886</text>
-    <text x="254" y="184.5" text-anchor="middle" class="sm">906</text>
-    <text x="66" y="211.5" text-anchor="end" class="sm dim">2022</text>
-    <text x="98" y="211.5" text-anchor="middle" class="sm">660</text>
-    <text x="150" y="211.5" text-anchor="middle" class="sm">858</text>
-    <text x="202" y="211.5" text-anchor="middle" class="sm">914</text>
-    <text x="66" y="238.5" text-anchor="end" class="sm dim">2023</text>
-    <text x="98" y="238.5" text-anchor="middle" class="sm">680</text>
-    <text x="150" y="238.5" text-anchor="middle" class="sm">884</text>
-    <text x="66" y="265.5" text-anchor="end" class="sm dim">2024</text>
-    <text x="98" y="265.5" text-anchor="middle" class="sm">700</text>
-    <text x="180" y="300" text-anchor="middle" class="sm dim">age in months →</text>
-    <text x="180" y="332" text-anchor="middle" class="sm">AY 2024: 700 × 1.429 = 1,000 ultimate claims</text>
-    <text x="180" y="360" text-anchor="middle" class="sm dim">2,850,000 / 1,000 = $2,850 average severity</text>
+    <rect x="58" y="110" width="40" height="50" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="63" y="129.72" width="30" height="27.28" rx="2" fill="#0d9488" fill-opacity="0.75"/>
+    <rect x="102" y="110" width="40" height="50" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="107" y="121.54" width="30" height="35.46" rx="2" fill="#0d9488" fill-opacity="0.75"/>
+    <rect x="146" y="110" width="40" height="50" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="151" y="119.25" width="30" height="37.75" rx="2" fill="#0d9488" fill-opacity="0.75"/>
+    <rect x="190" y="110" width="40" height="50" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="195" y="118.41" width="30" height="38.59" rx="2" fill="#0d9488" fill-opacity="0.75"/>
+    <rect x="234" y="110" width="40" height="50" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="239" y="118.02" width="30" height="38.98" rx="2" fill="#0d9488" fill-opacity="0.75"/>
+    <rect x="58" y="164" width="40" height="50" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="63" y="182.84" width="30" height="28.16" rx="2" fill="#0d9488" fill-opacity="0.75"/>
+    <rect x="102" y="164" width="40" height="50" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="107" y="174.39" width="30" height="36.61" rx="2" fill="#0d9488" fill-opacity="0.75"/>
+    <rect x="146" y="164" width="40" height="50" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="151" y="172.02" width="30" height="38.98" rx="2" fill="#0d9488" fill-opacity="0.75"/>
+    <rect x="190" y="164" width="40" height="50" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="195" y="171.14" width="30" height="39.86" rx="2" fill="#0d9488" fill-opacity="0.75"/>
+    <rect x="234" y="164" width="40" height="50" rx="3" fill="none" stroke="var(--edge)" stroke-width="1" stroke-dasharray="3 3"/>
+    <rect x="58" y="218" width="40" height="50" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="63" y="235.96" width="30" height="29.04" rx="2" fill="#0d9488" fill-opacity="0.75"/>
+    <rect x="102" y="218" width="40" height="50" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="107" y="227.25" width="30" height="37.75" rx="2" fill="#0d9488" fill-opacity="0.75"/>
+    <rect x="146" y="218" width="40" height="50" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="151" y="224.78" width="30" height="40.22" rx="2" fill="#0d9488" fill-opacity="0.75"/>
+    <rect x="190" y="218" width="40" height="50" rx="3" fill="none" stroke="var(--edge)" stroke-width="1" stroke-dasharray="3 3"/>
+    <rect x="234" y="218" width="40" height="50" rx="3" fill="none" stroke="var(--edge)" stroke-width="1" stroke-dasharray="3 3"/>
+    <rect x="58" y="272" width="40" height="50" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="63" y="289.08" width="30" height="29.92" rx="2" fill="#0d9488" fill-opacity="0.75"/>
+    <rect x="102" y="272" width="40" height="50" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="107" y="280.1" width="30" height="38.9" rx="2" fill="#0d9488" fill-opacity="0.75"/>
+    <rect x="146" y="272" width="40" height="50" rx="3" fill="none" stroke="var(--edge)" stroke-width="1" stroke-dasharray="3 3"/>
+    <rect x="190" y="272" width="40" height="50" rx="3" fill="none" stroke="var(--edge)" stroke-width="1" stroke-dasharray="3 3"/>
+    <rect x="234" y="272" width="40" height="50" rx="3" fill="none" stroke="var(--edge)" stroke-width="1" stroke-dasharray="3 3"/>
+    <rect x="58" y="326" width="40" height="50" rx="3" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+    <rect x="63" y="342.2" width="30" height="30.8" rx="2" fill="#0d9488" fill-opacity="0.75"/>
+    <rect x="102" y="326" width="40" height="50" rx="3" fill="none" stroke="var(--edge)" stroke-width="1" stroke-dasharray="3 3"/>
+    <rect x="146" y="326" width="40" height="50" rx="3" fill="none" stroke="var(--edge)" stroke-width="1" stroke-dasharray="3 3"/>
+    <rect x="190" y="326" width="40" height="50" rx="3" fill="none" stroke="var(--edge)" stroke-width="1" stroke-dasharray="3 3"/>
+    <rect x="234" y="326" width="40" height="50" rx="3" fill="none" stroke="var(--edge)" stroke-width="1" stroke-dasharray="3 3"/>
+    <text x="78" y="98" text-anchor="middle" class="sm dim">12</text>
+    <text x="122" y="98" text-anchor="middle" class="sm dim">24</text>
+    <text x="166" y="98" text-anchor="middle" class="sm dim">36</text>
+    <text x="210" y="98" text-anchor="middle" class="sm dim">48</text>
+    <text x="254" y="98" text-anchor="middle" class="sm dim">60</text>
+    <text x="298" y="98" text-anchor="middle" class="sm dim">ult</text>
+    <text x="48" y="139" text-anchor="end" class="sm dim">2020</text>
+    <text x="48" y="193" text-anchor="end" class="sm dim">2021</text>
+    <text x="48" y="247" text-anchor="end" class="sm dim">2022</text>
+    <text x="48" y="301" text-anchor="end" class="sm dim">2023</text>
+    <text x="48" y="355" text-anchor="end" class="sm dim">2024</text>
+    <rect x="278" y="326" width="40" height="50" rx="3" fill="#059669" fill-opacity="0.75" stroke="#059669" stroke-width="1.4"/>
+    <text x="298" y="394" text-anchor="middle" class="sm bold">1,000</text>
+    <line x1="98" y1="351" x2="274" y2="351" class="thin dash" stroke="#059669" stroke-width="1.6" marker-end="url(#ah059669)"/>
+    <text x="187" y="343" text-anchor="middle" class="sm bold">× 1.429</text>
+    <text x="78" y="394" text-anchor="middle" class="sm bold">700</text>
   </g>
 </svg>

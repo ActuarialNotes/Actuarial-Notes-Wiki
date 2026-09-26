@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Average case outstanding strengthening along the calendar diagonal</title>
+  <title>Average case outstanding at 12 and 24 months by accident year, both stepping up together once case reserves are strengthened</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,49 +47,48 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="96.17" y1="108" x2="96.17" y2="316" class="grid"/>
-    <line x1="146.58" y1="108" x2="146.58" y2="316" class="grid"/>
-    <line x1="197" y1="108" x2="197" y2="316" class="grid"/>
-    <line x1="247.42" y1="108" x2="247.42" y2="316" class="grid"/>
-    <line x1="297.83" y1="108" x2="297.83" y2="316" class="grid"/>
-    <line x1="76" y1="316" x2="318" y2="316" class="grid"/>
-    <line x1="76" y1="212" x2="318" y2="212" class="grid"/>
-    <line x1="76" y1="108" x2="318" y2="108" class="grid"/>
-    <line x1="76" y1="316" x2="328" y2="316" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="76" y1="316" x2="76" y2="98" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="96.17" y1="316" x2="96.17" y2="320" class="tick"/>
-    <text x="96.17" y="332" text-anchor="middle" class="sm dim">2020</text>
-    <line x1="146.58" y1="316" x2="146.58" y2="320" class="tick"/>
-    <text x="146.58" y="332" text-anchor="middle" class="sm dim">2021</text>
-    <line x1="197" y1="316" x2="197" y2="320" class="tick"/>
-    <text x="197" y="332" text-anchor="middle" class="sm dim">2022</text>
-    <line x1="247.42" y1="316" x2="247.42" y2="320" class="tick"/>
-    <text x="247.42" y="332" text-anchor="middle" class="sm dim">2023</text>
-    <line x1="297.83" y1="316" x2="297.83" y2="320" class="tick"/>
-    <text x="297.83" y="332" text-anchor="middle" class="sm dim">2024</text>
-    <line x1="72" y1="316" x2="76" y2="316" class="tick"/>
-    <text x="68" y="319.6" text-anchor="end" class="sm dim">0</text>
-    <line x1="72" y1="212" x2="76" y2="212" class="tick"/>
-    <text x="68" y="215.6" text-anchor="end" class="sm dim">700</text>
-    <line x1="72" y1="108" x2="76" y2="108" class="tick"/>
-    <text x="68" y="111.6" text-anchor="end" class="sm dim">1,400</text>
-    <polyline points="96.17,223.89 146.58,217.94 197,209.03 247.42,182.29 297.83,140.69" class="curve" stroke="#3b82f6" stroke-width="2.2"/>
-    <circle cx="96.17" cy="223.89" r="3.2" fill="#3b82f6"/>
-    <circle cx="146.58" cy="217.94" r="3.2" fill="#3b82f6"/>
-    <circle cx="197" cy="209.03" r="3.2" fill="#3b82f6"/>
-    <circle cx="247.42" cy="182.29" r="3.2" fill="#3b82f6"/>
-    <circle cx="297.83" cy="140.69" r="3.2" fill="#3b82f6"/>
-    <polyline points="96.17,185.26 146.58,176.34 197,165.94 247.42,131.77" class="curve" stroke="#d97706" stroke-width="2.2"/>
-    <circle cx="96.17" cy="185.26" r="3.2" fill="#d97706"/>
-    <circle cx="146.58" cy="176.34" r="3.2" fill="#d97706"/>
-    <circle cx="197" cy="165.94" r="3.2" fill="#d97706"/>
-    <circle cx="247.42" cy="131.77" r="3.2" fill="#d97706"/>
-    <line x1="120" y1="106" x2="133" y2="106" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round"/>
-    <text x="139" y="109.6" text-anchor="start" class="sm">at 12 months</text>
-    <line x1="224" y1="106" x2="237" y2="106" stroke="#d97706" stroke-width="2.4" stroke-linecap="round"/>
-    <text x="243" y="109.6" text-anchor="start" class="sm">at 24 months</text>
-    <text x="180" y="346" text-anchor="middle" class="sm dim">average case outstanding by accident year</text>
-    <text x="180" y="376" text-anchor="middle" class="sm dim">both ages jump together in 2023 — a calendar</text>
-    <text x="180" y="394" text-anchor="middle" class="sm dim">effect, so reported factors must be restated</text>
+    <rect x="222.21" y="94" width="95.79" height="250" fill="#e11d48" fill-opacity="0.08" stroke="none"/>
+    <line x1="96.17" y1="94" x2="96.17" y2="344" class="grid"/>
+    <line x1="146.58" y1="94" x2="146.58" y2="344" class="grid"/>
+    <line x1="197" y1="94" x2="197" y2="344" class="grid"/>
+    <line x1="247.42" y1="94" x2="247.42" y2="344" class="grid"/>
+    <line x1="297.83" y1="94" x2="297.83" y2="344" class="grid"/>
+    <line x1="76" y1="344" x2="318" y2="344" class="grid"/>
+    <line x1="76" y1="219" x2="318" y2="219" class="grid"/>
+    <line x1="76" y1="94" x2="318" y2="94" class="grid"/>
+    <line x1="76" y1="344" x2="328" y2="344" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="76" y1="344" x2="76" y2="84" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="96.17" y1="344" x2="96.17" y2="348" class="tick"/>
+    <text x="96.17" y="360" text-anchor="middle" class="sm dim">2020</text>
+    <line x1="146.58" y1="344" x2="146.58" y2="348" class="tick"/>
+    <text x="146.58" y="360" text-anchor="middle" class="sm dim">2021</text>
+    <line x1="197" y1="344" x2="197" y2="348" class="tick"/>
+    <text x="197" y="360" text-anchor="middle" class="sm dim">2022</text>
+    <line x1="247.42" y1="344" x2="247.42" y2="348" class="tick"/>
+    <text x="247.42" y="360" text-anchor="middle" class="sm dim">2023</text>
+    <line x1="297.83" y1="344" x2="297.83" y2="348" class="tick"/>
+    <text x="297.83" y="360" text-anchor="middle" class="sm dim">2024</text>
+    <line x1="72" y1="344" x2="76" y2="344" class="tick"/>
+    <text x="68" y="347.6" text-anchor="end" class="sm dim">0</text>
+    <line x1="72" y1="219" x2="76" y2="219" class="tick"/>
+    <text x="68" y="222.6" text-anchor="end" class="sm dim">700</text>
+    <line x1="72" y1="94" x2="76" y2="94" class="tick"/>
+    <text x="68" y="97.6" text-anchor="end" class="sm dim">1,400</text>
+    <text x="318" y="376" text-anchor="end" class="sm dim">accident year</text>
+    <text x="72" y="80" text-anchor="start" class="sm dim">average case</text>
+    <polyline points="96.17,233.29 146.58,226.14 197,215.43 247.42,183.29 297.83,133.29" class="curve" stroke="#3b82f6" stroke-width="2.2"/>
+    <circle cx="96.17" cy="233.29" r="3.2" fill="#3b82f6"/>
+    <circle cx="146.58" cy="226.14" r="3.2" fill="#3b82f6"/>
+    <circle cx="197" cy="215.43" r="3.2" fill="#3b82f6"/>
+    <circle cx="247.42" cy="183.29" r="3.2" fill="#3b82f6"/>
+    <circle cx="297.83" cy="133.29" r="3.2" fill="#3b82f6"/>
+    <text x="146.58" y="244.14" text-anchor="middle" class="sm bold">12 months</text>
+    <polyline points="96.17,186.86 146.58,176.14 197,163.64 247.42,122.57" class="curve" stroke="#d97706" stroke-width="2.2"/>
+    <circle cx="96.17" cy="186.86" r="3.2" fill="#d97706"/>
+    <circle cx="146.58" cy="176.14" r="3.2" fill="#d97706"/>
+    <circle cx="197" cy="163.64" r="3.2" fill="#d97706"/>
+    <circle cx="247.42" cy="122.57" r="3.2" fill="#d97706"/>
+    <text x="146.58" y="166.14" text-anchor="middle" class="sm bold">24 months</text>
+    <text x="270.1" y="108" text-anchor="middle" class="sm dim">strengthened</text>
   </g>
 </svg>

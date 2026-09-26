@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Claims split at the retention between the entity's own layer and the insurer's</title>
+  <title>Eight claims cut at a 250 retention: the entity keeps each claim up to the line and the insurer pays what rises above it</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,38 +47,35 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="72" y1="322" x2="320" y2="322" class="grid"/>
-    <line x1="72" y1="277.6" x2="320" y2="277.6" class="grid"/>
-    <line x1="72" y1="188.8" x2="320" y2="188.8" class="grid"/>
-    <line x1="72" y1="100" x2="320" y2="100" class="grid"/>
-    <line x1="72" y1="322" x2="330" y2="322" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="72" y1="322" x2="72" y2="90" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="68" y1="322" x2="72" y2="322" class="tick"/>
-    <text x="64" y="325.6" text-anchor="end" class="sm dim">0</text>
-    <line x1="68" y1="277.6" x2="72" y2="277.6" class="tick"/>
-    <text x="64" y="281.2" text-anchor="end" class="sm dim">250</text>
-    <line x1="68" y1="188.8" x2="72" y2="188.8" class="tick"/>
-    <text x="64" y="192.4" text-anchor="end" class="sm dim">750</text>
-    <line x1="68" y1="100" x2="72" y2="100" class="tick"/>
-    <text x="64" y="103.6" text-anchor="end" class="sm dim">1,250</text>
-    <rect x="84.4" y="300.69" width="16.53" height="21.31" rx="2" fill="#d97706" fill-opacity="0.75"/>
-    <rect x="113.92" y="277.6" width="16.53" height="44.4" rx="2" fill="#d97706" fill-opacity="0.75"/>
-    <rect x="113.92" y="261.62" width="16.53" height="15.98" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
-    <rect x="143.45" y="306.02" width="16.53" height="15.98" rx="2" fill="#d97706" fill-opacity="0.75"/>
-    <rect x="172.97" y="277.6" width="16.53" height="44.4" rx="2" fill="#d97706" fill-opacity="0.75"/>
-    <rect x="172.97" y="183.47" width="16.53" height="94.13" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
-    <rect x="202.5" y="277.6" width="16.53" height="44.4" rx="2" fill="#d97706" fill-opacity="0.75"/>
-    <rect x="232.02" y="311.34" width="16.53" height="10.66" rx="2" fill="#d97706" fill-opacity="0.75"/>
-    <rect x="261.54" y="277.6" width="16.53" height="44.4" rx="2" fill="#d97706" fill-opacity="0.75"/>
-    <rect x="261.54" y="117.76" width="16.53" height="159.84" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
-    <rect x="291.07" y="286.48" width="16.53" height="35.52" rx="2" fill="#d97706" fill-opacity="0.75"/>
-    <line x1="72" y1="277.6" x2="320" y2="277.6" class="thin" stroke="#e11d48" stroke-width="1.3"/>
-    <text x="317.05" y="270.6" text-anchor="end" class="sm bold" fill="#e11d48">SIR 250</text>
-    <text x="180" y="352" text-anchor="middle" class="sm dim">individual claims ($000)</text>
-    <line x1="56" y1="374" x2="69" y2="374" stroke="#d97706" stroke-width="2.4" stroke-linecap="round"/>
-    <text x="75" y="377.6" text-anchor="start" class="sm">retained</text>
-    <line x1="176" y1="374" x2="189" y2="374" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round"/>
-    <text x="195" y="377.6" text-anchor="start" class="sm">insured</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">the retained layer still needs a reserve estimate</text>
+    <line x1="72" y1="344" x2="326" y2="344" class="grid"/>
+    <line x1="72" y1="294" x2="326" y2="294" class="grid"/>
+    <line x1="72" y1="194" x2="326" y2="194" class="grid"/>
+    <line x1="72" y1="94" x2="326" y2="94" class="grid"/>
+    <line x1="72" y1="344" x2="336" y2="344" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="72" y1="344" x2="72" y2="84" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="68" y1="344" x2="72" y2="344" class="tick"/>
+    <text x="64" y="347.6" text-anchor="end" class="sm dim">0</text>
+    <line x1="68" y1="294" x2="72" y2="294" class="tick"/>
+    <text x="64" y="297.6" text-anchor="end" class="sm dim">250</text>
+    <line x1="68" y1="194" x2="72" y2="194" class="tick"/>
+    <text x="64" y="197.6" text-anchor="end" class="sm dim">750</text>
+    <line x1="68" y1="94" x2="72" y2="94" class="tick"/>
+    <text x="64" y="97.6" text-anchor="end" class="sm dim">1,250</text>
+    <text x="326" y="376" text-anchor="end" class="sm dim">claims</text>
+    <rect x="81.62" y="320" width="15.29" height="24" rx="2" fill="#d97706" fill-opacity="0.75"/>
+    <rect x="106.28" y="294" width="15.29" height="50" rx="2" fill="#d97706" fill-opacity="0.75"/>
+    <rect x="106.28" y="276" width="15.29" height="18" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+    <rect x="130.94" y="326" width="15.29" height="18" rx="2" fill="#d97706" fill-opacity="0.75"/>
+    <rect x="155.6" y="294" width="15.29" height="50" rx="2" fill="#d97706" fill-opacity="0.75"/>
+    <rect x="155.6" y="188" width="15.29" height="106" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+    <rect x="180.26" y="294" width="15.29" height="50" rx="2" fill="#d97706" fill-opacity="0.75"/>
+    <rect x="204.92" y="332" width="15.29" height="12" rx="2" fill="#d97706" fill-opacity="0.75"/>
+    <rect x="229.58" y="294" width="15.29" height="50" rx="2" fill="#d97706" fill-opacity="0.75"/>
+    <rect x="229.58" y="114" width="15.29" height="180" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+    <rect x="254.24" y="304" width="15.29" height="40" rx="2" fill="#d97706" fill-opacity="0.75"/>
+    <line x1="72" y1="294" x2="326" y2="294" class="thin" stroke="#e11d48" stroke-width="1.3"/>
+    <text x="301.34" y="287" text-anchor="middle" class="sm bold">SIR</text>
+    <text x="301.34" y="204" text-anchor="middle" class="sm">insured</text>
+    <text x="301.34" y="323" text-anchor="middle" class="sm">retained</text>
   </g>
 </svg>

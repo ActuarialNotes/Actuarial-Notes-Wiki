@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>A sample space partitioned into its elementary outcomes</title>
+  <title>The six faces of a die laid out inside S, one for each outcome of a roll</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -44,20 +44,34 @@ text {
   <g id="light"/><g id="dark"/>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="36" y="86" width="288" height="234" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
-    <text x="49" y="102" text-anchor="middle" class="sm dim">S</text>
-    <circle cx="96" cy="152" r="36" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
-    <text x="96" y="158" text-anchor="middle">ω₁</text>
-    <circle cx="180" cy="152" r="36" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
-    <text x="180" y="158" text-anchor="middle">ω₂</text>
-    <circle cx="264" cy="152" r="36" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
-    <text x="264" y="158" text-anchor="middle">ω₃</text>
-    <circle cx="96" cy="252" r="36" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
-    <text x="96" y="258" text-anchor="middle">ω₄</text>
-    <circle cx="180" cy="252" r="36" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
-    <text x="180" y="258" text-anchor="middle">ω₅</text>
-    <circle cx="264" cy="252" r="36" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
-    <text x="264" y="258" text-anchor="middle">ω₆</text>
-    <text x="180" y="350" text-anchor="middle" class="sm dim">one roll of a die</text>
+    <rect x="30" y="80" width="300" height="300" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
+    <text x="43" y="96" text-anchor="middle" class="sm dim">S</text>
+    <rect x="51" y="139" width="74" height="74" rx="13.32" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
+    <circle cx="88" cy="176" r="6.29" fill="#3b82f6"/>
+    <rect x="143" y="139" width="74" height="74" rx="13.32" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
+    <circle cx="160.76" cy="156.76" r="6.29" fill="#3b82f6"/>
+    <circle cx="199.24" cy="195.24" r="6.29" fill="#3b82f6"/>
+    <rect x="235" y="139" width="74" height="74" rx="13.32" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
+    <circle cx="252.76" cy="156.76" r="6.29" fill="#3b82f6"/>
+    <circle cx="272" cy="176" r="6.29" fill="#3b82f6"/>
+    <circle cx="291.24" cy="195.24" r="6.29" fill="#3b82f6"/>
+    <rect x="51" y="255" width="74" height="74" rx="13.32" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
+    <circle cx="68.76" cy="272.76" r="6.29" fill="#3b82f6"/>
+    <circle cx="107.24" cy="272.76" r="6.29" fill="#3b82f6"/>
+    <circle cx="68.76" cy="311.24" r="6.29" fill="#3b82f6"/>
+    <circle cx="107.24" cy="311.24" r="6.29" fill="#3b82f6"/>
+    <rect x="143" y="255" width="74" height="74" rx="13.32" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
+    <circle cx="160.76" cy="272.76" r="6.29" fill="#3b82f6"/>
+    <circle cx="199.24" cy="272.76" r="6.29" fill="#3b82f6"/>
+    <circle cx="180" cy="292" r="6.29" fill="#3b82f6"/>
+    <circle cx="160.76" cy="311.24" r="6.29" fill="#3b82f6"/>
+    <circle cx="199.24" cy="311.24" r="6.29" fill="#3b82f6"/>
+    <rect x="235" y="255" width="74" height="74" rx="13.32" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
+    <circle cx="252.76" cy="272.76" r="6.29" fill="#3b82f6"/>
+    <circle cx="291.24" cy="272.76" r="6.29" fill="#3b82f6"/>
+    <circle cx="252.76" cy="292" r="6.29" fill="#3b82f6"/>
+    <circle cx="291.24" cy="292" r="6.29" fill="#3b82f6"/>
+    <circle cx="252.76" cy="311.24" r="6.29" fill="#3b82f6"/>
+    <circle cx="291.24" cy="311.24" r="6.29" fill="#3b82f6"/>
   </g>
 </svg>

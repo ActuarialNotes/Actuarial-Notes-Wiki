@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Disjoint events versus overlapping events</title>
+  <title>Two events A and B drawn apart inside S, with no overlap between them</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,25 +42,13 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
-  <defs>
-    <clipPath id="meA"><circle cx="156.0" cy="300" r="46"/></clipPath>
-  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="34" y="88" width="292" height="124" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
-    <text x="46" y="104" text-anchor="middle" class="sm dim">S</text>
-    <circle cx="134" cy="150" r="46" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.6"/>
-    <circle cx="226" cy="150" r="46" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.6"/>
-    <text x="108.7" y="100" text-anchor="middle" class="bold" fill="#3b82f6">A</text>
-    <text x="251.3" y="100" text-anchor="middle" class="bold" fill="#d97706">B</text>
-    <text x="180" y="232" text-anchor="middle" class="bold" fill="#3b82f6">A ∩ B = ∅</text>
-    <rect x="34" y="238" width="292" height="124" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
-    <text x="46" y="254" text-anchor="middle" class="sm dim">S</text>
-    <circle cx="156" cy="300" r="46" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.6"/>
-    <circle cx="204" cy="300" r="46" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.6"/>
-    <text x="130.7" y="250" text-anchor="middle" class="bold" fill="#3b82f6">A</text>
-    <text x="229.3" y="250" text-anchor="middle" class="bold" fill="#d97706">B</text>
-    <g clip-path="url(#meA)"><circle cx="204.0" cy="300" r="46" fill="#e11d48" fill-opacity="0.4"/></g>
-    <text x="180" y="382" text-anchor="middle" class="bold" fill="#e11d48">A ∩ B ≠ ∅</text>
+    <rect x="26" y="86" width="308" height="290" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
+    <text x="39" y="102" text-anchor="middle" class="sm dim">S</text>
+    <circle cx="99" cy="236" r="68" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.6"/>
+    <circle cx="261" cy="236" r="68" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.6"/>
+    <text x="61.6" y="164" text-anchor="middle" class="bold" fill="#3b82f6">A</text>
+    <text x="298.4" y="164" text-anchor="middle" class="bold" fill="#d97706">B</text>
   </g>
 </svg>

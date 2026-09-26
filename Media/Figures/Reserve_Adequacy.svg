@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The carried reserve compared with the indicated estimate and the range around it</title>
+  <title>A carried reserve of 2,180 inside the 2,050 to 2,440 reasonable range but 70 short of the 2,250 indicated estimate</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,22 +47,20 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="98.8" y="156" width="161.2" height="48" rx="6" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="135.2" y="182" text-anchor="middle" class="sm" fill="#3b82f6">reasonable</text>
-    <text x="135.2" y="196" text-anchor="middle" class="sm" fill="#3b82f6">range</text>
-    <line x1="52" y1="226" x2="312" y2="226" class="axis"/>
-    <line x1="78" y1="222" x2="78" y2="230" class="tick"/>
-    <text x="78" y="244" text-anchor="middle" class="sm dim">2,000</text>
-    <line x1="182" y1="222" x2="182" y2="230" class="tick"/>
-    <text x="182" y="244" text-anchor="middle" class="sm dim">2,250</text>
-    <line x1="286" y1="222" x2="286" y2="230" class="tick"/>
-    <text x="286" y="244" text-anchor="middle" class="sm dim">2,500</text>
-    <line x1="182" y1="152" x2="182" y2="226" class="thin dash" stroke="#059669" stroke-width="1.6"/>
-    <text x="182" y="142" text-anchor="middle" class="sm bold" fill="#059669">indicated 2,250</text>
-    <line x1="153.4" y1="282" x2="153.4" y2="232" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
-    <text x="153.4" y="298" text-anchor="middle" class="sm bold" fill="#e11d48">carried 2,180</text>
-    <text x="180" y="322" text-anchor="middle" class="sm dim">inside the range, but below the point estimate</text>
-    <text x="180" y="340" text-anchor="middle" class="sm dim">— a deficiency to disclose, not necessarily</text>
-    <text x="180" y="358" text-anchor="middle" class="sm dim">an unreasonable one</text>
+    <rect x="98.8" y="140" width="162.24" height="136" rx="6" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="106.8" y="160" text-anchor="start" class="sm bold">range</text>
+    <line x1="52" y1="280" x2="312" y2="280" class="axis"/>
+    <line x1="78" y1="276" x2="78" y2="284" class="tick"/>
+    <text x="78" y="298" text-anchor="middle" class="sm dim">2,000</text>
+    <line x1="182" y1="276" x2="182" y2="284" class="tick"/>
+    <text x="182" y="298" text-anchor="middle" class="sm dim">2,250</text>
+    <line x1="286" y1="276" x2="286" y2="284" class="tick"/>
+    <text x="286" y="298" text-anchor="middle" class="sm dim">2,500</text>
+    <line x1="182" y1="132" x2="182" y2="280" class="thin dash" stroke="#059669" stroke-width="1.6"/>
+    <text x="182" y="124" text-anchor="middle" class="sm bold">indicated 2,250</text>
+    <rect x="152.88" y="262" width="29.12" height="12" rx="2" fill="#e11d48" fill-opacity="0.6"/>
+    <text x="167.44" y="254" text-anchor="middle" class="sm bold">−70</text>
+    <line x1="152.88" y1="356" x2="152.88" y2="288" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
+    <text x="152.88" y="372" text-anchor="middle" class="sm bold">carried 2,180</text>
   </g>
 </svg>

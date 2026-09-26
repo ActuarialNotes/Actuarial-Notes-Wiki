@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Reported losses taken at face value with only the unreported portion estimated from the a priori</title>
+  <title>The a priori 2,600 split into its expected reported and unreported shares, the unreported 47.4% carried down beside AY 2024's actual 1,500 reported to make a 2,732 ultimate</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -44,19 +44,17 @@ text {
   <g id="light"/><g id="dark"/>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <text x="180" y="116" text-anchor="middle" class="sm dim">AY 2024, CDF = 1.900 ⇒ 52.6% reported</text>
-    <rect x="46" y="142" width="147.14" height="36" rx="4" fill="#3b82f6" fill-opacity="0.42" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="119.57" y="165" text-anchor="middle" class="sm">reported 1,500</text>
-    <rect x="193.14" y="142" width="120.86" height="36" rx="4" fill="#7c3aed" fill-opacity="0.34" stroke="#7c3aed" stroke-width="1.2"/>
-    <text x="253.57" y="165" text-anchor="middle" class="sm">IBNR 1,232</text>
-    <text x="253.57" y="200" text-anchor="middle" class="sm dim">0.474 × 2,600</text>
-    <text x="180" y="246" text-anchor="middle" class="sm dim">it is a credibility blend in disguise</text>
-    <rect x="46" y="271" width="127.03" height="30" rx="4" fill="#7c3aed" fill-opacity="0.30" stroke="#7c3aed" stroke-width="1.2"/>
-    <text x="109.52" y="290" text-anchor="middle" class="sm">a priori 2,600</text>
-    <rect x="173.03" y="271" width="140.97" height="30" rx="4" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="243.52" y="290" text-anchor="middle" class="sm">chain ladder 2,850</text>
-    <text x="180" y="320" text-anchor="middle" class="sm dim">Z = 1 / CDF = 0.526</text>
-    <text x="180" y="358" text-anchor="middle" class="sm dim">a reporting anomaly moves BF dollar for dollar</text>
-    <text x="180" y="376" text-anchor="middle" class="sm dim">and the chain ladder by CDF times as much</text>
+    <text x="40" y="120" text-anchor="start" class="sm bold">a priori 2,600</text>
+    <rect x="40" y="130" width="140.26" height="44" rx="4" fill="var(--dim)" fill-opacity="0.14" stroke="var(--dim)" stroke-width="1.2" stroke-dasharray="4 3"/>
+    <text x="110.13" y="156" text-anchor="middle" class="sm">52.6%</text>
+    <rect x="180.26" y="130" width="126.25" height="44" rx="4" fill="#7c3aed" fill-opacity="0.34" stroke="#7c3aed" stroke-width="1.2"/>
+    <text x="243.38" y="156" text-anchor="middle" class="sm bold">47.4%</text>
+    <polygon points="180.26,174 306.51,174 320,280 193.75,280" fill="#7c3aed" fill-opacity="0.1" stroke="none"/>
+    <rect x="40" y="280" width="153.75" height="44" rx="4" fill="#3b82f6" fill-opacity="0.4" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="116.88" y="306" text-anchor="middle" class="sm bold">reported 1,500</text>
+    <rect x="193.75" y="280" width="126.25" height="44" rx="4" fill="#7c3aed" fill-opacity="0.34" stroke="#7c3aed" stroke-width="1.2"/>
+    <text x="256.88" y="306" text-anchor="middle" class="sm bold">IBNR 1,232</text>
+    <path d="M40,330 v4.8 H175 q5,0 5,4.4 q0,-4.4 5,-4.4 H320 v-4.8" class="thin" stroke="var(--dim)" stroke-width="1.2"/>
+    <text x="180" y="349" text-anchor="middle" class="sm bold">BF 2,732</text>
   </g>
 </svg>

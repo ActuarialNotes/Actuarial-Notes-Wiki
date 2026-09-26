@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The classical ULAE reserve, charging half the ratio to case reserves and all of it to IBNR</title>
+  <title>The classical ULAE reserve: half of the 900 of case reserves and all of the 1,350 of IBNR, charged at the 6.0% paid ratio, give a 108 reserve</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,20 +42,22 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
+  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <text x="180" y="112" text-anchor="middle" class="sm dim">R = 96 / 1,600 = 6.0%</text>
-    <text x="60" y="140" text-anchor="start" class="sm bold">Case reserves</text>
-    <rect x="60" y="152" width="90" height="28" rx="3" fill="#d97706" fill-opacity="0.30" stroke="#d97706" stroke-width="1.1"/>
-    <rect x="60" y="152" width="45" height="28" rx="3" fill="#d97706" fill-opacity="0.72"/>
-    <text x="160" y="172" text-anchor="start" class="sm">× 0.5 × 6.0% = 27</text>
-    <text x="60" y="214" text-anchor="start" class="sm bold">IBNR</text>
-    <rect x="60" y="226" width="135" height="28" rx="3" fill="#7c3aed" fill-opacity="0.30" stroke="#7c3aed" stroke-width="1.1"/>
-    <rect x="60" y="226" width="135" height="28" rx="3" fill="#7c3aed" fill-opacity="0.72"/>
-    <text x="205" y="246" text-anchor="start" class="sm">× 1.0 × 6.0% = 81</text>
-    <text x="180" y="306" text-anchor="middle" class="bold" fill="#059669">ULAE reserve = 27 + 81 = $108k</text>
-    <text x="180" y="344" text-anchor="middle" class="sm dim">half, because the claims behind the case</text>
-    <text x="180" y="362" text-anchor="middle" class="sm dim">reserves are already half handled — a</text>
-    <text x="180" y="380" text-anchor="middle" class="sm dim">convention, not a measurement</text>
+    <rect x="40" y="176" width="70" height="180" rx="3" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2" stroke-dasharray="4 3"/>
+    <rect x="40" y="266" width="70" height="90" rx="3" fill="#d97706" fill-opacity="0.55" stroke="#d97706" stroke-width="1.2"/>
+    <text x="75" y="315" text-anchor="middle" class="sm bold">× 0.5</text>
+    <text x="75" y="374" text-anchor="middle" class="sm">case 900</text>
+    <rect x="130" y="86" width="70" height="270" rx="3" fill="#7c3aed" fill-opacity="0.14" stroke="#7c3aed" stroke-width="1.2" stroke-dasharray="4 3"/>
+    <rect x="130" y="86" width="70" height="270" rx="3" fill="#7c3aed" fill-opacity="0.55" stroke="#7c3aed" stroke-width="1.2"/>
+    <text x="165" y="225" text-anchor="middle" class="sm bold">× 1.0</text>
+    <text x="165" y="374" text-anchor="middle" class="sm">IBNR 1,350</text>
+    <rect x="262" y="334.4" width="50" height="21.6" rx="3" fill="#059669" fill-opacity="0.6" stroke="#059669" stroke-width="1.2"/>
+    <text x="287" y="374" text-anchor="middle" class="sm bold">ULAE 108</text>
+    <line x1="206" y1="345.2" x2="256" y2="345.2" class="thin" stroke="var(--dim)" stroke-width="1.6" marker-end="url(#ahvardim)"/>
+    <text x="231" y="335.2" text-anchor="middle" class="sm bold">× 6.0%</text>
   </g>
 </svg>

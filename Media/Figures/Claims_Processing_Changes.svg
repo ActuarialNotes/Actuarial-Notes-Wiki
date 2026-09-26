@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>A faster settlement pattern distorting the paid development it is measured with</title>
+  <title>The share of claims closed by each age, higher at every age after claims start settling faster</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,43 +47,42 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="121.2" y1="100" x2="121.2" y2="326" class="grid"/>
-    <line x1="170.4" y1="100" x2="170.4" y2="326" class="grid"/>
-    <line x1="219.6" y1="100" x2="219.6" y2="326" class="grid"/>
-    <line x1="268.8" y1="100" x2="268.8" y2="326" class="grid"/>
-    <line x1="318" y1="100" x2="318" y2="326" class="grid"/>
-    <line x1="72" y1="326" x2="318" y2="326" class="grid"/>
-    <line x1="72" y1="218.38" x2="318" y2="218.38" class="grid"/>
-    <line x1="72" y1="110.76" x2="318" y2="110.76" class="grid"/>
-    <line x1="72" y1="326" x2="328" y2="326" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="72" y1="326" x2="72" y2="90" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="121.2" y1="326" x2="121.2" y2="330" class="tick"/>
-    <text x="121.2" y="342" text-anchor="middle" class="sm dim">12</text>
-    <line x1="170.4" y1="326" x2="170.4" y2="330" class="tick"/>
-    <text x="170.4" y="342" text-anchor="middle" class="sm dim">24</text>
-    <line x1="219.6" y1="326" x2="219.6" y2="330" class="tick"/>
-    <text x="219.6" y="342" text-anchor="middle" class="sm dim">36</text>
-    <line x1="268.8" y1="326" x2="268.8" y2="330" class="tick"/>
-    <text x="268.8" y="342" text-anchor="middle" class="sm dim">48</text>
-    <line x1="318" y1="326" x2="318" y2="330" class="tick"/>
-    <text x="318" y="342" text-anchor="middle" class="sm dim">60</text>
-    <line x1="68" y1="326" x2="72" y2="326" class="tick"/>
-    <text x="64" y="329.6" text-anchor="end" class="sm dim">0%</text>
-    <line x1="68" y1="218.38" x2="72" y2="218.38" class="tick"/>
-    <text x="64" y="221.98" text-anchor="end" class="sm dim">50%</text>
-    <line x1="68" y1="110.76" x2="72" y2="110.76" class="tick"/>
-    <text x="64" y="114.36" text-anchor="end" class="sm dim">100%</text>
-    <polyline points="121.2,248.51 170.4,192.55 219.6,153.81 268.8,127.98 318,115.07" class="curve dash" stroke="var(--dim)" stroke-width="1.8"/>
-    <polyline points="121.2,214.08 170.4,162.42 219.6,134.44 268.8,119.37 318,112.91" class="curve" stroke="#e11d48" stroke-width="2.4"/>
-    <circle cx="121.2" cy="214.08" r="3" fill="#e11d48"/>
-    <circle cx="170.4" cy="162.42" r="3" fill="#e11d48"/>
-    <circle cx="219.6" cy="134.44" r="3" fill="#e11d48"/>
-    <circle cx="268.8" cy="119.37" r="3" fill="#e11d48"/>
-    <circle cx="318" cy="112.91" r="3" fill="#e11d48"/>
-    <text x="195" y="226.08" text-anchor="middle" class="sm dim">before</text>
-    <text x="178.6" y="145.81" text-anchor="middle" class="sm bold" fill="#e11d48">after</text>
-    <text x="180" y="358" text-anchor="middle" class="sm dim">disposal rate by age in months</text>
-    <text x="180" y="376" text-anchor="middle" class="sm dim">closing sooner raises paid losses at every age,</text>
-    <text x="180" y="394" text-anchor="middle" class="sm dim">so paid factors fall and the method under-reserves</text>
+    <line x1="121.2" y1="94" x2="121.2" y2="344" class="grid"/>
+    <line x1="170.4" y1="94" x2="170.4" y2="344" class="grid"/>
+    <line x1="219.6" y1="94" x2="219.6" y2="344" class="grid"/>
+    <line x1="268.8" y1="94" x2="268.8" y2="344" class="grid"/>
+    <line x1="318" y1="94" x2="318" y2="344" class="grid"/>
+    <line x1="72" y1="344" x2="318" y2="344" class="grid"/>
+    <line x1="72" y1="224.95" x2="318" y2="224.95" class="grid"/>
+    <line x1="72" y1="105.9" x2="318" y2="105.9" class="grid"/>
+    <line x1="72" y1="344" x2="328" y2="344" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="72" y1="344" x2="72" y2="84" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="121.2" y1="344" x2="121.2" y2="348" class="tick"/>
+    <text x="121.2" y="360" text-anchor="middle" class="sm dim">12</text>
+    <line x1="170.4" y1="344" x2="170.4" y2="348" class="tick"/>
+    <text x="170.4" y="360" text-anchor="middle" class="sm dim">24</text>
+    <line x1="219.6" y1="344" x2="219.6" y2="348" class="tick"/>
+    <text x="219.6" y="360" text-anchor="middle" class="sm dim">36</text>
+    <line x1="268.8" y1="344" x2="268.8" y2="348" class="tick"/>
+    <text x="268.8" y="360" text-anchor="middle" class="sm dim">48</text>
+    <line x1="318" y1="344" x2="318" y2="348" class="tick"/>
+    <text x="318" y="360" text-anchor="middle" class="sm dim">60</text>
+    <line x1="68" y1="344" x2="72" y2="344" class="tick"/>
+    <text x="64" y="347.6" text-anchor="end" class="sm dim">0%</text>
+    <line x1="68" y1="224.95" x2="72" y2="224.95" class="tick"/>
+    <text x="64" y="228.55" text-anchor="end" class="sm dim">50%</text>
+    <line x1="68" y1="105.9" x2="72" y2="105.9" class="tick"/>
+    <text x="64" y="109.5" text-anchor="end" class="sm dim">100%</text>
+    <text x="318" y="376" text-anchor="end" class="sm dim">age in months</text>
+    <text x="68" y="80" text-anchor="start" class="sm dim">claims closed</text>
+    <polyline points="121.2,258.29 170.4,196.38 219.6,153.52 268.8,124.95 318,110.67" class="curve dash" stroke="var(--dim)" stroke-width="1.8"/>
+    <polyline points="121.2,220.19 170.4,163.05 219.6,132.1 268.8,115.43 318,108.29" class="curve" stroke="#e11d48" stroke-width="2.4"/>
+    <circle cx="121.2" cy="220.19" r="3" fill="#e11d48"/>
+    <circle cx="170.4" cy="163.05" r="3" fill="#e11d48"/>
+    <circle cx="219.6" cy="132.1" r="3" fill="#e11d48"/>
+    <circle cx="268.8" cy="115.43" r="3" fill="#e11d48"/>
+    <circle cx="318" cy="108.29" r="3" fill="#e11d48"/>
+    <text x="195" y="232.19" text-anchor="middle" class="sm dim">before</text>
+    <text x="178.6" y="145.52" text-anchor="middle" class="sm bold" fill="#e11d48">after</text>
   </g>
 </svg>

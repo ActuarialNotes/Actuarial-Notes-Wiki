@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The ultimate loss split into what has been paid, the case reserves and IBNR</title>
+  <title>AY 2024's 2,850 ultimate stacked as paid, case and IBNR, with the 1,500 reported bracketed on one side and the 2,250 unpaid on the other</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -44,20 +44,16 @@ text {
   <g id="light"/><g id="dark"/>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <text x="180" y="118" text-anchor="middle" class="sm dim">AY 2024 at 12 months ($000)</text>
-    <rect x="44" y="160" width="57.26" height="44" rx="4" fill="#059669" fill-opacity="0.34" stroke="#059669" stroke-width="1.2"/>
-    <rect x="101.26" y="160" width="85.89" height="44" rx="4" fill="#d97706" fill-opacity="0.34" stroke="#d97706" stroke-width="1.2"/>
-    <rect x="187.16" y="160" width="128.84" height="44" rx="4" fill="#7c3aed" fill-opacity="0.34" stroke="#7c3aed" stroke-width="1.2"/>
-    <path d="M44,156 v-4.8 H175 q5,0 5,-4.4 q0,4.4 5,4.4 H316 v4.8" class="thin" stroke="var(--dim)" stroke-width="1.2"/>
-    <text x="180" y="135" text-anchor="middle" class="sm dim">ultimate 2,850</text>
-    <path d="M101.26,210 v4.8 H203.63 q5,0 5,4.4 q0,-4.4 5,-4.4 H316 v-4.8" class="thin" stroke="var(--dim)" stroke-width="1.2"/>
-    <text x="208.63" y="229" text-anchor="middle" class="sm dim">unpaid claim estimate 2,250</text>
-    <rect x="84" y="259" width="11" height="11" rx="2" fill="#059669" fill-opacity="0.8"/>
-    <text x="102" y="269" text-anchor="start" class="sm">paid 600</text>
-    <rect x="84" y="291" width="11" height="11" rx="2" fill="#d97706" fill-opacity="0.8"/>
-    <text x="102" y="301" text-anchor="start" class="sm">case 900</text>
-    <rect x="84" y="323" width="11" height="11" rx="2" fill="#7c3aed" fill-opacity="0.8"/>
-    <text x="102" y="333" text-anchor="start" class="sm">IBNR 1,350</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">reported = paid + case; the rest is the actuary's</text>
+    <rect x="140" y="313.05" width="80" height="58.95" rx="3" fill="#059669" fill-opacity="0.34" stroke="#059669" stroke-width="1.2"/>
+    <text x="180" y="346.53" text-anchor="middle" class="sm bold">paid 600</text>
+    <rect x="140" y="224.63" width="80" height="88.42" rx="3" fill="#d97706" fill-opacity="0.34" stroke="#d97706" stroke-width="1.2"/>
+    <text x="180" y="272.84" text-anchor="middle" class="sm bold">case 900</text>
+    <rect x="140" y="92" width="80" height="132.63" rx="3" fill="#7c3aed" fill-opacity="0.34" stroke="#7c3aed" stroke-width="1.2"/>
+    <text x="180" y="162.32" text-anchor="middle" class="sm bold">IBNR 1,350</text>
+    <text x="180" y="82" text-anchor="middle" class="sm bold">ultimate 2,850</text>
+    <path d="M134,372.0 H128 V224.6 H134" class="thin" stroke="var(--dim)" stroke-width="1.3"/>
+    <text x="120" y="302.32" text-anchor="end" class="sm">reported 1,500</text>
+    <path d="M226,313.1 H232 V92.0 H226" class="thin" stroke="var(--dim)" stroke-width="1.3"/>
+    <text x="240" y="206.53" text-anchor="start" class="sm">unpaid 2,250</text>
   </g>
 </svg>

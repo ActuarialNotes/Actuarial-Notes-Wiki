@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Paid losses developing toward the same ultimate as reported losses, from further below</title>
+  <title>Paid losses climbing to the same ultimate as reported losses, from further below</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,37 +47,35 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="109.14" y1="98" x2="109.14" y2="326" class="grid"/>
-    <line x1="179.43" y1="98" x2="179.43" y2="326" class="grid"/>
-    <line x1="249.71" y1="98" x2="249.71" y2="326" class="grid"/>
-    <line x1="320" y1="98" x2="320" y2="326" class="grid"/>
-    <line x1="74" y1="326" x2="320" y2="326" class="grid"/>
-    <line x1="74" y1="219.12" x2="320" y2="219.12" class="grid"/>
-    <line x1="74" y1="112.25" x2="320" y2="112.25" class="grid"/>
-    <line x1="74" y1="326" x2="330" y2="326" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="74" y1="326" x2="74" y2="88" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="109.14" y1="326" x2="109.14" y2="330" class="tick"/>
-    <text x="109.14" y="342" text-anchor="middle" class="sm dim">12</text>
-    <line x1="179.43" y1="326" x2="179.43" y2="330" class="tick"/>
-    <text x="179.43" y="342" text-anchor="middle" class="sm dim">36</text>
-    <line x1="249.71" y1="326" x2="249.71" y2="330" class="tick"/>
-    <text x="249.71" y="342" text-anchor="middle" class="sm dim">60</text>
-    <line x1="320" y1="326" x2="320" y2="330" class="tick"/>
-    <text x="320" y="342" text-anchor="middle" class="sm dim">84</text>
-    <line x1="70" y1="326" x2="74" y2="326" class="tick"/>
-    <text x="66" y="329.6" text-anchor="end" class="sm dim">0</text>
-    <line x1="70" y1="219.12" x2="74" y2="219.12" class="tick"/>
-    <text x="66" y="222.72" text-anchor="end" class="sm dim">1,500</text>
-    <line x1="70" y1="112.25" x2="74" y2="112.25" class="tick"/>
-    <text x="66" y="115.85" text-anchor="end" class="sm dim">3,000</text>
-    <polyline points="109.14,219.12 144.29,165.69 179.43,140.04 214.57,128.85 249.71,124.93 284.86,123.29 320,122.94" class="curve" stroke="#3b82f6" stroke-width="2.2"/>
-    <polyline points="109.14,283.25 144.29,219.12 179.43,172.81 214.57,143.6 249.71,130.78 284.86,125.08 320,122.94" class="curve" stroke="#059669" stroke-width="2.4"/>
-    <line x1="74" y1="122.94" x2="320" y2="122.94" class="thin dash" stroke="var(--dim)" stroke-width="1.3"/>
-    <text x="161.86" y="141.88" text-anchor="middle" class="sm bold" fill="#3b82f6">reported</text>
-    <text x="208.71" y="204.62" text-anchor="middle" class="sm bold" fill="#059669">paid</text>
-    <text x="302.43" y="114.94" text-anchor="end" class="sm dim">ultimate</text>
-    <text x="180" y="358" text-anchor="middle" class="sm dim">age in months</text>
-    <text x="180" y="374" text-anchor="middle" class="sm dim">immune to case-reserving changes, and</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">distorted instead by the speed of settlement</text>
+    <line x1="109.14" y1="94" x2="109.14" y2="344" class="grid"/>
+    <line x1="179.43" y1="94" x2="179.43" y2="344" class="grid"/>
+    <line x1="249.71" y1="94" x2="249.71" y2="344" class="grid"/>
+    <line x1="320" y1="94" x2="320" y2="344" class="grid"/>
+    <line x1="74" y1="344" x2="320" y2="344" class="grid"/>
+    <line x1="74" y1="226.81" x2="320" y2="226.81" class="grid"/>
+    <line x1="74" y1="109.62" x2="320" y2="109.62" class="grid"/>
+    <line x1="74" y1="344" x2="330" y2="344" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="74" y1="344" x2="74" y2="84" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="109.14" y1="344" x2="109.14" y2="348" class="tick"/>
+    <text x="109.14" y="360" text-anchor="middle" class="sm dim">12</text>
+    <line x1="179.43" y1="344" x2="179.43" y2="348" class="tick"/>
+    <text x="179.43" y="360" text-anchor="middle" class="sm dim">36</text>
+    <line x1="249.71" y1="344" x2="249.71" y2="348" class="tick"/>
+    <text x="249.71" y="360" text-anchor="middle" class="sm dim">60</text>
+    <line x1="320" y1="344" x2="320" y2="348" class="tick"/>
+    <text x="320" y="360" text-anchor="middle" class="sm dim">84</text>
+    <line x1="70" y1="344" x2="74" y2="344" class="tick"/>
+    <text x="66" y="347.6" text-anchor="end" class="sm dim">0</text>
+    <line x1="70" y1="226.81" x2="74" y2="226.81" class="tick"/>
+    <text x="66" y="230.41" text-anchor="end" class="sm dim">1,500</text>
+    <line x1="70" y1="109.62" x2="74" y2="109.62" class="tick"/>
+    <text x="66" y="113.22" text-anchor="end" class="sm dim">3,000</text>
+    <text x="320" y="376" text-anchor="end" class="sm dim">age in months</text>
+    <polyline points="109.14,226.81 144.29,168.22 179.43,140.09 214.57,127.83 249.71,123.53 284.86,121.73 320,121.34" class="curve" stroke="#3b82f6" stroke-width="2.2"/>
+    <polyline points="109.14,297.12 144.29,226.81 179.43,176.03 214.57,144 249.71,129.94 284.86,123.69 320,121.34" class="curve" stroke="#059669" stroke-width="2.4"/>
+    <line x1="74" y1="121.34" x2="320" y2="121.34" class="thin dash" stroke="var(--dim)" stroke-width="1.3"/>
+    <text x="128.57" y="168.22" text-anchor="end" class="sm bold" fill="#3b82f6">reported</text>
+    <text x="191.14" y="201.75" text-anchor="middle" class="sm bold" fill="#059669">paid</text>
+    <text x="302.43" y="113.34" text-anchor="end" class="sm dim">ultimate</text>
   </g>
 </svg>

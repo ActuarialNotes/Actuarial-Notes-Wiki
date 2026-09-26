@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Five of twelve equally likely outcomes shaded, and the resulting probability marked on a 0-to-1 scale</title>
+  <title>A disc cut into twelve equal slices, the equally likely outcomes, with five of them shaded as the event E</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,33 +42,22 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
-  <defs>
-    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
-  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="40" y="82" width="280" height="168" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
-    <text x="53" y="98" text-anchor="middle" class="sm dim">S</text>
-    <circle cx="86" cy="122" r="19" fill="#3b82f6" fill-opacity="0.85" stroke="#3b82f6" stroke-width="1.4"/>
-    <circle cx="148" cy="122" r="19" fill="#3b82f6" fill-opacity="0.85" stroke="#3b82f6" stroke-width="1.4"/>
-    <circle cx="210" cy="122" r="19" fill="var(--surf)" fill-opacity="1" stroke="var(--edge)" stroke-width="1.4"/>
-    <circle cx="272" cy="122" r="19" fill="var(--surf)" fill-opacity="1" stroke="var(--edge)" stroke-width="1.4"/>
-    <circle cx="86" cy="174" r="19" fill="#3b82f6" fill-opacity="0.85" stroke="#3b82f6" stroke-width="1.4"/>
-    <circle cx="148" cy="174" r="19" fill="var(--surf)" fill-opacity="1" stroke="var(--edge)" stroke-width="1.4"/>
-    <circle cx="210" cy="174" r="19" fill="#3b82f6" fill-opacity="0.85" stroke="#3b82f6" stroke-width="1.4"/>
-    <circle cx="272" cy="174" r="19" fill="var(--surf)" fill-opacity="1" stroke="var(--edge)" stroke-width="1.4"/>
-    <circle cx="86" cy="226" r="19" fill="var(--surf)" fill-opacity="1" stroke="var(--edge)" stroke-width="1.4"/>
-    <circle cx="148" cy="226" r="19" fill="#3b82f6" fill-opacity="0.85" stroke="#3b82f6" stroke-width="1.4"/>
-    <circle cx="210" cy="226" r="19" fill="var(--surf)" fill-opacity="1" stroke="var(--edge)" stroke-width="1.4"/>
-    <circle cx="272" cy="226" r="19" fill="var(--surf)" fill-opacity="1" stroke="var(--edge)" stroke-width="1.4"/>
-    <text x="180" y="278" text-anchor="middle" class="sm dim">5 of the 12 outcomes are in E</text>
-    <rect x="60" y="334" width="240" height="16" rx="8" fill="var(--soft)" stroke="var(--edge)"/>
-    <rect x="60" y="334" width="100" height="16" rx="8" fill="#3b82f6" fill-opacity="0.55"/>
-    <line x1="60" y1="352" x2="60" y2="357" class="tick"/>
-    <text x="60" y="370" text-anchor="middle" class="sm dim">0</text>
-    <line x1="300" y1="352" x2="300" y2="357" class="tick"/>
-    <text x="300" y="370" text-anchor="middle" class="sm dim">1</text>
-    <line x1="160" y1="308" x2="160" y2="330" class="thin" stroke="#3b82f6" stroke-width="1.6" marker-end="url(#ah3b82f6)"/>
-    <text x="160" y="302" text-anchor="middle" class="sm bold" fill="#3b82f6">P(E)</text>
+    <circle cx="180" cy="232" r="141.5" fill="none" stroke="var(--edge)" stroke-width="1.2"/>
+    <path d="M180.0,232 L180.00,92.00 A140,140 0 0 1 250.00,110.76 Z" fill="#3b82f6" fill-opacity="0.7" stroke="var(--surf)" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M180.0,232 L250.00,110.76 A140,140 0 0 1 301.24,162.00 Z" fill="#3b82f6" fill-opacity="0.7" stroke="var(--surf)" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M180.0,232 L301.24,162.00 A140,140 0 0 1 320.00,232.00 Z" fill="#3b82f6" fill-opacity="0.7" stroke="var(--surf)" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M180.0,232 L320.00,232.00 A140,140 0 0 1 301.24,302.00 Z" fill="#3b82f6" fill-opacity="0.7" stroke="var(--surf)" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M180.0,232 L301.24,302.00 A140,140 0 0 1 250.00,353.24 Z" fill="#3b82f6" fill-opacity="0.7" stroke="var(--surf)" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M180.0,232 L250.00,353.24 A140,140 0 0 1 180.00,372.00 Z" fill="var(--soft)" fill-opacity="1" stroke="var(--surf)" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M180.0,232 L180.00,372.00 A140,140 0 0 1 110.00,353.24 Z" fill="var(--soft)" fill-opacity="1" stroke="var(--surf)" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M180.0,232 L110.00,353.24 A140,140 0 0 1 58.76,302.00 Z" fill="var(--soft)" fill-opacity="1" stroke="var(--surf)" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M180.0,232 L58.76,302.00 A140,140 0 0 1 40.00,232.00 Z" fill="var(--soft)" fill-opacity="1" stroke="var(--surf)" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M180.0,232 L40.00,232.00 A140,140 0 0 1 58.76,162.00 Z" fill="var(--soft)" fill-opacity="1" stroke="var(--surf)" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M180.0,232 L58.76,162.00 A140,140 0 0 1 110.00,110.76 Z" fill="var(--soft)" fill-opacity="1" stroke="var(--surf)" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M180.0,232 L110.00,110.76 A140,140 0 0 1 180.00,92.00 Z" fill="var(--soft)" fill-opacity="1" stroke="var(--surf)" stroke-width="3" stroke-linejoin="round"/>
+    <text x="258.43" y="217.98" text-anchor="middle" class="bold">E</text>
+    <text x="68" y="120" text-anchor="middle" class="sm dim">S</text>
   </g>
 </svg>

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Gross losses as the base from which net and ceded figures are derived</title>
+  <title>AY 2024's 2,850 gross ultimate as one column, stacked from the net the insurer keeps and the ceded, salvage and subrogation and deductible shares that come off it</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -44,18 +44,15 @@ text {
   <g id="light"/><g id="dark"/>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <text x="180" y="118" text-anchor="middle" class="sm dim">AY 2024 ultimate ($000)</text>
-    <rect x="100" y="146" width="82" height="110.72" rx="4" fill="#3b82f6" fill-opacity="0.36" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="196" y="205.36" text-anchor="start" class="sm">net 1,610</text>
-    <rect x="100" y="256.72" width="82" height="44.01" rx="4" fill="#d97706" fill-opacity="0.36" stroke="#d97706" stroke-width="1.2"/>
-    <text x="196" y="282.73" text-anchor="start" class="sm">ceded 640</text>
-    <rect x="100" y="300.74" width="82" height="17.19" rx="4" fill="#059669" fill-opacity="0.36" stroke="#059669" stroke-width="1.2"/>
-    <text x="196" y="313.33" text-anchor="start" class="sm">S&amp;S 250</text>
-    <rect x="100" y="317.93" width="82" height="24.07" rx="4" fill="#e11d48" fill-opacity="0.36" stroke="#e11d48" stroke-width="1.2"/>
-    <text x="196" y="333.96" text-anchor="start" class="sm">deductible 350</text>
-    <text x="86" y="244" text-anchor="end" class="sm bold">gross</text>
-    <text x="86" y="260" text-anchor="end" class="sm bold">2,850</text>
-    <line x1="94" y1="146" x2="94" y2="342" class="thin" stroke="var(--dim)" stroke-width="1.4"/>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">reserve here first — every other view is a subtraction</text>
+    <rect x="110" y="120" width="82" height="135.58" rx="4" fill="#3b82f6" fill-opacity="0.36" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="206" y="191.79" text-anchor="start" class="sm">net 1,610</text>
+    <rect x="110" y="255.58" width="82" height="53.89" rx="4" fill="#d97706" fill-opacity="0.36" stroke="#d97706" stroke-width="1.2"/>
+    <text x="206" y="286.53" text-anchor="start" class="sm">ceded 640</text>
+    <rect x="110" y="309.47" width="82" height="21.05" rx="4" fill="#059669" fill-opacity="0.36" stroke="#059669" stroke-width="1.2"/>
+    <text x="206" y="324" text-anchor="start" class="sm">S&amp;S 250</text>
+    <rect x="110" y="330.53" width="82" height="29.47" rx="4" fill="#e11d48" fill-opacity="0.36" stroke="#e11d48" stroke-width="1.2"/>
+    <text x="206" y="349.26" text-anchor="start" class="sm">deductible 350</text>
+    <path d="M106,120 H98 V360 H106" class="thin" stroke="var(--ink)" stroke-width="1.4"/>
+    <text x="92" y="244" text-anchor="end" class="sm bold">gross 2,850</text>
   </g>
 </svg>

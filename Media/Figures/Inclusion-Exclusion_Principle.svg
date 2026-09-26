@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Alternating signs over the seven regions of a three-set Venn diagram</title>
+  <title>Three overlapping circles with a plus sign in each region covered once or three times and a minus sign in each region covered twice</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -44,18 +44,18 @@ text {
   <g id="light"/><g id="dark"/>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <circle cx="180" cy="174" r="78" fill="#3b82f6" fill-opacity="0.16" stroke="#3b82f6" stroke-width="1.6"/>
-    <circle cx="134" cy="250" r="78" fill="#d97706" fill-opacity="0.16" stroke="#d97706" stroke-width="1.6"/>
-    <circle cx="226" cy="250" r="78" fill="#059669" fill-opacity="0.16" stroke="#059669" stroke-width="1.6"/>
-    <text x="180" y="86" text-anchor="middle" class="bold" fill="#3b82f6">A</text>
-    <text x="68" y="310" text-anchor="middle" class="bold" fill="#d97706">B</text>
-    <text x="292" y="310" text-anchor="middle" class="bold" fill="#059669">C</text>
-    <text x="180" y="134" text-anchor="middle" class="bold">+</text>
-    <text x="106" y="282" text-anchor="middle" class="bold">+</text>
-    <text x="254" y="282" text-anchor="middle" class="bold">+</text>
-    <text x="140" y="208" text-anchor="middle" class="bold">−</text>
-    <text x="220" y="208" text-anchor="middle" class="bold">−</text>
-    <text x="180" y="282" text-anchor="middle" class="bold">−</text>
-    <text x="180" y="238" text-anchor="middle" class="bold">+</text>
+    <circle cx="180" cy="192" r="88" fill="#3b82f6" fill-opacity="0.16" stroke="#3b82f6" stroke-width="1.6"/>
+    <circle cx="130" cy="276" r="88" fill="#d97706" fill-opacity="0.16" stroke="#d97706" stroke-width="1.6"/>
+    <circle cx="230" cy="276" r="88" fill="#059669" fill-opacity="0.16" stroke="#059669" stroke-width="1.6"/>
+    <text x="104" y="120" text-anchor="middle" class="bold">A</text>
+    <text x="42" y="356" text-anchor="middle" class="bold">B</text>
+    <text x="318" y="356" text-anchor="middle" class="bold">C</text>
+    <text x="180" y="147" text-anchor="middle" class="bold">+</text>
+    <text x="98" y="313" text-anchor="middle" class="bold">+</text>
+    <text x="262" y="313" text-anchor="middle" class="bold">+</text>
+    <text x="136" y="231" text-anchor="middle" class="bold">−</text>
+    <text x="224" y="231" text-anchor="middle" class="bold">−</text>
+    <text x="180" y="313" text-anchor="middle" class="bold">−</text>
+    <text x="180" y="263" text-anchor="middle" class="bold">+</text>
   </g>
 </svg>

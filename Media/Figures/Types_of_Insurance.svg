@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Lines of insurance placed by claim frequency and claim severity</title>
+  <title>Six lines of insurance placed by claim frequency and claim severity, with the tail lengthening toward low frequency and high severity</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -44,26 +44,27 @@ text {
   <g id="light"/><g id="dark"/>
   <defs>
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="68" y1="322" x2="326" y2="322" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="68" y1="322" x2="68" y2="92" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <circle cx="276.32" cy="291.2" r="4.6" fill="#059669"/>
-    <text x="276.32" y="281.2" text-anchor="middle" class="sm bold" fill="#059669">Auto PD</text>
-    <circle cx="231.68" cy="251.6" r="4.6" fill="#059669"/>
-    <text x="231.68" y="241.6" text-anchor="middle" class="sm bold" fill="#059669">Homeowners</text>
-    <circle cx="177.12" cy="198.8" r="4.6" fill="#3b82f6"/>
-    <text x="177.12" y="188.8" text-anchor="middle" class="sm bold" fill="#3b82f6">CGL</text>
-    <circle cx="132.48" cy="172.4" r="4.6" fill="#3b82f6"/>
-    <text x="132.48" y="162.4" text-anchor="middle" class="sm bold" fill="#3b82f6">Auto BI</text>
-    <circle cx="147.36" cy="128.4" r="4.6" fill="#e11d48"/>
-    <text x="147.36" y="118.4" text-anchor="middle" class="sm bold" fill="#e11d48">Workers comp</text>
-    <circle cx="90.32" cy="115.2" r="4.6" fill="#e11d48"/>
-    <text x="90.32" y="105.2" text-anchor="middle" class="sm bold" fill="#e11d48">Med mal</text>
-    <text x="62" y="88" text-anchor="start" class="sm dim">severity</text>
-    <text x="316" y="342" text-anchor="end" class="sm dim">frequency</text>
-    <text x="180" y="376" text-anchor="middle" class="sm dim">low frequency and high severity means a long</text>
-    <text x="180" y="394" text-anchor="middle" class="sm dim">tail — and colour is the tail length here</text>
+    <line x1="56" y1="352" x2="330" y2="352" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="56" y1="352" x2="56" y2="82" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <text x="320" y="384" text-anchor="end" class="sm dim">frequency</text>
+    <text x="52" y="78" text-anchor="start" class="sm dim">severity</text>
+    <circle cx="277.76" cy="315.6" r="4.6" fill="#059669"/>
+    <text x="277.76" y="305.6" text-anchor="middle" class="sm bold" fill="#059669">Auto PD</text>
+    <circle cx="230.24" cy="268.8" r="4.6" fill="#059669"/>
+    <text x="230.24" y="258.8" text-anchor="middle" class="sm bold" fill="#059669">Homeowners</text>
+    <circle cx="172.16" cy="206.4" r="4.6" fill="#3b82f6"/>
+    <text x="172.16" y="196.4" text-anchor="middle" class="sm bold" fill="#3b82f6">CGL</text>
+    <circle cx="124.64" cy="175.2" r="4.6" fill="#3b82f6"/>
+    <text x="124.64" y="165.2" text-anchor="middle" class="sm bold" fill="#3b82f6">Auto BI</text>
+    <circle cx="140.48" cy="123.2" r="4.6" fill="#e11d48"/>
+    <text x="140.48" y="113.2" text-anchor="middle" class="sm bold" fill="#e11d48">Workers comp</text>
+    <circle cx="79.76" cy="107.6" r="4.6" fill="#e11d48"/>
+    <text x="79.76" y="97.6" text-anchor="middle" class="sm bold" fill="#e11d48">Med mal</text>
+    <line x1="298.88" y1="222" x2="230.24" y2="133.6" class="thin" stroke="var(--dim)" stroke-width="1.6" marker-end="url(#ahvardim)"/>
+    <text x="269.84" y="162.2" text-anchor="start" class="sm dim">longer tail</text>
   </g>
 </svg>

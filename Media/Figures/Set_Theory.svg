@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Union, intersection, complement and difference on Venn diagrams</title>
+  <title>One Venn diagram of A and B inside S with its four regions shaded apart: A without B, the overlap, B without A, and the outside</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,47 +42,21 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
-  <defs>
-    <clipPath id="clipA0"><circle cx="82.0" cy="136" r="36"/></clipPath>
-    <clipPath id="clipA1"><circle cx="242.0" cy="136" r="36"/></clipPath>
-    <clipPath id="clipA2"><circle cx="82.0" cy="284" r="36"/></clipPath>
-    <clipPath id="clipA3"><circle cx="242.0" cy="284" r="36"/></clipPath>
-  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="30" y="84" width="140" height="104" rx="7" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
-    <text x="41" y="99" text-anchor="middle" class="sm dim">S</text>
-    <g opacity="0.22" fill="#3b82f6"><circle cx="82.0" cy="136" r="36"/><circle cx="118.0" cy="136" r="36"/></g>
-    <circle cx="82" cy="136" r="36" fill="none" stroke="#3b82f6" stroke-width="1.4"/>
-    <circle cx="118" cy="136" r="36" fill="none" stroke="#d97706" stroke-width="1.4"/>
-    <text x="56" y="108" text-anchor="middle" class="sm bold" fill="#3b82f6">A</text>
-    <text x="144" y="108" text-anchor="middle" class="sm bold" fill="#d97706">B</text>
-    <text x="100" y="210" text-anchor="middle" class="bold">A ∪ B</text>
-    <rect x="190" y="84" width="140" height="104" rx="7" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
-    <text x="201" y="99" text-anchor="middle" class="sm dim">S</text>
-    <g clip-path="url(#clipA1)"><circle cx="278.0" cy="136" r="36" fill="#3b82f6" fill-opacity="0.3"/></g>
-    <circle cx="242" cy="136" r="36" fill="none" stroke="#3b82f6" stroke-width="1.4"/>
-    <circle cx="278" cy="136" r="36" fill="none" stroke="#d97706" stroke-width="1.4"/>
-    <text x="216" y="108" text-anchor="middle" class="sm bold" fill="#3b82f6">A</text>
-    <text x="304" y="108" text-anchor="middle" class="sm bold" fill="#d97706">B</text>
-    <text x="260" y="210" text-anchor="middle" class="bold">A ∩ B</text>
-    <rect x="30" y="232" width="140" height="104" rx="7" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
-    <text x="41" y="247" text-anchor="middle" class="sm dim">S</text>
-    <rect x="30" y="232" width="140" height="104" rx="7" fill="#3b82f6" fill-opacity="0.22"/>
-    <circle cx="82" cy="284" r="36" fill="var(--soft)"/>
-    <circle cx="82" cy="284" r="36" fill="none" stroke="#3b82f6" stroke-width="1.4"/>
-    <circle cx="118" cy="284" r="36" fill="none" stroke="#d97706" stroke-width="1.4"/>
-    <text x="56" y="256" text-anchor="middle" class="sm bold" fill="#3b82f6">A</text>
-    <text x="144" y="256" text-anchor="middle" class="sm bold" fill="#d97706">B</text>
-    <text x="100" y="358" text-anchor="middle" class="bold">Aᶜ</text>
-    <rect x="190" y="232" width="140" height="104" rx="7" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
-    <text x="201" y="247" text-anchor="middle" class="sm dim">S</text>
-    <circle cx="242" cy="284" r="36" fill="#3b82f6" fill-opacity="0.22"/>
-    <g clip-path="url(#clipA3)"><circle cx="278.0" cy="284" r="36" fill="var(--soft)"/></g>
-    <circle cx="242" cy="284" r="36" fill="none" stroke="#3b82f6" stroke-width="1.4"/>
-    <circle cx="278" cy="284" r="36" fill="none" stroke="#d97706" stroke-width="1.4"/>
-    <text x="216" y="256" text-anchor="middle" class="sm bold" fill="#3b82f6">A</text>
-    <text x="304" y="256" text-anchor="middle" class="sm bold" fill="#d97706">B</text>
-    <text x="260" y="358" text-anchor="middle" class="bold">A \ B</text>
+    <rect x="26" y="86" width="308" height="290" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
+    <text x="39" y="104" text-anchor="middle" class="sm dim">S</text>
+    <circle cx="134" cy="222" r="92" fill="#3b82f6" fill-opacity="0.3" stroke="none"/>
+    <circle cx="226" cy="222" r="92" fill="#d97706" fill-opacity="0.3" stroke="none"/>
+    <path d="M180.0,142.33 A92,92 0 0 1 180.0,301.67 A92,92 0 0 1 180.0,142.33 Z" fill="var(--surf)" stroke="none"/>
+    <path d="M180.0,142.33 A92,92 0 0 1 180.0,301.67 A92,92 0 0 1 180.0,142.33 Z" fill="#7c3aed" fill-opacity="0.5" stroke="none"/>
+    <circle cx="134" cy="222" r="92" fill="none" stroke="#3b82f6" stroke-width="1.6"/>
+    <circle cx="226" cy="222" r="92" fill="none" stroke="#d97706" stroke-width="1.6"/>
+    <text x="72" y="142" text-anchor="middle" class="bold">A</text>
+    <text x="288" y="142" text-anchor="middle" class="bold">B</text>
+    <text x="96" y="227" text-anchor="middle" class="sm bold">A \ B</text>
+    <text x="180" y="227" text-anchor="middle" class="sm bold">A ∩ B</text>
+    <text x="264" y="227" text-anchor="middle" class="sm bold">B \ A</text>
+    <text x="320" y="362" text-anchor="end" class="sm bold">(A ∪ B)ᶜ</text>
   </g>
 </svg>

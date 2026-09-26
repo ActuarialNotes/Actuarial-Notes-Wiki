@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>A random variable mapping outcomes of two coin tosses to the number of heads</title>
+  <title>The four outcomes of two coin tosses, each sent by an arrow to its number of heads on the real line</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -48,30 +48,30 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="36" y="110" width="288" height="92" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
-    <text x="49" y="126" text-anchor="middle" class="sm dim">S</text>
-    <rect x="42" y="152" width="64" height="34" rx="7" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.3"/>
-    <text x="74" y="174" text-anchor="middle">TT</text>
-    <rect x="114" y="152" width="64" height="34" rx="7" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.3"/>
-    <text x="146" y="174" text-anchor="middle">HT</text>
-    <rect x="186" y="152" width="64" height="34" rx="7" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.3"/>
-    <text x="218" y="174" text-anchor="middle">TH</text>
-    <rect x="258" y="152" width="64" height="34" rx="7" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.3"/>
-    <text x="290" y="174" text-anchor="middle">HH</text>
-    <line x1="50" y1="330" x2="310" y2="330" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <text x="320" y="334" text-anchor="start" class="sm dim">ℝ</text>
-    <line x1="66" y1="325" x2="66" y2="335" class="tick"/>
-    <circle cx="66" cy="330" r="5" fill="#7c3aed"/>
-    <text x="66" y="352" text-anchor="middle">0</text>
-    <line x1="180" y1="325" x2="180" y2="335" class="tick"/>
-    <circle cx="180" cy="330" r="5" fill="#7c3aed"/>
-    <text x="180" y="352" text-anchor="middle">1</text>
-    <line x1="294" y1="325" x2="294" y2="335" class="tick"/>
-    <circle cx="294" cy="330" r="5" fill="#7c3aed"/>
-    <text x="294" y="352" text-anchor="middle">2</text>
-    <line x1="74" y1="188" x2="66" y2="316" class="thin dash" stroke="var(--dim)" stroke-width="1" marker-end="url(#ahvardim)"/>
-    <line x1="146" y1="188" x2="180" y2="316" class="thin dash" stroke="var(--dim)" stroke-width="1" marker-end="url(#ahvardim)"/>
-    <line x1="218" y1="188" x2="180" y2="316" class="thin dash" stroke="var(--dim)" stroke-width="1" marker-end="url(#ahvardim)"/>
-    <line x1="290" y1="188" x2="294" y2="316" class="thin dash" stroke="var(--dim)" stroke-width="1" marker-end="url(#ahvardim)"/>
+    <rect x="30" y="92" width="300" height="108" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
+    <text x="43" y="108" text-anchor="middle" class="sm dim">S</text>
+    <rect x="42" y="134" width="60" height="40" rx="8" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.4"/>
+    <text x="72" y="159" text-anchor="middle" class="bold">TT</text>
+    <rect x="114" y="134" width="60" height="40" rx="8" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.4"/>
+    <text x="144" y="159" text-anchor="middle" class="bold">HT</text>
+    <rect x="186" y="134" width="60" height="40" rx="8" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.4"/>
+    <text x="216" y="159" text-anchor="middle" class="bold">TH</text>
+    <rect x="258" y="134" width="60" height="40" rx="8" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.4"/>
+    <text x="288" y="159" text-anchor="middle" class="bold">HH</text>
+    <line x1="42" y1="342" x2="314" y2="342" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <text x="324" y="346" text-anchor="start" class="sm dim">ℝ</text>
+    <line x1="72" y1="337" x2="72" y2="347" class="tick"/>
+    <circle cx="72" cy="342" r="6" fill="#7c3aed"/>
+    <text x="72" y="366" text-anchor="middle" class="bold">0</text>
+    <line x1="180" y1="337" x2="180" y2="347" class="tick"/>
+    <circle cx="180" cy="342" r="6" fill="#7c3aed"/>
+    <text x="180" y="366" text-anchor="middle" class="bold">1</text>
+    <line x1="288" y1="337" x2="288" y2="347" class="tick"/>
+    <circle cx="288" cy="342" r="6" fill="#7c3aed"/>
+    <text x="288" y="366" text-anchor="middle" class="bold">2</text>
+    <line x1="72" y1="178" x2="72" y2="326" class="thin dash" stroke="var(--dim)" stroke-width="1.2" marker-end="url(#ahvardim)"/>
+    <line x1="144" y1="178" x2="180" y2="326" class="thin dash" stroke="var(--dim)" stroke-width="1.2" marker-end="url(#ahvardim)"/>
+    <line x1="216" y1="178" x2="180" y2="326" class="thin dash" stroke="var(--dim)" stroke-width="1.2" marker-end="url(#ahvardim)"/>
+    <line x1="288" y1="178" x2="288" y2="326" class="thin dash" stroke="var(--dim)" stroke-width="1.2" marker-end="url(#ahvardim)"/>
   </g>
 </svg>

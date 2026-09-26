@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Gross ultimate reduced by salvage and subrogation recoveries</title>
+  <title>A claim payment of 2,850 on a timeline, followed later by a salvage recovery of 90 from the wreck and a subrogation recovery of 160 from the party at fault</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,18 +42,35 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+    <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
+    <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
+  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <text x="180" y="120" text-anchor="middle" class="sm dim">AY 2024 ultimate ($000)</text>
-    <rect x="46" y="144" width="268" height="34" rx="4" fill="#7c3aed" fill-opacity="0.28" stroke="#7c3aed" stroke-width="1.2"/>
-    <text x="180" y="166" text-anchor="middle" class="sm">gross 2,850</text>
-    <rect x="46" y="200" width="8.46" height="30" rx="3" fill="#0d9488" fill-opacity="0.7"/>
-    <text x="64.46" y="221" text-anchor="start" class="sm">salvage 90</text>
-    <rect x="46" y="244" width="15.05" height="30" rx="3" fill="#e11d48" fill-opacity="0.7"/>
-    <text x="71.05" y="265" text-anchor="start" class="sm">subrogation 160</text>
-    <rect x="46" y="292" width="244.49" height="34" rx="4" fill="#3b82f6" fill-opacity="0.34" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="168.25" y="314" text-anchor="middle" class="sm">net 2,600</text>
-    <text x="180" y="358" text-anchor="middle" class="sm dim">S&amp;S has its own long development pattern —</text>
-    <text x="180" y="376" text-anchor="middle" class="sm dim">estimate it, do not net it out of the triangle</text>
+    <line x1="40" y1="230" x2="330" y2="230" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+    <text x="330" y="248" text-anchor="end" class="sm dim">time</text>
+    <line x1="80" y1="230" x2="80" y2="370" class="thin" stroke="#e11d48" stroke-width="2.4" marker-end="url(#ahe11d48)"/>
+    <text x="90" y="336" text-anchor="start" class="sm bold">paid 2,850</text>
+    <line x1="196" y1="230" x2="196" y2="184" class="thin" stroke="#059669" stroke-width="2.4" marker-end="url(#ah059669)"/>
+    <text x="204" y="211" text-anchor="start" class="sm bold">+90</text>
+    <path d="M171,151 V144 L181,142 L188,134 H205 L212,142 L221,145 V151 Z" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="182" cy="152" r="4.5" fill="var(--surf)" stroke="#0d9488" stroke-width="1.6"/>
+    <circle cx="210" cy="152" r="4.5" fill="var(--surf)" stroke="#0d9488" stroke-width="1.6"/>
+    <text x="196" y="110" text-anchor="middle" class="sm bold">salvage</text>
+    <line x1="284" y1="230" x2="284" y2="164" class="thin" stroke="#059669" stroke-width="2.4" marker-end="url(#ah059669)"/>
+    <text x="292" y="201" text-anchor="start" class="sm bold">+160</text>
+    <line x1="284" y1="105" x2="284" y2="146" stroke="#0d9488" stroke-width="1.8"/>
+    <rect x="273" y="146" width="22" height="5" rx="2" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <line x1="261" y1="111" x2="307" y2="111" stroke="#0d9488" stroke-width="1.8" stroke-linecap="round"/>
+    <circle cx="284" cy="104" r="2.5" fill="#0d9488"/>
+    <line x1="261" y1="111" x2="253" y2="126" stroke="#0d9488" stroke-width="1"/>
+    <line x1="261" y1="111" x2="269" y2="126" stroke="#0d9488" stroke-width="1"/>
+    <path d="M251,126 Q261,133 271,126 Z" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <line x1="307" y1="111" x2="299" y2="126" stroke="#0d9488" stroke-width="1"/>
+    <line x1="307" y1="111" x2="315" y2="126" stroke="#0d9488" stroke-width="1"/>
+    <path d="M297,126 Q307,133 317,126 Z" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <text x="284" y="90" text-anchor="middle" class="sm bold">subrogation</text>
   </g>
 </svg>

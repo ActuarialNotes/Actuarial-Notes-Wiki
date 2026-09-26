@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The present value of a customer's profit over the years they are expected to stay</title>
+  <title>A customer's discounted profit by policy year, negative in the first year, with the running total climbing to a lifetime value of 81</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,46 +47,41 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="96.19" y1="102" x2="96.19" y2="320" class="grid"/>
-    <line x1="136.52" y1="102" x2="136.52" y2="320" class="grid"/>
-    <line x1="176.84" y1="102" x2="176.84" y2="320" class="grid"/>
-    <line x1="217.16" y1="102" x2="217.16" y2="320" class="grid"/>
-    <line x1="257.48" y1="102" x2="257.48" y2="320" class="grid"/>
-    <line x1="297.81" y1="102" x2="297.81" y2="320" class="grid"/>
-    <line x1="72" y1="320" x2="322" y2="320" class="grid"/>
-    <line x1="72" y1="232.8" x2="322" y2="232.8" class="grid"/>
-    <line x1="72" y1="145.6" x2="322" y2="145.6" class="grid"/>
-    <line x1="72" y1="232.8" x2="332" y2="232.8" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="72" y1="320" x2="72" y2="92" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="96.19" y1="232.8" x2="96.19" y2="236.8" class="tick"/>
-    <text x="96.19" y="248.8" text-anchor="middle" class="sm dim">1</text>
-    <line x1="136.52" y1="232.8" x2="136.52" y2="236.8" class="tick"/>
-    <text x="136.52" y="248.8" text-anchor="middle" class="sm dim">2</text>
-    <line x1="176.84" y1="232.8" x2="176.84" y2="236.8" class="tick"/>
-    <text x="176.84" y="248.8" text-anchor="middle" class="sm dim">3</text>
-    <line x1="217.16" y1="232.8" x2="217.16" y2="236.8" class="tick"/>
-    <text x="217.16" y="248.8" text-anchor="middle" class="sm dim">4</text>
-    <line x1="257.48" y1="232.8" x2="257.48" y2="236.8" class="tick"/>
-    <text x="257.48" y="248.8" text-anchor="middle" class="sm dim">5</text>
-    <line x1="297.81" y1="232.8" x2="297.81" y2="236.8" class="tick"/>
-    <text x="297.81" y="248.8" text-anchor="middle" class="sm dim">6</text>
-    <line x1="68" y1="320" x2="72" y2="320" class="tick"/>
-    <text x="64" y="323.6" text-anchor="end" class="sm dim">-40</text>
-    <line x1="68" y1="232.8" x2="72" y2="232.8" class="tick"/>
-    <text x="64" y="236.4" text-anchor="end" class="sm dim">0</text>
-    <line x1="68" y1="145.6" x2="72" y2="145.6" class="tick"/>
-    <text x="64" y="149.2" text-anchor="end" class="sm dim">40</text>
-    <rect x="82.89" y="232.8" width="26.61" height="74.12" rx="1.5" fill="#3b82f6" fill-opacity="0.72"/>
-    <rect x="123.21" y="184.84" width="26.61" height="47.96" rx="1.5" fill="#3b82f6" fill-opacity="0.72"/>
-    <rect x="163.53" y="167.4" width="26.61" height="65.4" rx="1.5" fill="#3b82f6" fill-opacity="0.72"/>
-    <rect x="203.85" y="176.12" width="26.61" height="56.68" rx="1.5" fill="#3b82f6" fill-opacity="0.72"/>
-    <rect x="244.18" y="187.02" width="26.61" height="45.78" rx="1.5" fill="#3b82f6" fill-opacity="0.72"/>
-    <rect x="284.5" y="197.92" width="26.61" height="34.88" rx="1.5" fill="#3b82f6" fill-opacity="0.72"/>
-    <rect x="90.19" y="232.8" width="12" height="74.12" rx="1.5" fill="#e11d48" fill-opacity="0.72"/>
-    <text x="120.39" y="289.48" text-anchor="start" class="sm" fill="#e11d48">year 1 loses money</text>
-    <text x="233.29" y="145.6" text-anchor="middle" class="sm bold" fill="#3b82f6">PV of profit = $81</text>
-    <text x="180" y="352" text-anchor="middle" class="sm dim">policy year, discounted and survival-weighted</text>
-    <text x="180" y="374" text-anchor="middle" class="sm dim">it is a marketing and retention frame laid over</text>
-    <text x="180" y="390" text-anchor="middle" class="sm dim">the indication — it never replaces one</text>
+    <line x1="68" y1="344" x2="322" y2="344" class="grid"/>
+    <line x1="68" y1="269.93" x2="322" y2="269.93" class="grid"/>
+    <line x1="68" y1="195.85" x2="322" y2="195.85" class="grid"/>
+    <line x1="68" y1="121.78" x2="322" y2="121.78" class="grid"/>
+    <line x1="68" y1="269.93" x2="332" y2="269.93" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="68" y1="344" x2="68" y2="84" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="64" y1="344" x2="68" y2="344" class="tick"/>
+    <text x="60" y="347.6" text-anchor="end" class="sm dim">-40</text>
+    <line x1="64" y1="269.93" x2="68" y2="269.93" class="tick"/>
+    <text x="60" y="273.53" text-anchor="end" class="sm dim">0</text>
+    <line x1="64" y1="195.85" x2="68" y2="195.85" class="tick"/>
+    <text x="60" y="199.45" text-anchor="end" class="sm dim">40</text>
+    <line x1="64" y1="121.78" x2="68" y2="121.78" class="tick"/>
+    <text x="60" y="125.38" text-anchor="end" class="sm dim">80</text>
+    <rect x="81.58" y="269.93" width="22" height="62.96" rx="1.5" fill="#e11d48" fill-opacity="0.72"/>
+    <text x="92.58" y="360" text-anchor="middle" class="sm dim">1</text>
+    <rect x="122.55" y="229.19" width="22" height="40.74" rx="1.5" fill="#3b82f6" fill-opacity="0.72"/>
+    <text x="133.55" y="360" text-anchor="middle" class="sm dim">2</text>
+    <rect x="163.52" y="214.37" width="22" height="55.56" rx="1.5" fill="#3b82f6" fill-opacity="0.72"/>
+    <text x="174.52" y="360" text-anchor="middle" class="sm dim">3</text>
+    <rect x="204.48" y="221.78" width="22" height="48.15" rx="1.5" fill="#3b82f6" fill-opacity="0.72"/>
+    <text x="215.48" y="360" text-anchor="middle" class="sm dim">4</text>
+    <rect x="245.45" y="231.04" width="22" height="38.89" rx="1.5" fill="#3b82f6" fill-opacity="0.72"/>
+    <text x="256.45" y="360" text-anchor="middle" class="sm dim">5</text>
+    <rect x="286.42" y="240.3" width="22" height="29.63" rx="1.5" fill="#3b82f6" fill-opacity="0.72"/>
+    <text x="297.42" y="360" text-anchor="middle" class="sm dim">6</text>
+    <text x="322" y="376" text-anchor="end" class="sm dim">policy year</text>
+    <polyline points="92.58,332.89 133.55,292.15 174.52,236.59 215.48,188.44 256.45,149.56 297.42,119.93" class="curve" stroke="#059669" stroke-width="2.4"/>
+    <circle cx="92.58" cy="332.89" r="3.2" fill="#059669"/>
+    <circle cx="133.55" cy="292.15" r="3.2" fill="#059669"/>
+    <circle cx="174.52" cy="236.59" r="3.2" fill="#059669"/>
+    <circle cx="215.48" cy="188.44" r="3.2" fill="#059669"/>
+    <circle cx="256.45" cy="149.56" r="3.2" fill="#059669"/>
+    <circle cx="297.42" cy="119.93" r="3.2" fill="#059669"/>
+    <text x="305.42" y="123.93" text-anchor="start" class="sm bold">81</text>
+    <text x="250.45" y="141.56" text-anchor="end" class="sm bold">lifetime value</text>
   </g>
 </svg>

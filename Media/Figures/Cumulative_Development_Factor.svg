@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The selected link ratios multiplied through to a factor to ultimate</title>
+  <title>The cumulative factor at each age drawn as a bar, each one the bar below it times one link ratio, climbing from 1.000 at ultimate to 1.900 at 12 months</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,45 +42,33 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
+  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <rect x="44" y="134" width="48" height="28" rx="14.0" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="68" y="152" text-anchor="middle" class="sm">1.500</text>
-    <text x="68" y="122" text-anchor="middle" class="sm dim">12–24</text>
-    <rect x="100" y="134" width="48" height="28" rx="14.0" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="124" y="152" text-anchor="middle" class="sm">1.160</text>
-    <text x="124" y="122" text-anchor="middle" class="sm dim">24–36</text>
-    <text x="96" y="152" text-anchor="middle" class="sm dim">×</text>
-    <rect x="156" y="134" width="48" height="28" rx="14.0" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="180" y="152" text-anchor="middle" class="sm">1.060</text>
-    <text x="180" y="122" text-anchor="middle" class="sm dim">36–48</text>
-    <text x="152" y="152" text-anchor="middle" class="sm dim">×</text>
-    <rect x="212" y="134" width="48" height="28" rx="14.0" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
-    <text x="236" y="152" text-anchor="middle" class="sm">1.020</text>
-    <text x="236" y="122" text-anchor="middle" class="sm dim">48–60</text>
-    <text x="208" y="152" text-anchor="middle" class="sm dim">×</text>
-    <rect x="268" y="134" width="48" height="28" rx="14.0" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2"/>
-    <text x="292" y="152" text-anchor="middle" class="sm">1.010</text>
-    <text x="292" y="122" text-anchor="middle" class="sm dim">tail</text>
-    <text x="264" y="152" text-anchor="middle" class="sm dim">×</text>
-    <text x="180" y="202" text-anchor="middle" class="sm dim">cumulated back from ultimate</text>
-    <rect x="44" y="218" width="48" height="28" rx="14.0" fill="#059669" fill-opacity="0.14" stroke="#059669" stroke-width="1.2"/>
-    <text x="68" y="236" text-anchor="middle" class="sm">1.900</text>
-    <text x="68" y="262" text-anchor="middle" class="sm dim">12</text>
-    <rect x="100" y="218" width="48" height="28" rx="14.0" fill="#059669" fill-opacity="0.14" stroke="#059669" stroke-width="1.2"/>
-    <text x="124" y="236" text-anchor="middle" class="sm">1.267</text>
-    <text x="124" y="262" text-anchor="middle" class="sm dim">24</text>
-    <rect x="156" y="218" width="48" height="28" rx="14.0" fill="#059669" fill-opacity="0.14" stroke="#059669" stroke-width="1.2"/>
-    <text x="180" y="236" text-anchor="middle" class="sm">1.092</text>
-    <text x="180" y="262" text-anchor="middle" class="sm dim">36</text>
-    <rect x="212" y="218" width="48" height="28" rx="14.0" fill="#059669" fill-opacity="0.14" stroke="#059669" stroke-width="1.2"/>
-    <text x="236" y="236" text-anchor="middle" class="sm">1.030</text>
-    <text x="236" y="262" text-anchor="middle" class="sm dim">48</text>
-    <rect x="268" y="218" width="48" height="28" rx="14.0" fill="#059669" fill-opacity="0.14" stroke="#059669" stroke-width="1.2"/>
-    <text x="292" y="236" text-anchor="middle" class="sm">1.010</text>
-    <text x="292" y="262" text-anchor="middle" class="sm dim">60</text>
-    <text x="180" y="306" text-anchor="middle" class="sm">1 / 1.900 = 52.6% of AY 2024 is reported</text>
-    <text x="180" y="344" text-anchor="middle" class="sm dim">the CDF is a property of the pattern, not of</text>
-    <text x="180" y="362" text-anchor="middle" class="sm dim">the year it is applied to</text>
+    <rect x="70" y="87" width="171.01" height="26" rx="3" fill="#3b82f6" fill-opacity="0.3" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="62" y="104" text-anchor="end" class="sm dim">12</text>
+    <rect x="70" y="137" width="114.01" height="26" rx="3" fill="#3b82f6" fill-opacity="0.3" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="62" y="154" text-anchor="end" class="sm dim">24</text>
+    <rect x="70" y="187" width="98.28" height="26" rx="3" fill="#3b82f6" fill-opacity="0.3" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="62" y="204" text-anchor="end" class="sm dim">36</text>
+    <rect x="70" y="237" width="92.72" height="26" rx="3" fill="#3b82f6" fill-opacity="0.3" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="62" y="254" text-anchor="end" class="sm dim">48</text>
+    <rect x="70" y="287" width="90.9" height="26" rx="3" fill="#3b82f6" fill-opacity="0.3" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="62" y="304" text-anchor="end" class="sm dim">60</text>
+    <rect x="70" y="337" width="90" height="26" rx="3" fill="#d97706" fill-opacity="0.3" stroke="#d97706" stroke-width="1.2"/>
+    <text x="62" y="354" text-anchor="end" class="sm dim">ult</text>
+    <text x="235.01" y="104" text-anchor="end" class="sm bold">1.900</text>
+    <line x1="188.01" y1="137" x2="245.01" y2="113" class="thin" stroke="var(--dim)" stroke-width="1.4" marker-end="url(#ahvardim)"/>
+    <text x="259.01" y="129" text-anchor="start" class="sm">× 1.500</text>
+    <line x1="172.28" y1="187" x2="188.01" y2="163" class="thin" stroke="var(--dim)" stroke-width="1.4" marker-end="url(#ahvardim)"/>
+    <text x="202.01" y="179" text-anchor="start" class="sm">× 1.160</text>
+    <line x1="166.72" y1="237" x2="172.28" y2="213" class="thin" stroke="var(--dim)" stroke-width="1.4" marker-end="url(#ahvardim)"/>
+    <text x="186.28" y="229" text-anchor="start" class="sm">× 1.060</text>
+    <line x1="164.9" y1="287" x2="166.72" y2="263" class="thin" stroke="var(--dim)" stroke-width="1.4" marker-end="url(#ahvardim)"/>
+    <text x="180.72" y="279" text-anchor="start" class="sm">× 1.020</text>
+    <line x1="164" y1="337" x2="164.9" y2="313" class="thin" stroke="var(--dim)" stroke-width="1.4" marker-end="url(#ahvardim)"/>
+    <text x="178.9" y="329" text-anchor="start" class="sm">× 1.010</text>
   </g>
 </svg>

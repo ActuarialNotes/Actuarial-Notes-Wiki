@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Deductible, coinsurance and limit applied in order to a ground-up loss</title>
+  <title>Payment against loss with the deductible, coinsurance and limit applied in turn: zero up to d, a line of slope alpha, then flat at u</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -62,8 +62,7 @@ text {
     <text x="62" y="82" text-anchor="start" class="sm dim">payment Y</text>
     <line x1="66" y1="248.4" x2="324" y2="248.4" class="thin dash" stroke="var(--dim)" stroke-width="1.3"/>
     <line x1="117.6" y1="350" x2="117.6" y2="248.4" class="thin dash" stroke="var(--dim)" stroke-width="1.3"/>
-    <text x="89.22" y="327.14" text-anchor="middle" class="sm dim">0</text>
-    <text x="176.94" y="309.36" text-anchor="middle" class="sm">slope α</text>
-    <text x="282.72" y="276.34" text-anchor="middle" class="sm dim">capped</text>
+    <line x1="246.6" y1="350" x2="246.6" y2="248.4" class="thin dash" stroke="var(--dim)" stroke-width="1.3"/>
+    <text x="192.42" y="306.82" text-anchor="start" class="sm bold">slope α</text>
   </g>
 </svg>

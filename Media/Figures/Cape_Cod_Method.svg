@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The a priori loss ratio derived from the triangle's own used-up premium</title>
+  <title>Five years' premium, the used-up share of it and their reported losses, each stacked by accident year, with the losses coming to 66.2% of the used-up premium</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -42,38 +42,32 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <g id="light"/><g id="dark"/>
+  <defs>
+    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
+  </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <text x="180" y="110" text-anchor="middle" class="sm dim">used-up premium: EP ÷ CDF ($000)</text>
-    <text x="52" y="140" text-anchor="start" class="sm dim">2020</text>
-    <text x="140" y="140" text-anchor="end" class="sm">3,000</text>
-    <text x="206" y="140" text-anchor="end" class="sm dim">÷ 1.010</text>
-    <text x="272" y="140" text-anchor="end" class="sm">2,970</text>
-    <text x="312" y="140" text-anchor="end" class="sm dim">1,882</text>
-    <text x="52" y="170" text-anchor="start" class="sm dim">2021</text>
-    <text x="140" y="170" text-anchor="end" class="sm">3,200</text>
-    <text x="206" y="170" text-anchor="end" class="sm dim">÷ 1.030</text>
-    <text x="272" y="170" text-anchor="end" class="sm">3,106</text>
-    <text x="312" y="170" text-anchor="end" class="sm dim">2,029</text>
-    <text x="52" y="200" text-anchor="start" class="sm dim">2022</text>
-    <text x="140" y="200" text-anchor="end" class="sm">3,500</text>
-    <text x="206" y="200" text-anchor="end" class="sm dim">÷ 1.092</text>
-    <text x="272" y="200" text-anchor="end" class="sm">3,205</text>
-    <text x="312" y="200" text-anchor="end" class="sm dim">2,088</text>
-    <text x="52" y="230" text-anchor="start" class="sm dim">2023</text>
-    <text x="140" y="230" text-anchor="end" class="sm">3,800</text>
-    <text x="206" y="230" text-anchor="end" class="sm dim">÷ 1.267</text>
-    <text x="272" y="230" text-anchor="end" class="sm">3,000</text>
-    <text x="312" y="230" text-anchor="end" class="sm dim">2,025</text>
-    <text x="52" y="260" text-anchor="start" class="sm dim">2024</text>
-    <text x="140" y="260" text-anchor="end" class="sm">4,000</text>
-    <text x="206" y="260" text-anchor="end" class="sm dim">÷ 1.900</text>
-    <text x="272" y="260" text-anchor="end" class="sm">2,105</text>
-    <text x="312" y="260" text-anchor="end" class="sm dim">1,500</text>
-    <line x1="46" y1="300" x2="314" y2="300" class="rule"/>
-    <text x="272" y="322" text-anchor="end" class="sm bold">14,387</text>
-    <text x="312" y="322" text-anchor="end" class="sm bold">9,524</text>
-    <text x="180" y="356" text-anchor="middle" class="sm dim">an ELR that reflects this book's own rate level</text>
-    <text x="180" y="374" text-anchor="middle" class="sm dim">and mix — no external assumption to go stale</text>
+    <rect x="48" y="317.14" width="64" height="42.86" fill="var(--dim)" fill-opacity="0.3" stroke="var(--dim)" stroke-width="1"/>
+    <rect x="48" y="271.43" width="64" height="45.71" fill="var(--dim)" fill-opacity="0.3" stroke="var(--dim)" stroke-width="1"/>
+    <rect x="48" y="221.43" width="64" height="50" fill="var(--dim)" fill-opacity="0.3" stroke="var(--dim)" stroke-width="1"/>
+    <rect x="48" y="167.14" width="64" height="54.29" fill="var(--dim)" fill-opacity="0.3" stroke="var(--dim)" stroke-width="1"/>
+    <rect x="48" y="110" width="64" height="57.14" fill="var(--dim)" fill-opacity="0.3" stroke="var(--dim)" stroke-width="1"/>
+    <text x="80" y="378" text-anchor="middle" class="sm">premium</text>
+    <rect x="148" y="317.57" width="64" height="42.43" fill="#3b82f6" fill-opacity="0.3" stroke="#3b82f6" stroke-width="1"/>
+    <rect x="148" y="273.19" width="64" height="44.37" fill="#3b82f6" fill-opacity="0.3" stroke="#3b82f6" stroke-width="1"/>
+    <rect x="148" y="227.41" width="64" height="45.79" fill="#3b82f6" fill-opacity="0.3" stroke="#3b82f6" stroke-width="1"/>
+    <rect x="148" y="184.55" width="64" height="42.85" fill="#3b82f6" fill-opacity="0.3" stroke="#3b82f6" stroke-width="1"/>
+    <rect x="148" y="154.48" width="64" height="30.07" fill="#3b82f6" fill-opacity="0.3" stroke="#3b82f6" stroke-width="1"/>
+    <text x="180" y="378" text-anchor="middle" class="sm">used up</text>
+    <rect x="248" y="333.11" width="64" height="26.89" fill="#d97706" fill-opacity="0.3" stroke="#d97706" stroke-width="1"/>
+    <rect x="248" y="304.13" width="64" height="28.99" fill="#d97706" fill-opacity="0.3" stroke="#d97706" stroke-width="1"/>
+    <rect x="248" y="274.3" width="64" height="29.83" fill="#d97706" fill-opacity="0.3" stroke="#d97706" stroke-width="1"/>
+    <rect x="248" y="245.37" width="64" height="28.93" fill="#d97706" fill-opacity="0.3" stroke="#d97706" stroke-width="1"/>
+    <rect x="248" y="223.94" width="64" height="21.43" fill="#d97706" fill-opacity="0.3" stroke="#d97706" stroke-width="1"/>
+    <text x="280" y="378" text-anchor="middle" class="sm">reported</text>
+    <text x="180" y="146.48" text-anchor="middle" class="sm bold">14,387</text>
+    <text x="280" y="215.94" text-anchor="middle" class="sm bold">9,524</text>
+    <line x1="214" y1="156.48" x2="246" y2="221.94" class="thin" stroke="var(--dim)" stroke-width="1.4" marker-end="url(#ahvardim)"/>
+    <text x="240" y="183.21" text-anchor="start" class="sm bold">ELR 66.2%</text>
   </g>
 </svg>

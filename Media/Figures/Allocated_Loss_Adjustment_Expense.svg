@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>ALAE developing more slowly than indemnity, as a rising ratio to loss</title>
+  <title>The ratio of ALAE to loss rising with age to 17% at ultimate, because defence costs develop more slowly than indemnity</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,40 +47,39 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="107.14" y1="102" x2="107.14" y2="322" class="grid"/>
-    <line x1="177.43" y1="102" x2="177.43" y2="322" class="grid"/>
-    <line x1="247.71" y1="102" x2="247.71" y2="322" class="grid"/>
-    <line x1="318" y1="102" x2="318" y2="322" class="grid"/>
-    <line x1="72" y1="322" x2="318" y2="322" class="grid"/>
-    <line x1="72" y1="230.33" x2="318" y2="230.33" class="grid"/>
-    <line x1="72" y1="138.67" x2="318" y2="138.67" class="grid"/>
-    <line x1="72" y1="322" x2="328" y2="322" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="72" y1="322" x2="72" y2="92" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="107.14" y1="322" x2="107.14" y2="326" class="tick"/>
-    <text x="107.14" y="338" text-anchor="middle" class="sm dim">12</text>
-    <line x1="177.43" y1="322" x2="177.43" y2="326" class="tick"/>
-    <text x="177.43" y="338" text-anchor="middle" class="sm dim">36</text>
-    <line x1="247.71" y1="322" x2="247.71" y2="326" class="tick"/>
-    <text x="247.71" y="338" text-anchor="middle" class="sm dim">60</text>
-    <line x1="318" y1="322" x2="318" y2="326" class="tick"/>
-    <text x="318" y="338" text-anchor="middle" class="sm dim">84</text>
-    <line x1="68" y1="322" x2="72" y2="322" class="tick"/>
-    <text x="64" y="325.6" text-anchor="end" class="sm dim">0%</text>
-    <line x1="68" y1="230.33" x2="72" y2="230.33" class="tick"/>
-    <text x="64" y="233.93" text-anchor="end" class="sm dim">10%</text>
-    <line x1="68" y1="138.67" x2="72" y2="138.67" class="tick"/>
-    <text x="64" y="142.27" text-anchor="end" class="sm dim">20%</text>
-    <polyline points="107.14,244.08 142.29,219.33 177.43,198.25 212.57,182.67 247.71,172.58 282.86,168 318,166.17" class="curve" stroke="#7c3aed" stroke-width="2.4"/>
-    <circle cx="107.14" cy="244.08" r="3" fill="#7c3aed"/>
-    <circle cx="142.29" cy="219.33" r="3" fill="#7c3aed"/>
-    <circle cx="177.43" cy="198.25" r="3" fill="#7c3aed"/>
-    <circle cx="212.57" cy="182.67" r="3" fill="#7c3aed"/>
-    <circle cx="247.71" cy="172.58" r="3" fill="#7c3aed"/>
-    <circle cx="282.86" cy="168" r="3" fill="#7c3aed"/>
-    <circle cx="318" cy="166.17" r="3" fill="#7c3aed"/>
-    <text x="236" y="162.58" text-anchor="middle" class="sm bold" fill="#7c3aed">17% at ultimate</text>
-    <text x="180" y="354" text-anchor="middle" class="sm dim">age in months</text>
-    <text x="180" y="376" text-anchor="middle" class="sm dim">ALAE outlives the indemnity it defends, so its</text>
-    <text x="180" y="394" text-anchor="middle" class="sm dim">own triangle develops longer — reserve it apart</text>
+    <line x1="107.14" y1="94" x2="107.14" y2="344" class="grid"/>
+    <line x1="177.43" y1="94" x2="177.43" y2="344" class="grid"/>
+    <line x1="247.71" y1="94" x2="247.71" y2="344" class="grid"/>
+    <line x1="318" y1="94" x2="318" y2="344" class="grid"/>
+    <line x1="72" y1="344" x2="318" y2="344" class="grid"/>
+    <line x1="72" y1="239.83" x2="318" y2="239.83" class="grid"/>
+    <line x1="72" y1="135.67" x2="318" y2="135.67" class="grid"/>
+    <line x1="72" y1="344" x2="328" y2="344" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="72" y1="344" x2="72" y2="84" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="107.14" y1="344" x2="107.14" y2="348" class="tick"/>
+    <text x="107.14" y="360" text-anchor="middle" class="sm dim">12</text>
+    <line x1="177.43" y1="344" x2="177.43" y2="348" class="tick"/>
+    <text x="177.43" y="360" text-anchor="middle" class="sm dim">36</text>
+    <line x1="247.71" y1="344" x2="247.71" y2="348" class="tick"/>
+    <text x="247.71" y="360" text-anchor="middle" class="sm dim">60</text>
+    <line x1="318" y1="344" x2="318" y2="348" class="tick"/>
+    <text x="318" y="360" text-anchor="middle" class="sm dim">84</text>
+    <line x1="68" y1="344" x2="72" y2="344" class="tick"/>
+    <text x="64" y="347.6" text-anchor="end" class="sm dim">0%</text>
+    <line x1="68" y1="239.83" x2="72" y2="239.83" class="tick"/>
+    <text x="64" y="243.43" text-anchor="end" class="sm dim">10%</text>
+    <line x1="68" y1="135.67" x2="72" y2="135.67" class="tick"/>
+    <text x="64" y="139.27" text-anchor="end" class="sm dim">20%</text>
+    <text x="318" y="376" text-anchor="end" class="sm dim">age in months</text>
+    <text x="68" y="80" text-anchor="start" class="sm dim">ALAE / loss</text>
+    <polyline points="107.14,255.46 142.29,227.33 177.43,203.37 212.57,185.67 247.71,174.21 282.86,169 318,166.92" class="curve" stroke="#7c3aed" stroke-width="2.4"/>
+    <circle cx="107.14" cy="255.46" r="3" fill="#7c3aed"/>
+    <circle cx="142.29" cy="227.33" r="3" fill="#7c3aed"/>
+    <circle cx="177.43" cy="203.37" r="3" fill="#7c3aed"/>
+    <circle cx="212.57" cy="185.67" r="3" fill="#7c3aed"/>
+    <circle cx="247.71" cy="174.21" r="3" fill="#7c3aed"/>
+    <circle cx="282.86" cy="169" r="3" fill="#7c3aed"/>
+    <circle cx="318" cy="166.92" r="3" fill="#7c3aed"/>
+    <text x="236" y="164.21" text-anchor="middle" class="sm bold" fill="#7c3aed">17% at ultimate</text>
   </g>
 </svg>

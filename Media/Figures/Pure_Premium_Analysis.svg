@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Pure premium by accident year decomposed into frequency and severity</title>
+  <title>Pure premium, frequency and severity indexed to 2020: severity rising 4.6% a year and frequency falling 1.2%, so pure premium rises 3.3%</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,40 +47,39 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="89.65" y1="106" x2="89.65" y2="320" class="grid"/>
-    <line x1="141.83" y1="106" x2="141.83" y2="320" class="grid"/>
-    <line x1="194" y1="106" x2="194" y2="320" class="grid"/>
-    <line x1="246.17" y1="106" x2="246.17" y2="320" class="grid"/>
-    <line x1="298.35" y1="106" x2="298.35" y2="320" class="grid"/>
-    <line x1="74" y1="297.07" x2="314" y2="297.07" class="grid"/>
-    <line x1="74" y1="220.64" x2="314" y2="220.64" class="grid"/>
-    <line x1="74" y1="144.21" x2="314" y2="144.21" class="grid"/>
-    <line x1="74" y1="320" x2="324" y2="320" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="74" y1="320" x2="74" y2="96" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="89.65" y1="320" x2="89.65" y2="324" class="tick"/>
-    <text x="89.65" y="336" text-anchor="middle" class="sm dim">2020</text>
-    <line x1="141.83" y1="320" x2="141.83" y2="324" class="tick"/>
-    <text x="141.83" y="336" text-anchor="middle" class="sm dim">2021</text>
-    <line x1="194" y1="320" x2="194" y2="324" class="tick"/>
-    <text x="194" y="336" text-anchor="middle" class="sm dim">2022</text>
-    <line x1="246.17" y1="320" x2="246.17" y2="324" class="tick"/>
-    <text x="246.17" y="336" text-anchor="middle" class="sm dim">2023</text>
-    <line x1="298.35" y1="320" x2="298.35" y2="324" class="tick"/>
-    <text x="298.35" y="336" text-anchor="middle" class="sm dim">2024</text>
-    <line x1="70" y1="297.07" x2="74" y2="297.07" class="tick"/>
-    <text x="66" y="300.67" text-anchor="end" class="sm dim">0.95</text>
-    <line x1="70" y1="220.64" x2="74" y2="220.64" class="tick"/>
-    <text x="66" y="224.24" text-anchor="end" class="sm dim">1.05</text>
-    <line x1="70" y1="144.21" x2="74" y2="144.21" class="tick"/>
-    <text x="66" y="147.81" text-anchor="end" class="sm dim">1.15</text>
-    <polyline points="89.65,258.86 141.83,223.7 194,187.78 246.17,149.56 298.35,109.06" class="curve" stroke="#e11d48" stroke-width="2.2"/>
-    <text x="294.35" y="101.06" text-anchor="end" class="sm bold" fill="#e11d48">severity</text>
-    <polyline points="89.65,258.86 141.83,268.03 194,277.2 246.17,286.37 298.35,294.78" class="curve" stroke="#3b82f6" stroke-width="2.2"/>
-    <text x="294.35" y="310.78" text-anchor="end" class="sm bold" fill="#3b82f6">frequency</text>
-    <polyline points="89.65,258.86 141.83,233.64 194,207.65 246.17,180.9 298.35,151.86" class="curve" stroke="#059669" stroke-width="2.2"/>
-    <text x="294.35" y="143.86" text-anchor="end" class="sm bold" fill="#059669">pure premium</text>
-    <text x="180" y="350" text-anchor="middle" class="sm dim">indexed to accident year 2020</text>
-    <text x="180" y="376" text-anchor="middle" class="sm dim">a rising pure premium built on falling frequency</text>
-    <text x="180" y="394" text-anchor="middle" class="sm dim">is a different problem from a rising one on both</text>
+    <line x1="89.65" y1="94" x2="89.65" y2="344" class="grid"/>
+    <line x1="141.83" y1="94" x2="141.83" y2="344" class="grid"/>
+    <line x1="194" y1="94" x2="194" y2="344" class="grid"/>
+    <line x1="246.17" y1="94" x2="246.17" y2="344" class="grid"/>
+    <line x1="298.35" y1="94" x2="298.35" y2="344" class="grid"/>
+    <line x1="74" y1="317.21" x2="314" y2="317.21" class="grid"/>
+    <line x1="74" y1="227.93" x2="314" y2="227.93" class="grid"/>
+    <line x1="74" y1="138.64" x2="314" y2="138.64" class="grid"/>
+    <line x1="74" y1="344" x2="324" y2="344" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="74" y1="344" x2="74" y2="84" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="89.65" y1="344" x2="89.65" y2="348" class="tick"/>
+    <text x="89.65" y="360" text-anchor="middle" class="sm dim">2020</text>
+    <line x1="141.83" y1="344" x2="141.83" y2="348" class="tick"/>
+    <text x="141.83" y="360" text-anchor="middle" class="sm dim">2021</text>
+    <line x1="194" y1="344" x2="194" y2="348" class="tick"/>
+    <text x="194" y="360" text-anchor="middle" class="sm dim">2022</text>
+    <line x1="246.17" y1="344" x2="246.17" y2="348" class="tick"/>
+    <text x="246.17" y="360" text-anchor="middle" class="sm dim">2023</text>
+    <line x1="298.35" y1="344" x2="298.35" y2="348" class="tick"/>
+    <text x="298.35" y="360" text-anchor="middle" class="sm dim">2024</text>
+    <line x1="70" y1="317.21" x2="74" y2="317.21" class="tick"/>
+    <text x="66" y="320.81" text-anchor="end" class="sm dim">0.95</text>
+    <line x1="70" y1="227.93" x2="74" y2="227.93" class="tick"/>
+    <text x="66" y="231.53" text-anchor="end" class="sm dim">1.05</text>
+    <line x1="70" y1="138.64" x2="74" y2="138.64" class="tick"/>
+    <text x="66" y="142.24" text-anchor="end" class="sm dim">1.15</text>
+    <text x="314" y="376" text-anchor="end" class="sm dim">accident year</text>
+    <text x="70" y="80" text-anchor="start" class="sm dim">index</text>
+    <polyline points="89.65,272.57 141.83,231.5 194,189.54 246.17,144.89 298.35,97.57" class="curve" stroke="#e11d48" stroke-width="2.2"/>
+    <text x="294.35" y="89.57" text-anchor="end" class="sm bold" fill="#e11d48">severity</text>
+    <polyline points="89.65,272.57 141.83,283.29 194,294 246.17,304.71 298.35,314.54" class="curve" stroke="#3b82f6" stroke-width="2.2"/>
+    <text x="294.35" y="330.54" text-anchor="end" class="sm bold" fill="#3b82f6">frequency</text>
+    <polyline points="89.65,272.57 141.83,243.11 194,212.75 246.17,181.5 298.35,147.57" class="curve" stroke="#059669" stroke-width="2.2"/>
+    <text x="294.35" y="163.57" text-anchor="end" class="sm bold" fill="#059669">pure premium</text>
   </g>
 </svg>

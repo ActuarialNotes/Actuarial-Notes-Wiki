@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>The development the triangle cannot see, beyond its last observed age</title>
+  <title>Observed link ratios falling toward 1.000 until the data ends at 48 months, and the dashed extrapolation beyond it that the 1.010 tail factor stands for</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -47,37 +47,35 @@ text {
   </defs>
   <g class="art">
     <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
-    <line x1="94.55" y1="100" x2="94.55" y2="322" class="grid"/>
-    <line x1="184.73" y1="100" x2="184.73" y2="322" class="grid"/>
-    <line x1="274.91" y1="100" x2="274.91" y2="322" class="grid"/>
-    <line x1="72" y1="305.43" x2="320" y2="305.43" class="grid"/>
-    <line x1="72" y1="206.03" x2="320" y2="206.03" class="grid"/>
-    <line x1="72" y1="106.63" x2="320" y2="106.63" class="grid"/>
-    <line x1="72" y1="322" x2="330" y2="322" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="72" y1="322" x2="72" y2="90" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-    <line x1="94.55" y1="322" x2="94.55" y2="326" class="tick"/>
-    <text x="94.55" y="338" text-anchor="middle" class="sm dim">12</text>
-    <line x1="184.73" y1="322" x2="184.73" y2="326" class="tick"/>
-    <text x="184.73" y="338" text-anchor="middle" class="sm dim">60</text>
-    <line x1="274.91" y1="322" x2="274.91" y2="326" class="tick"/>
-    <text x="274.91" y="338" text-anchor="middle" class="sm dim">108</text>
-    <line x1="68" y1="305.43" x2="72" y2="305.43" class="tick"/>
-    <text x="64" y="309.03" text-anchor="end" class="sm dim">1.0</text>
-    <line x1="68" y1="206.03" x2="72" y2="206.03" class="tick"/>
-    <text x="64" y="209.63" text-anchor="end" class="sm dim">1.3</text>
-    <line x1="68" y1="106.63" x2="72" y2="106.63" class="tick"/>
-    <text x="64" y="110.23" text-anchor="end" class="sm dim">1.6</text>
-    <polyline points="94.55,139.76 117.09,252.42 139.64,285.55 162.18,298.81" class="curve" stroke="#3b82f6" stroke-width="2.4"/>
-    <circle cx="94.55" cy="139.76" r="3.4" fill="#3b82f6"/>
-    <circle cx="117.09" cy="252.42" r="3.4" fill="#3b82f6"/>
-    <circle cx="139.64" cy="285.55" r="3.4" fill="#3b82f6"/>
-    <circle cx="162.18" cy="298.81" r="3.4" fill="#3b82f6"/>
-    <polyline points="162.18,298.81 184.73,303.44 207.27,304.44 229.82,305.1 252.36,305.43 274.91,305.43 297.45,305.43" class="curve dash" stroke="#d97706" stroke-width="2.2"/>
-    <line x1="173.45" y1="322" x2="173.45" y2="100" class="thin dash" stroke="var(--dim)" stroke-width="1.3"/>
-    <text x="167.45" y="159.64" text-anchor="end" class="sm dim">data ends</text>
-    <text x="229.82" y="272.3" text-anchor="middle" class="sm bold" fill="#d97706">extrapolated</text>
-    <text x="180" y="354" text-anchor="middle" class="sm dim">age in months</text>
-    <text x="180" y="376" text-anchor="middle" class="sm dim">a curve fit or an industry benchmark — and on</text>
-    <text x="180" y="394" text-anchor="middle" class="sm dim">a long tail, the largest assumption in the analysis</text>
+    <line x1="94.55" y1="94" x2="94.55" y2="344" class="grid"/>
+    <line x1="184.73" y1="94" x2="184.73" y2="344" class="grid"/>
+    <line x1="274.91" y1="94" x2="274.91" y2="344" class="grid"/>
+    <line x1="72" y1="325.34" x2="320" y2="325.34" class="grid"/>
+    <line x1="72" y1="213.4" x2="320" y2="213.4" class="grid"/>
+    <line x1="72" y1="101.46" x2="320" y2="101.46" class="grid"/>
+    <line x1="72" y1="344" x2="330" y2="344" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="72" y1="344" x2="72" y2="84" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+    <line x1="94.55" y1="344" x2="94.55" y2="348" class="tick"/>
+    <text x="94.55" y="360" text-anchor="middle" class="sm dim">12</text>
+    <line x1="184.73" y1="344" x2="184.73" y2="348" class="tick"/>
+    <text x="184.73" y="360" text-anchor="middle" class="sm dim">60</text>
+    <line x1="274.91" y1="344" x2="274.91" y2="348" class="tick"/>
+    <text x="274.91" y="360" text-anchor="middle" class="sm dim">108</text>
+    <line x1="68" y1="325.34" x2="72" y2="325.34" class="tick"/>
+    <text x="64" y="328.94" text-anchor="end" class="sm dim">1.0</text>
+    <line x1="68" y1="213.4" x2="72" y2="213.4" class="tick"/>
+    <text x="64" y="217" text-anchor="end" class="sm dim">1.3</text>
+    <line x1="68" y1="101.46" x2="72" y2="101.46" class="tick"/>
+    <text x="64" y="105.06" text-anchor="end" class="sm dim">1.6</text>
+    <text x="320" y="376" text-anchor="end" class="sm dim">age in months</text>
+    <polyline points="94.55,138.78 117.09,265.64 139.64,302.96 162.18,317.88" class="curve" stroke="#3b82f6" stroke-width="2.4"/>
+    <circle cx="94.55" cy="138.78" r="3.4" fill="#3b82f6"/>
+    <circle cx="117.09" cy="265.64" r="3.4" fill="#3b82f6"/>
+    <circle cx="139.64" cy="302.96" r="3.4" fill="#3b82f6"/>
+    <circle cx="162.18" cy="317.88" r="3.4" fill="#3b82f6"/>
+    <polyline points="162.18,317.88 184.73,323.1 207.27,324.22 229.82,324.97 252.36,325.34 274.91,325.34 297.45,325.34" class="curve dash" stroke="#d97706" stroke-width="2.2"/>
+    <line x1="173.45" y1="344" x2="173.45" y2="94" class="thin dash" stroke="var(--dim)" stroke-width="1.3"/>
+    <text x="167.45" y="161.16" text-anchor="end" class="sm dim">data ends</text>
+    <text x="237.33" y="288.03" text-anchor="middle" class="sm bold" fill="#d97706">tail 1.010</text>
   </g>
 </svg>

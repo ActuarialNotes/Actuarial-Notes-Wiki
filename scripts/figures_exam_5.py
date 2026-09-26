@@ -1527,62 +1527,69 @@ def experience_rating() -> Fig:
     return f
 
 
-@figure("Schedule Rating", "Underwriter debits and credits accumulating into one "
-        "schedule modifier", width=WID)
+@figure("Schedule Rating", "Underwriter credits and debits stepping the manual 1.00 "
+        "down, row by row, to a 0.95 schedule modifier", width=WID)
 def schedule_rating() -> Fig:
     f = vcard()
 
-    items = [("Premises condition", -10), ("Classification", -5),
-             ("Employee selection", 8), ("Management", -3), ("Equipment", 5)]
-    x_zero, scale = 248, 3.6
+    items = [("premises", -10), ("class", -5), ("staff", 8), ("management", -3),
+             ("equipment", 5)]
+
+    def px(p):
+        return 120 + (p - 82) * 10
+
+    f.line(px(100), 94, px(100), 370, cls="thin dash", stroke="var(--dim)",
+           stroke_width="1.2")
+    f.text(px(100), 86, "1.00", cls="sm dim")
+    level = 100
+    ys = [114 + i * 46 for i in range(len(items))] + [356]
     for i, (name, pts) in enumerate(items):
-        y = 132 + i * 42
-        f.text(44, y + 4, name, cls="sm", anchor="start")
+        y = ys[i]
         colour = ROSE if pts > 0 else GREEN
-        w = abs(pts) * scale
-        x = x_zero if pts > 0 else x_zero - w
-        f.rect(x, y - 9, w, 20, rx=3, fill=colour, fill_opacity="0.65")
-        f.text(x_zero + (w + 8 if pts > 0 else -w - 8), y + 4, f"{pts:+d}",
-               cls="sm", anchor="start" if pts > 0 else "end")
-    f.line(x_zero, 114, x_zero, 348, cls="rule")
-    f.text(BCX, 372, "net −5% — and the file has to say why", cls="sm dim")
+        lo, hi = sorted((level, level + pts))
+        f.rect(px(lo), y - 11, px(hi) - px(lo), 22, rx=3, fill=colour,
+               fill_opacity="0.6", stroke=colour, stroke_width="1.2")
+        f.text(108, y + 4, name, cls="sm", anchor="end")
+        level += pts
+        f.line(px(level), y + 11, px(level), ys[i + 1] - 11, cls="thin dot",
+               stroke="var(--dim)", stroke_width="1.2")
+    y = ys[-1]
+    f.rect(px(level), y - 12, px(100) - px(level), 24, rx=3, fill=BLUE,
+           fill_opacity="0.6", stroke=BLUE, stroke_width="1.2")
+    f.text(108, y + 4, "modifier", cls="sm bold", anchor="end")
+    f.text(px(level) - 6, y + 4, "0.95", cls="sm bold", anchor="end")
     return f
 
 
 @figure("Retrospective Rating", "Retrospective premium rising with the insured's own "
-        "losses between a guaranteed minimum and maximum", width=WID)
+        "losses, held between a minimum and a maximum premium", width=WID)
 def retrospective_rating() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 160, 0, 190, left=52, right=20, top=32, bottom=70)
-    ax.frame(xticks=[0, 50, 100, 150], yticks=[0, 50, 100, 150],
-             xfmt=lambda t: f"{t:.0f}", yfmt=lambda t: f"{t:.0f}", grid=True)
+    ax = vaxes(f, 0, 160, 0, 190, left=52, right=20, top=28, bottom=48)
+    ax.frame(xlabel="own losses", ylabel="premium", xticks=[0, 50, 100, 150],
+             yticks=[0, 50, 100, 150], xfmt=lambda t: f"{t:.0f}",
+             yfmt=lambda t: f"{t:.0f}", grid=True)
     ax.curve(lambda L: min(max(30 + 1.15 * L, 45), 150), colour=BLUE, width=2.6)
     ax.hline(45, colour=GREEN, x_to=160, dash=True)
     ax.label(158, 45, "minimum", cls="sm bold", fill=GREEN, anchor="end", dy=-7)
     ax.hline(150, colour=ROSE, x_to=160, dash=True)
     ax.label(158, 150, "maximum", cls="sm bold", fill=ROSE, anchor="end", dy=-7)
-    ax.label(70, 100, "basic + converted losses", cls="sm", fill=BLUE,
-             anchor="start", dx=-6, dy=-10)
-    f.text(BCX, ax.y1 + 32, "the insured's own losses ($000)", cls="sm dim")
-    f.text(BCX, BY1 - 18, "retrospective, not prospective — this year's",
-           cls="sm dim")
-    f.text(BCX, BY1 - 2, "losses adjust this year's premium", cls="sm dim")
     return f
 
 
-@figure("Self-Insured Retention", "Claims split at the retention between the "
-        "entity's own layer and the insurer's", width=WID)
+@figure("Self-Insured Retention", "Eight claims cut at a 250 retention: the entity "
+        "keeps each claim up to the line and the insurer pays what rises above it",
+        width=WID)
 def self_insured_retention() -> Fig:
     f = vcard()
 
     claims = [120, 340, 90, 780, 250, 60, 1150, 200]
     R = 250
-    ax = vaxes(f, 0.3, len(claims) + 0.7, 0, 1250, left=52, right=20, top=34,
-               bottom=70)
-    ax.frame(xticks=[], yticks=[0, 250, 750, 1250],
+    ax = vaxes(f, 0.3, 10.6, 0, 1250, left=52, right=14, top=28, bottom=48)
+    ax.frame(xlabel="claims", xticks=[], yticks=[0, 250, 750, 1250],
              yfmt=lambda t: f"{t:,.0f}", grid=True)
-    bw = (ax.px(2) - ax.px(1)) * 0.56
+    bw = (ax.px(2) - ax.px(1)) * 0.62
     for k, x in enumerate(claims):
         cx = ax.px(k + 1)
         lo = min(x, R)
@@ -1591,30 +1598,25 @@ def self_insured_retention() -> Fig:
         if x > R:
             f.rect(cx - bw / 2, ax.py(x), bw, ax.py(R) - ax.py(x), rx=2,
                    fill=BLUE, fill_opacity="0.7")
-    ax.hline(R, colour=ROSE, x_to=len(claims) + 0.7, dash=False)
-    ax.label(len(claims) + 0.6, R, "SIR 250", cls="sm bold", fill=ROSE,
-             anchor="end", dy=-7)
-    f.text(BCX, ax.y1 + 30, "individual claims ($000)", cls="sm dim")
-    f.legend_row(56, ax.y1 + 52, [(AMBER, "retained"), (BLUE, "insured")],
-                 gap=120)
-    f.text(BCX, BY1 - 2, "the retained layer still needs a reserve estimate",
-           cls="sm dim")
+    ax.hline(R, colour=ROSE, x_to=10.6, dash=False)
+    ax.label(9.6, R, "SIR", cls="sm bold", dy=-7)
+    ax.label(9.6, 700, "insured", cls="sm")
+    ax.label(9.6, 125, "retained", cls="sm", dy=4)
     return f
 
 
-@figure("Reinsurance", "An excess-of-loss treaty cutting each claim into the "
-        "cedant's retention, the reinsured layer and the excess above it",
+@figure("Reinsurance", "Seven claims cut by a 1,500 xs 500 excess-of-loss treaty into "
+        "the cedant's retention, the reinsured layer and the excess above it",
         width=WID)
 def reinsurance() -> Fig:
     f = vcard()
 
     claims = [180, 620, 300, 1400, 2600, 240, 900]
     R, L = 500, 1500
-    ax = vaxes(f, 0.3, len(claims) + 0.7, 0, 2800, left=54, right=20, top=36,
-               bottom=76)
-    ax.frame(xticks=[], yticks=[0, 500, 2000, 2800],
+    ax = vaxes(f, 0.3, 10.2, 0, 2800, left=54, right=14, top=28, bottom=48)
+    ax.frame(xlabel="claims", xticks=[], yticks=[0, 500, 2000, 2800],
              yfmt=lambda t: f"{t:,.0f}", grid=True)
-    bw = (ax.px(2) - ax.px(1)) * 0.56
+    bw = (ax.px(2) - ax.px(1)) * 0.62
     for k, x in enumerate(claims):
         cx = ax.px(k + 1)
         for lo, hi, colour in ((0, min(x, R), BLUE),
@@ -1624,37 +1626,37 @@ def reinsurance() -> Fig:
                 continue
             f.rect(cx - bw / 2, ax.py(hi), bw, ax.py(lo) - ax.py(hi), rx=2,
                    fill=colour, fill_opacity="0.72")
-    ax.hline(R, colour=BLUE, x_to=len(claims) + 0.7, dash=False)
-    ax.hline(R + L, colour=AMBER, x_to=len(claims) + 0.7, dash=False)
-    f.text(BCX, ax.y1 + 30, "individual claims ($000)", cls="sm dim")
-    f.legend_row(46, ax.y1 + 52,
-                 [(BLUE, "retained 500"), (AMBER, "1,500 xs 500")], gap=136)
-    f.text(BCX, ax.y1 + 72, "the layer above the treaty comes back to the cedant",
-           cls="sm dim")
+    ax.hline(R, colour=BLUE, x_to=10.2, dash=False)
+    ax.hline(R + L, colour=AMBER, x_to=10.2, dash=False)
+    ax.label(8.9, R / 2, "retained", cls="sm", dy=4)
+    ax.label(8.9, R + L / 2, "1,500 xs 500", cls="sm bold", dy=4)
+    ax.label(8.9, (R + L + 2800) / 2, "above limit", cls="sm", dy=4)
     return f
 
 
-@figure("Lifetime Value", "The present value of a customer's profit over the years "
-        "they are expected to stay", width=WID)
+@figure("Lifetime Value", "A customer's discounted profit by policy year, negative in "
+        "the first year, with the running total climbing to a lifetime value of 81",
+        width=WID)
 def lifetime_value() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0.4, 6.6, -40, 60, left=52, right=18, top=36, bottom=72)
-    ax.frame(xticks=[1, 2, 3, 4, 5, 6], yticks=[-40, 0, 40],
-             yfmt=lambda t: f"{t:.0f}", grid=True)
+    ax = vaxes(f, 0.4, 6.6, -40, 95, left=48, right=18, top=28, bottom=48)
+    ax.frame(xticks=[], yticks=[-40, 0, 40, 80], yfmt=lambda t: f"{t:.0f}",
+             grid=True)
     profit = [-34, 22, 30, 26, 21, 16]
-    ax.bars([(k + 1, v) for k, v in enumerate(profit)], colour=BLUE,
-            opacity="0.72")
+    running, total = [], 0
     for k, v in enumerate(profit):
-        if v < 0:
-            ax.bars([(k + 1, v)], colour=ROSE, opacity="0.72")
-    ax.label(1.6, -26, "year 1 loses money", cls="sm", fill=ROSE, anchor="start")
-    ax.label(4.4, 40, "PV of profit = $81", cls="sm bold", fill=BLUE)
-    f.text(BCX, ax.y1 + 32, "policy year, discounted and survival-weighted",
-           cls="sm dim")
-    f.text(BCX, BY1 - 18, "it is a marketing and retention frame laid over",
-           cls="sm dim")
-    f.text(BCX, BY1 - 2, "the indication — it never replaces one", cls="sm dim")
+        ax.bars([(k + 1, v)], colour=ROSE if v < 0 else BLUE, bw=22,
+                opacity="0.72")
+        f.text(ax.px(k + 1), ax.y1 + 16, str(k + 1), cls="sm dim")
+        total += v
+        running.append((k + 1, total))
+    f.text(ax.x1, ax.y1 + 32, "policy year", cls="sm dim", anchor="end")
+    ax.polyline(running, colour=GREEN, width=2.4)
+    for x, y in running:
+        ax.point(x, y, colour=GREEN, r=3.2)
+    ax.label(6, total, f"{total:.0f}", cls="sm bold", anchor="start", dx=8, dy=4)
+    ax.label(5, 65, "lifetime value", cls="sm bold", anchor="end", dx=-6, dy=-8)
     return f
 
 
@@ -1662,116 +1664,137 @@ def lifetime_value() -> Fig:
 # B. Estimating claim liabilities — the framework
 # ═══════════════════════════════════════════════════════════════════════════
 
-@figure("Loss Reserving", "Reserving looking backwards at claims already incurred "
-        "while ratemaking looks forwards", width=WID)
+@figure("Loss Reserving", "A time axis split at the valuation date: reserving looks "
+        "back at claims already incurred, some carried as case reserves and some "
+        "still IBNR, while ratemaking looks ahead at claims yet to happen", width=WID)
 def loss_reserving() -> Fig:
     f = vcard()
 
-    y = 168
-    f.line(44, y, 316, y, cls="axis")
-    f.line(BCX, y - 12, BCX, y + 12, cls="tick")
-    f.text(BCX, y + 30, "valuation date", cls="sm dim")
-    f.arrow(BCX - 10, y - 34, 52, y - 34, colour=BLUE, width=1.8)
-    f.text(BCX - 90, y - 44, "reserving", cls="sm bold", fill=BLUE)
-    f.text(BCX - 90, y - 60, "what past losses will cost", cls="sm dim")
-    f.arrow(BCX + 10, y - 34, 308, y - 34, colour=AMBER, width=1.8)
-    f.text(BCX + 90, y - 44, "ratemaking", cls="sm bold", fill=AMBER)
-    f.text(BCX + 90, y - 60, "what future losses will cost", cls="sm dim")
+    y, xv = 340, 200
+    past = [(52, 110, True), (72, 72, True), (92, 160, True), (112, 96, True),
+            (130, 64, False), (146, 128, True), (162, 88, False), (180, 146, False)]
+    future = [(224, 86), (246, 128), (270, 70), (292, 112), (314, 94)]
+    for x, h, reported in past:
+        colour = AMBER if reported else VIOLET
+        f.line(x, y, x, y - h, cls="thin" if reported else "thin dash",
+               stroke=colour, stroke_width="2")
+        f.circle(x, y - h, 5, fill=colour if reported else "var(--surf)",
+                 fill_opacity="0.8" if reported else None, stroke=colour,
+                 stroke_width="1.6")
+    for x, h in future:
+        f.line(x, y, x, y - h, cls="thin dot", stroke="var(--dim)",
+               stroke_width="1.6")
+        f.circle(x, y - h, 5, fill="none", stroke="var(--dim)", stroke_width="1.2",
+                 stroke_dasharray="2 2")
+    f.text(92, y - 160 - 12, "case", cls="sm bold")
+    f.text(180, y - 146 - 12, "IBNR", cls="sm bold")
 
-    f.text(BCX, 246, "the liability being estimated", cls="sm dim")
-    _hbar(f, 288, [(0.42, "case reserves", AMBER), (0.58, "IBNR", VIOLET)],
-          x0=44, x1=316, height=34)
-    f.text(BCX, 344, "the claims department sets the first;", cls="sm dim")
-    f.text(BCX, 362, "the actuary is responsible for the second", cls="sm dim")
+    f.arrow(36, y, 332, y, colour="var(--axis)", width=1.2)
+    f.line(xv, 96, xv, y + 6, cls="thin dash", stroke="var(--ink)",
+           stroke_width="1.3")
+    f.text(xv, y + 22, "valuation date", cls="sm dim")
+    f.arrow(xv - 8, 120, 46, 120, colour=BLUE, width=2)
+    f.text(122, 110, "reserving", cls="sm bold")
+    f.arrow(xv + 8, 120, 322, 120, colour=AMBER, width=2)
+    f.text(264, 110, "ratemaking", cls="sm bold")
     return f
 
 
-@figure("Unpaid Claims", "The ultimate loss split into what has been paid, the case "
-        "reserves and IBNR", width=WID)
+@figure("Unpaid Claims", "AY 2024's 2,850 ultimate stacked as paid, case and IBNR, "
+        "with the 1,500 reported bracketed on one side and the 2,250 unpaid on the "
+        "other", width=WID)
 def unpaid_claims() -> Fig:
     f = vcard()
 
-    f.text(BCX, 118, "AY 2024 at 12 months ($000)", cls="sm dim")
-    x0, x1 = 44, 316
+    x0, x1, base, scale = 140, 220, 372, 280 / 2850
     parts = [(600, "paid 600", GREEN), (900, "case 900", AMBER),
              (1350, "IBNR 1,350", VIOLET)]
-    x = x0
+    edges = [base]
     for amount, label, colour in parts:
-        w = (x1 - x0) * amount / 2850
-        f.rect(x, 160, w, 44, rx=4, fill=colour, fill_opacity="0.34",
+        h = amount * scale
+        top = edges[-1] - h
+        f.rect(x0, top, x1 - x0, h, rx=3, fill=colour, fill_opacity="0.34",
                stroke=colour, stroke_width="1.2")
-        x += w
-    brace(f, x0, x1, 156, depth=8, below=False, label="ultimate 2,850")
-    brace(f, x0 + (x1 - x0) * 600 / 2850, x1, 210, depth=8,
-          label="unpaid claim estimate 2,250")
-    for i, (amount, label, colour) in enumerate(parts):
-        y = 268 + i * 32
-        f.rect(84, y - 9, 11, 11, rx=2, fill=colour, fill_opacity="0.8")
-        f.text(102, y + 1, label, cls="sm", anchor="start")
-    f.text(BCX, BY1 - 2, "reported = paid + case; the rest is the actuary's",
-           cls="sm dim")
+        f.text((x0 + x1) / 2, top + h / 2 + 4, label, cls="sm bold")
+        edges.append(top)
+    f.text((x0 + x1) / 2, edges[-1] - 10, "ultimate 2,850", cls="sm bold")
+
+    def bracket(x, ya, yb, tick):
+        f.path(f"M{x + tick},{ya:.1f} H{x} V{yb:.1f} H{x + tick}", cls="thin",
+               stroke="var(--dim)", stroke_width="1.3")
+
+    bracket(128, edges[0], edges[2], 6)
+    f.text(120, (edges[0] + edges[2]) / 2 + 4, "reported 1,500", cls="sm",
+           anchor="end")
+    bracket(232, edges[1], edges[3], -6)
+    f.text(240, (edges[1] + edges[3]) / 2 + 4, "unpaid 2,250", cls="sm",
+           anchor="start")
     return f
 
 
-@figure("Reserving Data Organization", "Segmenting a book into triangles that each "
-        "hold a stable emergence pattern", width=WID)
+@figure("Reserving Data Organization", "One triangle whose cells mix four coverages, "
+        "split into four smaller triangles that each hold a single coverage",
+        width=WID)
 def reserving_data_organization() -> Fig:
     f = vcard()
 
-    f.text(BCX, 112, "one book, three defensible segmentations", cls="sm dim")
-    groups = [("Coverage", ["BI", "PD", "Coll", "Comp"], BLUE),
-              ("Claim type", ["litigated", "not litigated"], TEAL),
-              ("Limit band", ["basic", "excess"], VIOLET)]
-    for i, (name, cells, colour) in enumerate(groups):
-        y = 146 + i * 68
-        f.text(46, y - 10, name, cls="sm bold", anchor="start")
-        w = 268 / len(cells)
-        for j, cell in enumerate(cells):
-            f.rect(46 + j * w, y, w - 5, 30, rx=4, fill=colour,
-                   fill_opacity="0.18", stroke=colour, stroke_width="1.1")
-            f.text(46 + j * w + (w - 5) / 2, y + 20, cell, cls="sm")
-    f.text(BCX, 358, "more homogeneous, less credible — the same", cls="sm dim")
-    f.text(BCX, 376, "trade as ratemaking, decided per triangle", cls="sm dim")
+    colours = [BLUE, AMBER, TEAL, VIOLET]
+
+    def cells(x0, y0, n, c, colour_at):
+        for i in range(n):
+            for j in range(n - i):
+                colour = colour_at(i, j)
+                f.rect(x0 + j * c + 1, y0 + i * c + 1, c - 2, c - 2, rx=2,
+                       fill=colour, fill_opacity="0.55", stroke=colour,
+                       stroke_width="1")
+
+    cells(BCX - 65, 80, 5, 26, lambda i, j: colours[(2 * i + 3 * j + i * j) % 4])
+    for k, name in enumerate(["BI", "PD", "Coll", "Comp"]):
+        cx = 60 + 80 * k
+        f.arrow(BCX - 18 + 12 * k, 220, cx, 268, colour="var(--dim)", width=1.3)
+        cells(cx - 34, 278, 4, 17, lambda i, j: colours[k])
+        f.text(cx, 368, name, cls="sm bold")
     return f
 
 
-@figure("Underwriting Year", "Reinsurance treaties grouped by the year the contract "
-        "was bound", width=WID)
+@figure("Underwriting Year", "A treaty bound at the start of 2024 and the policies "
+        "that attach to it through the year, so underwriting year 2024 runs for 24 "
+        "months", width=WID)
 def underwriting_year() -> Fig:
     f = vcard()
 
-    _calendar_axis(f, 296, ["2023", "2024", "2025"], band=1, y_top=128)
-    spans = [(1.0, 2.0), (1.0, 2.4), (1.0, 3.0)]
-    labels = ["treaty A", "treaty B", "treaty C"]
-    _policy_bars(f, 154, spans, x0=48, x1=318, t0=0.0, t1=3.0, gap=36,
-                 colour=VIOLET, labels=None)
-    for i, name in enumerate(labels):
-        f.text(52, 154 + i * 36 - 12, name, cls="sm dim", anchor="start")
-    f.text(BCX, 114, "UY 2024", cls="sm bold", fill=AMBER)
-    f.text(BCX, 334, "a treaty bound 1/1 covers policies written", cls="sm dim")
-    f.text(BCX, 352, "all year, so a UY runs longer than a policy year",
-           cls="sm dim")
+    px = _calendar_axis(f, 340, ["2023", "2024", "2025"], band=1, y_top=96)
+    f.rect(px(1), 117, px(2) - px(1), 18, rx=3, fill=VIOLET, fill_opacity="0.4",
+           stroke=VIOLET, stroke_width="1.2")
+    f.text(px(0.5), 130, "treaty", cls="sm bold")
+    for k in range(6):
+        t = 1 + 0.18 * k
+        y = 166 + 22 * k
+        f.rect(px(t), y - 5.5, px(t + 1) - px(t), 11, rx=3, fill=BLUE,
+               fill_opacity="0.34", stroke=BLUE, stroke_width="1.1")
+    f.text(px(0.5), 226, "policies", cls="sm")
+    brace(f, px(1), px(2.9), 296, depth=8, label="24 months", label_cls="sm bold")
     return f
 
 
-@figure("Types of Insurance", "Lines of insurance placed by claim frequency and "
-        "claim severity", width=WID)
+@figure("Types of Insurance", "Six lines of insurance placed by claim frequency and "
+        "claim severity, with the tail lengthening toward low frequency and high "
+        "severity", width=WID)
 def types_of_insurance() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 10, 0, 10, left=48, right=24, top=36, bottom=70)
-    ax.frame(xticks=[], yticks=[], arrows=True)
+    ax = vaxes(f, 0, 10, 0, 10, left=36, right=20, top=26, bottom=40)
+    ax.frame(xlabel="frequency", ylabel="severity", xticks=[], yticks=[],
+             arrows=True)
     lines = [(8.4, 1.4, "Auto PD", GREEN), (6.6, 3.2, "Homeowners", GREEN),
              (4.4, 5.6, "CGL", BLUE), (2.6, 6.8, "Auto BI", BLUE),
              (3.2, 8.8, "Workers comp", ROSE), (0.9, 9.4, "Med mal", ROSE)]
     for x, y, name, colour in lines:
         ax.point(x, y, colour=colour, r=4.6)
         ax.label(x, y, name, cls="sm bold", fill=colour, dy=-10)
-    f.text(ax.x0 - 6, ax.y0 - 14, "severity", cls="sm dim", anchor="start")
-    f.text(ax.x1, ax.y1 + 20, "frequency", cls="sm dim", anchor="end")
-    f.text(BCX, BY1 - 16, "low frequency and high severity means a long",
-           cls="sm dim")
-    f.text(BCX, BY1 + 2, "tail — and colour is the tail length here", cls="sm dim")
+    f.arrow(ax.px(9.2), ax.py(5.0), ax.px(6.6), ax.py(8.4), colour="var(--dim)",
+            width=1.6)
+    ax.label(8.1, 7.3, "longer tail", cls="sm dim", anchor="start")
     return f
 
 
@@ -1784,48 +1807,47 @@ def _emergence(ax: Axes, pattern, colour, label=None, width=2.4, dash=False):
                  fill=colour, anchor="end", dx=-4, dy=-8)
 
 
-@figure("Long Tail Lines", "A long-tail reporting pattern taking years to reach "
-        "ultimate", width=WID)
+@figure("Long Tail Lines", "A long-tail reporting pattern only 52.6% reported at 12 "
+        "months, the unreported gap shaded as IBNR, beside a short-tail pattern that "
+        "is nearly complete at once", width=WID)
 def long_tail_lines() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 96, 0, 1.08, left=50, right=22, top=32, bottom=66)
-    ax.frame(xticks=[12, 36, 60, 84], yticks=[0, 0.5, 1.0],
-             yfmt=lambda t: f"{t:.0%}", grid=True)
+    ax = vaxes(f, 0, 96, 0, 1.08, left=50, right=22, top=28, bottom=48)
+    ax.frame(xlabel="age in months", xticks=[12, 36, 60, 84],
+             yticks=[0, 0.5, 1.0], yfmt=lambda t: f"{t:.0%}", grid=True)
     long_p = [(12, 0.526), (24, 0.789), (36, 0.916), (48, 0.971), (60, 0.990),
               (72, 0.998), (84, 1.0), (96, 1.0)]
     short_p = [(12, 0.94), (24, 0.99), (36, 1.0), (48, 1.0), (60, 1.0),
                (72, 1.0), (84, 1.0), (96, 1.0)]
+    f.polygon([ax.p(x, y) for x, y in long_p] + [ax.p(12, 1.0)], fill=BLUE,
+              fill_opacity="0.14", stroke="none")
     ax.polyline(short_p, colour="var(--dim)", width=1.6, dash=True)
     _emergence(ax, long_p, BLUE)
-    ax.label(60, 0.30, "long tail", cls="sm bold", fill=BLUE)
-    ax.label(60, 0.30, "auto BI, WC, med mal", cls="sm dim", dy=15)
-    ax.label(40, 1.0, "short tail", cls="sm dim", anchor="start", dx=4, dy=-7)
     ax.point(12, 0.526, colour=ROSE, r=4.2)
-    f.text(BCX, ax.y1 + 32, "age in months", cls="sm dim")
-    f.text(BCX, BY1 - 2, "the reserve, not the payment, is the whole exposure",
-           cls="sm dim")
+    ax.label(12, 0.526, "52.6%", cls="sm bold", anchor="start", dx=8, dy=14)
+    ax.label(19, 0.86, "IBNR", cls="sm bold")
+    ax.label(60, 0.62, "long tail", cls="sm bold", fill=BLUE)
+    ax.label(40, 1.0, "short tail", cls="sm dim", anchor="start", dx=4, dy=-7)
     return f
 
 
-@figure("Short Tail Insurance", "A short-tail reporting pattern reaching ultimate "
-        "within a year", width=WID)
+@figure("Short Tail Insurance", "A short-tail reporting pattern already 94% reported "
+        "at 12 months and complete by 36, beside a long-tail pattern still climbing",
+        width=WID)
 def short_tail_insurance() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 60, 0, 1.08, left=50, right=22, top=32, bottom=66)
-    ax.frame(xticks=[12, 24, 36, 48, 60], yticks=[0, 0.5, 1.0],
-             yfmt=lambda t: f"{t:.0%}", grid=True)
+    ax = vaxes(f, 0, 60, 0, 1.08, left=50, right=22, top=28, bottom=48)
+    ax.frame(xlabel="age in months", xticks=[12, 24, 36, 48, 60],
+             yticks=[0, 0.5, 1.0], yfmt=lambda t: f"{t:.0%}", grid=True)
     short_p = [(12, 0.94), (24, 0.99), (36, 1.0), (48, 1.0), (60, 1.0)]
     long_p = [(12, 0.526), (24, 0.789), (36, 0.916), (48, 0.971), (60, 0.990)]
     ax.polyline(long_p, colour="var(--dim)", width=1.6, dash=True)
     _emergence(ax, short_p, GREEN)
+    ax.label(12, 0.94, "94%", cls="sm bold", anchor="start", dx=8, dy=14)
+    ax.label(42, 1.0, "short tail", cls="sm bold", fill=GREEN, dy=-9)
     ax.label(30, 0.62, "long tail", cls="sm dim")
-    ax.label(34, 0.94, "auto PD, property", cls="sm bold", fill=GREEN, dy=-8)
-    f.text(BCX, ax.y1 + 32, "age in months", cls="sm dim")
-    f.text(BCX, BY1 - 18, "development is a small correction, so a", cls="sm dim")
-    f.text(BCX, BY1 - 2, "distorted factor costs far less than on a long tail",
-           cls="sm dim")
     return f
 
 

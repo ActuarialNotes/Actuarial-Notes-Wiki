@@ -236,299 +236,297 @@ def _calendar_axis(f: Fig, y, years, x0=48, x1=318, band=None, band_colour=AMBER
 # A. Ratemaking — the framework
 # ═══════════════════════════════════════════════════════════════════════════
 
-@figure("Ratemaking", "The premium dollar split into losses, LAE, expenses and "
-        "underwriting profit", width=WID)
+@figure("Ratemaking", "A $558 premium column standing level with the stack it has to "
+        "pay for: $360 of losses and LAE, $170 of expenses and $28 of profit", width=WID)
 def ratemaking() -> Fig:
     f = vcard()
 
-    f.text(BCX, 100, "where a $520 average premium goes", cls="sm dim")
-    x, w, y = 62, 78, 128
-    for share, name, colour in ((0.62, "losses", BLUE), (0.07, "LAE", TEAL),
-                                (0.26, "expenses", AMBER),
-                                (0.05, "profit", GREEN)):
-        h = share * 210
-        f.rect(x, y, w, h, rx=4, fill=colour, fill_opacity="0.30", stroke=colour,
-               stroke_width="1.2")
-        f.text(x + w + 12, y + h / 2 + 4, f"{name}  {share:.0%}", cls="sm",
-               anchor="start")
-        y += h
-    f.text(BCX, 360, "and every one of them is a projection", cls="sm dim")
+    top, base = 94, 352
+    k = (base - top) / IND_RATE
+    mid = (top + base) / 2
+    f.rect(44, top, 84, base - top, rx=4, fill=VIOLET, fill_opacity="0.30",
+           stroke=VIOLET, stroke_width="1.2")
+    f.text(86, mid + 4, _money(IND_RATE), cls="bold")
+    f.text(86, base + 20, "premium", cls="sm dim")
+    for dy in (-5, 5):
+        f.line(144, mid + dy, 164, mid + dy, cls="", stroke="var(--ink)",
+               stroke_width="2.4", stroke_linecap="round")
+
+    y = base
+    for value, name, colour in ((PP, "loss & LAE", BLUE),
+                                (FIXED + VAR * IND_RATE, "expenses", AMBER),
+                                (PROF * IND_RATE, "profit", GREEN)):
+        h = value * k
+        f.rect(180, y - h, 84, h, rx=3, fill=colour, fill_opacity="0.30",
+               stroke=colour, stroke_width="1.2")
+        f.text(222, y - h / 2 + 4, _money(value), cls="sm")
+        f.text(274, y - h / 2 + 4, name, cls="sm", anchor="start")
+        y -= h
     return f
 
 
-@figure("Exposure Base", "Expected loss rising in proportion to the exposure base",
-        width=WID)
+@figure("Exposure Base", "Expected loss rising in a straight line with car-years, each "
+        "extra car adding the same $360", width=WID)
 def exposure_base() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 5, 0, 2000, left=52, right=18, top=30, bottom=66)
+    ax = vaxes(f, 0, 5, 0, 2000, left=52, right=18, top=30)
     ax.frame(xticks=[0, 1, 2, 3, 4, 5], yticks=[0, 1000, 2000],
-             yfmt=lambda t: f"{t:,.0f}", grid=True)
-    ax.curve(lambda x: 360 * x, colour=BLUE, width=2.4)
+             yfmt=lambda t: f"{t:,.0f}", grid=True, xlabel="car-years",
+             ylabel="expected loss")
+    ax.curve(lambda x: PP * x, colour=BLUE, width=2.4)
+    ax.polyline([(3, PP * 3), (4, PP * 3), (4, PP * 4)], colour=AMBER, width=1.6,
+                dash=True)
+    ax.label(4, PP * 3.5, "+360", cls="sm bold", anchor="start", dx=7, dy=4)
+    car(f, ax.px(3.5), ax.py(PP * 3) + 20, 36, AMBER)
     for x in (1, 2, 3, 4):
-        ax.point(x, 360 * x, colour=BLUE, r=3.4)
-    ax.label(3.05, 360 * 3.4, "360 per car-year", cls="sm bold", fill=BLUE,
-             anchor="end")
-    f.text(BCX, ax.y1 + 32, "earned exposures (car-years)", cls="sm dim")
-    f.text(BCX, BY1 - 18, "proportional, practical, verifiable,", cls="sm dim")
-    f.text(BCX, BY1 - 2, "and not manipulable by the insured", cls="sm dim")
+        ax.point(x, PP * x, colour=BLUE, r=3.4)
     return f
 
 
-@figure("Line of Business", "Four lines of business with their exposure bases and "
-        "indicated changes", width=WID)
+@figure("Line of Business", "Four lines of business — auto, home, workers comp and "
+        "liability — each with its own indicated rate change", width=WID)
 def line_of_business() -> Fig:
     f = vcard()
 
-    rows = [("Personal auto", "car-year", 7.3, BLUE),
-            ("Homeowners", "house-year", 12.5, AMBER),
-            ("Workers comp", "payroll/100", -2.4, GREEN),
-            ("General liability", "sales/1,000", 4.1, VIOLET)]
-    x_zero, scale = 236, 4.6
-    for i, (name, base, chg, colour) in enumerate(rows):
-        y = 128 + i * 52
-        f.text(34, y - 6, name, cls="sm bold", anchor="start")
-        f.text(34, y + 10, base, cls="sm dim", anchor="start")
+    rows = [("Personal auto", car, 50, 7.3, BLUE),
+            ("Homeowners", house, 38, 12.5, AMBER),
+            ("Workers comp", person, 38, -2.4, GREEN),
+            ("General liability", tower, 36, 4.1, VIOLET)]
+    x_zero, scale = 176, 9.0
+    f.line(x_zero, 78, x_zero, 380, cls="rule")
+    for i, (name, icon, size, chg, colour) in enumerate(rows):
+        y = 98 + i * 80
+        icon(f, 66, y, size, colour)
+        f.text(66, y + 36, name, cls="sm")
         w = abs(chg) * scale
         x = x_zero if chg > 0 else x_zero - w
-        f.rect(x, y - 12, w, 20, rx=3, fill=colour, fill_opacity="0.65")
-        f.text(x_zero + (w + 8 if chg > 0 else -w - 8), y + 3,
-               f"{chg:+.1f}%", cls="sm", anchor="start" if chg > 0 else "end")
-    f.line(x_zero, 106, x_zero, 340, cls="rule")
-    f.text(BCX, 366, "one exposure base, one rating plan, one triangle",
-           cls="sm dim")
+        f.rect(x, y - 11, w, 22, rx=3, fill=colour, fill_opacity="0.65")
+        f.text(x_zero + (w + 8 if chg > 0 else -w - 8), y + 4,
+               f"{chg:+.1f}%".replace("-", "−"), cls="sm",
+               anchor="start" if chg > 0 else "end")
     return f
 
 
-@figure("Ratemaking Data Organization", "The four data aggregations placed on the "
-        "accuracy-versus-availability trade-off", width=WID)
+@figure("Ratemaking Data Organization", "The four data aggregations placed along a "
+        "falling line of accuracy against availability, policy year at the accurate end "
+        "and calendar year at the available end", width=WID)
 def ratemaking_data_organization() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 10, 0, 10, left=44, right=20, top=34, bottom=54)
+    ax = vaxes(f, 0, 10, 0, 10, left=44, right=20, top=34, bottom=36)
     ax.frame(xticks=[], yticks=[], arrows=True)
+    ax.curve(lambda x: 10.4 - 0.95 * x, colour="var(--dim)", width=1.3, dash=True,
+             xa=0.6, xb=9.4)
     pts = [(8.6, 2.2, "Calendar", GREEN), (5.4, 6.0, "Accident", BLUE),
            (5.0, 4.2, "Report", TEAL), (1.8, 8.8, "Policy", AMBER)]
     for x, y, name, colour in pts:
         ax.point(x, y, colour=colour, r=5)
         ax.label(x, y, name, cls="sm bold", fill=colour, dy=-11)
-    ax.curve(lambda x: 10.4 - 0.95 * x, colour="var(--dim)", width=1.3, dash=True,
-             xa=0.6, xb=9.4)
     f.text(ax.x0 - 6, ax.y0 - 14, "accuracy", cls="sm dim", anchor="start")
     f.text(ax.x1, ax.y1 + 20, "availability", cls="sm dim", anchor="end")
-    f.text(BCX, BY1 - 2, "policy year matches best and closes last",
-           cls="sm dim")
     return f
 
 
-@figure("Calendar Year", "Calendar-year aggregation capturing every transaction "
-        "booked inside one year", width=WID)
+@figure("Calendar Year", "Five policies crossing a shaded calendar year 2024, the part "
+        "of each that falls inside the year picked out, whichever year it was written",
+        width=WID)
 def calendar_year() -> Fig:
     f = vcard()
 
-    px = _calendar_axis(f, 300, ["2023", "2024", "2025"], band=1, y_top=126)
-    spans = [(0.30, 1.30), (0.75, 1.75), (1.20, 2.20), (1.65, 2.65)]
-    _policy_bars(f, 150, spans, x0=48, x1=318, t0=0.0, t1=3.0, gap=30)
-    f.text(BCX, 112, "CY 2024", cls="sm bold", fill=AMBER)
-    f.text(BCX, 336, "the year closes at 12/31 and never reopens",
-           cls="sm dim")
-    f.text(BCX, 354, "— fast to obtain, but it mixes cohorts", cls="sm dim")
+    px = _calendar_axis(f, 350, ["2023", "2024", "2025"], band=1, y_top=100)
+    spans = [(0.20, 1.20), (0.55, 1.55), (0.95, 1.95), (1.30, 2.30), (1.70, 2.70)]
+    _, ys = _policy_bars(f, 128, spans, gap=46, height=14)
+    for (a, b), y in zip(spans, ys):
+        lo, hi = max(a, 1.0), min(b, 2.0)
+        f.rect(px(lo), y - 7, px(hi) - px(lo), 14, rx=3, fill=AMBER,
+               fill_opacity="0.8")
+    f.text(px(1.5), 88, "CY 2024", cls="sm bold")
     return f
 
 
-@figure("Policy Year", "Policy-year aggregation following the policies written in "
-        "one year to their expiry", width=WID)
+@figure("Policy Year", "The policies that incept in 2024 highlighted in full, running "
+        "on into 2025, while the one written in 2023 is left out", width=WID)
 def policy_year() -> Fig:
     f = vcard()
 
-    _calendar_axis(f, 300, ["2023", "2024", "2025"], band=1, y_top=126)
-    spans = [(1.02, 2.02), (1.28, 2.28), (1.55, 2.55), (1.86, 2.86)]
-    _policy_bars(f, 150, spans, x0=48, x1=318, t0=0.0, t1=3.0, gap=30,
-                 colour=AMBER)
-    f.text(BCX, 112, "PY 2024", cls="sm bold", fill=AMBER)
-    f.text(BCX, 336, "losses and premium come from the same policies", cls="sm dim")
-    f.text(BCX, 354, "— the cleanest match, and 24 months to fill", cls="sm dim")
+    px = _calendar_axis(f, 350, ["2023", "2024", "2025"], band=1, y_top=100)
+    spans = [(0.62, 1.62), (1.05, 2.05), (1.35, 2.35), (1.62, 2.62), (1.90, 2.90)]
+    for i, (a, b) in enumerate(spans):
+        y = 128 + i * 46
+        colour = AMBER if 1.0 <= a < 2.0 else "var(--axis)"
+        f.rect(px(a), y - 7, px(b) - px(a), 14, rx=3, fill=colour,
+               fill_opacity="0.45" if colour == AMBER else "0.3", stroke=colour,
+               stroke_width="1.1")
+        f.circle(px(a), y, 4.6, fill=colour)
+    f.text(px(1.5), 88, "PY 2024", cls="sm bold")
     return f
 
 
-@figure("Accident Year", "Accident-year aggregation grouping losses by the date of "
-        "the event", width=WID)
+@figure("Accident Year", "Accidents dotted along five policies, the four that happen in "
+        "2024 picked out whichever policy they fall on", width=WID)
 def accident_year() -> Fig:
     f = vcard()
 
-    _calendar_axis(f, 300, ["2023", "2024", "2025"], band=1, y_top=126)
-    spans = [(0.55, 1.55), (0.90, 1.90), (1.35, 2.35), (1.70, 2.70)]
-    px, ys = _policy_bars(f, 150, spans, x0=48, x1=318, t0=0.0, t1=3.0, gap=30)
-    events = [(0, 1.22), (1, 1.10), (1, 1.62), (2, 1.48), (3, 2.10)]
+    px = _calendar_axis(f, 350, ["2023", "2024", "2025"], band=1, y_top=100)
+    spans = [(0.20, 1.20), (0.55, 1.55), (0.95, 1.95), (1.30, 2.30), (1.70, 2.70)]
+    _, ys = _policy_bars(f, 128, spans, gap=46, height=14)
+    events = [(0, 0.62), (0, 1.10), (1, 1.40), (2, 1.64), (3, 1.86), (3, 2.12),
+              (4, 2.40)]
     for i, t in events:
         colour = ROSE if 1.0 <= t < 2.0 else "var(--dim)"
-        f.circle(px(t), ys[i], 4.2, fill=colour)
-    f.text(BCX, 112, "AY 2024", cls="sm bold", fill=AMBER)
-    f.text(BCX, 336, "four of the five accidents fall in 2024 —", cls="sm dim")
-    f.text(BCX, 354, "the policies they came from do not matter", cls="sm dim")
+        f.circle(px(t), ys[i], 5, fill=colour)
+    f.text(px(1.5), 88, "AY 2024", cls="sm bold")
     return f
 
 
-@figure("Report Year", "Claims grouped by report date, with the reporting lag drawn "
-        "from each accident", width=WID)
+@figure("Report Year", "Five claims drawn as arrows from accident to report date, the "
+        "three reported during 2024 picked out", width=WID)
 def report_year() -> Fig:
     f = vcard()
 
-    px = _calendar_axis(f, 300, ["2023", "2024", "2025"], band=1, y_top=126)
-    lags = [(0.45, 1.15), (0.80, 1.42), (1.10, 1.70), (1.35, 2.30)]
+    px = _calendar_axis(f, 350, ["2023", "2024", "2025"], band=1, y_top=100)
+    lags = [(0.25, 0.85), (0.55, 1.25), (0.90, 1.60), (1.30, 1.85), (1.55, 2.45)]
     for i, (acc, rpt) in enumerate(lags):
-        y = 150 + i * 30
-        f.circle(px(acc), y, 4.2, fill=BLUE)
+        y = 128 + i * 46
         colour = ROSE if 1.0 <= rpt < 2.0 else "var(--dim)"
-        f.arrow(px(acc) + 5, y, px(rpt), y, colour=colour, width=1.5)
-        f.circle(px(rpt), y, 4.2, fill=colour)
-    f.text(BCX, 112, "RY 2024", cls="sm bold", fill=AMBER)
-    f.text(58, 336, "● accident", cls="sm dim", anchor="start")
-    f.text(200, 336, "→ ● report", cls="sm dim", anchor="start")
-    f.text(BCX, 358, "a report year has no pure IBNR — only IBNER", cls="sm dim")
+        f.circle(px(acc), y, 4.6, fill=BLUE)
+        f.arrow(px(acc) + 6, y, px(rpt) - 5, y, colour=colour, width=1.5)
+        f.circle(px(rpt), y, 4.6, fill=colour)
+    f.text(px(lags[1][0]), 162, "accident", cls="sm dim")
+    f.text(px(lags[1][1]), 162, "report", cls="sm dim")
+    f.text(px(1.5), 88, "RY 2024", cls="sm bold")
     return f
 
 
-@figure("Close Year", "Claims grouped by settlement date, with the settlement lag "
-        "drawn from each accident", width=WID)
+@figure("Close Year", "Five claims drawn as arrows from accident to settlement, the "
+        "three closed during 2024 picked out", width=WID)
 def close_year() -> Fig:
     f = vcard()
 
-    px = _calendar_axis(f, 300, ["2023", "2024", "2025"], band=1, y_top=126)
-    lags = [(0.30, 1.05), (0.55, 1.60), (0.95, 1.85), (1.25, 2.50)]
+    px = _calendar_axis(f, 350, ["2023", "2024", "2025"], band=1, y_top=100)
+    lags = [(0.15, 0.80), (0.30, 1.15), (0.55, 1.65), (0.95, 1.85), (1.25, 2.50)]
     for i, (acc, close) in enumerate(lags):
-        y = 150 + i * 30
-        f.circle(px(acc), y, 4.2, fill=BLUE)
+        y = 128 + i * 46
         colour = GREEN if 1.0 <= close < 2.0 else "var(--dim)"
-        f.arrow(px(acc) + 5, y, px(close), y, colour=colour, width=1.5)
-        f.text(px(close) + 6, y + 4, "✕", cls="sm", fill=colour, anchor="start")
-    f.text(BCX, 112, "Close year 2024", cls="sm bold", fill=AMBER)
-    f.text(BCX, 336, "the settled cost is a fact, not an estimate —", cls="sm dim")
-    f.text(BCX, 354, "but the cohort is biased toward fast claims", cls="sm dim")
+        f.circle(px(acc), y, 4.6, fill=BLUE)
+        f.arrow(px(acc) + 6, y, px(close) - 8, y, colour=colour, width=1.5)
+        for d in (1, -1):
+            f.line(px(close) - 5, y - 5 * d, px(close) + 5, y + 5 * d, cls="",
+                   stroke=colour, stroke_width="2.2", stroke_linecap="round")
+    f.text(px(lags[1][0]), 162, "accident", cls="sm dim")
+    f.text(px(lags[1][1]), 162, "closed", cls="sm dim")
+    f.text(px(1.5), 88, "Close year 2024", cls="sm bold")
     return f
 
 
-@figure("In-Force", "A vertical cut through the book at one date, counting the "
-        "policies then providing coverage", width=WID)
+@figure("In-Force", "A dashed valuation date cutting through five policies, the three "
+        "it crosses highlighted as in force", width=WID)
 def in_force() -> Fig:
     f = vcard()
 
-    px = _calendar_axis(f, 306, ["2023", "2024", "2025"], y_top=124)
+    px = _calendar_axis(f, 350, ["2023", "2024", "2025"], y_top=100)
     spans = [(0.15, 1.15), (0.60, 1.60), (1.05, 2.05), (1.40, 2.40),
              (1.75, 2.75)]
-    _, ys = _policy_bars(f, 146, spans, x0=48, x1=318, t0=0.0, t1=3.0, gap=30)
     t = 1.50
-    f.line(px(t), 122, px(t), 306, cls="thin dash", stroke=ROSE, stroke_width="1.6")
-    f.text(px(t), 114, "valuation date", cls="sm bold", fill=ROSE)
+    for i, (a, b) in enumerate(spans):
+        y = 128 + i * 46
+        live = a <= t < b
+        colour = BLUE if live else "var(--axis)"
+        f.rect(px(a), y - 7, px(b) - px(a), 14, rx=3, fill=colour,
+               fill_opacity="0.45" if live else "0.3", stroke=colour,
+               stroke_width="1.1")
+    f.line(px(t), 98, px(t), 350, cls="thin dash", stroke=ROSE, stroke_width="1.6")
     for i, (a, b) in enumerate(spans):
         if a <= t < b:
-            f.circle(px(t), ys[i], 4.4, fill=ROSE)
-    f.text(BCX, 344, "3 of the 5 policies are in force —", cls="sm dim")
-    f.text(BCX, 362, "written and earned both count different things", cls="sm dim")
+            f.circle(px(t), 128 + i * 46, 4.8, fill=ROSE)
+    f.text(px(t), 88, "valuation date", cls="sm bold")
     return f
 
 
-@figure("Net of Reinsurance", "Gross losses split into the reinsurer's share and "
-        "the retained net", width=WID)
+@figure("Net of Reinsurance", "A 2,850 gross loss bar split into the 2,050 the insurer "
+        "keeps and the 800 it cedes to the reinsurer", width=WID)
 def net_of_reinsurance() -> Fig:
     f = vcard()
 
-    f.text(BCX, 118, "AY 2024 ultimate losses ($000)", cls="sm dim")
-    f.text(46, 152, "Gross", cls="sm bold", anchor="start")
-    f.rect(46, 162, 268, 30, rx=4, fill=VIOLET, fill_opacity="0.28",
-           stroke=VIOLET, stroke_width="1.2")
-    f.text(180, 182, "2,850", cls="sm")
-
-    f.text(46, 228, "Ceded", cls="sm bold", anchor="start")
-    f.rect(46, 238, 268 * 0.28, 30, rx=4, fill=AMBER, fill_opacity="0.34",
-           stroke=AMBER, stroke_width="1.2")
-    f.text(46 + 268 * 0.14, 258, "800", cls="sm")
-
-    f.text(46, 304, "Net", cls="sm bold", anchor="start")
-    f.rect(46, 314, 268 * 0.72, 30, rx=4, fill=BLUE, fill_opacity="0.34",
-           stroke=BLUE, stroke_width="1.2")
-    f.text(46 + 268 * 0.36, 334, "2,050", cls="sm")
-    f.text(BCX, 372, "reserve gross first, then cede — never the reverse",
-           cls="sm dim")
+    gross, ceded = 2850, 800
+    x0, x1, y0, h = 36, 324, 112, 44
+    xs = x0 + (x1 - x0) * (gross - ceded) / gross
+    f.text(BCX, y0 - 14, f"gross {_money(gross)}", cls="bold")
+    parts = (((x0 + xs) / 2, x0, xs, gross - ceded, BLUE, "net", "insurer"),
+             ((xs + x1) / 2, xs, x1, ceded, AMBER, "ceded", "reinsurer"))
+    for cx, a, b, value, colour, name, who in parts:
+        f.rect(a, y0, b - a, h, rx=4, fill=colour, fill_opacity="0.34",
+               stroke=colour, stroke_width="1.2")
+        f.text(cx, y0 + h / 2 + 4, _money(value), cls="sm")
+        f.arrow(cx, y0 + h + 8, cx, 240, colour=colour, width=1.8)
+        f.text(cx + 8, 208, name, cls="sm", anchor="start")
+        tower(f, cx, 292, 70, colour)
+        f.text(cx, 350, who, cls="sm bold")
     return f
 
 
-@figure("Written Premium", "A full-term premium booked at inception against the "
-        "premium earned month by month", width=WID)
+@figure("Written Premium", "A $600 annual policy's written premium jumping to the full "
+        "$600 on the day it is issued, while earned premium climbs to it over twelve "
+        "months", width=WID)
 def written_premium() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 12, 0, 1.15, left=48, right=20, top=32, bottom=66)
-    ax.frame(xticks=[0, 3, 6, 9, 12], yticks=[0, 0.5, 1.0],
-             yfmt=lambda t: f"{t:.0%}", grid=True)
-    ax.polyline([(0, 0), (0, 1.0), (12, 1.0)], colour=AMBER, width=2.4)
-    ax.polyline([(0, 0), (12, 1.0)], colour=BLUE, width=2.4)
-    ax.label(6.2, 1.03, "written", cls="sm bold", fill=AMBER, dy=-6)
-    ax.label(8.6, 0.62, "earned", cls="sm bold", fill=BLUE, dy=8)
-    f.text(BCX, ax.y1 + 32, "months since inception", cls="sm dim")
-    f.text(BCX, BY1 - 18, "a $600 annual policy written 12/1 is $600", cls="sm dim")
-    f.text(BCX, BY1 - 2, "of CY written premium and $50 of CY earned", cls="sm dim")
+    ax = vaxes(f, 0, 12, 0, 690, left=48, right=20, top=32)
+    ax.frame(xticks=[0, 3, 6, 9, 12], yticks=[0, 200, 400, 600], grid=True,
+             xlabel="months", ylabel="premium")
+    ax.polyline([(0, 0), (0, 600), (12, 600)], colour=AMBER, width=2.4)
+    ax.polyline([(0, 0), (12, 600)], colour=BLUE, width=2.4)
+    ax.label(6, 600, "written", cls="sm bold", dy=-8)
+    ax.label(8.6, 372, "earned", cls="sm bold", dy=8)
     return f
 
 
-@figure("Earned Premium", "Premium earned pro rata across the policy term",
-        width=WID)
+@figure("Earned Premium", "A $600 annual policy's earned premium climbing in a straight "
+        "line, with $400 earned by month eight", width=WID)
 def earned_premium() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 12, 0, 1.1, left=48, right=20, top=32, bottom=66)
-    ax.area(lambda t: t / 12, 0, 8, colour=BLUE, opacity="0.20")
-    ax.frame(xticks=[0, 4, 8, 12], yticks=[0, 0.5, 1.0],
-             yfmt=lambda t: f"{t:.0%}", grid=True)
-    ax.polyline([(0, 0), (12, 1.0)], colour=BLUE, width=2.4)
-    ax.vline(8, colour=ROSE, y_top=8 / 12)
-    ax.point(8, 8 / 12, colour=ROSE)
-    ax.label(8, 8 / 12, "$400 earned", cls="sm bold", fill=ROSE, anchor="end",
-             dx=-8, dy=-6)
-    ax.label(10.2, 0.28, "$200 still", cls="sm dim")
-    ax.label(10.2, 0.28, "unearned", cls="sm dim", dy=13)
-    f.text(BCX, ax.y1 + 32, "months into a $600 annual policy", cls="sm dim")
-    f.text(BCX, BY1 - 2, "earned premium is the ratemaking denominator",
-           cls="sm dim")
+    ax = vaxes(f, 0, 12, 0, 690, left=48, right=20, top=32)
+    ax.area(lambda t: 50 * t, 0, 8, colour=BLUE, opacity="0.20")
+    ax.frame(xticks=[0, 4, 8, 12], yticks=[0, 200, 400, 600], grid=True,
+             xlabel="months", ylabel="premium")
+    ax.polyline([(0, 0), (12, 600)], colour=BLUE, width=2.4)
+    ax.vline(8, colour=ROSE, y_top=400)
+    ax.point(8, 400, colour=ROSE)
+    ax.label(8, 400, "$400 earned", cls="sm bold", anchor="end", dx=-8, dy=-6)
     return f
 
 
-@figure("Unearned Premium", "The unearned portion of a policy shrinking to zero "
-        "over its term", width=WID)
+@figure("Unearned Premium", "A $600 annual policy's unearned premium falling in a "
+        "straight line to zero, with $200 still unearned at month eight", width=WID)
 def unearned_premium() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 12, 0, 1.1, left=48, right=20, top=32, bottom=66)
-    ax.area(lambda t: 1 - t / 12, 0, 12, colour=AMBER, opacity="0.20")
-    ax.frame(xticks=[0, 4, 8, 12], yticks=[0, 0.5, 1.0],
-             yfmt=lambda t: f"{t:.0%}", grid=True)
-    ax.polyline([(0, 1.0), (12, 0)], colour=AMBER, width=2.4)
-    ax.point(8, 1 / 3, colour=ROSE)
-    ax.label(8, 1 / 3, "$200 unearned", cls="sm bold", fill=ROSE, anchor="start",
-             dx=8, dy=-6)
-    f.text(BCX, ax.y1 + 32, "months into a $600 annual policy", cls="sm dim")
-    f.text(BCX, BY1 - 18, "cancel today and $200 goes back —", cls="sm dim")
-    f.text(BCX, BY1 - 2, "the reserve is an obligation, not income", cls="sm dim")
+    ax = vaxes(f, 0, 12, 0, 690, left=48, right=20, top=32)
+    ax.area(lambda t: 600 - 50 * t, 0, 12, colour=AMBER, opacity="0.20")
+    ax.frame(xticks=[0, 4, 8, 12], yticks=[0, 200, 400, 600], grid=True,
+             xlabel="months", ylabel="premium")
+    ax.polyline([(0, 600), (12, 0)], colour=AMBER, width=2.4)
+    ax.point(8, 200, colour=ROSE)
+    ax.label(8, 200, "$200 unearned", cls="sm bold", anchor="start", dx=8, dy=-6)
     return f
 
 
-@figure("Earned Exposure", "Written exposure earning out over the policy term in "
-        "car-years", width=WID)
+@figure("Earned Exposure", "One car on an annual policy earning exposure in a straight "
+        "line, 0.50 car-years at six months and 1.00 at twelve", width=WID)
 def earned_exposure() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 12, 0, 1.1, left=52, right=20, top=32, bottom=66)
-    ax.frame(xticks=[0, 4, 8, 12], yticks=[0, 0.5, 1.0],
-             yfmt=lambda t: f"{t:.2f}", grid=True)
+    ax = vaxes(f, 0, 12, 0, 1.1, left=52, right=20, top=32)
+    ax.frame(xticks=[0, 3, 6, 9, 12], yticks=[0, 0.5, 1.0],
+             yfmt=lambda t: f"{t:.2f}", grid=True, xlabel="months",
+             ylabel="car-years")
     ax.polyline([(0, 0), (12, 1.0)], colour=GREEN, width=2.4)
     for m, lab in ((6, "0.50"), (12, "1.00")):
         ax.point(m, m / 12, colour=GREEN)
-        ax.label(m, m / 12, lab, cls="sm bold", fill=GREEN, anchor="end",
-                 dx=-7, dy=-5)
-    f.text(BCX, ax.y1 + 32, "months of a one-car annual policy", cls="sm dim")
-    f.text(BCX, BY1 - 18, "a six-month policy is 0.5 car-years,", cls="sm dim")
-    f.text(BCX, BY1 - 2, "not one — exposure is counted, not policies",
-           cls="sm dim")
+        ax.label(m, m / 12, lab, cls="sm bold", anchor="end", dx=-7, dy=-5)
+    car(f, ax.px(8.2), ax.py(0.3), 54, GREEN)
     return f
 
 
@@ -536,189 +534,169 @@ def earned_exposure() -> Fig:
 # A. Ratemaking — grouping the data
 # ═══════════════════════════════════════════════════════════════════════════
 
-@figure("Homogeneity", "A homogeneous group's tight loss-cost distribution beside a "
-        "heterogeneous group's two humps", width=WID)
+@figure("Homogeneity", "One tight loss-cost curve centred on the $360 rate beside a "
+        "two-humped curve that the same rate fits badly", width=WID)
 def homogeneity() -> Fig:
     f = vcard()
 
     def bump(x, mu, sd):
         return math.exp(-((x - mu) ** 2) / (2 * sd * sd))
 
-    for k, (title, fn, colour) in enumerate((
-            ("homogeneous", lambda x: bump(x, 360, 55), GREEN),
-            ("heterogeneous",
-             lambda x: 0.85 * bump(x, 230, 45) + bump(x, 520, 55), ROSE))):
-        y0 = 112 + k * 132
-        ax = Axes(f, 56, y0, 316, y0 + 88, 120, 640, 0, 1.15)
-        ax.area(fn, 120, 640, colour=colour, opacity="0.18")
+    ax = Axes(f, 36, 104, 324, 350, 120, 640, 0, 1.12)
+    curves = ((lambda x: 0.56 * bump(x, 230, 42) + 0.6 * bump(x, 520, 48), ROSE),
+              (lambda x: bump(x, PP, 36), GREEN))
+    for fn, colour in curves:
+        ax.area(fn, 120, 640, colour=colour, opacity="0.16")
         ax.curve(fn, colour=colour, width=2.2)
-        f.line(ax.x0, ax.y1, ax.x1, ax.y1, cls="axis")
-        ax.vline(360, colour="var(--dim)", dash=True)
-        f.text(56, y0 - 8, title, cls="sm bold", fill=colour, anchor="start")
-        f.text(ax.px(360), ax.y1 + 15, "one rate of 360", cls="sm dim")
-    f.text(BCX, BY1 - 4, "split further and each group gets thinner — that is "
-           "the trade", cls="sm dim")
+    f.line(ax.x0, ax.y1, ax.x1, ax.y1, cls="axis")
+    ax.vline(PP, colour="var(--dim)", dash=True)
+    ax.label(PP, 1.12, "rate 360", cls="sm dim", dy=-8)
+    ax.label(PP, 1.0, "homogeneous", cls="sm bold", anchor="start", dx=10, dy=4)
+    ax.label(520, 0.6, "heterogeneous", cls="sm bold", dy=-10)
+    f.text(ax.x1, ax.y1 + 18, "loss cost", cls="sm dim", anchor="end")
     return f
 
 
-@figure("Credibility", "A territory indication blended with the statewide "
-        "indication by a credibility weight", width=WID)
+@figure("Credibility", "A beam balanced at +11.6%, carrying the statewide +7.3% with "
+        "weight 0.60 at one end and the territory's own +18% with weight 0.40 at the "
+        "other", width=WID)
 def credibility() -> Fig:
     f = vcard()
 
-    f.text(BCX, 106, "Territory 07: +18% indicated on 430 claims", cls="sm dim")
-    x0, x1, z = 44, 316, 0.40
-    w = x1 - x0
-    f.rect(x0, 134, w * (1 - z), 30, rx=4, fill=AMBER, fill_opacity="0.28",
-           stroke=AMBER, stroke_width="1.2")
-    f.rect(x0 + w * (1 - z), 134, w * z, 30, rx=4, fill=BLUE, fill_opacity="0.34",
-           stroke=BLUE, stroke_width="1.2")
-    f.text(x0 + w * (1 - z) / 2, 154, "statewide +7.3%", cls="sm")
-    f.text(x0 + w * (1 - z) + w * z / 2, 154, "own +18%", cls="sm")
-    f.text(x0 + w * (1 - z) / 2, 126, "1 − Z = 0.60", cls="sm dim")
-    f.text(x0 + w * (1 - z) + w * z / 2, 126, "Z = 0.40", cls="sm dim")
+    lo, hi, z = 7.3, 18.0, 0.40
+    est = z * hi + (1 - z) * lo
 
-    sy = 250
-    f.line(x0, sy, x1, sy, cls="axis")
-    for v, lab, colour in ((0.0, "+7.3%", AMBER), (1.0, "+18%", BLUE)):
-        x = x0 + w * v
-        f.line(x, sy - 5, x, sy + 5, cls="tick")
-        f.text(x, sy + 19, lab, cls="sm", fill=colour)
-    xe = x0 + w * z
-    f.arrow(xe, sy - 36, xe, sy - 7, colour=GREEN, width=1.8)
-    f.text(xe, sy - 43, "+11.6%", cls="bold", fill=GREEN)
-    f.text(BCX, 310, "Z rises with volume, never above 1 —", cls="sm dim")
-    f.text(BCX, 328, "and the complement carries the rest", cls="sm dim")
+    def bx(v):
+        return 74 + (v - lo) / (hi - lo) * 220
+
+    y = 268
+    f.line(30, y, 330, y, cls="", stroke="var(--ink)", stroke_width="3",
+           stroke_linecap="round")
+    xf = bx(est)
+    f.polygon([(xf, y + 2), (xf - 22, y + 50), (xf + 22, y + 50)], fill=GREEN,
+              fill_opacity="0.3", stroke=GREEN, stroke_width="1.4")
+    f.text(xf, y + 70, f"+{est:.1f}%", cls="bold")
+    for v, w, name, colour in ((lo, 1 - z, "statewide", AMBER),
+                               (hi, z, "territory", BLUE)):
+        s = 118 * math.sqrt(w)
+        f.rect(bx(v) - s / 2, y - 2 - s, s, s, rx=4, fill=colour,
+               fill_opacity="0.34", stroke=colour, stroke_width="1.2")
+        f.text(bx(v), y - 2 - s / 2 + 4, f"{w:.2f}", cls="sm")
+        f.text(bx(v), y - s - 12, name, cls="sm bold")
+        f.text(bx(v), y + 18, f"+{v:g}%", cls="sm")
     return f
 
 
-@figure("Loss and Loss Adjustment Expense", "The claim dollar split into indemnity, "
-        "ALAE and ULAE", width=WID)
+@figure("Loss and Loss Adjustment Expense", "The $360 pure premium drawn as a column: "
+        "$300 of indemnity to the claimant, $36 of ALAE tied to the claim file, and $24 "
+        "of ULAE for the claims department", width=WID)
 def loss_and_lae() -> Fig:
     f = vcard()
 
-    f.text(BCX, 106, "the $360 pure premium, by component", cls="sm dim")
-    x, w, y = 60, 78, 128
-    rows = [(300, "Indemnity  $300", "paid to the claimant", BLUE),
-            (36, "ALAE  $36", "traceable to one claim", TEAL),
-            (24, "ULAE  $24", "claims-department overhead", AMBER)]
-    label_y = 0.0
-    for amount, name, note, colour in rows:
-        h = amount / 360 * 210
-        f.rect(x, y, w, h, rx=4, fill=colour, fill_opacity="0.32", stroke=colour,
+    top, base, x0, w = 94, 356, 60, 76
+    k = (base - top) / PP
+    y = top
+    rows = [(300, "indemnity", person, BLUE, 146),
+            (36, "ALAE", document, TEAL, 254),
+            (24, "ULAE", tower, AMBER, 344)]
+    for amount, name, icon, colour, row_y in rows:
+        h = amount * k
+        f.rect(x0, y, w, h, rx=3, fill=colour, fill_opacity="0.32", stroke=colour,
                stroke_width="1.2")
-        # a 24-dollar slice is 14px tall, so labels are spaced, not centred
-        label_y = max(y + h / 2, label_y + 42)
-        f.line(x + w + 4, y + h / 2, x + w + 10, label_y - 4, cls="thin",
-               stroke=colour, stroke_width="1")
-        f.text(x + w + 14, label_y, name, cls="sm bold", anchor="start")
-        f.text(x + w + 14, label_y + 15, note, cls="sm dim", anchor="start")
+        f.line(x0 + w + 4, y + h / 2, 176, row_y, cls="thin", stroke=colour,
+               stroke_width="1")
+        icon(f, 200, row_y, 40, colour)
+        f.text(230, row_y + 4, f"{name} {amount}", cls="sm bold", anchor="start")
         y += h
-    f.text(BCX, BY1 - 2, "ALAE follows the claim, ULAE the department",
-           cls="sm dim")
     return f
 
 
-@figure("Pure Premium", "Frequency times severity giving the loss cost per exposure",
-        width=WID)
+@figure("Pure Premium", "A rectangle 0.060 claims per car-year wide and $6,000 per claim "
+        "tall, whose area is the $360 pure premium", width=WID)
 def pure_premium() -> Fig:
     f = vcard()
 
-    y = 170
-    f.chip(88, y, "0.060", colour=BLUE, w=104, h=44, cls="ttl")
-    f.text(88, y - 34, "frequency", cls="sm dim")
-    f.text(88, y + 40, "claims per", cls="sm dim")
-    f.text(88, y + 54, "car-year", cls="sm dim")
-    f.text(BCX, y + 6, "×", cls="ttl")
-    f.chip(272, y, "6,000", colour=AMBER, w=104, h=44, cls="ttl")
-    f.text(272, y - 34, "severity", cls="sm dim")
-    f.text(272, y + 40, "cost per", cls="sm dim")
-    f.text(272, y + 54, "claim", cls="sm dim")
-
-    f.arrow(BCX, y + 66, BCX, 288, colour="var(--dim)", width=1.4)
-    f.chip(BCX, 314, "$360 per car-year", colour=GREEN, w=190, h=44, cls="ttl")
-    f.text(BCX, BY1 - 2, "the part of the rate that pays claims", cls="sm dim")
+    freq, sev = 0.060, 6000
+    ax = vaxes(f, 0, 0.08, 0, 8000, left=52, right=18, top=30)
+    ax.frame(xticks=[0, 0.02, 0.04, 0.06, 0.08], yticks=[0, 2000, 4000, 6000, 8000],
+             xfmt=lambda t: f"{t:.2f}" if t else "0",
+             yfmt=lambda t: f"{t:,.0f}", grid=True, xlabel="frequency",
+             ylabel="severity")
+    (xa, ya), (xb, yb) = ax.p(0, 0), ax.p(freq, sev)
+    f.rect(xa, yb, xb - xa, ya - yb, fill=GREEN, fill_opacity="0.3", stroke=GREEN,
+           stroke_width="1.6")
+    f.text((xa + xb) / 2, (ya + yb) / 2 + 4, "$360", cls="bold")
     return f
 
 
-@figure("Loss Ratio", "The projected loss and LAE ratio measured against the "
-        "permissible loss ratio", width=WID)
+@figure("Loss Ratio", "A $520 premium column filled to 69.2% by $360 of losses, the "
+        "other 30.8% left for expenses and profit", width=WID)
 def loss_ratio() -> Fig:
     f = vcard()
 
-    x0, x1, y = 46, 314, 150
-    f.rect(x0, y, x1 - x0, 40, rx=5, fill="var(--soft)", stroke="var(--edge)",
-           stroke_width="1.2")
-    w = (x1 - x0) * 0.692
-    f.rect(x0, y, w, 40, rx=5, fill=BLUE, fill_opacity="0.34", stroke=BLUE,
-           stroke_width="1.2")
-    f.text(x0 + w / 2, y + 25, "69.2% losses", cls="sm")
-    f.text(x0 + w + (x1 - x0 - w) / 2, y + 25, "30.8%", cls="sm dim")
-    f.text(BCX, y - 14, "$520 of earned premium", cls="sm dim")
-    f.text(x0 + w + (x1 - x0 - w) / 2, y + 58, "expenses", cls="sm dim")
-    f.text(x0 + w + (x1 - x0 - w) / 2, y + 73, "+ profit", cls="sm dim")
-
-    xp = x0 + (x1 - x0) * PLR
-    f.line(xp, y - 24, xp, y + 44, cls="thin dash", stroke=ROSE, stroke_width="1.6")
-    f.text(xp, y - 32, "PLR 69.0%", cls="sm bold", fill=ROSE)
-    f.text(BCX, 274, "360 / 520 = 69.2%, against 69.0% available", cls="sm dim")
-    f.text(BCX, 312, "above the PLR ⇒ the rate is inadequate", cls="sm")
-    f.text(BCX, 340, "below it ⇒ there is room to give back", cls="sm dim")
+    x0, x1, top, base = 84, 204, 100, 356
+    level = base - (base - top) * PP / CUR_RATE
+    f.rect(x0, top, x1 - x0, base - top, rx=5, fill="var(--soft)",
+           stroke="var(--edge)", stroke_width="1.2")
+    f.rect(x0, level, x1 - x0, base - level, rx=5, fill=BLUE, fill_opacity="0.34",
+           stroke=BLUE, stroke_width="1.2")
+    f.text((x0 + x1) / 2, top - 10, f"premium {CUR_RATE:.0f}", cls="sm bold")
+    f.text((x0 + x1) / 2, (level + base) / 2 + 4, f"losses {PP:.0f}", cls="sm")
+    xd = x1 + 20
+    for a, b, colour, share in ((level, base, BLUE, PP / CUR_RATE),
+                                (top, level, "var(--dim)", 1 - PP / CUR_RATE)):
+        f.line(xd, a + 2, xd, b - 2, cls="", stroke=colour, stroke_width="1.6")
+        for y in (a + 2, b - 2):
+            f.line(xd - 5, y, xd + 5, y, cls="", stroke=colour, stroke_width="1.6")
+        f.text(xd + 12, (a + b) / 2 + 4, f"{share:.1%}",
+               cls="bold" if colour == BLUE else "sm dim", anchor="start")
     return f
 
 
-@figure("Loss Development", "An immature accident year grown to ultimate by its "
-        "cumulative development factor", width=WID)
+@figure("Loss Development", "AY 2024's reported losses growing from 1,500 at 12 months "
+        "to an ultimate of 2,850, a factor of 1.900", width=WID)
 def loss_development() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 84, 0, 3200, left=52, right=22, top=32, bottom=62)
+    ax = vaxes(f, 0, 84, 0, 3200, left=52, right=22, top=32)
     ax.frame(xticks=[12, 24, 36, 48, 60, 72, 84], yticks=[0, 1500, 3000],
-             yfmt=lambda t: f"{t:,.0f}", grid=True)
+             yfmt=lambda t: f"{t:,.0f}", grid=True, xlabel="months")
     pattern = [(12, 1500), (24, 2250), (36, 2610), (48, 2767), (60, 2822),
                (72, 2845), (84, 2850)]
     ax.polyline(pattern, colour=BLUE, width=2.4)
     for x, y in pattern:
         ax.point(x, y, colour=BLUE, r=3)
     ax.hline(2850, colour=GREEN, x_to=84)
-    ax.label(46, 2850, "ultimate 2,850", cls="sm bold", fill=GREEN, dy=-8)
+    ax.label(46, 2850, "ultimate 2,850", cls="sm bold", dy=-8)
     ax.point(12, 1500, colour=ROSE, r=4.4)
-    ax.label(12, 1500, "1,500 reported", cls="sm bold", fill=ROSE, anchor="start",
-             dx=8, dy=14)
+    ax.label(12, 1500, "1,500 reported", cls="sm bold", anchor="start", dx=8, dy=14)
     f.arrow(ax.px(12), ax.py(1560), ax.px(12), ax.py(2790), colour=AMBER, width=1.8)
-    f.text(ax.px(12) - 6, ax.py(2200), "× 1.900", cls="sm bold", fill=AMBER,
-           anchor="end")
-    f.text(BCX, ax.y1 + 32, "age in months", cls="sm dim")
-    f.text(BCX, BY1 - 2, "AY 2024 is 52.6% reported at 12 months", cls="sm dim")
+    f.text(ax.px(12) - 6, ax.py(2200), "× 1.900", cls="sm bold", anchor="end")
     return f
 
 
-@figure("Loss Trend", "Historical losses trended from the experience period's "
-        "midpoint to the future policy period's", width=WID)
+@figure("Loss Trend", "A pure premium of 360 trended at 5% a year across the 2.75 "
+        "years from the experience period to the new rates, arriving at 411", width=WID)
 def loss_trend() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 4.0, 300, 460, left=52, right=20, top=36, bottom=70)
-    ax.frame(xticks=[0, 1, 2, 3, 4], yticks=[300, 380, 460],
-             xfmt=lambda t: "", yfmt=lambda t: f"{t:,.0f}", grid=True)
-    ax.curve(lambda x: 360 * 1.05 ** x, colour=BLUE, width=2.4)
-    ax.point(0.0, 360, colour=AMBER, r=4.2)
-    ax.label(0.0, 360, "360", cls="sm bold", fill=AMBER, anchor="start", dx=6,
-             dy=16)
-    ax.point(2.75, 360 * 1.05 ** 2.75, colour=GREEN, r=4.2)
-    ax.label(2.75, 360 * 1.05 ** 2.75, "411", cls="sm bold", fill=GREEN,
-             anchor="end", dx=-6, dy=-8)
-    ax.vline(0.0, colour=AMBER, y_top=360)
-    ax.vline(2.75, colour=GREEN, y_top=360 * 1.05 ** 2.75)
-    brace(f, ax.px(0), ax.px(2.75), ax.y1 + 18, depth=7, label="2.75 years")
-    f.text(ax.px(0), ax.y1 + 54, "experience", cls="sm dim")
-    f.text(ax.px(2.75), ax.y1 + 54, "new rates", cls="sm dim")
-    f.text(BCX, BY1 - 2, "the length of the bridge is the calculation",
-           cls="sm dim")
+    ax = vaxes(f, 0, 4.0, 300, 460, left=52, right=20, top=36, bottom=64)
+    ax.frame(xticks=[0, 2.75], yticks=[300, 380, 460],
+             xfmt=lambda t: "new rates" if t else "experience",
+             yfmt=lambda t: f"{t:,.0f}", grid=True)
+    ax.curve(lambda x: PP * 1.05 ** x, colour=BLUE, width=2.4)
+    ax.vline(0.0, colour=AMBER, y_top=PP)
+    ax.vline(2.75, colour=GREEN, y_top=PP * 1.05 ** 2.75)
+    ax.point(0.0, PP, colour=AMBER, r=4.2)
+    ax.label(0.0, PP, "360", cls="sm bold", anchor="start", dx=6, dy=16)
+    ax.point(2.75, PP * 1.05 ** 2.75, colour=GREEN, r=4.2)
+    ax.label(2.75, PP * 1.05 ** 2.75, "411", cls="sm bold", anchor="end", dx=-6,
+             dy=-8)
+    brace(f, ax.px(0), ax.px(2.75), ax.y1 + 28, depth=7, label="2.75 years")
     return f
 
 
-def _trigger_plane(f: Fig, y0=126, size=176, x0=92):
+def _trigger_plane(f: Fig, x0=104, y0=100, size=216):
     """The accident-date × report-date plane both coverage triggers live on."""
     f.rect(x0, y0, size, size, rx=6, fill="var(--soft)", stroke="var(--edge)",
            stroke_width="1.2")
@@ -728,168 +706,148 @@ def _trigger_plane(f: Fig, y0=126, size=176, x0=92):
     f.line(x0, y0 + size, x0 + size, y0, cls="thin dash", stroke="var(--axis)",
            stroke_width="1.1")
     f.text(x0 + size * 0.74, y0 + size * 0.88, "impossible", cls="sm dim")
-    f.text(x0 + size / 2, y0 + size + 44, "accident date →", cls="sm dim")
-    f.text(x0 - 8, y0 + size / 2, "report", cls="sm dim", anchor="end")
-    f.text(x0 - 8, y0 + size / 2 + 14, "date ↑", cls="sm dim", anchor="end")
-    return lambda a: x0 + size * a, lambda r: y0 + size * (1 - r), size
+    f.text(x0 + size, y0 + size + 48, "accident date", cls="sm dim", anchor="end")
+    f.text(x0 - 8, y0 + 12, "report date", cls="sm dim", anchor="end")
+    return lambda a: x0 + size * a, lambda r: y0 + size * (1 - r)
 
 
-@figure("Occurrence Coverage", "The occurrence trigger drawn on the accident-date "
-        "by report-date plane", width=WID)
+@figure("Occurrence Coverage", "On a plane of accident date against report date, the "
+        "covered region is a column: accidents inside the policy period, reported at any "
+        "later date", width=WID)
 def occurrence_coverage() -> Fig:
     f = vcard()
 
-    px, py, size = _trigger_plane(f)
+    px, py = _trigger_plane(f)
     f.polygon([(px(0.34), py(0.34)), (px(0.66), py(0.66)), (px(0.66), py(1.0)),
                (px(0.34), py(1.0))], fill=BLUE, fill_opacity="0.24", stroke=BLUE,
               stroke_width="1.4")
-    f.text((px(0.34) + px(0.66)) / 2, py(0.86), "covered", cls="sm bold",
-           fill=BLUE)
+    f.text((px(0.34) + px(0.66)) / 2, py(0.86), "covered", cls="sm bold")
     brace(f, px(0.34), px(0.66), py(0.0) + 6, depth=7, label="policy period")
-    f.text(BCX, BY1 - 18, "any report date, however late —", cls="sm dim")
-    f.text(BCX, BY1 - 2, "so the insurer carries a long IBNR tail", cls="sm dim")
     return f
 
 
-@figure("Claims Made Coverage", "The claims-made trigger drawn on the accident-date "
-        "by report-date plane, with the retroactive date", width=WID)
+@figure("Claims Made Coverage", "On a plane of accident date against report date, the "
+        "covered region is a band: claims reported inside the policy period for "
+        "accidents after the retro date", width=WID)
 def claims_made_coverage() -> Fig:
     f = vcard()
 
-    px, py, size = _trigger_plane(f)
+    px, py = _trigger_plane(f)
     f.polygon([(px(0.18), py(0.42)), (px(0.42), py(0.42)), (px(0.68), py(0.68)),
                (px(0.18), py(0.68))],
               fill=AMBER, fill_opacity="0.26", stroke=AMBER, stroke_width="1.4")
     f.line(px(0.18), py(0.0), px(0.18), py(1.0), cls="thin dash", stroke=ROSE,
            stroke_width="1.4")
-    f.text(px(0.18), py(1.0) - 8, "retro date", cls="sm bold", fill=ROSE)
-    f.text(px(0.32), py(0.55) + 4, "covered", cls="sm bold", fill=AMBER)
-    f.text(px(0.74), py(0.55) + 4, "report", cls="sm dim", anchor="start")
-    f.text(px(0.74), py(0.55) + 18, "year", cls="sm dim", anchor="start")
-    f.text(BCX, BY1 - 18, "no pure IBNR — but the retro date has to be",
-           cls="sm dim")
-    f.text(BCX, BY1 - 2, "bought back, and a tail policy ends the cover",
-           cls="sm dim")
+    f.text(px(0.18), py(1.0) - 8, "retro date", cls="sm bold")
+    f.text(px(0.33), py(0.55) + 4, "covered", cls="sm bold")
+    xb = px(0) - 6
+    f.path(f"M{xb + 4:.1f},{py(0.42):.1f} H{xb:.1f} V{py(0.68):.1f} H{xb + 4:.1f}",
+           cls="thin", stroke="var(--dim)", stroke_width="1.2")
+    f.text(xb - 6, (py(0.42) + py(0.68)) / 2 + 4, "policy period", cls="sm dim",
+           anchor="end")
     return f
 
 
-@figure("On Level Premium", "Historical earned premium restated at the rate level "
-        "now in force", width=WID)
+@figure("On Level Premium", "Three years of earned premium drawn as bars, the two older "
+        "years lengthened by their on-level factors to today's rate level", width=WID)
 def on_level_premium() -> Fig:
     f = vcard()
 
     rows = [("2023", 3800, 1.1034), ("2024", 3900, 1.0136), ("2025", 4000, 1.000)]
-    x0, scale = 88, 0.042
+    x0, scale = 76, 0.058
     for i, (year, ep, olf) in enumerate(rows):
-        y = 132 + i * 66
-        f.text(84, y + 14, year, cls="sm dim", anchor="end")
-        f.rect(x0, y, ep * scale, 24, rx=3, fill=BLUE, fill_opacity="0.30",
+        y = 112 + i * 92
+        f.text(x0 - 8, y + 26, year, cls="sm dim", anchor="end")
+        f.rect(x0, y, ep * scale, 40, rx=3, fill=BLUE, fill_opacity="0.30",
                stroke=BLUE, stroke_width="1.1")
         extra = ep * (olf - 1) * scale
         if extra > 1:
-            f.rect(x0 + ep * scale, y, extra, 24, rx=3, fill=GREEN,
-                   fill_opacity="0.55")
-        f.text(x0 + 8, y + 17, f"{ep:,}", cls="sm", anchor="start")
-        f.text(x0 + (ep * olf) * scale + 10, y + 17, f"× {olf:.4f}", cls="sm dim",
-               anchor="start")
-    f.text(BCX, 116, "earned premium ($000) and its on-level factor", cls="sm dim")
-    f.text(BCX, 334, "a 12% increase on 7/1/2023 takes two full", cls="sm dim")
-    f.text(BCX, 352, "years to work through earned premium", cls="sm dim")
+            f.rect(x0 + ep * scale, y, extra, 40, rx=3, fill=GREEN,
+                   fill_opacity="0.6")
+            f.text(x0 + ep * olf * scale, y + 58, f"× {olf:.4f}", cls="sm",
+                   anchor="end")
+        f.text(x0 + 10, y + 25, f"{ep:,}", cls="sm", anchor="start")
     return f
 
 
-@figure("On-Leveling", "The parallelogram method: a mid-year rate change earning "
-        "over the unit square", width=WID)
+@figure("On-Leveling", "The parallelogram method: calendar year 2023 as a unit square, "
+        "cut by the diagonal of a 7/1 rate change into 0.875 earned at the old rates and "
+        "a 0.125 triangle at the new", width=WID)
 def on_leveling() -> Fig:
     f = vcard()
 
-    x0, y0, s = 96, 122, 168
-    f.rect(x0, y0, s, s, rx=4, fill="var(--soft)", stroke="var(--edge)",
+    x0, y0, s = 76, 100, 236
+    f.rect(x0, y0, s, s, rx=4, fill=BLUE, fill_opacity="0.14", stroke="var(--edge)",
            stroke_width="1.2")
     f.polygon([(x0 + s * 0.5, y0 + s), (x0 + s, y0 + s), (x0 + s, y0 + s * 0.5)],
-              fill=GREEN, fill_opacity="0.30", stroke=GREEN, stroke_width="1.3")
-    f.text(x0 + s * 0.84, y0 + s * 0.86, "0.125", cls="sm bold", fill=GREEN)
-    f.text(x0 + s * 0.34, y0 + s * 0.42, "0.875", cls="sm bold", fill=BLUE)
-    f.text(x0 + s * 0.34, y0 + s * 0.56, "old rates", cls="sm dim")
-    f.text(x0 + s * 0.84, y0 + s * 0.70, "new", cls="sm dim", fill=GREEN)
-    f.line(x0 + s * 0.5, y0 + s, x0 + s * 0.5, y0 + s + 8, cls="tick")
-    f.text(x0 + s * 0.5, y0 + s + 22, "7/1", cls="sm dim")
-    f.text(x0 + s / 2, y0 + s + 42, "calendar year 2023 →", cls="sm dim")
-    f.text(x0 - 8, y0 + s / 2, "fraction of", cls="sm dim", anchor="end")
-    f.text(x0 - 8, y0 + s / 2 + 14, "term elapsed", cls="sm dim", anchor="end")
-    f.text(BCX, BY1 - 20, "uniform writing, one policy term — where those",
-           cls="sm dim")
-    f.text(BCX, BY1 - 4, "fail, extend exposures instead", cls="sm dim")
+              fill=GREEN, fill_opacity="0.34", stroke=GREEN, stroke_width="1.4")
+    f.text(x0 + s * 0.38, y0 + s * 0.46, "old 0.875", cls="sm bold")
+    f.text(x0 + s * 0.83, y0 + s * 0.86, "new 0.125", cls="sm bold")
+    for frac, lab in ((0.0, "1/1"), (0.5, "7/1"), (1.0, "12/31")):
+        f.line(x0 + s * frac, y0 + s, x0 + s * frac, y0 + s + 6, cls="tick")
+        f.text(x0 + s * frac, y0 + s + 20, lab, cls="sm dim")
+    for frac, lab in ((0.0, "0"), (1.0, "1")):
+        f.text(x0 - 8, y0 + s * (1 - frac) + 4, lab, cls="sm dim", anchor="end")
+    f.text(x0, y0 - 10, "earned", cls="sm dim", anchor="start")
+    f.text(x0 + s, y0 + s + 42, "CY 2023", cls="sm dim", anchor="end")
     return f
 
 
-@figure("Premium Audit", "A deposit premium corrected to the audited exposure after "
-        "the policy expires", width=WID)
+@figure("Premium Audit", "A $9,000 deposit premium beside the $12,400 audited premium, "
+        "the $3,400 difference billed once the actual exposure is known", width=WID)
 def premium_audit() -> Fig:
     f = vcard()
 
-    f.text(BCX, 112, "workers compensation, payroll per $100", cls="sm dim")
-    x0, scale = 96, 0.0135
-    rows = [("estimated", 9_000, BLUE), ("actual", 12_400, GREEN)]
-    for i, (name, payroll, colour) in enumerate(rows):
-        y = 146 + i * 62
-        f.text(88, y + 15, name, cls="sm dim", anchor="end")
-        f.rect(x0, y, payroll * scale, 26, rx=3, fill=colour, fill_opacity="0.34",
+    base, k = 352, 236 / 12_400
+    deposit, audited = 9_000, 12_400
+    cols = ((100, deposit, "deposit", BLUE), (240, audited, "audited", GREEN))
+    for cx, amount, name, colour in cols:
+        h = amount * k
+        f.rect(cx - 40, base - h, 80, h, rx=3, fill=colour, fill_opacity="0.34",
                stroke=colour, stroke_width="1.2")
-        f.text(x0 + payroll * scale / 2, y + 18, f"${payroll:,}", cls="sm")
-    f.rect(x0 + 9_000 * scale, 208, 3_400 * scale, 26, rx=3, fill=AMBER,
-           fill_opacity="0.55")
-    f.arrow(x0 + 9_000 * scale, 264, x0 + 12_400 * scale, 264, colour=AMBER,
-            width=1.6)
-    f.text(x0 + 10_700 * scale, 284, "+$3,400 billed at audit", cls="sm bold",
-           fill=AMBER)
-    f.text(BCX, 326, "audits also correct classification and", cls="sm dim")
-    f.text(BCX, 344, "must be booked before the data is used", cls="sm dim")
+        f.text(cx, base - h - 8, f"{amount:,}", cls="sm bold")
+        f.text(cx, base + 18, name, cls="sm dim")
+    top, extra = base - audited * k, (audited - deposit) * k
+    f.rect(200, top, 80, extra, rx=3, fill=AMBER, fill_opacity="0.6", stroke=AMBER,
+           stroke_width="1.2")
+    f.text(240, top + extra / 2 + 4, f"+{audited - deposit:,}", cls="sm bold")
+    f.line(140, base - deposit * k, 200, base - deposit * k, cls="thin dash",
+           stroke="var(--dim)", stroke_width="1.2")
     return f
 
 
-@figure("Exposure Trend", "An inflation-sensitive exposure base trending alongside "
-        "losses, leaving only the net trend", width=WID)
+@figure("Exposure Trend", "Losses trending at 6% a year and payroll at 3.5%, leaving a "
+        "net trend of 2.4% on the pure premium", width=WID)
 def exposure_trend() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 4, 0.95, 1.30, left=48, right=44, top=34, bottom=64)
+    ax = vaxes(f, 0, 4, 0.95, 1.30, left=48, right=20, top=34)
     ax.frame(xticks=[0, 1, 2, 3, 4], yticks=[1.0, 1.1, 1.2, 1.3],
-             yfmt=lambda t: f"{t:.2f}", grid=True)
-    for rate, colour, name in ((0.06, ROSE, "losses  6%"),
-                               (0.035, BLUE, "payroll  3.5%"),
-                               (0.024, GREEN, "net  2.4%")):
+             yfmt=lambda t: f"{t:.2f}", grid=True, xlabel="years")
+    for rate, colour, name in ((0.06, ROSE, "losses 6%"),
+                               (0.035, BLUE, "payroll 3.5%"),
+                               (0.024, GREEN, "net 2.4%")):
         ax.curve(lambda x, r=rate: (1 + r) ** x, colour=colour, width=2.2)
-        ax.label(4, (1 + rate) ** 4, name, cls="sm bold", fill=colour,
-                 anchor="end", dx=-4, dy=-7)
-    f.text(BCX, ax.y1 + 32, "years", cls="sm dim")
-    f.text(BCX, BY1 - 18, "1.060 / 1.035 = 1.024 — trend the pure", cls="sm dim")
-    f.text(BCX, BY1 - 2, "premium at the net rate, not the gross", cls="sm dim")
+        ax.label(4, (1 + rate) ** 4, name, cls="sm bold", anchor="end", dx=-4, dy=-7)
     return f
 
 
-@figure("Premium Trend", "Average premium at current rate level drifting upward "
-        "between the experience and forecast periods", width=WID)
+@figure("Premium Trend", "Average premium at the current rate level drifting up from "
+        "496 to 520 over the experience years, projected on to 529", width=WID)
 def premium_trend() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 4.0, 480, 580, left=54, right=20, top=34, bottom=70)
+    ax = vaxes(f, 0, 4.0, 480, 540, left=54, right=20, top=34)
     ax.frame(xticks=[0, 1, 2, 3, 4], xfmt=lambda t: "",
-             yticks=[480, 530, 580], yfmt=lambda t: f"{t:,.0f}", grid=True)
+             yticks=[480, 500, 520, 540], yfmt=lambda t: f"{t:,.0f}", grid=True,
+             xlabel="years", ylabel="average premium")
     pts = [(0, 496), (1, 505), (2, 512), (3, 520)]
     ax.polyline(pts, colour=BLUE, width=2.2)
     for x, y in pts:
         ax.point(x, y, colour=BLUE, r=3.2)
     ax.polyline([(3, 520), (4, 529)], colour=GREEN, width=2.2, dash=True)
     ax.point(4.0, 529, colour=GREEN, r=4.2)
-    ax.label(4.0, 529, "forecast", cls="sm bold", fill=GREEN, anchor="end",
-             dx=-6, dy=-9)
-    f.text(BCX, ax.y1 + 30, "average written premium at current rate level",
-           cls="sm dim")
-    f.text(BCX, BY1 - 18, "limits, deductibles and mix move it —",
-           cls="sm dim")
-    f.text(BCX, BY1 - 2, "rate changes do not; on-levelling handles those",
-           cls="sm dim")
+    ax.label(4.0, 529, "forecast", cls="sm bold", anchor="end", dx=-6, dy=-9)
     return f
 
 
@@ -897,367 +855,428 @@ def premium_trend() -> Fig:
 # A. Ratemaking — expenses, profit and the overall indication
 # ═══════════════════════════════════════════════════════════════════════════
 
-@figure("Expense Provisions", "The rate built up from pure premium and fixed "
-        "expense, then grossed up for variable expense and profit", width=WID)
+@figure("Expense Provisions", "Three columns building the rate: the $360 pure premium, "
+        "$25 of fixed expense added to make $385, then divided by 0.69 to make room for "
+        "variable expense and profit, reaching $558", width=WID)
 def expense_provisions() -> Fig:
     f = vcard()
 
-    f.rect(72, 122, 216, 62, rx=6, fill=BLUE, fill_opacity="0.16", stroke=BLUE,
-           stroke_width="1.2")
-    f.text(BCX, 146, "360  pure premium", cls="sm")
-    f.text(BCX, 166, "+ 25  fixed expense F", cls="sm")
-    f.line(72, 196, 288, 196, cls="rule")
-    f.text(BCX, 216, "385", cls="ttl")
-
-    f.arrow(BCX, 228, BCX, 258, colour="var(--dim)", width=1.4)
-    f.text(BCX + 10, 248, "÷ 0.69", cls="sm bold", fill=AMBER, anchor="start")
-    f.rect(72, 262, 216, 60, rx=6, fill=AMBER, fill_opacity="0.16", stroke=AMBER,
-           stroke_width="1.2")
-    f.text(BCX, 284, "1 − V(0.26) − Q(0.05)", cls="sm")
-    f.text(BCX, 308, "= 0.69 permissible", cls="sm dim")
-    f.chip(BCX, 356, "indicated rate  $557.97", colour=GREEN, w=228, h=32)
+    base, k, w = 356, 250 / IND_RATE, 56
+    cols = [(60, [(PP, BLUE)]),
+            (174, [(PP, BLUE), (FIXED, TEAL)]),
+            (288, [(PP, BLUE), (FIXED, TEAL), (VAR * IND_RATE, AMBER),
+                   (PROF * IND_RATE, GREEN)])]
+    tops = []
+    for cx, parts in cols:
+        y = base
+        for value, colour in parts:
+            h = value * k
+            f.rect(cx - w / 2, y - h, w, h, rx=2, fill=colour, fill_opacity="0.32",
+                   stroke=colour, stroke_width="1.1")
+            y -= h
+        tops.append(y)
+        f.text(cx, y - 8, _money(sum(v for v, _ in parts)), cls="sm bold")
+    ya = base - 40
+    for (xa, _), (xb, _), lab in ((cols[0], cols[1], "+ 25"),
+                                  (cols[1], cols[2], f"÷ {PLR:.2f}")):
+        f.arrow(xa + w / 2 + 6, ya, xb - w / 2 - 6, ya, colour="var(--dim)", width=1.4)
+        f.text((xa + xb) / 2, ya - 8, lab, cls="sm bold")
+    x3 = cols[2][0]
+    yv = base - (PP + FIXED + VAR * IND_RATE / 2) * k
+    f.text(x3, yv + 4, "V", cls="sm bold")
+    f.text(x3 + w / 2 + 6, tops[2] + PROF * IND_RATE * k / 2 + 4, "Q", cls="sm bold",
+           anchor="start")
     return f
 
 
-@figure("Fixed Expenses", "A flat per-exposure expense weighing far more heavily on "
-        "a small policy than a large one", width=WID)
+@figure("Fixed Expenses", "The same $25 fixed expense shaded on three premiums of $200, "
+        "$520 and $2,000, where it is 12.5%, 4.8% and 1.25% of the bar", width=WID)
 def fixed_expenses() -> Fig:
     f = vcard()
 
-    f.text(BCX, 112, "$25 of fixed expense, as a share of premium", cls="sm dim")
-    x0, x1 = 46, 314
-    for i, (prem, colour) in enumerate(((200, ROSE), (2000, BLUE))):
-        y = 152 + i * 96
-        f.text(x0, y - 12, f"a ${prem:,} policy", cls="sm bold", anchor="start")
-        f.rect(x0, y, x1 - x0, 34, rx=4, fill="var(--soft)", stroke="var(--edge)",
+    x0, x1 = 30, 330
+    for i, prem in enumerate((200, CUR_RATE, 2000)):
+        y = 104 + i * 110
+        f.text(x0, y - 10, f"${prem:,.0f} policy", cls="sm bold", anchor="start")
+        f.rect(x0, y, x1 - x0, 46, rx=4, fill="var(--soft)", stroke="var(--edge)",
                stroke_width="1.2")
-        share = 25 / prem
-        f.rect(x0, y, (x1 - x0) * share, 34, rx=4, fill=colour,
-               fill_opacity="0.75")
-        f.text(x1 - 10, y + 23, f"F = {share:.2%}", cls="sm", anchor="end")
-    f.text(BCX, BY1 - 34, "the same $25 is a tenth of one premium", cls="sm dim")
-    f.text(BCX, BY1 - 16, "and a rounding error in the other — so it is",
-           cls="sm dim")
-    f.text(BCX, BY1 + 2, "charged per exposure, never as a percentage",
-           cls="sm dim")
+        share = FIXED / prem
+        w = (x1 - x0) * share
+        f.rect(x0, y, w, 46, rx=4, fill=AMBER, fill_opacity="0.75")
+        f.text(x0 + w + 8, y + 27, f"{100 * share:.3g}%", cls="sm", anchor="start")
     return f
 
 
-@figure("Variable Expenses", "Commission and taxes rising in proportion to premium",
-        width=WID)
+@figure("Variable Expenses", "Variable expense rising as a straight 26% line through "
+        "the origin as premium grows, against a flat $25 fixed expense", width=WID)
 def variable_expenses() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 2200, 0, 620, left=54, right=22, top=34, bottom=64)
+    ax = vaxes(f, 0, 2200, 0, 620, left=54, right=22, top=34)
     ax.frame(xticks=[0, 1000, 2000], yticks=[0, 300, 600],
-             xfmt=lambda t: f"{t:,.0f}", yfmt=lambda t: f"{t:,.0f}", grid=True)
-    ax.curve(lambda p: 0.26 * p, colour=AMBER, width=2.4)
-    ax.hline(25, colour=BLUE, x_to=2200, dash=False)
-    ax.label(1500, 60, "fixed F = 25", cls="sm bold", fill=BLUE)
+             xfmt=lambda t: f"{t:,.0f}", yfmt=lambda t: f"{t:,.0f}", grid=True,
+             xlabel="premium", ylabel="expense")
+    ax.curve(lambda p: VAR * p, colour=AMBER, width=2.4)
+    ax.hline(FIXED, colour=BLUE, x_to=2200, dash=False)
+    ax.label(1500, 60, "fixed 25", cls="sm bold")
+    ax.label(1100, VAR * 1100, "variable 26%", cls="sm bold", anchor="end", dx=-8,
+             dy=-8)
     ax.point(2000, 520, colour=AMBER, r=4)
-    ax.label(2000, 520, "520", cls="sm bold", fill=AMBER, anchor="end", dx=-8,
-             dy=2)
-    ax.point(200, 52, colour=AMBER, r=3.4)
-    f.text(BCX, ax.y1 + 32, "policy premium", cls="sm dim")
-    f.text(BCX, BY1 - 2, "so it belongs in the denominator, not the numerator",
-           cls="sm dim")
+    ax.label(2000, 520, "520", cls="sm bold", anchor="end", dx=-8, dy=2)
     return f
 
 
-@figure("Expense Ratio", "The underwriting expense ratio broken into its four "
-        "components", width=WID)
+@figure("Expense Ratio", "A 30.8% expense column stacked from commission 20.0, taxes "
+        "3.0 and other acquisition 3.0 — the 26% that varies with premium — topped by "
+        "4.8 of fixed general expense", width=WID)
 def expense_ratio() -> Fig:
     f = vcard()
 
-    rows = [("Commission & brokerage", 20.0, True, BLUE),
-            ("Taxes, licences, fees", 3.0, True, TEAL),
-            ("Other acquisition", 3.0, True, VIOLET),
-            ("General expenses", 4.8, False, AMBER)]
-    x0, scale = 178, 6.6
-    for i, (name, pct, variable, colour) in enumerate(rows):
-        y = 128 + i * 48
-        f.text(170, y + 4, name, cls="sm", anchor="end")
-        f.rect(x0, y - 9, pct * scale, 20, rx=3, fill=colour, fill_opacity="0.70")
-        f.text(x0 + pct * scale + 7, y + 4, f"{pct:.1f}", cls="sm", anchor="start")
-        f.text(170, y + 19, "variable" if variable else "fixed", cls="sm dim",
-               anchor="end")
-    f.line(x0, 112, x0, 328, cls="rule")
-    f.text(BCX, 356, "which column an expense sits in decides", cls="sm dim")
-    f.text(BCX, 374, "whether it is divided or added", cls="sm dim")
+    base, k, x0, w = 368, 9.0, 128, 80
+    rows = [(20.0, "commission", BLUE), (3.0, "taxes", TEAL),
+            (3.0, "other acq.", VIOLET), (4.8, "general", AMBER)]
+    y = base
+    for pct, name, colour in rows:
+        h = pct * k
+        f.rect(x0, y - h, w, h, rx=2, fill=colour, fill_opacity="0.34",
+               stroke=colour, stroke_width="1.1")
+        f.text(x0 + w + 10, y - h / 2 + 4, f"{name} {pct:.1f}", cls="sm",
+               anchor="start")
+        y -= h
+    f.text(x0 + w / 2, y - 10, "30.8%", cls="bold")
+    xb = x0 - 8
+    for lo, hi, lab in ((0, 26.0, "variable"), (26.0, 30.8, "fixed")):
+        ya, yb = base - lo * k - 2, base - hi * k + 2
+        f.path(f"M{xb + 4},{ya:.1f} H{xb} V{yb:.1f} H{xb + 4}", cls="thin",
+               stroke="var(--dim)", stroke_width="1.2")
+        f.text(xb - 6, (ya + yb) / 2 + 4, lab, cls="sm dim", anchor="end")
     return f
 
 
-@figure("Profit and Contingency Provision", "The profit provision as the last slice "
-        "of the premium dollar and the combined ratio it targets", width=WID)
+@figure("Profit and Contingency Provision", "The premium column split into 69% for "
+        "losses, 26% for expenses and a thin 5% profit slice on top, with the 95% "
+        "combined ratio marked below it", width=WID)
 def profit_and_contingency() -> Fig:
     f = vcard()
 
-    f.text(BCX, 112, "the $520 premium dollar", cls="sm dim")
-    _hbar(f, 152, [(0.692, "losses & LAE 69.2%", BLUE),
-                   (0.258, "expense", AMBER), (0.05, "Q", GREEN)],
-          x0=40, x1=320, height=34)
-    f.line(40 + 280 * 0.95, 126, 40 + 280 * 0.95, 186, cls="thin dash",
-           stroke=ROSE, stroke_width="1.5")
-    f.text(40 + 280 * 0.95, 202, "combined ratio 95%", cls="sm bold", fill=ROSE,
-           anchor="end")
-    f.text(BCX, 262, "Q_T pays for the capital held behind the book;", cls="sm dim")
-    f.text(BCX, 282, "the contingency half covers a rate built on", cls="sm dim")
-    f.text(BCX, 302, "expected values being exceeded", cls="sm dim")
-    f.text(BCX, 352, "investment income may reduce it, never remove it",
-           cls="sm dim")
+    x0, w, top, base = 126, 84, 96, 376
+    k = (base - top) / 100
+    y = base
+    for pct, lab, colour in ((100 * PLR, "losses", BLUE), (100 * VAR, "expenses", AMBER),
+                             (100 * PROF, None, GREEN)):
+        h = pct * k
+        f.rect(x0, y - h, w, h, rx=2, fill=colour, fill_opacity="0.32",
+               stroke=colour, stroke_width="1.2")
+        if lab:
+            f.text(x0 + w / 2, y - h / 2 + 4, f"{pct:.0f}%", cls="sm")
+            f.text(x0 + w + 12, y - h / 2 + 4, lab, cls="sm", anchor="start")
+        y -= h
+    yq = top + 100 * PROF * k
+    f.line(x0 - 12, yq, x0 + w + 6, yq, cls="thin dash", stroke=ROSE,
+           stroke_width="1.6")
+    f.text(x0 - 16, yq + 4, "combined 95%", cls="sm bold", anchor="end")
+    shield(f, x0 + w + 22, top + 4, 30, GREEN)
+    f.text(x0 + w + 44, top + 9, "Q 5%", cls="sm bold", anchor="start")
     return f
 
 
-@figure("Underwriting Profit", "Earned premium less losses, LAE and expenses "
-        "leaving the underwriting margin", width=WID)
+@figure("Underwriting Profit", "A waterfall from $558 of premium down through $300 of "
+        "losses, $60 of LAE and $170 of expenses to $28 of underwriting profit",
+        width=WID)
 def underwriting_profit() -> Fig:
     f = vcard()
 
-    x0, x1 = 46, 314
-    f.text(BCX, 116, "per $520 of earned premium", cls="sm dim")
-    f.rect(x0, 136, x1 - x0, 30, rx=4, fill=VIOLET, fill_opacity="0.24",
-           stroke=VIOLET, stroke_width="1.2")
-    f.text(BCX, 156, "earned premium  520", cls="sm")
-
-    steps = [("− losses", 300, BLUE), ("− LAE", 60, TEAL),
-             ("− expenses", 134, AMBER), ("= profit", 26, GREEN)]
+    base, k = 348, 240 / IND_RATE
+    steps = [("premium", IND_RATE, VIOLET), ("losses", -300, BLUE),
+             ("LAE", -60, TEAL), ("expenses", -(FIXED + VAR * IND_RATE), AMBER)]
+    slot, w, x = 62, 42, 44
+    level = 0.0
     for i, (name, amt, colour) in enumerate(steps):
-        y = 190 + i * 44
-        w = (x1 - x0) * amt / 520
-        f.rect(x0, y, max(w, 3), 26, rx=3, fill=colour, fill_opacity="0.6")
-        f.text(x0 + max(w, 3) + 10, y + 18, f"{name} {amt}",
-               cls="sm bold" if i == 3 else "sm", anchor="start")
-    f.text(BCX, 380, "26 / 520 = 5.0% — a 95% combined ratio", cls="sm dim")
+        cx = x + slot * i
+        hi = level if amt < 0 else amt
+        lo = level + amt if amt < 0 else 0
+        f.rect(cx - w / 2, base - hi * k, w, (hi - lo) * k, rx=2, fill=colour,
+               fill_opacity="0.34", stroke=colour, stroke_width="1.2")
+        f.text(cx, base - hi * k - 8, _money(abs(amt)), cls="sm")
+        f.text(cx, base + 18, name, cls="sm dim")
+        if i:
+            f.line(cx - slot + w / 2, base - level * k, cx - w / 2, base - level * k,
+                   cls="thin dash", stroke="var(--dim)", stroke_width="1")
+        level = hi if amt > 0 else lo
+    cx = x + slot * len(steps)
+    f.line(cx - slot + w / 2, base - level * k, cx - w / 2, base - level * k,
+           cls="thin dash", stroke="var(--dim)", stroke_width="1")
+    f.rect(cx - w / 2, base - level * k, w, level * k, rx=2, fill=GREEN,
+           fill_opacity="0.6", stroke=GREEN, stroke_width="1.2")
+    f.text(cx, base - level * k - 8, _money(level), cls="sm bold")
+    f.text(cx, base + 18, "profit", cls="sm bold")
     return f
 
 
-@figure("Overall Rate Level Indication", "The indicated average rate against the "
-        "current one", width=WID)
+@figure("Overall Rate Level Indication", "The current $520 average rate beside the "
+        "indicated $558, the $38 gap between them marked +7.3%", width=WID)
 def overall_rate_level_indication() -> Fig:
     f = vcard()
 
-    x0, scale = 62, 0.40
-    for i, (name, rate, colour) in enumerate((("current", CUR_RATE, BLUE),
-                                              ("indicated", IND_RATE, GREEN))):
-        y = 148 + i * 74
-        f.text(BCX, y - 14, name, cls="sm dim")
-        f.rect(x0, y, rate * scale, 34, rx=4, fill=colour, fill_opacity="0.34",
+    base, k = 356, 250 / IND_RATE
+    for cx, rate, name, colour in ((110, CUR_RATE, "current", BLUE),
+                                   (230, IND_RATE, "indicated", GREEN)):
+        h = rate * k
+        f.rect(cx - 44, base - h, 88, h, rx=3, fill=colour, fill_opacity="0.30",
                stroke=colour, stroke_width="1.2")
-        f.text(x0 + rate * scale / 2, y + 23, f"${rate:,.2f}", cls="sm")
-    f.rect(x0 + CUR_RATE * scale, 222, (IND_RATE - CUR_RATE) * scale, 34, rx=4,
-           fill=GREEN, fill_opacity="0.75")
-    f.arrow(x0 + IND_RATE * scale + 46, 268, x0 + IND_RATE * scale - 4, 250,
-            colour=GREEN, width=1.5)
-    f.text(x0 + IND_RATE * scale + 50, 278, "+$37.97 = +7.3%", cls="sm bold",
-           fill=GREEN, anchor="end")
-    f.text(BCX, 330, "the aggregate answer — classification work", cls="sm dim")
-    f.text(BCX, 348, "distributes it but must not change it", cls="sm dim")
+        f.text(cx, base - h / 2 + 4, _money(rate), cls="sm bold")
+        f.text(cx, base + 18, name, cls="sm dim")
+    ya, yb = base - CUR_RATE * k, base - IND_RATE * k
+    f.rect(186, yb, 88, ya - yb, rx=3, fill=GREEN, fill_opacity="0.75")
+    f.line(154, ya, 186, ya, cls="thin dash", stroke="var(--dim)", stroke_width="1.2")
+    f.text(230, yb - 10, f"+{IND_CHG:.1%}", cls="bold")
     return f
 
 
-@figure("Pure Premium Method", "The pure premium method building the indicated rate "
-        "from loss cost per exposure", width=WID)
+@figure("Pure Premium Method", "Losses over exposures giving a $360 pure premium per "
+        "car, which becomes the base of a $558 rate column topped by $25 of fixed "
+        "expense and the variable and profit loads", width=WID)
 def pure_premium_method() -> Fig:
     f = vcard()
 
-    _flow(f, 136, ["losses", "÷ exposures", "PP 360"],
-          colours=[BLUE, BLUE, BLUE], x0=32, x1=328)
-    f.arrow(BCX, 156, BCX, 186, colour="var(--dim)", width=1.3)
-    _flow(f, 206, ["+ F 25", "= 385", "÷ 0.69"],
-          colours=[AMBER, AMBER, AMBER], x0=32, x1=328)
-    f.arrow(BCX, 226, BCX, 256, colour="var(--dim)", width=1.3)
-    f.chip(BCX, 278, "indicated rate  $557.97", colour=GREEN, w=228, h=34)
-    f.text(BCX, 328, "no on-levelling needed — premium never", cls="sm dim")
-    f.text(BCX, 346, "enters. It needs a reliable exposure count,", cls="sm dim")
-    f.text(BCX, 364, "which new or changed classes may not have", cls="sm dim")
+    # losses ÷ exposures, drawn as a fraction
+    ym = 276
+    coins(f, 72, ym - 14, 4, 20, BLUE)
+    f.line(40, ym, 104, ym, cls="", stroke="var(--ink)", stroke_width="2",
+           stroke_linecap="round")
+    car(f, 72, ym + 26, 58, BLUE)
+    f.text(72, ym - 56, "losses", cls="sm dim")
+    f.text(72, ym + 62, "exposures", cls="sm dim")
+    for dy in (-5, 5):
+        f.line(128, ym + dy, 148, ym + dy, cls="", stroke="var(--ink)",
+               stroke_width="2.2", stroke_linecap="round")
+
+    # …the per-exposure pure premium, built up into the rate
+    base, k, x0, w = 356, 250 / IND_RATE, 176, 84
+    y = base
+    for value, colour, lab in ((PP, BLUE, _money(PP)), (FIXED, TEAL, None),
+                               (IND_RATE * (VAR + PROF), AMBER, "V + Q")):
+        h = value * k
+        f.rect(x0, y - h, w, h, rx=2, fill=colour, fill_opacity="0.32",
+               stroke=colour, stroke_width="1.2")
+        if lab:
+            f.text(x0 + w / 2, y - h / 2 + 4, lab, cls="sm bold")
+        y -= h
+    f.text(x0 + w + 8, base - (PP + FIXED / 2) * k + 4, "+ 25", cls="sm",
+           anchor="start")
+    f.text(x0 + w / 2, y - 10, _money(IND_RATE), cls="bold")
     return f
 
 
-@figure("Loss Ratio Method", "The loss ratio method comparing the projected ratio "
-        "with the permissible loss ratio", width=WID)
+@figure("Loss Ratio Method", "The projected ratio of 74.0 — 69.2 of loss and LAE plus "
+        "4.8 of fixed expense — standing taller than the 69.0 permissible column, a gap "
+        "of +7.3%", width=WID)
 def loss_ratio_method() -> Fig:
     f = vcard()
 
-    x0, x1 = 46, 314
-    f.text(BCX, 116, "projected loss & LAE ratio plus fixed expense", cls="sm dim")
-    f.rect(x0, 140, (x1 - x0) * 0.692 / 0.80, 34, rx=4, fill=BLUE,
-           fill_opacity="0.34", stroke=BLUE, stroke_width="1.2")
-    f.rect(x0 + (x1 - x0) * 0.692 / 0.80, 140, (x1 - x0) * 0.048 / 0.80, 34, rx=4,
-           fill=TEAL, fill_opacity="0.55")
-    f.text(x0 + (x1 - x0) * 0.346 / 0.80, 163, "69.2%", cls="sm")
-    f.text(x0 + (x1 - x0) * 0.716 / 0.80, 190, "+4.8%", cls="sm dim")
-
-    f.rect(x0, 232, (x1 - x0) * 0.69 / 0.80, 34, rx=4, fill=AMBER,
-           fill_opacity="0.30", stroke=AMBER, stroke_width="1.2")
-    f.text(x0 + (x1 - x0) * 0.345 / 0.80, 255, "PLR 69.0%", cls="sm")
-    f.text(BCX, 218, "against what the premium makes available", cls="sm dim")
-    f.text(BCX, 300, "74.0 / 69.0 = 1.073 ⇒ +7.3%", cls="bold", fill=GREEN)
-    f.text(BCX, 344, "works without exposure counts, but the", cls="sm dim")
-    f.text(BCX, 362, "premium must be brought on level first", cls="sm dim")
+    lr, fx = 100 * PP / CUR_RATE, 100 * FIXED / CUR_RATE
+    base, k, w = 352, 3.4, 90
+    for cx, parts, name in ((100, [(lr, BLUE), (fx, TEAL)], "projected"),
+                            (240, [(100 * PLR, AMBER)], "permissible")):
+        y = base
+        for value, colour in parts:
+            h = value * k
+            f.rect(cx - w / 2, y - h, w, h, rx=2, fill=colour, fill_opacity="0.34",
+                   stroke=colour, stroke_width="1.2")
+            y -= h
+        f.text(cx, base + 18, name, cls="sm dim")
+    for cy, value in ((base - lr * k / 2, lr), (base - (lr + fx / 2) * k, fx),
+                      (base - 50 * PLR * k, 100 * PLR)):
+        f.text(100 if value != 100 * PLR else 240, cy + 4, f"{value:.1f}", cls="sm")
+    ya, yb = base - 100 * PLR * k, base - (lr + fx) * k
+    f.text(100, yb - 10, f"{lr + fx:.1f}", cls="bold")
+    f.line(145, yb, 195, yb, cls="thin dash", stroke="var(--dim)", stroke_width="1.2")
+    f.rect(195, yb, w, ya - yb, rx=2, fill=ROSE, fill_opacity="0.14", stroke=ROSE,
+           stroke_width="1.4", stroke_dasharray="4 3")
+    f.text(240 + w / 2 + 8, (ya + yb) / 2 + 4, f"+{IND_CHG:.1%}", cls="bold",
+           anchor="start")
     return f
 
 
-@figure("Permissible Loss Ratio", "The share of the premium dollar left for losses "
-        "once expenses and profit are provided for", width=WID)
+@figure("Permissible Loss Ratio", "The premium column with the 26% variable expense "
+        "and 5% profit slices lifted out to the side, leaving the 69% permissible loss "
+        "ratio behind", width=WID)
 def permissible_loss_ratio() -> Fig:
     f = vcard()
 
-    f.text(BCX, 122, "the premium dollar, from the top down", cls="sm dim")
-    x, w, y = 88, 96, 148
-    for share, name, colour in ((0.26, "V  26%", AMBER), (0.05, "Q  5%", GREEN),
-                                (0.69, "PLR  69%", BLUE)):
-        h = share * 190
-        f.rect(x, y, w, h, rx=4, fill=colour, fill_opacity="0.32", stroke=colour,
-               stroke_width="1.2")
-        f.text(x + w + 14, y + h / 2 + 4, name, cls="sm bold", anchor="start")
+    x0, w, top, base = 64, 96, 88, 368
+    k = (base - top) / 100
+    yp = base - 100 * PLR * k
+    f.rect(x0, top, w, yp - top, rx=3, fill="none", stroke="var(--axis)",
+           stroke_width="1.2", stroke_dasharray="4 3")
+    f.rect(x0, yp, w, base - yp, rx=3, fill=BLUE, fill_opacity="0.34", stroke=BLUE,
+           stroke_width="1.2")
+    f.text(x0 + w / 2, (yp + base) / 2 + 4, f"PLR {PLR:.0%}", cls="bold")
+    y, xo = top, 214
+    for share, name, colour in ((VAR, "V", AMBER), (PROF, "Q", GREEN)):
+        h = share * 100 * k
+        f.rect(xo, y - (8 if name == "V" else -8), w, h, rx=3, fill=colour,
+               fill_opacity="0.34", stroke=colour, stroke_width="1.2")
+        f.text(xo + w / 2, y - (8 if name == "V" else -8) + h / 2 + 4,
+               f"{name} {share:.0%}", cls="sm bold")
+        f.arrow(x0 + w + 8, y + h / 2, xo - 8, y + h / 2 - (8 if name == "V" else -8),
+                colour=colour, width=1.4)
         y += h
-    f.text(BCX, BY1 - 18, "raise V or Q and the PLR falls, so the same",
-           cls="sm dim")
-    f.text(BCX, BY1 - 2, "loss ratio becomes an inadequate one", cls="sm dim")
     return f
 
 
-@figure("Rate Change", "The indicated change, the selected change, and the gap "
-        "between them", width=WID)
+@figure("Rate Change", "Indicated and selected rate changes for 2021–2025 drawn as two "
+        "lines, the selected always below, with the gap between them shaded", width=WID)
 def rate_change() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -0.5, 4.5, 0, 16, left=48, right=20, top=40, bottom=78)
+    ax = vaxes(f, -0.4, 4.4, 0, 16, left=48, right=20, top=40)
     ax.frame(xticks=[0, 1, 2, 3, 4], xfmt=lambda t: f"{2021 + int(t)}",
              yticks=[0, 5, 10, 15], yfmt=lambda t: f"{t:.0f}%", grid=True)
-    ind = [11.4, 9.8, 13.2, 8.6, 7.3]
+    ind = [11.4, 9.8, 13.2, 8.6, 100 * IND_CHG]
     sel = [7.0, 7.0, 9.0, 7.0, 5.0]
-    bw = (ax.px(1) - ax.px(0)) * 0.34
-    for k, (a, b) in enumerate(zip(ind, sel)):
-        x = ax.px(k)
-        f.rect(x - bw - 1, ax.py(a), bw, ax.y1 - ax.py(a), rx=2, fill=BLUE,
-               fill_opacity="0.7")
-        f.rect(x + 1, ax.py(b), bw, ax.y1 - ax.py(b), rx=2, fill=AMBER,
-               fill_opacity="0.7")
-    f.legend_row(96, 96, [(BLUE, "indicated"), (AMBER, "selected")], gap=104)
-    f.text(BCX, BY1 - 34, "taking less than the indication is allowed;",
-           cls="sm dim")
-    f.text(BCX, BY1 - 16, "taking it every year without closing the gap",
-           cls="sm dim")
-    f.text(BCX, BY1 + 2, "is how a book becomes permanently inadequate",
-           cls="sm dim")
+    f.polygon([ax.p(k, v) for k, v in enumerate(ind)]
+              + [ax.p(k, v) for k, v in reversed(list(enumerate(sel)))],
+              fill=ROSE, fill_opacity="0.16", stroke="none")
+    for vals, colour in ((ind, BLUE), (sel, AMBER)):
+        ax.polyline(list(enumerate(vals)), colour=colour, width=2.4)
+        for k, v in enumerate(vals):
+            ax.point(k, v, colour=colour, r=3.6)
+    ax.label(0, ind[0], "indicated", cls="sm bold", dy=-10)
+    ax.label(0, sel[0], "selected", cls="sm bold", dy=18)
+    ax.label(2, (ind[2] + sel[2]) / 2, "gap", cls="sm dim", dy=4)
     return f
 
 
-@figure("Ratemaking Constraints", "The band of filed changes the regulatory, "
-        "competitive and operational limits leave open", width=WID)
+@figure("Ratemaking Constraints", "A regulator, the market and the insurer's own "
+        "systems pressing down on a narrow band of allowed rate changes, while the "
+        "+7.3% indication sits outside it", width=WID)
 def ratemaking_constraints() -> Fig:
     f = vcard()
 
-    x0, x1, y = 52, 312, 168
-    f.line(x0, y, x1, y, cls="axis")
-    for v, lab in ((0.0, "0%"), (0.5, "+5%"), (1.0, "+10%")):
-        x = x0 + (x1 - x0) * v
-        f.line(x, y - 5, x, y + 5, cls="tick")
-        f.text(x, y + 20, lab, cls="sm dim")
-    f.rect(x0 + (x1 - x0) * 0.30, y - 34, (x1 - x0) * 0.35, 24, rx=4, fill=GREEN,
-           fill_opacity="0.24", stroke=GREEN, stroke_width="1.2")
-    f.text(x0 + (x1 - x0) * 0.475, y - 17, "filable band", cls="sm", fill=GREEN)
-    f.arrow(x0 + (x1 - x0) * 0.73, y - 58, x0 + (x1 - x0) * 0.73, y - 8,
-            colour=BLUE, width=1.8)
-    f.text(x0 + (x1 - x0) * 0.73, y - 66, "indicated +7.3%", cls="sm bold",
-           fill=BLUE)
-    rows = [("Regulatory", "prior approval, capping rules", ROSE),
-            ("Competitive", "what the market will bear", AMBER),
-            ("Operational", "systems, filing lead times", VIOLET)]
-    for i, (name, note, colour) in enumerate(rows):
-        yy = 246 + i * 42
-        f.rect(52, yy - 9, 11, 11, rx=2, fill=colour, fill_opacity="0.8")
-        f.text(70, yy + 1, name, cls="sm bold", anchor="start")
-        f.text(70, yy + 17, note, cls="sm dim", anchor="start")
-    f.text(BCX, BY1 - 2, "compute it properly, then say why you departed",
-           cls="sm dim")
+    def px(v):
+        return 40 + 28 * v
+
+    y = 286
+    lo, hi = 3.0, 6.5
+    for cx, icon, name, colour in ((70, building, "regulator", ROSE),
+                                   (180, tower, "market", AMBER),
+                                   (290, document, "systems", VIOLET)):
+        icon(f, cx, 118, 44, colour)
+        f.text(cx, 162, name, cls="sm")
+        target = min(max(cx, px(lo) + 12), px(hi) - 12)
+        f.arrow(cx, 172, target, y - 34, colour=colour, width=1.5)
+    f.rect(px(lo), y - 30, px(hi) - px(lo), 30, rx=3, fill=GREEN,
+           fill_opacity="0.26", stroke=GREEN, stroke_width="1.2")
+    f.text((px(lo) + px(hi)) / 2, y - 11, "allowed", cls="sm")
+    f.line(px(0) - 6, y, px(10) + 6, y, cls="axis")
+    for v, lab in ((0, "0%"), (5, "+5%"), (10, "+10%")):
+        f.line(px(v), y, px(v), y + 5, cls="tick")
+        f.text(px(v), y + 19, lab, cls="sm dim")
+    xi = px(100 * IND_CHG)
+    f.arrow(xi, y + 64, xi, y + 4, colour=BLUE, width=2)
+    f.text(xi, y + 80, f"indicated +{IND_CHG:.1%}", cls="sm bold")
     return f
 
 
-@figure("Considerations for Implementing Rates", "An off-balance correction keeping "
-        "a relativity change revenue-neutral", width=WID)
+@figure("Considerations for Implementing Rates", "Revenue climbing in two steps: new "
+        "relativities alone add 3.0%, so the base rate needs only +4.2% to reach the "
+        "+7.3% overall target", width=WID)
 def considerations_for_implementing_rates() -> Fig:
     f = vcard()
 
-    _flow(f, 132, ["overall +7.3%", "relativities"], colours=[BLUE, AMBER],
-          x0=44, x1=316, h=30)
-    f.text(BCX, 176, "new relativities alone would raise revenue 3.0%",
-           cls="sm dim")
-    f.text(BCX, 200, "even before any base-rate change", cls="sm dim")
-    f.arrow(BCX, 214, BCX, 244, colour="var(--dim)", width=1.4)
-    f.chip(BCX, 266, "base rate +4.2%", colour=GREEN, w=196, h=34)
-    f.text(BCX, 308, "so the book gets +7.3% overall", cls="sm dim")
-    f.text(BCX, 344, "dislocation, capping and the effective date", cls="sm dim")
-    f.text(BCX, 362, "are decided here, not in the indication", cls="sm dim")
+    off = 1.030
+    target = 1 + IND_CHG
+    ax = vaxes(f, 0, 3, 0.99, 1.085, left=52, right=16, top=30)
+    ax.frame(xticks=[0.5, 1.5, 2.5], yticks=[1.0, off, target],
+             xfmt=lambda t: {0.5: "current", 1.5: "relativities", 2.5: "base rate"}[t],
+             yfmt=lambda t: f"{t:.3f}", grid=True, arrows=False, xlabel=None,
+             ylabel="revenue")
+    ax.hline(target, colour=GREEN)
+    ax.label(0.5, target, f"+{IND_CHG:.1%}", cls="sm bold", dy=-7)
+    levels = [(0, 1, 1.0), (1, 2, off), (2, 3, target)]
+    for a, b, v in levels:
+        ax.polyline([(a, v), (b, v)], colour=BLUE, width=2.6)
+    for x, a, b, colour in ((1, 1.0, off, AMBER), (2, off, target, GREEN)):
+        f.arrow(ax.px(x), ax.py(a), ax.px(x), ax.py(b) + 2, colour=colour, width=2)
+        ax.label(x, (a + b) / 2, f"+{b / a - 1:.1%}", cls="sm bold", anchor="end",
+                 dx=-8, dy=4)
     return f
 
 
-@figure("Minimum Premium", "A premium floor holding the smallest risks above the "
-        "cost of writing them", width=WID)
+@figure("Minimum Premium", "Premium rising with exposure along the rate line, held up "
+        "by a $150 floor for every risk smaller than 0.27 exposures", width=WID)
 def minimum_premium() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 1.0, 0, 620, left=54, right=20, top=36, bottom=66)
+    ax = vaxes(f, 0, 1.0, 0, 620, left=54, right=20, top=36)
     ax.frame(xticks=[0, 0.25, 0.5, 0.75, 1.0], yticks=[0, 200, 400, 600],
-             yfmt=lambda t: f"{t:,.0f}", grid=True)
-    ax.curve(lambda e: 558 * e, colour="var(--dim)", width=1.6, dash=True)
-    ax.curve(lambda e: max(558 * e, 150), colour=BLUE, width=2.6)
-    ax.vline(150 / 558, colour=ROSE, y_top=150)
-    ax.label(150 / 558, 0, "0.27 exposures", cls="sm", fill=ROSE, anchor="start",
-             dx=8, dy=-10)
-    ax.hline(150, colour=ROSE, x_to=150 / 558)
-    ax.label(0, 150, "minimum $150", cls="sm bold", fill=ROSE, anchor="start",
-             dx=6, dy=-8)
-    f.text(BCX, ax.y1 + 32, "earned exposures", cls="sm dim")
-    f.text(BCX, BY1 - 2, "issuing and servicing cost the same either way",
-           cls="sm dim")
+             yfmt=lambda t: f"{t:,.0f}", grid=True, xlabel="exposures",
+             ylabel="premium")
+    ax.curve(lambda e: IND_RATE * e, colour="var(--dim)", width=1.6, dash=True)
+    ax.curve(lambda e: max(IND_RATE * e, 150), colour=BLUE, width=2.6)
+    ax.vline(150 / IND_RATE, colour=ROSE, y_top=150)
+    ax.label(150 / IND_RATE, 0, "0.27 exposures", cls="sm", anchor="start", dx=8,
+             dy=-10)
+    ax.hline(150, colour=ROSE, x_to=150 / IND_RATE)
+    ax.label(0, 150, "minimum $150", cls="sm bold", anchor="start", dx=6, dy=-8)
     return f
 
 
-@figure("Rating Algorithm", "The ordered steps that turn a base rate into a quoted "
-        "premium", width=WID)
+@figure("Rating Algorithm", "A staircase of the premium through the filed steps in "
+        "order: $558 base rate, × 1.25 class, × 0.90 territory, + $40 endorsements, "
+        "− 5% discount and + $25 policy fee, ending at $659", width=WID)
 def rating_algorithm() -> Fig:
     f = vcard()
 
-    steps = [("base rate", "558", BLUE), ("× class 1.25", "698", BLUE),
-             ("× territory 0.90", "628", BLUE), ("+ endorsements", "668", TEAL),
-             ("− discounts 5%", "634", AMBER), ("+ policy fee", "$636", GREEN)]
-    for i, (name, value, colour) in enumerate(steps):
-        y = 118 + i * 42
-        f.rect(46, y, 190, 30, rx=5, fill=colour, fill_opacity="0.16",
-               stroke=colour, stroke_width="1.1")
-        f.text(56, y + 20, name, cls="sm", anchor="start")
-        f.text(300, y + 20, value, cls="sm bold", anchor="end")
-        if i:
-            f.line(66, y - 12, 66, y, cls="thin", stroke="var(--dim)",
-                   stroke_width="1")
-    f.text(BCX, BY1 - 2, "multiply before adding — a reordered algorithm "
-           "is a different rate", cls="sm dim")
+    steps = [("× 1.25", lambda p: p * 1.25, BLUE), ("× 0.90", lambda p: p * 0.90, BLUE),
+             ("+ 40", lambda p: p + 40, TEAL), ("− 5%", lambda p: p * 0.95, AMBER),
+             ("+ 25", lambda p: p + 25, TEAL)]
+    ax = vaxes(f, 0, 6, 540, 720, left=48, right=14, top=30)
+    ax.frame(xticks=[], yticks=[550, 600, 650, 700], grid=True, arrows=False,
+             ylabel="premium")
+    level = IND_RATE
+    ax.polyline([(0, level), (1, level)], colour=VIOLET, width=2.6)
+    ax.label(0.5, level, _money(level), cls="sm bold", dy=-8)
+    for k, (lab, op, colour) in enumerate(steps, start=1):
+        new = op(level)
+        f.arrow(ax.px(k), ax.py(level), ax.px(k), ax.py(new) + (3 if new > level else -3),
+                colour=colour, width=2)
+        ax.label(k, (level + new) / 2, lab, cls="sm bold", anchor="end", dx=-6, dy=4)
+        ax.polyline([(k, new), (k + 1, new)], colour=VIOLET, width=2.6)
+        level = new
+    ax.label(5.5, level, f"${level:,.0f}", cls="bold", dy=-9)
     return f
 
 
-@figure("Principles of Ratemaking", "The four CAS ratemaking principles", width=WID)
+@figure("Principles of Ratemaking", "One risk's rate drawn as a column of every expected "
+        "cost — loss, LAE, expense and capital — whose top lands in the narrow sound band "
+        "between inadequate and excessive", width=WID)
 def principles_of_ratemaking() -> Fig:
     f = vcard()
 
-    items = [("1", "A rate is an estimate of the expected value",
-              "of future costs", BLUE),
-             ("2", "A rate provides for all costs associated",
-              "with the transfer of risk", TEAL),
-             ("3", "A rate provides for the costs associated",
-              "with an individual risk transfer", VIOLET),
-             ("4", "A rate is reasonable and not excessive,",
-              "inadequate or unfairly discriminatory", GREEN)]
-    for i, (n, line1, line2, colour) in enumerate(items):
-        y = 118 + i * 66
-        f.circle(46, y + 14, 13, fill=colour, fill_opacity="0.22", stroke=colour,
-                 stroke_width="1.2")
-        f.text(46, y + 18, n, cls="sm bold", fill=colour)
-        f.text(66, y + 10, line1, cls="sm", anchor="start")
-        f.text(66, y + 26, line2, cls="sm", anchor="start")
-    f.text(BCX, BY1 - 2, "only the fourth is a judgment; the first three are "
-           "definitions", cls="sm dim")
+    x0, w, base, k = 120, 84, 330, 1.6
+    y = base
+    for pct, name, colour in ((64, "loss", BLUE), (8, "LAE", TEAL),
+                              (20, "expense", AMBER), (8, "capital", GREEN)):
+        h = pct * k
+        f.rect(x0, y - h, w, h, rx=2, fill=colour, fill_opacity="0.32",
+               stroke=colour, stroke_width="1.2")
+        f.text(x0 - 10, y - h / 2 + 4, name, cls="sm", anchor="end")
+        y -= h
+    car(f, x0 + w / 2, base + 26, 64, VIOLET)
+    # the gauge the top of the rate is read against
+    gx, gw = 254, 22
+    for a, b, colour, opacity in ((76, y - 14, ROSE, "0.2"), (y - 14, y + 14, GREEN, "0.5"),
+                                  (y + 14, base, AMBER, "0.2")):
+        f.rect(gx, a, gw, b - a, rx=3, fill=colour, fill_opacity=opacity, stroke=colour,
+               stroke_width="1.1")
+    f.line(x0 + w + 4, y, gx - 4, y, cls="thin dash", stroke="var(--ink)",
+           stroke_width="1.4")
+    f.text(gx + gw + 8, (76 + y - 14) / 2 + 4, "excessive", cls="sm", anchor="start")
+    f.text(gx + gw + 8, y + 4, "sound", cls="sm bold", anchor="start")
+    f.text(gx + gw + 8, (y + 14 + base) / 2 + 4, "inadequate", cls="sm",
+           anchor="start")
     return f
 
 
@@ -1265,12 +1284,12 @@ def principles_of_ratemaking() -> Fig:
 # A. Ratemaking — extraordinary losses
 # ═══════════════════════════════════════════════════════════════════════════
 
-@figure("Large Loss", "A claim-size distribution capped at a threshold, with the "
-        "excess reloaded across the class", width=WID)
+@figure("Large Loss", "A claim-size curve capped at 250k, the excess tail beyond the "
+        "cap shaded and spread back over the body of the distribution", width=WID)
 def large_loss() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 12, 0, 1.05, left=44, right=20, top=34, bottom=76)
+    ax = vaxes(f, 0, 12, 0, 1.05, left=44, right=20, top=34)
     cap = 5.0
 
     def pdf(x):
@@ -1279,33 +1298,31 @@ def large_loss() -> Fig:
     ax.area(pdf, 0, cap, colour=BLUE, opacity="0.20")
     ax.area(pdf, cap, 12, colour=ROSE, opacity="0.28")
     ax.curve(pdf, colour=BLUE, width=2.2)
-    ax.frame(xticks=[0, 5, 10], xfmt=lambda t: f"{t * 50:,.0f}k", yticks=[])
+    ax.frame(xticks=[0, 5, 10], xfmt=lambda t: f"{t * 50:,.0f}k", yticks=[],
+             xlabel="claim size")
     ax.vline(cap, colour=ROSE, y_top=pdf(cap) + 0.35)
-    ax.label(cap, pdf(cap) + 0.35, "cap M = 250k", cls="sm bold", fill=ROSE,
-             anchor="start", dx=6, dy=-4)
-    ax.label(8.2, 0.14, "excess", cls="sm bold", fill=ROSE)
-    f.text(BCX, ax.y1 + 30, "claim size", cls="sm dim")
-    f.text(BCX, ax.y1 + 56, "price the capped losses on the class's own", cls="sm dim")
-    f.text(BCX, ax.y1 + 74, "data, then add a wider-based excess load", cls="sm dim")
+    ax.label(cap, pdf(cap) + 0.35, "cap 250k", cls="sm bold", anchor="start", dx=6,
+             dy=-4)
+    ax.label(8.4, 0.12, "excess", cls="sm bold")
+    f.arrow(ax.px(8.2), ax.py(0.2), ax.px(2.6), ax.py(0.62), colour=ROSE, width=1.6,
+            dash=True)
+    ax.label(4.4, 0.6, "load", cls="sm bold", dy=-6)
     return f
 
 
-@figure("Catastrophe Loss", "Twenty years of catastrophe ratios against the "
-        "long-term load they average to", width=WID)
+@figure("Catastrophe Loss", "Twenty years of catastrophe loss ratios, mostly near zero "
+        "with two huge spikes, against the flat long-run load of 7% they average to",
+        width=WID)
 def catastrophe_loss() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0.4, 20.6, 0, 68, left=48, right=18, top=34, bottom=66)
+    ax = vaxes(f, 0.4, 20.6, 0, 68, left=48, right=18, top=34)
     ax.frame(xticks=[1, 5, 10, 15, 20], yticks=[0, 25, 50],
-             yfmt=lambda t: f"{t:.0f}%", grid=True)
+             yfmt=lambda t: f"{t:.0f}%", grid=True, xlabel="year")
     ratios = [2, 1, 4, 0, 58, 3, 1, 0, 6, 2, 1, 41, 2, 0, 3, 1, 9, 0, 2, 4]
     ax.bars([(k + 1, v) for k, v in enumerate(ratios)], colour=ROSE, opacity="0.7")
     ax.hline(7.0, colour=GREEN, dash=False)
-    ax.label(20.4, 7.0, "load 7%", cls="sm bold", fill=GREEN, anchor="end",
-             dy=-7)
-    f.text(BCX, ax.y1 + 32, "cat losses as a % of premium, by year", cls="sm dim")
-    f.text(BCX, BY1 - 18, "a five-year experience period would price", cls="sm dim")
-    f.text(BCX, BY1 - 2, "this book at 0% or at 12% — never at 7%", cls="sm dim")
+    ax.label(20.4, 7.0, "load 7%", cls="sm bold", anchor="end", dy=-7)
     return f
 
 
@@ -1313,33 +1330,31 @@ def catastrophe_loss() -> Fig:
 # A. Ratemaking — classification and individual risk rating
 # ═══════════════════════════════════════════════════════════════════════════
 
-@figure("Classification Ratemaking", "Class relativities measured against the base "
-        "class's pure premium", width=WID)
+@figure("Classification Ratemaking", "Five driver classes' pure premiums as bars "
+        "measured against the adult-married base class, with relativities from 1.70 "
+        "down to 0.65", width=WID)
 def classification_ratemaking() -> Fig:
     f = vcard()
 
     classes = [("Youthful", 612, 1.70), ("Adult single", 396, 1.10),
-               ("Adult married", 360, 1.00), ("Mature", 288, 0.80),
+               ("Adult married", PP, 1.00), ("Mature", 288, 0.80),
                ("Senior", 234, 0.65)]
-    x0, scale = 172, 0.196
+    x0, scale = 124, 0.29
     for i, (name, pp, rel) in enumerate(classes):
-        y = 124 + i * 44
+        y = 104 + i * 62
         base = rel == 1.00
-        f.text(164, y + 4, name, cls="sm bold" if base else "sm", anchor="end")
-        f.rect(x0, y - 10, pp * scale, 22, rx=3, fill=BLUE if base else AMBER,
+        f.text(x0 - 8, y + 4, name, cls="sm bold" if base else "sm", anchor="end")
+        f.rect(x0, y - 14, pp * scale, 28, rx=3, fill=BLUE if base else AMBER,
                fill_opacity="0.7" if base else "0.55")
         f.text(x0 + pp * scale + 7, y + 4, f"{rel:.2f}", cls="sm", anchor="start")
-    f.line(x0 + 360 * scale, 108, x0 + 360 * scale, 336, cls="thin dash",
-           stroke=BLUE, stroke_width="1.3")
-    f.text(BCX, 356, "the base class is a choice of denominator —",
-           cls="sm dim")
-    f.text(BCX, 374, "it changes the factors, not anyone's premium",
-           cls="sm dim")
+    f.line(x0 + PP * scale, 80, x0 + PP * scale, 372, cls="thin dash", stroke=BLUE,
+           stroke_width="1.3")
     return f
 
 
-@figure("Territory Ratemaking", "A grid of territories carrying spatially "
-        "correlated relativities", width=WID)
+@figure("Territory Ratemaking", "A four-by-four map of territories shaded by relativity, "
+        "hottest at 1.45 in the city centre and cooling smoothly to 0.72 at the edge",
+        width=WID)
 def territory_ratemaking() -> Fig:
     f = vcard()
 
@@ -1347,27 +1362,21 @@ def territory_ratemaking() -> Fig:
             [0.80, 0.95, 1.15, 1.10],
             [0.90, 1.20, 1.45, 1.22],
             [0.85, 1.05, 1.18, 1.00]]
-    x0, y0, c = 108, 122, 42
+    x0, y0, c = 40, 88, 70
     for i, row in enumerate(grid):
         for j, rel in enumerate(row):
-            opacity = max(0.06, min(0.62, (rel - 0.65) * 0.72))
-            f.rect(x0 + j * c, y0 + i * c, c - 2, c - 2, rx=3, fill=ROSE,
+            opacity = max(0.06, min(0.85, (rel - 0.68) * 1.1))
+            f.rect(x0 + j * c, y0 + i * c, c - 3, c - 3, rx=4, fill=ROSE,
                    fill_opacity=f"{opacity:.2f}", stroke="var(--edge)",
                    stroke_width="0.8")
-            f.text(x0 + j * c + (c - 2) / 2, y0 + i * c + (c - 2) / 2 + 4,
-                   f"{rel:.2f}", cls="sm")
-    f.text(BCX, y0 + 4 * c + 26, "the city centre and its ring, not a list",
-           cls="sm dim")
-    f.text(BCX, y0 + 4 * c + 44, "of independent cells", cls="sm dim")
-    f.text(BCX, BY1 - 18, "neighbouring territories inform one another —",
-           cls="sm dim")
-    f.text(BCX, BY1 - 2, "and the boundaries are themselves a decision",
-           cls="sm dim")
+            if rel in (0.72, 1.45):
+                f.text(x0 + j * c + (c - 3) / 2, y0 + i * c + (c - 3) / 2 + 4,
+                       f"{rel:.2f}", cls="bold")
     return f
 
 
-@figure("Loss Elimination Ratio", "The share of ground-up losses a deductible "
-        "removes, as the deductible rises", width=WID)
+@figure("Loss Elimination Ratio", "The loss elimination ratio rising and flattening as "
+        "the deductible grows: 34% at a $500 deductible, only 57% at $1,000", width=WID)
 def loss_elimination_ratio() -> Fig:
     f = vcard()
 
@@ -1376,30 +1385,25 @@ def loss_elimination_ratio() -> Fig:
     def ler(d):
         return (mean * (1 - math.exp(-d / mean))) / mean
 
-    ax = vaxes(f, 0, 6, 0, 1.05, left=48, right=20, top=32, bottom=66)
+    ax = vaxes(f, 0, 6, 0, 1.05, left=48, right=20, top=32)
     ax.frame(xticks=[0, 1, 2, 3, 4, 5, 6], xfmt=lambda t: f"{t * 500:,.0f}",
-             yticks=[0, 0.5, 1.0], yfmt=lambda t: f"{t:.0%}", grid=True)
+             yticks=[0, 0.5, 1.0], yfmt=lambda t: f"{t:.0%}", grid=True,
+             xlabel="deductible", ylabel="LER")
     ax.curve(ler, colour=BLUE, width=2.4)
-    ax.point(1.0, ler(1.0), colour=ROSE, r=4)
-    ax.label(1.0, ler(1.0), "d = 500 ⇒ 34%", cls="sm bold", fill=ROSE,
-             anchor="start", dx=8, dy=-6)
-    ax.point(2.0, ler(2.0), colour=AMBER, r=4)
-    ax.label(2.0, ler(2.0), "1,000 ⇒ 57%", cls="sm bold", fill=AMBER,
-             anchor="start", dx=8, dy=-6)
-    f.text(BCX, ax.y1 + 32, "deductible", cls="sm dim")
-    f.text(BCX, BY1 - 18, "doubling the deductible does not double the",
-           cls="sm dim")
-    f.text(BCX, BY1 - 2, "credit — small claims are eliminated first",
-           cls="sm dim")
+    for d, colour in ((1.0, ROSE), (2.0, AMBER)):
+        ax.vline(d, colour=colour, y_top=ler(d))
+        ax.point(d, ler(d), colour=colour, r=4)
+        ax.label(d, ler(d), f"{ler(d):.0%}", cls="sm bold", anchor="end", dx=-8, dy=-6)
     return f
 
 
-@figure("Deductible Rating", "A ground-up loss distribution split at the deductible "
-        "into the insured's retention and the insurer's share", width=WID)
+@figure("Deductible Rating", "A ground-up loss curve split at the $500 deductible: the "
+        "small losses the insured keeps to the left, the part the insurer pays to the "
+        "right", width=WID)
 def deductible_rating() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 12, 0, 1.05, left=44, right=20, top=34, bottom=82)
+    ax = vaxes(f, 0, 12, 0, 1.05, left=44, right=20, top=34)
 
     def pdf(x):
         return math.exp(-x / 3.0) if x > 0 else 0.0
@@ -1408,31 +1412,26 @@ def deductible_rating() -> Fig:
     ax.area(pdf, 2.0, 12, colour=BLUE, opacity="0.20")
     ax.curve(pdf, colour=BLUE, width=2.2)
     ax.frame(xticks=[0, 2, 4, 8, 12], xfmt=lambda t: f"{t * 250:,.0f}",
-             yticks=[])
+             yticks=[], xlabel="loss size")
     ax.vline(2.0, colour=ROSE, y_top=1.0)
-    ax.label(2.0, 1.0, "d = 500", cls="sm bold", fill=ROSE, anchor="start", dx=6,
-             dy=-2)
-    ax.label(0.95, 0.30, "kept", cls="sm bold", fill=AMBER)
-    ax.label(5.6, 0.20, "insured", cls="sm bold", fill=BLUE)
-    f.text(BCX, ax.y1 + 30, "loss size", cls="sm dim")
-    f.text(BCX, ax.y1 + 58, "the credit must be less than the loss share",
-           cls="sm dim")
-    f.text(BCX, ax.y1 + 76, "removed — fixed expenses do not go away",
-           cls="sm dim")
+    ax.label(2.0, 1.0, "deductible", cls="sm bold", anchor="start", dx=6, dy=-2)
+    ax.label(1.0, 0.3, "kept", cls="sm bold")
+    ax.label(5.8, 0.24, "covered", cls="sm bold")
     return f
 
 
-@figure("Increased Limits", "Increased limits factors rising with the policy limit, "
-        "and the cost of a layer between two of them", width=WID)
+@figure("Increased Limits", "Increased limits factors rising and flattening from 1.00 "
+        "at the 100k basic limit to 1.97 at 5M, the layer from 500k to 1M costing 0.18",
+        width=WID)
 def increased_limits() -> Fig:
     f = vcard()
 
     pts = [(100, 1.00), (250, 1.32), (500, 1.55), (1000, 1.73), (2000, 1.86),
            (5000, 1.97)]
-    ax = vaxes(f, 0, 5200, 0.9, 2.1, left=48, right=20, top=34, bottom=70)
+    ax = vaxes(f, 0, 5200, 0.9, 2.1, left=48, right=20, top=34)
     ax.frame(xticks=[100, 1000, 2000, 5000], xfmt=lambda t: f"{t / 1000:.0f}M"
              if t >= 1000 else "100k", yticks=[1.0, 1.5, 2.0],
-             yfmt=lambda t: f"{t:.1f}", grid=True)
+             yfmt=lambda t: f"{t:.1f}", grid=True, xlabel="limit", ylabel="ILF")
     ax.polyline(pts, colour=BLUE, width=2.4)
     for x, y in pts:
         ax.point(x, y, colour=BLUE, r=3.2)
@@ -1442,88 +1441,86 @@ def increased_limits() -> Fig:
            stroke=AMBER, stroke_width="1.4")
     f.line(ax.px(1000), ax.py(1.55), ax.px(1000), ax.py(1.73), cls="thin",
            stroke=AMBER, stroke_width="1.4")
-    ax.label(1050, 1.64, "0.18", cls="sm bold", fill=AMBER, anchor="start", dx=4)
-    f.text(BCX, ax.y1 + 32, "policy limit", cls="sm dim")
-    f.text(BCX, BY1 - 18, "the curve must be concave — a layer higher",
-           cls="sm dim")
-    f.text(BCX, BY1 - 2, "up cannot cost more than the one below it",
-           cls="sm dim")
+    ax.label(1050, 1.64, "0.18", cls="sm bold", anchor="start", dx=4)
     return f
 
 
-@figure("Coinsurance Rating", "The coinsurance penalty applied when the insurance "
-        "carried falls below the required percentage of value", width=WID)
+@figure("Coinsurance Rating", "The share of each loss paid rising in a straight line "
+        "with the insurance carried until it reaches the 80% requirement, so carrying "
+        "60% pays only 75%", width=WID)
 def coinsurance_rating() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0.4, 1.02, 0, 1.1, left=52, right=20, top=34, bottom=70)
+    ax = vaxes(f, 0.4, 1.02, 0, 1.1, left=52, right=20, top=34)
     ax.frame(xticks=[0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
              xfmt=lambda t: f"{t:.0%}" if abs(t * 10 % 2) < 0.01 else "",
-             yticks=[0, 0.5, 1.0], yfmt=lambda t: f"{t:.0%}", grid=True)
+             yticks=[0, 0.5, 1.0], yfmt=lambda t: f"{t:.0%}", grid=True,
+             xlabel="insurance carried", ylabel="share paid")
     ax.curve(lambda c: min(c / 0.80, 1.0), colour=BLUE, width=2.6)
     ax.vline(0.80, colour=GREEN, y_top=1.0)
-    ax.label(0.80, 1.0, "80% required", cls="sm bold", fill=GREEN, anchor="end",
-             dx=-6, dy=-6)
+    ax.label(0.80, 1.0, "required 80%", cls="sm bold", anchor="end", dx=-6, dy=-6)
+    ax.vline(0.60, colour=ROSE, y_top=0.75)
+    ax.hline(0.75, colour=ROSE, x_to=0.60)
     ax.point(0.60, 0.75, colour=ROSE, r=4.2)
-    ax.label(0.60, 0.75, "carried 60%", cls="sm bold", fill=ROSE, anchor="start",
-             dx=10, dy=16)
-    ax.label(0.60, 0.75, "⇒ 75% paid", cls="sm", fill=ROSE, anchor="start",
-             dx=10, dy=31)
-    f.text(BCX, ax.y1 + 32, "insurance carried, as a % of value", cls="sm dim")
-    f.text(BCX, BY1 - 18, "the penalty applies to every loss, including",
-           cls="sm dim")
-    f.text(BCX, BY1 - 2, "the partial ones the insured expected to collect",
-           cls="sm dim")
+    ax.label(0.60, 0.75, "75% paid", cls="sm bold", anchor="start", dx=10, dy=16)
     return f
 
 
-@figure("Commercial Lines Rating", "The chain of adjustments from a manual premium "
-        "to a commercial risk's final price", width=WID)
+@figure("Commercial Lines Rating", "A $100,000 manual premium stepping down through an "
+        "experience mod of 0.88 and a schedule mod of 0.95 to a standard premium of "
+        "$83,600", width=WID)
 def commercial_lines_rating() -> Fig:
     f = vcard()
 
-    steps = [("Manual premium", "100,000", "class rate × exposure", VIOLET),
-             ("× Experience mod", "0.88", "the risk's own losses", BLUE),
-             ("× Schedule mod", "0.95", "underwriter judgment", TEAL),
-             ("Standard premium", "83,600", "before any retro", GREEN)]
-    for i, (name, value, note, colour) in enumerate(steps):
-        y = 120 + i * 62
-        f.rect(44, y, 272, 46, rx=6, fill=colour, fill_opacity="0.14",
+    base, k, w = 356, 200 / 100_000, 64
+    values = [100_000, 88_000, 83_600]
+    xs = [60, 180, 300]
+    for x, v, name, colour in zip(xs, values, ("manual", None, "standard"),
+                                  (VIOLET, BLUE, GREEN)):
+        h = v * k
+        f.rect(x - w / 2, base - h, w, h, rx=3, fill=colour, fill_opacity="0.32",
                stroke=colour, stroke_width="1.2")
-        f.text(56, y + 20, name, cls="sm bold", anchor="start")
-        f.text(56, y + 36, note, cls="sm dim", anchor="start")
-        f.text(304, y + 28, value, cls="sm bold", anchor="end")
-        if i:
-            f.arrow(BCX, y - 15, BCX, y - 2, colour="var(--dim)", width=1.2)
-    f.text(BCX, BY1 - 2, "and a retro plan can still move it afterwards",
-           cls="sm dim")
+        f.text(x, base - h - 8, f"{v:,}", cls="sm bold")
+        if name:
+            f.text(x, base + 18, name, cls="sm dim")
+    for (xa, xb), mod, icon, name, colour in (((xs[0], xs[1]), 0.88, document,
+                                               "experience", BLUE),
+                                              ((xs[1], xs[2]), 0.95, person,
+                                               "schedule", TEAL)):
+        xm = (xa + xb) / 2
+        icon(f, xm, 104, 34, colour)
+        f.text(xm, 138, name, cls="sm")
+        f.arrow(xa + w / 2 + 4, 236, xb - w / 2 - 4, 236, colour=colour, width=1.6)
+        f.text(xm, 228, f"× {mod:.2f}", cls="sm bold")
     return f
 
 
-@figure("Experience Rating", "The experience modification as a credibility blend "
-        "between a risk's own loss ratio and the class average", width=WID)
+@figure("Experience Rating", "A beam balanced at a mod of 0.88, carrying the risk's own "
+        "0.70 actual-to-expected with weight 0.40 at one end and the class's 1.00 with "
+        "weight 0.60 at the other", width=WID)
 def experience_rating() -> Fig:
     f = vcard()
 
-    x0, x1, y = 52, 312, 196
-    f.text(BCX, 112, "actual losses 70% of expected, Z = 0.40", cls="sm dim")
-    f.line(x0, y, x1, y, cls="axis")
-    for v, lab in ((0.0, "0.60"), (0.5, "1.00"), (1.0, "1.40")):
-        x = x0 + (x1 - x0) * v
-        f.line(x, y - 5, x, y + 5, cls="tick")
-        f.text(x, y + 20, lab, cls="sm dim")
-    f.text(BCX, y + 42, "experience modification", cls="sm dim")
-    for v, lab, colour, dy in ((0.5, "no mod 1.00", "var(--dim)", 66),
-                               (0.35, "M = 0.88", GREEN, 40)):
-        x = x0 + (x1 - x0) * v
-        f.arrow(x, y - dy, x, y - 8, colour=colour, width=1.7)
-        f.text(x, y - dy - 8, lab, cls="sm bold", fill=colour)
-    f.text(BCX, 284, "a credit of 12% on the manual premium", cls="sm")
-    f.text(BCX, 322, "Z rises with the risk's own volume — a small",
-           cls="sm dim")
-    f.text(BCX, 340, "insured's good year barely moves the mod,",
-           cls="sm dim")
-    f.text(BCX, 358, "and its bad year barely hurts", cls="sm dim")
+    own, z = 0.70, 0.40
+    mod = z * own + (1 - z) * 1.0
+
+    def bx(v):
+        return 74 + (v - own) / (1.0 - own) * 220
+
+    y = 268
+    f.line(30, y, 330, y, cls="", stroke="var(--ink)", stroke_width="3",
+           stroke_linecap="round")
+    xf = bx(mod)
+    f.polygon([(xf, y + 2), (xf - 22, y + 50), (xf + 22, y + 50)], fill=GREEN,
+              fill_opacity="0.3", stroke=GREEN, stroke_width="1.4")
+    f.text(xf, y + 70, f"{mod:.2f}", cls="bold")
+    for v, w, name, colour in ((own, z, "risk", BLUE), (1.0, 1 - z, "class", AMBER)):
+        s = 118 * math.sqrt(w)
+        f.rect(bx(v) - s / 2, y - 2 - s, s, s, rx=4, fill=colour,
+               fill_opacity="0.34", stroke=colour, stroke_width="1.2")
+        f.text(bx(v), y - 2 - s / 2 + 4, f"{w:.2f}", cls="sm")
+        f.text(bx(v), y - s - 12, name, cls="sm bold")
+        f.text(bx(v), y + 18, f"{v:.2f}", cls="sm")
     return f
 
 

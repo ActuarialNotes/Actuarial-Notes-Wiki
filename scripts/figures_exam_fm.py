@@ -837,61 +837,66 @@ def geometric_increasing() -> Fig:
     return f
 
 
-@figure("Geometric Progression", "A geometric payment stream and the shifted rate that "
-        "values it", width=WID)
+@figure("Geometric Progression", "Ten payments growing 3% a period, each with its present "
+        "value at 8% drawn inside it, the present values shrinking at a steady shifted rate",
+        width=WID)
 def geometric_progression() -> Fig:
     f = vcard()
 
-    i, g = 0.08, 0.03
-    a = vaxes(f, 0, 11, 0, 1.6, left=50, top=44)
-    a.bars([(k, (1 + g) ** (k - 1)) for k in range(1, 11)], colour=ROSE, opacity="0.6")
-    a.bars([(k, (1 + g) ** (k - 1) * (1 + i) ** -k) for k in range(1, 11)], colour=BLUE,
+    i, g, n = 0.08, 0.03, 10
+    a = vaxes(f, 0, 11, 0, 1.45, left=40, right=30, top=24)
+    a.bars([(k, (1 + g) ** (k - 1)) for k in range(1, n + 1)], colour=ROSE, opacity="0.6")
+    a.bars([(k, (1 + g) ** (k - 1) * (1 + i) ** -k) for k in range(1, n + 1)], colour=BLUE,
            opacity="0.85")
-    a.frame(xlabel="payment number", xticks=[1, 5, 10],
-            yticks=[0.5, 1.0, 1.5], yfmt=lambda t: f"{t:g}")
-    f.legend(62, 92, [(ROSE, "payment (1+g)^(k−1)"), (BLUE, "its present value")])
+    a.frame(xlabel="payment", xticks=[1, 5, 10], yticks=[0.5, 1.0],
+            yfmt=lambda t: f"{t:g}")
+    top, pv = (1 + g) ** (n - 1), (1 + g) ** (n - 1) * (1 + i) ** -n
+    a.label(n, top, "payment", cls="sm bold", anchor="end", dx=8, dy=-8)
+    a.label(n, pv / 2, "PV", cls="sm bold", anchor="start", dx=12, dy=4)
     return f
 
 
-@figure("Payable m-thly", "An annual payment of 1 split into m sub-period payments",
-        width=WID)
+@figure("Payable m-thly", "Four years of payments: the annual 1 drawn as a tall grey arrow "
+        "at each year end, and the same 1 paid as four blue quarter-payments of ¼ through "
+        "the year", width=WID)
 def payable_m_thly() -> Fig:
     f = vcard()
 
-    for k, (head, m, colour) in enumerate((("m = 1", 1, "var(--dim)"), ("m = 4", 4, BLUE))):
-        y = 156 + k * 122
-        f.text(BCX, y - 66, head, cls="bold", fill=colour)
-        xs = timeline(f, y, 62, 300, 4, labels=["0", "1", "2", "3", "4"], label_dy=16)
-        step = (xs[1] - xs[0]) / m
-        for yr in range(4):
-            for j in range(1, m + 1):
-                cash_arrow(f, xs[yr] + step * j, y, 34 if m == 1 else 24, colour=colour,
-                           label="1" if m == 1 else "", up=True)
-        f.text(BCX, y + 42, "1 per year" if m == 1 else "¼ each quarter", cls="sm dim")
+    y, m, h = 330, 4, 180
+    xs = timeline(f, y, 62, 300, 4, labels=["0", "1", "2", "3", "4"])
+    step = (xs[1] - xs[0]) / m
+    for yr in range(4):
+        f.arrow(xs[yr + 1], y, xs[yr + 1], y - h, colour="var(--axis)", width=2, dash=True)
+        for j in range(1, m + 1):
+            cash_arrow(f, xs[yr] + step * j, y, h / m, colour=BLUE, width=2)
+    f.text(xs[1], y - h - 8, "1", cls="bold")
+    f.text(xs[0] + step, y - h / m - 8, "¼", cls="bold")
     return f
 
 
-@figure("Payable Continuously", "The m-thly annuity in the limit, paying as a continuous "
-        "stream", width=WID)
+@figure("Payable Continuously", "One year's payment of 1 split into 4 tall quarterly arrows, "
+        "12 shorter monthly ones, and in the limit a continuous band along the timeline",
+        width=WID)
 def payable_continuously() -> Fig:
     f = vcard()
 
-    for k, (head, m, colour) in enumerate((("m = 4", 4, BLUE), ("m = 12", 12, VIOLET))):
-        y = 130 + k * 92
-        f.text(BCX, y - 50, head, cls="bold", fill=colour)
-        xs = timeline(f, y, 62, 300, 1, labels=["", ""], label_dy=0)
+    y, h = 340, 220
+    xs = timeline(f, y, 62, 300, 1, labels=["0", "1"])
+    f.rect(xs[0], y - 16, xs[1] - xs[0], 16, rx=2, fill=TEAL, fill_opacity="0.45",
+           stroke=TEAL, stroke_width="1.2")
+    for m, colour in ((12, VIOLET), (4, BLUE)):      # each payment is 1/m tall
         step = (xs[1] - xs[0]) / m
         for j in range(1, m + 1):
-            cash_arrow(f, xs[0] + step * j, y, 26, colour=colour)
-    y = 344
-    xs = timeline(f, y, 62, 300, 1, labels=["0", "n"])
-    f.rect(xs[0], y - 28, xs[1] - xs[0], 28, rx=2, fill=TEAL, fill_opacity="0.42")
-    f.text(BCX, y - 44, "m → ∞", cls="bold", fill=TEAL)
+            cash_arrow(f, xs[0] + step * j, y - 16, h / m, colour=colour, width=2)
+    step = (xs[1] - xs[0]) / 4
+    f.text(xs[0] + step, y - 16 - h / 4 - 8, "m = 4", cls="sm bold", fill=BLUE)
+    f.text(xs[0] + step / 3, y - 16 - h / 12 - 8, "m = 12", cls="sm bold", fill=VIOLET)
+    f.text(BCX, y + 18, "m → ∞", cls="sm bold", fill=TEAL)
     return f
 
 
-@figure("Continuous Annuity", "The continuous annuity as area under the discount curve",
-        width=WID)
+@figure("Continuous Annuity", "The discount curve vᵗ falling from 1, the area under it from "
+        "0 to n shaded as the continuous annuity", width=WID)
 def continuous_annuity() -> Fig:
     f = vcard()
 
@@ -900,10 +905,10 @@ def continuous_annuity() -> Fig:
     a = vaxes(f, 0, 10, 0, 1.1, top=30)
     a.area(lambda t: math.exp(-delta * t), 0, n, colour=TEAL, opacity="0.26")
     a.curve(lambda t: math.exp(-delta * t), colour=TEAL)
-    a.frame(xlabel="time t", ylabel="v^t = e^(−δt)", xticks=[0, n],
+    a.frame(xlabel="time t", ylabel="vᵗ", xticks=[0, n],
             xfmt=lambda t: "0" if t == 0 else "n", yticks=[0.5, 1.0],
             yfmt=lambda t: f"{t:g}")
-    a.label(3.4, 0.36, "ā₍ₙ₎ = ∫₀ⁿ v^t dt", cls="sm bold")
+    a.label(3.6, 0.36, "ā₍ₙ₎", cls="bold")
     a.vline(n, y_top=math.exp(-delta * n), colour=TEAL)
     return f
 
@@ -930,34 +935,42 @@ def _schedule(L=LOAN_L, i=LOAN_I, n=LOAN_N, P=None):
     return rows, P
 
 
-def _amort_bars(f, a, rows, P, bar_frac=0.62):
-    """Stacked interest/principal bars, one per payment."""
+def _amort_bars(f, a, rows, P, bar_frac=0.62, faded=False):
+    """Stacked principal (below) and interest (above) bars, one per payment."""
     bw = (a.px(1) - a.px(0)) * bar_frac
     for k, (_, interest, principal, _) in enumerate(rows):
         x = a.px(k + 1) - bw / 2
-        f.rect(x, a.py(P), bw, a.py(principal) - a.py(P), rx=2, fill=BLUE,
+        f.rect(x, a.py(principal), bw, a.y1 - a.py(principal), rx=2, fill=BLUE,
                fill_opacity="0.7")
-        f.rect(x, a.py(principal), bw, a.y1 - a.py(principal), rx=2, fill=AMBER,
-               fill_opacity="0.7")
+        f.rect(x, a.py(P), bw, a.py(principal) - a.py(P), rx=2, fill=AMBER,
+               fill_opacity="0.25" if faded else "0.7")
     return bw
 
 
-@figure("Loans", "The four moving parts of a loan and the two ways to find the balance",
+@figure("Loans", "A loan of 10,000 advanced at time 0 and repaid by eight payments of "
+        "1,740 above the timeline, while the balance still owed shrinks to nothing below it",
         width=WID)
 def loans() -> Fig:
     f = vcard()
 
-    y = 240
-    xs = timeline(f, y, 60, 300, 6, labels=["0", "1", "2", "3", "…", "n−1", "n"])
-    cash_arrow(f, xs[0], y, 96, colour=GREEN, label="L", up=False)
-    for j in range(1, 7):
-        cash_arrow(f, xs[j], y, 60, colour=BLUE, label="P", up=True)
-    f.text(BCX, 110, "the lender advances L, the borrower repays P", cls="sm dim")
+    rows, P = _schedule()
+    y, s = 150, 0.021                                # s: pixels per unit of money
+    xs = timeline(f, y, 66, 306, LOAN_N, labels=[""] * (LOAN_N + 1))
+    owed = [(xs[0], y + LOAN_L * s)] + [(xs[k + 1], y + r[3] * s) for k, r in enumerate(rows)]
+    f.polygon([(xs[0], y)] + owed, fill=GREEN, fill_opacity="0.16", stroke="none")
+    f.poly(owed, cls="thin", stroke=GREEN, stroke_width="1.4")
+    cash_arrow(f, xs[0], y, LOAN_L * s, colour=GREEN, label="10,000", up=False, width=2.2)
+    for k in range(1, LOAN_N + 1):
+        cash_arrow(f, xs[k], y, P * s, colour=BLUE, width=2)
+        f.text(xs[k], y + 16, str(k), cls="sm dim")
+    f.text(xs[1], y - P * s - 8, f"{P:,.0f}", cls="sm bold")
+    f.text(xs[2] + 4, y + 110, "balance", cls="sm bold", anchor="start")
     return f
 
 
-@figure("Amortization", "A level payment splitting into shrinking interest and growing "
-        "principal", width=WID)
+@figure("Amortization", "Eight level payments on the 10,000 loan, each split into a "
+        "principal part growing from the bottom and an interest part shrinking on top",
+        width=WID)
 def amortization() -> Fig:
     f = vcard()
 
@@ -965,48 +978,53 @@ def amortization() -> Fig:
     a = vaxes(f, 0.4, LOAN_N + 0.6, 0, P * 1.12, left=54, top=44)
     _amort_bars(f, a, rows, P)
     a.hline(P, colour=VIOLET, dash=False)
-    a.frame(xlabel="payment number", xticks=list(range(1, LOAN_N + 1)),
+    a.frame(xlabel="payment", xticks=list(range(1, LOAN_N + 1)),
             yticks=[0, 1000], yfmt=lambda t: f"{t:,.0f}")
-    f.legend(58, 92, [(AMBER, "interest I_k"), (BLUE, "principal PR_k")])
+    a.label(1.5, 1380, "interest", cls="sm bold")
+    a.label(7.5, 700, "principal", cls="sm bold")
     return f
 
 
-@figure("Principal", "The principal portion of each payment growing as the balance falls",
-        width=WID)
+@figure("Principal", "The principal part of each payment on the 10,000 loan, growing from "
+        "940 to 1,611 as the interest part above it fades", width=WID)
 def principal() -> Fig:
     f = vcard()
 
     rows, P = _schedule()
     a = vaxes(f, 0.4, LOAN_N + 0.6, 0, P * 1.12, left=54, top=44)
-    _amort_bars(f, a, rows, P)
-    a.frame(xlabel="payment number", xticks=list(range(1, LOAN_N + 1)),
+    _amort_bars(f, a, rows, P, faded=True)
+    a.frame(xlabel="payment", xticks=list(range(1, LOAN_N + 1)),
             yticks=[0, 1000], yfmt=lambda t: f"{t:,.0f}")
-    f.legend(58, 92, [(BLUE, "principal repaid"), (AMBER, "interest")])
+    for k in (1, LOAN_N):
+        a.label(k, rows[k - 1][2], f"{rows[k - 1][2]:,.0f}", cls="sm bold", dy=-6)
     return f
 
 
-@figure("Interest", "Interest charged on the declining balance, period by period",
-        width=WID)
+@figure("Interest", "The balance owed on the 10,000 loan before each payment, topped by "
+        "the 8% interest charged on it — 800 at first, 129 by the last", width=WID)
 def interest() -> Fig:
     f = vcard()
 
     rows, P = _schedule()
-    a = vaxes(f, 0.4, LOAN_N + 0.6, 0, 11000, left=58, top=44)
-    bw = (a.px(1) - a.px(0)) * 0.6
+    a = vaxes(f, 0.4, LOAN_N + 0.6, 0, 11200, left=58, top=24)
+    bw = (a.px(1) - a.px(0)) * 0.62
     for k, (bal, interest_, _, _) in enumerate(rows):
         x = a.px(k + 1)
         f.rect(x - bw / 2, a.py(bal), bw, a.y1 - a.py(bal), rx=2, fill="var(--dim)",
-               fill_opacity="0.2")
-        f.rect(x - bw / 2, a.py(interest_ * 10), bw, a.y1 - a.py(interest_ * 10), rx=2,
-               fill=AMBER, fill_opacity="0.75")
-    a.frame(xlabel="period", xticks=list(range(1, LOAN_N + 1)),
+               fill_opacity="0.3")
+        f.rect(x - bw / 2, a.py(bal + interest_), bw, a.py(bal) - a.py(bal + interest_),
+               rx=2, fill=AMBER, fill_opacity="0.85")
+    a.frame(xlabel="period", ylabel="balance", xticks=list(range(1, LOAN_N + 1)),
             yticks=[0, 5000, 10000], yfmt=lambda t: f"{t:,.0f}")
-    f.legend(62, 92, [("var(--dim)", "balance OB₍ₖ₋₁₎"), (AMBER, "interest I_k (×10)")])
+    for k in (1, LOAN_N):
+        bal, interest_ = rows[k - 1][0], rows[k - 1][1]
+        a.label(k, bal + interest_, f"{interest_:,.0f}", cls="sm bold", dy=-6)
     return f
 
 
-@figure("Outstanding Balance", "The loan balance falling to zero, found prospectively or "
-        "retrospectively", width=WID)
+@figure("Outstanding Balance", "The 10,000 loan's balance falling to zero over eight "
+        "payments, the 6,948 left after three reached from the past and from the future "
+        "alike", width=WID)
 def outstanding_balance() -> Fig:
     f = vcard()
 
@@ -1021,19 +1039,25 @@ def outstanding_balance() -> Fig:
         a.point(k, b, colour=BLUE, r=3)
     k0 = 3
     a.vline(k0, y_top=balances[k0], colour=VIOLET)
-    a.label(k0, balances[k0], f"OB₃ = {balances[k0]:,.0f}", cls="sm bold", dy=-12, dx=30)
+    # the same balance two ways: looking back at what was paid, or forward at what is due
+    ob = balances[k0]
+    f.arrow(a.px(0.15), a.py(ob), a.px(k0) - 7, a.py(ob), colour=AMBER, width=1.6)
+    a.label(0.25, ob, "retrospective", cls="sm bold", anchor="start", dy=16, fill=AMBER)
+    f.arrow(a.px(7.6), a.py(ob), a.px(k0) + 7, a.py(ob), colour=GREEN, width=1.6)
+    a.label(7.6, ob, "prospective", cls="sm bold", anchor="end", dy=-7, fill=GREEN)
     a.frame(xlabel="payments made", ylabel="balance", xticks=list(range(LOAN_N + 1)),
-            yticks=[0, 5000, 10000], yfmt=lambda t: f"{t:,.0f}")
+            yticks=[0, ob, 10000], yfmt=lambda t: f"{t:,.0f}")
     return f
 
 
-@figure("Term of Loan", "How the term trades off against the level payment", width=WID)
+@figure("Term of Loan", "The level payment on a 10,000 loan at 8% falling as the term "
+        "lengthens: 2,505 over 5 years, 1,740 over 8, 1,019 over 20", width=WID)
 def term_of_loan() -> Fig:
     f = vcard()
 
     a = vaxes(f, 2, 30, 0, 5200, left=58, top=30)
     a.curve(lambda n: LOAN_L / _ann_imm(n, LOAN_I), colour=BLUE, xa=2, xb=30)
-    for n_ in (5, 10, 20):
+    for n_ in (5, LOAN_N, 20):
         a.point(n_, LOAN_L / _ann_imm(n_, LOAN_I), colour=AMBER, r=3.4)
         a.label(n_, LOAN_L / _ann_imm(n_, LOAN_I),
                 f"{LOAN_L / _ann_imm(n_, LOAN_I):,.0f}", cls="sm bold", dy=-12, dx=16)
@@ -1042,84 +1066,78 @@ def term_of_loan() -> Fig:
     return f
 
 
-@figure("Final Payment", "A drop payment and a balloon payment against the regular "
-        "payment", width=WID)
+@figure("Final Payment", "Four level payments P, then two alternatives at time 5: a short "
+        "drop payment below the level line or a tall balloon payment above it", width=WID)
 def final_payment() -> Fig:
     f = vcard()
 
-    for k, (head, last_h, colour) in enumerate((("Drop payment", 18, GREEN),
-                                                ("Balloon payment", 70, ROSE))):
-        y = 158 + k * 128
-        f.text(BCX, y - 84, head, cls="bold", fill=colour)
-        xs = timeline(f, y, 66, 300, 5, labels=["0", "1", "2", "3", "4", "5"])
-        for j in range(1, 5):
-            cash_arrow(f, xs[j], y, 36, colour=BLUE, label="P", up=True)
-        cash_arrow(f, xs[5], y, last_h, colour=colour, up=True)
+    y, h = 330, 110
+    xs = timeline(f, y, 66, 300, 5, labels=["0", "1", "2", "3", "4", "5"])
+    for j in range(1, 5):
+        cash_arrow(f, xs[j], y, h, colour=BLUE, width=2)
+    f.text(xs[1], y - h - 8, "P", cls="bold")
+    f.line(xs[1] - 12, y - h, xs[5] + 22, y - h, cls="thin dash", stroke="var(--dim)",
+           stroke_width="1.2")
+    cash_arrow(f, xs[5] - 9, y, 0.35 * h, colour=GREEN, label="drop", label_cls="sm bold",
+               width=2.2)
+    cash_arrow(f, xs[5] + 9, y, 2.1 * h, colour=ROSE, label="balloon", label_cls="sm bold",
+               width=2.2)
     return f
 
 
-@figure("Drop Payment", "A final payment smaller than the regular one, clearing a small "
-        "remaining balance", width=WID)
+@figure("Drop Payment", "Five level payments P, then a final drop payment filling only part "
+        "of the dashed outline a full payment would have", width=WID)
 def drop_payment() -> Fig:
     f = vcard()
 
-    y = 250
+    y, h = 330, 170
     xs = timeline(f, y, 56, 300, 6, labels=["0", "1", "2", "3", "4", "5", "6"])
     for j in range(1, 6):
-        cash_arrow(f, xs[j], y, 54, colour=BLUE, label="P", up=True)
-    cash_arrow(f, xs[6], y, 20, colour=GREEN, label="drop", up=True)
-    f.line(xs[1] - 12, y - 54, xs[6] + 12, y - 54, cls="thin dash", stroke="var(--dim)",
-           stroke_width="1.2")
-    f.text(BCX, y - 76, "level P", cls="sm dim")
-    f.text(BCX, 340, "P was rounded up, so the loan clears early", cls="sm dim")
+        cash_arrow(f, xs[j], y, h, colour=BLUE, width=2)
+    f.text(xs[1], y - h - 8, "P", cls="bold")
+    f.arrow(xs[6], y, xs[6], y - h, colour="var(--axis)", width=2, dash=True)
+    cash_arrow(f, xs[6], y, 0.3 * h, colour=GREEN, width=2.6)
+    f.text(xs[6] - 8, y - 0.3 * h / 2 + 4, "drop", cls="sm bold", anchor="end",
+           fill=GREEN)
     return f
 
 
-@figure("Balloon Payment", "A final payment larger than the regular one, retiring the "
-        "remaining balance", width=WID)
+@figure("Balloon Payment", "Five reduced payments K, then a final balloon payment B towering "
+        "over the dashed level of the others", width=WID)
 def balloon_payment() -> Fig:
     f = vcard()
 
-    y = 268
+    y, h = 344, 70
     xs = timeline(f, y, 56, 300, 6, labels=["0", "1", "2", "3", "4", "5", "6"])
     for j in range(1, 6):
-        cash_arrow(f, xs[j], y, 34, colour=BLUE, label="K", up=True)
-    cash_arrow(f, xs[6], y, 100, colour=ROSE, label="B", up=True)
-    f.line(xs[1] - 12, y - 34, xs[5] + 12, y - 34, cls="thin dash", stroke="var(--dim)",
+        cash_arrow(f, xs[j], y, h, colour=BLUE, width=2)
+    f.text(xs[1], y - h - 8, "K", cls="bold")
+    f.line(xs[1] - 12, y - h, xs[6] + 12, y - h, cls="thin dash", stroke="var(--dim)",
            stroke_width="1.2")
-    f.text(BCX, 118, "principal is still outstanding at the end", cls="sm dim")
+    cash_arrow(f, xs[6], y, 3.6 * h, colour=ROSE, label="B", label_cls="bold", width=2.6)
     return f
 
 
-@figure("Loan Repayment Comparison", "Level payments against constant-principal "
-        "repayment on the same loan", width=WID)
+@figure("Loan Repayment Comparison", "The 10,000 loan repaid two ways: solid bars for level "
+        "payments of 1,740, each split into principal and interest, and dashed outlines for "
+        "constant principal of 1,250 plus falling interest", width=WID)
 def loan_repayment_comparison() -> Fig:
     f = vcard()
 
     rows, P = _schedule()
     n, L, i = LOAN_N, LOAN_L, LOAN_I
-    for k, (head, colour) in enumerate((("Level payment", BLUE),
-                                        ("Constant principal", GREEN))):
-        top = 110 + k * 154
-        a = Axes(f, 66, top, 322, top + 92, 0.4, n + 0.6, 0, 2400)
-        bw = (a.px(1) - a.px(0)) * 0.66
-        for t in range(1, n + 1):
-            if k == 0:
-                pr, inte = rows[t - 1][2], rows[t - 1][1]
-            else:
-                pr, inte = L / n, i * L * (n - t + 1) / n
-            x = a.px(t) - bw / 2
-            f.rect(x, a.py(pr), bw, a.y1 - a.py(pr), rx=2, fill=colour,
-                   fill_opacity="0.7")
-            f.rect(x, a.py(pr + inte), bw, a.py(pr) - a.py(pr + inte), rx=2, fill=AMBER,
-                   fill_opacity="0.7")
-            if t == 1:
-                f.text(x + bw + 4, a.py(pr + inte) + 10, "interest", cls="sm",
-                       fill=AMBER, anchor="start")
-        a.frame(xticks=[1, 4, 8], yticks=[0, 1000, 2000], yfmt=lambda t: f"{t:,.0f}")
-        f.text(BCX, top - 14, head, cls="bold", fill=colour)
-        total = (n * P - L) if k == 0 else (i * L * (n + 1) / 2)
-        f.text(BCX, top + 128, f"total interest {total:,.0f}", cls="sm bold")
+    a = vaxes(f, 0.4, n + 0.6, 0, 2250, left=54, top=24)
+    bw = _amort_bars(f, a, rows, P)
+    # constant principal: L/n of principal every time, plus interest on what is left
+    for t in range(1, n + 1):
+        total = L / n + i * L * (n - t + 1) / n
+        f.rect(a.px(t) - bw / 2 - 3, a.py(total), bw + 6, a.y1 - a.py(total), rx=3,
+               fill="none", stroke=GREEN, stroke_width="1.4", stroke_dasharray="4 3")
+    a.hline(L / n, colour=GREEN, dash=False)
+    a.frame(xlabel="payment", xticks=list(range(1, n + 1)), yticks=[0, 1000, 2000],
+            yfmt=lambda t: f"{t:,.0f}")
+    a.label(1, L / n + i * L, "constant", cls="sm bold", dy=-8, fill=GREEN)
+    a.label(n, P, "level", cls="sm bold", dy=-8, fill=BLUE)
     return f
 
 

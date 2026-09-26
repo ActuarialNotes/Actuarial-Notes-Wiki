@@ -683,8 +683,8 @@ Other important `lib/` modules:
   60 requests/hour per IP without `VITE_GITHUB_TOKEN` — don't put it on a path that has to work.
 - `supabase.ts` — Supabase client + shared row types
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **128 test files /
-~1960 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **132 test files /
+~2010 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, and the research/resource-timeline
 modules).
 
@@ -729,7 +729,14 @@ compile — don't "clean up" the flagged code as dead.
   frontmatter needed), rides along in `virtual:wiki-content`, and is listed on the Study
   Guides home page from `GENERAL_GUIDES` in `data/examGuides.ts` — which is where the card's
   title, one-line description and vault path are authored. It stays out of
-  `virtual:exam-guides`, which only walks the exam folders.
+  `virtual:exam-guides`, which only walks the exam folders. Its questions are
+  `> [!question]-` callouts, which `MarkdownCallout` draws as soft yellow FAQ cards (no side
+  rule, body-size answers). A bare `%%credential-path%%` line — an Obsidian comment, so the
+  vault shows nothing there — is swapped by `WikiArticle` for the interactive SOA/CAS path
+  (`components/wiki/CredentialPath.tsx`): start → associate → fellow → continuing education,
+  authored in `data/credentialPaths.ts` and held in step with `data/tracks.ts` both ways by
+  its test. The continuing-education stage (CE/CPD rules, iCAS's CSPA and cat credentials,
+  CERA, FCIA) has no track behind it and is transcribed from the societies' own pages.
 - The four credential pages — `Concepts/Associate of the Casualty Actuarial Society
   (ACAS).md` and its ASA / FCAS / FSA siblings — are what the Study Guides page's track
   headings open. `data/tracks.ts` names them (`Track.conceptPage`), so a renamed page is a

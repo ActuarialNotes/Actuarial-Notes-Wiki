@@ -5,7 +5,6 @@ import {
   Lightbulb,
   AlertTriangle,
   AlertOctagon,
-  HelpCircle,
   CheckCircle2,
   BookOpen,
   Quote,
@@ -30,6 +29,20 @@ type CalloutStyle = {
   noBorder?: boolean
   bgClass?: string
   contentClass?: string
+  /** Replaces the rounding `roundLeft` picks. */
+  roundClass?: string
+  /** Replaces the default `my-4` between callouts. */
+  marginClass?: string
+  /** Padding for the header row (and the toggle button that wraps it). */
+  headerClass?: string
+  /** Replaces the grey hover wash on a foldable header. */
+  hoverClass?: string
+  /**
+   * The body runs straight on from the header: no hairline between them, and
+   * no italic lead paragraph (that treatment is for a learning objective's
+   * one-line summary, not an answer).
+   */
+  plainBody?: boolean
 }
 
 const DEFAULT_STYLE: CalloutStyle = {
@@ -80,10 +93,22 @@ const RED: CalloutStyle = {
   accentClass: 'text-red-600 dark:text-red-400',
 }
 
-const YELLOW: CalloutStyle = {
-  icon: HelpCircle,
-  borderClass: 'border-yellow-500/60',
-  accentClass: 'text-yellow-600 dark:text-yellow-400',
+// A question on a guide page ("Do I need a degree?"). These stack into an FAQ,
+// so each is a soft yellow card rather than an aside hung off a coloured rule:
+// no side border, no icon repeated down the page, and the answer set at the
+// same size as the prose around it.
+const QUESTION_STYLE: CalloutStyle = {
+  icon: null,
+  borderClass: '',
+  accentClass: 'text-foreground',
+  noBorder: true,
+  roundClass: 'rounded-xl',
+  marginClass: 'my-3',
+  bgClass: 'bg-yellow-50 dark:bg-yellow-400/[0.08]',
+  hoverClass: 'hover:bg-yellow-100/70 dark:hover:bg-yellow-400/[0.12]',
+  headerClass: 'px-5 py-4',
+  contentClass: 'text-base text-foreground',
+  plainBody: true,
 }
 
 const VIOLET: CalloutStyle = {
@@ -125,9 +150,9 @@ const STYLE_MAP: Record<string, CalloutStyle> = {
   fail: RED,
   missing: RED,
   bug: RED,
-  question: YELLOW,
-  faq: YELLOW,
-  help: YELLOW,
+  question: QUESTION_STYLE,
+  faq: QUESTION_STYLE,
+  help: QUESTION_STYLE,
   quote: QUOTE_STYLE,
   cite: QUOTE_STYLE,
   abstract: CYAN,
@@ -283,11 +308,14 @@ interface CalloutProps {
   children: ReactNode
 }
 
+// The hairline under the header and the body's padding below it.
+const BODY_FRAME = 'border-t border-border/40 px-4 pb-4 pt-3'
+// A learning objective's first line is its summary, set apart in muted italics.
+const LEAD_PARAGRAPH = '[&>p:first-of-type]:text-muted-foreground [&>p:first-of-type]:italic [&>p:first-of-type]:mb-3'
+
 const CONTENT_CLASSES_SHARED = [
-  'border-t border-border/40 px-4 pb-4 pt-3',
   'leading-relaxed',
   '[&>p]:my-1.5',
-  '[&>p:first-of-type]:text-muted-foreground [&>p:first-of-type]:italic [&>p:first-of-type]:mb-3',
   '[&_ul]:list-disc [&_ul]:pl-5 [&_ul]:my-2',
   '[&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:my-2',
   '[&_li]:my-1',
@@ -302,7 +330,7 @@ const CONTENT_CLASSES_SHARED = [
   '[&_tbody_tr:last-child_td]:border-0',
 ].join(' ')
 
-const CONTENT_CLASSES = `text-sm text-foreground ${CONTENT_CLASSES_SHARED}`
+const CONTENT_CLASSES = `text-sm text-foreground ${BODY_FRAME} ${LEAD_PARAGRAPH} ${CONTENT_CLASSES_SHARED}`
 
 function Callout({ type, fold, title, children }: CalloutProps) {
   const collapsible = fold !== ''
@@ -329,18 +357,23 @@ function Callout({ type, fold, title, children }: CalloutProps) {
       {examWeight && <ExamWeightLabel weight={examWeight} />}
       {collapsible && hasBody && (
         <ChevronDown
-          className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
+          className={`${style.plainBody ? 'h-4 w-4' : 'h-3.5 w-3.5'} shrink-0 text-muted-foreground transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
         />
       )}
     </div>
   )
 
-  const roundClass = style.roundLeft ? 'rounded-lg' : 'rounded-r-lg'
+  const roundClass = style.roundClass ?? (style.roundLeft ? 'rounded-lg' : 'rounded-r-lg')
   const borderClasses = style.noBorder ? '' : `border-l-[3px] ${style.borderClass}`
   const bgClass = style.bgClass ?? 'bg-card'
-  const contentClasses = style.contentClass
-    ? `${style.contentClass} ${CONTENT_CLASSES_SHARED}`
-    : CONTENT_CLASSES
+  const marginClass = style.marginClass ?? 'my-4'
+  const headerClass = style.headerClass ?? 'px-4 py-3'
+  const hoverClass = style.hoverClass ?? 'hover:bg-accent/50'
+  const contentClasses = style.plainBody
+    ? `${style.contentClass ?? 'text-sm text-foreground'} px-5 pb-5 pt-0 ${CONTENT_CLASSES_SHARED}`
+    : style.contentClass
+      ? `${style.contentClass} ${BODY_FRAME} ${LEAD_PARAGRAPH} ${CONTENT_CLASSES_SHARED}`
+      : CONTENT_CLASSES
 
   if (isBarGraph) {
     return (
@@ -375,19 +408,19 @@ function Callout({ type, fold, title, children }: CalloutProps) {
   }
 
   return (
-    <div className={`not-prose my-4 ${borderClasses} ${bgClass} ${roundClass} overflow-hidden`}>
+    <div className={`not-prose ${marginClass} ${borderClasses} ${bgClass} ${roundClass} overflow-hidden`}>
       {collapsible && hasBody ? (
         <button
           type="button"
           data-callout-toggle
           onClick={() => setOpen(v => !v)}
-          className="w-full px-4 py-3 text-left hover:bg-accent/50 transition-colors duration-150"
+          className={`w-full ${headerClass} text-left ${hoverClass} transition-colors duration-150`}
           aria-expanded={open}
         >
           {headerContent}
         </button>
       ) : (
-        <div className="px-4 py-3">{headerContent}</div>
+        <div className={headerClass}>{headerContent}</div>
       )}
       {hasBody && (
         <div data-callout-body hidden={!open} className={contentClasses}>

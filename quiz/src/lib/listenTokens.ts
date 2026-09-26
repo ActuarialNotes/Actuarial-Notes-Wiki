@@ -183,6 +183,7 @@ export function buildListenContent(markdown: string): ListenContent {
   const cleaned = cleanWikiLinks(
     stripFrontmatter(markdown)
       .replace(BREADCRUMB_RE, '')
+      .replace(/%%[\s\S]*?%%/g, '')                   // Obsidian comments (and the markers they carry)
       .replace(/!\[\[[^\]]*\]\]/g, '')                 // image / note embeds
       .replace(/!\[[^\]]*\]\([^)]*\)/g, '')            // markdown images
       .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')         // markdown links → text

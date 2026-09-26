@@ -9,6 +9,8 @@ import { calloutComponents } from '@/components/MarkdownCallout'
 import { codeComponents } from '@/components/CodeBlock'
 import { DistributionSimulator } from '@/components/wiki/DistributionSimulator'
 import { SourceMaterialGallery } from '@/components/wiki/SourceMaterialGallery'
+import { CredentialPath } from '@/components/wiki/CredentialPath'
+import { CREDENTIAL_PATH_MARKER } from '@/data/credentialPaths'
 import { extractSourceMaterial, SOURCE_MATERIAL_MARKER } from '@/lib/sourceMaterial'
 import { hrefToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { isInWikiIndex } from '@/lib/wikiIndex'
@@ -244,6 +246,11 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
       const only = kids.length === 1 ? kids[0] : null
       if (only && only.type === 'text' && only.value.trim() === SOURCE_MATERIAL_MARKER) {
         return <SourceMaterialGallery entries={sourceMaterial} onOpen={openRef} />
+      }
+      // The general study guide's SOA/CAS credential path. The vault writes it
+      // as an Obsidian comment, so Obsidian shows nothing there.
+      if (only && only.type === 'text' && only.value.trim() === CREDENTIAL_PATH_MARKER) {
+        return <CredentialPath onOpen={openRef} />
       }
       if (
         !hideImages &&

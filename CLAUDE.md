@@ -235,6 +235,12 @@ Other important `lib/` modules:
   of quiz sessions — ahead of the `ids` short-circuit, so a saved mistake-review link can't
   serve one either. Sidecar logs are deliberately *not* bundled; the panel fetches one on
   demand through `github.ts`.
+- `reportIssue.ts` — the panel's **Report** flow as data: the category catalogue (split by
+  question vs page), the three steps of `components/ReportIssueModal.tsx` (category →
+  description → credit + consent), and the credit name (display name, never the email).
+  A category value must also be in the `content_reports_severity` CHECK constraint and in
+  `SEVERITY_HINT` in `scripts/sync_reports.py`; `reportIssue.test.ts` reads both. See
+  `docs/verification.md`, "The reader's write path".
 - `vaultMath.ts` — normalises the vault's math delimiters into the shapes `remark-math`
   can tokenise. The content is authored for Obsidian, whose math parser is looser: an
   escaped dollar inside inline math (`$\$400$` — currency is everywhere in ratemaking

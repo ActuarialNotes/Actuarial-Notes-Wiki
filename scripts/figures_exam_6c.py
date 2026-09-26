@@ -1888,303 +1888,324 @@ def comprehensive_income() -> Fig:
     return f
 
 
-@figure("Statement of Changes in Equity", "Opening equity reconciled to closing "
-        "through comprehensive income, dividends and capital transactions",
-        width=WID)
+@figure("Statement of Changes in Equity", "The running insurer's equity as a "
+        "waterfall from $245M opening, up $39M of net income, down $14M of OCI and "
+        "$10M of dividends, to $260M closing", width=WID)
 def statement_of_changes_in_equity() -> Fig:
     f = vcard()
 
-    _waterfall(f, 264,
-               [("open", 245.0, TEAL), ("net income", 39.4, GREEN),
-                ("OCI", -14.0, ROSE), ("dividends", -10.4, AMBER),
+    dividends = 10.4
+    opening = EQUITY - COMP_INCOME + dividends                  # 245
+    _waterfall(f, 350,
+               [("open", opening, TEAL), ("net income", NET_INCOME, GREEN),
+                ("OCI", OCI, ROSE), ("dividends", -dividends, AMBER),
                 ("close", None, BLUE)],
-               x0=36, x1=326, top=126, bar_frac=0.62,
+               x0=36, x1=326, top=236, bar_frac=0.62,
                fmt=lambda v: f"{abs(v):,.0f}")
-    f.text(BCX, 302, "$M, the running insurer", cls="sm dim")
-    f.line(30, 320, 330, 320, cls="rule")
-    f.text(BCX, 342, "the dividend is the line OSFI watches: paying it",
-           cls="sm dim")
-    f.text(BCX, 358, "out while the capital ratio falls is distributing",
-           cls="sm dim")
-    f.text(BCX, 374, "capital the insurer may shortly need", cls="sm dim")
     return f
 
 
-@figure("Quarterly Return", "Three quarterly filings between annual returns, and "
-        "what a regulator would otherwise miss", width=WID)
+@figure("Quarterly Return", "The MCT ratio over a year: the two annual returns "
+        "show only its start and end, while the three quarterly returns between "
+        "them catch it falling through the supervisory target", width=WID)
 def quarterly_return() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 5, 100, 175, left=48, right=18, top=28, bottom=162)
-    ax.frame(xticks=[], yticks=[100, 150], yfmt=lambda v: f"{v:.0f}%",
-             grid=True)
-    pts = [(0.5, 168), (1.5, 160), (2.5, 149), (3.5, 133), (4.5, 118)]
+    ax = vaxes(f, 0, 4, 100, 180, left=48, right=20, top=24, bottom=40)
+    ax.hline(SUP_TARGET * 100, colour=AMBER)
+    ax.frame(xticks=[0, 1, 2, 3, 4], yticks=[100, 150],
+             xfmt=lambda t: ["Dec", "Mar", "Jun", "Sep", "Dec"][int(t)],
+             yfmt=lambda v: f"{v:.0f}%")
+    pts = [(0, 168), (1, 160), (2, 149), (3, 133), (4, 118)]
     ax.polyline(pts, colour=ROSE, width=2.4)
-    for x, y in pts:
-        ax.point(x, y, colour=ROSE, r=3.6)
-    ax.label(0.5, 168, "annual", cls="sm dim", dy=-10)
-    ax.label(4.5, 118, "annual", cls="sm dim", dy=16)
-    ax.hline(150, colour=AMBER, label=None)
-    ax.label(2.4, 155, "supervisory target", cls="sm", fill=AMBER)
-    f.text(BCX, ax.y1 + 22, "quarters", cls="sm dim")
-    f.text(BCX, 276, "without the three points between, this insurer",
-           cls="sm dim")
-    f.text(BCX, 292, "looks fine until it does not", cls="sm dim")
-    f.line(30, 310, 330, 310, cls="rule")
-    f.text(BCX, 332, "the liabilities are still estimated each quarter,",
-           cls="sm dim")
-    f.text(BCX, 348, "usually rolled forward — which is exactly what",
-           cls="sm dim")
-    f.text(BCX, 364, "will not catch a deterioration in the emergence",
-           cls="sm dim")
-    f.text(BCX, 388, "read the sequence, not any one ratio", cls="sm dim")
+    for x, y in pts[1:-1]:
+        ax.point(x, y, colour=ROSE, r=4)
+    for x, y in (pts[0], pts[-1]):
+        ax.point(x, y, colour=BLUE, r=6)
+    ax.label(0, 168, "annual", cls="sm bold", dy=-12, anchor="start", dx=-6)
+    ax.label(4, 118, "annual", cls="sm bold", dy=20, anchor="end", dx=6)
+    ax.label(1.15, 167, "quarterly", cls="sm bold", anchor="start")
+    ax.label(0.2, 150, "target", cls="sm", dy=14, anchor="start")
     return f
 
 
-@figure("Notes to Financial Statements", "The IFRS 17 disclosures that decide "
-        "whether two insurers' numbers can be compared at all", width=WID)
+@figure("Notes to Financial Statements", "Two insurers holding the same risk report "
+        "different liabilities, because each chose a different risk adjustment; the "
+        "notes attached to each column say which", width=WID)
 def notes_to_financial_statements() -> Fig:
     f = vcard()
 
-    _bullets(f, 106, ["the LRC, loss component, LIC and CSM,",
-                      "reconciled opening to closing",
-                      "the risk adjustment's confidence level",
-                      "the discount rate method and the curves",
-                      "the coverage unit driver",
-                      "claims development tables",
-                      "the transition approach taken"],
-             x=38, gap=26, colour=BLUE)
-    f.line(30, 306, 330, 306, cls="rule")
-    f.text(BCX, 328, "two insurers can hold identical risk and report",
-           cls="sm dim")
-    f.text(BCX, 344, "different liabilities — the confidence level and",
-           cls="sm dim")
-    f.text(BCX, 360, "the discount method are where the difference is",
-           cls="sm dim")
-    f.text(BCX, 386, "plus IFRS 7 risk, sensitivity and credit disclosures",
-           cls="sm dim")
+    base, pv = 368, 214
+    for x, name, ra in ((90, "A", 176), (230, "B", 140)):
+        tower(f, x, 98, 44, TEAL)
+        f.text(x + 20, 104, name, cls="bold", anchor="start")
+        f.rect(x - 40, pv, 80, base - pv, rx=4, fill=BLUE, fill_opacity="0.28",
+               stroke=BLUE, stroke_width="1.3")
+        f.rect(x - 40, ra, 80, pv - ra, rx=4, fill=VIOLET, fill_opacity="0.34",
+               stroke=VIOLET, stroke_width="1.3")
+        f.text(x, (ra + pv) / 2 + 4, "RA", cls="sm bold")
+        document(f, x + 58, (ra + pv) / 2, 34, AMBER)
+        f.line(x + 40, (ra + pv) / 2, x + 46, (ra + pv) / 2, cls="",
+               stroke=AMBER, stroke_width="1.4")
+    f.text(90, 296, "PV", cls="sm bold")
+    f.text(230, 296, "PV", cls="sm bold")
+    f.line(40, pv, 280, pv, cls="thin dash", stroke="var(--dim)", stroke_width="1.2")
+    f.text(288, pv + 4, "same", cls="sm dim", anchor="start")
+    f.text(288, 152, "notes", cls="sm")
     return f
 
 
-@figure("MSA Ratios", "The combined ratio split into its parts, and the four "
-        "families of ratio a Canadian analyst reads", width=WID)
+@figure("MSA Ratios", "Earned premium as 100% beside claims of 64% and expenses of "
+        "31%: a 95% combined ratio, leaving a 5% underwriting profit", width=WID)
 def msa_ratios() -> Fig:
     f = vcard()
 
-    _hbar(f, 132, [(0.64, "loss 64%", BLUE), (0.31, "exp 31%", AMBER),
-                   (0.05, "", GREEN)], x0=40, x1=320, height=34)
-    f.text(320, 166, "underwriting profit 5%", cls="sm", fill=GREEN,
-           anchor="end")
-    f.line(30, 190, 330, 190, cls="rule")
-    _bullets(f, 212, ["profitability — loss, expense, combined, ROE",
-                      "leverage — premium and reserves to surplus",
-                      "adequacy — one- and two-year development",
-                      "capital — the MCT ratio, and its trend"],
-             x=38, gap=26, colour=TEAL)
-    f.text(BCX, 336, "no single ratio diagnoses anything — distress is",
-           cls="sm dim")
-    f.text(BCX, 352, "rapid growth, thin capital and adverse development",
-           cls="sm dim")
-    f.text(BCX, 368, "arriving together", cls="sm dim")
-    f.text(BCX, 390, "and under IFRS 17 revenue is not earned premium",
-           cls="sm dim")
+    base, full = 368, 276
+    top = base - full
+    f.rect(52, top, 90, full, rx=4, fill=TEAL, fill_opacity="0.24", stroke=TEAL,
+           stroke_width="1.3")
+    f.text(97, (top + base) / 2 - 4, "premium", cls="sm bold")
+    f.text(97, (top + base) / 2 + 12, "100%", cls="sm")
+    y = base
+    for share, name, colour in ((0.64, "loss", BLUE), (0.31, "expense", AMBER)):
+        h = full * share
+        f.rect(176, y - h, 90, h, rx=4, fill=colour, fill_opacity="0.30",
+               stroke=colour, stroke_width="1.3")
+        f.text(221, y - h / 2 - 4, name, cls="sm bold")
+        f.text(221, y - h / 2 + 12, f"{share:.0%}", cls="sm")
+        y -= h
+    f.rect(176, top, 90, y - top, rx=2, fill=GREEN, fill_opacity="0.30",
+           stroke=GREEN, stroke_width="1.2", stroke_dasharray="3 2")
+    f.line(142, top, 300, top, cls="thin dash", stroke="var(--dim)",
+           stroke_width="1.1")
+    f.text(272, top + 5, "profit 5%", cls="sm", anchor="start")
+    # the combined ratio: loss and expense together
+    f.path(f"M272,{y:.1f} h8 V{base} h-8", cls="thin", stroke="var(--dim)",
+           stroke_width="1.2")
+    f.text(286, (y + base) / 2 + 4, "95%", cls="bold", anchor="start")
+    f.line(40, base, 320, base, cls="axis")
     return f
 
 
-@figure("Accepted Actuarial Practice", "The hierarchy the phrase points at, and "
-        "the statutory hook that gives it legal effect", width=WID)
+@figure("Accepted Actuarial Practice", "Parliament pointing, through s. 365 of the "
+        "Insurance Companies Act, at the profession's own stack of rules: the Rules of "
+        "Professional Conduct, the Standards of Practice, the educational notes and "
+        "general practice", width=WID)
 def accepted_actuarial_practice() -> Fig:
     f = vcard()
 
-    rows = [("Rules of Professional Conduct", "how to behave", VIOLET),
-            ("Standards of Practice", "binding — what must be done", BLUE),
-            ("Educational Notes", "guidance, not binding", TEAL),
-            ("Generally accepted practice", "where the standards are silent",
-             GREEN)]
-    _stack(f, 96, rows, x0=30, x1=330, h=46, gap=10, arrows=False)
-    f.line(30, 326, 330, 326, cls="rule")
-    f.text(BCX, 348, "departure is allowed, with the departure and", cls="sm dim")
-    f.text(BCX, 364, "its reason disclosed — silence is not", cls="sm dim")
-    f.text(BCX, 388, "and it moves: MfADs became the risk adjustment",
-           cls="sm dim")
+    building(f, 62, 146, 58, ROSE)
+    f.text(62, 194, "Parliament", cls="sm bold")
+    f.arrow(92, 174, 146, 214, colour=ROSE, width=1.8)
+    f.text(104, 222, "s. 365", cls="sm", anchor="end")
+    for i, (name, colour, w) in enumerate(
+            [("rules", VIOLET, 100), ("standards", BLUE, 148),
+             ("notes", TEAL, 196), ("practice", GREEN, 216)]):
+        y = 104 + i * 66
+        guidance = i >= 2
+        f.rect(226 - w / 2, y, w, 58, rx=5, fill=colour,
+               fill_opacity="0.14" if guidance else "0.30", stroke=colour,
+               stroke_width="1.3", stroke_dasharray="4 3" if guidance else None)
+        f.text(226, y + 33, name, cls="sm bold")
     return f
 
 
-@figure("IFRS 17", "The two liabilities, the three measurement models, and which "
-        "one a Canadian P&C insurer actually uses", width=WID)
+@figure("IFRS 17", "A policy's coverage on a timeline at the reporting date: the "
+        "coverage still to come is the liability for remaining coverage, and claims "
+        "already incurred but not yet paid are the liability for incurred claims",
+        width=WID)
 def ifrs_17() -> Fig:
     f = vcard()
 
-    f.box(38, 100, 128, 62, label="LRC", colour=BLUE,
-          sub="service not yet given")
-    f.box(194, 100, 128, 62, label="LIC", colour=AMBER,
-          sub="claims already incurred")
-    f.line(30, 180, 330, 180, cls="rule")
-    f.text(BCX, 202, "three measurement models", cls="sm bold")
-    for i, (name, note, colour) in enumerate(
-            [("GMM", "the default — building blocks", TEAL),
-             ("PAA", "short contracts — most Canadian P&C", GREEN),
-             ("VFA", "direct participating — not P&C", VIOLET)]):
-        y = 220 + i * 44
-        f.rect(34, y, 292, 36, rx=6, fill=colour, fill_opacity="0.16",
-               stroke=colour, stroke_width="1.2")
-        f.text(46, y + 23, name, cls="sm bold", anchor="start", fill=colour)
-        f.text(314, y + 23, note, cls="sm dim", anchor="end")
-    f.text(BCX, 372, "discounting is mandatory, the RA replaced MfADs,",
-           cls="sm dim")
-    f.text(BCX, 388, "and reinsurance held is never netted", cls="sm dim")
+    y, x_issue, x_now, x_end = 266, 52, 172, 300
+    # coverage above the line: given, and still to come
+    f.rect(x_issue, 170, x_now - x_issue, 60, rx=4, fill="var(--soft)",
+           stroke="var(--edge)", stroke_width="1.2")
+    f.rect(x_now, 170, x_end - x_now, 60, rx=4, fill=BLUE, fill_opacity="0.30",
+           stroke=BLUE, stroke_width="1.3")
+    f.text((x_now + x_end) / 2, 205, "LRC", cls="bold")
+    f.arrow(30, y, 334, y, colour="var(--axis)", width=1.2)
+    # claims below it: incurred before the date, paid after it
+    for x in (80, 116, 150):
+        _moral_burst(f, x, 322, 13, ROSE)
+    f.arrow(166, 322, x_now + 8, 322, colour=AMBER)
+    f.rect(x_now + 12, 300, x_end - x_now + 18, 44, rx=4, fill=AMBER,
+           fill_opacity="0.30", stroke=AMBER, stroke_width="1.3")
+    f.text((x_now + x_end) / 2 + 15, 327, "LIC", cls="bold")
+    f.line(x_now, 136, x_now, 362, cls="thin dash", stroke="var(--ink)",
+           stroke_width="1.3")
+    f.text(x_now, 126, "now", cls="sm bold")
+    f.text(x_issue, y + 18, "issue", cls="sm dim")
+    f.text(x_end, y + 18, "expiry", cls="sm dim")
     return f
 
 
-@figure("Insurance Contract Liabilities", "The insurer's contract liability split "
-        "into the two halves, measured on entirely different bases", width=WID)
+@figure("Insurance Contract Liabilities", "The running insurer's $640M contract "
+        "liability as one bar split into a $190M liability for remaining coverage, "
+        "fed by premium, and a $450M liability for incurred claims, fed by claims",
+        width=WID)
 def insurance_contract_liabilities() -> Fig:
     f = vcard()
 
-    _hbar(f, 128, [(LRC_CO, "LRC 190", BLUE), (LIC_CO, "LIC 450", AMBER)],
-          x0=40, x1=320, height=38)
-    _columns(f, 168, ["LRC", "LIC"],
-             [["premium-driven", "released as", "coverage is given",
-               "unearned premium's", "successor"],
-              ["claim-driven", "run off as", "claims are paid",
-               "case, IBNR, ALAE", "— the actuary's half"]],
-             x0=30, x1=330, row_h=20, head_h=24, colours=(BLUE, AMBER))
-    f.text(BCX, 322, "confusing the two is the commonest IFRS 17 error",
-           cls="sm dim")
-    f.text(BCX, 348, "reinsurance held is a separate asset, so the",
-           cls="sm dim")
-    f.text(BCX, 364, "balance sheet shows both liabilities gross",
-           cls="sm dim")
-    f.text(BCX, 388, "and the Appointed Actuary opines on the total",
-           cls="sm dim")
+    x0, x1 = 40, 320
+    split = x0 + (x1 - x0) * LRC_CO / ICL
+    brace(f, x0, x1, 162, depth=10, below=False, label=f"{ICL:,.0f}",
+          label_cls="bold")
+    f.rect(x0, 170, split - x0, 66, rx=5, fill=BLUE, fill_opacity="0.30",
+           stroke=BLUE, stroke_width="1.3")
+    f.rect(split, 170, x1 - split, 66, rx=5, fill=AMBER, fill_opacity="0.30",
+           stroke=AMBER, stroke_width="1.3")
+    f.text((x0 + split) / 2, 208, f"LRC {LRC_CO:.0f}", cls="bold")
+    f.text((split + x1) / 2, 208, f"LIC {LIC_CO:.0f}", cls="bold")
+
+    # what drives each half
+    lrc_x, lic_x = (x0 + split) / 2, (split + x1) / 2
+    f.arrow(lrc_x, 278, lrc_x, 242, colour=BLUE)
+    coins(f, lrc_x, 330, 4, 16, BLUE)
+    f.text(lrc_x, 352, "premium", cls="sm")
+    f.arrow(lic_x, 278, lic_x, 242, colour=AMBER)
+    for dx in (-34, 0, 34):
+        _moral_burst(f, lic_x + dx, 306, 14, ROSE)
+    f.text(lic_x, 352, "claims", cls="sm")
     return f
 
 
-@figure("Liability for Remaining Coverage", "The running PAA book's LRC at six "
-        "months, and the loss component the onerous test adds to it", width=WID)
+@figure("Liability for Remaining Coverage", "The running PAA book at 31 December: "
+        "$12.0M of unearned premium less $2.4M of acquisition cash flows carries an "
+        "LRC of $9.6M, which the $1.9M loss component tops up to the $11.5M of "
+        "fulfilment cash flows", width=WID)
 def liability_for_remaining_coverage() -> Fig:
     f = vcard()
 
-    f.text(BCX, 100, "$24M written 1 July, at 31 December ($M)", cls="sm dim")
-    rows = [("premium unearned", 12.0, BLUE),
-            ("less acquisition", -2.4, AMBER),
-            ("LRC carried", 9.6, TEAL),
-            ("fulfilment cash flows", 11.5, ROSE)]
-    for i, (name, value, colour) in enumerate(rows):
-        y = 124 + i * 44
-        f.text(40, y, name, cls="sm", anchor="start")
-        f.rect(40, y + 8, abs(value) * 19, 20, rx=3, fill=colour,
-               fill_opacity="0.55")
-        f.text(40 + abs(value) * 19 + 8, y + 23,
-               f"{value:+.1f}" if value < 0 else f"{value:.1f}", cls="sm",
-               anchor="start")
-    f.line(30, 302, 330, 302, cls="rule")
-    f.rect(40, 316, 280, 46, rx=7, fill=ROSE, fill_opacity="0.12", stroke=ROSE,
-           stroke_width="1.2")
-    f.text(BCX, 336, "the group is onerous by $1.9M — recognised", cls="sm")
-    f.text(BCX, 353, "in full now, and tracked as the loss component",
-           cls="sm")
-    f.text(BCX, 384, "the test is per group: no profitable group offsets it",
-           cls="sm dim")
+    base, scale, bw = 350, 19.5, 52
+    unearned = PAA_PREM / 2
+    acq = PAA_ACQ / 2
+
+    def y(v):
+        return base - v * scale
+
+    cols = [(70, "unearned", [(0, unearned, BLUE)], f"{unearned:.1f}"),
+            (145, "acquisition", [(PAA_LRC, unearned, AMBER)], f"−{acq:.1f}"),
+            (220, "LRC", [(0, PAA_LRC, TEAL), (PAA_LRC, PAA_FCF, ROSE)], None),
+            (295, "FCF", [(0, PAA_FCF, VIOLET)], f"{PAA_FCF:.1f}")]
+    for cx, name, segs, value in cols:
+        for lo, hi, colour in segs:
+            f.rect(cx - bw / 2, y(hi), bw, y(lo) - y(hi), rx=3, fill=colour,
+                   fill_opacity="0.34", stroke=colour, stroke_width="1.2")
+        if value:
+            f.text(cx, y(segs[-1][1]) - 8, value, cls="sm")
+        f.text(cx, base + 17, name, cls="sm dim")
+    f.text(220, (y(0) + y(PAA_LRC)) / 2 + 4, f"{PAA_LRC:.1f}", cls="sm bold")
+    f.text(220, (y(PAA_LRC) + y(PAA_FCF)) / 2 + 4, f"{PAA_LOSS:.1f}", cls="sm bold")
+    f.line(190, y(PAA_FCF), 324, y(PAA_FCF), cls="thin dash", stroke=VIOLET,
+           stroke_width="1.3")
+    f.line(38, base, 326, base, cls="axis")
     return f
 
 
-@figure("Liability for Incurred Claims", "The LIC as discounted fulfilment cash "
-        "flows plus a risk adjustment, and no margin beyond", width=WID)
+@figure("Liability for Incurred Claims", "The running insurer's LIC as a waterfall: "
+        "$486M of undiscounted claims, less $66M of discount, plus a $30M risk "
+        "adjustment, to $450M", width=WID)
 def liability_for_incurred_claims() -> Fig:
     f = vcard()
 
-    _waterfall(f, 236,
-               [("undiscounted", 486.0, "var(--dim)"),
-                ("discount", -66.0, TEAL), ("RA", 30.0, VIOLET),
+    undiscounted = 486.0
+    _waterfall(f, 350,
+               [("undiscounted", undiscounted, "var(--dim)"),
+                ("discount", LIC_FCF - undiscounted, TEAL), ("RA", LIC_RA, VIOLET),
                 ("LIC", None, BLUE)],
-               x0=48, x1=314, top=118, bar_frac=0.58,
+               x0=44, x1=318, top=236, bar_frac=0.58,
                fmt=lambda v: f"{abs(v):,.0f}")
-    f.text(BCX, 274, "$M — case, IBNR and ALAE, at current rates",
-           cls="sm dim")
-    f.line(30, 294, 330, 294, cls="rule")
-    _bullets(f, 316, ["no CSM — the service is already provided",
-                      "the estimate is the mean, not a prudent figure",
-                      "discounting is mandatory, with no PAA relief"],
-             x=38, gap=24, colour=AMBER)
-    f.text(BCX, 390, "reinsurance recoveries sit in the separate asset",
-           cls="sm dim")
     return f
 
 
-@figure("Fulfilment Cash Flows", "The three building blocks of a fulfilment "
-        "measurement, and where each lands on the income statement", width=WID)
+@figure("Fulfilment Cash Flows", "Five expected future cash flows, each shrunk by "
+        "discounting and gathered at time zero into a present value, with the risk "
+        "adjustment stacked on top", width=WID)
 def fulfilment_cash_flows() -> Fig:
     f = vcard()
 
-    rows = [("Expected cash flows", "unbiased, probability-weighted", BLUE),
-            ("Time value of money", "current, market-consistent rates", TEAL),
-            ("Risk adjustment", "for non-financial uncertainty", VIOLET)]
-    _stack(f, 100, rows, x0=34, x1=326, h=48, gap=12, arrows=False)
-    f.line(30, 268, 330, 268, cls="rule")
-    f.text(BCX, 290, "and the split drives the income statement", cls="sm bold")
-    f.text(BCX, 316, "a change in the cash flow estimate →", cls="sm dim")
-    f.text(BCX, 332, "insurance service expenses", cls="sm", fill=AMBER)
-    f.text(BCX, 356, "a change in the discount rate →", cls="sm dim")
-    f.text(BCX, 372, "insurance finance income or expenses", cls="sm", fill=TEAL)
+    base, v = 350, 0.88
+    xs = [150, 186, 222, 258, 294]
+    flows = [110, 86, 64, 44, 26]
+    pv = 0.0
+    for t, (x, h) in enumerate(zip(xs, flows), start=1):
+        d = h * v ** t
+        pv += d
+        f.rect(x - 12, base - h, 24, h, rx=2, fill="none", stroke="var(--dim)",
+               stroke_width="1.2", stroke_dasharray="3 2")
+        f.rect(x - 12, base - d, 24, d, rx=2, fill=BLUE, fill_opacity="0.55")
+        f.line(x, base, x, base + 4, cls="tick")
+        f.text(x, base + 17, str(t), cls="sm dim")
+    f.arrow(40, base, 330, base, colour="var(--axis)", width=1.2)
+    f.text(186, base - flows[1] - 10, "expected", cls="sm", anchor="start")
+    f.arrow(136, 290, 104, 290, colour=BLUE)
+    f.text(120, 282, "× v", cls="sm")
+
+    ra = 30
+    f.rect(52, base - pv, 44, pv, rx=3, fill=BLUE, fill_opacity="0.34", stroke=BLUE,
+           stroke_width="1.3")
+    f.rect(52, base - pv - ra, 44, ra, rx=3, fill=VIOLET, fill_opacity="0.40",
+           stroke=VIOLET, stroke_width="1.3")
+    f.text(74, base - pv / 2 + 4, "PV", cls="sm bold")
+    f.text(74, base - pv - ra / 2 + 4, "RA", cls="sm bold")
+    f.text(74, base + 17, "0", cls="sm dim")
     return f
 
 
-@figure("Risk Adjustment for Non-Financial Risk", "The risk adjustment read off "
-        "the liability distribution, and the confidence level that must be "
-        "disclosed", width=WID)
+@figure("Risk Adjustment for Non-Financial Risk", "The liability's probability "
+        "distribution with its mean and its 75th percentile marked; the risk "
+        "adjustment is the gap between them", width=WID)
 def risk_adjustment() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 10, 0, 0.42, left=44, right=16, top=30, bottom=150)
-    ax.area(lambda x: 0.40 * 2.718 ** (-0.5 * (x - 3.4) ** 2 / 1.6), 0, 4.2,
-            colour=BLUE, opacity="0.16")
-    ax.area(lambda x: 0.40 * 2.718 ** (-0.5 * (x - 3.4) ** 2 / 1.6), 4.2, 10,
-            colour=VIOLET, opacity="0.24")
-    ax.curve(lambda x: 0.40 * 2.718 ** (-0.5 * (x - 3.4) ** 2 / 1.6),
-             colour=BLUE, width=2.2)
+    def density(x):
+        return 0.40 * math.exp(-0.5 * (x - 3.4) ** 2 / 1.6)
+
+    ax = vaxes(f, 0, 10, 0, 0.44, left=24, right=16, top=30, bottom=64)
+    ax.area(density, 0, 3.4, colour=BLUE, opacity="0.16")
+    ax.area(density, 3.4, 6.0, colour=VIOLET, opacity="0.30")
+    ax.area(density, 6.0, 10, colour=BLUE, opacity="0.16")
+    ax.curve(density, colour=BLUE, width=2.2)
     ax.frame(xticks=[], yticks=[], arrows=True)
-    ax.vline(3.4, colour="var(--dim)", y_top=0.40)
+    ax.vline(3.4, colour="var(--dim)", y_top=density(3.4))
     ax.vline(6.0, colour=VIOLET, y_top=0.30)
-    ax.label(3.4, 0.42, "mean", cls="sm dim", dy=-4)
-    ax.label(6.0, 0.32, "75th", cls="sm bold", fill=VIOLET, dy=-4)
-    brace(f, ax.px(3.4), ax.px(6.0), ax.y1 + 8, depth=8, colour=VIOLET,
-          label="the RA is the gap between them")
-    f.line(30, 282, 330, 282, cls="rule")
-    _bullets(f, 304, ["higher for low-frequency, high-severity risk",
-                      "higher for long duration and wide uncertainty",
-                      "released as the risk expires, so slowly on",
-                      "a long-tail line"],
-             x=38, gap=24, colour=TEAL)
+    ax.label(3.4, density(3.4), "mean", cls="sm", dy=-8)
+    ax.label(6.0, 0.30, "75th", cls="sm bold", dy=-8)
+    brace(f, ax.px(3.4), ax.px(6.0), ax.y1 + 8, depth=9, colour=VIOLET,
+          label="RA", label_cls="bold")
     return f
 
 
-@figure("IFRS 17 Discount Rates", "The bottom-up and top-down constructions "
-        "arriving at the same curve from opposite ends", width=WID)
+@figure("IFRS 17 Discount Rates", "The discount rate built two ways: bottom-up, a "
+        "risk-free rate plus an illiquidity premium; top-down, an asset yield less its "
+        "credit and market risk — landing close, but not necessarily together",
+        width=WID)
 def ifrs_17_discount_rates() -> Fig:
     f = vcard()
 
-    f.text(100, 112, "bottom-up", cls="sm bold", fill=BLUE)
-    f.text(260, 112, "top-down", cls="sm bold", fill=AMBER)
-    f.rect(52, 224, 96, 76, rx=6, fill=BLUE, fill_opacity="0.30")
-    f.text(100, 266, "risk-free", cls="sm")
-    f.rect(52, 176, 96, 44, rx=6, fill=TEAL, fill_opacity="0.40")
-    f.text(100, 202, "illiquidity", cls="sm")
-    f.rect(212, 176, 96, 124, rx=6, fill=AMBER, fill_opacity="0.30")
-    f.text(260, 242, "what is left", cls="sm")
-    f.rect(212, 124, 96, 46, rx=6, fill=ROSE, fill_opacity="0.40")
-    f.text(260, 143, "less credit", cls="sm")
-    f.text(260, 159, "and market risk", cls="sm")
-    f.line(40, 173, 320, 173, cls="thin dash", stroke=VIOLET,
-           stroke_width="1.5")
-    f.text(BCX, 322, "the dashed line is the rate — built up from below",
-           cls="sm dim")
-    f.text(BCX, 338, "or from above, and IFRS 17 does not make them meet",
-           cls="sm dim")
-    f.text(BCX, 364, "current every period, except the CSM's locked-in rate",
-           cls="sm dim")
-    f.text(BCX, 386, "the effects land in insurance finance income or expense",
-           cls="sm dim")
+    base = 356
+    # bottom-up: built from the risk-free rate
+    f.rect(60, 236, 96, base - 236, rx=5, fill=BLUE, fill_opacity="0.30",
+           stroke=BLUE, stroke_width="1.2")
+    f.text(108, 300, "risk-free", cls="sm")
+    f.rect(60, 180, 96, 54, rx=5, fill=TEAL, fill_opacity="0.36", stroke=TEAL,
+           stroke_width="1.2")
+    f.text(108, 211, "illiquidity", cls="sm")
+    f.arrow(40, 340, 40, 186, colour=BLUE, width=1.6)
+    # top-down: cut down from an asset yield
+    f.rect(204, 170, 96, base - 170, rx=5, fill=AMBER, fill_opacity="0.30",
+           stroke=AMBER, stroke_width="1.2")
+    f.text(252, 270, "asset yield", cls="sm")
+    f.rect(204, 108, 96, 60, rx=5, fill=ROSE, fill_opacity="0.10", stroke=ROSE,
+           stroke_width="1.2", stroke_dasharray="4 3")
+    f.text(252, 142, "credit risk", cls="sm")
+    f.arrow(320, 112, 320, 164, colour=ROSE, width=1.6)
+    for x0, x1, yy in ((52, 164, 180), (196, 308, 170)):
+        f.line(x0, yy, x1, yy, cls="thin dash", stroke=VIOLET, stroke_width="1.8")
+    f.line(34, base, 330, base, cls="axis")
+    f.text(108, base + 18, "bottom-up", cls="sm bold")
+    f.text(252, base + 18, "top-down", cls="sm bold")
     return f
 
 

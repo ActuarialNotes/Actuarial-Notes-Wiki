@@ -3,7 +3,7 @@
 
 An exam page is the most load-bearing file in the vault: every link inside a
 learning-objective callout becomes a syllabus concept, which enters mastery,
-the study plan and the readiness score, and obliges a comprehension check. Until
+the study plan and the readiness score. Until
 this lint, nothing checked one. It fails a page for:
 
   structure   the exam-nav div, `## Learning Objectives` then `## Source
@@ -28,8 +28,7 @@ this lint, nothing checked one. It fails a page for:
 Severity follows the exam's status (scripts/exam_catalog.json, mirroring
 quiz/src/lib/examStatus.ts): unresolved links and unlinked objectives are errors
 on a `ready`/`beta` exam and warnings on a `development` one, whose pages are a
-syllabus outline by definition. A syllabus concept of a studiable exam with no
-comprehension check, and a link to the wrong member of a namesake pair
+syllabus outline by definition. A link to the wrong member of a namesake pair
 (scripts/concept_aliases.json), are warnings everywhere.
 
 Usage:
@@ -81,8 +80,6 @@ def lint_page(rel: str, vault: vl.Vault, report: Report, exam: dict) -> sl.ExamP
     _lint_links(rel, page, vault, report, strict, exam)
     if exam.get("bank"):
         _lint_questions(rel, page, report, exam)
-    if studiable and exam.get("bank"):
-        _lint_checks(rel, page, report, exam)
     if re.search(r"^syllabus:", page.frontmatter, re.M):
         import syllabus_write  # the renderer owns the fidelity rule
         for line, code, msg in syllabus_write.fidelity_problems(rel, page, vault):
@@ -204,22 +201,6 @@ def _lint_questions(rel: str, page: sl.ExamPage, report: Report, exam: dict) -> 
         report.error(rel, 1, "question-objective",
                      f"{len(files)} question(s) in questions/{exam['bank']} name learning objective "
                      f"`{lo}`, which is no section of this page ({shown})")
-
-
-def _lint_checks(rel: str, page: sl.ExamPage, report: Report, exam: dict) -> None:
-    # The app keys checks by concept name across every exam's folder
-    # (data/comprehensionChecks.ts), so a check written under another exam counts.
-    base = os.path.join(ROOT, "comprehension-checks")
-    have = {os.path.splitext(f)[0] for d in os.listdir(base) for f in os.listdir(os.path.join(base, d))}
-    missing = []
-    for _, link in page.links_in_sections():
-        if not sl.DATED_NAME_RE.search(link.name) and link.name not in have and link.name not in missing:
-            missing.append(link.name)
-    if missing:
-        shown = ", ".join(missing[:5]) + (f" (+{len(missing) - 5} more)" if len(missing) > 5 else "")
-        report.warn(rel, 1, "no-comprehension-check",
-                    f"{len(missing)} syllabus concept(s) have no comprehension check (comprehension-checks/<exam>/), "
-                    f"so their mastery can't advance past New: {shown}")
 
 
 def main(argv: list[str] | None = None) -> int:

@@ -51,10 +51,20 @@ BATCH = 200
 # The reporter's vocabulary, mapped to a hint for the agent. The agent still
 # decides the severity of anything it opens as a finding — a reader saying
 # "wrong answer" is a report, not a verdict.
+#
+# One key per category the app offers (quiz/src/lib/reportIssue.ts) — the
+# app's tests fail if a category is missing here.
 SEVERITY_HINT = {
     "wrong answer": "reader reports the keyed answer is wrong — recompute before anything else",
+    "solution error": "reader reports a step in the worked solution is wrong — rework it line by line",
+    "mistranscribed": "reader reports the question differs from the published original — diff it against the PDF",
+    "incorrect": "reader reports a fact, formula or number is wrong — check it against the syllabus reading",
+    "missing": "reader reports something is missing from the page",
+    "outdated": "reader reports the content is out of date — check against the current syllabus or source",
     "typo": "reader reports a typo",
     "unclear": "reader reports the wording is unclear",
+    "display": "reader reports a rendering problem (math, table or image)",
+    "broken link": "reader reports a broken or wrong link",
     "other": "reader report",
 }
 

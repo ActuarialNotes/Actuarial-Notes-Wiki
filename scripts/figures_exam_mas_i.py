@@ -849,40 +849,37 @@ def power_of_a_test() -> Fig:
     return f
 
 
-@figure("p-Value", "The tail area beyond the observed statistic, compared with α",
-        width=WID)
+@figure("p-Value", "The null distribution with the α region beyond the critical value "
+        "and the smaller p-value tail beyond the observed 2.50", width=WID)
 def p_value() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -3.6, 3.6, 0, 0.46, left=36, top=60, bottom=54)
-    ax.frame(xticks=[0, 2.5], xfmt=lambda t: "0" if t == 0 else "z = 2.50",
-             yticks=[])
+    ax = vaxes(f, -3.6, 3.6, 0, 0.46, left=20, right=20, top=30, bottom=44)
+    ax.frame(xticks=[0, 2.5], xfmt=lambda t: "0" if t == 0 else "2.50", yticks=[])
     ax.curve(lambda x: _npdf(x), colour=BLUE, width=2.4)
     ax.area(lambda x: _npdf(x), 1.645, 3.6, colour="var(--dim)", opacity="0.18")
     ax.area(lambda x: _npdf(x), 2.5, 3.6, colour=ROSE, opacity="0.65")
     ax.vline(2.5, colour=ROSE, y_top=0.30)
-    ax.vline(1.645, colour="var(--dim)", y_top=0.22)
+    ax.vline(1.645, colour="var(--dim)", y_top=0.22, label="α", label_cls="sm bold")
     f.arrow(ax.px(3.1), ax.py(0.26), ax.px(2.75), ax.py(0.03), colour=ROSE, width=1.5)
-    ax.label(3.1, 0.28, "p = 0.0062", cls="sm bold", fill=ROSE, anchor="end")
-    ax.label(1.645, 0.24, "α = 0.05", cls="sm dim")
-    f.text(BCX, BY0 + 34, "p smaller than α → reject", cls="sm dim")
+    ax.label(3.1, 0.28, "p", cls="bold")
     return f
 
 
-@figure("Confidence Interval", "Twenty intervals from twenty samples, one of which "
-        "misses the parameter", width=WID)
+@figure("Confidence Interval", "Twenty intervals from twenty samples around the true "
+        "mean μ, one of which misses it", width=WID)
 def confidence_interval() -> Fig:
     f = vcard()
 
     x0, x1 = BX0 + 34, BX1 - 20
     mid = (x0 + x1) / 2
-    f.line(mid, BY0 + 26, mid, BY1 - 34, cls="thin dash", stroke=ROSE,
+    f.line(mid, BY0 + 20, mid, BY1 - 4, cls="thin dash", stroke=ROSE,
            stroke_width="1.4")
-    f.text(mid, BY0 + 20, "μ", cls="sm bold", fill=ROSE)
+    f.text(mid, BY0 + 14, "μ", cls="sm bold", fill=ROSE)
     u = _rng(2027)
-    miss = 9                       # exactly one interval in the twenty misses
-    for i in range(16):
-        y = BY0 + 40 + i * 17
+    miss = 11                      # exactly one interval in the twenty misses
+    for i in range(20):
+        y = BY0 + 32 + i * 15
         half = 46 + (u() - 0.5) * 12
         offset = (u() - 0.5) * 1.4 * half
         centre = mid + (half + 14 if i == miss else offset)
@@ -893,40 +890,42 @@ def confidence_interval() -> Fig:
         f.circle(centre, y, 2.6, fill=colour)
         for end in (centre - half, centre + half):
             f.line(end, y - 4, end, y + 4, cls="", stroke=colour, stroke_width="1.4")
-    f.text(BX0 + 6, BY1 - 14, "one interval in twenty misses", cls="sm dim",
-           anchor="start")
     return f
 
 
-@figure("Likelihood Ratio Test", "Two nested log-likelihoods and the deviance drop "
-        "between them", width=WID)
+@figure("Likelihood Ratio Test", "A log-likelihood curve with the full model at its "
+        "peak and the reduced model held lower down, the gap between them marked",
+        width=WID)
 def likelihood_ratio_test() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -3, 3, -418, -404, left=54, top=40, bottom=64)
-    ax.frame(xticks=[], yticks=[-416, -412, -408], yfmt=lambda v: f"{v:.0f}",
+    full, reduced, hat, nul = -407.1, -412.6, 0.6, -1.2
+    ll = lambda t: full - (full - reduced) / (hat - nul) ** 2 * (t - hat) ** 2
+    ax = vaxes(f, -2, 3, -420, -404, left=24, top=30, bottom=44)
+    ax.frame(xticks=[nul, hat], xfmt=lambda t: "θ̂" if t == hat else "θ₀", yticks=[],
              ylabel="log-likelihood")
-    ax.hline(-407.1, colour=BLUE, dash=False, label="", x_to=3)
-    ax.hline(-412.6, colour=AMBER, dash=False, label="", x_to=3)
-    ax.label(-2.8, -406.4, "full model", cls="sm", fill=BLUE, anchor="start")
-    ax.label(-2.8, -413.9, "reduced model", cls="sm", fill=AMBER, anchor="start")
-    xg = 1.6
-    f.arrow(ax.px(xg), ax.py(-412.6), ax.px(xg), ax.py(-407.1), colour=ROSE,
+    ax.curve(ll, colour=BLUE, width=2.4)
+    xg = 2.2
+    for t, v, colour in ((hat, full, BLUE), (nul, reduced, AMBER)):
+        ax.vline(t, colour=colour, y_top=v)
+        f.line(ax.px(t), ax.py(v), ax.px(xg), ax.py(v), cls="thin dash", stroke=colour,
+               stroke_width="1.3")
+        ax.point(t, v, colour=colour, r=4.4)
+    ax.label(hat, full, "full", cls="sm bold", dy=-10)
+    ax.label(nul, reduced, "reduced", cls="sm bold", dx=-8, dy=-8, anchor="end")
+    f.arrow(ax.px(xg), ax.py(reduced), ax.px(xg), ax.py(full) + 2, colour=ROSE,
             width=1.8)
-    f.text(ax.px(xg) + 8, (ax.py(-412.6) + ax.py(-407.1)) / 2 + 4, "5.5",
-           cls="sm bold", anchor="start", fill=ROSE)
-    f.text(BCX, BY1 - 28, "−2 ln Λ = 11.0 on 2 df", cls="bold")
-    f.text(BCX, BY1 - 10, "χ²₀.₀₅,₂ = 5.99 → reject the reduced model",
-           cls="sm dim")
+    ax.label(xg, (full + reduced) / 2, "5.5", cls="sm bold", dx=8, dy=4,
+             anchor="start")
     return f
 
 
-@figure("Censoring", "Policies observed to a limit, with the true values beyond it "
-        "unknown", width=WID)
+@figure("Censoring", "Six claims drawn as bars from zero: four observed in full, two "
+        "stopped at the policy limit with their true size unknown", width=WID)
 def censoring() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 10, -0.6, 6.4, left=40, top=42, bottom=48)
+    ax = vaxes(f, 0, 10, -0.6, 6.4, left=20, top=30, bottom=48)
     ax.frame(xlabel="claim size (000s)", xticks=[0, 2, 4, 6, 8, 10], yticks=[])
     limit = 6.0
     ax.vline(limit, colour=ROSE, dash=True, y_top=6.2, label="policy limit u",
@@ -941,16 +940,15 @@ def censoring() -> Fig:
             ax.label(v, y, "→ ?", cls="sm", fill=ROSE, dx=22, dy=4)
         else:
             ax.point(v, y, colour=BLUE, r=3.6)
-    f.text(BCX, BY0 + 26, "two claims hit the limit", cls="sm dim")
     return f
 
 
-@figure("Truncation", "Losses below the deductible never entering the data at all",
-        width=WID)
+@figure("Truncation", "A loss density cut at the deductible: the part below is never "
+        "seen, and the part above is rescaled to integrate to one", width=WID)
 def truncation() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 12, 0, 0.36, left=40, top=52, bottom=48)
+    ax = vaxes(f, 0, 12, 0, 0.36, left=20, top=30, bottom=48)
     ax.frame(xlabel="loss (000s)", xticks=[0, 3, 6, 9, 12], yticks=[])
     dens = lambda x: _gammapdf(x, 2.0, 2.0)
     ax.area(dens, 0, 3, colour="var(--dim)", opacity="0.18")
@@ -960,9 +958,8 @@ def truncation() -> Fig:
              xa=3, xb=12)
     ax.area(lambda x: dens(x) / surv, 3, 12, colour=BLUE, opacity="0.14")
     ax.vline(3, colour=ROSE, y_top=0.34, label="deductible d", label_cls="sm")
-    ax.label(1.4, 0.055, "never seen", cls="sm dim")
-    ax.label(6.6, 0.16, "rescaled to", cls="sm", fill=BLUE, anchor="start")
-    ax.label(6.6, 0.135, "integrate to 1", cls="sm", fill=BLUE, anchor="start")
+    ax.label(1.75, 0.045, "never seen", cls="sm")
+    ax.label(6.4, 0.16, "rescaled", cls="sm bold", anchor="start")
     return f
 
 
@@ -970,33 +967,41 @@ def truncation() -> Fig:
 # C. Extended linear models — the model families
 # ═══════════════════════════════════════════════════════════════════════════
 
-@figure("Extended Linear Model", "The ladder from ordinary regression to the extended "
-        "linear model, and what each rung relaxes", width=WID)
+@figure("Extended Linear Model", "Three nested regions: ordinary linear regression "
+        "inside the generalized linear model, inside the extended linear model",
+        width=WID)
 def extended_linear_model() -> Fig:
     f = vcard()
 
-    rungs = [
-        ("Ordinary regression", "Normal · identity link", BLUE),
-        ("Generalized linear model", "exponential family · any link", AMBER),
-        ("Extended linear model", "+ interactions, transforms, mixed effects", GREEN),
-    ]
-    for i, (name, sub, colour) in enumerate(rungs):
-        y = BY0 + 34 + i * 88
-        f.box(BX0 + 14, y, 292, 62, label=name, colour=colour, sub=sub,
-              label_cls="bold")
-        if i < 2:
-            f.arrow(BCX, y + 64, BCX, y + 84, colour="var(--dim)", width=1.4)
-    f.text(BX1 - 8, BY0 + 302, "more flexible", cls="sm dim", anchor="end")
-    f.arrow(BX0 + 14, BY0 + 306, BX1 - 14, BY0 + 306, colour="var(--dim)", width=1.2)
+    base = BY1 - 6
+    rings = [(156, 158, GREEN, "extended"), (116, 112, AMBER, "GLM"),
+             (70, 62, BLUE, "linear")]
+    for rx, ry, colour, _ in rings:
+        f.ellipse(BCX, base - ry, rx, ry, fill=colour, fill_opacity="0.12",
+                  stroke=colour, stroke_width="1.6")
+    for rx, ry, colour, name in rings:
+        f.text(BCX, base - 2 * ry + 24, name, cls="bold")
+
+    # one glyph per ring, under its name: crossing lines, a curved mean, a line fit
+    y = base - 258
+    f.line(BCX - 26, y + 10, BCX + 26, y - 10, cls="", stroke=GREEN, stroke_width="2")
+    f.line(BCX - 26, y - 6, BCX + 26, y + 8, cls="", stroke=GREEN, stroke_width="2")
+    y = base - 164
+    f.path(f"M{BCX - 30},{y + 12} Q{BCX + 12},{y + 12} {BCX + 30},{y - 14}",
+           cls="curve", stroke=AMBER)
+    y = base - 50
+    f.line(BCX - 30, y + 14, BCX + 30, y - 12, cls="", stroke=BLUE, stroke_width="2")
+    for dx, dy in ((-22, 4), (-8, 10), (6, -8), (20, -2)):
+        f.circle(BCX + dx, y + dy, 2.6, fill=BLUE)
     return f
 
 
-@figure("Linear Regression", "A fitted least-squares line with the residuals it "
-        "minimizes", width=WID)
+@figure("Linear Regression", "A fitted least-squares line through ten points, with the "
+        "residuals it minimizes drawn as vertical gaps", width=WID)
 def linear_regression() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 10, 0, 60, left=46, top=44, bottom=48)
+    ax = vaxes(f, 0, 10, 0, 60, left=30, top=30, bottom=48)
     ax.frame(xlabel="predictor x", xticks=[0, 5, 10], yticks=[0, 30, 60],
              ylabel="response y")
     fit = lambda x: 25.8 + 1.6 * x * 1.35
@@ -1008,41 +1013,49 @@ def linear_regression() -> Fig:
     ax.curve(fit, colour=BLUE, width=2.4)
     for x, y in pts:
         ax.point(x, y, colour=BLUE, r=3.6)
-    ax.label(7.3, 24, "residual", cls="sm", fill=ROSE, anchor="start")
+    ax.label(10, fit(10), "ŷ", cls="bold", dx=-4, dy=18)
+    ax.label(7.3, 24, "residual", cls="sm", anchor="start")
     f.arrow(ax.px(7.9), ax.py(26), ax.px(7.5), ax.py(45), colour=ROSE, width=1.2,
             dash=True)
-    f.text(BX1 - 16, BY0 + 26, "ŷ = 25.8 + 2.16x", cls="sm bold", fill=BLUE,
-           anchor="end")
     return f
 
 
-@figure("Generalized Linear Model", "The three components of a GLM: distribution, "
-        "linear predictor, link", width=WID)
+@figure("Generalized Linear Model", "A curved mean running through the data, with the "
+        "response distribution at three points drawn sideways and widening as the mean "
+        "grows", width=WID)
 def generalized_linear_model() -> Fig:
     f = vcard()
 
-    f.box(BX0 + 12, BY0 + 26, 296, 60, label="η = β₀ + β₁x₁ + ⋯ + βₚxₚ",
-          colour=BLUE, sub="systematic component — linear in the parameters",
-          label_cls="bold")
-    f.arrow(BCX, BY0 + 88, BCX, BY0 + 116, colour="var(--dim)", width=1.5)
-    f.box(BX0 + 12, BY0 + 118, 296, 60, label="μ = g⁻¹(η)", colour=AMBER,
-          sub="link function — log keeps μ > 0", label_cls="bold")
-    f.arrow(BCX, BY0 + 180, BCX, BY0 + 208, colour="var(--dim)", width=1.5)
-    f.box(BX0 + 12, BY0 + 210, 296, 60, label="Y ~ Poisson, Gamma, binomial, …",
-          colour=GREEN, sub="random component — variance tied to the mean",
-          label_cls="bold")
-
-    f.text(BCX, BY0 + 296, "ordinary regression is the case", cls="sm dim")
-    f.text(BCX, BY0 + 314, "Normal + identity link", cls="sm dim")
+    ax = vaxes(f, 0, 10, 0, 16, left=30, top=30, bottom=44)
+    ax.frame(xlabel="x", xticks=[0, 5, 10], yticks=[], ylabel="y")
+    mean = lambda x: math.exp(0.4 + 0.18 * x)
+    shape = 4
+    u = _rng(61)
+    for _ in range(26):
+        x = 0.3 + u() * 9.4
+        y = -mean(x) / shape * sum(math.log(1 - u() * 0.999) for _ in range(shape))
+        if y < 16:
+            ax.point(x, y, colour="var(--dim)", r=2.4)
+    for x in (2, 5, 8):
+        m = mean(x)
+        dens = lambda y, m=m: _gammapdf(y, shape, m / shape)
+        peak = dens(m * (shape - 1) / shape)
+        ys = [m * 2.4 * i / 60 for i in range(61)]
+        ys = [y for y in ys if y <= 16]
+        pts = [(ax.px(x) + 38 * dens(y) / peak, ax.py(y)) for y in ys]
+        f.polygon([(ax.px(x), ax.py(ys[0]))] + pts + [(ax.px(x), ax.py(ys[-1]))],
+                  fill=AMBER, fill_opacity="0.3", stroke=AMBER, stroke_width="1.4")
+    ax.curve(mean, colour=BLUE, width=2.6)
+    ax.label(9.6, mean(9.6), "μ(x)", cls="sm bold", anchor="end", dx=-6, dy=-4)
     return f
 
 
-@figure("Linear Mixed Model", "Group-specific intercepts scattered around the "
-        "population line", width=WID)
+@figure("Linear Mixed Model", "Three groups' lines sharing one slope but with their "
+        "own intercepts, scattered around the population line", width=WID)
 def linear_mixed_model() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 10, 0, 60, left=46, top=46, bottom=48)
+    ax = vaxes(f, 0, 10, 0, 60, left=30, top=30, bottom=44)
     ax.frame(xlabel="x", xticks=[0, 5, 10], yticks=[0, 30, 60], ylabel="y")
     ax.curve(lambda x: 20 + 2.6 * x, colour=ROSE, width=2.8)
     u = _rng(88)
@@ -1055,63 +1068,71 @@ def linear_mixed_model() -> Fig:
             ax.point(x, 20 + b + 2.6 * x + (u() - 0.5) * 5, colour=colour, r=3)
     ax.label(1.2, 20 + 2.6 * 1.2, "population", cls="sm", fill=ROSE,
              anchor="start", dy=-9)
-    f.text(BX0 + 12, BY1 - 8, "one slope, three intercepts", cls="sm dim",
-           anchor="start")
     return f
 
 
-@figure("Model Structure", "The terms of a linear predictor: main effects, an "
-        "interaction and a transform", width=WID)
+@figure("Model Structure", "The linear predictor built as a waterfall of terms: the "
+        "intercept, two main effects, an interaction and a squared term, summing to η",
+        width=WID)
 def model_structure() -> Fig:
     f = vcard()
 
-    rows = [("β₀", "intercept — the base level", "var(--dim)"),
-            ("β₁x₁", "main effect: territory", BLUE),
-            ("β₂x₂", "main effect: vehicle age", BLUE),
-            ("β₃x₁x₂", "interaction — effects not additive", AMBER),
-            ("β₄x₁²", "transform — a curved effect", GREEN)]
-    for i, (term, note, colour) in enumerate(rows):
-        y = BY0 + 26 + i * 56
-        f.chip(BX0 + 54, y + 18, term, colour=colour, w=76, h=28, cls="bold")
-        f.text(BX0 + 104, y + 22, note, cls="sm dim", anchor="start")
+    terms = [("β₀", 1.0, "var(--dim)"), ("β₁x₁", 0.6, BLUE), ("β₂x₂", -0.3, BLUE),
+             ("β₃x₁x₂", 0.4, AMBER), ("β₄x₁²", -0.2, GREEN)]
+    ax = vaxes(f, -0.6, 5.6, 0, 1.9, left=20, right=20, top=30, bottom=36)
+    f.line(ax.x0, ax.y1, ax.x1, ax.y1, cls="axis")
+    bw = (ax.px(1) - ax.px(0)) * 0.62
+    level = 0.0
+    for i, (name, v, colour) in enumerate(terms):
+        lo, hi = sorted((level, level + v))
+        f.rect(ax.px(i) - bw / 2, ax.py(hi), bw, ax.py(lo) - ax.py(hi), rx=2,
+               fill=colour, fill_opacity="0.7")
         if i:
-            f.text(BX0 + 20, y + 22, "+", cls="bold")
+            f.line(ax.px(i - 1) + bw / 2, ax.py(level), ax.px(i) - bw / 2, ax.py(level),
+                   cls="thin dot", stroke="var(--dim)", stroke_width="1.2")
+        level += v
+        ax.label(i, 0, name, cls="sm bold", dy=18)
+    f.line(ax.px(4) + bw / 2, ax.py(level), ax.px(5) - bw / 2, ax.py(level),
+           cls="thin dot", stroke="var(--dim)", stroke_width="1.2")
+    f.rect(ax.px(5) - bw / 2, ax.py(level), bw, ax.py(0) - ax.py(level), rx=2,
+           fill=VIOLET, fill_opacity="0.7")
+    ax.label(5, 0, "η", cls="bold", dy=18)
     return f
 
 
-@figure("Link Function", "The log link mapping a positive mean onto the whole real "
-        "line", width=WID)
+@figure("Link Function", "The log link's mean curve staying above zero across the "
+        "linear predictor, while an identity link's straight line drops below zero",
+        width=WID)
 def link_function() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, -2.6, 2.6, 0, 8, left=46, top=52, bottom=54)
-    ax.frame(xlabel="linear predictor η", xticks=[-2, 0, 2], yticks=[0, 4, 8],
-             ylabel="mean μ")
+    ax = vaxes(f, -2.6, 2.6, -2.4, 8, left=30, top=30, bottom=20)
+    f.rect(ax.x0, ax.py(0), ax.x1 - ax.x0, ax.py(-2.4) - ax.py(0), fill=ROSE,
+           fill_opacity="0.12")
+    ax.frame(xlabel="η", xticks=[], yticks=[0, 4, 8], ylabel="mean μ")
     ax.curve(lambda e: math.exp(e), colour=BLUE, width=2.6, xb=2.05)
-    ax.curve(lambda e: 4 + 1.6 * e, colour="var(--dim)", width=1.8, dash=True)
-    ax.label(2.0, 7.4, "log link", cls="sm", fill=BLUE, anchor="end")
-    ax.label(-0.35, 3.1, "identity", cls="sm dim", anchor="end")
-    f.text(BX0 + 12, BY1 - 8, "identity can predict μ < 0 — log cannot",
-           cls="sm dim", anchor="start")
+    ax.curve(lambda e: 2.6 + 1.6 * e, colour="var(--dim)", width=1.8, dash=True)
+    ax.label(1.95, 7.4, "log link", cls="sm bold", anchor="end", dx=-8)
+    ax.label(-0.6, 2.6, "identity", cls="sm", anchor="end")
+    ax.label(1.2, -1.4, "μ < 0", cls="sm bold")
     return f
 
 
-@figure("Exponential Family", "The variance functions that separate the family's "
-        "members", width=WID)
+@figure("Exponential Family", "Variance functions of four exponential-family members "
+        "against the mean: flat for the normal, then μ, μ² and μ³", width=WID)
 def exponential_family() -> Fig:
     f = vcard()
 
-    ax = vaxes(f, 0, 3.2, 0, 10, left=48, top=44, bottom=48)
+    ax = vaxes(f, 0, 3.2, 0, 10, left=30, top=30, bottom=44)
     ax.frame(xlabel="mean μ", xticks=[0, 1, 2, 3], yticks=[0, 5, 10],
              ylabel="V(μ)")
-    for power, colour, name, ly in ((0, "var(--dim)", "Normal  V = 1", 1.0),
-                                    (1, BLUE, "Poisson  V = μ", 3.0),
-                                    (2, AMBER, "Gamma  V = μ²", 6.4),
-                                    (3, GREEN, "inv Gaussian  V = μ³", 9.4)):
-        ax.curve(lambda m, p=power: m ** p, colour=colour, width=2.2)
-        ax.label(3.15, ly, name, cls="sm", fill=colour, anchor="end", dy=-6)
-    f.text(BX0 + 12, BY1 - 8, "the variance function picks the member",
-           cls="sm dim", anchor="start")
+    for power, colour in ((0, "var(--dim)"), (1, BLUE), (2, AMBER), (3, GREEN)):
+        ax.curve(lambda m, p=power: m ** p, colour=colour, width=2.2,
+                 xb=min(3.2, 10 ** (1 / power)) if power else None)
+    ax.label(3.15, 1, "Normal", cls="sm bold", anchor="end", dy=-7)
+    ax.label(3.15, 3.15, "Poisson", cls="sm bold", anchor="end", dy=-9)
+    ax.label(2.85, 8.1, "Gamma", cls="sm bold", anchor="end", dx=-8)
+    ax.label(2.05, 9.6, "inv. Gaussian", cls="sm bold", anchor="end", dx=-8)
     return f
 
 

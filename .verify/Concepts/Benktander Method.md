@@ -27,3 +27,11 @@ created: 2026-09-12
 - confidence: high
 - checks_run: Definition vs Friedland Ch.9; recomputed U_GB=C+(1-1/CDF)U_BF, the credibility identity p*U_CL+(1-p)U_BF, and the a priori form p(2-p)U_CL+(1-p)^2*U_0 from scratch; re-derived both worked examples and the maturity table (p=.30/.60/.85 -> .510/.840/.9775).
 - sources_checked: Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 9 'Bornhuetter-Ferguson Technique' pp.160-163 (PDF pp.166-169), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:claude-code
+- date: 2026-09-27
+- resolves: F-001
+- status: resolved
+- note: Fixed in this branch: the page now credits the mean-squared-error comparison and the optimal credibility factor c* to Mack (2000), 'Credible Claims Reserves: The Benktander Method', ASTIN Bulletin 30(2), which proves them.

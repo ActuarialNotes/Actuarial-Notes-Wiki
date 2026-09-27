@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:eb428ce4dfb870ba9d916f41497bf75542122525101b5c2880384cf094eabefc
+  content_hash: sha256:3470b14d081930c8d86e0dee2686f8c4e5f0e2715a3fc9c94aaacbb668b31a12
   sources: []
   open_findings: 0
   open_critical: 0
@@ -33,7 +33,7 @@ verification:
   Each of these breaks a chain ladder assumption. The usual fixes are a [[Berquist-Sherman Method|Berquist-Sherman]] restatement, or separating [[Large Loss|large]] and [[Catastrophe Loss|catastrophe]] losses.
 - **Model diagnostics (Exam 7, Shapland).**
   - Plot residuals against development period, accident period, calendar period and fitted value. They should be patternless and have a common variance.
-  - Check normality with a p-p plot.
+  - Test normality by plotting the residuals against the normal inverse, with a P-value, $R^2$, AIC and BIC. The ODP bootstrap does not need normal residuals, but the test compares parameter sets and gauges skewness.
   - Find outliers with a box-whisker plot.
   - Where residual variance differs by development group, rescale with a **hetero-adjustment** factor $h_i = \mathrm{sd}(\text{all } r)/\mathrm{sd}(r \in \text{group } i)$.
 - **Data issues to adjust for** ([[Data Issues]]): negative incremental values, missing cells, outliers, a partial first or last diagonal, exposure changes and tail factors. Venter's tests for the age-to-age factor assumptions add linearity, stability over accident years, correlation between columns, and high or low diagonals.

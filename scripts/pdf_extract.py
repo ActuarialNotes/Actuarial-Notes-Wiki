@@ -273,6 +273,10 @@ def _find_tables(page) -> list[tuple[float, float, float, float, str]]:
                 rows = table.extract()
             except Exception:  # pragma: no cover
                 continue
+            # Cells come straight off the page, so they carry the same exotic
+            # word gaps the prose does — and `TOTAL POINT VALUE` has to match
+            # in a cell for `swallows_structure` to reject a page-as-table.
+            rows = [[mdmath.normalize_spaces(c) if c else c for c in row] for row in rows]
             if swallows_structure(rows):
                 continue
             if strategy == "text" and not plausible_table(rows):
@@ -304,12 +308,24 @@ STRUCTURE_CELL_RE = re.compile(
 )
 
 
+# The pre-2014 reports' headings, which a table candidate splits mid-word
+# across its cells — `| Question | 5: |`, `| Model Solu | tion 1 |` — so they
+# are matched on the whole row with its whitespace squeezed out. Exam 8 2012
+# and 2013 each lost a question's heading inside a page read as one table.
+LEGACY_STRUCTURE_ROW_RE = re.compile(
+    "(?i)^(?:question\\d{1,3}:?|modelsolution\\d*:?|examiner['’]?s?comments?:?)$"
+)
+
+
 def swallows_structure(rows: list[list[str | None]]) -> bool:
     """Whether a table candidate has eaten the document's own headings."""
     return any(
         STRUCTURE_CELL_RE.search((cell or "").strip())
         for row in rows
         for cell in row
+    ) or any(
+        LEGACY_STRUCTURE_ROW_RE.match(re.sub(r"\s+", "", "".join(cell or "" for cell in row)))
+        for row in rows
     )
 
 
@@ -908,10 +924,14 @@ def strip_solution_header(text: str) -> tuple[str, str | None]:
 # a colon that appears once in a paper is enough to lose a question entirely.
 # Exam 7 Spring 2018 names the sitting in front of every heading —
 # `SPRING 2018 EXAM 7, QUESTION 1` — which a line-anchored `QUESTION` never
-# sees, so the whole report segmented to nothing.
+# sees, so the whole report segmented to nothing. Exam 8 Fall 2015 heads one
+# question `Question 21` in title case; that spelling only counts with its
+# `Total Point Value` right behind it, since the pre-2014 reports open every
+# question `Question 1:` and must still read as the legacy layout.
 CAS_QUESTION_RE = re.compile(
     r"(?m)^[ \t]*(?:(?:SPRING|FALL)[ \t]+\d{4}[ \t]+EXAM[ \t]+[\w-]+[ \t]*,?[ \t]*)?"
-    r"QUESTION[ \t]*[:#]?[ \t]*(\d{1,3})\b"
+    r"(?:QUESTION|Question(?=[ \t]*[:#]?[ \t]*\d{1,3}[ \t]*:?\s*(?i:t?otal\s+point\s+value)))"
+    r"[ \t]*[:#]?[ \t]*(\d{1,3})\b"
 )
 # The leading glyph of a field label is sometimes missing from a publisher
 # PDF's text layer — Fall 2016 page 45 extracts as `OTAL POINT VALUE: 3.25`,
@@ -1084,12 +1104,28 @@ def _split_samples(chunk: str) -> list[str]:
 # six solutions of part a and then starts over at `Solution 1` for part d. So a
 # part's samples are collected in reading order from wherever its letter
 # appears, which reads both shapes the same way.
+#
+# The Exam 8 reports of October 2012 and 2013 are a variant of the same
+# layout: a question is headed `Question 1:` alone on its line, its samples are
+# `Model Solution 1` (once `Model Solution1`, once unnumbered), and the parts
+# are lettered `a)` or `a.` inside them. Or — the other shape those reports use
+# — each part is its own block: a `Part a` line, that part's model solutions,
+# and that part's own `Examiner's Comments`, then `Part b` over again.
 LEGACY_QUESTION_RE = re.compile(
-    r"(?m)^[ \t]*Question[ \t]+(\d{1,3})[ \t]+Sample[ \t]+(?:Answers?|Solutions?)\b"
+    r"(?m)^[ \t]*Question[ \t]+(\d{1,3})"
+    r"(?:[ \t]+Sample[ \t]+(?:Answers?|Solutions?)\b|[ \t]*:?[ \t]*$)"
 )
-LEGACY_SAMPLE_RE = re.compile(r"(?mi)^[ \t]*(?:Solution|Sample)[ \t]*\d+[ \t]*:?[ \t]*$")
+LEGACY_SAMPLE_RE = re.compile(
+    r"(?mi)^[ \t]*(?:Model[ \t]+(?:Solution|Answer)[ \t]*\d*|(?:Solution|Sample)[ \t]*\d+)"
+    r"[ \t]*:?[ \t]*$"
+)
 LEGACY_COMMENT_RE = re.compile("(?mi)^[ \t]*Examiners?['’]?s?[ \t]+Comments?\\b[ \t]*:?[ \t]*")
-LEGACY_PART_RE = re.compile(r"(?m)^[ \t]*\(?([a-h])\)[ \t]*")
+# `a)` or `a.` opening a line. The full stop has to be followed by a space or
+# the line's end, so `e.g.` never reads as part e.
+LEGACY_PART_RE = re.compile(r"(?m)^[ \t]*\(?([a-h])(?:\)|\.(?=[ \t]|$))[ \t]*")
+# `Part a` alone on its line: a part's own block when model solutions follow
+# it, and merely a heading inside the commentary when they do not.
+LEGACY_PART_HEAD_RE = re.compile(r"(?mi)^[ \t]*Part[ \t]+\(?([a-h])\)?[ \t]*:?[ \t]*$")
 # The commentary names its parts in prose as often as with a label:
 # `Part a) of the problem required …`, `The b. part requires …`,
 # `For the a. part, candidates would …`, or `a)` alone on a line.
@@ -1099,10 +1135,83 @@ LEGACY_COMMENT_PART_RE = re.compile(
 )
 
 
+def _legacy_part_blocks(text: str) -> list[re.Match[str]]:
+    """The `Part a` lines that open a part's own block of model solutions.
+
+    A heading only counts when a sample marker follows it before any
+    commentary does; the same `Part a` line inside an `Examiner's Comments`
+    section heads a paragraph of commentary, not a block.
+    """
+    heads = list(LEGACY_PART_HEAD_RE.finditer(text))
+    blocks: list[re.Match[str]] = []
+    for i, head in enumerate(heads):
+        stop = heads[i + 1].start() if i + 1 < len(heads) else len(text)
+        region = text[head.end() : stop]
+        sample = LEGACY_SAMPLE_RE.search(region)
+        comment = LEGACY_COMMENT_RE.search(region)
+        if sample and (not comment or sample.start() < comment.start()):
+            if not blocks or head.group(1).lower() > blocks[-1].group(1).lower():
+                blocks.append(head)
+    return blocks
+
+
+def _parse_legacy_part_blocks(text: str, heads: list[re.Match[str]]) -> dict:
+    """The block-per-part shape: each `Part a` carries its own samples and,
+    usually, its own commentary. A block with no commentary of its own is
+    covered by a later block's, which names the parts it speaks to."""
+    parts: dict[str, CasPart] = {}
+    comments: list[tuple[str, str]] = []
+    overall = ""
+    for i, head in enumerate(heads):
+        label = head.group(1).lower()
+        stop = heads[i + 1].start() if i + 1 < len(heads) else len(text)
+        block = text[head.end() : stop]
+        comment_at = LEGACY_COMMENT_RE.search(block)
+        samples_block = block[: comment_at.start()] if comment_at else block
+        part = parts.setdefault(label, CasPart(label=label))
+        own_label = re.compile(rf"^[ \t]*\(?{label}(?:\)|\.(?=[ \t]|$))[ \t]*")
+        for sample in LEGACY_SAMPLE_RE.split(samples_block):
+            sample = own_label.sub("", sample.strip(), count=1).strip()
+            if len(sample) > 2:
+                part.samples.append(sample)
+        if comment_at:
+            comments.append((label, block[comment_at.end() :].strip()))
+    for label, comment in comments:
+        named = []
+        for m in LEGACY_COMMENT_PART_RE.finditer(comment):
+            other = (m.group(1) or m.group(2) or m.group(3)).lower()
+            if other in parts and (not named or other > named[-1][0]):
+                named.append((other, m))
+        if len({other for other, _ in named}) < 2:
+            parts[label].report = "\n\n".join(x for x in (parts[label].report, comment) if x)
+            continue
+        lead = comment[: named[0][1].start()].strip()
+        if lead:
+            overall = "\n\n".join(x for x in (overall, lead) if x)
+        for j, (other, m) in enumerate(named):
+            end = named[j + 1][1].start() if j + 1 < len(named) else len(comment)
+            chunk = comment[m.start() : end].strip()
+            label_line = LEGACY_PART_HEAD_RE.match(chunk)
+            if label_line:  # a bare `Part b` line heads its paragraph
+                chunk = chunk[label_line.end() :].strip()
+            parts[other].report = "\n\n".join(x for x in (parts[other].report, chunk) if x)
+    return {
+        "points": None,
+        "learning_objective_codes": "",
+        "examiner_report": overall,
+        "solution": "",
+        "alternatives": [],
+        "parts": [asdict(parts[k]) for k in sorted(parts)],
+    }
+
+
 def parse_legacy_question(text: str) -> dict:
     """Pull samples and commentary out of one `Question N Sample Answer`
     section of a pre-2014 CAS examiner's report. Same shape as
     `parse_cas_question`, with no point values — the report prints none."""
+    blocks = _legacy_part_blocks(text)
+    if blocks:
+        return _parse_legacy_part_blocks(text, blocks)
     comment_at = LEGACY_COMMENT_RE.search(text)
     samples_block = text[: comment_at.start()] if comment_at else text
     report_block = text[comment_at.end() :] if comment_at else ""

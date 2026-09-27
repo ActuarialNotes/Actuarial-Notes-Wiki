@@ -198,16 +198,22 @@ def _sub(chunk: str, table: dict[str, str]) -> str:
 # text is segmented rather than in `normalize_chars` afterwards.
 SPACE_CHARS = {ch: sub for ch, sub in UNIVERSAL.items() if sub == " "}
 _SPACE_RE = re.compile("[" + "".join(SPACE_CHARS) + "]")
+# A word gap written as TAB, CARRIAGE RETURN and padding: the CAS Exam 8 reports
+# of 2012-2014 set *every* space as `\t\r \u00a0`. The heading regexes allow a
+# tab but not a bare CR, and two padding spaces read as a column gap, so the
+# whole run is one space. A CR that ends a line (`\r\n`) is left alone.
+_CR_GAP_RE = re.compile(r"(?:[ \t]*\r(?!\n)[ \t]*)+")
 
 
 def normalize_spaces(text: str) -> str:
     """Exotic space glyphs turned into plain spaces, and nothing else changed.
 
-    Length-preserving and safe to apply to raw page text before any parsing:
-    unlike `normalize_chars` it never rewrites a character a math span would
-    have to see intact, so it cannot disturb the table finder or the reflow.
+    Safe to apply to raw page text before any parsing: unlike `normalize_chars`
+    it never rewrites a character a math span would have to see intact, so it
+    cannot disturb the table finder or the reflow. Length-preserving, except
+    that a carriage-return word gap collapses to the one space it stands for.
     """
-    return _SPACE_RE.sub(" ", text)
+    return _CR_GAP_RE.sub(" ", _SPACE_RE.sub(" ", text))
 
 
 def normalize_chars(text: str) -> str:

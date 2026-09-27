@@ -522,6 +522,58 @@ class TestExam7Layouts(unittest.TestCase):
         bounds = px.segment(report, px.CAS_QUESTION_RE)
         self.assertEqual([b.num for b in bounds], [1, 2])
 
+    def test_a_title_case_heading_with_its_point_value_segments(self):
+        report = (
+            "QUESTION 20\nTOTAL POINT VALUE: 2.5\nSAMPLE ANSWERS\nPart a: 2.5 points\n"
+            "Sample 1\nx = 1\nQuestion 21\nTotal Point Value: 3.75\nPart a: 3.75 points\n"
+            "Sample 1\ny = 2\nQUESTION 22\nTOTAL POINT VALUE: 1\n"
+        )
+        bounds = px.segment(report, px.CAS_QUESTION_RE)
+        self.assertEqual([b.num for b in bounds], [20, 21, 22])
+        # Without a point value behind it, `Question 1:` is the legacy layout's.
+        self.assertEqual(px.segment(self.LEGACY_BLOCKS, px.CAS_QUESTION_RE), [])
+
+    LEGACY_BLOCKS = (
+        "Question 1:\nPart a\nModel Solution 1\nG(x) is increasing and concave.\n"
+        "Model Solution 2\nG(0) = 0 and G(1) = 1.\n"
+        "Examiner\u2019s Comments:\nMost candidates named two properties.\n"
+        "Part b\nModel Solution 1\nb) ELF = 0.25\n"
+        "Examiner\u2019s Comments:\nPart (b) was harder.\n"
+        "Question 2:\nModel Solution1\na. Protect the insurance system\nb. Fairness\n"
+        "Model Solution 2\na. Solvency\nb. Equity\n"
+        "Examiner\u2019s Comments\nPart a\nWell answered.\nPart b\nPoorly answered.\n"
+    )
+
+    def test_legacy_part_blocks_keep_their_own_samples_and_comments(self):
+        bounds = px.segment(self.LEGACY_BLOCKS, px.LEGACY_QUESTION_RE)
+        self.assertEqual([b.num for b in bounds], [1, 2])
+        parsed = px.parse_legacy_question(
+            self.LEGACY_BLOCKS[bounds[0].start : bounds[0].end]
+        )
+        parts = {p["label"]: p for p in parsed["parts"]}
+        self.assertEqual(sorted(parts), ["a", "b"])
+        self.assertEqual(len(parts["a"]["samples"]), 2)
+        self.assertEqual(parts["b"]["samples"], ["ELF = 0.25"])  # its own `b)` dropped
+        self.assertIn("two properties", parts["a"]["report"])
+        self.assertEqual(parts["b"]["report"], "Part (b) was harder.")
+
+    def test_model_solutions_with_lettered_parts_and_part_headed_comments(self):
+        bounds = px.segment(self.LEGACY_BLOCKS, px.LEGACY_QUESTION_RE)
+        parsed = px.parse_legacy_question(
+            self.LEGACY_BLOCKS[bounds[1].start : bounds[1].end]
+        )
+        parts = {p["label"]: p for p in parsed["parts"]}
+        self.assertEqual(sorted(parts), ["a", "b"])
+        self.assertEqual(len(parts["a"]["samples"]), 2)  # `Model Solution1` splits too
+        self.assertIn("Solvency", parts["a"]["samples"][1])
+        self.assertEqual(parts["a"]["report"], "Well answered.")
+        self.assertEqual(parts["b"]["report"], "Poorly answered.")
+
+    def test_a_table_that_splits_a_legacy_heading_is_not_an_exhibit(self):
+        self.assertTrue(px.swallows_structure([["Question", "5:", ""], ["Model Solu", "tion 1", ""]]))
+        self.assertTrue(px.swallows_structure([["Model", "Solution 2"], ["1", "300"]]))
+        self.assertFalse(px.swallows_structure([["Risk", "Losses"], ["1", "300"], ["2", "400"]]))
+
     def test_legacy_samples_are_gathered_per_part(self):
         bounds = px.segment(self.LEGACY, px.LEGACY_QUESTION_RE)
         self.assertEqual([b.num for b in bounds], [1, 2])
@@ -679,6 +731,20 @@ class TestSpring2016Faults(unittest.TestCase):
         self.assertTrue(px.CAS_QUESTION_RE.search(flat))
         self.assertTrue(px.CAS_POINTS_RE.search(flat))
         self.assertRegex(flat, r"(?i)sample answers and examiner")
+
+    def test_a_carriage_return_word_gap_is_one_space(self):
+        # The Exam 8 reports of 2012-2014 write every space as TAB, CR, SPACE,
+        # NBSP. Nothing matched `TOTAL POINT VALUE` and the paper segmented to
+        # no questions at all.
+        gap = "\t\r \u00a0"
+        text = gap.join(["EXAM", "8", "FALL", "2014", "SAMPLE", "ANSWERS", "AND",
+                         "EXAMINER\u2019S", "REPORT"]) + gap + "\nQUESTION" + gap + "1" + gap
+        text += "\nTOTAL" + gap + "POINT" + gap + "VALUE:" + gap + "1.25\r\n"
+        flat = mdmath.normalize_spaces(text)
+        self.assertIn("EXAM 8 FALL 2014 SAMPLE ANSWERS AND", flat)
+        self.assertTrue(px.CAS_QUESTION_RE.search(flat))
+        self.assertEqual(px.CAS_POINTS_RE.search(flat).group(1), "1.25")
+        self.assertTrue(flat.endswith("1.25\r\n"))  # a real line ending survives
 
     def test_normalize_spaces_leaves_everything_else_alone(self):
         text = "a \u2019quoted\u2019 On\u2010Level \u00d7 value\u00a0here"

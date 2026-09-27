@@ -638,7 +638,9 @@ def review_sheet(judgments: list[dict]) -> str:
 # `difficulty` usually stand as voted; they are here for the ones that do not —
 # and `difficulty` for a paper with no publisher solution to take a proxy from,
 # which is every CAS MAS paper.
-SETTLED_FIELDS = ("topic", "learning_objective", "bank", "difficulty", "wiki_link")
+# `off_syllabus` rides along so a paper's whole review — including the questions
+# no current exam covers — lives in one decisions file.
+SETTLED_FIELDS = ("topic", "learning_objective", "bank", "off_syllabus", "difficulty", "wiki_link")
 DIFFICULTIES = ("easy", "medium", "hard")
 
 

@@ -253,7 +253,7 @@ of for to in into on onto with within without by from at about under over betwee
 via per upon toward towards against across after before during including include includes excluding
 is are be been being was were can may will should must would could has have had do does
 who whom which whose what when where why how whether if then also only not more most less least
-well both either very so candidates candidate expected able
+well both either very so candidates candidate expected able familiar
 them it they one ones themselves itself
 generating quantitatively necessary realistic historical
 and/or concerning along out up due behind below above following notably typically generally
@@ -296,7 +296,7 @@ choice choices goal goals organization's overall framework fundamentals importan
 criteria second semester two-semester undergraduate sequence behavior behaviour usage form tabular function draw part
 parts starting models assumption assumptions specification specifications mechanics strengths weaknesses procedure
 procedures task tasks hand improvements computations measure measures relationships limiting actuarial available
-relevance findings details methodologies decisions
+relevance findings details methodologies decisions emphasis sources
 """.split())
 
 WORD_RE = re.compile(r"[^\W\d_][\w'’\-/]*|\d[\d.,%]*")

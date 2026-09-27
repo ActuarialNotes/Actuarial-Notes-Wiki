@@ -87,6 +87,23 @@ class LintTest(unittest.TestCase):
         bad = GOOD.replace("## 2 Definition of Capital Available", "## Why it is on the syllabus\n- it is examined")
         self.assertIn("editorial", codes(bad))
 
+    def test_a_documents_own_question_heading_is_not_commentary(self):
+        for heading in ("What do the terms mean?", "How Charts Work", "Where We Are Now – Diagnosis"):
+            ok = GOOD.replace("## 2 Definition of Capital Available", f"## {heading}")
+            self.assertNotIn("editorial", codes(ok), heading)
+        for heading in ("The exam angles", "Where it fits on the syllabus", "Links"):
+            bad = GOOD.replace("## 2 Definition of Capital Available", f"## {heading}")
+            self.assertIn("editorial", codes(bad), heading)
+
+    def test_an_unreadable_document_says_so_instead_of_growing_contents(self):
+        no_contents = GOOD.split("## 1 Overview")[0] + "## Sources" + GOOD.split("## Sources")[1]
+        self.assertIn("shape", codes(no_contents))
+        said = no_contents.replace("## Sources", "> [!note] Contents unavailable\n"
+                                   "> No copy is published; the CAS supplies it in the study kit.\n\n## Sources")
+        self.assertEqual(lint(said), [])
+        both = GOOD.replace("## 1 Overview", "> [!note] Contents unavailable\n> Not published.\n\n## 1 Overview")
+        self.assertIn("unavailable", codes(both))
+
     def test_prose_under_a_division_is_refused(self):
         bad = GOOD.replace("## 2 Definition of Capital Available",
                            "## 2 Definition of Capital Available\n\nCapital available is the sum of three tiers.")

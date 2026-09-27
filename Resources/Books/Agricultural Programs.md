@@ -1,16 +1,16 @@
 ---
 Title: "Agricultural Risk Management Programs in Canada"
-Author: "Sarah Chevalier"
+Authors: "Sarah Chevalier"
+Publisher: "Casualty Actuarial Society"
 Year: "2014"
 date: "2014"
-Type: "Study Note"
-Available from: "CAS Study Kit (not published online)"
+Type: "Paper"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ec5cef32ee4c30f6ed30c8d53c2fb9379f126e5e4b073b89a28e4341c9401268
+  content_hash: sha256:04f252e035841ff3c6e8bd32408bfa82f42144bc9b5a4c8c1ab6dc66cfa0ea6e
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,33 +18,14 @@ verification:
 ---
 ![[Agricultural Programs - Cover.svg]]
 
-Sarah Chevalier's October 2014 study note on Canada's **[[Agricultural Insurance|agricultural risk management]] programs**. Read for [[Exam 6C (CAS)|Exam 6C]] objectives B1–B3. The syllabus notes that **the table on page 6 is for reference only**.
+A paper by Sarah Chevalier on agricultural risk management programs in Canada, dated October 2014. It is distributed in the Casualty Actuarial Society's study kit for Exam 6C rather than published online, and the content outline notes that its table on page 6 is for reference only.
 
-## The subject
+> [!info] On the syllabus
+> - [[Exam 6C (CAS)|Exam 6C]] — objectives B1–B3; in the study kit; the table on page 6 is for reference only.
 
-Canadian farm risk is managed through a suite of federal–provincial **business risk management (BRM)** programs, cost-shared between Ottawa and the provinces and delivered provincially. They are the syllabus's clearest example of insurance built for a [[Social Insurance|social]] purpose — keeping farms viable through a bad year — rather than priced purely to expected cost.
+> [!note] Contents unavailable
+> No copy of this paper is published online; the CAS supplies it in the Exam 6C study kit. This page records only its citation and assignment, from the content outline.
 
-The programs the note covers:
-
-| Program | What it responds to |
-|---|---|
-| **AgriInsurance** (production insurance) | Yield and production loss from insured perils — the closest to a conventional indemnity insurance product, with actuarially-certified premium rates, government premium subsidy, and federal reinsurance behind the provincial funds |
-| **AgriStability** | A **margin-based** whole-farm program: it pays when the year's production margin falls below a reference margin derived from the producer's own history |
-| **AgriInvest** | A **producer savings account** with matched government contributions, for small income declines — self-insurance with a subsidy rather than risk transfer |
-| **AgriRecovery** | A **disaster framework**: an ad hoc, case-by-case federal–provincial response to events the other programs do not reach |
-
-## Why the design looks the way it does
-
-- **[[Adverse Selection|Adverse selection]]** — yield insurance on an individual farm's history invites the producer to insure only the poor land; area-yield and whole-farm designs, and the coverage-level menu, are the responses.
-- **[[Moral Hazard|Moral hazard]]** — a producer whose yield is guaranteed has less incentive to manage the crop, so coverage sits below full value and inspection and agronomic-practice requirements attach.
-- **Systemic risk.** Weather losses are highly correlated across a region in a way an insurer's portfolio cannot diversify away, which is the standard justification for government participation and reinsurance (see [[Government Insurers Study Note]]).
-- **Subsidy and trade.** Premium subsidy is what makes the coverage affordable, and its structure is constrained by Canada's trade commitments on domestic agricultural support.
-- **The [[Guaranty Funds|guaranty fund]] boundary** — crop insurance is one of the classes excluded from [[PACICC]] coverage.
-
-## Related readings
-- [[Government Insurers Study Note]] — the five reasons for government participation
-- [[GOC Flood Risks]] — the same design questions for a different peril
-- [[PACICC]] — and why crop is excluded from the compensation plan
-
-## Links
-- [Exam 6C content outline (CAS)](https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf)
+## Sources
+- [CAS Exam 6C Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf) — the citation (Chevalier, Sarah, "Agricultural Risk Management Programs in Canada," October 2014), objectives B1–B3, the study-kit source code (SK) and the note on page 6; no copy of the paper itself could be found online
+- [CAS Exam 6C Content Outline, Fall 2025](https://www.casact.org/sites/default/files/2025-05/Exam_6C_ContentOutlines_2025_F.pdf) — the same citation and note

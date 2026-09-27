@@ -244,7 +244,19 @@ In order:
 
 When the document cannot be read — no free copy, a scan the extractor can't see — the
 page says less, not more: a textbook page is its sourced table of contents and nothing
-else, and a division with no readable text is a bare heading. A **scan is not
+else, and a division with no readable text is a bare heading. When not even its contents
+can be found (a study-kit text with no copy online and no catalogue contents note), the
+page has **no divisions**, and says so where a reader will see it — right after the
+syllabus callout:
+
+```markdown
+> [!note] Contents unavailable
+> No copy of this paper is published; the CAS supplies it in the Exam 6C study kit.
+> This page records its citation and assignment from the content outline.
+```
+
+The lint accepts a page without divisions only with this callout, and refuses the callout
+on a page that has them. A **scan is not
 unreadable**: `resource_extract.py` renders every page with no text layer as an image,
 and a model reads the images.
 
@@ -321,10 +333,10 @@ under `Resources/`, and held to zero errors on the whole shelf by
 | Code | Rule |
 | --- | --- |
 | `key-*`, `type`, `year`, `edition`, `isbn`, `available-from` | §2.1 and §2.2: canonical keys, order and quoting; the vocabulary; `date` = `Year`; an ordinal edition; the ISBN's check digit; `"[host](url)"` with the label naming the link's host |
-| `cover`, `lead`, `shape`, `h1` | §2.3's order: cover (a file that exists), lead (60–700 characters), the callout, then headings |
+| `cover`, `lead`, `shape`, `h1`, `unavailable` | §2.3's order: cover (a file that exists), lead (60–700 characters), the callout, then headings; a page with no divisions only behind `> [!note] Contents unavailable` |
 | `syllabus` | the callout names exactly the exams whose Source Material lists the page, each bullet opening with the exam's link and saying what it assigns |
 | `prose`, `table` | lists under a division, never paragraphs or tables |
-| `editorial` | no commentary heading of the kinds §1 found (*Why…*, *The exam angles*, *Links*, *Contents*…) |
+| `editorial` | no commentary heading of the phrasings §1 found (*Why it is on the syllabus*, *The exam angles*, *Links*, *Contents*…) — a document's own *What do the terms mean?* passes |
 | `related`, `sources` | related readings are resource pages; `## Sources` is last, every entry a link with a ` — ` note, the `Available from` link among them |
 | `link` | every `[[link]]` lands exactly (`scripts/vault_links.py`) |
 

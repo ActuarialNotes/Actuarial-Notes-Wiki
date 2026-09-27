@@ -115,18 +115,27 @@ SOURCES_HEADING = "Sources"
 RELATED_HEADING = "Related readings"
 MIN_LEAD, MAX_LEAD = 60, 700     # MIN_LEAD is quiz/src/lib/seo.ts's: shorter and SEO ignores it
 
-# Headings of the commentary kind the standard retired. They are not the
-# document's divisions; what they said that the document supports now lives
-# under the division that says it.
+# Headings of the commentary kind the standard retired — the phrasings the
+# review found (docs/resource-pages.md §1), not every heading that opens with
+# "Why" or "What": a document's own divisions do that too ("What do the terms
+# mean?", "How Charts Work", "Where We Are Now"). What they said that the
+# document supports now lives under the division that says it.
 EDITORIAL_HEADING = re.compile(
-    r"^(why\b|what\b|where\b|how\b|the exam|exam angle|points worth|the mechanics|"
-    r"mechanics\b|reading note|reading a |the argument|the subject|the principle|"
-    r"the comparison|the organising|the organizing|the problem|the answer|the asymmetr|"
-    r"the judgements|the judgments|the technical points|the full return|the two assigned|"
-    r"the assigned|the three families|the ratio\b|historical significance|strategic impact|"
-    r"syllabus scope|scope on the syllabus|what to take|key takeaways|links?$|contents$)",
+    r"^(why (it|a life|the design|the instructions|the exam|eligibility)\b|"
+    r"what (it covers|the syllabus|the paper covers|chapters|is in the assigned|to take|"
+    r"the risk adjustment|\"standards|the guideline sets)|"
+    r"where it\b|how (the exam|to read it)|the exam\b|exam angles?|points worth|"
+    r"the mechanics|mechanics\b|reading note|reading a |the argument|the subject$|the principle$|"
+    r"the comparison|the organi[sz]ing|the problem the|the answer$|the asymmetr|the judge?ments|"
+    r"the technical points|the full return|the two assigned|the assigned|the three families|"
+    r"the ratio$|historical significance|strategic impact|syllabus scope|scope on the syllabus|"
+    r"key takeaways|fct versus orsa|links?$|contents$)",
     re.I,
 )
+
+# A document no one could read (a study-kit text with no copy online) says so
+# instead of growing divisions from memory — the page then has none.
+UNAVAILABLE_CALLOUT = "> [!note] Contents unavailable"
 
 ISBN_RE = re.compile(r"^(?:97[89][- ]?)?(?:\d[- ]?){9}[\dX]$", re.I)
 ORDINAL_RE = re.compile(r"^\d+(?:st|nd|rd|th)$")
@@ -424,6 +433,13 @@ def lint_body(page: Page, report: Report, listings: dict[str, list[str]], vault:
         report.error(rel, rest[0][0] if rest else ln, "syllabus",
                      f"listed by {', '.join(exams)} — add `{SYLLABUS_CALLOUT}` after the lead")
 
+    # 3b. a document that could not be read
+    unavailable = bool(rest and rest[0][1] == "callout" and rest[0][2][0].strip() == UNAVAILABLE_CALLOUT)
+    if unavailable:
+        if len(rest[0][2]) < 2:
+            report.error(rel, rest[0][0], "unavailable", "say why the document could not be read, and where it is held")
+        rest = rest[1:]
+
     # 4. divisions, related readings, sources
     headings = [(b[0], HEADING_RE.match(b[2][0])) for b in rest if b[1] == "heading"]
     if rest and rest[0][1] != "heading":
@@ -447,8 +463,13 @@ def lint_body(page: Page, report: Report, listings: dict[str, list[str]], vault:
         if RELATED_HEADING in titles and titles.index(RELATED_HEADING) != len(titles) - 2:
             report.error(rel, h2[titles.index(RELATED_HEADING)][0], "related",
                          "`## Related readings` comes immediately before `## Sources`")
-        if len([t for t in titles if t not in (SOURCES_HEADING, RELATED_HEADING)]) == 0:
-            report.error(rel, page.body_offset, "shape", "no division of the document — the page has no contents")
+        divisions = [t for t in titles if t not in (SOURCES_HEADING, RELATED_HEADING)]
+        if not divisions and not unavailable:
+            report.error(rel, page.body_offset, "shape", "no division of the document — write its contents, or, "
+                         f"if no copy can be read, say so with `{UNAVAILABLE_CALLOUT}`")
+        if divisions and unavailable:
+            report.error(rel, page.body_offset, "unavailable",
+                         "the page has divisions, so its contents are not unavailable — drop the callout")
 
     # section bodies
     section = None

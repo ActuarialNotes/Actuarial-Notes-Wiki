@@ -818,8 +818,8 @@ compile — don't "clean up" the flagged code as dead.
   reinsurance and catastrophe questions (Clark, Bernegger, Grossi & Kunreuther). Two optional keys
   say a question has outlived its paper's syllabus: `originally_exam` (the material moved to
   the exam in `exam`, so it stays off that exam's past-paper shelf) and `off_syllabus: true`
-  (no current exam covers it — Exam 7's old valuation questions, Exam 8's hazard-group
-  mapping and minimum bias; kept for the record, out of
+  (no current exam covers it — Exam 7's old valuation questions, Exam 8's NCCI hazard-group
+  mapping and Mahler's excess-ratio estimation; kept for the record, out of
   quiz draws, still found by its sitting, its id or a search, and not held to the exam page
   by `syllabus_lint.py`). A CAS question with no lettered parts is `type: multi-part` with
   `### Explanation` / `### Examiner Report` and no `## Part` heading — under `## Explanation`

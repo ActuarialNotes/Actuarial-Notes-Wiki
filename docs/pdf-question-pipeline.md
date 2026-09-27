@@ -299,7 +299,7 @@ Two judgments move a question off its paper's own bank, both set in
   to MAS-II.
 - **`"off_syllabus": true`** — no current exam covers it at all (Exam 7's old
   insurance-company-valuation section; Exam 8's NCCI hazard-group mapping and
-  minimum bias procedures). Like `bank`, it is a field `--settle` applies from a
+  Mahler's workers compensation excess-ratio estimation). Like `bank`, it is a field `--settle` applies from a
   decisions file. The question stays in its paper's bank
   under its old objective, for the record: `syllabus_lint.py` does not hold it to
   the exam page, and `filterQuestions` leaves it out of quiz draws while a

@@ -158,7 +158,12 @@ export function ResourceMetaCard({
               className="mt-3 self-start bg-muted"
             />
           ) : meta.copySources && meta.copySources.length > 0 ? (
-            <GetCopyMenu sources={meta.copySources} title={meta.title} className="mt-3 self-start" />
+            <GetCopyMenu
+              sources={meta.copySources}
+              isbn={meta.isbn}
+              title={meta.title}
+              className="mt-3 self-start"
+            />
           ) : (
             <a
               href={meta.getCopyUrl}

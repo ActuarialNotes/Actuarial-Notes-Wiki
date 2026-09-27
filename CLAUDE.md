@@ -464,6 +464,16 @@ Other important `lib/` modules:
   hung on the wiki index's `document` items as `exams`, which is what lets a resource card
   lead its pill row with **Exam P-1** / **Exam MAS-I** without re-reading every exam page.
   Imports are relative, not `@/`-aliased — the vite config pulls it into its own Node graph.
+- `amazonPrice.ts` — the **Amazon price** on a resource card's *Get a copy* menu
+  (`components/wiki/GetCopyMenu.tsx`, whose rows — WorldCat, Amazon, Library Genesis — each
+  lead with the place's own logo from `quiz/public/copy-sources/`). The price comes from
+  `quiz/api/amazon-price.js`, which asks Amazon's **Creators API** with an Associates account's
+  credentials (Vercel env: `AMAZON_CREATORS_CREDENTIAL_ID` / `_SECRET` / `_VERSION`,
+  `AMAZON_PARTNER_TAG`); with none set it answers `price: null` and the row is the plain ISBN
+  search. Rules from Amazon's licence that the code keeps: a price only for an item carrying
+  the page's own ISBN, the vended detail-page link used untouched, an hour at the CDN and
+  nothing cached in the browser, and the "as of" stamp, disclaimers and associate disclosure
+  beside any price (the wording is pinned by `amazonPrice.test.ts`).
 - `pastExams.ts` — the past-sitting shelf behind the quiz builder's **Past Papers** source:
   `buildPastExamRows` unions the authored catalogue (`data/pastExams.ts`) with the sittings the
   question bank actually holds, so a released paper that hasn't been imported still lists
@@ -799,8 +809,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **145 test files /
-~2340 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **147 test files /
+~2365 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).
@@ -1021,8 +1031,8 @@ Both the root site and `quiz/` have their own `vercel.json` (root handles `/api/
 headers for the serverless functions — `chat.js` and the flag-gated `research*.js`; `quiz/`
 rewrites all routes to `index.html` for the SPA). Deploys to Vercel; Supabase edge functions
 deploy via the GitHub Action above. Functions that must share the app's origin live in
-`quiz/api/` (`exam-pdf.js`, and `mcp.js` — the AI connector, which reads the knowledge-base
-export from its own deployment); `quiz/api/_mcp/` is `_`-prefixed so Vercel doesn't route it.
+`quiz/api/` (`exam-pdf.js`, `amazon-price.js`, and `mcp.js` — the AI connector, which reads
+the knowledge-base export from its own deployment); `quiz/api/_mcp/` is `_`-prefixed so Vercel doesn't route it.
 
 ## Cowork (the second product)
 

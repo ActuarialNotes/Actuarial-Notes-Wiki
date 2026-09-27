@@ -24,6 +24,13 @@
  *     question wrong is already visible on screen, and buzzing at someone who
  *     is studying is punishment, not feedback. A missed question is heard as
  *     the `correct` streak dropping back to its root, not as a buzzer.
+ *   • One key. Every note is from the pentatonic of C major (`KEY`), so
+ *     whatever overlaps — a press in a chime's tail, a level-up over the
+ *     session fanfare — there is no pair of cues that can clash.
+ *   • Nothing plays the same twice. Each play drifts a hair in level, pitch
+ *     and grain (`playVariation`), and every struck note beats softly against
+ *     a unison voice a few cents away (`bell`). A sound that never changes is
+ *     the surest tell of a synthesizer.
  */
 
 export type SoundEvent =
@@ -114,6 +121,13 @@ export interface ToneSpec {
    * arrives somewhere instead of immediately falling away.
    */
   hold?: number
+  /**
+   * Offset from `freq` in cents. Only the unison voice `bell()` puts beside a
+   * fundamental uses it: a few cents apart, the two beat slowly against each
+   * other, which is the shimmer that makes a note sound struck in a room
+   * rather than generated.
+   */
+  detune?: number
 }
 
 export interface NoiseSpec {
@@ -264,8 +278,77 @@ export function nextComboIndex(previous: number, elapsedMs: number, combo: Combo
   return previous + 1
 }
 
+/**
+ * How far one play of a cue may drift from the play before it — the reason no
+ * two presses in the app are the same sound.
+ *
+ * A synthesizer gives itself away by being perfect: the fortieth click of an
+ * afternoon is bit-for-bit the first, and the ear files a sound that never
+ * changes as a machine. Nothing tapped, brushed or struck in a room sounds the
+ * same twice, so every play is nudged — a fraction of a decibel in level, a
+ * few cents in pitch, a few percent in where the paper's noise sits.
+ *
+ * The tuned part is on a very short leash. Three cents is well under what
+ * anyone hears as out of tune, and it moves the whole cue together, so the
+ * intervals inside a cue stay pure and two cues ringing at once stay in the
+ * key. Noise has no pitch to protect, so it can wander a lot further.
+ */
+export const VARIATION = {
+  /** Level of the whole cue, ± dB. */
+  gainDb: 0.8,
+  /** Every tone in the cue, moved together, ± cents. */
+  toneCents: 3,
+  /** Every noise filter in the cue, moved together, ± cents. */
+  noiseCents: 80,
+} as const
+
+/** One play's drift, as multipliers — all three are 1 for a play exactly as written. */
+export interface PlayVariation {
+  /** Level multiplier for the whole cue. */
+  gain: number
+  /** Frequency multiplier for every tone. */
+  pitch: number
+  /** Frequency multiplier for every noise filter. */
+  grain: number
+}
+
+/** Draw one play's drift. `random` is injectable so the bounds can be tested. */
+export function playVariation(random: () => number = Math.random): PlayVariation {
+  const spread = () => Math.min(1, Math.max(-1, random() * 2 - 1))
+  return {
+    gain: Math.pow(10, (spread() * VARIATION.gainDb) / 20),
+    pitch: Math.pow(2, (spread() * VARIATION.toneCents) / 1200),
+    grain: Math.pow(2, (spread() * VARIATION.noiseCents) / 1200),
+  }
+}
+
+/**
+ * One key for the whole app: C major.
+ *
+ * Cues overlap all the time — a press lands in a chime's tail, a level-up
+ * rings out over the session fanfare, a combo climbs over its own reverb — and
+ * two sounds that are each lovely on their own can still be sour together. So
+ * every note in the catalogue is written from the pentatonic of one key: C D
+ * E G A, the five notes with no semitone between any two of them. However the
+ * cues stack, there is no pair that can clash.
+ *
+ * A climb transposes a cue, so on its upper rungs a cue can reach the rest of
+ * the scale — `correct`'s fifth, walked up the pentatonic, touches B — but
+ * never leaves it. The struck partials are exempt from both rules: an octave
+ * and a twelfth above a note are that note's own harmonics, consonant with it
+ * by definition. `soundConfig.test.ts` holds every recipe to this.
+ */
+export const KEY = {
+  /** C major, in semitones above C. Every note, on every rung of every climb. */
+  scale: [0, 2, 4, 5, 7, 9, 11],
+  /** Its pentatonic. Every note as written. */
+  pentatonic: [0, 2, 4, 7, 9],
+} as const
+
 // Equal-tempered reference pitches (Hz), so the recipes below read musically.
+// All of them are in the key's pentatonic — see `KEY`.
 const D2 = 73.42
+const G2 = 98.0
 const A2 = 110.0
 const C3 = 130.81
 const D3 = 146.83
@@ -279,11 +362,11 @@ const D5 = 587.33
 const E5 = 659.25
 const G5 = 783.99
 const A5 = 880.0
-const B5 = 987.77
 const C6 = 1046.5
 const D6 = 1174.66
 const E6 = 1318.51
 const G6 = 1568.0
+const C7 = 2093.0
 
 /**
  * One struck note — the voice every reward cue is built from.
@@ -305,6 +388,8 @@ const G6 = 1568.0
  * and 15f, which is exactly the glare this family is trying not to have), and
  * the onset is slow enough to be a mallet on wood rather than metal — while
  * staying fast enough to read as an impact.
+ *
+ * The fundamental is two voices, not one — see `UNISON`.
  */
 function bell(
   freq: number,
@@ -312,11 +397,28 @@ function bell(
 ): ToneSpec[] {
   const { at, dur, gain = 0.6, attack = 0.007, hold, sparkle = 1 } = opts
   return [
-    { at, dur, freq, type: 'sine', gain, attack, hold },
+    { at, dur, freq, type: 'sine', gain: gain * (1 - UNISON.share), attack, hold },
+    { at, dur: dur * UNISON.length, freq, detune: UNISON.cents, type: 'sine', gain: gain * UNISON.share, attack },
     { at, dur: dur * 0.34, freq: freq * 2, type: 'sine', gain: gain * 0.22 * sparkle, attack: attack * 0.6 },
     { at, dur: dur * 0.14, freq: freq * 3, type: 'sine', gain: gain * 0.05 * sparkle, attack: 0.002 },
   ]
 }
+
+/**
+ * The second voice under every struck fundamental: the same note a few cents
+ * sharp, quieter and shorter than the first.
+ *
+ * One sine at one frequency is the most synthetic sound there is — it never
+ * moves. Nothing acoustic is that still: a piano strikes two or three strings
+ * per note tuned a hair apart, and a real bell's modes come in near-identical
+ * pairs. Either way the note *beats* — a slow swell and ebb, a couple of times a
+ * second — and that shimmer is a lot of what the ear takes for "a thing that
+ * was hit". Three and a half cents gives a beat of one or two per second across
+ * the catalogue's register; the unison dies at 70% of the note, so the shimmer
+ * settles out and the note ends pure. It shares the note's level rather than
+ * adding to it, so no cue got louder when it arrived.
+ */
+const UNISON = { share: 0.16, cents: 3.5, length: 0.7 } as const
 
 /**
  * The mallet itself: a few milliseconds of bandpassed noise at the moment of
@@ -329,7 +431,7 @@ function bell(
  * a second event of its own.
  */
 function mallet(at = 0, gain = 0.22): NoiseSpec {
-  return { at, dur: 0.022, from: 2400, to: 1300, type: 'bandpass', q: 1.1, gain, swell: 0 }
+  return { at, dur: 0.022, from: 2000, to: 1100, type: 'bandpass', q: 0.9, gain, swell: 0 }
 }
 
 /**
@@ -344,10 +446,15 @@ function mallet(at = 0, gain = 0.22): NoiseSpec {
  * moved something, so it's reserved for presses that did: the `press` cue on
  * solid, primary-action buttons. Stacked under every control instead, an
  * afternoon of studying sounds like someone knocking on a desk.
+ *
+ * Even a press is in the key (see `KEY`): the edge falls D → A and the body
+ * E → G. Nobody hears a 30 ms tick as a note, but they do hear it as a colour,
+ * and a tick that lands between the notes of the chime still ringing under it
+ * is a small sourness repeated forty times an hour.
  */
-const CLICK_TICK: NoiseSpec = { at: 0, dur: 0.018, from: 2600, to: 1500, type: 'bandpass', q: 1.1, gain: 0.55, swell: 0 }
-const CLICK_EDGE: ToneSpec = { at: 0, dur: 0.03, freq: 1250, glide: 850, type: 'sine', gain: 0.12, attack: 0.001 }
-const CLICK_BODY: ToneSpec = { at: 0, dur: 0.05, freq: 320, glide: 190, type: 'sine', gain: 0.22, attack: 0.001 }
+const CLICK_TICK: NoiseSpec = { at: 0, dur: 0.02, from: 2200, to: 1300, type: 'bandpass', q: 0.9, gain: 0.55, swell: 0 }
+const CLICK_EDGE: ToneSpec = { at: 0, dur: 0.03, freq: D6, glide: A5, type: 'sine', gain: 0.1, attack: 0.002 }
+const CLICK_BODY: ToneSpec = { at: 0, dur: 0.05, freq: E4, glide: G3, type: 'sine', gain: 0.22, attack: 0.003 }
 
 export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
   // ---- interface ----------------------------------------------------------
@@ -363,7 +470,7 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     // The weighty one: the same tick with the low body back underneath. Used
     // for solid primary actions (see `components/ui/button.tsx`) and anywhere a
     // press should feel like it moved something — `data-sound="press"`.
-    gain: 0.3,
+    gain: 0.27,
     throttleMs: 40,
     noise: [CLICK_TICK],
     tones: [CLICK_BODY],
@@ -384,9 +491,9 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     // list still marks every row.
     gain: 0.3,
     throttleMs: 30,
-    lowpass: 9000,
-    noise: [{ at: 0, dur: 0.012, from: 4400, to: 2600, type: 'bandpass', q: 2.2, gain: 0.5, swell: 0 }],
-    tones: [{ at: 0, dur: 0.022, freq: 2093, glide: 1480, type: 'triangle', gain: 0.14, attack: 0.001 }],
+    lowpass: 7500,
+    noise: [{ at: 0, dur: 0.012, from: 3800, to: 2300, type: 'bandpass', q: 1.6, gain: 0.5, swell: 0 }],
+    tones: [{ at: 0, dur: 0.022, freq: C7, glide: G6, type: 'sine', gain: 0.12, attack: 0.0015 }],
   },
   toggleOn: {
     gain: 0.34,
@@ -406,7 +513,7 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     // A short low whoosh — movement, without announcing itself.
     gain: 0.26,
     throttleMs: 80,
-    noise: [{ at: 0, dur: 0.16, from: 900, to: 2200, type: 'bandpass', q: 0.7, gain: 0.5, swell: 0.4 }],
+    noise: [{ at: 0, dur: 0.16, from: 900, to: 2200, type: 'bandpass', q: 0.7, gain: 0.2, swell: 0.4 }],
     tones: [{ at: 0, dur: 0.12, freq: D5, type: 'sine', gain: 0.12, attack: 0.02 }],
     lowpass: 4200,
   },
@@ -429,10 +536,10 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     gain: 0.34,
     throttleMs: 120,
     noise: [
-      { at: 0, dur: 0.3, from: 480, to: 3000, type: 'bandpass', q: 0.75, gain: 0.6, swell: 0.45 },
-      { at: 0.02, dur: 0.26, from: 1400, to: 2400, type: 'highpass', q: 0.4, gain: 0.22, swell: 0.55 },
+      { at: 0, dur: 0.3, from: 480, to: 3000, type: 'bandpass', q: 0.75, gain: 0.27, swell: 0.45 },
+      { at: 0.02, dur: 0.26, from: 1400, to: 2400, type: 'highpass', q: 0.4, gain: 0.12, swell: 0.55 },
     ],
-    tones: [{ at: 0, dur: 0.16, freq: 150, glide: 110, type: 'sine', gain: 0.16, attack: 0.03 }],
+    tones: [{ at: 0, dur: 0.16, freq: D3, glide: A2, type: 'sine', gain: 0.16, attack: 0.03 }],
     lowpass: 6500,
   },
   close: {
@@ -440,9 +547,9 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     gain: 0.3,
     throttleMs: 120,
     noise: [
-      { at: 0, dur: 0.24, from: 2800, to: 460, type: 'bandpass', q: 0.75, gain: 0.55, swell: 0.3 },
+      { at: 0, dur: 0.24, from: 2800, to: 650, type: 'bandpass', q: 0.75, gain: 0.27, swell: 0.3 },
     ],
-    tones: [{ at: 0.06, dur: 0.14, freq: 140, glide: 100, type: 'sine', gain: 0.14, attack: 0.03 }],
+    tones: [{ at: 0.06, dur: 0.14, freq: C3, glide: G2, type: 'sine', gain: 0.14, attack: 0.03 }],
     lowpass: 6000,
   },
   page: {
@@ -451,7 +558,7 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     // `ruffle`, which is the same gesture done small enough to repeat.
     gain: 0.28,
     throttleMs: 70,
-    noise: [{ at: 0, dur: 0.13, from: 1100, to: 3200, type: 'bandpass', q: 0.9, gain: 0.55, swell: 0.35 }],
+    noise: [{ at: 0, dur: 0.13, from: 1100, to: 3200, type: 'bandpass', q: 0.9, gain: 0.26, swell: 0.35 }],
     lowpass: 7000,
   },
   ruffle: {
@@ -476,10 +583,10 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     throttleMs: 40,
     lowpass: 4800,
     noise: [
-      { at: 0,     dur: 0.07,  from: 1500, to: 700,  type: 'bandpass', q: 0.8, gain: 0.3,  swell: 0.3 },
-      { at: 0,     dur: 0.012, from: 2200, to: 1500, type: 'bandpass', q: 1.6, gain: 0.26, swell: 0 },
-      { at: 0.022, dur: 0.012, from: 2000, to: 1400, type: 'bandpass', q: 1.6, gain: 0.2,  swell: 0 },
-      { at: 0.042, dur: 0.011, from: 1800, to: 1300, type: 'bandpass', q: 1.6, gain: 0.14, swell: 0 },
+      { at: 0,     dur: 0.07,  from: 1500, to: 700,  type: 'bandpass', q: 0.8, gain: 0.14, swell: 0.3 },
+      { at: 0,     dur: 0.012, from: 2200, to: 1500, type: 'bandpass', q: 1.3, gain: 0.13, swell: 0 },
+      { at: 0.022, dur: 0.012, from: 2000, to: 1400, type: 'bandpass', q: 1.3, gain: 0.1,  swell: 0 },
+      { at: 0.042, dur: 0.011, from: 1800, to: 1300, type: 'bandpass', q: 1.3, gain: 0.07, swell: 0 },
     ],
   },
   shuffle: {
@@ -490,12 +597,12 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     throttleMs: 150,
     lowpass: 6500,
     noise: [
-      { at: 0,     dur: 0.16,  from: 500,  to: 2200, type: 'bandpass', q: 0.7, gain: 0.4,  swell: 0.4 },
-      { at: 0.01,  dur: 0.02,  from: 2800, to: 2000, type: 'bandpass', q: 1.3, gain: 0.42, swell: 0 },
-      { at: 0.04,  dur: 0.02,  from: 3000, to: 2100, type: 'bandpass', q: 1.3, gain: 0.4,  swell: 0 },
-      { at: 0.07,  dur: 0.018, from: 3100, to: 2200, type: 'bandpass', q: 1.3, gain: 0.36, swell: 0 },
-      { at: 0.095, dur: 0.018, from: 3000, to: 2200, type: 'bandpass', q: 1.3, gain: 0.3,  swell: 0 },
-      { at: 0.118, dur: 0.016, from: 2800, to: 2100, type: 'bandpass', q: 1.3, gain: 0.24, swell: 0 },
+      { at: 0,     dur: 0.16,  from: 500,  to: 2200, type: 'bandpass', q: 0.7, gain: 0.2,  swell: 0.4 },
+      { at: 0.01,  dur: 0.02,  from: 2800, to: 2000, type: 'bandpass', q: 1.1, gain: 0.24, swell: 0 },
+      { at: 0.04,  dur: 0.02,  from: 3000, to: 2100, type: 'bandpass', q: 1.1, gain: 0.22, swell: 0 },
+      { at: 0.07,  dur: 0.018, from: 3100, to: 2200, type: 'bandpass', q: 1.1, gain: 0.2,  swell: 0 },
+      { at: 0.095, dur: 0.018, from: 3000, to: 2200, type: 'bandpass', q: 1.1, gain: 0.17, swell: 0 },
+      { at: 0.118, dur: 0.016, from: 2800, to: 2100, type: 'bandpass', q: 1.1, gain: 0.13, swell: 0 },
     ],
   },
 
@@ -508,15 +615,16 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     //
     // Same pentatonic rungs as `correct`, and for the same reason: the wrap
     // from the last rung back to the root has to be a step like any other, so
-    // a nineteen-card sweep keeps rising the whole way down the deck. No
+    // a nineteen-card sweep keeps rising the whole way down the deck. Rooted
+    // on C like `correct` too, so every rung is a note of the key. No
     // `bloom` — the cue is dry, and twenty reverb tails overlapping is not a
     // sweep, it's a wash.
     gain: 0.21,
     throttleMs: 55,
     lowpass: 5400,
     combo: { steps: [0, 2, 4, 7, 9], resetMs: 1500 },
-    noise: [{ at: 0, dur: 0.12, from: 2400, to: 700, type: 'bandpass', q: 0.8, gain: 0.34, swell: 0.25 }],
-    tones: [...bell(A4, { at: 0.02, dur: 0.22, gain: 0.4 })],
+    noise: [{ at: 0, dur: 0.12, from: 2400, to: 700, type: 'bandpass', q: 0.8, gain: 0.24, swell: 0.25 }],
+    tones: [...bell(C5, { at: 0.02, dur: 0.22, gain: 0.36 })],
   },
 
   // ---- reward -------------------------------------------------------------
@@ -617,7 +725,8 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     // a lone level-up gets the fanfare. A run of them gets this instead — one
     // struck note per card, a rung higher each time, the same climbing sweep
     // `fileAway` uses for a deck of cards clearing. No pickup, no re-struck
-    // landing: the climb itself is the ceremony.
+    // landing: the climb itself is the ceremony. It climbs from C — the note
+    // the lone `levelUp` fanfare starts on — so every rung stays in the key.
     gain: 0.42,
     throttleMs: 150,
     lowpass: 6200,
@@ -625,22 +734,23 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     combo: { steps: [0, 2, 4, 7, 9], resetMs: 2500 },
     noise: [mallet(0, 0.28)],
     tones: [
-      ...bell(D5, { at: 0, dur: 0.55, gain: 0.62, hold: 0.05 }),
-      { at: 0, dur: 0.6, freq: D3, type: 'sine', gain: 0.2, attack: 0.02 },
+      ...bell(C5, { at: 0, dur: 0.55, gain: 0.62, hold: 0.05 }),
+      { at: 0, dur: 0.6, freq: C3, type: 'sine', gain: 0.2, attack: 0.02 },
     ],
   },
   reward: {
-    // Gems: a coin dropping into the purse. A tiny high clink, then two struck
-    // notes a fourth apart — the platformer pickup interval — with the second
-    // one held. Short and bright; it fires once per quest, several in a row.
+    // Gems: a coin dropping into the purse. A tiny clink, then two struck notes
+    // a fourth apart — the platformer pickup interval, on A and D so it sits in
+    // the key — with the second one held. Short and clear; it fires once per
+    // quest, several in a row.
     gain: 0.35,
     throttleMs: 60,
-    lowpass: 6800,
+    lowpass: 6200,
     space: 0.3,
-    noise: [{ at: 0, dur: 0.014, from: 5200, to: 3400, type: 'bandpass', q: 2.4, gain: 0.28, swell: 0 }],
+    noise: [{ at: 0, dur: 0.014, from: 4200, to: 2800, type: 'bandpass', q: 1.8, gain: 0.24, swell: 0 }],
     tones: [
-      ...bell(B5, { at: 0, dur: 0.14, gain: 0.5, attack: 0.002 }),
-      ...bell(E6, { at: 0.055, dur: 0.34, gain: 0.56, attack: 0.002, hold: 0.04 }),
+      ...bell(A5, { at: 0, dur: 0.14, gain: 0.5, attack: 0.004 }),
+      ...bell(D6, { at: 0.055, dur: 0.34, gain: 0.56, attack: 0.004, hold: 0.04 }),
     ],
   },
   streak: {

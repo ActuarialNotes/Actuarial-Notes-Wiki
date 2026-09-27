@@ -150,11 +150,14 @@ before touching that area**:
 - `docs/leagues.md` — the opt-in weekly XP leagues (roadmap P4.1): the tier ladder and
   promotion/relegation math, the lazy Monday-UTC rollover, and the privacy model
   (snapshot-on-join / delete-on-leave, RPC-only board reads).
-- `docs/sound-design.md` — the **sound-effects system**: the four rules the cue
+- `docs/sound-design.md` — the **sound-effects system**: the rules the cue
   catalogue follows (quiet interface feedback, paper-as-noise, melodic success,
-  silent mistakes), the delegated `data-sound` listener that gives every control
-  a press cue, and how to wire a new interaction. Read before adding or changing
-  a sound.
+  silent mistakes, one key — every note from C major's pentatonic — and nothing
+  playing the same twice), what keeps the synth from sounding synthesized
+  (linear attacks, pink noise, per-play drift, a unison shimmer on struck notes,
+  a room that darkens as it rings), the delegated `data-sound` listener that
+  gives every control a press cue, and how to wire a new interaction. Read
+  before adding or changing a sound.
 - `docs/visual-noise-review.md` — a **review backlog**: where the app explains itself in grey
   text instead of designing the fact, the five tests for whether a muted caption has earned
   its place, and the surface-by-surface list to work through. The Exam Readiness popup (§3.1)
@@ -637,7 +640,8 @@ Other important `lib/` modules:
 - `soundConfig.ts` / `soundEngine.ts` / `soundInteractions.ts` — the sound system.
   `soundConfig.ts` is the cue catalogue as plain data (tones, noise sweeps,
   envelopes) — edit sounds there; `soundEngine.ts` holds the single AudioContext,
-  the synth and the enabled/volume store; `soundInteractions.ts` is the pure
+  the synth (its pink noise, room impulse and soft-clip output curve are pure and
+  tested in `soundEngine.test.ts`) and the enabled/volume store; `soundInteractions.ts` is the pure
   press-cue decision table used by `components/SoundEffects.tsx`, the one
   delegated listener (mounted in `App`) that sounds every button in the app.
   Override per element with `data-sound="<cue>"` / `data-sound="none"`. Nothing
@@ -731,7 +735,7 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **138 test files /
+`*.test.ts` files sit alongside the modules they test (vitest). There are **139 test files /
 ~2165 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS

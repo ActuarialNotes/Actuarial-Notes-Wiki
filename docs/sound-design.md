@@ -4,6 +4,10 @@ Every interaction in the quiz app makes a sound. All of it is synthesized at
 runtime with the Web Audio API — there are no audio files, so the whole system
 costs zero bytes of assets and every cue is tunable from one table.
 
+Synthesized is not the same as *sounding* synthesized, though, and most of the
+engine is there to keep the one from becoming the other: see "Why it doesn't
+sound synthesized" below.
+
 ## The rules
 
 1. **Interface feedback is quiet and short.** A press is ~30 ms and sits an
@@ -61,18 +65,88 @@ costs zero bytes of assets and every cue is tunable from one table.
    they read as a glitch — and the second chime is what turns a small win into
    something that sounds like it fired twice. A flow gets a cue per *thing that
    happened*, not per function call on the way there: see "Collecting a card".
+11. **One key.** Cues overlap all the time — a press lands in a chime's tail, a
+   level-up rings out over the session fanfare, a combo climbs over its own
+   reverb — and two sounds that are each lovely alone can still be sour
+   together. So every note in the catalogue is written from the pentatonic of C
+   major (`KEY` in `soundConfig.ts`): C D E G A, the five notes with no
+   semitone between any two of them. However the cues stack, no pair can
+   clash. That goes for the interface too — a click's 30 ms edge falls D → A,
+   the press body E → G — because a tick nobody hears as a *note* is still
+   heard as a colour. A climb transposes its cue, so the upper rungs reach the
+   rest of C major (`correct`'s fifth, walked up the pentatonic, touches B) but
+   never leave it; every climbing cue is rooted on C for that reason. A
+   struck note's own partials are exempt — they are its harmonics, consonant
+   with it by definition. Pinned by a test, per recipe and per rung.
+12. **Nothing plays the same twice.** The surest tell of a synthesizer is that
+   it is perfect: the fortieth click of an afternoon used to be bit-for-bit the
+   first. See "Why it doesn't sound synthesized".
 
 ## The pieces
 
 | File | Role |
 | --- | --- |
 | `quiz/src/lib/soundConfig.ts` | The catalogue: every cue as plain data (tones, noise sweeps, envelopes, levels). Edit sounds here. |
-| `quiz/src/lib/soundEngine.ts` | One AudioContext for the app, the synth that renders a recipe, the shared reverb, the combo counters, and the enabled/volume store (localStorage-backed). |
+| `quiz/src/lib/soundEngine.ts` | One AudioContext for the app, the synth that renders a recipe, the pink noise, the shared room, the soft-clipping output stage, the combo counters, and the enabled/volume store (localStorage-backed). The buffers and the output curve are pure functions (`pinkNoise`, `roomImpulse`, `softClipCurve`), tested in `soundEngine.test.ts`. |
 | `quiz/src/lib/soundInteractions.ts` | Pure decision table: given a description of the pressed element, which cue plays. |
 | `quiz/src/components/SoundEffects.tsx` | Mounted once in `App`. One delegated listener gives every control its press cue (see "When a press counts as a press"); also unlocks the AudioContext on the first gesture. |
 | `quiz/src/hooks/useSoundEffects.ts` | `useSoundEffects()` (settings + `play`), plus `useSoundOnMount` / `useSoundOnToggle` for surfaces whose sound belongs to the surface. |
 | `quiz/src/components/SoundSettingsCard.tsx` | Settings → Sound: on/off and volume. |
 | `quiz/src/components/SoundPopover.tsx` | The sidebar popout beside the theme picker: mute + volume, reachable from any page. |
+
+## Why it doesn't sound synthesized
+
+A chime built from sine waves is a synthesizer whatever notes it plays. What
+gives synthesis away is rarely the recipe; it's a handful of things real sounds
+never do, and the engine removes each of them.
+
+- **Attacks rise in a straight line.** A Web Audio exponential ramp can't start
+  from zero, so every envelope used to ramp up from 0.0001 — and an exponential
+  from there spends almost all of its time inaudible, then jumps to full level
+  in the last fraction of a millisecond. That was a hidden click on the front
+  of every note and every burst of noise, whatever the written attack said. A
+  linear rise over the same few milliseconds is the soft edge of a mallet on
+  wood. Decays stay exponential: that's how anything struck dies away.
+- **Noise is pink, and never read from the same place twice.** White noise has
+  equal energy per hertz, so most of it sits in the top octaves; through a wide
+  bandpass it is hiss. Pink has equal energy per octave — the tilt of paper,
+  cloth and fingertips — and is far gentler at the same level. It's also read
+  from a random point in a two-second buffer on every burst. It used to start
+  at sample 0 every time, which made every click in the app the same few
+  hundred samples: the machine-gun sameness a UI sounds like when it is a UI.
+- **Every play drifts** (`playVariation`, `VARIATION`): up to ±0.8 dB in
+  level, ±3 cents in pitch and ±80 cents in where the noise filters sit. The
+  tuned part is on a very short leash — three cents is under what anyone hears
+  as out of tune, and it moves the whole cue together, so the intervals inside
+  a cue stay pure and overlapping cues stay in the key. The headroom test
+  budgets for the loudest drift.
+- **Struck notes shimmer.** Every fundamental `bell()` strikes is two voices:
+  the note, and a unison twin 3.5 cents sharp at 16% of its level that dies at
+  70% of its length (`UNISON`). The two beat slowly — once or twice a second
+  across the catalogue's register — the way a piano's paired strings or a real
+  bell's paired modes do, then the twin fades and the note ends pure. They
+  share the note's level rather than adding to it, so nothing got louder.
+- **The room darkens as it rings** (`roomImpulse`, `ROOM`). A 12 ms pre-delay,
+  so the strike is heard before the walls answer it; an exponential decay
+  (RT60 1.5 s), which is what a room does — the tail it replaced sagged and
+  then dropped away; and damping that closes from ~4.5 kHz to ~450 Hz across
+  the tail, because in a real room the top end dies first. A tail with a
+  constant spectrum is a plug-in; one that darkens is a place. The
+  ConvolverNode scales every impulse response to the same power, so a cue's
+  `space` still means the send level it always did.
+- **Overlaps are rounded off, not clipped** (`softClipCurve`). Every cue clears
+  the ceiling on its own, but a chime still ringing when the next lands can sum
+  past it, and a wave clipped flat is the harshest sound digital audio makes.
+  The output stage is a straight wire up to 0.8 of full scale and a tanh
+  shoulder above it — not a compressor, so the loudness hierarchy is never
+  squashed.
+
+The catalogue was re-levelled around these: pink noise carries more body
+through a paper cue's bandpass than white did, so the paper family's noise
+gains roughly halved to keep each cue at (or a touch under) its old loudness.
+Rendered offline in Chromium and measured against the previous engine, the
+paper and press cues lost 3–8 dB above 5 kHz at matched loudness, and two
+clicks in a row went from identical to about half-correlated.
 
 ## When a press counts as a press
 
@@ -109,9 +183,10 @@ The difference between a chime that feels like a reward and one that feels like
 a notification is almost never the notes. It's five things underneath them, and
 the reward family in `soundConfig.ts` is built from all five:
 
-- **Struck, not faded in.** `bell(freq, …)` renders one note as three
-  oscillators — the fundamental, an octave, and a twelfth — where the partials
-  are scaled to die in a fraction of the fundamental's time. The spectrum
+- **Struck, not faded in.** `bell(freq, …)` renders one note as four
+  oscillators — the fundamental and its unison twin (see "Why it doesn't sound
+  synthesized"), an octave, and a twelfth — where the partials are scaled to
+  die in a fraction of the fundamental's time. The spectrum
   narrows as the note rings, which is what a real struck metal bar does and
   what a lone sine can never do. Both partials are exact harmonics, so
   stacking several of these stays consonant instead of clanging like an actual
@@ -129,8 +204,8 @@ the reward family in `soundConfig.ts` is built from all five:
   rather than heard, and inaudible on a laptop speaker, but it's the difference
   between weight and a beep on headphones.
 - **A room.** `space` sends the cue to a shared convolution reverb (a
-  synthesized impulse response — decaying, lowpassed, per-channel noise, built
-  once). Dry synthesis always sounds like a phone UI. Reward cues use it;
+  synthesized impulse response — pre-delayed, exponentially decaying,
+  per-channel noise that darkens as it rings, built once). Dry synthesis always sounds like a phone UI. Reward cues use it;
   interface and paper cues stay dry, because a tail on something pressed forty
   times an hour is mud.
 

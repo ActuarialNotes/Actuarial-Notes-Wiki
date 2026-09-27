@@ -1,9 +1,12 @@
 import { describe, it, expect } from 'vitest'
 import {
+  KEY,
   SOUND_RECIPES,
+  VARIATION,
   comboBloom,
   comboVoicing,
   nextComboIndex,
+  playVariation,
   recipeDuration,
   type SoundEvent,
   type SoundRecipe,
@@ -47,6 +50,33 @@ function principals(recipe: SoundRecipe): ToneSpec[] {
 }
 
 const semitones = (a: number, b: number) => Math.round(12 * Math.log2(b / a))
+
+/**
+ * A voice's own harmonics — the octave and twelfth `bell()` puts over a note.
+ * They are the note's timbre, not a note of their own.
+ */
+function isPartial(tone: ToneSpec, recipe: SoundRecipe): boolean {
+  return (recipe.tones ?? []).some(other => other !== tone && other.at === tone.at &&
+    [2, 3].some(n => Math.abs(tone.freq - other.freq * n) < 0.01))
+}
+
+/** Every pitch a tone sounds — where it starts, and where it glides to. */
+function pitchesOf(tone: ToneSpec): number[] {
+  const cents = tone.detune ?? 0
+  return [tone.freq, ...(tone.glide !== undefined ? [tone.glide] : [])]
+    .map(freq => freq * Math.pow(2, cents / 1200))
+}
+
+/** How far (in cents) a frequency sits from the nearest note of `scale` (semitones above C). */
+function centsOffKey(freq: number, scale: readonly number[]): number {
+  const C0 = 16.3516
+  const aboveC = ((1200 * Math.log2(freq / C0)) % 1200 + 1200) % 1200
+  return Math.min(...scale.flatMap(step => [step * 100, step * 100 + 1200, step * 100 - 1200])
+    .map(cents => Math.abs(aboveC - cents)))
+}
+
+/** The loudest a single play can be pushed by `playVariation`. */
+const LOUDEST_PLAY = Math.pow(10, VARIATION.gainDb / 20)
 
 /**
  * Worst-case level of a cue at time `t`: every voice's envelope summed as if
@@ -244,8 +274,9 @@ describe('sound catalogue', () => {
       // twenty voices into one bus. Summed in phase they must still clear the
       // destination's ceiling, or the payoff distorts for anyone with the
       // volume slider up.
+      // …and with the loudest nudge `playVariation` can give a single play.
       for (const [event, recipe] of entries()) {
-        expect(peakLevel(recipe), `${event} clips at full volume`).toBeLessThan(0.85)
+        expect(peakLevel(recipe) * LOUDEST_PLAY, `${event} clips at full volume`).toBeLessThan(0.85)
       }
     })
 
@@ -383,6 +414,109 @@ describe('sound catalogue', () => {
       const first = (SOUND_RECIPES.study.noise ?? []).find(n => n.at === 0)
       expect(first, 'the study cue has no paper under it').toBeDefined()
       expect(first!.to!, 'the deck settles, so the sweep falls').toBeLessThan(first!.from)
+    })
+  })
+
+  describe('one key', () => {
+    // Cues overlap constantly — a press in a chime's tail, a level-up over the
+    // session fanfare — so the whole catalogue is written in one key, from its
+    // pentatonic, where no two notes are a semitone apart.
+    const TOLERANCE = 12 // cents: a unison voice's detune, and rounding in the reference pitches
+
+    it('writes every note from the pentatonic', () => {
+      for (const [event, recipe] of entries()) {
+        for (const tone of recipe.tones ?? []) {
+          if (isPartial(tone, recipe)) continue
+          for (const freq of pitchesOf(tone)) {
+            expect(centsOffKey(freq, KEY.pentatonic), `${event}: ${freq.toFixed(1)} Hz is off the pentatonic`)
+              .toBeLessThan(TOLERANCE)
+          }
+        }
+      }
+    })
+
+    it('keeps every rung of every climb inside the key', () => {
+      // A climb transposes the whole cue, so its upper rungs reach the rest of
+      // the scale — but never step outside it.
+      for (const [event, recipe] of climbing()) {
+        for (const rung of recipe.combo!.steps) {
+          for (const tone of recipe.tones ?? []) {
+            if (isPartial(tone, recipe)) continue
+            for (const freq of pitchesOf(tone)) {
+              expect(centsOffKey(freq * Math.pow(2, rung / 12), KEY.scale),
+                `${event} leaves the key on rung +${rung}`).toBeLessThan(TOLERANCE)
+            }
+          }
+        }
+      }
+    })
+
+    it('draws the pentatonic from the scale', () => {
+      for (const step of KEY.pentatonic) expect(KEY.scale).toContain(step)
+      // No semitone anywhere in it — that is the property the rule is for.
+      const steps = [...KEY.pentatonic, KEY.pentatonic[0] + 12]
+      for (let i = 1; i < steps.length; i++) expect(steps[i] - steps[i - 1]).toBeGreaterThan(1)
+    })
+  })
+
+  describe('struck notes', () => {
+    it('beat gently against a unison voice a few cents away', () => {
+      // One sine at one pitch never moves, and nothing acoustic is that still.
+      // Every struck fundamental has a quieter, shorter twin a few cents sharp:
+      // close enough to beat slowly (a shimmer), too close to read as a second
+      // note, and gone before the note is, so the note ends pure.
+      for (const event of REWARDS) {
+        const recipe = SOUND_RECIPES[event]
+        // Struck notes carry an octave partial; `streak`'s swell underneath its
+        // bells is not struck, and has nothing to shimmer.
+        const struck = principals(recipe).filter(note => (recipe.tones ?? []).some(t =>
+          t.at === note.at && Math.abs(t.freq - note.freq * 2) < 0.01))
+        expect(struck.length, `${event} strikes nothing`).toBeGreaterThan(0)
+        for (const note of struck) {
+          const twin = (recipe.tones ?? []).find(t =>
+            t !== note && t.at === note.at && t.freq === note.freq && t.detune)
+          expect(twin, `${event}: ${note.freq} Hz has no unison voice`).toBeDefined()
+          expect(Math.abs(twin!.detune!), `${event}: the unison is a second note`).toBeLessThan(10)
+          expect(Math.abs(twin!.detune!), `${event}: the unison cannot beat`).toBeGreaterThan(1)
+          expect(twin!.gain ?? 1, `${event}: the unison is as loud as the note`)
+            .toBeLessThan((note.gain ?? 1) * 0.3)
+          expect(twin!.dur, `${event}: the unison outlasts the note`).toBeLessThan(note.dur)
+        }
+      }
+    })
+  })
+
+  describe('playVariation', () => {
+    const fixed = (value: number) => () => value
+
+    it('plays the cue exactly as written from the middle of its range', () => {
+      const centre = playVariation(fixed(0.5))
+      expect(centre.gain).toBeCloseTo(1, 10)
+      expect(centre.pitch).toBeCloseTo(1, 10)
+      expect(centre.grain).toBeCloseTo(1, 10)
+    })
+
+    it('never pushes a play out of tune or out of its place in the hierarchy', () => {
+      // Three cents moved together keeps every interval inside a cue pure and
+      // two overlapping cues in the key; under a decibel keeps the loudness
+      // hierarchy the catalogue is balanced on.
+      expect(VARIATION.toneCents).toBeLessThanOrEqual(5)
+      expect(VARIATION.gainDb).toBeLessThanOrEqual(1)
+      for (const edge of [0, 0.999999, 1, -3, 7]) {
+        const drift = playVariation(fixed(edge))
+        expect(Math.abs(1200 * Math.log2(drift.pitch))).toBeLessThanOrEqual(VARIATION.toneCents + 1e-9)
+        expect(Math.abs(20 * Math.log10(drift.gain))).toBeLessThanOrEqual(VARIATION.gainDb + 1e-9)
+        expect(Math.abs(1200 * Math.log2(drift.grain))).toBeLessThanOrEqual(VARIATION.noiseCents + 1e-9)
+      }
+    })
+
+    it('actually varies, so no two plays are the same sound', () => {
+      let seed = 1
+      const random = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647 }
+      const plays = Array.from({ length: 20 }, () => playVariation(random))
+      expect(new Set(plays.map(p => p.gain.toFixed(6))).size).toBeGreaterThan(15)
+      expect(new Set(plays.map(p => p.pitch.toFixed(8))).size).toBeGreaterThan(15)
+      expect(new Set(plays.map(p => p.grain.toFixed(6))).size).toBeGreaterThan(15)
     })
   })
 

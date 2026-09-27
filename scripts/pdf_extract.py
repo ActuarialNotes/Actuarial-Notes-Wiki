@@ -495,12 +495,14 @@ CAPS_HEADING_RE = re.compile(r"^\s*[A-Z][A-Z0-9 '\u2018\u2019(),./-]{4,}$")
 # on nearly every page *by design*, so they are the one thing furniture
 # detection must never eat — unlike a running header or a page number, which
 # repeat for the opposite reason.
-# The last two are the pre-2014 report's own headings (`Solution 2`,
-# `Examiner Comment`): folded into the line below, the comment heading takes
-# the first sentence of the commentary with it and the split never finds it.
+# The last three are the pre-2014 reports' own headings (`Solution 2`,
+# `Model Solution 2`, `Examiner Comment`): folded into the line below, the
+# comment heading takes the first sentence of the commentary with it and the
+# split never finds it; folded into the line above, a model solution runs on
+# as the end of the one before it.
 CONTENT_MARKER_RE = re.compile(
     r"^\s*(?:Part\s+[a-h]\b|Sample(?:\s+Answer)?\s+\d+\b|Solution\s*[:#]"
-    r"|Question\s*#?\s*\d+\b|Solution\s*\d+\s*$"
+    r"|Question\s*#?\s*\d+\b|Solution\s*\d+\s*$|Model\s+(?:Solution|Answer)\s*\d*\s*:?\s*$"
     "|Examiners?['’]?s?\\s+Comments?\\b)",
     re.IGNORECASE,
 )

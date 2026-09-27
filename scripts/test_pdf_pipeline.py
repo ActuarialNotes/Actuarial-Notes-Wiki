@@ -574,6 +574,20 @@ class TestExam7Layouts(unittest.TestCase):
         self.assertTrue(px.swallows_structure([["Model", "Solution 2"], ["1", "300"]]))
         self.assertFalse(px.swallows_structure([["Risk", "Losses"], ["1", "300"], ["2", "400"]]))
 
+    def test_a_model_solution_heading_is_never_folded_into_prose(self):
+        # A sample that ends mid-sentence took the next `Model Solution 2`
+        # into its own last line, so the two samples read as one — and an
+        # unnumbered `Model Solution` took the first line of the answer.
+        flat = px.reflow_block(
+            "the new hazard groups are homogeneous\nModel Solution 2\n"
+            "A risk classification should\nModel Solution\nprotect the system"
+        )
+        self.assertEqual(
+            flat.splitlines(),
+            ["the new hazard groups are homogeneous", "Model Solution 2",
+             "A risk classification should", "Model Solution", "protect the system"],
+        )
+
     def test_legacy_samples_are_gathered_per_part(self):
         bounds = px.segment(self.LEGACY, px.LEGACY_QUESTION_RE)
         self.assertEqual([b.num for b in bounds], [1, 2])

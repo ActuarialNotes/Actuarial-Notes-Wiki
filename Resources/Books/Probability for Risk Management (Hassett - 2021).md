@@ -8,12 +8,15 @@ Edition: "3rd"
 Type: "Textbook"
 ISBN: "978-1-64756-322-6"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-27
+  last_checked_by: agent:validate-v1
   content_hash: sha256:e574423e2825902165040b36a278d358c76786634142d837faae406f2813a600
-  sources: []
+  sources:
+    - "Hassett, Stewart and Milovanovic, Probability for Risk Management, 3rd ed. (ACTEX Learning, 2021) - publisher digital sample: title page p.2, copyright page p.3, preface p.iii, printed contents pp.v-xi and PDF bookmark outline (sha256:c327b939c7793edf526f7b9618699df1b57858093f6d4118508b1766bbd84115) https://www.actexmadriver.com/samples/PRM_3rd_Edition_Digital%20Sample.pdf"
+    - "ACTEX Learning product page, Probability for Risk Management 3rd Edition - ISBN list (Printed 978-1-64756-322-6; Digital 365-day 978-1-64756-323-3) https://www.actexlearning.com/exams/p/probability-for-risk-management"
+    - "SOA Probability Exam syllabus, November 2026, REFERENCES pp.5-6 (sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397) https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Probability for Risk Management (Hassett - 2021).md

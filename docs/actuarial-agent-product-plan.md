@@ -15,6 +15,13 @@ vault) and the [Actuarial Ontology](https://github.com/Actuarial-Notes/Actuarial
 > planned, staffed, and shipped as such. Where the Agent reuses learning-app infrastructure,
 > this document says so explicitly.
 >
+> **Status (2026-09-26):** the first slice of Phase A ships *outside* the app — the
+> knowledge base is now an MCP connector that Claude and ChatGPT use directly, with grounded,
+> cited answers, fact-check status on every result and a practice loop marked against the
+> official solutions (`docs/ai-connector.md`). A1's grounding contract and A2's term resolution
+> (aliases, abbreviations, link-text variants) are in it; the ontology layer, the eval harness and
+> an in-app surface are not.
+>
 > Read `CLAUDE.md` for the repo map and this document assumes it. The ontology-side companion
 > to this plan lives at `Actuarial-Ontology/docs/actuarial-agent.md` — read it for the
 > semantic-foundation details (competency questions as the eval harness, SPARQL/SHACL needs).

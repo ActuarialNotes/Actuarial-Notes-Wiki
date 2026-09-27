@@ -18,6 +18,7 @@ import { useSubscription } from '@/hooks/useSubscription'
 import { useOnboardingTour } from '@/hooks/useOnboardingTour'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { SoundSettingsCard } from '@/components/SoundSettingsCard'
+import { AiConnectorCard } from '@/components/AiConnectorCard'
 import { TOUR_ENABLED } from '@/lib/featureFlags'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { ProBadge } from '@/components/ProBadge'
@@ -289,6 +290,7 @@ export default function Settings() {
     ...(user ? ACCOUNT_NAV_ITEMS : []),
     { id: 'appearance', label: 'Appearance' },
     { id: 'sound', label: 'Sound' },
+    { id: 'ai', label: 'AI assistants' },
     { id: 'support', label: 'Support' },
     ...(user ? [{ id: 'data', label: 'Progress & Data' }] : []),
   ]
@@ -930,6 +932,11 @@ export default function Settings() {
             {/* ---- Sound ---- */}
             <section ref={el => { sectionRefs.current.sound = el }} id="sound">
               <SoundSettingsCard />
+            </section>
+
+            {/* ---- AI assistants (docs/ai-connector.md) ---- */}
+            <section ref={el => { sectionRefs.current.ai = el }} id="ai">
+              <AiConnectorCard />
             </section>
 
             {/* ---- Support ---- */}

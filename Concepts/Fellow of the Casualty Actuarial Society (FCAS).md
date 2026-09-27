@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ffdfffd443920f70ea75e1341b7cdb664f4697baf92bccdc32d5067e5abee61e
+  content_hash: sha256:8eed6faea8debfdb4b4ed424a71f18f412e2cf275d1969590f742d683d056cbb
   sources: []
   open_findings: 0
   open_critical: 0
@@ -14,6 +14,8 @@ verification:
 ## Fellow of the Casualty Actuarial Society (FCAS)
 
 **FCAS** is the fellowship credential of the **Casualty Actuarial Society (CAS)** — the senior of its two designations, and the one most property and casualty actuarial careers are pointed at. A Fellow has completed everything required of an [[Associate of the Casualty Actuarial Society (ACAS)|Associate]] and three further exams covering the advanced end of the same material: reserving, ratemaking, and the capital and risk questions an insurer's management and regulator actually argue about.
+
+%%credential-path FCAS%%
 
 ## Requirements
 

@@ -794,12 +794,15 @@ compile — don't "clean up" the flagged code as dead.
   vault shows nothing there — is swapped by `WikiArticle` for the interactive SOA/CAS path
   (`components/wiki/CredentialPath.tsx`): start → associate → fellow → continuing education,
   authored in `data/credentialPaths.ts` and held in step with `data/tracks.ts` both ways by
-  its test. The continuing-education stage (CE/CPD rules, iCAS's CSPA and cat credentials,
+  its test. It is the first thing on the guide, and each designation page (below) places it
+  too, naming itself — `%%credential-path ACAS%%` — so it opens on that society at that
+  stage (`readCredentialPathMarker`; a name no stage has is left on the page as text). The continuing-education stage (CE/CPD rules, iCAS's CSPA and cat credentials,
   CERA, FCIA) has no track behind it and is transcribed from the societies' own pages.
 - The four credential pages — `Concepts/Associate of the Casualty Actuarial Society
   (ACAS).md` and its ASA / FCAS / FSA siblings — are what the Study Guides page's track
   headings open. `data/tracks.ts` names them (`Track.conceptPage`), so a renamed page is a
-  one-line change there.
+  one-line change there. Each carries its `%%credential-path <designation>%%` line just above
+  `## Requirements`; `credentialPaths.test.ts` fails if one goes missing.
 - Every exam page ends with a `## Source Material` heading over a
   `> [!answer]- Source Material` callout: one top-level bullet per syllabus reading (a
   `[[wiki link]]`, normally to a `Resources/Books/` page) with an indented bullet naming the

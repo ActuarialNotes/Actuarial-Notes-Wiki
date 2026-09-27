@@ -4,14 +4,17 @@
 //
 // It stands in for the guide's `%%credential-path%%` line (see
 // `data/credentialPaths.ts`, which holds the stages and keeps them in step
-// with `data/tracks.ts`). The stages are a tab list: one row of pills joined by
+// with `data/tracks.ts`), and for the `%%credential-path ACAS%%` line on each
+// designation page, which opens it at that designation — `start`. The stages are a tab list: one row of pills joined by
 // a line, the last joined by a dashed one because it never ends, and the open
 // stage's requirements underneath. Exams lead their row with the same logo
 // tile the Study Guides grid uses, so the colours climb the same ladder; the
 // courses, modules and credentials get a neutral tile with a glyph.
 //
 // A requirement with a vault page opens it the way any link in the article
-// does — through `onOpen`, which is the article's own link handler.
+// does — through `onOpen`, which is the article's own link handler. The one
+// exception is the stage the page is about: on the ACAS page, the ACAS heading
+// is where you already are, so it isn't a link.
 
 import { useRef, useState, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react'
 import { RefreshCw } from 'lucide-react'
@@ -24,6 +27,7 @@ import { cn } from '@/lib/utils'
 import {
   CREDENTIAL_PATHS,
   type PathItem,
+  type PathPosition,
   type PathStage,
 } from '@/data/credentialPaths'
 
@@ -83,11 +87,11 @@ function ItemRow({ item, onOpen }: { item: PathItem; onOpen: OpenRef }) {
   )
 }
 
-function StageDetail({ stage, onOpen }: { stage: PathStage; onOpen: OpenRef }) {
+function StageDetail({ stage, here, onOpen }: { stage: PathStage; here: boolean; onOpen: OpenRef }) {
   return (
     <>
       <h3 className="text-base font-semibold text-foreground">
-        {stage.ref ? <PageLink refTo={stage.ref} onOpen={onOpen}>{stage.title}</PageLink> : stage.title}
+        {stage.ref && !here ? <PageLink refTo={stage.ref} onOpen={onOpen}>{stage.title}</PageLink> : stage.title}
       </h3>
       <p className="mt-1 text-sm text-muted-foreground leading-relaxed">{stage.blurb}</p>
       <ul className="mt-2">
@@ -107,14 +111,15 @@ function StageDetail({ stage, onOpen }: { stage: PathStage; onOpen: OpenRef }) {
   )
 }
 
-export function CredentialPath({ onOpen }: { onOpen: OpenRef }) {
-  // Open on the society the reader last picked on the Quiz or Study Guides
-  // tab. Choosing one here doesn't change that choice — this is a page to
-  // compare the two on, not a setting.
-  const [body, setBody] = useState<ExamBody>(() => loadBody() ?? 'SOA')
+export function CredentialPath({ onOpen, start }: { onOpen: OpenRef; start?: PathPosition }) {
+  // Open at the page's own designation if it names one; otherwise on the
+  // society the reader last picked on the Quiz or Study Guides tab. Choosing
+  // one here doesn't change that choice — this is a path to compare the two
+  // on, not a setting.
+  const [body, setBody] = useState<ExamBody>(() => start?.body ?? loadBody() ?? 'SOA')
   // The stage is kept by position, so flipping society keeps you at the same
   // point on the path (fellowship on one, fellowship on the other).
-  const [index, setIndex] = useState(0)
+  const [index, setIndex] = useState(start?.stage ?? 0)
   const tabsRef = useRef<HTMLDivElement>(null)
 
   const path = CREDENTIAL_PATHS[body]
@@ -144,7 +149,7 @@ export function CredentialPath({ onOpen }: { onOpen: OpenRef }) {
     <section
       data-credential-path=""
       aria-label="Path to a credential"
-      className="not-prose my-6 rounded-xl border border-border/70 p-4 sm:p-5"
+      className="not-prose my-6 first:mt-0 rounded-xl border border-border/70 p-4 sm:p-5"
     >
       <div className="flex items-center justify-between gap-3">
         <p className="text-sm font-medium text-foreground">{path.name}</p>
@@ -210,7 +215,11 @@ export function CredentialPath({ onOpen }: { onOpen: OpenRef }) {
         aria-labelledby={`credential-path-${body}-${stage.kind}`}
         className="mt-4"
       >
-        <StageDetail stage={stage} onOpen={onOpen} />
+        <StageDetail
+          stage={stage}
+          here={start?.body === body && start.stage === at}
+          onOpen={onOpen}
+        />
       </div>
     </section>
   )

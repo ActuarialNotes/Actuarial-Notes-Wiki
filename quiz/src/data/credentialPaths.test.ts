@@ -1,7 +1,13 @@
 import { describe, it, expect } from 'vitest'
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { CREDENTIAL_PATHS, CREDENTIAL_PATH_MARKER, type PathItem, type StageKind } from './credentialPaths'
+import {
+  CREDENTIAL_PATHS,
+  CREDENTIAL_PATH_MARKER,
+  readCredentialPathMarker,
+  type PathItem,
+  type StageKind,
+} from './credentialPaths'
 import { TRACKS } from './tracks'
 import { entryRefToRepoPath } from '@/lib/wikiRoutes'
 import { buildListenContent } from '@/lib/listenTokens'
@@ -71,10 +77,36 @@ describe('credential paths', () => {
     expect(missing).toEqual([])
   })
 
-  it('is placed by the general study guide', () => {
+  it('is the first thing on the general study guide', () => {
     const lines = readFileSync(resolve(VAULT, GUIDE), 'utf8').split('\n')
     expect(lines.filter(l => l.trim() === CREDENTIAL_PATH_MARKER)).toHaveLength(1)
+    expect(lines.find(l => l.trim() !== '')?.trim()).toBe(CREDENTIAL_PATH_MARKER)
   })
+
+  // Each designation page shows the path opened at itself. The page is the
+  // stage's own `ref`, so a renamed page or a missing marker fails here.
+  it.each(
+    Object.values(CREDENTIAL_PATHS).flatMap(p =>
+      p.stages.flatMap((s, i) => (s.ref ? [[s.short, s.ref, p.body, i] as const] : [])),
+    ),
+  )('is placed by the %s page, opened at itself', (short, ref, body, stage) => {
+    const lines = readFileSync(resolve(VAULT, entryRefToRepoPath(ref)), 'utf8').split('\n')
+    const markers = lines.filter(l => readCredentialPathMarker(l) !== null)
+    expect(markers.map(l => l.trim())).toEqual([`%%credential-path ${short}%%`])
+    expect(readCredentialPathMarker(markers[0])).toEqual({ at: { body, stage } })
+  })
+
+  it('reads the bare marker as the unplaced path', () => {
+    expect(readCredentialPathMarker(CREDENTIAL_PATH_MARKER)).toEqual({})
+    expect(readCredentialPathMarker(`  ${CREDENTIAL_PATH_MARKER}  `)).toEqual({})
+  })
+
+  // A designation no stage has isn't a marker: the typo stays visible on the
+  // page instead of quietly drawing the path at the start.
+  it.each(['%%credential-path CERA%%', '%%credential-path Start%%', '%%credential-paths%%', 'credential-path'])(
+    'refuses %s',
+    text => expect(readCredentialPathMarker(text)).toBeNull(),
+  )
 
   // The marker is an Obsidian comment; Listen must not read it out.
   it('keeps the marker out of Listen', () => {

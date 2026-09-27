@@ -1,18 +1,18 @@
 ---
 Title: "Morneau Shepell Handbook of Canadian Pension and Benefit Plans"
-Author: "Morneau Shepell"
+Authors: "Morneau Shepell, Bethune Whiston, Gregory Clooney, Tracy Solhi and Nisha Modi"
+Publisher: "LexisNexis Canada"
 Year: "2020"
 date: "2020"
 Edition: "17th"
-Publisher: "LexisNexis Canada"
 Type: "Textbook"
-Available from: "CAS Study Kit (not published online)"
+ISBN: "9780433506997"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:154944825923b8e40a70f0949f233a3292741811b698f0db8481997f06110e2c
+  content_hash: sha256:85d7d8739373fe8a63cab54167d72c170a4bb6fab775bff0ce96800b21c7c18b
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,28 +20,52 @@ verification:
 ---
 ![[Morneau Shepell - Cover.svg]]
 
-The standard Canadian reference on pension and benefit plans and the public programs behind them. Read for [[Exam 6C (CAS)|Exam 6C]] objectives B1–B3; the syllabus assigns **Chapters 17–19** and states that **candidates will not be responsible for specific values and figures included in the text**.
+A handbook to the essential elements of Canadian public and private pension and benefit plans, their legal and regulatory framework and administration. In the publisher's description, the 17th edition (LexisNexis Canada, November 2020; 742 pages), updated by Morneau Shepell and HUB International professionals, covers pensions and benefits from retirement savings and deferred compensation arrangements to extended health care and employee assistance plans, including government programs such as workers' compensation and employment insurance.
 
-That last instruction is the key to reading it: learn the *design* of each program — who is covered, who pays, what triggers a benefit, how it is financed — and not the dollar amounts, which change annually.
+> [!info] On the syllabus
+> - [[Exam 6C (CAS)|Exam 6C]] — objectives B1–B3; Chapters 17–19, not responsible for specific values and figures included in the text; in the study kit.
 
-## What the assigned chapters supply
+## Preface
 
-The chapters cover the **government-sponsored programs** that Domain B lists as its subject matter — the Canadian side of the framework [[Government Insurers Study Note]] sets out in the abstract:
+## List of Acronyms
 
-- **[[Workers Compensation Insurance|Workers' compensation]]** — provincial boards operating on the [[Meredith Principles]]: no-fault compensation, collective employer liability, exclusive jurisdiction of the board (the "historic trade" of the worker's right to sue for guaranteed benefits), and industry-based assessment rates with [[Experience Rating|experience rating]] on top.
-- **[[Employment Insurance]]** — a federal [[Social Insurance|social insurance]] program financed by employer and employee premiums, with eligibility, benefit duration and replacement rate varying by region and by hours worked; and the employer premium reduction where a private plan meets the standard.
-- **[[Health Care Insurance|Public health care]]** — provincial single-payer plans under the *Canada Health Act*'s conditions, the boundary of what they cover, and the supplementary private benefit plans that sit above that boundary (drugs, dental, vision, paramedical).
+## Part I Retirement Income Arrangements
+### 1 Overview of Retirement Income Arrangements
+### 2 Government Pension Programs
+### 3 Employer Pension Plans – Terms and Conditions
+### 4 Governance of Retirement, Savings and Other Benefit Plans
+### 5 Design, Registration and Administration of Pension Plans
+### 6 Financial Management of Pension Plans
+### 7 Pension Fund Investment Management
+### 8 Registration of Pension Plans Under the Income Tax Act and Taxation of Retirement Savings
+### 9 Pension Standards Legislation
+### 10 Case Law Affecting Pension Plans
+### 11 Multi–Employer Pension Plans
+### 12 Public Sector Pension Plans
+### 13 Supplementary Pension Arrangements
+### 14 Other Retirement Income, Savings, and Deferred Compensation Arrangements
+### 15 Winding Up a Pension Plan
 
-## The exam angles
+## Part II Employee Benefits
+### 16 Overview of Employee Benefits
+### 17 Provincial Hospital and Medical Insurance Plans
+### 18 Workers' Compensation
+### 19 Employment Insurance
+### 20 Extended Health and Dental Care Plans
+### 21 Disability Benefits and Income Programs
+### 22 Workplace Health Management
+### 23 Group Life and Accident Insurance
+### 24 Post–Retirement and Post–Employment Benefits
+### 25 Financial Management and Administration of Employee Benefit Plans
+### 26 Flexible Benefits
+### 27 Employee Assistance Programs and Other Employee Benefits
 
-- Each program is **compulsory participation with pooled financing** — the [[Social Insurance|social insurance]] answer to [[Adverse Selection|adverse selection]], since a voluntary version of any of them would be bought mainly by those expecting to claim.
-- **The boundary with private insurance.** Public health care sets the floor that group benefit plans build on; workers' compensation removes work injury from the tort system and therefore from liability insurance; EI interacts with private disability coverage. What the public program does *not* cover is where the private market lives, and that boundary is where the exam asks about interaction.
-- **Funding.** Workers' compensation boards are funded by employer assessment and are expected to be fully funded; EI runs through the Consolidated Revenue Fund with a premium-setting mechanism intended to break even over a cycle. Evaluating a program's viability (objective B3) means examining that funding mechanism.
+## Part III Developing Areas
+### 28 Retirement Planning
+### 29 Communicating Benefits and Retirement Savings Plans
 
-## Related readings
-- [[Government Insurers Study Note]] — the five reasons for government participation
-- [[Dutil]] — the residual auto market
-- [[PACICC]] — the guaranty fund
+## Case Table
 
-## Links
-- [Exam 6C content outline (CAS)](https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf)
+## Sources
+- [Morneau Shepell Handbook of Canadian Pension and Benefit Plans, 17th Edition (LexisNexis Canada, 2020)](https://store.lexisnexis.com/en-ca/products/morneau-shepell-handbook-of-canadian-pension-and-benefit-plans-17th-edition.html) — the publisher's record: title, authors, publication date (17 November 2020), ISBN, page count, description and table of contents
+- [CAS Exam 6C Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf) — the citation, the assigned chapters and the note on values and figures, and its source as the study kit

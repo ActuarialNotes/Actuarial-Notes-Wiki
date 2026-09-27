@@ -1,10 +1,10 @@
 ---
 Title: "Stress Testing"
-Author: "Office of the Superintendent of Financial Institutions Canada"
+Authors: "Office of the Superintendent of Financial Institutions"
+Publisher: "Office of the Superintendent of Financial Institutions"
 Year: "2009"
 date: "2009"
-Publisher: "Office of the Superintendent of Financial Institutions Canada"
-Type: "Regulatory Guideline"
+Type: "Guideline"
 Code: "Guideline E-18"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Stress_Testing.pdf)"
 verification:
@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:7a27b326d4121202e1fd502cfc41a9d751b36019abbff912ad7facf5c2a0e186
+  content_hash: sha256:ae76427bff7ad0420a77d8efe5cd040eb5f8042e164e26cb318bcb1e967727bb
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,50 +20,59 @@ verification:
 ---
 ![[OSFI Stress Testing - Cover.svg]]
 
-OSFI **Guideline E-18** (December 2009) on **[[Stress Testing|stress testing]]** — written after the financial crisis, when firms discovered their stress tests had not contemplated anything like what happened. Read for [[Exam 6C (CAS)|Exam 6C]] objectives C2–C4.
+OSFI's guideline setting out its expectations for stress testing, an important tool for senior management's business strategy, risk and capital decisions. Guideline E-18, dated December 2009 in the Sound Business and Financial Practices category, applies to banks and bank holding companies, federally regulated trust and loan companies, cooperative credit associations, life insurers, fraternal benefit societies, property and casualty insurers and insurance holding companies. It defines stress testing and its purposes, sets out the role of senior management and what a program, its methodology and its scenarios should cover, and says how OSFI uses stress testing in supervision.
 
-## Contents
+> [!info] On the syllabus
+> - [[Exam 6C (CAS)|Exam 6C]] — objectives C2–C4; Guideline E-18, December 2009, with no sections excluded.
 
-| Section | Subject |
-|---|---|
-| **A** | Stress testing defined |
-| **B** | Purposes of stress testing |
-| **C** | Role of senior management |
-| **D** | General considerations for stress testing programs |
-| **E** | Methodology and scenario selection |
-| **F** | Specific areas of focus |
-| **G** | Supervisory considerations |
+## A Stress Testing Defined
+- [[Stress Testing]] is a risk management technique used to evaluate the potential effects on an institution's financial condition of a set of specified changes in risk factors, corresponding to exceptional but plausible events; it includes scenario testing and sensitivity testing.
+- It is especially important after long periods of benign conditions, when fading memory can lead to complacency and the underpricing of risk, and during expansion, when new products grow rapidly with limited historical experience.
+- It attempts to determine the impact of situations where the assumptions underlying established models break down.
 
-## A. The definitions
+## B Purposes of Stress Testing
+- Stress testing should be embedded in [[Enterprise Risk Management|enterprise-wide risk management]] and feed into decision making, including setting the [[Risk Appetite|risk appetite]], setting exposure limits and evaluating strategic choices.
+- A program should serve four purposes: risk identification and control; a complementary risk perspective to other risk management tools, such as statistical models built on historical data; supporting capital management; and improving liquidity management.
 
-- **Sensitivity test** — the effect of moving **one** parameter, usually over a short horizon, with no view about why it moved.
-- **Scenario test** — a coherent set of simultaneous movements, often over a longer horizon, driven by a narrative (historical or hypothetical).
-- **[[Reverse Stress Testing|Reverse stress test]]** — start from the outcome (the firm becomes unviable) and work backwards to the scenarios that would produce it. This is the concept the guideline is most often examined on, because it is designed to defeat the failure mode of ordinary stress testing: management chooses the scenarios, and will not choose the ones it cannot survive.
+## C Role of Senior Management
+- Senior management is accountable for the program's implementation, management and oversight, and for adequate plans to deal with remote but plausible stress scenarios; for a foreign branch this includes the Chief Agent or Principal Officer and a senior official from the home office.
+- It must ensure a "fit for purpose", enterprise-wide program, participate in identifying potential stress scenarios, and be able to articulate the institution's risk appetite.
+- OSFI's expectations of Boards of Directors are left to its Corporate Governance Guideline.
 
-## B. Purposes
+## D General Considerations for Stress Testing Programs
+- Programs should take account of views from across the organisation and use a range of quantitative and qualitative techniques.
+- Written policies and procedures should govern the program, and the assumptions and fundamental elements of each exercise should be documented.
+- The infrastructure should be flexible enough to accommodate changing stress tests and to aggregate comparable risks and exposures across the institution.
+- The framework should be maintained and updated regularly, and its effectiveness assessed regularly and independently (for example, by internal audit).
 
-Risk identification and control; a complementary and challenging **risk perspective** to models built on historical data; support for **capital and liquidity management**; and improving **communication with the board and the supervisor** about vulnerability.
+## E Methodology and Scenario Selection
+- Stress tests should cover product-, business- and entity-specific views and all relevant risk factors, taking their interrelations into account; material risks may include credit (including counterparty and reinsurance), market, insurance, liquidity, operational and legal, [[Concentration Risk|concentration]], contagion, reputation, securitization, new business, regulatory and inflation risk.
+- Typical measures of impact include asset and liability values, accounting and economic profit and loss, required and available regulatory capital, economic capital, and liquidity and funding gaps.
+- Programs should include non-historical scenarios and a range of severities; a "failure of imagination" could lead to underestimating the likelihood and severity of extreme events.
+- Institutions should conduct [[Reverse Stress Testing|reverse stress tests]], which start from an outcome that challenges the viability of the firm and work backward to the scenarios that could bring it about.
+- For a property and casualty insurer, changing economic conditions influence investment income and expenses and, particularly in times of inflation, can lead to higher claims and loss reserves.
 
-## C–D. Governance and programme design
+## F Specific Areas of Focus
+- Risk Mitigation
+    - The performance of risk mitigating techniques such as [[Reinsurance|reinsurance]], hedging, netting and collateral should be challenged under stressed conditions, without undue reliance on the timeliness of mitigating actions.
+- Securitization and Warehousing Risks
+- Risks to Reputation
+- Counterparty Credit risk
+- Risk Concentrations
+    - Stress testing should consider concentrations arising directly from risk taking and indirectly from risk mitigation, such as counterparty concentrations from hedges of market and insurance risk.
 
-Senior management is **accountable** for the stress testing programme — its design, its severity, and acting on the results. A programme should be documented, cover the enterprise (product-, business-line- and firm-level), be reviewed and updated, and produce results that actually feed decisions. Stress tests that are run and filed are the failure the guideline names.
+## G Supervisory Considerations
+- OSFI reviews stress testing programs as part of its supervisory review process; for insurers, one example of stress testing is Financial Condition Testing ([[FCT]]).
+- In assessing a program OSFI may, among other things, check that scenarios are consistent with the institution's risk appetite, ask it to evaluate scenarios under which viability is compromised, examine capital resources and requirements under adverse scenarios, and challenge whether management actions would be available in a period of stress.
+- Stress testing and FCT are complementary; the annual FCT should be submitted to OSFI within 30 days of its presentation to the Board of Directors, Principal Officer or Chief Agent.
 
-## E. Methodology and scenario selection
-
-Scenarios should be **severe but plausible**, span multiple risk factors and their **interactions**, include events with **no historical precedent**, and consider the **duration** of the stress and the possibility that management's assumed mitigating actions are unavailable when everyone tries them at once.
-
-## F–G. Focus areas and supervision
-
-Areas that repay specific attention (risk concentrations, correlations that break down under stress, contingent exposures and liquidity), and how OSFI uses stress testing results in supervision.
-
-## Where it sits
-
-E-18 is the enterprise-wide, management-owned discipline; **[[FCT]]** is its actuarial, standards-bound cousin, and **[[ORSA]]** is where its results become an [[Internal Target Capital Ratio|internal capital target]]. A frequent exam task is to explain how sensitivity testing, scenario testing, reverse stress testing and FCT differ.
+## Glossary
+- Scenario testing uses a hypothetical future state of the world to define changes in risk factors; it normally involves changes in a number of risk factors, as well as [[Ripple Effect|ripple effects]] and related management and regulatory actions.
+- Sensitivity testing typically involves an incremental change in one risk factor, or a limited number, over a shorter time horizon such as an instantaneous shock, and requires fewer resources than scenario testing.
 
 ## Related readings
-- [[CIA FCT 1]] — scenarios, [[Ripple Effect|ripple effects]] and management actions
-- [[OSFI ORSA]] · [[OSFI Target Capital]]
-- [[OSFI Climate]] · [[IAA Climate]] — climate scenario analysis
+- [[OSFI Corporate Governance]] — the Corporate Governance Guideline, to which §C refers for OSFI's expectations of Boards of Directors
 
-## Links
-- [Stress Testing, Guideline E-18 (CAS)](https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Stress_Testing.pdf)
+## Sources
+- [Stress Testing, Guideline E-18 (OSFI, 2009)](https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Stress_Testing.pdf) — the document (the CAS-hosted copy): its cover page, table of contents, Sections A–G and the Glossary
+- [CAS Exam 6C Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf) — the citation and the assigned scope

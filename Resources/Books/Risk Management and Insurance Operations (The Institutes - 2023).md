@@ -1,17 +1,17 @@
 ---
 Title: "CAS DISC RM – Risk Management and Insurance Operations"
-Author: The Institutes
+Authors: "The Institutes"
+Publisher: "The Institutes"
 Year: "2023"
 date: "2023"
-Publisher: The Institutes
-Type: "Online Course"
-Available from: "[theinstitutes.org](https://web.theinstitutes.org/casualty-actuarial-society)"
+Type: "Course"
+Available from: "[web.theinstitutes.org](https://web.theinstitutes.org/casualty-actuarial-society)"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:d9994d17ed3980ee31833bfa7e705692aeb385765275b707eb99cd10b26e6a87
+  content_hash: sha256:1d51c5c8d701579685e755ec8bbd5576fe315346f63a105e8f209018aeead432
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,9 +21,10 @@ verification:
 
 The Institutes' online course for **CAS DISC RM**, and the only source material the [[Exam DISC-RM (CAS)|DISC RM]] syllabus names: the course contains the learning objectives and all the material needed to meet them, and ends in the exam. The printed textbook has the same content; review notes, a course guide of sample questions and answers, and flashcards are optional extras.
 
-The outline below is the course syllabus (© 2023 The Institutes), transcribed from the PDF the CAS links.
+> [!info] On the syllabus
+> - [[Exam DISC-RM (CAS)|DISC RM]] — topics 1–15, the whole course, which the CAS says "contains learning objectives and all the educational material to meet these objectives".
 
-## 1. Introduction to Risk Management
+## 1 Introduction to Risk Management
 
 - a. The Risk Management Environment
 - b. Objectives and Benefits
@@ -31,26 +32,26 @@ The outline below is the course syllabus (© 2023 The Institutes), transcribed f
 - d. Classifications and Categories
 - e. Process for Managing Risk
 
-## 2. Identifying Risk
+## 2 Identifying Risk
 
 - a. Holistic Risk Identification
 - b. Risk Identification as a Team
 - c. Assessment Tools and Techniques
 
-## 3. Managing Business Continuity Risk
+## 3 Managing Business Continuity Risk
 
 - a. Organizational Resiliency
 - b. Business Continuity Management
 - c. Business Continuity Planning
 
-## 4. Treating Risk
+## 4 Treating Risk
 
 - a. Risk Treat Fundamentals
 - b. The Evolution of Risk Treatment
 - c. Risk Treatment Applications
 - d. Treating Risk Holistically
 
-## 5. Insurance as a Risk Management Technique
+## 5 Insurance as a Risk Management Technique
 
 - a. Using Insurance to Treat Risk
 - b. Managing Personal Property Exposures
@@ -58,7 +59,7 @@ The outline below is the course syllabus (© 2023 The Institutes), transcribed f
 - d. Analyzing Commercial Property Loss Exposures
 - e. Analyzing Commercial Liability Loss Exposures
 
-## 6. Overview of Insurance Operations
+## 6 Overview of Insurance Operations
 
 - a. Insurer Goals and Constraints
 - b. Classification of Insurers
@@ -66,7 +67,7 @@ The outline below is the course syllabus (© 2023 The Institutes), transcribed f
 - d. Functional View of Insurance
 - e. The Digitization of Insurance
 
-## 7. Insurance Marketing and Distribution
+## 7 Insurance Marketing and Distribution
 
 - a. Property-Casualty Insurer Marketplace
 - b. Unique Factors in the Property-Casualty Insurer Marketplace
@@ -75,7 +76,7 @@ The outline below is the course syllabus (© 2023 The Institutes), transcribed f
 - e. Functions of Insurance Producers
 - f. Selecting Distribution Systems and Channels
 
-## 8. The Underwriting Function
+## 8 The Underwriting Function
 
 - a. Underwriting Activities
 - b. Underwriting Authority
@@ -84,7 +85,7 @@ The outline below is the course syllabus (© 2023 The Institutes), transcribed f
 - e. Steps in the Underwriting Process
 - f. Measuring Underwriting Results
 
-## 9. Underwriting Commercial Property Coverage
+## 9 Underwriting Commercial Property Coverage
 
 - a. Identifying the Causes of Commercial Property Loss
 - b. Analyzing Fire Exposure: The Greatest Threat
@@ -93,7 +94,7 @@ The outline below is the course syllabus (© 2023 The Institutes), transcribed f
 - e. Determining Potential Loss Severity
 - f. COPE Elements
 
-## 10. Underwriting Business Income and Commercial Liability Coverage
+## 10 Underwriting Business Income and Commercial Liability Coverage
 
 - a. Estimating Probably Maximum Loss of Business Income
 - b. Factors that Influence the Maximum Period of Restoration
@@ -105,7 +106,7 @@ The outline below is the course syllabus (© 2023 The Institutes), transcribed f
 - h. Underwriting Products and Completed Operations Liability
 - i. Underwriting Commercial Crime Insurance
 
-## 11. Underwriting Other Types of Coverage
+## 11 Underwriting Other Types of Coverage
 
 - a. Business Auto Underwriting Considerations – Liability Coverage
 - b. Business Auto Underwriting Considerations – Physical Damage Coverage
@@ -113,7 +114,7 @@ The outline below is the course syllabus (© 2023 The Institutes), transcribed f
 - d. Underwriting Commercial Umbrella and Excess Liability Insurance
 - e. Underwriting Personal Auto Insurance
 
-## 12. Risk Control and Premium Auditing
+## 12 Risk Control and Premium Auditing
 
 - a. Insurer Risk Control Goals
 - b. Risk Control Services Provided by Insurers
@@ -122,7 +123,7 @@ The outline below is the course syllabus (© 2023 The Institutes), transcribed f
 - e. Premium Auditing Process
 - f. Premium Auditing Contributions
 
-## 13. The Claims Function
+## 13 The Claims Function
 
 - a. Overview of the Claims Function
 - b. Claims Department Structure, Personnel, and Performance
@@ -131,7 +132,7 @@ The outline below is the course syllabus (© 2023 The Institutes), transcribed f
 - e. Framework for Coverage Analysis
 - f. Applying the Claims Handling Process and the Framework for Coverage Analysis
 
-## 14. Understanding Reinsurance
+## 14 Understanding Reinsurance
 
 - a. Reinsurance and its Functions
 - b. Reinsurance Sources
@@ -140,7 +141,7 @@ The outline below is the course syllabus (© 2023 The Institutes), transcribed f
 - e. Types of Excess of Loss Reinsurance
 - f. Alternatives to Traditional Reinsurance
 
-## 15. Insurer Strategic Management
+## 15 Insurer Strategic Management
 
 - a. Strategic Management Process
 - b. The Five Forces and SWOT Methods of Analyzing the Environment
@@ -148,7 +149,7 @@ The outline below is the course syllabus (© 2023 The Institutes), transcribed f
 - d. Strategic Management Case
 - e. The Insurance Underwriting Cycle
 
-## Links
-- [CAS DISC RM – Risk Management and Insurance Operations, course syllabus (The Institutes, PDF)](https://www.casact.org/sites/default/files/2022-12/DISC_RM.pdf)
-- [CAS Data and Insurance Series Courses (CAS)](https://www.casact.org/exams-admissions/exams/acas-exams/cas-data-and-insurance-series-courses)
-- [Register for CAS DISCs (The Institutes)](https://web.theinstitutes.org/casualty-actuarial-society)
+## Sources
+- [CAS DISC RM – Risk Management and Insurance Operations, course syllabus (The Institutes, PDF)](https://www.casact.org/sites/default/files/2022-12/DISC_RM.pdf) — the course syllabus (© 2023 The Institutes) the CAS links: the course title and every topic and section, word for word
+- [CAS Data and Insurance Series Courses (CAS)](https://www.casact.org/exams-admissions/exams/acas-exams/cas-data-and-insurance-series-courses) — the CAS page that links the syllabus, says each course contains its learning objectives and all the educational material to meet them, and lists the printed textbook, review notes, course guide and flashcards as supplemental
+- [Register for CAS DISCs (The Institutes)](https://web.theinstitutes.org/casualty-actuarial-society) — where the course is taken and the exam registered

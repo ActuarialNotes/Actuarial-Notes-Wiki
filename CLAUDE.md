@@ -34,9 +34,11 @@ the repo root is the "database" the app is built on top of.
 
 ```
 Exam *.md, Concepts/*.md                          — wiki content (Obsidian [[wiki-links]])
-Resources/{Books,Regulation,Events,Benchmarks,Data}/*.md
-                                                  — resource pages; the dated ones feed the
-                                                    Resources timeline/heatmap (frontmatter w/ source links)
+Resources/Books/*.md                              — resource pages: one real document each, written to
+                                                    the standard in docs/resource-pages.md
+Resources/{Regulation,Events,Benchmarks,Data}/*.md
+                                                  — dated timeline entries for the flag-gated
+                                                    Research tab (frontmatter w/ source links)
 questions/<exam-id>/*.md                          — question bank (YAML frontmatter + markdown)
 Guides/<Exam page>/*.md                           — study tips, one page per tip (frontmatter: exam,
                                                     section, order). Bundled but no longer rendered —
@@ -241,6 +243,18 @@ before touching that area**:
   caption or table; labels of a word or two where the picture needs them, and the words
   in the `alt` text. Read before editing a figure — they are generated, so a hand edit
   to an SVG is lost on the next run.
+- `docs/resource-pages.md` — **the resource-page standard** and the pipeline behind it. A
+  `Resources/Books/` page describes one real document and **says only what the document
+  says, naming where it read it**: the canonical frontmatter (keys, order, the `Type`
+  vocabulary, `Available from` only for an official copy — a book for sale carries its
+  `ISBN`), then cover → lead → `> [!info] On the syllabus` (one bullet per exam whose
+  Source Material lists the page) → the document's own divisions as `##` headings with
+  lists beneath → `## Related readings` → `## Sources` last. The pipeline reads the
+  document before a page is written (`scripts/resource_extract.py`: sha256, bookmark
+  outline in the vault's shape, contents pages, page text, images of scanned pages), and
+  `scripts/resource_lint.py` holds every page to the shape in CI. Also the review that
+  led to it — commentary sections and a page written without reading its (scanned)
+  paper. Read before writing or editing a resource page.
 - `docs/resource-covers.md` — the **resource cover images**: where the metadata card gets
   a source's cover (the page's first image embed), how `scripts/generate_resource_covers.py`
   draws one from front matter for the pages with no real jacket, and the rule that a real
@@ -855,8 +869,11 @@ compile — don't "clean up" the flagged code as dead.
   `flashcard-comprehension-check` skill.
 - Dated resource pages (`Resources/Regulation|Events|Benchmarks/*.md`) carry frontmatter
   with a `date`/`type` and source links (`source_url`, `source_type`, `pdf_url`) — these feed
-  the Resources timeline/heatmap. `Resources/Books/*.md` use the older schema (`Available from`).
-  See `docs/research-corpus-plan.md` for the full schema.
+  the Resources timeline/heatmap. See `docs/research-corpus-plan.md` for the full schema.
+- `Resources/Books/*.md` follow `docs/resource-pages.md`: frontmatter `Title`, `Authors`,
+  `Publisher`, `Year`, `date`, `Edition`, `Type`, `Code`, `ISBN`, `Available from` — in that
+  order, every value double-quoted — then the body's fixed shape ending in `## Sources`.
+  `python3 scripts/resource_lint.py` checks it (CI: `content-validation.yml`).
 - `scripts/*.py` are batch maintenance tools for the content vault — e.g.
   `standardize_questions.py` enforces a canonical topic→concept→learning-objective mapping
   (`ontology_map.py` is the data table it consumes), `update_wiki_links.py` rebuilds
@@ -865,9 +882,9 @@ compile — don't "clean up" the flagged code as dead.
   cleanup, not for one-off edits.
 - `pdf_extract.py` / `question_classify.py` / `question_write.py` / `question_lint.py`
   (+ `mdmath.py`) — the **PDF → question bank** pipeline; see
-  `docs/pdf-question-pipeline.md`. `pdf_extract.py` is the only script in the repo with a
-  non-stdlib dependency (PyMuPDF, imported lazily so the rest stays importable without
-  it). `mdmath.py` is the math-aware text normaliser the pipeline and the linter share —
+  `docs/pdf-question-pipeline.md`. `pdf_extract.py` and `resource_extract.py` are the only
+  scripts in the repo with a non-stdlib dependency (PyMuPDF, imported lazily so the rest
+  stays importable without it). `mdmath.py` is the math-aware text normaliser the pipeline and the linter share —
   it mirrors what `quiz/src/lib/vaultMath.ts` fixes at render time and covers what the
   renderer cannot (a literal `\n` escape, an `align*` row packing formula and result,
   OCR characters). Tests: `scripts/test_pdf_pipeline.py`.
@@ -881,6 +898,13 @@ compile — don't "clean up" the flagged code as dead.
   `figures_exam_{p,fm,mas_i,mas_ii,5,6c}.py`) draws the per-concept SVGs in `Media/Figures/`
   and inserts their embeds. The figures are **generated** — edit the builder, not the SVG.
   See `docs/concept-figures.md`.
+- `resource_extract.py` / `resource_lint.py` — the **resource-page** pipeline
+  (`docs/resource-pages.md`): the first fetches a page's real document and extracts what
+  can be read rather than judged (sha256, metadata, bookmark outline as vault markdown,
+  contents pages, page text, images of pages with no text layer; an HTML page's headings
+  and citation tags; a workbook's sheets), the second is the CI lint for the page shape
+  (`--fix` canonicalises the frontmatter). Tests: `scripts/test_resource_pages.py`, which
+  also holds every page in `Resources/Books/` to zero lint errors.
 - `generate_resource_covers.py` (+ `cover_kit.py`) draws the `Resources/Books/` cover
   images in `Media/Attachments/… - Cover.svg` and inserts their embeds, skipping any page
   that already has a real jacket. Also **generated** — edit the builder.

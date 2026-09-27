@@ -1,17 +1,17 @@
 ---
 Title: "Solvency II Technical Provisions for General Insurers"
-Authors: "Institute and Faculty of Actuaries, GI ROC Working Party on Solvency II Technical Provisions"
+Authors: "Susan Dreksler, Christopher Allen, Ayuk Akoh-Arrey, Jeffrey A. Courchene, Basit Junaid, Jerome Kirk, William Lowe, Shane O’Dea, Jonathan Piper, Meera Shah, Gemma Shaw, David Storman, Seema Thaper, Lucy Thomas, Matthew Wheatley and Matthew Wilson"
+Publisher: "Institute and Faculty of Actuaries"
 Year: "2013"
 date: "2013"
-Publisher: "Institute and Faculty of Actuaries"
-Type: "Working Party Paper"
-Available from: "[cambridge.org](https://www.cambridge.org/core/services/aop-cambridge-core/content/view/C5898B42008C775573CEC7051D3A3E86/S1357321714000099a.pdf/solvency-ii-technical-provisions-for-general-insurers-by-the-institute-and-faculty-of-actuaries-general-insurance-reserving-oversight-committees-working-party-on-solvency-ii-technical-provisions.pdf)"
+Type: "Paper"
+Available from: "[actuaries.org.uk](https://www.actuaries.org.uk/system/files/documents/pdf/sii-tp-wp-paper-giro40.pdf)"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9069f284916f05223b5824b72cdcdedc3cb14f510bf42aea71e41a799e2d4d2f
+  content_hash: sha256:3474a4752c4f2678500da5b3e6c6bedc90d81ffb19c5d7cf0648f7e0dc881798
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,39 +19,67 @@ verification:
 ---
 ![[IFOA - Cover.svg]]
 
-The IFoA General Insurance Reserving Oversight Committee working party's paper on **[[Solvency II]] technical provisions**, presented to the Institute and Faculty of Actuaries in November 2013 and published in the *British Actuarial Journal* (Vol. 20, part 1, pp. 7–129). Read for [[Exam 6C (CAS)|Exam 6C]] objective C4. The syllabus assigns **Sections 6.4 and 6.5 only**.
+A working-party paper explaining the Solvency II requirements for general insurers' technical provisions and suggesting how they may be implemented. Dated August 2013, it brings together the work of the Institute & Faculty of Actuaries General Insurance Reserving Oversight Committee's working party on Solvency II technical provisions, formed in 2009, and aims to help those new to the requirements, fuel debate among experienced practitioners and promote best practice. It was presented to the Institute and Faculty of Actuaries on 25 November 2013 and published in the *British Actuarial Journal*, Vol. 20, part 1.
 
-## The assigned sections: ENID
+> [!info] On the syllabus
+> - [[Exam 6C (CAS)|Exam 6C]] — objective C4; Sections 6.4 and 6.5.
 
-Sections 6.4 and 6.5 are about **ENID — "events not in data"**, also called **binary events**. Solvency II requires the best estimate to allow for **all possible future outcomes**; standard reserving techniques project from the data, and the data by construction does not contain the events that have not happened yet.
+## 1 Introduction
 
-### 6.4 — What are ENID?
+## 2 Solvency II requirements for technical provisions in brief
 
-The working party proposes a definition that returns to the Directive's own wording:
+## 3 Best estimate: claims and premium provision
 
-> **ENID is "the balancing amount required to bring the best estimate before ENID up to an amount allowing for all possible future outcomes."**
+## 4 Reinsurance
 
-Two consequences follow, and both are examinable:
+## 5 Expenses
 
-- **The loading is entity-specific.** It depends not only on the risks underwritten but on **the insurer's own reserving policy** — an insurer that already books an actuarial best estimate plus a management adjustment has absorbed some ENID into that adjustment, and must not count it twice.
-- **An ENID loading is not necessarily an increase.** One must allow for **both positive and negative** outcomes not already in the estimate: a successful new claims process, a court award in the insurer's favour, a legislative change in its favour.
+## 6 ENID (Binary Events)
+- 6.1 Terminology
+- 6.2 Introduction
+- 6.3 The guidance
+    - 6.3.1 Solvency II Directive - Article 77 (2)
+    - 6.3.2 Groupe Consultatif - Valuation of Best Estimate under Solvency II for Non-life Insurance Interim Report
+    - 6.3.3 CEIOPS Advice - CEIOPS DOC 21/09 CEIOPS Advice for Level 2 Implementing Measures on Solvency II: Technical Provisions: Elements of Actuarial and Statistical Methodologies to Calculate the Best Estimate
+    - 6.3.4 LTGA and QIS5
+    - 6.3.5 Lloyd's Guidance (March 2011)
+- 6.4 What are ENID (binary events)?
+    - Binary events are often taken to mean high-severity, low-probability loss events that are not represented in the historical data used for reserving and may be unforeseeable.
+    - Going back to the original wording of the [[Solvency II]] Directive, the working party defines ENID (Events Not In Data) as "the balancing amount required to bring the best estimate before ENID up to an amount allowing for all possible future outcomes".
+    - ENID loadings therefore vary not only with the nature of the risks underwritten but also with the insurer's reserving policy.
+    - A loading need not increase reserves: it allows for positive outcomes not already allowed for too — a successful new claims process, a court award or a change in legislation in the insurer's favour.
+- 6.5 General considerations in estimating a loading for ENID
+    - 6.5.1 The starting point
+        - First determine which exposures and risks the current best estimate includes; where an Actuarial Best Estimate plus a management adjustment is booked, specific events behind the adjustment can move into the ENID bucket, without double counting, and an adjustment tied to no specific event is likely removed as margin.
+    - 6.5.2 Identifying ENID
+        - Underwriters, claims managers, reserving and pricing actuaries and reinsurance managers can brainstorm future events affecting settlements on past claims and on the exposure remaining at the valuation date.
+        - The exposure period is limited to business the (re)insurer is obligated to at the valuation date — 13 months for an insurer writing annual policies that accepts business within a month of cover starting.
+        - Candidates include catastrophe exposure, large one-off claims, legislative change, court awards, accumulations, and changes in policy terms or claims processing; consistency is considered with [[Reverse Stress Testing|reverse stress testing]], the risk register, pricing models, [[Catastrophe Modelling|catastrophe modelling]] and the internal capital model.
+        - Estimation is subjective, and minutes of discussions and process documentation can evidence the decisions and assumptions made.
+    - 6.5.3 Is it necessary to identify potential ENID?
+        - It is not necessary for calculating a loading, and identifying all potential outcomes is arguably impossible, but the exercise can underpin a probability/severity loading, check a truncated distribution method, and raise awareness of the risks underlying the business.
+- 6.6 Methodology
+- 6.7 Benchmarking
+    - 6.7.1 Can we benchmark our ENID loading?
+    - 6.7.2 Available benchmarks
 
-The paper also sets out the alternatives it rejects or qualifies — most notably the **uplift/truncated-distribution approach**: assume standard techniques capture only events up to a realistically foreseeable level (for consistency with capital setting, say 1-in-200), fit a distribution, and take the ratio of the "true mean" to the "mean of the truncated distribution" as an uplift factor. Workable, but "very sensitive" and heavily dependent on the assumed distribution and truncation point.
+## 7 Segmentation
 
-### 6.5 — Estimating a loading for ENID
+## 8 Risk Margin
 
-- **6.5.1 The starting point.** Determine first **what exposures and risks are already included in the best estimate** under current reserving practice, so the ENID bucket neither double-counts a management adjustment nor omits what the adjustment did not cover.
-- **6.5.2 Identifying ENID.** **The exposure period is limited**: the insurer need only consider future events on business it is *obligated to* at the valuation date — an annual-policy writer accepting business within a month of inception need consider only about 13 months. Candidates should consider catastrophe exposure, potential large one-off claims, legislative change, court awards, other environmental changes, accumulations, changes in policy terms and conditions, and changes in claims processing. Consistency should be maintained with **[[Reverse Stress Testing|reverse stress testing]]**, the risk register, pricing models, catastrophe models and the internal capital model.
-- **6.5.3 Is it necessary to identify potential ENID?** Strictly no — a loading can be computed without enumerating the events, and enumerating *all* possible outcomes is impossible. But the exercise supports a probability/severity calculation, provides a check on a truncated-distribution method, and the "blue sky thinking" has value in itself. Judgement is unavoidable, so **document it** — minutes of the discussions and process documentation are the evidence.
+## 9 Balance sheet considerations
 
-## Why a European paper is on a Canadian syllabus
+## 10 Validation
 
-Exam 6C asks candidates to compare **rules-based and [[Principles-Based Regulation|principles-based]]** solvency regimes. Solvency II is the principles-based comparator to the [[MCT]], and ENID is the sharpest illustration of the difference: a formula-driven regime never asks for a loading for events not in the data, and a principles-based one cannot avoid asking. The rest of the paper — best estimate, claims and premium provisions, contract boundaries, and the **risk margin** (its own section 8, a cost-of-capital construction of the same shape as the [[Risk Adjustment for Non-Financial Risk|IFRS 17 risk adjustment]] in [[CIA IFRS 2]] §5) — is context rather than assigned material.
+## 11 Reporting
 
-## Related readings
-- [[OSFI MCT]] — the Canadian rules-based capital test
-- [[OSFI ORSA]] — the Canadian import of a Solvency II Pillar 2 idea
-- [[CIA IFRS 2]] §5 — the cost-of-capital risk adjustment
+## 12 Communication
 
-## Links
-- [Solvency II Technical Provisions for General Insurers (Cambridge / British Actuarial Journal)](https://www.cambridge.org/core/services/aop-cambridge-core/content/view/C5898B42008C775573CEC7051D3A3E86/S1357321714000099a.pdf/solvency-ii-technical-provisions-for-general-insurers-by-the-institute-and-faculty-of-actuaries-general-insurance-reserving-oversight-committees-working-party-on-solvency-ii-technical-provisions.pdf)
+## Appendix 1 Glossary of terms
+
+## Appendix 2 References and further reading
+
+## Sources
+- [Solvency II Technical Provisions for General Insurers (Institute and Faculty of Actuaries, 2013)](https://www.actuaries.org.uk/system/files/documents/pdf/sii-tp-wp-paper-giro40.pdf) — the document, the August 2013 version the outline cites: title page, contents, and Sections 6.1–6.7 with the text of 6.4 and 6.5
+- [CAS Exam 6C Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf) — the citation and the assigned sections
+- [Solvency II Technical Provisions for General Insurers (British Actuarial Journal, Cambridge University Press, 2015)](https://www.cambridge.org/core/services/aop-cambridge-core/content/view/C5898B42008C775573CEC7051D3A3E86/S1357321714000099a.pdf/solvency-ii-technical-provisions-for-general-insurers-by-the-institute-and-faculty-of-actuaries-general-insurance-reserving-oversight-committees-working-party-on-solvency-ii-technical-provisions.pdf) — the later journal version: its presentation date and journal volume, and a check of the title and authors

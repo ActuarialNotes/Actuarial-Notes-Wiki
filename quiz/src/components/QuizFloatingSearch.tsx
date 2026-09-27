@@ -3,23 +3,24 @@ import { useNavigate } from 'react-router-dom'
 import { History, Layers, Search, Sparkles, X } from 'lucide-react'
 import { filterQuestions } from '@/lib/parser'
 import type { Question, QuestionFilter } from '@/lib/parser'
-import { questionSittingLabel, sittingLabels } from '@/lib/pastExams'
+import {
+  hasFacetFilters,
+  matchesFacets,
+  splitSearchFilter,
+  toggleFacet,
+  type FacetSelection,
+  type QuestionFacet,
+} from '@/lib/questionFilters'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { MobileNavButton } from '@/components/MobileNavButton'
-import { QuestionSearchRow, DifficultyDots } from '@/components/QuestionSearchRow'
-import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
+import { QuestionSearchRow } from '@/components/QuestionSearchRow'
+import { QuestionFilterBar } from '@/components/QuestionFilterBar'
 
 interface FilterPill {
   label: string
   onRemove: () => void
 }
-
-const DIFFICULTY_OPTIONS = [
-  { value: 'easy', label: 'Easy' },
-  { value: 'medium', label: 'Medium' },
-  { value: 'hard', label: 'Hard' },
-]
 
 /** Attempt-history filter, cycled by a single button: all → attempted → new → all. */
 type AttemptStatus = 'all' | 'attempted' | 'new'
@@ -49,24 +50,12 @@ function isTouchPointer(): boolean {
     && window.matchMedia('(pointer: coarse)').matches
 }
 
-// Turns a raw wiki_link path ("Concepts/Geometric+Distribution", "/probability/set-theory")
-// into a human label, matching how QuestionSearchRow renders concept chips.
-function conceptLabel(link: string): string {
-  const clean = link.replace(/\.md$/i, '').replace(/\+/g, ' ')
-  const segment = clean.split('/').filter(Boolean).pop() ?? link
-  return segment.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
-}
-
-// Tallies a pool by the option(s) each question belongs to — a question sits
-// under one difficulty but under every concept it is tagged with.
-function tally(pool: Question[], keysOf: (q: Question) => string[]): Record<string, number> {
-  const counts: Record<string, number> = {}
-  pool.forEach(q => keysOf(q).forEach(key => { counts[key] = (counts[key] ?? 0) + 1 }))
-  return counts
-}
-
 interface QuizFloatingSearchProps {
-  /** When provided, results are pre-filtered to this pool (e.g. current exam + concepts). */
+  /**
+   * The quiz builder's current selection. Its exam and sitting become the
+   * panel's starting Exam / Sitting choices (ticked, and widenable from the
+   * panel); everything else in it — the chosen concepts — scopes the pool.
+   */
   filter?: QuestionFilter
   /** Active filter chips shown at the top of the dropdown with × to remove. */
   filterPills?: FilterPill[]
@@ -79,25 +68,27 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
   const [query, setQuery] = useState('')
   const [active, setActive] = useState(false)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
-  const [difficultyFilters, setDifficultyFilters] = useState<Set<string>>(new Set())
-  const [conceptFilters, setConceptFilters] = useState<Set<string>>(new Set())
-  const [examFilters, setExamFilters] = useState<Set<string>>(new Set())
-  const [sittingFilters, setSittingFilters] = useState<Set<string>>(new Set())
   const [attemptStatus, setAttemptStatus] = useState<AttemptStatus>('all')
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // The incoming quiz-config filter (exam + selected concepts) defines the pool
-  // the difficulty/concept filters refine. When the quiz selection changes,
-  // drop stale refinements so they can't linger against a different pool.
+  // The quiz selection, split into the pool it scopes (its concepts) and the
+  // Exam / Sitting choices the panel opens on. Keyed by value, not identity:
+  // the builder rebuilds its filter object on renders that change nothing.
   const filterKey = JSON.stringify(filter ?? {})
+  const { scope, initial } = useMemo(
+    () => splitSearchFilter(filter ?? {}),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [filterKey],
+  )
+  const [facets, setFacets] = useState<FacetSelection>(initial)
+
+  // When the quiz selection changes, start again from it, so a refinement
+  // made against one exam can't linger against the next.
   useEffect(() => {
-    setDifficultyFilters(new Set())
-    setConceptFilters(new Set())
-    setExamFilters(new Set())
-    setSittingFilters(new Set())
+    setFacets(initial)
     setAttemptStatus('all')
-  }, [filterKey])
+  }, [initial])
 
   useEffect(() => {
     if (!active) return
@@ -140,37 +131,14 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
   // Expand whenever the search bar is active (focus), regardless of query
   const isExpanded = active
 
-  // Pool defined by the quiz config (exam + selected concepts) and the search
-  // query — this is what the difficulty/concept refinements narrow further.
+  // Pool defined by the quiz config's concepts and the search query — this is
+  // what the Difficulty / Concepts / Exam / Sitting filters narrow. It lists
+  // the bank, so a question kept only for the record is in it: the panel is
+  // how one is found by its sitting.
   const basePool = useMemo(() => {
-    const hasFilter = filter && Object.keys(filter).length > 0
     const q = query.trim()
-    if (!q) return hasFilter ? filterQuestions(allQuestions, filter!) : allQuestions
-    return filterQuestions(allQuestions, { ...filter, search: q })
-  }, [allQuestions, query, filter])
-
-  // Concepts available to filter by, drawn from the current pool so the dropdown
-  // stays scoped to the selected quiz topics/exam.
-  const conceptOptions = useMemo(() => {
-    const seen = new Set<string>()
-    basePool.forEach(q => q.wiki_link.forEach(link => seen.add(conceptLabel(link))))
-    return Array.from(seen).sort().map(name => ({ value: name, label: name }))
-  }, [basePool])
-
-  // Exams available to filter by, drawn from the current pool the same way.
-  const examOptions = useMemo(() => {
-    const seen = new Set<string>()
-    basePool.forEach(q => seen.add(q.exam))
-    return Array.from(seen).sort().map(name => ({ value: name, label: name }))
-  }, [basePool])
-
-  // Past sittings the pool holds, newest first — "Spring 2019" is how a
-  // candidate thinks of a paper, so the filter is keyed by that label rather
-  // than by year and session separately. Undated questions contribute nothing.
-  const sittingOptions = useMemo(
-    () => sittingLabels(basePool).map(label => ({ value: label, label })),
-    [basePool],
-  )
+    return filterQuestions(allQuestions, { ...scope, includeOffSyllabus: true, ...(q && { search: q }) })
+  }, [allQuestions, query, scope])
 
   // A question counts as attempted once it has any recorded response — the same
   // signal QuestionSearchRow uses to show its "Attempted/Correct" chip.
@@ -179,107 +147,33 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
     [attemptsByQuestionId],
   )
 
-  // One predicate per filter group. Each group is OR within itself (an empty
-  // group matches everything); the groups are AND'd together.
-  const predicates = useMemo(() => ({
-    difficulty: (q: Question) => difficultyFilters.size === 0 || difficultyFilters.has(q.difficulty),
-    concept: (q: Question) => conceptFilters.size === 0
-      || q.wiki_link.some(link => conceptFilters.has(conceptLabel(link))),
-    exam: (q: Question) => examFilters.size === 0 || examFilters.has(q.exam),
-    sitting: (q: Question) => {
-      if (sittingFilters.size === 0) return true
-      const label = questionSittingLabel(q)
-      return label !== null && sittingFilters.has(label)
-    },
-    attempt: (q: Question) =>
+  const matchesAttempt = useCallback(
+    (q: Question) =>
       attemptStatus === 'all' ? true
       : attemptStatus === 'attempted' ? isAttempted(q)
       : !isAttempted(q),
-  }), [difficultyFilters, conceptFilters, examFilters, sittingFilters, attemptStatus, isAttempted])
-
-  type FilterGroup = keyof typeof predicates
-
-  const visiblePool = useMemo(
-    () => basePool.filter(q => Object.values(predicates).every(match => match(q))),
-    [basePool, predicates],
+    [attemptStatus, isAttempted],
   )
 
-  // Option counts reflect the pool with the *other* filter groups applied, so
-  // each count previews how many questions choosing it would leave.
-  const poolExcluding = useCallback(
-    (group: FilterGroup) => basePool.filter(q => (Object.keys(predicates) as FilterGroup[])
-      .every(g => g === group || predicates[g](q))),
-    [basePool, predicates],
-  )
-
-  const difficultyOptionCounts = useMemo(
-    () => tally(poolExcluding('difficulty'), q => [q.difficulty]),
-    [poolExcluding],
-  )
-
-  const conceptOptionCounts = useMemo(
-    () => tally(poolExcluding('concept'), q => q.wiki_link.map(conceptLabel)),
-    [poolExcluding],
-  )
-
-  const examOptionCounts = useMemo(
-    () => tally(poolExcluding('exam'), q => [q.exam]),
-    [poolExcluding],
-  )
-
-  const sittingOptionCounts = useMemo(
-    () => tally(poolExcluding('sitting'), q => {
-      const label = questionSittingLabel(q)
-      return label ? [label] : []
-    }),
-    [poolExcluding],
-  )
+  // The attempt cycle is this panel's own filter, AND'd with the shared ones.
+  // The filter bar's counts are taken over the pool it leaves, so each option
+  // previews how many questions choosing it would show.
+  const attemptPool = useMemo(() => basePool.filter(matchesAttempt), [basePool, matchesAttempt])
+  const facetPool = useMemo(() => basePool.filter(q => matchesFacets(q, facets)), [basePool, facets])
+  const visiblePool = useMemo(() => facetPool.filter(matchesAttempt), [facetPool, matchesAttempt])
 
   // Counts for the attempt-status cycle, previewing what each state would leave
-  // once the other filter groups are applied.
+  // once the shared filters are applied.
   const attemptStatusCounts = useMemo(() => {
-    const pool = poolExcluding('attempt')
-    const attempted = pool.reduce((n, q) => n + (isAttempted(q) ? 1 : 0), 0)
-    return { all: pool.length, attempted, new: pool.length - attempted }
-  }, [poolExcluding, isAttempted])
+    const attempted = facetPool.reduce((n, q) => n + (isAttempted(q) ? 1 : 0), 0)
+    return { all: facetPool.length, attempted, new: facetPool.length - attempted }
+  }, [facetPool, isAttempted])
 
   const questionResults = useMemo(() => visiblePool.slice(0, 100), [visiblePool])
   const totalCount = visiblePool.length
 
-  function toggleDifficulty(value: string) {
-    setDifficultyFilters(prev => {
-      const next = new Set(prev)
-      if (next.has(value)) next.delete(value)
-      else next.add(value)
-      return next
-    })
-  }
-
-  function toggleConceptFilter(value: string) {
-    setConceptFilters(prev => {
-      const next = new Set(prev)
-      if (next.has(value)) next.delete(value)
-      else next.add(value)
-      return next
-    })
-  }
-
-  function toggleExamFilter(value: string) {
-    setExamFilters(prev => {
-      const next = new Set(prev)
-      if (next.has(value)) next.delete(value)
-      else next.add(value)
-      return next
-    })
-  }
-
-  function toggleSittingFilter(value: string) {
-    setSittingFilters(prev => {
-      const next = new Set(prev)
-      if (next.has(value)) next.delete(value)
-      else next.add(value)
-      return next
-    })
+  function toggleFilter(facet: QuestionFacet, value: string) {
+    setFacets(prev => toggleFacet(prev, facet, value))
   }
 
   // Select-all applies to the currently visible pool, leaving any selections
@@ -395,89 +289,39 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
               {/* Single scrollable region: tags → filter pills → results.
                   Everything scrolls together so tags don't push results off screen. */}
               <div className="flex-1 overflow-y-auto min-h-0">
-                {/* Difficulty + concept filters — scoped to the active quiz pool */}
+                {/* The shared filter row — Difficulty, Concepts, Exam and Sitting,
+                    each always on screen — with this panel's attempt cycle on
+                    the end. The builder's exam (and paper) start ticked. */}
                 {basePool.length > 0 && (
-                  <div className="flex items-center gap-2 flex-wrap px-0.5 py-2">
-                    {DIFFICULTY_OPTIONS.map(opt => {
-                      const count = difficultyOptionCounts[opt.value] ?? 0
-                      const isActive = difficultyFilters.has(opt.value)
-                      return (
-                        <button
-                          key={opt.value}
-                          type="button"
-                          data-sound="tick"
-                          onClick={() => toggleDifficulty(opt.value)}
-                          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                            isActive
-                              ? 'bg-primary/10 text-primary'
-                              : 'bg-background hover:bg-accent text-muted-foreground'
-                          }`}
-                        >
-                          <DifficultyDots difficulty={opt.value} />
-                          <span className="capitalize">{opt.label}</span>
-                          <span className="ml-0.5 text-xs bg-muted rounded-full px-1.5 py-0.5 min-w-[1.25rem] text-center text-muted-foreground">
-                            {count}
-                          </span>
-                        </button>
-                      )
-                    })}
-                    {conceptOptions.length > 0 && (
-                      <MultiSelectDropdown
-                        label="Concepts"
-                        options={conceptOptions}
-                        selected={conceptFilters}
-                        onToggle={toggleConceptFilter}
-                        getCount={v => conceptOptionCounts[v] ?? 0}
-                      />
-                    )}
-                    {examOptions.length > 1 && (
-                      <MultiSelectDropdown
-                        label="Exam"
-                        options={examOptions}
-                        selected={examFilters}
-                        onToggle={toggleExamFilter}
-                        getCount={v => examOptionCounts[v] ?? 0}
-                      />
-                    )}
-                    {/* Past sittings — how a candidate narrows to one paper.
-                        Hidden for a pool that is already a single sitting (the
-                        mock-exam shelf's selection scopes the pool itself) or
-                        holds no dated questions at all. */}
-                    {sittingOptions.length > 1 && (
-                      <MultiSelectDropdown
-                        label="Sitting"
-                        options={sittingOptions}
-                        selected={sittingFilters}
-                        onToggle={toggleSittingFilter}
-                        getCount={v => sittingOptionCounts[v] ?? 0}
-                      />
-                    )}
-                    {/* Attempt history — a single button cycling all → attempted → new.
-                        Only useful once the signed-in user has answered something. */}
-                    {attemptsByQuestionId.size > 0 && (() => {
-                      const { label, icon: Icon } = ATTEMPT_STATUS_META[attemptStatus]
-                      const isActive = attemptStatus !== 'all'
-                      return (
-                        <button
-                          type="button"
-                          data-sound="tick"
-                          onClick={() => setAttemptStatus(nextAttemptStatus)}
-                          aria-label={`Attempt filter: ${label}. Tap to cycle.`}
-                          title={`Showing ${label.toLowerCase()} questions — tap to cycle`}
-                          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                            isActive
-                              ? 'bg-primary/10 text-primary'
-                              : 'bg-background hover:bg-accent text-muted-foreground'
-                          }`}
-                        >
-                          <Icon className="h-4 w-4 shrink-0" />
-                          <span>{label}</span>
-                          <span className="ml-0.5 text-xs bg-muted rounded-full px-1.5 py-0.5 min-w-[1.25rem] text-center text-muted-foreground">
-                            {attemptStatusCounts[attemptStatus]}
-                          </span>
-                        </button>
-                      )
-                    })()}
+                  <div className="px-0.5 py-2">
+                    <QuestionFilterBar pool={attemptPool} selection={facets} onToggle={toggleFilter}>
+                      {/* Attempt history — a single button cycling all → attempted → new.
+                          Only useful once the signed-in user has answered something. */}
+                      {attemptsByQuestionId.size > 0 && (() => {
+                        const { label, icon: Icon } = ATTEMPT_STATUS_META[attemptStatus]
+                        const isActive = attemptStatus !== 'all'
+                        return (
+                          <button
+                            type="button"
+                            data-sound="tick"
+                            onClick={() => setAttemptStatus(nextAttemptStatus)}
+                            aria-label={`Attempt filter: ${label}. Tap to cycle.`}
+                            title={`Showing ${label.toLowerCase()} questions — tap to cycle`}
+                            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                              isActive
+                                ? 'bg-primary/10 text-primary'
+                                : 'bg-background hover:bg-accent text-muted-foreground'
+                            }`}
+                          >
+                            <Icon className="h-4 w-4 shrink-0" />
+                            <span>{label}</span>
+                            <span className="ml-0.5 text-xs bg-muted rounded-full px-1.5 py-0.5 min-w-[1.25rem] text-center text-muted-foreground">
+                              {attemptStatusCounts[attemptStatus]}
+                            </span>
+                          </button>
+                        )
+                      })()}
+                    </QuestionFilterBar>
                   </div>
                 )}
 
@@ -533,7 +377,7 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
                         </button>
                       </span>
                     ))
-                  ) : (
+                  ) : !hasFacetFilters(facets) && attemptStatus === 'all' && (
                     <span className="text-xs text-muted-foreground">All questions</span>
                   )}
                   <span className="ml-auto text-xs font-medium text-muted-foreground shrink-0">

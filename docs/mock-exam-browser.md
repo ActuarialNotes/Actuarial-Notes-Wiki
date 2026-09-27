@@ -185,17 +185,25 @@ downstream and still does:
   (`data/examPdfLinks.ts`), beside the pass-rate lookup link;
 - `searchFilter` carries the sitting's `year` / `session` into the floating search bar, so
   opening the search while Spring 2019 is picked lists *that paper's* questions rather than
-  the whole exam's, with a removable `Exam 5 · Spring 2019` pill in the panel (clearing it
-  drops the shelf's selection too, so the panel and the page behind it can't disagree).
+  the whole exam's. The panel opens with **Exam 5** ticked in its Exam filter and
+  **Spring 2019** in its Sitting filter — each dropdown names its one choice on the pill —
+  and either can be widened from the panel without changing the shelf behind it
+  (`splitSearchFilter` in `lib/questionFilters.ts`). The builder's exam used to narrow the
+  panel's pool instead, which left its Exam filter a single option and hid it: the panel
+  filtered by an exam it no longer showed.
 
 A sitting can also be picked from inside the search panel itself: the **Sitting** filter
-(`sittingLabels` / `questionSittingLabel` in `lib/pastExams.ts`) lists the sittings the
-current pool actually holds, newest first, with a count each. It is keyed by display label
-— `"Spring 2019"` is how a candidate thinks of a paper — and read off each question's own
-frontmatter, so an undated question contributes no option and a question re-tagged onto
-another exam's syllabus still lists under the paper it was sat on. The filter hides itself
-when the pool is already one sitting (the mock-exam selection above has scoped it) or holds
-no dated questions at all.
+(`lib/questionFilters.ts`, over `sittingLabels` / `questionSittingLabel` in
+`lib/pastExams.ts`) lists the sittings the pool holds once the other filters are applied,
+newest first, with a count each. It is keyed by display label — `"Spring 2019"` is how a
+candidate thinks of a paper — and read off each question's own frontmatter, so an undated
+question contributes no option. A question re-tagged onto another exam's syllabus lists
+under the date it was sat on; once an exam is chosen, though, a sitting means *that exam's*
+paper, and the carried-over question is on none of its sittings — the same rule
+`filterQuestions` keeps for the shelf. Exam and Sitting are on every list of questions, the
+same row everywhere (`components/QuestionFilterBar.tsx` — the quiz builder's search panel,
+the concept question browser, the concept detail modal, and the Search page's Sitting). A
+pool with no dated questions shows Sitting disabled rather than dropping it.
 
 ### The header row
 

@@ -37,7 +37,7 @@ import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { cn } from '@/lib/utils'
 import { getSittingPdfLink, getExamPdfLink, getExamSolutionsPdfLink } from '@/data/examPdfLinks'
 import { getPassRateLookup } from '@/data/pastExams'
-import { buildPastExamRows, examSourceLabel, sittingLabel, PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
+import { buildPastExamRows, examSourceLabel, PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
 import { applyPassRates } from '@/lib/passRates'
 import { useExamPassRates } from '@/hooks/useExamPassRates'
 import { PastExamBrowser } from '@/components/PastExamBrowser'
@@ -1190,7 +1190,8 @@ export default function Landing() {
   }
 
   // Filter reflecting the current quiz configuration — passed to the search
-  // bar so it only previews questions from the active pool.
+  // bar, which opens on it: the exam (and paper) as its Exam / Sitting
+  // choices, ticked, and the concepts as the pool.
   const searchFilter = useMemo(() => {
     if (selectedConcept) return { concept: selectedConcept }
     if (!topic) return {}
@@ -1218,27 +1219,19 @@ export default function Landing() {
   }, [topic, mode, selectedSitting, selectedConcept, selectedConcepts, useTodaysPlan, plan])
 
   // Active filter chips shown in the search dropdown so the user can see and
-  // remove concept filters without leaving the search panel.
+  // remove concept filters without leaving the search panel. The exam and the
+  // picked paper need none: the panel's Exam and Sitting filters open on them.
   const filterPills = useMemo(() => {
     const pills: { label: string; onRemove: () => void }[] = []
     if (selectedConcept) {
       pills.push({ label: selectedConcept, onRemove: () => setSelectedConcept('') })
-    }
-    // The picked paper, removable in place — clearing it widens the search back
-    // to the whole exam and drops the shelf's selection with it, so the panel
-    // and the page behind it can't disagree about what is selected.
-    if (mode === 'mock-exam' && selectedSitting) {
-      pills.push({
-        label: `${examLabel} · ${sittingLabel(selectedSitting.year, selectedSitting.session)}`,
-        onRemove: () => setSelectedSitting(null),
-      })
     }
     selectedConcepts.forEach(c => {
       pills.push({ label: c, onRemove: () => toggleConcept(c) })
     })
     return pills
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedConcept, selectedConcepts, mode, selectedSitting, examLabel])
+  }, [selectedConcept, selectedConcepts])
 
   // Dashboard launch is still resolving — hold a quiet loading state rather than
   // flashing the quiz config screen on the way into the quiz.

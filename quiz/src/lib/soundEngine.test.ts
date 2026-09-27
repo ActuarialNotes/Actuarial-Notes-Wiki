@@ -44,7 +44,7 @@ describe('pinkNoise', () => {
 
 describe('roomImpulse', () => {
   const rate = 48000
-  const [left, right] = roomImpulse(rate, 1.8, seeded(11))
+  const [left, right] = roomImpulse(rate, 1, seeded(11))
   const delay = Math.floor(rate * ROOM.preDelay)
   const quarter = Math.floor((left.length - delay) / 4)
 
@@ -57,6 +57,10 @@ describe('roomImpulse', () => {
     expect(energy(left, left.length - quarter)).toBeLessThan(energy(left, delay, delay + quarter) / 1000)
     expect(Math.abs(left[left.length - 1])).toBe(0)
     expect(Math.abs(right[right.length - 1])).toBe(0)
+  })
+
+  it('is a small room — the tail is gone well inside a second', () => {
+    expect(ROOM.rt60).toBeLessThanOrEqual(0.8)
   })
 
   it('darkens as it rings, the way a room does', () => {

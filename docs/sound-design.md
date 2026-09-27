@@ -10,24 +10,28 @@ sound synthesized" below.
 
 ## The rules
 
-1. **Interface feedback is quiet and short.** A press is ~30 ms and sits an
+1. **Interface feedback is quiet and short.** A press is ~15 ms and sits an
    order of magnitude below the celebratory cues.
-2. **Only weighty presses are thumpy.** The press transient has two halves: a
-   high tick, and a low body under it. Ordinary controls — the vast majority —
-   get the high end alone (`click`). The body belongs to `press`, which the
-   solid `Button` variants (the committing actions: start, finish, save,
-   delete) opt into. Stacked under every control instead, an afternoon of
-   studying sounds like knocking on a desk.
+2. **A click is a mouse button, not a note.** `click` is the two sounds a
+   switch makes — the snap of the contact (a few milliseconds of bright noise)
+   and the knock of the housing (a short hollow resonance around 1 kHz) — and
+   nothing else: no oscillator, so no pitch to hear as a tone. It used to carry
+   a falling sine "edge", and forty presses an hour of that sounded like a toy.
+   `tick` is the same thing smaller and higher, a pen mark. Only weighty
+   presses get a thud: a low sine that drops away inside 35 ms, too short to
+   carry a pitch, which belongs to `press` — the solid `Button` variants (the
+   committing actions: start, finish, save, delete). Stacked under every
+   control instead, an afternoon of studying sounds like knocking on a desk.
 3. **Panels and cards move on filtered noise, not tones.** The `open` /
    `close` / `page` / `ruffle` / `shuffle` family is a bandpass sweep over
-   white noise with a slow swell — it reads as a sheet of paper sliding, not as
+   pink noise with a slow swell — it reads as a sheet of paper sliding, not as
    a beep. The louder a cue in this family is, the fewer times it fires: see
    "Stepping through a sequence".
-4. **Success is struck, not beeped.** Every reward cue is a mallet hitting a
-   tuned bar (see "Anatomy of a reward cue" below). It ascends, the notes ring
-   far longer than the gap between them so they pile into a chord rather than a
-   countdown, it *lands* on its loudest note, it has a low root under it for
-   weight, and it rings in a room.
+4. **Success is struck, not beeped.** Every reward cue is a soft mallet on a
+   wooden bar (see "Anatomy of a reward cue" below). It ascends, the notes ring
+   a few times longer than the gap between them so they pile into a chord
+   rather than a countdown, it *lands* on its loudest note, it has a low root
+   under it for weight, and it sits in a small room.
 5. **Two notes, not three.** Every chime in the catalogue is a pickup and an
    arrival. Nothing here is a melody — a cue is heard a few hundred times a
    week, and the third note is where one stops being a sound and starts being a
@@ -36,13 +40,19 @@ sound synthesized" below.
    octave and let the fifth enter underneath the landing as harmony instead.
    What separates a level-up from finishing a session is width and weight, not
    note count.
-6. **Chimes are round.** The partials that make a struck bar a struck bar are
-   also what make it *bright*, so they are kept on a short leash: the octave
-   and the twelfth sit well down and die in a third of the fundamental's time,
-   the twelfth is a sine (a triangle at 3f puts energy back up at 9f and 15f,
-   which is the glare), the onset is a mallet on wood rather than on metal, and
-   every reward cue runs through a lowpass in the 4–7 kHz range. Warm and a
-   little subdued beats bright: bright is what a notification sounds like.
+6. **Chimes are round, and short.** Between 1 and 3 kHz is where the ear is
+   most sensitive, and a tone that *rings* there is what turns a chime from
+   sweet to sharp. So nothing in a chime sustains above 1 kHz: the melody sits
+   in the middle register (the ceremonies an octave under `correct` — weight is
+   register, not brightness), the struck partials last a fifth of their note
+   at a tenth of its level, there is no sparkle over the landings, and every
+   chime is rolled off at 2.4–3.6 kHz. And they land and get out of the way:
+   no chime takes more than a second to die (`correct` is gone in about a
+   quarter of one), in a room small enough to be gone before the next
+   question. The previous generation used bells — an octave and a twelfth held
+   for a third of the note, sine sparkle an octave above, 1.5 s tails — and it
+   read as metal. All of it is pinned by tests. Warm and a little subdued
+   beats bright: bright is what a notification sounds like.
 7. **Mistakes are silent.** There is deliberately no `wrong` cue. A wrong
    answer is already obvious on screen, and buzzing at someone who is studying
    is punishment, not feedback. `soundConfig.test.ts` pins this so it can't
@@ -100,13 +110,16 @@ A chime built from sine waves is a synthesizer whatever notes it plays. What
 gives synthesis away is rarely the recipe; it's a handful of things real sounds
 never do, and the engine removes each of them.
 
-- **Attacks rise in a straight line.** A Web Audio exponential ramp can't start
-  from zero, so every envelope used to ramp up from 0.0001 — and an exponential
-  from there spends almost all of its time inaudible, then jumps to full level
-  in the last fraction of a millisecond. That was a hidden click on the front
-  of every note and every burst of noise, whatever the written attack said. A
-  linear rise over the same few milliseconds is the soft edge of a mallet on
-  wood. Decays stay exponential: that's how anything struck dies away.
+- **Attacks rise along a rounded curve** (`ATTACK_CURVE`, a squared
+  quarter-sine). A Web Audio exponential ramp can't start from zero, so every
+  envelope used to ramp up from 0.0001 — and an exponential from there spends
+  almost all of its time inaudible, then jumps to full level in the last
+  fraction of a millisecond. That was a hidden click on the front of every
+  note and every burst of noise, whatever the written attack said. A straight
+  line fixed that but still turned sharply where the rise met the decay; the
+  curve leaves silence and meets the peak with no slope at either end, the
+  soft edge of a felt mallet. Decays stay exponential: that's how anything
+  struck dies away.
 - **Noise is pink, and never read from the same place twice.** White noise has
   equal energy per hertz, so most of it sits in the top octaves; through a wide
   bandpass it is hiss. Pink has equal energy per octave — the tilt of paper,
@@ -120,20 +133,14 @@ never do, and the engine removes each of them.
   as out of tune, and it moves the whole cue together, so the intervals inside
   a cue stay pure and overlapping cues stay in the key. The headroom test
   budgets for the loudest drift.
-- **Struck notes shimmer.** Every fundamental `bell()` strikes is two voices:
-  the note, and a unison twin 3.5 cents sharp at 16% of its level that dies at
-  70% of its length (`UNISON`). The two beat slowly — once or twice a second
-  across the catalogue's register — the way a piano's paired strings or a real
-  bell's paired modes do, then the twin fades and the note ends pure. They
-  share the note's level rather than adding to it, so nothing got louder.
-- **The room darkens as it rings** (`roomImpulse`, `ROOM`). A 12 ms pre-delay,
-  so the strike is heard before the walls answer it; an exponential decay
-  (RT60 1.5 s), which is what a room does — the tail it replaced sagged and
-  then dropped away; and damping that closes from ~4.5 kHz to ~450 Hz across
+- **The room is small, and darkens as it rings** (`roomImpulse`, `ROOM`). An
+  8 ms pre-delay, so the strike is heard before the walls answer it; an
+  exponential decay (RT60 0.6 s — a study with a rug, not a hall), which is
+  what a room does; and damping that closes from ~3.2 kHz to ~350 Hz across
   the tail, because in a real room the top end dies first. A tail with a
   constant spectrum is a plug-in; one that darkens is a place. The
-  ConvolverNode scales every impulse response to the same power, so a cue's
-  `space` still means the send level it always did.
+  ConvolverNode scales every impulse response to the same power per sample,
+  so a shorter room is also a quieter one — the sends were lowered with it.
 - **Overlaps are rounded off, not clipped** (`softClipCurve`). Every cue clears
   the ceiling on its own, but a chime still ringing when the next lands can sum
   past it, and a wave clipped flat is the harshest sound digital audio makes.
@@ -183,17 +190,19 @@ The difference between a chime that feels like a reward and one that feels like
 a notification is almost never the notes. It's five things underneath them, and
 the reward family in `soundConfig.ts` is built from all five:
 
-- **Struck, not faded in.** `bell(freq, …)` renders one note as four
-  oscillators — the fundamental and its unison twin (see "Why it doesn't sound
-  synthesized"), an octave, and a twelfth — where the partials are scaled to
-  die in a fraction of the fundamental's time. The spectrum
-  narrows as the note rings, which is what a real struck metal bar does and
-  what a lone sine can never do. Both partials are exact harmonics, so
-  stacking several of these stays consonant instead of clanging like an actual
-  (inharmonic) bell.
-- **A mallet.** `mallet()` puts ~20 ms of bandpassed noise at the moment of the
-  strike. You don't hear it as its own event; without it the notes bloom out of
-  nowhere and the cue loses its impact.
+- **Struck, not faded in.** `strike(freq, …)` renders one note the way a soft
+  mallet sounds on a marimba bar: a sine fundamental that carries almost
+  everything, the octave at a tenth of its level for the first fifth of the
+  note, and the double octave — a marimba bar's own overtone, the part the
+  ear hears as *wood* — for its first few hundredths of a second. What makes a
+  note read as hit rather than generated is its first few milliseconds, so
+  that is the only place the partials are allowed; what rings afterwards is a
+  plain round tone. Both are exact harmonics, so stacking several notes stays
+  consonant.
+- **A mallet.** `mallet()` puts ~16 ms of low, wide noise (1.1 kHz falling to
+  500 Hz) at the moment of the strike — felt on wood, not a stick on metal. You
+  don't hear it as its own event; without it the notes bloom out of nowhere
+  and the cue loses its impact.
 - **A landing.** Cues accent *toward* the last note and give it a `hold` — the
   arrival stays at full level before it decays. An even run at even volume is a
   scale exercise; a pickup into a held arrival is an announcement. `levelUp`
@@ -204,10 +213,12 @@ the reward family in `soundConfig.ts` is built from all five:
   rather than heard, and inaudible on a laptop speaker, but it's the difference
   between weight and a beep on headphones.
 - **A room.** `space` sends the cue to a shared convolution reverb (a
-  synthesized impulse response — pre-delayed, exponentially decaying,
-  per-channel noise that darkens as it rings, built once). Dry synthesis always sounds like a phone UI. Reward cues use it;
-  interface and paper cues stay dry, because a tail on something pressed forty
-  times an hour is mud.
+  synthesized impulse response — a small room, pre-delayed, exponentially
+  decaying, per-channel noise that darkens as it rings, built once). Dry
+  synthesis always sounds like a phone UI; a big room makes every chime ring
+  out over the next question. Reward cues use it lightly; interface and paper
+  cues stay dry, because a tail on something pressed forty times an hour is
+  mud.
 
 ## The combo
 
@@ -335,9 +346,9 @@ it leans forward.
 What `launch` deliberately doesn't have is a second run-up. You were counted in
 once already; counting in again would make the gate read as a second beginning
 rather than the end of the first, so there's no count-in and no spin-up — one
-short sweep under an immediate strike. It carries the same low D and the same
-octave sparkle as `begin`'s landing, so the two halves sound like one instrument
-picked back up rather than two cues.
+short sweep under an immediate strike. It carries the same low D as `begin`'s
+landing, so the two halves sound like one instrument picked back up rather than
+two cues.
 
 A quiz without the gate is one press, and hears only the first half: a count-in
 into a single note that doesn't resolve — which is the right shape for a cue
@@ -348,8 +359,7 @@ celebration cue for the Study button, and it's wrong twice over: opening your ow
 deck is not an achievement, and a cue that congratulates you for a press you make
 twenty times a session wears out fast. So `study` has no triad and no third in
 it — just an open fifth, the interval with no mood attached — pulled warm (the
-partials are scaled down via `bell`'s `sparkle`, and the lowpass is the darkest
-in the catalogue). It begins on paper, like the rest of the
+lowpass is the darkest in the catalogue). It begins on paper, like the rest of the
 flashcard family, and it *opens* rather than arriving: a slow A5 fades in over
 the held fifth across a fifth of a second, a lamp coming up over a desk.
 

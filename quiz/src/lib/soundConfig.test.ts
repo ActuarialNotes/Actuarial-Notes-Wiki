@@ -52,19 +52,23 @@ function principals(recipe: SoundRecipe): ToneSpec[] {
 const semitones = (a: number, b: number) => Math.round(12 * Math.log2(b / a))
 
 /**
- * A voice's own harmonics — the octave and twelfth `bell()` puts over a note.
- * They are the note's timbre, not a note of their own.
+ * A voice's own harmonics — the octave and double octave `strike()` puts over
+ * a note. They are the note's timbre, not a note of their own.
  */
 function isPartial(tone: ToneSpec, recipe: SoundRecipe): boolean {
-  return (recipe.tones ?? []).some(other => other !== tone && other.at === tone.at &&
-    [2, 3].some(n => Math.abs(tone.freq - other.freq * n) < 0.01))
+  return partialOf(tone, recipe) !== undefined
+}
+
+/** The note a partial sits over: a louder voice struck with it, a whole multiple below. */
+function partialOf(tone: ToneSpec, recipe: SoundRecipe): ToneSpec | undefined {
+  return (recipe.tones ?? []).find(other => other !== tone && other.at === tone.at &&
+    (other.gain ?? 1) > (tone.gain ?? 1) &&
+    [2, 3, 4].some(n => Math.abs(tone.freq - other.freq * n) < 0.05))
 }
 
 /** Every pitch a tone sounds — where it starts, and where it glides to. */
 function pitchesOf(tone: ToneSpec): number[] {
-  const cents = tone.detune ?? 0
   return [tone.freq, ...(tone.glide !== undefined ? [tone.glide] : [])]
-    .map(freq => freq * Math.pow(2, cents / 1200))
 }
 
 /** How far (in cents) a frequency sits from the nearest note of `scale` (semitones above C). */
@@ -85,10 +89,13 @@ const LOUDEST_PLAY = Math.pow(10, VARIATION.gainDb / 20)
  * clipping guard.
  *
  * This mirrors the envelopes `scheduleTone` / `scheduleNoise` schedule in
- * `soundEngine.ts` (attack ramp → optional hold → exponential decay, and the
- * noise `swell`). If those change shape, change this with them.
+ * `soundEngine.ts` (a squared quarter-sine rise → optional hold → exponential
+ * decay, and the noise `swell`). If those change shape, change this with them.
  */
 const SILENT = 0.0001
+
+/** The engine's attack shape, 0 → 1 across the attack. */
+const rising = (u: number) => Math.sin((Math.PI / 2) * u) ** 2
 
 function levelAt(recipe: SoundRecipe, t: number): number {
   let sum = 0
@@ -98,16 +105,16 @@ function levelAt(recipe: SoundRecipe, t: number): number {
     const attack = Math.min(tone.attack ?? 0.012, tone.dur * 0.5)
     const hold = Math.min(tone.hold ?? 0, Math.max(0, tone.dur - attack) * 0.6)
     const u = t - tone.at
-    if (u < attack) sum += peak * (u / attack)
+    if (u < attack) sum += peak * rising(u / attack)
     else if (u < attack + hold) sum += peak
     else sum += peak * Math.pow(SILENT / peak, (u - attack - hold) / (tone.dur - attack - hold))
   }
   for (const noise of recipe.noise ?? []) {
     if (t < noise.at || t > noise.at + noise.dur) continue
     const peak = noise.gain ?? 1
-    const swell = Math.max(0.002, noise.dur * Math.min(0.9, Math.max(0, noise.swell ?? 0)))
+    const swell = Math.min(noise.dur * 0.9, Math.max(0.002, noise.dur * Math.min(0.9, Math.max(0, noise.swell ?? 0))))
     const u = t - noise.at
-    if (u < swell) sum += peak * (u / swell)
+    if (u < swell) sum += peak * rising(u / swell)
     else sum += peak * Math.pow(SILENT / peak, (u - swell) / (noise.dur - swell))
   }
   return sum
@@ -459,30 +466,69 @@ describe('sound catalogue', () => {
     })
   })
 
-  describe('struck notes', () => {
-    it('beat gently against a unison voice a few cents away', () => {
-      // One sine at one pitch never moves, and nothing acoustic is that still.
-      // Every struck fundamental has a quieter, shorter twin a few cents sharp:
-      // close enough to beat slowly (a shimmer), too close to read as a second
-      // note, and gone before the note is, so the note ends pure.
-      for (const event of REWARDS) {
+  describe('round, short chimes', () => {
+    const CHIMES = [...REWARDS, 'study'] as const
+
+    it('sustains nothing above 1 kHz', () => {
+      // Between 1 and 3 kHz is where the ear is most sensitive, and a tone that
+      // rings there is what turns a chime from sweet to sharp. The struck
+      // partials may flash up there for the strike; nothing may stay.
+      for (const event of CHIMES) {
         const recipe = SOUND_RECIPES[event]
-        // Struck notes carry an octave partial; `streak`'s swell underneath its
-        // bells is not struck, and has nothing to shimmer.
-        const struck = principals(recipe).filter(note => (recipe.tones ?? []).some(t =>
-          t.at === note.at && Math.abs(t.freq - note.freq * 2) < 0.01))
-        expect(struck.length, `${event} strikes nothing`).toBeGreaterThan(0)
-        for (const note of struck) {
-          const twin = (recipe.tones ?? []).find(t =>
-            t !== note && t.at === note.at && t.freq === note.freq && t.detune)
-          expect(twin, `${event}: ${note.freq} Hz has no unison voice`).toBeDefined()
-          expect(Math.abs(twin!.detune!), `${event}: the unison is a second note`).toBeLessThan(10)
-          expect(Math.abs(twin!.detune!), `${event}: the unison cannot beat`).toBeGreaterThan(1)
-          expect(twin!.gain ?? 1, `${event}: the unison is as loud as the note`)
-            .toBeLessThan((note.gain ?? 1) * 0.3)
-          expect(twin!.dur, `${event}: the unison outlasts the note`).toBeLessThan(note.dur)
+        for (const tone of recipe.tones ?? []) {
+          // Partials are held to the strike by the next test.
+          if (tone.dur <= 0.1 || isPartial(tone, recipe)) continue
+          for (const freq of pitchesOf(tone)) {
+            expect(freq, `${event} rings at ${freq.toFixed(0)} Hz for ${tone.dur}s`).toBeLessThanOrEqual(1000)
+          }
         }
       }
+    })
+
+    it('rolls the top end off every chime', () => {
+      for (const event of CHIMES) {
+        expect(SOUND_RECIPES[event].lowpass, `${event} is left bright`).toBeLessThanOrEqual(3600)
+      }
+    })
+
+    it('keeps the struck partials to the strike', () => {
+      // A partial that outlasts a fifth of its note stops being the sound of
+      // the mallet and starts being a second, brighter note on top.
+      for (const event of CHIMES) {
+        const recipe = SOUND_RECIPES[event]
+        for (const tone of recipe.tones ?? []) {
+          const note = partialOf(tone, recipe)
+          if (!note) continue
+          expect(tone.dur, `${event}: a partial rings on`).toBeLessThanOrEqual(note.dur * 0.2 + 1e-9)
+          expect(tone.gain ?? 1, `${event}: a partial is too loud`).toBeLessThanOrEqual((note.gain ?? 1) * 0.1 + 1e-9)
+        }
+      }
+    })
+
+    it('lands and gets out of the way — a short tail, not a ring-out', () => {
+      for (const event of CHIMES) {
+        expect(recipeDuration(SOUND_RECIPES[event]), `${event} rings out`).toBeLessThanOrEqual(1)
+        expect(SOUND_RECIPES[event].space ?? 0, `${event} is swimming in the room`).toBeLessThanOrEqual(0.3)
+      }
+      // The most frequent chime is the shortest of them.
+      expect(recipeDuration(SOUND_RECIPES.correct)).toBeLessThanOrEqual(0.55)
+    })
+  })
+
+  describe('the click', () => {
+    it('is a switch, not a note — noise only, no tone', () => {
+      // A mouse button has no pitch. Any oscillator here is heard as a tone on
+      // every press in the app.
+      for (const event of ['click', 'tick'] as const) {
+        expect(SOUND_RECIPES[event].tones ?? [], `${event} has a tone in it`).toHaveLength(0)
+        expect(SOUND_RECIPES[event].noise?.length ?? 0).toBeGreaterThan(0)
+      }
+      // The press's thud is too short to carry a pitch.
+      for (const tone of SOUND_RECIPES.press.tones ?? []) expect(tone.dur).toBeLessThanOrEqual(0.04)
+    })
+
+    it('is over in a couple of hundredths of a second', () => {
+      expect(recipeDuration(SOUND_RECIPES.click)).toBeLessThanOrEqual(0.02)
     })
   })
 

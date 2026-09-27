@@ -6,7 +6,7 @@
  * for volume, and a tiny subscribable store for the enabled/volume settings so
  * every component that shows a mute button agrees on the state.
  *
- * The synth is built to not sound like one: attacks rise in a straight line
+ * The synth is built to not sound like one: attacks rise along a rounded curve
  * rather than snapping in, noise is pink and never read from the same place
  * twice, every play drifts a little from the last (`playVariation`), the room
  * darkens as it rings, and overlapping cues are rounded off at the output
@@ -113,7 +113,7 @@ let reverb: ConvolverNode | null = null
 let unavailable = false
 
 /** Length of the shared reverb tail, in seconds. */
-const REVERB_SECONDS = 1.8
+const REVERB_SECONDS = 1
 
 /**
  * Seconds of noise in the shared buffer. Every burst reads a different stretch
@@ -123,18 +123,22 @@ const REVERB_SECONDS = 1.8
  */
 const NOISE_SECONDS = 2
 
-/** The room the reward cues ring in — see `roomImpulse`. */
+/**
+ * The room the reward cues sit in — see `roomImpulse`. A small one: a study
+ * with a rug, not a hall. Enough that a chime happens somewhere rather than
+ * inside your head, and gone well before the next question is on screen.
+ */
 export const ROOM = {
   /** Silence before the room answers, in seconds. */
-  preDelay: 0.012,
+  preDelay: 0.008,
   /** How long the room takes to reach full level once it does, in seconds. */
-  onset: 0.006,
+  onset: 0.005,
   /** Seconds for the tail to fall 60 dB. */
-  rt60: 1.5,
+  rt60: 0.6,
   /** Where the damping starts (Hz) — the tail's brightest moment… */
-  brightHz: 4500,
+  brightHz: 3200,
   /** …and where it has closed down to by the end of the tail. */
-  darkHz: 450,
+  darkHz: 350,
 } as const
 
 /**
@@ -335,13 +339,30 @@ function getReverb(audio: AudioContext, dest: AudioNode): ConvolverNode | null {
 const SILENT = 0.0001
 
 /**
- * The attack is a straight line up from silence, not an exponential ramp. An
- * exponential ramp from near-zero spends almost all of its time inaudible and
- * then jumps to full level in the last fraction of a millisecond — a hidden
- * click on the front of every note, whatever the written attack says. A linear
- * rise over the same few milliseconds is the soft edge of a mallet on wood.
- * The decay stays exponential: that's how anything struck actually dies away.
+ * The shape of every attack: a quarter-sine, squared. It leaves silence with no
+ * slope and arrives at the peak with no slope, so the rise has no corner at
+ * either end.
+ *
+ * Both of the shapes before it had one. An exponential ramp from near-zero
+ * spends almost all of its time inaudible and then jumps to full level in the
+ * last fraction of a millisecond — a hidden click on the front of every note,
+ * whatever the written attack said. A straight line fixed that, but still
+ * turned sharply at the top, where the rise meets the decay, and a sudden turn
+ * in a level is heard as a faint tick of its own. This curve rounds both ends
+ * off: the soft edge of a felt mallet on wood.
  */
+const ATTACK_CURVE = Float32Array.from({ length: 32 }, (_, i) => Math.sin((Math.PI / 2) * (i / 31)) ** 2)
+
+/**
+ * Rise from silence to `peak` over `time` seconds along `ATTACK_CURVE`. The
+ * decay that follows stays exponential: that's how anything struck actually
+ * dies away.
+ */
+function rise(param: AudioParam, peak: number, start: number, time: number) {
+  param.value = 0
+  param.setValueCurveAtTime(ATTACK_CURVE.map(level => level * peak), start, time)
+}
+
 function scheduleTone(
   audio: AudioContext,
   dest: AudioNode,
@@ -359,7 +380,6 @@ function scheduleTone(
   if (spec.glide !== undefined) {
     osc.frequency.exponentialRampToValueAtTime(Math.max(SILENT, spec.glide * tune), start + spec.dur)
   }
-  if (spec.detune) osc.detune.setValueAtTime(spec.detune, start)
   const peak = Math.max(SILENT, (spec.gain ?? 1) * level)
   const attack = Math.min(spec.attack ?? 0.012, spec.dur * 0.5)
   // `hold` keeps the note at full level before the decay begins — the
@@ -367,8 +387,7 @@ function scheduleTone(
   // falling away the instant it gets there. It shares `dur` with the decay
   // rather than extending it, and always leaves room for the decay itself.
   const hold = Math.min(spec.hold ?? 0, Math.max(0, spec.dur - attack) * 0.6)
-  gain.gain.setValueAtTime(0, start)
-  gain.gain.linearRampToValueAtTime(peak, start + attack)
+  rise(gain.gain, peak, start, attack)
   if (hold > 0) gain.gain.setValueAtTime(peak, start + attack + hold)
   gain.gain.exponentialRampToValueAtTime(SILENT, start + spec.dur)
   osc.connect(gain)
@@ -405,12 +424,11 @@ function scheduleNoise(
 
   // `swell` shapes the envelope: 0 gives a click's quick transient, ~0.5 the
   // slow rise-and-fall of something sliding across a surface. The rise is
-  // linear for the same reason a tone's attack is.
+  // the same rounded curve a tone's attack is.
   const peak = Math.max(SILENT, spec.gain ?? 1)
   const swell = Math.min(0.9, Math.max(0, spec.swell ?? 0))
   const gain = audio.createGain()
-  gain.gain.setValueAtTime(0, start)
-  gain.gain.linearRampToValueAtTime(peak, start + Math.max(0.002, spec.dur * swell))
+  rise(gain.gain, peak, start, Math.min(spec.dur * 0.9, Math.max(0.002, spec.dur * swell)))
   gain.gain.exponentialRampToValueAtTime(SILENT, start + spec.dur)
 
   src.connect(filter)

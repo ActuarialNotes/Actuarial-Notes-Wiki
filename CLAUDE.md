@@ -153,9 +153,11 @@ before touching that area**:
 - `docs/sound-design.md` — the **sound-effects system**: the rules the cue
   catalogue follows (quiet interface feedback, paper-as-noise, melodic success,
   silent mistakes, one key — every note from C major's pentatonic — and nothing
-  playing the same twice), what keeps the synth from sounding synthesized
-  (linear attacks, pink noise, per-play drift, a unison shimmer on struck notes,
-  a room that darkens as it rings), the delegated `data-sound` listener that
+  playing the same twice, a click is a mouse button with no tone in it, chimes
+  are round and short — marimba-like `strike()` notes, nothing sustained above
+  1 kHz, dead inside a second), what keeps the synth from sounding synthesized
+  (rounded attacks, pink noise, per-play drift, a small room that darkens as it
+  rings), the delegated `data-sound` listener that
   gives every control a press cue, and how to wire a new interaction. Read
   before adding or changing a sound.
 - `docs/visual-noise-review.md` — a **review backlog**: where the app explains itself in grey

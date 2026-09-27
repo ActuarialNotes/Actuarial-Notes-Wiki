@@ -8,12 +8,15 @@ Edition: "7th"
 Type: "Textbook"
 ISBN: "978-0495110811"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-27
+  last_checked_by: agent:validate-v1
   content_hash: sha256:a827dae4aac8b14c880d70c557c0802addb712fd04a096394499274458320875
-  sources: []
+  sources:
+    - "SOA Probability Exam syllabus, November 2026, REFERENCES pp.5-7, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "Mathematical Statistics with Applications, 7th edition, table of contents and description (WebAssign, Cengage Learning), https://www.webassign.net/features/textbooks/wackerlystat7/details.html, fetched 2026-09-27, sha256:2b338d52354b0d6d9be5228f04593c25b7739efeb740aae93c2ce480260f59ff"
+    - "Mathematical statistics with applications, MARC record (Internet Archive, LCCN 2007922554), https://archive.org/download/mathematicalstat0000wack/mathematicalstat0000wack_marc.xml, sha256:689a20e63e0b22e361f610e03dc5b03b1b801972aeacdeb1f323d6b0b5aa8c25"
   open_findings: 0
   open_critical: 0
   log: ".verify/Resources/Books/Mathematical Statistics with Applications (Wackerly, Mendenhall, & Scheaffer - 2008).md"

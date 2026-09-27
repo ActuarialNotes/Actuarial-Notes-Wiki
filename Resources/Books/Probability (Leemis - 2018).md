@@ -43,7 +43,7 @@ A calculus-based introduction to probability covering the traditional topics, wi
 - 3.2 [[Continuous Random Variable|Continuous Random Variables]]
 - 3.3 [[Cumulative Distribution Function (CDF)|Cumulative Distribution Functions]]
 - 3.4 [[Expected Value|Expected Values]]
-- 3.5 Inequalities
+- 3.5 Inequalities (Markov, Chebyshev)
 
 ## 4 Common Discrete Distributions
 - 4.1 Bernoulli Distribution

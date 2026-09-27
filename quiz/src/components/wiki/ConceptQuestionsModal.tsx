@@ -5,8 +5,15 @@ import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
 import type { Question } from '@/lib/parser'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
-import { QuestionSearchRow, DifficultyDots } from '@/components/QuestionSearchRow'
-import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
+import { QuestionSearchRow } from '@/components/QuestionSearchRow'
+import { QuestionFilterBar } from '@/components/QuestionFilterBar'
+import {
+  emptyFacets,
+  hasFacetFilters,
+  matchesFacets,
+  toggleFacet,
+  type FacetSelection,
+} from '@/lib/questionFilters'
 import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { tallyAttempts } from '@/lib/questionAttempts'
@@ -23,12 +30,6 @@ function linkMatchesConcept(link: string, conceptName: string): boolean {
   return !!lastSegment && lastSegment.replace(/-/g, ' ').toLowerCase() === lower
 }
 
-function conceptLabel(link: string): string {
-  const clean = link.replace(/\.md$/i, '').replace(/\+/g, ' ')
-  const segment = clean.split('/').filter(Boolean).pop() ?? link
-  return segment.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
-}
-
 interface ConceptQuestionsModalProps {
   conceptName: string
   onClose: () => void
@@ -38,12 +39,6 @@ interface ConceptQuestionsModalProps {
   onQuizStart?: () => void
 }
 
-const DIFFICULTY_OPTIONS = [
-  { value: 'easy', label: 'Easy' },
-  { value: 'medium', label: 'Medium' },
-  { value: 'hard', label: 'Hard' },
-]
-
 export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: ConceptQuestionsModalProps) {
   // Paper: the panel sliding in.
   useSoundOnMount('open')
@@ -52,8 +47,7 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
-  const [difficultyFilters, setDifficultyFilters] = useState<Set<string>>(new Set())
-  const [conceptFilters, setConceptFilters] = useState<Set<string>>(new Set())
+  const [facets, setFacets] = useState<FacetSelection>(emptyFacets)
 
   useEffect(() => {
     let cancelled = false
@@ -89,65 +83,16 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
 
   const navigate = useNavigate()
 
-  const relatedConcepts = useMemo(() => {
-    const seen = new Set<string>()
-    questions.forEach(q => {
-      q.wiki_link.forEach(link => {
-        if (!linkMatchesConcept(link, conceptName)) {
-          seen.add(conceptLabel(link))
-        }
-      })
-    })
-    return Array.from(seen)
-      .sort()
-      .map(name => ({ value: name, label: name }))
-  }, [questions, conceptName])
-
-  const visibleQuestions = useMemo(() => {
-    let filtered = questions
-    if (difficultyFilters.size > 0) {
-      filtered = filtered.filter(q => difficultyFilters.has(q.difficulty))
-    }
-    if (conceptFilters.size > 0) {
-      filtered = filtered.filter(q =>
-        q.wiki_link.some(link => conceptFilters.has(conceptLabel(link)))
-      )
-    }
-    return filtered
-  }, [questions, difficultyFilters, conceptFilters])
+  const visibleQuestions = useMemo(
+    () => questions.filter(q => matchesFacets(q, facets)),
+    [questions, facets],
+  )
 
   const filteredOutQuestions = useMemo(() => {
-    if (difficultyFilters.size === 0 && conceptFilters.size === 0) return []
+    if (!hasFacetFilters(facets)) return []
     const visibleIds = new Set(visibleQuestions.map(q => q.id))
     return questions.filter(q => !visibleIds.has(q.id))
-  }, [questions, visibleQuestions, difficultyFilters, conceptFilters])
-
-  const difficultyOptionCounts = useMemo(() => {
-    let filtered = questions
-    if (conceptFilters.size > 0) {
-      filtered = filtered.filter(q =>
-        q.wiki_link.some(link => conceptFilters.has(conceptLabel(link)))
-      )
-    }
-    const counts: Record<string, number> = {}
-    filtered.forEach(q => { counts[q.difficulty] = (counts[q.difficulty] ?? 0) + 1 })
-    return counts
-  }, [questions, conceptFilters])
-
-  const conceptOptionCounts = useMemo(() => {
-    let filtered = questions
-    if (difficultyFilters.size > 0) {
-      filtered = filtered.filter(q => difficultyFilters.has(q.difficulty))
-    }
-    const counts: Record<string, number> = {}
-    filtered.forEach(q => {
-      q.wiki_link.forEach(link => {
-        const lbl = conceptLabel(link)
-        counts[lbl] = (counts[lbl] ?? 0) + 1
-      })
-    })
-    return counts
-  }, [questions, difficultyFilters])
+  }, [questions, visibleQuestions, facets])
 
   // Roll-up of the visible set, so the header answers "how much of this concept
   // have I actually done?" without reading every row.
@@ -244,50 +189,15 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
           )}
           {!loading && questions.length > 0 && (
             <>
-              {/* Filter controls */}
-              <div className="flex items-center gap-2 flex-wrap">
-                {DIFFICULTY_OPTIONS.map(opt => {
-                  const count = difficultyOptionCounts[opt.value] ?? 0
-                  const active = difficultyFilters.has(opt.value)
-                  return (
-                    <button
-                      key={opt.value}
-                      type="button"
-                      onClick={() => setDifficultyFilters(prev => {
-                        const next = new Set(prev)
-                        if (next.has(opt.value)) next.delete(opt.value)
-                        else next.add(opt.value)
-                        return next
-                      })}
-                      className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                        active
-                          ? 'bg-primary/10 text-primary'
-                          : 'bg-background hover:bg-accent text-muted-foreground'
-                      }`}
-                    >
-                      <DifficultyDots difficulty={opt.value} />
-                      <span className="capitalize">{opt.label}</span>
-                      <span className="ml-0.5 text-xs bg-muted rounded-full px-1.5 py-0.5 min-w-[1.25rem] text-center text-muted-foreground">
-                        {count}
-                      </span>
-                    </button>
-                  )
-                })}
-                {relatedConcepts.length > 0 && (
-                  <MultiSelectDropdown
-                    label="Concepts"
-                    options={relatedConcepts}
-                    selected={conceptFilters}
-                    onToggle={c => setConceptFilters(prev => {
-                      const next = new Set(prev)
-                      if (next.has(c)) next.delete(c)
-                      else next.add(c)
-                      return next
-                    })}
-                    getCount={v => conceptOptionCounts[v] ?? 0}
-                  />
-                )}
-              </div>
+              {/* Filter controls — the row every question list carries. The
+                  concept itself is left out of Concepts: every question here
+                  is tagged with it. */}
+              <QuestionFilterBar
+                pool={questions}
+                selection={facets}
+                onToggle={(facet, value) => setFacets(prev => toggleFacet(prev, facet, value))}
+                omitConcept={conceptName}
+              />
 
               {/* Toolbar: select-all + count */}
               <div className="flex items-center gap-3 py-1">

@@ -197,6 +197,12 @@ describe('resourceSeo', () => {
     expect(page.description).toBe('Probability by Ross. A syllabus reading for Exam P-1. Chapters include Combinatorial Analysis and Axioms of Probability.')
   })
 
+  it("never counts a page's related readings or sources as chapters", () => {
+    const tail = '\n## Related readings\n- [[Other]] — x\n\n## Sources\n- [Ross](https://example.com) — contents\n'
+    const page = resourceSeo({ name: 'Probability', markdown: FM(`${outline}${tail}`, 'Title: Probability\nAuthors: Ross'), exams: [EXAM_P] })
+    expect(page.description).toBe('Probability by Ross. A syllabus reading for Exam P-1. Chapters include Combinatorial Analysis and Axioms of Probability.')
+  })
+
   it("describes a paper by its own lead, and names it by its main title when it's long", () => {
     const md = FM(
       '![[Davidson - Cover.svg]]\n\nA paper on the Canadian **cap on non-pecuniary general damages** and its effect on litigation.\n\n## The subject\n',

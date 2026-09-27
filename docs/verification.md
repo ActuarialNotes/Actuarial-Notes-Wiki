@@ -237,8 +237,11 @@ Where the way in sits depends on the surface:
   asked twice, so they answer in the same place. The row opens the same
   `FactCheckDialog`, which binds Esc itself — the info sheet hands the key over
   while the record is up, so one Esc closes one thing.
-- **Exam pages** — nothing. An exam page is a syllabus outline; the claims worth
-  checking live on the concept and resource pages it links to.
+- **Exam pages** — the **Fact Check** item of the exam's action menu, which the
+  study guide's title opens (`pages/wiki/WikiExam.tsx` → `ConceptActionMenu`, its
+  exam form). An exam page's syllabus is transcribed from the examining body's, so
+  its record — what it was checked against, and everything since — is worth a
+  reader's tap; no badge sits in the title row, which carries the exam's status.
 
 Either way opens `FactCheckDialog` over `FactCheckPanel` — a bottom sheet on a
 phone, a centred `max-w-lg` card above `sm`, per `docs/style-guide.md` §8.1.

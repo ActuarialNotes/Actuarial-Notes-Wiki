@@ -270,39 +270,67 @@ them. Re-derive the defining formula against the source text before you keep it.
 
 ## Source-material pages (`Resources/Books/`)
 
-Exam syllabi end with a **Source Material** callout linking one page per reading.
-These carry richer frontmatter than a concept page, and they exist to give each
-reading a chapter-level map into the concept vault:
+Exam syllabi end with a **Source Material** callout linking one page per reading. A
+resource page describes that one real document — and **says only what the document
+says, naming where it read it**. The standard, the review that produced it and the
+pipeline are `docs/resource-pages.md`; read it before writing or editing one. The short
+form:
 
 ```markdown
 ---
 Title: "Basic Ratemaking"
-Authors: "Geoff Werner, Claudine Modlin"
+Authors: "Geoff Werner and Claudine Modlin"
+Publisher: "Casualty Actuarial Society"
 Year: "2016"
 date: "2016"
 Edition: "5th"
-Publisher: "Casualty Actuarial Society"
-Type: "Study Note"
-Available from: "[casact.org](https://…)"
+Type: "Textbook"
+Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf)"
 ---
 ![[Basic Ratemaking (Werner - 2016) - Cover.svg]]
 
-One-line framing sentence, linking the exam and the core concept.
+One paragraph on what the document is, in its own terms (its abstract, purpose, scope,
+preface or the publisher's description); first sentence ≤ 160 characters.
+
+> [!info] On the syllabus
+> - [[Exam 5 (CAS)|Exam 5]] — Chapters 1 and 3–16 and the Appendices (the outline's words)
 
 ## 1 Introduction
+- Bullets stating what the chapter says, each linking the [[Concept]] it teaches —
+  or the chapter's numbered sections, verbatim
 
-- Bulleted section outline, wiki-linked to [[Concepts]] pages
-
-## Links
-- [Title (Publisher)](https://…)
+## Sources
+- [Basic Ratemaking, 5th ed. (CAS, 2016)](https://…) — the document: contents, chapters 1–16
+- [CAS Exam 5 Content Outline](https://…) — the citation and the assigned scope
 ```
 
-- `Year`/`date` feed the Resources timeline; `Author`/`Authors`, `Edition`,
-  `Publisher` populate the index card. Books use `Find at your local library at:`;
-  papers, ASOPs and study notes use `Available from:` with a real URL.
+The pipeline, in order:
+
+1. **Pin the document** from the exam's content outline or syllabus
+   (`quiz/src/data/examPdfLinks.ts`): citation, edition, scope.
+2. **Extract it** — `python3 scripts/resource_extract.py --url <document>` (or `--page`
+   for an existing page's `Available from`). It fetches the real document and writes its
+   sha256, metadata, bookmark outline already in the vault shape, contents pages, page
+   text, and images of scanned pages. For a book with no free copy, the `textbook-toc`
+   skill's source ladder is this step.
+3. **Write from the extraction** — division headings as the document titles them,
+   bullets read from the division, every source under `## Sources`. Never from memory;
+   commentary ("why it is on the syllabus", "the exam angles") belongs on concept pages.
+4. **Cover** — `python3 scripts/generate_resource_covers.py` (see below).
+5. **Lint** — `python3 scripts/resource_lint.py "Resources/Books/<page>.md"` (CI runs it on
+   every page) and `validate_links.py`.
+6. **Sync** — `python3 scripts/verify_check.py --sync "Resources/Books/<page>.md"`.
+
+Details that matter:
+
+- `Year`/`date` feed the Resources timeline; `Authors`, `Edition`, `Publisher`, `Type`,
+  `Code` and `ISBN` populate the card. **Every value is double-quoted**, keys in the
+  order above; `Type` comes from the vocabulary in `docs/resource-pages.md` §2.2.
+  `Available from` is only for an official copy a reader can open; a book for sale
+  carries its `ISBN` instead, and the card builds a *Get a copy* menu from it.
 - **Every content file needs a `verification:` block** as the last key of its
-  frontmatter (`docs/verification.md`) — but **do not write it by hand.** Author
-  the page without one, then run from the repo root:
+  frontmatter (`docs/verification.md`) — but **do not write it by hand.** Author the
+  page without one, then run from the repo root:
 
   ```bash
   python3 scripts/verify_check.py --sync "Resources/Books/<your page>.md"
@@ -329,9 +357,8 @@ One-line framing sentence, linking the exam and the core concept.
   `Media/Attachments/` under a name not ending in `- Cover.svg` wins permanently.
   A real jacket is the better picture — but a generated one is correct, and
   omitting the cover is not. See `docs/resource-covers.md`.
-- The outline's job is linking, not summarizing. Each chapter bullet should point
-  at the concept page that teaches it. Build it with the `textbook-toc` skill — the
-  chapter titles come from the real work, never from memory.
+- The outline's job is to lead into the concept vault: link the concept a division
+  teaches, and only concepts whose pages exist.
 
 ### Which `Resources/` directory
 
@@ -407,7 +434,7 @@ app can never display — so the concept looks permanently unstudied.
 - [ ] Multi-step solutions use `align*`, one `&=` step per line, `$$` on own lines
 - [ ] LaTeX is clean (no smart quotes, OCR dashes, Unicode fractions; `\$` for money)
 - [ ] Image embeds only reference files that exist in `Media/`
-- [ ] `Resources/Books/` page only: it carries a cover — run `python3 scripts/generate_resource_covers.py`
+- [ ] `Resources/Books/` page only: written from the extracted document (`docs/resource-pages.md`), cover first, `## Sources` last, `python3 scripts/resource_lint.py` clean
 - [ ] All `[[wiki-links]]` resolve to existing `Concepts/` pages
 - [ ] Filename ends in `.md`, uses spaces (not underscores), and matches inbound links character-for-character
 - [ ] Namesake check: linked the exam-appropriate page (`Deductible Rating` vs `Deductible`, etc.)

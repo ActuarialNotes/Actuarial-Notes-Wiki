@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, type ReactNode, type RefObject } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -159,6 +159,50 @@ export interface WikiArticleProps {
   className?: string
   /** Optional node rendered inline after the H1 title (e.g. an exam status badge). */
   titleBadge?: React.ReactNode
+  /**
+   * Makes the H1 title a control: pressing it opens the page's action menu,
+   * the way the concept popup's title does (the exam study guide passes its
+   * menu here). The host owns the menu; the article only draws the trigger.
+   */
+  titleAction?: WikiTitleAction
+}
+
+export interface WikiTitleAction {
+  /** The trigger — the host anchors its menu to this element's box. */
+  ref: RefObject<HTMLButtonElement>
+  open: boolean
+  onToggle: () => void
+  /** Accessible name, e.g. "Exam 9 — page actions". */
+  label: string
+}
+
+// The title action reaches the H1 through context rather than through the
+// `components` map: react-markdown treats a new component function as a new
+// element type, so a map rebuilt every time the menu opened or closed would
+// remount the whole article.
+const TitleActionContext = createContext<WikiTitleAction | null>(null)
+
+/**
+ * The H1's text, as the page's action-menu trigger when the host gave it one.
+ * Underlined to say so — the same underline the concept popup's title wears.
+ */
+function ArticleTitle({ children }: { children: ReactNode }) {
+  const action = useContext(TitleActionContext)
+  if (!action) return <>{children}</>
+  return (
+    <button
+      ref={action.ref}
+      type="button"
+      data-play-menu-trigger
+      onClick={action.onToggle}
+      aria-haspopup="menu"
+      aria-expanded={action.open}
+      aria-label={action.label}
+      className="action-title-underline text-left"
+    >
+      {children}
+    </button>
+  )
 }
 
 function refKey(ref: WikiEntryRef): string {
@@ -192,7 +236,7 @@ function stripHtmlBlocks(md: string): string {
     .replace(/^> *<div\b.*?<\/div> *\n?/gm, '')
 }
 
-export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, className, titleBadge }: WikiArticleProps) {
+export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, className, titleBadge, titleAction }: WikiArticleProps) {
   const navigate = useNavigate()
   const articleRef = useRef<HTMLDivElement | null>(null)
   const { theme } = useTheme()
@@ -229,10 +273,11 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
     ...calloutComponents,
     ...codeComponents,
     h1({ children, ...rest }) {
-      if (!titleBadge) return <h1 {...rest}>{children}</h1>
+      const title = <ArticleTitle>{children}</ArticleTitle>
+      if (!titleBadge) return <h1 {...rest}>{title}</h1>
       return (
         <h1 {...rest} className="flex items-center gap-2 flex-wrap">
-          <span>{children}</span>
+          <span>{title}</span>
           {titleBadge}
         </h1>
       )
@@ -416,13 +461,15 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
         (className ?? '')
       }
     >
-      <ReactMarkdown
-        remarkPlugins={[remarkGfm, remarkMath]}
-        rehypePlugins={[rehypeKatex]}
-        components={components}
-      >
-        {processed}
-      </ReactMarkdown>
+      <TitleActionContext.Provider value={titleAction ?? null}>
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm, remarkMath]}
+          rehypePlugins={[rehypeKatex]}
+          components={components}
+        >
+          {processed}
+        </ReactMarkdown>
+      </TitleActionContext.Provider>
     </div>
   )
 }

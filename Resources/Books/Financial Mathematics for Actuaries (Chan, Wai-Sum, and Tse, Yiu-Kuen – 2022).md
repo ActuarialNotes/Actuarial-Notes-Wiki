@@ -1,17 +1,18 @@
 ---
-Title: Financial Mathematics for Actuaries
-Authors: "Wai-Sum Chan, Yiu-Kuen Tse"
+Title: "Financial Mathematics for Actuaries"
+Authors: "Wai-Sum Chan and Yiu-Kuen Tse"
+Publisher: "World Scientific"
 Year: "2022"
 date: "2022"
-Edition: 3rd
-Publisher: World Scientific
-ISBN: 978-981-124-327-1
+Edition: "3rd"
+Type: "Textbook"
+ISBN: "978-981-12-4327-1"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:697896b1d6f37ea73518da289c2e2da76d7a188574433034296718c0582d5156
+  content_hash: sha256:39352635c26825147af8166ed57e02f61a26f4108880d8b862c995ae37ae7014
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,75 +20,34 @@ verification:
 ---
 ![[Financial Mathematics for Actuaries (Chan, Wai-Sum, and Tse, Yiu-Kuen – 2022) - Cover.svg]]
 
-## 1 Interest Accumulation and Time Value of Money
+A textbook on the fundamental concepts of financial mathematics essential for evaluating any financial product and instrument. It centres on the present and future values of streams of cash flows under different interest rate environments and, in the publisher's description, covers the body of knowledge the Society of Actuaries requires for its Financial Mathematics (FM) exam, with numerous examples and exercises, some adapted from past FM exams. The third edition adds an "R Laboratory" section of R code to every chapter except Chapter 9, revises key definitions and alters the theme structure.
 
-- 1.1 [[Accumulation Function]] and [[Effective Rate|Effective Interest]]
-- 1.2 [[Simple Interest]] and [[Compound Interest]]
-- 1.3 [[Force of Interest]]
-- 1.4 [[Nominal Interest Rate|Nominal Rates of Interest]] and [[Nominal Discount Rate Convertible m-thly|Discount]]
-- 1.5 [[Present Value]] and [[Discount Factor]]
-- 1.6 [[Equation of Value|Equations of Value]]
-- 1.7 [[Real Rate of Interest]] and [[Inflation]]
+> [!info] On the syllabus
+> - [[Exam FM-2 (SOA)|Exam FM]] — a suggested text (the syllabus requires none); Chapter 1; Chapter 2 (excluding 2.4); Chapter 3 (excluding 3.5); Chapter 4 (excluding 4.2 and 4.5); Chapter 5 (excluding 5.3); Chapter 6 (excluding 6.4); Chapter 7; Chapter 8 (excluding 8.6, 8.7 and 8.8).
+
+## 1 Interest Accumulation and Time Value of Money
 
 ## 2 Annuities
 
-- 2.1 [[Annuity Immediate]]
-- 2.2 [[Annuity Due]]
-- 2.3 [[Payable m-thly|Annuities Payable m-thly]]
-- 2.5 [[Level Perpetuity|Perpetuities]]
-- 2.6 [[Non-level Annuities|Non-Level Annuities]] — [[Arithmetic Progression]]
-- 2.7 [[Non-level Annuities|Non-Level Annuities]] — [[Geometric Progression]]
-- 2.8 [[Payable Continuously|Continuously Payable Annuities]]
-
-## 3 Spot Rates, Forward Rates, and the Term Structure
-
-- 3.1 [[Yield Curve|Term Structure of Interest Rates]]
-- 3.2 [[Spot Rate|Spot Rates]]
-- 3.3 [[Forward Rate|Forward Rates]]
-- 3.4 Relationships Between [[Spot Rate|Spot]] and [[Forward Rate|Forward Rates]]
+## 3 Spot Rates, Forward Rates and the Term Structure
 
 ## 4 Rates of Return
 
-- 4.1 [[Net Present Value]] and [[Yield Rate|Internal Rate of Return]]
-- 4.3 Dollar-Weighted Rate of Return
-- 4.4 Time-Weighted Rate of Return
-
 ## 5 Loans and Costs of Borrowing
-
-- 5.1 The [[Amortization]] Method
-- 5.2 [[Outstanding Balance]] and [[Amortization]] Schedules
-- 5.4 The Sinking Fund Method
-- 5.5 Comparing [[Amortization]] and Sinking Fund Methods
 
 ## 6 Bonds and Bond Pricing
 
-- 6.1 [[Bonds|Bond]] Terminology
-- 6.2 [[Bond Price|Bond Valuation]]
-- 6.3 [[Amortization of Premium]] and [[Accumulation of Discount]]
-- 6.5 [[Callable Bond|Callable Bonds]]
-
-## 7 Bond Yields and the Term Structure
-
-- 7.1 [[Yield Rate|Yield to Maturity]]
-- 7.2 [[Spot Rate|Spot Rates]] and [[Bond Price|Bond Prices]]
-- 7.3 [[Forward Rate|Forward Rates]] and [[Bond Price|Bond Prices]]
-- 7.4 Par Yield and [[Yield Curve]]
-- 7.5 [[Redemption Value|Reinvestment Rate]] Effects
+## 7 Bond Yields and Term Structure
 
 ## 8 Bond Management
 
-- 8.1 [[Macaulay Duration]]
-- 8.2 [[Modified Duration]]
-- 8.3 [[Convexity]]
-- 8.4 [[Redington Immunization]]
-- 8.5 [[Full Immunization]] and [[Cash Flow|Cash Flow Matching]]
+## 9 Interest Rates and Financial Securities
 
-## 9 Stochastic Interest Rates
+## 10 Stochastic Interest Rates
 
-- 9.1 Deterministic Scenarios of Interest Rates
-- 9.2 Random-Scenario and Independent Lognormal Models
-- 9.3 Autoregressive and Dynamic Term-Structure Models
+## Appendices
 
-## Links
-- [Financial Mathematics for Actuaries, 3rd edition (World Scientific)](https://www.worldscientific.com/worldscibooks/10.1142/12464)
-- [Find in a library (WorldCat)](https://search.worldcat.org/search?q=bn%3A9789811243271)
+## Sources
+- [Financial Mathematics for Actuaries, Third Edition — chapter records (World Scientific, via Crossref)](https://api.crossref.org/works?filter=isbn:9789811243271&rows=40&select=DOI,title,page,type) — the chapter titles, their order (chapter DOIs 10.1142/9789811243288_0001 to _0010, then Appendices) and page ranges, as deposited by the publisher; section titles were not available from any fetched source
+- [Financial mathematics for actuaries, third edition — catalogue record (K10plus)](https://sru.k10plus.de/opac-de-627?version=1.1&operation=searchRetrieve&query=pica.isb%3D9789811243271&maximumRecords=5&recordSchema=marcxml) — authors, edition, imprint (World Scientific, [2022]), pagination (xx, 345 pages), the hardcover and paperback ISBNs and the publisher's summary
+- [SOA Exam FM Syllabus, June 2026](https://www.soa.org/globalassets/assets/files/edu/2026/syllabi/2026-06-exam-fm-syllabus.pdf) — the citation (Third Edition, 2022; ISBN 978-9811243271 hardcover, 978-9811245671 paperback) and the assigned chapters and exclusions

@@ -6,7 +6,8 @@ import { extractWikiLinksFromText, extractWikiLinkOccurrences } from '@/lib/wiki
 import { fromSlug, examIdFromFile, examDisplayName, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
-import { WikiArticle } from '@/components/wiki/WikiArticle'
+import { WikiArticle, type WikiTitleAction } from '@/components/wiki/WikiArticle'
+import { ConceptActionMenu } from '@/components/ConceptActionMenu'
 import { ExamSyllabusButton } from '@/components/wiki/ExamSyllabusButton'
 import { ExamVersionMenu } from '@/components/wiki/ExamVersionMenu'
 import { ExamSittingInfoButton } from '@/components/wiki/ExamSittingInfoButton'
@@ -14,8 +15,8 @@ import { ExamProjectButton } from '@/components/wiki/ExamProjectButton'
 import { ExamLogo } from '@/components/ExamLogo'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
-import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { todayISO } from '@/lib/studyPlan'
+import { examProgressKeyFromFile, todaysPlanConcepts } from '@/lib/examMenu'
 import { examStatus } from '@/lib/examStatus'
 import { buildObjectiveIndex, isSyllabusConcept } from '@/lib/syllabusChapters'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
@@ -121,13 +122,7 @@ export default function WikiExam() {
     }
   }, [])
 
-  const progressKey = useMemo(() => {
-    const cleaned = examFileName
-      .replace(/^Exam\s+/i, '')
-      .replace(/\s*\([^)]*\)\s*$/, '')
-      .trim()
-    return wikiExamIdToProgressKey(cleaned)
-  }, [examFileName])
+  const progressKey = useMemo(() => examProgressKeyFromFile(examFileName), [examFileName])
 
   const { examRows } = useExamProgress()
 
@@ -147,9 +142,8 @@ export default function WikiExam() {
 
   // Beside the exam's title: its status/date. The examining body's syllabus
   // rides the sticky header instead (below), so it stays in reach down the
-  // page. No fact-check badge here: an exam page is a syllabus outline, and the
-  // claims worth checking live on the concept and resource pages it links to,
-  // which is where the Fact Check action sits.
+  // page. No fact-check badge here: the page's Fact Check is a row of the
+  // action menu its title opens (below).
   const titleBadge = useMemo(() => (
     <span className="inline-flex items-center gap-2 not-prose">
       <ExamStatusBadge progressKey={progressKey} />
@@ -238,18 +232,17 @@ export default function WikiExam() {
   )
 
   // Today's cached plan for this exam, or null when absent/stale.
-  const todaysPlan = useMemo(() => {
-    const cache = examRows.find(r => r.exam_id === progressKey)?.study_plan_cache
-    if (!cache || cache.generatedDate !== todayISO() || !cache.todaysConcepts?.length) return null
-    return cache
-  }, [examRows, progressKey])
+  const todaysConcepts = useMemo(
+    () => todaysPlanConcepts(examRows.find(r => r.exam_id === progressKey)?.study_plan_cache, todayISO()),
+    [examRows, progressKey],
+  )
 
   const studyPlanRefs = useMemo(() => {
-    if (!todaysPlan) return null
-    const planSet = new Set(todaysPlan.todaysConcepts.map(n => n.toLowerCase()))
+    if (!todaysConcepts) return null
+    const planSet = new Set(todaysConcepts.map(n => n.toLowerCase()))
     const refs = conceptList.filter(r => planSet.has(r.name.toLowerCase()))
     return refs.length > 0 ? refs : null
-  }, [todaysPlan, conceptList])
+  }, [todaysConcepts, conceptList])
 
   // The sticky header's right-hand end: the version — which sitting of the
   // exam the page is being read for — and what that sitting asks for and when
@@ -348,6 +341,34 @@ export default function WikiExam() {
     return true
   }, [conceptList, conceptOccurrences, resourceRefs, examFileName, openAt, studyPlanRefs, objectives])
 
+  // The title is the page's action-menu trigger, as a concept's title is in the
+  // popup — underlined to say so. It opens the exam form of the same menu:
+  // readiness, how long is left, today's study plan, and Fact Check.
+  const examEntry = useMemo<WikiEntryRef>(() => ({ kind: 'exam', name: examFileName }), [examFileName])
+  const titleRef = useRef<HTMLButtonElement>(null)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const closeMenu = useCallback(() => setMenuOpen(false), [])
+  useEffect(() => { setMenuOpen(false) }, [examFileName])
+  const titleAction = useMemo<WikiTitleAction>(() => ({
+    ref: titleRef,
+    open: menuOpen,
+    onToggle: () => setMenuOpen(v => !v),
+    label: `${extractedTitle ?? examDisplayName(examFileName)} — page actions`,
+  }), [menuOpen, extractedTitle, examFileName])
+
+  // The menu's Today's Study Plan, walked right here: the popup opens on the
+  // plan, with the rest of the syllabus a filter away, exactly as a link on
+  // this page would open it.
+  const openStudyPlan = useCallback(() => {
+    if (!studyPlanRefs) return
+    openAt(studyPlanRefs, 0, `${examFileName}.md`, studyPlanRefs, resourceRefs, {
+      initialFilter: 'study-plan',
+      fullList: conceptList,
+      occurrences: conceptOccurrences,
+      objectives,
+    })
+  }, [studyPlanRefs, examFileName, resourceRefs, conceptList, conceptOccurrences, objectives, openAt])
+
   // Reset the opened flag whenever the exam or the requested concept changes.
   useEffect(() => {
     popupOpenedRef.current = false
@@ -384,12 +405,23 @@ export default function WikiExam() {
       )}
 
       {content !== null && (
-        <WikiArticle
-          markdown={content}
-          sourcePath={`${examFileName}.md`}
-          onWikiLink={onWikiLink}
-          titleBadge={titleBadge}
-        />
+        <>
+          <WikiArticle
+            markdown={content}
+            sourcePath={`${examFileName}.md`}
+            onWikiLink={onWikiLink}
+            titleBadge={titleBadge}
+            titleAction={titleAction}
+          />
+          <ConceptActionMenu
+            entry={examEntry}
+            open={menuOpen}
+            onClose={closeMenu}
+            anchorRef={titleRef}
+            content={content}
+            onOpenStudyPlan={studyPlanRefs ? openStudyPlan : undefined}
+          />
+        </>
       )}
     </div>
   )

@@ -12,6 +12,7 @@ import { examAccentStyle } from '@/lib/examColors'
 import { defaultBody, loadBody, saveBody, SOA_TRACK_KEYS, CAS_TRACK_KEYS, type ExamBody } from '@/lib/bodyFilter'
 import { ExamLogo } from '@/components/ExamLogo'
 import { LogoTile } from '@/components/LogoTile'
+import { ReadinessBar } from '@/components/ReadinessBar'
 import { matchesSelectedVariant } from '@/data/examSittings'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
@@ -272,20 +273,12 @@ export default function WikiHome() {
                       : []
                     // The same score the exam page's Exam Readiness Score card
                     // and the Dashboard radial show — one definition of readiness.
-                    const { overallPct, sections } = match
+                    const readiness = match
                       ? computeExamReadiness(match, examRecords, now, examId)
-                      : { overallPct: 0, sections: [] }
-                    const total = sections.reduce((sum, s) => sum + s.total, 0)
-                    const level3Count = sections.reduce((sum, s) => sum + s.level3Count, 0)
-                    const level2Count = sections.reduce((sum, s) => sum + s.level2Count, 0)
-                    const level1Count = sections.reduce((sum, s) => sum + s.level1Count, 0)
-                    const readinessPct = Math.round(overallPct)
-                    const level3Pct = total > 0 ? Math.round((level3Count / total) * 100) : 0
-                    const level2Pct = total > 0 ? Math.round((level2Count / total) * 100) : 0
-                    const level1Pct = total > 0 ? Math.round((level1Count / total) * 100) : 0
+                      : null
 
                     // No readiness readout on an exam with nothing to be ready for.
-                    const hasProgressBar = isInProgress && total > 0 && !inDevelopment
+                    const hasProgressBar = isInProgress && !!readiness && readiness.counts.total > 0 && !inDevelopment
 
                     // The exam's place on the ladder, as a colour (blue at
                     // Exam P through to red at Exam 9 — see lib/examColors.ts).
@@ -376,18 +369,8 @@ export default function WikiHome() {
                           </CardHeader>
 
                           {/* Progress bar — in-progress only, not for completed */}
-                          {hasProgressBar && (
-                            <div className="px-4 pb-4 space-y-1">
-                              <div className="flex items-center justify-between text-xs text-muted-foreground">
-                                <span>Readiness</span>
-                                <span className="font-medium tabular-nums">{readinessPct}%</span>
-                              </div>
-                              <div className="h-1.5 rounded-full bg-black/10 dark:bg-white/10 overflow-hidden flex">
-                                <div className="h-full transition-all" style={{ width: `${level3Pct}%`, backgroundColor: 'rgba(34, 197, 94, 1)' }} />
-                                <div className="h-full transition-all" style={{ width: `${level2Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.55)' }} />
-                                <div className="h-full transition-all" style={{ width: `${level1Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.25)' }} />
-                              </div>
-                            </div>
+                          {hasProgressBar && readiness && (
+                            <ReadinessBar readiness={readiness} className="px-4 pb-4" />
                           )}
                         </Card>
                       </Link>

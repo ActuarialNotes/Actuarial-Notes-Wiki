@@ -1,17 +1,17 @@
 ---
 Title: "Facility Association"
-Author: "R. Dutil"
+Authors: "Rachel Dutil"
+Publisher: "Casualty Actuarial Society"
 Year: "2008"
 date: "2008"
-Publisher: "Casualty Actuarial Society"
 Type: "Study Note"
-Available from: "[facilityassociation.com](https://www.facilityassociation.com/docs/RSP_Procedures_Manual_Last_Updated_January_2023.pdf)"
+Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/6C_Dutil.pdf)"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:2de38ca02e1102c0048fde6798be2992d5c6b803d86e3f633c3db11dd125e887
+  content_hash: sha256:2bccbcd7815ebfde84b1e68118f99e22362149059084ab401e9252b15aa13383
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,48 +19,81 @@ verification:
 ---
 ![[Dutil - Cover.svg]]
 
-The CAS study note (May 2008) on the **[[Facility Association]]** — the [[Residual Market|residual market]] for Canadian automobile insurance — read together with the **FA Risk Sharing Pool Procedures Manual** (1 January 2023), of which the syllabus assigns **pp. 2–5**. Read for [[Exam 6C (CAS)|Exam 6C]] objectives B1–B3.
+A CAS study note summarizing the key elements of the operations of the Facility Association, which administers Canada's residual automobile insurance market. The industry created the Association in June 1977 as an unincorporated, non-profit organization to ensure that automobile insurance is available to every owner and licensed driver who needs it. Rachel Dutil's note (May 2008) covers its organization, board and membership rights, participation ratios and risk sharing pools; the content outline assigns it with pp. 2–5 of the Association's Risk Sharing Pool Procedures Manual (revised January 1, 2023), also outlined here.
 
-## Why a residual market exists
+> [!info] On the syllabus
+> - [[Exam 6C (CAS)|Exam 6C]] — objectives B1–B3; the study note, including the FA Risk Sharing Pool Procedure Manual, January 1, 2023, pp. 2–5.
 
-[[Ontario Reg. 664|Take-all-comers]] rules and compulsory auto insurance create a problem the private market cannot solve on its own: an insurer must offer coverage to applicants it would rather decline, at a rate the regulator approves. The residual market is the mechanism that lets it do so without absorbing the loss alone. Canada uses two distinct mechanisms, and keeping them apart is the single most testable point in this reading.
+## Organization
+- Every insurer licensed to write automobile liability insurance in a jurisdiction the Association serves must become and remain a member.
+- The [[Facility Association]] — operating in Alberta as the "Market Availability Plan" — works through two risk sharing mechanisms, risk sharing pools and the more traditional residual market, and also administers the Uninsured Automobile Funds in the four Atlantic Provinces.
+- It does not operate in British Columbia, Manitoba and Saskatchewan, which have public automobile insurance, or in Quebec, where the Groupement des Assureurs Automobiles administers the [[Plan de Répartition des Risques]] (P.R.R.), a risk sharing pool that fulfils essentially the same role.
+- Facility Association Residual Market (FARM)
+    - FARM is a [[Residual Market|residual market]] for owners and operators of personal and commercial vehicles who may otherwise have difficulty obtaining insurance; a few member insurers, the Servicing Carriers, issue and administer its policies and adjust its claims, under FA rates, rules and classification that require regulatory approval.
+    - A policy may be written only if it carries at least the statutory minimum coverage and the risk is a "Residual Market Risk": a vehicle that is not a private passenger vehicle, or a private passenger vehicle an insurer is authorized at law to decline or refuse to renew.
+    - Every FARM policyholder knows the policy is part of the residual market, and FARM results are pooled among all licensed insurers by participation ratios.
+- Risk Sharing Pools
+    - [[Risk Sharing Pool|Risk sharing pools]] let insurers transfer certain personal auto exposures they believe carry a higher risk of loss to an industry-wide pool — essentially industry-wide reinsurance, invisible to consumers and intermediaries; FA administered them in Ontario, Alberta, New Brunswick and Nova Scotia.
+- The Uninsured Automobile Funds
+    - In the four Atlantic Provinces, FA administers funds compensating persons who cannot obtain satisfaction for their damages under an automobile insurance contract, with payment governed by the provincial Insurance Acts.
 
-## The two mechanisms
+## Board of Directors and membership rights
+- The Board, of elected or appointed representatives of member insurers and insurance brokers, manages FA's affairs — among other things approving rate changes and rate filings, authorizing expenses, setting standards for Servicing Carriers and pool users, and appointing committees.
+- A member's votes are set by its automobile third party liability direct written premium for the latest full calendar year; on a matter affecting one jurisdiction, only members operating there vote, weighted by their premium there.
 
-| | **Facility Association (FARM)** | **Risk Sharing Pools (RSP)** |
-|---|---|---|
-| Who deals with the insured | A **servicing carrier** on FA's behalf; the policy is an FA policy | The **member insurer** — the policy stays with the insurer and the insured is not told |
-| What is transferred | The whole risk | The premium and losses only |
-| Who chooses | The insured is placed there because no insurer will write them voluntarily | The **member insurer** elects to cede an eligible risk |
-| Rates | FA's own filed rates, generally above market | The member's own filed rates |
-| Result to the industry | Deficits shared among all members in proportion to market share | Pool results shared among all members |
+## Participation Ratios and Sharing
+- The Plan of Operation lists five classes of business that determine a member's participation, among them private passenger non-fleet non-pool business, business transferred to a risk sharing pool, and uninsured or unidentified motorist claims.
+- FA allocates the profit or loss of each class by each member's participation ratio at each fiscal year end; the basis of the ratio varies by jurisdiction, and profit or loss is determined separately for each accident year in each jurisdiction.
 
-Quebec's equivalent of the risk sharing pool is the ***plan de répartition des risques*** (PRR).
+## Risk Sharing Pools
+- Five pools operated in Canada, each in one jurisdiction; they are designed to promote stability by letting insurers accept risks for which they believe their prices are not totally adequate, so they are generally expected to operate at a loss overall.
+- A risk must meet five minimum requirements to be transferred: a private passenger vehicle; not a residual market risk (which belongs in FARM); at least the statutory minimum third party liability limit; the appropriate classification and rating procedures followed; and the approved premium charged.
+- Each member shares in a pool's results by its share of voluntary private passenger, non-fleet, third party liability direct earned car years not ceded to a pool (in Ontario, also by the number of risks ceded), so a member that transfers nothing still shares.
+- The member receives a percentage of the transferred written premium as an expense allowance, excluding premium tax and professional fees.
+- Ontario Risk Sharing Pool
+    - Established in 1993 as Canada's first; it covers 85% of each risk transferred (the others 100%), and a member may transfer at most 5% of its voluntary private passenger non-fleet written exposures.
+- Alberta Risk Sharing Pool
+    - A "Grid Pool", with no transfer limit, for exposures subject to the statutory maximum premium, and a "Non-Grid Pool" limited to 4% of the member's voluntary private passenger non-fleet written exposures not transferred to the Grid Pool; both began on October 1, 2004.
+- New Brunswick Risk Sharing Pool
+    - The "First Chance" pool, from January 1, 2005, for exposures where a household member qualifies for the recently licensed drivers with good driving records discount; the transfer limit is 8%.
+- Nova Scotia Risk Sharing Pool
+    - The "Inexperienced Driver" pool, from January 1, 2007, for risks with a household driver of less than six years' experience and no accidents or convictions; there is no transfer limit.
 
-## Risk Sharing Pool eligibility
+## Conclusion
+- The Facility Association was created by and for the Canadian insurance industry and serves an important role in ensuring the availability of automobile insurance coverage; for details the note refers to the Plan of Operation.
 
-From the procedures manual, a risk may be transferred only if:
+## Risk Sharing Pool Procedures Manual
 
-- the vehicle is used in whole or in part as a **private passenger vehicle**;
-- the member has **followed all appropriate classification and rate procedures** and has charged the correct premium;
-- the risk is insured against **third party liability for at least the statutory limit**; and
-- the premium charged for the transferable coverages meets the manual's conditions;
-- and the risk is **not** eligible for insurance through the Association as a residual-market risk — a risk that belongs in FARM cannot be put in the pool instead.
+### I Introduction
+- A Overview of the Risk Sharing Pools
+    - The pools operate in Ontario, Alberta (two), New Brunswick, Nova Scotia and Newfoundland and Labrador under the FA Plan of Operation; members issue policies on their own accounts and may transfer all or part of a policy.
+    - The issuing member remains responsible for servicing the policy, including settling its claims; FA funds the pools by a monthly sharing among members of premiums received net of claims and expenses paid.
+    - Each province sets its eligibility rules, much alike: a private passenger vehicle, classification and rate procedures followed with previous-insurer reports and driver abstracts requested, at least the statutory third party liability limit, and approved premiums (in Alberta, the regulated grid or filed premium); Ontario also excludes risks eligible for FA as Residual Market Risks.
+    - Risks are transferred at 100% — in Ontario since January 1, 2022.
+    - Ontario shares results 50% on share of market and 50% on the member's usage of the pool; the other pools share by non-ceded voluntary private passenger non-fleet third party liability direct earned car years.
+    - A member's transfer limit is 5% of its previous year's voluntary private passenger non-fleet third party liability direct written car years; Alberta grid risks are unlimited.
+- B Management Structure
+- C Claim Responsibilities
+- D Claims Reporting
+- E Auditing of Members
+- F More Information
 
-The manual also covers the **management structure**, **claim responsibilities**, **claims reporting**, **auditing of members**, communication with the pools (the member's designated RSP project manager, retrieval of reports, interpretation questions, disputes and appeals), and **retention of records**.
+### II Communication with the Risk Sharing Pools
 
-## The exam angles
+### III Overview: Transfer Methods
 
-- **[[Adverse Selection|Adverse selection]] runs both ways.** The RSP lets an insurer keep a customer relationship while ceding the risk, so it cedes what it believes is underpriced — which is exactly the business the pool least wants. The eligibility conditions and the audit right are the counterweight.
-- **[[Moral Hazard|Moral hazard]] in claims handling.** The member still adjusts a ceded claim although the pool bears the cost, hence the claim responsibilities and audit provisions.
-- **Cross-subsidy.** FARM rates are set above the voluntary market to limit the subsidy; where they are not, the deficit falls on all members in proportion to their voluntary writings — a tax on writing auto insurance in the jurisdiction.
-- **Size as a diagnostic.** A growing residual market is evidence that approved rates are inadequate for part of the risk distribution; a shrinking one that the voluntary market has room to price it.
+### IV Reporting RSP Risk/Premium and Claims Transactions
 
-## Related readings
-- [[Government Insurers Study Note]] — the residual-market philosophy in general
-- [[Ontario Reg. 664]] — the take-all-comers obligation that makes the residual market necessary
-- [[Marshall]] · [[CFAI]] — what happens when the compulsory product itself is reformed
+### V Risk/Premium Transaction Reporting Errors
 
-## Links
-- [FA Risk Sharing Pool Procedures Manual (Facility Association)](https://www.facilityassociation.com/docs/RSP_Procedures_Manual_Last_Updated_January_2023.pdf)
-- [Facility Association](https://www.facilityassociation.com/)
+### VI Claims Transaction Reporting
+
+### VII The Transfer Limit Report
+
+### Glossary of Terms
+
+## Sources
+- [Facility Association (Casualty Actuarial Society, 2008)](https://www.casact.org/sites/default/files/2021-03/6C_Dutil.pdf) — the document: its title page and pp. 1–7, read from the page images (the scan has no text layer)
+- [Risk Sharing Pool Procedures Manual (Facility Association, 2023)](https://www.facilityassociation.com/docs/RSP_Procedures_Manual_Last_Updated_January_2023.pdf) — the manual the content outline assigns with the note: its title page, table of contents and the text of pp. 2–5 (Section I.A)
+- [Facility Association (Casualty Actuarial Society)](https://www.casact.org/abstract/facility-association) — the CAS record of the study note: May 2008
+- [CAS Exam 6C Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf) — the citation, which names Dutil's study note as the reading and the manual's pp. 2–5 with it, and the objectives

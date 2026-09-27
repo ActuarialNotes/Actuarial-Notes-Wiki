@@ -3,6 +3,8 @@ import { CheckMark } from '@/components/CheckMark'
 import type { Question } from '@/lib/parser'
 import type { AttemptCounts } from '@/lib/questionAttempts'
 import { questionPreview } from '@/lib/questionPreview'
+// The chip's label is the Concepts filter's option label, so the two agree.
+import { conceptLabel } from '@/lib/questionFilters'
 import { MarkdownText } from '@/components/MarkdownText'
 import { QuestionAnswerReveal } from '@/components/QuestionAnswerReveal'
 import { QuestionAttemptBadge } from '@/components/QuestionAttemptBadge'
@@ -48,12 +50,6 @@ function StemPreview({ question, query }: { question: Question; query: string })
       <MarkdownText inline>{text.slice(idx + q.length)}</MarkdownText>
     </>
   )
-}
-
-function conceptLabel(link: string): string {
-  const clean = link.replace(/\.md$/i, '').replace(/\+/g, ' ')
-  const segment = clean.split('/').filter(Boolean).pop() ?? link
-  return segment.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
 }
 
 export function DifficultyDots({ difficulty }: { difficulty: string }) {

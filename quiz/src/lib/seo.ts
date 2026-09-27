@@ -558,7 +558,9 @@ export function examSeo(input: { fileName: string; markdown: string; questions: 
   }
 }
 
-const OUTLINE_SKIP_RE = /^(related|see also|notes?|references|further reading|source|about|overview|summary)\b/i
+// A resource page ends in `## Related readings` and `## Sources` (docs/resource-pages.md):
+// navigation and provenance, not chapters of the work.
+const OUTLINE_SKIP_RE = /^(related|see also|notes?|references|further reading|sources?|about|overview|summary)\b/i
 
 /** A resource page's chapter headings, numbering stripped. */
 function chapterTitles(markdown: string): string[] {

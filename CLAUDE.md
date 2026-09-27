@@ -34,9 +34,11 @@ the repo root is the "database" the app is built on top of.
 
 ```
 Exam *.md, Concepts/*.md                          — wiki content (Obsidian [[wiki-links]])
-Resources/{Books,Regulation,Events,Benchmarks,Data}/*.md
-                                                  — resource pages; the dated ones feed the
-                                                    Resources timeline/heatmap (frontmatter w/ source links)
+Resources/Books/*.md                              — resource pages: one real document each, written to
+                                                    the standard in docs/resource-pages.md
+Resources/{Regulation,Events,Benchmarks,Data}/*.md
+                                                  — dated timeline entries for the flag-gated
+                                                    Research tab (frontmatter w/ source links)
 questions/<exam-id>/*.md                          — question bank (YAML frontmatter + markdown)
 Guides/<Exam page>/*.md                           — study tips, one page per tip (frontmatter: exam,
                                                     section, order). Bundled but no longer rendered —
@@ -82,7 +84,11 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
   `components/ConceptActionMenu.tsx` is **the** concept action menu — quiz, study guide, deck,
   learning progress, fact check — and the owner of the modals those rows open; the
   concept popup (whose title is its only trigger) and every flashcard surface open that one
-  component, so the two can't drift apart. A surface adds only rows about *itself* (a card's
+  component, so the two can't drift apart. An **exam** gets its own form of it, opened by the
+  exam study guide's underlined title (`WikiArticle`'s `titleAction`): the readiness bar
+  (`components/ReadinessBar.tsx`, shared with the exam grid) and the countdown to the exam,
+  then **Today's Study Plan** (locked for a reader who isn't Pro) and Fact Check — the facts
+  are `lib/examMenu.ts`, pure and tested. A surface adds only rows about *itself* (a card's
   Study and Remove) through `leading` / `trailing`; view switches (Listen, the deck's view
   modes) are each surface's own control, never menu rows. It always portals to the body and
   is placed by `lib/menuPlacement.ts`, so no host's stacking context or viewport edge can
@@ -240,6 +246,18 @@ before touching that area**:
   caption or table; labels of a word or two where the picture needs them, and the words
   in the `alt` text. Read before editing a figure — they are generated, so a hand edit
   to an SVG is lost on the next run.
+- `docs/resource-pages.md` — **the resource-page standard** and the pipeline behind it. A
+  `Resources/Books/` page describes one real document and **says only what the document
+  says, naming where it read it**: the canonical frontmatter (keys, order, the `Type`
+  vocabulary, `Available from` only for an official copy — a book for sale carries its
+  `ISBN`), then cover → lead → `> [!info] On the syllabus` (one bullet per exam whose
+  Source Material lists the page) → the document's own divisions as `##` headings with
+  lists beneath → `## Related readings` → `## Sources` last. The pipeline reads the
+  document before a page is written (`scripts/resource_extract.py`: sha256, bookmark
+  outline in the vault's shape, contents pages, page text, images of scanned pages), and
+  `scripts/resource_lint.py` holds every page to the shape in CI. Also the review that
+  led to it — commentary sections and a page written without reading its (scanned)
+  paper. Read before writing or editing a resource page.
 - `docs/resource-covers.md` — the **resource cover images**: where the metadata card gets
   a source's cover (the page's first image embed), how `scripts/generate_resource_covers.py`
   draws one from front matter for the pages with no real jacket, and the rule that a real
@@ -271,9 +289,9 @@ Other important `lib/` modules:
   via `parser.ts`), parses a sidecar log, and decides what the **Fact Check** badge says
   (`factCheckBadge` → `components/FactCheckBadge.tsx` → `FactCheckPanel`; on a concept or
   resource page the way in is the *Fact Check* item of the action menu, on a question it is
-  both the explanation panel's badge and the verdict row in the quiz's **Info** sheet, and an
-  exam page has none). The panel shows the verdict alone until the reader taps it, then
-  unfolds the record — findings first, then what it was **Checked against**.
+  both the explanation panel's badge and the verdict row in the quiz's **Info** sheet, and on
+  an exam page it is the same item in the menu the exam's title opens). The panel shows the
+  verdict alone until the reader taps it, then unfolds the record — findings first, then what it was **Checked against**.
   `summarizeSource` and `summarizeLog` are what keep it short — the first cuts an auditor's
   citation into the source's name, the chapters/pages checked and its link (the sha256 never
   reaches the screen), the second splits the log into Open / Fixed / Notes and folds each
@@ -304,9 +322,13 @@ Other important `lib/` modules:
 - `wikiParser.ts` / `wikiIndex.ts` / `wikiExtract.ts` — parse wiki pages, build search index, extract syllabus structure
 - `conceptMatch.ts` — resolves concept name variants/aliases to a canonical slug (`slugForLink`)
 - `examStatus.ts` — how far along each exam's material is, keyed by exam_progress key:
-  `ready` (P, FM), `beta` (MAS-I, MAS-II, Exam 5) or `development` (PCPA and Exams 6–9 — a
-  syllabus outline with no question bank yet; PCPA has none because CAS releases no PCPA
-  paper or sample questions to convert). The one definition; the study-guide exam grid greys
+  `ready` (P, FM), `beta` (MAS-I, MAS-II, Exam 5) or `development` (the three DISCs, PCPA
+  and Exams 6–9 — a syllabus outline with no question bank yet; PCPA has none because CAS
+  releases no PCPA paper or sample questions to convert, and the DISCs none because The
+  Institutes sells their sample questions and publishes none). The DISC pages
+  (`Exam DISC-DA (CAS).md` …) transcribe The Institutes' course syllabi, which carry no
+  section weights — `"weighted": false` in `scripts/exam_catalog.json`, and the app counts
+  each topic equally. The one definition; the study-guide exam grid greys
   those cards out with an "In development — not yet available" pill instead of a Beta label,
   the exam page shows the amber *In Development* banner (`WikiFloatingSearch`), the quiz
   builder's Beta pill reads the same helper, and `ExamsPopout` uses it (together with "does
@@ -392,6 +414,18 @@ Other important `lib/` modules:
   `questionPreview` falls back to the first *part* of a multi-part question whose stem is an
   empty preamble — those rows previewed nothing at all before. Read by
   `components/QuestionSearchRow.tsx` (clamped to three lines) and the Search page.
+- `questionFilters.ts` — the filters **every list of questions** offers — Difficulty,
+  Concepts, Exam and Sitting — as one definition: what each matches, the options each
+  offers over a pool (with the count choosing it would leave, the other filters applied),
+  and `splitSearchFilter`, which turns the quiz builder's exam and past paper into the
+  search panel's *starting* Exam / Sitting choices rather than a narrowed pool (a panel
+  scoped to one exam hid its Exam filter). One rule lives here rather than in a surface:
+  once an exam is chosen, a sitting means that exam's paper, so a question carried over
+  (`originally_exam`) is on none of its sittings — `filterQuestions`' rule for the shelf.
+  Drawn by `components/QuestionFilterBar.tsx`, the one filter row used by the quiz search
+  panel, the concept question browser, the concept detail modal (Exam + Sitting) and the
+  Search page (Sitting); Exam and Sitting are always on screen, Sitting disabled for an
+  undated pool. Add it to any new surface that lists questions. Pure and tested.
 - `questionSource.ts` — where a question came from, for the quiz's **Info** button
   (`components/QuestionInfoButton.tsx`, in the question bar beside the flag): the sitting it
   was sat on, the published paper behind it (`data/examPdfLinks.ts`), and its vault file —
@@ -758,8 +792,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **141 test files /
-~2255 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **143 test files /
+~2305 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).
@@ -861,8 +895,11 @@ compile — don't "clean up" the flagged code as dead.
   `flashcard-comprehension-check` skill.
 - Dated resource pages (`Resources/Regulation|Events|Benchmarks/*.md`) carry frontmatter
   with a `date`/`type` and source links (`source_url`, `source_type`, `pdf_url`) — these feed
-  the Resources timeline/heatmap. `Resources/Books/*.md` use the older schema (`Available from`).
-  See `docs/research-corpus-plan.md` for the full schema.
+  the Resources timeline/heatmap. See `docs/research-corpus-plan.md` for the full schema.
+- `Resources/Books/*.md` follow `docs/resource-pages.md`: frontmatter `Title`, `Authors`,
+  `Publisher`, `Year`, `date`, `Edition`, `Type`, `Code`, `ISBN`, `Available from` — in that
+  order, every value double-quoted — then the body's fixed shape ending in `## Sources`.
+  `python3 scripts/resource_lint.py` checks it (CI: `content-validation.yml`).
 - `scripts/*.py` are batch maintenance tools for the content vault — e.g.
   `standardize_questions.py` enforces a canonical topic→concept→learning-objective mapping
   (`ontology_map.py` is the data table it consumes), `update_wiki_links.py` rebuilds
@@ -871,9 +908,9 @@ compile — don't "clean up" the flagged code as dead.
   cleanup, not for one-off edits.
 - `pdf_extract.py` / `question_classify.py` / `question_write.py` / `question_lint.py`
   (+ `mdmath.py`) — the **PDF → question bank** pipeline; see
-  `docs/pdf-question-pipeline.md`. `pdf_extract.py` is the only script in the repo with a
-  non-stdlib dependency (PyMuPDF, imported lazily so the rest stays importable without
-  it). `mdmath.py` is the math-aware text normaliser the pipeline and the linter share —
+  `docs/pdf-question-pipeline.md`. `pdf_extract.py` and `resource_extract.py` are the only
+  scripts in the repo with a non-stdlib dependency (PyMuPDF, imported lazily so the rest
+  stays importable without it). `mdmath.py` is the math-aware text normaliser the pipeline and the linter share —
   it mirrors what `quiz/src/lib/vaultMath.ts` fixes at render time and covers what the
   renderer cannot (a literal `\n` escape, an `align*` row packing formula and result,
   OCR characters). Tests: `scripts/test_pdf_pipeline.py`.
@@ -887,6 +924,13 @@ compile — don't "clean up" the flagged code as dead.
   `figures_exam_{p,fm,mas_i,mas_ii,5,6c}.py`) draws the per-concept SVGs in `Media/Figures/`
   and inserts their embeds. The figures are **generated** — edit the builder, not the SVG.
   See `docs/concept-figures.md`.
+- `resource_extract.py` / `resource_lint.py` — the **resource-page** pipeline
+  (`docs/resource-pages.md`): the first fetches a page's real document and extracts what
+  can be read rather than judged (sha256, metadata, bookmark outline as vault markdown,
+  contents pages, page text, images of pages with no text layer; an HTML page's headings
+  and citation tags; a workbook's sheets), the second is the CI lint for the page shape
+  (`--fix` canonicalises the frontmatter). Tests: `scripts/test_resource_pages.py`, which
+  also holds every page in `Resources/Books/` to zero lint errors.
 - `generate_resource_covers.py` (+ `cover_kit.py`) draws the `Resources/Books/` cover
   images in `Media/Attachments/… - Cover.svg` and inserts their embeds, skipping any page
   that already has a real jacket. Also **generated** — edit the builder.

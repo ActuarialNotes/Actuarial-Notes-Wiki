@@ -50,7 +50,7 @@ export function ExamSittingInfoButton({
 
   const label = selected
     ? `About the ${sittingVersionLabel(selected)} sitting`
-    : `About ${examLabel}'s sittings`
+    : `About ${examLabel}`
 
   function close() {
     setOpen(false)
@@ -135,7 +135,6 @@ function ExamSittingInfoDialog({
     ...(about ? [about.source, ...(about.factSources ?? [])] : []),
   ].filter((s, i, all) => all.findIndex(o => o.url === s.url) === i)
 
-  const title = sitting ? `${sittingVersionLabel(sitting)} sitting` : 'No sitting on file'
 
   return (
     <OverlayPortal>
@@ -152,10 +151,11 @@ function ExamSittingInfoDialog({
           <header className="flex items-start gap-3">
             <ExamLogo examKey={progressKey} size="md" />
             <div className="min-w-0 flex-1">
-              <h2 id="exam-sitting-info-title" className="text-base font-semibold leading-tight">{title}</h2>
+              <h2 id="exam-sitting-info-title" className="text-base font-semibold leading-tight">
+                {sitting ? `${sittingVersionLabel(sitting)} sitting` : examLabel}
+              </h2>
               <p className="mt-0.5 text-xs text-muted-foreground">
-                {examLabel}
-                {sitting && ` · ${FORMAT_LABEL[sitting.format]}`}
+                {sitting ? `${examLabel} · ${FORMAT_LABEL[sitting.format]}` : 'No sitting on file'}
               </p>
             </div>
             <button
@@ -173,7 +173,7 @@ function ExamSittingInfoDialog({
             <SittingTimeline steps={steps} today={today} />
           ) : (
             <p className="text-sm">
-              No upcoming sitting of {examLabel} has been published yet.
+              {about?.noSittings ?? `No upcoming sitting of ${examLabel} has been published yet.`}
             </p>
           )}
 

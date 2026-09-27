@@ -56,6 +56,12 @@ export interface ExamAbout {
   source: SittingSource
   /** The documents the facts were read from, where not the page itself. */
   factSources?: SittingSource[]
+  /**
+   * For a requirement that has no sittings at all, why — in place of the
+   * panel's "no upcoming sitting has been published yet", which would read
+   * as a gap in the calendar rather than the absence of one.
+   */
+  noSittings?: string
 }
 
 // ── Sources ───────────────────────────────────────────────────────────────────
@@ -85,6 +91,10 @@ const CAS_PCPA_OUTLINE: SittingSource = {
   // deadline, window, submission deadline, results — with no year printed.
   label: 'CAS — PCPA content outline',
   url: 'https://www.casact.org/sites/default/files/2024-05/Exam_PCPA_2025_F_Content_Outlines.pdf',
+}
+const CAS_DISC: SittingSource = {
+  label: 'CAS — Data and Insurance Series Courses',
+  url: 'https://www.casact.org/exams-admissions/exams/acas-exams/cas-data-and-insurance-series-courses',
 }
 const CAS_FEES: SittingSource = {
   label: 'CAS — Exam fees',
@@ -133,6 +143,23 @@ function casOutline(exam: string, url: string): SittingSource {
 const SOA_UNOFFICIAL = { label: 'Unofficial result', value: 'Emailed within an hour of a CBT exam' }
 const SOA_DELIVERY = { label: 'Delivery', value: 'Prometric test centre; paper and pencil at select international centres' }
 const SOA_FEE = { label: 'Fee', value: '$275' }
+
+// The DISCs, from CAS's DISC page: "Candidates taking the virtual online
+// courses will have 100 minutes to complete 75 application-based
+// multiple-choice questions", "The course fee includes one attempt at the
+// exam", and The Institutes "will send a copy of the grades directly to the CAS
+// Office at the conclusion of the test window ... This can take up to 10-15
+// business days." The page names no test-window dates, so there is no sitting.
+const DISC: ExamAbout = {
+  facts: [
+    { label: 'Exam', value: '75 multiple-choice questions in 100 minutes' },
+    { label: 'Course', value: 'Online, with The Institutes' },
+    { label: 'Fee', value: 'The course fee includes one exam attempt' },
+    { label: 'Grades', value: 'Sent to CAS after the test window; can take 10–15 business days' },
+  ],
+  source: CAS_DISC,
+  noSittings: 'The DISCs are online courses the CAS runs with The Institutes, and CAS publishes no sitting dates for them.',
+}
 
 export const EXAM_ABOUT: Record<string, ExamAbout> = {
   // ── SOA ───────────────────────────────────────────────────────────────────
@@ -211,6 +238,10 @@ export const EXAM_ABOUT: Record<string, ExamAbout> = {
     source: CAS_PCPA,
     factSources: [CAS_PCPA_OUTLINE, CAS_FEES],
   },
+  // The three DISCs: one CAS page, and no sittings.
+  'CAS-DA': DISC,
+  'CAS-IA': DISC,
+  'CAS-RM': DISC,
 }
 
 /**

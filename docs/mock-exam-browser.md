@@ -498,6 +498,25 @@ An exam with no sitting on file still gets the button; the dialog says none is p
 yet and links the publisher's exam page, rather than the header dropping a control the
 reader expects to find.
 
+What the table held on 2026-09-27, and why it looks the way it does:
+
+- **PCPA's sittings are its project windows** (format `Project` in `data/examSittings.ts`):
+  the exam half is sat on demand at Pearson VUE, and gates the project through an *exam
+  deadline*. The project calendar comes from CAS's PCPA content outline, which prints no
+  year, and CAS's per-project notices have moved it before (June 2026 registration closed
+  June 1, not the calendar's June 8) — so a date from the standing calendar says so in the
+  dialog. CAS also disagrees with itself on the September 2026 start (the Syllabus of Basic
+  Education says the 16th, the PCPA page and outline the 15th); the row follows the PCPA
+  page and the dialog carries both.
+- **CAS publishes no results date for an exam sitting**, only a rule of thumb in its
+  candidate guide, so CAS sittings show none and say so. PCPA's project results do have
+  dates ("subject to change").
+- **SOA publishes P and FM through December 2027** on its exam schedule, results dates
+  (candidate numbers, then transcripts) only a few sittings ahead, and no registration
+  opening date — both exams are "continuous registration". One published date is wrong on
+  SOA's own page (December 2026 FM's candidate numbers "February 5, 2026", before the exam)
+  and is left out rather than corrected.
+
 ### Source documents on a resource page (`ResourceMetaCard`)
 
 The third caller of the viewer isn't an exam at all. A `Resources/Books/*.md` page whose

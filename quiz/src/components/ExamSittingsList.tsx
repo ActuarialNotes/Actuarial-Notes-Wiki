@@ -49,7 +49,9 @@ export function ExamSittingsList({ examId, selectedDate, onSelect }: Props) {
                 <span className={`shrink-0 rounded px-1.5 py-0.5 text-xs font-semibold tracking-wide ${
                   s.format === 'CBT'
                     ? 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300'
-                    : 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300'
+                    : s.format === 'P/P'
+                      ? 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300'
+                      : 'bg-muted text-muted-foreground'
                 }`}>
                   {s.format}
                 </span>

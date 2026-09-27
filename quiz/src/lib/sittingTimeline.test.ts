@@ -99,3 +99,10 @@ describe('formatStepDate', () => {
     expect(formatStepDate({ date: '2026-12-16', endDate: '2027-01-04' })).toBe('Dec 16, 2026 – Jan 4, 2027')
   })
 })
+
+describe('a project window', () => {
+  it("is called a project window, not an exam's", () => {
+    const pcpa: ExamSitting = { examId: 'CAS-PCPA', format: 'Project', startDate: '2026-12-16', endDate: '2026-12-31', registrationDeadline: null }
+    expect(sittingTimeline(pcpa, [], '2026-09-27')[0].label).toBe('Project window')
+  })
+})

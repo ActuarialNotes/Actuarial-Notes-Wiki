@@ -91,6 +91,7 @@ export function ExamSittingInfoButton({
 const FORMAT_LABEL: Record<ExamSitting['format'], string> = {
   CBT: 'Computer-based',
   'P/P': 'Paper and pencil',
+  Project: 'Remote project',
 }
 
 function ExamSittingInfoDialog({
@@ -128,24 +129,26 @@ function ExamSittingInfoDialog({
   )
 
   // The publisher's pages, sitting first: the dates' own sources, then the
-  // exam's page if it isn't one of them already.
+  // exam's page and the documents its facts were read from — each once.
   const sources = [
     ...(details?.sources ?? []),
-    ...(about && !details?.sources.some(s => s.url === about.source.url) ? [about.source] : []),
-  ]
+    ...(about ? [about.source, ...(about.factSources ?? [])] : []),
+  ].filter((s, i, all) => all.findIndex(o => o.url === s.url) === i)
 
   const title = sitting ? `${sittingVersionLabel(sitting)} sitting` : 'No sitting on file'
 
   return (
     <OverlayPortal>
       <div
-        className="fixed inset-0 z-[80] flex items-start justify-center overflow-y-auto p-4 paper-scrim sm:items-center"
+        className="fixed inset-0 z-[80] flex justify-center overflow-y-auto p-4 paper-scrim"
         role="dialog"
         aria-modal="true"
         aria-labelledby="exam-sitting-info-title"
       >
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} aria-hidden="true" />
-        <div className="relative z-10 my-8 flex w-full max-w-sm flex-col gap-5 rounded-2xl bg-card p-5 shadow-2xl">
+        {/* `m-auto`, not `items-center`: a panel taller than the screen
+            (PCPA's) then scrolls from its top instead of losing it. */}
+        <div className="relative z-10 m-auto flex w-full max-w-sm flex-col gap-5 rounded-2xl bg-card p-5 shadow-2xl">
           <header className="flex items-start gap-3">
             <ExamLogo examKey={progressKey} size="md" />
             <div className="min-w-0 flex-1">
@@ -174,24 +177,24 @@ function ExamSittingInfoDialog({
             </p>
           )}
 
-          {about && about.facts.length > 0 && (
-            <section>
-              <h3 className="mb-2 text-xs font-medium text-muted-foreground">The exam</h3>
-              <dl className="space-y-1.5 text-sm">
-                {about.facts.map(f => (
-                  <div key={f.label} className="flex items-baseline justify-between gap-4">
-                    <dt className="shrink-0 text-muted-foreground">{f.label}</dt>
-                    <dd className="min-w-0 text-right">{f.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            </section>
-          )}
-
           {details?.notes && details.notes.length > 0 && (
             <ul className="space-y-1.5 rounded-lg bg-muted/50 p-3 text-xs leading-relaxed">
               {details.notes.map(n => <li key={n}>{n}</li>)}
             </ul>
+          )}
+
+          {about && about.facts.length > 0 && (
+            <section>
+              <h3 className="mb-2 text-xs font-medium text-muted-foreground">The exam</h3>
+              <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-sm">
+                {about.facts.map(f => (
+                  <div key={f.label} className="contents">
+                    <dt className="text-muted-foreground">{f.label}</dt>
+                    <dd className="min-w-0">{f.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
           )}
 
           {sources.length > 0 && (

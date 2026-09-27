@@ -46,6 +46,13 @@ export interface SittingStep extends SittingMilestone {
   state: SittingStepState
 }
 
+/** What a sittings row's window is a window *for*. */
+const WINDOW_LABEL: Record<ExamSitting['format'], string> = {
+  CBT: 'Exam window',
+  'P/P': 'Exam window',
+  Project: 'Project window',
+}
+
 /** One-per-sitting kinds: a transcribed one supersedes the sittings row's. */
 const SINGLE_KINDS: ReadonlySet<SittingMilestoneKind> = new Set(['window', 'registration-deadline'])
 
@@ -66,7 +73,7 @@ export function sittingTimeline(
     fromRow.push({ kind: 'registration-deadline', label: 'Registration deadline', date: sitting.registrationDeadline })
   }
   fromRow.push(sitting.endDate
-    ? { kind: 'window', label: 'Exam window', date: sitting.startDate, endDate: sitting.endDate }
+    ? { kind: 'window', label: WINDOW_LABEL[sitting.format], date: sitting.startDate, endDate: sitting.endDate }
     : { kind: 'window', label: 'Exam day', date: sitting.startDate })
 
   const merged = [

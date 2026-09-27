@@ -42,6 +42,9 @@ CALLOUT_RE = re.compile(r"^>\s*\[!(\w+)\][-+]?\s*(.*?)\s*$")
 # The canonical title line: one space after the marker, one before the weight,
 # an en-dash range (or a single figure), nothing after.
 CANONICAL_TITLE_RE = re.compile(r"^> \[!example\]- (\S(?:.*\S)?) \{(\d+)(?:–(\d+))?%\}$")
+# …and on a page whose outline publishes no weights (`"weighted": false` in
+# scripts/exam_catalog.json), the same line with no weight tag.
+UNWEIGHTED_TITLE_RE = re.compile(r"^> \[!example\]- (\S(?:.*\S)?)$")
 WEIGHT_TAG_RE = re.compile(r"\s*\{([^}]*)\}\s*$")
 OBJECTIVE_RE = re.compile(r"^(\s{0,3})(\d+)\.\s+(.*)$")
 KEY_CONCEPTS_RE = re.compile(r"^\s*(?:[-*]\s+)?\*Key concepts:\*\s*(.*)$")
@@ -258,6 +261,7 @@ them it they one ones themselves itself
 generating quantitatively necessary realistic historical
 and/or concerning along out up due behind below above following notably typically generally
 exactly appropriately alternative similar out-of
+unique selected
 """.split())
 
 VERBS = frozenset("""
@@ -273,6 +277,8 @@ pays applying carried relating developed covered calculated determining estimati
 deriving counting valued built relate accommodate assumed know requires coincide estimated
 measured identified check smooth control sit gather import manipulate refine run improve incorporate
 provided present relates stripping indicated
+harnessing working addressing planning creating selecting maximizing identifying analyzing
+examining modifying classifying
 """.split())
 
 # Abstract nouns that name no concept of their own — "the *role* of…", "the
@@ -297,6 +303,7 @@ criteria second semester two-semester undergraduate sequence behavior behaviour 
 parts starting models assumption assumptions specification specifications mechanics strengths weaknesses procedure
 procedures task tasks hand improvements computations measure measures relationships limiting actuarial available
 relevance findings details methodologies decisions emphasis sources
+overview keys steps reasons evolution characteristics cooperation functions
 """.split())
 
 WORD_RE = re.compile(r"[^\W\d_][\w'’\-/]*|\d[\d.,%]*")

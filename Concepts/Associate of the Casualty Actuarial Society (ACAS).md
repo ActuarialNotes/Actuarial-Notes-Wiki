@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:71eed7fc4d10cd92f6c9fa4005d39074e03c5f0ad778693ab5268b46a083725a
+  content_hash: sha256:2675e86f93176f0dece18e013cfd3dba7fa860df7c7359e152d4ba6f77c0df8d
   sources: []
   open_findings: 0
   open_critical: 0
@@ -29,7 +29,7 @@ It is the first of the two CAS designations. [[Fellow of the Casualty Actuarial 
 > - **Exam 2 — [[Exam FM-2 (SOA)|Financial Mathematics]]**
 >     - Also joint with the SOA, where it is called Exam FM.
 > - **CAS DISCs** — three online *Data and Insurance Series Courses*, taken through The Institutes
->     - Introduction to Data & Analytics (DISC DA); Risk Management and Insurance Operations (DISC RM); Insurance Accounting, Coverage Analysis, Insurance Law and Insurance Regulation (DISC IA).
+>     - [[Exam DISC-DA (CAS)|Introduction to Data & Analytics (DISC DA)]]; [[Exam DISC-RM (CAS)|Risk Management and Insurance Operations (DISC RM)]]; [[Exam DISC-IA (CAS)|Insurance Accounting, Coverage Analysis, Insurance Law and Insurance Regulation (DISC IA)]].
 > - **[[Exam MAS-I (CAS)|Exam MAS-I]]** — Modern Actuarial Statistics I
 >     - [[Stochastic Processes]], [[Survival Model|survival models]], statistics and [[Generalized Linear Model|GLMs]].
 > - **[[Exam MAS-II (CAS)|Exam MAS-II]]** — Modern Actuarial Statistics II

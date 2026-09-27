@@ -1,10 +1,13 @@
 {
-  "_comment": "One row per exam page. `status` mirrors quiz/src/lib/examStatus.ts (pinned by quiz/src/lib/examCatalog.test.ts); `exam_id` is the page's data-current id; `wiki_id` is lib/wikiRoutes.examIdFromFile(page) — the key of quiz/src/data/examPdfLinks.ts's syllabus table and the directory under .syllabus/; `bank` is questions/<bank>/, null while an exam has none. Read by scripts/vault_links.py.",
+  "_comment": "One row per exam page. `status` mirrors quiz/src/lib/examStatus.ts (pinned by quiz/src/lib/examCatalog.test.ts); `exam_id` is the page's data-current id; `wiki_id` is lib/wikiRoutes.examIdFromFile(page) — the key of quiz/src/data/examPdfLinks.ts's syllabus table and the directory under .syllabus/; `bank` is questions/<bank>/, null while an exam has none. `weighted: false` marks an exam whose outline publishes no section weights (the DISC course syllabi): its page carries none, and the syllabus lint and quiz/src/lib/examCatalog.test.ts hold it to that rather than to a weight on every section. Read by scripts/vault_links.py.",
   "exams": [
     { "page": "Exam P-1 (SOA).md",    "exam_id": "P-1",    "wiki_id": "p-1",    "progress_key": "P",      "body": "SOA", "bank": "exam-p",      "status": "ready" },
     { "page": "Exam FM-2 (SOA).md",   "exam_id": "FM-2",   "wiki_id": "fm-2",   "progress_key": "FM",     "body": "SOA", "bank": "exam-fm",     "status": "ready" },
     { "page": "Exam MAS-I (CAS).md",  "exam_id": "MAS-I",  "wiki_id": "mas-i",  "progress_key": "MAS-I",  "body": "CAS", "bank": "exam-mas-i",  "status": "beta" },
     { "page": "Exam MAS-II (CAS).md", "exam_id": "MAS-II", "wiki_id": "mas-ii", "progress_key": "MAS-II", "body": "CAS", "bank": "exam-mas-ii", "status": "beta" },
+    { "page": "Exam DISC-DA (CAS).md", "exam_id": "DISC-DA", "wiki_id": "disc-da", "progress_key": "CAS-DA", "body": "CAS", "bank": null,        "status": "development", "weighted": false },
+    { "page": "Exam DISC-RM (CAS).md", "exam_id": "DISC-RM", "wiki_id": "disc-rm", "progress_key": "CAS-RM", "body": "CAS", "bank": null,        "status": "development", "weighted": false },
+    { "page": "Exam DISC-IA (CAS).md", "exam_id": "DISC-IA", "wiki_id": "disc-ia", "progress_key": "CAS-IA", "body": "CAS", "bank": null,        "status": "development", "weighted": false },
     { "page": "Exam 5 (CAS).md",      "exam_id": "5",      "wiki_id": "5-1",    "progress_key": "CAS-5",  "body": "CAS", "bank": "exam-5",      "status": "beta" },
     { "page": "Exam PCPA (CAS).md",   "exam_id": "PCPA",   "wiki_id": "pcpa-1", "progress_key": "CAS-PCPA", "body": "CAS", "bank": null,        "status": "development" },
     { "page": "Exam 6C (CAS).md",     "exam_id": "6C",     "wiki_id": "6c-1",   "progress_key": "CAS-6",  "body": "CAS", "bank": null,          "status": "development" },

@@ -303,9 +303,13 @@ Other important `lib/` modules:
 - `wikiParser.ts` / `wikiIndex.ts` / `wikiExtract.ts` — parse wiki pages, build search index, extract syllabus structure
 - `conceptMatch.ts` — resolves concept name variants/aliases to a canonical slug (`slugForLink`)
 - `examStatus.ts` — how far along each exam's material is, keyed by exam_progress key:
-  `ready` (P, FM), `beta` (MAS-I, MAS-II, Exam 5) or `development` (PCPA and Exams 6–9 — a
-  syllabus outline with no question bank yet; PCPA has none because CAS releases no PCPA
-  paper or sample questions to convert). The one definition; the study-guide exam grid greys
+  `ready` (P, FM), `beta` (MAS-I, MAS-II, Exam 5) or `development` (the three DISCs, PCPA
+  and Exams 6–9 — a syllabus outline with no question bank yet; PCPA has none because CAS
+  releases no PCPA paper or sample questions to convert, and the DISCs none because The
+  Institutes sells their sample questions and publishes none). The DISC pages
+  (`Exam DISC-DA (CAS).md` …) transcribe The Institutes' course syllabi, which carry no
+  section weights — `"weighted": false` in `scripts/exam_catalog.json`, and the app counts
+  each topic equally. The one definition; the study-guide exam grid greys
   those cards out with an "In development — not yet available" pill instead of a Beta label,
   the exam page shows the amber *In Development* banner (`WikiFloatingSearch`), the quiz
   builder's Beta pill reads the same helper, and `ExamsPopout` uses it (together with "does

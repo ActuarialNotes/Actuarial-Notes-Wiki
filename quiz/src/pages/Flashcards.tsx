@@ -2713,6 +2713,14 @@ function FlashcardsDeck({
   )
   lastIndexRef.current = activeIndex
 
+  // Focus mode's scroller outlives the card on it, so a new card would open
+  // wherever the last one was left — start each one at its top.
+  const focusScrollRef = useRef<HTMLDivElement>(null)
+  const activeCardName = orderedCards[activeIndex]?.name
+  useEffect(() => {
+    focusScrollRef.current?.scrollTo({ top: 0 })
+  }, [activeCardName])
+
   const completedCount = useMemo(() => cards.filter(c => c.completedAt).length, [cards])
 
   function handleShuffle() {
@@ -2958,6 +2966,10 @@ function FlashcardsDeck({
 
   const studyFocus = focusMode && !galleryExpanded
 
+  function closeFocusFromBackdrop(e: React.MouseEvent) {
+    if (e.target === e.currentTarget) setFocusMode(false)
+  }
+
   return (
     <>
       {/* The deck's top chrome. Below `lg` it stands in for the app header (see
@@ -3018,13 +3030,25 @@ function FlashcardsDeck({
         />
       )}
 
+      {/* Focus mode locks the page (the backdrop covers it), so the study area
+          brings its own scroller: a revealed card is often taller than a phone
+          screen, and in normal flow under a locked body it could never be
+          scrolled to its end. A tap on the scroller's empty space — not on
+          the card, and not on anything the card portals out — still closes
+          focus mode, as the backdrop beneath it used to. */}
       <div
-        className={`container max-w-4xl mx-auto pb-36${studyFocus ? ' relative z-[56] pointer-events-none' : ''}`}
+        ref={focusScrollRef}
+        className={studyFocus ? 'fixed inset-0 z-[56] overflow-y-auto overscroll-contain' : undefined}
+        onClick={studyFocus ? closeFocusFromBackdrop : undefined}
+      >
+      <div
+        className="container max-w-4xl mx-auto pb-36"
         style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
+        onClick={studyFocus ? closeFocusFromBackdrop : undefined}
       >
         {/* Study area — no page title here; the nav already says "Flashcards"
             and the deck should get the full height. */}
-        <div className={studyFocus ? 'pointer-events-auto' : undefined}>
+        <div>
           <FlashcardStudyArea
             ref={studyAreaRef}
             cards={orderedCards}
@@ -3041,6 +3065,7 @@ function FlashcardsDeck({
             isCompleted={!!orderedCards[activeIndex]?.completedAt}
           />
         </div>
+      </div>
       </div>
 
       <ConceptPopup />

@@ -1,33 +1,39 @@
 /**
- * A PCPA project attempt: the window it runs in, the case it drew, the files it
- * starts with (`docs/pcpa-project.md`).
+ * A PCPA project attempt: the brief it works, how it is being worked, the
+ * files it starts with (`docs/pcpa-project.md`).
  *
- * The real project opens on a fixed date, runs sixteen days and closes; a
- * submission after the deadline is no submission. An attempt here does the
- * same from the moment the candidate starts it — or, for someone practising a
- * piece at a time, runs untimed. Which case an attempt gets is drawn, not
- * chosen, as the CAS assigns "a specific project selected from a pool".
+ * The candidate picks the brief and one of two ways to work it (`AttemptMode`).
+ * A **rehearsal** is the real conditions: the window opens the moment it
+ * starts, runs sixteen days and closes, and a submission after the deadline is
+ * no submission. **Practice** has no deadline, and the report is checked as it
+ * is written instead of only after submission. The window is a consequence of
+ * the mode, never a question of its own.
  *
  * Pure and tested; the stores that persist attempts and their files are
  * `hooks/usePcpaAttempts.ts` and `lib/project/fileStore.ts`.
  */
 
-import { PROJECT_CASES, PROJECT_WINDOWS, WINDOW_DAYS, type ProjectCase } from '@/data/pcpaProjects'
+import { PROJECT_WINDOWS, WINDOW_DAYS, type ProjectCase } from '@/data/pcpaProjects'
 import type { CaseId } from './pcpaData'
 import type { Appendix } from './pcpaReport'
 import type { AssessmentScore, Rating } from './pcpaAssessment'
 
-export type Timing = 'window' | 'untimed'
+/**
+ * How an attempt is worked. `rehearsal` runs the real project's window and
+ * holds feedback back until submission; `practice` has no deadline and checks
+ * the report as it is written.
+ */
+export type AttemptMode = 'rehearsal' | 'practice'
 export type Language = 'r' | 'python'
 
 export interface ProjectAttempt {
   id: string
   caseId: CaseId
   seed: number
-  timing: Timing
+  mode: AttemptMode
   language: Language
   startedAt: number
-  /** Epoch ms the window closes; null for an untimed attempt. */
+  /** Epoch ms the window closes; null for a practice attempt. */
   deadline: number | null
   submittedAt: number | null
   report: { body: string; appendices: Appendix[] }
@@ -39,6 +45,21 @@ export interface ProjectAttempt {
   assessment: Pick<AssessmentScore, 'gini' | 'oracleGini' | 'captured' | 'balance' | 'verdict'> | null
   /** Milliseconds spent with the workspace open and in use. */
   activeMs: number
+}
+
+/**
+ * The mode of a saved attempt. Attempts saved before there were modes carry
+ * `timing` instead — the window was the only choice then — and a timed one was
+ * a rehearsal, an untimed one practice.
+ */
+export function savedMode(record: { mode?: unknown; timing?: unknown }): AttemptMode {
+  if (record.mode === 'rehearsal' || record.mode === 'practice') return record.mode
+  return record.timing === 'untimed' ? 'practice' : 'rehearsal'
+}
+
+/** Where an attempt lives: `/project/pcpa/<id>`, opened on `view` when given. */
+export function attemptRoute(id: string, view?: string): string {
+  return `/project/pcpa/${id}${view ? `?view=${view}` : ''}`
 }
 
 export type AttemptPhase = 'open' | 'closed' | 'submitted'
@@ -83,23 +104,11 @@ export function formatDuration(ms: number): string {
   return h > 0 ? `${h}h ${m}m` : `${m}m`
 }
 
-/**
- * Draws the case for a new attempt: one this candidate hasn't attempted yet
- * where possible, the least-attempted otherwise.
- */
-export function drawCase(previous: CaseId[], random: number): CaseId {
-  const counts = new Map<CaseId, number>(PROJECT_CASES.map(c => [c.id, 0]))
-  for (const id of previous) counts.set(id, (counts.get(id) ?? 0) + 1)
-  const fewest = Math.min(...counts.values())
-  const pool = PROJECT_CASES.map(c => c.id).filter(id => counts.get(id) === fewest)
-  return pool[Math.min(pool.length - 1, Math.floor(random * pool.length))]
-}
-
 export function newAttempt(opts: {
   id: string
   caseId: CaseId
   seed: number
-  timing: Timing
+  mode: AttemptMode
   language: Language
   now: number
 }): ProjectAttempt {
@@ -107,10 +116,10 @@ export function newAttempt(opts: {
     id: opts.id,
     caseId: opts.caseId,
     seed: opts.seed,
-    timing: opts.timing,
+    mode: opts.mode,
     language: opts.language,
     startedAt: opts.now,
-    deadline: opts.timing === 'window' ? windowDeadline(opts.now) : null,
+    deadline: opts.mode === 'rehearsal' ? windowDeadline(opts.now) : null,
     submittedAt: null,
     report: { body: '', appendices: [] },
     answers: {},

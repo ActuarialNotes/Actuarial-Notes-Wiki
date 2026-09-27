@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronLeft, Clock } from 'lucide-react'
+import { ChevronLeft, Clock, PenLine } from 'lucide-react'
 import { MobileNavButton } from '@/components/MobileNavButton'
 import { CheckMark } from '@/components/CheckMark'
 import { attemptPhase, timeLeft, type ProjectAttempt } from '@/lib/pcpaAttempt'
@@ -49,7 +49,7 @@ const URGENCY_CLASS = {
   closed: 'bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-200',
 }
 
-/** The attempt's state in a pill: time left in the window, untimed, closed or submitted. */
+/** The attempt's state in a pill: time left in the window, practice, closed or submitted. */
 export function WindowPill({ attempt, now, compact = false }: { attempt: ProjectAttempt; now: number; compact?: boolean }) {
   const phase = attemptPhase(attempt, now)
   if (phase === 'submitted') {
@@ -60,7 +60,7 @@ export function WindowPill({ attempt, now, compact = false }: { attempt: Project
     )
   }
   if (attempt.deadline === null) {
-    return <span className="inline-flex h-8 items-center gap-1.5 rounded-full bg-muted px-3 text-xs font-medium text-muted-foreground"><Clock className="h-3.5 w-3.5" /> Untimed</span>
+    return <span className="inline-flex h-8 items-center gap-1.5 rounded-full bg-muted px-3 text-xs font-medium text-muted-foreground" title="Practice — no deadline"><PenLine className="h-3.5 w-3.5" /> Practice</span>
   }
   const left = timeLeft(attempt.deadline, now)
   return (

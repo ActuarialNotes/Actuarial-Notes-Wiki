@@ -294,10 +294,13 @@ Two judgments move a question off its paper's own bank, both set in
   exam. The file is written into that bank and gets `originally_exam:` naming
   the paper it was sat on, which keeps it off the new exam's past-paper shelf
   (`isFromAnotherExamsPaper`). The ERM questions on the 2012–2019 Exam 7 papers
-  went to Exam 9 this way, as the 2018 MAS-I time-series questions went to
-  MAS-II.
+  went to Exam 9 this way, and so did the reinsurance and catastrophe questions
+  on the 2012–2019 Exam 8 papers, as the 2018 MAS-I time-series questions went
+  to MAS-II.
 - **`"off_syllabus": true`** — no current exam covers it at all (Exam 7's old
-  insurance-company-valuation section). The question stays in its paper's bank
+  insurance-company-valuation section; Exam 8's NCCI hazard-group mapping and
+  Mahler's workers compensation excess-ratio estimation). Like `bank`, it is a field `--settle` applies from a
+  decisions file. The question stays in its paper's bank
   under its old objective, for the record: `syllabus_lint.py` does not hold it to
   the exam page, and `filterQuestions` leaves it out of quiz draws while a
   sitting, an id or a search still finds it.
@@ -462,6 +465,10 @@ PDF-reading cases when PyMuPDF is absent).
 | a scanned booklet places only its two-digit questions | OCR set `1.` alone on its line with `(2.75 points)` below it, which the `N.` pattern cannot see | already handled: the `N. (points)` pattern keys on the point value that must follow |
 | a sentence renders as italic math between two amounts | a bare `$25,000 … $10,000` pairs into one inline-math span | already handled for extracted text — a text layer carries no LaTeX, so `_joined` escapes every `$`; a transcription or rewrite must write `\$` itself |
 | a once-a-year exam's ids read `cas7-2018s-q1` | `--session` adds the sitting letter | pass `--single-sitting` with `--session Spring`: the session is recorded (the past-paper shelf filters on it) and the id stays `cas7-2018-q1` |
+| a report segments to nothing although every page reads `QUESTION 1` / `TOTAL POINT VALUE` | the text layer writes each word gap as TAB, CR, SPACE, NBSP (Exam 8 2012–2014), and `[ \t]` never matches the CR | already handled: `mdmath.normalize_spaces` collapses a CR word gap to one space, in prose and in table cells |
+| a pre-2014 report segments to nothing, its questions opening `Question 1:` over `Model Solution 1` | the Exam 8 October 2012 / 2013 variant of the legacy layout: `Question N:` alone on its line, `Model Solution N` samples, parts lettered `a)` / `a.`, or each part its own `Part a` block with its own `Examiner's Comments` | already handled: `LEGACY_QUESTION_RE` / `LEGACY_SAMPLE_RE` take the variant, and `_legacy_part_blocks` reads a block-per-part question |
+| one question of a report is missing and its page was read as a table | the table finder took the whole page, splitting `Question 5:` and `Model Solution 1` across cells mid-word | already handled: `swallows_structure` also matches the legacy headings on a row with its whitespace squeezed out |
+| one question is missing and its heading reads `Question 21` in title case (Exam 8 Fall 2015) | `CAS_QUESTION_RE` keyed on upper-case `QUESTION` only | already handled: the title-case spelling counts when `Total Point Value` follows it — a bare `Question 1:` stays the legacy layout's |
 
 ## The rules this pipeline does not bend
 

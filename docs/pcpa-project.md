@@ -8,13 +8,43 @@ technical report of at most 1,250 words (appendices included), up to five tables
 their code, answers to questions about their analysis, and an attestation. It is human-scored
 pass/fail against a published rubric, six to eight weeks later.
 
-The simulator at `/project/pcpa` reproduces that whole loop in the browser, entered from the
-**Project** button on the PCPA study guide's header (`components/wiki/ExamProjectButton.tsx`).
+The simulator reproduces that whole loop in the browser. It lives on the **Projects** tab
+(`/project`), a tab of its own in the sidebar after Quiz — a project is its own kind of study,
+a brief and a data set and a deadline rather than a bank of questions. The PCPA study guide's
+**Project** button (`components/wiki/ExamProjectButton.tsx`) leads there too.
 
 ```
-Portal ──► Brief ──► Workspace ──► Report ──► Submit ──► Results
-(agreement)  (materials)  (R · Python · sheet)  (≤1,250 words)  (questions · attestation · clean run)  (assessment data · rubric · examiner's notes)
+Projects tab ──► Start sheet ──► Brief ──► Workspace ──► Report ──► Submit ──► Results
+(pick a brief)  (mode · language · data)  (materials)  (R · Python · sheet)  (≤1,250 words)  (questions · attestation · clean run)  (assessment data · rubric · examiner's notes)
 ```
+
+## The Projects tab and the start sheet
+
+`pages/Project/ProjectsHome.tsx` lists every brief as a card, grouped by the exam it is a
+project for. The groups come from `data/projects.ts` (`PROJECT_PROGRAMMES`): an exam's key,
+its published rules as a row of facts, where they come from, and its briefs. PCPA is the only
+programme yet; another exam's project is an entry there with its briefs authored the way
+`data/pcpaProjects.ts` authors PCPA's. Open attempts sit above the briefs (**Continue**) and
+submitted ones below them.
+
+**A brief is chosen, not assigned.** The real project hands each candidate one case from a
+pool, but someone practising for it wants the case that exercises what they are weak at.
+Choosing one opens the start sheet (`components/project/StartProjectDialog.tsx`), which asks
+only what changes the attempt:
+
+- **How to work it** (`AttemptMode` in `lib/pcpaAttempt.ts`). A **rehearsal** is the real
+  conditions: the 16-day window opens at once and closes at the end of its last day, and
+  feedback waits for submission. **Practice** has no deadline, and the report is checked as it
+  is written — the Report view's toolbar carries the count of `reviewReport` checks found and
+  opens the list. The deadline follows from the mode and is never a question of its own.
+  Attempts saved before modes existed carry `timing` instead; `savedMode` reads a timed one
+  as a rehearsal and an untimed one as practice.
+- **The language**, which writes the starter script. Both languages run in the workspace
+  either way.
+- **The data**, only for a brief attempted before: a new draw, or the same seed as the last
+  attempt, to redo the analysis on the same sample and compare.
+
+The candidate attestation is made once, at submission, as on the real project.
 
 ## Sources
 
@@ -43,8 +73,8 @@ parameters, a data dictionary, point-of-submission questions and the examiner's
 | `auto-severity` | Personal auto collision | gross loss per claim | decimal-shift errors vs real large losses; total losses capped at ACV; exact aliasing (model year = accident year − vehicle age); gamma vs inverse Gaussian; post-accident variables |
 | `ho-water` | Homeowners non-weather water | pure premium | Tweedie and its power; heavy tails and capping; a non-linear age curve; collinear size measures; a specific business question (a shut-off device discount) |
 
-An attempt is **assigned** a case (`drawCase` prefers one the candidate hasn't done), as the
-CAS assigns "a specific project selected from a pool".
+The real project assigns "a specific project selected from a pool"; here the candidate picks
+the brief (see above).
 
 ## The data — `lib/pcpaData.ts`
 
@@ -131,15 +161,16 @@ practice on the device it was made on.
   as its own.
 
 On submission the code is snapshotted to `submission/` (read-only) and the report locks. A
-window that closes unsubmitted can't be submitted, as on the real project.
+rehearsal whose window closes unsubmitted can't be submitted, as on the real project.
 
 ## Where things are
 
 | | |
 |---|---|
+| The Projects tab's catalogue | `quiz/src/data/projects.ts` |
 | Authored material & published rules | `quiz/src/data/pcpaProjects.ts` |
 | Data generator | `quiz/src/lib/pcpaData.ts` |
-| Attempts, windows, paths | `quiz/src/lib/pcpaAttempt.ts` |
+| Attempts, modes, windows, paths | `quiz/src/lib/pcpaAttempt.ts` |
 | Words, form rules, report checks | `quiz/src/lib/pcpaReport.ts` |
 | Gini, lift, cross-check, rubric score | `quiz/src/lib/pcpaAssessment.ts` |
 | CSV in/out | `quiz/src/lib/csv.ts` |
@@ -150,4 +181,5 @@ window that closes unsubmitted can't be submitted, as on the real project.
 
 To add a case: its material to `PROJECT_CASES`, a generator and an assessment draw to
 `pcpaData.ts` (`CaseId`, `generateCase`, `generateAssessment`), and its checks to `CASE_CHECKS`
-in `pcpaReport.ts`. The tests hold the dictionary and the generated columns together.
+in `pcpaReport.ts`, and a tile icon to `components/project/BriefTile.tsx`. The tests hold the
+dictionary and the generated columns together.

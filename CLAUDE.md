@@ -66,7 +66,7 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
 
 ### Inside `quiz/src/`
 - `pages/` — route-level views (Quiz, Review, Dashboard, Flashcards, Search, Settings, Store,
-  Upgrade, wiki/*, `Project/` — the PCPA project simulator, `Cowork/` — the second product's shelf, source pages and deliverables —
+  Upgrade, wiki/*, `Project/` — the Projects tab and the PCPA project simulator, `Cowork/` — the second product's shelf, source pages and deliverables —
   and `Research/`, which is
   flag-gated)
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
@@ -207,10 +207,14 @@ before touching that area**:
   far more than its share of the syllabus. `computeExamReadiness` is the *one* readiness
   number — the exam-page card, the Dashboard radial, the exam grid and the readiness
   projection all call it. Read before changing `lib/readiness.ts` or any readiness readout.
-- `docs/pcpa-project.md` — the **PCPA project simulator** (`/project/pcpa`, entered from the
-  **Project** button on the PCPA study guide's header): a 16-day window, a case assigned from a
-  pool (`data/pcpaProjects.ts` — the CAS's published rules transcribed, the cases invented and
-  labelled so), data drawn per attempt from a known model with every planted problem counted
+- `docs/pcpa-project.md` — the **Projects tab** (`/project`, in the sidebar after Quiz; the
+  PCPA study guide's **Project** button leads there too) and the **PCPA project simulator**
+  behind it: every brief is a card grouped by the exam it is a project for (`data/projects.ts`
+  — PCPA is the only one yet), the reader *chooses* a brief, and the start sheet asks only what
+  changes the attempt — **Rehearsal** (the real 16-day window, feedback after submission) or
+  **Practice** (no deadline, the report checked as it is written), the language, and for a
+  brief done before, fresh data or the same draw again. The briefs are `data/pcpaProjects.ts`
+  (the CAS's published rules transcribed, the cases invented and labelled so), data drawn per attempt from a known model with every planted problem counted
   (`lib/pcpaData.ts`), a workspace running **webR** and **Pyodide** from their CDNs plus a
   Fortune-sheet spreadsheet, the 1,250-word / five-appendix report, submission with a clean run
   of the code, and grading on fresh assessment data against the true model. Read before touching
@@ -812,11 +816,14 @@ compile — don't "clean up" the flagged code as dead.
   of concept paths), `answer`, `points` — followed by the question body, options, and an
   `## Explanation` section (LaTeX via `$$...$$`). Current banks: `exam-p`, `exam-fm`,
   `exam-mas-i`, `exam-mas-ii`, `exam-5` (hundreds of questions each), and `exam-7` /
-  `exam-9` — the 2012–2019 Exam 7 papers: reserving in `exam-7`, their ERM questions in
-  `exam-9` with `originally_exam: "Exam 7"` (CAS moved Brehm's ERM there). Two optional keys
+  `exam-8` / `exam-9` — the 2012–2019 Exam 7 and Exam 8 papers: reserving in `exam-7`,
+  classification and individual risk rating in `exam-8`, and in `exam-9` with
+  `originally_exam:` Exam 7's ERM questions (CAS moved Brehm's ERM there) and Exam 8's
+  reinsurance and catastrophe questions (Clark, Bernegger, Grossi & Kunreuther). Two optional keys
   say a question has outlived its paper's syllabus: `originally_exam` (the material moved to
   the exam in `exam`, so it stays off that exam's past-paper shelf) and `off_syllabus: true`
-  (no current exam covers it — Exam 7's old valuation questions; kept for the record, out of
+  (no current exam covers it — Exam 7's old valuation questions, Exam 8's NCCI hazard-group
+  mapping and Mahler's excess-ratio estimation; kept for the record, out of
   quiz draws, still found by its sitting, its id or a search, and not held to the exam page
   by `syllabus_lint.py`). A CAS question with no lettered parts is `type: multi-part` with
   `### Explanation` / `### Examiner Report` and no `## Part` heading — under `## Explanation`

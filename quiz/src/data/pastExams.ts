@@ -96,6 +96,20 @@ export const PAST_EXAM_SITTINGS: PastExamSitting[] = [
   { exam: 'Exam 7', year: 2013, session: 'Spring' },
   { exam: 'Exam 7', year: 2012, session: 'Spring' },
 
+  // ── CAS Exam 8 ─── sat once a year, in the fall. Released papers run from
+  //    October 2012, the first with an Examiners' Report, to Fall 2019. Their
+  //    reinsurance and catastrophe questions now sit in the Exam 9 bank
+  //    (`originally_exam`), so a sitting here holds its classification and
+  //    individual-risk-rating questions ────────────────────────────────────
+  { exam: 'Exam 8', year: 2019, session: 'Fall' },
+  { exam: 'Exam 8', year: 2018, session: 'Fall' },
+  { exam: 'Exam 8', year: 2017, session: 'Fall' },
+  { exam: 'Exam 8', year: 2016, session: 'Fall' },
+  { exam: 'Exam 8', year: 2015, session: 'Fall' },
+  { exam: 'Exam 8', year: 2014, session: 'Fall' },
+  { exam: 'Exam 8', year: 2013, session: 'Fall' },
+  { exam: 'Exam 8', year: 2012, session: 'Fall' },
+
   // ── CAS Exam MAS-I ─── first sat Spring 2018 ──────────────────────────────
   { exam: 'Exam MAS-I', year: 2019, session: 'Fall', officialQuestionCount: 45 },
   { exam: 'Exam MAS-I', year: 2019, session: 'Spring', officialQuestionCount: 45 },

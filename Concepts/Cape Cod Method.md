@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:71f69816e5310e9d8e56caf313430a142854feea580be907aae1f50aed3a1772
+  content_hash: sha256:529db62be06da75df381d1c53d99bd39b873e15694adf4fb3ab95480927965e2
   sources: []
   open_findings: 0
   open_critical: 0
@@ -60,7 +60,7 @@ verification:
 > > | $2024$ | $47.3\%$ | $0.488 \times 6{,}000 \times 0.473 = 1{,}384$ |
 > > | **Total** | | $\$2{,}309$K |
 > >
-> > Note how little AY 2022 contributes to the ELR relative to its premium — its used-up premium is nearly its full premium precisely because it is mature, so it *dominates* the ELR estimate. The immature AY 2024 contributes only $3{,}162$ of the $14{,}764$ denominator despite having $6{,}000$ of premium.
+> > Note how the used-up premium weights the years. AY 2022 is mature, so its used-up premium is nearly its full premium and it *dominates* the ELR estimate. The immature AY 2024 contributes only $3{,}162$ of the $14{,}764$ denominator despite having $6{,}000$ of premium.
 
 > [!example]- When Cape Cod Beats BF, and When It Does Not {Example}
 > Two situations: (a) a five-year-old commercial programme whose pricing indications have never been reconciled to results; (b) a book that changed its case reserving philosophy two years ago, strengthening reserves across all open years.

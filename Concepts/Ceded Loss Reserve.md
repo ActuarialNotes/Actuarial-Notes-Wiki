@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:d6cc48fab828fa516a95703c89eb714eccf8dc9f2ab2246d74f48d4a37d24630
+  content_hash: sha256:3bb67458d95b58cd042d3f8f46f076fd66636425df8b7dbff82d58f6695d1b5a
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,10 +23,10 @@ verification:
   - **Per-risk or per-occurrence [[Excess of Loss|excess of loss]]** applies $\min(\max(X - R, 0), L)$ to projected ultimates of large claims. Alternatively, develop a ceded triangle, or run BF with a ceded expected loss ratio.
   - **Stop-loss and [[Aggregate Excess of Loss|aggregate]]** covers cap the retained total.
 - **Order matters.** Covers inure in a stated sequence. Typically per-occurrence excess comes off first, then the quota share applies to what remains, and the stop-loss applies last to protect the final net result.
-- **Estimate two, derive the third.** Friedland's advice is to estimate gross and ceded (or gross and net) separately and consistently. A net triangle breaks every time the treaty terms change. Then check:
+- **Estimate two, derive the third.** [[Reserving for Reinsurance (Friedland - 2022)|Friedland]] describes two approaches: project gross and net and take ceded as the difference, or project gross and ceded and take net as the difference. Actuaries typically use the first, selecting development patterns and expected loss ratios gross and net. Ceded data often have limited credibility: a lower volume of losses, volatility from large claims and catastrophes, and frequent changes in attachment points, limits, participation and ALAE treatment. Then check:
   - ceded is non-negative and net never exceeds gross;
-  - ceded IBNR is a *larger* share of ceded ultimate than gross IBNR is of gross, because excess cessions develop late;
-  - implied ceded development factors exceed gross ones.
+  - on excess of loss cessions, ceded IBNR is a *larger* share of ceded ultimate than gross IBNR is of gross, because excess cessions develop late;
+  - on excess of loss cessions, implied ceded development factors exceed gross ones. On a quota share the gross, ceded and net factors are identical.
 - **Why ceded data is harder.** Trend is leveraged into excess layers, reporting thresholds delay notice, and a change in retention makes prior ceded years non-comparable. The treaty history must be kept alongside the data.
 - **It is an asset with credit risk.** Recoverables can be disputed, commuted ([[Commutations]]) or lost to a reinsurer's insolvency ([[Reinsurance Credit Risk]]), and the cedant stays liable to its policyholders. See [[Reinsurance Recovery]] and, for the reinsurer's side of the same liability, [[Reinsurance Reserving]].
 
@@ -90,4 +90,4 @@ verification:
 > >
 > > For 2024, the whole gross IBNR of $6{,}000$ is retained, and the ceded ultimate equals what has already been ceded. For an excess treaty at $12$ months that is implausible. Claims pierce the retention *late*, so ceded IBNR should be the largest part of ceded ultimate for the youngest year. The net chain ladder has applied net factors to a diagonal with too few large claims yet.
 > >
-> > A better approach is to estimate ceded directly, for example with the expected claims or BF method using a ceded expected ratio from pricing or exposure rating. If that ratio is $12\%$ of gross ultimate, ceded ultimate is $1{,}320$ and ceded IBNR is $620$. Net then follows as $11{,}000 - 1{,}320 = 9{,}680$, which is $620$ below the separate net projection.
+> > Ceded is still the difference between gross and net; the net projection for 2024 is what needs replacing. A method that leans less on the thin diagonal, such as the expected claims method with a net expected loss ratio consistent with the gross one and the treaty terms, fixes it. If pricing or exposure rating expects $12\%$ of gross ultimate to be ceded, net ultimate is $11{,}000 \times 0.88 = 9{,}680$. Ceded ultimate is then $1{,}320$ and ceded IBNR $620$, with net $620$ below the net chain ladder.

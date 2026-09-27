@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:847b8aa771f37c4d63e929199073cb18b412556d7478272c553eff915785eba3
+  content_hash: sha256:e25bf64f6907b71640daa01a82ae8442746e6092f5d64ce9fd48cc38c3bd1ebe
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,7 +22,7 @@ verification:
   - Claims reach the reinsurer only after the cedant has reported and assessed them. Excess claims arrive later still, once they approach the retention or a reporting threshold.
   - As a result, early development factors and tails are higher than primary, especially for non-proportional covers, and trend is leveraged in excess layers.
   - Rate-change data for on-leveling is weaker because contract terms change from year to year.
-- **Data realities.** The data is usually summary bordereaux without claim detail, so claim counts are seldom usable. Reported losses include the reinsurer's **additional case reserves** (ACRs) on top of cedant case reserves. Several currencies must be restated at a common exchange rate, or the development factors absorb exchange movements. Catastrophe losses are estimated event by event and removed from the triangles. Discontinued business is often excluded, and asbestos, environmental and abuse exposures are not suited to triangle methods at all.
+- **Data realities.** Data often arrive as summary reports rather than claim detail; the detailed [[Bordereau|bordereau]], mainly a pro rata practice, has largely been supplanted by summary reporting. Claim counts are seldom usable. Reported losses include the reinsurer's **additional case reserves** (ACRs) on top of cedant case reserves. Several currencies must be restated at a common exchange rate, or the development factors absorb exchange movements. Catastrophe losses are estimated event by event and removed from the triangles. Discontinued business is often excluded, and asbestos, environmental and abuse exposures are not suited to triangle methods at all.
 - **Segmentation.** Friedland quotes Patrik's priority list:
   - line of business;
   - contract type (treaty, facultative, finite);

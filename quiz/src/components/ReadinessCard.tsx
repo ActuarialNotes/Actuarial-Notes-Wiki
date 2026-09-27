@@ -39,6 +39,7 @@ import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { daysBetween, formatReadableDate, todayISO, type StudyPlan, type StudyPlanConfig } from '@/lib/studyPlan'
 import {
   LOCALIZED_EXAMS,
+  examWindowFor,
   formatSittingDate,
   getSittingsForExam,
   isValidSittingDate,
@@ -1100,6 +1101,10 @@ export function ReadinessCard({
   const nextSitting = useMemo(() => getSittingsForExam(progressKey)[0] ?? null, [progressKey])
   const daysToExam = examDate ? daysBetween(todayISO(), examDate) : null
   const showNextSitting = !!nextSitting && (!examDate || !isValidSittingDate(progressKey, examDate))
+  // The sitting window the chosen date falls in, which the strip below shades
+  // and runs a week past. Transcribed, like the next sitting: a date in no
+  // known window shades nothing but exam day itself.
+  const examWindow = useMemo(() => examWindowFor(progressKey, examDate), [progressKey, examDate])
   const countdownLabel = daysToExam === null ? null : daysLeftLabel(daysToExam)
   // The exam date, the countdown beside it, and — under both — the schedule
   // itself: the Study Schedule card's timeline, drawn linear so it spans exactly
@@ -1161,6 +1166,7 @@ export function ReadinessCard({
           onTargetDateChange={onExamDateChange ?? (() => {})}
           targetReadyDate={config.targetReadyDate}
           onTargetReadyDateChange={date => onConfigChange({ targetReadyDate: date })}
+          examWindow={examWindow}
           onOpenStudyPlan={(step) => { setConfigInitialStep(step ?? 1); setShowConfig(true) }}
           onDayClick={date => { playback.stop(); setSelectedDay(date) }}
           dayPlanPct={dayPlanPct}

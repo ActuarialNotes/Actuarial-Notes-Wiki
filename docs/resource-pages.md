@@ -142,6 +142,7 @@ cover.
 | `Casebook` | a book of cases with commentary |
 | `Study Note` | a CAS or SOA study note |
 | `Monograph` | the CAS monograph series |
+| `Course` | an online course, read through its published syllabus |
 | `Paper` | a journal article, E-Forum paper, research paper, working-party or discussion paper |
 | `Report` | a government, committee, consultant or research report |
 | `Educational Note` | a CIA educational note |
@@ -209,8 +210,8 @@ In order:
 4. **The document's divisions** — its chapters, sections, parts, schedules or form pages,
    as `##` headings, **titled and numbered as the document titles and numbers them**:
    `## 4 Insurance Risk`, `## Appendix A …`, `## 10.60 Summary of Selected Financial Data
-   for Five Years`. Drop the words *Chapter*/*Section* before a number; keep *Part* and
-   *Appendix*, which are part of the label. A `###` level is for a book whose parts hold
+   for Five Years`. Drop the words *Chapter*/*Section* before a number, and a period after it
+   (`## 1 Title`, not `## 1. Title`); keep *Part* and *Appendix*, which are part of the label. A `###` level is for a book whose parts hold
    chapters. A document that groups its content without titling the groups (a one-page
    legend in colour bands, say) gets one heading per group naming what the group holds,
    and its `## Sources` entry says the groups are untitled in the original. Under each heading, a **list**, never prose or a table:

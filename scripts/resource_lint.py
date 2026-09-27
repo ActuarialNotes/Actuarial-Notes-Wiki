@@ -93,6 +93,7 @@ TYPES = (
     "Casebook",               # a book of cases with commentary
     "Study Note",             # a CAS/SOA study note
     "Monograph",              # the CAS monograph series
+    "Course",                 # an online course (read through its published syllabus)
     "Paper",                  # a journal, E-Forum, research or working-party paper; an article
     "Report",                 # a government, committee, consultant or research report
     "Educational Note",       # CIA educational notes
@@ -449,6 +450,9 @@ def lint_body(page: Page, report: Report, listings: dict[str, list[str]], vault:
         level, title = len(m.group(1)), m.group(2)
         if level == 1:
             report.error(rel, hln, "h1", "no `#` title — the card above the page already carries it")
+        if re.match(r"^\d+(?:\.\d+)*\.\s", title):
+            report.error(rel, hln, "heading-number", f"`## {title}` — write the number without a trailing period "
+                         "(`## 1 Title`), as every other page does")
         if not vault_page and level == 2 and EDITORIAL_HEADING.match(title) and title not in (SOURCES_HEADING, RELATED_HEADING):
             report.error(rel, hln, "editorial",
                          f"`## {title}` is commentary, not one of the document's divisions — move what the document "

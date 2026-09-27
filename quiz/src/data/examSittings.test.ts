@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { currentSitting, sittingContains, sittingVersionLabel, type ExamSitting } from './examSittings'
+import { currentSitting, examWindowFor, sittingContains, sittingVersionLabel, type ExamSitting } from './examSittings'
 
 const sep: ExamSitting = { examId: 'P', format: 'CBT', startDate: '2026-09-10', endDate: '2026-09-21', registrationDeadline: null }
 const nov: ExamSitting = { examId: 'P', format: 'CBT', startDate: '2026-11-04', endDate: '2026-11-15', registrationDeadline: null }
@@ -41,5 +41,39 @@ describe('sittingVersionLabel', () => {
   it('names a sitting by the month it opens in', () => {
     expect(sittingVersionLabel(nov)).toBe('Nov 2026')
     expect(sittingVersionLabel({ ...sep, startDate: '2025-10-23', endDate: '2026-10-29' })).toBe('Oct 2025')
+  })
+})
+
+describe('examWindowFor', () => {
+  const paper: ExamSitting = { examId: 'P', format: 'P/P', startDate: '2026-09-10', endDate: null, registrationDeadline: null }
+  const span: ExamSitting = { examId: 'FAM', format: 'CBT', startDate: '2025-10-23', endDate: '2026-10-29', registrationDeadline: null }
+
+  it('is the window the exam date falls in', () => {
+    expect(examWindowFor('P', '2026-11-10', [sep, nov])).toEqual({ start: '2026-11-04', end: '2026-11-15' })
+  })
+
+  it('is null for a date in no window, or no date at all', () => {
+    expect(examWindowFor('P', '2026-10-01', [sep, nov])).toBeNull()
+    expect(examWindowFor('P', null, [sep, nov])).toBeNull()
+  })
+
+  it("belongs to the reader's exam only", () => {
+    expect(examWindowFor('FM', '2026-11-10', [sep, nov])).toBeNull()
+  })
+
+  it('takes the CBT window over a paper day inside it', () => {
+    expect(examWindowFor('P', '2026-09-10', [paper, sep])).toEqual({ start: '2026-09-10', end: '2026-09-21' })
+  })
+
+  it('treats a single-day sitting as no window', () => {
+    expect(examWindowFor('P', '2026-09-10', [paper])).toBeNull()
+  })
+
+  it('ignores a registration span of more than a month', () => {
+    expect(examWindowFor('FAM', '2026-07-01', [span])).toBeNull()
+  })
+
+  it('finds the published CAS-5 window from the sittings table', () => {
+    expect(examWindowFor('CAS-5', '2026-10-27')).toEqual({ start: '2026-10-19', end: '2026-10-27' })
   })
 })

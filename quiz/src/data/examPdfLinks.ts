@@ -310,14 +310,20 @@ const SYLLABUS_PDF_LINKS: Record<string, ExamPdfLink> = {
     url: 'https://www.casact.org/sites/default/files/2024-05/Exam_PCPA_2025_F_Content_Outlines.pdf',
     label: 'Content Outline',
   },
+  // Fall 2026 administration (October 2026 window) — v03 of 22 Jun 2026, the
+  // "October 2026 Content Outline" the CAS Exam 8 page links.
+  '8-1': {
+    url: 'https://www.casact.org/sites/default/files/2026-03/Exam_8_CO_2026_Fall.pdf',
+    label: 'Content Outline',
+  },
   // Fall 2026 administration (October 2026 window) — v01 of 18 Mar 2026, the
   // "October 2026 Content Outline" the CAS Exam 9 page links.
   '9-1': {
     url: 'https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf',
     label: 'Content Outline',
   },
-  // Exams 6U and 8 have no entry: their current document hasn't been
-  // located on casact.org. Adding a guess is the one thing this file forbids.
+  // Exam 6U has no entry: its current document hasn't been located on
+  // casact.org. Adding a guess is the one thing this file forbids.
 }
 
 export function getSittingPdfLink(examTopic: string, year: number, session?: string): ExamPdfLink | null {

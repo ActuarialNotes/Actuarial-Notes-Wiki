@@ -1,3 +1,5 @@
+%%credential-path%%
+
 Anyone can become an actuary. There's no degree requirement to register for the first exam, and nobody asks to see a transcript. What the profession asks for instead is a long run of exams and courses. Finish them and you get the letters after your name.
 
 It is a long run, though. Most people do it while working full time, writing an exam or two a year, and it's normal for the whole thing to take the better part of a decade. Nobody hands you a schedule. You make one, and then you remake it the first time a result doesn't go your way.
@@ -35,10 +37,6 @@ Below are the questions I'd want answered if I were starting over. Open whicheve
 > The UK has the Institute and Faculty of Actuaries, and many other countries have a national body with its own exams. Some of these have recognition agreements with the SOA or CAS, but the details differ from one to the next. Check with the body you'd actually be practising under before assuming a credential carries over.
 
 ## The path to a credential
-
-Pick a society below to see how the pieces fit together, from the first exam through to the continuing education that keeps a credential current. Tap any stage to see what's in it.
-
-%%credential-path%%
 
 > [!question]- How long does it take?
 >

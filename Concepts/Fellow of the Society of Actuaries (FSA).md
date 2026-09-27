@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:44e3c7795ea5d68bee288ba1df3f337b95af6fdd846f2c1ac80d855cd61c4c05
+  content_hash: sha256:592dd80a8978cf6a52ecb606b15091ce6b78401cb5c7ce7611b6b5306c7e5970
   sources: []
   open_findings: 0
   open_critical: 0
@@ -14,6 +14,8 @@ verification:
 ## Fellow of the Society of Actuaries (FSA)
 
 **FSA** is the fellowship credential of the **Society of Actuaries (SOA)** — the senior of its two designations. A Fellow has completed everything required of an [[Associate of the Society of Actuaries (ASA)|Associate]] and then specialised: the fellowship stage is where a candidate picks a practice area and is examined on the way that business is actually priced, reserved and regulated.
+
+%%credential-path FSA%%
 
 ## Requirements
 

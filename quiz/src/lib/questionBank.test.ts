@@ -10,7 +10,8 @@ import { describe, it, expect } from 'vitest'
 import { readdirSync, readFileSync } from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { filterQuestions, parseQuestion } from './parser'
+import { filterQuestions, isFromAnotherExamsPaper, parseQuestion } from './parser'
+import { paperQuestionNumber } from './pastExams'
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..')
 const QUESTIONS_DIR = path.join(REPO_ROOT, 'questions')
@@ -36,6 +37,31 @@ describe('the question bank', () => {
   it('parses every file', () => {
     const dropped = files.filter(f => parseQuestion(readFileSync(path.join(QUESTIONS_DIR, f), 'utf-8')) === null)
     expect(dropped).toEqual([])
+  })
+
+  // A past paper is sat in the order it was set, and that order is read off the
+  // id (`inPaperOrder`). A dated question whose id names no number would fall to
+  // the back of its paper, and two sharing a number would sit in no set order.
+  it('numbers every question on a past paper once, in its id', () => {
+    const questions = files.map(f => parseQuestion(readFileSync(path.join(QUESTIONS_DIR, f), 'utf-8'))!)
+    const unnumbered: string[] = []
+    const seen = new Map<string, string>()
+    const clashes: string[] = []
+    for (const q of questions) {
+      if (!q?.year || isFromAnotherExamsPaper(q, q.exam)) continue
+      const n = paperQuestionNumber(q.id)
+      if (n === null) {
+        unnumbered.push(q.id)
+        continue
+      }
+      const key = `${q.exam} ${q.year} ${q.session ?? ''} Q${n}`
+      const other = seen.get(key)
+      if (other) clashes.push(`${key}: ${other}, ${q.id}`)
+      else seen.set(key, q.id)
+    }
+    expect(seen.size).toBeGreaterThan(0)
+    expect(unnumbered).toEqual([])
+    expect(clashes).toEqual([])
   })
 
   it('gives a single-part CAS question its explanation', () => {

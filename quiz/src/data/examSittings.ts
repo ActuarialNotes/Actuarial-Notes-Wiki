@@ -222,6 +222,49 @@ export function currentSitting(sittings: ExamSitting[], targetDate: string | nul
   return sittings.find(s => sittingContains(s, targetDate)) ?? sittings[0] ?? null
 }
 
+/**
+ * Longest span, in days, that `examWindowFor` treats as one sitting's window.
+ * The CAS and SOA CBT windows run one to two weeks (PCPA's project window about
+ * a fortnight); a row that spans more is a registration span covering several
+ * sittings (FAM's Oct 2025 – Oct 2026 row), not a window anyone sits in.
+ */
+export const MAX_EXAM_WINDOW_DAYS = 31
+
+/** An exam's sitting window: the first and last day it can be sat, ISO. */
+export interface ExamWindow {
+  start: string
+  end: string
+}
+
+/**
+ * The published window the reader's exam date falls in — the stretch the
+ * Dashboard's schedule strip shades around exam day. Past sittings count too
+ * (a date that has gone by still sat in its window). Where two rows contain the
+ * date (Exam P's paper day inside its CBT window) the wider window wins; a row
+ * longer than `MAX_EXAM_WINDOW_DAYS` is not a window. Null when the date is in
+ * no known window — the exam day is then the whole of it, and nothing is
+ * shaded that the sittings table doesn't say.
+ */
+export function examWindowFor(
+  examId: string,
+  examDate: string | null | undefined,
+  sittings: ExamSitting[] = EXAM_SITTINGS,
+): ExamWindow | null {
+  if (!examDate) return null
+  let best: ExamWindow | null = null
+  let bestDays = -1
+  for (const s of sittings) {
+    if (s.examId !== examId || !s.endDate || !sittingContains(s, examDate)) continue
+    const days = Math.round(
+      (Date.parse(s.endDate + 'T00:00:00Z') - Date.parse(s.startDate + 'T00:00:00Z')) / 86400000,
+    ) + 1
+    if (days > MAX_EXAM_WINDOW_DAYS || days <= bestDays) continue
+    best = { start: s.startDate, end: s.endDate }
+    bestDays = days
+  }
+  return best
+}
+
 /** A sitting named as a version: its month and year, e.g. "Nov 2026". */
 export function sittingVersionLabel(sitting: ExamSitting): string {
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']

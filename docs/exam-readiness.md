@@ -9,7 +9,9 @@ and read by every surface that prints a readiness percentage.
 
 **The exam study guide no longer shows a readiness card.** The card, its assessment popup and
 the 48px `ReadinessRing` badge were removed along with the exam page's orientation row; the
-score itself and the surfaces below are unchanged.
+score itself and the surfaces below are unchanged. On the study guide the score now lives one
+tap away: the exam's title opens its action menu, which leads with the same readiness bar the
+exam grid draws.
 
 ## One score, everywhere
 
@@ -20,7 +22,8 @@ a readiness percentage calls it, so they can never disagree:
 |---|---|
 | Dashboard **Exam readiness** card (the `NN%` KPI beside the band verdict, over the primary actions) | `components/ReadinessCard.tsx` |
 | Dashboard **Study Guide** card (the ring and the criterion bars — the breakdown of that one score, which it no longer reprints) | `components/ReadinessCard.tsx` |
-| Exam grid cards ("Readiness NN%") | `pages/wiki/WikiHome.tsx` |
+| Exam grid cards ("Readiness NN%") | `pages/wiki/WikiHome.tsx` → `components/ReadinessBar.tsx` |
+| Exam action menu (the study guide's title opens it) | `components/ConceptActionMenu.tsx` → `components/ReadinessBar.tsx` |
 | Readiness projection ("now → exam day") | `lib/masteryAnalytics.ts` → `components/HeatmapInfoPanel.tsx` |
 
 `computeReadiness` (the weighted section score) is an *input* to it, not a second opinion.
@@ -144,10 +147,14 @@ while they render at the top of the page:
    the picker. Tapping the block's date line opens the Study Plan modal at the exam-date step.
 
    Under those two lines is the **schedule strip** — what used to be the Study Schedule card,
-   drawn as a *linear* heatmap (`<ExamHeatmap layout="linear">`): one thin bar per day from a
-   fortnight before the first session to a fortnight past exam day, shaded by how much of
-   that day's plan was completed, with today ringed, the exam day solid and the target-ready
-   day amber. Merging it here is what makes the deadline and the record of what has been done
+   drawn as a *linear* heatmap (`<ExamHeatmap layout="linear">`): one 32px-tall cell per day
+   from a week before the first session to a week past the exam's sitting window
+   (`scheduleStripRange` in `lib/heatmapGrid.ts` — every day shares one line, so the span is
+   kept tight and each day stays a target a finger can hit), shaded by how much of that day's
+   plan was completed, with today ringed, the exam day solid and the target-ready day amber.
+   The **sitting window** the exam date falls in (`examWindowFor` in `data/examSittings.ts` —
+   transcribed, so a date in no known window shades nothing but exam day) is a faint wash of
+   the exam's accent colour behind its days. Merging it here is what makes the deadline and the record of what has been done
    about it one object rather than two cards saying the same thing at opposite ends of the
    page. It keeps everything the card did: tapping a day opens that day's panel below the
    block (its sessions, gems, level-ups and what the plan schedules for it), the

@@ -175,7 +175,12 @@ downstream and still does:
 - `currentPool` filters the bank to that sitting, so the deck card's count and the shuffle
   draw from that paper only;
 - `handleStart` passes `year` / `session` to `/quiz`, and the sitting's full question count
-  as `count` (a past paper is sat whole, not sampled);
+  as `count` (a past paper is sat whole, not sampled) — and in the paper's own order:
+  `useQuestions` hands a sitting to `inPaperOrder` (`lib/pastExams.ts`) instead of the
+  shuffle every other draw gets. The order is read off the id, whose `-q<n>` suffix is the
+  number the paper printed (`paperQuestionNumber`, compared as a number so Q10 follows Q9);
+  `lib/questionBank.test.ts` fails on a dated question with no number or a sitting that
+  numbers two questions the same;
 - the header row above the shelf offers that sitting's examiner's report as a PDF download
   (`data/examPdfLinks.ts`), beside the pass-rate lookup link;
 - `searchFilter` carries the sitting's `year` / `session` into the floating search bar, so
@@ -457,7 +462,7 @@ Two things differ from the sittings above:
 - **A syllabus is reissued, not just published once**, so these entries rot into *superseded*
   rather than dead — a link that still opens and is no longer what the candidate sits. Each
   entry records which edition it is, so staleness shows up in the diff. The same "absent
-  beats guessed" rule applies: Exams 6U and 8 have no entry and therefore no button.
+  beats guessed" rule applies: Exam 6U has no entry and therefore no button.
   CAS's own naming is the warning against extrapolating — the newer outlines are
   `Exam_6C_CO_2026_Fall.pdf` where the older ones are `Exam7_Content_Outline.pdf`.
 

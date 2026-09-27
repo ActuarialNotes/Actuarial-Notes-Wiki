@@ -84,7 +84,11 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
   `components/ConceptActionMenu.tsx` is **the** concept action menu — quiz, study guide, deck,
   learning progress, fact check — and the owner of the modals those rows open; the
   concept popup (whose title is its only trigger) and every flashcard surface open that one
-  component, so the two can't drift apart. A surface adds only rows about *itself* (a card's
+  component, so the two can't drift apart. An **exam** gets its own form of it, opened by the
+  exam study guide's underlined title (`WikiArticle`'s `titleAction`): the readiness bar
+  (`components/ReadinessBar.tsx`, shared with the exam grid) and the countdown to the exam,
+  then **Today's Study Plan** (locked for a reader who isn't Pro) and Fact Check — the facts
+  are `lib/examMenu.ts`, pure and tested. A surface adds only rows about *itself* (a card's
   Study and Remove) through `leading` / `trailing`; view switches (Listen, the deck's view
   modes) are each surface's own control, never menu rows. It always portals to the body and
   is placed by `lib/menuPlacement.ts`, so no host's stacking context or viewport edge can
@@ -280,9 +284,9 @@ Other important `lib/` modules:
   via `parser.ts`), parses a sidecar log, and decides what the **Fact Check** badge says
   (`factCheckBadge` → `components/FactCheckBadge.tsx` → `FactCheckPanel`; on a concept or
   resource page the way in is the *Fact Check* item of the action menu, on a question it is
-  both the explanation panel's badge and the verdict row in the quiz's **Info** sheet, and an
-  exam page has none). The panel shows the verdict alone until the reader taps it, then
-  unfolds the record — findings first, then what it was **Checked against**.
+  both the explanation panel's badge and the verdict row in the quiz's **Info** sheet, and on
+  an exam page it is the same item in the menu the exam's title opens). The panel shows the
+  verdict alone until the reader taps it, then unfolds the record — findings first, then what it was **Checked against**.
   `summarizeSource` and `summarizeLog` are what keep it short — the first cuts an auditor's
   citation into the source's name, the chapters/pages checked and its link (the sha256 never
   reaches the screen), the second splits the log into Open / Fixed / Notes and folds each
@@ -436,6 +440,9 @@ Other important `lib/` modules:
   `buildPastExamRows` unions the authored catalogue (`data/pastExams.ts`) with the sittings the
   question bank actually holds, so a released paper that hasn't been imported still lists
   (greyed out, "Not added yet") and a freshly converted one appears without a catalogue edit.
+  A sitting is sat in the paper's own order, not shuffled: `inPaperOrder` sorts on the
+  number in the question id (`cas5-2019s-q12` → 12), which `useQuestions` applies whenever
+  the draw is a sitting — so a converted question's id must keep its `-q<n>` suffix.
   Rendered by `components/PastExamBrowser.tsx`. See `docs/mock-exam-browser.md`.
 - `syllabusChapters.ts` — the syllabus's **chapters**: which learning objective each stop of
   an exam page's walk belongs to, read off the page's `[!example]` callouts
@@ -755,8 +762,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **139 test files /
-~2200 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **140 test files /
+~2245 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).
@@ -808,12 +815,15 @@ compile — don't "clean up" the flagged code as dead.
   vault shows nothing there — is swapped by `WikiArticle` for the interactive SOA/CAS path
   (`components/wiki/CredentialPath.tsx`): start → associate → fellow → continuing education,
   authored in `data/credentialPaths.ts` and held in step with `data/tracks.ts` both ways by
-  its test. The continuing-education stage (CE/CPD rules, iCAS's CSPA and cat credentials,
+  its test. It is the first thing on the guide, and each designation page (below) places it
+  too, naming itself — `%%credential-path ACAS%%` — so it opens on that society at that
+  stage (`readCredentialPathMarker`; a name no stage has is left on the page as text). The continuing-education stage (CE/CPD rules, iCAS's CSPA and cat credentials,
   CERA, FCIA) has no track behind it and is transcribed from the societies' own pages.
 - The four credential pages — `Concepts/Associate of the Casualty Actuarial Society
   (ACAS).md` and its ASA / FCAS / FSA siblings — are what the Study Guides page's track
   headings open. `data/tracks.ts` names them (`Track.conceptPage`), so a renamed page is a
-  one-line change there.
+  one-line change there. Each carries its `%%credential-path <designation>%%` line just above
+  `## Requirements`; `credentialPaths.test.ts` fails if one goes missing.
 - Every exam page ends with a `## Source Material` heading over a
   `> [!answer]- Source Material` callout: one top-level bullet per syllabus reading (a
   `[[wiki link]]`, normally to a `Resources/Books/` page) with an indented bullet naming the

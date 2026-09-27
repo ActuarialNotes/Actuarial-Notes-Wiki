@@ -457,7 +457,7 @@ Two things differ from the sittings above:
 - **A syllabus is reissued, not just published once**, so these entries rot into *superseded*
   rather than dead — a link that still opens and is no longer what the candidate sits. Each
   entry records which edition it is, so staleness shows up in the diff. The same "absent
-  beats guessed" rule applies: Exams 6U and 8 have no entry and therefore no button.
+  beats guessed" rule applies: Exam 6U has no entry and therefore no button.
   CAS's own naming is the warning against extrapolating — the newer outlines are
   `Exam_6C_CO_2026_Fall.pdf` where the older ones are `Exam7_Content_Outline.pdf`.
 

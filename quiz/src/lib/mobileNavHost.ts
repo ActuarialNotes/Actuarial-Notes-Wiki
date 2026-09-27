@@ -20,11 +20,13 @@ export function pageHostsNavButton(pathname: string): boolean {
   // The Dashboard (DashboardSearchBar) and Flashcards (FlashcardsSearchBar) —
   // both exactly, nothing below them.
   if (pathname === '/dashboard' || pathname === '/flashcards') return true
+  // A project attempt (ProjectTopBar) — every page *under* the Projects tab.
+  // The tab's own list of briefs is a plain page under the app header.
+  if (pathname.startsWith('/project/')) return true
   // The wiki (WikiFloatingSearch), the flag-gated research tab
   // (ResearchTopSearch) and Cowork (CoworkTopBar) — each of which bars every
   // page under them.
-  // The PCPA project (ProjectTopBar) bars every page under it too.
-  return isUnder(pathname, '/wiki') || isUnder(pathname, '/research') || isUnder(pathname, '/cowork') || isUnder(pathname, '/project')
+  return isUnder(pathname, '/wiki') || isUnder(pathname, '/research') || isUnder(pathname, '/cowork')
 }
 
 function isUnder(pathname: string, route: string): boolean {

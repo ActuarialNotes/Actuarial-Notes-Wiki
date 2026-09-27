@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { newAttempt, type Language, type ProjectAttempt, type Timing } from '@/lib/pcpaAttempt'
+import { newAttempt, savedMode, type AttemptMode, type Language, type ProjectAttempt } from '@/lib/pcpaAttempt'
 import { CASE_IDS, type CaseId } from '@/lib/pcpaData'
 import { deleteAttemptFiles } from '@/lib/project/fileStore'
 
@@ -24,6 +24,7 @@ function load(): ProjectAttempt[] {
       a && typeof a.id === 'string' && (CASE_IDS as string[]).includes(a.caseId) && typeof a.seed === 'number',
     ).map(a => ({
       ...a,
+      mode: savedMode(a),
       report: a.report && typeof a.report.body === 'string' ? { body: a.report.body, appendices: Array.isArray(a.report.appendices) ? a.report.appendices : [] } : { body: '', appendices: [] },
       answers: a.answers && typeof a.answers === 'object' ? a.answers : {},
       ratings: a.ratings && typeof a.ratings === 'object' ? a.ratings : {},
@@ -48,7 +49,8 @@ function newId(): string {
 
 interface PcpaAttemptsState {
   attempts: ProjectAttempt[]
-  create: (opts: { caseId: CaseId; timing: Timing; language: Language }) => ProjectAttempt
+  /** `seed` reuses an earlier attempt's data; a fresh one is drawn without it. */
+  create: (opts: { caseId: CaseId; mode: AttemptMode; language: Language; seed?: number }) => ProjectAttempt
   update: (id: string, patch: Partial<ProjectAttempt> | ((a: ProjectAttempt) => Partial<ProjectAttempt>)) => void
   remove: (id: string) => Promise<void>
 }
@@ -60,13 +62,13 @@ export const usePcpaAttempts = create<PcpaAttemptsState>((set, get) => {
   }
   return {
     attempts: load(),
-    create: ({ caseId, timing, language }) => {
+    create: ({ caseId, mode, language, seed }) => {
       const attempt = newAttempt({
         id: newId(),
         caseId,
         // Any 32-bit seed; the attempt's data is a function of it.
-        seed: Math.floor(Math.random() * 0xffffffff) >>> 0,
-        timing,
+        seed: seed ?? Math.floor(Math.random() * 0xffffffff) >>> 0,
+        mode,
         language,
         now: Date.now(),
       })

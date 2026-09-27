@@ -56,7 +56,7 @@ export function BriefView({
         <h1 className="text-2xl font-semibold tracking-tight">{projectCase.title}</h1>
         <p className="text-sm text-muted-foreground">
           {projectCase.company}
-          {attempt.deadline !== null ? <> · Submissions close {formatDeadline(attempt.deadline)}</> : ' · Untimed practice'}
+          {attempt.deadline !== null ? <> · Submissions close {formatDeadline(attempt.deadline)}</> : ' · Practice, no deadline'}
         </p>
       </header>
 

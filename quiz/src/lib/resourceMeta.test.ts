@@ -187,10 +187,10 @@ Title: Probability Distributions
 
 describe('copySources', () => {
   it('searches each place on the bare ISBN', () => {
-    expect(copySources('978-0134753119').map(({ label, url }) => ({ label, url }))).toEqual([
-      { label: 'WorldCat', url: 'https://search.worldcat.org/search?q=bn%3A9780134753119' },
-      { label: 'Amazon', url: 'https://www.amazon.com/s?k=9780134753119&i=stripbooks' },
-      { label: 'Library Genesis', url: 'https://libgen.li/index.php?req=9780134753119' },
+    expect(copySources('978-0134753119').map(({ id, label, url }) => ({ id, label, url }))).toEqual([
+      { id: 'worldcat', label: 'WorldCat', url: 'https://search.worldcat.org/search?q=bn%3A9780134753119' },
+      { id: 'amazon', label: 'Amazon', url: 'https://www.amazon.com/s?k=9780134753119&i=stripbooks' },
+      { id: 'libgen', label: 'Library Genesis', url: 'https://libgen.li/index.php?req=9780134753119' },
     ])
   })
 

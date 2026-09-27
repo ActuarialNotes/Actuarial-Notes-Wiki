@@ -24,6 +24,8 @@ export interface ResourceMeta {
 
 /** One place to look for a book, searched on its ISBN. */
 export interface CopySource {
+  /** Which place — the menu prices the Amazon row (`lib/amazonPrice.ts`). */
+  id: keyof typeof COPY_SOURCE_LOGOS
   label: string
   url: string
   /**
@@ -80,7 +82,7 @@ export function librarySearchUrl(isbn?: string): string | undefined {
 }
 
 /** The ISBN with its hyphens and spaces gone, or nothing if it isn't one. */
-function isbnDigits(isbn?: string): string | undefined {
+export function isbnDigits(isbn?: string): string | undefined {
   if (!isbn) return undefined
   const digits = isbn.replace(/[\s-]/g, '').toUpperCase()
   return /^(?:\d{9}[\dX]|\d{13})$/.test(digits) ? digits : undefined
@@ -100,16 +102,19 @@ export function copySources(isbn?: string): CopySource[] {
   if (!digits) return []
   return [
     {
+      id: 'worldcat',
       label: 'WorldCat',
       url: `https://search.worldcat.org/search?q=bn%3A${digits}`,
       logo: COPY_SOURCE_LOGOS.worldcat,
     },
     {
+      id: 'amazon',
       label: 'Amazon',
       url: `https://www.amazon.com/s?k=${digits}&i=stripbooks`,
       logo: COPY_SOURCE_LOGOS.amazon,
     },
     {
+      id: 'libgen',
       label: 'Library Genesis',
       url: `https://libgen.li/index.php?req=${digits}`,
       logo: COPY_SOURCE_LOGOS.libgen,

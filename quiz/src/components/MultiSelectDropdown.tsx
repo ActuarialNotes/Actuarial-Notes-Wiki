@@ -9,20 +9,25 @@ interface MultiSelectOption {
 interface MultiSelectDropdownProps {
   label: string
   options: MultiSelectOption[]
-  selected: Set<string>
+  selected: ReadonlySet<string>
   onToggle: (value: string) => void
   getCount?: (value: string) => number
+  /** Why there is nothing to pick, shown as the tooltip of the disabled pill.
+   *  A dropdown with no options stays on screen, disabled, so a filter the
+   *  surface always offers doesn't come and go with the pool. */
+  emptyTitle?: string
 }
 
 /** A pill-style button that opens a checkbox list for multi-selecting options.
- *  Shared by the concept-questions modal and the quiz search bar so both expose
- *  the same "Concepts" filter affordance. */
+ *  The Concepts, Exam and Sitting filters of every question list
+ *  (`QuestionFilterBar`) are drawn with it. */
 export function MultiSelectDropdown({
   label,
   options,
   selected,
   onToggle,
   getCount,
+  emptyTitle,
 }: MultiSelectDropdownProps) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
@@ -35,29 +40,38 @@ export function MultiSelectDropdown({
     return () => document.removeEventListener('mousedown', handler)
   }, [])
 
+  // One choice is named outright — "Exam MAS-II", "Spring 2019" — so the pill
+  // says what the list is filtered to without being opened.
+  const single = selected.size === 1 ? [...selected][0] : null
   const displayLabel =
     selected.size === 0
       ? label
-      : selected.size === options.length
-        ? `${label}: All`
-        : `${label} (${selected.size})`
+      : single !== null
+        ? (options.find(o => o.value === single)?.label ?? single)
+        : selected.size === options.length
+          ? `${label}: All`
+          : `${label} (${selected.size})`
+  const empty = options.length === 0
 
   return (
     <div ref={ref} className="relative">
       <button
         type="button"
         onClick={() => setOpen(v => !v)}
-        className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
+        disabled={empty}
+        title={empty ? emptyTitle : undefined}
+        aria-label={single !== null ? `${label}: ${displayLabel}` : undefined}
+        className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed ${
           selected.size > 0
             ? 'bg-primary/10 text-primary'
-            : 'bg-background hover:bg-accent'
+            : 'bg-background enabled:hover:bg-accent'
         }`}
       >
-        <span>{displayLabel}</span>
+        <span className="max-w-[14rem] truncate">{displayLabel}</span>
         <ChevronDown className={`h-4 w-4 transition-transform shrink-0 ${open ? 'rotate-180' : ''}`} />
       </button>
-      {open && (
-        <div className="absolute top-full left-0 mt-1 z-20 bg-card rounded-lg shadow-lg min-w-[200px] py-1.5 max-h-72 overflow-y-auto">
+      {open && !empty && (
+        <div className="absolute top-full left-0 mt-1 z-20 bg-card rounded-lg shadow-lg w-max min-w-[200px] max-w-[18rem] py-1.5 max-h-72 overflow-y-auto">
           {options.map(opt => {
             const count = getCount?.(opt.value)
             return (

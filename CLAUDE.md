@@ -409,6 +409,18 @@ Other important `lib/` modules:
   `questionPreview` falls back to the first *part* of a multi-part question whose stem is an
   empty preamble — those rows previewed nothing at all before. Read by
   `components/QuestionSearchRow.tsx` (clamped to three lines) and the Search page.
+- `questionFilters.ts` — the filters **every list of questions** offers — Difficulty,
+  Concepts, Exam and Sitting — as one definition: what each matches, the options each
+  offers over a pool (with the count choosing it would leave, the other filters applied),
+  and `splitSearchFilter`, which turns the quiz builder's exam and past paper into the
+  search panel's *starting* Exam / Sitting choices rather than a narrowed pool (a panel
+  scoped to one exam hid its Exam filter). One rule lives here rather than in a surface:
+  once an exam is chosen, a sitting means that exam's paper, so a question carried over
+  (`originally_exam`) is on none of its sittings — `filterQuestions`' rule for the shelf.
+  Drawn by `components/QuestionFilterBar.tsx`, the one filter row used by the quiz search
+  panel, the concept question browser, the concept detail modal (Exam + Sitting) and the
+  Search page (Sitting); Exam and Sitting are always on screen, Sitting disabled for an
+  undated pool. Add it to any new surface that lists questions. Pure and tested.
 - `questionSource.ts` — where a question came from, for the quiz's **Info** button
   (`components/QuestionInfoButton.tsx`, in the question bar beside the flag): the sitting it
   was sat on, the published paper behind it (`data/examPdfLinks.ts`), and its vault file —
@@ -766,8 +778,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **140 test files /
-~2245 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **141 test files /
+~2280 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).

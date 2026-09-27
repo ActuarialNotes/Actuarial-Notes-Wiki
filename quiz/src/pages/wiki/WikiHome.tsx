@@ -25,6 +25,7 @@ import { splitAuthors } from '@/lib/authorNames'
 import { ExamPill, MetaPill } from '@/components/wiki/ResourcePills'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { cn } from '@/lib/utils'
+import { useWikiPageHead } from '@/hooks/useWikiPageHead'
 
 function examNameToTrackKey(name: string): string {
   const cleaned = name
@@ -48,6 +49,7 @@ function formatTargetDate(dateStr: string): string {
 export default function WikiHome() {
   const { syllabi, loading } = useWikiSyllabus()
   const { setPageRefs, setExamId } = useWikiPage()
+  useWikiPageHead('hub', '')
   const { progress: examProgress, targetDates, examVariants, selectedTrack } = useExamProgress()
   const { records: masteryRecords } = useConceptMastery()
   const openAt = useConceptPopup(s => s.openAt)

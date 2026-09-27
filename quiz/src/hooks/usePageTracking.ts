@@ -1,55 +1,28 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
-import { fromSlug, examDisplayName } from '@/lib/wikiRoutes'
-
-const STATIC_TITLES: Record<string, string> = {
-  '/': 'Actuarial Notes',
-  '/auth': 'Sign In | Actuarial Notes',
-  '/auth/callback': 'Actuarial Notes',
-  '/quiz': 'Quiz | Actuarial Notes',
-  '/review': 'Review | Actuarial Notes',
-  '/dashboard': 'Dashboard | Actuarial Notes',
-  '/search': 'Search | Actuarial Notes',
-  '/flashcards': 'Flashcards | Actuarial Notes',
-  '/settings': 'Settings | Actuarial Notes',
-  '/upgrade': 'Upgrade | Actuarial Notes',
-  '/store': 'Store | Actuarial Notes',
-  '/wiki': 'Wiki | Actuarial Notes',
-}
-
-// Wiki route slugs are `toSlug` output (spaces as `+`, the rest
-// percent-encoded), so the page's name is read back with `fromSlug` rather than
-// guessed at — a slug split on '-' turned "Exam+MAS-I+(CAS)" into
-// "Exam+MAS I+(CAS)".
-function slugToTitle(slug: string): string {
-  return fromSlug(slug)
-}
-
-function getPageTitle(pathname: string): string {
-  if (STATIC_TITLES[pathname]) return STATIC_TITLES[pathname]
-
-  // An exam's tab title drops the examining-body suffix its file name carries,
-  // the same as every other surface that shows an exam's name.
-  const wikiExam = pathname.match(/^\/wiki\/exam\/(.+)$/)
-  if (wikiExam) return `${examDisplayName(slugToTitle(wikiExam[1]))} | Actuarial Notes`
-
-  const wikiConcept = pathname.match(/^\/wiki\/concept\/(.+)$/)
-  if (wikiConcept) return `${slugToTitle(wikiConcept[1])} | Actuarial Notes`
-
-  const wikiResource = pathname.match(/^\/wiki\/resource\/(.+)$/)
-  if (wikiResource) return `${slugToTitle(wikiResource[1])} | Actuarial Notes`
-
-  return 'Actuarial Notes'
-}
+import { fallbackHead } from '@/lib/seo'
+import { applyPageHead, currentCanonical } from '@/lib/documentHead'
 
 export function usePageTracking() {
   const location = useLocation()
   const isFirstRender = useRef(true)
+  const headWritten = useRef(false)
+
+  // The route's own head — its name, the site's description, its canonical URL
+  // (see `fallbackHead` in lib/seo.ts). A layout effect, so it is in place
+  // before any page's passive effect writes its fuller record over it
+  // (`usePageHead`). A wiki page served from its own static file arrives with
+  // that fuller record already in the head; the first pass leaves it alone
+  // rather than blank it while the page's chunk loads.
+  useLayoutEffect(() => {
+    const head = fallbackHead(location.pathname)
+    const firstPass = !headWritten.current
+    headWritten.current = true
+    if (firstPass && head.canonical && currentCanonical() === head.canonical) return
+    applyPageHead(head)
+  }, [location.pathname])
 
   useEffect(() => {
-    const title = getPageTitle(location.pathname)
-    document.title = title
-
     if (isFirstRender.current) {
       isFirstRender.current = false
       return
@@ -57,7 +30,7 @@ export function usePageTracking() {
     if (typeof window.gtag !== 'function') return
     window.gtag('config', 'G-YTVSN1NTV9', {
       page_path: location.pathname + location.search,
-      page_title: title,
+      page_title: fallbackHead(location.pathname).title,
     })
   }, [location.pathname, location.search])
 }

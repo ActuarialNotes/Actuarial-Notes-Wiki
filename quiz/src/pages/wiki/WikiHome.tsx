@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useLocation, useNavigationType } from 'react-router-dom'
 import { Compass, Hammer } from 'lucide-react'
 import { CheckMark } from '@/components/CheckMark'
@@ -20,7 +20,7 @@ import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
-import { computeExamReadiness } from '@/lib/readiness'
+import { computeExamReadiness, type ExamReadinessAssessment } from '@/lib/readiness'
 import { examStatus } from '@/lib/examStatus'
 import { splitAuthors } from '@/lib/authorNames'
 import { ExamPill, MetaPill } from '@/components/wiki/ResourcePills'
@@ -45,6 +45,135 @@ const SEARCH_BAR_H = 56
 function formatTargetDate(dateStr: string): string {
   const d = new Date(dateStr)
   return d.toLocaleDateString('en-US', { month: 'short', year: '2-digit' })
+}
+
+/** Everything an exam card shows, derived once per exam page. */
+interface ExamCardModel {
+  exam: WikiIndexItem
+  examId: string
+  topic: string | null
+  isInProgress: boolean
+  isCompleted: boolean
+  targetDate: string | null
+  inDevelopment: boolean
+  isBeta: boolean
+  readiness: ExamReadinessAssessment | null
+  hasProgressBar: boolean
+}
+
+/**
+ * A group's heading bar — sticky, just below the search bar, so the group
+ * being scrolled through stays named.
+ */
+function GroupHeading({ children }: { children: ReactNode }) {
+  return (
+    <div
+      className="sticky z-10 -mx-4 sm:-mx-6 px-4 sm:px-6 py-1.5 mb-3 bg-background/95 backdrop-blur-sm"
+      style={{ top: `${SEARCH_BAR_H}px` }}
+    >
+      {children}
+    </div>
+  )
+}
+
+function ExamGuideCard({ model, tourId }: { model: ExamCardModel; tourId?: string }) {
+  const { exam, examId, topic, isInProgress, isCompleted, targetDate, inDevelopment, isBeta, readiness, hasProgressBar } = model
+
+  // The exam's place on the ladder, as a colour (blue at
+  // Exam P through to red at Exam 9 — see lib/examColors.ts).
+  // Scoped to the card as custom properties, so the highlight
+  // below is one use of it rather than the only place the
+  // colour exists.
+  const accent = examAccentStyle(examId)
+
+  return (
+    <Link to={wikiRoute({ kind: 'exam', name: exam.name })} data-tour={tourId}>
+      <Card
+        style={accent}
+        className={cn(
+          'transition-all duration-150 overflow-hidden ring-1 ring-transparent',
+          isInProgress && !inDevelopment && 'bg-primary/10',
+          // Unbuilt exam: no card surface, a dashed outline and
+          // dimmed contents — the same "nothing here yet" material
+          // the empty-state placeholders use. The page is still
+          // reachable (it holds the published syllabus), it just
+          // never looks like something to study from.
+          inDevelopment && 'bg-muted/40 border border-dashed border-muted-foreground/30 shadow-none',
+          // Hover picks the exam's own colour up off the card's
+          // custom properties. Exams only: a requirement with no
+          // rung on the ladder keeps the neutral hover.
+          accent
+            ? 'hover:bg-[var(--exam-accent-soft)] hover:ring-[var(--exam-accent-muted)]'
+            : isInProgress && !inDevelopment
+              ? 'hover:bg-primary/25'
+              : inDevelopment
+                ? 'hover:bg-muted/60'
+                : 'hover:bg-accent/30',
+        )}
+      >
+        <CardHeader className="flex-row items-start gap-3 space-y-0 p-4 pb-3">
+          {/* The exam's logo — its monogram in its own place
+              on the colour ramp. A visual anchor, so a card
+              is recognisable before its title is read; the
+              title beside it is what actually names the exam,
+              which is why the tile is aria-hidden. */}
+          <ExamLogo examKey={examId} size="lg" muted={inDevelopment} className="mt-0.5" />
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center justify-between gap-2">
+              <CardTitle className={cn('text-base leading-snug', inDevelopment && 'text-muted-foreground')}>
+                {examDisplayName(exam.name)}
+              </CardTitle>
+              {isCompleted && (
+                <CheckMark className="h-4 w-4 text-emerald-500" />
+              )}
+            </div>
+            {topic && (
+              <CardDescription className="mt-0.5">{topic}</CardDescription>
+            )}
+
+            {/* Status pill — hidden for completed exams. "In
+                development" outranks everything: it says the
+                material isn't there, which is true whatever the
+                candidate has marked this exam as. */}
+            {!isCompleted && (inDevelopment || isInProgress || isBeta) && (
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {/* The quiz builder's pills, to the letter:
+                    blue is the info hue a scheduled date
+                    takes, being part-way through is neutral,
+                    and Beta is the amber caution (style
+                    guide §4.1). They used to be one size
+                    smaller and a different colour here. */}
+                {inDevelopment ? (
+                  <span className="inline-flex items-center gap-1 rounded-full border border-dashed border-muted-foreground/40 px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                    <Hammer className="h-3 w-3" aria-hidden="true" />
+                    In development — not yet available
+                  </span>
+                ) : isInProgress ? (
+                  <span className={cn(
+                    'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium',
+                    targetDate
+                      ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
+                      : 'bg-muted text-muted-foreground',
+                  )}>
+                    {targetDate ? `Exam: ${formatTargetDate(targetDate)}` : 'In progress'}
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center rounded-full bg-amber-500/15 px-2 py-0.5 text-xs font-medium text-amber-600 dark:text-amber-400">
+                    Beta
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+        </CardHeader>
+
+        {/* Progress bar — in-progress only, not for completed */}
+        {hasProgressBar && readiness && (
+          <ReadinessBar readiness={readiness} className="px-4 pb-4" />
+        )}
+      </Card>
+    </Link>
+  )
 }
 
 export default function WikiHome() {
@@ -155,6 +284,66 @@ export default function WikiHome() {
     [allTrackGroups, filter],
   )
 
+  // One model per exam page, shared by every card that shows it — an exam in
+  // progress is drawn twice (at the top, and in its place on the ladder), and
+  // the two must never disagree.
+  const cardModels = useMemo(() => {
+    const now = new Date()
+    const models = new Map<string, ExamCardModel>()
+    for (const exam of exams) {
+      const examId = examNameToTrackKey(exam.name)
+      const examIdCleaned = exam.name.replace(/^Exam\s+/i, '').replace(/\s*\([^)]*\)\s*$/, '').trim()
+      const match = syllabi.find(s => s.examId === examIdCleaned)
+        ?? syllabi.find(s => wikiExamIdToProgressKey(s.examId) === examId)
+      const status = examProgress[examId]
+      const variantMatch = matchesSelectedVariant(examId, examIdCleaned, examVariants[examId])
+      const isInProgress = status === 'in_progress' && variantMatch
+      // Exams 6–9 are still only a syllabus outline. They stay
+      // listed (candidates should see what's coming) but greyed
+      // out, so the card never reads as material to study from.
+      const contentStatus = examStatus(examId)
+      const inDevelopment = contentStatus === 'development'
+      // The same score the exam page's Exam Readiness Score card
+      // and the Dashboard radial show — one definition of readiness.
+      const readiness = match
+        ? computeExamReadiness(match, masteryRecords.filter(r => r.exam_id === examId), now, examId)
+        : null
+      models.set(exam.path, {
+        exam,
+        examId,
+        topic: match?.examTopic ?? null,
+        isInProgress,
+        isCompleted: status === 'completed' && variantMatch,
+        targetDate: targetDates[examId] ?? null,
+        inDevelopment,
+        isBeta: contentStatus === 'beta',
+        readiness,
+        // No readiness readout on an exam with nothing to be ready for.
+        hasProgressBar: isInProgress && !!readiness && readiness.counts.total > 0 && !inDevelopment,
+      })
+    }
+    return models
+  }, [exams, syllabi, examProgress, examVariants, targetDates, masteryRecords])
+
+  // The exams being studied, lifted above the ladder so the reader's own exams
+  // are the first thing on the page rather than somewhere down a credential.
+  // Walked over all four credentials — not just the picked body's — because
+  // they are the reader's exams whichever ladder is being browsed; in ladder
+  // order, once each (P and FM sit on both an associate and a fellow path).
+  const inProgressModels = useMemo(() => {
+    const seen = new Set<string>()
+    const out: ExamCardModel[] = []
+    for (const { exams: trackExams } of allTrackGroups) {
+      for (const exam of trackExams) {
+        if (seen.has(exam.path)) continue
+        seen.add(exam.path)
+        const model = cardModels.get(exam.path)
+        if (model?.isInProgress) out.push(model)
+      }
+    }
+    return out
+  }, [allTrackGroups, cardModels])
+
   return (
     <div className="space-y-8">
       {/* The body picker rides the title row rather than a label row of its
@@ -218,13 +407,26 @@ export default function WikiHome() {
           <p className="text-sm text-muted-foreground">Loading exams…</p>
         ) : (
           <div className="space-y-6">
+            {/* The exams being studied, first — the same card as on the
+                ladder below, which keeps showing it in its place too. */}
+            {inProgressModels.length > 0 && (
+              <div>
+                <GroupHeading>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    In progress
+                  </p>
+                </GroupHeading>
+                <div className="grid grid-cols-1 items-start gap-3 sm:grid-cols-2">
+                  {inProgressModels.map(model => (
+                    <ExamGuideCard key={model.exam.path} model={model} />
+                  ))}
+                </div>
+              </div>
+            )}
+
             {filteredTrackGroups.filter(g => g.exams.length > 0).map(({ track, exams: trackExams }) => (
               <div key={track.key}>
-                {/* Sticky track header — sits just below the search bar */}
-                <div
-                  className="sticky z-10 -mx-4 sm:-mx-6 px-4 sm:px-6 py-1.5 mb-3 bg-background/95 backdrop-blur-sm"
-                  style={{ top: `${SEARCH_BAR_H}px` }}
-                >
+                <GroupHeading>
                   {/* The quiz builder's track heading, to the letter — one
                       `LABEL | Full name` line at `text-xs` — except that here
                       it is a button: the designation is a page of its own
@@ -245,135 +447,23 @@ export default function WikiHome() {
                       {track.name}
                     </p>
                   )}
-                </div>
+                </GroupHeading>
 
                 {/* `items-start`: a card is as tall as what it holds. Left to
                     stretch, a row's short card (no readiness bar) would be padded
                     out to match its tall neighbour and read as half empty. */}
                 <div className="grid grid-cols-1 items-start gap-3 sm:grid-cols-2">
                   {trackExams.map(exam => {
-                    const examId = examNameToTrackKey(exam.name)
-                    const examIdCleaned = exam.name.replace(/^Exam\s+/i, '').replace(/\s*\([^)]*\)\s*$/, '').trim()
-                    const match = syllabi.find(s => s.examId === examIdCleaned)
-                      ?? syllabi.find(s => wikiExamIdToProgressKey(s.examId) === examNameToTrackKey(exam.name))
-                    const status = examProgress[examId]
-                    const variantMatch = matchesSelectedVariant(examId, examIdCleaned, examVariants[examId])
-                    const isInProgress = status === 'in_progress' && variantMatch
-                    const isCompleted = status === 'completed' && variantMatch
-                    const targetDate = targetDates[examId]
-                    // Exams 6–9 are still only a syllabus outline. They stay
-                    // listed (candidates should see what's coming) but greyed
-                    // out, so the card never reads as material to study from.
-                    const contentStatus = examStatus(examId)
-                    const inDevelopment = contentStatus === 'development'
-
-                    const now = new Date()
-                    const examRecords = match
-                      ? masteryRecords.filter(r => r.exam_id === examId)
-                      : []
-                    // The same score the exam page's Exam Readiness Score card
-                    // and the Dashboard radial show — one definition of readiness.
-                    const readiness = match
-                      ? computeExamReadiness(match, examRecords, now, examId)
-                      : null
-
-                    // No readiness readout on an exam with nothing to be ready for.
-                    const hasProgressBar = isInProgress && !!readiness && readiness.counts.total > 0 && !inDevelopment
-
-                    // The exam's place on the ladder, as a colour (blue at
-                    // Exam P through to red at Exam 9 — see lib/examColors.ts).
-                    // Scoped to the card as custom properties, so the highlight
-                    // below is one use of it rather than the only place the
-                    // colour exists.
-                    const accent = examAccentStyle(examId)
-
+                    const model = cardModels.get(exam.path)
+                    if (!model) return null
+                    // The tour's marker stays on the ladder's card, so an
+                    // exam in progress doesn't carry it twice.
                     return (
-                      <Link key={exam.path} to={wikiRoute({ kind: 'exam', name: exam.name })} data-tour={examId === 'P' ? 'exam-p' : undefined}>
-                        <Card
-                          style={accent}
-                          className={cn(
-                            'transition-all duration-150 overflow-hidden ring-1 ring-transparent',
-                            isInProgress && !inDevelopment && 'bg-primary/10',
-                            // Unbuilt exam: no card surface, a dashed outline and
-                            // dimmed contents — the same "nothing here yet" material
-                            // the empty-state placeholders use. The page is still
-                            // reachable (it holds the published syllabus), it just
-                            // never looks like something to study from.
-                            inDevelopment && 'bg-muted/40 border border-dashed border-muted-foreground/30 shadow-none',
-                            // Hover picks the exam's own colour up off the card's
-                            // custom properties. Exams only: a requirement with no
-                            // rung on the ladder keeps the neutral hover.
-                            accent
-                              ? 'hover:bg-[var(--exam-accent-soft)] hover:ring-[var(--exam-accent-muted)]'
-                              : isInProgress && !inDevelopment
-                                ? 'hover:bg-primary/25'
-                                : inDevelopment
-                                  ? 'hover:bg-muted/60'
-                                  : 'hover:bg-accent/30',
-                          )}
-                        >
-                          <CardHeader className="flex-row items-start gap-3 space-y-0 p-4 pb-3">
-                            {/* The exam's logo — its monogram in its own place
-                                on the colour ramp. A visual anchor, so a card
-                                is recognisable before its title is read; the
-                                title beside it is what actually names the exam,
-                                which is why the tile is aria-hidden. */}
-                            <ExamLogo examKey={examId} size="lg" muted={inDevelopment} className="mt-0.5" />
-                            <div className="min-w-0 flex-1">
-                              <div className="flex items-center justify-between gap-2">
-                                <CardTitle className={cn('text-base leading-snug', inDevelopment && 'text-muted-foreground')}>
-                                  {examDisplayName(exam.name)}
-                                </CardTitle>
-                                {isCompleted && (
-                                  <CheckMark className="h-4 w-4 text-emerald-500" />
-                                )}
-                              </div>
-                              {match && (
-                                <CardDescription className="mt-0.5">{match.examTopic}</CardDescription>
-                              )}
-
-                              {/* Status pill — hidden for completed exams. "In
-                                  development" outranks everything: it says the
-                                  material isn't there, which is true whatever the
-                                  candidate has marked this exam as. */}
-                              {!isCompleted && (inDevelopment || isInProgress || contentStatus === 'beta') && (
-                                <div className="mt-2 flex flex-wrap gap-1.5">
-                                  {/* The quiz builder's pills, to the letter:
-                                      blue is the info hue a scheduled date
-                                      takes, being part-way through is neutral,
-                                      and Beta is the amber caution (style
-                                      guide §4.1). They used to be one size
-                                      smaller and a different colour here. */}
-                                  {inDevelopment ? (
-                                    <span className="inline-flex items-center gap-1 rounded-full border border-dashed border-muted-foreground/40 px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                                      <Hammer className="h-3 w-3" aria-hidden="true" />
-                                      In development — not yet available
-                                    </span>
-                                  ) : isInProgress ? (
-                                    <span className={cn(
-                                      'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium',
-                                      targetDate
-                                        ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
-                                        : 'bg-muted text-muted-foreground',
-                                    )}>
-                                      {targetDate ? `Exam: ${formatTargetDate(targetDate)}` : 'In progress'}
-                                    </span>
-                                  ) : (
-                                    <span className="inline-flex items-center rounded-full bg-amber-500/15 px-2 py-0.5 text-xs font-medium text-amber-600 dark:text-amber-400">
-                                      Beta
-                                    </span>
-                                  )}
-                                </div>
-                              )}
-                            </div>
-                          </CardHeader>
-
-                          {/* Progress bar — in-progress only, not for completed */}
-                          {hasProgressBar && readiness && (
-                            <ReadinessBar readiness={readiness} className="px-4 pb-4" />
-                          )}
-                        </Card>
-                      </Link>
+                      <ExamGuideCard
+                        key={exam.path}
+                        model={model}
+                        tourId={model.examId === 'P' ? 'exam-p' : undefined}
+                      />
                     )
                   })}
                 </div>

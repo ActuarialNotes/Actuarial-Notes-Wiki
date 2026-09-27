@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { flashcardShelfExams } from './flashcardShelf'
+import { completedTodayConcepts, flashcardShelfExams } from './flashcardShelf'
+import type { DailyLevelUp } from './dailyProgressStore'
 import type { WikiExamSyllabus } from './wikiParser'
 
 function syllabus(examId: string, examLabel: string): WikiExamSyllabus {
@@ -39,5 +40,55 @@ describe('flashcardShelfExams', () => {
   it('keeps the ladder order among several exams in progress', () => {
     const out = flashcardShelfExams(SYLLABI, { 'CAS-5': 'in_progress', FM: 'in_progress' }, {})
     expect(ids(out).slice(0, 2)).toEqual(['FM-2', '5'])
+  })
+})
+
+describe('completedTodayConcepts', () => {
+  const levelUp = (conceptSlug: string, at: string, to: DailyLevelUp['to'] = 'level1'): DailyLevelUp =>
+    ({ conceptSlug, from: 'new', to, at })
+  const CONCEPTS = ['Probability', 'Bayes Theorem', 'Conditional Probability', 'Variance']
+
+  it('lists the syllabus concepts levelled up today, most recent first', () => {
+    const out = completedTodayConcepts(
+      [
+        levelUp('Bayes Theorem', '2026-09-27T09:00:00.000Z'),
+        levelUp('Variance', '2026-09-27T14:30:00.000Z'),
+        levelUp('Probability', '2026-09-27T11:15:00.000Z'),
+      ],
+      CONCEPTS,
+    )
+    expect(out).toEqual(['Variance', 'Probability', 'Bayes Theorem'])
+  })
+
+  it('lists a concept that levelled up twice today once, at its latest', () => {
+    const out = completedTodayConcepts(
+      [
+        levelUp('Variance', '2026-09-27T09:00:00.000Z', 'level1'),
+        levelUp('Probability', '2026-09-27T10:00:00.000Z'),
+        levelUp('Variance', '2026-09-27T12:00:00.000Z', 'level2'),
+      ],
+      CONCEPTS,
+    )
+    expect(out).toEqual(['Variance', 'Probability'])
+  })
+
+  it("spells each concept the syllabus's way, whatever case the level-up carries", () => {
+    const out = completedTodayConcepts([levelUp('bayes theorem', '2026-09-27T09:00:00.000Z')], CONCEPTS)
+    expect(out).toEqual(['Bayes Theorem'])
+  })
+
+  it("leaves off concepts this exam's syllabus doesn't list", () => {
+    const out = completedTodayConcepts(
+      [
+        levelUp('Present Value', '2026-09-27T09:00:00.000Z'),
+        levelUp('Variance', '2026-09-27T08:00:00.000Z'),
+      ],
+      CONCEPTS,
+    )
+    expect(out).toEqual(['Variance'])
+  })
+
+  it('is empty with nothing completed today', () => {
+    expect(completedTodayConcepts([], CONCEPTS)).toEqual([])
   })
 })

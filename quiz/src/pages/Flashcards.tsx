@@ -49,6 +49,7 @@ import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { useTodayPlanCardNames } from '@/hooks/useTodayPlanCardNames'
+import { useTodayCompletions } from '@/hooks/useTodayCompletions'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath } from '@/lib/wikiRoutes'
@@ -67,7 +68,7 @@ import {
 } from '@/lib/flashcardStudy'
 import { buildCollectedList } from '@/lib/collectedList'
 import { wikiExamIdToProgressKey, type WikiExamSyllabus } from '@/lib/wikiParser'
-import { flashcardShelfExams } from '@/lib/flashcardShelf'
+import { completedTodayConcepts, flashcardShelfExams } from '@/lib/flashcardShelf'
 import { Button } from '@/components/ui/button'
 import { WikiArticle, stripFrontmatter, extractMathBlockquotes, extractImages } from '@/components/wiki/WikiArticle'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
@@ -197,8 +198,9 @@ const COLLECTED_FILTER_ID = '__collected__'
 // exam's concepts out as individual tiles under their learning objectives (see
 // ExamCardShelf), and the trailing "Collected" pill swaps in the same tiles for
 // what the learner has already unlocked — the fastest route from "I've
-// collected these" to "put them in my deck". Today's study plan is the first
-// section of the selected exam's shelf (see TodayStudyPlanSection).
+// collected these" to "put them in my deck". Today's study plan and what was
+// completed today are the first sections of the selected exam's shelf (see
+// ExamCardShelf).
 function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
   const { syllabi, loading: syllabiLoading } = useWikiSyllabus()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
@@ -578,8 +580,7 @@ function ShelfSection({
 // objectives so the deck the plan is asking for is the one that's easiest to
 // build. It used to be a card pinned to the top of the deck; it belongs here,
 // where cards are added. Follows the exam pill rather than the primary exam, so
-// it always describes the shelf below it. A hairline separates it from the
-// syllabus proper.
+// it always describes the shelf below it.
 function TodayStudyPlanSection({
   syllabus,
   masteryRecords,
@@ -612,7 +613,6 @@ function TodayStudyPlanSection({
       masteryOf={masteryOf}
       isCollected={isCollected}
       onCardsAdded={onCardsAdded}
-      className="pb-5 border-b border-border"
       emptyHint={
         <p className="text-xs text-muted-foreground py-1">
           {plan?.config?.targetReadyDate ? (
@@ -641,10 +641,14 @@ interface ExamShelfGroup {
 }
 
 // An exam's shelf. The same tiles as the Collected shelf, grouped under today's
-// study plan (for an exam in progress — one being browsed has no plan to show)
-// and then the exam's learning objectives — the syllabus structure
-// the pack cards carried survives the switch from packs to cards, and each
-// section keeps its own "add what's missing" action.
+// study plan (for an exam in progress — one being browsed has no plan to show),
+// then the exam's concepts completed today (its level-ups, the same ones the
+// Dashboard's Today card lists — shown whenever there are any, plan or no plan,
+// since a quiz can level up an exam that isn't being studied), and then the
+// exam's learning objectives — the syllabus structure the pack cards carried
+// survives the switch from packs to cards, and each section keeps its own "add
+// what's missing" action. A hairline closes off the day's sections from the
+// syllabus proper.
 function ExamCardShelf({
   group,
   masteryOf,
@@ -660,18 +664,38 @@ function ExamCardShelf({
   masteryLoading: boolean
   onCardsAdded?: () => void
 }) {
+  const levelUps = useTodayCompletions(wikiExamIdToProgressKey(group.examId))
+  const completedToday = useMemo(
+    () => completedTodayConcepts(levelUps, group.allConcepts),
+    [levelUps, group.allConcepts],
+  )
+  const showToday = group.studying || completedToday.length > 0
+
   return (
     <div className="space-y-5">
       <ShelfSummary concepts={group.allConcepts} isCollected={isCollected} onCardsAdded={onCardsAdded} />
-      {group.studying && (
-        <TodayStudyPlanSection
-          syllabus={group.syllabus}
-          masteryRecords={masteryRecords}
-          masteryLoading={masteryLoading}
-          masteryOf={masteryOf}
-          isCollected={isCollected}
-          onCardsAdded={onCardsAdded}
-        />
+      {showToday && (
+        <div className="space-y-5 pb-5 border-b border-border">
+          {group.studying && (
+            <TodayStudyPlanSection
+              syllabus={group.syllabus}
+              masteryRecords={masteryRecords}
+              masteryLoading={masteryLoading}
+              masteryOf={masteryOf}
+              isCollected={isCollected}
+              onCardsAdded={onCardsAdded}
+            />
+          )}
+          {completedToday.length > 0 && (
+            <ShelfSection
+              title="Completed Today"
+              concepts={completedToday}
+              masteryOf={masteryOf}
+              isCollected={isCollected}
+              onCardsAdded={onCardsAdded}
+            />
+          )}
+        </div>
       )}
       {group.learningObjectives.map(lo => (
         <ShelfSection

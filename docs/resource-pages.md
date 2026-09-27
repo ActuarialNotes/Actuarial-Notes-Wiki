@@ -346,3 +346,58 @@ under `Resources/`, and held to zero errors on the whole shelf by
 What the lint cannot check is whether a heading is the document's own or a bullet says
 what the division says. That is the job of step 2 (a page written from an extraction)
 and step 7 (a page checked against the document by someone other than its writer).
+
+---
+
+## 5. Applying it (2026-09-27)
+
+Every page in `Resources/Books/` was rewritten to this standard from its document — 107
+by fifteen parallel agents working to one brief, `CIA Bias` by hand as the worked example
+(the distribution reference sheet is the vault's own page and kept its body). The lint
+went from **1,169 errors to 0**; `scripts/test_resource_pages.py` now holds it there.
+
+**What the documents said that the pages didn't.** Reading the real documents found
+errors on almost every page — not formatting, facts:
+
+- **Invented outlines.** The Leemis and Asimow tables of contents were largely
+  reconstructed (sections those books do not have; the SOA's own exclusions only line up
+  with the real contents). Friedland has 17 chapters in 4 parts, not 21 in 5. The CIA
+  Standards of Practice page had most of its assigned sections under the wrong titles.
+  The Ontario Regulation 664 and Insurance Companies Act pages mapped nearly every
+  section number to the wrong provision.
+- **Contradicted content.** *CIA Bias* defined bias as estimator bias, which the document
+  says it does not mean. The MCT's diversification credit is between credit-plus-market
+  and insurance risk, not insurance and market. IFRS 17.53(b) tests each contract's
+  coverage period, not the group's. The old *Davidson* body described a paper no one had
+  read; it is now written from the twelve scanned pages.
+- **Wrong metadata.** *CAS Financial Reporting* credited the wrong authors, *KPMG PACICC*
+  the wrong authors and publisher, the CIA Standards had author and publisher swapped,
+  *ASOP 43* linked the 2007 text rather than the 2011 update the outline cites, and
+  *ASOP 12* claimed a 2023 revision that is still an exposure draft.
+- **Syllabus scope.** Many pages stated a scope the content outline doesn't (ISLR's
+  MAS-I and MAS-II chapters, Cowpertwait's MAS-II chapters, Goldburd listed for one of
+  the three exams that assign it).
+
+**What could not be read.** Three study-kit texts have no copy online and no catalogue
+contents note (Agricultural Programs, KPMG Regulatory Oversight, McDonald), and Baer and
+Rendall's contents could not be fetched; each carries `Contents unavailable`. Pages whose
+documents were only partly reachable say so under `## Sources` (Tse beyond §2.2; West et
+al. at chapter level; the 2023 climate guideline, which OSFI replaced with a 2025 text;
+the 2024 Memorandum to the Appointed Actuary, now served as a 2026 page; two SCC decisions
+behind a CAPTCHA).
+
+**Found outside the resource pages, and left for their owners:**
+
+- Findings recorded with `verify_record.py` against two concept pages the documents
+  contradict: `Concepts/Base Solvency Buffer.md` (MCT §1.1.1 *divides* capital required
+  by 1.5) and `Concepts/Insurance Companies Act.md` (the actuary provisions cited to the
+  wrong sections).
+- Exam pages whose Source Material disagrees with the current outline: Exam P's chapter
+  assignments, Exam 5's objective codes for Werner & Modlin and Friedland, Exam FM's
+  scope for Brown & Kopp, and Exam 6C still listing *CIA Reinsurance Treatment*, which
+  the Fall 2026 outline dropped. Exam 6U links three readings by names no page has
+  (`Rating Agencies (Feldblum - 2011)` and two others) that may be the 6C pages' documents
+  in another edition.
+- The FM and MAS-I exam pages each had a Source Material bullet written `-[[` with no
+  space — no list item in Markdown, and invisible to the vault's tools. Fixed.
+

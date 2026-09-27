@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:6a8690ff02705c73cf8059d61b51cd9f3cdd6f44e8f47eb87143525155ba0418
+  content_hash: sha256:55af2ca1240cf521a46f2674423a263c3fc11c6dd83f263196c3e60d81610f91
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,7 +19,7 @@ verification:
 
 > $$E[\text{layer loss}] = E[N]\left(E[X \wedge b] - E[X \wedge a]\right)$$
 
-- $X$ is the ground-up severity, $N$ the claim count and $E[X \wedge u]$ the [[Limited Expected Value|limited expected value]]. Equivalently, $E[X_{(a,b]}] = \int_a^b S(x)\,dx$ with $S = 1 - F$ — the horizontal strip of a Lee diagram between $a$ and $b$.
+- $X$ is the ground-up severity, $N$ the claim count and $E[X \wedge u]$ the [[Limited Expected Value|limited expected value]]. Equivalently, $E[X_{(a,b]}] = \int_a^b S(x)\,dx$ with $S = 1 - F$ — the horizontal strip of a [[Lee Diagram|Lee diagram]] between $a$ and $b$.
 - **Frequency and severity in the layer.** $E[N]\,S(a)$ claims are expected to reach the layer. Each pays on average $\left(E[X \wedge b] - E[X \wedge a]\right)/S(a)$. This is how [[Frequency]] and [[Severity]] distributions give the expected losses by layer.
 - **Cost given the overall loss cost.** Layer loss cost $= \text{overall loss cost} \times \dfrac{E[X \wedge b] - E[X \wedge a]}{E[X]}$. In [[Increased Limits|ILF]] form, it is the basic-limits loss cost $\times\,[\text{ILF}(b) - \text{ILF}(a)]$. The bottom layer below a deductible is the [[Loss Elimination Ratio|LER]].
 - **Properties.** Layers stack: the layers of a tower add up to the ground-up loss. Expected cost per dollar of limit falls as the layer rises (the consistency test). Under inflation, a layer with no upper limit grows faster than the ground-up trend; an upper limit damps that leverage, so a capped layer can grow more slowly than the trend. Upper layers also report and develop later. That is why unpaid claims must be estimated layer by layer rather than by scaling ground-up results — see [[Excess Insurance]] and [[Excess and Deductible Rating]].

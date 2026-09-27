@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:04ef6425db7d7b03ad4f21ab9aafb42189a69d4b349457034c21087ff32a09f3
+  content_hash: sha256:9a57d87c0eaafda77a5005b8885460bc91c9833c4a2a4dbe7b70007ab8729581
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,9 +22,9 @@ verification:
 - **Approaches (Exam 8).**
   1. **Group the levels**, by banding indicated relativities or by clustering on loss characteristics. WC classes are grouped into hazard groups this way for excess pricing. Grouping on the response itself overfits unless it is checked on holdout data.
   2. **Replace the level's identity with its characteristics**: vehicle weight, price and safety features, or a territory's density and weather. A model on characteristics extends to thin and brand-new levels.
-  3. **Shrink toward the complement.** A GLMM treats the variable as a [[Random Effects|random effect]]. The [[Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020)|GLM monograph]] notes that its estimates land between the GLM's full-credibility value and the grand mean, just as in Bühlmann-Straub. Elastic net and ridge penalties ([[Regularization]]) shrink in a similar way.
+  3. **Shrink toward the complement.** A [[Generalized Linear Mixed Model|GLMM]] treats the variable as a [[Random Effects|random effect]]. The [[Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020)|GLM monograph]] notes that its estimates land between the GLM's full-credibility value and the grand mean, just as in Bühlmann-Straub. Elastic net and ridge penalties ([[Regularization]]) shrink in a similar way.
   4. **Build a separate model and enter it as an offset.** This is the monograph's approach for territories. A standalone territory model (for example, spatial smoothing) supplies loss costs, which enter the classification GLM as an [[Offset Variable|offset]]. The territory model is in turn offset for the class plan, and the two are iterated toward convergence.
-  5. **Borrow strength across outcomes.** Couret and Venter estimate each WC class's vector of claim frequencies by injury type with multi-dimensional credibility, so each injury type's estimate draws on the class's other injury counts. On holdout data this added information beyond the standard seven hazard groups.
+  5. **Borrow strength across outcomes.** Couret and Venter estimate each WC class's vector of claim frequencies by injury type with [[Multi-Dimensional Credibility|multi-dimensional credibility]], so each injury type's estimate draws on the class's other injury counts. On holdout data this added information beyond the standard seven hazard groups.
 - See [[Territorial Rating]], [[Vehicle Make and Model]] and [[Workers Compensation Classification]] for the three standard cases.
 
 > [!example]- Same Indication, Different Credibility {Example}

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:f3ce7de4c028a7026d8d522ca8685d8b73a54f5953a4be84e817ed0856641b4b
+  content_hash: sha256:d2e650e43994a2df4e402fcf82009e6387cb91ca920ccc2d287756fc326e04fd
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,10 +18,10 @@ verification:
 > $$M = Z\,\frac{A}{E} + (1 - Z) = \frac{A + K}{E + K}$$
 
 - $A$ is the risk's actual (usually capped) losses — its [[Risk Experience|own experience]]. $E$ is the losses expected for a risk of its [[Rating Class|class]] and size. $Z = E/(E + K)$ is the credibility, where $K$ is the [[Bühlmann Credibility|Bühlmann]] ratio of expected process variance to variance of the hypothetical means, in units of expected loss. As the study note requires, $Z$ lies between 0 and 1 and never falls as $E$ grows, while $Z/E$ falls — so a loss of a given size moves a large risk's mod less than a small one's.
-- **Why rate individually.** No class is perfectly [[Homogeneity|homogeneous]]: experience rating picks up the variance of the hypothetical means *within* a class. It improves equity, strengthens the incentive for loss control, and makes more risks acceptable to write. A mod is a prospective estimate of loss potential, not a charge-back for past losses. Bailey and Simon found that the more refined the class plan, the less credibility individual experience deserves.
+- **Why rate individually.** No class is perfectly [[Homogeneity|homogeneous]]: experience rating picks up the variance of the hypothetical means *within* a class. It improves equity, strengthens the incentive for loss control, and makes more risks acceptable to write. A mod is a prospective estimate of loss potential, not a charge-back for past losses. [[An Actuarial Note on the Credibility of Experience of a Single Private Passenger Car (Bailey and Simon - 1959)|Bailey and Simon]] found that the more refined the class plan, the less credibility individual experience deserves.
 - **The spectrum by size.** Manual rating → schedule and experience modification → retrospective rating or large deductibles → loss rating and self-insurance. Each step moves more of the risk, and more of the premium's sensitivity to actual losses, onto the insured ([[Commercial Lines Rating]]).
 - **Design features.** A maximum single loss or a primary/excess split (the NCCI plan weights primary losses more heavily, since they signal frequency), minimum and maximum mods, the experience period, and rules against double-counting a feature through both a schedule credit and the mod.
-- **Plan balance.** If the mods actually written average below $1.00$, manual rates must be loaded by an off-balance factor. Whether mods separate risks correctly is tested with the quintiles and efficiency tests — see [[Rating Plan]].
+- **Plan balance.** If the mods actually written average below $1.00$, manual rates must be loaded by an off-balance factor. Whether mods separate risks correctly is tested with the [[Quintiles Test|quintiles and efficiency tests]] — see [[Rating Plan]].
 
 > [!example]- Credibility Grows with Size {Example}
 > A plan uses $Z = E/(E + K)$ with $K = \$50{,}000$. Two risks in the same class both ran at $70\%$ of expected losses: a small risk with $E = \$10{,}000$ and $A = \$7{,}000$, and a large risk with $E = \$500{,}000$ and $A = \$350{,}000$. Compute both mods.

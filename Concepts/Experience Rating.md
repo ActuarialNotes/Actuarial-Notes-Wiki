@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:0b7adf752119ec0d014c57ce6616afb4868a5211621f9e180198ae8852b79063
+  content_hash: sha256:f91582f0792fdcdc22a30b67d25b679bbf10e93f3a34d782fd5e29c462b171f5
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,7 +19,7 @@ verification:
 
 - $A$ is the insured's actual losses over the experience period and $E$ the losses expected for a risk of its size and class. A mod is therefore a **relative** measure: it says how this risk compares with the average risk already reflected in the manual rate.
 - Credibility rises with size. A small risk's mod stays near $1.0$ however good or bad its recent record, because a few claims say little; a large risk approaches $Z = 1$ and effectively self-rates.
-- Losses are **capped** at a per-claim limit before entering $A$. A single catastrophic claim should not dominate a mod, and the split between primary (capped) and excess losses is the mechanism the NCCI workers compensation formula uses to weight frequency more heavily than severity — the theory being that frequency is more predictive of future experience than severity.
+- Losses are **capped** at a per-claim limit before entering $A$. A single catastrophic claim should not dominate a mod, and the [[Split Loss Plan|split]] between primary (capped) and excess losses is the mechanism the NCCI workers compensation formula uses to weight frequency more heavily than severity — the theory being that frequency is more predictive of future experience than severity.
 - Experience rating is **prospective**: it uses a completed experience period (typically three years, excluding the most recent, incomplete one) to modify the *coming* policy's premium. [[Retrospective Rating|Retrospective rating]] instead adjusts the *current* policy's premium after the fact.
 - It creates a real incentive for loss control, and an equally real incentive for **claim suppression** — paying small claims outside the policy to keep them out of the mod. Both are consequences of the same mechanism.
 - Order of application: schedule and experience modifications apply to the manual premium to give **standard premium**, which is then the base for a retro plan or a large-deductible programme.

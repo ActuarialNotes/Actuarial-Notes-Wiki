@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:04849e39f82fa4861b01c8ec70b4b8c14a5a1e1722fc9238c0de00a2c0d09759
+  content_hash: sha256:cbcff95c5969677446fa81dcb270861e08b3fb91934fbb2d9e31c52a813c853e
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,9 +19,9 @@ verification:
 
 - $\bar X_j$ is class $j$'s observed loss cost or frequency and $\bar X$ the overall (or parent-group) value. $Z_j = n_j/(n_j + k)$ is the [[Bühlmann-Straub Credibility|Bühlmann–Straub]] credibility. In the test, $O_j$ is the claims observed in class $j$ and $E_j$ the claims expected if every class had the overall frequency. If the classes really do not differ, $\chi^2$ is approximately chi-square with $m - 1$ degrees of freedom.
 - **Validity.** Actuarially, a class should be [[Homogeneity|homogeneous]] within, separated from the others, [[Credibility|credible]] and stable over time. ASOP No. 12 adds considerations for the characteristics that define classes: a demonstrated relationship to expected outcomes (causality is not required), objectivity, practicality, applicable law, and industry and business practice. See the criteria under [[Classification Ratemaking]].
-- **[[Statistical Significance|Statistical significance]].** Use a chi-square test on counts; Mahler applied the same test to each risk's results by period to show that risk means shift over time. In a [[Generalized Linear Model|GLM]], use each class coefficient's standard error, [[p-Value|p-value]] and [[Confidence Interval|confidence interval]]. Significance depends on volume: with enough data a trivial difference becomes significant, so significance is necessary but not sufficient.
-- **Estimating class loss costs.** Raw class averages over-react, because next period regresses toward the mean. Group averages ignore real differences. Credibility-weighting sits between the two. Couret and Venter extend this to *multi-dimensional* credibility: a workers compensation class's rare serious-injury frequencies are estimated with the help of its correlated, more common injury types. They validated the estimates on a holdout period with a quintiles test.
-- **Link to individual risk rating.** [[Experience Rating|Experience rating]] measures how a risk differs from others *in its class*. Bailey and Simon showed that the more refined the classes, the less credibility individual experience deserves.
+- **[[Statistical Significance|Statistical significance]].** Use a chi-square test on counts; Mahler applied the same test to each risk's results by period to show that risk means [[Shifting Risk Parameters|shift over time]]. In a [[Generalized Linear Model|GLM]], use each class coefficient's standard error, [[p-Value|p-value]] and [[Confidence Interval|confidence interval]]. Significance depends on volume: with enough data a trivial difference becomes significant, so significance is necessary but not sufficient.
+- **Estimating class loss costs.** Raw class averages over-react, because next period regresses toward the mean. Group averages ignore real differences. Credibility-weighting sits between the two. Couret and Venter extend this to *multi-dimensional* credibility: a workers compensation class's rare serious-injury frequencies are estimated with the help of its correlated, more common injury types. They validated the estimates on a holdout period with a [[Quintiles Test|quintiles test]].
+- **Link to individual risk rating.** [[Experience Rating|Experience rating]] measures how a risk differs from others *in its class*. [[An Actuarial Note on the Credibility of Experience of a Single Private Passenger Car (Bailey and Simon - 1959)|Bailey and Simon]] showed that the more refined the classes, the less credibility individual experience deserves.
 
 > [!example]- Are the Class Differences Significant? {Example}
 > Three classes: A has $10{,}000$ exposures and $480$ claims, B $6{,}000$ and $330$, C $4{,}000$ and $190$. Test at $5\%$ whether the frequencies differ. Then repeat with four times the data at the same frequencies.

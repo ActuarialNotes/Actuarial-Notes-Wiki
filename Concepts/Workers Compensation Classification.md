@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:6ddbbd80351c1d984dcef47edc5e9d772d10c8fa7ce934a8e112994c2853eae6
+  content_hash: sha256:f53b228678042cd7f80eebc3852f546e4aceca411197f0381c23895ec2733b43
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,8 +21,8 @@ verification:
 - **How employers are classified.** By the employer's *business* — the governing classification — rather than each worker's occupation. A short list of standard exceptions, such as clerical office employees and outside salespersons, is rated separately. Payroll is the [[Exposure Base|exposure base]]: it tracks the exposure, moves with wage inflation, and is verified by [[Premium Audit|premium audit]]. Classifying by business also stops payroll from being shifted into cheaper classes.
 - **Why it is high-dimensional.** Robertson (2009) put the count at about 800 classes in NCCI states, many of them small. Their loss costs are dominated by rare, severe injuries (fatal, permanent total, major permanent partial), so raw class estimates are volatile. There are four ways to deal with that:
   - *Credibility-weight* each class toward its group, as in the formula above.
-  - Use *multi-dimensional credibility* across injury types, estimating a class's rare serious-injury frequencies from its correlated, more common types (Couret and Venter).
-  - Treat class as a random effect in a GLMM, whose shrinkage is the [[Bühlmann-Straub Credibility|Bühlmann–Straub]] blend ([[Random Effects]]).
+  - Use *[[Multi-Dimensional Credibility|multi-dimensional credibility]]* across injury types, estimating a class's rare serious-injury frequencies from its correlated, more common types (Couret and Venter).
+  - Treat class as a random effect in a [[Generalized Linear Mixed Model|GLMM]], whose shrinkage is the [[Bühlmann-Straub Credibility|Bühlmann–Straub]] blend ([[Random Effects]]).
   - *[[Clustering|Cluster]]* classes with similar loss characteristics into a few groups, as NCCI's hazard groups do.
 - **Hazard groups.** NCCI moved to seven hazard groups in 2007, assigning classes by weighted [[K-Means Clustering|k-means]] on credibility-weighted vectors of excess ratios at five loss limits, from $\$100$K to $\$5$M (Robertson). Classes in a hazard group share the same excess loss factors, which NCCI uses in class ratemaking and in pricing loss limits on retrospectively rated policies. The class sets the manual rate, and [[Experience Rating|experience rating]] captures the differences between employers *within* a class.
 - In Canada, workers compensation is run by provincial boards that assess employers by industry rate group. See [[Workers Compensation Insurance]].

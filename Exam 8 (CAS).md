@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:7d708e5a6d8258920e704614742dedf9b1bcb1c7b9e73005206fc332270b731e
+  content_hash: sha256:8258cb6960ee8e53f2e9a51017edce6adad3837af89e58c3d3400bc2ef03d1af
   sources: []
   open_findings: 0
   open_critical: 0
@@ -30,7 +30,7 @@ verification:
 > 4. Measure [[Statistical Significance|statistical significance]] & [[Credibility|credibility]] of [[Rating Class|rate classes]] including [[Loss Cost|estimates of loss costs]] of [[Rating Class|rate classes]].
 > 5. Evaluate the validity of [[Rating Class|rate classes]].
 > 6. Calculate the [[Loss Cost|loss cost]] of a [[Rating Class|class or group]].
-> 7. Describe approaches to control for and integrate [[Rating Factors|rating factors]] using [[Predictive Analytics|predictive models]] for further analysis (e.g., [[Territorial Rating|territorial]], [[Increased Limits|limits]]).
+> 7. Describe approaches to [[Two-Stage Model|control for and integrate]] [[Rating Factors|rating factors]] using [[Predictive Analytics|predictive models]] for further analysis (e.g., [[Territorial Rating|territorial]], [[Increased Limits|limits]]).
 > 8. Describe approaches to [[Predictive Analytics|modeling]] with [[High Dimensional Variables|high dimensional variables]] (e.g., [[Vehicle Make and Model|vehicle make and model]], [[Workers Compensation Classification|workers compensation classes]]).
 > 9. Evaluate combinations of [[Frequency-Severity Models|ratemaking component models]] (e.g., [[Frequency-Severity Models|frequency/severity]]).
 >
@@ -48,7 +48,7 @@ verification:
 > 3. Calculate the [[Layer of Insurance|cost of the layer]] of [[Risk|risk]] given the overall [[Loss Cost|loss cost]].
 > 4. Analyze a [[Loss Sensitive Rating|loss sensitive rating plan]] (e.g., [[Retrospective Rating|retrospective rating]]).
 > 5. Analyze an [[Experience Rating|experience rating plan]].
-> 6. Assess the effectiveness of [[Rating Plan|rating plans]].
+> 6. Assess the [[Quintiles Test|effectiveness]] of [[Rating Plan|rating plans]].
 >
 > **Readings:** Bahnemann · Case Study for Fisher et al. · Fisher et al. · ISO (Commercial General Liability Experience and Schedule Rating Plan)
 

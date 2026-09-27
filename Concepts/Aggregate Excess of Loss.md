@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:23607ddd2f8c65c5ecc74d19a61db0a58f40250f6679776eb4b413eef1b2d381
+  content_hash: sha256:40b6deed452fcd2018361ea5a361df3c9539f2bfb29b9722a2aaca657e1fe3a2
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,7 +19,7 @@ verification:
 
 > $$\phi(A) = \frac{E\left[(S - A)_+\right]}{E[S]}$$
 
-- $S$ is the aggregate loss for the period: all subject losses for a stop loss, or the per-occurrence layer losses for an AAD. $\phi(A)$ is Clark's **excess charge factor**, the share of expected aggregate loss above $A$. It is the reinsurance analogue of a Table M insurance charge in [[Retrospective Rating|retrospective rating]].
+- $S$ is the aggregate loss for the period: all subject losses for a stop loss, or the per-occurrence layer losses for an AAD. $\phi(A)$ is Clark's **excess charge factor**, the share of expected aggregate loss above $A$. It is the reinsurance analogue of a Table M [[Insurance Charge|insurance charge]] in [[Retrospective Rating|retrospective rating]].
 - **The expected value is not enough.** $E[Y]$ depends on the whole distribution of $S$. Plugging in the expected loss ratio usually gives zero, because stop losses attach above it. Clark regards the collective risk model — an [[Aggregate Loss Model|aggregate loss model]] of frequency and severity — as generally the best tool for these covers.
 - **Clark's cautions on aggregate models:** don't treat the model as a black box — check its CV and percentiles against the data; occurrences, and frequency and severity, are assumed independent; numerical methods can err at low frequencies; and the model captures process variance but not parameter variance or model risk.
 - **AAD on a working layer.** The cedant keeps the first layer losses each year but stays protected if there are more than expected. The net loss cost is the layer's loss cost gross of the AAD times $\phi_{\text{AAD}}$.

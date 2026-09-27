@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:f7a88cf0e2b7afb91f32c91bc10a435acf4242b3ed287e19f6c4a34dbbb900d5
+  content_hash: sha256:565d6434af5dc32ecdbb6c09f1341d9a45e629cced4038ec8c44d11dcb8158ef
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,7 +20,7 @@ verification:
 - $f_k$ are the rating factors, $M$ the experience modification and $S$ the net schedule modification. Retrospective or large-deductible terms then act on standard premium ([[Commercial Lines Rating]]).
 - **From model to plan.** A [[Generalized Linear Model|GLM]] predicts loss cost, but a rating plan must be implementable ([[Model Implementation]]). Classification must be clear and unambiguous, and every variable must be obtainable and verifiable at quote. Factors are rounded, capped or smoothed. Any factor the model did not see, such as a new discount, has to be reconciled with the variables it overlaps. The change is checked for dislocation and off-balanced to the target rate level. Between rebuilds, the model is refreshed on newer data (Goldburd et al., §3.8–3.9).
 - **Assessing a classification plan.** Measure the proposed plan's lift over the current one on a [[Holdout Sample|holdout]], using [[Quantile Plot|quantile plots]], [[Double Lift Chart|double lift charts]], the [[Gini Index|Gini index]] and **loss ratio charts**. A loss ratio chart sorts policies by predicted loss cost divided by current premium; if the current plan were perfect, every bucket would have the same loss ratio. See [[Model Fit]].
-- **Assessing an experience rating plan: the quintiles test.** Rank risks by mod and form five groups. The *manual* loss ratio should rise with the mod, showing the plan *identifies* differences. The *standard* (modified) loss ratio should be flat, showing the plan *corrects* for them. Standard loss ratios falling as the mod rises mean too much credibility; rising means too little. The **efficiency test** compares $\mathrm{Var}(\text{standard LR}) / \mathrm{Var}(\text{manual LR})$ across plans, and the lower value is better.
+- **Assessing an experience rating plan: the [[Quintiles Test|quintiles test]].** Rank risks by mod and form five groups. The *manual* loss ratio should rise with the mod, showing the plan *identifies* differences. The *standard* (modified) loss ratio should be flat, showing the plan *corrects* for them. Standard loss ratios falling as the mod rises mean too much credibility; rising means too little. The **efficiency test** compares $\mathrm{Var}(\text{standard LR}) / \mathrm{Var}(\text{manual LR})$ across plans, and the lower value is better.
 - A [[Loss Sensitive Rating|loss-sensitive plan]] is assessed differently: whether expected losses balance, whether the insurance charges are adequate, what credit risk it carries, and what incentives it creates.
 
 > [!example]- Quintiles Test of Three Experience Rating Plans {Example}

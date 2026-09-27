@@ -18,3 +18,25 @@ test.describe('wiki', () => {
     await expect(page.locator('h1, h2').first()).toBeVisible()
   })
 })
+
+// The study guide's sticky header carries an info button beside the version
+// menu: it opens the selected sitting's dates (registration, window, results)
+// and the publisher's page they were taken from.
+test.describe('exam sitting info', () => {
+  test('opens from the study guide header and closes on Escape', async ({ page }) => {
+    await page.goto('/wiki/exam/Exam+5+(CAS)')
+
+    const info = page.getByRole('button', { name: /^About / })
+    await expect(info).toBeVisible()
+    await info.click()
+
+    const dialog = page.getByRole('dialog')
+    await expect(dialog).toBeVisible()
+    await expect(dialog.getByRole('heading', { level: 2 })).toBeVisible()
+    await expect(dialog.locator('a[href^="https://www.casact.org/"]').first()).toBeVisible()
+
+    await page.keyboard.press('Escape')
+    await expect(dialog).toBeHidden()
+    await expect(info).toBeFocused()
+  })
+})

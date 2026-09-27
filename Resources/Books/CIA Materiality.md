@@ -1,17 +1,18 @@
 ---
-Title: "Report: Materiality"
-Author: "Canadian Institute of Actuaries"
+Title: "Materiality"
+Authors: "Canadian Institute of Actuaries"
+Publisher: "Canadian Institute of Actuaries"
 Year: "2007"
 date: "2007"
-Publisher: "Canadian Institute of Actuaries"
 Type: "Report"
+Code: "207099"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/6C_CIA_Materiality.pdf)"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:93af5a1e59dd8bf4990856c8509a702ad386835b547152eb114561310bedec34
+  content_hash: sha256:5e086b6742da0afdd00c9e8a93a45614e004262d3f8cd84964f7b82c8d1db4d1
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,38 +20,48 @@ verification:
 ---
 ![[CIA Materiality - Cover.svg]]
 
-The CIA Task Force on Materiality's October 2007 report, developed *for discretionary use by actuaries* to assist in considering the aspects of **[[Materiality|materiality]]** in professional work. Read for [[Exam 6C (CAS)|Exam 6C]] objectives C1 and C5. The syllabus states that **candidates are not responsible for material in the Appendix**.
+A CIA task force report to assist Canadian actuaries in considering the aspects of materiality in the professional services they provide. It was developed by the Task Force on Materiality for discretionary use by actuaries and issued in October 2007 (document 207099); it relies to a great extent on the American Academy of Actuaries' 2006 discussion paper *Materiality – Concepts on Professionalism*, and, as a task force report, it does not constitute Standards of Practice and is not binding.
 
-## Contents
+> [!info] On the syllabus
+> - [[Exam 6C (CAS)|Exam 6C]] — objectives C1, C5; candidates are not responsible for the material in the Appendix.
 
-| Section | Subject |
-|---|---|
-| 1 | Preface |
-| 2 | Purpose and scope |
-| 3 | Background |
-| **4** | **Defining materiality** |
-| **5** | **Reflecting upon materiality: user is key** |
-| **6** | **Considerations in the determination of materiality** |
-| **7** | **Accounting vs. actuarial materiality** |
-| **8** | **Communication and disclosure** |
-| 9 | Areas for further research and discussion |
-| App. | Helpful references *(not assigned)* |
+## 1 Preface
+- The report is a first step in developing Canadian literature on materiality; its concepts apply to valuation, pricing, reserving and financial modelling work in all practice areas.
 
-## The argument
+## 2 Purpose and Scope
+- It is intended to stimulate thinking and discussion about materiality, not to impose new requirements; the CIA Rules refer to what is material in Rule 13, and Rule 6 (Control of Work Product) bears on how users view the member's work.
 
-- **Materiality is about the user, not the number.** An amount is material if it would change the decision or the understanding of the person the work is prepared for. The same dollar amount is material in one engagement and immaterial in another; §5 is the section the whole report turns on.
-- **The actuary selects the standard.** [[CIA CSOP|Standards of Practice]] §1240 requires the actuary to choose a materiality standard for the work and to have a reason for it. It is not inherited from the auditor and not read off a rule of thumb.
-- **Considerations in the determination** (§6) — the purpose of the work, the users and their needs, the entity's size and capital position, the nature of the item, and whether the effect accumulates with other items.
-- **Accounting versus actuarial materiality** (§7) — the [[External Auditor|auditor]] sets materiality for the financial statements as a whole, usually as a percentage of a benchmark such as pre-tax income or equity. The actuary's standard serves a different purpose and may legitimately be tighter or looser. The two are not required to agree, but the difference has to be understood by both, which is why §8 pairs it with communication.
-- **Communication and disclosure** (§8) — the standard used should be capable of being explained, and disclosed where a user needs it to interpret the report.
+## 3 Background
+- The question of materiality arises in the context of inclusion, of refinement and of disclosure; paragraph 1340.03 of the [[Standards of Practice]] gives "material" its ordinary meaning, judged from the point of view of a user, having regard for the purpose of the work.
 
-## Where it bites on this syllabus
+## 4 Defining Materiality
+- Per paragraph 1340.03, an omission, understatement or overstatement is material if the actuary expects it materially to affect either the user's decision making or the user's reasonable expectations.
+- [[Materiality]] is different from the range of reasonable values in an actuarial estimate and from the inherent uncertainty associated with actuarial estimates.
 
-Materiality is the threshold in half of Domain C: whether a [[Subsequent Events|subsequent event]] must be taken into account, whether a [[CIA Reliance|reliance]] needs review, how deep [[Peer Review|peer review]] goes ([[OSFI AA]] §4.4), what goes into the [[Appointed Actuary's Report]] ([[OSFI Memorandum]] §4.3), and when a difference in [[CIA PAA|PAA eligibility]] "would not differ materially."
+## 5 Reflecting Upon Materiality: User is Key
+- User perspective is typically the key element: the actuary focuses on the purpose of the work and its intended users, though indirect users may be unknown to the actuary.
+- ASOP No. 41's framework of intended audience and other users offers an approach; a clear statement of the intended users and uses of the work focuses the preparer on what may be material.
+
+## 6 Considerations in the Determination of Materiality
+- An actuary would generally select one materiality level for a task rather than separate levels for data and the overall analysis; a "tolerance level" for data is a separate concept.
+- The level relates to the purpose and intended uses of the work, such as statutory surplus or the solvency benchmark ratio for regulatory work, and exclusive reliance on quantitative benchmarks is inappropriate.
+- It also varies with the entity's size, access to capital, stage of life cycle, type of business, net retention and financial strength, becoming more rigorous as the entity approaches a threshold (paragraph 1340.04).
+
+## 7 Accounting vs. Actuarial Materiality
+- Some actuaries would argue that, for work prepared for financial reporting, the actuary's materiality level would normally be close to the accountant's or [[External Auditor|auditor's]].
+- The CIA/CICA Joint Policy Statement (subsection 1630) expects communication regarding materiality between actuary and auditor; good communication is likely to lead to appropriate levels for both and to facilitate discussion of any differences ([[Actuary and Auditor Relationship|actuary and auditor relationship]]).
+
+## 8 Communication and Disclosure
+- The actuary would usually at least consider some disclosure of the materiality level selected, weighing the complexity of the concept and the sophistication of the user; subsection 1340 did not then require disclosure of the selected level.
+
+## 9 Areas for Further Research and Discussion
+- Issues listed include how materiality relates to the range of reasonable results and to the inherent uncertainty of an estimate, and whether it should be treated differently in an internal user report.
+
+## Appendix A Helpful References Regarding Materiality
 
 ## Related readings
-- [[CIA CSOP]] §1240 — the binding standard
-- [[CIA Subsequent Events]] · [[CIA Reliance]] · [[OSFI AA]] · [[OSFI Memorandum]]
+- [[CIA CSOP]] — the CIA Standards of Practice, whose subsection 1340 (Materiality), in its 2007 form, the report quotes and builds on
 
-## Links
-- [Report: Materiality (CAS)](https://www.casact.org/sites/default/files/2021-03/6C_CIA_Materiality.pdf)
+## Sources
+- [Materiality (CIA, 2007)](https://www.casact.org/sites/default/files/2021-03/6C_CIA_Materiality.pdf) — the document: title page, memorandum, table of contents and the text of Sections 1–9
+- [CAS Exam 6C Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf) — the citation and the assigned scope

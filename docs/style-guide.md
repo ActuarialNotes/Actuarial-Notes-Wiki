@@ -92,8 +92,13 @@ One exception to "neutral by default": every exam has a **hue of its own**, and 
 carries information. `lib/examColors.ts` steps chromatically around the wheel from **blue at
 Exam P** to **red at Exam 9** — two exams next to each other on the ladder are next to each
 other on the wheel, and how far round the wheel a surface is says how far along the course of
-study it is. Only exams get one: VEE credits, the DISC courses, PCPA and the professionalism
-courses are requirements rather than rungs, so they take the neutral treatment.
+study it is. Only exams get one: VEE credits, the DISC courses and the professionalism
+courses are requirements rather than rungs, so they take the neutral treatment. **PCPA** is the
+one requirement with a hue: it is sat — an exam and a project — at a fixed point of the ACAS
+track, after Exam 5 and before Exam 6, so it takes the hue halfway between those two rungs
+(`BETWEEN_RUNGS`) without moving the ladder. That is the colour the Projects tab paints its
+briefs in — the tile on a brief's card (`components/project/BriefTile.tsx`), the exam's group
+in the new-project sheet, and the brief's section icons and outline marker.
 
 Nothing in that module paints anything. `examAccentStyle(examKey)` returns three custom
 properties to spread onto whatever element scopes the exam, and everything inside it can then

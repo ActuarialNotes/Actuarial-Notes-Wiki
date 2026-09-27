@@ -8,9 +8,15 @@
 // round the wheel a card is says how far along the course of study it is.
 //
 // Only *exams* get an accent. The VEE credits, the online courses (DISC), the
-// projects (PCPA, FAP, ATPA) and the professionalism courses are requirements
+// SOA's projects (FAP, ATPA) and the professionalism courses are requirements
 // rather than rungs of the exam ladder, so `examHue` returns undefined for
 // them and a surface falls back to its neutral treatment.
+//
+// PCPA is the one requirement with a hue. It is sat — an exam and a project —
+// at a fixed point of the ACAS track, after Exam 5 and before Exam 6, and it is
+// the exam the Projects tab colours its briefs by, so it takes the hue halfway
+// between those two rungs (`BETWEEN_RUNGS`). It is placed *between* rungs rather
+// than made one so the ladder's own hues don't move to make room for it.
 //
 // ## Using it as an exam's feature colour
 //
@@ -86,6 +92,28 @@ function ladderHues(ladder: readonly Rung[]): Record<string, number> {
 }
 
 /**
+ * Requirements sat alongside the ladder at a fixed point of it, and the two
+ * rungs either side of that point on their track (`data/tracks.ts` — the test
+ * holds the two in step). Each takes the hue halfway between its rungs.
+ */
+export const BETWEEN_RUNGS: Readonly<Record<string, readonly [string, string]>> = {
+  'CAS-PCPA': ['CAS-5', 'CAS-6'],
+}
+
+function betweenHues(ladder: Readonly<Record<string, number>>): Record<string, number> {
+  const out: Record<string, number> = {}
+  for (const [key, [before, after]] of Object.entries(BETWEEN_RUNGS)) {
+    out[key] = (ladder[before] + ladder[after]) / 2
+  }
+  return out
+}
+
+const LADDER_HUES: Readonly<Record<string, number>> = {
+  ...ladderHues(SOA_LADDER),
+  ...ladderHues(CAS_LADDER),
+}
+
+/**
  * Hue per exam key (the `exam_progress` key: `P`, `FM`, `MAS-I`, `CAS-5`, …).
  *
  * P and FM sit on both ladders. They take their position from the CAS one —
@@ -93,8 +121,8 @@ function ladderHues(ladder: readonly Rung[]): Record<string, number> {
  * candidate on either track sees the same blue on the exams they share.
  */
 export const EXAM_HUES: Readonly<Record<string, number>> = {
-  ...ladderHues(SOA_LADDER),
-  ...ladderHues(CAS_LADDER),
+  ...LADDER_HUES,
+  ...betweenHues(LADDER_HUES),
 }
 
 /** The exam's hue in degrees, or undefined for anything that isn't an exam. */

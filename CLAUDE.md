@@ -34,9 +34,11 @@ the repo root is the "database" the app is built on top of.
 
 ```
 Exam *.md, Concepts/*.md                          — wiki content (Obsidian [[wiki-links]])
-Resources/{Books,Regulation,Events,Benchmarks,Data}/*.md
-                                                  — resource pages; the dated ones feed the
-                                                    Resources timeline/heatmap (frontmatter w/ source links)
+Resources/Books/*.md                              — resource pages: one real document each, written to
+                                                    the standard in docs/resource-pages.md
+Resources/{Regulation,Events,Benchmarks,Data}/*.md
+                                                  — dated timeline entries for the flag-gated
+                                                    Research tab (frontmatter w/ source links)
 questions/<exam-id>/*.md                          — question bank (YAML frontmatter + markdown)
 Guides/<Exam page>/*.md                           — study tips, one page per tip (frontmatter: exam,
                                                     section, order). Bundled but no longer rendered —
@@ -96,7 +98,10 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
   retired comprehension checks from `comprehension-checks/<exam-id>/*.md` via the
   `virtual:comprehension-checks` vite module — nothing imports it, so it isn't bundled; see
   `docs/flashcard-collection.md`), `examSittings.ts` / `examPdfLinks.ts` (sitting dates, examiner reports, and each
-  exam's published syllabus — the PDF an exam page's header button opens),
+  exam's published syllabus — the PDF an exam page's header button opens), `examSittingDetails.ts`
+  (what the examining body publishes about each sitting — registration opening and closing, PCPA's exam and
+  submission deadlines, results release — transcribed with its source page, never extrapolated; the
+  study guide's info button reads it),
   `mnemonics.ts` / `stories.ts` (per-concept, per-avatar content), `quests.ts` (daily-quest
   catalogue), `keystoneConcepts.ts` (the per-exam keystone catalogue — see
   `docs/keystone-concepts.md`), `examGuides.ts` (the exam-page orientation guide — the tip
@@ -219,14 +224,18 @@ before touching that area**:
 - `docs/pcpa-project.md` — the **Projects tab** (`/project`, in the sidebar after Quiz; the
   PCPA study guide's **Project** button leads there too) and the **PCPA project simulator**
   behind it: every brief is a card grouped by the exam it is a project for (`data/projects.ts`
-  — PCPA is the only one yet), the reader *chooses* a brief, and the start sheet asks only what
+  — PCPA is the only one yet), the reader *chooses* a brief from the sheet the page's **+** opens
+  (each exam's briefs in that exam's colour), and its second step asks only what
   changes the attempt — **Rehearsal** (the real 16-day window, feedback after submission) or
   **Practice** (no deadline, the report checked as it is written), the language, and for a
   brief done before, fresh data or the same draw again. The briefs are `data/pcpaProjects.ts`
   (the CAS's published rules transcribed, the cases invented and labelled so), data drawn per attempt from a known model with every planted problem counted
   (`lib/pcpaData.ts`), a workspace running **webR** and **Pyodide** from their CDNs plus a
   Fortune-sheet spreadsheet, the 1,250-word / five-appendix report, submission with a clean run
-  of the code, and grading on fresh assessment data against the true model. Read before touching
+  of the code, and grading on fresh assessment data against the true model. Signed in, attempts and
+  their files are kept with the account (`lib/project/projectSync.ts`, last writer wins per row,
+  tombstones for deletions; the data sets never leave the browser); signed out they are the
+  browser's alone and the page says so. Read before touching
   anything named `pcpa*`, `project/` or `Project`. Two rules: nothing is interpreted by the app
   (the languages are their official Wasm builds), and the CAS's data sets are read-only in the
   workspace — a run can't overwrite them.
@@ -241,6 +250,18 @@ before touching that area**:
   caption or table; labels of a word or two where the picture needs them, and the words
   in the `alt` text. Read before editing a figure — they are generated, so a hand edit
   to an SVG is lost on the next run.
+- `docs/resource-pages.md` — **the resource-page standard** and the pipeline behind it. A
+  `Resources/Books/` page describes one real document and **says only what the document
+  says, naming where it read it**: the canonical frontmatter (keys, order, the `Type`
+  vocabulary, `Available from` only for an official copy — a book for sale carries its
+  `ISBN`), then cover → lead → `> [!info] On the syllabus` (one bullet per exam whose
+  Source Material lists the page) → the document's own divisions as `##` headings with
+  lists beneath → `## Related readings` → `## Sources` last. The pipeline reads the
+  document before a page is written (`scripts/resource_extract.py`: sha256, bookmark
+  outline in the vault's shape, contents pages, page text, images of scanned pages), and
+  `scripts/resource_lint.py` holds every page to the shape in CI. Also the review that
+  led to it — commentary sections and a page written without reading its (scanned)
+  paper. Read before writing or editing a resource page.
 - `docs/resource-covers.md` — the **resource cover images**: where the metadata card gets
   a source's cover (the page's first image embed), how `scripts/generate_resource_covers.py`
   draws one from front matter for the pages with no real jacket, and the rule that a real
@@ -262,6 +283,8 @@ before touching that area**:
   which reads the same table and reuses the same viewer, and the **Read PDF** button on a
   resource page's metadata card (`components/wiki/ResourceMetaCard.tsx`), which opens an
   `Available from:` PDF — an ASOP, a CAS study note — in that viewer instead of a browser tab.
+  And the study guide header's **info button** (`components/wiki/ExamSittingInfoButton.tsx`),
+  which lays the selected sitting's dates out as a timeline — see "The sitting's details".
 
 Other important `lib/` modules:
 - `parser.ts` — parses question markdown (frontmatter + body) into `Question` objects
@@ -303,9 +326,13 @@ Other important `lib/` modules:
 - `wikiParser.ts` / `wikiIndex.ts` / `wikiExtract.ts` — parse wiki pages, build search index, extract syllabus structure
 - `conceptMatch.ts` — resolves concept name variants/aliases to a canonical slug (`slugForLink`)
 - `examStatus.ts` — how far along each exam's material is, keyed by exam_progress key:
-  `ready` (P, FM), `beta` (MAS-I, MAS-II, Exam 5) or `development` (PCPA and Exams 6–9 — a
-  syllabus outline with no question bank yet; PCPA has none because CAS releases no PCPA
-  paper or sample questions to convert). The one definition; the study-guide exam grid greys
+  `ready` (P, FM), `beta` (MAS-I, MAS-II, Exam 5) or `development` (the three DISCs, PCPA
+  and Exams 6–9 — a syllabus outline with no question bank yet; PCPA has none because CAS
+  releases no PCPA paper or sample questions to convert, and the DISCs none because The
+  Institutes sells their sample questions and publishes none). The DISC pages
+  (`Exam DISC-DA (CAS).md` …) transcribe The Institutes' course syllabi, which carry no
+  section weights — `"weighted": false` in `scripts/exam_catalog.json`, and the app counts
+  each topic equally. The one definition; the study-guide exam grid greys
   those cards out with an "In development — not yet available" pill instead of a Beta label,
   the exam page shows the amber *In Development* banner (`WikiFloatingSearch`), the quiz
   builder's Beta pill reads the same helper, and `ExamsPopout` uses it (together with "does
@@ -330,8 +357,11 @@ Other important `lib/` modules:
   element scopes the exam. The first three are translucent or mid-lightness so they wash over
   either theme; `--exam-accent-vivid` is the opaque fill for a shape carrying white text.
   Anything that needs an exam's feature colour should read it from there rather than growing
-  a second palette. Non-exam requirements (VEE, the DISCs, PCPA, the professionalism courses)
-  get `undefined`, not a colour. See `docs/style-guide.md` §2.3.
+  a second palette. Non-exam requirements (VEE, the DISCs, the professionalism courses)
+  get `undefined`, not a colour. PCPA is the one exception: it is sat at a fixed point of the
+  ACAS track, so it takes the hue halfway between Exam 5 and Exam 6 (`BETWEEN_RUNGS`, held
+  to `data/tracks.ts` by the test) — the colour the Projects tab paints its briefs in. See
+  `docs/style-guide.md` §2.3.
 - `examLogo.ts` — the **exam logo**'s monogram: an exam key cut down to something that fits a
   square (`MAS-I` → `MAS` over `I`, `CAS-5` → `5`) and the type scale that says how big it may
   be drawn, as a fraction of the tile's edge. Pure and tested; the tile itself is
@@ -405,6 +435,18 @@ Other important `lib/` modules:
   `questionPreview` falls back to the first *part* of a multi-part question whose stem is an
   empty preamble — those rows previewed nothing at all before. Read by
   `components/QuestionSearchRow.tsx` (clamped to three lines) and the Search page.
+- `questionFilters.ts` — the filters **every list of questions** offers — Difficulty,
+  Concepts, Exam and Sitting — as one definition: what each matches, the options each
+  offers over a pool (with the count choosing it would leave, the other filters applied),
+  and `splitSearchFilter`, which turns the quiz builder's exam and past paper into the
+  search panel's *starting* Exam / Sitting choices rather than a narrowed pool (a panel
+  scoped to one exam hid its Exam filter). One rule lives here rather than in a surface:
+  once an exam is chosen, a sitting means that exam's paper, so a question carried over
+  (`originally_exam`) is on none of its sittings — `filterQuestions`' rule for the shelf.
+  Drawn by `components/QuestionFilterBar.tsx`, the one filter row used by the quiz search
+  panel, the concept question browser, the concept detail modal (Exam + Sitting) and the
+  Search page (Sitting); Exam and Sitting are always on screen, Sitting disabled for an
+  undated pool. Add it to any new surface that lists questions. Pure and tested.
 - `questionSource.ts` — where a question came from, for the quiz's **Info** button
   (`components/QuestionInfoButton.tsx`, in the question bar beside the flag): the sitting it
   was sat on, the published paper behind it (`data/examPdfLinks.ts`), and its vault file —
@@ -457,6 +499,15 @@ Other important `lib/` modules:
   outside every callout belongs to no objective and its stretch stays unnamed. `isSyllabusConcept`
   is the shared "this link is a concept, not a source" predicate the exam page walks too, so
   both sides count the same mentions. Pure and tested. See `docs/style-guide.md` §7.5.
+- `sittingTimeline.ts` — **one sitting, as a timeline**: the study guide header's info
+  button (`components/wiki/ExamSittingInfoButton.tsx`, beside the version menu) shows the
+  selected sitting's registration dates, window and results in date order, a check on what
+  has passed and a countdown on what comes next. This module merges a sittings row's own
+  window / registration deadline with what `data/examSittingDetails.ts` transcribes (a
+  transcribed one replaces the row's, under the publisher's label) and places today among
+  them — at most one step is *next*, none while a window is open. Which sitting is selected
+  is `hooks/useExamVersion.ts`, shared with `ExamVersionMenu` so the two can't disagree.
+  Pure and tested. See `docs/mock-exam-browser.md`.
 - `pdfChapters.ts` — the exam-PDF reader's **chapters**: a document's own outline (the
   bookmarks a viewer shows in a sidebar) turned into the marks that segment the page bar,
   resolved against the document by `hooks/usePdfChapters.ts`. Pure and tested. Chapters are
@@ -762,8 +813,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **141 test files /
-~2260 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **146 test files /
+~2350 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).
@@ -865,8 +916,11 @@ compile — don't "clean up" the flagged code as dead.
   `flashcard-comprehension-check` skill.
 - Dated resource pages (`Resources/Regulation|Events|Benchmarks/*.md`) carry frontmatter
   with a `date`/`type` and source links (`source_url`, `source_type`, `pdf_url`) — these feed
-  the Resources timeline/heatmap. `Resources/Books/*.md` use the older schema (`Available from`).
-  See `docs/research-corpus-plan.md` for the full schema.
+  the Resources timeline/heatmap. See `docs/research-corpus-plan.md` for the full schema.
+- `Resources/Books/*.md` follow `docs/resource-pages.md`: frontmatter `Title`, `Authors`,
+  `Publisher`, `Year`, `date`, `Edition`, `Type`, `Code`, `ISBN`, `Available from` — in that
+  order, every value double-quoted — then the body's fixed shape ending in `## Sources`.
+  `python3 scripts/resource_lint.py` checks it (CI: `content-validation.yml`).
 - `scripts/*.py` are batch maintenance tools for the content vault — e.g.
   `standardize_questions.py` enforces a canonical topic→concept→learning-objective mapping
   (`ontology_map.py` is the data table it consumes), `update_wiki_links.py` rebuilds
@@ -875,9 +929,9 @@ compile — don't "clean up" the flagged code as dead.
   cleanup, not for one-off edits.
 - `pdf_extract.py` / `question_classify.py` / `question_write.py` / `question_lint.py`
   (+ `mdmath.py`) — the **PDF → question bank** pipeline; see
-  `docs/pdf-question-pipeline.md`. `pdf_extract.py` is the only script in the repo with a
-  non-stdlib dependency (PyMuPDF, imported lazily so the rest stays importable without
-  it). `mdmath.py` is the math-aware text normaliser the pipeline and the linter share —
+  `docs/pdf-question-pipeline.md`. `pdf_extract.py` and `resource_extract.py` are the only
+  scripts in the repo with a non-stdlib dependency (PyMuPDF, imported lazily so the rest
+  stays importable without it). `mdmath.py` is the math-aware text normaliser the pipeline and the linter share —
   it mirrors what `quiz/src/lib/vaultMath.ts` fixes at render time and covers what the
   renderer cannot (a literal `\n` escape, an `align*` row packing formula and result,
   OCR characters). Tests: `scripts/test_pdf_pipeline.py`.
@@ -891,6 +945,13 @@ compile — don't "clean up" the flagged code as dead.
   `figures_exam_{p,fm,mas_i,mas_ii,5,6c}.py`) draws the per-concept SVGs in `Media/Figures/`
   and inserts their embeds. The figures are **generated** — edit the builder, not the SVG.
   See `docs/concept-figures.md`.
+- `resource_extract.py` / `resource_lint.py` — the **resource-page** pipeline
+  (`docs/resource-pages.md`): the first fetches a page's real document and extracts what
+  can be read rather than judged (sha256, metadata, bookmark outline as vault markdown,
+  contents pages, page text, images of pages with no text layer; an HTML page's headings
+  and citation tags; a workbook's sheets), the second is the CI lint for the page shape
+  (`--fix` canonicalises the frontmatter). Tests: `scripts/test_resource_pages.py`, which
+  also holds every page in `Resources/Books/` to zero lint errors.
 - `generate_resource_covers.py` (+ `cover_kit.py`) draws the `Resources/Books/` cover
   images in `Media/Attachments/… - Cover.svg` and inserts their embeds, skipping any page
   that already has a real jacket. Also **generated** — edit the builder.
@@ -952,7 +1013,7 @@ via `supabase secrets set`, never as `VITE_*`.
 - `supabase/migrations/` — SQL migrations, dated filenames (`YYYYMMDD_description.sql`).
   They cover: concept mastery, quiz sessions, exam progress, study plan config/cache,
   user subscriptions/gems/cosmetics, beta codes, daily completions, store expansion,
-  flashcard sync (collected cards + deck), and
+  flashcard sync (collected cards + deck), project sync (PCPA attempts + workspace files), and
   (most of the recent additions) the flag-gated **research** feature — `research_documents`,
   full-text search, ontology, projects, project questions/sections, cron.
 - `supabase/functions/` — Deno edge functions: Stripe checkout/portal/webhook/sync,

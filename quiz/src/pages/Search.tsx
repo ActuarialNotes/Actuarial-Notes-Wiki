@@ -27,6 +27,8 @@ import { QuestionAttemptBadge } from '@/components/QuestionAttemptBadge'
 import { useQuestionAttempts, type QuestionAttemptSummary } from '@/hooks/useQuestionAttempts'
 import { trackSearchQuery } from '@/lib/analytics'
 import { useActionBarHeight } from '@/hooks/useActionBarHeight'
+import { QuestionFilterBar } from '@/components/QuestionFilterBar'
+import { emptyFacets, facetOptions, matchesFacets, toggleFacet, type QuestionFacet } from '@/lib/questionFilters'
 
 type SearchType = 'concepts' | 'questions' | 'resources'
 
@@ -38,12 +40,8 @@ function linkMatchesConcept(link: string, conceptName: string): boolean {
   return !!lastSegment && lastSegment.replace(/-/g, ' ').toLowerCase() === lower
 }
 
-const EXAMS = [
-  { value: '', label: 'All Exams' },
-  { value: 'Probability', label: 'Exam P-1 (SOA)' },
-  { value: 'Financial Mathematics', label: 'Exam FM-2 (SOA)' },
-  { value: 'Exam 5', label: 'Exam 5 (CAS)' },
-]
+/** The shared filter this page draws as a dropdown; its Exam stays a row of pills. */
+const SITTING_FACET: readonly QuestionFacet[] = ['sitting']
 
 const DIFFICULTIES: { value: Difficulty | ''; label: string }[] = [
   { value: '', label: 'All' },
@@ -284,6 +282,7 @@ export default function Search() {
   const [difficulty, setDifficulty] = useState<Difficulty | ''>('')
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [conceptFilter, setConceptFilter] = useState(() => searchParams.get('concept') ?? '')
+  const [sittings, setSittings] = useState<ReadonlySet<string>>(new Set())
   const [openTopicGroups, setOpenTopicGroups] = useState<Set<string>>(new Set())
   const [useTodaysPlan, setUseTodaysPlan] = useState(false)
 
@@ -316,11 +315,13 @@ export default function Search() {
       const s = JSON.parse(raw) as {
         topic?: string; selectedSubtopics?: string[]
         difficulty?: Difficulty | ''; conceptFilter?: string; selectedIds?: string[]
+        sittings?: string[]
       }
       if (s.topic)               setTopic(s.topic)
       if (s.selectedSubtopics?.length) setSelectedSubtopics(s.selectedSubtopics)
       if (s.difficulty)          setDifficulty(s.difficulty)
       if (s.conceptFilter)       setConceptFilter(s.conceptFilter)
+      if (s.sittings?.length)    setSittings(new Set(s.sittings))
       if (s.selectedIds?.length) setSelectedIds(new Set(s.selectedIds))
     } catch { /* ignore */ }
   }, [])
@@ -366,10 +367,18 @@ export default function Search() {
     setDifficulty('')
     setSelectedIds(new Set())
     setConceptFilter('')
+    setSittings(new Set())
     setTextQuery('')
     setUseTodaysPlan(false)
     setOpenTopicGroups(new Set())
   }
+
+  // Every exam the bank holds, up the ladder — read off the bank rather than
+  // listed here, which is how this row once offered only three of them.
+  const examOptions = useMemo(
+    () => [{ value: '', label: 'All Exams' }, ...facetOptions(allQuestions, 'exam', emptyFacets())],
+    [allQuestions],
+  )
 
   const subtopics = topic ? (subtopicsByTopic[topic] ?? []) : []
 
@@ -459,7 +468,8 @@ export default function Search() {
       : plan.todaysConcepts.length
   }, [plan])
 
-  const filtered = useMemo(() => {
+  // Every filter but Sitting — the pool the Sitting dropdown offers and counts.
+  const filteredBeforeSitting = useMemo(() => {
     let result = filterQuestions(allQuestions, {
       exam: topic || undefined,
       topics: selectedSubtopics.length ? selectedSubtopics : undefined,
@@ -486,6 +496,18 @@ export default function Search() {
     }
     return result
   }, [allQuestions, topic, selectedSubtopics, difficulty, conceptFilter, textQuery, useTodaysPlan, plan])
+
+  // The page's exam rides along as the facet's Exam, so a sitting of a chosen
+  // exam means that exam's paper — the shared rule (lib/questionFilters.ts).
+  const sittingSelection = useMemo(
+    () => ({ ...emptyFacets(), exam: new Set(topic ? [topic] : []), sitting: sittings }),
+    [topic, sittings],
+  )
+
+  const filtered = useMemo(
+    () => (sittings.size === 0 ? filteredBeforeSitting : filteredBeforeSitting.filter(q => matchesFacets(q, sittingSelection))),
+    [filteredBeforeSitting, sittings, sittingSelection],
+  )
 
   // How many questions link to each concept, keyed by canonical concept name.
   // This is the wiki_link concept graph that drives concept search.
@@ -555,7 +577,7 @@ export default function Search() {
       .slice(0, 30)
   }, [wikiIndex, textQuery, searchType, conceptQuestionCounts, allQuestions])
 
-  const hasFilters = topic || selectedSubtopics.length || difficulty || conceptFilter || textQuery
+  const hasFilters = topic || selectedSubtopics.length || difficulty || conceptFilter || sittings.size || textQuery
 
   function handleStartQuiz() {
     trackSearchQuery({ query: textQuery.trim(), exam: topic, difficulty: difficulty })
@@ -564,6 +586,7 @@ export default function Search() {
     try {
       sessionStorage.setItem(SEARCH_STATE_KEY, JSON.stringify({
         topic, selectedSubtopics, difficulty, conceptFilter,
+        sittings: [...sittings],
         selectedIds: [...selectedIds],
       }))
     } catch { /* ignore */ }
@@ -578,6 +601,18 @@ export default function Search() {
       }
       params.set('selection', 'stored')
       params.set('exam', storageExam)
+      navigate(`/quiz?${params.toString()}`)
+      return
+    }
+
+    // The quiz URL has no way to name several papers, so a list narrowed to
+    // sittings is started as it stands: its questions are the selection.
+    if (sittings.size > 0 && filtered.length > 0) {
+      try {
+        sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(filtered.map(q => q.id)))
+      } catch { /* ignore */ }
+      params.set('selection', 'stored')
+      params.set('exam', topic || filtered[0].exam)
       navigate(`/quiz?${params.toString()}`)
       return
     }
@@ -719,7 +754,7 @@ export default function Search() {
               <div className="space-y-1.5">
                 <label className="text-sm font-medium">Exam</label>
                 <div className="flex flex-wrap gap-2">
-                  {EXAMS.map(exam => (
+                  {examOptions.map(exam => (
                     <button
                       key={exam.value}
                       type="button"
@@ -728,6 +763,7 @@ export default function Search() {
                         setSelectedSubtopics([])
                         setSelectedIds(new Set())
                         setConceptFilter('')
+                        setSittings(new Set())
                         setUseTodaysPlan(false)
                         setOpenTopicGroups(new Set())
                       }}
@@ -741,6 +777,17 @@ export default function Search() {
                     </button>
                   ))}
                 </div>
+              </div>
+
+              {/* Sitting — the paper a question was set on, newest first */}
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium">Sitting</label>
+                <QuestionFilterBar
+                  pool={filteredBeforeSitting}
+                  selection={sittingSelection}
+                  onToggle={(facet, value) => setSittings(toggleFacet(sittingSelection, facet, value).sitting)}
+                  facets={SITTING_FACET}
+                />
               </div>
 
               {/* Subtopics — only shown when a specific exam is selected */}

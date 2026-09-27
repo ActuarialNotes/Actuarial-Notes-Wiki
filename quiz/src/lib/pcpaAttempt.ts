@@ -14,7 +14,7 @@
  */
 
 import { PROJECT_WINDOWS, WINDOW_DAYS, type ProjectCase } from '@/data/pcpaProjects'
-import type { CaseId } from './pcpaData'
+import { CASE_IDS, type CaseId } from './pcpaData'
 import type { Appendix } from './pcpaReport'
 import type { AssessmentScore, Rating } from './pcpaAssessment'
 
@@ -45,6 +45,16 @@ export interface ProjectAttempt {
   assessment: Pick<AssessmentScore, 'gini' | 'oracleGini' | 'captured' | 'balance' | 'verdict'> | null
   /** Milliseconds spent with the workspace open and in use. */
   activeMs: number
+  /**
+   * When the record last changed. Two devices editing one attempt settle on
+   * the later of their two records (`lib/project/projectSync.ts`).
+   */
+  updatedAt: number
+  /**
+   * The account the attempt is saved to. Absent for one started signed out,
+   * which stays in this browser until someone signs in and takes it with them.
+   */
+  owner?: string
 }
 
 /**
@@ -55,6 +65,48 @@ export interface ProjectAttempt {
 export function savedMode(record: { mode?: unknown; timing?: unknown }): AttemptMode {
   if (record.mode === 'rehearsal' || record.mode === 'practice') return record.mode
   return record.timing === 'untimed' ? 'practice' : 'rehearsal'
+}
+
+/**
+ * A saved attempt made whole, or null for one that can't be read. Records come
+ * back from localStorage and from the account in whatever shape the version
+ * that saved them wrote, so every field an older one may lack gets its default
+ * here rather than at each place it is read.
+ */
+export function normalizeAttempt(raw: unknown): ProjectAttempt | null {
+  if (!raw || typeof raw !== 'object') return null
+  const a = raw as Partial<ProjectAttempt> & { timing?: unknown }
+  if (typeof a.id !== 'string' || !(CASE_IDS as string[]).includes(a.caseId as string) || typeof a.seed !== 'number') return null
+  const startedAt = typeof a.startedAt === 'number' ? a.startedAt : 0
+  const submittedAt = typeof a.submittedAt === 'number' ? a.submittedAt : null
+  return {
+    ...(a as ProjectAttempt),
+    startedAt,
+    submittedAt,
+    deadline: typeof a.deadline === 'number' ? a.deadline : null,
+    language: a.language === 'python' ? 'python' : 'r',
+    mode: savedMode(a),
+    report: a.report && typeof a.report.body === 'string' ? { body: a.report.body, appendices: Array.isArray(a.report.appendices) ? a.report.appendices : [] } : { body: '', appendices: [] },
+    answers: a.answers && typeof a.answers === 'object' ? a.answers : {},
+    attested: a.attested === true,
+    ratings: a.ratings && typeof a.ratings === 'object' ? a.ratings : {},
+    submittedCode: Array.isArray(a.submittedCode) ? a.submittedCode : [],
+    activeMs: typeof a.activeMs === 'number' ? a.activeMs : 0,
+    assessment: a.assessment ?? null,
+    updatedAt: typeof a.updatedAt === 'number' ? a.updatedAt : submittedAt ?? startedAt,
+    owner: typeof a.owner === 'string' ? a.owner : undefined,
+  }
+}
+
+/**
+ * Whether the reader signed in as `userId` (null signed out) sees an attempt.
+ * Signed in, it is their account's attempts, and any started signed out in
+ * this browser — which signing in takes into the account. Signed out, only the
+ * ones started signed out: an account's attempts stay with the account rather
+ * than being left open to whoever uses the browser next.
+ */
+export function visibleTo(attempt: Pick<ProjectAttempt, 'owner'>, userId: string | null): boolean {
+  return attempt.owner === undefined || (userId !== null && attempt.owner === userId)
 }
 
 /** Where an attempt lives: `/project/pcpa/<id>`, opened on `view` when given. */
@@ -111,6 +163,7 @@ export function newAttempt(opts: {
   mode: AttemptMode
   language: Language
   now: number
+  owner?: string
 }): ProjectAttempt {
   return {
     id: opts.id,
@@ -128,6 +181,8 @@ export function newAttempt(opts: {
     ratings: {},
     assessment: null,
     activeMs: 0,
+    updatedAt: opts.now,
+    ...(opts.owner ? { owner: opts.owner } : {}),
   }
 }
 

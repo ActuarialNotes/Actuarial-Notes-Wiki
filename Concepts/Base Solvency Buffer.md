@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:48e961a275aac0c11d84472dc3dc4cf8a39f9467d03ace396e0e4f4bea8c6a8a
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Base Solvency Buffer.md
 ---

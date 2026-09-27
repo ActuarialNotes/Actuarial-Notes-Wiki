@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { fileKind, isTextKind, normalizePath } from '@/lib/pcpaAttempt'
 import { deleteFiles, isPersistent, listFiles, putFiles, type StoredFile } from '@/lib/project/fileStore'
+import { fetchRemoteFiles, planFileSync, queueFilePush, READ_ONLY_MARKER } from '@/lib/project/projectSync'
 
 /**
  * The open PCPA attempt's files (`docs/pcpa-project.md`): what the file tree
@@ -10,7 +11,19 @@ import { deleteFiles, isPersistent, listFiles, putFiles, type StoredFile } from 
  * a keystroke in a script is a state update, not a database write — so the
  * editor stays responsive and `flush()` is there for the moments that must not
  * lose one (leaving the page, submitting).
+ *
+ * For an attempt kept with an account, each change is also queued for the
+ * account (`lib/project/projectSync.ts`), and opening the attempt first takes
+ * in whatever another device wrote since this browser last had it open.
  */
+
+/** A file an attempt starts with. `updatedAt` is when it was first written. */
+export interface SeedFile {
+  path: string
+  text: string
+  readOnly: boolean
+  updatedAt: number
+}
 
 export interface WorkspaceFile {
   path: string
@@ -28,7 +41,7 @@ interface WorkspaceState {
   status: 'idle' | 'loading' | 'ready'
   /** False when IndexedDB is unavailable and files last only for this tab. */
   persistent: boolean
-  open: (attemptId: string, seedFiles?: () => { path: string; text: string; readOnly: boolean }[]) => Promise<void>
+  open: (attemptId: string, seedFiles?: () => SeedFile[]) => Promise<void>
   close: () => void
   write: (path: string, content: string | Uint8Array, opts?: { readOnly?: boolean }) => WorkspaceFile | null
   remove: (path: string) => void
@@ -86,10 +99,17 @@ function schedule(attemptId: string, path: string, file: WorkspaceFile | null) {
   pending.set(path, file)
   if (timer) clearTimeout(timer)
   timer = setTimeout(() => { void flushPending() }, 600)
+  queueFilePush(attemptId, file
+    ? { path, text: file.text, bytes: file.bytes, size: file.size, updatedAt: file.updatedAt, readOnly: file.readOnly }
+    : { path, size: 0, updatedAt: Date.now(), readOnly: false, deleted: true })
 }
 
-/** The read-only data paths are recorded as a marker file, so a reload knows them. */
-const READ_ONLY_MARKER = '.readonly'
+// The read-only paths are recorded as a marker file (`READ_ONLY_MARKER`), so a
+// reload knows them.
+function markerRecord(attemptId: string, readOnly: Iterable<string>): StoredFile {
+  const text = [...readOnly].sort().join('\n')
+  return { attemptId, path: READ_ONLY_MARKER, text, size: 0, updatedAt: Date.now() }
+}
 
 export const usePcpaWorkspace = create<WorkspaceState>((set, get) => ({
   attemptId: null,
@@ -103,18 +123,47 @@ export const usePcpaWorkspace = create<WorkspaceState>((set, get) => ({
     set({ attemptId, files: {}, status: 'loading' })
     const persistent = await isPersistent()
     let stored = await listFiles(attemptId)
-    if (stored.length === 0 && seedFiles) {
-      const now = Date.now()
-      const seeded = seedFiles()
-      const records: StoredFile[] = seeded.map(f => ({ attemptId, path: f.path, text: f.text, size: f.text.length, updatedAt: now }))
-      const readOnly = seeded.filter(f => f.readOnly).map(f => f.path)
-      records.push({ attemptId, path: READ_ONLY_MARKER, text: readOnly.join('\n'), size: 0, updatedAt: now })
-      await putFiles(records)
-      stored = records
-    }
-    if (get().attemptId !== attemptId) return
     const marker = stored.find(f => f.path === READ_ONLY_MARKER)
     const readOnlyPaths = new Set((marker?.text ?? '').split('\n').filter(Boolean))
+    const markerBefore = markerRecord(attemptId, readOnlyPaths).text
+
+    // What another device wrote since this browser last had the attempt open.
+    const remote = await fetchRemoteFiles(attemptId)
+    if (get().attemptId !== attemptId) return
+    if (remote) {
+      const plan = planFileSync(stored, remote, readOnlyPaths)
+      await putFiles(plan.write.map(f => ({ attemptId, path: f.path, text: f.text, bytes: f.bytes, size: f.size, updatedAt: f.updatedAt })))
+      await deleteFiles(attemptId, plan.remove)
+      for (const f of plan.write) {
+        if (f.readOnly) readOnlyPaths.add(f.path)
+        else readOnlyPaths.delete(f.path)
+      }
+      for (const path of plan.remove) readOnlyPaths.delete(path)
+      for (const f of plan.push) queueFilePush(attemptId, f)
+      if (plan.write.length > 0 || plan.remove.length > 0) stored = await listFiles(attemptId)
+    }
+
+    // The data sets are drawn whenever they are missing — on a new device they
+    // come from the seed again rather than the account. The starter script only
+    // goes into a workspace that has never held a file, here or in the account.
+    if (seedFiles) {
+      const have = new Set(stored.map(f => f.path))
+      const untouched = !stored.some(f => f.path !== READ_ONLY_MARKER) && !(remote && remote.length > 0)
+      const seeds = seedFiles().filter(f => !have.has(f.path) && (f.readOnly || untouched))
+      if (seeds.length > 0) {
+        const records: StoredFile[] = seeds.map(f => ({ attemptId, path: f.path, text: f.text, size: f.text.length, updatedAt: f.updatedAt }))
+        await putFiles(records)
+        for (const f of seeds) {
+          if (f.readOnly) readOnlyPaths.add(f.path)
+          else queueFilePush(attemptId, { path: f.path, text: f.text, size: f.text.length, updatedAt: f.updatedAt, readOnly: false })
+        }
+        stored = [...stored.filter(f => !seeds.some(s => s.path === f.path)), ...records]
+      }
+    }
+
+    const nextMarker = markerRecord(attemptId, readOnlyPaths)
+    if (!marker || nextMarker.text !== markerBefore) await putFiles([nextMarker])
+    if (get().attemptId !== attemptId) return
     const files: Record<string, WorkspaceFile> = {}
     for (const f of stored) if (f.path !== READ_ONLY_MARKER) files[f.path] = toWorkspace(f, readOnlyPaths)
     set({ files, status: 'ready', persistent })

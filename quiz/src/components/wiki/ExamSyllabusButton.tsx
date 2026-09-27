@@ -12,10 +12,12 @@ import { PdfLinkButton } from '@/components/PdfLinkButton'
  * tap away inside it. It rides the header rather than the title so it stays in
  * reach however far down the syllabus the reader has scrolled.
  *
- * The header strip is one row shared with the exam's logo and its version
- * menu (`ExamVersionMenu`), so the button is drawn at the menu's height rather
- * than a full PDF button's, and without the `PDF` chip (the icon and tooltip
- * carry it).
+ * The header strip is one row shared with the exam's logo, its version menu
+ * (`ExamVersionMenu`) and the sitting's info button (`ExamSittingInfoButton`),
+ * so the button is drawn at the menu's height rather than a full PDF button's,
+ * without the `PDF` chip (the icon and tooltip carry it), and on a phone
+ * without its label too — the row is a phone's width, and PCPA's adds a
+ * Project button to it.
  *
  * An exam whose syllabus isn't in `data/examPdfLinks.ts` renders nothing —
  * `getSyllabusPdfLink` returning null is the honest answer, where a guessed URL
@@ -39,6 +41,7 @@ export function ExamSyllabusButton({
       tooltip={`${examLabel} — the published syllabus (PDF)`}
       chip={false}
       className="shrink-0 min-h-0 h-8 gap-1.5 px-2.5 py-1 text-xs"
+      labelClassName="hidden sm:inline"
     />
   )
 }

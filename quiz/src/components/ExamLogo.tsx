@@ -12,9 +12,11 @@
 // guide cards on the Study Guides home page so a guide and an exam lead their
 // cards with the same shape.
 //
-// A requirement that is not an exam has no accent (VEE, the DISCs, PCPA, the
+// A requirement that is not an exam has no accent (VEE, the DISCs, the
 // professionalism courses), so it gets a neutral tile rather than a borrowed
-// colour — same shape, same anchor, no false position on the ladder.
+// colour — same shape, same anchor, no false position on the ladder. PCPA,
+// sat at a fixed point between Exam 5 and Exam 6, is the one requirement with
+// a hue (`BETWEEN_RUNGS` in `lib/examColors.ts`).
 
 import { examAccentStyle } from '@/lib/examColors'
 import { examMonogram } from '@/lib/examLogo'

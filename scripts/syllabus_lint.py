@@ -10,7 +10,9 @@ this lint, nothing checked one. It fails a page for:
               Material` (last), each callout titled `> [!example]- Title
               {lo–hi%}` (en-dash, single spaces), weights whose ranges contain
               100%, at least one objective per section, no `### Title` repeating
-              the callout's own title
+              the callout's own title. An outline that publishes no weights
+              (`"weighted": false` in the catalogue — the DISC course syllabi)
+              has none on any section: a weight is transcribed, never invented
   links       every noun phrase of an objective — its numbered line, its
               sub-items, and the section's preamble — links a note (a warning:
               the chunker is a heuristic, and scripts/test_syllabus_lib.py is
@@ -78,7 +80,7 @@ def lint_page(rel: str, vault: vl.Vault, report: Report, exam: dict) -> sl.ExamP
     studiable = exam["status"] in ("ready", "beta")
     strict = report.error if studiable else report.warn
 
-    _lint_structure(rel, page, report)
+    _lint_structure(rel, page, report, exam)
     _lint_links(rel, page, vault, report, strict, exam)
     if exam.get("bank"):
         _lint_questions(rel, page, report, exam)
@@ -89,7 +91,7 @@ def lint_page(rel: str, vault: vl.Vault, report: Report, exam: dict) -> sl.ExamP
     return page
 
 
-def _lint_structure(rel: str, page: sl.ExamPage, report: Report) -> None:
+def _lint_structure(rel: str, page: sl.ExamPage, report: Report, exam: dict) -> None:
     nav = re.search(r'^<div class="exam-nav"\n((?:\s+data-[\w-]+="[^"]*"\n)*?\s+data-[\w-]+="[^"]*">)\n</div>$',
                     page.body, re.M)
     if not nav or 'data-current="' not in nav.group(1):
@@ -112,8 +114,19 @@ def _lint_structure(rel: str, page: sl.ExamPage, report: Report) -> None:
 
     lo_sum = hi_sum = 0
     weighted = True
+    # An outline that publishes no weights (the DISC course syllabi) is
+    # transcribed without them; the app counts each section equally.
+    unweighted = exam.get("weighted") is False
     for s in page.sections:
-        if not sl.CANONICAL_TITLE_RE.match(s.title_line):
+        if unweighted:
+            if s.weight_raw is not None:
+                report.error(rel, s.line_no, "callout-title",
+                             f"`{s.title_line.strip()}` — this exam's outline publishes no weights; "
+                             "drop the `{…}` tag rather than invent one")
+            elif not sl.UNWEIGHTED_TITLE_RE.match(s.title_line):
+                report.error(rel, s.line_no, "callout-title",
+                             f"`{s.title_line.strip()}` — write `> [!example]- Title` (single spaces)")
+        elif not sl.CANONICAL_TITLE_RE.match(s.title_line):
             report.error(rel, s.line_no, "callout-title",
                          f"`{s.title_line.strip()}` — write `> [!example]- Title {{lo–hi%}}` "
                          "(en-dash, single spaces, a weight on every section)")

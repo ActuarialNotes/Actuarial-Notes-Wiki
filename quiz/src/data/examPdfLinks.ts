@@ -292,8 +292,11 @@ const SYLLABUS_PDF_LINKS: Record<string, ExamPdfLink> = {
     url: 'https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf',
     label: 'Content Outline',
   },
+  // Fall 2026 administration (October 2026 window) — v04 of 16 Sep 2026, the
+  // "October 2026 Content Outline" the CAS Exam 7 page links. Replaces the
+  // 2023 `Exam7_Content_Outline.pdf`.
   '7-1': {
-    url: 'https://www.casact.org/sites/default/files/2023-05/Exam7_Content_Outline.pdf',
+    url: 'https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf',
     label: 'Content Outline',
   },
   'mas-i': {
@@ -321,6 +324,21 @@ const SYLLABUS_PDF_LINKS: Record<string, ExamPdfLink> = {
   '9-1': {
     url: 'https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf',
     label: 'Content Outline',
+  },
+  // The three DISC courses: The Institutes' course syllabi (© 2023, the PDFs
+  // dated Nov 2023), which the CAS DISC page links under the courses' names.
+  // They list the course's topics and sections and give no exam weights.
+  'disc-da': {
+    url: 'https://www.casact.org/sites/default/files/2022-12/DISC_DA.pdf',
+    label: 'Syllabus',
+  },
+  'disc-rm': {
+    url: 'https://www.casact.org/sites/default/files/2022-12/DISC_RM.pdf',
+    label: 'Syllabus',
+  },
+  'disc-ia': {
+    url: 'https://www.casact.org/sites/default/files/2022-12/DISC_IA.pdf',
+    label: 'Syllabus',
   },
   // Exam 6U has no entry: its current document hasn't been located on
   // casact.org. Adding a guess is the one thing this file forbids.

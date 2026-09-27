@@ -9,7 +9,8 @@ import type { ItemStatus } from '@/data/tracks'
 //   'beta'        — usable, still being filled out (MAS-I, MAS-II, Exam 5)
 //   'development' — syllabus scaffolding only: no question bank, concept
 //                   pages mostly unwritten. Not
-//                   something a candidate can study from yet (PCPA, Exams 6–9).
+//                   something a candidate can study from yet (the DISCs,
+//                   PCPA, Exams 6–9).
 //
 // Surfaces read this rather than re-deriving "not P and not FM" locally: the
 // study-guide exam grid (`pages/wiki/WikiHome.tsx`), the exam page's status
@@ -27,8 +28,12 @@ const READY_EXAMS = new Set(['P', 'FM'])
  */
 // PCPA has no bank because CAS releases no PCPA paper to convert: the exam is
 // a continuous CBT drawn from an item pool, and no sample questions are
-// published. Its page transcribes the content outline.
-const IN_DEVELOPMENT_EXAMS = new Set(['CAS-PCPA', 'CAS-6', 'CAS-7', 'CAS-8', 'CAS-9'])
+// published. Its page transcribes the content outline. The same holds for the
+// three DISC courses: The Institutes sells their sample questions in a course
+// guide and publishes none, so their pages transcribe the course syllabi.
+const IN_DEVELOPMENT_EXAMS = new Set([
+  'CAS-DA', 'CAS-RM', 'CAS-IA', 'CAS-PCPA', 'CAS-6', 'CAS-7', 'CAS-8', 'CAS-9',
+])
 
 export function examStatus(progressKey: string | null | undefined): ExamStatus {
   if (!progressKey) return 'beta'
@@ -37,7 +42,7 @@ export function examStatus(progressKey: string | null | undefined): ExamStatus {
   return 'beta'
 }
 
-/** True for the exams that are still scaffolding (PCPA, Exams 6–9). */
+/** True for the exams that are still scaffolding (the DISCs, PCPA, Exams 6–9). */
 export function isExamInDevelopment(progressKey: string | null | undefined): boolean {
   return examStatus(progressKey) === 'development'
 }

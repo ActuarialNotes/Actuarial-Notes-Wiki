@@ -16,6 +16,8 @@ describe('examMonogramLines', () => {
     expect(examMonogramLines('CAS-9')).toEqual(['9'])
     // …and for a lettered requirement: PCPA, not CAS / PCPA.
     expect(examMonogramLines('CAS-PCPA')).toEqual(['PC', 'PA'])
+    // …and the DISCs, keyed by their letters alone.
+    expect(examMonogramLines('CAS-DA')).toEqual(['DA'])
   })
 
   it('splits a hyphenated name at its own hyphen', () => {

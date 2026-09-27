@@ -20,8 +20,11 @@ export const EXAM_LABEL_TO_ID: Record<string, string> = {
   'Exam MAS-II': 'MAS-II',
   'Exam 5': 'CAS-5',
   'Exam 7': 'CAS-7',
-  // Exam 9's bank so far is the ERM questions from the 2012–2019 Exam 7 papers
-  // (`originally_exam: "Exam 7"`) — CAS moved Brehm's ERM to Exam 9.
+  'Exam 8': 'CAS-8',
+  // Exam 9's bank so far is what the syllabus moved there from older papers:
+  // the ERM questions of the 2012–2019 Exam 7 papers (CAS moved Brehm's ERM to
+  // Exam 9) and the reinsurance and catastrophe questions of the 2012–2019
+  // Exam 8 papers, each carrying `originally_exam`.
   'Exam 9': 'CAS-9',
 }
 

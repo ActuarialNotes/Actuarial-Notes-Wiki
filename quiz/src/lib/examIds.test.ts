@@ -105,7 +105,7 @@ describe('questionExamLabel', () => {
   })
 
   it('falls back to the syllabus topic for an exam with no question bank', () => {
-    expect(questionExamLabel({ examId: '8', examTopic: 'Advanced Ratemaking' }))
-      .toBe('Advanced Ratemaking')
+    expect(questionExamLabel({ examId: '6U', examTopic: 'Regulation and Financial Reporting (United States)' }))
+      .toBe('Regulation and Financial Reporting (United States)')
   })
 })

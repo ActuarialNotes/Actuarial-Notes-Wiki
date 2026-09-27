@@ -154,37 +154,44 @@ Sources: [Pearson product page](https://…) (full TOC, 10th ed.),
 Section-level detail for Ch. 10 was not available from either — chapter title only.
 ```
 
-In a vault page, provenance lives in the `Available from:` /
-`Find at your local library at:` frontmatter and the `## Links` section.
+In a vault page, provenance lives in the `## Sources` section: each source a link,
+then ` — ` and what was taken from it.
 
 ## Writing the vault page
 
 When the result should become a `Resources/Books/` page (a new syllabus reading, or
-filling in an existing stub), match the shape the app expects:
+filling in an existing one), the shape is **`docs/resource-pages.md`** — read it; this is
+the short form. `scripts/resource_lint.py` checks it and CI runs it.
 
 ```markdown
 ---
-Title: A First Course in Probability
-Author: Sheldon Ross              # or  Authors: "First Last, Second Last"
+Title: "A First Course in Probability"
+Authors: "Sheldon Ross"
+Publisher: "Pearson"
 Year: "2019"
 date: "2019"
-Edition: 10th
-Publisher: Pearson
-ISBN: 978-0134753119
-Find at your local library at: "[worldcat.org](https://…)"
+Edition: "10th"
+Type: "Textbook"
+ISBN: "978-0-13-475311-9"
 ---
-One-line framing sentence: what this is and which exam/objectives it serves, with a
-[[wiki-link]] or two.
+![[A First Course in Probability (Ross - 2019) - Cover.svg]]
+
+One paragraph on what the book is, from the publisher's description or its preface —
+first sentence 160 characters or fewer (it becomes the search description).
+
+> [!info] On the syllabus
+> - [[Exam P-1 (SOA)|Exam P]] — Chapters 1–8 (the assignment in the syllabus's words)
 
 ## 1 Combinatorial Analysis
-  - 1.1 Introduction
-  - 1.2 The Basic Principle of Counting
+- 1.1 Introduction
+- 1.2 The Basic Principle of Counting
 
 ## 2 Axioms of Probability
-  - 2.1 Introduction
+- 2.1 Introduction
 
-## Links
-- [Title (Publisher)](https://…)
+## Sources
+- [A First Course in Probability, 10th ed. (Pearson)](https://…) — table of contents
+- [Exam P Syllabus, July 2026 (SOA)](https://…) — the edition and the chapters assigned
 ```
 
 Things that are easy to get wrong and quietly break something:
@@ -192,19 +199,24 @@ Things that are easy to get wrong and quietly break something:
 - **Everything goes in `Resources/Books/`** — ASOPs, statements of principles and
   study notes included. It's the only directory the wiki collector reads for
   documents.
-- **`date:` is what puts the work on the Resources timeline.** No resolvable `date`
-  (or `Year`, or a `(YYYY)` in the filename) and the page is silently dropped from
-  the timeline. Set both `Year` and `date` to the same quoted year string.
-- **Lead with the framing sentence, before any image embed.** The timeline card's
-  summary is the page's first non-heading line — put an `![[cover.png]]` first and
-  the card's summary becomes the raw embed text. (`Resources/Books/A First Course in
-  Probability (Ross - 2019).md` has this bug; don't copy it.)
-- **Only embed an image that already exists** in `Media/Attachments/`. Most works
-  have no cover in the vault; omit rather than invent a filename.
-- Free PDF → `Available from:`; a book you'd borrow → `Find at your local library
-  at:`. Both take a markdown link, quoted.
-- Add `Type:` (`Study Note`, `Actuarial Standard of Practice`, `Statement of
-  Principles`) and `Code:` (`ASOP No. 12`, `P-21-05`) for non-book documents.
+- **The cover comes first**, then the lead. The metadata card takes the *first* image
+  embed as the jacket and lifts it out; run `python3 scripts/generate_resource_covers.py`
+  to draw one rather than omitting it (`docs/resource-covers.md`).
+- **`date:` equals `Year`** — it is what puts the work on the Resources timeline.
+- **Every value is double-quoted, and the keys come in the standard's order**:
+  `Title, Authors, Publisher, Year, date, Edition, Type, Code, ISBN, Available from`, then
+  the `verification:` block (`verify_check.py --sync` writes it). `Authors` is one key
+  however many authors; `Type` comes from the vocabulary in `docs/resource-pages.md`.
+- **A book you buy has an `ISBN` and no `Available from`.** The card builds its *Get a
+  copy* menu from the ISBN; `Available from` is only for an official copy a reader can
+  open (a free PDF, an open edition, the standards body's page). `Find at your local
+  library at` is retired.
+- **`## Sources` is last**, and names every source the page was written from with what
+  was taken from it — the provenance this skill's Step 5 asks for, on the page.
+- **The TOC is the body.** Chapters are `##` headings titled and numbered as the book
+  does, sections nested bullets beneath them. Summarising bullets under a chapter are
+  allowed only when they state what that chapter says (read, not recalled) — see
+  `docs/resource-pages.md` §2.3.
 
 ### Filename and inbound link
 
@@ -236,11 +248,11 @@ Do this *after* the TOC is transcribed and only where a page already exists in
 term, keep the source's title text as the display text, and leave entries with no
 matching concept as plain text.
 
-Note that `Basic Ratemaking (Werner - 2016).md` and the ASOP pages use a different
-body style — summarizing bullets under each chapter rather than the literal
-subsection list. That's an editorial outline, a different job from this skill. When
-one is wanted, the sourced TOC is still the scaffold: get the real chapter titles
-first, then write bullets under them.
+Some pages (`Basic Ratemaking (Werner - 2016).md`, the standards) carry summarising
+bullets under each chapter rather than the literal subsection list. The sourced TOC is
+still the scaffold: get the real chapter titles first, then write bullets under them —
+each one read from that chapter (`scripts/resource_extract.py` fetches and extracts the
+document when a free copy exists).
 
 ## When the network is restricted
 
@@ -261,7 +273,8 @@ that is exactly the failure this skill exists to prevent.
 - [ ] Two sources agree on the chapter count, or the single source is named as such
 - [ ] Numbering is continuous and verbatim; no invented or renamed entries
 - [ ] Gaps marked explicitly rather than filled in
-- [ ] Sources listed with URLs in the output (or in frontmatter + `## Links`)
+- [ ] Sources listed with URLs in the output (or, on a vault page, in `## Sources`)
 - [ ] Vault page: in `Resources/Books/`, `.md` extension, filename dash matches inbound links
-- [ ] Vault page: `Year` + `date` set (else it drops off the timeline); framing sentence before any image
+- [ ] Vault page: `Year` + `date` set (else it drops off the timeline); cover embed first, then the lead
+- [ ] Vault page: `## Sources` last; `python3 scripts/resource_lint.py "<page>"` clean
 - [ ] Vault page: `[[links]]` only to concepts that exist; `validate_links.py` clean

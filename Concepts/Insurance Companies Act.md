@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:c8c4b723ac697d0109bf616f390944a03dba9412215068cad56e7a19fe554950
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Insurance Companies Act.md
 ---

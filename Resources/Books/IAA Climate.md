@@ -1,17 +1,17 @@
 ---
 Title: "Climate-Related Scenarios Applied to Insurers and Other Financial Institutions"
-Author: "International Actuarial Association"
+Authors: "Rade Musulin, Eric Dal Moro, Sam Gutterman, Evelyn Yong and Tracey Zalk"
+Publisher: "International Actuarial Association"
 Year: "2021"
 date: "2021"
-Publisher: "International Actuarial Association"
-Type: "Research Paper"
+Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2022-05/6C_IAAClimate_082021.pdf)"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a9265ef09013a2488a082e7c520ee8f4000feaa2d7937bb86c96b89fc1332b1f
+  content_hash: sha256:e12923105471681ab6d9547628eddae74ac8e86a4cbf80c9557ffc9187e6201a
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,44 +19,75 @@ verification:
 ---
 ![[IAA Climate - Cover.svg]]
 
-The IAA's August 2021 paper on **building and using climate-related scenarios**. Read for [[Exam 6C (CAS)|Exam 6C]] objective C4. The syllabus assigns **p. 1, pp. 18–19 (Section 2.1.3) and pp. 24–26 (Section 3)**.
+An IAA paper on applying climate-related scenarios to insurers and other financial institutions, and the challenges actuaries face in doing so. Prepared for the Climate Risk Task Force of the International Actuarial Association by a drafting group led by Rade Musulin and published in August 2021, it is the third paper in the task force's series: it takes the earlier "Introduction to Climate-Related Scenarios" to the level of an individual firm in a national jurisdiction. It was written in the first half of 2021, before the IPCC's Sixth Assessment Report, and is not an International Standard of Actuarial Practice.
 
-## Structure of the paper
+> [!info] On the syllabus
+> - [[Exam 6C (CAS)|Exam 6C]] — objective C4; p. 1, pp. 18–19 (Section 2.1.3) and pp. 24–26 (Section 3).
 
-| Section | Subject |
-|---|---|
-| **1** | **Sources of information and considerations for reporting financial effects** — 1.1 general components of scenarios · 1.2 physical risk scenarios: the Climate Measurement Standards Initiative (Australia) · 1.3 transition risk (and opportunity) · 1.4 legal and reputational risks · 1.5 other sources of information |
-| **2** | **Actuarial considerations** — 2.1 the Actuaries Institute Australia information note for appointed actuaries (2.1.1 reinsurers · 2.1.2 investment management · **2.1.3 general insurers** · 2.1.4 life insurers · 2.1.5 health insurers) · 2.2 other actuarial associations |
-| **3** | **Considering interactions and systemic issues** *(assigned)* |
-| **4** | Updating scenarios and integration with **ERM frameworks** |
-| **5** | Case studies — including underwriting or investing in a region dependent on fossil fuels (a transition scenario), and climate-related risks, crop failures, food prices, supply chains and fragility |
+## Executive Summary
+- Scenario analysis is a core component of [[Climate Risk|climate-related risk]] assessment and disclosure; the paper examines the challenges actuaries face in implementing it and outlines a range of possible approaches.
+- Climate scenarios from agencies such as the IPCC lack the specificity actuaries and firms need to model their risks; the paper suggests how to add it, using Australia for illustration.
+- Physical risks are frequently considered to develop over many years, while the timing and impact of transition and legal and reputational risks may be highly uncertain.
+- Three simplified case studies illustrate the concepts, and the paper hopes scenarios will become standardized enough to compare disclosures across firms, industries and countries.
 
-## §2.1.3 — the general insurer's appointed actuary
+## Introduction
 
-The assigned pages of Section 2 set out what an [[Appointed Actuary]] of a general insurer should be looking at when reviewing the firm's approach to climate:
+## 1 Sources of Information and Considerations for Reporting Financial Effects
+- 1.1 General Components of Scenarios
+- 1.2 Physical Risk Scenarios: The Climate Measurement Standards Initiative, Australia
+- 1.3 Transition Risk (and Opportunity)
+- 1.4 Legal and Reputational Risks
+    - 1.4.1 Legal Risk
+    - 1.4.2 Reputation Risk
+- 1.5 Other Sources of Information
 
-- **Physical risk in the pricing and reserving assumptions** — whether catastrophe models and loss trends reflect a changing hazard rather than the historical record.
-- **Reinsurance dependence** — whether the programme still responds if event frequency shifts, and what happens to price and availability at renewal.
-- **Concentration and aggregation** by peril and geography (compare [[OSFI Concentration]], [[OSFI Earthquake]]).
-- **Liability exposures** — climate litigation reaching D&O and general liability books.
-- **Repricing ability** — a general insurer's principal defence is the annual contract, and the paper is explicit that this is a *shorter*-term defence than it appears, because affordability and availability become regulatory problems before they become underwriting ones.
+## 2 Actuarial Considerations
+- 2.1 Actuaries Institute Australia Information Note for Appointed Actuaries
+    - 2.1.1 Reinsurers
+    - 2.1.2 Investment Management
+    - 2.1.3 General Insurers
+        - General insurers are exposed to physical risk through claims, through the values of their investments and through credit risk; physical risk also reaches [[Workers Compensation Insurance|workers' compensation]] through heat stress and pollution at work.
+        - Transition considerations include new technologies such as battery-operated and autonomous vehicles, shifts in the industries underwritten, and sectors whose growth or contraction affects premium revenue; D&O and professional indemnity contracts carry liability risk from a firm's failure to address climate risk.
+        - Annually renewable contracts let an insurer reprice or refuse to renew and recalibrate natural hazard prices frequently, but affordability and availability pressures mean [[Appointed Actuary|Appointed Actuaries]] need to consider regulatory and reputational risks when premiums rise or coverage is limited.
+        - For reserving, many physical risks are known at the time of loss, but long-tailed lines develop longer and changes in claim payment patterns can be hard to detect from historical data.
+        - Natural hazard [[Catastrophe Modelling|catastrophe modelling]] needs to go beyond replicating historical weather: capture current climate-related risks, segregate effects by geography, update exposures, allow for demand surge and business interruption, and consider non-linearity or step changes.
+        - Time horizons: annual pricing and valuation use current risks with small annual increments; portfolio steering sensitivity-tests a trend or step change; the capital position and business rebalancing are tested under different climate scenarios.
+    - 2.1.4 Life Insurers
+    - 2.1.5 Health Insurers
+- 2.2 Other Actuarial Associations
 
-## §3 — interactions and systemic issues
+## 3 Considering Interactions and Systematic Issues
+- Actuaries should consider the broader social, economic, political and technological environment in which a firm operates, and "systems thinking" is a useful tool for this.
+- The TCFD's October 2020 guidance describes exploratory scenarios, which explore a range of plausible futures (stress tests can fall here), and normative scenarios, which plot pathways to a set outcome ([[Reverse Stress Testing|reverse stress testing]] is a variant).
+- Mapping IPCC outcomes onto liabilities and assets may miss the implicit assumption that markets, healthcare systems and supply chains keep functioning, the sequencing, correlation and cascading of effects, impacts on critical infrastructure, the correlation of assets with liabilities, and actions by one firm that create risk for another.
+- Example: property insurers raising prices may impair mortgage borrowers' ability to repay, and lenders reducing loans in high-risk areas shrinks the insurers' pool of customers.
+- Under the theory of fragility, systems that are occasionally stressed become resilient while systems that suppress volatility become fragile; developing scenarios requires multi-disciplinary teams.
 
-The paper's most quoted section, and the reason it is assigned. Climate risk does not decompose neatly: physical, transition, legal and reputational risks **interact**, and they hit an insurer's underwriting, its investments and its own operations simultaneously. A scenario that treats them separately understates the outcome — the same failure [[CIA FCT 1|FCT]] calls missing the **[[Ripple Effect|ripple effects]]**. Systemic issues are those an individual insurer cannot diversify against, because every insurer and every asset holder is exposed to the same transition at once.
+## 4 Updating Scenarios and Integration with ERM Frameworks
 
-## Scenario construction (Section 1, for context)
+## 5 Case Studies
+- 5.1 Crop Insurance in an Emerging Country
+    - 5.1.1 Climate Change Impact on Key Agriculture Perils
+    - 5.1.2 Climate Change Adaptation in Agriculture
+    - 5.1.3 Methods and Data
+    - 5.1.4 Climate Change-Driven Trends of Major Crop Yields
+- 5.2 Investing or Underwriting in a Region Dependent on Fossil Fuels: A Transition Example
+    - 5.2.1 A Country Heavily Dependent on Fossil Fuels
+    - 5.2.2 Climate Change's Impact on Qatar's Economy
+    - 5.2.3 Scenario Construction
+    - 5.2.4 Designated Timeframe
+    - 5.2.5 National Policies, Transition Scenarios, and Macroeconomics
+    - 5.2.6 Social and Technology Issues
+    - 5.2.7 Investment Considerations
+- 5.3 Climate-Related Risks, Crop Failures, Food Prices, Supply Chains, and Fragility
+    - 5.3.1 Food Price Crisis
+    - 5.3.2 Floods and Global Automobile Parts Shortages
+    - 5.3.3 Fragility
 
-- **General components** — a narrative, a time horizon far longer than a business plan, and the difficulty of setting a boundary when the driver is global.
-- **Physical scenarios** are typically built on the IPCC's shared socioeconomic pathways (the CMSI work uses SSP1, a "sustainable" pathway, and SSP5, out to 2090).
-- **Transition scenarios** depend on policy, technology and sentiment — none of which have a usable historical distribution.
-- **Legal and reputational risk** — including the risk that a **failure to anticipate consumer reaction** itself causes loss.
+## 6 Next Steps
 
-## Related readings
-- [[OSFI Climate]] — Guideline B-15, the Canadian expectations
-- [[CIA FCT 2]] §3.3 — climate scenarios in financial condition testing
-- [[OSFI Stress Testing]] — scenario design
-- [[GOC Flood Risks]] — physical risk as an insurability problem
+## References
 
-## Links
-- [Climate-Related Scenarios Applied to Insurers and Other Financial Institutions (CAS)](https://www.casact.org/sites/default/files/2022-05/6C_IAAClimate_082021.pdf)
+## Sources
+- [Climate-Related Scenarios Applied to Insurers and Other Financial Institutions (IAA, 2021)](https://www.casact.org/sites/default/files/2022-05/6C_IAAClimate_082021.pdf) — the document (CAS-hosted copy): title and credits pages, table of contents and body headings, the Executive Summary, Introduction, Section 2.1.3 and Section 3
+- [CAS Exam 6C Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf) — the citation and the assigned pages

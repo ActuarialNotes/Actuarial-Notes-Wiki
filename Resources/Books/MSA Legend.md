@@ -1,17 +1,17 @@
 ---
 Title: "MSA Legend of P&C KPI's and Descriptions"
-Author: "Market-Security Analysis & Research Inc."
+Authors: "Market-Security Analysis & Research Inc."
+Publisher: "Market-Security Analysis & Research Inc."
 Year: "2023"
 date: "2023"
-Publisher: "Market-Security Analysis & Research Inc."
-Type: "Reference Sheet"
+Type: "Glossary"
 Available from: "[msaresearch.com](https://www.msaresearch.com/wp-content/uploads/2023/09/MSA-Legend-of-PC-KPI-descriptions-1.pdf)"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1f1821f2ba46332d88a28dc131db4caa5c20aa6278acc79d7d8a1e3b4297106a
+  content_hash: sha256:1720091fffdc21c2f7a172a587d83788d5b0c6465eb880463e3fbd012c067524
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,40 +19,36 @@ verification:
 ---
 ![[MSA Legend - Cover.svg]]
 
-MSA Research's legend of Canadian P&C **key performance indicators** (revised 15 September 2023) — the definitions behind the **[[MSA Ratios]]** that analysts, regulators and [[Rating Agency|rating agencies]] use to compare Canadian insurers. Read for [[Exam 6C (CAS)|Exam 6C]] objective C4.
+MSA Research's one-page legend of property and casualty key performance indicators, each given as a ratio formula in words and in CCIR datapoint format. Revised September 15, 2023 and marked subject to change, it defines net and gross expense, claims and combined ratios (partially and fully discounted), four insurance service and reinsurance ratios, investment yield and return on equity — the [[MSA Ratios]] — addressing each datapoint as Statement, Page, Row, Column.
 
-## How the document is built
+> [!info] On the syllabus
+> - [[Exam 6C (CAS)|Exam 6C]] — objective C4.
 
-Each ratio is given twice: once **in words**, and once as a formula in **CCIR datapoint format — `StatementPageRowColumn`**. So the *Gross Expense Ratio* is
+## Net Expense, Claims and Combined Ratios
+- Net [[Expense Ratio]] — (amortization of [[Insurance Acquisition Cash Flows|insurance acquisition cash flows]] − amortization of reinsurance acquisition cash flows + general and operating expenses) ÷ (total [[Insurance Revenue|insurance revenue]] + allocation of reinsurance premiums); `(201422019-201813519+202242001)/(202209901+201811919)`
+- Net Claims Ratio (Partially Discounted) — ((incurred claims and other insurance service expenses + adjustments to [[Liability for Incurred Claims|liabilities for incurred claims]] + losses and reversal of losses on [[Onerous Contract|onerous contracts]]) − (incurred claims recovered and other reinsurance service expenses + recovery of losses and reversal on recovery of losses + adjustments to assets for incurred claims + effect of changes in non-performance risk of reinsurers)) ÷ (total insurance revenue + allocation of reinsurance premiums); `((201421019+201423019+201424019)-(201813019+201814019+201814519+201816019))/(202209901+201811919)`
+- Net [[Combined Ratio]] (Partially Discounted) — ([[Insurance Service Expenses|insurance service expense]] + general and operating expenses − amounts recoverable from reinsurers − effect of changes in non-performance risk of reinsurers) ÷ (total insurance revenue + allocation of reinsurance premiums); `(202211001+202242001-201814919-201816019)/(202209901+201811919)`
+- Net Combined Ratio (Fully Discounted) — the partially discounted numerator less (net finance income from insurance contracts + net finance income from reinsurance contracts held), over the same denominator ([[Insurance Finance Income or Expenses|insurance finance income]]); `((202211001+202242001-201814919-201816019)-(202231001+202232001))/(202209901+201811919)`
 
-> (Amortization of insurance acquisition cash flows + General and operating expenses) ÷ (Total insurance revenue)
+## Gross Expense, Claims and Combined Ratios
+- Gross Expense Ratio — (amortization of insurance acquisition cash flows + general and operating expenses) ÷ total insurance revenue; `(201422019+202242001)/(202209901)`
+- Gross Claims Ratio (Partially Discounted) — (incurred claims and other insurance service expenses + adjustments to liabilities for incurred claims + losses and reversal of losses on onerous contracts) ÷ total insurance revenue; `((201421019+201423019+201424019)/(202209901)`
+- Gross Combined Ratio (Partially Discounted) — (insurance service expense + general and operating expenses) ÷ total insurance revenue; `(202211001+202242001)/(202209901)`
+- Gross Combined Ratio (Fully Discounted) — ((insurance service expense + general and operating expenses) − net finance income from insurance contracts) ÷ total insurance revenue; `((202211001+202242001)-(202231001))/(202209901)`
 
-and, in datapoints, `(201422019+202242001)/(202209901)`.
+## Insurance Service and Reinsurance Ratios
+- Gross Insurance Service Ratio (GISR) — insurance service expense ÷ total insurance revenue; `202211001/202209901`
+- Reinsurance Impact Ratio (RIR) — net expenses from [[Reinsurance Contracts Held|reinsurance contracts held]] ÷ total insurance revenue; `202212001/202209901`
+- Net Insurance Service Ratio (NISR) — (insurance service expense + net expenses from reinsurance contracts held) ÷ (total insurance revenue + allocation of reinsurance premiums); `(202211001+202212001)/(202209901+602559932)`
+- Reinsurance Service Ratio (RSR) — amounts recoverable from reinsurers for incurred claims ÷ allocation for reinsurance premiums; `({2602559934}/{2602559932})*100`
 
-That addressing is the point of the document: every KPI is defined as arithmetic on specific cells of the [[Canadian Annual Return]], so two insurers' ratios are computed identically. The addressing is the one specified in [[CCIR Instructions]], which is why the two readings belong together.
-
-## The ratios, post-IFRS 17
-
-The definitions were rebuilt for [[IFRS 17]] and no longer resemble their IFRS 4 predecessors — the exam's favourite point about them.
-
-- **Net expense ratio** — *Numerator (in words):* Amortization of [[Insurance Acquisition Cash Flows|insurance acquisition cash flows]] − amortization of reinsurance acquisition cash flows + general and operating expenses · *Denominator:* Total [[Insurance Revenue|insurance revenue]] + allocation of reinsurance premiums
-- **Net claims ratio (partially discounted)** — *Numerator (in words):* Incurred claims and other [[Insurance Service Expenses|insurance service expenses]] + adjustments to liabilities for incurred claims + losses and reversals on [[Onerous Contract|onerous contracts]], **less** the corresponding reinsurance recoveries, recoveries of losses, adjustments to reinsurance assets, and the effect of changes in **non-performance risk of reinsurers** · *Denominator:* Insurance revenue + allocation of reinsurance premiums
-- **Net combined ratio (partially discounted)** — *Numerator (in words):* Insurance service expense + general and operating expenses − amounts recoverable from reinsurers − effect of changes in non-performance risk of reinsurers · *Denominator:* Insurance revenue + allocation of reinsurance premiums
-- **Net combined ratio (fully discounted)** — *Numerator (in words):* The above, **less** net finance income from insurance contracts and from reinsurance contracts held · *Denominator:* Insurance revenue + allocation of reinsurance premiums
-- **Gross expense ratio / gross claims ratio** — *Numerator (in words):* The same constructions before reinsurance · *Denominator:* Total insurance revenue
-
-## What to take from it
-
-- **"Premium" is gone.** The denominator is **insurance revenue**, which is not earned premium: it excludes any investment component and is recognised as coverage is provided under IFRS 17.
-- **Partially versus fully discounted.** IFRS 17 splits the result between the [[Insurance Service Result|insurance service result]] and [[Insurance Finance Income or Expenses|insurance finance income or expenses]] (the unwinding of the discount). A *partially discounted* combined ratio leaves the unwinding out; the *fully discounted* version puts it back. **The two can differ materially for a long-tailed insurer, and neither is comparable to a pre-2023 combined ratio.**
-- **Reinsurer non-performance risk enters the claims ratio** — a purely IFRS 17 artefact, and a reason a ratio can move without any change in underwriting.
-- The **loss component** on onerous contracts sits in the claims ratio, so a mispriced book shows up there rather than being deferred.
+## Investment Yield and Return on Equity
+- Investment Yield — investment return ÷ average invested assets, the return annualized by Q (Q1 = 4, Q2 = 2, Q3 = 4/3, Q4 = 1), with average invested assets taken over twelve datapoints
+- Return on Equity — net income ÷ average of total equity, annualized by Q; `({1202299901}*Q)/(({1201169901}+{1201169903}+{1201189901}+{1201189903})/2)*100`
 
 ## Related readings
-- [[CCIR Instructions]] — the datapoint addressing these formulas use
-- [[OSFI Core Return]] · [[OSFI Quarterly Return]] — the pages the datapoints refer to
-- [[Feldblum]] — how an external analyst uses ratios like these
-- [[CAS Financial Reporting]] ch. 21 — measurement tools
+- [[CCIR Instructions]] — the CCIR return whose datapoints (statement, page, row, column) the legend's formulas address
 
-## Links
-- [MSA Legend of P&C KPI's and Descriptions (MSA Research)](https://www.msaresearch.com/wp-content/uploads/2023/09/MSA-Legend-of-PC-KPI-descriptions-1.pdf)
+## Sources
+- [MSA Legend of P&C KPI's and Descriptions (MSA Research, 2023)](https://www.msaresearch.com/wp-content/uploads/2023/09/MSA-Legend-of-PC-KPI-descriptions-1.pdf) — the document: title line, revision date, and each KPI's formula in words and in datapoint format, read from the text layer and the rendered page (whose colour bands group the KPIs)
+- [CAS Exam 6C Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf) — the citation and the assigned objective

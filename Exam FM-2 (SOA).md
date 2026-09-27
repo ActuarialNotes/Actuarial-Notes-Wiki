@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:cbc5eb43e67ad5b4e9de40f3a767f688c13214535b4a165128448c0b01e3c956
+  content_hash: sha256:a897fd1cc2c102ce7d2975a58a31cd1ca0615fc0a2ff8a842f19ead2486b2cff
   sources: []
   open_findings: 0
   open_critical: 0
@@ -81,7 +81,7 @@ The **Financial Mathematics (FM-2) Exam** is a 2.5 hour SOA exam with 35 multipl
 >      - Chapters 1–6, 8–9^[excluding 1.13–1.16; 2.6; 3.10, 3.12, investment year method portion of 3.13; 5.3; 6.6–6.7, example 6.8.1, 6.10; Ch. 8: 8.3 only; 9.4, 9.5, 9.7]|
 > - [[Financial Mathematics: Theory and Practice (Brown, R. and Kopp, S. – 2024)]]
 >      - Chapters 1–9, Ch. 2: sections 1–3 only; Ch. 4: sections 1, 3–5 only; Ch. 7: sections 1–2 only
-> -[[Interest Theory – Financial Mathematics and Deterministic Valuation (Francis, J. and Ruckman, C. – 2022)]]
+> - [[Interest Theory – Financial Mathematics and Deterministic Valuation (Francis, J. and Ruckman, C. – 2022)]]
 >      - Chapters 1–16 excluding 14.04 and 14.05
 > - [[Financial Mathematics for Actuaries (Chan, Wai-Sum, and Tse, Yiu-Kuen – 2022)]]
 >      - Chapters 1–8 excluding 2.4; 3.5; 4.2, 4.5; 5.3; 6.4; 8.6, 8.7, 8.8

@@ -1,17 +1,17 @@
 ---
 Title: "Tort Reform Tension"
-Author: "Craig Harris"
+Authors: "Craig Harris"
+Publisher: "Canadian Underwriter"
 Year: "2005"
 date: "2005"
-Publisher: "Canadian Underwriter"
-Type: "Article"
+Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/6C_Harris.pdf)"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:b0f40ee995f5f7d0a4514e07900a61751ce8b8d98a01a8e4e32f67672e0f0b82
+  content_hash: sha256:c73369f390a9eac6b547f28ddfddbb260ead1576f78b8ebec78734e673ed8971
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,25 +19,36 @@ verification:
 ---
 ![[Harris - Cover.svg]]
 
-> [!warning]- Not on the Fall 2026 Exam 6C syllabus
-> The CAS dropped this reading; objective A3's litigation-trend material is now carried by [[GAO]] (third-party litigation financing). It is kept here because the [[Exam 6C (CAS)|Exam 6C]] page still lists it.
+A *Canadian Underwriter* feature on tort reform, asking whether the time has come for amendments to Canada's legal rules. Some countries, such as the U.S. and Australia, have made headway on reforming tort systems that many perceive to be unfair, costly and inefficient, targeting joint and several liability, compensatory damages, collateral sources and vicarious liability; in Canada the wave of reform experiments "has barely caused a ripple". The article opens with IBC's figures — court awards and legal expenses of about \$7.3 billion in 1998, rising to an estimated \$10 billion by 2003 — and gathers the views of insurers, risk managers, defence counsel and trial lawyers.
 
-Craig Harris's August 2005 *Canadian Underwriter* feature on why the wave of [[Tort Reform|tort reform]] that swept the United States and Australia "has barely caused a ripple in Canada."
+> [!info] On the syllabus
+> - [[Exam 6C (CAS)|Exam 6C]] — objective A2; retired from the Fall 2026 syllabus (the Fall 2025 content outline assigned the whole article).
 
-## The argument
+## Attention to the Aussie Way
+- In 2003 the Australian government undertook what its treasury called "a program of unprecedented law reform", in three main areas — establishing liability, clarifying damages and procedural reform — changing how courts decide duty of care, foreseeability, causation and remoteness of damage.
+- In the U.S., a 2005 paper by the Insurance Information Institute, AIG and the U.S. Chamber of Commerce cited reforms taken or needed across states: capping non-economic damages, modifying joint and several liability, restricting [[Punitive Damages|punitive damage]] awards and revising the collateral source rule.
 
-- **The pressure.** Insurers attributed the early-2000s hard market in commercial liability to the cost of settling and litigating claims. IBC put Canadian court awards and legal expenses at roughly \$2 billion in 1995, rising to an estimated \$5 billion — small beside the U.S. figures a Tillinghast study reported, but rising on the same slope.
-- **The Australian precedent.** Australia's 2002 reforms are held up as the model: a coordinated national program of changes to damage awards and liability limits, enacted after a liability-insurance crisis, unmatched in the common-law world for its breadth.
-- **What IBC wanted changed.** Four targets: **joint and several liability**, the **collateral source rule** (see [[Collateral Benefits]]), moving damages for lost income onto a **net rather than gross** basis, and **[[Vicarious Liability|vicarious liability]]**.
-- **Joint and several liability** — a defendant one per cent at fault can be made to pay the whole loss when the co-defendants cannot. Insurers and risk managers wanted it abolished or made proportionate; trial lawyers answered that full compensation of the innocent party is the point of the rule.
-- **The collateral source rule** — a plaintiff can recover from the wrongdoer *and* keep sick pay and disability benefits, which insurers characterise as double recovery.
-- **Gross versus net income** — future income awards are untaxed, which the plaintiff bar defends as a deliberate legislative choice rather than a windfall.
-- **Why nothing happened.** The common law, including negligence, is provincial. Reform would have to be negotiated province by province with each attorney general, and Quebec operates under the civil code. Canada also already has what the U.S. reforms sought — a judicial cap on non-pecuniary damages (see [[Davidson]]) and modest [[Punitive Damages|punitive damages]].
+## Reflecting on Reform
+- IBC vice president and general counsel Randy Bundus names the areas ripe for [[Tort Reform|reform]]: joint and several liability, the collateral sources rule, net income as the basis for damages, and [[Vicarious Liability|vicarious liability]].
+- The president of the Canadian Defence Lawyers Association calls for proactive reform; the president of the Ontario Trial Lawyers Association answers that the number one rule of law is full compensation for the innocent party.
 
-## Related readings
-- [[GAO]] — the current A3 reading on litigation-financing trends
-- [[Davidson]] — the cap on non-pecuniary general damages
-- [[Marshall]] — dispute-resolution cost in the Ontario auto system
+## What Currently Counts in Court
+- Under joint and several liability a plaintiff can recover all of the damages from one of several wrongdoers, even one only partly at fault; IBC objects to a defendant 1% at fault paying 100% of the loss.
+- RIMS supports eliminating joint and several liability for all non-economic damages; a municipal insurer (OMEX) describes being the "deep pocket" plaintiffs look for.
+- Trial lawyers argue the rule promotes settlement, and that paying on a percentage basis would mean more trials; alternatives floated include a fund similar to [[PACICC]] and making the rule proportionate.
 
-## Links
-- [Tort Reform Tension (CAS)](https://www.casact.org/sites/default/files/2021-03/6C_Harris.pdf)
+## The Bigger Picture
+- Loss-of-income damages are based on gross earnings, which do not take into account taxation and other employment deductions; the collateral source rule lets plaintiffs recover from the wrongdoer and again from insurance, sick pay and disability plans (see [[Collateral Benefits]]).
+- Trial lawyers counter that not taxing future income is a tax break the government chose to give injured people.
+
+## Vesting Vicariously
+- The introduction of Bill C-45 into Ontario, which introduced criminal liability for employees and organizations for negligent conduct, has raised awareness of vicarious liability; its two main issues are sexual abuse claims and car leasing or renting.
+- IBC's further list includes disallowing gross-up for income tax, court-ordered [[Structured Settlement|structured settlements]] for future care or income losses, and changes to prejudgment interest; a school-board insurer adds [[Class Action|class action]] reform, and risk managers add sanctions on frivolous lawsuits.
+- Trial lawyers note that caps on non-economic damages already exist in Canada and punitive damages are minimal compared with the U.S.
+- Because the common law, including negligence, is provincial (Quebec operates on the civil code), tort reform will have to be done province by province, coordinated with the attorneys general.
+
+## Sources
+- [Tort Reform Tension (Canadian Underwriter, 2005)](https://www.casact.org/sites/default/files/2021-03/6C_Harris.pdf) — the document, read as page images (its text layer is unreadable): title, standfirst, byline and date (August 1, 2005), the five section headings and the text under them
+- [Tort Reform Tension (Canadian Underwriter)](https://canadianunderwriter.ca/2005/07/31/tort-reform-tension/) — the publisher's online copy: title, byline, standfirst and section headings
+- [CAS Exam 6C Content Outline, Fall 2025](https://www.casact.org/sites/default/files/2025-05/Exam_6C_ContentOutlines_2025_F.pdf) — the citation ("Canadian Underwriter.ca, August 2005") and the objective
+- [CAS Exam 6C Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf) — no longer lists the article

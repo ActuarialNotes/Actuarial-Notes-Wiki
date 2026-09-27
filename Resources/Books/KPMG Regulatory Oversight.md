@@ -1,17 +1,16 @@
 ---
 Title: "Best Practices for Actuarial Involvement in the Regulatory Oversight of Property and Casualty Insurance Rates"
-Author: "KPMG"
+Authors: "KPMG"
+Publisher: "KPMG"
 Year: "2012"
 date: "2012"
-Publisher: "KPMG"
-Type: "Research Report"
-Available from: "CAS Study Kit (not published online)"
+Type: "Report"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:50e6917a939092eb85e543c7689581be4a2e256224a1f27c595b035a114c797c
+  content_hash: sha256:c5735c229c50735e1f25c078066850c4ba8db8968e73c6e08f24c7aeceb830e8
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,28 +18,14 @@ verification:
 ---
 ![[KPMG Regulatory Oversight - Cover.svg]]
 
-KPMG's December 2012 research report on how Canadian regulators should use actuaries when they review P&C insurance rates. Read for [[Exam 6C (CAS)|Exam 6C]] objective A1. The syllabus assigns **pp. 21–31**, excluding references to the B.C. and Ontario simplified guidelines — and notes that the **Alberta, B.C. and Ontario simplified guidelines are excluded** generally.
+A KPMG research report, dated December 2012, on best practices for actuarial involvement in the regulatory oversight of property and casualty insurance rates. The CAS supplies it to candidates in the Exam 6C study kit rather than as an online publication, so this page records only the report's citation and the pages the syllabus assigns.
 
-## The subject
+> [!info] On the syllabus
+> - [[Exam 6C (CAS)|Exam 6C]] — objective A1; pp. 21–31, except references to the B.C. and Ontario simplified guidelines (the Alberta, B.C. and Ontario simplified guidelines are excluded); in the study kit.
 
-[[Rate Regulation|Rate regulation]] in Canada is provincial and takes several forms, from **prior approval** (Ontario private passenger auto — nothing may be used until approved) through **file-and-use** to **open competition**. The report asks what an actuary employed or retained by the regulator should actually do inside each of those regimes, and what "best practice" looks like across jurisdictions with very different resources.
+> [!note] Contents unavailable
+> No copy of this report is published online; the CAS supplies it in the Exam 6C study kit. This page records only its citation and the pages assigned, from the content outline.
 
-The material in the assigned pages covers:
-
-- **The regulator's objectives** — rates that are not excessive, not inadequate, and not [[Unfair Discrimination|unfairly discriminatory]]; and the tension between those three, since a rate low enough to satisfy the first can fail the second.
-- **What the regulator's actuary reviews** — the components of the indication: [[Loss Development|development]], [[Loss Trend|trend]], [[On-Leveling|on-levelling]], expense allocation, the [[Underwriting Profit|profit provision]] and the investment income offset, [[Credibility|credibility]], and the classification differentials.
-- **Depth of review.** A full technical review of every filing is not affordable; the report addresses triage — which filings warrant depth, and what a screening review can and cannot catch.
-- **Independence and expertise.** Whether the regulator's actuary is in-house or retained, and the conflicts either arrangement creates.
-- **Consistency across jurisdictions**, and the cost imposed on a national insurer by regulators who each want the support presented differently.
-
-## Why it is on the syllabus
-
-It is the counterpart to [[FSCO Private Auto]] and [[FSCO Tech Notes]]: those say what the *insurer* must file, this says what the *regulator* does with it. The exam asks candidates to argue both sides — the case for and against prior approval, and what a regulator gains from actuarial involvement in exchange for the delay it imposes.
-
-## Related readings
-- [[FSCO Private Auto]] / [[FSCO Tech Notes]] — the Ontario filing and its technical support
-- [[FSRA Risk Management]] — principles-based supervision of rating and underwriting models
-- [[Marshall]] — a critique of the Ontario regulatory regime as a whole
-
-## Links
-- [Exam 6C content outline (CAS)](https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf)
+## Sources
+- [CAS Exam 6C Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf) — the citation (KPMG, "Research Report – Best Practices for Actuarial Involvement in the Regulatory Oversight of Property and Casualty Insurance Rates," December 2012), the assigned pages and exclusions, and its source as the study kit
+- [Syllabus of Basic Education, Spring 2022, Exam 6-Canada (Casualty Actuarial Society)](https://www.casact.org/sites/default/files/2021-03/6C_individual_textref.pdf) — the same citation in an earlier syllabus, likewise sourced from the study kit

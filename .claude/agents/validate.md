@@ -159,6 +159,12 @@ A resource page is a *map of a document*, and its most consequential claim is
 which parts of that document are examinable. Get both sources: the document
 itself, and the exam's current content outline.
 
+The page's shape is `docs/resource-pages.md`: its scope claim is the
+`> [!info] On the syllabus` callout, and the document it was written from is the
+first entry under `## Sources`. `python3 scripts/resource_extract.py --url <that
+document>` fetches it and gives you the sha256 to cite, the bookmark outline, the
+printed contents pages and every page's text (images for a scan).
+
 - **Fetch the exam's published content outline and diff the chapter/section
   range against what the page claims is on the syllabus.** The context bundle
   lists the exam pages that cite this resource and the syllabus URL for each

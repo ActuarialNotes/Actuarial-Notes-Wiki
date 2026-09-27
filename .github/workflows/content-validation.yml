@@ -11,6 +11,10 @@ name: Content Validation
 # their sections (scripts/syllabus_lint.py), then the link graph of every
 # ready/beta exam (validate_links.py --studiable). Exams 6–9 are a syllabus
 # outline by design, so their unwritten pages warn rather than fail.
+#
+# The third gates the resource pages (docs/resource-pages.md): every
+# Resources/Books/ page in the one shape the standard defines, its syllabus
+# callout matching the exam pages, its sources named (scripts/resource_lint.py).
 on:
   pull_request:
     paths:
@@ -22,6 +26,7 @@ on:
       - 'comprehension-checks/**'
       - 'scripts/validate_content.py'
       - 'scripts/syllabus_*.py'
+      - 'scripts/resource_*.py'
       - 'scripts/vault_links.py'
       - 'scripts/*.json'
       - '.claude/skills/actuarial-concept-definitions/validate_links.py'
@@ -37,6 +42,7 @@ on:
       - 'comprehension-checks/**'
       - 'scripts/validate_content.py'
       - 'scripts/syllabus_*.py'
+      - 'scripts/resource_*.py'
       - 'scripts/vault_links.py'
       - 'scripts/*.json'
       - '.claude/skills/actuarial-concept-definitions/validate_links.py'
@@ -79,3 +85,17 @@ jobs:
 
       - name: Link graph of the studiable exams
         run: python3 .claude/skills/actuarial-concept-definitions/validate_links.py --studiable
+
+  resources:
+    name: lint resource pages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Standard library only (resource_extract.py, which needs PyMuPDF, is not run here).
+      - name: Lint resource pages
+        run: python3 scripts/resource_lint.py

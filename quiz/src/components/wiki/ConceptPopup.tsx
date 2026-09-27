@@ -4,11 +4,12 @@ import { ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Lock, Maximize2
 import { type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useSplitHeight } from '@/hooks/useSplitHeight'
-import { useIsReadingPdf } from '@/hooks/usePdfReader'
+import { useIsReadingPdf, type PdfReaderDoc } from '@/hooks/usePdfReader'
 import { ConceptPagePanel } from '@/components/wiki/ConceptPagePanel'
+import { PdfPagePanel } from '@/components/wiki/PdfPagePanel'
 import { PageStackBar } from '@/components/wiki/PageStackBar'
 import { ProBadge } from '@/components/ProBadge'
-import { samePage } from '@/lib/pageStack'
+import { pdfPage, samePage, type StackPageRef } from '@/lib/pageStack'
 import { clearPageScrollMemory } from '@/lib/pageScrollMemory'
 import { useAuth } from '@/hooks/useAuth'
 import { useSoundEffects, useSoundOnToggle } from '@/hooks/useSoundEffects'
@@ -16,8 +17,8 @@ import { useSubscription } from '@/hooks/useSubscription'
 import { NavProgressBar } from '@/components/NavProgressBar'
 import { objectiveMarks } from '@/lib/syllabusChapters'
 
-function pageKey(ref: WikiEntryRef): string {
-  return `${ref.kind}:${ref.name.toLowerCase()}`
+function pageKey(ref: StackPageRef): string {
+  return ref.kind === 'pdf' ? `pdf:${ref.url}` : `${ref.kind}:${ref.name.toLowerCase()}`
 }
 
 /**
@@ -32,11 +33,16 @@ function pageKey(ref: WikiEntryRef): string {
  *
  * The footer walks the *source page's* concepts, which is a different
  * sequence from the stack: stepping to another concept starts a new trail.
+ *
+ * A document opened from a page (a resource card's Read PDF) stacks the same
+ * way, as a `PdfPagePanel`. While it is the open page its own page bar and
+ * Previous / Next take the footer's place — it is what the arrows turn — and
+ * the walk's footer comes back with the page it folds down to.
  */
 export function ConceptPopup() {
   const { open, list, index, pages, pageIndex, occurrences, occurrenceIndex, objectives, walkKind, navigate, pushPage, focusPage, closePage, close, dashboardContext, setDashboardFilter } = useConceptPopup()
   const current: WikiEntryRef | undefined = list[index]
-  const activePage: WikiEntryRef | undefined = pages[pageIndex]
+  const activePage: StackPageRef | undefined = pages[pageIndex]
   const { height, beginDrag } = useSplitHeight()
   // Focus mode — the popup's counterpart to the Flashcards page focus mode:
   // it fills the viewport (covering the sidebar, the mobile header and the
@@ -118,11 +124,18 @@ export function ConceptPopup() {
   // Following a link from a page stacks the target on top of it. A link back to
   // a page already open just returns to it, so the two get different cues: a
   // sheet sliding out, or a flick back through the ones already there.
-  const openLinkFrom = useCallback((from: number) => (ref: WikiEntryRef) => {
+  const openLinkFrom = useCallback((from: number) => (ref: StackPageRef) => {
     const reopened = useConceptPopup.getState().pages.slice(0, from + 1).some(p => samePage(p, ref))
     play(reopened ? 'page' : 'open')
     pushPage(from, ref)
   }, [play, pushPage])
+
+  // A document a page offers is opened the same way: on top of that page, with
+  // the page folded into a bar above it, instead of the app's reader sliding up
+  // over the whole popup.
+  const openPdfFrom = useCallback((from: number) => (doc: PdfReaderDoc) => {
+    openLinkFrom(from)(pdfPage(doc))
+  }, [openLinkFrom])
 
   // Keyboard: Esc steps back out, arrows navigate. Scoped to the popup so
   // typing in the sidebar search input still works.
@@ -142,13 +155,17 @@ export function ConceptPopup() {
       // Esc unwinds one layer at a time: the page just opened, then focus mode,
       // then the popup — so a link followed by mistake costs one key, not the
       // whole reading position.
+      const { pages: stacked, pageIndex: at, closePage: closeOne } = useConceptPopup.getState()
       if (e.key === 'Escape') {
-        const { pages: stacked, pageIndex: at, closePage: closeOne } = useConceptPopup.getState()
         if (stacked.length > 1) closeOne(at)
         else if (focusMode) setFocusMode(false)
         else close()
+        return
       }
-      else if (e.key === 'ArrowLeft') turnPage(-1)
+      // A document open in the stack turns its own pages with the arrows (the
+      // footer it shows says so), so they don't walk the concepts behind it.
+      if (stacked[at]?.kind === 'pdf') return
+      if (e.key === 'ArrowLeft') turnPage(-1)
       else if (e.key === 'ArrowRight') turnPage(1)
     }
     window.addEventListener('keydown', onKey)
@@ -221,6 +238,10 @@ export function ConceptPopup() {
 
   if (!open || !current || !activePage) return null
 
+  // A document is the open page: its own page bar and footer stand in for the
+  // walk's (see PdfPagePanel).
+  const readingStackedPdf = activePage.kind === 'pdf'
+
   const isCircular = !!(dashboardContext?.circular)
   // In occurrence mode, prev/next step through every mention (repeats included),
   // so bounds follow the occurrence list; the count shown stays the deduped
@@ -268,7 +289,7 @@ export function ConceptPopup() {
       data-focus={focusMode}
       style={{ height: focusMode ? undefined : `min(${height}px, 100vh)` }}
       role="complementary"
-      aria-label={`Concept: ${activePage.name}`}
+      aria-label={`${readingStackedPdf ? 'Document' : 'Concept'}: ${activePage.name}`}
     >
       {/* Drag handle — hidden in focus mode, visible otherwise */}
       {!focusMode && (
@@ -307,16 +328,29 @@ export function ConceptPopup() {
               className={`flex flex-1 flex-col min-h-0 ${i > 0 ? 'page-panel' : ''}`}
               data-page-open="true"
             >
-              <ConceptPagePanel
-                entry={page}
-                focusMode={focusMode}
-                onOpenLink={openLinkFrom(i)}
-                onClose={() => closePageAt(i)}
-                trailing={focusToggle}
-                gallerySeek={gallerySeek}
-                onGallerySeekResolved={handleGallerySeek}
-                onGalleryOpenChange={setShowGalleryInPanel}
-              />
+              {page.kind === 'pdf' ? (
+                <PdfPagePanel
+                  entry={page}
+                  focusMode={focusMode}
+                  onClose={() => closePageAt(i)}
+                  trailing={focusToggle}
+                  // The app's reader can still open over the popup (a sheet
+                  // above it has a PDF button of its own); the keys are its.
+                  keyboard={!readingPdf}
+                />
+              ) : (
+                <ConceptPagePanel
+                  entry={page}
+                  focusMode={focusMode}
+                  onOpenLink={openLinkFrom(i)}
+                  onOpenPdf={openPdfFrom(i)}
+                  onClose={() => closePageAt(i)}
+                  trailing={focusToggle}
+                  gallerySeek={gallerySeek}
+                  onGallerySeekResolved={handleGallerySeek}
+                  onGalleryOpenChange={setShowGalleryInPanel}
+                />
+              )}
             </div>
           ) : (
             <PageStackBar
@@ -333,138 +367,143 @@ export function ConceptPopup() {
       {/* Footer nav. The bar is the only position readout — there is no "N of
           M" text under it — so it has to answer "where am I" on every press,
           including Previous and a wiki-link jump backwards. Its drag bubble
-          names the concept, which is the more useful answer anyway. */}
-      <NavProgressBar
-        current={navCurrent}
-        total={navTotal}
-        label={`Concept ${index + 1} of ${list.length}`}
-        // Dragging is the same walk Previous / Next takes, just several stops at
-        // once, so it goes through `navigate` rather than setting the index
-        // itself — that's what keeps occurrence mode's concept/mention pairing
-        // (and the dashboard's circular list) working from the bar too.
-        onScrub={next => navigate(next - navCurrent)}
-        formatValue={n => (occMode ? occurrences![n - 1]?.name : list[n - 1]?.name) ?? `${n} of ${navTotal}`}
-        // …and cut into the syllabus's own sections when the walk is an exam's:
-        // a segment per learning objective, so the bar shows that these eight
-        // concepts are General Probability and the next twenty are Univariate
-        // Random Variables. The bubble then names the objective above the
-        // concept. Empty for a walk with no syllabus behind it (the dashboard,
-        // a search result), and the bar is the plain strip it always was.
-        segments={objectiveSegments}
-      />
-      <div className="flex items-stretch h-16 shrink-0 bg-background/60">
-        <button
-          type="button"
-          disabled={!canPrev}
-          data-sound="none"
-          onClick={() => turnPage(-1)}
-          className="flex-1 flex items-center justify-center gap-2 px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-        >
-          <ChevronLeft className="h-6 w-6 sm:h-5 sm:w-5" />
-          <span>Previous</span>
-        </button>
-        {/* The syllabus-filter picker — extra information, so focus mode drops
-            it and leaves the footer as just Previous / Next. The position it
-            used to sit over is read off the bar above instead, which leaves the
-            picker as the one thing here and lets it be sized as a real target.
-            A guide walk (an exam's How to Study tips) drops it too: those pages
-            are not a view of the syllabus, so every filter it offers is either
-            a no-op or a lie about what is being read. */}
-        {!focusMode && hasSyllabusToFilter && (
-        <div className="self-center flex flex-col items-center px-2 shrink-0" ref={viewingRef}>
-          <div className="relative">
+          names the concept, which is the more useful answer anyway. A document
+          open in the stack brings its own, over its pages, in place of this. */}
+      {!readingStackedPdf && (
+        <>
+          <NavProgressBar
+            current={navCurrent}
+            total={navTotal}
+            label={`Concept ${index + 1} of ${list.length}`}
+            // Dragging is the same walk Previous / Next takes, just several stops at
+            // once, so it goes through `navigate` rather than setting the index
+            // itself — that's what keeps occurrence mode's concept/mention pairing
+            // (and the dashboard's circular list) working from the bar too.
+            onScrub={next => navigate(next - navCurrent)}
+            formatValue={n => (occMode ? occurrences![n - 1]?.name : list[n - 1]?.name) ?? `${n} of ${navTotal}`}
+            // …and cut into the syllabus's own sections when the walk is an exam's:
+            // a segment per learning objective, so the bar shows that these eight
+            // concepts are General Probability and the next twenty are Univariate
+            // Random Variables. The bubble then names the objective above the
+            // concept. Empty for a walk with no syllabus behind it (the dashboard,
+            // a search result), and the bar is the plain strip it always was.
+            segments={objectiveSegments}
+          />
+          <div className="flex items-stretch h-16 shrink-0 bg-background/60">
             <button
               type="button"
-              onClick={() => { setViewingDropdownOpen(v => !v); setShowProInfo(false) }}
-              className="appearance-none px-2 py-2 rounded-md text-xs text-muted-foreground hover:text-foreground hover:bg-accent transition-colors cursor-pointer focus:outline-none inline-flex items-center gap-1"
+              disabled={!canPrev}
+              data-sound="none"
+              onClick={() => turnPage(-1)}
+              className="flex-1 flex items-center justify-center gap-2 px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
-              {currentFilter === 'study-plan' ? todayLabel : currentFilter === 'source-material' ? 'Source Material' : 'Entire Syllabus'}
-              <ChevronDown className="h-6 w-6 shrink-0" />
+              <ChevronLeft className="h-6 w-6 sm:h-5 sm:w-5" />
+              <span>Previous</span>
             </button>
-
-            {viewingDropdownOpen && (
-              <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 z-50 w-56 rounded-md bg-popover text-popover-foreground shadow-md py-1">
-                {hasStudyPlan ? (
-                  <button
-                    type="button"
-                    onClick={() => { setDashboardFilter('study-plan'); setViewingDropdownOpen(false) }}
-                    className={`w-full flex items-center px-3 py-2 text-xs hover:bg-accent transition-colors text-left ${currentFilter === 'study-plan' ? 'font-medium' : ''}`}
-                  >
-                    {todayLabel}
-                  </button>
-                ) : isLoggedInPro ? (
-                  <Link
-                    to="/dashboard"
-                    onClick={() => { close(); setViewingDropdownOpen(false) }}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-xs hover:bg-accent transition-colors"
-                  >
-                    Set up Study Plan →
-                  </Link>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => { setShowProInfo(v => !v); setViewingDropdownOpen(false) }}
-                    className="w-full flex items-center gap-1.5 px-3 py-2 text-xs opacity-50 hover:opacity-70 transition-opacity text-left"
-                  >
-                    <Lock className="h-3 w-3 shrink-0" />
-                    {todayLabel}
-                  </button>
-                )}
+            {/* The syllabus-filter picker — extra information, so focus mode drops
+                it and leaves the footer as just Previous / Next. The position it
+                used to sit over is read off the bar above instead, which leaves the
+                picker as the one thing here and lets it be sized as a real target.
+                A guide walk (an exam's How to Study tips) drops it too: those pages
+                are not a view of the syllabus, so every filter it offers is either
+                a no-op or a lie about what is being read. */}
+            {!focusMode && hasSyllabusToFilter && (
+            <div className="self-center flex flex-col items-center px-2 shrink-0" ref={viewingRef}>
+              <div className="relative">
                 <button
                   type="button"
-                  onClick={() => { setDashboardFilter('entire-syllabus'); setViewingDropdownOpen(false) }}
-                  className={`w-full flex items-center px-3 py-2 text-xs hover:bg-accent transition-colors text-left ${currentFilter === 'entire-syllabus' ? 'font-medium' : ''}`}
+                  onClick={() => { setViewingDropdownOpen(v => !v); setShowProInfo(false) }}
+                  className="appearance-none px-2 py-2 rounded-md text-xs text-muted-foreground hover:text-foreground hover:bg-accent transition-colors cursor-pointer focus:outline-none inline-flex items-center gap-1"
                 >
-                  Entire Syllabus
+                  {currentFilter === 'study-plan' ? todayLabel : currentFilter === 'source-material' ? 'Source Material' : 'Entire Syllabus'}
+                  <ChevronDown className="h-6 w-6 shrink-0" />
                 </button>
-                {hasSourceMaterial && (
-                  <button
-                    type="button"
-                    onClick={() => { setDashboardFilter('source-material'); setViewingDropdownOpen(false) }}
-                    className={`w-full flex items-center px-3 py-2 text-xs hover:bg-accent transition-colors text-left ${currentFilter === 'source-material' ? 'font-medium' : ''}`}
-                  >
-                    Source Material
-                  </button>
+
+                {viewingDropdownOpen && (
+                  <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 z-50 w-56 rounded-md bg-popover text-popover-foreground shadow-md py-1">
+                    {hasStudyPlan ? (
+                      <button
+                        type="button"
+                        onClick={() => { setDashboardFilter('study-plan'); setViewingDropdownOpen(false) }}
+                        className={`w-full flex items-center px-3 py-2 text-xs hover:bg-accent transition-colors text-left ${currentFilter === 'study-plan' ? 'font-medium' : ''}`}
+                      >
+                        {todayLabel}
+                      </button>
+                    ) : isLoggedInPro ? (
+                      <Link
+                        to="/dashboard"
+                        onClick={() => { close(); setViewingDropdownOpen(false) }}
+                        className="w-full flex items-center gap-2 px-3 py-2 text-xs hover:bg-accent transition-colors"
+                      >
+                        Set up Study Plan →
+                      </Link>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => { setShowProInfo(v => !v); setViewingDropdownOpen(false) }}
+                        className="w-full flex items-center gap-1.5 px-3 py-2 text-xs opacity-50 hover:opacity-70 transition-opacity text-left"
+                      >
+                        <Lock className="h-3 w-3 shrink-0" />
+                        {todayLabel}
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => { setDashboardFilter('entire-syllabus'); setViewingDropdownOpen(false) }}
+                      className={`w-full flex items-center px-3 py-2 text-xs hover:bg-accent transition-colors text-left ${currentFilter === 'entire-syllabus' ? 'font-medium' : ''}`}
+                    >
+                      Entire Syllabus
+                    </button>
+                    {hasSourceMaterial && (
+                      <button
+                        type="button"
+                        onClick={() => { setDashboardFilter('source-material'); setViewingDropdownOpen(false) }}
+                        className={`w-full flex items-center px-3 py-2 text-xs hover:bg-accent transition-colors text-left ${currentFilter === 'source-material' ? 'font-medium' : ''}`}
+                      >
+                        Source Material
+                      </button>
+                    )}
+                  </div>
+                )}
+
+                {showProInfo && (
+                  <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 z-50 w-60 rounded-md bg-popover text-popover-foreground shadow-md p-3">
+                    <div className="flex items-center gap-1.5 mb-1.5 text-xs font-medium">
+                      <Lock className="h-3 w-3 shrink-0" />
+                      <ProBadge />
+                      feature
+                    </div>
+                    <p className="text-xs text-muted-foreground mb-2.5">
+                      {user
+                        ? 'Upgrade to Pro to access personalised daily Study Plans.'
+                        : 'Sign in and upgrade to Pro to access personalised daily Study Plans.'
+                      }
+                    </p>
+                    <Link
+                      to={user ? '/upgrade' : '/auth'}
+                      onClick={() => setShowProInfo(false)}
+                      className="text-xs text-primary hover:underline"
+                    >
+                      {user ? 'Upgrade to Pro →' : 'Sign in →'}
+                    </Link>
+                  </div>
                 )}
               </div>
+            </div>
             )}
-
-            {showProInfo && (
-              <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 z-50 w-60 rounded-md bg-popover text-popover-foreground shadow-md p-3">
-                <div className="flex items-center gap-1.5 mb-1.5 text-xs font-medium">
-                  <Lock className="h-3 w-3 shrink-0" />
-                  <ProBadge />
-                  feature
-                </div>
-                <p className="text-xs text-muted-foreground mb-2.5">
-                  {user
-                    ? 'Upgrade to Pro to access personalised daily Study Plans.'
-                    : 'Sign in and upgrade to Pro to access personalised daily Study Plans.'
-                  }
-                </p>
-                <Link
-                  to={user ? '/upgrade' : '/auth'}
-                  onClick={() => setShowProInfo(false)}
-                  className="text-xs text-primary hover:underline"
-                >
-                  {user ? 'Upgrade to Pro →' : 'Sign in →'}
-                </Link>
-              </div>
-            )}
+            <button
+              type="button"
+              disabled={!canNext}
+              data-sound="none"
+              onClick={() => turnPage(1)}
+              className="flex-1 flex items-center justify-center gap-2 px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              <span>Next</span>
+              <ChevronRight className="h-6 w-6 sm:h-5 sm:w-5" />
+            </button>
           </div>
-        </div>
-        )}
-        <button
-          type="button"
-          disabled={!canNext}
-          data-sound="none"
-          onClick={() => turnPage(1)}
-          className="flex-1 flex items-center justify-center gap-2 px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-        >
-          <span>Next</span>
-          <ChevronRight className="h-6 w-6 sm:h-5 sm:w-5" />
-        </button>
-      </div>
+        </>
+      )}
     </aside>
   )
 }

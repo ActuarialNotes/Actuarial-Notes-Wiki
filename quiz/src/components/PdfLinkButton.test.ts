@@ -121,3 +121,20 @@ describe('one reader, mounted once', () => {
     expect(hosts).toEqual([])
   })
 })
+
+describe('a document opened inside the concept popup stacks', () => {
+  // The popup keeps a stack of the pages a reader has opened (docs/stacked-
+  // pages.md). A resource card's Read PDF used to open the app's reader, which
+  // slid up over the whole popup — the page that offered the document, the
+  // trail above it, the walk below — instead of stacking like a followed link.
+  it("hands a popup page's Read PDF to the stack rather than the app's reader", () => {
+    expect(read('components/wiki/ConceptPagePanel.tsx')).toContain('onReadPdf={onOpenPdf}')
+    expect(read('components/wiki/ResourceMetaCard.tsx')).toContain('onRead={onReadPdf}')
+  })
+
+  it('draws that document as a page of the stack', () => {
+    const popup = read('components/wiki/ConceptPopup.tsx')
+    expect(popup).toContain('<PdfPagePanel')
+    expect(popup).toContain('onOpenPdf={openPdfFrom(i)}')
+  })
+})

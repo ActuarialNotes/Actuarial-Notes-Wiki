@@ -23,6 +23,11 @@ import type { WikiEntryRef } from '@/lib/wikiRoutes'
  * The stack is a *trail*, not a history: it only ever grows by following a
  * link, and the popup rebuilds it from a single page whenever the Previous /
  * Next walk moves (see `hooks/useConceptPopup.ts`).
+ *
+ * A page of the trail need not be a wiki page. A resource page's **Read PDF**
+ * opens its document the same way a link opens a page — on top, with the page
+ * that offered it folded into a bar above — rather than laying the app's
+ * full-pane reader over the whole popup and hiding the trail it came from.
  */
 
 /**
@@ -33,15 +38,42 @@ import type { WikiEntryRef } from '@/lib/wikiRoutes'
  */
 export const MAX_STACK_PAGES = 5
 
+/**
+ * A published PDF read as a page of the stack (`components/wiki/PdfPagePanel.tsx`).
+ * A PDF has no links of its own, so it only ever sits at the top of a trail.
+ */
+export interface PdfPageRef {
+  kind: 'pdf'
+  /** What the document is — the title its bar and header show. */
+  name: string
+  /** The publisher's URL. It, not the title, is what makes two refs one document. */
+  url: string
+  /** Which work or paper it belongs to, under the title in its header. */
+  subtitle?: string
+}
+
+/** Anything the stack can hold: a wiki page, or a document opened from one. */
+export type StackPageRef = WikiEntryRef | PdfPageRef
+
+/** The stack's page for a document a PDF button asked to read. */
+export function pdfPage(doc: { url: string; title: string; subtitle?: string }): PdfPageRef {
+  return { kind: 'pdf', name: doc.title, url: doc.url, subtitle: doc.subtitle }
+}
+
 export interface PageStack {
   /** Oldest first; the last entry is the most recently opened page. */
-  pages: WikiEntryRef[]
+  pages: StackPageRef[]
   /** Index of the expanded, focused page. */
   index: number
 }
 
-/** Do two refs point at the same wiki page? */
-export function samePage(a: WikiEntryRef, b: WikiEntryRef): boolean {
+/**
+ * Do two refs point at the same page? Wiki pages match on kind and name; two
+ * documents match on their URL, since two different papers can share a title
+ * ("Examiner's Report") and one paper can be offered under two.
+ */
+export function samePage(a: StackPageRef, b: StackPageRef): boolean {
+  if (a.kind === 'pdf' || b.kind === 'pdf') return a.kind === 'pdf' && b.kind === 'pdf' && a.url === b.url
   return a.kind === b.kind && a.name.toLowerCase() === b.name.toLowerCase()
 }
 
@@ -50,7 +82,7 @@ export function openStack(ref: WikiEntryRef): PageStack {
   return { pages: [ref], index: 0 }
 }
 
-function clampIndex(pages: WikiEntryRef[], index: number): number {
+function clampIndex(pages: StackPageRef[], index: number): number {
   return Math.max(0, Math.min(pages.length - 1, index))
 }
 
@@ -62,7 +94,7 @@ function clampIndex(pages: WikiEntryRef[], index: number): number {
  * than burying the old one. If the target is already somewhere in what remains,
  * the stack focuses it instead of opening a second copy — a page appears once.
  */
-export function pushPage(stack: PageStack, from: number, ref: WikiEntryRef): PageStack {
+export function pushPage(stack: PageStack, from: number, ref: StackPageRef): PageStack {
   const at = clampIndex(stack.pages, from)
   const kept = stack.pages.slice(0, at + 1)
   const existing = kept.findIndex(p => samePage(p, ref))

@@ -2,7 +2,7 @@ import type { LucideIcon } from 'lucide-react'
 import { FileText } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { opensInReader } from '@/lib/examPdf'
-import { openPdfReader } from '@/hooks/usePdfReader'
+import { openPdfReader, type PdfReaderDoc } from '@/hooks/usePdfReader'
 
 /**
  * **The** PDF button. One published document, opened in the app's reader.
@@ -19,6 +19,10 @@ import { openPdfReader } from '@/hooks/usePdfReader'
  * source the proxy won't serve (`lib/examPdf.ts`) is left as an ordinary
  * out-link rather than opening a panel that can't load. `opensInReader` is that
  * rule, in one tested place.
+ *
+ * Where the document is read is the host's to say. By default it is the app's
+ * reader (`hooks/usePdfReader.ts`); a page of the concept popup passes `onRead`
+ * instead, and its document opens as the next page of the popup's stack.
  */
 
 interface PdfLinkButtonProps {
@@ -30,8 +34,14 @@ interface PdfLinkButtonProps {
   title?: string
   /** The reader's subtitle — which paper or work this belongs to. */
   subtitle?: string
-  /** Opened from a full-screen surface (the popup in focus mode)? */
-  hostFullScreen?: boolean
+  /**
+   * Read the document here rather than in the app's reader. The concept popup
+   * passes this for the pages of its stack, so a PDF opened from one of them
+   * stacks on top of the page like a followed link instead of covering the
+   * pane. The click rules are the same either way — a modified click is still a
+   * link, and a source the proxy won't serve is still an out-link.
+   */
+  onRead?: (doc: PdfReaderDoc) => void
   /** Force the out-link, for a surface the reader must not cover. */
   linkOnly?: boolean
   /**
@@ -81,7 +91,7 @@ export function PdfLinkButton({
   label,
   title,
   subtitle,
-  hostFullScreen,
+  onRead,
   linkOnly = false,
   onOpen,
   icon: Icon = FileText,
@@ -105,7 +115,9 @@ export function PdfLinkButton({
         if (!opensInReader(url, e, linkOnly)) return
         e.preventDefault()
         onOpen?.()
-        openPdfReader({ url, title: title ?? label, subtitle, hostFullScreen })
+        const doc = { url, title: title ?? label, subtitle }
+        if (onRead) onRead(doc)
+        else openPdfReader(doc)
       }}
       className={cn('not-prose bg-card', BASE_CLASS, className)}
     >

@@ -5,6 +5,7 @@ import { isSupportedPdfSource } from '@/lib/examPdf'
 import { PdfLinkButton } from '@/components/PdfLinkButton'
 import { GetCopyMenu } from '@/components/wiki/GetCopyMenu'
 import type { ResourceMeta } from '@/lib/resourceMeta'
+import type { PdfReaderDoc } from '@/hooks/usePdfReader'
 
 /**
  * The metadata card at the top of a resource page — the jacket, who wrote it,
@@ -35,11 +36,11 @@ interface ResourceMetaCardProps {
   /** Extra classes on the card itself — a host that wants it to fill a column. */
   className?: string
   /**
-   * Whether the surface this card is read on is full screen — the concept
-   * popup in focus mode. Passed to the reader so it covers that page instead
-   * of leaving the chrome-sized gaps the page has already filled.
+   * Read the card's PDF here rather than in the app's reader — the concept
+   * popup's pages pass this, so the document stacks on top of the page the
+   * card is on (`PdfLinkButton`'s `onRead`).
    */
-  hostFullScreen?: boolean
+  onReadPdf?: (doc: PdfReaderDoc) => void
 }
 
 export function ResourceMetaCard({
@@ -47,7 +48,7 @@ export function ResourceMetaCard({
   compact,
   note,
   className,
-  hostFullScreen,
+  onReadPdf,
 }: ResourceMetaCardProps) {
   // A cover that fails to load drops its column entirely — no empty gutter.
   const [coverFailed, setCoverFailed] = useState(false)
@@ -148,7 +149,7 @@ export function ResourceMetaCard({
               label={copyLabel}
               title={meta.title ?? 'Source document'}
               subtitle={[meta.author, meta.year].filter(Boolean).join(' · ') || undefined}
-              hostFullScreen={hostFullScreen}
+              onRead={onReadPdf}
               icon={FileText}
               ariaLabel={
                 canView

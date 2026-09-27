@@ -524,10 +524,14 @@ Other important `lib/` modules:
   URLs of the four asset directories pdf.js fetches at run time — `pdfjsAssets.ts` is the
   shared list, copied out of node_modules by `vite.config.ts`. `wasm` is the load-bearing
   one: CCITT fax and JBIG2 decode through it, so without it every *scanned* page renders
-  as a ghost, and pdf.js only warns. Rendered by
-  `components/PdfViewerPanel.tsx` in the concept popup's shell, mounted **once** at the app
-  root by `components/PdfReaderHost.tsx` off the `hooks/usePdfReader.ts` store — there is
-  one reader, and `components/PdfLinkButton.tsx` is the one PDF button that opens it. The
+  as a ghost, and pdf.js only warns. The reader itself is `PdfDocumentView` (in
+  `components/PdfViewerPanel.tsx`) and it has two frames: `PdfViewerPanel`, in the concept
+  popup's shell, mounted **once** at the app root by `components/PdfReaderHost.tsx` off the
+  `hooks/usePdfReader.ts` store, for every PDF button outside the popup; and a page of the
+  popup's own stack (`components/wiki/PdfPagePanel.tsx`) for a **Read PDF** on a page
+  being read *in* the popup, which stacks like a followed link instead of covering the pane
+  (`PdfLinkButton`'s `onRead`; see `docs/stacked-pages.md`).
+  `components/PdfLinkButton.tsx` is the one PDF button that opens either. The
   rule: *every* PDF the app offers is read in the app, never in a browser tab — the
   past-paper shelf's report and solutions, an exam's syllabus, a resource card's **Read
   PDF**, the paper behind the question in the quiz's **Info** panel, and the sources on the
@@ -542,7 +546,9 @@ Other important `lib/` modules:
   title bars down the pane). Pure and tested; the store half is `pages`/`pageIndex` in
   `hooks/useConceptPopup.ts`, the rendering is `ConceptPopup` (shell + bars) over
   `ConceptPagePanel` (the open page, mounted per ref, with the scroll memory that lets a
-  folded page come back where it was left). See `docs/stacked-pages.md`.
+  folded page come back where it was left). A page's **Read PDF** stacks its document the
+  same way (`PdfPageRef` → `components/wiki/PdfPagePanel.tsx`), whose own page bar and
+  footer stand in for the walk's while it is open. See `docs/stacked-pages.md`.
 - `mobileNavHost.ts` — below `lg` the app is one row of top chrome, and this says who owns
   it on a given route: a page with a floating search bar carries the hamburger
   (`components/MobileNavButton.tsx`) on that bar's line, and every other page gets the app

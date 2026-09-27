@@ -1,5 +1,5 @@
 import { BookOpen, Compass, FileText, GraduationCap, Landmark, X } from 'lucide-react'
-import type { WikiEntryRef } from '@/lib/wikiRoutes'
+import type { StackPageRef } from '@/lib/pageStack'
 
 const BAR_ICON = {
   concept: FileText,
@@ -8,6 +8,7 @@ const BAR_ICON = {
   event: Landmark,
   regulation: Landmark,
   guide: Compass,
+  pdf: FileText,
 } as const
 
 /**
@@ -20,9 +21,12 @@ const BAR_ICON = {
  * the whole point of leaving it on screen. It also leaves room for a full-size
  * close button, so a page can be dropped from the trail without opening it
  * first.
+ *
+ * A document in the stack folds the same way, with the `PDF` chip the button
+ * that opened it wears, so the bar says it is the paper and not a page about it.
  */
 export interface PageStackBarProps {
-  entry: WikiEntryRef
+  entry: StackPageRef
   onOpen: () => void
   onClose: () => void
   /** Sits above the open page (its trail) rather than below it. */
@@ -47,6 +51,11 @@ export function PageStackBar({ entry, onOpen, onClose, above }: PageStackBarProp
         <span className="truncate text-sm font-medium text-muted-foreground transition-colors group-hover:text-foreground">
           {entry.name}
         </span>
+        {entry.kind === 'pdf' && (
+          <span className="shrink-0 rounded bg-muted px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+            PDF
+          </span>
+        )}
       </button>
       <button
         type="button"

@@ -30,6 +30,8 @@ interface CatalogRow {
   body: 'SOA' | 'CAS'
   bank: string | null
   status: 'ready' | 'beta' | 'development'
+  /** false when the exam's outline publishes no section weights (the DISCs). */
+  weighted?: false
 }
 const catalog = readJson<{ exams: CatalogRow[] }>('scripts/exam_catalog.json').exams
 
@@ -111,7 +113,10 @@ describe('exam pages, as the app parses them', () => {
     const syllabus = parseExamSyllabus(content, row.exam_id, `Exam ${row.exam_id}`, '', row.page)
     expect(syllabus.topics.length).toBeGreaterThan(0)
     for (const topic of syllabus.topics) {
-      expect(topic.weight, `${topic.name} has no {weight}`).toBeTruthy()
+      // A weight is transcribed, never invented: an outline that publishes
+      // none has none on any section, and readiness counts each one equally.
+      if (row.weighted === false) expect(topic.weight, `${topic.name} has a {weight}`).toBeUndefined()
+      else expect(topic.weight, `${topic.name} has no {weight}`).toBeTruthy()
       expect(topic.concepts.length, `${topic.name} links no concept`).toBeGreaterThan(0)
     }
     expect(syllabus.resources.length).toBeGreaterThan(0)

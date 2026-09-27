@@ -18,9 +18,14 @@ import type { WikiEntryRef } from '@/lib/wikiRoutes'
  * Offsets are recorded as the page *scrolls*, never on the way out: by the time
  * a `useEffect` cleanup runs during an unmount React has already detached the
  * body, and a detached element's `scrollTop` reads 0.
+ *
+ * A document in the stack (`components/wiki/PdfPagePanel.tsx`) keeps its place
+ * here too, as the page number it was left on rather than an offset — a PDF is
+ * read a page at a time, and each page starts at its top.
  */
 
 const offsets = new Map<string, number>()
+const pdfPages = new Map<string, number>()
 
 function key(ref: WikiEntryRef): string {
   return `${ref.kind}:${ref.name.toLowerCase()}`
@@ -37,7 +42,19 @@ export function recallPageScroll(ref: WikiEntryRef): number {
   return offsets.get(key(ref)) ?? 0
 }
 
+/** Record which page of a stacked document is open. Page 1 is simply forgotten. */
+export function rememberPdfPage(url: string, page: number): void {
+  if (page > 1) pdfPages.set(url, page)
+  else pdfPages.delete(url)
+}
+
+/** The page a stacked document was left on, or 1 for one that hasn't been read yet. */
+export function recallPdfPage(url: string): number {
+  return pdfPages.get(url) ?? 1
+}
+
 /** Forget every remembered position — called when the popup closes. */
 export function clearPageScrollMemory(): void {
   offsets.clear()
+  pdfPages.clear()
 }

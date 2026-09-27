@@ -10,6 +10,10 @@ import { PdfViewerPanel } from '@/components/PdfViewerPanel'
  * every dialog and sheet that can open it, and survives that host closing or
  * unmounting underneath it.
  *
+ * The concept popup is the one surface that reads its documents itself: a
+ * Read PDF on one of its pages opens as the next page of its stack
+ * (`components/wiki/PdfPagePanel.tsx`), not here.
+ *
  * Keyed on the document's URL so switching papers remounts the panel rather
  * than leaving the previous document's page number, zoom and scroll position
  * on the new one.
@@ -24,7 +28,6 @@ export function PdfReaderHost() {
       url={doc.url}
       title={doc.title}
       subtitle={doc.subtitle}
-      hostFullScreen={doc.hostFullScreen}
       onClose={closePdf}
     />
   )

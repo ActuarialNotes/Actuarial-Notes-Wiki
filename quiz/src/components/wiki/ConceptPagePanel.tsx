@@ -11,6 +11,7 @@ import { ImageGalleryModal } from '@/components/wiki/ImageGalleryModal'
 import { ConceptImageBanner } from '@/components/wiki/ConceptImageBanner'
 import { ConceptActionMenu } from '@/components/ConceptActionMenu'
 import { findKeystone } from '@/lib/keystone'
+import type { PdfReaderDoc } from '@/hooks/usePdfReader'
 
 /**
  * The open page of the concept popup's stack: its header (the title, which is
@@ -36,6 +37,12 @@ export interface ConceptPagePanelProps {
   focusMode: boolean
   /** Called when a link on this page is followed, to stack the target on top. */
   onOpenLink: (ref: WikiEntryRef) => void
+  /**
+   * Called when a document this page offers is opened (a resource card's Read
+   * PDF), to stack it on top the same way — rather than covering the popup with
+   * the app's reader.
+   */
+  onOpenPdf: (doc: PdfReaderDoc) => void
   /** Close this page. The popup closes when its last page does. */
   onClose: () => void
   /** Popup-level controls (the focus-mode toggle), shown on the active panel. */
@@ -55,6 +62,7 @@ export function ConceptPagePanel({
   entry,
   focusMode,
   onOpenLink,
+  onOpenPdf,
   onClose,
   trailing,
   gallerySeek = 0,
@@ -265,9 +273,9 @@ export function ConceptPagePanel({
                 <ResourceMetaCard
                   meta={resourceMeta}
                   compact
-                  // The reader opens over this page, and in focus mode this
-                  // page *is* the screen — so it has no chrome to keep clear of.
-                  hostFullScreen={focusMode}
+                  // Its document opens as the next page of the stack, with
+                  // this one folded into a bar above it — a link, not a lid.
+                  onReadPdf={onOpenPdf}
                 />
               )}
               <WikiArticle

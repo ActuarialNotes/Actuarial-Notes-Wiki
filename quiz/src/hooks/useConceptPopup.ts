@@ -7,6 +7,7 @@ import {
   openStack,
   pushPage as pushStackPage,
   type PageStack,
+  type StackPageRef,
 } from '@/lib/pageStack'
 
 // An ordered list of concept/resource refs plus the current index — drives
@@ -65,8 +66,9 @@ interface ConceptPopupState {
   // The stacked pages, oldest first, and which one is open on screen (the rest
   // are folded to title bars). `pages[0]` is the walk's own entry until the
   // trail outgrows the stack and the oldest page drops off; everything after it
-  // was reached by following a link. Reset to one page by every move of the walk.
-  pages: WikiEntryRef[]
+  // was reached by following a link — or is a document opened from a page's
+  // Read PDF (`PdfPageRef`). Reset to one page by every move of the walk.
+  pages: StackPageRef[]
   pageIndex: number
   // Document-ordered occurrences for the current (entire-syllabus) view, or
   // null when occurrence-aware navigation doesn't apply (dashboard, study-plan
@@ -100,7 +102,8 @@ interface ConceptPopupState {
   jumpTo: (ref: WikiEntryRef) => void
   // Follow a link found on the stacked page at `from`, opening the target on
   // top of it. Anything opened from that page is dropped first — see pushPage.
-  pushPage: (from: number, ref: WikiEntryRef) => void
+  // A document the page offers is opened the same way, as a `PdfPageRef`.
+  pushPage: (from: number, ref: StackPageRef) => void
   // Open the stacked page at `i` (tapping its bar).
   focusPage: (i: number) => void
   // Close one stacked page; closing the last one closes the popup.
@@ -113,7 +116,7 @@ interface ConceptPopupState {
 
 // The stack the walk resets to whenever it moves: just the entry it landed on.
 // An empty list (nothing to show) yields an empty stack rather than a hole.
-function stackState(list: WikiEntryRef[], index: number): { pages: WikiEntryRef[]; pageIndex: number } {
+function stackState(list: WikiEntryRef[], index: number): { pages: StackPageRef[]; pageIndex: number } {
   const ref = list[index]
   const stack: PageStack = ref ? openStack(ref) : { pages: [], index: 0 }
   return { pages: stack.pages, pageIndex: stack.index }

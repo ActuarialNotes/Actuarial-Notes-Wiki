@@ -435,23 +435,16 @@
    is opened *from* somewhere else — a resource page's "Read PDF" button, an
    exam page's syllabus button, the quiz's Question info panel, the Fact Check
    sheet's "Checked against" shelf — and it has to paint above every one of
-   them, or pressing the button appears to do nothing. Those hosts run from the
-   concept popup (z-index 56 in focus mode) all the way up to the record sheets
+   them, or pressing the button appears to do nothing. (A "Read PDF" on a page
+   *inside* the concept popup is the exception: that document is a page of the
+   popup's stack, drawn in the popup itself — see docs/stacked-pages.md.) The
+   hosts run from the concept popup (z-index 56 in focus mode) all the way up to the record sheets
    at z-[130], so the reader sits at 135: the top of the ladder bar the
    onboarding tour's spotlight (§8.2 of docs/style-guide.md). Its own focus mode
    included — hence the second selector, which outranks the rule above. */
 .concept-popup-aside.pdf-viewer-aside,
 .concept-popup-aside.pdf-viewer-aside[data-focus="true"] {
   z-index: 135;
-}
-
-/* Opened from a page that is itself full screen: that page has already covered
-   the desktop sidebar, so the inset the reader normally leaves for it would
-   only show a strip of the page underneath. */
-@media (min-width: 1024px) {
-  .pdf-viewer-aside[data-host-focus="true"] {
-    left: 0 !important;
-  }
 }
 
 /* Page stack: a page behind the one being read folds up into a title bar, and

@@ -230,7 +230,7 @@ you were building.
 
 | Piece | Role |
 |---|---|
-| `quiz/src/components/PdfViewerPanel.tsx` | The panel: header (title, download, expand, close), canvas, page scrubber, paging footer |
+| `quiz/src/components/PdfViewerPanel.tsx` | `PdfDocumentView`, the reader without a frame — header (title, download, the frame's controls), canvas, page scrubber, paging footer — and `PdfViewerPanel`, that view in the slide-up shell with its expand, close and Esc |
 | `quiz/src/hooks/usePdfDocument.ts` | Loads one document; imports pdf.js on demand and destroys the loading task on close |
 | `quiz/src/lib/pdfjsSetup.ts` | The pdf.js instance, its worker and the URLs of the assets it fetches at run time — reached only through a dynamic import |
 | `quiz/src/lib/pdfjsAssets.ts` | The one list of those asset directories, shared with `vite.config.ts` so the two halves can't drift |
@@ -534,7 +534,7 @@ The third caller of the viewer isn't an exam at all. A `Resources/Books/*.md` pa
 frontmatter carries an `Available from:` link to a PDF — the ASOPs, the CAS study notes,
 the SOA's *Risk and Insurance* — shows a **Read PDF** button on its metadata card
 (`components/wiki/ResourceMetaCard.tsx`, rendered both on the resource page and inside the
-concept popup), and that opens the same `PdfViewerPanel`. The reasoning is the one the
+concept popup), and that opens the same reader. The reasoning is the one the
 syllabus button uses: the page under it is *our* summary of the source, and checking one
 against the other shouldn't throw a candidate out to a browser tab they then have to find
 their way back from — least of all on a phone, where the tab that opens is a different app
@@ -544,19 +544,24 @@ The button is a **plain anchor to the publisher underneath**, exactly as the syl
 is: only an unmodified left click is intercepted, so ⌘/ctrl-click, middle-click and
 long-press still behave like a link and the real URL stays visible on hover.
 
-Because that card is read *inside* the concept popup as often as on the standalone page, the
-reader has to open **over** the page that asked for it — and the popup's own layer is what it
-would otherwise open behind. That problem generalises, which is what §"One reader, mounted
-once" below is about. Two consequences belong here:
+That card is read *inside* the concept popup as often as on the standalone page, and there
+the document is **a page of the popup's stack** (`components/wiki/PdfPagePanel.tsx`), not
+the app's reader. It used to be the reader, laid over the whole popup — which hid the page
+that offered the document, the trail above that page and the walk below, when the popup
+already had the model for "read this next without losing what I was reading": a followed
+link stacks, and the page behind folds into a bar. So `ConceptPagePanel` hands the card an
+`onReadPdf`, which `PdfLinkButton` takes as `onRead` in place of `openPdfReader`, and the
+document opens on top of the page with the page folded above it — same click rules, same
+view (`PdfDocumentView`), just a different frame. `docs/stacked-pages.md` has the rest:
+the document's own footer standing in for the walk's, and the page it is left on kept when it
+folds.
 
-- **No chrome gaps over a full-screen host.** `hostFullScreen` (passed down as
-  `ConceptPagePanel`'s `focusMode`) drops the desktop sidebar inset, because the page
-  underneath has already covered it — leaving it would show a strip of that page instead of
-  the chrome it was reserved for.
-- **The keys.** The popup binds Esc and the arrows too, so it hands them over while a
-  document is up — `useIsReadingPdf()` (`hooks/usePdfReader.ts`) is the flag. Kept apart from
-  the image gallery's hand-over, which *also* makes the footer's Previous / Next carry the
-  gallery to the next concept: a document being read must not do that.
+On the standalone resource page nothing changes — there is no stack to join, so the card
+opens the app's reader like every other PDF button. The popup still hands its keys over
+whenever that reader is up (`useIsReadingPdf()`, `hooks/usePdfReader.ts`), since a sheet
+above the popup — the Fact Check panel — can open it. Kept apart from the image gallery's
+hand-over, which *also* makes the footer's Previous / Next carry the gallery to the next
+concept: a document being read must not do that.
 
 What decides between reading and out-linking is `isSupportedPdfSource` — the same predicate
 the exam shelf uses, so the viewer never opens on a request the endpoint would refuse. A
@@ -580,16 +585,18 @@ label follows the document (`Examiner's Report` vs `Exam & Answer Key`), not the
 **Every PDF button in the app reads its document in the app.** The rule has no exceptions:
 the past-paper shelf's report and solutions, the study guide's syllabus, a resource card's
 **Read PDF**, the paper behind the question on screen (the quiz's **Info** panel), and the
-sources on the Fact Check panel's *Checked against* shelf all open the same panel. A
-published paper opened in a browser tab costs a candidate their place; mid-quiz it costs them
-the quiz.
+sources on the Fact Check panel's *Checked against* shelf all open the same reader — the one
+panel at the app root, or, for a Read PDF on a page being read inside the concept popup, a
+page of that popup's stack. A published paper opened in a browser tab costs a candidate their
+place; mid-quiz it costs them the quiz.
 
-Three pieces hold that up:
+Four pieces hold that up:
 
 | Piece | Role |
 |---|---|
 | `quiz/src/hooks/usePdfReader.ts` | The store: which document is being read, `openPdfReader`, and `useIsReadingPdf()` |
 | `quiz/src/components/PdfReaderHost.tsx` | The one `PdfViewerPanel`, mounted in `App` |
+| `quiz/src/components/wiki/PdfPagePanel.tsx` | The exception: a Read PDF on a page *inside* the concept popup, read as a page of its stack (see §"Source documents on a resource page") |
 | `quiz/src/components/PdfLinkButton.tsx` | The button every surface uses |
 
 It is one store rather than a panel each surface mounts for itself because a panel mounted

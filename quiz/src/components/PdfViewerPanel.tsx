@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import {
   ChevronLeft,
@@ -62,34 +62,44 @@ function ReadingFailure({ message, url, sourceHost }: { message: string; url: st
   )
 }
 
-interface Props {
+interface PdfDocumentViewProps {
   /** The publisher's URL for the PDF — casact.org / soa.org. */
   url: string
   /** What the document is, e.g. "Examiner's Report". */
   title: string
   /** Which paper it belongs to, e.g. "Exam 5 · Spring 2019". */
   subtitle?: string
+  /** Whether the host fills the viewport, so the header joins a reading column. */
+  focusMode: boolean
+  /** The host's own header controls, after Download — its expand and close. */
+  controls: ReactNode
   /**
-   * Whether the surface the reader was opened from is itself full screen — a
-   * concept popup in focus mode, which covers the sidebar and the mobile bottom
-   * nav (`.concept-popup-aside[data-focus="true"]` in index.css). The reader
-   * always paints above that page (see `.pdf-viewer-aside`); this is what stops
-   * it leaving a strip of it showing along the bottom and down the left, where
-   * the chrome it normally keeps clear of would be.
+   * Whether the view owns the arrow keys and `+`/`−` right now. A host that is
+   * not the top layer — a stacked document with the app's reader over it —
+   * hands them to whatever is.
    */
-  hostFullScreen?: boolean
-  onClose: () => void
+  keyboard?: boolean
+  /** The page to open at — where a stacked document was left before it folded. */
+  initialPage?: number
+  /** Reports the page being read, so a host can put the reader back on it. */
+  onPageChange?: (page: number) => void
 }
 
 /**
  * The exam-PDF reader: a past paper read *in* the app rather than in a browser
  * tab you then have to find your way back from.
  *
- * It wears the concept popup's shell — the same slide-up bottom panel, the same
- * drag-to-resize handle and shared preferred height, the same focus-mode
- * expand, the same Previous / position / Next footer — because a source
- * document is another thing you read beside your work. Pages here are what
- * concepts are there.
+ * It reads like the concept popup — a header naming the document, the page,
+ * and the same Previous / position / Next footer — because a source document is
+ * another thing you read beside your work. Pages here are what concepts are
+ * there.
+ *
+ * This is the reader itself, without a frame, and it has two: `PdfViewerPanel`
+ * below, the free-standing slide-up panel every PDF button outside the concept
+ * popup opens (`components/PdfReaderHost.tsx`), and a page of the popup's own
+ * stack (`components/wiki/PdfPagePanel.tsx`), where a resource page's Read PDF
+ * opens its document on top of the page, the way a followed link does. The
+ * frame owns the rest: the resize handle, full screen, Esc, the opening sound.
  *
  * The pages are drawn by pdf.js rather than handed to a browser's PDF plugin
  * (`lib/pdfjsSetup.ts` explains why), and the bytes come from `quiz/api/exam-pdf.js`
@@ -97,12 +107,17 @@ interface Props {
  * that can still fail — a moved file, an endpoint that isn't deployed — so the
  * publisher's own copy is always one tap away.
  */
-export function PdfViewerPanel({ url, title, subtitle, hostFullScreen = false, onClose }: Props) {
+export function PdfDocumentView({
+  url,
+  title,
+  subtitle,
+  focusMode,
+  controls,
+  keyboard = true,
+  initialPage = 1,
+  onPageChange,
+}: PdfDocumentViewProps) {
   const { play } = useSoundEffects()
-  // A sheet of paper sliding out, same as the concept popup opening.
-  useSoundOnMount('open')
-  const { height, beginDrag } = useSplitHeight()
-  const [focusMode, setFocusMode] = useState(false)
 
   const proxied = useMemo(() => pdfProxyUrl(url), [url])
   const { doc, pageCount, status, error } = usePdfDocument(proxied)
@@ -121,8 +136,8 @@ export function PdfViewerPanel({ url, title, subtitle, hostFullScreen = false, o
   // A drag across a 423-page report crosses a page every few milliseconds, and
   // parsing each one only to cancel it would leave the reader watching a
   // spinner instead of the page they stopped on.
-  const [page, setPage] = useState(1)
-  const [renderPage, setRenderPage] = useState(1)
+  const [page, setPage] = useState(initialPage)
+  const [renderPage, setRenderPage] = useState(initialPage)
   // Three zooms, because a page is a bitmap that takes a moment to redraw and
   // a pinch changes the zoom continuously:
   //   `zoom`       what the reader has asked for, live under their finger;
@@ -276,14 +291,14 @@ export function PdfViewerPanel({ url, title, subtitle, hostFullScreen = false, o
     )
   }, [zoom])
 
-  const close = useCallback(() => {
-    play('close')
-    onClose()
-  }, [play, onClose])
-
   // A new document starts at its first page, fitted to the panel — the fit
-  // itself lands once the page has been measured, below.
+  // itself lands once the page has been measured, below. Not on mount: the
+  // state above already starts there, or on the page a folded document was
+  // left on, which this would throw away.
+  const shownRef = useRef(proxied)
   useEffect(() => {
+    if (shownRef.current === proxied) return
+    shownRef.current = proxied
     setPage(1)
     setRenderPage(1)
     setPageBase(null)
@@ -328,14 +343,11 @@ export function PdfViewerPanel({ url, title, subtitle, hostFullScreen = false, o
     requestZoom(nudgeZoom(zoomRef.current, direction, minZoomRef.current))
   }, [requestZoom])
 
+  // The arrows turn pages and `+`/`−` zoom. Esc is the frame's: it is what
+  // knows whether the key leaves full screen, closes a panel or unwinds a stack.
   useEffect(() => {
+    if (!keyboard) return
     function onKey(e: KeyboardEvent) {
-      // Esc leaves focus mode first, then closes — same as the concept popup.
-      if (e.key === 'Escape') {
-        if (focusMode) setFocusMode(false)
-        else close()
-        return
-      }
       const el = e.target as HTMLElement | null
       if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable)) return
       if (e.key === 'ArrowLeft') turnPage(-1)
@@ -345,15 +357,13 @@ export function PdfViewerPanel({ url, title, subtitle, hostFullScreen = false, o
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [close, focusMode, turnPage, changeZoom])
+  }, [keyboard, turnPage, changeZoom])
 
-  // Focus mode covers the whole viewport, so lock the page behind it exactly as
-  // the concept popup does.
+  // Recorded as the reader moves, not on the way out — the same rule the
+  // concept pages' scroll memory keeps (`lib/pageScrollMemory.ts`).
   useEffect(() => {
-    if (!focusMode) return
-    document.body.style.overflow = 'hidden'
-    return () => { document.body.style.overflow = '' }
-  }, [focusMode])
+    onPageChange?.(page)
+  }, [page, onPageChange])
 
   // The panel is resizable and the sidebar collapses under it, so the page is
   // re-fitted to whatever width it actually has rather than measured once.
@@ -607,44 +617,10 @@ export function PdfViewerPanel({ url, title, subtitle, hostFullScreen = false, o
   // reader has asked for. 1 whenever the two agree, which is most of the time.
   const previewScale = sizedZoom > 0 ? zoom / sizedZoom : 1
 
-  return createPortal(
-    <aside
-      // The concept popup's class carries the sidebar-width offset on desktop
-      // and the whole focus-mode layer in index.css, so both panels sit and
-      // expand identically. `pdf-viewer-aside` is the one difference: the
-      // reader is opened *from* something else — a resource page's Read PDF
-      // button, an exam page's syllabus button, the quiz's Question info panel,
-      // the Fact Check sheet — so it layers above every host that can open it,
-      // in focus mode included. See index.css.
-      className="concept-popup-aside pdf-viewer-aside fixed left-0 right-0 bottom-0 z-[135] border-t bg-card text-card-foreground shadow-2xl flex flex-col"
-      data-focus={focusMode}
-      data-host-focus={hostFullScreen}
-      style={{ height: focusMode ? undefined : `min(${height}px, 100vh)` }}
-      // Non-modal, like the concept popup: the shelf behind stays live, so this
-      // is a document you read beside the quiz rather than a dialog over it.
-      role="complementary"
-      aria-label={subtitle ? `${title} — ${subtitle}` : title}
-    >
-      {!focusMode && (
-        <div
-          role="separator"
-          aria-orientation="horizontal"
-          aria-label="Resize document panel"
-          onMouseDown={e => {
-            e.preventDefault()
-            beginDrag(e.clientY)
-          }}
-          onTouchStart={e => {
-            if (e.touches[0]) beginDrag(e.touches[0].clientY)
-          }}
-          className="flex h-4 items-center justify-center cursor-row-resize hover:bg-accent/60 active:bg-accent/80 transition-colors select-none touch-none"
-        >
-          <GripHorizontal className="h-3 w-6 text-muted-foreground/60" />
-        </div>
-      )}
-
-      {/* Header: what you're reading, then save / expand / close. Focus mode
-          spans the viewport, so it shares the body's reading column. */}
+  return (
+    <>
+      {/* Header: what you're reading, then save and the frame's own controls.
+          Focus mode spans the viewport, so it shares the body's reading column. */}
       <div className={`flex items-center gap-2 h-16 shrink-0 ${focusMode ? 'w-full max-w-4xl mx-auto px-4 sm:px-6' : 'px-3'}`}>
         <div className="flex-1 min-w-0">
           <h2 className="truncate font-semibold text-lg sm:text-xl min-w-0">{title}</h2>
@@ -659,26 +635,7 @@ export function PdfViewerPanel({ url, title, subtitle, hostFullScreen = false, o
         >
           <Download className="h-5 w-5" />
         </a>
-        <button
-          type="button"
-          onClick={() => setFocusMode(v => !v)}
-          aria-pressed={focusMode}
-          className="inline-flex items-center justify-center h-10 w-10 rounded-lg shrink-0 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-          title={focusMode ? 'Exit full screen (Esc)' : 'Full screen'}
-          aria-label={focusMode ? 'Exit full screen' : 'Full screen'}
-        >
-          {focusMode ? <Minimize2 className="h-5 w-5" /> : <Maximize2 className="h-5 w-5" />}
-        </button>
-        <button
-          type="button"
-          onClick={close}
-          data-sound="none"
-          className="inline-flex items-center justify-center h-10 w-10 rounded-lg shrink-0 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-          title="Close"
-          aria-label="Close"
-        >
-          <X className="h-5 w-5" />
-        </button>
+        {controls}
       </div>
 
       {/* The page. Scrolls in both directions, because a zoomed-in page is
@@ -825,6 +782,124 @@ export function PdfViewerPanel({ url, title, subtitle, hostFullScreen = false, o
           <ChevronRight className="h-6 w-6 sm:h-5 sm:w-5" />
         </button>
       </div>
+    </>
+  )
+}
+
+interface Props {
+  /** The publisher's URL for the PDF — casact.org / soa.org. */
+  url: string
+  /** What the document is, e.g. "Examiner's Report". */
+  title: string
+  /** Which paper it belongs to, e.g. "Exam 5 · Spring 2019". */
+  subtitle?: string
+  onClose: () => void
+}
+
+/**
+ * The free-standing reader: `PdfDocumentView` in the concept popup's shell —
+ * the same slide-up bottom panel, the same drag-to-resize handle and shared
+ * preferred height, the same focus-mode expand. Mounted once, by
+ * `components/PdfReaderHost.tsx`, for every PDF button outside the popup; a
+ * document opened from a page *inside* the popup is read in its stack instead
+ * (`components/wiki/PdfPagePanel.tsx`).
+ */
+export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
+  const { play } = useSoundEffects()
+  // A sheet of paper sliding out, same as the concept popup opening.
+  useSoundOnMount('open')
+  const { height, beginDrag } = useSplitHeight()
+  const [focusMode, setFocusMode] = useState(false)
+
+  const close = useCallback(() => {
+    play('close')
+    onClose()
+  }, [play, onClose])
+
+  // Esc leaves focus mode first, then closes — same as the concept popup.
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key !== 'Escape') return
+      if (focusMode) setFocusMode(false)
+      else close()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [close, focusMode])
+
+  // Focus mode covers the whole viewport, so lock the page behind it exactly as
+  // the concept popup does.
+  useEffect(() => {
+    if (!focusMode) return
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = '' }
+  }, [focusMode])
+
+  return createPortal(
+    <aside
+      // The concept popup's class carries the sidebar-width offset on desktop
+      // and the whole focus-mode layer in index.css, so both panels sit and
+      // expand identically. `pdf-viewer-aside` is the one difference: the
+      // reader is opened *from* something else — a resource page's Read PDF
+      // button, an exam page's syllabus button, the quiz's Question info panel,
+      // the Fact Check sheet — so it layers above every host that can open it,
+      // in focus mode included. See index.css.
+      className="concept-popup-aside pdf-viewer-aside fixed left-0 right-0 bottom-0 z-[135] border-t bg-card text-card-foreground shadow-2xl flex flex-col"
+      data-focus={focusMode}
+      style={{ height: focusMode ? undefined : `min(${height}px, 100vh)` }}
+      // Non-modal, like the concept popup: the shelf behind stays live, so this
+      // is a document you read beside the quiz rather than a dialog over it.
+      role="complementary"
+      aria-label={subtitle ? `${title} — ${subtitle}` : title}
+    >
+      {!focusMode && (
+        <div
+          role="separator"
+          aria-orientation="horizontal"
+          aria-label="Resize document panel"
+          onMouseDown={e => {
+            e.preventDefault()
+            beginDrag(e.clientY)
+          }}
+          onTouchStart={e => {
+            if (e.touches[0]) beginDrag(e.touches[0].clientY)
+          }}
+          className="flex h-4 items-center justify-center cursor-row-resize hover:bg-accent/60 active:bg-accent/80 transition-colors select-none touch-none"
+        >
+          <GripHorizontal className="h-3 w-6 text-muted-foreground/60" />
+        </div>
+      )}
+
+      <PdfDocumentView
+        url={url}
+        title={title}
+        subtitle={subtitle}
+        focusMode={focusMode}
+        controls={
+          <>
+            <button
+              type="button"
+              onClick={() => setFocusMode(v => !v)}
+              aria-pressed={focusMode}
+              className="inline-flex items-center justify-center h-10 w-10 rounded-lg shrink-0 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+              title={focusMode ? 'Exit full screen (Esc)' : 'Full screen'}
+              aria-label={focusMode ? 'Exit full screen' : 'Full screen'}
+            >
+              {focusMode ? <Minimize2 className="h-5 w-5" /> : <Maximize2 className="h-5 w-5" />}
+            </button>
+            <button
+              type="button"
+              onClick={close}
+              data-sound="none"
+              className="inline-flex items-center justify-center h-10 w-10 rounded-lg shrink-0 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+              title="Close"
+              aria-label="Close"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </>
+        }
+      />
     </aside>,
     document.body,
   )

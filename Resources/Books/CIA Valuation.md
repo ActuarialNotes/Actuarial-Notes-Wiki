@@ -1,17 +1,18 @@
 ---
 Title: "2024 Guidance to the Appointed Actuary and Valuation Actuaries of Property and Casualty Insurers"
-Author: "Canadian Institute of Actuaries"
+Authors: "Canadian Institute of Actuaries"
+Publisher: "Canadian Institute of Actuaries"
 Year: "2024"
 date: "2024"
-Publisher: "Canadian Institute of Actuaries"
 Type: "Educational Note"
+Code: "224092"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/224092e/)"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:00b373eb3e2e8f9768a3f5bd4a6abd8d9491316a7727d682a96e4d440e1c0874
+  content_hash: sha256:d6fa0aa60b08c96296c4ff5b24a9084f7a9ba19e7188cac9a17f10f0ee0da8d0
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,36 +20,76 @@ verification:
 ---
 ![[CIA Valuation - Cover.svg]]
 
-The CIA's September 2024 annual guidance to the P&C **[[Appointed Actuary]]** and valuation actuaries — the note that gathers everything relevant to this year-end valuation in one place. Read for [[Exam 6C (CAS)|Exam 6C]] objectives C1–C5.
+A CIA educational note guiding the Appointed Actuary and valuation actuaries of P&C insurers on valuing 2024 year-end insurance contract liabilities. Prepared by the Committee on Property and Casualty Insurance Financial Reporting, approved for distribution by the Actuarial Guidance Council on August 13, 2024 and dated September 3, 2024 (document 224092), it has seven sections of guidance on recent and emerging issues and an appendix of relevant educational notes and reference documents. The CIA archived it on October 14, 2025.
 
-## Contents
+> [!info] On the syllabus
+> - [[Exam 6C (CAS)|Exam 6C]] — objectives C1–C5; the whole note.
 
-- **1** — Introduction
-- **2** — **[[Standards of Practice|Standards of practice]]** — amendments in force for the valuation
-- **3** — **Recent guidance** — educational notes and research papers issued since the last edition
-- **4** — **Upcoming guidance** — what is in exposure draft, so the actuary is not surprised next year
-- **5** — **[[FCT|Financial condition testing]]**
-- **6** — **Regulatory guidance** — 6.1 [[OSFI]] requirements · 6.2 the [[Autorité des marchés financiers|AMF]]
-- **7** — **Emerging issues and other considerations** — 7.1 product reforms · 7.2 recent judicial, legislative, regulatory and political events · 7.3 catastrophic events · 7.4 the macroeconomic environment
-- **App.** — References
+## Preamble
+- Process
+- Guidance to members on specific situations
+- Your feedback
+- Guidance from the 2023 edition that is still appropriate is duplicated and labelled *unchanged*; guidance revised for recent developments or clarity is labelled *modified*.
 
-## How to read it
+## 1 Introduction (unchanged)
+- The note reviews relevant standards of practice and educational notes and discusses current issues affecting the work of actuaries; the appendix links the CIA, OSFI and AMF documents it references.
 
-This is a **pointer document**. Its value is section 7 and the way sections 2–6 tell the actuary which of the standing guidance has changed. The recurring content is worth learning as a checklist of what an appointed actuary has to think about at a year-end:
+## 2 Standards of practice (modified)
+- [[IFRS 17]], published by the IASB in June 2020, applies to fiscal years beginning on or after January 1, 2023, and the Canadian Accounting Standards Board incorporated it into Canadian GAAP without modification.
+- References are to the Rules of Professional Conduct effective January 1, 2024 and the [[Standards of Practice]] effective June 1, 2024; the note directs attention to subsection 1240 ([[Materiality]]), Sections 1400–1700, and Sections 2100–2500 on insurance contract valuation, the [[Appointed Actuary]] and [[FCT|financial condition testing]].
 
-- **Product reform** — an [[Automobile Insurance Reform|auto reform]] in any province restates the benefit level the historical experience was earned on, so the data must be adjusted before it can support an estimate (see [[CFAI]], [[Marshall]]).
-- **Judicial, legislative and regulatory events** — a decision that widens a benefit definition (the [[Catastrophic Impairment|catastrophic impairment]] line of cases in [[Landmark Legal]]) moves reserves on claims already incurred.
-- **Catastrophic events** — the year's wildfires, floods and storms, and the reinsurance and [[Earthquake Exposure Risk Margin|earthquake]] implications.
-- **The macroeconomic environment** — inflation (social and economic), interest rates feeding the [[IFRS 17 Discount Rates|discount curve]], and their interaction with claim severity trend.
+## 3 Recent guidance (modified)
+- Lists the guidance recently published for year-end valuation and FCT work: IAN 100, released by the CIA as an educational note in October 2021, and the CIA's IFRS 17 educational notes and explanatory reports.
+- The 2024 discount rates note's most significant change is to subsection 12.4 (unwinding claims incurred in the current period); the 2024 risk adjustment note's is Appendix 3, quantifying the confidence level using the MCT.
+- Discounting consideration: a CLIFR subcommittee recalibrates the CIA [[IFRS 17 Discount Rates|reference curve]] parameters annually, and the 2024 review made no changes.
+- Role of the Appointed Actuary: the revised [[Statement of Actuarial Opinion|opinion]] states that the valuation is for inclusion in IFRS financial statements, so it must comply with applicable accounting standards, and more reconciliation and validation may be required.
+- IFRS 17 restated opening balances: the AA needs to be fully comfortable with the opening balances of both the first fiscal year of implementation and the previous fiscal year ([[Transition to IFRS 17]]).
 
-## Why it is on the syllabus
+## 4 Upcoming guidance (new)
+- Section 8 (MCT considerations) of the liability for remaining coverage note is expected to be updated with more content and examples on the MCT margin for unexpired coverage.
 
-It is the closest thing on the syllabus to a description of what the appointed actuary's job actually looks like across a year, and it maps the rest of Domain C onto that job: [[CIA CSOP]] compels, the individual educational notes give method, [[OSFI Memorandum]] says what the report must contain, and this note says what is live this year.
+## 5 Financial condition testing (modified)
+- The January 2023 FCT educational note is adapted to IFRS 17, expands on adverse scenario selection, going concern scenarios, [[Ripple Effect|ripple effects]] and management actions, and adds expense, climate-related, and technology and cyber risk to the major P&C risk categories.
+- The Standardized Climate Scenario Exercise run by OSFI and the AMF is separate from the annual FCT and does not affect the consideration of a climate change scenario in an FCT.
+
+## 6 Regulatory guidance (modified)
+- 6.1 Office of the Superintendent of Financial Institutions requirements (modified)
+    - The 2024 OSFI Memorandum merged the life, P&C and mortgage memoranda and replaced detailed prescription of the [[Appointed Actuary's Report|Appointed Actuary's Report]] with principles.
+    - Guideline E-15 requires a full [[Peer Review|peer review]] of the AAR and the FCT report at least once every three years, and material changes to be reviewed and reported on annually.
+    - Also covered: Guideline B-9 (earthquake exposure data filed by May 31), Guideline B-15 on climate risk management, the Standardized Climate Scenario Exercise (submissions due December 20, 2024) and draft Guideline E-23 on [[Model Risk|model risk]] management.
+- 6.2 Autorité des marchés financiers (modified)
+    - The [[Autorité des marchés financiers|AMF]] issues annual guides for the insurance contract liabilities report and the FCT of Quebec-chartered insurers, published its Climate Risk Management Guideline in July 2024, and prescribes no standardized stress test this year.
+
+## 7 Emerging issues and other considerations (modified)
+- 7.1 Product reforms (modified)
+    - Examples of [[Automobile Insurance Reform|product reforms]] to consider: British Columbia's transition to a [[No-Fault Insurance|no-fault]] auto framework and changes to strata insurance, Ontario's Occupier's Liability Act, and Alberta's auto changes — the "minor injury" definition, [[Prejudgment Interest|pre-judgment interest]], [[Direct Compensation Property Damage|direct compensation property damage]] — and its ongoing consultation.
+- 7.2 Recent judicial, legislative, regulatory and political events (modified)
+    - Regular communication with claims professionals covers recent court decisions and legislative, regulatory and political changes; actuaries also consider tax changes and the proposed excess profit provision framework of Alberta's Automobile Insurance Rate Board.
+- 7.3 Catastrophic events (unchanged)
+    - An event catastrophic industry-wide may not be catastrophic for a given insurer; actuaries consider its effect on post-event inflation, the payment pattern, [[Unallocated Loss Adjustment Expenses ULAE|ULAE]] estimates and [[Risk Adjustment for Non-Financial Risk|risk adjustments]].
+- 7.4 Macroeconomic environment (modified)
+    - An increase in the CPI does not necessarily translate point for point into insurance loss costs; actuaries may consult experts and external [[Inflation|inflation]] indices, and consider sensitivity analyses.
+    - Age-to-age factors capture past inflation when it is stable, but for long-tailed lines the development method may not be appropriate after sudden changes, and methods such as the [[Berquist-Sherman Method|Berquist-Sherman method]] adjust the triangles.
+    - Also considered: higher pre-judgment interest, a recession's effect on policyholder behaviour, and the sharp increase in auto theft in several cities.
+
+## Appendix – References
 
 ## Related readings
-- [[CIA CSOP]] — the standards the guidance is written under
-- [[OSFI Memorandum]] — OSFI's requirements for the Appointed Actuary's Report
-- [[CIA FCT 1]] · [[CIA FCT 2]] — financial condition testing
+- [[CIA CSOP]] — the Standards of Practice, whose sections Section 2 lists
+- [[CIA Materiality]] — the CIA task force report on materiality (October 2007), listed in the appendix
+- [[CIA Subsequent Events]] — listed in Section 3 as recent guidance (August 2023)
+- [[CIA Duration]] — listed in Section 3 as recent guidance (August 2023)
+- [[CIA IFRS 2]] — the risk adjustment note (August 2024), whose Appendix 3 change Section 3 describes
+- [[CIA Appointed Actuary]] — *Role of the Appointed Actuary Under IFRS 17* (December 2022), discussed in Section 3
+- [[CIA IFRS 17 - LRC]] — listed in Section 3; Section 4 expects its Section 8 to be updated
+- [[CIA PAA]] — listed in Section 3 as recent guidance (June 2022)
+- [[CIA IFRS 17 - Comparison]] — listed in Section 3 as recent guidance (June 2022)
+- [[CIA Models]] — *Use of Models* (January 2017), listed in the appendix
+- [[OSFI Memorandum]] — the 2024 OSFI Memorandum, discussed in Section 6.1
+- [[OSFI AA]] — Guideline E-15, discussed in Section 6.1
+- [[OSFI Earthquake]] — Guideline B-9, discussed in Section 6.1
+- [[OSFI Climate]] — Guideline B-15 (March 2023), discussed in Section 6.1
 
-## Links
-- [2024 Guidance to the Appointed Actuary and Valuation Actuaries of P&C Insurers (CIA)](https://www.cia-ica.ca/publications/224092e/)
+## Sources
+- [2024 Guidance to the Appointed Actuary and Valuation Actuaries of Property and Casualty Insurers (CIA, 2024)](https://www.cia-ica.ca/publications/224092e/) — the landing page (type, accession number, publication date, archived status) and the linked PDF: archive cover, title page, contents, Preamble, Sections 1–7 and the appendix
+- [CAS Exam 6C Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf) — the citation and the assigned scope

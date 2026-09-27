@@ -178,6 +178,7 @@ describe('the syllabus catalogue', () => {
     expect(getSyllabusPdfLink(examIdFromFile('Exam FM-2 (SOA).md'))?.label).toBe('Syllabus')
     expect(getSyllabusPdfLink(examIdFromFile('Exam 5 (CAS).md'))?.label).toBe('Content Outline')
     expect(getSyllabusPdfLink(examIdFromFile('Exam MAS-II (CAS).md'))?.label).toBe('Content Outline')
+    expect(getSyllabusPdfLink(examIdFromFile('Exam 8 (CAS).md'))?.label).toBe('Content Outline')
     expect(getSyllabusPdfLink(examIdFromFile('Exam 9 (CAS).md'))?.label).toBe('Content Outline')
   })
 
@@ -189,7 +190,6 @@ describe('the syllabus catalogue', () => {
     // Absent beats guessed: the page then shows no button at all, where an
     // extrapolated URL is a 404 the candidate finds for themselves.
     expect(getSyllabusPdfLink('6u-1')).toBeNull()
-    expect(getSyllabusPdfLink('8-1')).toBeNull()
     expect(getSyllabusPdfLink('not-an-exam')).toBeNull()
   })
 

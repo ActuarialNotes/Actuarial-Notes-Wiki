@@ -14,23 +14,32 @@ a brief and a data set and a deadline rather than a bank of questions. The PCPA 
 **Project** button (`components/wiki/ExamProjectButton.tsx`) leads there too.
 
 ```
-Projects tab ──► Start sheet ──► Brief ──► Workspace ──► Report ──► Submit ──► Results
-(pick a brief)  (mode · language · data)  (materials)  (R · Python · sheet)  (≤1,250 words)  (questions · attestation · clean run)  (assessment data · rubric · examiner's notes)
+Projects tab ──► + ──► Start sheet ──► Brief ──► Workspace ──► Report ──► Submit ──► Results
+(your attempts)  (pick a brief · mode · language · data)  (materials)  (R · Python · sheet)  (≤1,250 words)  (questions · attestation · clean run)  (assessment data · rubric · examiner's notes)
 ```
 
 ## The Projects tab and the start sheet
 
-`pages/Project/ProjectsHome.tsx` lists every brief as a card, grouped by the exam it is a
-project for. The groups come from `data/projects.ts` (`PROJECT_PROGRAMMES`): an exam's key,
-its published rules as a row of facts, where they come from, and its briefs. PCPA is the only
-programme yet; another exam's project is an entry there with its briefs authored the way
-`data/pcpaProjects.ts` authors PCPA's. Open attempts sit above the briefs (**Continue**) and
-submitted ones below them.
+`pages/Project/ProjectsHome.tsx` is the candidate's own work: the attempts still open
+(**Continue**), then the submitted ones, whose results are kept. The catalogue is not on the
+page. A **+** in the title row (and, before there is any attempt, a dashed *Start a project*
+card in its place) opens the start sheet, `components/project/NewProjectDialog.tsx` — one
+dialog, two steps, so Back is a step and not a second scrim.
+
+The first step lists every brief, grouped by the exam it is a project for. The groups come
+from `data/projects.ts` (`PROJECT_PROGRAMMES`): an exam's key, its published rules as a row of
+facts, where they come from, the next real window, and its briefs. PCPA is the only programme
+yet; another exam's project is an entry there with its briefs authored the way
+`data/pcpaProjects.ts` authors PCPA's. **Each group wears its exam's colour** —
+`examAccentStyle(programme.examKey)` scopes the group, so the exam logo, the brief tiles
+(`components/project/BriefTile.tsx`, the line-of-business icon on an `--exam-accent-vivid`
+fill) and the hover wash are all that exam's hue. PCPA's hue sits halfway between Exam 5's and
+Exam 6's (`BETWEEN_RUNGS` in `lib/examColors.ts`, `docs/style-guide.md` §2.3). The same tile
+leads each attempt's row on the page.
 
 **A brief is chosen, not assigned.** The real project hands each candidate one case from a
 pool, but someone practising for it wants the case that exercises what they are weak at.
-Choosing one opens the start sheet (`components/project/StartProjectDialog.tsx`), which asks
-only what changes the attempt:
+Choosing one moves the sheet to its second step, which asks only what changes the attempt:
 
 - **How to work it** (`AttemptMode` in `lib/pcpaAttempt.ts`). A **rehearsal** is the real
   conditions: the 16-day window opens at once and closes at the end of its last day, and
@@ -45,6 +54,24 @@ only what changes the attempt:
   attempt, to redo the analysis on the same sample and compare.
 
 The candidate attestation is made once, at submission, as on the real project.
+
+## The brief
+
+`components/project/BriefView.tsx` is the project portal's materials — the memo, the
+stakeholder notes, the scope, the data sets and their dictionaries, what to submit, the
+attestation. A candidate comes back to it many times, each time for one part, so it is laid out
+for finding rather than for reading straight through:
+
+- **Every section starts folded**, as a card that names it and says in one line what is
+  inside (whom the memo is from, how many notes, which files). The card's header is the
+  button; the heading wraps it, so the section names stay headings.
+- **An outline** beside the brief — a row of chips pinned above it below `lg` — lists the
+  sections and marks the one being read (`aria-current="location"`), following the scroll.
+  `lib/scrollSpy.ts` decides which that is (the last section whose top has passed a line near
+  the top of the pane, or the last section once a scrolling pane reaches its end). Choosing a
+  section opens it and brings it into view; *Expand all* / *Collapse all* sits under it.
+- Which sections are open is remembered per attempt for the session, so going to the
+  workspace and back leaves the brief as it was.
 
 ## Sources
 
@@ -139,9 +166,42 @@ paths agree:
 The data sets are the CAS's: **read-only**. A run that overwrites one is told so and the original
 is restored before the next run.
 
+## Where an attempt is kept
+
 The attempt's *record* — report, answers, ratings, timings — is small and lives in localStorage
-(`hooks/usePcpaAttempts.ts`), like Cowork's stores. Nothing is synced to Supabase: an attempt is
-practice on the device it was made on.
+(`hooks/usePcpaAttempts.ts`); its files live in IndexedDB. Both are written first, always, so
+the workspace never waits on the network.
+
+**Signed in, an attempt is also kept with the account**, and opens on any device the
+candidate signs in on. `lib/project/projectSync.ts` is the client half; the tables are
+`user_project_attempts` (one row per attempt, the record as JSON) and `user_project_files`
+(one row per file, text as text and anything else as base64), in
+`supabase/migrations/20260927_project_sync.sql`.
+
+- **Last writer wins, row by row.** Each attempt and each file carries an `updatedAt`, and the
+  later copy is kept, whichever side it is on. A deletion is a row too — a tombstone — so a
+  file or attempt deleted on one device goes from the next one, rather than being put back by
+  its older copy. The merges are pure and tested (`planAttemptSync`, `planFileSync`).
+- **Writes** are queued by the stores on every change and sent debounced and coalesced (a
+  keystroke is a local write; a pause is a remote one), and when the tab is hidden or closed.
+- **Reads**: `hooks/useProjectSync.ts`, mounted by the tab itself (`pages/Project/index.tsx`),
+  folds the account's attempts in on arrival and whenever the tab comes back into view; the
+  workspace takes in an attempt's files when it opens it. A link straight to an attempt made
+  on another device waits for the account before deciding there is no such attempt.
+- **The data sets never leave the browser**: they are a function of the seed, so a new device
+  draws them again, and they are the CAS's. The starter script is seeded only into a workspace
+  that has never held a file, here or in the account, and every seeded file is dated to the
+  attempt's start so any real edit is newer than it.
+- **Ownership.** An attempt records the account it belongs to (`owner`). Signed in, a reader
+  sees their account's attempts and any started signed out in this browser — which signing in
+  takes into the account, files and all. Signed out, they see only the latter: an account's
+  attempts stay with the account rather than being left to whoever uses the browser next.
+  `visibleTo` in `lib/pcpaAttempt.ts` is the rule.
+- A file past 2,000,000 characters in its stored form stays in the browser that made it.
+
+**Signed out**, attempts are this browser's alone, and the Projects page says so — not
+permanent, gone with the site data, not on another device — with the way to sign in and keep
+them.
 
 ## Submission and grading
 
@@ -170,14 +230,16 @@ rehearsal whose window closes unsubmitted can't be submitted, as on the real pro
 | The Projects tab's catalogue | `quiz/src/data/projects.ts` |
 | Authored material & published rules | `quiz/src/data/pcpaProjects.ts` |
 | Data generator | `quiz/src/lib/pcpaData.ts` |
-| Attempts, modes, windows, paths | `quiz/src/lib/pcpaAttempt.ts` |
+| Attempts, modes, windows, paths, who sees what | `quiz/src/lib/pcpaAttempt.ts` |
+| Keeping attempts with the account | `quiz/src/lib/project/projectSync.ts`, `quiz/src/hooks/useProjectSync.ts`, `supabase/migrations/20260927_project_sync.sql` |
+| The brief's outline | `quiz/src/lib/scrollSpy.ts` |
 | Words, form rules, report checks | `quiz/src/lib/pcpaReport.ts` |
 | Gini, lift, cross-check, rubric score | `quiz/src/lib/pcpaAssessment.ts` |
 | CSV in/out | `quiz/src/lib/csv.ts` |
 | Runtimes, file store, sheet files | `quiz/src/lib/project/` |
 | Stores | `quiz/src/hooks/usePcpaAttempts.ts`, `usePcpaWorkspace.ts`, `useProjectRuntime.ts` |
 | UI | `quiz/src/components/project/`, `quiz/src/pages/Project/` |
-| E2E | `quiz/e2e/pcpa-project.spec.ts` (stops short of running code — the runtimes come from CDNs) |
+| E2E | `quiz/e2e/pcpa-project.spec.ts` (signed out; stops short of running code — the runtimes come from CDNs) |
 
 To add a case: its material to `PROJECT_CASES`, a generator and an assessment draw to
 `pcpaData.ts` (`CaseId`, `generateCase`, `generateAssessment`), and its checks to `CASE_CHECKS`

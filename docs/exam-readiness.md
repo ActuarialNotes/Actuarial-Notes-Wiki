@@ -144,10 +144,14 @@ while they render at the top of the page:
    the picker. Tapping the block's date line opens the Study Plan modal at the exam-date step.
 
    Under those two lines is the **schedule strip** — what used to be the Study Schedule card,
-   drawn as a *linear* heatmap (`<ExamHeatmap layout="linear">`): one thin bar per day from a
-   fortnight before the first session to a fortnight past exam day, shaded by how much of
-   that day's plan was completed, with today ringed, the exam day solid and the target-ready
-   day amber. Merging it here is what makes the deadline and the record of what has been done
+   drawn as a *linear* heatmap (`<ExamHeatmap layout="linear">`): one 32px-tall cell per day
+   from a week before the first session to a week past the exam's sitting window
+   (`scheduleStripRange` in `lib/heatmapGrid.ts` — every day shares one line, so the span is
+   kept tight and each day stays a target a finger can hit), shaded by how much of that day's
+   plan was completed, with today ringed, the exam day solid and the target-ready day amber.
+   The **sitting window** the exam date falls in (`examWindowFor` in `data/examSittings.ts` —
+   transcribed, so a date in no known window shades nothing but exam day) is a faint wash of
+   the exam's accent colour behind its days. Merging it here is what makes the deadline and the record of what has been done
    about it one object rather than two cards saying the same thing at opposite ends of the
    page. It keeps everything the card did: tapping a day opens that day's panel below the
    block (its sessions, gems, level-ups and what the plan schedules for it), the

@@ -1,4 +1,5 @@
-// Which square of the Study Schedule strip a tap landed on.
+// Which square of the Study Schedule strip a tap landed on — and, at the foot of
+// the file, which days the Dashboard's linear strip spans.
 //
 // The strip draws a whole exam season at once — a phone fits ~17 week columns
 // across, so a day is a square of about 18 css px with 3px gutters between.
@@ -50,4 +51,59 @@ export function dayCellAt(box: HeatmapGridBox, x: number, y: number): HeatmapCel
   const col = Math.min(columns - 1, Math.max(0, Math.floor(x / pitchX)))
   const row = Math.min(rows - 1, Math.max(0, Math.floor(y / pitchY)))
   return { col, row }
+}
+
+// ── The strip's span ─────────────────────────────────────────────────────────
+//
+// Which days the Dashboard's schedule strip draws. Every day is on screen at
+// once, so each day the strip carries is width taken from every other: the
+// span is kept to the stretch that says something — a week of lead-in before
+// the first session, the exam's sitting window, and a week past it.
+
+/** Days of lead-in before the first session, and of tail past the exam window. */
+export const STRIP_MARGIN_DAYS = 7
+/** How far ahead the strip runs when no exam date is set. */
+export const STRIP_OPEN_ENDED_DAYS = 28
+
+export interface ScheduleStripInput {
+  /** Today, ISO `YYYY-MM-DD`. */
+  today: string
+  /** Day of the earliest quiz session for this exam, or null when there is none. */
+  firstSession: string | null
+  /** The reader's exam date, or null when none is set. */
+  examDate: string | null
+  /** The published sitting window around the exam date (`examWindowFor`), if any. */
+  examWindow?: { start: string; end: string } | null
+  /** The target-ready date, which the strip always reaches. */
+  targetReadyDate?: string | null
+}
+
+function shiftIso(iso: string, days: number): string {
+  const [y, m, d] = iso.split('-').map(Number)
+  return new Date(Date.UTC(y, m - 1, d + days)).toISOString().slice(0, 10)
+}
+
+function maxIso(...dates: (string | null | undefined)[]): string {
+  return dates.reduce<string>((max, d) => (d && d > max ? d : max), '')
+}
+
+/**
+ * First and last day (ISO, inclusive) the schedule strip draws.
+ *
+ * It opens `STRIP_MARGIN_DAYS` before the first session — or before today, for
+ * an exam not yet quizzed on — and closes the same margin past the end of the
+ * exam window, or past exam day when the date is in no known window. With no
+ * exam date it runs `STRIP_OPEN_ENDED_DAYS` ahead. Today and the target-ready
+ * day are always on it, so a date that has passed never leaves the reader off
+ * the end of their own timeline.
+ */
+export function scheduleStripRange(input: ScheduleStripInput): { start: string; end: string } {
+  const { today, firstSession, examDate, examWindow, targetReadyDate } = input
+  const opening = firstSession && firstSession < today ? firstSession : today
+  const start = shiftIso(opening, -STRIP_MARGIN_DAYS)
+  const examEnd = maxIso(examDate, examWindow?.end)
+  const end = examEnd
+    ? shiftIso(examEnd, STRIP_MARGIN_DAYS)
+    : shiftIso(today, STRIP_OPEN_ENDED_DAYS)
+  return { start, end: maxIso(end, today, targetReadyDate) }
 }

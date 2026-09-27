@@ -219,14 +219,18 @@ before touching that area**:
 - `docs/pcpa-project.md` — the **Projects tab** (`/project`, in the sidebar after Quiz; the
   PCPA study guide's **Project** button leads there too) and the **PCPA project simulator**
   behind it: every brief is a card grouped by the exam it is a project for (`data/projects.ts`
-  — PCPA is the only one yet), the reader *chooses* a brief, and the start sheet asks only what
+  — PCPA is the only one yet), the reader *chooses* a brief from the sheet the page's **+** opens
+  (each exam's briefs in that exam's colour), and its second step asks only what
   changes the attempt — **Rehearsal** (the real 16-day window, feedback after submission) or
   **Practice** (no deadline, the report checked as it is written), the language, and for a
   brief done before, fresh data or the same draw again. The briefs are `data/pcpaProjects.ts`
   (the CAS's published rules transcribed, the cases invented and labelled so), data drawn per attempt from a known model with every planted problem counted
   (`lib/pcpaData.ts`), a workspace running **webR** and **Pyodide** from their CDNs plus a
   Fortune-sheet spreadsheet, the 1,250-word / five-appendix report, submission with a clean run
-  of the code, and grading on fresh assessment data against the true model. Read before touching
+  of the code, and grading on fresh assessment data against the true model. Signed in, attempts and
+  their files are kept with the account (`lib/project/projectSync.ts`, last writer wins per row,
+  tombstones for deletions; the data sets never leave the browser); signed out they are the
+  browser's alone and the page says so. Read before touching
   anything named `pcpa*`, `project/` or `Project`. Two rules: nothing is interpreted by the app
   (the languages are their official Wasm builds), and the CAS's data sets are read-only in the
   workspace — a run can't overwrite them.
@@ -334,8 +338,11 @@ Other important `lib/` modules:
   element scopes the exam. The first three are translucent or mid-lightness so they wash over
   either theme; `--exam-accent-vivid` is the opaque fill for a shape carrying white text.
   Anything that needs an exam's feature colour should read it from there rather than growing
-  a second palette. Non-exam requirements (VEE, the DISCs, PCPA, the professionalism courses)
-  get `undefined`, not a colour. See `docs/style-guide.md` §2.3.
+  a second palette. Non-exam requirements (VEE, the DISCs, the professionalism courses)
+  get `undefined`, not a colour. PCPA is the one exception: it is sat at a fixed point of the
+  ACAS track, so it takes the hue halfway between Exam 5 and Exam 6 (`BETWEEN_RUNGS`, held
+  to `data/tracks.ts` by the test) — the colour the Projects tab paints its briefs in. See
+  `docs/style-guide.md` §2.3.
 - `examLogo.ts` — the **exam logo**'s monogram: an exam key cut down to something that fits a
   square (`MAS-I` → `MAS` over `I`, `CAS-5` → `5`) and the type scale that says how big it may
   be drawn, as a fraction of the tile's edge. Pure and tested; the tile itself is
@@ -752,8 +759,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **140 test files /
-~2245 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **142 test files /
+~2290 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).
@@ -942,7 +949,7 @@ via `supabase secrets set`, never as `VITE_*`.
 - `supabase/migrations/` — SQL migrations, dated filenames (`YYYYMMDD_description.sql`).
   They cover: concept mastery, quiz sessions, exam progress, study plan config/cache,
   user subscriptions/gems/cosmetics, beta codes, daily completions, store expansion,
-  flashcard sync (collected cards + deck), and
+  flashcard sync (collected cards + deck), project sync (PCPA attempts + workspace files), and
   (most of the recent additions) the flag-gated **research** feature — `research_documents`,
   full-text search, ontology, projects, project questions/sections, cron.
 - `supabase/functions/` — Deno edge functions: Stripe checkout/portal/webhook/sync,

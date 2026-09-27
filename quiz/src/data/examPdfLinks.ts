@@ -135,6 +135,43 @@ const SITTING_PDF_LINKS: Record<string, ExamPdfLink> = {
     label: "Examiner's Report",
   },
 
+  // ── CAS Exam 8 — sat once a year, in the fall; exam + Examiner's Report ────
+  // Fall 2013–2019 are transcribed from casact.org's Past Exams & Pass Marks
+  // page; that page lists nothing earlier, and the October 2012 paper (with its
+  // Examiners' Report) is the `f12-8.pdf` casact.org serves under `2021-03/`.
+  'Exam 8|2012|fall': {
+    url: 'https://www.casact.org/sites/default/files/2021-03/f12-8.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 8|2013|fall': {
+    url: 'https://www.casact.org/sites/default/files/2021-03/13-8.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 8|2014|fall': {
+    url: 'https://www.casact.org/sites/default/files/2021-03/14-8_0.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 8|2015|fall': {
+    url: 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam8_15-8.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 8|2016|fall': {
+    url: 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam8_16-8.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 8|2017|fall': {
+    url: 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam8_17-8.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 8|2018|fall': {
+    url: 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam8_18-8.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 8|2019|fall': {
+    url: 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam8_19-8.pdf',
+    label: "Examiner's Report",
+  },
+
   // ── CAS Exam MAS-I — multiple choice, so paper + final answer key ─────────
   'Exam MAS-I|2018|spring': {
     url: 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exammasi_spmasi-18.pdf',

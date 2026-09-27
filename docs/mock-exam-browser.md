@@ -472,7 +472,8 @@ Two things differ from the sittings above:
   entry records which edition it is, so staleness shows up in the diff. The same "absent
   beats guessed" rule applies: Exam 6U has no entry and therefore no button.
   CAS's own naming is the warning against extrapolating — the newer outlines are
-  `Exam_6C_CO_2026_Fall.pdf` where the older ones are `Exam7_Content_Outline.pdf`.
+  `Exam_6C_CO_2026_Fall.pdf` where the older ones are `Exam7_Content_Outline.pdf` (the 2023
+  Exam 7 outline this table carried until the Fall 2026 one replaced it).
 
 ### The sitting's details (`ExamSittingInfoButton`)
 

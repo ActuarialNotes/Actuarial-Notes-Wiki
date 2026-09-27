@@ -182,3 +182,15 @@ export function ChoiceCards<T extends string>({
     </div>
   )
 }
+
+/** A short fact about a brief or a programme — the Projects tab's pill. */
+export function Pill({ children, tone = 'neutral' }: { children: ReactNode; tone?: 'neutral' | 'info' }) {
+  return (
+    <span className={tone === 'info'
+      ? 'inline-flex items-center rounded-full bg-blue-500/10 px-2 py-0.5 text-xs font-medium text-blue-600 dark:text-blue-400'
+      : 'inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground'}
+    >
+      {children}
+    </span>
+  )
+}

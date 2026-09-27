@@ -1,15 +1,18 @@
 import { create } from 'zustand'
-import { newAttempt, savedMode, type AttemptMode, type Language, type ProjectAttempt } from '@/lib/pcpaAttempt'
-import { CASE_IDS, type CaseId } from '@/lib/pcpaData'
+import { newAttempt, normalizeAttempt, visibleTo, type AttemptMode, type Language, type ProjectAttempt } from '@/lib/pcpaAttempt'
+import type { CaseId } from '@/lib/pcpaData'
 import { deleteAttemptFiles } from '@/lib/project/fileStore'
+import { queueAttemptDelete, queueAttemptPush, registerOwnerLookup } from '@/lib/project/projectSync'
 
 /**
  * The candidate's PCPA project attempts (`docs/pcpa-project.md`).
  *
- * localStorage only, like Cowork's stores: an attempt is practice, kept on the
- * device it was made on. The record is small — the report, the answers, the
- * ratings — and the workspace's files (megabytes of data and plots) live in
- * IndexedDB under the attempt's id (`lib/project/fileStore.ts`).
+ * The record is small — the report, the answers, the ratings — and sits in
+ * localStorage, written synchronously on every change; the workspace's files
+ * (megabytes of data and plots) live in IndexedDB under the attempt's id
+ * (`lib/project/fileStore.ts`). An attempt with an `owner` is also kept with
+ * that account: every change is queued for it (`lib/project/projectSync.ts`),
+ * and `hooks/useProjectSync.ts` folds the account's attempts back in.
  */
 
 const STORAGE_KEY = 'pcpa.attempts'
@@ -18,20 +21,9 @@ function load(): ProjectAttempt[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return []
-    const parsed = JSON.parse(raw) as ProjectAttempt[]
+    const parsed = JSON.parse(raw) as unknown
     if (!Array.isArray(parsed)) return []
-    return parsed.filter(a =>
-      a && typeof a.id === 'string' && (CASE_IDS as string[]).includes(a.caseId) && typeof a.seed === 'number',
-    ).map(a => ({
-      ...a,
-      mode: savedMode(a),
-      report: a.report && typeof a.report.body === 'string' ? { body: a.report.body, appendices: Array.isArray(a.report.appendices) ? a.report.appendices : [] } : { body: '', appendices: [] },
-      answers: a.answers && typeof a.answers === 'object' ? a.answers : {},
-      ratings: a.ratings && typeof a.ratings === 'object' ? a.ratings : {},
-      submittedCode: Array.isArray(a.submittedCode) ? a.submittedCode : [],
-      activeMs: typeof a.activeMs === 'number' ? a.activeMs : 0,
-      assessment: a.assessment ?? null,
-    }))
+    return parsed.map(normalizeAttempt).filter((a): a is ProjectAttempt => a !== null)
   } catch {
     return []
   }
@@ -49,10 +41,15 @@ function newId(): string {
 
 interface PcpaAttemptsState {
   attempts: ProjectAttempt[]
-  /** `seed` reuses an earlier attempt's data; a fresh one is drawn without it. */
-  create: (opts: { caseId: CaseId; mode: AttemptMode; language: Language; seed?: number }) => ProjectAttempt
+  /**
+   * `seed` reuses an earlier attempt's data; a fresh one is drawn without it.
+   * `owner` is the signed-in account, which the attempt is saved to.
+   */
+  create: (opts: { caseId: CaseId; mode: AttemptMode; language: Language; seed?: number; owner?: string }) => ProjectAttempt
   update: (id: string, patch: Partial<ProjectAttempt> | ((a: ProjectAttempt) => Partial<ProjectAttempt>)) => void
   remove: (id: string) => Promise<void>
+  /** Replace the list with one reconciled against the account. Queues nothing. */
+  hydrate: (attempts: ProjectAttempt[]) => void
 }
 
 export const usePcpaAttempts = create<PcpaAttemptsState>((set, get) => {
@@ -62,7 +59,7 @@ export const usePcpaAttempts = create<PcpaAttemptsState>((set, get) => {
   }
   return {
     attempts: load(),
-    create: ({ caseId, mode, language, seed }) => {
+    create: ({ caseId, mode, language, seed, owner }) => {
       const attempt = newAttempt({
         id: newId(),
         caseId,
@@ -71,20 +68,34 @@ export const usePcpaAttempts = create<PcpaAttemptsState>((set, get) => {
         mode,
         language,
         now: Date.now(),
+        owner,
       })
       commit([attempt, ...get().attempts])
+      queueAttemptPush(attempt)
       return attempt
     },
     update: (id, patch) => {
-      commit(get().attempts.map(a => (a.id === id ? { ...a, ...(typeof patch === 'function' ? patch(a) : patch) } : a)))
+      let changed: ProjectAttempt | undefined
+      commit(get().attempts.map(a => {
+        if (a.id !== id) return a
+        changed = { ...a, ...(typeof patch === 'function' ? patch(a) : patch), updatedAt: Date.now() }
+        return changed
+      }))
+      if (changed) queueAttemptPush(changed)
     },
     remove: async id => {
+      const gone = get().attempts.find(a => a.id === id)
       commit(get().attempts.filter(a => a.id !== id))
+      queueAttemptDelete(id, gone?.owner)
       await deleteAttemptFiles(id)
     },
+    hydrate: attempts => commit(attempts),
   }
 })
 
-export function useAttempt(id: string | undefined): ProjectAttempt | undefined {
-  return usePcpaAttempts(s => s.attempts.find(a => a.id === id))
+registerOwnerLookup(id => usePcpaAttempts.getState().attempts.find(a => a.id === id)?.owner)
+
+/** The attempt `id`, if the reader signed in as `userId` (null signed out) can see it. */
+export function useAttempt(id: string | undefined, userId: string | null): ProjectAttempt | undefined {
+  return usePcpaAttempts(s => s.attempts.find(a => a.id === id && visibleTo(a, userId)))
 }

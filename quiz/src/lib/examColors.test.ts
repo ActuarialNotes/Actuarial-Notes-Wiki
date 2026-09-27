@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { examAccent, examAccentStyle, examAccentVivid, examHue } from './examColors'
+import { BETWEEN_RUNGS, examAccent, examAccentStyle, examAccentVivid, examHue } from './examColors'
+import { TRACKS } from '@/data/tracks'
 
 describe('examHue', () => {
   it('starts at blue on the first preliminary exam', () => {
@@ -32,12 +33,39 @@ describe('examHue', () => {
   })
 
   it('has no accent for requirements that are not exams', () => {
-    for (const key of ['VEE-ECON', 'CAS-IA', 'CAS-PCPA', 'CAS-APC', 'FAP', 'FSA-GI101', '']) {
+    for (const key of ['VEE-ECON', 'CAS-IA', 'CAS-APC', 'FAP', 'FSA-GI101', '']) {
       expect(examHue(key)).toBeUndefined()
       expect(examAccent(key)).toBeUndefined()
       expect(examAccentVivid(key)).toBeUndefined()
       expect(examAccentStyle(key)).toBeUndefined()
     }
+  })
+})
+
+describe('a requirement sat between rungs', () => {
+  it('takes the hue halfway between the rungs either side of it', () => {
+    const pcpa = examHue('CAS-PCPA')!
+    expect(pcpa).toBe((examHue('CAS-5')! + examHue('CAS-6')!) / 2)
+    expect(pcpa).toBeGreaterThan(examHue('CAS-5')!)
+    expect(pcpa).toBeLessThan(examHue('CAS-6')!)
+  })
+
+  it('sits between those rungs on its own track', () => {
+    // The hue is only honest while the track agrees about where PCPA is sat.
+    for (const [key, [before, after]] of Object.entries(BETWEEN_RUNGS)) {
+      const tracks = TRACKS.filter(t => t.sections.some(s => s.items.some(i => i.id === key)))
+      expect(tracks.length).toBeGreaterThan(0)
+      for (const track of tracks) {
+        const order = track.sections.flatMap(s => s.items.map(i => i.id))
+        expect(order.indexOf(before)).toBeLessThan(order.indexOf(key))
+        expect(order.indexOf(key)).toBeLessThan(order.indexOf(after))
+      }
+    }
+  })
+
+  it('does not move the ladder to make room', () => {
+    expect(examHue('CAS-5')).toBe(290.5)
+    expect(examHue('CAS-6')).toBe(307.875)
   })
 })
 

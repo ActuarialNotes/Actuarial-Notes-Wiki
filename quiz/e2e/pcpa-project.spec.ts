@@ -6,34 +6,64 @@ import { test, expect, type Page } from '@playwright/test'
  *
  * R and Python are downloaded from their CDNs on first use, which a CI runner
  * can't be relied on to reach, so this covers everything up to the first run:
- * choosing a brief and starting it, the materials, the data in the workspace,
+ * choosing a brief from the + and starting it, the materials, the data in the workspace,
  * and the word limit the report is held to.
  */
 
 const BRIEF = 'Small Business Claim Frequency'
 
-async function startBrief(page: Page, mode: 'Rehearsal' | 'Practice' = 'Rehearsal') {
+/** The + on the Projects tab, and the brief chosen from the sheet it opens. */
+async function chooseBrief(page: Page) {
   await page.goto('/project')
-  await page.getByRole('button', { name: new RegExp(BRIEF) }).click()
-  const sheet = page.getByRole('dialog', { name: BRIEF })
+  await page.getByRole('button', { name: 'New project' }).first().click()
+  await page.getByRole('dialog', { name: 'New project' }).getByRole('button', { name: new RegExp(BRIEF) }).click()
+  return page.getByRole('dialog', { name: BRIEF })
+}
+
+async function startBrief(page: Page, mode: 'Rehearsal' | 'Practice' = 'Rehearsal') {
+  const sheet = await chooseBrief(page)
   await sheet.getByRole('radio', { name: new RegExp(`^${mode}`) }).click()
   await sheet.getByRole('button', { name: 'Start project' }).click()
   await expect(page).toHaveURL(/\/project\/pcpa\/p-/)
 }
 
 test.describe('pcpa project', () => {
-  test('lists every brief on the Projects tab, and starts the one chosen', async ({ page }) => {
+  test('lists every brief behind the + on the Projects tab, and starts the one chosen', async ({ page }) => {
     await page.goto('/project')
     await expect(page.getByRole('heading', { name: 'Projects', level: 1 })).toBeVisible()
+    // Signed out, the page says where attempts are kept, and that it isn't for good.
+    await expect(page.getByText('Saved in this browser only.')).toBeVisible()
+
+    await page.getByRole('button', { name: 'New project' }).first().click()
+    const picker = page.getByRole('dialog', { name: 'New project' })
     for (const title of [BRIEF, 'Collision Claim Severity', 'Homeowners Water Damage Loss Cost']) {
-      await expect(page.getByRole('button', { name: new RegExp(title) })).toBeVisible()
+      await expect(picker.getByRole('button', { name: new RegExp(title) })).toBeVisible()
     }
+    await page.keyboard.press('Escape')
 
     await startBrief(page)
     await expect(page.getByRole('heading', { name: BRIEF, level: 1 })).toBeVisible()
-    await expect(page.getByRole('heading', { name: 'Statement of the business problem' })).toBeVisible()
-    await expect(page.getByRole('heading', { name: 'Scope parameters' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: /Statement of the business problem/ })).toBeVisible()
+    await expect(page.getByRole('heading', { name: /Scope parameters/ })).toBeVisible()
     await expect(page.getByText(/Submissions close/)).toBeVisible()
+
+    await page.goto('/project')
+    await expect(page.getByRole('link', { name: new RegExp(BRIEF) })).toBeVisible()
+  })
+
+  test('folds every section of the brief, and opens one from the outline', async ({ page }) => {
+    await startBrief(page)
+    const scope = page.getByRole('button', { name: /^Scope parameters/ })
+    await expect(scope).toHaveAttribute('aria-expanded', 'false')
+    await expect(page.getByRole('button', { name: /^Statement of the business problem/ })).toHaveAttribute('aria-expanded', 'false')
+
+    const outline = page.getByRole('navigation', { name: 'Brief outline' })
+    await outline.getByRole('button', { name: /^Scope/ }).click()
+    await expect(scope).toHaveAttribute('aria-expanded', 'true')
+    await expect(outline.getByRole('button', { name: /^Scope/ })).toHaveAttribute('aria-current', 'location')
+
+    await scope.click()
+    await expect(scope).toHaveAttribute('aria-expanded', 'false')
   })
 
   test('puts the data sets in the workspace, read-only, beside a starter script', async ({ page }) => {
@@ -77,9 +107,8 @@ test.describe('pcpa project', () => {
 
   test('offers the same data again on a second attempt at a brief', async ({ page }) => {
     await startBrief(page)
-    await page.goto('/project')
-    await page.getByRole('button', { name: new RegExp(BRIEF) }).click()
-    await expect(page.getByRole('dialog', { name: BRIEF }).getByRole('radiogroup', { name: 'Data' })).toBeVisible()
+    const sheet = await chooseBrief(page)
+    await expect(sheet.getByRole('radiogroup', { name: 'Data' })).toBeVisible()
   })
 
   test('is its own tab, and reachable from the PCPA study guide', async ({ page }) => {

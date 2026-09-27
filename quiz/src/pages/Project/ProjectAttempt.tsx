@@ -10,8 +10,9 @@ import { ResultsView } from '@/components/project/ResultsView'
 import { ProjectTopBar, WindowPill } from '@/components/project/ProjectTopBar'
 import { queueOpenFile } from '@/components/project/workspaceTabs'
 import { projectCase as findCase } from '@/data/pcpaProjects'
+import { useAuth } from '@/hooks/useAuth'
 import { useAttempt, usePcpaAttempts } from '@/hooks/usePcpaAttempts'
-import { usePcpaWorkspace } from '@/hooks/usePcpaWorkspace'
+import { usePcpaWorkspace, type SeedFile } from '@/hooks/usePcpaWorkspace'
 import { useProjectRuntime } from '@/hooks/useProjectRuntime'
 import { attemptPhase, starterScript, type ProjectAttempt } from '@/lib/pcpaAttempt'
 import { generateCase } from '@/lib/pcpaData'
@@ -37,19 +38,25 @@ const VIEWS: View[] = ['brief', 'workspace', 'report', 'submit', 'results']
 const IDLE_MS = 2 * 60_000
 const TICK_MS = 30_000
 
-function seedFiles(attempt: ProjectAttempt) {
+/**
+ * The files an attempt starts with, dated to its start so that any later edit
+ * — on this device or another — is newer than they are.
+ */
+function seedFiles(attempt: ProjectAttempt): SeedFile[] {
   const projectCase = findCase(attempt.caseId)
   const generated = generateCase(attempt.caseId, attempt.seed)
-  const starter = projectCase ? [{ ...starterScript(attempt.language, projectCase), readOnly: false }] : []
+  const updatedAt = attempt.startedAt
+  const starter = projectCase ? [{ ...starterScript(attempt.language, projectCase), readOnly: false, updatedAt }] : []
   return [
-    ...generated.tables.map(t => ({ path: `data/${t.file}`, text: toCsv(t.columns, t.rows), readOnly: true })),
+    ...generated.tables.map(t => ({ path: `data/${t.file}`, text: toCsv(t.columns, t.rows), readOnly: true, updatedAt })),
     ...starter,
   ]
 }
 
 export default function ProjectAttemptPage() {
   const { attemptId } = useParams()
-  const attempt = useAttempt(attemptId)
+  const { user } = useAuth()
+  const attempt = useAttempt(attemptId, user?.id ?? null)
   const update = usePcpaAttempts(s => s.update)
   const openWorkspace = usePcpaWorkspace(s => s.open)
   const closeWorkspace = usePcpaWorkspace(s => s.close)

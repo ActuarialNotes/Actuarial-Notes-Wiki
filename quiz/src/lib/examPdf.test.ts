@@ -178,6 +178,7 @@ describe('the syllabus catalogue', () => {
     expect(getSyllabusPdfLink(examIdFromFile('Exam FM-2 (SOA).md'))?.label).toBe('Syllabus')
     expect(getSyllabusPdfLink(examIdFromFile('Exam 5 (CAS).md'))?.label).toBe('Content Outline')
     expect(getSyllabusPdfLink(examIdFromFile('Exam MAS-II (CAS).md'))?.label).toBe('Content Outline')
+    expect(getSyllabusPdfLink(examIdFromFile('Exam 7 (CAS).md'))?.label).toBe('Content Outline')
     expect(getSyllabusPdfLink(examIdFromFile('Exam 8 (CAS).md'))?.label).toBe('Content Outline')
     expect(getSyllabusPdfLink(examIdFromFile('Exam 9 (CAS).md'))?.label).toBe('Content Outline')
   })

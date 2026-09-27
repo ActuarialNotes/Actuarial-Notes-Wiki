@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { attemptPhase, attemptRoute, fileKind, newAttempt, nextRealWindow, normalizePath, savedMode, starterScript, timeLeft, windowDeadline } from './pcpaAttempt'
+import { attemptPhase, attemptRoute, fileKind, newAttempt, nextRealWindow, normalizeAttempt, normalizePath, savedMode, starterScript, timeLeft, visibleTo, windowDeadline } from './pcpaAttempt'
 import { PROJECT_CASES, WINDOW_DAYS } from '@/data/pcpaProjects'
 
 describe('the window', () => {
@@ -80,5 +80,41 @@ describe('workspace paths', () => {
       }
       expect(r.text).not.toMatch(/glm\(/)
     }
+  })
+})
+
+describe('normalizeAttempt', () => {
+  it('refuses what is not an attempt', () => {
+    expect(normalizeAttempt(null)).toBeNull()
+    expect(normalizeAttempt({ id: 'a', caseId: 'no-such-case', seed: 1 })).toBeNull()
+    expect(normalizeAttempt({ id: 'a', caseId: 'bop-frequency' })).toBeNull()
+  })
+
+  it('fills in what an older record lacks', () => {
+    const a = normalizeAttempt({ id: 'a', caseId: 'bop-frequency', seed: 1, startedAt: 100, submittedAt: 400, timing: 'untimed' })!
+    expect(a.mode).toBe('practice')
+    expect(a.report).toEqual({ body: '', appendices: [] })
+    expect(a.activeMs).toBe(0)
+    // No record of when it last changed: the last thing known to have happened to it.
+    expect(a.updatedAt).toBe(400)
+    expect(a.owner).toBeUndefined()
+  })
+
+  it('keeps a record that is already whole as it is', () => {
+    const a = newAttempt({ id: 'a', caseId: 'auto-severity', seed: 7, mode: 'rehearsal', language: 'python', now: 1000, owner: 'u1' })
+    expect(normalizeAttempt(JSON.parse(JSON.stringify(a)))).toEqual(a)
+  })
+})
+
+describe('visibleTo', () => {
+  it("shows a reader their account's attempts and any started signed out", () => {
+    expect(visibleTo({ owner: 'u1' }, 'u1')).toBe(true)
+    expect(visibleTo({ owner: undefined }, 'u1')).toBe(true)
+    expect(visibleTo({ owner: 'u2' }, 'u1')).toBe(false)
+  })
+
+  it("keeps an account's attempts from whoever uses the browser signed out", () => {
+    expect(visibleTo({ owner: 'u1' }, null)).toBe(false)
+    expect(visibleTo({ owner: undefined }, null)).toBe(true)
   })
 })

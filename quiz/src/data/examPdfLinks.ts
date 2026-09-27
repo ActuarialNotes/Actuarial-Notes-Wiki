@@ -292,8 +292,11 @@ const SYLLABUS_PDF_LINKS: Record<string, ExamPdfLink> = {
     url: 'https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf',
     label: 'Content Outline',
   },
+  // Fall 2026 administration (October 2026 window) — v04 of 16 Sep 2026, the
+  // "October 2026 Content Outline" the CAS Exam 7 page links. Replaces the
+  // 2023 `Exam7_Content_Outline.pdf`.
   '7-1': {
-    url: 'https://www.casact.org/sites/default/files/2023-05/Exam7_Content_Outline.pdf',
+    url: 'https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf',
     label: 'Content Outline',
   },
   'mas-i': {

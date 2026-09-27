@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:b4c3257dbf222a46e8d2f6debff34da4d96d56bc4e0e44527b649e65b257b059
+  content_hash: sha256:71eed7fc4d10cd92f6c9fa4005d39074e03c5f0ad778693ab5268b46a083725a
   sources: []
   open_findings: 0
   open_critical: 0
@@ -16,6 +16,8 @@ verification:
 **ACAS** is the associateship credential of the **Casualty Actuarial Society (CAS)**, the professional body for actuaries working in property and casualty (general) insurance — auto, home, commercial liability, workers compensation, reinsurance. An Associate has finished the CAS's *basic education*: probability and financial mathematics, modern statistics, ratemaking, estimating claim liabilities, and the regulation and financial reporting of an insurer in one jurisdiction.
 
 It is the first of the two CAS designations. [[Fellow of the Casualty Actuarial Society (FCAS)|FCAS]] is the second, and an Associate continues straight on to it — every ACAS requirement is also an FCAS requirement.
+
+%%credential-path ACAS%%
 
 ## Requirements
 

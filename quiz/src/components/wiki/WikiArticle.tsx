@@ -10,7 +10,7 @@ import { codeComponents } from '@/components/CodeBlock'
 import { DistributionSimulator } from '@/components/wiki/DistributionSimulator'
 import { SourceMaterialGallery } from '@/components/wiki/SourceMaterialGallery'
 import { CredentialPath } from '@/components/wiki/CredentialPath'
-import { CREDENTIAL_PATH_MARKER } from '@/data/credentialPaths'
+import { readCredentialPathMarker } from '@/data/credentialPaths'
 import { extractSourceMaterial, SOURCE_MATERIAL_MARKER } from '@/lib/sourceMaterial'
 import { hrefToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { isInWikiIndex } from '@/lib/wikiIndex'
@@ -247,10 +247,13 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
       if (only && only.type === 'text' && only.value.trim() === SOURCE_MATERIAL_MARKER) {
         return <SourceMaterialGallery entries={sourceMaterial} onOpen={openRef} />
       }
-      // The general study guide's SOA/CAS credential path. The vault writes it
-      // as an Obsidian comment, so Obsidian shows nothing there.
-      if (only && only.type === 'text' && only.value.trim() === CREDENTIAL_PATH_MARKER) {
-        return <CredentialPath onOpen={openRef} />
+      // The SOA/CAS credential path — on the general study guide, and on each
+      // designation page opened at that designation. The vault writes it as an
+      // Obsidian comment, so Obsidian shows nothing there.
+      const credentialPath = only && only.type === 'text' ? readCredentialPathMarker(only.value) : null
+      if (credentialPath) {
+        const { at } = credentialPath
+        return <CredentialPath key={at ? `${at.body}-${at.stage}` : 'reader'} onOpen={openRef} start={at} />
       }
       if (
         !hideImages &&

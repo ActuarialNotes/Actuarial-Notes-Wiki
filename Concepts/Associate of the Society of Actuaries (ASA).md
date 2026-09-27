@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:3b0865e6cba06e1ec8896762e1b523433f5be50288ea4309eacec74fabcf4b48
+  content_hash: sha256:3e394f4fff48520ba77b3aaf8b1d09c8e71b19d10d1ed6080ca1d1042478f86b
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,6 +18,8 @@ verification:
 It is the first of the two SOA designations; [[Fellow of the Society of Actuaries (FSA)|FSA]] is the second, and it is earned on top of this one.
 
 The SOA and the Casualty Actuarial Society share their first two exams, so the first year or so of study is the same whichever body you end up with. The tracks separate after that: the SOA's route runs through this designation and [[Fellow of the Society of Actuaries (FSA)|FSA]], the CAS's through [[Associate of the Casualty Actuarial Society (ACAS)|ACAS]] and [[Fellow of the Casualty Actuarial Society (FCAS)|FCAS]] into property and casualty work.
+
+%%credential-path ASA%%
 
 ## Requirements
 

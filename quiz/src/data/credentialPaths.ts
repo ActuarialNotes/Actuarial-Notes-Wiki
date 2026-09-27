@@ -5,7 +5,9 @@
 //
 // The guide places it with a bare `%%credential-path%%` line (an Obsidian
 // comment, so the vault reads as plain prose there), and `WikiArticle` swaps
-// that line for `components/wiki/CredentialPath.tsx`.
+// that line for `components/wiki/CredentialPath.tsx`. The four designation
+// pages place it too, naming themselves — `%%credential-path ACAS%%` — so the
+// path opens on their society at their stage (`readCredentialPathMarker`).
 //
 // The exam and course lists are the same requirements `data/tracks.ts` tracks,
 // grouped for reading rather than for progress. Each item names the track ids
@@ -391,4 +393,33 @@ export const CREDENTIAL_PATHS: Record<ExamBody, CredentialPath> = {
       },
     ],
   },
+}
+
+/** Where a placed path opens: a society, and a stage along its path. */
+export interface PathPosition {
+  body: ExamBody
+  stage: number
+}
+
+const MARKER_RE = /^%%credential-path(?:\s+([^\s%]+))?%%$/
+
+/**
+ * Reads a marker line. The bare `%%credential-path%%` is the general guide's,
+ * and opens wherever the reader's society says. `%%credential-path FCAS%%`
+ * names a designation — a credential stage's `short` — and opens that society
+ * at that stage, which is how a designation page shows where it sits.
+ *
+ * Anything else is not a marker, a designation no stage has included, so a
+ * typo is left on the page as text rather than drawn as the wrong path.
+ */
+export function readCredentialPathMarker(text: string): { at?: PathPosition } | null {
+  const match = MARKER_RE.exec(text.trim())
+  if (!match) return null
+  const designation = match[1]
+  if (!designation) return {}
+  for (const path of Object.values(CREDENTIAL_PATHS)) {
+    const stage = path.stages.findIndex(s => s.ref && s.short === designation)
+    if (stage >= 0) return { at: { body: path.body, stage } }
+  }
+  return null
 }

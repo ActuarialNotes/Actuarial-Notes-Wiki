@@ -82,7 +82,11 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
   `components/ConceptActionMenu.tsx` is **the** concept action menu — quiz, study guide, deck,
   learning progress, fact check — and the owner of the modals those rows open; the
   concept popup (whose title is its only trigger) and every flashcard surface open that one
-  component, so the two can't drift apart. A surface adds only rows about *itself* (a card's
+  component, so the two can't drift apart. An **exam** gets its own form of it, opened by the
+  exam study guide's underlined title (`WikiArticle`'s `titleAction`): the readiness bar
+  (`components/ReadinessBar.tsx`, shared with the exam grid) and the countdown to the exam,
+  then **Today's Study Plan** (locked for a reader who isn't Pro) and Fact Check — the facts
+  are `lib/examMenu.ts`, pure and tested. A surface adds only rows about *itself* (a card's
   Study and Remove) through `leading` / `trailing`; view switches (Listen, the deck's view
   modes) are each surface's own control, never menu rows. It always portals to the body and
   is placed by `lib/menuPlacement.ts`, so no host's stacking context or viewport edge can
@@ -266,9 +270,9 @@ Other important `lib/` modules:
   via `parser.ts`), parses a sidecar log, and decides what the **Fact Check** badge says
   (`factCheckBadge` → `components/FactCheckBadge.tsx` → `FactCheckPanel`; on a concept or
   resource page the way in is the *Fact Check* item of the action menu, on a question it is
-  both the explanation panel's badge and the verdict row in the quiz's **Info** sheet, and an
-  exam page has none). The panel shows the verdict alone until the reader taps it, then
-  unfolds the record — findings first, then what it was **Checked against**.
+  both the explanation panel's badge and the verdict row in the quiz's **Info** sheet, and on
+  an exam page it is the same item in the menu the exam's title opens). The panel shows the
+  verdict alone until the reader taps it, then unfolds the record — findings first, then what it was **Checked against**.
   `summarizeSource` and `summarizeLog` are what keep it short — the first cuts an auditor's
   citation into the source's name, the chapters/pages checked and its link (the sha256 never
   reaches the screen), the second splits the log into Open / Fixed / Notes and folds each
@@ -744,8 +748,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **139 test files /
-~2165 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **140 test files /
+~2245 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).

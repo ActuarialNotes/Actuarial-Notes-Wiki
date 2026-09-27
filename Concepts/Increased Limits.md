@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:cbf034ffadcd2fc1ef4d7931b1643549ab680d55c7ab39140d00b4b0aecfd7c2
+  content_hash: sha256:cb4e8721ef1c85141e00f01831f73556014f785b6433423cd5cd2ccae99d40b2
   sources: []
   open_findings: 3
   open_critical: 0
@@ -21,7 +21,7 @@ verification:
 - Werner's fuller formulation includes more than indemnity in each layer: **ALAE**, a **risk load** for the greater volatility of high layers, and sometimes ULAE. The risk load is what makes the ILF exceed the pure expected-loss ratio — writing a $\$5$M limit carries more parameter and process risk per dollar than writing $\$100$K.
 - ILFs are estimated from a **size-of-loss distribution** — empirical where enough large claims exist, otherwise a fitted curve (Pareto, lognormal, mixed exponential). Because the number of claims in the top layers is tiny, ILFs are usually taken from industry data (ISO) rather than from one insurer's own experience.
 - **Consistency test (Lee).** The *marginal* cost per dollar of additional limit must decrease as the limit rises: expected loss in each successive layer falls, because fewer claims reach it. An ILF table whose marginal cost increases lets a buyer purchase a higher limit for less than the layer is worth.
-- ILFs are **leveraged by inflation**. As losses grow, more of them pierce the basic limit and the excess layers grow faster than the ground-up trend — so ILF tables must be reviewed, not left in place, through inflationary periods.
+- ILFs are **leveraged by inflation**. As losses grow, more of them pierce the basic limit, so losses above it grow faster than basic-limit losses and the factors rise — ILF tables must be reviewed, not left in place, through inflationary periods. Only an excess layer with no upper limit is sure to outgrow the ground-up trend; an upper limit damps the effect, and a capped layer can trend *below* it (Bahnemann's layer from $500$ to $5{,}000$ trends at $2.2\%$ under a $5\%$ ground-up trend).
 - The **assumptions** behind an ILF table matter: frequency is independent of severity, the severity distribution is the same at all limits, and there is no adverse selection by limit. All three fail somewhat in practice — insureds who buy $\$5$M limits are not a random sample.
 
 ![[Media/Figures/Increased_Limits.svg|340]]

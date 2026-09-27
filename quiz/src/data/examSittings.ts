@@ -1,12 +1,24 @@
 export interface ExamSitting {
   examId: string
-  format: 'CBT' | 'P/P'
+  /**
+   * How it is sat: computer-based at a test centre, paper and pencil, or —
+   * PCPA's second half — a project done remotely over the window.
+   */
+  format: 'CBT' | 'P/P' | 'Project'
   startDate: string       // ISO YYYY-MM-DD
   endDate: string | null  // null = single-day
   registrationDeadline: string | null
 }
 
-// All 2026 exam sittings sourced from Exam Database 2026-03-30.csv.
+// All 2026 exam sittings sourced from Exam Database 2026-03-30.csv, with the
+// rows for the exams the vault covers (P, FM, MAS-I, MAS-II, CAS 5–9, PCPA)
+// checked against the publishers on 2026-09-27 — CAS's 2026 Syllabus of Basic
+// Education and registration notices, SOA's exam schedule and per-sitting
+// applications — and corrected where they disagreed. SOA's 2027 sittings are
+// transcribed from its exam schedule, which runs through December 2027; CAS
+// has published no 2027 dates. What each sitting's publisher says beyond the
+// window (registration opening, refund deadlines, results) is in
+// `examSittingDetails.ts`, with its sources.
 // examId values match the app's canonical IDs from tracks.ts.
 // Duplicate rows (regional variants that share the same sitting window) are included;
 // getSittingsForExam() deduplicates by (startDate, endDate, format).
@@ -14,29 +26,35 @@ export const EXAM_SITTINGS: ExamSitting[] = [
   // ── CAS ──────────────────────────────────────────────────────────────────
   { examId: 'MAS-I',    format: 'CBT', startDate: '2026-01-28', endDate: '2026-02-03', registrationDeadline: '2026-01-08' },
   { examId: 'MAS-II',   format: 'CBT', startDate: '2026-01-28', endDate: '2026-02-03', registrationDeadline: '2026-01-08' },
-  { examId: 'CAS-PCPA', format: 'CBT', startDate: '2026-03-16', endDate: '2026-03-31', registrationDeadline: null },
-  { examId: 'CAS-5',    format: 'CBT', startDate: '2026-04-14', endDate: '2026-04-21', registrationDeadline: null },
-  { examId: 'CAS-6',    format: 'CBT', startDate: '2026-04-14', endDate: '2026-04-21', registrationDeadline: null },
-  { examId: 'CAS-6',    format: 'CBT', startDate: '2026-04-14', endDate: '2026-04-21', registrationDeadline: null }, // US variant — deduped at query time
-  { examId: 'CAS-7',    format: 'CBT', startDate: '2026-04-14', endDate: '2026-04-21', registrationDeadline: null },
-  { examId: 'CAS-8',    format: 'CBT', startDate: '2026-04-14', endDate: '2026-04-21', registrationDeadline: null },
-  { examId: 'CAS-9',    format: 'CBT', startDate: '2026-04-14', endDate: '2026-04-21', registrationDeadline: null },
+  // PCPA rows are the *project* windows; the exam half is sat on demand.
+  { examId: 'CAS-PCPA', format: 'Project', startDate: '2026-03-16', endDate: '2026-03-31', registrationDeadline: null },
+  { examId: 'CAS-5',    format: 'CBT', startDate: '2026-04-14', endDate: '2026-04-21', registrationDeadline: '2026-03-25' },
+  { examId: 'CAS-6',    format: 'CBT', startDate: '2026-04-14', endDate: '2026-04-21', registrationDeadline: '2026-03-25' },
+  { examId: 'CAS-6',    format: 'CBT', startDate: '2026-04-14', endDate: '2026-04-21', registrationDeadline: '2026-03-25' }, // US variant — deduped at query time
+  { examId: 'CAS-7',    format: 'CBT', startDate: '2026-04-14', endDate: '2026-04-21', registrationDeadline: '2026-03-25' },
+  { examId: 'CAS-8',    format: 'CBT', startDate: '2026-04-14', endDate: '2026-04-21', registrationDeadline: '2026-03-25' },
+  { examId: 'CAS-9',    format: 'CBT', startDate: '2026-04-14', endDate: '2026-04-21', registrationDeadline: '2026-03-25' },
   { examId: 'MAS-I',    format: 'CBT', startDate: '2026-04-22', endDate: '2026-05-01', registrationDeadline: '2026-03-25' },
   { examId: 'MAS-II',   format: 'CBT', startDate: '2026-04-22', endDate: '2026-05-01', registrationDeadline: '2026-03-25' },
-  { examId: 'CAS-PCPA', format: 'CBT', startDate: '2026-06-15', endDate: '2026-06-30', registrationDeadline: null },
+  // Registration closed June 1, not the standing calendar's June 8 (CAS's
+  // "Registration Open for June 2026 PCPA Project" notice).
+  { examId: 'CAS-PCPA', format: 'Project', startDate: '2026-06-15', endDate: '2026-06-30', registrationDeadline: '2026-06-01' },
   { examId: 'MAS-I',    format: 'CBT', startDate: '2026-07-29', endDate: '2026-08-04', registrationDeadline: '2026-07-09' },
   { examId: 'MAS-II',   format: 'CBT', startDate: '2026-07-29', endDate: '2026-08-04', registrationDeadline: '2026-07-09' },
-  { examId: 'CAS-PCPA', format: 'CBT', startDate: '2026-09-16', endDate: '2026-09-30', registrationDeadline: null },
-  { examId: 'CAS-5',    format: 'CBT', startDate: '2026-10-19', endDate: '2026-10-27', registrationDeadline: null },
-  { examId: 'CAS-6',    format: 'CBT', startDate: '2026-10-19', endDate: '2026-10-27', registrationDeadline: null }, // Canada variant
-  { examId: 'CAS-6',    format: 'CBT', startDate: '2026-10-19', endDate: '2026-10-27', registrationDeadline: null }, // Intl variant — deduped
-  { examId: 'CAS-6',    format: 'CBT', startDate: '2026-10-19', endDate: '2026-10-27', registrationDeadline: null }, // US variant — deduped
-  { examId: 'CAS-7',    format: 'CBT', startDate: '2026-10-19', endDate: '2026-10-27', registrationDeadline: null },
-  { examId: 'CAS-8',    format: 'CBT', startDate: '2026-10-19', endDate: '2026-10-27', registrationDeadline: null },
-  { examId: 'CAS-9',    format: 'CBT', startDate: '2026-10-19', endDate: '2026-10-27', registrationDeadline: null },
+  // September 15 per the PCPA page ("Project scheduled for September 15, 2026")
+  // and the v.8 content outline; the Syllabus of Basic Education's table says
+  // September 16. The info panel carries the disagreement as a note.
+  { examId: 'CAS-PCPA', format: 'Project', startDate: '2026-09-15', endDate: '2026-09-30', registrationDeadline: '2026-09-08' },
+  { examId: 'CAS-5',    format: 'CBT', startDate: '2026-10-19', endDate: '2026-10-27', registrationDeadline: '2026-09-29' },
+  { examId: 'CAS-6',    format: 'CBT', startDate: '2026-10-19', endDate: '2026-10-27', registrationDeadline: '2026-09-29' }, // Canada variant
+  { examId: 'CAS-6',    format: 'CBT', startDate: '2026-10-19', endDate: '2026-10-27', registrationDeadline: '2026-09-29' }, // Intl variant — deduped
+  { examId: 'CAS-6',    format: 'CBT', startDate: '2026-10-19', endDate: '2026-10-27', registrationDeadline: '2026-09-29' }, // US variant — deduped
+  { examId: 'CAS-7',    format: 'CBT', startDate: '2026-10-19', endDate: '2026-10-27', registrationDeadline: '2026-09-29' },
+  { examId: 'CAS-8',    format: 'CBT', startDate: '2026-10-19', endDate: '2026-10-27', registrationDeadline: '2026-09-29' },
+  { examId: 'CAS-9',    format: 'CBT', startDate: '2026-10-19', endDate: '2026-10-27', registrationDeadline: '2026-09-29' },
   { examId: 'MAS-I',    format: 'CBT', startDate: '2026-10-28', endDate: '2026-11-05', registrationDeadline: '2026-09-29' },
   { examId: 'MAS-II',   format: 'CBT', startDate: '2026-10-28', endDate: '2026-11-05', registrationDeadline: '2026-09-29' },
-  { examId: 'CAS-PCPA', format: 'CBT', startDate: '2026-12-16', endDate: '2026-12-31', registrationDeadline: null },
+  { examId: 'CAS-PCPA', format: 'Project', startDate: '2026-12-16', endDate: '2026-12-31', registrationDeadline: null },
 
   // ── SOA ──────────────────────────────────────────────────────────────────
   // FAM — long CBT window spanning two sittings
@@ -66,16 +84,18 @@ export const EXAM_SITTINGS: ExamSitting[] = [
   { examId: 'FSA-RET301', format: 'CBT', startDate: '2026-03-07', endDate: null, registrationDeadline: '2026-02-16' },
   { examId: 'FSA-CFE101', format: 'CBT', startDate: '2026-03-23', endDate: null, registrationDeadline: '2026-02-16' },
   // Spring sittings
-  { examId: 'FM',     format: 'CBT', startDate: '2026-04-02', endDate: '2026-04-13', registrationDeadline: null },
+  { examId: 'FM',     format: 'CBT', startDate: '2026-04-02', endDate: '2026-04-13', registrationDeadline: '2026-03-04' },
   { examId: 'PA',     format: 'CBT', startDate: '2026-04-14', endDate: '2026-04-17', registrationDeadline: null },
   { examId: 'ALTAM',  format: 'CBT', startDate: '2026-04-21', endDate: null,         registrationDeadline: null },
   { examId: 'ASTAM',  format: 'CBT', startDate: '2026-04-22', endDate: null,         registrationDeadline: null },
-  { examId: 'P',      format: 'P/P', startDate: '2026-05-08', endDate: '2026-05-19', registrationDeadline: null },
-  { examId: 'P',      format: 'CBT', startDate: '2026-05-08', endDate: null,         registrationDeadline: '2026-04-08' },
+  // The CSV had these two formats swapped: CBT is the window, P/P the day.
+  { examId: 'P',      format: 'CBT', startDate: '2026-05-08', endDate: '2026-05-19', registrationDeadline: '2026-04-08' },
+  { examId: 'P',      format: 'P/P', startDate: '2026-05-08', endDate: null,         registrationDeadline: '2026-04-08' },
   { examId: 'SRM',    format: 'P/P', startDate: '2026-05-22', endDate: null,         registrationDeadline: null },
   { examId: 'SRM',    format: 'CBT', startDate: '2026-05-28', endDate: null,         registrationDeadline: '2026-04-21' },
-  { examId: 'FM',     format: 'P/P', startDate: '2026-06-11', endDate: null,         registrationDeadline: null },
-  { examId: 'FM',     format: 'CBT', startDate: '2026-06-22', endDate: null,         registrationDeadline: '2026-05-06' },
+  // The CSV had the CBT window as its last day alone.
+  { examId: 'FM',     format: 'P/P', startDate: '2026-06-11', endDate: null,         registrationDeadline: '2026-05-06' },
+  { examId: 'FM',     format: 'CBT', startDate: '2026-06-11', endDate: '2026-06-22', registrationDeadline: '2026-05-06' },
   // FSA July sitting
   { examId: 'FSA-GH101',  format: 'CBT', startDate: '2026-07-01', endDate: null, registrationDeadline: '2026-06-16' },
   { examId: 'FSA-ILA101', format: 'CBT', startDate: '2026-07-01', endDate: null, registrationDeadline: '2026-06-16' },
@@ -103,9 +123,9 @@ export const EXAM_SITTINGS: ExamSitting[] = [
   { examId: 'SRM', format: 'CBT', startDate: '2026-09-02', endDate: '2026-09-08', registrationDeadline: '2026-08-05' },
   { examId: 'SRM', format: 'P/P', startDate: '2026-09-02', endDate: null,         registrationDeadline: null },
   { examId: 'P',   format: 'CBT', startDate: '2026-09-10', endDate: '2026-09-21', registrationDeadline: '2026-08-12' },
-  { examId: 'P',   format: 'P/P', startDate: '2026-09-10', endDate: null,         registrationDeadline: null },
+  { examId: 'P',   format: 'P/P', startDate: '2026-09-10', endDate: null,         registrationDeadline: '2026-08-12' },
   { examId: 'FM',  format: 'CBT', startDate: '2026-10-01', endDate: '2026-10-12', registrationDeadline: '2026-09-02' },
-  { examId: 'FM',  format: 'P/P', startDate: '2026-10-01', endDate: null,         registrationDeadline: null },
+  { examId: 'FM',  format: 'P/P', startDate: '2026-10-01', endDate: null,         registrationDeadline: '2026-09-02' },
   { examId: 'PA',    format: 'CBT', startDate: '2026-10-13', endDate: '2026-10-16', registrationDeadline: '2026-09-07' },
   { examId: 'ALTAM', format: 'CBT', startDate: '2026-10-21', endDate: null,         registrationDeadline: '2026-09-14' },
   { examId: 'ASTAM', format: 'CBT', startDate: '2026-10-22', endDate: null,         registrationDeadline: '2026-09-14' },
@@ -130,6 +150,26 @@ export const EXAM_SITTINGS: ExamSitting[] = [
   { examId: 'FSA-CP311',  format: 'CBT', startDate: '2026-11-29', endDate: null, registrationDeadline: '2026-10-13' },
   { examId: 'FSA-CP321',  format: 'CBT', startDate: '2026-11-29', endDate: null, registrationDeadline: '2026-10-13' },
   { examId: 'FM', format: 'CBT', startDate: '2026-12-03', endDate: '2026-12-14', registrationDeadline: '2026-11-04' },
+
+  // ── SOA 2027 — the exam schedule's ASA tab, "through December 2027" ───────
+  { examId: 'P',  format: 'CBT', startDate: '2027-01-14', endDate: '2027-01-25', registrationDeadline: '2026-12-15' },
+  { examId: 'P',  format: 'P/P', startDate: '2027-01-14', endDate: null,         registrationDeadline: '2026-12-15' },
+  { examId: 'FM', format: 'CBT', startDate: '2027-02-04', endDate: '2027-02-15', registrationDeadline: '2027-01-05' },
+  { examId: 'FM', format: 'P/P', startDate: '2027-02-04', endDate: null,         registrationDeadline: '2027-01-05' },
+  { examId: 'P',  format: 'CBT', startDate: '2027-03-01', endDate: '2027-03-12', registrationDeadline: '2027-02-02' },
+  { examId: 'FM', format: 'CBT', startDate: '2027-04-01', endDate: '2027-04-12', registrationDeadline: '2027-03-02' },
+  { examId: 'P',  format: 'CBT', startDate: '2027-05-07', endDate: '2027-05-18', registrationDeadline: '2027-04-06' },
+  { examId: 'P',  format: 'P/P', startDate: '2027-05-07', endDate: null,         registrationDeadline: '2027-04-06' },
+  { examId: 'FM', format: 'CBT', startDate: '2027-06-10', endDate: '2027-06-21', registrationDeadline: '2027-05-11' },
+  { examId: 'FM', format: 'P/P', startDate: '2027-06-10', endDate: null,         registrationDeadline: '2027-05-11' },
+  { examId: 'P',  format: 'CBT', startDate: '2027-07-01', endDate: '2027-07-12', registrationDeadline: '2027-06-01' },
+  { examId: 'FM', format: 'CBT', startDate: '2027-08-05', endDate: '2027-08-16', registrationDeadline: '2027-07-06' },
+  { examId: 'P',  format: 'CBT', startDate: '2027-09-16', endDate: '2027-09-27', registrationDeadline: '2027-08-17' },
+  { examId: 'P',  format: 'P/P', startDate: '2027-09-16', endDate: null,         registrationDeadline: '2027-08-17' },
+  { examId: 'FM', format: 'CBT', startDate: '2027-10-01', endDate: '2027-10-12', registrationDeadline: '2027-08-31' },
+  { examId: 'FM', format: 'P/P', startDate: '2027-10-01', endDate: null,         registrationDeadline: '2027-08-31' },
+  { examId: 'P',  format: 'CBT', startDate: '2027-11-03', endDate: '2027-11-14', registrationDeadline: '2027-10-05' },
+  { examId: 'FM', format: 'CBT', startDate: '2027-12-02', endDate: '2027-12-13', registrationDeadline: '2027-11-02' },
 ]
 
 /**
@@ -143,7 +183,7 @@ export function getSittingsForExam(examId: string, today = new Date()): ExamSitt
     .filter(s => s.examId === examId)
     .filter(s => (s.endDate ?? s.startDate) >= todayISO)
     .filter(s => {
-      const key = `${s.startDate}|${s.endDate ?? ''}|${s.format}`
+      const key = sittingKey(s)
       if (seen.has(key)) return false
       seen.add(key)
       return true
@@ -220,6 +260,33 @@ export function sittingContains(sitting: ExamSitting, date: string | null | unde
  */
 export function currentSitting(sittings: ExamSitting[], targetDate: string | null | undefined): ExamSitting | null {
   return sittings.find(s => sittingContains(s, targetDate)) ?? sittings[0] ?? null
+}
+
+/** One sitting's identity — the same triple `getSittingsForExam` dedupes on. */
+export function sittingKey(sitting: ExamSitting): string {
+  return `${sitting.startDate}|${sitting.endDate ?? ''}|${sitting.format}`
+}
+
+/**
+ * The version a study guide shows, given the reader's recorded exam date (only
+ * for a tracked exam) and the sitting they last picked from the version menu.
+ *
+ * The record decides, since it is what the study plan paces to; the pick only
+ * breaks a tie inside it — Exam P's paper day falls inside its CBT window, so a
+ * date alone can't say which of the two was chosen. With no record, the pick
+ * stands on its own, and with neither it is the next sitting.
+ */
+export function selectVersion(
+  sittings: ExamSitting[],
+  recordDate: string | null | undefined,
+  pickedKey: string | null | undefined,
+): ExamSitting | null {
+  const picked = pickedKey ? sittings.find(s => sittingKey(s) === pickedKey) : undefined
+  if (recordDate) {
+    if (picked && sittingContains(picked, recordDate)) return picked
+    return currentSitting(sittings, recordDate)
+  }
+  return picked ?? currentSitting(sittings, null)
 }
 
 /**

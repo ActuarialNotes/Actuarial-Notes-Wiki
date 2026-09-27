@@ -12,6 +12,7 @@
 // (`EXAM_HUES` is laid out in sitting order). Pure and deterministic.
 
 import { matchesSelectedVariant } from '@/data/examSittings'
+import type { DailyLevelUp } from './dailyProgressStore'
 import { examHue } from './examColors'
 import { isExamInDevelopment } from './examStatus'
 import { wikiExamIdToProgressKey, type WikiExamSyllabus } from './wikiParser'
@@ -42,4 +43,35 @@ export function flashcardShelfExams(
       || ladder(a) - ladder(b)
       || a.examLabel.localeCompare(b.examLabel),
     )
+}
+
+/**
+ * The concepts an exam shelf's "Completed Today" section holds: today's
+ * level-ups (`hooks/useTodayCompletions`) that belong to this exam's syllabus,
+ * most recent first. A concept that levelled up twice today appears once, and
+ * every name is spelled the way the syllabus spells it, since that is the name
+ * the deck keys its cards by. A level-up for a concept this syllabus doesn't
+ * list — another exam's quiz — is left off.
+ */
+export function completedTodayConcepts(
+  levelUps: readonly DailyLevelUp[],
+  syllabusConcepts: readonly string[],
+): string[] {
+  const byLower = new Map<string, string>()
+  for (const name of syllabusConcepts) {
+    const key = name.toLowerCase()
+    if (!byLower.has(key)) byLower.set(key, name)
+  }
+
+  const out: string[] = []
+  const seen = new Set<string>()
+  const newestFirst = [...levelUps].sort((a, b) => (b.at > a.at ? 1 : b.at < a.at ? -1 : 0))
+  for (const lu of newestFirst) {
+    const key = lu.conceptSlug.toLowerCase()
+    const name = byLower.get(key)
+    if (!name || seen.has(key)) continue
+    seen.add(key)
+    out.push(name)
+  }
+  return out
 }

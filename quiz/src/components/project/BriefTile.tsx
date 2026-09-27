@@ -16,7 +16,7 @@ const ICONS: Record<CaseId, LucideIcon> = {
   'ho-water': Droplets,
 }
 
-const ICON_SIZE: Record<LogoTileSize, string> = { sm: 'h-3.5 w-3.5', md: 'h-5 w-5', lg: 'h-6 w-6' }
+const ICON_SIZE: Record<LogoTileSize, string> = { xs: 'h-3 w-3', sm: 'h-3.5 w-3.5', md: 'h-5 w-5', lg: 'h-6 w-6' }
 
 export function BriefTile({ caseId, size = 'lg', className }: { caseId: CaseId; size?: LogoTileSize; className?: string }) {
   const Icon = ICONS[caseId] ?? FolderKanban

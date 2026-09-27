@@ -15,6 +15,8 @@ import type { CSSProperties, ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
 export const LOGO_TILE_SIZES = {
+  /** A menu row, beside one line of body text — the "Get a copy" menu. */
+  xs: 20,
   /** A list row or a pill. */
   sm: 26,
   /** The wiki header strip, where the tile stands in for the exam's title. */

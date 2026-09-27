@@ -3,12 +3,14 @@ import { ChevronDown, ExternalLink } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { placeMenu, type MenuPlacement } from '@/lib/menuPlacement'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
+import { LogoTile } from '@/components/LogoTile'
 import type { CopySource } from '@/lib/resourceMeta'
 
 /**
  * The resource card's "Get a copy" button for a book the vault has no link
  * for: one control that opens the places to look for it (a library, a shop, a
- * shadow library), each a search on the book's ISBN.
+ * shadow library), each a search on the book's ISBN, led by the place's own
+ * logo.
  *
  * The menu portals to the body and is placed by `placeMenu`, for the same
  * reason the concept action menu is — the card sits inside the concept popup,
@@ -137,6 +139,14 @@ export function GetCopyMenu({ sources, title, className }: GetCopyMenuProps) {
                 onClick={() => close()}
                 className="flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:outline-none"
               >
+                {/* A white plate under the mark in both themes, as a Cowork
+                    publisher's logo gets: each is drawn for a light page, and
+                    the plate is what makes three different icons read as one
+                    row of tiles. The name beside it says who it is, so the
+                    tile is branding — `LogoTile` hides it from AT. */}
+                <LogoTile size="xs" className="overflow-hidden bg-white ring-1 ring-black/5">
+                  <img src={source.logo} alt="" className="h-full w-full object-contain" />
+                </LogoTile>
                 <span className="flex-1">{source.label}</span>
                 <ExternalLink className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
               </a>

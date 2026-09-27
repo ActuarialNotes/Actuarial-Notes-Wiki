@@ -1,4 +1,7 @@
 import { describe, it, expect } from 'vitest'
+import { existsSync } from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import {
   copySources,
   isNumberedOutline,
@@ -184,11 +187,23 @@ Title: Probability Distributions
 
 describe('copySources', () => {
   it('searches each place on the bare ISBN', () => {
-    expect(copySources('978-0134753119')).toEqual([
+    expect(copySources('978-0134753119').map(({ label, url }) => ({ label, url }))).toEqual([
       { label: 'WorldCat', url: 'https://search.worldcat.org/search?q=bn%3A9780134753119' },
       { label: 'Amazon', url: 'https://www.amazon.com/s?k=9780134753119&i=stripbooks' },
       { label: 'Library Genesis', url: 'https://libgen.li/index.php?req=9780134753119' },
     ])
+  })
+
+  // The logos are served from quiz/public, not hotlinked — a path that names
+  // no file there would put a broken image in every row of the menu.
+  it('leads each place with a logo the app itself serves', () => {
+    const publicDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../public')
+    const sources = copySources('978-0134753119')
+    for (const { label, logo } of sources) {
+      expect(logo, label).toMatch(/^\/copy-sources\/[a-z-]+\.png$/)
+      expect(existsSync(path.join(publicDir, logo)), `${label}: ${logo}`).toBe(true)
+    }
+    expect(new Set(sources.map(s => s.logo)).size).toBe(sources.length)
   })
 
   it('offers nothing for a malformed or missing ISBN', () => {

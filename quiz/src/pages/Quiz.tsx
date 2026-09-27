@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
-import { useSearchParams, useNavigate } from 'react-router-dom'
+import { useSearchParams, useNavigate, useLocation } from 'react-router-dom'
 import { Loader2, X, ChevronLeft, Volume2, VolumeX, AlertCircle, Keyboard } from 'lucide-react'
 import { useQuestions } from '@/hooks/useQuestions'
 import { useAuth } from '@/hooks/useAuth'
@@ -19,12 +19,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
 import { isAnswerCorrect, isMultiPartAnswerComplete } from '@/lib/parser'
 import { pendingAnswerFor, tagPendingAnswer } from '@/lib/pendingAnswer'
+import { resumesQuiz } from '@/lib/quizResume'
 import { loadRevealMode, parseRevealMode } from '@/lib/revealMode'
 import { difficultyFromParam } from '@/lib/quizDifficulty'
 import { timeAllowanceSeconds } from '@/lib/quizTiming'
 import { QuizTimer } from '@/components/QuizTimer'
 import { startViewTransition } from '@/lib/viewTransition'
-import type { PendingAnswer } from '@/lib/pendingAnswer'
 import type { QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
 import { decayIfStale } from '@/lib/mastery'
 import { useTodayPlanConcepts } from '@/hooks/useTodayPlanConcepts'
@@ -37,6 +37,7 @@ import { trackQuizStarted, trackQuestionAnswered, trackQuizCompleted, trackFirst
 
 export default function Quiz() {
   const [searchParams] = useSearchParams()
+  const { search } = useLocation()
   const navigate = useNavigate()
   const { user } = useAuth()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
@@ -104,7 +105,29 @@ export default function Quiz() {
     setManualGrade,
     completeQuiz,
     resetQuiz,
+    leaveQuiz,
+    timer,
+    startTimer,
+    pending,
+    setPending,
+    conceptListDismissed,
+    dismissConceptList,
   } = useQuizStore()
+
+  // A quiz outlives this page: the reader can go anywhere in the app mid-quiz
+  // and the "Return to quiz" pill (components/QuizResumeButton.tsx) brings them
+  // back here. Coming back at the URL the session was started under — by the
+  // pill, or by the browser's Back — picks it up where it was left; any other
+  // URL is a new quiz (lib/quizResume.ts). Decided once, on arrival, from the
+  // store as it stood then.
+  const [resumed] = useState(() => resumesQuiz(useQuizStore.getState(), search))
+  // Set on Quit. The page change it asks for lands a frame or two later (it is
+  // a view transition — components/PaperRouter.tsx), and in between this page
+  // is still mounted over a store that has just gone back to idle: without the
+  // flag it would draw a fresh quiz from the questions it has loaded, and the
+  // reader would arrive wherever they were going to a "Return to quiz" pill
+  // for a quiz they never started.
+  const leavingRef = useRef(false)
 
   // Next and Back turn the question like a sheet on a pile — the answered one
   // is flicked off and the next lifts into place — rather than swapping it in
@@ -124,20 +147,21 @@ export default function Quiz() {
     startViewTransition(() => flushSync(stepBackQuestion), { paper: 'return', fallback: stepBackQuestion })
   }
 
-  // Reset store on every new quiz navigation so filters always take effect
+  // Reset store on every new quiz navigation so filters always take effect —
+  // unless this is the session in progress being picked back up.
   useEffect(() => {
-    resetQuiz()
+    if (!resumed) resetQuiz()
   }, [])  // eslint-disable-line react-hooks/exhaustive-deps
 
   // Start the quiz once questions load — guard prevents re-triggering on re-renders
   useEffect(() => {
-    if (!loading && questions.length > 0 && status === 'idle') {
-      startQuiz(questions, mode)
+    if (!loading && questions.length > 0 && status === 'idle' && !leavingRef.current) {
+      startQuiz(questions, mode, search)
       const exam = questions[0]?.exam ?? 'Unknown'
       trackQuizStarted({ mode, exam, question_count: questions.length })
       trackFirstQuiz({ mode, exam })
     }
-  }, [loading, questions, status, mode, startQuiz])
+  }, [loading, questions, status, mode, search, startQuiz])
 
   const { enabled: soundEnabled, toggle: toggleSound, play: playSound, resetCombo: resetSoundCombo } = useSoundEffects()
 
@@ -146,10 +170,11 @@ export default function Quiz() {
   const [showIncompletePartsDialog, setShowIncompletePartsDialog] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
-  // Local pre-confirmation selection — not committed to store until "Confirm
-  // Answer". Tagged with the question it was entered for so it is never read
-  // back on another one (see lib/pendingAnswer.ts).
-  const [pending, setPending] = useState<PendingAnswer | null>(null)
+  // The pre-confirmation selection (`pending`, from the store) is not an
+  // answer until "Confirm Answer". It is tagged with the question it was
+  // entered for so it is never read back on another one (see
+  // lib/pendingAnswer.ts), and kept in the store so a half-typed multi-part
+  // answer is still there when the reader comes back from a lookup.
 
   // Self-grading screen for reveal='end' (mock exam) with written questions
   const [showSelfGradeScreen, setShowSelfGradeScreen] = useState(false)
@@ -174,8 +199,8 @@ export default function Quiz() {
   // first question, each one openable in the concept popup so the reader can
   // look it over first. A right answer on one levels it to Level 1 and collects
   // its card (docs/flashcard-collection.md). Only applies to ordinary quizzes
-  // (never mock exams).
-  const [conceptListDismissed, setConceptListDismissed] = useState(false)
+  // (never mock exams). Whether it has been read past is the store's
+  // `conceptListDismissed`, so a resumed quiz doesn't show it twice.
 
   const newQuizConcepts = useMemo(() => {
     if (mode !== 'quiz') return []
@@ -235,17 +260,18 @@ export default function Quiz() {
   // ── Timed ────────────────────────────────────────────────────────────────
   // The budget is the set's, fixed once the questions are in; the clock starts
   // on the first question, not under the pre-quiz concept list — reading that
-  // list is preparation, not the paper.
+  // list is preparation, not the paper. It lives in the store and keeps
+  // running while the reader is elsewhere in the app: time spent looking
+  // something up is time spent on the paper.
   const timeAllowance = useMemo(
     () => (timed ? timeAllowanceSeconds(storeQuestions) : null),
     [timed, storeQuestions],
   )
-  const [timerStartedAt, setTimerStartedAt] = useState<number | null>(null)
   const questionOnScreen =
     status !== 'idle' && status !== 'complete' && !showConceptList && !awaitingConceptListDecision
   useEffect(() => {
-    if (timeAllowance !== null && questionOnScreen && timerStartedAt === null) setTimerStartedAt(Date.now())
-  }, [timeAllowance, questionOnScreen, timerStartedAt])
+    if (timeAllowance !== null && questionOnScreen && timer === null) startTimer(timeAllowance)
+  }, [timeAllowance, questionOnScreen, timer, startTimer])
 
   // Scroll to top whenever the question changes. The pending selection needs no
   // clearing here — it is tagged with its question and read back through
@@ -301,8 +327,8 @@ export default function Quiz() {
   }, !anyDialogOpen && !showConceptList && status !== 'idle' && status !== 'complete')
 
   function handleQuit() {
-    try { sessionStorage.removeItem('actuarial_selected_ids') } catch { /* ignore */ }
-    resetQuiz()
+    leavingRef.current = true
+    leaveQuiz()
     const from = searchParams.get('from')
     if (from === 'search') navigate('/search')
     else if (from === 'dashboard') navigate('/dashboard')
@@ -409,7 +435,10 @@ export default function Quiz() {
   }
 
   // ── Loading state ────────────────────────────────────────────────────
-  if (loading || (status === 'idle' && !error) || awaitingConceptListDecision) {
+  // A resumed session already has its questions; the fresh draw `useQuestions`
+  // makes underneath it is never used, so neither its loading nor its errors
+  // hold the quiz up.
+  if ((!resumed && (loading || (status === 'idle' && !error))) || awaitingConceptListDecision) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -419,7 +448,7 @@ export default function Quiz() {
   }
 
   // ── Error state ──────────────────────────────────────────────────────
-  if (error) {
+  if (error && !resumed) {
     return (
       <div className="container max-w-md mx-auto px-4 py-12">
         <Card>
@@ -438,7 +467,7 @@ export default function Quiz() {
   }
 
   // ── Empty state ──────────────────────────────────────────────────────
-  if (!loading && questions.length === 0) {
+  if (!resumed && !loading && questions.length === 0) {
     return (
       <div className="container max-w-md mx-auto px-4 py-12">
         <Card>
@@ -466,7 +495,7 @@ export default function Quiz() {
       <PreQuizConcepts
         concepts={newQuizConcepts}
         planConcepts={planConcepts}
-        onStart={() => setConceptListDismissed(true)}
+        onStart={dismissConceptList}
         onQuit={handleQuit}
       />
     )
@@ -584,8 +613,8 @@ export default function Quiz() {
           >
             {mode === 'mock-exam' ? PRACTICE_EXAM_LABEL : 'Quiz'}
           </span>
-          {timeAllowance !== null && timerStartedAt !== null && (
-            <QuizTimer startedAt={timerStartedAt} allowanceSeconds={timeAllowance} />
+          {timer !== null && (
+            <QuizTimer startedAt={timer.startedAt} allowanceSeconds={timer.allowanceSeconds} />
           )}
           <Button
             variant="ghost"

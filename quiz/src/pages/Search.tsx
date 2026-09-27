@@ -26,6 +26,7 @@ import { QuestionAnswerReveal } from '@/components/QuestionAnswerReveal'
 import { QuestionAttemptBadge } from '@/components/QuestionAttemptBadge'
 import { useQuestionAttempts, type QuestionAttemptSummary } from '@/hooks/useQuestionAttempts'
 import { trackSearchQuery } from '@/lib/analytics'
+import { useActionBarHeight } from '@/hooks/useActionBarHeight'
 
 type SearchType = 'concepts' | 'questions' | 'resources'
 
@@ -619,6 +620,12 @@ export default function Search() {
     searchType === 'concepts' ? 'Search concepts and exams…' :
     'Search resources…'
 
+  // The quiz button's bar, measured for whatever else is parked on the bottom
+  // edge — the "Return to quiz" pill rides above it (style guide §5.1).
+  const showQuizBar = searchType === 'questions' && !loading && filtered.length > 0
+  const quizBarRef = useRef<HTMLDivElement>(null)
+  useActionBarHeight(quizBarRef, showQuizBar)
+
   return (
     <div className="container max-w-4xl mx-auto px-4 sm:px-6 py-8 pb-28 space-y-6">
       <div className="space-y-1">
@@ -987,8 +994,8 @@ export default function Search() {
       </div>
 
       {/* Sticky quiz button — Questions mode only */}
-      {searchType === 'questions' && !loading && filtered.length > 0 && (
-        <div className="fixed bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-50 flex justify-center px-4 py-4 bg-background/80 backdrop-blur-sm">
+      {showQuizBar && (
+        <div ref={quizBarRef} className="fixed bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-50 flex justify-center px-4 py-4 bg-background/80 backdrop-blur-sm">
           <button
             type="button"
             onClick={handleStartQuiz}

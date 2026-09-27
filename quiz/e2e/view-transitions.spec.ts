@@ -59,9 +59,10 @@ test.describe('tab-switch view transitions', () => {
         if (await segment.count()) await segment.click()
         for (const move of ['next', 'prev', 'push', 'pop']) {
           const names = await transitionNames(page, move)
-          // `root` is the page's own sheet (the html element); the rail and the
-          // phone header are the chrome held still over it.
-          const allowed = new Set(['root', 'paper-rail', 'paper-header'])
+          // `root` is the page's own sheet (the html element); the rail, the
+          // phone header and the "Return to quiz" pill are the chrome held
+          // still over it.
+          const allowed = new Set(['root', 'paper-rail', 'paper-header', 'paper-resume'])
           expect(names.every(n => allowed.has(n)), `${path} · ${body} · ${move}: ${names.join(', ')}`).toBe(true)
           expect(new Set(names).size, `${path} · ${body} · ${move}: ${names.join(', ')}`).toBe(names.length)
         }

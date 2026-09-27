@@ -15,6 +15,15 @@ import { NavProgressBar } from '@/components/NavProgressBar'
 import { QuestionAttemptBadge } from '@/components/QuestionAttemptBadge'
 import { MasteryBadge } from '@/components/MasteryBadge'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
+import { QuestionFilterBar } from '@/components/QuestionFilterBar'
+import {
+  emptyFacets,
+  hasFacetFilters,
+  matchesFacets,
+  toggleFacet,
+  type FacetSelection,
+  type QuestionFacet,
+} from '@/lib/questionFilters'
 
 function linkMatchesConcept(link: string, conceptName: string): boolean {
   const lower = conceptName.toLowerCase()
@@ -29,6 +38,9 @@ const DIFFICULTY_COLORS: Record<Difficulty, string> = {
   medium: 'bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-950 dark:text-yellow-300 dark:border-yellow-800',
   hard: 'bg-red-100 text-red-800 border-red-200 dark:bg-red-950 dark:text-red-300 dark:border-red-800',
 }
+
+/** The shared filters this list offers beside its own All / New / Attempted. */
+const LIST_FACETS: readonly QuestionFacet[] = ['exam', 'sitting']
 
 export type TabMode = 'definition' | 'questions' | 'syllabus'
 export type FilterMode = 'all' | 'new' | 'attempted'
@@ -184,6 +196,7 @@ export function ConceptDetailModal({
   const [questionsError, setQuestionsError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<TabMode>('definition')
   const [filter, setFilter] = useState<FilterMode>('all')
+  const [facets, setFacets] = useState<FacetSelection>(emptyFacets)
   const [conceptFilter, setConceptFilter] = useState<ConceptFilter>(
     initialFilter ?? (studyPlanConcepts ? 'study-plan' : 'entire-syllabus')
   )
@@ -245,6 +258,7 @@ export function ConceptDetailModal({
   useEffect(() => {
     setActiveTab('definition')
     setFilter('all')
+    setFacets(emptyFacets())
     setSelectedIds(new Set())
   }, [localIndex])
 
@@ -275,15 +289,20 @@ export function ConceptDetailModal({
   const canNext = !!effectiveConcepts && localIndex < (effectiveConcepts?.length ?? 1) - 1
   const showFooterNav = !!effectiveConcepts && effectiveConcepts.length > 1
 
-  const newCount = questions.filter(q => !byQuestionId.get(q.id)).length
-  const attemptedCount = questions.filter(q => !!byQuestionId.get(q.id)).length
-
-  const filteredQuestions = questions.filter(q => {
+  const matchesMode = (q: Question) => {
     const attempt = byQuestionId.get(q.id)
     if (filter === 'new') return !attempt
     if (filter === 'attempted') return !!attempt
     return true
-  })
+  }
+
+  // The Exam / Sitting choice narrows the list first; the All / New /
+  // Attempted counts are taken within it, so they add up to what is listed.
+  const facetQuestions = questions.filter(q => matchesFacets(q, facets))
+  const newCount = facetQuestions.filter(q => !byQuestionId.get(q.id)).length
+  const attemptedCount = facetQuestions.filter(q => !!byQuestionId.get(q.id)).length
+
+  const filteredQuestions = facetQuestions.filter(matchesMode)
 
   // Sync selected IDs when filtered questions change (select all by default)
   useEffect(() => {
@@ -291,7 +310,7 @@ export function ConceptDetailModal({
       setSelectedIds(new Set(filteredQuestions.map(q => q.id)))
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [questionsLoading, filter, currentConceptName])
+  }, [questionsLoading, filter, facets, currentConceptName])
 
   const allSelected = filteredQuestions.length > 0 && filteredQuestions.every(q => selectedIds.has(q.id))
   const someSelected = filteredQuestions.some(q => selectedIds.has(q.id)) && !allSelected
@@ -446,7 +465,7 @@ export function ConceptDetailModal({
                   <div className="flex items-center gap-1 ml-auto flex-wrap">
                     {(['all', 'new', 'attempted'] as FilterMode[]).map(mode => {
                       const label = mode === 'all'
-                        ? `All (${questions.length})`
+                        ? `All (${facetQuestions.length})`
                         : mode === 'new'
                         ? `New (${newCount})`
                         : `Attempted (${attemptedCount})`
@@ -469,6 +488,18 @@ export function ConceptDetailModal({
                 </>
               )}
             </div>
+
+            {/* Exam / Sitting — the filters every question list offers. Kept
+                out of the toolbar's condition above, so a choice that leaves
+                nothing listed can still be undone. */}
+            {!questionsLoading && questions.length > 0 && (
+              <QuestionFilterBar
+                pool={questions.filter(matchesMode)}
+                selection={facets}
+                onToggle={(facet, value) => setFacets(prev => toggleFacet(prev, facet, value))}
+                facets={LIST_FACETS}
+              />
+            )}
 
             {/* Select-all toolbar */}
             {!questionsLoading && filteredQuestions.length > 0 && (
@@ -512,7 +543,9 @@ export function ConceptDetailModal({
             )}
             {!questionsLoading && !questionsError && filteredQuestions.length === 0 && (
               <div className="text-center py-6 text-muted-foreground text-sm">
-                {filter === 'all'
+                {questions.length > 0 && hasFacetFilters(facets)
+                  ? 'No questions match the selected filters.'
+                  : filter === 'all'
                   ? 'No questions found for this concept.'
                   : filter === 'new'
                   ? "No new questions — you've attempted all of them."

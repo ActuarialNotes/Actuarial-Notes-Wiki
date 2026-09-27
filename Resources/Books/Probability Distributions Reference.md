@@ -1,13 +1,14 @@
 ---
 Title: "Probability Distributions — Reference Sheet"
-Author: Actuarial Notes
-Type: Reference Sheet
+Authors: "Actuarial Notes"
+Publisher: "Actuarial Notes"
+Type: "Reference Sheet"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9a8e143187cdccc4723ca08460a70f4fa0587758b339b271785059755b88a877
+  content_hash: sha256:3acc1e02a0890f6a7b84fa64499f7fe45de2ec5e3532ba5b103f8034e617a481
   sources: []
   open_findings: 0
   open_critical: 0

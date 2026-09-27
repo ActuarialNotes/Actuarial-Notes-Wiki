@@ -1,17 +1,17 @@
 ---
 Title: "CAS DISC IA – Insurance Accounting, Coverage Analysis, Insurance Law, and Insurance Regulation"
-Author: The Institutes
+Authors: "The Institutes"
+Publisher: "The Institutes"
 Year: "2023"
 date: "2023"
-Publisher: The Institutes
-Type: "Online Course"
-Available from: "[theinstitutes.org](https://web.theinstitutes.org/casualty-actuarial-society)"
+Type: "Course"
+Available from: "[web.theinstitutes.org](https://web.theinstitutes.org/casualty-actuarial-society)"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ad4c0a9e987953ad559070e87aee65527a51c5e95357947878bb63b461156554
+  content_hash: sha256:c75005fb6bd09a050c98cb2606e141a6e76fc809002cda6f5b278f76be38811b
   sources: []
   open_findings: 0
   open_critical: 0
@@ -21,9 +21,10 @@ verification:
 
 The Institutes' online course for **CAS DISC IA**, and the only source material the [[Exam DISC-IA (CAS)|DISC IA]] syllabus names: the course contains the learning objectives and all the material needed to meet them, and ends in the exam. The printed textbook has the same content; review notes, a course guide of sample questions and answers, and flashcards are optional extras.
 
-The outline below is the course syllabus (© 2023 The Institutes), transcribed from the PDF the CAS links.
+> [!info] On the syllabus
+> - [[Exam DISC-IA (CAS)|DISC IA]] — topics 1–16, the whole course, which the CAS says "contains learning objectives and all the educational material to meet these objectives".
 
-## 1. Introductory Insurance Accounting
+## 1 Introductory Insurance Accounting
 
 - a. Qualitative Accounting Information Criteria
 - b. Types of Accounting Frameworks
@@ -39,14 +40,14 @@ The outline below is the course syllabus (© 2023 The Institutes), transcribed f
 - l. Reinsurance Accounting Basics
 - m. Deposit Accounting
 
-## 2. Insurance Policy Analysis
+## 2 Insurance Policy Analysis
 
 - a. Ideally Insurable Loss Exposures
 - b. Characteristics of Insurance Policies
 - c. Insurance Policy Structure
 - d. Insurance Policy Provisions
 
-## 3. Common Policy Concepts
+## 3 Common Policy Concepts
 
 - a. Identifying and Protecting Insurable Interests
 - b. Determining Replacement Cost and Actual Cost Value
@@ -56,7 +57,7 @@ The outline below is the course syllabus (© 2023 The Institutes), transcribed f
 - f. Applying Book Value to a Property Damage Claim
 - g. Factors Affecting Liability Claim Valuation
 
-## 4. Personal Auto Policy
+## 4 Personal Auto Policy
 
 - a. The Personal Vehicle Risk Management Environment
 - b. Understanding the Personal Auto Policy
@@ -67,7 +68,7 @@ The outline below is the course syllabus (© 2023 The Institutes), transcribed f
 - g. PAP Endorsements for Vehicles Other Than Personal Auto
 - h. Additional PAP Endorsements
 
-## 5. Homeowners Property Coverage
+## 5 Homeowners Property Coverage
 
 - a. Managing Personal Property Exposures
 - b. Managing Personal Liability Exposures
@@ -75,21 +76,21 @@ The outline below is the course syllabus (© 2023 The Institutes), transcribed f
 - d. Analyzing HO-3 Section I – Perils Insured Against and Exclusions
 - e. Examining HO-3 Property Conditions
 
-## 6. Homeowners Liability Coverage
+## 6 Homeowners Liability Coverage
 
 - a. Determining HO-3 Liability Coverages
 - b. HO-3 Liability Exclusions
 - c. HO-3 Coverage Conditions
 - d. Recommending Key Homeowners Endorsements
 
-## 7. Life and Health Insurance
+## 7 Life and Health Insurance
 
 - a. Understanding Term Life Insurance
 - b. Understanding Whole Life and Universal Life Insurance
 - c. Evaluating Types of Annuities
 - d. Health Insurance Plans
 
-## 8. Commercial Property Insurance Part 1
+## 8 Commercial Property Insurance Part 1
 
 - a. Analyzing Commercial Property Loss Exposures
 - b. Covered Property Under the BPP
@@ -98,7 +99,7 @@ The outline below is the course syllabus (© 2023 The Institutes), transcribed f
 - e. Causes of Loss – Special Form
 - f. BPP Limits of Insurance and Deductible
 
-## 9. Commercial Property Insurance Part 2
+## 9 Commercial Property Insurance Part 2
 
 - a. Applying BPP Loss Conditions and Additional Conditions
 - b. Applying BPP Optional Coverages
@@ -107,7 +108,7 @@ The outline below is the course syllabus (© 2023 The Institutes), transcribed f
 - e. Selecting Blanket Insurance
 - f. Determining Whether the BPP Covers a Loss
 
-## 10. Commercial General Liability Insurance Part 1
+## 10 Commercial General Liability Insurance Part 1
 
 - a. Analyzing Commercial Liability Loss Exposures
 - b. Understanding CGL Coverage
@@ -118,7 +119,7 @@ The outline below is the course syllabus (© 2023 The Institutes), transcribed f
 - g. CGL Coverage C
 - h. CGL Supplementary Payments
 
-## 11. Commercial General Liability Insurance Part 2
+## 11 Commercial General Liability Insurance Part 2
 
 - a. CGL Who is an Insured
 - b. Applying CGL Limits of Insurance
@@ -127,7 +128,7 @@ The outline below is the course syllabus (© 2023 The Institutes), transcribed f
 - e. Other General Liability Coverage Forms
 - f. Determining Whether the CGL Covers a Claim
 
-## 12. Specialty Coverages Part 1
+## 12 Specialty Coverages Part 1
 
 - a. Understanding Excess and Umbrella Liability Insurance
 - b. Professional Liability Insurance
@@ -136,14 +137,14 @@ The outline below is the course syllabus (© 2023 The Institutes), transcribed f
 - e. Fiduciary Liability Insurance
 - f. Environmental Insurance
 
-## 13. Specialty Coverages Part 2
+## 13 Specialty Coverages Part 2
 
 - a. Examining Aircraft Insurance
 - b. Cyber Risk Insurance Policies
 - c. International Insurance Solutions
 - d. Understanding the Terrorism Risk Insurance Program
 
-## 14. Insurance Law Part 1
+## 14 Insurance Law Part 1
 
 - a. Negligence
 - b. Defenses Against Negligence Claims
@@ -151,14 +152,14 @@ The outline below is the course syllabus (© 2023 The Institutes), transcribed f
 - d. Intentional Torts Part 1
 - e. Intentional Torts Part 2
 
-## 15. Insurance Law Part 2
+## 15 Insurance Law Part 2
 
 - a. Liability in Extraordinary Circumstances
 - b. Products Liability
 - c. Damages in Tort Suits
 - d. Liability Concepts Affecting Tort Claims
 
-## 16. Insurance Regulation
+## 16 Insurance Regulation
 
 - a. Reasons for Insurance Regulations
 - b. Insurance Regulators
@@ -168,7 +169,7 @@ The outline below is the course syllabus (© 2023 The Institutes), transcribed f
 - f. Regulating Insurance Policies
 - g. Market Conduct and Consumer Protection
 
-## Links
-- [CAS DISC IA – Insurance Accounting, Coverage Analysis, Insurance Law, and Insurance Regulation, course syllabus (The Institutes, PDF)](https://www.casact.org/sites/default/files/2022-12/DISC_IA.pdf)
-- [CAS Data and Insurance Series Courses (CAS)](https://www.casact.org/exams-admissions/exams/acas-exams/cas-data-and-insurance-series-courses)
-- [Register for CAS DISCs (The Institutes)](https://web.theinstitutes.org/casualty-actuarial-society)
+## Sources
+- [CAS DISC IA – Insurance Accounting, Coverage Analysis, Insurance Law, and Insurance Regulation, course syllabus (The Institutes, PDF)](https://www.casact.org/sites/default/files/2022-12/DISC_IA.pdf) — the course syllabus (© 2023 The Institutes) the CAS links: the course title and every topic and section, word for word
+- [CAS Data and Insurance Series Courses (CAS)](https://www.casact.org/exams-admissions/exams/acas-exams/cas-data-and-insurance-series-courses) — the CAS page that links the syllabus, says each course contains its learning objectives and all the educational material to meet them, and lists the printed textbook, review notes, course guide and flashcards as supplemental
+- [Register for CAS DISCs (The Institutes)](https://web.theinstitutes.org/casualty-actuarial-society) — where the course is taken and the exam registered

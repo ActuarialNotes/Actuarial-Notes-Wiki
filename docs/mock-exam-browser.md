@@ -185,17 +185,25 @@ downstream and still does:
   (`data/examPdfLinks.ts`), beside the pass-rate lookup link;
 - `searchFilter` carries the sitting's `year` / `session` into the floating search bar, so
   opening the search while Spring 2019 is picked lists *that paper's* questions rather than
-  the whole exam's, with a removable `Exam 5 · Spring 2019` pill in the panel (clearing it
-  drops the shelf's selection too, so the panel and the page behind it can't disagree).
+  the whole exam's. The panel opens with **Exam 5** ticked in its Exam filter and
+  **Spring 2019** in its Sitting filter — each dropdown names its one choice on the pill —
+  and either can be widened from the panel without changing the shelf behind it
+  (`splitSearchFilter` in `lib/questionFilters.ts`). The builder's exam used to narrow the
+  panel's pool instead, which left its Exam filter a single option and hid it: the panel
+  filtered by an exam it no longer showed.
 
 A sitting can also be picked from inside the search panel itself: the **Sitting** filter
-(`sittingLabels` / `questionSittingLabel` in `lib/pastExams.ts`) lists the sittings the
-current pool actually holds, newest first, with a count each. It is keyed by display label
-— `"Spring 2019"` is how a candidate thinks of a paper — and read off each question's own
-frontmatter, so an undated question contributes no option and a question re-tagged onto
-another exam's syllabus still lists under the paper it was sat on. The filter hides itself
-when the pool is already one sitting (the mock-exam selection above has scoped it) or holds
-no dated questions at all.
+(`lib/questionFilters.ts`, over `sittingLabels` / `questionSittingLabel` in
+`lib/pastExams.ts`) lists the sittings the pool holds once the other filters are applied,
+newest first, with a count each. It is keyed by display label — `"Spring 2019"` is how a
+candidate thinks of a paper — and read off each question's own frontmatter, so an undated
+question contributes no option. A question re-tagged onto another exam's syllabus lists
+under the date it was sat on; once an exam is chosen, though, a sitting means *that exam's*
+paper, and the carried-over question is on none of its sittings — the same rule
+`filterQuestions` keeps for the shelf. Exam and Sitting are on every list of questions, the
+same row everywhere (`components/QuestionFilterBar.tsx` — the quiz builder's search panel,
+the concept question browser, the concept detail modal, and the Search page's Sitting). A
+pool with no dated questions shows Sitting disabled rather than dropping it.
 
 ### The header row
 
@@ -465,6 +473,59 @@ Two things differ from the sittings above:
   beats guessed" rule applies: Exam 6U has no entry and therefore no button.
   CAS's own naming is the warning against extrapolating — the newer outlines are
   `Exam_6C_CO_2026_Fall.pdf` where the older ones are `Exam7_Content_Outline.pdf`.
+
+### The sitting's details (`ExamSittingInfoButton`)
+
+Between the version menu and the syllabus button sits an **info button**
+(`components/wiki/ExamSittingInfoButton.tsx`) that says what the selected sitting asks of a
+candidate, and when: registration opening and closing, the window (for PCPA, the *project*
+window and the exam deadline that gates it), and results. It opens a dialog that lays the
+dates out as a timeline — a check on what has passed, a dot on what is happening today, a
+ring and a countdown on what comes next — followed by how the exam is sat and links to the
+publisher's pages the dates were taken from.
+
+Three pieces, each doing one thing:
+
+- **`hooks/useExamVersion.ts`** is the selection. The version menu and the info button both
+  call it, so switching the version switches what the dialog describes. For a signed-in
+  reader who is sitting the exam, choosing a version writes their exam date; the last pick
+  is remembered for the visit too (`selectVersion` in `data/examSittings.ts`), which is what
+  tells Exam P's paper day from the CBT window it falls inside.
+- **`data/examSittingDetails.ts`** is the transcription: per sitting, the milestones the
+  publisher names (under the publisher's own label), any note it attaches ("subject to
+  change"), and the pages they came from; per exam, how it is sat. The table-level rule is
+  this document's rule — **transcribed, never constructed**. A results date that "is always
+  about eight weeks later" is exactly the guess the file exists to keep out: an unpublished
+  date is absent, and the dialog shows the dates that are and nothing in the gap.
+- **`lib/sittingTimeline.ts`** is pure: it merges a sittings row's own window and
+  registration deadline with the transcribed milestones (a transcribed window or deadline
+  replaces the row's), orders them, and places today among them — at most one step is
+  *next*, and none is while a window is open, because then the window is the news.
+
+An exam with no sitting on file still gets the button; the dialog says none is published
+yet and links the publisher's exam page, rather than the header dropping a control the
+reader expects to find. A requirement with no sittings *at all* — the three DISCs, online
+courses CAS runs with The Institutes — says so instead (`ExamAbout.noSittings`), since
+"not published yet" would read as a gap in a calendar that doesn't exist.
+
+What the table held on 2026-09-27, and why it looks the way it does:
+
+- **PCPA's sittings are its project windows** (format `Project` in `data/examSittings.ts`):
+  the exam half is sat on demand at Pearson VUE, and gates the project through an *exam
+  deadline*. The project calendar comes from CAS's PCPA content outline, which prints no
+  year, and CAS's per-project notices have moved it before (June 2026 registration closed
+  June 1, not the calendar's June 8) — so a date from the standing calendar says so in the
+  dialog. CAS also disagrees with itself on the September 2026 start (the Syllabus of Basic
+  Education says the 16th, the PCPA page and outline the 15th); the row follows the PCPA
+  page and the dialog carries both.
+- **CAS publishes no results date for an exam sitting**, only a rule of thumb in its
+  candidate guide, so CAS sittings show none and say so. PCPA's project results do have
+  dates ("subject to change").
+- **SOA publishes P and FM through December 2027** on its exam schedule, results dates
+  (candidate numbers, then transcripts) only a few sittings ahead, and no registration
+  opening date — both exams are "continuous registration". One published date is wrong on
+  SOA's own page (December 2026 FM's candidate numbers "February 5, 2026", before the exam)
+  and is left out rather than corrected.
 
 ### Source documents on a resource page (`ResourceMetaCard`)
 

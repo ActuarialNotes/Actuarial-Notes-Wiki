@@ -54,9 +54,10 @@ both ways. There are exactly two:
 entry is `sample: true` and that no `wikiRef` entry is a sample. So:
 
 > **To add a real, citable document to Cowork, it has to be a vault page.**
-> Author the `Resources/Books/*.md` page first (that is the
-> `actuarial-concept-definitions` skill, with `textbook-toc` for its outline), then
-> point a `wikiRef` at it here.
+> Author the `Resources/Books/*.md` page first — to the standard in
+> `docs/resource-pages.md`, written from the extracted document
+> (`scripts/resource_extract.py`; the `actuarial-concept-definitions` skill, with
+> `textbook-toc` for a book's outline) — then point a `wikiRef` at it here.
 
 That is the intended path and it is what "replacing a sample with real documents"
 means in `docs/cowork.md`. Do **not** work around it by inventing a `docPath`

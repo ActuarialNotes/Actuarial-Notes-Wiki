@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:3c8fa77d44e00c708e8d577721120eb972d62ffc16df75cfa5c65c7f84be1cde
+  content_hash: sha256:ceca10e8660747792941f293eb111a543adf8d142b4cf79ad16250c25e851b41
   sources: []
   open_findings: 0
   open_critical: 0
@@ -154,7 +154,7 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > 
 > - [[Poisson Processes and Mixture Distributions (Daniel - 2008)]]
 >      - A1–A5
-> -[[An Introduction to Generalized Linear Models (Dobson - 2018)]]
+> - [[An Introduction to Generalized Linear Models (Dobson - 2018)]]
 >      - C1–C9
 > - [[Introduction to Mathematical Statistics (Hogg et al. - 2018)]]
 >      - B1–B8, C1–C9

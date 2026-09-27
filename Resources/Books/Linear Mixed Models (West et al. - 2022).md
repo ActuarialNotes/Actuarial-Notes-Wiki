@@ -1,18 +1,18 @@
 ---
 Title: "Linear Mixed Models: A Practical Guide Using Statistical Software"
-Authors: "Brady T. West, Kathleen B. Welch, Andrzej T. Gałecki"
+Authors: "Brady T. West, Kathleen B. Welch and Andrzej T. Gałecki"
+Publisher: "Chapman & Hall/CRC"
 Year: "2022"
 date: "2022"
-Edition: 3rd
-Publisher: Chapman & Hall/CRC
-Type: Textbook
-Available from: "[routledge.com](https://www.routledge.com/Linear-Mixed-Models-A-Practical-Guide-Using-Statistical-Software/West-Welch-Galecki/p/book/9781032019321)"
+Edition: "3rd"
+Type: "Textbook"
+ISBN: "978-1-032-01932-1"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:521b73fa7e731ae89667fa49dc745e70152f280b60d22cd676c63be10b2f48f2
+  content_hash: sha256:54fa34148abb4377a0be8daa91062f0870d9b9d351833a9a8856d80c61480fbe
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,38 +20,37 @@ verification:
 ---
 ![[Linear Mixed Models (West et al. - 2022) - Cover.svg]]
 
-The [[Linear Mixed Model]] text on the [[Exam MAS-II (CAS)|MAS-II]] syllabus, covering section B (objectives B1–B4). The book is organized as an introductory chapter on the general model followed by worked case studies in five statistical packages; the third edition adds a chapter on power analysis for mixed-effects models.
+A step-by-step guide to fitting linear mixed models (LMMs) in SAS, SPSS, R, Stata and HLM, covering the most popular packages for the task in one book. It gives a chapter to the key theory underlying LMMs for clustered, longitudinal and repeated-measures data, then analyses real-world data sets from a variety of study designs — hypothesis testing, interpretation of results and model diagnostics — with each package's code and tables of estimates that allow the results to be compared across procedures. The third edition updates every example, with new tools for visualization and interpretation, and adds a chapter on power analysis for mixed-effects models.
 
-Read for the **model, not the software**: the exam tests interpretation of output, so the case-study chapters matter for what the printouts mean rather than for the syntax that produced them.
+> [!info] On the syllabus
+> - [[Exam MAS-II (CAS)|Exam MAS-II]] — objectives B1–B4; all chapters, excluding coding examples, together with the authors' Additional Notes on Shrinkage Means.
 
-## What the syllabus takes from it
+## 1 Introduction
 
-### The general linear mixed model
+## 2 Linear Mixed Models: An Overview
 
-- The specification $\mathbf{y} = \mathbf{X}\boldsymbol\beta + \mathbf{Z}\mathbf{b} + \boldsymbol\varepsilon$ and its assumptions
-- [[Fixed Effects]] versus [[Random Effects]] — when a grouping factor belongs in each
-- [[Variance Components]] and the implied [[Covariance Structure]]: independent, compound symmetry, AR(1), Toeplitz, unstructured
-- [[Intraclass Correlation]] and the design effect under clustering
+## 3 Two-Level Models for Clustered Data: The Rat Pup Example
 
-### Model specifications
+## 4 Three-Level Models for Clustered Data: The Classroom Example
 
-- [[Random Intercept and Slope]] models, and nested versus crossed grouping factors
-- [[Hierarchical Model|Hierarchical (multilevel)]] formulations of the same model
-- Marginal versus conditional interpretation of the fitted values
+## 5 Models for Repeated-Measures Data: The Rat Brain Example
 
-### Estimation and inference
+## 6 Random Coefficient Models for Longitudinal Data: The Autism Example
 
-- Maximum likelihood versus [[Restricted Maximum Likelihood|REML]], and the rule for which to use when comparing models
-- The [[Likelihood Ratio Test]] for nested models, including the boundary problem when testing a variance component at zero
-- [[AIC]] and [[BIC]] for non-nested comparisons
-- [[Best Linear Unbiased Predictor|BLUPs]] of the random effects, and their shrinkage toward the population mean
+## 7 Models for Clustered Longitudinal Data: The Dental Veneer Example
 
-### Diagnostics
+## 8 Models for Data with Crossed Random Factors: The SAT Score Example
 
-- Residual diagnostics for the conditional and marginal residuals
-- Assessing [[Model Structure|model structure]] and [[Variable Selection|variable selection]] from the fitted output
-- Power analysis for mixed-effects designs (new in the third edition)
+## 9 Power Analysis and Sample Size Calculations for Linear Mixed Models
 
-## Links
-- [Linear Mixed Models, 3rd edition (Routledge)](https://www.routledge.com/Linear-Mixed-Models-A-Practical-Guide-Using-Statistical-Software/West-Welch-Galecki/p/book/9781032019321)
-- [Author's companion site (University of Michigan)](https://websites.umich.edu/~bwest/almmussp.html)
+## Appendix A Statistical Software Resources
+
+## Appendix B Calculation of the Marginal Covariance Matrix
+
+## Appendix C Acronyms / Abbreviations
+
+## Sources
+- [Linear Mixed Models: A Practical Guide Using Statistical Software, 3rd Edition (Routledge)](https://www.routledge.com/Linear-Mixed-Models-A-Practical-Guide-Using-Statistical-Software/West-Welch-Galecki/p/book/9781032019321) — the publisher's page: authors, edition, year, the book description and the table of contents (nine chapters and three appendices)
+- [Crossref chapter records for the eBook (doi:10.1201/9781003181064)](https://api.crossref.org/works?filter=isbn:9781003181064&rows=40&select=DOI,title,page,type) — the full chapter titles, numbered 1–9 with page ranges
+- [Linear Mixed Models (Google Books)](https://books.google.com/books?vid=ISBN9781032019321) — the ISBN, publisher, year and edition
+- [CAS Exam MAS-II Content Outline (2025)](https://www.casact.org/sites/default/files/2023-06/MASII_Content_Outline.pdf) — the citation (3rd Edition, CRC Press, 2022) and the assigned scope

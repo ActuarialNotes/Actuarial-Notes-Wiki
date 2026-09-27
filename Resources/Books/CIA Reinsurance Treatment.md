@@ -1,17 +1,18 @@
 ---
 Title: "Report of the CIA Task Force on the Appropriate Treatment of Reinsurance"
-Author: "Canadian Institute of Actuaries"
+Authors: "Canadian Institute of Actuaries"
+Publisher: "Canadian Institute of Actuaries"
 Year: "2007"
 date: "2007"
-Publisher: "Canadian Institute of Actuaries"
 Type: "Report"
+Code: "207081"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/6C_CIA_Reinsurance_Treatment.pdf)"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ea3915fb4f9b5a0a1290b66ccf14dff10528bd8f74167536d7f52bdbe58e24cc
+  content_hash: sha256:7d6ead94358664ba901517b32536e80cec47643168a09bb13ef31fa068f41264
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,36 +20,73 @@ verification:
 ---
 ![[CIA Reinsurance Treatment - Cover.svg]]
 
-> [!warning]- Not on the Fall 2026 Exam 6C syllabus
-> The CAS dropped this reading; the reinsurance accounting material is now carried by [[CIA IFRS 1]] and [[OSFI Reinsurance]]. It is kept here because the [[Exam 6C (CAS)|Exam 6C]] page still lists it, and because it is the source of the Canadian [[Risk Transfer|risk transfer]] vocabulary.
+A CIA task force report giving guidance on reinsurance, and on assessing risk transfer, to the actuarial and insurance community in Canada. OSFI had asked the CIA to look into the treatment of reinsurance amid scrutiny of transactions transferring a reduced degree of risk. Issued by the Task Force on the Appropriate Treatment of Reinsurance in October 2007 (document 207081) and circulated for comment, it also examines finite and financial reinsurance, side agreements, mirroring, bifurcation and reinsurance counterparty risk; as a task force report it is not binding.
 
-The October 2007 report of the CIA Task Force on the Appropriate Treatment of Reinsurance (Document 207081), prepared at [[OSFI]]'s request after international scrutiny of transactions that transfer little real risk — **[[Finite Reinsurance|finite reinsurance]]**. When it was on the syllabus, candidates were responsible for **Key Principles of Risk Transfer (pp. 11–12), Qualitative Assessment (p. 13), Limitations of Risk Transfer (pp. 15–18) and Other Issues (pp. 18–23)**.
+> [!info] On the syllabus
+> - [[Exam 6C (CAS)|Exam 6C]] — objectives C1, C3 on the exam page; the Fall 2026 content outline does not list this reading.
 
-## What the report covers
+## Introduction
+- The report is intended to supplement the CIA [[Standards of Practice]], most importantly on the concept of risk transfer, on which they are silent; the task force's mandate covered finite reinsurance, the degree of risk transfer, side agreements, stop loss arrangements and reinsurance counterparty risk.
 
-- A brief overview of reinsurance and **risk transfer principles**, against the emerging international consensus.
-- Guidance on **assessing risk transfer** in a contract for accounting and valuation purposes.
-- **Finite and financial reinsurance**, **side agreements**, **mirroring**, **bifurcation**, and **reinsurance counterparty risk**.
+## Definitions
+- The definitions are based on IFRS 4; reinsurance risk is risk, other than financial risk, transferred from a cedant to a reinsurer.
 
-## The task force's positions
+## Background
+- Overview of Reinsurance Concepts and Terminology
+- Finite Reinsurance
+    - "[[Finite Reinsurance|Finite]]" and "financial" reinsurance are ambiguous terms; the report does not use them, and instead presents the types of limitation that can exist in reinsurance contracts.
+- Reinsurance and the Actuary
+    - The task force holds it strongly implied by the SOP that the valuation considers all cash flows arising from the reinsurance contract, all modifications and side agreements, and the credit rating of the reinsurer.
+- Current Reinsurance Accounting Practice
+    - Reinsurance Accounting and Deposit Accounting
+        - Where [[Reinsurance Accounting|reinsurance accounting]] is not appropriate under generally accepted accounting principles, [[Deposit Accounting|deposit accounting]] must be applied instead.
+    - Relevant Accounting Standards
+    - Canadian GAAP
+    - Canadian Regulatory Requirements
+        - For P&C insurers, OSFI Guideline D-7 effectively imports US GAAP (FAS 113) for assessing reinsurance risk transfer.
+    - United States GAAP (US GAAP)
+        - "At least a 10% chance of at least a 10% loss" is a commonly expressed rule of thumb, not part of any authoritative guidance.
+    - International Financial Reporting Standards (IFRS)
 
-The report is unusual in stating positions bluntly, and those statements are what an exam question quotes:
+## The Concept of Risk Transfer
+- Key Principles of Risk Transfer
+    - Four principles: several approaches can assess the existence of [[Risk Transfer|risk transfer]]; professional judgment is required; the entire agreement, including all written and verbal agreements, must be considered; and existence is assessed at inception and whenever a change significantly alters the contract's expected future cash flows.
+    - The Appointed Actuary must assess risk transfer for each reinsurance contract, and consider a qualified opinion if not reaching the conclusion presented in the financial statements.
+- Assessing the "Existence" of Risk Transfer
+    - The approaches fall into qualitative assessment, including "reasonably self-evident" risk transfer for arm's-length contracts with no potentially limiting features, and quantitative testing.
+- Assessing the "Extent" of Risk Transfer
+    - Regulatory capital requirements (MCCSR, and the [[MCT]] for P&C insurers) assume risk transfer is absolute and do not reflect the possible limitations on it.
+- Limitations of Risk Transfer
+    - The presence of a potentially limiting feature does not mean risk has not been transferred, but calls for further work; the features are listed under terms set in advance, such as [[Profit Commission|profit sharing]], [[Sliding Scale Commissions|adjustable commissions]] and [[Commutations|commutation]] clauses, and experience-based renewals.
 
-- **Principle versus rules-based.** The task force held that a **rules-based** bright-line test for risk transfer is *not* advisable — a numerical threshold is gamed, and a contract can satisfy it while transferring nothing meaningful. Canada should assess risk transfer on principles.
-- **Regulatory capital formulae** should not be the mechanism that determines the accounting treatment.
-- **Mirroring of liability amounts** — that the cedant and the reinsurer must record equal and opposite amounts — was rejected. Two parties with different information and different portfolios can legitimately hold different estimates.
-- **Bifurcation** — splitting a contract into a risk-transferring insurance component and a financing component — was rejected as a general requirement.
+## Other Issues
+- Side Agreements
+    - Side agreements can obscure or misrepresent a contract and may even negate any true transfer of risk; OSFI and the AMF strongly discourage them.
+- Mirroring and Communication
+    - The prevailing opinion in the international actuarial community is that mirror reserving should not be required; in a principles-based environment the safeguards are data integrity and communication between cedant and reinsurer actuaries.
+- Bifurcation
+    - Reinsurance contracts are not intended to be bifurcated; they are only valid contracts in their entirety.
+- Reinsurance Counterparty Risk
+    - Factors for a credit provision include the reinsurer's ratings, history of disputes, run-off status, expertise, diversification, retrocession and capital ratio; for P&C, the SOP then required a margin of 0–15% of best estimate ceded claim and premium liabilities ([[Reinsurance Credit Risk|reinsurance credit risk]]).
 
-The report also has no binding force: committee and task force reports are not [[Standards of Practice|Standards of Practice]].
+## Appendix
 
-## Why it is worth reading anyway
-
-It is the Canadian counterpart to the U.S. risk-transfer literature in [[Freihaut and Vendetti]], and it explains why Canada has no **ERD**-style threshold test. The principle-versus-rules argument recurs across the syllabus — in [[OSFI MCT|MCT]] versus [[ORSA]], and in [[FSRA Risk Management|principles-based]] market conduct regulation.
+## Recommendations and Opinions of the Task Force
+- CIA Standards of Practice (SOP)
+    - The SOP are adequate when properly applied; the task force recommends stating explicitly that the entire contract, including reinsurance contracts and side agreements, be considered, and removing Life–P&C differences in margins for counterparty risk.
+- Principle versus a Rules-Based Approach
+    - A rules-based approach to assessing the existence of risk transfer is not advisable: it cannot be comprehensive and would tempt practitioners to "manage to the test".
+- Regulatory Capital Formulae
+    - Factor-based formulae may not recognize that risk is not always completely and permanently transferred; that assessment should be left to the Appointed Actuary's judgement.
+- Mirroring of Liability Amounts
+    - Mirroring of liability amounts by the cedant and the reinsurer is not appropriate for accounting purposes.
+- Bifurcation of Reinsurance Contracts
+    - Requiring bifurcation of reinsurance contracts into insurance and financial components is not appropriate for accounting purposes.
 
 ## Related readings
-- [[Freihaut and Vendetti]] — the practical risk-transfer analysis, and the ERD measure
-- [[CIA IFRS 1]] — the current reinsurance educational note
-- [[OSFI Reinsurance]] — sound reinsurance practices and procedures
+- [[CIA IFRS 1]] — the June 2025 educational note, whose preamble says it adapts this 2007 report as its appendix, *Principles of Risk Transfer in Reinsurance*
 
-## Links
-- [Report of the CIA Task Force on the Appropriate Treatment of Reinsurance (CAS)](https://www.casact.org/sites/default/files/2021-03/6C_CIA_Reinsurance_Treatment.pdf)
+## Sources
+- [Report of the CIA Task Force on the Appropriate Treatment of Reinsurance (CIA, 2007)](https://www.casact.org/sites/default/files/2021-03/6C_CIA_Reinsurance_Treatment.pdf) — the document: title page, memorandum, table of contents (read as a page image for its levels) and the full text
+- [CAS Exam 6C Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf) — checked: the reading is not among its citations
+- [IFRS 17 – Actuarial Considerations Related to Reinsurance Contracts Issued and Held (CIA, 2025)](https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=610928&fid=610931) — its preamble, on adapting this report as its appendix

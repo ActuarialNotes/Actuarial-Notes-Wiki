@@ -10,6 +10,7 @@ import { WikiArticle, type WikiTitleAction } from '@/components/wiki/WikiArticle
 import { ConceptActionMenu } from '@/components/ConceptActionMenu'
 import { ExamSyllabusButton } from '@/components/wiki/ExamSyllabusButton'
 import { ExamVersionMenu } from '@/components/wiki/ExamVersionMenu'
+import { ExamSittingInfoButton } from '@/components/wiki/ExamSittingInfoButton'
 import { ExamProjectButton } from '@/components/wiki/ExamProjectButton'
 import { ExamLogo } from '@/components/ExamLogo'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
@@ -244,20 +245,22 @@ export default function WikiExam() {
   }, [todaysConcepts, conceptList])
 
   // The sticky header's right-hand end: the version — which sitting of the
-  // exam the page is being read for — then the examining body's own syllabus,
-  // the document this whole page is a reading of. PCPA adds its project, the
-  // requirement's second half.
-  const smallTitleBadge = useMemo(() => (
-    <span className="inline-flex items-center gap-1.5 not-prose shrink-0">
-      <ExamVersionMenu progressKey={progressKey} />
-      <ExamSyllabusButton
-        examId={wikiExamId}
-        examLabel={extractedTitle ?? examDisplayName(examFileName)}
-      />
-      {/* PCPA's second part: the project, which the syllabus page can't be. */}
-      {progressKey === 'CAS-PCPA' && <ExamProjectButton />}
-    </span>
-  ), [progressKey, wikiExamId, extractedTitle, examFileName])
+  // exam the page is being read for — and what that sitting asks for and when
+  // (registration, the window, results), then the examining body's own
+  // syllabus, the document this whole page is a reading of. PCPA adds its
+  // project, the requirement's second half.
+  const smallTitleBadge = useMemo(() => {
+    const examLabel = extractedTitle ?? examDisplayName(examFileName)
+    return (
+      <span className="inline-flex items-center gap-1.5 not-prose shrink-0">
+        <ExamVersionMenu progressKey={progressKey} />
+        <ExamSittingInfoButton progressKey={progressKey} wikiExamId={wikiExamId} examLabel={examLabel} />
+        <ExamSyllabusButton examId={wikiExamId} examLabel={examLabel} />
+        {/* PCPA's second part: the project, which the syllabus page can't be. */}
+        {progressKey === 'CAS-PCPA' && <ExamProjectButton iconOnlyOnPhone />}
+      </span>
+    )
+  }, [progressKey, wikiExamId, extractedTitle, examFileName])
 
   const resourceRefs = useMemo(() => {
     const seen = new Set<string>()

@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /auth/callback
+Disallow: /settings
+Disallow: /review
+
+Sitemap: https://quiz.actuarialnotes.com/sitemap.xml

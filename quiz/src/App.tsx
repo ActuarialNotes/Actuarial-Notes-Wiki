@@ -1,6 +1,8 @@
 import { Suspense, Component, useEffect, type ReactNode, type ErrorInfo } from 'react'
 import { Routes, Route, Link, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { usePageTracking } from '@/hooks/usePageTracking'
+import { usePageHead } from '@/hooks/usePageHead'
+import { NOT_FOUND_HEAD } from '@/lib/seo'
 import { Loader2 } from 'lucide-react'
 import type { Session } from '@supabase/supabase-js'
 import Landing from '@/pages/Landing'
@@ -154,6 +156,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 }
 
 function NotFound() {
+  usePageHead(NOT_FOUND_HEAD)
   return (
     <div className="container max-w-md mx-auto px-4 py-16 text-center space-y-4">
       <h1 className="text-4xl font-bold">404</h1>

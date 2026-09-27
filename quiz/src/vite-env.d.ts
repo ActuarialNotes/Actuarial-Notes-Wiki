@@ -27,6 +27,13 @@ declare module 'virtual:exam-pages' {
   export default examPages
 }
 
+declare module 'virtual:seo-pages' {
+  import type { SeoPage } from '@/lib/seo'
+  /** Every exam, concept and resource page, described — see lib/seo.ts. */
+  const pages: SeoPage[]
+  export default pages
+}
+
 declare module 'virtual:questions-content' {
   const questions: string[]
   export default questions

@@ -5,6 +5,7 @@ import { fetchWikiFile } from '@/lib/github'
 import { fromSlug } from '@/lib/wikiRoutes'
 import { extractWikiLinksFromText } from '@/lib/wikiExtract'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
+import { useWikiPageHead } from '@/hooks/useWikiPageHead'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { FactCheckBadge } from '@/components/FactCheckBadge'
@@ -19,6 +20,7 @@ export default function WikiResource() {
   const { openAt } = useConceptPopup()
   const [content, setContent] = useState<string | null>(null)
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
+  useWikiPageHead('resource', resourceName, status === 'error')
 
   useEffect(() => {
     let cancelled = false

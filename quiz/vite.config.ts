@@ -1,13 +1,15 @@
 /// <reference types="vitest/config" />
-import { defineConfig, loadEnv, type Plugin } from 'vite'
+import { defineConfig, loadEnv, type Logger, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import { PDFJS_ASSET_DIRS } from './src/lib/pdfjsAssets'
 import path from 'path'
-import { readdir, readFile } from 'fs/promises'
+import { mkdir, readdir, readFile, writeFile } from 'fs/promises'
 import fm from 'front-matter'
 import { KEYSTONE_EXAMS } from './src/data/keystoneConcepts'
 import { buildResourceExamMap, examsForResource } from './src/lib/resourceExams'
 import { examDisplayName, examIdFromFile } from './src/lib/wikiRoutes'
+import { buildSeoPages, countQuestionsByExam, pageHead, sitemapXml, SITEMAP_APP_PATHS, type SeoPage } from './src/lib/seo'
+import { renderStaticPage, staticBody } from './src/lib/seoPrerender'
 
 const REPO_ROOT = path.resolve(__dirname, '..')
 
@@ -586,8 +588,82 @@ function pdfjsAssetsPlugin(): Plugin {
   }
 }
 
+// ── SEO: every page described, a static file per page, and the sitemap ──────
+// Each exam, concept and resource page is described once (`lib/seo.ts`: its
+// title, its description, what it links up to) and the record is used three
+// ways:
+//   - `virtual:seo-pages` hands the records to the app, which writes a page's
+//     head as it opens (`hooks/usePageHead.ts`);
+//   - at the end of a build each page gets its own
+//     `dist/wiki/<kind>/<slug>/index.html` — the app's shell with that page's
+//     head and a crawlable copy of its article (`lib/seoPrerender.ts`). Vercel
+//     serves a file before the SPA rewrite, so a crawler that fetches a page
+//     gets its title, description and words without running the app;
+//   - `dist/sitemap.xml` lists every page worth indexing — generated, so it
+//     can't fall behind the vault the way a hand-kept one did.
+// See docs/seo.md.
+function seoPagesPlugin(): Plugin {
+  const VIRTUAL_ID = 'virtual:seo-pages'
+  const RESOLVED_ID = '\0' + VIRTUAL_ID
+  let outDir = ''
+  let isBuild = false
+  let logger: Logger | undefined
+  let site: Promise<{ files: Record<string, string>; pages: SeoPage[] }> | null = null
+  const loadSite = () => (site ??= (async () => {
+    const { files } = await collectWikiContent()
+    const pages = buildSeoPages(files, countQuestionsByExam(await collectQuestions()))
+    return { files, pages }
+  })())
+
+  return {
+    name: 'seo-pages',
+    configResolved(config) {
+      outDir = path.resolve(config.root, config.build.outDir)
+      isBuild = config.command === 'build' && !process.env.VITEST
+      logger = config.logger
+    },
+    resolveId: (id) => id === VIRTUAL_ID ? RESOLVED_ID : undefined,
+    load: async (id) => {
+      if (id !== RESOLVED_ID) return
+      const { pages } = await loadSite()
+      // Which vault file a page came from is the build's business, not the app's.
+      return `export default ${JSON.stringify(pages.map(page => ({ ...page, source: undefined })))}`
+    },
+    async closeBundle() {
+      if (!isBuild) return
+      const template = await readFile(path.join(outDir, 'index.html'), 'utf-8')
+      const { files, pages } = await loadSite()
+      const indexable = pages.filter(p => !p.noindex)
+      const canonical = new Map(indexable.map(p => [p.path.toLowerCase(), p.path]))
+      const resolve = (route: string) => canonical.get(route.toLowerCase())
+      const crumb = (p: SeoPage) => ({ name: p.name, path: p.path })
+      const hubSections = [
+        { heading: 'Exams', links: pages.filter(p => p.kind === 'exam').map(crumb) },
+        { heading: 'Syllabus readings', links: indexable.filter(p => p.kind === 'resource').map(crumb) },
+      ]
+      for (const page of pages) {
+        const body = staticBody({
+          page,
+          markdown: page.source ? files[page.source] : undefined,
+          resolve,
+          sections: page.kind === 'hub' ? hubSections : [],
+        })
+        // The route is `toSlug` output; on disk it is the decoded path, which is
+        // what Vercel matches a request against (it decodes before it looks).
+        const file = path.join(outDir, ...decodeURIComponent(page.path).split('/'), 'index.html')
+        if (!file.startsWith(outDir + path.sep)) throw new Error(`SEO page would be written outside dist: ${page.path}`)
+        await mkdir(path.dirname(file), { recursive: true })
+        await writeFile(file, renderStaticPage(template, pageHead(page), body))
+      }
+      const listed = [...SITEMAP_APP_PATHS, ...indexable.map(p => p.path)]
+      await writeFile(path.join(outDir, 'sitemap.xml'), sitemapXml(listed))
+      logger?.info(`seo: ${pages.length} static pages (${pages.length - indexable.length} noindex stubs), ${listed.length} URLs in sitemap.xml`)
+    },
+  }
+}
+
 export default defineConfig({
-  plugins: [react(), examPagesPlugin(), wikiContentPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), examGuidesPlugin(), keystoneLinksPlugin(), pdfjsAssetsPlugin()],
+  plugins: [react(), examPagesPlugin(), wikiContentPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), examGuidesPlugin(), keystoneLinksPlugin(), pdfjsAssetsPlugin(), seoPagesPlugin()],
   resolve: {
     alias: { '@': path.resolve(__dirname, 'src') },
   },

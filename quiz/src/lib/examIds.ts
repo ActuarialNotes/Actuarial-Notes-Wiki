@@ -1,4 +1,6 @@
-import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+// Relative, not `@/`-aliased: `lib/seo.ts` imports this into the vite config's
+// own Node graph.
+import { wikiExamIdToProgressKey } from './wikiParser'
 
 // Canonical mapping between a Question's `exam` label (e.g. "Probability", as
 // stored on Question.exam and quiz_sessions.exam) and the short exam id used

@@ -24,9 +24,34 @@ export interface ResourceMeta {
 
 /** One place to look for a book, searched on its ISBN. */
 export interface CopySource {
+  /** Which place — the menu prices the Amazon row (`lib/amazonPrice.ts`). */
+  id: keyof typeof COPY_SOURCE_LOGOS
   label: string
   url: string
+  /**
+   * The place's own mark, served from `quiz/public` — see `COPY_SOURCE_LOGOS`.
+   */
+  logo: string
 }
+
+/**
+ * Each place's own icon, copied from its site into `quiz/public/copy-sources/`
+ * rather than hotlinked the way a Cowork publisher's logo is. There are only
+ * three and they never change, and a hotlink would make merely *opening* the
+ * menu send a request to each of them — a shop and a shadow library included,
+ * the latter on a domain many networks block, which would leave a broken image
+ * in the row. An approximation of a mark would be an invented brand
+ * (`components/cowork/EntityLogo.tsx`), so these are the files the sites serve:
+ *
+ *   WorldCat — search.worldcat.org/favicons/android-chrome-192x192.png, at 64px
+ *   Amazon — www.amazon.com/favicon.ico, its 48px frame
+ *   Library Genesis — libgen.li/apple-touch-icon.png, centred on a square
+ */
+const COPY_SOURCE_LOGOS = {
+  worldcat: '/copy-sources/worldcat.png',
+  amazon: '/copy-sources/amazon.png',
+  libgen: '/copy-sources/library-genesis.png',
+} as const
 
 function extractUrl(value: string): string | undefined {
   const m = value.match(/\(([^)]+)\)/)
@@ -57,7 +82,7 @@ export function librarySearchUrl(isbn?: string): string | undefined {
 }
 
 /** The ISBN with its hyphens and spaces gone, or nothing if it isn't one. */
-function isbnDigits(isbn?: string): string | undefined {
+export function isbnDigits(isbn?: string): string | undefined {
   if (!isbn) return undefined
   const digits = isbn.replace(/[\s-]/g, '').toUpperCase()
   return /^(?:\d{9}[\dX]|\d{13})$/.test(digits) ? digits : undefined
@@ -76,9 +101,24 @@ export function copySources(isbn?: string): CopySource[] {
   const digits = isbnDigits(isbn)
   if (!digits) return []
   return [
-    { label: 'WorldCat', url: `https://search.worldcat.org/search?q=bn%3A${digits}` },
-    { label: 'Amazon', url: `https://www.amazon.com/s?k=${digits}&i=stripbooks` },
-    { label: 'Library Genesis', url: `https://libgen.li/index.php?req=${digits}` },
+    {
+      id: 'worldcat',
+      label: 'WorldCat',
+      url: `https://search.worldcat.org/search?q=bn%3A${digits}`,
+      logo: COPY_SOURCE_LOGOS.worldcat,
+    },
+    {
+      id: 'amazon',
+      label: 'Amazon',
+      url: `https://www.amazon.com/s?k=${digits}&i=stripbooks`,
+      logo: COPY_SOURCE_LOGOS.amazon,
+    },
+    {
+      id: 'libgen',
+      label: 'Library Genesis',
+      url: `https://libgen.li/index.php?req=${digits}`,
+      logo: COPY_SOURCE_LOGOS.libgen,
+    },
   ]
 }
 

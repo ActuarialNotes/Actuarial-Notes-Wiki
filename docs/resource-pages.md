@@ -124,7 +124,11 @@ Two consequences worth stating:
 
 - **A book you buy has no `Available from`.** It carries its `ISBN`, and the card
   builds the *Get a copy* menu (WorldCat, then shops) from it (`copySources` in
-  `quiz/src/lib/resourceMeta.ts`). A shop, a paywalled page or a catalogue record in
+  `quiz/src/lib/resourceMeta.ts`), each row led by that place's own logo, served
+  from `quiz/public/copy-sources/` rather than hotlinked. The Amazon row also carries
+  Amazon's price when the deployment has Creators API credentials
+  (`quiz/api/amazon-price.js`), which is one more reason the `ISBN` must be the
+  exact edition's: the price is shown only for an item that carries it. A shop, a paywalled page or a catalogue record in
   `Available from` would suppress that menu and send the reader somewhere worse.
   `Find at your local library at` is retired for the same reason.
 - **Revision history is not an edition.** A study note's `rev. Sep 2015` goes in the

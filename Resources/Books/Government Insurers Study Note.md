@@ -1,9 +1,9 @@
 ---
 Title: "Government Insurers Study Note"
-Authors: "Wendy Germani, Jim Klann, George Levine, Sarah McNair-Grove, Patty Smolen"
+Authors: "Wendy Germani, Jim Klann, George Levine, Sarah McNair-Grove and Patty Smolen"
+Publisher: "Casualty Actuarial Society"
 Year: "2017"
 date: "2017"
-Publisher: "Casualty Actuarial Society"
 Type: "Study Note"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/6C_Government_Insurers_Study_Note.pdf)"
 verification:
@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:bbf687af67713cce381ff1de5517d2e3b8eb4af3410f2dc263c8618c2d858341
+  content_hash: sha256:0aa2a63e78b42cad52b738a2e0ba56af0cfdabb38e81746701274dc3de46e79c
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,30 +19,51 @@ verification:
 ---
 ![[Government Insurers Study Note - Cover.svg]]
 
-The CAS study note on **why governments write insurance**, and on three programs where they do. Read for [[Exam 6C (CAS)|Exam 6C]] objectives B1–B3; the syllabus assigns **pp. 1–5, excluding crop insurance**.
+A CAS study note (April 2017) on why U.S. federal and state governments act as insurers, and on how they take part in crop and workers compensation insurance. It summarizes the main reasons for government insurance, the levels at which government participates — as exclusive insurer, as partner of private insurers or as their competitor — and the questions for evaluating a program, then describes the federal crop insurance program, federal and state workers compensation programs, and the interaction of workers compensation with Medicare.
 
-## The five reasons for government participation
+> [!info] On the syllabus
+> - [[Exam 6C (CAS)|Exam 6C]] — objectives B1–B3; pp. 1–5, excluding Crop Insurance.
+> - [[Exam 6U (CAS)|Exam 6U]] — objectives B1–B3.
 
-Drawn from Nyce, and from Greene and Weining — the framework the exam expects a candidate to name and apply:
+## Introduction
+- Federal and state governments take part in insurance as regulators and as insurers, either as the sole insurer, in partnership with insurance companies or in competition with them ([[Government and Industry Insurance Programs|government insurance programs]]).
+- Filling Insurance Needs Unmet by Private Insurance
+    - Under the [[Residual Market|residual market]] philosophy, government offers insurance in markets private insurance leaves unserved for unavailability or unaffordability, with insurability requirements that differ from private insurers'.
+    - The Federal Crime Insurance Program, begun in 1968 for high-crime neighbourhoods, expired in 1995 once the private market offered the cover at lower rates; [[Crop Insurance|crop]] and [[Flood Insurance|flood]] insurance are available and affordable only because of federal subsidies.
+- Compulsory Purchase of Insurance
+    - Because [[Workers Compensation Insurance|workers compensation]] or auto insurance may be compulsory, some legislatures felt obliged to offer it to those who could not find a private market — the state workers compensation funds and the Maryland Automobile Insurance Fund.
+    - For [[Compulsory Auto Insurance|compulsory auto insurance]], government insurance is normally not the answer: assigned risk plans, reinsurance facilities and joint underwriting associations make coverage available, sometimes below its actuarial cost.
+- Convenience
+    - A legislature can fund a program faster than the private market can, and government may already provide services a program needs, as with the [[Florida Hurricane Catastrophe Fund]]; convenience alone may not justify a program where the private market is willing and able.
+- Greater Efficiency
+    - The cost savings claimed for government insurance may be overstated: record-keeping, policy issue and claims costs remain, and other government departments may perform services on the program's behalf.
+- Social Purposes
+    - Social purposes may be the main reason for government insurance programs — rehabilitation of injured workers, or loss mitigation requirements in catastrophe plans ([[Social Insurance|social insurance]]).
+- Level of Government
+    - Government may be an exclusive insurer (Social Security; some state workers compensation programs), a partner of private insurers (the National Flood Insurance Program, the Terrorism Risk Insurance Program, federal crop insurance; FAIR, windstorm and residual auto plans), or a competitor (workers compensation in some states).
+- Evaluation of Government Insurance Programs
+    - Greene's questions: is government provision necessary, or does it achieve a social purpose private insurance cannot; is it insurance or social welfare; is the program efficient and accepted by the public ([[Government Program Evaluation|program evaluation]]).
 
-1. **Filling insurance needs unmet by private insurance.** The *residual market philosophy*: government offers coverage in markets the private market does not serve, whether because cover is unavailable or unaffordable. One implication is that the government's requirements for insurability differ from a private insurer's. The **Federal Crime Insurance Program** (1968) is the cautionary example — created because burglary cover was unaffordable in high-crime neighbourhoods, it expired in 1995 once loss-prevention methods made the private market cheaper than the government rate. **Crop and [[Flood Insurance|flood]] insurance are available and affordable only because of federal subsidy.**
-2. **Compulsory purchase of insurance.** Where the state compels a purchase — auto liability, [[Workers Compensation Insurance|workers compensation]] — some legislatures felt obliged to make the coverage available to those who could not buy it privately. Hence state workers-compensation funds. For compulsory auto, government *insurance* is normally not the answer; instead there are [[Residual Market|residual market]] mechanisms — **assigned risk plans, reinsurance facilities and joint underwriting associations** — which often deliver the coverage below its actuarial cost, so that insurers, other insureds or taxpayers subsidise high-risk drivers. Maryland has the only state-owned auto insurer.
-3. **Convenience.** A legislature can appropriate funding and stand a program up faster than the private market can raise capital, and government may already run the services the program needs — the Florida Hurricane Catastrophe Fund is the example. The note is sceptical: convenience alone does not justify displacing a willing private market.
-4. **Greater efficiency.** The claim that government can deliver at lower expense, principally by avoiding acquisition cost.
-5. **Social purposes.** Where the objective is redistribution or participation rather than risk transfer priced to cost — the [[Social Insurance|social insurance]] rationale.
+## Crop Insurance
 
-## The programs covered
+## Workers Compensation Insurance
+- A) Federal Workers Compensation Programs
+- B) State Workers Compensation Programs
+    - Partnership with Private Insurers
+    - State Funds
+    - Competitive State Funds
+    - Exclusive State Funds
+    - Residual Markets
+- C) Evaluation of Workers Compensation Insurance
+- D) Interaction of Workers Compensation Insurance with Medicare
+    - Background
+    - Medicare Set-Aside Allocations since 2001
+    - New Reporting Requirements since 2007
+    - Property/Casualty Actuarial Implications of the Recent Changes
+    - Changes in the Future?
 
-State and federal involvement in **[[Workers Compensation Insurance|workers compensation]]**, **crop insurance** (excluded by the syllabus) and **unemployment insurance** — with the note's actuarial implications section on what recent changes mean for the P&C actuary, and on what may change next. Other government programs — the National Flood Insurance Program, Social Security, [[Guaranty Funds|guaranty funds]], FAIR plans, TRIA and state auto plans — are dealt with elsewhere on the syllabus.
+## Notes
 
-## Reading it on a Canadian exam
-
-The study note is written about the United States. Exam 6C uses it for the **framework**, then applies it to Canadian programs: the [[Facility Association]] and [[Risk Sharing Pool|risk sharing pools]] as residual markets (see [[Dutil]]), provincial workers-compensation boards under the [[Meredith Principles]], [[Employment Insurance]], [[Health Care Insurance|public health insurance]], [[Agricultural Insurance|agricultural programs]] (see [[Agricultural Programs]]), and [[Flood Insurance|flood]] (see [[GOC Flood Risks]]).
-
-## Related readings
-- [[Dutil]] — the Facility Association and risk sharing pools
-- [[Morneau Shepell]] — workers compensation, employment insurance and health care in Canada
-- [[PACICC]] — the Canadian guaranty fund
-
-## Links
-- [Government Insurers Study Note (CAS)](https://www.casact.org/sites/default/files/2021-03/6C_Government_Insurers_Study_Note.pdf)
+## Sources
+- [Government Insurers Study Note (CAS, 2017)](https://www.casact.org/sites/default/files/2021-03/6C_Government_Insurers_Study_Note.pdf) — the document: title page, authors, headings and bookmarks, and the text of pp. 1–5
+- [CAS Exam 6C Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf) — the citation and the assigned pages and exclusion

@@ -211,7 +211,9 @@ In order:
    `## 4 Insurance Risk`, `## Appendix A …`, `## 10.60 Summary of Selected Financial Data
    for Five Years`. Drop the words *Chapter*/*Section* before a number; keep *Part* and
    *Appendix*, which are part of the label. A `###` level is for a book whose parts hold
-   chapters. Under each heading, a **list**, never prose or a table:
+   chapters. A document that groups its content without titling the groups (a one-page
+   legend in colour bands, say) gets one heading per group naming what the group holds,
+   and its `## Sources` entry says the groups are untitled in the original. Under each heading, a **list**, never prose or a table:
    - its **sub-divisions**, verbatim and numbered as printed (`- 1.3 Permutations`,
      nested four spaces per level) — the preferred content, and all a textbook page
      needs; and/or

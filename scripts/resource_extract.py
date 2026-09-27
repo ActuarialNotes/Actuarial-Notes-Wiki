@@ -136,7 +136,7 @@ def extract_pdf(data: bytes, out: str, render: str | None, text_pages: int) -> d
     for i in range(n):
         text = doc[i].get_text()
         sizes.append(len(text.strip()))
-        if i < text_pages:
+        if not text_pages or i < text_pages:
             with open(os.path.join(out, "text", f"p{i + 1:03d}.txt"), "w", encoding="utf-8") as fh:
                 fh.write(text)
         if i < 25 and TOC_WORDS.search(text[:400]):
@@ -310,7 +310,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--file", action="append", default=[], help="a local document (repeatable)")
     ap.add_argument("--out", help="output folder (only with a single source)")
     ap.add_argument("--render", help="PDF pages to render as images, e.g. 1-3,9")
-    ap.add_argument("--text-pages", type=int, default=400, help="write the text layer of the first N pages (default 400)")
+    ap.add_argument("--text-pages", type=int, default=0,
+                    help="write the text layer of only the first N pages (default: every page)")
     args = ap.parse_args(argv)
 
     sources = list(args.url) + list(args.file)

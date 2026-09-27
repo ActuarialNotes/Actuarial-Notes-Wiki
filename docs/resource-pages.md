@@ -105,7 +105,7 @@ Keys in this order, **every value double-quoted**, then the `verification:` bloc
 
 | Key | Required | Value | Where it comes from |
 | --- | --- | --- | --- |
-| `Title` | yes | the full title as printed, subtitle after `: ` | the document's title page (or the publisher's record of it) |
+| `Title` | yes | the full title as printed, subtitle after `: ` — the document's *name*: a number it carries (`Actuarial Standard of Practice No. 12`, `Guideline A-4`) goes in `Code` instead | the document's title page (or the publisher's record of it) |
 | `Authors` | yes | names in title-page order, given name first, `, ` between and ` and ` before the last; a body's full name when no person is credited | the title page |
 | `Publisher` | yes | the publishing or issuing body, full name | the title page / imprint |
 | `Year` | yes* | four digits — the year of the edition or version the syllabus prescribes | the title page, copyright page or effective date |

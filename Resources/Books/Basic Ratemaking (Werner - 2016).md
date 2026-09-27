@@ -1,18 +1,18 @@
 ---
-Title: Basic Ratemaking
-Authors: "Geoff Werner, Claudine Modlin"
+Title: "Basic Ratemaking"
+Authors: "Geoff Werner and Claudine Modlin"
+Publisher: "Casualty Actuarial Society"
 Year: "2016"
 date: "2016"
-Edition: 5th
-Publisher: Casualty Actuarial Society
-Type: Textbook
-Available from: "[casact.org](https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf)"
+Edition: "5th"
+Type: "Textbook"
+Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf)"
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-09-05
   last_checked_by: agent:validate-v1-followup
-  content_hash: sha256:5276f993b985228da93367fca70226e547fecbcee3fad21d3d1a1ba732ed06bc
+  content_hash: sha256:8b04b31a2b25c4ac14cc24b0a4ee75778f6f80b5cb411542743ef08b7bc4f5ae
   sources:
     - "Werner, G. & Modlin, C., Basic Ratemaking, 5th ed., May 2016 (CAS) — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf (sha256 6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c, 423 pp.): printed Table of Contents PDF pp.8-12, PDF bookmark outline, and chapter bodies pp.204-210 (ILF), 310 (large commercial scope), 324-333 (ch.16), 411/415 (Appendices E/F)"
     - "CAS Exam 5 Content Outline, Fall 2026 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf (version Exam_5_CO_2026_F v01 2026_4_22.docx; sha256 a7ba895343f7d888bc2c2d5f3b10b2811c8911620c628ae4cebd3ae6393ff1ea), p.6 'Complete Text References for Exam 5' and p.4 Domain A task list"
@@ -22,7 +22,10 @@ verification:
 ---
 ![[Basic Ratemaking (Werner - 2016) - Cover.svg]]
 
-The primary [[Ratemaking]] text on the [[Exam 5 (CAS)|Exam 5]] syllabus. The CAS Exam 5 content outline lists **Chapters 1 and 3–16**; **Chapter 2 is excluded**, and the Appendices "are an integral part of the textbook and will be used for creating questions." Errata are included in the reading.
+A CAS text outlining basic property/casualty insurance ratemaking concepts and techniques for actuarial candidates practicing around the world. Its key concept is the fundamental insurance equation, which balances the expected future income and outgo of an insurance operation: some chapters discuss the components of the equation — premium, loss, expense, profit — and others how to assess whether it is in balance in the aggregate and by customer segment. It is organised into sixteen chapters plus six appendices of in-depth practical examples. This is the Fifth Edition (Version 5), May 2016.
+
+> [!info] On the syllabus
+> - [[Exam 5 (CAS)|Exam 5]] — objectives A1–A15 and A17–A18; Chapters 1 and 3–16, including errata; Chapter 2 is excluded, and the Appendices "are an integral part of the textbook and will be used for creating questions."
 
 ## 1 Introduction
 
@@ -32,9 +35,6 @@ The primary [[Ratemaking]] text on the [[Exam 5 (CAS)|Exam 5]] syllabus. The CAS
 - Key ratios: [[Frequency]], [[Severity]], pure premium, [[Loss Ratio]], expense ratio, combined ratio
 
 ## 2 Rating Manuals
-
-> [!warning]- Not on the Exam 5 syllabus
-> The CAS content outline excludes Chapter 2. It is kept here because it is part of the book's structure and the later chapters refer back to it — but nothing in it is examinable.
 
 - Structure of a rating manual: rules, rate pages, [[Rating Algorithm|rating algorithms]], underwriting guidelines
 - [[Classification Ratemaking|Rating characteristics]] and how they map to relativities
@@ -133,13 +133,30 @@ The primary [[Ratemaking]] text on the [[Exam 5 (CAS)|Exam 5]] syllabus. The CAS
 - The five principles of claims-made policies (Marker and Mohl, 1980): cheaper than occurrence while claim costs rise; less exposed to a misestimated trend; a mature policy is barely affected by a shift in the reporting pattern; no pure [[IBNR]] liability, so less reserve-inadequacy risk; and substantially less investment income
 - Coordinating coverage: the **retroactive date**, first- and second-year vs. **mature** claims-made policies, **step factors** as a percentage of the mature rate, and the **extended reporting endorsement** (tail coverage) that closes the gap on switching back to occurrence or on retirement
 
+## Bibliography
+
 ## Appendices
+- Appendix A Auto Indication
+    - A full ratemaking indication worked example, on the loss ratio method
+- Appendix B Homeowners Indication
+    - A full ratemaking indication worked example, on the pure premium method
+- Appendix C Medical Malpractice Indication
+    - A full ratemaking indication worked example, on the loss ratio method
+- Appendix D Workers Compensation Indication
+    - A full ratemaking indication worked example
+- Appendix E Univariate Classification Example
+    - The pure premium and loss ratio approaches side by side
+- Appendix F Multivariate Classification Example
+    - Sample [[Generalized Linear Model|GLM]] output for a predictive and an unpredictive variable, plus overall model validation on a hold-out sample
 
-The Appendices are, per the CAS content outline, "an integral part of the textbook and will be used for creating questions."
+## Changes
+- The changes to the text from Version 4 (October 2010) to Version 5 (May 2016), chapter by chapter
 
-- **A–D** — full ratemaking indication worked examples: auto (loss ratio), homeowners (pure premium), medical malpractice, and workers compensation
-- **E** — univariate classification example: the pure premium and loss ratio approaches side by side
-- **F** — multivariate classification example: sample [[Generalized Linear Model|GLM]] output for a predictive and an unpredictive variable, plus overall model validation on a hold-out sample
+## Related readings
+- [[Statement of Principles Regarding Property and Casualty Insurance Ratemaking (CAS - 1988)]] — quoted in Chapter 1 for its first three principles, and listed in the Bibliography
+- [[ASOP 13 - Trending Procedures in Property Casualty Insurance (ASB - 2009)]] — cited in Chapter 6 for its definition of social influences, and listed in the Bibliography
 
-## Links
-- [Basic Ratemaking, 5th Edition (CAS)](https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf)
+## Sources
+- [Basic Ratemaking, Fifth Edition (Casualty Actuarial Society, 2016)](https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf) — the document: title page and abstract, the printed table of contents and bookmark outline (chapter and appendix titles), and the chapter text behind the points under each chapter
+- [CAS Exam 5 Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf) — the citation and the assigned scope
+- [Errata to Basic Ratemaking, 5th Edition (Casualty Actuarial Society, 2024)](https://www.casact.org/sites/default/files/2024-07/2024_Exam_5_Werner_Errata_2024_06_27.pdf) — the errata the content outline includes in the reading: the coinsurance clause (pp. 209–210) and Appendix D-14

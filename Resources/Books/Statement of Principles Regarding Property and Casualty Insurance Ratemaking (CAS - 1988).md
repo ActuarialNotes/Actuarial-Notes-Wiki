@@ -1,17 +1,17 @@
 ---
 Title: "Statement of Principles Regarding Property and Casualty Insurance Ratemaking"
-Author: Casualty Actuarial Society
+Authors: "Casualty Actuarial Society"
+Publisher: "Casualty Actuarial Society"
 Year: "1988"
 date: "1988"
-Publisher: Casualty Actuarial Society
-Type: Statement of Principles
+Type: "Statement of Principles"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-05/Statement-Of-Principles-Ratemaking.pdf)"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:decf7af8b05fea9b013e78c297fd358bf2753a17bd45861e0522ba15c8a4aba6
+  content_hash: sha256:a2b984571e6329c413e1c88d4b302fb7e9535594d9d0e73100c0072427a28093
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,48 +19,53 @@ verification:
 ---
 ![[Statement of Principles Regarding Property and Casualty Insurance Ratemaking (CAS - 1988) - Cover.svg]]
 
-The CAS statement setting out the **four principles of ratemaking** and the considerations behind them. On the [[Exam 5 (CAS)|Exam 5]] syllabus for objectives A4 and A16. Short but heavily examined — candidates are expected to state the principles and apply them to a scenario. See [[Principles of Ratemaking]].
+The CAS statement identifying and describing the principles that apply to the determination and review of property and casualty insurance rates. Adopted by the CAS Board of Directors in May 1988, it is limited to the part of ratemaking that estimates the costs associated with the transfer of risk, and consists of four parts: definitions, principles, considerations and a conclusion. The Board rescinded it in December 2020 and reinstated it in May 2021, for reference for U.S.-regulated ratemaking.
 
-## Definitions
+> [!info] On the syllabus
+> - [[Exam 5 (CAS)|Exam 5]] — objectives A4 and A16; the statement of May 1988.
 
-- A **rate** is an estimate of the expected value of future costs — it is prospective, per unit of exposure, and distinct from a *price* (which reflects competitive and marketing judgment)
-- A rate provides for all costs associated with the transfer of risk
-- Ratemaking is **prospective** because the property/casualty policy is priced before its costs are known
+## I Definitions
+- [[Ratemaking]] is the process of establishing rates used in insurance or other risk transfer mechanisms; the Statement is limited to the estimation of future costs — claims, claim settlement expenses, operational and administrative expenses, and the cost of capital.
+- The costs are summarised as incurred losses; [[Allocated Loss Adjustment Expense|allocated]] and [[Unallocated Loss Adjustment Expenses ULAE|unallocated loss adjustment expenses]]; commission and brokerage; other acquisition expenses; taxes, licenses and fees; policyholder dividends; and general administrative expenses.
+- The [[Underwriting Profit|underwriting profit]] and [[Profit and Contingency Provision|contingency provisions]] are the amounts that, considered with net investment and other income, provide an appropriate total after-tax return.
 
-## The Four Principles
+## II Principles
+- Ratemaking is prospective because the rate must be developed prior to the transfer of risk.
+- [[Principles of Ratemaking|Principle 1]]: a rate is an estimate of the expected value of future costs.
+- Principle 2: a rate provides for all costs associated with the transfer of risk — so that the insurance system is financially sound.
+- Principle 3: a rate provides for the costs associated with an individual risk transfer — so that equity among insureds is maintained; when an individual risk's experience is not a credible basis, the aggregate experience of similar risks may be considered.
+- Principle 4: a rate is reasonable and not excessive, inadequate, or [[Unfair Discrimination|unfairly discriminatory]] if it is an actuarially sound estimate of the expected value of all future costs associated with an individual risk transfer.
+- Cost estimates based on Principles 1, 2 and 3 are actuarially sound, and comply with the four criteria commonly used by actuaries: reasonable, not excessive, not inadequate, and not unfairly discriminatory.
 
-> [!example]- The Four Principles of Ratemaking {Memorize}
->
-> 1. **A rate is an estimate of the expected value of future costs.**
-> 2. **A rate provides for all costs associated with the transfer of risk.**
-> 3. **A rate provides for the costs associated with an individual risk transfer.**
-> 4. **A rate is reasonable and not excessive, inadequate, or unfairly discriminatory if it is an actuarially sound estimate of the expected value of all future costs associated with an individual risk transfer.**
->
-> > [!tip] How they build
-> > Principles 1–3 narrow the scope step by step — from *expected future costs*, to *all* such costs, to costs at the *individual risk* level. Principle 4 then defines actuarial soundness as satisfying the first three, and equates that with the regulatory standard of "not excessive, inadequate, or unfairly discriminatory."
+## III Considerations
+- Regardless of the methodology, material assumptions should be documented and available for disclosure; the actuary need not be completely bound by precedent.
+- Exposure Unit
+    - The [[Exposure Base|exposure unit]] should vary with the hazard and be practical and verifiable.
+- Data
+- Organization of Data
+    - [[Calendar Year|Calendar year]], [[Accident Year|accident year]], [[Report Year|report year]] and [[Policy Year|policy year]] are all acceptable; data availability, clarity, simplicity and the nature of the coverage affect the choice.
+- Homogeneity
+- Credibility
+    - [[Credibility]] is a measure of the predictive value the actuary attaches to a body of data; each situation requires balancing [[Homogeneity|homogeneity]] and the volume of data.
+- Loss Development
+- Trends
+- Catastrophes
+- Policy Provisions
+- Mix of Business
+- Reinsurance
+- Operational Changes
+- Other Influences
+- Classification Plans
+- Individual Risk Rating
+    - When an [[Individual Risk Rating|individual risk's]] experience is sufficiently credible, its premium should be modified to reflect that experience.
+- Risk
+    - The rate should include a charge for the risk of random variation from expected costs, reflected in the underwriting profit provision, and a charge for systematic variation of estimated from expected costs, reflected in the contingency provision.
+- Investment and Other Income
+- Actuarial Judgment
 
-- **Principle 1** grounds ratemaking in [[Loss Development|development]] and [[Loss Trend|trend]]: historical data must be adjusted to estimate *future* costs, not restate past ones
-- **Principle 2** requires the rate to include [[Loss and Loss Adjustment Expense|losses and LAE]], [[Expense Provisions|underwriting expenses]], the net cost of [[Reinsurance|reinsurance]], and a [[Profit and Contingency Provision|provision for profit and contingencies]]
-- **Principle 3** underpins [[Classification Ratemaking|risk classification]]: rates must reflect the expected costs of the individual risk transfer, which is why classification and [[Territory Ratemaking|territorial]] differentials are actuarially required rather than merely permitted
-- **Principle 4** connects actuarial soundness to the statutory rate standard; note that the definition works at the level of the *individual* risk transfer, so a rate can be inadequate for a class even if the overall book is adequate
+## IV Conclusion
+- By applying the principles, the actuary derives an estimate of the future costs associated with the transfer of risk; other business considerations are also part of ratemaking, and through interaction with underwriting, marketing, law, claims and finance the actuary has a key role in the process.
 
-## Considerations
-
-The statement lists considerations the actuary should address in applying the principles, including:
-
-- **Exposure unit** — selecting an [[Exposure Base|exposure base]] that varies with the hazard and is practical to administer
-- **Data** — organizing [[Ratemaking Data Organization|ratemaking data]] appropriately and evaluating its quality
-- **Organization of data** — [[Calendar Year]], [[Accident Year]], [[Policy Year]], and [[Report Year]] aggregations and their trade-offs
-- **Homogeneity** — grouping risks so that classes are internally similar (see [[Homogeneity]])
-- **Credibility** — supplementing thin data with a [[Complement of Credibility|complement]] (see [[Credibility]])
-- **Loss development, trends, and catastrophes** — adjusting for maturity, changes over time, and [[Catastrophe Loss|infrequent large events]]
-- **Expenses, profit, and contingencies** — provisions for [[Fixed Expenses|fixed]] and [[Variable Expenses|variable]] expenses and the [[Underwriting Profit|underwriting profit]] target
-- **Individual risk rating** — [[Experience Rating|experience]], [[Schedule Rating|schedule]], and [[Retrospective Rating|retrospective]] plans
-- **Risk classification and operational constraints** — including regulatory and marketing [[Ratemaking Constraints|constraints]] on the final [[Rate Change|rate change]]
-
-## Conclusion
-
-- Ratemaking is **prospective**; actuarial judgment is an essential part of applying the principles, and the actuary must be prepared to justify departures from indicated rates
-
-## Links
-- [Statement of Principles Regarding Property and Casualty Insurance Ratemaking (CAS)](https://www.casact.org/sites/default/files/2021-03/Ratemaking_Principles.pdf)
+## Sources
+- [Statement of Principles Regarding Property and Casualty Insurance Ratemaking (CAS, 1988)](https://www.casact.org/sites/default/files/2021-05/Statement-Of-Principles-Ratemaking.pdf) — the document: title, adoption date, the rescission and reinstatement notes, its four parts and what each says
+- [CAS Exam 5 Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf) — the citation and the assigned objectives

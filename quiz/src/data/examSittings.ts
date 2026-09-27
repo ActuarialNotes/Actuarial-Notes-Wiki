@@ -143,7 +143,7 @@ export function getSittingsForExam(examId: string, today = new Date()): ExamSitt
     .filter(s => s.examId === examId)
     .filter(s => (s.endDate ?? s.startDate) >= todayISO)
     .filter(s => {
-      const key = `${s.startDate}|${s.endDate ?? ''}|${s.format}`
+      const key = sittingKey(s)
       if (seen.has(key)) return false
       seen.add(key)
       return true
@@ -220,6 +220,33 @@ export function sittingContains(sitting: ExamSitting, date: string | null | unde
  */
 export function currentSitting(sittings: ExamSitting[], targetDate: string | null | undefined): ExamSitting | null {
   return sittings.find(s => sittingContains(s, targetDate)) ?? sittings[0] ?? null
+}
+
+/** One sitting's identity — the same triple `getSittingsForExam` dedupes on. */
+export function sittingKey(sitting: ExamSitting): string {
+  return `${sitting.startDate}|${sitting.endDate ?? ''}|${sitting.format}`
+}
+
+/**
+ * The version a study guide shows, given the reader's recorded exam date (only
+ * for a tracked exam) and the sitting they last picked from the version menu.
+ *
+ * The record decides, since it is what the study plan paces to; the pick only
+ * breaks a tie inside it — Exam P's paper day falls inside its CBT window, so a
+ * date alone can't say which of the two was chosen. With no record, the pick
+ * stands on its own, and with neither it is the next sitting.
+ */
+export function selectVersion(
+  sittings: ExamSitting[],
+  recordDate: string | null | undefined,
+  pickedKey: string | null | undefined,
+): ExamSitting | null {
+  const picked = pickedKey ? sittings.find(s => sittingKey(s) === pickedKey) : undefined
+  if (recordDate) {
+    if (picked && sittingContains(picked, recordDate)) return picked
+    return currentSitting(sittings, recordDate)
+  }
+  return picked ?? currentSitting(sittings, null)
 }
 
 /**

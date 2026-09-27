@@ -1,14 +1,11 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { ChevronDown, Circle } from 'lucide-react'
 import { CheckMark } from '@/components/CheckMark'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
-import { useAuth } from '@/hooks/useAuth'
-import { useExamProgress } from '@/contexts/ExamProgressContext'
+import { useExamVersion } from '@/hooks/useExamVersion'
 import {
-  currentSitting,
   formatSittingDate,
-  getSittingsForExam,
-  sittingContains,
+  sittingKey,
   sittingVersionLabel,
   type ExamSitting,
 } from '@/data/examSittings'
@@ -23,7 +20,9 @@ import { cn } from '@/lib/utils'
  * sittings from `data/examSittings.ts`. For a signed-in reader who is sitting
  * the exam, the version *is* their exam date — picking one writes it, so the
  * study plan paces to the sitting the header names. Anyone else can still
- * switch it, for this visit only; it changes no one's record.
+ * switch it, for this visit only; it changes no one's record. The selection
+ * itself is `hooks/useExamVersion.ts`, which the info button beside this menu
+ * (`ExamSittingInfoButton`) reads too.
  *
  * An exam with no upcoming sitting on file renders nothing: a version the
  * sittings table doesn't list would be invented.
@@ -32,17 +31,7 @@ import { cn } from '@/lib/utils'
  * `placeMenu` — the trigger lives in the sticky header's stacking context.
  */
 export function ExamVersionMenu({ progressKey }: { progressKey: string }) {
-  const { user } = useAuth()
-  const { progress, targetDates, updateTargetDate } = useExamProgress()
-  const sittings = useMemo(() => getSittingsForExam(progressKey), [progressKey])
-  const tracked = !!user && progress[progressKey] === 'in_progress'
-
-  // A pick not written to the reader's record (guest, or an untracked exam).
-  const [localDate, setLocalDate] = useState<string | null>(null)
-  useEffect(() => { setLocalDate(null) }, [progressKey])
-
-  const selectedDate = (tracked ? targetDates[progressKey] : null) ?? localDate
-  const selected = currentSitting(sittings, selectedDate)
+  const { sittings, selected, choose: chooseVersion } = useExamVersion(progressKey)
 
   const [open, setOpen] = useState(false)
   const [box, setBox] = useState<MenuPlacement | null>(null)
@@ -100,14 +89,7 @@ export function ExamVersionMenu({ progressKey }: { progressKey: string }) {
 
   function choose(s: ExamSitting) {
     setOpen(false)
-    // The last day of the window, the same date the study-plan settings'
-    // sitting list sets — the plan paces to the end of the window.
-    const date = s.endDate ?? s.startDate
-    if (tracked) {
-      if (!sittingContains(s, targetDates[progressKey])) void updateTargetDate(progressKey, date)
-    } else {
-      setLocalDate(date)
-    }
+    chooseVersion(s)
   }
 
   const label = sittingVersionLabel(selected)
@@ -129,7 +111,7 @@ export function ExamVersionMenu({ progressKey }: { progressKey: string }) {
         const active = s === selected
         return (
           <button
-            key={`${s.startDate}|${s.endDate ?? ''}|${s.format}`}
+            key={sittingKey(s)}
             type="button"
             role="option"
             aria-selected={active}

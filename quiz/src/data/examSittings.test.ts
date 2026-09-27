@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { currentSitting, examWindowFor, sittingContains, sittingVersionLabel, type ExamSitting } from './examSittings'
+import { currentSitting, examWindowFor, selectVersion, sittingContains, sittingKey, sittingVersionLabel, type ExamSitting } from './examSittings'
 
 const sep: ExamSitting = { examId: 'P', format: 'CBT', startDate: '2026-09-10', endDate: '2026-09-21', registrationDeadline: null }
 const nov: ExamSitting = { examId: 'P', format: 'CBT', startDate: '2026-11-04', endDate: '2026-11-15', registrationDeadline: null }
@@ -34,6 +34,34 @@ describe('currentSitting', () => {
 
   it('is null when no sitting is known', () => {
     expect(currentSitting([], '2026-11-15')).toBeNull()
+  })
+})
+
+describe('selectVersion', () => {
+  const paper: ExamSitting = { examId: 'P', format: 'P/P', startDate: '2026-09-10', endDate: null, registrationDeadline: null }
+
+  it('follows the recorded exam date', () => {
+    expect(selectVersion([sep, nov], '2026-11-15', null)).toBe(nov)
+  })
+
+  it('uses the pick to say which of two sittings the date means', () => {
+    // The paper day sits inside the CBT window: the date alone reads as CBT.
+    expect(selectVersion([sep, paper], '2026-09-10', null)).toBe(sep)
+    expect(selectVersion([sep, paper], '2026-09-10', sittingKey(paper))).toBe(paper)
+  })
+
+  it('does not let a pick override a record that disagrees with it', () => {
+    expect(selectVersion([sep, nov], '2026-11-15', sittingKey(sep))).toBe(nov)
+  })
+
+  it('takes the pick when nothing is recorded, else the next sitting', () => {
+    expect(selectVersion([sep, nov], null, sittingKey(nov))).toBe(nov)
+    expect(selectVersion([sep, nov], null, null)).toBe(sep)
+    expect(selectVersion([sep, nov], null, 'gone|gone|CBT')).toBe(sep)
+  })
+
+  it('is null with no sittings', () => {
+    expect(selectVersion([], '2026-11-15', null)).toBeNull()
   })
 })
 

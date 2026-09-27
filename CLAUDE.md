@@ -92,7 +92,10 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
   retired comprehension checks from `comprehension-checks/<exam-id>/*.md` via the
   `virtual:comprehension-checks` vite module — nothing imports it, so it isn't bundled; see
   `docs/flashcard-collection.md`), `examSittings.ts` / `examPdfLinks.ts` (sitting dates, examiner reports, and each
-  exam's published syllabus — the PDF an exam page's header button opens),
+  exam's published syllabus — the PDF an exam page's header button opens), `examSittingDetails.ts`
+  (what the examining body publishes about each sitting — registration opening and closing, PCPA's exam and
+  submission deadlines, results release — transcribed with its source page, never extrapolated; the
+  study guide's info button reads it),
   `mnemonics.ts` / `stories.ts` (per-concept, per-avatar content), `quests.ts` (daily-quest
   catalogue), `keystoneConcepts.ts` (the per-exam keystone catalogue — see
   `docs/keystone-concepts.md`), `examGuides.ts` (the exam-page orientation guide — the tip
@@ -258,6 +261,8 @@ before touching that area**:
   which reads the same table and reuses the same viewer, and the **Read PDF** button on a
   resource page's metadata card (`components/wiki/ResourceMetaCard.tsx`), which opens an
   `Available from:` PDF — an ASOP, a CAS study note — in that viewer instead of a browser tab.
+  And the study guide header's **info button** (`components/wiki/ExamSittingInfoButton.tsx`),
+  which lays the selected sitting's dates out as a timeline — see "The sitting's details".
 
 Other important `lib/` modules:
 - `parser.ts` — parses question markdown (frontmatter + body) into `Question` objects
@@ -439,6 +444,15 @@ Other important `lib/` modules:
   outside every callout belongs to no objective and its stretch stays unnamed. `isSyllabusConcept`
   is the shared "this link is a concept, not a source" predicate the exam page walks too, so
   both sides count the same mentions. Pure and tested. See `docs/style-guide.md` §7.5.
+- `sittingTimeline.ts` — **one sitting, as a timeline**: the study guide header's info
+  button (`components/wiki/ExamSittingInfoButton.tsx`, beside the version menu) shows the
+  selected sitting's registration dates, window and results in date order, a check on what
+  has passed and a countdown on what comes next. This module merges a sittings row's own
+  window / registration deadline with what `data/examSittingDetails.ts` transcribes (a
+  transcribed one replaces the row's, under the publisher's label) and places today among
+  them — at most one step is *next*, none while a window is open. Which sitting is selected
+  is `hooks/useExamVersion.ts`, shared with `ExamVersionMenu` so the two can't disagree.
+  Pure and tested. See `docs/mock-exam-browser.md`.
 - `pdfChapters.ts` — the exam-PDF reader's **chapters**: a document's own outline (the
   bookmarks a viewer shows in a sidebar) turned into the marks that segment the page bar,
   resolved against the document by `hooks/usePdfChapters.ts`. Pure and tested. Chapters are

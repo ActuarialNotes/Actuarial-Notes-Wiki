@@ -466,6 +466,38 @@ Two things differ from the sittings above:
   CAS's own naming is the warning against extrapolating — the newer outlines are
   `Exam_6C_CO_2026_Fall.pdf` where the older ones are `Exam7_Content_Outline.pdf`.
 
+### The sitting's details (`ExamSittingInfoButton`)
+
+Between the version menu and the syllabus button sits an **info button**
+(`components/wiki/ExamSittingInfoButton.tsx`) that says what the selected sitting asks of a
+candidate, and when: registration opening and closing, the window (for PCPA, the *project*
+window and the exam deadline that gates it), and results. It opens a dialog that lays the
+dates out as a timeline — a check on what has passed, a dot on what is happening today, a
+ring and a countdown on what comes next — followed by how the exam is sat and links to the
+publisher's pages the dates were taken from.
+
+Three pieces, each doing one thing:
+
+- **`hooks/useExamVersion.ts`** is the selection. The version menu and the info button both
+  call it, so switching the version switches what the dialog describes. For a signed-in
+  reader who is sitting the exam, choosing a version writes their exam date; the last pick
+  is remembered for the visit too (`selectVersion` in `data/examSittings.ts`), which is what
+  tells Exam P's paper day from the CBT window it falls inside.
+- **`data/examSittingDetails.ts`** is the transcription: per sitting, the milestones the
+  publisher names (under the publisher's own label), any note it attaches ("subject to
+  change"), and the pages they came from; per exam, how it is sat. The table-level rule is
+  this document's rule — **transcribed, never constructed**. A results date that "is always
+  about eight weeks later" is exactly the guess the file exists to keep out: an unpublished
+  date is absent, and the dialog shows the dates that are and nothing in the gap.
+- **`lib/sittingTimeline.ts`** is pure: it merges a sittings row's own window and
+  registration deadline with the transcribed milestones (a transcribed window or deadline
+  replaces the row's), orders them, and places today among them — at most one step is
+  *next*, and none is while a window is open, because then the window is the news.
+
+An exam with no sitting on file still gets the button; the dialog says none is published
+yet and links the publisher's exam page, rather than the header dropping a control the
+reader expects to find.
+
 ### Source documents on a resource page (`ResourceMetaCard`)
 
 The third caller of the viewer isn't an exam at all. A `Resources/Books/*.md` page whose

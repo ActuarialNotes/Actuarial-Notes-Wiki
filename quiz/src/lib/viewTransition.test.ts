@@ -143,7 +143,7 @@ describe('canTransition', () => {
 
 describe('deskPlace', () => {
   it('lays the tabs out left to right in the sidebar\'s order', () => {
-    const order = ['/dashboard', '/wiki', '/flashcards', '/'].map(p => deskPlace(p).tab)
+    const order = ['/dashboard', '/wiki', '/flashcards', '/', '/project'].map(p => deskPlace(p).tab)
     expect([...order].sort((a, b) => a - b)).toEqual(order)
     expect(new Set(order).size).toBe(order.length)
   })
@@ -159,10 +159,11 @@ describe('deskPlace', () => {
     expect(deskPlace('/review').depth).toBeGreaterThan(deskPlace('/quiz').depth)
   })
 
-  it('lays the PCPA project over its exam page, and an attempt over the project', () => {
-    expect(deskPlace('/project/pcpa').tab).toBe(deskPlace('/wiki').tab)
-    expect(deskPlace('/project/pcpa').depth).toBeGreaterThan(deskPlace('/wiki/exam/Exam%20PCPA').depth)
-    expect(deskPlace('/project/pcpa/p-123').depth).toBeGreaterThan(deskPlace('/project/pcpa').depth)
+  it('reads Projects as a tab, with an attempt a sheet over its briefs', () => {
+    expect(deskPlace('/project')).toEqual({ tab: deskPlace('/project').tab, depth: 0 })
+    expect(deskPlace('/project').tab).not.toBe(deskPlace('/wiki').tab)
+    expect(deskPlace('/project/pcpa/p-123')).toEqual({ tab: deskPlace('/project').tab, depth: 1 })
+    expect(paperMove('/project', '/project/pcpa/p-123', 'PUSH')).toBe('push')
     expect(paperMove('/project/pcpa/p-123', '/project/pcpa/p-123?view=report', 'PUSH')).toBeNull()
   })
 

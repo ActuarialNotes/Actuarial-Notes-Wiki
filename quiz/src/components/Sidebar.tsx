@@ -7,6 +7,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
   FileSpreadsheet,
+  FlaskConical,
   Gem,
   GraduationCap,
   Layers,
@@ -709,6 +710,16 @@ export default function Sidebar() {
             onNavigate={closeMobile}
             badge={quizBadge}
             dataTour="nav-quiz"
+          />
+          {/* A project is its own kind of study — a brief, a data set and a
+              deadline, not a bank of questions — so it is a tab of its own
+              (docs/pcpa-project.md). */}
+          <SidebarItem
+            to="/project"
+            label="Projects"
+            icon={<FlaskConical className="h-5 w-5 lg:h-4 lg:w-4" />}
+            collapsed={collapsed}
+            onNavigate={closeMobile}
           />
             </>
           )}

@@ -59,7 +59,7 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
 
 ### Inside `quiz/src/`
 - `pages/` — route-level views (Quiz, Review, Dashboard, Flashcards, Search, Settings, Store,
-  Upgrade, wiki/*, `Project/` — the PCPA project simulator, `Cowork/` — the second product's shelf, source pages and deliverables —
+  Upgrade, wiki/*, `Project/` — the Projects tab and the PCPA project simulator, `Cowork/` — the second product's shelf, source pages and deliverables —
   and `Research/`, which is
   flag-gated)
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
@@ -191,10 +191,14 @@ before touching that area**:
   far more than its share of the syllabus. `computeExamReadiness` is the *one* readiness
   number — the exam-page card, the Dashboard radial, the exam grid and the readiness
   projection all call it. Read before changing `lib/readiness.ts` or any readiness readout.
-- `docs/pcpa-project.md` — the **PCPA project simulator** (`/project/pcpa`, entered from the
-  **Project** button on the PCPA study guide's header): a 16-day window, a case assigned from a
-  pool (`data/pcpaProjects.ts` — the CAS's published rules transcribed, the cases invented and
-  labelled so), data drawn per attempt from a known model with every planted problem counted
+- `docs/pcpa-project.md` — the **Projects tab** (`/project`, in the sidebar after Quiz; the
+  PCPA study guide's **Project** button leads there too) and the **PCPA project simulator**
+  behind it: every brief is a card grouped by the exam it is a project for (`data/projects.ts`
+  — PCPA is the only one yet), the reader *chooses* a brief, and the start sheet asks only what
+  changes the attempt — **Rehearsal** (the real 16-day window, feedback after submission) or
+  **Practice** (no deadline, the report checked as it is written), the language, and for a
+  brief done before, fresh data or the same draw again. The briefs are `data/pcpaProjects.ts`
+  (the CAS's published rules transcribed, the cases invented and labelled so), data drawn per attempt from a known model with every planted problem counted
   (`lib/pcpaData.ts`), a workspace running **webR** and **Pyodide** from their CDNs plus a
   Fortune-sheet spreadsheet, the 1,250-word / five-appendix report, submission with a clean run
   of the code, and grading on fresh assessment data against the true model. Read before touching

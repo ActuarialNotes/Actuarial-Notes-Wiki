@@ -9,14 +9,13 @@ describe('pageHostsNavButton', () => {
     expect(pageHostsNavButton('/wiki/concept/Bayes Theorem')).toBe(true)
     expect(pageHostsNavButton('/research')).toBe(true)
     expect(pageHostsNavButton('/research/projects')).toBe(true)
-    expect(pageHostsNavButton('/project/pcpa')).toBe(true)
     expect(pageHostsNavButton('/project/pcpa/p-1')).toBe(true)
     expect(pageHostsNavButton('/dashboard')).toBe(true)
     expect(pageHostsNavButton('/flashcards')).toBe(true)
   })
 
   it('leaves every other route to the app header', () => {
-    for (const path of ['/search', '/settings', '/store', '/upgrade', '/quiz', '/review', '/auth']) {
+    for (const path of ['/search', '/settings', '/store', '/upgrade', '/quiz', '/review', '/auth', '/project']) {
       expect(pageHostsNavButton(path)).toBe(false)
     }
   })
@@ -28,5 +27,6 @@ describe('pageHostsNavButton', () => {
     expect(pageHostsNavButton('/researching')).toBe(false)
     expect(pageHostsNavButton('/dashboards')).toBe(false)
     expect(pageHostsNavButton('/flashcards/deck')).toBe(false)
+    expect(pageHostsNavButton('/projects')).toBe(false)
   })
 })

@@ -43,8 +43,9 @@ const { Component: Research, preload: loadResearch } = lazyRoute(() => import('@
 // Cowork is the app's second product (see `lib/appMode.ts`). Lazy, because a
 // reader in Study mode should never pay for its catalogue or its xlsx writer.
 const { Component: Cowork, preload: loadCowork } = lazyRoute(() => import('@/pages/Cowork'))
-// The PCPA project simulator (docs/pcpa-project.md). Lazy: its editor, its
-// spreadsheet and its data generator are for the candidates who open it.
+// The Projects tab — the PCPA project simulator (docs/pcpa-project.md). Lazy:
+// its editor, its spreadsheet and its data generator are for the candidates
+// who open it.
 const { Component: Project, preload: loadProject } = lazyRoute(() => import('@/pages/Project'))
 
 const { Component: WikiLayout, preload: loadWikiLayout } = lazyRoute(() => import('@/components/wiki/WikiLayout'))
@@ -64,7 +65,7 @@ function preloadRoute(path: string): Promise<unknown> | null {
   const route = path.split('?')[0].split('#')[0]
   if (route === '/research' || route.startsWith('/research/')) return loadResearch()
   if (route === '/cowork' || route.startsWith('/cowork/')) return loadCowork()
-  if (route.startsWith('/project/')) return loadProject()
+  if (route === '/project' || route.startsWith('/project/')) return loadProject()
   if (route === '/wiki') return Promise.all([loadWikiLayout(), loadWikiHome()])
   if (route.startsWith('/wiki/exam/')) return Promise.all([loadWikiLayout(), loadWikiExam()])
   if (route.startsWith('/wiki/concept/')) return Promise.all([loadWikiLayout(), loadWikiConcept()])
@@ -305,9 +306,10 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="/cowork" element={<CoworkRoute />} />
                 <Route path="/cowork/:tab" element={<CoworkRoute />} />
                 <Route path="/cowork/:tab/:id" element={<CoworkRoute />} />
-                {/* The PCPA project simulator: the portal, and one attempt. */}
-                <Route path="/project" element={<Navigate to="/project/pcpa" replace />} />
-                <Route path="/project/pcpa" element={<ProjectRoute />} />
+                {/* The Projects tab: the briefs, and one attempt. `/project/pcpa`
+                    was the PCPA portal before projects were a tab of their own. */}
+                <Route path="/project" element={<ProjectRoute />} />
+                <Route path="/project/pcpa" element={<Navigate to="/project" replace />} />
                 <Route path="/project/pcpa/:attemptId" element={<ProjectRoute />} />
                 <Route path="/wiki" element={
                   <Suspense fallback={<WikiFallback />}>

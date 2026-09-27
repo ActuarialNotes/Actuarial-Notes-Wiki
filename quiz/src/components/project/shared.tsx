@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react'
 import { X } from 'lucide-react'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import { cn } from '@/lib/utils'
@@ -115,6 +115,70 @@ export function PopMenu({
           ))}
         </div>
       )}
+    </div>
+  )
+}
+
+export interface Choice<T extends string> {
+  value: T
+  label: string
+  icon?: ReactNode
+  /** What choosing it means — the consequence the label can't carry. */
+  detail: string
+}
+
+/**
+ * A choice between a few options whose *consequences* differ, each a card
+ * with its label and one line of what it means. The segmented control is for
+ * choices whose labels say it all; this is for the ones that can't, so the
+ * line lives inside the option instead of as a caption under the control.
+ * Same radiogroup behaviour: arrows move the selection.
+ */
+export function ChoiceCards<T extends string>({
+  label,
+  value,
+  onChange,
+  choices,
+}: {
+  label: string
+  value: T
+  onChange: (value: T) => void
+  choices: Choice<T>[]
+}) {
+  const groupRef = useRef<HTMLDivElement>(null)
+  function onKeyDown(e: ReactKeyboardEvent) {
+    const delta = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0
+    if (!delta) return
+    e.preventDefault()
+    const at = choices.findIndex(c => c.value === value)
+    const next = choices[(at + delta + choices.length) % choices.length]
+    onChange(next.value)
+    groupRef.current?.querySelector<HTMLButtonElement>(`[data-choice="${CSS.escape(next.value)}"]`)?.focus()
+  }
+  return (
+    <div ref={groupRef} role="radiogroup" aria-label={label} onKeyDown={onKeyDown} className="grid gap-2 sm:grid-cols-2">
+      {choices.map(c => {
+        const active = c.value === value
+        return (
+          <button
+            key={c.value}
+            type="button"
+            role="radio"
+            aria-checked={active}
+            data-choice={c.value}
+            tabIndex={active ? 0 : -1}
+            onClick={() => onChange(c.value)}
+            className={cn(
+              'flex flex-col items-start gap-1 rounded-xl border p-3 text-left transition-colors',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
+              active ? 'border-primary bg-primary/10' : 'border-border hover:bg-accent/60',
+            )}
+          >
+            <span className="flex items-center gap-2 text-sm font-semibold">{c.icon}{c.label}</span>
+            <span className="text-xs leading-snug text-muted-foreground">{c.detail}</span>
+          </button>
+        )
+      })}
     </div>
   )
 }

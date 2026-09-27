@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { attemptPhase, drawCase, fileKind, newAttempt, nextRealWindow, normalizePath, starterScript, timeLeft, windowDeadline } from './pcpaAttempt'
+import { attemptPhase, attemptRoute, fileKind, newAttempt, nextRealWindow, normalizePath, savedMode, starterScript, timeLeft, windowDeadline } from './pcpaAttempt'
 import { PROJECT_CASES, WINDOW_DAYS } from '@/data/pcpaProjects'
 
 describe('the window', () => {
@@ -10,14 +10,18 @@ describe('the window', () => {
     expect(end.getHours()).toBe(23)
   })
 
-  it('moves an attempt from open to closed, unless it was submitted', () => {
-    const a = newAttempt({ id: 'a', caseId: 'bop-frequency', seed: 1, timing: 'window', language: 'r', now: 0 })
+  it('opens a window for a rehearsal and closes it, unless it was submitted', () => {
+    const a = newAttempt({ id: 'a', caseId: 'bop-frequency', seed: 1, mode: 'rehearsal', language: 'r', now: 0 })
+    expect(a.deadline).toBe(windowDeadline(0))
     expect(attemptPhase(a, 1)).toBe('open')
     expect(attemptPhase(a, a.deadline! + 1)).toBe('closed')
     expect(attemptPhase({ ...a, submittedAt: 5 }, a.deadline! + 1)).toBe('submitted')
-    const untimed = newAttempt({ id: 'b', caseId: 'bop-frequency', seed: 1, timing: 'untimed', language: 'r', now: 0 })
-    expect(untimed.deadline).toBeNull()
-    expect(attemptPhase(untimed, 10 ** 13)).toBe('open')
+  })
+
+  it('gives practice no deadline', () => {
+    const practice = newAttempt({ id: 'b', caseId: 'bop-frequency', seed: 1, mode: 'practice', language: 'r', now: 0 })
+    expect(practice.deadline).toBeNull()
+    expect(attemptPhase(practice, 10 ** 13)).toBe('open')
   })
 
   it('counts down in days, then hours, then minutes', () => {
@@ -38,11 +42,18 @@ describe('the window', () => {
   })
 })
 
-describe('drawCase', () => {
-  it('prefers a case the candidate has not attempted', () => {
-    const all = PROJECT_CASES.map(c => c.id)
-    expect(drawCase(all.slice(0, 2), 0.99)).toBe(all[2])
-    expect(all).toContain(drawCase([], 0.5))
+describe('saved attempts', () => {
+  it('reads the mode, or derives it from the timing an older attempt was saved with', () => {
+    expect(savedMode({ mode: 'practice' })).toBe('practice')
+    expect(savedMode({ mode: 'rehearsal', timing: 'untimed' })).toBe('rehearsal')
+    expect(savedMode({ timing: 'untimed' })).toBe('practice')
+    expect(savedMode({ timing: 'window' })).toBe('rehearsal')
+    expect(savedMode({})).toBe('rehearsal')
+  })
+
+  it('lives at its own route', () => {
+    expect(attemptRoute('p-1')).toBe('/project/pcpa/p-1')
+    expect(attemptRoute('p-1', 'results')).toBe('/project/pcpa/p-1?view=results')
   })
 })
 

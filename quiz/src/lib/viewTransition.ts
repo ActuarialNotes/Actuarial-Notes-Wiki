@@ -51,35 +51,33 @@ export interface DeskPlace {
 }
 
 // The tabs, left to right, in the order the sidebar lists them — Dashboard,
-// Study Guides, Flashcards, Quiz — then the pages the rest of the chrome opens.
-// `depth` is how many sheets down the tab a page lies; `below` is the depth of
-// a page *under* the prefix (`/wiki/exam/Exam P` under `/wiki/exam`), where
-// that differs. The longest matching prefix wins, and a path none of them
-// match is a tab of its own at the far end of the desk.
+// Study Guides, Flashcards, Quiz, Projects — then the pages the rest of the
+// chrome opens. `depth` is how many sheets down the tab a page lies; `below` is
+// the depth of a page *under* the prefix (`/wiki/exam/Exam P` under
+// `/wiki/exam`), where that differs. The longest matching prefix wins, and a
+// path none of them match is a tab of its own at the far end of the desk.
 const DESK: { prefix: string; tab: number; depth: number; below?: number }[] = [
   { prefix: '/dashboard', tab: 0, depth: 0 },
   { prefix: '/wiki', tab: 1, depth: 0, below: 1 },
   { prefix: '/wiki/exam', tab: 1, depth: 1 },
   { prefix: '/wiki/concept', tab: 1, depth: 2 },
   { prefix: '/wiki/resource', tab: 1, depth: 2 },
-  // The PCPA project opens from the PCPA exam page, so it lies on the Study
-  // Guides tab: the portal a sheet over the exam, an attempt a sheet over that.
-  { prefix: '/project', tab: 1, depth: 2 },
-  { prefix: '/project/pcpa', tab: 1, depth: 2, below: 3 },
   { prefix: '/research', tab: 1.5, depth: 0, below: 1 },
   { prefix: '/flashcards', tab: 2, depth: 0 },
   { prefix: '/', tab: 3, depth: 0 },
   { prefix: '/quiz', tab: 3, depth: 1 },
   { prefix: '/review', tab: 3, depth: 2 },
-  { prefix: '/search', tab: 4, depth: 0 },
-  { prefix: '/store', tab: 5, depth: 0 },
-  { prefix: '/upgrade', tab: 6, depth: 0 },
-  { prefix: '/settings', tab: 7, depth: 0 },
+  // The Projects tab; an attempt is a sheet laid over the list of briefs.
+  { prefix: '/project', tab: 4, depth: 0, below: 1 },
+  { prefix: '/search', tab: 5, depth: 0 },
+  { prefix: '/store', tab: 6, depth: 0 },
+  { prefix: '/upgrade', tab: 7, depth: 0 },
+  { prefix: '/settings', tab: 8, depth: 0 },
   // Cowork's two places are two tabs of their own, and a source or a
   // deliverable opens as a sheet over its shelf.
-  { prefix: '/cowork', tab: 8, depth: 0, below: 1 },
-  { prefix: '/cowork/deliverables', tab: 9, depth: 0, below: 1 },
-  { prefix: '/auth', tab: 10, depth: 0 },
+  { prefix: '/cowork', tab: 9, depth: 0, below: 1 },
+  { prefix: '/cowork/deliverables', tab: 10, depth: 0, below: 1 },
+  { prefix: '/auth', tab: 11, depth: 0 },
 ]
 
 const FAR_END = 100

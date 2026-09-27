@@ -107,9 +107,9 @@ export default function ProjectAttemptPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [attempt?.id, update])
 
-  if (!attempt) return <Navigate to="/project/pcpa" replace />
+  if (!attempt) return <Navigate to="/project" replace />
   const projectCase = findCase(attempt.caseId)
-  if (!projectCase) return <Navigate to="/project/pcpa" replace />
+  if (!projectCase) return <Navigate to="/project" replace />
 
   const locked = phase !== 'open'
   const fullHeight = view === 'workspace' || view === 'report'
@@ -126,8 +126,8 @@ export default function ProjectAttemptPage() {
   return (
     <div className="flex h-[100dvh] flex-col">
       <ProjectTopBar
-        backTo="/project/pcpa"
-        backLabel="Back to your projects"
+        backTo="/project"
+        backLabel="Back to Projects"
         title={projectCase.title}
         subtitle={`PCPA Project · ${projectCase.company}`}
         right={<WindowPill attempt={attempt} now={now} compact />}

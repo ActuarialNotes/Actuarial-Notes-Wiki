@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
-import { ArrowDown, ArrowUp, Eye, FileImage, ListTree, Paperclip, PenLine, Printer, Table2, Trash2 } from 'lucide-react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { ArrowDown, ArrowUp, Eye, FileImage, ListChecks, ListTree, Paperclip, PenLine, Printer, Table2, Trash2, XCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
+import { CheckMark } from '@/components/CheckMark'
 import { CodeEditor } from './CodeEditor'
 import { ProjectDialog } from './shared'
 import { ReportDocument } from './reportDocument'
@@ -11,7 +12,7 @@ import { APPENDIX_LIMIT, type ProjectCase } from '@/data/pcpaProjects'
 import { usePcpaAttempts } from '@/hooks/usePcpaAttempts'
 import { usePcpaWorkspace } from '@/hooks/usePcpaWorkspace'
 import { useIsMobile } from '@/hooks/useIsMobile'
-import { appendixKind, countBodyImages, type Appendix } from '@/lib/pcpaReport'
+import { appendixKind, countBodyImages, reviewReport, type Appendix, type ReportCheck } from '@/lib/pcpaReport'
 import { useWordTally } from './useWordTally'
 import type { ProjectAttempt } from '@/lib/pcpaAttempt'
 import { cn } from '@/lib/utils'
@@ -24,6 +25,10 @@ import { cn } from '@/lib/utils'
  * Appendices are files the code produced (`output/*.png`, `output/*.csv`),
  * attached with a caption. A table's cells count as words, the way they would
  * in the document a grader receives.
+ *
+ * A **practice** attempt also gets the report checks while it is written — the
+ * same `reviewReport` the results run after a rehearsal is submitted — behind
+ * a count in the toolbar. A rehearsal holds them back, as the real project does.
  */
 
 function outline(projectCase: ProjectCase): string {
@@ -61,6 +66,31 @@ export function WordCounter({ attempt, className }: { attempt: ProjectAttempt; c
   )
 }
 
+/** The report checks, what's missing first: the list a practice attempt can open while writing. */
+function ChecksDialog({ checks, onClose }: { checks: ReportCheck[]; onClose: () => void }) {
+  const missing = checks.filter(c => !c.found)
+  const found = checks.filter(c => c.found)
+  return (
+    <ProjectDialog title="Report checks" wide onClose={onClose}>
+      <p className="text-sm text-muted-foreground">What graders look for, from the mistakes the CAS's post-project summary lists most often.</p>
+      <ul className="space-y-2">
+        {missing.map(c => (
+          <li key={c.id} className="flex gap-2 text-sm">
+            <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-600 dark:text-red-400" aria-hidden />
+            <span><span className="font-medium">{c.label}.</span> <span className="text-muted-foreground">{c.missing}</span></span>
+          </li>
+        ))}
+        {found.map(c => (
+          <li key={c.id} className="flex gap-2 text-sm">
+            <CheckMark className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" label="Found" />
+            <span>{c.label}</span>
+          </li>
+        ))}
+      </ul>
+    </ProjectDialog>
+  )
+}
+
 export function ReportView({
   attempt,
   projectCase,
@@ -74,6 +104,7 @@ export function ReportView({
   const files = usePcpaWorkspace(s => s.files)
   const [body, setBody] = useState(attempt.report.body)
   const [picking, setPicking] = useState(false)
+  const [checking, setChecking] = useState(false)
   const [mobileView, setMobileView] = useState<'write' | 'preview'>('write')
   const narrow = useIsMobile(1023)
   const preview = useRef<HTMLDivElement>(null)
@@ -101,6 +132,12 @@ export function ReportView({
     .filter(f => !f.path.startsWith('data/') && appendixKind(f.path) !== null)
     .sort((a, b) => a.path.localeCompare(b.path))
   const bodyImages = countBodyImages(body)
+  const liveChecks = attempt.mode === 'practice' && !locked
+  const checks = useMemo(
+    () => (liveChecks ? reviewReport(attempt.caseId, body, appendices) : []),
+    [liveChecks, attempt.caseId, body, appendices],
+  )
+  const checksFound = checks.filter(c => c.found).length
 
   function attach(path: string) {
     const kind = appendixKind(path)
@@ -151,6 +188,11 @@ export function ReportView({
         {!locked && !body.trim() && (
           <Button variant="outline" size="sm" onClick={() => setBody(outline(projectCase))} title="Insert section headings — a study aid; the CAS provides no template">
             <ListTree className="mr-1.5 h-4 w-4" /> Outline
+          </Button>
+        )}
+        {liveChecks && (
+          <Button variant="outline" size="sm" onClick={() => setChecking(true)} aria-label={`Report checks: ${checksFound} of ${checks.length} found`}>
+            <ListChecks className="mr-1.5 h-4 w-4" /> <span className="tabular-nums">{checksFound} / {checks.length}</span>
           </Button>
         )}
         <Button variant="outline" size="sm" onClick={print} title="Open the report in a print view — save it as PDF from there">
@@ -217,6 +259,8 @@ export function ReportView({
         )}
         {narrow ? (mobileView === 'preview' && <div className="min-h-0 min-w-0 flex-1">{docView}</div>) : <div className="min-h-0 min-w-0 flex-1">{docView}</div>}
       </div>
+
+      {checking && <ChecksDialog checks={checks} onClose={() => setChecking(false)} />}
 
       {picking && (
         <ProjectDialog title="Attach an appendix" onClose={() => setPicking(false)} wide>

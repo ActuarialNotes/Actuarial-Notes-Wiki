@@ -376,6 +376,20 @@ Other important `lib/` modules:
   matching, no fuzzy hits) and `keystoneProgress` (decay-aware mastery roll-up per exam).
   Rendered by `components/KeystoneName.tsx`. No surface lists an exam's keystones since the
   readiness card was removed; keystone mastery is still a criterion of the readiness score.
+- `quizResume.ts` — **a quiz outlives its page**: the session lives in `stores/quizStore.ts`
+  (including the timed quiz's clock, the unconfirmed answer and whether the pre-quiz concept
+  list was read past), so a reader can leave `/quiz` mid-question — to look something up —
+  and come back to the same question with their answers intact and the clock still running.
+  The rules are here: what counts as *in progress* (started, not finished), and that opening
+  `/quiz` **at the URL the session was started under** resumes it (the pill's Return, or the
+  browser's Back) while any other URL starts a new quiz. `components/QuizResumeButton.tsx`,
+  mounted once in `App`, is the **Return to quiz** pill on every other page — position,
+  timer when timed — which opens a choice of **Return** or **Leave** (`leaveQuiz`, the same
+  discard the quiz page's Quit does). It is still chrome in a page move (`paper-resume`) and
+  rides above `--action-bar-height` / `--concept-split-height`. One trap, commented in
+  `Quiz.tsx`: after Quit resets the store the page is still mounted until the (deferred)
+  route change lands, so the start effect is guarded or it would draw a phantom new quiz.
+  Pure and tested; the flow is `e2e/quiz-resume.spec.ts`.
 - `revealMode.ts` — **when the answers show**: `'during'` marks and explains each
   answer as soon as it's confirmed, `'end'` holds the lot back for /review. The quiz
   page has always read a `reveal` search param; this module is the reader's side of
@@ -809,8 +823,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **147 test files /
-~2365 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **148 test files /
+~2380 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).

@@ -18,6 +18,8 @@ import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { useFlashcards } from '@/hooks/useFlashcards'
 import { trackConceptCollected } from '@/lib/analytics'
+import type { PendingAnswer } from '@/lib/pendingAnswer'
+import { normalizeSearch, type QuizSessionStatus } from '@/lib/quizResume'
 
 // A concept's flashcard is collected the moment it first reaches Level 1 —
 // there is no separate comprehension check (docs/flashcard-collection.md).
@@ -278,7 +280,13 @@ function effectiveIsCorrect(q: Question, chosen: string, manualGrades: Record<st
   return isAnswerCorrect(q, chosen)
 }
 
-type QuizStatus = 'idle' | 'loading' | 'active' | 'reviewing' | 'complete'
+type QuizStatus = QuizSessionStatus
+
+/** A timed quiz's clock: when it started, and the budget it counts down. */
+export interface QuizTimerState {
+  startedAt: number
+  allowanceSeconds: number
+}
 
 /** One answered question: what was chosen and how long it took. */
 export interface QuizResponse {
@@ -316,9 +324,20 @@ export interface QuizStore {
   status: QuizStatus
   error: string | null
   manualGrades: Record<string, SelfGrade>
+  // What the Quiz page needs to pick a session back up after the reader has
+  // been elsewhere in the app (lib/quizResume.ts). All of it lives here rather
+  // than in the page, because the page unmounts when the reader leaves it.
+  /** The `location.search` the session was started under — its way back in. */
+  search: string
+  /** The timed quiz's clock, once it has started; null when untimed. */
+  timer: QuizTimerState | null
+  /** A selected or typed answer not yet confirmed, tagged with its question. */
+  pending: PendingAnswer | null
+  /** The pre-quiz concept list has been read past. */
+  conceptListDismissed: boolean
 
   // Actions
-  startQuiz: (questions: Question[], mode: QuizMode) => void
+  startQuiz: (questions: Question[], mode: QuizMode, search?: string) => void
   answerQuestion: (questionId: string, chosen: string) => void
   clearAnswer: (questionId: string) => void
   nextQuestion: () => void
@@ -328,6 +347,12 @@ export interface QuizStore {
   setManualGrade: (key: string, grade: SelfGrade) => void
   completeQuiz: (userId: string | null, priorMasteryRecords?: ConceptMasteryRecord[]) => Promise<void>
   resetQuiz: () => void
+  /** Abandon the quiz in progress: its answers are discarded, nothing is saved. */
+  leaveQuiz: () => void
+  /** Start the clock — once per session, and only while the quiz is underway. */
+  startTimer: (allowanceSeconds: number) => void
+  setPending: (pending: PendingAnswer | null) => void
+  dismissConceptList: () => void
 }
 
 function computeMasteryTransitions(
@@ -537,16 +562,21 @@ const initialState = {
   status: 'idle' as QuizStatus,
   error: null,
   manualGrades: {} as Record<string, SelfGrade>,
+  search: '',
+  timer: null as QuizTimerState | null,
+  pending: null as PendingAnswer | null,
+  conceptListDismissed: false,
 }
 
 export const useQuizStore = create<QuizStore>((set, get) => ({
   ...initialState,
 
-  startQuiz(questions, mode) {
+  startQuiz(questions, mode, search = '') {
     set({
       ...initialState,
       questions,
       mode,
+      search: normalizeSearch(search),
       status: 'active',
       startedAt: new Date(),
       questionStartedAt: new Date(),
@@ -561,6 +591,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
     set(state => ({
       responses: { ...state.responses, [questionId]: { chosen, timeSpent } },
       status: 'reviewing',
+      pending: null,
     }))
   },
 
@@ -746,6 +777,28 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
   resetQuiz() {
     localStorage.removeItem(LAST_SESSION_KEY)
     set(initialState)
+  },
+
+  leaveQuiz() {
+    // The id list a Search launch handed over in sessionStorage belongs to this
+    // quiz alone; leaving it would seed the next `selection=stored` launch.
+    try { sessionStorage.removeItem('actuarial_selected_ids') } catch { /* ignore */ }
+    get().resetQuiz()
+  },
+
+  startTimer(allowanceSeconds) {
+    const { status, questions, timer } = get()
+    if (timer !== null) return
+    if ((status !== 'active' && status !== 'reviewing') || questions.length === 0) return
+    set({ timer: { startedAt: Date.now(), allowanceSeconds } })
+  },
+
+  setPending(pending) {
+    set({ pending })
+  },
+
+  dismissConceptList() {
+    set({ conceptListDismissed: true })
   },
 }))
 

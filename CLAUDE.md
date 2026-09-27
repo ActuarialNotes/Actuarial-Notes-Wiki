@@ -422,6 +422,9 @@ Other important `lib/` modules:
   `buildPastExamRows` unions the authored catalogue (`data/pastExams.ts`) with the sittings the
   question bank actually holds, so a released paper that hasn't been imported still lists
   (greyed out, "Not added yet") and a freshly converted one appears without a catalogue edit.
+  A sitting is sat in the paper's own order, not shuffled: `inPaperOrder` sorts on the
+  number in the question id (`cas5-2019s-q12` → 12), which `useQuestions` applies whenever
+  the draw is a sitting — so a converted question's id must keep its `-q<n>` suffix.
   Rendered by `components/PastExamBrowser.tsx`. See `docs/mock-exam-browser.md`.
 - `syllabusChapters.ts` — the syllabus's **chapters**: which learning objective each stop of
   an exam page's walk belongs to, read off the page's `[!example]` callouts

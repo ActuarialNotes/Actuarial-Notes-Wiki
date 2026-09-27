@@ -4,7 +4,9 @@ import {
   examSourceLabel,
   formatPassRate,
   hasPublishedStats,
+  inPaperOrder,
   normalizeSession,
+  paperQuestionNumber,
   questionSittingLabel,
   sittingLabel,
   sittingLabels,
@@ -219,6 +221,55 @@ describe('sittingLabels', () => {
 
   it('is empty for a pool with no dated questions', () => {
     expect(sittingLabels([q({})])).toEqual([])
+  })
+})
+
+describe('paperQuestionNumber', () => {
+  it('reads the number the paper printed off the id', () => {
+    expect(paperQuestionNumber('cas5-2019s-q12')).toBe(12)
+    expect(paperQuestionNumber('cas7-2012-q1')).toBe(1)
+    expect(paperQuestionNumber('masii-2019f-q42')).toBe(42)
+  })
+
+  it('is null for an id that names no place on a paper', () => {
+    expect(paperQuestionNumber('p-004')).toBeNull()
+    expect(paperQuestionNumber('fm-120')).toBeNull()
+  })
+})
+
+describe('inPaperOrder', () => {
+  it('sits a paper question 1 first, Q10 after Q9 rather than after Q1', () => {
+    const paper = [10, 2, 1, 9, 3].map(n => q({ id: `cas5-2019s-q${n}`, year: 2019, session: 'Spring' }))
+    expect(inPaperOrder(paper).map(x => x.id)).toEqual([
+      'cas5-2019s-q1', 'cas5-2019s-q2', 'cas5-2019s-q3', 'cas5-2019s-q9', 'cas5-2019s-q10',
+    ])
+  })
+
+  it('keeps papers apart, oldest first and Spring before Fall', () => {
+    const questions = [
+      q({ id: 'masi-2019f-q1', year: 2019, session: 'Fall' }),
+      q({ id: 'masi-2019s-q2', year: 2019, session: 'Spring' }),
+      q({ id: 'masi-2018f-q1', year: 2018, session: 'Fall' }),
+      q({ id: 'masi-2019s-q1', year: 2019, session: 'sp' }),
+    ]
+    expect(inPaperOrder(questions).map(x => x.id)).toEqual([
+      'masi-2018f-q1', 'masi-2019s-q1', 'masi-2019s-q2', 'masi-2019f-q1',
+    ])
+  })
+
+  it('puts a question with no number behind the numbered ones instead of guessing its place', () => {
+    const questions = [
+      q({ id: 'stray', year: 2019, session: 'Spring' }),
+      q({ id: 'cas5-2019s-q2', year: 2019, session: 'Spring' }),
+      q({ id: 'cas5-2019s-q1', year: 2019, session: 'Spring' }),
+    ]
+    expect(inPaperOrder(questions).map(x => x.id)).toEqual(['cas5-2019s-q1', 'cas5-2019s-q2', 'stray'])
+  })
+
+  it('leaves the input as it was', () => {
+    const questions = [q({ id: 'cas5-2019s-q2', year: 2019 }), q({ id: 'cas5-2019s-q1', year: 2019 })]
+    inPaperOrder(questions)
+    expect(questions.map(x => x.id)).toEqual(['cas5-2019s-q2', 'cas5-2019s-q1'])
   })
 })
 

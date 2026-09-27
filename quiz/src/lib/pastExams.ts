@@ -86,6 +86,42 @@ export function sittingLabels(questions: Pick<Question, 'year' | 'session'>[]): 
 }
 
 /**
+ * A question's number on the paper it was sat on — `12` for `cas5-2019s-q12` —
+ * or null when its id carries none (the undated SOA sample set).
+ *
+ * The converters name every dated question `<paper>-q<n>` after the number the
+ * paper printed, so the id is where the paper's order is recorded. The gaps a
+ * sitting shows (a question moved to another exam) are the paper's gaps too.
+ */
+export function paperQuestionNumber(id: string): number | null {
+  const match = /-q(\d+)$/i.exec(id)
+  return match ? Number(match[1]) : null
+}
+
+/**
+ * Questions in the order the paper set them: question 1 first, compared as
+ * numbers so Q10 follows Q9 rather than Q1.
+ *
+ * A past sitting is one paper, but a sitting the bank tags with a year only
+ * matches every session of that year, so papers are kept apart first — oldest
+ * first, Spring before Fall. A question with no number keeps its place behind
+ * the numbered ones rather than being guessed into the run.
+ */
+export function inPaperOrder<T extends Pick<Question, 'id' | 'year' | 'session'>>(questions: readonly T[]): T[] {
+  return [...questions].sort((a, b) => {
+    if ((a.year ?? 0) !== (b.year ?? 0)) return (a.year ?? 0) - (b.year ?? 0)
+    const sessionOrder = sessionRank(normalizeSession(b.session)) - sessionRank(normalizeSession(a.session))
+    if (sessionOrder !== 0) return sessionOrder
+    const aNumber = paperQuestionNumber(a.id)
+    const bNumber = paperQuestionNumber(b.id)
+    if (aNumber === null || bNumber === null) {
+      return aNumber === null ? (bNumber === null ? 0 : 1) : -1
+    }
+    return aNumber - bNumber
+  })
+}
+
+/**
  * One row per past sitting of `exam`, newest first.
  *
  * Rows come from the union of the authored catalogue and the sittings present

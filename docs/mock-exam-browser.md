@@ -175,7 +175,12 @@ downstream and still does:
 - `currentPool` filters the bank to that sitting, so the deck card's count and the shuffle
   draw from that paper only;
 - `handleStart` passes `year` / `session` to `/quiz`, and the sitting's full question count
-  as `count` (a past paper is sat whole, not sampled);
+  as `count` (a past paper is sat whole, not sampled) — and in the paper's own order:
+  `useQuestions` hands a sitting to `inPaperOrder` (`lib/pastExams.ts`) instead of the
+  shuffle every other draw gets. The order is read off the id, whose `-q<n>` suffix is the
+  number the paper printed (`paperQuestionNumber`, compared as a number so Q10 follows Q9);
+  `lib/questionBank.test.ts` fails on a dated question with no number or a sitting that
+  numbers two questions the same;
 - the header row above the shelf offers that sitting's examiner's report as a PDF download
   (`data/examPdfLinks.ts`), beside the pass-rate lookup link;
 - `searchFilter` carries the sitting's `year` / `session` into the floating search bar, so

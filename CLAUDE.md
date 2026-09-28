@@ -68,11 +68,12 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
 
 ### Inside `quiz/src/`
 - `pages/` — route-level views (Quiz, Review, Dashboard, Flashcards, Search, Settings, Store,
-  Upgrade, wiki/*, `Project/` — the Projects tab and the PCPA project simulator, `Cowork/` — the second product's shelf, source pages and deliverables —
+  Upgrade, wiki/*, `Battle.tsx` — Quiz Battle, `/battle`, lazy — `Project/` — the Projects tab and the PCPA project simulator, `Cowork/` — the second product's shelf, source pages and deliverables —
   and `Research/`, which is
   flag-gated)
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
-  `components/collect/` (the 3D card the level-up ceremony spins), `components/research/` (flag-gated).
+  `components/collect/` (the 3D card the level-up ceremony spins), `components/battle/` (Quiz
+  Battle's screens), `components/research/` (flag-gated).
   `components/CheckMark.tsx` is **the** checkmark — a filled disc with the tick masked out
   of it, so the tick shows whatever the mark is sitting on. Everything that means *done* or
   *picked* draws it (completed plan rows, a levelled-up concept's card, a selected quiz
@@ -188,6 +189,18 @@ before touching that area**:
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
   work stays consistent, minimalistic, and hierarchy-aware.
+- `docs/quiz-battle.md` — **Quiz Battle** (`/battle`, the card at the top of the Quiz tab): two
+  players racing through the same questions, on one screen under **buzzer** rules (first to
+  buzz answers, a miss hands the other the steal) or on two devices under **simultaneous**
+  rules (each locks in unseen; the fastest right answer earns most). The scoring table (100 +
+  speed + streak, final question ×2), the pure reducer in `lib/battle.ts`, and the online
+  design — one **host** device runs the reducer and sends the whole room, redacted, over a
+  Supabase Realtime broadcast channel named after a 4-character code (no table, nothing
+  stored); the guest times its own answers and the host holds a round open 1.5 s for them;
+  every message is untrusted and parsed field by field. Two rules to keep: **nothing is
+  saved** (no mastery, XP, streak or attempts — the other player's answers are not the
+  account's), and only click-markable multiple choice is raced. Read before touching
+  anything named `battle*`.
 - `docs/cowork.md` — **Cowork**, the second product: the mode switch (`lib/appMode.ts`), the
   Sources → Library → Deliverable → Export loop, the three deliverable types and their five
   facets, and the two rules that hold the whole thing up — *nothing is invented* (exports
@@ -809,6 +822,21 @@ Other important `lib/` modules:
   plain JS under `quiz/api/_mcp/` (`protocol.js` both MCP eras, `server.js` tools/resources/prompts,
   `knowledgeBase.js` index + search, `load.js`); a few helpers are mirrored there
   (`normalizeTerm`, `objectiveKey`, `normalizeAnswerText`) and pinned by `mcpServer.test.ts`.
+- `battle.ts` / `battleDisplay.ts` / `battleSetup.ts` / `battleRoom.ts` / `battleSession.ts` /
+  `battleTransport.ts` — **Quiz Battle** (`docs/quiz-battle.md`). `battle.ts` is the game as a
+  pure reducer (`battleReducer`: tick / buzz / answer / ready / next / forfeit, each carrying its
+  own time; a disallowed event returns the state by identity), the scoring constants, the
+  summary, and the question pool (`isBattleQuestion` — multiple choice only — over
+  `filterQuestions`). `battleDisplay.ts` is how it is drawn: the two **player colours** (sky and
+  fuchsia, `playerAccentStyle` — identity, never a verdict; style guide §2.3) and the words a
+  round is told in. `battleSetup.ts` is the remembered setup. The online half:
+  `battleRoom.ts` is room codes and the wire protocol, with a validator for every message
+  (`parseMessage` / `parseBattleState` — the channel is public to whoever has the code);
+  `battleSession.ts` is `HostSession` (runs the reducer, sends the redacted room on every change
+  and every 2 s) and `GuestSession` (sends moves, draws the room shifted onto its own clock),
+  framework-free and tested against each other over an in-memory channel; `battleTransport.ts`
+  is the channel — Supabase Realtime broadcast, or BroadcastChannel with
+  `VITE_BATTLE_TRANSPORT=local` (the e2e suite). All pure modules are tested.
 - `featureFlags.ts` — build-time feature flags (`COWORK_ENABLED`, `RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
   `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`,
   `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `FACT_CHECK_UI_ENABLED`, `TOUR_ENABLED`). `TOUR_ENABLED` is
@@ -844,8 +872,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **149 test files /
-~2400 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **154 test files /
+~2500 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).
@@ -1039,7 +1067,9 @@ If you add new top-level exam files or content directories, make sure the releva
 picks them up — `readKnowledgeBaseSources` in `lib/knowledgeBase.ts` included.
 
 `quiz/.env.example` lists required env vars: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`,
-`VITE_GITHUB_REPO`/`VITE_GITHUB_BRANCH` (for runtime content fetches), `VITE_GITHUB_TOKEN`.
+`VITE_GITHUB_REPO`/`VITE_GITHUB_BRANCH` (for runtime content fetches), `VITE_GITHUB_TOKEN` —
+and the optional `VITE_BATTLE_TRANSPORT=local`, which plays online Quiz Battles over the
+browser's BroadcastChannel instead of Supabase Realtime (two tabs; set by the e2e config).
 Server secrets (e.g. `GOOGLE_CLOUD_TTS_API_KEY`, Stripe keys, `ANTHROPIC_API_KEY`) are set
 via `supabase secrets set`, never as `VITE_*`.
 

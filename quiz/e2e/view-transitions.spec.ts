@@ -168,7 +168,8 @@ test.describe('tab-switch view transitions', () => {
 
   test('the two tabs open on the same shell, and the same examining body', async ({ page }) => {
     await page.goto('/')
-    await expect(page.getByRole('heading', { name: 'Quiz' })).toBeVisible()
+    // Exact: the Quiz Battle card's title is a heading on the same page.
+    await expect(page.getByRole('heading', { name: 'Quiz', exact: true })).toBeVisible()
     const quiz = await shell(page)
     const quizBody = await page.locator('[data-segment][aria-checked="true"]').getAttribute('data-segment')
 

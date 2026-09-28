@@ -156,6 +156,8 @@ describe('deskPlace', () => {
     expect(deskPlace('/wiki/resource/Werner').depth).toBe(2)
     expect(deskPlace('/quiz').tab).toBe(deskPlace('/').tab)
     expect(deskPlace('/quiz').depth).toBeGreaterThan(deskPlace('/').depth)
+    // Quiz Battle lies over the Quiz tab's exam list, as a quiz does.
+    expect(deskPlace('/battle')).toEqual({ tab: deskPlace('/').tab, depth: deskPlace('/quiz').depth })
     expect(deskPlace('/review').depth).toBeGreaterThan(deskPlace('/quiz').depth)
   })
 

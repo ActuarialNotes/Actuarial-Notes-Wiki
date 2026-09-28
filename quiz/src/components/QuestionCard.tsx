@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { AnswerOption } from '@/components/AnswerOption'
 import { ExplanationPanel } from '@/components/ExplanationPanel'
 import { TopicBadge } from '@/components/TopicBadge'
-import { MarkdownText } from '@/components/MarkdownText'
+import { MarkdownText, MARKDOWN_LIST_CLASS, QUESTION_MD_CLASS } from '@/components/MarkdownText'
 import { Button } from '@/components/ui/button'
 import { isAnswerCorrect, normalizeAnswerText, estimateEssayScore } from '@/lib/parser'
 import type { Question, Part, SelfGrade } from '@/lib/parser'
@@ -129,7 +129,16 @@ interface PartCardProps {
   onSelfGrade?: (grade: SelfGrade) => void
 }
 
-const PART_MD_CLASS = 'text-sm leading-relaxed [&_p]:my-1.5 [&_p:first-child]:mt-0 [&_table]:text-xs [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-current/20 [&_th]:border [&_th]:border-current/20 [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1'
+// A labelled block of the reference material a part reveals — its sample
+// answer, its examiner's notes.
+function AnswerSection({ label, className, children }: { label: string; className?: string; children: string }) {
+  return (
+    <section className={['space-y-1.5', className].filter(Boolean).join(' ')}>
+      <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</h4>
+      <MarkdownText className={QUESTION_MD_CLASS}>{children}</MarkdownText>
+    </section>
+  )
+}
 
 function SelfGradeButtons({ value, onChange }: { value: SelfGrade | null; onChange: (g: SelfGrade) => void }) {
   return (
@@ -207,7 +216,7 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
           <span className="text-xs text-muted-foreground italic">Written response</span>
         </div>
 
-        <MarkdownText className={PART_MD_CLASS}>{part.stem}</MarkdownText>
+        <MarkdownText className={QUESTION_MD_CLASS}>{part.stem}</MarkdownText>
 
         {!isLocked ? (
           <textarea
@@ -218,11 +227,11 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
             className="w-full rounded-md border px-3 py-2 text-[16px] sm:text-sm bg-background resize-y focus:outline-none focus:ring-2 focus:ring-ring"
           />
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-4">
             {partAnswer.trim() ? (
-              <div className="rounded-md bg-muted/20 p-3 space-y-1">
+              <div className="rounded-md bg-muted/20 p-3 space-y-1.5">
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Your Response</p>
-                <p className="text-sm whitespace-pre-wrap text-foreground">{partAnswer}</p>
+                <p className="text-sm leading-relaxed whitespace-pre-wrap text-foreground">{partAnswer}</p>
               </div>
             ) : (
               <p className="text-xs text-muted-foreground italic">No response written</p>
@@ -243,27 +252,21 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
               </div>
             )}
 
-            {showExplanation && (
-              <SelfGradeButtons value={effectiveSelfGrade} onChange={handleSelfGradeClick} />
-            )}
-
+            {/* The reference first, then the grade: a reader marks themselves
+                against the sample answer, so they read it before being asked. */}
             {showExplanation && (part.explanation || part.examiner_report) && (
-              <div className="rounded-md bg-muted/40 p-3 space-y-2 text-sm">
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Sample Answer</p>
+              <div className="rounded-md bg-muted/40 p-3 sm:p-4 divide-y divide-foreground/10 [&>*]:py-3 sm:[&>*]:py-4 [&>:first-child]:pt-0 [&>:last-child]:pb-0">
                 {part.explanation && (
-                  <MarkdownText className={PART_MD_CLASS}>{part.explanation}</MarkdownText>
+                  <AnswerSection label="Sample Answer">{part.explanation}</AnswerSection>
                 )}
                 {part.examiner_report && (
-                  <div className="pt-2">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">
-                      Examiner&apos;s Notes
-                    </p>
-                    <MarkdownText className="leading-relaxed [&_p]:my-1.5 [&_p:first-child]:mt-0">
-                      {part.examiner_report}
-                    </MarkdownText>
-                  </div>
+                  <AnswerSection label="Examiner's Notes">{part.examiner_report}</AnswerSection>
                 )}
               </div>
+            )}
+
+            {showExplanation && (
+              <SelfGradeButtons value={effectiveSelfGrade} onChange={handleSelfGradeClick} />
             )}
           </div>
         )}
@@ -288,7 +291,7 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
         )}
       </div>
 
-      <MarkdownText className={PART_MD_CLASS}>{part.stem}</MarkdownText>
+      <MarkdownText className={QUESTION_MD_CLASS}>{part.stem}</MarkdownText>
 
       {part.type === 'multiple-choice' ? (
         <div className="space-y-2">
@@ -333,17 +336,12 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
             </p>
           )}
           {part.explanation && (
-            <MarkdownText className={PART_MD_CLASS}>{part.explanation}</MarkdownText>
+            <MarkdownText className={QUESTION_MD_CLASS}>{part.explanation}</MarkdownText>
           )}
           {part.examiner_report && (
-            <div className="pt-2">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">
-                Examiner&apos;s Notes
-              </p>
-              <MarkdownText className="leading-relaxed [&_p]:my-1.5 [&_p:first-child]:mt-0">
-                {part.examiner_report}
-              </MarkdownText>
-            </div>
+            <AnswerSection label="Examiner's Notes" className="border-t border-foreground/10 pt-3">
+              {part.examiner_report}
+            </AnswerSection>
           )}
         </div>
       )}
@@ -410,7 +408,7 @@ export function QuestionCard({
               )}
             </div>
           )}
-          <MarkdownText className="text-base leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0">
+          <MarkdownText className={`text-base leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 ${MARKDOWN_LIST_CLASS}`}>
             {question.stem}
           </MarkdownText>
         </CardHeader>
@@ -474,7 +472,7 @@ export function QuestionCard({
               )}
             </div>
           )}
-          <MarkdownText className="text-base leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 [&_table]:text-sm [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_th]:border [&_th]:border-border [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1">
+          <MarkdownText className={`text-base leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 [&_table]:text-sm [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_th]:border [&_th]:border-border [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1 ${MARKDOWN_LIST_CLASS}`}>
             {question.stem}
           </MarkdownText>
         </CardHeader>
@@ -529,7 +527,7 @@ export function QuestionCard({
           </div>
         )}
         {question.stem && (
-          <MarkdownText className="text-base leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 [&_table]:text-sm [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_th]:border [&_th]:border-border [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1">
+          <MarkdownText className={`text-base leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 [&_table]:text-sm [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_th]:border [&_th]:border-border [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1 ${MARKDOWN_LIST_CLASS}`}>
             {question.stem}
           </MarkdownText>
         )}

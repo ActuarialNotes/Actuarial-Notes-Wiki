@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils'
-import { MarkdownText } from '@/components/MarkdownText'
+import { MarkdownText, QUESTION_MD_CLASS } from '@/components/MarkdownText'
 import { WikiContent } from '@/components/WikiContent'
 import { FactCheckBadge } from '@/components/FactCheckBadge'
 import { contentPathFromVerification, type Verification } from '@/lib/verification'
@@ -49,20 +49,18 @@ export function ExplanationPanel({
       </div>
 
       {explanation && (
-        <MarkdownText className="text-sm text-foreground leading-relaxed [&_p]:my-1.5 [&_p:first-child]:mt-0 [&_table]:text-xs [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-current/20 [&_th]:border [&_th]:border-current/20 [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1">
+        <MarkdownText className={QUESTION_MD_CLASS}>
           {explanation}
         </MarkdownText>
       )}
 
       {examinerReport && (
-        <div className="pt-2">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">
+        <section className="space-y-1.5 border-t border-current/10 pt-3">
+          <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
             Examiner&apos;s Notes
-          </p>
-          <MarkdownText className="text-sm text-foreground leading-relaxed [&_p]:my-1.5 [&_p:first-child]:mt-0">
-            {examinerReport}
-          </MarkdownText>
-        </div>
+          </h4>
+          <MarkdownText className={QUESTION_MD_CLASS}>{examinerReport}</MarkdownText>
+        </section>
       )}
 
       {wikiLinks.length > 0 && (

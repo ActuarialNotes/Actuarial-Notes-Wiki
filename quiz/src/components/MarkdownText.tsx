@@ -16,6 +16,27 @@ interface Props {
   inline?: boolean
 }
 
+// Lists, for markdown that doesn't render through `prose`. Tailwind's preflight
+// strips list markers and indentation, so without these a bulleted sample
+// answer or examiner's report reads as a run of unmarked lines — one mistake
+// indistinguishable from the next.
+export const MARKDOWN_LIST_CLASS =
+  '[&_ul]:list-disc [&_ol]:list-decimal [&_ul]:pl-5 [&_ol]:pl-5 [&_ul]:my-2 [&_ol]:my-2 ' +
+  '[&_li]:my-1.5 [&_li]:pl-1 [&_li>p]:my-0 [&_li::marker]:text-muted-foreground ' +
+  '[&_li_ul]:my-1 [&_li_ol]:my-1'
+
+// Question text at body size — a part's stem, a worked solution, a sample
+// answer, an examiner's report: paragraphs, lists, and the bordered tables the
+// data-heavy answers (development triangles, …) need. The block's own first
+// and last elements lose their outer margin so a heading above sits snug.
+export const QUESTION_MD_CLASS =
+  'text-sm text-foreground leading-relaxed ' +
+  '[&_p]:my-2 [&>:first-child]:mt-0 [&>:last-child]:mb-0 ' +
+  '[&_table]:text-xs [&_table]:border-collapse [&_th]:text-left [&_td]:pr-4 ' +
+  '[&_th]:border [&_td]:border [&_th]:border-current/20 [&_td]:border-current/20 ' +
+  '[&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1 ' +
+  MARKDOWN_LIST_CLASS
+
 const scrollableTable: Components['table'] = ({ children, ...props }) => (
   <div className="overflow-x-auto w-full my-2">
     <table {...props}>{children}</table>

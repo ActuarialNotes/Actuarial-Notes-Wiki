@@ -5,7 +5,7 @@ import type { AttemptCounts } from '@/lib/questionAttempts'
 import { questionPreview } from '@/lib/questionPreview'
 // The chip's label is the Concepts filter's option label, so the two agree.
 import { conceptLabel } from '@/lib/questionFilters'
-import { MarkdownText } from '@/components/MarkdownText'
+import { MarkdownText, MARKDOWN_LIST_CLASS } from '@/components/MarkdownText'
 import { QuestionAnswerReveal } from '@/components/QuestionAnswerReveal'
 import { QuestionAttemptBadge } from '@/components/QuestionAttemptBadge'
 
@@ -13,7 +13,7 @@ import { QuestionAttemptBadge } from '@/components/QuestionAttemptBadge'
 // quiz uses, so data-heavy stems (development triangles, etc.) render as tables
 // rather than raw pipe text.
 const STEM_MD_CLASS =
-  'leading-relaxed [&_p]:my-1.5 [&_p:first-child]:mt-0 [&_table]:text-xs [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_th]:border [&_th]:border-border [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1'
+  `leading-relaxed [&_p]:my-1.5 [&_p:first-child]:mt-0 [&_table]:text-xs [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_th]:border [&_th]:border-border [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1 ${MARKDOWN_LIST_CLASS}`
 
 interface QuestionSearchRowProps {
   question: Question

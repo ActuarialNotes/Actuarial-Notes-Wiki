@@ -43,3 +43,31 @@ created: 2026-09-27
 - checks_run: P(A u B)=P(A)+P(B)-P(A n B) = G&S Thm 1.4 eq.(1.1), no condition needed; universal set as rectangle, sets as closed regions = Pishro-Nik §1.2.1; phrase table: both = intersection, either/or = union (G&S p.21 inclusive or convention), neither = (A u B)^c (complement, Pishro-Nik §1.2.2), A but not B = A minus B (G&S p.21 snow-but-not-rain example E = B - C), exactly one = union of the two differences (from the same definitions); SOA Q182/Q258 solutions use Venn diagrams on exam problems. Example recomputed before reading answer: 0.9, neither 0.10 - agrees; trap tip Auto only 70-20=50 = G&S Cor 1.1 P(A)=P(A n B)+P(A n B~) - agrees. Figure exists; LaTeX balanced; no wiki-links.
 - sources_checked: Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 set operations and Figure 1.7 Venn diagrams (pp.21-22, PDF pp.29-30), Theorem 1.4 and Corollary 1.1 (p.24, PDF p.32), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.2.1 Venn Diagrams, fetched 2026-09-27, sha256:918553ec01dda7da540a1f051713ec597d9e4a9e612a4ee5dfc03a08f6e96287 — https://www.probabilitycourse.com/chapter1/1_2_1_venn.php; Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.2.2 Set Operations (incl. De Morgan's law, mutually exclusive), fetched 2026-09-27, sha256:aae5ce2766d2602e6bbdf92038d7bafdceca10b66ead36612dc7c6b31a35e12b — https://www.probabilitycourse.com/chapter1/1_2_2_set_operations.php; SOA Exam P Sample Solutions (Aug 2026 revision), Q182 (PDF pp.54-55) and Q258 (PDF pp.75-76), Venn-diagram solutions, sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf; SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability, learning outcome 1a (PDF p.2), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf
 - note: Open minor F-001 (unsourced claim), nit F-002 (undefined events in stem).
+
+## [F-001/R] Unsourced ranking sentence removed
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-001
+- status: resolved
+- note: Deleted "The most common calculation derived from a Venn Diagram is finding the probability of the union." The formula is now introduced as the two-event union rule, G&S Thm 1.4 (p.24, PDF p.32).
+
+## [F-002/R] Example stem defines A and H
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-002
+- status: resolved
+- note: Stem now reads "Let A be the event that a policyholder has an auto policy and H the event that they have a homeowners policy", matching the answer tip (Auto, Homeowners). Numbers unchanged.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- status_set: verified
+- confidence: high
+- checks_run: Re-verified after resolving F-001, F-002: Venn diagram visualises relations between sets, rectangle = universal set (Pishro-Nik §1.2.1); union, intersection, difference, complement (G&S p.21, Figure 1.7); union rule = G&S Thm 1.4; phrasing table: neither = (A ∪ B)^c, A but not B = A − B = A ∩ B^c (Pishro-Nik §1.2.2), exactly one = (A − B) ∪ (B − A); example recomputed 0.70 + 0.40 − 0.20 = 0.90, neither = 0.10, auto only 0.70 − 0.20 = 0.50, consistent with the figure region labels 0.50 / 0.20 / 0.20 / 0.10.
+- sources_checked: Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 set operations and Figure 1.7 Venn diagrams (pp.21-22, PDF pp.29-30), Thm 1.4 (p.24, PDF p.32), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.2.1 Venn Diagrams, fetched 2026-09-28, sha256:2fe78c16c34bc692e154703fc87319338f8983e53c9914321e49e0fd8e5344ab — https://www.probabilitycourse.com/chapter1/1_2_1_venn.php; Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.2.2 Set Operations (difference, disjoint sets, partition), fetched 2026-09-28, sha256:f8c7bf7ece0a23a177de9f1eeff3631122625cb461fde905f05d4fa468ad03ba — https://www.probabilitycourse.com/chapter1/1_2_2_set_operations.php; SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability, learning outcome 1a (PDF p.2), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf

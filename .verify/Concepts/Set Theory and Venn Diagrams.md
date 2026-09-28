@@ -26,3 +26,22 @@ created: 2026-09-27
 - status_set: in_review
 - checks_run: Read in full; no formula, definition or example to check; searched questions/ and Exam*.md for links (none).
 - note: Stub page: it makes no substantive claim a source could confirm, so it cannot be verified; open minor F-001.
+
+## [F-001/R] Placeholder replaced by a pointer to Set Theory and Venn Diagram
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-001
+- status: resolved
+- note: Removed the placeholder text, its false claim that the page anchors the topic for every review question (no question or exam page links it), and the empty example. The page now points to [[Set Theory]] and [[Venn Diagram]] and quotes syllabus outcome 1a verbatim. No new mathematical content. scripts/ontology_map.py already maps this topic name to Set Theory.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- status_set: verified
+- confidence: high
+- checks_run: Re-verified after resolving F-001: both links resolve (Concepts/Set Theory.md, Concepts/Venn Diagram.md exist); the quoted outcome matches syllabus 1a verbatim ("Define set functions, Venn diagrams, sample space, and events."); the page makes no other claim.
+- sources_checked: SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability, learning outcome 1a (PDF p.2), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf

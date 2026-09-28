@@ -28,3 +28,22 @@ created: 2026-09-27
 - checks_run: Definition (set of all possible outcomes) = G&S Def 1.1 and Pishro-Nik §1.3.1; notation S (Pishro-Nik) / Omega (G&S) both given; one outcome per trial and exhaustiveness follow from G&S Def 1.1-1.2 (the outcome X takes exactly one value in the set of all possible values; Example 1.9 one and only one wins); finite / countably / uncountably infinite = G&S pp.28-29; enumerated form valid only for countable S (F-001). Example recomputed before reading answer: no claim, claim <=1000, claim >1000 gives 3 outcomes - agrees. Currency shape: escaped dollar sits outside inline math, fine per vaultMath.ts header. Figure exists.
 - sources_checked: Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 Definitions 1.1-1.2 and Example 1.9 (pp.18-20, PDF pp.26-28), Infinite Sample Spaces (pp.28-29, PDF pp.36-37), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.1 Random Experiments (sample space, outcome, event), fetched 2026-09-27, sha256:d93c82800caad31da983d799d5444d8627a5423b3338900bf22405af912bc7f4 — https://www.probabilitycourse.com/chapter1/1_3_1_random_experiments.php; SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability, learning outcome 1a (PDF p.2), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf
 - note: Open minor F-001.
+
+## [F-001/R] Enumerated form labelled as the finite or countable case
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-001
+- status: resolved
+- note: Added the bullet "When S is finite or countably infinite, its outcomes can be listed in sequence:" before the S = {ω1, ω2, ...} block. G&S Infinite Sample Spaces (p.28, PDF p.36): countably infinite means the elements can be put in one-to-one correspondence with the positive integers, uncountably infinite otherwise.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- status_set: verified
+- confidence: high
+- checks_run: Re-verified after resolving F-001: sample space = set of all possible outcomes (G&S p.18; Pishro-Nik §1.3.1); finite / countably infinite / uncountably infinite and the listing for the countable case = G&S p.28; one outcome per performance of the experiment (outcomes mutually exclusive and exhaustive) agrees with G&S p.18 (a random variable represents the outcome of the experiment) and Example 1.9 (one and only one candidate wins); claim example S = {No Claim, Small Claim, Large Claim} checked as a partition of the stated classification (no claim, claim ≤ 1,000, claim > 1,000).
+- sources_checked: Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §1.2 sample space (p.18, PDF p.26), Example 1.9 (p.20, PDF p.28), Infinite Sample Spaces (p.28, PDF p.36), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (online ed.), §1.3.1 Random Experiments (outcome, sample space, event), fetched 2026-09-28, sha256:5ab5af0abfbf56905a0a023eb3242ae9749a17af50a5ff8581a6c69030ce29ad — https://www.probabilitycourse.com/chapter1/1_3_1_random_experiments.php; SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability, learning outcome 1a (PDF p.2), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf

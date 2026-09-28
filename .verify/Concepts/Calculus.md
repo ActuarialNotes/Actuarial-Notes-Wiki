@@ -96,3 +96,49 @@ created: 2026-09-27
 - checks_run: Limit laws (sum, product) = OpenStax V1 Thm 2.5 PDF p.169 (hypotheses missing: F-002); continuity definition = V1 PDF p.188; derivative limit definition = V1 eq. 3.6 PDF p.228; power, product, quotient, chain rules = V1 Thm 3.3 PDF p.257, Thm 3.5 p.261, Thm 3.6 p.263, chain rule eq. 3.17 p.296; (a^x)' = a^x ln a = V1 Thm 3.16 eq. 3.34 PDF p.335; (ln x)' = 1/x (x > 0) = V1 Thm 3.15 PDF p.332; L'Hôpital = V1 Thms 4.12-4.13 PDF pp.463,465 (F-002); integral power rule = V1 Thm 4.15 PDF p.496 (n ≠ -1 missing: F-003); FTC = V1 Thm 5.5 PDF p.563 (F-003); substitution = V1 Thm 5.7 PDF p.592; integration by parts ∫u dv = uv - ∫v du = V2 Thm 3.1 PDF p.240 (page image); improper integral lim_{b→∞} = V2 Def. eq. 3.16 PDF p.296 (page image); partial fractions V2 §3.4 PDF p.270 (F-005); partial derivative holds y fixed = V3 eq. 4.12 and example PDF pp.377,379; joint cdf double integral = G&S Def. 4.6 p.165 (PDF p.173); geometric series Σ r^k = 1/(1-r), |r| < 1 = binomial series with r = -1 (V2 Def. PDF p.522, |x| < 1) and V2 worked geometric sum a/(1-r) PDF p.425; Maclaurin series = Taylor series at a = 0 (V2 PDF p.515), e^x series converges for all real x (V2 Example 6.16 PDF p.516); binomial series (1+x)^k = Σ C(k,n) x^n, |x| < 1 = V2 Def. PDF p.522 and DLMF 4.6.7 (|z| < 1); ln(1+x) series = DLMF 4.6.1 (interval wrong: F-004). Examples recomputed before reading answers: S(t) = e^{-λt} gives μ = λ = stated; E[X] = 1/λ by parts = stated, agrees with SOA Tables for Exam C A.3.3.1 exponential E[X] = θ with λ = 1/θ (PDF p.11); perpetuity Σ_{k≥1} v^k = v/(1-v) = 1/i = stated. Syllabus: SOA Exam P Nov 2026 p.1 assumes an understanding of calculus, including series, differentiation, and integration, consistent with the page and Exam P-1 (SOA).md line 26. Links (Probability Theory, Hazard Rate, Multivariate Distribution) and figure embed resolve; LaTeX fixed per F-001.
 - sources_checked: OpenStax, Calculus Volume 1 (Strang, Herman et al., 2016), Thm 2.5 p.161 (PDF p.169); continuity def. p.180; derivative def. p.220; Thms 3.3, 3.5, 3.6 pp.249-255; chain rule p.288; Thms 3.15-3.16 pp.324-327; Thms 4.12-4.13 pp.455-457; Thm 4.15 p.488; Thm 5.5 p.555; Thm 5.7 p.584 (PDF = printed + 8), sha256:202c86537285adf7e5abeb64057c39ee7333ad8c8473b6dd6a9ddf3e72443286 — https://assets.openstax.org/oscms-prodcms/media/documents/CalculusVolume1-OP.pdf; OpenStax, Calculus Volume 2 (Strang, Herman et al., web PDF), Thm 3.1 p.232; §3.4 p.262; Def. eq. 3.16 p.288; p.417; §6.3 p.507-508; binomial series Def. p.514 (PDF = printed + 8), sha256:f6ac06038088711766e5b664a8114c8fcb0b7b88cfb38e92bbaf56ba2df43f4a — https://assets.openstax.org/oscms-prodcms/media/documents/calculus-volume-2_-_WEB.pdf; OpenStax, Calculus Volume 3 (Strang, Herman et al., 2016), §4.3 partial derivatives, eq. 4.12, PDF pp.377-379, sha256:63d36af23d6f9a163b5e627aaa714b63e4196d8159b9d5fa3ea93bdbdd284ca9 — https://assets.openstax.org/oscms-prodcms/media/documents/CalculusVolume3-OP.pdf; NIST Digital Library of Mathematical Functions, §4.6 Series Expansions, eqs. 4.6.1 and 4.6.7 (HTML fetched 2026-09-27), sha256:dda80a4ebca6bab85fc738f032fe4fe06100a976a0728f2a8651715903addec6 — https://dlmf.nist.gov/4.6; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.2 Def. 4.6 joint density and cumulative distribution p.165 (PDF p.173), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; SOA, Tables for Exam C (Fall 2009), A.3.3.1 Exponential, PDF p.11, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf; SOA, Probability Exam (Exam P) syllabus, November 2026, p.1 (calculus including series, differentiation and integration is assumed), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf
 - note: Every formula on the page was checked against OpenStax Calculus Vols 1-3 and NIST DLMF §4.6 this pass. Held at in_review rather than verified because three open major findings (F-002 limit and L'Hôpital hypotheses, F-003 power rule n ≠ -1 and FTC continuity, F-004 ln(1+x) interval) concern formula conditions.
+
+## [F-002/R] Limit laws and L’Hôpital’s rule now carry their hypotheses
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-002
+- status: resolved
+- note: Limit table now opens "If lim f(x) = L and lim g(x) = M as x → a, where L and M are real numbers" (OpenStax V1 Thm 2.5, p.161) and writes the limits at x → a. L’Hôpital moved out of the table into a statement with the hypotheses of V1 Thms 4.12-4.13 (pp.455, 457): f and g differentiable on an open interval containing a (except possibly at a), 0/0 or ∞/∞ form, conclusion holds provided the limit on the right exists or is ±∞.
+
+## [F-003/R] Power rule n ≠ −1 and FTC continuity added
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-003
+- status: resolved
+- note: Power-rule row now reads "n ≠ −1 (for n = −1: ln|x| + C)" per V1 Thm 4.15 (p.488) and the antiderivative of 1/x (p.486); the FTC sentence now requires f continuous on [a, b] and F any antiderivative of f, per V1 Thm 5.5 FTC Part 2 (p.555).
+
+## [F-004/R] ln(1+x) interval corrected to −1 < x ≤ 1
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-004
+- status: resolved
+- note: Maclaurin row for ln(1+x) now reads −1 < x ≤ 1. NIST DLMF eq. 4.6.1: ln(1+z) = z − z^2/2 + z^3/3 − ..., |z| ≤ 1, z ≠ −1; at x = −1 the series is the negative harmonic series.
+
+## [F-005/R] Partial fractions row covers irreducible quadratic factors
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-005
+- status: resolved
+- note: Row now reads "Decompose denominator into linear and irreducible quadratic factors", per OpenStax V2 §3.4 problem-solving strategy step 2 (p.267, PDF p.275: factor into the product of linear and irreducible quadratic factors).
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- status_set: verified
+- confidence: high
+- checks_run: Re-verified after resolving F-002 to F-005: limit laws with L, M real = V1 Thm 2.5; continuity = V1 p.180; derivative = V1 eq. 3.6; power, product, quotient, chain = V1 Thms 3.3, 3.5, 3.6, eq. 3.17; (ln x)′ = 1/x (x > 0) = Thm 3.15; (b^x)′ = b^x ln b = eq. 3.34; L’Hôpital hypotheses = Thms 4.12-4.13; ∫x^n dx with n ≠ −1 = Thm 4.15, n = −1 gives ln|x| + C (p.486); FTC with f continuous on [a, b] = Thm 5.5; substitution u = g(x), du = g′(x)dx = Thm 5.7; integration by parts = V2 Thm 3.1; partial fractions (linear and irreducible quadratic) = V2 §3.4; improper integral as lim of ∫_0^b = V2 eq. 3.16; partial derivative holds the other variable fixed = V3 §4.3; joint cdf as double integral of the density = G&S Def. 4.6; geometric Σ r^k = 1/(1 − r), |r| < 1 = V2 eq. 5.7 with a = 1; Maclaurin = Taylor at 0 = V2 eq. 6.5; e^x series = DLMF 4.2.19; ln(1+x) on −1 < x ≤ 1 = DLMF 4.6.1; (1+x)^k with |x| < 1 = DLMF 4.6.7. Examples recomputed: S(t) = e^{−λt} gives S′ = −λe^{−λt}, μ = λ; E[X] = [−x e^{−λx}]_0^∞ + ∫_0^∞ e^{−λx} dx = 0 + 1/λ; perpetuity Σ_{k≥1} v^k = v/(1 − v) = 1/i with v = 1/(1+i).
+- sources_checked: OpenStax, Calculus Volume 1 (Strang, Herman et al., 2016), Thm 2.5 p.161 (PDF p.169); continuity def. p.180 (PDF p.188); derivative def. eqs. 3.5-3.6 p.220 (PDF p.228); Thm 3.3 p.249, Thm 3.5 p.253, Thm 3.6 p.255 (PDF pp.257-263); chain rule eq. 3.17 p.288 (PDF p.296); Thms 3.15-3.16 pp.324-327 (PDF pp.332-335); Thms 4.12-4.13 pp.455, 457 (PDF pp.463, 465); antiderivative ln|x| + C p.486 (PDF p.494); Thm 4.15 p.488 (PDF p.496); Thm 5.5 p.555 (PDF p.563); Thm 5.7 p.584 (PDF p.592), sha256:202c86537285adf7e5abeb64057c39ee7333ad8c8473b6dd6a9ddf3e72443286 — https://assets.openstax.org/oscms-prodcms/media/documents/CalculusVolume1-OP.pdf; OpenStax, Calculus Volume 2 (Strang, Herman et al., web PDF), Thm 3.1 p.232 (PDF p.240, page image); §3.4 partial fractions, strategy step 2 p.267 (PDF p.275); §3.7 Def. eq. 3.16 p.288 (PDF p.296, page image); §5.2 geometric series Def. eq. 5.7 p.401 (PDF p.409, page image); §6.3 Taylor/Maclaurin Def. eq. 6.5 p.498 (PDF p.506), sha256:f6ac06038088711766e5b664a8114c8fcb0b7b88cfb38e92bbaf56ba2df43f4a — https://assets.openstax.org/oscms-prodcms/media/documents/calculus-volume-2_-_WEB.pdf; OpenStax, Calculus Volume 3 (Strang, Herman et al., 2016), §4.3 partial derivatives, eq. 4.12 and the fix-one-variable argument, PDF pp.377-379, sha256:63d36af23d6f9a163b5e627aaa714b63e4196d8159b9d5fa3ea93bdbdd284ca9 — https://assets.openstax.org/oscms-prodcms/media/documents/CalculusVolume3-OP.pdf; NIST Digital Library of Mathematical Functions, §4.6 Power Series, eqs. 4.6.1 and 4.6.7 (HTML fetched 2026-09-27), sha256:dda80a4ebca6bab85fc738f032fe4fe06100a976a0728f2a8651715903addec6 — https://dlmf.nist.gov/4.6; NIST Digital Library of Mathematical Functions, §4.2 eq. 4.2.19 exp series (HTML fetched 2026-09-27), sha256:7b3a39ea2b1dc72440b0469070ef5d9e857ad09673e010036c06580d450bd50c — https://dlmf.nist.gov/4.2; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.2 Def. 4.6 joint cumulative distribution (p.165, PDF p.173), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf

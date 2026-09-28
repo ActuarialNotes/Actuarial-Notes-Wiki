@@ -161,7 +161,11 @@ export default function Dashboard() {
   const [profileOpen, setProfileOpen] = useState(false)
   const [signOutConfirm, setSignOutConfirm] = useState(false)
   const [exportOpen, setExportOpen] = useState(false)
-  const [remindersOpen, setRemindersOpen] = useState(false)
+  // The daily email's footer links to /dashboard?reminders=1 — the bell's modal
+  // is the one place the preference is set, so the link opens it.
+  const [remindersOpen, setRemindersOpen] = useState(
+    () => new URLSearchParams(location.search).get('reminders') === '1',
+  )
   const [guideOpen, setGuideOpen] = useState(false)
   const profileRef = useRef<HTMLDivElement>(null)
   // ReadinessCard portals its cards into this slot so they render at the top of
@@ -193,6 +197,13 @@ export default function Dashboard() {
     setShowWelcomeModal(false)
     setWelcomeDismissed(true)
     try { localStorage.setItem(WELCOME_DISMISSED_KEY, '1') } catch { /* ignore */ }
+  }, [])
+
+  useEffect(() => {
+    if (new URLSearchParams(location.search).get('reminders') === '1') {
+      navigate('/dashboard', { replace: true })
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {

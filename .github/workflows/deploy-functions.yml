@@ -6,6 +6,8 @@ on:
       - main
     paths:
       - 'supabase/functions/**'
+      # A function added to the list below has to deploy on the merge that adds it.
+      - '.github/workflows/deploy-functions.yml'
   workflow_dispatch:
 
 jobs:
@@ -43,5 +45,8 @@ jobs:
           deploy delete-account
           deploy redeem-beta-code
           deploy research-ingest-url
+          # Called by pg_cron, which sends no user JWT: the function checks its own
+          # x-cron-secret header instead, so the gateway's JWT check must be off.
+          deploy daily-plan-email --no-verify-jwt
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}

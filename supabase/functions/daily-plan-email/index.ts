@@ -22,15 +22,23 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const APP_URL = 'https://quiz.actuarialnotes.com'
+// Where the preference lives: the Dashboard's bell. `?reminders=1` opens it.
+const PREFS_URL = `${APP_URL}/dashboard?reminders=1`
 const DEFAULT_FROM = 'Actuarial Notes <notifications@actuarialnotes.com>'
 
-// Matches EXAM_ID_TO_LABEL in quiz/src/lib/examIds.ts (exam_progress keys).
+// Keyed like EXAM_ID_TO_LABEL in quiz/src/lib/examIds.ts (exam_progress keys),
+// plus PCPA's key from wikiExamIdToProgressKey.
 const EXAM_LABELS: Record<string, string> = {
   'P': 'Exam P — Probability',
   'FM': 'Exam FM — Financial Mathematics',
   'MAS-I': 'Exam MAS-I',
   'MAS-II': 'Exam MAS-II',
   'CAS-5': 'Exam 5',
+  'CAS-6': 'Exam 6',
+  'CAS-7': 'Exam 7',
+  'CAS-8': 'Exam 8',
+  'CAS-9': 'Exam 9',
+  'CAS-PCPA': 'PCPA',
 }
 
 // ── Mirrored from quiz/src/lib/dailyEmail.ts (tested there) ──────────────────
@@ -181,8 +189,8 @@ function renderHtml(sections: ExamSection[], friendlyDate: string): string {
     <a href="${APP_URL}/quiz" style="display:inline-block;margin-top:4px;padding:10px 22px;background:#4f46e5;color:#ffffff;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;">Start today's session</a>
     <p style="margin-top:28px;font-size:12px;color:#9ca3af;">
       You're receiving this because you turned on the daily study plan email.
-      You can change the time or turn it off in
-      <a href="${APP_URL}/settings" style="color:#6b7280;">Settings</a>.
+      You can change the time or turn it off from the bell on your
+      <a href="${PREFS_URL}" style="color:#6b7280;">Dashboard</a>.
     </p>
   </div>`
 }
@@ -205,7 +213,7 @@ function renderText(sections: ExamSection[], friendlyDate: string): string {
     lines.push('')
   }
   lines.push(`Start today's session: ${APP_URL}/quiz`)
-  lines.push(`Turn this email off in Settings: ${APP_URL}/settings`)
+  lines.push(`Change the time or turn this email off: ${PREFS_URL}`)
   return lines.join('\n')
 }
 
@@ -233,10 +241,14 @@ Deno.serve(async (req: Request) => {
 
   // Manual-test escape hatch (still behind the cron secret): { "force": true }
   // sends to matching users regardless of the current hour / last_sent_date.
+  // Add "user_id" to limit the run to one account, so a smoke test doesn't
+  // email every opted-in user.
   let force = false
+  let onlyUserId: string | null = null
   try {
     const body = await req.json()
     force = body?.force === true
+    if (typeof body?.user_id === 'string' && body.user_id) onlyUserId = body.user_id
   } catch { /* empty body from cron */ }
 
   const admin = createClient(
@@ -244,10 +256,12 @@ Deno.serve(async (req: Request) => {
     Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
   )
 
-  const { data: prefs, error: prefsErr } = await admin
+  let prefsQuery = admin
     .from('user_email_prefs')
     .select('user_id, daily_plan_email, send_hour_local, timezone, last_sent_date')
     .eq('daily_plan_email', true)
+  if (onlyUserId) prefsQuery = prefsQuery.eq('user_id', onlyUserId)
+  const { data: prefs, error: prefsErr } = await prefsQuery
   if (prefsErr) return Response.json({ error: prefsErr.message }, { status: 500 })
 
   const now = new Date()

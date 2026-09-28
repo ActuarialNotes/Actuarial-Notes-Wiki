@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>A car sending its driving data by signal to the insurer's rating, above three premium columns that fall from risky to average to safe driving</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+    --grid: #333333; --soft: #242424; --axis: #6b6b6b;
+  }
+}
+/* Named by the host in the embed URL (`…svg#dark`), and beats the media query
+   above because a value set here lands on the drawing rather than on the root
+   it inherits from. See the module docstring. */
+#light:target ~ * { --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c; }
+#dark:target ~ * { --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+  --grid: #333333; --soft: #242424; --axis: #6b6b6b; }
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <g id="light"/><g id="dark"/>
+  <g class="art">
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <path d="M44,156.4 V141.84 L64.8,137.68 L79.36,121.04 H114.72 L129.28,137.68 L148,143.92 V156.4 Z" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.4" stroke-linejoin="round"/>
+    <circle cx="66.88" cy="158.48" r="9.36" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.6"/>
+    <circle cx="125.12" cy="158.48" r="9.36" fill="var(--surf)" stroke="#3b82f6" stroke-width="1.6"/>
+    <path d="M146.8,97.6 A16,16 0 0 1 164.4,108.8" class="thin" stroke="#0d9488" stroke-width="1.8" fill="none"/>
+    <path d="M144.4,86.8 A28,28 0 0 1 175.2,106.4" class="thin" stroke="#0d9488" stroke-width="1.8" fill="none"/>
+    <path d="M142.0,76.0 A40,40 0 0 1 186.0,104.0" class="thin" stroke="#0d9488" stroke-width="1.8" fill="none"/>
+    <polygon points="246.96,96 280.24,96 293.04,108.8 293.04,160 246.96,160" fill="#0d9488" fill-opacity="0.18" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M280.24,96 V108.8 H293.04" fill="none" stroke="#0d9488" stroke-width="1.2"/>
+    <line x1="255.92" y1="121.6" x2="282.8" y2="121.6" stroke="#0d9488" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="255.92" y1="132.48" x2="282.8" y2="132.48" stroke="#0d9488" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="255.92" y1="143.36" x2="273.84" y2="143.36" stroke="#0d9488" stroke-width="1.4" stroke-linecap="round"/>
+    <text x="270" y="184" text-anchor="middle" class="sm bold">rating</text>
+    <rect x="76.8" y="232" width="46.4" height="128" rx="3" fill="#e11d48" fill-opacity="0.75"/>
+    <text x="100" y="375" text-anchor="middle" class="sm dim">risky</text>
+    <rect x="156.8" y="249.92" width="46.4" height="110.08" rx="3" fill="#d97706" fill-opacity="0.75"/>
+    <text x="180" y="375" text-anchor="middle" class="sm dim">average</text>
+    <rect x="236.8" y="267.84" width="46.4" height="92.16" rx="3" fill="#059669" fill-opacity="0.75"/>
+    <text x="260" y="375" text-anchor="middle" class="sm dim">safe</text>
+    <line x1="54" y1="360" x2="306" y2="360" class="axis"/>
+  </g>
+</svg>

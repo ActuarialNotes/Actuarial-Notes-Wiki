@@ -1,12 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:92308a3e4169efa1bd49680179c6654e1f138cb2a76290be3936b14185370723
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-28
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:8d1ae133e7a136a8a8934b4394aae27083d7a7098849675e18d8cfbce07b1a2d
+  sources:
+    - "SOA Financial Mathematics Exam syllabus, December 2026 (all pages), sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
+    - "SOA Financial Mathematics Exam syllabus, October 2026, sha256:949a2e9008bd5f8791b8852599e09f28aa30a9f53a5af05b2499907de1397b26 — https://www.soa.org/globalassets/assets/files/edu/2026/syllabi/2026-10-exam-fm-syllabus.pdf"
+    - "SOA Financial Mathematics Exam syllabus, August 2026, sha256:a3af6f54e132f4439988cccc1d20ea3cb269c175c253d9b2b27c6f8d23bbbc5b — https://www.soa.org/globalassets/assets/files/edu/2026/spring/syllabi/2026-08-exam-fm-syllabus.pdf"
+  open_findings: 3
   open_critical: 0
   log: .verify/Exam FM-2 (SOA).md
 ---
@@ -28,6 +31,7 @@ The **Financial Mathematics (FM-2) Exam** is a 2.5 hour SOA exam with 30 multipl
 > 4. Write the [[Equation of Value|equation of value]] given a set of [[Cash Flow|cash flows]] and an [[Interest Rate|interest rate]]
 
 > [!example]- Annuities/Cash Flows with Non-Contingent Payments {20–30%}
+> Be able to calculate [[Present Value|present value]], [[Current Value|current value]], and [[Accumulated Value|accumulated value]] for [[Annuities|sequences of non-contingent payments]].
 > 1. Define and recognize the definitions of the following terms: [[Annuity Immediate]], [[Annuity Due]], [[Perpetuity]], [[Payable m-thly]] or [[Payable Continuously]], [[Level Payment Annuity]], [[Arithmetic Increasing Annuity|Arithmetic Increasing/Decreasing Annuity]], [[Geometric Increasing Annuity|Geometric Increasing/Decreasing Annuity]], [[Decreasing Annuity]], [[Continuous Annuity]], [[Term of Annuity]].
 > 2. For each of the following types of [[Annuities|annuity]]/[[Cash Flow|cash flows]], given sufficient information of [[Annuity Immediate|immediate]] or [[Annuity Due|due]], [[Present Value|present value]], [[Future Value|future value]], [[Current Value|current value]], [[Interest Rate|interest rate]], [[Payment Amount|payment amount]], and [[Term of Annuity|term of annuity]], calculate any remaining item.
 >	- [[Level Annuity]], [[Term of Annuity|finite term]].
@@ -59,7 +63,7 @@ The **Financial Mathematics (FM-2) Exam** is a 2.5 hour SOA exam with 30 multipl
 
 > [!example]- General Cash Flows, Portfolios, and Asset Liability Management {20–30%}
 > Understand key concepts concerning [[Yield Curve|yield curves]], [[Rate of Return|rates of return]], measures of [[Duration|duration]] and [[Convexity|convexity]], [[Cash Flow Matching|cash flow matching]] and [[Immunization|immunization]], and how to perform related calculations.
-> 1. Define and recognize the definitions of the following terms: [[Yield Rate]]/[[Rate of Return|rate of return]], [[Current Value]], [[Duration]] and [[Convexity]] ([[Macaulay Duration|Macaulay]] and [[Modified Duration|Modified]]), [[Portfolio]], [[Spot Rate]], [[Forward Rate]], [[Yield Curve]], [[Cash Flow]] and [[Duration Matching]], and [[Immunization]] (including [[Full Immunization]] and [[Redington Immunization]]).
+> 1. Define and recognize the definitions of the following terms: [[Yield Rate]]/[[Rate of Return|rate of return]], [[Current Value]], [[Duration]] and [[Convexity]] ([[Macaulay Duration|Macaulay]] and [[Modified Duration|Modified]]), [[Portfolio]], [[Spot Rate]], [[Forward Rate]], [[Yield Curve]], [[Cash Flow Matching|Cash Flow]] and [[Duration Matching]], and [[Immunization]] (including [[Full Immunization]] and [[Redington Immunization]]).
 > 2. Calculate:
 > 	- The [[Duration]] and [[Convexity|convexity]] of a set of [[Cash Flow|cash flows]].
 > 	- Either [[Macaulay Duration|Macaulay]] or [[Modified Duration|modified duration]] given the other.
@@ -80,7 +84,7 @@ The **Financial Mathematics (FM-2) Exam** is a 2.5 hour SOA exam with 30 multipl
 > - [[Mathematical Interest Theory (Vaaler, L.J.F., Harper, S.K., and Daniel, J.W. – 2019)]]
 >      - Chapters 1–6, 8–9^[excluding 1.13–1.16; 2.6; 3.10, 3.12, investment year method portion of 3.13; 5.3; 6.6–6.7, example 6.8.1, 6.10; Ch. 8: 8.3 only; 9.4, 9.5, 9.7]|
 > - [[Financial Mathematics: Theory and Practice (Brown, R. and Kopp, S. – 2024)]]
->      - Chapters 1–9, Ch. 2: sections 1–3 only; Ch. 4: sections 1, 3–5 only; Ch. 7: sections 1–2 only
+>      - Chapter 1, all sections; Chapter 2, sections 1, 2, 3; Chapter 3, all sections; Chapter 4, sections 1, 3, 4, 5; Chapter 5, sections 1, 2, 3; Chapter 6, sections 1, 2, 3, 4, 5, 6; Chapter 7, sections 1, 2; Chapter 8, all sections; Chapter 9, all sections
 > - [[Interest Theory – Financial Mathematics and Deterministic Valuation (Francis, J. and Ruckman, C. – 2022)]]
 >      - Chapters 1–16 excluding 14.04 and 14.05
 > - [[Financial Mathematics for Actuaries (Chan, Wai-Sum, and Tse, Yiu-Kuen – 2022)]]

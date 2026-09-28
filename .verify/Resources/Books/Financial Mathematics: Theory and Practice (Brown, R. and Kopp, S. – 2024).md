@@ -1,0 +1,14 @@
+---
+target: Resources/Books/Financial Mathematics: Theory and Practice (Brown, R. and Kopp, S. – 2024).md
+created: 2026-09-28
+---
+
+## [C-001] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-28T14:47Z/aa33
+- date: 2026-09-28
+- status_set: verified
+- confidence: medium
+- checks_run: Outline built from the source first: the printed TOC (sample PDF pp.5–7) and the bookmark outline (71 entries) agree with each other. The page's Preface, chapters 1–9 and Glossary were diffed against them: every number (1.1–9.5, including 5.4.1–5.4.3) and every title is identical. The only difference is em-dash spacing in 5.3 and 5.4.2. Nothing is omitted, and the TOC ends at the Glossary. The four content bullets under 2.1–2.2 were checked against the text: dated values and Y = X(1+i)^n (pp.67–68); transitivity, and the sum of dated values due on different dates having no meaning (pp.69–70); equation of value and focal/comparison/valuation date (p.71); i = (S/P)^{1/n} − 1, eq. (2.1) (p.80). The lead was checked against the Preface (pp.ix–x): every clause is there, including the calculators/spreadsheets sentence. The callout was checked against the SOA Dec 2026 syllabus p.6 (image): all nine chapter/section entries and the 1st-edition (2012) allowance are identical. Frontmatter: Title and Authors per the title page (PDF p.3, 'Robert L. Brown, Steve Kopp'); Publisher and 2nd edition per the title page; Year 2024 (© 2024, PDF p.4; syllabus 2024). ISBN 979-8-89016-187-1 matches the syllabus and ACTEX's product page ('Digital: 365-day license'), and its check digit is valid; the copyright page prints no ISBN. There is no Available from and every Sources URL was fetched (HTTP 200). resource_lint: 0 errors. Wiki-links resolve and the cover exists. Capped at medium because it is a commercial text and only its sample pages were readable.
+- sources_checked: Brown & Kopp, Financial Mathematics: Theory and Practice, 2nd ed. (ACTEX Learning, © 2024) — publisher's sample: title page PDF p.3; copyright page PDF p.4; Table of Contents PDF pp.5–7 and PDF bookmark outline; Preface pp.ix–x (PDF pp.9–10); Chapter 2 §§2.1–2.2 pp.67–82 (PDF pp.11–26), sha256:38962db0adeb8bd5a223d4b6486882d9118e9cf2684b0ae619d5d75d64779121 — https://www.actexlearning.com/samples/FINANCIAL_MATHEMATICS_Brown_Kopp_2e_sample.pdf; ACTEX Learning, Financial Mathematics: Theory and Practice 2nd Edition product page (retrieved 2026-09-28): description and ISBN list, sha256:aea509e3efca5d13e21eca638be4aa6f3eb9b7b509ffa3af4977ea78449ca8c7 — https://www.actexlearning.com/exams/fm/financial-mathematics-theory-and-practice-second-edition; SOA Financial Mathematics Exam syllabus, December 2026, Text References / Suggested Textbooks, PDF p.6 (page image read), sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf

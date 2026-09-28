@@ -8,13 +8,17 @@ Edition: "3rd"
 Type: "Textbook"
 ISBN: "978-981-12-4327-1"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: low
+  last_checked: 2026-09-28
+  last_checked_by: agent:validate-v1
   content_hash: sha256:39352635c26825147af8166ed57e02f61a26f4108880d8b862c995ae37ae7014
-  sources: []
-  open_findings: 0
+  sources:
+    - "SOA Financial Mathematics Exam syllabus, December 2026, Suggested Textbooks (Chan & Tse entry), PDF p.5, 7, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
+    - "World Scientific's Crossref deposit for Financial Mathematics for Actuaries, 3rd ed.: chapter records 10.1142/9789811243288_0001–_0011 with titles and page ranges, sha256:8a015cb140eaa779b82f41856ee5800df2af336f25d2ed78a0fc2b5a44b964ee — https://api.crossref.org/works?filter=isbn:9789811243271&rows=40&select=DOI,title,page,type ; book record 10.1142/12464 (authors, edition 3, ISBNs), sha256:74cea9eb5518d3b87a36f73d0a28b98583dfa05e6f69492ebea08c586def22b5 — https://api.crossref.org/works/10.1142/12464"
+    - "swisscovery (SLSP) catalogue, MARC records for ISBN 9789811243271: 020, 250 'Third edition', 264 '[2022]' / '©2022', 300, 505 chapter contents note, 520 publisher's summary, sha256:95af423bb8fd52d3e2335e6c72f33c55f8fc1799a7a1e0e7713aaa0fa7fb5069 — https://swisscovery.slsp.ch/view/sru/41SLSP_NETWORK?version=1.2&operation=searchRetrieve&recordSchema=marcxml&query=alma.isbn=9789811243271"
+    - "K10plus catalogue, MARC record for ISBN 9789811243271 (020 hardcover/paperback ISBNs, 250, 264, 300 'xx, 345 Seiten', 520 publisher's summary), sha256:15a11a7c9d80ff71176946f2ec50aa858f923583e77cd5d02c5d30389ce75fe8 — https://sru.k10plus.de/opac-de-627?version=1.1&operation=searchRetrieve&query=pica.isb%3D9789811243271&maximumRecords=5&recordSchema=marcxml"
+  open_findings: 2
   open_critical: 0
   log: ".verify/Resources/Books/Financial Mathematics for Actuaries (Chan, Wai-Sum, and Tse, Yiu-Kuen – 2022).md"
 ---

@@ -8,12 +8,17 @@ Edition: "3rd"
 Type: "Textbook"
 ISBN: "978-1-4704-4393-1"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-28
+  last_checked_by: agent:validate-v1
   content_hash: sha256:bc8a6cb8fa484a170ce48689f68faa624331b7a89ad70af79b9ffe38f15857e6
-  sources: []
+  sources:
+    - "Vaaler, Harper & Daniel, Mathematical Interest Theory, 3rd ed. (MAA Press, an imprint of the American Mathematical Society, 2019) — title page and Contents pp.vii–x, library scan (ZBW, linked from the K10plus record), PDF pp.1–5 read as images, sha256:81799b5ea775d35a9b466601c96e6c6ef6b260718a598bb627462f6b86f7e918 — https://www.gbv.de/dms/zbw/1664825304.pdf"
+    - "K10plus catalogue record for ISBN 9781470443931 (MARC 020, 245, 250, 264, 300, 490, 700) — https://sru.k10plus.de/opac-de-627?version=1.1&operation=searchRetrieve&query=pica.isb%3D9781470443931&maximumRecords=10&recordSchema=marcxml"
+    - "Publisher's description and chapter list, Google Books (American Mathematical Soc., 2019, ISBN 9781470443931; retrieved 2026-09-28, sha256:3a78e045b450dcf2fc509d436a5b50f510124d3dcb9c8f3a5fc13596350c4593) — https://books.google.com/books?vid=ISBN9781470443931"
+    - "WebAssign, Mathematical Interest Theory 3rd edition — section-level table of contents (rank 3; retrieved 2026-09-28, sha256:42e3f1efc89d028b20a02f240a185b85186faa1905c43b661f4ce2a1c7df5478) — https://www.webassign.net/features/textbooks/fvinttheory3/details.html"
+    - "SOA Financial Mathematics Exam syllabus, December 2026, Text References / Suggested Textbooks, PDF p.6 (page image read), sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: ".verify/Resources/Books/Mathematical Interest Theory (Vaaler, L.J.F., Harper, S.K., and Daniel, J.W. – 2019).md"

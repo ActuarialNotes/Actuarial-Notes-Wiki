@@ -1,0 +1,14 @@
+---
+target: Concepts/Call Premium.md
+created: 2026-09-28
+---
+
+## [C-001] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-28T14:47Z/aa33
+- date: 2026-09-28
+- status_set: verified
+- confidence: medium
+- checks_run: Definition call premium = call price − face value vs Achievable SIE ('A call premium is the amount above par ($1,000) the issuer must pay to call the bond. For example, if a bond is callable at $1,030, the call premium is $30' — the page's example uses the same figures) and Investor.gov ('call price (usually the face value) … Sometimes a call premium is also paid'); SOA Q43 p.20 prices a bond 'called at 100 over the par value of 1100', consistent. SOA sample questions/solutions never use the words 'call premium' (full-text search), so the defining formula rests on rank-3 sources — medium. Declining schedule reaching par at maturity illustrated by FIN Ex 47.2 p.421 (109 / 104.50 / 100) and SOA Q43 (1200 early, 1100 at maturity). Example: 1030 − 1000 = 30, 1015 − 1000 = 15. Links and figure resolve. Issuer-cost/attractiveness remarks are generic (Achievable: issuers offer call premiums to reduce call risk) — not filed.
+- sources_checked: SOA Financial Mathematics Exam syllabus, December 2026, Topic 4 Bonds (15-25%), learning outcome a), PDF p.4, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf; SOA Exam FM Sample Questions (rev. Aug 2026), Q 43, questions PDF p.20, sha256:d20b5cf2b78cb4cddb3dc556e0df62c40b7d510b7941b546809cc58c4b71a069 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-questions.pdf; SOA Exam FM Sample Solutions (rev. Aug 2026), Q 43, solutions PDF p.13, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf; Achievable, FINRA SIE course — Debt securities, Bond fundamentals: Features (web page read 2026-09-28), 'call premium' paragraph, sha256:5f832c9229d83f6f5f9dedfd417b2d522c4030f7c4938ea299365a18fca947fa — https://app.achievable.me/study/finra-sie/learn/bond-fundamentals-features; U.S. SEC Investor.gov glossary, Callable or Redeemable Bonds (web page read 2026-09-28), sha256:db86cee96b21a36c190fcf34f474a1cbc56064484f608c5262ab6b487ad6fe5b — https://www.investor.gov/introduction-investing/investing-basics/glossary/callable-or-redeemable-bonds; Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §47 Callable Bonds and Serial Bonds, PDF p.421, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf

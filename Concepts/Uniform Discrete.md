@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-28
+  last_checked_by: agent:validate-v1
   content_hash: sha256:45b3fcb366f0c453ed455c9caaa5be4f678a966774aa7ab9f03363d4bfe61c0d
-  sources: []
-  open_findings: 0
+  sources:
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), 6.2 Exercise 11: X chosen at random from 1..n has E(X)=(n+1)/2, V(X)=(n-1)(n+1)/12, and Exercise 10(a) D(X+c)=D(X), p.264 (PDF p.272); die mean 7/2 and variance 35/12 p.261 (PDF p.269), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), Deductibles section, sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Uniform Discrete.md
 ---

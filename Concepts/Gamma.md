@@ -1,12 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-28
+  last_checked_by: agent:validate-v1
   content_hash: sha256:67bdc7e2f3128c1f9967162cb7794e771f6b4b91018493e0a652ee9938bce46e
-  sources: []
-  open_findings: 0
+  sources:
+    - "SOA, Tables for Exam C (Fall 2009), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf; A.1 Introduction printed p.1 (PDF p.6), A.2.3.1 Pareto printed p.3 (PDF p.8), A.3.2.1 Gamma printed p.4 (PDF p.9), A.3.3.1 Exponential printed p.6 (PDF p.11), A.6.1.2 beta printed p.8 (PDF p.13)"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), 5.2 p.207 (PDF p.215) and 7.2 pp.296, 300 (PDF pp.304, 308), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "SOA, Exam P Sample Solutions (Aug 2026 revision), Q390 (PDF p.109) and Q507 (PDF pp.139-140), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Gamma.md
 ---

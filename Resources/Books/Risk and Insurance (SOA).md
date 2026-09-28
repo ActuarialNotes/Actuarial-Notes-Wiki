@@ -8,13 +8,15 @@ Type: "Study Note"
 Code: "P-21-05"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-09-27
+  last_checked_by: agent:validate-v1
   content_hash: sha256:8ae8ecd0f4c290e4f47d3be751098dc931a6aeaf2aef8a966b4a8a60d04f73be
-  sources: []
-  open_findings: 0
+  sources:
+    - "Anderson & Brown, Risk and Insurance (SOA Education and Examination Committee study note P-21-05, copyright 2005, second printing), 16 pp.: title page and Sections I-X read in full (text layer, plus page images of pp.4 and 12-14 for the math) — sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
+    - "SOA Probability Exam syllabus, November 2026, p.1 (purpose paragraph) and p.7 (REFERENCES > Other Resources) — sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Resources/Books/Risk and Insurance (SOA).md
 ---

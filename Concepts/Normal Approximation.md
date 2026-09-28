@@ -1,12 +1,16 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-28
+  last_checked_by: agent:validate-v1
   content_hash: sha256:126a2f70959eb9f11d4c2caac2de8d38bdf76f1a40c261264448fd6540f3eb52
-  sources: []
-  open_findings: 0
+  sources:
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Thm 9.1 (printed p.328, PDF p.336), 1/2 correction worked example in 9.1 (printed p.332, PDF p.340), Thm 9.4 (PDF p.351), Thm 9.6 (PDF p.365), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "SOA Exam P Sample Solutions (Aug 2026 revision), Q65 (PDF p.22), Q71 (PDF p.23), Q459 (PDF p.128), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
+    - "SOA Exam P normal distribution table (rev. 4/29/21), rows z=1.3 and 1.4 and the Values of z for selected Pr(Z<z) row (0.95 -> 1.6449), sha256:5dbd8a242813fe585c3eb085d32617ff14bcaa0517ca547b263e7b03541a8bcb — https://www.soa.org/globalassets/assets/files/edu/2021/p-1-table-rev-4-29-21.pdf"
+    - "SOA Probability Exam syllabus, November 2026, Topic 3 (Multivariate Random Variables) learning outcomes g-i, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Normal Approximation.md
 ---

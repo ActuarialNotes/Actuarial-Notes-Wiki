@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-09-27
+  last_checked_by: agent:validate-v1
   content_hash: sha256:20574b51c4b3ba25f8b2601fa1e65b246bf0a27a62e79c5489f0d19fe2bedef8
-  sources: []
-  open_findings: 0
+  sources:
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Thm 1.1 property 5 p.22 (PDF p.30), Thm 1.4 p.24 (PDF p.32), Thm 3.8 p.104 (PDF p.112), §4.1 conditional probability p.134 (PDF p.142), Example 4.5/Fig. 4.1 p.135 (PDF p.143), Def. 4.1 + Thm 4.1 pp.139-140 (PDF pp.147-148), eqs. (4.2)-(4.3) p.146 (PDF p.154), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "SOA Exam P Sample Solutions (Aug 2026 revision), Q1-Q3 p.2 and Q351 p.98, sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Probability Rules.md
 ---

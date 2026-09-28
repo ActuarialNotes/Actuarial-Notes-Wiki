@@ -1,12 +1,16 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:62c4bb32879483c96176f6c68ffe9e8352d946a1703ec796df6a78982151f4d4
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-27
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:bbfd3a7b8147ffa519e9453d12eee221aaacf37e7d5759a3f94de1b2692555ec
+  sources:
+    - "SOA Probability Exam syllabus, November 2026 (7 pp.), REFERENCES pp.5-7, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "SOA Probability Exam syllabus, January 2027, sha256:252d07fc2b3be499bdee55caaf40f5bd610c2d9593bee2f0428b6614d4e14e2a, https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-p-syllabus.pdf"
+    - "SOA Probability Exam syllabus, September 2026, sha256:a67f56f7ef60ff673730e28b6b6361168d0889683c78373f29a1ed38c1e5d7e3, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-09-p-syllabus.pdf"
+    - "SOA Exam P Sample Questions (Aug 2026 rev.), full-text search, sha256:e47245963f7d2c1c4f8cc5ff1baf2090542d923ac47cbeb27d1f657ac51bf5f0, https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-questions.pdf"
+  open_findings: 5
   open_critical: 0
   log: .verify/Exam P-1 (SOA).md
 ---
@@ -76,14 +80,14 @@ The Probability (P-1) Exam is a 3 hour SOA exam with 30 multiple choice question
 > [!answer]- Source Material
 >
 > - [[A First Course in Probability (Ross - 2019)]]
->      - Chapters 1-8, Excluding 4.8.4, 5.6.2, 5.6.3, 5.6.5, 5.7, 7.2.1, 7.2.2, 7.3, 7.6, 7.7, 7.8, 7.9
+>      - Chapter 1; Chapter 2; Chapter 3; Chapter 4 (exclude 4.8.4); Chapter 5 (exclude 5.6.2, 5.6.3, 5.6.5, 5.7); Chapter 6: 6.1, 6.2, 6.3.3, 6.3.4, 6.4, 6.6; Chapter 7 Discrete Only (exclude 7.2.1, 7.2.2, 7.3, 7.6, 7.7, 7.8, 7.9); Chapter 8: 8.1, 8.3
 > - [[Mathematical Statistics with Applications (Wackerly, Mendenhall, & Scheaffer - 2008)]]
->      - Chapters 1-8, Excluding 2.12, MGF, 4.10, Continuous Multivariate Distributions, 5.10, 7.4
+>      - Chapter 1; Chapter 2 (exclude 2.12); Chapter 3: 3.1-3.8, 3.9 (exclude MGF); Chapter 4 (exclude 4.10); Chapter 5 (exclude continuous multivariate distributions, exclude 5.10); Chapter 6: 6.7; Chapter 7 (exclude 7.4)
 > - [[Probability for Risk Management (Hassett - 2021)]]
->      - Chapters 1-11
+>      - Chapter 1; Chapter 2; Chapter 3; Chapter 4; Chapter 5; Chapter 6: 6.1, 6.2.1; Chapter 7; Chapter 8 (exclude 8.5, 8.6, 8.7); Chapter 9 (exclude 9.2, 9.3, 9.4, 9.6); Chapter 10 (exclude 10.2, 10.3.2, 10.3.3 continuous, 10.4.2); Chapter 11 (exclude 11.1.4, 11.1.5, 11.2.3 continuous, 11.2.5 continuous, 11.2.8, 11.3)
 > - [[Probability and Statistics with Applications - A Problem Solving Text (Asimow - 2021)]]
->      - Chapters 1-8
+>      - Chapter 1; Chapter 2; Chapter 3 (exclude 3.4.5, 3.7); Chapter 4 (exclude 4.6.2, 4.6.3, 4.6.5); Chapter 5 (exclude 5.6); Chapter 6 (exclude 6.3.4, 6.4.2, 6.4.6, 6.7); Chapter 7 (exclude 7.5, 7.6, 7.7, 7.9, 7.10); Chapter 8: 8.1.5, 8.3, 8.4 (exclude continuous), 8.6
 > - [[Probability and Statistical Inference (Hogg - 2020)]]
->      - Chapters 1-5
+>      - Chapter 1; Chapter 2; Chapter 3 (exclude Chi-Square); Chapter 4 (exclude 4.4, 4.5); Chapter 5: 5.3 (discrete only), 5.5, 5.6, 5.7
 > - [[Probability (Leemis - 2018)]]
->      - Chapters 1-8
+>      - Chapter 1 (exclude 1.1); Chapter 2; Chapter 3 (exclude moment generating functions in 3.4, exclude 3.5); Chapter 4 (exclude 4.7); Chapter 5 (include only beta distribution in 5.5); Chapter 6 (exclude continuous, exclude moment generating functions in 6.3, exclude 6.4); Chapter 7 (exclude 7.1, include only order statistics in 7.2, exclude 7.3); Chapter 8 (exclude 8.1, exclude 8.2)

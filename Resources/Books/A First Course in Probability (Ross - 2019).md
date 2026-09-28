@@ -8,13 +8,17 @@ Edition: "10th"
 Type: "Textbook"
 ISBN: "978-0-13-475311-9"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-27
+  last_checked_by: agent:validate-v1
   content_hash: sha256:91abc38b24aa7392a1f52830f6711f713f639acde55a1e376661bfcd490481e0
-  sources: []
-  open_findings: 0
+  sources:
+    - "Ross, A First Course in Probability, Tenth Edition (Pearson, 2019), publisher front matter PDF pp. i-xii: title page p. iii, copyright page p. iv, Contents pp. vii-ix, Preface pp. x-xii; sha256:ad10c2e634a970e2a39042327927e09d4296924cb0189c1267450a0606a60fa6, https://www.pearsonhighered.com/assets/preface/0/1/3/4/0134753119.pdf"
+    - "SOA Probability Exam syllabus, November 2026, REFERENCES pp. 5-6 (read from the page images), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "Pearson product page, A First Course in Probability 10th ed., Table of contents (fetched 2026-09-27, sha256:e889adc70c0c2f935f8893ec2477851a28c173bf6eae11979b02ee686ce1bbd2), https://www.pearson.com/en-us/subject-catalog/p/first-course-in-probability-a/P200000006334"
+    - "Open Library edition record ISBN 9780134753119 (title, publisher Pearson; sha256:64491156c9464563ed8344c32c7f25f915126d2bdeaa175bc3a2d324db972d9c), https://openlibrary.org/isbn/9780134753119.json"
+  open_findings: 1
   open_critical: 0
   log: .verify/Resources/Books/A First Course in Probability (Ross - 2019).md
 ---

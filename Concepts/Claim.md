@@ -1,12 +1,17 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-28
+  last_checked_by: agent:validate-v1
   content_hash: sha256:b13b93188e84b1b8d0dfe6f940111ec3ea16794ac0606f396e70dc52ccfbde81
-  sources: []
-  open_findings: 0
+  sources:
+    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf — §II claim payment PDF p.2; §III frequency and severity PDF p.3; §VI losses vs claim payments PDF p.7"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §5.1.5 (random sum Y = X1+...+XN: EY = E[X]E[N], Var(Y) = EN Var(X) + (EX)^2 Var(N)), fetched 2026-09-28, sha256:b02361ccef1565d4250b62e694cf7e84e96005add6eb5bb45dff9f51d72d12be — https://www.probabilitycourse.com/chapter5/5_1_5_conditional_expectation.php"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §11.1.3 Splitting a Poisson process (N1(t) Poisson with rate lambda p), fetched 2026-09-28, sha256:2b83b99ec8feade5f4778629c16b496516b0d40ae3e284456afcf1cc6a3a4506 — https://www.probabilitycourse.com/chapter11/11_1_3_merging_and_splitting_poisson_processes.php"
+    - "SOA, Tables for Exam C (Fall 2009), exponential entry E[X^x] = theta(1 - e^(-x/theta)), PDF p.11, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS study note, 451 pp.), claim life cycle PDF p.14, reopened claims and IBNR PDF p.20, claims-made accident date PDF p.44, reported claim count triangle PDF p.66, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Claim.md
 ---

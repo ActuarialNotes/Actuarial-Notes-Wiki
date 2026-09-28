@@ -8,13 +8,19 @@ Edition: "2nd"
 Type: "Textbook"
 ISBN: "978-0-9829174-7-3"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:e7fc7b7f13c72726a2a6c0a593d007bca6f8b5137c6687b5a4f11d386bbb97ae
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-27
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:eeadb99a588704fa8e227c4b8c0760bdd9512f1283ff406744a4515e74dda279
+  sources:
+    - "SOA Probability Exam syllabus, November 2026, REFERENCES pp.5-7, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "Lawrence M. Leemis, Probability, Second Edition: contents (author's list), https://www.math.wm.edu/~leemis/ptext.con, sha256:2e8c718840614a51e42de65131bc4f91268a3fbb0402bc0f258c0ebe0118f955"
+    - "Leemis, Probability 2nd ed., sample pages of the book pp.27, 55-56, 129, 170, 206-207, 211, 242, 257-258, 290-291, 344, 393, 489-490, 542-543, 550, https://www.math.wm.edu/~leemis/probability/samplepages/ (page489.pdf sha256:d38cb3730a6d9d70cef5acdba5c948989f081f33b2e792025a94bb2c72190f28, page542.pdf sha256:0f6d3c4f84931522e6f39a1daeded8554166d92f014bf96deb971962249260ba)"
+    - "Lawrence Leemis home page (W&M), book citation and errata links, https://www.math.wm.edu/~leemis/, sha256:370224d526ef2951ae6427e4aeedc8d6f8e31c1aa1e210be917373525fe887ab"
+    - "S. Huang, review of Probability (Leemis), Journal of Quality Technology 53(3):332, 2021, https://www.math.wm.edu/~leemis/probability2e-review.pdf, sha256:88c930e079af88b3b1378bd9bbb11c1ffdd831b56e091e7574a53ac2bae4dcc8"
+    - "Introduction to Probability, W&M ScholarWorks record (description), https://scholarworks.wm.edu/asbookchapters/125/"
+  open_findings: 2
   open_critical: 0
   log: .verify/Resources/Books/Probability (Leemis - 2018).md
 ---
@@ -43,7 +49,7 @@ A calculus-based introduction to probability covering the traditional topics, wi
 - 3.2 [[Continuous Random Variable|Continuous Random Variables]]
 - 3.3 [[Cumulative Distribution Function (CDF)|Cumulative Distribution Functions]]
 - 3.4 [[Expected Value|Expected Values]]
-- 3.5 Inequalities
+- 3.5 Inequalities (Markov, Chebyshev)
 
 ## 4 Common Discrete Distributions
 - 4.1 Bernoulli Distribution

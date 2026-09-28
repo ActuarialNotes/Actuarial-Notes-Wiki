@@ -2971,19 +2971,20 @@ def operational_risk_margin() -> Fig:
     return f
 
 
-@figure("Diversification Credit", "The running insurer's $92M insurance and $54M "
-        "market margins stacked to $146M beside the $120M actually required once "
-        "they are combined — the outlined $26M gap is the diversification credit",
-        width=WID)
+@figure("Diversification Credit", "The running insurer's $92M insurance, $54M "
+        "market and $21M credit margins stacked to $167M beside the $141M actually "
+        "required once insurance is combined with market and credit — the outlined "
+        "$26M gap is the diversification credit", width=WID)
 def diversification_credit() -> Fig:
     f = vcard()
 
-    base, s, bw = 352, 1.72, 84
+    base, s, bw = 352, 1.5, 84
     xa, xc = 110, 250
-    added = M_INS + M_MKT
+    added = M_INS + M_MKT + M_CRD
     combined = added - DIVERS
     y = base
-    for label, v, colour in (("insurance", M_INS, BLUE), ("market", M_MKT, TEAL)):
+    for label, v, colour in (("insurance", M_INS, BLUE), ("market", M_MKT, TEAL),
+                             ("credit", M_CRD, AMBER)):
         f.rect(xa - bw / 2, y - v * s, bw, v * s, rx=3, fill=colour,
                fill_opacity="0.7")
         f.text(xa, y - v * s / 2 + 4, f"{label} {v:,.0f}", cls="sm")

@@ -711,6 +711,16 @@ class TestExam7Layouts(unittest.TestCase):
         self.assertIn("The FIO collects", parts[1]["samples"][1])
         self.assertEqual(records[0]["id"], "cas6c-2013f-q1")
 
+    def test_a_list_lead_in_on_every_page_is_not_furniture(self):
+        # Exam 6C Fall 2016 heads a list of mistakes this way on most pages.
+        pages = [
+            px.Page(number=i, text=f"EXAM 6C FALL 2016 REPORT\nCommon mistakes included:\n- slip {i}")
+            for i in range(1, 6)
+        ]
+        drop = px.furniture_lines(pages)
+        self.assertIn("EXAM 6C FALL 2016 REPORT", drop)
+        self.assertNotIn("Common mistakes included:", drop)
+
     def test_a_short_header_on_every_page_is_furniture(self):
         pages = [
             px.Page(number=i, text=f"Exam 6C \u2013 Fall 2013\nQuestion {i}\n(C) 4{i}\nwork {i}")
@@ -1707,6 +1717,37 @@ class TestMasFiling(unittest.TestCase):
             md = written.read_text()
             self.assertIn("Calculate $r_1$.\n\n- A) I only\n- B) II only\n", md)
             self.assertNotIn("Tonly", md)
+
+    def test_a_transcription_drops_parts_it_does_not_print_and_the_report_never_answered(self):
+        # Exam 6C Fall 2015 Q19: one 2-point question whose booklet span ran
+        # into Q20's a. (1.5) and b. (0.5), which priced it exactly.
+        record = {
+            "num": 19, "id": "cas6c-2015f-q19", "bank": "exam-6c", "type": "multi-part",
+            "body": "Q19 text", "options": {}, "answer": None, "points": 2.0,
+            "year": 2015, "session": "Fall", "solution": "The published answer.",
+            "alternatives": [], "examiner_report": "Well answered.",
+            "parts": [
+                {"label": "a", "points": 1.5, "samples": [], "report": "", "prompt": "Q20 a"},
+                {"label": "b", "points": 0.5, "samples": [], "report": "", "prompt": "Q20 b"},
+            ],
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            (tmp / "records.jsonl").write_text(json.dumps(record) + "\n")
+            (tmp / "judgments.jsonl").write_text(json.dumps(
+                {"id": "cas6c-2015f-q19", "topic": "Flood Insurance", "difficulty": "medium",
+                 "learning_objective": "Canadian Government and Industry Insurance Programs",
+                 "wiki_link": ["Concepts/Flood+Insurance"], "needs_review": False}) + "\n")
+            (tmp / "prompts").mkdir()
+            (tmp / "prompts" / "cas6c-2015f-q19.md").write_text("Describe the flood program.\n")
+            rc = qw.main(["--records", str(tmp / "records.jsonl"),
+                          "--judgments", str(tmp / "judgments.jsonl"),
+                          "--prompts", str(tmp / "prompts"), "--root", str(tmp)])
+            self.assertEqual(rc, 0)
+            md = (tmp / "questions" / "exam-6c" / "cas6c-2015f-q19.md").read_text()
+            self.assertNotIn("## Part", md)
+            self.assertIn("Describe the flood program.", md)
+            self.assertIn("### Explanation\nThe published answer.", md)
 
 
 class TestMasClassifying(unittest.TestCase):

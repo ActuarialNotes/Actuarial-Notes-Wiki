@@ -455,6 +455,12 @@ def furniture_lines(pages: list[Page]) -> set[str]:
         # ANSWERS AND EXAMINER'S REPORT` is still furniture.
         if REPORT_SECTION_RE.match(next(iter(concrete))):
             continue
+        # A line ending in a colon introduces what follows it, which a running
+        # header never does: Exam 6C Fall 2016 opens 51 of its 59 report pages'
+        # lists `Common mistakes included:`, and without it each list of
+        # mistakes read as what candidates were expected to write.
+        if shape.rstrip().endswith(":"):
+            continue
         letters = sum(1 for ch in shape if ch.isalpha())
         if letters >= FURNITURE_MIN_LETTERS or PAGE_NUMBER_RE.match(shape):
             drop |= concrete

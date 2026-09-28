@@ -163,7 +163,37 @@ The linter covers the old per-file checklist: point sums, part sequence, LaTeX
 readability, OCR characters. `verification:` is never hand-written
 (`docs/verification.md`).
 
-## 6. Commit
+## 6. Fact check
+
+Every question is checked in the change that adds it — CI fails a PR that adds
+one unchecked (`docs/verification.md`, "Checked at creation"). Once the batch is
+final, run `/validate --new` and tell it the paper you converted — the PDF's URL
+or the file you downloaded, and the sitting — and nothing else. It works each
+question cold, in groups of about five: recomputes every numeric part before it
+reads the sample answers, diffs every figure in the prompt and its exhibits
+against the booklet, and checks the explanation against the report. Check the
+pilot questions this way before you write the rest.
+
+Two things to know about what it finds:
+
+- **An exhibit is where a scanned paper goes wrong**, and the booklet page
+  image is the source that settles it. A figure the page proves wrong is a
+  transcription error the checker fixes and records.
+- **A sample answer is a candidate's, not the answer.** The report often
+  accepts several approaches and credits partial work, so a recomputation that
+  differs from one sample is a finding only when it also differs from what the
+  examiners' commentary says was expected. One that will not reach the report's
+  figure at all is a finding for the user — never an explanation bent to fit.
+
+Fix what it reports (a `--prompts` / `--explanations` override, then
+`question_write.py --force` for that question) and run `/validate --new` again
+until `python3 scripts/verify_targets.py --new` lists nothing. For the MAS papers
+the key is the answer key, and a two-letter key counts as reached by either
+letter.
+
+## 7. Commit
+
+The `.verify/` logs go in the same commit as the questions they are about.
 
 ```
 Add CAS Exam 5 Spring 2019 questions 1-12

@@ -7,8 +7,9 @@ name: Verify Check
 # reworded after the fact. Both fail here.
 #
 # Note what this does NOT fail on: a content edit that outdates a hash. That is
-# repaired by --sync and committed back, so a content-only PR is never blocked by
-# the record — only a false claim is.
+# repaired by --sync and committed back, so an edit is never blocked by the
+# record — only a false claim is, and a new page that arrives with no fact check
+# at all (docs/verification.md, "Checked at creation").
 #
 # The trigger covers `scripts/**`, not just `scripts/verify_*.py`, because the
 # "Unit tests" step below runs the *whole* scripts suite — the VERIFY toolchain
@@ -94,7 +95,9 @@ jobs:
 
       # The part that fails the build: a verification with no source, a
       # confidence on an unverified page, a log entry edited rather than
-      # appended, a log pointing at a file that does not exist.
+      # appended, a log pointing at a file that does not exist, and a page this
+      # PR adds with no validation pass (or edited after it). The --sync above
+      # backfills a new page as `unverified`; it cannot raise it past this.
       - name: Check the record
         run: |
           python3 scripts/verify_check.py \

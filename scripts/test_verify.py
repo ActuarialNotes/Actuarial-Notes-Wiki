@@ -519,6 +519,174 @@ class AppendOnlyBranchWalkTests(AppendOnlyTests):
         self.assertTrue(any("deleted" in p.message for p in problems))
 
 
+# ─── Checked at creation ──────────────────────────────────────────────────────
+
+class CreationCheckTests(TempVault):
+    """A page is fact checked in the change that adds it. An edit to an existing
+    page is never blocked by the record; a new page arriving unchecked is."""
+
+    EXISTING = "Concepts/Existing.md"
+    NEW = "Concepts/Loss Development Factor.md"
+
+    def setUp(self) -> None:
+        super().setUp()
+        import verify_record
+        import verify_targets
+
+        self.R = verify_record
+        self.T = verify_targets
+        self._saved_targets_root = verify_targets.REPO_ROOT
+        verify_targets.REPO_ROOT = self.root
+        self.addCleanup(setattr, verify_targets, "REPO_ROOT", self._saved_targets_root)
+
+        self.init_git()
+        self.write(self.EXISTING, V.upsert_verification(
+            CONCEPT, V.new_block(CONCEPT, V.log_rel_for(self.EXISTING))))
+        self.commit("seed")
+        self.base = self.git("rev-parse", "HEAD").strip()
+
+    def add_page(self, rel: str = NEW, text: str = CONCEPT) -> None:
+        """What a skill does: write the page, then let --sync add the block."""
+        path = self.write(rel, text)
+        C.sync_file(path)
+
+    def check(self, *argv: str) -> None:
+        saved = sys.argv
+        sys.argv = ["verify_record.py", *argv]
+        try:
+            self.R.main()
+        finally:
+            sys.argv = saved
+
+    def fact_check(self, rel: str = NEW, status: str = "verified") -> None:
+        extra = (["--confidence", "high", "--source", "Friedland (2010), ch. 7, p.84"]
+                 if status == "verified" else ["--note", "Friedland could not be reached."])
+        self.check("pass", rel, "--status", status, "--date", "2026-08-19", *extra)
+
+    def gate(self) -> list[str]:
+        return [f"{p.level}: {p.message}" for p in C.check_new_files(self.base)]
+
+    def test_a_new_page_with_no_fact_check_fails(self) -> None:
+        self.add_page()
+        self.commit("add a page")
+        problems = self.gate()
+        self.assertEqual(len(problems), 1)
+        self.assertTrue(problems[0].startswith("error: new page, not fact checked"))
+
+    def test_a_new_page_is_caught_before_it_is_committed(self) -> None:
+        """The skill asks before committing, so an untracked file counts."""
+        self.add_page()
+        self.assertEqual(C.new_content_files(self.base), [self.NEW])
+        self.assertTrue(self.gate())
+
+    def test_a_verified_new_page_passes(self) -> None:
+        self.add_page()
+        self.fact_check()
+        self.commit("add a checked page")
+        self.assertEqual(self.gate(), [])
+        self.assertEqual(self.errors(self.NEW), [])
+
+    def test_in_review_counts_as_checked(self) -> None:
+        """The honest outcome when the source could not be reached (P1)."""
+        self.add_page()
+        self.fact_check(status="in_review")
+        self.assertEqual(self.gate(), [])
+
+    def test_a_new_page_edited_after_its_check_fails(self) -> None:
+        self.add_page()
+        self.fact_check()
+        self.write(self.NEW, (self.root / self.NEW).read_text(encoding="utf-8") + "\nOne more line.\n")
+        self.assertTrue(any("edited after its fact check" in p for p in self.gate()))
+        # …and still fails once CI's --sync has turned it stale.
+        C.sync_file(self.root / self.NEW)
+        self.assertEqual(V.parse_verification((self.root / self.NEW).read_text(encoding="utf-8"))["status"],
+                         "stale")
+        self.assertTrue(any("edited after its fact check" in p for p in self.gate()))
+
+    def test_rechecking_the_final_page_clears_it(self) -> None:
+        self.add_page()
+        self.fact_check()
+        self.write(self.NEW, (self.root / self.NEW).read_text(encoding="utf-8") + "\nOne more line.\n")
+        self.fact_check()
+        self.assertEqual(self.gate(), [])
+
+    def test_a_hand_written_comment_alone_is_not_a_fact_check(self) -> None:
+        self.add_page()
+        V.append_entry(self.NEW, V.render_entry("C-001", "Looks fine to me", [
+            ("entry_type", "comment"), ("author", "human:jordan"), ("date", "2026-08-19"),
+        ]), self.root)
+        self.assertTrue(any("not fact checked" in p for p in self.gate()))
+
+    def test_an_edit_to_an_existing_page_is_not_held_to_it(self) -> None:
+        self.write(self.EXISTING, (self.root / self.EXISTING).read_text(encoding="utf-8") + "\nEdited.\n")
+        self.commit("edit an existing page")
+        self.assertEqual(self.gate(), [])
+
+    def test_moving_a_page_is_not_creating_one(self) -> None:
+        self.git("mv", self.EXISTING, "Concepts/Renamed.md")
+        self.commit("rename")
+        self.assertEqual(C.new_content_files(self.base), [])
+
+    def test_a_page_added_on_the_base_after_the_branch_was_cut_is_not_the_branchs(self) -> None:
+        self.git("checkout", "-q", "-b", "feature")
+        self.git("checkout", "-q", "main")
+        self.add_page()
+        self.commit("main gains a page")
+        self.git("checkout", "-q", "feature")
+        self.assertEqual(C.new_content_files("main"), [])
+
+    def critical_finding(self) -> None:
+        self.check("finding", self.NEW, "--severity", "critical", "--locus", "formula",
+                   "--claim", "Numerator and denominator are swapped.",
+                   "--evidence", "Friedland (2010) ch. 7 p.84 defines it the other way up.",
+                   "--date", "2026-08-19")
+        self.check("pass", self.NEW, "--status", "disputed", "--date", "2026-08-19",
+                   "--source", "Friedland (2010), ch. 7, p.84")
+
+    def test_a_checked_page_with_an_open_critical_finding_warns(self) -> None:
+        self.add_page()
+        self.critical_finding()
+        problems = self.gate()
+        self.assertEqual(len(problems), 1)
+        self.assertTrue(problems[0].startswith("warning: new page lands with an open critical"))
+
+    def test_a_finding_without_a_pass_is_not_a_finished_check(self) -> None:
+        """Every file a check opens gets a pass — the outcome, not only the problems."""
+        self.add_page()
+        self.check("finding", self.NEW, "--severity", "minor", "--locus", "bullet 2",
+                   "--claim", "Unsourced.", "--evidence", "Not in Friedland ch. 7.",
+                   "--set-status", "in_review", "--date", "2026-08-19")
+        self.assertTrue(any("not fact checked" in p for p in self.gate()))
+
+    def test_a_disputed_page_fixed_after_its_check_needs_another(self) -> None:
+        """`--sync` refreshes a disputed page's hash without a trace, so the
+        edit is read off the pass itself — or the fix would merge unchecked."""
+        self.add_page()
+        self.critical_finding()
+        fixed = (self.root / self.NEW).read_text(encoding="utf-8").replace("C_{n}}{C_{n-1}", "C_{n+1}}{C_{n}")
+        self.write(self.NEW, fixed)
+        C.sync_file(self.root / self.NEW)
+        block = V.parse_verification((self.root / self.NEW).read_text(encoding="utf-8"))
+        self.assertEqual(block["status"], "disputed")
+        self.assertEqual(block["content_hash"], V.content_hash(fixed))
+        self.assertTrue(any("edited after its fact check" in p for p in self.gate()))
+        self.assertEqual([t.path for t in self.T.select_new([], self.base, {})], [self.NEW])
+
+    def test_files_outside_the_content_roots_are_not_held_to_it(self) -> None:
+        self.write("Guides/How to Study.md", "A guide.\n")
+        self.write("docs/notes.md", "Notes.\n")
+        self.assertEqual(C.new_content_files(self.base), [])
+
+    def test_targets_new_lists_exactly_what_the_gate_fails(self) -> None:
+        self.add_page()
+        self.add_page("Concepts/Checked.md")
+        self.fact_check("Concepts/Checked.md")
+        listed = [t.path for t in self.T.select_new([], self.base, {})]
+        self.assertEqual(listed, [self.NEW])
+        failing = [p.path for p in C.check_new_files(self.base) if p.level == "error"]
+        self.assertEqual(listed, failing)
+
+
 # ─── Recording a pass (P1 + idempotency) ──────────────────────────────────────
 
 class RecordTests(TempVault):

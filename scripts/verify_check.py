@@ -19,6 +19,9 @@ tooling simply repairs:
       * a sidecar log entry that was modified or deleted rather than appended
         (diffed against the base ref) — this is what protects P3
       * a log whose `target:` names a file that doesn't exist
+      * a content file the branch *adds* that has not been fact checked, or was
+        edited after its check — a page is checked when it is created
+        (docs/verification.md, "Checked at creation")
 
   --sync         — REPAIRS and exits 0 (the workflow commits the result)
       * `content_hash` mismatch → downgrade a claiming status to `stale` (P4)
@@ -32,7 +35,7 @@ Usage:
   python3 scripts/verify_check.py                    # check everything
   python3 scripts/verify_check.py questions/exam-5   # check a subset
   python3 scripts/verify_check.py --sync             # repair hashes/counters
-  python3 scripts/verify_check.py --base origin/main # + append-only diff check
+  python3 scripts/verify_check.py --base origin/main # + append-only and creation checks
   python3 scripts/verify_check.py --strict           # warnings fail too
 """
 
@@ -390,6 +393,108 @@ def check_append_only(base: str) -> list[Problem]:
     return unique
 
 
+# ─── Checked at creation ──────────────────────────────────────────────────────
+#
+# A page is fact checked in the change that adds it, not by a sweep that reaches
+# it months later. Everywhere else the record only repairs — an edit to an
+# existing page is never blocked, it just goes `stale` — but a *new* page is the
+# one moment its source is already in hand, and a page that merges unchecked
+# joins a backlog that is only ever worked from the top.
+
+#: Why a new page does not yet count as checked. `creation_gap` returns one.
+GAP_UNCHECKED = "not fact checked"
+GAP_EDITED = "edited after its fact check"
+
+CREATION_HOW = (
+    "hand it to the validate agent (`/validate --new`) before merging — "
+    "docs/verification.md, \"Checked at creation\""
+)
+
+
+def new_content_files(base: str) -> list[str]:
+    """Content files this branch adds relative to `base`, committed or not.
+
+    Compared against the merge base, so a page `base` gained after the branch
+    was cut is not this branch's. Renames are followed: moving a page is not
+    creating one. The working tree counts, untracked files included, so a skill
+    can ask "what have I written that still needs its check?" before it
+    commits; in CI the tree is the commit.
+    """
+    try:
+        merge_base = _git("merge-base", base, "HEAD").strip() or base
+    except subprocess.CalledProcessError:
+        merge_base = base
+    added = _git("diff", "--name-only", "-z", "--diff-filter=A", "--find-renames", merge_base)
+    untracked = _git("ls-files", "--others", "--exclude-standard", "-z")
+    rels = {p for p in (added + "\0" + untracked).split("\0") if p}
+    return sorted(
+        rel for rel in rels
+        if (REPO_ROOT / rel).is_file() and V.is_content_file(REPO_ROOT / rel)
+    )
+
+
+def creation_gap(rel: str, text: str) -> str | None:
+    """Why a new page does not count as checked at creation, or None if it does.
+
+    Checked means a validation pass (`verify_record.py pass`) is in the page's
+    log, set a status other than `unverified`, and looked at the bytes being
+    merged. `in_review` counts — it is the honest outcome of a check whose
+    source could not be reached, and its note says which — and so does
+    `disputed`: the check ran, and the log says what it found. What does not
+    count is a page nobody looked at, a comment in place of a pass, or a pass
+    over an earlier draft (P4: it no longer describes the page).
+
+    "Earlier draft" is read off the pass entry's own `content_hash`, not the
+    block's: `--sync` refreshes the block's hash on every run, and on a
+    `disputed` page it does so without a trace.
+    """
+    try:
+        block = V.parse_verification(text)
+    except ValueError:
+        return None  # malformed: `check_block` reports it; never guess a status
+    status = block.get("status") if block else None
+    log = V.read_log(rel)
+    passes = [e for e in (log.entries if log else []) if e.fields.get("status_set")]
+    if status in (None, "unverified") or not passes:
+        return GAP_UNCHECKED
+    checked = passes[-1].fields.get("content_hash")
+    if checked:
+        return GAP_EDITED if checked != V.content_hash(text) else None
+    # A pass recorded before passes carried a hash: fall back on the block.
+    if status == "stale" or (
+        status in V.CLAIMING_STATUSES and block.get("content_hash") != V.content_hash(text)
+    ):
+        return GAP_EDITED
+    return None
+
+
+def check_new_files(base: str, only: set[str] | None = None) -> list[Problem]:
+    """Every content file the branch adds must arrive fact checked."""
+    problems: list[Problem] = []
+    for rel in new_content_files(base):
+        if only is not None and rel not in only:
+            continue
+        text = (REPO_ROOT / rel).read_text(encoding="utf-8")
+        gap = creation_gap(rel, text)
+        if gap == GAP_UNCHECKED:
+            problems.append(Problem("error", rel, f"new page, {GAP_UNCHECKED}: {CREATION_HOW}"))
+        elif gap == GAP_EDITED:
+            problems.append(Problem(
+                "error", rel,
+                f"new page, {GAP_EDITED} — the check no longer speaks for it: "
+                "re-run it on the final page (`/validate --new`)",
+            ))
+        else:
+            log = V.read_log(rel)
+            if log is not None and log.open_critical():
+                problems.append(Problem(
+                    "warning", rel,
+                    "new page lands with an open critical finding — fix it before merging, "
+                    "or say in the PR why it ships",
+                ))
+    return problems
+
+
 # ─── Sync (repair) ────────────────────────────────────────────────────────────
 
 def sync_file(path: Path) -> str | None:
@@ -468,7 +573,7 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("paths", nargs="*", help="limit to these files/directories")
     ap.add_argument("--sync", action="store_true", help="repair hashes, statuses and counters, then exit 0")
-    ap.add_argument("--base", help="git ref to diff .verify/ against for the append-only check")
+    ap.add_argument("--base", help="git ref to diff against for the append-only and creation checks")
     ap.add_argument("--no-append-check", action="store_true", help="skip the append-only diff check")
     ap.add_argument("--strict", action="store_true", help="treat warnings as errors")
     args = ap.parse_args()
@@ -488,12 +593,15 @@ def main() -> int:
     for log_file in iter_log_files():
         problems.extend(check_log_file(log_file))
 
-    if not args.no_append_check:
-        base = resolve_base(args.base)
-        if base is None:
-            print("note: no base ref available; skipping the append-only check", file=sys.stderr)
-        else:
+    base = resolve_base(args.base)
+    if base is None:
+        print("note: no base ref available; skipping the append-only and creation checks",
+              file=sys.stderr)
+    else:
+        if not args.no_append_check:
             problems.extend(check_append_only(base))
+        only = {V.rel_path(p) for p in files} if args.paths else None
+        problems.extend(check_new_files(base, only))
 
     errors = [p for p in problems if p.level == "error"]
     warnings = [p for p in problems if p.level == "warning"]

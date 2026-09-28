@@ -293,6 +293,11 @@ def cmd_pass(args: argparse.Namespace) -> int:
             ("checks_run", args.checks or ""),
             ("sources_checked", "; ".join(args.source) if args.source else ""),
             ("note", args.note or ""),
+            # The bytes this pass looked at. The block's own hash is refreshed by
+            # every --sync, so it cannot say whether a page was edited after its
+            # check; this can, and it is what the creation check reads
+            # (verify_check.creation_gap).
+            ("content_hash", V.content_hash(path.read_text(encoding="utf-8"))),
         ],
     )
     V.append_entry(rel, entry_text, V.REPO_ROOT)

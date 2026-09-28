@@ -24,6 +24,12 @@ Usage:
   python3 scripts/verify_targets.py questions/exam-5      # restrict to a subtree
   python3 scripts/verify_targets.py --json                # machine-readable
   python3 scripts/verify_targets.py --traffic traffic.json
+  python3 scripts/verify_targets.py --new                 # pages this branch adds, unchecked
+
+`--new` is the creation check's batch rather than a sweep's: every content file
+the branch adds (committed or not) that has not yet been fact checked, or was
+edited after its check. It is the list `verify_check.py` fails a PR for
+(docs/verification.md, "Checked at creation"), so it is never truncated.
 """
 
 from __future__ import annotations
@@ -38,6 +44,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import verify_check as C  # noqa: E402
 import verify_lib as V  # noqa: E402
 
 REPO_ROOT = V.REPO_ROOT
@@ -250,6 +257,39 @@ def select(
     return targets[:limit] if limit > 0 else targets
 
 
+def select_new(
+    paths: list[str],
+    base: str | None,
+    traffic: dict[str, int],
+    today: date | None = None,
+) -> list[Target]:
+    """The pages this branch adds that are not yet checked at creation.
+
+    Same test as the CI gate (`verify_check.creation_gap`), so what this lists
+    and what fails the PR can never disagree.
+    """
+    resolved = C.resolve_base(base)
+    if resolved is None:
+        raise SystemExit("no base ref to compare against — pass --base <ref>")
+    today = today or date.today()
+    in_scope = {V.rel_path(p) for p in _files_for(paths)} if paths else None
+    weights = concept_weights()
+    targets: list[Target] = []
+    for rel in C.new_content_files(resolved):
+        if in_scope is not None and rel not in in_scope:
+            continue
+        text = (REPO_ROOT / rel).read_text(encoding="utf-8")
+        gap = C.creation_gap(rel, text)
+        if gap is None:
+            continue
+        target = classify(rel, text, weights, traffic, DEFAULT_RECHECK_DAYS, today)
+        target.band = BAND_STALE if gap == C.GAP_EDITED else BAND_NEVER
+        target.reason = f"new on this branch — {gap}"
+        targets.append(target)
+    targets.sort(key=Target.sort_key)
+    return targets
+
+
 def _files_for(paths: list[str]) -> list[Path]:
     if not paths:
         return list(V.iter_content_files())
@@ -266,10 +306,15 @@ def _files_for(paths: list[str]) -> list[Path]:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("paths", nargs="*", help="restrict the pool to these files/directories")
-    ap.add_argument("--limit", type=int, default=DEFAULT_LIMIT, help="batch size (0 = no limit)")
+    ap.add_argument("--limit", type=int, default=None,
+                    help=f"batch size (0 = no limit; default {DEFAULT_LIMIT}, or no limit with --new)")
     ap.add_argument("--recheck-days", type=int, default=DEFAULT_RECHECK_DAYS)
     ap.add_argument("--traffic", help="JSON file of {question id or path: attempt count}")
     ap.add_argument("--json", action="store_true", help="emit JSON instead of a table")
+    ap.add_argument("--new", action="store_true",
+                    help="only the pages this branch adds that still need their creation check")
+    ap.add_argument("--base", help="with --new: the ref the branch is compared against "
+                                   "(default origin/main)")
     args = ap.parse_args()
 
     traffic: dict[str, int] = {}
@@ -277,14 +322,22 @@ def main() -> int:
         raw = json.loads(Path(args.traffic).read_text(encoding="utf-8"))
         traffic = {str(k): int(v) for k, v in raw.items()}
 
-    targets = select(args.paths, args.limit, args.recheck_days, traffic)
+    if args.new:
+        targets = select_new(args.paths, args.base, traffic)
+        if args.limit:
+            targets = targets[:args.limit]
+    else:
+        limit = DEFAULT_LIMIT if args.limit is None else args.limit
+        targets = select(args.paths, limit, args.recheck_days, traffic)
 
     if args.json:
         print(json.dumps([asdict(t) for t in targets], indent=2))
         return 0
 
     if not targets:
-        print("Nothing to validate: every file in scope is freshly verified.")
+        print("Nothing to validate: every page this branch adds has been fact checked."
+              if args.new else
+              "Nothing to validate: every file in scope is freshly verified.")
         return 0
 
     print(f"{len(targets)} target(s), highest priority first:\n")

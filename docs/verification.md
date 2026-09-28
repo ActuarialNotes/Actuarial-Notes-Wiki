@@ -190,6 +190,8 @@ between what fails a build and what tooling simply repairs.
 - a `.verify/` file that was **modified other than by appending**, or deleted, or
   renamed, diffed against the base ref — this is P3, mechanically
 - a log whose `target:` names a file that does not exist
+- a content file the branch **adds** with no validation pass, or edited after
+  its pass — see "Checked at creation" below
 
 **Repairs and exits 0** (`--sync`; the workflow commits the result):
 
@@ -197,8 +199,9 @@ between what fails a build and what tooling simply repairs.
 - `open_findings` recomputed from the log
 - a missing block on a newly added content file → backfilled as `unverified`
 
-A content-only PR is never *blocked* by the record: a hash mismatch is a warning
-in check mode and a repair in sync mode. What is blocked is a false claim.
+An edit is never *blocked* by the record: a hash mismatch is a warning in check
+mode and a repair in sync mode. What is blocked is a false claim — and a new page
+that arrives with no check at all.
 
 Note the asymmetry, which is the point: **`--sync` can only ever lower a status,
 never raise one.** No code path anywhere in `scripts/` can move a page to
@@ -209,9 +212,73 @@ citation is there.
 python3 scripts/verify_check.py                     # check everything
 python3 scripts/verify_check.py questions/exam-5    # check a subset
 python3 scripts/verify_check.py --sync              # repair hashes/counters
-python3 scripts/verify_check.py --base origin/main  # + the append-only check
+python3 scripts/verify_check.py --base origin/main  # + the append-only and creation checks
+python3 scripts/verify_targets.py --new             # new pages still needing their check
 python3 -m unittest discover -s scripts -p 'test_*.py'
 ```
+
+## Checked at creation
+
+A page is fact checked in the change that adds it. Everything else in this
+document repairs the record or refuses a false claim; this is the one rule that
+refuses a *missing* claim, and it applies only to new pages.
+
+The reason is timing. A page is never cheaper to check than while it is being
+written: the source it was written from is open, its edition pinned, its URL in
+hand. A page that merges unchecked joins a backlog of over three thousand that
+the weekly sweep works from the top, ordered by syllabus weight and traffic — a
+new page on a lightly weighted topic could wait months, telling every reader
+*Not fact checked*, which is the one verdict a page written yesterday from an
+open PDF has no excuse for.
+
+**What counts as checked** is `creation_gap` in `scripts/verify_check.py` — one
+definition, read by the CI gate and by `verify_targets.py --new`, so the list a
+skill works from and the list CI fails on cannot disagree:
+
+- a **validation pass** (`verify_record.py pass`) in the page's log. A comment,
+  or a finding on its own, is not one: every file a check opens gets a pass that
+  records its outcome;
+- a status other than `unverified` — `verified` when the source confirmed it;
+  `in_review` when the source could not be reached, with a note naming it (P1
+  holds at creation as everywhere: being new is no licence to verify on
+  reasoning); `disputed` when the check found a conflict or a critical error;
+- **of the bytes being merged.** Each pass records the `content_hash` of what it
+  read, and a page edited after its pass needs another. The block's hash cannot
+  answer this — `--sync` refreshes it on every run, on a `disputed` page without
+  a trace, and a fix to a disputed page would otherwise merge unchecked.
+
+A new page that lands with an open **critical** finding is a warning, not an
+error: the check did its job and the finding is its record — the app keeps such
+a question out of quizzes and badges such a page *Known issue* — but fix it first
+where you can, or say in the PR why it ships.
+
+*New* means a content file the branch adds relative to its merge base, committed
+or not (untracked files count, so a skill can ask before it commits). A rename is
+not a new page, and an edit to an existing page is never held to this rule: it
+goes `stale`, and `stale` is the sweep's band 1, ahead of everything never
+checked.
+
+**How a page gets checked.** Every skill that writes content ends on the same
+step: once the page is final, `/validate --new` hands the pages the branch adds
+to the VALIDATE agent in record-only mode, with the document each was written
+from (`.claude/agents/validate.md`, "Checking a page at creation"). The agent
+runs in its own context and never sees the author's working, because the reader
+most likely to repeat a page's mistake is the one who made it; it fetches the
+source itself and builds its own outline, or its own answer, before it reads the
+page's. Its findings go back to the author, who fixes the page and runs
+`/validate --new` again; the pages and their logs ship together in one PR.
+
+| New page | Written by | Checked against |
+|---|---|---|
+| `Concepts/*.md` | `actuarial-concept-definitions` | the syllabus reading it was written from |
+| `Resources/Books/*.md` | `actuarial-concept-definitions`, `textbook-toc` | the document `resource_extract.py` read, cited by sha256 |
+| `questions/<bank>/*.md` | `soa-exam-converter`, `cas-exam-converter` | the paper converted, and an independent recomputation (P5) |
+| `Exam *.md` | by hand | the published syllabus or content outline |
+| other `Resources/` | by hand | the page's own `source_url` |
+
+The check does not replace the human review `CLAUDE.md` asks of AI-written
+content. It says a page agrees with its source; whether it teaches well is still a
+person's call.
 
 ## What a reader sees
 

@@ -136,7 +136,10 @@ before touching that area**:
   what `scripts/verify_check.py` fails a PR for. The five principles are the part to read —
   in particular P1 (an AI cannot verify by reasoning alone; a page reaches `verified` only
   against a *citable external source*, and `verify_record.py` refuses otherwise) and P4
-  (verification is bound to the file's bytes, so any edit downgrades it to `stale`). Read
+  (verification is bound to the file's bytes, so any edit downgrades it to `stale`). A page
+  is fact checked **when it is created**: CI fails a PR that adds a content file with no
+  validation pass, or one edited after its pass, and every skill that writes a page ends
+  on `/validate --new` — "Checked at creation" in that doc. Read
   before touching a `verification:` block, a log, or anything under `scripts/verify_*`.
 - `docs/pdf-question-pipeline.md` — the **PDF → question bank** pipeline behind the
   `soa-exam-converter` / `cas-exam-converter` skills: the four stages that turn an
@@ -912,7 +915,9 @@ compile — don't "clean up" the flagged code as dead.
   pages, which is why they now have frontmatter at all (`WikiArticle` already stripped it).
   Never hand-edit `content_hash`, `status`, `open_findings` or `open_critical`: they are
   derived, and `python3 scripts/verify_check.py --sync` owns them. A new content file with no
-  block is backfilled by the same command. See `docs/verification.md`.
+  block is backfilled by the same command — as `unverified`, which CI will not merge: a new
+  page is fact checked in the change that adds it (`/validate --new`, once the page is final,
+  and its `.verify/` log committed with it). See `docs/verification.md`.
 - Question files (`questions/<exam-id>/*.md`) have YAML frontmatter: `id`, `exam`, `topic`,
   `learning_objective`, `difficulty` (`easy`/`medium`/`hard`), `type`, `wiki_link` (array
   of concept paths), `answer`, `points` — followed by the question body, options, and an
@@ -961,7 +966,8 @@ compile — don't "clean up" the flagged code as dead.
   toolchain. `verify_check.py` is the CI gate (and `--sync` the repair pass);
   `verify_record.py` is the only supported way to write a finding, resolution or status —
   it dedupes findings by fingerprint and refuses to mark anything `verified` without a
-  cited source. Stdlib only, no PyYAML. Tests: `python3 -m unittest discover -s scripts`.
+  cited source. `verify_targets.py --new` lists the pages the branch adds that still owe
+  their creation check — the same test (`creation_gap`) the CI gate applies. Stdlib only, no PyYAML. Tests: `python3 -m unittest discover -s scripts`.
 - `generate_concept_figures.py` (+ `figure_kit.py`, `figure_registry.py`,
   `figures_exam_{p,fm,mas_i,mas_ii,5,6c}.py`) draws the per-concept SVGs in `Media/Figures/`
   and inserts their embeds. The figures are **generated** — edit the builder, not the SVG.
@@ -1046,7 +1052,8 @@ via `supabase secrets set`, never as `VITE_*`.
 - `.github/workflows/deploy-functions.yml` — auto-deploys edge functions to Supabase on
   push to `main` when `supabase/functions/**` changes.
 - `.github/workflows/verify-check.yml` — the VERIFY gate on every PR (fails on a false
-  verification claim or an edited log entry; repairs and commits back what is merely stale).
+  verification claim, an edited log entry, or a new page with no fact check; repairs and
+  commits back what is merely stale).
 - `.github/workflows/validate-sweep.yml` — the Monday VALIDATE sweep. Opens a PR, never
   pushes to `main`.
 

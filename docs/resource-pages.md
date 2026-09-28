@@ -281,10 +281,10 @@ pages use both `-` and `–`, and the link must match character for character.
 ## 3. The pipeline
 
 ```
-content outline ─► pin the document ─► resource_extract.py ─► write ─► covers ─► resource_lint.py ─► verify_check --sync
-  (citation,         (edition, URL)       (sha256, outline,     (model,   (generate_     (+ validate_links)   (hash; VERIFY
-   scope)                                  headings, text,       from the   resource_                           later cites the
-                                           page images)          extract)   covers.py)                          same document)
+content outline ─► pin the document ─► resource_extract.py ─► write ─► covers ─► resource_lint.py ─► verify_check --sync ─► /validate --new
+  (citation,         (edition, URL)       (sha256, outline,     (model,   (generate_     (+ validate_links)   (backfills the       (a second reader
+   scope)                                  headings, text,       from the   resource_                           block, unverified)   checks it against
+                                           page images)          extract)   covers.py)                                               the same document)
 ```
 
 1. **Pin the document.** The exam's content outline or syllabus
@@ -318,10 +318,14 @@ content outline ─► pin the document ─► resource_extract.py ─► write 
    `python3 .claude/skills/actuarial-concept-definitions/validate_links.py`.
 6. **Sync.** `python3 scripts/verify_check.py --sync` — the hash moves, and a
    previously verified page drops to `stale`, by design.
-7. **Verify** (later, separately). The VALIDATE agent (`docs/validation-agent.md`)
-   checks the page against the document named first under `## Sources` and records it,
-   with the sha256 the extraction printed, via `verify_record.py`. Writing a page and
-   verifying it are different passes.
+7. **Fact check** (same change, separate pass). `/validate --new` hands the finished
+   page to the VALIDATE agent (`docs/validation-agent.md`) with the document it was
+   written from and the sha256 the extraction printed. The agent fetches the document
+   itself, builds the outline from it before reading the page's, and records the
+   result via `verify_record.py`; its log is committed with the page, and CI fails a
+   new page without one (`docs/verification.md`, "Checked at creation"). Writing a
+   page and verifying it are still different passes — by different readers — but not
+   different weeks: the document is never easier to reach than while it is open.
 
 Step 2 is the one that was missing, and it is what makes step 3 honest: a model that
 writes from `outline.md` and `text/p012.txt` is transcribing; a model that writes from

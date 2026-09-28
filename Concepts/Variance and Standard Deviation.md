@@ -1,14 +1,15 @@
 ---
 verification:
   status: verified
-  confidence: medium
+  confidence: high
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:5817235ddf93a829906b5d682c3532e0cf0e8f86fa4108389416df5383abde43
+  content_hash: sha256:8ff7b2dcb60b4da7da5bf99fe723c0a63095963dd80da39cbe5343bc56c0785e
   sources:
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), sec. 6.2 definitions, Thm 6.6-6.8, Exercise 6.2.23, Exercise 6.3.17, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), pooling section (CV = SD/mean; sqrt(n) sigma less than n sigma) and benefit-limit section (premium based primarily on expected claim payments), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
-  open_findings: 1
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Theorems 6.6-6.8, Exercise 6.2.23, Exercise 6.3.17, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com, HTML fetched 2026-09-27), §5.3.1 Covariance and Correlation (independent implies Cov = 0, converse not necessarily true; uncorrelated implies Var(X+Y) = Var(X) + Var(Y)), sha256:b6bc17d7f786f7ac8d2836f42d6524c99e8909254d473f1edef7909f1da9620e — https://www.probabilitycourse.com/chapter5/5_3_1_covariance_correlation.php"
+    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), pooling section (SD of the sum of n independent policies sqrt(n) sigma, less than n sigma; CV = SD/mean) (PDF pp.4-5), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Variance and Standard Deviation.md
 ---

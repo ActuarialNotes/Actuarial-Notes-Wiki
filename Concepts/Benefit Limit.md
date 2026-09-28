@@ -20,8 +20,10 @@ A **Benefit Limit** ($u$) is the maximum amount an insurer will pay on a single 
 >
 > $$\text{where } u = \text{maximum benefit (benefit limit)}$$
 
-- The benefit limit is the insurer's counterpart to the [[Deductible]]: the deductible removes small losses, while the limit removes large ones
-- Losses above $d + u/\alpha$ (for coinsurance $\alpha$) result in the insurer paying exactly $u$ and the insured bearing the remainder
+- The formula caps the insurer's **payment**: the deductible comes off first, coinsurance $\alpha$ applies to the rest, and $u$ caps the result. That matches P-21-05's definition (a benefit limit sets an upper bound on how much the insurer will pay for any loss) and the way SOA's sample questions apply a limit to the benefit itself
+- A policy can instead cap the **covered loss** and apply coinsurance after the cap. P-21-05's health policy pays costs up to $5{,}000$ and reimburses $80\%$ of them, so costs of $6{,}000$ are reimbursed $0.80 \times \min(6{,}000,\ 5{,}000) = 4{,}000$, where the payment-cap formula would give $\min(4{,}800,\ 5{,}000) = 4{,}800$. The policy wording decides the order (see [[Payment Random Variable]]); with no coinsurance the two agree
+- The benefit limit is the insurer's counterpart to the [[Deductible]]: the deductible takes the first part of each loss off the insurer, while the limit caps what it pays on a large one
+- Under the payment cap, losses above $d + u/\alpha$ result in the insurer paying exactly $u$ and the insured bearing the remainder
 
 ![[Media/Figures/Benefit_Limit.svg|340]]
 

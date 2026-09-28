@@ -143,3 +143,37 @@ created: 2026-09-28
 - confidence: high
 - checks_run: Re-verified after resolving F-001, F-002, F-003, F-004, F-005: smallest m with F(m) >= 0.5 vs SOA solutions 137 and 181; continuous F(m) = 0.5 vs G&S Ch. 5 Ex. 22 and SOA solution 61; normal median = mean and mean pulled toward the heavier tail vs NIST 1.3.5.1; exponential median theta ln 2 from Tables VaR_p; lognormal median e^mu from F = Phi(z); deductible payment median max(m - d, 0) vs SOA solution 181; sample median vs NIST 1.3.5.1. Examples recomputed: 1 - sqrt(0.5) = 0.29289, mean 1/3, mode 0; F(0) = 0.35, F(1) = 0.60, median 1, mean 1.25; 5000 ln 2 = 3465.74, F(1000) = 0.1813, m_Y = 2465.74, E[Y] = 5000 e^-0.2 = 4093.65 (all agree). Links resolve; LaTeX well formed.
 - sources_checked: SOA Exam P Sample Solutions (Aug 2026 rev.), Q61 (PDF p.21), Q137 (PDF p.40), Q181 (PDF p.54), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Ch. 5 Exercise 22 (median m with F(m) = 1/2), Theorem 6.2, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; SOA, Tables for Exam C (Fall 2009; Loss Models 3rd ed. Appendices A-B excerpts), Exponential A.3.3.1 (F(x), VaR_p = -theta ln(1-p)) and Lognormal A.5.1.1 (F(x) = Phi(z)) (PDF p.11), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf; NIST/SEMATECH e-Handbook of Statistical Methods, sec. 1.3.5.1 Measures of Location (fetched 2026-09-27), sha256:0a089979887b22d95c06e33973825f6222d73b60f1cde964df479a13bbd7d1d3 — https://www.itl.nist.gov/div898/handbook/eda/section3/eda351.htm; SOA Probability Exam syllabus, November 2026, Topic 2 (univariate random variables) learning outcomes c), d), e) (PDF p.3), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf
+
+## [F-006] Undefined g left in the deductible bullet
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- severity: nit
+- status: open
+- locus: bullet 4 (Deductibles pass straight through), line 28
+- claim: The mean has no such property: E[g(X)] != g(E[X]) in general.
+- evidence: After this run restricted the bullet to the deductible payment, g is no longer defined anywhere in the bullet. The intended statement is the one the page example demonstrates: for an exponential loss with mean 5000 and d = 1000, E[(X - d)+] = 5000 e^-0.2 = 4093.65, not 5000 - 1000 = 4000.
+- source_rank: 3
+- proposed_action: Write the mean statement in terms of the payment: E[(X - d)+] != E[X] - d in general.
+- applied: true
+- fingerprint: a543a3e63e7e
+
+## [F-006/R] Mean statement written for the payment
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-006
+- status: resolved
+- note: Sentence now reads: The mean has no such property: E[(X - d)+] != E[X] - d in general, matching the worked example (4093.65 against 4000).
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- status_set: verified
+- confidence: high
+- checks_run: Re-verified after resolving F-006 (and F-001 to F-005 earlier this run): smallest m with F(m) >= 0.5 vs SOA solutions 137 and 181; continuous F(m) = 0.5 vs G&S Ch. 5 Ex. 22 and SOA solution 61; normal median = mean, mean pulled toward the heavier tail vs NIST 1.3.5.1; exponential median theta ln 2 from Tables VaR_p; lognormal median e^mu from F = Phi(z); deductible payment median max(m - d, 0) vs SOA solution 181; E[(X-d)+] != E[X] - d shown by the example; sample median vs NIST 1.3.5.1. Examples recomputed: 1 - sqrt(0.5) = 0.29289, mean 1/3, mode 0; F(0) = 0.35, F(1) = 0.60, median 1, mean 1.25; 5000 ln 2 = 3465.74, F(1000) = 0.1813, m_Y = 2465.74, E[Y] = 5000 e^-0.2 = 4093.65 (all agree). Links resolve; LaTeX well formed.
+- sources_checked: SOA Exam P Sample Solutions (Aug 2026 rev.), Q61 (PDF p.21), Q137 (PDF p.40), Q181 (PDF p.54), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Ch. 5 Exercise 22 (median m with F(m) = 1/2), Theorem 6.2, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; SOA, Tables for Exam C (Fall 2009; Loss Models 3rd ed. Appendices A-B excerpts), Exponential A.3.3.1 (F(x), VaR_p = -theta ln(1-p)) and Lognormal A.5.1.1 (F(x) = Phi(z)) (PDF p.11), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf; NIST/SEMATECH e-Handbook of Statistical Methods, sec. 1.3.5.1 Measures of Location (fetched 2026-09-27), sha256:0a089979887b22d95c06e33973825f6222d73b60f1cde964df479a13bbd7d1d3 — https://www.itl.nist.gov/div898/handbook/eda/section3/eda351.htm; SOA Probability Exam syllabus, November 2026, Topic 2 (univariate random variables) learning outcomes c), d), e) (PDF p.3), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf

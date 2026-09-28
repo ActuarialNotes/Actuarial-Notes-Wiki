@@ -17,13 +17,9 @@ verification:
 
 > $$\text{SD}\!\left(\frac{S_n}{n}\right) = \frac{\sigma}{\sqrt{n}}$$
 
-> $$\text{Assets} = \text{Liabilities} + \text{Capital}$$
-
-- **Pooling.** For $n$ independent policies, each with loss standard deviation $\sigma$, the standard deviation of the average loss per policy falls as $\sigma/\sqrt{n}$ ([[Law of Large Numbers]]). Correlated losses (a [[Catastrophe Loss|catastrophe]], an inflation shock) don't diversify away like that. The capital has to absorb what remains across the [[Insurance Portfolio|portfolio]].
-- **Why capital is costly (Exam 9).** Capital held inside an insurer carries frictional costs: investment income on it is taxed twice, and it also bears agency costs and the costs of financial distress and regulation. Those [[Insurance Market Imperfections|market imperfections]] give capital a [[Cost of Capital|cost]], and that cost is why premiums include a [[Risk Loads|risk load]]. They are also why the [[Capital Structure|capital structure]] (equity, debt, [[Reinsurance|reinsurance]]) matters to policyholders, who are the insurer's largest creditors.
-- **Forms.** An insurer can be a stock company, a mutual (owned by its policyholders), a reciprocal exchange, a Lloyd's syndicate, a captive, or, in the US, a [[Risk Retention Groups|risk retention group]]. A [[Self-Insured Retention|self-insured]] entity keeps its risk without being an insurer. Exam 5 reserving methods estimate its [[Unpaid Claims|unpaid claims]] the same way, but from thinner data and for different users.
-- **Canada (Exam 6C).** Federally incorporated insurers and the Canadian branches of foreign insurers are supervised for solvency by [[OSFI]] under the [[Insurance Companies Act]], and P&C companies are held to the [[MCT]]. Insurers incorporated in a province are supervised by that province. Every insurer also needs a licence in each province where it writes, and market conduct is provincial ([[Federal-Provincial Jurisdiction]]). [[PACICC]] protects policyholders if a P&C insurer fails, and financial reporting follows [[IFRS 17]].
-- **United States (Exam 6U).** Insurance is regulated by the states. The state of domicile leads solvency oversight, and an insurer must be admitted in each state where it writes, apart from [[Excess and Surplus Lines|surplus lines]] business placed with non-admitted insurers. The [[NAIC Annual Statement]] is prepared on [[Statutory Accounting Principles|SAP]]. Regulators judge [[Financial Health|financial health]] through [[Risk-Based Capital|RBC]], [[IRIS Ratios]], the actuarial opinion and [[Schedule F]]. For federal income tax, loss reserves are deducted on a discounted basis ([[Loss Reserve Discounting]], [[Insurance Income Tax]]).
+- **Pooling.** For $n$ independent policies, each with loss standard deviation $\sigma$, the standard deviation of the average loss per policy falls as $\sigma/\sqrt{n}$ ([[Law of Large Numbers]]), and the pool's coefficient of variation tends to zero as $n$ grows. That needs the losses to be reasonably independent: one policyholder's loss should not have a major effect on whether others have one, which is why an insurer would not insure every store in one area against fire. Losses that move together, such as a [[Catastrophe Loss|catastrophe]], don't diversify away, and capital has to absorb what remains across the [[Insurance Portfolio|portfolio]].
+- **Self-insurance.** Friedland's basic techniques for estimating [[Unpaid Claims|unpaid claims]] are written for any risk bearer: insurance companies, and [[Self-Insured Retention|self-insurers]] such as funded self-insured programs, captive insurers and pooling associations.
+- **Canada (Exam 6C).** The [[Insurance Companies Act]] requires federally regulated P&C companies to maintain adequate capital, and foreign P&C companies operating in Canada on a branch basis to maintain an adequate margin of assets in Canada over liabilities in Canada. [[OSFI]]'s [[MCT]] guideline is the framework within which the Superintendent assesses that capital (for branches, through its Branch Adequacy of Assets Test). The MCT ratio is capital available divided by minimum capital required, which is the capital required at the target level divided by $1.5$. Insurers must hold at least $100\%$, and OSFI's $150\%$ [[Supervisory Target Capital Ratio|supervisory target]] is a cushion above that minimum that facilitates early intervention.
 
 > [!example]- Pooling and Capital per Policy {Example}
 > An insurer writes $n$ independent homeowners policies. Each has an expected annual loss of $\$800$ and a standard deviation of $\$4{,}000$. It charges expected loss and holds capital large enough that losses are covered with probability $99.5\%$ ($z = 2.576$, normal approximation).
@@ -47,12 +43,12 @@ verification:
 > > \end{align*}
 > > $$
 > >
-> > A book 100 times larger needs one tenth the capital per policy. That only works because the risks are independent. If the homes share a hurricane exposure, the covariance terms don't shrink (see [[Insurance Portfolio]]).
+> > A book 100 times larger needs one tenth the capital per policy. That only works because the risks are independent. Homes that share a hurricane exposure fail that condition, and this calculation no longer applies (see [[Insurance Portfolio]]).
 
 > [!example]- A Reserve Deficiency Hits Capital {Example}
-> An insurer has assets of $\$1{,}200$M, claim liabilities of $\$700$M and other liabilities of $\$200$M. A review finds the claim liabilities are $10\%$ deficient. It is a Canadian P&C company with capital required under the MCT of $\$150$M, and you may treat its capital available as equal to its capital.
+> An insurer has assets of $\$1{,}200$M, claim liabilities of $\$700$M and other liabilities of $\$200$M. A review finds the claim liabilities are $10\%$ deficient. It is a Canadian P&C company whose minimum capital required under the MCT is $\$150$M, and you may treat its capital available as its assets less its liabilities.
 >
-> Ignoring tax and any change in capital required, what happens to its capital and its MCT ratio?
+> Ignoring tax and any change in minimum capital required, what happens to its capital and its MCT ratio?
 >
 > > [!answer]-
 > > $$
@@ -74,4 +70,4 @@ verification:
 > > \end{align*}
 > > $$
 > >
-> > A $10\%$ reserve error took out $23\%$ of capital, because reserves are $2.33$ times capital. The ratio now sits just above OSFI's $150\%$ [[Supervisory Target Capital Ratio|supervisory target]]. Reserve adequacy dominates any assessment of an insurer's financial health for this reason, in the MCT and in RBC and Schedule P alike.
+> > A $10\%$ reserve error took out $23\%$ of capital, because reserves are $2.33$ times capital. The ratio is still above the $100\%$ minimum, but it now sits just above OSFI's $150\%$ [[Supervisory Target Capital Ratio|supervisory target]], the cushion OSFI keeps for early intervention.

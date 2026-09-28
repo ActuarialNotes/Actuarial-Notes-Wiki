@@ -4,7 +4,7 @@ verification:
   confidence: high
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:279dfe92adcf264b1029fe49da2ff40059f1aeffef4a52617ca75ea9aa388238
+  content_hash: sha256:94839e372dc6dacad146a159b74c74f5fab260e709906e0347477be36e44ec92
   sources:
     - "SOA Exam P Sample Solutions (Aug 2026 rev.), Q61 (PDF p.21), Q137 (PDF p.40), Q181 (PDF p.54), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
     - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Ch. 5 Exercise 22 (median m with F(m) = 1/2), Theorem 6.2, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
@@ -25,7 +25,7 @@ The **Median** $m$ of a [[Random Variable]] $X$ is its 50th [[Percentile|percent
 - For a [[Continuous Random Variable|continuous]] $X$ with a strictly increasing [[Cumulative Distribution Function (CDF)|CDF]] the median is unique: solve $F(m) = 0.5$, or equivalently $\int_{-\infty}^{m} f(x)\,dx = 0.5$.
 - For a [[Discrete Random Variable|discrete]] $X$ the CDF usually jumps past 0.5 rather than landing on it, so $F(m) = 0.5$ has no solution; the median is then the smallest $m$ with $F(m) \ge 0.5$ — the same rule as for every other [[Percentile]].
 - **Median versus mean.** For a [[Normal Distribution|normal]] distribution the median equals the [[Expected Value|mean]]; for a skewed one they differ, the mean pulled toward the heavier tail. Claim severities are right-skewed — a few large claims pull the mean up but leave the median alone — so typically [[Mode|mode]] < median < mean. For the [[Exponential Distribution|exponential]], $m = \theta \ln 2 \approx 0.693\theta$ against a mean of $\theta$; for the [[Lognormal Distribution|lognormal]], $m = e^{\mu}$ against $e^{\mu + \sigma^2/2}$.
-- **Deductibles pass straight through.** The payment $(X - d)_+$ is a continuous, non-decreasing function of the loss, so its median is the loss median less the deductible, floored at zero: $\max(m - d,\ 0)$. The same holds for every percentile. The mean has no such property: $E[g(X)] \ne g(E[X])$ in general.
+- **Deductibles pass straight through.** The payment $(X - d)_+$ is a continuous, non-decreasing function of the loss, so its median is the loss median less the deductible, floored at zero: $\max(m - d,\ 0)$. The same holds for every percentile. The mean has no such property: $E[(X - d)_+] \ne E[X] - d$ in general.
 - The **sample median** is the middle [[Order Statistics|order statistic]], or the average of the two middle values when $n$ is even.
 
 > [!example]- Median Fire Damage Ratio {Example}

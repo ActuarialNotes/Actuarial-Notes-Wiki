@@ -17,10 +17,14 @@ verification:
 
 The **Payment Random Variable** ($Y$) is the amount the insurer actually pays on a claim, derived from the [[Loss Random Variable]] $X$ after applying all policy provisions — [[Deductible]], [[Coinsurance Percentage|coinsurance]], and [[Benefit Limit|benefit limit]].
 
-> $$Y = \alpha\,\min\!\bigl((X-d)_+,\; u\bigr)$$
+> $$Y = \alpha\,\min\!\bigl((X-d)_+,\; u\bigr) \quad \text{(limit on the covered amount)}$$
 >
 > $$\text{where } d = \text{deductible},\; u = \text{benefit limit},\; \alpha = \text{coinsurance}$$
 
+> $$Y = \min\!\bigl(\alpha\,(X-d)_+,\; u\bigr) \quad \text{(limit on the payment)}$$
+
+- **The order of limit and coinsurance matters.** The first form applies the deductible, caps the amount above it at $u$ and then pays the share $\alpha$, so the most the insurer pays is $\alpha u$. That is the order of P-21-05's health policy, which pays costs up to $5{,}000$ and reimburses $80\%$ of them: $4{,}000$ on costs of $6{,}000$, which is $80\%$ of the lesser of $5{,}000$ and the cost
+- When the [[Benefit Limit|benefit limit]] caps the insurer's payment instead (P-21-05 defines a benefit limit as an upper bound on how much the insurer will pay for any loss, and SOA's sample questions apply limits to the benefit itself), the second form holds and the most the insurer pays is $u$. The policy wording decides which applies; with no coinsurance the two agree
 - $Y$ has a mixed distribution: a probability mass at $Y = 0$ (when $X \leq d$) and a continuous or discrete component for positive payments
 - Its mean and variance differ from those of $X$ due to the truncation and censoring imposed by the policy
 
@@ -35,3 +39,5 @@ The **Payment Random Variable** ($Y$) is the amount the insurer actually pays on
 > > Step 3 — Apply coinsurance:
 > > $$Y = 0.75 \times 900 = 675$$
 > > The insurer pays \$675. The insured absorbs \$200 (deductible) + \$400 (excess above limit) = \$600, and co-pays $0.25 \times 900 = \$225$, totaling \$825.
+>
+> > If the \$900 limit capped the payment instead, $Y = \min(0.75 \times 1{,}300,\ 900) = \min(975,\ 900) = 900$.

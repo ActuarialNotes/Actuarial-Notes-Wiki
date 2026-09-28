@@ -21,10 +21,9 @@ verification:
 > $$Y = \min\!\big(c\,(X - d)^+,\ u\big)$$
 
 - $X$ is the ground-up [[Loss Random Variable|loss]], $Y$ the insurer's [[Payment|payment]], and $X - Y$ the amount the policyholder retains. $d$ is the [[Deductible|deductible]], $c$ the insurer's [[Coinsurance Percentage|coinsurance percentage]] and $u$ the [[Benefit Limit|benefit limit]] (the maximum payment). Check the [[Policy Information|policy information]] for the order in which the terms apply. With coinsurance, capping the loss at $u$ and capping the payment at $u$ give different answers.
-- The policyholder retains three things: the deductible, its coinsurance share $(1-c)(X-d)$, and anything above the limit. Deductibles and coinsurance are there to keep that share meaningful. They remove the cost of handling small claims and curb [[Moral Hazard|moral hazard]].
+- The policyholder retains three things: the deductible, its coinsurance share $(1-c)(X-d)$, and anything above the limit. P-21-05 gives the reasons for a deductible: it saves the expense of processing small claims, lowers the premium, and gives the policyholder an economic incentive to prevent losses ([[Moral Hazard|moral hazard]]).
 - **Inflation is leveraged.** With a fixed $d$, the deductible part of the policyholder's share doesn't grow with the loss, so the insurer's payment grows faster than the loss does. Once the limit binds, the policyholder absorbs all further growth ([[Inflation]]).
-- **Policyholder, insured and claimant can be different people.** A parent's auto policy covers a child who drives it. A liability claim is brought by a third party and paid on the policyholder's behalf. A life policy's owner, insured life and beneficiary can be three separate people.
-- In a mutual insurer the policyholders are also the owners. In any insurer they are the largest creditors, and protecting them is the purpose of [[Solvency Regulation|solvency regulation]].
+- **Policyholder, beneficiary and claimant can be different people.** The insurer pays the policyholder *or a designated beneficiary*, and a claimant can be the insured or a third party alleging injuries or damages that the policy covers, so a liability claim is paid to someone other than the policyholder.
 
 > [!example]- Splitting Two Losses Before and After Inflation {Example}
 > A policy has a $\$500$ deductible, $80\%$ coinsurance and a maximum payment of $\$8{,}000$. This year the policyholder has losses of $\$6{,}000$ and $\$12{,}000$. Next year every loss is $10\%$ larger.

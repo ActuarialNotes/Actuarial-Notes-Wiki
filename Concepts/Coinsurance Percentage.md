@@ -16,7 +16,11 @@ verification:
   log: .verify/Concepts/Coinsurance Percentage.md
 ---
 
-A **Coinsurance Percentage** ($\alpha$) is the fraction of the covered loss (after any deductible) that the insurer agrees to pay, with the insured retaining the remaining fraction $1 - \alpha$.
+A **Coinsurance Percentage** means different things on the SOA and CAS exams, and the two are not interchangeable:
+- **Exam P ($\alpha$):** the fraction of the covered loss (after any deductible) that the insurer agrees to pay, with the insured retaining the remaining fraction $1 - \alpha$
+- **Exam 5 ($c$):** the *required* insurance-to-value percentage in a property [[Coinsurance Rating|coinsurance clause]]. The insured must carry insurance of at least $cV$, e.g. $80\%$ of the property's value $V$, or the payment on a covered loss is reduced in proportion to the underinsurance. It is not the insurer's share of each loss
+
+In the Exam P sense:
 
 > $$Y = \alpha \cdot (X - d)_+$$
 >
@@ -24,6 +28,14 @@ A **Coinsurance Percentage** ($\alpha$) is the fraction of the covered loss (aft
 
 - When $\alpha = 1$ the insurer covers 100% of the excess; lower values mean the insured co-pays a portion
 - It scales the expected payment by $\alpha$ and the variance by $\alpha^2$
+
+In the Exam 5 sense (Werner & Modlin):
+
+> $$a = \min\!\left(\frac{F}{cV},\ 1.0\right)$$
+
+> $$I = L \times \frac{F}{cV}, \quad \text{where } I \le F \text{ and } I \le L$$
+
+- $F$ is the face value of the policy, $V$ the value of the property, $L$ the loss after deductible, $a$ the apportionment ratio and $I$ the indemnity. A home worth $\$500{,}000$ insured for $\$300{,}000$ under an $80\%$ requirement has $cV = \$400{,}000$ and $a = 0.75$, so a $\$200{,}000$ loss is paid $\$150{,}000$
 
 ![[Media/Figures/Coinsurance_Percentage.svg|340]]
 

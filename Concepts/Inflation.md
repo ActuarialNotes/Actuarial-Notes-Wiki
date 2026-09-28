@@ -16,17 +16,19 @@ verification:
   log: .verify/Concepts/Inflation.md
 ---
 
-**Inflation** in an insurance context is growth in the underlying loss random variable over time, $X' = (1+r)X$. Because policy provisions — deductibles, limits, retentions — are stated in **fixed dollars**, inflation does not scale the insurer's cost proportionally: it is **leveraged**, raising the insurer's payment by more than $r$.
+**Inflation** in an insurance context is growth in the underlying loss random variable over time, $X' = (1+r)X$. Many deductibles and benefit limits are stated in **fixed dollars** that do not rise with inflation, so inflation does not scale the insurer's cost proportionally. A fixed deductible **leverages** it, raising the insurer's expected payment by more than $r$; a fixed limit **damps** it, raising the capped payment by less than $r$.
 
 > $$X' = (1 + r)\,X$$
 
 > $$E[(X' - d)_+] = (1+r)\,E\!\left[\left(X - \tfrac{d}{1+r}\right)_+\right]$$
 
 - The second identity is the whole mechanism: inflating losses against a fixed deductible $d$ is equivalent to holding losses fixed and **lowering the deductible** to $d/(1+r)$. A lower deductible means more claims pierce it and each pierces it by more.
-- The leverage runs the other way in an **excess layer**: a fixed limit caps the insurer's payment, so a ground-up inflation of $r$ produces less than $r$ growth for the primary insurer and more than $r$ for the excess or reinsurance layer. This is why excess and reinsurance rates move so violently with modest changes in ground-up severity.
-- In **ratemaking** inflation is the main driver of [[Loss Trend|severity trend]], and its leveraged effect is why a $5\%$ economic trend can produce an $8\%$ trend in the insurer's costs on a book with fixed deductibles.
-- In **reserving** inflation is a **calendar year** effect: a shift in the inflationary or legal environment raises payments and case reserves on *every open accident year at once*, appearing as an elevated diagonal in the triangle rather than a change in one row. Accident-year development factors, which are estimated down columns, do not anticipate it.
-- **Social inflation** — rising jury awards, litigation funding, broadened liability theories — behaves the same way in the triangle and is the reason long-tail reserve estimates can prove inadequate across an entire book simultaneously.
+- P-21-05's car policy shows both. At $10\%$ inflation a year, expected losses rise $46\%$ from year 1 to year 5. Under a fixed $500$ deductible, expected claim payments rise $54\%$ ($650$ to $998$); add a fixed maximum claim payment of $12{,}500$ and they rise only $34\%$ ($610$ to $819$).
+- The losses **above** a fixed limit take the leverage instead. With a constant positive trend in total losses, basic limits trend $\le$ total limits trend $\le$ increased limits trend (Werner & Modlin), and their example dampens a $10\%$ total-limits severity trend to $3.5\%$ in basic-limits losses. Deductibles have the same leveraging effect, with the censoring below the deductible rather than above the limit.
+- In **ratemaking**, monetary inflation is one of the factors that drive [[Loss Trend|loss trends]], alongside rising medical costs and advances in safety technology, and historical losses are trended to the cost level of the period the rates will cover.
+- In **reserving**, an increase in the inflation rate is one of the changes in the economic environment that can alter claims experience. For an insurer in a stable environment, average claim values should rise down each column of a triangle only at the relevant inflation rate, so averages rising faster are a warning sign. Development techniques assume that past development patterns will account for inflationary forces; frequency-severity techniques reflect inflation explicitly instead, at the price of being highly sensitive to the inflation assumption.
+- **Social inflation** is a significant rise in the propensity for lawsuits and the size of jury awards. Like general inflation, it has a disproportionate impact on increased-limits losses.
+- On **Exam FM** the word belongs to interest theory instead: the syllabus lists *inflation and real rate of interest* together among the terms to define (see [[Real Rate of Interest]]).
 
 ![[Media/Figures/Inflation.svg|340]]
 
@@ -43,10 +45,10 @@ verification:
 > > &= 606.5 \\[6pt]
 > > E[(X' - 500)_+] &= 1100\,e^{-500/1100} \\
 > > &= 1100\,e^{-0.4545} \\
-> > &= 698.1
+> > &= 698.2
 > > \end{align*}$$
 > >
-> > $$\frac{698.1}{606.5} - 1 = +15.1\%$$
+> > $$\frac{698.2}{606.5} - 1 = +15.1\%$$
 > >
 > > Ground-up losses rose $10\%$; the insurer's expected payment rose $15.1\%$. The deductible has effectively fallen to $500/1.1 = \$454.55$ in real terms, and the insurer picks up both the extra severity and the claims that newly exceed the threshold.
 
@@ -65,11 +67,17 @@ verification:
 > Diagnose and respond.
 >
 > > [!answer]-
-> > Every factor on the latest diagonal exceeds its column history, and the excess grows with maturity — $+11\%$ at $12$–$24$ but $+7$ points at $48$–$60$ where development had been nearly complete. Combined with the severity jump, this is an **inflation shock**, not a change in the reporting pattern.
+> > Every factor on the latest diagonal exceeds its column average: $1.58$ against $1.42$, $1.28$ against $1.18$, $1.16$ against $1.09$ and $1.11$ against $1.04$. Measured against the development each column expects, the excess grows with maturity:
 > >
-> > The distinction matters for the response:
+> > $$
+> > \begin{align*}
+> > \text{12--24:} \quad \frac{0.58 - 0.42}{0.42} &= 38\% \\
+> > \text{24--36:} \quad \frac{0.28 - 0.18}{0.18} &= 56\% \\
+> > \text{36--48:} \quad \frac{0.16 - 0.09}{0.09} &= 78\% \\
+> > \text{48--60:} \quad \frac{0.11 - 0.04}{0.04} &= 175\%
+> > \end{align*}
+> > $$
 > >
-> > - Selecting factors that average the elevated diagonal into the history would **spread a one-time level shift across all future development**, over-stating young years and under-stating old ones.
-> > - Excluding the diagonal understates the reserves, because the higher payments are real and on the books.
+> > Each diagonal of the triangle is one valuation date, so a rise along the latest diagonal, rather than down one accident-year row, points to something that happened during $2024$ itself. Paid severity on closed claims rose too ($14\%$ against a $6\%$ trend), so the payments themselves went up, not only the case reserves: the pattern of an inflation shift.
 > >
-> > The standard treatment is to recognize the shift explicitly: estimate the level change (here roughly $8\%$ above trend), apply it to the *unpaid* portion of every open accident year, and select development factors from the pre-shock history. Where the shock is expected to persist, the severity [[Loss Trend|trend]] used for both reserving and pricing must also be re-selected — an inflation shock that changes the run rate is a pricing event as much as a reserving one.
+> > Development factors averaged from the history assume that past development patterns will account for inflationary forces, and this diagonal says they no longer do. A frequency-severity method reflects inflation explicitly instead, but its estimate is highly sensitive to the inflation assumption, so test the rate selected. If the higher inflation is expected to persist, the severity [[Loss Trend|trend]] used in pricing needs re-selecting as well.

@@ -22,16 +22,18 @@ The **Limited Expected Value** (LEV) of a random variable $X$ at limit $u$ is th
 > $$E[X \wedge u] = E[X] - E[\max(X - u, 0)] = E[X] - e(u)\cdot[1-F(u)]$$
 
 - Also written $E[\min(X, u)]$; the **limited loss variable** is $Y = \min(X, u)$
+- $e(u)$ is the mean excess loss at $u$: $e(u) = \dfrac{E[X] - E[X \wedge u]}{1 - F(u)}$
 - As $u \to \infty$, $E[X \wedge u] \to E[X]$
-- $E[X \wedge u]$ is a non-decreasing, concave function of $u$
 - Used to price **policy limits** and **excess-of-loss reinsurance**: the insurer pays $E[X \wedge u]$ and the reinsurer pays $E[X] - E[X \wedge u]$
+- Exam 5 (Werner & Modlin) writes the limit as $H$ and calls $E[X \wedge H]$ the **limited average severity** $\text{LAS}(H)$. Under its simplifying assumptions, the increased limit factor for limit $H$ over basic limit $B$ is $\text{ILF}(H) = \text{LAS}(H)/\text{LAS}(B)$ (see [[Increased Limits]])
 
 **Common formulas:**
 
 | Distribution | $E[X \wedge u]$ |
 | :--- | :--- |
 | Exponential$(\theta)$ | $\theta(1 - e^{-u/\theta})$ |
-| Pareto$(\alpha, \theta)$ | $\dfrac{\theta}{\alpha-1}\!\left[1 - \left(\dfrac{\theta}{\theta+u}\right)^{\alpha-1}\right]$ |
+| Pareto$(\alpha, \theta)$, $\alpha \neq 1$ | $\dfrac{\theta}{\alpha-1}\!\left[1 - \left(\dfrac{\theta}{\theta+u}\right)^{\alpha-1}\right]$ |
+| Pareto$(\alpha = 1, \theta)$ | $-\theta \ln\!\left(\dfrac{\theta}{\theta+u}\right)$ |
 
 ![[Media/Figures/Limited_Expected_Value.svg|340]]
 

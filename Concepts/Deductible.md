@@ -15,11 +15,9 @@ verification:
 ---
 
 A **Deductible** is the initial amount of a loss that the policyholder must pay before insurance coverage begins.
-- If the loss $X$ is less than or equal to the deductible $d$, the insurer pays nothing
-- There are two types of deductibles:
-  - An **ordinary deductible** eliminates small claims entirely
-  - A **franchise deductible** pays the full loss $X$ once it exceeds $d$
-- Deductibles reduce moral hazard and lower premiums by transferring some risk back to the insured
+- If the loss $X$ is less than or equal to the deductible $d$, the insurer pays nothing; above $d$ it pays the excess $X - d$
+- Deductibles save the expense of processing small claims, lower the premium, and give the policyholder an economic incentive to prevent losses
+- On Exam 5, a deductible is stated either as a flat dollar amount or as a percentage of the coverage amount: a 5% deductible on a home insured for \$500,000 is equivalent to a flat \$25,000 deductible
 
 > $$Y = (X - d)_+$$
 

@@ -10,15 +10,14 @@ ISBN: "978-0-13-518939-9"
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-09-27
+  last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:17d742d58e386d6549cb00a9de2df051398a5fc7a73b2fb93c1daef4535be0bd
+  content_hash: sha256:61c3df7645e379287af8aab80607b0779a519abdd5ee85e5a0fa8efcd46e3e85
   sources:
     - "Hogg, Tanis and Zimmerman, Probability and Statistical Inference, Tenth Edition (Pearson, 2020), publisher front matter PDF pp. i-x: title page p. i, copyright page p. ii, Contents pp. iii-iv, Preface pp. v-vii, Prologue pp. ix-x; sha256:5d8ccb44060dfb22382c31629d59432464788b62355437a33eba820c7aba4568, https://www.pearsonhighered.com/assets/preface/0/1/3/5/013518939X.pdf"
-    - "SOA Probability Exam syllabus, November 2026, REFERENCES pp. 5-6 (read from the page images), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "SOA Probability Exam syllabus, November 2026 (7 pp.), REFERENCES p.6, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
     - "Pearson product page, Probability and Statistical Inference 10th ed., Table of contents (fetched 2026-09-27, sha256:28bdf23a08d2b70242925f20998e962897a600aa544babcc8fa9b882130f3392), https://www.pearson.com/en-us/subject-catalog/p/probability-and-statistical-inference/P200000006212"
-    - "Open Library edition record ISBN 9780135189399 (title, publisher Pearson; sha256:aca8e31a0f6560079d51b55c6b5ea26547411d1130767394bb967979b2bb6e7f), https://openlibrary.org/isbn/9780135189399.json"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Probability and Statistical Inference (Hogg - 2020).md
 ---

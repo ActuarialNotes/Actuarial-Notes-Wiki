@@ -43,3 +43,31 @@ created: 2026-09-27
 - proposed_action: Cite the November 2026 syllabus.
 - applied: true
 - fingerprint: 628b25c515d6
+
+## [F-002/R] Citation moved to the November 2026 syllabus
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-002
+- status: resolved
+- note: Sources now cites the SOA Exam P Syllabus, November 2026 (p.6: same citation and chapter list as the callout).
+
+## [F-001/R] Filename kept; the exam page link carries the 2015 citation instead
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-001
+- status: wontfix
+- note: Not renamed: the filename keys this page append-only .verify log (and the log path in its verification block) and is the target of every inbound link, so a rename fails scripts/verify_check.py. Instead the Exam P-1 (SOA) Source Material link now carries the alias Probability and Statistics with Applications: A Problem-Solving Text (Asimow & Maxwell, Second Edition, 2015) - the syllabus p.6 citation - which quiz/src/lib/sourceMaterial.ts shows as the card label. The frontmatter already gives Year 2015, 2nd edition, ISBN 978-1-62542-472-3.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- status_set: verified
+- confidence: medium
+- checks_run: Re-verified after F-001 (wontfix) and F-002: Sources syllabus line now names the November 2026 syllabus, whose p.6 citation and chapter list match the callout word for word; outline, frontmatter and lead unchanged since the 2026-09-27 pass; resource_lint
+- sources_checked: Asimow and Maxwell, Probability and Statistics with Applications: A Problem Solving Text, 2nd ed. (ACTEX Learning, 2015) - publisher sample: title page p.2, copyright/CIP page p.3, prefaces pp.iii-v, printed contents pp.vii-xiii (sha256:35ab158018e8e8999b6311506f5c38ed3519bcca1d32ac9bf0eca82888eebcad) https://www.actexlearning.com/samples/ProbStats%20Sample.pdf; ACTEX Learning product page, Probability and Statistics with Applications 2nd Edition - ISBN list (Printed 978-1-62542-472-3) https://www.actexlearning.com/exams/p/probability-and-statistics-with-applications; SOA Probability Exam syllabus, November 2026 (7 pp.), REFERENCES p.6, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf

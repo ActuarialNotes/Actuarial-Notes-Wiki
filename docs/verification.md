@@ -263,19 +263,39 @@ for more; the record unfolds under it on a tap, and folds away again.
 - **Open / Fixed / Notes** — the log, fetched through `fetchWikiFile` on the
   first unfolding (not on mount: a reader who only wanted the verdict never pays
   for it) and split by `summarizeLog`. It comes first because what has been
-  *found* on a page is what a reader came for. Open findings show first, worst
-  severity first, and are the only section expanded by default; a resolution is
+  *found* on a page is what a reader came for. Each section is a card that folds
+  (`components/FactCheckSection.tsx`), in the verdict tile's own shape — a
+  tinted mark, the section's name and count, a chevron as big as the tile's —
+  so the folded stack reads as a summary on its own (*Open 3 · Fixed 11 ·
+  Notes 2*). Open's mark takes the worst open severity's tone and its one
+  supporting line is the breakdown ("1 major · 2 minor"); it is the only card
+  unfolded by default. Open findings sort worst first, and a resolution is
   folded into the finding it closes rather than listed twice. A finding is one
-  row of a list card, its severity a chip on the same four tones as the verdict,
-  expanding in place to the substance — `claim`, `evidence`, `proposed_action`,
-  `note` — and not to the run id, locus or fingerprint beside them. A `✓` marks
-  an open finding whose `applied: true` says the page in front of the reader has
-  already been corrected.
+  row of its card, its severity a chip on the same four tones as the verdict,
+  and a `✓` marks an open finding whose `applied: true` says the page in front
+  of the reader has already been corrected.
+
+  Opened, a finding is a **diff**. `claim` is the line taken out — marked `−`,
+  labelled *Page said*, on a red wash — and `evidence` the line put in — `+`,
+  *Source says*, on a green one (`FACT_CHECK_DIFF`; the words stay in the
+  foreground colour, only the mark, label and wash carry the tone). The
+  evidence goes through `summarizeEvidence`, which takes out the sha256s and
+  URLs a citation drops mid-sentence and tidies the separators they leave, and
+  touches nothing in evidence that has neither; the URLs come back under it as
+  buttons named by publisher, a PDF read in the app. Under the diff,
+  `findingOutcome` says what became of it: **Fixed · date** with the
+  resolution's note (the proposal, if it closed without one), **Won't fix** /
+  **Superseded** with only what the closing entry said, **Corrected on the page
+  · not yet signed off**, or **Suggested fix** with the proposal. The finding's
+  own `note` follows, and the date and author close it — never the run id,
+  locus or fingerprint.
 - **Checked against** — the sources the pass actually cited, as the same
   `components/wiki/ResourceMetaCard.tsx` the resource page leads with: cover,
   title, author, the bibliographic chips, the link to go and get it, and under
   them the chapters and pages the claim was checked on. It is under the record
-  because it is how a reader would go and settle a finding themselves.
+  because it is how a reader would go and settle a finding themselves, and it
+  is the last card of the same folding shape — folded unless it is the only
+  one, since a page with no log has nothing else to open.
 
   A citation is written for an auditor — the work, the pages, a sha256 of the
   exact file that was read, a version string, a URL — so

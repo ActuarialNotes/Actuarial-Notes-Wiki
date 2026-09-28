@@ -1,11 +1,25 @@
 import { useEffect, useState } from 'react'
-import { Check, ChevronDown, ExternalLink, Flag, Loader2 } from 'lucide-react'
+import {
+  AlertCircle,
+  ChevronDown,
+  CircleSlash,
+  ExternalLink,
+  Flag,
+  Loader2,
+  MessageSquare,
+  Wrench,
+} from 'lucide-react'
 import { fetchWikiFile, githubBlobUrl } from '@/lib/github'
+import { pdfFileName, pdfSourceHost } from '@/lib/examPdf'
 import { Button } from '@/components/ui/button'
+import { CheckMark } from '@/components/CheckMark'
+import { PdfLinkButton } from '@/components/PdfLinkButton'
 import { ReportIssueModal } from '@/components/ReportIssueModal'
+import { FactCheckSection } from '@/components/FactCheckSection'
 import { FactCheckSources } from '@/components/FactCheckSources'
 import { cn } from '@/lib/utils'
 import {
+  FACT_CHECK_DIFF,
   FACT_CHECK_TONE_CLASSES,
   FACT_CHECK_TONE_ICONS,
   SEVERITY_TONE,
@@ -13,11 +27,16 @@ import {
 import {
   parseVerificationLog,
   factCheckBadge,
+  findingOutcome,
   formatCheckedDate,
+  logField,
+  summarizeEvidence,
   summarizeLog,
   verificationLogPath,
-  type LogEntry,
+  type FindingOutcome,
   type LogEntryGroup,
+  type LogEntrySeverity,
+  type LogSummary,
   type Verification,
   type VerificationLog,
 } from '@/lib/verification'
@@ -36,16 +55,24 @@ import {
  * link's accessible name. Showing the work is the point; showing the paperwork
  * is not.
  *
- * Unfolded, it reads in the order the reader asks it in: *what is still wrong
- * with this page?* first, *what was it checked against?* second.
+ * Unfolded, the record is a stack of cards of one shape
+ * (`components/FactCheckSection.tsx`) — **Open**, **Fixed**, **Notes**, then
+ * **Checked against** — each naming what it holds and how many, so the folded
+ * stack is itself the summary. Only Open starts unfolded: what is still wrong
+ * with the page is what a reader came for.
  *
  *  - the **verdict tile** — the tinted mark from `lib/factCheckTone.ts` on the
  *    `rounded-xl bg-muted/50` block the question-info sheet leads with, and the
  *    disclosure for everything below it;
- *  - a **finding** as one row of a list card, with its severity as a chip on the
- *    same four tones, expanding in place to the evidence behind it. The evidence
- *    runs to a paragraph of citations, which is right in the log and unreadable
- *    as a wall — so it stays folded until asked for;
+ *  - a **finding** as one row of its section, with its severity as a chip on the
+ *    same four tones. Opened, it is a **diff**: what the page said, marked `−` on
+ *    a red wash, over what the source says, marked `+` on a green one — the two
+ *    things that disagree, side by side in the shape everyone already reads as
+ *    *before / after*. Under it, what became of it (`findingOutcome`): fixed and
+ *    when, with what the fix said; corrected on the page but not signed off; or
+ *    the fix still only suggested. The date and author close it, quietly. The
+ *    evidence is cut free of its hashes and URLs (`summarizeEvidence`), and the
+ *    URLs come back as buttons to go and read the source;
  *  - a **source** as the resource card a resource page leads with, carrying the
  *    chapters and pages the claim was checked on
  *    (`components/FactCheckSources.tsx`).
@@ -63,15 +90,9 @@ import {
  */
 const NEEDS_DETAIL = new Set(['in_review', 'stale', 'disputed'])
 
-/** The fields that carry the finding itself, in reading order. */
-const DETAIL_FIELDS: Array<[string, string]> = [
-  ['claim', 'Page said'],
-  ['evidence', 'Source says'],
-  ['proposed_action', 'Fix'],
-  ['note', 'Note'],
-]
+/** Worst first — the order the open section's breakdown and tile read in. */
+const SEVERITIES: LogEntrySeverity[] = ['critical', 'major', 'minor', 'nit']
 
-const HEADING = 'text-xs font-semibold uppercase tracking-wide text-muted-foreground'
 const ROW_FOCUS = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
 
 interface FactCheckPanelProps {
@@ -122,7 +143,7 @@ export function FactCheckPanel({
   const support = verification && NEEDS_DETAIL.has(verification.status)
     ? badge.detail
     : checked && !badge.label.endsWith(checked) ? checked : null
-  const groups = log ? summarizeLog(log) : null
+  const summary = log && log.entries.length > 0 ? summarizeLog(log) : null
 
   return (
     <div className="space-y-5 text-sm">
@@ -144,35 +165,34 @@ export function FactCheckPanel({
           {support && <p className="mt-0.5 text-xs text-muted-foreground">{support}</p>}
         </div>
         <ChevronDown
-          className={cn('h-4 w-4 shrink-0 text-muted-foreground transition-transform', open && 'rotate-180')}
+          className={cn('h-5 w-5 shrink-0 text-muted-foreground transition-transform', open && 'rotate-180')}
           aria-hidden
         />
       </button>
 
       {open && (
-        <>
+        <div className="space-y-2">
           {!loaded ? (
             <p className="flex items-center gap-2 text-sm text-muted-foreground">
               <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
               Loading
             </p>
-          ) : !log || !groups || log.entries.length === 0 ? (
-            verification && verification.status !== 'unverified' && (
-              <p className="text-sm text-muted-foreground">Nothing recorded yet.</p>
-            )
           ) : (
             <>
-              <EntrySection title="Open" groups={groups.open} defaultOpen />
-              <EntrySection title="Fixed" groups={groups.resolved} />
-              <EntrySection title="Notes" groups={groups.notes} />
+              {summary ? (
+                <LogSections summary={summary} />
+              ) : verification && verification.status !== 'unverified' && (
+                <p className="text-sm text-muted-foreground">Nothing recorded yet.</p>
+              )}
+
+              {/* What the page was actually read against, under the record: what
+                  has been *found* on a page is what a reader came for, and the
+                  books it was checked on are how they'd go and settle it
+                  themselves. Unfolded when it is all there is to show. */}
+              <FactCheckSources sources={verification?.sources ?? []} defaultOpen={!summary} />
             </>
           )}
-
-          {/* What the page was actually read against, under the record: what has
-              been *found* on a page is what a reader came for, and the books it
-              was checked on are how they'd go and settle it themselves. */}
-          <FactCheckSources sources={verification?.sources ?? []} />
-        </>
+        </div>
       )}
 
       <div className="flex items-center justify-between gap-2 border-t border-border pt-4">
@@ -203,41 +223,72 @@ export function FactCheckPanel({
   )
 }
 
-function EntrySection({
-  title,
-  groups,
-  defaultOpen = false,
-}: {
-  title: string
-  groups: LogEntryGroup[]
-  defaultOpen?: boolean
-}) {
-  const [open, setOpen] = useState(defaultOpen)
-  if (groups.length === 0) return null
+/** "1 critical · 2 minor" — how bad what is still open is, worst first. */
+function severityBreakdown(groups: LogEntryGroup[]): string | null {
+  const counts = new Map<string, number>()
+  for (const { entry } of groups) {
+    if (entry.severity) counts.set(entry.severity, (counts.get(entry.severity) ?? 0) + 1)
+  }
+  const parts = SEVERITIES.filter((s) => counts.has(s)).map((s) => `${counts.get(s)} ${s}`)
+  return parts.length > 0 ? parts.join(' · ') : null
+}
 
+/**
+ * The open section's tile takes the worst open finding's tone — a critical one
+ * is the same red as the *Known issue* verdict it produces.
+ */
+function worstTone(groups: LogEntryGroup[]) {
+  const worst = SEVERITIES.find((s) => groups.some((g) => g.entry.severity === s))
+  return worst ? SEVERITY_TONE[worst] : 'grey'
+}
+
+/** The log's three sections, each a card that folds (`FactCheckSection`). */
+function LogSections({ summary }: { summary: LogSummary }) {
   return (
-    <section>
-      <h3>
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          aria-expanded={open}
-          data-sound="tap"
-          className={cn('-mx-1 mb-2 flex items-center gap-1.5 rounded-md px-1 py-0.5 transition-colors hover:text-foreground',
-            HEADING, ROW_FOCUS)}
+    <>
+      {summary.open.length > 0 && (
+        <FactCheckSection
+          title="Open"
+          count={summary.open.length}
+          detail={severityBreakdown(summary.open)}
+          tone={worstTone(summary.open)}
+          icon={<AlertCircle className="h-4 w-4" aria-hidden />}
+          defaultOpen
         >
-          {title} · {groups.length}
-          <ChevronDown className={cn('h-3.5 w-3.5 transition-transform', open && 'rotate-180')} aria-hidden />
-        </button>
-      </h3>
-      {open && (
-        <ul className="divide-y divide-border overflow-hidden rounded-lg border border-border bg-card">
-          {groups.map((group) => (
-            <EntryRow key={group.entry.id} group={group} />
-          ))}
-        </ul>
+          <EntryList groups={summary.open} />
+        </FactCheckSection>
       )}
-    </section>
+      {summary.resolved.length > 0 && (
+        <FactCheckSection
+          title="Fixed"
+          count={summary.resolved.length}
+          tone="green"
+          icon={<CheckMark className="h-5 w-5" />}
+        >
+          <EntryList groups={summary.resolved} />
+        </FactCheckSection>
+      )}
+      {summary.notes.length > 0 && (
+        <FactCheckSection
+          title="Notes"
+          count={summary.notes.length}
+          tone="grey"
+          icon={<MessageSquare className="h-4 w-4" aria-hidden />}
+        >
+          <EntryList groups={summary.notes} />
+        </FactCheckSection>
+      )}
+    </>
+  )
+}
+
+function EntryList({ groups }: { groups: LogEntryGroup[] }) {
+  return (
+    <ul className="divide-y divide-border">
+      {groups.map((group) => (
+        <EntryRow key={group.entry.id} group={group} />
+      ))}
+    </ul>
   )
 }
 
@@ -258,12 +309,10 @@ function EntryRow({ group }: { group: LogEntryGroup }) {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         data-sound="tap"
-        className={cn('flex w-full items-start gap-2.5 px-3 py-2.5 text-left transition-colors hover:bg-accent/50', ROW_FOCUS)}
+        className={cn('flex w-full items-start gap-2.5 px-3 py-3 text-left transition-colors hover:bg-accent/50', ROW_FOCUS)}
       >
-        {applied && (
-          <Check className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
-        )}
-        <span className="min-w-0 flex-1 break-words text-sm">
+        {applied && <CheckMark className="mt-0.5 h-4 w-4" />}
+        <span className={cn('min-w-0 flex-1 break-words text-sm', open && 'font-medium')}>
           {entry.title || entry.id}
           {applied && <span className="sr-only"> — already corrected on the page</span>}
         </span>
@@ -281,35 +330,162 @@ function EntryRow({ group }: { group: LogEntryGroup }) {
       </button>
 
       {open && (
-        <div className="space-y-3 px-3 pb-3">
-          <EntryDetail entry={entry} />
-          {closedBy && <EntryDetail entry={closedBy} />}
+        <div className="px-3 pb-4">
+          <EntryDetail group={group} />
         </div>
       )}
     </li>
   )
 }
 
-function EntryDetail({ entry }: { entry: LogEntry }) {
-  const value = (key: string) => entry.fields.find((f) => f.key === key)?.value ?? ''
+/**
+ * What one entry says, in the order a reader asks it: *what was wrong* (the
+ * diff), *what was done about it* (the outcome), and last, quietly, *when and
+ * by whom*. Exported for its test.
+ */
+export function EntryDetail({ group }: { group: LogEntryGroup }) {
+  const { entry, closedBy } = group
+  const claim = logField(entry, 'claim')
+  const evidence = summarizeEvidence(logField(entry, 'evidence'))
+  const outcome = findingOutcome(group)
+  const note = logField(entry, 'note')
+  // A resolution folded into something other than a finding still has its say.
+  const closingNote = !outcome && closedBy ? logField(closedBy, 'note') : ''
+  const hasDiff = Boolean(claim || evidence.text)
+  const date = formatCheckedDate(entry.date) ?? entry.date
+  const author = entry.author.replace(/^(agent|human):/, '')
+  const meta = [entry.entryType === 'finding' && date ? `Found ${date}` : date, author]
+    .filter(Boolean).join(' · ')
+
   return (
-    <div className="rounded-lg bg-muted/50 p-3">
-      <dl className="space-y-2">
-        {DETAIL_FIELDS.map(([key, label]) => {
-          const text = value(key)
-          if (!text) return null
-          return (
-            <div key={key}>
-              <dt className="text-xs text-muted-foreground">{label}</dt>
-              <dd className="mt-0.5 break-words text-sm leading-relaxed">{text}</dd>
-            </div>
-          )
-        })}
-      </dl>
-      <p className="mt-2 text-xs text-muted-foreground">
-        {formatCheckedDate(entry.date) ?? entry.date}
-        {entry.author && ` · ${entry.author.replace(/^(agent|human):/, '')}`}
-      </p>
+    <div className="space-y-4">
+      {hasDiff && (
+        <div className="overflow-hidden rounded-lg border border-border">
+          {claim && <DiffSide side="removed" label="Page said" text={claim} />}
+          {evidence.text && (
+            <DiffSide side="added" label="Source says" text={evidence.text} links={evidence.links} />
+          )}
+        </div>
+      )}
+      {outcome && <Outcome outcome={outcome} />}
+      {note && <EntryNote label={hasDiff || outcome ? 'Note' : null} text={note} />}
+      {closingNote && <EntryNote label="Closed" text={closingNote} />}
+      {meta && <p className="text-xs text-muted-foreground">{meta}</p>}
+    </div>
+  )
+}
+
+/**
+ * One side of the diff. The mark and its label carry the colour; the words stay
+ * in the foreground colour so a long passage of evidence reads as text, not as
+ * an alarm (`FACT_CHECK_DIFF`).
+ */
+function DiffSide({
+  side,
+  label,
+  text,
+  links = [],
+}: {
+  side: 'removed' | 'added'
+  label: string
+  text: string
+  links?: string[]
+}) {
+  const tone = FACT_CHECK_DIFF[side]
+  return (
+    <div className={cn('flex gap-2 px-3 py-2.5', tone.surface)}>
+      <span
+        className={cn('w-3 shrink-0 select-none text-center font-mono text-sm font-bold leading-5', tone.mark)}
+        aria-hidden
+      >
+        {side === 'removed' ? '−' : '+'}
+      </span>
+      <div className="min-w-0 flex-1">
+        <p className={cn('text-xs font-semibold leading-5', tone.mark)}>{label}</p>
+        <p className="mt-0.5 break-words text-sm leading-relaxed">{text}</p>
+        {links.length > 0 && (
+          <div className="mt-2.5 flex flex-wrap gap-2">
+            {links.map((url) => <SourceLink key={url} url={url} />)}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+/**
+ * A URL the evidence cited, named by its publisher. A PDF is read in the app
+ * like every other PDF the app offers (`PdfLinkButton`); anything else is a
+ * link out, in the same shape so the two don't read as different kinds of thing.
+ */
+function SourceLink({ url }: { url: string }) {
+  const host = pdfSourceHost(url) || 'Source'
+  if (/\.pdf(?:$|[?#])/i.test(url)) {
+    return (
+      <PdfLinkButton
+        url={url}
+        label={host}
+        title={pdfFileName(url)}
+        subtitle={host}
+        ariaLabel={`Read the source on ${host} (PDF)`}
+        className="min-h-[32px] px-2.5 py-1"
+      />
+    )
+  }
+  return (
+    <a
+      href={url}
+      target="_blank"
+      rel="noreferrer"
+      aria-label={`Open the source on ${host}`}
+      className={cn('inline-flex min-h-[32px] items-center gap-2 rounded-md border border-border bg-card px-2.5 py-1 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground', ROW_FOCUS)}
+    >
+      <ExternalLink className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+      {host}
+    </a>
+  )
+}
+
+const OUTCOME_LABEL: Record<FindingOutcome['kind'], string> = {
+  fixed: 'Fixed',
+  wontfix: 'Won’t fix',
+  superseded: 'Superseded',
+  applied: 'Corrected on the page',
+  proposed: 'Suggested fix',
+}
+
+/** What became of a finding: the line under the diff. */
+function Outcome({ outcome }: { outcome: FindingOutcome }) {
+  const done = outcome.kind === 'fixed' || outcome.kind === 'applied'
+  const Icon = outcome.kind === 'proposed' ? Wrench : CircleSlash
+  // The date it was closed, or — for a correction already on the page — that
+  // nobody has signed it off yet, which is why it is still listed as open.
+  const aside = 'date' in outcome
+    ? formatCheckedDate(outcome.date) ?? outcome.date
+    : outcome.kind === 'applied' ? 'not yet signed off' : ''
+  return (
+    <div className="flex gap-2.5">
+      {done
+        ? <CheckMark className="mt-0.5 h-4 w-4" />
+        : <Icon className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />}
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-medium leading-5">
+          {OUTCOME_LABEL[outcome.kind]}
+          {aside && <span className="font-normal text-muted-foreground"> · {aside}</span>}
+        </p>
+        {outcome.note && (
+          <p className="mt-1 break-words text-sm leading-relaxed">{outcome.note}</p>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function EntryNote({ label, text }: { label: string | null; text: string }) {
+  return (
+    <div>
+      {label && <p className="text-xs font-semibold text-muted-foreground">{label}</p>}
+      <p className={cn('break-words text-sm leading-relaxed', label && 'mt-0.5')}>{text}</p>
     </div>
   )
 }

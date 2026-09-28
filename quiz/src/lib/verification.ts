@@ -533,6 +533,105 @@ export function summarizeLog(log: VerificationLog): LogSummary {
   return summary
 }
 
+/** One `- key: value` field of an entry, or '' when it has none. */
+export function logField(entry: LogEntry, key: string): string {
+  return entry.fields.find((f) => f.key === key)?.value ?? ''
+}
+
+export interface EvidenceSummary {
+  /** The evidence as prose, with the auditor's fingerprints taken out. */
+  text: string
+  /** The links it cited, in order, so they can be offered as links. */
+  links: string[]
+}
+
+/**
+ * A fingerprint as evidence prose writes it — in full, or cut short behind an
+ * ellipsis ("sha256:1cb44e7f..."), which a source line never is.
+ */
+const EVIDENCE_HASH = /\bsha-?256[:\s]+[0-9a-f]{6,}(?:\.{3}|…)?/gi
+
+/** Separators a removed URL or hash can leave stranded. Not `-`: it is a minus sign too. */
+const STRANDED_CHARS = ',;:—–'
+const STRANDED = `[${STRANDED_CHARS}]`
+
+/**
+ * Evidence as a reader can read it.
+ *
+ * An `evidence:` line is where a finding says what the source says, and it is
+ * the other half of the diff the panel draws against what the page said. Most
+ * of it is plain prose, but a citation inside it carries what `summarizeSource`
+ * cuts off a source line — a sha256 of the file that was read, and the URL it
+ * was read at — usually in the middle of a sentence ("… REFERENCES pp.5-7,
+ * sha256:bed2…, https://…. p.5 lists …"). Both come out, the URL to be offered
+ * as a link instead, and the separators they leave behind are tidied. Text with
+ * neither is returned exactly as written: the tidying is only ever a repair of
+ * what the cut left, never an edit of the finding.
+ */
+export function summarizeEvidence(raw: string): EvidenceSummary {
+  const text = (raw ?? '').trim()
+  const links = [...text.matchAll(new RegExp(SOURCE_URL.source, 'g'))]
+    .map((m) => m[0].replace(/[.,;:]+$/, ''))
+  const hasHash = new RegExp(EVIDENCE_HASH.source, 'i').test(text)
+  if (links.length === 0 && !hasHash) return { text, links }
+
+  // The hash alone, not the bracket around it as `summarizeSource` drops: in
+  // evidence that bracket is as often the name of what was read ("P-21-05
+  // (Risk and Insurance, sha256:1cb4…)") as the auditor's aside.
+  let prose = links
+    .reduce((t, url) => t.split(url).join(' '), text)
+    .replace(EVIDENCE_HASH, ' ')
+    .replace(/\s+/g, ' ')
+
+  let previous = ''
+  while (prose !== previous) {
+    previous = prose
+    prose = prose
+      // Brackets the cut emptied, or left opening or closing on a separator.
+      .replace(new RegExp(`\\(\\s*(?:${STRANDED}\\s*)*\\)`, 'g'), '')
+      .replace(new RegExp(`\\(\\s*${STRANDED}\\s*`, 'g'), '(')
+      .replace(new RegExp(`\\s*${STRANDED}\\s*\\)`, 'g'), ')')
+      // Two separators in a row where something between them was taken out.
+      .replace(new RegExp(`(${STRANDED})(?:\\s*${STRANDED})+`, 'g'), '$1')
+      .replace(new RegExp(`${STRANDED}\\s*\\.`, 'g'), '.')
+      .replace(/\s+([,;:.)])/g, '$1')
+      .replace(/\s+/g, ' ')
+  }
+  // Not `trimCitationEdges`: evidence can open on a negative number.
+  const trimmed = prose
+    .replace(new RegExp(`^[\\s${STRANDED_CHARS}]+`), '')
+    .replace(new RegExp(`[\\s(${STRANDED_CHARS}]+$`), '')
+  return { text: trimmed, links: [...new Set(links)] }
+}
+
+/**
+ * What became of a finding — the line under the diff.
+ *
+ * `fixed` / `wontfix` / `superseded` are the three ways something later in the
+ * log (or the finding's own status) closes it, with the date it was closed and
+ * what the closing entry said. `applied` is an open finding whose correction
+ * has already been made to the page; `proposed` is one still waiting for it.
+ */
+export type FindingOutcome =
+  | { kind: 'fixed' | 'wontfix' | 'superseded'; date: string; note: string }
+  | { kind: 'applied' | 'proposed'; note: string }
+
+export function findingOutcome(group: LogEntryGroup): FindingOutcome | null {
+  const { entry, closedBy } = group
+  if (entry.entryType !== 'finding') return null
+  const proposed = logField(entry, 'proposed_action')
+  const status = closedBy?.status || entry.status
+  if (CLOSING.includes(status as LogEntryStatus)) {
+    const said = closedBy ? logField(closedBy, 'note') : ''
+    // A finding closed without a word is fixed the way it proposed. One set
+    // aside is not: its proposal is exactly what was *not* done.
+    if (status === 'resolved') return { kind: 'fixed', date: closedBy?.date ?? '', note: said || proposed }
+    return { kind: status as 'wontfix' | 'superseded', date: closedBy?.date ?? '', note: said }
+  }
+  if (entry.applied) return { kind: 'applied', note: proposed }
+  return proposed ? { kind: 'proposed', note: proposed } : null
+}
+
 
 /**
  * Should this page be kept out of a quiz session by default?

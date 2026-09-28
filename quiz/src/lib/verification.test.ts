@@ -5,7 +5,9 @@ import {
   openFindings,
   openCriticalFindings,
   factCheckBadge,
+  findingOutcome,
   formatCheckedDate,
+  summarizeEvidence,
   summarizeLog,
   summarizeSource,
   verificationLogPath,
@@ -368,5 +370,88 @@ describe('summarizeLog', () => {
     expect(summary.open.map((g) => g.entry.id)).toContain('F-001')
     expect(summary.open.find((g) => g.entry.id === 'F-001')!.entry.applied).toBe(true)
     expect(summary.open.find((g) => g.entry.id === 'F-002')!.entry.applied).toBe(false)
+  })
+})
+
+describe('summarizeEvidence', () => {
+  it('takes the hash and URL out of a citation in the middle of the evidence', () => {
+    // Verbatim from `.verify/Exam P-1 (SOA).md` F-002: the citation runs into
+    // the substance with the fingerprint and the link between them.
+    const raw = 'SOA Probability Exam syllabus, November 2026 (7 pp.), REFERENCES pp.5-7, '
+      + 'sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397, '
+      + 'https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf. '
+      + 'p.5 lists Wackerly 7th ed.: Chapter 1; Chapter 2 (exclude 2.12). No Chapter 8.'
+    const { text, links } = summarizeEvidence(raw)
+    expect(text).toBe('SOA Probability Exam syllabus, November 2026 (7 pp.), REFERENCES pp.5-7. '
+      + 'p.5 lists Wackerly 7th ed.: Chapter 1; Chapter 2 (exclude 2.12). No Chapter 8.')
+    expect(links).toEqual([
+      'https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf',
+    ])
+  })
+
+  it('keeps what a bracket names when only its hash goes', () => {
+    const { text } = summarizeEvidence(
+      'SOA study note P-21-05 (Risk and Insurance, sha256:1cb44e7f...) has no discussion of it.')
+    expect(text).toBe('SOA study note P-21-05 (Risk and Insurance) has no discussion of it.')
+  })
+
+  it('drops a bracket the cut leaves empty, and a trailing dash', () => {
+    const { text, links } = summarizeEvidence(
+      'NIST DLMF §4.6 eq. 4.6.1 (https://dlmf.nist.gov/4.6) states the series. '
+      + 'Werner Ch. 6 p.98, sha256:' + 'ab'.repeat(32) + ' — https://www.casact.org/werner.pdf')
+    expect(text).toBe('NIST DLMF §4.6 eq. 4.6.1 states the series. Werner Ch. 6 p.98')
+    expect(links).toEqual(['https://dlmf.nist.gov/4.6', 'https://www.casact.org/werner.pdf'])
+  })
+
+  it('returns evidence with neither exactly as written', () => {
+    // The tidying is a repair of what the cut left, never an edit of the
+    // finding: a leading minus, a spaced colon and a stray comma all survive.
+    const raw = '-0.020 is pre-tax , and the ratio is 3 : 1.'
+    expect(summarizeEvidence(raw)).toEqual({ text: raw, links: [] })
+  })
+})
+
+describe('findingOutcome', () => {
+  const group = (raw: string, id: string) => {
+    const summary = summarizeLog(parseVerificationLog(raw))
+    return [...summary.open, ...summary.resolved].find((g) => g.entry.id === id)!
+  }
+
+  it('says a closed finding was fixed, when, and what the resolution said', () => {
+    expect(findingOutcome(group(LOG + RESOLUTION, 'F-001'))).toEqual({
+      kind: 'fixed',
+      date: '2026-08-20',
+      note: 'Confirmed against the PDF, fixed in commit 8ac31f2.',
+    })
+  })
+
+  it('falls back to the proposal for a finding closed without a word', () => {
+    const silent = RESOLUTION.replace(/- note: .*\n/, '')
+    expect(findingOutcome(group(LOG + silent, 'F-001'))).toMatchObject({
+      kind: 'fixed',
+      note: 'Change earned premium to 3,850,000.',
+    })
+  })
+
+  it('never passes a set-aside finding off as done the way it proposed', () => {
+    const wontfix = RESOLUTION.replace('status: resolved', 'status: wontfix').replace(/- note: .*\n/, '')
+    expect(findingOutcome(group(LOG + wontfix, 'F-001'))).toEqual({ kind: 'wontfix', date: '2026-08-20', note: '' })
+  })
+
+  it('separates a correction already on the page from one only suggested', () => {
+    expect(findingOutcome(group(LOG, 'F-001'))).toEqual({
+      kind: 'proposed',
+      note: 'Change earned premium to 3,850,000.',
+    })
+    const applied = LOG.replace('- applied: false', '- applied: true')
+    expect(findingOutcome(group(applied, 'F-001'))?.kind).toBe('applied')
+    // Nothing proposed and nothing done: there is no outcome line to draw.
+    expect(findingOutcome(group(LOG, 'F-002'))).toBeNull()
+  })
+
+  it('has nothing to say about an entry that is not a finding', () => {
+    const comment = '\n## [C-001] Reader report\n- entry_type: comment\n- date: 2026-08-21\n- note: Looks off.\n'
+    const note = summarizeLog(parseVerificationLog(LOG + comment)).notes[0]
+    expect(findingOutcome(note)).toBeNull()
   })
 })

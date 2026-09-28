@@ -129,5 +129,5 @@ A two-semester course text in probability and statistical inference that needs a
 
 ## Sources
 - [Probability and Statistical Inference, Tenth Edition: front matter (Pearson, 2020)](https://www.pearsonhighered.com/assets/preface/0/1/3/5/013518939X.pdf) — the publisher's typeset front matter: title page, copyright page (Tenth Edition, © 2020 Pearson Education, ISBN 978-0-13-518939-9), the contents, the preface (the lead) and the prologue
-- [SOA Exam P Syllabus, July 2026](https://www.soa.org/globalassets/assets/files/edu/2026/july/syllabi/2026-07-p-syllabus.pdf) — the citation (Tenth Edition, 2020, ISBN 978-0135189399) and the assigned chapters and sections
+- [SOA Exam P Syllabus, November 2026](https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf) — the citation (Tenth Edition, 2020, ISBN 978-0135189399) and the assigned chapters and sections
 - [Probability and Statistical Inference, 10th edition (Pearson)](https://www.pearson.com/en-us/subject-catalog/p/probability-and-statistical-inference/P200000006212) — the publisher's product page: its table of contents agrees with the front matter, chapter for chapter and section for section

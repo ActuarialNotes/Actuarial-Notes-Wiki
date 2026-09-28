@@ -258,4 +258,4 @@ An introductory textbook designed to make probability and statistics accessible 
 
 ## Sources
 - [Probability and Statistics with Applications: A Problem Solving Text, sample pages (ACTEX Learning)](https://www.actexlearning.com/samples/ProbStats%20Sample.pdf) — the publisher's sample of the second edition: title page, copyright page (© 2015, 2023 ACTEX Learning; ISBN 978-1-62542-472-3; CIP data with the authors and the publisher's summary), both prefaces (the lead) and the full table of contents
-- [SOA Exam P Syllabus, July 2026](https://www.soa.org/globalassets/assets/files/edu/2026/july/syllabi/2026-07-p-syllabus.pdf) — the citation (Second Edition, 2015, ACTEX, ISBN 978-1-62542-472-3) and the assigned chapters and sections
+- [SOA Exam P Syllabus, November 2026](https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf) — the citation (Second Edition, 2015, ACTEX, ISBN 978-1-62542-472-3) and the assigned chapters and sections

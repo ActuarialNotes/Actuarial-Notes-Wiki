@@ -20,21 +20,32 @@ verification:
 </div>
 
 # Exam P-1
-The Probability (P-1) Exam is a 3 hour SOA exam with 30 multiple choice questions that cover probability concepts and applications to measuring risk.
+The Probability (P-1) Exam is a three-hour SOA exam of 30 multiple-choice questions, administered as a computer-based test (CBT). Its syllabus develops knowledge of the fundamental probability tools for quantitatively assessing risk, with emphasis on their application to problems encountered in actuarial science.
+
+- Each question has five answer choices, A to E, only one of which is correct; answers for some questions have been rounded.
+- A few pilot questions are placed at random in the exam and are not scored; an unanswered question is scored incorrect.
+- A table of values for the normal distribution is provided during the exam under an Exhibit button, so candidates may not bring a copy of it into the exam.
 
 ## Prerequisite knowledge
 - [[Calculus]], including series, differentiation, and integration.
 - Concepts introduced in [[Resources/Books/Risk and Insurance (SOA)]]
 
+## Other Resources
+- [Tables for Exam P](https://www.soa.org/globalassets/assets/files/edu/2021/p-1-table-rev-4-29-21.pdf) — the normal distribution table provided in the exam
+- Exam P Sample Questions and Solutions: [questions](https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-questions.pdf) and [solutions](https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf)
+- [Online Sample Exam P](https://www.soa.org/education/exam-req/syllabus-study-materials/edu-exam-p-online-sample/) — a balanced yet randomized set of questions on each attempt, drawn from the sample questions and coded to the learning objectives
+
 ## Learning Objectives
 
 > [!example]- General Probability {23–30%}
 > Understand basic concepts of [[Probability]] and [[Discrete Mathematics]].
-> 1. Define [[Set Function]], [[Venn Diagram]], [[Sample Space]], and [[Event]]. Define [[Probability|probability]] as a [[Set Function|set function]] on a collection of [[Event|events]] and state the basic [[Axioms of Probability]]. Use [[Set Theory]] to represent and analyze [[Event|events]].
+> 1. Define [[Set Function|set functions]], [[Venn Diagram|Venn diagrams]], [[Sample Space|sample space]], and [[Event|events]]. Define [[Probability|probability]] as a [[Set Function|set function]] on a collection of [[Event|events]] and state the basic [[Axioms of Probability|axioms of probability]].
+>    - *Key concepts:* [[Set Theory]]
 > 2. Calculate [[Probability|probabilities]] using [[Combinatorics]], such as [[Combination]] and [[Permutation]].
 > 3. Define [[Independent Events|Independence]] and calculate [[Probability|probabilities]] of [[Independent Events]].
 > 4. Calculate [[Probability|probabilities]] of [[Mutually Exclusive Events]].
-> 5. Calculate [[Probability|probabilities]] using [[Probability Addition Rule]] and [[Probability Multiplication Rule|Probability Multiplication Rules]], including the [[Inclusion-Exclusion Principle]].
+> 5. Calculate [[Probability|probabilities]] using [[Probability Addition Rule|addition]] and [[Probability Multiplication Rule|multiplication rules]].
+>    - *Key concepts:* [[Inclusion-Exclusion Principle]]
 > 6. Define and calculate [[Conditional Probability]].
 > 7. State [[Bayes Theorem]] and [[The Law of Total Probability]] and use them to calculate [[Conditional Probability|conditional probabilities]].
 > 
@@ -46,7 +57,7 @@ The Probability (P-1) Exam is a 3 hour SOA exam with 30 multiple choice question
 > 3. Explain and calculate [[Expected Value|expected values]], including [[Moment|moments]], [[Mode|mode]], [[Median|median]], and [[Percentile|percentiles]].
 > 4. Explain and calculate [[Variance]], [[Standard Deviation]], and [[Coefficient of Variation]].
 > 5. Calculate the amount that an [[Insurer|insurance company]] pays to a [[Policyholder|policyholder]] for a [[Claim|claim]] given [[Policy Information]], including [[Deductible|Deductibles]], [[Coinsurance Percentage|Coinsurance Percentages]], and [[Benefit Limit|Benefit Limits]], as well as other factors, such as [[Inflation]].
-> 6. Calculate the [[Expected Value]], [[Variance]], and [[Standard Deviation]] of both the [[Loss Random Variable]] and the corresponding [[Payment Random Variable]], applying the relevant [[Transformations of Random Variables|transformation]] to the [[Loss Random Variable|loss]].
+> 6. Calculate the [[Expected Value|expected value]], [[Variance|variance]], and [[Standard Deviation|standard deviation]] of both the [[Loss Random Variable|loss random variable]] and the corresponding [[Payment Random Variable|payment amount random variable]].
 >
 > ### Discrete Univariate Distributions 
 > - [[Binomial Distribution]]
@@ -60,12 +71,11 @@ The Probability (P-1) Exam is a 3 hour SOA exam with 30 multiple choice question
 > - [[Beta]]
 > - [[Exponential Distribution]]
 > - [[Gamma]]
-> - [[Lognormal Distribution]]
 > - [[Normal Distribution]]
 > - [[Uniform Continuous Distribution|Uniform]]
 
 > [!example]- Multivariate Random Variables {23–30%}
-> Understand key concepts in the [[Discrete Random Variable|discrete]] and [[Continuous Random Variable|continuous]] settings concerning [[Multivariate Distribution|Multivariate Distributions]], the [[Order Statistics|Distribution of Order Statistics]] for [[Independent Random Variables]], and [[Linear Combinations of Random Variables|linear combinations]] of [[Independent Random Variables|independent random variables]], along with associated applications. In the [[Continuous Random Variable|continuous]] setting the same calculations are carried out on a [[Joint Probability Density Function]], where the work is setting up the [[Region of Integration|region of integration]].
+> Understand key concepts in the [[Discrete Random Variable|discrete]] and [[Continuous Random Variable|continuous]] settings concerning [[Multivariate Distribution|multivariate distributions]], the [[Order Statistics|distribution of order statistics]] for [[Independent Random Variables|independent random variables]], and [[Linear Combinations of Random Variables|linear combinations]] of [[Independent Random Variables|independent random variables]], along with associated applications.
 > 1. Determine [[Joint Probability Function|Joint Probability Functions]] and [[Joint Cumulative Distribution Function|Joint Cumulative Distribution Functions]] for [[Discrete Random Variable|discrete random variables]].
 > 2. Determine [[Conditional Probability Function]] and [[Marginal Probability Function]] for [[Discrete Random Variable|discrete random variables]].
 > 3. Calculate [[Moments for Joint Distributions]] for [[Joint Probability Function|joint]], [[Conditional Probability Function|conditional]], and [[Marginal Probability Function|marginal discrete distributions]].
@@ -85,7 +95,7 @@ The Probability (P-1) Exam is a 3 hour SOA exam with 30 multiple choice question
 >      - Chapter 1; Chapter 2 (exclude 2.12); Chapter 3: 3.1-3.8, 3.9 (exclude MGF); Chapter 4 (exclude 4.10); Chapter 5 (exclude continuous multivariate distributions, exclude 5.10); Chapter 6: 6.7; Chapter 7 (exclude 7.4)
 > - [[Probability for Risk Management (Hassett - 2021)]]
 >      - Chapter 1; Chapter 2; Chapter 3; Chapter 4; Chapter 5; Chapter 6: 6.1, 6.2.1; Chapter 7; Chapter 8 (exclude 8.5, 8.6, 8.7); Chapter 9 (exclude 9.2, 9.3, 9.4, 9.6); Chapter 10 (exclude 10.2, 10.3.2, 10.3.3 continuous, 10.4.2); Chapter 11 (exclude 11.1.4, 11.1.5, 11.2.3 continuous, 11.2.5 continuous, 11.2.8, 11.3)
-> - [[Probability and Statistics with Applications - A Problem Solving Text (Asimow - 2021)]]
+> - [[Probability and Statistics with Applications - A Problem Solving Text (Asimow - 2021)|Probability and Statistics with Applications: A Problem-Solving Text (Asimow & Maxwell, Second Edition, 2015)]]
 >      - Chapter 1; Chapter 2; Chapter 3 (exclude 3.4.5, 3.7); Chapter 4 (exclude 4.6.2, 4.6.3, 4.6.5); Chapter 5 (exclude 5.6); Chapter 6 (exclude 6.3.4, 6.4.2, 6.4.6, 6.7); Chapter 7 (exclude 7.5, 7.6, 7.7, 7.9, 7.10); Chapter 8: 8.1.5, 8.3, 8.4 (exclude continuous), 8.6
 > - [[Probability and Statistical Inference (Hogg - 2020)]]
 >      - Chapter 1; Chapter 2; Chapter 3 (exclude Chi-Square); Chapter 4 (exclude 4.4, 4.5); Chapter 5: 5.3 (discrete only), 5.5, 5.6, 5.7

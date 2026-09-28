@@ -50,6 +50,7 @@ A calculus-based introduction to probability covering the traditional topics, wi
 - 3.3 [[Cumulative Distribution Function (CDF)|Cumulative Distribution Functions]]
 - 3.4 [[Expected Value|Expected Values]]
 - 3.5 Inequalities (Markov, Chebyshev)
+- 3.6 Exercises
 
 ## 4 Common Discrete Distributions
 - 4.1 Bernoulli Distribution
@@ -59,6 +60,7 @@ A calculus-based introduction to probability covering the traditional topics, wi
 - 4.5 [[Poisson Distribution]]
 - 4.6 [[Hypergeometric Distribution]]
 - 4.7 Other Distributions
+- 4.8 Exercises
 
 ## 5 Common Continuous Distributions
 - 5.1 [[Uniform Continuous Distribution|Uniform Distribution]]
@@ -85,9 +87,9 @@ A calculus-based introduction to probability covering the traditional topics, wi
 - 8.3 [[Central Limit Theorem]]
 
 ## Sources
-- [Probability, Second Edition: contents (Lawrence M. Leemis, 2018)](https://www.math.wm.edu/~leemis/ptext.con) — the author's contents for the second edition: the eight chapters and their sections (Chapter 8 is listed there as "Limit Theorems")
-- [Sample pages from Probability, 2nd Edition (Lawrence M. Leemis)](https://www.math.wm.edu/~leemis/probability/samplepages/) — pages of the book itself (pp. 27, 55–56, 129, 206–207, 211, 257–258, 290–291, 344, 393, 489–490, 542–543, 550), whose headings and running heads confirm the section titles they reach and give Chapter 8's title as "Limiting Distributions"
-- [SOA Exam P Syllabus, July 2026](https://www.soa.org/globalassets/assets/files/edu/2026/july/syllabi/2026-07-p-syllabus.pdf) — the citation (Second Edition, 2018, Lightning Source, ISBN 978-0-9829174-7-3) and the assigned chapters and sections
+- [Probability, Second Edition: contents (Lawrence M. Leemis, 2018)](https://www.math.wm.edu/~leemis/ptext.con) — the author's contents for the second edition: the eight chapters and their sections (Chapter 8 is listed there as "Limit Theorems"); it lists no Exercises sections
+- [Sample pages from Probability, 2nd Edition (Lawrence M. Leemis)](https://www.math.wm.edu/~leemis/probability/samplepages/) — pages of the book itself (pp. 27, 55–56, 129, 170, 206–207, 211, 242, 257–258, 290–291, 344, 393, 489–490, 542–543, 550), whose headings and running heads confirm the section titles they reach — among them the 3.6 and 4.8 Exercises sections (pp. 170 and 242) — and give Chapter 8's title as "Limiting Distributions"
+- [SOA Exam P Syllabus, November 2026](https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf) — the citation (Second Edition, 2018, Lightning Source, ISBN 978-0-9829174-7-3) and the assigned chapters and sections
 - [Lawrence Leemis, home page (College of William & Mary)](https://www.math.wm.edu/~leemis/) — the author's own citation (Probability, Second Edition, 2018, Lightning Source, ISBN 978-0-9829174-7-3) and the errata, which date the first printing October 2017 and the second July 2018
-- [Introduction to "Probability" (W&M ScholarWorks)](https://scholarworks.wm.edu/asbookchapters/125/) — the book's description (the lead's first two sentences)
-- [Review of Probability, second edition (Journal of Quality Technology, 2021)](https://www.math.wm.edu/~leemis/probability2e-review.pdf) — what the second edition adds: moment-ratio diagrams at the end of Chapter 5 and a univariate distribution relationship chart at the end of Chapter 8
+- [Introduction to "Probability" (W&M ScholarWorks)](https://scholarworks.wm.edu/asbookchapters/125/) — the book's description (the lead's first two sentences), from the record of the 2011 first edition
+- [Review of Probability, second edition (Journal of Quality Technology, 2021)](https://www.math.wm.edu/~leemis/probability2e-review.pdf) — that the book's selection of topics aligns with all the topics of the SOA's Exam P, and what the second edition adds: moment-ratio diagrams at the end of Chapter 5 and a univariate distribution relationship chart at the end of Chapter 8

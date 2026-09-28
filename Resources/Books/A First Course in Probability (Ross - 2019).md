@@ -162,5 +162,5 @@ An elementary introduction to the theory of probability for students of mathemat
 
 ## Sources
 - [A First Course in Probability, Tenth Edition: front matter (Pearson, 2019)](https://www.pearsonhighered.com/assets/preface/0/1/3/4/0134753119.pdf) — the publisher's typeset front matter: title page, copyright page (Tenth Edition, © 2019, ISBN 978-0-13-475311-9), the contents to subsection level, and the preface (the lead)
-- [SOA Exam P Syllabus, July 2026](https://www.soa.org/globalassets/assets/files/edu/2026/july/syllabi/2026-07-p-syllabus.pdf) — the citation (Tenth Edition, 2019, ISBN 978-0134753119) and the assigned chapters and sections
+- [SOA Exam P Syllabus, November 2026](https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf) — the citation (Tenth Edition, 2019, ISBN 978-0134753119) and the assigned chapters and sections
 - [A First Course in Probability (Pearson)](https://www.pearson.com/en-us/subject-catalog/p/first-course-in-probability-a/P200000006334) — the publisher's product page for the 10th edition: corroborates the ten chapters and their sections (it titles Chapter 3 "Conditional Probability and Inference"; the book's own contents page reads "Conditional Probability and Independence")

@@ -84,4 +84,4 @@ An introduction to the ideas and concepts behind actuarial work, with its exampl
 
 ## Sources
 - [Risk and Insurance (Society of Actuaries, 2005)](https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf) — the study note (P-21-05, second printing; copyright 2005 by the Society of Actuaries): title page and Sections I–X
-- [SOA Exam P Syllabus, July 2026](https://www.soa.org/globalassets/assets/files/edu/2026/july/syllabi/2026-07-p-syllabus.pdf) — names "Risk and Insurance" as the concepts an Exam P candidate is expected to be familiar with
+- [SOA Exam P Syllabus, November 2026](https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf) — names "Risk and Insurance" as the concepts an Exam P candidate is expected to be familiar with (p. 1; Other Resources, p. 7)

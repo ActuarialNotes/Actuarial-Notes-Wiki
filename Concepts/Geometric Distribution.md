@@ -38,7 +38,7 @@ The **Geometric Distribution** $X \sim \text{Geom}(p)$ counts the number of inde
 > > The expected number of policies until the first claim: $E[X] = 1/0.20 = 5$.
 
 > [!example]- Using Memorylessness After a Dry Spell {Example}
-> With the same 20% claim probability per policy, 8 policies have been reviewed with no claim. Find the probability that at least 3 more must be reviewed before the first claim appears.
+> With the same 20% claim probability per policy, 8 policies have been reviewed with no claim. Find the probability that the first claim comes on the 11th policy or later.
 >
 > > [!answer]-
 > > Memorylessness discards the 8 wasted trials entirely:

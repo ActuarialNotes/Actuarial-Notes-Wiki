@@ -19,7 +19,8 @@ The **Continuous Uniform Distribution** $X \sim \text{Unif}(a, b)$ assigns equal
 > $$f(x) = \frac{1}{b - a}, \quad a < x < b$$
 
 - $E[X] = (a+b)/2$, $\text{Var}(X) = (b-a)^2/12$, and $F(x) = (x-a)/(b-a)$ for $a < x < b$
-- Conditional distributions on sub-intervals are also uniform (memoryless within the support)
+- Conditional distributions on sub-intervals are also uniform: given $X > d$, $X$ is uniform on $(d, b)$
+- The uniform is **not** memoryless — the exponential is the only continuous density that is. For $\text{Unif}(0, 10)$, $P(X > 8 \mid X > 5) = 2/5$, but $P(X > 3) = 7/10$
 
 ![[Media/Figures/Uniform_Continuous_Distribution.svg|340]]
 

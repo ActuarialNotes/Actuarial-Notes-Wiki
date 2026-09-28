@@ -35,7 +35,7 @@ Read the question for the **story** the quantity follows, then check the support
 
 - The word **memoryless** is decisive: it appears only for the exponential (and its discrete counterpart, the geometric).
 - For the lognormal, $\mu$ and $\sigma$ are the parameters of $\ln X$, **not** the mean and standard deviation of $X$. Every lognormal probability reduces to a normal one by taking logs of both sides: $P(X > c) = P(\ln X > \ln c)$.
-- The normal is the only one on this list allowed to go negative — a red flag if the quantity is a loss.
+- Apart from a uniform with $a < 0$, the normal is the only one on this list that can go negative, and the only one with no lower bound at all — a red flag if the quantity is a loss.
 - Insurance provisions ([[Deductible|deductibles]], [[Benefit Limit|limits]], [[Coinsurance Percentage|coinsurance]]) transform whichever severity distribution is chosen; see [[Transformations of Random Variables]].
 
 ![[Media/Figures/Continuous_Univariate_Distributions.svg|340]]

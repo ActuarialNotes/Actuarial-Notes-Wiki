@@ -64,7 +64,7 @@ The **Beta Distribution** $X \sim \text{Beta}(\alpha, \beta)$ is a continuous di
 > >            &\approx 0.181
 > > \end{align*}
 > > $$
-> > About an 18% chance the loss ratio exceeds 80%. Any Exam P beta question will have integer parameters for exactly this reason.
+> > About an 18% chance the loss ratio exceeds 80%.
 
 > [!example]- Beta as the Distribution of a Uniform Order Statistic {Example}
 > Four claim-settlement delays are i.i.d. $\text{Uniform}(0,1)$ years. Find the expected value of the second-smallest delay.

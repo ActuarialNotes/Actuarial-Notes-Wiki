@@ -72,4 +72,4 @@ The **Gamma Distribution** $X \sim \text{Gamma}(\alpha, \theta)$ is a flexible c
 > > $$
 > > Then back-substitute:
 > > $$\alpha = \frac{E[X]}{\theta} = \frac{800}{400} = 2$$
-> > So $X \sim \text{Gamma}(2, 400)$. This ratio trick — variance over mean gives the scale — works for any scale family and is faster than solving the two equations simultaneously.
+> > So $X \sim \text{Gamma}(2, 400)$. The ratio trick — variance over mean gives the scale — is a property of the gamma (exponential included), where $\alpha\theta^2/(\alpha\theta) = \theta$ whatever $\alpha$ is. It does not carry over to other scale families: for a uniform on $(0, \theta)$, variance over mean is $(\theta^2/12)/(\theta/2) = \theta/6$.

@@ -26,7 +26,8 @@ The **Negative Binomial Distribution** $X \sim \text{NegBin}(r, p)$ counts the n
 > $$E[X] = \frac{r}{p}, \qquad \text{Var}(X) = \frac{r(1-p)}{p^2}$$
 
 - **Check the parameterization first.** As written, $X$ counts *trials* and starts at $r$. The alternative counts *failures before the $r$-th success*, $Y = X - r \in \{0,1,2,\ldots\}$, with $P(Y=k) = \binom{k+r-1}{k}p^r(1-p)^k$ and $E[Y] = r(1-p)/p$. Same variance, means differing by $r$ — the same trap as the [[Geometric Distribution|geometric]].
-- $\text{Var}(X) > E[X]$ always, so the negative binomial is the standard **overdispersed** alternative to the [[Poisson Distribution|Poisson]] for claim counts in a heterogeneous portfolio.
+- **The exam tables' form.** SOA's *Tables for Exam C* (the Loss Models appendix) write the failures count as $\text{NegBin}(r, \beta)$ with $p = 1/(1+\beta)$: $P(Y=k) = \dfrac{r(r+1)\cdots(r+k-1)\,\beta^k}{k!\,(1+\beta)^{r+k}}$, $E[Y] = r\beta$ and $\text{Var}(Y) = r\beta(1+\beta)$. Unlike the binomial's $m$, $r$ is not required to be a whole number there.
+- **Overdispersion belongs to the failures form.** $\text{Var}(Y)/E[Y] = 1/p = 1+\beta > 1$ always, where the binomial's ratio is below 1 and the Poisson's is exactly 1 — which is what makes $Y$ the **overdispersed** alternative to the [[Poisson Distribution|Poisson]] for counts. The trials count $X$ does not share it: $\text{Var}(X)/E[X] = (1-p)/p$, below 1 whenever $p > 1/2$ (with $r = 3$, $p = 0.75$: $E[X] = 4$ but $\text{Var}(X) = 4/3$).
 
 ![[Media/Negative_binomial_pmf.svg|500]]
 

@@ -44,7 +44,7 @@ The **Discrete Uniform Distribution** $X \sim \text{Unif}\{1, \ldots, n\}$ assig
 > >      &= 2.1
 > > \end{align*}
 > > $$
-> > The insurer expects to pay 2.1 thousand per loss, against a ground-up mean of $E[X] = 5.5$ — the deductible removes 3.4, more than the 4 it nominally withholds, because it also zeroes out the four smallest losses entirely.
+> > The insurer expects to pay 2.1 thousand per loss, against a ground-up mean of $E[X] = 5.5$ — the deductible removes $E[\min(X, 4)] = (1+2+3+4 \cdot 7)/10 = 3.4$ on average, less than the full 4, because a loss of 1, 2 or 3 is withheld only up to its own amount.
 
 > [!example]- A Range That Does Not Start at 1 {Example}
 > Claim counts are equally likely to be any integer from 20 to 29. Find the mean and variance.

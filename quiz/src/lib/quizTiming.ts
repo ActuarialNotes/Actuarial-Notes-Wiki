@@ -24,8 +24,8 @@ export interface ExamPace {
 export const EXAM_PACE: Record<string, ExamPace> = {
   // Guides/Exam P-1 (SOA): 3 hours, 30 multiple-choice questions.
   'Probability': { minutes: 180, per: 'question', units: 30 },
-  // Guides/Exam FM-2 (SOA): 2.5 hours, 35 multiple-choice questions.
-  'Financial Mathematics': { minutes: 150, per: 'question', units: 35 },
+  // Guides/Exam FM-2 (SOA): 2.5 hours, 30 multiple-choice questions.
+  'Financial Mathematics': { minutes: 150, per: 'question', units: 30 },
   // Guides/Exam MAS-I (CAS): 4 hours, 45 multiple-choice questions.
   'Exam MAS-I': { minutes: 240, per: 'question', units: 45 },
   // Guides/Exam MAS-II (CAS): 4 hours, 45 multiple-choice questions.

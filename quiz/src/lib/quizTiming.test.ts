@@ -64,7 +64,7 @@ describe('formatting', () => {
 
   it('prints paces', () => {
     expect(formatPace(EXAM_PACE['Probability'])).toBe('6:00 per question')
-    expect(formatPace(EXAM_PACE['Financial Mathematics'])).toBe('4:17 per question')
+    expect(formatPace(EXAM_PACE['Financial Mathematics'])).toBe('5:00 per question')
     expect(formatPace(EXAM_PACE['Exam MAS-I'])).toBe('5:20 per question')
     expect(formatPace(EXAM_PACE['Exam 5'])).toBe('4:22 per point')
   })

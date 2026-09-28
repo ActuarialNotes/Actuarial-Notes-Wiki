@@ -101,7 +101,7 @@ Below are the questions I'd want answered if I were starting over. Open whicheve
 
 > [!question]- What is the exam itself like?
 >
-> The early exams are multiple choice, on a computer. [[Exam P-1 (SOA)|Exam P]] gives you 3 hours for 30 questions. [[Exam FM-2 (SOA)|Exam FM]] gives you 2.5 hours for 35, which feels noticeably tighter. [[Exam MAS-I (CAS)|MAS-I]] and [[Exam MAS-II (CAS)|MAS-II]] are 4 hours each for 45 questions. Wrong answers don't cost you anything, so there's no reason to leave one blank. For P and FM you'll usually see a preliminary result on screen before you leave.
+> The early exams are multiple choice, on a computer. [[Exam P-1 (SOA)|Exam P]] gives you 3 hours for 30 questions. [[Exam FM-2 (SOA)|Exam FM]] gives you 2.5 hours for 30, which feels tighter. [[Exam MAS-I (CAS)|MAS-I]] and [[Exam MAS-II (CAS)|MAS-II]] are 4 hours each for 45 questions. Wrong answers don't cost you anything, so there's no reason to leave one blank. For P and FM you'll usually see a preliminary result on screen before you leave.
 >
 > The upper-level exams, like [[Exam 5 (CAS)|Exam 5]], are written answer. You still type your answers on a computer, but they're graded by volunteer actuaries against a marking scheme, and partial credit matters. Show your work, label what you're calculating and state your assumptions, even when you aren't sure of the final number. A clear method with a small slip in it can often still pick up most of the marks.
 

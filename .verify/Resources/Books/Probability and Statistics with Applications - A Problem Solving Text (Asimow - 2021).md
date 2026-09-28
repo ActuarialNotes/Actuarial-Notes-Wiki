@@ -28,3 +28,18 @@ created: 2026-09-27
 - checks_run: outline built from printed contents first, then diffed entry by entry against the page (211/211 numbered and back-matter entries; 6.5.5 Z-squared confirmed from the rendered page image); syllabus callout diffed both ways against Nov 2026 REFERENCES; every excluded section number confirmed to exist in the contents; Jul/Sep/Nov 2026 and Jan 2027 syllabi diffed (identical but for the sitting name); frontmatter vs title/CIP page, product page and syllabus; ISBN check digit; lead vs CIP summary and second-edition preface; resource_lint clean
 - sources_checked: Asimow and Maxwell, Probability and Statistics with Applications: A Problem Solving Text, 2nd ed. (ACTEX Learning, 2015) - publisher sample: title page p.2, copyright/CIP page p.3, prefaces pp.iii-v, printed contents pp.vii-xiii (sha256:35ab158018e8e8999b6311506f5c38ed3519bcca1d32ac9bf0eca82888eebcad) https://www.actexlearning.com/samples/ProbStats%20Sample.pdf; ACTEX Learning product page, Probability and Statistics with Applications 2nd Edition - ISBN list (Printed 978-1-62542-472-3) https://www.actexlearning.com/exams/p/probability-and-statistics-with-applications; SOA Probability Exam syllabus, November 2026, REFERENCES pp.5-6 (sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397) https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf
 - note: Outline matches the printed contents exactly (all-caps chapter titles title-cased; the PDF has no usable bookmarks, only Blank Page entries, so the printed contents are the single in-source outline). Frontmatter is right: 2nd edition, 2015, ISBN 978-1-62542-472-3 is the printed ISBN of that edition per ACTEX and the syllabus; the title page and CIP have no hyphen in Problem Solving (the syllabus writes Problem-Solving). The only error is the 2021 in the filename (F-001). Lead is supported by the CIP summary and the second-edition preface; its list of new topics gives five of the six the preface names (omits sufficient statistical estimators and the linear exponential family) - partial, not wrong. Callout matches the syllabus word for word; nothing changes in January 2027. Confidence capped at medium per the sweep brief: the chapters themselves were not read, though the page claims nothing beyond the sampled front matter.
+
+## [F-002] Syllabus citation names a past sitting (July 2026)
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- severity: minor
+- status: open
+- locus: ## Sources, SOA syllabus entry
+- claim: Sources cites SOA Exam P Syllabus, July 2026 (https://www.soa.org/globalassets/assets/files/edu/2026/july/syllabi/2026-07-p-syllabus.pdf) for the citation and the assigned chapters and sections.
+- evidence: SOA Probability Exam syllabus, November 2026 (7 pp.), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf. p.6 carries the same Asimow citation (Second Edition, 2015, ACTEX, ISBN 978-1-62542-472-3) and chapter list as the callout; the July 2026 sitting has passed and its text is identical bar the title (per this page log C-001, Jul/Sep/Nov 2026 and Jan 2027 diffed).
+- source_rank: 1
+- proposed_action: Cite the November 2026 syllabus.
+- applied: true
+- fingerprint: 628b25c515d6

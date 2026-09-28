@@ -90,3 +90,40 @@ created: 2026-09-27
 - proposed_action: Cite the November 2026 syllabus.
 - applied: true
 - fingerprint: 628b25c515d6
+
+## [F-004/R] Citation moved to the November 2026 syllabus
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-004
+- status: resolved
+- note: Sources now cites the SOA Exam P Syllabus, November 2026 (p.7: same citation and chapter list as the callout).
+
+## [F-002/R] Confirmed Exercises sections added to the outline
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-002
+- status: resolved
+- note: Added 3.6 Exercises and 4.8 Exercises, each headed so on the book own page (2nd-ed sample pages p.170 sha256:60ac8455a94174a6aa8cf04d5a4521ec020b7a8ddacfecd9ab293d994d1a9410, p.242 sha256:db6f2e1da8a170024f760d8efefa0b0f338d0567df44f56fbf14988e07d6ee93, text re-read this run). The other chapters Exercises sections are not added: the author contents file ptext.con, re-fetched this run (sha256:2e8c718840614a51e42de65131bc4f91268a3fbb0402bc0f258c0ebe0118f955; the server omits its intermediate, so Sectigo published InCommon RSA OV SSL CA 3 from the leaf AIA URL http://crt.sectigo.com/InCommonRSAOVSSLCA3.crt, sha256:9c0f288eaabb71405701020c972f8159446296078d38591c68499b12ce379444, was supplied and the chain verified to the trusted Sectigo root), lists no Exercises section in any chapter, and no fetched 2nd-edition page shows another one number. The Sources lines now say both.
+
+## [F-003/R] ScholarWorks line names the first edition; Exam P claim sourced to the review
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-003
+- status: resolved
+- note: The ScholarWorks Sources line now says the record is the 2011 first edition (its attached PDF, sha256:9758dcf6fe8ccbaf1071c40b0d103edc56c7caaa6cf62b4a1b67709537e2c9ce, p.2 read from the page image: copyright 2011, ISBN 978-0-9829174-0-4, QA 273.L44 2011). The JQT review line now carries the Exam P claim for the second edition (review p.332, read from the page image: the book selection of topics aligns with all the topics associated with Exam P given by the Society of Actuaries).
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- status_set: verified
+- confidence: medium
+- checks_run: Re-verified after resolving F-002..F-004: outline re-diffed against re-fetched ptext.con (all 8 chapters and 33 sections) plus the 3.6 and 4.8 Exercises headings on sample pp.170 and 242; callout against Nov 2026 syllabus p.7; Sources lines against ptext.con, the sample pages, the review page image and the ScholarWorks PDF p.2 image; resource_lint
+- sources_checked: SOA Probability Exam syllabus, November 2026 (7 pp.), REFERENCES p.7, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf; Lawrence M. Leemis, Probability, Second Edition: contents (author list), https://www.math.wm.edu/~leemis/ptext.con, sha256:2e8c718840614a51e42de65131bc4f91268a3fbb0402bc0f258c0ebe0118f955 (fetched 2026-09-28 with the InCommon RSA OV SSL CA 3 intermediate supplied); Leemis, Probability 2nd ed., sample pages of the book pp.27, 55-56, 129, 170, 206-207, 211, 242, 257-258, 290-291, 344, 393, 489-490, 542-543, 550, https://www.math.wm.edu/~leemis/probability/samplepages/ (page170.pdf sha256:60ac8455a94174a6aa8cf04d5a4521ec020b7a8ddacfecd9ab293d994d1a9410, page242.pdf sha256:db6f2e1da8a170024f760d8efefa0b0f338d0567df44f56fbf14988e07d6ee93, page542.pdf sha256:0f6d3c4f84931522e6f39a1daeded8554166d92f014bf96deb971962249260ba); Lawrence Leemis home page (W&M), book citation and errata links, https://www.math.wm.edu/~leemis/, sha256:370224d526ef2951ae6427e4aeedc8d6f8e31c1aa1e210be917373525fe887ab; S. Huang, review of Probability (Leemis), Journal of Quality Technology 53(3):332, 2021, https://www.math.wm.edu/~leemis/probability2e-review.pdf, sha256:88c930e079af88b3b1378bd9bbb11c1ffdd831b56e091e7574a53ac2bae4dcc8; Introduction to Probability, W&M ScholarWorks record (first edition), https://scholarworks.wm.edu/asbookchapters/125/, html sha256:d426dd4fa9348ae742226d1a067345c0597cdcad76e4aa3da98b9d4e633915ec, attached PDF sha256:9758dcf6fe8ccbaf1071c40b0d103edc56c7caaa6cf62b4a1b67709537e2c9ce p.2

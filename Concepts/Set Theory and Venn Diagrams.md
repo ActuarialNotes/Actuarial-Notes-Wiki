@@ -15,4 +15,4 @@ Set theory and Venn diagrams are covered on two separate pages:
 - [[Set Theory]]
 - [[Venn Diagram]]
 
-On the Exam P syllabus both fall under General Probability learning outcome 1a: define set functions, Venn diagrams, sample space, and events.
+On the Exam P syllabus, Venn diagrams are named in General Probability learning outcome 1a: "Define set functions, Venn diagrams, sample space, and events."

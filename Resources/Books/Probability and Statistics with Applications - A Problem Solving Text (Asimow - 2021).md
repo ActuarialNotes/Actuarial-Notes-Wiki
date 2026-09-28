@@ -8,16 +8,16 @@ Edition: "2nd"
 Type: "Textbook"
 ISBN: "978-1-62542-472-3"
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-09-27
   last_checked_by: agent:validate-v1
-  content_hash: sha256:52f0618f7688974353293b95f07c4b800354b0822e12aa5b613377935854ba96
+  content_hash: sha256:54529c2593deb740ce180fb7e18b4040b113ec8c124ce5fb486df24bf226193c
   sources:
     - "Asimow and Maxwell, Probability and Statistics with Applications: A Problem Solving Text, 2nd ed. (ACTEX Learning, 2015) - publisher sample: title page p.2, copyright/CIP page p.3, prefaces pp.iii-v, printed contents pp.vii-xiii (sha256:35ab158018e8e8999b6311506f5c38ed3519bcca1d32ac9bf0eca82888eebcad) https://www.actexlearning.com/samples/ProbStats%20Sample.pdf"
     - "ACTEX Learning product page, Probability and Statistics with Applications 2nd Edition - ISBN list (Printed 978-1-62542-472-3) https://www.actexlearning.com/exams/p/probability-and-statistics-with-applications"
     - "SOA Probability Exam syllabus, November 2026, REFERENCES pp.5-6 (sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397) https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-  open_findings: 1
+  open_findings: 2
   open_critical: 0
   log: .verify/Resources/Books/Probability and Statistics with Applications - A Problem Solving Text (Asimow - 2021).md
 ---

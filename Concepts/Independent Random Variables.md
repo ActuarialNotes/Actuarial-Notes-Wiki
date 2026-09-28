@@ -27,7 +27,7 @@ verification:
 ![[Media/Figures/Independent_Random_Variables.svg|340]]
 
 > [!example]- Verifying Independence {Example}
-> $X \sim \text{Uniform}(0,1)$ and $Y \sim \text{Uniform}(0,1)$ with joint density $f(x,y) = 2$ for $0 < x < y < 1$. Are $X$ and $Y$ independent?
+> $X$ and $Y$ have joint density $f(x,y) = 2$ for $0 < x < y < 1$ (and 0 elsewhere). Are $X$ and $Y$ independent?
 >
 > > [!answer]-
 > > The marginal densities are $f_X(x) = 2(1-x)$ and $f_Y(y) = 2y$. Their product is $4y(1-x)$, but $f(x,y) = 2 \neq 4y(1-x)$ in general, so **$X$ and $Y$ are not independent**.

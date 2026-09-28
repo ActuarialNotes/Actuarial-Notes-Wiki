@@ -18,6 +18,7 @@ A **Sample Space** $S$ (or $\Omega$) is the set of all possible outcomes of a ra
 - Every conceivable result of the experiment appears as exactly one element of $S$
 - Outcomes in $S$ must be mutually exclusive (no two can occur simultaneously) and collectively exhaustive (together they cover every possibility)
 - The sample space can be finite, countably infinite, or uncountably infinite depending on the experiment
+- When $S$ is finite or countably infinite, its outcomes can be listed in sequence:
 
 > $$S = \{\omega_1, \omega_2, \ldots\}$$
 >

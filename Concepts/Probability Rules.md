@@ -53,7 +53,7 @@ verification:
 > > P(\text{at least one}) &= 1 - P(\text{no claims}) \\
 > >                        &= 1 - (0.90)^5 \\
 > >                        &= 1 - 0.59049 \\
-> >                        &= 0.41
+> >                        &= 0.40951 \approx 0.41
 > > \end{align*}
 > > $$
 

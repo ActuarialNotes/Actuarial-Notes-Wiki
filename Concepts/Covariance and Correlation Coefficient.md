@@ -23,7 +23,8 @@ The **covariance** $\text{Cov}(X, Y)$ measures the direction of the linear relat
 
 - Correlation is unit-free and comparable across scales, whereas covariance carries the product of the two variables' units.
 - $\rho_{X,Y} = 0$ means no linear relationship, but not necessarily [[Independent Random Variables|independence]].
-- See [[Correlation]] for interpretation and [[Covariance]] for properties such as bilinearity.
+- Covariance is bilinear: $\text{Cov}(aX + bY,\, Z) = a\,\text{Cov}(X, Z) + b\,\text{Cov}(Y, Z)$, adding a constant to either variable leaves it unchanged, and $\text{Cov}(X, X) = \text{Var}(X)$.
+- See also [[Correlation]] and [[Covariance]].
 
 > [!example]- Covariance of Study Hours and Exam Score {Example}
 > A joint PMF is $p(1,4)=0.2$, $p(1,8)=0.1$, $p(3,4)=0.1$, $p(3,8)=0.6$, where $X$ = hours studied and $Y$ = exam score. Compute $\text{Cov}(X, Y)$.

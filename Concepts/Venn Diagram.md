@@ -16,7 +16,7 @@ verification:
   log: .verify/Concepts/Venn Diagram.md
 ---
 
-A **Venn Diagram** is a visual tool used to represent the relationships between different sets, used for calculating the intersections and unions of multiple events. The most common calculation derived from a Venn Diagram is finding the probability of the union.
+A **Venn Diagram** is a visual tool used to represent the relationships between different sets, used for calculating the intersections and unions of multiple events. For two events, the probability of the union is:
 
 > $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
 
@@ -37,7 +37,7 @@ A **Venn Diagram** is a visual tool used to represent the relationships between 
 | "Exactly one of $A$ or $B$" | $(A \setminus B) \cup (B \setminus A)$ | Both crescent moons (no overlap). |
 
 > [!example]- The Insurance Policyholder {Example}
-> $P(A) = 0.70$, $P(H) = 0.40$, $P(A \cap H) = 0.20$. Find the probability of a policyholder having neither policy.
+> Let $A$ be the event that a policyholder has an auto policy and $H$ the event that they have a homeowners policy, with $P(A) = 0.70$, $P(H) = 0.40$, $P(A \cap H) = 0.20$. Find the probability of a policyholder having neither policy.
 >
 > > [!answer]-
 > > **Step 1: Find the Union (Anyone with at least one policy)**

@@ -21,8 +21,8 @@ verification:
 > $$= \frac{P(E \mid H)\,P(H)}{\displaystyle\sum_{i} P(E \mid H_i)\,P(H_i)}$$
 
 - $H$ is the hypothesis and $E$ is the observed evidence
-- If $A$ and $B$ are independent, then $P(A \mid B) = P(A)$
-- Bayes' Theorem is central to [[Credibility Theory]] and to [[Bayesian Credibility]], where the prior is the class assumption and the posterior is the experience-updated estimate
+- If $H$ and $E$ are independent (with $P(E) > 0$), observing $E$ leaves the prior unchanged: $P(H \mid E) = P(H)$
+- See also [[Bayesian Credibility]]
 
 ![[Media/Figures/Bayes_Theorem.svg|340]]
 

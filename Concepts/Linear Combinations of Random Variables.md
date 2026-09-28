@@ -20,10 +20,10 @@ verification:
 
 > $$\text{Var}(L) = \sum_{i=1}^{n} c_i^2\,\text{Var}(X_i) + 2\sum_{i < j} c_i c_j\,\text{Cov}(X_i, X_j)$$
 
-- **Expectation is always linear** — $E[L]$ needs no independence assumption at all. Variance does: the [[Covariance]] terms vanish only for [[Independent Random Variables|independent]] $X_i$. See [[Moments for Linear Combinations]].
+- **Expectation is always linear** — $E[L]$ needs no independence assumption at all. The variance formula holds in general too; the [[Covariance]] terms drop out whenever the $X_i$ are pairwise uncorrelated. [[Independent Random Variables|Independent]] variables are always uncorrelated, but zero covariance does not by itself imply independence. See [[Moments for Linear Combinations]].
 - Coefficients enter the variance **squared**, so $\text{Var}(X - Y) = \text{Var}(X) + \text{Var}(Y)$ for independent $X, Y$ — a difference has a *larger* variance than either term, never a smaller one.
 - A linear combination of independent normals is exactly normal, which is what makes [[Probabilities for Linear Combinations]] computable in closed form.
-- For $n$ i.i.d. variables, $\bar{X}$ has mean $\mu$ and variance $\sigma^2/n$; for large $n$ the [[Central Limit Theorem]] makes $L$ approximately normal whatever the $X_i$ are.
+- For $n$ i.i.d. variables with mean $\mu$ and finite variance $\sigma^2$, $\bar{X}$ has mean $\mu$ and variance $\sigma^2/n$, and for large $n$ the [[Central Limit Theorem]] makes the sum $X_1 + \cdots + X_n$ and the mean $\bar{X}$ approximately normal, whatever their common distribution.
 
 ![[Media/Figures/Linear_Combinations_of_Random_Variables.svg|340]]
 

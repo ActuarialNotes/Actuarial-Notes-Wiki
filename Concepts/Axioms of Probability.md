@@ -14,15 +14,15 @@ verification:
   log: .verify/Concepts/Axioms of Probability.md
 ---
 
-The **Axioms of Probability** (also called **Kolmogorov's axioms**) are three foundational rules that any valid [[Concepts/Probability]] $P$ must satisfy:
-- Total Probability
+The **Axioms of Probability** are three foundational rules that any valid [[Concepts/Probability]] $P$ must satisfy:
 - Non-Negativity
+- Total Probability
 - Additivity
 
 | Axiom | Mathematical Statement | Description |
 | :--- | :--- | :--- |
-| **1. Total Probability** | $P(S) = 1$ | Something must happen. The probability of the entire sample space is 100%. |
-| **2. Non-negativity** | $P(E) \geq 0$ | No negative odds. You cannot have a less-than-zero chance of an event occurring. |
+| **1. Non-negativity** | $P(E) \geq 0$ | No negative odds. You cannot have a less-than-zero chance of an event occurring. |
+| **2. Total Probability** | $P(S) = 1$ | Something must happen. The probability of the entire sample space is 100%. |
 | **3. Additivity** | $P\!\left(\bigcup_{i=1}^{\infty} E_i\right) = \sum_{i=1}^{\infty} P(E_i)$ | Add if no overlap. If events are [[Concepts/Mutually Exclusive Events]], the probability of "one or the other" is the sum of their individual probabilities. |
 
 ![[Media/Figures/Axioms_of_Probability.svg|340]]

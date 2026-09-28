@@ -60,7 +60,7 @@ The **Variance for Conditional and Marginal Distributions** measures spread at t
 > >               &= 0.25
 > > \end{align*}
 > > $$
-> > $\text{Var}(N) > E[N]$: heterogeneous risk parameters make the portfolio's claim counts **overdispersed** relative to a single Poisson, which is why insurers do not price every driver at the portfolio mean.
+> > $\text{Var}(N) > E[N]$: heterogeneous risk parameters make the portfolio's claim counts **overdispersed** relative to a single Poisson.
 
 > [!example]- Both Terms Matter {Example}
 > A loss $X$ is uniform on $(0, Y)$, where $Y$ takes the values 10 and 20 with equal probability. Find $\text{Var}(X)$.
@@ -84,4 +84,4 @@ The **Variance for Conditional and Marginal Distributions** measures spread at t
 > > \end{align*}
 > > $$
 > > $$\text{Var}(X) = 20.83 + 6.25 \approx 27.08$$
-> > Reporting only 6.25 (the between-group term) would understate the spread by a factor of four.
+> > Reporting only 6.25 (the between-group term) would understate the spread by a factor of more than four ($27.08/6.25 \approx 4.3$).

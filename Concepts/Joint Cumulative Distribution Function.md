@@ -20,8 +20,16 @@ The **joint cumulative distribution function** (joint CDF) of random variables $
 
 > $$F(x,y) = P(X \leq x,\; Y \leq y)$$
 
-- It is non-decreasing in each argument and right-continuous
+- It is non-decreasing in each argument
 - $F(-\infty, y) = F(x, -\infty) = 0$ and $F(\infty, \infty) = 1$
+- For discrete variables, $F$ adds up the joint probability function over every cell at or below $x$ and at or below $y$:
+
+> $$F(x,y) = \sum_{x_i \le x}\ \sum_{y_j \le y} p(x_i, y_j)$$
+
+- For integer-valued $X$ and $Y$, a single cell is recovered from $F$ by inclusion–exclusion on the rectangle:
+
+> $$p(x,y) = F(x,y) - F(x-1,y) - F(x,y-1) + F(x-1,y-1)$$
+
 - For continuous jointly distributed variables, the joint PDF is recovered by:
 
 > $$f(x,y) = \frac{\partial^2 F(x,y)}{\partial x\, \partial y}$$
@@ -29,6 +37,34 @@ The **joint cumulative distribution function** (joint CDF) of random variables $
 - The joint CDF of [[Independent Random Variables]] factors as $F(x,y) = F_X(x)\cdot F_Y(y)$
 
 ![[Media/Figures/Joint_Cumulative_Distribution_Function.svg|340]]
+
+> [!example]- A Discrete Joint CDF {Example}
+> $X$ and $Y$ are the numbers of claims on two policies, with joint probability function
+>
+> | | $Y=0$ | $Y=1$ | $Y=2$ |
+> |---|---|---|---|
+> | $X=0$ | 0.30 | 0.15 | 0.05 |
+> | $X=1$ | 0.20 | 0.20 | 0.10 |
+>
+> Find $F(1,1)$ and $F(0,2)$, then recover $P(X=1, Y=1)$ from $F$ alone.
+>
+> > [!answer]-
+> > Add every cell with $x_i \le x$ and $y_j \le y$:
+> > $$
+> > \begin{align*}
+> > F(1,1) &= 0.30 + 0.15 + 0.20 + 0.20 = 0.85 \\
+> > F(0,2) &= 0.30 + 0.15 + 0.05 = 0.50
+> > \end{align*}
+> > $$
+> > With $F(0,1) = 0.45$, $F(1,0) = 0.50$ and $F(0,0) = 0.30$, the rectangle rule gives the cell back:
+> > $$
+> > \begin{align*}
+> > P(X=1, Y=1) &= F(1,1) - F(0,1) - F(1,0) + F(0,0) \\
+> >             &= 0.85 - 0.45 - 0.50 + 0.30 \\
+> >             &= 0.20
+> > \end{align*}
+> > $$
+> > which matches the table.
 
 > [!example]- Computing a Joint Probability {Example}
 > $X$ and $Y$ are independent, each Uniform on $[0,1]$. Find $P(X \leq 0.4,\; Y \leq 0.6)$.

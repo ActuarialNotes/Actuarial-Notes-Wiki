@@ -22,6 +22,15 @@ verification:
 
 - The formulas above apply when the observations are i.i.d. with common CDF $F(x)$ and PDF $f(x)$
 - For the $\text{Uniform}(0,1)$ distribution: $E[X_{(k)}] = \dfrac{k}{n+1}$
+- For **independent** $X_1, \ldots, X_n$ that need not share a distribution ($X_i$ with CDF $F_i$), the maximum and minimum still have product forms. They use only distribution functions, so they hold for discrete and continuous variables alike:
+
+> $$P\bigl(X_{(n)} \le x\bigr) = F_1(x)\,F_2(x)\cdots F_n(x)$$
+
+> $$P\bigl(X_{(1)} > x\bigr) = \bigl[1 - F_1(x)\bigr]\bigl[1 - F_2(x)\bigr]\cdots\bigl[1 - F_n(x)\bigr]$$
+
+- The **joint** density of two order statistics $X_{(j)} < X_{(k)}$ ($j < k$) of an i.i.d. continuous sample counts the observations below, between and above them; for the minimum and maximum ($j = 1$, $k = n$) it reduces to $f_{1,n}(x,y) = n(n-1)[F(y) - F(x)]^{n-2} f(x) f(y)$:
+
+> $$f_{j,k}(x,y) = \frac{n!}{(j-1)!\,(k-j-1)!\,(n-k)!} [F(x)]^{j-1} [F(y) - F(x)]^{k-j-1} [1 - F(y)]^{n-k} f(x)\, f(y), \quad x < y$$
 
 ![[Media/Figures/Order_Statistics.svg|340]]
 
@@ -31,3 +40,25 @@ verification:
 > > [!answer]-
 > > The maximum is the $k = 3$ order statistic from a sample of $n = 3$. For i.i.d. $\text{Uniform}(0,1)$ random variables:
 > > $$E[X_{(3)}] = \frac{3}{3+1} = \frac{3}{4} = 0.75$$
+
+> [!example]- First Failure of Two Different Components {Example}
+> A system fails as soon as either of two independent components fails. Their lifetimes are exponential with means 10 and 15. Find the distribution and mean of the system's lifetime.
+>
+> > [!answer]-
+> > The system lifetime is the minimum $X_{(1)}$ of two independent but **not** identically distributed lifetimes, so multiply the survival functions:
+> > $$
+> > \begin{align*}
+> > P\bigl(X_{(1)} > x\bigr) &= e^{-x/10}\, e^{-x/15} \\
+> >                          &= e^{-x/6}
+> > \end{align*}
+> > $$
+> > That is the survival function of an exponential with mean 6, so $E[X_{(1)}] = 6$ — shorter than either component's mean.
+
+> [!example]- Joint Distribution of the Low and High Die {Example}
+> Two fair dice are rolled independently. Let $L$ be the smaller number and $H$ the larger. Find the joint probability function of $(L, H)$ and $P(H - L \ge 4)$.
+>
+> > [!answer]-
+> > Of the 36 equally likely ordered outcomes, $\{L = l, H = h\}$ with $l < h$ is the two outcomes $(l, h)$ and $(h, l)$, while $l = h$ is the single outcome $(l, l)$:
+> > $$p_{L,H}(l, h) = \begin{cases} 2/36, & l < h \\ 1/36, & l = h \end{cases}$$
+> > The pairs with $h - l \ge 4$ are $(1,5)$, $(1,6)$ and $(2,6)$:
+> > $$P(H - L \ge 4) = 3 \cdot \frac{2}{36} = \frac{1}{6}$$

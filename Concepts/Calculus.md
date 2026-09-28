@@ -27,11 +27,14 @@ A **limit** describes the value a function approaches as its input approaches a 
 
 A function $f$ is **continuous** at $a$ if $\lim_{x \to a} f(x) = f(a)$.
 
+If $\lim_{x \to a} f(x) = L$ and $\lim_{x \to a} g(x) = M$, where $L$ and $M$ are real numbers:
+
 | Rule | Formula |
 | ---- | ------- |
-| Sum | $\lim[f + g] = L + M$ |
-| Product | $\lim[f \cdot g] = L \cdot M$ |
-| L'Hôpital's Rule | $\lim \frac{f}{g} = \lim \frac{f'}{g'}$ when form is $\frac{0}{0}$ or $\frac{\infty}{\infty}$ |
+| Sum | $\lim_{x \to a}[f(x) + g(x)] = L + M$ |
+| Product | $\lim_{x \to a}[f(x) \cdot g(x)] = L \cdot M$ |
+
+**L'Hôpital's Rule** — if $f$ and $g$ are differentiable on an open interval containing $a$ (except possibly at $a$) and $\lim_{x \to a} \frac{f(x)}{g(x)}$ has the form $\frac{0}{0}$ or $\frac{\infty}{\infty}$, then $\lim_{x \to a} \frac{f(x)}{g(x)} = \lim_{x \to a} \frac{f'(x)}{g'(x)}$, provided the limit on the right exists or is $\pm\infty$.
 
 ### Differentiation
 The **derivative** of $f$ at $x$ measures the instantaneous rate of change:
@@ -61,7 +64,7 @@ $$\frac{\partial f}{\partial x}(x,y) \quad \text{holds } y \text{ fixed}$$
 > > $$\mu(t) = -\frac{-\lambda e^{-\lambda t}}{e^{-\lambda t}} = \lambda$$
 
 ### Integration
-The **definite integral** gives the net signed area under $f$ from $a$ to $b$:
+The **definite integral** gives the net signed area under $f$ from $a$ to $b$. If $f$ is continuous on $[a, b]$ and $F$ is any antiderivative of $f$:
 
 > $$\int_a^b f(x)\,dx = F(b) - F(a)$$
 >
@@ -71,10 +74,10 @@ This result is the **Fundamental Theorem of Calculus**.
 
 | Technique | When to Use | Key Formula |
 | --------- | ----------- | ----------- |
-| Power Rule | Polynomial terms | $\int x^n\,dx = \dfrac{x^{n+1}}{n+1} + C$ |
+| Power Rule | Polynomial terms | $\int x^n\,dx = \dfrac{x^{n+1}}{n+1} + C$, $n \neq -1$ (for $n = -1$: $\ln\lvert x \rvert + C$) |
 | Substitution | Composite functions | Let $u = g(x)$, then $du = g'(x)\,dx$ |
 | Integration by Parts | Product of functions | $\int u\,dv = uv - \int v\,du$ |
-| Partial Fractions | Rational functions | Decompose denominator into linear factors |
+| Partial Fractions | Rational functions | Decompose denominator into linear and irreducible quadratic factors |
 
 **Improper integrals** over $[0,\infty)$ are essential for continuous distributions on an unbounded support:
 
@@ -105,7 +108,7 @@ A **series** is the sum of the terms of a sequence. Two families appear constant
 | Function | Maclaurin Series |
 | -------- | ---------------- |
 | $e^x$ | $\displaystyle\sum_{n=0}^{\infty} \frac{x^n}{n!}$ |
-| $\ln(1+x)$ | $\displaystyle\sum_{n=1}^{\infty} \frac{(-1)^{n+1}x^n}{n}, \quad \lvert x \rvert \leq 1$ |
+| $\ln(1+x)$ | $\displaystyle\sum_{n=1}^{\infty} \frac{(-1)^{n+1}x^n}{n}, \quad -1 < x \leq 1$ |
 | $(1+x)^k$ | $\displaystyle\sum_{n=0}^{\infty} \binom{k}{n} x^n, \quad \lvert x \rvert < 1$ |
 
 > [!example]- Geometric Series: Present Value of a Perpetuity {Example}

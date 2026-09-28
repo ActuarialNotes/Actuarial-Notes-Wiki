@@ -21,7 +21,7 @@ The **joint probability function** (joint PMF) of discrete random variables $X$ 
 
 - It satisfies $p(x,y) \geq 0$ for all $(x,y)$ and $\displaystyle\sum_x \sum_y p(x,y) = 1$
 - [[Marginal Probability Function]]s are obtained by summing out one variable
-- [[Conditional Probability Function]]s are obtained by fixing one variable
+- [[Conditional Probability Function]]s are obtained by fixing one variable and dividing by its marginal, so the slice sums to 1: $p_{X \mid Y}(x \mid y) = \dfrac{p(x,y)}{p_Y(y)}$ for $p_Y(y) > 0$
 
 ![[Media/Figures/Joint_Probability_Function.svg|340]]
 
@@ -35,3 +35,5 @@ The **joint probability function** (joint PMF) of discrete random variables $X$ 
 >
 > > [!answer]-
 > > $P(X=1, Y=1) = 0.10$. Marginal $P(X=1) = 0.20 + 0.10 = 0.30$.
+> >
+> > Conditional: fixing $Y = 1$ leaves the slice $(0.20, 0.10)$, which sums to $p_Y(1) = 0.30$, so $P(X=1 \mid Y=1) = 0.10/0.30 = 1/3$ and $P(X=0 \mid Y=1) = 2/3$.

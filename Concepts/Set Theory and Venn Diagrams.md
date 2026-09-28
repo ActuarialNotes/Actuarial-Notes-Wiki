@@ -11,8 +11,8 @@ verification:
   log: .verify/Concepts/Set Theory and Venn Diagrams.md
 ---
 
-- **Set Theory and Venn Diagrams** — concept summary to be written.
-- This page anchors the **Set Theory and Venn Diagrams** topic so every review question links to a concept.
+Set theory and Venn diagrams are covered on two separate pages:
+- [[Set Theory]]
+- [[Venn Diagram]]
 
-> [!example]- Worked Example {Example}
-> Example to be added.
+On the Exam P syllabus both fall under General Probability learning outcome 1a: define set functions, Venn diagrams, sample space, and events.

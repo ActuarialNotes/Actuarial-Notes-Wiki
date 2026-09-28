@@ -36,7 +36,7 @@ The integrand is rarely the hard part; the **region** is. Work in this order:
 1. **Sketch the support.** Shade the set of $(x,y)$ where $f > 0$.
 2. **Pick an outer variable** and read off its full numeric range — those limits must be constants.
 3. **Slice.** Holding the outer variable fixed, read the inner variable's range off the sketch — those limits may involve the outer variable.
-4. **Sanity check:** the outer limits are always numbers, the inner limits never mention the outer variable's *own* symbol.
+4. **Sanity check:** the outer limits are always numbers; the inner limits may mention the outer variable but never the inner variable itself — the limits on $dy$ never contain $y$.
 
 > $$\int_{a}^{b}\!\!\int_{g_1(x)}^{g_2(x)} f(x,y)\,dy\,dx$$
 

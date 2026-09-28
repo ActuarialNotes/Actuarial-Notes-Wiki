@@ -14,13 +14,17 @@ verification:
   log: .verify/Concepts/Probabilities for Linear Combinations.md
 ---
 
-A **linear combination** of independent random variables $L = c_1 X_1 + c_2 X_2 + \cdots + c_n X_n$ is normally distributed when the $X_i$ are independent normals, enabling exact probability calculations via standardization.
+Probabilities for a **linear combination** $L = c_1 X_1 + c_2 X_2 + \cdots + c_n X_n$ of independent random variables can be found exactly in two cases. When the $X_i$ are independent normals, $L$ is itself normal and is handled by standardization. When the $X_i$ are independent and discrete, the distribution of $L$ is built by adding up, for each value of $L$, the probabilities of the combinations of values that produce it.
 
 > $$L = c_1 X_1 + \cdots + c_n X_n \sim N\!\left(\sum_i c_i\mu_i,\ \sum_i c_i^2\sigma_i^2\right)$$
 >
 > $$\text{where } X_1, \ldots, X_n \text{ are independent normal random variables}$$
 
-- For non-normal independent random variables, the [[Central Limit Theorem]] provides an approximation for large $n$
+> $$P(X + Y = s) = \sum_{x} P(X = x)\,P(Y = s - x) \qquad \text{for independent integer-valued } X, Y$$
+
+- The discrete sum above is the **convolution** of the two probability functions; for more than two variables, convolve one at a time, and a coefficient only relabels values ($2X$ takes the values $0, 2, 4, \ldots$).
+- Some families are closed under independent sums: independent Poisson variables sum to a Poisson with the means added, so no convolution is needed.
+- For the sum or mean of many i.i.d. non-normal variables with finite variance, the [[Central Limit Theorem]] gives an approximation instead — see [[Normal Approximation]].
 
 ![[Media/Figures/Probabilities_for_Linear_Combinations.svg|340]]
 
@@ -32,3 +36,16 @@ A **linear combination** of independent random variables $L = c_1 X_1 + c_2 X_2 
 > > $$\mu_L = 100+200 = 300, \qquad \sigma_L = \sqrt{10^2+15^2} = \sqrt{325} \approx 18.03$$
 > > Standardising:
 > > $$P(L > 340) = P\!\left(Z > \frac{340-300}{18.03}\right) = P(Z > 2.22) \approx 0.0132$$
+
+> [!example]- Total Claims from Two Independent Policies {Example}
+> Policy A has $X$ claims with $P(X=0)=0.5$, $P(X=1)=0.3$, $P(X=2)=0.2$. Policy B, independently, has $Y$ claims with $P(Y=0)=0.6$, $P(Y=1)=0.4$. Find $P(X + Y \ge 2)$.
+>
+> > [!answer]-
+> > Add the products over the pairs of values that give each total:
+> > $$
+> > \begin{align*}
+> > P(X+Y=0) &= (0.5)(0.6) = 0.30 \\
+> > P(X+Y=1) &= (0.5)(0.4) + (0.3)(0.6) = 0.38
+> > \end{align*}
+> > $$
+> > So $P(X + Y \ge 2) = 1 - 0.30 - 0.38 = 0.32$. Directly, $P(X+Y=2) = (0.3)(0.4) + (0.2)(0.6) = 0.24$ and $P(X+Y=3) = (0.2)(0.4) = 0.08$, which also total $0.32$.

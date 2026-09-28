@@ -25,7 +25,7 @@ The **Normal Approximation** replaces the distribution of a sum or average of ma
 - **Continuity correction.** When $S_n$ is integer-valued — a claim count, a [[Binomial Distribution|binomial]], a [[Poisson Distribution|Poisson]] — widen the event by half a unit first: $P(S_n \le k) \approx \Phi\!\left(\frac{k + 0.5 - n\mu}{\sigma\sqrt{n}}\right)$ and $P(S_n \ge k) \approx 1 - \Phi\!\left(\frac{k - 0.5 - n\mu}{\sigma\sqrt{n}}\right)$. Never apply it to a continuous sum.
 - A binomial$(n, p)$ is approximately $N\big(np,\ np(1-p)\big)$ and a Poisson$(\lambda)$ approximately $N(\lambda, \lambda)$ for large $n$ or $\lambda$ — each is a sum of i.i.d. pieces.
 - If the summands are themselves normal, nothing is approximate: the sum is exactly normal ([[Probabilities for Linear Combinations]]).
-- The approximation is weakest in the tails and for small $n$ with skewed summands. Claim severities are right-skewed, so the normal tends to **understate** the chance of a very large aggregate loss.
+- How large $n$ must be depends on the summands: for a binomial, the usual rule of thumb is that $np$ and $n(1-p)$ are both at least 5.
 - Inverted, it sets a fund: the total exceeded with probability $\alpha$ is about $n\mu + z_{1-\alpha}\,\sigma\sqrt{n}$, where $z_{1-\alpha}$ is the standard normal [[Percentile|percentile]].
 
 > [!example]- Sizing a Claim Fund at the 95th Percentile {Example}

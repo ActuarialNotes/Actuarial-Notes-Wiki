@@ -13,14 +13,17 @@ verification:
   log: .verify/Concepts/Independent Events.md
 ---
 
-Two events $A$ and $B$ are **Independent** if knowing that one occurred provides no information about whether the other occurred.
-- $P(A \mid B) = P(A)$ and $P(B \mid A) = P(B)$
-- Independence is a symmetric relation and must be verified mathematically; it cannot be assumed from a diagram
-- For a collection of events to be **mutually independent**, the product rule must hold for every subset of the collection, not just pairs:
+Two events $A$ and $B$ are **Independent** if knowing that one occurred provides no information about whether the other occurred. Equivalently, they satisfy the product rule:
 
 > $$P(A \cap B) = P(A) \cdot P(B)$$
 
 ![[Media/Figures/Independent_Events.svg|340]]
+
+- When $P(A) > 0$ and $P(B) > 0$, independence means $P(A \mid B) = P(A)$ and $P(B \mid A) = P(B)$; an event with probability 0 is independent of every event
+- Independence is a symmetric relation and must be verified mathematically; it cannot be assumed from a diagram
+- For a collection of events $A_1, \ldots, A_n$ to be **mutually independent**, the product rule must hold for every subset of the collection, not just pairs:
+
+> $$P(A_{i_1} \cap A_{i_2} \cap \cdots \cap A_{i_m}) = P(A_{i_1})\,P(A_{i_2}) \cdots P(A_{i_m})$$
 
 > [!example]- Testing Independence of Two Claim Events {Example}
 > For two policyholders, $P(\text{A claims}) = 0.4$, $P(\text{B claims}) = 0.3$, and $P(\text{both claim}) = 0.12$. Are their claim events independent?

@@ -23,9 +23,10 @@ Two events $A$ and $B$ are **Mutually Exclusive** (disjoint) if they cannot both
 ![[Media/Figures/Mutually_Exclusive_Events.svg|340]]
 
 > [!example]- Insurance Claim Type {Example}
-> A single claim is classified as either property damage ($P$) or bodily injury ($B$), but not both. $P(P) = 0.60$ and $P(B) = 0.35$.
+> Each claim is classified as exactly one of property damage ($D$), bodily injury ($B$), or other. $P(D) = 0.60$ and $P(B) = 0.35$. Find the probability that a claim is property damage or bodily injury, and the probability that it is classified as other.
 >
 > > [!answer]-
-> > Since $P$ and $B$ are mutually exclusive:
-> > $$P(P \cup B) = P(P) + P(B) = 0.60 + 0.35 = 0.95$$
-> > There is a 5% probability the claim is neither type (e.g., classified as "other").
+> > Since $D$ and $B$ are mutually exclusive:
+> > $$P(D \cup B) = P(D) + P(B) = 0.60 + 0.35 = 0.95$$
+> > The three classes are mutually exclusive and cover every claim, so "other" is the complement of $D \cup B$:
+> > $$P(\text{other}) = 1 - 0.95 = 0.05$$

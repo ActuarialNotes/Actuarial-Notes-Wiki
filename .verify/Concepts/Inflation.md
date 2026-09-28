@@ -1,0 +1,74 @@
+---
+target: Concepts/Inflation.md
+created: 2026-09-28
+---
+
+## [F-001] Lead says fixed limits leverage inflation upward; P-21-05 shows a fixed limit damps it
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-09-27T19:59Z/bfa2
+- date: 2026-09-28
+- severity: major
+- status: open
+- locus: opening paragraph, line 14
+- claim: Because policy provisions - deductibles, limits, retentions - are stated in fixed dollars, inflation does not scale the insurer's cost proportionally: it is leveraged, raising the insurer's payment by more than r.
+- evidence: P-21-05 §VII: with a fixed 500 deductible and no limit, expected claim payments grow 650 -> 998 (+54%) while expected losses grow 750 -> 1098 (+46%) over five years of 10% inflation (PDF p.10) - leverage, as the page says. But with a fixed 12,500 maximum claim payment added: Adding a fixed maximum on claim payments limits the effect of inflation. Expected claim payments grow from 610 in year 1 to 819 in year 5, an increase of 34%, which is less than the 46% increase in expected losses (PDF p.11). Werner & Modlin Ch.6 (PDF pp.129-130): a 10% total-limits severity trend is dampened to 3.5% in basic-limits losses. The second bullet of the page says the same (less than r growth for the primary insurer), so the lead contradicts both the source and the page itself. More than r holds for a fixed deductible or retention alone.
+- source_rank: 1
+- proposed_action: Restrict the lead's 'more than r' to deductibles and retentions, and say a fixed limit damps the primary insurer's growth (P-21-05 p.11).
+- applied: false
+- fingerprint: 17abdfcf92c8
+
+## [F-002] Worked example: 1100 e^-0.4545 is 698.2, not 698.1
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-09-27T19:59Z/bfa2
+- date: 2026-09-28
+- severity: minor
+- status: open
+- locus: Leveraged Effect example, answer align block, line 41
+- claim: E[(X' - 500)+] = 1100 e^-0.4545 = 698.1
+- evidence: Recomputed before reading the answer: E[(X - d)+] = E[X] - E[X^d] = theta e^(-d/theta) (SOA Tables for Exam C, exponential, PDF p.11). Before: 1000 e^-0.5 = 606.53. After 10% inflation, theta = 1100: 1100 e^(-500/1100) = 1100 x 0.634736 = 698.21. The page prints 698.1, and 698.1 again in the ratio line. The conclusion survives: 698.21/606.53 - 1 = 15.12%, which rounds to the +15.1% the page gives. Low consequence, hence minor.
+- source_rank: 5
+- proposed_action: Change 698.1 to 698.2 in the align block and in the ratio line.
+- applied: false
+- fingerprint: 22d2bd296fea
+
+## [F-003] Reserving example: the figures quoted do not show the excess growing with maturity
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-09-27T19:59Z/bfa2
+- date: 2026-09-28
+- severity: minor
+- status: open
+- locus: Calendar Year example, answer first paragraph, line 63
+- claim: Every factor on the latest diagonal exceeds its column history, and the excess grows with maturity - +11% at 12-24 but +7 points at 48-60 where development had been nearly complete.
+- evidence: Recomputed from the table: latest-diagonal factor vs column average is 1.58/1.42 = +11.3% (+16 points), 1.28/1.18 = +8.5% (+10 points), 1.16/1.09 = +6.4% (+7 points), 1.11/1.04 = +6.7% (+7 points). As a percentage or in points the excess shrinks with maturity; it grows only as a share of the expected remaining development (0.16/0.42 = 38%, 0.10/0.18 = 56%, 0.07/0.09 = 78%, 0.07/0.04 = 175%). The sentence compares a percentage at 12-24 with points at 48-60, so the numbers it quotes contradict the claim they illustrate.
+- source_rank: 5
+- proposed_action: Say in which measure the excess grows (excess development over the column-average development) and quote those figures.
+- applied: false
+- fingerprint: ffabca05f58d
+
+## [F-004] Exam FM-2 links this page beside the real rate of interest; the page covers only the loss-model sense
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-09-27T19:59Z/bfa2
+- date: 2026-09-28
+- severity: minor
+- status: open
+- locus: whole page, opening definition line 14
+- claim: Inflation in an insurance context is growth in the underlying loss random variable over time, X' = (1+r)X.
+- evidence: Exam FM-2 (SOA).md line 25 lists [[Inflation]] and [[Real Rate of Interest]] among the interest-rate measures; an FM candidate following that link finds no treatment of inflation as a rate in the real/nominal interest relation. The Exam P sense is right: SOA Exam P sample Q328 models 3% inflation as Var[1.03X + 2.5] (solution PDF p.91), i.e. the loss scaled by (1+r). A legitimate SOA FM vs SOA P context difference to flag, not reconcile; the FM syllabus was not read in this pass (rank-4 cross-reference).
+- source_rank: 4
+- proposed_action: Either add the FM sense (inflation rate and the real rate of interest) with its source, or point the FM page link at Real Rate of Interest.
+- applied: false
+- fingerprint: 726e81c0f776
+
+## [C-001] Validation pass — in_review
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-27T19:59Z/bfa2
+- date: 2026-09-28
+- status_set: in_review
+- checks_run: X' = (1+r)X vs SOA Q328 solution. Identity E[(X'-d)+] = (1+r)E[(X - d/(1+r))+] by substitution; deductible leverage vs P-21-05 p.10; limit damping vs P-21-05 p.11 and Werner pp.129-130 (bullet 2 correct, lead contradicts it - major). Example 1 recomputed first: 606.53 and 698.21, +15.12% - result agrees, intermediate 698.1 off (minor). Example 2 factors recomputed (minor on the maturity wording). Links and embed resolve.
+- sources_checked: Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf — §VII Inflation PDF pp.10-11; SOA, Tables for Exam C (Fall 2009), exponential entry E[X^x] = theta(1 - e^(-x/theta)), PDF p.11, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf; SOA Exam P Sample Solutions (Aug 2026 revision), Q50 (PDF pp.17-18), Q243 (PDF p.72), Q328 (PDF p.91), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf; Werner & Modlin, Basic Ratemaking (CAS), Ch.6 Leveraged Effect of Limits on Severity Trend PDF pp.129-130; Ch.11 coinsurance notation PDF pp.221-222, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf; Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS study note, 451 pp.), claim life cycle PDF p.14, reopened claims and IBNR PDF p.20, claims-made accident date PDF p.44, reported claim count triangle PDF p.66, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf
+- note: In review: the reserving content is unsourced - inflation as a calendar-year effect seen as an elevated diagonal, social inflation, and Example 2's prescribed treatment (apply the level shift to unpaid, select factors from pre-shock history) were not found in Friedland (searched for calendar year / diagonal near inflation: only p.50 lists inflation among environmental changes and p.397 a paid-to-paid distortion); the 5% -> 8% ratemaking figure is not in Werner pp.129-130. Needs the Exam 5 reading that treats calendar-year effects (e.g. Friedland Ch.13 Berquist-Sherman) and a source for the ratemaking figure.

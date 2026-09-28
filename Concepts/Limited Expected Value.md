@@ -1,12 +1,16 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: low
+  last_checked: 2026-09-28
+  last_checked_by: agent:validate-v1
   content_hash: sha256:125485b01971ca7647556495b3d0586f5721c7e578a20c3562fb4e1f84b0a6cf
-  sources: []
-  open_findings: 0
+  sources:
+    - "SOA, Tables for Exam C (Fall 2009), A.3.3.1 Exponential (PDF p.11) and A.2.3.1 Pareto (PDF p.8), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
+    - "SOA Exam C Sample Solutions (C-09-15), Q#28 (PDF p.10), Q#100-#101 (PDF p.37), Q#119-#120 (PDF p.44), PDF p.74, sha256:de58b71716cce5fbbe82cd3b31d1533db67686a86cabe407844ae403534a9a4a — https://www.soa.org/globalassets/assets/files/edu/edu-exam-c-sample-sol.pdf"
+    - "SOA Exam P Sample Solutions (Aug 2026 revision), Q50 (PDF p.17), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 2016), ch.11 Increased Limits, LAS(H) (PDF p.205), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+  open_findings: 4
   open_critical: 0
   log: .verify/Concepts/Limited Expected Value.md
 ---

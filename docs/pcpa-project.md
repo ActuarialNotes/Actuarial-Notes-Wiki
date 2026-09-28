@@ -55,6 +55,23 @@ Choosing one moves the sheet to its second step, which asks only what changes th
 
 The candidate attestation is made once, at submission, as on the real project.
 
+## An attempt's views
+
+An attempt is one page, `pages/Project/ProjectAttempt.tsx`, with four views chosen by its
+`view` search parameter: **Brief**, **Workspace**, **Report** and **Submit** — **Results** in
+Submit's place once the attempt is submitted. Two surfaces list them: the switcher in the
+attempt's top bar, and rows under **Projects** in the sidebar while the attempt is open (in
+line under the flask on the collapsed rail). Both read `lib/attemptViews.ts` — which views an
+attempt offers, which one a `?view=` opens, their names and icons — so they can't disagree.
+Switching views replaces the history entry either way: the views are windows of one project,
+not pages of it.
+
+The sidebar is in the main bundle and the attempt isn't, so the sidebar doesn't read the
+attempts store (that would bring the authored briefs into every page's first load). The page
+publishes its views and the one showing to `hooks/useAttemptNav.ts` and clears them when it
+closes; `lib/attemptViews.ts` imports nothing from `lib/pcpaAttempt.ts` but a type, and holds
+`attemptRoute` for the same reason.
+
 ## The brief
 
 `components/project/BriefView.tsx` is the project portal's materials — the memo, the
@@ -231,6 +248,7 @@ rehearsal whose window closes unsubmitted can't be submitted, as on the real pro
 | Authored material & published rules | `quiz/src/data/pcpaProjects.ts` |
 | Data generator | `quiz/src/lib/pcpaData.ts` |
 | Attempts, modes, windows, paths, who sees what | `quiz/src/lib/pcpaAttempt.ts` |
+| An attempt's views (top-bar switcher, sidebar rows) | `quiz/src/lib/attemptViews.ts`, `quiz/src/hooks/useAttemptNav.ts` |
 | Keeping attempts with the account | `quiz/src/lib/project/projectSync.ts`, `quiz/src/hooks/useProjectSync.ts`, `supabase/migrations/20260927_project_sync.sql` |
 | The brief's outline | `quiz/src/lib/scrollSpy.ts` |
 | Words, form rules, report checks | `quiz/src/lib/pcpaReport.ts` |

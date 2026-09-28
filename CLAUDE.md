@@ -235,8 +235,9 @@ before touching that area**:
   far more than its share of the syllabus. `computeExamReadiness` is the *one* readiness
   number — the exam-page card, the Dashboard radial, the exam grid and the readiness
   projection all call it. Read before changing `lib/readiness.ts` or any readiness readout.
-- `docs/pcpa-project.md` — the **Projects tab** (`/project`, in the sidebar after Quiz; the
-  PCPA study guide's **Project** button leads there too) and the **PCPA project simulator**
+- `docs/pcpa-project.md` — the **Projects tab** (`/project`, in the sidebar after Quiz, with an
+  open attempt's Brief / Workspace / Report / Submit views as rows under it — `lib/attemptViews.ts`;
+  the PCPA study guide's **Project** button leads there too) and the **PCPA project simulator**
   behind it: every brief is a card grouped by the exam it is a project for (`data/projects.ts`
   — PCPA is the only one yet), the reader *chooses* a brief from the sheet the page's **+** opens
   (each exam's briefs in that exam's colour), and its second step asks only what
@@ -872,7 +873,7 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **154 test files /
+`*.test.ts` files sit alongside the modules they test (vitest). There are **155 test files /
 ~2500 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS

@@ -10,7 +10,10 @@ import type { ItemStatus } from '@/data/tracks'
 //   'development' — syllabus scaffolding only: no question bank, concept
 //                   pages mostly unwritten. Not
 //                   something a candidate can study from yet (the DISCs,
-//                   PCPA, Exams 6–9).
+//                   PCPA, Exams 6–9). Exams 7, 8 and 9 have since had their
+//                   banks converted from the 2012–2019 papers, and the quiz
+//                   builder offers them, labelled In Development; everywhere
+//                   else they stay a syllabus until they leave the list below.
 //
 // Surfaces read this rather than re-deriving "not P and not FM" locally: the
 // study-guide exam grid (`pages/wiki/WikiHome.tsx`), the exam page's status
@@ -24,7 +27,9 @@ const READY_EXAMS = new Set(['P', 'FM'])
 /**
  * Exams that exist only as a syllabus outline so far. Greyed out wherever they
  * are listed — they are visible so candidates can see what is coming, not
- * because they are usable.
+ * because they are usable. The one exception is the quiz builder
+ * (`pages/Landing.tsx`), which lists an exam once it has a question bank and
+ * says In Development on its card rather than greying it out.
  */
 // PCPA has no bank because CAS releases no PCPA paper to convert: the exam is
 // a continuous CBT drawn from an item pool, and no sample questions are

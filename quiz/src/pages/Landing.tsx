@@ -41,7 +41,7 @@ import { buildPastExamRows, examSourceLabel, PRACTICE_EXAM_LABEL } from '@/lib/p
 import { applyPassRates } from '@/lib/passRates'
 import { useExamPassRates } from '@/hooks/useExamPassRates'
 import { PastExamBrowser } from '@/components/PastExamBrowser'
-import { examStatus } from '@/lib/examStatus'
+import { EXAM_STATUS_LABEL, examStatus } from '@/lib/examStatus'
 import { loadRevealMode, saveRevealMode, type RevealMode } from '@/lib/revealMode'
 import {
   difficultyToParam,
@@ -65,6 +65,9 @@ const EXAMS = [
   { value: 'Exam MAS-I', label: 'Exam MAS-I', tracks: ['ACAS'] as const, progressKey: 'MAS-I' },
   { value: 'Exam MAS-II', label: 'Exam MAS-II', tracks: ['ACAS'] as const, progressKey: 'MAS-II' },
   { value: 'Exam 5', label: 'Exam 5', tracks: ['ACAS'] as const, progressKey: 'CAS-5' },
+  { value: 'Exam 7', label: 'Exam 7', tracks: ['FCAS'] as const, progressKey: 'CAS-7' },
+  { value: 'Exam 8', label: 'Exam 8', tracks: ['FCAS'] as const, progressKey: 'CAS-8' },
+  { value: 'Exam 9', label: 'Exam 9', tracks: ['FCAS'] as const, progressKey: 'CAS-9' },
 ]
 
 const QUIZ_TRACK_GROUPS = [
@@ -91,6 +94,12 @@ const MOCK_EXAM_QUESTIONS: Record<string, number> = {
   'Exam MAS-I': 40,
   'Exam MAS-II': 42,
   'Exam 5': 25,
+  // No format guide gives these, so they are the released papers' own size:
+  // the eight 2012–2019 Exam 7 papers held 200 questions and the eight Exam 8
+  // papers 173 (`cas7-*` / `cas8-*` across the bank, wherever the syllabus has
+  // since filed them). Exam 9 has no released paper of its own in the bank.
+  'Exam 7': 25,
+  'Exam 8': 22,
 }
 
 const QUICK_COUNTS = [1, 3, 5, 10]
@@ -285,10 +294,11 @@ function ExamOptionCard({
   todayQuizComplete?: boolean
 }) {
   const isActive = colorIdx >= 0
-  // P and FM are the mature exams with a full question bank; the rest of what
-  // the builder offers is beta. `lib/examStatus.ts` is the one definition —
-  // it's also what greys out the exams that are still only a syllabus.
-  const isBeta = examStatus(exam.progressKey) === 'beta'
+  // P and FM are the mature exams with a full question bank and carry no label.
+  // The rest say how far along their material is, in `lib/examStatus.ts`'s
+  // words: Beta, or In Development for Exams 7, 8 and 9 — their banks are in,
+  // which is all a quiz needs, but the exams are not yet out of development.
+  const statusLabel = EXAM_STATUS_LABEL[examStatus(exam.progressKey)]
   const description = subtitle ?? null
 
   // The exam's place on the ladder, as a colour — the same custom properties
@@ -336,7 +346,8 @@ function ExamOptionCard({
                   is neither, so it stays neutral rather than borrowing the
                   warning colour. Beta *is* a caution, and takes the amber that
                   the mobile nav's Research chip already uses for the same word —
-                  it used to be emerald here and amber there. */}
+                  it used to be emerald here and amber there. In Development is
+                  the same caution, said more strongly, in the same amber. */}
               {isActive ? (
                 <span className={cn(
                   'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium',
@@ -346,9 +357,9 @@ function ExamOptionCard({
                 )}>
                   {targetDate ? `Exam: ${formatTargetDate(targetDate)}` : 'In progress'}
                 </span>
-              ) : isBeta ? (
+              ) : statusLabel ? (
                 <span className="inline-flex items-center rounded-full bg-amber-500/15 px-2 py-0.5 text-xs font-medium text-amber-600 dark:text-amber-400">
-                  Beta
+                  {statusLabel}
                 </span>
               ) : null}
             </div>

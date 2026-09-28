@@ -27,3 +27,22 @@ created: 2026-09-28
 - confidence: medium
 - checks_run: pdf and B(a,b) = Gamma(a)Gamma(b)/Gamma(a+b): tables A.6.1.2 with theta = 1 (f = Gamma(a+b)/(Gamma(a)Gamma(b)) x^(a-1)(1-x)^(b-1)) and G&S p.168 (B as the integral); alpha = beta = 1 is uniform: G&S p.168. Mean a/(a+b) and E[X^2] = a(a+1)/((a+b)(a+b+1)) from the tables integer-moment row, giving Var = ab/((a+b)^2(a+b+1)); same variance formula NIST 1.3.6.6.17 and SOA Q565. Integer-parameter constant (a+b-1)C(a+b-2, a-1) follows from Gamma(n) = (n-1)!; checked at (3,2): 4 x 3 = 12 = 1/B(3,2). Skew direction: NIST skewness 2(q-p)sqrt(p+q+1)/((p+q+2)sqrt(pq)) is positive when alpha < beta, zero when equal. Uniform order statistic Beta(k, n-k+1) with mean k/(n+1): Siegrist 6.6. Parameterisation note: the SOA tables beta carries a scale theta (support 0 < x < theta); the page is the theta = 1 case. Examples recomputed before reading: Beta(3,2) mean 0.6, Var 6/150 = 0.04, SD 0.20; P(X > 0.8) = 1 - (4(0.512) - 3(0.4096)) = 1 - 0.8192 = 0.1808 (page 0.181); E[X_(2)] of 4 uniforms = 2/5 = 0.4. All agree. Links and embeds resolve. Open minor F-001.
 - sources_checked: SOA, Tables for Exam C (Fall 2009), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf; A.6.1.2 beta (a, b, theta), printed p.8 (PDF p.13), read with theta = 1; Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Chapter 4 Beta Density p.168 (PDF p.176), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; NIST/SEMATECH e-Handbook of Statistical Methods, 1.3.6.6.17 Beta Distribution (standard beta pdf, mean, standard deviation, skewness), fetched 2026-09-28, sha256:eaab2714d3753b95f94be3402dcc443911e5a19a90ef34aeddb05eb11c0165b0 — https://www.itl.nist.gov/div898/handbook/eda/section3/eda366h.htm; SOA, Exam P Sample Solutions (Aug 2026 revision), Q565 (PDF p.157), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf; Kyle Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), 6.6 Order Statistics, The Uniform Distribution, fetched 2026-09-28, sha256:19ff485c600d4294e888c1b3d05ff7eb9196449f958d3325fd72b416aca56d63 — https://www.randomservices.org/random/sample/OrderStatistics.html
+
+## [F-001/R] Unsourced claim about Exam P beta parameters deleted
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-001
+- status: resolved
+- note: Deleted the sentence Any Exam P beta question will have integer parameters for exactly this reason: no source read states it, and it is a prediction about future papers. The example result stands: 12[(1/3 - 1/4) - (0.8^3/3 - 0.8^4/4)] = 12(0.083333 - 0.068267) = 0.1808, about 0.181.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- status_set: verified
+- confidence: medium
+- checks_run: Re-verified after resolving F-001: density and uniform special case against G&S p.168; E = a/(a+b) and E[X^2] = a(a+1)/((a+b)(a+b+1)) from A.6.1.2 give Var = ab/((a+b)^2(a+b+1)); 1/B for integers = (a+b-1) C(a+b-2, a-1); examples recomputed: 0.60, 0.04, 0.1808, 0.4. Skewness direction and the order-statistic result not re-read this session, hence medium.
+- sources_checked: Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), 4 Beta Density B(alpha,beta,x) = x^(alpha-1)(1-x)^(beta-1)/B(alpha,beta) on [0,1], alpha = beta = 1 is the uniform, p.168 (PDF p.176), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; SOA, Tables for Exam C (Fall 2009), A.6.1.2 beta (a, b, theta), printed p.8 (PDF p.13), read with theta = 1, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf

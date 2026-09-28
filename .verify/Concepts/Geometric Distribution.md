@@ -27,3 +27,22 @@ created: 2026-09-28
 - confidence: high
 - checks_run: trials pmf and support (G&S p.185); E=1/p, Var=(1-p)/p^2 (G&S p.262); memoryless property and exponential link (G&S p.186); failures form Y=X-1: Exam C B.2.1.2 pk=beta^k/(1+beta)^(k+1), E=beta, Var=beta(1+beta), with beta=(1-p)/p gives (1-p)^k p, (1-p)/p, (1-p)/p^2 (same variance, as stated); survival (1-p)^n (G&S p.186 P(T>r)=q^r); page states its parameterisation explicitly; examples recomputed before reading: 0.8^2 x 0.2=0.128, E=5, P(X>2)=0.64 (all agree; wording nit F-001); links and media exist
 - sources_checked: Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), 5.1 geometric pmf P(T=j)=q^(j-1)p, j=1,2,... p.185 (PDF p.193); memoryless P(T>r+s|T>r)=q^s, also obeyed by the exponential, p.186 (PDF p.194); 6.2 E(T)=1/p and V(T)=q/p^2 p.262 (PDF p.270), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; SOA, Tables for Exam C (Fall 2009), Appendix B.2 (a,b,0) class: B.2.1.1 Poisson (PDF p.14); B.2.1.2 geometric, B.2.1.3 binomial, B.2.1.4 negative binomial (PDF p.15), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf; H. Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), fetched 2026-09-27, 3.2.2 geometric EX=1/p on range 1,2,3,..., sha256:cef561084124ba2a0ab25d131a56f9647e8f53a20ab41be7c4480f11fb27c5bf — https://www.probabilitycourse.com/chapter3/3_2_2_expectation.php
+
+## [F-001/R] Memorylessness example prompt names the event
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-001
+- status: resolved
+- note: Prompt now asks for the probability that the first claim comes on the 11th policy or later, i.e. X > 10 given X > 8, which is the event the answer computes: P(X > 8+2 | X > 8) = P(X > 2) = 0.8^2 = 0.64 (Grinstead & Snell 5.1 p.186, PDF p.194: P(T > r+s | T > r) = q^s). The alternative reading (0.512) is no longer available.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- status_set: verified
+- confidence: high
+- checks_run: Re-verified after resolving F-001: pmf, survival q^n, memorylessness and E = 1/p against G&S; failures form pk = beta^k/(1+beta)^(k+1) = (1-p)^k p with beta = (1-p)/p, E[N] = beta = (1-p)/p and Var[N] = beta(1+beta) = (1-p)/p^2 against Exam C tables B.2.1.2; examples recomputed: 0.8^2 x 0.2 = 0.128, E = 5, P(X > 10 | X > 8) = 0.64.
+- sources_checked: Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), 5.1 geometric pmf P(T=j) = q^(j-1) p p.185 (PDF p.193); P(T > k) = q^k and memoryless P(T > r+s | T > r) = q^s, also obeyed by the exponential, p.186 (PDF p.194); 6.2 E(T) = 1/p p.262 (PDF p.270), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; SOA, Tables for Exam C (Fall 2009), B.2.1.2 geometric (PDF p.15, page image), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf

@@ -571,8 +571,7 @@ Other important `lib/` modules:
 - `mobileNavHost.ts` — below `lg` the app is one row of top chrome, and this says who owns
   it on a given route: a page with a floating search bar carries the hamburger
   (`components/MobileNavButton.tsx`) on that bar's line, and every other page gets the app
-  header `Sidebar.tsx` draws (the same row, plus the wordmark and the in-progress exam
-  pills). `App.tsx` reads it to decide whether the content reserves `pt-14`, `Sidebar.tsx`
+  header `Sidebar.tsx` draws (the same row, plus the wordmark). `App.tsx` reads it to decide whether the content reserves `pt-14`, `Sidebar.tsx`
   to decide whether to render the header — so a route added here must gain a
   `<MobileNavButton />` in its bar at the same time, or it ends up with two hamburgers or
   none. The drawer's own open state is `hooks/useMobileNav.ts`, since the button that opens
@@ -666,8 +665,8 @@ Other important `lib/` modules:
   `STREAK_CELEBRATION_EVENT`; `components/StreakCompleteOverlay.tsx` reads that on /review
   to play a flame animation when today's streak grew, then resolves so the
   `QuestCompleteOverlay` follows (sequenced by `PostQuizCelebrations` in `pages/Review.tsx`).
-  Also surfaced via `hooks/useStreak.ts` + `components/StreakBadge.tsx` in the
-  Sidebar/Dashboard. Gated by `STREAK_ENABLED`.
+  Also surfaced via `hooks/useStreak.ts` + `components/StreakBadge.tsx` on the
+  Dashboard. Gated by `STREAK_ENABLED`.
 - `xp.ts` / `xpStore.ts` — daily goal + XP engine (roadmap P1.2). `xp.ts` is the
   pure, tested core: per-answer XP weighted toward hard + decaying (revived) concepts,
   a level curve, and the configurable daily-goal presets (`DAILY_GOALS`). `xpStore.ts`

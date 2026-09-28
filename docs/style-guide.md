@@ -383,8 +383,7 @@ Spacing uses the default Tailwind 4px scale. A few defaults carry most screens:
 `components/MobileNavButton.tsx` is the hamburger that opens that drawer, and it has two
 homes. A page that already pins a bar to the top of the viewport — a floating search bar —
 carries it **on that bar's line**, left of the search icon; every other page gets the app
-header (`Sidebar.tsx`), the same `h-14` row plus the wordmark and the in-progress exam
-pills. Either way a phone spends **one** 3.5rem row on chrome, never two stacked bars, and
+header (`Sidebar.tsx`), the same `h-14` row plus the wordmark. Either way a phone spends **one** 3.5rem row on chrome, never two stacked bars, and
 the hamburger is always in the same corner.
 
 `lib/mobileNavHost.ts` is the one place that says which route does which; `App.tsx` reads it
@@ -406,7 +405,7 @@ full-width target carrying 16px type, well past the 40px floor in §11. At `lg` 
 those classes is taken back (`lg:py-2 lg:text-sm lg:rounded-md`, `lg:h-5` slot, 16px glyph)
 so the 16rem rail keeps the app's body size and nav text never outranks page text. The same
 pair rides the group headers, the theme/profile rows in the footer and the popover menus the
-profile and exam pills open — a row is a row wherever it is drawn, so add the `lg:` half
+profile row opens — a row is a row wherever it is drawn, so add the `lg:` half
 whenever you add the mobile half. `SidebarItem`'s `base` string is where it lives; the
 hamburger matches it at `h-10 w-10`.
 

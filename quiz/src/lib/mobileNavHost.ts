@@ -6,7 +6,7 @@
  * viewport — a floating search bar — puts the hamburger in that bar, on the
  * same line as the search input, so the phone spends one 3.5rem row on chrome
  * instead of two. Every other page gets the app header (`Sidebar.tsx`), which
- * is that row plus the wordmark and the in-progress exam pills.
+ * is that row plus the wordmark.
  *
  * This is the one place that says which is which: `App.tsx` reads it to decide
  * whether the content reserves room for a header, and `Sidebar.tsx` reads it to

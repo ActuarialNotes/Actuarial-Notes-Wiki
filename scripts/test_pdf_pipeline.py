@@ -496,6 +496,15 @@ class TestPublisherTextDefects(unittest.TestCase):
         self.assertEqual(a["samples"], ["- Many insurers went bankrupt"])
         self.assertEqual(b["samples"], ["- periodic filing", "- restricted investments"])
 
+    def test_a_part_priced_in_point_s_keeps_no_s(self):
+        parsed = px.parse_cas_question(
+            "TOTAL POINT VALUE: 3\nSAMPLE ANSWERS\nPart a: 1.5 point(s)\n"
+            "- Restrict licensing\nPart b: 1.5 point(s)\n- Bankruptcies\n"
+        )
+        a, b = parsed["parts"]
+        self.assertEqual((a["points"], a["samples"]), (1.5, ["- Restrict licensing"]))
+        self.assertEqual(b["samples"], ["- Bankruptcies"])
+
     def test_a_sample_label_with_more_on_its_line_loses_the_label_only(self):
         parsed = px.parse_cas_question(
             "TOTAL POINT VALUE: 1\nSAMPLE ANSWERS\nPart a: 0.5 point\n"

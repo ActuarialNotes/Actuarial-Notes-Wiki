@@ -980,8 +980,10 @@ CAS_QUESTION_RE = re.compile(
 # long enough that this cannot match anything else.
 CAS_POINTS_RE = re.compile(r"(?i)T?OTAL POINT VALUE[ \t]*[:=]?[ \t]*([\d.]+)")
 CAS_LO_RE = re.compile(r"(?i)L?EARNING OBJECTIVE\(?S?\)?[ \t]*[:=]?[ \t]*(.+)")
+# Exam 6C Spring 2014 prices every part `Part a: 1 point(s)`; left behind, the
+# `(s)` opened each part's first sample.
 CAS_PART_RE = re.compile(r"(?mi)^[ \t]*Part[ \t]+([a-h])[ \t]*[:.]?[ \t]*"
-                         r"(?:([\d.]+)[ \t]*points?)?[ \t]*")
+                         r"(?:([\d.]+)[ \t]*points?(?:\(s\))?)?[ \t]*")
 # `SAMPLE ANSWERS`, and Spring 2015's `SAMPLE/ACCEPTED ANSWERS:` — the
 # qualifier is the publisher's, not a different section. Missing it costs the
 # whole paper: with no sample heading there is no block to split, so every

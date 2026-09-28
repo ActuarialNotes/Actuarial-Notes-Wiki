@@ -15,18 +15,18 @@ verification:
   log: .verify/Concepts/Percentile.md
 ---
 
-The **Percentile** (or quantile) $x_p$ of a [[Random Variable]] $X$ is the value below which a proportion $p$ of the distribution lies — the smallest $x_p$ with $P(X \leq x_p) = p$. It is obtained by inverting the [[Cumulative Distribution Function (CDF)|CDF]].
+The **Percentile** (or quantile) $x_p$ of a [[Random Variable]] $X$ is the smallest value at which the [[Cumulative Distribution Function (CDF)|CDF]] reaches $p$, so at least a proportion $p$ of the distribution lies at or below it. When $F$ is continuous and strictly increasing, it is the value that solves $F(x_p) = p$, found by inverting the CDF.
 
-> $$P(X \leq x_p) = F(x_p)$$
+> $$x_p = \min\{x : F(x) \geq p\}$$
 
-> $$= p$$
+> $$F(x_p) = p \quad (F \text{ continuous, strictly increasing})$$
 
 > $$x_p = F^{-1}(p)$$
 
 - Here $p \in (0, 1)$; the $100p$-th percentile is the quantile of order $p$.
-- The 50th percentile ($p = 0.5$) is the median, splitting the distribution into two equal halves.
+- The 50th percentile ($p = 0.5$) is the [[Median|median]].
+- Where $F$ jumps past $p$ — a [[Discrete Random Variable|discrete]] variable, or a [[Payment Random Variable|payment]] with a probability mass at 0 — no $x$ solves $F(x) = p$; the percentile is the value at which the CDF first reaches or passes $p$. For a [[Poisson Distribution|Poisson]] with mean 3, $F(3) = 0.647$ and $F(4) = 0.815$, so its 75th percentile is 4.
 - Percentiles describe tail behavior and underlie actuarial risk measures such as Value at Risk (VaR), the loss level a portfolio will not exceed with probability $p$.
-- For a continuous, strictly increasing $F$ the inverse is unique; where $F$ is flat or jumps, take the smallest $x_p$ satisfying the condition.
 
 ![[Media/Figures/Percentile.svg|340]]
 
@@ -45,3 +45,20 @@ The **Percentile** (or quantile) $x_p$ of a [[Random Variable]] $X$ is the value
 > > The 95th percentile of the standard normal is $z_{0.95} = 1.645$. Transform back with $\sigma = 15$:
 > > $$\begin{align*} x_{0.95} &= \mu + z_{0.95}\,\sigma \\ &= 100 + 1.645(15) \\ &= 124.68 \end{align*}$$
 > > There is a 95% chance the annual loss is below 124.68.
+
+> [!example]- Percentiles of a Payment Under a Deductible {Example}
+> Losses $X$ are exponential with mean \$5,000, and a policy pays $Y = (X - 1{,}000)_+$. Find the 10th and 90th percentiles of $Y$.
+>
+> > [!answer]-
+> > $Y = 0$ whenever $X \le 1{,}000$, so the CDF of $Y$ jumps at zero:
+> > $$F_Y(0) = P(X \le 1{,}000) = 1 - e^{-0.2} = 0.1813$$
+> > Since $F_Y(0) = 0.1813 \ge 0.10$, the 10th percentile is $y_{0.10} = 0$, even though $F_Y(y) = 0.10$ has no solution. Above the jump $F_Y$ is continuous and increasing, so the 90th percentile solves $F_Y(y) = 0.90$:
+> > $$
+> > \begin{align*}
+> > 1 - e^{-(y + 1{,}000)/5{,}000} &= 0.90 \\
+> > y + 1{,}000 &= 5{,}000 \ln 10 \\
+> > y_{0.90} &= 11{,}512.93 - 1{,}000 \\
+> >          &= 10{,}512.93
+> > \end{align*}
+> > $$
+> > Every percentile with $p \le 0.1813$ is 0; above that, the continuous rule applies.

@@ -22,7 +22,7 @@ The **Coefficient of Variation** $CV$ is the ratio of the standard deviation to 
 
 - $CV$ is dimensionless, so it can compare the relative variability of distributions with different units or scales
 - A larger $CV$ indicates greater dispersion relative to the mean
-- It is meaningful only when $E[X] > 0$
+- It requires $E[X] \neq 0$; it is used to compare the variability of positive distributions, such as losses, with different expected values
 
 ![[Media/Figures/Coefficient_of_Variation.svg|340]]
 

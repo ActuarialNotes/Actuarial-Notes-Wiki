@@ -23,7 +23,7 @@ verification:
 
 - $\mu = E[X]$. The second form $E[X^2] - \mu^2$ is the one to use in practice — it needs only two moments and avoids expanding a square.
 - $\text{Var}(aX + b) = a^2\,\text{Var}(X)$ and $\text{SD}(aX + b) = |a|\,\text{SD}(X)$ — a shift $b$ moves the distribution without changing its spread.
-- For a sum, $\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y) + 2\,\text{Cov}(X,Y)$; the [[Covariance]] term drops out only when $X$ and $Y$ are [[Independent Random Variables|independent]]. See [[Moments for Linear Combinations]].
+- For a sum, $\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y) + 2\,\text{Cov}(X,Y)$; the [[Covariance]] term drops out whenever $X$ and $Y$ are uncorrelated, $\text{Cov}(X,Y) = 0$ — for example when they are [[Independent Random Variables|independent]]. Zero covariance does not imply independence. See [[Moments for Linear Combinations]].
 - Standard deviations do **not** add: $\text{SD}(X+Y) \neq \text{SD}(X) + \text{SD}(Y)$. Always add variances, then take the square root at the very end.
 - Dividing $\sigma$ by $\mu$ gives the unitless [[Coefficient of Variation]].
 

@@ -20,7 +20,8 @@ A **Random Variable** $X$ is a function that assigns a real number to each outco
 
 > $$X : S \to \mathbb{R}$$
 
-- Random variables are classified as discrete (countable range of outcomes) or continuous (uncountable range of outcomes)
+- $X$ is **discrete** if its possible values form a finite or countably infinite set, and **continuous** if its probabilities come from a density, $P(c \le X \le d) = \int_c^d f(x)\,dx$ — so its CDF has no jumps and every single value has probability 0. See [[Discrete Random Variable]] and [[Continuous Random Variable]].
+- The two classes do not cover every case. A payment under a [[Deductible]], $Y = (X - d)_+$ with $X$ continuous, takes a continuum of values yet puts probability $P(X \le d) > 0$ on the single value 0: it is a **mixed** random variable, neither discrete nor continuous (see [[Payment Random Variable]]).
 - They are fully characterized by their probability distribution, which describes how probability is spread across their possible values
 
 ![[Media/Figures/Random_Variable.svg|340]]

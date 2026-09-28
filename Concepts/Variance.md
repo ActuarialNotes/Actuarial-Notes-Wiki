@@ -17,7 +17,7 @@ verification:
 **Variance** $\sigma^2$ measures the spread or dispersion of a [[Random Variable]]'s distribution as the expected squared deviation from the mean.
 - Efficient computation formula: $\text{Var}(X) = E[X^2] - \mu^2$ where $\mu = E[X]$
 - $\text{Var}(aX + b) = a^2 \text{Var}(X)$ — scaling changes variance, shifts do not
-- $\text{Var}(X) \geq 0$, with equality only if $X$ is constant
+- $\text{Var}(X) \geq 0$, since $(X - \mu)^2 \geq 0$; a variable that always equals its mean, such as a constant, has variance 0
 
 > $$\text{Var}(X) = E\left[(X - \mu)^2\right]$$
 

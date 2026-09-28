@@ -18,6 +18,7 @@ verification:
 
 > $$E[X] = \begin{cases} \displaystyle\sum_{k} k\, f(k) & \text{(discrete)} \\[6pt] \displaystyle\int_{-\infty}^{\infty} x\, f(x)\, dx & \text{(continuous)} \end{cases}$$
 
+- The sum or integral must converge absolutely ($\sum_k |k|\,f(k)$ or $\int |x|\,f(x)\,dx$ finite); otherwise $X$ has no expected value — a Pareto with shape $\alpha \le 1$ has none (see [[Moment]]).
 - It is linear: $E[aX + b] = aE[X] + b$
 - The $n$-th moment of $X$ is $E[X^n]$, and the $n$-th central moment is $E[(X-\mu)^n]$
 

@@ -61,7 +61,7 @@ A **Transformation of a Random Variable** produces a new variable $Y = g(X)$ fro
 > >        &= u
 > > \end{align*}
 > > $$
-> > $F_U(u) = u$ on $(0,1)$ is exactly the [[Uniform Continuous Distribution|uniform]] CDF. Run backwards, $X = F_X^{-1}(U)$ turns uniform random numbers into samples from any distribution — the basis of simulation.
+> > $F_U(u) = u$ on $(0,1)$ is exactly the [[Uniform Continuous Distribution|uniform]] CDF. Run backwards, for any CDF $F$ that is strictly increasing where $0 < F < 1$, $X = F^{-1}(U)$ has CDF $F$ — so uniform random numbers can be turned into samples from such a distribution, the basis of simulation.
 
 > [!example]- A Non-Monotone Transformation {Example}
 > $X \sim \text{Uniform}(-1, 1)$, so $f_X(x) = 1/2$ on $(-1,1)$. Find the density of $Y = X^2$.

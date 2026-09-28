@@ -126,7 +126,8 @@ before touching that area**:
   time it reaches **Level 1** (its first correct answer) — no check, no modal, no lock.
   `collectLevelledConcepts` in `stores/quizStore.ts` collects and decks it and marks the
   transition `collected`, which is what makes `ConceptLevelUpCeremony` play the collect
-  animation on /review. Before a quiz, `components/PreQuizConcepts.tsx` lists the quiz's New
+  animation on /review — one card on its own, or several popping into one grid before a
+  summary of them all; the pace is `lib/levelUpCeremony.ts`. Before a quiz, `components/PreQuizConcepts.tsx` lists the quiz's New
   concepts, each opening in the concept popup.
 - `docs/verification.md` — **VERIFY**, the fact-check layer (**Fact Check** is what it is
   called on screen; the vault-side schema and toolchain keep the `verify`/`verification`
@@ -833,8 +834,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **148 test files /
-~2380 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **149 test files /
+~2400 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).

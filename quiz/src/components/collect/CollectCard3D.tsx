@@ -9,14 +9,22 @@ import { KeystoneIcon } from '@/components/KeystoneName'
 // via `lib/flashcardFoil.ts`) — no 3D perspective or tilt. Drawn by the
 // level-up ceremony (components/ConceptLevelUpCeremony.tsx): a rainbow "snake"
 // chases around the border, spinning faster and faster, before the card
-// dissolves into the collect flash.
+// dissolves into the collect flash — or, in a grid of several, lands in place.
+
+// Card size and the type that fits it. `lg` is the lone card; the ceremony's
+// grid draws `md` for a short run and `sm` for a long one (lib/levelUpCeremony.ts).
+const SIZE = {
+  lg: { dims: 'w-52 h-72 sm:w-60 sm:h-80', face: 'gap-3 px-4', name: 'text-xl sm:text-2xl' },
+  md: { dims: 'w-32 h-44 sm:w-36 sm:h-48', face: 'gap-2 px-3', name: 'text-base sm:text-lg' },
+  sm: { dims: 'w-24 h-32 sm:w-28 sm:h-36', face: 'gap-1.5 px-1.5', name: 'text-[11px] sm:text-xs' },
+} as const
 
 interface CollectCard3DProps {
   name: string
   // 'idle' rests flat; 'spin' shows the accelerating rainbow border used by
   // the collection animation; 'won' settles in with a quick pop-in.
   phase?: 'idle' | 'spin' | 'won'
-  size?: 'md' | 'lg'
+  size?: keyof typeof SIZE
   className?: string
   // When set, the card can be flipped by clicking/tapping it to reveal `back`
   // — a cross-fade between panes, not a 3D flip.
@@ -50,7 +58,7 @@ export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '
   // Never rest on a back that isn't rendered.
   const shownSide = flippable ? side : 'front'
 
-  const dims = size === 'lg' ? 'w-52 h-72 sm:w-60 sm:h-80' : 'w-36 h-48'
+  const { dims, face, name: nameText } = SIZE[size]
   // While the collection celebration is running, the accelerating snake ring
   // below carries the "rainbow border" effect on its own — the resting foil
   // sheen is dropped so the two don't visually compete.
@@ -87,7 +95,7 @@ export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '
         <div
           data-card-face="front"
           aria-hidden={shownSide === 'back' || undefined}
-          className={`collect-card-pane absolute inset-0 flex flex-col items-center justify-center gap-3 px-4 text-center ${shownSide === 'back' ? 'collect-card-pane--hidden opacity-0 pointer-events-none' : 'opacity-100'}`}
+          className={`collect-card-pane absolute inset-0 flex flex-col items-center justify-center ${face} text-center ${shownSide === 'back' ? 'collect-card-pane--hidden opacity-0 pointer-events-none' : 'opacity-100'}`}
         >
           {/* Keystone cards are worth more than the card you're collecting —
               say so on the card itself. The chip is the whole signal: no gold
@@ -97,12 +105,17 @@ export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '
           {keystone && (
             <span className="keystone-ring inline-flex items-center gap-1 rounded-full px-2 py-0.5">
               <KeystoneIcon className="h-3.5 w-3.5" />
-              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800 dark:text-amber-200">
-                Keystone
-              </span>
+              {/* The smallest card has room for the glyph alone. */}
+              {size !== 'sm' && (
+                <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800 dark:text-amber-200">
+                  Keystone
+                </span>
+              )}
             </span>
           )}
-          <span className="text-xl sm:text-2xl font-bold leading-tight text-card-foreground">
+          {/* A long word on a small card hyphenates rather than overflowing the
+              edge; one no dictionary knows breaks where it must. */}
+          <span className={`${nameText} font-bold leading-tight text-card-foreground hyphens-auto [overflow-wrap:anywhere]`}>
             {name}
           </span>
         </div>

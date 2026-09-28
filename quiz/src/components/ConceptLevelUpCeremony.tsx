@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { ArrowRight, Gem, Sparkles } from 'lucide-react'
 import { CollectCard3D } from '@/components/collect/CollectCard3D'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
 import type { MasteryState } from '@/lib/mastery'
+import { SINGLE, SPIN_MS, gridCardSize, gridTimeline } from '@/lib/levelUpCeremony'
 import type { MasteryTransition } from '@/stores/quizStore'
 
 const LEVEL_LABEL: Record<MasteryState, string> = {
@@ -23,20 +24,22 @@ function prefersReducedMotion(): boolean {
     window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 }
 
-// Per-card ceremony: the card spins (rainbow snake ring), blooms into a flash of
-// light, then the next concept's card takes its place. After the last card, a
-// summary "post" screen recaps every level-up and tallies the gems earned into
-// the running balance.
+// The ceremony has two shapes, by how many concepts moved (the clock for both
+// is lib/levelUpCeremony.ts):
 //
-// A level-up that collected the concept's flashcard (its first New → Level 1,
-// `MasteryTransition.collected` — see docs/flashcard-collection.md) plays the
-// collect animation instead: the sealed card spins under "Collecting…", the
-// bloom lands on the `collect` chime, and the card settles back in on a
-// "Collected!" beat before the next one takes its place.
-type Phase = 'spin' | 'flash' | 'collected' | 'summary'
-
-// How long the "Collected!" beat holds before the ceremony moves on.
-const COLLECTED_HOLD_MS = 1400
+// - **One concept**: its card spins (rainbow snake ring) and blooms into a
+//   flash of light. A level-up that collected the concept's flashcard (its
+//   first New → Level 1, `MasteryTransition.collected` — see
+//   docs/flashcard-collection.md) plays the collect animation instead: the
+//   sealed card spins under "Collecting…", the bloom lands on the `collect`
+//   chime, and the card settles back in on a "Collected!" beat.
+// - **Several**: every card pops into one grid, a beat apart, each spinning and
+//   then landing in place with its new level (or "Collected!") under it, on a
+//   climbing `levelUpStep` note.
+//
+// Either way it ends on a summary "post" screen that recaps every level-up and
+// tallies the gems earned into the running balance.
+type Phase = 'grid' | 'spin' | 'flash' | 'collected' | 'summary'
 
 interface Props {
   /** Upward mastery transitions from the just-completed quiz (New/L1/L2 → L1/L2/L3). */
@@ -61,47 +64,79 @@ export function ConceptLevelUpCeremony({ transitions, gemsEarned, totalGems, onR
     // eslint-disable-next-line react-hooks/exhaustive-deps -- only for the ceremony this component was mounted for
   }, [])
 
-  const [index, setIndex] = useState(0)
-  const [phase, setPhase] = useState<Phase>(reduce ? 'summary' : 'spin')
+  const [phase, setPhase] = useState<Phase>(reduce ? 'summary' : multiple ? 'grid' : 'spin')
+  const skip = () => { if (phase !== 'summary') setPhase('summary') }
 
   // Running gem counter shown on the summary screen — starts at the pre-quiz
   // balance and ticks up to the current total by the amount just earned.
   const startBalance = Math.max(0, totalGems - gemsEarned)
   const [displayGems, setDisplayGems] = useState(startBalance)
 
-  const current = transitions[index]
-
+  // ── One concept: spin → flash (→ collected) → summary ───────────────────
+  const current = transitions[0]
   const collecting = !!current?.collected
 
-  // Drive the spin → flash (→ collected) → next-card sequence. Each phase
-  // schedules exactly one timeout and clears it on cleanup, so it stays correct
-  // under StrictMode.
+  // Each phase schedules exactly one timeout and clears it on cleanup, so it
+  // stays correct under StrictMode.
   useEffect(() => {
-    if (reduce || phase === 'summary') return
-    const next = () => {
-      if (index + 1 < transitions.length) {
-        setIndex(i => i + 1)
-        setPhase('spin')
-      } else {
-        setPhase('summary')
-      }
-    }
+    if (phase !== 'spin' && phase !== 'flash' && phase !== 'collected') return
     let id: number
     if (phase === 'spin') {
       // A collection's one chime is `collect`, on the bloom — the card landing
       // — so its spin stays quiet, as it always did in the collect flow.
-      if (!collecting) play(multiple ? 'levelUpStep' : 'levelUp')
-      id = window.setTimeout(() => setPhase('flash'), 1100)
+      if (!collecting) play('levelUp')
+      id = window.setTimeout(() => setPhase('flash'), SPIN_MS)
     } else if (phase === 'flash') {
       if (collecting) play('collect')
-      // Matches the 560ms .collect-card-absorb duration so the card finishes
-      // fading out before it unmounts.
-      id = window.setTimeout(() => (collecting ? setPhase('collected') : next()), 560)
+      // The card finishes dissolving (.collect-card-absorb) before it unmounts.
+      id = window.setTimeout(() => setPhase(collecting ? 'collected' : 'summary'), SINGLE.absorbMs)
     } else {
-      id = window.setTimeout(next, COLLECTED_HOLD_MS)
+      id = window.setTimeout(() => setPhase('summary'), SINGLE.collectedHoldMs)
     }
     return () => window.clearTimeout(id)
-  }, [phase, index, reduce, transitions.length, multiple, collecting, play])
+  }, [phase, collecting, play])
+
+  // ── Several concepts: one grid, each card popping in a beat after the last ─
+  const timeline = useMemo(() => gridTimeline(transitions.length), [transitions.length])
+  const cardSize = gridCardSize(transitions.length)
+  // How many cards have popped into the grid, and how many of those have landed.
+  const [shown, setShown] = useState(0)
+  const [landed, setLanded] = useState(0)
+  const gridRef = useRef<HTMLDivElement>(null)
+  const cellRefs = useRef<(HTMLDivElement | null)[]>([])
+
+  // The whole grid is scheduled up front and torn down on cleanup — a skip to
+  // the summary cancels whatever hasn't fired yet, and StrictMode's second run
+  // starts from a clean slate. Every landing is a rung of the `levelUpStep`
+  // climb, collected or not: the climb is the ceremony, and a `collect` chime
+  // per card on top of it would be a second cue for the same event. A grid that
+  // lands faster than the cue's throttle has it sound every other card or so —
+  // thinned, never bunched.
+  useEffect(() => {
+    if (phase !== 'grid') return
+    const ids: number[] = []
+    timeline.appearAt.forEach((at, i) => {
+      ids.push(window.setTimeout(() => setShown(s => Math.max(s, i + 1)), at))
+    })
+    timeline.landAt.forEach((at, i) => {
+      ids.push(window.setTimeout(() => {
+        setLanded(l => Math.max(l, i + 1))
+        play('levelUpStep')
+      }, at))
+    })
+    ids.push(window.setTimeout(() => setPhase('summary'), timeline.doneAt))
+    return () => ids.forEach(id => window.clearTimeout(id))
+  }, [phase, timeline, play])
+
+  // A run too long for the screen scrolls to keep the newest card in view.
+  useEffect(() => {
+    if (phase !== 'grid' || shown === 0) return
+    const box = gridRef.current
+    const cell = cellRefs.current[shown - 1]
+    if (!box || !cell) return
+    const bottom = cell.offsetTop + cell.offsetHeight + 12 - box.clientHeight
+    if (bottom > box.scrollTop) box.scrollTo({ top: bottom, behavior: 'smooth' })
+  }, [phase, shown])
 
   // Count the gems up once we land on the summary.
   useEffect(() => {
@@ -141,16 +176,16 @@ export function ConceptLevelUpCeremony({ transitions, gemsEarned, totalGems, onR
       {/* Backdrop — tap to skip straight to the summary. */}
       <div
         className="absolute inset-0 bg-black/70 backdrop-blur-sm"
-        onClick={() => phase !== 'summary' && setPhase('summary')}
+        onClick={skip}
       />
 
       {/* Radial bloom during the flash between cards. */}
       {inBloom && <div className="collect-bloom pointer-events-none absolute inset-0" />}
 
-      {/* ── Per-card spin / flash / collected ─────────────────────────── */}
-      {phase !== 'summary' && current && (
+      {/* ── One card: spin / flash / collected ─────────────────────────── */}
+      {(phase === 'spin' || phase === 'flash' || phase === 'collected') && current && (
         <div
-          key={phase === 'collected' ? `collected-${index}` : `card-${index}`}
+          key={phase === 'collected' ? 'collected' : 'card'}
           className={`relative z-[121] flex max-w-md flex-col items-center gap-5 text-center ${phase === 'collected' ? 'collect-done-pop' : ''}`}
         >
           <CollectCard3D
@@ -178,11 +213,48 @@ export function ConceptLevelUpCeremony({ transitions, gemsEarned, totalGems, onR
               {LEVEL_LABEL[current.to]}
             </span>
           </div>
-          {transitions.length > 1 && (
-            <span className="text-xs font-medium tabular-nums text-white/50">
-              {index + 1} / {transitions.length}
-            </span>
-          )}
+        </div>
+      )}
+
+      {/* ── Several cards: one grid ───────────────────────────────────────── */}
+      {phase === 'grid' && (
+        <div className="relative z-[121] flex w-full max-w-3xl flex-col items-center gap-3 text-center" onClick={skip}>
+          <span className="text-sm font-medium text-white/70">Leveling up…</span>
+          <div
+            ref={gridRef}
+            className="relative flex max-h-[70vh] w-full flex-wrap content-start justify-center gap-3 overflow-y-auto overscroll-contain p-2 sm:gap-4"
+          >
+            {transitions.slice(0, shown).map((t, i) => {
+              const hasLanded = i < landed
+              return (
+                <div
+                  key={`${t.conceptSlug}-${i}`}
+                  ref={el => { cellRefs.current[i] = el }}
+                  className="collect-grid-in flex flex-col items-center gap-1.5"
+                >
+                  <CollectCard3D
+                    name={formatSlug(t.conceptSlug)}
+                    phase={hasLanded ? 'idle' : 'spin'}
+                    size={cardSize}
+                    mastery={t.to}
+                    locked={!!t.collected && !hasLanded}
+                    className={hasLanded ? 'collect-card-land' : ''}
+                  />
+                  {/* Reserves its line before the card lands, so nothing shifts. */}
+                  <span
+                    className={`inline-flex items-center gap-1 text-xs font-bold ${
+                      hasLanded ? (t.collected ? 'text-primary' : 'text-white') : 'invisible'
+                    }`}
+                  >
+                    {t.collected ? <><Sparkles className="h-3.5 w-3.5" /> Collected!</> : LEVEL_LABEL[t.to]}
+                  </span>
+                </div>
+              )
+            })}
+          </div>
+          <span className="text-xs font-medium tabular-nums text-white/50">
+            {landed} / {transitions.length}
+          </span>
         </div>
       )}
 
@@ -194,32 +266,39 @@ export function ConceptLevelUpCeremony({ transitions, gemsEarned, totalGems, onR
             {transitions.length === 1 ? 'Concept Leveled Up!' : `${transitions.length} Concepts Leveled Up!`}
           </span>
 
-          {/* Recap every concept that advanced, with its from → to jump. */}
+          {/* Recap every concept that advanced, with its from → to jump. A card
+              collected at Level 1 says only that — collecting *is* New → Level 1,
+              and the ladder beside it would only squeeze the name. A long run
+              scrolls inside the card so Continue stays on screen. */}
           <div className="w-full space-y-1.5 rounded-xl bg-card p-4 shadow-2xl">
-            {transitions.map((t, i) => (
-              <div
-                key={`${t.conceptSlug}-${i}`}
-                className="flex items-center justify-between gap-3 rounded-lg px-2 py-1.5"
-              >
-                <span className="min-w-0 flex-1 truncate text-left text-sm font-medium text-foreground">
-                  {formatSlug(t.conceptSlug)}
-                </span>
-                {t.collected && (
-                  <span
-                    className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-primary"
-                    title="Flashcard collected"
-                  >
-                    <Sparkles className="h-3 w-3" />
-                    Collected
+            <div className="max-h-[50vh] space-y-1.5 overflow-y-auto overscroll-contain">
+              {transitions.map((t, i) => (
+                <div
+                  key={`${t.conceptSlug}-${i}`}
+                  className="flex items-center justify-between gap-3 rounded-lg px-2 py-1.5"
+                >
+                  <span className="min-w-0 flex-1 truncate text-left text-sm font-medium text-foreground">
+                    {formatSlug(t.conceptSlug)}
                   </span>
-                )}
-                <span className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-                  {LEVEL_LABEL[t.from]}
-                  <ArrowRight className="h-3 w-3" />
-                  {LEVEL_LABEL[t.to]}
-                </span>
-              </div>
-            ))}
+                  {t.collected && (
+                    <span
+                      className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-primary"
+                      title="Flashcard collected"
+                    >
+                      <Sparkles className="h-3 w-3" />
+                      Collected
+                    </span>
+                  )}
+                  {!(t.collected && t.to === 'level1') && (
+                    <span className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                      {LEVEL_LABEL[t.from]}
+                      <ArrowRight className="h-3 w-3" />
+                      {LEVEL_LABEL[t.to]}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
 
             {/* Gems earned this quiz, ticking up into the running balance. */}
             {showGems && (

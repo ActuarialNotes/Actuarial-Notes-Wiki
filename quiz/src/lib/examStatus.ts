@@ -10,10 +10,11 @@ import type { ItemStatus } from '@/data/tracks'
 //   'development' — syllabus scaffolding only: no question bank, concept
 //                   pages mostly unwritten. Not
 //                   something a candidate can study from yet (the DISCs,
-//                   PCPA, Exams 6–9). Exams 7, 8 and 9 have since had their
-//                   banks converted from the 2012–2019 papers, and the quiz
-//                   builder offers them, labelled In Development; everywhere
-//                   else they stay a syllabus until they leave the list below.
+//                   PCPA, Exams 6–9). Exams 6C, 7, 8 and 9 have since had
+//                   their banks converted from the 2012–2019 papers, and the
+//                   quiz builder offers them, labelled In Development;
+//                   everywhere else they stay a syllabus until they leave the
+//                   list below.
 //
 // Surfaces read this rather than re-deriving "not P and not FM" locally: the
 // study-guide exam grid (`pages/wiki/WikiHome.tsx`), the exam page's status

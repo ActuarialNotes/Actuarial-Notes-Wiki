@@ -23,7 +23,8 @@ import { useTodayAnsweredQuestions } from '@/hooks/useTodayAnsweredQuestions'
 import { useSubscription } from '@/hooks/useSubscription'
 import { filterQuestions, isFromAnotherExamsPaper } from '@/lib/parser'
 import type { Question } from '@/lib/parser'
-import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { bankLabelFor } from '@/lib/examIds'
+import { matchesSelectedVariant } from '@/data/examSittings'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import type { QuizMode } from '@/lib/parser'
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -65,6 +66,9 @@ const EXAMS = [
   { value: 'Exam MAS-I', label: 'Exam MAS-I', tracks: ['ACAS'] as const, progressKey: 'MAS-I' },
   { value: 'Exam MAS-II', label: 'Exam MAS-II', tracks: ['ACAS'] as const, progressKey: 'MAS-II' },
   { value: 'Exam 5', label: 'Exam 5', tracks: ['ACAS'] as const, progressKey: 'CAS-5' },
+  // Exam 6 is sat in regional variants sharing `CAS-6`; this card is the
+  // Canadian one's, so `examId` says which syllabus it answers to.
+  { value: 'Exam 6C', label: 'Exam 6C', tracks: ['ACAS'] as const, progressKey: 'CAS-6', examId: '6C' },
   { value: 'Exam 7', label: 'Exam 7', tracks: ['FCAS'] as const, progressKey: 'CAS-7' },
   { value: 'Exam 8', label: 'Exam 8', tracks: ['FCAS'] as const, progressKey: 'CAS-8' },
   { value: 'Exam 9', label: 'Exam 9', tracks: ['FCAS'] as const, progressKey: 'CAS-9' },
@@ -95,9 +99,11 @@ const MOCK_EXAM_QUESTIONS: Record<string, number> = {
   'Exam MAS-II': 42,
   'Exam 5': 25,
   // No format guide gives these, so they are the released papers' own size:
-  // the eight 2012–2019 Exam 7 papers held 200 questions and the eight Exam 8
-  // papers 173 (`cas7-*` / `cas8-*` across the bank, wherever the syllabus has
+  // the thirteen Fall 2013–Fall 2019 Exam 6C papers held 394 questions, the
+  // eight 2012–2019 Exam 7 papers 200 and the eight Exam 8 papers 173
+  // (`cas6c-*` / `cas7-*` / `cas8-*` across the bank, wherever the syllabus has
   // since filed them). Exam 9 has no released paper of its own in the bank.
+  'Exam 6C': 30,
   'Exam 7': 25,
   'Exam 8': 22,
 }
@@ -377,7 +383,7 @@ export default function Landing() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
-  const { progress: examProgress, targetDates, selectedTrack } = useExamProgress()
+  const { progress: examProgress, targetDates, selectedTrack, examVariants } = useExamProgress()
   const { byExam: conceptsByExam, loading: conceptsLoading } = useConcepts()
   const { questions: allQuestions } = useAllQuestions()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
@@ -408,11 +414,14 @@ export default function Landing() {
 
   // Exam subtitles (e.g. "Basic Techniques for Ratemaking and Estimating Claim
   // Liabilities" for Exam 5) sourced from the wiki syllabus so the Quiz tab
-  // matches the Study Guides tab exactly.
-  const examTopicByProgressKey = useMemo(() => {
+  // matches the Study Guides tab exactly. Keyed by bank label rather than
+  // progress key: 6C and 6U share `CAS-6`, and the 6C card must not carry the
+  // U.S. syllabus's subject line.
+  const examTopicByLabel = useMemo(() => {
     const map: Record<string, string> = {}
     for (const s of syllabi) {
-      map[wikiExamIdToProgressKey(s.examId)] = s.examTopic
+      const label = bankLabelFor(s)
+      if (label) map[label] = s.examTopic
     }
     return map
   }, [syllabi])
@@ -424,7 +433,8 @@ export default function Landing() {
 
   // Index of each exam in the global active-exams list (for consistent colour across tabs)
   const activeExamValues = EXAMS
-    .filter(e => examProgress[e.progressKey] === 'in_progress')
+    .filter(e => examProgress[e.progressKey] === 'in_progress'
+      && (!e.examId || matchesSelectedVariant(e.progressKey, e.examId, examVariants[e.progressKey])))
     .map(e => e.value)
 
   const [topic, setTopic] = useState(initialTopic)
@@ -1386,7 +1396,7 @@ export default function Landing() {
                           questionCount={questionCounts[exam.value] ?? 0}
                           colorIdx={colorIdx}
                           targetDate={isActive ? (targetDates[exam.progressKey] ?? null) : null}
-                          subtitle={examTopicByProgressKey[exam.progressKey]}
+                          subtitle={examTopicByLabel[exam.value]}
                           todayQuizCount={badgeCountFor(todayQuizByExam[exam.progressKey])}
                           todayQuizComplete={todayQuizByExam[exam.progressKey]?.complete ?? false}
                         />

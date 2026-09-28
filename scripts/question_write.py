@@ -50,7 +50,9 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import mdmath  # noqa: E402
-from pdf_extract import attach_part_prompts, parts_total, points_label, split_options  # noqa: E402
+from pdf_extract import (  # noqa: E402
+    attach_part_prompts, parts_total, points_label, split_options, split_part_prompts,
+)
 from validate_content import EXAM_LABEL_BY_DIR  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -341,10 +343,20 @@ def main(argv: list[str] | None = None) -> int:
                     record = dict(
                         record, options={k: mdmath.normalize_chars(v) for k, v in options.items()}
                     )
-            parts = [dict(part) for part in record.get("parts") or []]
+            transcribed = mdmath.normalize_markdown(transcribed)
+            # The transcription is the page as printed, so a part it does not
+            # print and the report never answers is the extraction's, not the
+            # paper's: Exam 6C Fall 2015 Q19 is one 2-point question whose span
+            # ran into Q20's a. (1.5) and b. (0.5), which priced it exactly.
+            printed = set(split_part_prompts(transcribed)[1])
+            parts = [
+                dict(part) for part in record.get("parts") or []
+                if part["label"] in printed or part.get("samples")
+                or (part.get("report") or "").strip()
+            ]
             surplus: list[str] = []
             stem = attach_part_prompts(
-                mdmath.normalize_markdown(transcribed),
+                transcribed,
                 parts,
                 record.get("points"),
                 surplus,

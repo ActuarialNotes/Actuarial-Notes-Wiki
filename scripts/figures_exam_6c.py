@@ -575,6 +575,24 @@ def bias_in_actuarial_practice() -> Fig:
     return f
 
 
+@figure("Usage-Based Insurance", "A car sending its driving data by signal to the "
+        "insurer's rating, above three premium columns that fall from risky to average "
+        "to safe driving", width=WID)
+def usage_based_insurance() -> Fig:
+    f = vcard()
+
+    car(f, 96, 146, 104, BLUE)
+    for r in (16, 28, 40):
+        f.path(f"M{150 - r * 0.2:.1f},{112 - r * 0.9:.1f} "
+               f"A{r},{r} 0 0 1 {150 + r * 0.9:.1f},{112 - r * 0.2:.1f}",
+               cls="thin", stroke=TEAL, stroke_width="1.8", fill="none")
+    document(f, 270, 128, 64, TEAL)
+    f.text(270, 184, "rating", cls="sm bold")
+    _vbars(f, [1.0, 0.86, 0.72], ["risky", "average", "safe"], 360, x0=60, x1=300,
+           height=128, colours=[ROSE, AMBER, GREEN])
+    return f
+
+
 @figure("Take-All-Comers Rule", "An applicant with a car checked against the filed "
         "rules: meet them and the insurer must write the policy, fail them and the "
         "way leads to the Facility Association", width=WID)
@@ -949,6 +967,29 @@ def punitive_damages() -> Fig:
     f.line(34, base, 326, base, cls="axis")
     house(f, 96, 234, 64, BLUE)
     scales(f, 264, 170, 72, VIOLET)
+    return f
+
+
+@figure("Cap on Non-Pecuniary Damages", "Two stacks of coins under the court's "
+        "scales: pecuniary damages for care and lost income rising unchecked, and "
+        "non-pecuniary damages stopped at the dashed cap the 1978 trilogy set at "
+        "$100k, the coins above it faded out", width=WID)
+def cap_on_non_pecuniary_damages() -> Fig:
+    f = vcard()
+
+    base = 352
+    coins(f, 80, base, 22, 30, BLUE)
+    f.text(80, base + 22, "pecuniary", cls="sm bold")
+    capped, excess = 8, 9
+    coins(f, 256, base, capped, 30, ROSE)
+    coins(f, 256, base - capped * 6, excess, 30, "var(--dim)")
+    y_cap = base - 5 - capped * 6 + 3
+    f.line(200, y_cap, 304, y_cap, cls="thin dash", stroke="var(--ink)",
+           stroke_width="1.6")
+    f.text(194, y_cap + 4, "cap $100k", cls="sm bold", anchor="end")
+    f.text(256, base + 22, "non-pecuniary", cls="sm bold")
+    f.line(40, base, 320, base, cls="axis")
+    scales(f, 256, 132, 70, VIOLET)
     return f
 
 
@@ -2930,19 +2971,20 @@ def operational_risk_margin() -> Fig:
     return f
 
 
-@figure("Diversification Credit", "The running insurer's $92M insurance and $54M "
-        "market margins stacked to $146M beside the $120M actually required once "
-        "they are combined — the outlined $26M gap is the diversification credit",
-        width=WID)
+@figure("Diversification Credit", "The running insurer's $92M insurance, $54M "
+        "market and $21M credit margins stacked to $167M beside the $141M actually "
+        "required once insurance is combined with market and credit — the outlined "
+        "$26M gap is the diversification credit", width=WID)
 def diversification_credit() -> Fig:
     f = vcard()
 
-    base, s, bw = 352, 1.72, 84
+    base, s, bw = 352, 1.5, 84
     xa, xc = 110, 250
-    added = M_INS + M_MKT
+    added = M_INS + M_MKT + M_CRD
     combined = added - DIVERS
     y = base
-    for label, v, colour in (("insurance", M_INS, BLUE), ("market", M_MKT, TEAL)):
+    for label, v, colour in (("insurance", M_INS, BLUE), ("market", M_MKT, TEAL),
+                             ("credit", M_CRD, AMBER)):
         f.rect(xa - bw / 2, y - v * s, bw, v * s, rx=3, fill=colour,
                fill_opacity="0.7")
         f.text(xa, y - v * s / 2 + 4, f"{label} {v:,.0f}", cls="sm")
@@ -2989,6 +3031,42 @@ def earthquake_exposure_risk_margin() -> Fig:
     f.text(xr, base + 18, "resources", cls="sm dim")
     f.line(xp + bw / 2, base - pml * s, xr - bw / 2, base - pml * s,
            cls="thin dot", stroke="var(--dim)")
+    f.line(40, base, 320, base, cls="axis")
+    return f
+
+
+@figure("Earthquake Reserves", "A 1-in-500 countrywide earthquake PML of 385 "
+        "beside the resources stacked against it — 200 of reinsurance, 40 of capital, "
+        "a 25 earthquake premium reserve and the 120 reserve component that closes the "
+        "gap — with the premium reserve and the component braced as the reserve, "
+        "times 1.25", width=WID)
+def earthquake_reserves() -> Fig:
+    f = vcard()
+
+    pml, base, s, bw = 385.0, 352, 0.66, 84
+    xp, xr = 92, 214
+    f.rect(xp - bw / 2, base - pml * s, bw, pml * s, rx=3, fill=ROSE,
+           fill_opacity="0.6")
+    f.text(xp, base - pml * s - 8, f"PML {pml:,.0f}", cls="sm bold")
+    f.text(xp, base + 18, "1-in-500", cls="sm dim")
+    y = base
+    tops = {}
+    for label, v, colour in (("reinsurance", 200.0, TEAL), ("capital", 40.0, BLUE),
+                             ("EPR", 25.0, AMBER), ("ERC", 120.0, VIOLET)):
+        f.rect(xr - bw / 2, y - v * s, bw, v * s, rx=3, fill=colour,
+               fill_opacity="0.6")
+        f.text(xr, y - v * s / 2 + 4, label,
+               cls="sm bold" if label in ("EPR", "ERC") else "sm")
+        tops[label] = (y - v * s, y)
+        y -= v * s
+    f.text(xr, base + 18, "resources", cls="sm dim")
+    f.line(xp + bw / 2, base - pml * s, xr - bw / 2, base - pml * s,
+           cls="thin dot", stroke="var(--dim)")
+    x_b = xr + bw / 2 + 6
+    y_top, y_bot = tops["ERC"][0], tops["EPR"][1]
+    f.path(f"M{x_b},{y_top} h8 V{y_bot} h-8", cls="thin", stroke="var(--ink)",
+           stroke_width="1.4", fill="none")
+    f.text(x_b + 14, (y_top + y_bot) / 2 + 4, "× 1.25", cls="sm bold", anchor="start")
     f.line(40, base, 320, base, cls="axis")
     return f
 
@@ -3389,6 +3467,31 @@ def _c6c_stamp(f: Fig, cx, cy, ok, colour):
                    stroke=colour, stroke_width="2.6", stroke_linecap="round")
 
 
+@figure("Events Not in Data", "A claims distribution whose body is covered by "
+        "a row of observed data points, and a small shaded bump far out in the tail "
+        "that no data point reaches — the events not in data", width=WID)
+def events_not_in_data() -> Fig:
+    f = vcard()
+
+    def body(x):
+        return x * math.exp(-x / 1.3) / 1.69
+
+    def bump(x):
+        return 0.07 * math.exp(-((x - 8.2) ** 2) / (2 * 0.45 ** 2))
+
+    ax = vaxes(f, 0, 10, 0, 0.32, left=24, right=18, top=40, bottom=64)
+    ax.area(lambda x: body(x) + bump(x), 0, 10, colour=BLUE, opacity="0.14")
+    ax.area(bump, 6.6, 10, colour=ROSE, opacity="0.55")
+    ax.curve(lambda x: body(x) + bump(x), colour=BLUE, width=2.2)
+    ax.frame(xticks=[], yticks=[], arrows=True)
+    for x in (0.4, 0.7, 0.9, 1.1, 1.3, 1.5, 1.8, 2.0, 2.3, 2.7, 3.1, 3.6, 4.2, 5.0):
+        f.circle(ax.px(x), ax.py(0) + 16, 3.2, fill=BLUE, fill_opacity="0.75")
+    brace(f, ax.px(0.4), ax.px(5.0), ax.py(0) + 24, label="in data",
+          label_cls="sm bold")
+    f.text(ax.px(8.2), ax.py(0.07) - 12, "ENID", cls="sm bold")
+    return f
+
+
 @figure("Statement of Actuarial Opinion", "A liability scale with the actuary's range "
         "of reasonable estimates shaded: a carried amount inside the range stamped "
         "unqualified, and one below it stamped adverse", width=WID)
@@ -3579,6 +3682,37 @@ def runoff() -> Fig:
     ax.label(2.6, 52, "claims", cls="sm bold", anchor="start")
     ax.label(8.2, 19, "expenses", cls="sm bold", dy=-8)
     f.text(ax.x1, ax.y1 + 22, "years in run-off", cls="sm dim", anchor="end")
+    return f
+
+
+@figure("Excess (Deficiency) Ratio", "Last year's 420 estimate of the claim "
+        "liabilities beside what it became — 180 paid in the year and 222 still "
+        "outstanding — leaving 18, a 4.3% excess", width=WID)
+def excess_deficiency_ratio() -> Fig:
+    f = vcard()
+
+    prior, paid, remaining = LIC_FCF, 180.0, 222.0
+    excess = prior - paid - remaining                      # 18
+    base, s, bw = 352, 0.62, 84
+    xp, xn = 112, 248
+    f.rect(xp - bw / 2, base - prior * s, bw, prior * s, rx=3, fill=BLUE,
+           fill_opacity="0.6")
+    f.text(xp, base - prior * s - 8, f"{prior:,.0f}", cls="sm bold")
+    f.text(xp, base + 18, "prior", cls="sm dim")
+    y = base
+    for label, v, colour in (("paid", paid, TEAL), ("remaining", remaining, AMBER)):
+        f.rect(xn - bw / 2, y - v * s, bw, v * s, rx=3, fill=colour,
+               fill_opacity="0.6")
+        f.text(xn, y - v * s / 2 + 4, f"{label} {v:,.0f}", cls="sm")
+        y -= v * s
+    f.text(xn, base + 18, "now", cls="sm dim")
+    y_prior = base - prior * s
+    f.line(xp + bw / 2, y_prior, xn + bw / 2, y_prior, cls="thin dot",
+           stroke="var(--dim)")
+    f.rect(xn - bw / 2, y_prior, bw, y - y_prior, rx=2, fill=GREEN,
+           fill_opacity="0.35", stroke=GREEN, stroke_width="1.2", stroke_dasharray="3 3")
+    f.text(xn, y_prior - 8, f"excess {excess / prior:.1%}", cls="sm bold")
+    f.line(40, base, 320, base, cls="axis")
     return f
 
 

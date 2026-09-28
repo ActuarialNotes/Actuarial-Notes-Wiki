@@ -484,6 +484,38 @@ class TestPublisherTextDefects(unittest.TestCase):
         self.assertNotIn("expected to round", part["samples"][0])
         self.assertIn("expected to round", part["report"])
 
+    def test_an_unnumbered_sample_label_is_not_part_of_the_answer(self):
+        # Exam 6C reports head a part's answer `Sample` or `Sample answers`.
+        parsed = px.parse_cas_question(
+            "TOTAL POINT VALUE: 1\nSAMPLE ANSWERS\nPart a: 0.5 point\n"
+            "Sample\n- Many insurers went bankrupt\n"
+            "Part b: 0.5 point\nSample answers:\n- periodic filing\n"
+            "Sample answers\n- restricted investments\n"
+        )
+        a, b = parsed["parts"]
+        self.assertEqual(a["samples"], ["- Many insurers went bankrupt"])
+        self.assertEqual(b["samples"], ["- periodic filing", "- restricted investments"])
+
+    def test_a_part_priced_in_point_s_keeps_no_s(self):
+        parsed = px.parse_cas_question(
+            "TOTAL POINT VALUE: 3\nSAMPLE ANSWERS\nPart a: 1.5 point(s)\n"
+            "- Restrict licensing\nPart b: 1.5 point(s)\n- Bankruptcies\n"
+        )
+        a, b = parsed["parts"]
+        self.assertEqual((a["points"], a["samples"]), (1.5, ["- Restrict licensing"]))
+        self.assertEqual(b["samples"], ["- Bankruptcies"])
+
+    def test_a_sample_label_with_more_on_its_line_loses_the_label_only(self):
+        parsed = px.parse_cas_question(
+            "TOTAL POINT VALUE: 1\nSAMPLE ANSWERS\nPart a: 0.5 point\n"
+            "Samples (any 2 of the following 3)\n- Sexual abuse\n"
+            "Part b: 0.5 point\nSample Duty of care is owed by both.\n"
+        )
+        a, b = parsed["parts"]
+        self.assertEqual(a["samples"], ["(any 2 of the following 3)\n- Sexual abuse"])
+        self.assertEqual(b["samples"], ["Duty of care is owed by both."])
+        self.assertEqual(px.SAMPLE_LEAD_RE.sub("", "Sample size was small."), "Sample size was small.")
+
 
 def _page(number: int, text: str) -> "px.Page":
     """A Page carrying one text block, the way `read_pages` builds one."""
@@ -641,6 +673,71 @@ class TestExam7Layouts(unittest.TestCase):
         once = px.cas_records("7", 2012, "Spring", [_page(1, booklet)], [_page(2, report)],
                               single_sitting=True)
         self.assertEqual((once[0]["id"], once[0]["session"]), ("cas7-2012-q1", "Spring"))
+
+    # Exam 6C Fall 2013: an answer key, a candidate's answer and a report per
+    # question, parts lettered however the grader typed them.
+    FALL_2013 = (
+        "Question 1\nAnswer key:\na) Insurance is not commerce.\n"
+        "b) Any two of the following:\na. Establishes the FIO;\nb. Establishes the FSOC;\n"
+        "c. The FSOC may require heightened standards;\n"
+        "Actual candidate answer for full marks:\n(a) Paul v. Virginia: state regulation.\n"
+        "(b) The FIO collects information.\n"
+        "Examiner's report:\n(a) Candidates described the case.\n(b) Candidates did poorly.\n"
+        "Question 2\nAnswer key:\nA) Recovery = 279,500\nB) Recovery = 700\n"
+        "Actual candidate answer for full marks:\na) \\$279,500\nb) \\$700\n"
+        "Examiner's report:\nWell answered.\n"
+    )
+
+    def test_an_answer_key_and_a_candidate_answer_are_two_samples(self):
+        bounds = px.segment(self.FALL_2013, px.LEGACY_QUESTION_RE)
+        self.assertEqual([b.num for b in bounds], [1, 2])
+        parsed = px.parse_legacy_question(self.FALL_2013[bounds[0].start : bounds[0].end])
+        parts = {p["label"]: p for p in parsed["parts"]}
+        self.assertIn("not commerce", parts["a"]["samples"][0])
+        self.assertIn("Paul v. Virginia", parts["a"]["samples"][1])
+        self.assertIn("described the case", parts["a"]["report"])
+        self.assertIn("did poorly", parts["b"]["report"])
+        self.assertFalse(any("Candidates" in s for p in parts.values() for s in p["samples"]))
+
+    def test_upper_case_part_letters_are_parts(self):
+        bounds = px.segment(self.FALL_2013, px.LEGACY_QUESTION_RE)
+        parsed = px.parse_legacy_question(self.FALL_2013[bounds[1].start : bounds[1].end])
+        parts = {p["label"]: p for p in parsed["parts"]}
+        self.assertEqual(sorted(parts), ["a", "b"])
+        self.assertIn("279,500", parts["a"]["samples"][0])
+        self.assertIn("700", parts["b"]["samples"][1])
+
+    def test_a_part_the_booklet_never_printed_folds_into_the_one_above(self):
+        booklet = (
+            "1.\n(1.5 points)\na.\n(0.5 point)\nDescribe the ruling.\n"
+            "b.\n(1 point)\nIdentify two implications.\n"
+            "2.\n(1 point)\na.\n(0.5 point)\nCalculate.\nb.\n(0.5 point)\nCalculate.\n"
+        )
+        records = px.cas_records("6c", 2013, "Fall", [_page(1, booklet)], [_page(2, self.FALL_2013)])
+        parts = records[0]["parts"]
+        self.assertEqual([p["label"] for p in parts], ["a", "b"])
+        self.assertIn("c. The FSOC may require", parts[1]["samples"][0])
+        self.assertIn("The FIO collects", parts[1]["samples"][1])
+        self.assertEqual(records[0]["id"], "cas6c-2013f-q1")
+
+    def test_a_list_lead_in_on_every_page_is_not_furniture(self):
+        # Exam 6C Fall 2016 heads a list of mistakes this way on most pages.
+        pages = [
+            px.Page(number=i, text=f"EXAM 6C FALL 2016 REPORT\nCommon mistakes included:\n- slip {i}")
+            for i in range(1, 6)
+        ]
+        drop = px.furniture_lines(pages)
+        self.assertIn("EXAM 6C FALL 2016 REPORT", drop)
+        self.assertNotIn("Common mistakes included:", drop)
+
+    def test_a_short_header_on_every_page_is_furniture(self):
+        pages = [
+            px.Page(number=i, text=f"Exam 6C \u2013 Fall 2013\nQuestion {i}\n(C) 4{i}\nwork {i}")
+            for i in range(1, 11)
+        ]
+        drop = px.furniture_lines(pages)
+        self.assertIn("Exam 6C \u2013 Fall 2013", drop)
+        self.assertFalse(any(line.startswith("(C)") for line in drop))
 
     def test_the_legacy_cover_page_splits_the_combined_pdf(self):
         pages = [
@@ -871,6 +968,35 @@ class TestSurplusBookletParts(unittest.TestCase):
         px.attach_part_prompts(self.BOOKLET, parts, None, [])
         self.assertEqual([p["label"] for p in parts], ["a", "b", "c"])
 
+    def test_a_question_the_report_prices_whole_takes_no_parts_that_do_not_price_it(self):
+        # Exam 6C Fall 2018 Q10 (1.5 points, no parts) ran on into Q11's parts.
+        booklet = (
+            "(1.5 points)\nContrast three elements of the pools.\n"
+            "a. (2 points)\nDescribe the flood program.\nb. (1 point)\nDescribe four variables.\n"
+        )
+        parts: list[dict] = []
+        warnings: list[str] = []
+        stem = px.attach_part_prompts(booklet, parts, 1.5, warnings)
+        self.assertEqual(parts, [])
+        self.assertIn("Contrast three elements", stem)
+        self.assertIn("booklet parts a, b dropped", warnings[0])
+
+    def test_a_report_total_the_booklet_and_the_parts_contradict_is_a_misprint(self):
+        # Exam 6C Fall 2014 Q15: report total 1.75, booklet (2.75 points), and
+        # parts of 0.75, 1.5 and 0.5 in both.
+        booklet = (
+            "15. (2.75 points)\nGiven OSFI's guideline B-9:\n"
+            "a. (0.75 point)\nDescribe.\nb. (1.5 points)\nCalculate.\nc. (0.5 point)\nExplain.\n"
+        )
+        report = (
+            "QUESTION 15\nTOTAL POINT VALUE: 1.75\nSAMPLE ANSWERS\n"
+            "Part a: 0.75 point\nSample 1\nx\nPart b: 1.5 points\nSample 1\ny\n"
+            "Part c: 0.5 point\nSample 1\nz\n"
+        )
+        record = px.cas_records("6c", 2014, "Fall", [_page(1, booklet)], [_page(2, report)])[0]
+        self.assertEqual(record["points"], 2.75)
+        self.assertTrue(any("taken as a misprint" in w for w in record["warnings"]))
+
     def test_a_single_part_question_loses_its_redundant_total(self):
         stem = px.attach_part_prompts("(2.5 points)\n\nCalculate the premium.\n", [])
         self.assertEqual(stem.strip(), "Calculate the premium.")
@@ -1042,6 +1168,22 @@ class TestFurnitureAndReflow(unittest.TestCase):
         drop = px.furniture_lines(pages)
         self.assertIn("EXAM 5 FALL 2016 REPORT", drop)
         self.assertNotIn("Sample Answer 1", drop)
+
+    def test_report_section_headings_on_every_page_are_not_furniture(self):
+        # Exam 6C Spring 2014 sets one question to a page, so its section
+        # headings repeat as often as the running header above them.
+        pages = [
+            px.Page(
+                number=i,
+                text="SAMPLE ANSWERS AND EXAMINER’S REPORT\n"
+                f"QUESTION {i}\nSAMPLE ANSWERS\nwork {i}\nEXAMINER’S REPORT\nnote {i}",
+            )
+            for i in range(1, 6)
+        ]
+        drop = px.furniture_lines(pages)
+        self.assertIn("SAMPLE ANSWERS AND EXAMINER’S REPORT", drop)
+        self.assertNotIn("SAMPLE ANSWERS", drop)
+        self.assertNotIn("EXAMINER’S REPORT", drop)
 
     def test_reflow_joins_wrapped_lines(self):
         out = px.reflow_block("Calculate the percentage of the\ngroup that watched none.")
@@ -1584,6 +1726,37 @@ class TestMasFiling(unittest.TestCase):
             md = written.read_text()
             self.assertIn("Calculate $r_1$.\n\n- A) I only\n- B) II only\n", md)
             self.assertNotIn("Tonly", md)
+
+    def test_a_transcription_drops_parts_it_does_not_print_and_the_report_never_answered(self):
+        # Exam 6C Fall 2015 Q19: one 2-point question whose booklet span ran
+        # into Q20's a. (1.5) and b. (0.5), which priced it exactly.
+        record = {
+            "num": 19, "id": "cas6c-2015f-q19", "bank": "exam-6c", "type": "multi-part",
+            "body": "Q19 text", "options": {}, "answer": None, "points": 2.0,
+            "year": 2015, "session": "Fall", "solution": "The published answer.",
+            "alternatives": [], "examiner_report": "Well answered.",
+            "parts": [
+                {"label": "a", "points": 1.5, "samples": [], "report": "", "prompt": "Q20 a"},
+                {"label": "b", "points": 0.5, "samples": [], "report": "", "prompt": "Q20 b"},
+            ],
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            (tmp / "records.jsonl").write_text(json.dumps(record) + "\n")
+            (tmp / "judgments.jsonl").write_text(json.dumps(
+                {"id": "cas6c-2015f-q19", "topic": "Flood Insurance", "difficulty": "medium",
+                 "learning_objective": "Canadian Government and Industry Insurance Programs",
+                 "wiki_link": ["Concepts/Flood+Insurance"], "needs_review": False}) + "\n")
+            (tmp / "prompts").mkdir()
+            (tmp / "prompts" / "cas6c-2015f-q19.md").write_text("Describe the flood program.\n")
+            rc = qw.main(["--records", str(tmp / "records.jsonl"),
+                          "--judgments", str(tmp / "judgments.jsonl"),
+                          "--prompts", str(tmp / "prompts"), "--root", str(tmp)])
+            self.assertEqual(rc, 0)
+            md = (tmp / "questions" / "exam-6c" / "cas6c-2015f-q19.md").read_text()
+            self.assertNotIn("## Part", md)
+            self.assertIn("Describe the flood program.", md)
+            self.assertIn("### Explanation\nThe published answer.", md)
 
 
 class TestMasClassifying(unittest.TestCase):

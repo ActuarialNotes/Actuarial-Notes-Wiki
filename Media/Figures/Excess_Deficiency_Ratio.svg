@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
+  <title>Last year's 420 estimate of the claim liabilities beside what it became — 180 paid in the year and 222 still outstanding — leaving 18, a 4.3% excess</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+    --grid: #333333; --soft: #242424; --axis: #6b6b6b;
+  }
+}
+/* Named by the host in the embed URL (`…svg#dark`), and beats the media query
+   above because a value set here lands on the drawing rather than on the root
+   it inherits from. See the module docstring. */
+#light:target ~ * { --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
+  --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c; }
+#dark:target ~ * { --surf: #171717; --edge: #424242; --ink: #ffffff; --dim: #c7c7c7;
+  --grid: #333333; --soft: #242424; --axis: #6b6b6b; }
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <g id="light"/><g id="dark"/>
+  <g class="art">
+    <rect class="card" x="0.6" y="46.6" width="358.8" height="364.8" rx="10"/>
+    <rect x="70" y="91.6" width="84" height="260.4" rx="3" fill="#3b82f6" fill-opacity="0.6"/>
+    <text x="112" y="83.6" text-anchor="middle" class="sm bold">420</text>
+    <text x="112" y="370" text-anchor="middle" class="sm dim">prior</text>
+    <rect x="206" y="240.4" width="84" height="111.6" rx="3" fill="#0d9488" fill-opacity="0.6"/>
+    <text x="248" y="300.2" text-anchor="middle" class="sm">paid 180</text>
+    <rect x="206" y="102.76" width="84" height="137.64" rx="3" fill="#d97706" fill-opacity="0.6"/>
+    <text x="248" y="175.58" text-anchor="middle" class="sm">remaining 222</text>
+    <text x="248" y="370" text-anchor="middle" class="sm dim">now</text>
+    <line x1="154" y1="91.6" x2="290" y2="91.6" class="thin dot" stroke="var(--dim)"/>
+    <rect x="206" y="91.6" width="84" height="11.16" rx="2" fill="#059669" fill-opacity="0.35" stroke="#059669" stroke-width="1.2" stroke-dasharray="3 3"/>
+    <text x="248" y="83.6" text-anchor="middle" class="sm bold">excess 4.3%</text>
+    <line x1="40" y1="352" x2="320" y2="352" class="axis"/>
+  </g>
+</svg>

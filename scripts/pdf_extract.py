@@ -406,6 +406,9 @@ def rows_to_markdown(rows: list[list[str | None]]) -> str:
 PAGE_NUMBER_RE = re.compile(r"(?i)^(?:page\s*)?#+(?:\s*(?:of|/)\s*#+)?\.?$")
 # Words a running header needs before a repeated *shape* counts as furniture.
 FURNITURE_MIN_LETTERS = 10
+# …and what a shorter one needs when it repeats verbatim (`furniture_lines`).
+FURNITURE_VERBATIM_LETTERS = 5
+FURNITURE_VERBATIM_SHARE = 0.9
 
 
 def furniture_lines(pages: list[Page]) -> set[str]:
@@ -444,8 +447,33 @@ def furniture_lines(pages: list[Page]) -> set[str]:
         # noise.
         if is_content_marker(next(iter(concrete))):
             continue
+        # The same holds for a report's section headings when every question
+        # sits on its own page: Exam 6C Spring 2014 prints `SAMPLE ANSWERS`
+        # and `EXAMINER'S REPORT` on 34 of its 53 report pages, and dropping
+        # them left all 34 questions with no sample answer and no commentary.
+        # Only the heading alone on its line — the running header `SAMPLE
+        # ANSWERS AND EXAMINER'S REPORT` is still furniture.
+        if REPORT_SECTION_RE.match(next(iter(concrete))):
+            continue
+        # A line ending in a colon introduces what follows it, which a running
+        # header never does: Exam 6C Fall 2016 opens 51 of its 59 report pages'
+        # lists `Common mistakes included:`, and without it each list of
+        # mistakes read as what candidates were expected to write.
+        if shape.rstrip().endswith(":"):
+            continue
         letters = sum(1 for ch in shape if ch.isalpha())
         if letters >= FURNITURE_MIN_LETTERS or PAGE_NUMBER_RE.match(shape):
+            drop |= concrete
+        # A short header is still a header when it is the *same line* on
+        # nearly every page: Exam 6C Fall 2013 heads all 41 report pages
+        # `Exam 6C – Fall 2013`, nine letters, and it landed mid-answer in
+        # every question that ran over a page. An option such as `(C) 41`
+        # repeats as a shape, never verbatim on nine pages in ten.
+        elif (
+            len(concrete) == 1
+            and letters >= FURNITURE_VERBATIM_LETTERS
+            and len(per_page[shape]) >= len(pages) * FURNITURE_VERBATIM_SHARE
+        ):
             drop |= concrete
 
     # OCR reads the same running header slightly differently on some pages —
@@ -461,6 +489,13 @@ def furniture_lines(pages: list[Page]) -> set[str]:
             if _skeleton(line) in skeletons
         }
     return drop
+
+
+# A report section heading standing alone on its line — see `furniture_lines`.
+REPORT_SECTION_RE = re.compile(
+    "(?i)^\\s*(?:S?AMPLE(?:\\s*/\\s*[A-Z]+)?\\s+ANSWERS?"
+    "|E?XAMINER(?:['\u2019]?S|S['\u2019])?\\s+REPORT)\\s*:?\\s*$"
+)
 
 
 def _skeleton(line: str) -> str:
@@ -503,7 +538,10 @@ CAPS_HEADING_RE = re.compile(r"^\s*[A-Z][A-Z0-9 '\u2018\u2019(),./-]{4,}$")
 CONTENT_MARKER_RE = re.compile(
     r"^\s*(?:Part\s+[a-h]\b|Sample(?:\s+Answer)?\s+\d+\b|Solution\s*[:#]"
     r"|Question\s*#?\s*\d+\b|Solution\s*\d+\s*$|Model\s+(?:Solution|Answer)\s*\d*\s*:?\s*$"
-    "|Examiners?['’]?s?\\s+Comments?\\b)",
+    "|Examiners?['’]?s?\\s+Comments?\\b"
+    # Exam 6C Fall 2013's headings (see `LEGACY_SAMPLE_RE`).
+    "|Examiners?['’]?s?\\s+report\\s*:|Answer\\s+key\\s*:?\\s*$"
+    "|Actual\\s+candidate\\s+answers?\\b)",
     re.IGNORECASE,
 )
 MARKER_RE = re.compile(
@@ -942,8 +980,10 @@ CAS_QUESTION_RE = re.compile(
 # long enough that this cannot match anything else.
 CAS_POINTS_RE = re.compile(r"(?i)T?OTAL POINT VALUE[ \t]*[:=]?[ \t]*([\d.]+)")
 CAS_LO_RE = re.compile(r"(?i)L?EARNING OBJECTIVE\(?S?\)?[ \t]*[:=]?[ \t]*(.+)")
+# Exam 6C Spring 2014 prices every part `Part a: 1 point(s)`; left behind, the
+# `(s)` opened each part's first sample.
 CAS_PART_RE = re.compile(r"(?mi)^[ \t]*Part[ \t]+([a-h])[ \t]*[:.]?[ \t]*"
-                         r"(?:([\d.]+)[ \t]*points?)?[ \t]*")
+                         r"(?:([\d.]+)[ \t]*points?(?:\(s\))?)?[ \t]*")
 # `SAMPLE ANSWERS`, and Spring 2015's `SAMPLE/ACCEPTED ANSWERS:` — the
 # qualifier is the publisher's, not a different section. Missing it costs the
 # whole paper: with no sample heading there is no block to split, so every
@@ -1071,10 +1111,26 @@ def _split_parts(block: str) -> list[tuple[str, str | None, str]]:
 SAMPLE_HEADING_RE = re.compile(r"^[^\n]{1,60}:$")
 
 
+# `Sample Answer 1`, and the unnumbered labels the Exam 6C reports head their
+# samples with — `Sample`, `Sample answers`, `Sample answer:` — which, not
+# being split on, landed as the first line of every explanation.
+SAMPLE_LABEL_RE = re.compile(
+    r"(?mi)^[ \t]*Sample(?:[ \t]+Answers?)?(?:[ \t]+\d+)?[ \t]*:?[ \t]*$"
+)
+
+
+# The same label left at the head of a sample with more on its line —
+# `Sample (two of the following)`, `Samples (any 2 of the following 3)`, or
+# `Sample Duty of care is owed…` where reflow joined the label to the answer.
+# The label goes; a qualifier in brackets is the publisher's and stays.
+SAMPLE_LEAD_RE = re.compile(
+    r"^(?i:samples?(?:[ \t]+(?:answers?|responses?))?)[ \t]*:?[ \t]*(?=\(|\n|[A-Z]|$)"
+)
+
+
 def _split_samples(chunk: str) -> list[str]:
-    pieces = [p.strip() for p in re.split(
-        r"(?mi)^[ \t]*Sample(?:[ \t]+Answer)?[ \t]+\d+[ \t]*:?[ \t]*$", chunk
-    )]
+    pieces = [SAMPLE_LEAD_RE.sub("", p.strip(), count=1).strip()
+              for p in SAMPLE_LABEL_RE.split(chunk)]
     # A heading introducing the samples under it is left by the split either
     # alone in front of the first sample or trailing the one above it — Fall
     # 2015 Q4 heads its five samples `2-Step Method:` and `1-Step Method:`.
@@ -1117,14 +1173,29 @@ LEGACY_QUESTION_RE = re.compile(
     r"(?m)^[ \t]*Question[ \t]+(\d{1,3})"
     r"(?:[ \t]+Sample[ \t]+(?:Answers?|Solutions?)\b|[ \t]*:?[ \t]*$)"
 )
+# Exam 6C Fall 2013 is a third variant: each `Question N` gives an `Answer key:`
+# (the points the graders credited), then `Actual candidate answer for full
+# marks:`, then `Examiner's report:` — the key and the candidate's answer are
+# the question's two samples, the key first, and the report its commentary.
 LEGACY_SAMPLE_RE = re.compile(
-    r"(?mi)^[ \t]*(?:Model[ \t]+(?:Solution|Answer)[ \t]*\d*|(?:Solution|Sample)[ \t]*\d+)"
+    r"(?mi)^[ \t]*(?:Model[ \t]+(?:Solution|Answer)[ \t]*\d*|(?:Solution|Sample)[ \t]*\d+"
+    r"|Answer[ \t]+key|Actual[ \t]+candidate[ \t]+answers?(?:[ \t]+for[ \t]+full[ \t]+marks)?)"
     r"[ \t]*:?[ \t]*$"
 )
-LEGACY_COMMENT_RE = re.compile("(?mi)^[ \t]*Examiners?['’]?s?[ \t]+Comments?\\b[ \t]*:?[ \t]*")
+LEGACY_COMMENT_RE = re.compile(
+    "(?mi)^[ \t]*Examiners?['’]?s?[ \t]+(?:Comments?\\b|report[ \t]*:)[ \t]*:?[ \t]*"
+)
 # `a)` or `a.` opening a line. The full stop has to be followed by a space or
 # the line's end, so `e.g.` never reads as part e.
-LEGACY_PART_RE = re.compile(r"(?m)^[ \t]*\(?([a-h])(?:\)|\.(?=[ \t]|$))[ \t]*")
+LEGACY_PART_RE = re.compile(
+    r"(?m)^[ \t]*\(?(?:([a-h])(?:\)|\.(?=[ \t]|$))|([A-H])\))[ \t]*"
+)
+
+
+def _legacy_label(m: re.Match[str]) -> str:
+    """A part's letter, lower-cased: Exam 6C Fall 2013 letters one answer key
+    `A)`, `B)`, `C)`. Only with a bracket — `A.` opens too many sentences."""
+    return (m.group(1) or m.group(2)).lower()
 # `Part a` alone on its line: a part's own block when model solutions follow
 # it, and merely a heading inside the commentary when they do not.
 LEGACY_PART_HEAD_RE = re.compile(r"(?mi)^[ \t]*Part[ \t]+\(?([a-h])\)?[ \t]*:?[ \t]*$")
@@ -1226,7 +1297,7 @@ def parse_legacy_question(text: str) -> dict:
         for m in LEGACY_PART_RE.finditer(sample):
             # Letters only climb inside one sample: an `a)` below a `c)` is a
             # list inside the answer, not the start of part a again.
-            if not marks or m.group(1) > marks[-1].group(1):
+            if not marks or _legacy_label(m) > _legacy_label(marks[-1]):
                 marks.append(m)
         lead = sample[: marks[0].start()] if marks else sample
         if lead.strip():
@@ -1240,7 +1311,7 @@ def parse_legacy_question(text: str) -> dict:
         for i, m in enumerate(marks):
             stop = marks[i + 1].start() if i + 1 < len(marks) else len(sample)
             chunk = sample[m.end() : stop].strip()
-            current = m.group(1)
+            current = _legacy_label(m)
             part = parts.setdefault(current, CasPart(label=current))
             if len(chunk) > 2:
                 part.samples.append(chunk)
@@ -1531,9 +1602,13 @@ def cas_records(
             total = BOOKLET_TOTAL_RE.match(body)
             if parsed["points"] is None and total:
                 parsed["points"] = float(total.group(1))
+            printed = set(split_part_prompts(body)[1])
             body = _strip_trailing_label(
                 attach_part_prompts(body, parsed["parts"], parsed["points"], warnings)
             )
+            _prefer_booklet_total(parsed, total, warnings)
+            if legacy and printed:
+                parsed["parts"] = fold_unprinted_parts(parsed["parts"], printed)
             if parsed["points"] is None:
                 parsed["points"] = parts_total(parsed["parts"])
             ocred = sorted({p for p in pages if booklet_pages[p - 1].ocred})
@@ -1602,6 +1677,35 @@ def cas_records(
         record["rewrite_flags"] = rewrite_flags(record)
     _locate_unplaced(records)
     return records
+
+
+def fold_unprinted_parts(parts: list[dict], printed: set[str]) -> list[dict]:
+    """Fold a report "part" the booklet never printed back into the part before it.
+
+    A pre-2014 report letters nothing but its own text, so a list inside an
+    answer reads as parts: Exam 6C Fall 2013 Q1 answers part b with `a.` to
+    `f.`, and `c.` onwards — climbing past `b)` — became parts c, d and e of a
+    two-part question. The booklet prints the question's real parts, so a
+    letter it does not print is text of the part above it: each of its samples
+    rejoins the sample it was cut from, under its own letter again.
+    """
+    kept: list[dict] = []
+    for part in sorted(parts, key=lambda p: p["label"]):
+        if part["label"] in printed or not kept:
+            kept.append(part)
+            continue
+        host = kept[-1]
+        samples = list(host.get("samples") or [])
+        for i, sample in enumerate(part.get("samples") or []):
+            text = f"{part['label']}. {sample}"
+            if i < len(samples):
+                samples[i] = f"{samples[i]}\n{text}"
+            else:
+                samples.append(text)
+        host["samples"] = samples
+        if (part.get("report") or "").strip():
+            host["report"] = "\n\n".join(x for x in (host.get("report"), part["report"]) if x)
+    return kept
 
 
 def _locate_unplaced(records: list[dict]) -> None:
@@ -1864,6 +1968,20 @@ def attach_part_prompts(
     stem, prompts = split_part_prompts(body)
     if not prompts:
         return stem  # a single-part question: its total is already frontmatter
+    if not parts and total is not None:
+        # The report answers the question whole. Lettered parts in its span
+        # are its own only if they price it: Exam 6C Fall 2018 Q10 is 1.5
+        # points with no parts, and its span ran on into Q11's `a. (2 points)`
+        # and `b. (1 point)` — the second fitted under the total one at a time.
+        found = sum(p["points"] or 0 for p in prompts.values())
+        if abs(found - total) > POINT_EPS:
+            if warnings is not None:
+                warnings.append(
+                    f"booklet parts {', '.join(sorted(prompts))} dropped: the report prices "
+                    f"the question whole at {points_label(total)} and they sum to "
+                    f"{points_label(found)} — an over-run into the next question's page"
+                )
+            return stem
     by_label = {part["label"]: part for part in parts}
     priced = sum(p["points"] for p in parts if p.get("points") is not None)
     for label, found in sorted(prompts.items()):
@@ -1920,6 +2038,26 @@ def _prefer_closing_points(
                 f"parts sum to the total of {points_label(total)}"
             )
         part["points"] = booklet
+
+
+def _prefer_booklet_total(parsed: dict, booklet: re.Match[str] | None, warnings: list[str]) -> None:
+    """Take the booklet's total when the report's is the one figure that disagrees.
+
+    Exam 6C Fall 2014 Q15's report prints `TOTAL POINT VALUE: 1.75` over parts
+    of 0.75, 1.5 and 0.5; the booklet prints `(2.75 points)` over the same
+    three. Two printings of the total and three of the parts agree on 2.75, so
+    the report's total is the misprint.
+    """
+    summed = parts_total(parsed["parts"])
+    if booklet is None or summed is None or parsed["points"] is None:
+        return
+    printed = float(booklet.group(1))
+    if abs(summed - parsed["points"]) > POINT_EPS and abs(summed - printed) <= POINT_EPS:
+        warnings.append(
+            f"TOTAL POINT VALUE {points_label(parsed['points'])} taken as a misprint: the "
+            f"booklet's total and the parts both give {points_label(printed)}"
+        )
+        parsed["points"] = printed
 
 
 # The next question's own `10.`, left at the end of a span that reaches to the

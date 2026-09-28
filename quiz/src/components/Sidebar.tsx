@@ -1,5 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import {
   BookOpen,
@@ -33,25 +32,18 @@ import { useGems } from '@/hooks/useGems'
 import { getDailyQuizStats, DAILY_QUIZ_EVENT } from '@/lib/dailyProgressStore'
 import { useSubscription } from '@/hooks/useSubscription'
 import { useTheme } from '@/hooks/useTheme'
-import { useExamProgress } from '@/contexts/ExamProgressContext'
-import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
-import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
-import type { WikiExamSyllabus } from '@/lib/wikiParser'
-import { matchesSelectedVariant } from '@/data/examSittings'
 import ExamsPopout from '@/components/ExamsPopout'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { ProBadge } from '@/components/ProBadge'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { parseBanner, DESIGNATION_BANNERS } from '@/lib/banners'
-import { COWORK_ENABLED, RESEARCH_TAB_ENABLED, STREAK_ENABLED } from '@/lib/featureFlags'
+import { COWORK_ENABLED, RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
 import { ModeSwitcher } from '@/components/ModeSwitcher'
 import { useCoworkLibrary } from '@/hooks/useCoworkLibrary'
 import { useCoworkDeliverables } from '@/hooks/useCoworkDeliverables'
 import { modeForPath } from '@/lib/appMode'
-import { StreakNavBadge, StreakCornerBadge } from '@/components/StreakBadge'
 import { TodayQuizCornerBadge, TodayQuizNavBadge } from '@/components/TodayQuizBadge'
 import { useTodayQuizCounts } from '@/hooks/useTodayQuizCount'
-import { badgeCountFor } from '@/lib/todayPlanCount'
 import { SoundPopover } from '@/components/SoundPopover'
 import { cn } from '@/lib/utils'
 
@@ -179,95 +171,6 @@ function SidebarGroup({
   )
 }
 
-interface ExamPillProps {
-  syllabus: WikiExamSyllabus
-  isOpen: boolean
-  onToggle: () => void
-  onClose: () => void
-  /** Questions left in this exam's plan today — badges the pill and its Start Quiz item. */
-  todayQuizCount?: number
-  /** Today's plan for this exam is finished — the pill wears a check instead. */
-  todayQuizComplete?: boolean
-}
-
-function ExamPill({ syllabus, isOpen, onToggle, onClose, todayQuizCount = 0, todayQuizComplete = false }: ExamPillProps) {
-  const navigate = useNavigate()
-  const buttonRef = useRef<HTMLButtonElement>(null)
-  const [dropdownPos, setDropdownPos] = useState<{ top: number; left: number } | null>(null)
-  const progressKey = wikiExamIdToProgressKey(syllabus.examId)
-  const shortLabel = syllabus.examLabel.replace(/^Exam\s+/i, '')
-
-  // Compute position before paint so there's no layout flash.
-  // Guard against width=0: hidden elements (lg:hidden) return zero DOMRects —
-  // without this, both the mobile-header and sidebar-header pills would render
-  // a portal, causing the duplicate dropdown.
-  useLayoutEffect(() => {
-    if (!isOpen || !buttonRef.current) { setDropdownPos(null); return }
-    const rect = buttonRef.current.getBoundingClientRect()
-    if (rect.width === 0) { setDropdownPos(null); return }
-    setDropdownPos({ top: rect.bottom + 4, left: rect.left })
-  }, [isOpen])
-
-  function handleReadConcepts() {
-    onClose()
-    navigate('/dashboard', { state: { openConceptsFor: progressKey } })
-  }
-
-  function handleStartQuiz() {
-    onClose()
-    navigate('/dashboard', { state: { autoStartQuiz: progressKey } })
-  }
-
-  return (
-    <>
-      <span className="relative shrink-0">
-        <button
-          ref={buttonRef}
-          type="button"
-          onClick={onToggle}
-          className="rounded-full bg-primary/10 text-primary text-[0.8125rem] font-semibold px-2.5 py-1 hover:bg-primary/20 transition-colors lg:text-xs lg:px-2 lg:py-0.5"
-        >
-          {shortLabel}
-        </button>
-        <TodayQuizCornerBadge count={todayQuizCount} complete={todayQuizComplete} size="sm" className="-top-1 -right-1.5" />
-      </span>
-      {isOpen && dropdownPos && createPortal(
-        <>
-          {/* Full-screen backdrop — any tap outside the menu closes it */}
-          <div
-            style={{ position: 'fixed', inset: 0, zIndex: 9998 }}
-            onClick={onClose}
-            aria-hidden="true"
-          />
-          <div
-            style={{ position: 'fixed', top: dropdownPos.top, left: dropdownPos.left, zIndex: 9999 }}
-            className="rounded-md border bg-popover shadow-md py-1 min-w-[152px]"
-          >
-            <button
-              type="button"
-              onClick={handleReadConcepts}
-              className="w-full flex items-center gap-2.5 px-3 py-2.5 text-base text-foreground hover:bg-accent/60 transition-colors lg:gap-2 lg:py-2 lg:text-sm"
-            >
-              <BookOpen className="h-5 w-5 shrink-0 lg:h-4 lg:w-4" />
-              <span>Read Concepts</span>
-            </button>
-            <button
-              type="button"
-              onClick={handleStartQuiz}
-              className="w-full flex items-center gap-2.5 px-3 py-2.5 text-base text-foreground hover:bg-accent/60 transition-colors lg:gap-2 lg:py-2 lg:text-sm"
-            >
-              <Play className="h-5 w-5 shrink-0 lg:h-4 lg:w-4" />
-              <span className="flex-1 text-left">Start Quiz</span>
-              <TodayQuizNavBadge count={todayQuizCount} complete={todayQuizComplete} />
-            </button>
-          </div>
-        </>,
-        document.body
-      )}
-    </>
-  )
-}
-
 /**
  * The nav rows of **Cowork** mode — the two tabs of the product, mirrored into
  * the sidebar so the drawer and the page agree about what Cowork contains.
@@ -326,18 +229,12 @@ export default function Sidebar() {
   const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
   const location = useLocation()
-  const { progress: examProgress, examVariants } = useExamProgress()
-  const { syllabi } = useWikiSyllabus()
-  const inProgressSyllabi = syllabi.filter(s => {
-    const key = wikiExamIdToProgressKey(s.examId)
-    return examProgress[key] === 'in_progress' && matchesSelectedVariant(key, s.examId, examVariants[key])
-  })
   const { cards } = useFlashcards()
   // Which product the current route belongs to. In Cowork the nav is Cowork's
   // own rows — the two modes are places, not tabs of each other — while the
   // footer (theme, sound, account) stays put because it belongs to neither.
   const appMode = modeForPath(location.pathname)
-  const { byExam: todayQuizByExam, total: todayQuizTotal, allComplete: todayQuizAllComplete } = useTodayQuizCounts()
+  const { total: todayQuizTotal, allComplete: todayQuizAllComplete } = useTodayQuizCounts()
   const [dailyQuizStats, setDailyQuizStats] = useState(() => getDailyQuizStats())
   // Lights up the Flashcards item whenever a card is collected.
   const collectGlow = useCollectGlow()
@@ -390,7 +287,6 @@ export default function Sidebar() {
   const [profileOpen, setProfileOpen] = useState(false)
   const { open: examsOpen, openExams, closeExams } = useExamsPopout()
   const [signOutConfirm, setSignOutConfirm] = useState(false)
-  const [openExamDropdown, setOpenExamDropdown] = useState<string | null>(null)
   const profileRef = useRef<HTMLDivElement>(null)
 
   // Gem animation: tracks unseen increases and fires when the badge is visible.
@@ -478,8 +374,7 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Below lg: the app header — the hamburger, the wordmark and the
-          in-progress exam pills. It is the row a page gets when it pins nothing
+      {/* Below lg: the app header — the hamburger and the wordmark. It is the row a page gets when it pins nothing
           to the top of the viewport itself; a page with a floating search bar
           puts the hamburger on that bar's line instead and this header is not
           rendered at all, so the phone spends one 3.5rem row on chrome rather
@@ -497,20 +392,6 @@ export default function Sidebar() {
               <span className="truncate">Actuarial Notes</span>
             </Link>
             {COWORK_ENABLED && <ModeSwitcher mode={appMode} onNavigate={closeMobile} />}
-            {user && inProgressSyllabi.map(s => {
-              const key = wikiExamIdToProgressKey(s.examId)
-              return (
-                <ExamPill
-                  key={key}
-                  syllabus={s}
-                  isOpen={openExamDropdown === key}
-                  onToggle={() => setOpenExamDropdown(prev => prev === key ? null : key)}
-                  onClose={() => setOpenExamDropdown(null)}
-                  todayQuizCount={badgeCountFor(todayQuizByExam[key])}
-                  todayQuizComplete={todayQuizByExam[key]?.complete ?? false}
-                />
-              )
-            })}
           </div>
         </header>
       )}
@@ -560,20 +441,6 @@ export default function Sidebar() {
               Actuarial Notes
             </Link>
             {COWORK_ENABLED && <ModeSwitcher mode={appMode} onNavigate={closeMobile} />}
-            {user && inProgressSyllabi.map(s => {
-              const key = wikiExamIdToProgressKey(s.examId)
-              return (
-                <ExamPill
-                  key={key}
-                  syllabus={s}
-                  isOpen={openExamDropdown === key}
-                  onToggle={() => setOpenExamDropdown(prev => prev === key ? null : key)}
-                  onClose={() => setOpenExamDropdown(null)}
-                  todayQuizCount={badgeCountFor(todayQuizByExam[key])}
-                  todayQuizComplete={todayQuizByExam[key]?.complete ?? false}
-                />
-              )
-            })}
           </div>
           {/* Desktop: collapse/expand toggle */}
           <button
@@ -606,21 +473,9 @@ export default function Sidebar() {
             <SidebarItem
               to="/dashboard"
               label="Dashboard"
-              icon={
-                <span className="relative inline-flex items-center justify-center">
-                  <LayoutDashboard className="h-5 w-5 lg:h-4 lg:w-4" />
-                  {/* Collapsed sidebar hides the row badge, so mirror the streak as
-                      a corner badge on the icon (matches the Flashcards count). */}
-                  {STREAK_ENABLED && collapsed && (
-                    <span className="hidden lg:block">
-                      <StreakCornerBadge />
-                    </span>
-                  )}
-                </span>
-              }
+              icon={<LayoutDashboard className="h-5 w-5 lg:h-4 lg:w-4" />}
               collapsed={collapsed}
               onNavigate={closeMobile}
-              badge={STREAK_ENABLED ? <StreakNavBadge /> : undefined}
             />
           )}
           {RESEARCH_TAB_ENABLED ? (

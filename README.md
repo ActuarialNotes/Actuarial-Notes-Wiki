@@ -41,12 +41,12 @@ actuaries** who want a quick, sourced reference to material they last studied ye
 | [MAS-I](Exam%20MAS-I%20(CAS).md) | CAS | Modern Actuarial Statistics I | Beta | 2018–2019 papers |
 | [MAS-II](Exam%20MAS-II%20(CAS).md) | CAS | Modern Actuarial Statistics II | Beta | 2018–2019 papers |
 | [5](Exam%205%20(CAS).md) | CAS | Basic Techniques for Ratemaking and Estimating Claim Liabilities | Beta | 2013–2019 papers |
-| [6C](Exam%206C%20(CAS).md) | CAS | Regulation and Financial Reporting (Canada) | In development | — |
+| [6C](Exam%206C%20(CAS).md) | CAS | Regulation and Financial Reporting (Canada) | Beta | 2013–2019 papers |
 | [6U](Exam%206U%20(CAS).md) | CAS | Regulation and Financial Reporting (United States) | In development | — |
-| [7](Exam%207%20(CAS).md) | CAS | Advanced Estimation of Claims Liabilities | In development | 2012–2019 papers |
-| [8](Exam%208%20(CAS).md) | CAS | Advanced Ratemaking | In development | 2012–2019 papers |
-| [9](Exam%209%20(CAS).md) | CAS | Risk Management for Actuaries | In development | 2012–2019 papers |
-| [PCPA](Exam%20PCPA%20(CAS).md) | CAS | Property and Casualty Predictive Analytics | In development | Project simulator |
+| [7](Exam%207%20(CAS).md) | CAS | Advanced Estimation of Claims Liabilities | Beta | 2012–2019 papers |
+| [8](Exam%208%20(CAS).md) | CAS | Advanced Ratemaking | Beta | 2012–2019 papers |
+| [9](Exam%209%20(CAS).md) | CAS | Risk Management for Actuaries | Beta | 2012–2019 papers |
+| [PCPA](Exam%20PCPA%20(CAS).md) | CAS | Property and Casualty Predictive Analytics | Beta | Project simulator |
 | [DISC-DA](Exam%20DISC-DA%20(CAS).md), [DISC-RM](Exam%20DISC-RM%20(CAS).md), [DISC-IA](Exam%20DISC-IA%20(CAS).md) | CAS | The Institutes' online courses | In development | — |
 
 **Complete:** syllabus, concept pages and question bank are all in place. **Beta:** usable, and

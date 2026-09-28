@@ -4,14 +4,12 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1a285d9f8871111140c3e32e14b1685e5e4f102c598c280691f7a88528c0c7fc
+  content_hash: sha256:dbdd93563e94274f01732a4f530ef494c20a63d806a84ee11f09b1bdc8c5d0a9
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Catastrophe Modelling.md
 ---
-
-[[Actuarial Notes Wiki|Wiki]] / [[Actuarial Methods]] / **==Catastrophe Modelling==**
 
 > "==Catastrophes== are infrequent events that cause severe loss, injury or property damage to a large population of exposures. "
 > - [Actuarial Glossary](https://www.soa.org/4a537f/globalassets/assets/files/edu/actuarial-glossary.pdf) - SOA
@@ -21,7 +19,7 @@ verification:
 | Section                             | Description                                                                                                                                                |
 | ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [[Catastrophe Modelling Framework]] | Catastrophe models are made up of several parts, such as simulation of events, hazards, vulnerabilities, and ultimately estimation of financial risk.      |
-| [[Data for Catastrophe Modelling]]  | Data used in catastrophe models include geolocation, temperature, wind strength, terrain, architecture, building codes, contents, rebuild costs, and more. |
+| Data for Catastrophe Modelling      | Data used in catastrophe models include geolocation, temperature, wind strength, terrain, architecture, building codes, contents, rebuild costs, and more. |
 | [[Concepts/Climate Change]]                  | How are catastrophe models adapted for changes in climate?                                                                                                 |
 
 ## Catastrophe Modelling for Reinsurers

@@ -9,16 +9,17 @@ describe('examStatus', () => {
     expect(EXAM_STATUS_LABEL[examStatus('P')]).toBeNull()
   })
 
-  it('treats the exams with a question bank but unfinished material as beta', () => {
-    for (const key of ['MAS-I', 'MAS-II', 'CAS-5']) {
+  it('treats the exams that are usable but unfinished as beta', () => {
+    for (const key of ['MAS-I', 'MAS-II', 'CAS-5', 'CAS-PCPA', 'CAS-6', 'CAS-7', 'CAS-8', 'CAS-9']) {
       expect(examStatus(key)).toBe('beta')
       expect(isExamBeta(key)).toBe(true)
       expect(isExamInDevelopment(key)).toBe(false)
+      expect(EXAM_STATUS_LABEL[examStatus(key)]).toBe('Beta')
     }
   })
 
-  it('treats the DISCs, PCPA and Exams 6-9 as in development, never beta', () => {
-    for (const key of ['CAS-DA', 'CAS-RM', 'CAS-IA', 'CAS-PCPA', 'CAS-6', 'CAS-7', 'CAS-8', 'CAS-9']) {
+  it('treats the DISCs as in development, never beta', () => {
+    for (const key of ['CAS-DA', 'CAS-RM', 'CAS-IA']) {
       expect(examStatus(key)).toBe('development')
       expect(isExamInDevelopment(key)).toBe(true)
       expect(isExamBeta(key)).toBe(false)
@@ -26,15 +27,26 @@ describe('examStatus', () => {
     }
   })
 
+  it('tells apart the Exam 6 variants that share CAS-6', () => {
+    // 6C has its bank; 6U is still a syllabus outline.
+    expect(examStatus('CAS-6', '6C')).toBe('beta')
+    expect(examStatus('CAS-6', '6U')).toBe('development')
+    expect(isExamInDevelopment('CAS-6', '6U')).toBe(true)
+    expect(isExamBeta('CAS-6', '6U')).toBe(false)
+    // With no page named, the key reads as the variant that can be studied.
+    expect(examStatus('CAS-6')).toBe('beta')
+    // A variant id only matters on the key it is a variant of.
+    expect(examStatus('CAS-7', '6U')).toBe('beta')
+  })
+
   it('matches the progress keys the exam pages resolve to', () => {
     // The vault's file names, cleaned the way WikiHome/WikiExam clean them.
-    const devPages = ['DISC-DA', 'DISC-RM', 'DISC-IA', 'PCPA', '6C', '6U', '7', '8', '9']
-    for (const id of devPages) {
-      expect(isExamInDevelopment(wikiExamIdToProgressKey(id))).toBe(true)
+    for (const id of ['DISC-DA', 'DISC-RM', 'DISC-IA', '6U']) {
+      expect(isExamInDevelopment(wikiExamIdToProgressKey(id), id)).toBe(true)
     }
-    expect(isExamInDevelopment(wikiExamIdToProgressKey('5'))).toBe(false)
-    expect(isExamInDevelopment(wikiExamIdToProgressKey('P-1'))).toBe(false)
-    expect(isExamInDevelopment(wikiExamIdToProgressKey('MAS-II'))).toBe(false)
+    for (const id of ['P-1', 'MAS-II', '5', 'PCPA', '6C', '7', '8', '9']) {
+      expect(isExamInDevelopment(wikiExamIdToProgressKey(id), id)).toBe(false)
+    }
   })
 
   it('falls back to beta for an unknown or missing key', () => {

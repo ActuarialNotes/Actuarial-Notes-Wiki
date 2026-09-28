@@ -302,8 +302,8 @@ function ExamOptionCard({
   const isActive = colorIdx >= 0
   // P and FM are the mature exams with a full question bank and carry no label.
   // The rest say how far along their material is, in `lib/examStatus.ts`'s
-  // words: Beta, or In Development for Exams 7, 8 and 9 — their banks are in,
-  // which is all a quiz needs, but the exams are not yet out of development.
+  // words: Beta for every exam with a bank here today, In Development for any
+  // whose bank is in before the rest of its material is.
   const statusLabel = EXAM_STATUS_LABEL[examStatus(exam.progressKey)]
   const description = subtitle ?? null
 

@@ -1,16 +1,16 @@
 ---
 verification:
   status: verified
-  confidence: medium
-  last_checked: 2026-09-27
+  confidence: high
+  last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:bbfd3a7b8147ffa519e9453d12eee221aaacf37e7d5759a3f94de1b2692555ec
+  content_hash: sha256:cb858988b00700e386d94ddc07f1cb0453919c5ce87abf2d4750bdd786bc2363
   sources:
-    - "SOA Probability Exam syllabus, November 2026 (7 pp.), REFERENCES pp.5-7, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "SOA Probability Exam syllabus, November 2026 (7 pp.), pp.1-7 incl. link annotations, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
     - "SOA Probability Exam syllabus, January 2027, sha256:252d07fc2b3be499bdee55caaf40f5bd610c2d9593bee2f0428b6614d4e14e2a, https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-p-syllabus.pdf"
-    - "SOA Probability Exam syllabus, September 2026, sha256:a67f56f7ef60ff673730e28b6b6361168d0889683c78373f29a1ed38c1e5d7e3, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-09-p-syllabus.pdf"
     - "SOA Exam P Sample Questions (Aug 2026 rev.), full-text search, sha256:e47245963f7d2c1c4f8cc5ff1baf2090542d923ac47cbeb27d1f657ac51bf5f0, https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-questions.pdf"
-  open_findings: 5
+    - "SOA Exam P Sample Solutions (Aug 2026 rev.), Q1 solutions PDF p.2 and full-text search, sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135, https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Exam P-1 (SOA).md
 ---

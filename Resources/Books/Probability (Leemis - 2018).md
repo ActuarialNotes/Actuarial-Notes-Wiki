@@ -8,11 +8,11 @@ Edition: "2nd"
 Type: "Textbook"
 ISBN: "978-0-9829174-7-3"
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-09-27
   last_checked_by: agent:validate-v1
-  content_hash: sha256:eeadb99a588704fa8e227c4b8c0760bdd9512f1283ff406744a4515e74dda279
+  content_hash: sha256:95c7df4632079e791885eafc0abe126ada0b486658af01f09d3b5d4d47e34c56
   sources:
     - "SOA Probability Exam syllabus, November 2026, REFERENCES pp.5-7, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
     - "Lawrence M. Leemis, Probability, Second Edition: contents (author's list), https://www.math.wm.edu/~leemis/ptext.con, sha256:2e8c718840614a51e42de65131bc4f91268a3fbb0402bc0f258c0ebe0118f955"
@@ -20,7 +20,7 @@ verification:
     - "Lawrence Leemis home page (W&M), book citation and errata links, https://www.math.wm.edu/~leemis/, sha256:370224d526ef2951ae6427e4aeedc8d6f8e31c1aa1e210be917373525fe887ab"
     - "S. Huang, review of Probability (Leemis), Journal of Quality Technology 53(3):332, 2021, https://www.math.wm.edu/~leemis/probability2e-review.pdf, sha256:88c930e079af88b3b1378bd9bbb11c1ffdd831b56e091e7574a53ac2bae4dcc8"
     - "Introduction to Probability, W&M ScholarWorks record (description), https://scholarworks.wm.edu/asbookchapters/125/"
-  open_findings: 2
+  open_findings: 3
   open_critical: 0
   log: .verify/Resources/Books/Probability (Leemis - 2018).md
 ---

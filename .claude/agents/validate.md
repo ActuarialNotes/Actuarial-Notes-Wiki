@@ -59,6 +59,10 @@ It returns files in priority order: open findings or `disputed` first, then
 `stale`, then never-checked weighted by syllabus weight and student traffic, then
 verifications past the 180-day horizon. Do not re-derive this ordering yourself.
 
+Called with `--new`, the batch is instead the pages the current branch adds that
+still need their check (`python3 scripts/verify_targets.py --new`) — the creation
+check. Read "Checking a page at creation" below before you start one.
+
 Open the run:
 
 ```bash
@@ -284,7 +288,8 @@ run cost.
 **Record-only mode.** If the caller says they are handling git — their own
 branch, their own PR, "leave it in the working tree" — stop here. Do not branch,
 commit or push. Running `python3 scripts/verify_check.py` to confirm your writes
-are consistent is still expected; everything below is not.
+are consistent is still expected; everything below is not. A creation check
+(`--new`) is always record-only.
 
 Otherwise:
 
@@ -296,6 +301,39 @@ git add -A && git commit && git push -u origin HEAD
 
 PR title: `Validate: <exam/topic> (<n> files, <m> findings)`. Body: the run
 summary, **critical findings first**. Never push to `main`.
+
+## Checking a page at creation
+
+A page is fact checked in the change that adds it: `verify_check.py` fails a PR
+that adds a content file with no validation pass, or one edited after its pass
+(`docs/verification.md`, "Checked at creation"). The skill that wrote the page
+calls you, usually as `/validate --new`, before it commits. It is the same pass as
+a sweep's — the same checks, the same rules, the same bar for `verified` — with
+these differences:
+
+- **You are the second reader.** You are given the page and the document it was
+  written from, and nothing of the author's working. Keep it that way: do not go
+  looking for the author's notes, and do not take the page's own `## Sources`
+  line as proof it says what the source says. Fetch the source yourself and do
+  the §4 ordering exactly — build the outline, recompute the answer — *before*
+  you read the page's version. An author and a checker who read the same PDF
+  agree for a reason only if both of them actually read it.
+- **The source is usually one call away.** The author just had it open, so "could
+  not reach a source" should be rare. When you are handed a local PDF, hash it
+  and cite the hash; when you are handed a URL, fetch it. `in_review` with a note
+  naming what you could not get is still the honest outcome when that fails.
+- **The log is empty.** There are no earlier findings to reconcile; the context
+  bundle's linked concept pages and syllabus sources still apply.
+- **Every page gets a `pass`**, as always — the gate looks for one. A finding
+  alone is not a finished check.
+- **Findings go back to the caller, not into the page.** Record each finding and
+  report it with its `proposed_action`; the §6 line still holds, so fix a
+  transcription yourself but leave anything that needs new prose to the author.
+  When the author has fixed the page it comes back to you on the next
+  `/validate --new` — the pass you recorded was of the old bytes. Append a
+  `resolution` for what was fixed and record a fresh `pass` on the final page.
+- **Always record-only.** The pages and their record ship together in the
+  caller's PR.
 
 ## Idempotency
 

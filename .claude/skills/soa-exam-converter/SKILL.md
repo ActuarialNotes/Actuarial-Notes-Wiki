@@ -118,12 +118,44 @@ python3 scripts/verify_check.py --sync                # backfills verification:
 ```
 
 All three must be clean. `verification:` is never hand-written
-(`docs/verification.md`): a new question is `unverified` until an auditor checks
-it against a citable source.
+(`docs/verification.md`): `--sync` writes it as `unverified`, and the next stage
+is what moves it.
 
-## 6. Commit
+## 6. Fact check
 
-One commit per batch of ~25–50 questions:
+Every question is checked in the change that adds it — CI fails a PR that adds
+one unchecked (`docs/verification.md`, "Checked at creation"). Once the batch is
+final (stage 5 clean), run:
+
+```
+/validate --new
+```
+
+and tell it the booklet and solutions you converted — their URLs, or the PDFs
+you downloaded — and nothing else. It works each question cold: recomputes the
+answer before it reads the key, then diffs every number in the stem against the
+booklet. Its recomputation and the SOA's solution are the two independent
+sources principle P5 asks of anything numeric, so a question that passes is
+`verified`. It works in groups of about five; check the pilot batch this way
+before you scale up, so a systematic extraction error surfaces once rather than
+fifty times.
+
+What it can come back with:
+
+- **A transcription the PDF proves wrong** — it fixes and records it.
+- **A recomputation that will not reach the key** — a finding for the user.
+  Never bend the explanation to fit, and never change the key to match a
+  recomputation: the key is transcribed, and SOA errata are the only thing that
+  outranks it.
+- **Anything else it reports** — fix it (a `--prompts` / `--explanations`
+  override, then `question_write.py --force` for that question), and run
+  `/validate --new` again. Done when `python3 scripts/verify_targets.py --new`
+  lists nothing.
+
+## 7. Commit
+
+One commit per batch of ~25–50 questions, the `.verify/` logs in the same commit
+as the questions they are about:
 
 ```
 Add SOA Exam P sample questions 101-150

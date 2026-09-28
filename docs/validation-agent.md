@@ -48,6 +48,17 @@ file is band 2, so the tiebreak *is* the sweep order:
   a load-bearing concept on half the syllabus. A local run has no Supabase
   credentials, so traffic is optional and its absence changes nothing else.
 
+### A new page is not a sweep target — `verify_targets.py --new`
+
+The bands order a backlog. A page the current branch adds does not wait in it: it
+is checked in the same change (`docs/verification.md`, "Checked at creation"),
+and `--new` lists exactly the pages still owed that check — every content file
+the branch adds, committed or not, with no validation pass or edited since its
+pass. It is never truncated, because it is the same list `verify_check.py` fails
+the PR for (both read `creation_gap`). `/validate --new` runs the agent over it in
+record-only mode: the session that wrote the pages owns the branch and the PR,
+and the pages ship with their logs.
+
 ## Context loading — `verify_context.py`
 
 The compounding mechanism, and the reason a sweep in November is worth more than

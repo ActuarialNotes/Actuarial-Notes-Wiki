@@ -139,6 +139,15 @@ python3 .claude/skills/exam-material-review/audit_exam.py --exam exam-p
 The test suite has corpus tests that read the markdown directly and will fail on
 malformed content. `npm run build` fails on unused imports (`noUnusedLocals`).
 
+Then fact check what the review **created** — new concept pages, new questions,
+a new resource page. CI fails a PR that adds one unchecked (`docs/verification.md`,
+"Checked at creation"), so run `/validate --new` once the pages are final, telling
+it the reading or paper each was written from, and fix what it reports until
+`python3 scripts/verify_targets.py --new` lists nothing. A page the review only
+*rewrote* is not gated — the edit drops it to `stale` and the weekly sweep picks
+it up — but where the rewrite changed a formula or a number, `/validate <path>`
+now is cheaper than a wrong page for a week.
+
 ## Traps specific to this repo
 
 These break the built app while looking perfect in the markdown and in Obsidian.

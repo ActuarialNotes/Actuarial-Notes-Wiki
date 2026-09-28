@@ -403,7 +403,8 @@ def main(argv: list[str] | None = None) -> int:
         print(f"  needs attention — {problem}")
     if not args.dry_run and written:
         print("next: python3 scripts/verify_check.py --sync && "
-              "python3 scripts/validate_content.py")
+              "python3 scripts/validate_content.py, then fact check the batch "
+              "(/validate --new — docs/verification.md, \"Checked at creation\")")
     return 0
 
 

@@ -240,6 +240,12 @@ Then wire it into the exam page's `> [!answer]- Source Material` callout
 python3 .claude/skills/actuarial-concept-definitions/validate_links.py
 ```
 
+A new vault page is fact checked in the change that adds it — CI fails one without a
+check (`docs/verification.md`, "Checked at creation"). When the page is final —
+after the optional linking pass below, since an edit after the check needs another — run
+`/validate --new` and give it the sources you took the TOC from, as URLs; the checker
+reads them itself and compares, it does not take this skill's output on trust.
+
 ### Wiki-linking the TOC (optional second pass)
 
 Vault pages link TOC entries to concept pages — `- 1.3 [[Permutation|Permutations]]`.
@@ -278,3 +284,5 @@ that is exactly the failure this skill exists to prevent.
 - [ ] Vault page: `Year` + `date` set (else it drops off the timeline); cover embed first, then the lead
 - [ ] Vault page: `## Sources` last; `python3 scripts/resource_lint.py "<page>"` clean
 - [ ] Vault page: `[[links]]` only to concepts that exist; `validate_links.py` clean
+- [ ] Vault page: fact checked last, in the same change — `/validate --new`, told which
+      sources the TOC came from (`python3 scripts/verify_targets.py --new` empty)

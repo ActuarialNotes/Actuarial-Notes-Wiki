@@ -428,6 +428,7 @@ python3 scripts/question_write.py --records /tmp/masi/records.jsonl \
 python3 scripts/question_lint.py questions/exam-p
 python3 scripts/validate_content.py
 python3 scripts/verify_check.py --sync
+# then, in the session: /validate --new — the batch is fact checked before it commits
 ```
 
 Tests: `python3 -m unittest discover -s scripts` (see
@@ -478,8 +479,13 @@ PDF-reading cases when PyMuPDF is absent).
   (`docs/mock-exam-browser.md`).
 - **An unresolvable question yields no file**, not a guessed one. Stage 3
   refuses and names it.
-- **`verification:` is never hand-written** (`docs/verification.md`): a new file
-  is unverified until an auditor checks it against a citable source, and a body
-  edit correctly downgrades it to `stale`.
+- **`verification:` is never hand-written** (`docs/verification.md`): `--sync`
+  writes a new file's block as `unverified`, and a body edit correctly downgrades a
+  checked one to `stale`.
+- **A converted question is fact checked before it merges** (`docs/verification.md`,
+  "Checked at creation"). The VALIDATE agent recomputes it cold and diffs it against
+  the same PDF the pipeline read — the stages above extract mechanically, and the
+  check is what catches the page that extraction got wrong. A question that will not
+  reach its key is a finding for a person, never a key changed to fit.
 - **New concept pages are flagged to a human**, per `CLAUDE.md` — the
   classifier never invents a `Concepts/` page, it only matches existing ones.

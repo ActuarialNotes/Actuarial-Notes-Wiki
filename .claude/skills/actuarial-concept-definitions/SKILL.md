@@ -240,7 +240,20 @@ The app renders with `remark-math` + `rehype-katex`; pages are read on phones.
 7. **Build if you renamed or added files:** `cd quiz && npm run build && npm test`.
    Renames change what the collectors bundle, so a rename that looks harmless in
    git can still break the app.
-8. **Self-check** against the checklist below, then commit.
+8. **Self-check** against the checklist below and fix what it turns up.
+9. **Fact check** — a new page is checked in the change that adds it, and CI
+   fails a PR that adds one unchecked (`docs/verification.md`, "Checked at
+   creation"). Do it **last**, on the final page: the check is of these exact
+   bytes, and any edit after it has to be checked again. Run `/validate --new`
+   and tell it the reading each page was written from — book, edition and
+   chapter, and the URL of any free copy (for P/FM, the SOA's sample solutions
+   and study notes are free and often carry the formula). Do not hand it your
+   working; the check is worth something because a second reader goes to the
+   source cold. Fix what it reports, then run `/validate --new` again until
+   `python3 scripts/verify_targets.py --new` lists nothing, and commit the
+   `.verify/` log with the page. A textbook the checker cannot reach leaves the
+   page `in_review` with a note saying which — that is an honest outcome, not
+   a failure. Then commit.
 
 ## Namesake pages — link the one for the right exam
 
@@ -320,6 +333,10 @@ The pipeline, in order:
 5. **Lint** — `python3 scripts/resource_lint.py "Resources/Books/<page>.md"` (CI runs it on
    every page) and `validate_links.py`.
 6. **Sync** — `python3 scripts/verify_check.py --sync "Resources/Books/<page>.md"`.
+7. **Fact check** — `/validate --new`, naming the document you extracted: its URL and
+   the sha256 `resource_extract.py` printed. The checker fetches it again and builds the
+   outline from the document before it reads yours. Last, after the cover and the lint,
+   and the `.verify/` log is committed with the page (CI fails a new page without one).
 
 Details that matter:
 
@@ -440,6 +457,7 @@ app can never display — so the concept looks permanently unstudied.
 - [ ] Namesake check: linked the exam-appropriate page (`Deductible Rating` vs `Deductible`, etc.)
 - [ ] If the page already existed, the defining formula was re-derived, not just reformatted
 - [ ] `validate_links.py` passes for the affected exam
+- [ ] New page fact checked **last**, in the same change: `/validate --new` given the source, its findings fixed, `python3 scripts/verify_targets.py --new` empty, `.verify/` log committed
 - [ ] If a `Resources/` page was renamed, `quiz/src/data/coworkSources.ts` was grepped for the old name (Cowork `wikiRef`s are filenames)
 - [ ] `npm run build && npm test` pass if any file was added or renamed
 
@@ -479,3 +497,6 @@ wants its own regeneration commit. Don't hand-edit that file — it is generated
 
 Per `CLAUDE.md`, no concept content ships 100% AI-written without human review —
 present new/changed pages for the user to review before treating them as final.
+The fact check does not stand in for that review: it says the page agrees with its
+source, not that it teaches well. Report its outcome alongside the pages — status,
+and any finding still open.

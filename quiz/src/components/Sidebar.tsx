@@ -23,6 +23,7 @@ import {
   X,
 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
+import { useAttemptNav } from '@/hooks/useAttemptNav'
 import { useFlashcards } from '@/hooks/useFlashcards'
 import { useCollectGlow } from '@/hooks/useCollectGlow'
 import { useMobileNav } from '@/hooks/useMobileNav'
@@ -42,6 +43,7 @@ import { ModeSwitcher } from '@/components/ModeSwitcher'
 import { useCoworkLibrary } from '@/hooks/useCoworkLibrary'
 import { useCoworkDeliverables } from '@/hooks/useCoworkDeliverables'
 import { modeForPath } from '@/lib/appMode'
+import { ATTEMPT_VIEW_ICON, ATTEMPT_VIEW_LABEL, attemptRoute } from '@/lib/attemptViews'
 import { TodayQuizCornerBadge, TodayQuizNavBadge } from '@/components/TodayQuizBadge'
 import { useTodayQuizCounts } from '@/hooks/useTodayQuizCount'
 import { SoundPopover } from '@/components/SoundPopover'
@@ -74,9 +76,18 @@ type ItemProps = {
   forceActive?: boolean
   dataTour?: string
   dataFlashcardNav?: boolean
+  /**
+   * Decides the highlight in place of the route match, for a row whose place
+   * isn't a pathname — an attempt's view is a search parameter, which a
+   * NavLink doesn't match on. `within` is a row one of whose children is the
+   * lit one: named, not filled, as a group's heading is.
+   */
+  state?: 'active' | 'within' | 'idle'
+  /** Replace the history entry rather than push one, as switching an attempt's view does. */
+  replace?: boolean
 }
 
-function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, badge, forceActive, dataTour, dataFlashcardNav }: ItemProps) {
+function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, badge, forceActive, dataTour, dataFlashcardNav, state, replace }: ItemProps) {
   // Phone-first sizing: below `lg` the drawer *is* the screen, so a row is a
   // full-width 48px target carrying 16px type; at `lg` it narrows back into the
   // 16rem rail at the app's default body size (style guide §3, §11).
@@ -84,6 +95,16 @@ function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, ba
     'flex items-center gap-3 rounded-lg px-3 py-3 text-base transition-colors lg:rounded-md lg:py-2 lg:text-sm'
   const inactive = 'text-muted-foreground hover:text-foreground hover:bg-accent/60'
   const active = 'bg-card text-foreground font-medium'
+  const within = 'text-foreground font-medium hover:bg-accent/60'
+  const tone = { active, within, idle: inactive }
+
+  const content = (
+    <>
+      <span className="flex h-6 w-6 shrink-0 items-center justify-center lg:h-5 lg:w-5">{icon}</span>
+      <span className={`flex-1 truncate ${collapsed ? 'lg:hidden' : ''}`}>{label}</span>
+      {badge && <span className={`shrink-0 ${collapsed ? 'lg:hidden' : ''}`}>{badge}</span>}
+    </>
+  )
 
   if (external) {
     return (
@@ -96,10 +117,26 @@ function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, ba
         onClick={onNavigate}
         data-tour={dataTour}
       >
-        <span className="flex h-6 w-6 shrink-0 items-center justify-center lg:h-5 lg:w-5">{icon}</span>
-        <span className={`flex-1 truncate ${collapsed ? 'lg:hidden' : ''}`}>{label}</span>
-        {badge && <span className={`shrink-0 ${collapsed ? 'lg:hidden' : ''}`}>{badge}</span>}
+        {content}
       </a>
+    )
+  }
+
+  // A plain Link, because a NavLink would mark itself the current page
+  // whenever the pathname matches — every view of an attempt at once.
+  if (state) {
+    return (
+      <Link
+        to={to}
+        replace={replace}
+        title={collapsed ? label : undefined}
+        aria-current={state === 'active' ? 'page' : undefined}
+        className={`${base} ${tone[state]}`}
+        onClick={onNavigate}
+        data-tour={dataTour}
+      >
+        {content}
+      </Link>
     )
   }
 
@@ -107,15 +144,14 @@ function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, ba
     <NavLink
       to={to}
       end={end}
+      replace={replace}
       title={collapsed ? label : undefined}
       className={({ isActive }) => `${base} ${(isActive || forceActive) ? active : inactive}`}
       onClick={onNavigate}
       data-tour={dataTour}
       data-flashcard-nav={dataFlashcardNav ? '' : undefined}
     >
-      <span className="flex h-6 w-6 shrink-0 items-center justify-center lg:h-5 lg:w-5">{icon}</span>
-      <span className={`flex-1 truncate ${collapsed ? 'lg:hidden' : ''}`}>{label}</span>
-      {badge && <span className={`shrink-0 ${collapsed ? 'lg:hidden' : ''}`}>{badge}</span>}
+      {content}
     </NavLink>
   )
 }
@@ -218,6 +254,56 @@ function CoworkNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: 
           ) : undefined
         }
       />
+    </>
+  )
+}
+
+/**
+ * The Projects row and, while an attempt is open, that attempt's views under
+ * it — Brief, Workspace, Report, Submit (Results once submitted) — mirroring
+ * the switcher in the attempt's top bar, which the attempt page publishes to
+ * `useAttemptNav`. Choosing one replaces the history entry, as the switcher
+ * does: the views are windows of one project, not pages of it.
+ */
+function ProjectsNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: () => void }) {
+  const attempt = useAttemptNav(s => s.current)
+  const iconClass = 'h-5 w-5 lg:h-4 lg:w-4'
+
+  return (
+    <>
+      <SidebarItem
+        to="/project"
+        label="Projects"
+        icon={<FlaskConical className={iconClass} />}
+        collapsed={collapsed}
+        onNavigate={onNavigate}
+        state={attempt ? 'within' : undefined}
+      />
+      {attempt && (
+        <div
+          className={cn(
+            'ml-4 mt-0.5 space-y-0.5 border-l border-border pl-2',
+            // The icon-only rail has no room to indent: the views stand in line under the flask.
+            collapsed && 'lg:ml-0 lg:border-l-0 lg:pl-0',
+          )}
+        >
+          {attempt.views.map(view => {
+            const Icon = ATTEMPT_VIEW_ICON[view]
+            return (
+              <SidebarItem
+                key={view}
+                to={attemptRoute(attempt.attemptId, view)}
+                label={ATTEMPT_VIEW_LABEL[view]}
+                icon={<Icon className={iconClass} />}
+                collapsed={collapsed}
+                onNavigate={onNavigate}
+                state={view === attempt.view ? 'active' : 'idle'}
+                replace
+              />
+            )
+          })}
+        </div>
+      )}
     </>
   )
 }
@@ -463,7 +549,7 @@ export default function Sidebar() {
           </button>
         </div>
 
-        <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-1 lg:px-2">
+        <nav aria-label="Main" className="flex-1 overflow-y-auto px-3 py-3 space-y-1 lg:px-2">
           {appMode === 'cowork' ? (
             <CoworkNav collapsed={collapsed} onNavigate={closeMobile} />
           ) : (
@@ -569,13 +655,7 @@ export default function Sidebar() {
           {/* A project is its own kind of study — a brief, a data set and a
               deadline, not a bank of questions — so it is a tab of its own
               (docs/pcpa-project.md). */}
-          <SidebarItem
-            to="/project"
-            label="Projects"
-            icon={<FlaskConical className="h-5 w-5 lg:h-4 lg:w-4" />}
-            collapsed={collapsed}
-            onNavigate={closeMobile}
-          />
+          <ProjectsNav collapsed={collapsed} onNavigate={closeMobile} />
             </>
           )}
         </nav>

@@ -109,10 +109,9 @@ export function visibleTo(attempt: Pick<ProjectAttempt, 'owner'>, userId: string
   return attempt.owner === undefined || (userId !== null && attempt.owner === userId)
 }
 
-/** Where an attempt lives: `/project/pcpa/<id>`, opened on `view` when given. */
-export function attemptRoute(id: string, view?: string): string {
-  return `/project/pcpa/${id}${view ? `?view=${view}` : ''}`
-}
+// Where an attempt lives. Defined beside the attempt's views, which the
+// sidebar reads without bringing this module (and the briefs) with it.
+export { attemptRoute } from './attemptViews'
 
 export type AttemptPhase = 'open' | 'closed' | 'submitted'
 

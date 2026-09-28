@@ -1,13 +1,7 @@
 import type { Question, Part } from '@/lib/parser'
-import { MarkdownText } from '@/components/MarkdownText'
+import { MarkdownText, QUESTION_MD_CLASS } from '@/components/MarkdownText'
 import { ExplanationPanel } from '@/components/ExplanationPanel'
 import { WikiContent } from '@/components/WikiContent'
-
-// Shared markdown styling for revealed answers — matches the table styling the
-// quiz and question rows use so data-heavy answers (triangles, etc.) render as
-// tables rather than raw pipe text.
-const ANSWER_MD_CLASS =
-  'text-sm text-foreground leading-relaxed [&_p]:my-1.5 [&_p:first-child]:mt-0 [&_table]:text-xs [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-current/20 [&_th]:border [&_th]:border-current/20 [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1'
 
 // One part of a multi-part question, rendered read-only with its correct answer.
 function PartReveal({ part }: { part: Part }) {
@@ -21,7 +15,7 @@ function PartReveal({ part }: { part: Part }) {
         )}
       </p>
 
-      {part.stem && <MarkdownText className={ANSWER_MD_CLASS}>{part.stem}</MarkdownText>}
+      {part.stem && <MarkdownText className={QUESTION_MD_CLASS}>{part.stem}</MarkdownText>}
 
       {part.type === 'multiple-choice' ? (
         <div className="space-y-1">
@@ -52,16 +46,16 @@ function PartReveal({ part }: { part: Part }) {
           {isEssay && (
             <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Sample Answer</p>
           )}
-          <MarkdownText className={ANSWER_MD_CLASS}>{part.explanation}</MarkdownText>
+          <MarkdownText className={QUESTION_MD_CLASS}>{part.explanation}</MarkdownText>
         </div>
       )}
 
       {part.examiner_report && (
-        <div className="pt-1">
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-1">
+        <div className="space-y-1.5 border-t border-foreground/10 pt-2">
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             Examiner&apos;s Notes
           </p>
-          <MarkdownText className={ANSWER_MD_CLASS}>{part.examiner_report}</MarkdownText>
+          <MarkdownText className={QUESTION_MD_CLASS}>{part.examiner_report}</MarkdownText>
         </div>
       )}
     </div>

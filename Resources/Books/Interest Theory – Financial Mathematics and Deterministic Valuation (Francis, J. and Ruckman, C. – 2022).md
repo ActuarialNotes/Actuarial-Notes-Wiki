@@ -8,13 +8,16 @@ Edition: "3rd"
 Type: "Textbook"
 ISBN: "978-0-9981604-4-3"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-28
+  last_checked_by: agent:validate-v1
   content_hash: sha256:6e46cd4c8103e51386a1c2be4196cd56d8bffb5d5ebcba8a563cd56da9b153dc
-  sources: []
-  open_findings: 0
+  sources:
+    - "Francis & Ruckman, Interest Theory: Financial Mathematics and Deterministic Valuation, Third Edition (ActuarialBrew, 2022), publisher's sample pages: title page p.1, copyright page p.2, Table of Contents pp.3-5, Introduction p.7, sha256:c3b537a0237c73d4c5740005ebcecb4b73f646056d32e63f2884b8b05f1cb551 — https://www.actexmadriver.com/samples/Interest%20Theory%203rd%20Edition%20Sample.pdf"
+    - "ActuarialBrew, 'Financial Mathematics Textbook' (publisher's description of the third edition), home page fetched 2026-09-28, sha256:416a0fc39b58a8d19e41866a8a4c873357abd7ee47f98c99ddab1e04aebdf6ee — https://actuarialbrew.com/"
+    - "SOA Financial Mathematics Exam syllabus, December 2026, Suggested Textbooks (Francis & Ruckman entry), PDF p.5-6, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
+  open_findings: 1
   open_critical: 0
   log: ".verify/Resources/Books/Interest Theory – Financial Mathematics and Deterministic Valuation (Francis, J. and Ruckman, C. – 2022).md"
 ---

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Navigate, useParams, useSearchParams } from 'react-router-dom'
-import { Award, BookOpenText, Code2, FileText, Loader2, Send } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { BriefView } from '@/components/project/BriefView'
 import { WorkspaceView } from '@/components/project/WorkspaceView'
@@ -11,10 +11,12 @@ import { ProjectTopBar, WindowPill } from '@/components/project/ProjectTopBar'
 import { queueOpenFile } from '@/components/project/workspaceTabs'
 import { projectCase as findCase } from '@/data/pcpaProjects'
 import { useAuth } from '@/hooks/useAuth'
+import { useAttemptNav } from '@/hooks/useAttemptNav'
 import { useAttempt, usePcpaAttempts } from '@/hooks/usePcpaAttempts'
 import { usePcpaWorkspace, type SeedFile } from '@/hooks/usePcpaWorkspace'
 import { useProjectRuntime } from '@/hooks/useProjectRuntime'
 import { attemptPhase, starterScript, type ProjectAttempt } from '@/lib/pcpaAttempt'
+import { ATTEMPT_VIEW_ICON, ATTEMPT_VIEW_LABEL, attemptViewTab, attemptViews, resolveAttemptView, type AttemptView } from '@/lib/attemptViews'
 import { generateCase } from '@/lib/pcpaData'
 import { toCsv } from '@/lib/csv'
 
@@ -23,16 +25,14 @@ import { toCsv } from '@/lib/csv'
  * and — once submitted — the results. The five are views of one page (the
  * `view` search parameter), not five pages: switching between them is the
  * candidate moving between windows of one project, and a query-only change
- * doesn't slide the sheet (`lib/viewTransition.ts`).
+ * doesn't slide the sheet (`lib/viewTransition.ts`). The sidebar lists the
+ * same views under Projects (`lib/attemptViews.ts`), from what this page
+ * publishes to `useAttemptNav`.
  *
  * The page owns the attempt's session: it opens the workspace's files — drawing
  * the data sets the first time — and stops the R and Python sessions when the
  * candidate leaves.
  */
-
-type View = 'brief' | 'workspace' | 'report' | 'submit' | 'results'
-
-const VIEWS: View[] = ['brief', 'workspace', 'report', 'submit', 'results']
 
 /** Minutes of inactivity after which the workspace stops counting time. */
 const IDLE_MS = 2 * 60_000
@@ -67,12 +67,10 @@ export default function ProjectAttemptPage() {
   const [now, setNow] = useState(() => Date.now())
 
   const phase = attempt ? attemptPhase(attempt, now) : 'open'
-  const requested = params.get('view') as View | null
-  const view: View = requested && VIEWS.includes(requested) && (requested !== 'results' || phase === 'submitted')
-    ? requested
-    : phase === 'submitted' ? 'results' : 'brief'
+  const view = resolveAttemptView(params.get('view'), phase)
+  const tab = attemptViewTab(view, phase)
 
-  const setView = useCallback((next: View) => {
+  const setView = useCallback((next: AttemptView) => {
     setParams(p => {
       const out = new URLSearchParams(p)
       out.set('view', next)
@@ -91,6 +89,19 @@ export default function ProjectAttemptPage() {
     closeWorkspace()
     shutdown()
   }, [closeWorkspace, shutdown])
+
+  // What the sidebar mirrors under Projects: this attempt's views and the one showing.
+  const showNav = useAttemptNav(s => s.show)
+  const clearNav = useAttemptNav(s => s.clear)
+  const shownId = attempt?.id
+  useEffect(() => {
+    if (!shownId) return
+    showNav({ attemptId: shownId, views: attemptViews(phase), view: tab })
+  }, [shownId, phase, tab, showNav])
+  useEffect(() => {
+    if (!shownId) return
+    return () => clearNav(shownId)
+  }, [shownId, clearNav])
 
   // The clock the countdown reads, and the time spent working.
   useEffect(() => {
@@ -121,14 +132,11 @@ export default function ProjectAttemptPage() {
   const locked = phase !== 'open'
   const fullHeight = view === 'workspace' || view === 'report'
 
-  const tabs = [
-    { value: 'brief' as const, label: <><BookOpenText className="h-4 w-4" /><span className="hidden sm:inline">Brief</span></>, ariaLabel: 'Brief' },
-    { value: 'workspace' as const, label: <><Code2 className="h-4 w-4" /><span className="hidden sm:inline">Workspace</span></>, ariaLabel: 'Workspace' },
-    { value: 'report' as const, label: <><FileText className="h-4 w-4" /><span className="hidden sm:inline">Report</span></>, ariaLabel: 'Report' },
-    phase === 'submitted'
-      ? { value: 'results' as const, label: <><Award className="h-4 w-4" /><span className="hidden sm:inline">Results</span></>, ariaLabel: 'Results' }
-      : { value: 'submit' as const, label: <><Send className="h-4 w-4" /><span className="hidden sm:inline">Submit</span></>, ariaLabel: 'Submit' },
-  ]
+  const tabs = attemptViews(phase).map(value => {
+    const Icon = ATTEMPT_VIEW_ICON[value]
+    const name = ATTEMPT_VIEW_LABEL[value]
+    return { value, label: <><Icon className="h-4 w-4" /><span className="hidden sm:inline">{name}</span></>, ariaLabel: name }
+  })
 
   return (
     <div className="flex h-[100dvh] flex-col">
@@ -139,11 +147,11 @@ export default function ProjectAttemptPage() {
         subtitle={`PCPA Project · ${projectCase.company}`}
         right={<WindowPill attempt={attempt} now={now} compact />}
       >
-        <SegmentedControl<View>
+        <SegmentedControl<AttemptView>
           size="sm"
           pill
           label="Project view"
-          value={view === 'submit' && phase === 'submitted' ? 'results' : view}
+          value={tab}
           onChange={setView}
           options={tabs}
           className="w-full max-w-md"

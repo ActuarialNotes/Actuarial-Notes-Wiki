@@ -81,8 +81,8 @@ describe('questionExamLabel', () => {
     expect(examPages.length).toBeGreaterThan(0)
   })
 
-  // Exams 6–9 have a syllabus page and no questions yet, so only the mapped ones
-  // can be checked against the bank.
+  // The DISCs, PCPA and Exam 6 have a syllabus page and no questions yet, so only
+  // the mapped ones can be checked against the bank.
   const bankedPages = examPages.filter(e => EXAM_ID_TO_LABEL[wikiExamIdToProgressKey(e.meta.examId)])
 
   it.each(bankedPages.map(e => [e.file, e.meta] as const))(

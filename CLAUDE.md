@@ -335,9 +335,13 @@ Other important `lib/` modules:
   each topic equally. The one definition; the study-guide exam grid greys
   those cards out with an "In development — not yet available" pill instead of a Beta label,
   the exam page shows the amber *In Development* banner (`WikiFloatingSearch`), the quiz
-  builder's Beta pill reads the same helper, and `ExamsPopout` uses it (together with "does
+  builder's status pill reads the same helper, and `ExamsPopout` uses it (together with "does
   the vault have an `Exam *.md` page at all?") to decide which exams get an **Add** button.
-  Move an exam out of development here, not in the surfaces. The credential tracks in
+  Move an exam out of development here, not in the surfaces. The quiz builder is the one
+  surface that lists an in-development exam: it offers any exam with a question bank (its
+  hand-kept `EXAMS` in `pages/Landing.tsx`, practice-exam sizes in `MOCK_EXAM_QUESTIONS`),
+  so Exams 7, 8 and 9 are quizzable there under an amber *In Development* pill while the
+  rest of the app still treats them as a syllabus. The credential tracks in
   `data/tracks.ts` list ~50 exams and the vault covers ten of them, so an exam can be
   tracked on a credential path without being studiable — `data/tracks.test.ts` pins the
   DEFAULT track (what a new account lands on) to exams that *are*.

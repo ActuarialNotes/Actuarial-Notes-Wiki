@@ -1598,6 +1598,7 @@ def cas_records(
             body = _strip_trailing_label(
                 attach_part_prompts(body, parsed["parts"], parsed["points"], warnings)
             )
+            _prefer_booklet_total(parsed, total, warnings)
             if legacy and printed:
                 parsed["parts"] = fold_unprinted_parts(parsed["parts"], printed)
             if parsed["points"] is None:
@@ -1959,6 +1960,20 @@ def attach_part_prompts(
     stem, prompts = split_part_prompts(body)
     if not prompts:
         return stem  # a single-part question: its total is already frontmatter
+    if not parts and total is not None:
+        # The report answers the question whole. Lettered parts in its span
+        # are its own only if they price it: Exam 6C Fall 2018 Q10 is 1.5
+        # points with no parts, and its span ran on into Q11's `a. (2 points)`
+        # and `b. (1 point)` — the second fitted under the total one at a time.
+        found = sum(p["points"] or 0 for p in prompts.values())
+        if abs(found - total) > POINT_EPS:
+            if warnings is not None:
+                warnings.append(
+                    f"booklet parts {', '.join(sorted(prompts))} dropped: the report prices "
+                    f"the question whole at {points_label(total)} and they sum to "
+                    f"{points_label(found)} — an over-run into the next question's page"
+                )
+            return stem
     by_label = {part["label"]: part for part in parts}
     priced = sum(p["points"] for p in parts if p.get("points") is not None)
     for label, found in sorted(prompts.items()):
@@ -2015,6 +2030,26 @@ def _prefer_closing_points(
                 f"parts sum to the total of {points_label(total)}"
             )
         part["points"] = booklet
+
+
+def _prefer_booklet_total(parsed: dict, booklet: re.Match[str] | None, warnings: list[str]) -> None:
+    """Take the booklet's total when the report's is the one figure that disagrees.
+
+    Exam 6C Fall 2014 Q15's report prints `TOTAL POINT VALUE: 1.75` over parts
+    of 0.75, 1.5 and 0.5; the booklet prints `(2.75 points)` over the same
+    three. Two printings of the total and three of the parts agree on 2.75, so
+    the report's total is the misprint.
+    """
+    summed = parts_total(parsed["parts"])
+    if booklet is None or summed is None or parsed["points"] is None:
+        return
+    printed = float(booklet.group(1))
+    if abs(summed - parsed["points"]) > POINT_EPS and abs(summed - printed) <= POINT_EPS:
+        warnings.append(
+            f"TOTAL POINT VALUE {points_label(parsed['points'])} taken as a misprint: the "
+            f"booklet's total and the parts both give {points_label(printed)}"
+        )
+        parsed["points"] = printed
 
 
 # The next question's own `10.`, left at the end of a span that reaches to the

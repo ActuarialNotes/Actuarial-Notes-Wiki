@@ -949,6 +949,35 @@ class TestSurplusBookletParts(unittest.TestCase):
         px.attach_part_prompts(self.BOOKLET, parts, None, [])
         self.assertEqual([p["label"] for p in parts], ["a", "b", "c"])
 
+    def test_a_question_the_report_prices_whole_takes_no_parts_that_do_not_price_it(self):
+        # Exam 6C Fall 2018 Q10 (1.5 points, no parts) ran on into Q11's parts.
+        booklet = (
+            "(1.5 points)\nContrast three elements of the pools.\n"
+            "a. (2 points)\nDescribe the flood program.\nb. (1 point)\nDescribe four variables.\n"
+        )
+        parts: list[dict] = []
+        warnings: list[str] = []
+        stem = px.attach_part_prompts(booklet, parts, 1.5, warnings)
+        self.assertEqual(parts, [])
+        self.assertIn("Contrast three elements", stem)
+        self.assertIn("booklet parts a, b dropped", warnings[0])
+
+    def test_a_report_total_the_booklet_and_the_parts_contradict_is_a_misprint(self):
+        # Exam 6C Fall 2014 Q15: report total 1.75, booklet (2.75 points), and
+        # parts of 0.75, 1.5 and 0.5 in both.
+        booklet = (
+            "15. (2.75 points)\nGiven OSFI's guideline B-9:\n"
+            "a. (0.75 point)\nDescribe.\nb. (1.5 points)\nCalculate.\nc. (0.5 point)\nExplain.\n"
+        )
+        report = (
+            "QUESTION 15\nTOTAL POINT VALUE: 1.75\nSAMPLE ANSWERS\n"
+            "Part a: 0.75 point\nSample 1\nx\nPart b: 1.5 points\nSample 1\ny\n"
+            "Part c: 0.5 point\nSample 1\nz\n"
+        )
+        record = px.cas_records("6c", 2014, "Fall", [_page(1, booklet)], [_page(2, report)])[0]
+        self.assertEqual(record["points"], 2.75)
+        self.assertTrue(any("taken as a misprint" in w for w in record["warnings"]))
+
     def test_a_single_part_question_loses_its_redundant_total(self):
         stem = px.attach_part_prompts("(2.5 points)\n\nCalculate the premium.\n", [])
         self.assertEqual(stem.strip(), "Calculate the premium.")

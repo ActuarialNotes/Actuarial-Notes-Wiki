@@ -41,7 +41,16 @@ cat /tmp/exam-5/report.md
   the same year already uses and match it; ask the user if it is ambiguous.
   An exam sat once a year (Exam 7 in the spring, Exam 8 in the fall) takes
   `--session Spring --single-sitting` (`Fall` for Exam 8): the session is
-  recorded and the id stays `cas7-2018-q1`.
+  recorded and the id stays `cas7-2018-q1`. Exam 6C (`--exam 6c`) is sat
+  twice a year, so it keeps the letter — `cas6c-2019s-q1` — including Fall
+  2013, the only 2013 paper released (`cas6c-2013f-q1`).
+- **Check the paper is the sitting you asked for.** casact.org's Past Exams
+  page links "Fall 2016 Exam 6-Canada" to the Spring 2016 paper; the report
+  pages' own header says which sitting a PDF is.
+- A text layer can be worse than none: Exam 6C Fall 2014's report extracts as
+  `Candidatesshouldnotethat…`, every word gap lost. Rasterise that PDF (each
+  page drawn as an image into a new PDF) and run it with `--ocr`, then check
+  every sample and commentary against the rendered report pages.
 - `--ocr` reads scanned booklet pages locally instead of leaving them for
   vision. Always pass it when tesseract is there: on Fall 2016 it recovered 22
   of 26 prompts for nothing. The booklet's question numbers do not survive a
@@ -206,8 +215,9 @@ python3 scripts/pdf_extract.py --exam mas-i --year 2019 --session Spring \
 
 - `scripts/standardize_questions.py` and `scripts/update_wiki_links.py` have no
   Exam 5+ entries in `ontology_map.py` — do not run them on these banks.
-- Exams 7, 8 and 9 have banks (the 2012–2019 Exam 7 and Exam 8 papers) but
-  `examStatus.ts` still lists them, with Exam 6, as *in development*;
+- Exams 6C, 7, 8 and 9 have banks (the 2013–2019 Exam 6-Canada papers and the
+  2012–2019 Exam 7 and Exam 8 papers) but `examStatus.ts` still lists them,
+  with Exam 6U, as *in development*;
   converting a paper for them is fine, but the exam does not become studiable
   until that status moves.
 - An old paper can test material the syllabus has since moved or dropped. Set

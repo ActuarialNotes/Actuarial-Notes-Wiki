@@ -94,7 +94,7 @@ function formatTargetDate(dateStr: string): string {
 // Question counts that mirror each real exam
 const MOCK_EXAM_QUESTIONS: Record<string, number> = {
   'Probability': 30,
-  'Financial Mathematics': 35,
+  'Financial Mathematics': 30,
   'Exam MAS-I': 40,
   'Exam MAS-II': 42,
   'Exam 5': 25,

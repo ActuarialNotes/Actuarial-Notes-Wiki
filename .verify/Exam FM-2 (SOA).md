@@ -130,3 +130,22 @@ created: 2026-09-28
 - checks_run: Exam format (2.5 hours, 30 multiple-choice, PDF p.1) matches. Five topic names and weights (5-15, 20-30, 15-25, 15-25, 20-30%) match PDF pp.2-5. Every learning objective and every outcome diffed phrase by phrase against PDF pp.2-5: all SOA terms present; additions filed (F-005); Topic 2 objective added (F-003); cash-flow-matching link fixed (F-004); bond-valuation-between-coupons exclusion and the callable-bond outcome match. Reading lines diffed against PDF pp.6-7: Broverman 8th ed. chapters 1-7 and every exclusion match; Vaaler-Harper-Daniel 3rd ed. chapters 1-6, 8 (8.3 only), 9 and every exclusion match; Francis & Ruckman 3rd ed. chapters 1-16 excluding 14.04-14.05 match; Chan & Tse 3rd ed. chapters 1-8 and every exclusion match; Brown & Kopp corrected (F-001). FM-24-17 missing (F-002). The August, October and December 2026 syllabi are identical apart from the month; the SOA study page lists no 2027 syllabus yet. syllabus_lint: 0 errors.
 - sources_checked: SOA Financial Mathematics Exam syllabus, December 2026 (all pages), sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf; SOA Financial Mathematics Exam syllabus, October 2026, sha256:949a2e9008bd5f8791b8852599e09f28aa30a9f53a5af05b2499907de1397b26 — https://www.soa.org/globalassets/assets/files/edu/2026/syllabi/2026-10-exam-fm-syllabus.pdf; SOA Financial Mathematics Exam syllabus, August 2026, sha256:a3af6f54e132f4439988cccc1d20ea3cb269c175c253d9b2b27c6f8d23bbbc5b — https://www.soa.org/globalassets/assets/files/edu/2026/spring/syllabi/2026-08-exam-fm-syllabus.pdf
 - note: Medium: one open major (the required study note has no page) and two open minors; everything the page states is now what the syllabus states.
+
+## [C-002] Topic 2 objective phrase linked
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-28T14:47Z/aa33
+- date: 2026-09-28
+- locus: Annuities/Cash Flows callout, preamble
+- note: The objective added under F-003 left 'sequences of non-contingent payments' unlinked, which scripts/test_syllabus_lib.py (every noun phrase links a note) fails. It now reads [[Annuities|sequences of non-contingent payments]]; Annuities is already linked in outcome 2, so the exam's concept set is unchanged and the visible text is SOA's.
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-28T14:47Z/aa33
+- date: 2026-09-28
+- status_set: verified
+- confidence: medium
+- checks_run: Re-pass after linking the Topic 2 objective phrase (comment above); the visible text is unchanged, so every check in C-001 stands: format, weights, all objectives and outcomes and every reading line diffed against the December 2026 syllabus PDF pp.1-7. syllabus_lint 0 errors 0 warnings; test_syllabus_lib passes.
+- sources_checked: SOA Financial Mathematics Exam syllabus, December 2026 (all pages), sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf; SOA Financial Mathematics Exam syllabus, October 2026, sha256:949a2e9008bd5f8791b8852599e09f28aa30a9f53a5af05b2499907de1397b26 — https://www.soa.org/globalassets/assets/files/edu/2026/syllabi/2026-10-exam-fm-syllabus.pdf; SOA Financial Mathematics Exam syllabus, August 2026, sha256:a3af6f54e132f4439988cccc1d20ea3cb269c175c253d9b2b27c6f8d23bbbc5b — https://www.soa.org/globalassets/assets/files/edu/2026/spring/syllabi/2026-08-exam-fm-syllabus.pdf
+- note: Medium: F-002 (required study note FM-24-17 has no page, major), F-005 and F-006 (minor) remain open.

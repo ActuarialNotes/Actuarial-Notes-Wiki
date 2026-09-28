@@ -6,13 +6,11 @@ import { parseAllQuestions } from '@/lib/parser'
 import type { Question } from '@/lib/parser'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { slugForLink } from '@/lib/conceptMatch'
-import {
-  sanitizeMasteryState,
-  decayIfStale,
-} from '@/lib/mastery'
+import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
+import { sanitizeMasteryState } from '@/lib/mastery'
 import type { MasteryState, ConceptMasteryRecord } from '@/lib/mastery'
-import { syntheticDecayEvents } from '@/lib/learningHistory'
-import type { LevelEvent } from '@/lib/learningHistory'
+import { conceptLevelHistory, levelAtTime } from '@/lib/learningHistory'
+import type { LevelEvent, MasteryTrack } from '@/lib/learningHistory'
 
 export type { LevelEvent } from '@/lib/learningHistory'
 
@@ -34,26 +32,12 @@ export interface ConceptLearningHistory {
   error: string | null
 }
 
-// Numeric rank for picking the "best" state when multiple exam records exist.
-const STATE_RANK: Record<MasteryState, number> = {
-  level3: 4, level2: 3, level1: 2, new: 1, forgotten: 0,
-}
-
 function linkMatchesConcept(link: string, conceptName: string): boolean {
   const lower = conceptName.toLowerCase()
   const ref = hrefToEntryRef(link)
   if (ref?.name.toLowerCase() === lower) return true
   const lastSegment = link.split('/').filter(Boolean).pop()
   return !!lastSegment && lastSegment.replace(/-/g, ' ').toLowerCase() === lower
-}
-
-function levelAtTime(time: Date, levelEvents: LevelEvent[]): MasteryState {
-  let state: MasteryState = levelEvents[0]?.from ?? 'new'
-  for (const ev of levelEvents) {
-    if (ev.at <= time) state = ev.to
-    else break
-  }
-  return state
 }
 
 const EMPTY: ConceptLearningHistory = {
@@ -142,7 +126,7 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
       const [levelResult, masteryResult] = await Promise.all([
         supabase
           .from('daily_completions')
-          .select('from_state, to_state, at')
+          .select('exam_id, concept_slug, from_state, to_state, at')
           .eq('user_id', userId)
           .in('concept_slug', slugs)
           .order('at', { ascending: true }),
@@ -157,14 +141,32 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
 
       if (levelResult.error) throw new Error(levelResult.error.message)
 
-      const levelEvents: LevelEvent[] = (levelResult.data ?? []).map((r: { from_state: string; to_state: string; at: string }) => ({
-        at: new Date(r.at),
-        from: sanitizeMasteryState(r.from_state),
-        to: sanitizeMasteryState(r.to_state),
-      }))
+      // Mastery is kept per (exam, slug) — one track per row. The same concept
+      // on two exams is two ladders, and the graph draws the best of them
+      // (conceptLevelHistory), never their events laid end to end.
+      const tracks = new Map<string, MasteryTrack>()
+      const trackFor = (examId: string, slug: string): MasteryTrack => {
+        const key = `${examId}::${slug.toLowerCase()}`
+        let track = tracks.get(key)
+        if (!track) {
+          track = { events: [], record: null, lastAttemptAt: null }
+          tracks.set(key, track)
+        }
+        return track
+      }
 
-      let attemptDots: AttemptDot[] = []
+      for (const r of (levelResult.data ?? []) as Array<{ exam_id: string; concept_slug: string; from_state: string; to_state: string; at: string }>) {
+        trackFor(r.exam_id, r.concept_slug).events.push({
+          at: new Date(r.at),
+          from: sanitizeMasteryState(r.from_state),
+          to: sanitizeMasteryState(r.to_state),
+        })
+      }
+      for (const r of (masteryResult.data ?? []) as ConceptMasteryRecord[]) {
+        trackFor(r.exam_id, r.concept_slug).record = { ...r, state: sanitizeMasteryState(r.state) }
+      }
 
+      let responses: Array<{ question_id: string; is_correct: boolean; answered_at: string }> = []
       if (questionIds.length > 0) {
         const { data: responseData, error: responseError } = await supabase
           .from('question_responses')
@@ -175,149 +177,47 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
 
         if (cancelled) return
         if (responseError) throw new Error(responseError.message)
-
-        attemptDots = (responseData ?? []).map((r: { question_id: string; is_correct: boolean; answered_at: string }) => {
-          const at = new Date(r.answered_at)
-          return {
-            at,
-            isCorrect: r.is_correct,
-            levelAtTime: levelAtTime(at, levelEvents),
-            questionId: r.question_id,
-          }
-        })
+        responses = responseData ?? []
       }
 
-      // Compute the true current level from concept_mastery with decay applied.
-      // Falls back to the last daily_completions event if no mastery record exists.
-      const rawMasteryRows: ConceptMasteryRecord[] = (masteryResult.data ?? []).map(
-        (r: ConceptMasteryRecord) => ({ ...r, state: sanitizeMasteryState(r.state) }),
-      )
-
-      let currentLevel: MasteryState
-      let finalLevelEvents = levelEvents
-
-      if (rawMasteryRows.length === 0) {
-        // No mastery record yet — fall back to last level event
-        currentLevel = levelEvents.length > 0 ? levelEvents[levelEvents.length - 1].to : 'new'
-      } else {
-        // Apply decay to each row and pick the one with the highest resulting state.
-        // (Mirrors the exam-agnostic approach used for daily_completions.)
-        const decayedRows = rawMasteryRows.map(r => decayIfStale(r, now))
-        const canonical = decayedRows.reduce((best, r) => {
-          const rankB = STATE_RANK[best.state]
-          const rankR = STATE_RANK[r.state]
-          if (rankR > rankB) return r
-          if (rankR === rankB) {
-            // Prefer most recently attempted as tiebreaker
-            const bTime = best.last_attempted_at ? new Date(best.last_attempted_at).getTime() : 0
-            const rTime = r.last_attempted_at ? new Date(r.last_attempted_at).getTime() : 0
-            return rTime > bTime ? r : best
-          }
-          return best
-        })
-        currentLevel = canonical.state
-
-        // If the mastery record is 'new' but level events show the concept was
-        // advanced, the mastery row may be stale (e.g. the upsert failed while
-        // daily_completions succeeded). Derive the current level from the last
-        // level event with decay applied so the pill matches the graph.
-        if (currentLevel === 'new' && levelEvents.length > 0) {
-          const lastEvent = levelEvents[levelEvents.length - 1]
-          if (lastEvent.to !== 'new' && lastEvent.to !== 'forgotten') {
-            const tempRecord: ConceptMasteryRecord = {
-              user_id: '', exam_id: '', concept_slug: '',
-              state: lastEvent.to,
-              correct_count: 0, incorrect_streak: 0, hard_correct_count: 0,
-              last_correct_at: lastEvent.at.toISOString(),
-              last_attempted_at: lastEvent.at.toISOString(),
-            }
-            const decayedState = decayIfStale(tempRecord, now).state
-            if (STATE_RANK[decayedState] > STATE_RANK.new) {
-              currentLevel = decayedState
-            }
-          }
-        }
-
-        // Augment levelEvents with synthetic decay/forget events so the graph
-        // line drops at the correct time rather than staying flat.
-        const lastLevelEvent = levelEvents[levelEvents.length - 1]
-        if (
-          lastLevelEvent &&
-          currentLevel !== lastLevelEvent.to &&
-          lastLevelEvent.to !== 'new' &&
-          lastLevelEvent.to !== 'forgotten'
-        ) {
-          // Find the raw (pre-decay) mastery record that best corresponds to the
-          // last known upward level so we can anchor decay from last_correct_at.
-          const anchorRaw = rawMasteryRows.reduce((best, r) => {
-            return STATE_RANK[r.state] >= STATE_RANK[best.state] ? r : best
-          })
-
-          if (anchorRaw.last_correct_at) {
-            const lastCorrectAt = new Date(anchorRaw.last_correct_at)
-            const decayEvts = syntheticDecayEvents(lastLevelEvent.to, lastCorrectAt, now)
-            if (decayEvts.length > 0) {
-              finalLevelEvents = [...levelEvents, ...decayEvts]
-            }
-          } else if (anchorRaw.state === 'forgotten' && anchorRaw.last_attempted_at) {
-            // Forgotten via fail-streak (no last_correct_at means new→forgotten path
-            // which shouldn't happen, but guard anyway). Use last_attempted_at as
-            // an approximation of when forgetting occurred.
-            const at = new Date(anchorRaw.last_attempted_at)
-            finalLevelEvents = [
-              ...levelEvents,
-              { at, from: lastLevelEvent.to, to: 'forgotten' as MasteryState },
-            ]
-          }
-        }
-
-        // Fail-streak forgetting: mastery record shows forgotten but time-based
-        // decay from last_correct_at wouldn't have triggered yet. Add a synthetic
-        // forget event around last_attempted_at (time of the 3rd consecutive failure).
-        if (
-          currentLevel === 'forgotten' &&
-          lastLevelEvent &&
-          lastLevelEvent.to !== 'forgotten' &&
-          finalLevelEvents === levelEvents // no decay events were added above
-        ) {
-          const anchorRaw = rawMasteryRows.find(r => r.state === 'forgotten')
-          if (anchorRaw?.last_attempted_at) {
-            // All question_responses from the quiz that caused the forgetting
-            // share one client-side timestamp, written slightly *after*
-            // last_attempted_at (set earlier in the same submission). Anchoring
-            // the forget event at last_attempted_at would therefore place it
-            // before every attempt dot from that quiz, making the 3 consecutive
-            // wrong answers that triggered it all render on the 'forgotten' row
-            // (and overlap into what looks like a single dot). Anchor it just
-            // after the latest attempt dot instead, so those dots render at
-            // their pre-forget level (e.g. level2) and the step line drops to
-            // Forgotten immediately after them.
-            const lastDotTime = attemptDots.length > 0
-              ? attemptDots[attemptDots.length - 1].at.getTime()
-              : 0
-            const at = new Date(Math.max(new Date(anchorRaw.last_attempted_at).getTime(), lastDotTime + 1))
-            finalLevelEvents = [
-              ...levelEvents,
-              { at, from: lastLevelEvent.to, to: 'forgotten' as MasteryState },
-            ]
-          }
+      // Each answer fed the rows its question writes to — the same
+      // (exam, slug) pairs quizStore derives — so each track knows when it was
+      // last answered, which is where a run of failures drops it to Forgotten.
+      const trackKeysByQuestion = new Map<string, string[]>()
+      for (const q of matchingQuestions) {
+        const examId = EXAM_LABEL_TO_ID[q.exam]
+        if (!examId) continue
+        const keys = q.wiki_link
+          .filter(link => linkMatchesConcept(link, conceptName))
+          .map(slugForLink)
+          .filter((slug): slug is string => !!slug)
+          .map(slug => `${examId}::${slug.toLowerCase()}`)
+        trackKeysByQuestion.set(q.id, keys)
+      }
+      for (const r of responses) {
+        const at = new Date(r.answered_at)
+        for (const key of trackKeysByQuestion.get(r.question_id) ?? []) {
+          const track = tracks.get(key)
+          if (track && (!track.lastAttemptAt || at > track.lastAttemptAt)) track.lastAttemptAt = at
         }
       }
 
-      // Recompute each dot's y-position using finalLevelEvents (which includes
-      // synthetic decay/forget events). The dots were initially computed with the
-      // raw daily_completions levelEvents, which don't include those synthetic
-      // events — causing dots to float above the graph line when the concept had
-      // decayed between the last level event and the attempt timestamp.
-      const finalAttemptDots = attemptDots.map(dot => ({
-        ...dot,
-        levelAtTime: levelAtTime(dot.at, finalLevelEvents),
-      }))
+      const { levelEvents, currentLevel } = conceptLevelHistory([...tracks.values()], now)
+
+      const attemptDots: AttemptDot[] = responses.map(r => {
+        const at = new Date(r.answered_at)
+        return {
+          at,
+          isCorrect: r.is_correct,
+          levelAtTime: levelAtTime(at, levelEvents),
+          questionId: r.question_id,
+        }
+      })
 
       if (!cancelled) {
         setResult({
-          levelEvents: finalLevelEvents,
-          attemptDots: finalAttemptDots,
+          levelEvents,
+          attemptDots,
           questions: matchingQuestions,
           currentLevel,
           loading: false,

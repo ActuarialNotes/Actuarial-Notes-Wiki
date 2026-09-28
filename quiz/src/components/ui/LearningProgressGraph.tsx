@@ -2,6 +2,7 @@
 // Used by LearningProgressModal and ConceptCoverageSection.
 
 import { useRef, useState } from 'react'
+import { levelAtTime } from '@/lib/learningHistory'
 import type { LevelEvent } from '@/lib/learningHistory'
 import type { AttemptDot } from '@/hooks/useConceptLearningHistory'
 import type { MasteryState } from '@/lib/mastery'
@@ -92,14 +93,7 @@ export function makeScales(levelEvents: LevelEvent[], attemptDots: AttemptDot[])
   return { xScale, xInverse, yScale, buildXLabels, buildStepPath, tMin, tMax }
 }
 
-export function levelAtTime(time: Date, levelEvents: LevelEvent[]): MasteryState {
-  let state: MasteryState = levelEvents[0]?.from ?? 'new'
-  for (const ev of levelEvents) {
-    if (ev.at <= time) state = ev.to
-    else break
-  }
-  return state
-}
+export { levelAtTime }
 
 // ─── Component ────────────────────────────────────────────────────────────────
 

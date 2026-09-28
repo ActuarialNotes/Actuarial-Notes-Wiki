@@ -51,6 +51,12 @@ The concept detail view shows a step-function chart of your mastery over time:
 
 The graph also draws **projected decay steps** — forward-looking dashes that show when your current level will start to slide if you don't revisit the concept. This makes it easy to spot concepts that are about to need attention before they actually decay.
 
+### One concept, several exams
+
+Mastery is stored per exam (see "Which exams are tracked" below), so a concept on more than one syllabus — Probability is on Exam P, MAS-I, MAS-II, Exam 5 and Exam 9 — climbs a separate ladder on each, and each writes its own level-ups. The graph shows the *concept*, so its line is the **best level any of those ladders holds at each moment**, the same rule the level pill beside it uses (`conceptLevelHistory` in `quiz/src/lib/learningHistory.ts`). Each ladder's recorded climbs are first extended to where its mastery row stands now — decay steps where the clock explains the fall, a drop just after the failing answers where three failures in a row do — and a ladder has no say before its first event.
+
+Drawing the ladders' events end to end instead reads as one ladder going down: a concept at Level 2 on Exam P, answered correctly on MAS-I for the first time, logs MAS-I's New → Level 1, and the line stepped from 2 to 1 on a correct answer.
+
 ## Concept Aliases
 
 Some concepts are displayed under a short name (e.g. "Price") but stored under their full canonical name (e.g. "Bond Price"). The system resolves aliases automatically so your mastery record follows the concept regardless of which name appears in a question or on the wiki page.

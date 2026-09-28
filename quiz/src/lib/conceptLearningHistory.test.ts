@@ -1,5 +1,14 @@
 import { describe, it, expect } from 'vitest'
-import { syntheticDecayEvents, summarizeAttemptedQuestions } from '@/lib/learningHistory'
+import {
+  syntheticDecayEvents,
+  summarizeAttemptedQuestions,
+  trackLevelTimeline,
+  combineLevelTimelines,
+  conceptLevelHistory,
+  levelAtTime,
+} from '@/lib/learningHistory'
+import type { LevelEvent, MasteryTrack } from '@/lib/learningHistory'
+import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
 import {
   DECAY_DAYS_LEVEL1,
   DECAY_DAYS_LEVEL2,
@@ -205,5 +214,127 @@ describe('summarizeAttemptedQuestions', () => {
       dot('q1', true, daysAgo(2)),
     ])
     expect(rows.map(r => r.questionId)).toEqual(['q1'])
+  })
+})
+
+// ── one concept across several exams ─────────────────────────────────────────
+
+function ev(at: Date, from: MasteryState, to: MasteryState): LevelEvent {
+  return { at, from, to }
+}
+
+function row(state: MasteryState, lastCorrectAt: Date | null, lastAttemptedAt: Date | null = lastCorrectAt): ConceptMasteryRecord {
+  return {
+    user_id: 'u', exam_id: 'P', concept_slug: 'Probability',
+    state,
+    correct_count: 0, incorrect_streak: 0, hard_correct_count: 0,
+    last_correct_at: lastCorrectAt?.toISOString() ?? null,
+    last_attempted_at: lastAttemptedAt?.toISOString() ?? null,
+  }
+}
+
+function track(events: LevelEvent[], record: ConceptMasteryRecord | null, lastAttemptAt: Date | null = null): MasteryTrack {
+  return { events, record, lastAttemptAt }
+}
+
+describe('conceptLevelHistory — a concept shared by two exams', () => {
+  // Level 2 on one exam, then a first correct answer on the other: that exam's
+  // New → Level 1 must not read as the concept falling from 2 to 1.
+  const examA = track(
+    [ev(daysAgo(12), 'new', 'level1'), ev(daysAgo(9), 'level1', 'level2')],
+    row('level2', daysAgo(6)),
+  )
+  const examB = track([ev(daysAgo(1), 'new', 'level1')], row('level1', daysAgo(1)))
+
+  it('never drops on the other exam\'s first correct answer', () => {
+    const { levelEvents } = conceptLevelHistory([examA, examB], NOW)
+    expect(levelEvents.map(e => e.to)).toEqual(['level1', 'level2'])
+    expect(levelAtTime(daysAgo(1), levelEvents)).toBe('level2')
+  })
+
+  it('ends at the best level either exam holds — the pill\'s level', () => {
+    expect(conceptLevelHistory([examA, examB], NOW).currentLevel).toBe('level2')
+    expect(conceptLevelHistory([examB, examA], NOW).currentLevel).toBe('level2')
+  })
+
+  it('climbs when the other exam overtakes', () => {
+    const examBHigher = track(
+      [ev(daysAgo(3), 'new', 'level1'), ev(daysAgo(2), 'level1', 'level2'), ev(daysAgo(1), 'level2', 'level3')],
+      row('level3', daysAgo(1)),
+    )
+    const { levelEvents, currentLevel } = conceptLevelHistory([examA, examBHigher], NOW)
+    expect(levelEvents.map(e => e.to)).toEqual(['level1', 'level2', 'level3'])
+    expect(currentLevel).toBe('level3')
+  })
+
+  it('an exam not yet started does not hold a forgotten concept up at New', () => {
+    const forgotten = track(
+      [ev(daysAgo(40), 'new', 'level1')],
+      row('level1', daysAgo(40)),
+    )
+    const later = track([ev(daysAgo(1), 'new', 'level1')], row('level1', daysAgo(1)))
+    const { levelEvents } = conceptLevelHistory([forgotten, later], NOW)
+    expect(levelEvents.map(e => e.to)).toEqual(['level1', 'forgotten', 'level1'])
+  })
+
+  it('is empty with nothing earned', () => {
+    expect(conceptLevelHistory([], NOW)).toEqual({ levelEvents: [], currentLevel: 'new' })
+    expect(conceptLevelHistory([track([], row('new', null, daysAgo(1)))], NOW).currentLevel).toBe('new')
+  })
+})
+
+describe('combineLevelTimelines', () => {
+  it('passes a single timeline through unchanged', () => {
+    const only = [ev(daysAgo(5), 'forgotten', 'level1'), ev(daysAgo(2), 'level1', 'level2')]
+    expect(combineLevelTimelines([only])).toEqual(only)
+  })
+
+  it('takes the best level at each moment, merging simultaneous steps', () => {
+    const a = [ev(daysAgo(5), 'new', 'level1'), ev(daysAgo(2), 'level1', 'level2')]
+    const b = [ev(daysAgo(5), 'new', 'level1'), ev(daysAgo(3), 'level1', 'level2')]
+    expect(combineLevelTimelines([a, b])).toEqual([
+      ev(daysAgo(5), 'new', 'level1'),
+      ev(daysAgo(3), 'level1', 'level2'),
+    ])
+  })
+})
+
+describe('trackLevelTimeline', () => {
+  it('returns the recorded events when they already end at the current level', () => {
+    const events = [ev(daysAgo(3), 'new', 'level1')]
+    expect(trackLevelTimeline(track(events, row('level1', daysAgo(3))), NOW)).toEqual(events)
+  })
+
+  it('adds the decay steps the clock explains', () => {
+    const levelUp = daysAgo(DECAY_DAYS_LEVEL2 + 1)
+    const timeline = trackLevelTimeline(track([ev(levelUp, 'level1', 'level2')], row('level2', levelUp)), NOW)
+    expect(timeline).toHaveLength(2)
+    expect(timeline[1]).toMatchObject({ from: 'level2', to: 'level1' })
+    expect(timeline[1].at.getTime()).toBe(levelUp.getTime() + DECAY_DAYS_LEVEL2 * MS_PER_DAY)
+  })
+
+  it('drops to Forgotten just after the failing answers of a fail streak', () => {
+    const levelUp = daysAgo(3)
+    const failedAt = daysAgo(1)
+    const answeredAt = new Date(failedAt.getTime() + 50)
+    const timeline = trackLevelTimeline(
+      track([ev(levelUp, 'level1', 'level2')], row('forgotten', levelUp, failedAt), answeredAt),
+      NOW,
+    )
+    expect(timeline[timeline.length - 1]).toMatchObject({ from: 'level2', to: 'forgotten' })
+    expect(timeline[timeline.length - 1].at.getTime()).toBe(answeredAt.getTime() + 1)
+    expect(levelAtTime(answeredAt, timeline)).toBe('level2')
+  })
+
+  it('draws a level the row holds that no event recorded', () => {
+    const correctAt = daysAgo(2)
+    const timeline = trackLevelTimeline(track([], row('level1', correctAt)), NOW)
+    expect(timeline).toEqual([ev(correctAt, 'new', 'level1')])
+  })
+
+  it('trusts a level-up over a row left at New by a failed upsert', () => {
+    const levelUp = daysAgo(2)
+    const timeline = trackLevelTimeline(track([ev(levelUp, 'new', 'level1')], row('new', null)), NOW)
+    expect(timeline).toEqual([ev(levelUp, 'new', 'level1')])
   })
 })

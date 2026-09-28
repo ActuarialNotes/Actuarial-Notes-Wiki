@@ -232,3 +232,68 @@ created: 2026-09-27
 - checks_run: line-by-line diff vs Nov 2026 syllabus (format, prerequisites, topics, weights, every objective, every reading line and edition/year/ISBN via Resources/Books frontmatter); word diff Nov 2026 vs Jan 2027 and Sep 2026; wiki-link resolution; syllabus_lint
 - sources_checked: SOA Probability Exam syllabus, November 2026 (7 pp.), REFERENCES pp.5-7, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf; SOA Probability Exam syllabus, January 2027, sha256:252d07fc2b3be499bdee55caaf40f5bd610c2d9593bee2f0428b6614d4e14e2a, https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-p-syllabus.pdf; SOA Probability Exam syllabus, September 2026, sha256:a67f56f7ef60ff673730e28b6b6361168d0889683c78373f29a1ed38c1e5d7e3, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-09-p-syllabus.pdf; SOA Exam P Sample Questions (Aug 2026 rev.), full-text search, sha256:e47245963f7d2c1c4f8cc5ff1baf2090542d923ac47cbeb27d1f657ac51bf5f0, https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-questions.pdf
 - note: Six reading lines corrected by verbatim transcription (F-001..F-006). Topics, weights 23-30/44-50/23-30 and all 22 outcomes match apart from the additions in F-007..F-009. Jan 2027 and Sep 2026 syllabi are word-identical to Nov 2026 except the title month: nothing rolls over. Frontmatter of the six linked books matches the syllabus edition/year/ISBN (Asimow page name aside, F-010); Hogg page says Pearson where the syllabus says Prentice Hall, and Asimow title lacks the hyphen in Problem-Solving: resource-page matters, not filed here. All 84 wiki-links resolve.
+
+## [F-007/R] Multivariate preamble cut to SOA objective sentence
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-007
+- status: resolved
+- note: The preamble now ends at along with associated applications, as Nov 2026 syllabus p.4 does (its casing transcribed too: multivariate distributions, distribution of order statistics, independent random variables). The added continuous joint-density sentence is deleted, so Joint Probability Density Function and Region of Integration are no longer linked from the Exam P syllabus and leave its concept set (4 exam-p questions still tag Joint Probability Density Function; their own sweeps own them).
+
+## [F-008/R] Lognormal removed from the continuous distributions list
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-008
+- status: resolved
+- note: The Continuous Univariate Distributions list now names beta, exponential, gamma, normal and uniform, as syllabus p.3 does. Re-checked: 0 of the Aug 2026 sample questions or solutions mention lognormal. Lognormal Distribution leaves the Exam P concept set (2 exam-p questions still tag it).
+
+## [F-009/R] Outcomes 1a, 1e and 2f transcribed from the syllabus
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-009
+- status: resolved
+- note: Outcomes 1a, 1e and 2f are now SOA wording word for word (pp.2-3), with the vault links kept on SOA words via aliases (set functions, Venn diagrams, axioms of probability, addition, multiplication rules, loss random variable, payment amount random variable). The three added clauses are gone. Set Theory and Inclusion-Exclusion Principle stay concepts only on marked editorial *Key concepts:* lines under 1a and 1e (the vault convention in scripts/syllabus_lib.py), set apart from SOA words: set operations are assigned reading (Leemis 1.3 Sets, Asimow 2.2 Set Theory Survival Kit) and SOA sample solution 1 (solutions PDF p.2, page image) is the three-event inclusion-exclusion formula; 29 and 5 exam-p questions tag them. Transformations of Random Variables is dropped outright: the change-of-variable technique it teaches is excluded from the readings (Ross 5.7, Leemis 7.1 and 7.2 beyond order statistics).
+
+## [F-010/R] Asimow link carries the syllabus citation as its alias
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-010
+- status: resolved
+- note: The Source Material link now reads [[... (Asimow - 2021)|Probability and Statistics with Applications: A Problem-Solving Text (Asimow & Maxwell, Second Edition, 2015)]] - the syllabus p.6 title, authors, edition and year - and quiz/src/lib/sourceMaterial.ts shows the alias as the card label. The page is not renamed: its append-only .verify log and inbound links are keyed to the filename (wontfix recorded on that page F-001).
+
+## [F-011/R] Exam format and Other Resources added from the syllabus
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-011
+- status: resolved
+- note: Intro now carries syllabus p.1: three-hour exam, 30 multiple-choice questions, CBT, five answer choices A-E with some answers rounded, unscored pilot questions, unanswered questions scored incorrect, and the normal table provided under an Exhibit button and not to be brought in. A new ## Other Resources lists p.7 Tables for Exam P, Exam P Sample Questions and Solutions, and Online Sample Exam P with the URLs the syllabus itself hyperlinks (read from the PDF link annotations). Risk and Insurance stays under Prerequisite knowledge.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- status_set: verified
+- confidence: high
+- checks_run: Re-verified after resolving F-007..F-011: intro, prerequisites and Other Resources against syllabus pp.1 and 7 (URLs from the PDF link annotations); every objective of the three callouts diffed against pp.2-4 (1a, 1e, 2f and the multivariate preamble now word for word; Key concepts lines marked editorial); distribution lists against p.3; weights 23-30/44-50/23-30; six reading lines against pp.5-7 unchanged; Nov 2026 vs Jan 2027 text identical bar the title; lognormal and joint-density full-text search of the sample set (0 hits); syllabus_lint and test_syllabus_lib
+- sources_checked: SOA Probability Exam syllabus, November 2026 (7 pp.), pp.1-7 incl. link annotations, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf; SOA Probability Exam syllabus, January 2027, sha256:252d07fc2b3be499bdee55caaf40f5bd610c2d9593bee2f0428b6614d4e14e2a, https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-p-syllabus.pdf; SOA Exam P Sample Questions (Aug 2026 rev.), full-text search, sha256:e47245963f7d2c1c4f8cc5ff1baf2090542d923ac47cbeb27d1f657ac51bf5f0, https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-questions.pdf; SOA Exam P Sample Solutions (Aug 2026 rev.), Q1 solutions PDF p.2 and full-text search, sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135, https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- status_set: verified
+- confidence: high
+- checks_run: Correction to the checks line of the pass just above: the full-text search of the sample set found 0 lognormal hits and 0 joint-density hits in the questions, but 2 joint-density hits in the solutions (Q444, solutions pp.124-125; Q606, p.171), and both are discrete joint probability functions laid out as tables, so F-007 stands. Nov 2026 vs Jan 2027 re-diffed page by page with pymupdf: only the title line differs. All other checks as recorded above.
+- sources_checked: SOA Probability Exam syllabus, November 2026 (7 pp.), pp.1-7 incl. link annotations, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf; SOA Probability Exam syllabus, January 2027, sha256:252d07fc2b3be499bdee55caaf40f5bd610c2d9593bee2f0428b6614d4e14e2a, https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-p-syllabus.pdf; SOA Exam P Sample Questions (Aug 2026 rev.), full-text search, sha256:e47245963f7d2c1c4f8cc5ff1baf2090542d923ac47cbeb27d1f657ac51bf5f0, https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-questions.pdf; SOA Exam P Sample Solutions (Aug 2026 rev.), Q1 solutions PDF p.2 and full-text search, sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135, https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf

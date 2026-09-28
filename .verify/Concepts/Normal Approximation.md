@@ -43,3 +43,31 @@ created: 2026-09-28
 - checks_run: P(S_n<=s) and P(Xbar<=x) standardisations: G&S Thm 9.4/9.6 and SOA Q459 (SD of mean of 64 Poisson(16) = 4/8 = 0.5). Continuity correction k+0.5 and k-0.5: G&S 9.1 printed p.332 (35 to 65 successes, n=100, p=.5 -> -3.1 to 3.1) and SOA Q71 (at most 90 -> below 90.5, z=2.28). Binomial N(np, npq): G&S Thm 9.1. Fund n mu + z sigma sqrt n: SOA Q65 (90th percentile = mean + 1.282 SD); z_0.95 = 1.6449 in SOA table, page uses 1.645. Example 1 recomputed: 100,000 + 1.645(20,000) = 132,900; 332.25 per member; loading 82.25 = 32.9% (agrees). Example 2: mean 50, var 47.5, SD 6.892, z=1.378 -> 1.38, table 0.9162, P=0.0838; uncorrected z=1.451 -> 1.45, table 0.9265, 0.0735 (agree). Example 3: 0.05 sqrt(n) >= 1.645 -> n >= 1,082.41 -> 1,083 (agrees). Links Independent and Identically Distributed, Normal Distribution, Central Limit Theorem, Sample Mean, Moments for Linear Combinations, Binomial Distribution, Poisson Distribution, Probabilities for Linear Combinations, Percentile resolve; LaTeX fine.
 - sources_checked: Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Thm 9.1 (printed p.328, PDF p.336), 1/2 correction worked example in 9.1 (printed p.332, PDF p.340), Thm 9.4 (PDF p.351), Thm 9.6 (PDF p.365), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; SOA Exam P Sample Solutions (Aug 2026 revision), Q65 (PDF p.22), Q71 (PDF p.23), Q459 (PDF p.128), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf; SOA Exam P normal distribution table (rev. 4/29/21), rows z=1.3 and 1.4 and the Values of z for selected Pr(Z<z) row (0.95 -> 1.6449), sha256:5dbd8a242813fe585c3eb085d32617ff14bcaa0517ca547b263e7b03541a8bcb — https://www.soa.org/globalassets/assets/files/edu/2021/p-1-table-rev-4-29-21.pdf; SOA Probability Exam syllabus, November 2026, Topic 3 (Multivariate Random Variables) learning outcomes g-i, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf
 - note: Formulas and all three examples verified. Open minors F-001/F-002 are unsourced side claims, not formulas. The exact binomial 0.0867 in example 2 was checked only by own summation (rank 5: consistent, not a confirmation).
+
+## [F-001/R] Poisson normal approximation now sourced
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-001
+- status: resolved
+- note: Siegrist, The Poisson Distribution > Normal Approximation: if N is Poisson with a large parameter a, N is approximately normal with mean a and standard deviation sqrt(a) (continuity correction advised), and N has the distribution of a sum of n i.i.d. Poisson(a/n) variables — the sum-of-i.i.d.-pieces reading on the page. Text unchanged; the source is added to the pass.
+
+## [F-002/R] Unsourced skew/tail bullet replaced by a sourced rule of thumb
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-002
+- status: resolved
+- note: No source read states the tail-understatement claim (the G&S text never mentions skew), so the bullet was deleted. In its place: how large n must be depends on the summands; for a binomial the rule of thumb is np and n(1-p) both at least 5 (Siegrist, Poisson distribution page, binomial comparison).
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- status_set: verified
+- confidence: medium
+- checks_run: Re-verified after resolving F-001, F-002: CLT statements (G&S Thms 9.1, 9.4, 9.6), Poisson approximation and binomial rule of thumb (Siegrist). Examples recomputed against the SOA table: fund 100,000 + 1.645(20,000) = 132,900; P(N >= 60) = 1 - Phi(1.38) = 1 - 0.9162 = 0.0838, uncorrected 1 - Phi(1.45) = 0.0735, exact binomial 0.0867 (computed); n >= 32.9^2 = 1082.4.
+- sources_checked: Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Thm 9.1 CLT for binomial distributions (PDF p.336), Thm 9.4 (PDF p.351), Thm 9.6 (PDF p.365), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; Siegrist, Random (randomservices.org), The Poisson Process > The Poisson Distribution (normal approximation N(a, a) for large a with continuity correction; infinitely divisible; binomial normal rule of thumb np, n(1-p) >= 5), sha256:cf3d0aacfdb40291bb729d32f6f7692b39e4c4a13a1e09f86ef8826bef61f688 — https://www.randomservices.org/random/poisson/Poisson.html; SOA Exam P normal distribution table (rev. 4/29/21), rows z = 1.3 and 1.4 and the Values of z for selected Pr(Z<z) row (0.95 -> 1.6449), sha256:5dbd8a242813fe585c3eb085d32617ff14bcaa0517ca547b263e7b03541a8bcb — https://www.soa.org/globalassets/assets/files/edu/2021/p-1-table-rev-4-29-21.pdf; SOA, Probability Exam (Exam P) Syllabus, November 2026, Topic 3 Multivariate Random Variables, learning objective and outcomes a)-i), PDF p.4, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf

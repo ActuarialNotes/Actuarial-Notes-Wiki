@@ -28,3 +28,22 @@ created: 2026-09-28
 - checks_run: CV = sigma/mu = sqrt(Var X)/E[X] vs P-21-05 pooling section and SOA sample solution 252; dimensionless and relative-dispersion bullets follow from the definition; syllabus LO d. Example recomputed before reading the answer: 100/500 = 0.20, 300/2000 = 0.15, A more variable, agrees. Links and embed resolve; LaTeX well formed.
 - sources_checked: Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), pooling section (CV = SD/mean; sqrt(n) sigma less than n sigma) and benefit-limit section (premium based primarily on expected claim payments), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf; SOA Exam P Sample Solutions (Aug 2026 revision), Q252 (PDF p.74), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf; SOA Probability Exam syllabus, November 2026, univariate random variables learning objectives c) (expected values incl. moments, mode, median, percentiles) and d) (variance, standard deviation, coefficient of variation), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf
 - note: Definition and example confirmed; one minor open (unsourced E[X] > 0 restriction).
+
+## [F-001/R] Positive-mean restriction replaced by the sourced use
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-001
+- status: resolved
+- note: Bullet now reads: CV requires E[X] != 0 (it divides by the mean), and it is used to compare the variability of positive distributions, such as losses, with different expected values, which is what P-21-05 (PDF p.5) says: the coefficient of variation is useful for comparing variability between positive distributions with different expected values. The unsourced only-when-E[X] > 0 claim is gone.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- status_set: verified
+- confidence: high
+- checks_run: Re-verified after resolving F-001: CV = sigma/mu vs P-21-05 and SOA solution 252; comparison of positive distributions with different means vs P-21-05 p.5; syllabus LO d. Example recomputed: 100/500 = 0.20, 300/2000 = 0.15, A more variable (agrees). Links resolve; LaTeX well formed.
+- sources_checked: Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), pooling section (CV = ratio of SD to mean; useful for comparing variability between positive distributions with different expected values) (PDF pp.4-5), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf; SOA Exam P Sample Solutions (Aug 2026 rev.), Q252 (solutions PDF p.74), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf; SOA Probability Exam syllabus, November 2026, Topic 2 (univariate random variables) learning outcomes c), d), e) (PDF p.3), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf

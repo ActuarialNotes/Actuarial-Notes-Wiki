@@ -43,3 +43,31 @@ created: 2026-09-28
 - checks_run: PMF conditions f>=0, sum=1 (G&S Def 1.2); CDF F(x)=P(X<=x) as sum (Pishro-Nik 3.2.1); identification means: binomial np (Exam C mq; G&S p.233), hypergeometric nK/N (Pishro-Nik 3.2.5), geometric trials 1/p (G&S p.262), NB trials r/p (Pishro-Nik 3.2.2), Poisson lambda (Exam C), uniform (n+1)/2 only on 1..n (G&S Ex 6.2.11) -> F-002; binomial-hypergeometric agreement for large population (G&S p.193); ratio rule: binomial 1-q<1, Poisson 1 (Exam C), NB >1 only for failures form -> F-001; example recomputed before reading: 10c=1, c=0.1, F(3)=0.6 (agrees); all six wiki-links resolve; figure embed exists; distribution list matches the Nov 2026 syllabus Topic 2
 - sources_checked: Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Def. 1.2 p.19 (PDF p.27) distribution function m >= 0, sum = 1; 5.1 geometric p.185 (PDF p.193), negative binomial p.187 (PDF p.195), hypergeometric and its binomial limit p.193 (PDF p.201); 6.1 E(Sn)=np p.233 (PDF p.241); 6.2 E(T)=1/p p.262 (PDF p.270), Exercise 11 uniform on 1..n p.264 (PDF p.272), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; SOA, Tables for Exam C (Fall 2009), Appendix B.2 (a,b,0) class: B.2.1.1 Poisson (PDF p.14); B.2.1.2 geometric, B.2.1.3 binomial, B.2.1.4 negative binomial (PDF p.15), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf; H. Pishro-Nik, Introduction to Probability, Statistics, and Random Processes (probabilitycourse.com), fetched 2026-09-27, 3.2.1 CDF definition F_X(x)=P(X <= x), sha256:af20b8d628299ce3fe01503e29617951bd45f4292ce46980c319cd3eede2035b — https://www.probabilitycourse.com/chapter3/3_2_1_cdf.php; 3.2.2 Pascal EX=m/p, sha256:cef561084124ba2a0ab25d131a56f9647e8f53a20ab41be7c4480f11fb27c5bf — https://www.probabilitycourse.com/chapter3/3_2_2_expectation.php; 3.2.5 hypergeometric EX=kb/(b+r), sha256:71f926e8d746785af219018a406d4b28b9aac9e283a7c501119fc6c94584f86e — https://www.probabilitycourse.com/chapter3/3_2_5_solved3_2.php; SOA Probability Exam syllabus, November 2026, Topic 2 Univariate Random Variables (binomial, geometric, hypergeometric, negative binomial, Poisson, uniform), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf
 - note: Formulas agree with sources; two major findings open on the identification list (NB ratio rule under the page own parameterisation; missing 1..n condition on the uniform mean).
+
+## [F-001/R] Variance-to-mean rule restricted to the failures-count negative binomial
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-001
+- status: resolved
+- note: Bullet now says the ratio exceeds 1 for the negative binomial counted as failures before the r-th success (Var/E = 1/p) and that the trials count defined on this page has ratio (1-p)/p, below 1 whenever p > 1/2. Checked against SOA Tables for Exam C (page image, PDF p.15): B.2.1.4 E[N] = r beta, Var[N] = r beta(1+beta), so Var/E = 1+beta = 1/p with p = 1/(1+beta); B.2.1.3 binomial Var/E = 1-q < 1; B.2.1.1 Poisson E = Var = lambda (PDF p.14). Trials form X = N + r (Grinstead & Snell 5.1 pp.186-187, PDF pp.194-195): E = r/p, same variance, ratio (1-p)/p; r=3, p=0.75 gives 1/3.
+
+## [F-002/R] Discrete uniform mean tied to the support 1..n
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-002
+- status: resolved
+- note: Line now reads: one of the integers 1,...,n, each equally likely, E[X] = (n+1)/2, with (a+b)/2 on a,...,b. Grinstead & Snell 6.2 Exercise 11 (p.264, PDF p.272): a number chosen at random from the integers 1,...,n has E(X) = (n+1)/2. On a,...,b (n = b-a+1 values) the shift by a-1 gives (n+1)/2 + a - 1 = (a+b)/2, matching the linked page example 20..29 -> 24.5.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- status_set: verified
+- confidence: medium
+- checks_run: Re-verified after resolving F-001 and F-002: variance-to-mean ratios recomputed from the Exam C tables (binomial 1-q, Poisson 1, negative binomial failures 1+beta = 1/p) and for the trials form (1-p)/p; discrete uniform mean (n+1)/2 on 1..n per G&S Ex. 11 and (a+b)/2 by shift; example c = 1/10, P(X <= 3) = 0.6 recomputed. Hypergeometric mean nK/N and the CDF definition not re-read this session (carried from the prior pass), hence medium.
+- sources_checked: Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), 5.1 geometric p.185 (PDF p.193), negative binomial pp.186-187 (PDF pp.194-195), hypergeometric p.193 (PDF p.201); 6.2 Exercise 11 p.264 (PDF p.272), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; SOA, Tables for Exam C (Fall 2009), Appendix B.2 (a,b,0) class: B.2.1.1 Poisson (PDF p.14); B.2.1.2 geometric, B.2.1.3 binomial, B.2.1.4 negative binomial (PDF p.15, page image), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf

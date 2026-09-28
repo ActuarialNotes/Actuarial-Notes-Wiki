@@ -4,22 +4,21 @@ verification:
   confidence: medium
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:cd74be3dd93052c420b80573bf128ecae4c9e7175ce3a6387de871e00bfbf3bb
+  content_hash: sha256:875aa7e4fde88147957eac59ce8fa7ca9ac6d86d5e17424b694959d6c8e53cf8
   sources:
-    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf — §VI Deductibles PDF p.7"
+    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf — §VI Deductibles: definition, 500/2000/1500 example and reasons for deductibles, PDF p.7"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 2016), Ch.11 Deductibles: flat dollar and percentage deductibles, 5% of 500,000 = 25,000, PDF p.211, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "SOA, Tables for Exam C (Fall 2009), exponential entry E[X^x] = theta(1 - e^(-x/theta)), PDF p.11, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
     - "SOA Probability Exam syllabus, November 2026, objective \"Calculate the amount that an insurance company pays to a policyholder for a claim given policy information, including deductibles, coinsurance percentages, and benefit limits, as well as other factors, such as inflation\", PDF p.3, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Deductible.md
 ---
 
 A **Deductible** is the initial amount of a loss that the policyholder must pay before insurance coverage begins.
-- If the loss $X$ is less than or equal to the deductible $d$, the insurer pays nothing
-- There are two types of deductibles:
-  - An **ordinary deductible** eliminates small claims entirely
-  - A **franchise deductible** pays the full loss $X$ once it exceeds $d$
-- Deductibles reduce moral hazard and lower premiums by transferring some risk back to the insured
+- If the loss $X$ is less than or equal to the deductible $d$, the insurer pays nothing; above $d$ it pays the excess $X - d$
+- Deductibles save the expense of processing small claims, lower the premium, and give the policyholder an economic incentive to prevent losses
+- On Exam 5, a deductible is stated either as a flat dollar amount or as a percentage of the coverage amount: a 5% deductible on a home insured for \$500,000 is equivalent to a flat \$25,000 deductible
 
 > $$Y = (X - d)_+$$
 

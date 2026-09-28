@@ -28,3 +28,46 @@ created: 2026-09-28
 - checks_run: Formula Y = min(c(X-d)+, u) with u the maximum payment vs P-21-05 pp.8-9 (12,500 maximum on a claim payment). Retained share and deductible purpose (small-claim expense, incentive to prevent losses) vs P-21-05 p.7. Inflation bullet vs P-21-05 p.10 (fixed deductible: payments +54% vs losses +46%) and p.11 (fixed maximum: payments +34%). Example 1 recomputed first: 0.8 x 5500 = 4400, 0.8 x 6100 = 4880 (+10.9%), retained 1600 -> 1720 (+7.5%); 0.8 x 11500 = 9200 and 0.8 x 12700 = 10160 both capped at 8000, retained 4000 -> 5200 (+30%) - agrees. Example 2 recomputed: E[(X-250)+] = 1000 - 1000(1 - e^-0.25) = 778.80 (C tables E[X^x]); retained 221.20 = E[X^250]; F(250) = 0.2212 - agrees. All wiki-links resolve.
 - sources_checked: Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf — §II PDF pp.2-3 (policyholder, beneficiary); §VI deductibles PDF p.7, benefit limits and maximum claim payment PDF pp.8-9; §VII inflation PDF pp.10-11; SOA, Tables for Exam C (Fall 2009), exponential entry E[X^x] = theta(1 - e^(-x/theta)), PDF p.11, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf; SOA Probability Exam syllabus, November 2026, objective "Calculate the amount that an insurance company pays to a policyholder for a claim given policy information, including deductibles, coinsurance percentages, and benefit limits, as well as other factors, such as inflation", PDF p.3, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf
 - note: Verified against P-21-05 and the SOA tables for its Exam P content; one open minor for an unsourced sentence outside the Exam P scope.
+
+## [F-002] Unsourced illustrations in the policyholder / insured / claimant bullet
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- severity: minor
+- status: open
+- locus: bullet 4
+- claim: A parents auto policy covers a child who drives it. A liability claim is brought by a third party and paid on the policyholders behalf. A life policys owner, insured life and beneficiary can be three separate people.
+- evidence: P-21-05 PDF p.2 says the insurer pays the policyholder or his designated beneficiary; Werner & Modlin PDF p.14 says the claimant can be an insured or a third party alleging injuries or damages covered by the policy. Neither gives the auto or life illustrations, and no other source read supports them.
+- source_rank: 1
+- proposed_action: Restate the bullet from P-21-05 and Werner & Modlin.
+- applied: true
+- fingerprint: 57d271248929
+
+## [F-001/R] Mutual / creditor / solvency sentence deleted
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-001
+- status: resolved
+- note: No source for the sentence on this Exam P page was found this session, so the last bullet was deleted. The deductible sentence in bullet 2 was also restated to the three reasons P-21-05 PDF p.7 gives (saves processing small claims, premium savings, economic incentive to prevent losses).
+
+## [F-002/R] Bullet restated from P-21-05 and Werner & Modlin
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-002
+- status: resolved
+- note: Bullet now reads: the insurer pays the policyholder or a designated beneficiary (P-21-05 PDF p.2), and the claimant can be an insured or a third party alleging injuries or damages the policy covers (Werner & Modlin PDF p.14), so the person paid need not be the policyholder.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- status_set: verified
+- confidence: medium
+- checks_run: Re-verified after resolving F-001, F-002: bullets traced to P-21-05 and Werner. Example 1 recomputed: 0.8 x 5500 = 4400, 0.8 x 6100 = 4880 (+10.9%), retained 1600 -> 1720 (+7.5%); 0.8 x 11500 = 9200 and 0.8 x 12700 = 10160 both capped at 8000, retained 4000 -> 5200 (+30%). Example 2: 1000 e^-0.25 = 778.80; 1000 - 778.80 = 221.20 = 1000(1 - e^-0.25) = E[X ^ 250]; P(X <= 250) = 22.1%. Medium: original worked examples.
+- sources_checked: Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf — §II policyholder or designated beneficiary PDF p.2; §VI reasons for deductibles PDF p.7, benefit limits and maximum claim payment PDF pp.8-9; §VII inflation PDF pp.10-11; Werner & Modlin, Basic Ratemaking (CAS, 2016), Ch.1 claim and claimant PDF p.14, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; SOA, Tables for Exam C (Fall 2009), exponential entry E[X^x] = theta(1 - e^(-x/theta)), PDF p.11, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf; SOA Probability Exam syllabus, November 2026, objective "Calculate the amount that an insurance company pays to a policyholder for a claim given policy information, including deductibles, coinsurance percentages, and benefit limits, as well as other factors, such as inflation", PDF p.3, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf

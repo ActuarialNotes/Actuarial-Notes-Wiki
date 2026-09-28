@@ -1,14 +1,14 @@
 ---
 verification:
   status: verified
-  confidence: medium
-  last_checked: 2026-09-27
+  confidence: high
+  last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:74489c2c09cd2eb652145e089479e302663547a91a7d93e324cfcbf5adc04c80
+  content_hash: sha256:f56a785366ae7c1d0b9670139fea89f4772dfc6ad6ef2a417c169dbab0a55245
   sources:
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 Bayes Probabilities pp.145-146 (PDF pp.153-154) eqs. (4.2)-(4.3) and Bayes formula; §4.1 Independent Events p.139 (PDF p.147), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "SOA, Probability Exam (Exam P) syllabus, November 2026, p.1 learning outcome 1g, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-  open_findings: 2
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 Def. 4.1 (p.139, PDF p.147), Bayes formula and eqs. (4.2)-(4.3) (pp.145-146, PDF pp.153-154), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability, learning outcome 1g (PDF p.2), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Bayes Theorem.md
 ---
@@ -21,8 +21,8 @@ verification:
 > $$= \frac{P(E \mid H)\,P(H)}{\displaystyle\sum_{i} P(E \mid H_i)\,P(H_i)}$$
 
 - $H$ is the hypothesis and $E$ is the observed evidence
-- If $A$ and $B$ are independent, then $P(A \mid B) = P(A)$
-- Bayes' Theorem is central to [[Credibility Theory]] and to [[Bayesian Credibility]], where the prior is the class assumption and the posterior is the experience-updated estimate
+- If $H$ and $E$ are independent (with $P(E) > 0$), observing $E$ leaves the prior unchanged: $P(H \mid E) = P(H)$
+- See also [[Bayesian Credibility]]
 
 ![[Media/Figures/Bayes_Theorem.svg|340]]
 

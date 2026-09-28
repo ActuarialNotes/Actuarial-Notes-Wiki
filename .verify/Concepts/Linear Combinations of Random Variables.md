@@ -43,3 +43,31 @@ created: 2026-09-28
 - checks_run: E[L] linear with no independence: G&S Thm 6.2/6.10. Var(L) with 2 sum c_i c_j Cov cross terms: G&S Ex. 6.3.17(c) V(X+Y)=V(X)+V(Y)+2cov(X,Y) with Thm 6.7 V(cX)=c^2 V(X); SOA Q80 bilinear expansion Cov(X+Y,X+1.2Y)=Var(X)+1.2Var(Y)+2.2Cov(X,Y); SOA Q301 Var(total)=5+8+2(3)=19. Independent case: G&S Thm 6.8. Exact normality of combinations of independent normals: G&S Example 7.5. Xbar mean mu, variance sigma^2/n: G&S Thm 6.9. Example 1 recomputed before reading: E=2(300)+3(500)=2,100, Var=4(2,500)+9(10,000)=100,000 (agrees). Example 2: 9+16-2(6)=13 (agrees). Example 3: E=400, Var=10,000/25=400, SD=20 (agrees). Links Covariance, Independent Random Variables, Moments for Linear Combinations, Probabilities for Linear Combinations, Central Limit Theorem resolve; figure embed exists; LaTeX balanced.
 - sources_checked: Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Thm 6.2 (printed p.231, PDF p.239), Thms 6.7-6.9 (printed pp.259-260, PDF pp.267-268), Ex. 6.2.23 (PDF p.275), Ex. 6.3.17 (printed p.281, PDF p.289), Example 7.5 (printed p.294, PDF p.302), Thms 9.4 and 9.6 (PDF pp.351, 365), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; SOA Exam P Sample Solutions (Aug 2026 revision), Q80 (PDF p.25), Q301 (PDF p.84), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf; SOA Probability Exam syllabus, November 2026, Topic 3 (Multivariate Random Variables) learning outcomes g-i, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf
 - note: Displayed formulas and all three examples check out against sources. Open major F-001 misstates the condition attached to the variance formula (covariance terms vanish "only" for independent variables), hence low confidence; open minor F-002 overbroad CLT sentence.
+
+## [F-001/R] Covariance terms vanish for uncorrelated variables; converse caveat stated
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-001
+- status: resolved
+- note: Bullet now says the variance formula holds in general, the covariance terms drop out whenever the X_i are pairwise uncorrelated, independent variables are always uncorrelated, and zero covariance does not by itself imply independence — G&S Ex. 6.2.23 (PDF p.275) and Ex. 6.3.17(b) (PDF p.289: the converse is not always true); the general formula with covariance terms is G&S Ex. 6.3.17(c) and SOA Q301 (Var(Total) = 5 + 8 + 2(3) = 19, PDF pp.83-84).
+
+## [F-002/R] CLT sentence restricted to i.i.d. sums and means with finite variance
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-002
+- status: resolved
+- note: Now reads: for n i.i.d. variables with mean mu and finite variance sigma^2, the mean has variance sigma^2/n, and for large n the CLT makes the sum and the mean approximately normal, whatever their common distribution — the setting of G&S Thm 9.4 (PDF p.351) and Thm 9.6 (PDF p.365) and of syllabus outcome 3i. The claim about a general L = sum c_i X_i was removed.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- status_set: verified
+- confidence: medium
+- checks_run: Re-verified after resolving F-001, F-002: linearity of expectation and the variance formula with covariance terms (G&S Ex. 6.3.17(c); Q301); c^2 scaling (Thm 6.7); independent implies uncorrelated, converse false (Ex. 6.2.23, 6.3.17(b)); sums of independent normals (Example 7.5); CLT for i.i.d. sums (Thms 9.4, 9.6). Examples recomputed: E[L] = 2100, Var(L) = 100,000; Var(X - Y) = 13; E = 400, SD = 20.
+- sources_checked: Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Thm 6.7 (V(cX) = c^2 V(X)), Thm 6.8 (V(X+Y) = V(X)+V(Y), independent), Ex. 6.2.23 (PDF p.275), Ex. 6.3.17 (PDF p.289), Example 7.5 (sum of independent normals is normal, PDF p.302), Thms 9.4 and 9.6 (PDF pp.351, 365), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; SOA Exam P Sample Solutions (Aug 2026 revision), Q301 (variance of a sum with a covariance term, PDF pp.83-84), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf; SOA, Probability Exam (Exam P) Syllabus, November 2026, Topic 3 Multivariate Random Variables, learning objective and outcomes a)-i), PDF p.4, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf

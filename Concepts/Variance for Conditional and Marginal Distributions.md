@@ -4,14 +4,12 @@ verification:
   confidence: medium
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fe3616eba22bed76dcbc540d8f3273abdcc548e405a9a381c84013d3b03fff96
+  content_hash: sha256:4cc32fbb650974e80f2045d58815ab8d30475967115ab17d65225d37ca48f9b4
   sources:
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §5.1.5 Conditional Expectation (Revisited) and Conditional Variance, eq. 5.7 (law of iterated expectations) and eq. 5.10 (law of total variance), sha256:f2c2e885d3519ab5b2d86ade4f54957dbc11842dd5af70988c43bd5a2e1da5d8 — https://www.probabilitycourse.com/chapter5/5_1_5_conditional_expectation.php"
-    - "Siegrist, Random (randomservices.org), Expected Value > Conditional Expected Value (E[E(Y|X)]=E(Y); var(Y|X)=E(Y^2|X)-[E(Y|X)]^2; var(Y)=E[var(Y|X)]+var[E(Y|X)]; uniform conditional variance l^2/12), sha256:23e328f9ee55e32522905aba62841f2920eef0d32fb68d7fbb1f4e0b0eaf62f6 — https://www.randomservices.org/random/expect/Conditional.html"
-    - "SOA Exam P Sample Solutions (Aug 2026 revision), Q388 solution (Var(X) = Var(E(X|N)) + E(Var(X|N)) = 12 + 16 = 28), PDF p.108, sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §6.1 Theorem 6.5 (E(X)=sum_j E(X|F_j)P(F_j)) p.239 (PDF p.247), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "SOA Probability Exam syllabus, November 2026, Topic 3 Multivariate Random Variables, learning outcomes 3a-3f, PDF p.4, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-  open_findings: 2
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §5.1.5 Conditional Expectation (Revisited) and Conditional Variance, law of iterated expectations and eq. 5.10 law of total variance, eq. 5.11 Var(X) >= E[Var(X|Y)], web page as fetched 2026-09-28, sha256:6adb223e9466dcfab4770df7a7b9ea167d6143e62706037baba712126a89f3cd — https://www.probabilitycourse.com/chapter5/5_1_5_conditional_expectation.php"
+    - "Siegrist, Random (randomservices.org), Expected Value > Conditional Expected Value (uniform conditional variance l^2/12), sha256:23e328f9ee55e32522905aba62841f2920eef0d32fb68d7fbb1f4e0b0eaf62f6 — https://www.randomservices.org/random/expect/Conditional.html"
+    - "SOA Exam P Sample Solutions (Aug 2026 revision), Q388 (Var(X) = Var(E(X|N)) + E(Var(X|N)) = 12 + 16 = 28, PDF p.108), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Variance for Conditional and Marginal Distributions.md
 ---
@@ -60,7 +58,7 @@ The **Variance for Conditional and Marginal Distributions** measures spread at t
 > >               &= 0.25
 > > \end{align*}
 > > $$
-> > $\text{Var}(N) > E[N]$: heterogeneous risk parameters make the portfolio's claim counts **overdispersed** relative to a single Poisson, which is why insurers do not price every driver at the portfolio mean.
+> > $\text{Var}(N) > E[N]$: heterogeneous risk parameters make the portfolio's claim counts **overdispersed** relative to a single Poisson.
 
 > [!example]- Both Terms Matter {Example}
 > A loss $X$ is uniform on $(0, Y)$, where $Y$ takes the values 10 and 20 with equal probability. Find $\text{Var}(X)$.
@@ -84,4 +82,4 @@ The **Variance for Conditional and Marginal Distributions** measures spread at t
 > > \end{align*}
 > > $$
 > > $$\text{Var}(X) = 20.83 + 6.25 \approx 27.08$$
-> > Reporting only 6.25 (the between-group term) would understate the spread by a factor of four.
+> > Reporting only 6.25 (the between-group term) would understate the spread by a factor of more than four ($27.08/6.25 \approx 4.3$).

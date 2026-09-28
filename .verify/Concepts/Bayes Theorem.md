@@ -66,3 +66,31 @@ created: 2026-09-27
 - confidence: medium
 - checks_run: P(H|E) = P(E|H)P(H)/P(E) and the partition form match G&S Bayes formula P(H_i|E) = P(H_i)P(E|H_i)/Σ_k P(H_k)P(E|H_k) (PDF p.154; partition = one and only one H_k occurs); denominator = P(E) by G&S eq. (4.3); independence bullet correct per G&S PDF p.147 (notation issue F-002); example recomputed first: P(C) = 0.40(0.20) + 0.10(0.80) = 0.16, P(H|C) = 0.08/0.16 = 0.50 = stated; matches syllabus outcome 1g; links (The Law of Total Probability, Credibility Theory, Bayesian Credibility) and Media/Figures/Bayes_Theorem.svg resolve; typo F-001 fixed; credibility sentence unchecked (F-003)
 - sources_checked: Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 Bayes Probabilities pp.145-146 (PDF pp.153-154) eqs. (4.2)-(4.3) and Bayes formula; §4.1 Independent Events p.139 (PDF p.147), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; SOA, Probability Exam (Exam P) syllabus, November 2026, p.1 learning outcome 1g, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf
+
+## [F-002/R] Independence bullet restated in the page notation
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-002
+- status: resolved
+- note: Bullet now reads: if H and E are independent (with P(E) > 0), observing E leaves the prior unchanged, P(H | E) = P(H). G&S Def. 4.1 (p.139, PDF p.147).
+
+## [F-003/R] Unsourced credibility sentence removed
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-003
+- status: resolved
+- note: Deleted the sentence on Bayes’ Theorem in Credibility Theory / Bayesian Credibility (prior as class assumption): no credibility reading was read this session to check it. A plain "See also [[Bayesian Credibility]]" link remains, with no claim attached.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- status_set: verified
+- confidence: high
+- checks_run: Re-verified after resolving F-002, F-003: prior P(H) to posterior P(H | E) given evidence E, with hypotheses H1..Hm pairwise disjoint covering the sample space = G&S Bayes formula (p.145); denominator = eq. (4.3); formula P(H | E) = P(E | H) P(H) / Σ P(E | Hi) P(Hi) = G&S Bayes formula; independence bullet = Def. 4.1; example recomputed P(C) = 0.40(0.20) + 0.10(0.80) = 0.16, P(H | C) = 0.08 / 0.16 = 0.50.
+- sources_checked: Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 Def. 4.1 (p.139, PDF p.147), Bayes formula and eqs. (4.2)-(4.3) (pp.145-146, PDF pp.153-154), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability, learning outcome 1g (PDF p.2), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf

@@ -4,26 +4,27 @@ verification:
   confidence: medium
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b13b93188e84b1b8d0dfe6f940111ec3ea16794ac0606f396e70dc52ccfbde81
+  content_hash: sha256:f92f1fd51cad706fad8beb9f379b5d038e2ed6faaa0c3864f43febd77836b8a1
   sources:
     - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf — §II claim payment PDF p.2; §III frequency and severity PDF p.3; §VI losses vs claim payments PDF p.7"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 2016), Ch.1 claim, claimant, accident date PDF p.14; loss, losses and claims used interchangeably PDF p.15, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §5.1.5 (random sum Y = X1+...+XN: EY = E[X]E[N], Var(Y) = EN Var(X) + (EX)^2 Var(N)), fetched 2026-09-28, sha256:b02361ccef1565d4250b62e694cf7e84e96005add6eb5bb45dff9f51d72d12be — https://www.probabilitycourse.com/chapter5/5_1_5_conditional_expectation.php"
     - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §11.1.3 Splitting a Poisson process (N1(t) Poisson with rate lambda p), fetched 2026-09-28, sha256:2b83b99ec8feade5f4778629c16b496516b0d40ae3e284456afcf1cc6a3a4506 — https://www.probabilitycourse.com/chapter11/11_1_3_merging_and_splitting_poisson_processes.php"
     - "SOA, Tables for Exam C (Fall 2009), exponential entry E[X^x] = theta(1 - e^(-x/theta)), PDF p.11, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS study note, 451 pp.), claim life cycle PDF p.14, reopened claims and IBNR PDF p.20, claims-made accident date PDF p.44, reported claim count triangle PDF p.66, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
-  open_findings: 2
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS study note), claim life cycle PDF p.14, reopened claims and IBNR PDF p.20, reported claim count triangle PDF p.66, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Claim.md
 ---
 
-**A claim** is a demand for payment under an [[Insurance Policy|insurance policy]] after an insured event. It is made either by a [[Policyholder|policyholder]] against its own [[Insurer|insurer]] (first party) or by someone the policyholder harmed (third party). In loss models, the claim is what [[Frequency|frequency]] counts ($N$) and what [[Severity|severity]] measures ($X$).
+**A claim** is a demand to an [[Insurer|insurer]] for indemnification under an [[Insurance Policy|insurance policy]] after an event the policy covers. The person making it, the claimant, can be the [[Policyholder|insured]], another individual the policy provides for, or a third party alleging injuries or damages that the policy covers. In loss models, the claim is what [[Frequency|frequency]] counts ($N$) and what [[Severity|severity]] measures ($X$).
 
 > $$S = X_1 + X_2 + \cdots + X_N$$
 
 > $$E[S] = E[N]\,E[X]$$
 
 - $S$ is aggregate claims for a period, $N$ the claim count, and $X_i$ the claim sizes. The $X_i$ are i.i.d. and independent of $N$. This is the collective risk model of the [[Aggregate Loss Model]]. With Poisson $N$ it becomes the [[Compound Poisson Process]], where claims arrive at random and each has a random size.
-- **Claim, loss, occurrence.** The *occurrence* is the event. It can produce several *claims*, one per claimant or per coverage, and the *loss* is the dollar amount. Per-occurrence limits, the [[Occurrence Coverage|occurrence]] versus [[Claims Made Coverage|claims-made]] trigger, and the definition of a claim count all depend on which of the three is being counted.
+- **Claim, loss, accident date.** The claim is the demand, and the *loss* is the amount of compensation paid or payable to the claimant under the policy. The date of the event that caused the loss is the accident date, also called the date of loss or occurrence date. Actuaries occasionally use *losses* and *claims* interchangeably, so check which one a source means.
 - **Per loss or per payment.** Under a [[Deductible|deductible]], a loss doesn't always produce a payment. The payment per loss $Y^L$ includes zeros. The payment per payment $Y^P$ is conditional on $X > d$, and $E[Y^L] = P(X > d)\,E[Y^P]$. The number of payments is a thinned count: if losses are Poisson with rate $\lambda$, payments are Poisson with rate $\lambda\,P(X > d)$ ([[Poisson Thinning]]).
 - **The claim's life.** A claim is reported, given a [[Case Reserves|case reserve]], paid in one or more instalments and closed. Some close without payment and some reopen. Claims that have occurred but not yet been reported are [[IBNR]]. Counts at each stage feed the [[Claim Count Triangle|claim count triangles]] used in reserving.
 
@@ -68,4 +69,4 @@ verification:
 > >
 > > $$P(\text{no large claim}) = e^{-4} = 0.0183$$
 > >
-> > A year with no large claim happens less than $2\%$ of the time, so an analyst should expect several large claims every year. The compound variance uses $E[X^2]$ rather than $\text{Var}(X)$, and the large claims drive most of it.
+> > A year with no large claim happens less than $2\%$ of the time, so an analyst should expect several large claims every year. The compound variance uses $E[X^2]$ rather than $\text{Var}(X)$.

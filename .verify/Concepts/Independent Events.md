@@ -42,3 +42,31 @@ created: 2026-09-27
 - confidence: medium
 - checks_run: Two-event definition P(A and B) = P(A)P(B): G&S Thm 4.1; applied as a product in SOA Q10 p.5 and Q351 p.98. Symmetry: G&S p.140 (each equation implies the other). Mutual independence over every subset, pairs not sufficient: G&S Def. 4.2 and the remark after it. Example recomputed first: 0.4*0.3 = 0.12 = P(both), independent, agrees. Open minors F-001 (missing P > 0 on the conditional form) and F-002 (formula box placement); no formula wrong. Figure exists.
 - sources_checked: Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 p.134 (PDF p.142), Def. 4.1 p.139 (PDF p.147), Thm 4.1 p.140 (PDF p.148), Def. 4.2 and remarks pp.140-141 (PDF pp.148-149), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; SOA Exam P Sample Solutions (Aug 2026 revision), Q10 p.5 and Q351 p.98, sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf
+
+## [F-001/R] Conditional form stated for positive probabilities; product rule leads
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-001
+- status: resolved
+- note: The product rule P(A ∩ B) = P(A) P(B) now follows the opening sentence as the defining condition (G&S Thm 4.1, p.140, PDF p.148: independent if and only if the product holds). The conditional form P(A | B) = P(A), P(B | A) = P(B) is now stated for P(A) > 0 and P(B) > 0, with G&S Def. 4.1 case 2 (p.139, PDF p.147): an event of probability 0 is independent of every event.
+
+## [F-002/R] Mutual-independence bullet now introduces the every-subset product
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-002
+- status: resolved
+- note: The two-event formula box moved above the bullets; the mutual-independence bullet now ends on P(A_{i1} ∩ ... ∩ A_{im}) = P(A_{i1}) ... P(A_{im}) for every subset, per G&S Def. 4.2 (p.141, PDF p.149).
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- status_set: verified
+- confidence: high
+- checks_run: Re-verified after resolving F-001, F-002: product rule iff independence = G&S Thm 4.1; conditional form for positive probabilities and probability-0 case = Def. 4.1 (symmetric in the two events); every-subset product for mutual independence = Def. 4.2; example recomputed 0.4 × 0.3 = 0.12 = P(both), so the events are independent.
+- sources_checked: Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), §4.1 Def. 4.1 (p.139, PDF p.147), Thm 4.1 (p.140, PDF p.148), Def. 4.2 (p.141, PDF p.149), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; SOA, Probability Exam (Exam P) syllabus, November 2026, Topic 1 General Probability, learning outcome 1a (PDF p.2), sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf

@@ -4,14 +4,11 @@ verification:
   confidence: medium
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:55b84c5e948460833cd7df09efa0e8b0da1de5d77e5b75a9e24644a3280b0814
+  content_hash: sha256:880b9da4ffce714fa01f43a391c765c40023cb16f9c061e493cb932bac0fc1d5
   sources:
-    - "SOA, Tables for Exam C (Fall 2009), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf; A.6.1.2 beta (a, b, theta), printed p.8 (PDF p.13), read with theta = 1"
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Chapter 4 Beta Density p.168 (PDF p.176), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "NIST/SEMATECH e-Handbook of Statistical Methods, 1.3.6.6.17 Beta Distribution (standard beta pdf, mean, standard deviation, skewness), fetched 2026-09-28, sha256:eaab2714d3753b95f94be3402dcc443911e5a19a90ef34aeddb05eb11c0165b0 — https://www.itl.nist.gov/div898/handbook/eda/section3/eda366h.htm"
-    - "SOA, Exam P Sample Solutions (Aug 2026 revision), Q565 (PDF p.157), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
-    - "Kyle Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), 6.6 Order Statistics, The Uniform Distribution, fetched 2026-09-28, sha256:19ff485c600d4294e888c1b3d05ff7eb9196449f958d3325fd72b416aca56d63 — https://www.randomservices.org/random/sample/OrderStatistics.html"
-  open_findings: 1
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), 4 Beta Density B(alpha,beta,x) = x^(alpha-1)(1-x)^(beta-1)/B(alpha,beta) on [0,1], alpha = beta = 1 is the uniform, p.168 (PDF p.176), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "SOA, Tables for Exam C (Fall 2009), A.6.1.2 beta (a, b, theta), printed p.8 (PDF p.13), read with theta = 1, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Beta.md
 ---
@@ -64,7 +61,7 @@ The **Beta Distribution** $X \sim \text{Beta}(\alpha, \beta)$ is a continuous di
 > >            &\approx 0.181
 > > \end{align*}
 > > $$
-> > About an 18% chance the loss ratio exceeds 80%. Any Exam P beta question will have integer parameters for exactly this reason.
+> > About an 18% chance the loss ratio exceeds 80%.
 
 > [!example]- Beta as the Distribution of a Uniform Order Statistic {Example}
 > Four claim-settlement delays are i.i.d. $\text{Uniform}(0,1)$ years. Find the expected value of the second-smallest delay.

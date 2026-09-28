@@ -1,15 +1,15 @@
 ---
 verification:
   status: verified
-  confidence: low
+  confidence: medium
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:d1f62d6818bb0a400f358a69b6d0a5b92554590659d24f1c5154e128bb475d87
+  content_hash: sha256:6ddebcf35dbe23a4eef37f756c5aafab88acbf9de6045aefa72023f0fa119b2d
   sources:
-    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Thm 6.2 (printed p.231, PDF p.239), Thms 6.7-6.9 (printed pp.259-260, PDF pp.267-268), Ex. 6.2.23 (PDF p.275), Ex. 6.3.17 (printed p.281, PDF p.289), Example 7.5 (printed p.294, PDF p.302), Thms 9.4 and 9.6 (PDF pp.351, 365), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
-    - "SOA Exam P Sample Solutions (Aug 2026 revision), Q80 (PDF p.25), Q301 (PDF p.84), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
-    - "SOA Probability Exam syllabus, November 2026, Topic 3 (Multivariate Random Variables) learning outcomes g-i, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-  open_findings: 2
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., 2006 GNU FDL version), Thm 6.7 (V(cX) = c^2 V(X)), Thm 6.8 (V(X+Y) = V(X)+V(Y), independent), Ex. 6.2.23 (PDF p.275), Ex. 6.3.17 (PDF p.289), Example 7.5 (sum of independent normals is normal, PDF p.302), Thms 9.4 and 9.6 (PDF pp.351, 365), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "SOA Exam P Sample Solutions (Aug 2026 revision), Q301 (variance of a sum with a covariance term, PDF pp.83-84), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf"
+    - "SOA, Probability Exam (Exam P) Syllabus, November 2026, Topic 3 Multivariate Random Variables, learning objective and outcomes a)-i), PDF p.4, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Linear Combinations of Random Variables.md
 ---
@@ -20,10 +20,10 @@ verification:
 
 > $$\text{Var}(L) = \sum_{i=1}^{n} c_i^2\,\text{Var}(X_i) + 2\sum_{i < j} c_i c_j\,\text{Cov}(X_i, X_j)$$
 
-- **Expectation is always linear** — $E[L]$ needs no independence assumption at all. Variance does: the [[Covariance]] terms vanish only for [[Independent Random Variables|independent]] $X_i$. See [[Moments for Linear Combinations]].
+- **Expectation is always linear** — $E[L]$ needs no independence assumption at all. The variance formula holds in general too; the [[Covariance]] terms drop out whenever the $X_i$ are pairwise uncorrelated. [[Independent Random Variables|Independent]] variables are always uncorrelated, but zero covariance does not by itself imply independence. See [[Moments for Linear Combinations]].
 - Coefficients enter the variance **squared**, so $\text{Var}(X - Y) = \text{Var}(X) + \text{Var}(Y)$ for independent $X, Y$ — a difference has a *larger* variance than either term, never a smaller one.
 - A linear combination of independent normals is exactly normal, which is what makes [[Probabilities for Linear Combinations]] computable in closed form.
-- For $n$ i.i.d. variables, $\bar{X}$ has mean $\mu$ and variance $\sigma^2/n$; for large $n$ the [[Central Limit Theorem]] makes $L$ approximately normal whatever the $X_i$ are.
+- For $n$ i.i.d. variables with mean $\mu$ and finite variance $\sigma^2$, $\bar{X}$ has mean $\mu$ and variance $\sigma^2/n$, and for large $n$ the [[Central Limit Theorem]] makes the sum $X_1 + \cdots + X_n$ and the mean $\bar{X}$ approximately normal, whatever their common distribution.
 
 ![[Media/Figures/Linear_Combinations_of_Random_Variables.svg|340]]
 

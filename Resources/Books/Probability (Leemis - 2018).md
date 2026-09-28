@@ -10,17 +10,17 @@ ISBN: "978-0-9829174-7-3"
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-09-27
+  last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:eeadb99a588704fa8e227c4b8c0760bdd9512f1283ff406744a4515e74dda279
+  content_hash: sha256:95c7df4632079e791885eafc0abe126ada0b486658af01f09d3b5d4d47e34c56
   sources:
-    - "SOA Probability Exam syllabus, November 2026, REFERENCES pp.5-7, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-    - "Lawrence M. Leemis, Probability, Second Edition: contents (author's list), https://www.math.wm.edu/~leemis/ptext.con, sha256:2e8c718840614a51e42de65131bc4f91268a3fbb0402bc0f258c0ebe0118f955"
-    - "Leemis, Probability 2nd ed., sample pages of the book pp.27, 55-56, 129, 170, 206-207, 211, 242, 257-258, 290-291, 344, 393, 489-490, 542-543, 550, https://www.math.wm.edu/~leemis/probability/samplepages/ (page489.pdf sha256:d38cb3730a6d9d70cef5acdba5c948989f081f33b2e792025a94bb2c72190f28, page542.pdf sha256:0f6d3c4f84931522e6f39a1daeded8554166d92f014bf96deb971962249260ba)"
+    - "SOA Probability Exam syllabus, November 2026 (7 pp.), REFERENCES p.7, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "Lawrence M. Leemis, Probability, Second Edition: contents (author list), https://www.math.wm.edu/~leemis/ptext.con, sha256:2e8c718840614a51e42de65131bc4f91268a3fbb0402bc0f258c0ebe0118f955 (fetched 2026-09-28 with the InCommon RSA OV SSL CA 3 intermediate supplied)"
+    - "Leemis, Probability 2nd ed., sample pages of the book pp.27, 55-56, 129, 170, 206-207, 211, 242, 257-258, 290-291, 344, 393, 489-490, 542-543, 550, https://www.math.wm.edu/~leemis/probability/samplepages/ (page170.pdf sha256:60ac8455a94174a6aa8cf04d5a4521ec020b7a8ddacfecd9ab293d994d1a9410, page242.pdf sha256:db6f2e1da8a170024f760d8efefa0b0f338d0567df44f56fbf14988e07d6ee93, page542.pdf sha256:0f6d3c4f84931522e6f39a1daeded8554166d92f014bf96deb971962249260ba)"
     - "Lawrence Leemis home page (W&M), book citation and errata links, https://www.math.wm.edu/~leemis/, sha256:370224d526ef2951ae6427e4aeedc8d6f8e31c1aa1e210be917373525fe887ab"
     - "S. Huang, review of Probability (Leemis), Journal of Quality Technology 53(3):332, 2021, https://www.math.wm.edu/~leemis/probability2e-review.pdf, sha256:88c930e079af88b3b1378bd9bbb11c1ffdd831b56e091e7574a53ac2bae4dcc8"
-    - "Introduction to Probability, W&M ScholarWorks record (description), https://scholarworks.wm.edu/asbookchapters/125/"
-  open_findings: 2
+    - "Introduction to Probability, W&M ScholarWorks record (first edition), https://scholarworks.wm.edu/asbookchapters/125/, html sha256:d426dd4fa9348ae742226d1a067345c0597cdcad76e4aa3da98b9d4e633915ec, attached PDF sha256:9758dcf6fe8ccbaf1071c40b0d103edc56c7caaa6cf62b4a1b67709537e2c9ce p.2"
+  open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Probability (Leemis - 2018).md
 ---
@@ -50,6 +50,7 @@ A calculus-based introduction to probability covering the traditional topics, wi
 - 3.3 [[Cumulative Distribution Function (CDF)|Cumulative Distribution Functions]]
 - 3.4 [[Expected Value|Expected Values]]
 - 3.5 Inequalities (Markov, Chebyshev)
+- 3.6 Exercises
 
 ## 4 Common Discrete Distributions
 - 4.1 Bernoulli Distribution
@@ -59,6 +60,7 @@ A calculus-based introduction to probability covering the traditional topics, wi
 - 4.5 [[Poisson Distribution]]
 - 4.6 [[Hypergeometric Distribution]]
 - 4.7 Other Distributions
+- 4.8 Exercises
 
 ## 5 Common Continuous Distributions
 - 5.1 [[Uniform Continuous Distribution|Uniform Distribution]]
@@ -85,9 +87,9 @@ A calculus-based introduction to probability covering the traditional topics, wi
 - 8.3 [[Central Limit Theorem]]
 
 ## Sources
-- [Probability, Second Edition: contents (Lawrence M. Leemis, 2018)](https://www.math.wm.edu/~leemis/ptext.con) — the author's contents for the second edition: the eight chapters and their sections (Chapter 8 is listed there as "Limit Theorems")
-- [Sample pages from Probability, 2nd Edition (Lawrence M. Leemis)](https://www.math.wm.edu/~leemis/probability/samplepages/) — pages of the book itself (pp. 27, 55–56, 129, 206–207, 211, 257–258, 290–291, 344, 393, 489–490, 542–543, 550), whose headings and running heads confirm the section titles they reach and give Chapter 8's title as "Limiting Distributions"
-- [SOA Exam P Syllabus, July 2026](https://www.soa.org/globalassets/assets/files/edu/2026/july/syllabi/2026-07-p-syllabus.pdf) — the citation (Second Edition, 2018, Lightning Source, ISBN 978-0-9829174-7-3) and the assigned chapters and sections
+- [Probability, Second Edition: contents (Lawrence M. Leemis, 2018)](https://www.math.wm.edu/~leemis/ptext.con) — the author's contents for the second edition: the eight chapters and their sections (Chapter 8 is listed there as "Limit Theorems"); it lists no Exercises sections
+- [Sample pages from Probability, 2nd Edition (Lawrence M. Leemis)](https://www.math.wm.edu/~leemis/probability/samplepages/) — pages of the book itself (pp. 27, 55–56, 129, 170, 206–207, 211, 242, 257–258, 290–291, 344, 393, 489–490, 542–543, 550), whose headings and running heads confirm the section titles they reach — among them the 3.6 and 4.8 Exercises sections (pp. 170 and 242) — and give Chapter 8's title as "Limiting Distributions"
+- [SOA Exam P Syllabus, November 2026](https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf) — the citation (Second Edition, 2018, Lightning Source, ISBN 978-0-9829174-7-3) and the assigned chapters and sections
 - [Lawrence Leemis, home page (College of William & Mary)](https://www.math.wm.edu/~leemis/) — the author's own citation (Probability, Second Edition, 2018, Lightning Source, ISBN 978-0-9829174-7-3) and the errata, which date the first printing October 2017 and the second July 2018
-- [Introduction to "Probability" (W&M ScholarWorks)](https://scholarworks.wm.edu/asbookchapters/125/) — the book's description (the lead's first two sentences)
-- [Review of Probability, second edition (Journal of Quality Technology, 2021)](https://www.math.wm.edu/~leemis/probability2e-review.pdf) — what the second edition adds: moment-ratio diagrams at the end of Chapter 5 and a univariate distribution relationship chart at the end of Chapter 8
+- [Introduction to "Probability" (W&M ScholarWorks)](https://scholarworks.wm.edu/asbookchapters/125/) — the book's description (the lead's first two sentences), from the record of the 2011 first edition
+- [Review of Probability, second edition (Journal of Quality Technology, 2021)](https://www.math.wm.edu/~leemis/probability2e-review.pdf) — that the book's selection of topics aligns with all the topics of the SOA's Exam P, and what the second edition adds: moment-ratio diagrams at the end of Chapter 5 and a univariate distribution relationship chart at the end of Chapter 8

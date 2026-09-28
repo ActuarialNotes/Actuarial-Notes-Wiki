@@ -341,7 +341,10 @@ Other important `lib/` modules:
   surface that lists an in-development exam: it offers any exam with a question bank (its
   hand-kept `EXAMS` in `pages/Landing.tsx`, practice-exam sizes in `MOCK_EXAM_QUESTIONS`),
   so Exams 7, 8 and 9 are quizzable there under an amber *In Development* pill while the
-  rest of the app still treats them as a syllabus. The credential tracks in
+  rest of the app still treats them as a syllabus. Exam 6's regional variants share the
+  `CAS-6` progress key and only 6C has a bank, so `bankLabelFor` in `lib/examIds.ts` binds
+  the 6C syllabus to `Exam 6C` and leaves 6U unbound — read a syllabus's bank label through
+  it (or `questionExamLabel`), never through `EXAM_ID_TO_LABEL[progressKey]`. The credential tracks in
   `data/tracks.ts` list ~50 exams and the vault covers ten of them, so an exam can be
   tracked on a credential path without being studiable — `data/tracks.test.ts` pins the
   DEFAULT track (what a new account lands on) to exams that *are*.
@@ -916,7 +919,8 @@ compile — don't "clean up" the flagged code as dead.
   `learning_objective`, `difficulty` (`easy`/`medium`/`hard`), `type`, `wiki_link` (array
   of concept paths), `answer`, `points` — followed by the question body, options, and an
   `## Explanation` section (LaTeX via `$$...$$`). Current banks: `exam-p`, `exam-fm`,
-  `exam-mas-i`, `exam-mas-ii`, `exam-5` (hundreds of questions each), and `exam-7` /
+  `exam-mas-i`, `exam-mas-ii`, `exam-5` (hundreds of questions each), `exam-6c` — the
+  thirteen Fall 2013–Fall 2019 Exam 6-Canada papers, 394 questions — and `exam-7` /
   `exam-8` / `exam-9` — the 2012–2019 Exam 7 and Exam 8 papers: reserving in `exam-7`,
   classification and individual risk rating in `exam-8`, and in `exam-9` with
   `originally_exam:` Exam 7's ERM questions (CAS moved Brehm's ERM there) and Exam 8's
@@ -924,7 +928,10 @@ compile — don't "clean up" the flagged code as dead.
   say a question has outlived its paper's syllabus: `originally_exam` (the material moved to
   the exam in `exam`, so it stays off that exam's past-paper shelf) and `off_syllabus: true`
   (no current exam covers it — Exam 7's old valuation questions, Exam 8's NCCI hazard-group
-  mapping and Mahler's excess-ratio estimation; kept for the record, out of
+  mapping and Mahler's excess-ratio estimation, and Exam 6C's pre-IFRS 17 valuation (PfADs and
+  MfADs, premium deficiency and DPAE, the future-income-tax asset, asset-yield discount rates,
+  IAS 39 bond classes), A.M. Best's BCAR (Feldblum Section 5, now excluded) and U.S.-only
+  regulation such as TRIA and Dodd-Frank; kept for the record, out of
   quiz draws, still found by its sitting, its id or a search, and not held to the exam page
   by `syllabus_lint.py`). A CAS question with no lettered parts is `type: multi-part` with
   `### Explanation` / `### Examiner Report` and no `## Part` heading — under `## Explanation`

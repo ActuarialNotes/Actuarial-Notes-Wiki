@@ -23,8 +23,8 @@
 
 import fm from 'front-matter'
 import { examDisplayName, fromSlug, wikiRoute } from './wikiRoutes'
-import { findSyllabiForConcept, parseExamMetadata, parseExamSyllabus, wikiExamIdToProgressKey, type WikiExamSyllabus } from './wikiParser'
-import { EXAM_ID_TO_LABEL } from './examIds'
+import { findSyllabiForConcept, parseExamMetadata, parseExamSyllabus, type WikiExamSyllabus } from './wikiParser'
+import { bankLabelFor } from './examIds'
 import { buildResourceExamMap, compareExamLabels, examsForResource } from './resourceExams'
 
 export const SITE_ORIGIN = 'https://quiz.actuarialnotes.com'
@@ -708,7 +708,7 @@ export function buildSeoPages(files: Record<string, string>, questionCounts: Rec
     const markdown = files[`${fileName}.md`]!
     const meta = parseExamMetadata(markdown)
     if (meta) syllabi.push(parseExamSyllabus(markdown, meta.examId, meta.examLabel, meta.examTopic, fileName))
-    const label = meta ? EXAM_ID_TO_LABEL[wikiExamIdToProgressKey(meta.examId)] : undefined
+    const label = meta ? bankLabelFor(meta) : undefined
     const page = { ...examSeo({ fileName, markdown, questions: label ? questionCounts[label] ?? 0 : 0 }), source: `${fileName}.md` }
     exams.push(page)
     examCrumbs.set(page.name, { name: page.name, path: page.path })

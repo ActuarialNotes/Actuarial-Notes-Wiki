@@ -19,6 +19,10 @@ export const EXAM_LABEL_TO_ID: Record<string, string> = {
   'Exam MAS-I': 'MAS-I',
   'Exam MAS-II': 'MAS-II',
   'Exam 5': 'CAS-5',
+  // Exam 6 is sat in regional variants that share the `CAS-6` progress key.
+  // Only the Canadian one has a bank (the 2013–2019 Exam 6-Canada papers), so
+  // its label owns the key — and `bankLabelFor` keeps the 6U syllabus off it.
+  'Exam 6C': 'CAS-6',
   'Exam 7': 'CAS-7',
   'Exam 8': 'CAS-8',
   // Exam 9's bank so far is what the syllabus moved there from older papers:
@@ -49,5 +53,20 @@ export const RESETTABLE_EXAMS: Array<{ id: string; label: string }> =
 // on a day that had quizzes. Route every syllabus → bank-label lookup through
 // here so the two spellings can't drift apart again.
 export function questionExamLabel(syllabus: { examId: string; examTopic: string }): string {
-  return EXAM_ID_TO_LABEL[wikiExamIdToProgressKey(syllabus.examId)] ?? syllabus.examTopic
+  return bankLabelFor(syllabus) ?? syllabus.examTopic
+}
+
+// A bank belongs to one syllabus, and a progress key can be shared by several:
+// Exam 6's regional variants are all `CAS-6`, but only 6C's syllabus is the one
+// its questions were sat on. Keyed by progress key, then wiki exam id; a
+// variant not listed (6U) has no bank, whatever its key maps to.
+const VARIANT_BANK_LABELS: Record<string, Record<string, string>> = {
+  'CAS-6': { '6C': 'Exam 6C' },
+}
+
+/** The bank label a syllabus's questions carry, or undefined when it has no bank. */
+export function bankLabelFor(syllabus: { examId: string }): string | undefined {
+  const key = wikiExamIdToProgressKey(syllabus.examId)
+  const variants = VARIANT_BANK_LABELS[key]
+  return variants ? variants[syllabus.examId] : EXAM_ID_TO_LABEL[key]
 }

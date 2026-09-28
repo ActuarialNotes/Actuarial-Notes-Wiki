@@ -10,7 +10,7 @@ import { describe, it, expect } from 'vitest'
 import { readdirSync, readFileSync } from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { EXAM_ID_TO_LABEL, EXAM_LABEL_TO_ID, RESETTABLE_EXAMS, questionExamLabel } from './examIds'
+import { EXAM_ID_TO_LABEL, EXAM_LABEL_TO_ID, RESETTABLE_EXAMS, bankLabelFor, questionExamLabel } from './examIds'
 import { parseExamMetadata, wikiExamIdToProgressKey } from './wikiParser'
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..')
@@ -81,9 +81,16 @@ describe('questionExamLabel', () => {
     expect(examPages.length).toBeGreaterThan(0)
   })
 
-  // The DISCs, PCPA and Exam 6 have a syllabus page and no questions yet, so only
-  // the mapped ones can be checked against the bank.
-  const bankedPages = examPages.filter(e => EXAM_ID_TO_LABEL[wikiExamIdToProgressKey(e.meta.examId)])
+  // The DISCs, PCPA and Exam 6U have a syllabus page and no questions yet, so
+  // only the mapped ones can be checked against the bank.
+  const bankedPages = examPages.filter(e => bankLabelFor(e.meta))
+
+  it('checks the Exam 6C page and not the 6U page it shares a progress key with', () => {
+    const ids = bankedPages.map(e => e.meta.examId)
+    expect(ids).toContain('6C')
+    expect(ids).not.toContain('6U')
+    expect(wikiExamIdToProgressKey('6U')).toBe(wikiExamIdToProgressKey('6C'))
+  })
 
   it.each(bankedPages.map(e => [e.file, e.meta] as const))(
     '%s resolves to a label the question bank uses',
@@ -102,6 +109,13 @@ describe('questionExamLabel', () => {
   it('keeps the SOA exams on their subject-line labels', () => {
     expect(questionExamLabel({ examId: 'P-1', examTopic: 'Probability' })).toBe('Probability')
     expect(questionExamLabel({ examId: 'FM-2', examTopic: 'Financial Mathematics' })).toBe('Financial Mathematics')
+  })
+
+  it('binds Exam 6C to its bank and leaves 6U, which shares CAS-6, unbound', () => {
+    expect(questionExamLabel({ examId: '6C', examTopic: 'Regulation and Financial Reporting (Canada)' }))
+      .toBe('Exam 6C')
+    expect(EXAM_ID_TO_LABEL['CAS-6']).toBe('Exam 6C')
+    expect(bankLabelFor({ examId: '6U' })).toBeUndefined()
   })
 
   it('falls back to the syllabus topic for an exam with no question bank', () => {

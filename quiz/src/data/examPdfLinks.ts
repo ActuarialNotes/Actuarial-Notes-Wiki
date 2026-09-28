@@ -98,6 +98,65 @@ const SITTING_PDF_LINKS: Record<string, ExamPdfLink> = {
     label: "Examiner's Report",
   },
 
+  // ── CAS Exam 6C — Exam 6-Canada; exam + Examiner's Report ────────────────
+  // Transcribed from casact.org's Past Exams & Pass Marks page, with one
+  // exception: that page's "Fall 2016" link
+  // (`2021-02/admissions_studytools_exam6c_f16-6c.pdf`) serves the *Spring*
+  // 2016 paper — its every page is headed SPRING 2016 — so Fall 2016 is the
+  // `f16-6c.pdf` the Examiners' Reports page links, headed FALL 2016.
+  'Exam 6C|2013|fall': {
+    url: 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam6c_13-6c.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 6C|2014|spring': {
+    url: 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam6c_14-6c.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 6C|2014|fall': {
+    url: 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam6c_f14-6c.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 6C|2015|spring': {
+    url: 'https://www.casact.org/sites/default/files/2021-03/sp15-6c_0.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 6C|2015|fall': {
+    url: 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam6c_f15-6c.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 6C|2016|spring': {
+    url: 'https://www.casact.org/sites/default/files/2021-03/sp16-6c_0.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 6C|2016|fall': {
+    url: 'https://www.casact.org/sites/default/files/2021-03/f16-6c.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 6C|2017|spring': {
+    url: 'https://www.casact.org/sites/default/files/2021-03/sp17-6c_0.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 6C|2017|fall': {
+    url: 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam6c_f17-6c.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 6C|2018|spring': {
+    url: 'https://www.casact.org/sites/default/files/2021-03/sp18-6c.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 6C|2018|fall': {
+    url: 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam6c_f18-6c.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 6C|2019|spring': {
+    url: 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam6c_sp19-6c.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 6C|2019|fall': {
+    url: 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam6c_f19-6c.pdf',
+    label: "Examiner's Report",
+  },
+
   // ── CAS Exam 7 — sat once a year, in the spring; exam + Examiner's Report ──
   // Transcribed from casact.org's Past Exams & Pass Marks page. The filenames
   // are as irregular as Exam 5's: 2017 is upper-case `.PDF` under `2021-01/`,

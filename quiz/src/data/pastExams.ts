@@ -83,6 +83,22 @@ export const PAST_EXAM_SITTINGS: PastExamSitting[] = [
   { exam: 'Exam 5', year: 2011, session: 'Fall' },
   { exam: 'Exam 5', year: 2011, session: 'Spring' },
 
+  // ── CAS Exam 6C ─── Exam 6-Canada. Released papers run from Fall 2013, the
+  //    first on casact.org's list, to Fall 2019 — sat twice a year from 2014 ──
+  { exam: 'Exam 6C', year: 2019, session: 'Fall' },
+  { exam: 'Exam 6C', year: 2019, session: 'Spring' },
+  { exam: 'Exam 6C', year: 2018, session: 'Fall' },
+  { exam: 'Exam 6C', year: 2018, session: 'Spring' },
+  { exam: 'Exam 6C', year: 2017, session: 'Fall' },
+  { exam: 'Exam 6C', year: 2017, session: 'Spring' },
+  { exam: 'Exam 6C', year: 2016, session: 'Fall' },
+  { exam: 'Exam 6C', year: 2016, session: 'Spring' },
+  { exam: 'Exam 6C', year: 2015, session: 'Fall' },
+  { exam: 'Exam 6C', year: 2015, session: 'Spring' },
+  { exam: 'Exam 6C', year: 2014, session: 'Fall' },
+  { exam: 'Exam 6C', year: 2014, session: 'Spring' },
+  { exam: 'Exam 6C', year: 2013, session: 'Fall' },
+
   // ── CAS Exam 7 ─── sat once a year, in the spring. Released papers run from
   //    May 2012, the first with an Examiner's Report, to Spring 2019. Their
   //    ERM questions now sit in the Exam 9 bank (`originally_exam`), so a

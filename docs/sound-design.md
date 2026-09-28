@@ -283,10 +283,15 @@ sound like the first card off a deck of twenty.
 (`ConceptLevelUpCeremony`): when several concepts level up in one sitting,
 playing the full `levelUp` fanfare for every card stops sounding like several
 wins the moment it repeats. A lone level-up still gets the fanfare; a run of
-them gets one struck note per card instead, a rung higher each time — the
-climb itself is the ceremony. Same pentatonic rungs, same reason as
-`fileAway`, and the same `resetSoundCombo` call before the run starts so a
-two-concept ceremony and a ten-concept one both climb from the root.
+them pops into one grid and gets one struck note per card as it lands, a rung
+higher each time — the climb itself is the ceremony. That holds for a card
+being collected too: in the grid its landing is a rung like any other rather
+than a `collect` chime, which would be a second cue for the same landing.
+Same pentatonic rungs, same reason as `fileAway`, and the same
+`resetSoundCombo` call before the run starts so a two-concept ceremony and a
+ten-concept one both climb from the root. A long run lands cards faster than
+the cue's 150 ms throttle, which thins the climb to every other card or so
+rather than bunching notes together.
 
 ## The catalogue
 
@@ -306,9 +311,9 @@ two-concept ceremony and a ten-concept one both climb from the root.
 | `fileAway` | One finished card going green and collapsing into itself during "Clear Completed Flashcards". Climbs across the sweep — see "The combo" |
 | `correct` | A right answer in a run: quiz, flashcard "Got it". Climbs endlessly across a run — see "The combo". Not the collect check — see "Collecting a card" |
 | `addToDeck` | A card filed into the study deck ("Add to Flashcards") |
-| `collect` | A flashcard landing in the deck via the collect ceremony |
+| `collect` | A flashcard landing in the deck via the collect ceremony — a lone card; in a grid of several, each landing is a `levelUpStep` rung |
 | `levelUp` | A concept climbing the mastery ladder — a lone one, on the quiz-completion ceremony |
-| `levelUpStep` | One card in a *run* of concepts leveling up on the same ceremony — a rung higher per card instead of repeating `levelUp`. Climbs — see "The combo" |
+| `levelUpStep` | One card landing in the grid when a *run* of concepts levels up on the same ceremony — a rung higher per card instead of repeating `levelUp`. Climbs — see "The combo" |
 | `reward` | Gems paid out — quest collect, study-plan bonus, a store purchase |
 | `streak` | The daily streak growing |
 | `complete` | A quiz or study session finishing |
@@ -440,7 +445,7 @@ the card behind a lockout. So a collect dropped into the middle of a quiz was
 walking the streak's pitch up without being part of the streak.
 
 The reduced-motion path skips the spin and the bloom, so `collect` fires
-immediately instead of 1.1 s in — same one chime, just sooner.
+immediately instead of after the spin — same one chime, just sooner.
 
 ## Wiring a new interaction
 

@@ -1047,9 +1047,10 @@ summary .katex-display,
 }
 
 /* The card grows and dissolves into the bloom of light once collection is
-   confirmed. */
+   confirmed. 380ms is SINGLE.absorbMs in lib/levelUpCeremony.ts — the ceremony
+   waits exactly this long before moving on. */
 .collect-card-absorb {
-  animation: collect-card-absorb 560ms cubic-bezier(0.4, 0, 0.7, 1) forwards;
+  animation: collect-card-absorb 380ms cubic-bezier(0.4, 0, 0.7, 1) forwards;
 }
 @keyframes collect-card-absorb {
   0%   { transform: scale(1);   opacity: 1; filter: brightness(1); }
@@ -1057,7 +1058,7 @@ summary .katex-display,
 }
 
 .collect-card-won {
-  animation: collect-card-won 600ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation: collect-card-won 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 @keyframes collect-card-won {
   0%   { transform: scale(0.6); opacity: 0; }
@@ -1093,7 +1094,8 @@ summary .katex-display,
     rgb(250 204 21) 344deg,
     transparent 360deg
   );
-  animation: collect-card-snake-spin 1.1s cubic-bezier(0.45, 0, 0.9, 0.45) forwards;
+  /* SPIN_MS in lib/levelUpCeremony.ts: the card lands when this ends. */
+  animation: collect-card-snake-spin 650ms cubic-bezier(0.45, 0, 0.9, 0.45) forwards;
 }
 @keyframes collect-card-snake-spin {
   from { transform: rotate(0deg); }
@@ -1108,13 +1110,34 @@ summary .katex-display,
 .collect-bloom {
   background: radial-gradient(circle at 50% 50%, hsl(var(--foreground)) 0%, hsl(var(--foreground)) 38%, transparent 72%);
   transform-origin: center;
-  animation: collect-bloom 620ms ease-out forwards;
+  animation: collect-bloom 440ms ease-out forwards;
   will-change: transform, opacity;
 }
 @keyframes collect-bloom {
   0%   { opacity: 0;    transform: scale(0.25); }
   35%  { opacity: 0.97; transform: scale(1.4); }
   100% { opacity: 0;    transform: scale(2.2); }
+}
+
+/* Several concepts leveling up at once share one grid (the level-up
+   ceremony's `grid` phase): each card pops in a beat after the one before,
+   spins its snake, then lands with a flash of light of its own — the lone
+   card's full-screen bloom, cut down to the card, so a dozen landings read as
+   a ripple across the grid rather than a dozen screens going white. */
+.collect-grid-in {
+  animation: collect-grid-in 280ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes collect-grid-in {
+  0%   { opacity: 0; transform: scale(0.6) translateY(8px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+.collect-card-land {
+  animation: collect-card-land 360ms cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+@keyframes collect-card-land {
+  0%   { transform: scale(1);    filter: brightness(1); }
+  35%  { transform: scale(1.08); filter: brightness(1.9); }
+  100% { transform: scale(1);    filter: brightness(1); }
 }
 
 .collect-shake {
@@ -1427,7 +1450,7 @@ summary .katex-display,
 
 @media (prefers-reduced-motion: reduce) {
   .collect-card-snake-ring::before, .collect-card-absorb,
-  .collect-bloom, .collect-shake,
+  .collect-bloom, .collect-shake, .collect-grid-in, .collect-card-land,
   .flashcard-nav-glow, .flashcard-nav-ring, .flashcard-badge-pop, .collect-done-pop { animation: none; }
   /* Keep a plain green-flash fade so cards still visibly leave, without motion.
      The card stays visible here (no visibility step) and simply fades, which

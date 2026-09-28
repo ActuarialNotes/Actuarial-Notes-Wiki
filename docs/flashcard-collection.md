@@ -26,11 +26,16 @@ There is no separate step: no comprehension check, no collect modal, no lock.
    every write path that banks mastery: `completeQuiz` (guest and signed-in) and
    `recordReviewAnswers` (the Fix-Mistakes panel).
 3. **Celebrate.** On `/review`, `ConceptLevelUpCeremony` plays the **collect
-   animation** for each transition marked `collected`: the sealed card spins
-   under "Collecting…", blooms into light on the `collect` chime, and settles
-   back in on a "Collected!" beat before the next card. Other level-ups keep the
-   ordinary level-up spin. The summary tags each collected concept with a
-   **Collected** mark.
+   animation**. A lone concept gets the card to itself: if its transition is
+   marked `collected`, the sealed card spins under "Collecting…", blooms into
+   light on the `collect` chime and settles back in on a "Collected!" beat;
+   any other level-up keeps the ordinary level-up spin. **Several** concepts
+   pop into one grid instead of queueing — each card a beat after the last,
+   spinning and then landing in place with "Collected!" (or its new level)
+   under it — so ten concepts take about as long as two. Either way the
+   ceremony ends on a summary of every concept that moved, a collected one
+   tagged **Collected**. The pace is `lib/levelUpCeremony.ts` (pure and tested,
+   including that its numbers agree with the keyframes in `index.css`).
 
 Nothing in the app withholds a feature from an uncollected concept — it can be
 read, studied as a flashcard, listened to and quizzed like any other. Collecting

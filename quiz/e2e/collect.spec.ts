@@ -3,11 +3,15 @@ import { test, expect } from '@playwright/test'
 // A flashcard is collected the first time its concept reaches Level 1 — there
 // is no comprehension check to pass (docs/flashcard-collection.md). This walks
 // that path signed out: the pre-quiz list names the quiz's New concepts and
-// opens one in the concept popup, a right answer levels it up, and the results
-// screen's ceremony plays the collect animation for it.
+// opens one in the concept popup, a right answer levels them up, and the
+// results screen's ceremony plays the collect animation for them — two
+// concepts, so both cards pop into one grid — then recaps the collection.
 //
-// p-004 links Combinatorics and Conditional Probability; its answer is A.
+// p-004 links Independent Events and Probability Addition Rule; its answer is A.
 test.describe('flashcard collection', () => {
+  // The suite resolves animations instantly; this one is about the animation.
+  test.use({ reducedMotion: 'no-preference' })
+
   test('collects a concept by answering its question right', async ({ page }) => {
     await page.goto('/quiz?ids=p-004')
 
@@ -15,8 +19,8 @@ test.describe('flashcard collection', () => {
     await expect(page.getByRole('heading', { name: 'New concepts in this quiz' })).toBeVisible()
 
     // A row opens the concept in the popup, to read before the questions start.
-    await page.getByRole('button', { name: 'Combinatorics' }).click()
-    await expect(page.getByRole('complementary', { name: 'Concept: Combinatorics' })).toBeVisible()
+    await page.getByRole('button', { name: 'Independent Events' }).click()
+    await expect(page.getByRole('complementary', { name: 'Concept: Independent Events' })).toBeVisible()
 
     await page.getByRole('button', { name: 'Start Quiz' }).click()
     // Starting the quiz leaves the popup behind with the list.
@@ -27,9 +31,10 @@ test.describe('flashcard collection', () => {
     await page.getByRole('button', { name: /Finish Quiz/i }).click()
 
     await expect(page).toHaveURL(/\/review/)
-    // The ceremony plays the collect animation, then recaps the collection.
+    // Both cards land in the grid collected, then the summary recaps them.
     const ceremony = page.getByRole('dialog', { name: 'Concepts leveled up' })
-    await expect(ceremony.getByText('Collected!')).toBeVisible()
-    await expect(ceremony.getByTitle('Flashcard collected').first()).toBeVisible({ timeout: 15_000 })
+    await expect(ceremony.getByText('Collected!')).toHaveCount(2)
+    await expect(ceremony.getByText('2 Concepts Leveled Up!')).toBeVisible()
+    await expect(ceremony.getByTitle('Flashcard collected')).toHaveCount(2)
   })
 })

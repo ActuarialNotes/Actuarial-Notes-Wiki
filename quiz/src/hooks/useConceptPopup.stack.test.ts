@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { useConceptPopup } from './useConceptPopup'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
+import { pdfPage } from '@/lib/pageStack'
 
 // The page stack: a link followed inside the popup opens a new page on top of
 // the one being read (Obsidian's stacked pages, folded into title bars down the
@@ -85,6 +86,21 @@ describe('useConceptPopup page stack', () => {
     useConceptPopup.getState().pushPage(0, concept('Linear Regression'))
     useConceptPopup.getState().setDashboardFilter('study-plan')
     expect(pageNames()).toEqual(['Cross-Validation'])
+  })
+
+  it('stacks a document opened from a page on top of it, and falls back on close', () => {
+    useConceptPopup.getState().openAt([book('CIA Materiality')], 0, 'Exam 6C (CAS).md')
+    useConceptPopup.getState().pushPage(0, pdfPage({ url: 'https://www.cia-ica.ca/207099e.pdf', title: 'Materiality' }))
+
+    const s = useConceptPopup.getState()
+    expect(pageNames()).toEqual(['CIA Materiality', 'Materiality'])
+    expect(s.pages[s.pageIndex].kind).toBe('pdf')
+    // The walk hasn't moved: the document is a branch off the page, not a stop.
+    expect(s.index).toBe(0)
+
+    useConceptPopup.getState().closePage(1)
+    expect(pageNames()).toEqual(['CIA Materiality'])
+    expect(useConceptPopup.getState().open).toBe(true)
   })
 
   it('ignores a push while nothing is open', () => {

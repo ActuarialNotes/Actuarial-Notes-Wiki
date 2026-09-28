@@ -4,6 +4,7 @@ import {
   closePage,
   focusPage,
   openStack,
+  pdfPage,
   pushPage,
   samePage,
 } from './pageStack'
@@ -11,7 +12,9 @@ import type { WikiEntryRef } from '@/lib/wikiRoutes'
 
 const concept = (name: string): WikiEntryRef => ({ kind: 'concept', name })
 const book = (name: string): WikiEntryRef => ({ kind: 'resource', name })
-const names = (s: { pages: WikiEntryRef[] }) => s.pages.map(p => p.name)
+const names = (s: { pages: Array<{ name: string }> }) => s.pages.map(p => p.name)
+const MATERIALITY_URL = 'https://www.cia-ica.ca/wp-content/uploads/2019/08/207099e.pdf'
+const materiality = pdfPage({ url: MATERIALITY_URL, title: 'Materiality', subtitle: 'Canadian Institute of Actuaries · 2007' })
 
 describe('samePage', () => {
   it('matches on kind and case-insensitive name', () => {
@@ -20,6 +23,29 @@ describe('samePage', () => {
     // Concepts/X.md and Resources/Books/X.md are different files, so a shared
     // name is not a shared page.
     expect(samePage(concept('Ratemaking'), book('Ratemaking'))).toBe(false)
+  })
+
+  it('matches documents on their URL, not their title', () => {
+    expect(samePage(materiality, pdfPage({ url: MATERIALITY_URL, title: 'Read PDF' }))).toBe(true)
+    // Two papers can share a title — every sitting has an "Examiner's Report".
+    expect(samePage(
+      pdfPage({ url: 'https://www.casact.org/sites/default/files/2021-03/5_2019_spring.pdf', title: "Examiner's Report" }),
+      pdfPage({ url: 'https://www.casact.org/sites/default/files/2021-03/5_2018_spring.pdf', title: "Examiner's Report" }),
+    )).toBe(false)
+    // A document is never the page it was opened from, whatever they're called.
+    expect(samePage(materiality, book('Materiality'))).toBe(false)
+    expect(samePage(book('Materiality'), materiality)).toBe(false)
+  })
+})
+
+describe('pdfPage', () => {
+  it('carries what the reader was asked to open, titled for its bar', () => {
+    expect(materiality).toEqual({
+      kind: 'pdf',
+      name: 'Materiality',
+      url: MATERIALITY_URL,
+      subtitle: 'Canadian Institute of Actuaries · 2007',
+    })
   })
 })
 
@@ -65,6 +91,35 @@ describe('pushPage', () => {
     expect(names(stack)[0]).toBe('C1')
     expect(names(stack).at(-1)).toBe(`C${MAX_STACK_PAGES}`)
     expect(stack.index).toBe(MAX_STACK_PAGES - 1)
+  })
+
+  it('stacks a document opened from a page like a followed link', () => {
+    let stack = openStack(book('CIA Materiality'))
+    stack = pushPage(stack, 0, materiality)
+    expect(names(stack)).toEqual(['CIA Materiality', 'Materiality'])
+    expect(stack.index).toBe(1)
+    expect(stack.pages[1].kind).toBe('pdf')
+  })
+
+  it('drops what was opened from a folded page before stacking its document', () => {
+    // The screenshot's stack: the Exam 6C page was opened from the resource
+    // page and then stepped back past; Read PDF on the resource page branches.
+    let stack = openStack(book('CIA Materiality'))
+    stack = pushPage(stack, 0, { kind: 'exam', name: 'Exam 6C (CAS)' })
+    stack = focusPage(stack, 0)
+    stack = pushPage(stack, 0, materiality)
+    expect(names(stack)).toEqual(['CIA Materiality', 'Materiality'])
+    expect(stack.index).toBe(1)
+  })
+
+  it('returns to a document already in the stack rather than opening it twice', () => {
+    let stack = openStack(book('CIA Materiality'))
+    stack = pushPage(stack, 0, materiality)
+    stack = focusPage(stack, 0)
+    // Read PDF again from the same page: the branch past it is the document.
+    stack = pushPage(stack, 0, materiality)
+    expect(names(stack)).toEqual(['CIA Materiality', 'Materiality'])
+    expect(stack.index).toBe(1)
   })
 
   it('clamps an out-of-range source index', () => {

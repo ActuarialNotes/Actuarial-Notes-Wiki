@@ -25,6 +25,7 @@ import ImageFocus from '@/components/ImageFocus'
 import PdfReaderHost from '@/components/PdfReaderHost'
 import FlashcardSync from '@/components/FlashcardSync'
 import Toast from '@/components/Toast'
+import { QuizResumeButton } from '@/components/QuizResumeButton'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ExamProgressProvider } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
@@ -340,6 +341,8 @@ export default function App({ initialSession }: { initialSession: Session | null
             {/* The app's one PDF reader. Root-level so a document opened from a
                 dialog, a sheet or a card clears it and outlives it. */}
             <PdfReaderHost />
+            {/* A quiz in progress, from anywhere else in the app. */}
+            <QuizResumeButton />
             <Toast />
           </div>
         </ExamProgressProvider>

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9b61421b9596cc3c1cbfb51d8a14d4ca40809e764c1ac1d810e2cc2f56d98ce5
+  content_hash: sha256:4aa77feec39be90b70474e17048fd50a1f87a9d55380e7f4eea3eb93742d5f9b
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,9 +22,9 @@ verification:
 ### Exam 7: a margin over the central estimate (Marshall et al.)
 
 - **Sources of uncertainty.**
-  - **Independent risk** is the random part of process and parameter risk. It is measured with Mack, bootstrap, GLM or Bayesian models.
-  - **Internal systemic risk** is specification error, parameter selection error and data error. It is scored against best practice on a **balanced scorecard**, with each indicator rated 1 to 5, and the weighted score is mapped to a CoV.
-  - **External systemic risk** covers seven categories: economic and social; legislative, political and claims inflation; claim management process change; expense; event; latent claim; and recovery. Each is assessed directly.
+  - **[[Independent Risk|Independent risk]]** is the random part of process and parameter risk. It is measured with Mack, bootstrap, GLM or Bayesian models.
+  - **[[Internal Systemic Risk|Internal systemic risk]]** is specification error, parameter selection error and data error. It is scored against best practice on a **balanced scorecard**, with each indicator rated 1 to 5, and the weighted score is mapped to a CoV.
+  - **[[External Systemic Risk|External systemic risk]]** covers seven categories: economic and social; legislative, political and claims inflation; claim management process change; expense; event; latent claim; and recovery. Each is assessed directly.
 - **Consolidation.** CoVs are set by valuation class, separately for outstanding claims and premium liabilities. They are combined across classes with judgmental correlations (nil, low $25\%$, medium $50\%$, high $75\%$, full). The three sources are taken as independent, so $\mathrm{CoV}^2 = \mathrm{CoV}_{\text{ind}}^2 + \mathrm{CoV}_{\text{int}}^2 + \mathrm{CoV}_{\text{ext}}^2$.
 - **From CoV to margin.** Under a normal distribution the margin is $z_p \times \mathrm{CoV} \times$ the central estimate. A lognormal gives a smaller margin at $75\%$ and can give a larger one at $90\%$.
 - **Checks on the result.** The margin is then tested with sensitivity testing, scenario testing, internal and external benchmarking, and hindsight analysis.

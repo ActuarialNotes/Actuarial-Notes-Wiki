@@ -4,14 +4,14 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:73e080ada64af464d9137e95b1230f7d6c48d4559d1f49b09a33bd81d651b7fd
+  content_hash: sha256:a3072fb8b037311473de7f22deff61991840e3d5fd21f00fac8706da92b06881
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Facultative Reinsurance.md
 ---
 
-**Facultative Reinsurance** is reinsurance negotiated for a **single risk** — one policy or one location. The cedant offers the risk, and the reinsurer underwrites and prices it on its own and is free to accept or decline. The cover is documented in a *facultative certificate* and is either **pro rata** (a share of the policy) or **excess** (a layer above the cedant's retention).
+**Facultative Reinsurance** is reinsurance negotiated risk by risk: a submission, acceptance and agreement for **each individual risk or a defined group of risks** the cedant wants to reinsure. The cedant offers the risk, and the reinsurer underwrites and prices it on its own and is free to accept or decline. The cover is documented in a *facultative certificate* and is either **pro rata** (a share of the policy) or **excess** (a layer above the cedant's retention).
 
 > $$\text{Casualty XS share} = \frac{\text{ILF}\big(\min(PL,\, AP + Lim)\big) - \text{ILF}(AP)}{\text{ILF}(PL)}$$
 

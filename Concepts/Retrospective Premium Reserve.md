@@ -4,14 +4,14 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:aeb89c9c5a40650665a6c65a07717041274dcb6e756cf3d6d98830d2b5e4adb6
+  content_hash: sha256:375f7617ddf887b55781596255a472b9063b63cfa75698c152fefd1f7a5593f7
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Retrospective Premium Reserve.md
 ---
 
-**The retrospective premium reserve** is the provision for premium adjustments still to come on [[Retrospective Rating|retrospectively rated]] policies: the expected ultimate retrospective premium, given the losses still to emerge, less the premium already booked. When positive it is an asset, the **premium asset** (earned but not reported premium, shown as accrued retrospective premiums). When negative it is a liability for return premium, the "retro reserve" of the older literature.
+**The retrospective premium reserve** is the provision for premium adjustments still to come on [[Retrospective Rating|retrospectively rated]] policies: the expected ultimate retrospective premium, given the losses still to emerge, less the premium already booked. When positive it is an asset, the **premium asset** (earned but not reported premium, shown as accrued retrospective premiums). When negative it is a liability for return premium. The "retro reserve" of the older literature (Berry, Fitzgibbon) is the same quantity with the opposite sign, the premium deviation to date less the ultimate premium deviation ([[Estimating the Premium Asset on Retrospectively Rated Policies (Teng and Perkins - 1996)|Teng and Perkins]]).
 
 > $$\text{Premium asset} = \text{Expected ultimate premium} - \text{Premium booked}$$
 

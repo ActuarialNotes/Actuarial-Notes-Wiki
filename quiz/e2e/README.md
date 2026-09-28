@@ -8,7 +8,9 @@ and the god-component refactors (P3.1) can't silently break them.
 | `home.spec.ts`   | App boots, sidebar nav renders, no error boundary |
 | `wiki.spec.ts`   | Wiki index loads from bundled content; open an exam page |
 | `quiz.spec.ts`   | Run a quiz, answer a question, reach the results screen; an open answer and its self-grade don't carry into the next question |
+| `quiz-resume.spec.ts` | Leave a timed quiz mid-way: the Return to quiz pill follows the reader, Return resumes the same answered question, Leave discards it, and Quit leaves no pill behind |
 | `code-block.spec.ts` | Console output in a question stem scrolls inside its panel on a phone |
+| `flashcard-focus.spec.ts` | A revealed flashcard taller than a phone scrolls in focus mode, and the backdrop still exits |
 | `collect.spec.ts`| Read a New concept from the pre-quiz list, answer it right, and collect its card |
 | `tour.spec.ts`   | Onboarding tour: corner launcher, guided steps, minimize/resume, dismiss |
 | `store.spec.ts`  | Cosmetics catalog renders and tabs switch |

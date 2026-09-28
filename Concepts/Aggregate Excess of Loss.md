@@ -4,14 +4,14 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:23607ddd2f8c65c5ecc74d19a61db0a58f40250f6679776eb4b413eef1b2d381
+  content_hash: sha256:ecc038cc1de6a999d96b681caff60944694cccfe313f146e42e5276a5812d205
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Aggregate Excess of Loss.md
 ---
 
-**Aggregate Excess of Loss** reinsurance responds to the **total** of the cedant's losses over a period, usually a year, rather than to any single loss. The reinsurer pays the aggregate in excess of an aggregate retention $A$, up to an aggregate limit $L_A$. Stated in loss-ratio points of subject premium it is a **stop loss**. Applied to the losses in an excess layer, the retention is an **annual aggregate deductible** (AAD).
+**Aggregate Excess of Loss** reinsurance responds to the **total** of the cedant's losses over a period, usually a year, rather than to any single loss. The reinsurer pays the aggregate in excess of an aggregate retention $A$, up to an aggregate limit $L_A$. It is also called **aggregate stop-loss** reinsurance, and the threshold can be a percentage of premium (a loss ratio) or a fixed amount. Applied to the losses in an excess layer, the retention is an **annual aggregate deductible** (AAD).
 
 > $$Y = \min\left(\max(S - A,\, 0),\; L_A\right)$$
 

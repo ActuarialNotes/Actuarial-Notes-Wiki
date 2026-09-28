@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:028ed3f4bd83211d22b1a30158c82ade3b32b182949baf3ba73b0f4260814bdb
+  content_hash: sha256:316b2aa586c88a070f76c1619fc468b9a804c7900e51a82ebbf499857b424d40
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,7 +22,7 @@ verification:
   - **ODP bootstrap:** the spread of reserves across refitted pseudo-triangles, before gamma process noise is added.
   - **MCMC:** the spread of the posterior draws.
 - **Parameter percentiles** are percentiles of the simulated or posterior parameter set, such as the 5th to 95th percentile of simulated ELRs or development factors. A reserve computed at the 95th-percentile parameter is **not** the 95th percentile of unpaid claims. Process risk sits on top, so the outcome percentile is wider (see [[Unpaid Claim Distribution]]).
-- **It grows with the number of parameters relative to the data.** A chain ladder fits a factor for every age. Clark's point is that a two-parameter growth curve, especially with a Cape Cod ELR, can cut parameter variance sharply. It concentrates in the most recent accident years, where a large CDF multiplies a thin diagonal. That is why a bootstrap CoV can turn up again for the latest year.
+- **It grows with the number of parameters relative to the data.** A chain ladder fits a factor for every age. [[LDF Curve-Fitting and Stochastic Reserving (Clark - 2003)|Clark]] finds parameter variance far larger than process variance when his LDF method fits 12 parameters (an ultimate for each of ten years plus the two growth-curve parameters) to 55 data points. Replacing the ultimates with one Cape Cod ELR leaves 3 parameters, and the parameter standard deviation of the total reserve falls from $4{,}688{,}826$ to $3{,}143{,}967$; the total variance is cut in half. It concentrates in the most recent accident years, where a large CDF multiplies a thin diagonal. That is why a bootstrap CoV can turn up again for the latest year.
 - **It does not diversify with volume.** Process CoV shrinks roughly like $1/\sqrt{\text{volume}}$. A misestimated factor, however, is applied to every year, so a large book still carries it in full. In Marshall et al.'s framework, the random part of parameter risk is *independent risk*, while *parameter selection error* is internal systemic risk, a [[Model Risk|model risk]] (see [[Risk Margin]]).
 
 > [!example]- Process and Parameter Variance in a Cape Cod Fit {Example}

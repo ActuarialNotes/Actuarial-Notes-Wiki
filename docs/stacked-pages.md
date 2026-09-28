@@ -14,12 +14,17 @@ to check what it means, and the book is gone — the section you were half-way t
 scroll position, the whole reason you opened it. The only way back was Previous, which
 walks a different sequence entirely.
 
+A resource page's **Read PDF** had the same problem in a worse form. It opened the app's PDF
+reader, a panel of its own that slid up over the popup and covered all of it — the page that
+offered the document, the trail above that page, the walk below.
+
 ## The model
 
 A followed link now **stacks**. The page you were reading folds up into a title bar above
 the new one and stays there, one tap from being opened again exactly as you left it —
 same scroll position, same view mode. It is Obsidian's stacked pages, folded along the
-pane's short axis:
+pane's short axis. A document opened from a page stacks the same way (see "Documents in the
+stack" below):
 
 ```
 ┌────────────────────────────────────┐
@@ -68,6 +73,55 @@ unmount: by the time a `useEffect` cleanup runs during a deletion React has alre
 detached the body, and a detached element's `scrollTop` reads 0. The map is cleared when
 the popup closes, since the trail those offsets belong to is gone with it.
 
+## Documents in the stack
+
+A **Read PDF** on a page in the popup opens its document as the next page of the stack —
+`PdfPageRef` (`{ kind: 'pdf', name, url, subtitle }`) beside the wiki refs, rendered by
+`components/wiki/PdfPagePanel.tsx`. It follows every rule above: it drops whatever was
+opened from the page it came from, it appears once (two refs are one document when their
+**URL** matches — every sitting has an "Examiner's Report", so the title can't decide),
+closing it lands back on that page, and its folded bar carries the `PDF` chip the button
+that opened it wears.
+
+```
+┌────────────────────────────────────┐
+│ 📖 CIA Materiality                ✕│  ← the page that offered it
+├────────────────────────────────────┤
+│ Materiality                ⤓ ⤢  ✕ │  ← the document, open
+│ Canadian Institute of Actuaries    │
+│            ┌──────┐                │
+│            │ page │                │
+│            └──────┘                │
+│ ▬▬▬▬▬▬───────────────────────────  │  ← its pages, not the walk
+│  ‹ Previous      2 of 22     Next ›│
+└────────────────────────────────────┘
+```
+
+Three things differ from a wiki page, all because a PDF is read a page at a time:
+
+- **Its footer replaces the walk's.** While a document is the open page, its own page bar
+  and Previous / position / Next stand in for the popup's footer, and the arrow keys turn
+  its pages. Two footers would each claim Previous and Next, and the arrows can only mean
+  one thing. The walk's footer comes back with the page the document folds down to — the
+  walk hasn't moved, the same as it doesn't for a stacked wiki page.
+- **Its place is a page number.** Folding unmounts the document, like any page; the page it
+  was on is kept in `lib/pageScrollMemory.ts` (`rememberPdfPage` / `recallPdfPage`) and
+  reopened from its bar.
+- **It has no links**, so nothing is ever stacked on top of it.
+
+The reading is the same component as the app's free-standing reader — `PdfDocumentView`, in
+`components/PdfViewerPanel.tsx`, which is the reader without a frame. `PdfViewerPanel` puts
+it in the slide-up shell for every PDF button *outside* the popup; `PdfPagePanel` puts it in
+the popup, whose resize handle and focus mode are the frame. The button decides nothing
+new: `PdfLinkButton` takes an `onRead` (passed down as `ConceptPagePanel` → `ResourceMetaCard`
+`onReadPdf`), and the click rules — a modified click is a link, a source the proxy won't
+serve is an out-link — hold either way.
+
+Only a page *inside* the popup stacks its documents. A sheet opened over the popup (the Fact
+Check panel's *Checked against* shelf) still opens the app's reader above it, since a page of
+the stack underneath that sheet would open out of sight; while that reader is up the popup
+and a stacked document both hand it the keys (`useIsReadingPdf()`).
+
 ## The stack vs. the walk
 
 Two sequences share the panel and they are not the same thing:
@@ -97,6 +151,7 @@ concepts would make "2 of 45" a lie, and the bar is a position readout for the w
 | `components/wiki/ConceptPagePanel.tsx` | **the open page** — its header (the title, which is the action menu's one trigger, plus Listen) and its body (article / Listen view), plus the gallery and scroll memory |
 | `components/ConceptActionMenu.tsx` | **the action menu** the title opens — the same component every flashcard surface opens, and the owner of the modals it leads to |
 | `components/wiki/PageStackBar.tsx` | a folded page |
+| `components/wiki/PdfPagePanel.tsx` | **a document in the stack** — `PdfDocumentView` framed by the popup, with its page kept across a fold |
 | `index.css` (`.page-bar`, `.page-panel`) | the bar unrolling and the new page rising into place |
 
 `ConceptPagePanel` is mounted **per page**, keyed by its ref, so opening another page is a
@@ -111,5 +166,8 @@ The paper family already had the right cues (`docs/sound-design.md`): a new page
 **out** from under the one it came from (`open`), a link back to a page already in the
 stack is a **flick** through the sheets already there (`page`), tapping a bar is the same
 flick, and closing a folded page is the sheet sliding back in (`close`) — except for the
-last page, where the popup's own close cue covers it. Nothing new was added to the
+last page, where the popup's own close cue covers it. A document takes the same cues as a
+page — it slides out when opened and flicks when reopened — so the free-standing reader's own
+opening sound is its frame's (`PdfViewerPanel`), not the view's, and a stacked document
+unfolding from its bar makes the bar's flick and nothing else. Nothing new was added to the
 catalogue.

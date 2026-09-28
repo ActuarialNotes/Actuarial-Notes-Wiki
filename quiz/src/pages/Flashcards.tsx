@@ -82,6 +82,7 @@ import { flashcardFoilClass, FOIL_LEVEL_CLASS } from '@/lib/flashcardFoil'
 import { MASTERY_LABEL } from '@/lib/masteryBadge'
 import { useTheme } from '@/hooks/useTheme'
 import { themedFigureSrc } from '@/lib/figureTheme'
+import { useActionBarHeight } from '@/hooks/useActionBarHeight'
 
 type GroupBy = 'exam' | 'date' | 'alpha' | 'custom' | 'mastery' | 'shuffle'
 type ReverseCardSection = 'definition' | 'math' | 'images'
@@ -2713,6 +2714,14 @@ function FlashcardsDeck({
   )
   lastIndexRef.current = activeIndex
 
+  // Focus mode's scroller outlives the card on it, so a new card would open
+  // wherever the last one was left — start each one at its top.
+  const focusScrollRef = useRef<HTMLDivElement>(null)
+  const activeCardName = orderedCards[activeIndex]?.name
+  useEffect(() => {
+    focusScrollRef.current?.scrollTo({ top: 0 })
+  }, [activeCardName])
+
   const completedCount = useMemo(() => cards.filter(c => c.completedAt).length, [cards])
 
   function handleShuffle() {
@@ -2836,6 +2845,14 @@ function FlashcardsDeck({
     flashTimerRef.current = setTimeout(() => setFlashingCard(null), 1700)
   }
 
+  // The controls footer, measured for whatever else is parked on the bottom
+  // edge — the "Return to quiz" pill rides above it (style guide §5.1). One
+  // footer per branch below, so one measurement each.
+  const emptyFooterRef = useRef<HTMLDivElement>(null)
+  const footerRef = useRef<HTMLDivElement>(null)
+  useActionBarHeight(emptyFooterRef, cards.length === 0)
+  useActionBarHeight(footerRef, cards.length > 0)
+
   // Empty state — no cards in the deck yet. Show the tabbed gallery inline so
   // the user can browse Packs / Collected and add cards to start studying. The
   // layout fills the viewport (rather than contracting to its content) and
@@ -2880,7 +2897,7 @@ function FlashcardsDeck({
             and so the + (the only way in with an empty deck) stays reachable.
             Flip / Back content act on the gallery cards; the deck controls
             (sort, manage) stay hidden until there's a deck. */}
-        <div className="fixed bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-[46]">
+        <div ref={emptyFooterRef} className="fixed bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-[46]">
           <FlashcardControlsBar
             reverseCardModes={reverseCardModes}
             onToggleMode={toggleReverseMode}
@@ -2958,6 +2975,10 @@ function FlashcardsDeck({
 
   const studyFocus = focusMode && !galleryExpanded
 
+  function closeFocusFromBackdrop(e: React.MouseEvent) {
+    if (e.target === e.currentTarget) setFocusMode(false)
+  }
+
   return (
     <>
       {/* The deck's top chrome. Below `lg` it stands in for the app header (see
@@ -3018,13 +3039,25 @@ function FlashcardsDeck({
         />
       )}
 
+      {/* Focus mode locks the page (the backdrop covers it), so the study area
+          brings its own scroller: a revealed card is often taller than a phone
+          screen, and in normal flow under a locked body it could never be
+          scrolled to its end. A tap on the scroller's empty space — not on
+          the card, and not on anything the card portals out — still closes
+          focus mode, as the backdrop beneath it used to. */}
       <div
-        className={`container max-w-4xl mx-auto pb-36${studyFocus ? ' relative z-[56] pointer-events-none' : ''}`}
+        ref={focusScrollRef}
+        className={studyFocus ? 'fixed inset-0 z-[56] overflow-y-auto overscroll-contain' : undefined}
+        onClick={studyFocus ? closeFocusFromBackdrop : undefined}
+      >
+      <div
+        className="container max-w-4xl mx-auto pb-36"
         style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
+        onClick={studyFocus ? closeFocusFromBackdrop : undefined}
       >
         {/* Study area — no page title here; the nav already says "Flashcards"
             and the deck should get the full height. */}
-        <div className={studyFocus ? 'pointer-events-auto' : undefined}>
+        <div>
           <FlashcardStudyArea
             ref={studyAreaRef}
             cards={orderedCards}
@@ -3041,6 +3074,7 @@ function FlashcardsDeck({
             isCompleted={!!orderedCards[activeIndex]?.completedAt}
           />
         </div>
+      </div>
       </div>
 
       <ConceptPopup />
@@ -3070,6 +3104,7 @@ function FlashcardsDeck({
 
       {/* Fixed controls footer — always on the bottom edge */}
       <div
+        ref={footerRef}
         className={`fixed bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 transition-opacity duration-300 ${
           focusMode ? 'z-[57] opacity-30 hover:opacity-100 focus-within:opacity-100' : 'z-[46]'
         }`}

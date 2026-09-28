@@ -23,6 +23,13 @@ import { create } from 'zustand'
  * both: the panel is a top-level child at the top of the layer ladder, and it
  * outlives whatever opened it.
  *
+ * The one exception is a document opened from a page *inside* the concept
+ * popup — a resource page's Read PDF. The popup keeps a stack of the pages a
+ * reader has opened, and that document becomes the next page of it
+ * (`components/wiki/PdfPagePanel.tsx`) rather than a panel laid over the whole
+ * stack, so the page it came from folds into a bar above it and stays one tap
+ * away. See `docs/stacked-pages.md`.
+ *
  * It is also the single answer to "is a document being read right now", which
  * the surfaces that bind `Esc` and the arrow keys need — the reader owns those
  * keys while it is up (`docs/style-guide.md` §8.3), and they hand them over by
@@ -36,12 +43,6 @@ export interface PdfReaderDoc {
   title: string
   /** Which paper it belongs to, e.g. "Exam 5 · Spring 2019". */
   subtitle?: string
-  /**
-   * Whether the surface it was opened from is itself full screen (the concept
-   * popup in focus mode), so the reader covers that page instead of leaving
-   * the chrome-sized gaps the page has already filled.
-   */
-  hostFullScreen?: boolean
 }
 
 interface PdfReaderState {

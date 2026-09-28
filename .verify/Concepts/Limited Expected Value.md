@@ -73,3 +73,49 @@ created: 2026-09-28
 - checks_run: Definition as the expected payment under a limit against SOA Exam P sample solution Q50 (benefit limit 10: E = int_1^10 y f dy + 10 P(Y>10) = 1.9, PDF p.17) and Werner & Modlin LAS(H) (PDF p.205); int_0^u [1-F] against Exam C sample solution Q#100 (PDF p.37); E[X] - E[(X-u)_+] and e(u)S(u) against Exam C Q#101 (PDF p.37) and PDF p.74 (e(u) undefined: F-002); limit E[X^u] -> E[X] against the Tables exponential and Pareto entries; insurer/reinsurer split against Exam C Q#119-#120 (PDF p.44); exponential LEV theta(1-e^(-x/theta)) against Tables A.3.3.1 PDF p.11; Pareto LEV against Tables A.2.3.1 PDF p.8 (alpha != 1 missing: F-001); concavity unsourced (F-003); Exam 5 naming (F-004); example recomputed before reading the answer: 1000(1 - e^-2) = 1000 x 0.864665 = 864.66, agrees with 864.7; 1 embed resolves; no wiki-links
 - sources_checked: SOA, Tables for Exam C (Fall 2009), A.3.3.1 Exponential (PDF p.11) and A.2.3.1 Pareto (PDF p.8), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf; SOA Exam C Sample Solutions (C-09-15), Q#28 (PDF p.10), Q#100-#101 (PDF p.37), Q#119-#120 (PDF p.44), PDF p.74, sha256:de58b71716cce5fbbe82cd3b31d1533db67686a86cabe407844ae403534a9a4a — https://www.soa.org/globalassets/assets/files/edu/edu-exam-c-sample-sol.pdf; SOA Exam P Sample Solutions (Aug 2026 revision), Q50 (PDF p.17), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf; Werner & Modlin, Basic Ratemaking (CAS, 2016), ch.11 Increased Limits, LAS(H) (PDF p.205), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
 - note: Confidence lowered: open major F-001 (Pareto row missing alpha != 1) is on a formula; every stated formula otherwise agrees with the SOA Tables and Exam C sample solutions.
+
+## [F-001/R] Pareto row conditioned on alpha != 1; alpha = 1 formula added
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-001
+- status: resolved
+- note: Pareto row now reads alpha != 1, and a row gives the Tables for Exam C formula -theta ln(theta/(theta+u)) for alpha = 1 (A.2.3.1 Pareto, PDF p.8).
+
+## [F-002/R] e(u) defined
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-002
+- status: resolved
+- note: Added a bullet defining e(u) as the mean excess loss at u, e(u) = (E[X] - E[X ^ u])/(1 - F(u)), the form SOA Exam C sample solution Q101 uses (PDF p.37).
+
+## [F-003/R] Concavity bullet deleted
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-003
+- status: resolved
+- note: No ranked source for the non-decreasing, concave claim was found this session, so the bullet was deleted.
+
+## [F-004/R] LAS(H) named as the Exam 5 term
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-004
+- status: resolved
+- note: Added a bullet: Werner & Modlin write the limit as H and call E[X ^ H] the limited average severity LAS(H); under their simplifying assumptions (all underwriting expenses variable, expense and profit provisions not varying by limit, frequency independent of severity and of the limit) ILF(H) = LAS(H)/LAS(B) (PDF p.205).
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- status_set: verified
+- confidence: medium
+- checks_run: Re-verified after resolving F-001 to F-004: table rows match the Tables for Exam C; e(u) form matches Exam C Q101; LAS(H) and its assumptions match Werner p.205. Example recomputed: 1000(1 - e^-2) = 864.66 -> 864.7. Medium: original worked example.
+- sources_checked: SOA, Tables for Exam C (Fall 2009), A.3.3.1 Exponential (PDF p.11) and A.2.3.1 Pareto incl. alpha = 1 (PDF p.8), sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf; SOA Exam C Sample Solutions (C-09-15), Q#101 mean excess loss (PDF p.37), E[(X-d)+] = E(X) - E(X ^ d) (PDF p.74), sha256:de58b71716cce5fbbe82cd3b31d1533db67686a86cabe407844ae403534a9a4a — https://www.soa.org/globalassets/assets/files/edu/edu-exam-c-sample-sol.pdf; SOA Exam P Sample Solutions (Aug 2026 revision), Q50 (PDF p.17), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf; Werner & Modlin, Basic Ratemaking (CAS, 2016), Ch.11 Increased Limits, LAS(H) and ILF(H) = LAS(H)/LAS(B) (PDF p.205), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf

@@ -28,3 +28,22 @@ created: 2026-09-28
 - checks_run: Definition (maximum the insurer pays) vs P-21-05 p.8 verbatim sense and SOA sample Q50 / Q243 usage. Formula Y = min(alpha (X-d)+, u) vs P-21-05 maximum-claim-payment example p.9 - correct for the page definition of u. d + u/alpha threshold: alpha (X - d) >= u iff X >= d + u/alpha - correct under the payment-cap reading. Example recomputed first: 600 - 100 = 500, min(500, 400) = 400, insured retains 200 = 100 + 100 - agrees. Links and embed resolve.
 - sources_checked: Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf — §VI Benefit limits PDF pp.8-9; SOA Exam P Sample Solutions (Aug 2026 revision), Q50 (PDF pp.17-18), Q243 (PDF p.72), Q328 (PDF p.91), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf; SOA Probability Exam syllabus, November 2026, objective "Calculate the amount that an insurance company pays to a policyholder for a claim given policy information, including deductibles, coinsurance percentages, and benefit limits, as well as other factors, such as inflation", PDF p.3, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf
 - note: Formula correct for its stated definition of u; one open major - the covered-loss-cap reading P-21-05 also uses is not acknowledged.
+
+## [F-001/R] Payment-cap condition stated; cap-on-covered-loss form added
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- resolves: F-001
+- status: resolved
+- note: Bullets now say the formula caps the insurer payment (deductible, then coinsurance, then cap at u), as P-21-05 PDF p.8 defines a benefit limit (upper bound on how much the insurer will pay for any loss) and as SOA sample Q50 and Q243 apply it; that a policy may instead cap the covered loss before coinsurance, with P-21-05 PDF pp.8-9 health policy: 0.80 x min(6000, 5000) = 4000 vs payment-cap 4800; that the wording decides and the two agree with no coinsurance; and the d + u/alpha threshold is tied to the payment-cap reading.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-28T02:59Z/919b
+- date: 2026-09-28
+- status_set: verified
+- confidence: medium
+- checks_run: Re-verified after resolving F-001: 0.8 x min(6000, 5000) = 4000 (P-21-05) and min(0.8 x 6000, 5000) = 4800; alpha(X - d) >= u iff X >= d + u/alpha. Example recomputed: 600 - 100 = 500, min(500, 400) = 400, insured keeps 100 + 100. Medium: original worked example.
+- sources_checked: Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf — §VI Benefit limits: upper bound on how much the insurer will pay PDF p.8; more than one way to provide limits, health policy 80% of the lesser of 5000 and the cost PDF pp.8-9; SOA Exam P Sample Questions (Aug 2026 revision), Q50 (reimburses a loss up to a benefit limit of 10, PDF p.23) and Q243 (PDF pp.102-103), sha256:e47245963f7d2c1c4f8cc5ff1baf2090542d923ac47cbeb27d1f657ac51bf5f0 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-questions.pdf; SOA Exam P Sample Solutions (Aug 2026 revision), Q50 (PDF pp.17-18), Q243 (PDF p.72), sha256:efade84ea0ba886e00f07be817c94eae33d3b2ec5ca378e6cad4b74d77136135 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf; SOA Probability Exam syllabus, November 2026, objective "Calculate the amount that an insurance company pays to a policyholder for a claim given policy information, including deductibles, coinsurance percentages, and benefit limits, as well as other factors, such as inflation", PDF p.3, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf

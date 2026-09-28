@@ -4,12 +4,13 @@ verification:
   confidence: medium
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fe5644b3ddccefaf9072768da2bfd2dd53de0e772bfac72513221ee809903b44
+  content_hash: sha256:94943cb7f994e79c6b42d9225d592eb9d2642a104c0d1c00fd470e44543f9800
   sources:
-    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf — §II PDF pp.2-3 (policyholder, beneficiary); §VI deductibles PDF p.7, benefit limits and maximum claim payment PDF pp.8-9; §VII inflation PDF pp.10-11"
+    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf — §II policyholder or designated beneficiary PDF p.2; §VI reasons for deductibles PDF p.7, benefit limits and maximum claim payment PDF pp.8-9; §VII inflation PDF pp.10-11"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 2016), Ch.1 claim and claimant PDF p.14, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "SOA, Tables for Exam C (Fall 2009), exponential entry E[X^x] = theta(1 - e^(-x/theta)), PDF p.11, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
     - "SOA Probability Exam syllabus, November 2026, objective \"Calculate the amount that an insurance company pays to a policyholder for a claim given policy information, including deductibles, coinsurance percentages, and benefit limits, as well as other factors, such as inflation\", PDF p.3, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Policyholder.md
 ---
@@ -23,7 +24,7 @@ verification:
 - $X$ is the ground-up [[Loss Random Variable|loss]], $Y$ the insurer's [[Payment|payment]], and $X - Y$ the amount the policyholder retains. $d$ is the [[Deductible|deductible]], $c$ the insurer's [[Coinsurance Percentage|coinsurance percentage]] and $u$ the [[Benefit Limit|benefit limit]] (the maximum payment). Check the [[Policy Information|policy information]] for the order in which the terms apply. With coinsurance, capping the loss at $u$ and capping the payment at $u$ give different answers.
 - The policyholder retains three things: the deductible, its coinsurance share $(1-c)(X-d)$, and anything above the limit. P-21-05 gives the reasons for a deductible: it saves the expense of processing small claims, lowers the premium, and gives the policyholder an economic incentive to prevent losses ([[Moral Hazard|moral hazard]]).
 - **Inflation is leveraged.** With a fixed $d$, the deductible part of the policyholder's share doesn't grow with the loss, so the insurer's payment grows faster than the loss does. Once the limit binds, the policyholder absorbs all further growth ([[Inflation]]).
-- **Policyholder, beneficiary and claimant can be different people.** The insurer pays the policyholder *or a designated beneficiary*, and a claimant can be the insured or a third party alleging injuries or damages that the policy covers, so a liability claim is paid to someone other than the policyholder.
+- **Policyholder, beneficiary and claimant can be different people.** The insurer pays the policyholder *or a designated beneficiary*, and the claimant, who makes the demand for payment, can be an insured or a third party alleging injuries or damages that the policy covers. The person paid need not be the policyholder.
 
 > [!example]- Splitting Two Losses Before and After Inflation {Example}
 > A policy has a $\$500$ deductible, $80\%$ coinsurance and a maximum payment of $\$8{,}000$. This year the policyholder has losses of $\$6{,}000$ and $\$12{,}000$. Next year every loss is $10\%$ larger.

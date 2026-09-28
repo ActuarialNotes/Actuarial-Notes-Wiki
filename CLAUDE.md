@@ -340,7 +340,7 @@ Other important `lib/` modules:
   Move an exam out of development here, not in the surfaces. The quiz builder is the one
   surface that lists an in-development exam: it offers any exam with a question bank (its
   hand-kept `EXAMS` in `pages/Landing.tsx`, practice-exam sizes in `MOCK_EXAM_QUESTIONS`),
-  so Exams 7, 8 and 9 are quizzable there under an amber *In Development* pill while the
+  so Exams 6C, 7, 8 and 9 are quizzable there under an amber *In Development* pill while the
   rest of the app still treats them as a syllabus. Exam 6's regional variants share the
   `CAS-6` progress key and only 6C has a bank, so `bankLabelFor` in `lib/examIds.ts` binds
   the 6C syllabus to `Exam 6C` and leaves 6U unbound — read a syllabus's bank label through

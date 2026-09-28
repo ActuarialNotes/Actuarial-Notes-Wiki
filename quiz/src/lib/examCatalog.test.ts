@@ -32,6 +32,8 @@ interface CatalogRow {
   status: 'ready' | 'beta' | 'development'
   /** false when the exam's outline publishes no section weights (the DISCs). */
   weighted?: false
+  /** 'partial' while a beta exam's readings don't all have a Resources/Books page. */
+  source_pages?: 'partial'
 }
 const catalog = readJson<{ exams: CatalogRow[] }>('scripts/exam_catalog.json').exams
 
@@ -49,7 +51,13 @@ describe('scripts/exam_catalog.json', () => {
   })
 
   it.each(catalog)('$page — status mirrors lib/examStatus', row => {
-    expect(examStatus(row.progress_key)).toBe(row.status)
+    expect(examStatus(row.progress_key, row.exam_id)).toBe(row.status)
+  })
+
+  it.each(catalog.filter(e => e.source_pages))('$page — only a beta exam excuses its missing source pages', row => {
+    // A development exam's missing sources are warnings anyway; a ready one
+    // has no gaps left to excuse.
+    expect(row.status).toBe('beta')
   })
 
   it.each(catalog.filter(e => e.bank))('$page — its question bank exists', row => {

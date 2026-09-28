@@ -77,9 +77,19 @@ export const TRACKS: Track[] = [
       {
         label: 'CAS Upper-Level Exams',
         items: [
-          { id: 'MAS-I',  name: 'Exam MAS-I',  color: 'violet' },
-          { id: 'MAS-II', name: 'Exam MAS-II', color: 'violet' },
-          { id: 'CAS-5',  name: 'Exam 5',      color: 'pink' },
+          { id: 'MAS-I',    name: 'Exam MAS-I',  color: 'violet' },
+          { id: 'MAS-II',   name: 'Exam MAS-II', color: 'violet' },
+          { id: 'CAS-5',    name: 'Exam 5',      color: 'pink' },
+          { id: 'CAS-PCPA', name: 'PCPA',        color: 'rose' },
+          { id: 'CAS-6',    name: 'Exam 6',      color: 'orange' },
+        ],
+      },
+      {
+        label: 'CAS Fellowship Exams',
+        items: [
+          { id: 'CAS-7', name: 'Exam 7', color: 'lime' },
+          { id: 'CAS-8', name: 'Exam 8', color: 'green' },
+          { id: 'CAS-9', name: 'Exam 9', color: 'emerald' },
         ],
       },
     ],

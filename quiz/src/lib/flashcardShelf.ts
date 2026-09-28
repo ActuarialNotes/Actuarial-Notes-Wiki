@@ -36,7 +36,7 @@ export function flashcardShelfExams(
   return syllabi
     .filter(s => {
       const key = wikiExamIdToProgressKey(s.examId)
-      return !isExamInDevelopment(key) && matchesSelectedVariant(key, s.examId, variants[key])
+      return !isExamInDevelopment(key, s.examId) && matchesSelectedVariant(key, s.examId, variants[key])
     })
     .sort((a, b) =>
       statusRank(a) - statusRank(b)

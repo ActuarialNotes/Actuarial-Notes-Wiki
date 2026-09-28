@@ -36,6 +36,7 @@ import { getSittingsForExam } from '@/data/examSittings'
 import { isExamInDevelopment } from '@/lib/examStatus'
 import {
   examCountdown,
+  examPageIdFromFile,
   examProgressKeyFromFile,
   todaysPlanConcepts,
   todaysPlanRowState,
@@ -492,7 +493,7 @@ function TodaysPlanRow({
     signedIn: !!user,
     isPro,
     subscriptionLoading,
-    inDevelopment: isExamInDevelopment(progressKey),
+    inDevelopment: isExamInDevelopment(progressKey, examPageIdFromFile(entry.name)),
     tracked: !!user && progress[progressKey] === 'in_progress',
     hasPlanToday: planConcepts !== null,
   })

@@ -3,6 +3,7 @@ import type { ExamSitting } from '@/data/examSittings'
 import {
   daysLeftLabel,
   examCountdown,
+  examPageIdFromFile,
   examProgressKeyFromFile,
   todaysPlanConcepts,
   todaysPlanRowState,
@@ -29,6 +30,14 @@ describe('examProgressKeyFromFile', () => {
 
   it('ignores a .md extension', () => {
     expect(examProgressKeyFromFile('Exam 9 (CAS).md')).toBe('CAS-9')
+  })
+})
+
+describe('examPageIdFromFile', () => {
+  it('keeps the variant a shared progress key loses', () => {
+    expect(examPageIdFromFile('Exam 6C (CAS)')).toBe('6C')
+    expect(examPageIdFromFile('Exam 6U (CAS).md')).toBe('6U')
+    expect(examPageIdFromFile('Exam P-1 (SOA)')).toBe('P-1')
   })
 })
 

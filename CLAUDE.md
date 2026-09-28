@@ -327,10 +327,17 @@ Other important `lib/` modules:
 - `wikiParser.ts` / `wikiIndex.ts` / `wikiExtract.ts` — parse wiki pages, build search index, extract syllabus structure
 - `conceptMatch.ts` — resolves concept name variants/aliases to a canonical slug (`slugForLink`)
 - `examStatus.ts` — how far along each exam's material is, keyed by exam_progress key:
-  `ready` (P, FM), `beta` (MAS-I, MAS-II, Exam 5) or `development` (the three DISCs, PCPA
-  and Exams 6–9 — a syllabus outline with no question bank yet; PCPA has none because CAS
-  releases no PCPA paper or sample questions to convert, and the DISCs none because The
-  Institutes sells their sample questions and publishes none). The DISC pages
+  `ready` (P, FM), `beta` (MAS-I, MAS-II, Exams 5, 6C, 7, 8 and 9, and PCPA) or
+  `development` (the three DISCs and Exam 6U — a syllabus outline with no question bank
+  yet; the DISCs have none because The Institutes sells their sample questions and
+  publishes none). PCPA is beta with no bank — CAS releases no PCPA paper or sample
+  questions to convert — because its page and the Projects tab's simulator are material
+  to study from. Exam 6's variants share `CAS-6` but not a status, so a surface that knows
+  which page it is drawing passes the page's id too (`examStatus(key, '6U')`, the id from
+  `examPageIdFromFile` in `lib/examMenu.ts`); with no id, `CAS-6` reads as beta. Exams 8
+  and 9 were promoted before all their readings had `Resources/Books/` pages, so they carry
+  `"source_pages": "partial"` in `scripts/exam_catalog.json` and `syllabus_lint.py` warns
+  about a missing source on them rather than failing — drop the key once the pages exist. The DISC pages
   (`Exam DISC-DA (CAS).md` …) transcribe The Institutes' course syllabi, which carry no
   section weights — `"weighted": false` in `scripts/exam_catalog.json`, and the app counts
   each topic equally. The one definition; the study-guide exam grid greys
@@ -338,11 +345,12 @@ Other important `lib/` modules:
   the exam page shows the amber *In Development* banner (`WikiFloatingSearch`), the quiz
   builder's status pill reads the same helper, and `ExamsPopout` uses it (together with "does
   the vault have an `Exam *.md` page at all?") to decide which exams get an **Add** button.
-  Move an exam out of development here, not in the surfaces. The quiz builder is the one
-  surface that lists an in-development exam: it offers any exam with a question bank (its
-  hand-kept `EXAMS` in `pages/Landing.tsx`, practice-exam sizes in `MOCK_EXAM_QUESTIONS`),
-  so Exams 6C, 7, 8 and 9 are quizzable there under an amber *In Development* pill while the
-  rest of the app still treats them as a syllabus. Exam 6's regional variants share the
+  Move an exam out of development here (and in `scripts/exam_catalog.json`, which
+  `lib/examCatalog.test.ts` holds to it), not in the surfaces — and add it to the DEFAULT
+  track in `data/tracks.ts`, which `data/tracks.test.ts` requires to offer every studiable
+  exam. The quiz builder offers any exam with a question bank (its hand-kept `EXAMS` in
+  `pages/Landing.tsx`, practice-exam sizes in `MOCK_EXAM_QUESTIONS`) and would show an
+  in-development one under an amber *In Development* pill. Exam 6's regional variants share the
   `CAS-6` progress key and only 6C has a bank, so `bankLabelFor` in `lib/examIds.ts` binds
   the 6C syllabus to `Exam 6C` and leaves 6U unbound — read a syllabus's bank label through
   it (or `questionExamLabel`), never through `EXAM_ID_TO_LABEL[progressKey]`. The credential tracks in

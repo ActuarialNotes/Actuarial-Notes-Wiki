@@ -16,7 +16,7 @@ import { ExamLogo } from '@/components/ExamLogo'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
 import { todayISO } from '@/lib/studyPlan'
-import { examProgressKeyFromFile, todaysPlanConcepts } from '@/lib/examMenu'
+import { examPageIdFromFile, examProgressKeyFromFile, todaysPlanConcepts } from '@/lib/examMenu'
 import { examStatus } from '@/lib/examStatus'
 import { buildObjectiveIndex, isSyllabusConcept } from '@/lib/syllabusChapters'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
@@ -171,9 +171,10 @@ export default function WikiExam() {
   ), [])
 
   // How far along this exam's material is — 'ready' (P/FM), 'beta', or
-  // 'development' (Exams 6–9: syllabus outline only). Drives the status banner
-  // under the sticky header.
-  const contentStatus = examStatus(progressKey)
+  // 'development' (the DISCs and Exam 6U: syllabus outline only). Drives the
+  // status banner under the sticky header. The page's own id, since 6C and 6U
+  // share a progress key and not a status.
+  const contentStatus = examStatus(progressKey, examPageIdFromFile(examFileName))
 
   useEffect(() => {
     let cancelled = false

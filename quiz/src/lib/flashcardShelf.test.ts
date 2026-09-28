@@ -23,18 +23,20 @@ const ids = (s: WikiExamSyllabus[]) => s.map(x => x.examId)
 
 describe('flashcardShelfExams', () => {
   it('offers every studiable exam, up the ladder, with nothing in progress', () => {
-    expect(ids(flashcardShelfExams(SYLLABI, {}, {}))).toEqual(['P-1', 'FM-2', 'MAS-I', 'MAS-II', '5'])
+    expect(ids(flashcardShelfExams(SYLLABI, {}, {}))).toEqual(['P-1', 'FM-2', 'MAS-I', 'MAS-II', '5', '6C', '7'])
   })
 
   it('leaves exams still in development off the shelf, whatever their status', () => {
-    const out = flashcardShelfExams(SYLLABI, { 'CAS-7': 'in_progress', 'CAS-6': 'in_progress' }, {})
-    expect(ids(out)).not.toContain('7')
-    expect(ids(out)).not.toContain('6C')
+    // 6U shares CAS-6 with 6C, but only 6C has material: with no variant
+    // chosen, the shelf offers the one there is to study.
+    const out = flashcardShelfExams(SYLLABI, { 'CAS-6': 'in_progress' }, {})
+    expect(ids(out)).toContain('6C')
+    expect(ids(out)).not.toContain('6U')
   })
 
   it('leads with the exams being studied, and puts passed exams last', () => {
     const out = flashcardShelfExams(SYLLABI, { 'MAS-I': 'in_progress', P: 'completed' }, {})
-    expect(ids(out)).toEqual(['MAS-I', 'FM-2', 'MAS-II', '5', 'P-1'])
+    expect(ids(out)).toEqual(['MAS-I', 'FM-2', 'MAS-II', '5', '6C', '7', 'P-1'])
   })
 
   it('keeps the ladder order among several exams in progress', () => {

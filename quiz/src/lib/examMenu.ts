@@ -10,16 +10,24 @@ import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 // component only reads.
 
 /**
- * The exam_progress key (`P`, `MAS-I`, `CAS-9`) of an exam page, from its vault
- * file name — "Exam 9 (CAS)" → `CAS-9`, "Exam P-1 (SOA)" → `P`.
+ * An exam page's own exam id, from its vault file name — "Exam 6U (CAS)" →
+ * `6U`, "Exam P-1 (SOA)" → `P-1`. The id the syllabus parser gives the page,
+ * which tells apart the variants that share a progress key.
  */
-export function examProgressKeyFromFile(fileName: string): string {
-  const cleaned = fileName
+export function examPageIdFromFile(fileName: string): string {
+  return fileName
     .replace(/\.md$/i, '')
     .replace(/^Exam\s+/i, '')
     .replace(/\s*\([^)]*\)\s*$/, '')
     .trim()
-  return wikiExamIdToProgressKey(cleaned)
+}
+
+/**
+ * The exam_progress key (`P`, `MAS-I`, `CAS-9`) of an exam page, from its vault
+ * file name — "Exam 9 (CAS)" → `CAS-9`, "Exam P-1 (SOA)" → `P`.
+ */
+export function examProgressKeyFromFile(fileName: string): string {
+  return wikiExamIdToProgressKey(examPageIdFromFile(fileName))
 }
 
 /**

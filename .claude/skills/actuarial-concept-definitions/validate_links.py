@@ -27,8 +27,11 @@ Usage:
 
 `--studiable` is the CI scope: every exam page whose status is `ready` or `beta`
 (scripts/exam_catalog.json), the pages each links, and those exams' question
-banks. The bare vault-wide run is a report — Exams 6–9 carry a large known
-backlog of unwritten pages (see scripts/syllabus_gaps.py).
+banks. A beta exam whose readings don't all have a `Resources/Books/` page yet
+(`"source_pages": "partial"` in the catalogue — Exams 8 and 9) has its missing
+sources listed as known gaps rather than failures, the rule scripts/syllabus_lint.py
+applies to the same pages. The bare vault-wide run is a report — Exams 6–9 carry
+a large known backlog of unwritten pages (see scripts/syllabus_gaps.py).
 
 Exits non-zero if any problem is found, so it can gate a commit.
 """
@@ -40,6 +43,7 @@ import sys
 from collections import defaultdict
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "scripts"))
+import syllabus_lib  # noqa: E402
 import vault_links  # noqa: E402
 
 SKIP_DIRS = {".git", "node_modules", "dist", "quiz", ".vercel"}
@@ -97,9 +101,23 @@ def links_in(path):
         return [link.target.split("#")[0].strip() for link in vault_links.iter_links(fh.read())]
 
 
-def check_wiki_links(root, vault, scopes=None):
+def excused_sources(root, exams):
+    """(reading, exam page) pairs a `source_pages: partial` exam is excused for:
+    its Source Material entries, which may name a page not yet written."""
+    out = set()
+    for exam in exams:
+        if exam.get("source_pages") != "partial":
+            continue
+        page = syllabus_lib.parse_exam_page(os.path.join(root, exam["page"]))
+        for _, link, _ in syllabus_lib.source_entries(page):
+            out.add((link.target.split("#")[0].strip(), exam["page"][:-3]))
+    return out
+
+
+def check_wiki_links(root, vault, scopes=None, excused=frozenset()):
     """Broken and case-only [[links]]. `scopes` limits to those pages and
-    everything each links."""
+    everything each links. A missing target in `excused` (as a (target, page)
+    pair) is returned apart, as a known gap."""
     if scopes:
         pages = []
         for scope in scopes:
@@ -115,7 +133,7 @@ def check_wiki_links(root, vault, scopes=None):
     else:
         pages = sorted(os.path.join(root, p) for p in set(vault.by_name.values()))
 
-    broken, case_only = defaultdict(set), defaultdict(set)
+    broken, case_only, gaps = defaultdict(set), defaultdict(set), defaultdict(set)
     for page in pages:
         src = os.path.splitext(os.path.basename(page))[0]
         for target in links_in(page):
@@ -123,10 +141,10 @@ def check_wiki_links(root, vault, scopes=None):
                 continue
             status, hit = vault.resolve(target)
             if status == "missing":
-                broken[target].add(src)
+                (gaps if (target, src) in excused else broken)[target].add(src)
             elif status == "case":
                 case_only[f"{target} -> {os.path.splitext(os.path.basename(hit))[0]}"].add(src)
-    return broken, case_only
+    return broken, case_only, gaps
 
 
 def check_question_links(root, vault, exam_dirs=None):
@@ -176,10 +194,12 @@ def main():
     failures = 0
     scopes = [args.exam] if args.exam else None
     banks = [args.questions] if args.questions else None
+    excused = frozenset()
     if args.studiable:
         studiable = [e for e in vault_links.load_catalog() if e["status"] in ("ready", "beta")]
         scopes = [e["page"][:-3] for e in studiable]
         banks = [e["bank"] for e in studiable if e["bank"]]
+        excused = excused_sources(root, studiable)
 
     print(f"Vault: {root}")
     print(f"Indexed {len(vault.by_name)} pages\n")
@@ -196,7 +216,7 @@ def main():
 
     scope = f" (scope: {', '.join(scopes)})" if scopes else ""
     print(f"\n== Broken [[wiki-links]]{scope} ==")
-    broken, case_only = check_wiki_links(root, vault, scopes)
+    broken, case_only, gaps = check_wiki_links(root, vault, scopes, excused)
     if broken:
         failures += len(broken)
         for target, srcs in sorted(broken.items()):
@@ -205,6 +225,11 @@ def main():
             print(f"  {target:45s} <- {shown}{more}")
     else:
         print("  none")
+
+    if gaps:
+        print("\n== Known gaps: readings with no page yet, on an exam marked source_pages: partial ==")
+        for target, srcs in sorted(gaps.items()):
+            print(f"  {target:45s} <- {', '.join(sorted(srcs))}")
 
     print("\n== Links that resolve only case-insensitively (Obsidian yes, the app no) ==")
     if case_only:

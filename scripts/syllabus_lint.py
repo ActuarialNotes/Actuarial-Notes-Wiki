@@ -32,7 +32,10 @@ this lint, nothing checked one. It fails a page for:
 Severity follows the exam's status (scripts/exam_catalog.json, mirroring
 quiz/src/lib/examStatus.ts): unresolved links and unlinked objectives are errors
 on a `ready`/`beta` exam and warnings on a `development` one, whose pages are a
-syllabus outline by definition. A link to the wrong member of a namesake pair
+syllabus outline by definition. A beta exam whose readings don't all have a
+`Resources/Books/` page yet carries `"source_pages": "partial"` in the
+catalogue: a source with no page is a warning on it until they do, while every
+other link on the page stays an error. A link to the wrong member of a namesake pair
 (scripts/concept_aliases.json), are warnings everywhere.
 
 Usage:
@@ -193,12 +196,16 @@ def _lint_links(rel: str, page: sl.ExamPage, vault: vl.Vault, report: Report, st
                 report.warn(rel, ln, "unlinked-noun",
                             "noun phrase(s) with no note: " + ", ".join(f"`{m}`" for m in missing))
 
+    # A beta exam promoted before its readings all have pages says so in the
+    # catalogue (`"source_pages": "partial"`), so the gap stays visible as a
+    # warning without failing CI on the exam's other, finished links.
+    missing_source = report.warn if exam.get("source_pages") == "partial" else strict
     for ln, link, _ in sl.source_entries(page):
         status, _ = vault.resolve(link.target)
         if status == "case":
             report.error(rel, ln, "case-link", f"source `[[{link.target}]]` only matches a page in another case")
         elif status == "missing":
-            strict(rel, ln, "broken-source", f"source `[[{link.target}]]` has no page")
+            missing_source(rel, ln, "broken-source", f"source `[[{link.target}]]` has no page")
 
     for linked, meant in vl.namesake_conflicts(list(dict.fromkeys(names)), exam["wiki_id"]):
         report.warn(rel, 1, "namesake", f"links `[[{linked}]]`, but on this exam the term means `[[{meant}]]`")

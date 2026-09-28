@@ -298,10 +298,11 @@ export default function WikiHome() {
       const status = examProgress[examId]
       const variantMatch = matchesSelectedVariant(examId, examIdCleaned, examVariants[examId])
       const isInProgress = status === 'in_progress' && variantMatch
-      // Exams 6–9 are still only a syllabus outline. They stay
-      // listed (candidates should see what's coming) but greyed
-      // out, so the card never reads as material to study from.
-      const contentStatus = examStatus(examId)
+      // The DISCs and Exam 6U are still only a syllabus outline.
+      // They stay listed (candidates should see what's coming) but
+      // greyed out, so the card never reads as material to study
+      // from. By the page's own id: 6C and 6U share a key.
+      const contentStatus = examStatus(examId, examIdCleaned)
       const inDevelopment = contentStatus === 'development'
       // The same score the exam page's Exam Readiness Score card
       // and the Dashboard radial show — one definition of readiness.

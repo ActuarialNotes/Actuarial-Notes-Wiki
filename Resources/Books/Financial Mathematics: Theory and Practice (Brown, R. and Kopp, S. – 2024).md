@@ -8,12 +8,15 @@ Edition: "2nd"
 Type: "Textbook"
 ISBN: "979-8-89016-187-1"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-28
+  last_checked_by: agent:validate-v1
   content_hash: sha256:874404ce974176ca025bdbac1379ef62d8e863b66d893a854031e77b76019d5a
-  sources: []
+  sources:
+    - "Brown & Kopp, Financial Mathematics: Theory and Practice, 2nd ed. (ACTEX Learning, © 2024) — publisher's sample: title page PDF p.3; copyright page PDF p.4; Table of Contents PDF pp.5–7 and PDF bookmark outline; Preface pp.ix–x (PDF pp.9–10); Chapter 2 §§2.1–2.2 pp.67–82 (PDF pp.11–26), sha256:38962db0adeb8bd5a223d4b6486882d9118e9cf2684b0ae619d5d75d64779121 — https://www.actexlearning.com/samples/FINANCIAL_MATHEMATICS_Brown_Kopp_2e_sample.pdf"
+    - "ACTEX Learning, Financial Mathematics: Theory and Practice 2nd Edition product page (retrieved 2026-09-28): description and ISBN list, sha256:aea509e3efca5d13e21eca638be4aa6f3eb9b7b509ffa3af4977ea78449ca8c7 — https://www.actexlearning.com/exams/fm/financial-mathematics-theory-and-practice-second-edition"
+    - "SOA Financial Mathematics Exam syllabus, December 2026, Text References / Suggested Textbooks, PDF p.6 (page image read), sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: ".verify/Resources/Books/Financial Mathematics: Theory and Practice (Brown, R. and Kopp, S. – 2024).md"

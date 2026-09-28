@@ -39,5 +39,5 @@ The **Payment Random Variable** ($Y$) is the amount the insurer actually pays on
 > > Step 3 — Apply coinsurance:
 > > $$Y = 0.75 \times 900 = 675$$
 > > The insurer pays \$675. The insured absorbs \$200 (deductible) + \$400 (excess above limit) = \$600, and co-pays $0.25 \times 900 = \$225$, totaling \$825.
->
+> >
 > > If the \$900 limit capped the payment instead, $Y = \min(0.75 \times 1{,}300,\ 900) = \min(975,\ 900) = 900$.

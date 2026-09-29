@@ -298,6 +298,9 @@ before touching that area**:
   which reads the same table and reuses the same viewer, and the **Read PDF** button on a
   resource page's metadata card (`components/wiki/ResourceMetaCard.tsx`), which opens an
   `Available from:` PDF — an ASOP, a CAS study note — in that viewer instead of a browser tab.
+  A PDF is always *read*, never downloaded: every host the vault links a PDF on is on the
+  proxy's allowlist (`examPdf.test.ts` reads every `Resources/` page to hold it there), and
+  the resource cards on both shelves carry a **PDF** pill (`PdfPill`) for such a source.
   And the study guide header's **info button** (`components/wiki/ExamSittingInfoButton.tsx`),
   which lays the selected sitting's dates out as a timeline — see "The sitting's details".
 

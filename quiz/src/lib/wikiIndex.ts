@@ -7,6 +7,7 @@ import fm from 'front-matter'
 import { listRepoContents, fetchWikiFile, rawGithubUrl } from '@/lib/github'
 import { buildResourceExamMap, examsForResource } from '@/lib/resourceExams'
 import { examDisplayName } from '@/lib/wikiRoutes'
+import { resourcePdfUrl } from '@/lib/examPdf'
 
 export type WikiIndexCategory = 'exam' | 'concept' | 'document'
 
@@ -27,9 +28,12 @@ export interface WikiIndexItem {
   coverImage?: string   // full GitHub raw URL to cover image
   edition?: string
   publisher?: string
+  // The page's `Available from` is a PDF the app's reader opens — the card's
+  // PDF mark (`PdfPill`). Documents only.
+  pdf?: boolean
 }
 
-const CACHE_KEY = 'actuarial_wiki_index_v5'
+const CACHE_KEY = 'actuarial_wiki_index_v6'
 const CACHE_TTL_MS = 6 * 60 * 60 * 1000
 
 interface CacheEntry {
@@ -187,6 +191,7 @@ export async function buildWikiIndex(): Promise<WikiIndexItem[]> {
         edition: fmData['Edition'] || undefined,
         publisher: fmData['Publisher'] || undefined,
         coverImage,
+        pdf: resourcePdfUrl(fmData['Available from']) ? true : undefined,
       }
       return item
     })

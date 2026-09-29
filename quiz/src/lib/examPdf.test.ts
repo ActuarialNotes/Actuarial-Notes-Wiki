@@ -1,7 +1,12 @@
 import { describe, it, expect } from 'vitest'
+import { readdirSync, readFileSync } from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import fm from 'front-matter'
 import {
   EXAM_PDF_HOSTS,
   isSupportedPdfSource,
+  resourcePdfUrl,
   describeNonPdfResponse,
   looksLikePdf,
   pdfDownloadUrl,
@@ -53,6 +58,63 @@ describe('isSupportedPdfSource', () => {
         'https://www.actuarialstandardsboard.org/asops/trending-procedures-propertycasualty-insurance/',
       ),
     ).toBe(false)
+  })
+})
+
+describe('resourcePdfUrl', () => {
+  const ASOP = 'https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop012_132.pdf'
+
+  it('reads the PDF out of a resource page’s link field', () => {
+    expect(resourcePdfUrl(`[actuarialstandardsboard.org](${ASOP})`)).toBe(ASOP)
+    expect(resourcePdfUrl(ASOP)).toBe(ASOP)
+  })
+
+  it('has nothing for a link that is not a PDF the reader opens', () => {
+    expect(resourcePdfUrl('[osfi-bsif.gc.ca](https://www.osfi-bsif.gc.ca/en/guidance)')).toBeUndefined()
+    expect(resourcePdfUrl('[example.com](https://example.com/a.pdf)')).toBeUndefined()
+    expect(resourcePdfUrl('CAS Study Kit (not published online)')).toBeUndefined()
+    expect(resourcePdfUrl(undefined)).toBeUndefined()
+  })
+})
+
+// Corpus test: a resource page's PDF is read in the app, never downloaded.
+//
+// The reader can only open a document its proxy serves, and the proxy serves
+// only the hosts on its allowlist. A page linking a PDF anywhere else still
+// *looked* like it had one — and its card offered "Download PDF", handing the
+// reader to a browser tab. Four syllabus readings for PCPA (Gelman & Unwin on
+// Columbia's site, an IFoA paper, MSA's KPI legend, PACICC's report) were
+// that. The vault is the fixture: a new PDF host fails here until it is added
+// to `EXAM_PDF_HOSTS` and the endpoint's `DEFAULT_HOSTS`, and an `http:` link
+// until it is written as the `https:` one.
+describe('every resource page’s PDF', () => {
+  const RESOURCES = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../Resources')
+
+  function pages(dir: string): string[] {
+    return readdirSync(dir, { withFileTypes: true }).flatMap(entry =>
+      entry.isDirectory()
+        ? pages(path.join(dir, entry.name))
+        : entry.name.endsWith('.md')
+          ? [path.join(dir, entry.name)]
+          : [],
+    )
+  }
+
+  const linked = pages(RESOURCES).flatMap(file => {
+    const attrs = fm<Record<string, unknown>>(readFileSync(file, 'utf-8')).attributes ?? {}
+    const link = attrs['Available from']
+    if (typeof link !== 'string') return []
+    const url = link.match(/\(([^)]+)\)/)?.[1] ?? link
+    return /\.pdf(?:$|[?#])/i.test(url) ? [{ page: path.relative(RESOURCES, file), url, link }] : []
+  })
+
+  it('finds the vault’s PDFs', () => {
+    expect(linked.length).toBeGreaterThan(50)
+  })
+
+  it('opens in the app’s reader', () => {
+    const unreadable = linked.filter(({ link }) => !resourcePdfUrl(link)).map(({ page, url }) => `${page}: ${url}`)
+    expect(unreadable).toEqual([])
   })
 })
 

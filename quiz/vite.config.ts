@@ -8,6 +8,7 @@ import fm from 'front-matter'
 import { KEYSTONE_EXAMS } from './src/data/keystoneConcepts'
 import { buildResourceExamMap, examsForResource } from './src/lib/resourceExams'
 import { examDisplayName, examIdFromFile } from './src/lib/wikiRoutes'
+import { resourcePdfUrl } from './src/lib/examPdf'
 import {
   KNOWLEDGE_BASE_ASSET,
   buildKnowledgeBase,
@@ -50,6 +51,7 @@ interface WikiIndexItem {
   edition?: string
   publisher?: string
   coverImage?: string
+  pdf?: boolean
 }
 
 interface WikiBundleData {
@@ -113,6 +115,7 @@ async function collectWikiContent(): Promise<WikiBundleData> {
       edition: attrs['Edition'] ? String(attrs['Edition']) : undefined,
       publisher: attrs['Publisher'] ? String(attrs['Publisher']) : undefined,
       coverImage: extractCoverImageUrl(text),
+      pdf: resourcePdfUrl(attrs['Available from']) ? true : undefined,
     })
   }
 

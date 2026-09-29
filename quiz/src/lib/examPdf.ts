@@ -12,10 +12,13 @@
  * Hosts whose PDFs the endpoint will serve. Mirrors `DEFAULT_HOSTS` in
  * `quiz/api/exam-pdf.js`.
  *
- * Wider than the exams alone: a source document a resource page links to — an
- * ASOP on the standards board's site — is read in the same viewer, so its
- * publisher belongs here too. Adding a host here without adding it there opens
- * a viewer the endpoint then refuses.
+ * Wider than the exams alone: every PDF a resource page's `Available from`
+ * names is read in the same viewer, so every publisher the vault links a PDF
+ * on belongs here too — the standards board's ASOPs, a paper on its author's
+ * university site, a regulator's or an industry body's report. A PDF on a host
+ * missing from this list shows up as a card that can't be read in the app;
+ * `examPdf.test.ts` holds every resource page to it. Adding a host here without
+ * adding it there opens a viewer the endpoint then refuses.
  */
 export const EXAM_PDF_HOSTS = [
   'casact.org',
@@ -24,6 +27,20 @@ export const EXAM_PDF_HOSTS = [
   'www.soa.org',
   'actuarialstandardsboard.org',
   'www.actuarialstandardsboard.org',
+  // Gelman & Unwin's manuscript, on the Columbia statistics department's site
+  // (`www.` redirects to `sites.`, and the endpoint re-checks where it lands).
+  'stat.columbia.edu',
+  'www.stat.columbia.edu',
+  'sites.stat.columbia.edu',
+  // The Institute and Faculty of Actuaries' GIRO working-party paper.
+  'actuaries.org.uk',
+  'www.actuaries.org.uk',
+  // MSA Research's legend of P&C KPI definitions.
+  'msaresearch.com',
+  'www.msaresearch.com',
+  // PACICC's report on the actuary's role in safeguarding solvency.
+  'pacicc.ca',
+  'www.pacicc.ca',
 ]
 
 /** Can this URL be shown in the viewer? https, a `.pdf`, on a publisher we proxy. */
@@ -38,6 +55,22 @@ export function isSupportedPdfSource(url: string): boolean {
   } catch {
     return false
   }
+}
+
+/**
+ * The PDF a resource page's link field names, when the app can read it — the
+ * `"[host](url)"` value of its `Available from`. `undefined` for a page whose
+ * link is not a PDF (a publisher's landing page, a catalogue search) or names
+ * none.
+ *
+ * What a resource card's PDF mark and the page's **Read PDF** both rest on, so
+ * the shelf never promises a document the page can't open.
+ */
+export function resourcePdfUrl(link: unknown): string | undefined {
+  if (typeof link !== 'string') return undefined
+  const value = link.trim()
+  const url = value.match(/\(([^)]+)\)/)?.[1] ?? (value.startsWith('http') ? value : undefined)
+  return url && isSupportedPdfSource(url) ? url : undefined
 }
 
 /** The proxy endpoint. Overridable for a split deployment, as `VITE_PASS_RATES_URL` is. */

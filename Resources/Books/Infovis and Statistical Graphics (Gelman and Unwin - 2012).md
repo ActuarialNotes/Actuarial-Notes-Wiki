@@ -5,13 +5,13 @@ Publisher: "Journal of Computational and Graphical Statistics"
 Year: "2012"
 date: "2012"
 Type: "Paper"
-Available from: "[stat.columbia.edu](http://www.stat.columbia.edu/~gelman/research/published/vis14.pdf)"
+Available from: "[sites.stat.columbia.edu](https://sites.stat.columbia.edu/gelman/research/published/vis14.pdf)"
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:45ed83d9c3053ce79d6fe6ec794979f0149c83233b2e7b5d5f2d78a257d07299
+  content_hash: sha256:3082804541df9293d9070dd9a7c6664d1d12a57b1fbf81c199b881b2bbd1cd2f
   sources: []
   open_findings: 0
   open_critical: 0
@@ -70,6 +70,6 @@ An article on the different goals of statistical graphics and information visual
 ## References
 
 ## Sources
-- [Infovis and Statistical Graphics: Different Goals, Different Looks, authors' manuscript of 20 Jan 2012 (Columbia University)](http://www.stat.columbia.edu/~gelman/research/published/vis14.pdf) — the document: title, authors, date, abstract, section headings and the text of every section
+- [Infovis and Statistical Graphics: Different Goals, Different Looks, authors' manuscript of 20 Jan 2012 (Columbia University)](https://sites.stat.columbia.edu/gelman/research/published/vis14.pdf) — the document: title, authors, date, abstract, section headings and the text of every section
 - [Crossref record for doi:10.1080/10618600.2012.761137](https://api.crossref.org/works/10.1080/10618600.2012.761137) — the published article: Journal of Computational and Graphical Statistics 22(1), January 2013, pp. 2–28
 - [CAS PCPA Content Outline v.8, updated 9.9.2026](https://www.casact.org/sites/default/files/2024-05/Exam_PCPA_2025_F_Content_Outlines.pdf) — the citation, the link to this manuscript, the domain and the source type

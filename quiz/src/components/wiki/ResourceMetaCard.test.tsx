@@ -40,6 +40,16 @@ Available from: "[actuarialstandardsboard.org](https://www.actuarialstandardsboa
 The standard governing unpaid claims.
 `
 
+const GELMAN = `---
+Title: "Infovis and Statistical Graphics: Different Goals, Different Looks"
+Authors: "Andrew Gelman and Antony Unwin"
+Year: "2012"
+Type: "Paper"
+Available from: "[sites.stat.columbia.edu](https://sites.stat.columbia.edu/gelman/research/published/vis14.pdf)"
+---
+An article on the goals of statistical graphics and Infovis.
+`
+
 function render(raw: string, compact = false): string {
   return renderToStaticMarkup(<ResourceMetaCard meta={parseResourceMeta(raw)} compact={compact} />)
 }
@@ -75,6 +85,8 @@ describe('ResourceMetaCard', () => {
 
   it('offers the source document as a control, not a bare link', () => {
     expect(render(ASOP)).toContain('Read PDF')
+    // Once, not "Read PDF PDF" — the label already names the file type.
+    expect(render(ASOP).match(/PDF</g)).toHaveLength(1)
     // Nothing to get hold of → no action at all.
     expect(render(LANDMARK)).not.toContain('Get a copy')
   })
@@ -87,6 +99,14 @@ describe('ResourceMetaCard', () => {
     expect(html).toContain('Get a copy')
     expect(html).toContain('aria-haspopup="menu"')
     expect(html).not.toContain('worldcat.org')
+  })
+
+  // A paper on its author's site is read like an ASOP on the standards
+  // board's: a PDF is always "Read PDF", never "Download PDF".
+  it('reads a PDF from any publisher the vault links, not only the examining bodies', () => {
+    const html = render(GELMAN)
+    expect(html).toContain('Read PDF')
+    expect(html).not.toContain('Download')
   })
 
   // A standard links to its own PDF — no menu of searches in front of it.

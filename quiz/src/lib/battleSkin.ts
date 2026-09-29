@@ -43,6 +43,11 @@ export interface BattleSkin {
   joinHint: string
   /** The share sheet's line, before the room code. */
   invite: string
+  /**
+   * Offer a private room the *Abilities* setting (docs/actuaria-online.md §7.2).
+   * Never in the lobby or on one screen, under any skin.
+   */
+  abilities: boolean
   /** Where the station's Simulation card leads — a timed practice exam (§6.10) — or null. */
   simulation: string | null
   /** Offer *Review my misses* on the results — a quiz of this player's misses (§6.9). */
@@ -69,6 +74,7 @@ export const PLAIN_SKIN: BattleSkin = {
   joinHint: 'Quiz Battle → Join with a code',
   invite: 'Join my Quiz Battle',
   simulation: null,
+  abilities: false,
   reviewMisses: false,
   scoreboardTop: 'top-14 lg:top-0',
 }
@@ -93,6 +99,7 @@ export const ACTUARIA_SKIN: BattleSkin = {
   joinHint: `${BATTLE_WORDS.title} → ${BATTLE_WORDS.friend} → Join with a code`,
   invite: `Join my duel at ${BATTLE_WORDS.title}`,
   simulation: '/actuaria/simulation',
+  abilities: true,
   reviewMisses: true,
   scoreboardTop: 'top-14',
 }

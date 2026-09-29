@@ -274,6 +274,82 @@ test.describe('quiz battle', () => {
     }
   })
 
+  test('a private channel with abilities on: each brings the Hangar loadout, spent on both screens', async ({ context }) => {
+    const host = await context.newPage()
+    const guest = await context.newPage()
+
+    await host.goto('/actuaria/battle')
+    await host.getByTestId('battle-mode-host').click()
+    await host.getByTestId('battle-name-0').fill('Ada')
+    await host.getByTestId('battle-exam-Financial Mathematics').click()
+    await chooseThreeQuestions(host)
+    await host.getByRole('radiogroup', { name: 'Abilities' }).getByRole('radio', { name: 'On' }).click()
+    await host.getByTestId('battle-begin').click()
+
+    const codeTiles = host.getByTestId('battle-room-code')
+    await expect(codeTiles).toBeVisible()
+    await expect(host.getByTestId('battle-lobby')).toContainText('abilities on')
+    const code = ((await codeTiles.getAttribute('aria-label')) ?? '').replace('Room code ', '').replace(/ /g, '')
+
+    await guest.goto(`/actuaria/battle?join=${code}`)
+    await guest.getByTestId('battle-join-name').fill('Bo')
+    await guest.getByTestId('battle-join').click()
+    await expect(host.getByTestId('battle-lobby')).toContainText('Bo is in')
+    await host.getByTestId('battle-start-online').click()
+
+    const { right, wrong } = await currentQuestion(host)
+    await expect(guest.getByTestId('battle-question')).toBeVisible({ timeout: 10_000 })
+    // A guest pilot has no keystones yet, so each brings the starter alone.
+    for (const page of [host, guest]) {
+      await expect(page.getByTestId('battle-ability-tray').getByTestId('ability-reinsurance')).toHaveAttribute('data-state', 'ready')
+    }
+
+    // Arming one is heard on this screen and seen as spent on the other.
+    await host.getByTestId('ability-reinsurance').click()
+    await expect(host.getByTestId('ability-reinsurance')).toHaveAttribute('data-state', 'armed')
+    await expect(guest.getByTestId('battle-opponent-abilities')).toHaveText('Ada used Reinsurance')
+    await expect(guest.getByTestId('ability-reinsurance')).toHaveAttribute('data-state', 'ready')
+
+    await host.getByTestId(`battle-option-${right}`).click()
+    await guest.getByTestId(`battle-option-${wrong}`).click()
+    await expect(host.getByTestId('battle-round-result')).toBeVisible()
+    // Reinsurance waits for a claim; a wrong lock-in under these rules is none.
+    await expect(host.getByTestId('ability-reinsurance')).toHaveAttribute('data-state', 'armed')
+  })
+
+  test('a room without abilities, or a page without a loadout, shows no tray', async ({ context }) => {
+    const host = await context.newPage()
+    const guest = await context.newPage()
+
+    // Quiz Battle's own page doesn't offer the setting.
+    await host.goto('/battle')
+    await host.getByTestId('battle-mode-host').click()
+    await expect(host.getByRole('radiogroup', { name: 'Abilities' })).toHaveCount(0)
+
+    await host.goto('/actuaria/battle')
+    await host.getByTestId('battle-mode-host').click()
+    await host.getByTestId('battle-name-0').fill('Ada')
+    await host.getByTestId('battle-exam-Financial Mathematics').click()
+    await chooseThreeQuestions(host)
+    await host.getByRole('radiogroup', { name: 'Abilities' }).getByRole('radio', { name: 'On' }).click()
+    await host.getByTestId('battle-begin').click()
+    const codeTiles = host.getByTestId('battle-room-code')
+    await expect(codeTiles).toBeVisible()
+    const code = ((await codeTiles.getAttribute('aria-label')) ?? '').replace('Room code ', '').replace(/ /g, '')
+
+    // Joined from Quiz Battle: that player brings nothing, and sees what Ada spends.
+    await guest.goto(`/battle?join=${code}`)
+    await guest.getByTestId('battle-join-name').fill('Bo')
+    await guest.getByTestId('battle-join').click()
+    await expect(host.getByTestId('battle-lobby')).toContainText('Bo is in')
+    await host.getByTestId('battle-start-online').click()
+    await currentQuestion(host)
+    await expect(guest.getByTestId('battle-question')).toBeVisible({ timeout: 10_000 })
+    await expect(guest.getByTestId('ability-reinsurance')).toHaveCount(0)
+    await host.getByTestId('ability-reinsurance').click()
+    await expect(guest.getByTestId('battle-opponent-abilities')).toHaveText('Ada used Reinsurance')
+  })
+
   test('the lobby pairs a player at Monte Carlo Station with one at Quiz Battle', async ({ context }) => {
     test.setTimeout(90_000)
     const ada = await context.newPage()

@@ -27,6 +27,7 @@ import {
   cleanPlayerName,
   drawBattleQuestions,
   questionKey,
+  type AbilityId,
   type BattleConfig,
   type BattlePlayer,
   type BattleQuestionKey,
@@ -40,6 +41,7 @@ import {
   matchSettings,
   pickExam,
   pickLobbyExam,
+  roomConfig,
   saveBattleSetup,
   type BattleSetup,
 } from '@/lib/battleSetup'
@@ -142,6 +144,9 @@ function HowPointsWork() {
     ['Final question', `×${FINAL_ROUND_MULTIPLIER} everything`],
     [skin.local.title, `${skin.claim} costs ${WRONG_BUZZ_PENALTY} and hands your rival the steal`],
     ['Online', `the first right answer gets +${FASTEST_BONUS}; a wrong one costs nothing`],
+    ...(skin.abilities
+      ? [['Abilities', 'a private channel’s host can turn them on — each once per battle, scored on its own line'] as [string, string]]
+      : []),
   ]
   return (
     <div className="rounded-xl bg-card">
@@ -171,6 +176,7 @@ function HowPointsWork() {
 export default function Battle({
   skin: skinId,
   onPlayingChange,
+  loadout,
 }: {
   /**
    * The skin to draw the page in — Quiz Battle's own, or Actuaria's Monte Carlo
@@ -180,16 +186,21 @@ export default function Battle({
   skin?: BattleSkinId
   /** Told when a battle (or a room) takes the screen over, and when it gives it back. */
   onPlayingChange?: (playing: boolean) => void
+  /**
+   * The abilities this player takes into a private room with them on — their
+   * Hangar loadout, cut to what is unlocked now (docs/actuaria-online.md §7.2).
+   */
+  loadout?: AbilityId[]
 } = {}) {
   const skin = battleSkin(skinId)
   return (
     <BattleSkinContext.Provider value={skin}>
-      <BattlePage onPlayingChange={onPlayingChange} />
+      <BattlePage onPlayingChange={onPlayingChange} loadout={skin.abilities ? loadout : undefined} />
     </BattleSkinContext.Provider>
   )
 }
 
-function BattlePage({ onPlayingChange }: { onPlayingChange?: (playing: boolean) => void }) {
+function BattlePage({ onPlayingChange, loadout }: { onPlayingChange?: (playing: boolean) => void; loadout?: AbilityId[] }) {
   const skin = useBattleSkin()
   const navigate = useNavigate()
   const [params, setParams] = useSearchParams()
@@ -251,8 +262,9 @@ function BattlePage({ onPlayingChange }: { onPlayingChange?: (playing: boolean) 
   }
 
   function begin(mode: 'local' | 'host') {
-    const rules = mode === 'local' ? 'buzzer' : 'simultaneous'
-    const config = configFromSetup(effectiveSetup, rules)
+    // A room's abilities are its host's to turn on, where the skin offers them;
+    // one screen never has them (seat 2 has no account and so no unlocks).
+    const config = mode === 'local' ? configFromSetup(effectiveSetup, 'buzzer') : roomConfig(effectiveSetup, skin.abilities)
     const difficulty = difficultyTarget(effectiveSetup.difficulty)
     if (mode === 'local') setScreen({ kind: 'local', config, players: [player(0, myAvatar), player(1)], difficulty })
     else setScreen({ kind: 'host', config, player: player(0, myAvatar), difficulty })
@@ -308,6 +320,7 @@ function BattlePage({ onPlayingChange }: { onPlayingChange?: (playing: boolean) 
         code={screen.code}
         onFindAnother={screen.code ? findAnother : undefined}
         opponent={screen.opponent}
+        loadout={screen.code ? undefined : loadout}
       />,
     )
   }
@@ -321,6 +334,7 @@ function BattlePage({ onPlayingChange }: { onPlayingChange?: (playing: boolean) 
         matched={screen.matched}
         onFindAnother={screen.matched ? findAnother : undefined}
         opponent={screen.opponent}
+        loadout={screen.matched ? undefined : loadout}
       />,
     )
   }
@@ -441,6 +455,8 @@ function BattlePage({ onPlayingChange }: { onPlayingChange?: (playing: boolean) 
             exams={exams}
             players={screen.mode === 'local' ? 2 : 1}
             avatarUrl={myAvatar}
+            offerAbilities={screen.mode === 'host' && skin.abilities}
+            loadoutSize={loadout?.length ?? 0}
           />
           <Button
             size="lg"

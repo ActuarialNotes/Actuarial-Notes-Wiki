@@ -653,6 +653,29 @@ them for layout, spacing and copy, not for colour, font, scoring or reward value
 
 ---
 
+## Implementation notes
+
+Where the build settled something this spec left open, or departed from its letter.
+
+- **The flag** is `ACTUARIA_ENABLED = import.meta.env.VITE_ACTUARIA_PREVIEW === 'on'` — a
+  build-time constant, `false` in every deployed build (nothing sets the variable), and folded
+  away there, so the main chunk carries no Actuaria code. The e2e build turns it on
+  (`playwright.config.ts`), which is how the specs reach `/actuaria`.
+- **`user_actuaria` has a `ship` column** (`jsonb`, the Hangar's equipped slot per part),
+  since §8.1 names no home for the equipped cosmetics. Ownership stays in `user_cosmetics`.
+- **The `power` event carries `now`**, as every other `battleReducer` event does, rather than
+  `at`. `PROTOCOL_VERSION` is **2**.
+- **Abilities are offered at the station only** (`BattleSkin.abilities`): Quiz Battle's own
+  page has no Hangar and so no loadout. A player on `/battle` can still join a station room
+  with abilities on — they bring none.
+- **Double Down with no answer** — the clock runs out on an armed round — is a miss, and so a
+  claim (−50, −25 with Reinsurance).
+- **Reinsurance stays armed across rounds** until the seat's next claim, and a used
+  Reinsurance that never met one is simply spent.
+- **Ship cosmetics** are a sibling catalogue, `data/actuariaShips.ts` (`ship:<slot>:<name>`),
+  sold on a flag-gated **Ships** tab of the Store through `purchase_cosmetic`. The ship is drawn
+  from what is owned: a slot naming something the player doesn't own draws the stock part.
+
 ## Changelog
 
 **Revision 2 (2026-09-29, `main` @ `4337677`).** Rebased the battle half on Quiz Battle

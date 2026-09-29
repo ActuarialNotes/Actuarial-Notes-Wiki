@@ -102,3 +102,60 @@ describe('parseMessage', () => {
     expect(parseMessage({ ...base, t: 'room', to: 'c2', sentAt: 1, stage: 'playing', host: { name: 'A' }, guest: { name: 'B' }, config: sampleBattle().config, battle: { junk: true }, rematch: [false, false] })).toBeNull()
   })
 })
+
+describe('abilities on the wire (docs/actuaria-online.md §7.2)', () => {
+  function abilitiesBattle(): BattleState {
+    const s = createBattle({
+      config: { rules: 'simultaneous', exam: 'Probability', rounds: 3, roundSeconds: 60, abilities: true },
+      players: [{ name: 'Ada' }, { name: 'Bo' }],
+      questions: ['p-1', 'p-2', 'p-3'].map(id => ({ id, answer: 'B', options: ['A', 'B', 'C', 'D'] })),
+      now: 1000,
+      graceMs: 1500,
+      loadouts: [['bayesian-update', 'reinsurance'], ['double-down']],
+    })
+    return [
+      { type: 'tick' as const, now: 5000 },
+      { type: 'power' as const, seat: 0 as const, ability: 'bayesian-update' as const, now: 5000, strike: 'C' },
+      { type: 'power' as const, seat: 0 as const, ability: 'reinsurance' as const, now: 5001 },
+      { type: 'power' as const, seat: 1 as const, ability: 'double-down' as const, now: 5002 },
+    ].reduce(battleReducer, s)
+  }
+
+  it('is a new version of the protocol — an older bundle refuses the room', () => {
+    expect(PROTOCOL_VERSION).toBe(2)
+  })
+
+  it('round-trips a battle with abilities through JSON', () => {
+    const s = abilitiesBattle()
+    const back = parseBattleState(JSON.parse(JSON.stringify(s)))
+    expect(back).toEqual(s)
+    expect(back!.spent).toEqual([['bayesian-update', 'reinsurance'], ['double-down']])
+    expect(back!.reinsured).toEqual([true, false])
+  })
+
+  it('refuses a loadout over the cap, an unknown ability or one listed twice', () => {
+    const over = JSON.parse(JSON.stringify(abilitiesBattle()))
+    over.loadouts[0] = ['reinsurance', 'double-down', 'time-value', 'immunization']
+    expect(parseBattleState(over)).toBeNull()
+    const unknown = JSON.parse(JSON.stringify(abilitiesBattle()))
+    unknown.rounds[0].powers[1] = ['poisson-burst']
+    expect(parseBattleState(unknown)).toBeNull()
+    const twice = JSON.parse(JSON.stringify(abilitiesBattle()))
+    twice.spent[1] = ['double-down', 'double-down']
+    expect(parseBattleState(twice)).toBeNull()
+    const longStrike = JSON.parse(JSON.stringify(abilitiesBattle()))
+    longStrike.rounds[0].struck[0] = 'x'.repeat(40)
+    expect(parseBattleState(longStrike)).toBeNull()
+  })
+
+  it('parses the power move, and a join that declares a loadout', () => {
+    const v = PROTOCOL_VERSION
+    expect(parseMessage({ t: 'act', v, from: 'g', action: { kind: 'power', round: 1, ability: 'time-value' } }))
+      .toEqual({ t: 'act', v, from: 'g', action: { kind: 'power', round: 1, ability: 'time-value' } })
+    expect(parseMessage({ t: 'act', v, from: 'g', action: { kind: 'power', round: 1, ability: 'afterburner' } })).toBeNull()
+    expect(parseMessage({ t: 'join', v, from: 'g', name: 'Bo', loadout: ['reinsurance', 'immunization'] }))
+      .toMatchObject({ loadout: ['reinsurance', 'immunization'] })
+    expect(parseMessage({ t: 'join', v, from: 'g', name: 'Bo', loadout: ['reinsurance', 'time-value', 'double-down', 'immunization'] })).toBeNull()
+    expect(parseMessage({ t: 'join', v, from: 'g', name: 'Bo', loadout: 'reinsurance' })).toBeNull()
+  })
+})

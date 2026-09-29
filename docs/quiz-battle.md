@@ -55,6 +55,32 @@ A **streak** is right answers in a row by one player: a round they don't get
 right (a miss, a pass, the other player taking it) ends it. Three in a row puts
 the flame on the scoreboard. A **draw** is a draw — equal scores name no winner.
 
+### Abilities (a room setting, off by default)
+
+A room hosted with **Abilities** on lets each player bring up to three
+once-per-battle power-ups (`docs/actuaria-online.md` §7.2). They are offered only
+where a player has a loadout — Monte Carlo Station's *Private channel* — and never
+in the lobby (`matchSettings` builds no such room) or on one screen. The rules are
+the engine's, in `lib/battle.ts`, driven by one event, `power`, which returns the
+state by identity when the setting is off, the ability isn't in the seat's
+loadout or is spent, the seat is past arming (arming runs from the count-in until
+it locks in — or, under buzzer rules, until it answers or is locked out), or it is
+Double Down on the final question.
+
+| Ability | Effect |
+|---|---|
+| **Reinsurance** | Halves the seat's next claim (−50 → −25), whenever it comes |
+| **Bayesian Update** | Strikes one wrong option, on this seat's screen only — `redactFor` hides which from the other |
+| **Double Down** | This round ×2, applied after every other part and never on top of the final's ×2; a miss is a claim of −50 even under simultaneous rules |
+| **Time Value** | Speed scored as if answered 30 s sooner, never above +50 |
+| **Immunization** | A miss this round keeps the streak |
+
+What an ability adds or refunds is the breakdown's own `ability` line, so the
+round's chips and the results can show it. The guest declares its loadout in its
+join message; the host checks only the ids and the count — unlocks are read from
+each player's own mastery and can't be verified across devices, so a friend room's
+trust stays social.
+
 ## Nothing is saved
 
 A battle writes no mastery, no XP, no streak day, no quest progress and no
@@ -136,7 +162,11 @@ after the code, and when both leave, the room is gone.
   `sessionStorage`, so the host recognises them and sends the room again.
 - **Answers and Ready are re-sent** with each heartbeat until the host's room
   shows them — a broadcast has no receipt — and the host ignores a repeat.
-- **Versions.** Messages carry `PROTOCOL_VERSION`, and a guest refuses a room
+- **Abilities** travel as one more move (`{ kind: 'power', round, ability }`),
+  re-sent like an answer until the host's room shows it spent; the loadouts, what
+  each seat has spent and a pending Reinsurance ride in the room, capped and
+  parsed like the rest.
+- **Versions.** Messages carry `PROTOCOL_VERSION` (2 since abilities), and a guest refuses a room
   whose questions its own bundle doesn't have (the two devices run different
   deploys): both are told to reload.
 
@@ -260,6 +290,7 @@ pinned by `soundConfig.test.ts`'s *battle cues*:
 | `buzz` | a buzz: a rising fourth over a low glide, the loudest press in the app |
 | `select` | an answer on the pad, same screen |
 | `lockIn` | your answer locked in, online — a latch, quieter than a right answer |
+| `power` | an ability armed — a rising latch, D up to G, softer than `lockIn` |
 | `opponentIn` | the other player locked in — two soft knocks, no pitch, so it can't be mistaken for a verdict |
 | `correct` | a right answer, climbing with a run — on one screen anyone's, online your own |
 | `steal` | a steal: a rising line that tops `correct`, because it's the best moment in a buzzer battle |
@@ -331,14 +362,23 @@ the scoring, the sessions, the lobby and its handshake, the cues, the music and
   unanswered (`missedQuestionIds` — online, this device's seat; on one screen, the
   first seat, the account holder's), opened as an ordinary quiz by id. The battle
   still saves nothing; the review is a quiz, and saves as one.
+- **Abilities** are the station's too (`skin.abilities`): the host's setup offers
+  the room setting, and the page passes in the Hangar loadout, cut to what the
+  player's keystones hold when the battle starts (`battleLoadout` in
+  `lib/actuaria/abilities.ts`). The tray (`components/battle/AbilityTray.tsx`)
+  sits above the answer pad in `BattleActionBar`. A room made at the station with
+  abilities on can still be joined from `/battle`: that player simply brings none.
 
 ## Testing
 
 - `lib/battle.test.ts` — the rules: the clock's boundaries, buzzing, the answer
   window, steals and their minimum, simultaneous lock-ins, the grace period,
-  Ready, runs, the final-round doubling, the summary, redaction, the clock shift.
+  Ready, runs, the final-round doubling, the summary, redaction, the clock shift;
+  and every ability and every disallowed use of one, with the worked example of
+  `docs/actuaria-online.md` §7.2 (183 → 195 → 390) as a fixture.
 - `lib/battleRoom.test.ts` — codes, and that every malformed message is dropped
-  rather than thrown on.
+  rather than thrown on (abilities' moves and fields included, and the old
+  protocol refused).
 - `lib/battleSession.test.ts` — a host and a guest over an in-memory channel with
   a JSON round trip: joining, a full room, a code nobody hosts, a version
   mismatch, redaction on the wire, latency compensation, a lost answer resent,
@@ -378,7 +418,7 @@ the scoring, the sessions, the lobby and its handshake, the cues, the music and
 
 Ideas deliberately left out so far: more than two players (the engine's seats
 are a pair throughout); a battle on the written CAS papers (it would need
-self-grading both players can trust); sudden death on a draw; power-ups (a
-"double down" armed before answering); a battle history; and a rating for
+self-grading both players can trust); sudden death on a draw; a battle history;
+and a rating for
 matchmaking to pair on — the lobby pairs on the exam alone, because a rating
 would have to be stored, and nothing about a battle is.

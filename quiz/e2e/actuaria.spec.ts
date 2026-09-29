@@ -99,6 +99,32 @@ test.describe('actuaria', () => {
     await expect(page.getByTestId('actuaria-hub-card')).toHaveCount(0)
   })
 
+  test('the Hangar equips up to three abilities and shows what unlocks the rest (§6.7)', async ({ page }) => {
+    await page.goto('/actuaria/hangar')
+    await expect(page.getByRole('heading', { name: 'Hangar' })).toBeVisible()
+    // The starter is on from the first visit.
+    const reinsurance = page.getByTestId('ability-reinsurance')
+    await expect(reinsurance).toHaveAttribute('aria-pressed', 'true')
+    await expect(page.getByTestId('hangar-loadout-count')).toHaveText('1 of 3 equipped')
+    // The others wait on a keystone — presentation only; the concept is a tap away.
+    await expect(page.getByTestId('ability-bayesian-update')).toBeDisabled()
+    const requirement = page.getByTestId('hangar-requirement-bayesian-update')
+    await expect(requirement).toContainText('Bayes Theorem at Level 2')
+    await requirement.getByRole('button', { name: 'Bayes Theorem' }).click()
+    await expect(page.getByLabel('Concept: Bayes Theorem')).toBeVisible()
+    await page.keyboard.press('Escape')
+
+    await reinsurance.click()
+    await expect(reinsurance).toHaveAttribute('aria-pressed', 'false')
+    await expect(page.getByTestId('hangar-loadout-count')).toHaveText('0 of 3 equipped')
+    await page.reload()
+    await expect(page.getByTestId('hangar-loadout-count')).toHaveText('0 of 3 equipped')
+
+    // A guest owns no parts: the stock ship, and the Store a sign-in away.
+    await expect(page.getByRole('img', { name: /hull paint Stock/ })).toBeVisible()
+    await expect(page.getByTestId('hangar-part-ship:hull:cobalt')).toHaveAttribute('href', '/auth')
+  })
+
   test('has its own row in the sidebar, under Play', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
     await page.goto('/wiki')

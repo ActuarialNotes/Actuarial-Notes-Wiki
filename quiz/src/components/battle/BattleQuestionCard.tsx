@@ -46,6 +46,7 @@ export function BattleQuestionCard({
   picks,
   revealed,
   pickSound = 'select',
+  struck = null,
 }: {
   question: Question
   players: readonly [BattlePlayer, BattlePlayer]
@@ -62,6 +63,8 @@ export function BattleQuestionCard({
   revealed: boolean
   /** The press cue; `none` when the handler plays its own (a lock-in). */
   pickSound?: 'select' | 'none'
+  /** Bayesian Update: the wrong option struck from this player's screen. */
+  struck?: string | null
 }) {
   const [showSolution, setShowSolution] = useState(false)
   // A pointer that moves more than a few pixels between down and click was
@@ -85,8 +88,10 @@ export function BattleQuestionCard({
             const isAnswer = option.key === question.answer
             const pickedBy = picks.filter(p => p.choice === option.key)
             const missed = pickedBy.some(p => !p.correct)
+            // Struck by this player's Bayesian Update: ruled out on this screen, not a verdict.
+            const struckOut = !revealed && !missed && struck === option.key
             const isLocked = locked?.choice === option.key
-            const pickable = picker !== null && !revealed && !missed && !locked
+            const pickable = picker !== null && !revealed && !missed && !struckOut && !locked
             return (
               <div
                 key={option.key}
@@ -97,6 +102,7 @@ export function BattleQuestionCard({
                 data-sound={pickable ? pickSound : 'none'}
                 data-math-magnify="none"
                 data-testid={`battle-option-${option.key}`}
+                data-struck={struckOut || undefined}
                 onPointerDown={e => { pointerStart.current = e.clientY; scrolled.current = false }}
                 onPointerMove={e => {
                   if (pointerStart.current !== null && Math.abs(e.clientY - pointerStart.current) > 8) scrolled.current = true
@@ -114,6 +120,7 @@ export function BattleQuestionCard({
                   revealed && isAnswer && 'bg-green-50 text-green-900 dark:bg-green-950 dark:text-green-100',
                   (revealed || missed) && !isAnswer && missed && 'bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-100',
                   revealed && !isAnswer && !missed && 'bg-muted/40 text-muted-foreground opacity-60',
+                  struckOut && 'bg-muted/40 text-muted-foreground opacity-50',
                   !revealed && !missed && isLocked && 'bg-[var(--player-soft)] ring-2 ring-[var(--player)]',
                   !revealed && !missed && !isLocked && pickable && 'cursor-pointer bg-muted/40 hover:bg-[var(--player-soft)] hover:ring-1 hover:ring-[var(--player-muted)]',
                   !revealed && !missed && !isLocked && !pickable && 'cursor-default bg-muted/40',
@@ -127,7 +134,7 @@ export function BattleQuestionCard({
                 >
                   {option.key}
                 </span>
-                <span className={cn('min-w-0 flex-1', missed && !revealed && 'line-through decoration-2 opacity-70')}>
+                <span className={cn('min-w-0 flex-1', (missed || struckOut) && !revealed && 'line-through decoration-2 opacity-70')}>
                   <OptionText text={option.text} />
                 </span>
                 {pickedBy.length > 0 && (

@@ -834,11 +834,11 @@ describe('sound catalogue', () => {
 describe('the battle cues', () => {
   // Quiz Battle's own sounds (docs/quiz-battle.md): built from the same parts
   // as the rest of the catalogue and held to the same rules.
-  const BATTLE = ['buzz', 'countIn', 'go', 'lockIn', 'opponentIn', 'steal', 'clockTick', 'matchFound', 'reaction'] as const
+  const BATTLE = ['buzz', 'countIn', 'go', 'lockIn', 'opponentIn', 'power', 'steal', 'clockTick', 'matchFound', 'reaction'] as const
   /** The moments of a game: struck, and in the room. */
   const MOMENTS = ['buzz', 'go', 'steal', 'matchFound'] as const
   /** Timekeeping and the other player's moves: under a right answer, and dry. */
-  const UNDERNEATH = ['countIn', 'lockIn', 'opponentIn', 'clockTick', 'reaction'] as const
+  const UNDERNEATH = ['countIn', 'lockIn', 'opponentIn', 'power', 'clockTick', 'reaction'] as const
 
   it('are round and short, like every chime', () => {
     for (const event of BATTLE) {
@@ -864,7 +864,7 @@ describe('the battle cues', () => {
 
   it('rings the moments in the room and keeps the timekeeping dry', () => {
     for (const event of MOMENTS) expect(SOUND_RECIPES[event].space, `${event} is bone dry`).toBeGreaterThan(0)
-    for (const event of ['countIn', 'lockIn', 'opponentIn', 'clockTick'] as const) {
+    for (const event of ['countIn', 'lockIn', 'opponentIn', 'power', 'clockTick'] as const) {
       expect(SOUND_RECIPES[event].space, `${event} has a tail on it`).toBeUndefined()
     }
   })
@@ -886,6 +886,13 @@ describe('the battle cues', () => {
     const [count] = principals(SOUND_RECIPES.countIn)
     const [go] = principals(SOUND_RECIPES.go)
     expect(semitones(count.freq, go.freq)).toBe(12)
+  })
+
+  it('arms an ability with a rising latch, softer than locking in', () => {
+    expect(peakLevel(SOUND_RECIPES.power)).toBeLessThan(peakLevel(SOUND_RECIPES.lockIn))
+    const notes = (SOUND_RECIPES.power.tones ?? []).filter(t => !isPartial(t, SOUND_RECIPES.power))
+    expect(notes.length).toBeGreaterThanOrEqual(2)
+    expect(notes[notes.length - 1].freq).toBeGreaterThan(notes[0].freq)
   })
 
   it('gives a steal more than a right answer — it replaces one', () => {

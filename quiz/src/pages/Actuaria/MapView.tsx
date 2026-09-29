@@ -7,15 +7,19 @@ import { HudFrame } from '@/components/actuaria/HudFrame'
 import { LandmarkRow } from '@/components/actuaria/LandmarkRow'
 import { SectorTile } from '@/components/actuaria/SectorTile'
 import { StarMap } from '@/components/actuaria/StarMap'
+import { ShipGlyph } from '@/components/actuaria/ShipGlyph'
 import { StatusChip } from '@/components/actuaria/StatusChip'
 import { Term } from '@/components/actuaria/Term'
 import { Button, buttonVariants } from '@/components/ui/button'
+import { useActuariaPrefs } from '@/hooks/useActuariaPrefs'
 import { useAuth } from '@/hooks/useAuth'
 import { useIsMobile } from '@/hooks/useIsMobile'
+import { useOwnedShips } from '@/hooks/useOwnedShips'
 import type { ActuariaWorld } from '@/hooks/useActuariaWorld'
 import { sectorCredibility } from '@/lib/actuaria/credibility'
 import { panelLandmarks, sectorRegions, uniqueLandmarks } from '@/lib/actuaria/landmarks'
 import { sectorName, stationCountLine } from '@/lib/actuaria/lexicon'
+import { shipView } from '@/lib/actuaria/ship'
 import { sectorByKey, type Sector } from '@/lib/actuaria/sectors'
 import { examAccentStyle } from '@/lib/examColors'
 import { wikiRoute } from '@/lib/wikiRoutes'
@@ -89,6 +93,10 @@ function PlayerCard({ world }: { world: ActuariaWorld }) {
   const name = (meta.full_name as string | undefined) || (meta.display_name as string | undefined) || user?.email?.split('@')[0] || 'Guest pilot'
   const active = world.activeSector
   const credibility = active ? sectorCredibility(world.readiness.get(active.key)?.overallPct ?? 0) : null
+  // The ship they fly — cosmetic, and shown only here and in the Hangar (§7.3).
+  const { prefs } = useActuariaPrefs()
+  const { owned } = useOwnedShips()
+  const ship = shipView(prefs.ship, owned)
 
   return (
     <div className="mb-3 flex w-full max-w-xs items-center gap-3 rounded-xl bg-card/90 p-3 backdrop-blur-sm lg:absolute lg:left-0 lg:top-0 lg:z-10 lg:mb-0 lg:w-64">
@@ -106,6 +114,9 @@ function PlayerCard({ world }: { world: ActuariaWorld }) {
           <p className="text-xs text-muted-foreground">No sector charted yet</p>
         )}
       </div>
+      <Link to="/actuaria/hangar" aria-label={`Your ship: hull ${ship.labels.hull}, trail ${ship.labels.trail}. Open the Hangar`} data-testid="actuaria-player-ship" className="rounded-md p-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        <ShipGlyph look={ship.look} size={36} />
+      </Link>
     </div>
   )
 }

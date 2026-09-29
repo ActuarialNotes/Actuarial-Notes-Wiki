@@ -200,7 +200,11 @@ export function RoundResult({
               if (mine.length === 0) return null
               const total = mine.reduce((n, a) => n + a.points.total, 0)
               const right = mine.find(a => a.correct)
-              const chips = right ? pointsChips(right.points) : []
+              // A miss says nothing more than its number — unless an ability
+              // changed it (Reinsurance's refund, Double Down's claim online).
+              const claim = right ? undefined : mine.find(a => a.points.ability !== 0 || (a.points.penalty < 0 && battle.config.rules === 'simultaneous'))
+              const penaltyLabel = battle.config.rules === 'buzzer' ? 'Wrong buzz' : 'Claim'
+              const chips = right ? pointsChips(right.points) : claim ? pointsChips(claim.points, penaltyLabel) : []
               const doubled = mine[0].points.multiplier > 1
               return (
                 <span key={seat} style={playerAccentStyle(seat)} className="inline-flex flex-wrap items-baseline gap-x-1.5">

@@ -3,6 +3,14 @@ import type { Question } from './parser'
 import {
   ANSWER_WINDOW_MS,
   BASE_POINTS,
+  DOUBLE_DOWN_CLAIM,
+  SEATS,
+  canUse,
+  cleanLoadout,
+  strikeable,
+  timeValueBonus,
+  type AbilityId,
+  type Seat,
   COUNTDOWN_MS,
   FASTEST_BONUS,
   FINAL_ROUND_MULTIPLIER,
@@ -489,5 +497,245 @@ describe('the claims review — each player’s misses (docs/actuaria-online.md 
     expect(missedQuestionIds(s, 0)).toEqual([])
     const forfeited = battleReducer(s, { type: 'forfeit', seat: 1, now: OPEN + 1 })
     expect(missedQuestionIds(forfeited, 0)).toEqual([])
+  })
+})
+
+// ── Abilities (docs/actuaria-online.md §7.2) ────────────────────────────────
+
+describe('abilities', () => {
+  type Loadouts = [AbilityId[], AbilityId[]]
+
+  function withAbilities(rules: BattleConfig['rules'], loadouts: Loadouts, opts: { rounds?: number; roundSeconds?: number; on?: boolean } = {}): BattleState {
+    return createBattle({
+      config: { rules, exam: 'Probability', rounds: opts.rounds ?? 5, roundSeconds: opts.roundSeconds ?? 120, abilities: opts.on ?? true },
+      players: [{ name: 'Ada' }, { name: 'Bo' }],
+      questions: keys(opts.rounds ?? 5),
+      now: T0,
+      graceMs: rules === 'simultaneous' ? ONLINE_GRACE_MS : 0,
+      loadouts,
+    })
+  }
+
+  /** Play the current simultaneous round: each seat's choice (or none) at its time, then both Ready. */
+  function playRound(s: BattleState, picks: [{ choice: string; ms: number } | null, { choice: string; ms: number } | null], powers: { seat: Seat; ability: AbilityId; strike?: string }[] = []): BattleState {
+    const at = opensAt(s)
+    s = run(s, { type: 'tick', now: at })
+    for (const p of powers) s = run(s, { type: 'power', seat: p.seat, ability: p.ability, now: at, strike: p.strike })
+    SEATS.forEach(seat => {
+      const pick = picks[seat]
+      if (pick) s = run(s, { type: 'answer', seat, choice: pick.choice, now: at + pick.ms, elapsedMs: pick.ms })
+    })
+    return run(s, { type: 'tick', now: at + 120_000 + ONLINE_GRACE_MS })
+  }
+
+  function next(s: BattleState): BattleState {
+    const now = currentRound(s).deadline + ONLINE_GRACE_MS + 1
+    return run(s, { type: 'ready', seat: 0, now }, { type: 'ready', seat: 1, now })
+  }
+
+  const mine = (s: BattleState, seat: Seat = 0) => currentRound(s).answers.find(a => a.seat === seat)!
+
+  describe('the worked example — private channel, simultaneous, Standard, round 2 of 5', () => {
+    // Your second right answer in a row, locked in at 30 s, the first right
+    // answer of the round (§7.2's table, as a fixture).
+    function roundTwo(powers: AbilityId[]): BattleState {
+      let s = withAbilities('simultaneous', [['time-value', 'double-down', 'reinsurance'], []])
+      s = playRound(s, [{ choice: 'B', ms: 10_000 }, { choice: 'A', ms: 5_000 }])
+      s = next(s)
+      return playRound(s, [{ choice: 'B', ms: 30_000 }, { choice: 'A', ms: 40_000 }], powers.map(ability => ({ seat: 0 as Seat, ability })))
+    }
+
+    it('scores 183 with no ability: 100 + 38 speed + 20 streak + 25 fastest', () => {
+      const p = mine(roundTwo([])).points
+      expect([p.base, p.speed, p.streak, p.fastest, p.ability, p.total]).toEqual([100, 38, 20, 25, 0, 183])
+    })
+
+    it('scores 195 with Time Value: speed as if at 0 s, a line of +12', () => {
+      const p = mine(roundTwo(['time-value'])).points
+      expect([p.speed, p.ability, p.multiplier, p.total]).toEqual([38, 12, 1, 195])
+    })
+
+    it('scores 390 with Time Value and Double Down: +12, then ×2 on the whole round', () => {
+      const p = mine(roundTwo(['time-value', 'double-down'])).points
+      expect([p.multiplier, p.ability, p.total]).toEqual([2, 24, 390])
+    })
+  })
+
+  it('turns a Double Down miss into a claim of −50, even online — −25 with Reinsurance', () => {
+    let s = withAbilities('simultaneous', [['double-down', 'reinsurance'], []])
+    s = playRound(s, [{ choice: 'A', ms: 5_000 }, null], [{ seat: 0, ability: 'double-down' }])
+    expect(mine(s).points.total).toBe(-DOUBLE_DOWN_CLAIM)
+    expect(s.scores[0]).toBe(-50)
+
+    let r = withAbilities('simultaneous', [['double-down', 'reinsurance'], []])
+    r = playRound(r, [{ choice: 'A', ms: 5_000 }, null], [{ seat: 0, ability: 'reinsurance' }, { seat: 0, ability: 'double-down' }])
+    expect(mine(r).points).toMatchObject({ penalty: -50, ability: 25, total: -25 })
+  })
+
+  it('counts an unanswered question as a Double Down miss — the bet was made', () => {
+    let s = withAbilities('simultaneous', [['double-down'], []])
+    s = playRound(s, [null, { choice: 'B', ms: 5_000 }], [{ seat: 0, ability: 'double-down' }])
+    expect(mine(s)).toMatchObject({ choice: null, correct: false })
+    expect(s.scores[0]).toBe(-50)
+  })
+
+  it('never lets Double Down stack on the final question, which is already doubled', () => {
+    let s = withAbilities('simultaneous', [['double-down'], []], { rounds: 3 })
+    s = next(playRound(s, [null, null]))
+    s = next(playRound(s, [null, null]))
+    const at = opensAt(s)
+    s = run(s, { type: 'tick', now: at })
+    expect(canUse(s, 0, 'double-down')).toBe(false)
+    expect(battleReducer(s, { type: 'power', seat: 0, ability: 'double-down', now: at })).toBe(s)
+  })
+
+  it('keeps Time Value’s speed at or under the most a fast answer earns', () => {
+    let s = withAbilities('simultaneous', [['time-value'], []])
+    s = playRound(s, [{ choice: 'B', ms: 10_000 }, null], [{ seat: 0, ability: 'time-value' }])
+    const p = mine(s).points
+    expect(p.speed + p.ability).toBe(SPEED_BONUS_MAX)
+    expect(timeValueBonus(10_000, 120_000)).toBe(4)
+    expect(timeValueBonus(0, 120_000)).toBe(0)
+  })
+
+  it('keeps a run alive through a miss with Immunization', () => {
+    let s = withAbilities('simultaneous', [['immunization'], []])
+    s = next(playRound(s, [{ choice: 'B', ms: 1_000 }, null]))
+    s = next(playRound(s, [{ choice: 'B', ms: 1_000 }, null]))
+    expect(s.streaks[0]).toBe(2)
+    s = playRound(s, [{ choice: 'A', ms: 1_000 }, null], [{ seat: 0, ability: 'immunization' }])
+    expect(s.streaks[0]).toBe(2)
+    // Without it, the next miss breaks the run.
+    s = next(s)
+    s = playRound(s, [{ choice: 'A', ms: 1_000 }, null])
+    expect(s.streaks[0]).toBe(0)
+  })
+
+  it('keeps a run through a wrong buzz with Immunization, on one screen', () => {
+    let s = withAbilities('buzzer', [['immunization'], []], { roundSeconds: 60 })
+    s = run(s, { type: 'tick', now: OPEN }, { type: 'buzz', seat: 0, now: OPEN + 1000 }, { type: 'answer', seat: 0, choice: 'B', now: OPEN + 2000 })
+    s = run(s, { type: 'next', now: OPEN + 3000 })
+    const at = opensAt(s)
+    s = run(s, { type: 'tick', now: at }, { type: 'power', seat: 0, ability: 'immunization', now: at })
+    s = run(s, { type: 'buzz', seat: 0, now: at + 1000 }, { type: 'answer', seat: 0, choice: 'A', now: at + 2000 })
+    expect(s.streaks[0]).toBe(1)
+  })
+
+  it('halves the next claim once with Reinsurance — the final question’s −100 becomes −50', () => {
+    let s = withAbilities('buzzer', [['reinsurance'], []], { rounds: 3, roundSeconds: 60 })
+    s = run(s, { type: 'tick', now: OPEN }, { type: 'power', seat: 0, ability: 'reinsurance', now: OPEN })
+    expect(s.reinsured[0]).toBe(true)
+    s = run(s, { type: 'buzz', seat: 0, now: OPEN + 1000 }, { type: 'answer', seat: 0, choice: 'A', now: OPEN + 2000 })
+    expect(currentRound(s).answers[0].points).toMatchObject({ penalty: -WRONG_BUZZ_PENALTY, ability: 25, total: -25 })
+    expect(s.reinsured[0]).toBe(false)
+    // Spent: the next claim is whole. (The steal window runs to the time Ada left.)
+    s = run(s, { type: 'tick', now: OPEN + 62_000 }, { type: 'next', now: OPEN + 62_001 })
+    expect(currentRound(s).index).toBe(1)
+    let at = opensAt(s)
+    s = run(s, { type: 'tick', now: at }, { type: 'buzz', seat: 0, now: at + 500 }, { type: 'answer', seat: 0, choice: 'A', now: at + 600 })
+    expect(currentRound(s).answers[0].points.total).toBe(-WRONG_BUZZ_PENALTY)
+
+    let f = withAbilities('buzzer', [['reinsurance'], []], { rounds: 3, roundSeconds: 60 })
+    f = run(f, { type: 'tick', now: OPEN }, { type: 'power', seat: 0, ability: 'reinsurance', now: OPEN })
+    for (let i = 0; i < 2; i++) {
+      at = opensAt(f)
+      f = run(f, { type: 'tick', now: at }, { type: 'buzz', seat: 1, now: at + 100 }, { type: 'answer', seat: 1, choice: 'B', now: at + 200 }, { type: 'next', now: at + 300 })
+    }
+    at = opensAt(f)
+    f = run(f, { type: 'tick', now: at }, { type: 'buzz', seat: 0, now: at + 100 }, { type: 'answer', seat: 0, choice: 'A', now: at + 200 })
+    expect(currentRound(f).answers[0].points).toMatchObject({ multiplier: 2, total: -50 })
+  })
+
+  describe('Bayesian Update', () => {
+    it('strikes one wrong option, from its player’s screen only', () => {
+      let s = withAbilities('simultaneous', [['bayesian-update'], []])
+      s = run(s, { type: 'tick', now: OPEN }, { type: 'power', seat: 0, ability: 'bayesian-update', now: OPEN, strike: 'C' })
+      expect(currentRound(s).struck).toEqual(['C', null])
+      expect(currentRound(redactFor(s, 0)).struck).toEqual(['C', null])
+      expect(currentRound(redactFor(s, 1)).struck).toEqual([null, null])
+      // Still hidden from the other seat once the round is over.
+      s = run(s, { type: 'answer', seat: 0, choice: 'B', now: OPEN + 1000, elapsedMs: 1000 }, { type: 'answer', seat: 1, choice: 'B', now: OPEN + 1000, elapsedMs: 1000 })
+      expect(currentRound(s).phase).toBe('revealed')
+      expect(currentRound(redactFor(s, 1)).struck).toEqual([null, null])
+    })
+
+    it('will only strike a wrong option still in play', () => {
+      const s = run(withAbilities('simultaneous', [['bayesian-update'], []]), { type: 'tick', now: OPEN })
+      expect(strikeable(s, 0)).toEqual(['A', 'C', 'D'])
+      for (const strike of [undefined, 'B', 'Z']) {
+        expect(battleReducer(s, { type: 'power', seat: 0, ability: 'bayesian-update', now: OPEN, strike })).toBe(s)
+      }
+    })
+
+    it('won’t strike a buzzer miss already struck through for everyone', () => {
+      let s = withAbilities('buzzer', [[], ['bayesian-update']], { roundSeconds: 60 })
+      s = run(s, { type: 'tick', now: OPEN }, { type: 'buzz', seat: 0, now: OPEN + 100 }, { type: 'answer', seat: 0, choice: 'A', now: OPEN + 200 })
+      expect(strikeable(s, 1)).toEqual(['C', 'D'])
+    })
+  })
+
+  describe('what the rules turn away — by identity', () => {
+    const open = (loadouts: Loadouts, on = true) => run(withAbilities('simultaneous', loadouts, { on }), { type: 'tick', now: OPEN })
+    const use = (s: BattleState, seat: Seat, ability: AbilityId) => battleReducer(s, { type: 'power', seat, ability, now: OPEN + 1 })
+
+    it('an ability in a room with abilities off', () => {
+      const s = open([['reinsurance'], []], false)
+      expect(s.loadouts).toEqual([[], []])
+      expect(use(s, 0, 'reinsurance')).toBe(s)
+    })
+
+    it('an ability not in the seat’s loadout', () => {
+      const s = open([['reinsurance'], []])
+      expect(use(s, 1, 'reinsurance')).toBe(s)
+      expect(use(s, 0, 'time-value')).toBe(s)
+    })
+
+    it('an ability already spent — each is good once per battle', () => {
+      let s = open([['time-value'], []])
+      s = use(s, 0, 'time-value')
+      expect(s.spent[0]).toEqual(['time-value'])
+      expect(use(s, 0, 'time-value')).toBe(s)
+      // …and still spent a question later.
+      s = next(run(s, { type: 'tick', now: OPEN + 200_000 }))
+      s = run(s, { type: 'tick', now: opensAt(s) })
+      expect(canUse(s, 0, 'time-value')).toBe(false)
+    })
+
+    it('an ability out of phase: after locking in, at the reveal, once the battle is over', () => {
+      let s = open([['time-value', 'immunization'], []])
+      s = run(s, { type: 'answer', seat: 0, choice: 'B', now: OPEN + 1000, elapsedMs: 1000 })
+      expect(use(s, 0, 'time-value')).toBe(s)
+      s = run(s, { type: 'tick', now: OPEN + 200_000 })
+      expect(currentRound(s).phase).toBe('revealed')
+      expect(use(s, 0, 'immunization')).toBe(s)
+      const over = battleReducer(s, { type: 'forfeit', seat: 1, now: OPEN + 200_001 })
+      expect(use(over, 0, 'immunization')).toBe(over)
+    })
+
+    it('on one screen: after a miss, or while the other player holds the floor', () => {
+      let s = withAbilities('buzzer', [['immunization'], ['time-value']], { roundSeconds: 60 })
+      s = run(s, { type: 'tick', now: OPEN }, { type: 'buzz', seat: 1, now: OPEN + 100 })
+      expect(battleReducer(s, { type: 'power', seat: 0, ability: 'immunization', now: OPEN + 200 })).toBe(s)
+      // The floor holder may still arm before answering.
+      expect(canUse(s, 1, 'time-value')).toBe(true)
+      s = run(s, { type: 'answer', seat: 1, choice: 'A', now: OPEN + 300 })
+      expect(canUse(s, 1, 'time-value')).toBe(false)
+      expect(canUse(s, 0, 'immunization')).toBe(true)
+    })
+  })
+
+  it('takes a loadout as known abilities, each once, at most three', () => {
+    expect(cleanLoadout(['double-down', 'double-down', 'nope', 'time-value', 'reinsurance', 'immunization'])).toEqual(['double-down', 'time-value', 'reinsurance'])
+    const s = withAbilities('simultaneous', [['reinsurance', 'reinsurance', 'immunization', 'time-value', 'double-down'] as AbilityId[], []])
+    expect(s.loadouts[0]).toEqual(['reinsurance', 'immunization', 'time-value'])
+  })
+
+  it('leaves a battle without abilities scoring exactly as before', () => {
+    const plain = battle('simultaneous', 3)
+    expect(plain.config.abilities).toBe(false)
+    const s = run(plain, { type: 'tick', now: OPEN }, { type: 'answer', seat: 0, choice: 'B', now: OPEN + 6000, elapsedMs: 6000 }, { type: 'answer', seat: 1, choice: 'A', now: OPEN + 6000, elapsedMs: 6000 })
+    const p = currentRound(s).answers.find(a => a.seat === 0)!.points
+    expect(p.ability).toBe(0)
+    expect(p.total).toBe(BASE_POINTS + speedBonus(6000, 60_000) + FASTEST_BONUS)
   })
 })

@@ -10,6 +10,7 @@ import { useActuariaWorld } from '@/hooks/useActuariaWorld'
 import { useLobbyCount } from '@/hooks/useBattle'
 import { useBattleExams } from '@/hooks/useBattleExams'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
+import { battleLoadout } from '@/lib/actuaria/abilities'
 import type { LeagueExamOption } from '@/components/LeaderboardPanel'
 // Monte Carlo Station *is* Quiz Battle's page, under Actuaria's skin (§6.8).
 import Battle from '@/pages/Battle'
@@ -53,6 +54,11 @@ export default function Actuaria() {
     [world.sectors],
   )
 
+  // The abilities this player would take into a private channel: their Hangar
+  // loadout, cut to what their keystones hold now (§7.2).
+  const { prefs } = useActuariaPrefs()
+  const loadout = useMemo(() => battleLoadout(prefs.loadout, world.records, new Date()), [prefs.loadout, world.records])
+
   // A battle owns the foot of the screen while it runs; the tab bar stands down.
   const [battling, setBattling] = useState(false)
 
@@ -67,9 +73,9 @@ export default function Actuaria() {
         <Route path="map" element={inWorld(<MapView world={world} lobbyCount={lobbyCount} battleCounts={battleCounts} />)} />
         <Route path="sector/:exam" element={inWorld(<SectorView world={world} battleCounts={battleCounts} />)} />
         <Route path="daily" element={inWorld(<DailyView world={world} questions={questions} questionsLoading={questionsLoading} />)} />
-        <Route path="hangar" element={inWorld(<HangarView />)} />
+        <Route path="hangar" element={inWorld(<HangarView world={world} />)} />
         <Route path="simulation" element={inWorld(<SimulationView world={world} />)} />
-        <Route path="battle" element={inWorld(<Battle skin="actuaria" onPlayingChange={setBattling} />, { tabBar: !battling })} />
+        <Route path="battle" element={inWorld(<Battle skin="actuaria" onPlayingChange={setBattling} loadout={loadout} />, { tabBar: !battling })} />
         <Route path="*" element={<Navigate to="/actuaria/map" replace />} />
       </Routes>
       {/* The one reader: a landmark opens where a concept always does. */}

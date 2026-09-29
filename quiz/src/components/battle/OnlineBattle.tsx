@@ -9,6 +9,7 @@ import { BattleResults } from '@/components/battle/BattleResults'
 import { BattleTopRow, MusicToggle } from '@/components/battle/BattleTopRow'
 import { PlayerTile } from '@/components/battle/PlayerTile'
 import { SkinQuestionFrame } from '@/components/battle/SkinParts'
+import { AbilityTray } from '@/components/battle/AbilityTray'
 import { useBattleSkin } from '@/hooks/useBattleSkin'
 import { useBattleMusic, useBattleSession, useNow } from '@/hooks/useBattle'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
@@ -18,6 +19,7 @@ import {
   currentRound,
   isFinalRound,
   otherSeat,
+  type AbilityId,
   type BattleConfig,
   type BattlePlayer,
   type BattleQuestionKey,
@@ -96,6 +98,7 @@ function ConfigSummary({ config }: { config: BattleConfig }) {
   return (
     <p className="text-center text-sm text-muted-foreground">
       {battleExamName(config.exam)} · {config.rounds} questions · {formatClock(config.roundSeconds)} each
+      {config.abilities && ' · abilities on'}
     </p>
   )
 }
@@ -216,6 +219,7 @@ function OnlineMatch({
   onReact,
   onLeave,
   onEndForAbsent,
+  onPower,
 }: {
   snapshot: SessionSnapshot
   questionsById: ReadonlyMap<string, Question>
@@ -224,6 +228,8 @@ function OnlineMatch({
   onReact: (emoji: Parameters<HostSession['react']>[0]) => void
   onLeave: () => void
   onEndForAbsent?: () => void
+  /** Use an ability — a room with abilities on (docs/actuaria-online.md §7.2). */
+  onPower: (ability: AbilityId) => void
 }) {
   const battle = snapshot.battle!
   const me = snapshot.me
@@ -278,6 +284,12 @@ function OnlineMatch({
       if (r.seat === opp) playSound('reaction')
     }
   }, [snapshot.reactions, opp])
+
+  /** An ability armed — a rising latch, softer than a lock-in. */
+  function armAbility(ability: AbilityId) {
+    playSound('power')
+    onPower(ability)
+  }
 
   /** This player's answer, locked in — heard as a latch, not as a verdict. */
   function lockIn(choice: string) {
@@ -354,13 +366,23 @@ function OnlineMatch({
                 locked={lockedChoice ? { seat: me, choice: lockedChoice } : null}
                 picks={phase === 'revealed' ? round.answers.map(a => ({ seat: a.seat, choice: a.choice, correct: a.correct })) : []}
                 revealed={phase === 'revealed'}
+                struck={round.struck[me]}
               />
             </SkinQuestionFrame>
           </div>
         ) : null}
       </div>
 
-      <BattleActionBar above={<ReactionRow onReact={onReact} />}>
+      <BattleActionBar
+        above={
+          <>
+            {battle.config.abilities && (
+              <AbilityTray battle={battle} me={me} pending={snapshot.pendingPower?.ability ?? null} onUse={armAbility} />
+            )}
+            <ReactionRow onReact={onReact} />
+          </>
+        }
+      >
         {phase === 'revealed' ? (
           <RoundResult
             battle={battle}
@@ -375,7 +397,14 @@ function OnlineMatch({
         ) : canPick ? (
           <div className="space-y-2">
             <p className="text-center text-xs text-muted-foreground">Tap to lock in — you can’t change it. First right answer scores most.</p>
-            <AnswerPad seat={me} options={battle.questions[round.index].options} onPick={lockIn} label="Your answer" sound="none" />
+            <AnswerPad
+              seat={me}
+              options={battle.questions[round.index].options}
+              onPick={lockIn}
+              ruledOut={round.struck[me] ? [round.struck[me]!] : []}
+              label="Your answer"
+              sound="none"
+            />
           </div>
         ) : (
           <p className="py-2 text-center text-sm text-muted-foreground" aria-live="polite">
@@ -469,9 +498,12 @@ export function OnlineHost({
   code: givenCode,
   onFindAnother,
   opponent,
+  loadout,
 }: {
   config: BattleConfig
   player: BattlePlayer
+  /** The abilities this player brings — used only if the room has them on. */
+  loadout?: AbilityId[]
   /** A fresh set of questions — for the first battle and every rematch. */
   draw: () => BattleQuestionKey[]
   questionsById: ReadonlyMap<string, Question>
@@ -494,6 +526,7 @@ export function OnlineHost({
       config: { ...config, rules: 'simultaneous' },
       // A fresh id per room: two tabs of one browser can host and join.
       clientId: tabClientId(null),
+      loadout,
     }),
     code,
   )
@@ -533,6 +566,7 @@ export function OnlineHost({
         onReact={e => session.react(e)}
         onLeave={onExit}
         onEndForAbsent={() => session.endForAbsentGuest()}
+        onPower={a => session.power(a)}
       />
     ) : (
       <Results
@@ -617,9 +651,12 @@ export function OnlineGuest({
   matched = false,
   onFindAnother,
   opponent,
+  loadout,
 }: {
   code: string
   player: BattlePlayer
+  /** The abilities this player declares on joining. */
+  loadout?: AbilityId[]
   questionsById: ReadonlyMap<string, Question>
   onExit: () => void
   /** Matchmaking sent this player here: no lobby to wait in, the host starts it. */
@@ -637,6 +674,7 @@ export function OnlineGuest({
       me: player,
       clientId: tabClientId(typeof sessionStorage === 'undefined' ? null : sessionStorage),
       knows: id => questionsById.has(id),
+      loadout,
     }),
     `${code}:${attempt}`,
   )
@@ -664,6 +702,7 @@ export function OnlineGuest({
         onReady={() => session.ready()}
         onReact={e => session.react(e)}
         onLeave={onExit}
+        onPower={a => session.power(a)}
       />
     ) : (
       <Results

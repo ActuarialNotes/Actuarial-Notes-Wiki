@@ -25,7 +25,7 @@ export const Y_LABELS = ['Forgotten', 'New', '1', '2', '3']
  * a level's Z. Forgotten and New are both 0 — Forgotten keeps an F so the two
  * rows stay told apart.
  */
-export const Y_LABELS_Z = ['F', '0', '0.33', '0.67', '1.00']
+const Y_LABELS_Z = ['F', '0', '0.33', '0.67', '1.00']
 
 /** How the graph labels itself: the app's level names, or Actuaria's Z. */
 export type GraphPresentation = 'app' | 'actuaria'

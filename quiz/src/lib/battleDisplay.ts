@@ -8,6 +8,7 @@ import type { MusicIntensity } from './battleMusic'
 import {
   currentRound,
   isFinalRound,
+  type AbilityId,
   type BattleState,
   type PointsBreakdown,
   type RoundAnswer,
@@ -89,13 +90,33 @@ export interface PointsChip {
  * only the parts it actually earned, and the doubling said once rather than
  * folded silently into every number.
  */
-export function pointsChips(points: PointsBreakdown): PointsChip[] {
+export function pointsChips(points: PointsBreakdown, penaltyLabel = 'Wrong buzz'): PointsChip[] {
   const chips: PointsChip[] = []
   if (points.speed > 0) chips.push({ label: 'Speed', value: points.speed })
   if (points.streak > 0) chips.push({ label: 'Streak', value: points.streak })
   if (points.fastest > 0) chips.push({ label: 'Fastest', value: points.fastest })
-  if (points.penalty < 0) chips.push({ label: 'Wrong buzz', value: points.penalty })
+  if (points.penalty < 0) chips.push({ label: penaltyLabel, value: points.penalty })
+  // Abilities are their own line (docs/actuaria-online.md §7.2): Time Value's
+  // extra speed, Reinsurance's share of a claim paid back.
+  if (points.ability !== 0) chips.push({ label: 'Ability', value: points.ability })
   return chips
+}
+
+// ── Abilities ───────────────────────────────────────────────────────────────
+
+export type AbilityUiState = 'ready' | 'armed' | 'used' | 'locked'
+
+/**
+ * How a seat's ability is drawn right now: armed this round (Reinsurance,
+ * until it pays out), used, or ready. `pending` is an ability sent and not yet
+ * in the host's room — drawn as armed, so a tap doesn't look ignored.
+ */
+export function abilityUiState(battle: BattleState, seat: Seat, ability: AbilityId, pending: AbilityId | null = null): AbilityUiState {
+  const round = currentRound(battle)
+  if (pending === ability || round.powers[seat].includes(ability)) return 'armed'
+  if (ability === 'reinsurance' && battle.reinsured[seat]) return 'armed'
+  if (battle.spent[seat].includes(ability)) return 'used'
+  return 'ready'
 }
 
 /** "+135", "−50", "0". */

@@ -5,16 +5,9 @@
 // surface tokens), and the calculator bay names the skin in it. Cosmetic only —
 // nothing a ship wears touches a battle's score.
 
+import type { ShipLook } from '@/lib/actuaria/ship'
+import { HULL_PATH, PANEL_PATH, TRAIL_PATHS } from './shipPaths'
 import { cn } from '@/lib/utils'
-
-export interface ShipLook {
-  /** Hull fill and its panel lines; the stock hull reads the surface tokens. */
-  hull?: { base: string; accent: string } | null
-  /** The engine trail's colour. */
-  trail?: string | null
-  /** The calculator skin's name, for the bay's callout. */
-  calculator?: string | null
-}
 
 export function ShipBay({
   look,
@@ -44,19 +37,18 @@ export function ShipBay({
         </defs>
 
         {/* Engine trails. */}
-        <path d="M222 214 L230 214 L234 292 L218 292 Z" fill="url(#ship-trail)" />
-        <path d="M250 214 L258 214 L262 292 L246 292 Z" fill="url(#ship-trail)" />
+        {TRAIL_PATHS.map(d => <path key={d} d={d} fill="url(#ship-trail)" />)}
 
         {/* Hull: an arrowhead with swept wings. */}
         <path
-          d="M240 28 C252 52 262 92 266 132 L338 176 L338 196 L262 188 L258 214 L222 214 L218 188 L142 196 L142 176 L214 132 C218 92 228 52 240 28 Z"
+          d={HULL_PATH}
           fill={hull}
           stroke="hsl(var(--foreground))"
           strokeWidth="2"
           strokeLinejoin="round"
         />
         {/* Panel lines, in the paint's accent. */}
-        <path d="M240 60 L240 200 M214 132 L266 132 M170 183 L214 160 M310 183 L266 160" stroke={accent} strokeWidth="2" fill="none" strokeLinecap="round" />
+        <path d={PANEL_PATH} stroke={accent} strokeWidth="2" fill="none" strokeLinecap="round" />
         {/* Canopy. */}
         <ellipse cx="240" cy="92" rx="9" ry="18" fill="hsl(var(--background))" stroke="hsl(var(--foreground))" strokeWidth="1.5" />
         {/* The calculator bay. */}

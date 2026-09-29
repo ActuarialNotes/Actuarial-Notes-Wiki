@@ -73,6 +73,8 @@ export function BattleSetupForm({
   exams,
   players,
   avatarUrl,
+  offerAbilities = false,
+  loadoutSize = 0,
 }: {
   setup: BattleSetup
   onChange: (next: BattleSetup) => void
@@ -82,6 +84,10 @@ export function BattleSetupForm({
   players: 1 | 2
   /** The signed-in account's avatar, for the first player's tile. */
   avatarUrl?: string
+  /** Offer the room's *Abilities* setting — a private channel under the Actuaria skin. */
+  offerAbilities?: boolean
+  /** How many abilities this player would take in — the Hangar's loadout, unlocked now. */
+  loadoutSize?: number
 }) {
   const skin = useBattleSkin()
   const set = (patch: Partial<BattleSetup>) => onChange({ ...setup, ...patch })
@@ -181,6 +187,22 @@ export function BattleSetupForm({
           }))}
         />
       </Field>
+
+      {offerAbilities && (
+        <Field label="Abilities">
+          <SegmentedControl
+            label="Abilities"
+            value={setup.abilities ? 'on' : 'off'}
+            onChange={v => set({ abilities: v === 'on' })}
+            options={[{ value: 'off', label: 'Off' }, { value: 'on', label: 'On' }]}
+          />
+          <p className="px-1 text-xs text-muted-foreground">
+            {setup.abilities
+              ? `Each of you brings up to three from the Hangar — you’d bring ${loadoutSize}. Each works once.`
+              : 'The plain rules. Turn on to let each of you bring abilities from the Hangar.'}
+          </p>
+        </Field>
+      )}
 
       <Field label="Difficulty">
         <SegmentedControl

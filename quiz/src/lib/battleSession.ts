@@ -14,14 +14,18 @@
 
 import {
   battleReducer,
+  canUse,
+  cleanLoadout,
   cleanPlayerName,
   createBattle,
   currentRound,
   otherSeat,
+  strikeable,
   redactFor,
   roundMs,
   shiftClock,
   ONLINE_GRACE_MS,
+  type AbilityId,
   type BattleConfig,
   type BattleEvent,
   type BattlePlayer,
@@ -120,6 +124,8 @@ export interface SessionSnapshot {
   problem: SessionProblem | null
   /** Guest: an answer sent and not yet in a room the host sent back. */
   pendingAnswer: { round: number; choice: string } | null
+  /** Guest: an ability used and not yet in a room the host sent back. */
+  pendingPower: { round: number; ability: AbilityId } | null
 }
 
 type Listener = () => void
@@ -242,10 +248,18 @@ export interface HostOptions {
   config: BattleConfig
   clientId: string
   clock?: Clock
+  /** The host's own abilities — used only in a room with abilities on. */
+  loadout?: readonly AbilityId[]
+  /** Picks Bayesian Update's option — the reducer draws nothing at random itself. */
+  random?: () => number
 }
 
 export class HostSession extends Session {
   private guestId: string | null = null
+  private hostLoadout: AbilityId[] = []
+  /** What the joining player declared they bring (docs/actuaria-online.md §7.2). */
+  private guestLoadout: AbilityId[] = []
+  private random: () => number = Math.random
   /** The battle on the host's clock, unredacted — the one true copy. */
   private battle: BattleState | null = null
   private roomStage: RoomStage = 'lobby'
@@ -265,7 +279,10 @@ export class HostSession extends Session {
       reactions: [],
       problem: null,
       pendingAnswer: null,
+      pendingPower: null,
     })
+    this.hostLoadout = cleanLoadout(options.loadout)
+    this.random = options.random ?? Math.random
     this.begin()
   }
 
@@ -289,6 +306,7 @@ export class HostSession extends Session {
       questions,
       now: this.clock.now(),
       graceMs: ONLINE_GRACE_MS,
+      loadouts: [this.hostLoadout, this.guestLoadout],
     })
     this.roomStage = 'playing'
     this.publish({ rematch: [false, false] })
@@ -308,6 +326,23 @@ export class HostSession extends Session {
 
   ready(): void {
     this.apply({ type: 'ready', seat: 0, now: this.clock.now() })
+  }
+
+  /** Use one of the host's abilities. */
+  power(ability: AbilityId): void {
+    this.applyPower(0, ability)
+  }
+
+  /** A power, with Bayesian Update's option picked here, where the reducer runs. */
+  private applyPower(seat: Seat, ability: AbilityId): void {
+    if (!this.battle) return
+    let strike: string | undefined
+    if (ability === 'bayesian-update') {
+      const options = strikeable(this.battle, seat)
+      if (options.length === 0) return
+      strike = options[Math.floor(this.random() * options.length)]
+    }
+    this.apply({ type: 'power', seat, ability, now: this.clock.now(), strike })
   }
 
   /** End the battle for a player who has dropped and isn't coming back. */
@@ -369,7 +404,7 @@ export class HostSession extends Session {
     if (fromGuest) this.lastHeardAt = this.clock.now()
 
     switch (message.t) {
-      case 'join': return this.onJoin(message.from, message.name, message.avatarUrl)
+      case 'join': return this.onJoin(message.from, message.name, message.avatarUrl, message.loadout)
       case 'act': if (fromGuest) this.onAction(message.action); return
       case 'react': if (fromGuest && message.seat === 1) this.showReaction(1, message.emoji); return
       case 'bye': if (fromGuest) this.onGuestLeft(); return
@@ -377,7 +412,7 @@ export class HostSession extends Session {
     }
   }
 
-  private onJoin(from: string, name: string, avatarUrl: string | undefined): void {
+  private onJoin(from: string, name: string, avatarUrl: string | undefined, loadout: AbilityId[] | undefined): void {
     // The seat is taken by someone else who is still here: turn this one away.
     const seatTaken = this.guestId !== null && this.guestId !== from && this.snapshot.opponentPresent
     if (seatTaken) {
@@ -388,6 +423,9 @@ export class HostSession extends Session {
     // taking over the seat of a player who dropped.
     this.guestId = from
     this.lastHeardAt = this.clock.now()
+    // Ids, count and once each are all that can be checked from here; the
+    // unlocks behind them are the other player's own mastery.
+    this.guestLoadout = cleanLoadout(loadout)
     const guest: BattlePlayer = { name: cleanPlayerName(name, 'Player 2'), ...(avatarUrl ? { avatarUrl } : {}) }
     if (this.battle) this.battle = { ...this.battle, players: [this.battle.players[0], guest] }
     this.set({ players: [this.snapshot.players[0], guest], opponentPresent: true })
@@ -407,6 +445,10 @@ export class HostSession extends Session {
     const now = this.clock.now()
     if (action.kind === 'answer') {
       this.apply({ type: 'answer', seat: 1, choice: action.choice, now, elapsedMs: action.elapsedMs })
+    } else if (action.kind === 'power') {
+      // A repeat (a resend that crossed the room on the wire) is already spent,
+      // and the reducer turns it away.
+      this.applyPower(1, action.ability)
     } else {
       this.apply({ type: 'ready', seat: 1, now })
     }
@@ -436,6 +478,8 @@ export interface GuestOptions {
   /** Every question id this device can show — a room naming one it can't is a version mismatch. */
   knows: (questionId: string) => boolean
   clock?: Clock
+  /** The abilities this player brings, declared to the host on joining. */
+  loadout?: readonly AbilityId[]
 }
 
 const PLACEHOLDER_CONFIG: BattleConfig = { rules: 'simultaneous', exam: '', rounds: 0, roundSeconds: 60 }
@@ -445,6 +489,7 @@ export class GuestSession extends Session {
   private joinStartedAt: number
   private lastJoinAt = -Infinity
   private readonly player: BattlePlayer
+  private readonly loadout: AbilityId[]
   private readonly knows: (questionId: string) => boolean
   /** A Ready not yet seen in a room the host sent back. */
   private pendingReady: number | null = null
@@ -465,8 +510,10 @@ export class GuestSession extends Session {
       reactions: [],
       problem: null,
       pendingAnswer: null,
+      pendingPower: null,
     })
     this.player = options.me
+    this.loadout = cleanLoadout(options.loadout)
     this.knows = options.knows
     this.joinStartedAt = clock.now()
     this.begin()
@@ -491,6 +538,16 @@ export class GuestSession extends Session {
     this.pendingReady = round.index
     this.set({ battle: { ...battle, rounds: [...battle.rounds.slice(0, -1), { ...round, ready: [...round.ready, 1] }] } })
     this.send({ t: 'act', ...this.envelope(), action: { kind: 'ready', round: round.index } })
+  }
+
+  /** Use one of this player's abilities — sent, and sent again until the host's room shows it. */
+  power(ability: AbilityId): void {
+    const battle = this.snapshot.battle
+    if (!battle || this.snapshot.stage !== 'playing' || this.snapshot.pendingPower) return
+    if (!canUse(battle, 1, ability)) return
+    const round = currentRound(battle).index
+    this.set({ pendingPower: { round, ability } })
+    this.send({ t: 'act', ...this.envelope(), action: { kind: 'power', round, ability } })
   }
 
   requestRematch(): void {
@@ -523,7 +580,13 @@ export class GuestSession extends Session {
       if (this.snapshot.connection === 'open' && now - this.lastJoinAt >= JOIN_RETRY_MS) {
         this.lastJoinAt = now
         const { name, avatarUrl } = this.player
-        this.send({ t: 'join', ...this.envelope(), name, ...(avatarUrl ? { avatarUrl } : {}) })
+        this.send({
+          t: 'join',
+          ...this.envelope(),
+          name,
+          ...(avatarUrl ? { avatarUrl } : {}),
+          ...(this.loadout.length > 0 ? { loadout: this.loadout } : {}),
+        })
       }
       return
     }
@@ -537,6 +600,8 @@ export class GuestSession extends Session {
     // The answer and Ready go again until the host's room shows them: a
     // broadcast has no receipt, and the host ignores a repeat.
     this.sendAnswer()
+    const power = this.snapshot.pendingPower
+    if (power) this.send({ t: 'act', ...this.envelope(), action: { kind: 'power', round: power.round, ability: power.ability } })
     if (this.pendingReady !== null) {
       this.send({ t: 'act', ...this.envelope(), action: { kind: 'ready', round: this.pendingReady } })
     }
@@ -595,6 +660,11 @@ export class GuestSession extends Session {
       if (!round || round.locks[1] || round.phase === 'revealed') pendingAnswer = null
     }
     if (!battle) pendingAnswer = null
+    let pendingPower = this.snapshot.pendingPower
+    // Spent in the host's copy (or its round gone by): stop sending it.
+    if (pendingPower && (!battle || battle.spent[1].includes(pendingPower.ability) || currentRound(battle).index !== pendingPower.round)) {
+      pendingPower = null
+    }
     if (this.pendingReady !== null && battle) {
       const round = battle.rounds[this.pendingReady]
       if (!round || round.ready.includes(1) || battle.rounds.length > this.pendingReady + 1) this.pendingReady = null
@@ -607,6 +677,7 @@ export class GuestSession extends Session {
       rematch: message.rematch,
       opponentPresent: true,
       pendingAnswer,
+      pendingPower,
     })
   }
 }

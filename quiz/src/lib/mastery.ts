@@ -194,6 +194,24 @@ export function decayIfStale(
   return { ...record, state, incorrect_streak: 0 }
 }
 
+/**
+ * Each concept's level as a card shows it: the most recently attempted record
+ * across exams, decayed to `now`, keyed by the lower-cased concept name. The
+ * flashcard picker, the deck and Quiz Battle's topic picker all read a card's
+ * foil off this, so one concept wears the same edge wherever it is drawn.
+ */
+export function latestMasteryStates(records: readonly ConceptMasteryRecord[], now: Date): Map<string, MasteryState> {
+  const best = new Map<string, ConceptMasteryRecord>()
+  for (const r of records) {
+    const slug = r.concept_slug.toLowerCase()
+    const existing = best.get(slug)
+    if (!existing || (r.last_attempted_at ?? '') > (existing.last_attempted_at ?? '')) best.set(slug, r)
+  }
+  const states = new Map<string, MasteryState>()
+  for (const [slug, r] of best) states.set(slug, decayIfStale(r, now).state)
+  return states
+}
+
 export interface TopicAggregate {
   total: number
   strong: number    // level3 count (alias for backwards compat)

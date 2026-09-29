@@ -12,6 +12,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { useLobbyCount } from '@/hooks/useBattle'
 import { BattleSkinContext, useBattleSkin } from '@/hooks/useBattleSkin'
+import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { battleSkin, type BattleSkinId } from '@/lib/battleSkin'
 import { stationCountLine, term } from '@/lib/actuaria/lexicon'
 import {
@@ -46,7 +47,9 @@ import {
   type BattleSetup,
 } from '@/lib/battleSetup'
 import type { MatchFound } from '@/lib/battleMatchmaking'
-import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
+import type { TopicSource } from '@/lib/battleSession'
+import { catalogueTopics, drawFromTopics, topicCatalogue, type TopicGroup } from '@/lib/battleTopics'
+import { EXAM_LABEL_TO_ID, bankLabelFor } from '@/lib/examIds'
 import { cn } from '@/lib/utils'
 
 // **Quiz Battle** — two players, the same questions, one scoreboard
@@ -221,6 +224,7 @@ function BattlePage({
   const [params, setParams] = useSearchParams()
   const { user } = useAuth()
   const { questions, loading } = useAllQuestions()
+  const { syllabi } = useWikiSyllabus()
 
   const myName = accountName(user)
   const myAvatar = (user?.user_metadata?.avatar_url as string | undefined) || undefined
@@ -276,6 +280,30 @@ function BattlePage({
 
   function drawFor(config: BattleConfig, difficulty: number): () => BattleQuestionKey[] {
     return () => drawBattleQuestions(battlePool(questions, config.exam), config.rounds, difficulty).map(questionKey)
+  }
+
+  // Online, a battle is drawn from the topics both players pick
+  // (lib/battleTopics.ts): each exam's topics, grouped the way its syllabus
+  // groups them, worked out once per exam.
+  const catalogueFor = useMemo(() => {
+    const cache = new Map<string, TopicGroup[]>()
+    return (exam: string): TopicGroup[] => {
+      let catalogue = cache.get(exam)
+      if (!catalogue) {
+        catalogue = topicCatalogue(battlePool(questions, exam), syllabi.find(s => bankLabelFor(s) === exam))
+        cache.set(exam, catalogue)
+      }
+      return catalogue
+    }
+  }, [questions, syllabi])
+
+  function topicsFor(difficulty: number): TopicSource {
+    return {
+      topics: exam => catalogueTopics(catalogueFor(exam)).map(t => t.name),
+      draw: (config, picks) =>
+        drawFromTopics(battlePool(questions, config.exam), picks, config.rounds, difficulty)
+          .map(d => ({ key: questionKey(d.question), topic: d.topic })),
+    }
   }
 
   function player(seat: 0 | 1, avatarUrl?: string): BattlePlayer {
@@ -335,7 +363,8 @@ function BattlePage({
       <OnlineHost
         config={screen.config}
         player={screen.player}
-        draw={drawFor(screen.config, screen.difficulty)}
+        topics={topicsFor(screen.difficulty)}
+        catalogueFor={catalogueFor}
         questionsById={questionsById}
         onExit={home}
         code={screen.code}
@@ -351,6 +380,7 @@ function BattlePage({
       <OnlineGuest
         code={screen.code}
         player={screen.player}
+        catalogueFor={catalogueFor}
         questionsById={questionsById}
         onExit={home}
         matched={screen.matched}
@@ -379,7 +409,7 @@ function BattlePage({
               icon={<Shuffle className="h-5 w-5" />}
               title={skin.lobby.title}
               plain={skin.lobby.plain}
-              body="Join the lobby and play whoever’s there. Five questions, two minutes each, answers locked in."
+              body="Join the lobby and play whoever’s there. Three questions from the topics you both pick, two minutes each."
             >
               <p className="flex items-center gap-2 text-sm text-muted-foreground" data-testid="battle-lobby-status">
                 <span

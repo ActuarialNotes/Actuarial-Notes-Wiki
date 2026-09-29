@@ -10,6 +10,7 @@ import { BattleTopRow, MusicToggle } from '@/components/battle/BattleTopRow'
 import { PlayerTile } from '@/components/battle/PlayerTile'
 import { SkinQuestionFrame } from '@/components/battle/SkinParts'
 import { AbilityTray } from '@/components/battle/AbilityTray'
+import { BattleDraftScreen } from '@/components/battle/TopicPick'
 import { useBattleSkin } from '@/hooks/useBattleSkin'
 import { useBattleMusic, useBattleSession, useNow } from '@/hooks/useBattle'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
@@ -22,10 +23,9 @@ import {
   type AbilityId,
   type BattleConfig,
   type BattlePlayer,
-  type BattleQuestionKey,
   type Seat,
 } from '@/lib/battle'
-import { answerFor, battleExamName, battleMusicIntensity } from '@/lib/battleDisplay'
+import { answerFor, battleExamName, battleMusicIntensity, topicCredit } from '@/lib/battleDisplay'
 import { generateRoomCode } from '@/lib/battleRoom'
 import { skinJoinPath } from '@/lib/battleSkin'
 import {
@@ -35,7 +35,9 @@ import {
   tabClientId,
   type SessionProblem,
   type SessionSnapshot,
+  type TopicSource,
 } from '@/lib/battleSession'
+import type { TopicGroup } from '@/lib/battleTopics'
 import { battleTransport } from '@/lib/battleTransport'
 import type { Question } from '@/lib/parser'
 import { formatClock } from '@/lib/quizTiming'
@@ -332,6 +334,11 @@ function OnlineMatch({
 
   const isLast = round.index + 1 >= battle.config.rounds
   const waiting = round.ready.includes(me) ? `Waiting for ${names[opp]}…` : null
+  // The topic this question was drawn for, from the draw that dealt it.
+  const drawn = snapshot.draft?.drawn[round.index]
+  const topic = drawn && drawn.id === round.questionId
+    ? { name: drawn.topic ?? 'Any topic', credit: drawn.topic ? topicCredit(snapshot.draft!.picks, drawn.topic, names) : 'from the whole exam' }
+    : null
 
   return (
     <div style={{ paddingBottom: 'calc(var(--action-bar-height, 7rem) + 1.5rem)' }}>
@@ -352,7 +359,7 @@ function OnlineMatch({
 
       <div className="mt-4">
         {phase === 'countdown' ? (
-          <BattleCountdown battle={battle} />
+          <BattleCountdown battle={battle} topic={topic} />
         ) : question ? (
           <div className="paper-sheet">
             <SkinQuestionFrame>
@@ -492,7 +499,8 @@ const MATCH_INTRO_MS = 1800
 export function OnlineHost({
   config,
   player,
-  draw,
+  topics,
+  catalogueFor,
   questionsById,
   onExit,
   code: givenCode,
@@ -507,8 +515,10 @@ export function OnlineHost({
   loadout?: AbilityId[]
   /** Told the room's code once it is open (a private room only). */
   onRoomOpen?: (code: string) => void
-  /** A fresh set of questions — for the first battle and every rematch. */
-  draw: () => BattleQuestionKey[]
+  /** The topics a pick offers, and the draw from two picks — for the first battle and every rematch. */
+  topics: TopicSource
+  /** The topics an exam offers, grouped for the picker. */
+  catalogueFor: (exam: string) => readonly TopicGroup[]
   questionsById: ReadonlyMap<string, Question>
   onExit: () => void
   /** Matchmaking picked the room: open this one, and start as soon as the other player is in. */
@@ -530,6 +540,7 @@ export function OnlineHost({
       // A fresh id per room: two tabs of one browser can host and join.
       clientId: tabClientId(null),
       loadout,
+      topics,
     }),
     code,
   )
@@ -546,16 +557,15 @@ export function OnlineHost({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session])
 
-  // Matched: nobody presses Start — the intro plays, and the count-in follows.
+  // Matched: nobody presses Start — the intro plays, and the topic pick follows.
   const started = useRef(false)
   useEffect(() => {
     if (!matched || !session || !inLobby || !guestIn || started.current) return
     const id = window.setTimeout(() => {
       started.current = true
-      session.start(draw())
+      session.openTopics()
     }, MATCH_INTRO_MS)
     return () => window.clearTimeout(id)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matched, session, inLobby, guestIn])
 
   // …and if the other player never arrives, say so rather than wait forever.
@@ -567,6 +577,18 @@ export function OnlineHost({
   }, [matched, guestIn])
 
   if (!session || !snapshot) return null
+
+  if ((snapshot.stage === 'picking' || snapshot.stage === 'drawing') && snapshot.draft) {
+    return (
+      <BattleDraftScreen
+        snapshot={snapshot}
+        catalogue={catalogueFor(snapshot.config.exam)}
+        onChoose={t => session.chooseTopics(t)}
+        onLock={() => session.lockTopics()}
+        onLeave={onExit}
+      />
+    )
+  }
 
   if ((snapshot.stage === 'playing' || snapshot.stage === 'finished') && snapshot.battle) {
     return snapshot.stage === 'playing' && !snapshot.battle.finished ? (
@@ -584,7 +606,7 @@ export function OnlineHost({
       <Results
         snapshot={snapshot}
         questionsById={questionsById}
-        onRematch={() => session.start(draw())}
+        onRematch={() => session.openTopics()}
         onLeave={onExit}
         onFindAnother={onFindAnother}
       />
@@ -626,14 +648,14 @@ export function OnlineHost({
         <div className="space-y-2">
           <Button
             size="lg"
-            onClick={() => session.start(draw())}
+            onClick={() => session.openTopics()}
             className="h-14 w-full gap-3 rounded-xl text-base font-semibold"
             data-sound="begin"
             data-testid="battle-start-online"
           >
             Start battle
           </Button>
-          <p className="text-sm text-muted-foreground">{guest.name} is in. Start when you’re both ready.</p>
+          <p className="text-sm text-muted-foreground">{guest.name} is in. Start when you’re both ready — you’ll each pick your topics first.</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -658,6 +680,7 @@ export function OnlineHost({
 export function OnlineGuest({
   code,
   player,
+  catalogueFor,
   questionsById,
   onExit,
   matched = false,
@@ -669,6 +692,8 @@ export function OnlineGuest({
   player: BattlePlayer
   /** The abilities this player declares on joining. */
   loadout?: AbilityId[]
+  /** The topics an exam offers, grouped for the picker. */
+  catalogueFor: (exam: string) => readonly TopicGroup[]
   questionsById: ReadonlyMap<string, Question>
   onExit: () => void
   /** Matchmaking sent this player here: no lobby to wait in, the host starts it. */
@@ -701,6 +726,18 @@ export function OnlineGuest({
         onRetry={retry}
         onExit={onExit}
         onFindAnother={matched ? onFindAnother : undefined}
+      />
+    )
+  }
+
+  if ((snapshot.stage === 'picking' || snapshot.stage === 'drawing') && snapshot.draft) {
+    return (
+      <BattleDraftScreen
+        snapshot={snapshot}
+        catalogue={catalogueFor(snapshot.config.exam)}
+        onChoose={t => session.chooseTopics(t)}
+        onLock={() => session.lockTopics()}
+        onLeave={onExit}
       />
     )
   }

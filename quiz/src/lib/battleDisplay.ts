@@ -5,6 +5,7 @@
 import type { CSSProperties } from 'react'
 import { EXAM_LABEL_TO_ID } from './examIds'
 import type { MusicIntensity } from './battleMusic'
+import { topicPickers, type BattleDraft } from './battleTopics'
 import {
   currentRound,
   isFinalRound,
@@ -170,6 +171,28 @@ export function resultHeadline(
   return `${names[winner]} wins`
 }
 
+// ── Telling the topics ──────────────────────────────────────────────────────
+
+/**
+ * Whose topic a question was drawn for, in a few words: "Ada's pick", "You
+ * both picked it", or — a question from the whole exam — "Any topic".
+ */
+export function topicCredit(
+  picks: BattleDraft['picks'],
+  topic: string | null,
+  names: readonly [string, string],
+): string {
+  const pickers = topicPickers(picks, topic)
+  if (pickers.length === 2) return 'You both picked it'
+  if (pickers.length === 1) return `${names[pickers[0]]}’s pick`
+  return 'Any topic'
+}
+
+/** "Pick up to 3 topics", "2 of 3 picked", "3 of 3 picked". */
+export function pickCountLine(chosen: number, max: number): string {
+  return chosen === 0 ? `Pick up to ${max} topics` : `${chosen} of ${max} picked`
+}
+
 // ── Heard ───────────────────────────────────────────────────────────────────
 
 /** The seconds left on a question below which the music leans in. */
@@ -197,4 +220,14 @@ export function battleMusicIntensity(
   if (phase === 'buzzed' || phase === 'closing') return 2
   if (isFinalRound(battle, round.index)) return 2
   return round.deadline - now <= PRESSURE_SECONDS * 1000 ? 2 : 1
+}
+
+/**
+ * The music under the topic pick and the draw: playing while the picks are
+ * open, pressure in their last ten seconds, and playing through the draw into
+ * the count-in.
+ */
+export function draftMusicIntensity(draft: BattleDraft, now: number): MusicIntensity {
+  if (draft.phase === 'picking' && draft.deadline - now <= PRESSURE_SECONDS * 1000) return 2
+  return 1
 }

@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ceca10e8660747792941f293eb111a543adf8d142b4cf79ad16250c25e851b41
+  content_hash: sha256:e23c7b88606c3f3e4d04afba42bcf01ab3390c7c71d6afb5dcf228bd3ad4cf22
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,9 +19,10 @@ verification:
 
 The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam covering [[Stochastic Processes]], [[Survival Model|Survival Models]], [[Statistics]], and [[Generalized Linear Model|Generalized Linear Models]] as part of the ACAS credentialing pathway.
 
-## Prerequisite knowledge
-- [[Calculus]], including integration, differentiation, and infinite series
-- The Exam P toolkit: [[Probability]], [[Random Variable|Random Variables]], [[Expected Value]], [[Variance]], [[Conditional Probability]], and the named [[Probability Distributions|distributions]]
+> [!question]- Prerequisite knowledge
+>
+> - [[Calculus]], including integration, differentiation, and infinite series
+> - The Exam P toolkit: [[Probability]], [[Random Variable|Random Variables]], [[Expected Value]], [[Variance]], [[Conditional Probability]], and the named [[Probability Distributions|distributions]]
 
 ## Learning Objectives
 

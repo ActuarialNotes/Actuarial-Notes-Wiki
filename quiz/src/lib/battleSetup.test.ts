@@ -38,9 +38,9 @@ describe('difficultyTarget', () => {
 })
 
 describe('matched battles', () => {
-  it('play five questions at the standard pace, a mixed draw, locked in', () => {
+  it('play three questions at the standard pace, a mixed draw, locked in', () => {
     expect(matchSettings('Probability')).toEqual({
-      config: { rules: 'simultaneous', exam: 'Probability', rounds: 5, roundSeconds: 120 },
+      config: { rules: 'simultaneous', exam: 'Probability', rounds: 3, roundSeconds: 120 },
       difficulty: 0.5,
     })
   })

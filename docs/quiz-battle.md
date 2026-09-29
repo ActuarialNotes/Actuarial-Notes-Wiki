@@ -4,6 +4,8 @@ Two players, the same questions, one scoreboard. A battle is a short race — 3,
 5, 7 or 10 questions from one exam's bank — where a fast right answer scores
 more than a slow one, a run of right answers scores more again, and the final
 question counts double so a battle is never over before its last question.
+Online, the players choose what it's played on: each picks up to three topics,
+and the questions are drawn from both picks (see *Topics* below).
 
 It lives at **`/battle`**, opened from the **Quiz Battle** card at the top of the
 Quiz tab (the same slot, grid and 48px tile the Study Guides tab gives its
@@ -49,6 +51,7 @@ panel on the Battle page is written from the same constants.
 | Online: the first right answer | **+25** (a dead heat pays both) |
 | Online: a wrong answer | **0** — there is no buzz to punish |
 | Count-in | **3 s** before every question, with the question off screen, so nobody reads ahead |
+| Online: topics | up to **3** each, **30 s** to pick, hidden from the other player until both are in; the questions are drawn from both picks, the players taking turns |
 | Time per question | *Blitz* 1:00, *Standard* 2:00, or *Exam pace* — the sitting's own time per question, from the table the timed quiz reads (`lib/quizTiming.ts`: 6:00 on Exam P) |
 
 A **streak** is right answers in a row by one player: a round they don't get
@@ -92,6 +95,49 @@ difficulty, the names and the exam last asked for in the lobby, so the next
 battle opens where the last one left off — and the music switch
 (`actuarial-notes-battle-music`).
 
+## Topics: what an online battle is played on
+
+Before an online battle's first question — a room's, a matched one's, and every
+rematch's — each player picks **up to three topics** from the exam. A topic is
+a concept: the concepts the exam's battle questions test (`questionTopics`, the
+same resolution a quiz records mastery under, so a topic is the key its
+flashcard and its level are filed under). All of it is `lib/battleTopics.ts`,
+pure and tested.
+
+1. **The pick** (`TOPIC_PICK_MS`, 30 s). Both screens show the exam's topics as
+   the flashcard picker shows an exam: grouped under the syllabus's learning
+   objectives, in the syllabus's order (`topicCatalogue`; a concept the syllabus
+   doesn't list goes under the objective most of its questions name, after the
+   listed ones), each drawn as the **same tile** the add-flashcards sheet draws
+   (`components/ConceptTile.tsx` — the two share it). So a tile's **foil edge is
+   the player's own level** on that concept, an uncollected one wears a padlock
+   and no foil, and a picked one gets the green wash and the check. A search
+   narrows the list. A player picks and unpicks freely, then **locks in** — or
+   picks nothing, which means *any topic*. The other player's pick is hidden
+   until both are in (`redactDraft`): they see *Locked in*, never what. When the
+   clock runs out, each device locks in whatever its player had chosen, and the
+   host holds the pick open `ONLINE_GRACE_MS` longer for one still on its way,
+   as it does for a last-second answer. The pick closes the moment both are in.
+2. **The draw** (`drawFromTopics`). The host deals the battle's questions from
+   the two picks. The players **take turns** — a coin toss says who goes first —
+   and each works through their own topics in the order picked, so every pick
+   is played before any is played twice. A topic with nothing left hands its
+   turn to the player's next topic, then to the other player's; with nothing
+   left in either pick, or nothing picked at all, a question comes from the
+   whole exam (*Any topic*). Within a topic the draw leans toward the battle's
+   difficulty, as every battle draw does. Never the same question twice.
+3. **The reveal.** Both screens lay out both picks, each under its player in
+   their colour, then turn the questions over one at a time — each card the
+   topic's tile, with a stripe in the colour of whoever picked it (both colours
+   where both did) and the last one marked *Final ×2*. The timing is one clock
+   both devices draw to (`drawDurationMs`: 1.8 s on the picks, 0.65 s a card,
+   1.5 s on the full draw), and then the count-in to the first question starts
+   as it always has. Each count-in names its question's topic and whose pick it
+   was ("Bayes Theorem · Ada's pick").
+
+The **same-screen** battle has no pick: two players at one device would see each
+other's, and the buzzer race is drawn from the whole exam as before.
+
 ## How it's built
 
 | Piece | File |
@@ -99,6 +145,7 @@ battle opens where the last one left off — and the music switch
 | The game: rules, scoring, reducer, summary, question draw — pure, tested | `quiz/src/lib/battle.ts` |
 | Colours, names and the words a round is told in — pure, tested | `quiz/src/lib/battleDisplay.ts` |
 | The setup form's state and its localStorage — pure, tested | `quiz/src/lib/battleSetup.ts` |
+| The topics an exam offers, the rules of a pick, the draw and its clock — pure, tested | `quiz/src/lib/battleTopics.ts` |
 | Room codes, the wire protocol and its validation — pure, tested | `quiz/src/lib/battleRoom.ts` |
 | The host and guest sessions — framework-free, tested over an in-memory channel | `quiz/src/lib/battleSession.ts` |
 | The channel itself: Supabase Realtime broadcast (and presence, for the lobby), or BroadcastChannel | `quiz/src/lib/battleTransport.ts` |
@@ -108,7 +155,7 @@ battle opens where the last one left off — and the music switch
 | The music, played on the app's audio graph | `quiz/src/lib/battleMusicPlayer.ts` |
 | Hooks: the local battle's clock, an online session, a lobby session, the music, `useNow` | `quiz/src/hooks/useBattle.ts` |
 | The page: the way in, the setup, joining, the lobby, and which battle to show | `quiz/src/pages/Battle.tsx` (lazy) |
-| The screens | `quiz/src/components/battle/` (the lobby is `Matchmaking.tsx`) |
+| The screens | `quiz/src/components/battle/` (the lobby is `Matchmaking.tsx`, the topic pick and the draw `TopicPick.tsx`) |
 
 ### The engine
 
@@ -129,12 +176,20 @@ because the fastest-answer bonus needs both answers.
 
 ### Online: one host, one truth
 
-The device that creates the room **hosts**. It draws the questions, runs the
-reducer on its own clock, and is the only copy of the battle that counts. The
-device that joins sends what its player does — an answer, Ready, a rematch
-request, a reaction — and draws the last room the host sent it. There is no
-server logic and no table: the two devices talk over a broadcast channel named
-after the code, and when both leave, the room is gone.
+The device that creates the room **hosts**. It runs the topic pick, draws the
+questions, runs the reducer on its own clock, and is the only copy of the battle
+that counts. The device that joins sends what its player does — its topics, an
+answer, Ready, a rematch request, a reaction — and draws the last room the host
+sent it. There is no server logic and no table: the two devices talk over a
+broadcast channel named after the code, and when both leave, the room is gone.
+
+A room moves through `lobby → picking → drawing → playing → finished`, and a
+rematch goes back to `picking`. `openTopics` opens the pick (the lobby's Start,
+a matched room's intro, a rematch); the host closes it, deals the draw, and
+starts the battle when the draw's clock is up. The room carries the pick and
+the draw as its **draft** (`BattleDraft`), kept through the battle it dealt so
+each count-in can name its topic; a pick sent for an earlier battle in the room
+(`game`) is ignored.
 
 - **Every change is sent as the whole room** (`t: 'room'`) — players, settings,
   the battle — and re-sent every 2 s as a heartbeat. A message lost on the way is
@@ -160,13 +215,16 @@ after the code, and when both leave, the room is gone.
   The host is offered *End battle* (the absent player forfeits) and can keep
   waiting instead. A player who reloads keeps their seat: a tab's id is kept in
   `sessionStorage`, so the host recognises them and sends the room again.
-- **Answers and Ready are re-sent** with each heartbeat until the host's room
-  shows them — a broadcast has no receipt — and the host ignores a repeat.
+- **Answers, topics and Ready are re-sent** with each heartbeat until the host's
+  room shows them — a broadcast has no receipt — and the host ignores a repeat.
+  A pick is held to the exam's own topics, three at most (`cleanTopicPick`),
+  whatever arrives.
 - **Abilities** travel as one more move (`{ kind: 'power', round, ability }`),
   re-sent like an answer until the host's room shows it spent; the loadouts, what
   each seat has spent and a pending Reinsurance ride in the room, capped and
   parsed like the rest.
-- **Versions.** Messages carry `PROTOCOL_VERSION` (2 since abilities), and a guest refuses a room
+- **Versions.** Messages carry `PROTOCOL_VERSION` (2 since the topic pick, 3 since
+  abilities), and a guest refuses a room
   whose questions its own bundle doesn't have (the two devices run different
   deploys): both are told to reload.
 
@@ -212,10 +270,11 @@ ordinary room with a code nobody had to type.
   accept. Every step can lapse — an offer unanswered in 3.5 s, an accept with no
   go — and a lapse just puts the player back in the queue; a player who never
   answers is passed over for 15 s, so a frozen tab can't hold the queue up.
-- **A matched battle has fixed settings** — five questions, 2:00 each, a mixed
+- **A matched battle has fixed settings** — three questions, 2:00 each, a mixed
   draw (`MATCH_ROUNDS`, `matchSettings` in `lib/battleSetup.ts`). Two strangers
-  can't negotiate a length. Nobody presses Start either: both screens show the
-  two players (`MatchIntro`) for 1.8 s and the count-in follows. A host whose
+  can't negotiate a length — but they do each pick their topics. Nobody presses
+  Start: both screens show the two players (`MatchIntro`) for 1.8 s and the
+  topic pick follows. A host whose
   opponent hasn't walked into the room in 15 s is told so and offered someone
   else. At the end, *Find another opponent* goes straight back to the lobby.
 - **An empty lobby says so.** The way in watches the lobby without joining it
@@ -248,6 +307,12 @@ ordinary room with a code nobody had to type.
   they appear under is editable above it; the account's name is the default.
 - **Setup** (`BattleSetupForm`): the names (the account's own name and avatar
   for the first player), the exam, the length, the pace, the difficulty.
+- **The topic pick** (`TopicPick.tsx`, online): both players and the 30-second
+  ring pinned at the top, the exam's topics as flashcard tiles under their
+  learning objectives with a search above them, and a bar at the foot counting
+  the pick ("2 of 3 picked") with **Lock in**.
+- **The draw**: both picks face up, each under its player, then the questions
+  turned over one at a time in a row, *Final ×2* on the last.
 - **The battle**: the scoreboard pinned at the top (`BattleScoreboard`) — each
   player's tile, name, score (counting up), streak flame and what they're doing
   ("Buzzed in!", "Locked in", "Thinking…"), the round clock as a ring between
@@ -294,9 +359,11 @@ pinned by `soundConfig.test.ts`'s *battle cues*:
 | `opponentIn` | the other player locked in — two soft knocks, no pitch, so it can't be mistaken for a verdict |
 | `correct` | a right answer, climbing with a run — on one screen anyone's, online your own |
 | `steal` | a steal: a rising line that tops `correct`, because it's the best moment in a buzzer battle |
-| `clockTick` | each of the last five seconds of a round — noise only, throttled |
+| `clockTick` | each of the last five seconds of a round, or of the topic pick — noise only, throttled |
 | `reaction` | the other player's emoji arriving |
 | `matchFound` | the lobby found an opponent |
+| `tick` / `lockIn` / `opponentIn` | a topic picked, your pick locked in, the other player's locked in |
+| `shuffle` / `page` | the draw begins / each question turned over |
 | `complete` | the results |
 
 A wrong answer, a missed buzz and a lost round are silent, as everywhere; a miss
@@ -314,8 +381,8 @@ It moves between three intensities, chosen by `battleMusicIntensity` in
 | Intensity | When | What plays |
 |---|---|---|
 | **Calm** (0) | the lobby, a room waiting to start, a reveal | pads, a low bass, a sparse line |
-| **Play** (1) | a count-in, a question up | a soft pulse on beats one and three; the line fills in |
-| **Pressure** (2) | the final question, the last 10 s, someone holding the floor | the pulse on every beat, a busier line, a shaker on the off-beats |
+| **Play** (1) | a count-in, a question up, the topic pick, the draw | a soft pulse on beats one and three; the line fills in |
+| **Pressure** (2) | the final question, the last 10 s (of a question, or of the topic pick), someone holding the floor | the pulse on every beat, a busier line, a shaker on the off-beats |
 
 It keeps the catalogue's rules, so a cue landing on it can't clash: every note is
 from C major's pentatonic, nothing that sustains sits above 1 kHz, and the bus
@@ -332,7 +399,8 @@ release waits half a second before it stops. The results are silent but for
 
 `index.css`, "Quiz Battle": the count-in pops, won or lost points float off the
 score, a buzz flares a ring in the player's colour, a wrong buzz shakes the
-player's tile once, reactions float up, confetti falls once. Each marks a thing
+player's tile once, reactions float up, confetti falls once, and in the draw the
+picks settle onto the table and each question card flips over as it lands. Each marks a thing
 that happened; under reduced motion each has a static end state, and no
 information is carried by movement alone.
 
@@ -381,14 +449,22 @@ the scoring, the sessions, the lobby and its handshake, the cues, the music and
   Ready, runs, the final-round doubling, the summary, redaction, the clock shift;
   and every ability and every disallowed use of one, with the worked example of
   `docs/actuaria-online.md` §7.2 (183 → 195 → 390) as a fixture.
+- `lib/battleTopics.test.ts` — the topics a question tests, the catalogue in
+  the syllabus's order (and without one), a pick cleaned and toggled, the draw
+  (turns, every pick before any twice, a spent topic handing on, the whole exam
+  as the last resort, never a repeat, the lean toward a difficulty), the draw's
+  clock, and a pick hidden until the draw.
 - `lib/battleRoom.test.ts` — codes, and that every malformed message is dropped
-  rather than thrown on (abilities' moves and fields included, and the old
-  protocol refused).
+  rather than thrown on — a draft, a topics action, and abilities' moves and
+  fields included, and the old protocol refused.
 - `lib/battleSession.test.ts` — a host and a guest over an in-memory channel with
   a JSON round trip: joining, a full room, a code nobody hosts, a version
   mismatch, redaction on the wire, latency compensation, a lost answer resent,
   Ready, forfeits, a dropped player, a reload keeping its seat, rematches,
-  reactions.
+  reactions — and the topic pick: opened for two, each pick hidden until both
+  are in, the draw from both, the battle started on it, the time running out,
+  a last-moment pick given its grace, a lost pick resent, a stale one ignored,
+  a pick held to the exam's topics, a rematch's fresh pick.
 - `lib/battleDisplay.test.ts`, `lib/battleSetup.test.ts` — the words, the music's
   intensity for each moment of a round, and the stored setup, including that both
   player hues keep clear of the meaning map.
@@ -408,13 +484,14 @@ the scoring, the sessions, the lobby and its handshake, the cues, the music and
   its own page.
 - `e2e/battle.spec.ts` — a same-screen battle played to the end (buzz, miss,
   steal on the pad, results, rematch), an online battle between two pages
-  over BroadcastChannel (invite link, lobby, hidden lock-ins, reveals on both
-  screens, Ready, results, a rematch asked for and started), the empty lobby
-  said so on the way in and inside it, and two strangers matched from the lobby
-  into a battle and sent back to it with *Find another opponent*; and a battle across
-  the two skins — hosted at Monte Carlo Station, joined from Quiz Battle — with the
-  claims review on the station only and nothing saved on either, and the lobby
-  pairing a player on each page. It runs with
+  over BroadcastChannel (invite link, lobby, a topic each, the draw on both
+  screens, hidden lock-ins, reveals on both screens, Ready, results, a rematch
+  asked for and back to the pick), the empty lobby said so on the way in and
+  inside it, and two strangers matched from the lobby, through the pick, into a
+  three-question battle and sent back to it with *Find another opponent*; a battle
+  across the two skins — hosted at Monte Carlo Station, joined from Quiz Battle —
+  with the claims review on the station only and nothing saved on either, and the
+  lobby pairing a player on each page; and a private room with abilities on. It runs with
   the app muted: a headless browser with no audio device can trap in its audio
   output thread under a battle's run of cues, and nothing it asserts is about
   sound.

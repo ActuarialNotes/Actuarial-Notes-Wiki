@@ -664,7 +664,9 @@ Where the build settled something this spec left open, or departed from its lett
 - **`user_actuaria` has a `ship` column** (`jsonb`, the Hangar's equipped slot per part),
   since §8.1 names no home for the equipped cosmetics. Ownership stays in `user_cosmetics`.
 - **The `power` event carries `now`**, as every other `battleReducer` event does, rather than
-  `at`. `PROTOCOL_VERSION` is **2**.
+  `at`. `PROTOCOL_VERSION` is **3**: Quiz Battle's topic pick took 2 on `main` while abilities
+  were being built, so abilities followed it. Abilities ride the same topic pick and draw as
+  every online battle; they are armed only once a question is in play.
 - **Abilities are offered at the station only** (`BattleSkin.abilities`): Quiz Battle's own
   page has no Hangar and so no loadout. A player on `/battle` can still join a station room
   with abilities on — they bring none.

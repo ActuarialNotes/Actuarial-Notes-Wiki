@@ -27,7 +27,7 @@ verification:
 > $$OB_k = L(1+i)^k - P \cdot s_{\overline{k}|i}$$
 
 - The **outstanding balance** $OB_k$ is the remaining principal owed immediately after the $k$-th payment on a loan of original amount $L$, level payment $P$, interest rate $i$ per period, and $n$ total payments.
-- Both formulas give the same result; the prospective method is usually simpler because it only requires the number of remaining payments $(n-k)$, while the retrospective method accumulates the original loan forward and subtracts the accumulated payments.
+- Both formulas give the same result. The prospective method needs only the remaining payments; the retrospective method needs only the original loan and the payments already made, which makes it the one to use when the future payments are not fully known — for example a loan settled by a final balloon payment of unknown size.
 - Note that the formula $OB_k = L - P\,a_{\overline{k}|i}$ is **incorrect** in general; it would only apply if interest were zero.
 
 ![[Media/Figures/Outstanding_Balance.svg|340]]
@@ -36,12 +36,19 @@ verification:
 > A \$$20{,}000$ loan is repaid with level annual payments over 6 years at $i = 8\%$. Find the outstanding balance immediately after the 3rd payment using both methods.
 >
 > > [!answer]-
-> > **Payment**: $P = 20000 / a_{\overline{6}|8\%} = 20000 / 4.6229 = \$4{,}326.40$
+> > **Payment**: $P = 20000 / a_{\overline{6}|8\%} = 20000 / 4.622880 = \$4{,}326.3077$, about \$$4{,}326.31$ a year.
 > >
-> > **Prospective**: $OB_3 = P \cdot a_{\overline{3}|8\%} = 4326.40 \times 2.5771 = \$11{,}147.42$
+> > **Prospective**: $OB_3 = P \cdot a_{\overline{3}|8\%} = 4326.3077 \times 2.577097 = \$11{,}149.31$
 > >
-> > **Retrospective**: $OB_3 = 20000(1.08)^3 - 4326.40 \cdot s_{\overline{3}|8\%}$
-> > $= 20000(1.2597) - 4326.40(3.2464)$
-> > $= 25194.00 - 14041.22 = \$11{,}152.78$
+> > **Retrospective**:
 > >
-> > The small difference is due to rounding in $P$; with exact arithmetic both methods agree exactly.
+> > $$
+> > \begin{align*}
+> > OB_3 &= 20000(1.08)^3 - 4326.3077\,s_{\overline{3}|8\%} \\
+> > &= 20000(1.259712) - 4326.3077(3.2464) \\
+> > &= 25194.24 - 14044.93 \\
+> > &= \$11{,}149.31
+> > \end{align*}
+> > $$
+> >
+> > Both methods give the same balance. (Rounding $P$ to $4{,}326.31$ before using it moves the results by at most a cent — $11{,}149.32$ prospectively, $11{,}149.31$ retrospectively — which is rounding, not a difference between the methods.)

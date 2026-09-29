@@ -5,6 +5,9 @@ import {
   battleMusicIntensity,
   battleExamKey,
   battleExamName,
+  draftMusicIntensity,
+  pickCountLine,
+  topicCredit,
   playerAccentStyle,
   playerInitials,
   pointsChips,
@@ -13,6 +16,7 @@ import {
   roundLabel,
   signedPoints,
 } from './battleDisplay'
+import { TOPIC_PICK_MS, type BattleDraft } from './battleTopics'
 
 const NAMES = ['Ada', 'Bo'] as const
 
@@ -137,3 +141,25 @@ describe('the music, heard from the game', () => {
     expect(battleMusicIntensity(battleReducer(s, { type: 'forfeit', seat: 0, now: 0 }), 0)).toBeNull()
   })
 })
+
+describe('the topics', () => {
+  it('credits a drawn question to whoever picked its topic', () => {
+    const picks: BattleDraft['picks'] = [['Bayes Theorem', 'Expected Value'], ['Expected Value']]
+    expect(topicCredit(picks, 'Bayes Theorem', NAMES)).toBe('Ada’s pick')
+    expect(topicCredit(picks, 'Expected Value', NAMES)).toBe('You both picked it')
+    expect(topicCredit(picks, null, NAMES)).toBe('Any topic')
+  })
+
+  it('counts a choice', () => {
+    expect(pickCountLine(0, 3)).toBe('Pick up to 3 topics')
+    expect(pickCountLine(2, 3)).toBe('2 of 3 picked')
+  })
+
+  it('plays under the pick, leaning in for its last ten seconds, and through the draw', () => {
+    const draft: BattleDraft = { game: 1, phase: 'picking', deadline: TOPIC_PICK_MS, picks: [null, null], drawn: [] }
+    expect(draftMusicIntensity(draft, 0)).toBe(1)
+    expect(draftMusicIntensity(draft, TOPIC_PICK_MS - 9000)).toBe(2)
+    expect(draftMusicIntensity({ ...draft, phase: 'drawing', drawn: [{ id: 'a', topic: null }] }, TOPIC_PICK_MS - 1000)).toBe(1)
+  })
+})
+

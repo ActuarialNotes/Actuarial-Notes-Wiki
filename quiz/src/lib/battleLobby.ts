@@ -25,10 +25,10 @@ export const ANY_EXAM = 'any'
 
 /**
  * A matched battle's settings. Two strangers can't negotiate a length and a
- * pace, so a matched battle is always the middle of the road: five questions,
- * the standard two minutes each, a mixed draw.
+ * pace, so a matched battle is always the same short race: three questions,
+ * the standard two minutes each, a mixed draw — from the topics the two pick.
  */
-export const MATCH_ROUNDS = 5
+export const MATCH_ROUNDS = 3
 export const MATCH_TIME = 'standard' as const
 export const MATCH_DIFFICULTY = 'mixed' as const
 

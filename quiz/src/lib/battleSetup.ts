@@ -104,9 +104,9 @@ export function pickExam(remembered: string, available: readonly string[]): stri
 }
 
 /**
- * A matched battle's settings (lib/battleLobby.ts): two strangers get the middle
- * of the road — five questions, two minutes each, a mixed draw — on the exam the
- * lobby matched them on.
+ * A matched battle's settings (lib/battleLobby.ts): two strangers get the same
+ * short race — three questions, two minutes each, a mixed draw — on the exam
+ * the lobby matched them on.
  */
 export function matchSettings(exam: string): { config: BattleConfig; difficulty: DifficultyTarget } {
   const setup: BattleSetup = { ...DEFAULT_SETUP, exam, rounds: MATCH_ROUNDS, time: MATCH_TIME, difficulty: MATCH_DIFFICULTY }

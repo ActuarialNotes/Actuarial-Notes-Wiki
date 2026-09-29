@@ -94,6 +94,11 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
   modes) are each surface's own control, never menu rows. It always portals to the body and
   is placed by `lib/menuPlacement.ts`, so no host's stacking context or viewport edge can
   clip it.
+  `components/ConceptTile.tsx` is **the** concept tile — a concept as a small static card, its
+  foil edge its level (`lib/flashcardFoil.ts`), a padlock while uncollected, the green wash and
+  tick when picked. The add-flashcards picker and Quiz Battle's topic pick both draw it (levels
+  read through `latestMasteryStates` in `lib/mastery.ts` on both), so one concept is the same
+  card in both.
 - `lib/` — core logic, mostly pure/testable modules (this is where the interesting algorithms live)
 - `data/` — authored static tables bundled into the app: `comprehensionChecks.ts` (parses the
   retired comprehension checks from `comprehension-checks/<exam-id>/*.md` via the
@@ -199,10 +204,16 @@ before touching that area**:
   design — one **host** device runs the reducer and sends the whole room, redacted, over a
   Supabase Realtime broadcast channel named after a 4-character code (no table, nothing
   stored); the guest times its own answers and the host holds a round open 1.5 s for them;
-  every message is untrusted and parsed field by field. **Random opponent** is a matchmaking
+  every message is untrusted and parsed field by field. Before every online battle (a room's,
+  a matched one's, each rematch's) comes a **topic pick** — up to 3 concepts each in 30 s,
+  drawn as flashcard tiles, hidden from the other player until both are in — and a **draw**
+  that deals the questions from both picks, the players taking turns, shown on both screens
+  before the count-in (`lib/battleTopics.ts`, `components/battle/TopicPick.tsx`); same-screen
+  battles have no pick. **Random opponent** is a matchmaking
   lobby on one more public channel (`quiz-battle:lobby`, presence): every device computes the
   same pairing from the same queue (oldest first, same exam or *any*; the older hosts) and an
-  offer → accept → go handshake seals each match, so nobody ends up in two rooms; an empty
+  offer → accept → go handshake seals each match, so nobody ends up in two rooms; a matched
+  battle is three questions; an empty
   lobby says so, on the way in and inside it. A battle also has its own **cues** and a
   **generative soundtrack** (calm / play / pressure, held to the sound rules). Two rules to
   keep: **nothing is saved** (no mastery, XP, streak or attempts — the other player's answers
@@ -835,8 +846,8 @@ Other important `lib/` modules:
   `knowledgeBase.js` index + search, `load.js`); a few helpers are mirrored there
   (`normalizeTerm`, `objectiveKey`, `normalizeAnswerText`) and pinned by `mcpServer.test.ts`.
 - `battle.ts` / `battleDisplay.ts` / `battleSetup.ts` / `battleRoom.ts` / `battleSession.ts` /
-  `battleTransport.ts` / `battleLobby.ts` / `battleMatchmaking.ts` / `battleMusic.ts` /
-  `battleMusicPlayer.ts` — **Quiz Battle** (`docs/quiz-battle.md`). `battle.ts` is the game as a
+  `battleTransport.ts` / `battleLobby.ts` / `battleMatchmaking.ts` / `battleTopics.ts` /
+  `battleMusic.ts` / `battleMusicPlayer.ts` — **Quiz Battle** (`docs/quiz-battle.md`). `battle.ts` is the game as a
   pure reducer (`battleReducer`: tick / buzz / answer / ready / next / forfeit, each carrying its
   own time; a disallowed event returns the state by identity), the scoring constants, the
   summary, and the question pool (`isBattleQuestion` — multiple choice only — over
@@ -847,7 +858,12 @@ Other important `lib/` modules:
   (`parseMessage` / `parseBattleState` — the channel is public to whoever has the code);
   `battleSession.ts` is `HostSession` (runs the reducer, sends the redacted room on every change
   and every 2 s) and `GuestSession` (sends moves, draws the room shifted onto its own clock),
-  framework-free and tested against each other over an in-memory channel; `battleTransport.ts`
+  framework-free and tested against each other over an in-memory channel — the host also runs
+  the **topic pick** (`openTopics`, the pick's clock and its grace, the draw, then `start`);
+  `battleTopics.ts` is that pick as data: the topics an exam offers (`topicCatalogue`, grouped
+  by the syllabus), the rules a pick is held to (`cleanTopicPick`), the draw from two picks
+  (`drawFromTopics` — turns, every pick before any twice, the whole exam last) and the
+  `BattleDraft` the room carries, hidden per player until the draw; `battleTransport.ts`
   is the channel — Supabase Realtime broadcast, or BroadcastChannel with
   `VITE_BATTLE_TRANSPORT=local` (the e2e suite). The **matchmaking lobby**: `battleLobby.ts` is
   its rules as data (entries and handshake messages validated, the queue, `planMatches` — the
@@ -897,8 +913,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **159 test files /
-~2575 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **160 test files /
+~2610 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).

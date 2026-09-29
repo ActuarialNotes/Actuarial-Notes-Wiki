@@ -13,7 +13,6 @@ import {
   LayoutGrid,
   Layers,
   Loader2,
-  Lock,
   Maximize2,
   Minus,
   Play,
@@ -25,6 +24,7 @@ import {
   X,
 } from 'lucide-react'
 import { CheckMark } from '@/components/CheckMark'
+import { CONCEPT_TILE_GRID, ConceptTile } from '@/components/ConceptTile'
 import {
   DndContext,
   closestCenter,
@@ -54,7 +54,7 @@ import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath } from '@/lib/wikiRoutes'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
-import { decayIfStale, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
+import { latestMasteryStates, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
 import { isKeystone } from '@/lib/keystone'
 import { ACTION_MENU_ROW_CLASS, ConceptActionMenu } from '@/components/ConceptActionMenu'
 import {
@@ -78,7 +78,7 @@ import { playSound, resetSoundCombo } from '@/lib/soundEngine'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
 import { NavProgressBar } from '@/components/NavProgressBar'
-import { flashcardFoilClass, FOIL_LEVEL_CLASS } from '@/lib/flashcardFoil'
+import { FOIL_LEVEL_CLASS } from '@/lib/flashcardFoil'
 import { MASTERY_LABEL } from '@/lib/masteryBadge'
 import { useTheme } from '@/hooks/useTheme'
 import { themedFigureSrc } from '@/lib/figureTheme'
@@ -219,22 +219,7 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
 
   // concept name → mastery state (same best-record + decay logic as the main
   // deck view) so every tile can carry its mastery stripe.
-  const packMasteryMap = useMemo(() => {
-    const map = new Map<string, MasteryState>()
-    const now = new Date()
-    const best = new Map<string, typeof masteryRecords[number]>()
-    for (const r of masteryRecords) {
-      const slug = r.concept_slug.toLowerCase()
-      const existing = best.get(slug)
-      if (!existing || (r.last_attempted_at ?? '') > (existing.last_attempted_at ?? '')) {
-        best.set(slug, r)
-      }
-    }
-    for (const [slug, r] of best) {
-      map.set(slug, decayIfStale(r, now).state)
-    }
-    return map
-  }, [masteryRecords])
+  const packMasteryMap = useMemo(() => latestMasteryStates(masteryRecords, new Date()), [masteryRecords])
   const masteryOf = useCallback(
     (name: string) => packMasteryMap.get(name.toLowerCase()) ?? 'new',
     [packMasteryMap],
@@ -372,29 +357,11 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
 
 // ─── Card shelves ────────────────────────────────────────────────────────────
 
-// The foil material a collected tile wears, keyed to its mastery — the same
-// ladder the deck gallery's cards use (`SortableCard`), one step per state, so
-// the border alone says what level a card is at (`lib/flashcardFoil.ts`). An
-// uncollected card is still behind the gate and has earned no material at all.
-// `.flashcard-tile` in index.css tunes the ring for the smaller surface and
-// lifts it over the tile's own content.
-function tileFoilClass(collected: boolean, state: MasteryState): string {
-  return flashcardFoilClass(collected, state, { tile: true })
-}
-
 // The unit both shelves below are built from: one concept as a small static
-// tile. Four across on the narrowest phone, so a screenful is ~20 cards and a
-// whole learning objective can be taken in at a glance — and deliberately
-// static: this is a picker, not a study surface, so a tile never flips. Tapping
-// one puts the card in the deck, tapping it again takes it back out.
-//
-// Colour is state only: the green wash and tick are "already in your deck", and
-// the padlock is "not collected yet".
-//
-// Mastery is the **foil** edge alone — the same rainbow border the card wears in
-// the deck gallery, scaled by level (see `tileFoilClass` above) — so one card
-// looks like the same card wherever it is shown, and the level is read off one
-// material rather than off a second, competing colour.
+// tile (`components/ConceptTile.tsx`, which Quiz Battle's topic picker draws
+// too). Tapping one puts the card in the deck, tapping it again takes it back
+// out — the tile's green wash and tick say it's in. Its foil edge is its level
+// (`lib/flashcardFoil.ts`), the same ladder the deck gallery's cards wear.
 function ConceptCardGrid({
   concepts,
   masteryOf,
@@ -417,41 +384,23 @@ function ConceptCardGrid({
   }
 
   return (
-    <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-2">
+    <div className={CONCEPT_TILE_GRID}>
       {concepts.map(name => {
         const added = hasCard(name)
         const collected = isCollected(name)
-        // "In deck" is the green wash and the tick; the green ring only appears
-        // on a card wearing no foil, since one border carries one material
-        // (docs/style-guide.md §4.3 — the edge belongs to foil).
-        const deckClass = added
-          ? `bg-green-500/15${collected ? '' : ' ring-1 ring-inset ring-green-600/50 dark:ring-green-500/50'}`
-          : 'bg-card hover:bg-accent'
         return (
-          <button
+          <ConceptTile
             key={name}
-            type="button"
+            name={name}
+            state={masteryOf(name)}
+            collected={collected}
+            selected={added}
             data-sound="none"
             onClick={() => toggle(name)}
             aria-pressed={added}
             title={`${name}${collected ? '' : ' — not collected yet'} — ${added ? 'in your deck (tap to remove)' : 'tap to add to your deck'}`}
             aria-label={added ? `Remove ${name} from your deck` : `Add ${name} to your deck`}
-            className={`relative flex aspect-[4/5] items-center justify-center overflow-hidden rounded-md p-1.5 text-center transition-colors ${tileFoilClass(collected, masteryOf(name))} ${deckClass}`}
-          >
-            <span
-              className={`text-[10px] font-medium leading-[1.2] break-words line-clamp-5 ${
-                collected ? '' : 'text-muted-foreground'
-              } ${isKeystone(name) ? 'keystone-underline' : ''}`}
-            >
-              {name}
-            </span>
-            {added && (
-              <CheckMark className="absolute top-1 right-1 h-3.5 w-3.5" />
-            )}
-            {!collected && (
-              <Lock className="absolute top-1 left-1 h-2.5 w-2.5 text-muted-foreground/70" aria-hidden="true" />
-            )}
-          </button>
+          />
         )
       })}
     </div>
@@ -2631,22 +2580,7 @@ function FlashcardsDeck({
   }, [syllabi])
 
   // concept name → best mastery state
-  const conceptMasteryMap = useMemo(() => {
-    const map = new Map<string, MasteryState>()
-    const now = new Date()
-    const best = new Map<string, typeof masteryRecords[number]>()
-    for (const r of masteryRecords) {
-      const slug = r.concept_slug.toLowerCase()
-      const existing = best.get(slug)
-      if (!existing || (r.last_attempted_at ?? '') > (existing.last_attempted_at ?? '')) {
-        best.set(slug, r)
-      }
-    }
-    for (const [slug, r] of best) {
-      map.set(slug, decayIfStale(r, now).state)
-    }
-    return map
-  }, [masteryRecords])
+  const conceptMasteryMap = useMemo(() => latestMasteryStates(masteryRecords, new Date()), [masteryRecords])
 
   // Sync customOrder when new cards are added
   useEffect(() => {

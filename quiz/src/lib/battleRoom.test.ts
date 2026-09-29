@@ -9,9 +9,11 @@ import {
   joinPath,
   normalizeRoomCode,
   parseBattleState,
+  parseDraft,
   parseMessage,
   roomChannel,
 } from './battleRoom'
+import type { BattleDraft } from './battleTopics'
 
 function sampleBattle(): BattleState {
   const s = createBattle({
@@ -76,6 +78,30 @@ describe('parseBattleState', () => {
   })
 })
 
+describe('parseDraft', () => {
+  const picking: BattleDraft = { game: 2, phase: 'picking', deadline: 31_000, picks: [['Bayes Theorem'], null], drawn: [] }
+  const drawing: BattleDraft = {
+    game: 2, phase: 'drawing', deadline: 40_000, picks: [['Bayes Theorem'], []],
+    drawn: [{ id: 'p-1', topic: 'Bayes Theorem' }, { id: 'p-2', topic: null }],
+  }
+
+  it('round-trips a pick and a draw through JSON', () => {
+    for (const d of [picking, drawing]) expect(parseDraft(JSON.parse(JSON.stringify(d)))).toEqual(d)
+  })
+
+  it('refuses a draw before the picks close, or a draw of nothing', () => {
+    expect(parseDraft({ ...picking, drawn: drawing.drawn })).toBeNull()
+    expect(parseDraft({ ...drawing, drawn: [] })).toBeNull()
+  })
+
+  it('refuses more than three topics, and the wrong shapes, rather than throwing', () => {
+    expect(parseDraft({ ...picking, picks: [['a', 'b', 'c', 'd'], null] })).toBeNull()
+    for (const bad of [null, 'x', {}, { ...picking, phase: 'voting' }, { ...picking, picks: [null] }, { ...picking, game: -1 }]) {
+      expect(parseDraft(bad)).toBeNull()
+    }
+  })
+})
+
 describe('parseMessage', () => {
   const base = { v: PROTOCOL_VERSION, from: 'c1' }
 
@@ -90,7 +116,11 @@ describe('parseMessage', () => {
       host: { name: 'Ada' }, guest: { name: 'Bo' },
       config: sampleBattle().config, battle: sampleBattle(), rematch: [false, true],
     }
-    expect(parseMessage(JSON.parse(JSON.stringify(room)))).toMatchObject({ t: 'room', stage: 'playing', rematch: [false, true] })
+    expect(parseMessage(JSON.parse(JSON.stringify(room)))).toMatchObject({ t: 'room', stage: 'playing', rematch: [false, true], draft: null })
+    const draft: BattleDraft = { game: 1, phase: 'picking', deadline: 30_000, picks: [null, []], drawn: [] }
+    expect(parseMessage({ ...room, stage: 'picking', battle: null, draft })).toMatchObject({ stage: 'picking', draft })
+    expect(parseMessage({ ...base, t: 'act', action: { kind: 'topics', game: 1, topics: ['Bayes Theorem'] } }))
+      .toMatchObject({ action: { kind: 'topics', game: 1, topics: ['Bayes Theorem'] } })
   })
 
   it('drops anything it does not recognise', () => {
@@ -98,6 +128,9 @@ describe('parseMessage', () => {
     expect(parseMessage({ ...base, t: 'react', seat: 1, emoji: '<script>' })).toBeNull()
     expect(parseMessage({ ...base, t: 'react', seat: 2, emoji: '🔥' })).toBeNull()
     expect(parseMessage({ ...base, t: 'act', action: { kind: 'win' } })).toBeNull()
+    expect(parseMessage({ ...base, t: 'act', action: { kind: 'topics', game: 1, topics: ['a', 'b', 'c', 'd'] } })).toBeNull()
+    expect(parseMessage({ ...base, t: 'act', action: { kind: 'topics', game: 1, topics: ['x'.repeat(500)] } })).toBeNull()
+    expect(parseMessage({ ...base, t: 'room', to: 'c2', sentAt: 1, stage: 'picking', host: { name: 'A' }, guest: { name: 'B' }, config: sampleBattle().config, battle: null, draft: { junk: true }, rematch: [false, false] })).toBeNull()
     expect(parseMessage({ t: 'ping', from: 'c1' })).toBeNull()
     expect(parseMessage({ ...base, t: 'room', to: 'c2', sentAt: 1, stage: 'playing', host: { name: 'A' }, guest: { name: 'B' }, config: sampleBattle().config, battle: { junk: true }, rematch: [false, false] })).toBeNull()
   })

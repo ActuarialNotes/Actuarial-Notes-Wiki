@@ -28,9 +28,10 @@ import {
   type RoundState,
   type Seat,
 } from './battle'
+import { MAX_TOPICS, type BattleDraft, type DraftPhase } from './battleTopics'
 
 /** Bumped whenever a message changes shape. Two versions don't play each other. */
-export const PROTOCOL_VERSION = 1
+export const PROTOCOL_VERSION = 2
 
 // ── Room codes ──────────────────────────────────────────────────────────────
 
@@ -80,14 +81,21 @@ export function isReaction(value: unknown): value is Reaction {
 
 // ── Messages ────────────────────────────────────────────────────────────────
 
-/** Where a room is between battles, and during one. */
-export type RoomStage = 'lobby' | 'playing' | 'finished'
+/**
+ * Where a room is between battles, and during one: the lobby, the topic pick
+ * and the draw from it (lib/battleTopics.ts), the battle, its results.
+ */
+export type RoomStage = 'lobby' | 'picking' | 'drawing' | 'playing' | 'finished'
+
+const ROOM_STAGES: readonly RoomStage[] = ['lobby', 'picking', 'drawing', 'playing', 'finished']
 
 /** What the joining player may ask the host to do. */
 export type GuestAction =
   | { kind: 'answer'; round: number; choice: string; elapsedMs: number }
   | { kind: 'ready'; round: number }
   | { kind: 'rematch' }
+  /** The joining player's topics, locked in for the `game`th battle in the room. */
+  | { kind: 'topics'; game: number; topics: string[] }
 
 export type BattleMessage =
   /** Joining player → host: let me in. */
@@ -107,6 +115,8 @@ export type BattleMessage =
       host: BattlePlayer
       guest: BattlePlayer
       config: BattleConfig
+      /** The topic pick and the draw — kept through the battle it drew, for the topic each question was drawn for. */
+      draft: BattleDraft | null
       battle: BattleState | null
       rematch: [boolean, boolean]
     }
@@ -193,6 +203,8 @@ const MAX_ROUNDS = 20
 const MAX_OPTIONS = 8
 const ID_MAX = 120
 const AVATAR_MAX = 600
+const TOPIC_MAX = 120
+const MAX_GAMES = 1_000_000
 
 function player(x: unknown): BattlePlayer {
   const o = obj(x)
@@ -303,6 +315,36 @@ export function parseBattleState(x: unknown): BattleState | null {
   }
 }
 
+function topicList(x: unknown): string[] {
+  return arr(x, MAX_TOPICS, v => str(v, TOPIC_MAX))
+}
+
+/**
+ * A draft from the wire, or null. Beyond the shapes: nothing drawn until the
+ * picks have closed, and no more questions drawn than a battle can have.
+ */
+export function parseDraft(x: unknown): BattleDraft | null {
+  try {
+    const o = obj(x)
+    const phase = oneOf<DraftPhase>(o.phase, ['picking', 'drawing'])
+    const drawn = arr(o.drawn, MAX_ROUNDS, v => {
+      const d = obj(v)
+      return { id: str(d.id, ID_MAX), topic: nullable(d.topic, t => str(t, TOPIC_MAX)) }
+    })
+    if (phase === 'picking' ? drawn.length > 0 : drawn.length === 0) fail()
+    return {
+      game: int(o.game, 0, MAX_GAMES),
+      phase,
+      deadline: num(o.deadline),
+      picks: pair(o.picks, v => nullable(v, topicList)),
+      drawn,
+    }
+  } catch (e) {
+    if (e instanceof Invalid) return null
+    throw e
+  }
+}
+
 function action(x: unknown): GuestAction {
   const o = obj(x)
   switch (o.kind) {
@@ -317,6 +359,8 @@ function action(x: unknown): GuestAction {
       return { kind: 'ready', round: int(o.round, 0, MAX_ROUNDS - 1) }
     case 'rematch':
       return { kind: 'rematch' }
+    case 'topics':
+      return { kind: 'topics', game: int(o.game, 0, MAX_GAMES), topics: topicList(o.topics) }
     default:
       return fail()
   }
@@ -336,16 +380,19 @@ export function parseMessage(x: unknown): BattleMessage | null {
       case 'room': {
         const battle = o.battle === null ? null : parseBattleState(o.battle)
         if (o.battle !== null && !battle) fail()
+        const draft = o.draft === null || o.draft === undefined ? null : parseDraft(o.draft)
+        if (o.draft !== null && o.draft !== undefined && !draft) fail()
         return {
           t: 'room',
           v,
           from,
           to: str(o.to, ID_MAX),
           sentAt: num(o.sentAt),
-          stage: oneOf<RoomStage>(o.stage, ['lobby', 'playing', 'finished']),
+          stage: oneOf<RoomStage>(o.stage, ROOM_STAGES),
           host: player(o.host),
           guest: player(o.guest),
           config: config(o.config),
+          draft,
           battle,
           rematch: pair(o.rematch, bool),
         }

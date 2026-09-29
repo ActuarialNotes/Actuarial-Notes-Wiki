@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:cb858988b00700e386d94ddc07f1cb0453919c5ce87abf2d4750bdd786bc2363
+  content_hash: sha256:7ca52cc140d592603de2329f2929564cddaebc3d899a1a1b6bc7392377d598ef
   sources:
     - "SOA Probability Exam syllabus, November 2026 (7 pp.), pp.1-7 incl. link annotations, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
     - "SOA Probability Exam syllabus, January 2027, sha256:252d07fc2b3be499bdee55caaf40f5bd610c2d9593bee2f0428b6614d4e14e2a, https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-p-syllabus.pdf"
@@ -22,18 +22,22 @@ verification:
 # Exam P-1
 The Probability (P-1) Exam is a three-hour SOA exam of 30 multiple-choice questions, administered as a computer-based test (CBT). Its syllabus develops knowledge of the fundamental probability tools for quantitatively assessing risk, with emphasis on their application to problems encountered in actuarial science.
 
-- Each question has five answer choices, A to E, only one of which is correct; answers for some questions have been rounded.
-- A few pilot questions are placed at random in the exam and are not scored; an unanswered question is scored incorrect.
-- A table of values for the normal distribution is provided during the exam under an Exhibit button, so candidates may not bring a copy of it into the exam.
+> [!question]- Exam format
+>
+> - Each question has five answer choices, A to E, only one of which is correct; answers for some questions have been rounded.
+> - A few pilot questions are placed at random in the exam and are not scored; an unanswered question is scored incorrect.
+> - A table of values for the normal distribution is provided during the exam under an Exhibit button, so candidates may not bring a copy of it into the exam.
 
-## Prerequisite knowledge
-- [[Calculus]], including series, differentiation, and integration.
-- Concepts introduced in [[Resources/Books/Risk and Insurance (SOA)]]
+> [!question]- Prerequisite knowledge
+>
+> - [[Calculus]], including series, differentiation, and integration.
+> - Concepts introduced in [[Resources/Books/Risk and Insurance (SOA)]]
 
-## Other Resources
-- [Tables for Exam P](https://www.soa.org/globalassets/assets/files/edu/2021/p-1-table-rev-4-29-21.pdf) — the normal distribution table provided in the exam
-- Exam P Sample Questions and Solutions: [questions](https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-questions.pdf) and [solutions](https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf)
-- [Online Sample Exam P](https://www.soa.org/education/exam-req/syllabus-study-materials/edu-exam-p-online-sample/) — a balanced yet randomized set of questions on each attempt, drawn from the sample questions and coded to the learning objectives
+> [!question]- Other resources
+>
+> - [Tables for Exam P](https://www.soa.org/globalassets/assets/files/edu/2021/p-1-table-rev-4-29-21.pdf) — the normal distribution table provided in the exam
+> - Exam P Sample Questions and Solutions: [questions](https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-questions.pdf) and [solutions](https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-solutions.pdf)
+> - [Online Sample Exam P](https://www.soa.org/education/exam-req/syllabus-study-materials/edu-exam-p-online-sample/) — a balanced yet randomized set of questions on each attempt, drawn from the sample questions and coded to the learning objectives
 
 ## Learning Objectives
 

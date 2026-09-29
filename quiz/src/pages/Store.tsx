@@ -27,16 +27,16 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { ShipGlyph } from '@/components/actuaria/ShipGlyph'
 import { storeShips, SHIP_SLOT_LABEL, type ShipCosmetic } from '@/data/actuariaShips'
-import { ACTUARIA_ENABLED } from '@/lib/featureFlags'
+import { canEnterActuaria } from '@/lib/actuaria/access'
+import { ACTUARIA_ENABLED, ACTUARIA_OPEN_TO_ALL } from '@/lib/featureFlags'
 import { cn } from '@/lib/utils'
 
 type StoreTab = 'characters' | 'skins' | 'banners' | 'ships'
 
 // Ships are Actuaria's (docs/actuaria-online.md §7.3): sold here with the
-// other cosmetics, equipped in the Hangar. The tab exists only with the flag.
-const STORE_TABS: StoreTab[] = ACTUARIA_ENABLED
-  ? ['characters', 'skins', 'banners', 'ships']
-  : ['characters', 'skins', 'banners']
+// other cosmetics, equipped in the Hangar. The tab is shown only to a viewer
+// who may enter Actuaria — Pro (lib/actuaria/access.ts).
+const STORE_TABS: StoreTab[] = ['characters', 'skins', 'banners', 'ships']
 
 function tabFromParam(value: string | null): StoreTab {
   return STORE_TABS.find(t => t === value) ?? 'characters'
@@ -69,6 +69,11 @@ export default function Store() {
   const [searchParams] = useSearchParams()
 
   const [activeTab, setActiveTab] = useState<StoreTab>(() => tabFromParam(searchParams.get('tab')))
+  const showShips = ACTUARIA_ENABLED && canEnterActuaria({ signedIn: !!user, isPro }, ACTUARIA_OPEN_TO_ALL)
+  const tabs = showShips ? STORE_TABS : STORE_TABS.filter(t => t !== 'ships')
+  // `?tab=ships` from a viewer who can't see ships — or before Pro status is
+  // read — shows the first tab until it can.
+  const shownTab: StoreTab = activeTab === 'ships' && !showShips ? 'characters' : activeTab
   const [skinAnimalFilter, setSkinAnimalFilter] = useState<AnimalType | null>(null)
 
   // All owned IDs from user_cosmetics (characters + paints + banner:custom)
@@ -282,13 +287,13 @@ export default function Store() {
 
       {/* Tab bar */}
       <div className="flex border-b border-border">
-        {STORE_TABS.map(tab => (
+        {tabs.map(tab => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={cn(
               'px-4 py-2 text-sm font-medium capitalize transition-colors border-b-2 -mb-px',
-              activeTab === tab
+              shownTab === tab
                 ? 'border-foreground text-foreground'
                 : 'border-transparent text-muted-foreground hover:text-foreground',
             )}
@@ -299,7 +304,7 @@ export default function Store() {
       </div>
 
       {/* ── Characters ────────────────────────────────────────────────────────── */}
-      {activeTab === 'characters' && (
+      {shownTab === 'characters' && (
         <div className="space-y-4">
           <div>
             <h2 className="font-semibold">Characters</h2>
@@ -359,7 +364,7 @@ export default function Store() {
       )}
 
       {/* ── Skins ─────────────────────────────────────────────────────────────── */}
-      {activeTab === 'skins' && (
+      {shownTab === 'skins' && (
         <div className="space-y-6">
           <p className="text-sm text-muted-foreground">Real-world color variants. Common skins cost 10 gems; Rare cost 50.</p>
 
@@ -485,7 +490,7 @@ export default function Store() {
       )}
 
       {/* ── Ships (Actuaria) ─────────────────────────────────────────────────── */}
-      {ACTUARIA_ENABLED && activeTab === 'ships' && (
+      {showShips && shownTab === 'ships' && (
         <div className="space-y-4">
           <p className="text-sm text-muted-foreground">
             Parts for your ship in Actuaria. Equip them in the <Link to="/actuaria/hangar" className="underline">Hangar</Link>.
@@ -543,7 +548,7 @@ export default function Store() {
       )}
 
       {/* ── Banners ─────────────────────────────────────────────────────────── */}
-      {activeTab === 'banners' && (
+      {shownTab === 'banners' && (
         <div className="space-y-8">
           {!user ? (
             <p className="text-sm text-muted-foreground">

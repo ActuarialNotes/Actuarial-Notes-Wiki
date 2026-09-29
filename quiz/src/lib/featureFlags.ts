@@ -211,25 +211,29 @@ export const COWORK_ENABLED: boolean = true
 
 /**
  * **Actuaria Online** — the game layer over Study Mode (docs/actuaria-online.md).
- * OFF until it launches.
  *
- * When ON, three things appear: a **PLAY** group in the sidebar with the
- * *Actuaria* row, the *Actuaria Online* card on the Study Guides home page, and
- * the `/actuaria/*` route tree (the star map, a sector's landmarks, the Daily
- * Transmission, the Hangar, and Quiz Battle under the Actuaria skin). Actuaria is
- * a skin and a social layer over systems the app already has — Credibility is
- * the mastery ladder and the readiness score, Coverage is the streak, a duel is
- * a Quiz Battle — so nothing behind the flag keeps a number of its own.
+ * ON, and open to **Pro**: a signed-in account with an active Pro subscription
+ * (`lib/actuaria/access.ts`) sees a **PLAY** group in the sidebar with the
+ * *Actuaria* row, the *Actuaria Online* card on the Study Guides home page, the
+ * Store's *Ships* tab, and the `/actuaria/*` route tree (the star map, a
+ * sector's landmarks, the Daily Transmission, the Hangar, Monte Carlo Station,
+ * cohorts and the weekly raid). Anyone else sees none of it, and `/actuaria/*`
+ * sends them to sign in or to the Pro page. Actuaria is a skin and a social
+ * layer over systems the app already has — Credibility is the mastery ladder and
+ * the readiness score, Coverage is the streak, a duel is a Quiz Battle — so
+ * nothing behind the flag keeps a number of its own.
  *
- * Gated off, `/actuaria/*` redirects to the Study Guides and the sidebar row and
- * hub card are gone; the whole world is one lazy chunk, so none of it reaches
- * Study Mode's bundle. The pure engines (`lib/actuaria/*`) and their tests stay
- * compiled either way.
- *
- * Launching is a one-line change: set this to `true`. Until then the one build
- * that has it on is the e2e suite's, which sets `VITE_ACTUARIA_PREVIEW=on`
- * (playwright.config.ts) so the world is exercised before it launches. No
- * deployed build sets that variable, and in one that doesn't, the comparison is
- * a constant `false` the bundler folds away.
+ * Off, `/actuaria/*` redirects to the Study Guides and every surface above is
+ * gone. The world is one lazy chunk either way, so it never weighs on Study
+ * Mode's bundle.
  */
-export const ACTUARIA_ENABLED: boolean = import.meta.env.VITE_ACTUARIA_PREVIEW === 'on'
+export const ACTUARIA_ENABLED: boolean = true
+
+/**
+ * The preview override: Actuaria open to every viewer, signed out included,
+ * rather than to Pro alone. Only the e2e suite's build sets
+ * `VITE_ACTUARIA_PREVIEW=on` (playwright.config.ts), so the world is exercised
+ * without a subscription; no deployed build does, and there the comparison is a
+ * constant `false`.
+ */
+export const ACTUARIA_OPEN_TO_ALL: boolean = import.meta.env.VITE_ACTUARIA_PREVIEW === 'on'

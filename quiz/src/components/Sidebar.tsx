@@ -39,7 +39,8 @@ import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { ProBadge } from '@/components/ProBadge'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { parseBanner, DESIGNATION_BANNERS } from '@/lib/banners'
-import { ACTUARIA_ENABLED, COWORK_ENABLED, RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
+import { ACTUARIA_ENABLED, ACTUARIA_OPEN_TO_ALL, COWORK_ENABLED, RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
+import { canEnterActuaria } from '@/lib/actuaria/access'
 import { StatusChip } from '@/components/actuaria/StatusChip'
 import { ModeSwitcher } from '@/components/ModeSwitcher'
 import { useCoworkLibrary } from '@/hooks/useCoworkLibrary'
@@ -348,6 +349,8 @@ export default function Sidebar() {
   const { user, signOut } = useAuth()
   const { balance: gemBalance } = useGems()
   const { isPro, isBetaTester } = useSubscription()
+  // Actuaria is Pro's (lib/actuaria/access.ts): no one else sees its row.
+  const showActuaria = ACTUARIA_ENABLED && canEnterActuaria({ signedIn: !!user, isPro }, ACTUARIA_OPEN_TO_ALL)
   const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
   const location = useLocation()
@@ -694,7 +697,7 @@ export default function Sidebar() {
               deadline, not a bank of questions — so it is a tab of its own
               (docs/pcpa-project.md). */}
           <ProjectsNav collapsed={collapsed} onNavigate={closeMobile} />
-          {ACTUARIA_ENABLED && <PlayNav collapsed={collapsed} onNavigate={closeMobile} />}
+          {showActuaria && <PlayNav collapsed={collapsed} onNavigate={closeMobile} />}
             </>
           )}
         </nav>

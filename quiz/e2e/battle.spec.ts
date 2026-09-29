@@ -150,4 +150,64 @@ test.describe('quiz battle', () => {
       await expect(page.getByTestId('battle-countdown')).toBeVisible()
     }
   })
+
+  test('says so when nobody is in the lobby — on the way in, and inside it', async ({ page }) => {
+    await page.goto('/battle')
+    await expect(page.getByTestId('battle-lobby-status')).toHaveText('No one’s in the lobby right now')
+    await page.getByTestId('battle-mode-lobby').click()
+    await expect(page.getByTestId('battle-lobby-empty')).toContainText('No one else is in the lobby right now.')
+    await expect(page.getByTestId('battle-lobby-count')).toHaveText('0')
+  })
+
+  test('matches two strangers from the lobby into a battle, and back to it', async ({ context }) => {
+    test.setTimeout(120_000)
+    const ada = await context.newPage()
+    const bo = await context.newPage()
+
+    await ada.goto('/battle')
+    await ada.getByTestId('battle-mode-lobby').click()
+    await ada.getByTestId('battle-lobby-name').fill('Ada')
+    await ada.getByTestId('battle-lobby-name').press('Enter')
+    await ada.getByTestId('battle-lobby-exam-Probability').click()
+    await expect(ada.getByTestId('battle-lobby-empty')).toBeVisible()
+
+    // One browser profile plays both: give Bo his own name and exam first.
+    await bo.goto('/battle')
+    await expect(bo.getByTestId('battle-lobby-status')).toHaveText('1 player waiting now')
+    await bo.evaluate(() => {
+      const setup = JSON.parse(localStorage.getItem('actuarial_battle_setup_v1') ?? '{}')
+      localStorage.setItem('actuarial_battle_setup_v1', JSON.stringify({ ...setup, names: ['Bo', ''], lobbyExam: 'Exam MAS-I' }))
+    })
+    await bo.reload()
+    await bo.getByTestId('battle-mode-lobby').click()
+
+    // Different exams: they see each other, and nobody is matched…
+    await expect(bo.getByTestId('battle-lobby-player')).toContainText('Ada')
+    await expect(ada.getByTestId('battle-lobby-player')).toContainText('Bo')
+    await expect(ada.getByTestId('battle-lobby-count')).toHaveText('1')
+    // …until Bo goes to Ada's exam.
+    await bo.getByRole('button', { name: 'Play Exam P' }).click()
+    for (const page of [ada, bo]) {
+      await expect(page.getByTestId('battle-match-intro')).toBeVisible()
+    }
+    for (const page of [ada, bo]) {
+      await expect(page.getByTestId('battle-countdown')).toBeVisible({ timeout: 15_000 })
+    }
+
+    // A matched battle is five questions. Ada's device hosts: she was waiting first.
+    for (let round = 0; round < 5; round++) {
+      const { right, wrong } = await currentQuestion(ada)
+      await expect(bo.getByTestId('battle-question')).toBeVisible({ timeout: 10_000 })
+      await ada.getByTestId(`battle-pad-${right}`).click()
+      await bo.getByTestId(`battle-pad-${wrong}`).click()
+      await expect(bo.getByTestId('battle-round-result')).toContainText('Ada got it')
+      await ada.getByTestId('battle-next').click()
+      await bo.getByTestId('battle-next').click()
+    }
+    await expect(bo.getByTestId('battle-result-headline')).toHaveText('Ada wins')
+
+    // And back into the lobby for someone new.
+    await bo.getByTestId('battle-find-another').click()
+    await expect(bo.getByTestId('battle-matchmaking')).toBeVisible()
+  })
 })

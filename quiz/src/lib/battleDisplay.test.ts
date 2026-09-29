@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { battleReducer, createBattle, currentRound, type BattleEvent, type BattleState } from './battle'
 import {
   PLAYER_HUES,
+  battleMusicIntensity,
   battleExamKey,
   battleExamName,
   playerAccentStyle,
@@ -104,5 +105,35 @@ describe('telling a round', () => {
     expect(resultHeadline(0, null, NAMES)).toBe('Ada wins')
     expect(resultHeadline(null, null, NAMES)).toBe("It's a draw")
     expect(resultHeadline(1, 0, NAMES)).toBe('Ada left — Bo wins')
+  })
+})
+
+describe('the music, heard from the game', () => {
+  it('is calm over a reveal, plays under a question and leans in at the end', () => {
+    const counting = played('buzzer', { type: 'tick', now: 0 })
+    expect(battleMusicIntensity(counting, 0, 'countdown')).toBe(1)
+    const open = played('buzzer')
+    expect(battleMusicIntensity(open, 3000 + 10_000)).toBe(1)
+    expect(battleMusicIntensity(open, 3000 + 50_001)).toBe(2)
+    const buzzed = played('buzzer', { type: 'buzz', seat: 0, now: 4000 })
+    expect(battleMusicIntensity(buzzed, 4000)).toBe(2)
+    const revealed = played('buzzer', { type: 'buzz', seat: 0, now: 4000 }, { type: 'answer', seat: 0, choice: 'B', now: 5000 })
+    expect(battleMusicIntensity(revealed, 5000)).toBe(0)
+    expect(battleMusicIntensity(open, 3000, 'closing')).toBe(2)
+  })
+
+  it('leans in for the whole of the final question, and stops at the end', () => {
+    let s = played('buzzer')
+    for (let i = 0; i < 2; i++) {
+      const at = currentRound(s).opensAt
+      s = [
+        { type: 'buzz' as const, seat: 0 as const, now: at },
+        { type: 'answer' as const, seat: 0 as const, choice: 'B', now: at + 1 },
+        { type: 'next' as const, now: at + 2 },
+        { type: 'tick' as const, now: at + 2 + 3000 },
+      ].reduce(battleReducer, s)
+    }
+    expect(battleMusicIntensity(s, currentRound(s).opensAt)).toBe(2)
+    expect(battleMusicIntensity(battleReducer(s, { type: 'forfeit', seat: 0, now: 0 }), 0)).toBeNull()
   })
 })

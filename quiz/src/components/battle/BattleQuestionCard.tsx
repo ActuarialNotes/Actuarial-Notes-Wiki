@@ -45,6 +45,7 @@ export function BattleQuestionCard({
   locked,
   picks,
   revealed,
+  pickSound = 'select',
 }: {
   question: Question
   players: readonly [BattlePlayer, BattlePlayer]
@@ -59,6 +60,8 @@ export function BattleQuestionCard({
    */
   picks: OptionPick[]
   revealed: boolean
+  /** The press cue; `none` when the handler plays its own (a lock-in). */
+  pickSound?: 'select' | 'none'
 }) {
   const [showSolution, setShowSolution] = useState(false)
   // A pointer that moves more than a few pixels between down and click was
@@ -91,7 +94,7 @@ export function BattleQuestionCard({
                 tabIndex={pickable ? 0 : -1}
                 aria-disabled={!pickable}
                 aria-label={`Option ${option.key}`}
-                data-sound="select"
+                data-sound={pickable ? pickSound : 'none'}
                 data-math-magnify="none"
                 data-testid={`battle-option-${option.key}`}
                 onPointerDown={e => { pointerStart.current = e.clientY; scrolled.current = false }}

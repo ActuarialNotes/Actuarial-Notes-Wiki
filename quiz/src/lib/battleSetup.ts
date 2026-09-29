@@ -12,6 +12,7 @@ import {
   type RoundTimePreset,
 } from './battle'
 import type { DifficultyTarget } from './quizDifficulty'
+import { ANY_EXAM, MATCH_DIFFICULTY, MATCH_ROUNDS, MATCH_TIME } from './battleLobby'
 
 export type BattleDifficulty = 'easy' | 'mixed' | 'hard'
 
@@ -29,6 +30,8 @@ export interface BattleSetup {
   difficulty: BattleDifficulty
   /** One screen: both players' names. Online: the first is this player's. */
   names: [string, string]
+  /** What this player asks the matchmaking lobby for: an exam, or `ANY_EXAM`. */
+  lobbyExam: string
 }
 
 export const DEFAULT_SETUP: BattleSetup = {
@@ -37,6 +40,7 @@ export const DEFAULT_SETUP: BattleSetup = {
   time: 'standard',
   difficulty: 'mixed',
   names: ['', ''],
+  lobbyExam: ANY_EXAM,
 }
 
 export const SETUP_STORAGE_KEY = 'actuarial_battle_setup_v1'
@@ -55,6 +59,7 @@ export function setupFromStored(raw: string | null): BattleSetup {
       time: o.time === 'blitz' || o.time === 'standard' || o.time === 'exam' ? o.time : DEFAULT_SETUP.time,
       difficulty: o.difficulty === 'easy' || o.difficulty === 'mixed' || o.difficulty === 'hard' ? o.difficulty : DEFAULT_SETUP.difficulty,
       names: [name(names[0]), name(names[1])],
+      lobbyExam: typeof o.lobbyExam === 'string' && o.lobbyExam.length <= 80 ? o.lobbyExam : DEFAULT_SETUP.lobbyExam,
     }
   } catch {
     return DEFAULT_SETUP
@@ -96,4 +101,19 @@ export function configFromSetup(setup: BattleSetup, rules: BattleRules): BattleC
 export function pickExam(remembered: string, available: readonly string[]): string {
   if (available.includes(remembered)) return remembered
   return available[0] ?? ''
+}
+
+/**
+ * A matched battle's settings (lib/battleLobby.ts): two strangers get the middle
+ * of the road — five questions, two minutes each, a mixed draw — on the exam the
+ * lobby matched them on.
+ */
+export function matchSettings(exam: string): { config: BattleConfig; difficulty: DifficultyTarget } {
+  const setup: BattleSetup = { ...DEFAULT_SETUP, exam, rounds: MATCH_ROUNDS, time: MATCH_TIME, difficulty: MATCH_DIFFICULTY }
+  return { config: configFromSetup(setup, 'simultaneous'), difficulty: difficultyTarget(setup.difficulty) }
+}
+
+/** The lobby exam a setup should open on: the remembered one while it can be battled, else any. */
+export function pickLobbyExam(remembered: string, available: readonly string[]): string {
+  return available.includes(remembered) ? remembered : ANY_EXAM
 }

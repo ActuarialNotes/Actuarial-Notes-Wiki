@@ -63,7 +63,7 @@ export function Buzzers({
             style={playerAccentStyle(seat)}
             disabled={!enabled}
             onClick={() => onBuzz(seat)}
-            data-sound="press"
+            data-sound="none"
             data-testid={`battle-buzz-${seat}`}
             aria-label={`${player.name}: buzz in (${BUZZ_KEYS[seat]})`}
             className={cn(
@@ -98,6 +98,7 @@ export function AnswerPad({
   onPick,
   ruledOut = [],
   label,
+  sound = 'select',
 }: {
   seat: Seat
   options: readonly string[]
@@ -105,6 +106,8 @@ export function AnswerPad({
   /** Options already tried and wrong — struck off the pad. */
   ruledOut?: readonly string[]
   label: string
+  /** The press cue; `none` when the handler plays its own (a lock-in). */
+  sound?: 'select' | 'none'
 }) {
   return (
     <div style={playerAccentStyle(seat)} role="group" aria-label={label} className="flex gap-2" data-testid="battle-pad">
@@ -116,7 +119,7 @@ export function AnswerPad({
             type="button"
             disabled={out}
             onClick={() => onPick(key)}
-            data-sound="select"
+            data-sound={sound}
             data-testid={`battle-pad-${key}`}
             aria-label={`Answer ${key}`}
             className={cn(

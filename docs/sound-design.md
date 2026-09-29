@@ -320,6 +320,7 @@ rather than bunching notes together.
 | `begin` | Pressing Start Quiz — every button in the app that opens one. The count-in and one struck note |
 | `launch` | The *second* Start Quiz, on the pre-quiz collect gate: the press that puts a question on screen. Finishes `begin`'s phrase |
 | `study` | Opening the flashcard study view: the Study toggle, a card's "Study" action, "Study again" |
+| `buzz` · `countIn` · `go` · `lockIn` · `opponentIn` · `steal` · `clockTick` · `reaction` · `matchFound` | Quiz Battle's own cues — see "Quiz Battle" below |
 
 ## The cues that start something
 
@@ -446,6 +447,41 @@ walking the streak's pitch up without being part of the streak.
 
 The reduced-motion path skips the spin and the bloom, so `collect` fires
 immediately instead of after the spin — same one chime, just sooner.
+
+## Quiz Battle
+
+A battle (`docs/quiz-battle.md`) is a race, and it needs a few things a quiz
+doesn't: a buzzer, a count-in that sounds like a clock, the other player's
+moves heard without being mistaken for your own verdict, and music. The cues
+live in `BATTLE_RECIPES` in `soundConfig.ts` and keep every rule above;
+`soundConfig.test.ts`'s *battle cues* pins the ones particular to them:
+
+- **The moments and the things under them** (rule 8). `buzz`, `steal`, `go` and
+  `matchFound` are moments and ring in the room; `countIn`, `lockIn` and
+  `clockTick` keep time and are dry. What sits *under* a verdict — `lockIn`,
+  `opponentIn`, `clockTick`, `reaction` — is quieter than `correct`; a `steal`
+  is louder, because taking a question off the other player is the best thing
+  that happens in a buzzer battle.
+- **Rising phrases.** `buzz` is a fourth up over a low glide, `steal` a line
+  that climbs past `correct`, `matchFound` a fifth up; `go` lands an octave over
+  the count-in's G4, so the count-in and the question read as one phrase.
+- **The other player has no pitch.** `opponentIn` is two soft knocks of noise
+  and `clockTick` is noise too, so neither can be heard as a right or wrong
+  answer. There is still no cue for a miss, a wrong buzz or a lost round (rule 7).
+
+### The music
+
+`lib/battleMusic.ts` writes a generative score — 84 bpm, an eight-bar harmony
+under a marimba line drawn fresh each beat — at three intensities the game moves
+it between (calm, play, pressure); `lib/battleMusicPlayer.ts` plays it with the
+standard Web Audio look-ahead scheduler onto the same output and room as the
+cues (`soundGraph()` in `soundEngine.ts`). It is held to the same rules as the
+catalogue, and tested for them: every note from the pentatonic (rule 11 — a
+cue landing on the music can't clash with it) and nothing that sustains above
+1 kHz (rule 6). Its bus sits about 9 dB under a right answer and through a
+2.2 kHz low-pass: the music is the room the game happens in, never something
+competing with it. It is off with the app's mute, off with its own switch
+(`actuarial-notes-battle-music`), and off while the tab is hidden.
 
 ## Wiring a new interaction
 

@@ -7,7 +7,7 @@ import { BattleCountdown } from '@/components/battle/BattleCountdown'
 import { BattleActionBar, Buzzers, FloorPad, NextButton, RoundResult } from '@/components/battle/BattleActionBar'
 import { BattleResults } from '@/components/battle/BattleResults'
 import { BattleTopRow } from '@/components/battle/BattleTopRow'
-import { useLocalBattle } from '@/hooks/useBattle'
+import { useBattleMusic, useLocalBattle, useNow } from '@/hooks/useBattle'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
 import { playSound, resetSoundCombo } from '@/lib/soundEngine'
 import {
@@ -20,7 +20,7 @@ import {
   type BattleQuestionKey,
   type Seat,
 } from '@/lib/battle'
-import { answerFor, battleExamName } from '@/lib/battleDisplay'
+import { answerFor, battleExamName, battleMusicIntensity } from '@/lib/battleDisplay'
 import type { Question } from '@/lib/parser'
 
 /**
@@ -59,9 +59,10 @@ export function LocalBattle({
   const phase = round?.phase ?? null
 
   // ── Sounds ────────────────────────────────────────────────────────────────
-  // The paper sound as each question is laid down; the climbing `correct` on a
-  // right answer; and silence on a miss, which only ends the climb
-  // (docs/sound-design.md, rules 7 and 10).
+  // The first question finishes the Start button's phrase (`launch`); every
+  // one after lands with `go`, the count-in's answer. A right answer climbs
+  // (`correct`), a steal gets its own flourish, and a miss is silent — it only
+  // ends the climb (docs/sound-design.md, rules 7 and 10).
   const heard = useRef({ index: -1, phase: '', answers: 0 })
   useEffect(() => {
     if (!round) return
@@ -69,13 +70,19 @@ export function LocalBattle({
     const sameRound = before.index === round.index
     heard.current = { index: round.index, phase: round.phase, answers: round.answers.length }
     if (round.phase === 'open' && round.answers.length === 0 && !(sameRound && before.phase === 'open')) {
-      playSound(round.index === 0 ? 'launch' : 'page')
+      playSound(round.index === 0 ? 'launch' : 'go')
     }
     if (round.answers.length > (sameRound ? before.answers : 0)) {
-      if (round.answers[round.answers.length - 1].correct) playSound('correct')
+      const last = round.answers[round.answers.length - 1]
+      if (last.correct) playSound(last.steal ? 'steal' : 'correct')
       else resetSoundCombo('correct')
     }
   }, [round])
+
+  // The music leans in as the round tightens: the clock is read twice a
+  // second while a question is open, which is all the music needs.
+  const now = useNow(phase === 'open', 500)
+  useBattleMusic(battle ? battleMusicIntensity(battle, now) : null)
 
   // Each question — and the results — starts at the top of the page, not
   // wherever the last one's options left the scroll.
@@ -86,7 +93,11 @@ export function LocalBattle({
   }, [roundIndex, finished])
 
   // ── Moves ─────────────────────────────────────────────────────────────────
-  const buzz = (seat: Seat) => dispatch({ type: 'buzz', seat, now: Date.now() })
+  const buzz = (seat: Seat) => {
+    if (round?.phase !== 'open' || round.lockedOut.includes(seat)) return
+    playSound('buzz')
+    dispatch({ type: 'buzz', seat, now: Date.now() })
+  }
   const answer = (choice: string) => {
     if (!round?.floor) return
     dispatch({ type: 'answer', seat: round.floor.seat, choice, now: Date.now() })
@@ -104,12 +115,7 @@ export function LocalBattle({
       answer(option)
     }
   }
-  const keyBuzz = (seat: Seat) => () => {
-    if (round?.phase === 'open' && !round.lockedOut.includes(seat)) {
-      playSound('press')
-      buzz(seat)
-    }
-  }
+  const keyBuzz = (seat: Seat) => () => buzz(seat)
 
   usePageKeyboard({
     a: keyBuzz(0), A: keyBuzz(0),

@@ -1632,8 +1632,23 @@ summary .katex-display,
   animation: battle-confetti 2600ms cubic-bezier(0.25, 0.6, 0.3, 1) both;
 }
 
+/* The matchmaking lobby's radar: two rings in the player's own colour
+   spreading out from their tile, a beat apart, for as long as they wait. The
+   only looping battle animation, and the one thing that says the page is
+   still looking. */
+@keyframes battle-radar {
+  0%   { opacity: 0.55; transform: scale(0.8); }
+  100% { opacity: 0; transform: scale(1.8); }
+}
+.battle-radar {
+  border: 2px solid var(--player);
+  animation: battle-radar 2.4s cubic-bezier(0.25, 0.6, 0.3, 1) infinite;
+}
+.battle-radar-late { animation-delay: 1.2s; }
+
 @media (prefers-reduced-motion: reduce) {
   .battle-count-pop,
+  .battle-radar,
   .battle-buzz-flash,
   .battle-shake,
   .battle-trophy { animation: none; }

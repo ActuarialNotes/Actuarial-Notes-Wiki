@@ -15,12 +15,13 @@ export function BattleCountdown({ battle }: { battle: BattleState }) {
   const n = Math.max(1, Math.ceil((round.opensAt - now) / 1000))
   const final = isFinalRound(battle, round.index)
 
-  // A pen-mark tick on each number — the count, heard.
+  // A woodblock on each number — the count, heard; `go` answers it an octave
+  // up when the question lands.
   const last = useRef<number | null>(null)
   useEffect(() => {
     if (last.current === n) return
     last.current = n
-    playSound('tick')
+    playSound('countIn')
   }, [n])
 
   return (

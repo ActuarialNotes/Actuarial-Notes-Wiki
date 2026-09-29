@@ -15,6 +15,12 @@ interface ImportMetaEnv {
    * e2e suite. See lib/battleTransport.ts.
    */
   readonly VITE_BATTLE_TRANSPORT?: string
+  /**
+   * `on` builds the app with Actuaria Online turned on though its flag is off —
+   * the e2e suite's build, so the game layer is tested before it launches. See
+   * `ACTUARIA_ENABLED` in lib/featureFlags.ts.
+   */
+  readonly VITE_ACTUARIA_PREVIEW?: string
 }
 
 interface Window {

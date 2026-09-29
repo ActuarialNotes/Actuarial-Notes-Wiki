@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Check, Gem, Loader2, Lock, Star } from 'lucide-react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Calculator, Check, Gem, Loader2, Lock, Star } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useGems } from '@/hooks/useGems'
 import { useSubscription } from '@/hooks/useSubscription'
@@ -22,12 +22,25 @@ import {
   parseBanner,
   type BannerEquip,
 } from '@/lib/banners'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { ShipGlyph } from '@/components/actuaria/ShipGlyph'
+import { storeShips, SHIP_SLOT_LABEL, type ShipCosmetic } from '@/data/actuariaShips'
+import { ACTUARIA_ENABLED } from '@/lib/featureFlags'
 import { cn } from '@/lib/utils'
 
-type StoreTab = 'characters' | 'skins' | 'banners'
+type StoreTab = 'characters' | 'skins' | 'banners' | 'ships'
+
+// Ships are Actuaria's (docs/actuaria-online.md §7.3): sold here with the
+// other cosmetics, equipped in the Hangar. The tab exists only with the flag.
+const STORE_TABS: StoreTab[] = ACTUARIA_ENABLED
+  ? ['characters', 'skins', 'banners', 'ships']
+  : ['characters', 'skins', 'banners']
+
+function tabFromParam(value: string | null): StoreTab {
+  return STORE_TABS.find(t => t === value) ?? 'characters'
+}
 
 type AnyRarity = CharacterRarity | CosmeticRarity
 
@@ -53,8 +66,9 @@ export default function Store() {
   const { isPro, isBetaTester, loading: subLoading } = useSubscription()
   const { balance, loading: gemsLoading, refresh: refreshGems } = useGems()
   const { progress } = useExamProgress()
+  const [searchParams] = useSearchParams()
 
-  const [activeTab, setActiveTab] = useState<StoreTab>('characters')
+  const [activeTab, setActiveTab] = useState<StoreTab>(() => tabFromParam(searchParams.get('tab')))
   const [skinAnimalFilter, setSkinAnimalFilter] = useState<AnimalType | null>(null)
 
   // All owned IDs from user_cosmetics (characters + paints + banner:custom)
@@ -166,6 +180,21 @@ export default function Store() {
     setBusyId(null)
   }
 
+  // ── Ship actions (Actuaria) ────────────────────────────────────────────────
+
+  async function handleBuyShip(item: ShipCosmetic) {
+    if (!userId) { navigate('/auth', { state: { from: '/store?tab=ships' } }); return }
+    setBusyId(item.id); setError(null)
+    const { error: rpcError } = await supabase.rpc('purchase_cosmetic', {
+      p_cosmetic_id: item.id,
+      p_price: item.priceGems,
+    })
+    if (rpcError) { setError(rpcError.message); setBusyId(null); return }
+    playSound('reward')
+    await Promise.all([refreshGems(), fetchOwned()])
+    setBusyId(null)
+  }
+
   // ── Banner actions ─────────────────────────────────────────────────────────
 
   async function handleEquipBanner(equip: BannerEquip) {
@@ -253,7 +282,7 @@ export default function Store() {
 
       {/* Tab bar */}
       <div className="flex border-b border-border">
-        {(['characters', 'skins', 'banners'] as StoreTab[]).map(tab => (
+        {STORE_TABS.map(tab => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -451,6 +480,64 @@ export default function Store() {
                   </Card>
                 )
               })}
+          </div>
+        </div>
+      )}
+
+      {/* ── Ships (Actuaria) ─────────────────────────────────────────────────── */}
+      {ACTUARIA_ENABLED && activeTab === 'ships' && (
+        <div className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            Parts for your ship in Actuaria. Equip them in the <Link to="/actuaria/hangar" className="underline">Hangar</Link>.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {storeShips().map(item => {
+              const isOwned = ownedIds.has(item.id)
+              const isBusy = busyId === item.id
+              const canAfford = balance >= item.priceGems
+              return (
+                <Card key={item.id} data-testid={`store-ship-${item.id}`}>
+                  <CardContent className="p-4 flex flex-col items-center gap-3">
+                    <div className="flex h-[72px] items-center justify-center">
+                      {item.slot === 'calculator'
+                        ? <Calculator className="h-10 w-10 text-muted-foreground" aria-hidden />
+                        : <ShipGlyph look={{ hull: item.hull ?? null, trail: item.trail ?? null }} size={72} />}
+                    </div>
+                    <div className="text-center space-y-1.5">
+                      <p className="text-sm font-semibold">{item.name}</p>
+                      <p className="text-xs text-muted-foreground">{SHIP_SLOT_LABEL[item.slot]}</p>
+                      <RarityBadge rarity={item.rarity} />
+                    </div>
+                    {isOwned ? (
+                      <Link
+                        to="/actuaria/hangar"
+                        className={buttonVariants({ variant: 'outline', size: 'sm', className: 'w-full gap-1.5' })}
+                      >
+                        <Check className="h-4 w-4" />Owned · Equip in Hangar
+                      </Link>
+                    ) : !actionsReady ? (
+                      <Button size="sm" variant="outline" disabled className="w-full">
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      </Button>
+                    ) : !user ? (
+                      <Button size="sm" variant="outline" onClick={() => navigate('/auth', { state: { from: '/store?tab=ships' } })} className="w-full gap-1.5">
+                        <Lock className="h-3.5 w-3.5" />Sign in to buy
+                      </Button>
+                    ) : canAfford ? (
+                      <Button size="sm" onClick={() => handleBuyShip(item)} disabled={isBusy} className="w-full gap-1.5">
+                        {isBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : (
+                          <>{item.priceGems} <Gem className="h-3.5 w-3.5" /></>
+                        )}
+                      </Button>
+                    ) : (
+                      <Button size="sm" disabled className="w-full gap-1.5 opacity-35">
+                        {item.priceGems} <Gem className="h-3.5 w-3.5" />
+                      </Button>
+                    )}
+                  </CardContent>
+                </Card>
+              )
+            })}
           </div>
         </div>
       )}

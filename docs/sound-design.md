@@ -320,7 +320,7 @@ rather than bunching notes together.
 | `begin` | Pressing Start Quiz — every button in the app that opens one. The count-in and one struck note |
 | `launch` | The *second* Start Quiz, on the pre-quiz collect gate: the press that puts a question on screen. Finishes `begin`'s phrase |
 | `study` | Opening the flashcard study view: the Study toggle, a card's "Study" action, "Study again" |
-| `buzz` · `countIn` · `go` · `lockIn` · `opponentIn` · `steal` · `clockTick` · `reaction` · `matchFound` | Quiz Battle's own cues — see "Quiz Battle" below |
+| `buzz` · `countIn` · `go` · `lockIn` · `opponentIn` · `power` · `steal` · `clockTick` · `reaction` · `matchFound` | Quiz Battle's own cues — see "Quiz Battle" below |
 
 ## The cues that start something
 
@@ -468,6 +468,9 @@ live in `BATTLE_RECIPES` in `soundConfig.ts` and keep every rule above;
 - **The other player has no pitch.** `opponentIn` is two soft knocks of noise
   and `clockTick` is noise too, so neither can be heard as a right or wrong
   answer. There is still no cue for a miss, a wrong buzz or a lost round (rule 7).
+- **Arming isn't a verdict.** `power` (an ability armed, in a room with abilities
+  on) is `lockIn`'s latch with a rising fourth in it, D to G, and quieter than
+  `lockIn`: it says a choice was made, not how the round will go.
 
 ### The music
 

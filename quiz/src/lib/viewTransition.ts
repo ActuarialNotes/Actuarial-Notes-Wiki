@@ -71,6 +71,21 @@ const DESK: { prefix: string; tab: number; depth: number; below?: number }[] = [
   { prefix: '/review', tab: 3, depth: 2 },
   // The Projects tab; an attempt is a sheet laid over the list of briefs.
   { prefix: '/project', tab: 4, depth: 0, below: 1 },
+  // Actuaria Online, under the sidebar's PLAY label after Projects. Its own
+  // tabs, in the order its tab bar lists them (lib/actuaria/nav.ts), so an
+  // in-world move slides the way the tabs read and never borrows the Quiz tab's
+  // motion — `/actuaria/battle` is not `/battle`. The title screen lies where
+  // the map does; a sector is a sheet over the map, the Simulation one over
+  // Monte Carlo Station, a raid one over the Cohort.
+  { prefix: '/actuaria', tab: 4.5, depth: 0, below: 1 },
+  { prefix: '/actuaria/map', tab: 4.5, depth: 0 },
+  { prefix: '/actuaria/sector', tab: 4.5, depth: 1 },
+  { prefix: '/actuaria/battle', tab: 4.6, depth: 0 },
+  { prefix: '/actuaria/simulation', tab: 4.6, depth: 1 },
+  { prefix: '/actuaria/daily', tab: 4.7, depth: 0 },
+  { prefix: '/actuaria/cohort', tab: 4.8, depth: 0 },
+  { prefix: '/actuaria/raid', tab: 4.8, depth: 1 },
+  { prefix: '/actuaria/hangar', tab: 4.9, depth: 0 },
   { prefix: '/search', tab: 5, depth: 0 },
   { prefix: '/store', tab: 6, depth: 0 },
   { prefix: '/upgrade', tab: 7, depth: 0 },

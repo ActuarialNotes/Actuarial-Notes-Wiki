@@ -173,6 +173,21 @@ streak flame the same scoreboard shows) — and they are the two ends of the foi
 a tile, a buzzer, the options while they hold the floor. A player colour is identity only:
 never put it on a verdict, and never use it outside a battle.
 
+#### Actuaria signal
+
+The third hue that means neither an exam nor a verdict: **Actuaria Online**'s one accent, a
+teal (`--actuaria-signal: 173 80% 40%`, ≈ `#14B8A6`) from the same family as the app's own
+teal — the general-guide tile, `tip` callouts — which is why it reads as the site's own.
+It is **chrome only**: the orbit ring of the Actuaria mark, a `live` indicator, a HUD panel's
+corner ticks, the "you are here" marker on the star map. Never a verdict, never a mastery
+readout (Credibility keeps the green ladder, gold for a keystone — `lib/masteryFill.ts`), and
+never on a battle player's tile, buzzer, pad or score, which stay sky and fuchsia. It is
+defined only inside the `.actuaria` scope (§2.6), exposed to Tailwind as `actuaria-signal`
+(`bg-actuaria-signal`, `text-actuaria-signal`, `bg-actuaria-signal-soft` for the ~18% wash a
+`live` chip sits on). There is **no Battle brand colour**: the design canvas painted Battle
+amber, which is the at-risk hue (§4.1) and the Beta chip's, and Quiz Battle already has its
+identity in the split sky/fuchsia `BattleLogo`.
+
 ### 2.4 The one place hexes are allowed
 
 The generated concept figures (`Media/Figures/*.svg`, see `docs/concept-figures.md`) are the
@@ -199,6 +214,53 @@ fallback for Obsidian and GitHub.
 - The "active/selected" signal across wiki links, highlights, and rings is `--primary`
   (e.g. `.wiki-link--active`, `.tts-tok--active`, onboarding spotlight). Keep new
   selection states in the primary family so they read consistently.
+
+### 2.6 Actuaria scope
+
+Actuaria Online (`docs/actuaria-online.md`) is the existing app with a thin sci-fi layer, not a
+second design system. Every `/actuaria/*` route renders inside one scope element,
+`components/actuaria/ActuariaScope.tsx`:
+
+```tsx
+<div className="actuaria dark actuaria-grid bg-background text-foreground" style={{ colorScheme: 'dark' }}>
+```
+
+- **Always dark.** In-world screens are space, so the scope carries `.dark` itself and pulls the
+  dark token block whatever the reader's theme — scoped to the route, never toggling the
+  document's class, so the sidebar and anything portalled to the body keep the reader's own
+  theme. Tailwind's `dark:` variants work inside it because `darkMode: ['class']` matches any
+  descendant of a `.dark` element. Quiz Battle's motion and player colours read the same tokens,
+  so they are unchanged under the Actuaria skin (`e2e/actuaria.spec.ts` holds that).
+- **The same surfaces.** Black canvas, `bg-card` panels, `border-border` sparingly, 12–16px radii
+  (`rounded-xl` / `rounded-2xl`), the exam tiles (`ExamLogo` / `LogoTile`). The canvas's hexes
+  were reference renders of these tokens in dark mode, not new colours.
+- **What the layer adds** — four things, and nothing else:
+  - the **Actuaria mark** (`ActuariaMark`: a planet, a tilted orbit ring, a satellite; exact
+    geometry, 24px minimum, the satellite dropped at 32px and under) and the wordmark;
+  - the **dot-grid floor**, `.actuaria-grid` (`radial-gradient(hsl(var(--border)) 1px, …)` at
+    22px) — on an in-world page canvas only, never a study page or a card;
+  - thin **orbit lines** on the star map, in `--border`;
+  - **corner ticks** (`HudFrame`: four 16px L-shapes, 2px signal, bent to the panel's radius) on
+    exactly three things — the selected-sector panel, the Battle page's question card under the
+    Actuaria skin, and the raid boss.
+- **Type.** The system UI stack stays the UI face. **Oxanium** (600/700) is the one new face, for
+  the wordmark and in-world display labels only — screen titles, sector names ("SECTOR P"), HUD
+  section headers — always uppercase and a little open (`.actuaria-display`, +4%), never body
+  text. It loads from Google Fonts the first time a reader enters Actuaria, from the route
+  chunk, so Study Mode never fetches it. Readouts (Z values, timers, scores) are
+  `font-mono tabular-nums` on the system mono stack.
+- **Selection** has one treatment, the site's selected exam card: `var(--exam-accent-soft)` over
+  a 1px `var(--exam-accent-muted)` border. Focus rings stay `ring-ring`.
+- **Buttons** stay the app's `Button` variants, one solid primary per view. `button.tsx` has no
+  pill shape; an in-world screen may round a button with `className="rounded-full"`, and that
+  is the only liberty it takes — never a new variant.
+- **Colour meanings don't change in space.** Green is mastered, amber is decaying (orbital
+  decay), red is wrong and `--destructive` is the raid boss — the one enemy. The signal is chrome
+  (§2.3, *Actuaria signal*). Status chips (`StatusChip`: `live`, `cleared`, `decaying`,
+  `locked`, `beta`) are the Beta-chip pattern in those hues.
+- **Motion** follows §9: nothing in space moves on its own or loops at rest — the starfield,
+  the orbits and the nebula are still drawings — and a sector answers the pointer with its
+  own accent ring rather than a movement. Quiz Battle's motion is unchanged under the skin.
 
 ---
 
@@ -272,6 +334,7 @@ so a colour always means the same thing.
 | **Pro (the paid tier)** | monochrome — `bg-foreground` / `text-background` | The **Pro** label, wherever the tier is named (`components/ProBadge.tsx`) |
 | **Streak / energy** | `orange` (flame) | Streak flame & celebrations |
 | **A battle's players** | `sky` / `fuchsia` (identity, not a verdict — §2.3) | Quiz Battle only: each player's tile, buzzer, answer pad and score |
+| **Actuaria chrome** | `actuaria-signal` teal (chrome, not a verdict — §2.3, §2.6) | Actuaria routes only: the mark's ring, live indicators, HUD corner ticks, "you are here" |
 
 ### 4.2 Standard shade pairings (light / dark)
 

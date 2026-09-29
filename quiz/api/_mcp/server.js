@@ -334,6 +334,16 @@ export function optionLetter(raw, options) {
   return byText ? byText.key : null
 }
 
+/**
+ * check_answer's marking of a multiple-choice answer: the option the answer
+ * means, and whether it is the key. The raid marks with this too
+ * (api/raid.js), so a hit on the boss is judged exactly as the connector judges.
+ */
+export function markChoice(q, raw) {
+  const letter = optionLetter(raw, q.options)
+  return { letter, correct: letter !== null && letter === q.answer }
+}
+
 function numeric(value) {
   const n = Number(String(value ?? '').trim().replace(/[$€£,\s]/g, ''))
   return Number.isFinite(n) ? n : null
@@ -633,14 +643,14 @@ function markQuestion(ix, q, answer, parts) {
     }
   } else {
     if (q.type === 'multiple-choice') {
-      const letter = optionLetter(answer, q.options)
+      const { letter, correct } = markChoice(q, answer)
       if (letter === null) {
         return {
           unreadable: true,
           text: `Couldn't read an option letter from "${answer}". Ask the student which option (${q.options.map(o => o.key).join(', ')}) they choose, then call check_answer again. The answer has not been revealed.`,
         }
       }
-      lines.push('', `${VERDICT[letter === q.answer ? 'correct' : 'incorrect']} — the student chose ${answerText(letter, q.options)}.`)
+      lines.push('', `${VERDICT[correct ? 'correct' : 'incorrect']} — the student chose ${answerText(letter, q.options)}.`)
     } else {
       lines.push('', `${VERDICT[markFreeEntry(answer, q.answer)]} — the student answered ${answer}.`)
     }

@@ -2,8 +2,9 @@ import { useEffect, useReducer, useState, useSyncExternalStore } from 'react'
 import { battleReducer, type BattleEvent, type BattleState } from '@/lib/battle'
 import { isMusicOn, setMusicOn, subscribeMusic, type MusicIntensity } from '@/lib/battleMusic'
 import { setBattleMusic } from '@/lib/battleMusicPlayer'
-import type { GuestSession, HostSession, SessionSnapshot } from '@/lib/battleSession'
-import type { LobbySnapshot, MatchmakingSession } from '@/lib/battleMatchmaking'
+import { tabClientId, type GuestSession, type HostSession, type SessionSnapshot } from '@/lib/battleSession'
+import { MatchmakingSession, type LobbySnapshot } from '@/lib/battleMatchmaking'
+import { lobbyTransport } from '@/lib/battleTransport'
 
 /**
  * The time, re-read every `intervalMs` while `active` — what a countdown
@@ -117,4 +118,21 @@ export function useLobbySession(
     session ? session.getSnapshot : noSnapshot,
   )
   return { session, snapshot }
+}
+
+/**
+ * The lobby, watched without joining it: how many players are waiting, read by
+ * an *observer* session (it counts, never matches). Null until the count is
+ * known, and while `active` is off. The Battle page's way in reads it, and so do
+ * Actuaria's title screen and star map — one count, from the lobby itself.
+ */
+export function useLobbyCount(exams: readonly string[], active: boolean): number | null {
+  const [id] = useState(() => tabClientId(null))
+  const watching = active && exams.length > 0
+  const { snapshot } = useLobbySession(
+    watching ? () => new MatchmakingSession({ transport: lobbyTransport(`watch-${id}`), exams }) : null,
+    watching ? `watch:${id}` : '',
+  )
+  if (!watching || !snapshot || snapshot.status === 'connecting') return null
+  return snapshot.others.length
 }

@@ -194,6 +194,32 @@ export function buildPastExamRows(questions: Question[], exam: string): PastExam
  * The session is practice either way — a generated Mix and Fall 2019 alike —
  * so the mode carries one name and only the *source* below distinguishes them.
  */
+/**
+ * How many questions a practice exam draws on each exam — the real paper's
+ * length. Read by the quiz builder's Practice Exam and by Actuaria's
+ * Simulation (docs/actuaria-online.md §6.10), so the two can't disagree.
+ */
+export const PRACTICE_EXAM_QUESTIONS: Readonly<Record<string, number>> = {
+  'Probability': 30,
+  'Financial Mathematics': 30,
+  'Exam MAS-I': 40,
+  'Exam MAS-II': 42,
+  'Exam 5': 25,
+  // No format guide gives these, so they are the released papers' own size:
+  // the thirteen Fall 2013–Fall 2019 Exam 6C papers held 394 questions, the
+  // eight 2012–2019 Exam 7 papers 200 and the eight Exam 8 papers 173
+  // (`cas6c-*` / `cas7-*` / `cas8-*` across the bank, wherever the syllabus has
+  // since filed them). Exam 9 has no released paper of its own in the bank.
+  'Exam 6C': 30,
+  'Exam 7': 25,
+  'Exam 8': 22,
+}
+
+/** A practice exam's length on `exam` (a bank label), 30 where no paper says. */
+export function practiceExamQuestions(exam: string): number {
+  return PRACTICE_EXAM_QUESTIONS[exam] ?? 30
+}
+
 export const PRACTICE_EXAM_LABEL = 'Practice Exam'
 
 /**

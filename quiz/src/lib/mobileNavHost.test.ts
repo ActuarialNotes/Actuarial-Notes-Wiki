@@ -12,6 +12,8 @@ describe('pageHostsNavButton', () => {
     expect(pageHostsNavButton('/project/pcpa/p-1')).toBe(true)
     expect(pageHostsNavButton('/dashboard')).toBe(true)
     expect(pageHostsNavButton('/flashcards')).toBe(true)
+    expect(pageHostsNavButton('/actuaria')).toBe(true)
+    expect(pageHostsNavButton('/actuaria/sector/CAS-5')).toBe(true)
   })
 
   it('leaves every other route to the app header', () => {
@@ -28,5 +30,6 @@ describe('pageHostsNavButton', () => {
     expect(pageHostsNavButton('/dashboards')).toBe(false)
     expect(pageHostsNavButton('/flashcards/deck')).toBe(false)
     expect(pageHostsNavButton('/projects')).toBe(false)
+    expect(pageHostsNavButton('/actuarial')).toBe(false)
   })
 })

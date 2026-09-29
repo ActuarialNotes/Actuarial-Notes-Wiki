@@ -13,8 +13,12 @@
 // a shape the app can't be crashed by, or dropped.
 
 import {
+  ABILITY_IDS,
+  LOADOUT_MAX,
   MAX_NAME_LENGTH,
+  isAbilityId,
   isSeat,
+  type AbilityId,
   type BattleConfig,
   type BattlePlayer,
   type BattleQuestionKey,
@@ -30,8 +34,13 @@ import {
 } from './battle'
 import { MAX_TOPICS, type BattleDraft, type DraftPhase } from './battleTopics'
 
-/** Bumped whenever a message changes shape. Two versions don't play each other. */
-export const PROTOCOL_VERSION = 2
+/**
+ * Bumped whenever a message changes shape. Two versions don't play each other.
+ * 2: the topic pick and the draw (a room's `draft`, the `topics` move).
+ * 3: abilities (a room setting, the `power` move, each seat's loadout and what
+ * it has spent, a round's armed abilities and struck options).
+ */
+export const PROTOCOL_VERSION = 3
 
 // ── Room codes ──────────────────────────────────────────────────────────────
 
@@ -96,10 +105,17 @@ export type GuestAction =
   | { kind: 'rematch' }
   /** The joining player's topics, locked in for the `game`th battle in the room. */
   | { kind: 'topics'; game: number; topics: string[] }
+  /** Use an ability (a room with abilities on). */
+  | { kind: 'power'; round: number; ability: AbilityId }
 
 export type BattleMessage =
-  /** Joining player → host: let me in. */
-  | { t: 'join'; v: number; from: string; name: string; avatarUrl?: string }
+  /**
+   * Joining player → host: let me in. `loadout` is the abilities this player
+   * brings — declared, since their unlocks are read from their own mastery and
+   * can't be checked from here; the host takes only the ids, the count and the
+   * once-each rule on trust, as the rest of a friend's room is taken.
+   */
+  | { t: 'join'; v: number; from: string; name: string; avatarUrl?: string; loadout?: AbilityId[] }
   /**
    * Host → joining player: the whole room — who's in it, the settings, and the
    * battle as it stands on the host's clock at `sentAt`, already redacted for
@@ -206,6 +222,18 @@ const AVATAR_MAX = 600
 const TOPIC_MAX = 120
 const MAX_GAMES = 1_000_000
 
+function ability(x: unknown): AbilityId {
+  if (!isAbilityId(x)) fail()
+  return x
+}
+
+/** A list of abilities: known ids, each once, at most `max`. */
+function abilities(x: unknown, max: number): AbilityId[] {
+  const list = arr(x, max, ability)
+  if (new Set(list).size !== list.length) fail()
+  return list
+}
+
 function player(x: unknown): BattlePlayer {
   const o = obj(x)
   const avatarUrl = optStr(o.avatarUrl, AVATAR_MAX)
@@ -219,6 +247,7 @@ function config(x: unknown): BattleConfig {
     exam: str(o.exam, 80),
     rounds: int(o.rounds, 1, MAX_ROUNDS),
     roundSeconds: num(o.roundSeconds, 5, 3600),
+    abilities: o.abilities === undefined ? false : bool(o.abilities),
   }
 }
 
@@ -236,7 +265,7 @@ function breakdown(x: unknown): PointsBreakdown {
   const n = (v: unknown) => num(v, -10_000, 10_000)
   return {
     base: n(o.base), speed: n(o.speed), streak: n(o.streak), fastest: n(o.fastest),
-    penalty: n(o.penalty), multiplier: n(o.multiplier), total: n(o.total),
+    penalty: n(o.penalty), ability: n(o.ability), multiplier: n(o.multiplier), total: n(o.total),
   }
 }
 
@@ -277,6 +306,8 @@ function round(x: unknown): RoundState {
     answers: arr(o.answers, 4, roundAnswer),
     outcome: nullable(o.outcome, v => oneOf<RoundOutcome>(v, ['won', 'missed', 'timeout'])),
     ready: arr(o.ready, 2, seat),
+    powers: pair(o.powers, v => abilities(v, ABILITY_IDS.length)),
+    struck: pair(o.struck, v => nullable(v, c => str(c, 8))),
   }
 }
 
@@ -308,6 +339,9 @@ export function parseBattleState(x: unknown): BattleState | null {
       finished: bool(o.finished),
       forfeit: nullable(o.forfeit, seat),
       graceMs: num(o.graceMs, 0, 60_000),
+      loadouts: pair(o.loadouts, v => abilities(v, LOADOUT_MAX)),
+      spent: pair(o.spent, v => abilities(v, LOADOUT_MAX)),
+      reinsured: pair(o.reinsured, bool),
     }
   } catch (e) {
     if (e instanceof Invalid) return null
@@ -361,6 +395,8 @@ function action(x: unknown): GuestAction {
       return { kind: 'rematch' }
     case 'topics':
       return { kind: 'topics', game: int(o.game, 0, MAX_GAMES), topics: topicList(o.topics) }
+    case 'power':
+      return { kind: 'power', round: int(o.round, 0, MAX_ROUNDS - 1), ability: ability(o.ability) }
     default:
       return fail()
   }
@@ -375,7 +411,15 @@ export function parseMessage(x: unknown): BattleMessage | null {
     switch (o.t) {
       case 'join': {
         const avatarUrl = optStr(o.avatarUrl, AVATAR_MAX)
-        return { t: 'join', v, from, name: str(o.name, MAX_NAME_LENGTH * 2), ...(avatarUrl ? { avatarUrl } : {}) }
+        const loadout = o.loadout === undefined || o.loadout === null ? undefined : abilities(o.loadout, LOADOUT_MAX)
+        return {
+          t: 'join',
+          v,
+          from,
+          name: str(o.name, MAX_NAME_LENGTH * 2),
+          ...(avatarUrl ? { avatarUrl } : {}),
+          ...(loadout ? { loadout } : {}),
+        }
       }
       case 'room': {
         const battle = o.battle === null ? null : parseBattleState(o.battle)

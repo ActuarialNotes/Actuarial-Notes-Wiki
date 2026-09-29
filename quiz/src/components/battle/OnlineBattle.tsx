@@ -8,7 +8,10 @@ import { AnswerPad, BattleActionBar, NextButton, ReactionRow, RoundResult } from
 import { BattleResults } from '@/components/battle/BattleResults'
 import { BattleTopRow, MusicToggle } from '@/components/battle/BattleTopRow'
 import { PlayerTile } from '@/components/battle/PlayerTile'
+import { SkinQuestionFrame } from '@/components/battle/SkinParts'
+import { AbilityTray } from '@/components/battle/AbilityTray'
 import { BattleDraftScreen } from '@/components/battle/TopicPick'
+import { useBattleSkin } from '@/hooks/useBattleSkin'
 import { useBattleMusic, useBattleSession, useNow } from '@/hooks/useBattle'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
 import { playSound, resetSoundCombo } from '@/lib/soundEngine'
@@ -17,12 +20,14 @@ import {
   currentRound,
   isFinalRound,
   otherSeat,
+  type AbilityId,
   type BattleConfig,
   type BattlePlayer,
   type Seat,
 } from '@/lib/battle'
 import { answerFor, battleExamName, battleMusicIntensity, topicCredit } from '@/lib/battleDisplay'
-import { generateRoomCode, joinPath } from '@/lib/battleRoom'
+import { generateRoomCode } from '@/lib/battleRoom'
+import { skinJoinPath } from '@/lib/battleSkin'
 import {
   GuestSession,
   HostSession,
@@ -58,7 +63,9 @@ function RoomCode({ code }: { code: string }) {
 
 function ShareButtons({ code }: { code: string }) {
   const [copied, setCopied] = useState(false)
-  const link = `${window.location.origin}${joinPath(code)}`
+  const skin = useBattleSkin()
+  // The page the room was made on — the code is the same room from either.
+  const link = `${window.location.origin}${skinJoinPath(skin, code)}`
   const canShare = typeof navigator.share === 'function'
 
   async function copy() {
@@ -79,7 +86,7 @@ function ShareButtons({ code }: { code: string }) {
         <Button
           variant="outline"
           className="gap-2"
-          onClick={() => { navigator.share({ title: 'Quiz Battle', text: `Join my Quiz Battle — room ${code}`, url: link }).catch(() => {}) }}
+          onClick={() => { navigator.share({ title: skin.title, text: `${skin.invite} — room ${code}`, url: link }).catch(() => {}) }}
         >
           <Share2 className="h-4 w-4" aria-hidden />
           Share
@@ -93,6 +100,7 @@ function ConfigSummary({ config }: { config: BattleConfig }) {
   return (
     <p className="text-center text-sm text-muted-foreground">
       {battleExamName(config.exam)} · {config.rounds} questions · {formatClock(config.roundSeconds)} each
+      {config.abilities && ' · abilities on'}
     </p>
   )
 }
@@ -213,6 +221,7 @@ function OnlineMatch({
   onReact,
   onLeave,
   onEndForAbsent,
+  onPower,
 }: {
   snapshot: SessionSnapshot
   questionsById: ReadonlyMap<string, Question>
@@ -221,6 +230,8 @@ function OnlineMatch({
   onReact: (emoji: Parameters<HostSession['react']>[0]) => void
   onLeave: () => void
   onEndForAbsent?: () => void
+  /** Use an ability — a room with abilities on (docs/actuaria-online.md §7.2). */
+  onPower: (ability: AbilityId) => void
 }) {
   const battle = snapshot.battle!
   const me = snapshot.me
@@ -275,6 +286,12 @@ function OnlineMatch({
       if (r.seat === opp) playSound('reaction')
     }
   }, [snapshot.reactions, opp])
+
+  /** An ability armed — a rising latch, softer than a lock-in. */
+  function armAbility(ability: AbilityId) {
+    playSound('power')
+    onPower(ability)
+  }
 
   /** This player's answer, locked in — heard as a latch, not as a verdict. */
   function lockIn(choice: string) {
@@ -345,22 +362,34 @@ function OnlineMatch({
           <BattleCountdown battle={battle} topic={topic} />
         ) : question ? (
           <div className="paper-sheet">
-            <BattleQuestionCard
-              key={question.id}
-              question={question}
-              players={battle.players}
-              picker={canPick ? me : null}
-              onPick={lockIn}
-              pickSound="none"
-              locked={lockedChoice ? { seat: me, choice: lockedChoice } : null}
-              picks={phase === 'revealed' ? round.answers.map(a => ({ seat: a.seat, choice: a.choice, correct: a.correct })) : []}
-              revealed={phase === 'revealed'}
-            />
+            <SkinQuestionFrame>
+              <BattleQuestionCard
+                key={question.id}
+                question={question}
+                players={battle.players}
+                picker={canPick ? me : null}
+                onPick={lockIn}
+                pickSound="none"
+                locked={lockedChoice ? { seat: me, choice: lockedChoice } : null}
+                picks={phase === 'revealed' ? round.answers.map(a => ({ seat: a.seat, choice: a.choice, correct: a.correct })) : []}
+                revealed={phase === 'revealed'}
+                struck={round.struck[me]}
+              />
+            </SkinQuestionFrame>
           </div>
         ) : null}
       </div>
 
-      <BattleActionBar above={<ReactionRow onReact={onReact} />}>
+      <BattleActionBar
+        above={
+          <>
+            {battle.config.abilities && (
+              <AbilityTray battle={battle} me={me} pending={snapshot.pendingPower?.ability ?? null} onUse={armAbility} />
+            )}
+            <ReactionRow onReact={onReact} />
+          </>
+        }
+      >
         {phase === 'revealed' ? (
           <RoundResult
             battle={battle}
@@ -375,7 +404,14 @@ function OnlineMatch({
         ) : canPick ? (
           <div className="space-y-2">
             <p className="text-center text-xs text-muted-foreground">Tap to lock in — you can’t change it. First right answer scores most.</p>
-            <AnswerPad seat={me} options={battle.questions[round.index].options} onPick={lockIn} label="Your answer" sound="none" />
+            <AnswerPad
+              seat={me}
+              options={battle.questions[round.index].options}
+              onPick={lockIn}
+              ruledOut={round.struck[me] ? [round.struck[me]!] : []}
+              label="Your answer"
+              sound="none"
+            />
           </div>
         ) : (
           <p className="py-2 text-center text-sm text-muted-foreground" aria-live="polite">
@@ -420,6 +456,7 @@ function Results({
       <BattleResults
         battle={battle}
         questionsById={questionsById}
+        me={snapshot.me}
         actions={
           <>
             {!gone && (
@@ -469,9 +506,15 @@ export function OnlineHost({
   code: givenCode,
   onFindAnother,
   opponent,
+  loadout,
+  onRoomOpen,
 }: {
   config: BattleConfig
   player: BattlePlayer
+  /** The abilities this player brings — used only if the room has them on. */
+  loadout?: AbilityId[]
+  /** Told the room's code once it is open (a private room only). */
+  onRoomOpen?: (code: string) => void
   /** The topics a pick offers, and the draw from two picks — for the first battle and every rematch. */
   topics: TopicSource
   /** The topics an exam offers, grouped for the picker. */
@@ -486,6 +529,7 @@ export function OnlineHost({
   opponent?: BattlePlayer
 }) {
   const matched = !!givenCode
+  const skin = useBattleSkin()
   const [code] = useState(() => givenCode ?? generateRoomCode())
   const { session, snapshot } = useBattleSession(
     () => new HostSession({
@@ -495,6 +539,7 @@ export function OnlineHost({
       config: { ...config, rules: 'simultaneous' },
       // A fresh id per room: two tabs of one browser can host and join.
       clientId: tabClientId(null),
+      loadout,
       topics,
     }),
     code,
@@ -502,6 +547,15 @@ export function OnlineHost({
 
   const guestIn = !!snapshot?.players[1]
   const inLobby = snapshot?.stage === 'lobby'
+
+  // Once, when the room exists to be joined.
+  const announced = useRef(false)
+  useEffect(() => {
+    if (matched || !session || announced.current) return
+    announced.current = true
+    onRoomOpen?.(code)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session])
 
   // Matched: nobody presses Start — the intro plays, and the topic pick follows.
   const started = useRef(false)
@@ -546,6 +600,7 @@ export function OnlineHost({
         onReact={e => session.react(e)}
         onLeave={onExit}
         onEndForAbsent={() => session.endForAbsentGuest()}
+        onPower={a => session.power(a)}
       />
     ) : (
       <Results
@@ -578,6 +633,7 @@ export function OnlineHost({
   }
 
   const guest = snapshot.players[1]
+  const joinHint = skin.joinHint
   return (
     <div className="mx-auto max-w-lg space-y-8 py-8 text-center" data-testid="battle-lobby">
       <CalmMusic />
@@ -604,7 +660,7 @@ export function OnlineHost({
       ) : (
         <div className="space-y-3">
           <p className="text-sm text-muted-foreground">
-            Send this code to a friend — they open <span className="font-medium text-foreground">Quiz Battle → Join with a code</span>.
+            Send this code to a friend — they open <span className="font-medium text-foreground">{joinHint}</span>.
           </p>
           <ShareButtons code={code} />
         </div>
@@ -630,9 +686,12 @@ export function OnlineGuest({
   matched = false,
   onFindAnother,
   opponent,
+  loadout,
 }: {
   code: string
   player: BattlePlayer
+  /** The abilities this player declares on joining. */
+  loadout?: AbilityId[]
   /** The topics an exam offers, grouped for the picker. */
   catalogueFor: (exam: string) => readonly TopicGroup[]
   questionsById: ReadonlyMap<string, Question>
@@ -652,6 +711,7 @@ export function OnlineGuest({
       me: player,
       clientId: tabClientId(typeof sessionStorage === 'undefined' ? null : sessionStorage),
       knows: id => questionsById.has(id),
+      loadout,
     }),
     `${code}:${attempt}`,
   )
@@ -691,6 +751,7 @@ export function OnlineGuest({
         onReady={() => session.ready()}
         onReact={e => session.react(e)}
         onLeave={onExit}
+        onPower={a => session.power(a)}
       />
     ) : (
       <Results

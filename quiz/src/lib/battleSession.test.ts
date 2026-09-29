@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { COUNTDOWN_MS, ONLINE_GRACE_MS, currentRound, type BattleConfig, type BattleQuestionKey } from './battle'
+import { COUNTDOWN_MS, ONLINE_GRACE_MS, currentRound, type AbilityId, type BattleConfig, type BattleQuestionKey } from './battle'
 import { PROTOCOL_VERSION, type BattleMessage } from './battleRoom'
 import {
   GuestSession,
@@ -478,5 +478,86 @@ describe('tabClientId', () => {
     const id = tabClientId(storage)
     expect(tabClientId(storage)).toBe(id)
     expect(tabClientId(null)).not.toBe(id)
+  })
+})
+
+describe('abilities over the wire (docs/actuaria-online.md §7.2)', () => {
+  const ABILITIES: BattleConfig = { ...CONFIG, abilities: true }
+
+  function room(config: BattleConfig, guestLoadout: AbilityId[] = ['bayesian-update', 'double-down']) {
+    const hub = new Hub()
+    const h = new HostSession({
+      transport: hub.transport(),
+      code: 'ABCD',
+      host: { name: 'Ada' },
+      config,
+      clientId: 'host',
+      loadout: ['time-value'],
+      random: () => 0,
+    })
+    const g = new GuestSession({
+      transport: hub.transport(),
+      code: 'ABCD',
+      me: { name: 'Bo' },
+      clientId: 'guest',
+      knows: () => true,
+      loadout: guestLoadout,
+    })
+    vi.advanceTimersByTime(250)
+    h.start(QUESTIONS)
+    return { hub, h, g }
+  }
+
+  it('seats each player with the loadout they declared', () => {
+    const { h, g } = room(ABILITIES)
+    expect(h.getSnapshot().battle!.loadouts).toEqual([['time-value'], ['bayesian-update', 'double-down']])
+    expect(g.getSnapshot().battle!.loadouts).toEqual([['time-value'], ['bayesian-update', 'double-down']])
+  })
+
+  it('takes no abilities into a room with them off, whatever a player declares', () => {
+    const { h, g } = room(CONFIG)
+    expect(h.getSnapshot().battle!.loadouts).toEqual([[], []])
+    vi.advanceTimersByTime(COUNTDOWN_MS)
+    g.power('double-down')
+    vi.advanceTimersByTime(250)
+    expect(h.getSnapshot().battle!.spent).toEqual([[], []])
+  })
+
+  it('strikes the guest’s option on the guest’s screen only — the host never sees which', () => {
+    const { hub, h, g } = room(ABILITIES)
+    vi.advanceTimersByTime(COUNTDOWN_MS)
+    g.power('bayesian-update')
+    vi.advanceTimersByTime(250)
+    // The host's own screen is drawn redacted, so it knows the ability is spent and not what it struck.
+    expect(h.getSnapshot().battle!.spent[1]).toEqual(['bayesian-update'])
+    expect(currentRound(h.getSnapshot().battle!).struck[1]).toBeNull()
+    // The guest's room carries its own strike — a wrong option (random() → 0 picks the first).
+    expect(currentRound(g.getSnapshot().battle!).struck[1]).toBe('A')
+    // And the rooms on the wire are the guest's: they carry the guest's own strike, no one else's.
+    const rooms = hub.log.filter((m): m is Extract<BattleMessage, { t: 'room' }> => m.t === 'room' && !!m.battle)
+    expect(rooms.every(m => currentRound(m.battle!).struck[0] === null)).toBe(true)
+  })
+
+  it('shows a used ability as spent on both screens, and turns away a second use', () => {
+    const { h, g } = room(ABILITIES)
+    vi.advanceTimersByTime(COUNTDOWN_MS)
+    h.power('time-value')
+    g.power('double-down')
+    vi.advanceTimersByTime(250)
+    for (const s of [h, g]) expect(s.getSnapshot().battle!.spent).toEqual([['time-value'], ['double-down']])
+    h.power('time-value')
+    expect(h.getSnapshot().battle!.spent[0]).toEqual(['time-value'])
+  })
+
+  it('sends a power again until the host’s room shows it', () => {
+    const { hub, h, g } = room(ABILITIES)
+    vi.advanceTimersByTime(COUNTDOWN_MS)
+    let dropped = 0
+    hub.drop = m => m.t === 'act' && m.action.kind === 'power' && dropped++ === 0
+    g.power('double-down')
+    expect(g.getSnapshot().pendingPower).toEqual({ round: 0, ability: 'double-down' })
+    vi.advanceTimersByTime(HEARTBEAT_MS + 250)
+    expect(h.getSnapshot().battle!.spent[1]).toEqual(['double-down'])
+    expect(g.getSnapshot().pendingPower).toBeNull()
   })
 })

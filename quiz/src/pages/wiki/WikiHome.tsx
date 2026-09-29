@@ -27,6 +27,8 @@ import { ExamPill, MetaPill, PdfPill } from '@/components/wiki/ResourcePills'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { cn } from '@/lib/utils'
 import { useWikiPageHead } from '@/hooks/useWikiPageHead'
+import { ActuariaHubCard } from '@/components/actuaria/ActuariaHubCard'
+import { ACTUARIA_ENABLED } from '@/lib/featureFlags'
 
 function examNameToTrackKey(name: string): string {
   const cleaned = name
@@ -399,6 +401,9 @@ export default function WikiHome() {
                 </Card>
               </button>
             ))}
+            {/* Actuaria Online — a way of studying rather than a guide, in the
+                same row so the exam lists below still line up (§6.2). */}
+            {ACTUARIA_ENABLED && <ActuariaHubCard />}
           </div>
         </section>
       )}

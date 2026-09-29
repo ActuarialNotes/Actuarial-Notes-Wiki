@@ -10,7 +10,7 @@ import { OnlineGuest, OnlineHost } from '@/components/battle/OnlineBattle'
 import { Matchmaking } from '@/components/battle/Matchmaking'
 import { useAuth } from '@/hooks/useAuth'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
-import { useLobbySession } from '@/hooks/useBattle'
+import { useLobbyCount } from '@/hooks/useBattle'
 import {
   BASE_POINTS,
   FASTEST_BONUS,
@@ -40,9 +40,7 @@ import {
   saveBattleSetup,
   type BattleSetup,
 } from '@/lib/battleSetup'
-import { MatchmakingSession, type MatchFound } from '@/lib/battleMatchmaking'
-import { tabClientId } from '@/lib/battleSession'
-import { lobbyTransport } from '@/lib/battleTransport'
+import type { MatchFound } from '@/lib/battleMatchmaking'
 import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 import { cn } from '@/lib/utils'
 
@@ -61,21 +59,6 @@ type Screen =
   | { kind: 'local'; config: BattleConfig; players: [BattlePlayer, BattlePlayer]; difficulty: number }
   | { kind: 'host'; config: BattleConfig; player: BattlePlayer; difficulty: number; code?: string; opponent?: BattlePlayer }
   | { kind: 'guest'; code: string; player: BattlePlayer; matched?: boolean; opponent?: BattlePlayer }
-
-/**
- * The lobby, watched from the way in: how many are waiting, without joining
- * them. Null until the count is known.
- */
-function useLobbyCount(exams: readonly string[], active: boolean): number | null {
-  const [id] = useState(() => tabClientId(null))
-  const watching = active && exams.length > 0
-  const { snapshot } = useLobbySession(
-    watching ? () => new MatchmakingSession({ transport: lobbyTransport(`watch-${id}`), exams }) : null,
-    watching ? `watch:${id}` : '',
-  )
-  if (!snapshot || snapshot.status === 'connecting') return null
-  return snapshot.others.length
-}
 
 function lobbyCountLine(count: number | null): string {
   if (count === null) return 'Checking the lobby…'

@@ -89,6 +89,19 @@ export function nextDecayStep(record: ConceptMasteryRecord | undefined, now: Dat
   return { ...next, inDays: Math.max(0, Math.ceil((next.at.getTime() - now.getTime()) / MS_PER_DAY)) }
 }
 
+/**
+ * Every step still to come for a concept left alone from `now` — the dashes the
+ * landmark chart projects (§6.5). Empty for one with nothing left to lose.
+ */
+export function projectedDecay(record: ConceptMasteryRecord | undefined, now: Date): LevelEvent[] {
+  if (!record || !record.last_correct_at) return []
+  if (record.state === 'new' || record.state === 'forgotten') return []
+  const lastCorrect = new Date(record.last_correct_at)
+  if (Number.isNaN(lastCorrect.getTime())) return []
+  return syntheticDecayEvents(record.state, lastCorrect, new Date(now.getTime() + HORIZON_MS))
+    .filter(step => step.at.getTime() > now.getTime())
+}
+
 /** "L2 → L1 in 3 days", "L1 → Forgotten tomorrow". */
 export function describeDecayStep(step: DecayStep): string {
   const when = step.inDays <= 0 ? 'today' : step.inDays === 1 ? 'tomorrow' : `in ${step.inDays} days`

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { emptyRecord, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
-import { describeDecayStep, formatZ, landmarkZ, nextDecayStep, sectorCredibility } from './credibility'
+import { describeDecayStep, formatZ, landmarkZ, nextDecayStep, projectedDecay, sectorCredibility } from './credibility'
 
 const DAY = 24 * 60 * 60 * 1000
 const NOW = new Date('2026-09-29T12:00:00Z')
@@ -72,5 +72,11 @@ describe('orbital decay', () => {
   it('says when, the way the sector screen prints it', () => {
     expect(describeDecayStep(nextDecayStep(record('level2', 11), NOW)!)).toBe('L2 → L1 in 3 days')
     expect(describeDecayStep(nextDecayStep(record('level1', 6), NOW)!)).toBe('L1 → Forgotten tomorrow')
+  })
+
+  it('projects every step still to come, for the landmark chart’s dashes', () => {
+    const steps = projectedDecay(record('level3', 35), NOW)
+    expect(steps.map(s => `${s.from}>${s.to}`)).toEqual(['level2>level1', 'level1>forgotten'])
+    expect(projectedDecay(record('forgotten', 3), NOW)).toEqual([])
   })
 })

@@ -20,6 +20,15 @@ export const CHART_H = VB_H - PAD_TOP - PAD_BOTTOM
 
 export const Y_LEVELS: MasteryState[] = ['forgotten', 'new', 'level1', 'level2', 'level3']
 export const Y_LABELS = ['Forgotten', 'New', '1', '2', '3']
+/**
+ * The same rows read as Credibility, for Actuaria (docs/actuaria-online.md §6.5):
+ * a level's Z. Forgotten and New are both 0 — Forgotten keeps an F so the two
+ * rows stay told apart.
+ */
+export const Y_LABELS_Z = ['F', '0', '0.33', '0.67', '1.00']
+
+/** How the graph labels itself: the app's level names, or Actuaria's Z. */
+export type GraphPresentation = 'app' | 'actuaria'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -33,7 +42,7 @@ export function stateToYIndex(state: MasteryState): number {
   }
 }
 
-export function makeScales(levelEvents: LevelEvent[], attemptDots: AttemptDot[]) {
+export function makeScales(levelEvents: LevelEvent[], attemptDots: AttemptDot[], until?: Date | null) {
   const allTimes = [
     ...levelEvents.map(e => e.at.getTime()),
     ...attemptDots.map(d => d.at.getTime()),
@@ -41,8 +50,9 @@ export function makeScales(levelEvents: LevelEvent[], attemptDots: AttemptDot[])
   const now = Date.now()
   const tMin = allTimes.length > 0 ? Math.min(...allTimes) - 12 * 3600_000 : now - 7 * 86400_000
   // Guard against a zero (or inverted) span so xScale can never divide by zero
-  // and emit NaN coordinates into the SVG path.
-  const tMax = Math.max(now + 12 * 3600_000, tMin + 86400_000)
+  // and emit NaN coordinates into the SVG path. A projection runs the axis on
+  // past today, to its last step and a day beyond.
+  const tMax = Math.max(now + 12 * 3600_000, tMin + 86400_000, until ? until.getTime() + 86400_000 : 0)
   const tSpan = tMax - tMin
 
   function xScale(t: Date): number {
@@ -74,23 +84,37 @@ export function makeScales(levelEvents: LevelEvent[], attemptDots: AttemptDot[])
     return labels
   }
 
+  // The solid line runs to now when a projection follows it, to the edge otherwise.
+  const solidEnd = until ? Math.min(now, tMax) : tMax
+
   function buildStepPath(): string {
     const initialState = levelEvents[0]?.from ?? 'new'
     const startY = yScale(stateToYIndex(initialState))
     const startX = xScale(new Date(tMin))
     if (levelEvents.length === 0) {
-      return `M ${startX} ${startY} H ${xScale(new Date(tMax))}`
+      return `M ${startX} ${startY} H ${xScale(new Date(solidEnd))}`
     }
     let d = `M ${startX} ${startY}`
     for (const ev of levelEvents) {
       const x = xScale(ev.at)
       d += ` H ${x} V ${yScale(stateToYIndex(ev.to))}`
     }
+    d += ` H ${xScale(new Date(solidEnd))}`
+    return d
+  }
+
+  /** The decay still to come, as dashes on from now: `from` the level held today. */
+  function buildProjectionPath(projection: LevelEvent[], current: MasteryState): string {
+    if (projection.length === 0) return ''
+    let d = `M ${xScale(new Date(solidEnd))} ${yScale(stateToYIndex(current))}`
+    for (const ev of projection) {
+      d += ` H ${xScale(ev.at)} V ${yScale(stateToYIndex(ev.to))}`
+    }
     d += ` H ${xScale(new Date(tMax))}`
     return d
   }
 
-  return { xScale, xInverse, yScale, buildXLabels, buildStepPath, tMin, tMax }
+  return { xScale, xInverse, yScale, buildXLabels, buildStepPath, buildProjectionPath, tMin, tMax }
 }
 
 export { levelAtTime }
@@ -105,6 +129,13 @@ export interface GraphProps {
   selectedQuestionId?: string | null
   /** Set to make the dots clickable — each one toggles the filter to its question. */
   onSelectQuestion?: (questionId: string | null) => void
+  /** `actuaria` labels the y-axis in Credibility (Z) rather than level names. */
+  presentation?: GraphPresentation
+  /**
+   * Projected decay — the steps still to come if nothing is reviewed
+   * (`syntheticDecayEvents` run forward), drawn dashed on from today.
+   */
+  projection?: LevelEvent[]
 }
 
 export function ProgressGraph({
@@ -113,10 +144,14 @@ export function ProgressGraph({
   onHoverLevel,
   selectedQuestionId = null,
   onSelectQuestion,
+  presentation = 'app',
+  projection = [],
 }: GraphProps) {
   const svgRef = useRef<SVGSVGElement>(null)
   const [cursorX, setCursorX] = useState<number | null>(null)
-  const { xScale, xInverse, yScale, buildXLabels, buildStepPath } = makeScales(levelEvents, attemptDots)
+  const until = projection.length > 0 ? projection[projection.length - 1].at : null
+  const { xScale, xInverse, yScale, buildXLabels, buildStepPath, buildProjectionPath } = makeScales(levelEvents, attemptDots, until)
+  const yLabels = presentation === 'actuaria' ? Y_LABELS_Z : Y_LABELS
 
   function getHoveredLevel(clientX: number): MasteryState {
     const rect = svgRef.current!.getBoundingClientRect()
@@ -145,6 +180,7 @@ export function ProgressGraph({
 
   const xLabels = buildXLabels()
   const stepPath = buildStepPath()
+  const projectionPath = buildProjectionPath(projection, projection[0]?.from ?? 'new')
   const selectable = !!onSelectQuestion
 
   // Several attempts answered in the same quiz session share one timestamp
@@ -199,7 +235,7 @@ export function ProgressGraph({
               textAnchor="end" fontSize={11}
               fill="currentColor" opacity={0.5}
             >
-              {Y_LABELS[i]}
+              {yLabels[i]}
             </text>
           </g>
         )
@@ -221,6 +257,20 @@ export function ProgressGraph({
         strokeLinejoin="round"
         opacity={0.7}
       />
+
+      {/* Projected decay: where the line goes if nothing is reviewed. */}
+      {projectionPath && (
+        <path
+          d={projectionPath}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+          strokeDasharray="5 5"
+          strokeLinejoin="round"
+          opacity={0.45}
+          data-testid="graph-projection"
+        />
+      )}
 
       {/* Attempt dots. When a select handler is supplied each dot is a control
           that filters the question list below to the question it answered; the

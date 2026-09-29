@@ -1690,22 +1690,6 @@ summary .katex-display,
   letter-spacing: 0.04em;
 }
 
-/* A sector on the star map lifts a little under the pointer or focus. */
-.actuaria-sector {
-  transition: transform 160ms cubic-bezier(0.4, 0, 0.2, 1);
-  transform-box: fill-box;
-  transform-origin: center;
-}
-.actuaria-sector:hover,
-.actuaria-sector:focus-visible {
-  transform: scale(1.06);
-}
-@media (prefers-reduced-motion: reduce) {
-  .actuaria-sector { transition: none; }
-  .actuaria-sector:hover,
-  .actuaria-sector:focus-visible { transform: none; }
-}
-
 /* Toast confirmation pill: rises into place with a small overshoot. Brief UI
    feedback — the message itself is the payload, so reduced motion degrades to
    a plain fade rather than dropping the entrance entirely. */

@@ -258,8 +258,9 @@ second design system. Every `/actuaria/*` route renders inside one scope element
   decay), red is wrong and `--destructive` is the raid boss — the one enemy. The signal is chrome
   (§2.3, *Actuaria signal*). Status chips (`StatusChip`: `live`, `cleared`, `decaying`,
   `locked`, `beta`) are the Beta-chip pattern in those hues.
-- **Motion** follows §9: a sector lifts a little under the pointer (`.actuaria-sector`), and
-  nothing loops at rest; under reduced motion it holds still.
+- **Motion** follows §9: nothing in space moves on its own or loops at rest — the starfield,
+  the orbits and the nebula are still drawings — and a sector answers the pointer with its
+  own accent ring rather than a movement. Quiz Battle's motion is unchanged under the skin.
 
 ---
 

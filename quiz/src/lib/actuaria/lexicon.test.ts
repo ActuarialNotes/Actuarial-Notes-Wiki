@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { BATTLE_WORDS, LEXICON, plainTerm, sectorName, term } from './lexicon'
+import { BATTLE_WORDS, LEXICON, plainTerm, sectorName, stationCountLine, term } from './lexicon'
 
 describe('the Actuaria lexicon', () => {
   it('gives every in-world word a plain app term', () => {
@@ -45,5 +45,16 @@ describe('the Actuaria lexicon', () => {
     }
     // Surplus is only ever the in-world word for points.
     expect(LEXICON.surplus.plain).toMatch(/points/i)
+  })
+})
+
+describe('the station’s live count', () => {
+  it('says the real count, or that the station is quiet — never a made-up number', () => {
+    expect(stationCountLine(3)).toBe('3 pilots waiting at Monte Carlo Station')
+    expect(stationCountLine(1)).toBe('1 pilot waiting at Monte Carlo Station')
+    expect(stationCountLine(0)).toBe('Monte Carlo Station is quiet right now')
+    expect(stationCountLine(null)).toBe('Tuning in to Monte Carlo Station…')
+    expect(stationCountLine(2, true)).toBe('2 pilots waiting')
+    expect(stationCountLine(0, true)).toBe('Quiet right now')
   })
 })

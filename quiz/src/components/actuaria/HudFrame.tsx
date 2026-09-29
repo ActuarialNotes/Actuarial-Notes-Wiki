@@ -6,7 +6,7 @@
 // under the Actuaria skin of the Battle page, and the raid boss — and never on
 // a plain card, or they stop meaning anything.
 
-import type { ElementType, ReactNode } from 'react'
+import type { ElementType, HTMLAttributes, ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
 type Radius = 'lg' | 'xl' | '2xl'
@@ -33,7 +33,7 @@ export function HudFrame({
   className?: string
   children?: ReactNode
   [data: `data-${string}`]: string | undefined
-}) {
+} & Omit<HTMLAttributes<HTMLElement>, 'className' | 'children'>) {
   const r = CORNER[radius]
   const tick = 'pointer-events-none absolute h-4 w-4 border-actuaria-signal'
   return (

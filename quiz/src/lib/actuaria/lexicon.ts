@@ -99,3 +99,16 @@ export const BATTLE_WORDS = {
   claimsReview: LEXICON.claimsReview.term,
   exit: 'Exit to map',
 } as const
+
+/**
+ * The station's live count — the real number of players in the matchmaking
+ * lobby, from an observer session (§6.1). `short` drops the station's name for
+ * a label that already sits under it on the map. Null is a count not yet known.
+ */
+export function stationCountLine(count: number | null, short = false): string {
+  const station = LEXICON.station.term
+  if (count === null) return short ? 'Tuning in…' : `Tuning in to ${station}…`
+  if (count === 0) return short ? 'Quiet right now' : `${station} is quiet right now`
+  const pilots = `${count} ${count === 1 ? 'pilot' : 'pilots'} waiting`
+  return short ? pilots : `${pilots} at ${station}`
+}

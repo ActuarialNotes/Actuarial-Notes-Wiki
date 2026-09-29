@@ -19,6 +19,7 @@ import { useOnboardingTour } from '@/hooks/useOnboardingTour'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { SoundSettingsCard } from '@/components/SoundSettingsCard'
 import { AiConnectorCard } from '@/components/AiConnectorCard'
+import { AboutCard } from '@/components/AboutCard'
 import { TOUR_ENABLED } from '@/lib/featureFlags'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { ProBadge } from '@/components/ProBadge'
@@ -293,6 +294,7 @@ export default function Settings() {
     { id: 'ai', label: 'AI assistants' },
     { id: 'support', label: 'Support' },
     ...(user ? [{ id: 'data', label: 'Progress & Data' }] : []),
+    { id: 'about', label: 'About' },
   ]
 
   // ---- Onboarding tour (replayable from Support) ----
@@ -1107,6 +1109,11 @@ export default function Settings() {
             </section>
 
             </> /* end user && */}
+
+            {/* ---- About (lib/aboutWorkflow.ts) ---- */}
+            <section ref={el => { sectionRefs.current.about = el }} id="about">
+              <AboutCard />
+            </section>
 
             <div className="text-center pt-2">
               <Link to="/dashboard" className="text-sm text-muted-foreground hover:text-foreground transition-colors">

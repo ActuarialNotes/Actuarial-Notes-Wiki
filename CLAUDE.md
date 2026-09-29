@@ -351,6 +351,13 @@ Other important `lib/` modules:
   A category value must also be in the `content_reports_severity` CHECK constraint and in
   `SEVERITY_HINT` in `scripts/sync_reports.py`; `reportIssue.test.ts` reads both. See
   `docs/verification.md`, "The reader's write path".
+- `aboutWorkflow.ts` — Settings → **About** (`components/AboutCard.tsx`, the last section of the
+  page): how the notes are written and checked, drawn as one flow — official material →
+  extract / draft / review → published → report / check / approve → Fact Check → round again —
+  each step naming who does it (AI, Community, Automated). The verdicts it shows are produced by
+  `factCheckBadge` itself, and the test holds each phase to an AI step and a community step. It
+  describes the process, it doesn't define it: change `docs/verification.md` /
+  `docs/validation-agent.md` / `docs/pdf-question-pipeline.md` first, then this.
 - `vaultMath.ts` — normalises the vault's math delimiters into the shapes `remark-math`
   can tokenise. The content is authored for Obsidian, whose math parser is looser: an
   escaped dollar inside inline math (`$\$400$` — currency is everywhere in ratemaking
@@ -913,8 +920,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **160 test files /
-~2610 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **161 test files /
+~2620 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).

@@ -22,7 +22,7 @@ The **face value** (also called **par value** or **nominal value**) $F$ of a bon
 - The [[Coupon]] payment each period equals $F \times r$ where $r$ is the [[Coupon Rate]] per period
 - When the bond is redeemed at par, the [[Redemption Value]] $C = F$
 
-- The face value is not necessarily the [[Bond Price|price]] paid for the bond. When the [[Yield Rate]] differs from the coupon rate, the bond trades at a premium (price $> F$) or discount (price $< F$).
+- The face value is not necessarily the [[Bond Price|price]] paid for the bond. A bond is bought at a [[Premium|premium]] when its price is above the redemption value ($P > C$) and at a [[Discount|discount]] when it is below ($P < C$). Only for a bond redeemed at par ($C = F$, the exam default unless a question says otherwise) is that the same as comparing the price with $F$, or the coupon rate with the [[Yield Rate]]; otherwise compare the yield with the modified coupon rate $g = Fr/C$.
 
 ![[Media/Figures/Face_Value.svg|340]]
 

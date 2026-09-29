@@ -1,23 +1,20 @@
 ---
 verification:
   status: verified
-  confidence: low
-  last_checked: 2026-09-28
+  confidence: medium
+  last_checked: 2026-09-29
   last_checked_by: agent:validate-v1
-  content_hash: sha256:207795d8b43ea3bd4045c14f5b5b8406071c0c6629f532bdf8be31ef241bdf75
+  content_hash: sha256:bfad74cee970023a64414947acfdd8cd805ab8fbb852ac5db14b2c14276856ff
   sources:
-    - "SOA, Notation and terminology used for Exam FM (rev. Dec 2025), PDF p.1, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf"
-    - "SOA Financial Mathematics Exam syllabus, December 2026, Topic 1 Time Value of Money, learning outcomes a)-c), PDF p.2, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
-    - "SOA Exam FM Sample Solutions (rev. Aug 2026), Q 87, solutions PDF p.25, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf"
-    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §8, PDF p.56-58, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
-    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §42, PDF p.381, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
-    - "Broverman, Review of Calculator Functions for the Texas Instruments BA II Plus (SOA study note FM-23-05), PDF p.6, sha256:1b71586cc1b08d7bc36c04ecb3d4e6b367fce30f394e63efafc879e6b6e466fa — https://www.soa.org/globalassets/assets/files/edu/FM-23-05.pdf"
-  open_findings: 1
+    - "SOA, Notation and terminology used for Exam FM, p.1, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf"
+    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.56-58, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
+    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.381, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Effective Discount Rate.md
 ---
 
-The **effective discount rate** $d$ is the interest paid at the **beginning** of the period rather than the end. On a $1$ investment for one period, $d$ is paid upfront and $1$ is returned at the end:
+The **effective discount rate** $d$ measures interest paid at the **beginning** of the period rather than the end: it is the amount of discount during the period divided by the amount at the end of the period. On a loan of $1$ repayable at the end of one period, the borrower pays $d$ upfront and has the use of only $1-d$:
 
 > $$d = \frac{i}{1+i}$$
 
@@ -32,15 +29,43 @@ The **effective discount rate** $d$ is the interest paid at the **beginning** of
 
 > $$= \frac{1}{1+i}$$
 
-> $$\Longleftrightarrow \qquad i = \frac{d}{1-d}$$
+> $$i = \frac{d}{1-d}$$
 
-- Under discount, $1$ today accumulates to $\frac{1}{1-d}$ after one period.
+- Under compound discount, $1$ today accumulates to $\frac{1}{1-d}$ after one period and to $(1-d)^{-t}$ after $t$ periods.
 
 ![[Media/Figures/Effective_Discount_Rate.svg|340]]
 
-> [!example]- Bank Discount {Example}
-> A 91-day T-bill with face value $10{,}000$ is purchased at a bank discount rate of 4%. Find the purchase price and effective annual rate.
+> [!example]- Interest Paid in Advance on a Loan {Example}
+> A lender makes a one-year loan with $5{,}000$ repayable at the end of the year, at an effective annual discount rate of $6\%$. How much does the borrower receive today, and what effective annual interest rate is the borrower paying?
+>
+> > [!answer]-
+> > The discount of $0.06 \times 5000 = 300$ is taken upfront, so the borrower receives $5000 - 300 = 4700$. The interest of $300$ is earned on the $4700$ actually lent:
+> > $$
+> > \begin{align*}
+> > i &= \frac{300}{4700} \\
+> >   &= 0.063830 = 6.383\%
+> > \end{align*}
+> > $$
+> > The same rate follows from $i = \frac{d}{1-d} = \frac{0.06}{0.94} = 0.063830$.
+> > Collecting interest in advance makes a 6% discount rate cost the borrower 6.383% effective.
+
+> [!example]- Bank Discount on a Treasury Bill {Example}
+> A 91-day T-bill with face value $10{,}000$ is purchased at a bank discount rate of 4% (simple discount, actual/360 basis). Find the purchase price, the effective annual interest rate, and the effective annual discount rate.
 >
 > > [!answer]-
 > > Discount $= 10000 \times 0.04 \times (91/360) = 101.11$. Price $= 10000 - 101.11 = 9898.89$.
-> > Effective annual rate: $i = (10000/9898.89)^{365/91} - 1 \approx 4.12\%$.
+> > $$
+> > \begin{align*}
+> > i &= \left(\frac{10000}{9898.89}\right)^{365/91} - 1 \\
+> >   &= (1.0102143)^{365/91} - 1 \\
+> >   &= 0.041604 = 4.160\%
+> > \end{align*}
+> > $$
+> > $$
+> > \begin{align*}
+> > d &= \frac{i}{1+i} \\
+> >   &= \frac{0.041604}{1.041604} \\
+> >   &= 0.039942 = 3.994\%
+> > \end{align*}
+> > $$
+> > The quoted 4% is a simple bank-discount rate, not the effective discount rate $d$: the effective annual discount rate is 3.994%.

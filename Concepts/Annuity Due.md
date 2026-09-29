@@ -2,14 +2,13 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-09-28
+  last_checked: 2026-09-29
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ea3b3624006faf7c61c8aebaa5628363602f002eb51824273318e8cc6dfabcf5
+  content_hash: sha256:1ecee74fa23ccc0a3c7ea91c81a01d474197efe05eb976f05a378d968234d0ba
   sources:
-    - "SOA, Notation and terminology used for Exam FM (rev. Dec 2025), PDF p.1, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf"
-    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §16 Annuity in Advance: Annuity Due, PDF p.157-160, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
-    - "SOA Financial Mathematics Exam syllabus, December 2026, Topic 2 Annuities/cash flows with non-contingent payments (20-30%), learning outcomes a)-b), PDF p.3, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
-  open_findings: 1
+    - "SOA, Notation and terminology used for Exam FM, p.1, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf"
+    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.157-160, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Annuity Due.md
 ---
@@ -35,7 +34,14 @@ An **annuity-due** is a series of $n$ level payments of 1 made at the **beginnin
 > A lease requires payments of \$$800$ at the **beginning** of each year for 4 years. The effective annual rate is $i = 5\%$. Find the present value.
 >
 > > [!answer]-
-> > $$\ddot{a}_{\overline{4}|0.05} = (1.05)\,a_{\overline{4}|0.05} = (1.05)\cdot\frac{1-(1.05)^{-4}}{0.05}$$
-> > $$(1.05)^{-4} \approx 0.82270, \quad a_{\overline{4}|} = \frac{0.17730}{0.05} = 3.5460$$
-> > $$\ddot{a}_{\overline{4}|} = 1.05 \times 3.5460 \approx 3.7233$$
-> > $$PV = 800 \times 3.7233 \approx \$2{,}978.64$$
+> > $$
+> > \begin{align*}
+> > a_{\overline{4}|0.05} &= \frac{1-(1.05)^{-4}}{0.05} \\
+> > &= \frac{1-0.822702}{0.05} \\
+> > &= 3.545951 \\
+> > \ddot{a}_{\overline{4}|0.05} &= (1.05)(3.545951) \\
+> > &= 3.723248 \\
+> > PV &= 800 \times 3.723248 \\
+> > &= \$2{,}978.60
+> > \end{align*}
+> > $$

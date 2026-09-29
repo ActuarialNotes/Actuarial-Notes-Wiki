@@ -149,3 +149,18 @@ created: 2026-09-28
 - checks_run: Re-pass after linking the Topic 2 objective phrase (comment above); the visible text is unchanged, so every check in C-001 stands: format, weights, all objectives and outcomes and every reading line diffed against the December 2026 syllabus PDF pp.1-7. syllabus_lint 0 errors 0 warnings; test_syllabus_lib passes.
 - sources_checked: SOA Financial Mathematics Exam syllabus, December 2026 (all pages), sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf; SOA Financial Mathematics Exam syllabus, October 2026, sha256:949a2e9008bd5f8791b8852599e09f28aa30a9f53a5af05b2499907de1397b26 — https://www.soa.org/globalassets/assets/files/edu/2026/syllabi/2026-10-exam-fm-syllabus.pdf; SOA Financial Mathematics Exam syllabus, August 2026, sha256:a3af6f54e132f4439988cccc1d20ea3cb269c175c253d9b2b27c6f8d23bbbc5b — https://www.soa.org/globalassets/assets/files/edu/2026/spring/syllabi/2026-08-exam-fm-syllabus.pdf
 - note: Medium: F-002 (required study note FM-24-17 has no page, major), F-005 and F-006 (minor) remain open.
+
+## [F-007] Outcome text departs from SOA's punctuation in five places
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- severity: nit
+- status: open
+- locus: Loans outcome 1; Annuities outcome 1; Time Value of Money outcome 4; Annuities outcome 2 (level perpetuity); Bonds outcome 2 (yield rate; coupon; term of bond); General Cash Flows outcome 3 (second bullet)
+- claim: Loans outcome 1 lists 'Final Payment, Drop Payment, Balloon Payment' as three peers; Annuities outcome 1 reads 'Annuity Immediate'; seven outcome lines end without SOA's closing period.
+- evidence: SOA FM syllabus, December 2026: Topic 3 outcome a (PDF p.3) reads 'final payment (drop payment, balloon payment), amortization' — drop and balloon payments are the kinds of final payment, not further terms; Topic 2 outcome a (p.3) reads 'annuity-immediate'; Topic 1 d (p.2), Topic 2 b 'Level perpetuity.' (p.3), Topic 4 b 'Yield rate.', 'Coupon, coupon rate.', 'Term of bond, … accumulation of discount.' (p.4) and Topic 5 c 'Exactly match a set of liability cash flows.' (p.5) each end with a period. Found re-reading every outcome against pp.2-5 while resolving F-005.
+- source_rank: 1
+- proposed_action: Restore SOA's parenthetical and hyphen and the closing periods; the links (and so the exam's concept set) are unchanged.
+- applied: true
+- fingerprint: 0534c66cd491

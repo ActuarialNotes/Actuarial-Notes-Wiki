@@ -8,12 +8,14 @@ Type: "Study Note"
 Code: "FM-24-17"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/Files/Edu/2017/fm-duration-convexity-present-value.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-29
+  last_checked_by: agent:validate-v1
   content_hash: sha256:27f514bb5945e935ad278670a365840e3ab8bca6f44bd73b5f426e0fc4eb0585
-  sources: []
+  sources:
+    - "SOA study note FM-24-17, Alps, Using Duration and Convexity to Approximate Change in Present Value (2017), PDF pp.1-19 (title page, contents, Sections 1-6, Appendices A-D, Acknowledgements, References; page images read for every formula), sha256:530436d4707ecadba3a7bef6e1a9661b8d9e9bb173486edfb6924bc4a4992040 — https://www.soa.org/globalassets/assets/Files/Edu/2017/fm-duration-convexity-present-value.pdf"
+    - "SOA Financial Mathematics Exam syllabus, December 2026, p.7 (Additional References), sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Using Duration and Convexity to Approximate Change in Present Value (Alps - 2017).md

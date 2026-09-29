@@ -27,3 +27,12 @@ created: 2026-09-28
 - checks_run: Placeholder only — nothing substantive to verify; SYL p.5 confirms the topic is on the syllabus. Recorded F-001 (minor).
 - sources_checked: SOA Financial Mathematics Exam syllabus, December 2026, Topic 5 General Cash Flows, Portfolios, and Asset Liability Management (20-30%), learning outcomes a)-c), PDF p.5, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf
 - note: Placeholder page: no claims to check. Left in_review until content is written.
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- resolves: F-001
+- status: resolved
+- note: Page written in the concept style for the sense its 12 linking FM questions use (fm-028, 029, 039, 052, 073, 099, 221, 222, 225, 266, 294, 331: PV with spot rates, forward from spot, spot from forward): definition of the two descriptions of one term structure; formula blocks for the consistency relation (1+s_n)^n (1+f_{n,n+k})^k = (1+s_{n+k})^{n+k} (Finan §53 p.461), the chain of one-year forwards giving spot rates (SOA S99 p.28), and PV by spot rates (Finan p.459; syllabus p.5 outcome b); bullets for SOA's 'k-year forward rate, deferred n years' wording (notation note p.2), f_{0,1} = s_1 (S99), and pointers to [[Spot Rate]] / [[Forward Rate]] for the one-step formulas instead of repeating them. Two worked examples, recomputed in python: s_2 = 3.50%, s_3 = 4.16%, PV = 970.874 + 933.532 + 884.865 = 2,789.27; f_{2,4} = (1.227124/1.092025)^(1/2) - 1 = 6.01%.

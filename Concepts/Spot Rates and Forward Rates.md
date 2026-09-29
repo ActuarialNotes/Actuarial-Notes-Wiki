@@ -1,13 +1,13 @@
 ---
 verification:
-  status: in_review
+  status: stale
   confidence: null
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a530e7c187071895b4fbb67b5ec607312ea362a44cb1b9d8ba5cf73c5c3694a9
+  content_hash: sha256:178d60a69933ea591dde10336fc652d770bebb92dfa7234274d05a7c89bfe1b4
   sources:
     - "SOA Financial Mathematics Exam syllabus, December 2026, Topic 5 General Cash Flows, Portfolios, and Asset Liability Management (20-30%), learning outcomes a)-c), PDF p.5, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Spot Rates and Forward Rates.md
 ---
@@ -33,10 +33,14 @@ Chaining one-year forward rates builds the spot rates, and the spot rates discou
 > > Chain the forward-rate factors:
 > > $$
 > > \begin{align*}
-> > (1+s_2)^2 &= (1.03)(1.04) = 1.0712 \\
-> > s_2 &= 1.0712^{1/2} - 1 = 3.50\% \\
-> > (1+s_3)^3 &= (1.03)(1.04)(1.055) = 1.130116 \\
-> > s_3 &= 1.130116^{1/3} - 1 = 4.16\%
+> > (1+s_2)^2 &= (1.03)(1.04) \\
+> > &= 1.0712 \\
+> > s_2 &= 1.0712^{1/2} - 1 \\
+> > &= 3.50\% \\
+> > (1+s_3)^3 &= (1.03)(1.04)(1.055) \\
+> > &= 1.130116 \\
+> > s_3 &= 1.130116^{1/3} - 1 \\
+> > &= 4.16\%
 > > \end{align*}
 > > $$
 > > Discount each payment by its own factor:
@@ -47,7 +51,6 @@ Chaining one-year forward rates builds the spot rates, and the spot rates discou
 > > &= 2{,}789.27
 > > \end{align*}
 > > $$
-> > A single level rate would not reproduce this value unless it happened to equal the yield rate of this particular annuity.
 
 > [!example]- A Two-Year Forward Rate, Deferred Two Years {Example}
 > The 2-year spot rate is $4.5\%$ and the 4-year spot rate is $5.25\%$. A company will borrow at the end of year 2 for two years. Find the 2-year forward rate, deferred 2 years, implied by these spot rates.
@@ -57,8 +60,10 @@ Chaining one-year forward rates builds the spot rates, and the spot rates discou
 > > $$
 > > \begin{align*}
 > > (1.045)^2\,(1+f_{2,4})^2 &= (1.0525)^4 \\
-> > (1+f_{2,4})^2 &= \frac{1.227124}{1.092025} = 1.123714 \\
-> > f_{2,4} &= 1.123714^{1/2} - 1 = 6.01\%
+> > (1+f_{2,4})^2 &= \frac{1.227124}{1.092025} \\
+> > &= 1.123714 \\
+> > f_{2,4} &= 1.123714^{1/2} - 1 \\
+> > &= 6.01\%
 > > \end{align*}
 > > $$
-> > The forward rate is above both spot rates: with an upward-sloping yield curve, the later years must earn more for the 4-year spot rate to be consistent with the 2-year one.
+> > The forward rate is above both spot rates. The 4-year spot rate is a geometric average of the rate for years 1–2 and the rate for years 3–4, so for $s_4$ to exceed $s_2$ the later two years must earn more than $s_4$.

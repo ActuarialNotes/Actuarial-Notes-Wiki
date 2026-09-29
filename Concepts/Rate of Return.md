@@ -21,19 +21,44 @@ verification:
   log: .verify/Concepts/Rate of Return.md
 ---
 
-The **rate of return** on an investment is the interest rate at which the money put in and the money taken out are equivalent — the [[Yield Rate|yield rate]] or **internal rate of return (IRR)** of its cash flows. For a fund with deposits and withdrawals during the year it is measured two ways: **dollar-weighted**, which reflects the investor's own timing, and **time-weighted**, which removes it.
+The **rate of return** on an investment is the interest rate at which the money put in and the money taken out are equivalent — the [[Yield Rate|yield rate]] or **internal rate of return (IRR)** of its cash flows.
 
 > $$\sum_{t} C_t\, v^t = 0$$
+
+- $C_t$ is the net cash flow at time $t$ (outflows negative) and $v = 1/(1+i)$; the IRR is the $i$ that makes the [[Net Present Value|net present value]] zero. For a bond it is the yield to maturity.
+- It is unique when the cash flows change sign only once — all outlays before all receipts; with several sign changes there can be more than one root.
+- On Exam FM, "yield rate/rate of return" is a term of Topic 5, General Cash Flows, Portfolios, and Asset Liability Management, studied alongside [[Duration]] and [[Immunization]].
+
+> [!example]- IRR of an Investment {Example}
+> An insurer pays \$10,000 today for a note that returns \$6,000 in one year and \$5,500 in two years. Find the rate of return.
+>
+> > [!answer]-
+> > Set the net present value to zero and solve the quadratic in $v$:
+> >
+> > $$
+> > \begin{align*}
+> > -10{,}000 + 6{,}000v + 5{,}500v^2 &= 0 \\
+> > v &= \frac{-6{,}000 + \sqrt{6{,}000^2 + 4(5{,}500)(10{,}000)}}{2(5{,}500)} \\
+> > &= \frac{-6{,}000 + 16{,}000}{11{,}000} \\
+> > &= 0.90909
+> > \end{align*}
+> > $$
+> >
+> > So $i = 1/0.90909 - 1 = 10\%$. There is one sign change, so this is the only rate of return.
+
+## Dollar-weighted and time-weighted returns
+
+*Not on the December 2026 Exam FM syllabus.* Its learning outcomes name only "yield rate/rate of return"; the textbook sections devoted to these measures are left out of its assigned readings (Broverman §5.2, Dollar-weighted and Time-weighted Rate of Return; Vaaler §2.6, Dollar-weighted yield rates; Brown & Kopp §§7.3–7.4, since only §§7.1–7.2 of that chapter are assigned); and SOA's sample questions, pruned to the syllabus since October 2022, include none. They are kept here for reference.
+
+For a fund with deposits and withdrawals during the year, the rate of return is measured two ways: **dollar-weighted**, which reflects the investor's own timing, and **time-weighted**, which removes it.
 
 > $$i_{DW} \approx \frac{I}{A + \sum_t C_t\,(1-t)}$$
 
 > $$1 + i_{TW} = \prod_{k=1}^{m} \frac{B_k}{B_{k-1} + C_{k-1}}$$
 
-- **IRR.** $C_t$ is the net cash flow at time $t$ (outflows negative) and $v = 1/(1+i)$; the IRR is the $i$ that makes the [[Net Present Value|net present value]] zero. For a bond it is the yield to maturity. It is unique when the cash flows change sign only once — all outlays before all receipts; with several sign changes there can be more than one root.
 - **Dollar-weighted.** Over one year, $A$ is the fund at the start, $B$ at the end, $C_t$ the net deposit at time $t$ (withdrawals negative), $C = \sum C_t$, and $I = B - A - C$ the interest earned. The formula is the simple-interest approximation to the exact equation $A(1+i) + \sum_t C_t (1+i)^{1-t} = B$.
 - **Time-weighted.** Split the year at every deposit or withdrawal. $B_0 = A$, $C_0 = 0$, $B_k$ is the fund value just before cash flow $C_k$, and $B_m = B$. Each ratio is one sub-period's growth; chaining them gives a return that does not depend on how much money was in the fund when.
 - **Which to use.** The time-weighted rate measures the **fund manager** (who does not control the deposits); the dollar-weighted rate measures the **investor's** actual experience. With no cash flows during the year, the two coincide.
-- Rates of return on a [[Portfolio]] of assets feed [[Duration]] and [[Immunization]] work, where the yield on assets is compared with the rate needed to support the liabilities.
 
 > [!example]- Dollar-Weighted Versus Time-Weighted Return {Example}
 > An insurer's investment fund is worth \$100,000 on January 1. On July 1 it is worth \$120,000, and the insurer immediately deposits another \$50,000. On December 31 the fund is worth \$160,000. Find the dollar-weighted and time-weighted rates of return.
@@ -62,20 +87,3 @@ The **rate of return** on an investment is the interest rate at which the money 
 > > $$
 > >
 > > So $i_{TW} = 12.94\%$. The manager earned $20\%$ in the first half and lost $5.9\%$ in the second; the dollar-weighted rate is lower because the insurer added money just before the losing half.
-
-> [!example]- IRR of an Investment {Example}
-> An insurer pays \$10,000 today for a note that returns \$6,000 in one year and \$5,500 in two years. Find the rate of return.
->
-> > [!answer]-
-> > Set the net present value to zero and solve the quadratic in $v$:
-> >
-> > $$
-> > \begin{align*}
-> > -10{,}000 + 6{,}000v + 5{,}500v^2 &= 0 \\
-> > v &= \frac{-6{,}000 + \sqrt{6{,}000^2 + 4(5{,}500)(10{,}000)}}{2(5{,}500)} \\
-> > &= \frac{-6{,}000 + 16{,}000}{11{,}000} \\
-> > &= 0.90909
-> > \end{align*}
-> > $$
-> >
-> > So $i = 1/0.90909 - 1 = 10\%$. There is one sign change, so this is the only rate of return.

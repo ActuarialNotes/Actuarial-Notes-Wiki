@@ -35,4 +35,4 @@ The **call price** is the price at which an issuer may redeem a [[Callable Bond]
 > A $1{,}000$ face bond with 8% annual coupons can be called in 3 years at $1{,}050$. Find the price to yield 6%.
 >
 > > [!answer]-
-> > $P = 80 \cdot a_{\overline{3}|6\%} + 1050(1.06)^{-3} = 80(2.6730) + 1050(0.8396) = 213.84 + 881.58 = 1095.42$
+> > $P = 80 \cdot a_{\overline{3}|6\%} + 1050(1.06)^{-3} = 80(2.6730) + 1050(0.839619) = 213.84 + 881.60 = 1095.44$

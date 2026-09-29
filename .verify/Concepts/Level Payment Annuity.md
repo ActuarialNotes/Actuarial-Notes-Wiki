@@ -60,3 +60,13 @@ created: 2026-09-28
 - resolves: F-001
 - status: resolved
 - note: Example rewritten as one align* with a_5@5% = 4.329477 and P = 20,000/4.329477 = 4,619.50 (was 4,621.02, which did not follow from its own 4.3295 either). Python: 20,000/a_5 = 4,619.496.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- status_set: verified
+- confidence: medium
+- checks_run: Re-checked on the new bytes: 'level payment annuity', 'Level annuity, finite term' and 'Level perpetuity' vs syllabus p.3; perpetuity as an annuity with infinite term vs Finan p.176; PV = P a_n = P(1-v^n)/i and FV = P s_n = P((1+i)^n-1)/i vs Finan p.144-146; a/s notation and 'future value' vs notation note p.1. Example recomputed in python: a_5@5% = 4.329477, P = 20,000/4.329477 = 4,619.50. 11 math nodes typeset in KaTeX; links and figure resolve.
+- sources_checked: SOA, Notation and terminology used for Exam FM, p.1, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.144-146, 176, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; SOA Financial Mathematics Exam syllabus, December 2026, p.3, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf

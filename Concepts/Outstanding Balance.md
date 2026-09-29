@@ -36,7 +36,7 @@ verification:
 > A \$$20{,}000$ loan is repaid with level annual payments over 6 years at $i = 8\%$. Find the outstanding balance immediately after the 3rd payment using both methods.
 >
 > > [!answer]-
-> > **Payment**: $P = 20000 / a_{\overline{6}|8\%} = 20000 / 4.622880 = \$4{,}326.3077$, about \$$4{,}326.31$ a year.
+> > **Payment**: $P = 20000 / a_{\overline{6}|8\%} = 20000 / 4.6228797 = \$4{,}326.3077$, about \$$4{,}326.31$ a year.
 > >
 > > **Prospective**: $OB_3 = P \cdot a_{\overline{3}|8\%} = 4326.3077 \times 2.577097 = \$11{,}149.31$
 > >

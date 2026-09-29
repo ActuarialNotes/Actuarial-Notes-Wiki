@@ -29,6 +29,8 @@ export interface ShipCosmetic {
   hull?: { base: string; accent: string }
   /** An engine trail's colour. */
   trail?: string
+  /** Not sold: earned — the Stop-Loss Shield is a raid's reward for the kill (§7.7). */
+  raidOnly?: boolean
 }
 
 export const BASIC_PRICE = 10
@@ -57,7 +59,20 @@ export const SHIP_COSMETICS: readonly ShipCosmetic[] = [
   // Calculator skins — the two the exams allow, 10 each.
   { id: 'ship:calculator:ba-ii-plus', slot: 'calculator', name: 'BA II Plus', priceGems: BASIC_PRICE, rarity: 'common' },
   { id: 'ship:calculator:ti-30xs', slot: 'calculator', name: 'TI-30XS MultiView', priceGems: BASIC_PRICE, rarity: 'common' },
+
+  // Decals — earned, never sold. Granted by the database to everyone who dealt
+  // damage when a cohort's raid boss falls (actuaria_raid_hit).
+  { id: 'ship:decal:stop-loss-shield', slot: 'decal', name: 'Stop-Loss Shield', priceGems: 0, rarity: 'rare', raidOnly: true },
 ]
+
+/**
+ * What the Store sells: everything but the raid's reward. A function, not a
+ * constant, so the Store — in the main chunk — carries none of this catalogue
+ * while ACTUARIA_ENABLED is off (a top-level call can't be tree-shaken away).
+ */
+export function storeShips(): ShipCosmetic[] {
+  return SHIP_COSMETICS.filter(c => !c.raidOnly)
+}
 
 export function shipCosmetic(id: string | null | undefined): ShipCosmetic | undefined {
   return id ? SHIP_COSMETICS.find(c => c.id === id) : undefined
@@ -67,4 +82,5 @@ export const SHIP_SLOT_LABEL: Record<ShipSlot, string> = {
   hull: 'Hull paint',
   trail: 'Engine trail',
   calculator: 'Calculator bay',
+  decal: 'Decal',
 }

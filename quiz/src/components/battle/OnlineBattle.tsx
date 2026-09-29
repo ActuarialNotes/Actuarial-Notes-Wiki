@@ -499,11 +499,14 @@ export function OnlineHost({
   onFindAnother,
   opponent,
   loadout,
+  onRoomOpen,
 }: {
   config: BattleConfig
   player: BattlePlayer
   /** The abilities this player brings — used only if the room has them on. */
   loadout?: AbilityId[]
+  /** Told the room's code once it is open (a private room only). */
+  onRoomOpen?: (code: string) => void
   /** A fresh set of questions — for the first battle and every rematch. */
   draw: () => BattleQuestionKey[]
   questionsById: ReadonlyMap<string, Question>
@@ -533,6 +536,15 @@ export function OnlineHost({
 
   const guestIn = !!snapshot?.players[1]
   const inLobby = snapshot?.stage === 'lobby'
+
+  // Once, when the room exists to be joined.
+  const announced = useRef(false)
+  useEffect(() => {
+    if (matched || !session || announced.current) return
+    announced.current = true
+    onRoomOpen?.(code)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session])
 
   // Matched: nobody presses Start — the intro plays, and the count-in follows.
   const started = useRef(false)

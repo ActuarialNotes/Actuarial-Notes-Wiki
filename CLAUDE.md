@@ -1119,6 +1119,12 @@ via `supabase secrets set`, never as `VITE_*`.
 - `supabase/functions/` — Deno edge functions: Stripe checkout/portal/webhook/sync,
   account deletion, beta code redemption, Google Cloud TTS proxy, `research-ingest-url`,
   and `daily-plan-email` (the pg_cron-driven study-plan email sender).
+- `20260929_actuaria.sql` / `20260930_actuaria_crews.sql` — **Actuaria Online** (flag-gated): a
+  player's own settings row, then cohorts (`actuaria_crews*`), the risk pool (applied inside
+  `award_gems`), guides, nudges, Cohort Clash challenges and the weekly raid — leagues' privacy
+  model, RPC-only, with `actuaria_raid_hit` callable by the service role alone (`quiz/api/raid.js`).
+  `supabase/tests/run.sh` runs `supabase/tests/actuaria_crews.sql` against a throwaway local
+  Postgres; CI doesn't, so run it after touching that migration. See `docs/actuaria-online.md`.
 - `content_reports` (`20260823_content_reports.sql`) — the reader-report inbox behind VERIFY's
   "Report an issue". Insert/select own rows only; **no** UPDATE or DELETE policy, so only the
   service-role `scripts/sync_reports.py` can mark a report synced.
@@ -1135,8 +1141,10 @@ Both the root site and `quiz/` have their own `vercel.json` (root handles `/api/
 headers for the serverless functions — `chat.js` and the flag-gated `research*.js`; `quiz/`
 rewrites all routes to `index.html` for the SPA). Deploys to Vercel; Supabase edge functions
 deploy via the GitHub Action above. Functions that must share the app's origin live in
-`quiz/api/` (`exam-pdf.js`, `amazon-price.js`, and `mcp.js` — the AI connector, which reads
-the knowledge-base export from its own deployment); `quiz/api/_mcp/` is `_`-prefixed so Vercel doesn't route it.
+`quiz/api/` (`exam-pdf.js`, `amazon-price.js`, `mcp.js` — the AI connector, which reads
+the knowledge-base export from its own deployment — and `raid.js`, Actuaria's raid marking, which
+reads the same export and needs `SUPABASE_SERVICE_ROLE_KEY`); `quiz/api/_mcp/` and `quiz/api/_raid/`
+are `_`-prefixed so Vercel doesn't route them.
 
 ## Cowork (the second product)
 

@@ -26,7 +26,7 @@ import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { ShipGlyph } from '@/components/actuaria/ShipGlyph'
-import { SHIP_COSMETICS, SHIP_SLOT_LABEL, type ShipCosmetic } from '@/data/actuariaShips'
+import { storeShips, SHIP_SLOT_LABEL, type ShipCosmetic } from '@/data/actuariaShips'
 import { ACTUARIA_ENABLED } from '@/lib/featureFlags'
 import { cn } from '@/lib/utils'
 
@@ -491,7 +491,7 @@ export default function Store() {
             Parts for your ship in Actuaria. Equip them in the <Link to="/actuaria/hangar" className="underline">Hangar</Link>.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {SHIP_COSMETICS.map(item => {
+            {storeShips().map(item => {
               const isOwned = ownedIds.has(item.id)
               const isBusy = busyId === item.id
               const canAfford = balance >= item.priceGems

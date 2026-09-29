@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { SHIP_COSMETICS, shipCosmetic } from '@/data/actuariaShips'
+import { SHIP_COSMETICS, shipCosmetic, storeShips } from '@/data/actuariaShips'
+import { STOP_LOSS_SHIELD } from './raid'
 import { defaultPrefs, parsePrefs, SHIP_SLOTS } from './prefs'
 import { equipPatch, ownedShipIds, shipView, slotCosmetics, STOCK } from './ship'
 
@@ -14,7 +15,8 @@ describe('the ship catalogue (§7.3)', () => {
 
   it('prices hull paints 10 basic / 50 rare, and trails and calculators 10', () => {
     for (const c of SHIP_COSMETICS) {
-      if (c.slot === 'hull') expect(c.priceGems).toBe(c.rarity === 'rare' ? 50 : 10)
+      if (c.raidOnly) expect(c.priceGems).toBe(0)
+      else if (c.slot === 'hull') expect(c.priceGems).toBe(c.rarity === 'rare' ? 50 : 10)
       else expect(c.priceGems).toBe(10)
     }
   })
@@ -31,8 +33,13 @@ describe('the ship catalogue (§7.3)', () => {
     }
   })
 
+  it('sells everything but the raid’s reward, which the database grants', () => {
+    expect(storeShips().some(c => c.raidOnly)).toBe(false)
+    expect(shipCosmetic(STOP_LOSS_SHIELD)).toMatchObject({ slot: 'decal', raidOnly: true })
+  })
+
   it('stores an equipped id through the prefs parser unchanged', () => {
-    const ship = { hull: 'ship:hull:cobalt', trail: 'ship:trail:ion', calculator: 'ship:calculator:ba-ii-plus' }
+    const ship = { hull: 'ship:hull:cobalt', trail: 'ship:trail:ion', calculator: 'ship:calculator:ba-ii-plus', decal: 'ship:decal:stop-loss-shield' }
     expect(parsePrefs({ ship }).ship).toEqual(ship)
   })
 })
@@ -42,29 +49,29 @@ describe('the ship as drawn', () => {
 
   it('is the stock ship with nothing equipped', () => {
     expect(shipView(stock, owned)).toEqual({
-      look: { hull: null, trail: null, calculator: null },
-      labels: { hull: STOCK, trail: STOCK, calculator: STOCK },
+      look: { hull: null, trail: null, calculator: null, decal: null },
+      labels: { hull: STOCK, trail: STOCK, calculator: STOCK, decal: 'None' },
     })
   })
 
   it('wears what is equipped and owned', () => {
-    const view = shipView({ hull: 'ship:hull:cobalt', trail: 'ship:trail:ion', calculator: null }, owned)
+    const view = shipView({ hull: 'ship:hull:cobalt', trail: 'ship:trail:ion', calculator: null, decal: null }, owned)
     expect(view.look.hull).toEqual(shipCosmetic('ship:hull:cobalt')!.hull)
     expect(view.look.trail).toBe(shipCosmetic('ship:trail:ion')!.trail)
-    expect(view.labels).toEqual({ hull: 'Cobalt', trail: 'Ion', calculator: STOCK })
+    expect(view.labels).toEqual({ hull: 'Cobalt', trail: 'Ion', calculator: STOCK, decal: 'None' })
   })
 
   it('draws the stock part for a slot naming something not owned', () => {
-    const view = shipView({ hull: 'ship:hull:nebula', trail: null, calculator: 'ship:calculator:ti-30xs' }, owned)
-    expect(view.labels).toEqual({ hull: STOCK, trail: STOCK, calculator: STOCK })
+    const view = shipView({ hull: 'ship:hull:nebula', trail: null, calculator: 'ship:calculator:ti-30xs', decal: 'ship:decal:stop-loss-shield' }, owned)
+    expect(view.labels).toEqual({ hull: STOCK, trail: STOCK, calculator: STOCK, decal: 'None' })
   })
 
   it('trusts the slots while ownership is still being read', () => {
-    expect(shipView({ hull: 'ship:hull:nebula', trail: null, calculator: null }, null).labels.hull).toBe('Nebula')
+    expect(shipView({ ...stock, hull: 'ship:hull:nebula' }, null).labels.hull).toBe('Nebula')
   })
 
   it('ignores an id that is not in the catalogue', () => {
-    expect(shipView({ hull: 'ship:hull:gold-plated', trail: null, calculator: null }, null).labels.hull).toBe(STOCK)
+    expect(shipView({ ...stock, hull: 'ship:hull:gold-plated' }, null).labels.hull).toBe(STOCK)
   })
 })
 

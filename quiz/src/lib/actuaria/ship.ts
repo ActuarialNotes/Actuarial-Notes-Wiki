@@ -13,6 +13,8 @@ export interface ShipLook {
   hull: { base: string; accent: string } | null
   trail: string | null
   calculator: string | null
+  /** A decal's name — the Stop-Loss Shield. */
+  decal: string | null
 }
 
 export interface ShipView {
@@ -36,16 +38,19 @@ export function shipView(ship: ShipLoadout, owned: ReadonlySet<string> | null): 
   const hull = worn('hull')
   const trail = worn('trail')
   const calculator = worn('calculator')
+  const decal = worn('decal')
   return {
     look: {
       hull: hull?.hull ?? null,
       trail: trail?.trail ?? null,
       calculator: calculator?.name ?? null,
+      decal: decal?.name ?? null,
     },
     labels: {
       hull: hull?.name ?? STOCK,
       trail: trail?.name ?? STOCK,
       calculator: calculator?.name ?? STOCK,
+      decal: decal?.name ?? 'None',
     },
   }
 }

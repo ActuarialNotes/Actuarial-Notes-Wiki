@@ -177,6 +177,7 @@ export default function Battle({
   skin: skinId,
   onPlayingChange,
   loadout,
+  onRoomOpen,
 }: {
   /**
    * The skin to draw the page in — Quiz Battle's own, or Actuaria's Monte Carlo
@@ -191,16 +192,30 @@ export default function Battle({
    * Hangar loadout, cut to what is unlocked now (docs/actuaria-online.md §7.2).
    */
   loadout?: AbilityId[]
+  /**
+   * Told the code of a private room this player opens — Actuaria's Cohort
+   * Clash hands it to the challenged member in-app (docs/actuaria-online.md
+   * §6.11). The room is Quiz Battle's as ever; nothing about it is stored.
+   */
+  onRoomOpen?: (code: string) => void
 } = {}) {
   const skin = battleSkin(skinId)
   return (
     <BattleSkinContext.Provider value={skin}>
-      <BattlePage onPlayingChange={onPlayingChange} loadout={skin.abilities ? loadout : undefined} />
+      <BattlePage onPlayingChange={onPlayingChange} loadout={skin.abilities ? loadout : undefined} onRoomOpen={onRoomOpen} />
     </BattleSkinContext.Provider>
   )
 }
 
-function BattlePage({ onPlayingChange, loadout }: { onPlayingChange?: (playing: boolean) => void; loadout?: AbilityId[] }) {
+function BattlePage({
+  onPlayingChange,
+  loadout,
+  onRoomOpen,
+}: {
+  onPlayingChange?: (playing: boolean) => void
+  loadout?: AbilityId[]
+  onRoomOpen?: (code: string) => void
+}) {
   const skin = useBattleSkin()
   const navigate = useNavigate()
   const [params, setParams] = useSearchParams()
@@ -220,8 +235,14 @@ function BattlePage({ onPlayingChange, loadout }: { onPlayingChange?: (playing: 
   }
 
   const joinParam = params.get('join')
+  // `?host=1` — a way in that is opening a private room (Cohort Clash) goes
+  // straight to the room's setup.
   const [screen, setScreen] = useState<Screen>(() =>
-    joinParam ? { kind: 'join', code: normalizeRoomCode(joinParam).slice(0, ROOM_CODE_LENGTH) } : { kind: 'home' },
+    joinParam
+      ? { kind: 'join', code: normalizeRoomCode(joinParam).slice(0, ROOM_CODE_LENGTH) }
+      : params.get('host') === '1'
+      ? { kind: 'setup', mode: 'host' }
+      : { kind: 'home' },
   )
 
   const questionsById = useMemo(() => new Map(questions.map(q => [q.id, q])), [questions])
@@ -321,6 +342,7 @@ function BattlePage({ onPlayingChange, loadout }: { onPlayingChange?: (playing: 
         onFindAnother={screen.code ? findAnother : undefined}
         opponent={screen.opponent}
         loadout={screen.code ? undefined : loadout}
+        onRoomOpen={screen.code ? undefined : onRoomOpen}
       />,
     )
   }

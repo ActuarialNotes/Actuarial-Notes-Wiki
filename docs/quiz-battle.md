@@ -368,6 +368,11 @@ the scoring, the sessions, the lobby and its handshake, the cues, the music and
   `lib/actuaria/abilities.ts`). The tray (`components/battle/AbilityTray.tsx`)
   sits above the answer pad in `BattleActionBar`. A room made at the station with
   abilities on can still be joined from `/battle`: that player simply brings none.
+- **Cohort Clash** is a private room like any other. `?host=1` opens the page on the
+  room's setup, and `onRoomOpen(code)` tells the page's owner the code once the room
+  exists — the station hands it to the challenged cohort member in-app
+  (`actuaria_challenge`). Only the code is stored, for half an hour; the battle, as
+  ever, saves nothing.
 
 ## Testing
 

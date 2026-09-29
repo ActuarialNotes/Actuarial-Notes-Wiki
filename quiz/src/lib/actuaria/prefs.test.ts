@@ -7,7 +7,7 @@ describe('Actuaria prefs', () => {
       loadout: ['reinsurance'],
       hubDismissed: false,
       titleSeen: false,
-      ship: { hull: null, trail: null, calculator: null },
+      ship: { hull: null, trail: null, calculator: null, decal: null },
     })
   })
 
@@ -28,11 +28,11 @@ describe('Actuaria prefs', () => {
 
   it('only puts a slot’s own kind of cosmetic in it', () => {
     const prefs = parsePrefs({ ship: { hull: 'ship:hull:nebula', trail: 'ship:hull:nebula', calculator: 'fox:arctic' } })
-    expect(prefs.ship).toEqual({ hull: 'ship:hull:nebula', trail: null, calculator: null })
+    expect(prefs.ship).toEqual({ hull: 'ship:hull:nebula', trail: null, calculator: null, decal: null })
   })
 
   it('round-trips through the user_actuaria row', () => {
-    const prefs = withPatch(defaultPrefs(), { titleSeen: true, loadout: ['reinsurance', 'double-down'], ship: { hull: 'ship:hull:nebula', trail: null, calculator: null } })
+    const prefs = withPatch(defaultPrefs(), { titleSeen: true, loadout: ['reinsurance', 'double-down'], ship: { hull: 'ship:hull:nebula', trail: null, calculator: null, decal: null } })
     const row = prefsToRow('u1', prefs)
     expect(row).toMatchObject({ user_id: 'u1', title_seen: true, hub_dismissed: false, loadout: ['reinsurance', 'double-down'] })
     expect(rowToPrefs(row)).toEqual(prefs)
@@ -40,8 +40,8 @@ describe('Actuaria prefs', () => {
   })
 
   it('patches one ship slot without clearing the others', () => {
-    const start = withPatch(defaultPrefs(), { ship: { hull: 'ship:hull:nebula', trail: 'ship:trail:ion', calculator: null } })
+    const start = withPatch(defaultPrefs(), { ship: { hull: 'ship:hull:nebula', trail: 'ship:trail:ion', calculator: null, decal: null } })
     const next = withPatch(start, { ship: { ...start.ship, trail: null } })
-    expect(next.ship).toEqual({ hull: 'ship:hull:nebula', trail: null, calculator: null })
+    expect(next.ship).toEqual({ hull: 'ship:hull:nebula', trail: null, calculator: null, decal: null })
   })
 })

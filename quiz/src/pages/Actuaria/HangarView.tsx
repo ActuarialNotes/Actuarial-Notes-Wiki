@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { Calculator, Gem } from 'lucide-react'
+import { Calculator, Gem, Shield } from 'lucide-react'
 import { ShipBay } from '@/components/actuaria/ShipBay'
 import { ShipGlyph } from '@/components/actuaria/ShipGlyph'
 import { Term } from '@/components/actuaria/Term'
@@ -37,7 +37,7 @@ export function HangarView({ world }: { world: ActuariaWorld }) {
       <section className="space-y-5 rounded-xl bg-card p-4 sm:p-6" aria-labelledby="hangar-ship">
         <h2 id="hangar-ship" className="sr-only">Your ship</h2>
         <ShipBay look={view.look} labels={view.labels} className="mx-auto max-w-xl" />
-        <div className="grid gap-5 sm:grid-cols-3">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {SHIP_SLOTS.map(slot => (
             <ShipSlotPicker
               key={slot}
@@ -108,6 +108,8 @@ function ShipPartRow({
 }) {
   const art = item.slot === 'calculator'
     ? <Calculator className="h-5 w-5 text-muted-foreground" aria-hidden />
+    : item.slot === 'decal'
+    ? <Shield className="h-5 w-5 text-muted-foreground" aria-hidden />
     : <ShipGlyph look={{ hull: item.hull ?? null, trail: item.trail ?? null }} size={28} />
   const body = (
     <>
@@ -132,6 +134,16 @@ function ShipPartRow({
         {body}
         <span className="text-xs text-muted-foreground">{equipped ? 'Equipped' : 'Equip'}</span>
       </button>
+    )
+  }
+
+  // The raid's reward is earned, never sold.
+  if (item.raidOnly) {
+    return (
+      <p className="flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-muted-foreground" data-testid={`hangar-part-${item.id}`}>
+        {body}
+        <span className="text-xs">Raid reward</span>
+      </p>
     )
   }
 

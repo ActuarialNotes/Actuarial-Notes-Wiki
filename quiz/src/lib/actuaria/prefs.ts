@@ -13,8 +13,8 @@ export const STARTER_ABILITY = 'reinsurance'
 /** Abilities a player can equip at once (§7.2). */
 export const LOADOUT_SIZE = 3
 
-export type ShipSlot = 'hull' | 'trail' | 'calculator'
-export const SHIP_SLOTS: readonly ShipSlot[] = ['hull', 'trail', 'calculator']
+export type ShipSlot = 'hull' | 'trail' | 'calculator' | 'decal'
+export const SHIP_SLOTS: readonly ShipSlot[] = ['hull', 'trail', 'calculator', 'decal']
 
 export type ShipLoadout = Record<ShipSlot, string | null>
 
@@ -32,7 +32,7 @@ export function defaultPrefs(): ActuariaPrefs {
     loadout: [STARTER_ABILITY],
     hubDismissed: false,
     titleSeen: false,
-    ship: { hull: null, trail: null, calculator: null },
+    ship: { hull: null, trail: null, calculator: null, decal: null },
   }
 }
 
@@ -51,7 +51,7 @@ export function cleanLoadout(raw: unknown): string[] {
 }
 
 function cleanShip(raw: unknown): ShipLoadout {
-  const ship: ShipLoadout = { hull: null, trail: null, calculator: null }
+  const ship: ShipLoadout = { hull: null, trail: null, calculator: null, decal: null }
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return ship
   const o = raw as Record<string, unknown>
   for (const slot of SHIP_SLOTS) {

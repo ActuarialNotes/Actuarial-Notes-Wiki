@@ -674,7 +674,51 @@ Where the build settled something this spec left open, or departed from its lett
   Reinsurance that never met one is simply spent.
 - **Ship cosmetics** are a sibling catalogue, `data/actuariaShips.ts` (`ship:<slot>:<name>`),
   sold on a flag-gated **Ships** tab of the Store through `purchase_cosmetic`. The ship is drawn
-  from what is owned: a slot naming something the player doesn't own draws the stock part.
+  from what is owned: a slot naming something the player doesn't own draws the stock part. The
+  Stop-Loss Shield is a fourth slot, **decal**, never sold (`raidOnly`); the database grants it.
+
+Phase 3 (cohorts and raids):
+
+- **Where it lives.** `supabase/migrations/20260930_actuaria_crews.sql` is all of the server
+  state and every rule that touches it; `supabase/tests/actuaria_crews.sql` exercises it against
+  a throwaway local Postgres (`supabase/tests/run.sh`, which stubs the slice of Supabase it
+  needs — roles, `auth.uid()`, and Supabase's default function grants). CI doesn't run it; run it
+  after touching the migration. The pure mirrors are `lib/actuaria/crews.ts` and `raid.ts`,
+  whose tests also read the migration to hold the duplicated formulas and grants together.
+- **Supabase grants EXECUTE on a new function to `anon` and `authenticated` directly**, not
+  through PUBLIC, so every internal helper and service-role RPC is revoked from both by name.
+  `actuaria_credit_gems`, `actuaria_raid_draw` and `actuaria_raid_hit` are callable by the
+  service role alone.
+- **The risk pool** is applied inside `award_gems` — every study reward's one way in — ×1.25
+  rounded half up, and only for a cohort of three or more (a cohort of one would otherwise be
+  a private +25%). Two cohorts don't stack. "Covered today" reads `user_streaks.last_active_day`
+  in the member's own time zone (an unreadable zone reads as UTC). That row is the member's own
+  to write, as the streak always was, so the pool trusts it as far as the streak does.
+- **Raid marking and timing.** `quiz/api/raid.js` draws a run of five (the cohort's weak spots
+  first, none already hit this week, hard only when All in), records the draw through the
+  service role, and marks each answer with the connector's `markChoice` — the same function
+  `check_answer` marks with. The answer is timed by the *database's* clock from the draw (then
+  from the previous answer), on the exam's pace — Quiz Battle's *Exam pace*, three minutes for an
+  exam with none. A question already hit this week deals nothing; a repeated answer is recorded
+  once; only the first answer to a question counts (the quiz lets a reader change theirs).
+- **Phases are cumulative.** All in (≤ 25%) keeps Double or nothing's rules and adds hard-only
+  draws. A miss that heals can lift the boss back over a line; the phase follows its health.
+- **The loot is paid whether or not the boss fell** (the week's work), the decal only for the
+  kill. A member who leaves takes their hits, and so their share, with them.
+- **A run at the boss is an ordinary quiz** (`/quiz?ids=…&raid=<draw>`), so it saves mastery,
+  XP, streak and quests like any quiz; the quiz page's only raid code hands each first answer to
+  the function and shows what it did (`RaidHitChip`).
+- **The weak spots** are the lowest mean Z across what members shared: opening the Cohort screen
+  shares the member's sector Z and each landmark's Z on the cohort's exam
+  (`actuaria_share_progress`). Nothing about a member is shared before they join.
+- **Guides are paid only for accepted replies**; any member may reply. The 25-gem cap is per UTC
+  day. **A nudge** is at most one per member per day (their day), from anyone in the cohort.
+  **A Cohort Clash challenge** is the room code, shown to the member for 30 minutes.
+- **The risk-pool card is a plain card**, not a `HudFrame` as §6.11 has it: §4.2 keeps the corner
+  ticks to three things so they keep meaning "live, and yours to act on".
+- **Signed-in e2e without a backend.** `e2e/fixtures/signedIn.ts` plants an unexpired session and
+  answers the placeholder project's REST and Auth calls, which is how `e2e/actuaria-cohort.spec.ts`
+  plays a cohort and a raid run.
 
 ## Changelog
 

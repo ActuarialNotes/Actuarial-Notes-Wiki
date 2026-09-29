@@ -26,9 +26,10 @@ export const ACTUARIA_TABS: readonly ActuariaTab[] = [
 
 /**
  * Whether the Cohort tab is shown. Cohorts and raids are the social phase (§9,
- * Phase 3); the tab stays hidden until they are there to open.
+ * Phase 3), and the tab was hidden until they were there to open; turn it off
+ * here to take them out of the nav again.
  */
-export const COHORTS_LIVE: boolean = false
+export const COHORTS_LIVE: boolean = true
 
 export function visibleTabs(cohortsLive: boolean = COHORTS_LIVE): ActuariaTab[] {
   return ACTUARIA_TABS.filter(t => t.id !== 'cohort' || cohortsLive)

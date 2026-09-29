@@ -16,7 +16,7 @@ export function ShipBay({
 }: {
   look: ShipLook
   /** What each slot holds — "Stock", or the cosmetic's name. */
-  labels: { hull: string; trail: string; calculator: string }
+  labels: { hull: string; trail: string; calculator: string; decal?: string }
   className?: string
 }) {
   const hull = look.hull?.base ?? 'hsl(var(--muted))'
@@ -27,7 +27,7 @@ export function ShipBay({
     <figure className={cn('relative w-full', className)} aria-label="Your ship">
       <svg viewBox="0 0 480 300" className="h-auto w-full" role="img" aria-labelledby="ship-bay-desc">
         <desc id="ship-bay-desc">
-          {`Your ship: hull paint ${labels.hull}, engine trail ${labels.trail}, calculator bay ${labels.calculator}.`}
+          {`Your ship: hull paint ${labels.hull}, engine trail ${labels.trail}, calculator bay ${labels.calculator}${look.decal ? `, decal ${look.decal}` : ''}.`}
         </desc>
         <defs>
           <linearGradient id="ship-trail" x1="0" y1="0" x2="0" y2="1">
@@ -51,6 +51,13 @@ export function ShipBay({
         <path d={PANEL_PATH} stroke={accent} strokeWidth="2" fill="none" strokeLinecap="round" />
         {/* Canopy. */}
         <ellipse cx="240" cy="92" rx="9" ry="18" fill="hsl(var(--background))" stroke="hsl(var(--foreground))" strokeWidth="1.5" />
+        {/* A decal on the port wing — the Stop-Loss Shield, a raid's reward. */}
+        {look.decal && (
+          <g data-testid="ship-decal">
+            <path d="M184 166 L194 162 L204 166 L204 175 C204 181 198 185 194 187 C190 185 184 181 184 175 Z" fill="hsl(var(--background))" stroke="hsl(var(--foreground))" strokeWidth="1.5" strokeLinejoin="round" />
+            <path d="M188 174 L200 174" stroke="hsl(var(--foreground))" strokeWidth="1.5" strokeLinecap="round" />
+          </g>
+        )}
         {/* The calculator bay. */}
         <rect x="229" y="148" width="22" height="30" rx="3" fill="hsl(var(--card))" stroke="hsl(var(--foreground))" strokeWidth="1.5" />
         <rect x="233" y="152" width="14" height="6" rx="1" fill="hsl(var(--actuaria-signal))" opacity="0.8" />

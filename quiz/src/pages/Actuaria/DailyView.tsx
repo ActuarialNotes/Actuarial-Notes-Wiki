@@ -3,15 +3,18 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Loader2, Radio, ShieldCheck } from 'lucide-react'
 import { CoverageCalendar } from '@/components/actuaria/CoverageCalendar'
 import { LandmarkRow } from '@/components/actuaria/LandmarkRow'
+import { StatusChip } from '@/components/actuaria/StatusChip'
 import { Term } from '@/components/actuaria/Term'
 import { Button, buttonVariants } from '@/components/ui/button'
 import type { ActuariaWorld } from '@/hooks/useActuariaWorld'
 import { useCoverageDays } from '@/hooks/useCoverageDays'
+import { useCrew } from '@/hooks/useCrew'
 import { useStreak } from '@/hooks/useStreak'
 import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { landmarkName } from '@/data/actuariaLandmarks'
 import { monthOf, shiftMonth, studiedInMonth } from '@/lib/actuaria/coverage'
+import { CREW_MIN, poolThreshold } from '@/lib/actuaria/crews'
 import { drawTransmission, selectTransmission, transmissionPath, TRANSMISSION_SIZE } from '@/lib/actuaria/transmission'
 import type { Question } from '@/lib/parser'
 import { planConceptsToday } from '@/lib/planCompletion'
@@ -33,7 +36,10 @@ export function DailyView({ world, questions, questionsLoading }: { world: Actua
       <h1 className="actuaria-display text-xl sm:text-2xl"><Term id="transmission" /></h1>
       <div className="grid gap-4 md:grid-cols-[1fr_20rem] md:items-start">
         <Transmission world={world} questions={questions} questionsLoading={questionsLoading} />
-        <Coverage />
+        <div className="space-y-4">
+          <Coverage />
+          <RiskPoolStrip exam={world.activeSector?.status === 'in_progress' ? world.activeSector.key : null} />
+        </div>
       </div>
     </div>
   )
@@ -136,6 +142,28 @@ function Transmission({ world, questions, questionsLoading }: { world: ActuariaW
         </div>
       )}
     </section>
+  )
+}
+
+/**
+ * The cohort's risk pool, in a line (§6.6): "9 / 12 covered · +25% gems
+ * active". Shown only to a member of a cohort on the active sector.
+ */
+function RiskPoolStrip({ exam }: { exam: string | null }) {
+  const { crew } = useCrew(exam)
+  if (!crew || crew.pool.members < CREW_MIN) return null
+  const { covered, members, active } = crew.pool
+  return (
+    <Link
+      to={`/actuaria/cohort?exam=${encodeURIComponent(crew.crew.exam)}`}
+      className="flex items-center justify-between gap-3 rounded-xl bg-card px-5 py-3 text-sm transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      data-testid="actuaria-risk-pool"
+    >
+      <span><Term id="riskPool" /> · <span className="font-mono tabular-nums">{covered} / {members}</span> covered</span>
+      {active
+        ? <StatusChip variant="cleared" size="sm">+25% gems active</StatusChip>
+        : <span className="text-xs text-muted-foreground">{poolThreshold(members) - covered} more for +25%</span>}
+    </Link>
   )
 }
 

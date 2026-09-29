@@ -10,6 +10,7 @@
 
 import { useMemo } from 'react'
 import { Lock } from 'lucide-react'
+import { GamblersRuin } from '@/components/actuaria/GamblersRuin'
 import { examAccentStyle } from '@/lib/examColors'
 import { examMonogram } from '@/lib/examLogo'
 import { sectorCredibility, SECTOR_FILL } from '@/lib/actuaria/credibility'
@@ -28,6 +29,7 @@ export function StarMap({
   size,
   onSelect,
   onStation,
+  raid = null,
 }: {
   sectors: readonly Sector[]
   readiness: ReadonlyMap<string, ExamReadinessAssessment>
@@ -39,6 +41,11 @@ export function StarMap({
   size: StarMapSize
   onSelect: (key: string) => void
   onStation: () => void
+  /**
+   * The cohort's raid, while one is up this week (§6.3): Gambler's Ruin drawn
+   * in the lower corner, and a way to it. Null draws nothing.
+   */
+  raid?: { label: string; onOpen: () => void } | null
 }) {
   const layout = useMemo(() => starMapLayout(sectors, size), [sectors, size])
   const stars = useMemo(() => starfield(size === 'wide' ? 140 : 80, layout.width, layout.height), [size, layout.width, layout.height])
@@ -48,6 +55,8 @@ export function StarMap({
   )
   const byKey = new Map(sectors.map(s => [s.key, s]))
   const compact = size === 'compact'
+  // The boss's corner: bottom left, clear of the orbits' widest sweep.
+  const ruin = { x: layout.width * 0.07, y: layout.height * 0.84, s: compact ? 26 : 40 }
   const pct = (v: number, of: number) => `${(v / of) * 100}%`
 
   return (
@@ -191,6 +200,15 @@ export function StarMap({
             </g>
           )
         })}
+        {/* Gambler's Ruin — only while the cohort's raid is up. */}
+        {raid && (
+          <g>
+            <GamblersRuin x={ruin.x - ruin.s / 2} y={ruin.y - ruin.s / 2} width={ruin.s} height={ruin.s} aria-hidden />
+            <text x={ruin.x} y={ruin.y + ruin.s / 2 + (compact ? 11 : 15)} textAnchor="middle" className="actuaria-display" fontSize={compact ? 8 : 11} fill="hsl(var(--destructive))">
+              GAMBLER’S RUIN
+            </text>
+          </g>
+        )}
       </svg>
 
       {/* The controls: one button per place, in ladder order. */}
@@ -207,6 +225,21 @@ export function StarMap({
         }}
         data-testid="actuaria-station"
       />
+      {raid && (
+        <button
+          type="button"
+          onClick={raid.onOpen}
+          aria-label={`Gambler’s Ruin — this week’s raid. ${raid.label}`}
+          className="absolute rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          style={{
+            left: pct(ruin.x - ruin.s * 0.7, layout.width),
+            top: pct(ruin.y - ruin.s * 0.7, layout.height),
+            width: pct(ruin.s * 1.4, layout.width),
+            height: pct(ruin.s * 1.4, layout.height),
+          }}
+          data-testid="actuaria-raid"
+        />
+      )}
       {layout.sectors.map(p => {
         const sector = byKey.get(p.key)
         if (!sector) return null

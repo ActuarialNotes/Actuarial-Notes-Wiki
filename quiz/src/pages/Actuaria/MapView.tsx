@@ -13,6 +13,7 @@ import { Term } from '@/components/actuaria/Term'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { useActuariaPrefs } from '@/hooks/useActuariaPrefs'
 import { useAuth } from '@/hooks/useAuth'
+import { useCrew } from '@/hooks/useCrew'
 import { useIsMobile } from '@/hooks/useIsMobile'
 import { useOwnedShips } from '@/hooks/useOwnedShips'
 import type { ActuariaWorld } from '@/hooks/useActuariaWorld'
@@ -48,6 +49,17 @@ export function MapView({
   const [selected, setSelected] = useState<string | null>(null)
   const selectedSector = sectorByKey(world.sectors, selected ?? undefined) ?? world.activeSector ?? world.sectors[0] ?? null
 
+  // Gambler's Ruin is drawn only while the active sector's cohort has a raid up.
+  const activeKey = world.activeSector?.status === 'in_progress' ? world.activeSector.key : null
+  const { crew } = useCrew(activeKey)
+  const raid = crew?.raid
+  const raidOnMap = raid && raid.phase !== 'defeated'
+    ? {
+        label: `${raid.bossHealth.toLocaleString('en-US')} of ${raid.bossMax.toLocaleString('en-US')} health left`,
+        onOpen: () => navigate(`/actuaria/raid?exam=${encodeURIComponent(crew.crew.exam)}`),
+      }
+    : null
+
   if (world.loading && world.sectors.length === 0) {
     return (
       <div className="flex items-center gap-2 p-8 text-sm text-muted-foreground">
@@ -71,6 +83,7 @@ export function MapView({
             size={compact ? 'compact' : 'wide'}
             onSelect={setSelected}
             onStation={() => navigate('/actuaria/battle')}
+            raid={raidOnMap}
           />
           <Legend />
         </div>

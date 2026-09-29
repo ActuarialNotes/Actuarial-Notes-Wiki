@@ -11,12 +11,15 @@ import { useLobbyCount } from '@/hooks/useBattle'
 import { useBattleExams } from '@/hooks/useBattleExams'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { battleLoadout } from '@/lib/actuaria/abilities'
+import { challenge } from '@/lib/actuaria/crewStore'
 import type { LeagueExamOption } from '@/components/LeaderboardPanel'
 // Monte Carlo Station *is* Quiz Battle's page, under Actuaria's skin (§6.8).
 import Battle from '@/pages/Battle'
+import { CohortView } from './CohortView'
 import { DailyView } from './DailyView'
 import { HangarView } from './HangarView'
 import { MapView } from './MapView'
+import { RaidView } from './RaidView'
 import { SectorView } from './SectorView'
 import { SimulationView } from './SimulationView'
 import { TitleScreen } from './TitleScreen'
@@ -38,7 +41,7 @@ import { TitleScreen } from './TitleScreen'
 export default function Actuaria() {
   const world = useActuariaWorld()
   const { questions, loading: questionsLoading, counts: battleCounts, exams: battleExams } = useBattleExams()
-  const { pathname } = useLocation()
+  const { pathname, search } = useLocation()
   const popupOpen = useConceptPopup(s => s.open)
   const closePopupOnNavigation = useConceptPopup(s => s.closeOnNavigation)
 
@@ -59,6 +62,16 @@ export default function Actuaria() {
   const { prefs } = useActuariaPrefs()
   const loadout = useMemo(() => battleLoadout(prefs.loadout, world.records, new Date()), [prefs.loadout, world.records])
 
+  // Cohort Clash (§6.11): a room opened from a member's Challenge hands its
+  // code to that member in-app — `?crew=&challenge=` on the way in.
+  const clashChallenge = useMemo(() => {
+    const params = new URLSearchParams(search)
+    const crew = params.get('crew')
+    const member = params.get('challenge')
+    if (!pathname.startsWith('/actuaria/battle') || !crew || !member) return undefined
+    return (code: string) => { void challenge(crew, member, code) }
+  }, [pathname, search])
+
   // A battle owns the foot of the screen while it runs; the tab bar stands down.
   const [battling, setBattling] = useState(false)
 
@@ -75,7 +88,12 @@ export default function Actuaria() {
         <Route path="daily" element={inWorld(<DailyView world={world} questions={questions} questionsLoading={questionsLoading} />)} />
         <Route path="hangar" element={inWorld(<HangarView world={world} />)} />
         <Route path="simulation" element={inWorld(<SimulationView world={world} />)} />
-        <Route path="battle" element={inWorld(<Battle skin="actuaria" onPlayingChange={setBattling} loadout={loadout} />, { tabBar: !battling })} />
+        <Route path="cohort" element={inWorld(<CohortView world={world} />)} />
+        <Route path="raid" element={inWorld(<RaidView world={world} />)} />
+        <Route
+          path="battle"
+          element={inWorld(<Battle skin="actuaria" onPlayingChange={setBattling} loadout={loadout} onRoomOpen={clashChallenge} />, { tabBar: !battling })}
+        />
         <Route path="*" element={<Navigate to="/actuaria/map" replace />} />
       </Routes>
       {/* The one reader: a landmark opens where a concept always does. */}

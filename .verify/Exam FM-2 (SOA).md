@@ -164,3 +164,39 @@ created: 2026-09-28
 - proposed_action: Restore SOA's parenthetical and hyphen and the closing periods; the links (and so the exam's concept set) are unchanged.
 - applied: true
 - fingerprint: 0534c66cd491
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- resolves: F-002
+- status: resolved
+- note: Wrote Resources/Books/Using Duration and Convexity to Approximate Change in Present Value (Alps - 2017).md from the note itself (resource_extract.py, sha256:530436d4…; Sections 1-6 and Appendices A-D as its divisions, every example recomputed; verified medium in its own log) and added it to the Source Material callout as its own bullet, last in the syllabus's order (Additional References follow the textbooks on p.7), with the reading line 'Sections 1–4 (required reading)' — the syllabus p.7 wording 'Sections 1-4 are required reading for this examination'. The page's On-the-syllabus callout names Exam FM. resource_lint 0/0 and syllabus_lint 0/0 on this page.
+
+## [F-005/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- resolves: F-005
+- status: resolved
+- note: The four additions left SOA's lists and now sit on marked editorial '*Key concepts:*' sub-bullets, as on the Exam P page: [[Fund Accumulation]] under Time Value of Money outcome 1; [[Decreasing Annuity]] and [[Continuous Annuity]] under Annuities outcome 1; [[Loan Repayment Comparison]] under Loans outcome 1. The outcome lists now read as SOA's pp.2-3 list them. The exam's concept set is unchanged: the same 91 link targets inside the objective callouts before and after (diffed mechanically), and syllabus_lint 0 errors 0 warnings. Re-reading every outcome against pp.2-5 found a parenthetical, a hyphen and seven closing periods that differed; filed and fixed as F-007.
+
+## [F-006/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- resolves: F-006
+- status: resolved
+- note: Broverman's reading now carries a second line 'Candidates may also use the Seventh Edition (2017, ACTEX Learning, ISBN 978-1-63588-221-6), with the same sections' and Brown & Kopp's 'Candidates may also use the First Edition (2012, ACTEX Learning, published by McGraw-Hill Ryerson, ISBN 978-1-63588-694-8), with the same chapters and sections' (syllabus p.6; both ISBN-13 check digits valid; the app joins a reading's lines with '; '). Added '## Other Resources' before Learning Objectives, where the Exam P page has it (syllabus_lint requires Source Material last): notation and terminology note, released exam papers, sample questions and solutions, the BA-35 (FM-22-05) and BA II Plus (FM-23-05) calculator reviews with SOA's BA II Plus recommendation, and the online sample exam. Every URL is the syllabus PDF's own p.7 link annotation (pymupdf get_links), none constructed, each fetched HTTP 200; the PDFs' sha256 match the brief's (notation f6cfa778…, FM-23-05 1b71586c…, sample questions d20b5cf2…, solutions ae4ec608…; FM-22-05 1fbd8c49…, titled 'Review of Calculator Functions for the Texas Instruments BA-35'). SOA's 'Online Sample Exam FM' link lands on its 'Online Sample Exams' page, which offers both the P and the FM sample exam.
+
+## [F-007/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- resolves: F-007
+- status: resolved
+- note: Loans outcome 1 now reads [[Final Payment]] ([[Drop Payment]], [[Balloon Payment]]), [[Amortization]]. as on syllabus p.3; Annuities outcome 1 displays 'Annuity-Immediate'; the closing periods of Topic 1 d, 'Level perpetuity.', 'Yield rate.', 'Coupon, coupon rate.', the term-of-bond line and 'Exactly match a set of liability cash flows.' restored. Links unchanged (same 91 targets).

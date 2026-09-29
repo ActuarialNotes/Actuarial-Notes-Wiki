@@ -1,12 +1,17 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-09-28
+  status: verified
+  confidence: medium
+  last_checked: 2026-09-29
   last_checked_by: agent:validate-v1
-  content_hash: sha256:178d60a69933ea591dde10336fc652d770bebb92dfa7234274d05a7c89bfe1b4
+  content_hash: sha256:efda7cb0134079057ac9f27fc710772e1597f0a04d6258e3a9570ecb163acb46
   sources:
-    - "SOA Financial Mathematics Exam syllabus, December 2026, Topic 5 General Cash Flows, Portfolios, and Asset Liability Management (20-30%), learning outcomes a)-c), PDF p.5, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
+    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets, pp.459-461, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
+    - "SOA, Notation and terminology used for Exam FM, p.2, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf"
+    - "SOA Exam FM Sample Solutions (rev. Aug 2026), Q 99, solutions PDF p.28, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf"
+    - "SOA Exam FM Sample Solutions (rev. Aug 2026), Q 222, solutions PDF p.56, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf"
+    - "SOA Exam FM Sample Solutions (rev. Aug 2026), Q 294, solutions PDF p.77, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf"
+    - "SOA Financial Mathematics Exam syllabus, December 2026, p.5, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Spot Rates and Forward Rates.md
@@ -53,17 +58,17 @@ Chaining one-year forward rates builds the spot rates, and the spot rates discou
 > > $$
 
 > [!example]- A Two-Year Forward Rate, Deferred Two Years {Example}
-> The 2-year spot rate is $4.5\%$ and the 4-year spot rate is $5.25\%$. A company will borrow at the end of year 2 for two years. Find the 2-year forward rate, deferred 2 years, implied by these spot rates.
+> The 2-year spot rate is $4.5\%$ and the 4-year spot rate is $5.5\%$. A company will borrow at the end of year 2 for two years. Find the 2-year forward rate, deferred 2 years, implied by these spot rates.
 >
 > > [!answer]-
 > > With $n = 2$ and $k = 2$:
 > > $$
 > > \begin{align*}
-> > (1.045)^2\,(1+f_{2,4})^2 &= (1.0525)^4 \\
-> > (1+f_{2,4})^2 &= \frac{1.227124}{1.092025} \\
-> > &= 1.123714 \\
-> > f_{2,4} &= 1.123714^{1/2} - 1 \\
-> > &= 6.01\%
+> > (1.045)^2\,(1+f_{2,4})^2 &= (1.055)^4 \\
+> > (1+f_{2,4})^2 &= \frac{1.238825}{1.092025} \\
+> > &= 1.134429 \\
+> > f_{2,4} &= 1.134429^{1/2} - 1 \\
+> > &= 6.51\%
 > > \end{align*}
 > > $$
 > > The forward rate is above both spot rates. The 4-year spot rate is a geometric average of the rate for years 1–2 and the rate for years 3–4, so for $s_4$ to exceed $s_2$ the later two years must earn more than $s_4$.

@@ -2,16 +2,15 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-09-28
+  last_checked: 2026-09-29
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e72f438088762563eac1862c11420ea746531383dd4e9c50ee2ea3a4da53aeae
+  content_hash: sha256:3a01e02c50a54d5d7b1563fb9f6926555f060e64758a69f52daef70c314b2d44
   sources:
-    - "SOA Financial Mathematics Exam syllabus, December 2026, Topic 3 Loans (15-25%), learning outcomes a)-b), PDF p.3, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
+    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.335, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
+    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.342, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
     - "SOA Exam FM Sample Questions (rev. Aug 2026), Q 12, questions PDF p.7, sha256:d20b5cf2b78cb4cddb3dc556e0df62c40b7d510b7941b546809cc58c4b71a069 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-questions.pdf"
     - "SOA Exam FM Sample Solutions (rev. Aug 2026), Q 12, solutions PDF p.6, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf"
-    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §37 Finding the Loan Balance Using Prospective and Retrospective Methods, PDF p.334-335, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
-    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §38 Amortization Schedules, PDF p.342, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Loan Repayment Comparison.md
 ---
@@ -25,7 +24,7 @@ verification:
 > $$\text{Total interest (constant principal)} = i\,L\cdot\frac{n+1}{2}$$
 
 - Under constant-principal repayment, the principal portion each period is $L/n$, and interest is charged on the declining balance $L\cdot\frac{n-t+1}{n}$ at time $t$; summing the interest over all $n$ periods gives $iL\frac{n+1}{2}$.
-- Level payments front-load more interest than the constant-principal method — the two can be tied together by setting their total payments or total interest equal and solving for an unknown rate or payment.
+- At the same rate, both methods charge $iL$ of interest in the first period, but level payments repay principal more slowly at first, so the balance stays higher and every later period carries more interest: total interest under level payments is larger. The two can be tied together by setting their total payments or total interest equal and solving for an unknown rate or payment.
 - The same comparison approach applies to two loans repaid by the same method at different [[Interest Rate]]s or [[Term of Loan]]s: write the equation of value for each and set the quantities of interest equal.
 
 ![[Media/Figures/Loan_Repayment_Comparison.svg|340]]
@@ -34,7 +33,7 @@ verification:
 > A \$$3{,}000$ loan can be repaid over 5 years in one of two ways: (i) level annual payments at an annual effective rate of $10\%$, or (ii) principal payments of \$$600$ per year plus interest on the unpaid balance at rate $j$. The total payments under both options are equal. Find $j$.
 >
 > > [!answer]-
-> > **Option (i):** $P = 3{,}000 / a_{\overline{5}|0.10} = 3{,}000/3.79079 \approx \$791.39$, so total paid $= 5(791.39) = \$3{,}956.96$ and total interest $= 3{,}956.96 - 3{,}000 = \$956.96$.
+> > **Option (i):** $P = 3{,}000 / a_{\overline{5}|0.10} = 3{,}000/3.79079 \approx \$791.39$, so total paid $= 5(791.392) = \$3{,}956.96$ and total interest $= 3{,}956.96 - 3{,}000 = \$956.96$.
 > >
 > > **Option (ii):** Total interest $= j(3{,}000)\dfrac{6}{2} = 9{,}000j$.
 > >

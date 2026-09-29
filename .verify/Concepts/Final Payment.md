@@ -75,3 +75,46 @@ created: 2026-09-28
 - confidence: low
 - checks_run: Definition vs SYL p.3 (final payment (drop payment, balloon payment)) and FIN §19 p.184-185; formula bullet vs SOA-S Q380 p.100 (image); example recomputed in python (F-003: n = 4.7098, B_4 = 168.82, drop = 178.95). Two content fixes applied (F-001 critical, F-002 major). Low: the worked example's answer is wrong and still open. Drop sub-bullet 'occurs at the same scheduled payment date' is vague (FIN: one period after the last regular payment) but not wrong. Links, figure resolve.
 - sources_checked: SOA Financial Mathematics Exam syllabus, December 2026, Topic 3 Loans (15-25%), learning outcomes a)-b), PDF p.3, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §19 Solving for the Unknown Number of Payments of an Annuity, PDF p.184-185, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §38 Amortization Schedules, PDF p.346, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; SOA Exam FM Sample Questions (rev. Aug 2026), Q 126, questions PDF p.53, sha256:d20b5cf2b78cb4cddb3dc556e0df62c40b7d510b7941b546809cc58c4b71a069 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-questions.pdf; SOA Exam FM Sample Questions (rev. Aug 2026), Q 337, questions PDF p.142, sha256:d20b5cf2b78cb4cddb3dc556e0df62c40b7d510b7941b546809cc58c4b71a069 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-questions.pdf; SOA Exam FM Sample Solutions (rev. Aug 2026), Q 380, solutions PDF p.100, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf
+
+## [F-004] Drop payment placed 'at the same scheduled payment date'
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- severity: minor
+- status: open
+- locus: second bullet, Drop Payment sub-bullet
+- claim: 'Drop Payment: the final payment is smaller than the regular payment and occurs at the same scheduled payment date'; the Balloon sub-bullet says only that it is larger.
+- evidence: Finan p.184-185: the remainder is paid 'either at the same time as the last regular payment making the last payment larger than the regular payment (such a payment is called a balloon payment) or at the end of the period following the last regular payment. In this case the smaller payment is called drop payment.' SOA Q87 (questions PDF p.39): 'a drop payment one year after the nth payment'. The page attached the 'same date' timing to the drop payment — the same misattribution as Term of Loan F-002 — and gave the balloon no timing.
+- source_rank: 1
+- proposed_action: Drop: the remainder paid one period after the last regular payment (smaller); balloon: the remainder added to the last regular payment (larger).
+- applied: true
+- fingerprint: 9b7558b508de
+
+## [F-003/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- resolves: F-003
+- status: resolved
+- note: Example rebuilt on the same loan (1,000 at 6%, payments of 250, drop at the end of year 5), recomputed in python: the student now solves for the term, 1000 = 250 a_n -> n = 0.274437/0.058269 = 4.71 (not 4.65), so 4 full payments; B_4 = 1000(1.06)^4 - 250 s_4 = 1262.477 - 1093.654 = 168.823 (s_4@6% = 4.374616, not the 1092.73/4 implied before); drop = 168.823 x 1.06 = 178.95 (not 179.93). The inconsistent prospective line 250 a_{0.65} was deleted; retrospective per Finan p.335, drop timing per Finan p.184-185 and SOA S380.
+
+## [F-004/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- resolves: F-004
+- status: resolved
+- note: Sub-bullets rewritten per Finan p.184-185: Drop Payment — the remainder paid one period after the last regular payment, so the final payment is smaller; Balloon Payment — the remainder added to the last regular payment, so it is larger. Consistent with SOA Q87 (drop one year after the nth payment) and SOA S337 (balloon 648.75 = 360 + 288.75 at the time of the 33rd payment).
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- status_set: verified
+- confidence: medium
+- checks_run: Definition vs SYL p.3 ('final payment (drop payment, balloon payment)') and Finan p.184-185; drop/balloon timing vs Finan p.184-185, SOA Q87 and S337; 'final payment = balance at the previous payment date accumulated one period' vs SOA S380 (X = 4.53 x 1.045^24 / v-form, 13.04 = OB_23 x 1.045) and Finan p.185 Example 19.1(b). Example recomputed in python: a_n = 4, n = 0.274437/0.058269 = 4.7098 -> 4 full payments; (1.06)^4 = 1.262477, s_4 = 4.374616, B_4 = 1262.477 - 1093.654 = 168.823 (prospective closed form 250(1 - v^0.7098)/0.06 = 168.823 agrees); drop = 178.95. Links (Term of Loan, Drop Payment, Balloon Payment, Outstanding Balance) and figure resolve; validate_links clean. Medium: the worked example is the vault's own.
+- sources_checked: SOA Financial Mathematics Exam syllabus, December 2026, p.3, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.184-185, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.335, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; SOA Exam FM Sample Questions (rev. Aug 2026), Q 87, questions PDF p.39, sha256:d20b5cf2b78cb4cddb3dc556e0df62c40b7d510b7941b546809cc58c4b71a069 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-questions.pdf; SOA Exam FM Sample Solutions (rev. Aug 2026), Q 380, solutions PDF p.100, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf; SOA Exam FM Sample Solutions (rev. Aug 2026), Q 337, solutions PDF p.89, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf

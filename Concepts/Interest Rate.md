@@ -25,7 +25,7 @@ The **interest rate** (or rate of interest) $i$ is the amount of interest earned
 
 > $$\text{PV} = \frac{\text{FV}}{(1+i)^n}$$
 
-- The **effective annual interest rate** refers to the rate compounded once per year.
+- The **effective annual interest rate** is the interest earned over a year per unit invested at the start of the year, however often interest is credited during the year — an account credited quarterly whose balance grows 4.5% a year has an effective annual rate of 4.5%. SOA denotes it $i$, and a nominal rate convertible $m$ times a year $i^{(m)}$.
 - Related measures include the [[Nominal Interest Rate|nominal rate]] convertible $m$-thly, the [[Discount Rate]], and the [[Force of Interest]].
 
 ![[Media/Figures/Interest_Rate.svg|340]]

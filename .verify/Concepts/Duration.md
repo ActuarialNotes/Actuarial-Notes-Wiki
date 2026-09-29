@@ -51,3 +51,46 @@ created: 2026-09-28
 - confidence: medium
 - checks_run: Macaulay = PV-weighted average time vs DUR (3.1) p.5 and p.5 text ✓; modified = −P'/P vs DUR (3.2) p.5 and NOTE p.2 ✓; D_mod = D_mac/(1+j) = DUR (3.3) ✓ ('≈' corrected to '=', F-001 resolved); longer duration → more sensitivity ✓ (DUR (4.1) p.6); Finan §54 p.471 'volatility is often called modified duration' ✓; FM default not stated → F-002 (minor, open). Example recomputed: −6 × 0.005 = −0.03 ✓. Notation j vs NOTE's i. Links and figure resolve; linked only from Exam FM. Medium: example is the vault's own.
 - sources_checked: SOA, Notation and terminology used for Exam FM (rev. Dec 2025), PDF p.2, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf; Alps, Using Duration and Convexity to Approximate Change in Present Value (SOA study note FM-24-17, 2017), §3 Macaulay and Modified Duration, (3.1)-(3.3), PDF p.5, sha256:530436d4707ecadba3a7bef6e1a9661b8d9e9bb173486edfb6924bc4a4992040 — https://www.soa.org/globalassets/assets/Files/Edu/2017/fm-duration-convexity-present-value.pdf; Alps, Using Duration and Convexity to Approximate Change in Present Value (SOA study note FM-24-17, 2017), §3, (3.5)-(3.8), PDF p.6, sha256:530436d4707ecadba3a7bef6e1a9661b8d9e9bb173486edfb6924bc4a4992040 — https://www.soa.org/globalassets/assets/Files/Edu/2017/fm-duration-convexity-present-value.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §54 Macaulay and Modified Durations, PDF p.471, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; SOA Financial Mathematics Exam syllabus, December 2026, Topic 5 General Cash Flows, Portfolios, and Asset Liability Management (20-30%), learning outcomes a)-c), PDF p.5, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf
+
+## [F-003] Modified-duration bullet drops the sign
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- severity: nit
+- status: open
+- locus: second bullet ([[Modified Duration]])
+- claim: D_Mod: approximate percentage change in price per unit change in yield
+- evidence: FM-24-17 (3.2) PDF p.5 defines D_mod = -P'(i)/P(i), and (4.1) PDF p.6 gives P(i) ≈ P(i0)(1 - (i - i0) D_mod): a positive D_mod is the approximate percentage *decrease* in price per unit *increase* in yield, not the change itself (which is -D_mod).
+- source_rank: 1
+- proposed_action: Say 'approximate percentage decrease in price per unit increase in yield'.
+- applied: true
+- fingerprint: 34899920b34d
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- resolves: F-002
+- status: resolved
+- note: Added, under the two types: 'On Exam FM, "duration" means Macaulay duration unless the question says otherwise.' — SOA notation note p.2 word for word in substance.
+
+## [F-003/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- resolves: F-003
+- status: resolved
+- note: Bullet now reads 'approximate percentage decrease in price per unit increase in yield', consistent with D_mod = -P'/P (FM-24-17 (3.2)) and the first-order approximation (4.1).
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- status_set: verified
+- confidence: medium
+- checks_run: Macaulay = PV-weighted average time vs FM-24-17 (3.1) and p.5 text ✓; D_Mod = D_Mac/(1+j) = -P'/P vs (3.2)-(3.3) and notation note p.2 ✓; FM default 'duration' = Macaulay now stated, vs notation note p.2 ✓; modified duration as approximate % decrease per unit rate increase vs (4.1) ✓; longer duration, greater sensitivity follows from (4.1) ✓. Example recomputed: -6 × 0.005 = -0.03 = -3% ✓. Links and figure resolve. Medium: example is the vault's own.
+- sources_checked: SOA, Notation and terminology used for Exam FM, p.2, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf; SOA study note FM-24-17, Alps, Using Duration and Convexity to Approximate Change in Present Value (2017), pp.5-6, sha256:530436d4707ecadba3a7bef6e1a9661b8d9e9bb173486edfb6924bc4a4992040 — https://www.soa.org/globalassets/assets/Files/Edu/2017/fm-duration-convexity-present-value.pdf

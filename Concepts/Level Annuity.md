@@ -29,5 +29,11 @@ A **level annuity** is an annuity with equal, constant payments at regular inter
 > Find the PV of a 4-year level annuity paying $1{,}000$/year at $i=5\%$, both immediate and due.
 >
 > > [!answer]-
-> > Immediate: $1000 \times a_{\overline{4}|5\%} = 1000 \times 3.5460 = 3546.0$
-> > Due: $1000 \times \ddot{a}_{\overline{4}|5\%} = 3546.0 \times 1.05 = 3723.3$
+> > $$
+> > \begin{align*}
+> > \text{Immediate: } 1{,}000\,a_{\overline{4}|5\%} &= 1{,}000 \times 3.545951 \\
+> > &= 3{,}545.95 \\
+> > \text{Due: } 1{,}000\,\ddot{a}_{\overline{4}|5\%} &= 1.05 \times 3{,}545.951 \\
+> > &= 3{,}723.25
+> > \end{align*}
+> > $$

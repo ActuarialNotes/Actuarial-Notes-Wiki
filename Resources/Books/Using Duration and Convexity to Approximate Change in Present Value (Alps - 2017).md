@@ -7,6 +7,16 @@ date: "2017"
 Type: "Study Note"
 Code: "FM-24-17"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/Files/Edu/2017/fm-duration-convexity-present-value.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:27f514bb5945e935ad278670a365840e3ab8bca6f44bd73b5f426e0fc4eb0585
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Using Duration and Convexity to Approximate Change in Present Value (Alps - 2017).md
 ---
 ![[Using Duration and Convexity to Approximate Change in Present Value (Alps - 2017) - Cover.svg]]
 

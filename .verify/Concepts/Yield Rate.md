@@ -60,3 +60,13 @@ created: 2026-09-28
 - resolves: F-002
 - status: resolved
 - note: No Concepts/ page defines the CIA portfolio yield rate (grep -il 'portfolio yield' Concepts/ finds only mentions inside Economic Value, Financial Asset Classification and IFRS 17 Discount Rates, none of them that concept), so the Concepts/Yield+Rate wiki_link entry was dropped from questions/exam-6c/cas6c-2014s-q33.md, cas6c-2015s-q20.md and cas6c-2019f-q28.md; each keeps Concepts/Loss+Reserve+Discounting and two other links. Hashes refreshed with verify_check.py --sync on each (still unverified); validate_content and question_lint clean. These were the only three files outside exam-fm and exam-p linking this page.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- status_set: verified
+- confidence: medium
+- checks_run: Yield rate = yield to maturity = IRR, the rate actually earned when held to redemption, vs Finan §43 pp.384-385 ✓; P = Fr a_n|j + C v^n vs Finan §43 basic formula ✓; premium iff Fr > Cj vs Finan §44 p.396, coupon rate > yield when C = F (notation note p.2 default) ✓; inverse price-yield relation vs Finan p.384-385 ✓; BA II Plus yield solve vs FM-23-05 pp.20-21 ✓. Example recomputed: a_3|6.5% = 2.64848, P = 960.27; a_3|7% = 2.62432, P = 947.51; interpolation 6.892%; exact 6.8916% → 6.89% ✓; discount bond since 5% < 6.89% ✓. Links and figure resolve; the three Exam 6C back-links for the CIA portfolio yield rate removed. Medium: example is the vault's own.
+- sources_checked: Finan, A Basic Course in the Theory of Interest and Derivatives Markets, pp.384-385, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.396, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; SOA, Notation and terminology used for Exam FM, p.2, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf; SOA study note FM-23-05, Broverman, Review of Calculator Functions for the Texas Instruments BA II Plus, pp.20-21, sha256:1b71586cc1b08d7bc36c04ecb3d4e6b367fce30f394e63efafc879e6b6e466fa — https://www.soa.org/globalassets/assets/files/edu/FM-23-05.pdf

@@ -1,0 +1,104 @@
+import { describe, expect, it } from 'vitest'
+import { battleReducer, createBattle, type BattleState } from './battle'
+import {
+  PROTOCOL_VERSION,
+  ROOM_CODE_ALPHABET,
+  ROOM_CODE_LENGTH,
+  generateRoomCode,
+  isRoomCode,
+  joinPath,
+  normalizeRoomCode,
+  parseBattleState,
+  parseMessage,
+  roomChannel,
+} from './battleRoom'
+
+function sampleBattle(): BattleState {
+  const s = createBattle({
+    config: { rules: 'simultaneous', exam: 'Probability', rounds: 3, roundSeconds: 60 },
+    players: [{ name: 'Ada' }, { name: 'Bo', avatarUrl: '{"type":"animal","value":"fox"}' }],
+    questions: ['p-1', 'p-2', 'p-3'].map(id => ({ id, answer: 'B', options: ['A', 'B', 'C', 'D', 'E'] })),
+    now: 1000,
+    graceMs: 1500,
+  })
+  return [
+    { type: 'tick' as const, now: 5000 },
+    { type: 'answer' as const, seat: 0 as const, choice: 'B', now: 6000 },
+    { type: 'answer' as const, seat: 1 as const, choice: 'A', now: 7000 },
+  ].reduce(battleReducer, s)
+}
+
+describe('room codes', () => {
+  it('draws codes from the unambiguous alphabet', () => {
+    let i = 0
+    const values = [0, 0.5, 0.99, 0.25]
+    const code = generateRoomCode(() => values[i++ % values.length])
+    expect(code).toHaveLength(ROOM_CODE_LENGTH)
+    expect(isRoomCode(code)).toBe(true)
+    for (const c of '01ILO') expect(ROOM_CODE_ALPHABET).not.toContain(c)
+  })
+
+  it('reads a typed code however it was typed', () => {
+    expect(normalizeRoomCode(' ab-cd ')).toBe('ABCD')
+    expect(isRoomCode('ABCD')).toBe(true)
+    expect(isRoomCode('AB0D')).toBe(false)
+    expect(isRoomCode('ABC')).toBe(false)
+  })
+
+  it('names the channel and the join link after the code', () => {
+    expect(roomChannel('ABCD')).toBe('quiz-battle:ABCD')
+    expect(joinPath('ABCD')).toBe('/battle?join=ABCD')
+  })
+})
+
+describe('parseBattleState', () => {
+  it('round-trips a battle through JSON', () => {
+    const s = sampleBattle()
+    expect(parseBattleState(JSON.parse(JSON.stringify(s)))).toEqual(s)
+  })
+
+  it('refuses a battle whose rounds disagree with its questions', () => {
+    const s = JSON.parse(JSON.stringify(sampleBattle()))
+    s.rounds[0].questionId = 'p-9'
+    expect(parseBattleState(s)).toBeNull()
+  })
+
+  it('refuses the wrong shapes rather than throwing', () => {
+    for (const bad of [null, 1, 'x', [], {}, { ...sampleBattle(), scores: [1] }, { ...sampleBattle(), finished: 'yes' }]) {
+      expect(parseBattleState(bad)).toBeNull()
+    }
+  })
+
+  it('caps what a message may carry', () => {
+    const s = JSON.parse(JSON.stringify(sampleBattle()))
+    s.players[0].name = 'x'.repeat(10_000)
+    expect(parseBattleState(s)).toBeNull()
+  })
+})
+
+describe('parseMessage', () => {
+  const base = { v: PROTOCOL_VERSION, from: 'c1' }
+
+  it('parses each kind of message', () => {
+    expect(parseMessage({ ...base, t: 'join', name: 'Bo' })).toEqual({ ...base, t: 'join', name: 'Bo' })
+    expect(parseMessage({ ...base, t: 'ping' })).toEqual({ ...base, t: 'ping' })
+    expect(parseMessage({ ...base, t: 'act', action: { kind: 'answer', round: 2, choice: 'C', elapsedMs: 1234 } }))
+      .toMatchObject({ action: { kind: 'answer', round: 2, choice: 'C' } })
+    expect(parseMessage({ ...base, t: 'react', seat: 1, emoji: '🔥' })).toMatchObject({ seat: 1, emoji: '🔥' })
+    const room = {
+      ...base, t: 'room', to: 'c2', sentAt: 5, stage: 'playing',
+      host: { name: 'Ada' }, guest: { name: 'Bo' },
+      config: sampleBattle().config, battle: sampleBattle(), rematch: [false, true],
+    }
+    expect(parseMessage(JSON.parse(JSON.stringify(room)))).toMatchObject({ t: 'room', stage: 'playing', rematch: [false, true] })
+  })
+
+  it('drops anything it does not recognise', () => {
+    expect(parseMessage({ ...base, t: 'shout' })).toBeNull()
+    expect(parseMessage({ ...base, t: 'react', seat: 1, emoji: '<script>' })).toBeNull()
+    expect(parseMessage({ ...base, t: 'react', seat: 2, emoji: '🔥' })).toBeNull()
+    expect(parseMessage({ ...base, t: 'act', action: { kind: 'win' } })).toBeNull()
+    expect(parseMessage({ t: 'ping', from: 'c1' })).toBeNull()
+    expect(parseMessage({ ...base, t: 'room', to: 'c2', sentAt: 1, stage: 'playing', host: { name: 'A' }, guest: { name: 'B' }, config: sampleBattle().config, battle: { junk: true }, rematch: [false, false] })).toBeNull()
+  })
+})

@@ -648,6 +648,8 @@ export default function Sidebar() {
             }
             collapsed={collapsed}
             end
+            // Quiz Battle is a way of quizzing, opened from this tab.
+            forceActive={location.pathname === '/battle'}
             onNavigate={closeMobile}
             badge={quizBadge}
             dataTour="nav-quiz"

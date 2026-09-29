@@ -160,6 +160,19 @@ tile — that mismatch is what the two grids used to disagree about.
 </LogoTile>
 ```
 
+#### Player colours (Quiz Battle)
+
+The second exception, and the only other hue that means *who* rather than *how it went*: the
+two players of a Quiz Battle (`docs/quiz-battle.md`) are **sky** (the first, left of the board)
+and **fuchsia** (the second, right). Both keep clear of the meaning map (§4.1) — not green or
+red, which the options are painted at the reveal, not amber (caution) and not orange (the
+streak flame the same scoreboard shows) — and they are the two ends of the foil gradient
+(§4.3), which the winner wears on the results. `lib/battleDisplay.ts` hands them out the way
+`examAccentStyle` hands out an exam's hue: `playerAccentStyle(seat)` returns `--player`,
+`--player-muted`, `--player-soft` and `--player-vivid`, spread on whatever is that player's —
+a tile, a buzzer, the options while they hold the floor. A player colour is identity only:
+never put it on a verdict, and never use it outside a battle.
+
 ### 2.4 The one place hexes are allowed
 
 The generated concept figures (`Media/Figures/*.svg`, see `docs/concept-figures.md`) are the
@@ -258,6 +271,7 @@ so a colour always means the same thing.
 | **Reward / rare** | `amber`/gold + the rainbow **foil** gradient | Gems, L3 mastery, collected cards |
 | **Pro (the paid tier)** | monochrome — `bg-foreground` / `text-background` | The **Pro** label, wherever the tier is named (`components/ProBadge.tsx`) |
 | **Streak / energy** | `orange` (flame) | Streak flame & celebrations |
+| **A battle's players** | `sky` / `fuchsia` (identity, not a verdict — §2.3) | Quiz Battle only: each player's tile, buzzer, answer pad and score |
 
 ### 4.2 Standard shade pairings (light / dark)
 

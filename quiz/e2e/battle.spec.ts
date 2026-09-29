@@ -1,0 +1,153 @@
+import { readdirSync, readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+import { test, expect, type Page } from '@playwright/test'
+
+// Quiz Battle, played to the end both ways (docs/quiz-battle.md). The build
+// runs with VITE_BATTLE_TRANSPORT=local, so the online battle is two pages of
+// one browser talking over BroadcastChannel — the whole protocol, host and
+// guest, with no Supabase project behind it.
+
+/** Every bank question's right answer, read off the vault — the page doesn't say before the reveal. */
+function answerKey(): Map<string, string> {
+  const root = fileURLToPath(new URL('../../questions/', import.meta.url))
+  const key = new Map<string, string>()
+  // Banks nest (questions/exam-p/probability/…), so walk the whole tree.
+  for (const file of readdirSync(root, { recursive: true, encoding: 'utf8' })) {
+    if (!file.endsWith('.md')) continue
+    const text = readFileSync(`${root}${file}`, 'utf8')
+    const id = /^id:\s*"?([^"\n]+)"?/m.exec(text)?.[1]
+    const answer = /^answer:\s*"?([^"\n]*)"?/m.exec(text)?.[1]
+    if (id && answer) key.set(id.trim(), answer.trim())
+  }
+  return key
+}
+
+const ANSWERS = answerKey()
+
+/** The question on screen, its right option and a wrong one. */
+async function currentQuestion(page: Page): Promise<{ right: string; wrong: string }> {
+  const card = page.getByTestId('battle-question')
+  await expect(card).toBeVisible({ timeout: 10_000 })
+  const id = await card.getAttribute('data-question-id')
+  const right = ANSWERS.get(id ?? '')
+  expect(right, `answer for ${id}`).toBeTruthy()
+  const options = await card.locator('[data-testid^="battle-option-"]').evaluateAll(els =>
+    els.map(el => el.getAttribute('data-testid')!.replace('battle-option-', '')),
+  )
+  return { right: right!, wrong: options.find(o => o !== right)! }
+}
+
+async function chooseThreeQuestions(page: Page) {
+  await page.getByRole('radiogroup', { name: 'Questions' }).getByRole('radio', { name: '3' }).click()
+}
+
+test.describe('quiz battle', () => {
+  // A battle strikes a cue on every tick of its count-in. A headless browser
+  // with no audio device can trap in its audio output thread under that
+  // (the page reports "Target crashed"), and no assertion here is about
+  // sound — so play these with the app muted.
+  test.beforeEach(async ({ context }) => {
+    await context.addInitScript(() => { localStorage.setItem('actuarial-notes-sounds', 'false') })
+  })
+
+  test('is reached from the Quiz tab', async ({ page }) => {
+    await page.goto('/')
+    await page.getByTestId('quiz-battle-entry').click()
+    await expect(page).toHaveURL(/\/battle$/)
+    await expect(page.getByRole('heading', { name: 'Quiz Battle' })).toBeVisible()
+  })
+
+  test('plays a same-screen battle to the end: buzz, miss, steal, results, rematch', async ({ page }) => {
+    await page.goto('/battle')
+    await page.getByTestId('battle-mode-local').click()
+    await page.getByTestId('battle-name-0').fill('Ada')
+    await page.getByTestId('battle-name-1').fill('Sam')
+    await page.getByTestId('battle-exam-Probability').click()
+    await chooseThreeQuestions(page)
+    await page.getByTestId('battle-begin').click()
+
+    await expect(page.getByTestId('battle-countdown')).toBeVisible()
+
+    for (let round = 0; round < 3; round++) {
+      const { right, wrong } = await currentQuestion(page)
+      // Ada buzzes from the keyboard and misses…
+      await page.keyboard.press('a')
+      await expect(page.getByTestId('battle-player-0')).toContainText('Buzzed in!')
+      await page.getByTestId(`battle-option-${wrong}`).click()
+      await expect(page.getByTestId('battle-player-0')).toContainText('Locked out')
+      await expect(page.getByTestId('battle-buzz-0')).toBeDisabled()
+      // …and Sam steals it, on the answer pad the bar becomes.
+      await page.getByTestId('battle-buzz-1').click()
+      await expect(page.getByTestId(`battle-pad-${wrong}`)).toBeDisabled()
+      await page.getByTestId(`battle-pad-${right}`).click()
+      await expect(page.getByTestId('battle-round-result')).toContainText('Steal! Sam got it')
+      await page.getByTestId('battle-next').click()
+    }
+
+    await expect(page.getByTestId('battle-result-headline')).toHaveText('Sam wins')
+    // Three wrong buzzes, the last on the double-points question.
+    await expect(page.getByTestId('battle-result-0')).toContainText('-200')
+    await expect(page.getByTestId('battle-result-1')).toContainText('3 of 3')
+
+    await page.getByTestId('battle-rematch').click()
+    await expect(page.getByTestId('battle-countdown')).toBeVisible()
+    await expect(page.getByTestId('battle-score-0')).toHaveText('0')
+  })
+
+  test('plays an online battle between two devices', async ({ context }) => {
+    const host = await context.newPage()
+    const guest = await context.newPage()
+
+    await host.goto('/battle')
+    await host.getByTestId('battle-mode-host').click()
+    await host.getByTestId('battle-name-0').fill('Ada')
+    await host.getByTestId('battle-exam-Financial Mathematics').click()
+    await chooseThreeQuestions(host)
+    await host.getByTestId('battle-begin').click()
+
+    const codeTiles = host.getByTestId('battle-room-code')
+    await expect(codeTiles).toBeVisible()
+    const code = ((await codeTiles.getAttribute('aria-label')) ?? '').replace('Room code ', '').replace(/ /g, '')
+    expect(code).toMatch(/^[A-Z2-9]{4}$/)
+
+    // The invite link opens straight onto joining.
+    await guest.goto(`/battle?join=${code}`)
+    await expect(guest.getByTestId('battle-join-code')).toHaveValue(code)
+    await guest.getByTestId('battle-join-name').fill('Bo')
+    await guest.getByTestId('battle-join').click()
+
+    await expect(host.getByTestId('battle-lobby')).toContainText('Bo is in')
+    await expect(guest.getByTestId('battle-lobby')).toContainText('Waiting for Ada to start')
+    await host.getByTestId('battle-start-online').click()
+
+    for (let round = 0; round < 3; round++) {
+      const { right, wrong } = await currentQuestion(host)
+      await expect(guest.getByTestId('battle-question')).toBeVisible({ timeout: 10_000 })
+
+      await host.getByTestId(`battle-option-${right}`).click()
+      // Bo sees that Ada is in — and not what she picked.
+      await expect(guest.getByTestId('battle-player-0')).toContainText('Locked in')
+      await expect(guest.getByTestId(`battle-option-${right}`)).not.toContainText('Locked in')
+
+      await guest.getByTestId(`battle-option-${wrong}`).click()
+      for (const page of [host, guest]) {
+        await expect(page.getByTestId('battle-round-result')).toContainText('Ada got it')
+      }
+      await host.getByTestId('battle-next').click()
+      await expect(host.getByTestId('battle-next')).toContainText('Waiting for Bo')
+      await guest.getByTestId('battle-next').click()
+    }
+
+    for (const page of [host, guest]) {
+      await expect(page.getByTestId('battle-result-headline')).toHaveText('Ada wins')
+    }
+
+    // Bo asks for a rematch; Ada starts it, and both are counted in.
+    await guest.getByTestId('battle-rematch').click()
+    await expect(host.getByText('Bo wants a rematch!')).toBeVisible()
+    await host.getByTestId('battle-rematch').click()
+    for (const page of [host, guest]) {
+      await expect(page.getByTestId('battle-countdown')).toBeVisible()
+    }
+  })
+})

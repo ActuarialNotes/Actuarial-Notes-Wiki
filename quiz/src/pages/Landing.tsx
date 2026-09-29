@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
-import { CalendarCheck, ChevronDown, ChevronLeft, Circle, Loader2, Lock, Play, X } from 'lucide-react'
+import { CalendarCheck, ChevronDown, ChevronLeft, ChevronRight, Circle, Loader2, Lock, Play, X } from 'lucide-react'
 import { QuizFloatingSearch } from '@/components/QuizFloatingSearch'
 import { QuestionDeckCard } from '@/components/QuestionDeckCard'
 import { QuizSettingsMenu } from '@/components/QuizSettingsMenu'
@@ -55,6 +55,7 @@ import {
 } from '@/lib/quizDifficulty'
 import { formatPace, loadTimed, paceForExam, saveTimed } from '@/lib/quizTiming'
 import { ExamLogo } from '@/components/ExamLogo'
+import { BattleLogo } from '@/components/battle/BattleLogo'
 import { examAccentStyle } from '@/lib/examColors'
 import { defaultBody, loadBody, saveBody, type ExamBody } from '@/lib/bodyFilter'
 
@@ -1366,6 +1367,33 @@ export default function Landing() {
         )}
 
       </div>
+
+      {/* Quiz Battle — a way of quizzing rather than an exam, so it sits above
+          the ladder, where the Study Guides tab keeps its general guide: the
+          same grid, the same card, the same 48px tile, so the exam lists below
+          still line up across the two tabs. */}
+      {!hasTopic && (
+        <section>
+          <div className="grid grid-cols-1 items-start gap-3 sm:grid-cols-2">
+            <Link
+              to="/battle"
+              data-testid="quiz-battle-entry"
+              className="block rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              <Card className="transition-all duration-150 hover:bg-accent/30">
+                <CardHeader className="flex-row items-center gap-3 space-y-0 p-4">
+                  <BattleLogo size="lg" />
+                  <div className="min-w-0 flex-1">
+                    <CardTitle className="text-base leading-snug">Quiz Battle</CardTitle>
+                    <CardDescription className="mt-0.5">Race a friend through the same questions</CardDescription>
+                  </div>
+                  <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
+                </CardHeader>
+              </Card>
+            </Link>
+          </div>
+        </section>
+      )}
 
       <div className="space-y-6">
           {!hasTopic && (

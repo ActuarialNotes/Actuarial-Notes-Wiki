@@ -8,6 +8,13 @@ interface ImportMetaEnv {
    * `exception` event only.
    */
   readonly VITE_ERROR_ENDPOINT?: string
+  /**
+   * What an online Quiz Battle plays over: unset (or `supabase`) is a Supabase
+   * Realtime broadcast channel, `local` the browser's BroadcastChannel — two
+   * tabs of one browser, for a dev server with no Supabase project and for the
+   * e2e suite. See lib/battleTransport.ts.
+   */
+  readonly VITE_BATTLE_TRANSPORT?: string
 }
 
 interface Window {

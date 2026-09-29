@@ -19,6 +19,10 @@ const baseURL = `http://${HOST}:${PORT}`
 const buildEnv = {
   VITE_SUPABASE_URL: process.env.VITE_SUPABASE_URL ?? 'https://e2e.placeholder.supabase.co',
   VITE_SUPABASE_ANON_KEY: process.env.VITE_SUPABASE_ANON_KEY ?? 'e2e-placeholder-anon-key',
+  // An online Quiz Battle plays over BroadcastChannel instead of Supabase
+  // Realtime, so two pages of one browser can battle each other
+  // (e2e/battle.spec.ts, lib/battleTransport.ts).
+  VITE_BATTLE_TRANSPORT: 'local',
 }
 
 export default defineConfig({

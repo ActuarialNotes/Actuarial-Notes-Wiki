@@ -48,6 +48,9 @@ const { Component: Cowork, preload: loadCowork } = lazyRoute(() => import('@/pag
 // its editor, its spreadsheet and its data generator are for the candidates
 // who open it.
 const { Component: Project, preload: loadProject } = lazyRoute(() => import('@/pages/Project'))
+// Quiz Battle (docs/quiz-battle.md) — a game two players open on purpose, so
+// its engine, its sessions and its screens wait for the click.
+const { Component: Battle, preload: loadBattle } = lazyRoute(() => import('@/pages/Battle'))
 
 const { Component: WikiLayout, preload: loadWikiLayout } = lazyRoute(() => import('@/components/wiki/WikiLayout'))
 const { Component: WikiHome, preload: loadWikiHome } = lazyRoute(() => import('@/pages/wiki/WikiHome'))
@@ -67,6 +70,7 @@ function preloadRoute(path: string): Promise<unknown> | null {
   if (route === '/research' || route.startsWith('/research/')) return loadResearch()
   if (route === '/cowork' || route.startsWith('/cowork/')) return loadCowork()
   if (route === '/project' || route.startsWith('/project/')) return loadProject()
+  if (route === '/battle') return loadBattle()
   if (route === '/wiki') return Promise.all([loadWikiLayout(), loadWikiHome()])
   if (route.startsWith('/wiki/exam/')) return Promise.all([loadWikiLayout(), loadWikiExam()])
   if (route.startsWith('/wiki/concept/')) return Promise.all([loadWikiLayout(), loadWikiConcept()])
@@ -247,6 +251,16 @@ function CoworkRoute() {
   )
 }
 
+function BattleRoute() {
+  return (
+    <ErrorBoundary>
+      <Suspense fallback={<WikiFallback />}>
+        <Battle />
+      </Suspense>
+    </ErrorBoundary>
+  )
+}
+
 function ProjectRoute() {
   return (
     <ErrorBoundary>
@@ -277,6 +291,7 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/auth/callback" element={<AuthCallback />} />
                 <Route path="/quiz" element={<Quiz />} />
+                <Route path="/battle" element={<BattleRoute />} />
                 <Route path="/review" element={<Review />} />
                 <Route path="/dashboard" element={<ErrorBoundary><Dashboard /></ErrorBoundary>} />
                 <Route path="/search" element={<Search />} />

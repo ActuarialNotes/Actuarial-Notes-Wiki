@@ -15,6 +15,7 @@ and the god-component refactors (P3.1) can't silently break them.
 | `tour.spec.ts`   | Onboarding tour: corner launcher, guided steps, minimize/resume, dismiss |
 | `store.spec.ts`  | Cosmetics catalog renders and tabs switch |
 | `auth.spec.ts`   | Sign-in form renders and toggles to sign-up |
+| `battle.spec.ts` | Quiz Battle: a same-screen battle played to the end (buzz, miss, steal, results, rematch), and an online battle between two pages over BroadcastChannel (`VITE_BATTLE_TRANSPORT=local`) |
 
 ## Running
 

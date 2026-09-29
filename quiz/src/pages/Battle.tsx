@@ -1,14 +1,16 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { ChevronDown, ChevronLeft, Globe, Loader2, LogIn, Play, Users } from 'lucide-react'
+import { ChevronDown, ChevronLeft, Globe, Loader2, LogIn, Play, Shuffle, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { BattleLogo } from '@/components/battle/BattleLogo'
 import { BattleSetupForm } from '@/components/battle/BattleSetupForm'
 import { LocalBattle } from '@/components/battle/LocalBattle'
 import { OnlineGuest, OnlineHost } from '@/components/battle/OnlineBattle'
+import { Matchmaking } from '@/components/battle/Matchmaking'
 import { useAuth } from '@/hooks/useAuth'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
+import { useLobbySession } from '@/hooks/useBattle'
 import {
   BASE_POINTS,
   FASTEST_BONUS,
@@ -32,26 +34,54 @@ import {
   configFromSetup,
   difficultyTarget,
   loadBattleSetup,
+  matchSettings,
   pickExam,
+  pickLobbyExam,
   saveBattleSetup,
   type BattleSetup,
 } from '@/lib/battleSetup'
+import { MatchmakingSession, type MatchFound } from '@/lib/battleMatchmaking'
+import { tabClientId } from '@/lib/battleSession'
+import { lobbyTransport } from '@/lib/battleTransport'
 import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 import { cn } from '@/lib/utils'
 
 // **Quiz Battle** — two players, the same questions, one scoreboard
 // (docs/quiz-battle.md). This page is the way in and the switchboard: the
-// choice of how to play, the settings, joining a room by its code, and then
-// whichever of the two battles was picked — `LocalBattle` on one screen,
-// `OnlineHost` / `OnlineGuest` across two.
+// choice of how to play, the settings, joining a room by its code, the
+// matchmaking lobby, and then whichever battle was picked — `LocalBattle` on
+// one screen, `OnlineHost` / `OnlineGuest` across two (a matched battle is an
+// online one whose room the lobby chose).
 
 type Screen =
   | { kind: 'home' }
   | { kind: 'setup'; mode: 'local' | 'host' }
   | { kind: 'join'; code: string }
+  | { kind: 'lobby' }
   | { kind: 'local'; config: BattleConfig; players: [BattlePlayer, BattlePlayer]; difficulty: number }
-  | { kind: 'host'; config: BattleConfig; player: BattlePlayer; difficulty: number }
-  | { kind: 'guest'; code: string; player: BattlePlayer }
+  | { kind: 'host'; config: BattleConfig; player: BattlePlayer; difficulty: number; code?: string; opponent?: BattlePlayer }
+  | { kind: 'guest'; code: string; player: BattlePlayer; matched?: boolean; opponent?: BattlePlayer }
+
+/**
+ * The lobby, watched from the way in: how many are waiting, without joining
+ * them. Null until the count is known.
+ */
+function useLobbyCount(exams: readonly string[], active: boolean): number | null {
+  const [id] = useState(() => tabClientId(null))
+  const watching = active && exams.length > 0
+  const { snapshot } = useLobbySession(
+    watching ? () => new MatchmakingSession({ transport: lobbyTransport(`watch-${id}`), exams }) : null,
+    watching ? `watch:${id}` : '',
+  )
+  if (!snapshot || snapshot.status === 'connecting') return null
+  return snapshot.others.length
+}
+
+function lobbyCountLine(count: number | null): string {
+  if (count === null) return 'Checking the lobby…'
+  if (count === 0) return 'No one’s in the lobby right now'
+  return `${count} ${count === 1 ? 'player' : 'players'} waiting now`
+}
 
 /** Ladder order — the order the question bank's labels are declared in. */
 const LADDER = Object.keys(EXAM_LABEL_TO_ID)
@@ -170,7 +200,9 @@ export default function Battle() {
   }, [questions])
   const examIds = exams.map(e => e.exam)
   const exam = pickExam(setup.exam, examIds)
-  const effectiveSetup = exam === setup.exam ? setup : { ...setup, exam }
+  const lobbyExam = pickLobbyExam(setup.lobbyExam, examIds)
+  const effectiveSetup = exam === setup.exam && lobbyExam === setup.lobbyExam ? setup : { ...setup, exam, lobbyExam }
+  const lobbyCount = useLobbyCount(examIds, screen.kind === 'home')
 
   function drawFor(config: BattleConfig, difficulty: number): () => BattleQuestionKey[] {
     return () => drawBattleQuestions(battlePool(questions, config.exam), config.rounds, difficulty).map(questionKey)
@@ -192,6 +224,19 @@ export default function Battle() {
     if (params.has('join')) setParams({}, { replace: true })
     setScreen({ kind: 'home' })
   }
+
+  /** The lobby paired this player: into the room it chose, as its host or its guest. */
+  function matched(match: MatchFound) {
+    const me = player(0, myAvatar)
+    if (match.role === 'host') {
+      const { config, difficulty } = matchSettings(match.exam)
+      setScreen({ kind: 'host', config, player: me, difficulty, code: match.code, opponent: match.opponent })
+    } else {
+      setScreen({ kind: 'guest', code: match.code, player: me, matched: true, opponent: match.opponent })
+    }
+  }
+
+  const findAnother = () => setScreen({ kind: 'lobby' })
 
   // ── The battles ───────────────────────────────────────────────────────────
   const shell = (children: ReactNode) => (
@@ -218,12 +263,23 @@ export default function Battle() {
         draw={drawFor(screen.config, screen.difficulty)}
         questionsById={questionsById}
         onExit={home}
+        code={screen.code}
+        onFindAnother={screen.code ? findAnother : undefined}
+        opponent={screen.opponent}
       />,
     )
   }
   if (screen.kind === 'guest') {
     return shell(
-      <OnlineGuest code={screen.code} player={screen.player} questionsById={questionsById} onExit={home} />,
+      <OnlineGuest
+        code={screen.code}
+        player={screen.player}
+        questionsById={questionsById}
+        onExit={home}
+        matched={screen.matched}
+        onFindAnother={screen.matched ? findAnother : undefined}
+        opponent={screen.opponent}
+      />,
     )
   }
 
@@ -240,21 +296,38 @@ export default function Battle() {
               Fast right answers score more, streaks score more again, and the final question counts double.
             </p>
           </div>
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-3 md:grid-cols-3">
+            <ModeCard
+              icon={<Shuffle className="h-5 w-5" />}
+              title="Random opponent"
+              body="Join the lobby and play whoever’s there. Five questions, two minutes each, answers locked in."
+            >
+              <p className="flex items-center gap-2 text-sm text-muted-foreground" data-testid="battle-lobby-status">
+                <span
+                  aria-hidden
+                  className={cn('h-2 w-2 shrink-0 rounded-full', lobbyCount ? 'bg-green-500' : 'bg-muted-foreground/40')}
+                />
+                {lobbyCountLine(lobbyCount)}
+              </p>
+              <Button size="lg" className="h-12 gap-2 rounded-xl" onClick={() => setScreen({ kind: 'lobby' })} disabled={loading} data-testid="battle-mode-lobby">
+                <Shuffle className="h-4 w-4" aria-hidden />
+                Find an opponent
+              </Button>
+            </ModeCard>
             <ModeCard
               icon={<Users className="h-5 w-5" />}
               title="Same screen"
               body="Two players, one device. First to buzz answers — miss, and your rival gets to steal."
             >
-              <Button size="lg" className="h-12 gap-2 rounded-xl" onClick={() => setScreen({ kind: 'setup', mode: 'local' })} data-testid="battle-mode-local">
+              <Button size="lg" variant="outline" className="h-12 gap-2 rounded-xl" onClick={() => setScreen({ kind: 'setup', mode: 'local' })} data-testid="battle-mode-local">
                 <Play className="h-4 w-4" aria-hidden />
                 Play on this device
               </Button>
             </ModeCard>
             <ModeCard
               icon={<Globe className="h-5 w-5" />}
-              title="Online"
-              body="Each on your own device. Lock in your answer — the fastest right answer scores most."
+              title="A friend, online"
+              body="Each on your own device, in a room only you two know the code to."
             >
               <Button size="lg" variant="outline" className="h-12 gap-2 rounded-xl" onClick={() => setScreen({ kind: 'setup', mode: 'host' })} data-testid="battle-mode-host">
                 Create a room
@@ -266,6 +339,32 @@ export default function Battle() {
             </ModeCard>
           </div>
           <HowPointsWork />
+        </>
+      )}
+
+      {screen.kind === 'lobby' && (
+        <>
+          <PageTitle onBack={home}>Find an opponent</PageTitle>
+          <LobbyName
+            name={effectiveSetup.names[0]}
+            onChange={name => setSetup({ ...effectiveSetup, names: [name, effectiveSetup.names[1]] })}
+          />
+          {loading ? (
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Loading questions…
+            </div>
+          ) : (
+            <Matchmaking
+              // A new name is a new entry in the lobby.
+              key={effectiveSetup.names[0]}
+              player={player(0, myAvatar)}
+              exam={lobbyExam}
+              exams={exams}
+              onExamChange={next => setSetup({ ...effectiveSetup, lobbyExam: next })}
+              onMatched={matched}
+              onPlayFriend={() => setScreen({ kind: 'setup', mode: 'host' })}
+            />
+          )}
         </>
       )}
 
@@ -382,5 +481,31 @@ function JoinForm({
         </Button>
       </form>
     </>
+  )
+}
+
+/**
+ * The name the lobby knows this player by. Committed on blur or Enter, not on
+ * every keystroke — each new name is a new entry in the lobby.
+ */
+function LobbyName({ name, onChange }: { name: string; onChange: (name: string) => void }) {
+  const [draft, setDraft] = useState(name)
+  const commit = () => { if (draft.trim() !== name.trim()) onChange(draft.trim()) }
+  return (
+    <div className="flex items-center gap-3">
+      <label htmlFor="battle-lobby-name" className="shrink-0 text-sm text-muted-foreground">Playing as</label>
+      <Input
+        id="battle-lobby-name"
+        value={draft}
+        maxLength={20}
+        placeholder={DEFAULT_PLAYER_NAMES[0]}
+        onChange={e => setDraft(e.target.value)}
+        onBlur={commit}
+        onKeyDown={e => { if (e.key === 'Enter') commit() }}
+        autoComplete="off"
+        className="h-9 max-w-xs"
+        data-testid="battle-lobby-name"
+      />
+    </div>
   )
 }

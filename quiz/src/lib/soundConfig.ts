@@ -103,6 +103,25 @@ export type SoundEvent =
   | 'launch'
   /** Settling in to study: entering the flashcard study view. */
   | 'study'
+  // — Quiz Battle —
+  /** Buzzing in: a player claims the question (docs/quiz-battle.md). */
+  | 'buzz'
+  /** Each number of the 3-2-1 before a question. */
+  | 'countIn'
+  /** The question laid on the table — the count-in's answer, an octave up. */
+  | 'go'
+  /** This player's answer, locked in (online). */
+  | 'lockIn'
+  /** The other player has locked in — heard, not seen. */
+  | 'opponentIn'
+  /** A steal: the right answer after the other player missed. Replaces `correct`. */
+  | 'steal'
+  /** The last seconds of a question, one per second: a clock's escapement. */
+  | 'clockTick'
+  /** Matchmaking paired this player with an opponent. */
+  | 'matchFound'
+  /** A reaction arriving from the other player. */
+  | 'reaction'
 
 export interface ToneSpec {
   /** Start offset from the cue's own start, in seconds. */
@@ -343,6 +362,7 @@ export const KEY = {
 
 // Equal-tempered reference pitches (Hz), so the recipes below read musically.
 // All of them are in the key's pentatonic — see `KEY`.
+const C2 = 65.41
 const D2 = 73.42
 const G2 = 98.0
 const A2 = 110.0
@@ -424,6 +444,152 @@ const CLICK_SNAP: NoiseSpec = { at: 0, dur: 0.005, from: 3600, to: 2400, type: '
 const CLICK_SHELL: NoiseSpec = { at: 0, dur: 0.018, from: 1300, to: 900, type: 'bandpass', q: 2, gain: 0.52, swell: 0 }
 const CLICK: NoiseSpec[] = [CLICK_SNAP, CLICK_SHELL]
 const PRESS_THUD: ToneSpec = { at: 0, dur: 0.035, freq: G3, glide: C3, type: 'sine', gain: 0.3, attack: 0.002 }
+
+/**
+ * Quiz Battle's cues (docs/quiz-battle.md). A battle is a game, not a study
+ * session, so it gets a few sounds a quiz doesn't — a buzzer, a count-in, a
+ * clock — but they are built from the same parts and held to the same rules:
+ * struck notes from the one key, rounded off, in the small room or dry. A
+ * wrong answer is still silent; a race has no buzzer for a miss either.
+ */
+const BATTLE_RECIPES: Record<
+  'buzz' | 'countIn' | 'go' | 'lockIn' | 'opponentIn' | 'steal' | 'clockTick' | 'matchFound' | 'reaction',
+  SoundRecipe
+> = {
+  buzz: {
+    // Claiming the question. It has to cut through a room of two people
+    // thinking hard, so it is the quickest rise in the catalogue: a hard knock
+    // and two struck notes a fourth apart, 50 ms between them, with a low G
+    // glide under it that gives the press its weight. Up, and out of the way.
+    gain: 0.46,
+    throttleMs: 150,
+    lowpass: 3200,
+    space: 0.12,
+    noise: [
+      { at: 0, dur: 0.02, from: 2200, to: 1200, type: 'bandpass', q: 1, gain: 0.3, swell: 0 },
+      mallet(0, 0.2),
+    ],
+    tones: [
+      ...strike(G4, { at: 0, dur: 0.18, gain: 0.55 }),
+      ...strike(C5, { at: 0.05, dur: 0.4, gain: 0.66, hold: 0.02 }),
+      { at: 0, dur: 0.3, freq: G2, glide: C3, type: 'sine', gain: 0.2, attack: 0.005 },
+    ],
+  },
+  countIn: {
+    // The 3, 2, 1: a woodblock on G4, dry and short — three of them, a second
+    // apart, then `go` an octave up. The oldest count-in there is, because
+    // everyone already knows what it means.
+    gain: 0.3,
+    throttleMs: 300,
+    lowpass: 3600,
+    noise: [mallet(0, 0.24)],
+    tones: [...strike(G4, { at: 0, dur: 0.12, gain: 0.56 })],
+  },
+  go: {
+    // The question on the table: paper laid down, and the count-in's note an
+    // octave up, held a moment, over a low G. The one bright moment of a
+    // round's start — everything after it is the players' to fill.
+    gain: 0.42,
+    throttleMs: 300,
+    lowpass: 3400,
+    space: 0.14,
+    noise: [
+      { at: 0, dur: 0.12, from: 800, to: 2200, type: 'bandpass', q: 0.8, gain: 0.22, swell: 0.4 },
+      mallet(0.02, 0.18),
+    ],
+    tones: [
+      ...strike(G5, { at: 0.02, dur: 0.45, gain: 0.62, hold: 0.03 }),
+      { at: 0.02, dur: 0.5, freq: G3, type: 'sine', gain: 0.16, attack: 0.02 },
+    ],
+  },
+  lockIn: {
+    // An answer committed where the other player can't see it: a click with a
+    // low struck D inside it — the sound of a latch, not of a result. It says
+    // nothing about right or wrong, because nothing is known yet.
+    gain: 0.28,
+    throttleMs: 120,
+    lowpass: 3000,
+    noise: [...CLICK],
+    tones: [
+      ...strike(D4, { at: 0.004, dur: 0.14, gain: 0.5 }),
+      { at: 0, dur: 0.05, freq: G3, glide: D3, type: 'sine', gain: 0.22, attack: 0.002 },
+    ],
+  },
+  opponentIn: {
+    // The other player has locked in: two soft knocks, felt more than heard,
+    // and no note at all — it's pressure, not news. Quieter than a click.
+    gain: 0.26,
+    throttleMs: 300,
+    lowpass: 2400,
+    noise: [
+      { at: 0, dur: 0.02, from: 1000, to: 700, type: 'bandpass', q: 2.2, gain: 0.5, swell: 0 },
+      { at: 0.09, dur: 0.02, from: 900, to: 600, type: 'bandpass', q: 2.2, gain: 0.42, swell: 0 },
+    ],
+  },
+  steal: {
+    // Taking it off the other player. `correct` would undersell it, so this
+    // replaces it: a swoop up an octave underneath, then a fifth struck on the
+    // way up and landed on A — the most a single right answer ever gets.
+    gain: 0.5,
+    throttleMs: 200,
+    lowpass: 3200,
+    space: 0.2,
+    noise: [
+      { at: 0, dur: 0.18, from: 600, to: 2400, type: 'bandpass', q: 0.7, gain: 0.24, swell: 0.6 },
+      mallet(0.12, 0.2),
+    ],
+    tones: [
+      { at: 0, dur: 0.22, freq: A3, glide: A4, type: 'sine', gain: 0.26, attack: 0.03 },
+      ...strike(E5, { at: 0.12, dur: 0.26, gain: 0.52 }),
+      ...strike(A5, { at: 0.2, dur: 0.46, gain: 0.64, hold: 0.03 }),
+      { at: 0.12, dur: 0.5, freq: A2, type: 'sine', gain: 0.16, attack: 0.02 },
+    ],
+  },
+  clockTick: {
+    // The last seconds of a question: a clock's escapement, once a second. A
+    // tick and the knock of the case under it, pure noise like the click it
+    // is kin to — a pitch here would be a note sounding every second.
+    gain: 0.3,
+    throttleMs: 400,
+    lowpass: 5000,
+    noise: [
+      { at: 0, dur: 0.008, from: 3000, to: 2400, type: 'bandpass', q: 1.6, gain: 0.4, swell: 0 },
+      { at: 0.002, dur: 0.03, from: 1400, to: 900, type: 'bandpass', q: 2.4, gain: 0.46, swell: 0 },
+    ],
+  },
+  matchFound: {
+    // Someone to play: a door opening onto a room — a noise swell — and two
+    // struck notes a fifth apart, D up to A, the second held. Brighter than a
+    // level-up, which is about you; this is about somebody arriving.
+    gain: 0.48,
+    throttleMs: 400,
+    lowpass: 3200,
+    space: 0.22,
+    noise: [
+      { at: 0, dur: 0.24, from: 500, to: 2000, type: 'bandpass', q: 0.7, gain: 0.24, swell: 0.6 },
+      mallet(0.12, 0.18),
+      mallet(0.24, 0.16),
+    ],
+    tones: [
+      ...strike(D5, { at: 0.12, dur: 0.26, gain: 0.52 }),
+      ...strike(A5, { at: 0.24, dur: 0.55, gain: 0.64, hold: 0.05 }),
+      { at: 0.12, dur: 0.66, freq: D3, type: 'sine', gain: 0.16, attack: 0.03 },
+    ],
+  },
+  reaction: {
+    // An emoji from the other player: a small bubble — a sine that bends from
+    // C up to G as it pops, with the faintest tap on the front. Friendly, brief,
+    // and well under anything that means the game moved.
+    gain: 0.28,
+    throttleMs: 250,
+    lowpass: 3000,
+    noise: [{ at: 0, dur: 0.01, from: 1600, to: 1100, type: 'bandpass', q: 1.2, gain: 0.2, swell: 0 }],
+    tones: [
+      { at: 0, dur: 0.14, freq: C5, glide: G5, type: 'sine', gain: 0.5, attack: 0.01 },
+      { at: 0, dur: 0.16, freq: C2, type: 'sine', gain: 0.08, attack: 0.01 },
+    ],
+  },
+}
 
 export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
   // ---- interface ----------------------------------------------------------
@@ -875,6 +1041,9 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
       { at: 0, dur: 0.6, freq: A2, type: 'sine', gain: 0.18, attack: 0.05 },
     ],
   },
+
+  // ---- Quiz Battle --------------------------------------------------------
+  ...BATTLE_RECIPES,
 }
 
 /**

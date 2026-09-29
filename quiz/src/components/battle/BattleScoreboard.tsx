@@ -15,6 +15,7 @@ import {
 import { playerAccentStyle, signedPoints } from '@/lib/battleDisplay'
 import type { ShownReaction } from '@/lib/battleSession'
 import { formatClock } from '@/lib/quizTiming'
+import { playSound } from '@/lib/soundEngine'
 import { cn } from '@/lib/utils'
 
 export interface PlayerStatus {
@@ -205,6 +206,20 @@ function RoundClock({ battle, closing }: { battle: BattleState; closing: boolean
   }
 
   const low = floorSeat === null && seconds !== null && seconds <= 10 && round.phase !== 'countdown'
+
+  // The clock heard in its last five seconds — the round's, or the answer
+  // window's — once a second, and not at all once the time is up.
+  const ticking = (round.phase === 'open' && !closing && now >= round.opensAt) || round.phase === 'buzzed'
+  const lastTick = useRef<number | null>(null)
+  useEffect(() => {
+    if (!ticking || seconds === null || seconds > 5 || seconds <= 0) {
+      lastTick.current = null
+      return
+    }
+    if (lastTick.current === seconds) return
+    lastTick.current = seconds
+    playSound('clockTick')
+  }, [ticking, seconds])
   const r = 22
   const circumference = 2 * Math.PI * r
   const label = isFinalRound(battle, round.index) ? 'Final' : `${round.index + 1}/${battle.config.rounds}`

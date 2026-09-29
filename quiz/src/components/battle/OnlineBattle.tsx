@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { AlertCircle, Check, Copy, Loader2, RotateCcw, Share2, WifiOff } from 'lucide-react'
+import { AlertCircle, Check, Copy, Loader2, RotateCcw, Share2, Shuffle, WifiOff } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { BattleScoreboard, type PlayerStatus } from '@/components/battle/BattleScoreboard'
 import { BattleQuestionCard } from '@/components/battle/BattleQuestionCard'
 import { BattleCountdown } from '@/components/battle/BattleCountdown'
 import { AnswerPad, BattleActionBar, NextButton, ReactionRow, RoundResult } from '@/components/battle/BattleActionBar'
 import { BattleResults } from '@/components/battle/BattleResults'
-import { BattleTopRow } from '@/components/battle/BattleTopRow'
+import { BattleTopRow, MusicToggle } from '@/components/battle/BattleTopRow'
 import { PlayerTile } from '@/components/battle/PlayerTile'
-import { useBattleSession, useNow } from '@/hooks/useBattle'
+import { useBattleMusic, useBattleSession, useNow } from '@/hooks/useBattle'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
 import { playSound, resetSoundCombo } from '@/lib/soundEngine'
 import {
@@ -21,7 +21,7 @@ import {
   type BattleQuestionKey,
   type Seat,
 } from '@/lib/battle'
-import { answerFor, battleExamName } from '@/lib/battleDisplay'
+import { answerFor, battleExamName, battleMusicIntensity } from '@/lib/battleDisplay'
 import { generateRoomCode, joinPath } from '@/lib/battleRoom'
 import {
   GuestSession,
@@ -129,8 +129,16 @@ const PROBLEM_TEXT: Record<SessionProblem, { title: string; body: string }> = {
   connection: { title: 'Couldn’t connect', body: 'The battle server couldn’t be reached. Check your connection and try again.' },
 }
 
-function Problem({ problem, onRetry, onExit }: { problem: SessionProblem; onRetry?: () => void; onExit: () => void }) {
-  const { title, body } = PROBLEM_TEXT[problem]
+function Problem({ problem, onRetry, onExit, onFindAnother }: {
+  problem: SessionProblem
+  onRetry?: () => void
+  onExit: () => void
+  /** A matched battle: back to the lobby for someone else. */
+  onFindAnother?: () => void
+}) {
+  const { title, body } = onFindAnother && problem !== 'version'
+    ? { title: 'Your opponent’s room closed', body: 'They left before the battle could start. Find someone else?' }
+    : PROBLEM_TEXT[problem]
   return (
     <div className="mx-auto max-w-md space-y-4 py-12 text-center" data-testid="battle-problem">
       <AlertCircle className="mx-auto h-8 w-8 text-muted-foreground" aria-hidden />
@@ -138,10 +146,57 @@ function Problem({ problem, onRetry, onExit }: { problem: SessionProblem; onRetr
         <h2 className="text-lg font-semibold">{title}</h2>
         <p className="text-sm text-muted-foreground">{body}</p>
       </div>
-      <div className="flex justify-center gap-2">
-        {onRetry && <Button onClick={onRetry}>Try again</Button>}
+      <div className="flex flex-wrap justify-center gap-2">
+        {onFindAnother ? (
+          <FindAnotherButton onClick={onFindAnother} solid />
+        ) : onRetry && <Button onClick={onRetry}>Try again</Button>}
         <Button variant="outline" onClick={onExit}>Back</Button>
       </div>
+    </div>
+  )
+}
+
+function FindAnotherButton({ onClick, solid }: { onClick: () => void; solid?: boolean }) {
+  return (
+    <Button
+      variant={solid ? 'default' : 'outline'}
+      size={solid ? 'default' : 'lg'}
+      onClick={onClick}
+      className={solid ? 'gap-2' : 'h-12 gap-2 rounded-xl'}
+      data-testid="battle-find-another"
+    >
+      <Shuffle className="h-4 w-4" aria-hidden />
+      Find a new opponent
+    </Button>
+  )
+}
+
+/** Calm music under whatever screen mounts it — a room's lobby, the match intro. */
+function CalmMusic() {
+  useBattleMusic(0)
+  return null
+}
+
+/**
+ * The lobby paired two players: both of them, face to face, while the room
+ * opens and the second player walks into it.
+ */
+function MatchIntro({ snapshot, note, opponent }: { snapshot: SessionSnapshot; note: string; opponent?: BattlePlayer }) {
+  // The lobby already said who the opponent is; show them before the room does.
+  const opp = otherSeat(snapshot.me)
+  const players = snapshot.players.map((p, seat) => p ?? (seat === opp ? opponent ?? null : null)) as SessionSnapshot['players']
+  return (
+    <div className="mx-auto max-w-lg space-y-8 py-10 text-center" data-testid="battle-match-intro">
+      <CalmMusic />
+      <div className="space-y-2">
+        <p className="battle-count-pop text-3xl font-bold tracking-tight">Match found!</p>
+        {snapshot.config.exam && <ConfigSummary config={snapshot.config} />}
+      </div>
+      <Versus players={players} me={snapshot.me} />
+      <p className="flex items-center justify-center gap-2 text-sm text-muted-foreground" aria-live="polite">
+        <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+        {note}
+      </p>
     </div>
   )
 }
@@ -179,17 +234,27 @@ function OnlineMatch({
   const pending = snapshot.pendingAnswer?.round === round.index ? snapshot.pendingAnswer : null
   const lockedChoice = pending?.choice ?? myLock?.choice ?? null
   const canPick = phase === 'open' && !lockedChoice
+  const oppLocked = !!round.locks[opp]
 
-  // Sounds: the sheet laid down, and the climb on a right answer of this
-  // player's own — a miss only ends the climb.
-  const heard = useRef({ index: -1, opened: false, revealed: false })
+  useBattleMusic(battleMusicIntensity(battle, now, phase))
+
+  // Sounds: the first question finishes the Start button's phrase and every
+  // one after lands with `go`; the other player's lock-in is two soft knocks;
+  // and at the reveal, the climb on a right answer of this player's own — a
+  // miss only ends the climb.
+  const heard = useRef({ index: -1, opened: false, revealed: false, oppIn: false })
   useEffect(() => {
-    const h = heard.current
-    if (h.index !== round.index) heard.current = { index: round.index, opened: false, revealed: false }
+    if (heard.current.index !== round.index) {
+      heard.current = { index: round.index, opened: false, revealed: false, oppIn: false }
+    }
     const cur = heard.current
     if (phase === 'open' && !cur.opened) {
       cur.opened = true
-      playSound(round.index === 0 ? 'launch' : 'page')
+      playSound(round.index === 0 ? 'launch' : 'go')
+    }
+    if (oppLocked && !cur.oppIn && phase !== 'revealed') {
+      cur.oppIn = true
+      playSound('opponentIn')
     }
     if (phase === 'revealed' && !cur.revealed) {
       cur.revealed = true
@@ -197,7 +262,24 @@ function OnlineMatch({
       if (mine?.correct) playSound('correct')
       else resetSoundCombo('correct')
     }
-  }, [phase, round, me])
+  }, [phase, round, me, oppLocked])
+
+  // A reaction from the other player pops as it arrives.
+  const heardReactions = useRef(new Set<string>())
+  useEffect(() => {
+    for (const r of snapshot.reactions) {
+      if (heardReactions.current.has(r.id)) continue
+      heardReactions.current.add(r.id)
+      if (r.seat === opp) playSound('reaction')
+    }
+  }, [snapshot.reactions, opp])
+
+  /** This player's answer, locked in — heard as a latch, not as a verdict. */
+  function lockIn(choice: string) {
+    if (!canPick) return
+    playSound('lockIn')
+    onAnswer(choice)
+  }
 
   // Each question starts at the top of the page.
   useEffect(() => {
@@ -206,10 +288,7 @@ function OnlineMatch({
 
   const optionAt = (i: number) => () => {
     const option = battle.questions[round.index].options[i]
-    if (option && canPick) {
-      playSound('select')
-      onAnswer(option)
-    }
+    if (option) lockIn(option)
   }
   usePageKeyboard({
     '1': optionAt(0), '2': optionAt(1), '3': optionAt(2), '4': optionAt(3), '5': optionAt(4),
@@ -264,7 +343,8 @@ function OnlineMatch({
               question={question}
               players={battle.players}
               picker={canPick ? me : null}
-              onPick={onAnswer}
+              onPick={lockIn}
+              pickSound="none"
               locked={lockedChoice ? { seat: me, choice: lockedChoice } : null}
               picks={phase === 'revealed' ? round.answers.map(a => ({ seat: a.seat, choice: a.choice, correct: a.correct })) : []}
               revealed={phase === 'revealed'}
@@ -288,7 +368,7 @@ function OnlineMatch({
         ) : canPick ? (
           <div className="space-y-2">
             <p className="text-center text-xs text-muted-foreground">Tap to lock in — you can’t change it. First right answer scores most.</p>
-            <AnswerPad seat={me} options={battle.questions[round.index].options} onPick={onAnswer} label="Your answer" />
+            <AnswerPad seat={me} options={battle.questions[round.index].options} onPick={lockIn} label="Your answer" sound="none" />
           </div>
         ) : (
           <p className="py-2 text-center text-sm text-muted-foreground" aria-live="polite">
@@ -311,11 +391,14 @@ function Results({
   questionsById,
   onRematch,
   onLeave,
+  onFindAnother,
 }: {
   snapshot: SessionSnapshot
   questionsById: ReadonlyMap<string, Question>
   onRematch: () => void
   onLeave: () => void
+  /** A matched battle: back to the lobby for someone else. */
+  onFindAnother?: () => void
 }) {
   const battle = snapshot.battle!
   const opp = otherSeat(snapshot.me)
@@ -344,6 +427,7 @@ function Results({
                 {host ? 'Rematch' : iAsked ? 'Rematch asked for' : 'Ask for a rematch'}
               </Button>
             )}
+            {onFindAnother && <FindAnotherButton onClick={onFindAnother} />}
             <Button size="lg" variant="outline" onClick={onLeave} className="h-12 rounded-xl">
               Leave room
             </Button>
@@ -363,12 +447,20 @@ function Results({
 
 // ── Hosting ─────────────────────────────────────────────────────────────────
 
+/** How long a matched host waits for the other player to walk into the room. */
+const ARRIVAL_TIMEOUT_MS = 15_000
+/** How long the match intro shows both players before the count-in starts. */
+const MATCH_INTRO_MS = 1800
+
 export function OnlineHost({
   config,
   player,
   draw,
   questionsById,
   onExit,
+  code: givenCode,
+  onFindAnother,
+  opponent,
 }: {
   config: BattleConfig
   player: BattlePlayer
@@ -376,8 +468,15 @@ export function OnlineHost({
   draw: () => BattleQuestionKey[]
   questionsById: ReadonlyMap<string, Question>
   onExit: () => void
+  /** Matchmaking picked the room: open this one, and start as soon as the other player is in. */
+  code?: string
+  /** Matched: back to the lobby for someone else. */
+  onFindAnother?: () => void
+  /** Matched: who the lobby paired this player with. */
+  opponent?: BattlePlayer
 }) {
-  const [code] = useState(() => generateRoomCode())
+  const matched = !!givenCode
+  const [code] = useState(() => givenCode ?? generateRoomCode())
   const { session, snapshot } = useBattleSession(
     () => new HostSession({
       transport: battleTransport(code),
@@ -389,6 +488,29 @@ export function OnlineHost({
     }),
     code,
   )
+
+  const guestIn = !!snapshot?.players[1]
+  const inLobby = snapshot?.stage === 'lobby'
+
+  // Matched: nobody presses Start — the intro plays, and the count-in follows.
+  const started = useRef(false)
+  useEffect(() => {
+    if (!matched || !session || !inLobby || !guestIn || started.current) return
+    const id = window.setTimeout(() => {
+      started.current = true
+      session.start(draw())
+    }, MATCH_INTRO_MS)
+    return () => window.clearTimeout(id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [matched, session, inLobby, guestIn])
+
+  // …and if the other player never arrives, say so rather than wait forever.
+  const [late, setLate] = useState(false)
+  useEffect(() => {
+    if (!matched || guestIn) return
+    const id = window.setTimeout(() => setLate(true), ARRIVAL_TIMEOUT_MS)
+    return () => window.clearTimeout(id)
+  }, [matched, guestIn])
 
   if (!session || !snapshot) return null
 
@@ -404,13 +526,40 @@ export function OnlineHost({
         onEndForAbsent={() => session.endForAbsentGuest()}
       />
     ) : (
-      <Results snapshot={snapshot} questionsById={questionsById} onRematch={() => session.start(draw())} onLeave={onExit} />
+      <Results
+        snapshot={snapshot}
+        questionsById={questionsById}
+        onRematch={() => session.start(draw())}
+        onLeave={onExit}
+        onFindAnother={onFindAnother}
+      />
     )
+  }
+
+  if (matched) {
+    if (late && !guestIn) {
+      return (
+        <div className="mx-auto max-w-md space-y-4 py-12 text-center" data-testid="battle-problem">
+          <AlertCircle className="mx-auto h-8 w-8 text-muted-foreground" aria-hidden />
+          <div className="space-y-1">
+            <h2 className="text-lg font-semibold">Your opponent didn’t arrive</h2>
+            <p className="text-sm text-muted-foreground">They may have closed the page. Find someone else?</p>
+          </div>
+          <div className="flex flex-wrap justify-center gap-2">
+            {onFindAnother && <FindAnotherButton onClick={onFindAnother} solid />}
+            <Button variant="outline" onClick={onExit}>Back</Button>
+          </div>
+        </div>
+      )
+    }
+    return <MatchIntro snapshot={snapshot} note={guestIn ? 'Starting…' : 'Opening the room…'} opponent={opponent} />
   }
 
   const guest = snapshot.players[1]
   return (
     <div className="mx-auto max-w-lg space-y-8 py-8 text-center" data-testid="battle-lobby">
+      <CalmMusic />
+      <div className="flex justify-end"><MusicToggle /></div>
       <div className="space-y-3">
         <p className="text-sm font-medium text-muted-foreground">Room code</p>
         <RoomCode code={code} />
@@ -455,11 +604,20 @@ export function OnlineGuest({
   player,
   questionsById,
   onExit,
+  matched = false,
+  onFindAnother,
+  opponent,
 }: {
   code: string
   player: BattlePlayer
   questionsById: ReadonlyMap<string, Question>
   onExit: () => void
+  /** Matchmaking sent this player here: no lobby to wait in, the host starts it. */
+  matched?: boolean
+  /** Matched: back to the lobby for someone else. */
+  onFindAnother?: () => void
+  /** Matched: who the lobby paired this player with. */
+  opponent?: BattlePlayer
 }) {
   const [attempt, setAttempt] = useState(0)
   const { session, snapshot } = useBattleSession(
@@ -477,7 +635,14 @@ export function OnlineGuest({
 
   if (snapshot.stage === 'ended' && snapshot.problem) {
     const retry = snapshot.problem === 'not-found' || snapshot.problem === 'connection' ? () => setAttempt(a => a + 1) : undefined
-    return <Problem problem={snapshot.problem} onRetry={retry} onExit={onExit} />
+    return (
+      <Problem
+        problem={snapshot.problem}
+        onRetry={retry}
+        onExit={onExit}
+        onFindAnother={matched ? onFindAnother : undefined}
+      />
+    )
   }
 
   if ((snapshot.stage === 'playing' || snapshot.stage === 'finished') && snapshot.battle) {
@@ -491,13 +656,25 @@ export function OnlineGuest({
         onLeave={onExit}
       />
     ) : (
-      <Results snapshot={snapshot} questionsById={questionsById} onRematch={() => session.requestRematch()} onLeave={onExit} />
+      <Results
+        snapshot={snapshot}
+        questionsById={questionsById}
+        onRematch={() => session.requestRematch()}
+        onLeave={onExit}
+        onFindAnother={matched ? onFindAnother : undefined}
+      />
     )
+  }
+
+  if (matched) {
+    return <MatchIntro snapshot={snapshot} note={snapshot.stage === 'lobby' ? 'Starting…' : 'Joining the room…'} opponent={opponent} />
   }
 
   const host = snapshot.players[0]
   return (
     <div className="mx-auto max-w-lg space-y-8 py-8 text-center" data-testid="battle-lobby">
+      <CalmMusic />
+      <div className="flex justify-end"><MusicToggle /></div>
       <div className="space-y-3">
         <p className="text-sm font-medium text-muted-foreground">Room code</p>
         <RoomCode code={code} />

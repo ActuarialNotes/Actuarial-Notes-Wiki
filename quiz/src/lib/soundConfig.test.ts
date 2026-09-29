@@ -830,3 +830,77 @@ describe('sound catalogue', () => {
     })
   })
 })
+
+describe('the battle cues', () => {
+  // Quiz Battle's own sounds (docs/quiz-battle.md): built from the same parts
+  // as the rest of the catalogue and held to the same rules.
+  const BATTLE = ['buzz', 'countIn', 'go', 'lockIn', 'opponentIn', 'steal', 'clockTick', 'matchFound', 'reaction'] as const
+  /** The moments of a game: struck, and in the room. */
+  const MOMENTS = ['buzz', 'go', 'steal', 'matchFound'] as const
+  /** Timekeeping and the other player's moves: under a right answer, and dry. */
+  const UNDERNEATH = ['countIn', 'lockIn', 'opponentIn', 'clockTick', 'reaction'] as const
+
+  it('are round and short, like every chime', () => {
+    for (const event of BATTLE) {
+      const recipe = SOUND_RECIPES[event]
+      expect(recipeDuration(recipe), `${event} rings out`).toBeLessThanOrEqual(1)
+      expect(recipe.lowpass ?? Infinity, `${event} is left bright`).toBeLessThanOrEqual(recipe.tones ? 3600 : 5000)
+      expect(recipe.space ?? 0, `${event} is swimming in the room`).toBeLessThanOrEqual(0.3)
+      for (const tone of recipe.tones ?? []) {
+        if (tone.dur <= 0.1 || isPartial(tone, recipe)) continue
+        for (const freq of pitchesOf(tone)) {
+          expect(freq, `${event} rings at ${freq.toFixed(0)} Hz`).toBeLessThanOrEqual(1000)
+        }
+      }
+    }
+  })
+
+  it('keeps the timekeeping and the other player’s moves under a right answer', () => {
+    const correct = peakLevel(SOUND_RECIPES.correct)
+    for (const event of UNDERNEATH) {
+      expect(peakLevel(SOUND_RECIPES[event]), `${event} is as loud as a right answer`).toBeLessThan(correct)
+    }
+  })
+
+  it('rings the moments in the room and keeps the timekeeping dry', () => {
+    for (const event of MOMENTS) expect(SOUND_RECIPES[event].space, `${event} is bone dry`).toBeGreaterThan(0)
+    for (const event of ['countIn', 'lockIn', 'opponentIn', 'clockTick'] as const) {
+      expect(SOUND_RECIPES[event].space, `${event} has a tail on it`).toBeUndefined()
+    }
+  })
+
+  it('lands every moment on its loudest note, rising', () => {
+    for (const event of ['buzz', 'steal', 'matchFound'] as const) {
+      const notes = principals(SOUND_RECIPES[event])
+      expect(notes.length, `${event} is not a phrase`).toBeGreaterThanOrEqual(2)
+      const last = notes[notes.length - 1]
+      for (const note of notes.slice(0, -1)) {
+        expect(note.at, `${event} is out of order`).toBeLessThan(last.at)
+        expect(note.freq, `${event} falls`).toBeLessThan(last.freq)
+        expect(note.gain ?? 1, `${event} fades out instead of landing`).toBeLessThanOrEqual(last.gain ?? 1)
+      }
+    }
+  })
+
+  it('counts in on one note and says go an octave above it', () => {
+    const [count] = principals(SOUND_RECIPES.countIn)
+    const [go] = principals(SOUND_RECIPES.go)
+    expect(semitones(count.freq, go.freq)).toBe(12)
+  })
+
+  it('gives a steal more than a right answer — it replaces one', () => {
+    expect(peakLevel(SOUND_RECIPES.steal)).toBeGreaterThan(peakLevel(SOUND_RECIPES.correct))
+  })
+
+  it('keeps the clock and the other player’s lock-in free of pitch', () => {
+    // A note every second, or every time the other player moves, would be a
+    // melody nobody asked for.
+    expect(SOUND_RECIPES.clockTick.tones).toBeUndefined()
+    expect(SOUND_RECIPES.opponentIn.tones).toBeUndefined()
+  })
+
+  it('still has nothing for a miss', () => {
+    expect(EVENTS).not.toContain('miss')
+    expect(EVENTS).not.toContain('buzzer')
+  })
+})

@@ -1,6 +1,9 @@
 import { useEffect, useReducer, useState, useSyncExternalStore } from 'react'
 import { battleReducer, type BattleEvent, type BattleState } from '@/lib/battle'
+import { isMusicOn, setMusicOn, subscribeMusic, type MusicIntensity } from '@/lib/battleMusic'
+import { setBattleMusic } from '@/lib/battleMusicPlayer'
 import type { GuestSession, HostSession, SessionSnapshot } from '@/lib/battleSession'
+import type { LobbySnapshot, MatchmakingSession } from '@/lib/battleMatchmaking'
 
 /**
  * The time, re-read every `intervalMs` while `active` — what a countdown
@@ -64,6 +67,49 @@ export function useBattleSession<T extends HostSession | GuestSession>(
       setSession(null)
     }
     // `create` is a fresh closure every render; `key` is what says it's a new session.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key])
+  const snapshot = useSyncExternalStore(
+    session ? session.subscribe : noSubscribe,
+    session ? session.getSnapshot : noSnapshot,
+  )
+  return { session, snapshot }
+}
+
+/**
+ * The battle music, at `intensity` while this component wants it — null for
+ * none. Handing over between two battle screens doesn't stop it: the player
+ * waits a moment after a release (`lib/battleMusicPlayer.ts`).
+ */
+export function useBattleMusic(intensity: MusicIntensity | null): void {
+  useEffect(() => { setBattleMusic(intensity) }, [intensity])
+  useEffect(() => () => setBattleMusic(null), [])
+}
+
+/** The music's own switch, and a way to flip it. */
+export function useMusicSwitch(): { on: boolean; toggle: () => void } {
+  const on = useSyncExternalStore(subscribeMusic, isMusicOn, isMusicOn)
+  return { on, toggle: () => setMusicOn(!isMusicOn()) }
+}
+
+/**
+ * A matchmaking session — in the lobby, or watching it — alive while the
+ * component is mounted with a `create`, and left when it unmounts or `key`
+ * changes.
+ */
+export function useLobbySession(
+  create: (() => MatchmakingSession) | null,
+  key: string,
+): { session: MatchmakingSession | null; snapshot: LobbySnapshot | null } {
+  const [session, setSession] = useState<MatchmakingSession | null>(null)
+  useEffect(() => {
+    if (!create) return
+    const s = create()
+    setSession(s)
+    return () => {
+      s.leave()
+      setSession(null)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key])
   const snapshot = useSyncExternalStore(

@@ -570,3 +570,35 @@ export function playSound(event: SoundEvent) {
     }, ms)
   } catch { /* ignore */ }
 }
+
+// ---------------------------------------------------------------------------
+// The shared graph, for music
+// ---------------------------------------------------------------------------
+
+/** What a long-running voice needs to play through the same system as the cues. */
+export interface SoundGraph {
+  audio: AudioContext
+  /** The master bus — the volume slider is on it, the soft clip after it. */
+  out: AudioNode
+  /** The small room the reward cues ring in, when it could be built. */
+  room: AudioNode | null
+  /** The pink noise every noise voice reads from. */
+  noise: AudioBuffer
+}
+
+/**
+ * The graph, for a voice that isn't a cue — Quiz Battle's music
+ * (`lib/battleMusicPlayer.ts`). It goes through the same master bus, so the
+ * volume slider reaches it, and rings in the same room, so it sounds like the
+ * same instrument as everything else. Null while sound is off or unavailable.
+ */
+export function soundGraph(): SoundGraph | null {
+  if (!settings.enabled || settings.volume <= 0) return null
+  const audio = getCtx()
+  if (!audio || !master) return null
+  try {
+    return { audio, out: master, room: getReverb(audio, master), noise: getNoiseBuffer(audio) }
+  } catch {
+    return null
+  }
+}

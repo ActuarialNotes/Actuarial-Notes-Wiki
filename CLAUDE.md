@@ -73,7 +73,7 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
   flag-gated)
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
   `components/collect/` (the 3D card the level-up ceremony spins), `components/battle/` (Quiz
-  Battle's screens), `components/research/` (flag-gated).
+  Battle's screens, `Matchmaking.tsx` the lobby), `components/research/` (flag-gated).
   `components/CheckMark.tsx` is **the** checkmark — a filled disc with the tick masked out
   of it, so the tick shows whatever the mark is sitting on. Everything that means *done* or
   *picked* draws it (completed plan rows, a levelled-up concept's card, a selected quiz
@@ -169,8 +169,10 @@ before touching that area**:
   1 kHz, dead inside a second), what keeps the synth from sounding synthesized
   (rounded attacks, pink noise, per-play drift, a small room that darkens as it
   rings), the delegated `data-sound` listener that
-  gives every control a press cue, and how to wire a new interaction. Read
-  before adding or changing a sound.
+  gives every control a press cue, how to wire a new interaction, and Quiz
+  Battle's own cues and music (the soundtrack keeps the same key and the same
+  1 kHz ceiling, so a cue can't clash with it). Read before adding or changing a
+  sound.
 - `docs/visual-noise-review.md` — a **review backlog**: where the app explains itself in grey
   text instead of designing the fact, the five tests for whether a muted caption has earned
   its place, and the surface-by-surface list to work through. The Exam Readiness popup (§3.1)
@@ -197,10 +199,16 @@ before touching that area**:
   design — one **host** device runs the reducer and sends the whole room, redacted, over a
   Supabase Realtime broadcast channel named after a 4-character code (no table, nothing
   stored); the guest times its own answers and the host holds a round open 1.5 s for them;
-  every message is untrusted and parsed field by field. Two rules to keep: **nothing is
-  saved** (no mastery, XP, streak or attempts — the other player's answers are not the
-  account's), and only click-markable multiple choice is raced. Read before touching
-  anything named `battle*`.
+  every message is untrusted and parsed field by field. **Random opponent** is a matchmaking
+  lobby on one more public channel (`quiz-battle:lobby`, presence): every device computes the
+  same pairing from the same queue (oldest first, same exam or *any*; the older hosts) and an
+  offer → accept → go handshake seals each match, so nobody ends up in two rooms; an empty
+  lobby says so, on the way in and inside it. A battle also has its own **cues** and a
+  **generative soundtrack** (calm / play / pressure, held to the sound rules). Two rules to
+  keep: **nothing is saved** (no mastery, XP, streak or attempts — the other player's answers
+  are not the account's; the lobby pairs on the exam alone, since a rating would have to be
+  stored), and only click-markable multiple choice is raced. Read before touching anything
+  named `battle*` or `Matchmaking`.
 - `docs/cowork.md` — **Cowork**, the second product: the mode switch (`lib/appMode.ts`), the
   Sources → Library → Deliverable → Export loop, the three deliverable types and their five
   facets, and the two rules that hold the whole thing up — *nothing is invented* (exports
@@ -827,7 +835,8 @@ Other important `lib/` modules:
   `knowledgeBase.js` index + search, `load.js`); a few helpers are mirrored there
   (`normalizeTerm`, `objectiveKey`, `normalizeAnswerText`) and pinned by `mcpServer.test.ts`.
 - `battle.ts` / `battleDisplay.ts` / `battleSetup.ts` / `battleRoom.ts` / `battleSession.ts` /
-  `battleTransport.ts` — **Quiz Battle** (`docs/quiz-battle.md`). `battle.ts` is the game as a
+  `battleTransport.ts` / `battleLobby.ts` / `battleMatchmaking.ts` / `battleMusic.ts` /
+  `battleMusicPlayer.ts` — **Quiz Battle** (`docs/quiz-battle.md`). `battle.ts` is the game as a
   pure reducer (`battleReducer`: tick / buzz / answer / ready / next / forfeit, each carrying its
   own time; a disallowed event returns the state by identity), the scoring constants, the
   summary, and the question pool (`isBattleQuestion` — multiple choice only — over
@@ -840,7 +849,19 @@ Other important `lib/` modules:
   and every 2 s) and `GuestSession` (sends moves, draws the room shifted onto its own clock),
   framework-free and tested against each other over an in-memory channel; `battleTransport.ts`
   is the channel — Supabase Realtime broadcast, or BroadcastChannel with
-  `VITE_BATTLE_TRANSPORT=local` (the e2e suite). All pure modules are tested.
+  `VITE_BATTLE_TRANSPORT=local` (the e2e suite). The **matchmaking lobby**: `battleLobby.ts` is
+  its rules as data (entries and handshake messages validated, the queue, `planMatches` — the
+  pairing every device computes alike — and the matched exam); `battleMatchmaking.ts` is
+  `MatchmakingSession`, one player's end of it (or an *observer*, which only counts — the
+  Battle page's "No one's in the lobby right now"), plus `presenceOverBroadcast`, the presence
+  the BroadcastChannel build and the tests emulate (Supabase has its own). The **music**:
+  `battleMusic.ts` writes the generative score (84 bpm, an eight-bar harmony, a line drawn
+  per beat, three intensities; every note from the pentatonic, nothing sustained above 1 kHz)
+  and holds its on/off switch; `battleMusicPlayer.ts` plays it, look-ahead scheduled onto
+  `soundGraph()` from `soundEngine.ts`, driven by `setBattleMusic(intensity | null)` —
+  `useBattleMusic` in `hooks/useBattle.ts`, with the intensity from `battleMusicIntensity` in
+  `battleDisplay.ts`. The battle's cues are `BATTLE_RECIPES` in `soundConfig.ts`. All pure
+  modules are tested.
 - `featureFlags.ts` — build-time feature flags (`COWORK_ENABLED`, `RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
   `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`,
   `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `FACT_CHECK_UI_ENABLED`, `TOUR_ENABLED`). `TOUR_ENABLED` is
@@ -876,8 +897,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **155 test files /
-~2500 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **159 test files /
+~2575 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).

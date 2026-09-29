@@ -4,6 +4,7 @@
 
 import type { CSSProperties } from 'react'
 import { EXAM_LABEL_TO_ID } from './examIds'
+import type { MusicIntensity } from './battleMusic'
 import {
   currentRound,
   isFinalRound,
@@ -146,4 +147,33 @@ export function resultHeadline(
   if (winner === null) return "It's a draw"
   if (forfeit !== null) return `${names[forfeit]} left — ${names[winner]} wins`
   return `${names[winner]} wins`
+}
+
+// ── Heard ───────────────────────────────────────────────────────────────────
+
+/** The seconds left on a question below which the music leans in. */
+export const PRESSURE_SECONDS = 10
+
+/**
+ * How hard the music pushes (lib/battleMusic.ts), from how the round stands:
+ * calm over a reveal, playing while a question is up, pressure on the final
+ * question, in the last ten seconds, and while someone holds the floor or the
+ * answers are on their way in. Null once the battle is over — the results get
+ * the fanfare, not the soundtrack.
+ *
+ * `phase` is the phase as drawn, where that differs from the state's (online,
+ * lib/battleSession.ts `displayPhase`).
+ */
+export function battleMusicIntensity(
+  battle: BattleState,
+  now: number,
+  phase: RoundState['phase'] | 'closing' = currentRound(battle).phase,
+): MusicIntensity | null {
+  if (battle.finished) return null
+  const round = currentRound(battle)
+  if (phase === 'revealed') return 0
+  if (phase === 'countdown') return 1
+  if (phase === 'buzzed' || phase === 'closing') return 2
+  if (isFinalRound(battle, round.index)) return 2
+  return round.deadline - now <= PRESSURE_SECONDS * 1000 ? 2 : 1
 }

@@ -1,7 +1,9 @@
 import { useEffect, useState, type ReactNode } from 'react'
-import { Volume2, VolumeX, X } from 'lucide-react'
+import { Music, Volume2, VolumeX, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
+import { useMusicSwitch } from '@/hooks/useBattle'
+import { cn } from '@/lib/utils'
 
 /**
  * The thin row over a battle in progress: leave it (a second tap confirms,
@@ -33,8 +35,9 @@ export function BattleTopRow({ onLeave, leaveLabel = 'End battle', children }: {
         <X className="mr-1 h-4 w-4" aria-hidden />
         {confirming ? 'Tap again to end' : leaveLabel}
       </Button>
-      <div className="flex min-w-0 items-center gap-2 text-xs text-muted-foreground">
-        {children}
+      <div className="flex min-w-0 items-center gap-1 text-xs text-muted-foreground">
+        <span className="mr-1 min-w-0 truncate">{children}</span>
+        <MusicToggle />
         <Button
           variant="ghost"
           size="sm"
@@ -47,5 +50,32 @@ export function BattleTopRow({ onLeave, leaveLabel = 'End battle', children }: {
         </Button>
       </div>
     </div>
+  )
+}
+
+/**
+ * The music's own switch (lib/battleMusic.ts). Struck through while off —
+ * and while the app's sound is muted, since that silences the music too.
+ */
+export function MusicToggle({ className }: { className?: string }) {
+  const { on, toggle } = useMusicSwitch()
+  const { enabled } = useSoundEffects()
+  const playing = on && enabled
+  return (
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={toggle}
+      aria-pressed={on}
+      aria-label={on ? 'Turn music off' : 'Turn music on'}
+      title={enabled ? (on ? 'Music on' : 'Music off') : 'Sound is muted'}
+      data-testid="battle-music"
+      className={cn('relative text-muted-foreground hover:text-foreground', className)}
+    >
+      <Music className={cn('h-4 w-4', !playing && 'opacity-50')} aria-hidden />
+      {!playing && (
+        <span aria-hidden className="absolute left-1/2 top-1/2 h-[1.5px] w-5 -translate-x-1/2 -translate-y-1/2 -rotate-45 rounded bg-current" />
+      )}
+    </Button>
   )
 }

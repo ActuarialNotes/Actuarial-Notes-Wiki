@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { ExternalLink, FileText } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { isSupportedPdfSource } from '@/lib/examPdf'
 import { PdfLinkButton } from '@/components/PdfLinkButton'
 import { GetCopyMenu } from '@/components/wiki/GetCopyMenu'
 import type { ResourceMeta } from '@/lib/resourceMeta'
@@ -52,13 +51,13 @@ export function ResourceMetaCard({
 }: ResourceMetaCardProps) {
   // A cover that fails to load drops its column entirely — no empty gutter.
   const [coverFailed, setCoverFailed] = useState(false)
+  // A source document that is a PDF is *read*, here, in the same reader every
+  // other PDF in the app opens in, rather than handed to a browser tab the
+  // reader then has to find their way back from. Every PDF a resource page
+  // links is on a publisher the proxy serves (`examPdf.test.ts` holds the vault
+  // to it), so the button never offers a download instead. A non-PDF link — a
+  // library catalogue, a publisher's shop page — stays an ordinary out-link.
   const isPdf = meta.getCopyUrl ? /\.pdf$/i.test(meta.getCopyUrl) : false
-  // A source document we can proxy is read here, in the same slide-up reader
-  // every other PDF in the app opens in, rather than handed to a browser tab
-  // the reader then has to find their way back from. A PDF on a publisher the
-  // proxy won't serve (and every non-PDF link — a library catalogue, a
-  // publisher's shop page) stays an ordinary out-link.
-  const canView = !!meta.getCopyUrl && isPdf && isSupportedPdfSource(meta.getCopyUrl)
   // Standards pages name the same body as both author and publisher — say it once.
   const publisher = meta.publisher === meta.author ? undefined : meta.publisher
   // Reads left to right like a citation, with the identifiers last.
@@ -69,7 +68,7 @@ export function ResourceMetaCard({
     meta.code,
     meta.isbn && `ISBN ${meta.isbn}`,
   ].filter((f): f is string => Boolean(f))
-  const copyLabel = canView ? 'Read PDF' : isPdf ? 'Download PDF' : 'Get a copy'
+  const copyLabel = isPdf ? 'Read PDF' : 'Get a copy'
   const heading = compact ? 'text-sm sm:text-base' : 'text-base sm:text-lg'
 
   return (
@@ -151,11 +150,9 @@ export function ResourceMetaCard({
               subtitle={[meta.author, meta.year].filter(Boolean).join(' · ') || undefined}
               onRead={onReadPdf}
               icon={FileText}
-              ariaLabel={
-                canView
-                  ? `Read ${meta.title ?? 'this resource'} (PDF)`
-                  : `Download ${meta.title ?? 'this resource'} (PDF)`
-              }
+              // The label already says PDF — a chip saying it again reads "Read PDF PDF".
+              chip={false}
+              ariaLabel={`Read ${meta.title ?? 'this resource'} (PDF)`}
               className="mt-3 self-start bg-muted"
             />
           ) : meta.copySources && meta.copySources.length > 0 ? (

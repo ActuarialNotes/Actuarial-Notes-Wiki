@@ -3,7 +3,7 @@ import { Card } from '@/components/ui/card'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { hrefToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { splitAuthors } from '@/lib/authorNames'
-import { MetaPill } from '@/components/wiki/ResourcePills'
+import { MetaPill, PdfPill } from '@/components/wiki/ResourcePills'
 import type { SourceMaterialEntry } from '@/lib/sourceMaterial'
 
 // The exam study guides' source-material list, rendered as the same shelf of
@@ -51,6 +51,9 @@ export function SourceMaterialGallery({ entries, onOpen }: SourceMaterialGallery
         // the article body, so the popup and the active-link highlight agree.
         const ref = hrefToEntryRef(entry.target) ?? { kind: 'concept' as const, name: entry.name }
         const title = meta?.title ?? entry.label
+        // Standards name the same body as author and publisher — say it once,
+        // as the resource page's own card does.
+        const publisher = meta?.publisher === meta?.author ? undefined : meta?.publisher
         return (
           <a
             key={entry.name}
@@ -84,14 +87,15 @@ export function SourceMaterialGallery({ entries, onOpen }: SourceMaterialGallery
               )}
               <div className="p-4 flex flex-col gap-2 flex-1 min-w-0">
                 <p className="text-sm font-semibold leading-snug">{title}</p>
-                {(meta?.author || meta?.year || meta?.edition || meta?.publisher) && (
+                {(meta?.pdf || meta?.author || meta?.year || meta?.edition || meta?.publisher) && (
                   <div className="flex flex-wrap gap-1">
-                    {splitAuthors(meta?.author).map((author, i) => (
+                    {meta.pdf && <PdfPill />}
+                    {splitAuthors(meta.author).map((author, i) => (
                       <MetaPill key={`author-${i}`}>{author}</MetaPill>
                     ))}
                     {meta.year && <MetaPill>{meta.year}</MetaPill>}
                     {meta.edition && <MetaPill>{meta.edition} ed.</MetaPill>}
-                    {meta.publisher && <MetaPill>{meta.publisher}</MetaPill>}
+                    {publisher && <MetaPill>{publisher}</MetaPill>}
                   </div>
                 )}
                 {entry.detail && (

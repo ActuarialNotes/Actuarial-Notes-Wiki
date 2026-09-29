@@ -13,10 +13,11 @@
 // response be cached at the CDN edge — these papers are frozen documents, so
 // one origin fetch serves everybody.
 //
-// Only the examining bodies' own hosts are reachable through here: this takes a
-// URL from the client, so without an allowlist it would be an open proxy.
-// Override the list with the EXAM_PDF_HOSTS environment variable (a
-// comma-separated host list) if a body moves its documents.
+// Only the publishers the vault links a PDF on are reachable through here: this
+// takes a URL from the client, so without an allowlist it would be an open
+// proxy. Override the list with the EXAM_PDF_HOSTS environment variable (a
+// comma-separated host list) if a body moves its documents — an override
+// replaces the list below, so it must carry every host in it.
 //
 // It lives under `quiz/api/` rather than the repo-root `api/` because the quiz
 // app is its own Vercel project rooted at `quiz/`: a function in the root
@@ -25,8 +26,10 @@
 // document whose structure is invalid. Same origin, same project, no rewrite.
 
 // The publishers whose PDFs the app links to and can therefore re-serve: the
-// two examining bodies, plus the Actuarial Standards Board, whose ASOPs are
-// source material on the Exam 5+ syllabi and are read the same way.
+// two examining bodies, the Actuarial Standards Board, whose ASOPs are source
+// material on the Exam 5+ syllabi, and every other host a resource page's
+// `Available from` names a PDF on — each one a syllabus reading, read the same
+// way. Mirrors `EXAM_PDF_HOSTS` in `src/lib/examPdf.ts`.
 const DEFAULT_HOSTS = [
   'casact.org',
   'www.casact.org',
@@ -34,6 +37,15 @@ const DEFAULT_HOSTS = [
   'www.soa.org',
   'actuarialstandardsboard.org',
   'www.actuarialstandardsboard.org',
+  'stat.columbia.edu',
+  'www.stat.columbia.edu',
+  'sites.stat.columbia.edu',
+  'actuaries.org.uk',
+  'www.actuaries.org.uk',
+  'msaresearch.com',
+  'www.msaresearch.com',
+  'pacicc.ca',
+  'www.pacicc.ca',
 ];
 
 const FETCH_TIMEOUT_MS = 20000;

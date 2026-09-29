@@ -114,7 +114,7 @@ Keys in this order, **every value double-quoted**, then the `verification:` bloc
 | `Type` | yes | one of the vocabulary in §2.2 | what the document is |
 | `Code` | no | the document's own identifier: `ASOP No. 43`, `Guideline A-4`, `PC3`, `O. Reg. 664` | the document |
 | `ISBN` | no | the ISBN-13 of that edition, check digit valid | the copyright page or the publisher |
-| `Available from` | no | `"[host](url)"` — the most stable official URL where the document **itself** can be read: a publisher's PDF, a free open edition, the standards body's page, the CAS or SOA copy | the publisher |
+| `Available from` | no | `"[host](url)"` — the most stable official URL where the document **itself** can be read: a publisher's PDF, a free open edition, the standards body's page, the CAS or SOA copy. A PDF is read in the app, so its host must be on the PDF proxy's allowlist (`EXAM_PDF_HOSTS`; `examPdf.test.ts` fails otherwise — see `docs/mock-exam-browser.md`) | the publisher |
 | `description` | no | an SEO description, only when the lead can't serve as one | — |
 
 \* A page the vault wrote itself (`Publisher: "Actuarial Notes"`, the distribution

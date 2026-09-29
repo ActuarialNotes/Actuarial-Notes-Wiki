@@ -434,11 +434,12 @@ page cannot read the file itself (the same reason `api/pass-rates.js` exists), a
 The endpoint re-serves the file from our origin with `Content-Disposition` chosen by the
 caller (`?download=1` for a save), and caches it hard at the edge — a past paper never
 changes. Because it takes a URL from the client it is **allowlisted to the publishers we
-link source PDFs from** (the two examining bodies and the Actuarial Standards Board) and to
-`.pdf` paths over https, re-checked after redirects, and it refuses a response
+link source PDFs from** (the two examining bodies, the Actuarial Standards Board, and every
+other host a resource page's `Available from` names a PDF on) and to `.pdf` paths over https, re-checked after redirects, and it refuses a response
 that isn't really a PDF (publishers answer 200 with an HTML "not found" page often enough
 that this would otherwise render as an empty panel). Set `EXAM_PDF_HOSTS` to re-aim the
-allowlist without a redeploy.
+allowlist without a redeploy — an override *replaces* the default list, so it must carry
+every host in it or the resource cards on the missing hosts stop opening.
 
 Every failure path ends in the same place: the panel says so in a sentence and offers the
 publisher's own copy, which is the only action any of them leaves.
@@ -566,12 +567,26 @@ concept: a document being read must not do that.
 What decides between reading and out-linking is `isSupportedPdfSource` — the same predicate
 the exam shelf uses, so the viewer never opens on a request the endpoint would refuse. A
 resource whose link is a library catalogue (`worldcat.org`), a publisher's shop page, or an
-ASOP *landing* page rather than the document is not a PDF we can serve, and keeps the
-ordinary out-link it always had (`Get a copy`, or `Download PDF` for a PDF on a host outside
-the allowlist). Adding a publisher means adding the host in **both** lists —
+ASOP *landing* page rather than the document is not a PDF, and keeps the ordinary out-link
+it always had (`Get a copy`).
+
+**A PDF is always read, never downloaded.** The card used to split PDFs in two — `Read PDF`
+on an allowlisted host, `Download PDF` (an out-link to a browser tab) anywhere else — so four
+PCPA readings on a university's, the IFoA's, MSA's and PACICC's sites looked like second-class
+documents beside the ASOPs next to them. The split is gone: every host the vault links a PDF
+on is on the allowlist, and `examPdf.test.ts` reads every `Resources/` page and fails on a
+PDF the reader can't open (a host missing from the list, or an `http:` link that needs its
+`https:` form). Adding a publisher means adding the host in **both** lists —
 `EXAM_PDF_HOSTS` in `lib/examPdf.ts` and `DEFAULT_HOSTS` in `quiz/api/exam-pdf.js`, which
 can't import from `src/` — and a test in `examPdfEndpoint.test.ts` walks the client list
 through the endpoint's resolver so the two can't drift.
+
+**The shelves say so before a card is opened.** A resource card on the study-guide home page
+and in an exam page's Source Material gallery carries a **PDF** pill (`PdfPill` in
+`components/wiki/ResourcePills.tsx`) — the same page icon, in the same tint, that leads the
+Read PDF button it opens onto — so a reader can see at a glance which sources are readable
+right now. It rests on the index's `pdf` flag, set at build time by `resourcePdfUrl` (the
+helper the vault test uses too), so a card never promises a document its page can't open.
 
 The gaps are researched, not forgotten: CAS began publishing Examiner's Reports with the
 **May 2012** sitting (2011 has none), stopped when testing moved to CBT in **Fall 2020**, and

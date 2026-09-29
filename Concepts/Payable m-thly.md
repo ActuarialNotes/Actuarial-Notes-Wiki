@@ -25,8 +25,19 @@ An annuity **payable $m$-thly** makes $m$ payments per year of $1/m$ each, total
 ![[Media/Figures/Payable_m-thly.svg|340]]
 
 > [!example]- Monthly Annuity Present Value {Example}
-> A 10-year annuity pays $100$ per month (end of month). Find the present value at $i = 6\%$ effective annual.
+> A 10-year annuity pays \$100 at the end of each month. Find the present value at $i = 6\%$ effective annual.
 >
 > > [!answer]-
-> > $i^{(12)} = 12[(1.06)^{1/12}-1] = 12(0.004868) = 5.842\%$. Annual payment = $1200$.
-> > $$\text{PV} = 1200 \cdot \frac{1-(1.06)^{-10}}{i^{(12)}} = 1200 \cdot \frac{0.44161}{0.05842} = 1200 \times 7.557 = 9068$$
+> > The payments total $1{,}200$ a year, so $\text{PV} = 1{,}200\,a^{(12)}_{\overline{10}|}$.
+> > $$
+> > \begin{align*}
+> > i^{(12)} &= 12\left[(1.06)^{1/12}-1\right] \\
+> > &= 12(0.00486755) \\
+> > &= 0.0584106 \\
+> > a^{(12)}_{\overline{10}|} &= \frac{1-(1.06)^{-10}}{0.0584106} \\
+> > &= \frac{0.4416052}{0.0584106} \\
+> > &= 7.56036 \\
+> > \text{PV} &= 1{,}200 \times 7.56036 \\
+> > &= 9{,}072.43
+> > \end{align*}
+> > $$

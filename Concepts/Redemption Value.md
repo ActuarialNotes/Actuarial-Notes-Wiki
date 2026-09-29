@@ -18,7 +18,7 @@ verification:
   log: .verify/Concepts/Redemption Value.md
 ---
 
-The **redemption value** $C$ is the amount paid to the bondholder at maturity (when the bond is "redeemed"). For most bonds, the redemption value equals the [[Face Value]] ($C = F$, called redemption **at par**). However, redemption can occur at a premium ($C > F$) or discount ($C < F$).
+The **redemption value** $C$ is the amount paid to the bondholder at maturity (when the bond is "redeemed"). For most bonds, the redemption value equals the [[Face Value]] ($C = F$, called redemption **at par**). However, redemption can occur at a premium ($C > F$) or discount ($C < F$). That describes $C$ against $F$; whether the bond is *bought* at a [[Premium|premium]] or [[Discount|discount]] compares the price $P$ with $C$.
 
 - The basic bond price formula uses $C$ as the terminal payment:
 
@@ -32,5 +32,7 @@ The **redemption value** $C$ is the amount paid to the bondholder at maturity (w
 > A $1{,}000$ face bond with 6% annual coupons matures in 5 years with redemption at $1{,}050$. Price at yield $7\%$.
 >
 > > [!answer]-
-> > $P = 1000(0.06) \cdot a_{\overline{5}|7\%} + 1050(1.07)^{-5} = 60(4.1002) + 1050(0.7130)$
-> > $= 246.01 + 748.65 = 994.66$
+> > $P = 1000(0.06) \cdot a_{\overline{5}|7\%} + 1050(1.07)^{-5} = 60(4.1002) + 1050(0.712986)$
+> > $= 246.01 + 748.64 = 994.65$
+> >
+> > The bond is redeemable at a premium ($C = 1{,}050 > F$) but is bought at a discount ($P = 994.65 < C$): its modified coupon rate $g = 60/1{,}050 = 5.71\%$ is below the 7% yield.

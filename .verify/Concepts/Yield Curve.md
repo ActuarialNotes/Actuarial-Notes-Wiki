@@ -84,3 +84,20 @@ created: 2026-09-28
 - resolves: F-003
 - status: resolved
 - note: Opening now defines the plotted rate as the spot rate s_t, the yield rate on a zero-coupon bond maturing at t (Finan §53 p.459; SOA S371 p.98); '(or yield to maturity)' removed.
+
+## [C-002] Comment
+- entry_type: correction
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- note: Typo in the F-002 resolution above: 'liability-premium' should read 'liquidity-premium'. The page change it describes is as stated.
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- status_set: verified
+- confidence: medium
+- checks_run: Yield curve = spot rates against term, spot rate = zero-coupon yield vs Finan p.459 and S371 p.98 ✓; P = sum C_t/(1+s_t)^t vs Finan p.459 (NPV with spot rates) and Ex. 53.4 p.462 ✓; upward-sloping = expected rate rises, inverted, flat vs Finan p.459 ✓ (unsourced liquidity-premium and slowdown remarks deleted); bootstrapping spot rates from coupon bond yields vs Finan Ex. 53.5 p.462 ✓; PV using a yield curve is syllabus p.5 outcome b ✓. Example recomputed: 48.54 + 46.23 + 920.11 = 1,014.88 ✓, premium since every spot rate is below the 5% coupon ✓. Links and figure resolve. Medium: example is the vault's own, definitions rest on Finan (rank 3).
+- sources_checked: Finan, A Basic Course in the Theory of Interest and Derivatives Markets, pp.459-462, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; SOA Exam FM Sample Solutions (rev. Aug 2026), Q 371, solutions PDF p.98, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf; SOA Financial Mathematics Exam syllabus, December 2026, p.5, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf

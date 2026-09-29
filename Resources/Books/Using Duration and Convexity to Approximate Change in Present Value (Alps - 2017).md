@@ -8,6 +8,8 @@ Type: "Study Note"
 Code: "FM-24-17"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/Files/Edu/2017/fm-duration-convexity-present-value.pdf)"
 ---
+![[Using Duration and Convexity to Approximate Change in Present Value (Alps - 2017) - Cover.svg]]
+
 An SOA study note on approximating the change in the present value of a cash flow series that results from a small change in interest rate. Written by Robert Alps and issued by the Education and Examination Committee as Financial Mathematics study note FM-24-17 (dated February 1, 2017), it demonstrates that a first-order approximation using Macaulay duration is more accurate than the linear approximation using modified duration, and that a second-order approximation using Macaulay duration and convexity is more accurate than the usual one using modified duration and convexity.
 
 > [!info] On the syllabus

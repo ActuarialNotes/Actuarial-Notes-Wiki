@@ -39,7 +39,7 @@ const STATUS_LABEL: Record<ItemStatus, string> = {
  *
  * The credential tracks list ~50 exams, but only the ones with a syllabus page
  * in the vault can ever reach the dashboard — and of those, the in-development
- * ones (the DISCs) are a syllabus outline with no question bank. Adding either
+ * ones (Exam 6U) are a syllabus outline with no material yet. Adding either
  * kind used to "work": the row saved, and then nothing appeared on the
  * dashboard, with nothing on screen to say why. So the popout now says which
  * exams it can study and only offers to add those.

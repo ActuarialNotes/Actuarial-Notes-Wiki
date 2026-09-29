@@ -363,12 +363,12 @@ Other important `lib/` modules:
 - `wikiParser.ts` / `wikiIndex.ts` / `wikiExtract.ts` — parse wiki pages, build search index, extract syllabus structure
 - `conceptMatch.ts` — resolves concept name variants/aliases to a canonical slug (`slugForLink`)
 - `examStatus.ts` — how far along each exam's material is, keyed by exam_progress key:
-  `ready` (P, FM), `beta` (MAS-I, MAS-II, Exams 5, 6C, 7, 8 and 9, and PCPA) or
-  `development` (the three DISCs and Exam 6U — a syllabus outline with no question bank
-  yet; the DISCs have none because The Institutes sells their sample questions and
-  publishes none). PCPA is beta with no bank — CAS releases no PCPA paper or sample
-  questions to convert — because its page and the Projects tab's simulator are material
-  to study from. Exam 6's variants share `CAS-6` but not a status, so a surface that knows
+  `ready` (P, FM), `beta` (MAS-I, MAS-II, Exams 5, 6C, 7, 8 and 9, PCPA and the three
+  DISCs) or `development` (Exam 6U — a syllabus outline with no question bank yet). PCPA
+  and the DISCs are beta with no bank — CAS releases no PCPA paper or sample questions to
+  convert, and The Institutes sells the DISCs' sample questions and publishes none — because
+  their material is there to study from: PCPA's page and the Projects tab's simulator, and a
+  written concept page behind every concept the DISC syllabi link. Exam 6's variants share `CAS-6` but not a status, so a surface that knows
   which page it is drawing passes the page's id too (`examStatus(key, '6U')`, the id from
   `examPageIdFromFile` in `lib/examMenu.ts`); with no id, `CAS-6` reads as beta. Exams 8
   and 9 were promoted before all their readings had `Resources/Books/` pages, so they carry

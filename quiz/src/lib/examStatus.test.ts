@@ -10,7 +10,7 @@ describe('examStatus', () => {
   })
 
   it('treats the exams that are usable but unfinished as beta', () => {
-    for (const key of ['MAS-I', 'MAS-II', 'CAS-5', 'CAS-PCPA', 'CAS-6', 'CAS-7', 'CAS-8', 'CAS-9']) {
+    for (const key of ['MAS-I', 'MAS-II', 'CAS-IA', 'CAS-DA', 'CAS-RM', 'CAS-5', 'CAS-PCPA', 'CAS-6', 'CAS-7', 'CAS-8', 'CAS-9']) {
       expect(examStatus(key)).toBe('beta')
       expect(isExamBeta(key)).toBe(true)
       expect(isExamInDevelopment(key)).toBe(false)
@@ -18,12 +18,12 @@ describe('examStatus', () => {
     }
   })
 
-  it('treats the DISCs as in development, never beta', () => {
+  it('treats the DISCs as beta — no question bank, but every syllabus concept has a page', () => {
+    // The Institutes publishes no DISC questions to convert, so beta here rests
+    // on the concept pages alone (like PCPA, which has no paper either).
     for (const key of ['CAS-DA', 'CAS-RM', 'CAS-IA']) {
-      expect(examStatus(key)).toBe('development')
-      expect(isExamInDevelopment(key)).toBe(true)
-      expect(isExamBeta(key)).toBe(false)
-      expect(EXAM_STATUS_LABEL[examStatus(key)]).toBe('In Development')
+      expect(examStatus(key)).toBe('beta')
+      expect(isExamInDevelopment(key)).toBe(false)
     }
   })
 
@@ -41,10 +41,8 @@ describe('examStatus', () => {
 
   it('matches the progress keys the exam pages resolve to', () => {
     // The vault's file names, cleaned the way WikiHome/WikiExam clean them.
-    for (const id of ['DISC-DA', 'DISC-RM', 'DISC-IA', '6U']) {
-      expect(isExamInDevelopment(wikiExamIdToProgressKey(id), id)).toBe(true)
-    }
-    for (const id of ['P-1', 'MAS-II', '5', 'PCPA', '6C', '7', '8', '9']) {
+    expect(isExamInDevelopment(wikiExamIdToProgressKey('6U'), '6U')).toBe(true)
+    for (const id of ['P-1', 'MAS-II', 'DISC-DA', 'DISC-RM', 'DISC-IA', '5', 'PCPA', '6C', '7', '8', '9']) {
       expect(isExamInDevelopment(wikiExamIdToProgressKey(id), id)).toBe(false)
     }
   })

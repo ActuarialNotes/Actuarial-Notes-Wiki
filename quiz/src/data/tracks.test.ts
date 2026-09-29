@@ -54,9 +54,9 @@ describe('credential tracks', () => {
 
   it('offers every studiable exam on the DEFAULT track', () => {
     // An exam with material that only appears under a credential track is an
-    // exam a candidate has to guess their way to. Exams in development (the
-    // DISCs) are excluded: they are a syllabus outline with no question bank
-    // (see lib/examStatus).
+    // exam a candidate has to guess their way to. Exams in development (Exam
+    // 6U, through its shared CAS-6 key, is the only one) are excluded: they are
+    // a syllabus outline with no material yet (see lib/examStatus).
     const offered = new Set(defaultTrack.sections.flatMap(s => s.items).map(i => i.id))
     const missing = [...syllabusExamKeys()]
       .filter(key => !isExamInDevelopment(key))

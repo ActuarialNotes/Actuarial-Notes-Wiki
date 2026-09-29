@@ -8,10 +8,12 @@ import type { ItemStatus } from '@/data/tracks'
 //   'ready'       — a mature syllabus page plus a full question bank (P, FM)
 //   'beta'        — usable, still being filled out (MAS-I, MAS-II, Exams 5,
 //                   6C, 7, 8 and 9 — their banks converted from the released
-//                   papers — and PCPA, which has no paper to convert)
+//                   papers — and PCPA and the three DISCs, which have no
+//                   paper to convert but a syllabus whose concept pages are
+//                   written)
 //   'development' — syllabus scaffolding only: no question bank, concept
 //                   pages mostly unwritten. Not something a candidate can
-//                   study from yet (the DISCs, Exam 6U).
+//                   study from yet (Exam 6U).
 //
 // Surfaces read this rather than re-deriving "not P and not FM" locally: the
 // study-guide exam grid (`pages/wiki/WikiHome.tsx`), the exam page's status
@@ -25,14 +27,16 @@ const READY_EXAMS = new Set(['P', 'FM'])
 /**
  * Exams that exist only as a syllabus outline so far. Greyed out wherever they
  * are listed — they are visible so candidates can see what is coming, not
- * because they are usable.
+ * because they are usable. None today: a whole progress key in development
+ * would go here, a variant of a shared key in `IN_DEVELOPMENT_VARIANTS` below.
  */
-// The three DISC courses have no bank because The Institutes sells their
-// sample questions in a course guide and publishes none, so their pages
-// transcribe the course syllabi. (PCPA has none either — CAS releases no PCPA
-// paper or sample questions to convert — but it is beta: its page and the
-// Projects tab's simulator are material to study from.)
-const IN_DEVELOPMENT_EXAMS = new Set(['CAS-DA', 'CAS-RM', 'CAS-IA'])
+// Beta with no bank is possible. The three DISC courses have none because The
+// Institutes sells their sample questions in a course guide and publishes none,
+// so their pages transcribe the course syllabi — but every concept those
+// syllabi link has a page, which is material to study from. (PCPA has none
+// either — CAS releases no PCPA paper or sample questions to convert — and is
+// beta for the same reason: its page and the Projects tab's simulator.)
+const IN_DEVELOPMENT_EXAMS: ReadonlySet<string> = new Set<string>()
 
 /**
  * Variants of a shared progress key whose material lags the rest of the key.
@@ -58,7 +62,7 @@ export function examStatus(progressKey: string | null | undefined, examId?: stri
   return 'beta'
 }
 
-/** True for the exams that are still scaffolding (the DISCs, Exam 6U). */
+/** True for the exams that are still scaffolding (Exam 6U). */
 export function isExamInDevelopment(progressKey: string | null | undefined, examId?: string | null): boolean {
   return examStatus(progressKey, examId) === 'development'
 }

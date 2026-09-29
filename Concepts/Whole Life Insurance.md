@@ -25,6 +25,8 @@ verification:
 - **Recursion:** $A_x = v\,q_x + v\,p_x\,A_{x+1}$
 - Under a **constant force of mortality** $\mu$ and force of interest $\delta$: $\bar{A}_x = \dfrac{\mu}{\mu + \delta}$
 - The **variance** uses the **double-force-of-interest trick**: ${}^2\!\bar{A}_x$ is $\bar{A}_x$ evaluated at $2\delta$
+- **As a product.** Whole life is *permanent* insurance. The premium is level, payable for life (*ordinary* or *straight* life) or for a limited period (*limited-payment* life — 20-pay, paid up at 65). A level premium overfunds the early years' cost of insurance, and the excess builds a guaranteed **cash value** that the owner can borrow against (a policy loan) or take by surrendering the policy
+- **If premiums stop**, the nonforfeiture options apply: take the cash surrender value, convert to *reduced paid-up* whole life, or convert to *extended term* insurance for the full face amount. **Participating** policies, sold mainly by mutual insurers, also pay policyholder dividends out of favourable mortality, interest and expense experience. Compare [[Term Life Insurance]] (temporary, no cash value) and [[Universal Life Insurance]] (flexible premium, an unbundled account value)
 
 ![[Media/Figures/Whole_Life_Insurance.svg|340]]
 

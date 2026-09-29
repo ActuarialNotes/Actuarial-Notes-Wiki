@@ -298,7 +298,7 @@ export default function WikiHome() {
       const status = examProgress[examId]
       const variantMatch = matchesSelectedVariant(examId, examIdCleaned, examVariants[examId])
       const isInProgress = status === 'in_progress' && variantMatch
-      // The DISCs and Exam 6U are still only a syllabus outline.
+      // Exam 6U is still only a syllabus outline.
       // They stay listed (candidates should see what's coming) but
       // greyed out, so the card never reads as material to study
       // from. By the page's own id: 6C and 6U share a key.

@@ -79,6 +79,9 @@ export const TRACKS: Track[] = [
         items: [
           { id: 'MAS-I',    name: 'Exam MAS-I',  color: 'violet' },
           { id: 'MAS-II',   name: 'Exam MAS-II', color: 'violet' },
+          { id: 'CAS-IA',   name: 'CAS DISC IA', color: 'fuchsia' },
+          { id: 'CAS-DA',   name: 'CAS DISC DA', color: 'fuchsia' },
+          { id: 'CAS-RM',   name: 'CAS DISC RM', color: 'fuchsia' },
           { id: 'CAS-5',    name: 'Exam 5',      color: 'pink' },
           { id: 'CAS-PCPA', name: 'PCPA',        color: 'rose' },
           { id: 'CAS-6',    name: 'Exam 6',      color: 'orange' },

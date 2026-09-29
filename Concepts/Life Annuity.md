@@ -23,6 +23,11 @@ A **Life Annuity** pays periodic benefits contingent on the survival of one or m
 - **Temporary life annuity** $\bar{a}_{x:\overline{n}|}$ pays for at most $n$ years: $\bar{a}_{x:\overline{n}|} = \int_0^n e^{-\delta t}\,{_t}p_x\,dt$
 - Under **constant force of mortality** $\mu$: $\bar{a}_x = \dfrac{1}{\mu + \delta}$
 - Relationship to whole life insurance: $\bar{A}_x + \delta\,\bar{a}_x = 1$
+- **As a product.** An annuity liquidates a sum over the annuitant's lifetime — the mirror image of [[Whole Life Insurance|life insurance]], which creates a sum on death. Contracts are told apart by four things:
+  - **When payments start** — *immediate*, or *deferred* after an accumulation phase
+  - **How it is funded** — a single premium or flexible premiums
+  - **How the value is credited** — *fixed* (a guaranteed rate), *variable* (the return on separate-account investments the owner chooses, and a registered security) or *indexed* (interest linked to a market index, with a floor and a cap or participation rate)
+  - **The payout option** — life only, life with a period certain, installment or cash refund, or joint and survivor. Every option but life only buys a guarantee with a lower payment
 
 ![[Media/Figures/Life_Annuity.svg|340]]
 

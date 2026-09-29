@@ -47,7 +47,7 @@ actuaries** who want a quick, sourced reference to material they last studied ye
 | [8](Exam%208%20(CAS).md) | CAS | Advanced Ratemaking | Beta | 2012–2019 papers |
 | [9](Exam%209%20(CAS).md) | CAS | Risk Management for Actuaries | Beta | 2012–2019 papers |
 | [PCPA](Exam%20PCPA%20(CAS).md) | CAS | Property and Casualty Predictive Analytics | Beta | Project simulator |
-| [DISC-DA](Exam%20DISC-DA%20(CAS).md), [DISC-RM](Exam%20DISC-RM%20(CAS).md), [DISC-IA](Exam%20DISC-IA%20(CAS).md) | CAS | The Institutes' online courses | In development | — |
+| [DISC-DA](Exam%20DISC-DA%20(CAS).md), [DISC-RM](Exam%20DISC-RM%20(CAS).md), [DISC-IA](Exam%20DISC-IA%20(CAS).md) | CAS | The Institutes' online courses | Beta | — |
 
 **Complete:** syllabus, concept pages and question bank are all in place. **Beta:** usable, and
 still being filled out. **In development:** the syllabus is mapped, but its concept pages and

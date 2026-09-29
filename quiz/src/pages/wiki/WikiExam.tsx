@@ -171,7 +171,7 @@ export default function WikiExam() {
   ), [])
 
   // How far along this exam's material is — 'ready' (P/FM), 'beta', or
-  // 'development' (the DISCs and Exam 6U: syllabus outline only). Drives the
+  // 'development' (Exam 6U: syllabus outline only). Drives the
   // status banner under the sticky header. The page's own id, since 6C and 6U
   // share a progress key and not a status.
   const contentStatus = examStatus(progressKey, examPageIdFromFile(examFileName))

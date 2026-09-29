@@ -17,7 +17,7 @@ verification:
 
 - Coinsurance incentivizes loss prevention by keeping the policyholder exposed to a share of every claim; it is common in health insurance and some property lines
 - In ratemaking, the coinsurance percentage reduces the loss elimination ratio, since more of each loss is borne by the insured — rates are scaled by $c$ relative to a full-coverage rate
-- In the property insurance context, a **coinsurance clause** can instead refer to a penalty applied when the insured carries less coverage than a required percentage of replacement value
+- In the property insurance context, a **coinsurance clause** can instead refer to a penalty applied when the insured carries less coverage than a required percentage of the property's value — the loss is paid in the ratio of the limit carried to the limit required. The clause, its formula and worked penalties are on [[Insurance to Value]]
 
 > [!example]- Coinsurance Payment {Example}
 > A health policy has a \$$200$ deductible and $70\%$ coinsurance. A covered loss is \$$1{,}200$.

@@ -4,6 +4,7 @@ import {
   decayIfStale,
   aggregateForTopic,
   emptyRecord,
+  latestMasteryStates,
   FORGET_AFTER_DAYS,
   DECAY_DAYS_LEVEL1,
   DECAY_DAYS_LEVEL2,
@@ -398,3 +399,18 @@ describe('aggregateForTopic', () => {
     expect(agg.newCount).toBe(0)
   })
 })
+
+describe('latestMasteryStates', () => {
+  it('reads each concept off its most recently attempted record, decayed, by lower-cased name', () => {
+    const states = latestMasteryStates([
+      rec({ exam_id: 'P', state: 'level3', last_attempted_at: RECENT, last_correct_at: RECENT }),
+      // The same concept on another exam, attempted longer ago: not the one shown.
+      rec({ exam_id: 'FM', state: 'level1', last_attempted_at: STALE_L1, last_correct_at: STALE_L1 }),
+      rec({ concept_slug: 'Bayes Theorem', state: 'level1', last_attempted_at: STALE_L1, last_correct_at: STALE_L1 }),
+    ], NOW)
+    expect(states.get('expected value')).toBe('level3')
+    expect(states.get('bayes theorem')).toBe('forgotten')
+    expect(states.get('Expected Value')).toBeUndefined()
+  })
+})
+

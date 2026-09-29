@@ -5,11 +5,16 @@ import { currentRound, isFinalRound, type BattleState } from '@/lib/battle'
 import { battleExamName, roundLabel } from '@/lib/battleDisplay'
 
 /**
- * The "3, 2, 1" before a question — which question it is, and on the last one
- * that it counts double. The question itself isn't on screen yet: nobody gets
- * a head start reading it.
+ * The "3, 2, 1" before a question — which question it is, the topic it was
+ * drawn for and whose pick that was (online), and on the last one that it
+ * counts double. The question itself isn't on screen yet: nobody gets a head
+ * start reading it.
  */
-export function BattleCountdown({ battle }: { battle: BattleState }) {
+export function BattleCountdown({ battle, topic }: {
+  battle: BattleState
+  /** Online: the topic the question was drawn for, and whose pick it was. */
+  topic?: { name: string; credit: string } | null
+}) {
   const round = currentRound(battle)
   const now = useNow(true, 100)
   const n = Math.max(1, Math.ceil((round.opensAt - now) / 1000))
@@ -35,6 +40,12 @@ export function BattleCountdown({ battle }: { battle: BattleState }) {
       <span key={n} className="battle-count-pop text-8xl font-bold tabular-nums leading-none" aria-live="assertive">
         {n}
       </span>
+      {topic && (
+        <p className="space-x-1.5 text-sm" data-testid="battle-countdown-topic">
+          <span className="font-medium">{topic.name}</span>
+          <span className="text-muted-foreground">· {topic.credit}</span>
+        </p>
+      )}
       {final && (
         <span className="rounded-full bg-amber-500/15 px-3 py-1 text-sm font-semibold text-amber-600 dark:text-amber-400">
           Double points

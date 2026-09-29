@@ -41,6 +41,21 @@ async function chooseThreeQuestions(page: Page) {
   await page.getByRole('radiogroup', { name: 'Questions' }).getByRole('radio', { name: '3' }).click()
 }
 
+/** Picks the `nth` topic tile on the page and locks it in; returns its name. */
+async function pickTopicAndLock(page: Page, nth: number): Promise<string> {
+  await expect(page.getByTestId('battle-topic-picker')).toBeVisible({ timeout: 15_000 })
+  const tile = page.getByTestId('battle-topic').nth(nth)
+  const name = (await tile.getAttribute('data-topic')) ?? ''
+  await tile.click()
+  await expect(tile).toHaveAttribute('aria-pressed', 'true')
+  await expect(page.getByTestId('battle-topic-count')).toHaveText('1 of 3 picked')
+  await page.getByTestId('battle-topics-lock').click()
+  // Locked in: the button goes — to a wait for the other player, or (the
+  // second in) straight to the draw.
+  await expect(page.getByTestId('battle-topics-lock')).toBeHidden()
+  return name
+}
+
 test.describe('quiz battle', () => {
   // A battle strikes a cue on every tick of its count-in. A headless browser
   // with no audio device can trap in its audio output thread under that
@@ -95,6 +110,7 @@ test.describe('quiz battle', () => {
   })
 
   test('plays an online battle between two devices', async ({ context }) => {
+    test.setTimeout(90_000)
     const host = await context.newPage()
     const guest = await context.newPage()
 
@@ -120,6 +136,22 @@ test.describe('quiz battle', () => {
     await expect(guest.getByTestId('battle-lobby')).toContainText('Waiting for Ada to start')
     await host.getByTestId('battle-start-online').click()
 
+    // Each picks a topic. Bo sees that Ada is in — and not what she picked.
+    const adaTopic = await pickTopicAndLock(host, 0)
+    await expect(guest.getByTestId('battle-player-0')).toContainText('Locked in')
+    const boTopic = await pickTopicAndLock(guest, 1)
+
+    // Both picks go up on both screens, and the questions are drawn from them.
+    for (const page of [host, guest]) {
+      await expect(page.getByTestId('battle-topic-draw')).toBeVisible()
+      await expect(page.getByTestId('battle-picks-0')).toContainText(adaTopic)
+      await expect(page.getByTestId('battle-picks-1')).toContainText(boTopic)
+      await expect(page.locator('[data-testid="battle-drawn"][data-drawn]')).toHaveCount(3)
+    }
+    for (const page of [host, guest]) {
+      await expect(page.getByTestId('battle-countdown-topic')).toBeVisible({ timeout: 15_000 })
+    }
+
     for (let round = 0; round < 3; round++) {
       const { right, wrong } = await currentQuestion(host)
       await expect(guest.getByTestId('battle-question')).toBeVisible({ timeout: 10_000 })
@@ -142,12 +174,13 @@ test.describe('quiz battle', () => {
       await expect(page.getByTestId('battle-result-headline')).toHaveText('Ada wins')
     }
 
-    // Bo asks for a rematch; Ada starts it, and both are counted in.
+    // Bo asks for a rematch; Ada starts it, and both pick their topics again.
     await guest.getByTestId('battle-rematch').click()
     await expect(host.getByText('Bo wants a rematch!')).toBeVisible()
     await host.getByTestId('battle-rematch').click()
     for (const page of [host, guest]) {
-      await expect(page.getByTestId('battle-countdown')).toBeVisible()
+      await expect(page.getByTestId('battle-topic-picker')).toBeVisible()
+      await expect(page.getByTestId('battle-topic-count')).toHaveText('Pick up to 3 topics')
     }
   })
 
@@ -190,12 +223,20 @@ test.describe('quiz battle', () => {
     for (const page of [ada, bo]) {
       await expect(page.getByTestId('battle-match-intro')).toBeVisible()
     }
+    // A topic each — Bo locks in none, and plays on Ada's and the whole exam.
+    await pickTopicAndLock(ada, 2)
+    await expect(bo.getByTestId('battle-topic-picker')).toBeVisible()
+    await bo.getByTestId('battle-topics-lock').click()
+    for (const page of [ada, bo]) {
+      await expect(page.getByTestId('battle-topic-draw')).toBeVisible()
+      await expect(page.getByTestId('battle-picks-1')).toContainText('No topics')
+    }
     for (const page of [ada, bo]) {
       await expect(page.getByTestId('battle-countdown')).toBeVisible({ timeout: 15_000 })
     }
 
-    // A matched battle is five questions. Ada's device hosts: she was waiting first.
-    for (let round = 0; round < 5; round++) {
+    // A matched battle is three questions. Ada's device hosts: she was waiting first.
+    for (let round = 0; round < 3; round++) {
       const { right, wrong } = await currentQuestion(ada)
       await expect(bo.getByTestId('battle-question')).toBeVisible({ timeout: 10_000 })
       await ada.getByTestId(`battle-pad-${right}`).click()

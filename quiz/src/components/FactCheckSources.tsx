@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
+import { BookOpen } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { parseResourceMeta, type ResourceMeta } from '@/lib/resourceMeta'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { citedSources, syllabusSourcePages, type CitedSource } from '@/lib/factCheckSources'
 import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
+import { FactCheckSection } from '@/components/FactCheckSection'
 
 /**
  * **Checked against** — the sources a fact check was actually run against, in
@@ -27,14 +29,21 @@ import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
  * over the Fact Check sheet rather than in a browser tab — the sheet stays
  * behind it, so closing the document puts the reader back on the finding that
  * sent them to it.
+ *
+ * It is the last of the record's cards (`FactCheckSection`), folded like the
+ * others unless it is the only one — a page checked clean has no log to show,
+ * and a card that has to be opened to find the one thing there is is a wasted
+ * tap.
  */
 
 interface FactCheckSourcesProps {
   /** The citations from the page's `verification:` block, as authored. */
   sources: string[]
+  /** Start unfolded — when there is nothing else in the record to read. */
+  defaultOpen?: boolean
 }
 
-export function FactCheckSources({ sources }: FactCheckSourcesProps) {
+export function FactCheckSources({ sources, defaultOpen = false }: FactCheckSourcesProps) {
   const { syllabi } = useWikiSyllabus()
   const cited = useMemo(
     () => citedSources(sources, syllabusSourcePages(syllabi)),
@@ -42,12 +51,22 @@ export function FactCheckSources({ sources }: FactCheckSourcesProps) {
   )
 
   if (cited.length === 0) return null
-  return <SourceShelf sources={cited} />
+  return (
+    <FactCheckSection
+      title="Checked against"
+      count={cited.length}
+      tone="grey"
+      icon={<BookOpen className="h-4 w-4" aria-hidden />}
+      defaultOpen={defaultOpen}
+    >
+      <SourceShelf sources={cited} />
+    </FactCheckSection>
+  )
 }
 
 /**
- * Mounted only when there is something to show, so the metadata fetch belongs
- * to a shelf that will actually be drawn.
+ * Mounted only when its card is unfolded, so the metadata fetch belongs to a
+ * shelf that will actually be drawn.
  */
 function SourceShelf({ sources }: { sources: CitedSource[] }) {
   const [metas, setMetas] = useState<Array<ResourceMeta | null> | null>(null)
@@ -69,33 +88,29 @@ function SourceShelf({ sources }: { sources: CitedSource[] }) {
   }, [sources])
 
   return (
-    <section>
-      {/* The same heading shape as the panel's other sections. */}
-      <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-        Checked against
-      </h3>
-      <ul className="space-y-2">
-        {sources.map((source, i) => {
-          const meta = metas?.[i]
-          return (
-            <li key={source.raw}>
-              <ResourceMetaCard
-                meta={{
-                  ...meta,
-                  title: meta?.title || source.label,
-                  // The citation's own link is the fallback, never the
-                  // override: the resource page names where the source lives,
-                  // and a pass cites the copy it happened to read.
-                  getCopyUrl: meta?.getCopyUrl || source.url || undefined,
-                }}
-                note={source.locator ?? undefined}
-                compact
-                className="mb-0 w-full"
-              />
-            </li>
-          )
-        })}
-      </ul>
-    </section>
+    <ul className="divide-y divide-border">
+      {sources.map((source, i) => {
+        const meta = metas?.[i]
+        return (
+          <li key={source.raw}>
+            <ResourceMetaCard
+              meta={{
+                ...meta,
+                title: meta?.title || source.label,
+                // The citation's own link is the fallback, never the
+                // override: the resource page names where the source lives,
+                // and a pass cites the copy it happened to read.
+                getCopyUrl: meta?.getCopyUrl || source.url || undefined,
+              }}
+              note={source.locator ?? undefined}
+              compact
+              // A row of the card it sits in, not a card of its own: the
+              // section's border already draws the edge.
+              className="mb-0 w-full rounded-none border-0 bg-transparent"
+            />
+          </li>
+        )
+      })}
+    </ul>
   )
 }

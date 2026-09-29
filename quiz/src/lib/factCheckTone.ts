@@ -50,3 +50,22 @@ export const SEVERITY_TONE: Record<LogEntrySeverity, FactCheckTone> = {
   minor: 'grey',
   nit: 'grey',
 }
+
+/**
+ * The two sides of a finding, drawn as a diff: what the page said is the line
+ * taken out, what the source says the line put in. Red and green because that
+ * is what they mean everywhere else (`docs/style-guide.md` §4.1 — incorrect,
+ * correct), but only as a wash under the text and a colour on the `−` / `+`
+ * mark and its label: the words themselves stay in the foreground colour, since
+ * a paragraph set in red-900 is a paragraph nobody reads to the end.
+ */
+export const FACT_CHECK_DIFF = {
+  removed: {
+    surface: 'bg-red-50 dark:bg-red-950/50',
+    mark: 'text-red-600 dark:text-red-400',
+  },
+  added: {
+    surface: 'bg-green-50 dark:bg-green-950/50',
+    mark: 'text-green-600 dark:text-green-400',
+  },
+} as const

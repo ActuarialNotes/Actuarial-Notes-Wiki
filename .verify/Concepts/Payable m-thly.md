@@ -51,3 +51,22 @@ created: 2026-09-28
 - confidence: medium
 - checks_run: m payments of 1/m per period and a^(m)_n = (1-v^n)/i^(m) vs FIN §24 p.218 (and the 'periodic rent' coefficient remark p.219); i^(m) notation and v = 1/(1+i) vs NOTE p.1 (image); 'payable m-thly' syllabus term vs SYL p.3; 'whole-life' clause removed (F-001, fixed, FIN p.143 contingent vs certain); example recomputed (F-002). Links, figure, LaTeX resolve. Medium: example is the vault's own; formulas rank 3.
 - sources_checked: Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §24 Analysis of Annuities Payable More Frequently than Interest is Convertible, PDF p.218-220, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; SOA, Notation and terminology used for Exam FM (rev. Dec 2025), PDF p.1, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf; SOA Financial Mathematics Exam syllabus, December 2026, Topic 2 Annuities/cash flows with non-contingent payments (20-30%), learning outcomes a)-b), PDF p.3, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), Part 'The Basics of Annuity Theory' introduction, PDF p.143, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- resolves: F-002
+- status: resolved
+- note: Example rewritten as one align*: i^(12) = 12(0.00486755) = 0.0584106 (5.8411%, was 5.842%), a^(12)_10 = 0.4416052/0.0584106 = 7.56036 (was 7.557), PV = 1,200 × 7.56036 = 9,072.43 (was 9,068). Python brute force Σ100(1.06)^(-k/12), k=1..120 = 9,072.43. Stem's '$100$ per month' inline math replaced by plain text.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- status_set: verified
+- confidence: medium
+- checks_run: Re-checked on the new bytes: m payments of 1/m per period and a^(m)_n = (1-v^n)/i^(m) vs Finan §24 p.218; i^(m) and v = 1/(1+i) vs notation note p.1; 'payable m-thly' vs syllabus p.3. Example recomputed in python: j = 0.00486755, i^(12) = 0.0584106, 1-1.06^-10 = 0.4416052, a^(12)_10 = 7.56036, PV = 9,072.43 (brute force identical). 15 math nodes typeset in KaTeX; links and figure resolve.
+- sources_checked: Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.218-219, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; SOA, Notation and terminology used for Exam FM, p.1, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf; SOA Financial Mathematics Exam syllabus, December 2026, p.3, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf

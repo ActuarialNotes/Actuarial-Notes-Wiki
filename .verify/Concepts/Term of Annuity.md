@@ -66,3 +66,31 @@ created: 2026-09-28
 - confidence: low
 - checks_run: Definition vs FIN p.143-144 and p.257 (F-001, major); 'term of annuity' syllabus term and 'immediate or due … term of annuity' outcome vs SYL p.3; log formula vs FIN §19 p.184 (correct for annuity-immediate; F-002 missing condition); perpetuity = infinite term vs FIN p.176; example recomputed in python: a_n = 6.6667, n = 8.7667, 1,500 a_8 = 9,314.69, OB_8 = 1,092.28, drop 1,157.82; F-003 fixed. Links (Perpetuity, Drop Payment), figure, LaTeX resolve. Low: F-001 (major) is open.
 - sources_checked: Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), Part 'The Basics of Annuity Theory' introduction, PDF p.143, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §15 Present and Accumulated Values of an Annuity-Immediate, PDF p.144-145, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §18 Annuities with Infinite Payments: Perpetuities, PDF p.176-177, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §19 Solving for the Unknown Number of Payments of an Annuity, PDF p.184-185, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §28 Varying Annuities with Payments at a Different Frequency than Interest is Convertible, PDF p.257, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; SOA Financial Mathematics Exam syllabus, December 2026, Topic 2 Annuities/cash flows with non-contingent payments (20-30%), learning outcomes a)-b), PDF p.3, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- resolves: F-001
+- status: resolved
+- note: Definition rewritten to Finan p.143 ('the fixed period of time for which payments are made'), measured in payment periods: n payments → a term of n periods, running from one period before the first payment to the last for an annuity-immediate (Finan p.144) and from the first payment to one period after the last for an annuity-due (Finan p.157); a 30-year monthly mortgage has a 360-month term. It now agrees with the next bullet (n in a_n is the term).
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- resolves: F-002
+- status: resolved
+- note: The log formula is now introduced as the term of an annuity-immediate (Finan §19 p.184), with a bullet for the annuity-due: PV = P(1-v^n)/d gives n = -ln(1 - d·PV/P)/ln(1+i). Also added, from Finan p.184-185: a non-integer n means ⌊n⌋ regular payments plus a smaller balloon (with the last) or drop (one period later) payment. The example now asks for the regular payments and the drop payment: n = 8.7667 → 8 regular payments, OB_8 = 15,938.48 - 1,500(9.897468) = 1,092.28, drop = 1,157.82 at time 9 (python; check 1,500·a_8 + 1,157.82·v^9 = 9,314.69 + 685.31 = 10,000).
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- status_set: verified
+- confidence: medium
+- checks_run: Re-checked on the new bytes: term = fixed period for which payments are made vs Finan p.143; immediate spans one period before the first payment to the last (p.144), due spans the first payment to one period after the last (p.157); n = ln(1-i·PV/P)/ln v for an annuity-immediate vs Finan §19 p.184, due form derived from ä_n = (1-v^n)/d (p.158); balloon/drop vs p.184-185; perpetuity infinite term vs p.176; 'term of annuity' and 'immediate or due' vs syllabus p.3. Example recomputed in python: a_n = 6.666667, n = 0.5108256/0.0582689 = 8.7667, 1.06^8·10,000 = 15,938.48, s_8 = 9.897468, OB_8 = 1,092.28, drop 1,157.82, 1,500a_8 = 9,314.69, 1,157.82v^9 = 685.31. 18 math nodes typeset in KaTeX; links (Balloon Payment, Drop Payment, Perpetuity, Annuity Immediate/Due) and figure resolve.
+- sources_checked: Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.143-144, 157, 176, 184-185, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; SOA Financial Mathematics Exam syllabus, December 2026, p.3, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf

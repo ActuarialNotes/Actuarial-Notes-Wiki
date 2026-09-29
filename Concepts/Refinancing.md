@@ -2,16 +2,16 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-09-28
+  last_checked: 2026-09-29
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3978e095fbaa581253b20e6ccc6789110ddcbd9bf900104236ba7acdfd4156c7
+  content_hash: sha256:d50078e43c51ddc19f6710cc37f41929c9becc9129382f055ec1255394f92187
   sources:
-    - "SOA Financial Mathematics Exam syllabus, December 2026, Topic 3 Loans (15-25%), learning outcomes a)-b), PDF p.3, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
-    - "SOA, Notation and terminology used for Exam FM (rev. Dec 2025), PDF p.2 (Refinanced loans), sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf"
-    - "SOA Exam FM Sample Questions (rev. Aug 2026), Q 60, questions PDF p.27, sha256:d20b5cf2b78cb4cddb3dc556e0df62c40b7d510b7941b546809cc58c4b71a069 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-questions.pdf"
+    - "SOA Financial Mathematics Exam syllabus, December 2026, p.3, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
+    - "SOA, Notation and terminology used for Exam FM, p.2, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf"
+    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.335, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
     - "SOA Exam FM Sample Solutions (rev. Aug 2026), Q 60, solutions PDF p.18, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf"
-    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §37 Finding the Loan Balance Using Prospective and Retrospective Methods, PDF p.334-335, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
-  open_findings: 1
+    - "SOA Exam FM Sample Questions (rev. Aug 2026), Q 243, questions PDF p.101, sha256:d20b5cf2b78cb4cddb3dc556e0df62c40b7d510b7941b546809cc58c4b71a069 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-questions.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Refinancing.md
 ---
@@ -24,11 +24,10 @@ verification:
 
 > $$P' = \frac{L'}{a_{\overline{n'}|\,i'}}$$
 
-- $P$, $n$ and $i$ are the old loan's [[Payment Amount|payment]], term and rate; $k$ is the number of payments made before refinancing; $i'$ and $n'$ are the new rate and term. The balance is computed **at the old rate** — that is the amount the lender is owed.
+- $P$, $n$ and $i$ are the old loan's [[Payment Amount|payment]], term and rate; $k$ is the number of payments made before refinancing; $i'$ and $n'$ are the new rate and term. Unless a question says otherwise, the balance is computed **at the old loan's rate** — that is the amount the lender is owed.
 - After refinancing, the new loan is amortized from scratch: interest in its first payment is $i' L'$, and the [[Amortization Schedule]] restarts from $L'$. Nothing about the payments already made changes.
 - There are two usual ways to take the benefit. **Lower payment**: keep the remaining term and solve for $P'$. **Shorter term**: keep the old payment and solve for $n'$, with a smaller final [[Drop Payment]] if $n'$ is not a whole number.
 - Whether it is worth doing is an [[Equation of Value]] question: compare the present value of the payment savings with the fees. A fee paid in cash up front can be set directly against that present value.
-- The borrower's right to refinance when rates fall is what makes a lender's cash flows uncertain — the same option an issuer holds in a [[Callable Bond]], and the source of [[Prepayment Risk]] for mortgage investors.
 
 > [!example]- Refinancing to a Lower Rate {Example}
 > A \$250,000 loan is repaid by 20 level annual payments at 7%. Just after the 8th payment, the borrower refinances the balance at 5% over the remaining 12 years, adding a \$2,000 fee to the new loan. Find the new payment, the annual saving, and the split of the first new payment.

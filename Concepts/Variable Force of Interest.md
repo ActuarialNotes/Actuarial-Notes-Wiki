@@ -34,4 +34,4 @@ A **variable (time-varying) force of interest** $\delta(t)$ allows the instantan
 >
 > > [!answer]-
 > > $$\int_0^3 (0.04 + 0.002t)\,dt = [0.04t + 0.001t^2]_0^3 = 0.12 + 0.009 = 0.129$$
-> > $$a(3) = e^{0.129} \approx 1.1378$$
+> > $$a(3) = e^{0.129} \approx 1.1377$$

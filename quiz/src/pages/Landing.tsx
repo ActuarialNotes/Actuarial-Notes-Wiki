@@ -38,7 +38,7 @@ import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { cn } from '@/lib/utils'
 import { getSittingPdfLink, getExamPdfLink, getExamSolutionsPdfLink } from '@/data/examPdfLinks'
 import { getPassRateLookup } from '@/data/pastExams'
-import { buildPastExamRows, examSourceLabel, PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
+import { buildPastExamRows, examSourceLabel, practiceExamQuestions, PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
 import { applyPassRates } from '@/lib/passRates'
 import { useExamPassRates } from '@/hooks/useExamPassRates'
 import { PastExamBrowser } from '@/components/PastExamBrowser'
@@ -91,23 +91,6 @@ function formatTargetDate(dateStr: string): string {
   return d.toLocaleDateString('en-US', { month: 'short', year: '2-digit' })
 }
 
-
-// Question counts that mirror each real exam
-const MOCK_EXAM_QUESTIONS: Record<string, number> = {
-  'Probability': 30,
-  'Financial Mathematics': 30,
-  'Exam MAS-I': 40,
-  'Exam MAS-II': 42,
-  'Exam 5': 25,
-  // No format guide gives these, so they are the released papers' own size:
-  // the thirteen Fall 2013–Fall 2019 Exam 6C papers held 394 questions, the
-  // eight 2012–2019 Exam 7 papers 200 and the eight Exam 8 papers 173
-  // (`cas6c-*` / `cas7-*` / `cas8-*` across the bank, wherever the syllabus has
-  // since filed them). Exam 9 has no released paper of its own in the bank.
-  'Exam 6C': 30,
-  'Exam 7': 25,
-  'Exam 8': 22,
-}
 
 const QUICK_COUNTS = [1, 3, 5, 10]
 
@@ -1023,9 +1006,9 @@ export default function Landing() {
     } else if (selectedSitting !== null) {
       params.set('year', String(selectedSitting.year))
       if (selectedSitting.session) params.set('session', selectedSitting.session)
-      params.set('count', String(sittingQuestionCount || (MOCK_EXAM_QUESTIONS[topic] ?? 30)))
+      params.set('count', String(sittingQuestionCount || practiceExamQuestions(topic)))
     } else {
-      params.set('count', String(MOCK_EXAM_QUESTIONS[topic] ?? 30))
+      params.set('count', String(practiceExamQuestions(topic)))
     }
     navigate(`/quiz?${params.toString()}`)
   }
@@ -1044,7 +1027,7 @@ export default function Landing() {
     ).length
   }, [allQuestions, topic, selectedSitting])
 
-  const mockExamCount = MOCK_EXAM_QUESTIONS[topic] ?? 30
+  const mockExamCount = practiceExamQuestions(topic)
   const examLabel = EXAMS.find(e => e.value === topic)?.label ?? topic
 
   // The real paper's pace, said beside the Timed choice. `topic` is the same

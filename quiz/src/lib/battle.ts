@@ -633,6 +633,19 @@ export function summarizeBattle(state: BattleState): BattleSummary {
   return { players, played: played.length, winner, margin: Math.abs(a - b), forfeit: null }
 }
 
+/**
+ * The questions `seat` got wrong or left unanswered, in the order they were
+ * played — what *Review my misses* turns into an ordinary quiz under the
+ * Actuaria skin (docs/actuaria-online.md §6.9). Only rounds played to a reveal
+ * count, so a battle cut short by a forfeit lists what was played. The battle
+ * itself still saves nothing; the review is a quiz, and saves as one.
+ */
+export function missedQuestionIds(state: BattleState, seat: Seat): string[] {
+  return state.rounds
+    .filter(r => r.phase === 'revealed' && !r.answers.some(a => a.seat === seat && a.correct))
+    .map(r => r.questionId)
+}
+
 // ── Seen from one side ──────────────────────────────────────────────────────
 
 /**

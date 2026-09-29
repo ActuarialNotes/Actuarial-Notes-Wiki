@@ -19,6 +19,7 @@ import {
   currentRound,
   formatBattleTime,
   isBattleQuestion,
+  missedQuestionIds,
   momentum,
   msLeft,
   redactFor,
@@ -467,5 +468,26 @@ describe('formatting', () => {
   it('prints a time', () => {
     expect(formatBattleTime(3420)).toBe('3.4s')
     expect(formatBattleTime(65_000)).toBe('1:05')
+  })
+})
+
+describe('the claims review — each player’s misses (docs/actuaria-online.md §6.9)', () => {
+  it('lists the rounds a seat got wrong or left unanswered, in the order played', () => {
+    let s = battle('simultaneous', 3)
+    // Round 1: Ada right, Bo wrong.
+    s = run(s, { type: 'tick', now: OPEN }, { type: 'answer', seat: 0, choice: 'B', now: OPEN + 1000 }, { type: 'answer', seat: 1, choice: 'A', now: OPEN + 2000 })
+    s = run(s, { type: 'ready', seat: 0, now: OPEN + 3000 }, { type: 'ready', seat: 1, now: OPEN + 3000 })
+    // Round 2: Ada says nothing, Bo right; the clock runs out.
+    const o2 = opensAt(s)
+    s = run(s, { type: 'tick', now: o2 }, { type: 'answer', seat: 1, choice: 'B', now: o2 + 500 }, { type: 'tick', now: o2 + 60_000 })
+    expect(missedQuestionIds(s, 0)).toEqual(['q1'])
+    expect(missedQuestionIds(s, 1)).toEqual(['q0'])
+  })
+
+  it('counts only rounds played to a reveal', () => {
+    const s = run(battle('buzzer', 3), { type: 'tick', now: OPEN })
+    expect(missedQuestionIds(s, 0)).toEqual([])
+    const forfeited = battleReducer(s, { type: 'forfeit', seat: 1, now: OPEN + 1 })
+    expect(missedQuestionIds(forfeited, 0)).toEqual([])
   })
 })

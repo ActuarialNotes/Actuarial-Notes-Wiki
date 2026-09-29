@@ -8,6 +8,8 @@ import { AnswerPad, BattleActionBar, NextButton, ReactionRow, RoundResult } from
 import { BattleResults } from '@/components/battle/BattleResults'
 import { BattleTopRow, MusicToggle } from '@/components/battle/BattleTopRow'
 import { PlayerTile } from '@/components/battle/PlayerTile'
+import { SkinQuestionFrame } from '@/components/battle/SkinParts'
+import { useBattleSkin } from '@/hooks/useBattleSkin'
 import { useBattleMusic, useBattleSession, useNow } from '@/hooks/useBattle'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
 import { playSound, resetSoundCombo } from '@/lib/soundEngine'
@@ -22,7 +24,8 @@ import {
   type Seat,
 } from '@/lib/battle'
 import { answerFor, battleExamName, battleMusicIntensity } from '@/lib/battleDisplay'
-import { generateRoomCode, joinPath } from '@/lib/battleRoom'
+import { generateRoomCode } from '@/lib/battleRoom'
+import { skinJoinPath } from '@/lib/battleSkin'
 import {
   GuestSession,
   HostSession,
@@ -56,7 +59,9 @@ function RoomCode({ code }: { code: string }) {
 
 function ShareButtons({ code }: { code: string }) {
   const [copied, setCopied] = useState(false)
-  const link = `${window.location.origin}${joinPath(code)}`
+  const skin = useBattleSkin()
+  // The page the room was made on — the code is the same room from either.
+  const link = `${window.location.origin}${skinJoinPath(skin, code)}`
   const canShare = typeof navigator.share === 'function'
 
   async function copy() {
@@ -77,7 +82,7 @@ function ShareButtons({ code }: { code: string }) {
         <Button
           variant="outline"
           className="gap-2"
-          onClick={() => { navigator.share({ title: 'Quiz Battle', text: `Join my Quiz Battle — room ${code}`, url: link }).catch(() => {}) }}
+          onClick={() => { navigator.share({ title: skin.title, text: `${skin.invite} — room ${code}`, url: link }).catch(() => {}) }}
         >
           <Share2 className="h-4 w-4" aria-hidden />
           Share
@@ -338,17 +343,19 @@ function OnlineMatch({
           <BattleCountdown battle={battle} />
         ) : question ? (
           <div className="paper-sheet">
-            <BattleQuestionCard
-              key={question.id}
-              question={question}
-              players={battle.players}
-              picker={canPick ? me : null}
-              onPick={lockIn}
-              pickSound="none"
-              locked={lockedChoice ? { seat: me, choice: lockedChoice } : null}
-              picks={phase === 'revealed' ? round.answers.map(a => ({ seat: a.seat, choice: a.choice, correct: a.correct })) : []}
-              revealed={phase === 'revealed'}
-            />
+            <SkinQuestionFrame>
+              <BattleQuestionCard
+                key={question.id}
+                question={question}
+                players={battle.players}
+                picker={canPick ? me : null}
+                onPick={lockIn}
+                pickSound="none"
+                locked={lockedChoice ? { seat: me, choice: lockedChoice } : null}
+                picks={phase === 'revealed' ? round.answers.map(a => ({ seat: a.seat, choice: a.choice, correct: a.correct })) : []}
+                revealed={phase === 'revealed'}
+              />
+            </SkinQuestionFrame>
           </div>
         ) : null}
       </div>
@@ -413,6 +420,7 @@ function Results({
       <BattleResults
         battle={battle}
         questionsById={questionsById}
+        me={snapshot.me}
         actions={
           <>
             {!gone && (
@@ -476,6 +484,7 @@ export function OnlineHost({
   opponent?: BattlePlayer
 }) {
   const matched = !!givenCode
+  const skin = useBattleSkin()
   const [code] = useState(() => givenCode ?? generateRoomCode())
   const { session, snapshot } = useBattleSession(
     () => new HostSession({
@@ -556,6 +565,7 @@ export function OnlineHost({
   }
 
   const guest = snapshot.players[1]
+  const joinHint = skin.joinHint
   return (
     <div className="mx-auto max-w-lg space-y-8 py-8 text-center" data-testid="battle-lobby">
       <CalmMusic />
@@ -582,7 +592,7 @@ export function OnlineHost({
       ) : (
         <div className="space-y-3">
           <p className="text-sm text-muted-foreground">
-            Send this code to a friend — they open <span className="font-medium text-foreground">Quiz Battle → Join with a code</span>.
+            Send this code to a friend — they open <span className="font-medium text-foreground">{joinHint}</span>.
           </p>
           <ShareButtons code={code} />
         </div>

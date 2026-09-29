@@ -305,6 +305,33 @@ player's tile once, reactions float up, confetti falls once. Each marks a thing
 that happened; under reduced motion each has a static end state, and no
 information is carried by movement alone.
 
+## Skins: Monte Carlo Station
+
+The same page is also **Monte Carlo Station**, Actuaria Online's way into a battle
+(`/actuaria/battle`, `docs/actuaria-online.md` §6.8): `pages/Battle.tsx` with
+`skin="actuaria"`. A skin changes chrome and words, never the game — the reducer,
+the scoring, the sessions, the lobby and its handshake, the cues, the music and
+*nothing is saved* are the same under both.
+
+- **The words and the chrome are data** (`lib/battleSkin.ts`, read through
+  `hooks/useBattleSkin.ts`): the ways in are *Open channel*, *Dogfight* and *Private
+  channel*, each carrying Quiz Battle's own name beneath it; the setup's exam picker
+  lists sectors, with an exam that has no raceable questions disabled and the
+  reason given rather than hidden; the question sits in a HUD frame; the logo is the
+  Actuaria mark; the way back leads to the star map. The components read the skin,
+  so they have no `if (actuaria)` branches of their own. Player colours are
+  untouched: sky and fuchsia are still the only colours a player's tile, buzzer, pad
+  or score wears.
+- **The two skins play each other.** A room's code is its channel's name, so a room
+  made at the station can be joined from `/battle` and the other way round; only the
+  invite link says which page to open it on (`skinJoinPath`). The lobby pairs players
+  on either page.
+- **Review my misses** (the *claims review*) is the one thing the Actuaria skin adds
+  to the results: the questions this device's own player got wrong or left
+  unanswered (`missedQuestionIds` — online, this device's seat; on one screen, the
+  first seat, the account holder's), opened as an ordinary quiz by id. The battle
+  still saves nothing; the review is a quiz, and saves as one.
+
 ## Testing
 
 - `lib/battle.test.ts` — the rules: the clock's boundaries, buzzing, the answer
@@ -332,12 +359,17 @@ information is carried by movement alone.
   sustained above 1 kHz, the form, and each intensity busier than the last.
 - `lib/soundConfig.test.ts`, *the battle cues* — round and short, the moments
   louder than what sits under them, no cue for a miss.
+- `lib/battleSkin.test.ts` — the two skins' words, and that each invites a friend to
+  its own page.
 - `e2e/battle.spec.ts` — a same-screen battle played to the end (buzz, miss,
   steal on the pad, results, rematch), an online battle between two pages
   over BroadcastChannel (invite link, lobby, hidden lock-ins, reveals on both
   screens, Ready, results, a rematch asked for and started), the empty lobby
   said so on the way in and inside it, and two strangers matched from the lobby
-  into a battle and sent back to it with *Find another opponent*. It runs with
+  into a battle and sent back to it with *Find another opponent*; and a battle across
+  the two skins — hosted at Monte Carlo Station, joined from Quiz Battle — with the
+  claims review on the station only and nothing saved on either, and the lobby
+  pairing a player on each page. It runs with
   the app muted: a headless browser with no audio device can trap in its audio
   output thread under a battle's run of cues, and nothing it asserts is about
   sound.

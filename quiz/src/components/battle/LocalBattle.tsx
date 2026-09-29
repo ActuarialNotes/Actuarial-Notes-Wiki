@@ -7,6 +7,7 @@ import { BattleCountdown } from '@/components/battle/BattleCountdown'
 import { BattleActionBar, Buzzers, FloorPad, NextButton, RoundResult } from '@/components/battle/BattleActionBar'
 import { BattleResults } from '@/components/battle/BattleResults'
 import { BattleTopRow } from '@/components/battle/BattleTopRow'
+import { SkinQuestionFrame } from '@/components/battle/SkinParts'
 import { useBattleMusic, useLocalBattle, useNow } from '@/hooks/useBattle'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
 import { playSound, resetSoundCombo } from '@/lib/soundEngine'
@@ -133,6 +134,9 @@ export function LocalBattle({
       <BattleResults
         battle={battle}
         questionsById={questionsById}
+        // One screen: the first seat is the account holder's; the second
+        // player's answers are not this account's to review.
+        me={0}
         actions={
           <>
             <Button size="lg" onClick={start} className="h-12 gap-2 rounded-xl" data-testid="battle-rematch">
@@ -177,15 +181,17 @@ export function LocalBattle({
           <BattleCountdown battle={battle} />
         ) : question ? (
           <div className="paper-sheet">
-            <BattleQuestionCard
-              key={question.id}
-              question={question}
-              players={battle.players}
-              picker={phase === 'buzzed' ? round.floor?.seat ?? null : null}
-              onPick={answer}
-              picks={round.answers.map(a => ({ seat: a.seat, choice: a.choice, correct: a.correct }))}
-              revealed={phase === 'revealed'}
-            />
+            <SkinQuestionFrame>
+              <BattleQuestionCard
+                key={question.id}
+                question={question}
+                players={battle.players}
+                picker={phase === 'buzzed' ? round.floor?.seat ?? null : null}
+                onPick={answer}
+                picks={round.answers.map(a => ({ seat: a.seat, choice: a.choice, correct: a.correct }))}
+                revealed={phase === 'revealed'}
+              />
+            </SkinQuestionFrame>
           </div>
         ) : null}
       </div>

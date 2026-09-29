@@ -1,5 +1,9 @@
 import { useId, type ReactNode } from 'react'
 import { ExamLogo } from '@/components/ExamLogo'
+import { SectorTile } from '@/components/actuaria/SectorTile'
+import { useBattleSkin } from '@/hooks/useBattleSkin'
+import { sectorName } from '@/lib/actuaria/lexicon'
+import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 import { PlayerTile } from '@/components/battle/PlayerTile'
 import { Input } from '@/components/ui/input'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
@@ -79,6 +83,7 @@ export function BattleSetupForm({
   /** The signed-in account's avatar, for the first player's tile. */
   avatarUrl?: string
 }) {
+  const skin = useBattleSkin()
   const set = (patch: Partial<BattleSetup>) => onChange({ ...setup, ...patch })
   const setName = (seat: Seat, name: string) => {
     const names: [string, string] = [...setup.names]
@@ -110,9 +115,11 @@ export function BattleSetupForm({
         </div>
       </Field>
 
-      <Field label="Exam">
+      <Field label={skin.id === 'actuaria' ? 'Sector' : 'Exam'}>
         {exams.length === 0 ? (
           <div className="h-16 animate-pulse rounded-lg bg-muted/50" />
+        ) : skin.id === 'actuaria' ? (
+          <SectorPicker exams={exams} value={setup.exam} onChange={exam => set({ exam })} />
         ) : (
           <div role="radiogroup" aria-label="Exam" className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             {exams.map(({ exam, count }) => {
@@ -183,6 +190,63 @@ export function BattleSetupForm({
           options={BATTLE_DIFFICULTIES.map(d => ({ value: d.id, label: d.label }))}
         />
       </Field>
+    </div>
+  )
+}
+
+/**
+ * Under the Actuaria skin the exam is picked as a sector (docs/actuaria-online.md
+ * §6.8): every exam with a question bank, in ladder order, each on its own tile.
+ * One whose bank has no raceable questions is listed and disabled, with the
+ * reason — a written paper can't be raced — rather than left off.
+ */
+function SectorPicker({
+  exams,
+  value,
+  onChange,
+}: {
+  exams: readonly { exam: string; count: number }[]
+  value: string
+  onChange: (exam: string) => void
+}) {
+  const counts = new Map(exams.map(e => [e.exam, e.count]))
+  return (
+    <div role="radiogroup" aria-label="Sector" className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+      {Object.keys(EXAM_LABEL_TO_ID).map(exam => {
+        const key = EXAM_LABEL_TO_ID[exam]
+        const count = counts.get(exam) ?? 0
+        const raceable = count > 0
+        const selected = value === exam
+        return (
+          <button
+            key={exam}
+            type="button"
+            role="radio"
+            aria-checked={selected}
+            aria-disabled={!raceable}
+            disabled={!raceable}
+            onClick={() => onChange(exam)}
+            style={examAccentStyle(key)}
+            data-testid={`battle-exam-${exam}`}
+            className={cn(
+              'flex items-center gap-3 rounded-lg border bg-card px-3 py-2.5 text-left transition-colors',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              selected
+                ? 'border-[var(--exam-accent-muted)] bg-[var(--exam-accent-soft)]'
+                : 'border-transparent',
+              raceable ? !selected && 'hover:bg-[var(--exam-accent-soft)]' : 'cursor-not-allowed opacity-60',
+            )}
+          >
+            <SectorTile examKey={key} size="md" charted={raceable} />
+            <span className="min-w-0 flex-1">
+              <span className="actuaria-display block truncate text-xs">{sectorName(key)}</span>
+              <span className="block truncate text-xs text-muted-foreground">
+                {raceable ? `${battleExamName(exam)} · ${count} questions` : `${battleExamName(exam)} · written papers can’t be raced`}
+              </span>
+            </span>
+          </button>
+        )
+      })}
     </div>
   )
 }

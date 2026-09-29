@@ -1,4 +1,4 @@
-import { useEffect, useMemo, type ReactNode } from 'react'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
 import { ActuariaBottomBar } from '@/components/actuaria/ActuariaBottomBar'
@@ -11,10 +11,13 @@ import { useLobbyCount } from '@/hooks/useBattle'
 import { useBattleExams } from '@/hooks/useBattleExams'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import type { LeagueExamOption } from '@/components/LeaderboardPanel'
+// Monte Carlo Station *is* Quiz Battle's page, under Actuaria's skin (§6.8).
+import Battle from '@/pages/Battle'
 import { DailyView } from './DailyView'
 import { HangarView } from './HangarView'
 import { MapView } from './MapView'
 import { SectorView } from './SectorView'
+import { SimulationView } from './SimulationView'
 import { TitleScreen } from './TitleScreen'
 
 /**
@@ -50,8 +53,11 @@ export default function Actuaria() {
     [world.sectors],
   )
 
-  const inWorld = (children: ReactNode) => (
-    <InWorld leagueExams={leagueExams} popupOpen={popupOpen}>{children}</InWorld>
+  // A battle owns the foot of the screen while it runs; the tab bar stands down.
+  const [battling, setBattling] = useState(false)
+
+  const inWorld = (children: ReactNode, opts: { tabBar?: boolean } = {}) => (
+    <InWorld leagueExams={leagueExams} popupOpen={popupOpen} tabBar={opts.tabBar ?? true}>{children}</InWorld>
   )
 
   return (
@@ -62,7 +68,8 @@ export default function Actuaria() {
         <Route path="sector/:exam" element={inWorld(<SectorView world={world} battleCounts={battleCounts} />)} />
         <Route path="daily" element={inWorld(<DailyView world={world} questions={questions} questionsLoading={questionsLoading} />)} />
         <Route path="hangar" element={inWorld(<HangarView />)} />
-        <Route path="battle" element={<Navigate to="/battle" replace />} />
+        <Route path="simulation" element={inWorld(<SimulationView world={world} />)} />
+        <Route path="battle" element={inWorld(<Battle skin="actuaria" onPlayingChange={setBattling} />, { tabBar: !battling })} />
         <Route path="*" element={<Navigate to="/actuaria/map" replace />} />
       </Routes>
       {/* The one reader: a landmark opens where a concept always does. */}
@@ -95,7 +102,17 @@ function TitleOrMap({ lobbyCount }: { lobbyCount: number | null }) {
   )
 }
 
-function InWorld({ leagueExams, popupOpen, children }: { leagueExams: LeagueExamOption[]; popupOpen: boolean; children: ReactNode }) {
+function InWorld({
+  leagueExams,
+  popupOpen,
+  tabBar,
+  children,
+}: {
+  leagueExams: LeagueExamOption[]
+  popupOpen: boolean
+  tabBar: boolean
+  children: ReactNode
+}) {
   return (
     <>
       <ActuariaHud leagueExams={leagueExams} />
@@ -108,7 +125,7 @@ function InWorld({ leagueExams, popupOpen, children }: { leagueExams: LeagueExam
       >
         {children}
       </div>
-      <ActuariaBottomBar />
+      {tabBar && <ActuariaBottomBar />}
     </>
   )
 }

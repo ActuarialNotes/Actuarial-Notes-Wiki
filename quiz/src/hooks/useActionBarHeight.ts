@@ -18,17 +18,27 @@ import { useEffect, type RefObject } from 'react'
  * The variable is absent (and reads as its `0px` fallback) on pages with no
  * action bar, so consumers can offset by it unconditionally.
  */
+/**
+ * The bar whose height the variable holds now. Two bars can be up at once for
+ * a moment — Actuaria's tab bar standing down as a battle's action bar takes the
+ * foot of the screen — and the one leaving must not clear the one arriving.
+ */
+let owner: object | null = null
+
 export function useActionBarHeight(ref: RefObject<HTMLElement | null>, active = true) {
   useEffect(() => {
     const root = document.documentElement
     const el = ref.current
 
     if (!active || !el) {
-      root.style.removeProperty('--action-bar-height')
+      if (owner === null) root.style.removeProperty('--action-bar-height')
       return
     }
 
+    const me = {}
+    owner = me
     const observer = new ResizeObserver(entries => {
+      if (owner !== me) return
       const height = entries[0]?.borderBoxSize?.[0]?.blockSize ?? el.offsetHeight
       root.style.setProperty('--action-bar-height', `${Math.round(height)}px`)
     })
@@ -36,6 +46,8 @@ export function useActionBarHeight(ref: RefObject<HTMLElement | null>, active = 
 
     return () => {
       observer.disconnect()
+      if (owner !== me) return
+      owner = null
       root.style.removeProperty('--action-bar-height')
     }
   }, [ref, active])

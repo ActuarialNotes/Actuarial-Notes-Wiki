@@ -1,11 +1,16 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
-import { ChevronDown, Trophy, Handshake } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { ChevronDown, ClipboardList, Trophy, Handshake } from 'lucide-react'
+import { buttonVariants } from '@/components/ui/button'
+import { useBattleSkin } from '@/hooks/useBattleSkin'
+import { claimsReviewPath } from '@/lib/battleSkin'
 import { PlayerTile } from '@/components/battle/PlayerTile'
 import { BattleQuestionCard } from '@/components/battle/BattleQuestionCard'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import {
   SEATS,
   formatBattleTime,
+  missedQuestionIds,
   roundTaker,
   summarizeBattle,
   type BattleState,
@@ -152,17 +157,28 @@ function ReviewRow({ battle, index, question }: { battle: BattleState; index: nu
 export function BattleResults({
   battle,
   questionsById,
+  me,
   actions,
   note,
 }: {
   battle: BattleState
   questionsById: ReadonlyMap<string, Question>
+  /**
+   * The seat this device's own player sat in — online, this device's; on one
+   * screen, the first (the account holder). Whose misses a claims review is of.
+   */
+  me?: Seat
   /** Rematch, settings, leave — whatever this way of playing offers. */
   actions: ReactNode
   /** A line under the actions — online, whether the other player wants a rematch. */
   note?: ReactNode
 }) {
+  const skin = useBattleSkin()
   const summary = summarizeBattle(battle)
+  // Under the Actuaria skin a lost question is study: the ones this player got
+  // wrong or left, as an ordinary quiz that saves as one (§6.9). The battle
+  // itself still saves nothing.
+  const misses = skin.reviewMisses && me !== undefined ? missedQuestionIds(battle, me) : []
   const names = [battle.players[0].name, battle.players[1].name] as const
   useSoundOnMount('complete')
   // The verdict is read from the top, whatever the last question left scrolled.
@@ -183,6 +199,7 @@ export function BattleResults({
             <Trophy className="h-8 w-8 text-amber-500" />
           )}
         </span>
+        {skin.resultsLabel && <p className="actuaria-display text-[11px] text-muted-foreground">{skin.resultsLabel}</p>}
         <h2
           className="text-2xl font-bold tracking-tight"
           style={summary.winner !== null ? playerAccentStyle(summary.winner) : undefined}
@@ -215,13 +232,25 @@ export function BattleResults({
       </div>
 
       <div className="space-y-2">
-        <div className="flex flex-col gap-2 sm:flex-row sm:justify-center">{actions}</div>
+        <div className="flex flex-col gap-2 sm:flex-row sm:justify-center">
+          {actions}
+          {misses.length > 0 && (
+            <Link
+              to={claimsReviewPath(misses)}
+              className={buttonVariants({ variant: 'outline', size: 'lg', className: 'h-12 gap-2 rounded-xl' })}
+              data-testid="battle-review-misses"
+            >
+              <ClipboardList className="h-4 w-4" aria-hidden />
+              Review my misses
+            </Link>
+          )}
+        </div>
         {note && <p className="text-center text-sm text-muted-foreground">{note}</p>}
       </div>
 
       {summary.played > 0 && (
         <section className="space-y-2">
-          <h3 className="px-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Question by question</h3>
+          <h3 className="px-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{skin.review}</h3>
           <ol className="space-y-1.5">
             {battle.rounds.slice(0, summary.played).map(r => (
               <ReviewRow key={r.index} battle={battle} index={r.index} question={questionsById.get(r.questionId)} />

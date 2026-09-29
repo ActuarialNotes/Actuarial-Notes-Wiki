@@ -1,17 +1,17 @@
 ---
 verification:
-  status: verified
-  confidence: low
+  status: stale
+  confidence: null
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ac8135a55bf7c6ade9165707eb7ba28bacc888f4dfeb0e58c936b3c7f8c3d6bc
+  content_hash: sha256:296e81d788a609b56f213d9367f7ab08bb6854b8f1eb8fe56f84a877c24ab04d
   sources:
     - "SOA Financial Mathematics Exam syllabus, December 2026, Topic 4 Bonds (15-25%), learning outcome a)-b), PDF p.4, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
     - "SOA, Notation and terminology used for Exam FM (rev. Dec 2025), PDF p.1, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf"
     - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §43 The Various Pricing Formulas of a Bond, PDF p.384-385, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
     - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §44 Amortization of Premium or Discount, PDF p.396, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
     - "Broverman, Review of Calculator Functions for the Texas Instruments BA II Plus (SOA study note FM-23-05), PDF p.20, sha256:1b71586cc1b08d7bc36c04ecb3d4e6b367fce30f394e63efafc879e6b6e466fa — https://www.soa.org/globalassets/assets/files/edu/FM-23-05.pdf"
-  open_findings: 2
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Yield Rate.md
 ---
@@ -20,19 +20,34 @@ The **yield rate** $j$ (also called the yield to maturity) is the internal rate 
 
 > $$P = Fr \cdot a_{\overline{n}|j} + C \cdot v^n$$
 
-- It is the $j$ that solves the bond price equation. Unlike the [[Coupon Rate]] $r$, which is fixed by the bond's terms, the yield rate reflects the bond's market price.
-- A **premium bond** ($P > C$) has $Fr > Cj$, meaning the coupon rate exceeds the yield rate; a **discount bond** ($P < C$) has $Fr < Cj$.
+- $F$ is the face amount, $r$ the coupon rate per period, $C$ the redemption value, $n$ the number of coupons and $v = 1/(1+j)$; the yield rate is the $j$ that solves this equation. Unlike the [[Coupon Rate]] $r$, which is fixed by the bond's terms, the yield rate reflects the bond's market price.
+- A **premium bond** ($P > C$) has $Fr > Cj$ — when $C = F$, as it is unless stated otherwise, the coupon rate exceeds the yield rate; a **discount bond** ($P < C$) has $Fr < Cj$.
 - Bond prices and yields move in opposite directions: if the yield rises, the price falls, and vice versa.
-- The yield rate is the fundamental measure of a bond's return to a buy-and-hold investor.
+- The yield rate is the rate actually earned by an investor who buys the bond at $P$ and holds it until redemption.
 
 ![[Media/Figures/Yield_Rate.svg|340]]
 
 > [!example]- Finding the Yield Rate {Example}
-> A \$$1{,}000$ face value 3-year annual-coupon bond with coupon rate $5\%$ is currently priced at \$$950.26$. Verify that the yield rate is approximately $6.5\%$.
+> A \$$1{,}000$ face value 3-year annual-coupon bond with coupon rate $5\%$ is currently priced at \$$950.26$. Find its yield rate.
 >
 > > [!answer]-
-> > Coupons are $Fr = 1000(0.05) = \$50$ per year; redemption value $C = 1000$.
-> > At $j = 6.5\%$: $v = 1/1.065$, $a_{\overline{3}|6.5\%} = (1 - 1.065^{-3})/0.065 = 2.6485$.
-> > $$P = 50(2.6485) + 1000(1.065)^{-3} = 132.43 + 827.85 = \$960.28$$
-> > Trying $j = 7\%$: $a_{\overline{3}|7\%} = 2.6243$, $P = 50(2.6243) + 1000(1.07)^{-3} = 131.22 + 816.30 = \$947.51$.
-> > By interpolation the yield is close to $6.5\%$–$7\%$, consistent with the bond trading at a discount to its \$$1{,}000$ face value since the coupon rate ($5\%$) is below the yield.
+> > Coupons are $Fr = 1{,}000(0.05) = 50$ per year and the redemption value is $C = 1{,}000$, so $j$ solves
+> > $$50\,a_{\overline{3}|j} + 1{,}000\,v^3 = 950.26$$
+> > Bracket the root by pricing at two trial rates:
+> > $$
+> > \begin{align*}
+> > P(6.5\%) &= 50(2.64848) + 1{,}000(1.065)^{-3} \\
+> > &= 960.27 \\
+> > P(7\%) &= 50(2.62432) + 1{,}000(1.07)^{-3} \\
+> > &= 947.51
+> > \end{align*}
+> > $$
+> > The price $950.26$ lies between them, so interpolate:
+> > $$
+> > \begin{align*}
+> > j &\approx 0.065 + 0.005 \cdot \frac{960.27 - 950.26}{960.27 - 947.51} \\
+> > &= 0.065 + 0.005(0.78448) \\
+> > &= 0.06892
+> > \end{align*}
+> > $$
+> > Solving exactly (BA II Plus: $N = 3$, $PV = 950.26$, $PMT = -50$, $FV = -1{,}000$, CPT $I/Y$) gives $j = 6.89\%$. The bond trades at a discount to its face value because its coupon rate ($5\%$) is below the yield.

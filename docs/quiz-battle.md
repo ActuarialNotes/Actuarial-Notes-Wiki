@@ -151,6 +151,7 @@ other's, and the buzzer race is drawn from the whole exam as before.
 | The channel itself: Supabase Realtime broadcast (and presence, for the lobby), or BroadcastChannel | `quiz/src/lib/battleTransport.ts` |
 | The lobby's rules: entries, the queue, the pairing, the handshake messages — pure, tested | `quiz/src/lib/battleLobby.ts` |
 | One player's end of the lobby, and presence over a plain broadcast — framework-free, tested over an in-memory channel | `quiz/src/lib/battleMatchmaking.ts` |
+| The queue away from the lobby: its rules (pure, tested), the store holding the session, and the pill | `quiz/src/lib/battleQueue.ts`, `quiz/src/stores/battleQueueStore.ts`, `quiz/src/components/BattleQueueButton.tsx` |
 | The music, as notes — pure, tested | `quiz/src/lib/battleMusic.ts` |
 | The music, played on the app's audio graph | `quiz/src/lib/battleMusicPlayer.ts` |
 | Hooks: the local battle's clock, an online session, a lobby session, the music, `useNow` | `quiz/src/hooks/useBattle.ts` |
@@ -261,9 +262,20 @@ ordinary room with a code nobody had to type.
   observer — nobody sees them, an offer to them is declined — and pressing
   Ready takes a place at the back of the queue (`since` is the moment it was
   pressed; `setReady` in `lib/battleMatchmaking.ts`). Cancel withdraws any offer
-  in flight and takes the entry down. The page holds the choice, so a new name
-  (a new entry) keeps it; every way into the lobby, *Find another opponent*
-  included, starts not ready.
+  in flight and takes the entry down. A new name (a new entry) keeps the choice;
+  every fresh way into the lobby, *Find another opponent* included, starts not
+  ready.
+- **The queue outlives the page** (`lib/battleQueue.ts`,
+  `stores/battleQueueStore.ts`). The lobby session is held by an app-level
+  store, not the lobby screen: a player who leaves the lobby *not* ready leaves
+  the lobby with it, as before, but a ready one keeps their place. A **Return
+  to lobby** pill (`components/BattleQueueButton.tsx`, in the resume dock beside
+  the *Return to quiz* pill) follows them with how long they have waited and
+  offers **Return** (the same lobby, still ready — *Find an opponent* and the
+  battle page's own mount pick the held session back up) or **Leave**. A match
+  found while they are away is kept by the store and fetches them to the battle
+  page they queued from, which picks it up once the bank is loaded. Starting any
+  other battle — one screen, a room, a code — gives the place up.
 - **Nobody picks anybody.** Every device in the lobby computes the same pairing
   from the same list (`planMatches` in `lib/battleLobby.ts`): down the queue,
   oldest first, each player with the next compatible one behind them. Two

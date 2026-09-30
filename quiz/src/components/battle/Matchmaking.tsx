@@ -58,16 +58,19 @@ function LobbyRow({
 }
 
 /**
- * The matchmaking lobby (lib/battleMatchmaking.ts): this player joins it on
- * mount, sees who else is waiting — or that nobody is — and is paired with the
- * first compatible player to arrive. The exam can be changed while waiting,
- * without losing the place in the queue.
+ * The matchmaking lobby (lib/battleMatchmaking.ts): this player walks in on
+ * mount and sees who else is waiting — or that nobody is — but is only in the
+ * queue once they press **Ready**; then they are paired with the first
+ * compatible player to arrive, until they press Cancel. The exam can be
+ * changed either way, without losing the place in the queue.
  */
 export function Matchmaking({
   player,
   exam,
   exams,
   onExamChange,
+  ready,
+  onReadyChange,
   onMatched,
   onPlayFriend,
 }: {
@@ -76,6 +79,9 @@ export function Matchmaking({
   exam: string
   exams: readonly { exam: string; count: number }[]
   onExamChange: (exam: string) => void
+  /** In the queue — held by the page, so a new name doesn't lose it. */
+  ready: boolean
+  onReadyChange: (ready: boolean) => void
   onMatched: (match: MatchFound) => void
   /** Nobody here: make a room for a friend instead. */
   onPlayFriend: () => void
@@ -88,9 +94,11 @@ export function Matchmaking({
       exams: examIds,
       player: { id, name: player.name, ...(player.avatarUrl ? { avatarUrl: player.avatarUrl } : {}) },
       exam,
+      ready,
     }),
     id,
   )
+  useEffect(() => { session?.setReady(ready) }, [session, ready])
   useBattleMusic(0)
   const now = useNow(true, 1000)
 
@@ -113,24 +121,25 @@ export function Matchmaking({
   const connecting = !snapshot || snapshot.status === 'connecting'
   const trouble = snapshot?.connection === 'error'
   const current = me?.exam ?? exam
+  const searching = ready && !connecting
 
   return (
     <div className="space-y-6" data-testid="battle-matchmaking">
       <div className="space-y-5 rounded-xl bg-card p-5">
         <div className="flex items-center gap-4">
           <span className="relative flex h-14 w-14 shrink-0 items-center justify-center" style={playerAccentStyle(0)} aria-hidden>
-            {!connecting && <span className="battle-radar absolute inset-0 rounded-full" />}
-            {!connecting && <span className="battle-radar battle-radar-late absolute inset-0 rounded-full" />}
+            {searching && <span className="battle-radar absolute inset-0 rounded-full" />}
+            {searching && <span className="battle-radar battle-radar-late absolute inset-0 rounded-full" />}
             <PlayerTile seat={0} player={player} size={44} />
           </span>
           <div className="min-w-0 flex-1">
             <p className="font-semibold" aria-live="polite">
-              {connecting ? 'Connecting to the lobby…' : 'Looking for an opponent…'}
+              {connecting ? 'Connecting to the lobby…' : ready ? 'Looking for an opponent…' : 'Ready when you are'}
             </p>
             <p className="text-sm text-muted-foreground">
               {current === ANY_EXAM ? 'Any exam' : battleExamName(current)} · {MATCH_ROUNDS} questions · 2:00 each
             </p>
-            {me && (
+            {me && searching && (
               <p className="text-xs tabular-nums text-muted-foreground">Waiting {waited(me.since, now)}</p>
             )}
           </div>
@@ -160,6 +169,18 @@ export function Matchmaking({
           })}
         </div>
 
+        <Button
+          size="lg"
+          variant={ready ? 'outline' : 'default'}
+          className="h-12 w-full rounded-xl"
+          onClick={() => onReadyChange(!ready)}
+          disabled={connecting}
+          aria-pressed={ready}
+          data-testid="battle-lobby-ready"
+        >
+          {ready ? 'Cancel' : 'Ready'}
+        </Button>
+
         {trouble && (
           <p className="flex items-center gap-2 text-sm text-amber-600 dark:text-amber-400">
             <WifiOff className="h-4 w-4" aria-hidden /> Trouble reaching the lobby — retrying…
@@ -182,7 +203,9 @@ export function Matchmaking({
             <div className="space-y-1">
               <p className="font-medium">No one else is in the lobby right now.</p>
               <p className="text-sm text-muted-foreground">
-                Stay on this page and you’ll be matched the moment someone joins — or battle a friend instead.
+                {ready
+                  ? 'Stay on this page and you’ll be matched the moment someone joins — or battle a friend instead.'
+                  : 'Press Ready and you’ll be matched the moment someone joins — or battle a friend instead.'}
               </p>
             </div>
             <Button variant="outline" onClick={onPlayFriend} className="gap-2">

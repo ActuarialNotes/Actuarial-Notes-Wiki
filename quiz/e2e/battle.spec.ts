@@ -202,6 +202,7 @@ test.describe('quiz battle', () => {
     await ada.getByTestId('battle-lobby-name').fill('Ada')
     await ada.getByTestId('battle-lobby-name').press('Enter')
     await ada.getByTestId('battle-lobby-exam-Probability').click()
+    await ada.getByTestId('battle-lobby-ready').click()
     await expect(ada.getByTestId('battle-lobby-empty')).toBeVisible()
 
     // One browser profile plays both: give Bo his own name and exam first.
@@ -213,6 +214,10 @@ test.describe('quiz battle', () => {
     })
     await bo.reload()
     await bo.getByTestId('battle-mode-lobby').click()
+    // Not ready: Bo sees Ada, but Ada can't see Bo until he presses Ready.
+    await expect(bo.getByTestId('battle-lobby-player')).toContainText('Ada')
+    await expect(ada.getByTestId('battle-lobby-count')).toHaveText('0')
+    await bo.getByTestId('battle-lobby-ready').click()
 
     // Different exams: they see each other, and nobody is matched…
     await expect(bo.getByTestId('battle-lobby-player')).toContainText('Ada')
@@ -409,13 +414,16 @@ test.describe('quiz battle', () => {
     await ada.getByTestId('battle-lobby-name').fill('Ada')
     await ada.getByTestId('battle-lobby-name').press('Enter')
     await ada.getByTestId('battle-lobby-exam-Probability').click()
+    await ada.getByTestId('battle-lobby-ready').click()
     await expect(ada.getByTestId('battle-lobby-empty')).toBeVisible()
 
     await bo.goto('/actuaria/battle')
     await expect(bo.getByTestId('battle-lobby-status')).toHaveText('1 pilot waiting')
     // One browser profile plays both, so Bo walks in asking for Ada's exam —
-    // the setup the two pages share remembers it.
+    // the setup the two pages share remembers it — and is matched on Ready.
     await bo.getByTestId('battle-mode-lobby').click()
+    await expect(bo.getByTestId('battle-lobby-player')).toContainText('Ada')
+    await bo.getByTestId('battle-lobby-ready').click()
 
     for (const page of [ada, bo]) {
       await expect(page.getByTestId('battle-match-intro')).toBeVisible({ timeout: 15_000 })

@@ -248,6 +248,8 @@ function BattlePage({
       ? { kind: 'setup', mode: 'host' }
       : { kind: 'home' },
   )
+  // In the lobby's queue: nobody is matched until they press Ready.
+  const [lobbyReady, setLobbyReady] = useState(false)
 
   const questionsById = useMemo(() => new Map(questions.map(q => [q.id, q])), [questions])
   const exams = useMemo(() => {
@@ -339,7 +341,12 @@ function BattlePage({
     }
   }
 
-  const findAnother = () => setScreen({ kind: 'lobby' })
+  /** Into the lobby — watching it, and in the queue only once Ready is pressed. */
+  function enterLobby() {
+    setLobbyReady(false)
+    setScreen({ kind: 'lobby' })
+  }
+  const findAnother = enterLobby
 
   // ── The battles ───────────────────────────────────────────────────────────
   const shell = (children: ReactNode) => (
@@ -421,7 +428,7 @@ function BattlePage({
                 />
                 {skin.id === 'actuaria' ? stationCountLine(lobbyCount, true) : lobbyCountLine(lobbyCount)}
               </p>
-              <Button size="lg" className="h-12 gap-2 rounded-xl" onClick={() => setScreen({ kind: 'lobby' })} disabled={loading} data-testid="battle-mode-lobby">
+              <Button size="lg" className="h-12 gap-2 rounded-xl" onClick={enterLobby} disabled={loading} data-testid="battle-mode-lobby">
                 <Shuffle className="h-4 w-4" aria-hidden />
                 Find an opponent
               </Button>
@@ -491,6 +498,8 @@ function BattlePage({
               exam={lobbyExam}
               exams={exams}
               onExamChange={next => setSetup({ ...effectiveSetup, lobbyExam: next })}
+              ready={lobbyReady}
+              onReadyChange={setLobbyReady}
               onMatched={matched}
               onPlayFriend={() => setScreen({ kind: 'setup', mode: 'host' })}
             />

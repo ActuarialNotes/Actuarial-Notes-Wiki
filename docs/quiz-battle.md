@@ -249,12 +249,21 @@ told it's full.
 ### Matchmaking: a random opponent
 
 **Random opponent** puts the player in a lobby — one more public channel,
-`quiz-battle:lobby` — with the exam they want to play, or *Any exam*. Everyone
-in it sees everyone else (name, avatar, exam, how long they've waited), and the
+`quiz-battle:lobby` — with the exam they want to play, or *Any exam*. Walking
+in doesn't queue anyone: the player sees who is waiting and chooses their exam,
+and joins the queue only by pressing **Ready** (and leaves it with **Cancel**).
+Everyone in the queue sees everyone else (name, avatar, exam, how long they've waited), and the
 first compatible player to arrive is the match. Nothing about it is stored
 either: the lobby is presence on a channel, and a matched pair go on to an
 ordinary room with a code nobody had to type.
 
+- **Ready is the queue.** A player who isn't ready watches the lobby like an
+  observer — nobody sees them, an offer to them is declined — and pressing
+  Ready takes a place at the back of the queue (`since` is the moment it was
+  pressed; `setReady` in `lib/battleMatchmaking.ts`). Cancel withdraws any offer
+  in flight and takes the entry down. The page holds the choice, so a new name
+  (a new entry) keeps it; every way into the lobby, *Find another opponent*
+  included, starts not ready.
 - **Nobody picks anybody.** Every device in the lobby computes the same pairing
   from the same list (`planMatches` in `lib/battleLobby.ts`): down the queue,
   oldest first, each player with the next compatible one behind them. Two
@@ -302,8 +311,9 @@ ordinary room with a code nobody had to type.
   (create a room, or join with a code); and the rules. An invite link,
   `/battle?join=CODE`, opens straight onto joining.
 - **The lobby** (`Matchmaking`): the player's own tile under a radar pulse in
-  their colour, what they're looking for and how long they've waited, the exam
-  pills (*Any exam* first), and who else is here — or the empty state. The name
+  their colour (only once they're ready), what they're looking for and how long
+  they've waited, the exam pills (*Any exam* first), the **Ready** button (Cancel
+  once pressed), and who else is here — or the empty state. The name
   they appear under is editable above it; the account's name is the default.
 - **Setup** (`BattleSetupForm`): the names (the account's own name and avatar
   for the first player), the exam, the length, the pace, the difficulty.

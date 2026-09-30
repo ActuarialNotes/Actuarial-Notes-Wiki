@@ -31,6 +31,8 @@ import { ExamProgressProvider } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
 import { useSubscription } from '@/hooks/useSubscription'
 import { canEnterMode, modeDestination, type AppMode } from '@/lib/appMode'
+import { actuariaDestination } from '@/lib/actuaria/access'
+import { useActuariaAccess } from '@/hooks/useActuariaAccess'
 import { ACTUARIA_ENABLED, COWORK_ENABLED, RESEARCH_TAB_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
 import { pageHostsNavButton } from '@/lib/mobileNavHost'
 import { captureError } from '@/lib/errorMonitoring'
@@ -266,7 +268,15 @@ function BattleRoute() {
 }
 
 function ActuariaRoute() {
+  const location = useLocation()
+  const { allowed, loading, viewer } = useActuariaAccess()
   if (!ACTUARIA_ENABLED) return <Navigate to="/wiki" replace />
+  // Pro's (lib/actuaria/access.ts): wait for a signed-in viewer's status to be
+  // read, then send anyone who can't enter to sign in, or to the Pro page.
+  if (!allowed) {
+    if (loading) return <WikiFallback />
+    return <Navigate to={actuariaDestination(viewer)} replace state={{ from: location.pathname + location.search }} />
+  }
   return (
     <ErrorBoundary>
       <Suspense fallback={<WikiFallback />}>

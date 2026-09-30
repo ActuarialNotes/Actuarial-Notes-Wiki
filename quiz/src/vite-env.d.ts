@@ -16,9 +16,9 @@ interface ImportMetaEnv {
    */
   readonly VITE_BATTLE_TRANSPORT?: string
   /**
-   * `on` builds the app with Actuaria Online turned on though its flag is off —
-   * the e2e suite's build, so the game layer is tested before it launches. See
-   * `ACTUARIA_ENABLED` in lib/featureFlags.ts.
+   * `on` opens Actuaria Online to every viewer, signed out included, rather
+   * than to Pro alone — the e2e suite's build, which plays the game layer with
+   * no subscription. See `ACTUARIA_OPEN_TO_ALL` in lib/featureFlags.ts.
    */
   readonly VITE_ACTUARIA_PREVIEW?: string
 }

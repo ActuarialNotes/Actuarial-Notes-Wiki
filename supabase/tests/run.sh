@@ -15,7 +15,7 @@ BIN="$(ls -d /usr/lib/postgresql/*/bin 2>/dev/null | sort -V | tail -1)"
 
 # The migrations each test loads, in order (the stub first).
 declare -A NEEDS=(
-  [actuaria_crews]="20260523_user_gems 20260523_user_cosmetics 20260706_user_streaks 20260710_leagues 20260929_actuaria 20260930_actuaria_crews"
+  [actuaria_crews]="20260523_user_gems 20260523_user_cosmetics 20260523_user_subscriptions 20260706_user_streaks 20260710_leagues 20260929_actuaria 20260930_actuaria_crews 20261001_actuaria_pro"
 )
 
 TESTS=("$@")

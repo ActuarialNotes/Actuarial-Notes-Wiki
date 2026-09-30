@@ -172,7 +172,7 @@ league failure must not break quiz completion.
   is plenty for a weekly board.
 - **Study-group leaderboards** (the "and/or" half of P4.1) — private invite-code
   groups could reuse the member/board/RPC shape later. Actuaria's cohorts
-  (`supabase/migrations/20260930_actuaria_crews.sql`, behind `ACTUARIA_ENABLED`)
+  (`supabase/migrations/20260930_actuaria_crews.sql`, Pro only)
   are exactly that shape — snapshot on join, RPC-only reads, delete on leave, a
   lazy Monday-UTC rollover — and are the model to follow if one is built for
   Study Mode.

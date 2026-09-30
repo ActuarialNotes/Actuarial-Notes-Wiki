@@ -67,8 +67,8 @@ export const SHIP_COSMETICS: readonly ShipCosmetic[] = [
 
 /**
  * What the Store sells: everything but the raid's reward. A function, not a
- * constant, so the Store — in the main chunk — carries none of this catalogue
- * while ACTUARIA_ENABLED is off (a top-level call can't be tree-shaken away).
+ * constant: the Store is in the main chunk, and a top-level call there can't be
+ * tree-shaken away when Actuaria is switched off.
  */
 export function storeShips(): ShipCosmetic[] {
   return SHIP_COSMETICS.filter(c => !c.raidOnly)

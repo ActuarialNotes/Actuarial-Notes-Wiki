@@ -11,11 +11,14 @@ import { ChevronRight, X } from 'lucide-react'
 import { ActuariaMark } from '@/components/actuaria/ActuariaMark'
 import { LogoTile } from '@/components/LogoTile'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { useActuariaAccess } from '@/hooks/useActuariaAccess'
 import { useActuariaPrefs } from '@/hooks/useActuariaPrefs'
 
 export function ActuariaHubCard() {
   const { prefs, update } = useActuariaPrefs()
-  if (prefs.hubDismissed) return null
+  // Only for a viewer who may enter — Pro (lib/actuaria/access.ts).
+  const { allowed } = useActuariaAccess()
+  if (!allowed || prefs.hubDismissed) return null
 
   return (
     <div className="relative" data-testid="actuaria-hub-card">

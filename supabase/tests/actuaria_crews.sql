@@ -19,6 +19,33 @@
 \set dee '00000000-0000-0000-0000-00000000000d'
 
 INSERT INTO auth.users (id) VALUES (:'ada'), (:'bo'), (:'cy'), (:'dee');
+-- Ada, Bo and Cy are Pro (Cy by a beta code's row, which carries no end);
+-- Dee is not (20261001_actuaria_pro.sql).
+INSERT INTO user_subscriptions (user_id, tier, status, current_period_end) VALUES
+  (:'ada', 'premium', 'active', now() + interval '30 days'),
+  (:'bo',  'premium', 'active', now() + interval '30 days'),
+  (:'cy',  'premium', 'active', NULL);
+
+-- ── Cohorts are Pro's ────────────────────────────────────────────────────────
+
+SET ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', :'dee', false) \gset
+SELECT test.fails($$SELECT actuaria_create_crew('P', 'January 2027', 'Free riders', 'Dee', '')$$,
+  'an account without Pro cannot start a cohort');
+RESET ROLE;
+INSERT INTO user_subscriptions (user_id, tier, status, current_period_end)
+VALUES (:'dee', 'premium', 'active', now() - interval '1 day');
+SET ROLE authenticated;
+SELECT test.fails($$SELECT actuaria_create_crew('P', 'January 2027', 'Lapsed', 'Dee', '')$$,
+  'nor one whose Pro period has ended');
+RESET ROLE;
+UPDATE user_subscriptions SET current_period_end = NULL, status = 'canceled' WHERE user_id = :'dee';
+SET ROLE authenticated;
+SELECT test.fails($$SELECT actuaria_create_crew('P', 'January 2027', 'Canceled', 'Dee', '')$$,
+  'nor a canceled one');
+RESET ROLE;
+SELECT test.ok(NOT EXISTS (SELECT 1 FROM actuaria_crews), 'and none of those made a cohort');
+SELECT test.ok(NOT has_function_privilege('authenticated', 'actuaria_is_pro(uuid)', 'EXECUTE'), 'the Pro check is internal');
 
 -- ── A crew forms ─────────────────────────────────────────────────────────────
 
@@ -36,6 +63,9 @@ SELECT test.ok(actuaria_get_crew('P') IS NULL, 'nothing is shared with a player 
 SELECT test.ok(actuaria_join_crew(lower(:'code'), 'Bo', '') = :'crew'::uuid, 'a player joins by invite code');
 SELECT set_config('request.jwt.claim.sub', :'cy', false) \gset
 SELECT actuaria_join_crew(:'code', 'Cy', '') \gset
+SELECT set_config('request.jwt.claim.sub', :'dee', false) \gset
+SELECT test.fails(format('SELECT actuaria_join_crew(%L, ''Dee'', '''')', :'code'), 'an account without Pro cannot join one either');
+SELECT set_config('request.jwt.claim.sub', :'cy', false) \gset
 
 -- ── Privacy: RPC-only, and no user id in a read ──────────────────────────────
 
@@ -237,6 +267,8 @@ SELECT test.ok(NOT EXISTS (SELECT 1 FROM actuaria_crews WHERE id = :'crew'), 'a 
 -- ── Twelve at most ───────────────────────────────────────────────────────────
 
 INSERT INTO auth.users (id) SELECT ('00000000-0000-0000-0001-' || lpad(i::text, 12, '0'))::uuid FROM generate_series(1, 13) i;
+INSERT INTO user_subscriptions (user_id, tier, status)
+SELECT ('00000000-0000-0000-0001-' || lpad(i::text, 12, '0'))::uuid, 'premium', 'active' FROM generate_series(1, 13) i;
 SET ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '00000000-0000-0000-0001-000000000001', false) \gset
 SELECT actuaria_create_crew('FM', 'February 2027', 'Annuitants', 'One', '') \gset

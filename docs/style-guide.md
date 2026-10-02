@@ -506,9 +506,9 @@ Mount `hooks/useActionBarHeight` on the bar; it publishes the measured height as
 `--action-bar-height` on the document root for as long as the bar exists. The page reads it
 (`paddingBottom: calc(var(--action-bar-height) + 1.5rem)`) and so does anything else parked
 in that corner — the onboarding launcher offsets by it, which is what stops it landing on top
-of the bar's primary button, and so does the **Return to quiz** pill
-(`components/QuizResumeButton.tsx`), which rides above whichever is taller, the bar or the
-concept popup's split pane (`--concept-split-height`). All three bars publish it — a bar
+of the bar's primary button, and so does the resume dock (`components/ResumeDock.tsx` —
+the **Return to quiz** and **Return to lobby** pills), which rides above whichever is taller,
+the bar or the concept popup's split pane (`--concept-split-height`). All three bars publish it — a bar
 that doesn't is one the pill lands on. The variable is absent on pages with no bar, so a
 `var(--action-bar-height, 0px)` fallback is safe to apply unconditionally.
 
@@ -851,7 +851,8 @@ Rules to keep — the first three are what make it read as *one* motion rather t
   sheet slides the other way, and two motions at once read as neither. The exam cards on the
   Quiz and Study Guides tabs used to be carried between the tabs this way; they now ride
   their sheets. Only the chrome is named (`paper-rail`, `paper-header`, and `paper-resume` —
-  the Return to quiz pill, which belongs to no page), and a within-page
+  the resume dock, which belongs to no page; the quiz and battle-queue pills share it so the
+  name is carried by one element), and a within-page
   sheet only while its own turn runs (`.paper-sheet` behind `data-paper="turn"`).
   `e2e/view-transitions.spec.ts` sweeps the tab pages for anything else — two live
   elements sharing a name also abort the whole transition, and nothing on screen says so.

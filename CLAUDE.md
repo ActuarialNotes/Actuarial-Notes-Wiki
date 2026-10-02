@@ -450,7 +450,10 @@ Other important `lib/` modules:
   mounted once in `App`, is the **Return to quiz** pill on every other page — position,
   timer when timed — which opens a choice of **Return** or **Leave** (`leaveQuiz`, the same
   discard the quiz page's Quit does). It is still chrome in a page move (`paper-resume`) and
-  rides above `--action-bar-height` / `--concept-split-height`. One trap, commented in
+  rides above `--action-bar-height` / `--concept-split-height`, in the **resume dock**
+  (`components/ResumeDock.tsx`) it shares with Quiz Battle's **Return to lobby** pill — a
+  ready player's place in the battle queue outlives the lobby screen the same way
+  (`lib/battleQueue.ts`, `stores/battleQueueStore.ts`, `e2e/battle.spec.ts`). One trap, commented in
   `Quiz.tsx`: after Quit resets the store the page is still mounted until the (deferred)
   route change lands, so the start effect is guarded or it would draw a phantom new quiz.
   Pure and tested; the flow is `e2e/quiz-resume.spec.ts`.

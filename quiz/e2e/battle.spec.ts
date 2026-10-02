@@ -257,6 +257,76 @@ test.describe('quiz battle', () => {
     await expect(bo.getByTestId('battle-matchmaking')).toBeVisible()
   })
 
+  // A place in the queue outlives the lobby screen (lib/battleQueue.ts): a
+  // ready player can read elsewhere while they wait, a pill follows them with
+  // how long they've waited, and the match brings them back to the battle.
+  async function queueAsAda(ada: Page) {
+    await ada.goto('/battle')
+    await ada.getByTestId('battle-mode-lobby').click()
+    await ada.getByTestId('battle-lobby-name').fill('Ada')
+    await ada.getByTestId('battle-lobby-name').press('Enter')
+    await ada.getByTestId('battle-lobby-exam-Probability').click()
+    await ada.getByTestId('battle-lobby-ready').click()
+    await expect(ada.getByTestId('battle-lobby-empty')).toBeVisible()
+  }
+  const queuePill = (page: Page) => page.getByRole('button', { name: /Return to lobby/ })
+
+  test('keeps a player in the queue away from the lobby, and brings them back for the match', async ({ context }) => {
+    test.setTimeout(120_000)
+    const ada = await context.newPage()
+    const bo = await context.newPage()
+    await queueAsAda(ada)
+    await expect(queuePill(ada)).toHaveCount(0)
+
+    await ada.getByRole('link', { name: 'Study Guides' }).first().click()
+    await ada.waitForURL('**/wiki')
+    await expect(queuePill(ada)).toBeVisible()
+    await expect(queuePill(ada).getByRole('timer')).toHaveText(/^\d+:\d\d$/)
+
+    // Still in the lobby, as everyone else sees it.
+    await bo.goto('/battle')
+    await expect(bo.getByTestId('battle-lobby-status')).toHaveText('1 player waiting now')
+
+    // Return: the same lobby, still ready.
+    await queuePill(ada).click()
+    await ada.getByRole('dialog', { name: 'Looking for an opponent' }).getByRole('button', { name: 'Return' }).click()
+    await ada.waitForURL('**/battle')
+    await expect(ada.getByTestId('battle-lobby-ready')).toHaveText('Cancel')
+    await expect(queuePill(ada)).toHaveCount(0)
+
+    // Away again — and an opponent arriving fetches her back to play.
+    await ada.getByRole('link', { name: 'Study Guides' }).first().click()
+    await ada.waitForURL('**/wiki')
+    await expect(queuePill(ada)).toBeVisible()
+    await bo.evaluate(() => {
+      const setup = JSON.parse(localStorage.getItem('actuarial_battle_setup_v1') ?? '{}')
+      localStorage.setItem('actuarial_battle_setup_v1', JSON.stringify({ ...setup, names: ['Bo', ''], lobbyExam: 'Probability' }))
+    })
+    await bo.reload()
+    await bo.getByTestId('battle-mode-lobby').click()
+    await bo.getByTestId('battle-lobby-ready').click()
+    await ada.waitForURL('**/battle')
+    for (const page of [ada, bo]) {
+      await expect(page.getByTestId('battle-match-intro')).toBeVisible()
+    }
+    await expect(queuePill(ada)).toHaveCount(0)
+  })
+
+  test('Leave takes the player out of the queue from anywhere', async ({ context }) => {
+    const ada = await context.newPage()
+    const bo = await context.newPage()
+    await queueAsAda(ada)
+    await ada.getByRole('link', { name: 'Study Guides' }).first().click()
+    await ada.waitForURL('**/wiki')
+
+    await queuePill(ada).click()
+    await ada.getByRole('dialog', { name: 'Looking for an opponent' }).getByRole('button', { name: 'Leave' }).click()
+    await expect(queuePill(ada)).toHaveCount(0)
+
+    await bo.goto('/battle')
+    await expect(bo.getByTestId('battle-lobby-status')).toHaveText('No one’s in the lobby right now')
+  })
+
   // Monte Carlo Station is this page under Actuaria's skin (docs/actuaria-online.md
   // §6.8): chrome and words, never the game. A room's code is its channel's
   // name, so a player on /actuaria/battle and one on /battle are in one room.

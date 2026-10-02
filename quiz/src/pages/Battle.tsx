@@ -47,6 +47,8 @@ import {
   type BattleSetup,
 } from '@/lib/battleSetup'
 import type { MatchFound } from '@/lib/battleMatchmaking'
+import { isQueued } from '@/lib/battleQueue'
+import { useBattleQueueStore } from '@/stores/battleQueueStore'
 import type { TopicSource } from '@/lib/battleSession'
 import { catalogueTopics, drawFromTopics, topicCatalogue, type TopicGroup } from '@/lib/battleTopics'
 import { EXAM_LABEL_TO_ID, bankLabelFor } from '@/lib/examIds'
@@ -240,16 +242,17 @@ function BattlePage({
 
   const joinParam = params.get('join')
   // `?host=1` — a way in that is opening a private room (Cohort Clash) goes
-  // straight to the room's setup.
+  // straight to the room's setup. A player still in the queue from before they
+  // left the page comes back to the lobby they were waiting in.
   const [screen, setScreen] = useState<Screen>(() =>
     joinParam
       ? { kind: 'join', code: normalizeRoomCode(joinParam).slice(0, ROOM_CODE_LENGTH) }
       : params.get('host') === '1'
       ? { kind: 'setup', mode: 'host' }
+      : isQueued(useBattleQueueStore.getState().session?.getSnapshot())
+      ? { kind: 'lobby' }
       : { kind: 'home' },
   )
-  // In the lobby's queue: nobody is matched until they press Ready.
-  const [lobbyReady, setLobbyReady] = useState(false)
 
   const questionsById = useMemo(() => new Map(questions.map(q => [q.id, q])), [questions])
   const exams = useMemo(() => {
@@ -279,6 +282,29 @@ function BattlePage({
   const playing = screen.kind === 'local' || screen.kind === 'host' || screen.kind === 'guest'
   useEffect(() => { onPlayingChange?.(playing) }, [playing, onPlayingChange])
   useEffect(() => () => onPlayingChange?.(false), [onPlayingChange])
+
+  // The queue outlives the lobby screen (stores/battleQueueStore.ts). This page
+  // is where a match is played, wherever the player was when it was found —
+  // once the bank is in, since the room is drawn from it.
+  useEffect(() => useBattleQueueStore.getState().mountPage(), [])
+  const pendingMatch = useBattleQueueStore(s => s.match)
+  useEffect(() => {
+    if (!pendingMatch || loading) return
+    const match = useBattleQueueStore.getState().takeMatch()
+    if (match) matched(match)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pendingMatch, loading])
+  // The pill's Return, pressed on this page's other screens: back to the lobby.
+  const summons = useBattleQueueStore(s => s.summons)
+  const seenSummons = useRef(summons)
+  useEffect(() => {
+    if (summons === seenSummons.current) return
+    seenSummons.current = summons
+    if (!playing) setScreen({ kind: 'lobby' })
+  }, [summons, playing])
+  // A battle begun some other way — a room, a code, one screen — gives up the
+  // place in the queue: nobody can be in two battles.
+  useEffect(() => { if (playing) useBattleQueueStore.getState().leaveQueue() }, [playing])
 
   function drawFor(config: BattleConfig, difficulty: number): () => BattleQuestionKey[] {
     return () => drawBattleQuestions(battlePool(questions, config.exam), config.rounds, difficulty).map(questionKey)
@@ -341,9 +367,11 @@ function BattlePage({
     }
   }
 
-  /** Into the lobby — watching it, and in the queue only once Ready is pressed. */
+  /**
+   * Into the lobby — watching it, and in the queue only once Ready is pressed;
+   * or back to the place in the queue the player already has.
+   */
   function enterLobby() {
-    setLobbyReady(false)
     setScreen({ kind: 'lobby' })
   }
   const findAnother = enterLobby
@@ -498,9 +526,6 @@ function BattlePage({
               exam={lobbyExam}
               exams={exams}
               onExamChange={next => setSetup({ ...effectiveSetup, lobbyExam: next })}
-              ready={lobbyReady}
-              onReadyChange={setLobbyReady}
-              onMatched={matched}
               onPlayFriend={() => setScreen({ kind: 'setup', mode: 'host' })}
             />
           )}

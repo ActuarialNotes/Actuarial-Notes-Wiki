@@ -1961,9 +1961,9 @@ summary .katex-display,
    held still, above everything that moves. Only what changes inside them —
    the rail's active row — cross-fades, and quickly. On a phone the rail is
    the drawer: lifted out the same way, it finishes closing over the sheets
-   rather than being carried off inside the old one. The "Return to quiz"
-   pill (components/QuizResumeButton.tsx) is chrome too: it belongs to no
-   page, so it stays where it is while they move. */
+   rather than being carried off inside the old one. The resume dock
+   (components/ResumeDock.tsx) — "Return to quiz", "Return to lobby" — is
+   chrome too: it belongs to no page, so it stays where it is while they move. */
 .paper-chrome-rail { view-transition-name: paper-rail; }
 .paper-chrome-header { view-transition-name: paper-header; }
 .paper-chrome-resume { view-transition-name: paper-resume; }

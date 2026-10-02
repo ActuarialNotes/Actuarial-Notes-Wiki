@@ -184,8 +184,8 @@ downstream and still does:
   number the paper printed (`paperQuestionNumber`, compared as a number so Q10 follows Q9);
   `lib/questionBank.test.ts` fails on a dated question with no number or a sitting that
   numbers two questions the same;
-- the header row above the shelf offers that sitting's examiner's report as a PDF download
-  (`data/examPdfLinks.ts`), beside the pass-rate lookup link;
+- the selected row itself carries that sitting's examiner's report as a PDF button
+  (`data/examPdfLinks.ts`), beside its checkmark;
 - `searchFilter` carries the sitting's `year` / `session` into the floating search bar, so
   opening the search while Spring 2019 is picked lists *that paper's* questions rather than
   the whole exam's. The panel opens with **Exam 5** ticked in its Exam filter and
@@ -210,20 +210,21 @@ Source and Sitting). Source is the publisher — SOA, CAS or Actuarial Notes, se
 `lib/questionPublisher.ts`. A pool with no dated questions shows Sitting disabled rather
 than dropping it.
 
-### The header row
+### The papers and the pass rates
 
-Two out-links sit above the shelf, both sized as real controls rather than fine print —
-on a phone they are sandwiched between the tab strip and the sitting rows, so a `text-xs`
-link is a miss waiting to happen:
+The selected row carries its own papers: the report (and, for the SOA's sample sets, the
+solutions as a second button) sits on that row, before its checkmark — on a phone, on a line
+of its own under the label. A radio can't contain a link, so each row is a `div` whose radio
+stretches an `::after` over the whole row, with the PDF buttons raised above that overlay as
+siblings; a tap anywhere else on the row still selects it.
 
-| Link | What it is | Shown when |
+| Control | What it is | Shown when |
 |---|---|---|
-| Examiner's report | The selected sitting's paper, opened in the in-app PDF viewer (icon + `PDF` tag) | `getSittingPdfLink` has that sitting — or, for an exam with no dated papers at all, `getExamPdfLink` has the exam-level sample-question PDF |
-| Pass rates | The exam's lookup page (`PASS_RATE_LOOKUP`) | The exam has a lookup entry |
+| Examiner's report | The selected sitting's paper, opened in the in-app PDF viewer (icon + `PDF` tag), on the selected row | `getSittingPdfLink` has that sitting — or, for an exam with no dated papers at all, `getExamPdfLink` has the exam-level sample-question PDF (on the Mix row) |
+| Pass rates | The exam's lookup page (`PASS_RATE_LOOKUP`), above the shelf, sized as a real control rather than fine print | The exam has a lookup entry |
 
-Either can be absent; the row itself disappears only when both are. The report link tracks
-the *selection*, so it appears, changes and vanishes as you move down the shelf — a sitting
-whose report isn't in `SITTING_PDF_LINKS` shows no button rather than a dead one.
+The report tracks the *selection*, so it moves with the checkmark as you go down the shelf
+— a sitting whose report isn't in `SITTING_PDF_LINKS` shows no button rather than a dead one.
 
 ## Reading the paper (`PdfViewerPanel`)
 

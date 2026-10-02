@@ -11,7 +11,7 @@ import { DistributionSimulator } from '@/components/wiki/DistributionSimulator'
 import { SourceMaterialGallery } from '@/components/wiki/SourceMaterialGallery'
 import { CredentialPath } from '@/components/wiki/CredentialPath'
 import { readCredentialPathMarker } from '@/data/credentialPaths'
-import { extractSourceMaterial, SOURCE_MATERIAL_MARKER } from '@/lib/sourceMaterial'
+import { extractSourceMaterial, parseSyllabusObjectives, SOURCE_MATERIAL_MARKER } from '@/lib/sourceMaterial'
 import { hrefToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { isInWikiIndex } from '@/lib/wikiIndex'
 import { isKeystone } from '@/lib/keystone'
@@ -240,7 +240,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
   const navigate = useNavigate()
   const articleRef = useRef<HTMLDivElement | null>(null)
   const { theme } = useTheme()
-  const { processed, sourceMaterial } = useMemo(() => {
+  const { processed, sourceMaterial, objectives } = useMemo(() => {
     // Math delimiters first: the vault is written for Obsidian, whose parser is
     // looser than remark-math's. See lib/vaultMath.ts.
     const stripped = normalizeVaultMath(stripFrontmatter(markdown).replace(BREADCRUMB_RE, ''))
@@ -250,6 +250,9 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
     return {
       processed: stripHtmlBlocks(fixBlockquoteOrderedLists(rewriteWikilinks(body))),
       sourceMaterial: entries,
+      // The learning objectives name the shelf's filter — read only where
+      // there is a shelf to filter.
+      objectives: entries.length > 0 ? parseSyllabusObjectives(body) : [],
     }
   }, [markdown])
 
@@ -290,7 +293,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
       )
       const only = kids.length === 1 ? kids[0] : null
       if (only && only.type === 'text' && only.value.trim() === SOURCE_MATERIAL_MARKER) {
-        return <SourceMaterialGallery entries={sourceMaterial} onOpen={openRef} />
+        return <SourceMaterialGallery entries={sourceMaterial} objectives={objectives} onOpen={openRef} />
       }
       // The SOA/CAS credential path — on the general study guide, and on each
       // designation page opened at that designation. The vault writes it as an
@@ -356,7 +359,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
         </a>
       )
     },
-  }), [openRef, hideImages, titleBadge, sourceMaterial, theme])
+  }), [openRef, hideImages, titleBadge, sourceMaterial, objectives, theme])
 
   // Active-concept highlight: when the popup is open and its sourcePath
   // matches this article's sourcePath, find the matching wikilink in this

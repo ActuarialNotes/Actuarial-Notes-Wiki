@@ -1041,7 +1041,14 @@ compile — don't "clean up" the flagged code as dead.
   the Resources page shows, with each card carrying its reading assignment. The
   metadata comes from the resource page's front matter via the wiki index, so a source with
   no `Resources/Books/` page still gets a card, just a bare one. Obsidian inline footnotes
-  (`^[…]`) in a reading line are flattened into parentheses.
+  (`^[…]`) in a reading line are flattened into parentheses, and a `[[link]]` in a note to
+  its text. A reading line that opens with learning-objective codes (`A1, C1-C5`) gives
+  the shelf a **Learning objective** filter (`readingObjectives` / `objectiveFilterOptions`
+  in `lib/sourceMaterial.ts`), each code named from the page's own numbered objectives —
+  but only where every cited code is one the page numbers. Exam 6C, 7, 8, 9, MAS-II and
+  PCPA have it; Exam 5, 6U and MAS-I cite codes in another numbering than their
+  objectives' (Exam 5's readings cite B1–B42, its page numbers B18–B42), so they get none
+  until the two agree. `sourceMaterial.test.ts` holds Exam 6C's readings to its objectives.
 - **Every** content file (`questions/`, `Concepts/`, `Resources/`, root `Exam *.md`) carries a
   `verification:` block as the last key of its YAML frontmatter — including concept and exam
   pages, which is why they now have frontmatter at all (`WikiArticle` already stripped it).

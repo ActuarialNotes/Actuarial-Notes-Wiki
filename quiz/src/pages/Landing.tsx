@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
+import { useState, useEffect, useLayoutEffect, useMemo, useRef, useCallback } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { CalendarCheck, ChevronDown, ChevronLeft, ChevronRight, Circle, Loader2, Lock, Play, X } from 'lucide-react'
 import { QuizFloatingSearch } from '@/components/QuizFloatingSearch'
@@ -58,6 +58,7 @@ import { ExamLogo } from '@/components/ExamLogo'
 import { BattleLogo } from '@/components/battle/BattleLogo'
 import { examAccentStyle } from '@/lib/examColors'
 import { defaultBody, loadBody, saveBody, type ExamBody } from '@/lib/bodyFilter'
+import { moveScreen } from '@/lib/viewTransition'
 
 type ExamOrg = ExamBody
 
@@ -1157,6 +1158,27 @@ export default function Landing() {
   const actionBarRef = useRef<HTMLDivElement>(null)
   useActionBarHeight(actionBarRef, hasSelection)
 
+  // Picking an exam lays its builder over the exam list, and the back arrow
+  // swipes it off again. Both are this one address, so the router never sees
+  // the move; the page names it (`moveScreen`, lib/viewTransition.ts). The
+  // builder opens at its top, the way a new page does, and the list comes back
+  // scrolled to where it was left — set in a layout effect, so the new screen
+  // is in place before the transition takes its picture.
+  const listScrollRef = useRef(0)
+  function openExam(value: string) {
+    listScrollRef.current = window.scrollY
+    moveScreen('push', () => setTopic(value))
+  }
+  function closeExam() {
+    moveScreen('pop', () => setTopic(''))
+  }
+  const shownHasTopic = useRef(hasTopic)
+  useLayoutEffect(() => {
+    if (shownHasTopic.current === hasTopic) return
+    shownHasTopic.current = hasTopic
+    window.scrollTo(0, hasTopic ? 0 : listScrollRef.current)
+  }, [hasTopic])
+
   // ── Question count ────────────────────────────────────────────────────────
   // "Full plan" carries its own value rather than its numeric count: when the
   // plan happens to need 3 questions it would otherwise collide with the "3"
@@ -1291,7 +1313,7 @@ export default function Landing() {
           {hasTopic && (
             <button
               type="button"
-              onClick={() => setTopic('')}
+              onClick={closeExam}
               aria-label="Change exam"
               className="-ml-1.5 shrink-0 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
@@ -1403,7 +1425,7 @@ export default function Landing() {
                         <ExamOptionCard
                           key={exam.value}
                           exam={exam}
-                          onClick={() => setTopic(exam.value)}
+                          onClick={() => openExam(exam.value)}
                           questionCount={questionCounts[exam.value] ?? 0}
                           colorIdx={colorIdx}
                           targetDate={isActive ? (targetDates[exam.progressKey] ?? null) : null}

@@ -645,7 +645,10 @@ Other important `lib/` modules:
   page a quiz's Next/Back flicks the question off the pile or slides it back
   (`turn`/`return`). `paperMove` decides the move from two paths and the history action
   (`deskPlace` is the tab/depth table — add a new route there); `startViewTransition` writes
-  it to `data-paper` on the root and `index.css` ("Paper on a desk") draws it. **Every
+  it to `data-paper` on the root and `index.css` ("Paper on a desk") draws it. A change of
+  *screen* the address doesn't show — the Quiz tab's exam list → one exam's builder, Quiz
+  Battle's way in → its lobby, a setup, a battle — is drawn by the page itself through
+  `moveScreen` (`push` deeper, `pop` back), so add one there for any new in-page screen. **Every
   navigation goes through it** without opting in: `components/PaperRouter.tsx` is
   `BrowserRouter` with the history listener wrapped, so links, `navigate()` and the browser's
   Back all animate; a `REPLACE` (a redirect) and a query/hash-only change don't. One curve

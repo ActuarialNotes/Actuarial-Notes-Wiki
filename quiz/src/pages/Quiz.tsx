@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { flushSync } from 'react-dom'
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom'
 import { Loader2, X, ChevronLeft, Volume2, VolumeX, AlertCircle, Keyboard } from 'lucide-react'
 import { useQuestions } from '@/hooks/useQuestions'
@@ -27,7 +26,7 @@ import { QuizTimer } from '@/components/QuizTimer'
 import { RaidHitChip } from '@/components/actuaria/RaidHitChip'
 import { reportRaidHit } from '@/lib/actuaria/raidClient'
 import { ACTUARIA_ENABLED } from '@/lib/featureFlags'
-import { startViewTransition } from '@/lib/viewTransition'
+import { moveScreen } from '@/lib/viewTransition'
 import type { QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
 import { decayIfStale } from '@/lib/mastery'
 import { useTodayPlanConcepts } from '@/hooks/useTodayPlanConcepts'
@@ -146,12 +145,12 @@ export default function Quiz() {
       advanceQuestion()
       return
     }
-    startViewTransition(() => flushSync(advanceQuestion), { paper: 'turn', fallback: advanceQuestion })
+    moveScreen('turn', advanceQuestion)
   }
 
   function goToPreviousQuestion() {
     if (currentIndex <= 0) return
-    startViewTransition(() => flushSync(stepBackQuestion), { paper: 'return', fallback: stepBackQuestion })
+    moveScreen('return', stepBackQuestion)
   }
 
   // Reset store on every new quiz navigation so filters always take effect —

@@ -14,7 +14,9 @@
 // `index.css` animates them according to `data-paper` on the root element.
 // This module decides *which* move a change is (`paperMove`, pure, from two
 // paths and how the history moved) and starts it (`startViewTransition`).
-// `components/PaperRouter.tsx` is what calls it for every navigation.
+// `components/PaperRouter.tsx` is what calls it for every navigation, and
+// `moveScreen` is what a page calls for a change of screen the address doesn't
+// show — the Quiz tab's exam list giving way to one exam's builder.
 //
 // Everything on a page travels with its page. An exam card on the Quiz tab
 // and the same exam's card on Study Guides are on two different sheets, so a
@@ -25,6 +27,8 @@
 // This module is pure: nothing here reaches for a global it isn't handed. The
 // document and window it needs are arguments (defaulted for callers in the
 // browser), so every decision is testable.
+
+import { flushSync } from 'react-dom'
 
 // ── Moves ─────────────────────────────────────────────────────────────────
 
@@ -208,20 +212,35 @@ interface StartOptions extends TransitionEnv {
   fallback?: () => void
 }
 
+/**
+ * Where the page's sheet starts: the left edge of `<main>`, which is the
+ * sidebar's width on a desktop and 0 on a phone, where the sidebar is a drawer.
+ */
+export function sheetInset(doc: Document | null = globalThis.document ?? null): number {
+  const main = doc?.querySelector?.('main')
+  return main ? main.getBoundingClientRect().left : 0
+}
+
 // The transition currently drawing, so the one that finishes last doesn't
 // clear the move a newer one has just written.
 let current: object | null = null
+
+// Set while a transition's update runs. A move asked for in there — a page
+// changing its screen as it mounts — is part of the page being laid down, not
+// a move of its own: starting one would skip the move already drawing it.
+let updating = false
 
 /**
  * Run `update` inside a view transition where one is possible, and plainly
  * where it isn't. Never throws: a browser without the API, a reader who wants
  * no motion, and a transition the browser refuses are all the same outcome —
- * the update still happens, it just happens at once.
+ * the update still happens, it just happens at once. So does one asked for
+ * from inside another transition's update, which lands in that one's picture.
  */
 export function startViewTransition(update: () => void, options: StartOptions = {}): void {
   const doc = options.doc === undefined ? globalThis.document ?? null : options.doc
   const plain = options.fallback ?? update
-  if (!canTransition({ doc, win: options.win })) {
+  if (updating || !canTransition({ doc, win: options.win })) {
     plain()
     return
   }
@@ -232,7 +251,14 @@ export function startViewTransition(update: () => void, options: StartOptions = 
       else delete root.dataset.paper
       root.style?.setProperty('--paper-inset', `${Math.max(0, Math.round(options.inset ?? 0))}px`)
     }
-    const transition = doc!.startViewTransition(update)
+    const transition = doc!.startViewTransition(() => {
+      updating = true
+      try {
+        update()
+      } finally {
+        updating = false
+      }
+    })
     current = transition
     const settle = () => {
       if (current !== transition) return
@@ -247,4 +273,27 @@ export function startViewTransition(update: () => void, options: StartOptions = 
     if (root) delete root.dataset.paper
     plain()
   }
+}
+
+/**
+ * Draw a change of *screen* — one the address doesn't show — as the page move
+ * it reads as. The Quiz tab's exam list and one exam's builder are both `/`,
+ * and Quiz Battle's way in, its lobby and a battle are all `/battle`, so
+ * `PaperRouter`, which watches addresses, never sees the reader go deeper.
+ * The page does, and names the move: `push` into the deeper screen, `pop`
+ * back out of it.
+ *
+ * `update` is a plain state update. It is flushed inside the transition, so
+ * the "after" picture is the new screen, and runs as it is where no
+ * transition can — which also makes this safe to call from an effect. Where
+ * the arriving screen is scrolled to is the page's to set, in a layout effect,
+ * so it holds with motion or without.
+ */
+export function moveScreen(move: PaperMove, update: () => void, env: TransitionEnv = {}): void {
+  startViewTransition(() => flushSync(update), {
+    ...env,
+    paper: move,
+    inset: isPageMove(move) ? sheetInset(env.doc) : 0,
+    fallback: update,
+  })
 }

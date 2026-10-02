@@ -68,12 +68,14 @@ export interface QuestionFilter {
   learningObjective?: string
   learningObjectives?: string[]  // multi-select learning-objective filter
   difficulty?: Difficulty
+  /** Keep only these levels — the quiz builder's difficulty multi-select. Empty or absent filters nothing. */
+  difficulties?: Difficulty[]
   mode?: QuizMode
   count?: number        // max questions to return
   /**
-   * Where the quiz builder's difficulty slider sits (0 Easy … 1 Hard). Not a
-   * filter — `filterQuestions` ignores it — but a lean on which `count`
-   * questions are drawn. See lib/quizDifficulty.ts.
+   * A lean toward a difficulty (0 Easy … 1 Hard) — what links made under the
+   * quiz builder's old slider carry. Not a filter — `filterQuestions` ignores
+   * it — but a lean on which `count` questions are drawn. See lib/quizDifficulty.ts.
    */
   difficultyTarget?: number
   author?: string       // partial match, case-insensitive
@@ -574,6 +576,7 @@ export function filterQuestions(questions: Question[], filters: QuestionFilter):
       if (!filters.learningObjectives.some(s => key === objectiveKey(s))) return false
     }
     if (filters.difficulty && q.difficulty !== filters.difficulty) return false
+    if (filters.difficulties?.length && !filters.difficulties.includes(q.difficulty)) return false
     if (filters.author) {
       if (!q.author?.toLowerCase().includes(filters.author.toLowerCase())) return false
     }

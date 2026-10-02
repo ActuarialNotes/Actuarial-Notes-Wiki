@@ -476,14 +476,15 @@ Other important `lib/` modules:
   With `'end'` the right-answer chime is silent too — it would give the verdict away
   (`docs/sound-design.md` rule 7). Pure and tested (the storage read/write wrap pure `revealFromStored` /
   `storedWithReveal`).
-- `quizDifficulty.ts` — the quiz builder's **difficulty slider** (settings menu, quiz mode
-  only). Continuous, but it only ever *says* Easy / Med / Hard: the position is a target on
-  a 0–1 line (easy 0, medium ½, hard 1) and each question is drawn with a weight that falls
-  off with its level's distance from it — a lean, not a filter, so a pool short on the
-  target level still fills the quiz from its neighbours. It rides the URL as `level=0–100`
-  (`QuestionFilter.difficultyTarget`, applied by `useQuestions`); the builder's shuffle uses
-  the same draw, and Today's Plan hands the coverage greedy a difficulty-ordered pool so it
-  prefers the level among ties. Pure and tested.
+- `quizDifficulty.ts` — the quiz builder's **difficulty multi-select** (settings menu, quiz
+  mode only): Easy / Med / Hard, any combination, at least one ticked. It is a *filter* —
+  an unticked level is out of the pool, so the deck card's count, the count clamp and
+  Today's Plan pool all move with it (`inLevels` in `pages/Landing.tsx`), and each level
+  shows how many questions it holds. It rides the URL as `levels=easy,hard`
+  (`QuestionFilter.difficulties`, applied by `filterQuestions`; omitted when every level is
+  ticked). The module also keeps the older weighted *lean* (`drawByDifficulty` /
+  `orderByDifficulty`, a 0–1 target) that Quiz Battle and Actuaria draw with, and that an old
+  `level=0–100` link still applies. Pure and tested.
 - `quizTiming.ts` — **Timed** quizzes: the per-exam pace table (transcribed from each exam's
   `Guides/<exam page>/Format and pacing.md` — per question for the MC papers, per *point* for
   Exam 5), the set's time budget (`timeAllowanceSeconds`, null rather than invented for an

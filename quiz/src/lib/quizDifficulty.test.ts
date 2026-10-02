@@ -1,14 +1,16 @@
 import { describe, expect, it } from 'vitest'
 import type { Difficulty } from './parser'
 import {
-  DEFAULT_DIFFICULTY_TARGET,
+  DIFFICULTY_LEVELS,
   difficultyFromParam,
-  difficultyFromStored,
-  difficultyLabel,
-  difficultyToParam,
+  difficultyLevelsFromParam,
+  difficultyLevelsFromStored,
+  difficultyLevelsToParam,
   difficultyWeight,
   drawByDifficulty,
+  normalizeDifficultyLevels,
   orderByDifficulty,
+  toggleDifficultyLevel,
 } from './quizDifficulty'
 
 /** A deterministic PRNG (mulberry32) so the draws are reproducible. */
@@ -36,23 +38,6 @@ function tally(items: { difficulty: Difficulty }[]) {
   for (const q of items) t[q.difficulty]++
   return t
 }
-
-describe('difficultyLabel', () => {
-  it('says only the three words, by nearest stop', () => {
-    expect(difficultyLabel(0)).toBe('Easy')
-    expect(difficultyLabel(0.2)).toBe('Easy')
-    expect(difficultyLabel(0.3)).toBe('Med')
-    expect(difficultyLabel(0.5)).toBe('Med')
-    expect(difficultyLabel(0.7)).toBe('Med')
-    expect(difficultyLabel(0.8)).toBe('Hard')
-    expect(difficultyLabel(1)).toBe('Hard')
-  })
-
-  it('clamps out-of-range positions', () => {
-    expect(difficultyLabel(-3)).toBe('Easy')
-    expect(difficultyLabel(9)).toBe('Hard')
-  })
-})
 
 describe('difficultyWeight', () => {
   it('peaks at the target level and never reaches zero', () => {
@@ -113,9 +98,8 @@ describe('orderByDifficulty', () => {
   })
 })
 
-describe('URL and storage round-trips', () => {
-  it('rides the URL as a whole percentage', () => {
-    expect(difficultyToParam(0.333)).toBe('33')
+describe('legacy level param', () => {
+  it('reads a whole percentage back to a lean', () => {
     expect(difficultyFromParam('33')).toBeCloseTo(0.33)
     expect(difficultyFromParam('250')).toBe(1)
   })
@@ -125,11 +109,33 @@ describe('URL and storage round-trips', () => {
     expect(difficultyFromParam('')).toBeNull()
     expect(difficultyFromParam('hard')).toBeNull()
   })
+})
 
-  it('defaults a missing or garbled stored value to Med', () => {
-    expect(difficultyFromStored(null)).toBe(DEFAULT_DIFFICULTY_TARGET)
-    expect(difficultyFromStored('nope')).toBe(DEFAULT_DIFFICULTY_TARGET)
-    expect(difficultyFromStored('0.8')).toBe(0.8)
-    expect(difficultyLabel(DEFAULT_DIFFICULTY_TARGET)).toBe('Med')
+describe('difficulty levels', () => {
+  it('normalizes to known levels in menu order, empty meaning all', () => {
+    expect(normalizeDifficultyLevels(['hard', 'easy', 'hard', 'nope'])).toEqual(['easy', 'hard'])
+    expect(normalizeDifficultyLevels([])).toEqual(['easy', 'medium', 'hard'])
+  })
+
+  it('toggles a level but never unticks the last one', () => {
+    expect(toggleDifficultyLevel(['easy', 'medium', 'hard'], 'medium')).toEqual(['easy', 'hard'])
+    expect(toggleDifficultyLevel(['hard'], 'easy')).toEqual(['easy', 'hard'])
+    expect(toggleDifficultyLevel(['hard'], 'hard')).toEqual(['hard'])
+  })
+
+  it('rides the URL only when it filters something', () => {
+    expect(difficultyLevelsToParam(['easy', 'medium', 'hard'])).toBeNull()
+    expect(difficultyLevelsToParam(['hard', 'easy'])).toBe('easy,hard')
+    expect(difficultyLevelsFromParam('easy,hard')).toEqual(['easy', 'hard'])
+    expect(difficultyLevelsFromParam('Hard')).toEqual(['hard'])
+    expect(difficultyLevelsFromParam('easy,medium,hard')).toBeNull()
+    expect(difficultyLevelsFromParam(null)).toBeNull()
+    expect(difficultyLevelsFromParam('')).toBeNull()
+  })
+
+  it('defaults a missing or garbled stored value to every level', () => {
+    expect(difficultyLevelsFromStored(null)).toEqual(DIFFICULTY_LEVELS)
+    expect(difficultyLevelsFromStored('nope')).toEqual(DIFFICULTY_LEVELS)
+    expect(difficultyLevelsFromStored('medium,hard')).toEqual(['medium', 'hard'])
   })
 })

@@ -20,7 +20,7 @@ import { isAnswerCorrect, isMultiPartAnswerComplete } from '@/lib/parser'
 import { pendingAnswerFor, tagPendingAnswer } from '@/lib/pendingAnswer'
 import { resumesQuiz } from '@/lib/quizResume'
 import { loadRevealMode, parseRevealMode } from '@/lib/revealMode'
-import { difficultyFromParam } from '@/lib/quizDifficulty'
+import { difficultyFromParam, difficultyLevelsFromParam } from '@/lib/quizDifficulty'
 import { timeAllowanceSeconds } from '@/lib/quizTiming'
 import { QuizTimer } from '@/components/QuizTimer'
 import { RaidHitChip } from '@/components/actuaria/RaidHitChip'
@@ -82,6 +82,7 @@ export default function Quiz() {
       topics: topicsParam ? topicsParam.split(',') : undefined,
       concepts: conceptsParam ? conceptsParam.split(',') : undefined,
       difficulty: (searchParams.get('difficulty') as Difficulty | null) ?? undefined,
+      difficulties: difficultyLevelsFromParam(searchParams.get('levels')) ?? undefined,
       difficultyTarget: difficultyFromParam(searchParams.get('level')) ?? undefined,
       mode,
       count: countParam ? Number(countParam) : undefined,

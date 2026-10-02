@@ -1,7 +1,9 @@
-// How hard a quiz's draw leans — the difficulty slider in the quiz builder's
-// settings menu.
+// How hard a quiz's draw is. Two tools live here: the quiz builder's difficulty
+// multi-select (at the bottom — a plain filter on the bank's three levels), and
+// the weighted lean that Quiz Battle, Actuaria and links made under the old
+// builder slider still draw with.
 //
-// The slider is continuous but the bank isn't: a question is easy, medium or
+// The lean is continuous but the bank isn't: a question is easy, medium or
 // hard, full stop. So the slider doesn't filter, it *weights*. Its position is a
 // target on a 0–1 line where easy sits at 0, medium at ½ and hard at 1, and each
 // question is drawn with a weight that falls off with its distance from the
@@ -12,12 +14,10 @@
 
 import type { Difficulty } from './parser'
 
-/** Where the slider sits: 0 is Easy, ½ is Med, 1 is Hard. */
+/** Where the lean points: 0 is Easy, ½ is Med, 1 is Hard. */
 export type DifficultyTarget = number
 
 export const DEFAULT_DIFFICULTY_TARGET: DifficultyTarget = 0.5
-
-export const DIFFICULTY_STORAGE_KEY = 'actuarial_quiz_difficulty_v1'
 
 /** Each level's place on the slider's line. */
 const LEVEL_POSITION: Record<Difficulty, number> = { easy: 0, medium: 0.5, hard: 1 }
@@ -30,20 +30,9 @@ const LEVEL_POSITION: Record<Difficulty, number> = { easy: 0, medium: 0.5, hard:
  */
 const SPREAD = 0.3
 
-/** The three words the slider says — nothing finer, however far it is dragged. */
-export type DifficultyLabel = 'Easy' | 'Med' | 'Hard'
-
 export function clampDifficultyTarget(value: number): DifficultyTarget {
   if (!Number.isFinite(value)) return DEFAULT_DIFFICULTY_TARGET
   return Math.min(1, Math.max(0, value))
-}
-
-/** The label for a position: whichever stop it is nearest. */
-export function difficultyLabel(target: DifficultyTarget): DifficultyLabel {
-  const t = clampDifficultyTarget(target)
-  if (t < 0.25) return 'Easy'
-  if (t > 0.75) return 'Hard'
-  return 'Med'
 }
 
 /** A question's relative draw weight at `target`. Always > 0. */
@@ -101,36 +90,86 @@ export function shuffle<T>(items: readonly T[], random: () => number = Math.rand
   return out
 }
 
-/** The slider position as it rides in a URL: a whole-number percentage. */
-export function difficultyToParam(target: DifficultyTarget): string {
-  return String(Math.round(clampDifficultyTarget(target) * 100))
-}
-
-/** A `level` URL param back to a target, or null for a missing/garbled one. */
+/**
+ * A `level` URL param back to a target, or null for a missing/garbled one. The
+ * quiz builder no longer writes one (it chooses levels — see below), but a
+ * link made under the slider still leans its draw the way it used to.
+ */
 export function difficultyFromParam(value: string | null | undefined): DifficultyTarget | null {
   if (value == null || value.trim() === '') return null
   const n = Number(value)
   return Number.isFinite(n) ? clampDifficultyTarget(n / 100) : null
 }
 
-/** The stored position, or the default. Pure — `raw` is what localStorage held. */
-export function difficultyFromStored(raw: string | null): DifficultyTarget {
-  if (raw == null || raw.trim() === '') return DEFAULT_DIFFICULTY_TARGET
-  const n = Number(raw)
-  return Number.isFinite(n) ? clampDifficultyTarget(n) : DEFAULT_DIFFICULTY_TARGET
+// ── The quiz builder's difficulty choice ─────────────────────────────────────
+// A multi-select over the bank's three levels. Unlike the weighted lean above,
+// this *is* a filter: a level left unticked is out of the pool, so the deck
+// card's question count says exactly what the choice leaves to draw from.
+
+/** The levels, in the order the menu lists them. */
+export const DIFFICULTY_LEVELS: readonly Difficulty[] = ['easy', 'medium', 'hard']
+
+/** What each level is called on screen. */
+export const DIFFICULTY_LEVEL_LABEL: Record<Difficulty, string> = { easy: 'Easy', medium: 'Med', hard: 'Hard' }
+
+export const DIFFICULTY_LEVELS_STORAGE_KEY = 'actuarial_quiz_difficulty_levels_v1'
+
+/**
+ * A level set cleaned up: known levels only, no repeats, in menu order. An
+ * empty set means nothing to draw from, which is never a useful choice, so it
+ * reads as every level.
+ */
+export function normalizeDifficultyLevels(levels: readonly string[]): Difficulty[] {
+  const picked = DIFFICULTY_LEVELS.filter(level => levels.includes(level))
+  return picked.length > 0 ? picked : [...DIFFICULTY_LEVELS]
 }
 
-export function loadDifficultyTarget(): DifficultyTarget {
+/** Whether a set leaves every level in — i.e. filters nothing. */
+export function isAllDifficultyLevels(levels: readonly Difficulty[]): boolean {
+  return DIFFICULTY_LEVELS.every(level => levels.includes(level))
+}
+
+/**
+ * Tick or untick one level. The last ticked level can't be unticked — a quiz
+ * drawn from no level has no questions.
+ */
+export function toggleDifficultyLevel(levels: readonly Difficulty[], level: Difficulty): Difficulty[] {
+  if (levels.includes(level)) {
+    return levels.length > 1 ? DIFFICULTY_LEVELS.filter(l => l !== level && levels.includes(l)) : [...levels]
+  }
+  return DIFFICULTY_LEVELS.filter(l => l === level || levels.includes(l))
+}
+
+/** The set as a `levels` URL param, or null when it filters nothing. */
+export function difficultyLevelsToParam(levels: readonly Difficulty[]): string | null {
+  const clean = normalizeDifficultyLevels(levels)
+  return isAllDifficultyLevels(clean) ? null : clean.join(',')
+}
+
+/** A `levels` URL param back to a set, or null for a missing one (no filter). */
+export function difficultyLevelsFromParam(value: string | null | undefined): Difficulty[] | null {
+  if (value == null || value.trim() === '') return null
+  const clean = normalizeDifficultyLevels(value.split(',').map(v => v.trim().toLowerCase()))
+  return isAllDifficultyLevels(clean) ? null : clean
+}
+
+/** The stored set, or every level. Pure — `raw` is what localStorage held. */
+export function difficultyLevelsFromStored(raw: string | null): Difficulty[] {
+  if (raw == null || raw.trim() === '') return [...DIFFICULTY_LEVELS]
+  return normalizeDifficultyLevels(raw.split(','))
+}
+
+export function loadDifficultyLevels(): Difficulty[] {
   try {
-    return difficultyFromStored(localStorage.getItem(DIFFICULTY_STORAGE_KEY))
+    return difficultyLevelsFromStored(localStorage.getItem(DIFFICULTY_LEVELS_STORAGE_KEY))
   } catch {
-    return DEFAULT_DIFFICULTY_TARGET
+    return [...DIFFICULTY_LEVELS]
   }
 }
 
-export function saveDifficultyTarget(target: DifficultyTarget): void {
+export function saveDifficultyLevels(levels: readonly Difficulty[]): void {
   try {
-    localStorage.setItem(DIFFICULTY_STORAGE_KEY, String(clampDifficultyTarget(target)))
+    localStorage.setItem(DIFFICULTY_LEVELS_STORAGE_KEY, normalizeDifficultyLevels(levels).join(','))
   } catch {
     /* ignore quota/private-mode errors */
   }

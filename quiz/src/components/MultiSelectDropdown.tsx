@@ -5,6 +5,12 @@ import { placeMenu } from '@/lib/menuPlacement'
 interface MultiSelectOption {
   value: string
   label: string
+  /** A second line under the label, in the option's own case — the
+   *  statement of a learning objective under its code. */
+  hint?: string
+  /** A heading the option is listed under. Consecutive options with the same
+   *  group share one heading, so pass them already in order. */
+  group?: string
 }
 
 interface MultiSelectDropdownProps {
@@ -27,7 +33,9 @@ interface MultiSelectDropdownProps {
 /** A pill-style button that opens a checkbox list for multi-selecting options.
  *  The Concepts, Source, Exam and Sitting filters of every question list
  *  (`QuestionFilterBar`) and the Exam, Publisher and Year filters of the
- *  Resources shelf (`pages/wiki/WikiResources.tsx`) are drawn with it. */
+ *  Resources shelf (`pages/wiki/WikiResources.tsx`) are drawn with it, and so
+ *  is the learning-objective filter over an exam's source material
+ *  (`components/wiki/SourceMaterialGallery.tsx`). */
 export function MultiSelectDropdown({
   label,
   options,
@@ -105,34 +113,46 @@ export function MultiSelectDropdown({
           ref={menuRef}
           style={{ left: menuShift }}
           className="absolute top-full mt-1 z-20 bg-card rounded-lg shadow-lg w-max min-w-[200px] max-w-[18rem] py-1.5 max-h-72 overflow-y-auto">
-          {options.map(opt => {
+          {options.map((opt, i) => {
             const count = getCount?.(opt.value)
+            const heading = opt.group && opt.group !== options[i - 1]?.group ? opt.group : null
             return (
-              <button
-                key={opt.value}
-                type="button"
-                data-sound="tick"
-                onClick={() => onToggle(opt.value)}
-                className="flex items-center gap-3 w-full px-4 py-3 text-sm hover:bg-accent transition-colors text-left"
-              >
-                <div
-                  className={`h-4 w-4 rounded border flex items-center justify-center shrink-0 ${
-                    selected.has(opt.value) ? 'bg-primary border-primary' : 'border-input bg-background'
-                  }`}
-                >
-                  {selected.has(opt.value) && (
-                    <svg className="h-2.5 w-2.5 text-primary-foreground" fill="none" viewBox="0 0 10 10">
-                      <path d="M2 5L4 7L8 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  )}
-                </div>
-                <span className="capitalize flex-1">{opt.label}</span>
-                {count !== undefined && (
-                  <span className="ml-2 text-xs bg-muted text-muted-foreground rounded-full px-2 py-0.5 min-w-[1.5rem] text-center font-medium">
-                    {count}
-                  </span>
+              <div key={opt.value}>
+                {heading && (
+                  <p className="px-4 pt-2.5 pb-1 text-xs font-medium text-muted-foreground">{heading}</p>
                 )}
-              </button>
+                <button
+                  type="button"
+                  data-sound="tick"
+                  onClick={() => onToggle(opt.value)}
+                  className="flex items-center gap-3 w-full px-4 py-3 text-sm hover:bg-accent transition-colors text-left"
+                >
+                  <div
+                    className={`h-4 w-4 rounded border flex items-center justify-center shrink-0 ${
+                      selected.has(opt.value) ? 'bg-primary border-primary' : 'border-input bg-background'
+                    }`}
+                  >
+                    {selected.has(opt.value) && (
+                      <svg className="h-2.5 w-2.5 text-primary-foreground" fill="none" viewBox="0 0 10 10">
+                        <path d="M2 5L4 7L8 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    )}
+                  </div>
+                  {opt.hint ? (
+                    <span className="flex-1 min-w-0">
+                      <span className="capitalize">{opt.label}</span>
+                      <span className="block text-xs text-muted-foreground leading-snug">{opt.hint}</span>
+                    </span>
+                  ) : (
+                    <span className="capitalize flex-1">{opt.label}</span>
+                  )}
+                  {count !== undefined && (
+                    <span className="ml-2 text-xs bg-muted text-muted-foreground rounded-full px-2 py-0.5 min-w-[1.5rem] text-center font-medium">
+                      {count}
+                    </span>
+                  )}
+                </button>
+              </div>
             )
           })}
         </div>

@@ -153,12 +153,24 @@ describe('deskPlace', () => {
     expect(deskPlace('/wiki/exam/Exam%20P-1').tab).toBe(deskPlace('/wiki').tab)
     expect(deskPlace('/wiki/exam/Exam%20P-1').depth).toBe(1)
     expect(deskPlace('/wiki/concept/Bayes').depth).toBe(2)
-    expect(deskPlace('/wiki/resource/Werner').depth).toBe(2)
     expect(deskPlace('/quiz').tab).toBe(deskPlace('/').tab)
     expect(deskPlace('/quiz').depth).toBeGreaterThan(deskPlace('/').depth)
     // Quiz Battle lies over the Quiz tab's exam list, as a quiz does.
     expect(deskPlace('/battle')).toEqual({ tab: deskPlace('/').tab, depth: deskPlace('/quiz').depth })
     expect(deskPlace('/review').depth).toBeGreaterThan(deskPlace('/quiz').depth)
+  })
+
+  it('lays Resources beside the exams, with a resource page a sheet over the shelf', () => {
+    const shelf = deskPlace('/wiki/resources')
+    expect(shelf.depth).toBe(0)
+    expect(shelf.tab).toBeGreaterThan(deskPlace('/wiki').tab)
+    expect(shelf.tab).toBeLessThan(deskPlace('/flashcards').tab)
+    expect(deskPlace('/wiki/resource/Werner')).toEqual({ tab: shelf.tab, depth: 1 })
+    expect(paperMove('/wiki', '/wiki/resources', 'PUSH')).toBe('next')
+    expect(paperMove('/wiki/resources', '/wiki', 'PUSH')).toBe('prev')
+    expect(paperMove('/wiki/resources', '/wiki/resource/Werner', 'PUSH')).toBe('push')
+    expect(paperMove('/wiki/resource/Werner', '/wiki/resources', 'PUSH')).toBe('pop')
+    expect(paperMove('/wiki/resources', '/wiki/resources?exam=Exam+7', 'PUSH')).toBeNull()
   })
 
   it('reads Projects as a tab, with an attempt a sheet over its briefs', () => {

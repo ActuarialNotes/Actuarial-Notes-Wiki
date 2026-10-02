@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { examDisplayName } from './wikiRoutes'
+import { examDisplayName, studyGuidesSection, RESOURCES_ROUTE } from './wikiRoutes'
 
 describe('examDisplayName', () => {
   it('drops the examining-body suffix', () => {
@@ -27,5 +27,26 @@ describe('examDisplayName', () => {
 
   it('keeps parenthetical text that is not an examining body', () => {
     expect(examDisplayName('Exam PA (Predictive Analytics)')).toBe('Exam PA (Predictive Analytics)')
+  })
+})
+
+describe('studyGuidesSection', () => {
+  it('puts the exam ladder and the pages read from it under Exams', () => {
+    expect(studyGuidesSection('/wiki')).toBe('exams')
+    expect(studyGuidesSection('/wiki/')).toBe('exams')
+    expect(studyGuidesSection('/wiki/exam/Exam+P-1+(SOA)')).toBe('exams')
+    expect(studyGuidesSection('/wiki/concept/Expected+Value')).toBe('exams')
+  })
+
+  it('puts the shelf and a resource page under Resources', () => {
+    expect(studyGuidesSection(RESOURCES_ROUTE)).toBe('resources')
+    expect(studyGuidesSection('/wiki/resources/')).toBe('resources')
+    expect(studyGuidesSection('/wiki/resource/Basic+Ratemaking+(Werner+-+2016)')).toBe('resources')
+  })
+
+  it('is null outside the tab', () => {
+    expect(studyGuidesSection('/')).toBeNull()
+    expect(studyGuidesSection('/wikipedia')).toBeNull()
+    expect(studyGuidesSection('/project')).toBeNull()
   })
 })

@@ -73,8 +73,10 @@ The details that make the derived text read cleanly:
    crawler that runs no JavaScript — most AI crawlers, link previews, Bing's first
    pass, Google's HTML-only first pass — gets the page's title, description, words and
    every wiki link as a real `<a href>`.
-3. **`dist/sitemap.xml`**, generated: the app's public routes (`SITEMAP_APP_PATHS`) and
-   every indexable page. It can't fall behind the vault again. `public/robots.txt`
+3. **`dist/sitemap.xml`**, generated: the app's public routes (`SITEMAP_APP_PATHS`,
+   which includes the Resources shelf, `/wiki/resources` — a filterable list with no
+   static file of its own; the hub's static file links every reading) and every
+   indexable page. It can't fall behind the vault again. `public/robots.txt`
    points to it.
 
 ### The crawlable copy is never seen

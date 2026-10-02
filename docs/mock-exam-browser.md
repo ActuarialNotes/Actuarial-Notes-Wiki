@@ -581,8 +581,8 @@ PDF the reader can't open (a host missing from the list, or an `http:` link that
 can't import from `src/` — and a test in `examPdfEndpoint.test.ts` walks the client list
 through the endpoint's resolver so the two can't drift.
 
-**The shelves say so before a card is opened.** A resource card on the study-guide home page
-and in an exam page's Source Material gallery carries a **PDF** pill (`PdfPill` in
+**The shelves say so before a card is opened.** A resource card on the Study Guides tab's
+Resources page and in an exam page's Source Material gallery carries a **PDF** pill (`PdfPill` in
 `components/wiki/ResourcePills.tsx`) — the same page icon, in the same tint, that leads the
 Read PDF button it opens onto — so a reader can see at a glance which sources are readable
 right now. It rests on the index's `pdf` flag, set at build time by `resourcePdfUrl` (the

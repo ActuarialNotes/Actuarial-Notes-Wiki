@@ -545,6 +545,17 @@ Other important `lib/` modules:
   hung on the wiki index's `document` items as `exams`, which is what lets a resource card
   lead its pill row with **Exam P-1** / **Exam MAS-I** without re-reading every exam page.
   Imports are relative, not `@/`-aliased — the vite config pulls it into its own Node graph.
+- `resourceFilters.ts` — the **Resources** page (`/wiki/resources`, `pages/wiki/WikiResources.tsx`),
+  the Study Guides tab's second page: every `Resources/Books` page as one shelf, filtered by
+  **Exam**, **Publisher** and **Year**. This module is what each filter matches (the index
+  item's `exams`, `publisher`, `year` — a page that names none is under none), the options
+  each offers with the count choosing it would leave (the other filters applied, OR within a
+  filter, AND across them — `questionFilters.ts`'s rule), and the URL the choice rides
+  (`?exam=…&year=…`, so Back and the sidebar's return keep it). Drawn with the question
+  lists' `MultiSelectDropdown`. The sidebar lists the tab's two pages — **Exams** and
+  **Resources** — under Study Guides while the tab is open, the way Projects lists an open
+  attempt's views; which one a path is under is `studyGuidesSection` in `wikiRoutes.ts`
+  (a resource page is under Resources, an exam or concept page under Exams). Pure and tested.
 - `amazonPrice.ts` — the **Amazon price** on a resource card's *Get a copy* menu
   (`components/wiki/GetCopyMenu.tsx`, whose rows — WorldCat, Amazon, Library Genesis — each
   lead with the place's own logo from `quiz/public/copy-sources/`). The price comes from
@@ -671,7 +682,8 @@ Other important `lib/` modules:
   trigger is only a preference: the viewport gets the last word, so a control near an edge has
   the menu shifted back inside, one with no room below has it opened upwards, and the height is
   cut to the room there is rather than spilling past the fold. Pure and tested; read by
-  `components/ConceptActionMenu.tsx`.
+  `components/ConceptActionMenu.tsx`, and by `components/MultiSelectDropdown.tsx` for its
+  horizontal place (a filter at the end of a row on a phone).
 - `navScrub.ts` — the maths behind a **scrubbable** progress bar: which item a point on the
   track means (the exact inverse of `navProgressPercent`, so a drag can't land off by one),
   where a key press moves to, and how a list of chapter marks becomes the **segments** the
@@ -928,8 +940,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **160 test files /
-~2610 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **179 test files /
+~2820 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).
@@ -997,7 +1009,7 @@ compile — don't "clean up" the flagged code as dead.
   and `parseExamSyllabus` reads its links — but the app doesn't: `lib/sourceMaterial.ts`
   lifts the entries out and `WikiArticle` renders them as
   `components/wiki/SourceMaterialGallery.tsx`, the same shelf of cover/title/metadata cards
-  the study-guide home page shows, with each card carrying its reading assignment. The
+  the Resources page shows, with each card carrying its reading assignment. The
   metadata comes from the resource page's front matter via the wiki index, so a source with
   no `Resources/Books/` page still gets a card, just a bare one. Obsidian inline footnotes
   (`^[…]`) in a reading line are flattened into parentheses.

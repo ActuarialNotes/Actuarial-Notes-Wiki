@@ -231,6 +231,40 @@ const SITTING_PDF_LINKS: Record<string, ExamPdfLink> = {
     label: "Examiner's Report",
   },
 
+  // ── CAS Exam 9 — sat once a year, in the spring; exam + Examiner's Report ──
+  // Spring 2013–2019, transcribed from casact.org's Past Exams & Pass Marks
+  // page, which lists nothing earlier for Exam 9; no 2012 paper has been
+  // located. 2013's report keeps the pre-2014 layout (model solutions, then a
+  // section of examiners' comments at the back).
+  'Exam 9|2013|spring': {
+    url: 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam9_13-9.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 9|2014|spring': {
+    url: 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam9_14-9.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 9|2015|spring': {
+    url: 'https://www.casact.org/sites/default/files/2021-03/15-9.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 9|2016|spring': {
+    url: 'https://www.casact.org/sites/default/files/2021-03/16-9.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 9|2017|spring': {
+    url: 'https://www.casact.org/sites/default/files/2021-03/17-9.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 9|2018|spring': {
+    url: 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam9_18-9.pdf',
+    label: "Examiner's Report",
+  },
+  'Exam 9|2019|spring': {
+    url: 'https://www.casact.org/sites/default/files/2021-03/19-9_0.pdf',
+    label: "Examiner's Report",
+  },
+
   // ── CAS Exam MAS-I — multiple choice, so paper + final answer key ─────────
   'Exam MAS-I|2018|spring': {
     url: 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exammasi_spmasi-18.pdf',

@@ -82,7 +82,10 @@ CAS published an Examiner's Report for. Those papers predate CAS moving ERM to E
 their ERM questions sit in the Exam 9 bank with `originally_exam: "Exam 7"` and an Exam 7
 sitting row holds its reserving and valuation questions; the valuation ones carry
 `off_syllabus: true` (no current exam covers them), which keeps them out of quiz draws but
-not out of their paper. Exam P and Exam FM have
+not out of their paper. Exam 9's shelf is its own seven Spring papers, **2013 to 2019** —
+casact.org lists none earlier. They are filed in the Exam 9 bank under their own sittings,
+and since today's Exam 9 kept only four of their readings, 149 of their 172 questions are
+`off_syllabus`: the shelf still holds every paper whole. Exam P and Exam FM have
 **no** sittings — the SOA publishes a rolling sample-question set rather than dated papers —
 so their browser is the Mix row alone, with the sample-questions PDF linked underneath.
 

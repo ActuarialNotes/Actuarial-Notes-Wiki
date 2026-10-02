@@ -299,7 +299,10 @@ Two judgments move a question off its paper's own bank, both set in
   to MAS-II.
 - **`"off_syllabus": true`** — no current exam covers it at all (Exam 7's old
   insurance-company-valuation section; Exam 8's NCCI hazard-group mapping and
-  Mahler's workers compensation excess-ratio estimation). Like `bank`, it is a field `--settle` applies from a
+  Mahler's workers compensation excess-ratio estimation; most of the 2013–2019
+  Exam 9 papers, whose BKM portfolio theory, bond management, Hull, Butsic,
+  Goldfarb, Bodoff and rate-of-return readings today's Exam 9 dropped — decided
+  by the reading a question tests, by points where it mixes them). Like `bank`, it is a field `--settle` applies from a
   decisions file. The question stays in its paper's bank
   under its old objective, for the record: `syllabus_lint.py` does not hold it to
   the exam page, and `filterQuestions` leaves it out of quiz draws while a
@@ -475,6 +478,10 @@ PDF-reading cases when PyMuPDF is absent).
 | each question's whole answer, key and commentary land in one solution | the Exam 6C Fall 2013 layout — `Answer key:`, `Actual candidate answer for full marks:`, `Examiner's report:`, parts lettered `a)`, `a.`, `(a)` or `A)` | already handled: `LEGACY_SAMPLE_RE` / `LEGACY_COMMENT_RE` read the headings (the key first), `LEGACY_PART_RE` takes `A)`, and `fold_unprinted_parts` folds a letter the booklet never prints — a list inside part b — back into the part above |
 | the report segments to nothing and its text reads `Candidatesshouldnotethat…` | the text layer dropped every word gap (Exam 6C Fall 2014's report) | rasterise the PDF (every page as an image) and run with `--ocr`, so the report is read like the booklet; check every sample and commentary against the rendered pages |
 | the paper a sitting's link opens is another sitting's | casact.org's Past Exams page links "Fall 2016 Exam 6-Canada" to the Spring 2016 paper | check the header on the report pages before converting; `data/examPdfLinks.ts` records the link that serves the right paper |
+| one question of a modern report is missing and its heading reads `Spring 2017 EXAM 9, QUESTION 20` | the sitting prefix is title case on that one heading (Exam 9 Spring 2017) | already handled: the prefix is matched case-insensitively |
+| one question ships with no sample answer at all and its report reads `ANSWERS` over `Part a` | the report heads that question's samples `ANSWERS`, not `SAMPLE ANSWERS` (Exam 9 Spring 2014 Q8) | not handled — a bare `ANSWERS` line is too common to key on; write the explanation from the report pages into `--explanations` |
+| a pre-2014 report segments to two stray questions; its solutions are headed `Question 1a)`, `Question 4)` and its commentary sits in one section at the back | Exam 9 Spring 2013: per-part model-solution headings, then every question's examiners' comments together (`QUESTION 1:`, `Question 3`, `Examiner's Report. Exam 9, Question 5`, grading keys …) | not handled by the extractor — the one paper with this layout was converted by reassembling each question in the legacy layout and handing it to `cas_records`; its comments were checked against the pages and fixed through `--reports`, and its point values (printed only in the booklet) set on the records |
+| a question's last part swallows the point chart and the normal table | the final booklet pages (a point-value chart, a normal table) follow the last question with no question marker between them | transcribe the last question into `--prompts`; the chart and table are not part of it |
 
 ## The rules this pipeline does not bend
 

@@ -554,6 +554,18 @@ class TestExam7Layouts(unittest.TestCase):
         bounds = px.segment(report, px.CAS_QUESTION_RE)
         self.assertEqual([b.num for b in bounds], [1, 2])
 
+    def test_a_title_case_sitting_prefix_still_segments(self):
+        # Exam 9 Spring 2017 heads Q20 alone `Spring 2017 EXAM 9, …`.
+        report = (
+            "SPRING 2017 EXAM 9, QUESTION 19\nTOTAL POINT VALUE: 2.5\n"
+            "SAMPLE ANSWERS\nPart a: 2.5 points\nSample 1\nRAROC = 12%\n"
+            "Spring 2017 EXAM 9, QUESTION 20\nTOTAL POINT VALUE: 2.5\n"
+            "SAMPLE ANSWERS\nPart a: 2.5 points\nSample 1\nEVA = 40\n"
+            "SPRING 2017 EXAM 9, QUESTION 21\nTOTAL POINT VALUE: 1.25\n"
+        )
+        bounds = px.segment(report, px.CAS_QUESTION_RE)
+        self.assertEqual([b.num for b in bounds], [19, 20, 21])
+
     def test_a_title_case_heading_with_its_point_value_segments(self):
         report = (
             "QUESTION 20\nTOTAL POINT VALUE: 2.5\nSAMPLE ANSWERS\nPart a: 2.5 points\n"

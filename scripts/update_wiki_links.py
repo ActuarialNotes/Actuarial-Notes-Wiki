@@ -4,13 +4,12 @@ update_wiki_links.py
 
 1. Build a concept index from Concepts/*.md
 2. For each question file, expand wiki_link to up to 3 entries using tag matching
-3. Write "Concepts Without Review Questions.md" listing all unlinked concepts
+3. (The coverage report, "Concepts Without Review Questions.md", is written by
+   scripts/generate_coverage_report.py, which is read-only over the vault.)
 """
 
 import re
 from pathlib import Path
-from datetime import date
-from collections import defaultdict
 
 REPO_ROOT = Path("/home/user/Actuarial-Notes-Wiki")
 CONCEPTS_DIR = REPO_ROOT / "Concepts"
@@ -18,7 +17,6 @@ QUESTIONS_DIRS = [
     REPO_ROOT / "questions" / "exam-fm",
     REPO_ROOT / "questions" / "exam-p",
 ]
-GAP_REPORT = REPO_ROOT / "Concepts Without Review Questions.md"
 
 # Tags that are exam/format labels, not concepts
 SKIP_TAGS = {
@@ -180,7 +178,6 @@ def replace_wiki_link_in_fm(fm_text: str, new_yaml: str) -> str:
 
 # ─── 4. Process question files ─────────────────────────────────────────────────
 
-referenced_concepts: set[str] = set()  # stem form of every linked concept
 stats: dict[str, int] = {"total": 0, "updated": 0, "unchanged": 0, "skipped": 0}
 tag_match_log: list[str] = []
 
@@ -208,10 +205,6 @@ def process_file(path: Path) -> None:
         if candidate and candidate not in links:
             links.append(candidate)
             added.append(f"{tag} → {candidate}")
-
-    # Track referenced concept stems
-    for l in links:
-        referenced_concepts.add(link_to_stem(l))
 
     stats["total"] += 1
 
@@ -245,116 +238,4 @@ if tag_match_log:
     if len(tag_match_log) > 30:
         print(f"  ... and {len(tag_match_log) - 30} more")
 
-
-# ─── 5. Categorise concepts for gap report ────────────────────────────────────
-
-def extract_syllabus_concepts(path: Path) -> set[str]:
-    """Extract [[Concept Name]] wiki links from a syllabus file."""
-    text = path.read_text(encoding="utf-8")
-    # Capture target of wiki link (before | or # if present)
-    return {
-        m.split("|")[0].split("#")[0].strip()
-        for m in re.findall(r"\[\[([^\]]+)\]\]", text)
-    }
-
-
-p_concepts = extract_syllabus_concepts(REPO_ROOT / "Exam P-1 (SOA).md")
-fm_concepts = extract_syllabus_concepts(REPO_ROOT / "Exam FM-2 (SOA).md")
-
-print(f"\nSyllabus concepts: {len(p_concepts)} Exam P, {len(fm_concepts)} Exam FM")
-
-
-def categorise(stem: str) -> str:
-    if stem in p_concepts:
-        return "exam-p"
-    if stem in fm_concepts:
-        return "exam-fm"
-    return "other"
-
-
-all_stems: set[str] = {v[0] for v in concept_index.values()}
-unreferenced = sorted(all_stems - referenced_concepts)
-covered = sorted(all_stems & referenced_concepts)
-
-by_cat: dict[str, list[str]] = defaultdict(list)
-for s in unreferenced:
-    by_cat[categorise(s)].append(s)
-
-all_by_cat: dict[str, list[str]] = defaultdict(list)
-for s in all_stems:
-    all_by_cat[categorise(s)].append(s)
-
-covered_by_cat: dict[str, list[str]] = defaultdict(list)
-for s in covered:
-    covered_by_cat[categorise(s)].append(s)
-
-
-# ─── 6. Write gap report ──────────────────────────────────────────────────────
-
-total = len(all_stems)
-n_covered = len(covered)
-pct = round(100 * n_covered / total, 1)
-today = date.today().isoformat()
-
-
-def cat_counts(cat: str) -> tuple[int, int]:
-    w = len(covered_by_cat[cat])
-    a = len(all_by_cat[cat])
-    return w, a - w
-
-
-def section(heading: str, note: str, stems: list[str]) -> list[str]:
-    out = [f"## {heading}", "", f"*{note}*", ""]
-    if stems:
-        for s in sorted(stems):
-            out.append(f"- {s}")
-    else:
-        out.append("*All concepts in this category have at least one linked question.*")
-    return out + [""]
-
-
-p_with, p_without = cat_counts("exam-p")
-fm_with, fm_without = cat_counts("exam-fm")
-ot_with, ot_without = cat_counts("other")
-
-lines = [
-    "# Concepts Without Review Questions",
-    "",
-    f"> Generated {today}. **{n_covered} of {total} concepts ({pct}%)** have at least one linked question.",
-    "",
-    "## Summary",
-    "",
-    "| Category | With Questions | Without Questions | Total |",
-    "|---|---|---|---|",
-    f"| Exam P | {p_with} | {p_without} | {p_with + p_without} |",
-    f"| Exam FM | {fm_with} | {fm_without} | {fm_with + fm_without} |",
-    f"| Other Exams & Topics | {ot_with} | {ot_without} | {ot_with + ot_without} |",
-    f"| **Total** | **{n_covered}** | **{total - n_covered}** | **{total}** |",
-    "",
-    "---",
-    "",
-]
-
-lines += section(
-    "Exam P — Missing Coverage",
-    "Concepts in the Exam P syllabus with no linked questions",
-    by_cat.get("exam-p", []),
-)
-lines += section(
-    "Exam FM — Missing Coverage",
-    "Concepts in the Exam FM syllabus with no linked questions",
-    by_cat.get("exam-fm", []),
-)
-lines += section(
-    "Other Exams & Topics — Not Yet Covered",
-    (
-        "Concepts for CAS exams (5, 6, 7, 8, 9), MAS exams, and general actuarial topics. "
-        "No question bank exists for these exams yet."
-    ),
-    by_cat.get("other", []),
-)
-
-GAP_REPORT.write_text("\n".join(lines), encoding="utf-8")
-print(f"\nGap report written: {GAP_REPORT.name}")
-print(f"  {total - n_covered} concepts without questions / {total} total ({100 - pct}% uncovered)")
-print(f"  Exam P: {p_without} missing | Exam FM: {fm_without} missing | Other: {ot_without} missing")
+print("\nGap report: run python3 scripts/generate_coverage_report.py")

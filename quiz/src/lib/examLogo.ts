@@ -1,8 +1,8 @@
 // The exam **logo**: the square, rounded monogram tile that marks an exam
-// wherever the app lists them — the Study Guides grid and the quiz builder's
-// exam cards today. It is a visual anchor rather than a label: the card's
-// title still says "Exam MAS-I", the tile is what the eye lands on first and
-// what makes one exam's card recognisable at a glance.
+// wherever the app lists them — the exam rows on the Study Guides and Quiz
+// tabs (`components/ExamRow.tsx`). It is a visual anchor rather than a label:
+// the row's title still says "Exam MAS-I", the tile is what the eye lands on
+// first and what makes one exam's row recognisable at a glance.
 //
 // Two things make it work, and this module owns both of them:
 //

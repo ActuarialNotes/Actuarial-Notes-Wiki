@@ -87,13 +87,19 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
   concept popup (whose title is its only trigger) and every flashcard surface open that one
   component, so the two can't drift apart. An **exam** gets its own form of it, opened by the
   exam study guide's underlined title (`WikiArticle`'s `titleAction`): the readiness bar
-  (`components/ReadinessBar.tsx`, shared with the exam grid) and the countdown to the exam,
+  (`components/ReadinessBar.tsx`) and the countdown to the exam,
   then **Today's Study Plan** (locked for a reader who isn't Pro) and Fact Check — the facts
   are `lib/examMenu.ts`, pure and tested. A surface adds only rows about *itself* (a card's
   Study and Remove) through `leading` / `trailing`; view switches (Listen, the deck's view
   modes) are each surface's own control, never menu rows. It always portals to the body and
   is placed by `lib/menuPlacement.ts`, so no host's stacking context or viewport edge can
   clip it.
+  `components/ExamRow.tsx` is **the** exam row — logo, name with its Beta / In Development
+  tag, topic, a line of facts as plain text, and a chevron — and both exam lists draw it: the
+  Quiz tab (question count, exam date) and Study Guides (exam date, "NN% ready"; no bar).
+  It is a `ListRow` in a `ListPanel` (`components/ui/ListPanel.tsx`), the grouped list every
+  "tap to go there" entry on those two pages uses (Quiz Battle, the general guide, Actuaria).
+  See `docs/style-guide.md` §7.2a.
   `components/ConceptTile.tsx` is **the** concept tile — a concept as a small static card, its
   foil edge its level (`lib/flashcardFoil.ts`), a padlock while uncollected, the green wash and
   tick when picked. The add-flashcards picker and Quiz Battle's topic pick both draw it (levels
@@ -388,17 +394,16 @@ Other important `lib/` modules:
   about a missing source on them rather than failing — drop the key once the pages exist. The DISC pages
   (`Exam DISC-DA (CAS).md` …) transcribe The Institutes' course syllabi, which carry no
   section weights — `"weighted": false` in `scripts/exam_catalog.json`, and the app counts
-  each topic equally. The one definition; the study-guide exam grid greys
-  those cards out with an "In development — not yet available" pill instead of a Beta label,
-  the exam page shows the amber *In Development* banner (`WikiFloatingSearch`), the quiz
-  builder's status pill reads the same helper, and `ExamsPopout` uses it (together with "does
+  each topic equally. The one definition; the exam rows on both tabs dim
+  those exams under a dashed *In Development* tag instead of a Beta one (`components/ExamRow.tsx`),
+  the exam page shows the amber *In Development* banner (`WikiFloatingSearch`), and `ExamsPopout` uses it (together with "does
   the vault have an `Exam *.md` page at all?") to decide which exams get an **Add** button.
   Move an exam out of development here (and in `scripts/exam_catalog.json`, which
   `lib/examCatalog.test.ts` holds to it), not in the surfaces — and add it to the DEFAULT
   track in `data/tracks.ts`, which `data/tracks.test.ts` requires to offer every studiable
   exam. The quiz builder offers any exam with a question bank (its hand-kept `EXAMS` in
   `pages/Landing.tsx`, practice-exam sizes in `MOCK_EXAM_QUESTIONS`) and would show an
-  in-development one under an amber *In Development* pill. Exam 6's regional variants share the
+  in-development one dimmed, under the same dashed *In Development* tag. Exam 6's regional variants share the
   `CAS-6` progress key and only 6C has a bank, so `bankLabelFor` in `lib/examIds.ts` binds
   the 6C syllabus to `Exam 6C` and leaves 6U unbound — read a syllabus's bank label through
   it (or `questionExamLabel`), never through `EXAM_ID_TO_LABEL[progressKey]`. The credential tracks in
@@ -433,9 +438,9 @@ Other important `lib/` modules:
   logos also reads as the ladder. The tile's *shape* — the three edge lengths and the radius
   that tracks them — is one level down in `components/LogoTile.tsx`, shared with the Study
   Guides page's general-guide card, which carries an icon in the same `lg` tile so a guide
-  and an exam lead their cards with the same object. It leads the cards on the Study Guides exam grid and the
-  quiz builder, and it is branding rather than information — the card's title names the exam,
-  so the tile is `aria-hidden`. See `docs/style-guide.md` §2.3.
+  and an exam lead their cards with the same object. It leads every exam row on the Study Guides and Quiz
+  tabs (`components/ExamRow.tsx`), and it is branding rather than information — the row's title
+  names the exam, so the tile is `aria-hidden`. See `docs/style-guide.md` §2.3.
 - `keystone.ts` — the keystone-concept read side: `findKeystone` / `isKeystone` (strict name
   matching, no fuzzy hits) and `keystoneProgress` (decay-aware mastery roll-up per exam).
   Rendered by `components/KeystoneName.tsx`. No surface lists an exam's keystones since the

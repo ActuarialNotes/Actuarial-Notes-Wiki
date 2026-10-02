@@ -16,8 +16,8 @@
 // paths and how the history moved) and starts it (`startViewTransition`).
 // `components/PaperRouter.tsx` is what calls it for every navigation.
 //
-// Everything on a page travels with its page. An exam card on the Quiz tab
-// and the same exam's card on Study Guides are on two different sheets, so a
+// Everything on a page travels with its page. An exam's row on the Quiz tab
+// and the same exam's row on Study Guides are on two different sheets, so a
 // tab switch slides them apart with their sheets rather than lifting either
 // one out: an object flying one way across two sheets moving the other reads
 // as two motions fighting, not as one desk.

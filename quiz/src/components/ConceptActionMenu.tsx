@@ -408,7 +408,8 @@ export const ACTION_MENU_ROW_CLASS =
 
 /**
  * The exam menu's head: the readiness bar — `computeExamReadiness`, the one
- * readiness number, drawn the way the Study Guides exam grid draws it — and
+ * readiness number, the same score the Study Guides list prints beside an exam
+ * in progress — and
  * under it how long is left before the exam is sat. The countdown runs to the
  * reader's own exam date, or without one to the next published sitting (the
  * one the study guide's version button names); with neither there is none.

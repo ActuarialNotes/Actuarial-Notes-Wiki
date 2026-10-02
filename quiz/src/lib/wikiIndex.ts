@@ -102,8 +102,8 @@ export function setWikiIndexBundle(items: WikiIndexItem[]): void { bundledIndex 
 /**
  * The bundled index if it has been set, synchronously — for a surface that has
  * to have it on its *first* render rather than a microtask later (the Study
- * Guides home page, whose exam cards are what a tab-switch view transition
- * matches against). `buildWikiIndex` is still the way to ask for it in
+ * Guides home page, whose exam list has to be on the page in the frame a
+ * tab-switch view transition captures). `buildWikiIndex` is still the way to ask for it in
  * general: it falls back to the cache and the network, this does not.
  */
 export function bundledWikiIndex(): WikiIndexItem[] | null { return bundledIndex }

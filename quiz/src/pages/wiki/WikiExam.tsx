@@ -151,8 +151,8 @@ export default function WikiExam() {
   ), [progressKey])
 
   // What the sticky header shows instead of the exam's name: the exam's own
-  // logo, the same tile its card carries on the Study Guides grid and the quiz
-  // builder — so the strip says which exam you are in with the object you
+  // logo, the same tile its row carries on the Study Guides and Quiz tabs —
+  // so the strip says which exam you are in with the object you
   // picked it with, rather than restating the heading a few pixels below it.
   const pageIcon = useMemo(() => (
     <ExamLogo examKey={progressKey} size="md" />

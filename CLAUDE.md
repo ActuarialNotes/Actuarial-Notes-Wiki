@@ -1085,7 +1085,8 @@ compile — don't "clean up" the flagged code as dead.
 - `scripts/*.py` are batch maintenance tools for the content vault — e.g.
   `standardize_questions.py` enforces a canonical topic→concept→learning-objective mapping
   (`ontology_map.py` is the data table it consumes), `update_wiki_links.py` rebuilds
-  `wiki_link` arrays and regenerates `Concepts Without Review Questions.md`,
+  `wiki_link` arrays, `generate_coverage_report.py` regenerates `Concepts Without Review
+  Questions.md` (per exam: syllabus concepts no question in that exam's bank is tagged with),
   `tag_missing_concepts.py` backfills concept tags. Run these when doing bulk content
   cleanup, not for one-off edits.
 - `pdf_extract.py` / `question_classify.py` / `question_write.py` / `question_lint.py`

@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { ChevronDown } from 'lucide-react'
+import { placeMenu } from '@/lib/menuPlacement'
 
 interface MultiSelectOption {
   value: string
@@ -16,11 +17,17 @@ interface MultiSelectDropdownProps {
    *  A dropdown with no options stays on screen, disabled, so a filter the
    *  surface always offers doesn't come and go with the pool. */
   emptyTitle?: string
+  /** The pill's resting fill while nothing is chosen. `background` suits a
+   *  row on a card or panel; on the page itself it would leave the pill
+   *  without a shape, so a page's own filter row (the Resources shelf) takes
+   *  `card`. */
+  surface?: 'background' | 'card'
 }
 
 /** A pill-style button that opens a checkbox list for multi-selecting options.
- *  The Concepts, Exam and Sitting filters of every question list
- *  (`QuestionFilterBar`) are drawn with it. */
+ *  The Concepts, Source, Exam and Sitting filters of every question list
+ *  (`QuestionFilterBar`) and the Exam, Publisher and Year filters of the
+ *  Resources shelf (`pages/wiki/WikiResources.tsx`) are drawn with it. */
 export function MultiSelectDropdown({
   label,
   options,
@@ -28,9 +35,31 @@ export function MultiSelectDropdown({
   onToggle,
   getCount,
   emptyTitle,
+  surface = 'background',
 }: MultiSelectDropdownProps) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
+  // How far the menu sits left of the pill's own left edge. It hangs from that
+  // edge when it fits, but a pill at the end of a phone-width row (Source,
+  // Concepts) opened a menu whose names and counts ran off the screen —
+  // `placeMenu` slides it back inside.
+  const [menuShift, setMenuShift] = useState(0)
+
+  useLayoutEffect(() => {
+    if (!open) return
+    const button = buttonRef.current
+    const menu = menuRef.current
+    if (!button || !menu) return
+    const anchor = button.getBoundingClientRect()
+    const { left } = placeMenu(
+      anchor,
+      { width: document.documentElement.clientWidth, height: window.innerHeight },
+      { width: menu.offsetWidth, maxHeight: menu.offsetHeight },
+    )
+    setMenuShift(left - anchor.left)
+  }, [open, options])
 
   useEffect(() => {
     function handler(e: MouseEvent) {
@@ -56,6 +85,7 @@ export function MultiSelectDropdown({
   return (
     <div ref={ref} className="relative">
       <button
+        ref={buttonRef}
         type="button"
         onClick={() => setOpen(v => !v)}
         disabled={empty}
@@ -64,14 +94,17 @@ export function MultiSelectDropdown({
         className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed ${
           selected.size > 0
             ? 'bg-primary/10 text-primary'
-            : 'bg-background enabled:hover:bg-accent'
+            : `${surface === 'card' ? 'bg-card' : 'bg-background'} enabled:hover:bg-accent`
         }`}
       >
         <span className="max-w-[14rem] truncate">{displayLabel}</span>
         <ChevronDown className={`h-4 w-4 transition-transform shrink-0 ${open ? 'rotate-180' : ''}`} />
       </button>
       {open && !empty && (
-        <div className="absolute top-full left-0 mt-1 z-20 bg-card rounded-lg shadow-lg w-max min-w-[200px] max-w-[18rem] py-1.5 max-h-72 overflow-y-auto">
+        <div
+          ref={menuRef}
+          style={{ left: menuShift }}
+          className="absolute top-full mt-1 z-20 bg-card rounded-lg shadow-lg w-max min-w-[200px] max-w-[18rem] py-1.5 max-h-72 overflow-y-auto">
           {options.map(opt => {
             const count = getCount?.(opt.value)
             return (

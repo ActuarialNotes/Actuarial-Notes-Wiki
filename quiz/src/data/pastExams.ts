@@ -126,6 +126,19 @@ export const PAST_EXAM_SITTINGS: PastExamSitting[] = [
   { exam: 'Exam 8', year: 2013, session: 'Fall' },
   { exam: 'Exam 8', year: 2012, session: 'Fall' },
 
+  // ── CAS Exam 9 ─── sat once a year, in the spring. Released papers run from
+  //    Spring 2013, the first casact.org lists, to Spring 2019. Their syllabus
+  //    ("Financial Risk and Rate of Return") was mostly BKM's Investments and
+  //    the rate-of-return papers, which today's Exam 9 dropped, so most of
+  //    their questions are `off_syllabus` — on the shelf, out of quiz draws ──
+  { exam: 'Exam 9', year: 2019, session: 'Spring' },
+  { exam: 'Exam 9', year: 2018, session: 'Spring' },
+  { exam: 'Exam 9', year: 2017, session: 'Spring' },
+  { exam: 'Exam 9', year: 2016, session: 'Spring' },
+  { exam: 'Exam 9', year: 2015, session: 'Spring' },
+  { exam: 'Exam 9', year: 2014, session: 'Spring' },
+  { exam: 'Exam 9', year: 2013, session: 'Spring' },
+
   // ── CAS Exam MAS-I ─── first sat Spring 2018 ──────────────────────────────
   { exam: 'Exam MAS-I', year: 2019, session: 'Fall', officialQuestionCount: 45 },
   { exam: 'Exam MAS-I', year: 2019, session: 'Spring', officialQuestionCount: 45 },

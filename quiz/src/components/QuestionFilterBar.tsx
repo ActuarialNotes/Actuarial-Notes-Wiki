@@ -15,7 +15,7 @@ interface QuestionFilterBarProps {
   pool: Question[]
   selection: FacetSelection
   onToggle: (facet: QuestionFacet, value: string) => void
-  /** The facets to offer, in this order. All four by default. */
+  /** The facets to offer, in this order. All five by default. */
   facets?: readonly QuestionFacet[]
   /**
    * A concept every question in the pool is tagged with — the concept whose
@@ -28,26 +28,29 @@ interface QuestionFilterBarProps {
 
 const DROPDOWN_LABEL: Record<Exclude<QuestionFacet, 'difficulty'>, string> = {
   concept: 'Concepts',
+  source: 'Source',
   exam: 'Exam',
   sitting: 'Sitting',
 }
 
 const EMPTY_TITLE: Record<Exclude<QuestionFacet, 'difficulty'>, string> = {
   concept: 'These questions are tagged with no other concept',
+  source: 'No questions to filter by source',
   exam: 'No questions to filter by exam',
   sitting: 'None of these questions names the sitting it was set on',
 }
 
 /**
  * The filter row every list of questions carries: the three difficulty pills,
- * then the Concepts, Exam and Sitting dropdowns. What each filter means — and
- * the counts beside every option — is `lib/questionFilters.ts`; this only
- * draws it, so a list can't offer a different set of filters from the next.
+ * then the Concepts, Source, Exam and Sitting dropdowns. What each filter
+ * means — and the counts beside every option — is `lib/questionFilters.ts`;
+ * this only draws it, so a list can't offer a different set of filters from
+ * the next.
  *
- * Exam and Sitting are always on screen. A pool from a single exam still shows
- * the Exam filter (with that exam named on it once chosen), and a pool with no
- * dated questions shows Sitting disabled rather than dropping it — a filter
- * that comes and goes with the pool reads as one that's missing.
+ * Source, Exam and Sitting are always on screen. A pool from a single exam
+ * still shows the Exam filter (with that exam named on it once chosen), and a
+ * pool with no dated questions shows Sitting disabled rather than dropping it
+ * — a filter that comes and goes with the pool reads as one that's missing.
  */
 export function QuestionFilterBar({
   pool,

@@ -82,7 +82,10 @@ CAS published an Examiner's Report for. Those papers predate CAS moving ERM to E
 their ERM questions sit in the Exam 9 bank with `originally_exam: "Exam 7"` and an Exam 7
 sitting row holds its reserving and valuation questions; the valuation ones carry
 `off_syllabus: true` (no current exam covers them), which keeps them out of quiz draws but
-not out of their paper. Exam P and Exam FM have
+not out of their paper. Exam 9's shelf is its own seven Spring papers, **2013 to 2019** —
+casact.org lists none earlier. They are filed in the Exam 9 bank under their own sittings,
+and since today's Exam 9 kept only four of their readings, 149 of their 172 questions are
+`off_syllabus`: the shelf still holds every paper whole. Exam P and Exam FM have
 **no** sittings — the SOA publishes a rolling sample-question set rather than dated papers —
 so their browser is the Mix row alone, with the sample-questions PDF linked underneath.
 
@@ -200,10 +203,12 @@ candidate thinks of a paper — and read off each question's own frontmatter, so
 question contributes no option. A question re-tagged onto another exam's syllabus lists
 under the date it was sat on; once an exam is chosen, though, a sitting means *that exam's*
 paper, and the carried-over question is on none of its sittings — the same rule
-`filterQuestions` keeps for the shelf. Exam and Sitting are on every list of questions, the
-same row everywhere (`components/QuestionFilterBar.tsx` — the quiz builder's search panel,
-the concept question browser, the concept detail modal, and the Search page's Sitting). A
-pool with no dated questions shows Sitting disabled rather than dropping it.
+`filterQuestions` keeps for the shelf. Source, Exam and Sitting are on every list of
+questions, the same row everywhere (`components/QuestionFilterBar.tsx` — the quiz builder's
+search panel, the concept question browser, the concept detail modal, and the Search page's
+Source and Sitting). Source is the publisher — SOA, CAS or Actuarial Notes, see
+`lib/questionPublisher.ts`. A pool with no dated questions shows Sitting disabled rather
+than dropping it.
 
 ### The header row
 
@@ -581,8 +586,8 @@ PDF the reader can't open (a host missing from the list, or an `http:` link that
 can't import from `src/` — and a test in `examPdfEndpoint.test.ts` walks the client list
 through the endpoint's resolver so the two can't drift.
 
-**The shelves say so before a card is opened.** A resource card on the study-guide home page
-and in an exam page's Source Material gallery carries a **PDF** pill (`PdfPill` in
+**The shelves say so before a card is opened.** A resource card on the Study Guides tab's
+Resources page and in an exam page's Source Material gallery carries a **PDF** pill (`PdfPill` in
 `components/wiki/ResourcePills.tsx`) — the same page icon, in the same tint, that leads the
 Read PDF button it opens onto — so a reader can see at a glance which sources are readable
 right now. It rests on the index's `pdf` flag, set at build time by `resourcePdfUrl` (the

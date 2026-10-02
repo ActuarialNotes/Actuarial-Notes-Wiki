@@ -17,6 +17,36 @@ test.describe('wiki', () => {
     // The exam page renders wiki article content (a heading of some kind).
     await expect(page.locator('h1, h2').first()).toBeVisible()
   })
+
+  // Resources is the tab's second page: listed under Study Guides in the
+  // sidebar while the tab is open, filtered by exam, publisher and year, with
+  // the choice kept in the URL.
+  test('opens Resources from the sidebar and filters the shelf by exam', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 })
+    await page.goto('/wiki')
+
+    const nav = page.getByRole('navigation', { name: 'Main' })
+    await expect(nav.getByRole('link', { name: 'Exams' })).toHaveAttribute('aria-current', 'page')
+    await nav.getByRole('link', { name: 'Resources' }).click()
+
+    await expect(page).toHaveURL(/\/wiki\/resources$/)
+    await expect(page.getByRole('heading', { name: 'Resources' })).toBeVisible()
+    await expect(nav.getByRole('link', { name: 'Resources' })).toHaveAttribute('aria-current', 'page')
+    const cards = page.locator('main').getByRole('button').filter({ has: page.locator('p.font-semibold') })
+    const all = await cards.count()
+    expect(all).toBeGreaterThan(10)
+
+    await page.getByRole('button', { name: /^Exam\b/ }).click()
+    await page.getByRole('button', { name: /^Exam 7\b/ }).click()
+    await expect(page).toHaveURL(/\/wiki\/resources\?exam=Exam\+7$/)
+    await expect.poll(() => cards.count()).toBeLessThan(all)
+    // Every card left on the shelf is an Exam 7 reading.
+    for (const card of await cards.all()) await expect(card.getByText('Exam 7', { exact: true })).toBeVisible()
+
+    await page.getByRole('button', { name: 'Clear' }).click()
+    await expect(page).toHaveURL(/\/wiki\/resources$/)
+    await expect.poll(() => cards.count()).toBe(all)
+  })
 })
 
 // The study guide's sticky header carries an info button beside the version

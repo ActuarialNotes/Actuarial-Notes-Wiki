@@ -62,6 +62,7 @@ const { Component: WikiHome, preload: loadWikiHome } = lazyRoute(() => import('@
 const { Component: WikiExam, preload: loadWikiExam } = lazyRoute(() => import('@/pages/wiki/WikiExam'))
 const { Component: WikiConcept, preload: loadWikiConcept } = lazyRoute(() => import('@/pages/wiki/WikiConcept'))
 const { Component: WikiResource, preload: loadWikiResource } = lazyRoute(() => import('@/pages/wiki/WikiResource'))
+const { Component: WikiResources, preload: loadWikiResources } = lazyRoute(() => import('@/pages/wiki/WikiResources'))
 
 /**
  * Warm the chunks a path needs before navigating to it, or null when it needs
@@ -78,6 +79,7 @@ function preloadRoute(path: string): Promise<unknown> | null {
   if (route === '/battle') return loadBattle()
   if (ACTUARIA_ENABLED && (route === '/actuaria' || route.startsWith('/actuaria/'))) return loadActuaria()
   if (route === '/wiki') return Promise.all([loadWikiLayout(), loadWikiHome()])
+  if (route === '/wiki/resources') return Promise.all([loadWikiLayout(), loadWikiResources()])
   if (route.startsWith('/wiki/exam/')) return Promise.all([loadWikiLayout(), loadWikiExam()])
   if (route.startsWith('/wiki/concept/')) return Promise.all([loadWikiLayout(), loadWikiConcept()])
   if (route.startsWith('/wiki/resource/')) return Promise.all([loadWikiLayout(), loadWikiResource()])
@@ -358,6 +360,13 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="/wiki" element={
                   <Suspense fallback={<WikiFallback />}>
                     <WikiLayout><WikiHome /></WikiLayout>
+                  </Suspense>
+                } />
+                {/* The Study Guides tab's second page: every resource, filtered
+                    by exam, publisher and year. */}
+                <Route path="/wiki/resources" element={
+                  <Suspense fallback={<WikiFallback />}>
+                    <WikiLayout><WikiResources /></WikiLayout>
                   </Suspense>
                 } />
                 <Route path="/wiki/exam/:slug" element={

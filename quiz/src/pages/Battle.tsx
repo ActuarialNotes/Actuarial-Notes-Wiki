@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { ChevronDown, ChevronLeft, ChevronRight, Globe, Loader2, LogIn, Play, Shuffle, Timer, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -14,6 +14,7 @@ import { useLobbyCount } from '@/hooks/useBattle'
 import { BattleSkinContext, useBattleSkin } from '@/hooks/useBattleSkin'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { battleSkin, type BattleSkinId } from '@/lib/battleSkin'
+import { moveScreen } from '@/lib/viewTransition'
 import { stationCountLine, term } from '@/lib/actuaria/lexicon'
 import {
   BASE_POINTS,
@@ -69,6 +70,21 @@ type Screen =
   | { kind: 'local'; config: BattleConfig; players: [BattlePlayer, BattlePlayer]; difficulty: number }
   | { kind: 'host'; config: BattleConfig; player: BattlePlayer; difficulty: number; code?: string; opponent?: BattlePlayer }
   | { kind: 'guest'; code: string; player: BattlePlayer; matched?: boolean; opponent?: BattlePlayer }
+
+/**
+ * How far in from the way in a screen lies: the way in, then the lobby, a
+ * battle's setup or the join form, then a battle. A change of screen deeper
+ * lays a sheet over; one back up swipes it off (`moveScreen`).
+ */
+function screenDepth(screen: Screen): number {
+  switch (screen.kind) {
+    case 'home': return 0
+    case 'setup':
+    case 'join':
+    case 'lobby': return 1
+    default: return 2
+  }
+}
 
 function lobbyCountLine(count: number | null): string {
   if (count === null) return 'Checking the lobby…'
@@ -244,7 +260,7 @@ function BattlePage({
   // `?host=1` — a way in that is opening a private room (Cohort Clash) goes
   // straight to the room's setup. A player still in the queue from before they
   // left the page comes back to the lobby they were waiting in.
-  const [screen, setScreen] = useState<Screen>(() =>
+  const [screen, showScreen] = useState<Screen>(() =>
     joinParam
       ? { kind: 'join', code: normalizeRoomCode(joinParam).slice(0, ROOM_CODE_LENGTH) }
       : params.get('host') === '1'
@@ -253,6 +269,26 @@ function BattlePage({
       ? { kind: 'lobby' }
       : { kind: 'home' },
   )
+
+  // Every screen here is one address, so the router never sees a change of
+  // screen: the page draws it, as a sheet laid over going in and swiped off
+  // coming back (lib/viewTransition.ts). The screen it moves from is kept in a
+  // ref, since the transition applies the change a frame after it is asked for.
+  const screenRef = useRef(screen)
+  function setScreen(next: Screen) {
+    const from = screenRef.current
+    screenRef.current = next
+    if (next.kind === from.kind) showScreen(next)
+    else moveScreen(screenDepth(next) < screenDepth(from) ? 'pop' : 'push', () => showScreen(next))
+  }
+  // A new screen opens at its top, the way a new page does — in a layout
+  // effect, so it is in place before the transition takes its picture.
+  const shownKind = useRef(screen.kind)
+  useLayoutEffect(() => {
+    if (shownKind.current === screen.kind) return
+    shownKind.current = screen.kind
+    window.scrollTo(0, 0)
+  }, [screen.kind])
 
   const questionsById = useMemo(() => new Map(questions.map(q => [q.id, q])), [questions])
   const exams = useMemo(() => {
@@ -278,9 +314,10 @@ function BattlePage({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [examParam, examIds.length])
 
-  // A battle, or a room, has the screen: the page around it can stand down.
+  // A battle, or a room, has the screen: the page around it can stand down —
+  // in the same commit, so a battle slides in without the chrome it drops.
   const playing = screen.kind === 'local' || screen.kind === 'host' || screen.kind === 'guest'
-  useEffect(() => { onPlayingChange?.(playing) }, [playing, onPlayingChange])
+  useLayoutEffect(() => { onPlayingChange?.(playing) }, [playing, onPlayingChange])
   useEffect(() => () => onPlayingChange?.(false), [onPlayingChange])
 
   // The queue outlives the lobby screen (stores/battleQueueStore.ts). This page

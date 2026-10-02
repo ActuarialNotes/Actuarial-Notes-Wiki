@@ -132,6 +132,49 @@ test.describe('tab-switch view transitions', () => {
     await expect.poll(() => page.evaluate(() => ({ ...document.documentElement.dataset }))).toEqual({})
   })
 
+  test('a change of screen the address does not show is still a page move', async ({ page }) => {
+    await page.addInitScript(() => {
+      const w = window as unknown as { __moves: string[] }
+      w.__moves = []
+      const original = document.startViewTransition?.bind(document)
+      if (!original) return
+      document.startViewTransition = ((cb: () => void) => {
+        w.__moves.push(document.documentElement.dataset.paper ?? '-')
+        return original(cb)
+      }) as typeof document.startViewTransition
+    })
+    const moves = () => page.evaluate(() => (window as unknown as { __moves: string[] }).__moves)
+    const scrollY = () => page.evaluate(() => Math.round(window.scrollY))
+
+    // The Quiz tab's exam list and one exam's builder are both `/`: picking
+    // an exam lays the builder over the list, opened at its top, and the back
+    // arrow swipes it off onto the list as it was left.
+    await page.goto('/')
+    const examP = page.locator('button[data-tour="quiz-exam-p"]')
+    await expect(examP).toBeVisible()
+    await page.evaluate(() => window.scrollTo(0, 120))
+    await examP.scrollIntoViewIfNeeded()
+    const listY = await scrollY()
+    await examP.click()
+    const changeExam = page.getByRole('button', { name: 'Change exam' })
+    await expect(changeExam).toBeVisible()
+    expect(await scrollY()).toBe(0)
+    await changeExam.click()
+    await expect(examP).toBeVisible()
+    expect(await scrollY()).toBe(listY)
+
+    // Quiz Battle's way in and its setups are all `/battle`.
+    await page.getByTestId('quiz-battle-entry').click()
+    await page.waitForURL('**/battle')
+    await page.getByTestId('battle-mode-local').click()
+    await expect(page.getByTestId('battle-begin')).toBeVisible()
+    await page.getByRole('button', { name: 'Back', exact: true }).click()
+    await expect(page.getByTestId('battle-mode-local')).toBeVisible()
+
+    await expect.poll(moves).toEqual(['push', 'pop', 'push', 'push', 'pop'])
+    await expect.poll(() => page.evaluate(() => ({ ...document.documentElement.dataset }))).toEqual({})
+  })
+
   test('a quiz turns its question like a sheet on a pile', async ({ page }) => {
     await page.goto('/quiz?ids=p-004,p-005')
     const startQuiz = page.getByRole('button', { name: 'Start Quiz' })

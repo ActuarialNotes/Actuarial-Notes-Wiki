@@ -7,6 +7,8 @@ import {
   deskPlace,
   paperMove,
   isPageMove,
+  sheetInset,
+  moveScreen,
 } from './viewTransition'
 
 describe('viewTransitionsSupported', () => {
@@ -117,6 +119,23 @@ describe('startViewTransition', () => {
     expect(dataset.paper).toBe('turn')
   })
 
+  it('lands a move asked for inside another\'s update in that update, rather than starting its own', () => {
+    const startVT = vi.fn((cb: () => void) => { cb(); return { finished: Promise.resolve() } })
+    const doc = { startViewTransition: startVT } as unknown as Document
+    const inner = vi.fn()
+    const innerFallback = vi.fn()
+    startViewTransition(() => {
+      // A page mounting inside a page move, changing its screen as it does.
+      startViewTransition(inner, { doc, win: allowsMotion, fallback: innerFallback })
+    }, { doc, win: allowsMotion })
+    expect(startVT).toHaveBeenCalledOnce()
+    expect(innerFallback).toHaveBeenCalledOnce()
+    expect(inner).not.toHaveBeenCalled()
+    // And once that update is done, the next move is a move of its own.
+    startViewTransition(() => {}, { doc, win: allowsMotion })
+    expect(startVT).toHaveBeenCalledTimes(2)
+  })
+
   it('swallows a skipped transition rather than surfacing an unhandled rejection', () => {
     const update = vi.fn()
     expect(() => startViewTransition(update, {
@@ -128,6 +147,59 @@ describe('startViewTransition', () => {
       } as unknown as Document,
       win: allowsMotion,
     })).not.toThrow()
+  })
+})
+
+describe('sheetInset', () => {
+  it('starts the sheet at the left edge of <main>', () => {
+    const doc = {
+      querySelector: (sel: string) => (sel === 'main' ? { getBoundingClientRect: () => ({ left: 256 }) } : null),
+    } as unknown as Document
+    expect(sheetInset(doc)).toBe(256)
+  })
+
+  it('is the whole width where there is no <main> or no document', () => {
+    expect(sheetInset({ querySelector: () => null } as unknown as Document)).toBe(0)
+    expect(sheetInset(null)).toBe(0)
+  })
+})
+
+describe('moveScreen', () => {
+  const allowsMotion = { matchMedia: () => ({ matches: false }) } as unknown as Window
+
+  function desk(left: number) {
+    const dataset: Record<string, string> = {}
+    const props: Record<string, string> = {}
+    const startVT = vi.fn((cb: () => void) => { cb(); return { finished: new Promise<void>(() => {}), ready: Promise.resolve() } })
+    const doc = {
+      documentElement: { dataset, style: { setProperty: (k: string, v: string) => { props[k] = v } } },
+      querySelector: () => ({ getBoundingClientRect: () => ({ left }) }),
+      startViewTransition: startVT,
+    } as unknown as Document
+    return { doc, dataset, props, startVT }
+  }
+
+  it('draws a change of screen as the page move it names, cut to the page\'s sheet', () => {
+    const { doc, dataset, props, startVT } = desk(240)
+    const update = vi.fn()
+    moveScreen('push', update, { doc, win: allowsMotion })
+    expect(startVT).toHaveBeenCalledOnce()
+    expect(update).toHaveBeenCalledOnce()
+    expect(dataset.paper).toBe('push')
+    expect(props['--paper-inset']).toBe('240px')
+  })
+
+  it('turns a sheet within a page without cutting it', () => {
+    const { doc, dataset, props } = desk(240)
+    moveScreen('turn', () => {}, { doc, win: allowsMotion })
+    expect(dataset.paper).toBe('turn')
+    expect(props['--paper-inset']).toBe('0px')
+  })
+
+  it('still changes the screen, at once, where no transition can run', () => {
+    const update = vi.fn()
+    moveScreen('pop', update, { doc: {} as Document, win: allowsMotion })
+    expect(update).toHaveBeenCalledOnce()
   })
 })
 
@@ -153,12 +225,24 @@ describe('deskPlace', () => {
     expect(deskPlace('/wiki/exam/Exam%20P-1').tab).toBe(deskPlace('/wiki').tab)
     expect(deskPlace('/wiki/exam/Exam%20P-1').depth).toBe(1)
     expect(deskPlace('/wiki/concept/Bayes').depth).toBe(2)
-    expect(deskPlace('/wiki/resource/Werner').depth).toBe(2)
     expect(deskPlace('/quiz').tab).toBe(deskPlace('/').tab)
     expect(deskPlace('/quiz').depth).toBeGreaterThan(deskPlace('/').depth)
     // Quiz Battle lies over the Quiz tab's exam list, as a quiz does.
     expect(deskPlace('/battle')).toEqual({ tab: deskPlace('/').tab, depth: deskPlace('/quiz').depth })
     expect(deskPlace('/review').depth).toBeGreaterThan(deskPlace('/quiz').depth)
+  })
+
+  it('lays Resources beside the exams, with a resource page a sheet over the shelf', () => {
+    const shelf = deskPlace('/wiki/resources')
+    expect(shelf.depth).toBe(0)
+    expect(shelf.tab).toBeGreaterThan(deskPlace('/wiki').tab)
+    expect(shelf.tab).toBeLessThan(deskPlace('/flashcards').tab)
+    expect(deskPlace('/wiki/resource/Werner')).toEqual({ tab: shelf.tab, depth: 1 })
+    expect(paperMove('/wiki', '/wiki/resources', 'PUSH')).toBe('next')
+    expect(paperMove('/wiki/resources', '/wiki', 'PUSH')).toBe('prev')
+    expect(paperMove('/wiki/resources', '/wiki/resource/Werner', 'PUSH')).toBe('push')
+    expect(paperMove('/wiki/resource/Werner', '/wiki/resources', 'PUSH')).toBe('pop')
+    expect(paperMove('/wiki/resources', '/wiki/resources?exam=Exam+7', 'PUSH')).toBeNull()
   })
 
   it('reads Projects as a tab, with an attempt a sheet over its briefs', () => {

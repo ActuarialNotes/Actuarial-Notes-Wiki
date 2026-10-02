@@ -13,7 +13,6 @@ import { ExamDateMeta, ExamRow, ExamRowMeta } from '@/components/ExamRow'
 import { ListPanel, ListRow } from '@/components/ui/ListPanel'
 import { LogoTile } from '@/components/LogoTile'
 import { matchesSelectedVariant } from '@/data/examSittings'
-import { Card } from '@/components/ui/card'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
@@ -21,9 +20,6 @@ import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { computeExamReadiness, type ExamReadinessAssessment } from '@/lib/readiness'
 import { examStatus, type ExamStatus } from '@/lib/examStatus'
-import { splitAuthors } from '@/lib/authorNames'
-import { ExamPill, MetaPill, PdfPill } from '@/components/wiki/ResourcePills'
-import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { useWikiPageHead } from '@/hooks/useWikiPageHead'
 import { ActuariaHubCard } from '@/components/actuaria/ActuariaHubCard'
 import { ACTUARIA_ENABLED } from '@/lib/featureFlags'
@@ -125,11 +121,11 @@ export default function WikiHome() {
   const location = useLocation()
   const navigationType = useNavigationType()
 
-  // Restore scroll when returning from an exam or resource page; scroll to top on fresh visits
+  // Restore scroll when returning from an exam page; scroll to top on fresh visits.
+  // (A resource page returns to the Resources shelf — `WikiResources`.)
   const shouldRestore = useRef(
     navigationType === 'POP' ||
-    !!(location.state as { fromExam?: boolean; fromResource?: boolean } | null)?.fromExam ||
-    !!(location.state as { fromExam?: boolean; fromResource?: boolean } | null)?.fromResource,
+    !!(location.state as { fromExam?: boolean } | null)?.fromExam,
   )
   const scrollRestored = useRef(false)
   // On fresh visits scroll to top immediately; on returns wait for index to load
@@ -172,11 +168,6 @@ export default function WikiHome() {
   }, [])
 
   const exams = useMemo(() => index.filter(i => i.category === 'exam'), [index])
-  const books = useMemo(() => index.filter(i => i.category === 'document'), [index])
-  const resourceRefs = useMemo<WikiEntryRef[]>(
-    () => books.map(book => ({ kind: 'resource', name: book.name })),
-    [books],
-  )
 
   const examsByKey = useMemo(() => {
     const map = new Map<string, WikiIndexItem[]>()
@@ -393,66 +384,6 @@ export default function WikiHome() {
                   })}
                 </ListPanel>
               </div>
-            ))}
-          </div>
-        )}
-      </section>
-
-      <section>
-        {/* Same field-label treatment the Exams block above uses, so the page
-            has one heading size rather than two. */}
-        <p className="text-sm font-medium mb-3">Resources</p>
-        {books.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Loading resources…</p>
-        ) : (
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {books.map((book, bookIdx) => (
-              <button
-                key={book.path}
-                type="button"
-                onClick={() => openAt(resourceRefs, bookIdx, '/wiki')}
-                className="w-full text-left appearance-none bg-transparent p-0"
-              >
-                <Card className="h-full transition-all duration-150 hover:bg-accent/40 overflow-hidden flex flex-row items-stretch">
-                  {book.coverImage && (
-                    <div className="flex-shrink-0 p-2 pt-4 flex items-start">
-                      <img
-                        src={book.coverImage}
-                        alt={book.title ?? book.name}
-                        className="w-16 sm:w-20 rounded-md object-contain max-h-28 bg-muted/20"
-                        loading="lazy"
-                        onError={(e) => {
-                          const p = e.currentTarget.parentElement
-                          if (p) p.style.display = 'none'
-                        }}
-                      />
-                    </div>
-                  )}
-                  <div className="p-4 flex flex-col gap-2 flex-1">
-                    <p className="text-sm font-semibold leading-snug">{book.title ?? book.name}</p>
-                    {(book.exams?.length || book.pdf || book.author || book.year || book.edition || book.publisher) && (
-                      <div className="flex flex-wrap gap-1">
-                        {/* The exam(s) this source is a reading for lead the row:
-                            on a shelf that mixes every exam's syllabus, that is
-                            what the card is being scanned for. Whether it can be
-                            read here and now comes next. */}
-                        {book.exams?.map(exam => (
-                          <ExamPill key={`exam-${exam}`}>{exam}</ExamPill>
-                        ))}
-                        {book.pdf && <PdfPill />}
-                        {splitAuthors(book.author).map((author, i) => (
-                          <MetaPill key={`author-${i}`}>{author}</MetaPill>
-                        ))}
-                        {book.year && <MetaPill>{book.year}</MetaPill>}
-                        {book.edition && <MetaPill>{book.edition} ed.</MetaPill>}
-                        {book.publisher && book.publisher !== book.author && (
-                          <MetaPill>{book.publisher}</MetaPill>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </Card>
-              </button>
             ))}
           </div>
         )}

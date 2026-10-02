@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { ChevronLeft, Loader2 } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
-import { fromSlug } from '@/lib/wikiRoutes'
+import { fromSlug, RESOURCES_ROUTE } from '@/lib/wikiRoutes'
 import { extractWikiLinksFromText } from '@/lib/wikiExtract'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useWikiPageHead } from '@/hooks/useWikiPageHead'
@@ -60,7 +60,7 @@ export default function WikiResource() {
 
   return (
     <div className="space-y-4">
-      <Link to="/wiki" state={{ fromResource: true }} className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
+      <Link to={RESOURCES_ROUTE} state={{ fromResource: true }} className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
         <ChevronLeft className="h-4 w-4" /> All resources
       </Link>
 

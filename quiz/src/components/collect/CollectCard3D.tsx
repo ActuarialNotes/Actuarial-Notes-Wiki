@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { MasteryState } from '@/lib/mastery'
-import { isKeystone } from '@/lib/keystone'
 import { flashcardFoilClass } from '@/lib/flashcardFoil'
-import { KeystoneIcon } from '@/components/KeystoneName'
 
 // A flat flashcard showing a concept name, styled identically to a collected
 // tile in the Flashcards gallery (the same .flashcard-collected foil ladder,
@@ -44,7 +42,6 @@ export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '
   // A locked card always shows the top of the ladder — the still-sealed pack
   // should look like the prize. Otherwise it wears its concept's real level.
   const foilState: MasteryState = locked ? 'level3' : mastery ?? 'new'
-  const keystone = isKeystone(name)
   const [side, setSide] = useState<'front' | 'back'>('front')
 
   // A new concept always opens showing its front, and so does a card that stops
@@ -97,22 +94,6 @@ export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '
           aria-hidden={shownSide === 'back' || undefined}
           className={`collect-card-pane absolute inset-0 flex flex-col items-center justify-center ${face} text-center ${shownSide === 'back' ? 'collect-card-pane--hidden opacity-0 pointer-events-none' : 'opacity-100'}`}
         >
-          {/* Keystone cards are worth more than the card you're collecting —
-              say so on the card itself. The chip is the whole signal: no gold
-              border (the edge already belongs to the foil/rarity material) and
-              no gold wash across the face, which tinted the card's own colour
-              gold and left the concept name reading as a label on brass. */}
-          {keystone && (
-            <span className="keystone-ring inline-flex items-center gap-1 rounded-full px-2 py-0.5">
-              <KeystoneIcon className="h-3.5 w-3.5" />
-              {/* The smallest card has room for the glyph alone. */}
-              {size !== 'sm' && (
-                <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800 dark:text-amber-200">
-                  Keystone
-                </span>
-              )}
-            </span>
-          )}
           {/* A long word on a small card hyphenates rather than overflowing the
               edge; one no dictionary knows breaks where it must. */}
           <span className={`${nameText} font-bold leading-tight text-card-foreground hyphens-auto [overflow-wrap:anywhere]`}>

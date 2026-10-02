@@ -115,8 +115,7 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
   submission deadlines, results release — transcribed with its source page, never extrapolated; the
   study guide's info button reads it),
   `mnemonics.ts` / `stories.ts` (per-concept, per-avatar content), `quests.ts` (daily-quest
-  catalogue), `keystoneConcepts.ts` (the per-exam keystone catalogue — see
-  `docs/keystone-concepts.md`), `examGuides.ts` (the exam-page orientation guide — the tip
+  catalogue), `examGuides.ts` (the exam-page orientation guide — the tip
   pages themselves live in the vault under `Guides/`, see below), `tracks.ts`
 - `hooks/` — React hooks wrapping lib logic + Supabase queries
 - `stores/` — Zustand stores: `quizStore.ts` (active quiz session), `researchStore.ts` (flag-gated)
@@ -130,9 +129,8 @@ before touching that area**:
   with Forgotten/decay), implemented in `quiz/src/lib/mastery.ts`
 - `docs/study-plan-generation.md` — how daily study plans are scheduled/paced/cached,
   implemented in `quiz/src/lib/studyPlan.ts`. The *order* concepts are introduced in lives
-  next door in `lib/studyPlanOrder.ts` — syllabus order, or keystone-first (each keystone
-  trailed by what its page links to, from the build-time `data/keystoneLinks.ts` map) when the
-  strategy is *Key concepts first*. Never alphabetical: on a fresh account every concept is
+  next door in `lib/studyPlanOrder.ts` — syllabus order, or heaviest topic first when the
+  strategy is *Heaviest topics first*. Never alphabetical: on a fresh account every concept is
   New, so that tiebreak *is* the plan.
 - `docs/flashcard-collection.md` — collecting a card: a concept's card is collected the first
   time it reaches **Level 1** (its first correct answer) — no check, no modal, no lock.
@@ -263,13 +261,8 @@ before touching that area**:
   the one thing to keep straight — the *stack* (what's on screen) and the *walk* (the
   Previous/Next footer) are different sequences, so every move of the walk rebuilds the
   stack from the page it landed on.
-- `docs/keystone-concepts.md` — **keystone concepts**: the authored ~10–15 load-bearing
-  concepts per exam (`data/keystoneConcepts.ts`), the `lib/keystone.ts` lookup every surface
-  shares, and the **gold** material that marks them. Read before editing the catalogue or
-  touching `.keystone-*` CSS — gold (intrinsic) and rainbow foil (earned) must stay distinct.
-- `docs/exam-readiness.md` — the **Exam Readiness Score**: the two weighted criteria
-  (syllabus coverage 60%, keystone concepts 40%), the bands, and why keystone mastery carries
-  far more than its share of the syllabus. `computeExamReadiness` is the *one* readiness
+- `docs/exam-readiness.md` — the **Exam Readiness Score**: syllabus coverage (each section at
+  its exam weighting), the bands and the insight line. `computeExamReadiness` is the *one* readiness
   number — the exam-page card, the Dashboard radial, the exam grid and the readiness
   projection all call it. Read before changing `lib/readiness.ts` or any readiness readout.
 - `docs/pcpa-project.md` — the **Projects tab** (`/project`, in the sidebar after Quiz, with an
@@ -441,10 +434,6 @@ Other important `lib/` modules:
   and an exam lead their cards with the same object. It leads every exam row on the Study Guides and Quiz
   tabs (`components/ExamRow.tsx`), and it is branding rather than information — the row's title
   names the exam, so the tile is `aria-hidden`. See `docs/style-guide.md` §2.3.
-- `keystone.ts` — the keystone-concept read side: `findKeystone` / `isKeystone` (strict name
-  matching, no fuzzy hits) and `keystoneProgress` (decay-aware mastery roll-up per exam).
-  Rendered by `components/KeystoneName.tsx`. No surface lists an exam's keystones since the
-  readiness card was removed; keystone mastery is still a criterion of the readiness score.
 - `quizResume.ts` — **a quiz outlives its page**: the session lives in `stores/quizStore.ts`
   (including the timed quiz's clock, the unconfirmed answer and whether the pre-quiz concept
   list was read past), so a reader can leave `/quiz` mid-question — to look something up —
@@ -731,10 +720,10 @@ Other important `lib/` modules:
   `lib/passRateParser.test.ts` / `lib/passRateEndpoint.test.ts` rather than mirrored.
 - `resourceTimeline.ts` / `resourceTimelineFilters.ts` — build/filter the dated Resources timeline (heatmap)
 - `readiness.ts` — exam-readiness scoring. `computeExamReadiness` is **the** readiness score
-  (syllabus coverage 60% + keystone concepts 40%, plus band, section breakdown and concept
+  (syllabus coverage, plus band, section breakdown and concept
   tally); every surface that prints a readiness % calls it — the Dashboard's **Exam
   readiness** card (its first card: the `NN%` KPI, the band verdict and the primary actions,
-  with **Today's Study Plan** below it and then the ring and the criterion bars in the
+  with **Today's Study Plan** below it and then the ring and the criterion bar in the
   **Study Guide** card), the exam grid and the readiness projection. The exam study guide shows no
   readiness card (removed along with the orientation row). `computeReadiness` is the
   weighted section score it is built from — an input, not a second number to display.
@@ -970,7 +959,7 @@ Other important `lib/` modules:
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
 `*.test.ts` files sit alongside the modules they test (vitest). There are **180 test files /
-~2840 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+~2810 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).
@@ -1153,8 +1142,6 @@ modules that read directly from the repo root:
   never in this module
 - `virtual:resource-timeline` — the dated `Resources/{Books,Events,Regulation,Benchmarks}/`
   pages that power the Resources timeline/heatmap
-- `virtual:keystone-links` — for each keystone concept page, the concept pages it links to
-  (the study plan's *Key concepts first* order)
 - `virtual:seo-pages` — every exam, concept and resource page, described (`lib/seo.ts`).
   The same plugin (`seoPagesPlugin`) writes, after a build, one static
   `dist/wiki/<kind>/<slug>/index.html` per page and `dist/sitemap.xml` — the sitemap is

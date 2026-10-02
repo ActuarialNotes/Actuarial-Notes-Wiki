@@ -1,15 +1,8 @@
 // Fill colours for the readiness ring on the Dashboard's Exam readiness card
 // (StudyGuideRadial in components/ReadinessCard.tsx).
 //
-// Two ladders, same shape: ordinary concepts climb through green, keystone
-// concepts (docs/keystone-concepts.md) climb through the matching three shades
-// of gold, so the load-bearing spokes are findable in the ring at a glance —
-// and a gold ring that stays dim reads directly as "the foundations are
-// untouched". A New keystone still shows a faint gold so it reads as a
-// keystone before it has been studied.
-//
-// Forgotten is red in *both* ladders on purpose: a decayed keystone should
-// alarm, not sparkle.
+// Concepts climb through green, so the ring reads as progress at a glance.
+// Forgotten leaves the ladder for red.
 
 import type { MasteryState } from '@/lib/mastery'
 
@@ -21,19 +14,9 @@ export const LEVEL_FILL: Record<MasteryState, string> = {
   forgotten: 'rgba(239,68,68,0.45)',
 }
 
-export const KEYSTONE_FILL: Record<MasteryState, string> = {
-  new:       'rgba(245,158,11,0.16)',
-  level1:    'rgba(245,158,11,0.42)',
-  level2:    'rgba(245,158,11,0.72)',
-  level3:    '#f59e0b',
-  forgotten: 'rgba(239,68,68,0.45)',
-}
-
-/** Solid gold, for text that labels a keystone (the radial's centre readout). */
-export const KEYSTONE_TEXT = '#f59e0b'
-/** Solid green, for text that labels a mastered ordinary concept. */
+/** Solid green, for text that labels a mastered concept. */
 export const LEVEL3_TEXT = '#22c55e'
 
-export function masteryFill(state: MasteryState, keystone: boolean): string {
-  return (keystone ? KEYSTONE_FILL : LEVEL_FILL)[state]
+export function masteryFill(state: MasteryState): string {
+  return LEVEL_FILL[state]
 }

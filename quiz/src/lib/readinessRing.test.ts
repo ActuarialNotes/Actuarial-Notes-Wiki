@@ -30,7 +30,7 @@ function record(slug: string, state: MasteryState, daysAgo = 0): ConceptMasteryR
 }
 
 // Two sections of unequal weight, so the arcs have to be sized by weight rather
-// than by concept count. "Bayes Theorem" is a real Exam P keystone.
+// than by concept count.
 function syllabus(): WikiExamSyllabus {
   return {
     examId: 'P-1',
@@ -113,12 +113,6 @@ describe('buildRingSegments', () => {
     // Untouched for over a year — the ring has to show the decay, not the
     // state the record was last written with.
     expect(byName.get('Variance')).toBe('forgotten')
-  })
-
-  it('marks the keystone concepts', () => {
-    const segments = buildRingSegments(syllabus(), [], NOW)
-    expect(segments.find(s => s.conceptName === 'Bayes Theorem')!.keystone).toBe(true)
-    expect(segments.find(s => s.conceptName === 'Sample Space')!.keystone).toBe(false)
   })
 
   it('skips a section with no concepts but still spends its weight', () => {

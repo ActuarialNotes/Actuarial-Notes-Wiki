@@ -24,12 +24,12 @@ function row(concept: string, state: MasteryState, daysAgo: number): ConceptMast
 
 describe('a sector’s landmarks', () => {
   const records = [
-    row('Bayes Theorem', 'level2', 12), // keystone, decays in 2 days
-    row('Variance', 'level3', 3),        // keystone, safe
+    row('Bayes Theorem', 'level2', 12), // decays in 2 days
+    row('Variance', 'level3', 3),        // safe for weeks
     row('Expected Value', 'forgotten', 80),
     row('Covariance', 'level1', 6),      // decays tomorrow
   ]
-  const regions = sectorRegions(EXAM_P, records, 'P', NOW)
+  const regions = sectorRegions(EXAM_P, records, NOW)
   const landmarks = uniqueLandmarks(regions)
   const byName = (name: string) => landmarks.find(l => l.concept.name === name)!
 
@@ -45,19 +45,15 @@ describe('a sector’s landmarks', () => {
     expect(formatZ(byName('Expected Value').z)).toBe('0.00')
   })
 
-  it('names the keystones that have a landmark name, and marks keystones of this exam only', () => {
+  it('names the concepts that have a landmark name', () => {
     expect(byName('Bayes Theorem').inWorldName).toBe('Bayes Outpost')
-    expect(byName('Bayes Theorem').keystone).toBe(true)
     expect(byName('Covariance').inWorldName).toBeNull()
   })
 
-  it('lists keystones first on the sector panel, most at risk first, then what is decaying', () => {
+  it('lists the most at-risk concepts on the sector panel: decayed first, then the soonest to decay', () => {
     const panel = panelLandmarks(landmarks, 20)
-    const firstNonKeystone = panel.findIndex(l => !l.keystone)
-    expect(panel.slice(0, firstNonKeystone).every(l => l.keystone)).toBe(true)
-    expect(panel[0].concept.name).toBe('Expected Value')
-    expect(panel[1].concept.name).toBe('Bayes Theorem')
-    expect(panel.slice(firstNonKeystone).map(l => l.concept.name)).toEqual(['Covariance'])
+    expect(panel.map(l => l.concept.name)).toEqual(['Expected Value', 'Covariance', 'Bayes Theorem', 'Variance'])
+    expect(panelLandmarks(landmarks, 2).map(l => l.concept.name)).toEqual(['Expected Value', 'Covariance'])
   })
 
   it('says which three decay soonest, with the step', () => {
@@ -69,7 +65,7 @@ describe('a sector’s landmarks', () => {
   })
 
   it('agrees with the readiness score about the sector (acceptance: Z × 100 = the Dashboard’s %)', () => {
-    const readiness = computeExamReadiness(EXAM_P, records, NOW, 'P')
+    const readiness = computeExamReadiness(EXAM_P, records, NOW)
     const c = sectorCredibility(readiness.overallPct)
     expect(c.percent).toBe(Math.round(readiness.overallPct))
     expect(Number(c.label) * 100).toBeCloseTo(Math.round(readiness.overallPct), 6)

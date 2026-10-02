@@ -3,6 +3,7 @@ import examPages from 'virtual:exam-pages'
 import { emptyRecord, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
 import { computeExamReadiness } from '@/lib/readiness'
 import { parseExamMetadata, parseExamSyllabus } from '@/lib/wikiParser'
+import { isLandmark } from './landmarks'
 import { biggestLifts, simulationFormat, simulationPath } from './simulation'
 
 const NOW = new Date('2026-09-29T12:00:00Z')
@@ -40,18 +41,20 @@ describe('biggest lifts', () => {
     expect(lifts[0].points).toBeGreaterThan(0)
   })
 
-  it('stops offering a keystone that has nowhere left to climb', () => {
-    const keystones = ['Bayes Theorem', 'Variance', 'Expected Value']
-    const records = keystones.map(k => row(k, 'level3'))
+  const region = EXAM_P.topics[0]
+  const regionConcepts = region.concepts.filter(isLandmark)
+
+  it('stops offering a region that has nowhere left to climb', () => {
+    const records = regionConcepts.map(c => row(c.name, 'level3'))
     const lifts = biggestLifts(EXAM_P, records, 'P', NOW, 50)
-    for (const k of keystones) expect(lifts.find(l => l.kind === 'keystone' && l.name === k)).toBeUndefined()
+    expect(lifts.find(l => l.name === region.name)).toBeUndefined()
   })
 
-  it('counts a keystone’s promotion at what readiness says it is worth', () => {
+  it('counts a region’s promotion at what readiness says it is worth', () => {
     const lifts = biggestLifts(EXAM_P, [], 'P', NOW, 50)
-    const bayes = lifts.find(l => l.name === 'Bayes Theorem')!
-    const before = computeExamReadiness(EXAM_P, [], NOW, 'P').overallPct
-    const after = computeExamReadiness(EXAM_P, [row('Bayes Theorem', 'level1')], NOW, 'P').overallPct
-    expect(bayes.points).toBeCloseTo(after - before, 6)
+    const lift = lifts.find(l => l.name === region.name)!
+    const before = computeExamReadiness(EXAM_P, [], NOW).overallPct
+    const after = computeExamReadiness(EXAM_P, regionConcepts.map(c => row(c.name, 'level1')), NOW).overallPct
+    expect(lift.points).toBeCloseTo(after - before, 6)
   })
 })

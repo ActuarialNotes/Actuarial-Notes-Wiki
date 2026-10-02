@@ -204,7 +204,7 @@ export default function WikiHome() {
       // The same score the exam page's Exam Readiness Score card
       // and the Dashboard radial show — one definition of readiness.
       const readiness = match
-        ? computeExamReadiness(match, masteryRecords.filter(r => r.exam_id === examId), now, examId)
+        ? computeExamReadiness(match, masteryRecords.filter(r => r.exam_id === examId), now)
         : null
       models.set(exam.path, {
         exam,

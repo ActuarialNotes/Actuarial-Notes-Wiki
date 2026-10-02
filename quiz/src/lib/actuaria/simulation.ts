@@ -5,13 +5,12 @@
 // sized from the same table (`practiceExamQuestions`) and timed from the same
 // pace table (`lib/quizTiming.ts`) — nothing here restates an exam's format.
 // Afterwards the screen shows the one readiness number (G2), and *Biggest
-// lifts*: the keystones or regions whose promotion one level would raise
+// lifts*: the regions whose promotion one level would raise
 // `computeExamReadiness` most, found by re-running it with that promotion
 // made. The canvas's 10,000-sitting histogram is deferred (D2) — it would be a
 // second readiness number.
 
 import { buildMasteryLookup, lookupConceptRecord, resolveConceptState } from '@/lib/conceptMatch'
-import { keystonesForExam } from '@/lib/keystone'
 import { emptyRecord, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
 import { practiceExamQuestions } from '@/lib/pastExams'
 import { paceForExam, secondsPerUnit, type ExamPace } from '@/lib/quizTiming'
@@ -54,8 +53,7 @@ const NEXT_LEVEL: Record<MasteryState, MasteryState> = {
 }
 
 export interface Lift {
-  kind: 'keystone' | 'region'
-  /** The keystone's or the region's name. */
+  /** The region's name. */
   name: string
   /** Readiness points the promotion would add. */
   points: number
@@ -90,9 +88,9 @@ function promote(
 }
 
 /**
- * The `limit` promotions that would lift the sector's readiness most: each of
- * the exam's keystones one level up, and each region with every concept in it
- * one level up. `records` are the player's rows for this exam.
+ * The `limit` promotions that would lift the sector's readiness most: each
+ * region with every concept in it one level up. `records` are the player's rows
+ * for this exam.
  */
 export function biggestLifts(
   syllabus: WikiExamSyllabus,
@@ -101,17 +99,14 @@ export function biggestLifts(
   now: Date,
   limit = 3,
 ): Lift[] {
-  const base = computeExamReadiness(syllabus, [...records], now, examKey).overallPct
+  const base = computeExamReadiness(syllabus, [...records], now).overallPct
   const lift = (concepts: readonly WikiConcept[]) =>
-    computeExamReadiness(syllabus, promote(records, concepts, examKey, now), now, examKey).overallPct - base
+    computeExamReadiness(syllabus, promote(records, concepts, examKey, now), now).overallPct - base
 
-  const lifts: Lift[] = []
-  for (const k of keystonesForExam(examKey)) {
-    lifts.push({ kind: 'keystone', name: k.name, points: lift([{ name: k.name, target: k.name }]) })
-  }
-  for (const topic of syllabus.topics) {
-    lifts.push({ kind: 'region', name: topic.name, points: lift(topic.concepts.filter(isLandmark)) })
-  }
+  const lifts: Lift[] = syllabus.topics.map(topic => ({
+    name: topic.name,
+    points: lift(topic.concepts.filter(isLandmark)),
+  }))
   return lifts
     .filter(l => l.points > 0.05)
     .sort((a, b) => b.points - a.points || a.name.localeCompare(b.name))

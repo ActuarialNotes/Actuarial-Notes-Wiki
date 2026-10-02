@@ -42,9 +42,8 @@ describe('the mastery ladder palette', () => {
   })
 
   // Style guide §4.1: red means incorrect/error, amber means "at risk". A
-  // decayed concept is at risk. The Study Guide radial keeps red on purpose
-  // (see lib/masteryFill.ts) because its keystone ladder is already gold —
-  // that exception is deliberately confined to the radial.
+  // decayed concept is at risk. The Study Guide radial still draws it red
+  // (see lib/masteryFill.ts); that exception is confined to the radial.
   it('signals Forgotten as at-risk amber, not error red', () => {
     for (const form of [MASTERY_TINT, MASTERY_TEXT, MASTERY_FILL]) {
       expect(form.forgotten).toContain('amber')

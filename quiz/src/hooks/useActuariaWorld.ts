@@ -47,7 +47,7 @@ export function useActuariaWorld(): ActuariaWorld {
   const readiness = useMemo(() => {
     const now = new Date()
     return new Map(
-      sectors.map(s => [s.key, computeExamReadiness(s.syllabus, records.filter(r => r.exam_id === s.key), now, s.key)]),
+      sectors.map(s => [s.key, computeExamReadiness(s.syllabus, records.filter(r => r.exam_id === s.key), now)]),
     )
   }, [sectors, records])
 

@@ -1,12 +1,12 @@
 // **Abilities** — what each of Quiz Battle's power-ups is called in Actuaria,
-// what it does in a line, and the keystone that unlocks it
+// what it does in a line, and the concept that unlocks it
 // (docs/actuaria-online.md §7.2). What an ability *does* in a battle is the
 // engine's (`lib/battle.ts`), not this table's; this is the Hangar's catalogue.
 //
-// Each ability is unlocked by mastering a keystone concept — read through the
-// mastery ladder, so decay can take it away again. Reinsurance is the starter,
-// open to everyone. `abilities.test.ts` holds every `keystone` to a real one in
-// data/keystoneConcepts.ts, of the exam named.
+// Each ability is unlocked by mastering a concept — read through the mastery
+// ladder, so decay can take it away again. Reinsurance is the starter, open to
+// everyone. `abilities.test.ts` holds every `concept` to a real concept page
+// linked from the syllabus of the exam named.
 
 import type { AbilityId } from '@/lib/battle'
 import type { MasteryState } from '@/lib/mastery'
@@ -16,11 +16,11 @@ export interface AbilityDef {
   name: string
   /** One line: what it does. */
   effect: string
-  /** The exam_progress key of the keystone's exam; null for the starter. */
+  /** The exam_progress key of the concept's exam; null for the starter. */
   exam: string | null
-  /** The keystone concept that unlocks it; null for the starter. */
-  keystone: string | null
-  /** The level the keystone must hold. */
+  /** The concept that unlocks it; null for the starter. */
+  concept: string | null
+  /** The level the concept must hold. */
   minLevel: Extract<MasteryState, 'level1' | 'level2' | 'level3'> | null
 }
 
@@ -30,7 +30,7 @@ export const ACTUARIA_ABILITIES: readonly AbilityDef[] = [
     name: 'Reinsurance',
     effect: 'Halve your next claim (−50 → −25).',
     exam: null,
-    keystone: null,
+    concept: null,
     minLevel: null,
   },
   {
@@ -38,7 +38,7 @@ export const ACTUARIA_ABILITIES: readonly AbilityDef[] = [
     name: 'Bayesian Update',
     effect: 'Strike one wrong option from this question, on your screen only.',
     exam: 'P',
-    keystone: 'Bayes Theorem',
+    concept: 'Bayes Theorem',
     minLevel: 'level2',
   },
   {
@@ -46,7 +46,7 @@ export const ACTUARIA_ABILITIES: readonly AbilityDef[] = [
     name: 'Double Down',
     effect: 'Arm before answering: this round ×2 — but a miss is a claim of −50.',
     exam: 'P',
-    keystone: 'Expected Value',
+    concept: 'Expected Value',
     minLevel: 'level2',
   },
   {
@@ -54,7 +54,7 @@ export const ACTUARIA_ABILITIES: readonly AbilityDef[] = [
     name: 'Time Value',
     effect: 'This round’s speed bonus as if you’d answered 30 s sooner.',
     exam: 'FM',
-    keystone: 'Present Value',
+    concept: 'Present Value',
     minLevel: 'level2',
   },
   {
@@ -62,7 +62,7 @@ export const ACTUARIA_ABILITIES: readonly AbilityDef[] = [
     name: 'Immunization',
     effect: 'A miss this round doesn’t break your streak.',
     exam: 'FM',
-    keystone: 'Immunization',
+    concept: 'Immunization',
     minLevel: 'level3',
   },
 ]

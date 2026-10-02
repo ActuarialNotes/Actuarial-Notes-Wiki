@@ -180,7 +180,7 @@ teal (`--actuaria-signal: 173 80% 40%`, ≈ `#14B8A6`) from the same family as t
 teal — the general-guide tile, `tip` callouts — which is why it reads as the site's own.
 It is **chrome only**: the orbit ring of the Actuaria mark, a `live` indicator, a HUD panel's
 corner ticks, the "you are here" marker on the star map. Never a verdict, never a mastery
-readout (Credibility keeps the green ladder, gold for a keystone — `lib/masteryFill.ts`), and
+readout (Credibility keeps the green ladder — `lib/masteryFill.ts`), and
 never on a battle player's tile, buzzer, pad or score, which stay sky and fuchsia. It is
 defined only inside the `.actuaria` scope (§2.6), exposed to Tailwind as `actuaria-signal`
 (`bg-actuaria-signal`, `text-actuaria-signal`, `bg-actuaria-signal-soft` for the ~18% wash a
@@ -372,10 +372,9 @@ level on two screens. Add `<MasteryBadge state={…} />` to a new list rather th
 
 ⚠️ **Convention — Forgotten is amber, with one exception.** Red means *incorrect / error /
 destructive* (§4.1); a decayed concept is at risk, not wrong, so every mastery **badge** uses
-amber. The Study Guide radial (`lib/masteryFill.ts`) keeps Forgotten red on purpose and is the
-only place that should: its keystone spokes already climb a *gold* ladder (§4.4), so an amber
-"forgotten" spoke would be indistinguishable from a healthy keystone. No badge surface has
-that collision.
+amber. The Study Guide radial (`lib/masteryFill.ts`) still draws Forgotten red. It kept red
+while it drew a second, gold ladder beside the green one, where an amber spoke would have read
+as a healthy gold one; that ladder is gone, so the radial is now free to follow the badges.
 
 ⚠️ **Convention — destructive:** for *actions* (buttons, delete) use the `destructive`
 token, not raw `red`. Reserve raw `red-*` for the incorrect-answer / error-text state pairings
@@ -399,31 +398,6 @@ On a flashcard the foil edge is the *only* mastery readout — the card prints n
 so the ladder needs one distinguishable step per state, and a decayed card steps off the
 rainbow into amber (§4.1). `lib/flashcardFoil.ts` is that mapping; every surface that draws a
 card calls it rather than re-deriving the classes.
-
-### 4.4 The "keystone" gold material
-
-Keystone concepts — the ~10–15 load-bearing concepts per exam (`docs/keystone-concepts.md`) —
-get a second rarity material: **polished gold**. On a *name* it is always an underline —
-`.wiki-link--keystone` in prose, `.keystone-underline` for a title or heading — and never an
-icon or badge beside the word, so one signal covers every surface and the name itself stays
-the tap target. On a *panel* it is `.keystone-ring` (gradient edge, same padding +
-mask-exclude trick) — an edge or a chip, never a wash tinting the surface itself. In the
-Dashboard's Study Guide ring the
-same gold replaces green as the mastery ladder for keystone spokes (`lib/masteryFill.ts`).
-
-Gold and foil mean different things and must stay distinguishable:
-
-| Material | Meaning | Behaviour |
-|---|---|---|
-| Rainbow **foil** | *Earned* — collected, Level 3, designation held | Animates at the top tier |
-| **Gold** keystone | *Intrinsic* — this concept was always load-bearing | Shine sweeps on hover/focus only |
-
-Because gold is intrinsic rather than a reward, it never animates at rest: a syllabus page with
-a dozen keystone links must still read as text. Where an element could carry both materials (a
-collected flashcard tile, the collect card), **the edge belongs to foil** and the keystone
-signal moves inside as a glyph or chip — never two rings on one border. Amber/gold is also the
-"at risk" warning hue (§4.1); keystone gold stays distinguishable by being a *gradient
-material* with a drawn glyph, not a flat amber pill.
 
 ---
 

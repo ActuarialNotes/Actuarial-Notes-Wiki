@@ -31,7 +31,7 @@ Almost every number a player sees in Actuaria already exists under another name 
 The genuinely new pieces are:
 
 - the in-world screens (title, star map, sector, Daily Transmission, Hangar);
-- **abilities** (Quiz Battle power-ups unlocked by mastering keystone concepts);
+- **abilities** (Quiz Battle power-ups unlocked by mastering named concepts);
 - **Cohorts** and **raids**.
 
 Tagline (from the site's hero direction): *Pass actuarial exams like it's a game.*
@@ -51,14 +51,14 @@ These come from the repo's existing design docs. Actuaria must not break any of 
 | G5 | **Exam hues come from `examAccentStyle(examKey)`.** Never hard-code an exam hex. Sector tiles use `--exam-accent-vivid`; selected states use `--exam-accent-soft` + `--exam-accent-muted`. | `docs/style-guide.md` §2.3 |
 | G6 | **Player colours are Quiz Battle's.** Sky and fuchsia (`playerAccentStyle`) mean *who*, only inside a battle, and are never a verdict. Actuaria adds nothing to a player's tile, buzzer, pad or score, and the Actuaria signal colour (§4.2) never appears on them. | `docs/style-guide.md` §2.3 *Player colours* |
 | G7 | **Tokens, not hexes.** Surfaces, text and borders use `bg-background`, `bg-card`, `border-border`, `text-muted-foreground` and so on. The canvas hexes are *reference renders* of those tokens in dark mode. | `docs/style-guide.md` §2.1 |
-| G8 | **Semantic state colours keep their meaning.** Green = correct/mastered (Credibility bars use `masteryFill`, gold for keystones), red = incorrect, amber = at risk/decaying, orange = streak, foil = earned. | `docs/style-guide.md` §4 |
+| G8 | **Semantic state colours keep their meaning.** Green = correct/mastered (Credibility bars use `masteryFill`), red = incorrect, amber = at risk/decaying, orange = streak, foil = earned. | `docs/style-guide.md` §4 |
 | G9 | **The game never gates study content.** Locked sectors, landmarks and abilities are presentation only. Every concept, question and guide stays reachable exactly as in Study Mode. | new |
 | G10 | **Stored cross-user state is server-authoritative.** Anything *stored* that another player can see (cohorts, raids, a future rating) is written only through `SECURITY DEFINER` RPCs, as leagues are, and is opt-in with delete-on-leave privacy. Ephemeral battle rooms stay host-authoritative broadcast, as Quiz Battle does. | `docs/leagues.md`, `docs/quiz-battle.md` |
 | G11 | **Pure core + tests.** Every rule in §7 lives in a pure module with vitest tests beside it, including the worked examples in this doc as fixtures. Battle extensions go in `lib/battle.ts` / `lib/battleRoom.ts` and their existing test files. Server SQL that duplicates a formula carries leagues' duplication-contract note. | repo convention |
 | G12 | **Sound and motion follow the house rules.** Reuse Quiz Battle's cues and soundtrack; a new cue is written to `docs/sound-design.md`'s rules (one key, round and short, mistakes silent). Every animation respects `prefers-reduced-motion`. | `docs/sound-design.md`, `docs/style-guide.md` §9 |
 
 Read before starting: `CLAUDE.md`, **`docs/quiz-battle.md`**, `docs/style-guide.md`,
-`docs/concept-learning-progression.md`, `docs/exam-readiness.md`, `docs/keystone-concepts.md`,
+`docs/concept-learning-progression.md`, `docs/exam-readiness.md`,
 `docs/leagues.md`, `docs/sound-design.md`, `docs/mock-exam-browser.md`,
 `docs/study-plan-generation.md`.
 
@@ -76,7 +76,7 @@ single source for labels. The Actuaria skin of the Battle page (§6.8) reads its
 | **Actuaria** | The game world (feature) | `ACTUARIA_ENABLED`, routes `/actuaria/*` |
 | **Sector** | An exam | exam_progress key (`P`, `FM`, `CAS-5`, …), `examAccentStyle` |
 | **Region** | A learning objective of that exam | syllabus sections from the exam page parser |
-| **Landmark** | A concept | concept slug; keystones get authored in-world names (§6.4) |
+| **Landmark** | A concept | concept slug; a few get authored in-world names (§6.4) |
 | **Credibility (Z)** — landmark | Concept credit: 0 / 0.33 / 0.67 / 1.00 for New-or-Forgotten / L1 / L2 / L3 | `resolveConceptState` |
 | **Credibility (Z)** — sector | Exam readiness ÷ 100 | `computeExamReadiness().overallPct` |
 | **Orbital decay** | Mastery decay (L3→L2 after 30 d, L2→L1 after 14 more, L1→Forgotten after 7 more) | `decayIfStale`; projected decay in `lib/learningHistory.ts` |
@@ -100,7 +100,7 @@ single source for labels. The Actuaria skin of the Battle page (§6.8) reads its
 | **Guide** | A member who has passed the exam and helps the cohort | §7.6 |
 | **Large Numbers** | The leaderboard | existing per-exam league board (`LeaderboardPanel`) |
 | **Hangar** | Ability loadout + ship cosmetics | new loadout (§7.2) + Store cosmetics (§7.3) |
-| **Ability** | A once-per-battle power-up, unlocked by mastering a keystone | §7.2 |
+| **Ability** | A once-per-battle power-up, unlocked by mastering a named concept | §7.2 |
 | **Simulation** | A timed Practice Exam at Monte Carlo Station + the readiness readout | existing `mock-exam` mode (`docs/mock-exam-browser.md`) |
 
 ---
@@ -137,7 +137,7 @@ cards, 12–16 px radii and exam tiles, and adds:
 | Secondary text | `text-muted-foreground` | |
 | **Signal** (new) | `--actuaria-signal: 173 80% 40%` (≈ `#14B8A6`) | Actuaria's single accent, **chrome only**: the logo's ring, "live" indicators, HUD corner ticks, the "you are here" marker. Defined only inside `.actuaria` and exposed as the Tailwind colour `actuaria-signal`. It is the same family as the app's teal (the general-guide tile, `tip` callouts), which is why it reads as the site's own. Never on a verdict, a mastery readout, or a battle player's element (G6). |
 | Signal soft | `--actuaria-signal-soft`: signal at ~18% alpha | `live` chip background |
-| Credibility | `masteryFill(state, keystone)` (`lib/masteryFill.ts`) | Green ladder; gold for keystones. **Not** signal (G8) |
+| Credibility | `masteryFill(state)` (`lib/masteryFill.ts`) | Green ladder. **Not** signal (G8) |
 | Exam hues | `examAccentStyle(examKey)` | Sector tiles, planets, selected states |
 | Battle players | `playerAccentStyle(seat)` | Sky / fuchsia, inside a battle only (G6) |
 | Decaying / at risk | semantic amber family | Orbital decay, "review due" |
@@ -284,7 +284,7 @@ with the loadout (§8.1).
 - **Geometry**: a central star with concentric elliptical orbits (ry ≈ 0.42 rx). Orbit 1 holds **Monte Carlo Station**, labelled with the live lobby count (§6.1). Orbit 2 holds charted sectors. Orbit 3 (dashed) holds uncharted ones.
 - **Sectors**: one planet per exam on the track, filled `--exam-accent-vivid`, with the `examLogo.ts` monogram and an Oxanium label. Uncharted exams are dashed circles stroked `--exam-accent-muted` with a lock. **Chart this sector** adds the exam through the existing exam-progress flow (G9).
 - **Order**: ladder order, so the hue ramp reads around the orbit as it does on the exam grid.
-- **Selected-sector panel**: tile + name + exam title in the selected state (§4.2); sector Credibility with the band verdict from `computeExamReadiness`; a **Landmarks** list (keystones first, then the concepts nearest to decaying), each with a StatusChip. Actions:
+- **Selected-sector panel**: tile + name + exam title in the selected state (§4.2); sector Credibility with the band verdict from `computeExamReadiness`; a **Landmarks** list (the concepts most at risk: decayed first, then the nearest to decaying), each with a StatusChip. Actions:
   - primary **Battle this sector**: shown only when `battleExamCounts` gives the exam at least three raceable questions (today P, FM, MAS-I, MAS-II). It opens `/actuaria/battle?exam=…` with the setup pre-filled. Otherwise the panel says battles need multiple-choice questions on this exam, and the primary becomes **Train in Quiz**;
   - secondary **Open study guide**.
 - **Decoration**: the Loss Triangle Nebula is decorative. Gambler's Ruin renders only while a raid is active (Phase 3).
@@ -293,10 +293,10 @@ with the loadout (§8.1).
 ### 6.4 Sector detail (`/actuaria/sector/:exam`)
 
 Regions (learning objectives) as sections with their weight (`ExamWeightLabel`). Each lists
-its landmarks with a Z chip and a decay readout. **Keystones get in-world names**, authored
-in `data/actuariaLandmarks.ts` as `{ exam, concept, name }`:
+its landmarks with a Z chip and a decay readout. **A few concepts get in-world names**,
+authored in `data/actuariaLandmarks.ts` as `{ exam, concept, name }`:
 
-| Exam | Keystone concept | Landmark name |
+| Exam | Concept | Landmark name |
 |---|---|---|
 | P | Bayes Theorem | Bayes Outpost |
 | P | Poisson Distribution | Poisson Drift |
@@ -306,14 +306,14 @@ in `data/actuariaLandmarks.ts` as `{ exam, concept, name }`:
 | FM | Annuity Immediate | Annuity Belt |
 | FM | Immunization | Immunization Shield Array |
 
-- Non-keystones use the plain concept name. A landmark name always shows the concept name beneath it.
-- Add a test that every entry is a real keystone (`findKeystone`).
+- Every other concept uses its plain name. A landmark name always shows the concept name beneath it.
+- A test holds every entry to a real concept page linked from that exam's syllabus.
 - A landmark opens the existing concept popup.
 
 ### 6.5 Credibility & decay
 
 - **Landmark chart**: the existing `components/ui/LearningProgressGraph.tsx` (step function, answer dots, projected decay dashes), with an `actuaria` presentation prop that labels the y-axis in Z (0, 0.33, 0.67, 1.00). Don't build a second chart.
-- **Sector roll-up**: the two readiness criteria (syllabus coverage 60%, keystones 40%) as bars that make up the sector Z. The regions list (§6.4) is where learning-objective-level progress lives.
+- **Sector roll-up**: the readiness criterion (syllabus coverage) as the bar that makes up the sector Z. The regions list (§6.4) is where learning-objective-level progress lives.
 - **Decaying now**: the three concepts with the soonest projected decay step, with the date and the drop ("L2 → L1 in 3 days"), plus **Repair · Daily Transmission**.
 
 ### 6.6 Daily Transmission + Coverage (`/actuaria/daily`)
@@ -327,7 +327,7 @@ in `data/actuariaLandmarks.ts` as `{ exam, concept, name }`:
 ### 6.7 Hangar (`/actuaria/hangar`)
 
 - **Ship bay**: a static top-down ship SVG with callouts for its cosmetic slots: hull paint, trail, calculator bay.
-- **Abilities** (§7.2): cards grouped by sector, each showing its effect, the keystone that unlocks it, the requirement ("Bayes Theorem at Level 2") and that concept's current state. States: equipped / unlocked / locked. Equip up to **3**. Reinsurance is always available.
+- **Abilities** (§7.2): cards grouped by sector, each showing its effect, the concept that unlocks it, the requirement ("Bayes Theorem at Level 2") and that concept's current state. States: equipped / unlocked / locked. Equip up to **3**. Reinsurance is always available.
 - **Ship cosmetics** (§7.3) are bought in the existing Store with gems; the Hangar only equips.
 - Before Phase 2b, the ability section shows "Abilities arrive in private-channel battles soon".
 
@@ -370,8 +370,8 @@ from the lexicon and one action is added:
 A launcher for the existing **Practice Exam** (`mode=mock-exam`), with the format read from
 the exam catalogue and the pace table (30 questions and 3 hours for P), not hard-coded. After
 a run, show the score, the time used and the sector's readiness (the one number, G2) with its
-band. Then show **Biggest lifts**: the three keystones or regions whose promotion would raise
-`computeExamReadiness` most, computed by re-running it with that one concept promoted. The
+band. Then show **Biggest lifts**: the three regions whose promotion one level would raise
+`computeExamReadiness` most, computed by re-running it with that region's concepts promoted. The
 canvas's 10,000-sitting histogram is deferred (D2).
 
 ### 6.11 Cohort (`/actuaria/cohort`, Phase 3)
@@ -436,8 +436,8 @@ screens. Arming happens in the count-in or while the question is open, before lo
 | **Time Value** | This round's speed bonus is scored as if you'd answered 30 s sooner (never above +50) | both | Present Value (FM) ≥ Level 2 |
 | **Immunization** | A miss this round doesn't break your streak | both | Immunization (FM) ≥ Level 3 |
 
-- Unlocks read the named **keystone** through `resolveConceptState`, so decay can re-lock an ability ("Requirement lapsed: review Bayes Theorem"). An ability equipped when a battle starts stays usable for that battle.
-- Catalogue: `data/actuariaAbilities.ts` (`{ id, name, effect, exam, keystone, minLevel }`). A test asserts every `keystone` exists in `data/keystoneConcepts.ts`.
+- Unlocks read the named **concept** through `resolveConceptState`, so decay can re-lock an ability ("Requirement lapsed: review Bayes Theorem"). An ability equipped when a battle starts stays usable for that battle.
+- Catalogue: `data/actuariaAbilities.ts` (`{ id, name, effect, exam, concept, minLevel }`). A test asserts every `concept` is a real concept page linked from that exam's syllabus.
 
 **Engine changes** (all in `lib/battle.ts` / `lib/battleRoom.ts`, tested in their test files):
 
@@ -491,7 +491,7 @@ room: Quiz Battle draws only the app's own avatars, and that rule stays.
 `selectTransmission(masteryRows, now, n = 3)` in `lib/actuaria/transmission.ts`:
 
 1. Candidates are the concepts on the player's active exams whose projected **next decay step is within 7 days**, plus **Forgotten** concepts that were learned before.
-2. Sort keystones first, then by the soonest decay step, then by the highest current level.
+2. Sort by the soonest decay step, then by the highest current level.
 3. Take `n` concepts and draw one question each through the quiz's own pool (`filterQuestions`, so fact-check and syllabus filters apply), leaning to the concept's level with `drawByDifficulty`.
 4. With fewer than `n` candidates, fill from today's study-plan concepts. With none at all, show "No decay today" and offer the study plan.
 
@@ -618,7 +618,7 @@ before Quiz Battle landed and before the repo was reviewed. Follow the spec wher
 | **05 Hangar**: hull Mk II/III, Afterburner, "power from mastery, Premium buys stats" | Cosmetics only; abilities are the only power, and only in private channels (§7.2–7.3) |
 | Abilities: Poisson Burst, Law of Large Numbers | Replaced by Double Down (Expected Value) to fit the points model (§7.2) |
 | Amber "Hazard" as Battle's colour | No Battle brand colour; players are sky/fuchsia; amber only for decay (§4.2) |
-| Credibility fills in teal | `masteryFill` (green; gold for keystones) (§4.2) |
+| Credibility fills in teal | `masteryFill` (green) (§4.2) |
 | Outfit UI font, JetBrains Mono readouts | System UI stack; system mono `tabular-nums`; Oxanium display only (§4.3) |
 | Hex colours (`#171717`, `#0E4FDD`, …) | Tokens and `examAccentStyle` (G5, G7) |
 | Z = n / (n + k) (Bühlmann); a half-life that doubles on each review | The existing ladder (0 / 0.33 / 0.67 / 1) and step decay (30 / 14 / 7 days) (§3) |

@@ -33,17 +33,16 @@ function question(id: string, exam: string, concept: string, difficulty: Questio
 }
 
 describe('selectTransmission', () => {
-  it('takes concepts decaying within 7 days and forgotten ones, keystones first (§7.5)', () => {
+  it('takes concepts decaying within 7 days and forgotten ones, soonest first (§7.5)', () => {
     const rows = [
       row('P', 'Percentile', 'level2', 12),          // L2 → L1 in 2 days
       row('P', 'Joint Distribution', 'level1', 6), // L1 → Forgotten in 1 day
-      row('P', 'Bayes Theorem', 'level2', 9),      // keystone, L2 → L1 in 5 days
+      row('P', 'Bayes Theorem', 'level2', 9),      // L2 → L1 in 5 days
       row('P', 'Covariance', 'level3', 2),         // safe for 28 days
       row('P', 'Moments', 'forgotten', 60),
     ]
     const picks = selectTransmission(rows, NOW, 3)
-    expect(picks.map(p => p.concept)).toEqual(['Bayes Theorem', 'Joint Distribution', 'Percentile'])
-    expect(picks[0].keystone).toBe(true)
+    expect(picks.map(p => p.concept)).toEqual(['Joint Distribution', 'Percentile', 'Bayes Theorem'])
     expect(picks.map(p => p.reason)).toEqual(['decaying', 'decaying', 'decaying'])
   })
 

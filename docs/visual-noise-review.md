@@ -162,9 +162,9 @@ questions on this exam and the score fills in."* is the label paraphrased **and*
 instruction for using the app, printed at the one moment there is genuinely nothing to report.
 
 The replacement is `readinessInsight` (`docs/exam-readiness.md`), a line derived from the
-learner's own records: which keystone decayed, how much of what they studied has slipped, the
-section with the most score left on the table. It names something the card does not already
-draw, and — the part worth copying — **it returns null freely**. Six ordered rules, and if none
+learner's own records: how much of what they studied has slipped, how much is parked at
+Level 1, the section with the most score left on the table. It names something the card does
+not already draw, and — the part worth copying — **it returns null freely**. Three ordered rules, and if none
 of them has anything, the paragraph is not rendered. No generic sentence stands in.
 
 **The generalisable move:** a caption slot does not have to be filled. Where a surface prints

@@ -167,7 +167,7 @@ function ShipPartRow({
 
 interface AbilityGroup {
   key: string
-  /** The keystone's exam, for the group's accent; null for the starter. */
+  /** The unlocking concept's exam, for the group's accent; null for the starter. */
   exam: string | null
   label: string
   statuses: AbilityStatus[]
@@ -244,29 +244,29 @@ function AbilityLoadout({
   )
 }
 
-/** "Bayes Theorem at Level 2", and where the keystone stands now. */
+/** "Bayes Theorem at Level 2", and where the concept stands now. */
 function Requirement({ status, onReview }: { status: AbilityStatus; onReview: (concept: string) => void }) {
   const { def } = status
-  if (!def.keystone || !def.minLevel) {
+  if (!def.concept || !def.minLevel) {
     return <p className="px-1 text-xs text-muted-foreground">Always available</p>
   }
-  const keystone = def.keystone
+  const concept = def.concept
   return (
     <div className="flex flex-wrap items-center gap-x-2 gap-y-1 px-1 text-xs text-muted-foreground" data-testid={`hangar-requirement-${def.id}`}>
       <span>
         <button
           type="button"
-          onClick={() => onReview(keystone)}
+          onClick={() => onReview(concept)}
           className="underline decoration-dotted underline-offset-2 hover:text-foreground"
         >
-          {keystone}
+          {concept}
         </button>{' '}
         at {MASTERY_LABEL[def.minLevel]}
       </span>
       {status.state && <MasteryBadge state={status.state} />}
       {status.lapsed && (
         <span className="w-full text-amber-600 dark:text-amber-400">
-          Requirement lapsed: review {keystone}
+          Requirement lapsed: review {concept}
         </span>
       )}
     </div>

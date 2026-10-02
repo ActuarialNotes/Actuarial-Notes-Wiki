@@ -58,7 +58,7 @@ export default function Actuaria() {
   )
 
   // The abilities this player would take into a private channel: their Hangar
-  // loadout, cut to what their keystones hold now (§7.2).
+  // loadout, cut to what their concepts hold now (§7.2).
   const { prefs } = useActuariaPrefs()
   const loadout = useMemo(() => battleLoadout(prefs.loadout, world.records, new Date()), [prefs.loadout, world.records])
 

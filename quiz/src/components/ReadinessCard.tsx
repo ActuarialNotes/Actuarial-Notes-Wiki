@@ -19,7 +19,7 @@ import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
 import { sanitizeMasteryState } from '@/lib/mastery'
-import { KEYSTONE_FILL, KEYSTONE_TEXT, LEVEL3_TEXT, LEVEL_FILL, masteryFill } from '@/lib/masteryFill'
+import { LEVEL3_TEXT, LEVEL_FILL, masteryFill } from '@/lib/masteryFill'
 import { MASTERY_LABEL } from '@/lib/masteryBadge'
 import { computeExamReadiness } from '@/lib/readiness'
 import { useReadinessDelta } from '@/hooks/useReadinessDelta'
@@ -131,7 +131,7 @@ function StudyGuideRadial({
             <path
               key={i}
               d={ringArcPath(seg.startDeg, seg.endDeg, RING_OUTER_R, RING_INNER_R)}
-              fill={masteryFill(seg.state, seg.keystone)}
+              fill={masteryFill(seg.state)}
               opacity={(hovered || selected) && !isActive ? 0.35 : 1}
               stroke={selected === seg && hovered !== seg ? 'rgba(255,255,255,0.55)' : 'none'}
               strokeWidth={selected === seg && hovered !== seg ? 1 : 0}
@@ -209,16 +209,15 @@ function StudyGuideRadial({
             </text>
             <text
               x={RING_CX} y={RING_CY + 18} textAnchor="middle" fontSize={10}
-              fill={centerSeg.keystone ? KEYSTONE_TEXT : centerSeg.state === 'level3' ? LEVEL3_TEXT : 'currentColor'}
-              opacity={centerSeg.keystone || centerSeg.state === 'level3' ? 1 : 0.65}
+              fill={centerSeg.state === 'level3' ? LEVEL3_TEXT : 'currentColor'}
+              opacity={centerSeg.state === 'level3' ? 1 : 0.65}
             >
               {centerSeg.state === 'new' ? 'New' : centerSeg.state === 'level1' ? 'Level 1' : centerSeg.state === 'level2' ? 'Level 2' : centerSeg.state === 'level3' ? 'Level 3' : 'Forgotten'}
-              {centerSeg.keystone ? ' · Keystone' : ''}
             </text>
           </>
         ) : (
           // The score itself, while nothing is hovered or selected. No caption
-          // under it: the two criteria beside the ring and the "Exam readiness"
+          // under it: the criterion beside the ring and the "Exam readiness"
           // KPI above both name what it measures, so a word here would be the
           // third time (docs/visual-noise-review.md, test 1).
           <text
@@ -235,19 +234,13 @@ function StudyGuideRadial({
       <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[12px] text-muted-foreground">
         {(['level3', 'level2', 'level1', 'new'] as MasteryState[]).map(s => (
           <span key={s} className="flex items-center gap-1">
-            {/* Each level shows both palettes stacked in one dot: green half for
-                an ordinary concept, gold half for a keystone at the same level. */}
             <span
               className="inline-block h-2 w-2 rounded-full shrink-0"
-              style={{ background: `linear-gradient(90deg, ${LEVEL_FILL[s]} 50%, ${KEYSTONE_FILL[s]} 50%)` }}
+              style={{ backgroundColor: LEVEL_FILL[s] }}
             />
             {s === 'new' ? 'New' : s === 'level1' ? 'Level 1' : s === 'level2' ? 'Level 2' : 'Level 3'}
           </span>
         ))}
-        <span className="flex items-center gap-1">
-          <span className="inline-block h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: KEYSTONE_FILL.level3 }} />
-          Keystone
-        </span>
       </div>
     </div>
   )
@@ -512,10 +505,10 @@ export function ReadinessCard({
     [masteryRecords, progressKey],
   )
 
-  // The one readiness score (docs/exam-readiness.md): syllabus coverage plus
-  // keystone mastery. Computed once here and read by both halves of the card
-  // below — the ring draws `overallPct`, the rows beside it draw the criteria
-  // it is made of — so the two can never quote different numbers.
+  // The one readiness score (docs/exam-readiness.md): syllabus coverage.
+  // Computed once here and read by both halves of the card below — the ring
+  // draws `overallPct`, the row beside it draws the criterion it is made of —
+  // so the two can never quote different numbers.
   //
   // Scored from real mastery on every tier. Mastery is recorded for every
   // account — the daily study *plan* is what Pro buys, not the record of
@@ -1081,11 +1074,10 @@ export function ReadinessCard({
   //      score today. It follows the number rather than the ring: the reader who
   //      has just read "Not started" is looking for the next step, not for a
   //      breakdown.
-  //   3. **Study Guide** — the ring (one arc per syllabus concept, gold for a
-  //      keystone) beside the two criteria the score is made of, so a number as
-  //      low as 3% still says *which* half of readiness is missing. The score is
-  //      printed in the ring's middle too — by the time the reader reaches it the
-  //      KPI two cards up has scrolled off, so the ring has to say what it measures.
+  //   3. **Study Guide** — the ring (one arc per syllabus concept) beside the
+  //      criterion the score is made of. The score is printed in the ring's
+  //      middle too — by the time the reader reaches it the KPI two cards up has
+  //      scrolled off, so the ring has to say what it measures.
   //
   // All three portal into `readinessSlot` when the Dashboard supplies one.
   const readinessPct = readiness.counts.total > 0 ? Math.round(readiness.overallPct) : 0
@@ -1465,14 +1457,12 @@ export function ReadinessCard({
 
             <div className="w-full min-w-0 flex-1">
               {/* The criteria. Each bar's *thickness* is the weight it carries in
-                  the headline score, so the heavier one is visibly the heavier
-                  line and nothing has to print "60% of score"
-                  (docs/visual-noise-review.md §3.1). Keystone coverage is drawn
-                  in the same gold as its spokes in the ring. */}
+                  the headline score, so a heavier one would be visibly the
+                  heavier line and nothing has to print "60% of score"
+                  (docs/visual-noise-review.md §3.1). */}
               <div className="space-y-3">
                 {readiness.criteria.map(criterion => {
                   const pct = Math.round(criterion.pct)
-                  const fill = criterion.id === 'keystone' ? KEYSTONE_TEXT : LEVEL3_TEXT
                   return (
                     <div
                       key={criterion.id}
@@ -1490,7 +1480,7 @@ export function ReadinessCard({
                       >
                         <div
                           className="h-full rounded-full transition-all"
-                          style={{ width: `${criterion.pct}%`, backgroundColor: fill }}
+                          style={{ width: `${criterion.pct}%`, backgroundColor: LEVEL3_TEXT }}
                         />
                       </div>
                     </div>

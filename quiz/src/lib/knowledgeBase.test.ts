@@ -14,7 +14,6 @@ import {
   type KnowledgeBaseSources,
 } from './knowledgeBase'
 import { parseQuestion } from './parser'
-import { KEYSTONE_EXAMS } from '../data/keystoneConcepts'
 
 const REPO = 'ActuarialNotes/Actuarial-Notes-Wiki'
 const SITE = { url: 'https://quiz.actuarialnotes.com', repo: REPO, branch: 'main', commit: 'abc123', builtAt: '2026-09-26T00:00:00.000Z' }
@@ -125,13 +124,12 @@ describe('buildKnowledgeBase', () => {
       { page: 'Exam 9 (CAS).md', exam_id: '9', wiki_id: '9-1', progress_key: 'CAS-9', body: 'CAS', bank: null, status: 'development' },
     ],
     aliases: { "bayes' rule": 'Bayes Theorem', 'no such': 'Missing Page' },
-    keystones: [{ id: 'P', concepts: [{ name: 'Bayes Theorem', why: 'Reverses conditioning.' }] }],
     site: SITE,
   }
   const kb = buildKnowledgeBase(sources)
   const doc = (id: string) => kb.docs.find(d => d.id === id)!
 
-  it('reads an exam page into objectives, readings, keystones, guides and a question count', () => {
+  it('reads an exam page into objectives, readings, guides and a question count', () => {
     expect(kb.exams).toHaveLength(1) // a catalog row with no page is skipped
     const [exam] = kb.exams
     expect(exam).toMatchObject({
@@ -145,7 +143,6 @@ describe('buildKnowledgeBase', () => {
       summary: 'A probability exam.',
       objectives: [{ title: 'General Probability', weight: '23–30%', concepts: ['Bayes Theorem', 'Conditional Probability'] }],
       readings: [{ title: 'A First Course in Probability (Ross - 2019)', detail: 'Chapters 1-8', docId: 'resource/A First Course in Probability (Ross - 2019)' }],
-      keystones: [{ name: 'Bayes Theorem', why: 'Reverses conditioning.' }],
       bank: 'exam-p',
     })
     // In their authored order, not alphabetical.
@@ -203,7 +200,7 @@ describe('buildKnowledgeBase', () => {
   })
 
   it('stamps the build', () => {
-    expect(kb).toMatchObject({ version: 1, commit: 'abc123', site: SITE.url, counts: { exams: 1, concepts: 4, resources: 1, guides: 3, questions: 2, withheld: 1 } })
+    expect(kb).toMatchObject({ version: 2, commit: 'abc123', site: SITE.url, counts: { exams: 1, concepts: 4, resources: 1, guides: 3, questions: 2, withheld: 1 } })
   })
 
   it('writes an llms.txt that points at the connector', () => {
@@ -228,7 +225,7 @@ describe('the knowledge base built from the vault', async () => {
       .map(e => ({ name: e.name, isDirectory: e.isDirectory() })),
     read: file => readFile(path.join(REPO_ROOT, file), 'utf-8').catch(() => null),
   })
-  const kb = buildKnowledgeBase({ ...sources, keystones: KEYSTONE_EXAMS, site: SITE })
+  const kb = buildKnowledgeBase({ ...sources, site: SITE })
 
   it('has every exam in the catalogue, each with its objectives', () => {
     expect(kb.exams.map(e => e.examId).sort()).toEqual(sources.catalog.map(r => r.exam_id).sort())

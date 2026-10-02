@@ -1,19 +1,17 @@
-// **Landmark names** — the in-world names a few keystone concepts carry on
-// Actuaria's sector screens (docs/actuaria-online.md §6.4).
+// **Landmark names** — the in-world names a few concepts carry on Actuaria's
+// sector screens (docs/actuaria-online.md §6.4).
 //
-// Only keystones get one: they are the load-bearing concepts of an exam
-// (data/keystoneConcepts.ts), so they are the landmarks worth naming. Every
-// other concept is its own name. A landmark name is never shown alone — the
-// concept's name always sits beneath it, so a player can find the page.
+// Every other concept is its own name. A landmark name is never shown alone —
+// the concept's name always sits beneath it, so a player can find the page.
 //
-// `concept` must be a keystone of `exam` — `actuariaLandmarks.test.ts` pins it
-// with `findKeystone`, so a renamed or retired keystone fails the build rather
-// than leaving a landmark pointing at nothing.
+// `concept` must be a concept page linked from `exam`'s syllabus —
+// `actuariaLandmarks.test.ts` pins it, so a renamed or retired concept fails
+// the build rather than leaving a landmark pointing at nothing.
 
 export interface ActuariaLandmark {
-  /** The exam_progress key the keystone belongs to (`P`, `FM`, `CAS-5`). */
+  /** The exam_progress key of the sector it is named on (`P`, `FM`, `CAS-5`). */
   exam: string
-  /** The keystone concept's canonical name — its `Concepts/<name>.md`. */
+  /** The concept's canonical name — its `Concepts/<name>.md`. */
   concept: string
   /** The in-world name. */
   name: string

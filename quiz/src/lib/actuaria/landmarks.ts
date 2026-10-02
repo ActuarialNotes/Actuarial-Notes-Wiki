@@ -9,7 +9,6 @@
 
 import { landmarkName } from '@/data/actuariaLandmarks'
 import { buildMasteryLookup, lookupConceptRecord, resolveConceptState } from '@/lib/conceptMatch'
-import { keystoneKey, keystonesForExam } from '@/lib/keystone'
 import { isSyllabusConcept } from '@/lib/syllabusChapters'
 import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
 import type { WikiConcept, WikiExamSyllabus } from '@/lib/wikiParser'
@@ -21,8 +20,6 @@ export interface Landmark {
   inWorldName: string | null
   state: MasteryState
   z: number
-  /** A keystone of *this* sector's exam. */
-  keystone: boolean
   decay: DecayStep | null
 }
 
@@ -39,18 +36,14 @@ export const DECAY_SOON_DAYS = 7
 /**
  * The sector's regions and their landmarks. `records` are the player's mastery
  * rows for this exam (filtered by `exam_id`, the way every readiness surface
- * filters them); `examKey` names the exam whose keystones are gold here.
+ * filters them).
  */
 export function sectorRegions(
   syllabus: WikiExamSyllabus,
   records: readonly ConceptMasteryRecord[],
-  examKey: string,
   now: Date,
 ): Region[] {
   const lookup = buildMasteryLookup([...records])
-  const keystones = new Set(keystonesForExam(examKey).map(k => keystoneKey(k.name)))
-  const isKeystoneHere = (c: WikiConcept) =>
-    keystones.has(keystoneKey(c.name)) || (!!c.target && keystones.has(keystoneKey(c.target)))
 
   return syllabus.topics.map(topic => {
     const seen = new Set<string>()
@@ -66,7 +59,6 @@ export function sectorRegions(
         inWorldName: landmarkName(concept),
         state,
         z: landmarkZ(state),
-        keystone: isKeystoneHere(concept),
         decay: nextDecayStep(lookupConceptRecord(lookup, concept), now),
       })
     }
@@ -109,15 +101,13 @@ function urgency(l: Landmark): number {
 }
 
 /**
- * The landmarks the star map's sector panel lists: the exam's keystones first
- * (the most at risk of them first), then the other concepts nearest to decaying.
+ * The landmarks the star map's sector panel lists: the concepts most at risk —
+ * decayed to Forgotten first, then the ones nearest to decaying.
  */
 export function panelLandmarks(landmarks: readonly Landmark[], limit = 6): Landmark[] {
   const byRisk = (a: Landmark, b: Landmark) =>
     urgency(a) - urgency(b) || LEVEL_RANK[a.state] - LEVEL_RANK[b.state] || a.concept.name.localeCompare(b.concept.name)
-  const keystones = landmarks.filter(l => l.keystone).sort(byRisk)
-  const decaying = landmarks.filter(l => !l.keystone && l.decay).sort(byRisk)
-  return [...keystones, ...decaying].slice(0, limit)
+  return landmarks.filter(l => l.state === 'forgotten' || l.decay).sort(byRisk).slice(0, limit)
 }
 
 /**

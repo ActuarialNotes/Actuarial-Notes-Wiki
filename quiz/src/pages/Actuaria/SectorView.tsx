@@ -56,13 +56,13 @@ function SectorDetail({ sector, world, battleCount }: { sector: Sector; world: A
   const openLandmark = useOpenLandmark()
   const records = world.recordsFor(sector.key)
   const now = useMemo(() => new Date(), [])
-  const regions = useMemo(() => sectorRegions(sector.syllabus, records, sector.key, now), [sector, records, now])
+  const regions = useMemo(() => sectorRegions(sector.syllabus, records, now), [sector, records, now])
   const all = useMemo(() => uniqueLandmarks(regions), [regions])
   const soon = useMemo(() => decayingNow(all), [all])
   const readiness = world.readiness.get(sector.key)
   const credibility = sectorCredibility(readiness?.overallPct ?? 0)
   const [charted, setCharted] = useState<string | null>(null)
-  const chartLandmark = all.find(l => l.concept.name === charted) ?? soon[0] ?? all.find(l => l.keystone) ?? all[0] ?? null
+  const chartLandmark = all.find(l => l.concept.name === charted) ?? soon[0] ?? all[0] ?? null
   const names = all.map(l => l.concept.name)
   const open = (l: Landmark) => openLandmark(names, names.indexOf(l.concept.name))
   const studyGuide = sector.syllabus.fileName ? wikiRoute({ kind: 'exam', name: sector.syllabus.fileName }) : '/wiki'
@@ -125,7 +125,6 @@ function SectorDetail({ sector, world, battleCount }: { sector: Sector; world: A
                     name={l.inWorldName ?? l.concept.name}
                     conceptName={l.inWorldName ? l.concept.name : null}
                     state={l.state}
-                    keystone={l.keystone}
                     decay={l.decay}
                     onOpen={() => open(l)}
                     trailing={
@@ -192,7 +191,6 @@ function SectorDetail({ sector, world, battleCount }: { sector: Sector; world: A
                     name={l.inWorldName ?? l.concept.name}
                     conceptName={l.inWorldName ? l.concept.name : null}
                     state={l.state}
-                    keystone={l.keystone}
                     decay={l.decay}
                     onOpen={() => open(l)}
                   />

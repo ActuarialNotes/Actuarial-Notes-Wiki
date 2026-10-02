@@ -12,7 +12,6 @@ import { ErrorCode } from '../../api/_mcp/protocol.js'
 import { KNOWLEDGE_BASE_ASSET, buildKnowledgeBase, normalizeTerm, readKnowledgeBaseSources, type KnowledgeBaseSources } from './knowledgeBase'
 import { PUBLIC_SITE_URL } from './aiConnector'
 import { normalizeAnswerText, objectiveKey } from './parser'
-import { KEYSTONE_EXAMS } from '../data/keystoneConcepts'
 
 const SITE = { url: 'https://quiz.actuarialnotes.com', repo: 'ActuarialNotes/Actuarial-Notes-Wiki', branch: 'main', commit: null, builtAt: '2026-09-26T00:00:00.000Z' }
 const verification = (critical = 0, status = 'unverified') =>
@@ -50,7 +49,6 @@ const sources: KnowledgeBaseSources = {
     { page: 'Exam 5 (CAS).md', exam_id: '5', wiki_id: '5-1', progress_key: 'CAS-5', body: 'CAS', bank: 'exam-5', status: 'beta' },
   ],
   aliases: { mle: 'Maximum Likelihood Estimation', 'bayes rule': 'Bayes Theorem' },
-  keystones: [{ id: 'P', concepts: [{ name: 'Bayes Theorem', why: 'Flips a conditional.' }] }],
   site: SITE,
 }
 
@@ -159,8 +157,7 @@ describe('list_exams and get_exam', () => {
     }
     const out = (await tool('get_exam', { exam: 'P' })).text
     expect(out).toContain('### 1. General Probability — 23–30% of the exam')
-    expect(out).toContain('Concepts: Bayes Theorem ★, Conditional Probability, Credit')
-    expect(out).toContain('- **Bayes Theorem** — Flips a conditional.')
+    expect(out).toContain('Concepts: Bayes Theorem, Conditional Probability, Credit')
     expect(out).toContain('- A First Course in Probability (Ross - 2019) — Chapters 1-8 (id: resource/A First Course in Probability (Ross - 2019))')
     expect(out).toContain('- Missing Book (Nobody - 2000)')
     expect(out).toContain('- Format and pacing (id: guide/Exam P-1 (SOA)/Format and pacing)')
@@ -190,7 +187,7 @@ describe('get_concept', () => {
 
   it('says where the concept is examined, and how much practice exists', async () => {
     const out = (await tool('get_concept', { name: 'Bayes Theorem' })).text
-    expect(out).toContain('- Exam P-1 (P) → General Probability (23–30%) · keystone ★ — Flips a conditional.')
+    expect(out).toContain('- Exam P-1 (P) → General Probability (23–30%)')
     expect(out).toContain('Practice questions: 2 on Exam P')
     expect(out).toContain('Linked pages: Conditional Probability')
     expect(out).toContain('$$P(H \\mid E)')
@@ -423,7 +420,7 @@ describe('the connector over the real vault', async () => {
       .map(e => ({ name: e.name, isDirectory: e.isDirectory() })),
     read: file => readFile(path.join(REPO_ROOT, file), 'utf-8').catch(() => null),
   })
-  const kb = buildKnowledgeBase({ ...real, keystones: KEYSTONE_EXAMS, site: SITE })
+  const kb = buildKnowledgeBase({ ...real, site: SITE })
   const vaultIndex = indexKnowledgeBase(kb)
   const vault = createActuarialNotesServer({ loadIndex: async () => vaultIndex })
   const run = async (name: string, args: Record<string, unknown>) =>

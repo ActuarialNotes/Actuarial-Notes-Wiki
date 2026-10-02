@@ -1,7 +1,6 @@
-import { wikiExamIdToProgressKey, type WikiExamSyllabus } from '@/lib/wikiParser'
-import { DECAY_DAYS_LEVEL3, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
+import type { WikiExamSyllabus } from '@/lib/wikiParser'
+import type { ConceptMasteryRecord } from '@/lib/mastery'
 import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
-import { keystoneProgress, type KeystoneProgress } from '@/lib/keystone'
 
 // Exam readiness scoring
 //
@@ -86,25 +85,22 @@ export function computeReadiness(
 // not a second opinion — nothing user-facing should print its `overallPct` on
 // its own, or the app ends up quoting two different readiness numbers.
 //
-// It breaks readiness into two criteria, each a 0–100 dial in its own right:
+// The score is one criterion, a 0–100 dial:
 //
-//   Syllabus coverage (60%) — the weighted section score computed above: how
-//     far up the mastery ladder the syllabus as a whole has been carried, with
-//     each section counted at its exam weighting.
-//   Keystone concepts (40%) — the same credit formula over the exam's authored
-//     keystones (docs/keystone-concepts.md). Broad-but-shallow coverage that
-//     skips the load-bearing concepts is not readiness, so the few carry a
-//     weight far above their share of the syllabus. Omitted (and its weight
-//     redistributed) for exams with no keystone catalogue, which leaves the
-//     score equal to syllabus coverage there.
+//   Syllabus coverage — the weighted section score computed above: how far up
+//     the mastery ladder the syllabus as a whole has been carried, with each
+//     section counted at its exam weighting.
+//
+// It is still reported as a list of criteria (with one entry) so the card that
+// draws the breakdown beside the ring has a shape to draw.
 //
 // Decay needs no criterion of its own: a concept that goes unreviewed steps
-// back down the ladder, so both criteria fall on their own. Every state is read
-// through `resolveConceptState` / `keystoneProgress`, so that happens at read
-// time exactly as it does everywhere else.
+// back down the ladder, so coverage falls on its own. Every state is read
+// through `resolveConceptState`, so that happens at read time exactly as it
+// does everywhere else.
 
-/** Relative weights of the criteria; renormalised when one is missing. */
-export const CRITERION_WEIGHTS = { syllabus: 0.6, keystone: 0.4 } as const
+/** Relative weights of the criteria. */
+export const CRITERION_WEIGHTS = { syllabus: 1 } as const
 
 export type ReadinessCriterionId = keyof typeof CRITERION_WEIGHTS
 
@@ -114,7 +110,7 @@ export interface ReadinessCriterion {
   /** 0–100. */
   pct: number
   /**
-   * Share of the headline score this criterion carries, 0–1 (renormalised).
+   * Share of the headline score this criterion carries, 0–1.
    * The popup draws this rather than printing it — a heavier criterion gets a
    * thicker bar — so nothing on screen has to say "60% of score".
    */
@@ -185,8 +181,6 @@ export interface ExamReadinessAssessment {
   sections: SectionReadiness[]
   /** Sections below the overall score, weakest (and heaviest) first. */
   weakestSections: SectionReadiness[]
-  /** Null when the exam has no authored keystones. */
-  keystone: KeystoneProgress | null
   counts: ConceptStateCounts
   /**
    * One sentence about *this* record, or null when there is nothing worth
@@ -196,29 +190,18 @@ export interface ExamReadinessAssessment {
   insight: ReadinessInsight | null
 }
 
-/** Credit a mastery state earns toward readiness, 0–3. */
-function stateCredit(state: MasteryState): number {
-  return state === 'level3' ? 3 : state === 'level2' ? 2 : state === 'level1' ? 1 : 0
-}
-
 /**
  * The full readiness assessment for one exam: the headline score, the criteria
- * behind it (including keystone mastery), the per-section breakdown, and the
- * concept-state tally.
+ * behind it, the per-section breakdown, and the concept-state tally.
  *
  * `records` should already be filtered to this exam — the same way the
- * Dashboard and the exam grid filter by `exam_id`. `examId` is the exam-progress
- * key (`P`, `FM`, `MAS-I`, `5`) the keystone catalogue is keyed by; it defaults
- * to the one the syllabus itself names, so callers that already hold the key can
- * pass it and everyone else gets the same answer without deriving it.
+ * Dashboard and the exam grid filter by `exam_id`.
  */
 export function computeExamReadiness(
   syllabus: WikiExamSyllabus,
   records: ConceptMasteryRecord[],
   now: Date,
-  examId: string = wikiExamIdToProgressKey(syllabus.examId),
 ): ExamReadinessAssessment {
-  const lookup = buildMasteryLookup(records)
   const { overallPct: syllabusPct, sections } = computeReadiness(syllabus, records, now)
 
   const counts: ConceptStateCounts = { total: 0, new: 0, level1: 0, level2: 0, level3: 0, forgotten: 0, studied: 0 }
@@ -232,11 +215,6 @@ export function computeExamReadiness(
   counts.studied = counts.level1 + counts.level2 + counts.level3 + counts.forgotten
   counts.new = counts.total - counts.studied
 
-  const keystone = keystoneProgress(examId, lookup, now)
-  const hasKeystones = keystone.total > 0
-  const keystoneCredit = keystone.entries.reduce((sum, e) => sum + stateCredit(e.state), 0)
-  const keystonePct = hasKeystones ? (keystoneCredit / (keystone.total * 3)) * 100 : 0
-
   const criteria: ReadinessCriterion[] = [
     {
       id: 'syllabus',
@@ -244,18 +222,7 @@ export function computeExamReadiness(
       pct: syllabusPct,
       weight: CRITERION_WEIGHTS.syllabus,
     },
-    ...(hasKeystones ? [{
-      id: 'keystone' as const,
-      label: 'Keystone concepts',
-      pct: keystonePct,
-      weight: CRITERION_WEIGHTS.keystone,
-    }] : []),
   ]
-
-  // Renormalise so a missing criterion redistributes its weight rather than
-  // capping the headline score below 100.
-  const weightSum = criteria.reduce((sum, c) => sum + c.weight, 0)
-  for (const c of criteria) c.weight = weightSum > 0 ? c.weight / weightSum : 0
   const overallPct = criteria.reduce((sum, c) => sum + c.pct * c.weight, 0)
 
   const weakestSections = sections
@@ -268,7 +235,6 @@ export function computeExamReadiness(
     criteria,
     sections,
     weakestSections,
-    keystone: hasKeystones ? keystone : null,
     counts,
   }
 
@@ -279,9 +245,9 @@ export function computeExamReadiness(
 //
 // The one sentence under the band label on the Dashboard's Exam readiness card.
 // It is derived from *this* learner's records, and every rule below names
-// something the card does not already draw — a concept, a section, a tally.
-// Nothing here may restate the ring, the headline score or the two criterion
-// bars (docs/visual-noise-review.md, test 1): "syllabus coverage is low" is the
+// something the card does not already draw — a section, a tally.
+// Nothing here may restate the ring, the headline score or the criterion
+// bar (docs/visual-noise-review.md, test 1): "syllabus coverage is low" is the
 // bar said twice, and a sentence that would read the same for everyone in a
 // forty-point band is not an insight at all.
 //
@@ -291,8 +257,7 @@ export function computeExamReadiness(
 // not worth a line of grey either. The card renders nothing when this is null.
 //
 // The rules are ordered by what costs a candidate the most, and the first hit
-// wins: a decayed keystone outranks a thin section, which outranks the reminder
-// that Level 3 does not hold by itself.
+// wins: broad decay outranks a shallow record, which outranks a thin section.
 //
 // **Say it the way a tutor would.** Each line is at most two short sentences:
 // the fact, then what to do about it. No em-dash asides, no "moves the score
@@ -301,12 +266,9 @@ export function computeExamReadiness(
 // the one place a plain voice costs nothing.
 
 export type ReadinessInsightId =
-  | 'keystone-decay'
   | 'broad-decay'
-  | 'keystones-untouched'
   | 'second-pass'
   | 'costliest-section'
-  | 'hold-the-keystones'
 
 export interface ReadinessInsight {
   id: ReadinessInsightId
@@ -316,8 +278,6 @@ export interface ReadinessInsight {
 /** Decay is only the headline once it is a pattern, not one stale concept. */
 const BROAD_DECAY_MIN = 3
 const BROAD_DECAY_SHARE = 0.25
-/** How far the keystone criterion must trail coverage before it is the story. */
-const KEYSTONE_LAG_POINTS = 15
 /** A Level 1 pile-up big enough to read as a habit rather than a starting point. */
 const SECOND_PASS_MIN = 5
 const SECOND_PASS_SHARE = 0.6
@@ -333,30 +293,12 @@ const SECTION_DONE_PCT = 80
 export function readinessInsight(
   assessment: Omit<ExamReadinessAssessment, 'insight'>,
 ): ReadinessInsight | null {
-  const { counts, keystone, sections, criteria } = assessment
+  const { counts, sections } = assessment
 
   // Nothing started — nothing to be insightful about.
   if (counts.total === 0 || counts.studied === 0) return null
 
-  // 1. A decayed keystone is the most expensive row on the board: it is a
-  //    concept already earned once, and it pays into both criteria.
-  if (keystone) {
-    const decayed = keystone.entries.filter(e => e.state === 'forgotten')
-    if (decayed.length === 1) {
-      return {
-        id: 'keystone-decay',
-        text: `You've forgotten ${decayed[0].concept.name}, a keystone concept. Review it before anything new.`,
-      }
-    }
-    if (decayed.length > 1) {
-      return {
-        id: 'keystone-decay',
-        text: `${decayed.length} keystone concepts have slipped to Forgotten, including ${decayed[0].concept.name}. Review those first.`,
-      }
-    }
-  }
-
-  // 2. Decay across the syllabus at a scale that outruns new study.
+  // 1. Decay across the syllabus at a scale that outruns new study.
   if (counts.forgotten >= BROAD_DECAY_MIN && counts.forgotten >= counts.studied * BROAD_DECAY_SHARE) {
     return {
       id: 'broad-decay',
@@ -366,29 +308,7 @@ export function readinessInsight(
     }
   }
 
-  // 3. Coverage running ahead of the concepts the coverage rests on. The bars
-  //    show the gap; this names how many keystones are behind it and one of them.
-  const syllabusPct = criteria.find(c => c.id === 'syllabus')?.pct ?? 0
-  const keystonePct = criteria.find(c => c.id === 'keystone')?.pct ?? 0
-  if (keystone && keystonePct + KEYSTONE_LAG_POINTS <= syllabusPct) {
-    const untouched = keystone.entries.filter(e => e.state === 'new')
-    if (untouched.length === 1) {
-      return {
-        id: 'keystones-untouched',
-        text: `${untouched[0].concept.name} is the one keystone concept you haven't started. Much of the exam builds on it.`,
-      }
-    }
-    if (untouched.length > 1) {
-      return {
-        id: 'keystones-untouched',
-        text: untouched.length === keystone.total
-          ? `You haven't started any of the ${keystone.total} keystone concepts yet. Begin with ${untouched[0].concept.name}.`
-          : `${untouched.length} of the ${keystone.total} keystone concepts are still untouched. Begin with ${untouched[0].concept.name}.`,
-      }
-    }
-  }
-
-  // 4. A record that is wide and shallow: most of it parked on the bottom rung,
+  // 2. A record that is wide and shallow: most of it parked on the bottom rung,
   //    where each concept is earning a third of what it could.
   if (counts.level1 >= SECOND_PASS_MIN && counts.level1 >= counts.studied * SECOND_PASS_SHARE) {
     return {
@@ -397,7 +317,7 @@ export function readinessInsight(
     }
   }
 
-  // 5. Where the missing score actually is. Ranked by weight × shortfall — the
+  // 3. Where the missing score actually is. Ranked by weight × shortfall — the
   //    points the section is leaving on the table — rather than by coverage
   //    alone, so a big section half-done outranks a tiny one untouched. (That
   //    is why this does not reuse `weakestSections`, which ranks by coverage.)
@@ -414,15 +334,6 @@ export function readinessInsight(
       text: weighted
         ? `Your biggest gap is ${costliest.name}: ${share}% of the exam, ${covered}% covered.`
         : `Your biggest gap is ${costliest.name}, at ${covered}% covered.`,
-    }
-  }
-
-  // 6. Everything is up. The one thing left to say is that it does not stay up
-  //    on its own — a fact no bar on the card can carry.
-  if (keystone && keystone.total > 0 && keystone.mastered === keystone.total) {
-    return {
-      id: 'hold-the-keystones',
-      text: `All ${keystone.total} keystone concepts are at Level 3. Keep reviewing them or they lapse after ${DECAY_DAYS_LEVEL3} days.`,
     }
   }
 

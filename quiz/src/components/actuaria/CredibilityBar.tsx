@@ -2,9 +2,9 @@
 // colours, with its Z as a mono readout (docs/actuaria-online.md §4.5).
 //
 // The fill is never the Actuaria signal: Credibility *is* mastery, so it keeps
-// mastery's green ladder — gold for a keystone — from `lib/masteryFill.ts`
-// (style guide §4.1, §4.4). A Credibility bar measures something earned, so it
-// is a readout and never takes a scrub handler (style guide §7.5).
+// mastery's green ladder from `lib/masteryFill.ts` (style guide §4.1). A
+// Credibility bar measures something earned, so it is a readout and never
+// takes a scrub handler (style guide §7.5).
 
 import { masteryFill } from '@/lib/masteryFill'
 import type { MasteryState } from '@/lib/mastery'
@@ -15,7 +15,6 @@ export function CredibilityBar({
   z,
   label,
   state,
-  keystone = false,
   fill,
   size = 'md',
   showLabel = true,
@@ -28,7 +27,6 @@ export function CredibilityBar({
   label?: string
   /** A landmark's mastery state — picks the fill off the ladder. */
   state?: MasteryState
-  keystone?: boolean
   /** An explicit fill, for a sector. Defaults to the ladder's (state) or green. */
   fill?: string
   size?: 'sm' | 'md'
@@ -39,7 +37,7 @@ export function CredibilityBar({
 }) {
   const value = Math.max(0, Math.min(1, z))
   const readout = label ?? formatZ(value)
-  const color = fill ?? (state ? masteryFill(state, keystone) : SECTOR_FILL)
+  const color = fill ?? (state ? masteryFill(state) : SECTOR_FILL)
 
   return (
     <div className={cn('flex min-w-0 items-center gap-2', className)}>

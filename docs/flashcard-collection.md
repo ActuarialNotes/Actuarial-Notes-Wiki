@@ -112,10 +112,9 @@ like the same card wherever it appears:
 | Picker tile in the add-flashcards sheet | `ConceptCardGrid` → `tileFoilClass`, plus `.flashcard-tile` for the smaller surface: a lighter edge, and the ring lifted over the tile's own content |
 | The card in the level-up ceremony | `components/collect/CollectCard3D.tsx` — a card being collected shows the Level 3 edge until it lands, so the sealed pack looks like the prize |
 
-The edge belongs to foil, so nothing else may claim it: a keystone concept moves
-its gold inside as an underline on the name, and a tile already in the deck
-shows that as its green wash and tick rather than a second ring (see
-`docs/style-guide.md` §4.3–4.4).
+The edge belongs to foil, so nothing else may claim it: a tile already in the
+deck shows that as its green wash and tick rather than a second ring (see
+`docs/style-guide.md` §4.3).
 
 ## Before the quiz: the concepts it introduces
 

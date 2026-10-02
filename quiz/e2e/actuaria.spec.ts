@@ -73,7 +73,7 @@ test.describe('actuaria', () => {
   test('opens a sector’s regions and a landmark in the concept popup (§6.4)', async ({ page }) => {
     await page.goto('/actuaria/sector/P')
     await expect(page.getByRole('heading', { name: /sector p/i, level: 1 })).toBeVisible()
-    // A keystone with a landmark name carries the concept's name beneath it.
+    // A concept with a landmark name carries the concept's name beneath it.
     const bayes = page.getByRole('button', { name: /Bayes Outpost/ }).first()
     await expect(bayes).toContainText('Bayes Theorem')
     await bayes.click()
@@ -106,7 +106,7 @@ test.describe('actuaria', () => {
     const reinsurance = page.getByTestId('ability-reinsurance')
     await expect(reinsurance).toHaveAttribute('aria-pressed', 'true')
     await expect(page.getByTestId('hangar-loadout-count')).toHaveText('1 of 3 equipped')
-    // The others wait on a keystone — presentation only; the concept is a tap away.
+    // The others wait on a concept's level — presentation only; the concept is a tap away.
     await expect(page.getByTestId('ability-bayesian-update')).toBeDisabled()
     const requirement = page.getByTestId('hangar-requirement-bayesian-update')
     await expect(requirement).toContainText('Bayes Theorem at Level 2')

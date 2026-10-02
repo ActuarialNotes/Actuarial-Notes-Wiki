@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import { ChevronLeft, Timer } from 'lucide-react'
 import { CredibilityBar } from '@/components/actuaria/CredibilityBar'
 import { SectorTile } from '@/components/actuaria/SectorTile'
-import { StatusChip } from '@/components/actuaria/StatusChip'
 import { Term } from '@/components/actuaria/Term'
 import { Button } from '@/components/ui/button'
 import type { ActuariaWorld } from '@/hooks/useActuariaWorld'
@@ -123,15 +122,12 @@ export function SimulationView({ world }: { world: ActuariaWorld }) {
             <div>
               <p className="actuaria-display text-[11px] text-muted-foreground">Biggest lifts</p>
               {lifts.length === 0 ? (
-                <p className="mt-1 text-sm text-muted-foreground">Every keystone and region is at the top of the ladder.</p>
+                <p className="mt-1 text-sm text-muted-foreground">Every {term('region').toLowerCase()} is at the top of the ladder.</p>
               ) : (
                 <ul className="mt-1 divide-y divide-border/60" data-testid="actuaria-lifts">
                   {lifts.map(l => (
-                    <li key={`${l.kind}:${l.name}`} className="flex items-center gap-3 py-2">
-                      <StatusChip variant="locked">{l.kind === 'keystone' ? 'Keystone' : term('region')}</StatusChip>
-                      <span className={cn('min-w-0 flex-1 truncate text-sm', l.kind === 'keystone' && 'font-medium')}>
-                        {l.kind === 'keystone' ? <span className="keystone-underline">{l.name}</span> : l.name}
-                      </span>
+                    <li key={l.name} className="flex items-center gap-3 py-2">
+                      <span className="min-w-0 flex-1 truncate text-sm">{l.name}</span>
                       <span className="shrink-0 font-mono text-xs tabular-nums text-green-400" title="Readiness points, one level up">
                         +{l.points.toFixed(1)}
                       </span>

@@ -10,7 +10,6 @@ import { ListenView } from '@/components/wiki/ListenView'
 import { ImageGalleryModal } from '@/components/wiki/ImageGalleryModal'
 import { ConceptImageBanner } from '@/components/wiki/ConceptImageBanner'
 import { ConceptActionMenu } from '@/components/ConceptActionMenu'
-import { findKeystone } from '@/lib/keystone'
 import type { PdfReaderDoc } from '@/hooks/usePdfReader'
 
 /**
@@ -80,9 +79,6 @@ export function ConceptPagePanel({
   const [listenView, setListenView] = useState(false)
   const titleBtnRef = useRef<HTMLButtonElement>(null)
   const bodyRef = useRef<HTMLDivElement>(null)
-  // Whether this concept is a keystone — which underline the title wears. The
-  // roll-up it used to open is the action menu's own first block now.
-  const keystoneMatch = useMemo(() => findKeystone(entry.name), [entry.name])
 
   // Fetch this page's markdown. The panel is keyed by its ref, so this runs
   // once per page rather than on every step of the walk.
@@ -173,11 +169,9 @@ export function ConceptPagePanel({
           {/* The title is the page's one control: pressing the concept's own
               name opens the action menu, so the largest thing in the header is
               the way into the page's actions rather than decoration — there is
-              no ▶ button beside it. It is underlined to say so: white (the
-              text's own colour) for an ordinary concept, and the keystone
-              marker's gold where that means something, since a name can only
-              carry one underline. The menu survives focus mode — the page
-              filling the screen is when its actions are most wanted. */}
+              no ▶ button beside it. It is underlined to say so, in the text's
+              own colour. The menu survives focus mode — the page filling the
+              screen is when its actions are most wanted. */}
           {hasActions ? (
             <button
               ref={titleBtnRef}
@@ -189,12 +183,12 @@ export function ConceptPagePanel({
               aria-expanded={showPlayMenu}
               title={entry.name}
               aria-label={`${entry.name} — page actions`}
-              className={`truncate text-left font-semibold text-lg sm:text-xl min-w-0 ${keystoneMatch ? 'keystone-underline' : 'action-title-underline'}`}
+              className="truncate text-left font-semibold text-lg sm:text-xl min-w-0 action-title-underline"
             >
               {entry.name}
             </button>
           ) : (
-            <span className={`truncate font-semibold text-lg sm:text-xl min-w-0 ${keystoneMatch ? 'keystone-underline' : ''}`}>
+            <span className="truncate font-semibold text-lg sm:text-xl min-w-0">
               {entry.name}
             </span>
           )}

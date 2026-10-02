@@ -10,7 +10,6 @@ import { DECAY_DAYS_LEVEL3 } from '@/lib/mastery'
 import { buildMasteryLookup, lookupConceptRecord, resolveConceptState } from '@/lib/conceptMatch'
 import { orderConceptsForPlan } from '@/lib/studyPlanOrder'
 import { localDayKey } from '@/lib/streak'
-import type { ConceptLinkMap } from '@/data/keystoneLinks'
 
 // Bump when the generation logic changes in a way that should invalidate
 // already-cached plans (local + server), forcing one clean regeneration even
@@ -22,9 +21,10 @@ import type { ConceptLinkMap } from '@/data/keystoneLinks'
 // approaching the decay threshold.
 // v5: a concept linked from more than one syllabus topic is scheduled once
 // instead of once per topic (which produced out-of-order level targets).
-// v6: concepts are introduced in syllabus order ('strong_all') or keystone-first
-// ('strong_key') instead of alphabetically (see lib/studyPlanOrder.ts).
-export const PLAN_CACHE_VERSION = 6
+// v6: concepts are introduced in teaching order instead of alphabetically
+// (see lib/studyPlanOrder.ts).
+// v7: 'strong_key' orders by topic weight alone, heaviest first.
+export const PLAN_CACHE_VERSION = 7
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -201,12 +201,10 @@ interface GenerateInput {
   /** Concept slugs levelled up today — used to keep today's plan grounded in actual quiz progress
    *  even when the plan regenerates mid-day (e.g. after a config change). */
   todaysLevelUps?: string[]
-  /** Keystone → linked concepts, for the 'strong_key' order. Defaults to the build-time map. */
-  keystoneLinks?: ConceptLinkMap
 }
 
 export function generateStudyPlan(input: GenerateInput): StudyPlan {
-  const { examId, syllabus, masteryRecords, config, examDate, todaysLevelUps, keystoneLinks } = input
+  const { examId, syllabus, masteryRecords, config, examDate, todaysLevelUps } = input
   const today = todayISO()
   const now = new Date()
 
@@ -343,14 +341,12 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
   const stateOrder: Record<string, number> = { forgotten: 0, level1: 1, level2: 2, new: 3 }
 
   // Within a state, concepts are introduced in teaching order — syllabus order,
-  // or keystone-first when the strategy asks for it (lib/studyPlanOrder.ts).
+  // or heaviest topic first when the strategy asks for it (lib/studyPlanOrder.ts).
   // Never alphabetical: on a fresh account every concept is New, so the tiebreak
   // *is* the plan, and "A" is not a reason to learn something first.
   const teachingRank = new Map<ConceptEntry, number>()
   orderConceptsForPlan(allConcepts, {
     strategy: config.targetStrengthLevel,
-    examId,
-    links: keystoneLinks,
   }).forEach((c, i) => teachingRank.set(c, i))
 
   const sortedUnmastered = [...unmastered].sort((a, b) => {

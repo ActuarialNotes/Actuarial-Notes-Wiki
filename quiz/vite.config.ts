@@ -5,7 +5,6 @@ import { PDFJS_ASSET_DIRS } from './src/lib/pdfjsAssets'
 import path from 'path'
 import { mkdir, readdir, readFile, writeFile } from 'fs/promises'
 import fm from 'front-matter'
-import { KEYSTONE_EXAMS } from './src/data/keystoneConcepts'
 import { buildResourceExamMap, examsForResource } from './src/lib/resourceExams'
 import { examDisplayName, examIdFromFile } from './src/lib/wikiRoutes'
 import { resourcePdfUrl } from './src/lib/examPdf'
@@ -467,61 +466,6 @@ function examGuidesPlugin(): Plugin {
   }
 }
 
-// Keystone link map: for every keystone concept page, the other concept pages it
-// links to directly. This is what the `strong_key` study plan orders by — a
-// keystone, then the concepts its own page leans on (see lib/studyPlanOrder.ts).
-//
-// Only keystone pages are collected. The whole concept graph would be ~45 kB of
-// JSON in the main chunk to answer a question the plan only ever asks about the
-// ~15 concepts per exam in the catalogue.
-async function collectKeystoneLinks(): Promise<Record<string, string[]>> {
-  const dir = path.join(REPO_ROOT, 'Concepts')
-  const entries = await readdir(dir).catch(() => [] as string[])
-  // Every real concept page, keyed lowercase — a link only counts when it lands
-  // on one of these (so figure embeds, resources and exam pages drop out).
-  const pages = new Map<string, string>()
-  for (const name of entries) {
-    if (name.endsWith('.md')) pages.set(name.slice(0, -3).toLowerCase(), name.slice(0, -3))
-  }
-
-  const links: Record<string, string[]> = {}
-  for (const exam of KEYSTONE_EXAMS) {
-    for (const { name } of exam.concepts) {
-      const page = pages.get(name.toLowerCase())
-      if (!page) continue  // keystone.test.ts pins this, but never emit a dead key
-      const text = await readFile(path.join(dir, `${page}.md`), 'utf-8').catch(() => null)
-      if (text == null) continue
-      const out: string[] = []
-      const seen = new Set<string>([page.toLowerCase()])  // never link a page to itself
-      for (const match of text.matchAll(/\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g)) {
-        const target = match[1].trim().split('/').pop()?.replace(/\.md$/i, '').trim() ?? ''
-        const key = target.toLowerCase()
-        if (!key || seen.has(key)) continue
-        const linked = pages.get(key)
-        if (!linked) continue
-        seen.add(key)
-        out.push(linked)
-      }
-      links[page] = out
-    }
-  }
-  return links
-}
-
-function keystoneLinksPlugin(): Plugin {
-  const VIRTUAL_ID = 'virtual:keystone-links'
-  const RESOLVED_ID = '\0' + VIRTUAL_ID
-  return {
-    name: 'keystone-links',
-    resolveId: (id) => id === VIRTUAL_ID ? RESOLVED_ID : undefined,
-    load: async (id) => {
-      if (id !== RESOLVED_ID) return
-      const links = await collectKeystoneLinks()
-      return `export default ${JSON.stringify(links)}`
-    },
-  }
-}
-
 // ── AI connector assets ──────────────────────────────────────────────────────
 // What Claude and ChatGPT read the vault through (docs/ai-connector.md):
 //
@@ -547,7 +491,6 @@ async function collectKnowledgeBase() {
   const sources = await readKnowledgeBaseSources(vaultReader)
   return buildKnowledgeBase({
     ...sources,
-    keystones: KEYSTONE_EXAMS,
     site: {
       url: _buildEnv.VITE_SITE_URL || PUBLIC_SITE_URL,
       repo: GITHUB_REPO,
@@ -769,7 +712,7 @@ function seoPagesPlugin(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), examPagesPlugin(), wikiContentPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), examGuidesPlugin(), keystoneLinksPlugin(), pdfjsAssetsPlugin(), seoPagesPlugin(), aiConnectorAssetsPlugin()],
+  plugins: [react(), examPagesPlugin(), wikiContentPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), examGuidesPlugin(), pdfjsAssetsPlugin(), seoPagesPlugin(), aiConnectorAssetsPlugin()],
   resolve: {
     alias: { '@': path.resolve(__dirname, 'src') },
   },

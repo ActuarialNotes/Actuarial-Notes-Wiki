@@ -8,7 +8,7 @@
 // so it is tested directly (src/lib/mcpServer.test.ts). Indexing ~3,000 pages
 // and questions takes a few hundred milliseconds, once per warm instance.
 
-export const SUPPORTED_KB_VERSION = 1
+export const SUPPORTED_KB_VERSION = 2
 
 /**
  * Mirrors `normalizeTerm` in src/lib/knowledgeBase.ts — the alias table's keys

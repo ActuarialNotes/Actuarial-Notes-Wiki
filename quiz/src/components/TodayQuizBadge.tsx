@@ -3,7 +3,7 @@
 // The badge answers one question — "how many questions until today's plan is
 // done?" — so it has to look the same everywhere a quiz that would accomplish
 // those questions can be started: the Sidebar's Quiz row and per-exam pill
-// menu, the Quiz tab's exam cards and Start button,
+// menu, the Quiz tab's exam rows and Start button,
 // and the Dashboard's "Start Today's Quiz". The count itself comes from
 // hooks/useTodayQuizCount.ts (total, or per exam via `byExam`).
 //

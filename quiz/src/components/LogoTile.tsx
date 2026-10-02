@@ -22,8 +22,9 @@ export const LOGO_TILE_SIZES = {
   /** The wiki header strip, where the tile stands in for the exam's title. */
   md: 34,
   /**
-   * A card. One size for every grid that shows them — the Study Guides grid
-   * and the quiz builder — so the same exam is the same object on either tab.
+   * A card, or a row of a grouped list (`ui/ListPanel.tsx`). One size for
+   * both exam lists — Study Guides and the quiz builder — so the same exam is
+   * the same object on either tab.
    */
   lg: 48,
 } as const

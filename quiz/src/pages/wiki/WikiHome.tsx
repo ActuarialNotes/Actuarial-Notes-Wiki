@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
-import { Link, useLocation, useNavigationType } from 'react-router-dom'
-import { Compass, Hammer } from 'lucide-react'
+import { useLocation, useNavigationType } from 'react-router-dom'
+import { Compass } from 'lucide-react'
 import { CheckMark } from '@/components/CheckMark'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { buildWikiIndex, bundledWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
@@ -8,21 +8,18 @@ import { examDisplayName, wikiRoute } from '@/lib/wikiRoutes'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { TRACKS, type Track } from '@/data/tracks'
 import { GENERAL_GUIDES } from '@/data/examGuides'
-import { examAccentStyle } from '@/lib/examColors'
 import { defaultBody, loadBody, saveBody, SOA_TRACK_KEYS, CAS_TRACK_KEYS, type ExamBody } from '@/lib/bodyFilter'
-import { ExamLogo } from '@/components/ExamLogo'
+import { ExamDateMeta, ExamRow, ExamRowMeta } from '@/components/ExamRow'
+import { ListPanel, ListRow } from '@/components/ui/ListPanel'
 import { LogoTile } from '@/components/LogoTile'
-import { ReadinessBar } from '@/components/ReadinessBar'
 import { matchesSelectedVariant } from '@/data/examSittings'
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { computeExamReadiness, type ExamReadinessAssessment } from '@/lib/readiness'
-import { examStatus } from '@/lib/examStatus'
-import { cn } from '@/lib/utils'
+import { examStatus, type ExamStatus } from '@/lib/examStatus'
 import { useWikiPageHead } from '@/hooks/useWikiPageHead'
 import { ActuariaHubCard } from '@/components/actuaria/ActuariaHubCard'
 import { ACTUARIA_ENABLED } from '@/lib/featureFlags'
@@ -54,10 +51,11 @@ interface ExamCardModel {
   isInProgress: boolean
   isCompleted: boolean
   targetDate: string | null
-  inDevelopment: boolean
-  isBeta: boolean
+  /** How far along the exam's material is — `lib/examStatus.ts`, by the page's own id. */
+  contentStatus: ExamStatus
   readiness: ExamReadinessAssessment | null
-  hasProgressBar: boolean
+  /** An exam in progress with something to be ready for. */
+  showReadiness: boolean
 }
 
 /**
@@ -75,103 +73,34 @@ function GroupHeading({ children }: { children: ReactNode }) {
   )
 }
 
-function ExamGuideCard({ model, tourId }: { model: ExamCardModel; tourId?: string }) {
-  const { exam, examId, topic, isInProgress, isCompleted, targetDate, inDevelopment, isBeta, readiness, hasProgressBar } = model
+function ExamGuideRow({ model, tourId }: { model: ExamCardModel; tourId?: string }) {
+  const { exam, examId, topic, isInProgress, isCompleted, targetDate, contentStatus, readiness, showReadiness } = model
 
-  // The exam's place on the ladder, as a colour (blue at
-  // Exam P through to red at Exam 9 — see lib/examColors.ts).
-  // Scoped to the card as custom properties, so the highlight
-  // below is one use of it rather than the only place the
-  // colour exists.
-  const accent = examAccentStyle(examId)
-
+  // The Quiz tab draws the same exam with the same row (components/ExamRow.tsx);
+  // only the facts differ. Here they are the reader's own: when the exam is sat,
+  // and how ready they are for it — the one readiness score
+  // (`computeExamReadiness`), as a number. A date is information and takes the
+  // blue info hue; being part-way through with no date stays muted (§4.1).
   return (
-    <Link to={wikiRoute({ kind: 'exam', name: exam.name })} data-tour={tourId}>
-      <Card
-        style={accent}
-        className={cn(
-          'transition-all duration-150 overflow-hidden ring-1 ring-transparent',
-          isInProgress && !inDevelopment && 'bg-primary/10',
-          // Unbuilt exam: no card surface, a dashed outline and
-          // dimmed contents — the same "nothing here yet" material
-          // the empty-state placeholders use. The page is still
-          // reachable (it holds the published syllabus), it just
-          // never looks like something to study from.
-          inDevelopment && 'bg-muted/40 border border-dashed border-muted-foreground/30 shadow-none',
-          // Hover picks the exam's own colour up off the card's
-          // custom properties. Exams only: a requirement with no
-          // rung on the ladder keeps the neutral hover.
-          accent
-            ? 'hover:bg-[var(--exam-accent-soft)] hover:ring-[var(--exam-accent-muted)]'
-            : isInProgress && !inDevelopment
-              ? 'hover:bg-primary/25'
-              : inDevelopment
-                ? 'hover:bg-muted/60'
-                : 'hover:bg-accent/30',
-        )}
-      >
-        <CardHeader className="flex-row items-start gap-3 space-y-0 p-4 pb-3">
-          {/* The exam's logo — its monogram in its own place
-              on the colour ramp. A visual anchor, so a card
-              is recognisable before its title is read; the
-              title beside it is what actually names the exam,
-              which is why the tile is aria-hidden. */}
-          <ExamLogo examKey={examId} size="lg" muted={inDevelopment} className="mt-0.5" />
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center justify-between gap-2">
-              <CardTitle className={cn('text-base leading-snug', inDevelopment && 'text-muted-foreground')}>
-                {examDisplayName(exam.name)}
-              </CardTitle>
-              {isCompleted && (
-                <CheckMark className="h-4 w-4 text-emerald-500" />
-              )}
-            </div>
-            {topic && (
-              <CardDescription className="mt-0.5">{topic}</CardDescription>
-            )}
-
-            {/* Status pill — hidden for completed exams. "In
-                development" outranks everything: it says the
-                material isn't there, which is true whatever the
-                candidate has marked this exam as. */}
-            {!isCompleted && (inDevelopment || isInProgress || isBeta) && (
-              <div className="mt-2 flex flex-wrap gap-1.5">
-                {/* The quiz builder's pills, to the letter:
-                    blue is the info hue a scheduled date
-                    takes, being part-way through is neutral,
-                    and Beta is the amber caution (style
-                    guide §4.1). They used to be one size
-                    smaller and a different colour here. */}
-                {inDevelopment ? (
-                  <span className="inline-flex items-center gap-1 rounded-full border border-dashed border-muted-foreground/40 px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                    <Hammer className="h-3 w-3" aria-hidden="true" />
-                    In development — not yet available
-                  </span>
-                ) : isInProgress ? (
-                  <span className={cn(
-                    'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium',
-                    targetDate
-                      ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
-                      : 'bg-muted text-muted-foreground',
-                  )}>
-                    {targetDate ? `Exam: ${formatTargetDate(targetDate)}` : 'In progress'}
-                  </span>
-                ) : (
-                  <span className="inline-flex items-center rounded-full bg-amber-500/15 px-2 py-0.5 text-xs font-medium text-amber-600 dark:text-amber-400">
-                    Beta
-                  </span>
-                )}
-              </div>
-            )}
-          </div>
-        </CardHeader>
-
-        {/* Progress bar — in-progress only, not for completed */}
-        {hasProgressBar && readiness && (
-          <ReadinessBar readiness={readiness} className="px-4 pb-4" />
-        )}
-      </Card>
-    </Link>
+    <ExamRow
+      examKey={examId}
+      title={examDisplayName(exam.name)}
+      topic={topic}
+      status={contentStatus}
+      to={wikiRoute({ kind: 'exam', name: exam.name })}
+      tourId={tourId}
+      meta={isInProgress && (
+        <ExamRowMeta
+          items={[
+            targetDate
+              ? <ExamDateMeta>Exam: {formatTargetDate(targetDate)}</ExamDateMeta>
+              : 'In progress',
+            showReadiness && readiness && `${Math.round(readiness.overallPct)}% ready`,
+          ]}
+        />
+      )}
+      trailing={isCompleted && <CheckMark className="h-5 w-5" label="Completed" />}
+    />
   )
 }
 
@@ -310,11 +239,10 @@ export default function WikiHome() {
         isInProgress,
         isCompleted: status === 'completed' && variantMatch,
         targetDate: targetDates[examId] ?? null,
-        inDevelopment,
-        isBeta: contentStatus === 'beta',
+        contentStatus,
         readiness,
         // No readiness readout on an exam with nothing to be ready for.
-        hasProgressBar: isInProgress && !!readiness && readiness.counts.total > 0 && !inDevelopment,
+        showReadiness: isInProgress && !!readiness && readiness.counts.total > 0 && !inDevelopment,
       })
     }
     return models
@@ -362,36 +290,27 @@ export default function WikiHome() {
 
       {/* The guides that belong to no single exam — read before there is an
           exam to study for, so they sit above the ladder rather than in it.
-          Same grid, same card, same tile as an exam below: a guide is one more
-          thing to open, not a prose block introducing the page. */}
+          A one-row panel of the same list the exams are drawn in, with the
+          same 48px tile: a guide is one more thing to open, not a prose block
+          introducing the page. */}
       {GENERAL_GUIDES.length > 0 && (
         <section>
           <div className="grid grid-cols-1 items-start gap-3 sm:grid-cols-2">
             {GENERAL_GUIDES.map(guide => (
-              <button
-                key={guide.ref.path ?? guide.title}
-                type="button"
-                onClick={() => openAt([guide.ref], 0, '/wiki')}
-                className="w-full text-left appearance-none bg-transparent p-0"
-              >
-                <Card className="transition-all duration-150 hover:bg-accent/30">
-                  {/* One line of title beside a 48px tile: centre the row on
-                      the tile rather than hanging the title off its top edge,
-                      and pad the card evenly so the object sits in the middle
-                      of it. */}
-                  <CardHeader className="flex-row items-center gap-3 space-y-0 p-4">
-                    {/* The exam cards' tile, carrying an icon instead of a
-                        monogram — a guide has no place on the colour ramp, so
-                        it takes the wiki's teal rather than borrowing a hue. */}
+              <ListPanel key={guide.ref.path ?? guide.title}>
+                <ListRow
+                  onClick={() => openAt([guide.ref], 0, '/wiki')}
+                  // The exam rows' tile, carrying an icon instead of a
+                  // monogram — a guide has no place on the colour ramp, so
+                  // it takes the wiki's teal rather than borrowing a hue.
+                  leading={
                     <LogoTile size="lg" className="bg-teal-500 text-white shadow-sm">
                       <Compass className="h-6 w-6" />
                     </LogoTile>
-                    <div className="min-w-0 flex-1">
-                      <CardTitle className="text-base leading-snug">{guide.title}</CardTitle>
-                    </div>
-                  </CardHeader>
-                </Card>
-              </button>
+                  }
+                  title={guide.title}
+                />
+              </ListPanel>
             ))}
             {/* Actuaria Online — a way of studying rather than a guide, in the
                 same row so the exam lists below still line up (§6.2). */}
@@ -405,7 +324,7 @@ export default function WikiHome() {
           <p className="text-sm text-muted-foreground">Loading exams…</p>
         ) : (
           <div className="space-y-6">
-            {/* The exams being studied, first — the same card as on the
+            {/* The exams being studied, first — the same row as on the
                 ladder below, which keeps showing it in its place too. */}
             {inProgressModels.length > 0 && (
               <div>
@@ -414,11 +333,11 @@ export default function WikiHome() {
                     In progress
                   </p>
                 </GroupHeading>
-                <div className="grid grid-cols-1 items-start gap-3 sm:grid-cols-2">
+                <ListPanel columns={2}>
                   {inProgressModels.map(model => (
-                    <ExamGuideCard key={model.exam.path} model={model} />
+                    <ExamGuideRow key={model.exam.path} model={model} />
                   ))}
-                </div>
+                </ListPanel>
               </div>
             )}
 
@@ -447,24 +366,23 @@ export default function WikiHome() {
                   )}
                 </GroupHeading>
 
-                {/* `items-start`: a card is as tall as what it holds. Left to
-                    stretch, a row's short card (no readiness bar) would be padded
-                    out to match its tall neighbour and read as half empty. */}
-                <div className="grid grid-cols-1 items-start gap-3 sm:grid-cols-2">
+                {/* One grouped list per credential, a row per exam, two
+                    columns from `sm` up. */}
+                <ListPanel columns={2}>
                   {trackExams.map(exam => {
                     const model = cardModels.get(exam.path)
                     if (!model) return null
-                    // The tour's marker stays on the ladder's card, so an
+                    // The tour's marker stays on the ladder's row, so an
                     // exam in progress doesn't carry it twice.
                     return (
-                      <ExamGuideCard
+                      <ExamGuideRow
                         key={exam.path}
                         model={model}
                         tourId={model.examId === 'P' ? 'exam-p' : undefined}
                       />
                     )
                   })}
-                </div>
+                </ListPanel>
               </div>
             ))}
           </div>

@@ -10,8 +10,7 @@ and read by every surface that prints a readiness percentage.
 **The exam study guide no longer shows a readiness card.** The card, its assessment popup and
 the 48px `ReadinessRing` badge were removed along with the exam page's orientation row; the
 score itself and the surfaces below are unchanged. On the study guide the score now lives one
-tap away: the exam's title opens its action menu, which leads with the same readiness bar the
-exam grid draws.
+tap away: the exam's title opens its action menu, which leads with the readiness bar.
 
 ## One score, everywhere
 
@@ -22,7 +21,7 @@ a readiness percentage calls it, so they can never disagree:
 |---|---|
 | Dashboard **Exam readiness** card (the `NN%` KPI beside the band verdict, over the primary actions) | `components/ReadinessCard.tsx` |
 | Dashboard **Study Guide** card (the ring and the criterion bars — the breakdown of that one score, which it no longer reprints) | `components/ReadinessCard.tsx` |
-| Exam grid cards ("Readiness NN%") | `pages/wiki/WikiHome.tsx` → `components/ReadinessBar.tsx` |
+| Study Guides exam list, an exam in progress ("NN% ready", text only — no bar) | `pages/wiki/WikiHome.tsx` → `components/ExamRow.tsx` |
 | Exam action menu (the study guide's title opens it) | `components/ConceptActionMenu.tsx` → `components/ReadinessBar.tsx` |
 | Readiness projection ("now → exam day") | `lib/masteryAnalytics.ts` → `components/HeatmapInfoPanel.tsx` |
 

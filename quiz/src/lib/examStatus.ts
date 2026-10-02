@@ -14,9 +14,9 @@ import type { ItemStatus } from '@/data/tracks'
 //                   study from yet (the DISCs, Exam 6U).
 //
 // Surfaces read this rather than re-deriving "not P and not FM" locally: the
-// study-guide exam grid (`pages/wiki/WikiHome.tsx`), the exam page's status
-// banner (`pages/wiki/WikiExam.tsx` → `WikiFloatingSearch`) and the quiz
-// builder's exam cards (`pages/Landing.tsx`).
+// exam rows on the Study Guides and Quiz tabs (`components/ExamRow.tsx`, its
+// status tag) and the exam page's status banner (`pages/wiki/WikiExam.tsx` →
+// `WikiFloatingSearch`).
 export type ExamStatus = 'ready' | 'beta' | 'development'
 
 /** Exams whose material is finished enough to carry no status label at all. */

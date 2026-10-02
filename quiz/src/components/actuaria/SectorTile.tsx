@@ -1,7 +1,7 @@
 // A **sector's tile** — the exam's own logo (`ExamLogo`), with an orbit ring
 // laid over it once the sector is charted, or held back to 40% with a lock disc
 // in the corner while it is uncharted (docs/actuaria-online.md §4.5). The same
-// object the exam grid and the quiz builder lead their cards with, so an exam
+// object the Study Guides and Quiz exam lists lead their rows with, so an exam
 // is recognisably itself in space. Decorative: whatever carries it names it.
 
 import { Lock } from 'lucide-react'

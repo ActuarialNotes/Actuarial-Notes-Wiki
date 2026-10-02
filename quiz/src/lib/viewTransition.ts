@@ -18,8 +18,8 @@
 // `moveScreen` is what a page calls for a change of screen the address doesn't
 // show — the Quiz tab's exam list giving way to one exam's builder.
 //
-// Everything on a page travels with its page. An exam card on the Quiz tab
-// and the same exam's card on Study Guides are on two different sheets, so a
+// Everything on a page travels with its page. An exam's row on the Quiz tab
+// and the same exam's row on Study Guides are on two different sheets, so a
 // tab switch slides them apart with their sheets rather than lifting either
 // one out: an object flying one way across two sheets moving the other reads
 // as two motions fighting, not as one desk.

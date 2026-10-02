@@ -8,7 +8,7 @@
 // designation page, which opens it at that designation — `start`. The stages are a tab list: one row of pills joined by
 // a line, the last joined by a dashed one because it never ends, and the open
 // stage's requirements underneath. Exams lead their row with the same logo
-// tile the Study Guides grid uses, so the colours climb the same ladder; the
+// tile the Study Guides list uses, so the colours climb the same ladder; the
 // courses, modules and credentials get a neutral tile with a glyph.
 //
 // A requirement with a vault page opens it the way any link in the article

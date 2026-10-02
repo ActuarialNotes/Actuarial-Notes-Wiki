@@ -7,9 +7,9 @@ import { cn } from '@/lib/utils'
  * and Level 1 fading out after it. The bar is the concept tally; the number is
  * `computeExamReadiness`'s score, the one readiness figure every surface prints.
  *
- * Drawn by the Study Guides exam grid (an in-progress exam's card) and the exam
- * action menu the study guide's title opens, so the two can't disagree about
- * what "readiness" looks like.
+ * Drawn by the exam action menu the study guide's title opens. The exam lists
+ * on Study Guides print the same score as a number ("42% ready") rather than a
+ * bar, so an exam's row stays one line of facts.
  */
 export function ReadinessBar({
   readiness,

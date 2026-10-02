@@ -1,10 +1,10 @@
 import { useState, useEffect, useLayoutEffect, useMemo, useRef, useCallback } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
-import { CalendarCheck, ChevronDown, ChevronLeft, ChevronRight, Circle, Loader2, Lock, Play, X } from 'lucide-react'
+import { CalendarCheck, ChevronDown, ChevronLeft, Circle, Loader2, Lock, Play, X } from 'lucide-react'
 import { QuizFloatingSearch } from '@/components/QuizFloatingSearch'
 import { QuestionDeckCard } from '@/components/QuestionDeckCard'
 import { QuizSettingsMenu } from '@/components/QuizSettingsMenu'
-import { TodayQuizCornerBadge } from '@/components/TodayQuizBadge'
+import { TodayQuizCornerBadge, TodayQuizNavBadge } from '@/components/TodayQuizBadge'
 import { CheckMark } from '@/components/CheckMark'
 import { useTodayQuizCounts } from '@/hooks/useTodayQuizCount'
 import { badgeCountFor } from '@/lib/todayPlanCount'
@@ -27,7 +27,6 @@ import { bankLabelFor } from '@/lib/examIds'
 import { matchesSelectedVariant } from '@/data/examSittings'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import type { QuizMode } from '@/lib/parser'
-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { SegmentedControl, type SegmentedOption } from '@/components/ui/SegmentedControl'
 import { MasteryBadge } from '@/components/MasteryBadge'
@@ -42,7 +41,7 @@ import { buildPastExamRows, examSourceLabel, practiceExamQuestions, PRACTICE_EXA
 import { applyPassRates } from '@/lib/passRates'
 import { useExamPassRates } from '@/hooks/useExamPassRates'
 import { PastExamBrowser } from '@/components/PastExamBrowser'
-import { EXAM_STATUS_LABEL, examStatus } from '@/lib/examStatus'
+import { examStatus } from '@/lib/examStatus'
 import { loadRevealMode, saveRevealMode, type RevealMode } from '@/lib/revealMode'
 import {
   difficultyToParam,
@@ -54,9 +53,9 @@ import {
   type DifficultyTarget,
 } from '@/lib/quizDifficulty'
 import { formatPace, loadTimed, paceForExam, saveTimed } from '@/lib/quizTiming'
-import { ExamLogo } from '@/components/ExamLogo'
+import { ExamDateMeta, ExamRow, ExamRowMeta } from '@/components/ExamRow'
+import { ListPanel, ListRow } from '@/components/ui/ListPanel'
 import { BattleLogo } from '@/components/battle/BattleLogo'
-import { examAccentStyle } from '@/lib/examColors'
 import { defaultBody, loadBody, saveBody, type ExamBody } from '@/lib/bodyFilter'
 import { moveScreen } from '@/lib/viewTransition'
 
@@ -263,11 +262,11 @@ function GroupSection({
   )
 }
 
-function ExamOptionCard({
+function QuizExamRow({
   exam,
   onClick,
   questionCount,
-  colorIdx,
+  isActive,
   targetDate,
   subtitle,
   todayQuizCount = 0,
@@ -276,91 +275,40 @@ function ExamOptionCard({
   exam: { value: string; label: string; progressKey: string }
   onClick: () => void
   questionCount: number
-  colorIdx: number  // -1 means not active
+  /** The reader is studying this exam. */
+  isActive: boolean
   targetDate?: string | null
   subtitle?: string | null
-  /** Questions left in this exam's plan today — picking the card starts here. */
+  /** Questions left in this exam's plan today — picking the row starts here. */
   todayQuizCount?: number
-  /** Today's plan for this exam is finished — the corner carries a check. */
+  /** Today's plan for this exam is finished — the count becomes a check. */
   todayQuizComplete?: boolean
 }) {
-  const isActive = colorIdx >= 0
-  // P and FM are the mature exams with a full question bank and carry no label.
-  // The rest say how far along their material is, in `lib/examStatus.ts`'s
-  // words: Beta for every exam with a bank here today, In Development for any
-  // whose bank is in before the rest of its material is.
-  const statusLabel = EXAM_STATUS_LABEL[examStatus(exam.progressKey)]
-  const description = subtitle ?? null
-
-  // The exam's place on the ladder, as a colour — the same custom properties
-  // the Study Guides card scopes to itself, so the hover highlight is the
-  // exam's own hue on both tabs rather than a shared neutral here and a hue
-  // there. See lib/examColors.ts.
-  const accent = examAccentStyle(exam.progressKey)
-
+  // The Study Guides tab draws the same exam with the same row
+  // (components/ExamRow.tsx); only the facts differ. Here they are the size
+  // of the bank and, for an exam being studied, when it is sat. A date is
+  // information and takes the blue info hue; being part-way through with no
+  // date is neither, so it stays muted (style guide §4.1).
   return (
-    <button
-      type="button"
-      data-tour={exam.value === 'Probability' ? 'quiz-exam-p' : undefined}
+    <ExamRow
+      examKey={exam.progressKey}
+      title={exam.label}
+      topic={subtitle}
+      status={examStatus(exam.progressKey)}
       onClick={onClick}
-      className="relative w-full rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-    >
-      <Card
-        style={accent}
-        className={cn(
-          'transition-all duration-150 overflow-hidden ring-1 ring-transparent',
-          isActive && 'bg-primary/10',
-          accent
-            ? 'hover:bg-[var(--exam-accent-soft)] hover:ring-[var(--exam-accent-muted)]'
-            : isActive
-              ? 'hover:bg-primary/25'
-              : 'hover:bg-accent/30',
-        )}
-      >
-        <CardHeader className="flex-row items-start gap-3 space-y-0 p-4 pb-3">
-          {/* The exam's logo — the same monogram tile, at the same size, that
-              the Study Guides grid leads its cards with, in the exam's own
-              place on the colour ramp, so an exam is the same object across
-              the two tabs. Decorative: the title beside it names the exam. */}
-          <ExamLogo examKey={exam.progressKey} size="lg" className="mt-0.5" />
-          <div className="min-w-0 flex-1">
-            <CardTitle className="text-base leading-snug">{exam.label}</CardTitle>
-            {description && (
-              <CardDescription className="mt-0.5">{description}</CardDescription>
-            )}
-            <div className="mt-2 flex flex-wrap gap-1.5">
-              <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                {questionCount} question{questionCount !== 1 ? 's' : ''}
-              </span>
-              {/* Style guide §4.1: blue is the info hue, amber means "caution".
-                  A scheduled date is information; being part-way through an exam
-                  is neither, so it stays neutral rather than borrowing the
-                  warning colour. Beta *is* a caution, and takes the amber that
-                  the mobile nav's Research chip already uses for the same word —
-                  it used to be emerald here and amber there. In Development is
-                  the same caution, said more strongly, in the same amber. */}
-              {isActive ? (
-                <span className={cn(
-                  'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium',
-                  targetDate
-                    ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
-                    : 'bg-muted text-muted-foreground',
-                )}>
-                  {targetDate ? `Exam: ${formatTargetDate(targetDate)}` : 'In progress'}
-                </span>
-              ) : statusLabel ? (
-                <span className="inline-flex items-center rounded-full bg-amber-500/15 px-2 py-0.5 text-xs font-medium text-amber-600 dark:text-amber-400">
-                  {statusLabel}
-                </span>
-              ) : null}
-            </div>
-          </div>
-        </CardHeader>
-      </Card>
-      {/* After the Card so it paints above the card surface. A count while
-          there's work left today, the checkmark once there isn't. */}
-      <TodayQuizCornerBadge count={todayQuizCount} complete={todayQuizComplete} size="md" />
-    </button>
+      tourId={exam.value === 'Probability' ? 'quiz-exam-p' : undefined}
+      meta={
+        <ExamRowMeta
+          items={[
+            `${questionCount} question${questionCount !== 1 ? 's' : ''}`,
+            isActive && (targetDate
+              ? <ExamDateMeta>Exam: {formatTargetDate(targetDate)}</ExamDateMeta>
+              : 'In progress'),
+          ]}
+        />
+      }
+      trailing={<TodayQuizNavBadge count={todayQuizCount} complete={todayQuizComplete} />}
+    />
   )
 }
 
@@ -416,7 +364,7 @@ export default function Landing() {
     .map(g => ({ ...g, exams: EXAMS.filter(e => (e.tracks as readonly string[]).includes(g.key)) }))
     .filter(g => g.exams.length > 0)
 
-  // Index of each exam in the global active-exams list (for consistent colour across tabs)
+  // The exams the reader is studying — in progress, on the variant they picked.
   const activeExamValues = EXAMS
     .filter(e => examProgress[e.progressKey] === 'in_progress'
       && (!e.examId || matchesSelectedVariant(e.progressKey, e.examId, examVariants[e.progressKey])))
@@ -1374,28 +1322,21 @@ export default function Landing() {
       </div>
 
       {/* Quiz Battle — a way of quizzing rather than an exam, so it sits above
-          the ladder, where the Study Guides tab keeps its general guide: the
-          same grid, the same card, the same 48px tile, so the exam lists below
-          still line up across the two tabs. */}
+          the ladder, where the Study Guides tab keeps its general guide: a
+          one-row panel of the same list the exams are drawn in, with the same
+          48px tile, so the two tabs line up. */}
       {!hasTopic && (
         <section>
           <div className="grid grid-cols-1 items-start gap-3 sm:grid-cols-2">
-            <Link
-              to="/battle"
-              data-testid="quiz-battle-entry"
-              className="block rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-            >
-              <Card className="transition-all duration-150 hover:bg-accent/30">
-                <CardHeader className="flex-row items-center gap-3 space-y-0 p-4">
-                  <BattleLogo size="lg" />
-                  <div className="min-w-0 flex-1">
-                    <CardTitle className="text-base leading-snug">Quiz Battle</CardTitle>
-                    <CardDescription className="mt-0.5">Race a friend through the same questions</CardDescription>
-                  </div>
-                  <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
-                </CardHeader>
-              </Card>
-            </Link>
+            <ListPanel>
+              <ListRow
+                to="/battle"
+                data-testid="quiz-battle-entry"
+                leading={<BattleLogo size="lg" />}
+                title="Quiz Battle"
+                subtitle="Race a friend through the same questions"
+              />
+            </ListPanel>
           </div>
         </section>
       )}
@@ -1415,19 +1356,18 @@ export default function Landing() {
                       {group.name}
                     </p>
                   </div>
-                  {/* `items-start`: a card is as tall as what it holds, rather
-                      than being padded out to match a taller neighbour. */}
-                  <div className="grid grid-cols-1 items-start gap-3 sm:grid-cols-2">
+                  {/* One grouped list per track, a row per exam (components/ExamRow.tsx),
+                      two columns from `sm` up. */}
+                  <ListPanel columns={2}>
                     {group.exams.map(exam => {
-                      const colorIdx = activeExamValues.indexOf(exam.value)
-                      const isActive = colorIdx >= 0
+                      const isActive = activeExamValues.includes(exam.value)
                       return (
-                        <ExamOptionCard
+                        <QuizExamRow
                           key={exam.value}
                           exam={exam}
                           onClick={() => openExam(exam.value)}
                           questionCount={questionCounts[exam.value] ?? 0}
-                          colorIdx={colorIdx}
+                          isActive={isActive}
                           targetDate={isActive ? (targetDates[exam.progressKey] ?? null) : null}
                           subtitle={examTopicByLabel[exam.value]}
                           todayQuizCount={badgeCountFor(todayQuizByExam[exam.progressKey])}
@@ -1435,7 +1375,7 @@ export default function Landing() {
                         />
                       )
                     })}
-                  </div>
+                  </ListPanel>
                 </div>
               ))}
             </div>

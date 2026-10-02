@@ -131,8 +131,8 @@ the wrong colour from an ancestor.
 
 `components/ExamLogo.tsx` is the accent's main spender: a square, rounded tile carrying the
 exam's monogram (`lib/examLogo.ts` — `P`, `FM`, `MAS` over `I`, `5`) on an `--exam-accent-vivid`
-fill. It leads the card on the Study Guides exam grid and the quiz builder's exam cards — the
-same `lg` tile on both, deliberately, so an exam is the same object on either tab — and it
+fill. It leads every exam row on the Study Guides and Quiz tabs (`components/ExamRow.tsx`) —
+the same `lg` tile on both, deliberately, so an exam is the same object on either tab — and it
 stands in for the exam's name in the wiki header strip at `md`. It is **branding, not
 information**: every surface that shows one also names the exam beside it (the header strip
 carries the name as the tile's `sr-only` label), which is why the tile is `aria-hidden`. Use
@@ -249,8 +249,8 @@ second design system. Every `/actuaria/*` route renders inside one scope element
   text. It loads from Google Fonts the first time a reader enters Actuaria, from the route
   chunk, so Study Mode never fetches it. Readouts (Z values, timers, scores) are
   `font-mono tabular-nums` on the system mono stack.
-- **Selection** has one treatment, the site's selected exam card: `var(--exam-accent-soft)` over
-  a 1px `var(--exam-accent-muted)` border. Focus rings stay `ring-ring`.
+- **Selection** has one treatment: `var(--exam-accent-soft)` — the wash an exam row takes when
+  pressed — over a 1px `var(--exam-accent-muted)` border. Focus rings stay `ring-ring`.
 - **Buttons** stay the app's `Button` variants, one solid primary per view. `button.tsx` has no
   pill shape; an in-world screen may round a button with `className="rounded-full"`, and that
   is the only liberty it takes — never a new variant.
@@ -583,6 +583,25 @@ Sizes: `default` (h-10), `sm` (h-9), `lg` (h-11), `icon` (h-10 w-10).
 This is the primary content container. `CardDescription` is `text-sm text-muted-foreground`
 by default — lean on it for the supporting line under a title. Keep one clear title per card;
 if you need multiple headings, you probably need multiple cards.
+
+### 7.2a Grouped lists (`ui/ListPanel.tsx`)
+
+When a card's whole job is to take the reader somewhere, draw it as a **row of a grouped
+list** instead: `ListPanel` (one card surface, `rounded-xl`) holding `ListRow`s, each a link
+or a button with a 48px tile, a title, one truncated line under it and a **chevron**. A row
+answers a press with a wash (`active:` as well as `hover:`, since a phone has no hover) and
+the chevron nudges right. Rows are separated by a hairline inset to start under the text.
+
+- **Facts are text, not pills.** A count or a date goes in the row's `meta` line as
+  `text-xs` muted text, joined by dots. A row of filled pills inside a tappable row reads as
+  a panel of small controls, and hides that the whole row is the target. The one thing that
+  stays a tag is a status (an exam's *Beta*), set beside the title.
+- **No bars in a row.** A progress bar makes a row two objects; print the number instead.
+- **One panel per group.** A list long enough to fill them takes `columns={2}` (two columns
+  from `sm`); a single destination (Quiz Battle, a guide) is a one-row panel.
+
+The exam lists on the Quiz and Study Guides tabs are the main use — `components/ExamRow.tsx`
+is **the** exam row, shared by both, and an exam's accent is its row's press wash.
 
 ### 7.3 Badges & chips (`badge.tsx`)
 

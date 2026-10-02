@@ -27,3 +27,22 @@ created: 2026-09-28
 - confidence: medium
 - checks_run: Definition (d^(m)/m paid at the beginning of each mth) vs NOTE p.1 and FIN §9 p.68; (1 - d^(m)/m)^m = 1 - d = v = 1/(1+i) and d^(m) = m[1 - v^(1/m)] vs FIN §9 p.69, SOA-S Q9 p.5 (image: 1 - d/4 = 1.57738^(-1/40), d = 4(1 - 0.98867)) and SOA-S Q214 p.54 (image: (1 - 0.12/4)^(-4n)); d^(m) -> delta vs FIN Ex.10.11 p.84; d^(m) < i^(m) vs FIN Ex.10.15 p.86-87 (d < d^(m) < delta < i^(m) < i, i > 0). Worked example (vault's own) recomputed: 5.813% vs page 5.82% (F-001, minor rounding). Figure consistent. Links resolve; LaTeX fine.
 - sources_checked: SOA, Notation and terminology used for Exam FM (rev. Dec 2025), PDF p.1, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf; SOA Financial Mathematics Exam syllabus, December 2026, Topic 1 Time Value of Money, learning outcomes a)-c), PDF p.2, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf; SOA Exam FM Sample Solutions (rev. Aug 2026), Q 9, solutions PDF p.5, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf; SOA Exam FM Sample Solutions (rev. Aug 2026), Q 214, solutions PDF p.54, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §9, PDF p.68-69, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §10, PDF p.84-87, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- resolves: F-001
+- status: resolved
+- note: Example now carries full precision: (1.06)^(-1/12) = 0.9951560, 1 - 0.9951560 = 0.0048440, x 12 = 0.058128, so d^(12) = 5.813% (was 5.82% from a truncated 0.99515). Laid out as align* and followed by the ordering check d^(12) = 5.813% < delta = ln 1.06 = 5.827% < i^(12) = 5.841% (python). Also stated the d^(m) < i^(m) bullet's condition (positive interest) and the full chain d < d^(m) < delta < i^(m) < i for m > 1, per FIN Ex.10.15 p.86-87.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- status_set: verified
+- confidence: medium
+- checks_run: Definition (d^(m)/m an effective discount rate per mth, paid at the beginning) vs NOTE p.1 and FIN §9 p.68; (1 - d^(m)/m)^m = 1 - d = v = 1/(1+i) and d^(m) = m[1 - v^(1/m)] vs FIN §9 p.69; d^(m) -> delta vs FIN Ex.10.11 p.84; d < d^(m) < delta < i^(m) < i (m > 1) vs FIN Ex.10.15 p.86-87. Example recomputed in python: 1.06^(-1/12) = 0.99515603, 12(0.00484397) = 0.0581277 -> 5.813%; ln 1.06 = 0.0582689; 12(1.06^(1/12) - 1) = 0.0584106. align* fences on own lines; links resolve. Medium: worked example is the vault's own.
+- sources_checked: SOA, Notation and terminology used for Exam FM, p.1, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.68-69, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.84-87, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf

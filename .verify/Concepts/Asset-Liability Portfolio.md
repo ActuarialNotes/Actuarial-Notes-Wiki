@@ -57,3 +57,40 @@ created: 2026-09-28
 - confidence: low
 - checks_run: Definition vs SYL p.5 and SOA Q268 p.113 (F-002); cash-flow-matching bullet vs Finan §56 p.489 (dedication: asset inflows exactly match liability outflows, full protection) ✓; duration-matching/immunization bullet vs S333/S295/S268/S181 (F-001, major, open); example recomputed: 50000·1.05^-4 = 41,135.12 vs 41,135.47 on page (F-003, minor); 'exactly cash-flow matches with no interest rate risk' ✓ Finan p.489. ALM-in-insurance remark is generic, not filed. Links and figure resolve; linked only from Exam FM. Low: a major is open.
 - sources_checked: SOA Financial Mathematics Exam syllabus, December 2026, Topic 5 General Cash Flows, Portfolios, and Asset Liability Management (20-30%), learning outcomes a)-c), PDF p.5, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf; SOA Exam FM Sample Questions (rev. Aug 2026), Q 268, questions PDF p.113, sha256:d20b5cf2b78cb4cddb3dc556e0df62c40b7d510b7941b546809cc58c4b71a069 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-questions.pdf; SOA Exam FM Sample Solutions (rev. Aug 2026), Q 268, solutions PDF p.69, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf; SOA Exam FM Sample Questions (rev. Aug 2026), Q 333, questions PDF p.141, sha256:d20b5cf2b78cb4cddb3dc556e0df62c40b7d510b7941b546809cc58c4b71a069 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-questions.pdf; SOA Exam FM Sample Solutions (rev. Aug 2026), Q 333, solutions PDF p.88, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf; SOA Exam FM Sample Solutions (rev. Aug 2026), Q 295, solutions PDF p.77, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf; SOA Exam FM Sample Solutions (rev. Aug 2026), Q 181, solutions PDF p.47, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §55 Redington Immunization and Convexity, PDF p.479, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §55 Redington Immunization and Convexity, PDF p.480, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §56 Full Immunization and Dedication, PDF p.489, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- resolves: F-001
+- status: resolved
+- note: The optional-convexity bullet is replaced by three strategy bullets. Redington now reads: equal present values, equal modified durations, and asset convexity greater than liability convexity, all three required, protecting against small changes in i (SOA S268 p.69, S295 p.77, S333 p.88 statement III false because asset convexity should exceed liability convexity; Finan §55 p.480 condition (3)). Full immunization is stated separately (PV match, duration match, asset flows before and after the liability; SOA S382 p.101) and cash flow matching as exact matching (Finan §56 p.489).
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- resolves: F-002
+- status: resolved
+- note: Definition rewritten as the combined position of assets and the liabilities they fund, valued together, whose surplus S(i) = sum v^t (A_t - L_t) = PV_A - PV_L is protected; the surplus formula is added as the page's formula block (Finan §55 p.479; SOA Q268 p.113 'a portfolio of assets and liabilities'; syllabus p.5 outcome c). The unsourced synonym 'matched portfolio' is deleted.
+
+## [F-003/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- resolves: F-003
+- status: resolved
+- note: Example cost corrected to 50,000(1.05)^-4 = 41,135.12 (python: 50000/1.21550625 = 41135.1237). The claim that the matched position carries no interest rate risk is kept and made explicit (surplus zero at every rate), per Finan §56 p.489.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- status_set: verified
+- confidence: medium
+- checks_run: Definition and surplus formula S(i) = sum v^t (A_t - L_t) vs Finan p.479 and SOA Q268 ('portfolio of assets and liabilities') and syllabus p.5 outcome c ✓; cash flow matching = exact matching with full protection vs Finan p.489 ✓; Redington = equal PV, equal modified duration, asset convexity > liability convexity, small changes only vs S268/S333/Finan p.480 ✓; full immunization conditions vs S382 p.101 and Finan pp.486-488 (surplus > 0 for any immediate change) ✓; example recomputed 50000·1.05^-4 = 41,135.12 ✓; all wiki-links and the figure resolve (validate_links clean). Medium: the worked example is the vault's own.
+- sources_checked: SOA Financial Mathematics Exam syllabus, December 2026, p.5, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf; SOA Exam FM Sample Questions (rev. Aug 2026), Q 268, questions PDF p.113, sha256:d20b5cf2b78cb4cddb3dc556e0df62c40b7d510b7941b546809cc58c4b71a069 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-questions.pdf; SOA Exam FM Sample Solutions (rev. Aug 2026), Q 268, solutions PDF pp.69-70, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf; SOA Exam FM Sample Solutions (rev. Aug 2026), Q 333, solutions PDF p.88, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf; SOA Exam FM Sample Solutions (rev. Aug 2026), Q 382, solutions PDF p.101, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets, pp.479-480, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets, pp.486-489, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf

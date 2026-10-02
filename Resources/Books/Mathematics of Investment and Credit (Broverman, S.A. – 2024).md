@@ -2,22 +2,22 @@
 Title: "Mathematics of Investment & Credit"
 Authors: "Samuel Broverman"
 Publisher: "ACTEX Learning"
-Year: "2024"
-date: "2024"
+Year: "2023"
+date: "2023"
 Edition: "8th"
 Type: "Textbook"
 ISBN: "978-1-64756-616-6"
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-09-28
+  last_checked: 2026-09-29
   last_checked_by: agent:validate-v1
-  content_hash: sha256:4152ed128994965d8f0dab2e5bc0f3454ff1cdb53480fdc201b09c0fbd1d6fea
+  content_hash: sha256:dc49bb8f839656674d99d4e02e4d8d0738de85fc2fb009b5b2cdc687baca6ef9
   sources:
-    - "Broverman, Mathematics of Investment & Credit, 8th ed. (ACTEX Learning, © 2023) — publisher's sample: title page PDF pp.1,3; copyright page PDF p.4; Table of Contents pp.v–xii (PDF pp.5–12) and PDF bookmark outline; Preface pp.xiii–xiv (PDF pp.13–14), sha256:1560f9e2bbcabe090d090abfea1e8e82a93ca4c7ff289e73b4180e30ab4d3eee — https://www.actexlearning.com/samples/MIC_8th_edition_051923_SAMPLE.pdf"
-    - "ACTEX Learning, Mathematics of Investment & Credit 8th Edition product page (retrieved 2026-09-28): description and ISBN list, sha256:d4df654c574bdddcfe206a011dffad044b94693bd268c8948307c4feb6f8a715 — https://www.actexlearning.com/exams/fm/mathematics-of-investment-and-credit"
-    - "SOA Financial Mathematics Exam syllabus, December 2026, Text References / Suggested Textbooks, PDF p.6 (page image read), sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
-  open_findings: 1
+    - "Broverman, Mathematics of Investment & Credit, 8th ed. (ACTEX Learning, © 2023) — publisher's sample: title page PDF pp.1,3; copyright page PDF p.4; Table of Contents pp.v–xii (PDF pp.5–12) and PDF bookmark outline; Preface pp.xiii–xiv (PDF pp.13–14), re-fetched 2026-09-29, sha256:1560f9e2bbcabe090d090abfea1e8e82a93ca4c7ff289e73b4180e30ab4d3eee — https://www.actexlearning.com/samples/MIC_8th_edition_051923_SAMPLE.pdf"
+    - "ACTEX Learning, Mathematics of Investment & Credit 8th Edition product page (retrieved 2026-09-29): description, ISBN list (printed 979-8-89016-016-4), sample link, no publication date, sha256:9f2b9bb578c665aacd828e92ee0cd027697cd0cd619c2ce5ed6a811606ab0d2b — https://www.actexlearning.com/exams/fm/mathematics-of-investment-and-credit"
+    - "SOA Financial Mathematics Exam syllabus, December 2026, Text References / Suggested Textbooks, PDF p.6, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
+  open_findings: 0
   open_critical: 0
   log: ".verify/Resources/Books/Mathematics of Investment and Credit (Broverman, S.A. – 2024).md"
 ---
@@ -274,4 +274,4 @@ A textbook giving a complete treatment of the theory of interest and its applica
 ## Sources
 - [Mathematics of Investment & Credit, Eighth Edition — sample pages (ACTEX Learning, 2023)](https://www.actexlearning.com/samples/MIC_8th_edition_051923_SAMPLE.pdf) — the title page, the copyright page (© 2023; ISBN 978-1-64756-616-6), the full table of contents and the preface
 - [Mathematics of Investment & Credit, 8th Edition (ACTEX Learning)](https://www.actexlearning.com/exams/fm/mathematics-of-investment-and-credit) — the publisher's description of the book and the 8th edition's current ISBNs (printed: 979-8-89016-016-4)
-- [SOA Exam FM Syllabus, June 2026](https://www.soa.org/globalassets/assets/files/edu/2026/syllabi/2026-06-exam-fm-syllabus.pdf) — the citation (Eighth Edition, 2024) and the assigned sections
+- [SOA Exam FM Syllabus, December 2026](https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf) — the citation (Eighth Edition, which the syllabus dates 2024; the book's copyright page gives © 2023) and the assigned sections, with the Seventh Edition allowance (p. 6)

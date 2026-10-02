@@ -2,17 +2,14 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-09-28
+  last_checked: 2026-09-29
   last_checked_by: agent:validate-v1
-  content_hash: sha256:98beb7b5ccaf054948469de5a30d0c3ab08b9f6a0834c52ddece6bdf60f07c52
+  content_hash: sha256:52441b54cc5ad8538ed2ad3395822554fa4433ad4a0153009bf5842edac4e9b1
   sources:
-    - "SOA, Notation and terminology used for Exam FM (rev. Dec 2025), PDF p.1, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf"
-    - "SOA Financial Mathematics Exam syllabus, December 2026, Topic 1 Time Value of Money, learning outcomes a)-c), PDF p.2, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
-    - "SOA Exam FM Sample Solutions (rev. Aug 2026), Q 9, solutions PDF p.5, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf"
-    - "SOA Exam FM Sample Solutions (rev. Aug 2026), Q 214, solutions PDF p.54, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf"
-    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §9, PDF p.68-69, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
-    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §10, PDF p.84-87, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
-  open_findings: 1
+    - "SOA, Notation and terminology used for Exam FM, p.1, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf"
+    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.68-69, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
+    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.84-87, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Nominal Discount Rate Convertible m-thly.md
 ---
@@ -32,7 +29,7 @@ The **nominal discount rate convertible $m$-thly**, denoted $d^{(m)}$, is an ann
 > $$= m\!\left[1 - (1+i)^{-1/m}\right]$$
 
 - As $m \to \infty$, $d^{(m)} \to \delta$ (the [[Force of Interest]]).
-- The nominal discount rate satisfies $d^{(m)} < i^{(m)}$ for all $m$.
+- For a positive interest rate, $d^{(m)} < i^{(m)}$ for all $m$; more fully, $d < d^{(m)} < \delta < i^{(m)} < i$ for $m > 1$.
 
 ![[Media/Figures/Nominal_Discount_Rate_Convertible_m-thly.svg|340]]
 
@@ -40,4 +37,13 @@ The **nominal discount rate convertible $m$-thly**, denoted $d^{(m)}$, is an ann
 > The effective annual interest rate is $6\%$. Find $d^{(12)}$.
 >
 > > [!answer]-
-> > $v = 1/1.06$. Thus $d^{(12)} = 12[1 - (1.06)^{-1/12}] = 12[1 - 0.99515] = 12(0.00485) = 5.82\%$.
+> > With $v = 1/1.06$:
+> > $$
+> > \begin{align*}
+> > d^{(12)} &= 12\left[1 - (1.06)^{-1/12}\right] \\
+> >   &= 12(1 - 0.9951560) \\
+> >   &= 12(0.0048440) \\
+> >   &= 0.058128 = 5.813\%
+> > \end{align*}
+> > $$
+> > As expected, $d^{(12)} = 5.813\%$ is below $\delta = \ln 1.06 = 5.827\%$ and $i^{(12)} = 12\left[(1.06)^{1/12} - 1\right] = 5.841\%$.

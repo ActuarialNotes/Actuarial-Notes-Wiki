@@ -2,17 +2,18 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-09-28
+  last_checked: 2026-09-29
   last_checked_by: agent:validate-v1
-  content_hash: sha256:132970b99797a2b768cf2fccff8e4a811035b7e924a705ee1eb79894538e72df
+  content_hash: sha256:0eb76b86e1b20d00783272f8c67ffcaecdf89b1f040bf14c37839771dd8ac07b
   sources:
-    - "SOA, Notation and terminology used for Exam FM (rev. Dec 2025), PDF p.1, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf"
-    - "SOA Financial Mathematics Exam syllabus, December 2026, Topic 1 Time Value of Money (5-15%), learning outcomes a)-d), PDF p.2, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
-    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §6 Exponential Accumulation Functions: Compound Interest, PDF p.41, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
-    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §6 Exponential Accumulation Functions: Compound Interest (Theorem 6.1), PDF p.42, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
-    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §7 Present Value and Discount Functions, PDF p.50, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
-    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §9 Nominal Rates of Interest and Discount, PDF p.66, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
-  open_findings: 1
+    - "SOA, Notation and terminology used for Exam FM, p.1, sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf"
+    - "SOA Financial Mathematics Exam syllabus, December 2026, p.2, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
+    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.16, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
+    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.41, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
+    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.42, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
+    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.50, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
+    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.66, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Compound Interest.md
 ---
@@ -23,7 +24,7 @@ Under **compound interest**, interest earned in each period is added to the prin
 
 - The [[Accumulation Function]] is $a(t) = (1+i)^t$, which is exponential (vs. linear under [[Simple Interest]]).
 - Compound interest is the standard convention for actuarial and financial calculations.
-- For $n$ periods at rate $i$, the accumulation factor $(1+i)^n$ is called the **accumulation factor**, and $(1+i)^{-n} = v^n$ is the **discount factor** $v$.
+- For $n$ periods at rate $i$, $(1+i)^n$ is the **accumulation factor** — the value at time $n$ of 1 invested now — and $v^n = (1+i)^{-n}$ is the present value of 1 due in $n$ periods, where $v = (1+i)^{-1}$ is the [[Discount Factor|discount factor]].
 
 ![[Media/Figures/Compound_Interest.svg|340]]
 
@@ -32,5 +33,7 @@ Under **compound interest**, interest earned in each period is added to the prin
 >
 > > [!answer]-
 > > Simple: $1000(1 + 0.06 \times 3) = 1000(1.18) = 1180$
+> >
 > > Compound: $1000(1.06)^3 = 1000(1.19102) = 1191.02$
+> >
 > > Compound interest yields more because earned interest is reinvested.

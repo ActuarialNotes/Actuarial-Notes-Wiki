@@ -27,3 +27,22 @@ created: 2026-09-28
 - confidence: medium
 - checks_run: (Ia)_n = (ä_n - n v^n)/i vs SOA-S Q4 p.4 and Q118 p.33 (images) and FIN (26.5) p.235; (Is)_n = (1+i)^n (Ia)_n vs FIN p.235; general P, Q formula PV = P a_n + (Q/i)(a_n - n v^n) vs FIN (26.3) p.234 (and recomputed: P = Q = 100 gives 1,214.69, matching 100(Ia)_5). Example recomputed in python (F-001, 2 cents). Links, figure, LaTeX (\$$100,\,\$200…$ promoted by vaultMath) resolve. Medium: example is the vault's own.
 - sources_checked: SOA Exam FM Sample Solutions (rev. Aug 2026), Q 4, solutions PDF p.4, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf; SOA Exam FM Sample Solutions (rev. Aug 2026), Q 118, solutions PDF p.33, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §26 Varying Annuity-Immediate, arithmetic progression, PDF p.234-237, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; SOA Financial Mathematics Exam syllabus, December 2026, Topic 2 Annuities/cash flows with non-contingent payments (20-30%), learning outcomes a)-b), PDF p.3, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- resolves: F-001
+- status: resolved
+- note: Example rewritten as one align* carrying six-decimal factors: v^5=0.747258, ä_5=4.465106, (Ia)_5=(4.465106-3.736291)/0.06=0.728815/0.06=12.1469, PV=100×12.1469=1,214.69 (was 12.1467 and 1,214.67 from a numerator rounded to 0.7288). Python brute force Σ100t·1.06^-t = 1,214.691. The stem's '$$100,\,$200…$' inline-math list became plain text with escaped dollars.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- status_set: verified
+- confidence: medium
+- checks_run: Re-checked on the new bytes: (Ia)_n=(ä_n-nv^n)/i vs SOA solution Q4 p.4 (page image) and Finan (26.5) p.235; (Is)_n=(1+i)^n(Ia)_n vs Finan p.235; P,Q form PV=P a_n+(Q/i)(a_n-nv^n) vs Finan (26.3) p.234 (P=Q=100 gives 1,214.69 = 100(Ia)_5). Example recomputed in python: v^5=0.747258, ä_5=4.465106, (Ia)_5=12.146912, PV=1,214.69, brute-force sum 1,214.691. KaTeX typesets every math node; links and figure resolve.
+- sources_checked: SOA Exam FM Sample Solutions (rev. Aug 2026), Q 4, solutions PDF p.4, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.234-235, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf

@@ -149,3 +149,74 @@ created: 2026-09-28
 - checks_run: Re-pass after linking the Topic 2 objective phrase (comment above); the visible text is unchanged, so every check in C-001 stands: format, weights, all objectives and outcomes and every reading line diffed against the December 2026 syllabus PDF pp.1-7. syllabus_lint 0 errors 0 warnings; test_syllabus_lib passes.
 - sources_checked: SOA Financial Mathematics Exam syllabus, December 2026 (all pages), sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf; SOA Financial Mathematics Exam syllabus, October 2026, sha256:949a2e9008bd5f8791b8852599e09f28aa30a9f53a5af05b2499907de1397b26 — https://www.soa.org/globalassets/assets/files/edu/2026/syllabi/2026-10-exam-fm-syllabus.pdf; SOA Financial Mathematics Exam syllabus, August 2026, sha256:a3af6f54e132f4439988cccc1d20ea3cb269c175c253d9b2b27c6f8d23bbbc5b — https://www.soa.org/globalassets/assets/files/edu/2026/spring/syllabi/2026-08-exam-fm-syllabus.pdf
 - note: Medium: F-002 (required study note FM-24-17 has no page, major), F-005 and F-006 (minor) remain open.
+
+## [F-007] Outcome text departs from SOA's punctuation in five places
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- severity: nit
+- status: open
+- locus: Loans outcome 1; Annuities outcome 1; Time Value of Money outcome 4; Annuities outcome 2 (level perpetuity); Bonds outcome 2 (yield rate; coupon; term of bond); General Cash Flows outcome 3 (second bullet)
+- claim: Loans outcome 1 lists 'Final Payment, Drop Payment, Balloon Payment' as three peers; Annuities outcome 1 reads 'Annuity Immediate'; seven outcome lines end without SOA's closing period.
+- evidence: SOA FM syllabus, December 2026: Topic 3 outcome a (PDF p.3) reads 'final payment (drop payment, balloon payment), amortization' — drop and balloon payments are the kinds of final payment, not further terms; Topic 2 outcome a (p.3) reads 'annuity-immediate'; Topic 1 d (p.2), Topic 2 b 'Level perpetuity.' (p.3), Topic 4 b 'Yield rate.', 'Coupon, coupon rate.', 'Term of bond, … accumulation of discount.' (p.4) and Topic 5 c 'Exactly match a set of liability cash flows.' (p.5) each end with a period. Found re-reading every outcome against pp.2-5 while resolving F-005.
+- source_rank: 1
+- proposed_action: Restore SOA's parenthetical and hyphen and the closing periods; the links (and so the exam's concept set) are unchanged.
+- applied: true
+- fingerprint: 0534c66cd491
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- resolves: F-002
+- status: resolved
+- note: Wrote Resources/Books/Using Duration and Convexity to Approximate Change in Present Value (Alps - 2017).md from the note itself (resource_extract.py, sha256:530436d4…; Sections 1-6 and Appendices A-D as its divisions, every example recomputed; verified medium in its own log) and added it to the Source Material callout as its own bullet, last in the syllabus's order (Additional References follow the textbooks on p.7), with the reading line 'Sections 1–4 (required reading)' — the syllabus p.7 wording 'Sections 1-4 are required reading for this examination'. The page's On-the-syllabus callout names Exam FM. resource_lint 0/0 and syllabus_lint 0/0 on this page.
+
+## [F-005/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- resolves: F-005
+- status: resolved
+- note: The four additions left SOA's lists and now sit on marked editorial '*Key concepts:*' sub-bullets, as on the Exam P page: [[Fund Accumulation]] under Time Value of Money outcome 1; [[Decreasing Annuity]] and [[Continuous Annuity]] under Annuities outcome 1; [[Loan Repayment Comparison]] under Loans outcome 1. The outcome lists now read as SOA's pp.2-3 list them. The exam's concept set is unchanged: the same 91 link targets inside the objective callouts before and after (diffed mechanically), and syllabus_lint 0 errors 0 warnings. Re-reading every outcome against pp.2-5 found a parenthetical, a hyphen and seven closing periods that differed; filed and fixed as F-007.
+
+## [F-006/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- resolves: F-006
+- status: resolved
+- note: Broverman's reading now carries a second line 'Candidates may also use the Seventh Edition (2017, ACTEX Learning, ISBN 978-1-63588-221-6), with the same sections' and Brown & Kopp's 'Candidates may also use the First Edition (2012, ACTEX Learning, published by McGraw-Hill Ryerson, ISBN 978-1-63588-694-8), with the same chapters and sections' (syllabus p.6; both ISBN-13 check digits valid; the app joins a reading's lines with '; '). Added '## Other Resources' before Learning Objectives, where the Exam P page has it (syllabus_lint requires Source Material last): notation and terminology note, released exam papers, sample questions and solutions, the BA-35 (FM-22-05) and BA II Plus (FM-23-05) calculator reviews with SOA's BA II Plus recommendation, and the online sample exam. Every URL is the syllabus PDF's own p.7 link annotation (pymupdf get_links), none constructed, each fetched HTTP 200; the PDFs' sha256 match the brief's (notation f6cfa778…, FM-23-05 1b71586c…, sample questions d20b5cf2…, solutions ae4ec608…; FM-22-05 1fbd8c49…, titled 'Review of Calculator Functions for the Texas Instruments BA-35'). SOA's 'Online Sample Exam FM' link lands on its 'Online Sample Exams' page, which offers both the P and the FM sample exam.
+
+## [F-007/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- resolves: F-007
+- status: resolved
+- note: Loans outcome 1 now reads [[Final Payment]] ([[Drop Payment]], [[Balloon Payment]]), [[Amortization]]. as on syllabus p.3; Annuities outcome 1 displays 'Annuity-Immediate'; the closing periods of Topic 1 d, 'Level perpetuity.', 'Yield rate.', 'Coupon, coupon rate.', the term-of-bond line and 'Exactly match a set of liability cash flows.' restored. Links unchanged (same 91 targets).
+
+## [C-004] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- status_set: verified
+- confidence: high
+- checks_run: Whole page re-checked on the new bytes against the December 2026 syllabus. Format (2.5-hour, 30 multiple-choice, p.1) and the five topic names and weights (5-15, 20-30, 15-25, 15-25, 20-30%, pp.2-5) match. Every objective and outcome diffed phrase by phrase against pp.2-5 with the links stripped: SOA's words, in SOA's order, including 'final payment (drop payment, balloon payment)', 'annuity-immediate' and the closing periods restored under F-007; the four vault additions now sit only on marked '*Key concepts:*' lines (F-005); the concept set is the same 91 link targets as before this run. Source Material diffed against pp.6-7: Broverman 8th ed. chapters 1-7 and every exclusion, with the 7th-edition (2017, ISBN 978-1-63588-221-6) allowance; Vaaler-Harper-Daniel 3rd ed.; Brown & Kopp 2nd ed. sections, with the 1st-edition (2012, McGraw-Hill Ryerson, ISBN 978-1-63588-694-8) allowance; Francis & Ruckman 3rd ed.; Chan & Tse 3rd ed.; and FM-24-17 Sections 1-4, the one required reading (F-002), each bullet linking an existing Resources/Books page. Other Resources (F-006) list matches p.7 item for item, each link the PDF's own annotation, each fetched HTTP 200 and each PDF identified from its first page. syllabus_lint 0 errors 0 warnings; test_syllabus_lib OK; resource_lint 0/0 across the shelf; validate_links clean; vitest sourceMaterial/resourceExams/examPdf/seo/examCatalog pass. High: every statement on the page is SOA's own and was checked against the current syllabus.
+- sources_checked: SOA Financial Mathematics Exam syllabus, December 2026 (7 pp.), pp.1-7 incl. p.7 link annotations, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf; SOA study note FM-24-17, Alps, Using Duration and Convexity to Approximate Change in Present Value (2017), title page p.1 and contents p.2, sha256:530436d4707ecadba3a7bef6e1a9661b8d9e9bb173486edfb6924bc4a4992040 — https://www.soa.org/globalassets/assets/Files/Edu/2017/fm-duration-convexity-present-value.pdf; SOA, Notation and terminology used for Exam FM, p.1 (title), sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf; SOA Exam FM Sample Questions and Solutions (rev. Aug 2026), p.1 of each, sha256:d20b5cf2b78cb4cddb3dc556e0df62c40b7d510b7941b546809cc58c4b71a069 and sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-questions.pdf, https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf; SOA study notes FM-22-05 (BA-35, sha256:1fbd8c493e3febfe0f4bf20e5440a80d3fe9c0b0c3838cef14ce186594e94f5e) and FM-23-05 (BA II Plus, sha256:1b71586cc1b08d7bc36c04ecb3d4e6b367fce30f394e63efafc879e6b6e466fa), Broverman, Review of Calculator Functions, title pages — https://www.soa.org/globalassets/assets/files/edu/FM-22-05.pdf, https://www.soa.org/globalassets/assets/files/edu/FM-23-05.pdf
+
+## [C-005] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-10-02
+- status_set: verified
+- confidence: high
+- checks_run: Layout-only change after C-004, made when merging main: the Other Resources list moved from a '## Other Resources' section into a collapsed '> [!question]- Other resources' card, the shape main gave the Exam P page (fdb2fb6) and the MAS pages (14970e8). Its five items are unchanged word for word, and every URL is still the December 2026 syllabus's own p.7 link annotation (re-read with pymupdf get_links: notation note, edu-multiple-choice-exam, 2018-10 sample questions/solutions, FM-22-05, FM-23-05, edu-exam-p-online-sample). Learning objectives, Key concepts lines and Source Material untouched since C-004; syllabus_lint: no error or warning on this page.
+- sources_checked: SOA Financial Mathematics Exam syllabus, December 2026 (7 pp.), pp.1-7 incl. p.7 link annotations, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf; SOA study note FM-24-17, Alps, Using Duration and Convexity to Approximate Change in Present Value (2017), title page p.1 and contents p.2, sha256:530436d4707ecadba3a7bef6e1a9661b8d9e9bb173486edfb6924bc4a4992040 — https://www.soa.org/globalassets/assets/Files/Edu/2017/fm-duration-convexity-present-value.pdf; SOA, Notation and terminology used for Exam FM, p.1 (title), sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf; SOA Exam FM Sample Questions and Solutions (rev. Aug 2026), p.1 of each, sha256:d20b5cf2b78cb4cddb3dc556e0df62c40b7d510b7941b546809cc58c4b71a069 and sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-questions.pdf, https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf; SOA study notes FM-22-05 (BA-35, sha256:1fbd8c493e3febfe0f4bf20e5440a80d3fe9c0b0c3838cef14ce186594e94f5e) and FM-23-05 (BA II Plus, sha256:1b71586cc1b08d7bc36c04ecb3d4e6b367fce30f394e63efafc879e6b6e466fa), Broverman, Review of Calculator Functions, title pages — https://www.soa.org/globalassets/assets/files/edu/FM-22-05.pdf, https://www.soa.org/globalassets/assets/files/edu/FM-23-05.pdf

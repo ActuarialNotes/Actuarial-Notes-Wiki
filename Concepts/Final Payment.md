@@ -1,18 +1,18 @@
 ---
 verification:
   status: verified
-  confidence: low
-  last_checked: 2026-09-28
+  confidence: medium
+  last_checked: 2026-09-29
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f0be393e5fd9a94a194a2e1d008cbb6e5cb812f1ad4fad3eb0016195f58ed652
+  content_hash: sha256:37036013e50df29ba804f1a5e25e16997c8accac98896ef5dfd9c973df3433ee
   sources:
-    - "SOA Financial Mathematics Exam syllabus, December 2026, Topic 3 Loans (15-25%), learning outcomes a)-b), PDF p.3, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
-    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §19 Solving for the Unknown Number of Payments of an Annuity, PDF p.184-185, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
-    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §38 Amortization Schedules, PDF p.346, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
-    - "SOA Exam FM Sample Questions (rev. Aug 2026), Q 126, questions PDF p.53, sha256:d20b5cf2b78cb4cddb3dc556e0df62c40b7d510b7941b546809cc58c4b71a069 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-questions.pdf"
-    - "SOA Exam FM Sample Questions (rev. Aug 2026), Q 337, questions PDF p.142, sha256:d20b5cf2b78cb4cddb3dc556e0df62c40b7d510b7941b546809cc58c4b71a069 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-questions.pdf"
+    - "SOA Financial Mathematics Exam syllabus, December 2026, p.3, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
+    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.184-185, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
+    - "Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.335, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf"
+    - "SOA Exam FM Sample Questions (rev. Aug 2026), Q 87, questions PDF p.39, sha256:d20b5cf2b78cb4cddb3dc556e0df62c40b7d510b7941b546809cc58c4b71a069 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-questions.pdf"
     - "SOA Exam FM Sample Solutions (rev. Aug 2026), Q 380, solutions PDF p.100, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf"
-  open_findings: 1
+    - "SOA Exam FM Sample Solutions (rev. Aug 2026), Q 337, solutions PDF p.89, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Final Payment.md
 ---
@@ -20,14 +20,34 @@ verification:
 The **final payment** on a loan is the last payment made to retire the outstanding balance, which may differ from the regular payment amount when the [[Term of Loan]] is not an integer number of periods.
 
 - There are two conventions:
-  - **[[Drop Payment]]**: the final payment is **smaller** than the regular payment and occurs at the same scheduled payment date
-  - **[[Balloon Payment]]**: the final payment is **larger** than the regular payment
+  - **[[Drop Payment]]**: the remainder is paid one period after the last regular payment, so the final payment is **smaller** than the regular payment
+  - **[[Balloon Payment]]**: the remainder is added to the last regular payment, so the final payment is **larger** than the regular payment
 - The final payment amount equals the [[Outstanding Balance]] at the previous payment date accumulated by one period.
 
 ![[Media/Figures/Final_Payment.svg|340]]
 
 > [!example]- Computing the Drop Payment {Example}
-> A $1{,}000$ loan at $6\%$ annual interest is repaid with annual payments of $250$. The term is approximately 4.65 years. Find the drop payment at end of year 5.
+> A $1{,}000$ loan at $6\%$ annual interest is repaid with annual payments of $250$ for as long as necessary, plus a smaller final payment one year after the last full payment. Find the term of the loan and the drop payment.
 >
 > > [!answer]-
-> > Balance after 4 payments (prospective): $B_4 = 250 \cdot a_{\overline{0.65}|6\%}$ or equivalently by retrospective method. Approximate: $B_4 = 1000(1.06)^4 - 250 \cdot s_{\overline{4}|} = 1262.48 - 1092.73 = 169.75$. Drop payment $= 169.75(1.06) = 179.93$.
+> > Solve $1000 = 250\,a_{\overline{n}|6\%}$, so $a_{\overline{n}|} = 4$:
+> >
+> > $$
+> > \begin{align*}
+> > n &= \frac{-\ln(1 - 0.06 \times 4)}{\ln 1.06} \\
+> > &= \frac{0.274437}{0.058269} \\
+> > &= 4.71
+> > \end{align*}
+> > $$
+> >
+> > So 4 full payments are made. The balance just after the 4th, retrospectively, with $(1.06)^4 = 1.262477$ and $s_{\overline{4}|6\%} = 4.374616$:
+> >
+> > $$
+> > \begin{align*}
+> > B_4 &= 1000(1.06)^4 - 250\,s_{\overline{4}|6\%} \\
+> > &= 1262.477 - 1093.654 \\
+> > &= 168.823
+> > \end{align*}
+> > $$
+> >
+> > The drop payment at the end of year 5 is $168.823(1.06) = 178.95$, smaller than the regular $250$.

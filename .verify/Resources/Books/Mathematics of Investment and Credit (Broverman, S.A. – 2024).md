@@ -43,3 +43,46 @@ created: 2026-09-28
 - date: 2026-09-28
 - locus: C-002 checks_run
 - note: C-002 gives the diffed entries as '205 numbered entries'; the actual count is 213 dotted section numbers (1.0 to 10.14) plus the 10 chapter numbers. All of them are identical between the page and the printed TOC. The count was wrong; the outcome is unchanged.
+
+## [F-002] Scope cited to the superseded June 2026 FM syllabus
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- severity: nit
+- status: open
+- locus: ## Sources, third entry
+- claim: The scope source is '[SOA Exam FM Syllabus, June 2026](https://www.soa.org/globalassets/assets/files/edu/2026/syllabi/2026-06-exam-fm-syllabus.pdf) — the citation (Eighth Edition, 2024) and the assigned sections'.
+- evidence: The current sitting's syllabus is December 2026 (sha256:b4189b65…, PDF p.6), which the aa33 pass itself checked the callout against; the same out-of-date citation was filed as F-001 on the Chan & Tse and Francis & Ruckman pages. The Broverman block (Eighth Edition, 2024, the seven chapter exclusions and the Seventh Edition allowance) is the same in the June and December syllabi, so the scope is right and only the citation is stale.
+- source_rank: 1
+- proposed_action: Cite the December 2026 syllabus, p. 6.
+- applied: true
+- fingerprint: 5c88c0c3f8ab
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- resolves: F-002
+- status: resolved
+- note: ## Sources now cites '[SOA Exam FM Syllabus, December 2026](https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf) — the citation (Eighth Edition, which the syllabus dates 2024; the book's copyright page gives © 2023) and the assigned sections, with the Seventh Edition allowance (p. 6)'; URL HTTP 200.
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- resolves: F-001
+- status: resolved
+- note: Year and date set to 2023. docs/resource-pages.md §2.1 defines Year as 'the year of the edition or version the syllabus prescribes' and names where it comes from: 'the title page, copyright page or effective date' (§2.4: frontmatter facts from the title page, imprint or copyright page, never inferred from a filename). The prescribed edition is the Eighth; its copyright page (ACTEX sample, re-fetched 2026-09-29, sha256 1560f9e2… unchanged, PDF p.4) reads 'Copyright © 2023 ACTEX Learning … ISBN: 978-1-64756-616-6' — the ISBN the page carries — and the preface is signed May 2023. ACTEX's product page gives no publication date. The SOA's '2024' is a citation date for the same edition, not a different edition, and now stands where the standard puts such a fact: the syllabus entry in ## Sources says the syllabus dates it 2024 and the copyright page © 2023. The filename (… – 2024) is left as it is: it is the link target and this log's key. The generated cover was redrawn (generate_resource_covers.py --force wrote only this page's SVG) and now reads '8th ed. · 2023'.
+
+## [C-004] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- status_set: verified
+- confidence: medium
+- checks_run: Re-pass after F-001 and F-002; the byte changes are Year/date 2024 → 2023 and the syllabus entry in ## Sources (December 2026, p. 6, with the 2024-vs-© 2023 dates stated; URL HTTP 200); the cover SVG was redrawn to match. Year 2023 checked against the copyright page (PDF p.4, © 2023, ISBN 978-1-64756-616-6, the page's ISBN, check digit valid) and the preface's May 2023 signature (PDF p.14). Callout re-diffed against Dec 2026 p.6: all seven chapter exclusions, 4.4 for background only, and the Seventh Edition (2017) allowance, word for word. The sample re-fetched with the same sha256 as the aa33 pass, so its outline diff (213 section numbers plus 10 chapters, 0 differences) and lead check stand. resource_lint 0 errors 0 warnings; generate_resource_covers --check clean. Medium: a commercial text read only through its sample pages.
+- sources_checked: Broverman, Mathematics of Investment & Credit, 8th ed. (ACTEX Learning, © 2023) — publisher's sample: title page PDF pp.1,3; copyright page PDF p.4; Table of Contents pp.v–xii (PDF pp.5–12) and PDF bookmark outline; Preface pp.xiii–xiv (PDF pp.13–14), re-fetched 2026-09-29, sha256:1560f9e2bbcabe090d090abfea1e8e82a93ca4c7ff289e73b4180e30ab4d3eee — https://www.actexlearning.com/samples/MIC_8th_edition_051923_SAMPLE.pdf; ACTEX Learning, Mathematics of Investment & Credit 8th Edition product page (retrieved 2026-09-29): description, ISBN list (printed 979-8-89016-016-4), sample link, no publication date, sha256:9f2b9bb578c665aacd828e92ee0cd027697cd0cd619c2ce5ed6a811606ab0d2b — https://www.actexlearning.com/exams/fm/mathematics-of-investment-and-credit; SOA Financial Mathematics Exam syllabus, December 2026, Text References / Suggested Textbooks, PDF p.6, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf

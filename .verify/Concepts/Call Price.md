@@ -27,3 +27,22 @@ created: 2026-09-28
 - confidence: medium
 - checks_run: Definition vs FIN §47 p.420 and Investor.gov ('pays investors the call price (usually the face value of the bonds)'); call premium = call price − face (see Call Premium page sources); pricing to the call with C_call and n_c vs SOA S40 p.12 and S136 p.37. 'Typically set at or above Face Value' is hedged — SOA Q139 p.59 has call prices 2900/2960 on a 3000 face bond — not filed. Example recomputed in one python script (work/c-bonds.py): 1095.4412 vs page 1095.42 (F-001). Links and figure resolve. Example is the vault's own, so medium.
 - sources_checked: SOA Financial Mathematics Exam syllabus, December 2026, Topic 4 Bonds (15-25%), learning outcome a), c), PDF p.4, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf; SOA Exam FM Sample Solutions (rev. Aug 2026), Q 40, solutions PDF p.12, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf; SOA Exam FM Sample Solutions (rev. Aug 2026), Q 136, solutions PDF p.37, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf; SOA Exam FM Sample Questions (rev. Aug 2026), Q 139, questions PDF p.59, sha256:d20b5cf2b78cb4cddb3dc556e0df62c40b7d510b7941b546809cc58c4b71a069 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-questions.pdf; Finan, A Basic Course in the Theory of Interest and Derivatives Markets (Arkansas Tech, 2009), §47 Callable Bonds and Serial Bonds, PDF p.420, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; U.S. SEC Investor.gov glossary, Callable or Redeemable Bonds (web page read 2026-09-28), sha256:db86cee96b21a36c190fcf34f474a1cbc56064484f608c5262ab6b487ad6fe5b — https://www.investor.gov/introduction-investing/investing-basics/glossary/callable-or-redeemable-bonds
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- resolves: F-001
+- status: resolved
+- note: Example line now carries v^3 to six places: 80(2.6730) + 1050(0.839619) = 213.84 + 881.60 = 1095.44 (python: 80a_3|6% = 213.840956, 1050v^3 = 881.600247, P = 1095.441203).
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-09-29T19:42Z/d7d3
+- date: 2026-09-29
+- status_set: verified
+- confidence: medium
+- checks_run: New version re-read. Definition (price at which the issuer may redeem early; FIN p.420 'pays investors the call price (usually the face value of the bonds)'); pricing to a call — the call price replaces C and n becomes the periods to the call date — vs SOA S40 p.12 and S136 p.37 (1000(1.05)^{-16} with a_16 for a call at time 16). Call premium = call price − face value kept as on the Call Premium page. Example recomputed in python: a_3|6% = 2.673012, 80a = 213.840956, v^3 = 0.839619, 1050v^3 = 881.600247, P = 1095.441203 → 213.84 + 881.60 = 1095.44 as printed. Links and figure resolve; validate_links.py --studiable clean. Example is the vault's own, so medium.
+- sources_checked: Finan, A Basic Course in the Theory of Interest and Derivatives Markets, p.420, sha256:41664968f8b6dcf60e4af92ed71bad63eda94dded40bc63e619fd3c2755efa93 — https://departments.central.edu/actsci/files/2011/08/Exam_FM_Study_GuideFinan.pdf; SOA Exam FM Sample Solutions (rev. Aug 2026), Q 40, solutions PDF p.12, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf; SOA Exam FM Sample Solutions (rev. Aug 2026), Q 136, solutions PDF p.37, sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf

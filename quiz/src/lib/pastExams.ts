@@ -207,12 +207,13 @@ export const PRACTICE_EXAM_QUESTIONS: Readonly<Record<string, number>> = {
   'Exam 5': 25,
   // No format guide gives these, so they are the released papers' own size:
   // the thirteen Fall 2013–Fall 2019 Exam 6C papers held 394 questions, the
-  // eight 2012–2019 Exam 7 papers 200 and the eight Exam 8 papers 173
-  // (`cas6c-*` / `cas7-*` / `cas8-*` across the bank, wherever the syllabus has
-  // since filed them). Exam 9 has no released paper of its own in the bank.
+  // eight 2012–2019 Exam 7 papers 200, the eight Exam 8 papers 173 and the
+  // seven Spring 2013–2019 Exam 9 papers 172 (`cas6c-*` / `cas7-*` / `cas8-*` /
+  // `cas9-*` across the bank, wherever the syllabus has since filed them).
   'Exam 6C': 30,
   'Exam 7': 25,
   'Exam 8': 22,
+  'Exam 9': 25,
 }
 
 /** A practice exam's length on `exam` (a bank label), 30 where no paper says. */

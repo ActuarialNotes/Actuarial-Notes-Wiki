@@ -967,9 +967,11 @@ def strip_solution_header(text: str) -> tuple[str, str | None]:
 # sees, so the whole report segmented to nothing. Exam 8 Fall 2015 heads one
 # question `Question 21` in title case; that spelling only counts with its
 # `Total Point Value` right behind it, since the pre-2014 reports open every
-# question `Question 1:` and must still read as the legacy layout.
+# question `Question 1:` and must still read as the legacy layout. The sitting
+# prefix is not typed to one case either: Exam 9 Spring 2017 heads Q20 alone
+# `Spring 2017 EXAM 9, QUESTION 20`, and the question went missing.
 CAS_QUESTION_RE = re.compile(
-    r"(?m)^[ \t]*(?:(?:SPRING|FALL)[ \t]+\d{4}[ \t]+EXAM[ \t]+[\w-]+[ \t]*,?[ \t]*)?"
+    r"(?m)^[ \t]*(?:(?i:SPRING|FALL)[ \t]+\d{4}[ \t]+EXAM[ \t]+[\w-]+[ \t]*,?[ \t]*)?"
     r"(?:QUESTION|Question(?=[ \t]*[:#]?[ \t]*\d{1,3}[ \t]*:?\s*(?i:t?otal\s+point\s+value)))"
     r"[ \t]*[:#]?[ \t]*(\d{1,3})\b"
 )

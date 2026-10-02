@@ -220,6 +220,18 @@ before touching that area**:
   are not the account's; the lobby pairs on the exam alone, since a rating would have to be
   stored), and only click-markable multiple choice is raced. Read before touching anything
   named `battle*` or `Matchmaking`.
+- `docs/actuaria-online.md` — **Actuaria Online**, the game layer over Study Mode (behind
+  `ACTUARIA_ENABLED`, **on for approved accounts only** — `ACTUARIA_APPROVED_EMAILS` in
+  `lib/actuaria/access.ts` is who may enter, and the database holds cohort membership to the
+  same list): each exam a *sector* of a star system, each concept a *landmark*,
+  Credibility = the mastery ladder and the readiness score, Coverage = the streak, a duel = a
+  Quiz Battle. It is the build spec, phase by phase, and its §2 ground rules are the part to
+  keep — one mastery ladder, one readiness number, one currency/streak/XP, **one battle engine**
+  (extend `battleReducer`, never fork it), exam hues from `examAccentStyle`, player colours only
+  inside a battle, and the game never gates study content. In-world words come from
+  `lib/actuaria/lexicon.ts`; the look is style guide §2.6 (`.actuaria dark` scope, the signal
+  teal as chrome only, Oxanium for display labels). Read before touching anything under
+  `actuaria/` or `Actuaria`.
 - `docs/cowork.md` — **Cowork**, the second product: the mode switch (`lib/appMode.ts`), the
   Sources → Library → Deliverable → Export loop, the three deliverable types and their five
   facets, and the two rules that hold the whole thing up — *nothing is invented* (exports
@@ -438,7 +450,10 @@ Other important `lib/` modules:
   mounted once in `App`, is the **Return to quiz** pill on every other page — position,
   timer when timed — which opens a choice of **Return** or **Leave** (`leaveQuiz`, the same
   discard the quiz page's Quit does). It is still chrome in a page move (`paper-resume`) and
-  rides above `--action-bar-height` / `--concept-split-height`. One trap, commented in
+  rides above `--action-bar-height` / `--concept-split-height`, in the **resume dock**
+  (`components/ResumeDock.tsx`) it shares with Quiz Battle's **Return to lobby** pill — a
+  ready player's place in the battle queue outlives the lobby screen the same way
+  (`lib/battleQueue.ts`, `stores/battleQueueStore.ts`, `e2e/battle.spec.ts`). One trap, commented in
   `Quiz.tsx`: after Quit resets the store the page is still mounted until the (deferred)
   route change lands, so the start effect is guarded or it would draw a phantom new quiz.
   Pure and tested; the flow is `e2e/quiz-resume.spec.ts`.
@@ -878,7 +893,7 @@ Other important `lib/` modules:
   `useBattleMusic` in `hooks/useBattle.ts`, with the intensity from `battleMusicIntensity` in
   `battleDisplay.ts`. The battle's cues are `BATTLE_RECIPES` in `soundConfig.ts`. All pure
   modules are tested.
-- `featureFlags.ts` — build-time feature flags (`COWORK_ENABLED`, `RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
+- `featureFlags.ts` — build-time feature flags (`ACTUARIA_ENABLED` — on, for the approved accounts in `lib/actuaria/access.ts`; `ACTUARIA_OPEN_TO_ALL`, which the e2e build sets with `VITE_ACTUARIA_PREVIEW=on`, opens it to everyone —, `COWORK_ENABLED`, `RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
   `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`,
   `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `FACT_CHECK_UI_ENABLED`, `TOUR_ENABLED`). `TOUR_ENABLED` is
   **off**: the guided onboarding tour (`components/OnboardingTour.tsx` +
@@ -1125,6 +1140,14 @@ via `supabase secrets set`, never as `VITE_*`.
 - `supabase/functions/` — Deno edge functions: Stripe checkout/portal/webhook/sync,
   account deletion, beta code redemption, Google Cloud TTS proxy, `research-ingest-url`,
   and `daily-plan-email` (the pg_cron-driven study-plan email sender).
+- `20260929_actuaria.sql` / `20260930_actuaria_crews.sql` / `20261001_actuaria_pro.sql` /
+  `20261002_actuaria_approved.sql` — **Actuaria Online** (approved accounts only): a player's own settings row, then cohorts (`actuaria_crews*`), the risk pool (applied inside
+  `award_gems`), guides, nudges, Cohort Clash challenges and the weekly raid — leagues' privacy
+  model, RPC-only, with `actuaria_raid_hit` callable by the service role alone (`quiz/api/raid.js`),
+  and starting or joining a cohort held to the approved emails (`actuaria_is_approved`, the
+  same list as `ACTUARIA_APPROVED_EMAILS` — `access.test.ts` holds them equal).
+  `supabase/tests/run.sh` runs `supabase/tests/actuaria_crews.sql` against a throwaway local
+  Postgres; CI doesn't, so run it after touching that migration. See `docs/actuaria-online.md`.
 - `content_reports` (`20260823_content_reports.sql`) — the reader-report inbox behind VERIFY's
   "Report an issue". Insert/select own rows only; **no** UPDATE or DELETE policy, so only the
   service-role `scripts/sync_reports.py` can mark a report synced.
@@ -1141,8 +1164,10 @@ Both the root site and `quiz/` have their own `vercel.json` (root handles `/api/
 headers for the serverless functions — `chat.js` and the flag-gated `research*.js`; `quiz/`
 rewrites all routes to `index.html` for the SPA). Deploys to Vercel; Supabase edge functions
 deploy via the GitHub Action above. Functions that must share the app's origin live in
-`quiz/api/` (`exam-pdf.js`, `amazon-price.js`, and `mcp.js` — the AI connector, which reads
-the knowledge-base export from its own deployment); `quiz/api/_mcp/` is `_`-prefixed so Vercel doesn't route it.
+`quiz/api/` (`exam-pdf.js`, `amazon-price.js`, `mcp.js` — the AI connector, which reads
+the knowledge-base export from its own deployment — and `raid.js`, Actuaria's raid marking, which
+reads the same export and needs `SUPABASE_SERVICE_ROLE_KEY`); `quiz/api/_mcp/` and `quiz/api/_raid/`
+are `_`-prefixed so Vercel doesn't route them.
 
 ## Cowork (the second product)
 

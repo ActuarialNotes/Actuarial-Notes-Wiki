@@ -58,6 +58,32 @@ A **streak** is right answers in a row by one player: a round they don't get
 right (a miss, a pass, the other player taking it) ends it. Three in a row puts
 the flame on the scoreboard. A **draw** is a draw — equal scores name no winner.
 
+### Abilities (a room setting, off by default)
+
+A room hosted with **Abilities** on lets each player bring up to three
+once-per-battle power-ups (`docs/actuaria-online.md` §7.2). They are offered only
+where a player has a loadout — Monte Carlo Station's *Private channel* — and never
+in the lobby (`matchSettings` builds no such room) or on one screen. The rules are
+the engine's, in `lib/battle.ts`, driven by one event, `power`, which returns the
+state by identity when the setting is off, the ability isn't in the seat's
+loadout or is spent, the seat is past arming (arming runs from the count-in until
+it locks in — or, under buzzer rules, until it answers or is locked out), or it is
+Double Down on the final question.
+
+| Ability | Effect |
+|---|---|
+| **Reinsurance** | Halves the seat's next claim (−50 → −25), whenever it comes |
+| **Bayesian Update** | Strikes one wrong option, on this seat's screen only — `redactFor` hides which from the other |
+| **Double Down** | This round ×2, applied after every other part and never on top of the final's ×2; a miss is a claim of −50 even under simultaneous rules |
+| **Time Value** | Speed scored as if answered 30 s sooner, never above +50 |
+| **Immunization** | A miss this round keeps the streak |
+
+What an ability adds or refunds is the breakdown's own `ability` line, so the
+round's chips and the results can show it. The guest declares its loadout in its
+join message; the host checks only the ids and the count — unlocks are read from
+each player's own mastery and can't be verified across devices, so a friend room's
+trust stays social.
+
 ## Nothing is saved
 
 A battle writes no mastery, no XP, no streak day, no quest progress and no
@@ -125,6 +151,7 @@ other's, and the buzzer race is drawn from the whole exam as before.
 | The channel itself: Supabase Realtime broadcast (and presence, for the lobby), or BroadcastChannel | `quiz/src/lib/battleTransport.ts` |
 | The lobby's rules: entries, the queue, the pairing, the handshake messages — pure, tested | `quiz/src/lib/battleLobby.ts` |
 | One player's end of the lobby, and presence over a plain broadcast — framework-free, tested over an in-memory channel | `quiz/src/lib/battleMatchmaking.ts` |
+| The queue away from the lobby: its rules (pure, tested), the store holding the session, and the pill | `quiz/src/lib/battleQueue.ts`, `quiz/src/stores/battleQueueStore.ts`, `quiz/src/components/BattleQueueButton.tsx` |
 | The music, as notes — pure, tested | `quiz/src/lib/battleMusic.ts` |
 | The music, played on the app's audio graph | `quiz/src/lib/battleMusicPlayer.ts` |
 | Hooks: the local battle's clock, an online session, a lobby session, the music, `useNow` | `quiz/src/hooks/useBattle.ts` |
@@ -193,7 +220,12 @@ each count-in can name its topic; a pick sent for an earlier battle in the room
   room shows them — a broadcast has no receipt — and the host ignores a repeat.
   A pick is held to the exam's own topics, three at most (`cleanTopicPick`),
   whatever arrives.
-- **Versions.** Messages carry `PROTOCOL_VERSION`, and a guest refuses a room
+- **Abilities** travel as one more move (`{ kind: 'power', round, ability }`),
+  re-sent like an answer until the host's room shows it spent; the loadouts, what
+  each seat has spent and a pending Reinsurance ride in the room, capped and
+  parsed like the rest.
+- **Versions.** Messages carry `PROTOCOL_VERSION` (2 since the topic pick, 3 since
+  abilities), and a guest refuses a room
   whose questions its own bundle doesn't have (the two devices run different
   deploys): both are told to reload.
 
@@ -218,12 +250,32 @@ told it's full.
 ### Matchmaking: a random opponent
 
 **Random opponent** puts the player in a lobby — one more public channel,
-`quiz-battle:lobby` — with the exam they want to play, or *Any exam*. Everyone
-in it sees everyone else (name, avatar, exam, how long they've waited), and the
+`quiz-battle:lobby` — with the exam they want to play, or *Any exam*. Walking
+in doesn't queue anyone: the player sees who is waiting and chooses their exam,
+and joins the queue only by pressing **Ready** (and leaves it with **Cancel**).
+Everyone in the queue sees everyone else (name, avatar, exam, how long they've waited), and the
 first compatible player to arrive is the match. Nothing about it is stored
 either: the lobby is presence on a channel, and a matched pair go on to an
 ordinary room with a code nobody had to type.
 
+- **Ready is the queue.** A player who isn't ready watches the lobby like an
+  observer — nobody sees them, an offer to them is declined — and pressing
+  Ready takes a place at the back of the queue (`since` is the moment it was
+  pressed; `setReady` in `lib/battleMatchmaking.ts`). Cancel withdraws any offer
+  in flight and takes the entry down. A new name (a new entry) keeps the choice;
+  every fresh way into the lobby, *Find another opponent* included, starts not
+  ready.
+- **The queue outlives the page** (`lib/battleQueue.ts`,
+  `stores/battleQueueStore.ts`). The lobby session is held by an app-level
+  store, not the lobby screen: a player who leaves the lobby *not* ready leaves
+  the lobby with it, as before, but a ready one keeps their place. A **Return
+  to lobby** pill (`components/BattleQueueButton.tsx`, in the resume dock beside
+  the *Return to quiz* pill) follows them with how long they have waited and
+  offers **Return** (the same lobby, still ready — *Find an opponent* and the
+  battle page's own mount pick the held session back up) or **Leave**. A match
+  found while they are away is kept by the store and fetches them to the battle
+  page they queued from, which picks it up once the bank is loaded. Starting any
+  other battle — one screen, a room, a code — gives the place up.
 - **Nobody picks anybody.** Every device in the lobby computes the same pairing
   from the same list (`planMatches` in `lib/battleLobby.ts`): down the queue,
   oldest first, each player with the next compatible one behind them. Two
@@ -271,8 +323,9 @@ ordinary room with a code nobody had to type.
   (create a room, or join with a code); and the rules. An invite link,
   `/battle?join=CODE`, opens straight onto joining.
 - **The lobby** (`Matchmaking`): the player's own tile under a radar pulse in
-  their colour, what they're looking for and how long they've waited, the exam
-  pills (*Any exam* first), and who else is here — or the empty state. The name
+  their colour (only once they're ready), what they're looking for and how long
+  they've waited, the exam pills (*Any exam* first), the **Ready** button (Cancel
+  once pressed), and who else is here — or the empty state. The name
   they appear under is editable above it; the account's name is the default.
 - **Setup** (`BattleSetupForm`): the names (the account's own name and avatar
   for the first player), the exam, the length, the pace, the difficulty.
@@ -324,6 +377,7 @@ pinned by `soundConfig.test.ts`'s *battle cues*:
 | `buzz` | a buzz: a rising fourth over a low glide, the loudest press in the app |
 | `select` | an answer on the pad, same screen |
 | `lockIn` | your answer locked in, online — a latch, quieter than a right answer |
+| `power` | an ability armed — a rising latch, D up to G, softer than `lockIn` |
 | `opponentIn` | the other player locked in — two soft knocks, no pitch, so it can't be mistaken for a verdict |
 | `correct` | a right answer, climbing with a run — on one screen anyone's, online your own |
 | `steal` | a steal: a rising line that tops `correct`, because it's the best moment in a buzzer battle |
@@ -372,18 +426,59 @@ picks settle onto the table and each question card flips over as it lands. Each 
 that happened; under reduced motion each has a static end state, and no
 information is carried by movement alone.
 
+## Skins: Monte Carlo Station
+
+The same page is also **Monte Carlo Station**, Actuaria Online's way into a battle
+(`/actuaria/battle`, `docs/actuaria-online.md` §6.8): `pages/Battle.tsx` with
+`skin="actuaria"`. A skin changes chrome and words, never the game — the reducer,
+the scoring, the sessions, the lobby and its handshake, the cues, the music and
+*nothing is saved* are the same under both.
+
+- **The words and the chrome are data** (`lib/battleSkin.ts`, read through
+  `hooks/useBattleSkin.ts`): the ways in are *Open channel*, *Dogfight* and *Private
+  channel*, each carrying Quiz Battle's own name beneath it; the setup's exam picker
+  lists sectors, with an exam that has no raceable questions disabled and the
+  reason given rather than hidden; the question sits in a HUD frame; the logo is the
+  Actuaria mark; the way back leads to the star map. The components read the skin,
+  so they have no `if (actuaria)` branches of their own. Player colours are
+  untouched: sky and fuchsia are still the only colours a player's tile, buzzer, pad
+  or score wears.
+- **The two skins play each other.** A room's code is its channel's name, so a room
+  made at the station can be joined from `/battle` and the other way round; only the
+  invite link says which page to open it on (`skinJoinPath`). The lobby pairs players
+  on either page.
+- **Review my misses** (the *claims review*) is the one thing the Actuaria skin adds
+  to the results: the questions this device's own player got wrong or left
+  unanswered (`missedQuestionIds` — online, this device's seat; on one screen, the
+  first seat, the account holder's), opened as an ordinary quiz by id. The battle
+  still saves nothing; the review is a quiz, and saves as one.
+- **Abilities** are the station's too (`skin.abilities`): the host's setup offers
+  the room setting, and the page passes in the Hangar loadout, cut to what the
+  player's keystones hold when the battle starts (`battleLoadout` in
+  `lib/actuaria/abilities.ts`). The tray (`components/battle/AbilityTray.tsx`)
+  sits above the answer pad in `BattleActionBar`. A room made at the station with
+  abilities on can still be joined from `/battle`: that player simply brings none.
+- **Cohort Clash** is a private room like any other. `?host=1` opens the page on the
+  room's setup, and `onRoomOpen(code)` tells the page's owner the code once the room
+  exists — the station hands it to the challenged cohort member in-app
+  (`actuaria_challenge`). Only the code is stored, for half an hour; the battle, as
+  ever, saves nothing.
+
 ## Testing
 
 - `lib/battle.test.ts` — the rules: the clock's boundaries, buzzing, the answer
   window, steals and their minimum, simultaneous lock-ins, the grace period,
-  Ready, runs, the final-round doubling, the summary, redaction, the clock shift.
+  Ready, runs, the final-round doubling, the summary, redaction, the clock shift;
+  and every ability and every disallowed use of one, with the worked example of
+  `docs/actuaria-online.md` §7.2 (183 → 195 → 390) as a fixture.
 - `lib/battleTopics.test.ts` — the topics a question tests, the catalogue in
   the syllabus's order (and without one), a pick cleaned and toggled, the draw
   (turns, every pick before any twice, a spent topic handing on, the whole exam
   as the last resort, never a repeat, the lean toward a difficulty), the draw's
   clock, and a pick hidden until the draw.
 - `lib/battleRoom.test.ts` — codes, and that every malformed message is dropped
-  rather than thrown on — a draft and a topics action included.
+  rather than thrown on — a draft, a topics action, and abilities' moves and
+  fields included, and the old protocol refused.
 - `lib/battleSession.test.ts` — a host and a guest over an in-memory channel with
   a JSON round trip: joining, a full room, a code nobody hosts, a version
   mismatch, redaction on the wire, latency compensation, a lost answer resent,
@@ -407,13 +502,18 @@ information is carried by movement alone.
   sustained above 1 kHz, the form, and each intensity busier than the last.
 - `lib/soundConfig.test.ts`, *the battle cues* — round and short, the moments
   louder than what sits under them, no cue for a miss.
+- `lib/battleSkin.test.ts` — the two skins' words, and that each invites a friend to
+  its own page.
 - `e2e/battle.spec.ts` — a same-screen battle played to the end (buzz, miss,
   steal on the pad, results, rematch), an online battle between two pages
   over BroadcastChannel (invite link, lobby, a topic each, the draw on both
   screens, hidden lock-ins, reveals on both screens, Ready, results, a rematch
   asked for and back to the pick), the empty lobby said so on the way in and
   inside it, and two strangers matched from the lobby, through the pick, into a
-  three-question battle and sent back to it with *Find another opponent*. It runs with
+  three-question battle and sent back to it with *Find another opponent*; a battle
+  across the two skins — hosted at Monte Carlo Station, joined from Quiz Battle —
+  with the claims review on the station only and nothing saved on either, and the
+  lobby pairing a player on each page; and a private room with abilities on. It runs with
   the app muted: a headless browser with no audio device can trap in its audio
   output thread under a battle's run of cues, and nothing it asserts is about
   sound.
@@ -422,7 +522,7 @@ information is carried by movement alone.
 
 Ideas deliberately left out so far: more than two players (the engine's seats
 are a pair throughout); a battle on the written CAS papers (it would need
-self-grading both players can trust); sudden death on a draw; power-ups (a
-"double down" armed before answering); a battle history; and a rating for
+self-grading both players can trust); sudden death on a draw; a battle history;
+and a rating for
 matchmaking to pair on — the lobby pairs on the exam alone, because a rating
 would have to be stored, and nothing about a battle is.

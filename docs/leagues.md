@@ -171,6 +171,10 @@ league failure must not break quiz completion.
   peer user ids) or per-cohort channels; refetch on `LEAGUE_EVENT` / tab focus
   is plenty for a weekly board.
 - **Study-group leaderboards** (the "and/or" half of P4.1) — private invite-code
-  groups could reuse the member/board/RPC shape later.
+  groups could reuse the member/board/RPC shape later. Actuaria's cohorts
+  (`supabase/migrations/20260930_actuaria_crews.sql`, approved accounts only)
+  are exactly that shape — snapshot on join, RPC-only reads, delete on leave, a
+  lazy Monday-UTC rollover — and are the model to follow if one is built for
+  Study Mode.
 - **Multi-week catch-up granularity** — see Lazy rollover.
 - **League history** — nothing is stored beyond each user's last result.

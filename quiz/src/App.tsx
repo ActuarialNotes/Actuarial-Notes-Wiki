@@ -25,13 +25,15 @@ import ImageFocus from '@/components/ImageFocus'
 import PdfReaderHost from '@/components/PdfReaderHost'
 import FlashcardSync from '@/components/FlashcardSync'
 import Toast from '@/components/Toast'
-import { QuizResumeButton } from '@/components/QuizResumeButton'
+import { ResumeDock } from '@/components/ResumeDock'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ExamProgressProvider } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
 import { useSubscription } from '@/hooks/useSubscription'
 import { canEnterMode, modeDestination, type AppMode } from '@/lib/appMode'
-import { COWORK_ENABLED, RESEARCH_TAB_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
+import { actuariaDestination } from '@/lib/actuaria/access'
+import { useActuariaAccess } from '@/hooks/useActuariaAccess'
+import { ACTUARIA_ENABLED, COWORK_ENABLED, RESEARCH_TAB_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
 import { pageHostsNavButton } from '@/lib/mobileNavHost'
 import { captureError } from '@/lib/errorMonitoring'
 import { lazyRoute } from '@/lib/lazyRoute'
@@ -51,6 +53,9 @@ const { Component: Project, preload: loadProject } = lazyRoute(() => import('@/p
 // Quiz Battle (docs/quiz-battle.md) — a game two players open on purpose, so
 // its engine, its sessions and its screens wait for the click.
 const { Component: Battle, preload: loadBattle } = lazyRoute(() => import('@/pages/Battle'))
+// Actuaria Online (docs/actuaria-online.md) — the game layer, one lazy chunk,
+// so its display face, its star map and its screens never reach Study Mode.
+const { Component: Actuaria, preload: loadActuaria } = lazyRoute(() => import('@/pages/Actuaria'))
 
 const { Component: WikiLayout, preload: loadWikiLayout } = lazyRoute(() => import('@/components/wiki/WikiLayout'))
 const { Component: WikiHome, preload: loadWikiHome } = lazyRoute(() => import('@/pages/wiki/WikiHome'))
@@ -71,6 +76,7 @@ function preloadRoute(path: string): Promise<unknown> | null {
   if (route === '/cowork' || route.startsWith('/cowork/')) return loadCowork()
   if (route === '/project' || route.startsWith('/project/')) return loadProject()
   if (route === '/battle') return loadBattle()
+  if (ACTUARIA_ENABLED && (route === '/actuaria' || route.startsWith('/actuaria/'))) return loadActuaria()
   if (route === '/wiki') return Promise.all([loadWikiLayout(), loadWikiHome()])
   if (route.startsWith('/wiki/exam/')) return Promise.all([loadWikiLayout(), loadWikiExam()])
   if (route.startsWith('/wiki/concept/')) return Promise.all([loadWikiLayout(), loadWikiConcept()])
@@ -261,6 +267,24 @@ function BattleRoute() {
   )
 }
 
+function ActuariaRoute() {
+  const location = useLocation()
+  const { allowed, viewer } = useActuariaAccess()
+  if (!ACTUARIA_ENABLED) return <Navigate to="/wiki" replace />
+  // Approved accounts only (lib/actuaria/access.ts): send anyone else to sign
+  // in, or — signed in and not approved — back to the dashboard.
+  if (!allowed) {
+    return <Navigate to={actuariaDestination(viewer)} replace state={{ from: location.pathname + location.search }} />
+  }
+  return (
+    <ErrorBoundary>
+      <Suspense fallback={<WikiFallback />}>
+        <Actuaria />
+      </Suspense>
+    </ErrorBoundary>
+  )
+}
+
 function ProjectRoute() {
   return (
     <ErrorBoundary>
@@ -292,6 +316,10 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="/auth/callback" element={<AuthCallback />} />
                 <Route path="/quiz" element={<Quiz />} />
                 <Route path="/battle" element={<BattleRoute />} />
+                {/* Actuaria Online: the title, the star map, the sectors, the
+                    Daily Transmission, the Hangar and Monte Carlo Station —
+                    its own routes, inside its own scope (pages/Actuaria). */}
+                <Route path="/actuaria/*" element={<ActuariaRoute />} />
                 <Route path="/review" element={<Review />} />
                 <Route path="/dashboard" element={<ErrorBoundary><Dashboard /></ErrorBoundary>} />
                 <Route path="/search" element={<Search />} />
@@ -356,8 +384,8 @@ export default function App({ initialSession }: { initialSession: Session | null
             {/* The app's one PDF reader. Root-level so a document opened from a
                 dialog, a sheet or a card clears it and outlives it. */}
             <PdfReaderHost />
-            {/* A quiz in progress, from anywhere else in the app. */}
-            <QuizResumeButton />
+            {/* A quiz in progress, or a place in the battle queue, from anywhere else in the app. */}
+            <ResumeDock />
             <Toast />
           </div>
         </ExamProgressProvider>

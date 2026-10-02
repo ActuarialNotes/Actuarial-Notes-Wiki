@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Crown, Flame } from 'lucide-react'
 import { PlayerTile } from '@/components/battle/PlayerTile'
 import { useNow } from '@/hooks/useBattle'
+import { useBattleSkin } from '@/hooks/useBattleSkin'
 import {
   ANSWER_WINDOW_MS,
   ON_FIRE_STREAK,
@@ -297,8 +298,10 @@ export function BattleScoreboard({
   /** Online, a question whose time is up here and whose reveal is on its way. */
   closing?: boolean
 }) {
+  // Under the app header, or under Actuaria's HUD row — the skin knows which.
+  const { scoreboardTop } = useBattleSkin()
   return (
-    <div className="sticky top-14 z-20 -mx-4 bg-background/95 px-4 py-3 backdrop-blur-sm sm:-mx-6 sm:px-6 lg:top-0">
+    <div className={cn('sticky z-20 -mx-4 bg-background/95 px-4 py-3 backdrop-blur-sm sm:-mx-6 sm:px-6', scoreboardTop)}>
       <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 sm:gap-4">
         <PlayerPanel battle={battle} seat={0} isMe={me === 0} status={status[0]} reactions={reactions.filter(r => r.seat === 0)} />
         <RoundClock battle={battle} closing={closing} />

@@ -1,23 +1,22 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState, useSyncExternalStore } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Loader2, UserPlus, Users, WifiOff } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { PlayerTile } from '@/components/battle/PlayerTile'
 import { MusicToggle } from '@/components/battle/BattleTopRow'
-import { useBattleMusic, useLobbySession, useNow } from '@/hooks/useBattle'
-import { playSound } from '@/lib/soundEngine'
+import { useBattleMusic, useNow } from '@/hooks/useBattle'
 import { ANY_EXAM, MATCH_ROUNDS, compatible, type LobbyEntry } from '@/lib/battleLobby'
-import { MatchmakingSession, type MatchFound } from '@/lib/battleMatchmaking'
+import { MatchmakingSession, type LobbySnapshot } from '@/lib/battleMatchmaking'
+import { lobbyOwnerKey, waitedClock } from '@/lib/battleQueue'
 import { battleExamName, playerAccentStyle } from '@/lib/battleDisplay'
 import { tabClientId } from '@/lib/battleSession'
 import { lobbyTransport } from '@/lib/battleTransport'
 import type { BattlePlayer } from '@/lib/battle'
-import { formatClock } from '@/lib/quizTiming'
+import { useBattleQueueStore } from '@/stores/battleQueueStore'
 import { cn } from '@/lib/utils'
 
-/** "0:42" since a moment, on this device's clock. */
-function waited(since: number, now: number): string {
-  return formatClock(Math.max(0, Math.floor((now - since) / 1000)))
-}
+const noSubscribe = () => () => {}
+const noSnapshot = () => null
 
 function ExamChip({ exam }: { exam: string }) {
   return (
@@ -45,7 +44,7 @@ function LobbyRow({
       <PlayerTile seat={1} player={entry} size={30} />
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-medium">{entry.name}</p>
-        <p className="text-xs tabular-nums text-muted-foreground">waiting {waited(entry.since, now)}</p>
+        <p className="text-xs tabular-nums text-muted-foreground">waiting {waitedClock(entry.since, now)}</p>
       </div>
       <ExamChip exam={entry.exam} />
       {!fits && (
@@ -58,17 +57,23 @@ function LobbyRow({
 }
 
 /**
- * The matchmaking lobby (lib/battleMatchmaking.ts): this player joins it on
- * mount, sees who else is waiting — or that nobody is — and is paired with the
- * first compatible player to arrive. The exam can be changed while waiting,
- * without losing the place in the queue.
+ * The matchmaking lobby (lib/battleMatchmaking.ts): this player walks in on
+ * mount and sees who else is waiting — or that nobody is — but is only in the
+ * queue once they press **Ready**; then they are paired with the first
+ * compatible player to arrive, until they press Cancel. The exam can be
+ * changed either way, without losing the place in the queue.
+ *
+ * The session is the queue store's, not this screen's
+ * (stores/battleQueueStore.ts): a ready player can leave the page and keep
+ * their place, and walking back in — from the pill, or from Find an opponent —
+ * picks the same session up. A match, here or elsewhere, is found by the store
+ * and picked up by the battle page.
  */
 export function Matchmaking({
   player,
   exam,
   exams,
   onExamChange,
-  onMatched,
   onPlayFriend,
 }: {
   player: BattlePlayer
@@ -76,32 +81,39 @@ export function Matchmaking({
   exam: string
   exams: readonly { exam: string; count: number }[]
   onExamChange: (exam: string) => void
-  onMatched: (match: MatchFound) => void
   /** Nobody here: make a room for a friend instead. */
   onPlayFriend: () => void
 }) {
-  const [id] = useState(() => tabClientId(null))
+  const { pathname } = useLocation()
   const examIds = exams.map(e => e.exam)
-  const { session, snapshot } = useLobbySession(
-    () => new MatchmakingSession({
-      transport: lobbyTransport(id),
-      exams: examIds,
-      player: { id, name: player.name, ...(player.avatarUrl ? { avatarUrl: player.avatarUrl } : {}) },
-      exam,
-    }),
-    id,
+  const ownerKey = lobbyOwnerKey(player)
+  const [session, setSession] = useState<MatchmakingSession | null>(null)
+  useEffect(() => {
+    const { openLobby, releaseLobby } = useBattleQueueStore.getState()
+    const s = openLobby(ownerKey, pathname, ready => {
+      const id = tabClientId(null)
+      return new MatchmakingSession({
+        transport: lobbyTransport(id),
+        exams: examIds,
+        player: { id, name: player.name, ...(player.avatarUrl ? { avatarUrl: player.avatarUrl } : {}) },
+        exam,
+        ready,
+      })
+    })
+    setSession(s)
+    return () => {
+      releaseLobby(s)
+      setSession(null)
+    }
+    // A new name or avatar is a new entry; everything else is read once.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ownerKey])
+  const snapshot: LobbySnapshot | null = useSyncExternalStore(
+    session ? session.subscribe : noSubscribe,
+    session ? session.getSnapshot : noSnapshot,
   )
   useBattleMusic(0)
   const now = useNow(true, 1000)
-
-  // Matched: the chime, and on to the room.
-  const handled = useRef(false)
-  useEffect(() => {
-    if (!snapshot?.match || handled.current) return
-    handled.current = true
-    playSound('matchFound')
-    onMatched(snapshot.match)
-  }, [snapshot?.match, onMatched])
 
   function choose(next: string) {
     onExamChange(next)
@@ -113,25 +125,27 @@ export function Matchmaking({
   const connecting = !snapshot || snapshot.status === 'connecting'
   const trouble = snapshot?.connection === 'error'
   const current = me?.exam ?? exam
+  const ready = !!snapshot?.ready
+  const searching = ready && !connecting
 
   return (
     <div className="space-y-6" data-testid="battle-matchmaking">
       <div className="space-y-5 rounded-xl bg-card p-5">
         <div className="flex items-center gap-4">
           <span className="relative flex h-14 w-14 shrink-0 items-center justify-center" style={playerAccentStyle(0)} aria-hidden>
-            {!connecting && <span className="battle-radar absolute inset-0 rounded-full" />}
-            {!connecting && <span className="battle-radar battle-radar-late absolute inset-0 rounded-full" />}
+            {searching && <span className="battle-radar absolute inset-0 rounded-full" />}
+            {searching && <span className="battle-radar battle-radar-late absolute inset-0 rounded-full" />}
             <PlayerTile seat={0} player={player} size={44} />
           </span>
           <div className="min-w-0 flex-1">
             <p className="font-semibold" aria-live="polite">
-              {connecting ? 'Connecting to the lobby…' : 'Looking for an opponent…'}
+              {connecting ? 'Connecting to the lobby…' : ready ? 'Looking for an opponent…' : 'Ready when you are'}
             </p>
             <p className="text-sm text-muted-foreground">
               {current === ANY_EXAM ? 'Any exam' : battleExamName(current)} · {MATCH_ROUNDS} questions · 2:00 each
             </p>
-            {me && (
-              <p className="text-xs tabular-nums text-muted-foreground">Waiting {waited(me.since, now)}</p>
+            {me && searching && (
+              <p className="text-xs tabular-nums text-muted-foreground">Waiting {waitedClock(me.since, now)}</p>
             )}
           </div>
           <MusicToggle />
@@ -160,6 +174,18 @@ export function Matchmaking({
           })}
         </div>
 
+        <Button
+          size="lg"
+          variant={ready ? 'outline' : 'default'}
+          className="h-12 w-full rounded-xl"
+          onClick={() => session?.setReady(!ready)}
+          disabled={connecting}
+          aria-pressed={ready}
+          data-testid="battle-lobby-ready"
+        >
+          {ready ? 'Cancel' : 'Ready'}
+        </Button>
+
         {trouble && (
           <p className="flex items-center gap-2 text-sm text-amber-600 dark:text-amber-400">
             <WifiOff className="h-4 w-4" aria-hidden /> Trouble reaching the lobby — retrying…
@@ -182,7 +208,9 @@ export function Matchmaking({
             <div className="space-y-1">
               <p className="font-medium">No one else is in the lobby right now.</p>
               <p className="text-sm text-muted-foreground">
-                Stay on this page and you’ll be matched the moment someone joins — or battle a friend instead.
+                {ready
+                  ? 'You’ll be matched the moment someone joins, even if you leave this page — or battle a friend instead.'
+                  : 'Press Ready and you’ll be matched the moment someone joins — or battle a friend instead.'}
               </p>
             </div>
             <Button variant="outline" onClick={onPlayFriend} className="gap-2">

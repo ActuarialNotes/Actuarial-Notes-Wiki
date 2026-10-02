@@ -32,6 +32,11 @@ export interface BattleSetup {
   names: [string, string]
   /** What this player asks the matchmaking lobby for: an exam, or `ANY_EXAM`. */
   lobbyExam: string
+  /**
+   * A private room's *Abilities* setting (docs/actuaria-online.md §7.2) — off
+   * unless its host turns it on, and only ever offered under the Actuaria skin.
+   */
+  abilities: boolean
 }
 
 export const DEFAULT_SETUP: BattleSetup = {
@@ -41,6 +46,7 @@ export const DEFAULT_SETUP: BattleSetup = {
   difficulty: 'mixed',
   names: ['', ''],
   lobbyExam: ANY_EXAM,
+  abilities: false,
 }
 
 export const SETUP_STORAGE_KEY = 'actuarial_battle_setup_v1'
@@ -60,6 +66,7 @@ export function setupFromStored(raw: string | null): BattleSetup {
       difficulty: o.difficulty === 'easy' || o.difficulty === 'mixed' || o.difficulty === 'hard' ? o.difficulty : DEFAULT_SETUP.difficulty,
       names: [name(names[0]), name(names[1])],
       lobbyExam: typeof o.lobbyExam === 'string' && o.lobbyExam.length <= 80 ? o.lobbyExam : DEFAULT_SETUP.lobbyExam,
+      abilities: o.abilities === true,
     }
   } catch {
     return DEFAULT_SETUP
@@ -92,6 +99,16 @@ export function configFromSetup(setup: BattleSetup, rules: BattleRules): BattleC
     rounds: setup.rounds,
     roundSeconds: roundSecondsFor(setup.time, setup.exam),
   }
+}
+
+/**
+ * A private room's configuration: the setup under simultaneous rules, with
+ * abilities on only where they are offered at all and the host turned them on.
+ * The lobby never comes through here — two strangers keep the plain rules
+ * (`matchSettings`).
+ */
+export function roomConfig(setup: BattleSetup, abilitiesOffered: boolean): BattleConfig {
+  return { ...configFromSetup(setup, 'simultaneous'), abilities: abilitiesOffered && setup.abilities }
 }
 
 /**

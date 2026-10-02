@@ -15,6 +15,11 @@
 // dropped and that player is passed over for a while, an accept that never gets
 // its go lapses, and a player never holds more than one offer at a time.
 //
+// A player is in the queue only while **ready** — the lobby's Ready button.
+// Not ready, they watch the lobby as an observer would (and can choose their
+// exam), but nobody sees them and nobody is matched with them; getting ready
+// takes a place at the back of the queue.
+//
 // Without a player it is an **observer**: it counts the lobby (the Battle page's
 // "2 people waiting") and never joins it.
 //
@@ -183,6 +188,8 @@ export interface LobbySnapshot {
   connection: ConnectionStatus
   /** This player's entry — null for an observer. */
   me: LobbyEntry | null
+  /** Whether that entry is in the queue: shown to the lobby, and matched. */
+  ready: boolean
   /** Everyone else waiting, oldest first. */
   others: LobbyEntry[]
   match: MatchFound | null
@@ -196,6 +203,8 @@ export interface MatchmakingOptions {
   player?: LobbyPlayer
   /** The exam they want, or `ANY_EXAM`. */
   exam?: string
+  /** Whether they start in the queue (the default) or wait to be `setReady`. */
+  ready?: boolean
   clock?: Clock
   random?: () => number
 }
@@ -231,7 +240,8 @@ export class MatchmakingSession {
           v: PROTOCOL_VERSION,
         }
       : null
-    this.snapshot = { status: 'connecting', connection: 'connecting', me, others: [], match: null }
+    const ready = !!me && (options.ready ?? true)
+    this.snapshot = { status: 'connecting', connection: 'connecting', me, ready, others: [], match: null }
     this.transport.connect({
       presence: entries => { if (!this.closed) this.onPresence(entries) },
       message: raw => { if (!this.closed) this.onMessage(raw) },
@@ -261,7 +271,34 @@ export class MatchmakingSession {
     this.set({ me: next })
     // An offer made on the old exam no longer stands.
     this.outgoing = null
-    this.transport.track(next)
+    if (this.snapshot.ready) this.transport.track(next)
+  }
+
+  /**
+   * Join the queue, or step out of it. Joining takes a place at the back —
+   * `since` is now; stepping out withdraws any offer in flight and hides the
+   * entry from the lobby.
+   */
+  setReady(ready: boolean): void {
+    const me = this.snapshot.me
+    if (!me || this.snapshot.ready === ready) return
+    if (this.snapshot.status === 'matched' || this.snapshot.status === 'closed') return
+    if (ready) {
+      const next = { ...me, since: this.clock.now() }
+      this.set({ me: next, ready: true })
+      if (this.snapshot.status === 'searching') {
+        this.transport.track(next)
+        this.consider()
+      }
+      return
+    }
+    if (this.outgoing) this.reply('cancel', this.outgoing.to, this.outgoing.code)
+    if (this.incoming) this.reply('decline', this.incoming.from, this.incoming.code)
+    this.outgoing = null
+    this.incoming = null
+    this.waitingOn = null
+    this.set({ ready: false })
+    try { this.transport.untrack() } catch { /* ignore */ }
   }
 
   /** Leave the lobby. Idempotent. */
@@ -279,7 +316,7 @@ export class MatchmakingSession {
     this.set(joining ? { connection: status, status: 'searching' } : { connection: status })
     // Searching before being seen: an offer can arrive the instant the entry
     // is out, and a player still connecting would turn it down.
-    if (joining && this.snapshot.me) this.transport.track(this.snapshot.me)
+    if (joining && this.snapshot.me && this.snapshot.ready) this.transport.track(this.snapshot.me)
   }
 
   private onPresence(raw: unknown[]) {
@@ -292,7 +329,7 @@ export class MatchmakingSession {
   /** Look at the lobby, and make an offer if the plan says it's this player's to make. */
   private consider() {
     const me = this.snapshot.me
-    if (!me || this.snapshot.status !== 'searching') return
+    if (!me || !this.snapshot.ready || this.snapshot.status !== 'searching') return
     const now = this.clock.now()
     for (const [id, until] of this.snubbed) if (until <= now) this.snubbed.delete(id)
 
@@ -345,7 +382,7 @@ export class MatchmakingSession {
 
     switch (message.t) {
       case 'offer': {
-        if (this.snapshot.status !== 'searching' || this.incoming) {
+        if (this.snapshot.status !== 'searching' || !this.snapshot.ready || this.incoming) {
           this.reply('decline', message.from, message.code)
           return
         }
@@ -373,7 +410,7 @@ export class MatchmakingSession {
       }
       case 'accept': {
         if (!this.outgoing || this.outgoing.to !== message.from || this.outgoing.code !== message.code
-          || this.snapshot.status !== 'searching') {
+          || this.snapshot.status !== 'searching' || !this.snapshot.ready) {
           this.reply('cancel', message.from, message.code)
           return
         }

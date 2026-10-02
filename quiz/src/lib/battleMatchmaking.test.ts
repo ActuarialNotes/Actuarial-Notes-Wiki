@@ -8,6 +8,7 @@ import {
   presenceOverBroadcast,
   type RawChannel,
 } from './battleMatchmaking'
+import { PROTOCOL_VERSION } from './battleRoom'
 import type { ConnectionStatus } from './battleSession'
 
 const EXAMS = ['Probability', 'Financial Mathematics', 'Exam MAS-I']
@@ -54,13 +55,14 @@ function seeded(seed: number): () => number {
 
 let seed = 1
 
-function join(hub: Hub, id: string, exam: string = ANY_EXAM, deaf = false) {
+function join(hub: Hub, id: string, exam: string = ANY_EXAM, deaf = false, ready = true) {
   const channel = hub.channel(deaf)
   const session = new MatchmakingSession({
     transport: presenceOverBroadcast(channel),
     exams: EXAMS,
     player: { id, name: id.toUpperCase() },
     exam,
+    ready,
     random: seeded(seed++),
   })
   return Object.assign(session, { channel })
@@ -125,6 +127,59 @@ describe('the lobby', () => {
     expect(ada.getSnapshot().me).toMatchObject({ exam: 'Exam MAS-I', since })
     ada.setExam('Exam 9')
     expect(ada.getSnapshot().me!.exam).toBe('Exam MAS-I')
+  })
+})
+
+describe('ready', () => {
+  it('keeps a player who isn’t ready out of the queue — unseen, and never matched', () => {
+    const hub = new Hub()
+    const ada = join(hub, 'ada', 'Probability')
+    const bo = join(hub, 'bo', 'Probability', false, false)
+    const watcher = new MatchmakingSession({ transport: presenceOverBroadcast(hub.channel()), exams: EXAMS })
+    vi.advanceTimersByTime(5000)
+    expect(bo.getSnapshot()).toMatchObject({ status: 'searching', ready: false, match: null })
+    expect(bo.getSnapshot().others.map(e => e.id)).toEqual(['ada'])
+    expect(ada.getSnapshot()).toMatchObject({ status: 'searching', others: [] })
+    expect(watcher.getSnapshot().others.map(e => e.id)).toEqual(['ada'])
+  })
+
+  it('matches a player once they are ready, at the back of the queue', () => {
+    const hub = new Hub()
+    const bo = join(hub, 'bo', 'Probability', false, false)
+    vi.advanceTimersByTime(1000)
+    const ada = join(hub, 'ada', 'Probability')
+    vi.advanceTimersByTime(1000)
+    bo.setReady(true)
+    expect(bo.getSnapshot().me!.since).toBeGreaterThan(ada.getSnapshot().me!.since)
+    vi.advanceTimersByTime(1000)
+    expect(ada.getSnapshot().match).toMatchObject({ role: 'host', opponent: { name: 'BO' } })
+    expect(bo.getSnapshot().match).toMatchObject({ role: 'guest', opponent: { name: 'ADA' } })
+  })
+
+  it('takes a player out of the queue when they stop being ready', () => {
+    const hub = new Hub()
+    const ada = join(hub, 'ada', 'Probability')
+    const bo = join(hub, 'bo', 'Exam MAS-I')
+    vi.advanceTimersByTime(1000)
+    expect(ada.getSnapshot().others.map(e => e.id)).toEqual(['bo'])
+    bo.setReady(false)
+    bo.setExam('Probability')
+    vi.advanceTimersByTime(5000)
+    expect(ada.getSnapshot()).toMatchObject({ status: 'searching', others: [] })
+    expect(bo.getSnapshot()).toMatchObject({ status: 'searching', ready: false, match: null })
+    expect(bo.getSnapshot().me!.exam).toBe('Probability')
+  })
+
+  it('declines an offer while not ready', () => {
+    const hub = new Hub()
+    const bo = join(hub, 'bo', 'Probability', false, false)
+    const heard: unknown[] = []
+    const ada = hub.channel()
+    ada.connect({ message: raw => heard.push(raw), status: () => {} })
+    vi.advanceTimersByTime(600)
+    ada.send({ lobby: 'msg', message: { t: 'offer', v: PROTOCOL_VERSION, from: 'ada', to: 'bo', code: 'ABCD', exam: 'Probability', name: 'ADA' } })
+    expect(heard).toContainEqual({ lobby: 'msg', message: expect.objectContaining({ t: 'decline', to: 'ada', code: 'ABCD' }) })
+    expect(bo.getSnapshot().match).toBeNull()
   })
 })
 

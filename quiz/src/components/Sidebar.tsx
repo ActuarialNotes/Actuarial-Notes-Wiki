@@ -15,6 +15,7 @@ import {
   LogOut,
   Microscope,
   Moon,
+  Orbit,
   Play,
   Settings2,
   ShoppingBag,
@@ -39,6 +40,8 @@ import { ProBadge } from '@/components/ProBadge'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { parseBanner, DESIGNATION_BANNERS } from '@/lib/banners'
 import { COWORK_ENABLED, RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
+import { useActuariaAccess } from '@/hooks/useActuariaAccess'
+import { StatusChip } from '@/components/actuaria/StatusChip'
 import { ModeSwitcher } from '@/components/ModeSwitcher'
 import { useCoworkLibrary } from '@/hooks/useCoworkLibrary'
 import { useCoworkDeliverables } from '@/hooks/useCoworkDeliverables'
@@ -308,10 +311,47 @@ function ProjectsNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate
   )
 }
 
+/**
+ * The **PLAY** group: Actuaria Online, under a label of its own below the study
+ * tabs (docs/actuaria-online.md §5). Actuaria is part of Study Mode — a way of
+ * studying — not a third product on the mode pill (D6). Its `live` chip is
+ * Actuaria's signal, so it carries the `.actuaria` class that defines it.
+ */
+function PlayNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: () => void }) {
+  return (
+    <>
+      <div role="separator" className="!my-3 border-t border-border" />
+      <p
+        className={cn(
+          'px-3 pb-1 font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground',
+          collapsed && 'lg:hidden',
+        )}
+      >
+        Play
+      </p>
+      <SidebarItem
+        to="/actuaria"
+        label="Actuaria"
+        icon={<Orbit className="h-5 w-5 lg:h-4 lg:w-4" />}
+        collapsed={collapsed}
+        onNavigate={onNavigate}
+        badge={
+          <span className="actuaria">
+            <StatusChip variant="live" size="sm">Live</StatusChip>
+          </span>
+        }
+      />
+    </>
+  )
+}
+
 export default function Sidebar() {
   const { user, signOut } = useAuth()
   const { balance: gemBalance } = useGems()
   const { isPro, isBetaTester } = useSubscription()
+  // Actuaria is open to approved accounts alone (lib/actuaria/access.ts): no
+  // one else sees its row.
+  const { allowed: showActuaria } = useActuariaAccess()
   const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
   const location = useLocation()
@@ -658,6 +698,7 @@ export default function Sidebar() {
               deadline, not a bank of questions — so it is a tab of its own
               (docs/pcpa-project.md). */}
           <ProjectsNav collapsed={collapsed} onNavigate={closeMobile} />
+          {showActuaria && <PlayNav collapsed={collapsed} onNavigate={closeMobile} />}
             </>
           )}
         </nav>

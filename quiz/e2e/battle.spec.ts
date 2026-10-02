@@ -202,6 +202,7 @@ test.describe('quiz battle', () => {
     await ada.getByTestId('battle-lobby-name').fill('Ada')
     await ada.getByTestId('battle-lobby-name').press('Enter')
     await ada.getByTestId('battle-lobby-exam-Probability').click()
+    await ada.getByTestId('battle-lobby-ready').click()
     await expect(ada.getByTestId('battle-lobby-empty')).toBeVisible()
 
     // One browser profile plays both: give Bo his own name and exam first.
@@ -213,6 +214,10 @@ test.describe('quiz battle', () => {
     })
     await bo.reload()
     await bo.getByTestId('battle-mode-lobby').click()
+    // Not ready: Bo sees Ada, but Ada can't see Bo until he presses Ready.
+    await expect(bo.getByTestId('battle-lobby-player')).toContainText('Ada')
+    await expect(ada.getByTestId('battle-lobby-count')).toHaveText('0')
+    await bo.getByTestId('battle-lobby-ready').click()
 
     // Different exams: they see each other, and nobody is matched…
     await expect(bo.getByTestId('battle-lobby-player')).toContainText('Ada')
@@ -250,5 +255,254 @@ test.describe('quiz battle', () => {
     // And back into the lobby for someone new.
     await bo.getByTestId('battle-find-another').click()
     await expect(bo.getByTestId('battle-matchmaking')).toBeVisible()
+  })
+
+  // A place in the queue outlives the lobby screen (lib/battleQueue.ts): a
+  // ready player can read elsewhere while they wait, a pill follows them with
+  // how long they've waited, and the match brings them back to the battle.
+  async function queueAsAda(ada: Page) {
+    await ada.goto('/battle')
+    await ada.getByTestId('battle-mode-lobby').click()
+    await ada.getByTestId('battle-lobby-name').fill('Ada')
+    await ada.getByTestId('battle-lobby-name').press('Enter')
+    await ada.getByTestId('battle-lobby-exam-Probability').click()
+    await ada.getByTestId('battle-lobby-ready').click()
+    await expect(ada.getByTestId('battle-lobby-empty')).toBeVisible()
+  }
+  const queuePill = (page: Page) => page.getByRole('button', { name: /Return to lobby/ })
+
+  test('keeps a player in the queue away from the lobby, and brings them back for the match', async ({ context }) => {
+    test.setTimeout(120_000)
+    const ada = await context.newPage()
+    const bo = await context.newPage()
+    await queueAsAda(ada)
+    await expect(queuePill(ada)).toHaveCount(0)
+
+    await ada.getByRole('link', { name: 'Study Guides' }).first().click()
+    await ada.waitForURL('**/wiki')
+    await expect(queuePill(ada)).toBeVisible()
+    await expect(queuePill(ada).getByRole('timer')).toHaveText(/^\d+:\d\d$/)
+
+    // Still in the lobby, as everyone else sees it.
+    await bo.goto('/battle')
+    await expect(bo.getByTestId('battle-lobby-status')).toHaveText('1 player waiting now')
+
+    // Return: the same lobby, still ready.
+    await queuePill(ada).click()
+    await ada.getByRole('dialog', { name: 'Looking for an opponent' }).getByRole('button', { name: 'Return' }).click()
+    await ada.waitForURL('**/battle')
+    await expect(ada.getByTestId('battle-lobby-ready')).toHaveText('Cancel')
+    await expect(queuePill(ada)).toHaveCount(0)
+
+    // Away again — and an opponent arriving fetches her back to play.
+    await ada.getByRole('link', { name: 'Study Guides' }).first().click()
+    await ada.waitForURL('**/wiki')
+    await expect(queuePill(ada)).toBeVisible()
+    await bo.evaluate(() => {
+      const setup = JSON.parse(localStorage.getItem('actuarial_battle_setup_v1') ?? '{}')
+      localStorage.setItem('actuarial_battle_setup_v1', JSON.stringify({ ...setup, names: ['Bo', ''], lobbyExam: 'Probability' }))
+    })
+    await bo.reload()
+    await bo.getByTestId('battle-mode-lobby').click()
+    await bo.getByTestId('battle-lobby-ready').click()
+    await ada.waitForURL('**/battle')
+    for (const page of [ada, bo]) {
+      await expect(page.getByTestId('battle-match-intro')).toBeVisible()
+    }
+    await expect(queuePill(ada)).toHaveCount(0)
+  })
+
+  test('Leave takes the player out of the queue from anywhere', async ({ context }) => {
+    const ada = await context.newPage()
+    const bo = await context.newPage()
+    await queueAsAda(ada)
+    await ada.getByRole('link', { name: 'Study Guides' }).first().click()
+    await ada.waitForURL('**/wiki')
+
+    await queuePill(ada).click()
+    await ada.getByRole('dialog', { name: 'Looking for an opponent' }).getByRole('button', { name: 'Leave' }).click()
+    await expect(queuePill(ada)).toHaveCount(0)
+
+    await bo.goto('/battle')
+    await expect(bo.getByTestId('battle-lobby-status')).toHaveText('No one’s in the lobby right now')
+  })
+
+  // Monte Carlo Station is this page under Actuaria's skin (docs/actuaria-online.md
+  // §6.8): chrome and words, never the game. A room's code is its channel's
+  // name, so a player on /actuaria/battle and one on /battle are in one room.
+  test('plays across the two skins — Monte Carlo Station hosts, Quiz Battle joins', async ({ context }) => {
+    test.setTimeout(90_000)
+    const host = await context.newPage()
+    const guest = await context.newPage()
+
+    await host.goto('/actuaria/battle')
+    await expect(host.getByRole('heading', { name: /monte carlo station/i })).toBeVisible()
+    await expect(host.getByTestId('actuaria-scope')).toBeVisible()
+    await host.getByTestId('battle-mode-host').click()
+    await host.getByTestId('battle-name-0').fill('Ada')
+    // The exam is picked as a sector; a written paper is listed, and can't be raced.
+    await expect(host.getByTestId('battle-exam-Exam 5')).toBeDisabled()
+    await host.getByTestId('battle-exam-Financial Mathematics').click()
+    await chooseThreeQuestions(host)
+    await host.getByTestId('battle-begin').click()
+
+    const codeTiles = host.getByTestId('battle-room-code')
+    await expect(codeTiles).toBeVisible()
+    const code = ((await codeTiles.getAttribute('aria-label')) ?? '').replace('Room code ', '').replace(/ /g, '')
+
+    await guest.goto(`/battle?join=${code}`)
+    await guest.getByTestId('battle-join-name').fill('Bo')
+    await guest.getByTestId('battle-join').click()
+    await expect(host.getByTestId('battle-lobby')).toContainText('Bo is in')
+    await host.getByTestId('battle-start-online').click()
+    // The topic pick is the same under both skins.
+    await pickTopicAndLock(host, 0)
+    await pickTopicAndLock(guest, 1)
+
+    let missed = ''
+    for (let round = 0; round < 3; round++) {
+      const { right, wrong } = await currentQuestion(host)
+      await expect(guest.getByTestId('battle-question')).toBeVisible({ timeout: 10_000 })
+      // The question is framed in space on the station, and plain on Quiz Battle.
+      await expect(host.getByTestId('battle-hud-frame')).toBeVisible()
+      await expect(guest.getByTestId('battle-hud-frame')).toHaveCount(0)
+      if (round === 0) {
+        missed = (await host.getByTestId('battle-question').getAttribute('data-question-id')) ?? ''
+        await host.getByTestId(`battle-option-${wrong}`).click()
+        await guest.getByTestId(`battle-option-${right}`).click()
+      } else {
+        await host.getByTestId(`battle-option-${right}`).click()
+        await guest.getByTestId(`battle-option-${wrong}`).click()
+      }
+      await expect(host.getByTestId('battle-round-result')).toBeVisible()
+      await host.getByTestId('battle-next').click()
+      await guest.getByTestId('battle-next').click()
+    }
+
+    for (const page of [host, guest]) await expect(page.getByTestId('battle-results')).toBeVisible()
+    // The claims review: Ada's one miss, as an ordinary quiz. Quiz Battle's own
+    // page offers no such thing.
+    await expect(host.getByTestId('battle-review-misses')).toHaveAttribute('href', `/quiz?ids=${encodeURIComponent(missed)}`)
+    await expect(guest.getByTestId('battle-review-misses')).toHaveCount(0)
+    await expect(host.getByText('Claims review')).toBeVisible()
+
+    // A battle saves nothing, on either skin.
+    for (const page of [host, guest]) {
+      const saved = await page.evaluate(() => ['actuarial_streak_state', 'actuarial_xp_state', 'actuarial_quests_state', 'actuarial_local_mastery_v1']
+        .filter(k => localStorage.getItem(k) !== null))
+      expect(saved).toEqual([])
+    }
+  })
+
+  test('a private channel with abilities on: each brings the Hangar loadout, spent on both screens', async ({ context }) => {
+    const host = await context.newPage()
+    const guest = await context.newPage()
+
+    await host.goto('/actuaria/battle')
+    await host.getByTestId('battle-mode-host').click()
+    await host.getByTestId('battle-name-0').fill('Ada')
+    await host.getByTestId('battle-exam-Financial Mathematics').click()
+    await chooseThreeQuestions(host)
+    await host.getByRole('radiogroup', { name: 'Abilities' }).getByRole('radio', { name: 'On' }).click()
+    await host.getByTestId('battle-begin').click()
+
+    const codeTiles = host.getByTestId('battle-room-code')
+    await expect(codeTiles).toBeVisible()
+    await expect(host.getByTestId('battle-lobby')).toContainText('abilities on')
+    const code = ((await codeTiles.getAttribute('aria-label')) ?? '').replace('Room code ', '').replace(/ /g, '')
+
+    await guest.goto(`/actuaria/battle?join=${code}`)
+    await guest.getByTestId('battle-join-name').fill('Bo')
+    await guest.getByTestId('battle-join').click()
+    await expect(host.getByTestId('battle-lobby')).toContainText('Bo is in')
+    await host.getByTestId('battle-start-online').click()
+    await pickTopicAndLock(host, 0)
+    await pickTopicAndLock(guest, 1)
+
+    const { right, wrong } = await currentQuestion(host)
+    await expect(guest.getByTestId('battle-question')).toBeVisible({ timeout: 10_000 })
+    // A guest pilot has no keystones yet, so each brings the starter alone.
+    for (const page of [host, guest]) {
+      await expect(page.getByTestId('battle-ability-tray').getByTestId('ability-reinsurance')).toHaveAttribute('data-state', 'ready')
+    }
+
+    // Arming one is heard on this screen and seen as spent on the other.
+    await host.getByTestId('ability-reinsurance').click()
+    await expect(host.getByTestId('ability-reinsurance')).toHaveAttribute('data-state', 'armed')
+    await expect(guest.getByTestId('battle-opponent-abilities')).toHaveText('Ada used Reinsurance')
+    await expect(guest.getByTestId('ability-reinsurance')).toHaveAttribute('data-state', 'ready')
+
+    await host.getByTestId(`battle-option-${right}`).click()
+    await guest.getByTestId(`battle-option-${wrong}`).click()
+    await expect(host.getByTestId('battle-round-result')).toBeVisible()
+    // Reinsurance waits for a claim; a wrong lock-in under these rules is none.
+    await expect(host.getByTestId('ability-reinsurance')).toHaveAttribute('data-state', 'armed')
+  })
+
+  test('a room without abilities, or a page without a loadout, shows no tray', async ({ context }) => {
+    const host = await context.newPage()
+    const guest = await context.newPage()
+
+    // Quiz Battle's own page doesn't offer the setting.
+    await host.goto('/battle')
+    await host.getByTestId('battle-mode-host').click()
+    await expect(host.getByRole('radiogroup', { name: 'Abilities' })).toHaveCount(0)
+
+    await host.goto('/actuaria/battle')
+    await host.getByTestId('battle-mode-host').click()
+    await host.getByTestId('battle-name-0').fill('Ada')
+    await host.getByTestId('battle-exam-Financial Mathematics').click()
+    await chooseThreeQuestions(host)
+    await host.getByRole('radiogroup', { name: 'Abilities' }).getByRole('radio', { name: 'On' }).click()
+    await host.getByTestId('battle-begin').click()
+    const codeTiles = host.getByTestId('battle-room-code')
+    await expect(codeTiles).toBeVisible()
+    const code = ((await codeTiles.getAttribute('aria-label')) ?? '').replace('Room code ', '').replace(/ /g, '')
+
+    // Joined from Quiz Battle: that player brings nothing, and sees what Ada spends.
+    await guest.goto(`/battle?join=${code}`)
+    await guest.getByTestId('battle-join-name').fill('Bo')
+    await guest.getByTestId('battle-join').click()
+    await expect(host.getByTestId('battle-lobby')).toContainText('Bo is in')
+    await host.getByTestId('battle-start-online').click()
+    await pickTopicAndLock(host, 0)
+    await pickTopicAndLock(guest, 1)
+    await currentQuestion(host)
+    await expect(guest.getByTestId('battle-question')).toBeVisible({ timeout: 10_000 })
+    await expect(guest.getByTestId('ability-reinsurance')).toHaveCount(0)
+    await host.getByTestId('ability-reinsurance').click()
+    await expect(guest.getByTestId('battle-opponent-abilities')).toHaveText('Ada used Reinsurance')
+  })
+
+  test('the lobby pairs a player at Monte Carlo Station with one at Quiz Battle', async ({ context }) => {
+    test.setTimeout(90_000)
+    const ada = await context.newPage()
+    const bo = await context.newPage()
+
+    await ada.goto('/battle')
+    await ada.getByTestId('battle-mode-lobby').click()
+    await ada.getByTestId('battle-lobby-name').fill('Ada')
+    await ada.getByTestId('battle-lobby-name').press('Enter')
+    await ada.getByTestId('battle-lobby-exam-Probability').click()
+    await ada.getByTestId('battle-lobby-ready').click()
+    await expect(ada.getByTestId('battle-lobby-empty')).toBeVisible()
+
+    await bo.goto('/actuaria/battle')
+    await expect(bo.getByTestId('battle-lobby-status')).toHaveText('1 pilot waiting')
+    // One browser profile plays both, so Bo walks in asking for Ada's exam —
+    // the setup the two pages share remembers it — and is matched on Ready.
+    await bo.getByTestId('battle-mode-lobby').click()
+    await expect(bo.getByTestId('battle-lobby-player')).toContainText('Ada')
+    await bo.getByTestId('battle-lobby-ready').click()
+
+    for (const page of [ada, bo]) {
+      await expect(page.getByTestId('battle-match-intro')).toBeVisible({ timeout: 15_000 })
+    }
+    // Through the topic pick, the same on both pages, to the count-in.
+    await pickTopicAndLock(ada, 0)
+    await pickTopicAndLock(bo, 1)
+    for (const page of [ada, bo]) {
+      await expect(page.getByTestId('battle-countdown')).toBeVisible({ timeout: 15_000 })
+    }
   })
 })

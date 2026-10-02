@@ -15,6 +15,12 @@ interface ImportMetaEnv {
    * e2e suite. See lib/battleTransport.ts.
    */
   readonly VITE_BATTLE_TRANSPORT?: string
+  /**
+   * `on` opens Actuaria Online to every viewer, signed out included, rather
+   * than to the approved accounts alone — the e2e suite's build, which plays
+   * the game layer signed out. See `ACTUARIA_OPEN_TO_ALL` in lib/featureFlags.ts.
+   */
+  readonly VITE_ACTUARIA_PREVIEW?: string
 }
 
 interface Window {

@@ -114,6 +114,8 @@ export type SoundEvent =
   | 'lockIn'
   /** The other player has locked in — heard, not seen. */
   | 'opponentIn'
+  /** An ability armed (Actuaria's private rooms — docs/actuaria-online.md §7.2). */
+  | 'power'
   /** A steal: the right answer after the other player missed. Replaces `correct`. */
   | 'steal'
   /** The last seconds of a question, one per second: a clock's escapement. */
@@ -453,7 +455,7 @@ const PRESS_THUD: ToneSpec = { at: 0, dur: 0.035, freq: G3, glide: C3, type: 'si
  * wrong answer is still silent; a race has no buzzer for a miss either.
  */
 const BATTLE_RECIPES: Record<
-  'buzz' | 'countIn' | 'go' | 'lockIn' | 'opponentIn' | 'steal' | 'clockTick' | 'matchFound' | 'reaction',
+  'buzz' | 'countIn' | 'go' | 'lockIn' | 'opponentIn' | 'power' | 'steal' | 'clockTick' | 'matchFound' | 'reaction',
   SoundRecipe
 > = {
   buzz: {
@@ -513,6 +515,19 @@ const BATTLE_RECIPES: Record<
     tones: [
       ...strike(D4, { at: 0.004, dur: 0.14, gain: 0.5 }),
       { at: 0, dur: 0.05, freq: G3, glide: D3, type: 'sine', gain: 0.22, attack: 0.002 },
+    ],
+  },
+  power: {
+    // An ability armed: a latch, like locking in, that rises — a struck D and
+    // the G a fourth above it, quick and dry and softer than `lockIn`, because
+    // arming says nothing about how the round will go.
+    gain: 0.2,
+    throttleMs: 200,
+    lowpass: 3000,
+    noise: [{ ...CLICK_SHELL, gain: 0.34 }],
+    tones: [
+      ...strike(D4, { at: 0.004, dur: 0.1, gain: 0.34 }),
+      ...strike(G4, { at: 0.06, dur: 0.14, gain: 0.44 }),
     ],
   },
   opponentIn: {

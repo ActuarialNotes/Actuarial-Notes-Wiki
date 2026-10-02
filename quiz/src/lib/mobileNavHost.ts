@@ -23,6 +23,9 @@ export function pageHostsNavButton(pathname: string): boolean {
   // A project attempt (ProjectTopBar) — every page *under* the Projects tab.
   // The tab's own list of briefs is a plain page under the app header.
   if (pathname.startsWith('/project/')) return true
+  // Actuaria (its HUD row, and the title screen's own top line) — every
+  // in-world screen, which stays in space rather than under the app header.
+  if (isUnder(pathname, '/actuaria')) return true
   // The wiki (WikiFloatingSearch), the flag-gated research tab
   // (ResearchTopSearch) and Cowork (CoworkTopBar) — each of which bars every
   // page under them.

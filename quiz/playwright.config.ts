@@ -23,6 +23,10 @@ const buildEnv = {
   // Realtime, so two pages of one browser can battle each other
   // (e2e/battle.spec.ts, lib/battleTransport.ts).
   VITE_BATTLE_TRANSPORT: 'local',
+  // Actuaria Online is open to approved accounts alone; the suite's build opens
+  // it to every viewer, signed out included, so the world is tested without one
+  // (e2e/actuaria.spec.ts, `ACTUARIA_OPEN_TO_ALL` in src/lib/featureFlags.ts).
+  VITE_ACTUARIA_PREVIEW: 'on',
 }
 
 export default defineConfig({

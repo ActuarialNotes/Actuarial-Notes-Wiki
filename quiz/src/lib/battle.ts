@@ -24,6 +24,12 @@
 // round counts double so a battle is never over before its last question.
 // Nothing here is saved: a battle is played, not studied, and a friend's
 // answers on your device are not your mastery (docs/quiz-battle.md).
+//
+// A room can also be played with **abilities** — once-per-battle power-ups,
+// Actuaria Online's (docs/actuaria-online.md §7.2) — which are a setting of the
+// battle, off by default and only ever turned on for a private room. They are
+// events like any other (`power`), checked like any other, and scored in their
+// own line of the points, so a battle without them is exactly what it was.
 
 import { filterQuestions, type Question } from './parser'
 import { drawByDifficulty, type DifficultyTarget } from './quizDifficulty'
@@ -72,6 +78,11 @@ export interface BattleConfig {
   rounds: number
   /** How long a question stays open, in seconds. */
   roundSeconds: number
+  /**
+   * Abilities are on (a private room whose host turned them on). Off — the
+   * default, and always in the lobby and on one screen — the battle is plain.
+   */
+  abilities?: boolean
 }
 
 export const ROUND_COUNTS = [3, 5, 7, 10] as const
@@ -136,6 +147,50 @@ export const FINAL_ROUND_MULTIPLIER = 2
 /** A run this long is "on fire" on the scoreboard. */
 export const ON_FIRE_STREAK = 3
 
+// ── Abilities ───────────────────────────────────────────────────────────────
+
+/**
+ * The power-ups a player can take into a room with abilities on. What each is
+ * called, and what it takes to unlock it, is Actuaria's catalogue
+ * (data/actuariaAbilities.ts); what each *does* is here, in the rules:
+ *
+ * - `reinsurance` — the player's next claim (a penalty) is halved.
+ * - `bayesian-update` — one wrong option is struck from this question, on the
+ *   player's own screen only.
+ * - `double-down` — this round's total ×2; a miss is a claim, even online.
+ *   Never on the final question, which is already doubled.
+ * - `time-value` — this round's speed bonus as if the answer came 30 s sooner.
+ * - `immunization` — a miss this round doesn't break the player's run.
+ */
+export type AbilityId = 'reinsurance' | 'bayesian-update' | 'double-down' | 'time-value' | 'immunization'
+
+export const ABILITY_IDS: readonly AbilityId[] = ['reinsurance', 'bayesian-update', 'double-down', 'time-value', 'immunization']
+
+export function isAbilityId(value: unknown): value is AbilityId {
+  return typeof value === 'string' && (ABILITY_IDS as readonly string[]).includes(value)
+}
+
+/** How many abilities a player takes into a battle. */
+export const LOADOUT_MAX = 3
+/** Time Value: how much sooner the speed bonus counts the answer. */
+export const TIME_VALUE_MS = 30_000
+/** Double Down: the round's total, this many times over. */
+export const DOUBLE_DOWN_MULTIPLIER = 2
+/** Double Down: what a miss costs — a claim, the same as a wrong buzz. */
+export const DOUBLE_DOWN_CLAIM = WRONG_BUZZ_PENALTY
+/** Reinsurance: the share of the next claim it pays back. */
+export const REINSURANCE_SHARE = 0.5
+
+/** A loadout as the rules take it: known abilities, each once, at most `LOADOUT_MAX`. */
+export function cleanLoadout(raw: readonly unknown[] | null | undefined): AbilityId[] {
+  const out: AbilityId[] = []
+  for (const id of raw ?? []) {
+    if (isAbilityId(id) && !out.includes(id)) out.push(id)
+    if (out.length === LOADOUT_MAX) break
+  }
+  return out
+}
+
 // ── State ───────────────────────────────────────────────────────────────────
 
 /** What the engine needs to know about a question: which choices there are, and which is right. */
@@ -152,6 +207,12 @@ export interface PointsBreakdown {
   fastest: number
   /** Negative, or 0. */
   penalty: number
+  /**
+   * What abilities added: Time Value's extra speed, Reinsurance's share of a
+   * claim paid back. Counted before the multiplier, like every other part.
+   */
+  ability: number
+  /** The final question's ×2, or Double Down's — never both. */
   multiplier: number
   total: number
 }
@@ -206,6 +267,13 @@ export interface RoundState {
   outcome: RoundOutcome | null
   /** Simultaneous, online: who has pressed Ready for the next question. */
   ready: Seat[]
+  /** Abilities each seat has armed for this round. */
+  powers: [AbilityId[], AbilityId[]]
+  /**
+   * Bayesian Update: the wrong option struck from each seat's screen. Private
+   * to that seat — `redactFor` hides the other's.
+   */
+  struck: [string | null, string | null]
 }
 
 export interface BattleState {
@@ -222,6 +290,12 @@ export interface BattleState {
   forfeit: Seat | null
   /** See `ONLINE_GRACE_MS` — 0 on one screen, where nothing is in flight. */
   graceMs: number
+  /** Each seat's abilities for this battle — empty with abilities off. */
+  loadouts: [AbilityId[], AbilityId[]]
+  /** Abilities each seat has used. Each is good once per battle. */
+  spent: [AbilityId[], AbilityId[]]
+  /** Reinsurance bought and not yet paid out: the seat's next claim is halved. */
+  reinsured: [boolean, boolean]
 }
 
 export type BattleEvent =
@@ -240,6 +314,12 @@ export type BattleEvent =
   | { type: 'next'; now: number }
   /** A player leaves; the other wins. */
   | { type: 'forfeit'; seat: Seat; now: number }
+  /**
+   * A player uses an ability. `strike` is Bayesian Update's option — a wrong
+   * one, picked by whoever runs the reducer (the host), since the reducer draws
+   * nothing at random.
+   */
+  | { type: 'power'; seat: Seat; ability: AbilityId; now: number; strike?: string }
 
 // ── Starting a battle ───────────────────────────────────────────────────────
 
@@ -262,6 +342,8 @@ function newRound(state: Pick<BattleState, 'config' | 'questions'>, index: numbe
     answers: [],
     outcome: null,
     ready: [],
+    powers: [[], []],
+    struck: [null, null],
   }
 }
 
@@ -271,11 +353,16 @@ export function createBattle(options: {
   questions: BattleQuestionKey[]
   now: number
   graceMs?: number
+  /** Each seat's abilities — ignored unless `config.abilities` is on. */
+  loadouts?: [readonly AbilityId[], readonly AbilityId[]]
 }): BattleState {
   const { config, players, now } = options
+  const loadouts: [AbilityId[], AbilityId[]] = config.abilities
+    ? [cleanLoadout(options.loadouts?.[0]), cleanLoadout(options.loadouts?.[1])]
+    : [[], []]
   const questions = options.questions.slice(0, config.rounds)
   if (questions.length === 0) throw new Error('A battle needs at least one question')
-  const base = { config: { ...config, rounds: questions.length }, questions }
+  const base = { config: { ...config, rounds: questions.length, abilities: !!config.abilities }, questions }
   return {
     ...base,
     players,
@@ -286,6 +373,9 @@ export function createBattle(options: {
     finished: false,
     forfeit: null,
     graceMs: options.graceMs ?? 0,
+    loadouts,
+    spent: [[], []],
+    reinsured: [false, false],
   }
 }
 
@@ -360,15 +450,33 @@ function points(parts: Partial<Omit<PointsBreakdown, 'total' | 'multiplier'>>, m
   const streak = parts.streak ?? 0
   const fastest = parts.fastest ?? 0
   const penalty = parts.penalty ?? 0
+  const ability = parts.ability ?? 0
   return {
     base: base * multiplier,
     speed: speed * multiplier,
     streak: streak * multiplier,
     fastest: fastest * multiplier,
     penalty: penalty * multiplier,
+    ability: ability * multiplier,
     multiplier,
-    total: (base + speed + streak + fastest + penalty) * multiplier,
+    total: (base + speed + streak + fastest + penalty + ability) * multiplier,
   }
+}
+
+/** Time Value's extra: the speed bonus as if the answer had come 30 s sooner, less the one it earned. */
+export function timeValueBonus(elapsedMs: number, totalMs: number): number {
+  return speedBonus(Math.max(0, elapsedMs - TIME_VALUE_MS), totalMs) - speedBonus(elapsedMs, totalMs)
+}
+
+/** What Reinsurance pays back of a claim of `claim` points. */
+export function reinsuranceRefund(claim: number): number {
+  return Math.round(claim * REINSURANCE_SHARE)
+}
+
+function withPair<T>(pair: readonly [T, T], seat: Seat, value: T): [T, T] {
+  const out: [T, T] = [pair[0], pair[1]]
+  out[seat] = value
+  return out
 }
 
 // ── The reducer ─────────────────────────────────────────────────────────────
@@ -388,6 +496,7 @@ export function battleReducer(state: BattleState, event: BattleEvent): BattleSta
     case 'ready': return ready(state, event.seat, event.now)
     case 'next': return advance(state, event.now)
     case 'forfeit': return { ...state, finished: true, forfeit: event.seat }
+    case 'power': return power(tick(state, event.now), event)
   }
 }
 
@@ -467,23 +576,37 @@ function scoreBuzzAnswer(state: BattleState, seat: Seat, choice: string | null, 
   const streaks: [number, number] = [...state.streaks]
   const scores: [number, number] = [...state.scores]
   const bestStreaks: [number, number] = [...state.bestStreaks]
+  const reinsured: [boolean, boolean] = [...state.reinsured]
+  const powers = round.powers[seat]
 
   if (correct) {
     streaks[seat] += 1
     bestStreaks[seat] = Math.max(bestStreaks[seat], streaks[seat])
-  } else {
+  } else if (!powers.includes('immunization')) {
     streaks[seat] = 0
   }
-  const pts = correct
-    ? points({ base: BASE_POINTS, speed: speedBonus(elapsedMs, roundMs(state.config)), streak: streakBonus(streaks[seat]) }, multiplier)
-    : points({ penalty: -WRONG_BUZZ_PENALTY }, multiplier)
+  const total = roundMs(state.config)
+  let pts: PointsBreakdown
+  if (correct) {
+    pts = points({
+      base: BASE_POINTS,
+      speed: speedBonus(elapsedMs, total),
+      streak: streakBonus(streaks[seat]),
+      ability: powers.includes('time-value') ? timeValueBonus(elapsedMs, total) : 0,
+    }, powers.includes('double-down') ? DOUBLE_DOWN_MULTIPLIER : multiplier)
+  } else {
+    // A wrong buzz is a claim — halved once for a player who bought Reinsurance.
+    const refund = reinsured[seat] ? reinsuranceRefund(WRONG_BUZZ_PENALTY) : 0
+    reinsured[seat] = false
+    pts = points({ penalty: -WRONG_BUZZ_PENALTY, ability: refund }, multiplier)
+  }
   scores[seat] += pts.total
 
   const scored: RoundAnswer = { seat, choice, elapsedMs, correct, steal, fastest: false, points: pts }
   const lockedOut = correct ? round.lockedOut : [...round.lockedOut, seat]
   const other = otherSeat(seat)
   const base: RoundState = { ...round, answers: [...round.answers, scored], lockedOut, floor: null }
-  const extra = { scores, streaks, bestStreaks }
+  const extra = { scores, streaks, bestStreaks, reinsured }
 
   if (correct) return finishRound(withRound(state, base, extra))
   if (!lockedOut.includes(other)) {
@@ -514,6 +637,7 @@ function reveal(state: BattleState): BattleState {
   const scores: [number, number] = [...state.scores]
   const streaks: [number, number] = [...state.streaks]
   const bestStreaks: [number, number] = [...state.bestStreaks]
+  const reinsured: [boolean, boolean] = [...state.reinsured]
 
   const rightTimes = SEATS
     .map(seat => round.locks[seat])
@@ -524,7 +648,18 @@ function reveal(state: BattleState): BattleState {
   const answers: RoundAnswer[] = []
   for (const seat of SEATS) {
     const lock = round.locks[seat]
-    if (!lock) continue
+    const powers = round.powers[seat]
+    const doubled = powers.includes('double-down')
+    if (!lock) {
+      // Nothing locked in scores nothing — unless Double Down was armed: the
+      // bet was made, and an unanswered question is a miss.
+      if (doubled) {
+        const pts = claimPoints(reinsured, seat, multiplier)
+        scores[seat] += pts.total
+        answers.push({ seat, choice: null, elapsedMs: total, correct: false, steal: false, fastest: false, points: pts })
+      }
+      continue
+    }
     const correct = lock.choice === question.answer
     const fastest = correct && lock.elapsedMs === fastestTime
     if (correct) {
@@ -537,14 +672,26 @@ function reveal(state: BattleState): BattleState {
           speed: speedBonus(lock.elapsedMs, total),
           streak: streakBonus(streaks[seat]),
           fastest: fastest ? FASTEST_BONUS : 0,
-        }, multiplier)
+          ability: powers.includes('time-value') ? timeValueBonus(lock.elapsedMs, total) : 0,
+        }, doubled ? DOUBLE_DOWN_MULTIPLIER : multiplier)
+      // Online a wrong answer costs nothing — unless it was doubled down on,
+      // when a miss is a claim like a wrong buzz.
+      : doubled
+      ? claimPoints(reinsured, seat, multiplier)
       : points({}, multiplier)
     scores[seat] += pts.total
     answers.push({ seat, choice: lock.choice, elapsedMs: lock.elapsedMs, correct, steal: false, fastest, points: pts })
   }
   // Answers are listed fastest first, the order they're told in.
   answers.sort((a, b) => a.elapsedMs - b.elapsedMs)
-  return finishRound(withRound(state, { ...round, answers }, { scores, streaks, bestStreaks }))
+  return finishRound(withRound(state, { ...round, answers }, { scores, streaks, bestStreaks, reinsured }))
+}
+
+/** Double Down's claim for a miss, halved once by Reinsurance (which it then spends). */
+function claimPoints(reinsured: [boolean, boolean], seat: Seat, multiplier: number): PointsBreakdown {
+  const refund = reinsured[seat] ? reinsuranceRefund(DOUBLE_DOWN_CLAIM) : 0
+  reinsured[seat] = false
+  return points({ penalty: -DOUBLE_DOWN_CLAIM, ability: refund }, multiplier)
 }
 
 /**
@@ -555,12 +702,66 @@ function reveal(state: BattleState): BattleState {
 function finishRound(state: BattleState): BattleState {
   const round = currentRound(state)
   const scoredRight = new Set(round.answers.filter(a => a.correct).map(a => a.seat))
+  // Immunization: this round can't break the seat's run, whatever happened in it.
+  const keeps = (seat: Seat) => scoredRight.has(seat) || round.powers[seat].includes('immunization')
   const streaks: [number, number] = [
-    scoredRight.has(0) ? state.streaks[0] : 0,
-    scoredRight.has(1) ? state.streaks[1] : 0,
+    keeps(0) ? state.streaks[0] : 0,
+    keeps(1) ? state.streaks[1] : 0,
   ]
   const outcome: RoundOutcome = scoredRight.size > 0 ? 'won' : round.answers.length > 0 ? 'missed' : 'timeout'
   return withRound(state, { ...round, phase: 'revealed', outcome, floor: null }, { streaks })
+}
+
+/**
+ * Can `seat` arm an ability now? In the count-in, or while the question is up
+ * and before their answer is in: online, until they lock in; on one screen,
+ * unless they've already missed it, and while they hold the floor.
+ */
+export function canArm(state: BattleState, seat: Seat): boolean {
+  if (state.finished || !state.config.abilities) return false
+  const round = currentRound(state)
+  if (round.phase === 'countdown') return true
+  if (round.phase === 'open') {
+    return state.config.rules === 'simultaneous' ? !round.locks[seat] : !round.lockedOut.includes(seat)
+  }
+  if (round.phase === 'buzzed') return round.floor?.seat === seat
+  return false
+}
+
+/** Whether `ability` could be used by `seat` now — the rules `power` checks, for a button to read. */
+export function canUse(state: BattleState, seat: Seat, ability: AbilityId): boolean {
+  if (!state.loadouts[seat].includes(ability) || state.spent[seat].includes(ability)) return false
+  if (ability === 'double-down' && isFinalRound(state, currentRound(state).index)) return false
+  return canArm(state, seat)
+}
+
+/**
+ * The options Bayesian Update may strike for `seat`: the wrong ones still in
+ * play — not the answer, and not one already struck through as a public miss.
+ */
+export function strikeable(state: BattleState, seat: Seat): string[] {
+  const round = currentRound(state)
+  const question = state.questions[round.index]
+  const missed = new Set(round.answers.filter(a => !a.correct && a.choice).map(a => a.choice))
+  return question.options.filter(o => o !== question.answer && !missed.has(o) && o !== round.struck[seat])
+}
+
+function power(state: BattleState, event: Extract<BattleEvent, { type: 'power' }>): BattleState {
+  const { seat, ability } = event
+  if (!canUse(state, seat, ability)) return state
+  const round = currentRound(state)
+  const spent = withPair(state.spent, seat, [...state.spent[seat], ability])
+
+  // Reinsurance waits for the next claim, whenever it comes.
+  if (ability === 'reinsurance') return { ...state, spent, reinsured: withPair(state.reinsured, seat, true) }
+
+  let struck = round.struck
+  if (ability === 'bayesian-update') {
+    if (!event.strike || !strikeable(state, seat).includes(event.strike)) return state
+    struck = withPair(round.struck, seat, event.strike)
+  }
+  const powers = withPair(round.powers, seat, [...round.powers[seat], ability])
+  return withRound(state, { ...round, powers, struck }, { spent })
 }
 
 function ready(state: BattleState, seat: Seat, now: number): BattleState {
@@ -633,22 +834,42 @@ export function summarizeBattle(state: BattleState): BattleSummary {
   return { players, played: played.length, winner, margin: Math.abs(a - b), forfeit: null }
 }
 
+/**
+ * The questions `seat` got wrong or left unanswered, in the order they were
+ * played — what *Review my misses* turns into an ordinary quiz under the
+ * Actuaria skin (docs/actuaria-online.md §6.9). Only rounds played to a reveal
+ * count, so a battle cut short by a forfeit lists what was played. The battle
+ * itself still saves nothing; the review is a quiz, and saves as one.
+ */
+export function missedQuestionIds(state: BattleState, seat: Seat): string[] {
+  return state.rounds
+    .filter(r => r.phase === 'revealed' && !r.answers.some(a => a.seat === seat && a.correct))
+    .map(r => r.questionId)
+}
+
 // ── Seen from one side ──────────────────────────────────────────────────────
 
 /**
  * The state as `viewer` may see it: an answer the other player has locked in
- * but that hasn't been revealed shows as *in*, with no choice. The host
+ * but that hasn't been revealed shows as *in*, with no choice, and the option
+ * the other player's Bayesian Update struck isn't there at all. The host
  * applies this before a snapshot leaves the device.
  */
 export function redactFor(state: BattleState, viewer: Seat): BattleState {
-  const round = currentRound(state)
-  if (round.phase === 'revealed') return state
   const hidden = otherSeat(viewer)
+  let rounds = state.rounds
+  // Bayesian Update's strike is its player's own, in every round.
+  if (rounds.some(r => r.struck[hidden] !== null)) {
+    rounds = rounds.map(r => (r.struck[hidden] === null ? r : { ...r, struck: withPair(r.struck, hidden, null) }))
+  }
+  const round = rounds[rounds.length - 1]
   const lock = round.locks[hidden]
-  if (!lock || lock.choice === null) return state
-  const locks: [Lock | null, Lock | null] = [...round.locks]
-  locks[hidden] = { choice: null, elapsedMs: 0 }
-  return withRound(state, { ...round, locks })
+  if (round.phase !== 'revealed' && lock && lock.choice !== null) {
+    const locks: [Lock | null, Lock | null] = [...round.locks]
+    locks[hidden] = { choice: null, elapsedMs: 0 }
+    rounds = [...rounds.slice(0, -1), { ...round, locks }]
+  }
+  return rounds === state.rounds ? state : { ...state, rounds }
 }
 
 /**

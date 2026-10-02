@@ -20,6 +20,7 @@ export function useQuestions(filters: QuestionFilter) {
   const topicsKey = filters.topics ? [...filters.topics].sort().join(',') : ''
   const idsKey = filters.ids ? [...filters.ids].sort().join(',') : ''
   const conceptsKey = filters.concepts ? [...filters.concepts].sort().join(',') : ''
+  const difficultiesKey = filters.difficulties ? [...filters.difficulties].sort().join(',') : ''
 
   useEffect(() => {
     let cancelled = false
@@ -33,8 +34,8 @@ export function useQuestions(filters: QuestionFilter) {
         const filtered = filterQuestions(parsed, { ...filters, includeFlagged: showFlagged })
         const limit = filters.count || filtered.length
         // A past sitting is sat the way the paper set it, question 1 first.
-        // Anything else is a draw: leaning toward the difficulty slider's level
-        // when it has one, a uniform shuffle when it doesn't. A pinned id list
+        // Anything else is a draw: leaning toward a difficulty when the link
+        // carries one (the old builder slider's `level`), a uniform shuffle when it doesn't. A pinned id list
         // is always shuffled — it is taken whole, and `filterQuestions` ignores
         // a sitting beside it, so neither the paper nor the lean has a say.
         const sitting = Boolean(filters.year || filters.session) && !filters.ids?.length
@@ -56,7 +57,7 @@ export function useQuestions(filters: QuestionFilter) {
 
     return () => { cancelled = true }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters.exam, filters.topic, filters.difficulty, filters.mode, filters.count, filters.difficultyTarget, topicsKey, idsKey, filters.concept, conceptsKey, filters.year, filters.session, showFlagged])
+  }, [filters.exam, filters.topic, filters.difficulty, filters.mode, filters.count, filters.difficultyTarget, difficultiesKey, topicsKey, idsKey, filters.concept, conceptsKey, filters.year, filters.session, showFlagged])
 
   return { questions, loading, error }
 }

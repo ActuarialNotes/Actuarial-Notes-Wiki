@@ -22,7 +22,7 @@ import { useTodayCompletions } from '@/hooks/useTodayCompletions'
 import { useTodayAnsweredQuestions } from '@/hooks/useTodayAnsweredQuestions'
 import { useSubscription } from '@/hooks/useSubscription'
 import { filterQuestions, isFromAnotherExamsPaper } from '@/lib/parser'
-import type { Question } from '@/lib/parser'
+import type { Difficulty, Question } from '@/lib/parser'
 import { bankLabelFor } from '@/lib/examIds'
 import { matchesSelectedVariant } from '@/data/examSittings'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
@@ -44,13 +44,11 @@ import { PastExamBrowser } from '@/components/PastExamBrowser'
 import { examStatus } from '@/lib/examStatus'
 import { loadRevealMode, saveRevealMode, type RevealMode } from '@/lib/revealMode'
 import {
-  difficultyToParam,
-  drawByDifficulty,
-  loadDifficultyTarget,
-  orderByDifficulty,
-  saveDifficultyTarget,
+  difficultyLevelsToParam,
+  isAllDifficultyLevels,
+  loadDifficultyLevels,
+  saveDifficultyLevels,
   shuffle,
-  type DifficultyTarget,
 } from '@/lib/quizDifficulty'
 import { formatPace, loadTimed, paceForExam, saveTimed } from '@/lib/quizTiming'
 import { ExamDateMeta, ExamRow, ExamRowMeta } from '@/components/ExamRow'
@@ -404,13 +402,20 @@ export default function Landing() {
     saveTimed(mode, next)
   }
 
-  // How hard a quiz's draw leans (lib/quizDifficulty.ts). One position for
-  // every quiz; a practice exam ignores it, since it is sat as the paper sets it.
-  const [difficulty, setDifficulty] = useState<DifficultyTarget>(loadDifficultyTarget)
-  function handleDifficultyChange(next: DifficultyTarget) {
-    setDifficulty(next)
-    saveDifficultyTarget(next)
+  // Which difficulty levels a quiz draws from (lib/quizDifficulty.ts) — a
+  // filter, so every count on the page below reads through `inLevels`. One
+  // choice for every quiz; a practice exam ignores it, since it is sat as the
+  // paper sets it.
+  const [difficulties, setDifficulties] = useState<Difficulty[]>(loadDifficultyLevels)
+  function handleDifficultiesChange(next: Difficulty[]) {
+    setDifficulties(next)
+    saveDifficultyLevels(next)
   }
+  const levelsParam = mode === 'quiz' ? difficultyLevelsToParam(difficulties) : null
+  const inLevels = useCallback(
+    (q: Question) => mode !== 'quiz' || isAllDifficultyLevels(difficulties) || difficulties.includes(q.difficulty),
+    [mode, difficulties],
+  )
 
   // Set once the user picks a specific question count, so the auto-sizing effect
   // (which defaults Today's Quiz to the whole-plan coverage count) stops overriding
@@ -586,14 +591,14 @@ export default function Landing() {
     if (!displayConcepts.length) return 0
     const todaySet = new Set(displayConcepts.map(c => c.toLowerCase()))
     return allQuestions.filter(q => {
-      if (q.exam !== topic) return false
+      if (q.exam !== topic || !inLevels(q)) return false
       return q.wiki_link.some(link => {
         const clean = link.replace(/\+/g, ' ').replace(/\.md$/i, '')
         const n = clean.split('/').filter(Boolean).pop()?.toLowerCase() ?? ''
         return todaySet.has(n)
       })
     }).length
-  }, [plan, allQuestions, topic])
+  }, [plan, allQuestions, topic, inLevels])
 
   // Derived: whether today's plan is the active filter
   const useTodaysPlan = examInProgress && conceptMode === 'today' && isPro && !!plan && planConceptCount > 0
@@ -640,7 +645,9 @@ export default function Landing() {
   // plan for extra practice — the `seenIds` option on the coverage helpers is
   // what keeps that extra practice from being a replay of the questions just
   // answered.
-  const buildTodaysPlanSelection = useCallback((): { todayQs: typeof allQuestions; concepts: string[] } | null => {
+  // The pool keeps to the difficulty choice unless `allLevels` asks for every
+  // level (the menu's per-level counts).
+  const buildTodaysPlanSelection = useCallback((allLevels = false): { todayQs: typeof allQuestions; concepts: string[] } | null => {
     if (!plan || !topic) return null
     const displayConcepts = plan.status === 'review_mode'
       ? (plan.reviewConcepts ?? [])
@@ -652,7 +659,7 @@ export default function Landing() {
 
     const conceptSet = new Set(concepts.map(n => n.toLowerCase()))
     const todayQs = allQuestions.filter(q => {
-      if (q.exam !== topic) return false
+      if (q.exam !== topic || (!allLevels && !inLevels(q))) return false
       return q.wiki_link.some(link => {
         const clean = link.replace(/\+/g, ' ').replace(/\.md$/i, '')
         const n = clean.split('/').filter(Boolean).pop()?.toLowerCase() ?? ''
@@ -661,7 +668,7 @@ export default function Landing() {
     })
     if (todayQs.length === 0) return null
     return { todayQs, concepts }
-  }, [plan, topic, allQuestions, doneConceptSlugs])
+  }, [plan, topic, allQuestions, doneConceptSlugs, inLevels])
 
   // Fewest questions needed to cover the whole (remaining) plan — the count a
   // dashboard-launched Today's Quiz auto-selects to complete the day's plan.
@@ -677,11 +684,7 @@ export default function Landing() {
   const launchTodaysPlan = useCallback((desiredCount: number): boolean => {
     const sel = buildTodaysPlanSelection()
     if (!sel) return false
-    // The cover takes the first best-covering question it meets, so handing it
-    // the pool in difficulty-weighted order makes it prefer the slider's level
-    // wherever the plan leaves it a choice — without giving up coverage.
-    const ordered = orderByDifficulty(sel.todayQs, difficulty)
-    const selected = selectQuestionsForCoverage(ordered, sel.concepts, desiredCount, { seenIds: todayAnsweredIds })
+    const selected = selectQuestionsForCoverage(sel.todayQs, sel.concepts, desiredCount, { seenIds: todayAnsweredIds })
     if (selected.length === 0) return false
     try {
       sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(selected.map(q => q.id)))
@@ -696,7 +699,7 @@ export default function Landing() {
     if (timed) params.set('timed', '1')
     navigate(`/quiz?${params.toString()}`)
     return true
-  }, [buildTodaysPlanSelection, navigate, todayAnsweredIds, reveal, timed, difficulty])
+  }, [buildTodaysPlanSelection, navigate, todayAnsweredIds, reveal, timed])
 
   // Auto-activate today's study plan for Pro users when it has concepts.
   // If the dashboard passed a custom concept selection (some deselected), apply that instead.
@@ -793,13 +796,13 @@ export default function Landing() {
     return filterQuestions(allQuestions, {
       exam: topic,
       ...(selectedConcepts.length > 0 && { concepts: selectedConcepts }),
-    }).length
-  }, [allQuestions, topic, selectedConcepts])
+    }).filter(inLevels).length
+  }, [allQuestions, topic, selectedConcepts, inLevels])
 
   const conceptAvailableCount = useMemo(() => {
     if (!selectedConcept) return 0
-    return filterQuestions(allQuestions, { concept: selectedConcept }).length
-  }, [allQuestions, selectedConcept])
+    return filterQuestions(allQuestions, { concept: selectedConcept }).filter(inLevels).length
+  }, [allQuestions, selectedConcept, inLevels])
 
   // When study plan is active, use its question pool size; otherwise use subtopic-filtered count
   const effectiveAvailableCount = selectedConcept
@@ -932,8 +935,8 @@ export default function Landing() {
         mode: 'quiz',
         reveal: loadRevealMode('quiz'),
         from: 'home',
-        level: difficultyToParam(difficulty),
       })
+      if (levelsParam) params.set('levels', levelsParam)
       if (loadTimed('quiz')) params.set('timed', '1')
       if (count < conceptAvailableCount) params.set('count', String(count))
       navigate(`/quiz?${params.toString()}`)
@@ -951,7 +954,7 @@ export default function Landing() {
     if (mode === 'quiz') {
       if (selectedConcepts.length > 0) params.set('concepts', selectedConcepts.join(','))
       params.set('count', String(count))
-      params.set('level', difficultyToParam(difficulty))
+      if (levelsParam) params.set('levels', levelsParam)
     } else if (selectedSitting !== null) {
       params.set('year', String(selectedSitting.year))
       if (selectedSitting.session) params.set('session', selectedSitting.session)
@@ -1007,9 +1010,14 @@ export default function Landing() {
   const mockSolutionsLink =
     !selectedSitting && pastExamRows.length === 0 ? getExamSolutionsPdfLink(topic) : null
 
-  // The questions the current configuration can draw from. Backs the deck
-  // card's availability number and gives the shuffle something to draw from.
-  const currentPool = useMemo<Question[]>(() => {
+  const todaysPlanUnleveledPool = useMemo(
+    () => (useTodaysPlan ? buildTodaysPlanSelection(true)?.todayQs ?? [] : []),
+    [useTodaysPlan, buildTodaysPlanSelection],
+  )
+
+  // The questions the current configuration covers before the difficulty
+  // choice — what the menu's per-level counts are read from.
+  const unleveledPool = useMemo<Question[]>(() => {
     if (mode === 'mock-exam') {
       if (!topic) return []
       return filterQuestions(allQuestions, {
@@ -1018,13 +1026,24 @@ export default function Landing() {
       })
     }
     if (selectedConcept) return filterQuestions(allQuestions, { concept: selectedConcept })
-    if (useTodaysPlan) return buildTodaysPlanSelection()?.todayQs ?? []
+    if (useTodaysPlan) return todaysPlanUnleveledPool
     if (!topic) return []
     return filterQuestions(allQuestions, {
       exam: topic,
       ...(selectedConcepts.length > 0 && { concepts: selectedConcepts }),
     })
-  }, [mode, topic, allQuestions, selectedSitting, selectedConcept, useTodaysPlan, buildTodaysPlanSelection, selectedConcepts])
+  }, [mode, topic, allQuestions, selectedSitting, selectedConcept, useTodaysPlan, todaysPlanUnleveledPool, selectedConcepts])
+
+  // How many questions each level holds there, said under each level's name.
+  const difficultyCounts = useMemo(() => {
+    const counts: Record<Difficulty, number> = { easy: 0, medium: 0, hard: 0 }
+    for (const q of unleveledPool) if (q.difficulty in counts) counts[q.difficulty]++
+    return counts
+  }, [unleveledPool])
+
+  // The questions the current configuration can draw from. Backs the deck
+  // card's availability number and gives the shuffle something to draw from.
+  const currentPool = useMemo(() => unleveledPool.filter(inLevels), [unleveledPool, inLevels])
 
   // How many the pool holds, and how many of those the quiz will pull.
   const poolCount = currentPool.length
@@ -1059,7 +1078,7 @@ export default function Landing() {
     count,
     selectedSitting ? `${selectedSitting.year}|${selectedSitting.session ?? ''}` : '',
     [...selectedConcepts].sort().join(','),
-    mode === 'quiz' ? difficultyToParam(difficulty) : '',
+    levelsParam ?? '',
   ].join('§')
 
   useEffect(() => {
@@ -1073,18 +1092,12 @@ export default function Landing() {
 
   function handleShuffle() {
     if (quizQuestionCount <= 0) return
-    // The same draw the quiz itself makes: leaning toward the difficulty
-    // slider for a quiz, uniform for a practice exam, which is sat as the paper
-    // sets it.
-    const target = mode === 'quiz' ? difficulty : 0.5
     // Today's Plan keeps its coverage guarantee: the greedy cover takes the
     // first best-covering question, so running it over a freshly ordered pool
     // yields a different set that still covers the day's concepts.
     const planConcepts = useTodaysPlan ? buildTodaysPlanSelection()?.concepts : undefined
     const draw = planConcepts
-      ? selectQuestionsForCoverage(orderByDifficulty(currentPool, target), planConcepts, quizQuestionCount, { seenIds: todayAnsweredIds })
-      : mode === 'quiz'
-      ? drawByDifficulty(currentPool, quizQuestionCount, target)
+      ? selectQuestionsForCoverage(shuffle(currentPool), planConcepts, quizQuestionCount, { seenIds: todayAnsweredIds })
       : shuffle(currentPool).slice(0, quizQuestionCount)
 
     setDrawnIds(draw.map(q => q.id))
@@ -1517,8 +1530,9 @@ export default function Landing() {
               countOptions={mode === 'quiz' ? countOptions : undefined}
               countValue={mode === 'quiz' ? countValue : undefined}
               onCountChange={mode === 'quiz' ? handleCountChange : undefined}
-              difficulty={mode === 'quiz' ? difficulty : undefined}
-              onDifficultyChange={mode === 'quiz' ? handleDifficultyChange : undefined}
+              difficulties={mode === 'quiz' ? difficulties : undefined}
+              onDifficultiesChange={mode === 'quiz' ? handleDifficultiesChange : undefined}
+              difficultyCounts={mode === 'quiz' ? difficultyCounts : undefined}
               reveal={reveal}
               onRevealChange={handleRevealChange}
               timed={timed}

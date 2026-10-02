@@ -5,7 +5,8 @@ import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import { SegmentedControl, type SegmentedOption } from '@/components/ui/SegmentedControl'
 import { placeMenu, type MenuPlacement } from '@/lib/menuPlacement'
 import type { RevealMode } from '@/lib/revealMode'
-import { difficultyLabel, type DifficultyTarget } from '@/lib/quizDifficulty'
+import { DIFFICULTY_LEVELS, DIFFICULTY_LEVEL_LABEL, toggleDifficultyLevel } from '@/lib/quizDifficulty'
+import type { Difficulty } from '@/lib/parser'
 import { cn } from '@/lib/utils'
 
 /**
@@ -13,7 +14,7 @@ import { cn } from '@/lib/utils'
  * the menu it opens.
  *
  * What it holds is how the quiz is *run* rather than what it draws from: how
- * many questions it pulls and how hard they lean, whether each answer is marked
+ * many questions it pulls and which difficulties they come from, whether each answer is marked
  * as it is confirmed or held back for the review screen, and whether the quiz
  * is sat against the clock. Both used to be full-width rows stacked
  * under the deck in the action bar, which on a phone pushed Start Quiz to the
@@ -36,9 +37,11 @@ export interface QuizSettingsMenuProps {
   countOptions?: SegmentedOption<string>[]
   countValue?: string
   onCountChange?: (value: string) => void
-  /** Where the difficulty slider sits. Omitted, the menu carries no slider. */
-  difficulty?: DifficultyTarget
-  onDifficultyChange?: (next: DifficultyTarget) => void
+  /** The difficulty levels the quiz draws from. Omitted, the menu carries no difficulty choice. */
+  difficulties?: Difficulty[]
+  onDifficultiesChange?: (next: Difficulty[]) => void
+  /** How many questions each level holds in the current pool, said under its name. */
+  difficultyCounts?: Record<Difficulty, number>
   reveal: RevealMode
   onRevealChange: (next: RevealMode) => void
   timed: boolean
@@ -52,8 +55,9 @@ export function QuizSettingsMenu({
   countOptions,
   countValue,
   onCountChange,
-  difficulty,
-  onDifficultyChange,
+  difficulties,
+  onDifficultiesChange,
+  difficultyCounts,
   reveal,
   onRevealChange,
   timed,
@@ -66,7 +70,7 @@ export function QuizSettingsMenu({
   const triggerRef = useRef<HTMLButtonElement>(null)
 
   const showCount = countOptions !== undefined && countValue !== undefined && onCountChange !== undefined
-  const showDifficulty = difficulty !== undefined && onDifficultyChange !== undefined
+  const showDifficulty = difficulties !== undefined && onDifficultiesChange !== undefined
   const difficultyLabelId = useId()
 
   // Anchor the menu to the button. `placeMenu` owns the rule that matters here
@@ -166,33 +170,51 @@ export function QuizSettingsMenu({
         </div>
       )}
 
-      {/* ── How hard the draw leans ─────────────────────────────────────
-          Continuous, because it blends: the bank only has three levels, and a
-          position between two stops draws a mix of both (lib/quizDifficulty.ts).
-          It only ever *says* the three words, though — a percentage would
-          promise a precision the bank doesn't have. */}
+      {/* ── Which difficulties it draws from ──────────────────────────────
+          A multi-select, and a filter: an unticked level is out of the pool,
+          so the deck card's count moves with it. The last ticked level can't
+          be unticked (lib/quizDifficulty.ts) — a quiz needs something to draw. */}
       {showDifficulty && (
-        <div className={cn('px-3 pt-3 pb-2', showCount && 'border-t border-border')}>
-          <div className="flex items-baseline justify-between">
-            <p id={difficultyLabelId} className="text-xs font-medium text-muted-foreground">Difficulty</p>
-            <span className="text-xs font-semibold">{difficultyLabel(difficulty)}</span>
-          </div>
-          <input
-            type="range"
-            min={0}
-            max={1}
-            step={0.01}
-            value={difficulty}
+        <div className={cn('space-y-2 px-3 py-3', showCount && 'border-t border-border')}>
+          <p id={difficultyLabelId} className="text-xs font-medium text-muted-foreground">Difficulty</p>
+          <div
+            role="group"
             aria-labelledby={difficultyLabelId}
-            aria-valuetext={difficultyLabel(difficulty)}
-            onChange={e => onDifficultyChange(Number(e.target.value))}
-            className="sim-slider"
-          />
-          {/* The stops, under the points of the track they name. */}
-          <div className="flex justify-between text-[11px] text-muted-foreground" aria-hidden>
-            <span>Easy</span>
-            <span>Med</span>
-            <span>Hard</span>
+            className="flex items-center gap-0.5 rounded-lg border border-border bg-muted/50 p-0.5"
+          >
+            {DIFFICULTY_LEVELS.map(level => {
+              const checked = difficulties.includes(level)
+              const n = difficultyCounts?.[level]
+              return (
+                <button
+                  key={level}
+                  type="button"
+                  role="checkbox"
+                  aria-checked={checked}
+                  data-sound="tick"
+                  onClick={() => onDifficultiesChange(toggleDifficultyLevel(difficulties, level))}
+                  className={cn(
+                    'flex min-w-0 flex-1 flex-col items-center justify-center rounded-md px-2 py-1.5 transition-colors',
+                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
+                    checked
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground',
+                  )}
+                >
+                  <span className="flex items-center gap-1.5 text-sm font-medium">
+                    {checked ? (
+                      <CheckMark className="h-3.5 w-3.5" />
+                    ) : (
+                      <Circle className="h-3.5 w-3.5 shrink-0 text-muted-foreground/50" />
+                    )}
+                    {DIFFICULTY_LEVEL_LABEL[level]}
+                  </span>
+                  {n !== undefined && (
+                    <span className="text-[11px] tabular-nums text-muted-foreground">{n}</span>
+                  )}
+                </button>
+              )
+            })}
           </div>
         </div>
       )}

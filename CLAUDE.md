@@ -221,8 +221,9 @@ before touching that area**:
   stored), and only click-markable multiple choice is raced. Read before touching anything
   named `battle*` or `Matchmaking`.
 - `docs/actuaria-online.md` — **Actuaria Online**, the game layer over Study Mode (behind
-  `ACTUARIA_ENABLED`, **on for Pro** — `lib/actuaria/access.ts` is who may enter, and the
-  database holds cohort membership to the same rule): each exam a *sector* of a star system, each concept a *landmark*,
+  `ACTUARIA_ENABLED`, **on for approved accounts only** — `ACTUARIA_APPROVED_EMAILS` in
+  `lib/actuaria/access.ts` is who may enter, and the database holds cohort membership to the
+  same list): each exam a *sector* of a star system, each concept a *landmark*,
   Credibility = the mastery ladder and the readiness score, Coverage = the streak, a duel = a
   Quiz Battle. It is the build spec, phase by phase, and its §2 ground rules are the part to
   keep — one mastery ladder, one readiness number, one currency/streak/XP, **one battle engine**
@@ -889,7 +890,7 @@ Other important `lib/` modules:
   `useBattleMusic` in `hooks/useBattle.ts`, with the intensity from `battleMusicIntensity` in
   `battleDisplay.ts`. The battle's cues are `BATTLE_RECIPES` in `soundConfig.ts`. All pure
   modules are tested.
-- `featureFlags.ts` — build-time feature flags (`ACTUARIA_ENABLED` — on, for Pro; `ACTUARIA_OPEN_TO_ALL`, which the e2e build sets with `VITE_ACTUARIA_PREVIEW=on`, opens it to everyone —, `COWORK_ENABLED`, `RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
+- `featureFlags.ts` — build-time feature flags (`ACTUARIA_ENABLED` — on, for the approved accounts in `lib/actuaria/access.ts`; `ACTUARIA_OPEN_TO_ALL`, which the e2e build sets with `VITE_ACTUARIA_PREVIEW=on`, opens it to everyone —, `COWORK_ENABLED`, `RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
   `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`,
   `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `FACT_CHECK_UI_ENABLED`, `TOUR_ENABLED`). `TOUR_ENABLED` is
   **off**: the guided onboarding tour (`components/OnboardingTour.tsx` +
@@ -1136,11 +1137,12 @@ via `supabase secrets set`, never as `VITE_*`.
 - `supabase/functions/` — Deno edge functions: Stripe checkout/portal/webhook/sync,
   account deletion, beta code redemption, Google Cloud TTS proxy, `research-ingest-url`,
   and `daily-plan-email` (the pg_cron-driven study-plan email sender).
-- `20260929_actuaria.sql` / `20260930_actuaria_crews.sql` / `20261001_actuaria_pro.sql` —
-  **Actuaria Online** (Pro only): a player's own settings row, then cohorts (`actuaria_crews*`), the risk pool (applied inside
+- `20260929_actuaria.sql` / `20260930_actuaria_crews.sql` / `20261001_actuaria_pro.sql` /
+  `20261002_actuaria_approved.sql` — **Actuaria Online** (approved accounts only): a player's own settings row, then cohorts (`actuaria_crews*`), the risk pool (applied inside
   `award_gems`), guides, nudges, Cohort Clash challenges and the weekly raid — leagues' privacy
   model, RPC-only, with `actuaria_raid_hit` callable by the service role alone (`quiz/api/raid.js`),
-  and starting or joining a cohort held to an active Pro subscription (`actuaria_is_pro`).
+  and starting or joining a cohort held to the approved emails (`actuaria_is_approved`, the
+  same list as `ACTUARIA_APPROVED_EMAILS` — `access.test.ts` holds them equal).
   `supabase/tests/run.sh` runs `supabase/tests/actuaria_crews.sql` against a throwaway local
   Postgres; CI doesn't, so run it after touching that migration. See `docs/actuaria-online.md`.
 - `content_reports` (`20260823_content_reports.sql`) — the reader-report inbox behind VERIFY's

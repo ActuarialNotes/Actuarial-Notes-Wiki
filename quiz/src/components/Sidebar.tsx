@@ -39,8 +39,8 @@ import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { ProBadge } from '@/components/ProBadge'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { parseBanner, DESIGNATION_BANNERS } from '@/lib/banners'
-import { ACTUARIA_ENABLED, ACTUARIA_OPEN_TO_ALL, COWORK_ENABLED, RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
-import { canEnterActuaria } from '@/lib/actuaria/access'
+import { COWORK_ENABLED, RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
+import { useActuariaAccess } from '@/hooks/useActuariaAccess'
 import { StatusChip } from '@/components/actuaria/StatusChip'
 import { ModeSwitcher } from '@/components/ModeSwitcher'
 import { useCoworkLibrary } from '@/hooks/useCoworkLibrary'
@@ -349,8 +349,9 @@ export default function Sidebar() {
   const { user, signOut } = useAuth()
   const { balance: gemBalance } = useGems()
   const { isPro, isBetaTester } = useSubscription()
-  // Actuaria is Pro's (lib/actuaria/access.ts): no one else sees its row.
-  const showActuaria = ACTUARIA_ENABLED && canEnterActuaria({ signedIn: !!user, isPro }, ACTUARIA_OPEN_TO_ALL)
+  // Actuaria is open to approved accounts alone (lib/actuaria/access.ts): no
+  // one else sees its row.
+  const { allowed: showActuaria } = useActuariaAccess()
   const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
   const location = useLocation()

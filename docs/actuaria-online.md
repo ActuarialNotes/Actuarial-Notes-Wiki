@@ -242,7 +242,7 @@ documented in §2.6. Don't add a new variant.
   `forceActive` check in `Sidebar.tsx` is `pathname === '/battle'`; keep it exact).
 - **Sidebar**: under the existing items, add a divider, a muted mono `PLAY` label, and an
   **Actuaria** row with a small stroke orbit icon and a `live` StatusChip. It is hidden when
-  `ACTUARIA_ENABLED` is false, and from anyone without Pro (see *Implementation notes*). Actuaria is part of Study Mode, **not** a third mode on the mode
+  `ACTUARIA_ENABLED` is false, and from any account not approved for it (see *Implementation notes*). Actuaria is part of Study Mode, **not** a third mode on the mode
   pill (D6).
 - **Mobile**: in-world screens get a 5-tab bottom bar (Map, Battle, Daily, Cohort, Hangar),
   following style guide §5.1. On `/actuaria/battle` it hides while a battle is running, since
@@ -657,20 +657,26 @@ them for layout, spacing and copy, not for colour, font, scoring or reward value
 
 Where the build settled something this spec left open, or departed from its letter.
 
-- **Launched for Pro.** `ACTUARIA_ENABLED` is `true`, and Actuaria is open to a signed-in
-  account with an active Pro subscription (`lib/actuaria/access.ts`, read through
-  `hooks/useActuariaAccess.ts`): the sidebar's PLAY row, the Study Guides hub card, the Store's
-  Ships tab and the `/actuaria/*` routes are shown to Pro and to no one else, and the route
-  sends anyone else to sign in or to `/upgrade`. It was built dark behind the flag first, with
-  the main chunk carrying none of it; the world is still one lazy chunk.
+- **Open to approved accounts.** `ACTUARIA_ENABLED` is `true`, and Actuaria is open to the
+  signed-in accounts on `ACTUARIA_APPROVED_EMAILS` (`lib/actuaria/access.ts`, read through
+  `hooks/useActuariaAccess.ts`; emails compared case-insensitively) — today one. The sidebar's
+  PLAY row, the Study Guides hub card, the Store's Ships tab and the `/actuaria/*` routes are
+  shown to those accounts and to no one else; to everyone else the world doesn't exist, the way
+  a Preview mode has no pill, and the route sends them to sign in or, signed in, back to the
+  dashboard. It was briefly open to every Pro subscriber before being narrowed. It was built
+  dark behind the flag first, with the main chunk carrying none of it; the world is still one
+  lazy chunk.
   `ACTUARIA_OPEN_TO_ALL` (`VITE_ACTUARIA_PREVIEW=on`) opens it to every viewer, signed out
   included — only the e2e build sets it (`playwright.config.ts`), which is how the specs reach
   `/actuaria` without a subscription.
-- **Pro in the database too.** A cohort is shared, stored state, so starting or joining one is
-  held to the same rule server-side (`20261001_actuaria_pro.sql`, `actuaria_is_pro`, mirroring
-  `isActivePro` as the TTS function does). A member whose Pro lapses keeps their place; the app
-  no longer shows them Actuaria, so they can't leave from it until they're Pro again — the one
-  gap in delete-on-leave, worth a Settings row if it matters.
+- **The same list in the database.** A cohort is shared, stored state, so starting or joining
+  one is held to the same list server-side (`20261002_actuaria_approved.sql`,
+  `actuaria_is_approved`, which reads the account's email from `auth.users`); `access.test.ts`
+  holds the two lists equal, so letting someone in is a line in each. It replaced the Pro check
+  of `20261001_actuaria_pro.sql`. A member let in under that rule keeps their place, but the app
+  no longer shows them Actuaria, so they can't leave from it — the one gap in delete-on-leave,
+  worth a Settings row if it matters. With a single approved account no cohort reaches
+  `CREW_MIN`, so the pool and the raid stay dormant until more accounts are let in.
 - **`user_actuaria` has a `ship` column** (`jsonb`, the Hangar's equipped slot per part),
   since §8.1 names no home for the equipped cosmetics. Ownership stays in `user_cosmetics`.
 - **The `power` event carries `now`**, as every other `battleReducer` event does, rather than

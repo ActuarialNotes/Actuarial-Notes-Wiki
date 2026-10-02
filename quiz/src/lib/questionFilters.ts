@@ -1,22 +1,26 @@
 import { isFromAnotherExamsPaper, type Question, type QuestionFilter } from './parser'
 import { questionSittingLabel, sittingLabel, sittingLabels } from './pastExams'
 import { EXAM_LABEL_TO_ID } from './examIds'
+import { PUBLISHER_ORDER, questionPublisher } from './questionPublisher'
 
-// The filters every list of questions offers — Difficulty, Concepts, Exam and
-// Sitting — as one definition. The quiz builder's search panel, the concept
-// question browser and the concept detail modal each used to own a copy, and
-// the copies drifted: one hid Exam whenever the pool held a single exam,
-// another never offered Exam or Sitting at all. `components/QuestionFilterBar`
-// draws these; this module decides what they mean.
+// The filters every list of questions offers — Difficulty, Concepts, Source,
+// Exam and Sitting — as one definition. The quiz builder's search panel, the
+// concept question browser and the concept detail modal each used to own a
+// copy, and the copies drifted: one hid Exam whenever the pool held a single
+// exam, another never offered Exam or Sitting at all.
+// `components/QuestionFilterBar` draws these; this module decides what they
+// mean.
 //
 // Each facet is OR within itself (nothing chosen matches everything) and the
 // facets are AND'd together. Values are the strings a question is matched
-// back against: a difficulty, a concept label, the bank's `exam:` label and a
-// sitting's display label (`"Spring 2019"`).
+// back against: a difficulty, a concept label, a publisher (`"SOA"`, `"CAS"`,
+// `"Actuarial Notes"` — `lib/questionPublisher.ts`), the bank's `exam:` label
+// and a sitting's display label (`"Spring 2019"`).
 
-export type QuestionFacet = 'difficulty' | 'concept' | 'exam' | 'sitting'
+export type QuestionFacet = 'difficulty' | 'concept' | 'source' | 'exam' | 'sitting'
 
-export const QUESTION_FACETS: readonly QuestionFacet[] = ['difficulty', 'concept', 'exam', 'sitting']
+/** Source before Exam before Sitting: each narrows the one after it. */
+export const QUESTION_FACETS: readonly QuestionFacet[] = ['difficulty', 'concept', 'source', 'exam', 'sitting']
 
 export type FacetSelection = Readonly<Record<QuestionFacet, ReadonlySet<string>>>
 
@@ -33,7 +37,7 @@ const DIFFICULTY_ORDER = ['easy', 'medium', 'hard']
 const EXAM_ORDER = Object.keys(EXAM_LABEL_TO_ID)
 
 export function emptyFacets(): FacetSelection {
-  return { difficulty: new Set(), concept: new Set(), exam: new Set(), sitting: new Set() }
+  return { difficulty: new Set(), concept: new Set(), source: new Set(), exam: new Set(), sitting: new Set() }
 }
 
 /** The selection with `value` flipped in or out of `facet`. */
@@ -90,6 +94,10 @@ export function questionFacetValues(q: Question, facet: QuestionFacet, examNarro
   switch (facet) {
     case 'difficulty': return [q.difficulty]
     case 'concept': return [...new Set(q.wiki_link.map(conceptLabel))]
+    case 'source': {
+      const publisher = questionPublisher(q)
+      return publisher ? [publisher] : []
+    }
     case 'exam': return [q.exam]
     case 'sitting': {
       const sitting = sittingOf(q, examNarrowed)
@@ -119,8 +127,8 @@ export function matchesFacets(q: Question, selection: FacetSelection, except?: Q
  * would leave, plus whatever is already chosen (so it can be un-chosen even
  * when nothing is left under it). Difficulty always offers all three levels.
  *
- * Ordered for reading: difficulty easy → hard, concepts A → Z, exams up the
- * ladder, sittings newest first.
+ * Ordered for reading: difficulty easy → hard, concepts A → Z, publishers and
+ * exams up the ladder, sittings newest first.
  */
 export function facetOptions(pool: Question[], facet: QuestionFacet, selection: FacetSelection): FacetOption[] {
   const examNarrowed = selection.exam.size > 0
@@ -139,6 +147,9 @@ export function facetOptions(pool: Question[], facet: QuestionFacet, selection: 
       break
     case 'concept':
       values = [...counts.keys()].sort((a, b) => a.localeCompare(b))
+      break
+    case 'source':
+      values = PUBLISHER_ORDER.filter(publisher => counts.has(publisher))
       break
     case 'exam': {
       const rank = (exam: string) => {

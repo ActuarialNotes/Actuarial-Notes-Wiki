@@ -40,7 +40,8 @@ function linkMatchesConcept(link: string, conceptName: string): boolean {
   return !!lastSegment && lastSegment.replace(/-/g, ' ').toLowerCase() === lower
 }
 
-/** The shared filter this page draws as a dropdown; its Exam stays a row of pills. */
+/** The shared filters this page draws as dropdowns; its Exam stays a row of pills. */
+const SOURCE_FACET: readonly QuestionFacet[] = ['source']
 const SITTING_FACET: readonly QuestionFacet[] = ['sitting']
 
 const DIFFICULTIES: { value: Difficulty | ''; label: string }[] = [
@@ -282,6 +283,7 @@ export default function Search() {
   const [difficulty, setDifficulty] = useState<Difficulty | ''>('')
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [conceptFilter, setConceptFilter] = useState(() => searchParams.get('concept') ?? '')
+  const [sources, setSources] = useState<ReadonlySet<string>>(new Set())
   const [sittings, setSittings] = useState<ReadonlySet<string>>(new Set())
   const [openTopicGroups, setOpenTopicGroups] = useState<Set<string>>(new Set())
   const [useTodaysPlan, setUseTodaysPlan] = useState(false)
@@ -315,12 +317,13 @@ export default function Search() {
       const s = JSON.parse(raw) as {
         topic?: string; selectedSubtopics?: string[]
         difficulty?: Difficulty | ''; conceptFilter?: string; selectedIds?: string[]
-        sittings?: string[]
+        sources?: string[]; sittings?: string[]
       }
       if (s.topic)               setTopic(s.topic)
       if (s.selectedSubtopics?.length) setSelectedSubtopics(s.selectedSubtopics)
       if (s.difficulty)          setDifficulty(s.difficulty)
       if (s.conceptFilter)       setConceptFilter(s.conceptFilter)
+      if (s.sources?.length)     setSources(new Set(s.sources))
       if (s.sittings?.length)    setSittings(new Set(s.sittings))
       if (s.selectedIds?.length) setSelectedIds(new Set(s.selectedIds))
     } catch { /* ignore */ }
@@ -367,6 +370,7 @@ export default function Search() {
     setDifficulty('')
     setSelectedIds(new Set())
     setConceptFilter('')
+    setSources(new Set())
     setSittings(new Set())
     setTextQuery('')
     setUseTodaysPlan(false)
@@ -499,14 +503,16 @@ export default function Search() {
 
   // The page's exam rides along as the facet's Exam, so a sitting of a chosen
   // exam means that exam's paper — the shared rule (lib/questionFilters.ts).
-  const sittingSelection = useMemo(
-    () => ({ ...emptyFacets(), exam: new Set(topic ? [topic] : []), sitting: sittings }),
-    [topic, sittings],
+  const facetSelection = useMemo(
+    () => ({ ...emptyFacets(), source: sources, exam: new Set(topic ? [topic] : []), sitting: sittings }),
+    [sources, topic, sittings],
   )
 
   const filtered = useMemo(
-    () => (sittings.size === 0 ? filteredBeforeSitting : filteredBeforeSitting.filter(q => matchesFacets(q, sittingSelection))),
-    [filteredBeforeSitting, sittings, sittingSelection],
+    () => (sources.size === 0 && sittings.size === 0
+      ? filteredBeforeSitting
+      : filteredBeforeSitting.filter(q => matchesFacets(q, facetSelection))),
+    [filteredBeforeSitting, sources, sittings, facetSelection],
   )
 
   // How many questions link to each concept, keyed by canonical concept name.
@@ -577,7 +583,7 @@ export default function Search() {
       .slice(0, 30)
   }, [wikiIndex, textQuery, searchType, conceptQuestionCounts, allQuestions])
 
-  const hasFilters = topic || selectedSubtopics.length || difficulty || conceptFilter || sittings.size || textQuery
+  const hasFilters = topic || selectedSubtopics.length || difficulty || conceptFilter || sources.size || sittings.size || textQuery
 
   function handleStartQuiz() {
     trackSearchQuery({ query: textQuery.trim(), exam: topic, difficulty: difficulty })
@@ -586,6 +592,7 @@ export default function Search() {
     try {
       sessionStorage.setItem(SEARCH_STATE_KEY, JSON.stringify({
         topic, selectedSubtopics, difficulty, conceptFilter,
+        sources: [...sources],
         sittings: [...sittings],
         selectedIds: [...selectedIds],
       }))
@@ -605,9 +612,9 @@ export default function Search() {
       return
     }
 
-    // The quiz URL has no way to name several papers, so a list narrowed to
-    // sittings is started as it stands: its questions are the selection.
-    if (sittings.size > 0 && filtered.length > 0) {
+    // The quiz URL has no way to name a publisher or several papers, so a list
+    // narrowed to either is started as it stands: its questions are the selection.
+    if ((sources.size > 0 || sittings.size > 0) && filtered.length > 0) {
       try {
         sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(filtered.map(q => q.id)))
       } catch { /* ignore */ }
@@ -779,13 +786,24 @@ export default function Search() {
                 </div>
               </div>
 
+              {/* Source — who published the question: SOA, CAS or the vault's own */}
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium">Source</label>
+                <QuestionFilterBar
+                  pool={filteredBeforeSitting}
+                  selection={facetSelection}
+                  onToggle={(facet, value) => setSources(toggleFacet(facetSelection, facet, value).source)}
+                  facets={SOURCE_FACET}
+                />
+              </div>
+
               {/* Sitting — the paper a question was set on, newest first */}
               <div className="space-y-1.5">
                 <label className="text-sm font-medium">Sitting</label>
                 <QuestionFilterBar
                   pool={filteredBeforeSitting}
-                  selection={sittingSelection}
-                  onToggle={(facet, value) => setSittings(toggleFacet(sittingSelection, facet, value).sitting)}
+                  selection={facetSelection}
+                  onToggle={(facet, value) => setSittings(toggleFacet(facetSelection, facet, value).sitting)}
                   facets={SITTING_FACET}
                 />
               </div>

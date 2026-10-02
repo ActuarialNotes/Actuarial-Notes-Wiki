@@ -40,7 +40,7 @@ const DIFFICULTY_COLORS: Record<Difficulty, string> = {
 }
 
 /** The shared filters this list offers beside its own All / New / Attempted. */
-const LIST_FACETS: readonly QuestionFacet[] = ['exam', 'sitting']
+const LIST_FACETS: readonly QuestionFacet[] = ['source', 'exam', 'sitting']
 
 export type TabMode = 'definition' | 'questions' | 'syllabus'
 export type FilterMode = 'all' | 'new' | 'attempted'
@@ -489,9 +489,9 @@ export function ConceptDetailModal({
               )}
             </div>
 
-            {/* Exam / Sitting — the filters every question list offers. Kept
-                out of the toolbar's condition above, so a choice that leaves
-                nothing listed can still be undone. */}
+            {/* Source / Exam / Sitting — the filters every question list
+                offers. Kept out of the toolbar's condition above, so a choice
+                that leaves nothing listed can still be undone. */}
             {!questionsLoading && questions.length > 0 && (
               <QuestionFilterBar
                 pool={questions.filter(matchesMode)}

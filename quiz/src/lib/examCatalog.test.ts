@@ -18,6 +18,7 @@ import { examIdFromFile } from '@/lib/wikiRoutes'
 import { parseExamMetadata, parseExamSyllabus, wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { slugForLink } from '@/lib/conceptMatch'
 import { getSyllabusPdfLink } from '@/data/examPdfLinks'
+import { EXAM_BODIES } from '@/lib/questionPublisher'
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..')
 const readJson = <T,>(rel: string): T => JSON.parse(readFileSync(path.join(REPO_ROOT, rel), 'utf-8')) as T
@@ -62,6 +63,11 @@ describe('scripts/exam_catalog.json', () => {
 
   it.each(catalog.filter(e => e.bank))('$page — its question bank exists', row => {
     expect(existsSync(path.join(REPO_ROOT, 'questions', row.bank!))).toBe(true)
+  })
+
+  // The Source filter names a question's publisher by the body that sets its exam.
+  it.each(catalog.filter(e => e.bank))('$page — body mirrors lib/questionPublisher', row => {
+    expect(EXAM_BODIES[row.progress_key]).toBe(row.body)
   })
 })
 

@@ -25,7 +25,7 @@ interface MultiSelectDropdownProps {
 }
 
 /** A pill-style button that opens a checkbox list for multi-selecting options.
- *  The Concepts, Exam and Sitting filters of every question list
+ *  The Concepts, Source, Exam and Sitting filters of every question list
  *  (`QuestionFilterBar`) and the Exam, Publisher and Year filters of the
  *  Resources shelf (`pages/wiki/WikiResources.tsx`) are drawn with it. */
 export function MultiSelectDropdown({
@@ -39,26 +39,27 @@ export function MultiSelectDropdown({
 }: MultiSelectDropdownProps) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
   const menuRef = useRef<HTMLDivElement>(null)
-  // How far the menu sits from its trigger's left edge. It prefers to line up
-  // with the trigger, but a filter at the end of a row on a phone would push it
-  // past the screen's right edge — `placeMenu` slides it back inside, the rule
-  // every menu in the app keeps. Measured before paint, so it never flashes.
-  const [shift, setShift] = useState(0)
+  // How far the menu sits left of the pill's own left edge. It hangs from that
+  // edge when it fits, but a pill at the end of a phone-width row (Source,
+  // Concepts) opened a menu whose names and counts ran off the screen —
+  // `placeMenu` slides it back inside.
+  const [menuShift, setMenuShift] = useState(0)
 
   useLayoutEffect(() => {
     if (!open) return
-    const trigger = ref.current
+    const button = buttonRef.current
     const menu = menuRef.current
-    if (!trigger || !menu) return
-    const anchor = trigger.getBoundingClientRect()
+    if (!button || !menu) return
+    const anchor = button.getBoundingClientRect()
     const { left } = placeMenu(
       anchor,
       { width: document.documentElement.clientWidth, height: window.innerHeight },
       { width: menu.offsetWidth, maxHeight: menu.offsetHeight },
     )
-    setShift(left - anchor.left)
-  }, [open])
+    setMenuShift(left - anchor.left)
+  }, [open, options])
 
   useEffect(() => {
     function handler(e: MouseEvent) {
@@ -84,6 +85,7 @@ export function MultiSelectDropdown({
   return (
     <div ref={ref} className="relative">
       <button
+        ref={buttonRef}
         type="button"
         onClick={() => setOpen(v => !v)}
         disabled={empty}
@@ -101,9 +103,8 @@ export function MultiSelectDropdown({
       {open && !empty && (
         <div
           ref={menuRef}
-          style={{ left: shift }}
-          className="absolute top-full mt-1 z-20 bg-card rounded-lg shadow-lg w-max min-w-[200px] max-w-[18rem] py-1.5 max-h-72 overflow-y-auto"
-        >
+          style={{ left: menuShift }}
+          className="absolute top-full mt-1 z-20 bg-card rounded-lg shadow-lg w-max min-w-[200px] max-w-[18rem] py-1.5 max-h-72 overflow-y-auto">
           {options.map(opt => {
             const count = getCount?.(opt.value)
             return (

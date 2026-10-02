@@ -1016,14 +1016,19 @@ compile — don't "clean up" the flagged code as dead.
   `exam-8` / `exam-9` — the 2012–2019 Exam 7 and Exam 8 papers: reserving in `exam-7`,
   classification and individual risk rating in `exam-8`, and in `exam-9` with
   `originally_exam:` Exam 7's ERM questions (CAS moved Brehm's ERM there) and Exam 8's
-  reinsurance and catastrophe questions (Clark, Bernegger, Grossi & Kunreuther). Two optional keys
+  reinsurance and catastrophe questions (Clark, Bernegger, Grossi & Kunreuther). `exam-9` also
+  holds Exam 9's own seven Spring 2013–2019 papers (`cas9-*`, 172 questions); their syllabus
+  ("Financial Risk and Rate of Return") was mostly BKM's *Investments* and the rate-of-return
+  papers, so only the 23 on readings today's Exam 9 kept (Panning; Coval, Jurek & Stafford;
+  Cummins's capital allocation and CAT bonds) are on it, the rest `off_syllabus`. Two optional keys
   say a question has outlived its paper's syllabus: `originally_exam` (the material moved to
   the exam in `exam`, so it stays off that exam's past-paper shelf) and `off_syllabus: true`
   (no current exam covers it — Exam 7's old valuation questions, Exam 8's NCCI hazard-group
   mapping and Mahler's excess-ratio estimation, and Exam 6C's pre-IFRS 17 valuation (PfADs and
   MfADs, premium deficiency and DPAE, the future-income-tax asset, asset-yield discount rates,
   IAS 39 bond classes), A.M. Best's BCAR (Feldblum Section 5, now excluded) and U.S.-only
-  regulation such as TRIA and Dodd-Frank; kept for the record, out of
+  regulation such as TRIA and Dodd-Frank, and Exam 9's old portfolio theory, bond management,
+  Hull, Butsic, Goldfarb, Bodoff and rate-of-return questions; kept for the record, out of
   quiz draws, still found by its sitting, its id or a search, and not held to the exam page
   by `syllabus_lint.py`). A CAS question with no lettered parts is `type: multi-part` with
   `### Explanation` / `### Examiner Report` and no `## Part` heading — under `## Explanation`

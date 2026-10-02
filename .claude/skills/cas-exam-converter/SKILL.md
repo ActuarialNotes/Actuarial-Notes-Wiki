@@ -215,8 +215,9 @@ python3 scripts/pdf_extract.py --exam mas-i --year 2019 --session Spring \
 
 - `scripts/standardize_questions.py` and `scripts/update_wiki_links.py` have no
   Exam 5+ entries in `ontology_map.py` — do not run them on these banks.
-- Exams 6C, 7, 8 and 9 have banks (the 2013–2019 Exam 6-Canada papers and the
-  2012–2019 Exam 7 and Exam 8 papers) and are beta in `examStatus.ts`. Exam 6U
+- Exams 6C, 7, 8 and 9 have banks (the 2013–2019 Exam 6-Canada papers, the
+  2012–2019 Exam 7 and Exam 8 papers and the 2013–2019 Exam 9 papers) and are
+  beta in `examStatus.ts`. Exam 6U
   has no bank and is still *in development*; converting a 6U paper is fine, but
   the exam does not become studiable until its status moves
   (`IN_DEVELOPMENT_VARIANTS`, and its row in `scripts/exam_catalog.json`).
@@ -227,6 +228,10 @@ python3 scripts/pdf_extract.py --exam mas-i --year 2019 --session Spring \
   bank, for the record, out of quiz draws (`docs/pdf-question-pipeline.md`,
   Stage 3). Its `learning_objective` is then the old syllabus's. Both are
   fields `question_classify.py --settle` applies from a decisions file.
+  Decide it by the **reading** the question tests, against the exam page's
+  Source Material: the 2013–2019 Exam 9 papers stayed on syllabus only where
+  they test Panning, Coval/Jurek/Stafford or one of the two Cummins papers, and
+  a question mixing readings goes by where most of its points sit.
 - Every `$` in a transcription or rewrite that is money is `\$` — the extractor
   escapes the text layer's, but it cannot tell yours from math.
 - The classifier leans on `Concepts/` coverage, which is thinner for Exam 5+

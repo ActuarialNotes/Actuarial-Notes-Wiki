@@ -622,6 +622,12 @@ def reflow_block(text: str) -> str:
     for raw in merge_lone_bullets(text.splitlines()):
         line = raw.strip()
         if not line:
+            # A blank line inside a block is the PDF's own paragraph break —
+            # the SOA FM booklet sets each question as one block, its
+            # paragraphs split by a line holding a space. Keep it, or the
+            # question's `Calculate X.` runs on into the paragraph above.
+            if out and out[-1]:
+                out.append("")
             continue
         runs_on = (
             out
@@ -631,11 +637,11 @@ def reflow_block(text: str) -> str:
             and not TERMINAL_RE.search(out[-1])
             and not STEP_END_RE.search(out[-1])
         )
-        if runs_on:
+        if runs_on and out[-1]:
             out[-1] = f"{out[-1]} {line}"
         else:
             out.append(line)
-    return "\n".join(out)
+    return "\n".join(out).strip("\n")
 
 
 # Two or more spaces: a column gap in space-aligned text.

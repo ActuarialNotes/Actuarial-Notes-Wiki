@@ -859,6 +859,12 @@ class TestSoaFm2026Layout(unittest.TestCase):
         _prompt, options = px.split_options(text[bound.start : bound.end])
         self.assertEqual(options["E"], "5.45")
 
+    def test_a_blank_line_inside_a_block_is_a_paragraph_break(self):
+        self.assertEqual(
+            px.reflow_block("Bank A lends money to\nBank B. \n \nCalculate the amount. \n"),
+            "Bank A lends money to Bank B.\n\nCalculate the amount.",
+        )
+
     def test_the_page_number_offset_is_found(self):
         self.assertEqual(px.page_number_offset(self._booklet()), 147)
         self.assertIsNone(px.page_number_offset([_page(1, "no numbers"), _page(2, "here")]))

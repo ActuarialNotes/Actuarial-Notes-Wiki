@@ -12,6 +12,7 @@ import {
   Layers,
   LayoutDashboard,
   Library,
+  LibraryBig,
   LogOut,
   Microscope,
   Moon,
@@ -47,6 +48,7 @@ import { useCoworkLibrary } from '@/hooks/useCoworkLibrary'
 import { useCoworkDeliverables } from '@/hooks/useCoworkDeliverables'
 import { modeForPath } from '@/lib/appMode'
 import { ATTEMPT_VIEW_ICON, ATTEMPT_VIEW_LABEL, attemptRoute } from '@/lib/attemptViews'
+import { RESOURCES_ROUTE, studyGuidesSection, type StudyGuidesSection } from '@/lib/wikiRoutes'
 import { TodayQuizCornerBadge, TodayQuizNavBadge } from '@/components/TodayQuizBadge'
 import { useTodayQuizCounts } from '@/hooks/useTodayQuizCount'
 import { SoundPopover } from '@/components/SoundPopover'
@@ -262,6 +264,72 @@ function CoworkNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: 
 }
 
 /**
+ * The rows a tab lists under itself while it is open — an attempt's views
+ * under Projects, the Study Guides pages under Study Guides — indented behind
+ * a rule, so they read as part of the row above.
+ */
+function SubRows({ collapsed, children }: { collapsed: boolean; children: React.ReactNode }) {
+  return (
+    <div
+      className={cn(
+        'ml-4 mt-0.5 space-y-0.5 border-l border-border pl-2',
+        // The icon-only rail has no room to indent: the rows stand in line under the tab's icon.
+        collapsed && 'lg:ml-0 lg:border-l-0 lg:pl-0',
+      )}
+    >
+      {children}
+    </div>
+  )
+}
+
+const STUDY_GUIDE_PAGES: { id: StudyGuidesSection; to: string; label: string; Icon: typeof BookOpen }[] = [
+  { id: 'exams', to: '/wiki', label: 'Exams', Icon: GraduationCap },
+  { id: 'resources', to: RESOURCES_ROUTE, label: 'Resources', Icon: LibraryBig },
+]
+
+/**
+ * The Study Guides row and, while the tab is open, its pages under it —
+ * **Exams** (the ladder, with the exam and concept pages read from it) and
+ * **Resources** (the shelf, with the resource pages opened from it) — drawn
+ * the way `ProjectsNav` draws an open attempt's views: the page showing is
+ * filled, the tab's own row is named but not filled. Which page a path is
+ * under is `studyGuidesSection` (`lib/wikiRoutes.ts`).
+ */
+function StudyGuidesNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: () => void }) {
+  const { pathname } = useLocation()
+  const section = studyGuidesSection(pathname)
+  const iconClass = 'h-5 w-5 lg:h-4 lg:w-4'
+
+  return (
+    <>
+      <SidebarItem
+        to={getLastWikiPath()}
+        label="Study Guides"
+        icon={<BookOpen className={iconClass} />}
+        collapsed={collapsed}
+        onNavigate={onNavigate}
+        state={section ? 'within' : 'idle'}
+      />
+      {section && (
+        <SubRows collapsed={collapsed}>
+          {STUDY_GUIDE_PAGES.map(({ id, to, label, Icon }) => (
+            <SidebarItem
+              key={id}
+              to={to}
+              label={label}
+              icon={<Icon className={iconClass} />}
+              collapsed={collapsed}
+              onNavigate={onNavigate}
+              state={id === section ? 'active' : 'idle'}
+            />
+          ))}
+        </SubRows>
+      )}
+    </>
+  )
+}
+
+/**
  * The Projects row and, while an attempt is open, that attempt's views under
  * it — Brief, Workspace, Report, Submit (Results once submitted) — mirroring
  * the switcher in the attempt's top bar, which the attempt page publishes to
@@ -283,13 +351,7 @@ function ProjectsNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate
         state={attempt ? 'within' : undefined}
       />
       {attempt && (
-        <div
-          className={cn(
-            'ml-4 mt-0.5 space-y-0.5 border-l border-border pl-2',
-            // The icon-only rail has no room to indent: the views stand in line under the flask.
-            collapsed && 'lg:ml-0 lg:border-l-0 lg:pl-0',
-          )}
-        >
+        <SubRows collapsed={collapsed}>
           {attempt.views.map(view => {
             const Icon = ATTEMPT_VIEW_ICON[view]
             return (
@@ -305,7 +367,7 @@ function ProjectsNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate
               />
             )
           })}
-        </div>
+        </SubRows>
       )}
     </>
   )
@@ -615,12 +677,21 @@ export default function Sidebar() {
               }
             >
               <SidebarItem
-                to={getLastWikiPath()}
+                to="/wiki"
                 label="Actuarial Exams"
                 icon={<GraduationCap className="h-5 w-5 lg:h-4 lg:w-4" />}
                 collapsed={collapsed}
+                end
                 onNavigate={closeMobile}
-                forceActive={location.pathname.startsWith('/wiki')}
+                forceActive={studyGuidesSection(location.pathname) === 'exams'}
+              />
+              <SidebarItem
+                to={RESOURCES_ROUTE}
+                label="Resources"
+                icon={<LibraryBig className="h-5 w-5 lg:h-4 lg:w-4" />}
+                collapsed={collapsed}
+                onNavigate={closeMobile}
+                forceActive={studyGuidesSection(location.pathname) === 'resources'}
               />
               {user && (
                 <SidebarItem
@@ -638,14 +709,7 @@ export default function Sidebar() {
               )}
             </SidebarGroup>
           ) : (
-            <SidebarItem
-              to={getLastWikiPath()}
-              label="Study Guides"
-              icon={<BookOpen className="h-5 w-5 lg:h-4 lg:w-4" />}
-              collapsed={collapsed}
-              onNavigate={closeMobile}
-              forceActive={location.pathname.startsWith('/wiki')}
-            />
+            <StudyGuidesNav collapsed={collapsed} onNavigate={closeMobile} />
           )}
           <SidebarItem
             to="/flashcards"

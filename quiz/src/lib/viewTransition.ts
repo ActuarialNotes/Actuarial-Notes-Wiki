@@ -61,7 +61,11 @@ const DESK: { prefix: string; tab: number; depth: number; below?: number }[] = [
   { prefix: '/wiki', tab: 1, depth: 0, below: 1 },
   { prefix: '/wiki/exam', tab: 1, depth: 1 },
   { prefix: '/wiki/concept', tab: 1, depth: 2 },
-  { prefix: '/wiki/resource', tab: 1, depth: 2 },
+  // Resources is the Study Guides tab's second page, listed under it in the
+  // sidebar beside the exams, so it lies beside them on the desk; a resource
+  // page is a sheet over that shelf.
+  { prefix: '/wiki/resources', tab: 1.2, depth: 0 },
+  { prefix: '/wiki/resource', tab: 1.2, depth: 1 },
   { prefix: '/research', tab: 1.5, depth: 0, below: 1 },
   { prefix: '/flashcards', tab: 2, depth: 0 },
   { prefix: '/', tab: 3, depth: 0 },

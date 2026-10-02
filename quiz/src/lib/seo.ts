@@ -50,7 +50,7 @@ export const THIN_PAGE_WORDS = 20
 const HUB_PATH = '/wiki'
 
 /** The app's own public routes, listed in the sitemap beside the vault's pages. */
-export const SITEMAP_APP_PATHS = ['/', '/quiz', '/flashcards', '/upgrade', '/store']
+export const SITEMAP_APP_PATHS = ['/', '/quiz', '/flashcards', '/wiki/resources', '/upgrade', '/store']
 const HUB_NAME = 'Study Guides'
 
 export type SeoPageKind = 'hub' | 'exam' | 'concept' | 'resource'
@@ -841,6 +841,7 @@ const STATIC_TITLES: Record<string, string> = {
   '/upgrade': `Upgrade | ${SITE_NAME}`,
   '/store': `Store | ${SITE_NAME}`,
   '/wiki': `SOA & CAS Actuarial Exam Study Guides | ${SITE_NAME}`,
+  '/wiki/resources': `Actuarial Exam Syllabus Readings & Resources | ${SITE_NAME}`,
 }
 
 /** Routes that are one reader's own state — never a search result. */

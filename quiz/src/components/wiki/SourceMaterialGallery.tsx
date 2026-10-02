@@ -7,7 +7,7 @@ import { MetaPill, PdfPill } from '@/components/wiki/ResourcePills'
 import type { SourceMaterialEntry } from '@/lib/sourceMaterial'
 
 // The exam study guides' source-material list, rendered as the same shelf of
-// resource cards the study-guide home page shows (cover, title, metadata pills)
+// resource cards the Resources page shows (cover, title, metadata pills)
 // rather than a collapsed callout of bare links. Each card carries the reading
 // assignment the syllabus gives for that source.
 

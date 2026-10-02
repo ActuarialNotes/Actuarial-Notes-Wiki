@@ -17,11 +17,17 @@ interface MultiSelectDropdownProps {
    *  A dropdown with no options stays on screen, disabled, so a filter the
    *  surface always offers doesn't come and go with the pool. */
   emptyTitle?: string
+  /** The pill's resting fill while nothing is chosen. `background` suits a
+   *  row on a card or panel; on the page itself it would leave the pill
+   *  without a shape, so a page's own filter row (the Resources shelf) takes
+   *  `card`. */
+  surface?: 'background' | 'card'
 }
 
 /** A pill-style button that opens a checkbox list for multi-selecting options.
  *  The Concepts, Source, Exam and Sitting filters of every question list
- *  (`QuestionFilterBar`) are drawn with it. */
+ *  (`QuestionFilterBar`) and the Exam, Publisher and Year filters of the
+ *  Resources shelf (`pages/wiki/WikiResources.tsx`) are drawn with it. */
 export function MultiSelectDropdown({
   label,
   options,
@@ -29,6 +35,7 @@ export function MultiSelectDropdown({
   onToggle,
   getCount,
   emptyTitle,
+  surface = 'background',
 }: MultiSelectDropdownProps) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
@@ -87,7 +94,7 @@ export function MultiSelectDropdown({
         className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed ${
           selected.size > 0
             ? 'bg-primary/10 text-primary'
-            : 'bg-background enabled:hover:bg-accent'
+            : `${surface === 'card' ? 'bg-card' : 'bg-background'} enabled:hover:bg-accent`
         }`}
       >
         <span className="max-w-[14rem] truncate">{displayLabel}</span>

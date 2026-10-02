@@ -4,7 +4,7 @@
 // the syllabus actually covers.
 //
 // The app renders that list as a gallery of resource cards — the same shelf the
-// study-guide home page shows — instead of a collapsed callout, so this module
+// Study Guides tab's Resources page shows — instead of a collapsed callout, so this module
 // lifts the entries out of the markdown and leaves a marker in their place for
 // `WikiArticle` to swap for the gallery. The vault keeps the callout: it is what
 // Obsidian renders, and `parseExamSyllabus` still reads its links.

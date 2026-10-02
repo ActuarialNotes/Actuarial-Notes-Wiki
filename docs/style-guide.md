@@ -486,6 +486,13 @@ profile row opens — a row is a row wherever it is drawn, so add the `lg:` half
 whenever you add the mobile half. `SidebarItem`'s `base` string is where it lives; the
 hamburger matches it at `h-10 w-10`.
 
+**A tab's pages are rows under it, while it is open.** A tab with more than one page lists
+them beneath its own row — indented behind a `border-l` rule (`SubRows` in `Sidebar.tsx`),
+flush under the icon on the collapsed rail — only while the reader is in that tab: an open
+project's Brief / Workspace / Report / Submit under **Projects**, **Exams** and **Resources**
+under **Study Guides**. The page showing is the filled row; the tab's own row is named
+(`text-foreground font-medium`) but not filled, so exactly one row reads as *here*.
+
 ### 5.1 Fixed bottom action bars
 
 Several views pin their commit action to the bottom (`Landing`, `Flashcards`, `Search`).

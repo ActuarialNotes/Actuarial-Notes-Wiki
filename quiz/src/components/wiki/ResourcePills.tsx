@@ -1,6 +1,6 @@
 import { FileText } from 'lucide-react'
 
-// The metadata pills on a resource card — shared by the study-guide home
+// The metadata pills on a resource card — shared by the Resources page's
 // shelf and the exam pages' source-material gallery so the two shelves stay
 // the same object.
 //

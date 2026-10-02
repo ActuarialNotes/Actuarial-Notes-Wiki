@@ -831,6 +831,53 @@ class TestExam7Layouts(unittest.TestCase):
         self.assertEqual([b.num for b in px.segment(booklet)], [1, 2, 10])
 
 
+class TestSoaFm2026Layout(unittest.TestCase):
+    """The August 2026 SOA FM booklets: numbers, options and keys on their own lines."""
+
+    def _booklet(self):
+        return [
+            _page(1, "148\n351.\nBank A lends money.\nCalculate the amount.\n"
+                     "(A)\n5159\n(B)\n5541\n(C)\n5655\n(D)\n5971\n(E)\n6210\n"
+                     "352.\nA zero-coupon bond sells for 640.\nCalculate the face.\n"
+                     "(A)\n780\n(B)\n805\n(C)\n830\n(D)\n855\n(E)\n880"),
+            _page(2, "149\n353.\nA bond is priced at 950.\nCalculate the duration.\n"
+                     "(A)\n4.59\n(B)\n4.62\n(C)\n5.00\n(D)\n5.41\n(E)\n5.45"),
+            _page(3, "150\n354.\n\nAt a force of interest, an investment grows.\nCalculate Y.\n"
+                     "(A)\n1124\n(B)\n1129\n(C)\n1134\n(D)\n1138\n(E)\n1143"),
+        ]
+
+    def test_question_numbers_and_option_values_are_not_page_numbers(self):
+        pages = self._booklet()
+        drop = px.furniture_lines(pages)
+        self.assertNotIn("351.", drop)
+        self.assertNotIn("5159", drop)
+        text, _ = px._joined(pages)
+        self.assertEqual([b.num for b in px.segment(text)], [351, 352, 353, 354])
+        self.assertNotIn("148", text)
+        self.assertNotIn("150", text)
+        bound = px.segment(text)[2]
+        _prompt, options = px.split_options(text[bound.start : bound.end])
+        self.assertEqual(options["E"], "5.45")
+
+    def test_a_blank_line_inside_a_block_is_a_paragraph_break(self):
+        self.assertEqual(
+            px.reflow_block("Bank A lends money to\nBank B. \n \nCalculate the amount. \n"),
+            "Bank A lends money to Bank B.\n\nCalculate the amount.",
+        )
+
+    def test_the_page_number_offset_is_found(self):
+        self.assertEqual(px.page_number_offset(self._booklet()), 147)
+        self.assertIsNone(px.page_number_offset([_page(1, "no numbers"), _page(2, "here")]))
+
+    def test_solutions_open_on_the_number_over_or_beside_the_key(self):
+        solutions = (
+            "351.\nSolution: C\nWork 1.\n12.\n3\n"
+            "352.  Solution:  C\nWork 2.\n353.  Solution.  E\nWork 3.\n354.  Solution B\nWork 4.\n"
+        )
+        self.assertEqual(px.answer_key(solutions), {351: "C", 352: "C", 353: "E", 354: "B"})
+        self.assertEqual([b.num for b in px.segment(solutions)], [351, 352, 353, 354])
+
+
 class TestSpring2016Faults(unittest.TestCase):
     """Four faults the CAS Exam 5 Spring 2016 paper exposed.
 

@@ -11,6 +11,7 @@ import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { FactCheckBadge } from '@/components/FactCheckBadge'
 import { parseVerification } from '@/lib/verification'
 import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
+import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 import { isNumberedOutline, OUTLINE_ARTICLE_CLASS, parseResourceMeta, preprocessResourceMarkdown } from '@/lib/resourceMeta'
 
 export default function WikiResource() {
@@ -60,7 +61,7 @@ export default function WikiResource() {
 
   return (
     <div className="space-y-4">
-      <Link to={RESOURCES_ROUTE} state={{ fromResource: true }} className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
+      <Link to={RESOURCES_ROUTE} state={RESTORE_SCROLL} className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
         <ChevronLeft className="h-4 w-4" /> All resources
       </Link>
 

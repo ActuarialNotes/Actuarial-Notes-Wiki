@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
-import { useLocation, useNavigationType } from 'react-router-dom'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { Compass } from 'lucide-react'
 import { CheckMark } from '@/components/CheckMark'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
@@ -118,33 +117,8 @@ export default function WikiHome() {
   // match the card it came from. The effect below still runs, for the build
   // that shipped no bundle.
   const [index, setIndex] = useState<WikiIndexItem[]>(() => bundledWikiIndex() ?? [])
-  const location = useLocation()
-  const navigationType = useNavigationType()
-
-  // Restore scroll when returning from an exam page; scroll to top on fresh visits.
-  // (A resource page returns to the Resources shelf — `WikiResources`.)
-  const shouldRestore = useRef(
-    navigationType === 'POP' ||
-    !!(location.state as { fromExam?: boolean } | null)?.fromExam,
-  )
-  const scrollRestored = useRef(false)
-  // On fresh visits scroll to top immediately; on returns wait for index to load
-  // so the page is tall enough before we try to jump to the saved position.
-  useEffect(() => {
-    if (!shouldRestore.current) window.scrollTo({ top: 0, behavior: 'instant' })
-  }, [])
-  useEffect(() => {
-    if (!shouldRestore.current || scrollRestored.current || index.length === 0) return
-    scrollRestored.current = true
-    const saved = sessionStorage.getItem('wiki-home:scroll')
-    if (saved !== null) {
-      const top = parseInt(saved, 10)
-      requestAnimationFrame(() => window.scrollTo({ top, behavior: 'instant' }))
-    }
-  }, [index])
-  useEffect(() => {
-    return () => { sessionStorage.setItem('wiki-home:scroll', String(window.scrollY)) }
-  }, [])
+  // Where the list was left is kept by the router (lib/routeScrollMemory.ts),
+  // which brings an exam page's "All exams" arrow and Back here to it.
 
   // Default to the reader's own track's body; the control overrides it, and the
   // choice is stored so the Quiz tab opens on the same body — one ladder, seen

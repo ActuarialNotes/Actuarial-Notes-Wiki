@@ -13,6 +13,7 @@ import { ExamVersionMenu } from '@/components/wiki/ExamVersionMenu'
 import { ExamSittingInfoButton } from '@/components/wiki/ExamSittingInfoButton'
 import { ExamProjectButton } from '@/components/wiki/ExamProjectButton'
 import { ExamLogo } from '@/components/ExamLogo'
+import { examAccentStyle } from '@/lib/examColors'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
 import { todayISO } from '@/lib/studyPlan'
@@ -402,13 +403,16 @@ export default function WikiExam() {
 
       {content !== null && (
         <>
-          <WikiArticle
-            markdown={content}
-            sourcePath={`${examFileName}.md`}
-            onWikiLink={onWikiLink}
-            titleBadge={titleBadge}
-            titleAction={titleAction}
-          />
+          {/* Scopes the exam's accent, which the learning objectives' titles are drawn in. */}
+          <div style={examAccentStyle(progressKey)}>
+            <WikiArticle
+              markdown={content}
+              sourcePath={`${examFileName}.md`}
+              onWikiLink={onWikiLink}
+              titleBadge={titleBadge}
+              titleAction={titleAction}
+            />
+          </div>
           <ConceptActionMenu
             entry={examEntry}
             open={menuOpen}

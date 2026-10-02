@@ -66,7 +66,10 @@ const TEAL: CalloutStyle = {
 const EXAMPLE_STYLE: CalloutStyle = {
   icon: null,
   borderClass: 'border-slate-300 dark:border-slate-500',
-  accentClass: 'text-foreground',
+  // A learning objective's title is drawn in the colour of the exam whose page
+  // it is on (`--exam-accent`, scoped by `WikiExam`), and in plain foreground
+  // wherever no exam is in scope.
+  accentClass: 'text-[color:var(--exam-accent,hsl(var(--foreground)))]',
   roundLeft: true,
   noBorder: true,
   bgClass: 'bg-card',
@@ -399,7 +402,7 @@ function Callout({ type, fold, title, children }: CalloutProps) {
           )}
         </div>
         {hasBody && (
-          <div data-callout-body hidden={!open} className={`bg-card ${contentClasses}`}>
+          <div data-callout-body hidden={!open} className={contentClasses}>
             {children}
           </div>
         )}

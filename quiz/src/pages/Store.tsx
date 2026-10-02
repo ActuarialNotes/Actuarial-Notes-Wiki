@@ -27,8 +27,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { ShipGlyph } from '@/components/actuaria/ShipGlyph'
 import { storeShips, SHIP_SLOT_LABEL, type ShipCosmetic } from '@/data/actuariaShips'
-import { canEnterActuaria } from '@/lib/actuaria/access'
-import { ACTUARIA_ENABLED, ACTUARIA_OPEN_TO_ALL } from '@/lib/featureFlags'
+import { useActuariaAccess } from '@/hooks/useActuariaAccess'
 import { cn } from '@/lib/utils'
 
 type StoreTab = 'characters' | 'skins' | 'banners' | 'ships'
@@ -69,10 +68,10 @@ export default function Store() {
   const [searchParams] = useSearchParams()
 
   const [activeTab, setActiveTab] = useState<StoreTab>(() => tabFromParam(searchParams.get('tab')))
-  const showShips = ACTUARIA_ENABLED && canEnterActuaria({ signedIn: !!user, isPro }, ACTUARIA_OPEN_TO_ALL)
+  // Ships are Actuaria's, so only a viewer who may enter it sees the tab.
+  const { allowed: showShips } = useActuariaAccess()
   const tabs = showShips ? STORE_TABS : STORE_TABS.filter(t => t !== 'ships')
-  // `?tab=ships` from a viewer who can't see ships — or before Pro status is
-  // read — shows the first tab until it can.
+  // `?tab=ships` from a viewer who can't see ships shows the first tab.
   const shownTab: StoreTab = activeTab === 'ships' && !showShips ? 'characters' : activeTab
   const [skinAnimalFilter, setSkinAnimalFilter] = useState<AnimalType | null>(null)
 

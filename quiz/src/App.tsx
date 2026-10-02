@@ -269,12 +269,11 @@ function BattleRoute() {
 
 function ActuariaRoute() {
   const location = useLocation()
-  const { allowed, loading, viewer } = useActuariaAccess()
+  const { allowed, viewer } = useActuariaAccess()
   if (!ACTUARIA_ENABLED) return <Navigate to="/wiki" replace />
-  // Pro's (lib/actuaria/access.ts): wait for a signed-in viewer's status to be
-  // read, then send anyone who can't enter to sign in, or to the Pro page.
+  // Approved accounts only (lib/actuaria/access.ts): send anyone else to sign
+  // in, or — signed in and not approved — back to the dashboard.
   if (!allowed) {
-    if (loading) return <WikiFallback />
     return <Navigate to={actuariaDestination(viewer)} replace state={{ from: location.pathname + location.search }} />
   }
   return (

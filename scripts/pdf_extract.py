@@ -461,6 +461,14 @@ def furniture_lines(pages: list[Page]) -> set[str]:
         # mistakes read as what candidates were expected to write.
         if shape.rstrip().endswith(":"):
             continue
+        # A page carries one page number, so a bare number with more distinct
+        # values than pages is numbering the content: the 2026 SOA FM booklet
+        # sets each `351.` alone on its line, two or three to a page, and each
+        # option value (`5159`) below its letter. Dropping them as page numbers
+        # left one question segmented of 462, its options empty. The page's
+        # own number is still furniture — `page_number_line` finds that one.
+        if PAGE_NUMBER_RE.match(shape) and len(concrete) > len(per_page[shape]):
+            continue
         letters = sum(1 for ch in shape if ch.isalpha())
         if letters >= FURNITURE_MIN_LETTERS or PAGE_NUMBER_RE.match(shape):
             drop |= concrete
@@ -720,6 +728,36 @@ def continues(prev: str, nxt: str) -> bool:
     return len(PROSE_WORD_RE.findall(last)) >= 3 and len(PROSE_WORD_RE.findall(first)) >= 2
 
 
+PAGE_NUMBER_LINE_RE = re.compile(r"^\s*(\d{1,4})\s*$")
+
+
+def page_number_offset(pages: list[Page]) -> int | None:
+    """The printed page number's offset from the PDF's, where pages print one.
+
+    `furniture_lines` cannot drop a page number that shares its shape with
+    content — a booklet setting each option value alone on its line — since
+    the set it returns applies to every page. What does single the page number
+    out is that it steps with the page: on most pages, some bare number is the
+    PDF page number plus one fixed offset.
+    """
+    from collections import Counter
+
+    if len(pages) < 2:
+        return None
+    offsets: Counter[int] = Counter()
+    for page in pages:
+        found = {
+            int(m.group(1)) - page.number
+            for line in page.text.splitlines()
+            if (m := PAGE_NUMBER_LINE_RE.match(line))
+        }
+        offsets.update(found)
+    if not offsets:
+        return None
+    offset, count = offsets.most_common(1)[0]
+    return offset if count >= max(2, len(pages) * FURNITURE_SHARE) else None
+
+
 def page_markdown(page: Page, drop: set[str]) -> str:
     """A page's prose and exhibits as markdown, furniture removed."""
     chunks: list[str] = []
@@ -745,6 +783,19 @@ def page_markdown(page: Page, drop: set[str]) -> str:
 # one is chosen by score, so a new PDF layout does not need code changes.
 QUESTION_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
     ("N.", re.compile(r"(?m)^[ \t]*(\d{1,3})\.[ \t]+(?=\S)")),
+    # The 2026 SOA FM booklet sets `351.` alone on its line, the prompt below —
+    # a blank line below when the prompt opens on an equation. A point value
+    # below the number is the CAS layout, `N. (points)`'s to read.
+    ("N.\\n", re.compile(
+        r"(?m)^[ \t]*(\d{1,3})\.[ \t]*\n(?=\s*\S)(?!\s*\(\s*[\d.]+\s*points?\s*\))"
+    )),
+    # …and its solutions booklet opens each answer `351.` over `Solution: C`,
+    # or on one line, `386.  Solution:  C` (once `Solution.  E`, once
+    # `Solution B`). Keyed on the `Solution` that must follow, a scrambled
+    # equation's stray `12.` cannot start an answer.
+    ("N. Solution", re.compile(
+        r"(?mi)^[ \t]*(\d{1,3})\.[ \t]*\n?(?=[ \t]*solution[ \t]*[:.]?[ \t]*[A-E]\b)"
+    )),
     ("N)", re.compile(r"(?m)^[ \t]*(\d{1,3})\)[ \t]+(?=\S)")),
     ("Question N", re.compile(r"(?mi)^[ \t]*question[ \t]*#?[ \t]*(\d{1,3})\b[.:]?")),
     ("QUESTION N", re.compile(r"(?m)^[ \t]*QUESTION[ \t]*[:#]?[ \t]*(\d{1,3})\b")),
@@ -903,6 +954,9 @@ def split_options(body: str) -> tuple[str, dict[str, str]]:
 # ─── Answer keys ──────────────────────────────────────────────────────────────
 
 ANSWER_PATTERNS = [
+    # The 2026 SOA FM solutions: `351.` over `Solution: C`, or `386.  Solution:  C`
+    # — once `Solution.  E`, once `Solution B`.
+    re.compile(r"(?mi)^[ \t]*(\d{1,3})\.[ \t]*\n?[ \t]*solution[ \t]*[:.]?[ \t]*([A-E])\b"),
     re.compile(r"(?mi)^[ \t]*(?:question[ \t]*#?[ \t]*)?(\d{1,3})[.):]?[ \t]*"
                r"(?:solution|answer)[ \t]*[:=-]?[ \t]*\(?([A-E])\)?\b"),
     re.compile(r"(?mi)^[ \t]*(\d{1,3})[ \t]+([A-E])[ \t]*$"),
@@ -2133,13 +2187,15 @@ def normalize_text_layer(md: str) -> str:
 def _joined(pages: list[Page], furniture: set[str] | None = None) -> tuple[str, list[int]]:
     """Concatenate page markdown, plus a char-index → page-number map."""
     drop = furniture if furniture is not None else (furniture_lines(pages) if pages else set())
+    offset = page_number_offset(pages)
     chunks: list[str] = []
     index: list[int] = []
     for page in pages:
+        page_drop = drop if offset is None else drop | {str(page.number + offset)}
         # Normalise here rather than per record: the publisher writes
         # `EXAMINER’S REPORT` with a curly apostrophe, and every marker regex
         # downstream is written with a straight one.
-        md = normalize_text_layer(mdmath.normalize_chars(page_markdown(page, drop)))
+        md = normalize_text_layer(mdmath.normalize_chars(page_markdown(page, page_drop)))
         if chunks and md.strip() and continues(chunks[-1], md):
             # A sentence carried over the page break: the page's first words
             # finish the last paragraph of the page before.

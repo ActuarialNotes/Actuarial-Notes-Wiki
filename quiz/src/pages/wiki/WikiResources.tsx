@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { useLocation, useNavigationType, useSearchParams } from 'react-router-dom'
+import { useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { X } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
@@ -21,8 +21,6 @@ import {
   toggleResourceFacet,
   type ResourceFacet,
 } from '@/lib/resourceFilters'
-
-const SCROLL_KEY = 'wiki-resources:scroll'
 
 const EMPTY_TITLE: Record<ResourceFacet, string> = {
   exam: 'None of these resources is a syllabus reading',
@@ -97,8 +95,6 @@ export default function WikiResources() {
   // first frame rather than one "Loading…" later.
   const [index, setIndex] = useState<WikiIndexItem[]>(() => bundledWikiIndex() ?? [])
   const [searchParams, setSearchParams] = useSearchParams()
-  const location = useLocation()
-  const navigationType = useNavigationType()
 
   useEffect(() => {
     setPageRefs([])
@@ -109,27 +105,8 @@ export default function WikiResources() {
     buildWikiIndex().then(setIndex).catch(() => setIndex([]))
   }, [])
 
-  // Back to where the shelf was left when returning from a resource page (its
-  // "All resources" link, or the browser's Back); the top on a fresh visit.
-  const shouldRestore = useRef(
-    navigationType === 'POP' || !!(location.state as { fromResource?: boolean } | null)?.fromResource,
-  )
-  const scrollRestored = useRef(false)
-  useEffect(() => {
-    if (!shouldRestore.current) window.scrollTo({ top: 0, behavior: 'instant' })
-  }, [])
-  useEffect(() => {
-    if (!shouldRestore.current || scrollRestored.current || index.length === 0) return
-    scrollRestored.current = true
-    const saved = sessionStorage.getItem(SCROLL_KEY)
-    if (saved !== null) {
-      const top = parseInt(saved, 10)
-      requestAnimationFrame(() => window.scrollTo({ top, behavior: 'instant' }))
-    }
-  }, [index])
-  useEffect(() => {
-    return () => { sessionStorage.setItem(SCROLL_KEY, String(window.scrollY)) }
-  }, [])
+  // Where the shelf was left is kept by the router (lib/routeScrollMemory.ts),
+  // which brings a resource page's "All resources" link and Back here to it.
 
   const books = useMemo(() => index.filter(i => i.category === 'document'), [index])
   const selection = useMemo(() => resourceFacetsFromParams(searchParams), [searchParams])

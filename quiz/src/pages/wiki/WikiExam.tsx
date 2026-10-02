@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useParams, Link, useSearchParams, useNavigationType } from 'react-router-dom'
+import { useParams, Link, useSearchParams } from 'react-router-dom'
 import { ChevronLeft, Loader2, CalendarDays } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { extractWikiLinksFromText, extractWikiLinkOccurrences } from '@/lib/wikiExtract'
@@ -22,6 +22,7 @@ import { buildObjectiveIndex, isSyllabusConcept } from '@/lib/syllabusChapters'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import type { ItemStatus } from '@/data/tracks'
 import { useWikiPageHead } from '@/hooks/useWikiPageHead'
+import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 
 const STATUS_TITLE: Record<ItemStatus, string> = {
   not_started: 'Not started — click to update exam status',
@@ -113,14 +114,8 @@ export default function WikiExam() {
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
   useWikiPageHead('exam', examFileName, status === 'error')
   const popupOpenedRef = useRef(false)
-  const navigationType = useNavigationType()
-
-  // Scroll to top on forward navigation; don't override browser's own restoration on back/forward
-  useEffect(() => {
-    if (navigationType !== 'POP') {
-      window.scrollTo({ top: 0, behavior: 'instant' })
-    }
-  }, [])
+  // The scroll is the router's: a new visit opens at the top, Back returns to
+  // where the page was left (lib/routeScrollMemory.ts).
 
   const progressKey = useMemo(() => examProgressKeyFromFile(examFileName), [examFileName])
 
@@ -161,7 +156,7 @@ export default function WikiExam() {
   const backLink = useMemo(() => (
     <Link
       to="/wiki"
-      state={{ fromExam: true }}
+      state={RESTORE_SCROLL}
       aria-label="All exams"
       title="All exams"
       className="inline-flex items-center justify-center shrink-0 -ml-1.5 h-7 w-7 rounded-full text-muted-foreground hover:text-foreground hover:bg-accent transition-colors not-prose"

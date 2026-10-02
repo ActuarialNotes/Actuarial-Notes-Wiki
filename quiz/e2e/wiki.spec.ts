@@ -18,6 +18,36 @@ test.describe('wiki', () => {
     await expect(page.locator('h1, h2').first()).toBeVisible()
   })
 
+  // Leaving a page and coming back returns to where it was left — by Back, or
+  // by the exam page's "All exams" arrow — while a new page opens at its top.
+  // lib/routeScrollMemory.ts; the router records the place as the page is left.
+  test('keeps the Study Guides list where it was left', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 600 })
+    await page.goto('/wiki')
+    const scrollY = () => page.evaluate(() => Math.round(window.scrollY))
+
+    const exam9 = page.locator('a[href^="/wiki/exam/"]').filter({ hasText: 'Exam 9' }).first()
+    if (!(await exam9.isVisible())) await page.getByRole('radio', { name: 'CAS' }).click()
+    await exam9.scrollIntoViewIfNeeded()
+    await page.evaluate(() => window.scrollBy(0, 40))
+    const listY = await scrollY()
+    expect(listY).toBeGreaterThan(0)
+
+    await exam9.click()
+    await expect(page).toHaveURL(/\/wiki\/exam\//)
+    await expect.poll(scrollY).toBe(0)
+
+    await page.goBack()
+    await expect(page).toHaveURL(/\/wiki$/)
+    await expect.poll(scrollY).toBe(listY)
+
+    await exam9.click()
+    await expect(page).toHaveURL(/\/wiki\/exam\//)
+    await page.getByRole('link', { name: 'All exams' }).click()
+    await expect(page).toHaveURL(/\/wiki$/)
+    await expect.poll(scrollY).toBe(listY)
+  })
+
   // Resources is the tab's second page: listed under Study Guides in the
   // sidebar while the tab is open, filtered by exam, publisher and year, with
   // the choice kept in the URL.

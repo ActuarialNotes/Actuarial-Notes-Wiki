@@ -693,6 +693,14 @@ Other important `lib/` modules:
   get the matching entrance from the `paper-scrim` class (or `paper-fade` + `paper-drop` for
   a separate backdrop and panel).
   Pure and tested. See `docs/style-guide.md` §9.1.
+- `routeScrollMemory.ts` — **the reader's place** across pages: `PaperRouter` records the
+  window's scroll as a page is *left* (keyed by history entry, mirrored to sessionStorage)
+  and `arrivalScroll` decides on arrival — Back/Forward return to where that entry was left,
+  a new page opens at its top, an up-link carrying `state={RESTORE_SCROLL}` (an exam's
+  "All exams" arrow, a resource's "All resources") returns to where that page was last left,
+  and a same-page change (query, hash) or a redirect leaves the window alone. The browser's
+  own restoration is off. Pages don't save or restore their own scroll — don't add a
+  per-page copy. Pure and tested; the flow is in `e2e/wiki.spec.ts`.
 - `bodyFilter.ts` — the **SOA/CAS picker** that rides the title row on both the Quiz and Study
   Guides tabs. One choice, one storage key, one fallback: the two tabs are one ladder seen
   twice, and they each used to own a copy of the rule. The copies had drifted in opposite

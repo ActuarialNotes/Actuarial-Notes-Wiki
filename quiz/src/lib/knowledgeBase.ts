@@ -39,7 +39,7 @@ import {
 import { examDisplayName, wikiRoute } from './wikiRoutes'
 
 /** Bumped whenever the shape below changes; the connector refuses a version it doesn't know. */
-export const KNOWLEDGE_BASE_VERSION = 1
+export const KNOWLEDGE_BASE_VERSION = 2
 
 /** Where the build emits the export, relative to the site root. */
 export const KNOWLEDGE_BASE_ASSET = 'ai/knowledge-base.json'
@@ -57,11 +57,6 @@ export interface ExamCatalogRow {
   status: string
 }
 
-export interface KeystoneSource {
-  id: string
-  concepts: { name: string; why: string }[]
-}
-
 export interface KnowledgeBaseSources {
   /**
    * Repo-relative path → markdown for every page: the root `Exam *.md` pages,
@@ -73,7 +68,6 @@ export interface KnowledgeBaseSources {
   catalog: ExamCatalogRow[]
   /** `scripts/concept_aliases.json` → `aliases`: normalised variant → concept page. */
   aliases: Record<string, string>
-  keystones: KeystoneSource[]
   site: {
     /** Public origin of the app, e.g. `https://quiz.actuarialnotes.com`. */
     url: string
@@ -157,7 +151,6 @@ export interface KbExam {
   summary: string
   objectives: KbObjective[]
   readings: KbReading[]
-  keystones: { name: string; why: string }[]
   guides: { id: string; title: string }[]
   /** `questions/<bank>/`, or null for an exam with no question bank yet. */
   bank: string | null
@@ -561,7 +554,6 @@ export function buildKnowledgeBase(sources: KnowledgeBaseSources): KnowledgeBase
       summary: summarize(text),
       objectives,
       readings,
-      keystones: sources.keystones.find(k => k.id === key)?.concepts.map(c => ({ name: c.name, why: c.why })) ?? [],
       guides: [],
       bank: row.bank,
       questionCount: 0,

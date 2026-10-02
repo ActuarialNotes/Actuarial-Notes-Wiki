@@ -525,42 +525,6 @@ describe('generateStudyPlan — strong_key strategy', () => {
       expect(todayAssignments).toContain('High Concept')
     }
   })
-
-  it('introduces a keystone before the rest of its topic, then what its page links to', () => {
-    // 'Bond Price' is an Exam FM keystone; the syllabus lists it last.
-    const keystoneSyllabus = {
-      examId: 'FM-2',
-      examLabel: 'Exam FM',
-      examTopic: 'Financial Mathematics',
-      resources: [],
-      topics: [
-        {
-          name: 'Bonds',
-          weight: '20-30%',
-          concepts: [
-            { name: 'Zeta Concept', target: 'Zeta Concept' },
-            { name: 'Callable Bond', target: 'Callable Bond' },
-            { name: 'Bond Price', target: 'Bond Price' },
-          ],
-        },
-      ],
-    } as unknown as WikiExamSyllabus
-
-    const plan = generateStudyPlan({
-      examId: 'FM',
-      syllabus: keystoneSyllabus,
-      masteryRecords: [],
-      config: { ...config, targetReadyDate: addDays(todayISO(), 60), targetStrengthLevel: 'strong_key' },
-      examDate: addDays(todayISO(), 90),
-      keystoneLinks: { 'Bond Price': ['Callable Bond'] },
-    })
-
-    const introOrder = plan.assignments
-      .filter(a => a.initialState === 'new')
-      .sort((a, b) => a.scheduledDate.localeCompare(b.scheduledDate))
-      .map(a => a.conceptName)
-    expect(introOrder).toEqual(['Bond Price', 'Callable Bond', 'Zeta Concept'])
-  })
 })
 
 // ── Introduction order ────────────────────────────────────────────────────────

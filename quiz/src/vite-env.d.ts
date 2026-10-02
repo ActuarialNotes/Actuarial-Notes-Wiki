@@ -64,12 +64,6 @@ declare module 'virtual:comprehension-checks' {
   export default checks
 }
 
-declare module 'virtual:keystone-links' {
-  /** Keystone concept page name → the concept pages it links to, in page order. */
-  const links: Record<string, string[]>
-  export default links
-}
-
 declare module 'virtual:resource-timeline' {
   import type { TimelineRawEntry } from '@/lib/resourceTimeline'
   const timeline: TimelineRawEntry[]

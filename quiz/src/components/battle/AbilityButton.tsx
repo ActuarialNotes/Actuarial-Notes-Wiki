@@ -5,7 +5,7 @@
 //   ready  — can be used (or equipped) now
 //   armed  — in play this round (Reinsurance: waiting for the next claim)
 //   used   — spent for this battle: dashed and quiet, on both screens
-//   locked — its keystone isn't at the level it asks for
+//   locked — its concept isn't at the level it asks for
 //
 // In the Hangar a card is also *selected* while it's equipped — Actuaria's one
 // selection treatment, the exam's soft wash and muted edge (§4.2), read off the

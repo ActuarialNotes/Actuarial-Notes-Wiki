@@ -14,7 +14,6 @@ const KB = buildKnowledgeBase({
   questions: {},
   catalog: [{ page: 'Exam P-1 (SOA).md', exam_id: 'P-1', wiki_id: 'p-1', progress_key: 'P', body: 'SOA', bank: null, status: 'ready' }],
   aliases: {},
-  keystones: [],
   site: { url: 'https://quiz.actuarialnotes.com', repo: 'o/r', branch: 'main', builtAt: '2026-09-26T00:00:00.000Z' },
 })
 

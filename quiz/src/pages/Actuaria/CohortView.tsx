@@ -267,7 +267,7 @@ function useShareProgress(crew: CrewView, sector: Sector, world: ActuariaWorld) 
   useEffect(() => {
     if (world.loading || sent.current === crew.crew.id) return
     sent.current = crew.crew.id
-    const landmarks = uniqueLandmarks(sectorRegions(sector.syllabus, world.recordsFor(sector.key), sector.key, new Date()))
+    const landmarks = uniqueLandmarks(sectorRegions(sector.syllabus, world.recordsFor(sector.key), new Date()))
     const readiness = world.readiness.get(sector.key)?.overallPct ?? 0
     const snap = progressSnapshot(landmarks.map(l => ({ name: l.concept.name, z: l.z })), readiness)
     void crewStore.shareProgress({ crewId: crew.crew.id, ...snap, displayName: me.name, avatarUrl: me.avatar })

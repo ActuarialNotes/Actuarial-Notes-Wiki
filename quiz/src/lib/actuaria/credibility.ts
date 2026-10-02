@@ -38,7 +38,7 @@ export function formatZ(z: number): string {
 // ── Sector Z ────────────────────────────────────────────────────────────────
 
 /** A sector's fill: readiness is measured in mastery's green (style guide §7.5). */
-export const SECTOR_FILL = masteryFill('level3', false)
+export const SECTOR_FILL = masteryFill('level3')
 
 export interface SectorCredibility {
   /** 0–1, the readiness score over 100. */

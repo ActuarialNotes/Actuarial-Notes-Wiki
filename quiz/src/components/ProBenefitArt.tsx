@@ -3,7 +3,7 @@
 // Each benefit is shown as a small, static vignette of the surface it unlocks —
 // the day's plan, the strategy picker, a concept's level history, Listen —
 // drawn from the same tokens and marks as the real thing (CheckMark, the
-// mastery greens, the keystone gold), so what a reader is shown here is what
+// mastery greens), so what a reader is shown here is what
 // they get after checkout. They are pictures, not controls: every one is
 // `aria-hidden` and carries no handlers; the card beside it says it in words.
 
@@ -90,8 +90,8 @@ export function StrategyArt() {
       <div className="flex items-center gap-2.5 rounded-md bg-card p-2.5 shadow-sm ring-2 ring-amber-400/70">
         <Sparkles className="h-4 w-4 shrink-0 text-amber-500" />
         <div className="min-w-0 flex-1">
-          <div className="text-[11px] font-medium">Focus on key concepts</div>
-          <div className="truncate text-[10px] text-muted-foreground">What the rest of the exam builds on</div>
+          <div className="text-[11px] font-medium">Heaviest topics first</div>
+          <div className="truncate text-[10px] text-muted-foreground">What the exam weights most</div>
         </div>
         <CheckMark className="h-4 w-4" />
       </div>

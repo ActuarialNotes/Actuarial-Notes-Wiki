@@ -102,7 +102,6 @@ function Transmission({ world, questions, questionsLoading }: { world: ActuariaW
                 name={inWorld ?? p.concept}
                 conceptName={inWorld ? p.concept : null}
                 state={p.state}
-                keystone={p.keystone}
                 decay={p.step}
                 onOpen={() => openLandmark(names, i)}
               />

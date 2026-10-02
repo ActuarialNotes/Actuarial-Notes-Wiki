@@ -421,7 +421,7 @@ test.describe('quiz battle', () => {
 
     const { right, wrong } = await currentQuestion(host)
     await expect(guest.getByTestId('battle-question')).toBeVisible({ timeout: 10_000 })
-    // A guest pilot has no keystones yet, so each brings the starter alone.
+    // A guest pilot has mastered nothing yet, so each brings the starter alone.
     for (const page of [host, guest]) {
       await expect(page.getByTestId('battle-ability-tray').getByTestId('ability-reinsurance')).toHaveAttribute('data-state', 'ready')
     }

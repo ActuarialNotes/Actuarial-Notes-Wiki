@@ -384,8 +384,8 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                   },
                   {
                     value: 'strong_key' as TargetStrengthLevel,
-                    label: 'Focus on key concepts',
-                    desc: 'Start with the concepts the rest of the exam builds on.',
+                    label: 'Heaviest topics first',
+                    desc: 'Start with the topics that carry the most weight on the exam.',
                     icon: Sparkles,
                   },
                 ] as const).map(opt => {

@@ -149,8 +149,8 @@ All tools are read-only (`readOnlyHint: true`) and deterministic apart from the 
 | `search` | `query`, optional `type`, `exam`, `limit` | ChatGPT's shape, as JSON text: `{"results": [{id, title, url, text, type, exams, fact_check}]}`. BM25 over titles, aliases and bodies; pages outrank questions |
 | `fetch` | `id` (from search; a name or exam key also works) | `{id, title, text, url, metadata}` — the document as markdown. A question comes back with its answer |
 | `list_exams` | — | The exam table: key, subject, body, how complete, objective / concept / question counts |
-| `get_exam` | `exam` ("P", "MAS 1", "Probability"…) | Objectives with weights and concepts (★ keystones), readings with chapters, keystones with their one-line *why*, exam guides, question counts by objective and difficulty |
-| `get_concept` | `name` (aliases, abbreviations, plurals, no accents) | The page, where it is examined, keystone status, linked pages, question counts, fact check; suggestions when not found |
+| `get_exam` | `exam` ("P", "MAS 1", "Probability"…) | Objectives with weights and concepts, readings with chapters, exam guides, question counts by objective and difficulty |
+| `get_concept` | `name` (aliases, abbreviations, plurals, no accents) | The page, where it is examined, linked pages, question counts, fact check; suggestions when not found |
 | `get_practice_questions` | `exam` or `concept`; optional `objective`, `topic`, `difficulty`, `sitting`, `count` (≤10), `exclude`, `seed` | Stems and options only, plus an app link to take the same set (`/quiz?ids=…`, where progress is tracked) |
 | `check_answer` | `question_id`, `answer` or `parts` | The verdict (MC letters however written; numbers compared as the app does, with a "close" for rounding slips), then the official solution and examiner's report. Written parts come back to be graded against the model answer |
 

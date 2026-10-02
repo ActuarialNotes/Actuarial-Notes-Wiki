@@ -55,7 +55,6 @@ import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath } from '@/lib/wikiRoutes'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { latestMasteryStates, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
-import { isKeystone } from '@/lib/keystone'
 import { ACTION_MENU_ROW_CLASS, ConceptActionMenu } from '@/components/ConceptActionMenu'
 import {
   needsReviewOrder,
@@ -1596,11 +1595,7 @@ function SortableCard({
             isActive ? 'text-primary' : 'hover:text-primary'
           }`}
         >
-          {/* Keystone marker: the gold underline on the name, same as
-              everywhere else. Never a ring — a collected card already wears the
-              rainbow foil edge, and the two materials must not fight for the
-              same border. */}
-          <span className={`font-semibold text-base leading-snug ${card.kind === 'concept' && isKeystone(card.name) ? 'keystone-underline' : ''}`}>
+          <span className="font-semibold text-base leading-snug">
             {card.name}
           </span>
         </button>

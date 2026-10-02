@@ -15,9 +15,6 @@ import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { showAddedToDeck } from '@/hooks/useToast'
 import { playSound } from '@/lib/soundEngine'
 import { decayIfStale, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
-import { buildMasteryLookup } from '@/lib/conceptMatch'
-import { findKeystone, keystoneProgress } from '@/lib/keystone'
-import { KeystoneSummary } from '@/components/KeystoneName'
 import { MasteryBadge } from '@/components/MasteryBadge'
 import { ProBadge } from '@/components/ProBadge'
 import { ReadinessBar } from '@/components/ReadinessBar'
@@ -220,14 +217,6 @@ export function ConceptActionMenu({
     return decayIfStale(record, new Date()).state
   }, [masteryRecords, entry.name])
 
-  // Keystone roll-up for the exam this concept anchors — the explainer the
-  // concept's name used to open, now the first block of the menu.
-  const keystoneMatch = useMemo(() => findKeystone(entry.name), [entry.name])
-  const keystoneStats = useMemo(() => {
-    if (!keystoneMatch) return undefined
-    return keystoneProgress(keystoneMatch.examId, buildMasteryLookup(masteryRecords), new Date())
-  }, [masteryRecords, keystoneMatch])
-
   const verification = useMemo(() => (markdown ? parseVerification(markdown) : null), [markdown])
   const factCheck = useMemo(() => factCheckBadge(verification), [verification])
 
@@ -251,15 +240,9 @@ export function ConceptActionMenu({
       onPointerDown={stopPropagation ? e => e.stopPropagation() : undefined}
       onClick={stopPropagation ? e => e.stopPropagation() : undefined}
     >
-      {/* What this concept *is*, before what can be done with it — or, for an
-          exam, where the reader stands on it. */}
-      {isExam ? (
-        <ExamMenuSummary entry={entry} masteryRecords={masteryRecords} />
-      ) : keystoneMatch && (
-        <div className="px-3 pt-1.5 pb-2.5 mb-1 border-b border-border">
-          <KeystoneSummary examLabel={keystoneMatch.examLabel} progress={keystoneStats} compact />
-        </div>
-      )}
+      {/* For an exam, where the reader stands on it, before what can be done
+          with it. */}
+      {isExam && <ExamMenuSummary entry={entry} masteryRecords={masteryRecords} />}
       {leading}
       {isExam ? (
         <TodaysPlanRow entry={entry} onOpenStudyPlan={onOpenStudyPlan} onClose={onClose} />
@@ -432,7 +415,7 @@ function ExamMenuSummary({
     const syllabus = syllabi.find(s => s.fileName === entry.name)
     if (!syllabus) return null
     const records = masteryRecords.filter(r => r.exam_id === progressKey)
-    return computeExamReadiness(syllabus, records, new Date(), progressKey)
+    return computeExamReadiness(syllabus, records, new Date())
   }, [syllabi, entry.name, masteryRecords, progressKey])
 
   const countdown = useMemo(

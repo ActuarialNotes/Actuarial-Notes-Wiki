@@ -5,7 +5,6 @@ import { BookMarked, FileText, GraduationCap, Search, X } from 'lucide-react'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { pathToEntryRef, wikiRoute, examIdFromFile, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
-import { isKeystone } from '@/lib/keystone'
 
 
 type Scope = 'page' | 'all'
@@ -300,9 +299,7 @@ function SearchResultRow({ item, query }: { item: WikiIndexItem; query: string }
     >
       <Icon className={`h-4 w-4 shrink-0 mt-0.5 ${iconColor}`} />
       <div className="min-w-0 flex-1">
-        {/* A keystone result is marked the same way it is everywhere else: a
-            gold underline on the concept's name, not a second icon. */}
-        <div className={`text-sm truncate ${item.category === 'concept' && isKeystone(item.name) ? 'keystone-underline' : ''}`}>
+        <div className="text-sm truncate">
           {highlightMatch(display, query)}
         </div>
         {(item.author || item.year) && (

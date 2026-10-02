@@ -454,7 +454,7 @@ the scoring, the sessions, the lobby and its handshake, the cues, the music and
   still saves nothing; the review is a quiz, and saves as one.
 - **Abilities** are the station's too (`skin.abilities`): the host's setup offers
   the room setting, and the page passes in the Hangar loadout, cut to what the
-  player's keystones hold when the battle starts (`battleLoadout` in
+  concepts that unlock them hold when the battle starts (`battleLoadout` in
   `lib/actuaria/abilities.ts`). The tray (`components/battle/AbilityTray.tsx`)
   sits above the answer pad in `BattleActionBar`. A room made at the station with
   abilities on can still be joined from `/battle`: that player simply brings none.

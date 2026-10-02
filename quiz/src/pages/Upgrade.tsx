@@ -30,7 +30,7 @@ const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element }[] 
   },
   {
     title: 'Study your way',
-    body: 'Work through the syllabus in order, or put the key concepts the rest of the exam builds on first.',
+    body: 'Work through the syllabus in order, or start with the topics the exam weights most.',
     Art: StrategyArt,
   },
   {

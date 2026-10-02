@@ -18,7 +18,6 @@ import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
 import { decayIfStale } from '@/lib/mastery'
 import { normalizeMasteryToDisplayNames } from '@/lib/conceptMatch'
-import { isKeystone } from '@/lib/keystone'
 import { parseSectionWeight } from '@/lib/readiness'
 
 export const RING_VIEWBOX = 280
@@ -35,7 +34,6 @@ export interface RingSegment {
   conceptName: string
   topicName: string
   state: MasteryState
-  keystone: boolean
 }
 
 export interface RingTopicGroup {
@@ -101,7 +99,6 @@ export function buildRingSegments(
           conceptName: concept.name,
           topicName: topic.name,
           state,
-          keystone: isKeystone(concept),
         })
       }
       cursor += slotDeg

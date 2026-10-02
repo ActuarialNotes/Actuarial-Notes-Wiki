@@ -10,7 +10,6 @@ import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { FactCheckBadge } from '@/components/FactCheckBadge'
 import { parseVerification } from '@/lib/verification'
-import { KeystoneName } from '@/components/KeystoneName'
 import { useWikiPageHead } from '@/hooks/useWikiPageHead'
 import { compareExamLabels } from '@/lib/resourceExams'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
@@ -160,7 +159,7 @@ export default function WikiConcept() {
   return (
     <div className="space-y-4 relative">
       <h1 className="text-2xl font-bold tracking-tight">
-        <KeystoneName name={conceptName} />
+        {conceptName}
       </h1>
 
       {/* A visitor who landed here reads the concept on its own; these are the

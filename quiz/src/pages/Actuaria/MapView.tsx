@@ -161,7 +161,7 @@ function SectorPanel({ sector, world, battleCount }: { sector: Sector; world: Ac
   const readiness = world.readiness.get(sector.key)
   const credibility = sectorCredibility(readiness?.overallPct ?? 0)
   const landmarks = useMemo(
-    () => panelLandmarks(uniqueLandmarks(sectorRegions(sector.syllabus, world.recordsFor(sector.key), sector.key, new Date()))),
+    () => panelLandmarks(uniqueLandmarks(sectorRegions(sector.syllabus, world.recordsFor(sector.key), new Date()))),
     [sector, world],
   )
   const raceable = battleCount >= MIN_BATTLE_QUESTIONS
@@ -233,7 +233,6 @@ function SectorPanel({ sector, world, battleCount }: { sector: Sector; world: Ac
                 name={l.inWorldName ?? l.concept.name}
                 conceptName={l.inWorldName ? l.concept.name : null}
                 state={l.state}
-                keystone={l.keystone}
                 decay={l.decay}
                 onOpen={() => openLandmark(landmarks.map(x => x.concept.name), i)}
               />

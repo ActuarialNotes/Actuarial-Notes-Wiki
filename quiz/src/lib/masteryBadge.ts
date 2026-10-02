@@ -14,18 +14,17 @@
  * `docs/style-guide.md` §4.2: intensity climbs with level through one green
  * family, and Forgotten leaves the ladder for amber.
  *
- * ## Why Forgotten is amber here and red in `masteryFill.ts`
+ * ## Why Forgotten is amber here
  *
  * Style guide §4.1 reserves red for *incorrect / error / destructive* and gives
  * amber to *warning / caution / at risk* — which names decaying concepts
  * explicitly. A forgotten concept is at risk, not an error, so the badge ladder
  * uses amber.
  *
- * The Study Guide radial (`lib/masteryFill.ts`) deliberately keeps Forgotten
- * red, and that exception stands: the radial draws keystone concepts on a
- * parallel *gold* ladder (§4.4), so an amber "forgotten" spoke would be
- * indistinguishable from a healthy keystone one. No badge surface has that
- * collision, so no badge surface needs the exception.
+ * The Study Guide radial (`lib/masteryFill.ts`) still draws Forgotten red. It
+ * kept red while it drew a second, gold ladder beside the green one, where an
+ * amber spoke would have read as a healthy gold one; that ladder is gone, so
+ * the radial is now free to follow this one.
  */
 
 import type { MasteryState } from '@/lib/mastery'

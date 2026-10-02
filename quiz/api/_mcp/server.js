@@ -142,7 +142,6 @@ function examCatalogue(ix) {
 
 function examSyllabus(ix, exam) {
   const doc = ix.doc(exam.docId)
-  const keystones = new Map(exam.keystones.map(k => [k.name.toLowerCase(), k]))
   const pool = ix.practicePool({ exam: exam.key })
   const lines = [
     `# ${exam.name} — ${exam.subject} (${exam.body})`,
@@ -158,14 +157,10 @@ function examSyllabus(ix, exam) {
     lines.push(
       '',
       `### ${i + 1}. ${o.title}${o.weight ? ` — ${o.weight} of the exam` : ''}`,
-      `Concepts: ${o.concepts.map(c => (keystones.has(c.toLowerCase()) ? `${c} ★` : c)).join(', ') || '—'}`,
+      `Concepts: ${o.concepts.join(', ') || '—'}`,
     )
     if (byObjective.length) lines.push(`Practice questions: ${byObjective.length} (${difficultySpread(byObjective)})`)
   })
-  if (exam.keystones.length) {
-    lines.push('', '## Keystone concepts (★) — the ones the rest of the syllabus leans on; learn these first')
-    for (const k of exam.keystones) lines.push(`- **${k.name}** — ${k.why}`)
-  }
   if (exam.readings.length) {
     lines.push('', '## Readings')
     for (const r of exam.readings) {
@@ -195,8 +190,7 @@ function conceptSummary(ix, doc) {
   for (const exam of ix.exams) {
     const objectives = exam.objectives.filter(o => o.concepts.some(c => c.toLowerCase() === doc.title.toLowerCase()))
     if (!objectives.length) continue
-    const keystone = exam.keystones.find(k => k.name.toLowerCase() === doc.title.toLowerCase())
-    examLines.push(`- ${exam.name} (${exam.key}) → ${objectives.map(o => `${o.title}${o.weight ? ` (${o.weight})` : ''}`).join('; ')}${keystone ? ` · keystone ★ — ${keystone.why}` : ''}`)
+    examLines.push(`- ${exam.name} (${exam.key}) → ${objectives.map(o => `${o.title}${o.weight ? ` (${o.weight})` : ''}`).join('; ')}`)
   }
   const counts = [...ix.conceptQuestionCounts(doc.title)].map(([exam, n]) => `${n} on Exam ${exam}`)
   const aliases = doc.aliases.filter(a => normalizeTerm(a) !== normalizeTerm(doc.title)).slice(0, 6)
@@ -476,7 +470,7 @@ export const TOOLS = [
     name: 'get_exam',
     title: 'Get an exam syllabus',
     description:
-      "An exam's syllabus from Actuarial Notes: its learning objectives with their share of the exam and the concepts under each, the assigned readings with chapters, the keystone concepts to learn first, the exam-day guides (format, scoring, calculators, strategy), and the practice-question bank by objective and difficulty. Use it to orient a study session, answer \"what's on the exam\", or build a study plan.",
+      "An exam's syllabus from Actuarial Notes: its learning objectives with their share of the exam and the concepts under each, the assigned readings with chapters, the exam-day guides (format, scoring, calculators, strategy), and the practice-question bank by objective and difficulty. Use it to orient a study session, answer \"what's on the exam\", or build a study plan.",
     inputSchema: { type: 'object', properties: { exam: EXAM_ARG }, required: ['exam'] },
     annotations: { title: 'Get an exam syllabus', ...READ_ONLY },
     _meta: invoking('Reading the syllabus…', 'Read the syllabus'),
@@ -488,7 +482,7 @@ export const TOOLS = [
     name: 'get_concept',
     title: 'Read a concept page',
     description:
-      'Read a concept page from Actuarial Notes by name — the definition, formulas (LaTeX) and worked examples — together with the exams and learning objectives it is tested under, whether it is a keystone concept, the pages it links to, how many practice questions cover it, and its fact-check status. Accepts common variants and abbreviations ("MLE", "Buhlmann credibility", "IBNR", "annuities").',
+      'Read a concept page from Actuarial Notes by name — the definition, formulas (LaTeX) and worked examples — together with the exams and learning objectives it is tested under, the pages it links to, how many practice questions cover it, and its fact-check status. Accepts common variants and abbreviations ("MLE", "Buhlmann credibility", "IBNR", "annuities").',
     inputSchema: {
       type: 'object',
       properties: { name: { type: 'string', description: 'The concept, e.g. "Bayes Theorem", "Chain Ladder Method", "Macaulay Duration".' } },
@@ -670,7 +664,7 @@ function markQuestion(ix, q, answer, parts) {
 const SCHEME = 'actuarialnotes://'
 
 const RESOURCE_TEMPLATES = [
-  { uriTemplate: `${SCHEME}exam/{exam}`, name: 'exam', title: 'Exam syllabus', description: 'An exam\'s syllabus: objectives and weights, concepts, readings, keystones, guides and question bank.', mimeType: 'text/markdown' },
+  { uriTemplate: `${SCHEME}exam/{exam}`, name: 'exam', title: 'Exam syllabus', description: 'An exam\'s syllabus: objectives and weights, concepts, readings, guides and question bank.', mimeType: 'text/markdown' },
   { uriTemplate: `${SCHEME}concept/{name}`, name: 'concept', title: 'Concept page', description: 'A concept page: definition, formulas and worked examples, with where it is examined.', mimeType: 'text/markdown' },
   { uriTemplate: `${SCHEME}resource/{name}`, name: 'resource', title: 'Source page', description: 'A textbook, study note, standard or regulation page.', mimeType: 'text/markdown' },
   { uriTemplate: `${SCHEME}question/{id}`, name: 'question', title: 'Practice question', description: 'A practice question with its answer and worked solution.', mimeType: 'text/markdown' },
@@ -739,7 +733,7 @@ const PROMPTS = [
   {
     name: 'study_plan',
     title: 'Study plan',
-    description: 'A week-by-week study plan for an exam, weighted by the syllabus: keystone concepts first, readings scheduled, and practice and review built in.',
+    description: 'A week-by-week study plan for an exam, weighted by the syllabus, with the readings scheduled and practice and review built in.',
     arguments: [
       { name: 'exam', description: 'The exam, e.g. "FM".', required: true },
       { name: 'weeks', description: 'Optional: weeks until the exam (default 10).', required: false },
@@ -777,7 +771,7 @@ function getPrompt(ix, name, args) {
         embedded(`${SCHEME}exam/${encodeURIComponent(exam.key)}`, examSyllabus(ix, exam)),
         userText(`Run a focused study session with me for ${exam.name} (${exam.subject}) using the Actuarial Notes connector. The syllabus is attached.
 
-1. ${focus ? `Concentrate on ${focus}.` : 'Suggest where to start — a high-weight learning objective or a keystone concept (★) — and tell me why in one sentence.'}
+1. ${focus ? `Concentrate on ${focus}.` : 'Suggest where to start — a high-weight learning objective — and tell me why in one sentence.'}
 2. Teach one concept at a time. Read it with get_concept, then explain it: the intuition, the definition and key formula, and a short worked example. Cite the page URL.
 3. After each concept, check my understanding with one question from get_practice_questions (concept filter). Wait for my answer, mark it with check_answer, and walk me through the official solution — the step I missed first.
 4. Keep track of what I get wrong. When I say stop, give me a three-line summary and what to study next.
@@ -836,7 +830,7 @@ Cite the page URL and mention its fact-check status. Then offer me a practice qu
         userText(`Build me a ${weeks}-week study plan for ${exam.name}${hours ? ` with about ${hours} hours a week` : ''}, from the attached syllabus.
 
 - Give each learning objective time in proportion to its weight on the exam.
-- Put the keystone concepts (★) first, and each concept after the ones it depends on.
+- Put each concept after the ones it depends on.
 - Schedule the assigned readings, with their chapters, alongside the objectives they cover.
 - Keep the last quarter of the plan for mixed practice (get_practice_questions, including past sittings) and review of weak areas.
 - Present it week by week as a table: objectives, concepts, readings, practice target.

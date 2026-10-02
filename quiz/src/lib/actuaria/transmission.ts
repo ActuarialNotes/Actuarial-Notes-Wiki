@@ -9,15 +9,14 @@
 //   1. Candidates are the concepts on the player's active exams whose next
 //      decay step is within `TRANSMISSION_HORIZON_DAYS`, plus the Forgotten ones
 //      (a concept only reaches Forgotten after it was learned).
-//   2. Keystones first, then the soonest decay step, then the highest current
-//      level — the most there is to lose goes first. Forgotten concepts, with
+//   2. The soonest decay step first, then the highest current level — the
+//      most there is to lose goes first. Forgotten concepts, with
 //      nothing left to lose, follow the ones still decaying.
 //   3. One question per concept from the quiz's own pool (`filterQuestions`, so
 //      the fact-check and syllabus filters hold), leaning toward the concept's
 //      level with the quiz builder's own draw (`drawByDifficulty`).
 //   4. Short of `n`, fill from today's study-plan concepts.
 
-import { findKeystone, keystoneExamKey } from '@/lib/keystone'
 import { EXAM_ID_TO_LABEL } from '@/lib/examIds'
 import { decayIfStale, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
 import { filterQuestions, type Question } from '@/lib/parser'
@@ -36,17 +35,11 @@ export interface TransmissionPick {
   /** Its state now, decay applied. */
   state: MasteryState
   step: DecayStep | null
-  keystone: boolean
   reason: 'decaying' | 'forgotten' | 'plan'
 }
 
 const LEVEL_RANK: Record<MasteryState, number> = { forgotten: 0, new: 1, level1: 2, level2: 3, level3: 4 }
 const DAY_MS = 24 * 60 * 60 * 1000
-
-function isKeystoneOf(concept: string, exam: string): boolean {
-  const match = findKeystone(concept)
-  return !!match && keystoneExamKey(match.examId) === keystoneExamKey(exam)
-}
 
 /**
  * The concepts today's transmission repairs, most urgent first. `activeExams`
@@ -69,20 +62,18 @@ export function selectTransmission(
   for (const row of masteryRows) {
     if (active && !active.has(row.exam_id)) continue
     const state = decayIfStale(row, now).state
-    const keystone = isKeystoneOf(row.concept_slug, row.exam_id)
     if (state === 'forgotten') {
-      candidates.push({ exam: row.exam_id, concept: row.concept_slug, state, step: null, keystone, reason: 'forgotten' })
+      candidates.push({ exam: row.exam_id, concept: row.concept_slug, state, step: null, reason: 'forgotten' })
       continue
     }
     const step = nextDecayStep(row, now)
     if (step && step.at.getTime() <= horizon) {
-      candidates.push({ exam: row.exam_id, concept: row.concept_slug, state, step, keystone, reason: 'decaying' })
+      candidates.push({ exam: row.exam_id, concept: row.concept_slug, state, step, reason: 'decaying' })
     }
   }
 
   const when = (p: TransmissionPick) => p.step?.at.getTime() ?? Number.POSITIVE_INFINITY
   candidates.sort((a, b) =>
-    Number(b.keystone) - Number(a.keystone) ||
     when(a) - when(b) ||
     LEVEL_RANK[b.state] - LEVEL_RANK[a.state] ||
     a.concept.localeCompare(b.concept),
@@ -107,7 +98,6 @@ export function selectTransmission(
       concept: entry.concept,
       state: row ? decayIfStale(row, now).state : 'new',
       step: null,
-      keystone: isKeystoneOf(entry.concept, entry.exam),
       reason: 'plan',
     })
   }

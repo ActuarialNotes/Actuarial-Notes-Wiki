@@ -1,5 +1,5 @@
 // One **landmark** in a list: its name (the in-world one over the concept's own,
-// for the keystones that have one), its Credibility, and a chip when there is
+// for the concepts that have one), its Credibility, and a chip when there is
 // something to say — decayed, about to, or cleared (docs/actuaria-online.md
 // §6.3–6.6). The name opens the concept in the popup, the same one the study
 // guide reads it in; nothing about a concept is gated here (G9).
@@ -16,7 +16,6 @@ export function LandmarkRow({
   name,
   conceptName,
   state,
-  keystone,
   decay,
   onOpen,
   trailing,
@@ -27,7 +26,6 @@ export function LandmarkRow({
   /** The concept's own name, shown under an in-world name. */
   conceptName?: string | null
   state: MasteryState
-  keystone: boolean
   decay: DecayStep | null
   onOpen: () => void
   trailing?: ReactNode
@@ -42,8 +40,7 @@ export function LandmarkRow({
         className="min-w-0 flex-1 rounded-md text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <span className="block truncate text-sm font-medium">
-          {/* A keystone's gold underline, on the word and not the row (style guide §4.4). */}
-          <span className={keystone ? 'keystone-underline' : undefined}>{name}</span>
+          {name}
         </span>
         {conceptName && conceptName !== name && (
           <span className="block truncate text-xs text-muted-foreground">{conceptName}</span>

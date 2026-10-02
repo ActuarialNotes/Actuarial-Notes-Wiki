@@ -2,7 +2,6 @@ import type { ButtonHTMLAttributes } from 'react'
 import { Lock } from 'lucide-react'
 import { CheckMark } from '@/components/CheckMark'
 import { flashcardFoilClass } from '@/lib/flashcardFoil'
-import { isKeystone } from '@/lib/keystone'
 import type { MasteryState } from '@/lib/mastery'
 import { cn } from '@/lib/utils'
 
@@ -48,7 +47,6 @@ function TileFace({ name, collected, selected }: TileLook) {
         className={cn(
           'text-[10px] font-medium leading-[1.2] break-words line-clamp-5',
           !collected && 'text-muted-foreground',
-          isKeystone(name) && 'keystone-underline',
         )}
       >
         {name}

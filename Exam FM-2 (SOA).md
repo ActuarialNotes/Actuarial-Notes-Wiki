@@ -2,9 +2,9 @@
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-09-29
+  last_checked: 2026-10-02
   last_checked_by: agent:validate-v1
-  content_hash: sha256:17d68c443a4aa2a4b0c577bfdb06970bb863fcfaec0c4aa510bb738026dc65d0
+  content_hash: sha256:e3f3cbb9be8c7264b8d9d7fbe7edc2d86196f4ca6fa81ef6f36bb0c37f42cd18
   sources:
     - "SOA Financial Mathematics Exam syllabus, December 2026 (7 pp.), pp.1-7 incl. p.7 link annotations, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
     - "SOA study note FM-24-17, Alps, Using Duration and Convexity to Approximate Change in Present Value (2017), title page p.1 and contents p.2, sha256:530436d4707ecadba3a7bef6e1a9661b8d9e9bb173486edfb6924bc4a4992040 — https://www.soa.org/globalassets/assets/Files/Edu/2017/fm-duration-convexity-present-value.pdf"
@@ -23,12 +23,13 @@ verification:
 # Exam FM-2
 The **Financial Mathematics (FM-2) Exam** is a 2.5 hour SOA exam with 30 multiple choice questions about financial mathematics concepts and how they are applied in calculating present and accumulated values for streams of cash flows.
 
-## Other Resources
-- [Notation and terminology used for Exam FM](https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf)
-- [All released exam papers since 2000](https://www.soa.org/education/exam-req/syllabus-study-materials/edu-multiple-choice-exam/) — SOA's Past Exams and Solutions page
-- Exam FM Sample Questions and Solutions: [questions](https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-questions.pdf) and [solutions](https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf)
-- Review of Calculator Functions for the Texas Instruments [BA-35](https://www.soa.org/globalassets/assets/files/edu/FM-22-05.pdf) and [BA II Plus](https://www.soa.org/globalassets/assets/files/edu/FM-23-05.pdf) — several calculators are allowed, but the BA II Plus or Plus Professional is strongly recommended for its ability to solve for interest rates, and some exam problems may require it to find the answer
-- [Online Sample Exam FM](https://www.soa.org/education/exam-req/syllabus-study-materials/edu-exam-p-online-sample/) — a balanced yet randomized set of questions on each attempt, drawn from the sample questions and coded to the learning objectives
+> [!question]- Other resources
+>
+> - [Notation and terminology used for Exam FM](https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf)
+> - [All released exam papers since 2000](https://www.soa.org/education/exam-req/syllabus-study-materials/edu-multiple-choice-exam/) — SOA's Past Exams and Solutions page
+> - Exam FM Sample Questions and Solutions: [questions](https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-questions.pdf) and [solutions](https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf)
+> - Review of Calculator Functions for the Texas Instruments [BA-35](https://www.soa.org/globalassets/assets/files/edu/FM-22-05.pdf) and [BA II Plus](https://www.soa.org/globalassets/assets/files/edu/FM-23-05.pdf) — several calculators are allowed, but the BA II Plus or Plus Professional is strongly recommended for its ability to solve for interest rates, and some exam problems may require it to find the answer
+> - [Online Sample Exam FM](https://www.soa.org/education/exam-req/syllabus-study-materials/edu-exam-p-online-sample/) — a balanced yet randomized set of questions on each attempt, drawn from the sample questions and coded to the learning objectives
 
 ## Learning Objectives
 

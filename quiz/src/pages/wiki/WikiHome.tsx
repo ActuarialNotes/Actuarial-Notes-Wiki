@@ -344,25 +344,29 @@ export default function WikiHome() {
             {filteredTrackGroups.filter(g => g.exams.length > 0).map(({ track, exams: trackExams }) => (
               <div key={track.key}>
                 <GroupHeading>
-                  {/* The quiz builder's track heading, to the letter — one
-                      `LABEL | Full name` line at `text-xs` — except that here
-                      it is a button: the designation is a page of its own
-                      (what it is, what it takes, what it lets an actuary
-                      sign), so the heading is the way into it. */}
+                  {/* The designation as a heading of its own — the short
+                      label as the title, a step below the page's own, with
+                      the long form beneath it. It is a button: the
+                      designation is a page of its own (what it is, what it
+                      takes, what it lets an actuary sign), so the heading is
+                      the way into it. */}
                   {track.conceptPage ? (
                     <button
                       type="button"
                       onClick={() => openAt([{ kind: 'concept', name: track.conceptPage! }], 0, '/wiki')}
-                      className="group block text-left appearance-none bg-transparent p-0 text-xs font-semibold text-muted-foreground uppercase tracking-wider transition-colors hover:text-foreground"
+                      className="group block min-w-0 max-w-full text-left appearance-none bg-transparent p-0"
                     >
-                      <span className="group-hover:underline underline-offset-4">
-                        {track.label} | {track.fullName}
-                      </span>
+                      <h2 className="text-xl font-bold tracking-tight underline-offset-4 group-hover:underline">
+                        {track.label}
+                      </h2>
+                      {track.fullName && (
+                        <p className="text-sm text-muted-foreground transition-colors group-hover:text-foreground">
+                          {track.fullName}
+                        </p>
+                      )}
                     </button>
                   ) : (
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                      {track.name}
-                    </p>
+                    <h2 className="text-xl font-bold tracking-tight">{track.name}</h2>
                   )}
                 </GroupHeading>
 

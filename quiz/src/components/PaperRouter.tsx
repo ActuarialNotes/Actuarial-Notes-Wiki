@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 're
 import { flushSync } from 'react-dom'
 import { Router } from 'react-router-dom'
 import { createBrowserHistory, type BrowserHistory, type Location, type Action } from '@remix-run/router'
-import { canTransition, isPageMove, paperMove, startViewTransition } from '@/lib/viewTransition'
+import { canTransition, isPageMove, paperMove, sheetInset, startViewTransition } from '@/lib/viewTransition'
 
 /**
  * `BrowserRouter`, with every change of page drawn as **paper on a desk** —
@@ -138,13 +138,4 @@ export default function PaperRouter({
       {children}
     </Router>
   )
-}
-
-/**
- * Where the page's sheet starts: the left edge of `<main>`, which is the
- * sidebar's width on a desktop and 0 on a phone, where the sidebar is a drawer.
- */
-function sheetInset(): number {
-  const main = document.querySelector('main')
-  return main ? main.getBoundingClientRect().left : 0
 }

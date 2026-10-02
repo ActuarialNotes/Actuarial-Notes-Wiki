@@ -818,8 +818,8 @@ state is a sheet moving, and *which way* it moves says what kind of change it wa
 | Move | When | What it looks like |
 |---|---|---|
 | `next` / `prev` | a tab switch | the desk slides: the tab to the right (or left) comes in beside the one going, both sheets moving together over a strip of desk |
-| `push` | a link deeper into a tab (Study Guides → an exam, the quiz builder → a quiz → its review) | a new sheet is laid over from the right, with a shadowed edge; the one it covers slips a little left and shades |
-| `pop` | Back, or a link *up* the tab (the review's "back to the builder") | the top sheet is swiped off to the right, uncovering the one it lay on |
+| `push` | a link deeper into a tab (Study Guides → an exam, the quiz builder → a quiz → its review), or a screen deeper on one page (the Quiz tab's exam list → one exam's builder, Quiz Battle's way in → its lobby or a setup → a battle) | a new sheet is laid over from the right, with a shadowed edge; the one it covers slips a little left and shades |
+| `pop` | Back, or a link *up* the tab (the review's "back to the builder"), or a page's own back arrow out of a deeper screen | the top sheet is swiped off to the right, uncovering the one it lay on |
 | `turn` / `return` | a quiz's Next / Back | the answered question slides off the pile, tipping a little as a pushed page does, and the next rises into place; Back slides it back on |
 | *(dialog)* | a modal opening | the room dims and the sheet settles into place from a little below — the arrival only, never a held exit |
 
@@ -834,9 +834,15 @@ The browser's View Transitions API does the drawing. The app supplies two things
   `startViewTransition` writes it to `data-paper` on the root. `components/PaperRouter.tsx`
   is `BrowserRouter` with its history listener wrapped, so *every* navigation — a link, a
   `navigate()`, the browser's Back — is drawn with no opt-in. A redirect (`REPLACE`) and a
-  change of query or hash alone are not moves and land at once. A page's own run of sheets
-  (the quiz) calls `startViewTransition` itself with `turn`/`return` and marks its sheet
-  `.paper-sheet`.
+  change of query or hash alone are not moves and land at once. A page that changes *screen*
+  without changing address — the Quiz tab's exam list and one exam's builder are both `/`,
+  Quiz Battle's screens all `/battle` — names the move itself with `moveScreen` (`push`
+  deeper, `pop` back out), and sets where the new screen is scrolled to in a layout effect
+  so it is in place before the picture is taken: a new screen opens at its top, and a list
+  comes back where it was left. A page's own run of sheets (the quiz) uses the same helper
+  with `turn`/`return` and marks its sheet `.paper-sheet`. A move asked for while another's
+  update is running — a page changing screen as it mounts — lands in that move's picture
+  rather than starting one of its own.
 - **The pictures.** `index.css` ("Paper on a desk") animates the two snapshots per move.
   The sidebar rail and the phone header are lifted out and held still above the sheets, and
   each page sheet is cut to `<main>`'s width (`--paper-inset`) so it carries its own edge and

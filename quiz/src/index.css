@@ -1903,9 +1903,11 @@ summary .katex-display,
 /* ── Paper on a desk ─────────────────────────────────────────────────────
    Every page is a sheet of paper and the app is the desk it lies on. The
    moves are decided in lib/viewTransition.ts and started by
-   components/PaperRouter.tsx (a change of page) or by the surface itself (a
-   quiz's next question); what arrives here is the move, as `data-paper` on
-   the root, and the browser's two snapshots of the page to move.
+   components/PaperRouter.tsx (a change of page) or by the surface itself
+   through `moveScreen` (a change of screen at the same address — the Quiz
+   tab's exam list to one exam's builder — or a quiz's next question); what
+   arrives here is the move, as `data-paper` on the root, and the browser's two
+   snapshots of the page to move.
 
      next / prev    a tab switch: the desk slides, both sheets together
      push           deeper into a tab: a sheet is laid over from the right

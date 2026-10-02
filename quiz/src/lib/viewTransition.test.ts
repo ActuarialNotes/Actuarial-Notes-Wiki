@@ -7,6 +7,8 @@ import {
   deskPlace,
   paperMove,
   isPageMove,
+  sheetInset,
+  moveScreen,
 } from './viewTransition'
 
 describe('viewTransitionsSupported', () => {
@@ -117,6 +119,23 @@ describe('startViewTransition', () => {
     expect(dataset.paper).toBe('turn')
   })
 
+  it('lands a move asked for inside another\'s update in that update, rather than starting its own', () => {
+    const startVT = vi.fn((cb: () => void) => { cb(); return { finished: Promise.resolve() } })
+    const doc = { startViewTransition: startVT } as unknown as Document
+    const inner = vi.fn()
+    const innerFallback = vi.fn()
+    startViewTransition(() => {
+      // A page mounting inside a page move, changing its screen as it does.
+      startViewTransition(inner, { doc, win: allowsMotion, fallback: innerFallback })
+    }, { doc, win: allowsMotion })
+    expect(startVT).toHaveBeenCalledOnce()
+    expect(innerFallback).toHaveBeenCalledOnce()
+    expect(inner).not.toHaveBeenCalled()
+    // And once that update is done, the next move is a move of its own.
+    startViewTransition(() => {}, { doc, win: allowsMotion })
+    expect(startVT).toHaveBeenCalledTimes(2)
+  })
+
   it('swallows a skipped transition rather than surfacing an unhandled rejection', () => {
     const update = vi.fn()
     expect(() => startViewTransition(update, {
@@ -128,6 +147,59 @@ describe('startViewTransition', () => {
       } as unknown as Document,
       win: allowsMotion,
     })).not.toThrow()
+  })
+})
+
+describe('sheetInset', () => {
+  it('starts the sheet at the left edge of <main>', () => {
+    const doc = {
+      querySelector: (sel: string) => (sel === 'main' ? { getBoundingClientRect: () => ({ left: 256 }) } : null),
+    } as unknown as Document
+    expect(sheetInset(doc)).toBe(256)
+  })
+
+  it('is the whole width where there is no <main> or no document', () => {
+    expect(sheetInset({ querySelector: () => null } as unknown as Document)).toBe(0)
+    expect(sheetInset(null)).toBe(0)
+  })
+})
+
+describe('moveScreen', () => {
+  const allowsMotion = { matchMedia: () => ({ matches: false }) } as unknown as Window
+
+  function desk(left: number) {
+    const dataset: Record<string, string> = {}
+    const props: Record<string, string> = {}
+    const startVT = vi.fn((cb: () => void) => { cb(); return { finished: new Promise<void>(() => {}), ready: Promise.resolve() } })
+    const doc = {
+      documentElement: { dataset, style: { setProperty: (k: string, v: string) => { props[k] = v } } },
+      querySelector: () => ({ getBoundingClientRect: () => ({ left }) }),
+      startViewTransition: startVT,
+    } as unknown as Document
+    return { doc, dataset, props, startVT }
+  }
+
+  it('draws a change of screen as the page move it names, cut to the page\'s sheet', () => {
+    const { doc, dataset, props, startVT } = desk(240)
+    const update = vi.fn()
+    moveScreen('push', update, { doc, win: allowsMotion })
+    expect(startVT).toHaveBeenCalledOnce()
+    expect(update).toHaveBeenCalledOnce()
+    expect(dataset.paper).toBe('push')
+    expect(props['--paper-inset']).toBe('240px')
+  })
+
+  it('turns a sheet within a page without cutting it', () => {
+    const { doc, dataset, props } = desk(240)
+    moveScreen('turn', () => {}, { doc, win: allowsMotion })
+    expect(dataset.paper).toBe('turn')
+    expect(props['--paper-inset']).toBe('0px')
+  })
+
+  it('still changes the screen, at once, where no transition can run', () => {
+    const update = vi.fn()
+    moveScreen('pop', update, { doc: {} as Document, win: allowsMotion })
+    expect(update).toHaveBeenCalledOnce()
   })
 })
 

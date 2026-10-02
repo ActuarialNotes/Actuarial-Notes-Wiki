@@ -66,10 +66,7 @@ const TEAL: CalloutStyle = {
 const EXAMPLE_STYLE: CalloutStyle = {
   icon: null,
   borderClass: 'border-slate-300 dark:border-slate-500',
-  // A learning objective's title is drawn in the colour of the exam whose page
-  // it is on (`--exam-accent`, scoped by `WikiExam`), and in plain foreground
-  // wherever no exam is in scope.
-  accentClass: 'text-[color:var(--exam-accent,hsl(var(--foreground)))]',
+  accentClass: 'text-foreground',
   roundLeft: true,
   noBorder: true,
   bgClass: 'bg-card',
@@ -382,9 +379,13 @@ function Callout({ type, fold, title, children }: CalloutProps) {
     return (
       <div className="not-prose my-4 rounded-lg overflow-hidden bg-background">
         <div className="relative">
-          {/* Grey bar fills to exam coverage % when collapsed, full width when expanded */}
+          {/* The bar fills to the exam coverage % when collapsed, full width when
+              expanded. It is filled in the colour of the exam whose page it is on
+              (`--exam-accent-muted`, scoped by `WikiExam` — the soft wash read as a
+              tint rather than the exam's colour), and plain card grey wherever no
+              exam is in scope. */}
           <div
-            className="absolute inset-y-0 left-0 bg-card transition-all duration-300"
+            className="absolute inset-y-0 left-0 bg-[color:var(--exam-accent-muted,hsl(var(--card)))] transition-all duration-300"
             style={{ width: open ? '100%' : `${examPercentage}%` }}
           />
           {collapsible && hasBody ? (

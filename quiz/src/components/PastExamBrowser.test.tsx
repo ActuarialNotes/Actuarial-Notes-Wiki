@@ -46,4 +46,20 @@ describe('PastExamBrowser document buttons', () => {
   it('shows no document row at all when the exam has no published papers', () => {
     expect(renderShelf()).not.toContain('PDF')
   })
+
+  it('puts the papers on the selected row, not above the shelf', () => {
+    const html = renderShelf({
+      rows: [
+        { key: '2019-spring', year: 2019, session: 'Spring', label: 'Spring 2019', available: true, bankCount: 18 },
+        { key: '2018-spring', year: 2018, session: 'Spring', label: 'Spring 2018', available: true, bankCount: 19 },
+      ] as Parameters<typeof PastExamBrowser>[0]['rows'],
+      selected: { year: 2018, session: 'Spring' },
+      reportLink: { url: 'https://www.casact.org/x.pdf', label: "Examiner's Report" },
+    })
+    const report = html.indexOf('casact.org/x.pdf')
+    expect(report).toBeGreaterThan(html.indexOf('Spring 2018'))
+    expect(report).toBeGreaterThan(html.indexOf('Spring 2019'))
+    // Beside the radio, never inside it — a link can't live in a button.
+    expect(html.slice(html.indexOf('Spring 2018'), report)).toContain('</button>')
+  })
 })

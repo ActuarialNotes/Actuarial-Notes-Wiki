@@ -200,10 +200,12 @@ candidate thinks of a paper — and read off each question's own frontmatter, so
 question contributes no option. A question re-tagged onto another exam's syllabus lists
 under the date it was sat on; once an exam is chosen, though, a sitting means *that exam's*
 paper, and the carried-over question is on none of its sittings — the same rule
-`filterQuestions` keeps for the shelf. Exam and Sitting are on every list of questions, the
-same row everywhere (`components/QuestionFilterBar.tsx` — the quiz builder's search panel,
-the concept question browser, the concept detail modal, and the Search page's Sitting). A
-pool with no dated questions shows Sitting disabled rather than dropping it.
+`filterQuestions` keeps for the shelf. Source, Exam and Sitting are on every list of
+questions, the same row everywhere (`components/QuestionFilterBar.tsx` — the quiz builder's
+search panel, the concept question browser, the concept detail modal, and the Search page's
+Source and Sitting). Source is the publisher — SOA, CAS or Actuarial Notes, see
+`lib/questionPublisher.ts`. A pool with no dated questions shows Sitting disabled rather
+than dropping it.
 
 ### The header row
 

@@ -503,7 +503,7 @@ Other important `lib/` modules:
   empty preamble — those rows previewed nothing at all before. Read by
   `components/QuestionSearchRow.tsx` (clamped to three lines) and the Search page.
 - `questionFilters.ts` — the filters **every list of questions** offers — Difficulty,
-  Concepts, Exam and Sitting — as one definition: what each matches, the options each
+  Concepts, Source, Exam and Sitting — as one definition: what each matches, the options each
   offers over a pool (with the count choosing it would leave, the other filters applied),
   and `splitSearchFilter`, which turns the quiz builder's exam and past paper into the
   search panel's *starting* Exam / Sitting choices rather than a narrowed pool (a panel
@@ -511,9 +511,21 @@ Other important `lib/` modules:
   once an exam is chosen, a sitting means that exam's paper, so a question carried over
   (`originally_exam`) is on none of its sittings — `filterQuestions`' rule for the shelf.
   Drawn by `components/QuestionFilterBar.tsx`, the one filter row used by the quiz search
-  panel, the concept question browser, the concept detail modal (Exam + Sitting) and the
-  Search page (Sitting); Exam and Sitting are always on screen, Sitting disabled for an
-  undated pool. Add it to any new surface that lists questions. Pure and tested.
+  panel, the concept question browser, the concept detail modal (Source + Exam + Sitting)
+  and the Search page (Source, Sitting); Source, Exam and Sitting are always on screen,
+  Sitting disabled for an undated pool. Add it to any new surface that lists questions.
+  Pure and tested.
+- `questionPublisher.ts` — who published a question, the **Source** filter's values:
+  `SOA`, `CAS` or `Actuarial Notes`. A past paper's question is its examining body's (the
+  body of `originally_exam` when the material has moved — `EXAM_BODIES`, held to
+  `scripts/exam_catalog.json`'s `body` by `examCatalog.test.ts`); the undated Exam P / FM
+  questions are the SOA's sample sets, filed as `p-<n>` / `fm-<n>` for sample question n;
+  and the vault's own questions are listed by id (`VAULT_QUESTION_IDS`, `p-901`–`p-964`)
+  rather than given a frontmatter key, which would stale every fact check on them (P4).
+  `questionPublisher.test.ts` holds the list to the bank both ways: every listed id is an
+  undated question not checked as the SOA's, and every unlisted undated question with a
+  fact check cites the SOA sample question its id numbers. Write a new original question
+  under a `p-9xx` id and add it to the list.
 - `questionSource.ts` — where a question came from, for the quiz's **Info** button
   (`components/QuestionInfoButton.tsx`, in the question bar beside the flag): the sitting it
   was sat on, the published paper behind it (`data/examPdfLinks.ts`), and its vault file —

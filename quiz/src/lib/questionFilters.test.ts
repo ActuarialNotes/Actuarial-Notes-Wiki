@@ -14,7 +14,7 @@ import type { Question } from './parser'
 
 function q(partial: Partial<Question>): Question {
   return {
-    id: partial.id ?? Math.random().toString(36).slice(2),
+    id: partial.id ?? `x-${Math.random().toString(36).slice(2)}`,
     exam: partial.exam ?? 'Exam 5',
     topic: partial.topic ?? 'Ratemaking',
     difficulty: partial.difficulty ?? 'medium',
@@ -32,6 +32,7 @@ function select(partial: Partial<Record<keyof FacetSelection, string[]>>): Facet
   return {
     difficulty: new Set(partial.difficulty ?? base.difficulty),
     concept: new Set(partial.concept ?? base.concept),
+    source: new Set(partial.source ?? base.source),
     exam: new Set(partial.exam ?? base.exam),
     sitting: new Set(partial.sitting ?? base.sitting),
   }
@@ -96,6 +97,11 @@ describe('matchesFacets', () => {
     expect(pool.filter(x => matchesFacets(x, sel)).map(x => x.id)).toEqual(['a'])
   })
 
+  it('matches a question to its publisher', () => {
+    const sel = select({ source: ['SOA'] })
+    expect(pool.filter(x => matchesFacets(x, sel)).map(x => x.id)).toEqual(['c'])
+  })
+
   it('ignores the facet being counted', () => {
     const sel = select({ exam: ['Probability'], difficulty: ['easy'] })
     expect(pool.filter(x => matchesFacets(x, sel, 'exam')).map(x => x.id)).toEqual(['a', 'c'])
@@ -144,6 +150,18 @@ describe('facetOptions', () => {
     expect(opts).toEqual([
       { value: 'Probability', label: 'Exam P', count: 1 },
       { value: 'Exam 5', label: 'Exam 5', count: 3 },
+    ])
+  })
+
+  it('offers publishers up the ladder, the vault’s own last', () => {
+    const bank = [...pool, q({ id: 'p-901', exam: 'Probability' })]
+    expect(facetOptions(bank, 'source', emptyFacets())).toEqual([
+      { value: 'SOA', label: 'SOA', count: 1 },
+      { value: 'CAS', label: 'CAS', count: 3 },
+      { value: 'Actuarial Notes', label: 'Actuarial Notes', count: 1 },
+    ])
+    expect(facetOptions(bank, 'source', select({ exam: ['Probability'] })).map(o => [o.value, o.count])).toEqual([
+      ['SOA', 1], ['Actuarial Notes', 1],
     ])
   })
 

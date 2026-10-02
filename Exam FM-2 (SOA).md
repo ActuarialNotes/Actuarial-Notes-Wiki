@@ -1,14 +1,16 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-09-28
+  status: verified
+  confidence: high
+  last_checked: 2026-09-29
   last_checked_by: agent:validate-v1
   content_hash: sha256:17d68c443a4aa2a4b0c577bfdb06970bb863fcfaec0c4aa510bb738026dc65d0
   sources:
-    - "SOA Financial Mathematics Exam syllabus, December 2026 (all pages), sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
-    - "SOA Financial Mathematics Exam syllabus, October 2026, sha256:949a2e9008bd5f8791b8852599e09f28aa30a9f53a5af05b2499907de1397b26 — https://www.soa.org/globalassets/assets/files/edu/2026/syllabi/2026-10-exam-fm-syllabus.pdf"
-    - "SOA Financial Mathematics Exam syllabus, August 2026, sha256:a3af6f54e132f4439988cccc1d20ea3cb269c175c253d9b2b27c6f8d23bbbc5b — https://www.soa.org/globalassets/assets/files/edu/2026/spring/syllabi/2026-08-exam-fm-syllabus.pdf"
+    - "SOA Financial Mathematics Exam syllabus, December 2026 (7 pp.), pp.1-7 incl. p.7 link annotations, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
+    - "SOA study note FM-24-17, Alps, Using Duration and Convexity to Approximate Change in Present Value (2017), title page p.1 and contents p.2, sha256:530436d4707ecadba3a7bef6e1a9661b8d9e9bb173486edfb6924bc4a4992040 — https://www.soa.org/globalassets/assets/Files/Edu/2017/fm-duration-convexity-present-value.pdf"
+    - "SOA, Notation and terminology used for Exam FM, p.1 (title), sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf"
+    - "SOA Exam FM Sample Questions and Solutions (rev. Aug 2026), p.1 of each, sha256:d20b5cf2b78cb4cddb3dc556e0df62c40b7d510b7941b546809cc58c4b71a069 and sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-questions.pdf, https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf"
+    - "SOA study notes FM-22-05 (BA-35, sha256:1fbd8c493e3febfe0f4bf20e5440a80d3fe9c0b0c3838cef14ce186594e94f5e) and FM-23-05 (BA II Plus, sha256:1b71586cc1b08d7bc36c04ecb3d4e6b367fce30f394e63efafc879e6b6e466fa), Broverman, Review of Calculator Functions, title pages — https://www.soa.org/globalassets/assets/files/edu/FM-22-05.pdf, https://www.soa.org/globalassets/assets/files/edu/FM-23-05.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam FM-2 (SOA).md

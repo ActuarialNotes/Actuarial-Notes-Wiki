@@ -10,14 +10,13 @@ ISBN: "978-0-9981604-4-3"
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-09-28
+  last_checked: 2026-09-29
   last_checked_by: agent:validate-v1
-  content_hash: sha256:6e46cd4c8103e51386a1c2be4196cd56d8bffb5d5ebcba8a563cd56da9b153dc
+  content_hash: sha256:75c6053d6f01a6005950d160213db1470aafc4bda0f899909c6b87d272766419
   sources:
-    - "Francis & Ruckman, Interest Theory: Financial Mathematics and Deterministic Valuation, Third Edition (ActuarialBrew, 2022), publisher's sample pages: title page p.1, copyright page p.2, Table of Contents pp.3-5, Introduction p.7, sha256:c3b537a0237c73d4c5740005ebcecb4b73f646056d32e63f2884b8b05f1cb551 — https://www.actexmadriver.com/samples/Interest%20Theory%203rd%20Edition%20Sample.pdf"
-    - "ActuarialBrew, 'Financial Mathematics Textbook' (publisher's description of the third edition), home page fetched 2026-09-28, sha256:416a0fc39b58a8d19e41866a8a4c873357abd7ee47f98c99ddab1e04aebdf6ee — https://actuarialbrew.com/"
+    - "Francis & Ruckman, Interest Theory: Financial Mathematics and Deterministic Valuation, Third Edition (ActuarialBrew, 2022), publisher's sample pages: title page p.1, copyright page p.2, Table of Contents pp.3-5, Introduction p.7, re-fetched 2026-09-29, sha256:c3b537a0237c73d4c5740005ebcecb4b73f646056d32e63f2884b8b05f1cb551 — https://www.actexmadriver.com/samples/Interest%20Theory%203rd%20Edition%20Sample.pdf"
     - "SOA Financial Mathematics Exam syllabus, December 2026, Suggested Textbooks (Francis & Ruckman entry), PDF p.5-6, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: ".verify/Resources/Books/Interest Theory – Financial Mathematics and Deterministic Valuation (Francis, J. and Ruckman, C. – 2022).md"
 ---
@@ -153,4 +152,4 @@ A textbook explaining the interest theory required for the SOA and CAS Financial
 ## Sources
 - [Interest Theory: Financial Mathematics and Deterministic Valuation, Third Edition — sample pages (ActuarialBrew, 2022)](https://www.actexmadriver.com/samples/Interest%20Theory%203rd%20Edition%20Sample.pdf) — the title page, the copyright page (© 2022; ISBN 0-9981604-4-3), the full table of contents and the authors' introduction
 - [Interest Theory: Financial Mathematics and Deterministic Valuation (ActuarialBrew)](https://actuarialbrew.com/) — the publisher's description of the third edition
-- [SOA Exam FM Syllabus, June 2026](https://www.soa.org/globalassets/assets/files/edu/2026/syllabi/2026-06-exam-fm-syllabus.pdf) — the citation (Third Edition, 2022; ISBN 978-0-9981604-4-3) and the assigned chapters
+- [SOA Exam FM Syllabus, December 2026](https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf) — the citation (Third Edition, 2022; ISBN 978-0-9981604-4-3) and the assigned chapters (p. 6)

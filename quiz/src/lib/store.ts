@@ -22,6 +22,7 @@ import { EXAM_ABOUT, sittingDetailsFor } from '../data/examSittingDetails'
 import { daysBetween } from './sittingTimeline'
 import { examAccentStyle } from './examColors'
 import type { StoreBook } from './storeBooks'
+import { STORE_SELLERS } from '../data/storeCatalog'
 
 // ── Aisles ────────────────────────────────────────────────────────────────────
 
@@ -509,6 +510,13 @@ interface ItemBase {
   sellerId?: string
   /** Every price it is offered at — the card prints the lowest. */
   prices: StorePrice[]
+  /** Who publishes it — the seller, the examining body, a book's publisher — and who wrote it. */
+  makers: Makers
+}
+
+export interface Makers {
+  publishers: string[]
+  authors: string[]
 }
 
 export type StoreItem =
@@ -540,6 +548,7 @@ export function buildStoreItems(catalog: StoreCatalog, books: readonly StoreBook
       exams: [registration.examKey],
       sellerId: registration.body.toLowerCase(),
       prices: [registrationPrice(registration)],
+      makers: { publishers: sellerNames(registration.body.toLowerCase()), authors: [] },
       registration,
     })
   }
@@ -564,6 +573,10 @@ export function buildStoreItems(catalog: StoreCatalog, books: readonly StoreBook
       exams: ladder(product.exams),
       sellerId: product.offer.sellerId,
       prices: offerPrices(product.offer),
+      makers: {
+        publishers: sellerNames(product.offer.sellerId),
+        authors: (product.facts ?? []).filter(f => f.label === 'By').flatMap(f => splitPeople(f.value)),
+      },
       study: product,
     })
   }
@@ -577,6 +590,7 @@ export function buildStoreItems(catalog: StoreCatalog, books: readonly StoreBook
       exams: [],
       sellerId: calculator.makerId,
       prices: calculator.offers.flatMap(offerPrices),
+      makers: { publishers: sellerNames(calculator.makerId), authors: [] },
       calculator,
     })
   }
@@ -589,12 +603,15 @@ export function buildStoreItems(catalog: StoreCatalog, books: readonly StoreBook
       name: book.title,
       exams: bookExamKeys(book),
       prices: [],
+      makers: { publishers: book.publisher ? [book.publisher] : [], authors: book.authors ? splitPeople(book.authors) : [] },
       book,
     })
   }
 
   // Aisle by aisle; registration up the ladder, a DISC's course package in
   // its place among the exams; every other aisle in the order it was built in.
+  canonicalAuthors(items)
+
   return STORE_AISLES.flatMap(aisle => {
     const shelf = items.filter(i => i.aisle === aisle)
     return aisle === 'registration' ? shelf.sort((a, b) => byLadder(a.exams[0] ?? '', b.exams[0] ?? '')) : shelf
@@ -661,6 +678,32 @@ export function itemMatchesExam(item: StoreItem, examKey: string): boolean {
 export interface ShelfFilter {
   exam: string | null
   aisle: StoreAisle | null
+  /** Only what costs nothing: a free course, a textbook its publisher puts online. */
+  free?: boolean
+  /** Price bands, any of them (OR). An item with no printed price is in none. */
+  prices?: readonly PriceBand[]
+  /** Publishers and authors, any of them (OR) — `Makers`, by name. */
+  makers?: readonly string[]
+}
+
+/** Whether any of the free / price / maker filters is on — the shelf then shows every match, not a preview. */
+export function hasRefinement(filter: ShelfFilter): boolean {
+  return !!filter.free || (filter.prices?.length ?? 0) > 0 || (filter.makers?.length ?? 0) > 0
+}
+
+/** Whether an item passes every filter but the aisle (AND across filters, OR within one). */
+export function itemMatchesFilter(item: StoreItem, filter: ShelfFilter): boolean {
+  if (filter.exam && !itemMatchesExam(item, filter.exam)) return false
+  if (filter.free && !isFreeItem(item)) return false
+  if (filter.prices?.length) {
+    const band = priceBandOf(item)
+    if (!band || !filter.prices.includes(band)) return false
+  }
+  if (filter.makers?.length) {
+    const names = [...item.makers.publishers, ...item.makers.authors]
+    if (!filter.makers.some(m => names.includes(m))) return false
+  }
+  return true
 }
 
 /**
@@ -672,7 +715,7 @@ export function storeShelf(items: readonly StoreItem[], filter: ShelfFilter): { 
   return STORE_AISLES
     .filter(aisle => !filter.aisle || filter.aisle === aisle)
     .map(aisle => {
-      const shelf = items.filter(i => i.aisle === aisle && (!filter.exam || itemMatchesExam(i, filter.exam)))
+      const shelf = items.filter(i => i.aisle === aisle && itemMatchesFilter(i, filter))
       return { aisle, items: filter.exam && aisle === 'study' ? byKindThenPrice(shelf) : shelf }
     })
     .filter(group => group.items.length > 0)
@@ -680,18 +723,117 @@ export function storeShelf(items: readonly StoreItem[], filter: ShelfFilter): { 
 
 function byKindThenPrice(items: StoreItem[]): StoreItem[] {
   const kindRank = (item: StoreItem) => (item.type === 'study' ? STUDY_KIND_ORDER.indexOf(item.study.kind) : STUDY_KIND_ORDER.length)
-  const low = (item: StoreItem) => Math.min(...item.prices.map(p => p.amount), Infinity)
+  const low = (item: StoreItem) => lowestPrice(item) ?? Infinity
   return items
     .map((item, i) => ({ item, i }))
     .sort((a, b) => kindRank(a.item) - kindRank(b.item) || low(a.item) - low(b.item) || a.i - b.i)
     .map(x => x.item)
 }
 
-/** How many items each aisle holds for an exam (or the whole Store) — the aisle pills' counts. */
-export function aisleCounts(items: readonly StoreItem[], exam: string | null): Record<StoreAisle, number> {
+/** How many items each aisle holds under a filter (its own aisle aside) — the aisle pills' counts. */
+export function aisleCounts(items: readonly StoreItem[], filter: ShelfFilter | string | null): Record<StoreAisle, number> {
+  const f: ShelfFilter = typeof filter === 'object' && filter !== null ? filter : { exam: filter, aisle: null }
   const counts = { registration: 0, study: 0, calculators: 0, textbooks: 0 } as Record<StoreAisle, number>
-  for (const item of items) if (!exam || itemMatchesExam(item, exam)) counts[item.aisle]++
+  for (const item of items) if (itemMatchesFilter(item, f)) counts[item.aisle]++
   return counts
+}
+
+// ── Price filters ─────────────────────────────────────────────────────────────
+
+/** Free: every price it is sold at is nothing — or, a textbook, its publisher puts it online. */
+export function isFreeItem(item: StoreItem): boolean {
+  if (item.type === 'book') return !!item.book.freeUrl
+  return item.prices.length > 0 && item.prices.every(p => p.amount === 0)
+}
+
+/** The lowest price an item is printed at, or null when it carries none (a textbook, a discontinued calculator). */
+export function lowestPrice(item: StoreItem): number | null {
+  if (item.type === 'book' && item.book.freeUrl) return 0
+  return item.prices.length ? Math.min(...item.prices.map(p => p.amount)) : null
+}
+
+export type PriceBand = 'under-100' | '100-299' | '300-599' | '600-plus'
+
+/** The price filter's bands, cheapest first. A band holds an item whose *lowest* price falls in it. */
+export const PRICE_BANDS: readonly { id: PriceBand; label: string; min: number; max: number }[] = [
+  { id: 'under-100', label: 'Under $100', min: 0, max: 100 },
+  { id: '100-299', label: '$100 – $299', min: 100, max: 300 },
+  { id: '300-599', label: '$300 – $599', min: 300, max: 600 },
+  { id: '600-plus', label: '$600 and up', min: 600, max: Infinity },
+]
+
+export function parsePriceBands(values: readonly string[]): PriceBand[] {
+  return PRICE_BANDS.map(b => b.id).filter(id => values.includes(id))
+}
+
+export function priceBandOf(item: StoreItem): PriceBand | null {
+  const low = lowestPrice(item)
+  if (low === null) return null
+  return PRICE_BANDS.find(b => low >= b.min && low < b.max)?.id ?? null
+}
+
+// ── Publishers and authors ────────────────────────────────────────────────────
+
+function sellerNames(sellerId: string): string[] {
+  const seller = STORE_SELLERS[sellerId]
+  return seller ? [seller.name] : []
+}
+
+const CREDENTIAL = /^(?:FCAS|ACAS|FSA|ASA|MAAA|CERA|FCIA|ACIA|CFA|PhD|Ph\.D\.|CPA)$/i
+
+/**
+ * The people a "By" line or a book's Authors names, one by one, as written:
+ * "Geoff Werner (ratemaking half) and Michael McPhail (reserving half)" →
+ * Geoff Werner, Michael McPhail; "Jim Bedford, FCAS, MAAA" → Jim Bedford. A
+ * team's name and a role in brackets are the seller's wording about the
+ * people, not people, and are left out.
+ */
+export function splitPeople(text: string): string[] {
+  const names = text
+    .replace(/\([^)]*\)/g, ' ')
+    .split(/;|\/|,|\band\b|&/)
+    .map(part => part
+      .replace(/^.*\bTeam:\s*/i, '')
+      .replace(/^.*\bby\s+/i, '')
+      .replace(/^Dr\.?\s+/i, '')
+      .replace(/\s+/g, ' ')
+      .trim())
+    .filter(part => part && !CREDENTIAL.test(part) && !/\bTeam$/i.test(part))
+  return [...new Set(names)]
+}
+
+/**
+ * One person, one name in the filter: a seller that prints a surname alone
+ * ("Weishaus") or with an initial ("S. Broverman") means the one author on the
+ * shelf with that surname (and initial) written in full — when there is
+ * exactly one. Anything less certain is left as printed.
+ */
+export function canonicalAuthors(items: StoreItem[]): void {
+  const all = [...new Set(items.flatMap(i => i.makers.authors))]
+  const words = (name: string) => name.split(' ')
+  const isFull = (name: string) => words(name).length >= 2 && !/^[A-Z]\.$/.test(words(name)[0]!)
+  const canonical = new Map<string, string>()
+  for (const name of all) {
+    if (isFull(name)) continue
+    const surname = words(name).at(-1)!
+    const initial = words(name).length > 1 ? words(name)[0]![0] : null
+    const matches = all.filter(n => isFull(n) && words(n).at(-1) === surname && (!initial || n.startsWith(initial)))
+    if (matches.length === 1) canonical.set(name, matches[0]!)
+  }
+  for (const item of items) {
+    item.makers.authors = [...new Set(item.makers.authors.map(n => canonical.get(n) ?? n))]
+  }
+}
+
+/** Every publisher and author on the shelf (under the other filters), with how many items each has — the filter's options. */
+export function makerOptions(items: readonly StoreItem[], filter: ShelfFilter): { publishers: [string, number][]; authors: [string, number][] } {
+  const pool = items.filter(i => (!filter.aisle || i.aisle === filter.aisle) && itemMatchesFilter(i, { ...filter, makers: [] }))
+  const tally = (pick: (m: Makers) => string[]) => {
+    const counts = new Map<string, number>()
+    for (const item of pool) for (const name of new Set(pick(item.makers))) counts.set(name, (counts.get(name) ?? 0) + 1)
+    return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+  }
+  return { publishers: tally(m => m.publishers), authors: tally(m => m.authors) }
 }
 
 /** The exams that have anything on the shelf, in ladder order — the strip. */
@@ -717,3 +859,102 @@ const NEUTRAL_ACCENT = {
   '--exam-accent-soft': 'rgb(100 116 139 / 0.12)',
   '--exam-accent-vivid': 'rgb(71 85 105)',
 } as CSSProperties
+
+// ── Comparing study materials ─────────────────────────────────────────────────
+
+export type StudyItem = Extract<StoreItem, { type: 'study' }>
+
+/** The study materials an exam's comparison table lays side by side: like with like, cheapest first. */
+export function comparisonFor(items: readonly StoreItem[], examKey: string): StudyItem[] {
+  const study = items.filter((i): i is StudyItem => i.type === 'study' && i.exams.includes(examKey))
+  return byKindThenPrice(study) as StudyItem[]
+}
+
+/** The exams with at least two study materials to compare, in ladder order. */
+export function comparableExams(items: readonly StoreItem[]): StoreExam[] {
+  return STORE_EXAMS.filter(exam => comparisonFor(items, exam.key).length >= 2)
+}
+
+/**
+ * The detail rows a comparison table carries — every fact label any of the
+ * products prints ("Format", "Access", "By", "Edition"), in the order they
+ * first appear. A product that doesn't state one shows nothing in its cell.
+ */
+export function comparisonFactLabels(products: readonly StudyProduct[]): string[] {
+  const labels: string[] = []
+  for (const p of products) for (const f of p.facts ?? []) if (!labels.includes(f.label)) labels.push(f.label)
+  return labels
+}
+
+// ── The disclaimer ────────────────────────────────────────────────────────────
+
+/**
+ * The legal notice under every listing. It says what the Store is and isn't:
+ * independent of the seller and of the examining bodies; names and marks
+ * used only to identify the product; the facts transcribed on a date and
+ * governed by the seller's own page; reviews quoted as their authors wrote
+ * them; no advice; no warranty. `seller` and `checked` name the listing's own
+ * seller and the date its page was read, where it has them.
+ */
+export function storeDisclaimer(seller: string | null, checked: string | null): string[] {
+  const bodies = ['the Society of Actuaries', 'the Casualty Actuarial Society']
+  const named = seller && !bodies.some(b => b.toLowerCase() === `the ${seller.toLowerCase()}`) ? [seller, ...bodies] : bodies
+  const whom = `${named.join(', ')} or any other organization named here`
+  return [
+    `Actuarial Notes is an independent study resource. It is not affiliated with, endorsed by, sponsored by or acting for ${whom}. Product names, logos and trademarks are the property of their owners and appear only to identify the products.`,
+    `Prices, contents, dates and other details are transcribed from the seller’s public page${checked ? ` as read on ${longDate(checked)}` : ''} and may have changed since. The seller’s own page and terms govern any purchase; confirm every detail there before you buy. Nothing in the Store is sold, and no payment for it is taken, on Actuarial Notes.`,
+    'Reviews are excerpts of public posts and published testimonials, quoted as their authors wrote them and linked to where they appear. They are the opinions of their authors, not of Actuarial Notes, and are not verified purchases.',
+    'This information is provided “as is”, for general information only, without warranty of any kind, and is not professional, financial or purchasing advice. Listing a product is not a recommendation, and no listing is a paid placement.',
+  ]
+}
+
+function longDate(iso: string): string {
+  const [y, m, d] = iso.split('-').map(Number)
+  return new Date(Date.UTC(y!, m! - 1, d!)).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
+}
+
+// ── Reviews ───────────────────────────────────────────────────────────────────
+
+/** Where a review was read: r/actuary, the Actuarial Outpost forum, or the seller's own page. */
+export type ReviewSource = 'reddit' | 'actuarial-outpost' | 'publisher'
+
+export const REVIEW_SOURCE_ORDER: readonly ReviewSource[] = ['reddit', 'actuarial-outpost', 'publisher']
+
+/**
+ * One review, **quoted as its author wrote it** — cut only at an ellipsis,
+ * never reworded — with the link to where it appears and its date. A rating
+ * is carried only when the source prints one beside the review.
+ */
+export interface StoreReview {
+  productIds: string[]
+  source: ReviewSource
+  url: string
+  author: string | null
+  date: string | null
+  quote: string
+  rating?: number | null
+  ratingOutOf?: number | null
+}
+
+/** A seller's own aggregate rating for a product, as its page prints it ("4.8 out of 5, 312 reviews"). */
+export interface PublisherRating {
+  productId: string
+  value: number
+  outOf: number
+  count: number | null
+  url: string
+}
+
+/** A product's reviews, newest first (undated last). */
+export function reviewsFor(productId: string, reviews: readonly StoreReview[]): StoreReview[] {
+  return reviews
+    .filter(r => r.productIds.includes(productId))
+    .sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''))
+}
+
+/** How many reviews a product has from each source, in source order, sources with none left out. */
+export function reviewTally(reviews: readonly StoreReview[]): { source: ReviewSource; count: number }[] {
+  return REVIEW_SOURCE_ORDER
+    .map(source => ({ source, count: reviews.filter(r => r.source === source).length }))
+    .filter(t => t.count > 0)
+}

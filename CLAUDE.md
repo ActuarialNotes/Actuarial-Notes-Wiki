@@ -218,7 +218,13 @@ before touching that area**:
   deadline from the sittings tables (`registrationStatus`: open / opens / closed /
   unscheduled). Textbooks come from the vault (`virtual:store-books`, `lib/storeBooks.ts`);
   sellers' logos are local copies in `quiz/public/store-sellers/`, never hotlinks; products
-  are drawn (`components/store/ProductArt.tsx`) in the exam's accent. Read before touching
+  are drawn (`components/store/ProductArt.tsx`) in the exam's accent. Three refinements ride
+  the URL beside exam and aisle — **Free**, **Price** bands and **Publisher / author** — a
+  **comparison table** lays one exam's study materials side by side
+  (`components/store/CompareSheet.tsx`), **reviews** are quoted verbatim with their links from
+  r/actuary (via the Arctic Shift archive), Actuarial Outpost and the sellers themselves
+  (`data/storeReviews.ts`, never paraphrased), and every listing ends in the legal notice
+  `storeDisclaimer` writes. Read before touching
   anything named `store*`, `examFees` or `GemShop`.
 - `docs/quiz-battle.md` — **Quiz Battle** (`/battle`, the card at the top of the Quiz tab): two
   players racing through the same questions, on one screen under **buzzer** rules (first to
@@ -994,8 +1000,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **185 test files /
-~2890 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **186 test files /
+~2910 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).

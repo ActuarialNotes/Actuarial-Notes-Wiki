@@ -22,6 +22,20 @@ import {
   showcase,
   storeShelf,
   type StudyProduct,
+  comparableExams,
+  comparisonFactLabels,
+  comparisonFor,
+  hasRefinement,
+  isFreeItem,
+  makerOptions,
+  parsePriceBands,
+  priceBandOf,
+  reviewTally,
+  reviewsFor,
+  splitPeople,
+  storeDisclaimer,
+  type ShelfFilter,
+  type StoreReview,
 } from './store'
 import { EXAM_FEES } from '../data/examFees'
 import { EXAM_HUES } from './examColors'
@@ -284,5 +298,158 @@ describe('registrationUrgency', () => {
     expect(order.slice(0, 2)).toEqual(['FM', 'CAS-PCPA'])
     expect(order.indexOf('P')).toBe(2)
     expect(order.indexOf('CAS-5')).toBeGreaterThan(order.indexOf('P'))
+  })
+})
+
+describe('the filters', () => {
+  const study = (id: string, exams: string[], amount: number, by?: string, sellerId = 'actex'): StudyProduct => ({
+    id,
+    kind: 'manual',
+    name: id,
+    exams,
+    offer: { sellerId, url: 'https://x.test', price: { amount, currency: 'USD' }, checked: '2026-10-02' },
+    facts: by ? [{ label: 'By', value: by }] : undefined,
+  })
+  const items = buildStoreItems(
+    {
+      study: [
+        study('free-course', ['P'], 0, undefined, 'tia'),
+        study('cheap', ['P'], 60, 'Jim Bedford, FCAS, MAAA'),
+        study('mid', ['FM'], 250, 'Geoff Werner (ratemaking half) and Michael McPhail (reserving half)'),
+        study('dear', ['FM'], 900),
+      ],
+      calculators: [],
+    },
+    [],
+  )
+  const ids = (filter: Partial<ShelfFilter>) =>
+    storeShelf(items, { exam: null, aisle: 'study', ...filter }).flatMap(g => g.items.map(i => i.id))
+
+  it('splits a "By" line into the people it names, without their credentials or roles', () => {
+    expect(splitPeople('Jim Bedford, FCAS, MAAA')).toEqual(['Jim Bedford'])
+    expect(splitPeople('Geoff Werner (ratemaking half) and Michael McPhail (reserving half)')).toEqual(['Geoff Werner', 'Michael McPhail'])
+    expect(splitPeople('MAS-I Team: Tom Wakefield, Nao Mimoto, Jeffrey Pai')).toEqual(['Tom Wakefield', 'Nao Mimoto', 'Jeffrey Pai'])
+    expect(splitPeople('Grossack (study manual); GOAL questions by Monadic (Hilary Masuka)')).toEqual(['Grossack', 'Monadic'])
+    expect(splitPeople('Dr. Lendie Follett (course author)')).toEqual(['Lendie Follett'])
+    expect(splitPeople('Dinius/Sadow/Okine')).toEqual(['Dinius', 'Sadow', 'Okine'])
+  })
+
+  it('leaves a team out, and joins a surname to the one full name it can mean', () => {
+    expect(splitPeople('P Team')).toEqual([])
+    const named = buildStoreItems(
+      {
+        study: [
+          study('a', ['P'], 1, 'Weishaus'),
+          study('b', ['P'], 1, 'Abraham Weishaus'),
+          study('c', ['FM'], 1, 'S. Broverman'),
+          study('d', ['FM'], 1, 'Samuel Broverman'),
+          study('e', ['FM'], 1, 'Grossack'),
+        ],
+        calculators: [],
+      },
+      [],
+    )
+    expect(named.filter(i => i.type === 'study').map(i => i.makers.authors[0])).toEqual([
+      'Abraham Weishaus',
+      'Abraham Weishaus',
+      'Samuel Broverman',
+      'Samuel Broverman',
+      'Grossack',
+    ])
+  })
+
+  it('keeps only what is free', () => {
+    expect(ids({ free: true })).toEqual(['free-course'])
+    expect(isFreeItem(items.find(i => i.id === 'cheap')!)).toBe(false)
+  })
+
+  it('bands an item by its lowest price, any band chosen', () => {
+    expect(priceBandOf(items.find(i => i.id === 'mid')!)).toBe('100-299')
+    expect(ids({ prices: ['under-100'] })).toEqual(['free-course', 'cheap'])
+    expect(ids({ prices: ['100-299', '600-plus'] })).toEqual(['mid', 'dear'])
+    expect(parsePriceBands(['600-plus', 'nonsense', 'under-100'])).toEqual(['under-100', '600-plus'])
+  })
+
+  it('matches a publisher or an author, any of them', () => {
+    expect(ids({ makers: ['Michael McPhail'] })).toEqual(['mid'])
+    expect(ids({ makers: ['The Infinite Actuary', 'Jim Bedford'] })).toEqual(['free-course', 'cheap'])
+    const options = makerOptions(items, { exam: 'FM', aisle: null })
+    expect(options.publishers).toEqual([['ACTEX Learning', 2], ['Society of Actuaries', 1]])
+    expect(options.authors.map(([name]) => name)).toEqual(['Geoff Werner', 'Michael McPhail'])
+  })
+
+  it('combines the filters, and counts the aisles under them', () => {
+    expect(ids({ exam: 'FM', prices: ['600-plus'] })).toEqual(['dear'])
+    expect(hasRefinement({ exam: 'FM', aisle: null })).toBe(false)
+    expect(hasRefinement({ exam: null, aisle: null, free: true })).toBe(true)
+    expect(aisleCounts(items, { exam: null, aisle: null, free: true }).study).toBe(1)
+  })
+})
+
+describe('the comparison table', () => {
+  const study = (id: string, kind: StudyProduct['kind'], amount: number, facts: { label: string; value: string }[] = []): StudyProduct => ({
+    id,
+    kind,
+    name: id,
+    exams: ['MAS-I'],
+    offer: { sellerId: 'actex', url: 'https://x.test', price: { amount, currency: 'USD' }, checked: '2026-10-02' },
+    facts,
+  })
+  const items = buildStoreItems(
+    {
+      study: [
+        study('practice', 'practice', 90, [{ label: 'Access', value: '6 months' }]),
+        study('manual-dear', 'manual', 300, [{ label: 'Format', value: 'Print' }, { label: 'By', value: 'A' }]),
+        study('manual-cheap', 'manual', 200, [{ label: 'By', value: 'B' }]),
+      ],
+      calculators: [],
+    },
+    [],
+  )
+
+  it('lays an exam’s study materials side by side, like with like, cheapest first', () => {
+    expect(comparisonFor(items, 'MAS-I').map(i => i.id)).toEqual(['manual-cheap', 'manual-dear', 'practice'])
+    expect(comparisonFor(items, 'FM')).toEqual([])
+    expect(comparableExams(items).map(e => e.key)).toEqual(['MAS-I'])
+  })
+
+  it('carries a row for every fact any of them states, in the order first seen', () => {
+    expect(comparisonFactLabels(comparisonFor(items, 'MAS-I').map(i => i.study))).toEqual(['By', 'Format', 'Access'])
+  })
+})
+
+describe('storeDisclaimer', () => {
+  it('names the seller and the date its page was read', () => {
+    const text = storeDisclaimer('ACTEX Learning', '2026-10-02').join(' ')
+    expect(text).toContain('not affiliated with, endorsed by, sponsored by or acting for ACTEX Learning, the Society of Actuaries')
+    expect(text).toContain('as read on October 2, 2026')
+    expect(text).toContain('“as is”')
+  })
+
+  it('names an examining body once when it is the seller', () => {
+    const text = storeDisclaimer('Society of Actuaries', null).join(' ')
+    expect(text.match(/Society of Actuaries/g)).toHaveLength(1)
+    expect(text).not.toContain('as read on')
+  })
+})
+
+describe('reviews', () => {
+  const review = (id: string, date: string | null, source: StoreReview['source'] = 'reddit'): StoreReview => ({
+    productIds: [id],
+    source,
+    url: 'https://www.reddit.com/r/actuary/comments/x/',
+    author: 'a',
+    date,
+    quote: 'q',
+  })
+
+  it('lists a product’s reviews newest first, and tallies them by source', () => {
+    const reviews = [review('p', '2023-01-01'), review('p', null, 'publisher'), review('p', '2025-05-05', 'actuarial-outpost'), review('q', '2024-01-01')]
+    expect(reviewsFor('p', reviews).map(r => r.date)).toEqual(['2025-05-05', '2023-01-01', null])
+    expect(reviewTally(reviewsFor('p', reviews))).toEqual([
+      { source: 'reddit', count: 1 },
+      { source: 'actuarial-outpost', count: 1 },
+      { source: 'publisher', count: 1 },
+    ])
   })
 })

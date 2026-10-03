@@ -14,7 +14,7 @@ import { cn } from '@/lib/utils'
  * Branding, not information: the seller is named beside every tile, which is
  * why `LogoTile` hides it from assistive technology.
  */
-export function SellerLogo({ seller, size = 'sm', className }: { seller: StoreSeller; size?: LogoTileSize; className?: string }) {
+export function SellerLogo({ seller, size = 'sm', className }: { seller: Pick<StoreSeller, 'name' | 'short' | 'logo'>; size?: LogoTileSize; className?: string }) {
   const [failed, setFailed] = useState(false)
   const edge = logoTileEdge(size)
 

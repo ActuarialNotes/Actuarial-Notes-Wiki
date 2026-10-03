@@ -28,6 +28,9 @@ interface MultiSelectDropdownProps {
    *  without a shape, so a page's own filter row (the Resources shelf) takes
    *  `card`. */
   surface?: 'background' | 'card'
+  /** `pill` draws the trigger as a compact outlined pill, the shape of the
+   *  toggles it sits in a row with (the Store's Free). */
+  shape?: 'tile' | 'pill'
 }
 
 /** A pill-style button that opens a checkbox list for multi-selecting options.
@@ -44,6 +47,7 @@ export function MultiSelectDropdown({
   getCount,
   emptyTitle,
   surface = 'background',
+  shape = 'tile',
 }: MultiSelectDropdownProps) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
@@ -99,14 +103,16 @@ export function MultiSelectDropdown({
         disabled={empty}
         title={empty ? emptyTitle : undefined}
         aria-label={single !== null ? `${label}: ${displayLabel}` : undefined}
-        className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed ${
+        className={`flex items-center text-sm font-medium transition-colors whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed ${
+          shape === 'pill' ? 'gap-1 rounded-full border px-3 py-1.5' : 'gap-2 rounded-lg px-4 py-2.5'
+        } ${
           selected.size > 0
-            ? 'bg-primary/10 text-primary'
+            ? `bg-primary/10 text-primary${shape === 'pill' ? ' border-primary/40' : ''}`
             : `${surface === 'card' ? 'bg-card' : 'bg-background'} enabled:hover:bg-accent`
         }`}
       >
         <span className="max-w-[14rem] truncate">{displayLabel}</span>
-        <ChevronDown className={`h-4 w-4 transition-transform shrink-0 ${open ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`${shape === 'pill' ? 'h-3.5 w-3.5' : 'h-4 w-4'} transition-transform shrink-0 ${open ? 'rotate-180' : ''}`} />
       </button>
       {open && !empty && (
         <div

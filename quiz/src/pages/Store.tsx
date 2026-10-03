@@ -184,61 +184,56 @@ export default function Store() {
       <div ref={shelfTop} className="scroll-mt-16 lg:scroll-mt-2" />
       <AisleNav value={aisle} counts={counts} onChange={a => choose({ aisle: a })} />
 
-      <div className="-mt-3 flex flex-wrap items-center gap-2" data-testid="store-filters">
-        <button
-          type="button"
-          aria-pressed={free}
-          onClick={() => refine({ free: !free })}
-          data-sound="select"
-          className={cn(
-            'inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-            free ? 'border-green-600 bg-green-600 text-white' : 'bg-card hover:bg-accent',
+      {/* The refinements, one row of pills under the aisles. Registration is
+          one fee per exam — nothing to narrow by price or maker — so it has none. */}
+      {aisle !== 'registration' && (
+        <div className="-mt-3 flex flex-wrap items-center gap-2" data-testid="store-filters">
+          <button
+            type="button"
+            aria-pressed={free}
+            onClick={() => refine({ free: !free })}
+            data-sound="select"
+            className={cn(
+              'inline-flex items-center rounded-full border px-3 py-1.5 text-sm font-medium transition-colors',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              free ? 'border-primary/40 bg-primary/10 text-primary' : 'bg-card hover:bg-accent',
+            )}
+          >
+            Free
+          </button>
+          <MultiSelectDropdown
+            label="Price"
+            surface="card"
+            shape="pill"
+            options={PRICE_BANDS.map(b => ({ value: b.id, label: b.label }))}
+            selected={new Set(prices)}
+            onToggle={v => refine({ prices: toggle(prices, v as PriceBand) })}
+          />
+          <MultiSelectDropdown
+            label="Publisher"
+            surface="card"
+            shape="pill"
+            options={[
+              ...options.publishers.map(([name]) => ({ value: name, label: name, group: 'Publishers' })),
+              ...options.authors.filter(([name]) => !options.publishers.some(([p]) => p === name)).map(([name]) => ({ value: name, label: name, group: 'Authors' })),
+            ]}
+            selected={new Set(makers)}
+            onToggle={v => refine({ makers: toggle(makers, v) })}
+            getCount={v => (options.publishers.find(([n]) => n === v) ?? options.authors.find(([n]) => n === v))?.[1] ?? 0}
+            emptyTitle="Nothing on this shelf names a publisher or author"
+          />
+          {refined && (
+            <button
+              type="button"
+              onClick={() => refine({ free: false, prices: [], makers: [] })}
+              className="inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <X className="h-3.5 w-3.5" aria-hidden />
+              Clear
+            </button>
           )}
-        >
-          Free
-        </button>
-        <MultiSelectDropdown
-          label="Price"
-          surface="card"
-          options={PRICE_BANDS.map(b => ({ value: b.id, label: b.label }))}
-          selected={new Set(prices)}
-          onToggle={v => refine({ prices: toggle(prices, v as PriceBand) })}
-        />
-        <MultiSelectDropdown
-          label="Publisher / author"
-          surface="card"
-          options={[
-            ...options.publishers.map(([name]) => ({ value: name, label: name, group: 'Publishers' })),
-            ...options.authors.filter(([name]) => !options.publishers.some(([p]) => p === name)).map(([name]) => ({ value: name, label: name, group: 'Authors' })),
-          ]}
-          selected={new Set(makers)}
-          onToggle={v => refine({ makers: toggle(makers, v) })}
-          getCount={v => (options.publishers.find(([n]) => n === v) ?? options.authors.find(([n]) => n === v))?.[1] ?? 0}
-          emptyTitle="Nothing on this shelf names a publisher or author"
-        />
-        {refined && (
-          <button
-            type="button"
-            onClick={() => refine({ free: false, prices: [], makers: [] })}
-            className="inline-flex items-center gap-1 rounded-full px-2.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-          >
-            <X className="h-3.5 w-3.5" aria-hidden />
-            Clear
-          </button>
-        )}
-        {comparable.length > 0 && (
-          <button
-            type="button"
-            onClick={openCompare}
-            data-testid="store-compare"
-            className="ml-auto inline-flex items-center gap-1.5 rounded-full border bg-card px-3 py-1.5 text-sm font-medium transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <Columns3 className="h-4 w-4" aria-hidden />
-            Compare study materials
-          </button>
-        )}
-      </div>
+        </div>
+      )}
 
       {shelf.length === 0 ? (
         <EmptyAisle
@@ -261,21 +256,40 @@ export default function Store() {
                 : group.aisle === 'registration'
                   ? registrationUrgency(group.items, today).slice(0, SHELF_PREVIEW)
                   : showcase(group.items, SHELF_PREVIEW)
+            // Comparing is a study-materials question, so it lives in that
+            // aisle's heading rather than in the filter row.
+            const compare = group.aisle === 'study' && comparable.length > 0 ? (
+              <button
+                type="button"
+                onClick={openCompare}
+                data-testid="store-compare"
+                aria-label="Compare study materials"
+                title="Compare study materials"
+                className="inline-flex items-center gap-1 whitespace-nowrap text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
+                <Columns3 className="h-4 w-4" aria-hidden />
+                <span className="hidden sm:inline">Compare</span>
+              </button>
+            ) : null
+            const more = preview ? (
+              <button
+                type="button"
+                onClick={() => seeAll(group.aisle)}
+                className="inline-flex items-center gap-0.5 whitespace-nowrap text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
+                See all
+                <ChevronRight className="h-4 w-4" aria-hidden />
+              </button>
+            ) : null
             return (
               <Aisle
                 key={group.aisle}
                 aisle={group.aisle}
                 count={group.items.length}
-                action={preview ? (
-                  <button
-                    type="button"
-                    onClick={() => seeAll(group.aisle)}
-                    className="inline-flex items-center gap-0.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    See all {group.items.length}
-                    <ChevronRight className="h-4 w-4" aria-hidden />
-                  </button>
-                ) : null}
+                // One aisle chosen, its pill already names it: the heading
+                // would only say it again, unless it carries a control.
+                heading={!aisle || !!compare}
+                action={compare || more ? <span className="flex items-center gap-3">{compare}{more}</span> : null}
               >
                 {shown.map(item =>
                   item.aisle === 'registration' ? (
@@ -514,19 +528,19 @@ function AislePill({
   )
 }
 
-function Aisle({ aisle, count, action, children }: { aisle: StoreAisle; count: number; action?: ReactNode; children: ReactNode }) {
+function Aisle({ aisle, count, heading = true, action, children }: { aisle: StoreAisle; count: number; heading?: boolean; action?: ReactNode; children: ReactNode }) {
   const Icon = AISLE_ICON[aisle]
   return (
-    <section aria-labelledby={`aisle-${aisle}`} className="space-y-3" data-testid={`aisle-${aisle}`}>
-      <div className="flex items-center gap-2.5">
+    <section aria-labelledby={`aisle-${aisle}`} aria-label={heading ? undefined : AISLE_LABEL[aisle]} className="space-y-3" data-testid={`aisle-${aisle}`}>
+      <div className={cn('flex items-center gap-2.5', !heading && 'sr-only')}>
         <LogoTile size="sm" className="bg-muted text-foreground">
           <Icon className="h-4 w-4" />
         </LogoTile>
-        <h2 id={`aisle-${aisle}`} className="text-lg font-semibold tracking-tight">
+        <h2 id={`aisle-${aisle}`} className="min-w-0 truncate text-lg font-semibold tracking-tight">
           {AISLE_LABEL[aisle]}
         </h2>
         <span className="text-sm tabular-nums text-muted-foreground">{count}</span>
-        {action && <span className="ml-auto">{action}</span>}
+        {action && <span className="ml-auto shrink-0">{action}</span>}
       </div>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">{children}</div>
     </section>

@@ -46,7 +46,7 @@ const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element }[] 
 ]
 
 const EXTRAS: { text: string; Icon: LucideIcon }[] = [
-  { text: 'Pro-only Custom Badge in the Store', Icon: BadgeCheck },
+  { text: 'Pro-only Custom Badge in the Gem Shop', Icon: BadgeCheck },
   { text: 'Fund new exams, questions and features', Icon: Heart },
 ]
 

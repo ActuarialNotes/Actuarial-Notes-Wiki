@@ -18,7 +18,9 @@ product, in Preview and open only to approved accounts (`PREVIEW_APPROVED_EMAILS
 2. **Quiz app** (`quiz/`) — a React + Vite + TypeScript SPA that reads the markdown content
    at build time, renders the wiki, runs quizzes/flashcards (a concept's card is
    collected when it first reaches Level 1), tracks per-concept mastery, generates personalized study plans, and layers on
-   gamification (gems, cosmetics, avatars, a Store). Backed by Supabase (auth, sync,
+   gamification (gems, cosmetics, avatars, a Gem Shop), and a **Store** of the real
+   products a candidate buys — registration, study materials, calculators, textbooks — each
+   linked to the seller who sells it (`docs/store.md`). Backed by Supabase (auth, sync,
    payments). A **Research** tab (Canadian P&C research corpus + AI "Ask") is fully built
    but currently **disabled behind feature flags** — see "Feature flags & the Research tab".
 
@@ -67,7 +69,8 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
 
 
 ### Inside `quiz/src/`
-- `pages/` — route-level views (Quiz, Review, Dashboard, Flashcards, Search, Settings, Store,
+- `pages/` — route-level views (Quiz, Review, Dashboard, Flashcards, Search, Settings,
+  `Store.tsx` — the Store, `/store`, lazy — `GemShop.tsx` — the gem cosmetics, `/store/gems` —
   Upgrade, wiki/*, `Battle.tsx` — Quiz Battle, `/battle`, lazy — `Project/` — the Projects tab and the PCPA project simulator, `Cowork/` — the second product's shelf, source pages and deliverables —
   and `Research/`, which is
   flag-gated)
@@ -113,7 +116,10 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
   exam's published syllabus — the PDF an exam page's header button opens), `examSittingDetails.ts`
   (what the examining body publishes about each sitting — registration opening and closing, PCPA's exam and
   submission deadlines, results release — transcribed with its source page, never extrapolated; the
-  study guide's info button reads it),
+  study guide's info button reads it), `examFees.ts` (each exam's fee, transcribed from the
+  SOA's and CAS's fee pages — the info panel's "Fee" row and the Store's registration
+  price), `storeCatalog.ts` (the Store's sellers, study materials and calculators — see
+  `docs/store.md`),
   `mnemonics.ts` / `stories.ts` (per-concept, per-avatar content), `quests.ts` (daily-quest
   catalogue), `examGuides.ts` (the exam-page orientation guide — the tip
   pages themselves live in the vault under `Guides/`, see below), `tracks.ts`
@@ -200,6 +206,20 @@ before touching that area**:
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
   work stays consistent, minimalistic, and hierarchy-aware.
+- `docs/store.md` — the **Store** (`/store`, in the sidebar after Projects): real products
+  — exam **registration**, **study materials**, the **calculators** SOA and CAS allow, the
+  syllabus **textbooks** — each opening a sheet of what its seller says about it, whose one
+  button goes to the seller in a new tab. **Nothing is sold here** (the Gem Shop at
+  `/store/gems` is the one corner where gems buy cosmetics). The rule is the vault's:
+  every name, price and list of contents is **transcribed from the seller's page with the
+  date it was read** (`checked`, printed beside the button), never constructed — a fact
+  the page doesn't state is absent. Registration is *assembled*, not authored: the fee
+  from `data/examFees.ts` (the same table the study guide's info panel reads) and the
+  deadline from the sittings tables (`registrationStatus`: open / opens / closed /
+  unscheduled). Textbooks come from the vault (`virtual:store-books`, `lib/storeBooks.ts`);
+  sellers' logos are local copies in `quiz/public/store-sellers/`, never hotlinks; products
+  are drawn (`components/store/ProductArt.tsx`) in the exam's accent. Read before touching
+  anything named `store*`, `examFees` or `GemShop`.
 - `docs/quiz-battle.md` — **Quiz Battle** (`/battle`, the card at the top of the Quiz tab): two
   players racing through the same questions, on one screen under **buzzer** rules (first to
   buzz answers, a miss hands the other the steal) or on two devices under **simultaneous**
@@ -573,6 +593,19 @@ Other important `lib/` modules:
   the page's own ISBN, the vended detail-page link used untouched, an hour at the CDN and
   nothing cached in the browser, and the "as of" stamp, disclaimers and associate disclosure
   beside any price (the wording is pinned by `amazonPrice.test.ts`).
+- `store.ts` / `storeBooks.ts` — the **Store** (`docs/store.md`). `store.ts` is its logic,
+  pure and tested: the four aisles, the exams the shelf narrows to (`STORE_EXAMS`, in
+  ladder order), price printing (`Free` for nothing, "From" over choices), registration
+  assembled from `data/examFees.ts` and the sittings tables (`registrationStatus` — a
+  deadline transcribed into `examSittingDetails.ts` replaces the sittings row's), the shelf
+  (`buildStoreItems`, `storeShelf`, `showcase` one exam at a time up the ladder,
+  `registrationUrgency` soonest deadline first), and which calculators an exam allows
+  (by the body that sets it; the DISCs, The Institutes' exams, none). `storeBooks.ts`
+  runs at bundle time (relative imports, like `resourceExams.ts`): every `Resources/Books`
+  Textbook or Casebook with an ISBN that an exam's Source Material lists, with each exam's
+  chapters. The authored half is `data/storeCatalog.ts` (sellers, study materials,
+  calculator policies and calculators — `storeCatalog.test.ts` holds each offer to its
+  seller's domain and each calculator to its line on both lists).
 - `pastExams.ts` — the past-sitting shelf behind the quiz builder's **Past Papers** source:
   `buildPastExamRows` unions the authored catalogue (`data/pastExams.ts`) with the sittings the
   question bank actually holds, so a released paper that hasn't been imported still lists
@@ -602,7 +635,10 @@ Other important `lib/` modules:
   transcribed one replaces the row's, under the publisher's label) and places today among
   them — at most one step is *next*, none while a window is open. Which sitting is selected
   is `hooks/useExamVersion.ts`, shared with `ExamVersionMenu` so the two can't disagree.
-  Pure and tested. See `docs/mock-exam-browser.md`.
+  Pure and tested. The drawing is `components/SittingTimeline.tsx`, which the Store's
+  registration sheet draws too — its own small module, so the Store importing it doesn't
+  pull the info button into a chunk the exam page then waits on. See
+  `docs/mock-exam-browser.md`.
 - `pdfChapters.ts` — the exam-PDF reader's **chapters**: a document's own outline (the
   bookmarks a viewer shows in a sidebar) turned into the marks that segment the page bar,
   resolved against the document by `hooks/usePdfChapters.ts`. Pure and tested. Chapters are
@@ -958,8 +994,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **180 test files /
-~2810 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **185 test files /
+~2890 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).
@@ -1150,6 +1186,8 @@ modules that read directly from the repo root:
   never in this module
 - `virtual:resource-timeline` — the dated `Resources/{Books,Events,Regulation,Benchmarks}/`
   pages that power the Resources timeline/heatmap
+- `virtual:store-books` — the Store's textbook aisle: the `Resources/Books` textbooks with
+  an ISBN that an exam assigns, with each exam's chapters (`lib/storeBooks.ts`, ~20 KB)
 - `virtual:seo-pages` — every exam, concept and resource page, described (`lib/seo.ts`).
   The same plugin (`seoPagesPlugin`) writes, after a build, one static
   `dist/wiki/<kind>/<slug>/index.html` per page and `dist/sitemap.xml` — the sitemap is

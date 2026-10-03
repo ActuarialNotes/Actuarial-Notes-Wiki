@@ -396,7 +396,7 @@ export function CharacterSkinSelector({ currentAvatarUrl, onClose, onSelect }: C
 
   const handleCharacterClick = (animal: AnimalType) => {
     if (!isCharacterOwned(animal)) {
-      navigate('/store')
+      navigate('/store/gems')
       onClose()
       return
     }
@@ -406,7 +406,7 @@ export function CharacterSkinSelector({ currentAvatarUrl, onClose, onSelect }: C
 
   const handleSkinClick = (variantKey: string | null) => {
     if (variantKey && !isSkinOwned(equippedAnimal, variantKey)) {
-      navigate('/store')
+      navigate('/store/gems')
       onClose()
       return
     }
@@ -533,10 +533,10 @@ export function CharacterSkinSelector({ currentAvatarUrl, onClose, onSelect }: C
         <div className="mt-3 pt-3">
           <button
             type="button"
-            onClick={() => { navigate('/store'); onClose() }}
+            onClick={() => { navigate('/store/gems'); onClose() }}
             className="text-xs text-primary hover:underline"
           >
-            + Unlock more in the Store
+            + Unlock more in the Gem Shop
           </button>
         </div>
       </div>

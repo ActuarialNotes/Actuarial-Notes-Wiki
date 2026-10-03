@@ -79,6 +79,8 @@ const DESK: { prefix: string; tab: number; depth: number; below?: number }[] = [
   { prefix: '/review', tab: 3, depth: 2 },
   // The Projects tab; an attempt is a sheet laid over the list of briefs.
   { prefix: '/project', tab: 4, depth: 0, below: 1 },
+  // The Store, listed after Projects; the gem shop is a sheet laid over it.
+  { prefix: '/store', tab: 4.2, depth: 0, below: 1 },
   // Actuaria Online, under the sidebar's PLAY label after Projects. Its own
   // tabs, in the order its tab bar lists them (lib/actuaria/nav.ts), so an
   // in-world move slides the way the tabs read and never borrows the Quiz tab's
@@ -95,7 +97,6 @@ const DESK: { prefix: string; tab: number; depth: number; below?: number }[] = [
   { prefix: '/actuaria/raid', tab: 4.8, depth: 1 },
   { prefix: '/actuaria/hangar', tab: 4.9, depth: 0 },
   { prefix: '/search', tab: 5, depth: 0 },
-  { prefix: '/store', tab: 6, depth: 0 },
   { prefix: '/upgrade', tab: 7, depth: 0 },
   { prefix: '/settings', tab: 8, depth: 0 },
   // Cowork's two places are two tabs of their own, and a source or a

@@ -6,6 +6,7 @@ import path from 'path'
 import { mkdir, readdir, readFile, writeFile } from 'fs/promises'
 import fm from 'front-matter'
 import { buildResourceExamMap, examsForResource } from './src/lib/resourceExams'
+import { buildStoreBooks, type BookPageSource } from './src/lib/storeBooks'
 import { examDisplayName, examIdFromFile } from './src/lib/wikiRoutes'
 import { resourcePdfUrl } from './src/lib/examPdf'
 import {
@@ -194,6 +195,44 @@ function wikiContentPlugin(): Plugin {
       if (id !== RESOLVED_ID) return
       const data = await collectWikiContent()
       return `export default ${JSON.stringify(data)}`
+    },
+  }
+}
+
+// ── The Store's textbooks ────────────────────────────────────────────────────
+// The books a candidate buys — `Resources/Books` pages typed Textbook or
+// Casebook with an ISBN — each with the exams it is a reading for and the
+// chapters each assigns (`lib/storeBooks.ts`). A few kilobytes, so the Store
+// shows its Textbooks aisle without loading the wiki bundle.
+async function collectStoreBooks() {
+  const examFiles = await collectExamPages()
+  const examPages = Object.entries(examFiles).map(([name, markdown]) => ({ name: name.replace(/\.md$/i, ''), markdown }))
+  const books: BookPageSource[] = []
+  const bookEntries = await readdir(path.join(REPO_ROOT, 'Resources/Books')).catch(() => [] as string[])
+  for (const name of bookEntries) {
+    if (!name.endsWith('.md')) continue
+    const text = await readFile(path.join(REPO_ROOT, 'Resources/Books', name), 'utf-8').catch(() => null)
+    if (text == null) continue
+    let attrs: Record<string, unknown> = {}
+    try {
+      attrs = (fm<Record<string, unknown>>(text).attributes ?? {}) as Record<string, unknown>
+    } catch {
+      continue
+    }
+    books.push({ name: name.replace(/\.md$/i, ''), attrs, coverImage: extractCoverImageUrl(text) })
+  }
+  return buildStoreBooks(examPages, books)
+}
+
+function storeBooksPlugin(): Plugin {
+  const VIRTUAL_ID = 'virtual:store-books'
+  const RESOLVED_ID = '\0' + VIRTUAL_ID
+  return {
+    name: 'store-books',
+    resolveId: (id) => id === VIRTUAL_ID ? RESOLVED_ID : undefined,
+    load: async (id) => {
+      if (id !== RESOLVED_ID) return
+      return `export default ${JSON.stringify(await collectStoreBooks())}`
     },
   }
 }
@@ -712,7 +751,7 @@ function seoPagesPlugin(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), examPagesPlugin(), wikiContentPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), examGuidesPlugin(), pdfjsAssetsPlugin(), seoPagesPlugin(), aiConnectorAssetsPlugin()],
+  plugins: [react(), examPagesPlugin(), wikiContentPlugin(), storeBooksPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), examGuidesPlugin(), pdfjsAssetsPlugin(), seoPagesPlugin(), aiConnectorAssetsPlugin()],
   resolve: {
     alias: { '@': path.resolve(__dirname, 'src') },
   },

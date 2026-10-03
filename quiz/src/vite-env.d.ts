@@ -40,6 +40,13 @@ declare module 'virtual:exam-pages' {
   export default examPages
 }
 
+declare module 'virtual:store-books' {
+  import type { StoreBook } from '@/lib/storeBooks'
+  /** The textbooks a candidate buys, with the exams that assign them — see lib/storeBooks.ts. */
+  const books: StoreBook[]
+  export default books
+}
+
 declare module 'virtual:seo-pages' {
   import type { SeoPage } from '@/lib/seo'
   /** Every exam, concept and resource page, described — see lib/seo.ts. */

@@ -13,7 +13,7 @@ and the god-component refactors (P3.1) can't silently break them.
 | `flashcard-focus.spec.ts` | A revealed flashcard taller than a phone scrolls in focus mode, and the backdrop still exits |
 | `collect.spec.ts`| Read a New concept from the pre-quiz list, answer it right, and collect its card |
 | `tour.spec.ts`   | Onboarding tour: corner launcher, guided steps, minimize/resume, dismiss |
-| `store.spec.ts`  | Cosmetics catalog renders and tabs switch |
+| `store.spec.ts`  | The Store's aisles render, the exam strip and aisle pills narrow them, a product sheet's button goes out to the seller in a new tab, and the Gem Shop's catalog renders at `/store/gems` (the old `/store?tab=` links sent on to it) |
 | `auth.spec.ts`   | Sign-in form renders and toggles to sign-up |
 | `actuaria.spec.ts` | Actuaria Online, which is open to approved accounts alone — the e2e build sets `VITE_ACTUARIA_PREVIEW=on` to open it to everyone, signed out included: the dark scope, title, keyboard map, sector and landmark popup, Daily Transmission, the hub card, the sidebar row and the Hangar loadout |
 | `actuaria-cohort.spec.ts` | Actuaria's cohorts and raid, **signed in** against a stubbed backend (`fixtures/signedIn.ts`): start a cohort, its pool and members, a nudge, the raid screen, a run at the boss marked by `/api/raid`, and the boss on the map |

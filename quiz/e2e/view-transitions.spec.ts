@@ -120,6 +120,11 @@ test.describe('tab-switch view transitions', () => {
     // Study Guides → an exam's page: a sheet laid on top.
     await page.locator('a[data-tour="exam-p"]').click()
     await page.waitForURL('**/wiki/exam/**')
+    // The address changes at the click, but the sheet is laid down only once
+    // the page's chunk has come (components/PaperRouter.tsx) — and a Back that
+    // lands first rightly wins, leaving no push to record. A reader goes back
+    // from a page they can see, so the test waits for it too.
+    await expect(page.getByRole('link', { name: 'All exams' })).toBeVisible()
     // Back: that sheet swiped off again.
     await page.goBack()
     await expect(page.locator('a[data-tour="exam-p"]')).toBeVisible()

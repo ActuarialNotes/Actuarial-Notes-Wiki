@@ -593,7 +593,7 @@ in §4.1 already means something else, and a tier mark that borrowed amber would
 reward. Every surface that names the tier renders this component: the account chip, the
 Settings card, the Upgrade header, and any feature the tier gates (the Dashboard's *Today's
 Study Plan*, the locked *Custom Study Plan* overlays, the Learning Progress panel, the quiz
-builder's plan row, a Pro-only cosmetic in the Store). Never write the word in a hand-rolled
+builder's plan row, a Pro-only cosmetic in the Gem Shop). Never write the word in a hand-rolled
 span — a Pro label that isn't this component is a bug.
 
 ### 7.3a Segmented controls (`ui/SegmentedControl.tsx`)

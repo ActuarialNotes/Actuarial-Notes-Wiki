@@ -762,6 +762,16 @@ export default function Sidebar() {
               deadline, not a bank of questions — so it is a tab of its own
               (docs/pcpa-project.md). */}
           <ProjectsNav collapsed={collapsed} onNavigate={closeMobile} />
+          {/* Real products — registration, study materials, calculators and
+              textbooks — each bought on its seller's own page (docs/store.md).
+              The gem shop is a corner of it, so this row stays lit there. */}
+          <SidebarItem
+            to="/store"
+            label="Store"
+            icon={<ShoppingBag className="h-5 w-5 lg:h-4 lg:w-4" />}
+            collapsed={collapsed}
+            onNavigate={closeMobile}
+          />
           {showActuaria && <PlayNav collapsed={collapsed} onNavigate={closeMobile} />}
             </>
           )}
@@ -794,11 +804,11 @@ export default function Sidebar() {
                 <div className="absolute bottom-full left-0 right-0 mb-1 rounded-md border bg-popover shadow-md py-1 z-50">
                   <button
                     type="button"
-                    onClick={() => { navigate('/store'); setProfileOpen(false); closeMobile() }}
+                    onClick={() => { navigate('/store/gems'); setProfileOpen(false); closeMobile() }}
                     className="w-full flex items-center gap-2.5 px-3 py-2.5 text-base text-foreground hover:bg-accent/60 transition-colors lg:gap-2 lg:py-2 lg:text-sm"
                   >
                     <ShoppingBag className="h-5 w-5 shrink-0 lg:h-4 lg:w-4" />
-                    <span>Store</span>
+                    <span>Gem Shop</span>
                     <span
                       key={gemAnimKey}
                       className={`inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 ${gemAnimKey > 0 ? 'gem-celebrate' : ''}`}

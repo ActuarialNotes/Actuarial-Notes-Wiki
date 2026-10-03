@@ -839,7 +839,8 @@ const STATIC_TITLES: Record<string, string> = {
   '/battle': `Quiz Battle | ${SITE_NAME}`,
   '/settings': `Settings | ${SITE_NAME}`,
   '/upgrade': `Upgrade | ${SITE_NAME}`,
-  '/store': `Store | ${SITE_NAME}`,
+  '/store': `Actuarial Exam Store | ${SITE_NAME}`,
+  '/store/gems': `Gem Shop | ${SITE_NAME}`,
   '/wiki': `SOA & CAS Actuarial Exam Study Guides | ${SITE_NAME}`,
   '/wiki/resources': `Actuarial Exam Syllabus Readings & Resources | ${SITE_NAME}`,
 }
@@ -880,6 +881,14 @@ export function fallbackHead(pathname: string): PageHead {
     noindex: PRIVATE_ROUTES.has(path) || undefined,
     ogType: 'website',
   }
+}
+
+/** The Store's own head — what it holds, for the search result that lands on it. */
+export const STORE_HEAD: PageHead = {
+  title: STATIC_TITLES['/store']!,
+  description:
+    'Exam registration, study manuals and courses, the calculators SOA and CAS allow, and the syllabus textbooks — every product linked to the seller who sells it.',
+  canonical: absoluteUrl('/store'),
 }
 
 /**

@@ -1,5 +1,6 @@
 import type { SittingMilestone } from '../lib/sittingTimeline'
 import type { ExamSitting } from './examSittings'
+import { feeFact } from './examFees'
 
 /**
  * **What the examining bodies publish about each sitting**, beyond the window
@@ -130,7 +131,9 @@ const CAS_UPPER_ITEMS = {
   label: 'Question types',
   value: 'Constructed response and spreadsheet, with multiple choice, multiple selection, point and click, fill in the blank and matching',
 }
-const CAS_UPPER_FEE = { label: 'Fee', value: '$850 ($680 full-time students)' }
+// The fees are `data/examFees.ts`'s — one table, read by this panel and the
+// Store's registration aisle alike.
+const CAS_UPPER_FEE = feeFact('CAS-5')
 
 function casOutline(exam: string, url: string): SittingSource {
   return { label: `CAS — ${exam} content outline`, url }
@@ -142,7 +145,6 @@ function casOutline(exam: string, url: string): SittingSource {
 // hour to the email address you used to schedule your appointment."
 const SOA_UNOFFICIAL = { label: 'Unofficial result', value: 'Emailed within an hour of a CBT exam' }
 const SOA_DELIVERY = { label: 'Delivery', value: 'Prometric test centre; paper and pencil at select international centres' }
-const SOA_FEE = { label: 'Fee', value: '$275' }
 
 // The DISCs, from CAS's DISC page: "Candidates taking the virtual online
 // courses will have 100 minutes to complete 75 application-based
@@ -169,7 +171,7 @@ export const EXAM_ABOUT: Record<string, ExamAbout> = {
       { label: 'Questions', value: '30 multiple choice' },
       SOA_DELIVERY,
       SOA_UNOFFICIAL,
-      SOA_FEE,
+      feeFact('P'),
     ],
     source: { label: 'SOA — Exam P', url: `${SOA_EXAM}edu-exam-p-detail/` },
     factSources: [
@@ -183,7 +185,7 @@ export const EXAM_ABOUT: Record<string, ExamAbout> = {
       { label: 'Questions', value: '30 multiple choice' },
       SOA_DELIVERY,
       SOA_UNOFFICIAL,
-      SOA_FEE,
+      feeFact('FM'),
     ],
     source: { label: 'SOA — Exam FM', url: `${SOA_EXAM}edu-exam-fm-detail/` },
     factSources: [
@@ -194,12 +196,12 @@ export const EXAM_ABOUT: Record<string, ExamAbout> = {
 
   // ── CAS ───────────────────────────────────────────────────────────────────
   'MAS-I': {
-    facts: [CAS_LENGTH, CAS_DELIVERY, CAS_MAS_ITEMS, { label: 'Fee', value: '$550 ($440 full-time students)' }],
+    facts: [CAS_LENGTH, CAS_DELIVERY, CAS_MAS_ITEMS, feeFact('MAS-I')],
     source: { label: 'CAS — Exam MAS-I', url: `${CAS_EXAM}exam-mas-i-modern-actuarial-statistics-i` },
     factSources: [casOutline('MAS-I', 'https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf'), CAS_FEES],
   },
   'MAS-II': {
-    facts: [CAS_LENGTH, CAS_DELIVERY, CAS_MAS_ITEMS, { label: 'Fee', value: '$550 ($440 full-time students)' }],
+    facts: [CAS_LENGTH, CAS_DELIVERY, CAS_MAS_ITEMS, feeFact('MAS-II')],
     source: { label: 'CAS — Exam MAS-II', url: `${CAS_EXAM}exam-mas-ii-modern-actuarial-statistics-ii` },
     factSources: [casOutline('MAS-II', 'https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf'), CAS_FEES],
   },
@@ -233,7 +235,7 @@ export const EXAM_ABOUT: Record<string, ExamAbout> = {
       { label: 'Exam delivery', value: 'On demand, year-round, at Pearson VUE' },
       { label: 'Exam result', value: 'On screen at the test centre; final in the CAS portal 15 days later' },
       { label: 'Project', value: 'Remote, through the project portal; report of at most 1,250 words' },
-      { label: 'Fees', value: '$300 exam, $700 project ($240 and $560 full-time students)' },
+      feeFact('CAS-PCPA'),
     ],
     source: CAS_PCPA,
     factSources: [CAS_PCPA_OUTLINE, CAS_FEES],
@@ -420,7 +422,18 @@ export const SITTING_DETAILS: SittingDetails[] = [
   },
 
   // ── SOA · 2027 — no results dates are published yet ──────────────────────
-  soa2027('P', '2027-01-14', '2026-12-15', '11:59 PM'),
+  // The Exam P page, read 2026-10-02, under "Ready to Register?": "Closed —
+  // Registration opens week of October 26, 2026". The SOA names a week, not
+  // a day: the date is the week's first day, and the label says so.
+  {
+    examIds: ['P'],
+    startDate: '2027-01-14',
+    milestones: [
+      { kind: 'registration-opens', label: 'Registration opens the week of', date: '2026-10-26' },
+      { kind: 'registration-deadline', label: 'Registration deadline', date: '2026-12-15', note: '11:59 PM' },
+    ],
+    sources: [SOA_SCHEDULE, { label: 'SOA — Exam P', url: `${SOA_EXAM}edu-exam-p-detail/` }],
+  },
   soa2027('FM', '2027-02-04', '2027-01-05', '11:59 PM'),
   // Printed "11:59 AM", where every other 2027 deadline says PM — kept as printed.
   soa2027('P', '2027-03-01', '2027-02-02', '11:59 AM'),

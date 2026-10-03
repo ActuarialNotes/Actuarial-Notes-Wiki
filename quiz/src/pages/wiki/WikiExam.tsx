@@ -403,7 +403,7 @@ export default function WikiExam() {
 
       {content !== null && (
         <>
-          {/* Scopes the exam's accent, which the learning objectives' titles are drawn in. */}
+          {/* Scopes the exam's accent, which the learning objectives' weight bars are washed in. */}
           <div style={examAccentStyle(progressKey)}>
             <WikiArticle
               markdown={content}

@@ -26,6 +26,7 @@ import { QuestionAnswerReveal } from '@/components/QuestionAnswerReveal'
 import { QuestionAttemptBadge } from '@/components/QuestionAttemptBadge'
 import { useQuestionAttempts, type QuestionAttemptSummary } from '@/hooks/useQuestionAttempts'
 import { trackSearchQuery } from '@/lib/analytics'
+import { useSearchTracking } from '@/hooks/useSearchTracking'
 import { useActionBarHeight } from '@/hooks/useActionBarHeight'
 import { QuestionFilterBar } from '@/components/QuestionFilterBar'
 import { emptyFacets, facetOptions, matchesFacets, toggleFacet, type QuestionFacet } from '@/lib/questionFilters'
@@ -274,6 +275,7 @@ export default function Search() {
     return SEARCH_TYPES.some(t => t.value === requested) ? (requested as SearchType) : 'questions'
   })
   const [textQuery, setTextQuery] = useState(() => searchParams.get('q') ?? '')
+  useSearchTracking(textQuery)
   const [wikiIndex, setWikiIndex] = useState<WikiIndexItem[]>([])
   const [wikiLoading, setWikiLoading] = useState(false)
   const wikiIndexFetchedRef = useRef(false)

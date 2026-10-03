@@ -13,6 +13,7 @@ import {
 } from '@/lib/questionFilters'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
+import { useSearchTracking } from '@/hooks/useSearchTracking'
 import { MobileNavButton } from '@/components/MobileNavButton'
 import { QuestionSearchRow } from '@/components/QuestionSearchRow'
 import { QuestionFilterBar } from '@/components/QuestionFilterBar'
@@ -66,6 +67,7 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
   const { questions: allQuestions } = useAllQuestions()
   const { byQuestionId: attemptsByQuestionId, tracked: attemptsTracked } = useQuestionAttempts()
   const [query, setQuery] = useState('')
+  useSearchTracking(query)
   const [active, setActive] = useState(false)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [attemptStatus, setAttemptStatus] = useState<AttemptStatus>('all')

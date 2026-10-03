@@ -18,6 +18,7 @@ import { useSubscription } from '@/hooks/useSubscription'
 import { useOnboardingTour } from '@/hooks/useOnboardingTour'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { SoundSettingsCard } from '@/components/SoundSettingsCard'
+import { PrivacySettingsCard } from '@/components/PrivacySettingsCard'
 import { AiConnectorCard } from '@/components/AiConnectorCard'
 import { TOUR_ENABLED } from '@/lib/featureFlags'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
@@ -291,6 +292,7 @@ export default function Settings() {
     { id: 'appearance', label: 'Appearance' },
     { id: 'sound', label: 'Sound' },
     { id: 'ai', label: 'AI assistants' },
+    { id: 'privacy', label: 'Privacy' },
     { id: 'support', label: 'Support' },
     ...(user ? [{ id: 'data', label: 'Progress & Data' }] : []),
   ]
@@ -937,6 +939,11 @@ export default function Settings() {
             {/* ---- AI assistants (docs/ai-connector.md) ---- */}
             <section ref={el => { sectionRefs.current.ai = el }} id="ai">
               <AiConnectorCard />
+            </section>
+
+            {/* ---- Privacy (lib/analytics.ts) ---- */}
+            <section ref={el => { sectionRefs.current.privacy = el }} id="privacy">
+              <PrivacySettingsCard />
             </section>
 
             {/* ---- Support ---- */}

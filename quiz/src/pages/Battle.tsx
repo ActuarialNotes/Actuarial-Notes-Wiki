@@ -54,6 +54,7 @@ import type { TopicSource } from '@/lib/battleSession'
 import { catalogueTopics, drawFromTopics, topicCatalogue, type TopicGroup } from '@/lib/battleTopics'
 import { EXAM_LABEL_TO_ID, bankLabelFor } from '@/lib/examIds'
 import { cn } from '@/lib/utils'
+import { trackBattleStarted } from '@/lib/analytics'
 
 // **Quiz Battle** — two players, the same questions, one scoreboard
 // (docs/quiz-battle.md). This page is the way in and the switchboard: the
@@ -319,6 +320,20 @@ function BattlePage({
   const playing = screen.kind === 'local' || screen.kind === 'host' || screen.kind === 'guest'
   useLayoutEffect(() => { onPlayingChange?.(playing) }, [playing, onPlayingChange])
   useEffect(() => () => onPlayingChange?.(false), [onPlayingChange])
+
+  // One `battle_started` per battle screen entered: a same-screen battle, a
+  // room opened or joined by its code, or a lobby match (a match's host carries
+  // the lobby's code). Every way in sets a new screen, so a rematch counts again.
+  useEffect(() => {
+    if (screen.kind === 'local') {
+      trackBattleStarted({ format: 'same_screen', matched: false, exam: screen.config.exam, rounds: screen.config.rounds })
+    } else if (screen.kind === 'host') {
+      const matched = !!screen.code
+      trackBattleStarted({ format: matched ? 'matched' : 'room_host', matched, exam: screen.config.exam, rounds: screen.config.rounds })
+    } else if (screen.kind === 'guest') {
+      trackBattleStarted({ format: screen.matched ? 'matched' : 'room_guest', matched: !!screen.matched })
+    }
+  }, [screen])
 
   // The queue outlives the lobby screen (stores/battleQueueStore.ts). This page
   // is where a match is played, wherever the player was when it was found —

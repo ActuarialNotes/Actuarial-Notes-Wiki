@@ -63,6 +63,53 @@ ones open now, soonest deadline first (`registrationUrgency`); the aisle itself 
 ladder order. Study materials stand exam by exam, and within an exam like with like —
 manuals, courses, practice, flashcards, bundles — cheapest first.
 
+Below the pills, three **refinements** narrow every aisle at once, each in the URL too
+(`?free=1&price=under-100&by=ACTEX+Learning`, repeated for several): **Free** (every price
+nothing, or a textbook its publisher puts online), **Price** (bands on the lowest price an item
+is sold at — under $100, $100–$299, $300–$599, $600 and up; an item with no printed price is in
+none) and **Publisher / author** (the seller, the examining body or a book's publisher, and the
+people a product's "By" line or a book's Authors names — `splitPeople` drops credentials, roles
+and team names, and `canonicalAuthors` joins "Weishaus" to "Abraham Weishaus" when the shelf
+has exactly one such full name). OR within a filter, AND across them; with any refinement on,
+the aisles show every match rather than a preview.
+
+A card leads with its picture, the exam's tile in the picture's top-left corner (a
+calculator's SOA / CAS verdicts there instead), and ends on one line: the seller on the left,
+the price on the right.
+
+### Comparing study materials
+
+**Compare study materials** opens one exam's study materials as a table
+(`components/store/CompareSheet.tsx`, `comparisonFor` / `comparisonFactLabels`): a column per
+product, like with like and cheapest first, and a row for the kind, the price (its range, and
+the lowest on the table marked), the options, what's included, every fact any of them states
+(Format, Access, Author, Edition…), the exam windows, the reviews and the date the page was
+read, ending in each seller's link. A seller that doesn't state something gets a dash, never a
+guess. The table's own exam strip moves between exams; its kind pills narrow the columns.
+
+### Reviews
+
+`data/storeReviews.ts` quotes what candidates and sellers say, from three places: **r/actuary**
+(read through the Arctic Shift archive, which keeps a comment's text as posted — Reddit's own
+site refuses the session's requests), the **Actuarial Outpost** forum, and **the seller's own**
+reviews or testimonials. Every quote is copied from the page it links to, cut only at an
+ellipsis, never reworded, with its author as shown and its date; the selection follows what the
+threads say rather than picking the praise. A seller's aggregate rating is carried only when its
+page prints one (`PUBLISHER_RATINGS`). The sheet shows a tally by source, then the quotes, newest
+first; a card shows the count beside its kind; the comparison has a row for them.
+`storeReviews.test.ts` holds each to a known product, a link on its source's own domain, a date
+no later than the day they were gathered and a quotable length. To add one: read the post,
+copy the words, record the permalink and date — and when a product's threads turn critical, the
+quotes should too.
+
+### The disclaimer
+
+Every listing ends in the same legal notice (`storeDisclaimer` in `lib/store.ts`), naming its own
+seller and the date its page was read: independent of the seller and the examining bodies, marks
+used only to identify, details transcribed and governed by the seller's page, nothing sold here,
+reviews their authors' opinions, provided "as is" with no advice and no paid placement. The
+Store's footer and the comparison table carry it too. Change the wording there, once.
+
 ### Registration
 
 A registration is assembled, not authored: for each exam with a transcribed fee, the fee
@@ -123,14 +170,18 @@ online free wears a **Free online** sticker.
 | `quiz/src/pages/Store.tsx` | The page: header, exam strip, aisle pills, shelves, Gem Shop row (lazy route) |
 | `quiz/src/pages/GemShop.tsx` | The gem cosmetics shop, `/store/gems` |
 | `quiz/src/components/store/StoreCards.tsx` | Ticket, product card, book card, the exam chips and price |
-| `quiz/src/components/store/ProductSheet.tsx` | The product sheet, per aisle |
+| `quiz/src/components/store/ProductSheet.tsx` | The product sheet, per aisle — with its reviews and disclaimer |
+| `quiz/src/components/store/CompareSheet.tsx` | The comparison table of one exam's study materials |
+| `quiz/src/components/store/useStoreDialog.ts` | What both dialogs do while open: focus, Tab, Escape, scroll lock |
 | `quiz/src/components/store/ProductArt.tsx` | The drawings |
 | `quiz/src/components/store/SellerLogo.tsx` | A seller's logo tile, monogram fallback |
 | `quiz/src/lib/store.ts` | Types, aisles, exams, prices, registration status, the shelf (pure, tested) |
 | `quiz/src/lib/storeBooks.ts` | The textbook aisle from the vault (pure, tested; runs in `vite.config.ts`) |
 | `quiz/src/data/storeCatalog.ts` | Sellers, study materials, calculator policies and calculators |
+| `quiz/src/data/storeReviews.ts` | The quoted reviews and the sellers' printed ratings |
 | `quiz/src/data/examFees.ts` | The exam fee tables |
 | `quiz/public/store-sellers/` | The sellers' logos |
+| `quiz/public/review-sources/` | Reddit's logo (Actuarial Outpost serves only its web host's default icon, so it gets a monogram) |
 
 ## Adding or updating a product
 

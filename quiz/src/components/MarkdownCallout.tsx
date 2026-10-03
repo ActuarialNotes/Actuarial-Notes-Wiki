@@ -94,7 +94,7 @@ const RED: CalloutStyle = {
 }
 
 // A question on a guide page ("Do I need a degree?"). These stack into an FAQ,
-// so each is a soft yellow card rather than an aside hung off a coloured rule:
+// so each is a soft grey card rather than an aside hung off a coloured rule:
 // no side border, no icon repeated down the page, and the answer set at the
 // same size as the prose around it.
 const QUESTION_STYLE: CalloutStyle = {
@@ -104,8 +104,8 @@ const QUESTION_STYLE: CalloutStyle = {
   noBorder: true,
   roundClass: 'rounded-xl',
   marginClass: 'my-3',
-  bgClass: 'bg-yellow-50 dark:bg-yellow-400/[0.08]',
-  hoverClass: 'hover:bg-yellow-100/70 dark:hover:bg-yellow-400/[0.12]',
+  bgClass: 'bg-muted/60 dark:bg-white/[0.06]',
+  hoverClass: 'hover:bg-muted dark:hover:bg-white/[0.09]',
   headerClass: 'px-5 py-4',
   contentClass: 'text-base text-foreground',
   plainBody: true,

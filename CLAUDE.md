@@ -1042,7 +1042,7 @@ compile — don't "clean up" the flagged code as dead.
   Guides home page from `GENERAL_GUIDES` in `data/examGuides.ts` — which is where the card's
   title, one-line description and vault path are authored. It stays out of
   `virtual:exam-guides`, which only walks the exam folders. Its questions are
-  `> [!question]-` callouts, which `MarkdownCallout` draws as soft yellow FAQ cards (no side
+  `> [!question]-` callouts, which `MarkdownCallout` draws as soft grey FAQ cards (no side
   rule, body-size answers). A bare `%%credential-path%%` line — an Obsidian comment, so the
   vault shows nothing there — is swapped by `WikiArticle` for the interactive SOA/CAS path
   (`components/wiki/CredentialPath.tsx`): start → associate → fellow → continuing education,

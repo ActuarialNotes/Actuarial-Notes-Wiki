@@ -42,7 +42,9 @@ currently land in GA4 (`window.gtag`); swapping in PostHog is a one-file change.
 Two families:
 
 - **Engagement** (fire every time): `quiz_started`, `question_answered`,
-  `quiz_completed`, `flashcard_reviewed`, `search_query`, `upgrade_clicked`.
+  `quiz_completed`, `flashcard_reviewed`, `search_query`, `upgrade_clicked`,
+  `store_outbound_clicked` (a Store product's button out to its seller — product,
+  seller and aisle; see `docs/store.md`).
 - **Activation funnel** (fire at most once per device): `signup → first_quiz →
   first_correct → concept_collected → day2_return`.
 

@@ -15,7 +15,7 @@ import Flashcards from '@/pages/Flashcards'
 import Search from '@/pages/Search'
 import Settings from '@/pages/Settings'
 import Upgrade from '@/pages/Upgrade'
-import Store from '@/pages/Store'
+import GemShop from '@/pages/GemShop'
 import Sidebar from '@/components/Sidebar'
 import OnboardingTour from '@/components/OnboardingTour'
 import SoundEffects from '@/components/SoundEffects'
@@ -53,6 +53,10 @@ const { Component: Project, preload: loadProject } = lazyRoute(() => import('@/p
 // Quiz Battle (docs/quiz-battle.md) — a game two players open on purpose, so
 // its engine, its sessions and its screens wait for the click.
 const { Component: Battle, preload: loadBattle } = lazyRoute(() => import('@/pages/Battle'))
+// The Store (docs/store.md) — real products, bought from their sellers. Lazy:
+// its catalogue, its textbook shelf and its drawings are for the readers who
+// open it.
+const { Component: Store, preload: loadStore } = lazyRoute(() => import('@/pages/Store'))
 // Actuaria Online (docs/actuaria-online.md) — the game layer, one lazy chunk,
 // so its display face, its star map and its screens never reach Study Mode.
 const { Component: Actuaria, preload: loadActuaria } = lazyRoute(() => import('@/pages/Actuaria'))
@@ -77,6 +81,7 @@ function preloadRoute(path: string): Promise<unknown> | null {
   if (route === '/cowork' || route.startsWith('/cowork/')) return loadCowork()
   if (route === '/project' || route.startsWith('/project/')) return loadProject()
   if (route === '/battle') return loadBattle()
+  if (route === '/store') return loadStore()
   if (ACTUARIA_ENABLED && (route === '/actuaria' || route.startsWith('/actuaria/'))) return loadActuaria()
   if (route === '/wiki') return Promise.all([loadWikiLayout(), loadWikiHome()])
   if (route === '/wiki/resources') return Promise.all([loadWikiLayout(), loadWikiResources()])
@@ -287,6 +292,16 @@ function ActuariaRoute() {
   )
 }
 
+function StoreRoute() {
+  return (
+    <ErrorBoundary>
+      <Suspense fallback={<WikiFallback />}>
+        <Store />
+      </Suspense>
+    </ErrorBoundary>
+  )
+}
+
 function ProjectRoute() {
   return (
     <ErrorBoundary>
@@ -329,7 +344,10 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="/browse" element={<Navigate to="/search" replace />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/upgrade" element={<Upgrade />} />
-                <Route path="/store" element={<ErrorBoundary><Store /></ErrorBoundary>} />
+                {/* The Store: real products, each bought on its seller's own
+                    page. The gem shop is a corner of it. */}
+                <Route path="/store" element={<StoreRoute />} />
+                <Route path="/store/gems" element={<ErrorBoundary><GemShop /></ErrorBoundary>} />
                 <Route path="/research" element={
                   RESEARCH_TAB_ENABLED ? (
                     <RequireAuth>

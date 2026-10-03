@@ -32,6 +32,8 @@ export interface AnalyticsEventMap {
   league_left: Record<string, never>
   search_query: { query: string; exam: string; difficulty: string }
   upgrade_clicked: Record<string, never>
+  /** A Store product's link to its seller — the Store sells nothing itself (docs/store.md). */
+  store_outbound_clicked: { product: string; seller: string; aisle: string }
 
   // ── Reliability (from lib/errorMonitoring.ts) ─────────────────────────────
   exception: { description: string; fatal: boolean }
@@ -117,6 +119,11 @@ export function trackDailyQuestsCleared(params: AnalyticsEventMap['daily_quests_
 
 export function trackUpgradeClicked() {
   track('upgrade_clicked')
+}
+
+/** Fires when a reader follows a Store product out to its seller. */
+export function trackStoreOutbound(params: AnalyticsEventMap['store_outbound_clicked']) {
+  track('store_outbound_clicked', params)
 }
 
 /** Fires when the student opts in to the weekly XP league (roadmap P4.1). */

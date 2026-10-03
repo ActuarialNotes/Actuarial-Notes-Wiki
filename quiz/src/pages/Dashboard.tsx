@@ -670,11 +670,11 @@ export default function Dashboard() {
               >
                 <button
                   type="button"
-                  onClick={() => { navigate('/store'); setProfileOpen(false) }}
+                  onClick={() => { navigate('/store/gems'); setProfileOpen(false) }}
                   className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
                 >
                   <ShoppingBag className="h-4 w-4 shrink-0" />
-                  <span className="flex-1 text-left">Store</span>
+                  <span className="flex-1 text-left">Gem Shop</span>
                   <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
                     <Gem className="h-3 w-3" />
                     {gemBalance}

@@ -147,11 +147,11 @@ function ShipPartRow({
     )
   }
 
-  // Not owned: the Store sells it, and only to an account.
+  // Not owned: the Gem Shop sells it, and only to an account.
   return (
     <Link
-      to={signedIn ? '/store?tab=ships' : '/auth'}
-      state={signedIn ? undefined : { from: '/store?tab=ships' }}
+      to={signedIn ? '/store/gems?tab=ships' : '/auth'}
+      state={signedIn ? undefined : { from: '/store/gems?tab=ships' }}
       data-testid={`hangar-part-${item.id}`}
       className="flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-muted-foreground transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >

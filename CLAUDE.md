@@ -202,6 +202,17 @@ before touching that area**:
   redirected, to whoever *lands* on it. Read before touching `lib/seo*.ts`,
   `documentHead.ts`, `usePageTracking`, `index.html`'s `page-head` markers, or the
   redirect in `WikiConcept`.
+- `docs/analytics-and-monitoring.md` — **Google Analytics** and error capture. GA is not in
+  `index.html`: `initAnalytics()` (`lib/analytics.ts`, from `main.tsx`) loads it only on a
+  measured visit — the production host, not automation (`navigator.webdriver`, bot user
+  agents), not opted out (Settings → Privacy) — the rules being `lib/analyticsPolicy.ts`,
+  pure and tested. The app sends its own page views (`usePageTracking`: one per settled
+  address, never for a page rewriting its query in place, URL cleaned, `content_group`
+  set), `user_id` + user properties (`components/AnalyticsTracker.tsx`), `content_view`
+  for the concept popup and PDF reader (no URL of their own), `search` from every search
+  box (`hooks/useSearchTracking.ts`) and `first_interaction`, the human signal. Every
+  event is typed in `AnalyticsEventMap`; no personal data in a param. The doc ends with
+  the GA4 property settings the code depends on. Read before adding an event.
 - `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
@@ -1000,8 +1011,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **186 test files /
-~2910 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **187 test files /
+~2980 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).

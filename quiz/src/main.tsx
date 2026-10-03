@@ -8,13 +8,17 @@ import type { Session } from '@supabase/supabase-js'
 import bundledQuestions from 'virtual:questions-content'
 import { setBundledQuestions } from './lib/github'
 import { initErrorMonitoring } from './lib/errorMonitoring'
-import { trackDay2ReturnOnBoot } from './lib/analytics'
+import { identifyUser, initAnalytics, trackDay2ReturnOnBoot } from './lib/analytics'
 
 setBundledQuestions(bundledQuestions)
 
 // Capture uncaught errors and unhandled rejections from the very first tick,
 // before any React render can throw.
 initErrorMonitoring()
+
+// Decide whether this visit is measured (production, a person, not opted out)
+// and start Google Analytics if so — see lib/analytics.ts.
+initAnalytics()
 
 async function bootstrap() {
   // Detect email confirmation before getSession() strips the hash.
@@ -40,7 +44,9 @@ async function bootstrap() {
     initialSession = refreshed.session
   }
 
-  // Fire the day2_return activation signal once the session is resolved.
+  // The restored account, before the first page view goes out; then the
+  // day2_return activation signal, once the session is resolved.
+  identifyUser(initialSession?.user ?? null)
   trackDay2ReturnOnBoot()
 
   const rootElement = document.getElementById('root')

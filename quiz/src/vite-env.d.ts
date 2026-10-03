@@ -23,9 +23,13 @@ interface ImportMetaEnv {
   readonly VITE_ACTUARIA_PREVIEW?: string
 }
 
+// Google Analytics, defined by `initAnalytics()` (lib/analytics.ts) only on a
+// visit that is measured — absent everywhere else.
 interface Window {
-  gtag: (...args: unknown[]) => void
-  dataLayer: unknown[]
+  gtag?: (...args: unknown[]) => void
+  dataLayer?: unknown[]
+  /** gtag.js's documented kill switch: true stops the tag sending anything. */
+  [disable: `ga-disable-${string}`]: boolean
 }
 
 declare module 'virtual:wiki-content' {

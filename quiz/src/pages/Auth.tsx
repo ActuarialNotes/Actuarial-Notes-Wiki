@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
-import { trackSignup } from '@/lib/analytics'
+import { identifyUser, trackLogin, trackSignup } from '@/lib/analytics'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -67,8 +67,11 @@ export default function Auth() {
     setSubmitting(true)
     try {
       if (mode === 'signin') {
-        const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
+        const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password })
         if (authError) throw authError
+        // Identify before the event, so the login carries the account's user_id.
+        identifyUser(data.user)
+        trackLogin('password')
         // Let the useEffect above handle the transition: in popup mode it posts
         // the session to window.opener and closes; otherwise it navigates to returnTo.
       } else {

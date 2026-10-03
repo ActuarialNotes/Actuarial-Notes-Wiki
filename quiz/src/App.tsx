@@ -24,6 +24,7 @@ import PaperRouter from '@/components/PaperRouter'
 import ImageFocus from '@/components/ImageFocus'
 import PdfReaderHost from '@/components/PdfReaderHost'
 import FlashcardSync from '@/components/FlashcardSync'
+import AnalyticsTracker from '@/components/AnalyticsTracker'
 import Toast from '@/components/Toast'
 import { ResumeDock } from '@/components/ResumeDock'
 import { AuthProvider } from '@/contexts/AuthContext'
@@ -324,6 +325,7 @@ export default function App({ initialSession }: { initialSession: Session | null
       <AuthProvider initialSession={initialSession}>
         <FlashcardSync />
         <ExamProgressProvider>
+          <AnalyticsTracker />
           <div className="min-h-screen bg-background text-foreground flex">
             <Sidebar />
             <Main>

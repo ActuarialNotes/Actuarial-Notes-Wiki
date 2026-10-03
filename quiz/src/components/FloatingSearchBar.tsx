@@ -1,6 +1,7 @@
 import { forwardRef, type ReactNode, type Ref } from 'react'
 import { Search, X } from 'lucide-react'
 import { MobileNavButton } from '@/components/MobileNavButton'
+import { useSearchTracking } from '@/hooks/useSearchTracking'
 import { cn } from '@/lib/utils'
 
 /**
@@ -87,6 +88,7 @@ export function FloatingSearchInput({
   inputRef,
   navCollapsed = false,
 }: FloatingSearchInputProps) {
+  useSearchTracking(value)
   return (
     <div className="flex h-[calc(3.5rem-1px)] items-center gap-2">
       <MobileNavButton collapsed={navCollapsed} className="-ml-1.5" />

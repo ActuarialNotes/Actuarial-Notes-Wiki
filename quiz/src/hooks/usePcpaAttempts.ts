@@ -3,6 +3,7 @@ import { newAttempt, normalizeAttempt, visibleTo, type AttemptMode, type Languag
 import type { CaseId } from '@/lib/pcpaData'
 import { deleteAttemptFiles } from '@/lib/project/fileStore'
 import { queueAttemptDelete, queueAttemptPush, registerOwnerLookup } from '@/lib/project/projectSync'
+import { trackProjectStarted } from '@/lib/analytics'
 
 /**
  * The candidate's PCPA project attempts (`docs/pcpa-project.md`).
@@ -72,6 +73,7 @@ export const usePcpaAttempts = create<PcpaAttemptsState>((set, get) => {
       })
       commit([attempt, ...get().attempts])
       queueAttemptPush(attempt)
+      trackProjectStarted({ project: caseId, mode, language })
       return attempt
     },
     update: (id, patch) => {

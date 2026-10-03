@@ -1,12 +1,15 @@
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react'
 import { Link, Navigate, useSearchParams } from 'react-router-dom'
-import { BookMarked, Calculator, ChevronRight, Gem, Layers, ShoppingBag, Ticket, type LucideIcon } from 'lucide-react'
+import { BookMarked, Calculator, ChevronRight, Columns3, Gem, Layers, ShoppingBag, Ticket, X, type LucideIcon } from 'lucide-react'
 import booksBundle from 'virtual:store-books'
 import { ExamLogo } from '@/components/ExamLogo'
 import { LogoTile } from '@/components/LogoTile'
 import { ListPanel, ListRow } from '@/components/ui/ListPanel'
 import { BookCard, ProductCard, RegistrationTicket } from '@/components/store/StoreCards'
 import { ProductSheet } from '@/components/store/ProductSheet'
+import { CompareSheet } from '@/components/store/CompareSheet'
+import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
+import { STORE_REVIEWS } from '@/data/storeReviews'
 import { CALCULATORS, STUDY_PRODUCTS } from '@/data/storeCatalog'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
@@ -16,9 +19,17 @@ import { STORE_HEAD } from '@/lib/seo'
 import { examAccentStyle } from '@/lib/examColors'
 import {
   AISLE_LABEL,
+  PRICE_BANDS,
   STORE_AISLES,
   aisleCounts,
   buildStoreItems,
+  comparableExams,
+  hasRefinement,
+  makerOptions,
+  parsePriceBands,
+  reviewsFor,
+  type PriceBand,
+  type ShelfFilter,
   isoDay,
   parseAisle,
   parseStoreExam,
@@ -26,6 +37,7 @@ import {
   showcase,
   stockedExams,
   storeExam,
+  storeDisclaimer,
   storeShelf,
   type StoreAisle,
   type StoreExam,
@@ -64,6 +76,10 @@ export default function Store() {
   const [params, setParams] = useSearchParams()
   const exam = parseStoreExam(params.get('exam'))
   const aisle = parseAisle(params.get('aisle'))
+  const free = params.get('free') === '1'
+  const prices = useMemo(() => parsePriceBands(params.getAll('price')), [params])
+  const makers = useMemo(() => params.getAll('by'), [params])
+  const [comparing, setComparing] = useState<string | null>(null)
   const [today] = useState(() => isoDay(new Date()))
   const [open, setOpen] = useState<StoreItem | null>(null)
   const shelfTop = useRef<HTMLDivElement>(null)
@@ -73,8 +89,16 @@ export default function Store() {
 
   const items = useMemo(() => buildStoreItems({ study: STUDY_PRODUCTS, calculators: CALCULATORS }, booksBundle), [])
   const exams = useMemo(() => stockedExams(items), [items])
-  const shelf = useMemo(() => storeShelf(items, { exam, aisle }), [items, exam, aisle])
-  const counts = useMemo(() => aisleCounts(items, exam), [items, exam])
+  const filter: ShelfFilter = useMemo(() => ({ exam, aisle, free, prices, makers }), [exam, aisle, free, prices, makers])
+  const refined = hasRefinement(filter)
+  const shelf = useMemo(() => storeShelf(items, filter), [items, filter])
+  const counts = useMemo(() => aisleCounts(items, { ...filter, aisle: null }), [items, filter])
+  const comparable = useMemo(() => comparableExams(items), [items])
+  const reviewCounts = useMemo(() => {
+    const counts = new Map<string, number>()
+    for (const item of items) counts.set(item.id, reviewsFor(item.id, STORE_REVIEWS).length)
+    return counts
+  }, [items])
   const studying = useMemo(
     () => new Set(Object.entries(progress).filter(([, status]) => status === 'in_progress').map(([key]) => key)),
     [progress],
@@ -91,6 +115,32 @@ export default function Store() {
     if (nextAisle) p.set('aisle', nextAisle)
     else p.delete('aisle')
     setParams(p, { replace: true })
+  }
+
+  // The refinements: free, price bands and makers, each its own param
+  // (`?free=1&price=under-100&by=ACTEX+Learning`), repeated for several.
+  function refine(next: { free?: boolean; prices?: readonly PriceBand[]; makers?: readonly string[] }) {
+    const p = new URLSearchParams(params)
+    if (next.free !== undefined) {
+      if (next.free) p.set('free', '1')
+      else p.delete('free')
+    }
+    if (next.prices) {
+      p.delete('price')
+      for (const band of next.prices) p.append('price', band)
+    }
+    if (next.makers) {
+      p.delete('by')
+      for (const name of next.makers) p.append('by', name)
+    }
+    setParams(p, { replace: true })
+  }
+  const toggle = <T,>(list: readonly T[], value: T) => (list.includes(value) ? list.filter(v => v !== value) : [...list, value])
+  const options = makerOptions(items, filter)
+  const compareExam = comparing ?? null
+  function openCompare() {
+    const start = exam && comparable.some(e => e.key === exam) ? exam : [...studying].find(k => comparable.some(e => e.key === k)) ?? comparable[0]?.key ?? null
+    setComparing(start)
   }
 
   // "See all" lands on the top of the shelf it opened, not halfway down it.
@@ -134,12 +184,73 @@ export default function Store() {
       <div ref={shelfTop} className="scroll-mt-16 lg:scroll-mt-2" />
       <AisleNav value={aisle} counts={counts} onChange={a => choose({ aisle: a })} />
 
+      <div className="-mt-3 flex flex-wrap items-center gap-2" data-testid="store-filters">
+        <button
+          type="button"
+          aria-pressed={free}
+          onClick={() => refine({ free: !free })}
+          data-sound="select"
+          className={cn(
+            'inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+            free ? 'border-green-600 bg-green-600 text-white' : 'bg-card hover:bg-accent',
+          )}
+        >
+          Free
+        </button>
+        <MultiSelectDropdown
+          label="Price"
+          surface="card"
+          options={PRICE_BANDS.map(b => ({ value: b.id, label: b.label }))}
+          selected={new Set(prices)}
+          onToggle={v => refine({ prices: toggle(prices, v as PriceBand) })}
+        />
+        <MultiSelectDropdown
+          label="Publisher / author"
+          surface="card"
+          options={[
+            ...options.publishers.map(([name]) => ({ value: name, label: name, group: 'Publishers' })),
+            ...options.authors.filter(([name]) => !options.publishers.some(([p]) => p === name)).map(([name]) => ({ value: name, label: name, group: 'Authors' })),
+          ]}
+          selected={new Set(makers)}
+          onToggle={v => refine({ makers: toggle(makers, v) })}
+          getCount={v => (options.publishers.find(([n]) => n === v) ?? options.authors.find(([n]) => n === v))?.[1] ?? 0}
+          emptyTitle="Nothing on this shelf names a publisher or author"
+        />
+        {refined && (
+          <button
+            type="button"
+            onClick={() => refine({ free: false, prices: [], makers: [] })}
+            className="inline-flex items-center gap-1 rounded-full px-2.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <X className="h-3.5 w-3.5" aria-hidden />
+            Clear
+          </button>
+        )}
+        {comparable.length > 0 && (
+          <button
+            type="button"
+            onClick={openCompare}
+            data-testid="store-compare"
+            className="ml-auto inline-flex items-center gap-1.5 rounded-full border bg-card px-3 py-1.5 text-sm font-medium transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <Columns3 className="h-4 w-4" aria-hidden />
+            Compare study materials
+          </button>
+        )}
+      </div>
+
       {shelf.length === 0 ? (
-        <EmptyAisle examName={examName ?? null} aisle={aisle} onReset={() => choose({ aisle: null })} />
+        <EmptyAisle
+          examName={examName ?? null}
+          aisle={aisle}
+          refined={refined}
+          onReset={() => (refined ? refine({ free: false, prices: [], makers: [] }) : choose({ aisle: null }))}
+        />
       ) : (
         <div className="space-y-10">
           {shelf.map(group => {
-            const preview = !aisle && group.items.length > SHELF_PREVIEW + 1
+            const preview = !aisle && !refined && group.items.length > SHELF_PREVIEW + 1
             // The front shelf, for every exam, shows the range up the ladder;
             // narrowed to one exam it shows that exam's own first few.
             // Registration leads with what is open now, soonest deadline first.
@@ -172,7 +283,7 @@ export default function Store() {
                   ) : item.type === 'book' ? (
                     <BookCard key={item.id} item={item} onOpen={() => setOpen(item)} />
                   ) : (
-                    <ProductCard key={item.id} item={item} onOpen={() => setOpen(item)} />
+                    <ProductCard key={item.id} item={item} reviewCount={reviewCounts.get(item.id) ?? 0} onOpen={() => setOpen(item)} />
                   ),
                 )}
               </Aisle>
@@ -195,12 +306,25 @@ export default function Store() {
         />
       </ListPanel>
 
-      <p className="mx-auto max-w-xl text-center text-xs leading-relaxed text-muted-foreground">
-        Nothing is sold on Actuarial Notes. Every button opens the seller’s own page, and every price is the one the
-        seller listed on the date shown — check it there before you buy.
-      </p>
+      <footer className="mx-auto max-w-2xl space-y-1.5 text-[11px] leading-relaxed text-muted-foreground" data-testid="store-disclaimer">
+        <h2 className="font-semibold uppercase tracking-wider">Disclaimer</h2>
+        {storeDisclaimer(null, null).map(p => <p key={p}>{p}</p>)}
+      </footer>
 
       {open && <ProductSheet item={open} today={today} onClose={() => setOpen(null)} />}
+      {compareExam && (
+        <CompareSheet
+          items={items}
+          exams={comparable}
+          examKey={compareExam}
+          onExam={setComparing}
+          onOpen={item => {
+            setComparing(null)
+            setOpen(item)
+          }}
+          onClose={() => setComparing(null)}
+        />
+      )}
     </div>
   )
 }
@@ -409,7 +533,7 @@ function Aisle({ aisle, count, action, children }: { aisle: StoreAisle; count: n
   )
 }
 
-function EmptyAisle({ examName, aisle, onReset }: { examName: string | null; aisle: StoreAisle | null; onReset: () => void }) {
+function EmptyAisle({ examName, aisle, refined, onReset }: { examName: string | null; aisle: StoreAisle | null; refined: boolean; onReset: () => void }) {
   return (
     <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed px-4 py-12 text-center">
       <LogoTile size="lg" className="bg-primary/10 text-foreground">
@@ -417,15 +541,16 @@ function EmptyAisle({ examName, aisle, onReset }: { examName: string | null; ais
       </LogoTile>
       <p className="text-sm font-medium">
         Nothing in {aisle ? AISLE_LABEL[aisle].toLowerCase() : 'the Store'}
-        {examName ? ` for ${examName}` : ''} yet.
+        {examName ? ` for ${examName}` : ''}
+        {refined ? ' matches these filters.' : ' yet.'}
       </p>
-      {aisle && (
+      {(aisle || refined) && (
         <button
           type="button"
           onClick={onReset}
           className="rounded-md border px-3 py-1.5 text-sm font-medium transition-colors hover:bg-accent"
         >
-          Show every aisle
+          {refined ? 'Clear the filters' : 'Show every aisle'}
         </button>
       )}
     </div>

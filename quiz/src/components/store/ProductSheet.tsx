@@ -12,9 +12,9 @@
 // body, traps focus while it is open and gives it back to the card that
 // opened it; Escape, the backdrop and the close button all dismiss it.
 
-import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useId, useMemo, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowUpRight, BookOpen, ExternalLink, X } from 'lucide-react'
+import { ArrowUpRight, BookOpen, ExternalLink, Star, X } from 'lucide-react'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import { buttonVariants } from '@/components/ui/button'
 import { CheckMark } from '@/components/CheckMark'
@@ -22,6 +22,7 @@ import { ExamLogo } from '@/components/ExamLogo'
 import { SittingTimeline } from '@/components/SittingTimeline'
 import { ArtStage, CalculatorArt, PlainBookArt, StudyArt } from '@/components/store/ProductArt'
 import { SellerLogo } from '@/components/store/SellerLogo'
+import { useStoreDialog } from '@/components/store/useStoreDialog'
 import { CALCULATOR_POLICIES, STORE_SELLERS } from '@/data/storeCatalog'
 import { sittingDetailsFor } from '@/data/examSittingDetails'
 import { dollars } from '@/data/examFees'
@@ -37,13 +38,18 @@ import {
 import { copySources, isbnDigits } from '@/lib/resourceMeta'
 import { wikiRoute } from '@/lib/wikiRoutes'
 import { trackStoreOutbound } from '@/lib/analytics'
+import { PUBLISHER_RATINGS, REVIEW_SOURCES, REVIEWS_CHECKED, STORE_REVIEWS } from '@/data/storeReviews'
 import {
   STUDY_KIND_LABEL,
   formatPrice,
   priceSummary,
   readingExamKey,
   registrationStatus,
+  reviewTally,
+  reviewsFor,
   shortDate,
+  storeDisclaimer,
+  type StoreReview,
   storeExam,
   type StoreItem,
   type StoreOffer,
@@ -53,53 +59,10 @@ import {
 } from '@/lib/store'
 import { cn } from '@/lib/utils'
 
-const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
-
 export function ProductSheet({ item, today, onClose }: { item: StoreItem; today: string; onClose: () => void }) {
   const titleId = useId()
-  const panelRef = useRef<HTMLDivElement>(null)
-  const closeRef = useRef<HTMLButtonElement>(null)
 
-  // Focus moves into the sheet and comes back to the card that opened it.
-  useEffect(() => {
-    const opener = document.activeElement as HTMLElement | null
-    closeRef.current?.focus()
-    return () => opener?.focus?.()
-  }, [])
-
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') {
-        e.preventDefault()
-        onClose()
-        return
-      }
-      if (e.key !== 'Tab' || !panelRef.current) return
-      // Keep Tab inside the sheet while it is open.
-      const focusable = Array.from(panelRef.current.querySelectorAll<HTMLElement>(FOCUSABLE))
-      if (focusable.length === 0) return
-      const first = focusable[0]!
-      const last = focusable[focusable.length - 1]!
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault()
-        last.focus()
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault()
-        first.focus()
-      }
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [onClose])
-
-  // The page under the sheet stays where it is.
-  useEffect(() => {
-    const { overflow } = document.body.style
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.body.style.overflow = overflow
-    }
-  }, [])
+  const { panelRef, closeRef } = useStoreDialog(onClose)
 
   // A textbook's Amazon price, asked each time the sheet opens and never kept:
   // Amazon's licence forbids a client from caching its prices
@@ -158,6 +121,8 @@ export function ProductSheet({ item, today, onClose }: { item: StoreItem; today:
               {body.byline}
             </header>
             {body.content}
+            <ProductReviews item={item} />
+            <Disclaimer item={item} />
           </div>
 
           {body.footer && (
@@ -838,5 +803,102 @@ function BookFooter({ item, amazon }: { item: Extract<StoreItem, { type: 'book' 
         The book’s details and reading list come from its page in the study guide. Nothing is sold on Actuarial Notes.
       </Provenance>
     </>
+  )
+}
+
+// ── Reviews ───────────────────────────────────────────────────────────────────
+
+/** How many quotes the sheet shows before "Show all". */
+const REVIEWS_SHOWN = 4
+
+/**
+ * What candidates and the seller say about it, each quote as written and
+ * linked to where it was posted (`data/storeReviews.ts`): a tally by source,
+ * the seller's own aggregate rating when its page prints one, then the
+ * quotes, newest first.
+ */
+function ProductReviews({ item }: { item: StoreItem }) {
+  const [all, setAll] = useState(false)
+  const reviews = reviewsFor(item.id, STORE_REVIEWS)
+  const rating = PUBLISHER_RATINGS.find(r => r.productId === item.id)
+  if (reviews.length === 0 && !rating) return null
+  const seller = item.sellerId ? STORE_SELLERS[item.sellerId] : undefined
+  const sourceName = (r: StoreReview['source']) => (r === 'publisher' ? seller?.name ?? 'The seller' : REVIEW_SOURCES[r].name)
+  const shown = all ? reviews : reviews.slice(0, REVIEWS_SHOWN)
+
+  return (
+    <Section title="Reviews">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-muted-foreground" data-testid="store-review-tally">
+        {rating && (
+          <a href={rating.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-medium text-foreground hover:underline">
+            <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" aria-hidden />
+            {rating.value} / {rating.outOf}
+            {rating.count !== null && <span className="font-normal text-muted-foreground">· {rating.count.toLocaleString()} ratings on {seller?.short ?? 'the seller'}’s page</span>}
+          </a>
+        )}
+        {reviewTally(reviews).map(t => (
+          <span key={t.source} className="inline-flex items-center gap-1.5">
+            <ReviewSourceMark source={t.source} seller={seller} />
+            {t.count} from {sourceName(t.source)}
+          </span>
+        ))}
+      </div>
+      <ul className="space-y-3">
+        {shown.map(review => (
+          <li key={review.url + review.quote} className="rounded-lg bg-muted/50 px-3.5 py-3">
+            <blockquote className="text-sm leading-relaxed">“{review.quote}”</blockquote>
+            <p className="mt-2 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-muted-foreground">
+              <ReviewSourceMark source={review.source} seller={seller} />
+              <span className="font-medium text-foreground">
+                {review.author ? (review.source === 'reddit' ? `u/${review.author}` : review.author) : sourceName(review.source)}
+              </span>
+              {review.rating != null && review.ratingOutOf != null && (
+                <span className="inline-flex items-center gap-0.5">
+                  · <Star className="h-3 w-3 fill-amber-400 text-amber-400" aria-hidden />
+                  {review.rating}/{review.ratingOutOf}
+                </span>
+              )}
+              {review.date && <span>· {shortDate(review.date)}</span>}
+              <a href={review.url} target="_blank" rel="noopener noreferrer" className="ml-auto inline-flex items-center gap-0.5 font-medium text-foreground hover:underline">
+                {review.source === 'publisher' ? 'Seller’s page' : `On ${REVIEW_SOURCES[review.source].name.split(' ·')[0]}`}
+                <ArrowUpRight className="h-3 w-3" aria-hidden />
+              </a>
+            </p>
+          </li>
+        ))}
+      </ul>
+      {reviews.length > REVIEWS_SHOWN && (
+        <button type="button" onClick={() => setAll(v => !v)} className="text-sm font-medium text-muted-foreground hover:text-foreground">
+          {all ? 'Show fewer' : `Show all ${reviews.length} reviews`}
+        </button>
+      )}
+      <p className="text-xs text-muted-foreground">
+        Quoted as written and linked to where each was posted; gathered {shortDate(REVIEWS_CHECKED)}. A review is its author’s opinion, not ours.
+      </p>
+    </Section>
+  )
+}
+
+function ReviewSourceMark({ source, seller }: { source: StoreReview['source']; seller?: StoreSeller }) {
+  if (source === 'publisher') return seller ? <SellerLogo seller={seller} size="xs" /> : null
+  const s = REVIEW_SOURCES[source]
+  return <SellerLogo seller={{ name: s.name, short: s.short, logo: s.logo }} size="xs" />
+}
+
+// ── The disclaimer ────────────────────────────────────────────────────────────
+
+/** The legal notice under every listing (`storeDisclaimer`), naming its seller and the date its page was read. */
+function Disclaimer({ item }: { item: StoreItem }) {
+  const seller = item.sellerId ? STORE_SELLERS[item.sellerId]?.name ?? null : item.type === 'book' ? item.book.publisher ?? null : null
+  const checked =
+    item.type === 'study' ? item.study.offer.checked
+      : item.type === 'calculator' ? item.calculator.checked
+        : item.type === 'registration' ? item.registration.fee.checked
+          : null
+  return (
+    <section className="space-y-1.5 border-t border-border pt-4 text-[11px] leading-relaxed text-muted-foreground" data-testid="store-disclaimer">
+      <h3 className="font-semibold uppercase tracking-wider">Disclaimer</h3>
+      {storeDisclaimer(seller, checked).map(p => <p key={p}>{p}</p>)}
+    </section>
   )
 }

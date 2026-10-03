@@ -12,7 +12,7 @@
 // control. Facts are text, not pills (style guide §7.2a), except the exam
 // tiles, which are the ladder's own colour chips.
 
-import { CalendarDays, Hourglass } from 'lucide-react'
+import { CalendarDays, Hourglass, MessageSquareQuote } from 'lucide-react'
 import { ExamLogo } from '@/components/ExamLogo'
 import { CheckMark } from '@/components/CheckMark'
 import { ArtStage, CalculatorArt, PlainBookArt, StudyArt } from '@/components/store/ProductArt'
@@ -42,14 +42,14 @@ const CARD =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background'
 
 /** The exams a product is for, as a row of the ladder's own tiles. */
-export function ExamChips({ exams, max = 4, className }: { exams: readonly string[]; max?: number; className?: string }) {
+export function ExamChips({ exams, max = 4, size = 'xs', className }: { exams: readonly string[]; max?: number; size?: 'xs' | 'sm'; className?: string }) {
   if (exams.length === 0) return null
   const shown = exams.slice(0, max)
   const more = exams.length - shown.length
   return (
     <span className={cn('flex shrink-0 items-center gap-1', className)}>
       {shown.map(key => (
-        <ExamLogo key={key} examKey={key} size="xs" />
+        <ExamLogo key={key} examKey={key} size={size} />
       ))}
       {more > 0 && <span className="text-[11px] font-medium text-muted-foreground">+{more}</span>}
       <span className="sr-only">For {exams.map(key => storeExam(key)?.name ?? key).join(', ')}</span>
@@ -81,9 +81,9 @@ export function CardPrice({ item, className }: { item: StoreItem; className?: st
 }
 
 /** The bodies whose lists allow a calculator, each with its verdict mark. */
-function Allowed({ bodies }: { bodies: readonly ExamBody[] }) {
+function Allowed({ bodies, plate }: { bodies: readonly ExamBody[]; plate?: boolean }) {
   return (
-    <span className="flex items-center gap-2 text-xs font-medium">
+    <span className={cn('flex items-center gap-2 text-xs font-medium', plate && 'rounded-full bg-background/90 px-2 py-0.5 text-foreground shadow-sm')}>
       {(['SOA', 'CAS'] as const).filter(b => bodies.includes(b)).map(body => (
         <span key={body} className="inline-flex items-center gap-1">
           <CheckMark className="h-3.5 w-3.5" />
@@ -94,8 +94,21 @@ function Allowed({ bodies }: { bodies: readonly ExamBody[] }) {
   )
 }
 
+/** "For Exam P, Exam FM" — what the exam tiles say, for a screen reader (the picture they sit on is hidden). */
+function forExams(exams: readonly string[]): string {
+  return exams.length ? `For ${exams.map(key => storeExam(key)?.name ?? key).join(', ')}` : ''
+}
+
+/**
+ * What sits in the picture's top-left corner: the exams it is for, as the
+ * ladder's tiles — or, for a calculator, which bodies' lists carry it.
+ */
+function CornerTags({ children }: { children: React.ReactNode }) {
+  return <span className="absolute left-2 top-2 flex items-center gap-1">{children}</span>
+}
+
 /** A study material or a calculator. */
-export function ProductCard({ item, onOpen }: { item: StoreItem; onOpen: () => void }) {
+export function ProductCard({ item, onOpen, reviewCount = 0 }: { item: StoreItem; onOpen: () => void; reviewCount?: number }) {
   const seller = item.sellerId ? STORE_SELLERS[item.sellerId] : undefined
   const examKey = item.exams[0]
 
@@ -121,29 +134,50 @@ export function ProductCard({ item, onOpen }: { item: StoreItem; onOpen: () => v
         examKey={item.type === 'calculator' ? undefined : examKey}
         neutral={item.type === 'calculator'}
         className="w-28 shrink-0 self-stretch sm:aspect-[16/10] sm:w-full"
-        overlay={isFree(item) && <FreeSticker label="Free" />}
+        overlay={
+          <>
+            <CornerTags>
+              {item.type === 'calculator' ? <Allowed bodies={item.calculator.approvedBy} plate /> : <ExamChips exams={item.exams} max={3} size="sm" />}
+            </CornerTags>
+            {isFree(item) && <FreeSticker label="Free" />}
+          </>
+        }
       >
         {art}
       </ArtStage>
       <span className="flex min-w-0 flex-1 flex-col gap-1 p-3 sm:p-4">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{kind}</span>
+        <span className="flex items-center justify-between gap-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+          <span className="truncate">{kind}</span>
+          {reviewCount > 0 && <ReviewCount count={reviewCount} />}
+        </span>
         <span className="line-clamp-2 text-sm font-semibold leading-snug">{item.name}</span>
-        {seller && (
-          <span className="flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground">
-            <SellerLogo seller={seller} size="xs" />
-            <span className="truncate">{seller.name}</span>
-          </span>
-        )}
-        <span className="mt-auto flex items-end justify-between gap-2 pt-2">
-          {item.type === 'calculator' ? <Allowed bodies={item.calculator.approvedBy} /> : <ExamChips exams={item.exams} />}
+        <span className="sr-only">{item.type === 'calculator' ? `Allowed by ${item.calculator.approvedBy.join(' and ')}` : forExams(item.exams)}</span>
+        <span className="mt-auto flex min-w-0 items-center justify-between gap-2 pt-1">
+          {seller ? (
+            <span className="flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground">
+              <SellerLogo seller={seller} size="xs" />
+              <span className="truncate">{seller.name}</span>
+            </span>
+          ) : <span />}
           {item.type === 'calculator' && item.calculator.discontinued ? (
-            <span className="text-xs font-medium text-muted-foreground">Discontinued</span>
+            <span className="shrink-0 text-xs font-medium text-muted-foreground">Discontinued</span>
           ) : (
-            <CardPrice item={item} />
+            <CardPrice item={item} className="shrink-0" />
           )}
         </span>
       </span>
     </button>
+  )
+}
+
+/** A small speech-bubble count of a product's reviews, beside its kind. */
+function ReviewCount({ count }: { count: number }) {
+  return (
+    <span className="inline-flex shrink-0 items-center gap-1 normal-case tracking-normal" title={`${count} review${count === 1 ? '' : 's'}`}>
+      <MessageSquareQuote className="h-3.5 w-3.5" aria-hidden />
+      <span className="tabular-nums">{count}</span>
+      <span className="sr-only">{count === 1 ? 'review' : 'reviews'}</span>
+    </span>
   )
 }
 
@@ -162,7 +196,14 @@ export function BookCard({ item, onOpen }: { item: Extract<StoreItem, { type: 'b
       <ArtStage
         neutral
         className="w-28 shrink-0 self-stretch sm:aspect-[16/10] sm:w-full"
-        overlay={book.freeUrl && <FreeSticker label="Free online" />}
+        overlay={
+          <>
+            <CornerTags>
+              <ExamChips exams={item.exams} max={3} size="sm" />
+            </CornerTags>
+            {book.freeUrl && <FreeSticker label="Free online" />}
+          </>
+        }
       >
         {book.coverImage ? (
           <img
@@ -178,10 +219,10 @@ export function BookCard({ item, onOpen }: { item: Extract<StoreItem, { type: 'b
       <span className="flex min-w-0 flex-1 flex-col gap-1 p-3 sm:p-4">
         <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{book.type}</span>
         <span className="line-clamp-2 text-sm font-semibold leading-snug">{book.title}</span>
-        {book.authors && <span className="line-clamp-1 text-xs text-muted-foreground">{book.authors}</span>}
-        <span className="mt-auto flex items-end justify-between gap-2 pt-2">
-          <ExamChips exams={item.exams} />
-          {facts && <span className="text-xs tabular-nums text-muted-foreground">{facts}</span>}
+        <span className="sr-only">{forExams(item.exams)}</span>
+        <span className="mt-auto flex min-w-0 items-center justify-between gap-2 pt-1 text-xs text-muted-foreground">
+          <span className="line-clamp-1">{book.authors}</span>
+          {facts && <span className="shrink-0 tabular-nums">{facts}</span>}
         </span>
       </span>
     </button>

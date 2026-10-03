@@ -43,8 +43,40 @@ test.describe('store', () => {
     await expect(buy).toHaveAttribute('rel', /noopener/)
     await expect(buy).toHaveAttribute('href', /^https:\/\//)
 
+    // Every listing carries the legal notice, naming its seller.
+    await expect(sheet.getByTestId('store-disclaimer')).toContainText('not affiliated with')
+
     await page.keyboard.press('Escape')
     await expect(sheet).toHaveCount(0)
+  })
+
+  test('filters to what is free, and back', async ({ page }) => {
+    await page.goto('/store?exam=FM&aisle=study')
+    await page.getByRole('button', { name: 'Free', exact: true }).click()
+    await expect(page).toHaveURL(/free=1/)
+    // TIA's FM course is free; ACTEX's manual is not.
+    await expect(page.getByTestId('store-item-tia-fm-video')).toBeVisible()
+    await expect(page.getByTestId('store-item-actex-fm-manual')).toHaveCount(0)
+
+    await page.getByRole('button', { name: 'Clear' }).click()
+    await expect(page.getByTestId('store-item-actex-fm-manual')).toBeVisible()
+  })
+
+  test('compares an exam’s study materials side by side', async ({ page }) => {
+    await page.goto('/store?exam=MAS-I')
+    await page.getByTestId('store-compare').click()
+    const table = page.getByTestId('store-compare-sheet')
+    await expect(table).toBeVisible()
+    await expect(table).toContainText('Exam MAS-I')
+    await expect(table.getByRole('rowheader', { name: 'Price', exact: true })).toBeVisible()
+    await expect(table.getByRole('columnheader').filter({ hasText: 'ASM Study Manual Program for CAS Exam MAS-I' })).toBeVisible()
+
+    // Another exam from the table's own strip.
+    await table.getByRole('radio', { name: 'Exam FM' }).click()
+    await expect(table).toContainText('Exam FM')
+
+    await page.keyboard.press('Escape')
+    await expect(table).toHaveCount(0)
   })
 })
 

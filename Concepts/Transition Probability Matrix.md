@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:00465fb4261a3b929a34b103f5d98ca98fbca395212c32235430aa511098740b
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Transition Probability Matrix.md
 ---

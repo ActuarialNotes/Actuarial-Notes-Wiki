@@ -1,0 +1,15 @@
+---
+target: Concepts/Hypothesis Testing.md
+created: 2026-10-04
+---
+
+## [C-001] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- status_set: verified
+- confidence: medium
+- checks_run: Definition, decision rule, p-value formula, hypothesis types, error table, alpha and power statements checked against Siegrist ch.8 §1, PSU STAT 415 L9 and ISLR2 §13.1. Example recomputed in python before reading the answer: Z = 200/80 = 2.50 > z_0.05 = 1.645 (CAS normal table) -> reject; agrees. Links ([[Type I Error]], [[Type II Error]]) resolve exact; figure embed exists and its builder (figures_exam_mas_i.py hypothesis_testing: N(0,1), rejection region beyond 1.645, observed 2.50) matches the example. Exam usage: only Exam MAS-I (CAS).md links it (Domain B objective 3), same sense.
+- sources_checked: Siegrist, Random (randomservices.org), ch.8 Hypothesis Testing §1 Introduction: hypotheses H0/H1, rejection (critical) region, type 1 and type 2 errors table, significance level, power, two-sided/left/right-tailed tests named for the alternative, P-value as the smallest alpha that rejects, sha256:fb05a9d71b55ba113e2f71afa052bc059b35f2c5b6946012c19ecbc693faab1a — https://www.randomservices.org/random/hypothesis/Introduction.html; Penn State STAT 415 (2026 notes), Lesson 9 Hypothesis Tests (Part I): §9.1 Defs 9.1-9.4 (H0, Ha, alpha, beta), power = 1 - beta, Type I/II error table, alpha chosen in advance (0.05 most common), §9.5 Z test with known sigma, sha256:4b40913ee64c6e155867542d9d3517e3384e5a942452f6fc8b1e72bf815a8acf — https://online.stat.psu.edu/stat415/Lesson09.html; James, Witten, Hastie & Tibshirani, ISLR 2nd ed. (Springer 2021, CAS-hosted copy), §13.1 pp.555-560 (PDF pp.561-566): p-value = probability of a statistic equal to or more extreme under H0, Table 13.1 decision/truth table, power = probability of correctly rejecting H0, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf; CAS Exam MAS-I Tables (version 01/15/2018), normal table p.3 (Pr(Z<1.645) = 0.950), sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf; CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain B task 3 'Test statistical hypotheses, including Type I and Type II errors' (PDF p.4), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf
+- note: No findings. Conventions noted, not corrected: the page rejects when p < alpha, Siegrist and PSU write p <= alpha (immaterial for a continuous statistic); 'Simple H0: theta = theta0' is simple only when theta is the sole parameter (Siegrist: simple = specifies one distribution). Medium: the MAS-I Domain B reading (Hogg, McKean & Craig 8th ed. §§4.5-4.6) is not freely available and was not read; the definitions rest on rank-3 notes and ISLR2 ch.13, which is outside the chapters MAS-I assigns.

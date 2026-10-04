@@ -56,3 +56,11 @@ created: 2026-10-04
 - proposed_action: Fill in the analogies and sections, or remove the empty parentheses and empty headings.
 - applied: false
 - fingerprint: 200ae7526a20
+
+## [C-001] F-003 evidence: link count
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- locus: list items and empty sections
+- note: F-003 evidence says the page is linked from Exam MAS-I (CAS).md five times; the count is six (lines 25, 31, 45, 46, 67 and 108). Nothing else in F-003 changes.

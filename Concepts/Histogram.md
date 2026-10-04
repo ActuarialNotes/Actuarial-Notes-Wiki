@@ -1,12 +1,17 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-04
+  last_checked_by: agent:validate-v1
   content_hash: sha256:4f644d7247bb036b1c71ce3770c8fe02f446cf374d5d3ebddfaaf2758abea829
-  sources: []
-  open_findings: 0
+  sources:
+    - "NIST/SEMATECH e-Handbook of Statistical Methods, §1.3.3.14 'Histogram' (definition, count and density normalisations, questions answered), sha256:5dd49706cfe4151a32e35dcae8bf63d421ba68685abf7473588776c7830f065a — https://www.itl.nist.gov/div898/handbook/eda/section3/histogra.htm"
+    - "Smile (Statistical Machine Intelligence and Learning Engine) Java API, smile.math.Histogram: bins(n) square-root rule and sturges(n) k = ceil(log2(n) + 1), sha256:1a0502638b9edbf8b5b7bb5a4ad62e41fc6dd0be3bcf9ae6947be2f3977b37c5 — http://haifengl.github.io/api/java/smile/math/Histogram.html"
+    - "R Documentation, graphics::hist (breaks = \"Sturges\" default; freq = FALSE plots densities with total area one), sha256:77630f10cde01668526e0e8ed07b58a325b5bf0a4e235713c7420789c3d92397 — https://stat.ethz.ch/R-manual/R-devel/library/graphics/html/hist.html"
+    - "Larsen, 'Generalized Linear Models', CAS Study Note (rev. 6/29/2016), pp.1-2 ('QQ and Box Plots…', 'Tweedie Distributions'), sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Section C Extended Linear Models, tasks 5 and 9, p.5, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Histogram.md
 ---

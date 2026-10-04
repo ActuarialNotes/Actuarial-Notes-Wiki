@@ -4,9 +4,9 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:e23c7b88606c3f3e4d04afba42bcf01ab3390c7c71d6afb5dcf228bd3ad4cf22
+  content_hash: sha256:832cec0f9c32f8f440d95cb945f7e879fc5cda0955d767a5cf087f56e7d9258e
   sources: []
-  open_findings: 0
+  open_findings: 4
   open_critical: 0
   log: .verify/Exam MAS-I (CAS).md
 ---

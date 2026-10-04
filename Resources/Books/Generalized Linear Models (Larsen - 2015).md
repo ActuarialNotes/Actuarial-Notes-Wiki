@@ -7,12 +7,14 @@ date: "2015"
 Type: "Study Note"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:2c98dc28d3cdc22d8610d38d56007ddb526b886576fdb58bd49ade4515678e75
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-04
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:ed77a24dba2721cb59cf02ed4497428ba1215d524904d134592891170768b9eb
+  sources:
+    - "Michael Larsen, Generalized Linear Models Study Note for Exam S (Revised 6/29/2016) — whole note pp.1-3 (six sections, link table, exponential-family table), sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026_6_29), pp.5-6 (Domain C readings; Larsen citation, C1-C9, OP, link), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Generalized Linear Models (Larsen - 2015).md

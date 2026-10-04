@@ -13,7 +13,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:2a928f0340edf13f44dd254cbb25e64939fdd6cf204f972399328ac14f4d433d
+  content_hash: sha256:b499bb5371c870e13ffe59c2fbe36f810a0f31bd90e8598e9ae3e2da3069cfa2
   sources: []
   open_findings: 0
   open_critical: 0

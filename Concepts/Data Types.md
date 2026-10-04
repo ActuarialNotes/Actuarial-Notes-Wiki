@@ -1,12 +1,17 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-04
+  last_checked_by: agent:validate-v1
   content_hash: sha256:2995f0626d520ad8d6a50f349d52e60ceed64e5c4123e1ce74bf851cf91dbb4a
-  sources: []
-  open_findings: 0
+  sources:
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), Ch.6 §1 'Introduction' (type and level of measurement: continuous/discrete, nominal, ordinal), sha256:0af72fbf0202413525cae99e696cfa70014a803d6c5ac7a7dcafd1577742414f — https://www.randomservices.org/random/sample/Introduction.html"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), §2.1.5 quantitative vs qualitative (categorical) variables, printed p.28 (PDF p.39); §2.3.5 cylinders stored numeric treated as quantitative until as.factor(), printed p.50 (PDF p.61); §3.3.1 qualitative predictors, 'one fewer dummy variable than the number of levels', printed p.86 (PDF p.96), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "pandas 3.0.6 User Guide, 'Categorical data' (category dtype; comparison with R's factor), sha256:f2643db9e1c77824c0a0fad64f881fd62095d7bd9ae0acc3218bc37dcef97bbd — https://pandas.pydata.org/docs/user_guide/categorical.html"
+    - "Larsen, 'Generalized Linear Models', CAS Study Note (rev. 6/29/2016), pp.1-2 ('QQ and Box Plots…', 'Tweedie Distributions'), sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Section C Extended Linear Models, tasks 5 and 9, p.5, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Data Types.md
 ---

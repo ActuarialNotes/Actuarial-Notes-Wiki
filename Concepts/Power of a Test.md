@@ -1,11 +1,16 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-04
+  last_checked_by: agent:validate-v1
   content_hash: sha256:44acc5a65c120c1c4876ac5c0dfd071210666dd1f1db71699812e0683b406c66
-  sources: []
+  sources:
+    - "Siegrist, Random, ch.8 Hypothesis Testing §1 Introduction: power = probability of rejecting H0 for a distribution in H1; power function Q(theta) = P_theta(X in R), Q is the type 1 error probability on Theta0, 1 - Q the type 2 probability off it; uniformly most powerful tests, sha256:fb05a9d71b55ba113e2f71afa052bc059b35f2c5b6946012c19ecbc693faab1a — https://www.randomservices.org/random/hypothesis/Introduction.html"
+    - "Siegrist, Random, ch.8 §2 Tests in the Normal Model: power functions with Q(mu0) = alpha and Q -> 1 away from the null, larger n or smaller sigma gives a uniformly more powerful test, one-sided sample-size formula n = (sigma[z(power) - z(alpha)]/(mu1 - mu0))^2, sha256:fd7bc50171fc51310f41e9132005b66cdbbd31bf507a70a0246394b05a379ab2 — https://www.randomservices.org/random/hypothesis/Normal.html"
+    - "Siegrist, Random, ch.8 §5 Likelihood Ratio Tests: Neyman-Pearson lemma - the likelihood-ratio rejection region is most powerful among regions of no greater size for simple H0 vs simple H1, sha256:60b047835a3f644cd2317c8ab984b8d41ae7669f53c1d32a79705942670b9b04 — https://www.randomservices.org/random/hypothesis/Likelihood.html"
+    - "Penn State STAT 415 (2026 notes), Lesson 10 §10.3: Def 10.1 power; power function K(mu) with alpha = K(mu0); lower alpha lowers power; 'the only way that alpha and beta can be decreased simultaneously is by increasing the sample size n'; §10.3.3 sample size for 0.90 power using 1.645 + 1.28, sha256:4277fd734c4d2b8b297124d4f9378d1fe638d9a4c4547b2689e24a9dfa1daf96 — https://online.stat.psu.edu/stat415/Lesson10.html"
+    - "CAS Exam MAS-I Tables (version 01/15/2018), normal table p.3 (Phi(0.85) = 0.8023, Phi(0.86) = 0.8051; z = 1.282 for 0.900 and 1.645 for 0.950), sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Power of a Test.md

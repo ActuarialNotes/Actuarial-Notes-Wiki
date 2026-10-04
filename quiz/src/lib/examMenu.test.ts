@@ -5,6 +5,7 @@ import {
   examCountdown,
   examPageIdFromFile,
   examProgressKeyFromFile,
+  examQuizTopic,
   todaysPlanConcepts,
   todaysPlanRowState,
 } from './examMenu'
@@ -30,6 +31,23 @@ describe('examProgressKeyFromFile', () => {
 
   it('ignores a .md extension', () => {
     expect(examProgressKeyFromFile('Exam 9 (CAS).md')).toBe('CAS-9')
+  })
+})
+
+describe('examQuizTopic', () => {
+  it('names the bank each exam page quizzes from', () => {
+    expect(examQuizTopic('Exam P-1 (SOA)')).toBe('Probability')
+    expect(examQuizTopic('Exam FM-2 (SOA).md')).toBe('Financial Mathematics')
+    expect(examQuizTopic('Exam MAS-I (CAS)')).toBe('Exam MAS-I')
+    expect(examQuizTopic('Exam 5 (CAS)')).toBe('Exam 5')
+    expect(examQuizTopic('Exam 6C (CAS)')).toBe('Exam 6C')
+    expect(examQuizTopic('Exam 9 (CAS)')).toBe('Exam 9')
+  })
+
+  it('has none for an exam with no bank', () => {
+    expect(examQuizTopic('Exam 6U (CAS)')).toBeUndefined()
+    expect(examQuizTopic('Exam PCPA (CAS)')).toBeUndefined()
+    expect(examQuizTopic('Exam DISC-DA (CAS)')).toBeUndefined()
   })
 })
 

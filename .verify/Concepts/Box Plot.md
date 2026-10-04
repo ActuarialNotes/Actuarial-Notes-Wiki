@@ -32,3 +32,23 @@ created: 2026-10-04
 - proposed_action: Name the convention: Tukey's inner fences at 1.5 IQR flag potential (mild) outliers, outer fences at 3 IQR extreme ones; and say quartile definitions differ (the example uses medians of the halves, equal here to the (n+1)p rule), so fences computed by software can differ.
 - applied: false
 - fingerprint: 5a348043c1ab
+
+## [C-001] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- status_set: verified
+- confidence: medium
+- checks_run: IQR definition, box Q1-Q3 holding the middle 50%, median line, whiskers to the most extreme point inside the 1.5-IQR fences = NIST §1.3.3.7 'box plots with fences' and Siegrist §6.6; side-by-side boxes by factor level = NIST 'check the significance of a factor' and ISLR §2.3.5; built from order statistics = Larsen p.2 (Hogg §4.4.1) and Siegrist §6.6 quantile definitions; resistance to one extreme value follows from those rank-based quantile definitions; example recomputed before reading the answer under three quartile conventions (halves / (n+1)p: 4, 7, 11, fences -6.5 / 21.5; (n-1)p+1 / R hinges: 4.5, 7, 10, fences -3.75 / 18.25) — outlier 40 and whisker 14 agree, stated five-number summary did not (F-001, fixed); example 2 interpretation (overlapping boxes, variance rising with median -> Gamma, log link) consistent with Larsen's Tweedie/variance-power note; links and figure embed resolve; figure builder (figures_exam_mas_i.py box_plot) draws Q1 4, median 7, Q3 11, whiskers 2/14, fence 21.5, outlier 40 = the example; scope = MAS-I outline task C9 ('box' plots).
+- sources_checked: NIST/SEMATECH e-Handbook of Statistical Methods, §1.3.3.7 'Box Plot' (basic box plot; 'Box plots with fences'), sha256:545e917efab8aae10425dd289461c519de359120fd39d6dc94efa8c324e1f783 — https://www.itl.nist.gov/div898/handbook/eda/section3/boxplot.htm; NIST/SEMATECH e-Handbook of Statistical Methods, §7.1.6 'What are outliers in the data?' (inner/outer fences, (N+1)p quartiles, mild/extreme outliers), sha256:6dfe27fdc6af41afc2fc6d3ca3c1cae158bc481e2c1f5dd5bbc3f5f67c38f520 — https://www.itl.nist.gov/div898/handbook/prc/section1/prc16.htm; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), Ch.6 §6 'Order Statistics' (sample quantiles and alternatives, IQR, fences, five-number summary, boxplot, empirical CDF), sha256:19ff485c600d4294e888c1b3d05ff7eb9196449f958d3325fd72b416aca56d63 — https://www.randomservices.org/random/sample/OrderStatistics.html; R Documentation, stats::fivenum 'Tukey Five-Number Summaries' (minimum, lower-hinge, median, upper-hinge, maximum), sha256:4d4c9ba1a26a23b9793e1bcadf996ed096e7eb84bdca2c78d45b78ed44667719 — https://stat.ethz.ch/R-manual/R-devel/library/stats/html/fivenum.html; R Documentation, grDevices::boxplot.stats (coef = 1.5 whiskers; hinges vs quartiles), sha256:202dc113fa952aae23b87aef26e3eb28b384ae53bfa717dc3b86ef46949b78c3 — https://stat.ethz.ch/R-manual/R-devel/library/grDevices/html/boxplot.stats.html; Larsen, 'Generalized Linear Models', CAS Study Note (rev. 6/29/2016), pp.1-2 ('QQ and Box Plots…', 'Tweedie Distributions'), sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf; James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), §2.3.5 lab (plot() of a qualitative x draws side-by-side boxplots), printed p.50 (PDF p.61), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf; CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Section C Extended Linear Models, tasks 5 and 9, p.5, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf
+- note: Verified at medium: rank-3 references (NIST, Siegrist, R docs) plus Larsen (rank 2) only point at Hogg §4.4.1, which is not freely available, so Hogg's own quartile/fence convention was not read. F-001 fixed in this pass (one number); F-002 (unnamed convention) left open — it needs new prose.
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- resolves: F-001
+- status: resolved
+- note: Corrected in this pass: the summary now reads (2, 4, 7, 11, 40), matching Siegrist's (x_(1), q1, q2, q3, x_(n)) and R's fivenum; the preceding sentence still gives the whisker end of 14.

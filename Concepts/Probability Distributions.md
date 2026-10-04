@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:1ba234abb638d36ee597b57903d5d181b507e471198bfc3144d4175bca651f10
   sources: []
-  open_findings: 0
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Probability Distributions.md
 ---

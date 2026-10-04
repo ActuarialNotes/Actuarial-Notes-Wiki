@@ -7,13 +7,18 @@ date: "2009"
 Type: "Textbook"
 ISBN: "978-0-521-76465-0"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: low
+  last_checked: 2026-10-04
+  last_checked_by: agent:validate-v1
   content_hash: sha256:7681d0a08b9c27be16cba73c2967d2140a619c275ec99079afc56dd8d8ef53e3
-  sources: []
-  open_findings: 0
+  sources:
+    - "Tse, Nonlife Actuarial Models: Theory, Methods and Evaluation (Cambridge University Press, 2009), Google Books preview of the printed book: title page p.iii (pg=PR3) sha256:8695604283c0a487308521be7bf7d5191d6f88eae36d7b6fba455a47cf43326a, copyright page p.iv (pg=PR4) sha256:eebe8bb7fb7dc1a53b59a07afa5785abac4c0e49f23d76044265e3186c9d4646, Contents p.vii (pg=PR7) sha256:f714af39286f7f255943e1c96886eeadcaf04d2f8f7951fd03b34a2ccf3b4827; p.viii (pg=PR8) sha256:1604ada36bbf7722a51f62e2c64829215e7b343c2c711dd03fca1a35b39863f7; p.ix (pg=PR9) sha256:649758e0c5319023e7347408da9f922ca9ab82b53aec6e1bec84ed838a2e7096; p.x (pg=PR10) sha256:9eac400042dd6efda8e4d39a4602a9efbaf8bff07eb22eab84ae534c6bafcabb; p.xi (pg=PR11) sha256:845cd7a74ff2cb301aa6e31c9aff09ba0cc4b30f160c7af3b5a87995c600a222; p.xii (pg=PR12) sha256:a2315182e0cc8924cca30ef0f6bd37763f3cf9d87ee62a26aa1d33f62ceb2b0b — https://books.google.com/books?id=zzlyNPTlqccC&pg=PR7"
+    - "Cambridge Core book record (title, author, series, hardback ISBN 9780521764650, publication date 17 September 2009, description, chapter list), fetched 2026-10-04, sha256:50c221074a0cf6b5ba7bb28a59487e2c54c372501c631ad7e323997bc2b31e60 — https://www.cambridge.org/core/books/nonlife-actuarial-models/41EF4E4BB9E3A31F63DDCC18C245C271; Contents p.vii page image sha256:310e411c2bcc82d3ba9d145325e7a649444a68994c6d03c990c75475c2e59fc0 — https://static.cambridge.org/content/id/urn%3Acambridge.org%3Aid%3Abook%3A9780511812156/resource/name/firstPage-9780511812156toc_pvii-xii_CBO.jpg; Preface opening sha256:0371a7c19ac7b04b92e3fa45338f2a3cfe93489191f8a6b7b38678d9682f56a1 — https://www.cambridge.org/core/books/nonlife-actuarial-models/preface/113E9D17410E3DAD5DB7C32CDD9EB567"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F, created 2026-06-29), Complete Text References p.6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf (Tse entry; Domain B readings p.4)"
+    - "CAS Exam MAS-II Content Outline 2026, Domain A p.2 and Complete Text References p.4, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf (Tse entry)"
+    - "Library of Congress table of contents for LCCN 2009520513 (publisher-supplied, chapter level), sha256:8b8e4835d7af6d0f6cc863a3ed00d7cb89a9fd9f7c4227c1d6510f527aa476a8 — https://catdir.loc.gov/catdir/enhancements/fy1005/2009520513-t.html"
+  open_findings: 2
   open_critical: 0
   log: .verify/Resources/Books/Nonlife Actuarial Models (Tse - 2009).md
 ---

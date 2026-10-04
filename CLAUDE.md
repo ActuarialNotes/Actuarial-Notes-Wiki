@@ -91,7 +91,9 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
   component, so the two can't drift apart. An **exam** gets its own form of it, opened by the
   exam study guide's underlined title (`WikiArticle`'s `titleAction`): the readiness bar
   (`components/ReadinessBar.tsx`) and the countdown to the exam,
-  then **Today's Study Plan** (locked for a reader who isn't Pro) and Fact Check — the facts
+  then **Start Quiz** (the exam's bank in the quiz builder, greyed out for an exam with no
+  questions — `examQuizTopic`), **Today's Study Plan** (locked for a reader who isn't Pro)
+  and Fact Check — the facts
   are `lib/examMenu.ts`, pure and tested. A surface adds only rows about *itself* (a card's
   Study and Remove) through `leading` / `trailing`; view switches (Listen, the deck's view
   modes) are each surface's own control, never menu rows. It always portals to the body and

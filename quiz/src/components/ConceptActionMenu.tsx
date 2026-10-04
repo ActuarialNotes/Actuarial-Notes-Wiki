@@ -35,6 +35,7 @@ import {
   examCountdown,
   examPageIdFromFile,
   examProgressKeyFromFile,
+  examQuizTopic,
   todaysPlanConcepts,
   todaysPlanRowState,
 } from '@/lib/examMenu'
@@ -64,11 +65,12 @@ import {
  * the viewport alone — which is the one promise this menu has to keep.
  *
  * An **exam** gets its own menu (the study guide's title opens it). An exam
- * isn't a concept — nothing about it is quizzed, kept as a card or levelled up —
- * so those rows give way to where the reader stands on it: the readiness bar
- * and how long is left before it is sat (`ExamMenuSummary`), and today's study
- * plan for it, locked for a reader who isn't Pro (`TodaysPlanRow`). Fact Check
- * is the one row the two menus share. The facts are `lib/examMenu.ts`.
+ * isn't a concept — it isn't kept as a card or levelled up — so those rows
+ * give way to where the reader stands on it: the readiness bar and how long is
+ * left before it is sat (`ExamMenuSummary`), then Start Quiz (the exam's whole
+ * bank in the quiz builder, greyed out for an exam with no questions) and
+ * today's study plan for it, locked for a reader who isn't Pro
+ * (`TodaysPlanRow`). Fact Check closes both menus. The facts are `lib/examMenu.ts`.
  *
  * It stays mounted while closed: the modals it opens (questions, learning
  * progress, fact check) outlive the menu that opened them.
@@ -195,20 +197,24 @@ export function ConceptActionMenu({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, content, fetchedContent, entry.kind, entry.name])
 
-  // How many questions are tagged to this concept (the Start Quiz count).
-  // fetchAllQuestions is cached, so this costs one parse per concept.
+  // The exam's question bank, if it has one — what its Start Quiz row draws from.
+  const examTopic = useMemo(() => (isExam ? examQuizTopic(entry.name) : undefined), [isExam, entry.name])
+
+  // How many questions are tagged to this concept, or are in this exam's bank
+  // (the Start Quiz count). fetchAllQuestions is cached, so this costs one
+  // parse per entry.
   useEffect(() => {
-    if (!open || entry.kind !== 'concept') return
+    if (!open || (entry.kind !== 'concept' && !examTopic)) return
     let cancelled = false
     fetchAllQuestions()
       .then(rawFiles => {
         if (cancelled) return
         const all = parseAllQuestions(rawFiles)
-        setQuestionCount(filterQuestions(all, { concept: entry.name }).length)
+        setQuestionCount(filterQuestions(all, examTopic ? { exam: examTopic } : { concept: entry.name }).length)
       })
       .catch(() => {})
     return () => { cancelled = true }
-  }, [open, entry.kind, entry.name])
+  }, [open, entry.kind, entry.name, examTopic])
 
   const masteryState = useMemo<MasteryState | null>(() => {
     const lower = entry.name.toLowerCase()
@@ -245,7 +251,32 @@ export function ConceptActionMenu({
       {isExam && <ExamMenuSummary entry={entry} masteryRecords={masteryRecords} />}
       {leading}
       {isExam ? (
-        <TodaysPlanRow entry={entry} onOpenStudyPlan={onOpenStudyPlan} onClose={onClose} />
+        <>
+          {/* The exam's whole bank, in the Quiz tab's builder. An exam with no
+              questions (6U, PCPA, the DISCs) keeps the row, greyed out, so the
+              menu has the same shape on every exam page. */}
+          <button
+            type="button"
+            disabled={!examTopic || questionCount === 0}
+            title={!examTopic || questionCount === 0 ? 'No practice questions for this exam yet' : undefined}
+            onClick={() => {
+              if (!examTopic) return
+              onClose()
+              closePopup()
+              routerNavigate(`/?topic=${encodeURIComponent(examTopic)}&mode=quiz`)
+            }}
+            className={`${ACTION_MENU_ROW_CLASS} disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent`}
+          >
+            <Play className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+            <span className="flex-1 text-left">Start Quiz</span>
+            {examTopic && questionCount !== null && questionCount > 0 && (
+              <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-primary/10 text-primary tabular-nums">
+                {questionCount}
+              </span>
+            )}
+          </button>
+          <TodaysPlanRow entry={entry} onOpenStudyPlan={onOpenStudyPlan} onClose={onClose} />
+        </>
       ) : (
         <>
           <button

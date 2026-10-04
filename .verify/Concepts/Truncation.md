@@ -17,3 +17,11 @@ created: 2026-10-04
 - proposed_action: Restrict the bullet to the sample mean (the average of reported losses estimates E[X | X > d], not E[X]) or to the exponential case, or drop the direction and say only that the estimates are biased.
 - applied: false
 - fingerprint: 45f43a3e9a19
+
+## [C-001] F-001 evidence: crossover point
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- locus: 2nd bullet (bias from not adjusting)
+- note: Correction to the last sentence of F-001 evidence, which overstated where the bias turns upward: for X ~ LN(0, 2^2) the naive lognormal fit has fitted mean below the true mean 7.389 for truncation below about the 31.5th percentile (bisection on the same truncated-normal moments) and above it beyond that; the 50th-percentile figure (10.20) was just the next grid point checked. F-001 itself stands: the direction depends on the model and the truncation level.

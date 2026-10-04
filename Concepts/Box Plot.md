@@ -4,9 +4,9 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:4fae40927a3fca2ef031c4fd19b56ecc0155db3d3fa6b44a0987de550b105d0f
+  content_hash: sha256:577a183243590908abc31ca23a82af9c207d58c41f3e557f22c923249db04020
   sources: []
-  open_findings: 0
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Box Plot.md
 ---

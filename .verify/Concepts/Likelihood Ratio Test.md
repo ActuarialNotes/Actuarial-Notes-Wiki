@@ -32,3 +32,18 @@ created: 2026-10-04
 - proposed_action: Hedge to match the source (e.g. 'simulation studies suggest the LRT may do better in small samples') or drop the clause. Not applied: needs new wording.
 - applied: false
 - fingerprint: a644be5936fa
+
+## [F-003] Gamma example: 'same fit difference would flip it' does not follow
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- severity: minor
+- status: open
+- locus: example 'Comparing an Exponential to a Gamma Fit', answer, line 43
+- claim: 'Note how close the call is: a slightly larger sample with the same fit difference would flip it.'
+- evidence: Recomputation (rank 5, falsifies only): the statistic is -2 ln Lambda = 2[l_full - l_reduced] = 2(1.8) = 3.6, which depends on the log-likelihood gap alone, not on n. If 'the same fit difference' means the same log-likelihood gap of 1.8, a larger sample gives the same 3.6 < 3.84 and nothing flips. The sentence is only true if it means the same per-observation improvement (0.006 per claim), in which case n of about 300 x 3.84/3.6 = 320 would give 3.84; the page does not say that. The other numbers in the example are right: 2(-2,401.2 + 2,403.0) = 3.6 and chi^2_{0.05,1} = 3.84 (CAS Exam MAS-I tables p.20, df 1, 0.950 column, sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4).
+- source_rank: 5
+- proposed_action: Delete the sentence, or say 'the same improvement per claim' so the dependence on n is explicit. Not applied: the sentence is ambiguous rather than contradicted by a source.
+- applied: false
+- fingerprint: e1851e7890fc

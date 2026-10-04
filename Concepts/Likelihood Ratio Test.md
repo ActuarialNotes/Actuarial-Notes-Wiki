@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:135dc9b6c6960374d483c63c64911851dcd326c9b007af184f06e1fb08285144
   sources: []
-  open_findings: 2
+  open_findings: 3
   open_critical: 0
   log: .verify/Concepts/Likelihood Ratio Test.md
 ---

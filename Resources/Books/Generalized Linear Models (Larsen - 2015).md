@@ -59,4 +59,4 @@ A three-page CAS study note adding six topics to the textbook treatment of gener
 
 ## Sources
 - [Generalized Linear Models: Study Note for Exam S (CAS, revised 2016)](https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf) — the document, read in full: title, author, revision date and its six headed sections
-- [CAS Exam MAS-I Content Outline (2025)](https://www.casact.org/sites/default/files/2023-06/MASI_Content_Outline.pdf) — the citation (December 2015, revised June 2016), the link to the CAS copy and the assignment
+- [CAS Exam MAS-I Content Outline (2026)](https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf) — the citation (December 2015, revised June 2016), the link to the CAS copy and the assignment

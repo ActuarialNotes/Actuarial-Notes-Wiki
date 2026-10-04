@@ -77,4 +77,4 @@ A short CAS study note on life contingencies — survival models for human lives
 
 ## Sources
 - [Life Contingencies Study Note for CAS Exam S (CAS, revised 2015)](https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf) — the document, read in full: title, author, revision date, the introduction, Chapters 1–7 and the appendix of solutions
-- [CAS Exam MAS-I Content Outline (2025)](https://www.casact.org/sites/default/files/2023-06/MASI_Content_Outline.pdf) — the citation (October 2014, revised September 2015), the link to the CAS copy and the assignment
+- [CAS Exam MAS-I Content Outline (2026)](https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf) — the citation (October 2014, revised September 2015), the link to the CAS copy and the assignment

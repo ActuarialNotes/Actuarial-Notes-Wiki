@@ -315,6 +315,6 @@ An introduction to statistical learning, the tools for making sense of complex d
 ## Sources
 - [An Introduction to Statistical Learning with Applications in R, Second Edition (Springer, 2021)](https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf) — the document, in the copy the content outlines link (first printing, August 4, 2021): title page, preface, and the printed contents checked against the PDF's bookmarks
 - [An Introduction to Statistical Learning (statlearning.com)](https://www.statlearning.com/) — the authors' site, which offers the second edition's PDF free
-- [CAS Exam MAS-I Content Outline (2025)](https://www.casact.org/sites/default/files/2023-06/MASI_Content_Outline.pdf) — the citation (2nd edition, Springer, 2021) and the MAS-I assignment
-- [CAS Exam MAS-II Content Outline (2025)](https://www.casact.org/sites/default/files/2023-06/MASII_Content_Outline.pdf) — the MAS-II assignment
+- [CAS Exam MAS-I Content Outline (2026)](https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf) — the citation (2nd edition, Springer, 2021) and the MAS-I assignment
+- [CAS Exam MAS-II Content Outline (2026)](https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf) — the MAS-II assignment
 - [Crossref record for doi:10.1007/978-1-0716-1418-1](https://api.crossref.org/works/10.1007/978-1-0716-1418-1) — the print ISBN, the authors and the series (Springer Texts in Statistics)

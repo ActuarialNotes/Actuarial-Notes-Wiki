@@ -7,13 +7,16 @@ date: "2008"
 Type: "Study Note"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_1.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:2f52375d6b91b0578d2618d78df3500b0475fcb0081fc864e8745b1c950c691f
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-04
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:1ddae7b21cbde6e80c7d99e9823c9be87f7cfe97f9f33508ec322b82ee8ccc76
+  sources:
+    - "James W. Daniel, Poisson processes (and mixture distributions), CAS Study Note, June 26 2008 — whole note pp.1-15 (title page, Foreword, Ch.1 §§1.1-1.4.3), sha256:e345451e9daae82b400aed77f2da0c96c361ed4fbdfd22456b8f711ca0d50888 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_1.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026_6_29), pp.3 and 6 (Domain A readings; Daniel citation, A1-5, OP, practice-problem note and links), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+    - "Daniel practice problems (CAS scan), 13 pp. read as page images, sha256:ad09bca16833dd204964b40a5a4f4a14d2a84df1b71ea39f77bda804a5de9702 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_2.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Resources/Books/Poisson Processes and Mixture Distributions (Daniel - 2008).md
 ---
@@ -32,9 +35,9 @@ A CAS study note on Poisson processes and mixture distributions that explains th
 - 1.1 What's a Poisson process?
     - A [[Poisson Process|Poisson process]] $N$ with rate (intensity) function $\lambda$ is a [[Counting Process|counting process]] with independent increments over non-overlapping intervals (touching at an endpoint is OK), and each increment $N(t+h) - N(t)$ is a Poisson random variable with mean $\int_t^{t+h} \lambda(z)\,dz$.
     - The mean-value function $m(t) = \int_0^t \lambda(z)\,dz$ — the operational time — gives $E[N(t)] = m(t)$; a constant $\lambda$ makes the process homogeneous, and a rate that varies makes it a [[Nonhomogeneous Poisson Process|non-homogeneous]] one.
-    - The time $T(x)$ from time $x$ to the next event has $\Pr[T(x) > t] = e^{-\int_x^{x+t} \lambda(z)\,dz}$, the survival-model formula with $\lambda$ in place of the force of mortality $\mu$.
     - 1.1.1 Some important time intervals
         - $T_n$ is the time of the $n$th event and $V_j = T_j - T_{j-1}$ the $j$th interevent time; a probability about $T_n$ is best translated into one about $N(t)$ — $T_3 > 1.2$ exactly when $N(1.2) \le 2$.
+        - The time $T(x)$ from time $x$ to the next event has $\Pr[T(x) > t] = e^{-\int_x^{x+t} \lambda(z)\,dz}$, the survival-model formula with $\lambda$ in place of the force of mortality $\mu$.
 - 1.2 Compound Poisson processes
     - A [[Compound Poisson Process|compound Poisson process]] is $S(t) = \sum_{j=1}^{N(t)} X_j$, with $N$ a Poisson process and the severities $X_j$ identically distributed and independent of $N(t)$ and of each other.
     - $E[S(t)] = E[N(t)]\,E[X]$ and $\text{Var}[S(t)] = E[N(t)]\,\text{Var}[X] + \text{Var}[N(t)]\,E[X]^2 = E[N(t)]\,E[X^2]$; when $E[N(t)]$ is large, $S(t)$ is approximated by a Normal random variable with that mean and variance.
@@ -62,5 +65,5 @@ A CAS study note on Poisson processes and mixture distributions that explains th
 
 ## Sources
 - [Poisson processes (and mixture distributions) (CAS, 2008)](https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_1.pdf) — the document, read in full: title page, Foreword and Chapter 1 with its sections
-- [CAS Exam MAS-I Content Outline (2025)](https://www.casact.org/sites/default/files/2023-06/MASI_Content_Outline.pdf) — the citation (CAS Study Note, June 2008), the note on the practice problems, the links to the CAS copies and the assignment
+- [CAS Exam MAS-I Content Outline (2026)](https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf) — the citation (CAS Study Note, June 2008), the note on the practice problems, the links to the CAS copies and the assignment
 - [Practice problems for the Daniel note (CAS)](https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_2.pdf) — the scanned problem set the content outline links beside the note (first page read: Exam 3, Spring 2007, question 1)

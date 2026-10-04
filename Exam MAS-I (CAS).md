@@ -1,11 +1,25 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-04
+  last_checked_by: agent:validate-v1
   content_hash: sha256:832cec0f9c32f8f440d95cb945f7e879fc5cda0955d767a5cf087f56e7d9258e
-  sources: []
+  sources:
+    - "CAS, Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026-06-29, 8 pp.), PDF pp.1-8, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+    - "CAS, Exam MAS-I — Modern Actuarial Statistics-I exam page, read 2026-10-04: windows Jul 29-Aug 4 and Oct 28-Nov 5, 2026; fee $550 ($440 students); links the 2026 Content Outline, sha256:60386e2cc573d16ac1792989fdf4d27382f0944e668a773669bb2567ca26004a — https://www.casact.org/exam/exam-mas-i-modern-actuarial-statistics-i"
+    - "CAS, 2026 Syllabus of Basic Education (PDF modified 2026-06-26), pp.7-8 prior-knowledge table, pp.10-13 MAS-I schedule and Pearson VUE delivery, sha256:f0ce0da128368cedb6ca35ac139ca0357e159a983dcf94e4275e32fa44530038 — https://www.casact.org/sites/default/files/2025-01/2025_SOBE.pdf"
+    - "CAS, Exam MAS-I Content Outline as served at the 2023-06 URL (MASI_CO_2025_S v04 2024-12-19), pp.3-6, for the wording the page was written from, sha256:0bd233bd23e60430706b52ab37eb248a9b14d33f9fe3d9bc0712a9e763e2e610 — https://www.casact.org/sites/default/files/2023-06/MASI_Content_Outline.pdf"
+    - "CAS, Exam MAS-II Content Outline 2026, PDF pp.2, 4 (Linear Mixed Models domain, West et al.), sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
+    - "CAS, Credential Requirements page, read 2026-10-04 (Requirements for Associateship include MAS-I), sha256:53c285ffbbe390a21e4c20f733269c5cdfaca53a091b770efb77d24943d4c088 — https://www.casact.org/credential-requirements"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, bookmark outline Ch 1-7 and full-text search, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Dobson & Barnett, An Introduction to Generalized Linear Models, 4th ed. (CRC 2018), publisher eBook preview, Contents PDF pp.8-12, sha256:40ed0b2549113ee0bea29e41786886ce992ffa29251ad26fb1037385bb51611a — https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf"
+    - "Hogg, McKean & Craig, Introduction to Mathematical Statistics, 8th ed. (Global Edition), publisher eBook preview, Contents PDF pp.6-9, sha256:7fd80607a820477e03ff2c8f3469f5cfa57d095d766cbc29d39d723ef5a69a99 — https://api.pageplace.de/preview/DT0400.9781292264783_A39514650/preview-9781292264783_A39514650.pdf"
+    - "Larsen, Generalized Linear Models, CAS Study Note (rev. 6/29/2016), PDF pp.1-3, sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf"
+    - "Daniel, Poisson processes (and mixture distributions), CAS Study Note (June 2008), full-text search, sha256:e345451e9daae82b400aed77f2da0c96c361ed4fbdfd22456b8f711ca0d50888 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_1.pdf"
+    - "Struppeck, Life Contingencies, CAS Study Note (rev. Sept 2015), full-text search, sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf"
+    - "Ross, Introduction to Probability Models, 13th ed. (Elsevier 2023), publisher product page, chapter-level contents, sha256:4feee1adf6f271c13df56c766024e4cbd75c1c730698a0e109a95f1260839a23 — https://shop.elsevier.com/books/introduction-to-probability-models/ross/978-0-443-18761-2"
+    - "Tse, Nonlife Actuarial Models (CUP 2009), Cambridge Core contents p.vii image, sha256:310e411c2bcc82d3ba9d145325e7a649444a68994c6d03c990c75475c2e59fc0, and chapter summaries for Ch 2, 11, 12, 13 — https://www.cambridge.org/core/books/nonlife-actuarial-models/41EF4E4BB9E3A31F63DDCC18C245C271"
   open_findings: 9
   open_critical: 0
   log: .verify/Exam MAS-I (CAS).md

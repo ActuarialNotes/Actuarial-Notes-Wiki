@@ -1,12 +1,13 @@
 import { formatSittingDate, type ExamSitting } from '@/data/examSittings'
 import { daysBetween, type StudyPlan } from '@/lib/studyPlan'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { bankLabelFor } from '@/lib/examIds'
 
 // The exam's action menu, as data — what the study guide's title opens
 // (`components/ConceptActionMenu.tsx`, its exam branch). An exam isn't a concept:
-// nothing about it is quizzed, kept as a card or levelled up, so its menu leads
-// with where the reader stands on it instead — the readiness score, how long is
-// left before it is sat, and today's plan for it. Pure and tested; the
+// it isn't kept as a card or levelled up, so its menu leads with where the
+// reader stands on it instead — the readiness score, how long is left before it
+// is sat — then a quiz on its whole bank and today's plan for it. Pure and tested; the
 // component only reads.
 
 /**
@@ -28,6 +29,17 @@ export function examPageIdFromFile(fileName: string): string {
  */
 export function examProgressKeyFromFile(fileName: string): string {
   return wikiExamIdToProgressKey(examPageIdFromFile(fileName))
+}
+
+/**
+ * The question bank an exam page's **Start Quiz** row draws from — the `exam:`
+ * label its questions carry and the quiz builder's `topic` ("Exam P-1 (SOA)" →
+ * `Probability`, "Exam 6C (CAS)" → `Exam 6C`) — or undefined for an exam with
+ * no bank (6U, PCPA, the DISCs), whose row is greyed out. Read through
+ * `bankLabelFor`, so 6U doesn't borrow 6C's questions through their shared key.
+ */
+export function examQuizTopic(fileName: string): string | undefined {
+  return bankLabelFor({ examId: examPageIdFromFile(fileName) })
 }
 
 /**

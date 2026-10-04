@@ -8,13 +8,17 @@ Edition: "8th"
 Type: "Textbook"
 ISBN: "978-0-13-468699-8"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-04
+  last_checked_by: agent:validate-v1
   content_hash: sha256:8f8264c8b9b817ae33531b0509eb29e8e5412164dfc993bdab96264c7520e62d
-  sources: []
-  open_findings: 0
+  sources:
+    - "Pearson product page, Introduction to Mathematical Statistics, 8th edition (Hogg, McKean, Craig): Title overview and Table of contents (sections and appendices), hardcover ISBN-13 9780134686998 'Published 2018', fetched 2026-10-04, sha256:0b390bfdae07c5509c079a5f2b7af46348cc2ab06e68b8c3b7597873a2096cf6 — https://www.pearson.com/en-us/subject-catalog/p/introduction-to-mathematical-statistics/P200000006211"
+    - "Hogg, McKean & Craig, Introduction to Mathematical Statistics, 8th ed., Global Edition (Pearson, 2020), printed Contents pp.5-9 (library scan linked from K10plus), sha256:56616bd9053ab8a928850890dfe2c0ef47a374f3f914d9393179afb4db21350f — https://www.gbv.de/dms/mpib-toc/1763045706.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F, created 2026-06-29), Complete Text References p.6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf (Hogg entry; Domain B readings p.4, Domain C p.5)"
+    - "K10plus catalogue, MARC record for ISBN 9780134686998 (245 authors; 250 'Eighth edition'; 264 Boston: Pearson [2019]; 300 xiii, 746 pages), sha256:871e24dc9bcc507458fc4821acecbb5ca1536d28640fd7c7a3f4ccee1ac9ba0c — https://sru.k10plus.de/opac-de-627?version=1.1&operation=searchRetrieve&query=pica.isb%3D9780134686998&maximumRecords=10&recordSchema=marcxml"
+  open_findings: 1
   open_critical: 0
   log: .verify/Resources/Books/Introduction to Mathematical Statistics (Hogg et al. - 2018).md
 ---

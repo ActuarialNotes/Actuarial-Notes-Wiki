@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:2a0e8f61d7e7d241b73211857345f9244e1ef97b931902ccf4a34cafe5375973
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Bonus-Malus System.md
 ---

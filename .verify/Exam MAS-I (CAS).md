@@ -92,3 +92,96 @@ created: 2026-10-04
 - proposed_action: Author Domain C topics for the omitted readings: bootstrap; ridge, lasso and tuning; PCR/PLS and high dimensions; polynomial and step functions, regression and smoothing splines, local regression and GAMs; multinomial logistic, QDA and naive Bayes; nominal/ordinal logistic regression; log-linear models and contingency tables; ANCOVA and multiple comparisons; quasi-likelihood. Existing pages that could be linked: Bootstrap, Regularization, High Dimensional Variables. This is authoring, so it was not auto-fixed.
 - applied: false
 - fingerprint: 8f32f5ee0d87
+
+## [F-007] Transformations filed under Domain A and simulation by inversion under Domain B; the readings place them the other way round
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- severity: minor
+- status: open
+- locus: Domain A ### Poisson Processes, 'Transformations of Random Variables' bullet; Domain B ### Summarizing a Sample, 'Cumulative Distribution Function (CDF)' bullet
+- claim: Domain A lists 'Transformations of Random Variables — deriving the distribution of a function of a lifetime or claim size'. Domain B lists 'Cumulative Distribution Function (CDF) — including its use to simulate a draw by inversion'.
+- evidence: CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026-06-29; https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed), p.6, assigns Hogg 1.7 and 2.7 to Domain B (B1-B8). Hogg, McKean & Craig 8th ed. (Global Edition) publisher eBook preview, Contents PDF pp.6-9 (https://api.pageplace.de/preview/DT0400.9781292264783_A39514650/preview-9781292264783_A39514650.pdf, sha256:7fd80607a820477e03ff2c8f3469f5cfa57d095d766cbc29d39d723ef5a69a99) titles them 1.7.2 'Transformations' (within 1.7 'Continuous Random Variables') and 2.7 'Transformations for Several Random Variables'. No assigned Domain A section is about transformations: Ross's assigned sections are in Ch 4, 5, 9 and 11, Daniel's note is about Poisson processes and mixtures, and Struppeck's is about life contingencies. Simulation is assigned only through Ross §§11.1, 11.2.1 and 11.2.2, in Ch 11 'Simulation' (Elsevier product page for Ross, Introduction to Probability Models 13th ed., chapter-level table of contents (https://shop.elsevier.com/books/introduction-to-probability-models/ross/978-0-443-18761-2, fetched 2026-10-04, sha256:4feee1adf6f271c13df56c766024e4cbd75c1c730698a0e109a95f1260839a23)), and the outline gives Ross to A1-A6. Hogg's 4.8 'The Method of Monte Carlo' and 4.8.1 'Accept-Reject Generation Algorithm' are not among the assigned Hogg sections. Each bullet's concept is therefore counted toward the wrong domain weight (A 20-30%, B 20-30%).
+- source_rank: 1
+- proposed_action: Move the transformations bullet to Domain B, and the simulation-by-inversion clause to Domain A with the Ross Ch 11 topic that F-004 asks for. This changes which domain the concepts count toward, so it was not auto-fixed.
+- applied: false
+- fingerprint: 6df3d3580606
+
+## [F-008] Source Material lines give task codes only; the outline's section limits, exclusions and Ross's editions are absent
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- severity: minor
+- status: open
+- locus: ## Source Material, every reading line
+- claim: Each reading's sub-bullet is task codes alone. Dobson 'C1–C9', Hogg 'B1–B8, C1–C9', James 'C1–C9', Ross 'A1–A6', Tse 'B1–B4, B7–B9'. Ross is linked only as the 2019 (12th) edition.
+- evidence: CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026-06-29; https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed), p.6, limits most readings. Dobson & Barnett: 'Chapters 1-9, excluding 6.3.3, 6.7, 6.8, & 7.9'. Hogg: Domain B 'Sections 1.7, 2.7, 2.8, 3.7, 4.1, 4.4, 4.5, 4.6, 4.7, 5.1, 6.1, 6.2, 6.3, 6.4, 6.5, 7.1-7.6, 8.1, 8.2, 8.3', Domain C '4.4, 6.3, 6.5, 7.5, 9.1-9.6'. James et al.: 'Chapters 1, 2 (excluding Section 2.2.3), 3 (Sections 3.1 through 3.3, and 3.6 labs on Sections 3.1 through 3.3), 4 (Sections 4.1 through 4.4; the Linear Discrimination Analysis portion of Section 4.4 will not be tested), 5, 6, and 7'. Ross: '11th edition, 12th edition, or 13th edition ... 2014/ 2019/2023 - Sections 4.1-4.8, 5.2.1-5.2.4, 5.3, 5.4.1, 5.4.2, 9.1-9.6, 11.1, 11.2.1, and 11.2.2'. Tse: 'Sections 1.1, 2.2, 2.3, 2.4, 2.5, 10.1, 10.2, 11.1, 12.1, 12.3, 13.2'. Daniel: practice problems on the CAS website. None of this is on the exam page, so the shelf card for James reads 'C1–C9' as if the whole book were assigned. The 13th-edition allowance for Ross is new in 2026: the outline still served at the 2023-06 URL the vault cites (MASI_CO_2025_S v04 2024-12-19; https://www.casact.org/sites/default/files/2023-06/MASI_Content_Outline.pdf, sha256:0bd233bd23e60430706b52ab37eb248a9b14d33f9fe3d9bc0712a9e763e2e610), p.6, reads '11th edition or 12th edition ... 2014/ 2019'. Apart from that, the two outlines' readings are identical. The resource pages carry these section lists in their On-the-syllabus callouts (rank 4, consistency only), which is why this is minor. Ross's resource page still says '(of the 11th or 12th edition)'.
+- source_rank: 1
+- proposed_action: After each reading's codes, append its scope from p.6 word for word, as the vault's other CAS pages do, and state that Ross's 11th, 12th or 13th edition may be used. This adds content, so it was not auto-fixed.
+- applied: false
+- fingerprint: e8bfecc6f122
+
+## [F-009] Lead sentence names Domain C as 'Generalized Linear Models'; the outline's domain is Extended Linear Models
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- severity: minor
+- status: open
+- locus: Lead paragraph, first sentence
+- claim: 'The Modern Actuarial Statistics I exam is a 4-hour computer-based CAS exam covering Stochastic Processes, Survival Models, Statistics, and Generalized Linear Models as part of the ACAS credentialing pathway.'
+- evidence: CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026-06-29; https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed), p.3, names the three domains 'A. Probability Models (Stochastic Processes and Survival Models)', 'B. Statistics' and 'C. Extended Linear Models' (45-55%). Domain C's readings go beyond GLMs: James Ch 5-7 (resampling, ridge/lasso, PCR/PLS, splines, GAMs) and Hogg Ch 9 (ANOVA). So 'Generalized Linear Models' narrows the exam's largest domain to one of its model families. The rest of the sentence checks out. The 4-hour length: p.1 'Exam Duration 4 hours' in a 4.5-hour appointment, and CAS 2026 Syllabus of Basic Education (PDF modified 2026-06-26; https://www.casact.org/sites/default/files/2025-01/2025_SOBE.pdf, sha256:f0ce0da128368cedb6ca35ac139ca0357e159a983dcf94e4275e32fa44530038) pp.10-12 '4 Hours'. Computer-based delivery: Pearson VUE test centres (SOBE p.13). Part of the ACAS pathway: CAS Credential Requirements page, fetched 2026-10-04 (https://www.casact.org/credential-requirements, sha256:53c285ffbbe390a21e4c20f733269c5cdfaca53a091b770efb77d24943d4c088) lists 'Requirements for Associateship: MAS-I, MAS-II, Course on Professionalism, Exam 5, PCPA Exam, PCPA Project, Exam 6'.
+- source_rank: 1
+- proposed_action: Name the third area as the outline does, '[[Extended Linear Model|Extended Linear Models]]'. This rewrites the lead sentence, so it was not auto-fixed.
+- applied: false
+- fingerprint: e447eb3c59b9
+
+## [F-010] Prerequisite callout omits Exam 2, which CAS says MAS-I assumes; its calculus line is unsourced
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- severity: minor
+- status: open
+- locus: Lead, '> [!question]- Prerequisite knowledge' callout
+- claim: Prerequisites listed: 'Calculus, including integration, differentiation, and infinite series' and 'The Exam P toolkit: Probability, Random Variables, Expected Value, Variance, Conditional Probability, and the named distributions'.
+- evidence: CAS 2026 Syllabus of Basic Education (PDF modified 2026-06-26; https://www.casact.org/sites/default/files/2025-01/2025_SOBE.pdf, sha256:f0ce0da128368cedb6ca35ac139ca0357e159a983dcf94e4275e32fa44530038). The p.8 table 'Exam or VEE Requirement / Assumes Prior Knowledge from the Following Exam(s)' reads 'Exam MAS-I — Exams 1 and 2'. p.7 adds that 'it is generally assumed that candidates for Associateship-level Exams MAS-I, MAS-II, 5, and 6 are familiar with material covered on the preliminary exams'. The callout covers Exam 1 (Exam P) but not Exam 2 (Financial Mathematics). Struppeck's life-contingency note, assigned for A5-A6, values payments using 'the rate(s) of interest for discounting' (https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf, sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849, PDF p.3). Neither the 2026 outline nor the SOBE says anything about calculus or infinite series. The calculus line is plausible, as Exam 1 rests on it, but it has no source.
+- source_rank: 1
+- proposed_action: Add Exam 2 (financial mathematics / interest theory) to the prerequisites, citing SOBE p.8. Either source the calculus line or reword it as Exam 1 background. This adds content, so it was not auto-fixed.
+- applied: false
+- fingerprint: a5836911898d
+
+## [F-011] Task C2 links 'data set' to Tidy Data, a concept from no MAS-I reading
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- severity: nit
+- status: open
+- locus: Learning Objectives, task C2, '[[Tidy Data|data set to be modeled]]'
+- claim: Task C2's 'data set' links to the Tidy Data concept page.
+- evidence: A full-text search of ISLR 2nd ed., CAS-hosted copy, PDF bookmark outline (https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f), Larsen, Generalized Linear Models study note (https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf, sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd) and Dobson & Barnett 4th ed. publisher eBook preview, Contents PDF pp.8-12 (https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf, sha256:40ed0b2549113ee0bea29e41786886ce992ffa29251ad26fb1037385bb51611a) finds 0 occurrences of 'tidy'. Concepts/Tidy Data.md cites R for Data Science and Python for Data Analysis. Neither is on CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026-06-29; https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed) p.6, and the link checker reports both as broken resource links from that page. A candidate following the task's link lands on material outside the syllabus.
+- source_rank: 1
+- proposed_action: Point 'data set' at a syllabus concept or leave it unlinked. Choosing the target is a judgement, so it was not auto-fixed.
+- applied: false
+- fingerprint: 822ffa80d9f1
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- resolves: F-001
+- status: resolved
+- note: Renumbered the Domain C tasks 1-9, as on the 2026 outline p.5. Objective codes on the page are now A1-A6, B1-B9 and C1-C9. Every code the Source Material cites resolves, so objectiveFilterOptions now offers the shelf's Learning objective filter (checked against the edited page with vitest). syllabus_lint 0/0 and test_syllabus_lib OK. vitest sourceMaterial, resourceExams, questionBank, examCatalog, storeBooks, syllabusChapters and wikiParser pass (171 tests).
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- resolves: F-002
+- status: resolved
+- note: Restored the outline's words. B3 drops '([[Hypothesis Testing]])'. B6 reads 'Model insurance claims in [[Aggregate Loss Model|aggregate]]'. B8 adds 'to [[Parameter Estimation|estimates]]'. C1 ends at 'extended linear model'. C2 reads '[[Tidy Data|data set to be modeled]]'. C3 ends at 'approach'. Links sit only on the outline's own words; the two inserted noun phrases are linked because test_syllabus_lib requires every noun phrase in an objective to be linked. The syllabus concept set is unchanged, since every concept the removed clauses linked is still linked in the same callout. The Linear Mixed Model bullet stays, under F-003.

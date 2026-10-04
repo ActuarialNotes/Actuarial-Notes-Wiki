@@ -1,11 +1,17 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-04
+  last_checked_by: agent:validate-v1
   content_hash: sha256:dc5e7927a1560abb8ae418c7a7efe7eb95488a530f74d341e2f6b2b58b11753f
-  sources: []
+  sources:
+    - "Ross, Introduction to Probability Models, Ch. 4 'Markov Chains' (course-hosted copy on NTNU TMA4265 page; edition earlier than the 11th-13th the 2026 outline lists, file dated 2012-09-06): Sec. 4.4 Theorem 4.1 and Remarks (ii)-(iii) (unique solution iff positive recurrent; long-run proportion; limit if aperiodic) pp.205-206; pi_j = 1/m_jj p.212; Proposition 4.3 long-run average reward sum r(j) pi_j and Ex. 4.23 BMS average premium pp.215-216; Ex. 4.31 nearest-neighbour chain time reversible, pi_i alpha_i = pi_{i+1}(1-alpha_{i+1}) p.238; Exercise 20 doubly stochastic p.266, sha256:9f01ac6c0ef8a6a641de075fe6af109d7215bad8c33734807fd654d4a1ad53e1 - https://arvidn.folk.ntnu.no/TMA4265/Chap%204%20from%20Ross.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed.), Ch. 11: Thm 11.3 absorption with probability 1 PDF p.425; Ex. 11.16 periodic ergodic non-regular chain PDF p.441; Thms 11.7-11.12 and 'Equilibrium' PDF pp.442-447; Ex. 11.19-11.20 solving wP = w using all but one equation PDF p.444; Thm 11.15 mean recurrence r_i = 1/w_i PDF p.463, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e - https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Siegrist, Random, 'Discrete-Time Markov Chains' (two-state chain P_01 = p, P_10 = q -> f = (q/(p+q), p/(p+q)); doubly stochastic -> uniform invariant), sha256:808118b103e17cd5e31115b953663b0d8ff94da21f432e6fe7c104e9300380f0 - https://www.randomservices.org/random/markov/Discrete.html"
+    - "Siegrist, Random, 'Stationary and Limiting Distributions' (finite irreducible class is positive recurrent; unique invariant f(x) = 1/mu(x); ergodic limit; periodic behaviour), sha256:d4719c5e1cb9ad3be4fbf84c8dd849390f7d1ad15ced112f6312be83e5545680 - https://www.randomservices.org/random/markov/Limiting.html"
+    - "Siegrist, Random, 'Discrete-Time Birth-Death Chains', section 'Time Reversal' (every irreducible recurrent birth-death chain is reversible), sha256:11fd7af4e9d00fb72857d73ce96bd41e6a78c0e4ad172587025d7096858dee94 - https://www.randomservices.org/random/markov/BirthDeath.html"
+    - "CreditMetrics Technical Document (J.P. Morgan 1997; RiskMetrics 2007 reprint), Sec. 6.4 'since default is an absorbing state, eventually all firms will default', PDF p.91, sha256:b9e9cf7e01f8cc89dedd1ca1c1df377714c6ecefa99c587d1addbb130d7367c7 - https://www.msci.com/documents/10199/93396227-d449-4229-9143-24a94dab122f"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Stationary Distribution.md

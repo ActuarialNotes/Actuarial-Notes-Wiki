@@ -1,11 +1,17 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-04
+  last_checked_by: agent:validate-v1
   content_hash: sha256:00465fb4261a3b929a34b103f5d98ca98fbca395212c32235430aa511098740b
-  sources: []
+  sources:
+    - "Ross, Introduction to Probability Models, Ch. 4 'Markov Chains' (course-hosted copy on NTNU TMA4265 page; edition earlier than the 11th-13th the 2026 outline lists, file dated 2012-09-06): P_ij >= 0 and row sums p.185; Ex. 4.4 'Transforming a Process into a Markov Chain' (two-day weather -> four-state chain) pp.186-187; Sec. 4.2 Chapman-Kolmogorov and unconditional P{X_n=j} = sum_i alpha_i P^n_ij pp.189-191; Exercise 20 doubly stochastic p.266, sha256:9f01ac6c0ef8a6a641de075fe6af109d7215bad8c33734807fd654d4a1ad53e1 - https://arvidn.folk.ntnu.no/TMA4265/Chap%204%20from%20Ross.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed.), Ch. 11: Thm 11.2 u(n) = uP^n (row vector) PDF p.417; Def 11.1 absorbing state p_ii = 1 PDF p.424; Exercise 11.3.9 column sums 1 -> uniform fixed vector PDF p.451, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e - https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Siegrist, Random, 'Discrete-Time Markov Chains' (stochastic matrix, f P^n is the distribution of X_n, time homogeneity, 'Doubly Stochastic Matrices' -> uniform invariant), sha256:808118b103e17cd5e31115b953663b0d8ff94da21f432e6fe7c104e9300380f0 - https://www.randomservices.org/random/markov/Discrete.html"
+    - "Siegrist, Random, 'General Markov Processes', section 'Enlarging the State Space' (future depends on last two states -> Y_n = (X_n, X_{n+1}) is a homogeneous Markov process), sha256:69b4f54fd8c976d8a7093b3bfb9e0b3e836aa60794d1ad262e55c9b4b27f043c - https://www.randomservices.org/random/markov/General.html"
+    - "Daniel, 'Multi-state transition models with actuarial applications' (2004; CAS/SOA reprint), Def. 1.7 non-homogeneous Markov chain and Thm 1.18 kQ_n = Q_n Q_{n+1} ... Q_{n+k-1}, PDF pp.4-7, sha256:0ca2c70a5c022a0032026ae139bd59e9fee3142d0455ed071e2d8698573200f8 - https://www.casact.org/sites/default/files/database/studynotes_daniel.pdf"
+    - "CreditMetrics Technical Document (J.P. Morgan 1997; RiskMetrics 2007 reprint), Sec. 6.4 'since default is an absorbing state, eventually all firms will default', PDF p.91, sha256:b9e9cf7e01f8cc89dedd1ca1c1df377714c6ecefa99c587d1addbb130d7367c7 - https://www.msci.com/documents/10199/93396227-d449-4229-9143-24a94dab122f"
   open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Transition Probability Matrix.md

@@ -1,11 +1,17 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-04
+  last_checked_by: agent:validate-v1
   content_hash: sha256:135dc9b6c6960374d483c63c64911851dcd326c9b007af184f06e1fb08285144
-  sources: []
+  sources:
+    - "Balakrishnan, CMU 36-705 Intermediate Statistics (Fall 2019), Lecture 21 §21.2: generalized LRT lambda = sup_{Theta0} L / sup_{Theta} L, reject when lambda <= c; 'Wilks' phenomenon'; under H0 and conditions -2 log lambda -> chi^2_nu with nu = dim(Theta) - dim(Theta0); the Neyman-Pearson test is optimal for simple vs simple, sha256:957e7c52577a6b3f0472bbcc14611653b64b7a934f07c5270e05228561c4df21 — https://www.stat.cmu.edu/~siva/teaching/705/lec21.pdf"
+    - "NIST/SEMATECH e-Handbook of Statistical Methods §8.2.3.3 Likelihood ratio tests: lambda = L0/L1 for nested restricted/unrestricted models, chi^2 = -2 ln lambda approximately chi-square with k degrees of freedom, k = number of parameters lost (e.g. exponential as a Weibull special case), sha256:b98f507c243e5f762477ab0311358633217b98a11251c19faf056044c3b4749b — https://www.itl.nist.gov/div898/handbook/apr/section2/apr233.htm"
+    - "Rodriguez, Generalized Linear Models (Princeton lecture notes), Appendix A §A.2 pp.5-9: nested models omega1 in omega2, eq (A.27) -2 log lambda -> chi^2_nu with nu = dim(omega2) - dim(omega1) 'under certain regularity conditions'; Wald, score and LR tests asymptotically equivalent, sha256:bfcc766141f43095433287dcc61f127df49103be1dd31d71454c56aa6ed8f8a6 — https://grodri.github.io/glms/notes/a1.pdf"
+    - "Rodriguez, Generalized Linear Models, Appendix B §B.3.2 pp.6-7, eqs (B.11)-(B.13): -2 log lambda = [D(omega1) - D(omega2)]/phi, equal to the deviance difference when phi = 1 (binomial, Poisson), F with (p2 - p1, n - p2) df under normality with phi estimated from the larger model, sha256:92bc67a6a2fc52a0ffa2babfd7a13e175b2babb52dd28f778d5e307cc65aa286 — https://grodri.github.io/glms/notes/a2.pdf"
+    - "Siegrist, Random, ch.8 §5 Likelihood Ratio Tests: Neyman-Pearson lemma (likelihood-ratio region most powerful among regions of no greater size, simple vs simple) and the generalized likelihood ratio for composite hypotheses, sha256:60b047835a3f644cd2317c8ab984b8d41ae7669f53c1d32a79705942670b9b04 — https://www.randomservices.org/random/hypothesis/Likelihood.html"
+    - "CAS Exam MAS-I Tables (version 01/15/2018), chi-square lower-tail table p.20 (0.950 column: df 1 = 3.84, df 2 = 5.99), sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
   open_findings: 3
   open_critical: 0
   log: .verify/Concepts/Likelihood Ratio Test.md

@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:589495aeb9ffb5d560f1d1948fe85320b2aa007dfecc29ecf4d9fcb5728afa4a
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Control Variable.md
 ---

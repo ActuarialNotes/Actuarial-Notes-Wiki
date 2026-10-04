@@ -1,11 +1,17 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-04
+  last_checked_by: agent:validate-v1
   content_hash: sha256:0e5fe0e7a7189b942e27d6a4e7f2ff2882ab9b4bf0e76b58181c68ddfe28068e
-  sources: []
+  sources:
+    - "Daniel, \"Poisson processes (and mixture distributions)\", CAS Study Note (June 2008) — MAS-I syllabus reading, §1.3.3 pp.9-12 (Mixing Method; Gamma-mixed Poisson is negative binomial r = α, β = θ, Def. & Prop. 1.21; Example 1.24: for N(t), Λ = tλ is Gamma(α, tθ), so β = tθ), sha256:e345451e9daae82b400aed77f2da0c96c361ed4fbdfd22456b8f711ca0d50888 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_1.pdf"
+    - "Frees et al., Loss Data Analytics (open text, arXiv:1808.06718v1, 2018), §2.6 Mixture Distributions, PDF pp.49-50 (Gamma(α, θ)-mixed Poisson pmf = C(α+k−1, k)(1/(1+θ))^α(θ/(1+θ))^k), sha256:1df1831e7d67a072712a2945645b788f5974748143da267bb471b9a7bc3baf33 — https://arxiv.org/pdf/1808.06718"
+    - "Mahler & Dean, 'Credibility', ch.8 of Foundations of Casualty Actuarial Science (SOA study note C-21-01), §5.2-5.4, PDF pp.96-98 (negative binomial k = α, p = λ/(λ+1) in the rate parametrisation), pp.100-103 (posterior Gamma α + C, λ + Y), pp.107-109 (Bühlmann K = λ, Z = Y/(Y + λ), equal to the Bayesian estimate for the Gamma-Poisson; footnote 56: conjugate priors of linear exponential families), sha256:bccdb7968ae276e041bf7f6eb5aea3aea473f1dc7739bc64352419c8a6a0f3c5 — https://www.soa.org/globalassets/assets/files/edu/C-21-01.pdf"
+    - "Huang, STAT 253/317 (U. Chicago, 2021) Lecture 11 slides, following Ross, Introduction to Probability Models ch.5, slides pp.17-18 (mixed Poisson process: stationary, not independent, increments), sha256:a0e1f0472675b35264cff54d6a4223c90ad34df1381d76f2150b537b7b5b9e74 — https://www.stat.uchicago.edu/~yibi/teaching/stat317/2021/Lectures/Lecture11.pdf"
+    - "McNulty, 'The Pareto-Gamma Mixture', CAS E-Forum Spring 2021, §3.1 Gamma-Exponential Mixture (result is Lomax = Pareto Type II), PDF pp.4-5, sha256:9499f17119a493997b6d69881adf50ff61033b80a6c43788366c521407710432 — https://www.casact.org/sites/default/files/2023-03/McNulty_The_Pareto_Gamma_Mixture_EForum-Spring2021.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain A tasks 1-2 and text references (Daniel A1-5; Ross 5.2.1-5.2.4, 5.3, 5.4.1, 5.4.2), PDF pp.3, 6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Mixing Distribution.md

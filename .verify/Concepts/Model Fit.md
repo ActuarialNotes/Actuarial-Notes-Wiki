@@ -1,0 +1,60 @@
+---
+target: Concepts/Model Fit.md
+created: 2026-10-04
+---
+
+## [F-001] Deviance-residual normality stated without the discrete-response condition
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- severity: major
+- status: open
+- locus: bullet 2 (deviance residual) and 'Diagnostic plots (MAS-I)' QQ-plot sub-bullet
+- claim: 'If the assumed distribution is right, deviance residuals are roughly normal with constant variance.' and 'A QQ Plot of deviance residuals should be close to a straight line'.
+- evidence: Goldburd et al., GLMs for Insurance Rating, 2nd ed., §6.3.1 pp.67-69 (PDF 77-79) gives the normal/constant-variance expectation and then the condition the page omits: 'For discrete distributions (such as Poisson or negative binomial) or distributions that otherwise have a point mass (such as Tweedie, which has a point mass at zero), the deviance residuals will likely not follow a normal distribution ... the large numbers of records having the same target values cause the residuals to be clustered together in tight groups. This makes deviance residuals less useful for assessing the appropriateness of such distributions.' It points to randomized quantile residuals or binned working residuals (§6.3.2) instead, and notes highly aggregated count data behave more continuously. The page's own first example is a Poisson frequency GLM on individual policies - the case where a correct model still gives a non-normal, banded QQ plot. Concepts/Model Diagnostics.md carries the caveat ('Residuals from a count or binary response fall in bands'). sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf
+- source_rank: 2
+- proposed_action: Add Goldburd's condition to both statements: the normality/straight-QQ expectation is for continuous responses (or highly aggregated counts); for Poisson, negative binomial or Tweedie records read binned working residuals or randomized quantile residuals instead.
+- applied: false
+- fingerprint: e0abda06807f
+
+## [F-002] Added-variable plots said to expose functional form
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- severity: minor
+- status: open
+- locus: 'Diagnostic plots (MAS-I)', added-variable sub-bullet
+- claim: 'Added variable plots show one predictor's effect net of the others, exposing its functional form and any influential points.'
+- evidence: Stata Base Reference Manual, [R] regress postestimation diagnostic plots, avplot Remarks p.5: 'The y and x coordinates of the added-variable plot cannot be used to identify functional form, or, at least, not well (see Mallows [1986]). In the construction of the added-variable plot, the relationship between y and x is forced to be linear.' (sha256:2b6a9b898c73d0657d3ce7fbf18a7a23c507d01ad9c1d0543cf7689dc6aa734f — https://www.stata.com/manuals/rregresspostestimationdiagnosticplots.pdf). Wikipedia 'Partial regression plot', citing Velleman & Welsch (1981): AV plots are mostly used for leverage and influence; 'the x-axis is not X_i. This limits its usefulness in determining the need for a transformation (which is the primary purpose of the partial residual plot)' (sha256:8ecce810efb2f345c2582914e56ad6e8bd2d40dec1e403dd541a5481bc48011a — https://en.wikipedia.org/wiki/Partial_regression_plot). The influential-points half is right (Weisberg ALR 4e §9.5.4 pp.224-225).
+- source_rank: 3
+- proposed_action: Drop 'exposing its functional form' or qualify it: AV plots show the adjusted coefficient and influential points; curvature may hint at non-linearity, but partial residual (component+residual) plots or binned residuals against the predictor are the tools for choosing a form.
+- applied: false
+- fingerprint: 267ac92a4d05
+
+## [F-003] By-level actual-vs-predicted on holdout attributed to the GLM monograph
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- severity: minor
+- status: open
+- locus: 'Rating-plan fit (Exam 8)' bullet, first sentence
+- claim: 'The GLM monograph tests fit where a rating plan needs it: actual against predicted on holdout data, by quantile of prediction and by level of each rating variable.'
+- evidence: Goldburd et al. 2nd ed. §7.1 pp.75-76 (PDF 85-86) plots actual vs predicted on holdout data, grouped into percentiles sorted by the prediction; §7.2.1 p.77 builds quantile plots. Neither, nor anything else in Ch.7, compares actual with predicted on holdout by level of each rating variable; text search of the monograph for 'by level', 'each level' and 'actual vs/versus predicted' returns only §2.4 coding passages, §2.10 and §7.1-7.2. The nearest is §6.3.2 pp.71-72 (PDF 81-82), binned working residuals plotted over a predictor's value - a residual analysis on the modelling data, not a holdout comparison. The quantile half and the Cook's distance / CV / bootstrap sentence are confirmed (§6.4 p.74). sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf
+- source_rank: 2
+- proposed_action: Drop 'and by level of each rating variable' from what the monograph is said to do, or attribute by-level checking to §6.3.2's residual plots over a predictor.
+- applied: false
+- fingerprint: 11a4a5e076b4
+
+## [C-001] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- status_set: verified
+- confidence: medium
+- checks_run: D* = 2(ll_sat - ll_model) named scaled deviance = Goldburd eq.15-16 p.63 (Dobson calls this the deviance - Goldburd fn.12; notation difference, not an error); saturated D* = 0, null model the other end, maximizing likelihood = minimizing deviance (§6.1.2); deviance residual = signed sqrt of the record's contribution (§6.3.1); adding a predictor always reduces deviance, F-test for nested models, AIC/BIC as penalties (§6.2, ISLR §3.2.2 F-test); holdout AvE (§7.1). MAS-I diagnostics: residuals vs fitted trend = mean misspecified, funnel = variance (ISLR §3.3.3; Goldburd §6.3.1-6.3.2); QQ of deviance residuals, right tail above line = more skewed than gamma -> inverse Gaussian (Goldburd §6.3.1 Figs 16-17, the page's second example); marginal model plot = car::mmps; AV plot influence (ALR §9.5.4) but not functional form (F-002). Exam 8 bullet vs Goldburd §6.4, §7.1-7.2 (F-003). Examples recomputed before comparing: Delta D = 528 vs chi2(0.95,11) = 19.675, 528/9,840 = 5.37%; A/P ratios 1.030, 0.980, 0.980, 1.150, total 4,048/4,000 = 1.012 - all agree. Links: every [[link]] resolves exactly, including Resources/Books/Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020).md (the page exists; the reported missing-page issue did not reproduce, so nothing was unlinked). No figure embed.
+- sources_checked: Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, 2nd ed. (CAS Monograph 5): §2.4.1 logging continuous variables pp.11-12 (PDF 21-22); §2.4.3 base level p.15; §6.1.2 scaled deviance D* = 2(ll_sat - ll_model) p.63 (PDF 73); §6.2 F-test, AIC, BIC pp.64-67; §6.3.1 deviance residuals, q-q plot, discrete-distribution caveat pp.67-69 (PDF 77-79); §6.3.2 binned working residuals pp.70-73; §6.4 Cook's distance, CV, bootstrap p.74; §7.1 actual vs predicted on holdout pp.75-76; §7.2.1 quantile plots p.77, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf; CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain C tasks 4 and 8 (p.5), 'Parameter and Diagnostic Tables' (p.7), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf; James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021; CAS-hosted copy), §3.3.3 'Potential Problems' pp.92-102 (PDF pp.102-112): residual plots, U-shape = non-linearity (Fig 3.9); correlated errors and tracking vs time (Fig 3.10); funnel = heteroscedasticity, log Y remedy (Fig 3.11); outliers, studentized residuals beyond ±3 (Fig 3.12); leverage statistic, average (p+1)/n (eq 3.37, Fig 3.13); VIF, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf; Fox & Weisberg, R package 'car' 3.1-5 reference manual (2026): mmps 'Marginal Model Plotting' pp.89-91 (response vs a linear combination u of the regressors, with a smooth of the data and a smooth of the fitted values on u; drawn versus each term and versus the fitted values/linear predictor; GLM smoother is a GAM with the model's family and link); avPlots 'Added-Variable Plots' pp.11-14 (examples contrast 'marginal plot, ignoring other predictors' with 'AV plot, adjusting for others'); crPlots 'Component+Residual (Partial Residual) Plots' p.39, sha256:5471a6e3292bcc8fcd9a83bf8f912989ce46de55e4a323595bcbb91a9d591cd3 — https://cran.r-project.org/web/packages/car/car.pdf; StataCorp, Stata Base Reference Manual (release 19), [R] regress postestimation diagnostic plots, avplot Remarks pp.4-6: added-variable (partial-regression) plot; its regression has the same coefficient as the full model; 'cannot be used to identify functional form, or, at least, not well (see Mallows [1986]). In the construction of the added-variable plot, the relationship between y and x is forced to be linear.', sha256:2b6a9b898c73d0657d3ce7fbf18a7a23c507d01ad9c1d0543cf7689dc6aa734f — https://www.stata.com/manuals/rregresspostestimationdiagnosticplots.pdf; Wikipedia, 'Partial regression plot' (wikitext retrieved 2026-10-04), citing Velleman & Welsch (1981): construction from two sets of residuals; LS fit has intercept 0 and slope beta_i; its residuals equal the full model's; used mostly to identify high-leverage and influential points; 'the x-axis is not X_i. This limits its usefulness in determining the need for a transformation (which is the primary purpose of the partial residual plot)', sha256:8ecce810efb2f345c2582914e56ad6e8bd2d40dec1e403dd541a5481bc48011a — https://en.wikipedia.org/wiki/Partial_regression_plot; Weisberg, Applied Linear Regression, 4th ed. (Wiley 2014), Ch.9 'Regression Diagnostics' (course copy): intro p.204; §9.1.5 residual-plot shapes (megaphone = nonconstant variance, curvature = wrong mean function) pp.209-210; §9.5.1-9.5.3 Cook's distance D_i = (r_i^2/p')h_ii/(1-h_ii), the distance between Y-hat and Y-hat(i), D_i near 1 as calibration pp.220-221; §9.5.4 added-variable plots and influence pp.224-225; §9.6 normal probability plots pp.225-226, sha256:7ecdc82a05367d2107915fe0535c8cbf65a9f47d95ee80b8816e0c5903d507af — https://www2.stat.duke.edu/courses/Fall21/sta521.001/papers/Applied_Linear_Regression_CHAPTER_9_Regression_Diagnostics.pdf
+- note: Open: F-001 major (deviance-residual normality needs the discrete-response condition, Goldburd §6.3.1), F-002 minor (AV plots and functional form), F-003 minor (by-level holdout AvE attribution). Medium: Goldburd is a syllabus reading for Exam 8 (which links this page, A3) but not for MAS-I; the MAS-I plot claims rest partly on rank-3 references. Linked by MAS-I C8 and Exam 8 A3; the two senses are kept in separate bullets and do not conflict.

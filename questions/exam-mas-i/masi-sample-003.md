@@ -12,12 +12,15 @@ wiki_link:
 answer: "A"
 points: 2
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-04
+  last_checked_by: agent:validate-v1
   content_hash: sha256:07b8f9883fd9b2e0607738c9a5ecf8ea8b26d244d98f62440bccce96f9a92a84
-  sources: []
+  sources:
+    - "CAS Exam MAS-I Sample Questions (as of 11/21/2017), Q3 and official solution, PDF pp.5-6, sha256:6f146ad2b2d0fd72746c551376572045246c317ae0ca8e189e3ffeffa79670de — https://www.casact.org/sites/default/files/2021-04/MASI_Sample_Questions.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021), s.5.1.2 PDF p.210 ('tends not to overestimate the test error rate as much as the validation set approach does'; training set 'typically around half the size'), s.5.1.3 PDF p.212 ('LOOCV is a special case of k-fold CV in which k is set to equal n'), s.5.1.4 PDF pp.214-215 (LOOCV has higher variance than k-fold CV with k < n; outputs highly (positively) correlated), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), p.5 Domain C tasks 1-9 and p.6 text references (James et al. Ch 1, 2 excl. 2.2.3, 3-7 as listed), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-i/masi-sample-003.md

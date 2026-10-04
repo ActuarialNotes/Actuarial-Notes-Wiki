@@ -1,0 +1,15 @@
+---
+target: Concepts/Poisson Superposition.md
+created: 2026-10-04
+---
+
+## [C-001] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- status_set: verified
+- confidence: medium
+- checks_run: both examples recomputed before reading answers: e^{-1.5} = 0.2231, 1/6, Binomial(8, 0.5) mean 4; two property before two casualty = 0.84375, cross-checked by integrating the Gamma(2, 3) density against the Gamma(2, 1) survival function (0.84375); n-before-m formula checked against Huang; links resolve; verify_check clean
+- sources_checked: Daniel, "Poisson processes (and mixture distributions)", CAS Study Note (June 2008) — MAS-I syllabus reading, Fact 1.15 pp.9-10 (sum of independent Poisson processes is Poisson with λ1 + λ2), §1.4.2 and Example 1.28 p.14 (next event from N_1 with probability λ1/(λ1+λ2); merged compound Poisson severity is the rate-weighted mixture), sha256:e345451e9daae82b400aed77f2da0c96c361ed4fbdfd22456b8f711ca0d50888 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_1.pdf; Siegrist, Random (randomservices.org, HTML fetched 2026-10-04), ch.13 The Poisson Process, 'Thinning and Superposition', Superposition (combined process Poisson with rate r1 + r2; requires independence), sha256:e07aab3aa8206236541466f57719dcdce9fdf7f1f21a9dd5357d89034cf623ba — https://www.randomservices.org/random/poisson/Splitting.html; Siegrist, Random (randomservices.org, HTML fetched 2026-10-04), ch.13 The Poisson Process, 'The Exponential Distribution' (first arrival min of exponentials, rate Σr_i; P(type i first) = r_i/Σr_j), sha256:db0eebaa01377dfc5e07ca838f9ae6c3b06b9653e6d10032de301cb07c4aad63 — https://www.randomservices.org/random/poisson/Exponential.html; Siegrist, Random (randomservices.org, HTML fetched 2026-10-04), ch.13 The Poisson Process, 'The Poisson Distribution', subsection 'The Binomial Distribution' (M given M + N = n is binomial(n, a/(a+b))), sha256:cf3d0aacfdb40291bb729d32f6f7692b39e4c4a13a1e09f86ef8826bef61f688 — https://www.randomservices.org/random/poisson/Poisson.html; Huang, STAT 253/317 (U. Chicago, 2021) Lecture 11 slides, following Ross, Introduction to Probability Models ch.5, slides p.2 (superposition), pp.6-7 (P(S^A_n < S^B_m) = Σ_{k=n}^{n+m-1} C(n+m-1, k) p^k (1-p)^{n+m-1-k}; labels iid Bernoulli(λA/(λA+λB))), p.12 Proposition 5.4, sha256:a0e1f0472675b35264cff54d6a4223c90ad34df1381d76f2150b537b7b5b9e74 — https://www.stat.uchicago.edu/~yibi/teaching/stat317/2021/Lectures/Lecture11.pdf; CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain A tasks 1-2 and text references (Daniel A1-5; Ross 5.2.1-5.2.4, 5.3, 5.4.1, 5.4.2), PDF pp.3, 6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf
+- note: Linked from Exam MAS-I only. No findings. 'Common-shock streams need not sum to a Poisson process' is the converse of the independence hypothesis every source states, not a separately sourced result.

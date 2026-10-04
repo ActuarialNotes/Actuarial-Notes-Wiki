@@ -12,12 +12,15 @@ wiki_link:
 answer: "D"
 points: 2
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-04
+  last_checked_by: agent:validate-v1
   content_hash: sha256:1b9bc6f4006148613ebb8d89ba1aee319a70ba39935194a5247a2771e2dd2b7d
-  sources: []
+  sources:
+    - "CAS Exam MAS-I Sample Questions (as of 11/21/2017), Q2 and official solution, PDF pp.3-4, sha256:6f146ad2b2d0fd72746c551376572045246c317ae0ca8e189e3ffeffa79670de — https://www.casact.org/sites/default/files/2021-04/MASI_Sample_Questions.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021), s.2.2.2 eq. (2.7) expected test MSE = Var + Bias^2 + Var(eps), PDF p.45 (printed p.34), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), p.5 Domain C tasks 1-9 and p.6 text references (James et al. Ch 1, 2 excl. 2.2.3, 3-7 as listed), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-i/masi-sample-002.md

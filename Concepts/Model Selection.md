@@ -1,12 +1,21 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: low
+  last_checked: 2026-10-04
+  last_checked_by: agent:validate-v1
   content_hash: sha256:14987bd8ec0101f670dc90f95fe5e7b81a241cc27971d52a09dd364502fdf8df
-  sources: []
-  open_findings: 0
+  sources:
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain C tasks 1-3, 7 and reading list, PDF pp.5-6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+    - "CAS Exam MAS-II Content Outline 2026, Domain B, PDF p.2, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021), §2.2.1-2.2.2 (printed pp.29-36, PDF pp.40-47); §6.1.3 (printed pp.232-235, PDF pp.240-243), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "R Core Team, R documentation 'AIC {stats}' (R-devel manual), Description and Details, sha256:f55c97cef5d53ab762953509b4e5c4da1e8891b8263ce021ef04dcb27c81b8df — https://stat.ethz.ch/R-manual/R-devel/library/stats/html/AIC.html"
+    - "Pinheiro & Bates, nlme documentation 'anova.lme' (R-devel manual), Note, sha256:508e9e3f590825aa2248bbb4fde038face9289698f57248738401421bd9a00e0 — https://stat.ethz.ch/R-manual/R-devel/library/nlme/html/anova.lme.html"
+    - "Bolker et al., GLMM FAQ, 'Testing significance of random effects' (boundary: p-value about twice as large as it should be for a single variance), sha256:53ab8a0c586ae5893841de85a84585e1cb46e79852c7c349c9e5bedb5c63d231 — https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html"
+    - "Embrechts, McNeil & Straumann, 'Correlation and Dependency in Risk Management: Properties and Pitfalls' (ETH preprint), §4.4 and PDF p.22 (Gaussian copula asymptotically independent for rho < 1; Gumbel asymptotically dependent), sha256:2705fc20f5bad0de8bf45ab6325cee27fe86f119b9919438a455c3393e6653cd — https://people.math.ethz.ch/~embrecht/ftp/pitfalls.pdf"
+    - "Larsen, 'Generalized Linear Models', CAS Study Note (rev. June 2016), PDF p.2 (Tweedie/variance powers: gamma p = 2), sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf"
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision), §2.6 offsets PDF pp.27-28; §2.7 overdispersion/negative binomial PDF pp.31-32, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Model Selection.md
 ---

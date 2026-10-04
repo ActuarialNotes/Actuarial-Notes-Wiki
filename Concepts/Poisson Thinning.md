@@ -1,11 +1,17 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-04
+  last_checked_by: agent:validate-v1
   content_hash: sha256:f6f574025467aff734e7476b0f5ae6ba9438bacb02f63a4259f6fecc276d4a4d
-  sources: []
+  sources:
+    - "Daniel, \"Poisson processes (and mixture distributions)\", CAS Study Note (June 2008) — MAS-I syllabus reading, Fact 1.13 p.9 (types with probabilities π_j(t): each type a Poisson process with rate π_j(t)λ(t), and the type counts independent), Example 1.14 p.9, §1.4.3 and Example 1.29 pp.14-15 (thinning a homogeneous process with π(t) gives a non-homogeneous one), sha256:e345451e9daae82b400aed77f2da0c96c361ed4fbdfd22456b8f711ca0d50888 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_1.pdf"
+    - "Siegrist, Random (randomservices.org, HTML fetched 2026-10-04), ch.13 The Poisson Process, 'Thinning and Superposition', Thinning (two-type process: rates rp and r(1 − p), independent; M_t given N_t = n binomial(n, p); k types), sha256:e07aab3aa8206236541466f57719dcdce9fdf7f1f21a9dd5357d89034cf623ba — https://www.randomservices.org/random/poisson/Splitting.html"
+    - "Huang, STAT 253/317 (U. Chicago, 2021) Lecture 11 slides, following Ross, Introduction to Probability Models ch.5, slides pp.4-5 Proposition 5.2 and pp.8-9 Proposition 5.3 (time-dependent classification: N_i(t) independent Poisson with means λ∫_0^t p_i(s)ds; claim-reporting example), sha256:a0e1f0472675b35264cff54d6a4223c90ad34df1381d76f2150b537b7b5b9e74 — https://www.stat.uchicago.edu/~yibi/teaching/stat317/2021/Lectures/Lecture11.pdf"
+    - "Gallager, Discrete Stochastic Processes (MIT OCW 6.262, Spring 2011), ch.2 Poisson Processes, §2.4 Non-homogeneous Poisson processes, Thm 2.4.1 and Example 2.4.1 (M/G/∞ splitting), PDF pp.18-20 (book pp.86-88), sha256:22aca1e5891be88631806e7a32fe24ba6b4e4729d61b9217a4517a379ea9838f — https://ocw.mit.edu/courses/6-262-discrete-stochastic-processes-spring-2011/3a19ce0e02d0008877351bfa24f3716a_MIT6_262S11_chap02.pdf"
+    - "Sigman, 'Non-stationary Poisson processes and Compound (batch) Poisson processes', Columbia IEOR 4404 notes (2013), §1.1 The non-stationary case: Thinning, PDF pp.1-2, sha256:91ae1398bbf6f852a48bac75670d19e25cc6369d31f0cb1579627d1c09b80dd4 — http://www.columbia.edu/~ks20/4404-Sigman/4404-Notes-NSP.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain A tasks 1-2 and text references (Daniel A1-5; Ross 5.2.1-5.2.4, 5.3, 5.4.1, 5.4.2), PDF pp.3, 6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Poisson Thinning.md

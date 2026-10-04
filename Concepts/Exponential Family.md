@@ -6,8 +6,8 @@ verification:
   last_checked_by: null
   content_hash: sha256:9c09c57fd6d7250f4f84381ab8d309661ddfe40119015385084d5558eb9ebf7d
   sources: []
-  open_findings: 0
-  open_critical: 0
+  open_findings: 2
+  open_critical: 1
   log: .verify/Concepts/Exponential Family.md
 ---
 

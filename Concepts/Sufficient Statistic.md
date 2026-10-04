@@ -18,7 +18,7 @@ A **Sufficient Statistic** $T(X_1, \ldots, X_n)$ for a parameter $\theta$ is a s
 
 - $g$ depends on the data **only through** $T$; $h$ does not depend on $\theta$
 - The sufficient statistic **summarizes** the sample without loss of information about $\theta$
-- For **exponential family** distributions, a natural sufficient statistic always exists (e.g., $\sum X_i$ for the Poisson, Normal, and Exponential families)
+- For **exponential family** distributions, a natural sufficient statistic always exists (e.g., $\sum X_i$ for the Poisson and Exponential families)
 - A **complete sufficient statistic** combined with the Lehmann–Scheffé theorem yields the **UMVUE** (uniformly minimum variance unbiased estimator)
 
 | Distribution | Parameter | Sufficient Statistic |

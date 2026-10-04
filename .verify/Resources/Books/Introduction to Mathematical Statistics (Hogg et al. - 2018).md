@@ -44,3 +44,11 @@ created: 2026-10-04
 - date: 2026-10-04
 - locus: C-002 checks_run
 - note: C-002's checks_run says '89 sections'; the mechanical diff counted 81 numbered sections (x.y) in the printed contents and 81 on the page, all matching. The outcome of C-002 is unchanged.
+
+## [C-004] Global Edition publisher preview: contents confirmed; copyright line dates the US edition (c) 2019
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- locus: frontmatter Year; outline
+- note: Publisher eBook preview of the 8th edition, Global Edition: https://api.pageplace.de/preview/DT0400.9781292264783_A39514650/preview-9781292264783_A39514650.pdf (sha256:7fd80607a820477e03ff2c8f3469f5cfa57d095d766cbc29d39d723ef5a69a99). It has the title page (PDF p.2), the copyright page (PDF p.3), the printed Contents pp.5-9 (PDF pp.6-10) with a text layer, and the Preface. (1) A mechanical diff of its Contents text against the transcription from the gbv.de scan cited in C-002 matches every chapter, section, subsection and appendix entry. The only differences are ligatures (ffi/ff), line-break hyphens and the Preface/Index entries, and 6.2 reads 'Rao-Cramer' with a hyphen, as the page has it. The page's section-level outline is therefore confirmed by a second copy of the printed contents. (2) The copyright page (PDF p.3) reads: 'Authorized adaptation from the United States edition, entitled Introduction to Mathematical Statistics, 8th Edition, ISBN 978-0-13-468699-8, by Robert V. Hogg, Joseph W. McKean, and Allen T. Craig, published by Pearson Education (c) 2019.' This adds a publisher's own (c) 2019 for the US 8th edition to the K10plus '[2019]' in C-001. The CAS 2026 outline p.6 (rank 1) and Pearson's product page give 2018, and the page's Year 2018 follows them (higher rank). This is consistent with a January 2018 release carrying a forward-dated 2019 copyright. The conflict is logged and not filed, and a human may prefer the copyright year. It also confirms the title, the three authors in title-page order and the US hardcover ISBN 978-0-13-468699-8 the page carries.

@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Mean+Square+Error
 answer: "D"
 points: 2
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1b9bc6f4006148613ebb8d89ba1aee319a70ba39935194a5247a2771e2dd2b7d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-mas-i/masi-sample-002.md
 ---
 
 You want to fit a cubic spline to a large dataset and need to determine the number of knots to use. Below is a chart of four statistics from this model valued for various numbers of knots:

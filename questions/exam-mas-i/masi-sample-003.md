@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Bias-Variance+Tradeoff
 answer: "A"
 points: 2
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:731251677d08b9936439dd5f500b658e8d26285631c190272595e9425bd95b31
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-mas-i/masi-sample-003.md
 ---
 
 You are given the following statements about different resampling methods:

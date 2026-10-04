@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Exponential+Distribution
 answer: "D"
 points: 2
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a82b56eb4d847d66c49b32be8e2ec8716627b4e9daca0a4dec4dd5f7e4924eac
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-mas-i/masi-sample-001.md
 ---
 
 An actuary is using the inversion method to simulate a gamma random variable with mean and variance both equal to 2. Two random draws from the uniform distribution $(0,1)$ are independently made, and their values are 0.2 and 0.8.

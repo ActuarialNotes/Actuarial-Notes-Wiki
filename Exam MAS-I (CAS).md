@@ -65,12 +65,12 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > 
 > 1. Estimate the [[Sample Mean|mean]] and [[Sample Variance|variance]] given a [[Random Sample|sample]]
 > 2. Estimate a [[Sufficient Statistic]] for a [[Probability Distributions|distribution]]
-> 3. Test [[Hypothesis Testing|statistical hypotheses]] ([[Hypothesis Testing]]), including [[Type I Error]] and [[Type II Error]]
+> 3. Test [[Hypothesis Testing|statistical hypotheses]], including [[Type I Error]] and [[Type II Error]]
 > 4. Test [[Sample Mean|means]] and [[Sample Variance|variances]] using [[Critical Value|critical values]] from a [[Sampling Distribution]]
 > 5. Model [[Claim|insurance claim]] [[Frequency]] and [[Severity]]
-> 6. Model [[Claim|insurance claims]] in aggregate using [[Aggregate Loss Model]]s
+> 6. Model [[Claim|insurance claims]] in [[Aggregate Loss Model|aggregate]]
 > 7. Calculate [[Order Statistics]] of a [[Random Sample|sample]]
-> 8. Perform [[Parameter Estimation|point estimation of statistical parameters]] using [[Maximum Likelihood Estimation]] ([[Maximum Likelihood Estimation|MLE]]) applying criteria such as [[Consistency]], [[Unbiasedness]], [[Sufficiency]], [[Efficiency]], [[Minimum Variance]], and [[Mean Square Error]] (e.g., accounting for [[Censoring]] and [[Truncation]] in the [[Incomplete Data|data]])
+> 8. Perform [[Parameter Estimation|point estimation of statistical parameters]] using [[Maximum Likelihood Estimation]] ([[Maximum Likelihood Estimation|MLE]]) applying criteria to [[Parameter Estimation|estimates]] such as [[Consistency]], [[Unbiasedness]], [[Sufficiency]], [[Efficiency]], [[Minimum Variance]], and [[Mean Square Error]] (e.g., accounting for [[Censoring]] and [[Truncation]] in the [[Incomplete Data|data]])
 > 9. Adjust calculations for the effect of [[Incomplete Data|missing data values]], including [[Censoring]] and [[Truncation]]
 > 
 > ### Summarizing a Sample
@@ -104,15 +104,15 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > 
 > Candidates should be able to solve problems using [[Extended Linear Model|extended linear models]] and determine when these [[Extended Linear Model|models]] are appropriate to use.
 > 
-> 10. Select the [[Model Selection|appropriate model]] for an [[Extended Linear Model|extended linear model]], from [[Linear Regression]] through the [[Generalized Linear Model]] and [[Linear Mixed Model]]
-> 11. Select the appropriate [[Model Structure|model structure]] for an [[Extended Linear Model|extended linear model]] given the behavior of the [[Tidy Data|data set]] (e.g., appropriate [[Link Function]] and [[Probability Distributions|distribution]] for the [[Response Variable|dependent variable]] for [[Generalized Linear Model]])
-> 12. Evaluate [[Model Selection|models]] developed using an [[Extended Linear Model|extended linear model]] approach, including [[Cross-Validation]] and the [[Bias-Variance Tradeoff]]
-> 13. Interpret the [[Extended Linear Model|extended linear model]] [[Model Output|output]] from [[Statistical Software|statistical software]], such as [[Parameter Estimate Tables|parameter estimate tables]] and [[ANOVA|ANOVA tables]]
-> 14. Distinguish among [[Categorical Predictor|categorical, ordinal, and continuous predictors]] and their [[Interaction|interactions]], and how these relate to their usage in an [[Extended Linear Model|extended linear model]]
-> 15. Understand and apply [[Control Variable|control]] and [[Offset Variable|offset variables]] in [[Generalized Linear Model]]s
-> 16. Understand and calculate [[AIC]], [[BIC]], [[Deviance]], and [[R-Squared]]
-> 17. Analyze [[Model Diagnostics|model diagnostic plots]] (e.g., [[Residual Plot]]s, [[Marginal Model Plot|marginal model]], [[QQ Plot]]s, and [[Added Variable Plot|added variable plots]]) to assess [[Model Fit|quality of fit]]
-> 18. Interpret [[Exploratory Data Analysis]] plots for various [[Data Types|data types]] (e.g., [[Box Plot|box plots]], [[Univariate Plot|univariate plots]], [[Histogram|histograms]])
+> 1. Select the [[Model Selection|appropriate model]] for an [[Extended Linear Model|extended linear model]]
+> 2. Select the appropriate [[Model Structure|model structure]] for an [[Extended Linear Model|extended linear model]] given the behavior of the [[Tidy Data|data set to be modeled]] (e.g., appropriate [[Link Function]] and [[Probability Distributions|distribution]] for the [[Response Variable|dependent variable]] for [[Generalized Linear Model]])
+> 3. Evaluate [[Model Selection|models]] developed using an [[Extended Linear Model|extended linear model]] approach
+> 4. Interpret the [[Extended Linear Model|extended linear model]] [[Model Output|output]] from [[Statistical Software|statistical software]], such as [[Parameter Estimate Tables|parameter estimate tables]] and [[ANOVA|ANOVA tables]]
+> 5. Distinguish among [[Categorical Predictor|categorical, ordinal, and continuous predictors]] and their [[Interaction|interactions]], and how these relate to their usage in an [[Extended Linear Model|extended linear model]]
+> 6. Understand and apply [[Control Variable|control]] and [[Offset Variable|offset variables]] in [[Generalized Linear Model]]s
+> 7. Understand and calculate [[AIC]], [[BIC]], [[Deviance]], and [[R-Squared]]
+> 8. Analyze [[Model Diagnostics|model diagnostic plots]] (e.g., [[Residual Plot]]s, [[Marginal Model Plot|marginal model]], [[QQ Plot]]s, and [[Added Variable Plot|added variable plots]]) to assess [[Model Fit|quality of fit]]
+> 9. Interpret [[Exploratory Data Analysis]] plots for various [[Data Types|data types]] (e.g., [[Box Plot|box plots]], [[Univariate Plot|univariate plots]], [[Histogram|histograms]])
 > 
 > ### Model Families
 > - [[Linear Regression]] — the [[Ordinary Least Squares|ordinary least-squares]] starting point

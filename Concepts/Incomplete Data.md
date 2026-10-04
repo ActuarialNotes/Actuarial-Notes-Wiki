@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:f7431ccd3b02db6065ed88e1416bc2a950382d5a1f12e29729354f931e7e377f
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Incomplete Data.md
 ---

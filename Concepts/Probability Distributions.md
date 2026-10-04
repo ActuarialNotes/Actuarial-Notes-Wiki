@@ -29,9 +29,9 @@ verification:
 
 Relationships
 
-- **Binomial → Poisson**: As n→∞,p→0,np=λn \to \infty, p \to 0, np = \lambdan→∞,p→0,np=λ.
-- **Binomial → Normal**: As n→∞,np and $n(1−p)n \to \infty$, np \text{ and } n(1-p)n→∞,np and n(1−p) are large.
-- **Poisson → Normal**: As λ\lambdaλ becomes large.
+- **Binomial → Poisson**: As $n \to \infty, p \to 0, np = \lambda$.
+- **Binomial → Normal**: As $n \to \infty, np \text{ and } n(1-p)$ are large.
+- **Poisson → Normal**: As $\lambda$ becomes large.
 
 **Exponential Family**
 $f(x∣θ)=h(x)exp(η(θ)T(x)−A(θ))$

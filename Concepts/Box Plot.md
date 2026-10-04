@@ -34,7 +34,7 @@ A **Box Plot** (box-and-whisker plot) is an [[Exploratory Data Analysis]] displa
 > > $$\text{IQR} = 11 - 4 = 7$$
 > > $$\text{upper fence} = Q_3 + 1.5(7) = 11 + 10.5 = 21.5$$
 > > $$\text{lower fence} = Q_1 - 1.5(7) = 4 - 10.5 = -6.5$$
-> > The value $40 > 21.5$ is an **outlier**; the upper whisker therefore stops at $14$. The five-number summary is $(2, 4, 7, 11, 14)$ with $40$ plotted separately.
+> > The value $40 > 21.5$ is an **outlier**; the upper whisker therefore stops at $14$. The five-number summary is $(2, 4, 7, 11, 40)$ with $40$ plotted separately.
 
 > [!example]- Comparing Vehicle Classes {Example}
 > Box plots of severity for three vehicle classes show medians of $3.1$, $3.3$, and $6.8$ (in thousands), with the first two boxes overlapping heavily and the third sitting well above them with several high outliers. What does this suggest for the model?

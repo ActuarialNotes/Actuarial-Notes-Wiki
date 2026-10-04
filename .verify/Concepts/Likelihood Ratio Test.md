@@ -17,3 +17,18 @@ created: 2026-10-04
 - proposed_action: Write the identity as -2 ln Lambda = (D_reduced - D_full)/phi, equal to Delta D when phi = 1 (Poisson, binomial), and describe the F form as using unscaled deviances with phi-hat from the full model, F on (r, n - p_full) df. Not applied: needs new wording.
 - applied: false
 - fingerprint: f0fe68c4fd27
+
+## [F-002] Small-sample superiority of the LRT stated more firmly than the source
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- severity: minor
+- status: open
+- locus: bullet line 25 (Wald and score tests)
+- claim: '... the LRT is generally the most reliable in small samples'.
+- evidence: Rodriguez, Generalized Linear Models, Appendix A §A.2, p.9 (grodri.github.io/glms/notes/a1.pdf, sha256:bfcc766141f43095433287dcc61f127df49103be1dd31d71454c56aa6ed8f8a6): the Wald, score and likelihood ratio tests 'are asymptotically equivalent ... Their small-sample properties are not known, but some simulation studies suggest that the likelihood ratio test may be better that its competitors in small samples.' The asymptotic-equivalence half of the bullet is confirmed; the small-sample half is a tentative empirical suggestion in the only source read, not an established general result. No other source read this session makes the claim.
+- source_rank: 3
+- proposed_action: Hedge to match the source (e.g. 'simulation studies suggest the LRT may do better in small samples') or drop the clause. Not applied: needs new wording.
+- applied: false
+- fingerprint: a644be5936fa

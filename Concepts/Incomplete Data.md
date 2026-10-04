@@ -1,11 +1,16 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-04
+  last_checked_by: agent:validate-v1
   content_hash: sha256:f7431ccd3b02db6065ed88e1416bc2a950382d5a1f12e29729354f931e7e377f
-  sources: []
+  sources:
+    - "Frees & Johnson (eds.), Loss Data Analytics, Version 1.1 (Aug 2020, open textbook), Ch.4 §4.3.1 (grouped data = interval censored, Example 4.3.1 exponential grouped MLE with p = e^(-1000/theta); right-censored and left-truncated likelihood prod_E f/(1-F(C_L)) prod_R (1-F(C_U))/(1-F(C_L)); exponential special case theta-hat = sum of (min(x, C_U) - C_L) over the number of uncensored observations) and §4.3.2.2 Kaplan-Meier with right-censored, left-truncated risk sets, sha256:c5fe1ff26cec4dee6f8bcc285b75c840202c947246f7b5d5598f9b837ccad021 — https://openacttexts.github.io/Loss-Data-Analytics/ChapModelSelection.html"
+    - "Frees & Johnson (eds.), Loss Data Analytics, Version 1.1, Ch.3 §3.5.2.1-3.5.2.3 grouped likelihood prod [F(c_j) - F(c_{j-1})]^{n_j}, policy limit as right censoring S(u), deductible as left truncation f(x)/S(d), Example 3.5.7 combined deductible-and-limit likelihood, sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
+    - "Dey, Lipsitz, Cooper, Trinh, Krzywinski & Altman, \"Survival analysis—time-to-event data and censoring\", Nature Methods 19(8), 2022, Fig. 3 caption, sha256:ca9f23c68a24089908bddcad8f88975bbf7ef603a0835200bfd828849af4f28d (article page HTML) — https://www.nature.com/articles/s41592-022-01563-7"
+    - "Luo, Shevchenko & Donnelly, J. Operational Risk 2(4), 2007 (arXiv:0904.2910 preprint), PDF p.3 and p.12, sha256:a91ad1b0e1bc8a2ec69e9c7f614faf8db2e6f4ca02e879a2ef3a598ecd39cf9b — https://arxiv.org/pdf/0904.2910"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain B task 9 \"Adjust calculations for the effect of missing data values, including censoring and truncation\" (PDF p.4); Tse §§10.1, 10.2, 11.1, 12.1, 12.3 assigned, §11.2 (Kaplan-Meier) not (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Incomplete Data.md

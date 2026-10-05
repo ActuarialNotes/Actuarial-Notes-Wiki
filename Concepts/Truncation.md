@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e53fbadd495533b2999b3146e526ca8bc2ff2818f7a1c53759fdf35e7810dc94
+  content_hash: sha256:fd9f0ccba2b73f652bb6b44e224b850b6c0a58615fbb63b5c9958222479506b2
   sources:
     - "Frees & Johnson (eds.), Loss Data Analytics, Version 1.1 (Aug 2020, open textbook), Ch.4 §4.3.1.3 truncated data (left truncation at a deductible: losses at or below C_L are not observed; right truncation; truncated outcomes are missing data, censored ones are recorded in limited form), §4.3.1.4 contribution f(x)/(1 - F(C_L)) and exponential special case, sha256:c5fe1ff26cec4dee6f8bcc285b75c840202c947246f7b5d5598f9b837ccad021 — https://openacttexts.github.io/Loss-Data-Analytics/ChapModelSelection.html"
     - "Frees & Johnson (eds.), Loss Data Analytics, Version 1.1, Ch.3 §3.5.2.3 MLE for truncated data, L = prod f(x_i)/S(d), \"we would not have been aware of the existence of these values had they not exceeded d\", sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"

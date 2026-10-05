@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:80427466567ac28c3bd78f0f14d117255fd941b0d2c8351bbcb60afdc871d506
+  content_hash: sha256:87cdbe636e0da959371df5440bb2266ad40cfcc44aea32f460c42b250eb18b74
   sources:
     - "Daniel, 'Multi-state transition models with actuarial applications' (2004; reprinted by CAS and SOA): Sec. 1.1 Examples 1.1 (alive-dead), 1.3 (multiple lives, four states), 1.4 (disability) PDF pp.2-3; Sec. 1.2 Def. 1.7 non-homogeneous Markov chain, Thm 1.18 kQ_n = Q_n ... Q_{n+k-1}, 'Warning on interpretation' and Thm 1.19 kP(i)_n = P(i)_n ... P(i)_{n+k-1} (staying vs. being in a state), Example 1.20 PDF pp.4-8; Sec. 2.3 Thm 2.12 APV of cash flows while in states = sum_k kQ(s,i)_n x C x kv_n PDF p.16, sha256:0ca2c70a5c022a0032026ae139bd59e9fee3142d0455ed071e2d8698573200f8 - https://www.casact.org/sites/default/files/database/studynotes_daniel.pdf"
     - "Heriot-Watt University F79AF lecture notes, Ch. 5 'Markov Multiple-State Models': Sec. 5.1 two-state alive-dead model, death governed by the transition intensity mu^ad (the force of mortality) PDF pp.1-5; Sec. 5.2 general model with age-dependent intensities PDF pp.5-6; Sec. 5.3 Fig. 5 disability model Able/Ill/Dead with recovery PDF pp.7-8, sha256:84d9098f7ae74942523f1ab7fae8739d963e6428c314b43ec41c7e1b28b0a6b1 - https://www.macs.hw.ac.uk/~andrea/f79af/notes5.pdf"

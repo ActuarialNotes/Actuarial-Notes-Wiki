@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7ab2a55bc4f5042851d591856daded7937a96662befc63f4c99f9ba41ea54395
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Cross-Correlation.md
+---
+
 The **cross-correlation function** (ccf) $\rho_{xy}(h)$ of two [[Time Series|time series]] $x_t$ and $y_t$ is the correlation between $x_{t+h}$ and $y_t$, one series set against the other shifted by $h$ periods. Read across the lags, it shows whether one series **leads** the other, which makes it a forecasting tool: a variable that moves ahead of the one to be forecast is a ready-made predictor.
 
 > $$\gamma_{xy}(h) = \mathrm{Cov}(x_{t+h},\, y_t) = E\big[(x_{t+h} - \mu_x)(y_t - \mu_y)\big]$$

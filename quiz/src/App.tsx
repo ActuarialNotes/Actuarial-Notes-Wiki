@@ -58,6 +58,10 @@ const { Component: Battle, preload: loadBattle } = lazyRoute(() => import('@/pag
 // its catalogue, its textbook shelf and its drawings are for the readers who
 // open it.
 const { Component: Store, preload: loadStore } = lazyRoute(() => import('@/pages/Store'))
+// Concept Craft (docs/concept-craft.md) — a syllabus built by combining its
+// concepts on a board. Lazy: its recipe book, its physics and the wiki bundle
+// its inspector reads are for the readers who open it.
+const { Component: Craft, preload: loadCraft } = lazyRoute(() => import('@/pages/Craft'))
 // Actuaria Online (docs/actuaria-online.md) — the game layer, one lazy chunk,
 // so its display face, its star map and its screens never reach Study Mode.
 const { Component: Actuaria, preload: loadActuaria } = lazyRoute(() => import('@/pages/Actuaria'))
@@ -82,6 +86,7 @@ function preloadRoute(path: string): Promise<unknown> | null {
   if (route === '/cowork' || route.startsWith('/cowork/')) return loadCowork()
   if (route === '/project' || route.startsWith('/project/')) return loadProject()
   if (route === '/battle') return loadBattle()
+  if (route === '/craft' || route.startsWith('/craft/')) return loadCraft()
   if (route === '/store') return loadStore()
   if (ACTUARIA_ENABLED && (route === '/actuaria' || route.startsWith('/actuaria/'))) return loadActuaria()
   if (route === '/wiki') return Promise.all([loadWikiLayout(), loadWikiHome()])
@@ -275,6 +280,16 @@ function BattleRoute() {
   )
 }
 
+function CraftRoute() {
+  return (
+    <ErrorBoundary>
+      <Suspense fallback={<WikiFallback />}>
+        <Craft />
+      </Suspense>
+    </ErrorBoundary>
+  )
+}
+
 function ActuariaRoute() {
   const location = useLocation()
   const { allowed, viewer } = useActuariaAccess()
@@ -335,6 +350,9 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="/auth/callback" element={<AuthCallback />} />
                 <Route path="/quiz" element={<Quiz />} />
                 <Route path="/battle" element={<BattleRoute />} />
+                {/* Concept Craft: the topic picker, and one topic's board. */}
+                <Route path="/craft" element={<CraftRoute />} />
+                <Route path="/craft/:moduleId" element={<CraftRoute />} />
                 {/* Actuaria Online: the title, the star map, the sectors, the
                     Daily Transmission, the Hangar and Monte Carlo Station —
                     its own routes, inside its own scope (pages/Actuaria). */}

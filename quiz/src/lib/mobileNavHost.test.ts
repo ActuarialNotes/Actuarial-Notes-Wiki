@@ -10,6 +10,7 @@ describe('pageHostsNavButton', () => {
     expect(pageHostsNavButton('/research')).toBe(true)
     expect(pageHostsNavButton('/research/projects')).toBe(true)
     expect(pageHostsNavButton('/project/pcpa/p-1')).toBe(true)
+    expect(pageHostsNavButton('/craft/exam-p-general-probability')).toBe(true)
     expect(pageHostsNavButton('/dashboard')).toBe(true)
     expect(pageHostsNavButton('/flashcards')).toBe(true)
     expect(pageHostsNavButton('/actuaria')).toBe(true)
@@ -17,7 +18,7 @@ describe('pageHostsNavButton', () => {
   })
 
   it('leaves every other route to the app header', () => {
-    for (const path of ['/search', '/settings', '/store', '/upgrade', '/quiz', '/review', '/auth', '/project']) {
+    for (const path of ['/search', '/settings', '/store', '/upgrade', '/quiz', '/review', '/auth', '/project', '/craft']) {
       expect(pageHostsNavButton(path)).toBe(false)
     }
   })

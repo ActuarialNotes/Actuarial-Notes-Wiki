@@ -124,6 +124,7 @@ const CONTENT_GROUPS: ReadonlyArray<readonly [prefix: string, group: string]> = 
   ['/quiz', 'Quiz'],
   ['/review', 'Quiz review'],
   ['/battle', 'Quiz Battle'],
+  ['/craft', 'Concept Craft'],
   ['/dashboard', 'Dashboard'],
   ['/flashcards', 'Flashcards'],
   ['/search', 'Search'],

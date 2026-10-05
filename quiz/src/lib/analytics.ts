@@ -71,6 +71,15 @@ export interface AnalyticsEventMap {
   search_query: { query: string; exam: string; difficulty: string }
   battle_started: { format: string; matched: boolean; exam?: string; rounds?: number }
   project_started: { project: string; mode: string; language: string }
+  /**
+   * Two concepts dropped together on a Concept Craft board (docs/concept-craft.md).
+   * `outcome` is what the drop did — `new_concept`, `new_link` (a known concept
+   * by a new route), `known` (a pair found before), `none` (no link), or, in
+   * Mastery mode, `asked` (the prompt opened). `answer` rides the prompt's verdict.
+   */
+  craft_combined: { module: string; mode: string; outcome: string; answer?: string }
+  /** Every link in a Concept Craft module found — the schema complete. */
+  craft_module_completed: { module: string; mode: string }
   upgrade_clicked: Record<string, never>
   /** A Store product's link to its seller — the Store sells nothing itself (docs/store.md). */
   store_outbound_clicked: { product: string; seller: string; aisle: string }
@@ -460,6 +469,16 @@ export function trackDailyQuestsCleared(params: AnalyticsEventMap['daily_quests_
 /** A Quiz Battle begins — on one screen, or online as host or guest. */
 export function trackBattleStarted(params: AnalyticsEventMap['battle_started']) {
   track('battle_started', params)
+}
+
+/** A pair of concepts dropped together on a Concept Craft board. */
+export function trackCraftCombined(params: AnalyticsEventMap['craft_combined']) {
+  track('craft_combined', params)
+}
+
+/** A Concept Craft module's whole graph found. */
+export function trackCraftModuleCompleted(params: AnalyticsEventMap['craft_module_completed']) {
+  track('craft_module_completed', params)
 }
 
 /** A project attempt is created on the Projects tab (the PCPA simulator). */

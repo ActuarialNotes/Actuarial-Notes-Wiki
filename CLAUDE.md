@@ -71,12 +71,14 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
 ### Inside `quiz/src/`
 - `pages/` — route-level views (Quiz, Review, Dashboard, Flashcards, Search, Settings,
   `Store.tsx` — the Store, `/store`, lazy — `GemShop.tsx` — the gem cosmetics, `/store/gems` —
-  Upgrade, wiki/*, `Battle.tsx` — Quiz Battle, `/battle`, lazy — `Project/` — the Projects tab and the PCPA project simulator, `Cowork/` — the second product's shelf, source pages and deliverables —
+  Upgrade, wiki/*, `Battle.tsx` — Quiz Battle, `/battle`, lazy — `Craft.tsx` — Concept Craft,
+  `/craft` and `/craft/:moduleId`, lazy — `Project/` — the Projects tab and the PCPA project simulator, `Cowork/` — the second product's shelf, source pages and deliverables —
   and `Research/`, which is
   flag-gated)
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
   `components/collect/` (the 3D card the level-up ceremony spins), `components/battle/` (Quiz
-  Battle's screens, `Matchmaking.tsx` the lobby), `components/research/` (flag-gated).
+  Battle's screens, `Matchmaking.tsx` the lobby), `components/craft/` (Concept Craft's board,
+  deck, inspector and Mastery prompt), `components/research/` (flag-gated).
   `components/CheckMark.tsx` is **the** checkmark — a filled disc with the tick masked out
   of it, so the tick shows whatever the mark is sitting on. Everything that means *done* or
   *picked* draws it (completed plan rows, a levelled-up concept's card, a selected quiz
@@ -103,13 +105,15 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
   tag, topic, a line of facts as plain text, and a chevron — and both exam lists draw it: the
   Quiz tab (question count, exam date) and Study Guides (exam date, "NN% ready"; no bar).
   It is a `ListRow` in a `ListPanel` (`components/ui/ListPanel.tsx`), the grouped list every
-  "tap to go there" entry on those two pages uses (Quiz Battle, the general guide, Actuaria).
+  "tap to go there" entry on those two pages uses (Quiz Battle, Concept Craft, the general guide,
+  Actuaria).
   See `docs/style-guide.md` §7.2a.
   `components/ConceptTile.tsx` is **the** concept tile — a concept as a small static card, its
   foil edge its level (`lib/flashcardFoil.ts`), a padlock while uncollected, the green wash and
-  tick when picked. The add-flashcards picker and Quiz Battle's topic pick both draw it (levels
-  read through `latestMasteryStates` in `lib/mastery.ts` on both), so one concept is the same
-  card in both.
+  tick when picked. The add-flashcards picker, Quiz Battle's topic pick and Concept Craft's deck
+  all draw it (levels read through `latestMasteryStates` in `lib/mastery.ts` — for the latter
+  two via `hooks/useConceptLevels.ts`), so one concept is the same card in each. The craft deck
+  passes `showLock={false}`: every card in hand can be played.
 - `lib/` — core logic, mostly pure/testable modules (this is where the interesting algorithms live)
 - `data/` — authored static tables bundled into the app: `comprehensionChecks.ts` (parses the
   retired comprehension checks from `comprehension-checks/<exam-id>/*.md` via the
@@ -239,6 +243,19 @@ before touching that area**:
   (`data/storeReviews.ts`, never paraphrased), and every listing ends in the legal notice
   `storeDisclaimer` writes. Read before touching
   anything named `store*`, `examFees` or `GemShop`.
+- `docs/concept-craft.md` — **Concept Craft** (`/craft`, the row beside Quiz Battle at the top of
+  the Quiz tab): a topic's concepts combined on a dark, zoomable board — drag one card onto
+  another to find the link between them (the two stay, a tag names the relation, the result
+  hangs below), or watch it bounce back. The recipe book is **authored**
+  (`data/conceptCraft.ts`, six topics from Exam P to Exam 5), every concept a `Concepts/` page
+  and every recipe restating its result's own page — derived wiki links were tried and are
+  "see also", not "made of". **Explore** crafts at once; **Mastery** asks "how does A relate to
+  B?" of *every* drop, related or not, with *No direct link* always a choice, or the prompt
+  would give the real pairs away. A daily challenge with step counts and hints, an inspector
+  that reuses the app's summary, action menu, reader and question browser, and a **layered**
+  force layout (rows by craft depth, forces sideways only) so a full topic reads top to bottom
+  without overlaps. localStorage only; feeds no mastery or XP. Read before touching anything
+  named `craft*` or `conceptCraft`.
 - `docs/quiz-battle.md` — **Quiz Battle** (`/battle`, the card at the top of the Quiz tab): two
   players racing through the same questions, on one screen under **buzzer** rules (first to
   buzz answers, a miss hands the other the steal) or on two devices under **simultaneous**
@@ -913,6 +930,16 @@ Other important `lib/` modules:
   rate-limited Contents API — the first screen of the app has to find things offline. What
   the bundle can't answer, the foot of the results hands to the Search page, which now takes
   `?type=` and `?q=`. Pure and tested.
+- `conceptCraft.ts` / `craftLayout.ts` — **Concept Craft** (`docs/concept-craft.md`).
+  `conceptCraft.ts` is the game as pure functions: the closed relation vocabulary
+  (`CRAFT_RELATIONS`), `combine`, what a reader holds (`availableNodes` — derived from the
+  recipes found, which is all `hooks/useConceptCraft.ts` stores), the Mastery prompt
+  (`relationQuestion`), the challenge (`dailyChallenge`, `craftPlan`, `nextCraft`), the board's
+  rows (`nodeDepths`), the inspector's summary (`conceptSummary`, built on `leadParagraph`) and
+  `moduleProblems`, which `data/conceptCraft.test.ts` runs over the recipe book alongside its
+  vault checks. `craftLayout.ts` is the board's physics and camera: bodies, springs, rows,
+  collision, a dragged card as a **ghost** (no force reaches it — or collision would shove the
+  target out from under the drop), `fitView` with insets for the panels. Both pure and tested.
 - `appMode.ts` / `cowork*.ts` / `xlsx.ts` — **Cowork**, the app's second product (Preview,
   approved accounts only via `PREVIEW_APPROVED_EMAILS`, `COWORK_ENABLED`). `appMode.ts` is the one definition of what a mode *is* — label,
   home, routes, what it takes to enter it — read by the pill (`components/ModeSwitcher.tsx`),
@@ -1013,8 +1040,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **187 test files /
-~2980 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **191 test files /
+~3060 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).

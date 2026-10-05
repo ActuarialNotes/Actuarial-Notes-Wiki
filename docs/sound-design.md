@@ -486,6 +486,19 @@ cue landing on the music can't clash with it) and nothing that sustains above
 competing with it. It is off with the app's mute, off with its own switch
 (`actuarial-notes-battle-music`), and off while the tab is hidden.
 
+## Concept Craft
+
+The board (`docs/concept-craft.md`) adds no cues of its own; it says what
+happened with the catalogue's. A link that brings a new concept onto the board
+is `collect` — a card landing in the deck, which is what it is — and a second
+route to a concept already held is `correct`, climbing the combo like a run of
+right answers; a pair that doesn't combine calls `resetCombo` and plays nothing
+(rule 7), the card bouncing back being the whole of the feedback. The day's
+challenge met is `levelUp`, a topic's last link `complete`, and the Mastery
+prompt opening is `open`, the paper of a sheet sliding out. The board's own
+cards and tags carry `data-sound="none"`: a tap and the start of a drag are the
+same press, and the cue belongs to what the press turns out to have done.
+
 ## Wiring a new interaction
 
 Most of the time you don't: a `<button>` gets `click` for free from the

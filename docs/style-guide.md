@@ -262,6 +262,19 @@ second design system. Every `/actuaria/*` route renders inside one scope element
   the orbits and the nebula are still drawings — and a sector answers the pointer with its
   own accent ring rather than a movement. Quiz Battle's motion is unchanged under the skin.
 
+### 2.7 Concept Craft's board
+
+The Concept Craft board (`docs/concept-craft.md`) is, with Actuaria, the one surface
+drawn dark whatever the reader's theme, scoped exactly as §2.6 scopes Actuaria —
+`.dark` and `color-scheme: dark` on the screen, never on the document, so the
+sidebar and anything portalled to the body keep the reader's theme. Inside it
+nothing is new: cards are `bg-card` wearing the foil (§4.3), a relation's tag is
+a `bg-muted` pill that fills with `bg-foreground` when its card is selected, and
+selection is a `primary` outline (§2.5). Its floor, `.craft-floor`, is a dot
+grid like `.actuaria-grid` but sized and offset from the board's camera so it
+moves with a pan or a zoom; it belongs to the board alone. The topic picker is a
+plain page in the reader's theme.
+
 ---
 
 ## 3. Typography

@@ -162,17 +162,23 @@ export default function WikiHome() {
 
     return credTracks.map(track => {
       const orderedExams: WikiIndexItem[] = []
+      // A fellowship's elective tracks (the FSA's Group and Health, General
+      // Insurance, …) each get a list of their own under the designation, so
+      // a candidate finds the exams of the track they are on together.
+      const electives: { label: string; exams: WikiIndexItem[] }[] = []
       const seenKeys = new Set<string>()
       for (const section of track.sections) {
         if (section.collapsed) continue
+        const into = section.elective ? [] : orderedExams
         for (const item of section.items) {
           if (seenKeys.has(item.id)) continue
           seenKeys.add(item.id)
           const items = examsByKey.get(item.id)
-          if (items) orderedExams.push(...items)
+          if (items) into.push(...items)
         }
+        if (section.elective && into.length > 0) electives.push({ label: section.label, exams: into })
       }
-      return { track, exams: orderedExams }
+      return { track, exams: orderedExams, electives }
     })
   }, [examsByKey])
 
@@ -318,7 +324,7 @@ export default function WikiHome() {
               </div>
             )}
 
-            {filteredTrackGroups.filter(g => g.exams.length > 0).map(({ track, exams: trackExams }) => (
+            {filteredTrackGroups.filter(g => g.exams.length > 0 || g.electives.length > 0).map(({ track, exams: trackExams, electives }) => (
               <div key={track.key}>
                 <GroupHeading>
                   {/* The designation as a heading of its own — the short
@@ -349,21 +355,42 @@ export default function WikiHome() {
 
                 {/* One grouped list per credential, a row per exam, two
                     columns from `sm` up. */}
-                <ListPanel columns={2}>
-                  {trackExams.map(exam => {
-                    const model = cardModels.get(exam.path)
-                    if (!model) return null
-                    // The tour's marker stays on the ladder's row, so an
-                    // exam in progress doesn't carry it twice.
-                    return (
-                      <ExamGuideRow
-                        key={exam.path}
-                        model={model}
-                        tourId={model.examId === 'P' ? 'exam-p' : undefined}
-                      />
-                    )
-                  })}
-                </ListPanel>
+                {trackExams.length > 0 && (
+                  <ListPanel columns={2}>
+                    {trackExams.map(exam => {
+                      const model = cardModels.get(exam.path)
+                      if (!model) return null
+                      // The tour's marker stays on the ladder's row, so an
+                      // exam in progress doesn't carry it twice.
+                      return (
+                        <ExamGuideRow
+                          key={exam.path}
+                          model={model}
+                          tourId={model.examId === 'P' ? 'exam-p' : undefined}
+                        />
+                      )
+                    })}
+                  </ListPanel>
+                )}
+
+                {/* …and one per elective track, under the track's name. */}
+                {electives.length > 0 && (
+                  <div className={trackExams.length > 0 ? 'mt-5 space-y-5' : 'space-y-5'}>
+                    {electives.map(group => (
+                      <div key={group.label}>
+                        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                          {group.label}
+                        </h3>
+                        <ListPanel columns={2}>
+                          {group.exams.map(exam => {
+                            const model = cardModels.get(exam.path)
+                            return model ? <ExamGuideRow key={exam.path} model={model} /> : null
+                          })}
+                        </ListPanel>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
           </div>

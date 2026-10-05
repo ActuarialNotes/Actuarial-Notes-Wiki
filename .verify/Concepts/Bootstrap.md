@@ -43,3 +43,21 @@ created: 2026-10-05
 - checks_run: page read in full, no prior log; exam pages linking it: MAS-II only (plus 2 MAS-I, 14 Exam 7, 1 Exam 8 questions); SE_B formula diffed against ISLR eq. 5.8; same-size-n with replacement, SE use, CV-vs-bootstrap distinction against ISLR §5 intro/§5.2; (1-1/n)^n -> e^-1 against ISLR Ex 5.4.2 + §8.2.1; example recomputed (1-(1-1/250)^250 = 0.6329 -> 158.2 distinct, 92 repeats; 25th/975th of 1,000); links (4) and figure embed resolve
 - sources_checked: James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy), §5 intro (PDF p.206), §5.2 eqs. 5.6-5.8 and Fig. 5.11 (PDF pp.218-221), Ex. 5.4.2 (PDF pp.228-229), §8.2.1 bagging/OOB 'around two-thirds' (PDF p.350), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf; Orloff & Bloom, MIT 18.05 Class 24 'Bootstrap confidence intervals' (prep-a), §§6-9 (PDF pp.3-6, 10), sha256:b3d7018c2214a25a7090228e8e0fa8e500922d6eb3fef4e52e5f08962e1dd948 — https://math.mit.edu/~dav/05.dir/class24-prep-a.pdf
 - note: Formula and core facts match ISLR §5.2 (MAS-I sense). 'No distributional assumption' is supported for the empirical bootstrap by MIT 18.05 §6 (resampling from the empirical distribution). Bagging/random-forest/OOB bullets are MAS-II sense (ISLR §8.2), consistent. Two minor findings open: percentile interval beyond the reading; Exam 7 ODP questions link this page.
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- resolves: F-001
+- status: resolved
+- note: Deleted the 'Percentile confidence interval' bullet and the example answer's last sentence ('A percentile interval comes straight from the 25th and 975th ordered values'). The bootstrap's MAS-I reading uses it only to estimate SE_B: James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy) §5.2 eq. 5.8 (PDF pp.218-221), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf; no bootstrap interval appears in ISLR, so the claim had no syllabus source and is removed rather than kept.
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- resolves: F-002
+- status: resolved
+- note: Added one bullet distinguishing the two senses and linking [[ODP Bootstrap Model]]: Exam 7's ODP bootstrap samples with replacement from the Pearson residuals of an over-dispersed Poisson model fitted to a loss triangle and builds pseudo triangles, rather than resampling the observations. Source: Shapland, Using the ODP Bootstrap Model: A Practitioner's Guide, CAS Monograph 4 (2016), §3.2 (PDF pp.19-20, printed pp.11-12: 'the ODP bootstrap process involves sampling with replacement from the residuals'; Pearson residuals 'the most desirable'; 'Sampling with replacement from the residuals can then be used to create new sample triangles of incremental values'), sha256:51b072243c0fe839cd776d9dc77532c544e2d52e025a29610e1aaea2cff07abf — https://www.casact.org/sites/default/files/2021-03/7_Shapland.pdf. ISLR's observation bootstrap: James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy) §5.2 Fig. 5.11 (PDF p.221: 'Each bootstrap data set contains n observations, sampled with replacement from the original data set'), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf. The 14 Exam 7 questions were not edited (outside this file).

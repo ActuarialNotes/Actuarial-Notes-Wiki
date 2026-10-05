@@ -19,7 +19,7 @@ verification:
   log: .verify/Concepts/Statistical Software.md
 ---
 
-**Statistical software** — for the CAS exams, the programming languages **R** and **Python** and the packages built on them — is how data sets are imported, cleaned and reshaped, how models are fitted, and how results reach the analyst: as printed tables of estimates, standard errors and tests that a candidate must be able to read without seeing the code.
+**Statistical software** — a programming language such as **R**, **Python** or **SAS** and the packages built on it — is how data sets are imported, cleaned and reshaped, how models are fitted, and how results reach the analyst: as printed tables of estimates, standard errors and tests that a candidate must be able to read without seeing the code. The CAS names no preferred language: PCPA candidates submit their code in R, Python or SAS, and MAS-I questions may show parameter and diagnostic tables of the kind a language such as R prints, but never ask a candidate to write or interpret R code. The examples below use R and Python.
 
 > $$\texttt{claims} \sim \texttt{territory} + \texttt{age}$$
 

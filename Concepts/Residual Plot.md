@@ -33,7 +33,7 @@ A **Residual Plot** is a diagnostic graph used to assess model fit by plotting *
 | Fan shape (spread increases) | **Heteroscedasticity** — variance is not constant |
 | Curved pattern | **Non-linearity** — a transform or polynomial term is needed |
 | Systematic trend | A predictor is missing or improperly specified |
-| Outliers | Influential observations; investigate further |
+| Isolated points far from zero | **Outliers**; whether one is influential depends on its leverage $h_{ii}$, which a residual plot does not show — check $h_{ii}$ or Cook's distance |
 
 - For [[Generalized Linear Model]]s, **Pearson residuals** $r_i^P = (y_i - \hat{\mu}_i)/\sqrt{V(\hat{\mu}_i)}$ and **deviance residuals** are used instead of raw residuals
 - **Residuals vs. fitted**: checks for non-linearity and heteroscedasticity

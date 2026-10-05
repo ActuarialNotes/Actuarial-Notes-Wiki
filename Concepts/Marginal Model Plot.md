@@ -21,7 +21,7 @@ A **Marginal Model Plot** is a regression diagnostic that overlays a smooth curv
 - Unlike a [[Residual Plot]], which plots residuals, a marginal model plot directly compares two **fitted curves** — one nonparametric smooth of the data and one implied by the model — on the original response scale
 - Close agreement between the two smooths across the range of $x$ indicates the model adequately captures the relationship; systematic gaps indicate missing [[Model Structure]] (e.g., a missing [[Interaction]] or a needed transformation)
 - Marginal model plots can be drawn against any predictor, or against the fitted values to check overall calibration
-- Especially useful for GLMs, where raw residuals on the link scale can be harder to interpret directly than a comparison of fitted-vs-actual curves
+- The same plot serves a GLM: the response stays on the vertical axis, the smoother is a generalized additive model with the model's own family, link and weights (the default in R's `car::mmps`), and the overall plot is drawn against the linear predictor
 
 ![[Media/Figures/Marginal_Model_Plot.svg|340]]
 

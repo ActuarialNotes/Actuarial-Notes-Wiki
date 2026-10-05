@@ -51,3 +51,35 @@ created: 2026-10-05
 - date: 2026-10-05
 - locus: figure (Media/Figures/Loading_Vector.svg)
 - note: Re F-001: the generated figure draws the same non-orthogonal pair - scripts/figures_exam_mas_ii.py loading_vector(), lines 1184-1185, phi_1 = [0.52, 0.51, 0.49, 0.48], phi_2 = [0.61, 0.55, -0.42, -0.39] (dot product 0.2047). Fixing the example needs the builder changed and the figure regenerated (docs/concept-figures.md), not a hand edit of the SVG.
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- resolves: F-001
+- status: resolved
+- note: Example recomputed with an orthogonal pair. New loadings are the first two eigenvectors (numpy eigh, rounded to 2 dp) of the correlation matrix R = [[1,.65,.45,.45],[.65,1,.45,.35],[.45,.45,1,.60],[.45,.35,.60,1]] (eigenvalues 2.4765, 0.7817, 0.4241, 0.3177): phi_1 = (0.52, 0.50, 0.50, 0.48), phi_2 = (0.42, 0.55, -0.43, -0.58); unrounded (0.5185, 0.4959, 0.5044, 0.4805) and (0.4211, 0.5543, -0.4298, -0.5751). Rounded checks: phi_1.phi_2 = 0.2184 + 0.2750 - 0.2150 - 0.2784 = 0 exactly; ||phi_1||^2 = 1.0008, ||phi_2||^2 = 1.0002; PC1 score with all four +1 = 2.00 (unchanged). The answer now shows the orthogonality check beside the norm check; the interpretation (PC1 a size component, PC2 first pair vs last pair) still holds. Basis: James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy) §12.2.1 (PDF p.507: constraining Z2 uncorrelated with Z1 'is equivalent to constraining the direction phi_2 to be orthogonal (perpendicular) to the direction phi_1'; footnote 2, loadings are ordered eigenvectors), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf. The generated figure (Media/Figures/Loading_Vector.svg from scripts/figures_exam_mas_ii.py loading_vector()) still draws the old pair - not changed here; filed separately with locus 'figure'.
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- resolves: F-002
+- status: resolved
+- note: Bullet 4 now reads 'so two software packages may report opposite signs (the scores flip with the loadings)' in place of 'software may flip it between runs'. Source: James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy) §12.2.4 'Uniqueness of the Principal Components' (PDF p.515: 'two different software packages will yield the same principal component loading vectors, although the signs of those loading vectors may differ'; 'the score vectors are unique up to a sign flip'), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf.
+
+## [F-003] Generated figure still draws the old non-orthogonal loading pair
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- severity: minor
+- status: open
+- locus: figure (Media/Figures/Loading_Vector.svg; scripts/figures_exam_mas_ii.py loading_vector())
+- claim: The figure plots phi_1 = (0.52, 0.51, 0.49, 0.48) and phi_2 = (0.61, 0.55, -0.42, -0.39) (builder lines ~1184-1185), whose dot product is 0.2047.
+- evidence: The example was corrected this run (F-001 resolution) to phi_1 = (0.52, 0.50, 0.50, 0.48), phi_2 = (0.42, 0.55, -0.43, -0.58), the first two eigenvectors of R = [[1,.65,.45,.45],[.65,1,.45,.35],[.45,.45,1,.60],[.45,.35,.60,1]], dot product 0. Loading vectors must be orthogonal: James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy) §12.2.1 (PDF p.507), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf. The figure now also disagrees with the page's example.
+- proposed_action: Change loading_vector() in scripts/figures_exam_mas_ii.py to the new pair and regenerate the SVG (docs/concept-figures.md). Generated figure - not edited by the resolve agent.
+- applied: false
+- fingerprint: d75d8dc59bc6

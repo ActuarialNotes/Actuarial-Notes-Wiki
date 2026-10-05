@@ -25,7 +25,7 @@ A **Multi-State Model** describes an individual moving among a finite set of sta
 - A disability model typically has states H (healthy), D (disabled) and X (dead, absorbing), with transitions H $\to$ D (disablement), D $\to$ H (recovery) and H, D $\to$ X.
 - **Being in a state versus staying in it:** $P^n_{ii}$ counts every path that is back in $i$ at time $n$, including those that left and returned; $(P_{ii})^n$ counts only paths that never left. Waiting periods and "continuously disabled" conditions need the second.
 - Transition probabilities change with age, so realistic models are non-homogeneous — a different [[Transition Probability Matrix]] each year, multiplied in order.
-- In continuous time the matrix is replaced by transition intensities, and the force of mortality ([[Hazard Rate]]) is the intensity of the alive $\to$ dead transition. [[Joint Life]] statuses (both alive, one alive, both dead) are another multi-state model.
+- In continuous time the matrix is replaced by transition intensities, and the force of mortality ([[Hazard Rate]]) is the intensity of the alive $\to$ dead transition. A pair of lives $(x)$ and $(y)$ is another multi-state model, with four states: both alive, only $(x)$ alive, only $(y)$ alive, and both dead. The [[Joint Life|joint-life]] status fails at the first death and the last-survivor status at the last.
 
 > [!example]- Two-Year Disability Probabilities {Example}
 > Annual transitions among Healthy, Disabled and Dead are

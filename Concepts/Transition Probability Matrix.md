@@ -25,7 +25,7 @@ The **Transition Probability Matrix** $\mathbf{P} = [P_{ij}]$ of a [[Markov Chai
 
 > $$\boldsymbol{\alpha}^{(n)} = \boldsymbol{\alpha}^{(0)}\, \mathbf{P}^{n}$$
 
-- **Rows sum to one; columns need not.** A matrix whose columns also sum to one is *doubly stochastic*, and its [[Stationary Distribution|stationary distribution]] is uniform.
+- **Rows sum to one; columns need not.** A matrix whose columns also sum to one is *doubly stochastic*. For a chain with finitely many states the uniform distribution is then stationary, and it is the chain's unique [[Stationary Distribution|stationary distribution]] when the chain is irreducible.
 - The state distribution is a **row vector** multiplied on the left: next period's probability of state $j$ is $\sum_i \alpha_i P_{ij}$ — the [[The Law of Total Probability|law of total probability]] over the current state. The $n$-step probabilities are the entries of $\mathbf{P}^n$, by the [[Chapman-Kolmogorov Equations]].
 - An **absorbing** state has $P_{ii} = 1$ — death in a [[Multi-State Model]], default in [[Credit Rating Migration]].
 - **Building the matrix is often the real question.** If the next state depends on the last *two* periods, the process is not Markov as stated — but it becomes Markov once the state is redefined as the pair of the last two periods, at the cost of a larger matrix.

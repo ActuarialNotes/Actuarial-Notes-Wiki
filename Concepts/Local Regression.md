@@ -1,14 +1,14 @@
 ---
 verification:
   status: verified
-  confidence: medium
+  confidence: high
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8e615d76417fb728460c5c6986f7b43fc300f2e2123e31a67c78cdebc77c357a
+  content_hash: sha256:cc057d8bdf8d068fc8e7d3c0173f5c031b479abb3436c36e591cd556ee9a0532
   sources:
-    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R (2nd ed., Springer 2021), §7.6 'Local Regression', Algorithm 7.1, eq (7.14), Figs 7.9-7.10, printed pp.304-307 (PDF pp.312-315); §7.7.1 two-dimensional smoothers for f_jk, printed p.310 (PDF p.318), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R (2nd ed., Springer 2021), §7.6 'Local Regression', Algorithm 7.1 steps 1-4 and eq (7.14) printed p.306 (PDF p.314); memory-based procedure, choice of K / degree / span printed p.305 (PDF p.313); Fig 7.10 legend (span 0.2 -> 16.4 df, 0.7 -> 5.3 df) printed p.307 (PDF p.315), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), reading list p.6 (James et al. Chapters 5, 6 and 7 assigned to tasks C1-C9), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Local Regression.md
 ---
@@ -79,7 +79,7 @@ verification:
 > (c) The $s = 0.2$ curve chases local noise. What should change?
 >
 > > [!answer]-
-> > (a) $k = sn$: $0.2(400) = 80$ neighbors for $s = 0.2$ and $0.7(400) = 280$ for $s = 0.7$. In each case the furthest neighbor gets weight zero, so slightly fewer points actually count.
+> > (a) The neighborhood holds $k = sn$ points: $0.2(400) = 80$ for $s = 0.2$ and $0.7(400) = 280$ for $s = 0.7$. The furthest of them gets weight zero, as does every point outside the neighborhood, so **at most $79$ and $279$** observations get non-zero weight.
 > >
 > > (b) $s = 0.2$. A smaller span makes each fit more local, which gives a wigglier, more flexible curve with more degrees of freedom. On ISLR's Wage data, $s = 0.2$ gave $16.4$ degrees of freedom against $5.3$ for $s = 0.7$.
 > >

@@ -22,26 +22,26 @@ verification:
 
 A **QQ Plot** (Quantile-Quantile Plot) is a graphical diagnostic that compares the **quantiles** of a dataset against the quantiles of a theoretical distribution (or another dataset) to assess goodness of fit.
 
-> **Construction:** Plot the $i$-th order statistic $x_{(i)}$ against the theoretical quantile $F^{-1}\!\left(\frac{i}{n+1}\right)$ (or $\frac{i-0.5}{n}$).
+> **Construction:** Plot the $i$-th order statistic $x_{(i)}$ on the vertical axis against the theoretical quantile $F^{-1}(p_i)$ on the horizontal axis, with plotting position $p_i = \frac{i}{n+1}$ (or $\frac{i-0.5}{n}$).
 
-**Interpretation:**
+**Interpretation** (sample quantiles on the vertical axis):
 
 | Pattern | Implication |
 | :--- | :--- |
 | Points fall on a straight line | Data fits the theoretical distribution well |
-| S-shaped curve | Data has lighter tails than the theoretical distribution |
-| Reverse S-shape | Data has heavier tails (fat-tailed data) |
+| Low end above the line, high end below it | Data has lighter (shorter) tails than the theoretical distribution |
+| Low end below the line, high end above it | Data has heavier (longer) tails — fat-tailed data |
 | Points above the line in the upper tail | Right tail is heavier than theoretical |
 | Systematic curvature | Distribution family is wrong |
 
 - A **Normal QQ plot** plots sample quantiles against Normal quantiles; a straight line indicates normality
 - Used to assess model assumptions in [[Generalized Linear Model]]s and linear regression ([[Residual Plot]]s on a QQ scale check normality of residuals)
-- More informative than a histogram for comparing distributional tails
+- Both tail cases can bend the middle of the plot into an S-like pattern, so read the direction of the departure at the two ends, not the shape of the middle
 
 ![[Media/Figures/QQ_Plot.svg|340]]
 
 > [!example]- Interpreting a Normal QQ Plot of Residuals {Example}
-> After fitting a linear regression to claim severity data, a Normal QQ plot of the residuals shows points that closely follow the 45° line in the center but curve sharply upward in the upper-right tail. What does this indicate?
+> After fitting a linear regression to claim severity data, a Normal QQ plot of the residuals shows points that closely follow the reference line in the center but curve sharply upward in the upper-right tail. What does this indicate?
 >
 > > [!answer]-
 > > The upward curve in the upper tail indicates that the **residuals have a heavier right tail** than the Normal distribution. This suggests the normality assumption for residuals may be violated — perhaps a log transformation of severity or a GLM with a Gamma distribution would be more appropriate.

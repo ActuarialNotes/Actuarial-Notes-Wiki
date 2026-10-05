@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7a2183636511b02e7bcd932314148963f7d313ef9985b6d6251637789242dbf0
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/High-Dimensional Data.md
+---
+
 **High-Dimensional Data** are data sets with more features than observations, $p > n$; the same problems arise when $p$ is close to $n$. Once $p \ge n$, least squares and other classical methods fit the training data perfectly whether or not any real relationship exists, so they overfit badly.
 
 > $$p \ge n \;\Longrightarrow\; \text{RSS} = 0 \ \text{ and } \ R^2 = 1$$

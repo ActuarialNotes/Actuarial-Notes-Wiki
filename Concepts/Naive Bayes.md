@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bd463bcc644fb40adfd0e1558dd07110f19bd8493fd3d731cf34a9fde3017e17
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Naive Bayes.md
+---
+
 **Naive Bayes** is a classifier that estimates the probability that an observation belongs to each class with [[Bayes Theorem]]. It assumes that, **within each class, the $p$ predictors are independent**, so each class's joint density factors into one-dimensional densities that are easy to estimate.
 
 > $$f_k(\mathbf{x}) = f_{k1}(x_1)\,f_{k2}(x_2) \cdots f_{kp}(x_p)$$

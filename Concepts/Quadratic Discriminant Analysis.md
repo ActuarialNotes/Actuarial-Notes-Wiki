@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bc97cb8d89f625127acd0ae64c75b81b896c9fff5303e30e9bb66b299072ccca
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Quadratic Discriminant Analysis.md
+---
+
 **Quadratic Discriminant Analysis** (QDA) is a classifier that assumes the predictors in each class $k$ are multivariate normal with their own mean vector $\boldsymbol\mu_k$ **and their own covariance matrix** $\boldsymbol\Sigma_k$. It plugs estimates of these and the class priors into [[Bayes Theorem]] and assigns an observation to the class whose **discriminant function** $\delta_k(\mathbf{x})$ is largest.
 
 > $$\mathbf{X} \mid Y = k \;\sim\; N(\boldsymbol\mu_k,\ \boldsymbol\Sigma_k)$$

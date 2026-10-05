@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5141262add99796efc85f0c3bbc95832930eaef4a3836f510da37f292f1fcd3d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Log-Linear Model.md
+---
+
 A **Log-Linear Model** for a contingency table treats each cell count as Poisson and models the log of its expected count as a sum of row, column and [[Interaction|interaction]] effects. It is [[Poisson Regression]] applied to cross-classified counts, and its terms correspond to independence and association between the classifying variables.
 
 > $$\ln \mu_{ij} = \eta + \alpha_i + \beta_j$$

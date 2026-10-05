@@ -14,6 +14,7 @@ import { LogoTile } from '@/components/LogoTile'
 import { matchesSelectedVariant } from '@/data/examSittings'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
+import { StudyGuidesPageRow } from '@/components/wiki/StudyGuidesPageRow'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
@@ -142,6 +143,7 @@ export default function WikiHome() {
   }, [])
 
   const exams = useMemo(() => index.filter(i => i.category === 'exam'), [index])
+  const resourceCount = useMemo(() => index.filter(i => i.category === 'document').length, [index])
 
   const examsByKey = useMemo(() => {
     const map = new Map<string, WikiIndexItem[]>()
@@ -266,32 +268,33 @@ export default function WikiHome() {
           exam to study for, so they sit above the ladder rather than in it.
           A one-row panel of the same list the exams are drawn in, with the
           same 48px tile: a guide is one more thing to open, not a prose block
-          introducing the page. */}
-      {GENERAL_GUIDES.length > 0 && (
-        <section>
-          <div className="grid grid-cols-1 items-start gap-3 sm:grid-cols-2">
-            {GENERAL_GUIDES.map(guide => (
-              <ListPanel key={guide.ref.path ?? guide.title}>
-                <ListRow
-                  onClick={() => openAt([guide.ref], 0, '/wiki')}
-                  // The exam rows' tile, carrying an icon instead of a
-                  // monogram — a guide has no place on the colour ramp, so
-                  // it takes the wiki's teal rather than borrowing a hue.
-                  leading={
-                    <LogoTile size="lg" className="bg-teal-500 text-white shadow-sm">
-                      <Compass className="h-6 w-6" />
-                    </LogoTile>
-                  }
-                  title={guide.title}
-                />
-              </ListPanel>
-            ))}
-            {/* Actuaria Online — a way of studying rather than a guide, in the
-                same row so the exam lists below still line up (§6.2). */}
-            {ACTUARIA_ENABLED && <ActuariaHubCard />}
-          </div>
-        </section>
-      )}
+          introducing the page. The way across to the tab's other page, the
+          Resources shelf, sits in the same row — on a phone the sidebar that
+          also lists it is a drawer. */}
+      <section>
+        <div className="grid grid-cols-1 items-start gap-3 sm:grid-cols-2">
+          {GENERAL_GUIDES.map(guide => (
+            <ListPanel key={guide.ref.path ?? guide.title}>
+              <ListRow
+                onClick={() => openAt([guide.ref], 0, '/wiki')}
+                // The exam rows' tile, carrying an icon instead of a
+                // monogram — a guide has no place on the colour ramp, so
+                // it takes the wiki's teal rather than borrowing a hue.
+                leading={
+                  <LogoTile size="lg" className="bg-teal-500 text-white shadow-sm">
+                    <Compass className="h-6 w-6" />
+                  </LogoTile>
+                }
+                title={guide.title}
+              />
+            </ListPanel>
+          ))}
+          <StudyGuidesPageRow page="resources" count={resourceCount} />
+          {/* Actuaria Online — a way of studying rather than a guide, in the
+              same row so the exam lists below still line up (§6.2). */}
+          {ACTUARIA_ENABLED && <ActuariaHubCard />}
+        </div>
+      </section>
 
       <section>
         {loading && exams.length === 0 ? (

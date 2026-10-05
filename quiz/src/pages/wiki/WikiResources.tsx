@@ -4,6 +4,7 @@ import { Minus, Plus, X } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
+import { StudyGuidesPageRow } from '@/components/wiki/StudyGuidesPageRow'
 import { ExamPill, MetaPill, PdfPill } from '@/components/wiki/ResourcePills'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { buildWikiIndex, bundledWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
@@ -223,6 +224,7 @@ export default function WikiResources() {
     () => withCurrentExams(index.filter(i => i.category === 'document'), syllabusEditions),
     [index],
   )
+  const examCount = useMemo(() => index.filter(i => i.category === 'exam').length, [index])
   const selection = useMemo(() => resourceFacetsFromParams(searchParams), [searchParams])
   const { label: vintageLabel, highlight } = useMemo(() => vintageFromParams(searchParams), [searchParams])
   // One exam with its syllabus editions on file: the shelf is one edition's
@@ -309,6 +311,13 @@ export default function WikiResources() {
       <header>
         <h1 className="min-w-0 truncate text-2xl font-bold tracking-tight">Resources</h1>
       </header>
+
+      {/* The way back across to the tab's other page, the exam ladder — the
+          row the ladder carries to here, pointing the other way. Half the
+          width from sm up, as it is in the ladder's guide row. */}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <StudyGuidesPageRow page="exams" count={examCount} />
+      </div>
 
       <div className="flex flex-wrap items-center gap-2">
         {RESOURCE_FACETS.map(facet => {

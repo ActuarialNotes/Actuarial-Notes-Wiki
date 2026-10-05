@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:577a183243590908abc31ca23a82af9c207d58c41f3e557f22c923249db04020
+  content_hash: sha256:ae9fc5cd33492e13db31929876166cd2c428adbc01dd509d04ad93f17721d43d
   sources:
     - "NIST/SEMATECH e-Handbook of Statistical Methods, §1.3.3.7 'Box Plot' (basic box plot; 'Box plots with fences'), sha256:545e917efab8aae10425dd289461c519de359120fd39d6dc94efa8c324e1f783 — https://www.itl.nist.gov/div898/handbook/eda/section3/boxplot.htm"
     - "NIST/SEMATECH e-Handbook of Statistical Methods, §7.1.6 'What are outliers in the data?' (inner/outer fences, (N+1)p quartiles, mild/extreme outliers), sha256:6dfe27fdc6af41afc2fc6d3ca3c1cae158bc481e2c1f5dd5bbc3f5f67c38f520 — https://www.itl.nist.gov/div898/handbook/prc/section1/prc16.htm"

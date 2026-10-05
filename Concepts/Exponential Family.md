@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:9c09c57fd6d7250f4f84381ab8d309661ddfe40119015385084d5558eb9ebf7d
+  content_hash: sha256:2c3d163d768372cc5981af67eb8ebee765319eeb9c98b47282947e08077d517e
   sources:
     - "Larsen, 'Generalized Linear Models', CAS Study Note (Dec 2015, rev. June 2016; MAS-I reading), sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf, p.2 (Tweedie power-variance list, canonical link and unbiasedness) and p.3 (canonical link table; exponential-family form and table)"
     - "Rodriguez, GLM lecture notes (Princeton), App. B, secs.B.1.1-B.3.2, B.4.1 (PDF pp.2-9), sha256:92bc67a6a2fc52a0ffa2babfd7a13e175b2babb52dd28f778d5e307cc65aa286 — https://grodri.github.io/glms/notes/a2.pdf"

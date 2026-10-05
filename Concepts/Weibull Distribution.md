@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e23b42c1929d7e03ab90df566c9cc8c337c44bd95cdc54058baef71a83ba7b3b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Weibull Distribution.md
+---
+
 The **Weibull Distribution** $X \sim \text{Weibull}(\theta, \tau)$ is a continuous distribution on $(0, \infty)$ with scale $\theta > 0$ and shape $\tau > 0$. It generalises the [[Exponential Distribution|exponential]] ($\tau = 1$) and is used for claim severities and for lifetimes whose [[Hazard Rate|hazard rate]] rises or falls with age.
 
 > $$f(x) = \frac{\tau\,(x/\theta)^{\tau}\,e^{-(x/\theta)^{\tau}}}{x}, \quad x > 0$$

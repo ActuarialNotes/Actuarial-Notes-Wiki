@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d8b4e228ab841f48173102c5877f1d1acb2f0406ff27cdf47f5a01b3350ac201
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/F-Distribution.md
+---
+
 The **F-Distribution** $F(n, m)$ with $n$ numerator and $m$ denominator degrees of freedom is the distribution of the ratio of two independent [[Chi-Squared Distribution|chi-squared]] variables, each divided by its degrees of freedom. It is the [[Sampling Distribution|sampling distribution]] for comparing two variances and for testing groups of coefficients in linear models.
 
 > $$F = \frac{U/n}{V/m} \sim F(n, m), \quad U \sim \chi^2(n),\ V \sim \chi^2(m)$$

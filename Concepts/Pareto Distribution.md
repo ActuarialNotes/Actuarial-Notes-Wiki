@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:12ab1259c9f49b2a0b55fd076a4cdb2dcd0db4a1b0c8c23430d4d484e8db40be
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Pareto Distribution.md
+---
+
 The **Pareto Distribution** $X \sim \text{Pareto}(\alpha, \theta)$ is a continuous distribution on $(0, \infty)$ with shape $\alpha > 0$ and scale $\theta > 0$. Its polynomial tail makes it a standard model for heavy-tailed claim severities, such as liability and large property losses.
 
 > $$f(x) = \frac{\alpha\,\theta^{\alpha}}{(x + \theta)^{\alpha + 1}}, \quad x > 0$$

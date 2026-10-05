@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6843fb9810b14daa489c0f49e0599c11ba676db62e477f2e7cef576282adacdf
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Chi-Squared Distribution.md
+---
+
 The **Chi-Squared Distribution** $\chi^2(n)$ with $n$ degrees of freedom is the distribution of the sum of squares of $n$ independent standard [[Normal Distribution|normal]] variables. It is the [[Sampling Distribution|sampling distribution]] behind tests and intervals for a normal variance and behind likelihood ratio tests.
 
 > $$V = \sum_{i=1}^{n} Z_i^2 \sim \chi^2(n), \quad Z_i \sim N(0, 1)$$
